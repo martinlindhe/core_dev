@@ -39,7 +39,7 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Label item="MQ_Spell_Name">
+	<Label item="Spell_Name">
 		<Font>2</Font>
 		<EQType>134</EQType>  
 		<RelativePosition>true</RelativePosition>
@@ -137,8 +137,8 @@
 		<Style_Border>true</Style_Border>
 		<Style_Sizable>false</Style_Sizable>
 		<Pieces>Casting_Gauge</Pieces>
-		
-		<Pieces>MQ_Spell_Name</Pieces>
+		<Pieces>Spell_Name</Pieces>
+
 		<Pieces>MQ_Spell_CastTime</Pieces>
 		<Pieces>MQ_Spell_Range</Pieces>
 	</Screen>

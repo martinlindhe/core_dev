@@ -39,63 +39,13 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Label item="MQ_Spell_Name">
+	<Label item="Spell_Name">
 		<Font>2</Font>
 		<EQType>134</EQType>  
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>2</X>
 			<Y>0</Y>
-		</Location>
-		<Size>
-			<CX>100</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item="MQ_Spell_CastTime">
-		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Me.Casting.MyCastTime}s</TooltipReference>  
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>110</X>
-			<Y>0</Y>
-		</Location>
-		<Size>
-			<CX>100</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-
-	<Label item="MQ_Spell_Range">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<!-- fixme: show AERange instead when appropriate (protection on seasons for example) -->
-		<TooltipReference>${Me.Casting.Range}</TooltipReference>  
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>110</X>
-			<Y>12</Y>
 		</Location>
 		<Size>
 			<CX>100</CX>
@@ -138,9 +88,7 @@
 		<Style_Sizable>false</Style_Sizable>
 		<Pieces>Casting_Gauge</Pieces>
 		
-		<Pieces>MQ_Spell_Name</Pieces>
-		<Pieces>MQ_Spell_CastTime</Pieces>
-		<Pieces>MQ_Spell_Range</Pieces>
+		<Pieces>Spell_Name</Pieces>
 	</Screen>
 
 </XML>
