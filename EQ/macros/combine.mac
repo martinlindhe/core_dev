@@ -1,0 +1,58 @@
+|todo: ta en parameter för hur många combines som ska göras
+
+sub Main
+
+	/declare finish int outer 0
+
+	/declare countsuccess	int outer 0
+	/declare countfail		int outer 0
+	/declare counttotal		int outer 0
+	
+	/echo Starting
+
+	:CombineLoop
+	|/notify COMBW_CombineArea COMBW_CombineButton leftmouseup
+	/notify TradeskillWnd CombineButton leftmouseup
+	/doevents
+	/delay 5
+	/if (${Cursor.ID}) {
+		/autoinventory
+
+		/if (${Me.FreeInventory} < 1) {
+			/echo Out of inventory slots!
+			/goto :Cleanup
+		}
+	}
+
+	/if (${finish}==1) {
+		/echo Done. ${countsuccess}/${counttotal} (${Math.Calc[ (${countsuccess}/${counttotal})*100 ]}%) items created
+		/goto :Cleanup
+	}
+	/goto :CombineLoop
+	
+	
+	:Cleanup
+	| closing tradeskill window
+	/notify TradeskillWnd COMBW_CloseButton Leftmouseup
+
+/return
+
+|------------------------------
+#Event nomore "Sorry, but you don't have everything you need for this recipe#*#"
+Sub Event_nomore
+	/varset finish 1
+/return
+
+#Event create "You have fashioned the items together to create something new#*#"
+Sub Event_create
+	/varcalc countsuccess ${countsuccess}+1
+	/varcalc counttotal ${countsuccess}+${countfail}
+	/echo ${countsuccess}/${counttotal} successes (${Math.Calc[ (${countsuccess}/${counttotal})*100 ]}% success rate)
+/return
+
+#Event failed "You lacked the skills#*#"
+Sub Event_failed
+	/varcalc countfail ${countfail}+1
+	/varcalc counttotal ${countsuccess}+${countfail}
+	/echo ${countfail}/${counttotal} failures (${Math.Calc[ (${countsuccess}/${counttotal})*100 ]}% success rate)
+/return

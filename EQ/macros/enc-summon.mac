@@ -1,0 +1,90 @@
+#include spell_routines.inc
+
+|funkar inte!!!!
+#Event	OutOfComponents		"You are missing#*#"
+
+Sub Main
+
+	/declare spellName string inner
+	/declare spellMana int inner 0
+
+	/if (${Defined[Param0]}) {
+		/if (${Param0.Equal["clay"]}) {
+			/varset spellName Mass Enchant Clay
+			/varset spellMana 180
+		}
+
+		/if (${Param0.Equal["silver"]}) {
+			/varset spellName Mass Enchant Silver
+			/varset spellMana 180
+		}
+
+		/if (${Param0.Equal["thicken"]}) {
+			/varset spellName Mass Thicken Mana
+			/varset spellMana 300
+		}
+
+		/if (${Param0.Equal["crystallize"]}) {
+			/varset spellName Mass Crystallize Mana
+			/varset spellMana 600
+		}
+		/if (${Param0.Equal["clarify"]}) {
+			/varset spellName Mass Clarify Mana
+			/varset spellMana 900
+		}
+
+		|Tunarean druids & clerics only:
+		/if (${Param0.Equal["emerald"]}) {
+			/varset spellName Mass Imbue Emerald
+			/varset spellMana 600
+		}
+		
+	} else {
+		/echo Call the script with parameter: [ clay | silver | thicken | crystallize | clarify | emerald ]
+		/return
+	}
+
+	/echo Enchanter summoning script started.
+
+	/if (!${Me.Gem["${spellName}"]}) {
+		/memspell 8 "${spellName}"
+	}
+
+	:loop
+		/if ( ${Me.CurrentMana} > ${spellMana} ) {
+			/if (${Me.Spawn.Sitting}) /stand
+			/call CheckGM
+			/call Cast "${spellName}"
+			/delay 5
+			/autoinventory
+		} else {
+			/echo Medding
+			/goto :medtofull
+		}
+	/goto :loop
+
+
+	|Medding so i have enough mana to cast spell again
+	:medtofull
+		/if (!${Me.Spawn.Sitting}) /sit
+		/if ( ${Me.CurrentMana} <= ${spellMana} ) {
+			/goto :medtofull
+		}
+		/delay 6s
+	/goto :loop
+
+/return
+
+Sub Event_OutOfComponents
+	/echo You are out of components.
+	/endm
+/return
+
+Sub CheckGM
+    :GMCheck
+    /if (${Bool[${Spawn[gm].ID}]}) {
+       /echo A GM or Guide has been detected in the zone, the macro will resume  when the zone is clear of GM/Guides
+       /delay 600s
+       /goto :GMCheck
+    }
+/return

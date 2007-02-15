@@ -1,0 +1,56 @@
+#Event NoBandages "#*#You can't bandage without bandages, go buy some.#*#"
+#Event NoBandages "#*#bandages#*#"
+
+|70 = defayult for all classes, 80 = with 10% skill AA
+|todo: detect max % automatically	
+#define MAX_HPPCT	70
+
+|note: not working!! :(
+Sub Event_NoBandages(String FullText)
+	/echo Out of bandages, making new ones
+	/call Cast "Anizok's Gauze Press" item
+	/delay 1s
+	/autoinventory
+	/delay 1s
+/return
+
+sub Main
+
+	/declare name	string local
+
+	/if (${Target.ID}) {
+		/varset name ${Target.Name}
+	} else {
+		|If no target, bind myself
+		/varset name ${Me.Name}
+	}
+
+	| Verify that we have the ability to beg.
+	/if (${Me.Skill["Bind Wound"]}==0) {
+		/echo You don't have the ability to bind wound.
+		/goto :Exit
+	}
+
+	/echo Binding wounds on ${name} up to MAX_HPPCT %
+
+	:Bind
+	/target ${name}
+	/if ((${Target.PctHPs}) >= MAX_HPPCT && (${Target.PctHPs} <= 100)) {
+		/echo Target at ${Target.PctHPs}% HP, aborting
+		/goto :Exit
+	}
+
+	/if (${Me.AbilityReady["Bind Wound"]}) {
+	
+		|/delay 2s
+		/target ${name}
+		/echo Binding wound at ${Target.PctHPs}%
+		/doability "bind wound"
+	}
+
+	/delay 1s
+	/goto :Bind
+
+:Exit
+/return
+

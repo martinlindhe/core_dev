@@ -1,0 +1,186 @@
+|forage.mac
+|
+|Nothing on cursor should be destroyed unless it is specified in .ini to be destroyed, but be careful.
+|
+| syntax: /macro forage [camo]
+|	camo = use innate camouflage ability
+|
+| Features:
+|	* For Rangers/Druids with Innate Camouflage, program will refresh it allowing forage in more dangerous places.
+|	* Ini-file support, allowing you to specify what you want to keep, and what to destroy
+|	* Zone-forage lists, allowing you to see where you can find specific forages
+|	* Support for Nature's Bounty AA (forage more than one item at once)
+|
+| Todo:
+|	* Search function, like 'where can i forage fishing grubs?', return list of zones
+|	* Search function, like 'what can be foraged in current zone?', can it be returned as click links?
+|	* If you're druid, gate to bind point if you are aggroed
+
+#include spell_routines.inc
+
+#define IRC_SERVER		127.0.0.1
+#define	IRC_PORT		14809
+#define	IRC_CHANNEL		#beep
+
+#Event InvFull "There was no place to put that!"
+
+#define NOT_FOUND			0
+#define INI_FILE			forage.ini
+
+#include gimp_metabolism.inc
+#include gimp_buffrequests.inc
+
+sub Main
+
+	/declare UseCamo		int outer  1
+
+	/echo Forage script started
+	
+	|/iconnect IRC_SERVER IRC_PORT IRC_CHANNEL ${Me.Name}
+	|/delay 2s
+	|/i join IRC_CHANNEL
+
+	/if (${Defined[Param0]}) {
+		/if (${Param0.Equal[camo]}) {
+			/varset UseCamo 1
+			/echo # Innate Camouflage mode ON.
+		}
+	} else {
+		|No parameters passed, defaulting to not using innate camo.
+		/echo # Camo mode OFF (use '/mac forage camo' to turn it on)
+		/varset UseCamo 0
+	}
+
+	| Verify that we have the ability to forage.
+	/if (${Me.Skill[Forage]} == 0) {
+		/echo You don't have the ability to forage.
+		/goto :Exit
+	}
+
+
+	:Forage
+	/doevents
+	/call CheckFood
+
+	/if ( ${UseCamo} == 1) {
+
+		|If I've been hit, or if macro is running while I'm not afk, will refresh camo
+		/if ((!${Me.Invis} || ${Me.Buff["Shared Camouflage"].Duration} < 10) && !${Me.Casting.ID}) {
+			/echo Eeep, im visible! Not a good sign! - ${Me.Buff["Shared Camouflage"].Duration}
+
+			|fixme: check if i am being punched on, then exodus/gate.
+			|fixme: check exodus location, check current location. tell player not to start script near exodus spot.
+
+			/if (${Me.AltAbilityReady["Shared Camouflage"]}) {
+				|/aa act Innate Camouflage
+				/aa act Shared Camouflage
+				/delay 10
+			}
+		}
+
+	}
+
+	| If we can forage then do so.
+	/if (${Me.AbilityReady[Forage]} && !${Window[SpellBookWnd].Open} && !${Window[LootWnd].Open} && !${Me.Combat}) {
+		
+		|Aborting if im mounted
+		/if (${Me.Mount.ID}) {
+			/echo Mounted, waiting
+			/delay 30s
+			/goto :Forage
+		}
+		
+		|Aborting if im casting a spell
+		/if (${Me.Casting.ID}) {
+			/echo Casting spells, waiting
+			/delay 3s
+			/goto :Forage
+		}
+	
+		| Stand up. Can't forage while sitting.
+		/if (!${Me.Standing}) /stand
+
+		| These delays are because i get the 'You must wait longer before you can forage' now and then because of lag
+		|/delay 3s
+		/doability forage
+		/delay 3s
+
+		| If we successfully foraged something then take care of it.
+		/if (${Cursor.ID}) {
+
+			| Loop is to handle Nature's Bounty AA
+			:LootIt
+			|/echo -- Handling ${Cursor.Name}
+			/call HandleItem
+			/delay 1s
+			/if (${Cursor.ID}) /goto :LootIt
+		}
+	}
+
+	/delay 1s
+
+	/goto :Forage
+
+:Exit
+/return
+
+
+sub HandleItem
+
+	/declare ItemSetting int local
+	/declare ItemInZone int local
+	/declare NotFound int local
+
+	/varset NotFound -1
+
+	| Look up item in ini
+	/varset ItemSetting ${Ini[INI_FILE, ForageList, ${Cursor.Name}, ${NotFound}]}
+
+	/delay 5
+
+	| If the item isn't in the .ini file then add it.
+	/if (${ItemSetting} == ${NotFound}) {
+
+		/ini "INI_FILE" "ForageList" "${Cursor.Name}" "1"
+		/varset ItemSetting 1
+		/echo # New item: ${Cursor.Name}
+	}
+
+	|Look up item in zone section of INI
+	/varset ItemInZone ${Ini[INI_FILE, ${Zone.Name}, ${Cursor.Name}_${Cursor.ID}, ${NotFound}]}
+	/if (${ItemInZone} == ${NotFound}) {
+		/echo New zone forage: ${Cursor.Name}
+		| Set information about what zone this item can be foraged in
+		/ini "INI_FILE" "${Zone.Name}" "${Cursor.Name}_${Cursor.ID}" "1"
+	}
+   
+
+	| If we're keeping this item then stash it in our bags.
+	| Otherwise, just destroy it.
+	/if (${ItemSetting}==1) {
+
+		/echo Saving ${Cursor.Name}
+		/autoinventory
+
+	} else {
+
+		| This item is specified in .ini to be destroyed
+		/if (${ItemSetting} == 0) {
+			/echo Destroying ${Cursor.Name}
+			/destroy
+		} else {
+			| this code should be unreachable because ItemSetting is set to 1 on new items
+			/echo I have a unknown item on cursor (${Cursor.Name}), ending macro
+			/endmacro
+		}
+	}
+
+/return
+
+
+sub Event_InvFull
+
+	/echo Inventory is full!
+	/endmacro
+
+/return

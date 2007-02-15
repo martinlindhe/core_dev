@@ -1,0 +1,579 @@
+todo UI:
+* fix friendwnd ui file
+* add timer to rez window: 5 minutes left till it expires thingy
+* buffwindow: show buff number 1-20
+* target window: make hp % bar wider
+
+----
+
+* buffreq add: new format in the ini ss=Steeloak Skin:Blessing of Steeloak
+	then if u get buffrequest from a group member, cast the group version spell
+
+Changes 2006.09.30: By Harden
+   Macro:
+	gimp_metabolism.inc:
+		* Fix: Will now Actually eat/drink your specified food/drink, instead of just picking it up. (Extra delay's were added, so the bag will flash for about 2 sec now.)
+
+changes 2006.09.28: By Harden
+   Macro:
+	gimp_clickies.inc:
+		*Updated Buffed Haste, with new Enchanter Haste buffs
+   		**TODO: Update all Spells in gimp_clickies.inc
+	gimp_consent.inc:
+		*Updated Mod Rod Handling on Rez to include New Mod Rods
+		NOTE: /accept Rez only works it you go to your bind point (Respawn at Bind).
+		**TODO: Add handling for Respawn Window into Acceptrez
+	gimp_modrod.inc:
+		*Added New Mod Rod Support
+	gimp_buffstatus.inc:
+		*All New TSS Buffs are now Up-to-date. Please report any problems.
+	krust.mac:
+		*Krust Data Window Buff slots now displays Proper number of Buffs vs Buff Slots
+		*Added a Respawn Window check into the Auto Heal Potion Click Script, to prevent Trying to Heal yourself when hovering over your body.
+		*Added Auto Mob Rod Use for the New Mod Rods (Note: This will use both mod rods if you have one of each, Since tey are on different Timers)
+		*Added Command /buffcheck This command will scan your your Buffs, and report in the MQ2 Window all buffs fading within 10 minutes.
+	NEW: Added gimp_gote.inc Works just like gimp_lions.inc except it's used for Guard of the Earth (Ranger Ac / DS Buff) But, it Skips SK, Necro Pets, and other who don't need it (like rangers).
+
+Changes 2006.09.24: By Harden
+   UI:
+      *Complete Rework of UI for TSS Compatability (Work in Progress to Restore old style map and other items)
+
+Changes 2006.06.27: By Harden 
+   UI: 
+      * Fix: Krust Data window count for SK's (Was Returning 0 all the time) 
+      * Update: EQUI_MapViewWnd.xml: Toggle Group Members on Map Button added. (Thanks Moeymoejoe) 
+      * Removed: Default Leyout will now be used for: (Don't worry they still have the same graphics) 
+         EQUI_AdvancedDisplayOptionsWnd.xml 
+         EQUI_OptionsWindow.xml 
+         EQUI_BarterSearchWnd.xml 
+         EQUI_BlockedBuffWnd.xml 
+         EQUI_BlockedPetBuffWnd.xml 
+      * Update: EQUI_Animations.xml: Fixed issue with Item Icons not matching the item. (Thanks Moeymoejoe) 
+         
+---------------
+Changes 2006.06.09: by Harden
+	gimp_consent.inc:
+		* Fix: Added an Extra Delay, before Attempting to Memorize a spell set after dieing. This should fix the issue with sometimes not memorizing the spell set.
+	gimp_assist.inc:
+		* New: Added a Second Assist (SA) Function. Works just like the MA function has.
+	gimp_clickies.inc
+		* New: Added Composers Greaves, ClickyComposersGreaves=1 in krust.ini to activate it
+
+	UI: * Modified the Krust Data window and addedthe Following:
+		-Class Count: List the Number of Key classes in the zone (not as usefull in open zones, but most things are instanced now.)
+			Tanks: WAR: 1 SK: 1 PAL: 1
+			Healers: CLR: 1 DRU: 1 SHM: 1
+		-SA Name added next to MA
+		-Self Tribute Status
+		-Data Window is now slightly wider
+
+Changes 2006.03.25: by Harden
+	krust.mac:
+		* When entering a new zone, the zone name is returned vice NULL.
+	gimp_clickies.inc:
+		* Added "Philter of the Ant" to Recognized Shrink Clickies (Ant's Potion, 5 Dose Ant's Potion, 10 Dose Ant's Potion were removed from code).
+
+Changes 2006.03.12:
+	krust.mac:
+		* Healing Potion X has been renamed to Distillate of Divine Healing X, code updated so autoclicking works again.
+
+Changes 2006.03.10:
+	gimp_clickies.inc:
+		* Added all PoR mount clickies (thanks Harden)
+		* Fixed Event_ShrinkSelf and Event_ShrinkGroup to work since size numbers have changed with PoR expansion (thanks Harden)
+
+	gimp_buffstatus.inc:
+		* Added Talisman of Celerity to recognized haste buffs
+
+	krust.mac:
+		* Added workaround to make Event_EnteredNewZone get called when you change zone. This fixes /acceptrez (thanks nils)
+
+
+Changes 2006.02.02:
+
+	krust.ini.sample:
+		* New: Added selfbuffs & recognized buffs presets for ranger (Thanks Harden)
+		
+	krust.mac:
+		* Fix: Fixed /acceptrez auto looting of corpse (stopped working with last version's code rewrite)
+		
+	gimp_buffrequests.inc:
+		* Fix: DontBuffWhenBusy=1 no longer makes the macro mess up, but also works again (stopped working with last version's code rewrite)
+
+	gimp_clickies.inc:
+		* New: /charge command: Auto clicks your important raid clickies at once.
+			Perfect to automatically refresh all your relevant clickies right before a boss encounter.
+			By "relevant clickies" I have chosen: mana regen clickies, mana pool clickies, +attack clickies, resist clickies, overhaste clickies
+			
+
+Changes 2006.01.26:
+
+	Rewritten alot of if-clauses to make mq run the macro faster, huge speed increase in this release. (Also maybe a new bug or 2 because of rewrite)
+
+	krust.mac:
+		* New: Automatically clicks off Aura of Devotion or Blessing of Devotion, the one with the shorter duration.
+		This "fixes" the stacking bug of this spells (they should overwrite)
+
+	krust.ini.sample:
+		* New: Added selfbuff presets for wizard, mage, cleric, shadow knight, shaman. Thanks NFC, rebelbob2k1, larry1024, eclipsed, sybarite
+
+	gimp_clickies.inc:
+		* Fix: Fixed haste clicky not refreshing when you had yourself targeted
+		* New: Command /illusion, toggles clicking of illusion item ON/OFF. also stores current value in INI
+		* New: Command /illusion itemname, changes/enables use of illusion item to itemname, saves to krust.ini
+
+	gimp_buffrequests.inc:
+		* New: Now actually reads from [ClassName_RecognizedBuffs], if [PlayerName_RecognizedBuffs] section doesnt exist in krust.ini,
+			making the krust.ini.sample actually useful more "out of the box" with the buffrequests module, at least for the classes already
+			defined in there, just missing ranger buffs i think.
+			This change will make existing ini's work without change, but some people might notice buffrequests starting to work
+			if they didn't before.
+		
+	gimp_lions.inc:
+		* Fix: No longer buff wizard familiars with Lion's Strength
+		
+	gimp_selfbuffs.inc:
+		* New: Auto equip focus item before casting buffs
+	
+	gimp_busy.inc:
+		* Removed.
+
+
+Changes 2006.01.05:
+
+	gimp_selfbuffs.inc:
+		* New file. Adds command /buffself (thanks Harden)
+			Usage: Add an entry in krust.ini that looks like this:
+
+			[Druid_SelfBuffs]
+			1=Mask of the Wild
+			2=Nettlecoat
+			3=Wrath of the Wild
+			4=Steeloak Skin
+			5=Protection of Seasons
+		
+			Then type /buffself to refresh these buffs (it handles stacking and wont refresh buffs with long duration left).
+			You can specify AA abilities or clicky item names aswell.
+			krust.ini.sample includes example buffs for ranger, druid and monk. Please post other classes for inclusion in later releases.
+
+	gimp_clickies.inc:
+		* New: Added Earring of Diminutiveness to shrink clickies
+
+Changes 2006.01.02:
+
+	krust.mac:
+		* Fix: Made /toggletaunt work again.
+
+	gimp_dps.inc:
+		* Fix: Mob claws damage counted
+		
+	gimp_clickies.inc:
+		* New: Added Rapier of Somber Notes. ClickyRapierOfSomberNotes=1 to activate it
+		* New: Added Bony Dark Web Ring, Shroud of the Fallen Defender, Band of Primordial Energy, Executioner's Cincture, Hanvar's Hoop, Skull of Vishimtar, Wristplates of the Fallen Saint to AC clickies.
+			Activate these clickies with useClickyAC=1
+			Removed ClickyShroudDefender=1 setting, use useClickyAC=1 instead.
+
+Changes 2005.12.31:
+	gimp_clickies.inc:
+		* New: /shrinkself command by Harden
+		* New: Added Vermilion Orb of Clairvoyance, Buckler of Unliving to mana regen clickies (DoDh)
+		* New: Added Grand Illsalin Robe to manapool clickies (DoDh)
+		* New: Added Blood Rage Choker, Supersonic Eargear, Earring of Frozen Poison, Fractured Talon of the Clouded Dragon, Pristine Witheran Hide Drum, Salt-Encrusted Eyepatch, Salty Chatty Eyepatch, Borilbeard, the Eyepatch, Forgotten Artist's Mesh Wristwraps, Mayong's Sanguine Cloak to hp buff clickies.
+		* New: Added Collapsable Roboboar to mount clickies.
+		* New: Added Ali-Ani, the Eyes of Mayong, Doomstone Band of Seeing, Dark Void Shoulders, Black Web Mantle, Earring of Celestial Energy, Light Amphibian Hide Slippers, Tainted Undershore Rock, Wristguards of the Vampire Hunter, Ancient Werewolf Skull, Skull of the Den Lord, The Skull of Den Lord Rakban to resist clickies.
+		  If you have more than one resist clicky, krust will only refresh one of them.
+		  I need someone to explain how the two kinds of resist clickies stack.
+		  How do the Soul Energy/Eternal Ward/Chaotic Ward/Unliving Ward stack versus Form of Protection I/Form of Protection/Form of Protection III/Form of Protection IV/Aura of Pure Arcanum buffs?
+		  I heard they did stack if you clicked them in a certain order or something? Can someone fill me in :)
+
+		This should cover all (?) DoDh clickies discovered up to 2005.12.31
+
+Changes 2005.12.30:
+
+	krust.mac:
+		* Fix: Fixed auto-accepting of raid invites
+		* Fix: On occasions where krust tries to /sit, it no longer tries if you are casting a spell.
+		* New: "Learns" some misc information about mobs in gimp_zoneinfo.ini wich will be exposed in the target window
+		* New: /notinzone now displays count of classes still in zone next to each entry. Example:
+		
+			/notinzone
+			[MQ2] # Raid members not in zone:
+			[MQ2] Tank1 [WAR] (4 warriors in zone)
+			[MQ2] Healer1 [CLR] (2 clerics in zone)
+			[MQ2] 2 of 53 raid members not in zone
+		
+			This makes keeping track of the raid easier.
+			
+	krust_zoneinfo.ini:
+		* More zoneinfo added, especially for DoD zones
+		
+	gimp_modrod.inc:
+		* Fix: Fixed modrod reuse timer
+
+	gimp_clickies.inc:
+		* Change: Removed ClickyAmuletOfNecropotence, ClickyCrownOfDeceit INI settings.
+			Instead added ClickyIllusion=item name
+			
+			Old setting "ClickyAmuletOfNecropotence=1" must be changed to "ClickyIllusion=Amulet of Necropotence"
+			Old setting "ClickyCrownOfDeceit=1" must be changed to "ClickyIllusion=Crown of Deceit"
+			This change allows you to specify any clicky illusion item to be auto clicked for you.
+			Illusions will not autorefresh in raids.
+
+	gimp_dps.inc:
+		* Fix: Now correctly counts "mob slashes for xx" as damage taken
+
+	gimp_debuffinfo.inc:
+		* New: Shows when mob is slowed from monk disc Counterforce Discipline
+	
+	gimp_selflearn.inc:
+		* New file. Contains misc functions that auto updates krust_zoneinfo.ini
+
+Changes 2005.12.01:
+
+	gimp_buffrequests.inc:
+		* Fix: Improved parser so it recognizes more buff requests
+
+	gimp_debuffinfo.inc:
+		* New: Shows when you got death touch from Vishmitar on you (when you need to say 'shoulder my burden')
+		
+	krust.mac:
+		* New: Added /acceptinvite, wich will automatically accept your next group or raid invite.
+			Type /acceptinvite again to auto-accept the following 2 invites, etc.
+		* New: Added /notinzone, a command to list all raid members not currently in same zone as you are.
+		* Fix: Never auto /sit while moving in any case.
+		* Fix: Dont auto click mod rod if invisible!
+		
+	krust_zoneinfo.ini:
+		* New file. Moved out [ZoneInfo] section from krust.ini to a separate file. Please do not save your old
+			version of this file as new versions of krust will contain updates to it.
+
+	krust.ini.sample:
+		* Added [DebuffNotes] section with many examples
+
+
+Changes 2005.11.26:
+
+	gimp_dps.inc:
+		* Improvement: Finally implemented a primitive dps counter
+		* Improvement: Added DPS highscore tracker. To qualify for highscore, the dps has to have been measured over at least 1 minute fight
+
+	gimp_buffstatus.inc:
+		* Improvement: Recognizes Virtue and Hand of Virtue as "CONV" buffs (how did i miss those?)
+		* Improvement: Recognizes Talisman of Kragg as "FOCUS" buff
+
+	gimp_debuffinfo.inc:
+		* Improvement: Shows bard snare "Dirge of Metala"
+
+	UI:
+		* Improvement: Added combat ability reuse timers to EQUI_CombatAbilityWnd.xml
+		* Change: Moved FE in XX (full endurance) to EQUI_CombatAbilityWnd.xml
+		* Improvement: Added current DPS info to krust window
+
+
+Changes 2005.11.22:
+
+	krust.mac:
+		* Fix: When Healing Potion X was about to be clicked because of low hp, krust encountered parse error
+		* Improvement: Auto clicks of mod rod if <= 10% mana, >= 1500 hp and mod rod ready (harden)
+
+	gimp_buffstatus.inc:
+		* Change: Only lists summer as missing buff if in raid
+		* Improvement: Recognizes Spirit of the Predator as a "PREDATOR" buff
+		
+	gimp_debuffinfo.inc:
+		* Improvement: Shows rogue mez (Assassin's Feint)
+		* Improvement: Shows mez breaks
+		* Improvement: Shows when Gift of Mana triggers
+		* Improvement: Shows when Lay on Hands is used (side effect: also triggers on paladin group heals)
+
+	gimp_modrod.inc:
+		* Improvement: Rewritten to take adventage of ${FindItem["Rod of Mystical Transvergance"].Timer}
+
+
+Changes 2005.10.02:
+
+	krust.mac:
+		* /acceptrez command: Will auto accept the next rez cast upon you, and auto loot your corpse when done zoning.
+
+	gimp_dps:
+		* Change: Hides DoT damage when in raid
+
+	gimp_clickies:
+		* Bugfix: Minor fix for Slot 2 DS clickies
+		* Bugfix: Fixed overhaste clickies
+		* Bugfix: Resist clickes are refreshed in raid aswell, as long as you have open buff slots
+		* Improvement: Don't refresh some clickies / aa buffs if there's just 1 buff slot open (Resist Disease, Amulet of Necropotence, Wrath of the Wild AA)
+		* Improvement: Now recognizes Elixir of Speed V to X as haste buffs
+		
+	gimp_debuffinfo:
+		* Improvement: Shows when rangers go Weapon Shield (WS)
+		* Improvement: Guesses that mobs got slowed with proc from Truncheon of Doom if no chanter is nearby. 
+		
+	gimp_dps:
+		* Improvement: Now counts "neutral" damage, from damage shields and such
+		
+	gimp_buffstatus:
+		Mostly improvements/fixes for mid level game play
+		* Change: Renamed HOWL to PREDATOR, for ranger line ATK buffs
+		* Improvement: Only list missing DS for Tank classes in raid (in group it shows for all but casters)
+		* Improvement: Dont list missing PREDATOR if you have Call of the Predator
+		* Improvement: Recognizes Vallon's Quickening / Speed of Vallon as haste buffs
+		* Improvement: If cleric in group and you have Temperance/Blessing of Temperance, it wont list CONV as missing
+		* Improvement: Recognizes Brell's Mountainous Barrier, Wonderous Rapidity
+		
+	gimp_lions:
+		* Fix: Don't try to buff dead group members
+		
+	UI:
+		* krust data wnd: Added FE (full endurance) countdown
+
+
+Changes 2005.09.20:
+	* gimp_clickies.inc:
+		* Bugfix: /makepulleritem now works properly again
+		* Bugfix: Shroud of the Defender now refreshes properly again
+		* Bugfix: Initializes module earlier so it will be initialized properly
+		  if you start the macro in a "blocked" zone like guild lobby or PoK
+		* Improvement: /makepulleritem now takes a optional parameter to specify
+		  how many times to click puller item. Default is 5 clicks
+		* Improvement: Added a little logic to discover if a unknown zone is indoors
+		* Improvement: Added all known slot 4 ds clickis as of 2005.09.20: Cloak of Thorns,
+		  Crystallized Serpent Eye, Orb of Captured Sunlight, Bone Chill Shield, Cloak of Icy Shadows,
+		  Mantle of the Accused, Puresteel Mantle, Girdle of Intense Durability, Cerulean Painted Veil,
+		  Pauldron of Dark Auspices, Stormeye Band.
+		* Bugfix: Typo caused AoN not to get clicked
+		* Improvement: Added all known slot 3 attack clickes as of 2005.09.20: Fearsome Shield, Pauldrons of Ferocity.
+		* Improvement: Added clicky Voice of the Serpent, activate with ClickyVoiceOfTheSerpent=1
+		* Rewrite: Now finds your haste clicky and refreshes it if you specify useHasteClicky=1 in the INI.
+		  WARNING! useClickyGauntletsOfBattle and ClickyEyepatchOfPlunder is removed!
+			useHasteClicky will refresh the following clickies: Eyepatch of Plunder, Belt of Marvelous Visions,
+			Stanos' Wicked Gauntlets, Jymall's Gloves of Frenzy, Kizrak's Gauntlets of Battle, Lizardscale Plated Girdle.
+		* Improvement: Added all known overhaste clickies (Haste v3) as of 2005.09.20: Prism of Dark Hues,
+		  Silver Hoop of Speed, Ilsin's Cloak, Ring of Organic Darkness, Symbol of the Overlord
+
+	* gimp_assist.inc:
+		* Improvement: Now auto changes MA upon Delegate Group Main Assist & Delegate Raid Main Assist events.
+		* Rewrite: Moved out /targetbyhp command to a plugin called MQ2Krust.dll instead for 2000000x improved speed.
+		* Rewrite: Moved out /assistt command to a plugin for same reason.
+
+	* gimp_xptrack.inc:
+		* Bugfix: Corrected AA xp "kills left to ping" calculation it was off by 1
+
+	* gimp_debuffinfo.inc:
+		* Bugfix: Correctly shows if mob was SHM or ENC slowed.
+		* Improvement: Shows when someone is given Divine Intervention.
+		* Improvement: Shows BST Slow with Sha's Legacy
+		* Improvement: Shows DRU Epic 2.0 click
+		* Improvement: Shows NEC debuffs Scent of Midnight and Scent of Terris
+		
+	* gimp_buffstatus.inc:
+		* Completley rewritten module now working for all classes in both group & raid mode.
+			Only lists missing buffs if the needed buff class is present in group or raid.
+
+	* gimp_consent.inc:
+		* Bugfix: /lootmycorpse: Dont sit down after looting corpse if you are a class without mana.
+
+	* gimp_metabolism.inc:
+		* Bugfix: No longer force feeds while moving, looks less automated.
+
+	* gimp_modrod.inc:
+		* Bugfix: No longer autoinventories anything, after a modrod was discovered on cursor (less intrusive)
+
+	* UI:
+		krust data window:
+			* Improvement: Shows (NOT IN ZONE) if current MA is not in zone
+		EQUI_HotButtonWnd.xml: made compatible with DoDh, hotkey bar 2-4 works
+		EQUI_Inventory.xml: made compatible with DoDh, shows evolving items & shroud progression tabs
+
+	* krust.ini.sample:
+		* Updated DRU & CLR default recognized buffs
+		* ZoneInfo updates
+
+
+Changes 2005.08.09:
+	* gimp_assist.inc:
+		* added parameter: /ma playername, if MA is not in zone
+		* /targetbyhp now targets HoTT if its a player & less hp than any group member
+
+	* gimp_debuffinfo.inc:
+		* Now rcognizes mez from Bliss of the Nihil (ENC)
+		* No longer tries to stun healing mobs while you are in a RAID, this is hardly useful and when it triggers (tacvi for example) you just hate it anyway
+		* Shows ranger epic 1.0 slow proc
+		
+	* gimp_clickies.inc:
+		* Fixed so /rez, /makepulleritem and more dont get called twice (double includes..)
+		* Rewritten code so mana regen clicky, mana pool clicky, hp buff clicky, ds clicky refreshes when they are about to fade, instead of when they have faded (ty david)
+
+	* krust.mac:
+		* Dont auto stand on full mana if invisible or /afk
+		
+	* krust.ini.sample:
+		* Many additions to [ZoneInfo] section
+
+	* UI:
+		* Shows duration in short duration buff window+minor fixes
+		* Made buff window smaller again as it was a few releases ago
+		* Added title to buff window + song window so they are easier to move around
+		* Added numbers on spell bar that shows how many casts of this spell you can cast with current mana (mana preservation not counted in)
+		* Included improvements from Moeymoejoe, including:
+				* New map window, with Low & High filter input boxes
+				* Group window include distance to group members
+				* Player window now contain hp+mana regen numbers in blue (removed from krust data window)
+				* A new target window (EQUI_TargetWindow.xml.Moeymoejoe: Added ascii target direction thinger ( /^\ target is straight, =)- target is right, -(= target is left) to target window, moved stuff around a little, converted distance to int. )
+		* Player window: added current/max endurance & endurance regen
+
+
+Changes 2005.07.03:
+* krust.mac:
+	* Fixed event handling when camping out, so script will no longer sometimes stand you up for having FM.
+
+* gimp_buffrequests.inc:
+	* Added DontBuffWhenBusy=1 INI setting. If set it will not buff people who ask for buffs when you are busy.
+	* Minor bugfixes
+	
+* gimp_metabolism.inc:
+	* Don't try force feed when loot window is open
+
+* gimp_debuffinfo.inc:
+	* Some more debuffs recognized
+
+* gimp_consent.inc:
+	* Removed consent code. Use the new auto consent settings instead
+
+* all code:
+	* Updated to not use the ${String} TLO
+
+Changes 2005.06.02:
+
+* gimp_dps.inc:
+	* Fixes to healed-me counter
+
+* gimp_clickies.inc:
+	* Now only refreshes one clicky at a time
+	* Resumes sitting if sitting before checking clicky-buff status
+	* Rewritten atk buff clickies code. All atk clickies in game should now be supported,
+		Turn on auto usage with useClickyAttack=1 under [Playername] in krust.ini
+	* Rewritten ds clickies code. All ds clickies in game should now be supported,
+		Turn on auto usage with useClickyDS=1 under [Playername] in krust.ini
+	* Added resist clickies code.
+		Turn on auto usage with useClickyResists=1 under [Playername] in krust.ini
+	* NOTE: Some stacking issues with clickies might still exist, please contact me if you notice anything strange
+
+* gimp_buffstatus.inc:
+	* Fixed: HASTE buff status for melee buffs for non-int&wis casters
+	
+* gimp_assist.inc:
+	* Added: /lootmycorpse command, shamelessly stolen from ARCH.MAC
+
+* krust.ini:
+	* Added level 70 beastlord, shaman & enchanter buffrequests templates
+
+
+-------------------
+Changes 2005.05.28:
+* gimp_busy.inc:
+	* Holding a item on your cursor considered being busy
+
+* gimp_clickies.inc:
+	* Changed /unmount to alias of /dismount
+	* Added: /clickies, toggles clickies module ON / OFF
+	* Fixed Shroud of the Fallen Defender & Kizrak's Gauntlets of Battle mixup (thanks aristocle)
+
+* gimp_buffstatus.inc:
+	* Minor fixes
+	
+* gimp_buffrequests.inc:
+	* Added check to see if you have 9th buff slot AA or not, fixes buffrequest from not working if you lack this AA, was asked for a buff which was not memorized and all spell slots were full
+	* Improved spawn check
+	* Added INI option under [PlayerName]: DontBuffGroupMembers=1, to not allow buffrequests from group/raid members who is not guilded/whitelisted.
+	* If i was sitting when i got the request, end sitting
+	* Added: /buffrequests, toggles buffrequests module ON / OFF
+	
+* gimp_metabolism.inc:
+	* Added: /metabolism, toggles metabolism module ON / OFF
+
+* gimp_lions.inc:
+	* Fixed: Workaround for incomplete ${Raid.Member[]} data in odd cases (unload mq, load it again and don't zone)
+
+* gimp_dps.inc;
+	* Shows how much you have been healed for after fight.
+
+--------------------
+Changes 2005.05.23:
+* gimp_dps.inc:
+	* Ignore cleric reverse DS in reporting my own DS
+
+* gimp_modrod.inc:
+	* Auto destroys mod rod for melee classes
+	
+* gimp_clickies.inc:
+	* Added function to find your "summon puller items" clicky. Finds A Dusty Soriz Worker Pouch, Bloody Ancille's Pouch, Ton Po's Mystical Pouch
+	* Added /makepulleritem command to auto summon puller items.
+	* Fix: It ignored ClickyJboots=0 in INI previously. Now you can turn off auto refreshing with this setting.
+	* Added all hourses to find mount routine
+	* Added /shrinkgroup command
+	* Added /mount command to cast your mount
+	* Added /unmount command to drop mount buff
+	* Added function to find hp buff clickies & code to auto refresh these. Veil of the Inferno and Ring of the Beast so far.
+
+* gimp_metabolism.inc:
+	* Stops force feeding when no chest item equipped (assumes you are dead)
+	* Dont force feed if the specified forcefeed food/water is occupying the top 2 slots in 1st bag
+	* Fixed bug with eating & drinking at once locked up the bags
+
+* gimp_busy.inc:
+	* Sitting no longer considered being busy
+
+* gimp_debuffinfo.inc:
+	* Recognizes cleric Pacification
+
+* gimp_assist.inc:
+	* Fixed assist bug when changed MA
+	* Added /assistt command. Assists current target, aquires target from HoTT if available
+	* Added /targetbyhp command to target group member with least HP.
+	* Added /pbcure command to chain cast Pure Blood on target until it is cured
+	* Added /rgccure command to chain cast Remove Greater Curse on target until it is cured
+
+* gimp_buffrequests.inc
+	* Module disabled for Shadow Knights
+
+* krust.mac:
+	* Auto taunt mode. Activate with AutoTaunt=1 in krust.ini under [Playername] section
+	* Added /toggletaunt to change the AutoTaunt on the fly
+
+* UI:
+	* Various minor fixes
+	* Displays time left to Full Mana in krust data window
+	* Only displays target level if its != your level
+	* Target window: Removed target type, guild name, hides target level if it is same as your (white con), changed text "in raid (gX)" to "in group X"
+	* Inventory window: Moved stuff around. Added inventory.tga, if you want to add graphics in the drop-down area put it in the pink box
+	* Hotbutton window: Shows tribute timer, green text = tribute turned on
+
+-------------------
+Changes 2005.04.22:
+* gimp_clickies.inc:
+	* Put ClickyCrownOfDeceit=1 under [Playername] section in INI to auto refresh wood elf illusion, off in raid mode
+	* Now recognizes and automatically refreshes all mana pool clickies in game as of 2005.04.22
+	* Now recognizes and automatically refreshes all mana regen clickies in the game as of 2005.04.22
+
+* gimp_buffrequests.inc:
+	* Checks that the spell names in the INI are valid spells & that you have them in your spell book
+	* Now also handles AA abilities. Example: rc=Resplendent Cure
+	* Added DontAutoBuff option to INI under [PlayerName], to disable the module
+	* Added DontBuffIfSpellNotMemorized option to INI under [PlayerName], guess what it does!
+
+* gimp_buffstatus.inc:
+	* Raid Buff Mode: Now only list DMF as missing resist buff in zones that allows levitation
+
+* gimp_busy.inc
+	* New module that just checks if you are currently busy doing something, returns 1 if so. Used by gimp_clickies.inc & gimp_buffrequests.inc
+
+* gimp_modrod.inc
+	* Shows time left before rod is useable in this format: 4m32s
+
+* krust.mac
+	* Fixed recognition of Embrace of the Keepers
+	* Auto "installs" the /ma och /assistlast commands
+
+----
+big thanks to momom for testing

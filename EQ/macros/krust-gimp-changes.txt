@@ -1,0 +1,90 @@
+todo:
+
+	- implementera mcHUDbuffmode i krust TLO (group status..)
+	- implementera mcHUDbuffslots i krust TLO
+	
+	
+------
+2007.02.07:
+	- EQUI_FriendsWnd.xml:
+		* removed tanks & healers count. use a HUD instead if you want them
+		* removed SA display
+
+2007.01.29:
+	- EQUI_CompassWnd.xml:
+		* removed the coordinates, use a HUD instead if you want them
+
+2007.01.25
+	- gimp_debuffinfo.inc:
+		* Recognizes Sunscorch dot (TSS druid spell)
+
+2007.01.15
+	- gimp_modrod.inc:
+		* removed mcHUDmodrod, no longer used in UI
+		* removed retarded code about /destroying rods if you were full mana
+		* fixed so that modrod used messages show again
+
+2007.01.14 - REQUIRES MQ2-20070114 or newer
+	- EQUI_PlayerWindow.xml, EQUI_Inventory.xml: updated to use ${Me.svPrismatic} & ${Me.svChromatic} instead of calculating resists on the fly
+	- krust.mac: removed ${mcHUDLowestResist} and related code
+	- gimp_clickies.inc: BuffedAttack1 now recognize TSS ranger buff "Strength of the Forest Stalker"
+	- krust dll: started re-implementing buffstatus in C++:
+		* renamed the buff SENSE to FORESIGHT (Talisman of Foresight, Talisman of Sense line of buffs)
+		* renamed the buff DIRSKIN to DIREWILD
+		* fixed missing parenthesises on ARMOR-check (cleric only buff), missing parenthesises caused ARMOR to show up for other classes too:...
+		* all melee buffs are implemented as ${Krust.MeleeBuffs}
+		* all caster buffs are implemented as ${Krust.CasterBuffs}
+		* all resist buffs are implemented as ${Krust.ResistBuffs}
+		* recognizes "Legacy of Viridiflora Rk. II" and "Blessing of Purpose" buffs
+	
+	- EQUI_FriendsWnd.xml: implemented the new ${Krust.MeleeBuffs}, ${Krust.CasterBuffs}, ${Krust.ResistBuffs}
+	
+
+2007.01.12:
+	- gimp_debuffinfo.inc: added detection of Vertigo debuff on others & casts RGC on them automatically (for DK Event 2 - Guests)
+
+2007.01.10:
+  - gimp_clickies.inc: added error msg on /shrinkself if no shrink clicky was found
+  - krust.mac: Fixed so Distillate of Divine Healing X gets clicked, instead of whatever is in potion belt 1 (wtf harden???)
+
+2007.01.08:
+	- krust.mac: fixed so monk epic 1.0 only is casted if it stacks, instead of checking against a long list of non-stacking buffs (uses Spell[].Stacks)
+
+2006.12.28:
+	- gimp_debuffinfo.inc: recognizes necro TSS snare "Coruscating Darkness"
+
+
+2006.12.26:
+	- EQUI_PlayerWindow.xml: added "unspent AA points" number to the right of the AAXP bar and AAXP %
+
+2006.12.24
+	- gimp_debuffinfo.inc: shows when Gift of Radiant Mana proc's
+
+2006.12.23
+	- gimp_dps.inc: added display of heal over times on you
+
+2006.12.07
+	- UI: flyttade "MA" och "EN" texterna lite så dom inte ligger över varandra
+	- UI: flyttade upp "avg resist" texten lite
+	- krust.mac: changed so lowest resist variable (used in Player Window) only reports the resist, not the value
+	- krust.mac: changed so the lowest resist addverbations are the same as the gfx in player window (PSN,MGC,DIS,FIR,CLD)
+	- gimp_buffstatus.inc: shows druid self buff "Second Life" if missing, as "2NDLIFE"
+	- gimp_buffstatus.inc: shows if druid Aura of Life is missing, as AURA (todo: add more auras)
+	- UI: krust data: removed modrod status, tribute status, ds & rearranged some pieces to make the window take up less space
+
+2006.12.06
+  - added OMM event notices
+
+2006.11.30
+	- added triggers for Sullon Zek raid fight (razorthorn)
+
+2006.11.26
+	- uses "Gale of the Stormborn" to stun (TSS druid spell)
+	- recognizes "Wasp of Fireants", druid DoT
+	- added raid check for CORRUPT buff, so it will only show up as missing if you are in raid
+	- recognizes "Brell's Steadfast Aegis", pally hp buff
+
+
+2006.11.25, submitted changes to Harden:
+	- fixed COAT / MASK buff showing correctly (affects druids/rangers)
+	- added Viridicoat (all ranks) to recognized COAT buff (affects druids)

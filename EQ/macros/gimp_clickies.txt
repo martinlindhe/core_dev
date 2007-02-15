@@ -1,0 +1,103 @@
+Last edited: 2006.01.17
+
+Clickies
+--------
+A module that deals with auto refreshing of item clickies.
+
+When the krust macro is running, it will automatically refresh clickies for you.
+By default it will refresh manaregen and manapool clickies only.
+To get the most out of this module you will need to configure it some.
+I have tried to split up clickes by type, so you will just have to activate "resist clickies" for example,
+and no matter what resist clicky you might have, they will be auto casted.
+
+This module also take adventage of data from krust_zoneinfo.ini if present.
+
+This module will not refresh clickies under certain circumstances:
+A) You are /afk, or invisible
+B) You are in a neutral zone (click here for neutral zone listing)
+C) Jboots are not refreshed in indoor zones (see krust_zoneinfo.ini)
+
+
+
+INI settings for clickies module
+--------------------------------
+All these settings are read from [Playername] in krust.ini
+
+Turn on clickies by type:
+-----------------------------
+useClickyResists=1							Refreshes your resist clickies
+useClickyAttack=1								Refreshes your attack clickies (slot 1, 3 and 5)
+useClickyDS=1										Refreshes your DS clickies (slot 2 and 4)
+useClickyHaste=1								Refreshes your haste and overhaste (Haste v3) clickies
+useClickyAC=1										Refreshes your AC clickies
+
+In addition, there is a few odd clickies you need to turn on like:
+ClickyJboots=1									Refreshes your Journeyman's Boots / Fabled Journeyman's Boots
+ClickyBracerOfTheHidden=1				Refreshes your Bracer of the Hidden
+ClickyIllusion=item name				Refreshes your illusion clicky
+ClickyVoiceOfTheSerpent=1				Refreshes your Voice of the Serpent
+ClickyRapierOfSomberNotes=1			Refreshes your Rapier of Somber Notes (bard tacvi clicky)
+
+Example INI section to turn everything on by default:
+[Playername]
+useClickyResists=1
+useClickyAttack=1
+useClickyDS=1
+useClickyHaste=1
+useClickyAC=1
+ClickyIllusion=Amulet of Necropotence
+ClickyJboots=1
+ClickyBracerOfTheHidden=1
+ClickyVoiceOfTheSerpent=1
+ClickyRapierOfSomberNotes=1
+
+
+Disabling the module
+--------------------
+/clickies												Toggles clickies module ON or OFF, if you wish to pause clickies refresh at some point
+This change is only for the duration of the script. When script is restarted the setting is forgotten.
+Module is turned ON when krust is started
+
+
+The clickies module also adds some /slash commands to EverQuest to improve gameplay
+----------------------------------
+/rez														Target a corpse and /rez it with your cleric epic 1.0 (auto equips and clicks it)
+/shrinkgroup										Shrinks nearby group members that is not already shrunk with your targetable shrink item (bracelet of the shadow hive and such)
+/shrinkself											Shrinks yourself with your shrink clicky
+/makepulleritem #ammount				Clicks your "summon puller item" clicky #ammount times (default is 5)
+/mount													Casts your mount clicky
+
+
+List all supported clickies:
+	Everything i could dig out of Lucy database + help from forums, up to and including DoDh expansion,
+	as of 2006.01.05
+ 
+
+
+
+
+Compatiblity: This module takes advantage of MQ2Exchange plugin if it is loaded (fixme)
+
+Status: Mostly complete.
+
+Todo:
+	* MQ2Exchange support
+	* Make neutral zones a INI section
+	* Verify the example works stand-alone
+	* BuffedAttack* functions return buffname instead of number so we can refresh buffs before they have faded
+	* store current ON/OFF mode of /clickies in INI
+
+For developers:
+	Exposes ${gimp_clickies_loaded} and ${gimp_clickies_activated} globally
+
+	#define INI_FILE yourinifile.ini
+	#include gimp_clickies.inc
+	
+	/declare UpdateClickiesTimer timer outer 0
+
+	|Put this in your macro's main loop
+	/if (!${UpdateClickiesTimer}) {
+		/call DoClickies
+		/varset UpdateClickiesTimer 60s
+	}
+

@@ -1,0 +1,493 @@
+|cleric: spamma inte ch om man e oor, eller oom
+|buff fixande: satt jag innan, avsluta sittande
+|  -""-: kasta inte zealot på clr om druid e i gruppen
+|  -""-: buffa lions på melees
+|
+|* för druid, definiera QHEAL % om man har cleric i gruppen, och ett annat % om man inte har det,
+|  för detta behövs:
+|* trigga event på "you have joined the group", "XXX have joined the group", "xxx have left the group"
+|  vid dessa event, uppdatera globala booleans ${HaveDruid} ${HaveCleric} etc
+
+
+
+
+|Also, the /delay 10 can also take an argument. Like:
+|Code:
+|/delay 10 ${Target.ID}==${ToonID}
+|or in your case:
+|Code:
+|/delay 10 ${Target.CleanName.Equal[${Toon}]}
+|I *think* that's how it would work, but it's been a while since I actually wrote a mac of my own. The above would have it delay 1s or until your Target's Clean Name is "Foo", whichever comes first
+
+
+
+
+#define IRC_SERVER		127.0.0.1
+#define	IRC_PORT		14809
+#define	IRC_CHANNEL		#beep
+
+#define INI_FILE		krust.ini
+#define ZONEINFO_FILE	krust_zoneinfo.ini
+#define NOT_FOUND		0
+
+|if this bot have more ldr aa's than the leader, ask for leadership (data not available in mq for this)
+
+
+|Leader commands: ! = todo
+| !MT #tankname - Tell healer types who is main tank
+| ALLQUIT - All bots quit irc & ends the scripts
+| ALLCAMP - All bots camp
+| ASSIST #zoneid #spawnid
+| FOLLOWME - The rest follows
+| MAKEMELEADER - Makes this person group/raid leader
+| BUFFGROUP - Refreshes group buffs
+
+|Bot commands:
+| INVITEME - If another bot/group leader is in zone, bot will be invited
+
+#include spell_routines.inc
+
+#include gimp_assist.inc
+#include gimp_lions.inc
+#include gimp_xptrack.inc
+#include gimp_clickies.inc
+#include gimp_metabolism.inc
+#include gimp_buffrequests.inc
+
+#include bot_death.inc
+#include bot_handleassist.inc
+
+#include advpath.inc
+
+
+#Event HANDLE_TELLS "#1# tells you, '#2#'"
+Sub Event_HANDLE_TELLS(string Line, string Player, string Message)
+	/if (${Spawn[${Player}].Type.Equal[Pet]}) {
+		/return
+	}
+	/call DebugMsg # CHAT: ${Player}: ${Message}
+/return
+
+
+#event HANDLE_BUFFGROUP "<#1#> BUFFGROUP"
+Sub Event_HANDLE_BUFFGROUP(string Line, string Sender)
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+	
+	/call UpdateBuffs
+
+/return
+
+
+
+|Usage: Leader character use hotkey: /i msg #beep ASSIST ${Zone.ID} ${Spawn.ID}
+#event HANDLE_ASSIST "<#1#> ASSIST #2# #3#"
+Sub Event_HANDLE_ASSIST(string Line, string Sender, int ZoneId, int SpawnId)
+
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+	/if (${Zone.ID} == ${ZoneId}) {
+		/call HandleAssistCall ${SpawnId}
+	}
+
+/return
+
+|addverbated form:
+#event HANDLE_DAMAGEMELEE	"#1# hits for #2#"
+#event HANDLE_DAMAGEMELEE	"#1# kicks for #2#"
+#event HANDLE_DAMAGEMELEE	"#1# pierces for #2#"
+#event HANDLE_DAMAGEMELEE	"#1# bashes for #2#"
+|#Event HANDLE_DAMAGEMELEE	"#1# crush for #2#"
+|#Event HANDLE_DAMAGEMELEE	"#1# punch for #2#"
+|#Event HANDLE_DAMAGEMELEE	"#1# slash for #2#"
+|#Event HANDLE_DAMAGEMELEE	"#1# backstab for #2#"
+Sub Event_HANDLE_DAMAGEMELEE(string Line, string Name, int dmg)
+
+	|Uses Healing Potion X if possible
+	/if ((${Me.PctHPs} <= 8) && !${timerHealingPotion} && !${Me.Stunned}) {
+		/if (${FindItem["Healing Potion X"].InvSlot}) {
+			/call DebugMsg # CLICKING HEALING POTION X!!!
+			/call Cast "Healing Potion X" item
+			/varset timerHealingPotion 1200
+		} else {
+				
+			|Warrior DA
+			/if (${Me.CombatAbilityReady["Furious Discipline"]}) {
+				/call DebugMsg # Using FURIOUS DISC!!!
+				/doability "Furious Discipline"
+			}
+
+			|fixme: Beastlord defensive, cleric DA
+
+		}
+	}
+
+	/if (!${MeleeDmgTimer} && (${dmg} > 100)) {
+		|/call DebugMsg # ${Name} HITS ME!
+		/varset MeleeDmgTimer 5s
+	} else {
+		|Timern e igång
+		/varcalc MeleeHitCounter ${MeleeHitCounter}+1
+		/varcalc MeleeHitAmmount ${MeleeHitAmmount}+${dmg}
+		/echo # Debug: Melee hit counter: ${MeleeHitCounter} (dmg ${MeleeHitAmmount})
+	
+		/if (${MeleeHitAmmount} > 1000) {
+			/if (${MeleeHitCounter} > 40) {
+				|I have been hit many times for small ammounts, ignore
+				/varset MeleeHitCounter 0
+				/varset MeleeHitAmmount 0
+				/return
+			}
+			|druid: räkna hits jag får, använd oaken guard när ja e över 3 hits på 5 sek
+			/if (${Me.SpellReady["Oaken Guard"]}) {
+				/call Cast "Oaken Guard"
+				/call DebugMsg HELP! Going DA! (hit for ${MeleeHitAmmount} in ${MeleeHitCounter} hits)
+				/varset MeleeHitCounter 0
+				/varset MeleeHitAmmount 0
+			}
+		}
+	}
+
+/return
+
+#event HANDLE_MAKEMELEADER "<#1#> MAKEMELEADER"
+Sub Event_HANDLE_MAKEMELEADER(string Line, string Sender)
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+	/if (${Group.Members} && (${Group.Leader.ID} == ${Me.ID})) {
+		/call DebugMsg # Making ${Sender} groupleader
+		/makeleader ${Sender}
+	}
+/return
+
+#event HANDLE_FOLLOWME "<#1#> FOLLOWME"
+Sub Event_HANDLE_FOLLOWME(string Line, string Sender)
+
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+	/if (${Spawn[pc ${Sender}].ID}) {
+
+		/if (${Spawn[pc ${Sender}].Distance} < 200) {
+			/call DebugMsg # Following ${Sender}
+			/target pc ${Sender}
+			/call AutoFollow ${Target.ID}
+		} else {
+			/call DebugMsg # Error: Cant follow ${Sender}, OOR!
+		}
+	}
+/return
+
+#event HANDLE_STOPFOLLOW "<#1#> STOPFOLLOW"
+Sub Event_HANDLE_STOPFOLLOW(string Line, string Sender)
+
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+	/varset stopAutoFollow 1
+/return
+
+Sub AutoFollow(int id)
+
+	/declare ComplainTimer timer local 0
+
+	|Making small viewport to reduce lag
+	/viewport 0 0 10 10
+
+	/if (${Me.Sitting}) {
+		/stand
+	}
+	/if (${Me.Buff["Summon Drogmor"].ID} || ${Me.Buff["Summon Horse"].ID}) {
+		/dismount
+	}
+
+	/target id ${id}
+
+	/varset stopAutoFollow 0
+	:Loop
+		/if (${Target.Distance} > 35) {
+			/keypress forward hold 
+		}
+		/if (${Target.Distance} < 5) {
+			/keypress back hold
+			/timed 1 /keypress back
+		}
+		/if (${Target.Distance} > 300) {
+			|klagar bara var 6:e sek
+			/if (!${ComplainTimer}) {
+				/varset ComplainTimer 6s
+				/call DebugMsg HELP! I'm left behind!
+			}
+		}
+		/if (!${Target.ID}) {
+			/echo # Target zoned/died - stopping follow
+			/goto :End
+		}
+		/face nolook fast
+		/doevents
+		/if (${stopAutoFollow}) {
+			/call DebugMsg # Stopping following ${Target.Name}
+			/goto :End
+		}
+	/goto :Loop
+
+	:End
+	/keypress forward
+	/keypress back
+
+	/viewport reset
+
+/return
+
+
+#event HANDLE_MANACHECK "<#1#> MANA"
+Sub Event_HANDLE_MANACHECK(string Line, string Sender)
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+	/if (${Me.MaxMana}) {
+		/call DebugMsg # Manacheck: ${Me.PctMana}m - FM in ${Int[${Math.Calc[(${Me.MaxMana}-${Me.CurrentMana})/(${Me.ManaRegen}|1)/10]}]}m${Int[${Math.Calc[(${Me.MaxMana}-${Me.CurrentMana})/(${Me.ManaRegen}|1)%10*6]}]}s (${Me.CurrentMana}/${Me.MaxMana} MANA)
+	}
+/return
+
+
+#event HANDLE_ALLQUIT "<#1#> ALLQUIT"
+Sub Event_HANDLE_ALLQUIT(string Line, string Sender)
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+	/echo # EXITING - ${Sender} ordered exit!
+	/i quit EXITING
+	/endmacro
+/return
+
+#event HANDLE_ALLCAMP "<#1#> ALLCAMP"
+Sub Event_HANDLE_ALLCAMP(string Line, string Sender)
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+	/echo # EXITING - ${Sender} ordered /camp !
+	/i quit CAMPING
+	/if (${Me.Buff["Summon Drogmor"].ID} || ${Me.Buff["Summon Horse"].ID}) {
+		/dismount
+	}
+	/camp desktop
+	/disband
+	/endmacro
+/return
+
+#event HANDLE_BUFFREQ "<#1#> BUFFREQ #2#"
+Sub Event_HANDLE_BUFFREQ(string Line, string Sender, string SpellName)
+
+
+	/if (${Me.Book[${SpellName}]} && ${Spawn[pc ${Sender}].ID}) {
+		/if (${Me.Moving} || ${Me.Feigning} || ${Me.Invis}) {
+			/call DebugMsg # IGNORING BUFFREQ FROM ${Sender} - BUSY!
+			/return
+		}
+
+		/call DebugMsg # Buffing ${Sender} with ${SpellName}
+		/target pc ${Sender}
+
+		/declare oldSpell string local ${Me.Gem[7]}
+
+		/call Cast "${SpellName}" gem7
+		/call WaitForSpellReady "${SpellName}"
+
+		/if (${Me.Gem[7].Name.NotEqual["${oldSpell}"]}) {
+			/delay 2s
+			/echo # Restoring old spell gem
+			/memspell 7 "${oldSpell}"
+		}
+	}
+
+/return
+
+|This function creates groups with all the bots
+#event HANDLE_INVITEME "<#1#> INVITEME"
+Sub Event_HANDLE_INVITEME(string Line, string Sender)
+
+	/if (!${Ini[INI_FILE, BotNet, ${Sender}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING REQUEST!
+		/return
+	}
+
+	/if (!${Group.Members} && !${Raid.Members}) {
+		/call DebugMsg # Forming group with ${Sender}
+		/invite ${Sender}
+	} else {
+		|This code invites player to group or to raid if group is full.
+		|If raid is created, it lets another group leader do the invite
+		|Am I group leader? ${Me.AmIGroupLeader} is broken
+		/if (${Group.Leader.ID} == ${Me.ID}) {
+			/if (${Group.Members} < 5) {
+				/call DebugMsg # Inviting ${Sender} to group
+				/invite ${Sender}
+			} else {
+				/if (!${Raid.Members}) {
+					|dont do shit..
+					/return
+					|fixme: when raid consist of 2 full groups, it won't invite more ppl to raid with this code
+					/call DebugMsg # Inviting ${Sender} to raid
+					/raidinvite ${Sender}
+				} else {
+					/echo # Debug: My group is full and I am in raid, let next group leader handle invite.
+				}
+			}
+		} else {
+			|/echo # Debug: Can't form group with ${Sender}-im not leader
+		}
+	}
+/return
+
+|This function forms raids with all the bots
+#event HANDLE_INVITEDRAID "#1# invites you to join a raid."
+Sub Event_HANDLE_INVITEDRAID(string Line, string Player)
+
+	/if (!${Ini[INI_FILE, BotNet, ${Player}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING RAID INVITE FROM ${Player}
+		/return
+	}
+
+	/if (!${Raid.Members}) {
+		/call DebugMsg # Accepted raid invite from ${Player}
+		/delay ${Math.Calc[${Math.Rand[2]}+1]}s
+		/raidaccept
+	} else {
+		/call DebugMsg # Warning: I was invited to raid by ${Player} but am already in raid
+	}
+
+/return
+
+
+#event HANDLE_INVITED "#1# invites you to join a group."
+Sub Event_HANDLE_INVITED(string Line, string Player)
+
+	|This function creates groups or forms raids with all the bots
+	/if (!${Ini[INI_FILE, BotNet, ${Player}, NOT_FOUND]}) {
+		/call DebugMsg # IGNORING GROUP INVITE FROM ${Player}
+		/return
+	}
+
+	/if (!${Group.Members}) {
+		/call DebugMsg # Accepted group invite from ${Player}
+		/delay ${Math.Calc[${Math.Rand[2]}+1]}s
+		/invite
+		/delay 3s
+	} else {
+		/call DebugMsg # Warning: I was invited by ${Player} but am already in group
+	}
+
+/return
+
+#event	HANDLE_Camping				"#*#It will take you about 30 seconds to prepare your camp.#*#"
+Sub Event_HANDLE_Camping
+	/echo Camping - Ending macro!
+	/i quit CAMPING
+	/endmacro
+/return
+
+
+#event HANDLE_INTERRUPTED "Your spell is interrupted."
+Sub Event_HANDLE_INTERRUPTED(string Line)
+	/call DebugMsg # Interrupted!
+/return
+
+#event HANDLE_ENTERED "You have entered #1#."
+Sub Event_HANDLE_ENTERED(string Line, string Zone)
+
+	/call GetGroupInvite
+
+/return
+
+#event HANDLE_Zoning				"LOADING, PLEASE WAIT..."
+Sub Event_HANDLE_Zoning(string Line)
+	/call DebugMsg Zoning
+	|Variable is used to break into neverending loops after deaths and such
+	/varset AbortLoop 1
+/return
+
+Sub GetGroupInvite
+
+	|If I am not in a group, ask for group invite
+	/if (!${Group.Members}) {
+		/call DebugMsg INVITEME
+	}
+/return
+
+|for advpath.inc
+Sub WaitTilThere
+	:LoopTilThere
+	/if (${PathingFlag}==1) {
+		/call AdvPathPoll
+		/delay 0
+		/doevents
+		/goto :LoopTilThere
+	}
+/return
+
+
+Sub Main
+
+	/declare MeleeDmgTimer timer outer 0
+	/declare MeleeHitCounter int outer 0
+	/declare MeleeHitAmmount int outer 0
+	/declare timerHealingPotion		timer outer 0
+
+	/declare AbortLoop					int outer 0
+	/declare stopAutoFollow				int outer 0
+
+	|for advpath.inc:
+	/call InitAPFVars 1 15 20
+
+	/call Init_XP
+	/call Init_HandleAssist
+
+	|fixme: it dont join channel...
+	/iconnect IRC_SERVER IRC_PORT IRC_CHANNEL ${Me.Name}
+	/delay 2s
+	/i join IRC_CHANNEL
+
+	/echo in channel: ${Irc.Channel} with nick ${Irc.Nick}
+	/call GetGroupInvite
+
+	/declare clickiesTimer	timer local 0
+	/declare SpawnId int local 0
+
+	:MainLoop
+	/doevents
+	/if (!${clickiesTimer}) {
+		/call DoClickies
+		/call CheckFood
+		/varset clickiesTimer 600
+	}
+
+	/if (${Spawn[npc radius 40].ID} && ${Spawn[npc radius 40].LineOfSight}) {
+		/call CheckNeutralZone
+		/if (!${Macro.Return}) {
+
+			/if (AUTO_ATTACK_MOBS && ${Me.Class.Name.Equal[Warrior]}) {
+				/varset SpawnId ${Spawn[npc radius 40].ID}
+				/call DebugMsg ##### MOB HERE !!!! AUTOATTACKING
+				/call DebugMsg ASSIST ${Zone.ID} ${SpawnId}
+				/call HandleAssistCall ${SpawnId}
+			}
+		}
+	}
+
+	/goto :MainLoop
+
+/return
+
+

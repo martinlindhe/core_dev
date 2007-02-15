@@ -1,0 +1,14 @@
+| test för mq2exchange
+
+
+|/exchange "itemname"|itemid <slotname|slotnumber>
+|Swaps "itemname"|itemid into <slotname|slotnumber> 
+
+|Rye of Eternity
+|Water of Eternity
+
+sub Main
+
+	/exchange "Rye of Eternity" pack8
+
+/return

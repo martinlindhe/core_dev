@@ -1,0 +1,72 @@
+2007.02.07:
+	- bot_spells.inc:
+		* ny fil
+		* HandleGroupHeal() kastar snabbis-quickheal om target är låg hp (adrenaline surge t.ex)
+
+2007.02.04:
+	- bot_handleassist.inc:
+		* fixade så att RefreshBuffs() använder lediga buffslots om sådana finns
+
+2007.02.01:
+	- bot_handleassist.inc:
+		* la dit stöd för att "vitlista" mobbar som ej ska dödas, quest npc's etc, om MT av misstag targetar en sån, så assistar vi ej
+
+2007.01.29:
+	- slack.mac:
+		* stödjer Delegate MA nu, behöver ej /assist'a mt för targets
+		
+	- bot_handleassist_druid.inc:
+		* rensat upp nuke-logiken lite
+
+2007.01.27:
+	- bot_handleassist_mage.inc:
+		* ny fil
+
+2007.01.26:
+	- bot_handleassist_druid.inc:
+		* autodetectar fire/cold nuke, och fire/cold debuff utifrån vad som är memorizat när scriptet körs
+	
+	- bot_handleassist.inc:
+		* FindTank() fix så den ignorerar auras/mounts om ingen PC tank hittas i närheten
+		* AttemptToStun() ignorerar mobbar över lv75
+
+2007.01.25:
+	- slack.mac:
+		* olika assist range beroende på i grupp eller i raid: grupp 150, raid 70
+		* raid mode: får automatiskt target från Raid MA
+
+2007.01.19:
+	- bot_handleassit_druid.inc:
+		* klickar inte Glitterfrost tunic i heal-only-mode
+
+2007.01.13:
+	- bot_handleassist_druid.inc:
+		* kastar inte group-DS när man är i raid
+
+2007.01.12:
+	- bot_handleassist_druid.inc:
+	  * buffar inte egen familiar med pet buffs
+	  * DruidUpdateBuffs() refreshar Second Life under förutsättning att den redan är memorizad och redo att kastas
+	    (den tar lång tid innan den blir redo att kasta efter den memorizats)
+	  * HandleAssistCallDruid() använder Everliving Bramble Tunic nuke clicky
+	
+	- bot_handleassist.inc:
+		* HandleEndOfFightCaster() upprensad
+		* RefreshBuff() /target myself, på spell buffs, så group buffs träffar gruppmedlemmar
+		* HandleGroupHeal() återställer inte gamla target när den är klar, mindre target-ändrande
+
+
+2006.12.28:
+	- bot_handleassist_druid.inc: 
+		* läser nu ready-timer från epic istället för att ha en intern counter,
+		  så epic reuse time funkar nu direkt när man startar om scriptet
+		* auto-curar Wind of Tashanian
+		* lade dit tss-spellnames
+		* refreshar item clickies
+		* refershar druid aura (Aura of Life)
+		* la till en minimum-level check på target för druid epic click (lv65)
+
+	- bot_handleassist.inc:
+		* RefreshBuff klarar nu av clicky-item namn
+	  * FindTank prioriterar efter level, så den skippar en lv74 tank om det finns en lv75 i gruppen
+		* AttemptToStun stöd för tss-druid stuns, nukar bara mobbar lv <= 75

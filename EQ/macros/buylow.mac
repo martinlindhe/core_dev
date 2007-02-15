@@ -1,0 +1,67 @@
+|-----------------------------------------------------------------------
+| Program     : buylow.mac
+| Author      : Script Guy
+| Purpose     : Buy Low, Sell High, Make Plat
+|
+| Version     : 1.0 01/10/2007 - Initial version
+|
+| Useage      : /mac buylow ##
+|             : Param0 = Minimum Profit
+|
+| Example     : /mac buylow 10 - Look for items with a 10 plat profit or more
+|
+| Description : Search through a trader for items below vendor buy price
+| Credits     : Ieatacid (tribute.mac)
+|-----------------------------------------------------------------------
+
+#turbo
+
+Sub Main(int Param0, string Param1, string Buy)
+    /if (!${Target.ID} || ${Target.Distance}>20) {
+        /echo No target or target is too far away!
+        /endmacro
+    }
+
+    /declare BuyVal    float local 0   | Price that the Trader is selling the item for
+    /declare SellVal   float local 0   | Price that a Vendor will give me for the item
+    /declare Profit    float local 0   | Profit from Buying Low and Selling High
+    /declare TotProfit float local 0   | Total Profit to be made from Trader
+    /declare i         int   outer     | Iteration Item counter
+    /declare ctr       int   outer 0   | Counter for number of profitable Items on Trader
+    /declare MinProfit int   local 10   | Minimum amount of Profit to determine if we should buy the item
+    /declare pp1       int   local 0   | Copper
+    /declare pp2       int   local 0   | Silver
+    /declare pp3       int   local 0   | Gold
+    /declare pp4       int   local 0   | Platinum
+
+		/if (${Param0}) /varset MinProfit ${Param0}
+
+    /echo Retrieving data for > ${Target.CleanName} <, min profit ${MinProfit}
+    /click right target
+    /delay 5s
+
+    /for i 1 to 80
+        /if (!${Merchant.Item[${i}].ID}) /goto :end
+        /varset pp1 ${Window[MerchantWnd].Child[itemList].List[${Window[MerchantWnd].Child[itemList].List[=${Merchant.Item[${i}]},2]},4]}
+        /varset pp2 ${Math.Calc[${Window[MerchantWnd].Child[itemList].List[${Window[MerchantWnd].Child[itemList].List[=${Merchant.Item[${i}]},2]},5]}*10]}
+        /varset pp3 ${Math.Calc[${Window[MerchantWnd].Child[itemList].List[${Window[MerchantWnd].Child[itemList].List[=${Merchant.Item[${i}]},2]},6]}*100]}
+        /varset pp4 ${Math.Calc[${Window[MerchantWnd].Child[itemList].List[${Window[MerchantWnd].Child[itemList].List[=${Merchant.Item[${i}]},2]},7]}*1000]}
+        /varset BuyVal ${Math.Calc[${pp1}+${pp2}+${pp3}+${pp4}]}
+        /varset SellVal ${Math.Calc[${Merchant.Item[${i}].Value}/1000]}
+        /varset Profit ${Math.Calc[${SellVal}-${BuyVal}]}
+
+        /if (${Profit}>=${MinProfit}) {
+            |/echo ${Merchant.Item[${i}].Name}:  Profit: ${SellVal} - ${BuyVal} = ${Profit}
+            /echo ${Merchant.Item[${i}].Name}:  Profit: ${Profit}
+            /varcalc TotProfit ${Math.Calc[${TotProfit}+${Profit}]}
+            /varcalc ctr (${ctr}+1)
+        }
+    /next i
+
+    :end
+    
+    /ini "buylow.ini" "CheckedTraders" "${Target.Name}" "${Time.Date} ${Time}"
+
+		|/if (${ctr}) /echo Number of Items:  ${ctr} Total Profit: ${TotProfit}
+    /if (!${ctr}) /cleanup
+/return

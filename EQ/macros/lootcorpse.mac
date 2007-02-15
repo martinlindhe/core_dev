@@ -1,0 +1,5 @@
+#include gimp_consent.inc
+
+Sub Main
+	/call Event_LootMyCorpse
+/return
