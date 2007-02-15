@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<XML ID="EQInterfaceDefinitionLanguage">
+  <Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />
+  <STMLbox item="IDW_ItemDescription">
+    <ScreenID>ItemDescription</ScreenID>
+    <DrawTemplate>WDT_Inner</DrawTemplate>
+    <RelativePosition>true</RelativePosition>
+    <Style_VScroll>true</Style_VScroll>
+    <AutoStretch>true</AutoStretch>
+    <LeftAnchorOffset>0</LeftAnchorOffset>
+    <TopAnchorOffset>0</TopAnchorOffset>
+    <RightAnchorOffset>0</RightAnchorOffset>
+    <BottomAnchorOffset>3</BottomAnchorOffset>
+    <RightAnchorToLeft>false</RightAnchorToLeft>
+    <BottomAnchorToTop>false</BottomAnchorToTop>
+    <LeftAnchorToLeft>true</LeftAnchorToLeft>
+    <TopAnchorToTop>true</TopAnchorToTop>
+    <Style_Border>true</Style_Border>
+    <Text>Item Description</Text>
+  </STMLbox>
+  <STMLbox item="IDW_ItemLore">
+    <ScreenID>ItemLore</ScreenID>
+    <DrawTemplate>WDT_Inner</DrawTemplate>
+    <RelativePosition>true</RelativePosition>
+    <Style_VScroll>true</Style_VScroll>
+    <AutoStretch>true</AutoStretch>
+    <LeftAnchorOffset>0</LeftAnchorOffset>
+    <TopAnchorOffset>0</TopAnchorOffset>
+    <RightAnchorOffset>0</RightAnchorOffset>
+    <BottomAnchorOffset>3</BottomAnchorOffset>
+    <RightAnchorToLeft>false</RightAnchorToLeft>
+    <BottomAnchorToTop>false</BottomAnchorToTop>
+    <LeftAnchorToLeft>true</LeftAnchorToLeft>
+    <TopAnchorToTop>true</TopAnchorToTop>
+    <Style_Border>true</Style_Border>
+    <Text>Item Lore</Text>
+  </STMLbox>
+  <Button item="IDW_IconButton">
+    <ScreenID>IconButton</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <AutoStretch>true</AutoStretch>
+    <LeftAnchorOffset>70</LeftAnchorOffset>
+    <TopAnchorOffset>12</TopAnchorOffset>
+    <RightAnchorOffset>26</RightAnchorOffset>
+    <BottomAnchorOffset>56</BottomAnchorOffset>
+    <RightAnchorToLeft>false</RightAnchorToLeft>
+    <BottomAnchorToTop>true</BottomAnchorToTop>
+    <LeftAnchorToLeft>false</LeftAnchorToLeft>
+    <TopAnchorToTop>true</TopAnchorToTop>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <!--<TooltipReference/>-->
+    <Style_Checkbox>false</Style_Checkbox>
+    <!--<RadioGroup/>-->
+    <ButtonDrawTemplate>
+      <Normal>RedIconBackground</Normal>
+      <NormalDecal>BuffIcons</NormalDecal>
+    </ButtonDrawTemplate>
+    <SoundPressed />
+    <SoundUp />
+    <SoundFlyby />
+    <DecalOffset>
+      <X>2</X>
+      <Y>2</Y>
+    </DecalOffset>
+    <DecalSize>
+      <CX>40</CX>
+      <CY>40</CY>
+    </DecalSize>
+  </Button>
+  <Page item="IDW_ItemDescriptionTab">
+    <ScreenID>ItemDescriptionTab</ScreenID>
+    <TabText>Description</TabText>
+    <TabTextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TabTextColor>
+    <TabTextActiveColor>
+      <R>255</R>
+      <G>255</G>
+      <B>0</B>
+    </TabTextActiveColor>
+    <DrawTemplate>WDT_Def</DrawTemplate>
+    <Pieces>IDW_ItemDescription</Pieces>
+    <Pieces>IDW_IconButton</Pieces>
+    <Location>
+      <X>0</X>
+      <Y>22</Y>
+    </Location>
+    <Size>
+      <CX>361</CX>
+      <CY>177</CY>
+    </Size>
+  </Page>
+  <Page item="IDW_ItemLoreTab">
+    <ScreenID>ItemLoreTab</ScreenID>
+    <TabText>Lore</TabText>
+    <TabTextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TabTextColor>
+    <TabTextActiveColor>
+      <R>255</R>
+      <G>255</G>
+      <B>0</B>
+    </TabTextActiveColor>
+    <DrawTemplate>WDT_Def</DrawTemplate>
+    <Pieces>IDW_ItemLore</Pieces>
+    <Location>
+      <X>0</X>
+      <Y>22</Y>
+    </Location>
+    <Size>
+      <CX>361</CX>
+      <CY>177</CY>
+    </Size>
+  </Page>
+  <TabBox item="IDW_ItemDescriptionTabBox">
+    <ScreenID>ItemDescriptionTabBox</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <AutoStretch>true</AutoStretch>
+    <TopAnchorToTop>true</TopAnchorToTop>
+    <BottomAnchorToTop>false</BottomAnchorToTop>
+    <LeftAnchorToLeft>true</LeftAnchorToLeft>
+    <RightAnchorToLeft>false</RightAnchorToLeft>
+    <TabBorderTemplate>FT_DefTabBorder</TabBorderTemplate>
+    <PageBorderTemplate>FT_DefPageBorder</PageBorderTemplate>
+    <Pages>IDW_ItemDescriptionTab</Pages>
+    <Pages>IDW_ItemLoreTab</Pages>
+    <LeftAnchorOffset>2</LeftAnchorOffset>
+    <RightAnchorOffset>-2</RightAnchorOffset>
+    <TopAnchorOffset>2</TopAnchorOffset>
+    <BottomAnchorOffset>-9</BottomAnchorOffset>
+  </TabBox>
+  <Screen item="ItemDisplayWindow">
+    <!--<ScreenID/>-->
+    <!--<Font/>-->
+    <RelativePosition>false</RelativePosition>
+    <Location>
+      <X>0</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>400</CX>
+      <CY>230</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <TooltipReference>This is an Item Display window</TooltipReference>
+	<DrawTemplate>WDT_Rounded</DrawTemplate>
+    <Style_Titlebar>true</Style_Titlebar>
+    <Style_Closebox>true</Style_Closebox>
+    <Style_Minimizebox>true</Style_Minimizebox>
+    <Style_Border>true</Style_Border>
+    <Style_Sizable>true</Style_Sizable>
+    <Pieces>IDW_ItemDescriptionTabBox</Pieces>
+  </Screen>
+</XML>
