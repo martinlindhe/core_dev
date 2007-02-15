@@ -1,0 +1,18 @@
+koncept: minimal cron-tjänst.
+
+servermodul:
+	* läser configfil vid uppstart och exekverar events.
+	
+minicron.cfg:
+	* innehåller allt som ska göras
+	* varje [event] har en "interval" variabel ELLER en "timeofday" variabel, när eventen ska köras
+	* varje [event] har en "do" variabel med kommando som ska köras
+		exempel:
+		- "do exec calc.exe" för att köra program
+		- "do fetch http://www.kde.org" för att anropa en URL 
+
+IDE:
+	* översikt över innehållet i configfilen
+	* översikt över vad som ska exekveras & när
+	* kunna redigera configfilen
+	* kunna se servermodul-status

@@ -1,0 +1,18 @@
+c++ applikation:
+	* xml-baserat format för UI layout
+
+	* lua-drivet event-system, inkludera en ui-engine.lua som kör kod vid vissa events:
+		- onload event, när skriptet laddats
+		- onclick event, när ett element klickas
+		- kunna accessa UI-variabler från lua-skriptet
+
+	* unicode stöd i text
+
+	* ui
+		- egen ui renderare med event-hanterare i DirectX via CInterface klassen
+		- windows ui renderare via CWinInterface klassen, samma syntax som CInterface
+
+	* xml parser
+		http://www.grinninglizard.com/tinyxml/
+
+	* freetype2 för .ttf fonter
