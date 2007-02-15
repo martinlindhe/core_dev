@@ -1,0 +1,435 @@
+html,body { /* hack for div height:100% to work */
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body { 
+	background-color: #0078ac;
+	background-image:url(esp_design/mainback.gif);
+	background-repeat: repeat-x;
+}
+
+a:link {
+	color: #900;
+}
+a:visited {
+	color: #48468f;
+}
+a:hover {
+	color: #f20;
+}
+
+img {
+	border: 0;
+}
+
+/* Default styles for input fields */
+input, select {
+	font: 12px verdana, arial;
+	border-width: 1px;
+	border-color: #000;
+	text-align: left;
+	background-color: #EEE;
+}
+input.button {
+	font: 12px verdana, arial;
+	border-width: 1px;
+	border-color: #000;
+	font-weight: bold;
+	text-align: left;
+	color: #FFF;
+	background-color: #00346E;
+}
+.checkbox {
+	color: #F0F0F0;
+	background-color: #FFF;
+	font: 20px verdana;
+	border: #FFFFFF solid 0px;	/* ser fult ut i Opera 9 */
+}
+.radio {
+	color: #F0F0F0;
+	background-color: #FFF;
+	font: 20px verdana;
+}
+textarea {
+	font: 12px verdana, arial;
+	color: #000000;
+	border-style: inset;
+	border-width: 1px;
+	border-color: #888;
+	background-color: #EEE;
+}
+
+
+
+
+/* Design */
+#middle {
+	position: relative;
+	padding: 30px;
+	font-size: 14px;
+	text-align: left;
+}
+#left-bg {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-color: #F1F1C9;
+	width: 200px;
+	height: 100%;
+	z-index: 2;
+}
+#left-sep {
+	position: absolute;
+	left: 200px;
+	top: 0px;
+	height: 100%;
+	background-color: #BAD6FC;
+	font-size: 0;
+	width: 4px;
+	border-left: 1px solid #000;
+	border-right: 1px solid #f5f5f5;
+}
+#footer {
+	padding: 5px;
+	font-size: 12px;
+	text-align: right;
+	color: #777;
+	background-color: #f0f0f0;
+	float: left;
+	width: 620px;
+}
+
+.db_layer {
+	overflow: auto;
+	padding: 4px 4px 4px 4px;
+	width: 99%;
+	border: #000000 1px solid;
+	color: #000;
+	background-color:#E0E0E0;
+}
+
+
+#header {
+	z-index: 10;
+	background-color: #F7F7DD;
+	height: 30px;
+	border-bottom: 1px dashed #000;
+}
+#header-logo {
+	position: absolute;
+	z-index: 10;
+	left: 220px;
+	top: 0px;
+}
+#header-logo img {
+	width: 205px;
+	height: 30px;
+}
+#header-items {
+	position: absolute;
+	right: 10px;
+	top: 13px;
+	text-align: right;
+	display: inline;
+	font-size: 12px;
+}
+#header-items a {
+	color: #000;
+	text-decoration: none;
+	padding: 7pt;
+}
+#header-items a:hover {
+	color: #f20;
+	cursor: pointer;
+}
+
+
+/* left menu */
+#leftmenu {
+	position: absolute;
+	left: 20px;
+	top: 20px;
+	width: 160px;
+	font-size: 14px;
+	z-index: 2;
+}
+#loginmenu {
+	position: absolute;
+	left: 20px;
+	top: 230px;
+	width: 160px;
+	font-size: 14px;
+	z-index: 2;
+}
+.side-nav {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid #E1E2B9;
+	border-top: 0;
+}
+.side-nav li {
+	border: 1px solid #E1E2B9;
+}
+.side-nav li:hover {
+	border: 1px solid #CCCCCC;
+}
+.side-nav a {
+	color: #000;
+	display: block;
+	text-decoration: none;
+	padding: 4px 6px;
+}
+.side-nav a:hover {
+	background-color: #FFFFFF;
+}
+.side-nav ul {
+	list-style: none;
+}
+.side-nav strong a {
+	font-weight: normal;
+	background-color: #CCCCCC;
+}
+
+
+
+/* design of a news item */
+.newsitem {
+	color: #000;
+	background-color: #EEE;
+}
+
+/* design of a guestbook entry */
+.guestbookentry {
+	color: #000;
+	background-color: #F0F0F0;
+	padding: 5px;
+}
+.guestbookentry a {
+	color: #000;
+}
+
+.relation_request {
+	color: #000;
+	background-color: #F0F0F0;
+	padding: 5px;
+}
+
+
+/* design of a blog entry */
+.blog {
+	color: #000;
+	background-color: #EEE;
+}
+
+/* design of attached files div's */
+.attached_files {
+	color: #668888;
+	background-color: #EEEEEE;
+}
+
+/* design of root level forum topics */
+.forum_header {
+	font: 12px verdana, arial;
+	color: #FFFFFF;
+	background-color: #0072BC;
+	text-align: center;
+	font-weight: bold;
+	padding: 6px;
+	border: 1px solid #000000;
+	margin-bottom: 1px;
+}
+.forum_header a, .forum_header a:visited {
+	color: #FFF;
+	text-decoration: none;
+}
+
+.forum_subheader {
+	font: 12px verdana, arial;
+	color:#FFFFFF;
+	background-color: #004A80;
+	font-weight: bold;
+}
+
+.forum_item {
+	color: #000000;
+	background-color: #F1F1F1;
+}
+
+.forum_item_text {
+	font: 10px verdana, arial !important;
+	padding: 10px;
+	font-size: 12px;
+}
+.forum_item_text a {
+	color: #000;
+	font-weight: bold;
+}
+.forum_item_text a:hover {
+	color: #f20;
+}
+
+.forum_borders {
+	border-color: #DDDBDB;
+	border-style: solid;
+	border-width: 1px;
+	border-spacing: 0;
+	border-collapse: collapse;
+	margin-top: 1px;
+}
+
+
+
+/* user page style */
+#user_holder {
+	width: 760px;
+	text-align: left;
+}
+
+#forum_holder {
+	width: 100%;
+	text-align: left;
+}
+
+
+#user_profile {
+	width: 150px;
+	height: 200px;
+}
+
+#user_favorite_games {
+	width: 150px;
+	height: 80px;
+}
+
+#user_guestbook {
+	width: 150px;
+	height: 140px;
+}
+
+#user_blogs {
+	width: 150px;
+	height: 140px;
+}
+
+
+
+#user_forum_desc {
+	width: 300px;
+	height: 210px;
+}
+
+#user_forum_latest {
+	width: 300px;
+	height: 350px;
+}
+
+#user_guestbook_content {
+	width: 300px;
+	height: 560px;
+}
+
+#user_blog_content {
+	width: 450px;
+	height: 560px;
+	overflow: auto;
+}
+
+#user_admin_content {
+	width: 450px;
+	height: 560px;
+	overflow-y: auto;
+}
+
+#user_misc_content {
+	width: 300px;
+	height: 560px;
+}
+
+#user_forum_content {
+	width: 100%;
+}
+
+#user_fotoalbum_content {
+	width: 450px;
+	height: 560px;
+	overflow: auto;
+}
+#user_fotoalbum_content img {
+	border: 1px solid black;
+}
+
+
+
+#user_fotoalbum {
+	width: 150px;
+	height: 210px;
+}
+#user_minifotoalbum {
+	border: 1px solid black;
+	text-align: center;
+	width: 120px;
+	height: 110px;
+}
+
+#user_minihelp_box {
+	width: 150px;
+	height: 50px;
+}
+
+#user_friendlist {
+	width: 150px;
+	height: 300px;
+}
+
+
+#user_help_box {
+	width: 160px;
+	height: 560px;
+}
+
+#user_presentation_text {
+	color: #000;
+	background-color: #EEE;
+}
+
+#user_presentation_content {
+	width: 300px;
+	height: 560px;
+	overflow: auto;
+}
+
+
+#user_ads {
+	text-align: left;
+}
+
+#user_choose_avatar_content {
+	width: 300px;
+	height: 560px;
+	overflow: auto;
+}
+
+.user_photoalbum_thumb {
+	float: left;
+	background-color: #EEE;
+	text-align: center;
+	width: 130px;
+	height: 140px;
+	margin: 2px;
+}
+
+.user_photo_comments {
+	background-color: #EEE;
+}
+
+.comment {
+	background-color: #EEE;
+}
+
+.forum_search_highlight {
+	background-color: #FFD3D3;
+	color: #000;
+}

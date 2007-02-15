@@ -1,0 +1,86 @@
+html,body { /* hack for div height:100% to work */
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body { 
+	background-color: #0080AF;
+}
+
+a:link {
+	color: #AAA;
+	text-decoration: none;
+}
+a:visited {
+	color: #AAA;
+	text-decoration: none;
+}
+a:hover {
+	color: #f20;
+}
+
+img {
+	border: 0;
+}
+
+#header_holder {
+	background-color: #FFF;
+	font: 10px verdana;
+	line-height: 23px;
+	height: 20px;
+	border-bottom: 1px dotted;
+	text-align: right;
+	width: 100%;
+}
+
+#header_holder a {
+	color: #EE0000;
+}
+
+#header_left {
+	text-align: left;
+	float: left;
+	line-height: 23px;
+	height: 20px;
+}
+
+
+
+
+#body_holder {
+	/*background-color: #ee1188;*/
+	float: left;
+	width: 99%; /*fixme, blir scrollbar på 100% i ff*/
+	font: 10px verdana;
+}
+
+#body_left {
+	float: left;
+	width: 100px;	
+}
+
+#body_left li {
+	background-color: #CCF1FF;
+	border: 1px solid #CCF1FF;
+}
+#body_left li:hover {
+	background-color: #FFF;
+	border: 1px solid #000;
+}
+#body_left ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#body_left a {
+	color: #000;
+	display: block;
+	text-decoration: none;
+	padding: 4px 6px;
+}
+
+#user_blog_content {
+	width: 500px;
+}

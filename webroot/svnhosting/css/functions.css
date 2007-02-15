@@ -1,0 +1,108 @@
+/* objects are forum posts, reported sites etc */
+.objectNormal {
+	color: #595930;
+	background-color: #E1E2B9;
+	padding: 5px;
+}
+.objectCritical {
+	background-color: #FB9B9B;
+	padding: 5px;
+}
+
+/* Should be used KONSEKVENT */
+.msg_success {
+	background-color: #66FF66;
+	padding: 5px;
+}
+.msg_error {
+	background-color: #FF6666;
+	padding: 5px;
+	line-height: 23px;
+}
+
+/* dictionary tooltip with overlib */
+div.domTTstyle {
+	border: 1px solid #333366;
+	background-color: #333366;
+}
+div.domTTstyle .caption {
+	font-family: Verdana, Helvetica;
+	font-size: 10px;
+	color: #FFFFFF;
+}
+div.domTTstyle .contents {
+	font-size: 10px;
+	font-family: Verdana, Helvetica;
+	padding: 2px;
+	background-color: #F1F1FF;
+}
+
+.definition:link, .definition:visited, .definition:hover { text-decoration: none; }
+
+/*dictionary tooltip without overlib */
+dfn {
+	cursor: help;
+	border-bottom: dashed 1px #707070;
+}
+
+/* style on text formatting tags */
+pre.tagstyle_code {	/* [code]xxx[/code]*/
+	border: 1px solid #A0A0A0;
+	background-image: url(code_bg.png);
+	background-repeat: no-repeat;
+	background-color: #F0F0F0;
+}
+
+
+/* infofield style */
+.infofield {
+	font-size: 14px;
+}
+.infofield_head ul li {
+	border-color: #000;
+	border-style: solid;
+	border-width: 1px;
+	border-bottom-style: none;
+}
+.infofield_foot ul li {
+	border-color: #000;
+	border-style: solid;
+	border-width: 1px;
+	border-top-style: none;
+}
+.infofield_foot {
+	text-align: right;
+}
+.infofield_body {
+	padding: 10px;
+	background-color: #F0F0F0;
+	color: #000;
+	border-width: 1px;
+	border-left-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-top-style: solid;
+}
+.infofield ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+.infofield li {
+	margin: 5px;
+	display: inline;
+}
+.infofield ul li strong a {
+	font-weight: normal;
+	background-color: #F0F0F0;
+	color: #000;
+}
+.infofield ul li a {
+	text-decoration: none;
+	color: #fff;
+	background-color: #AAAAAA;
+}
+.infofield ul li a:hover {
+	color: #fff;
+	background-color: #CCCCCC;
+}

@@ -1,0 +1,43 @@
+<?
+	//takes an ip address as parameter
+	if (empty($_GET['ip'])) $ip = '';
+	else $ip = $_GET['ip'];
+
+	include('include_all.php');
+
+	if (!$_SESSION['isSuperAdmin']) {
+		header('Location: '.$config['start_page']);
+		die;
+	}
+
+	include('design_head.php');
+
+	echo 'admin IP - query IP information<br><br>';
+
+	if ($ip) {	
+		$geoip = IPv4_to_GeoIP($ip);
+
+		echo '<h1>'.$ip.' ('.gethostbyaddr($ip).')</h1>';
+		echo 'IP belongs to this country: '.getGeoIPCountry($geoip).' '.getGeoIPCountryFlag($geoip).'<br>';
+		echo '<br><br>';
+	
+		echo '<a href="http://www.dnsstuff.com/tools/whois.ch?ip='.$ip.'" target="_blank">whois</a><br>';
+		echo '<a href="http://www.dnsstuff.com/tools/tracert.ch?ip='.$ip.'" target="_blank">traceroute</a><br>';
+		echo '<a href="http://visualroute.visualware.com/" target="_blank">visual route (java traceroute)</a><br>';
+		echo '<a href="http://www.dnsstuff.com/tools/ping.ch?ip='.$ip.'" target="_blank">ping</a><br>';
+		echo '<br>';
+
+		echo '<a href="http://www.dnsstuff.com/tools/city.ch?ip='.$ip.'" target="_blank">City from IP lookup</a><br>';
+		echo '<a href="http://www.senderbase.org/search?searchString='.$ip.'" target="_blank">senderbase blacklist lookup</a><br>';
+		echo '<a href="http://openrbl.org/lookup?i='.$ip.'" target="_blank">open RLB ip lookup</a><br>';
+		echo '<br>';
+	}
+	
+	
+	echo 'Your IP is '.$_SERVER['REMOTE_ADDR'].'<br>';
+	echo '<form method="get" action="'.$_SERVER['PHP_SELF'].'">';
+	echo '<input type="text" name="ip" value="'.$ip.'"> <input type="submit" value="query ip" class="button">';
+	echo '</form>';
+	
+	include('design_foot.php');
+?>

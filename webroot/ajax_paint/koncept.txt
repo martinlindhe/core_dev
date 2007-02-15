@@ -1,0 +1,4 @@
+tile editor:
+	- 16x16 tiles
+	-	spara knapp:
+		gå igenom alla tiles & hitta antal unika färger som används, ge dom varsitt nummer & enkoda "palett", sen palett-idnummer

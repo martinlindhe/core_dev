@@ -1,0 +1,47 @@
+body {
+	color: #000000;
+	background: #FFFFFF;
+}
+
+table {
+	font: 10px verdana, helvetica, arial;
+}
+A { text-decoration: none; }
+A:link { color: #E83E4A; }
+A:active { color: #E83E4A; }
+A:visited { color: #E83E4A; }
+A:hover { text-decoration: underline; }
+
+B.topic { text-decoration: underline; font-size: 12px; }
+
+
+.txt { font: 12px arial; line-height: 12px; color: white; }
+
+
+input,select,textarea {
+	font: 10px verdana, helvetica, arial;
+	background-color: #D4D0C8;
+	border-style: solid;
+	border-width: 1;
+	border-color: #000000;
+}
+
+.buttonstyle {
+	font: 10px verdana, helvetica, arial;
+	background-color: #D4D0C8;
+	border-style: solid;
+	border-width: 1;
+	border-color: #000000;
+}
+
+.cbstyle {
+	background-color: #FFFFFF;
+	border-style: none;
+	width: 16;
+}
+.rbstyle {
+	background-color: #FFFFFF;
+	border-style: none;
+	width: 16;
+}
+

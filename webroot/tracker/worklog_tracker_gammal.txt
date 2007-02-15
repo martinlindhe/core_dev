@@ -1,0 +1,454 @@
+--------
+flaggor, lagt till i tracker/flags:
+* flags/UK.png -> flags/GB.png
+* flags/BE.png -> ny
+* flags/HU.png -> ny
+* flags/GR.png -> ny
+* flags/RO.png -> ny
+* flags/MX.png -> ny
+* flags/SG.png -> ny
+* flags/CL.png -> ny
+* flags/ZA.png -> ny
+* flags/AT.png -> ny
+* flags/PT.png -> ny
+* flags/ID.png -> ny
+* flags/HR.png -> ny
+* flags/SI.png -> ny
+* flags/CO.png -> ny
+* flags/CS.png -> ny, skapad av mej
+* flags/TW.png -> ny (Taiwan)
+* flags/IN.png -> ny (India)
+* flags/RU.png -> ny (Russia)
+* flags/BG.png -> ny (Bulgaria)
+* flags/LU.png -> ny (Luxemburg), skapad av mej
+* flags/EE.png -> ny (Estonia), skapad av mej
+* flags/CY.png -> ny (Cyprus), skapad av mej - FUL!
+* flags/IR.png -> ny (Iran), skapad av mej - FUL!
+* flags/IQ.png -> ny (Iraq), skapad av mej - FUL!
+* flags/SA.png -> ny (Saudi Arabia), skapad av mej - FUL!
+* flags/CN.png -> ny (China), skapad av mej - FUL!
+* flags/AM.png -> ny (Armenia), skapad av mej
+* flags/EG.png -> ny (Egypt), skapad av mej - FUL!
+* flags/TH.png -> ny (Thailand), skapad av mej - FUL!
+* flags/UA.png -> ny (Ukraine), skapad av mej - FUL!
+* flags/BH.png -> ny (Bahrain), skapad av mej - FUL!
+* flags/HT.png -> ny (Haiti), skapad av mej - FUL!
+* flags/EU.png -> ny (Europe), skapad av mej - FUL!
+* flags/PH.png -> ny (Philippines), skapad av mej - FUL!
+* flags/HK.png -> ny (Hong Kong), skapad av mej - FUL!
+* flags/PK.png -> ny (Pakistan), skapad av mej - FUL!
+* flags/PA.png -> ny (Panama), skapad av mej - FUL!
+* flags/VN.png -> ny (Vietnam), skapad av mej - FUL!
+* flags/UG.png -> ny (Uganda), skapad av mej - FUL!
+* flags/TN.png -> ny (Tunisia), skapad av mej - FUL!
+* flags/AE.png -> ny (United Arab Emirates), skapad av mej - FUL!
+* flags/SY.png -> ny (Syria), skapad av mej - FUL!
+* flags/LK.png -> ny (Sri Lanka), skapad av mej - FUL!
+* flags/PE.png -> ny (Peru), skapad av mej - FUL!
+* flags/OM.png -> ny (Oman), skapad av mej - FUL!
+* flags/MZ.png -> ny (Mozambique), skapad av mej - FUL!
+* flags/MT.png -> ny (Malta), skapad av mej - FUL!
+* flags/LT.png -> ny (Lithuania), skapad av mej - FUL!
+* flags/GI.png -> ny (Gibraltar), skapad av mej - FUL!
+* flags/SV.png -> ny (El Salvador), skapad av mej - FUL!
+* flags/CU.png -> ny (Cuba), skapad av mej - FUL!
+* flags/CR.png -> ny (Costa Rica), skapad av mej - FUL!
+* flags/BA.png -> ny (Bosnia and Herzegovina), skapad av mej - FUL!
+* flags/BY.png -> ny (Belarus), skapad av mej - FUL!
+* flags/AZ.png -> ny (Azerbaijan), skapad av mej - FUL!
+* flags/LB.png -> ny (Lebanon), skapad av mej - FUL!
+* flags/UY.png -> ny (Uruguay), skapad av mej - FUL!
+* flags/TZ.png -> ny (Tanzania), skapad av mej - FUL!
+* flags/MA.png -> ny (Morocco), skapad av mej - FUL!
+* flags/KR.png -> ny (South Korea), skapad av mej - FUL!
+* flags/ET.png -> ny (Ethiopia), skapad av mej - FUL!
+* flags/SN.png -> ny (Senegal), skapad av mej - FUL!
+----------
+
+Måndag 2:a Okt, 8h:
+	trackern:
+		* admin_ip_ranges.php: uppsnyggande
+		* markerat fler ip ranges som private:
+			från "3424 entries. 689 is marked PRIVATE (20.12%)"
+			till "3428 entries. 922 is marked PRIVATE (26.9%)"
+		* identifierar Safari 1.1
+		* påbörjat ombyggnad för mätpunkts-översikt med en månadskalender istället för en års-kalender
+	
+	seo:
+		* länkpartners till kommunal.se
+	
+Tisdag 3:e Okt, 7h:
+	trackern:
+		* uppdaterat geoip databasen för oktober 2006
+		* jobbat mer på månadskalendern
+		* webtrends graferna skippar nu tomma entries (visar t.ex inte "spray" alls om 0 sökningar loggats från spray under perioden)
+		* implementerat en server-side typ av mätpunkt, för PHP
+		* implementerat selector av mätpunkts-script-typ under "edit track point": javascript / PHP / ASP / JSP
+		
+	seo:
+		* skapat & mailat mätpunkt till citybilen.se / sebastian@adgroup.se
+
+Onsdag 4:e Okt, 5h:
+	trackern:
+		* haft möte med dejan+jocke och planerat ny design för trackern
+		* markerat upp fler ip ranges
+		* bättre stöd för yahoo-query parsning
+		* gått igenom en massa data & planerat förändringar i programflödet för att göra allt mer användarvänligt
+	
+	hemsidan:
+		* lagt till en länk till mätverktyget på "klient inloggning"
+----
+Måndag 9:e Okt, 8h:
+	trackern:
+		* identifierar fler varianter av Windows 95
+		* ny sida "tracker statistics", som visar aktuell server load för gårdagen & senaste veckan
+		* fixade så location, IP och user agent för server-side-PHP version av mätpunkt-script rapporteras korrekt
+		* förbättrat & förenklat översiktssidan (månadskalendern) för varje mätpunkt
+
+Tisdag 10:e Okt, 8h:
+	trackern:
+		* visar antal mätpunktsregistreringar per sekund under "tracker statistics", snitt över gårdagen & snitt över förra veckan
+		* flyttade "server time" från track point overview till "tracker statistics"
+		* tog bort "created & last updated by" info från track point overview, det finns på "edit trackpoint"
+		* gjort en massa uppstädande av månadskalendern
+		* lagt till bläddra till föregående/nästa månad på kalendern
+		* påbörjat integration av "time selector" i månadskalendern
+
+Onsdag 11.e Okt, 4h:
+	trackern:
+		* lagt till en kolumn som visar veckonummer i månadskalendern
+		* integrerat time selectorn med månadskalendern
+		* tagit bort den separata "time selector" sidan
+		* börjat bygga in en "current selection"-ruta i månadskalendern
+---
+
+Måndag 16:e Okt, 8h:
+	trackern:
+		* optimerat includes, exkluderar vissa oanvända filer
+		* man kan klicka på ett veckonummer för att visa data från hela den veckan
+		* implementerat AJAX anrop för "current selection"i kalendern
+		* visar en "loading" animerad gif när ajax-data laddas in
+		* tagit bort "referrers" från vänstermenyn. den är nu inbyggd i time selectorn
+
+Tisdag 17:e Okt, 8h:
+	trackern:
+		* man kan nu selecta hela första veckan i månaden i kalendern
+		* tooltip på veckonummer, visar vad som kommer att selectas
+		* gjort en ersättare till include_all.php för track.php och ajax-filerna,
+			som bara inkluderar minimalt antal filer osv, för att maximera prestandan
+		* påbörjat implementation av image preload script för att grafik som används av dynamiska komponenter ska kunna laddas i förväg
+		* javascript för att visa timestamp (mindre data som behöver returneras i AJAX anropen)
+		* fixade admin_edit_trackpoint.php javascript
+		* la till en "details" länk i kalendern från current selection
+		* tooltip-förklaring på varje datum som går att klicka
+		*  highlightar alla dagar som kommer att selectas när man hovrar över ett veckonummer
+		* gjort om "time selector" formuläret för att fungera bättre
+		* IE 6 renderingsfix i kalendern, det var 20 pixlars döspace under kalendern pga </form>
+
+Onsdag 18:e Okt, 4h:
+	trackern:
+		* lagt till ikoner istället för textlänkar för alternativen i kalendern
+		* ändrat formatet för ajax-requests så man kan begära data för en dag, en vecka, eller en månad
+		* optimerat dataformatet i ajax-requestsen för minimal mängd data (ökar prestanda)
+		* gjort den fördefinierade månadsväljaren funktionell (denna månad, förra månaden)
+		* gjort "free form" tid-väljaren funktionell
+---
+Måndag 23:e Okt, 8h:
+	trackern:
+		* markerat en mängd nya IP ranges, cirka 200 nya är markerade som privatpersoner
+		* identifierar fler sökmotorer: google.co.il, google.nl, google.ru, google.lt, google.si,
+			hk.search.yahoo.com, google.com.tw, search.msn.fr, google.co.ma, us.search.yahoo.com, search.msn.nl,
+			google.co.in, google.cl, google.co.th, google.ch, google.is, google.pl, google.es, google.be,
+			cade.search.yahoo.com, google.ro, google.co.jp, fr.search.yahoo.com, google.com.ar, it.search.yahoo.com,
+			google.com.co, google.com.mx, google.com.br, aolsearch.aol.co.uk, search.yahoo.co.jp, google.hu,
+			google.ca, google.ee, google.hr, search.msn.ch, de.search.yahoo.com, google.co.id, google.gr,
+			google.bg, google.com.vn, ca.search.yahoo.com, search.msn.dk
+		* identiferar ww.google.se och liknande felskrivningar som sökningar (google svarar på ww.google.se)
+		* stöd för "big-5" codepage från yahoo-resultat (kinesisk codepage)
+		* stöd för "EUC-JP" codepage från yahoo-resultat (japansk codepage)
+
+Tisdag 24:e Okt, 8h:
+	trackern:
+		* optimerade SQL:en för admin_show_trackpoint.php
+		* exluderar MSN search dns error queries från misstänkta search engines på admin_show_trackpoint_all_referrers.php
+		* gjort så att admin_show_trackpoint_all_referrers.php exluderar alla interna referrers
+		* fixade time selectorn att fungera med undersidor för vald mätpunkt
+		* identifierar MSIE 5.14 (Mac), MSIE 5.15 (Mac)
+		* addverberar större tal på admin_show_trackpint_browserstats.php, 143201 blir "143.2K"
+		* skapat en översiktssida för "ip ranges", som först visar alla länder som har regisrerade IP ranges,
+			på undersidan listas enbart ip ranges för valt land.
+		* optimerat sql på admin_show_trackpoint_browserstats.php så sidan laddar fortare
+		* nya flaggor, nu finns flaggor för samtliga länder som det finns registrerade IP'n från:
+			Panama (.pa), Vietnam (.vn), Uganda (.ug), Tunisia (.tn), United Arab Emirates (.ae), Syria (.sy),
+			Sri Lanka (.lk), Peru (.pe), Oman (.om), Mozambique (.mz), Malta (.mt), Lithuania (.lt), Gibraltar (.gi),
+			El Salvador (.sv), Cuba (.cu), Costa Rica (.cr), Bosnia and Herzegovina (.ba), Belarus (.by), Azerbaijan (.az),
+			Lebanon (.lb), Uruguay (.uy), Tanzania (.tz), Morocco (.ma), South Korea (.kr), Ethiopia (.et), Senegal (.sn)
+		* bantat ner utseendet på "ip ranges" listan så den är mer överskådlig och laddar snabbare
+		* lagt till sql-analys verktyg för super admin
+		* status för svenska ip ranges:
+			3680 entries. 1119 is marked PRIVATE (30.41%)
+		* lade till time spent/query i sql-analysen
+
+Ons 25:e Okt, 4h:
+	möte med telge nät
+	
+----
+Mån 30:e Okt, 8h:
+	trackern:
+		* importerat live-databasen till utvecklingsmaskinen, för att lättare kunna analysera prestandaproblem med en stor mängd data.
+			livedatabasen innehåller idag över 1.2 miljoner mätningar
+		* sql optimeringar på översiktssidan för att ladda mätpunkt med mycket data ska gå snabbare
+		* importerade admin_geoip.php och admin_db.php från uReply
+		* optimerade getTrackPoints() att inte returnera antal mätningar per mätpunkt,
+			snabbar upp sidvisningen med cirka 5 sekunder på min dator.
+			problemet visade sig inte förräns mängden data som hanterades började bli ganska stor
+			
+Tis 31:e Okt, 8h:
+	trackern:
+		* optimerade "unika besökare"-sidan, en sql optimering gör att sidan laddas 5-6 sekunder snabbare än tidigare,
+			- getUniqueIPFromTrackerEntries() tog bort $page parametern
+			- "unika besökare"-sidan visar nu samtliga unika besökare över tidsperioden på en sida
+	
+	blized:
+		* gjort klart banners åt resfeber
+
+Ons 1:a Nov, 4h:
+	trackern:
+		* snyggat till web trends-arkivet
+		* admin_tools_editsubscription.php - fixade till selection expandern
+
+--------
+Mån 6:e Nov, 8h:
+	trackern:
+		* normaliserat databasen för uppsnabbande av admin-applikationen, med hjälp från marcus
+
+Tis 7:e Nov, 8h:
+	trackern:
+		* uppdaterat PHP till 5.2
+		* uppdaterat GeoIP databasen till November 2006-edition
+		
+		* 14:35, stänger ner webbservern på db1.ai.se
+		* tömde db1.ai.se på mätdata för sportal.nu från före 25:e oktober 2006, 833714 rows deleted
+			- 693177 kvar
+			
+	www.agentinteractive.se:
+		* la upp 4 bloggar
+		* fixat en del sidors w3c-kompilans
+
+Ons 8:e Nov, 4h:
+	trackern:
+		* fortsatt normaliseringen av db1.ai.se tracker-databasen
+		* börjat skriva om kod för att hantera den nya datastrukturen
+-----
+Mån 13:e Nov, 8h:
+	trackern:
+		* normaliseringen av databasen är slutförd, db1.ai.se är åter igång
+		* uppdaterat diverse SQL-kod så att admin-gränssnittet fungerar med det nya databasformatet:
+			- admin_show_trackpoint_referrers.php: fixad
+			- admin_show_trackpoint_location_details.php: fixad
+			- admin_show_trackpoint_browserstats.php: fixad
+		* flyttade design/*.css till css/*.css
+		* ändrat några datatyper i databasen från bigint till int, minskar databasens storlek med 20-25%
+		* uppdaterat GeoIP databasen till senaste (November 2006)
+		* fixat ajax-kalendern så att flera klick inte gör paralella requests. om en request är pågående
+			(den animerade "loading"-bilden visas) så ignoreras klickande
+		* fixat så att ajax-kalendern fungerar i Opera (webbläsare)
+		* ändrat storleken på trackId & siteId från int till smallint, minskar databasens storlek med ytterligare cirka 3%
+		* ändrat storleken på refId, locId & uaId, minskar databasens storlek med ytterligare cirka 5%
+		* eliminerat "NULL" kolumner i databasen, marginell prestandaökning & minskar databasens storlek med ytterligare cirka 0.2%
+		* tweakat mysql-inställningar för bättre prestanda:
+			key_buffer_size=64M   		(från 8M)
+			read_buffer_size=1M   		(från 64K)
+			sort_buffer_size=4M				(från 212K)
+			read_rnd_buffer_size=1M		(från 256K)
+
+Tis 14:e Nov, 8h:
+	trackern:
+		* visar execution time för mysqli_connect i sql-loggen
+		* visar lite exaktare page load time
+		* admin - tracker statistik: visar antal regisrerade mätpunkter hittils över idag
+		* visar execution time både för sql och php
+		* fixat så att kalendern fungerar i Internet Explorer
+		* implementerat preloader-javascript så att grafiken som används i ajax-kalendern är inladdade innan dom visas (ser bättre ut)
+		* konfigurerat om apache & php på db1.ai.se för bättre prestanda:
+				php.ini: memory_limit=32M (från 16M)
+				php.ini: register_long_arrays=Off (från On)
+				php.ini: register_argc_argv=Off (från On)
+				php.ini: post_max_size=1M (från 8M)
+				php.ini: file_uploads=Off (från On)
+				httpd.conf: ThreadsPerChild=64 (från 5)
+		* en hög med fixar i functions_whois.php, include_lite.php, track.php - resulterade i att servern inte segar ner så mycket under belastning
+		* ökade tblReferrers.referrer längd till 350 från 300 (några enstaka sportal.nu-url's var strax över 300 tecken)
+		* databas-omorganisering:
+			tblUsers: droppade userStatus, ändrade lastActive, createdTime, lastLoginTime till DATETIME, uppdaterade SQL att hantera nya formatet
+			tblTrackSites: ändrade timeCreated, timeEdited till DATETIME, uppdaterade SQL att hantera nya formatet
+			tblTrackPoints: ändrade timeCreated, timeEdited till DATETIME, uppdaterade SQL att hantera nya formatet
+			tblLogs: ändrade timeCreated till DATETIME & fixade SQL
+			tblComments: timeCreated, timeDeleted till DATETIME & fixat SQL
+			tblSubscriptions: timeCreated till DATETIME & fixat SQL
+			tblTrackEntries: timeCreated till DATETIME
+		* functions_db.php: skapade dbOneArray() funktion (optimering)
+		* kalender-översikten laddar nu MYCKET snabbare, från cirka 4 sekunders laddningstid på sportal.nu till cirka 0.7 sekunder
+
+Ons 15:e Nov, 4h:
+	trackern:
+		* getTrackerEntriesTimeperiodCnt() sql uppdaterat
+		* getUniqueIPCountFromTrackerEntriesTimeperiod() sql uppdaterat
+		* getTrackerEntriesByReferrers() sql uppdaterat
+		* getTrackerEntriesByLocation() sql uppdaterat
+		* getTrackerBrowserinfoTimeperiod() sql uppdaterat
+		* getUniqueIPFromTrackerEntries() sql uppdaterat
+		* getTrackerEntriesAllReferrers() sql uppdaterat
+		* getTotalTrackerEntries() sql uppdaterad
+		* ändrade tblUsers.createdTime till "timeCreated" för konsistens
+
+Tor 16:e Nov, 1h:
+	trackern:
+		* snyggat till sql-debug footern
+		* rensat upp functions_db.php, flyttat ut debugfunktioner till functions_debug.php
+		* lagt in event log under adminastrive tasks
+---
+
+Mån 20:e Nov, 5h:
+	trackern:
+		* filtrerar bort gulasidorna.eniro.se
+		* hanterar google.com/custom queries
+		* msn: search.msn.fi, search.msn.de
+		* stöd för "ISO-8859-2" codepage i google-queries
+		* stöd för google.mn, google.ae, google.cz, google.ba
+		* stöd för ar.search.yahoo.com
+		* hanterar special-yahoo queries, /search;_ylt
+		* stöd för google-query /hws/search
+		* identifierar NetBSD, BeOS
+		
+	hemsidan:
+		* lagt upp "lediga jobb"-sidan
+		* ändrat titlar på alla sidor efter jockes begäran
+		
+Tis 21:a Nov, 8h:
+	trackern:
+		* tog bort sista resterna av unix timestamp formatet från några sidor
+		* sparar subscriptions inställningar till databasen:
+			- man kan skapa oändligt antal subscriptions för varje track site
+			- man kan ansluta/ta bort oändligt antal email-addresser till varje subscription
+			- visar skapade subscriptions på "track site tools"-sidan
+			- skapat en översikttsida för en bevakning
+			- kan radera en bevakning
+---------
+Ons 29:e Nov, 8h:
+	hemsidan:
+		- städat upp engelska sajten, tagit bort online communities, gjort en mängd ändringar utifrån jockes kommentarer
+
+	bloggen:
+		- exporterat bloggfunktionaliteten från uReply som ett separat projekt baserat på ESP's projekt
+		- städat upp lite kod, konverterat datumtyp till DATETIME
+
+Tor 30:e Nov, 8h:
+	hemsidan/bloggen:
+		- ändrat en del texter utifrån jockes kommentarer
+		- integrerat bloggen med sajten
+		- fixade så blogg-rubriken blir sidrubrik på blog.php
+		- lagt upp senaste 3 bloggarna dynamiskt på startsidan
+		- fixat till positionen på "blogg-boxen" på startsidan
+
+Fre 31:e Nov, 5h:
+	SEO möte
+--------
+Mån 4:e Dec, 8h:
+	hemsidan:
+		- search_marketing.php: ny text upplagd från jocke
+
+	trackern:
+		- webtrends grafer skapade för november månad, lite kod uppdaterad
+		- identifierar sökningar från följande domäner:
+			google.com.mt, google.com.hk, google.at, google.com.sa, google.jo, google.com.ph, google.pt
+			ru.search.yahoo.com, search.msn.it
+		- man kan nu välja vilken mätpunkt som en bevakning ska vara knuten till
+		- bevakningsmodulen inkluderar nu "populäraste sökorden under tidsperioden"
+		- implementerat stöd för HTML-mail
+		- sesam.se, sidewalk.sesam.se, sesam.no sökmotor-stöd, visas på "referrer details"-sidan samt i sökmotor-graferna
+		- fixade så att sidfoten inte visas som en list över underdelen av sidan
+
+Tis 5:e Dec, 8h:
+	trackern:
+		- implementerat skal för de flesta funktioner för statistikmodulen
+		- implementerat övervakning av "Search engine popularity"
+		- implementerat övervakning av "Google PageRank för startsidan"
+		- sparar historik över utskickade mails, inklusive färdig-genererad HTML från mailen, när mailet skickades och vilka som var mottagare
+		- implementerat stöd för unicode text i mailutskicken (svenska tecken ser bra ut)
+
+Ons 6:e Dec, 4h:
+	trackern:
+		- tog bort "reply-to" mailheadern från mailutskick (överflödig)
+		- ändrade navigeringen till en punklista, eftersom internet explorer inte hanterade javascriptet något vidare (i brist på ny design)
+		- fixade länk till "detaljerad lista för referrers" så att den tar med aktuell tidsrymd
+		- browser stats & bevakningar: sorterar webbläsare i fallande popularitet
+		- implementerat bevakning på "de X populäraste webbläsarna"
+		- klassificerar web crawlers som en egen typ av webbläsare i "browser stats", identifierar cirka 45 olika web crawlers idag (samtliga som fanns loggade)
+		- identifierar browser IE 5.21 (Mac)
+		- admin_popup_ip_activity.php: fixade ett gäng buggar i popupfönstret med detaljer om ett enskilt IP (mange visade det)
+		- implementerat veckovis utskick av övervakningar
+		- implementerat bevakning på "de X populäraste operativsystemen"
+		- fixade så populäraste operativsystemen visar procentenheter
+		- ändrade så att mottagarna till utskicken är osynliga för mottagaren
+------
+Mån 11:e Dec, 8h:
+	trackern:
+		- jobbade med mailutskickskoden
+		- implementerat månadsvis-övervakningar
+		- visar historik över utskick. när, till vem & vad innehöll mailet
+		- bakat in AI-loggan i mailutskicken
+		- implementerat ett google-pr cache
+
+	hemsidan:
+		- småändringar från Jocke
+		
+Tis 12:e Dec, 8h:
+	trackern:
+		- mer mailutskick
+		- gmail visar html-mail korrekt (majo hade problem med det)
+		- tog bort allt set_time_limit(), har en i include_all.php bara
+		- ändrat rubrikerna på mailutskick:
+			Veckoövervakning v.42 - Namn
+			Daglig övervakning Torsdag 3:e Dec - Namn
+			Månadsövervakning December 2006 - Namn
+		- ordnat upp locales_time.php, sparat om i utf-8
+		- avkodar korrekt alla söksträngar från Sesam (dom blandar ASCII & UTF-8)
+		- avkodar google-queries i "ISO" format korrekt
+
+
+Tor 14:e Dec, 4h:
+	trackern:
+		- jobbat lite med databasoptimeringar (prestanda)
+		- uppdaterat geoip-databasen till december 2006
+		- förbättringar i scriptet som skökter mailutskick på övervakningar
+---------
+Mån 18:e Dec, 8h:
+	trackern:
+		- identifierar några fler webbläsare
+		- försökt felsöka varför google adwords & trackern visar olika siffror på telge ppc-klick utan framgång.
+		- hanterar relativa url:er som utgår ifrån roten & innehåller enbart ./
+		- webspindeln klarar av att extracta url:er från <area>-taggar
+
+Tis 19:e Dec, 8h:
+	trackern:
+		- felsökt varför google adwords & trackern visar olika siffror på telge ppc-klick på jockes begäran. berodde ej på trackern.
+		- städat upp och separerat det mesta av koden från webb-spindeln
+		- byggt en funktion som autogenererar robots.txt-filer utifrån vad webbspindeln har hittat
+		- byggt en funktion som autogenererar en Google XML Sitemap utifrån vad webbspindeln har hittat
+
+	hemsidan:
+		- webbspindeln upptäckte att engelska sidorna för jobb & pr_skandia_maklarna.php ej fanns, ordnade så att de ej går att nå
+		- små optimeringar på hemsidan som dök upp när jag gick igenom den med google xml sitemap tool från www.sitemapdoc.com:
+			* tagit bort alla referenser till index.php, http://www.agentinteractive.se/index.php -> http://www.agentinteractive.se/
+			* title på <area>-taggen för blogg-rutan på startsidan
+
+Ons 20:e Dec, 4h:
+	trackern:
+		- mer jobb med webbspindeln
+		- skapat funktion för att kolla upp Google PR för samtliga sidor på en hel domän
+		- buggfix: verkar ha löst vissa udda problem med webbside-nerladdnignskoden genom att gå ner från HTTP/1.1 till HTTP/1.0 header,
+			resulterade i såna här konstigheter:
+				Skipping download of .php 1a0 (from http://www.agentinteractive.se/ 9 index.php 1a0)
+		- implementerat
+		- förbättrade google PR-parsern litegrann, skrev om en del kod

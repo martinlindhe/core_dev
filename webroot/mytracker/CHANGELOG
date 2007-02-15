@@ -1,0 +1,194 @@
+WARNING: PHP BUG!
+-----------------
+
+There is a bug that is present in some versions of PHP. It has been fixed in
+version 4.3.11 and newer.
+
+It has to do with how PHP handles file uploads when get_magic_quotes_gpc is
+enabled. (Most have this enabled.) If you upload a file with an apostrophe
+(') in the filename, the filename will get truncated and you will get whatever
+is to the right of the apostrophe.
+
+It is recommended to upgrade to 4.3.11 if you can. It's not a real serious bug
+but it sure can be annoying.
+
+Changes between PHPBTTracker+ 2.2 and PHPBTTracker+ 2.1
+-------------------------------------------------------
+
+-THIS SOFTWARE NOW REQUIRES MYSQL 4.1.2 OR GREATER
+-The RSS feed is a little smarter dealing with URL encoding.
+-The peers and seed summary screen shows a decoded client version (not just the 
+ user-agent string.)
+-Use of mysql_escape_string discontinued, replaced with mysql_real_escape_string.
+-In the caching table, the compact field's type has been changed to BINARY. This is
+ done to prevent weird situations of the tracker passing out corrupt ip addresses while
+ using the compact specification.
+-The install.php script has been changed to report errors about the SQL statements,
+ and the invalid SQL has been corrected.
+-The install.php script attempts to detect the mysql version running, and notify the
+ user if the tracker is compatible with it.
+-The statistics script has been adjusted to deal with EB/PB/TB.
+-index_sample.php now displays a page generation time.
+-The add torrent page will try to automatically extract the CRC from the filename in the
+ torrent, if one is there in between brackets (either [],(), or {}).
+-The RSS feed has been expanded to allow individual feeds for subcategories that can appear
+ on the main page. These are present only in the "Live feeds/Live bookmarks" of the browser.
+-A rudimentary search feature has been added. It's a self-inclusive script that can be
+ modified to suit whatever your needs are. It can also accept input from custom pages,
+ provided that the form POST variable points to the script and the form search field is
+ named 'searchterms'. This information is also in the search.php script in the header.
+ 
+Changes between PHPBTTracker+ 2.1 and PHPBTTracker+ 2.0
+-------------------------------------------------------
+
+-You can now replace the stats of a torrent with a comment.
+-Admin interface rearranged (merged 4 columns together, takes up significantly
+ less screen real estate now.) Also, hiding a bunch of torrents at the same
+ time is possible now.
+-Fixed a small bug when uploading torrents to the database. The script will
+ add the gettorrent.php URL to the directory above the administration script.
+ (ie. if your tracker is in /tracker/admin, the script will now use
+  /tracker/gettorrent.php as the URL address.)
+-Fixed a little bug with external torrents. The tracker will not assume external
+ torrents are active unless the dynamic_torrents setting is enabled.
+-Fixed a small glitch in the retired torrents screen. If viewing a group the page
+ will not provide the 'Jump To' links (root user only).
+-Fixed a small glitch in the main torrent page. When logged in as root and you are
+ viewing a group it won't show the 'Jump To' links. Also changed the name of one of the
+ buttons.
+-Torrent grouping and manual sorting has been added to the index pages. These will
+ only work when not using dynamic torrents.
+-Fixed a minor glitch in bta_add.php. When uploading torrents with a '%' in the filename
+ there shouldn't be any bad requests from the URL that is generated automatically.
+-Updated the help scripts with current information.
+-Supressed warnings in external.php.
+-The index_sample and retired_sample scripts are now pure CSS. I think.
+-Internal RSS feed implemented. It can either run real-time or the scripts
+ can cache the results to a writeable directory on the webserver. The index
+ scripts have been updated to deal with this and the links will automatically
+ change depending on the caching setting. Live feeds are also included.
+-A statistics script is provided to let you know how the tracker is doing.
+ (statistics.php).
+
+Changes between PHPBTTracker+ 2.0 and PHPBTTracker+ 1.7
+-------------------------------------------------------
+
+-Now uses the PHPBT 1.5 core. (2 main features: peer caching and compact
+ protocol support, plus other optimizations.)
+-new configuration variable $GLOBALS["doavg"] added, allowing for a quick way
+ to disable this calculation on heavily loaded trackers. If using the scripts
+ provided, they will not show the average column when this is disabled.
+-new configuration variable $GLOBALS["heavyload"] added, which will disable
+ amount downloaded, speed, and average stats. It also includes a miniscule
+ speed improvement in tracker.php. If using the scripts provided, they will
+ not show the XFER, speed, and Avg done columns if this is set.
+-The original phpbttracker has a variable $GLOBALS["countbytes"] which will
+ prevent the script from updating the amount downloaded and speed. If you are
+ using the sample scripts provided the affected columns will not be shown if
+ this value is turned off.
+-A seperate username and password is now set in config.php! If you don't set
+ these the administration interface will remain disabled to everyone!
+
+
+Changes between PHPBTTracker+ 1.7 and PHPBTTracker+ 1.6
+-------------------------------------------------------
+
+
+-Any reference to sha1lib.php has been removed. Use PHP 4.3.0 or higher,
+ as indicated in the Requirements section of the sf.net webpage.
+
+-The consistency check has been moved to maintenance.php. Installations
+ that have cron'd the bta_consistency.php script can remove it, or it
+ will check twice.
+
+-The tracker is now proxy-aware. It will extract the real IP from the headers
+ if one is provided.
+
+-A couple bugs have been fixed in the IP banning module, somewhat related to
+ the proxy change. NOTE: the table structure has changed! upgrade.php will make
+ the modifications necessary and attempt to update all the bans.
+
+-The script that updates external torrents has been updated to optionally use
+ the info_hash parameter to request stats from external trackers. A new 
+ configuration parameter $GLOBALS["ext_batch_scrape"] has been added to
+ config.php and if set to true will request all scrape data, otherwise
+ will request info using the info_hash parameter. If this is not defined
+ in config.php the info_hash parameter is used by default.
+
+-Index scripts updated. They will now show a '?' for external torrents that
+ do not report a total download value.
+
+-Possible bug in index scripts fixed, regarding use of parameters.
+
+-Usernames and category names are no longer allowed to have spaces in them.
+ Fixed various scripts to enforce this.
+
+-Add torrent bug fixed: uploading zero-byte torrents doesn't make the script
+ add as an external torrent anymore.
+
+-A new user permission has been added: Add Mirror Torrent. This makes use of
+ backup trackers in the torrent file, and when this is selected, allows the
+ torrent to be added when the tracker is not the primary. NOTE: The announce
+ url has to appear in the backup list! Prior to V1.7, this was added as an
+ external torrent. There is a new option under 'Add Torrent' for this.
+
+-Edit torrent now has the capability to make an external torrent a normal one.
+ This is not reversible. You need add external torrent permission to use
+ this feature.
+
+-You can enable/disable users without removing them, and provide a reason
+ which will be shown if the user logs in and their account is disabled.
+
+-Add Torrent: If the torrent was not copied to the torrent folder, a
+ warning message is displayed to the user.
+
+-Add Torrent: Torrent size is calculated properly now. Previously it was
+ an educated guess at the actual size and was not 100% accurate.
+
+-Support for webserver farms has been added. If you have a website with 
+ multiple servers, you are not guaranteed to get the same webserver with the 
+ session data as you move around the administration interface. Two new globals
+ are set in config.php to get around this. See config.php for more detail.
+
+-A button has been added to the IP Banning interface to remove all bans
+ listed. There is no confirmation for this so be careful when using it!
+
+-Provision in Add Torrent screen to upload torrent only, without adding
+ to tracker. Intended for when reviving torrents and the original torrent
+ is not on the tracker.
+
+-Ability has been added to add torrents directly in the database instead
+ of on the webserver's local filesystem. See config.php for a new variable
+ called $GLOBALS["move_to_db"] for more details. A new script is provided
+ (gettorrent.php) for retrieving them from the database, all that is needed
+ is to specify an info_hash parameter. i.e. gettorrent.php?info_hash=<hash>
+ The torrents are base64 encoded to keep their integrity in the database.
+
+-Administration interface now totals external torrents seperately.
+
+-Sample index scripts now total external torrents seperately.
+
+-Administration interface (when logged on as root) will now remember the last
+ category you were browsing. If you navigate around it will not show all the
+ torrents if you select a specific category.
+
+-Records in timestamps table are removed when removing torrents.
+
+Changes between PHPBTTracker+ 1.6 and the original PHPBTTracker 1.4
+-------------------------------------------------------------------
+
+-Tracks how much the peers are uploading to the torrent
+-The client version is also tracked
+-Average torrent progress is calculated
+-Scrape output modified to show extra fields (speed/avg done, etc)
+-Tracker can ban by IP address
+-Client minimum versions can be enforced and some old client can be
+ banned automatically by IP address for a specified time
+-Ability to add external torrents and refresh the stats
+-Scrape decoder script example is provided
+-Full administration interface using PHP sessions and Javascript
+ added (shows all sorts of information on peers, etc)
+-Extra fields are provided when adding a torrent to display optional
+ information
+-Uploading of torrents to webserver
+-Multi user administration interface if needed

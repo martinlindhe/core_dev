@@ -1,0 +1,501 @@
+/*
+ * Description: This is the Cascading Style Sheet used for the Administration Interface
+ * 		of PHPBTTracker+. There will be comments throughout this document
+ *		in an attempt to help you understand what is changeable, and also
+ *		what you are changing. 
+ *
+ * Author:	danomac
+ * Written:	14-Febrary-2004
+ *
+ * Copyright (C) 2004 danomac
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
+/*
+ * these four are the default styles used on hyperlinks.
+ */
+a:link {
+	color: #0000ff;
+}
+
+a:visited {
+	color: #0000ff;
+}
+
+a:hover {
+	background: #bbbbbb;
+}
+
+a:active {
+	color: #0000ff;
+}
+
+
+/*
+ * This is the default body style for each document.
+ */
+body {
+	background-color: #F9F9F9;
+	color: #000000;
+}
+
+/* ------------------ ADMIN INTERFACE ------------------------------------------------------------ */
+/*
+ * This style is the outer table for the admin pages (the NON tracker data table).
+ */
+.tblAdminOuter {
+	border 0;
+	width: 100%;
+}
+
+/* Tracker data */
+.tblAdminInner {
+	background-color: black;
+	border 0;
+	width: 100%;
+}
+
+.tblCategories {
+ 	background-color: black;
+	border 0;
+}
+
+/*
+ * This is the style used for the odd numbered rows
+ */
+td.catodd {
+	font-family: "Times New Roman", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 10pt;
+
+	color: black;
+	background-color: #F9F9F9;
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 7px;
+    padding-left: 7px;
+}
+
+/*
+ * This is the style used for the even numbered rows
+ */
+td.cateven {
+	font-family: "Times New Roman", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 10pt;
+
+	color: black;
+	background-color: #D7D7D7;
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 7px;
+    padding-left: 7px;
+}
+
+/*
+ * This is the class used to show the HIDDEN tag on torrents.
+ */
+.specialtag {
+	font-weight: bold;
+	font-size: 8pt;
+
+	color: red;
+}
+
+.status {
+	font-weight: bold;
+	font-size: 10pt;
+
+	color: red;
+}
+
+td.consistency {
+	background-color: #000000;
+	color: #FFFFFF;
+}
+
+td.conftableheading {
+	font-family: "Times New Roman", sans-serif;
+	font-size: 8pt;
+	color: black;
+	text-align: center;
+	font-weight: bold;
+}
+
+td.conftableitem {
+	font-family: "Times New Roman", sans-serif;
+	font-size: 8pt;
+	color: black;
+	text-align: left;
+}
+
+td.conftablevalue {
+	font-family: "Times New Roman", sans-serif;
+	font-size: 8pt;
+	color: black;
+	text-align: right;
+}
+
+.DateToRemoveURL {
+	color: green;
+}
+
+.DateRetired {
+	color: green;
+}
+
+.crc32 {
+	color: red;
+}
+
+.category {
+	color: red;
+}
+
+.speed {
+	color: green;
+}
+
+.DateToHideTorrent {
+	color: red;
+}
+
+select.action {
+	font-size: 8pt;
+}
+
+/*
+ * This is the style used for the advanced sorting table row heading
+ */
+td.advSortHeading {
+	font-family: "Arial", sans-serif;
+	font-style: normal;
+	font-weight: Bold;
+	font-size: 10pt;
+
+	color: black;
+	background-color: #D7D7D7;
+}
+
+/*
+ * This is the style used for the odd numbered rows
+ */
+td.advSortOdd {
+	font-family: "Arial", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 10pt;
+
+	color: black;
+	background-color: #F9F9F9;
+}
+
+/*
+ * This is the style used for the even numbered rows
+ */
+td.advSortEven {
+	font-family: "Arial", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 10pt;
+
+	color: black;
+	background-color: #D7D7D7;
+}
+
+/*
+ * This is the style used for the tracker table row heading
+ */
+td.heading {
+	font-family: "Times New Roman", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 10pt;
+
+	color: black;
+	background-color: #D7D7D7;
+}
+
+/*
+ * This is the style used for sort heading
+ */
+td.sortheading {
+	font-family: Arial, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 8pt;
+
+	color: black;
+	background-color: #D7D7D7;
+
+	text-align: center;
+}
+
+/*
+ * This is the style used for refresh info heading
+ */
+td.refreshheading {
+	font-family: Arial, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 8pt;
+
+	color: black;
+	background-color: #D7D7D7;
+
+	text-align: center;
+}
+
+/*
+ * This is the style used for the odd numbered rows
+ */
+td.odd {
+	font-family: "Times New Roman", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 7pt;
+
+	color: black;
+	background-color: #F9F9F9;
+}
+
+/*
+ * This is the style used for the even numbered rows
+ */
+td.even {
+	font-family: "Times New Roman", sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 7pt;
+
+	color: black;
+	background-color: #D7D7D7;
+}
+
+/*
+ * This is the text colour used in the login table rows
+ */
+td.logintbl {
+	color: #000000;
+}
+
+/*
+ * This is the style used for all the page headings
+ */
+td.pgheading {
+	font-family: Arial, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: large;
+
+	color: black;
+	background-color: #F9F9F9;
+
+	text-decoration: none; 	
+	text-transform: normal; 
+	text-align: center;
+	
+}
+
+/*
+ * This is the style used for all non-tracker data cells
+ */
+td.data {
+	font-family: Arial, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: normal;
+
+	color: black;
+	background-color: #F9F9F9;
+}
+
+/*
+ * This is the style used for the tracker table summary
+ */
+td.summary {
+	font-family: Arial, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: xx-small;
+
+	color: black;
+	background-color: #F9F9F9;
+}
+/*
+ * This is the style of button used in the admin pages.
+ */
+.button { 
+	border : 1 solid #000000; 
+	background : #DDDDDD; 
+	font-family : Arial, sans-serif; 
+	font-size : 12px; 
+	color: #000000;  
+	font-weight : bold; 
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-right: 2px;
+        padding-left: 2px;
+}
+
+/*
+ * This is the "heading" for the pages. The normal BODY style sheet is used with it.
+ */
+p.adm_title {
+	font-family: Arial, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: large;
+
+	color: black;
+	background-color: white;
+
+	border-color = #000000;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-right: 5px;
+        padding-left: 5px;
+
+	text-decoration: none; 	
+	text-transform: uppercase; 
+	text-align: center;
+}
+
+/* ------------------ ADMIN LOGIN ------------------------------------------------------------ */
+/*
+ * This style is used to display the Login screen.
+ */
+.tblLogin {
+	background-color: #ffffff;
+	border 0;
+	width: 750px;
+}
+
+/*
+ * This is the text colour used in the login table rows
+ */
+td.logintbl {
+	color: #000000;
+}
+
+/* ------------------ ERROR MESSAGES --------------------------------------------------------- */
+/*
+ * This is used to display the message.
+ */
+body.adm_error {
+	background-color: #ff0000;
+	color: #000000;
+	text-align: center;
+	font-size: large;
+	font-weight: bold;
+}
+
+/*
+ * This is the "heading" with the error message.
+ */
+p.adm_error {
+	font-family: Arial, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: x-large;
+
+	color: red;
+	background-color: blue;
+
+	border-color = #000000;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-right: 5px;
+        padding-left: 5px;
+
+	text-decoration: none;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+/* ------------------ HELP --------------------------------------------------------------------- */
+/*
+ * This is used to display the message.
+ */
+body.help {
+	background-color: #efefef;
+	color: #000000;
+	text-align: left;
+	font-size: normal;
+	font-weight: normal;
+
+	border-color = #000000;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-left: 1px solid;
+	border-right: 1px solid;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+p.help_title {
+	font-family: Arial, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: x-large;
+
+	color: black;
+	background-color: #DfDfDf;
+
+	border-color = #000000;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-left: 1px solid;
+	border-right: 1px solid;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+
+	text-decoration: none;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+/*
+ * Used for examples: fixed width
+ */
+.helpexample {
+	font-size: small;	
+	font-family: Courier New, Verdana, Arial, Helvetica;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	padding-left: 1.0em;
+	margin-left: 1.0em;
+	color: #000000;
+	background-color: #ffffff;
+	font-weight: normal;
+}

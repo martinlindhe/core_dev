@@ -1,0 +1,84 @@
+/* CSS Document */
+body {
+	margin: 0;
+	padding: 0;
+	
+	font-family: Verdana, Arial, Helvetica, sans-serif
+}
+
+#content {
+	margin: 0 auto 0 auto;
+	padding: 0;
+	
+	width: 780px;
+}
+
+#top {
+	margin: 0;
+	padding: 0 0 0 400px;
+		
+	height: 140px;
+	background-image: url(bg-top.gif);
+	background-repeat: no-repeat;
+}
+
+#textarea {
+	margin: 0;
+	padding: 50px 50px 0 60px;
+	height: 500px;
+	background-color: #FFFFFF;
+}
+
+#parked {
+	margin: 0;
+	padding: 0 0 0 30px;
+	
+	width: 500px;
+	float: left;
+}
+
+#parkedimage {
+	margin: 0;
+	padding: 0;
+	
+	float: left;
+}
+
+#footer {
+	margin: 0;
+	padding: 0;
+	
+	clear: both;
+	text-align: center;
+}
+
+/* typograhpy */
+
+p {
+	font-size: 12px;
+}
+
+h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 16px; 
+	font-weight: bold
+}
+
+a:link {text-decoration: none; color: #237FC9}
+a:visited {text-decoration: none; color: #237FC9}
+a:hover {color: #46A2ED; text-decoration: underline}
+a:active {text-decoration: none; color: #46A2ED}
+
+/* misc */
+
+.floatleft {
+	float: left;
+}
+
+img {
+	margin: 0;
+	padding: 0;
+	
+	border: 0;
+}

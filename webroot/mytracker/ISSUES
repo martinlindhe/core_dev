@@ -1,0 +1,24 @@
+WARNING: PHP Bug!
+=================
+
+In PHP versions < 4.3.11 there is a bug in the upload files routines internal
+to PHP. This affects uploading torrents with an apostrophe (') in the
+filename. Everything to the left of the apostrophe (including the apostrophe
+itself) gets truncated.
+
+While not a very serious bug, it can be annoying. You may consider upgrading
+to 4.3.11.
+
+
+OTHER ISSUES
+============
+
+(In no particular order)
+
+- For reasons that make no sense, the summary page can occasionally get
+  negative numbers in the results. That's what bta_consistency.php is for, but this
+  script causes the tracker to become unresponsive while working. 
+  You may want to crontab bta_consistency.php every 3 hours or so.
+- Speed tracking is rough at best. When starting or after long periods of
+  inactivity, it might take up to half an hour to become accurate. It will
+  most likely be understated most of the time.

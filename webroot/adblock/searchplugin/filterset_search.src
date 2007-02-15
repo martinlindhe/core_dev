@@ -1,0 +1,11 @@
+<search
+	version="7.1"
+	name="filterset database"
+	description="Search adblock filters"
+	method="GET"
+	action="http://martin2/adblock/ruleset.php"
+>
+
+<input name="s" user>
+
+</search>

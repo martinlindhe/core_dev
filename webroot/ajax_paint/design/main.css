@@ -1,0 +1,57 @@
+body {
+	margin: 5px;
+}
+
+
+#infobox {
+	background-color: #BBAA99;
+	width: 100px;
+	height: 32px;
+	border: 1px solid #000;
+	float: right;
+}
+
+#main {
+	background-color: #AAA;
+	width: 512px;	/* 16x16 */
+	height: 512px;
+	border: 1px solid #000;
+}
+
+#colorselector {
+	background-color: #FFF;
+	width: 50px;
+	border: 1px solid #000;
+	float: right;
+}
+
+#fileselector {
+	background-color: #CCC;
+	width: 320px;
+	border: 1px solid #000;
+}
+
+#saveselector {
+	background-color: #DD7792;
+	width: 50px;
+	border: 1px solid #000;
+	float: right;
+}
+
+.cellbox {
+	background-color: #CC99AA;
+	width: 32px;
+	height: 32px;
+	float: left;
+	cursor: pointer;
+	font: 8px verdana;
+	/* hur kan man göra texten omöjlig att selecta med musen? */
+}
+.cellclicked {
+	background-color: #EE6666;
+	width: 32px;
+	height: 32px;
+	float: left;
+	cursor: pointer;
+	font: 8px verdana;
+}

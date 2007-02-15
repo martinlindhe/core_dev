@@ -1,0 +1,7 @@
+2006.08.06
+	* functions_db.php: uppdaterad för MySQLi extensionen
+
+2005.05.13
+	* search.php: added &highlight parameter to show_lyric.php results
+	* show_lyric.php: added &highlight parameter, displays highlighted words in yellow
+	* edit_lyric.php: added a link back to "view lyric" mode

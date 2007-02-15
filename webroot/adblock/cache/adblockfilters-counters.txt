@@ -1,0 +1,13 @@
+[Adblock]
+addfreestats.com
+count.cgi
+cqcounter.com
+digits.com
+emuunlim.com/cgiglobal/count.pl
+flowcounter.com
+free-web-counters.net
+freelogs.com
+jellycounter.com
+siggiez.com/cgi-bin
+thecounter.com
+visit.webhosting.yahoo.com/counter.gif

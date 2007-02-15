@@ -1,0 +1,82 @@
+/*Stylesheet för IE 4+ och NS6x*/
+
+body
+{
+    margin: 5px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    list-style-type: square; 
+    line-height: normal; 
+    background-color: #000000;
+    list-style-type: square;
+    font: 12px verdana, arial;
+    color: #ffffff;
+}
+
+
+table, tr, td {
+	font: 12px verdana, arial;
+	color: #FFFFFF;
+}
+
+FORM {
+	font: 12px verdana, arial;
+}
+
+INPUT, TEXTAREA, SELECT {
+	font: 12px verdana, arial;
+	color: #FFFFFF;
+	background-color: #000000;
+	border-style: solid;
+	border-color: #888888;
+}
+
+INPUT.buttonstyle {
+	font: 12px verdana, arial;
+	border-style: solid;
+	border-color: #999999;
+	background-color: #DDDDDD;
+	color: black;
+}
+
+INPUT.radio {
+	border-color: #FFFFFF;
+}
+
+INPUT.checkbox {
+	border-color: #FFFFFF;
+}
+
+
+A:link		{ color: #999999; font-family: verdana, arial; font-weight: bold; text-decoration: none; }
+A:visited	{ color: #999999; text-decoration: none; }
+A:active	{ color: #FFFFFF; text-decoration: none; }
+A:hover		{ color: #FFFFFF; text-decoration: none; }
+
+
+
+
+
+
+
+.titlemod {
+	font: 16px verdana, arial;
+	color: #000000;
+	background-color: #E2E969;
+}
+.title {
+	font: 16px verdana, arial;
+	color: #FFFFFF;
+}
+
+.subtitlemod {
+	font: 12px verdana, arial;
+	color: #000000;
+	background-color: #E2E969;
+}
+.subtitle {
+	font: 12px verdana, arial;
+	color: #FFFFFF;
+}
