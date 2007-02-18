@@ -133,7 +133,6 @@ todo: visa average resists etc
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
     <FillTint>
       <R>255</R>
       <G>0</G>
@@ -168,7 +167,6 @@ todo: visa average resists etc
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
     <FillTint>
       <R>255</R>
       <G>0</G>
@@ -202,7 +200,6 @@ todo: visa average resists etc
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
     <FillTint>
       <R>255</R>
       <G>102</G>
@@ -237,7 +234,6 @@ todo: visa average resists etc
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
     <FillTint>
       <R>255</R>
       <G>102</G>
@@ -271,7 +267,6 @@ todo: visa average resists etc
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
     <FillTint>
       <R>51</R>
       <G>153</G>
@@ -306,7 +301,6 @@ todo: visa average resists etc
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
     <FillTint>
       <R>51</R>
       <G>153</G>
@@ -340,7 +334,6 @@ todo: visa average resists etc
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
     <FillTint>
       <R>0</R>
       <G>0</G>
@@ -1093,7 +1086,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>2</Font>
 		<Location>
-			<X>10</X>
+			<X>2</X>
 			<Y>0</Y>
 		</Location>
 		<Size>
@@ -1171,7 +1164,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>4</X>
+			<X>1</X>
 			<Y>19</Y>
 		</Location>
 		<Size>
@@ -1190,7 +1183,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>38</X>
+			<X>20</X>
 			<Y>19</Y>
 		</Location>
 		<Size>
@@ -1209,7 +1202,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>4</X>
+			<X>1</X>
 			<Y>29</Y>
 		</Location>
 		<Size>
@@ -1228,7 +1221,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>38</X>
+			<X>20</X>
 			<Y>29</Y>
 		</Location>
 		<Size>
@@ -1247,7 +1240,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>4</X>
+			<X>1</X>
 			<Y>39</Y>
 		</Location>
 		<Size>
@@ -1266,7 +1259,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>38</X>
+			<X>20</X>
 			<Y>39</Y>
 		</Location>
 		<Size>
@@ -1285,7 +1278,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>4</X>
+			<X>1</X>
 			<Y>49</Y>
 		</Location>
 		<Size>
@@ -1304,7 +1297,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>38</X>
+			<X>20</X>
 			<Y>49</Y>
 		</Location>
 		<Size>
@@ -1323,7 +1316,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>4</X>
+			<X>1</X>
 			<Y>59</Y>
 		</Location>
 		<Size>
@@ -1342,7 +1335,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>38</X>
+			<X>20</X>
 			<Y>59</Y>
 		</Location>
 		<Size>
@@ -1361,7 +1354,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>4</X>
+			<X>1</X>
 			<Y>69</Y>
 		</Location>
 		<Size>
@@ -1380,7 +1373,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>38</X>
+			<X>20</X>
 			<Y>69</Y>
 		</Location>
 		<Size>
@@ -1399,7 +1392,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>4</X>
+			<X>1</X>
 			<Y>79</Y>
 		</Location>
 		<Size>
@@ -1418,7 +1411,7 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>38</X>
+			<X>20</X>
 			<Y>79</Y>
 		</Location>
 		<Size>
@@ -1434,27 +1427,28 @@ todo: visa average resists etc
 
 <!-- Resists -->
 
-	<Label item ="PW_Poison">
+	<Label item ="MQ_AvgResist">
 		<ScreenID>PoisonLabel</ScreenID>
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>80</X>
+			<X>54</X>
 			<Y>19</Y>
 		</Location>
 		<Size>
-			<CX>33</CX>
+			<CX>70</CX>
 			<CY>14</CY>
 		</Size>
-		<Text>Poi</Text>
+		<Text>Prismatic [Avg]</Text>
 		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
 		<AlignRight>false</AlignRight>
 	</Label>
-	<Label item ="PW_PoisonNumber">
+	<Label item ="MQ_AvgResistNumber">
 		<ScreenID>PoisonNumberLabel</ScreenID>
-		<EQType>12</EQType>
+		<EQType>9999</EQType>
+		<TooltipReference>${Me.svPrismatic}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
@@ -1472,146 +1466,33 @@ todo: visa average resists etc
 		<AlignRight>true</AlignRight>
 	</Label>
 
-	<Label item ="PW_Magic">
+	<Label item ="MQ_LowResist">
 		<ScreenID>MagicLabel</ScreenID>
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>80</X>
+			<X>54</X>
 			<Y>29</Y>
 		</Location>
 		<Size>
-			<CX>33</CX>
+			<CX>70</CX>
 			<CY>14</CY>
 		</Size>
-		<Text>Mag</Text>
+		<Text>Chromatic [Low]</Text>
 		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
 		<AlignRight>false</AlignRight>
 	</Label>
-	<Label item ="PW_MagicNumber">
+	<Label item ="MQ_LowResistNumber">
 		<ScreenID>MagicNumberLabel</ScreenID>
-		<EQType>16</EQType>
+		<EQType>9999</EQType>
+		<TooltipReference>${Me.svChromatic}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
 			<X>114</X>
 			<Y>29</Y>
-		</Location>
-		<Size>
-			<CX>25</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>255</Text>
-		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-
-	<Label item ="PW_Disease">
-		<ScreenID>DiseaseLabel</ScreenID>
-		<RelativePosition>true</RelativePosition>
-		<Font>1</Font>
-		<Location>
-			<X>80</X>
-			<Y>39</Y>
-		</Location>
-		<Size>
-			<CX>33</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>Dis</Text>
-		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item ="PW_DiseaseNumber">
-		<ScreenID>DiseaseNumberLabel</ScreenID>
-		<EQType>13</EQType>
-		<RelativePosition>true</RelativePosition>
-		<Font>1</Font>
-		<Location>
-			<X>114</X>
-			<Y>39</Y>
-		</Location>
-		<Size>
-			<CX>25</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>255</Text>
-		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-
-	<Label item ="PW_Fire">
-		<ScreenID>FireLabel</ScreenID>
-		<RelativePosition>true</RelativePosition>
-		<Font>1</Font>
-		<Location>
-			<X>80</X>
-			<Y>49</Y>
-		</Location>
-		<Size>
-			<CX>33</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>Fire</Text>
-		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item ="PW_FireNumber">
-		<ScreenID>FireNumberLabel</ScreenID>
-		<EQType>14</EQType>
-		<RelativePosition>true</RelativePosition>
-		<Font>1</Font>
-		<Location>
-			<X>114</X>
-			<Y>49</Y>
-		</Location>
-		<Size>
-			<CX>25</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>255</Text>
-		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-
-	<Label item ="PW_Cold">
-		<ScreenID>ColdLabel</ScreenID>
-		<RelativePosition>true</RelativePosition>
-		<Font>1</Font>
-		<Location>
-			<X>80</X>
-			<Y>59</Y>
-		</Location>
-		<Size>
-			<CX>33</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>Cold</Text>
-		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item ="PW_ColdNumber">
-		<ScreenID>ColdNumberLabel</ScreenID>
-		<EQType>15</EQType>
-		<RelativePosition>true</RelativePosition>
-		<Font>1</Font>
-		<Location>
-			<X>114</X>
-			<Y>59</Y>
 		</Location>
 		<Size>
 			<CX>25</CX>
@@ -1629,14 +1510,14 @@ todo: visa average resists etc
 		<RelativePosition>true</RelativePosition>
 		<Font>1</Font>
 		<Location>
-			<X>80</X>
-			<Y>69</Y>
+			<X>54</X>
+			<Y>49</Y>
 		</Location>
 		<Size>
-			<CX>33</CX>
+			<CX>60</CX>
 			<CY>14</CY>
 		</Size>
-		<Text>Cor</Text>
+		<Text>Corruption</Text>
 		<TextColor><R>255</R><G>255</G><B>255</B></TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -1649,7 +1530,7 @@ todo: visa average resists etc
 		<Font>1</Font>
 		<Location>
 			<X>114</X>
-			<Y>69</Y>
+			<Y>49</Y>
 		</Location>
 		<Size>
 			<CX>25</CX>
@@ -1698,16 +1579,12 @@ todo: visa average resists etc
 		<Pieces>PW_INTNumber</Pieces>
 		<Pieces>PW_CHA</Pieces>
 		<Pieces>PW_CHANumber</Pieces>
-		<Pieces>PW_Poison</Pieces>
-		<Pieces>PW_PoisonNumber</Pieces>
-		<Pieces>PW_Magic</Pieces>
-		<Pieces>PW_MagicNumber</Pieces>
-		<Pieces>PW_Disease</Pieces>
-		<Pieces>PW_DiseaseNumber</Pieces>
-		<Pieces>PW_Fire</Pieces>
-		<Pieces>PW_FireNumber</Pieces>
-		<Pieces>PW_Cold</Pieces>
-		<Pieces>PW_ColdNumber</Pieces>
+
+		<Pieces>MQ_AvgResist</Pieces>
+		<Pieces>MQ_AvgResistNumber</Pieces>
+		<Pieces>MQ_LowResist</Pieces>
+		<Pieces>MQ_LowResistNumber</Pieces>
+		
 		<Pieces>PW_Corruption</Pieces>
 		<Pieces>PW_CorruptionNumber</Pieces>
 
