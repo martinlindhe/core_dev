@@ -32,7 +32,7 @@
 #define DO_REPTILE_PLAYER		Keosden
 
 | Percent levels
-#define QHEAL_PERCENT				60					| todo: om vi har clr i gruppen, kör på t.ex 40%, annars på t.ex 70%
+#define QHEAL_PERCENT				30					| todo: om vi har clr i gruppen, kör på t.ex 40%, annars på t.ex 70%
 #define CHEAL_PERCENT				85
 #define SNARE_PERCENT				99
 #define DEBUFF_PERCENT			97
@@ -320,7 +320,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 			/delay 2s ${Target.ID}==${SpawnId}
 		}
 
-		/if (!HEAL_ONLY_MODE && !${Window[LootWnd].Open} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
+		/if (!HEAL_ONLY_MODE && !${Window[LootWnd].Open} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
 			/call DebugMsg "Casting nuke clicky"
 			/call MQ2Cast "Everliving Bramble Tunic" item
 		}
@@ -371,7 +371,7 @@ Sub DruidUpdateBuffs
 	/if (${Me.SpellReady["Second Life Rk. II"]}) /call RefreshBuff "Second Life Rk. II" 10
 	
 	| Clear debuffs:
-	/if (${Me.AltAbilityReady["Resplendent Cascade"]} && ${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID}) {
+	/if (${Me.AltAbilityReady["Resplendent Cascade"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID})) {
 		/call DebugMsg "Curing debuffs"
 		/aa act Resplendent Cascade
 		|3.5 sec cast time
