@@ -13439,4 +13439,380 @@
 			</Hotspot>
 		</Frames>
 	</Ui2DAnimation>
+	
+  <FrameTemplate item="FT_BlankTabBorder">
+    <TopLeft>A_BlankTabFrameTopLeft</TopLeft>
+    <Top>A_BlankTabFrameTop</Top>
+    <TopRight>A_BlankTabFrameTopRight</TopRight>
+    <RightTop>A_BlankTabFrameRightTop</RightTop>
+    <Right>A_BlankTabFrameRight</Right>
+    <RightBottom>A_BlankTabRightBottom</RightBottom>
+    <LeftTop>A_BlankTabFrameLeftTop</LeftTop>
+    <Left>A_BlankTabFrameLeft</Left>
+    <LeftBottom>A_BlankTabLeftBottom</LeftBottom>
+    <OverlapLeft>0</OverlapLeft>
+    <OverlapTop>0</OverlapTop>
+    <OverlapRight>0</OverlapRight>
+    <OverlapBottom>0</OverlapBottom>
+  </FrameTemplate>
+
+  <FrameTemplate item="FT_BlankPageBorder">
+    <TopLeft>A_BlankTabFrameTopLeft</TopLeft>
+    <Top>A_BlankTabFrameTop</Top>
+    <TopRight>A_BlankTabFrameTopRight</TopRight>
+    <RightTop>A_BlankTabFrameRightTop</RightTop>
+    <Right>A_BlankTabFrameRight</Right>
+    <RightBottom>A_BlankTabFrameRightBottom</RightBottom>
+    <BottomRight>A_BlankTabFrameBottomRight</BottomRight>
+    <Bottom>A_BlankTabFrameBottom</Bottom>
+    <BottomLeft>A_BlankTabFrameBottomLeft</BottomLeft>
+    <LeftTop>A_BlankTabFrameLeftTop</LeftTop>
+    <Left>A_BlankTabFrameLeft</Left>
+    <LeftBottom>A_BlankTabFrameLeftBottom</LeftBottom>
+    <OverlapLeft>0</OverlapLeft>
+    <OverlapTop>0</OverlapTop>
+    <OverlapRight>0</OverlapRight>
+    <OverlapBottom>0</OverlapBottom>
+  </FrameTemplate>
+ 
+   <Ui2DAnimation item="A_BlankTabBottomLeft">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>154</X>
+        <Y>112</Y>
+      </Location>
+      <Size>
+        <CX>1</CX>
+        <CY>1</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabBottomRight">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>159</X>
+        <Y>112</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabLeftBottom">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>156</X>
+        <Y>112</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>2</X>
+        <Y>2</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabRightBottom">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>159</X>
+        <Y>112</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameTopLeft">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>142</X>
+        <Y>112</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameTop">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>151</X>
+        <Y>112</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameTopRight">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>164</X>
+        <Y>112</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameLeftTop">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>142</X>
+        <Y>115</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameRightTop">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>170</X>
+        <Y>115</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameLeft">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>142</X>
+        <Y>124</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameRight">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>170</X>
+        <Y>124</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameLeftBottom">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>142</X>
+        <Y>127</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameRightBottom">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>170</X>
+        <Y>127</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameBottomLeft">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>142</X>
+        <Y>136</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameBottom">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>151</X>
+        <Y>136</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+  <Ui2DAnimation item="A_BlankTabFrameBottomRight">
+    <Cycle>true</Cycle>
+    <Frames>
+      <Texture>window_pieces01.tga</Texture>
+      <Location>
+        <X>164</X>
+        <Y>136</Y>
+      </Location>
+      <Size>
+        <CX>0</CX>
+        <CY>0</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+      <Duration>1000</Duration>
+    </Frames>
+  </Ui2DAnimation>
+
+	<Ui2DAnimation item = "Blackbox">
+		<Cycle>true</Cycle>
+		<Frames>
+			<Texture>window_pieces22.tga</Texture>
+			<Location>
+				<X>243</X>
+				<Y>243</Y>
+			</Location>
+			<Size>
+				<CX>10</CX>
+				<CY>10</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+	</Ui2DAnimation>
+
 </XML>
