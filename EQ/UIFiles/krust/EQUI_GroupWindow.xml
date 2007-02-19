@@ -2868,7 +2868,7 @@
 		<TooltipReference>${If[${Group.Member[1].ID},${If[${Group.Member[1].Level}!=75,${Group.Member[1].Level},]} ${Group.Member[1].Class.ShortName} ${Group.Member[1].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>90</X>
+			<X>96</X>
 			<Y>19</Y>
 		</Location>
 		<Size>
@@ -2891,7 +2891,7 @@
 		<TooltipReference>${If[${Group.Member[2].ID},${If[${Group.Member[2].Level}!=75,${Group.Member[2].Level},]} ${Group.Member[2].Class.ShortName} ${Group.Member[2].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>90</X>
+			<X>96</X>
 			<Y>42</Y>
 		</Location>
 		<Size>
@@ -2914,7 +2914,7 @@
 		<TooltipReference>${If[${Group.Member[3].ID},${If[${Group.Member[3].Level}!=75,${Group.Member[3].Level},]} ${Group.Member[3].Class.ShortName} ${Group.Member[3].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>90</X>
+			<X>96</X>
 			<Y>66</Y>
 		</Location>
 		<Size>
@@ -2937,7 +2937,7 @@
 		<TooltipReference>${If[${Group.Member[4].ID},${If[${Group.Member[4].Level}!=75,${Group.Member[4].Level},]} ${Group.Member[4].Class.ShortName} ${Group.Member[4].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>84</X>
+			<X>96</X>
 			<Y>89</Y>
 		</Location>
 		<Size>
@@ -2960,7 +2960,7 @@
 		<TooltipReference>${If[${Group.Member[5].ID},${If[${Group.Member[5].Level}!=75,${Group.Member[5].Level},]} ${Group.Member[5].Class.ShortName} ${Group.Member[5].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>90</X>
+			<X>96</X>
 			<Y>114</Y>
 		</Location>
 		<Size>
