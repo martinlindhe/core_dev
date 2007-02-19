@@ -1,15 +1,15 @@
-<?xml version = "1.0"?>
-<XML ID = "EQInterfaceDefinitionLanguage">
-	<Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
+<?xml version="1.0"?>
+<XML ID="EQInterfaceDefinitionLanguage">
+	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes"/>
 
-	<TextureInfo item = "TargetBox.tga">
+	<TextureInfo item="TargetBox.tga">
 		<Size>
 			<CX>118</CX>
 			<CY>30</CY>
 		</Size>
 	</TextureInfo>
 
-	<Ui2DAnimation item = "A_TargetBox">
+	<Ui2DAnimation item="A_TargetBox">
 		<Cycle>false</Cycle>
 		<Frames>
 			<Texture>TargetBox.tga</Texture>
@@ -24,12 +24,12 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<StaticAnimation item = "A_TargetBoxStaticAnim">
+	<StaticAnimation item="A_TargetBoxStaticAnim">
 		<ScreenID>A_TargetBoxStaticAnim</ScreenID>
 		<Animation>A_TargetBox</Animation>
 	</StaticAnimation>
 
-	<Gauge item = "Target_HP">
+	<Gauge item="Target_HP">
 		<ScreenID>TargetHP</ScreenID>
 		<Font>3</Font>
 		<TextColor>
@@ -48,7 +48,6 @@
 		</Size>
 		<GaugeOffsetY>16</GaugeOffsetY>
 		<TextOffsetX>0</TextOffsetX>
-		<!-- to hide name, non MQ users set TextOffsetY to 0  -->
 		<TextOffsetY>-50</TextOffsetY>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
@@ -74,7 +73,7 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Label item ="Target_HPLabel">
+	<Label item="Target_HPLabel">
 		<Font>1</Font>
 		<ScreenID>HPLabel</ScreenID>
 		<EQType>29</EQType>
@@ -95,7 +94,7 @@
 		</TextColor>
 		<AlignRight>true</AlignRight>
 	</Label>
-	<Label item ="Target_HPPercLabel">
+	<Label item="Target_HPPercLabel">
 		<Font>1</Font>
 		<ScreenID>HPPercLabel</ScreenID>
 		<RelativePosition>true</RelativePosition>
@@ -118,7 +117,7 @@
 		<AlignRight>false</AlignRight>
 	</Label>
 
-	<Gauge item = "TargetOfTarget_HP2">
+	<Gauge item="TargetOfTarget_HP2">
 		<ScreenID>TargetOfTarget_HP</ScreenID>
 		<Font>3</Font>
 		<TextColor>
@@ -163,7 +162,7 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Label item ="TargetOfTarget_HPLabel2">
+	<Label item="TargetOfTarget_HPLabel2">
 		<Font>1</Font>
 		<ScreenID>TargetOfTarget_HPLabel</ScreenID>
 		<EQType>120</EQType>
@@ -185,7 +184,7 @@
 		<NoWrap>true</NoWrap>
 		<AlignRight>true</AlignRight>
 	</Label>
-	<Label item ="TargetOfTarget_HPPercLabel2">
+	<Label item="TargetOfTarget_HPPercLabel2">
 		<Font>1</Font>
 		<ScreenID>TargetOfTarget_HPPercLabel</ScreenID>
 		<RelativePosition>true</RelativePosition>
@@ -208,11 +207,10 @@
 		<AlignRight>false</AlignRight>
 	</Label>
 
-
 	<Label item="MQ_Target_Name">
 		<Font>2</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Target.Invis},(${Target.CleanName}),${Target.CleanName}]}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Target.Invis},(${Target.CleanName}),${Target.CleanName}]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>2</X>
@@ -233,32 +231,11 @@
 		<AlignCenter>false</AlignCenter>
 		<AlignRight>false</AlignRight>
 	</Label>
-	<Label item="MQ_Target_Guild">
-		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Target.Guild.Length},${Target.Guild},]}</TooltipReference>  
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>0</X>
-			<Y>2</Y>
-		</Location>
-		<Size>
-			<CX>100</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<AlignRight>true</AlignRight>
-	</Label>
 
 	<Label item="MQ_Target_Class">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Target.Class.ShortName}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${Target.Class.ShortName}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>106</X>
@@ -281,8 +258,8 @@
 
 	<Label item="MQ_Target_Level">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Target.Level}!=${Me.Level},${Target.Level},]}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Target.Level}!=${Me.Level},${Target.Level},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>130</X>
@@ -305,8 +282,8 @@
 	</Label>
 	<Label item="MQ_Target_Distance">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Target.Distance}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${Target.Distance}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>150</X>
@@ -329,8 +306,8 @@
 	</Label>
 	<Label item="MQ_Target_LoS">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Target.ID},${If[!${Target.LineOfSight},!LoS,]},]}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Target.ID},${If[!${Target.LineOfSight},!LoS,]},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>170</X>
@@ -355,8 +332,8 @@
 	<!-- shows "in group", "in raid", "pet owner" at same spot, so same X,Y-->
 	<Label item="MQ_Target_StatusPetMaster">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Target.Master.Name.Length},Owner ${Target.Master.CleanName},]}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Target.Master.Name.Length},Owner ${Target.Master.CleanName},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>135</X>
@@ -379,7 +356,7 @@
 	</Label>
 	<Label item="MQ_Target_StatusInRaid">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
+		<EQType>9999</EQType>
 		<TooltipReference>${If[${Raid.Member[${Target.Name}].ID},in group ${Raid.Member[${Target.Name}].Group},${If[${Group.Member[${Group.Member[${Target.Name}]}].ID},in group,]}]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -402,11 +379,10 @@
 		<AlignRight>false</AlignRight>
 	</Label>
 
-
 	<Label item="MQ_ToT_Name">
 		<Font>2</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Me.TargetOfTarget.Invis},(${Me.TargetOfTarget.CleanName}),${Me.TargetOfTarget.CleanName}]}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Me.TargetOfTarget.Invis},(${Me.TargetOfTarget.CleanName}),${Me.TargetOfTarget.CleanName}]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>2</X>
@@ -427,34 +403,10 @@
 		<AlignCenter>false</AlignCenter>
 		<AlignRight>false</AlignRight>
 	</Label>
-	<Label item="MQ_ToT_Guild">
-		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Me.TargetOfTarget.Guild.Length},${Me.TargetOfTarget.Guild},]}</TooltipReference>  
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>0</X>
-			<Y>30</Y>
-		</Location>
-		<Size>
-			<CX>100</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>	
 	<Label item="MQ_ToT_Level">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Me.TargetOfTarget.Level}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${Me.TargetOfTarget.Level}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>130</X>
@@ -474,8 +426,8 @@
 	</Label>
 	<Label item="MQ_ToT_Class">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Me.TargetOfTarget.Class.ShortName}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${Me.TargetOfTarget.Class.ShortName}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>106</X>
@@ -498,8 +450,8 @@
 	</Label>
 	<Label item="MQ_ToT_Distance">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Me.TargetOfTarget.Distance}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${Me.TargetOfTarget.Distance}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>150</X>
@@ -522,8 +474,8 @@
 	</Label>
 	<Label item="MQ_ToT_LoS">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Me.TargetOfTarget.ID},${If[!${Me.TargetOfTarget.LineOfSight},!LoS,]},]}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Me.TargetOfTarget.ID},${If[!${Me.TargetOfTarget.LineOfSight},!LoS,]},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>170</X>
@@ -547,8 +499,8 @@
 
 	<Label item="MQ_ToT_StatusPetMaster">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${If[${Me.TargetOfTarget.Master.Name.Length},Owner ${Me.TargetOfTarget.Master.CleanName},]}</TooltipReference>  
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Me.TargetOfTarget.Master.Name.Length},Owner ${Me.TargetOfTarget.Master.CleanName},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>135</X>
@@ -571,7 +523,7 @@
 	</Label>
 	<Label item="MQ_ToT_StatusInRaid">
 		<Font>1</Font>
-		<EQType>9999</EQType>  
+		<EQType>9999</EQType>
 		<TooltipReference>${If[${Raid.Member[${Me.TargetOfTarget.Name}].ID},in group ${Raid.Member[${Me.TargetOfTarget.Name}].Group},${If[${Group.Member[${Group.Member[${Me.TargetOfTarget.Name}]}].ID},in group,]}]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -594,7 +546,7 @@
 		<AlignRight>false</AlignRight>
 	</Label>
 
-	<Screen item = "TargetWindow">
+	<Screen item="TargetWindow">
 		<ScreenID/>
 		<RelativePosition>false</RelativePosition>
 		<Location>
@@ -609,7 +561,6 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<TooltipReference>Your Current Target</TooltipReference>
 		<DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
 		<Style_Titlebar>false</Style_Titlebar>
 		<Style_Closebox>false</Style_Closebox>
@@ -625,7 +576,6 @@
 		<Pieces>TargetOfTarget_HPPercLabel2</Pieces>
 
 		<Pieces>MQ_Target_Name</Pieces>
-		<!--<Pieces>MQ_Target_Guild</Pieces>-->
 		<Pieces>MQ_Target_Level</Pieces>
 		<Pieces>MQ_Target_Class</Pieces>
 		<Pieces>MQ_Target_Distance</Pieces>
@@ -634,14 +584,12 @@
 		<Pieces>MQ_Target_StatusInRaid</Pieces>
 
 		<Pieces>MQ_ToT_Name</Pieces>
-		<!--<Pieces>MQ_ToT_Guild</Pieces>-->
 		<Pieces>MQ_ToT_Level</Pieces>
 		<Pieces>MQ_ToT_Class</Pieces>
 		<Pieces>MQ_ToT_Distance</Pieces>
 		<Pieces>MQ_ToT_LoS</Pieces>
 		<Pieces>MQ_ToT_StatusPetMaster</Pieces>
 		<Pieces>MQ_ToT_StatusInRaid</Pieces>
-
 	</Screen>
 
 </XML>
