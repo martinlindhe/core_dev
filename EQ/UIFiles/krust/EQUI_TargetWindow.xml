@@ -217,32 +217,7 @@
 			<Y>0</Y>
 		</Location>
 		<Size>
-			<CX>100</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-
-	<Label item="MQ_Target_Class">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Target.Class.ShortName}</TooltipReference>
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>106</X>
-			<Y>0</Y>
-		</Location>
-		<Size>
-			<CX>25</CX>
+			<CX>130</CX>
 			<CY>14</CY>
 		</Size>
 		<TextColor>
@@ -252,21 +227,19 @@
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
 	</Label>
 
 	<Label item="MQ_Target_Level">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Target.Level}!=${Me.Level},${Target.Level},]}</TooltipReference>
+		<TooltipReference>${If[${Target.ID},${If[${Target.Level}!=${Me.Level},${Target.Level},]} ${Target.Class.ShortName} ${Target.Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>130</X>
 			<Y>0</Y>
 		</Location>
 		<Size>
-			<CX>35</CX>
+			<CX>80</CX>
 			<CY>14</CY>
 		</Size>
 		<Text></Text>
@@ -279,30 +252,6 @@
 		<AlignLeft>true</AlignLeft>
 		<AlignCenter>false</AlignCenter>
 		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item="MQ_Target_Distance">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Target.Distance}</TooltipReference>
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>150</X>
-			<Y>0</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
 	</Label>
 	<Label item="MQ_Target_LoS">
 		<Font>1</Font>
@@ -389,7 +338,7 @@
 			<Y>28</Y>
 		</Location>
 		<Size>
-			<CX>100</CX>
+			<CX>130</CX>
 			<CY>14</CY>
 		</Size>
 		<Text></Text>
@@ -406,14 +355,14 @@
 	<Label item="MQ_ToT_Level">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${Me.TargetOfTarget.Level}</TooltipReference>
+		<TooltipReference>${If[${Me.TargetOfTarget.ID},${If[${Me.TargetOfTarget.Level}!=${Me.Level},${Me.TargetOfTarget.Level},]} ${Me.TargetOfTarget.Class.ShortName} ${Me.TargetOfTarget.Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>130</X>
 			<Y>28</Y>
 		</Location>
 		<Size>
-			<CX>35</CX>
+			<CX>80</CX>
 			<CY>14</CY>
 		</Size>
 		<Text></Text>
@@ -423,54 +372,6 @@
 			<B>200</B>
 		</TextColor>
 		<AlignLeft>true</AlignLeft>
-	</Label>
-	<Label item="MQ_ToT_Class">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Me.TargetOfTarget.Class.ShortName}</TooltipReference>
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>106</X>
-			<Y>28</Y>
-		</Location>
-		<Size>
-			<CX>25</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item="MQ_ToT_Distance">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Me.TargetOfTarget.Distance}</TooltipReference>
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>150</X>
-			<Y>28</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
 	</Label>
 	<Label item="MQ_ToT_LoS">
 		<Font>1</Font>
@@ -577,16 +478,12 @@
 
 		<Pieces>MQ_Target_Name</Pieces>
 		<Pieces>MQ_Target_Level</Pieces>
-		<Pieces>MQ_Target_Class</Pieces>
-		<Pieces>MQ_Target_Distance</Pieces>
 		<Pieces>MQ_Target_LoS</Pieces>
 		<Pieces>MQ_Target_StatusPetMaster</Pieces>
 		<Pieces>MQ_Target_StatusInRaid</Pieces>
 
 		<Pieces>MQ_ToT_Name</Pieces>
 		<Pieces>MQ_ToT_Level</Pieces>
-		<Pieces>MQ_ToT_Class</Pieces>
-		<Pieces>MQ_ToT_Distance</Pieces>
 		<Pieces>MQ_ToT_LoS</Pieces>
 		<Pieces>MQ_ToT_StatusPetMaster</Pieces>
 		<Pieces>MQ_ToT_StatusInRaid</Pieces>
