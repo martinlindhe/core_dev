@@ -475,6 +475,42 @@
 			<CY>256</CY>
 		</Size>
 	</TextureInfo>
+	<TextureInfo item="dragitem43.tga">
+		<Size>
+			<CX>256</CX>
+			<CY>256</CY>
+		</Size>
+	</TextureInfo>
+	<TextureInfo item="dragitem44.tga">
+		<Size>
+			<CX>256</CX>
+			<CY>256</CY>
+		</Size>
+	</TextureInfo>
+	<TextureInfo item="dragitem45.tga">
+		<Size>
+			<CX>256</CX>
+			<CY>256</CY>
+		</Size>
+	</TextureInfo>
+	<TextureInfo item="dragitem46.tga">
+		<Size>
+			<CX>256</CX>
+			<CY>256</CY>
+		</Size>
+	</TextureInfo>
+	<TextureInfo item="dragitem47.tga">
+		<Size>
+			<CX>256</CX>
+			<CY>256</CY>
+		</Size>
+	</TextureInfo>
+	<TextureInfo item="dragitem48.tga">
+		<Size>
+			<CX>256</CX>
+			<CY>256</CY>
+		</Size>
+	</TextureInfo>
 		<TextureInfo item="cleric01.tga">
 				<Size>
 						<CX>256</CX>
@@ -1780,7 +1816,7 @@
 			</Hotspot>
 		</Frames>
 	</Ui2DAnimation>
-		
+	<!-- Cursors -->
 		<Ui2DAnimation item="A_DefaultCursor">
 		<Cycle>true</Cycle>
 		<Frames>
@@ -7515,6 +7551,102 @@
 			</Hotspot>
 			<Duration>1000</Duration>
 		</Frames>
+		<Frames>
+			<Texture>dragitem43.tga</Texture>
+			<Location>
+				<X>0</X>
+				<Y>0</Y>
+			</Location>
+			<Size>
+				<CX>256</CX>
+				<CY>256</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+		<Frames>
+			<Texture>dragitem44.tga</Texture>
+			<Location>
+				<X>0</X>
+				<Y>0</Y>
+			</Location>
+			<Size>
+				<CX>256</CX>
+				<CY>256</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+		<Frames>
+			<Texture>dragitem45.tga</Texture>
+			<Location>
+				<X>0</X>
+				<Y>0</Y>
+			</Location>
+			<Size>
+				<CX>256</CX>
+				<CY>256</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+		<Frames>
+			<Texture>dragitem46.tga</Texture>
+			<Location>
+				<X>0</X>
+				<Y>0</Y>
+			</Location>
+			<Size>
+				<CX>256</CX>
+				<CY>256</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+		<Frames>
+			<Texture>dragitem47.tga</Texture>
+			<Location>
+				<X>0</X>
+				<Y>0</Y>
+			</Location>
+			<Size>
+				<CX>256</CX>
+				<CY>256</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+		<Frames>
+			<Texture>dragitem48.tga</Texture>
+			<Location>
+				<X>0</X>
+				<Y>0</Y>
+			</Location>
+			<Size>
+				<CX>256</CX>
+				<CY>256</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
 	</Ui2DAnimation>
   <!-- Default Tab Frame -->
 	<Ui2DAnimation item="A_TabBottomLeft">
@@ -8202,6 +8334,23 @@
 			<Texture>window_pieces02.tga</Texture>
 			<Location>
 				<X>200</X>
+				<Y>80</Y>
+			</Location>
+			<Size>
+				<CX>40</CX>
+				<CY>40</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+		</Frames>
+	</Ui2DAnimation>
+	<Ui2DAnimation item="A_InvPowerSource">
+		<Frames>
+			<Texture>window_pieces05.tga</Texture>
+			<Location>
+				<X>120</X>
 				<Y>80</Y>
 			</Location>
 			<Size>

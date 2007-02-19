@@ -32,17 +32,16 @@
         <Include>EQUI_PlayerCustomizationWnd.xml</Include>
         <Include>EQUI_GroupWindow.xml</Include>
         <Include>EQUI_ItemDisplay.xml</Include>
-        <!-- <Include>EQUI_BreathWindow.xml</Include> -->
+        <Include>EQUI_BreathWindow.xml</Include>		
         <Include>EQUI_NoteWindow.xml</Include>
         <Include>EQUI_OptionsWindow.xml</Include>
         <Include>EQUI_BookWindow.xml</Include>
         <Include>EQUI_PlayerWindow.xml</Include>
-        <!-- <Include>EQUI_CastingWindow.xml</Include> -->
+        <Include>EQUI_CastingWindow.xml</Include>
         <Include>EQUI_TargetWindow.xml</Include>
         <Include>EQUI_AAWindow.xml</Include>
         <Include>EQUI_Inventory.xml</Include>
         <Include>EQUI_CursorAttachment.xml</Include>
-        <Include>EQUI_CastingWindow.xml</Include>
         <Include>EQUI_CastSpellWnd.xml</Include>
         <Include>EQUI_SpellBookWnd.xml</Include>
         <Include>EQUI_FriendsWnd.xml</Include>
@@ -90,6 +89,7 @@
         <Include>EQUI_MapToolbarWnd.xml</Include>
         <Include>EQUI_EditLabelWnd.xml</Include>
         <Include>EQUI_GuildManagementWnd.xml</Include>
+        <Include>EQUI_FellowshipWnd.xml</Include>		
         <Include>EQUI_TipWnd.xml</Include>
         <Include>EQUI_SystemInfoWnd.xml</Include>
         <Include>EQUI_AdventureRequestWnd.xml</Include>
@@ -107,8 +107,6 @@
         <Include>EQUI_TargetOfTargetWindow.xml</Include>
         <Include>EQUI_GmAttentionTextWnd.xml</Include>
         <Include>EQUI_LargeDialogWnd.xml</Include>
-		<Include>EQUI_TicketWindow.xml</Include>
-		<Include>EQUI_TicketCommentWindow.xml</Include>
 		<Include>EQUI_GuildTributeMasterWnd.xml</Include>
 		<Include>EQUI_TaskWnd.xml</Include>
 		<Include>EQUI_TaskSelectWnd.xml</Include>
@@ -143,7 +141,8 @@
         <Include>EQUI_AuraWnd.xml</Include>
         <Include>EQUI_GroupMentorWnd.xml</Include>
         <Include>EQUI_SpellDisplay.xml</Include>
-        <Include>EQUI_RewardSelectionWnd.xml</Include>        
+        <Include>EQUI_RewardSelectionWnd.xml</Include> 
+	<Include>EQUI_NewPointMerchantWnd.xml</Include>		
 </Composite>
 
     <Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>

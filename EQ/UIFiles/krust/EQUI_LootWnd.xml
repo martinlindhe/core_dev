@@ -7,11 +7,11 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>0</X>
+			<X>5</X>
 			<Y>4</Y>
 		</Location>
 		<Size>
-			<CX>274</CX>
+			<CX>168</CX>
 			<CY>32</CY>
 		</Size>
 		<Text>Blahblahblah's Corpse</Text>
@@ -98,8 +98,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>168</X>
-			<Y>0</Y>
+			<X>0</X>
+			<Y>42</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -115,8 +115,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>210</X>
-			<Y>0</Y>
+			<X>42</X>
+			<Y>42</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -132,7 +132,7 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>0</X>
+			<X>84</X>
 			<Y>42</Y>
 		</Location>
 		<Size>
@@ -149,7 +149,7 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>42</X>
+			<X>126</X>
 			<Y>42</Y>
 		</Location>
 		<Size>
@@ -166,8 +166,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>84</X>
-			<Y>42</Y>
+			<X>0</X>
+			<Y>84</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -183,8 +183,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>126</X>
-			<Y>42</Y>
+			<X>42</X>
+			<Y>84</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -200,8 +200,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>168</X>
-			<Y>42</Y>
+			<X>84</X>
+			<Y>84</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -217,8 +217,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>210</X>
-			<Y>42</Y>
+			<X>126</X>
+			<Y>84</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -235,7 +235,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>0</X>
-			<Y>84</Y>
+			<Y>126</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -252,7 +252,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>42</X>
-			<Y>84</Y>
+			<Y>126</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -269,7 +269,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>84</X>
-			<Y>84</Y>
+			<Y>126</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -286,7 +286,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>126</X>
-			<Y>84</Y>
+			<Y>126</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -302,8 +302,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>168</X>
-			<Y>84</Y>
+			<X>0</X>
+			<Y>168</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -319,8 +319,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>210</X>
-			<Y>84</Y>
+			<X>42</X>
+			<Y>168</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -336,8 +336,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>0</X>
-			<Y>126</Y>
+			<X>84</X>
+			<Y>168</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -353,8 +353,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>42</X>
-			<Y>126</Y>
+			<X>126</X>
+			<Y>168</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -370,8 +370,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>84</X>
-			<Y>126</Y>
+			<X>0</X>
+			<Y>210</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -387,8 +387,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>126</X>
-			<Y>126</Y>
+			<X>42</X>
+			<Y>210</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -404,8 +404,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>168</X>
-			<Y>126</Y>
+			<X>84</X>
+			<Y>210</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -421,8 +421,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>210</X>
-			<Y>126</Y>
+			<X>126</X>
+			<Y>210</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -439,7 +439,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>0</X>
-			<Y>168</Y>
+			<Y>252</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -456,7 +456,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>42</X>
-			<Y>168</Y>
+			<Y>252</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -473,7 +473,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>84</X>
-			<Y>168</Y>
+			<Y>252</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -490,7 +490,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>126</X>
-			<Y>168</Y>
+			<Y>252</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -506,8 +506,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>168</X>
-			<Y>168</Y>
+			<X>0</X>
+			<Y>294</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -523,8 +523,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>210</X>
-			<Y>168</Y>
+			<X>42</X>
+			<Y>294</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -540,8 +540,8 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>0</X>
-			<Y>210</Y>
+			<X>84</X>
+			<Y>294</Y>
 		</Location>
 		<Size>
 			<CX>40</CX>
@@ -549,6 +549,23 @@
 		</Size>
 		<Background>A_RecessedBox</Background>
 		<EQType>5030</EQType>
+		<ItemOffsetX>2</ItemOffsetX>
+		<ItemOffsetY>2</ItemOffsetY>
+	</InvSlot>
+	<InvSlot item = "LW_LootSlot31">
+		<ScreenID>LW_LootSlot31</ScreenID>
+		<!--<Font>3</Font>-->
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>126</X>
+			<Y>294</Y>
+		</Location>
+		<Size>
+			<CX>40</CX>
+			<CY>40</CY>
+		</Size>
+		<Background>A_RecessedBox</Background>
+		<EQType>5031</EQType>
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
@@ -562,8 +579,8 @@
                    <Y>32</Y>
                 </Location>
                 <Size>
-                   <CX>250</CX>
-                   <CY>210</CY>
+                   <CX>168</CX>
+                   <CY>336</CY>
                 </Size>
 		<Style_Transparent>false</Style_Transparent>
 		<!--<TooltipReference/>-->
@@ -599,18 +616,19 @@
 		<Pieces>LW_LootSlot28</Pieces>
 		<Pieces>LW_LootSlot29</Pieces>
 		<Pieces>LW_LootSlot30</Pieces>
-	</Screen>
+		<Pieces>LW_LootSlot31</Pieces>
+		</Screen>
 
 	<Button item = "LW_BroadcastButton">
 		<ScreenID>BroadcastButton</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>45</X>
-			<Y>250</Y>
+			<X>5</X>
+			<Y>376</Y>
 		</Location>
 		<Size>
-			<CX>80</CX>
+			<CX>50</CX>
 			<CY>30</CY>
 		</Size>
 		<Style_Transparent>false</Style_Transparent>
@@ -637,11 +655,11 @@
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
 			<Location>
-				<X>135</X>
-				<Y>250</Y>
+				<X>63</X>
+				<Y>376</Y>
 			</Location>
 			<Size>
-				<CX>84</CX>
+				<CX>110</CX>
 				<CY>30</CY>
 			</Size>
 		<Style_Transparent>false</Style_Transparent>
@@ -683,8 +701,8 @@
 			<Y>25</Y>
 		</Location>
 		<Size>
-			<CX>274</CX>
-			<CY>312</CY>
+			<CX>190</CX>
+			<CY>438</CY>
 		</Size>
 		<Style_Titlebar>false</Style_Titlebar>
 		<Style_Closebox>false</Style_Closebox>

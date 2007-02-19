@@ -420,8 +420,101 @@
 			<CY>20</CY>
 		</DecalSize>
 	</Button>	
+   <Button item = "SDBW_Buff12_Button">
+      <ScreenID>Buff12</ScreenID>
+      <!--<Font>3</Font>-->
+      <RelativePosition>true</RelativePosition>
+      <Location>
+         <X>93</X>
+         <Y>141</Y>
+      </Location>
+      <Size>
+         <CX>108</CX>
+         <CY>20</CY>
+      </Size>
+      <Style_VScroll>false</Style_VScroll>
+      <Style_HScroll>false</Style_HScroll>
+      <Style_Transparent>false</Style_Transparent>
+      <!--<TooltipReference/>-->
+      <Style_Checkbox>false</Style_Checkbox>
+      <!--<RadioGroup/>-->
+      <ButtonDrawTemplate>
+         <Normal>RedIconBackground</Normal>
+         <NormalDecal>BuffIcons</NormalDecal>
+      </ButtonDrawTemplate>
+      <DecalOffset>
+         <X>0</X>
+         <Y>0</Y>
+      </DecalOffset>
+      <DecalSize>
+         <CX>20</CX>
+         <CY>20</CY>
+      </DecalSize>
+   </Button>
+   <Button item = "SDBW_Buff13_Button">
+      <ScreenID>Buff13</ScreenID>
+      <!--<Font>3</Font>-->
+      <RelativePosition>true</RelativePosition>
+      <Location>
+         <X>93</X>
+         <Y>141</Y>
+      </Location>
+      <Size>
+         <CX>108</CX>
+         <CY>20</CY>
+      </Size>
+      <Style_VScroll>false</Style_VScroll>
+      <Style_HScroll>false</Style_HScroll>
+      <Style_Transparent>false</Style_Transparent>
+      <!--<TooltipReference/>-->
+      <Style_Checkbox>false</Style_Checkbox>
+      <!--<RadioGroup/>-->
+      <ButtonDrawTemplate>
+         <Normal>RedIconBackground</Normal>
+         <NormalDecal>BuffIcons</NormalDecal>
+      </ButtonDrawTemplate>
+      <DecalOffset>
+         <X>0</X>
+         <Y>0</Y>
+      </DecalOffset>
+      <DecalSize>
+         <CX>20</CX>
+         <CY>20</CY>
+      </DecalSize>
+   </Button>
+   <Button item = "SDBW_Buff14_Button">
+      <ScreenID>Buff14</ScreenID>
+      <!--<Font>3</Font>-->
+      <RelativePosition>true</RelativePosition>
+      <Location>
+         <X>93</X>
+         <Y>141</Y>
+      </Location>
+      <Size>
+         <CX>108</CX>
+         <CY>20</CY>
+      </Size>
+      <Style_VScroll>false</Style_VScroll>
+      <Style_HScroll>false</Style_HScroll>
+      <Style_Transparent>false</Style_Transparent>
+      <!--<TooltipReference/>-->
+      <Style_Checkbox>false</Style_Checkbox>
+      <!--<RadioGroup/>-->
+      <ButtonDrawTemplate>
+         <Normal>RedIconBackground</Normal>
+         <NormalDecal>BuffIcons</NormalDecal>
+      </ButtonDrawTemplate>
+      <DecalOffset>
+         <X>0</X>
+         <Y>0</Y>
+      </DecalOffset>
+      <DecalSize>
+         <CX>20</CX>
+         <CY>20</CY>
+      </DecalSize>
+   </Button>   
 
-
+	
 	<Label item ="SDBW_Buff0">
 		<ScreenID>Buff0Label</ScreenID>
 		<EQType>600</EQType>
@@ -683,6 +776,75 @@
 		<Location>
 			<X>22</X>
 			<Y>231</Y>
+		</Location>
+		<Size>
+			<CX>344</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+				<R>255</R>
+				<G>255</G>
+				<B>255</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>false</AlignRight>
+	</Label>
+	<Label item ="SDBW_Buff12">
+		<ScreenID>Buff12Label</ScreenID>
+		<EQType>612</EQType>
+		<Font>1</Font>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>22</X>
+			<Y>252</Y>
+		</Location>
+		<Size>
+			<CX>344</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+				<R>255</R>
+				<G>255</G>
+				<B>255</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>false</AlignRight>
+	</Label>
+	<Label item ="SDBW_Buff13">
+		<ScreenID>Buff13Label</ScreenID>
+		<EQType>613</EQType>
+		<Font>1</Font>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>22</X>
+			<Y>273</Y>
+		</Location>
+		<Size>
+			<CX>344</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+				<R>255</R>
+				<G>255</G>
+				<B>255</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>false</AlignRight>
+	</Label>
+	<Label item ="SDBW_Buff14">
+		<ScreenID>Buff14Label</ScreenID>
+		<EQType>614</EQType>
+		<Font>1</Font>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>22</X>
+			<Y>294</Y>
 		</Location>
 		<Size>
 			<CX>344</CX>
@@ -976,6 +1138,75 @@
       <AlignCenter>false</AlignCenter>
       <AlignRight>false</AlignRight>
    </Label>
+   <Label item ="SDBW_Dur12">
+      <ScreenID>Dur12Label</ScreenID>
+      <EQType>9999</EQType>
+      <Font>1</Font>
+      <TooltipReference>${If[${Me.Song[13].ID},${Me.Song[13].Duration.Time},]}</TooltipReference>
+      <Location>
+         <X>22</X>
+         <Y>262</Y>
+      </Location>
+      <Size>
+         <CX>80</CX>
+         <CY>14</CY>
+      </Size>
+      <Text></Text>
+      <TextColor>
+            <R>0</R>
+            <G>240</G>
+            <B>0</B>
+      </TextColor>
+      <NoWrap>true</NoWrap>
+      <AlignCenter>false</AlignCenter>
+      <AlignRight>false</AlignRight>
+   </Label>
+   <Label item ="SDBW_Dur13">
+      <ScreenID>Dur13Label</ScreenID>
+      <EQType>9999</EQType>
+      <Font>1</Font>
+      <TooltipReference>${If[${Me.Song[14].ID},${Me.Song[14].Duration.Time},]}</TooltipReference>
+      <Location>
+         <X>22</X>
+         <Y>283</Y>
+      </Location>
+      <Size>
+         <CX>80</CX>
+         <CY>14</CY>
+      </Size>
+      <Text></Text>
+      <TextColor>
+            <R>0</R>
+            <G>240</G>
+            <B>0</B>
+      </TextColor>
+      <NoWrap>true</NoWrap>
+      <AlignCenter>false</AlignCenter>
+      <AlignRight>false</AlignRight>
+   </Label>
+   <Label item ="SDBW_Dur14">
+      <ScreenID>Dur11Label</ScreenID>
+      <EQType>9999</EQType>
+      <Font>1</Font>
+      <TooltipReference>${If[${Me.Song[15].ID},${Me.Song[15].Duration.Time},]}</TooltipReference>
+      <Location>
+         <X>22</X>
+         <Y>304</Y>
+      </Location>
+      <Size>
+         <CX>80</CX>
+         <CY>14</CY>
+      </Size>
+      <Text></Text>
+      <TextColor>
+            <R>0</R>
+            <G>240</G>
+            <B>0</B>
+      </TextColor>
+      <NoWrap>true</NoWrap>
+      <AlignCenter>false</AlignCenter>
+      <AlignRight>false</AlignRight>
+   </Label>
 
 	<Screen item = "ShortDurationBuffWindow">
 		<!--<ScreenID/>-->
@@ -1010,6 +1241,9 @@
 		<Pieces>SDBW_Buff9_Button</Pieces>
 		<Pieces>SDBW_Buff10_Button</Pieces>
 		<Pieces>SDBW_Buff11_Button</Pieces>
+		<Pieces>SDBW_Buff12_Button</Pieces>
+		<Pieces>SDBW_Buff13_Button</Pieces>
+		<Pieces>SDBW_Buff14_Button</Pieces>
 
 		<Pieces>SDBW_Buff0</Pieces>
 		<Pieces>SDBW_Buff1</Pieces>
@@ -1023,6 +1257,9 @@
 		<Pieces>SDBW_Buff9</Pieces>
 		<Pieces>SDBW_Buff10</Pieces>
 		<Pieces>SDBW_Buff11</Pieces>
+		<Pieces>SDBW_Buff12</Pieces>
+		<Pieces>SDBW_Buff13</Pieces>
+		<Pieces>SDBW_Buff14</Pieces>
 
     <Pieces>SDBW_Dur0</Pieces>
     <Pieces>SDBW_Dur1</Pieces>
@@ -1036,7 +1273,9 @@
     <Pieces>SDBW_Dur9</Pieces>
     <Pieces>SDBW_Dur10</Pieces>
     <Pieces>SDBW_Dur11</Pieces>
-
+    <Pieces>SDBW_Dur12</Pieces>
+    <Pieces>SDBW_Dur13</Pieces>
+    <Pieces>SDBW_Dur14</Pieces>
 	</Screen>
 
 </XML>

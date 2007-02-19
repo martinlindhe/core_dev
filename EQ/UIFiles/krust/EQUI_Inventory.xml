@@ -468,7 +468,7 @@
 			<CX>40</CX>
 			<CY>40</CY>
 		</Size>
-		<Background>A_RecessedBox</Background> <!-- todo: background gfx -->
+		<Background>A_InvPowerSource</Background> <!-- todo: background gfx -->
 		<EQType>21</EQType>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
@@ -2888,7 +2888,150 @@
 		<Pieces>VerticalLayoutBox:ACP_ProgressionLayout</Pieces>
 	</Page>
 
-	<TabBox item ="IW_Subwindows">
+    <Listbox item="IW_AltCurr_PointList">
+      <ScreenID>AltCurr_PointList</ScreenID>
+      <DrawTemplate>WDT_Inner</DrawTemplate>
+      <AutoStretch>true</AutoStretch>
+      <TopAnchorToTop>true</TopAnchorToTop>
+      <BottomAnchorToTop>false</BottomAnchorToTop>
+      <LeftAnchorToLeft>true</LeftAnchorToLeft>
+      <RightAnchorToLeft>false</RightAnchorToLeft>
+      <LeftAnchorOffset>4</LeftAnchorOffset>
+      <TopAnchorOffset>4</TopAnchorOffset>
+      <RightAnchorOffset>4</RightAnchorOffset>
+      <BottomAnchorOffset>50</BottomAnchorOffset>
+      <TextColor>
+         <R>255</R>
+         <G>255</G>
+         <B>255</B>
+      </TextColor>
+      <Style_Border>true</Style_Border>
+      <Style_VScroll>true</Style_VScroll>
+      <Columns>
+         <Width>20</Width>
+         <Heading></Heading>
+      </Columns>
+      <Columns>
+         <Width>200</Width>
+         <Heading>Name</Heading>
+      </Columns>
+      <Columns>
+         <Width>50</Width>
+         <Heading>Quantity</Heading>
+      </Columns>
+   </Listbox>
+   <Button item="IW_AltCurr_CreateItemButton">
+      <ScreenID>AltCurr_CreateItemButton</ScreenID>
+<!--<Font>3</Font>-->
+      <RelativePosition>true</RelativePosition>
+      <AutoStretch>true</AutoStretch>
+      <TopAnchorToTop>false</TopAnchorToTop>
+      <BottomAnchorToTop>false</BottomAnchorToTop>
+      <LeftAnchorToLeft>true</LeftAnchorToLeft>
+      <RightAnchorToLeft>true</RightAnchorToLeft>
+      <LeftAnchorOffset>4</LeftAnchorOffset>
+      <TopAnchorOffset>26</TopAnchorOffset>
+      <RightAnchorOffset>124</RightAnchorOffset>
+      <BottomAnchorOffset>4</BottomAnchorOffset>
+      <Style_Transparent>false</Style_Transparent>
+      <TooltipReference>Click to create hard currency (items) of type highlighted.</TooltipReference>
+      <Style_Checkbox>false</Style_Checkbox>
+      <Text>Create</Text>
+      <TextColor>
+         <R>255</R>
+         <G>255</G>
+         <B>255</B>
+      </TextColor>
+      <ButtonDrawTemplate>
+         <Normal>A_BtnNormal</Normal>
+         <Pressed>A_BtnPressed</Pressed>
+         <Flyby>A_BtnFlyby</Flyby>
+         <Disabled>A_BtnDisabled</Disabled>
+         <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+      </ButtonDrawTemplate>
+   </Button>
+   <Button item="IW_AltCurr_ReclaimButton">
+      <ScreenID>AltCurr_ReclaimButton</ScreenID>
+<!--<Font>3</Font>-->
+      <RelativePosition>true</RelativePosition>
+      <AutoStretch>true</AutoStretch>
+      <TopAnchorToTop>false</TopAnchorToTop>
+      <BottomAnchorToTop>false</BottomAnchorToTop>
+      <LeftAnchorToLeft>false</LeftAnchorToLeft>
+      <RightAnchorToLeft>false</RightAnchorToLeft>
+      <LeftAnchorOffset>251</LeftAnchorOffset>
+      <TopAnchorOffset>26</TopAnchorOffset>
+      <RightAnchorOffset>139</RightAnchorOffset>
+      <BottomAnchorOffset>4</BottomAnchorOffset>
+      <Style_Transparent>false</Style_Transparent>
+      <TooltipReference>Click here reclaim points from items of highlighted type.</TooltipReference>
+      <Style_Checkbox>false</Style_Checkbox>
+      <Text>Reclaim</Text>
+      <TextColor>
+         <R>255</R>
+         <G>255</G>
+         <B>255</B>
+      </TextColor>
+      <ButtonDrawTemplate>
+         <Normal>A_BtnNormal</Normal>
+         <Pressed>A_BtnPressed</Pressed>
+         <Flyby>A_BtnFlyby</Flyby>
+         <Disabled>A_BtnDisabled</Disabled>
+         <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+      </ButtonDrawTemplate>
+   </Button>
+     <Label item="IW_AltCurr_MaxStackLabel">
+    <ScreenID>AltCurr_MaxStackLabel</ScreenID>
+    <Font>3</Font>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Size>
+      <CX>600</CX>
+      <CY>15</CY>
+    </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>
+      <X>10</X>
+      <Y>370</Y>
+    </Location>
+  </Label>
+  <Page item="IW_AltCurrPage">
+      <ScreenID>AltCurrPage</ScreenID>
+      <RelativePosition>true</RelativePosition>
+      <Style_VScroll>false</Style_VScroll>
+      <Style_HScroll>false</Style_HScroll>
+      <Style_Transparent>false</Style_Transparent>
+      <DrawTemplate>WDT_Def</DrawTemplate>
+      <TabText>Alt. Currency</TabText>
+      <TabTextColor>
+         <R>255</R>
+         <G>255</G>
+         <B>255</B>
+      </TabTextColor>
+      <TabTextActiveColor>
+         <R>255</R>
+         <G>255</G>
+         <B>0</B>
+      </TabTextActiveColor>
+      <Style_Sizable>true</Style_Sizable>
+      <Pieces>IW_AltCurr_PointList</Pieces>
+      <Pieces>IW_AltCurr_CreateItemButton</Pieces>
+      <Pieces>IW_AltCurr_ReclaimButton</Pieces>
+      <Pieces>IW_AltCurr_MaxStackLabel</Pieces>`
+      <Location>
+         <X>0</X>
+         <Y>22</Y>
+      </Location>
+      <Size>
+         <CX>388</CX>
+         <CY>401</CY>
+      </Size>
+   </Page>
+
+   <TabBox item ="IW_Subwindows">
 		<ScreenID>IW_Subwindows</ScreenID>
 		<RelativePosition>true</RelativePosition>
 		<AutoStretch>true</AutoStretch>
@@ -2901,6 +3044,7 @@
 		<Pages>Page:IW_InvPage</Pages>			
 		<Pages>Page:IW_EIPage</Pages>
 		<Pages>Page:IW_AltCharProgPage</Pages>	
+		<Pages>Page:IW_AltCurrPage</Pages>
 	</TabBox>
 
   <Screen item="InventoryWindow">
