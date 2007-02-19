@@ -1,4 +1,6 @@
 #define NUKE_SPELL		"Char"
+
+#define DO_MALO				0
 #define MALO_SPELL		"Malosi"
 
 | need a delay to not overnuke, but it need to be adjusted depending on tank gear/aa
@@ -6,9 +8,12 @@
 
 #define STARTNUKE_PERCENT	90
 
+#define PET_ATTACK_PCT 95
+
 
 Sub HandleAssistCallMage(int SpawnId)
 
+	/declare sentPet int local 0
 	/declare nukeName string local
 	
 	/varset nukeName NUKE_SPELL
@@ -24,20 +29,10 @@ Sub HandleAssistCallMage(int SpawnId)
 
 	/call DebugMsg "Assisting on ${Target.CleanName} (${Me.PctMana}m)"
 
-	/if (${Me.Pet.ID}) {
-
-		/call MageWaitForTargetHP ${SpawnId} 98
-		| Send in pet if u have one
-		/call DebugMsg "Sending in pet"
-		/pet attack
+	/if (DO_MALO && (${Me.PctMana} > 30) && (${Target.PctHPs} <= 99) && (${Target.PctHPs} >= 70)) {
+		/call MageWaitForTargetHP ${SpawnId} 97
+		/call BotCast "MALO_SPELL" NukeCallback
 	}
-	
-	/if ((${Me.PctMana} > 30) && (${Target.PctHPs} <= 99) && (${Target.PctHPs} >= 70)) {
-		/call MageWaitForTargetHP ${SpawnId} 92
-		/call Cast MALO_SPELL
-	}
-
-
 
 	/varset AbortLoop 0
 	:MageLoop
@@ -62,16 +57,23 @@ Sub HandleAssistCallMage(int SpawnId)
 			/call DebugMsg "Aborting nukage!"
 			/goto :MageDone
 		}
-		
+
 		/target npc id ${SpawnId}
 		/doevents
 		/delay 10
-		
+
+		/if (${Me.Pet.ID} && !${sentPet} && (${Target.ID} == ${SpawnId}) && ${Target.LineOfSight} && (${Target.Distance} < 100) && (${Target.PctHPs} <= PET_ATTACK_PCT)) {
+			/varset sentPet 1
+			| Send in pet if u have one
+			/call DebugMsg "Sending in pet"
+			/pet attack
+		}
+
 		/if (${Spawn[npc id ${SpawnId}].ID} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Me.TargetOfTarget.ID} != ${Me.ID})) {
 
 			/target npc id ${SpawnId}
 			/delay 2s ${Target.ID}==${SpawnId}
-			
+
 			/call MageWaitForTargetHP ${SpawnId} STARTNUKE_PERCENT
 
 			/call WaitForSpellReady "${nukeName}"
@@ -79,7 +81,7 @@ Sub HandleAssistCallMage(int SpawnId)
 				/if ((${Me.PctMana} > LOM_PERCENT) && (${Target.PctHPs} > 5)) {
 					/if (!${timerNuke}) {
 						/call DebugMsg "Nuking ${Target.CleanName} at ${Target.PctHPs}% (${Me.PctMana}m)"
-						/call Cast "${nukeName}"
+						/call BotCast "${nukeName}" NukeCallback
 						/varset timerNuke NUKE_DELAY
 					}
 				} else {
@@ -111,13 +113,13 @@ Sub MageUpdateBuffs
 
 	/if (!${Me.Pet.ID}) {
 		/call DebugMsg "Making pet"
-		/call Cast "Greater Conjuration: Water"
+		/call MQ2Cast "Greater Conjuration: Water"
 	}
 	
 	/if (${Me.Pet.ID}) {
 		/call RefreshPetBuff "Burnout III" 10
 	}
-	
+
 	|/call RefreshBuff "Elemental Armor"
 	/call RefreshBuff "Arch Shielding"
 

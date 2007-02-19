@@ -1,14 +1,22 @@
 #include MQ2Cast_Spell_Routines.inc
 #include bot_spells.inc
 
-#include bot_handleassist_druid.inc
+/if (${Me.Class.Name.Equal[Druid]} {
+	#include bot_handleassist_druid.inc
+}
+
+/if (${Me.Class.Name.Equal[Magician]} {
+	#include bot_handleassist_mage.inc
+}
+
+
 | #include bot_handleassist_cleric.inc
 | #include bot_handleassist_enchanter.inc
 | #include bot_handleassist_warrior.inc
 | #include bot_handleassist_beastlord.inc
 | #include bot_handleassist_shadowknight.inc
 | #include bot_handleassist_wizard.inc
-| #include bot_handleassist_mage.inc
+
 
 Sub DebugMsg(string Line)
 

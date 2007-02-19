@@ -32,7 +32,7 @@
 #define DO_REPTILE_PLAYER		Keosden
 
 | Percent levels
-#define QHEAL_PERCENT				30					| todo: om vi har clr i gruppen, kör på t.ex 40%, annars på t.ex 70%
+#define QHEAL_PERCENT				70					| todo: om vi har clr i gruppen, kör på t.ex 40%, annars på t.ex 70%
 #define CHEAL_PERCENT				85
 #define SNARE_PERCENT				99
 #define DEBUFF_PERCENT			97
@@ -71,7 +71,8 @@ Sub Event_DEBUFF_DruNaturesSerenity(string Line, string Name)
 #event DEBUFF_DruImmolationOfSun "#1# is immolated by the flames of the sun."
 Sub Event_DEBUFF_DruImmolationOfSun(string Line, string Name)
 	| DRU/67: Immolation of the Sun
-	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFF: ${Target.CleanName} (-40 FR, -36 AC)"
+	| DRU/71: Blistering Sunray
+	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFF: ${Target.CleanName} (FIRE, AC)"
 /return
 
 #event DEBUFF_DruCold "#1#s body is covered in a film of ice."
@@ -250,7 +251,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 		}
 	}
 
-	/if (DO_DEBUFF && !HEAL_ONLY_MODE && ${Target.Type.Equal[NPC]} && (${Target.PctHPs} >= 80) && (${Me.PctMana} > LOM_PERCENT) && (${Spawn[id ${SpawnId}].Level} >= 62)) {
+	/if (DO_DEBUFF && !HEAL_ONLY_MODE && ${Target.Type.Equal[NPC]} && ${Me.Standing} && (${Target.PctHPs} >= 80) && (${Me.PctMana} > LOM_PERCENT) && (${Spawn[id ${SpawnId}].Level} >= 62)) {
 		/target npc id ${SpawnId}
 		/delay 2s ${Target.ID}==${SpawnId}
 		/call DruidWaitForTargetHP ${SpawnId} DEBUFF_PERCENT
@@ -308,7 +309,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 			/call BotCast "CHEAL_SPELLNAME" HealCallback
 		}
 
-		/if (DO_EPIC && !HEAL_ONLY_MODE && !${Window[LootWnd].Open} && !${Me.Stunned} && !${FindItem[EPIC_ITEMNAME].Timer} && ${Target.ID} && (${Target.PctHPs} > 50) && (${Target.PctHPs} < 100) && ${Target.Type.Equal[NPC]} && (${Target.Level} >= 60) && ${Target.LineOfSight} && ${Target.Distance} < 100) {
+		/if (DO_EPIC && !HEAL_ONLY_MODE && !${Window[LootWnd].Open} && !${Me.Stunned} && ${Me.Standing} && !${FindItem[EPIC_ITEMNAME].Timer} && ${Target.ID} && (${Target.PctHPs} > 50) && (${Target.PctHPs} < 100) && ${Target.Type.Equal[NPC]} && (${Target.Level} >= 60) && ${Target.LineOfSight} && ${Target.Distance} < 100) {
 			/call DebugMsg "DEBUFF: ${Target.CleanName} (Druid Epic)"
 			/call MQ2Cast "EPIC_ITEMNAME" item
 		}
@@ -320,12 +321,12 @@ Sub HandleAssistCallDruid(int SpawnId)
 			/delay 2s ${Target.ID}==${SpawnId}
 		}
 
-		/if (!HEAL_ONLY_MODE && !${Window[LootWnd].Open} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
+		/if (!HEAL_ONLY_MODE && !${Window[LootWnd].Open} && ${Me.Standing} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
 			/call DebugMsg "Casting nuke clicky"
 			/call MQ2Cast "Everliving Bramble Tunic" item
 		}
 
-		/if (!HEAL_ONLY_MODE && !${timerNuke} && !${Window[LootWnd].Open} && !${Window[SpellBookWnd].Open} && ${Spawn[npc id ${SpawnId}].ID} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Me.TargetOfTarget.ID} != ${Me.ID})) {
+		/if (!HEAL_ONLY_MODE && !${timerNuke} && ${Me.Standing} && !${Window[LootWnd].Open} && !${Window[SpellBookWnd].Open} && ${Spawn[npc id ${SpawnId}].ID} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Me.TargetOfTarget.ID} != ${Me.ID})) {
 			/target npc id ${SpawnId}
 			/delay 2s ${Target.ID}==${SpawnId}
 			/call WaitForSpellReady "${nukeName}"
