@@ -1,8 +1,8 @@
-<?xml version = "1.0"?>
-<XML ID = "EQInterfaceDefinitionLanguage">
-	<Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
+<?xml version="1.0"?>
+<XML ID="EQInterfaceDefinitionLanguage">
+	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes"/>
 
-	<Ui2DAnimation item = "Blackline">
+	<Ui2DAnimation item="Blackline">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -20,11 +20,9 @@
 			</Hotspot>
 			<Duration>1000</Duration>
 		</Frames>
-		
 	</Ui2DAnimation>
 
-
-	<Ui2DAnimation item = "GW_Highlight">
+	<Ui2DAnimation item="GW_Highlight">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -44,7 +42,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "GW_V_bar_image">
+	<Ui2DAnimation item="GW_V_bar_image">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -64,7 +62,7 @@
 		</Frames>
 	</Ui2DAnimation>
 		
-	<Ui2DAnimation item = "GW_H_bar_image">
+	<Ui2DAnimation item="GW_H_bar_image">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -82,10 +80,9 @@
 			</Hotspot>
 			<Duration>1000</Duration>
 		</Frames>
-		
 	</Ui2DAnimation>
 	
-	<StaticAnimation item = "GW_V_bar">
+	<StaticAnimation item="GW_V_bar">
 		<ScreenID>SBW_SpellBook1</ScreenID>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -99,7 +96,7 @@
 		<Animation>GW_V_bar_image</Animation>
 	</StaticAnimation>
 
-	<StaticAnimation item = "GW_V_barblack">
+	<StaticAnimation item="GW_V_barblack">
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>0</X>
@@ -112,7 +109,7 @@
 		<Animation>Blackbox</Animation>
 	</StaticAnimation>
 
-	<StaticAnimation item = "GW_H_bar">
+	<StaticAnimation item="GW_H_bar">
 		<ScreenID>SBW_SpellBook1</ScreenID>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -126,7 +123,7 @@
 		<Animation>GW_H_bar_image</Animation>
 	</StaticAnimation>
 
-	<StaticAnimation item = "GW_H_barblack">
+	<StaticAnimation item="GW_H_barblack">
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>0</X>
@@ -139,7 +136,7 @@
 		<Animation>Blackbox</Animation>
 	</StaticAnimation>
 
-	<Ui2DAnimation item = "A_InviteBtnNormal">
+	<Ui2DAnimation item="A_InviteBtnNormal">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -159,7 +156,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_InviteBtnFlyby">
+	<Ui2DAnimation item="A_InviteBtnFlyby">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -179,7 +176,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_InviteBtnPressed">
+	<Ui2DAnimation item="A_InviteBtnPressed">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -199,7 +196,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_DisbandBtnNormal">
+	<Ui2DAnimation item="A_DisbandBtnNormal">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -219,7 +216,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_DisbandBtnFlyby">
+	<Ui2DAnimation item="A_DisbandBtnFlyby">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -239,7 +236,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_DisbandBtnPressed">
+	<Ui2DAnimation item="A_DisbandBtnPressed">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -259,8 +256,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	
-	<Ui2DAnimation item = "A_FollowBtnNormal">
+	<Ui2DAnimation item="A_FollowBtnNormal">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -280,7 +276,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_FollowBtnFlyby">
+	<Ui2DAnimation item="A_FollowBtnFlyby">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -300,7 +296,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_FollowBtnPressed">
+	<Ui2DAnimation item="A_FollowBtnPressed">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -320,7 +316,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_DeclineBtnNormal">
+	<Ui2DAnimation item="A_DeclineBtnNormal">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -340,7 +336,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_DeclineBtnFlyby">
+	<Ui2DAnimation item="A_DeclineBtnFlyby">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -360,7 +356,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_DeclineBtnPressed">
+	<Ui2DAnimation item="A_DeclineBtnPressed">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -380,7 +376,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_GWBtnDisabled">
+	<Ui2DAnimation item="A_GWBtnDisabled">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces22.tga</Texture>
@@ -400,7 +396,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_F2image">
+	<Ui2DAnimation item="A_F2image">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces21.tga</Texture>
@@ -420,7 +416,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_F3image">
+	<Ui2DAnimation item="A_F3image">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces21.tga</Texture>
@@ -440,7 +436,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_F4image">
+	<Ui2DAnimation item="A_F4image">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces21.tga</Texture>
@@ -460,7 +456,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_F5image">
+	<Ui2DAnimation item="A_F5image">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces21.tga</Texture>
@@ -480,7 +476,7 @@
 		</Frames>
 	</Ui2DAnimation>
 
-	<Ui2DAnimation item = "A_F6image">
+	<Ui2DAnimation item="A_F6image">
 		<Cycle>true</Cycle>
 		<Frames>
 			<Texture>window_pieces21.tga</Texture>
@@ -499,9 +495,8 @@
 			<Duration>1000</Duration>
 		</Frames>
 	</Ui2DAnimation>
-
 	
-	<Button item = "GW_InviteButton">
+	<Button item="GW_InviteButton">
 		<ScreenID>InviteButton</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -518,7 +513,6 @@
 		<Style_Transparent>false</Style_Transparent>
 		<TooltipReference>INVITE</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
-		<!--<RadioGroup/>-->
 		<TextColor>
 				<R>150</R>
 				<G>255</G>
@@ -532,7 +526,7 @@
 		</ButtonDrawTemplate>
 	</Button>
 
-	<Button item = "GW_DisbandButton">
+	<Button item="GW_DisbandButton">
 		<ScreenID>DisbandButton</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -549,7 +543,6 @@
 		<Style_Transparent>false</Style_Transparent>
 		<TooltipReference>DISBAND</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
-		<!--<RadioGroup/>-->
 		<ButtonDrawTemplate>
 			<Normal>A_DisbandBtnNormal</Normal>
 			<Pressed>A_DisbandBtnPressed</Pressed>
@@ -563,7 +556,7 @@
 		</TextColor>
 	</Button>
 
-	<Button item = "GW_FollowButton">
+	<Button item="GW_FollowButton">
 		<ScreenID>FollowButton</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -580,7 +573,6 @@
 		<Style_Transparent>false</Style_Transparent>
 		<TooltipReference>ACCEPT</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
-		<!--<RadioGroup/>-->
 		<TextColor>
 				<R>150</R>
 				<G>255</G>
@@ -594,7 +586,7 @@
 		</ButtonDrawTemplate>
 	</Button>
 
-	<Button item = "GW_DeclineButton">
+	<Button item="GW_DeclineButton">
 		<ScreenID>DeclineButton</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -611,7 +603,6 @@
 		<Style_Transparent>false</Style_Transparent>
 		<TooltipReference>REFUSE</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
-		<!--<RadioGroup/>-->
 		<ButtonDrawTemplate>
 			<Normal>A_DeclineBtnNormal</Normal>
 			<Pressed>A_DeclineBtnPressed</Pressed>
@@ -625,84 +616,87 @@
 		</TextColor>
 	</Button>
 
-  <Ui2DAnimation item="A_GroupGaugeBackground">
-    <Cycle>true</Cycle>
-    <Frames>
-      <Texture>window_pieces21.tga</Texture>
-      <Location>
-        <X>1</X>
-        <Y>245</Y>
-      </Location>
-      <Size>
-        <CX>10000</CX>
-        <CY>8</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-      <Duration>1000</Duration>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_GroupGaugeFill1">
-    <Cycle>true</Cycle>
-    <Frames>
-      <Texture>window_pieces01.tga</Texture>
-      <Location>
-        <X>110</X>
-        <Y>20</Y>
-      </Location>
-      <Size>
-        <CX>10000</CX>
-        <CY>8</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-      <Duration>1000</Duration>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_GroupGaugeFill2">
-    <Cycle>true</Cycle>
-    <Frames>
-      <Texture>window_pieces01.tga</Texture>
-      <Location>
-        <X>-2890</X>
-        <Y>20</Y>
-      </Location>
-      <Size>
-        <CX>10000</CX>
-        <CY>8</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-      <Duration>1000</Duration>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_GroupGaugeFill3">
-    <Cycle>true</Cycle>
-    <Frames>
-      <Texture>window_pieces01.tga</Texture>
-      <Location>
-        <X>-6890</X>
-        <Y>20</Y>
-      </Location>
-      <Size>
-        <CX>10000</CX>
-        <CY>8</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-      <Duration>1000</Duration>
-    </Frames>
-  </Ui2DAnimation>
+	<Ui2DAnimation item="A_GroupGaugeBackground">
+		<Cycle>true</Cycle>
+		<Frames>
+			<Texture>window_pieces21.tga</Texture>
+			<Location>
+				<X>1</X>
+				<Y>245</Y>
+			</Location>
+			<Size>
+				<CX>10000</CX>
+				<CY>8</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+	</Ui2DAnimation>
 
-	<StaticAnimation item = "GW_Gauge1black">
+	<Ui2DAnimation item="A_GroupGaugeFill1">
+		<Cycle>true</Cycle>
+		<Frames>
+			<Texture>window_pieces01.tga</Texture>
+			<Location>
+				<X>110</X>
+				<Y>20</Y>
+			</Location>
+			<Size>
+				<CX>10000</CX>
+				<CY>8</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+	</Ui2DAnimation>
+
+	<Ui2DAnimation item="A_GroupGaugeFill2">
+		<Cycle>true</Cycle>
+		<Frames>
+			<Texture>window_pieces01.tga</Texture>
+			<Location>
+				<X>-2890</X>
+				<Y>20</Y>
+			</Location>
+			<Size>
+				<CX>10000</CX>
+				<CY>8</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+	</Ui2DAnimation>
+
+	<Ui2DAnimation item="A_GroupGaugeFill3">
+		<Cycle>true</Cycle>
+		<Frames>
+			<Texture>window_pieces01.tga</Texture>
+			<Location>
+				<X>-6890</X>
+				<Y>20</Y>
+			</Location>
+			<Size>
+				<CX>10000</CX>
+				<CY>8</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+			<Duration>1000</Duration>
+		</Frames>
+	</Ui2DAnimation>
+
+	<StaticAnimation item="GW_Gauge1black">
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>17</X>
@@ -715,13 +709,13 @@
 		<Animation>Blackline</Animation>
 	</StaticAnimation>
 
-  <Gauge item = "GW_Gauge1">
+	<Gauge item="GW_Gauge1">
 		<ScreenID>Gauge1</ScreenID>
 		<Font>2</Font>
 		<TextColor>
-				<R>240</R>
-				<G>240</G>
-				<B>240</B>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -737,16 +731,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>220</R>
-				<G>0</G>
-				<B>0</B>
+			<R>220</R>
+			<G>0</G>
+			<B>0</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>220</R>
-				<G>220</G>
-				<B>0</B>
+			<R>220</R>
+			<G>220</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>11</EQType>
@@ -758,268 +751,255 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Gauge item = "GW_PetGauge1">
+	<Gauge item="GW_PetGauge1">
 		<ScreenID>PetGauge1</ScreenID>
-		<!--<Font>3</Font>-->
 		<GaugeDrawTemplate>
 			<Background>A_GaugeBackground</Background>
 			<Fill>A_GaugeFill</Fill>
-			<!--<Lines>A_GaugeLines</Lines>-->
-			<!--<LinesFill>A_GaugeLinesFill</LinesFill>-->
-			<!--<EndCapLeft>A_GaugeEndCapLeft</EndCapLeft>-->
-			<!--<EndCapRight>A_GaugeEndCapRight</EndCapRight>-->
 		</GaugeDrawTemplate>
 	</Gauge>
 
-  <Gauge item="GW_F2_Gauge1A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>0</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>11</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill1</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F2_Gauge1B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>11</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F2_Gauge2A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-3000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>11</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill2</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F2_Gauge2B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>30</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-30</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>11</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F2_Gauge3A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-7000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>11</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill3</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F2_Gauge3B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>70</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-70</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>11</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F2_Gauge4">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>11</EQType>
-    <GaugeDrawTemplate>
-      <Lines>A_GaugeLines</Lines>
-      <LinesFill>A_GaugeLinesFill</LinesFill>
-    </GaugeDrawTemplate>
-  </Gauge>
-	<Gauge item = "GW_F2_PetGauge">
+	<Gauge item="GW_F2_Gauge1A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>0</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>11</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill1</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F2_Gauge1B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>11</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F2_Gauge2A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-3000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>11</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill2</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F2_Gauge2B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>30</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-30</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>11</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F2_Gauge3A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-7000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>11</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill3</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F2_Gauge3B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>70</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-70</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>11</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F2_Gauge4">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>11</EQType>
+		<GaugeDrawTemplate>
+			<Lines>A_GaugeLines</Lines>
+			<LinesFill>A_GaugeLinesFill</LinesFill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F2_PetGauge">
 		<ScreenID>PetGauge</ScreenID>
-		<!--<Font>3</Font>-->
 		<TextColor>
-				<R>240</R>
-				<G>240</G>
-				<B>240</B>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -1035,16 +1015,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>0</R>
-				<G>240</G>
-				<B>240</B>
+			<R>0</R>
+			<G>240</G>
+			<B>240</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>0</R>
-				<G>0</G>
-				<B>0</B>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>17</EQType>
@@ -1053,37 +1032,37 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 	
-  <Screen item="GW_F2_Gauges">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>18</X>
-      <Y>30</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <Text />
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>true</Style_Transparent>
-    <DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
-    <Style_Titlebar>false</Style_Titlebar>
-    <Style_Closebox>false</Style_Closebox>
-    <Style_Minimizebox>false</Style_Minimizebox>
-    <Style_Border>false</Style_Border>
-    <Style_Sizable>false</Style_Sizable>
-    <Pieces>GW_F2_Gauge1A</Pieces>
-    <Pieces>GW_F2_Gauge1B</Pieces>
-    <Pieces>GW_F2_Gauge2A</Pieces>
-    <Pieces>GW_F2_Gauge2B</Pieces>
-    <Pieces>GW_F2_Gauge3A</Pieces>
-    <Pieces>GW_F2_Gauge3B</Pieces>
-    <Pieces>GW_F2_Gauge4</Pieces>
-	<Pieces>GW_F2_PetGauge</Pieces>
-  </Screen>
+	<Screen item="GW_F2_Gauges">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>18</X>
+			<Y>30</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<Text />
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>true</Style_Transparent>
+		<DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
+		<Style_Titlebar>false</Style_Titlebar>
+		<Style_Closebox>false</Style_Closebox>
+		<Style_Minimizebox>false</Style_Minimizebox>
+		<Style_Border>false</Style_Border>
+		<Style_Sizable>false</Style_Sizable>
+		<Pieces>GW_F2_Gauge1A</Pieces>
+		<Pieces>GW_F2_Gauge1B</Pieces>
+		<Pieces>GW_F2_Gauge2A</Pieces>
+		<Pieces>GW_F2_Gauge2B</Pieces>
+		<Pieces>GW_F2_Gauge3A</Pieces>
+		<Pieces>GW_F2_Gauge3B</Pieces>
+		<Pieces>GW_F2_Gauge4</Pieces>
+		<Pieces>GW_F2_PetGauge</Pieces>
+	</Screen>
 
-	<StaticAnimation item = "GW_Gauge2black">
+	<StaticAnimation item="GW_Gauge2black">
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>17</X>
@@ -1096,13 +1075,13 @@
 		<Animation>Blackline</Animation>
 	</StaticAnimation>	
 
-	<Gauge item = "GW_Gauge2">
+	<Gauge item="GW_Gauge2">
 		<ScreenID>Gauge2</ScreenID>
 		<Font>2</Font>
 		<TextColor>
-				<R>240</R>
-				<G>240</G>
-				<B>240</B>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -1118,16 +1097,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>true</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>220</R>
-				<G>0</G>
-				<B>0</B>
+			<R>220</R>
+			<G>0</G>
+			<B>0</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>220</R>
-				<G>220</G>
-				<B>0</B>
+			<R>220</R>
+			<G>220</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>12</EQType>
@@ -1141,266 +1119,253 @@
 
 	<Gauge item = "GW_PetGauge2">
 		<ScreenID>PetGauge2</ScreenID>
-		<!--<Font>3</Font>-->
 		<GaugeDrawTemplate>
 			<Background>A_GaugeBackground</Background>
 			<Fill>A_GaugeFill</Fill>
-			<!--<Lines>A_GaugeLines</Lines>-->
-			<!--<LinesFill>A_GaugeLinesFill</LinesFill>-->
-			<!--<EndCapLeft>A_GaugeEndCapLeft</EndCapLeft>-->
-			<!--<EndCapRight>A_GaugeEndCapRight</EndCapRight>-->
 		</GaugeDrawTemplate>
 	</Gauge>
 
-  <Gauge item="GW_F3_Gauge1A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>0</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>12</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill1</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F3_Gauge1B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>12</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F3_Gauge2A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-3000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>12</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill2</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F3_Gauge2B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>30</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-30</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>12</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F3_Gauge3A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-7000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>12</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill3</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F3_Gauge3B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>70</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-70</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>12</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F3_Gauge4">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>12</EQType>
-    <GaugeDrawTemplate>
-      <Lines>A_GaugeLines</Lines>
-      <LinesFill>A_GaugeLinesFill</LinesFill>
-    </GaugeDrawTemplate>
-  </Gauge>
-	<Gauge item = "GW_F3_PetGauge">
+	<Gauge item="GW_F3_Gauge1A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>0</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>12</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill1</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F3_Gauge1B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>12</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F3_Gauge2A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-3000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>12</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill2</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F3_Gauge2B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>30</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-30</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>12</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F3_Gauge3A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-7000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>12</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill3</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F3_Gauge3B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>70</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-70</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>12</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F3_Gauge4">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>12</EQType>
+		<GaugeDrawTemplate>
+			<Lines>A_GaugeLines</Lines>
+			<LinesFill>A_GaugeLinesFill</LinesFill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F3_PetGauge">
 		<ScreenID>PetGauge</ScreenID>
-		<!--<Font>3</Font>-->
 		<TextColor>
-				<R>240</R>
-				<G>240</G>
-				<B>240</B>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -1416,16 +1381,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>0</R>
-				<G>240</G>
-				<B>240</B>
+			<R>0</R>
+			<G>240</G>
+			<B>240</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>0</R>
-				<G>0</G>
-				<B>0</B>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>18</EQType>
@@ -1434,37 +1398,37 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 	
-  <Screen item="GW_F3_Gauges">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>18</X>
-      <Y>54</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <Text />
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>true</Style_Transparent>
-    <DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
-    <Style_Titlebar>false</Style_Titlebar>
-    <Style_Closebox>false</Style_Closebox>
-    <Style_Minimizebox>false</Style_Minimizebox>
-    <Style_Border>false</Style_Border>
-    <Style_Sizable>false</Style_Sizable>
-    <Pieces>GW_F3_Gauge1A</Pieces>
-    <Pieces>GW_F3_Gauge1B</Pieces>
-    <Pieces>GW_F3_Gauge2A</Pieces>
-    <Pieces>GW_F3_Gauge2B</Pieces>
-    <Pieces>GW_F3_Gauge3A</Pieces>
-    <Pieces>GW_F3_Gauge3B</Pieces>
-    <Pieces>GW_F3_Gauge4</Pieces>
-	<Pieces>GW_F3_PetGauge</Pieces>
-  </Screen>
+	<Screen item="GW_F3_Gauges">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>18</X>
+			<Y>54</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<Text />
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>true</Style_Transparent>
+		<DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
+		<Style_Titlebar>false</Style_Titlebar>
+		<Style_Closebox>false</Style_Closebox>
+		<Style_Minimizebox>false</Style_Minimizebox>
+		<Style_Border>false</Style_Border>
+		<Style_Sizable>false</Style_Sizable>
+		<Pieces>GW_F3_Gauge1A</Pieces>
+		<Pieces>GW_F3_Gauge1B</Pieces>
+		<Pieces>GW_F3_Gauge2A</Pieces>
+		<Pieces>GW_F3_Gauge2B</Pieces>
+		<Pieces>GW_F3_Gauge3A</Pieces>
+		<Pieces>GW_F3_Gauge3B</Pieces>
+		<Pieces>GW_F3_Gauge4</Pieces>
+		<Pieces>GW_F3_PetGauge</Pieces>
+	</Screen>
 	
-	<StaticAnimation item = "GW_Gauge3black">
+	<StaticAnimation item="GW_Gauge3black">
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>17</X>
@@ -1477,13 +1441,13 @@
 		<Animation>Blackline</Animation>
 	</StaticAnimation>
 
-	<Gauge item = "GW_Gauge3">
+	<Gauge item="GW_Gauge3">
 		<ScreenID>Gauge3</ScreenID>
 		<Font>2</Font>
 		<TextColor>
-				<R>240</R>
-				<G>240</G>
-				<B>240</B>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -1499,16 +1463,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>220</R>
-				<G>0</G>
-				<B>0</B>
+			<R>220</R>
+			<G>0</G>
+			<B>0</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>220</R>
-				<G>220</G>
-				<B>0</B>
+			<R>220</R>
+			<G>220</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>13</EQType>
@@ -1522,266 +1485,253 @@
 
 	<Gauge item = "GW_PetGauge3">
 		<ScreenID>PetGauge3</ScreenID>
-		<!--<Font>3</Font>-->
 		<GaugeDrawTemplate>
 			<Background>A_GaugeBackground</Background>
 			<Fill>A_GaugeFill</Fill>
-			<!--<Lines>A_GaugeLines</Lines>-->
-			<!--<LinesFill>A_GaugeLinesFill</LinesFill>-->
-			<!--<EndCapLeft>A_GaugeEndCapLeft</EndCapLeft>-->
-			<!--<EndCapRight>A_GaugeEndCapRight</EndCapRight>-->
 		</GaugeDrawTemplate>
 	</Gauge>
 
-  <Gauge item="GW_F4_Gauge1A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>0</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>13</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill1</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F4_Gauge1B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>13</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F4_Gauge2A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-3000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>13</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill2</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F4_Gauge2B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>30</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-30</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>13</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F4_Gauge3A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-7000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>13</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill3</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F4_Gauge3B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>70</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-70</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>13</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F4_Gauge4">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>13</EQType>
-    <GaugeDrawTemplate>
-      <Lines>A_GaugeLines</Lines>
-      <LinesFill>A_GaugeLinesFill</LinesFill>
-    </GaugeDrawTemplate>
-  </Gauge>
-	<Gauge item = "GW_F4_PetGauge">
+	<Gauge item="GW_F4_Gauge1A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>0</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>13</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill1</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F4_Gauge1B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>13</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F4_Gauge2A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-3000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>13</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill2</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F4_Gauge2B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>30</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-30</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>13</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F4_Gauge3A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-7000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>13</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill3</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F4_Gauge3B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>70</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-70</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>13</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F4_Gauge4">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>13</EQType>
+		<GaugeDrawTemplate>
+			<Lines>A_GaugeLines</Lines>
+			<LinesFill>A_GaugeLinesFill</LinesFill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F4_PetGauge">
 		<ScreenID>PetGauge</ScreenID>
-		<!--<Font>3</Font>-->
 		<TextColor>
-				<R>240</R>
-				<G>240</G>
-				<B>240</B>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -1797,16 +1747,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>0</R>
-				<G>240</G>
-				<B>240</B>
+			<R>0</R>
+			<G>240</G>
+			<B>240</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>0</R>
-				<G>0</G>
-				<B>0</B>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>19</EQType>
@@ -1815,37 +1764,37 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 	
-  <Screen item="GW_F4_Gauges">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>18</X>
-      <Y>78</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <Text />
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>true</Style_Transparent>
-    <DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
-    <Style_Titlebar>false</Style_Titlebar>
-    <Style_Closebox>false</Style_Closebox>
-    <Style_Minimizebox>false</Style_Minimizebox>
-    <Style_Border>false</Style_Border>
-    <Style_Sizable>false</Style_Sizable>
-    <Pieces>GW_F4_Gauge1A</Pieces>
-    <Pieces>GW_F4_Gauge1B</Pieces>
-    <Pieces>GW_F4_Gauge2A</Pieces>
-    <Pieces>GW_F4_Gauge2B</Pieces>
-    <Pieces>GW_F4_Gauge3A</Pieces>
-    <Pieces>GW_F4_Gauge3B</Pieces>
-    <Pieces>GW_F4_Gauge4</Pieces>
-	<Pieces>GW_F4_PetGauge</Pieces>
-  </Screen>
+	<Screen item="GW_F4_Gauges">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>18</X>
+			<Y>78</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<Text />
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>true</Style_Transparent>
+		<DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
+		<Style_Titlebar>false</Style_Titlebar>
+		<Style_Closebox>false</Style_Closebox>
+		<Style_Minimizebox>false</Style_Minimizebox>
+		<Style_Border>false</Style_Border>
+		<Style_Sizable>false</Style_Sizable>
+		<Pieces>GW_F4_Gauge1A</Pieces>
+		<Pieces>GW_F4_Gauge1B</Pieces>
+		<Pieces>GW_F4_Gauge2A</Pieces>
+		<Pieces>GW_F4_Gauge2B</Pieces>
+		<Pieces>GW_F4_Gauge3A</Pieces>
+		<Pieces>GW_F4_Gauge3B</Pieces>
+		<Pieces>GW_F4_Gauge4</Pieces>
+		<Pieces>GW_F4_PetGauge</Pieces>
+	</Screen>
 
-	<StaticAnimation item = "GW_Gauge4black">
+	<StaticAnimation item="GW_Gauge4black">
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>17</X>
@@ -1858,13 +1807,13 @@
 		<Animation>Blackline</Animation>
 	</StaticAnimation>
 
-	<Gauge item = "GW_Gauge4">
+	<Gauge item="GW_Gauge4">
 		<ScreenID>Gauge4</ScreenID>
 		<Font>2</Font>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>255</B>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -1880,16 +1829,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>220</R>
-				<G>0</G>
-				<B>0</B>
+			<R>220</R>
+			<G>0</G>
+			<B>0</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>220</R>
-				<G>220</G>
-				<B>0</B>
+			<R>220</R>
+			<G>220</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>14</EQType>
@@ -1903,266 +1851,253 @@
 
 	<Gauge item = "GW_PetGauge4">
 		<ScreenID>PetGauge4</ScreenID>
-		<!--<Font>3</Font>-->
 		<GaugeDrawTemplate>
 			<Background>A_GaugeBackground</Background>
 			<Fill>A_GaugeFill</Fill>
-			<!--<Lines>A_GaugeLines</Lines>-->
-			<!--<LinesFill>A_GaugeLinesFill</LinesFill>-->
-			<!--<EndCapLeft>A_GaugeEndCapLeft</EndCapLeft>-->
-			<!--<EndCapRight>A_GaugeEndCapRight</EndCapRight>-->
 		</GaugeDrawTemplate>
 	</Gauge>
 
-  <Gauge item="GW_F5_Gauge1A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>0</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>14</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill1</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F5_Gauge1B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>14</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F5_Gauge2A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-3000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>14</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill2</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F5_Gauge2B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>30</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-30</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>14</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F5_Gauge3A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-7000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>14</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill3</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F5_Gauge3B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>70</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-70</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>14</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F5_Gauge4">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>14</EQType>
-    <GaugeDrawTemplate>
-      <Lines>A_GaugeLines</Lines>
-      <LinesFill>A_GaugeLinesFill</LinesFill>
-    </GaugeDrawTemplate>
-  </Gauge>
-	<Gauge item = "GW_F5_PetGauge">
+	<Gauge item="GW_F5_Gauge1A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>0</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>14</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill1</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F5_Gauge1B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>14</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F5_Gauge2A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-3000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>14</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill2</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F5_Gauge2B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>30</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-30</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>14</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F5_Gauge3A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-7000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>14</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill3</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F5_Gauge3B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>70</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-70</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>14</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F5_Gauge4">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>14</EQType>
+		<GaugeDrawTemplate>
+			<Lines>A_GaugeLines</Lines>
+			<LinesFill>A_GaugeLinesFill</LinesFill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F5_PetGauge">
 		<ScreenID>PetGauge</ScreenID>
-		<!--<Font>3</Font>-->
 		<TextColor>
-				<R>240</R>
-				<G>240</G>
-				<B>240</B>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -2178,16 +2113,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>0</R>
-				<G>240</G>
-				<B>240</B>
+			<R>0</R>
+			<G>240</G>
+			<B>240</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>0</R>
-				<G>0</G>
-				<B>0</B>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>20</EQType>
@@ -2196,37 +2130,37 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 	
-  <Screen item="GW_F5_Gauges">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>18</X>
-      <Y>102</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <Text />
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>true</Style_Transparent>
-    <DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
-    <Style_Titlebar>false</Style_Titlebar>
-    <Style_Closebox>false</Style_Closebox>
-    <Style_Minimizebox>false</Style_Minimizebox>
-    <Style_Border>false</Style_Border>
-    <Style_Sizable>false</Style_Sizable>
-    <Pieces>GW_F5_Gauge1A</Pieces>
-    <Pieces>GW_F5_Gauge1B</Pieces>
-    <Pieces>GW_F5_Gauge2A</Pieces>
-    <Pieces>GW_F5_Gauge2B</Pieces>
-    <Pieces>GW_F5_Gauge3A</Pieces>
-    <Pieces>GW_F5_Gauge3B</Pieces>
-    <Pieces>GW_F5_Gauge4</Pieces>
-	<Pieces>GW_F5_PetGauge</Pieces>
-  </Screen>
+	<Screen item="GW_F5_Gauges">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>18</X>
+			<Y>102</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<Text />
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>true</Style_Transparent>
+		<DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
+		<Style_Titlebar>false</Style_Titlebar>
+		<Style_Closebox>false</Style_Closebox>
+		<Style_Minimizebox>false</Style_Minimizebox>
+		<Style_Border>false</Style_Border>
+		<Style_Sizable>false</Style_Sizable>
+		<Pieces>GW_F5_Gauge1A</Pieces>
+		<Pieces>GW_F5_Gauge1B</Pieces>
+		<Pieces>GW_F5_Gauge2A</Pieces>
+		<Pieces>GW_F5_Gauge2B</Pieces>
+		<Pieces>GW_F5_Gauge3A</Pieces>
+		<Pieces>GW_F5_Gauge3B</Pieces>
+		<Pieces>GW_F5_Gauge4</Pieces>
+		<Pieces>GW_F5_PetGauge</Pieces>
+	</Screen>
 
-	<StaticAnimation item = "GW_Gauge5black">
+	<StaticAnimation item="GW_Gauge5black">
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>17</X>
@@ -2239,13 +2173,13 @@
 		<Animation>Blackline</Animation>
 	</StaticAnimation>
 
-	<Gauge item = "GW_Gauge5">
+	<Gauge item="GW_Gauge5">
 		<ScreenID>Gauge5</ScreenID>
 		<Font>2</Font>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>255</B>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -2261,16 +2195,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>220</R>
-				<G>0</G>
-				<B>0</B>
+			<R>220</R>
+			<G>0</G>
+			<B>0</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>220</R>
-				<G>220</G>
-				<B>0</B>
+			<R>220</R>
+			<G>220</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>15</EQType>
@@ -2282,268 +2215,255 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Gauge item = "GW_PetGauge5">
+	<Gauge item="GW_PetGauge5">
 		<ScreenID>PetGauge5</ScreenID>
-		<!--<Font>3</Font>-->
 		<GaugeDrawTemplate>
 			<Background>A_GaugeBackground</Background>
 			<Fill>A_GaugeFill</Fill>
-			<!--<Lines>A_GaugeLines</Lines>-->
-			<!--<LinesFill>A_GaugeLinesFill</LinesFill>-->
-			<!--<EndCapLeft>A_GaugeEndCapLeft</EndCapLeft>-->
-			<!--<EndCapRight>A_GaugeEndCapRight</EndCapRight>-->
 		</GaugeDrawTemplate>
 	</Gauge>
 
-  <Gauge item="GW_F6_Gauge1A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>0</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>15</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill1</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F6_Gauge1B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>15</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F6_Gauge2A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-3000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>15</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill2</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F6_Gauge2B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>30</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-30</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>255</R>
-      <G>102</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>15</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F6_Gauge3A">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>70</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-7000</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>15</EQType>
-    <GaugeDrawTemplate>
-      <Background>A_GroupGaugeBackground</Background>
-      <Fill>A_GroupGaugeFill3</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F6_Gauge3B">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>70</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>30</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>-70</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>51</R>
-      <G>153</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>15</EQType>
-    <GaugeDrawTemplate>
-      <Fill>A_GaugeFill</Fill>
-    </GaugeDrawTemplate>
-  </Gauge>
-  <Gauge item="GW_F6_Gauge4">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <GaugeOffsetX>0</GaugeOffsetX>
-    <GaugeOffsetY>0</GaugeOffsetY>
-    <Text />
-    <TextOffsetY>-50</TextOffsetY>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <!--<TooltipReference/>-->
-    <FillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </FillTint>
-    <LinesFillTint>
-      <R>0</R>
-      <G>0</G>
-      <B>0</B>
-    </LinesFillTint>
-    <DrawLinesFill>false</DrawLinesFill>
-    <EQType>15</EQType>
-    <GaugeDrawTemplate>
-      <Lines>A_GaugeLines</Lines>
-      <LinesFill>A_GaugeLinesFill</LinesFill>
-    </GaugeDrawTemplate>
-  </Gauge>
-	<Gauge item = "GW_F6_PetGauge">
+	<Gauge item="GW_F6_Gauge1A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>0</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>15</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill1</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F6_Gauge1B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>15</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F6_Gauge2A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-3000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>15</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill2</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F6_Gauge2B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>30</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-30</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>255</R>
+			<G>102</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>15</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F6_Gauge3A">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>70</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-7000</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>15</EQType>
+		<GaugeDrawTemplate>
+			<Background>A_GroupGaugeBackground</Background>
+			<Fill>A_GroupGaugeFill3</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F6_Gauge3B">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>70</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>30</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>-70</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>51</R>
+			<G>153</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>15</EQType>
+		<GaugeDrawTemplate>
+			<Fill>A_GaugeFill</Fill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F6_Gauge4">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>0</X>
+			<Y>0</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<GaugeOffsetX>0</GaugeOffsetX>
+		<GaugeOffsetY>0</GaugeOffsetY>
+		<Text />
+		<TextOffsetY>-50</TextOffsetY>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<FillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</FillTint>
+		<LinesFillTint>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
+		</LinesFillTint>
+		<DrawLinesFill>false</DrawLinesFill>
+		<EQType>15</EQType>
+		<GaugeDrawTemplate>
+			<Lines>A_GaugeLines</Lines>
+			<LinesFill>A_GaugeLinesFill</LinesFill>
+		</GaugeDrawTemplate>
+	</Gauge>
+	<Gauge item="GW_F6_PetGauge">
 		<ScreenID>PetGauge</ScreenID>
-		<!--<Font>3</Font>-->
 		<TextColor>
-				<R>240</R>
-				<G>240</G>
-				<B>240</B>
+			<R>240</R>
+			<G>240</G>
+			<B>240</B>
 		</TextColor>
 		<RelativePosition>true</RelativePosition>
 		<Location>
@@ -2559,16 +2479,15 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<!--<TooltipReference/>-->
 		<FillTint>
-				<R>0</R>
-				<G>240</G>
-				<B>240</B>
+			<R>0</R>
+			<G>240</G>
+			<B>240</B>
 		</FillTint>
 		<LinesFillTint>
-				<R>0</R>
-				<G>0</G>
-				<B>0</B>
+			<R>0</R>
+			<G>0</G>
+			<B>0</B>
 		</LinesFillTint>
 		<DrawLinesFill>false</DrawLinesFill>
 		<EQType>21</EQType>
@@ -2577,37 +2496,37 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 	
-  <Screen item="GW_F6_Gauges">
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>18</X>
-      <Y>126</Y>
-    </Location>
-    <Size>
-      <CX>100</CX>
-      <CY>8</CY>
-    </Size>
-    <Text />
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>true</Style_Transparent>
-    <DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
-    <Style_Titlebar>false</Style_Titlebar>
-    <Style_Closebox>false</Style_Closebox>
-    <Style_Minimizebox>false</Style_Minimizebox>
-    <Style_Border>false</Style_Border>
-    <Style_Sizable>false</Style_Sizable>
-    <Pieces>GW_F6_Gauge1A</Pieces>
-    <Pieces>GW_F6_Gauge1B</Pieces>
-    <Pieces>GW_F6_Gauge2A</Pieces>
-    <Pieces>GW_F6_Gauge2B</Pieces>
-    <Pieces>GW_F6_Gauge3A</Pieces>
-    <Pieces>GW_F6_Gauge3B</Pieces>
-    <Pieces>GW_F6_Gauge4</Pieces>
-	<Pieces>GW_F6_PetGauge</Pieces>
-  </Screen>
+	<Screen item="GW_F6_Gauges">
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>18</X>
+			<Y>126</Y>
+		</Location>
+		<Size>
+			<CX>100</CX>
+			<CY>8</CY>
+		</Size>
+		<Text />
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>true</Style_Transparent>
+		<DrawTemplate>WDT_RoundedNoTitle</DrawTemplate>
+		<Style_Titlebar>false</Style_Titlebar>
+		<Style_Closebox>false</Style_Closebox>
+		<Style_Minimizebox>false</Style_Minimizebox>
+		<Style_Border>false</Style_Border>
+		<Style_Sizable>false</Style_Sizable>
+		<Pieces>GW_F6_Gauge1A</Pieces>
+		<Pieces>GW_F6_Gauge1B</Pieces>
+		<Pieces>GW_F6_Gauge2A</Pieces>
+		<Pieces>GW_F6_Gauge2B</Pieces>
+		<Pieces>GW_F6_Gauge3A</Pieces>
+		<Pieces>GW_F6_Gauge3B</Pieces>
+		<Pieces>GW_F6_Gauge4</Pieces>
+		<Pieces>GW_F6_PetGauge</Pieces>
+	</Screen>
 
-	<Label item ="GW_HPLabel1">
+	<Label item="GW_HPLabel1">
 		<ScreenID>HPLabel1</ScreenID>
 		<EQType>35</EQType>
 		<Font>1</Font>
@@ -2622,9 +2541,9 @@
 		</Size>
 		<Text>0</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2632,7 +2551,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPPercLabel1">
+	<Label item="GW_HPPercLabel1">
 		<ScreenID>HPPercLabel1</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -2646,9 +2565,9 @@
 		</Size>
 		<Text>%</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2656,7 +2575,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPLabel2">
+	<Label item="GW_HPLabel2">
 		<ScreenID>HPLabel2</ScreenID>
 		<EQType>36</EQType>
 		<Font>1</Font>
@@ -2671,9 +2590,9 @@
 		</Size>
 		<Text>0</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2681,7 +2600,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPPercLabel2">
+	<Label item="GW_HPPercLabel2">
 		<ScreenID>HPPercLabel2</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -2695,9 +2614,9 @@
 		</Size>
 		<Text>%</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2705,7 +2624,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPLabel3">
+	<Label item="GW_HPLabel3">
 		<ScreenID>HPLabel3</ScreenID>
 		<EQType>37</EQType>
 		<Font>1</Font>
@@ -2720,9 +2639,9 @@
 		</Size>
 		<Text>0</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2730,7 +2649,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPPercLabel3">
+	<Label item="GW_HPPercLabel3">
 		<ScreenID>HPPercLabel3</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -2744,9 +2663,9 @@
 		</Size>
 		<Text>%</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2754,7 +2673,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPLabel4">
+	<Label item="GW_HPLabel4">
 		<ScreenID>HPLabel4</ScreenID>
 		<EQType>38</EQType>
 		<Font>1</Font>
@@ -2769,9 +2688,9 @@
 		</Size>
 		<Text>0</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2779,7 +2698,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPPercLabel4">
+	<Label item="GW_HPPercLabel4">
 		<ScreenID>HPPercLabel4</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -2793,9 +2712,9 @@
 		</Size>
 		<Text>%</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2803,7 +2722,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPLabel5">
+	<Label item="GW_HPLabel5">
 		<ScreenID>HPLabel5</ScreenID>
 		<EQType>39</EQType>
 		<Font>1</Font>
@@ -2818,9 +2737,9 @@
 		</Size>
 		<Text>0</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -2828,7 +2747,7 @@
 		<AlignLeft>false</AlignLeft>
 	</Label>
 
-	<Label item ="GW_HPPercLabel5">
+	<Label item="GW_HPPercLabel5">
 		<ScreenID>HPPercLabel5</ScreenID>
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
@@ -2842,16 +2761,15 @@
 		</Size>
 		<Text>%</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
+			<R>255</R>
+			<G>255</G>
+			<B>0</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
 		<AlignRight>true</AlignRight>
 		<AlignLeft>false</AlignLeft>
 	</Label>
-
 
 	<Ui2DAnimation item="GW_LFGBtnNormal">
 		<Frames>
@@ -2945,485 +2863,484 @@
 	</Button>
 	
 	<Label item="MQ_Class1">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${Group.Member[1].Class.ShortName}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>81</X>
-         <Y>20</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Class2">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${Group.Member[2].Class.ShortName}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>81</X>
-         <Y>43</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Class3">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${Group.Member[3].Class.ShortName}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>81</X>
-         <Y>67</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Class4">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${Group.Member[4].Class.ShortName}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>81</X>
-         <Y>90</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>   
-   <Label item="MQ_Class5">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${Group.Member[5].Class.ShortName}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>81</X>
-         <Y>115</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   
-   <Label item="MQ_Level1">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[1].Level}!=75,${Group.Member[1].Level},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>84</X>
-         <Y>20</Y>
-      </Location>
-      <Size>
-         <CX>20</CX>
-         <CY>14</CY>
-      </Size>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>true</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>false</AlignRight>
-   </Label>
-   <Label item="MQ_Level2">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[2].Level}!=75,${Group.Member[2].Level},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>84</X>
-         <Y>43</Y>
-      </Location>
-      <Size>
-         <CX>20</CX>
-         <CY>14</CY>
-      </Size>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>true</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>false</AlignRight>
-   </Label>
-   <Label item="MQ_Level3">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[3].Level}!=75,${Group.Member[3].Level},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>84</X>
-         <Y>67</Y>
-      </Location>
-      <Size>
-         <CX>20</CX>
-         <CY>14</CY>
-      </Size>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>true</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>false</AlignRight>
-   </Label>
-   <Label item="MQ_Level4">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[4].Level}!=75,${Group.Member[4].Level},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>84</X>
-         <Y>90</Y>
-      </Location>
-      <Size>
-         <CX>20</CX>
-         <CY>14</CY>
-      </Size>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>true</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>false</AlignRight>
-   </Label>
-   <Label item="MQ_Level5">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[5].Level}!=75,${Group.Member[5].Level},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>84</X>
-         <Y>115</Y>
-      </Location>
-      <Size>
-         <CX>20</CX>
-         <CY>14</CY>
-      </Size>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>true</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>false</AlignRight>
-   </Label>
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${Group.Member[1].Class.ShortName}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>81</X>
+			<Y>20</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Class2">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${Group.Member[2].Class.ShortName}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>81</X>
+			<Y>43</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Class3">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${Group.Member[3].Class.ShortName}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>81</X>
+			<Y>67</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Class4">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${Group.Member[4].Class.ShortName}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>81</X>
+			<Y>90</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>	 
+	<Label item="MQ_Class5">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${Group.Member[5].Class.ShortName}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>81</X>
+			<Y>115</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	 
+	<Label item="MQ_Level1">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[1].Level}!=75,${Group.Member[1].Level},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>84</X>
+			<Y>20</Y>
+		</Location>
+		<Size>
+			<CX>20</CX>
+			<CY>14</CY>
+		</Size>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>true</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>false</AlignRight>
+	</Label>
+	<Label item="MQ_Level2">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[2].Level}!=75,${Group.Member[2].Level},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>84</X>
+			<Y>43</Y>
+		</Location>
+		<Size>
+			<CX>20</CX>
+			<CY>14</CY>
+		</Size>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>true</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>false</AlignRight>
+	</Label>
+	<Label item="MQ_Level3">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[3].Level}!=75,${Group.Member[3].Level},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>84</X>
+			<Y>67</Y>
+		</Location>
+		<Size>
+			<CX>20</CX>
+			<CY>14</CY>
+		</Size>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>true</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>false</AlignRight>
+	</Label>
+	<Label item="MQ_Level4">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[4].Level}!=75,${Group.Member[4].Level},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>84</X>
+			<Y>90</Y>
+		</Location>
+		<Size>
+			<CX>20</CX>
+			<CY>14</CY>
+		</Size>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>true</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>false</AlignRight>
+	</Label>
+	<Label item="MQ_Level5">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[5].Level}!=75,${Group.Member[5].Level},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>84</X>
+			<Y>115</Y>
+		</Location>
+		<Size>
+			<CX>20</CX>
+			<CY>14</CY>
+		</Size>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>true</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>false</AlignRight>
+	</Label>
 
-   <Label item="MQ_Visible1">
-      <Font>1</Font>
-      <EQType>9999</EQType> 
-      <TooltipReference>${If[${Group.Member[1].ID},${If[${Group.Member[1].Invis},,VIS]},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>104</X>
-         <Y>20</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>255</R>
-         <G>0</G>
-         <B>0</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Visible2">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[2].ID},${If[${Group.Member[2].Invis},,VIS]},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>104</X>
-         <Y>43</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>255</R>
-         <G>0</G>
-         <B>0</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Visible3">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[3].ID},${If[${Group.Member[3].Invis},,VIS]},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>104</X>
-         <Y>67</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>255</R>
-         <G>0</G>
-         <B>0</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Visible4">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[4].ID},${If[${Group.Member[4].Invis},,VIS]},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>104</X>
-         <Y>90</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>255</R>
-         <G>0</G>
-         <B>0</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Visible5">
-      <Font>1</Font>
-      <EQType>9999</EQType>
-      <TooltipReference>${If[${Group.Member[5].ID},${If[${Group.Member[5].Invis},,VIS]},]}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>104</X>
-         <Y>115</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>255</R>
-         <G>0</G>
-         <B>0</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Distance1">
-      <Font>1</Font>
-      <EQType>9999</EQType> 
-      <TooltipReference>${Group.Member[1].Distance.Int}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>134</X>
-         <Y>25</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Distance2">
-      <Font>1</Font>
-      <EQType>9999</EQType> 
-      <TooltipReference>${Group.Member[2].Distance.Int}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>134</X>
-         <Y>48</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Distance3">
-      <Font>1</Font>
-      <EQType>9999</EQType> 
-      <TooltipReference>${Group.Member[3].Distance.Int}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>134</X>
-         <Y>72</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Distance4">
-      <Font>1</Font>
-      <EQType>9999</EQType> 
-      <TooltipReference>${Group.Member[4].Distance.Int}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>134</X>
-         <Y>95</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
-   <Label item="MQ_Distance5">
-      <Font>1</Font>
-      <EQType>9999</EQType> 
-      <TooltipReference>${Group.Member[5].Distance.Int}</TooltipReference> 
-      <RelativePosition>true</RelativePosition>
-      <Location>
-         <X>134</X>
-         <Y>120</Y>
-      </Location>
-      <Size>
-         <CX>35</CX>
-         <CY>14</CY>
-      </Size>
-      <Text></Text>
-      <TextColor>
-         <R>200</R>
-         <G>200</G>
-         <B>200</B>
-      </TextColor>
-      <NoWrap>true</NoWrap>
-      <AlignLeft>false</AlignLeft>
-      <AlignCenter>false</AlignCenter>
-      <AlignRight>true</AlignRight>
-   </Label>
+	<Label item="MQ_Visible1">
+		<Font>1</Font>
+		<EQType>9999</EQType> 
+		<TooltipReference>${If[${Group.Member[1].ID},${If[${Group.Member[1].Invis},,VIS]},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>104</X>
+			<Y>20</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Visible2">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[2].ID},${If[${Group.Member[2].Invis},,VIS]},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>104</X>
+			<Y>43</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Visible3">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[3].ID},${If[${Group.Member[3].Invis},,VIS]},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>104</X>
+			<Y>67</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Visible4">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[4].ID},${If[${Group.Member[4].Invis},,VIS]},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>104</X>
+			<Y>90</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Visible5">
+		<Font>1</Font>
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[5].ID},${If[${Group.Member[5].Invis},,VIS]},]}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>104</X>
+			<Y>115</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Distance1">
+		<Font>1</Font>
+		<EQType>9999</EQType> 
+		<TooltipReference>${Group.Member[1].Distance.Int}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>134</X>
+			<Y>25</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Distance2">
+		<Font>1</Font>
+		<EQType>9999</EQType> 
+		<TooltipReference>${Group.Member[2].Distance.Int}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>134</X>
+			<Y>48</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Distance3">
+		<Font>1</Font>
+		<EQType>9999</EQType> 
+		<TooltipReference>${Group.Member[3].Distance.Int}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>134</X>
+			<Y>72</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Distance4">
+		<Font>1</Font>
+		<EQType>9999</EQType> 
+		<TooltipReference>${Group.Member[4].Distance.Int}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>134</X>
+			<Y>95</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
+	<Label item="MQ_Distance5">
+		<Font>1</Font>
+		<EQType>9999</EQType> 
+		<TooltipReference>${Group.Member[5].Distance.Int}</TooltipReference> 
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>134</X>
+			<Y>120</Y>
+		</Location>
+		<Size>
+			<CX>35</CX>
+			<CY>14</CY>
+		</Size>
+		<Text></Text>
+		<TextColor>
+			<R>200</R>
+			<G>200</G>
+			<B>200</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignLeft>false</AlignLeft>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+	</Label>
 
-
-	<Screen item = "GroupWindow">
+	<Screen item="GroupWindow">
 		<ScreenID/>
 		<RelativePosition>false</RelativePosition>
 		<Location>
@@ -3488,28 +3405,28 @@
 		<Pieces>GW_HPLabel5</Pieces>
 		<Pieces>GW_HPPercLabel5</Pieces>
 		
-	<Pieces>MQ_Class1</Pieces>
-      <Pieces>MQ_Class2</Pieces>
-      <Pieces>MQ_Class3</Pieces>
-      <Pieces>MQ_Class4</Pieces>
-      <Pieces>MQ_Class5</Pieces>
-      
-      <Pieces>MQ_Level1</Pieces>
-      <Pieces>MQ_Level2</Pieces>
-      <Pieces>MQ_Level3</Pieces>
-      <Pieces>MQ_Level4</Pieces>
-      <Pieces>MQ_Level5</Pieces>
-      
-      <Pieces>MQ_Visible1</Pieces>
-      <Pieces>MQ_Visible2</Pieces>
-      <Pieces>MQ_Visible3</Pieces>
-      <Pieces>MQ_Visible4</Pieces>
-      <Pieces>MQ_Visible5</Pieces>
-      <Pieces>MQ_Distance1</Pieces>
-      <Pieces>MQ_Distance2</Pieces>
-      <Pieces>MQ_Distance3</Pieces>
-      <Pieces>MQ_Distance4</Pieces>
-      <Pieces>MQ_Distance5</Pieces>
+		<Pieces>MQ_Class1</Pieces>
+		<Pieces>MQ_Class2</Pieces>
+		<Pieces>MQ_Class3</Pieces>
+		<Pieces>MQ_Class4</Pieces>
+		<Pieces>MQ_Class5</Pieces>
+			
+		<Pieces>MQ_Level1</Pieces>
+		<Pieces>MQ_Level2</Pieces>
+		<Pieces>MQ_Level3</Pieces>
+		<Pieces>MQ_Level4</Pieces>
+		<Pieces>MQ_Level5</Pieces>
+			
+		<Pieces>MQ_Visible1</Pieces>
+		<Pieces>MQ_Visible2</Pieces>
+		<Pieces>MQ_Visible3</Pieces>
+		<Pieces>MQ_Visible4</Pieces>
+		<Pieces>MQ_Visible5</Pieces>
+		<Pieces>MQ_Distance1</Pieces>
+		<Pieces>MQ_Distance2</Pieces>
+		<Pieces>MQ_Distance3</Pieces>
+		<Pieces>MQ_Distance4</Pieces>
+		<Pieces>MQ_Distance5</Pieces>
 	</Screen>
 
 </XML>
