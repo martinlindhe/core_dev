@@ -726,7 +726,7 @@
 			<CX>115</CX>
 			<CY>24</CY>
 		</Size>
-		<TextOffsetX>15</TextOffsetX>
+		<TextOffsetX>17</TextOffsetX>
 		<TextOffsetY>3</TextOffsetY>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
@@ -1092,7 +1092,7 @@
 			<CX>115</CX>
 			<CY>24</CY>
 		</Size>
-		<TextOffsetX>15</TextOffsetX>
+		<TextOffsetX>17</TextOffsetX>
 		<TextOffsetY>3</TextOffsetY>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
@@ -1117,7 +1117,7 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Gauge item = "GW_PetGauge2">
+	<Gauge item="GW_PetGauge2">
 		<ScreenID>PetGauge2</ScreenID>
 		<GaugeDrawTemplate>
 			<Background>A_GaugeBackground</Background>
@@ -1458,7 +1458,7 @@
 			<CX>115</CX>
 			<CY>24</CY>
 		</Size>
-		<TextOffsetX>15</TextOffsetX>
+		<TextOffsetX>17</TextOffsetX>
 		<TextOffsetY>3</TextOffsetY>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
@@ -1483,7 +1483,7 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Gauge item = "GW_PetGauge3">
+	<Gauge item="GW_PetGauge3">
 		<ScreenID>PetGauge3</ScreenID>
 		<GaugeDrawTemplate>
 			<Background>A_GaugeBackground</Background>
@@ -1824,7 +1824,7 @@
 			<CX>115</CX>
 			<CY>24</CY>
 		</Size>
-		<TextOffsetX>15</TextOffsetX>
+		<TextOffsetX>17</TextOffsetX>
 		<TextOffsetY>3</TextOffsetY>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
@@ -1849,7 +1849,7 @@
 		</GaugeDrawTemplate>
 	</Gauge>
 
-	<Gauge item = "GW_PetGauge4">
+	<Gauge item="GW_PetGauge4">
 		<ScreenID>PetGauge4</ScreenID>
 		<GaugeDrawTemplate>
 			<Background>A_GaugeBackground</Background>
@@ -2190,7 +2190,7 @@
 			<CX>115</CX>
 			<CY>24</CY>
 		</Size>
-		<TextOffsetX>15</TextOffsetX>
+		<TextOffsetX>17</TextOffsetX>
 		<TextOffsetY>3</TextOffsetY>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
@@ -2556,7 +2556,7 @@
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>110</X>
+			<X>109</X>
 			<Y>28</Y>
 		</Location>
 		<Size>
@@ -2605,7 +2605,7 @@
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>110</X>
+			<X>109</X>
 			<Y>52</Y>
 		</Location>
 		<Size>
@@ -2654,7 +2654,7 @@
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>110</X>
+			<X>109</X>
 			<Y>76</Y>
 		</Location>
 		<Size>
@@ -2703,7 +2703,7 @@
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>110</X>
+			<X>109</X>
 			<Y>100</Y>
 		</Location>
 		<Size>
@@ -2752,7 +2752,7 @@
 		<Font>1</Font>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>110</X>
+			<X>109</X>
 			<Y>124</Y>
 		</Location>
 		<Size>
@@ -2862,138 +2862,17 @@
 		</ButtonDrawTemplate>
 	</Button>
 	
-	<Label item="MQ_Class1">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Group.Member[1].Class.ShortName}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>81</X>
-			<Y>20</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-	<Label item="MQ_Class2">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Group.Member[2].Class.ShortName}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>81</X>
-			<Y>43</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-	<Label item="MQ_Class3">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Group.Member[3].Class.ShortName}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>81</X>
-			<Y>67</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-	<Label item="MQ_Class4">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Group.Member[4].Class.ShortName}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>81</X>
-			<Y>90</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>	 
-	<Label item="MQ_Class5">
-		<Font>1</Font>
-		<EQType>9999</EQType>
-		<TooltipReference>${Group.Member[5].Class.ShortName}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>81</X>
-			<Y>115</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-	 
 	<Label item="MQ_Level1">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[1].Level}!=75,${Group.Member[1].Level},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[1].ID},${If[${Group.Member[1].Level}!=75,${Group.Member[1].Level},]} ${Group.Member[1].Class.ShortName} ${Group.Member[1].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>84</X>
-			<Y>20</Y>
+			<Y>19</Y>
 		</Location>
 		<Size>
-			<CX>20</CX>
+			<CX>60</CX>
 			<CY>14</CY>
 		</Size>
 		<TextColor>
@@ -3009,14 +2888,14 @@
 	<Label item="MQ_Level2">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[2].Level}!=75,${Group.Member[2].Level},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[2].ID},${If[${Group.Member[2].Level}!=75,${Group.Member[2].Level},]} ${Group.Member[2].Class.ShortName} ${Group.Member[2].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>84</X>
-			<Y>43</Y>
+			<Y>42</Y>
 		</Location>
 		<Size>
-			<CX>20</CX>
+			<CX>60</CX>
 			<CY>14</CY>
 		</Size>
 		<TextColor>
@@ -3032,14 +2911,14 @@
 	<Label item="MQ_Level3">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[3].Level}!=75,${Group.Member[3].Level},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[3].ID},${If[${Group.Member[3].Level}!=75,${Group.Member[3].Level},]} ${Group.Member[3].Class.ShortName} ${Group.Member[3].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>84</X>
-			<Y>67</Y>
+			<Y>66</Y>
 		</Location>
 		<Size>
-			<CX>20</CX>
+			<CX>60</CX>
 			<CY>14</CY>
 		</Size>
 		<TextColor>
@@ -3055,14 +2934,14 @@
 	<Label item="MQ_Level4">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[4].Level}!=75,${Group.Member[4].Level},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[4].ID},${If[${Group.Member[4].Level}!=75,${Group.Member[4].Level},]} ${Group.Member[4].Class.ShortName} ${Group.Member[4].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>84</X>
-			<Y>90</Y>
+			<Y>89</Y>
 		</Location>
 		<Size>
-			<CX>20</CX>
+			<CX>60</CX>
 			<CY>14</CY>
 		</Size>
 		<TextColor>
@@ -3078,14 +2957,14 @@
 	<Label item="MQ_Level5">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[5].Level}!=75,${Group.Member[5].Level},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[5].ID},${If[${Group.Member[5].Level}!=75,${Group.Member[5].Level},]} ${Group.Member[5].Class.ShortName} ${Group.Member[5].Distance.Int},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>84</X>
-			<Y>115</Y>
+			<Y>114</Y>
 		</Location>
 		<Size>
-			<CX>20</CX>
+			<CX>60</CX>
 			<CY>14</CY>
 		</Size>
 		<TextColor>
@@ -3101,11 +2980,11 @@
 
 	<Label item="MQ_Visible1">
 		<Font>1</Font>
-		<EQType>9999</EQType> 
-		<TooltipReference>${If[${Group.Member[1].ID},${If[${Group.Member[1].Invis},,VIS]},]}</TooltipReference> 
+		<EQType>9999</EQType>
+		<TooltipReference>${If[${Group.Member[1].ID},${If[${Group.Member[1].Invis},,*]},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>104</X>
+			<X>-15</X>
 			<Y>20</Y>
 		</Location>
 		<Size>
@@ -3126,10 +3005,10 @@
 	<Label item="MQ_Visible2">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[2].ID},${If[${Group.Member[2].Invis},,VIS]},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[2].ID},${If[${Group.Member[2].Invis},,*]},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>104</X>
+			<X>-15</X>
 			<Y>43</Y>
 		</Location>
 		<Size>
@@ -3150,10 +3029,10 @@
 	<Label item="MQ_Visible3">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[3].ID},${If[${Group.Member[3].Invis},,VIS]},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[3].ID},${If[${Group.Member[3].Invis},,*]},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>104</X>
+			<X>-15</X>
 			<Y>67</Y>
 		</Location>
 		<Size>
@@ -3174,10 +3053,10 @@
 	<Label item="MQ_Visible4">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[4].ID},${If[${Group.Member[4].Invis},,VIS]},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[4].ID},${If[${Group.Member[4].Invis},,*]},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>104</X>
+			<X>-15</X>
 			<Y>90</Y>
 		</Location>
 		<Size>
@@ -3198,10 +3077,10 @@
 	<Label item="MQ_Visible5">
 		<Font>1</Font>
 		<EQType>9999</EQType>
-		<TooltipReference>${If[${Group.Member[5].ID},${If[${Group.Member[5].Invis},,VIS]},]}</TooltipReference> 
+		<TooltipReference>${If[${Group.Member[5].ID},${If[${Group.Member[5].Invis},,*]},]}</TooltipReference>
 		<RelativePosition>true</RelativePosition>
 		<Location>
-			<X>104</X>
+			<X>-15</X>
 			<Y>115</Y>
 		</Location>
 		<Size>
@@ -3219,126 +3098,6 @@
 		<AlignCenter>false</AlignCenter>
 		<AlignRight>true</AlignRight>
 	</Label>
-	<Label item="MQ_Distance1">
-		<Font>1</Font>
-		<EQType>9999</EQType> 
-		<TooltipReference>${Group.Member[1].Distance.Int}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>134</X>
-			<Y>25</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-	<Label item="MQ_Distance2">
-		<Font>1</Font>
-		<EQType>9999</EQType> 
-		<TooltipReference>${Group.Member[2].Distance.Int}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>134</X>
-			<Y>48</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-	<Label item="MQ_Distance3">
-		<Font>1</Font>
-		<EQType>9999</EQType> 
-		<TooltipReference>${Group.Member[3].Distance.Int}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>134</X>
-			<Y>72</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-	<Label item="MQ_Distance4">
-		<Font>1</Font>
-		<EQType>9999</EQType> 
-		<TooltipReference>${Group.Member[4].Distance.Int}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>134</X>
-			<Y>95</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
-	<Label item="MQ_Distance5">
-		<Font>1</Font>
-		<EQType>9999</EQType> 
-		<TooltipReference>${Group.Member[5].Distance.Int}</TooltipReference> 
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>134</X>
-			<Y>120</Y>
-		</Location>
-		<Size>
-			<CX>35</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>false</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>true</AlignRight>
-	</Label>
 
 	<Screen item="GroupWindow">
 		<ScreenID/>
@@ -3348,7 +3107,7 @@
 			<Y>78</Y>
 		</Location>
 		<Size>
-			<CX>180</CX>
+			<CX>156</CX>
 			<CY>145</CY>
 		</Size>
 		<Text>Advanced Grouping</Text>
@@ -3405,12 +3164,6 @@
 		<Pieces>GW_HPLabel5</Pieces>
 		<Pieces>GW_HPPercLabel5</Pieces>
 		
-		<Pieces>MQ_Class1</Pieces>
-		<Pieces>MQ_Class2</Pieces>
-		<Pieces>MQ_Class3</Pieces>
-		<Pieces>MQ_Class4</Pieces>
-		<Pieces>MQ_Class5</Pieces>
-			
 		<Pieces>MQ_Level1</Pieces>
 		<Pieces>MQ_Level2</Pieces>
 		<Pieces>MQ_Level3</Pieces>
@@ -3422,11 +3175,7 @@
 		<Pieces>MQ_Visible3</Pieces>
 		<Pieces>MQ_Visible4</Pieces>
 		<Pieces>MQ_Visible5</Pieces>
-		<Pieces>MQ_Distance1</Pieces>
-		<Pieces>MQ_Distance2</Pieces>
-		<Pieces>MQ_Distance3</Pieces>
-		<Pieces>MQ_Distance4</Pieces>
-		<Pieces>MQ_Distance5</Pieces>
+
 	</Screen>
 
 </XML>
