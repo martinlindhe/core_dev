@@ -2985,7 +2985,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>-15</X>
-			<Y>20</Y>
+			<Y>21</Y>
 		</Location>
 		<Size>
 			<CX>35</CX>
@@ -3009,7 +3009,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>-15</X>
-			<Y>43</Y>
+			<Y>44</Y>
 		</Location>
 		<Size>
 			<CX>35</CX>
@@ -3033,7 +3033,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>-15</X>
-			<Y>67</Y>
+			<Y>68</Y>
 		</Location>
 		<Size>
 			<CX>35</CX>
@@ -3057,7 +3057,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>-15</X>
-			<Y>90</Y>
+			<Y>91</Y>
 		</Location>
 		<Size>
 			<CX>35</CX>
@@ -3081,7 +3081,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>-15</X>
-			<Y>115</Y>
+			<Y>116</Y>
 		</Location>
 		<Size>
 			<CX>35</CX>

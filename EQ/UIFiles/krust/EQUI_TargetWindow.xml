@@ -4,7 +4,7 @@
 
 	<TextureInfo item="TargetBox.tga">
 		<Size>
-			<CX>118</CX>
+			<CX>116</CX>
 			<CY>30</CY>
 		</Size>
 	</TextureInfo>
@@ -18,7 +18,7 @@
 				<Y>0</Y>
 			</Location>
 			<Size>
-				<CX>118</CX>
+				<CX>116</CX>
 				<CY>30</CY>
 			</Size>
 		</Frames>
