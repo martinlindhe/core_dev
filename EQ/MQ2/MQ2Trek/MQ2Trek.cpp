@@ -104,8 +104,8 @@
 
 #include "../MQ2Plugin.h"
 
-#define CDisplay__MoveLocalPlayerToSuccorCoords 0x45F100 //20070117
-#define LocalCEverQuest__DoTheZone  0x4D51C0 //20070117
+#define CDisplay__MoveLocalPlayerToSuccorCoords 0x45FBF0  //20070216
+#define LocalCEverQuest__DoTheZone  0x4D6B50 //20070216
 
 PreSetup("MQ2Trek");
 
