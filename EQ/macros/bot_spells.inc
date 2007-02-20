@@ -22,6 +22,8 @@ Sub Event_SomeoneVertigo(string Line, string Name)
 	/echo ${Name} needs RGC! (Vertigo)
 	/if (${Zone.ShortName.Equal["theatera_raid"]} && ${Me.Book["Remove Greater Curse"]}) {
 		/target pc ${Name}
+		| delay here so ppl dont get suspicious
+		/delay 2s
 		/call BotCast "Remove Greater Curse"
 	}
 /return
@@ -206,9 +208,24 @@ Sub HandleGroupHeal(int PctHPs, string SpellName, string Spell2Name)
 					/call DebugMsg "# QHEAL > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 					/call BotCast "${SpellName}" HealCallback
 				}
+				/return
 			}
 		}
 	/next i
+
+	| Heal target if it's a player outside group
+	/if (${Target.ID} && ${Target.Type.Equal[PC]} && ${Target.PctHPs} <= ${PctHPs}) {
+		/call WaitForSpellReady "${SpellName}"
+
+		/if (${Spell2Name.Length} && ${Me.SpellReady[${Spell2Name}]} && (${Target.PctHPs} <= 35)) {
+			/call DebugMsg "# HoTT HEAL2!!! > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+			/call BotCast "${Spell2Name}" HealCallback
+		} else {
+			/call DebugMsg "# HoTT HEAL!!! > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+			/call BotCast "${SpellName}" HealCallback
+		}
+		/return
+	}
 
 	| See if HoTT is a player that needs a heal	
 	/if (${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && ${Me.TargetOfTarget.PctHPs} <= ${PctHPs}) {
@@ -217,11 +234,12 @@ Sub HandleGroupHeal(int PctHPs, string SpellName, string Spell2Name)
 		
 		/if (${Spell2Name.Length} && ${Me.SpellReady[${Spell2Name}]} && (${Target.PctHPs} <= 35)) {
 			/call DebugMsg "# HoTT HEAL2!!! > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
-			/call BotCast "${Spell2Name}" HealCallback			
+			/call BotCast "${Spell2Name}" HealCallback
 		} else {
 			/call DebugMsg "# HoTT HEAL!!! > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 			/call BotCast "${SpellName}" HealCallback
 		}
+		/return
 	}
 	
 /return
