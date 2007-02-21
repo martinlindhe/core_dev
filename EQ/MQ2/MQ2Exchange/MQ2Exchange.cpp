@@ -1,13 +1,13 @@
 //Thread: http://www.macroquest2.com/phpBB2/viewtopic.php?t=7603
-//This is version 1.14 (November 8, 2006) 
+//This is version 1.16 (February 20, 2007)
 
 #include "../MQ2Plugin.h"
 PreSetup("MQ2Exchange");
-PLUGIN_VERSION(1.14);
+PLUGIN_VERSION(1.16);
 PCONTENTS ifITEM;
 PCONTENTS ifPACK;
 
-bool      ItemFind(PCHAR ID, long B=0, long E=30);
+bool      ItemFind(PCHAR ID, long B=0, long E=NUM_INV_SLOTS);
 char      szArg1[MAX_STRING];
 char      szArg2[MAX_STRING];
 long      ifSLOT;
@@ -49,7 +49,7 @@ bool ItemFind(PCHAR ID, long B, long E) {
          if((Search && Number==cSlot->Item->ItemNumber) || (!Search && !stricmp(ID,cSlot->Item->Name))) {
             ifITEM=cSlot;
             ifSLOT=iSlot;
-            if(iSlot>21)
+            if(iSlot >= BAG_SLOT_START)
                ifPACK=cSlot;
             return true;
          } else
@@ -58,7 +58,7 @@ bool ItemFind(PCHAR ID, long B, long E) {
                   if(PCONTENTS cPack=cSlot->Contents[iPack]) {
                      if((Search && Number==cPack->Item->ItemNumber) || (!Search && !stricmp(ID,cPack->Item->Name))) {
                         ifITEM=cPack;
-                        ifSLOT=(iSlot-22)*10+251+iPack;
+                        ifSLOT=(iSlot-BAG_SLOT_START)*10+262+iPack;
                         ifPACK=cSlot;
                         return true;
                      }
@@ -71,7 +71,7 @@ bool ItemFind(PCHAR ID, long B, long E) {
 bool SlotFind(PCHAR ID) {
    if(IsNumber(ID)) {
       sfSLOT=atoi(ID);
-      if(sfSLOT>=0 && sfSLOT<30)
+      if(sfSLOT>=0 && sfSLOT<NUM_INV_SLOTS)
          return true;
    }
    else
@@ -86,12 +86,12 @@ bool SlotFind(PCHAR ID) {
 long PackFind(PITEMINFO Item) {
    pfSLOT=0;
    long pfSIZE=10;
-   for(int iSlot=22; iSlot<30;iSlot++) {
+   for(int iSlot=BAG_SLOT_START; iSlot<NUM_INV_SLOTS; iSlot++) {
       if(PCONTENTS cSlot=GetCharInfo2()->InventoryArray[iSlot]) {
          if(cSlot->Item->Type==ITEMTYPE_PACK && cSlot->Item->Combine!=2 && Item->Size <= cSlot->Item->SizeCapacity && (!pfSLOT || cSlot->Item->SizeCapacity<pfSIZE)) {
             for(int iPack=0;iPack<cSlot->Item->Slots;iPack++) {
                if(!cSlot->Contents[iPack]) {
-                  pfSLOT=(iSlot-22)*10+251+iPack;
+                     pfSLOT=(iSlot-BAG_SLOT_START)*10+262+iPack;
                   pfSIZE=cSlot->Item->SizeCapacity;
                   break;
                }
@@ -110,7 +110,7 @@ bool CheckValidExchange(PITEMINFO swapInItem, PCONTENTS bagSlot, int toSlot) {
    if(GetCharInfo()->pSpawn->SpellETA) {
       MacroError("Exchange: Cannot /exchange while casting");
    }
-   if (toSlot>21 && toSlot<30) return true;
+   if(toSlot>=BAG_SLOT_START && toSlot<NUM_INV_SLOTS) return true;
    if(bagSlot->Item->Type==ITEMTYPE_PACK) {
       if(GetCharInfo2()->InventoryArray[toSlot]) {
          if(GetCharInfo2()->InventoryArray[toSlot]->Item->Size > bagSlot->Item->SizeCapacity) {
@@ -119,8 +119,8 @@ bool CheckValidExchange(PITEMINFO swapInItem, PCONTENTS bagSlot, int toSlot) {
          }
       }
    }
-   if(toSlot==21) {
-      if(((swapInItem->EquipSlots&(1<<11)) || (swapInItem->EquipSlots&(1<<21))) && swapInItem->StackSize>1)
+   if(toSlot==22) {
+      if((swapInItem->EquipSlots&(1<<11)) || (swapInItem->EquipSlots&(1<<22)))
          return true;
       else {
          MacroError("Exchange: Cannot equip %s in the ammo slot.",swapInItem->Name);
@@ -186,13 +186,13 @@ VOID ExchangeItem(PSPAWNINFO pChar, PCHAR szLine) {
       MacroError("Exchange: %s slot not found",szArg2);
    else if(!ItemFind(szArg1))
       MacroError("Exchange: Couldn't find %s in your inventory",szArg1);
-   else if(ifSLOT<22 || ifSLOT==sfSLOT || !CheckValidExchange(ifITEM->Item,ifPACK,sfSLOT))
+   else if(ifSLOT<BAG_SLOT_START || ifSLOT==sfSLOT || !CheckValidExchange(ifITEM->Item,ifPACK,sfSLOT))
       return;
    else {
       sprintf(szArg2,"InvSlot%d",sfSLOT);
-      pInvSlotMgr->MoveItem(ifSLOT,0x1E,1,1);
+      pInvSlotMgr->MoveItem(ifSLOT,0x1F,1,1);
       SendModClick(szArg2,"leftmouseup",0);
-      pInvSlotMgr->MoveItem(0x1E,ifSLOT,1,1);
+      pInvSlotMgr->MoveItem(0x1F,ifSLOT,1,1);
    }
 }
 
@@ -214,17 +214,17 @@ VOID UnequipItem(PSPAWNINFO pChar, PCHAR szLine) {
    else if(!SlotFind(szLine))
       MacroError("Unequip: %s slot not found.",szLine);
    else {
-      if(sfSLOT>21)
+        if(sfSLOT>=BAG_SLOT_START)
          return;
       PCONTENTS uiCONT=GetCharInfo2()->InventoryArray[sfSLOT];
       if(!uiCONT)
          MacroError("Unequip: There is nothing in the %s slot to unequip",szLine);
-      else if(!PackFind(uiCONT->Item)) //Is there an item inside this ack in this slot?
+      else if(!PackFind(uiCONT->Item))
          MacroError("Unequip: %s is too large for bags, or no room.",uiCONT->Item->Name);
       else {
          sprintf(szArg2,"InvSlot%d",sfSLOT);
          SendModClick(szArg2,"leftmouseup",1);
-         pInvSlotMgr->MoveItem(0x1E,pfSLOT,1,1);
+         pInvSlotMgr->MoveItem(0x1F,pfSLOT,1,1);
       }
    }
 }

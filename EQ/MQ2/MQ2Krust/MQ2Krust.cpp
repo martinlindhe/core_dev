@@ -335,6 +335,7 @@ private:
 		Temp[0] = 0;
 
 		InitClassCheck();
+		InitMyClassCheck();
 
 		if (MeleeClass) {
 			sprintf(Temp, "OK");
@@ -405,16 +406,6 @@ private:
 		//if (${HasNEC} && ${ZoneAllowsLevitate} && !${Me.Buff["Dead Men Floating"].ID} && !${Me.Buff["Dead Man Floating"].ID}) /varset str ${str} DMF
 
 
-		if ((HasSHM || HasBST) &&
-			!HasBuff("Protection of Wishka") && !HasBuff("Talisman of the Tribunal") &&	!HasBuff("Talisman of Jasinth"))
-		{
-			if (HasSHM) {
-				strcat(Temp, "Wishka ");
-			} else {
-				strcat(Temp, "Jasinth ");
-			}
-		}
-
 		if (HasENC && !HasBuff("Guard of Druzzil"))
 		{
 			strcat(Temp, "GoD ");
@@ -430,7 +421,19 @@ private:
 			strcat(Temp, "SUMMER ");
 		}
 
+		//Wishka har CORRUPT resist komponent, den behövs i AG/FC raids
+		if ((HasSHM || HasBST) &&
+			!HasBuff("Protection of Wishka") && !HasBuff("Talisman of the Tribunal") &&	!HasBuff("Talisman of Jasinth"))
+		{
+			if (HasSHM) {
+				strcat(Temp, "Wishka ");
+			} else {
+				strcat(Temp, "Jasinth ");
+			}
+		}
+
 		//todo: visa bara i AG/FC raider
+		//zone shortname: vergalid_raid  = här behövs corrupt resists
 		if ((HasDRU || HasCLR) && pRaid && pRaid->RaidMemberCount &&
 			!HasBuff("Shared Purity") && !HasBuff("Resist Corruption"))
 		{
