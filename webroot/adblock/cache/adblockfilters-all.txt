@@ -92,6 +92,7 @@ adsonar.com
 adtech.de
 adtology.com
 adtology2.com
+adtology3.com
 adtoma.com
 adtrade.net
 adtraxx.de
@@ -419,6 +420,7 @@ rek.snyggast.se
 reliablestats.com
 research-int.se
 revsci.net
+roventskij.net/skunk/
 rsi*.go.com
 ru4.com
 sageanalyst.net
@@ -537,6 +539,7 @@ xhit.com
 xiti.com
 xxx-hitz.org
 xxxcounter.de
+y.digg.com
 yadro.ru
 yahoo.com/cgi-bin/ref
 yahoo.com/get_ad
