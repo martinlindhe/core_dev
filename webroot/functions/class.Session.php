@@ -7,12 +7,12 @@
 
 class Session
 {
-	private $session_name = 'sid';	//default name
-	private $timeout = 1800;	//max allowed idle time (in seconds) before auto-logout
-	private $check_ip = true;	//if set to true, client will be logged out if client ip is changed during the session
-	private $sha1_key = 'rpxp8xkewljo';		//used to further encode sha1 passwords, to make rainbow table attacks harder
+	private $session_name = 'sid';			//default session name
+	private $timeout = 1800;						//max allowed idle time (in seconds) before auto-logout
+	private $check_ip = true;						//if set to true, client will be logged out if client ip is changed during the session
+	private $sha1_key = 'rpxp8xkewljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 
-	private $db = 0;		//reference to db handle
+	private $db = 0;										//reference to db handle
 
 	public function __construct($db_handle, array $session_config)
 	{
@@ -51,6 +51,8 @@ class Session
 		//GET to any page with 'logout' set to log out
 		if (isset($_GET['logout'])) {
 			$this->logOut();
+			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
+			die;
 		}
 	}
 
@@ -92,6 +94,16 @@ class Session
 		$_SESSION['isAdmin'] = 0;
 		$_SESSION['isSuperAdmin'] = 0;
 	}
+	
+	public function showLoginForm()
+	{
+		echo '<form name="login_form" method="post">';
+		echo 'Username: <input name="usr" type="text"><br>';
+		echo 'Password: <input name="pwd" type="password"><br>';
+		echo '<input type="submit" value="Log in">';
+		echo '</form>';
+	}
+	
 
 	public function showInfo()
 	{
