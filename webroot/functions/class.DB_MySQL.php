@@ -1,11 +1,13 @@
 <?
 /*
-	Object oriented interface for MySQL databases using the MySQLi extension
+	Object oriented interface for MySQL databases using the MySQL extension
+
+	When possible, use class.DB_MySQLi.php instead
 
 	Written by Martin Lindhe, 2007
 */
 
-class DB_MySQLi extends DB_Base
+class DB_MySQL extends DB_Base
 {
 	//default settings
 	protected $host	= 'localhost';
@@ -40,7 +42,7 @@ class DB_MySQLi extends DB_Base
 	//Destructor
 	public function __destruct()
 	{
-		if ($this->db_handle) $this->db_handle->close();
+		if ($this->db_handle) mysql_close($this->db_handle);
 	}
 
 	/* Opens a database connection */
@@ -49,16 +51,18 @@ class DB_MySQLi extends DB_Base
 		if ($this->debug) $time_started = microtime(true);
 
 		//Open database connection
-		$this->db_handle = @ new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
+		$this->db_handle = @mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
 
 		if (mysqli_connect_errno()) {
 			$this->db_handle = false;
 			die('Database connection error.');
 		}
 
+		mysql_select_db($this->database, $this->db_handle);
+
 		if ($this->debug) {
 			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
-			$this->queries[ $this->queries_cnt ] = 'connect('.$this->host.'), '.$this->db_handle->host_info;
+			$this->queries[ $this->queries_cnt ] = 'connect('.$this->host.'), '.mysql_get_host_info($this->db_handle);
 			$this->queries_cnt++;
 		}
 	}
@@ -66,21 +70,21 @@ class DB_MySQLi extends DB_Base
 	/* Escapes a string for use in queries */
 	public function escape($query)
 	{
-		return $this->db_handle->real_escape_string($query);
+		return mysql_real_escape_string($query, $this->db_handle);
 	}
-	
+
 	/* Performs a query that don't return anything */
 	public function query($query)
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		$result = $this->db_handle->query($query);
+		$result = mysql_query($query, $this->db_handle);
 
 		if ($result) {
-			$this->insert_id = $this->db_handle->insert_id;
-			$result->free();
+			$this->insert_id = mysql_insert_id($this->db_handle);
+			mysql_free_result($result);
 		} else if ($this->debug && !$result) {
-			$this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			$this->query_error[ $this->queries_cnt ] = mysql_error($this->db_handle);
 		} else {
 			//if debug is turned off (production) and a query fail, just die silently
 			die;
@@ -98,17 +102,17 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($query)) return array();
+		if (!$result = mysql_query($query, $this->db_handle)) return array();
 
-		$rows = $result->num_rows;
-		
+		$rows = mysql_num_rows($result);
+
 		$data = array();
 
 		for ($i=0; $i<$rows; $i++) {
-			$data[$i] = $result->fetch_array(MYSQLI_ASSOC);
+			$data[$i] = mysql_fetch_array($result, MYSQL_ASSOC);
 		}
 
-		$result->free();
+		mysql_free_result($result);
 
 		if ($this->debug) {
 			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
@@ -124,14 +128,14 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);	
 
-		if (!$result = $this->db_handle->query($query)) return array();
+		if (!$result = mysql_query($query, $this->db_handle)) return array();
 
-		if ($result->num_rows > 1) {
-			die('ERROR: query '.$query.' in DB_MySQLi::getOneRow() returned more than 1 result!');
+		if (mysql_num_rows($result) > 1) {
+			die('ERROR: query '.$query.' in DB_MySQL::getOneRow() returned more than 1 result!');
 		}
 
-		$data = $result->fetch_array(MYSQLI_ASSOC);
-		$result->free();
+		$data = mysql_fetch_array($result, MYSQL_ASSOC);
+		mysql_free_result($result);
 
 		if ($this->debug) {
 			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
@@ -147,14 +151,14 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);	
 
-		if (!$result = $this->db_handle->query($query)) return array();
+		if (!$result = mysql_query($query, $this->db_handle)) return array();
 
-		if ($result->num_rows > 1) {
-			die('ERROR: query '.$query.' in DB_MySQLi::getOneItem() returned more than 1 result!');
+		if (mysql_num_rows($result) > 1) {
+			die('ERROR: query '.$query.' in DB_MySQL::getOneItem() returned more than 1 result!');
 		}
 
-		$data = $result->fetch_row();
-		$result->free();
+		$data = mysql_fetch_row($result);
+		mysql_free_result($result);
 
 		if ($this->debug) {
 			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;

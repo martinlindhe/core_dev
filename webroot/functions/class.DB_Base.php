@@ -24,7 +24,7 @@ abstract class DB_Base
 		echo 'Host: '.$this->host.':'.$this->port.'<br>';
 		echo 'Login: '.$this->username.':'.$this->password.'<br>';
 		echo 'Database: '.$this->database.'<br>';
-		echo 'Host info: '. $this->db_handle->host_info.'<br>';
+		//echo 'Host info: '. $this->db_handle->host_info.'<br>';
 	}
 
 	/* Shows debug/profiling information */
