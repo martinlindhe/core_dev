@@ -44,6 +44,9 @@ abstract class DB_Base
 
 	/* Creates a database connection */
 	abstract protected function connect();
+	
+	/* Shows driver-specific settings */
+	abstract protected function showMoreSettings();
 
 	//default settings
 	protected $host	= 'localhost';
@@ -83,6 +86,8 @@ abstract class DB_Base
 		echo 'Host: '.$this->host.':'.$this->port.'<br>';
 		echo 'Login: '.$this->username.':'.$this->password.'<br>';
 		echo 'Database: '.$this->database.'<br>';
+
+		$this->showMoreSettings();
 	}
 
 	/* Stores profiling information about connect time to database */

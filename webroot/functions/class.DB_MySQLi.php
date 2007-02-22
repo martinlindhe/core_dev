@@ -13,6 +13,13 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->db_handle) $this->db_handle->close();
 	}
+	
+	protected function showMoreSettings()
+	{
+		echo 'Server info: '.$this->db_handle->server_info.' ('.$this->db_handle->host_info.')<br>';
+		echo 'Client info: '.$this->db_handle->client_info.'<br>';
+		echo 'Character set: '.$this->db_handle->character_set_name().'<br>';
+	}
 
 	public function escape($query)
 	{
