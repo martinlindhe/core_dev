@@ -386,6 +386,7 @@ Sub Event_MobSlowed(string line, string name)
 	|Warrior item Truncheon of Doom procs Tepid Deeds (mob slows down) aswell
 	/if (${Spawn[radius 300 PC ENC].ID}) {
 		/echo ${name} SLOWED (ENC)
+		/if (!${Raid.Members}) /alert ${name} SLOWED (ENC)
 	} else {
 		/echo ${name} SLOWED (WAR proc)
 	}
