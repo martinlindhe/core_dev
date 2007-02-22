@@ -7,27 +7,12 @@
 	Written by Martin Lindhe, 2007
 */
 
+require_once('class.DB_Base.php');
+
 class DB_MySQL extends DB_Base
 {
-	//default settings
-	protected $host	= 'localhost';
-	protected $port	= 3306;
-	protected $username = 'root';
-	protected $password = '';
-	protected $database = '';
-	protected $db_handle = false;
-	
-	//debug variables
-	protected $debug = false;
-	protected $time_spent = array();
-	protected $queries_cnt = 0;
-	protected $queries = array();
-	protected $query_error = array();
-	
-	public $insert_id = 0;
-
 	//Constructor
-	public function __construct($settings)
+	public function __construct(array $settings)
 	{
 		if (!empty($settings['debug'])) $this->debug = $settings['debug'];
 		if (!empty($settings['host'])) $this->host = $settings['host'];
@@ -35,6 +20,8 @@ class DB_MySQL extends DB_Base
 		if (!empty($settings['username'])) $this->username = $settings['username'];
 		if (!empty($settings['password'])) $this->password = $settings['password'];
 		if (!empty($settings['database'])) $this->database = $settings['database'];
+
+		$this->db_driver = 'DB_MySQL';
 
 		$this->connect();
 	}
@@ -50,8 +37,7 @@ class DB_MySQL extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		//Open database connection
-		$this->db_handle = @mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
+		$this->db_handle = @ mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
 
 		if (mysqli_connect_errno()) {
 			$this->db_handle = false;
@@ -60,11 +46,7 @@ class DB_MySQL extends DB_Base
 
 		mysql_select_db($this->database, $this->db_handle);
 
-		if ($this->debug) {
-			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
-			$this->queries[ $this->queries_cnt ] = 'connect('.$this->host.'), '.mysql_get_host_info($this->db_handle);
-			$this->queries_cnt++;
-		}
+		if ($this->debug) $this->profileConnect($time_started);
 	}
 
 	/* Escapes a string for use in queries */
@@ -90,11 +72,7 @@ class DB_MySQL extends DB_Base
 			die;
 		}
 
-		if ($this->debug) {
-			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
-			$this->queries[ $this->queries_cnt ] = $query;
-			$this->queries_cnt++;
-		}
+		if ($this->debug) $this->profileQuery($time_started, $query);
 	}
 
 	/* Returns an array with the results, with columns as array indexes */
@@ -114,11 +92,7 @@ class DB_MySQL extends DB_Base
 
 		mysql_free_result($result);
 
-		if ($this->debug) {
-			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
-			$this->queries[ $this->queries_cnt ] = $query;
-			$this->queries_cnt++;
-		}
+		if ($this->debug) $this->profileQuery($time_started, $query);
 
 		return $data;
 	}
@@ -137,11 +111,7 @@ class DB_MySQL extends DB_Base
 		$data = mysql_fetch_array($result, MYSQL_ASSOC);
 		mysql_free_result($result);
 
-		if ($this->debug) {
-			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
-			$this->queries[ $this->queries_cnt ] = $query;
-			$this->queries_cnt++;
-		}
+		if ($this->debug) $this->profileQuery($time_started, $query);
 
 		return $data;
 	}
@@ -160,11 +130,7 @@ class DB_MySQL extends DB_Base
 		$data = mysql_fetch_row($result);
 		mysql_free_result($result);
 
-		if ($this->debug) {
-			$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
-			$this->queries[ $this->queries_cnt ] = $query;
-			$this->queries_cnt++;
-		}
+		if ($this->debug) $this->profileQuery($time_started, $query);
 
 		if (!$data) return false;
 		return $data[0];

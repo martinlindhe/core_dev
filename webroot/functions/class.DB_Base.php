@@ -1,15 +1,31 @@
 <?
 /*
 	SQL DB Base class
-	Written by Martin Lindhe, 2007
 
-	todo:
-		* räkna ej connect som en sql query i debug listan
-		* baka in css direkt i funktionen, slipp externa dependencies
+	Written by Martin Lindhe, 2007
 */
 
 abstract class DB_Base
 {
+	//default settings
+	protected $host	= 'localhost';
+	protected $port	= 3306;
+	protected $username = 'root';
+	protected $password = '';
+	protected $database = '';
+	protected $db_handle = false;
+	protected $db_driver = '';
+
+	//debug variables
+	protected $debug = false;
+	protected $connect_time = 0;
+	protected $time_spent = array();
+	protected $queries_cnt = 0;
+	protected $queries = array();
+	protected $query_error = array();
+
+	public $insert_id = 0;
+
 	abstract protected function connect();
 	abstract public function escape($query);
 	abstract public function query($query);
@@ -17,10 +33,24 @@ abstract class DB_Base
 	abstract public function getOneRow($query);
 	abstract public function getOneItem($query);
 
+	/* Stores profiling information during page load. Show result with showDebugInfo() */
+	protected function profileQuery($time_started, $query)
+	{
+		$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
+		$this->queries[ $this->queries_cnt ] = $query;
+		$this->queries_cnt++;
+	}
+
+	protected function profileConnect($time_started)
+	{
+		$this->connect_time = microtime(true) - $time_started;
+	}
+
 	/* Shows current settings */
 	public function showSettings()
 	{
 		echo 'Debug: '.($this->debug?'ON':'OFF').'<br>';
+		echo 'DB driver: '.$this->db_driver.'<br>';
 		echo 'Host: '.$this->host.':'.$this->port.'<br>';
 		echo 'Login: '.$this->username.':'.$this->password.'<br>';
 		echo 'Database: '.$this->database.'<br>';
@@ -41,7 +71,8 @@ abstract class DB_Base
 
 		$sql_time = 0;
 
-		echo '<div id="debug_layer" style="height:'.$sql_height.'px; display: none; font-family: verdana; font-size: 9px;">';
+		echo '<div id="debug_layer" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000000 1px solid; font: 9px verdana;">';
+
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{
 			$sql_time += $this->time_spent[$i];
@@ -56,11 +87,12 @@ abstract class DB_Base
 
 		if ($pageload_start) {
 			$php_time = $total_time - $sql_time;
-			echo 'Total time spent: '.round($total_time, 3).'s '.' (SQL: '.round($sql_time, 3).'s, PHP: '.round($php_time, 3).'s)';
+			echo 'Total time spent: '.round($total_time, 3).'s '.' (SQL connect: '.round($this->connect_time, 3).'s, SQL queries: '.round($sql_time, 3).'s, PHP: '.round($php_time, 3).'s)';
 		} else {
 			echo 'Time spent - SQL: '.round($sql_time, 3);
 		}
 		echo '</div>';
 	}
+
 }
 ?>
