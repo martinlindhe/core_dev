@@ -3,11 +3,48 @@
 	SQL DB Base class
 
 	Written by Martin Lindhe, 2007
-
+	
+	todo: metod för att anropa stored procedures
 */
 
 abstract class DB_Base
 {
+	/****************************************************/
+	/* PUBLIC INTERFACE EXPOSED BY ALL DB MODULES				*/
+	/****************************************************/
+
+	/* Holds the ID of last successful INSERT */
+	public $insert_id = 0;
+
+	/* Escapes a string for use in queries */
+	abstract public function escape($query);
+
+	/* Performs a query that don't return anything
+		Example: INSERT a=1 INTO t */
+	abstract public function query($query);
+
+	/* Returns an array with the results, with columns as array indexes
+		Example: SELECT * FROM t */
+	abstract public function getArray($query);
+
+	/* Returns one row-result with columns as array indexes
+		Example: SELECT * FROM t WHERE id=1 (where id is distinct) */
+	abstract public function getOneRow($query);
+
+	/* Returns one column-result only
+		Example: SELECT a FROM t WHERE id=1 (where id is distinct) */
+	abstract public function getOneItem($query);
+
+
+
+
+	/****************************************************/
+	/* PRIVATE INTERFACE USED INTERNALLY ONLY						*/
+	/****************************************************/
+
+	/* Creates a database connection */
+	abstract protected function connect();
+
 	//default settings
 	protected $host	= 'localhost';
 	protected $port	= 3306;
@@ -25,16 +62,7 @@ abstract class DB_Base
 	protected $queries = array();
 	protected $query_error = array();
 
-	public $insert_id = 0;
-
-	abstract protected function connect();				/* Opens a database connection */
-	abstract public function escape($query);			/* Escapes a string for use in queries */
-	abstract public function query($query);				/* Performs a query that don't return anything */
-	abstract public function getArray($query);		/* Returns an array with the results, with columns as array indexes */
-	abstract public function getOneRow($query);		/* Returns one row-result with columns as array indexes */
-	abstract public function getOneItem($query);	/* Returns one column-result only (SELECT a FROM t WHERE id=1), where id is distinct */
-
-	//Constructor
+	/* Constructor */
 	public function __construct(array $settings)
 	{
 		if (!empty($settings['debug'])) $this->debug = $settings['debug'];
@@ -77,7 +105,7 @@ abstract class DB_Base
 
 		$total_time = microtime(true) - $pageload_start;
 
-		echo '<a href="#" onClick="return toggle_element_by_name(\'debug_layer\');">'.$this->queries_cnt.' sql</a>';
+		echo '<a href="#" onClick="return toggle_element_by_name(\'sql_profiling\');">'.$this->queries_cnt.' sql</a>';
 
 		//Shows all SQL queries from this page view
 		$sql_height = $this->queries_cnt*30;
@@ -85,17 +113,27 @@ abstract class DB_Base
 
 		$sql_time = 0;
 
-		echo '<div id="debug_layer" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000000 1px solid; font: 9px verdana;">';
+		echo '<div id="sql_profiling" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000000 1px solid; font: 9px verdana;">';
 
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{
 			$sql_time += $this->time_spent[$i];
+			
+			$query = htmlentities(nl2br($this->queries[$i]), ENT_COMPAT, 'UTF-8');
 
 			echo '<div style="width: 50px; float: left;">';
-				echo round($this->time_spent[$i], 3).'s';
-				if (!empty($this->query_error[$i])) echo '<img src="design/delete.png" title="'.$this->query_error[$i].'">';
+				if (!empty($this->query_error[$i])) {
+					echo '<img src="/gfx/icon_error.png" align="absmiddle" title="SQL Error">';
+				} else {
+					echo round($this->time_spent[$i], 3).'s';
+				}
 			echo '</div> ';
-			echo htmlentities(nl2br($this->queries[$i]), ENT_COMPAT, 'UTF-8');
+			if (!empty($this->query_error[$i])) {
+				echo '<b>'.$query.'</b><br>';
+				echo 'Error: <i>'.$this->query_error[$i].'</i>';
+			} else {
+				echo $query;
+			}
 			echo '<hr>';
 		}
 
