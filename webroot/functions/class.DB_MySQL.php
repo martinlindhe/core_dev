@@ -11,22 +11,7 @@ require_once('class.DB_Base.php');
 
 class DB_MySQL extends DB_Base
 {
-	//Constructor
-	public function __construct(array $settings)
-	{
-		if (!empty($settings['debug'])) $this->debug = $settings['debug'];
-		if (!empty($settings['host'])) $this->host = $settings['host'];
-		if (!empty($settings['port'])) $this->port = $settings['port'];
-		if (!empty($settings['username'])) $this->username = $settings['username'];
-		if (!empty($settings['password'])) $this->password = $settings['password'];
-		if (!empty($settings['database'])) $this->database = $settings['database'];
-
-		$this->db_driver = 'DB_MySQL';
-
-		$this->connect();
-	}
-
-	//Destructor
+	/* Destructor */
 	public function __destruct()
 	{
 		if ($this->db_handle) mysql_close($this->db_handle);
@@ -36,6 +21,8 @@ class DB_MySQL extends DB_Base
 	protected function connect()
 	{
 		if ($this->debug) $time_started = microtime(true);
+
+		$this->db_driver = 'DB_MySQL';
 
 		$this->db_handle = @ mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
 

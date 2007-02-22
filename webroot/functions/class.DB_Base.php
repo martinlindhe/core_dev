@@ -3,6 +3,7 @@
 	SQL DB Base class
 
 	Written by Martin Lindhe, 2007
+
 */
 
 abstract class DB_Base
@@ -32,6 +33,19 @@ abstract class DB_Base
 	abstract public function getArray($query);
 	abstract public function getOneRow($query);
 	abstract public function getOneItem($query);
+
+	//Constructor
+	public function __construct(array $settings)
+	{
+		if (!empty($settings['debug'])) $this->debug = $settings['debug'];
+		if (!empty($settings['host'])) $this->host = $settings['host'];
+		if (!empty($settings['port'])) $this->port = $settings['port'];
+		if (!empty($settings['username'])) $this->username = $settings['username'];
+		if (!empty($settings['password'])) $this->password = $settings['password'];
+		if (!empty($settings['database'])) $this->database = $settings['database'];
+
+		$this->connect();
+	}
 
 	/* Stores profiling information during page load. Show result with showDebugInfo() */
 	protected function profileQuery($time_started, $query)
