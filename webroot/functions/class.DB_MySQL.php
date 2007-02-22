@@ -1,6 +1,6 @@
 <?
 /*
-	Object oriented interface for MySQL databases using the MySQL extension
+	Object oriented interface for MySQL databases using the php_mysql.dll extension
 
 	When possible, use class.DB_MySQLi.php instead
 

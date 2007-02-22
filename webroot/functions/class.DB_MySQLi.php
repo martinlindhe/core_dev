@@ -1,6 +1,6 @@
 <?
 /*
-	Object oriented interface for MySQL databases using the MySQLi extension
+	Object oriented interface for MySQL databases using the php_mysqli.dll extension
 
 	Written by Martin Lindhe, 2007
 */

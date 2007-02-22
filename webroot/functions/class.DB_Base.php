@@ -75,19 +75,6 @@ abstract class DB_Base
 		$this->connect();
 	}
 
-	/* Stores profiling information during page load. Show result with showDebugInfo() */
-	protected function profileQuery($time_started, $query)
-	{
-		$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
-		$this->queries[ $this->queries_cnt ] = $query;
-		$this->queries_cnt++;
-	}
-
-	protected function profileConnect($time_started)
-	{
-		$this->connect_time = microtime(true) - $time_started;
-	}
-
 	/* Shows current settings */
 	public function showSettings()
 	{
@@ -98,8 +85,22 @@ abstract class DB_Base
 		echo 'Database: '.$this->database.'<br>';
 	}
 
-	/* Shows debug/profiling information */
-	public function showDebugInfo($pageload_start = 0)
+	/* Stores profiling information about connect time to database */
+	protected function profileConnect($time_started)
+	{
+		$this->connect_time = microtime(true) - $time_started;
+	}
+
+	/* Stores profiling information about query execution time */
+	protected function profileQuery($time_started, $query)
+	{
+		$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
+		$this->queries[ $this->queries_cnt ] = $query;
+		$this->queries_cnt++;
+	}
+
+	/* Shows profiling information */
+	public function showProfile($pageload_start = 0)
 	{
 		if (!$this->debug) return;
 
@@ -113,7 +114,7 @@ abstract class DB_Base
 
 		$sql_time = 0;
 
-		echo '<div id="sql_profiling" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000000 1px solid; font: 9px verdana;">';
+		echo '<div id="sql_profiling" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana;">';
 
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{
@@ -121,7 +122,7 @@ abstract class DB_Base
 			
 			$query = htmlentities(nl2br($this->queries[$i]), ENT_COMPAT, 'UTF-8');
 
-			echo '<div style="width: 50px; float: left;">';
+			echo '<div style="width: 45px; float: left;">';
 				if (!empty($this->query_error[$i])) {
 					echo '<img src="/gfx/icon_error.png" align="absmiddle" title="SQL Error">';
 				} else {
