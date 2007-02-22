@@ -17,6 +17,12 @@ class DB_MySQL extends DB_Base
 		if ($this->db_handle) mysql_close($this->db_handle);
 	}
 
+	/* Escapes a string for use in queries */
+	public function escape($query)
+	{
+		return mysql_real_escape_string($query, $this->db_handle);
+	}
+
 	/* Opens a database connection */
 	protected function connect()
 	{
@@ -34,12 +40,6 @@ class DB_MySQL extends DB_Base
 		mysql_select_db($this->database, $this->db_handle);
 
 		if ($this->debug) $this->profileConnect($time_started);
-	}
-
-	/* Escapes a string for use in queries */
-	public function escape($query)
-	{
-		return mysql_real_escape_string($query, $this->db_handle);
 	}
 
 	/* Performs a query that don't return anything */
@@ -69,11 +69,9 @@ class DB_MySQL extends DB_Base
 
 		if (!$result = mysql_query($query, $this->db_handle)) return array();
 
-		$rows = mysql_num_rows($result);
-
 		$data = array();
 
-		for ($i=0; $i<$rows; $i++) {
+		for ($i=0; $i<mysql_num_rows($result); $i++) {
 			$data[$i] = mysql_fetch_array($result, MYSQL_ASSOC);
 		}
 

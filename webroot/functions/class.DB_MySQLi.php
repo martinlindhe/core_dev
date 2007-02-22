@@ -15,6 +15,12 @@ class DB_MySQLi extends DB_Base
 		if ($this->db_handle) $this->db_handle->close();
 	}
 
+	/* Escapes a string for use in queries */
+	public function escape($query)
+	{
+		return $this->db_handle->real_escape_string($query);
+	}
+
 	/* Opens a database connection */
 	protected function connect()
 	{
@@ -30,12 +36,6 @@ class DB_MySQLi extends DB_Base
 		}
 
 		if ($this->debug) $this->profileConnect($time_started);
-	}
-
-	/* Escapes a string for use in queries */
-	public function escape($query)
-	{
-		return $this->db_handle->real_escape_string($query);
 	}
 
 	/* Performs a query that don't return anything */
@@ -65,11 +65,9 @@ class DB_MySQLi extends DB_Base
 
 		if (!$result = $this->db_handle->query($query)) return array();
 
-		$rows = $result->num_rows;
-
 		$data = array();
 
-		for ($i=0; $i<$rows; $i++) {
+		for ($i=0; $i<$result->num_rows; $i++) {
 			$data[$i] = $result->fetch_array(MYSQLI_ASSOC);
 		}
 
