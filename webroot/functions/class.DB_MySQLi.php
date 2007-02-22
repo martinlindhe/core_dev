@@ -9,19 +9,16 @@ require_once('class.DB_Base.php');
 
 class DB_MySQLi extends DB_Base
 {
-	/* Destructor */
 	public function __destruct()
 	{
 		if ($this->db_handle) $this->db_handle->close();
 	}
 
-	/* Escapes a string for use in queries */
 	public function escape($query)
 	{
 		return $this->db_handle->real_escape_string($query);
 	}
 
-	/* Opens a database connection */
 	protected function connect()
 	{
 		if ($this->debug) $time_started = microtime(true);
@@ -38,7 +35,6 @@ class DB_MySQLi extends DB_Base
 		if ($this->debug) $this->profileConnect($time_started);
 	}
 
-	/* Performs a query that don't return anything */
 	public function query($query)
 	{
 		if ($this->debug) $time_started = microtime(true);
@@ -58,7 +54,6 @@ class DB_MySQLi extends DB_Base
 		if ($this->debug) $this->profileQuery($time_started, $query);
 	}
 
-	/* Returns an array with the results, with columns as array indexes */
 	public function getArray($query)
 	{
 		if ($this->debug) $time_started = microtime(true);
@@ -78,7 +73,6 @@ class DB_MySQLi extends DB_Base
 		return $data;
 	}
 
-	/* Returns one row-result with columns as array indexes */
 	public function getOneRow($query)
 	{
 		if ($this->debug) $time_started = microtime(true);	
@@ -97,7 +91,6 @@ class DB_MySQLi extends DB_Base
 		return $data;
 	}
 
-	/* Returns one column-result only (SELECT a FROM t WHERE id=1), where id is distinct */
 	public function getOneItem($query)
 	{
 		if ($this->debug) $time_started = microtime(true);	

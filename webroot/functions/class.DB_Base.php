@@ -27,12 +27,12 @@ abstract class DB_Base
 
 	public $insert_id = 0;
 
-	abstract protected function connect();
-	abstract public function escape($query);
-	abstract public function query($query);
-	abstract public function getArray($query);
-	abstract public function getOneRow($query);
-	abstract public function getOneItem($query);
+	abstract protected function connect();				/* Opens a database connection */
+	abstract public function escape($query);			/* Escapes a string for use in queries */
+	abstract public function query($query);				/* Performs a query that don't return anything */
+	abstract public function getArray($query);		/* Returns an array with the results, with columns as array indexes */
+	abstract public function getOneRow($query);		/* Returns one row-result with columns as array indexes */
+	abstract public function getOneItem($query);	/* Returns one column-result only (SELECT a FROM t WHERE id=1), where id is distinct */
 
 	//Constructor
 	public function __construct(array $settings)
