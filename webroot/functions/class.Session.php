@@ -7,24 +7,25 @@
 
 class Session
 {
-	protected $session_name = 'sid';	//default name
-	
-	//todo: ability to change these default values... they are used in the constructor...
-	public $timeout = 180;	//max allowed idle time (in seconds) before auto-logout
-	public $check_ip = true;	//if set to true, client will be logged out if client ip is changed during the session
-	public $sha1_key = 'sitecode_uReply';
+	private $session_name = 'sid';	//default name
+	private $timeout = 1800;	//max allowed idle time (in seconds) before auto-logout
+	private $check_ip = true;	//if set to true, client will be logged out if client ip is changed during the session
+	private $sha1_key = 'rpxp8xkewljo';		//used to further encode sha1 passwords, to make rainbow table attacks harder
 
-	protected $db = 0;		//reference to db handle
+	private $db = 0;		//reference to db handle
 
-	public function __construct($db_handle, $session_name = '')
+	public function __construct($db_handle, array $session_config)
 	{
 		$this->db = &$db_handle;
 
-		if ($session_name) $this->session_name = $session_name;
+		if (isset($session_config['name'])) $this->session_name = $session_config['name'];
+		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
+		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
+		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
 
 		session_name($this->session_name);
 		session_start();
-		
+
 		if (!isset($_SESSION['IP'])) $_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 		else if ($this->check_ip && ($_SESSION['IP'] != $_SERVER['REMOTE_ADDR'])) {
 				$this->logOut();
@@ -59,7 +60,6 @@ class Session
 
 	public function logIn($username, $password)
 	{
-		//echo 'LOGGING IN<br>';
 		$enc_username = $this->db->escape($username);
 		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
 
@@ -68,7 +68,7 @@ class Session
 			$_SESSION['lastError'] = 'Login failed';
 			return false;
 		}
-		
+
 		$_SESSION['userName'] = $enc_username;
 		$_SESSION['userId'] = $data['userId'];
 		$_SESSION['mode'] = $data['userMode'];		//0=normal user. 1=admin, 2=super admin
@@ -76,9 +76,6 @@ class Session
 		if ($_SESSION['mode'] >= 1) $_SESSION['isAdmin'] = 1;
 		if ($_SESSION['mode'] >= 2) $_SESSION['isSuperAdmin'] = 1;
 		$_SESSION['loggedIn'] = true;
-
-		//any use of setting cookies these days? the browsers are pretty good at remembering this themselves
-		//$this->WriteCookie('usr', $enc_username, 90);	//remembers username in 90 days from last visit
 
 		//Update last login time
 		$this->db->query('UPDATE tblUsers SET lastLoginTime=NOW(), lastActive=NOW() WHERE userId='.$_SESSION['userId']);
@@ -89,8 +86,6 @@ class Session
 
 	public function logOut()
 	{
-		//echo 'LOGGING OUT<br>';
-		
 		$_SESSION['userId'] = 0;
 		$_SESSION['loggedIn'] = false;
 		$_SESSION['mode'] = 0;
@@ -110,8 +105,9 @@ class Session
 		echo 'Current IP: '.$_SESSION['IP'].'<br>';
 		echo 'Session timeout: '.$this->timeout.'<br>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br>';
-		
-		echo 'SHA1 key: '.$this->sha1_key.'<br>';
+		if ($_SESSION['isSuperAdmin']) {
+			echo 'SHA1 key: '.$this->sha1_key.'<br>';
+		}
 	}
 
 }
