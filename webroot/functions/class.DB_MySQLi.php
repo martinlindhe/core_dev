@@ -14,14 +14,14 @@ class DB_MySQLi extends DB_Base
 	protected $password = '';
 	protected $database = '';
 	protected $db_handle = false;
-	
+
 	//debug variables
 	protected $debug = false;
 	protected $time_spent = array();
 	protected $queries_cnt = 0;
 	protected $queries = array();
 	protected $query_error = array();
-	
+
 	public $insert_id = 0;
 
 	//Constructor
@@ -68,7 +68,7 @@ class DB_MySQLi extends DB_Base
 	{
 		return $this->db_handle->real_escape_string($query);
 	}
-	
+
 	/* Performs a query that don't return anything */
 	public function query($query)
 	{
@@ -101,7 +101,7 @@ class DB_MySQLi extends DB_Base
 		if (!$result = $this->db_handle->query($query)) return array();
 
 		$rows = $result->num_rows;
-		
+
 		$data = array();
 
 		for ($i=0; $i<$rows; $i++) {
@@ -118,7 +118,7 @@ class DB_MySQLi extends DB_Base
 
 		return $data;
 	}
-	
+
 	/* Returns one row-result with columns as array indexes */
 	public function getOneRow($query)
 	{
@@ -141,7 +141,7 @@ class DB_MySQLi extends DB_Base
 
 		return $data;
 	}
-	
+
 	/* Returns one column-result only (SELECT a FROM t WHERE id=1), where id is distinct */
 	public function getOneItem($query)
 	{

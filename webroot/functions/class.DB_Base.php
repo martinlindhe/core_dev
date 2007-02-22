@@ -11,12 +11,12 @@
 abstract class DB_Base
 {
 	abstract protected function connect();
-	abstract public public function escape($query);
-	abstract public public function query($query);
-	abstract public public function getArray($query);
-	abstract public public function getOneRow($query);
-	abstract public public function getOneItem($query);
-	
+	abstract public function escape($query);
+	abstract public function query($query);
+	abstract public function getArray($query);
+	abstract public function getOneRow($query);
+	abstract public function getOneItem($query);
+
 	/* Shows current settings */
 	public function showSettings()
 	{
@@ -24,16 +24,15 @@ abstract class DB_Base
 		echo 'Host: '.$this->host.':'.$this->port.'<br>';
 		echo 'Login: '.$this->username.':'.$this->password.'<br>';
 		echo 'Database: '.$this->database.'<br>';
-		//echo 'Host info: '. $this->db_handle->host_info.'<br>';
 	}
 
 	/* Shows debug/profiling information */
 	public function showDebugInfo($pageload_start = 0)
 	{
 		if (!$this->debug) return;
-		
+
 		$total_time = microtime(true) - $pageload_start;
-		
+
 		echo '<a href="#" onClick="return toggle_element_by_name(\'debug_layer\');">'.$this->queries_cnt.' sql</a>';
 
 		//Shows all SQL queries from this page view
@@ -46,7 +45,7 @@ abstract class DB_Base
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{
 			$sql_time += $this->time_spent[$i];
-				
+
 			echo '<div style="width: 50px; float: left;">';
 				echo round($this->time_spent[$i], 3).'s';
 				if (!empty($this->query_error[$i])) echo '<img src="design/delete.png" title="'.$this->query_error[$i].'">';
