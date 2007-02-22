@@ -50,7 +50,6 @@ class DB_MySQLi extends DB_Base
 
 		if ($result) {
 			$this->insert_id = $this->db_handle->insert_id;
-			$result->free();
 		} else if ($this->debug && !$result) {
 			$this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 		} else {

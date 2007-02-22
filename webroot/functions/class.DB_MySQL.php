@@ -54,7 +54,6 @@ class DB_MySQL extends DB_Base
 
 		if ($result) {
 			$this->insert_id = mysql_insert_id($this->db_handle);
-			mysql_free_result($result);
 		} else if ($this->debug && !$result) {
 			$this->query_error[ $this->queries_cnt ] = mysql_error($this->db_handle);
 		} else {

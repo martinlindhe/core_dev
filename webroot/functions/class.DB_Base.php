@@ -115,6 +115,7 @@ abstract class DB_Base
 
 		//Shows all SQL queries from this page view
 		$sql_height = $this->queries_cnt*30;
+		if (!$sql_height) $sql_height = 12;
 		if ($sql_height > 160) $sql_height = 160;
 
 		$sql_time = 0;
