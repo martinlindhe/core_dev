@@ -10,18 +10,19 @@ class Session
 	private $session_name = 'sid';			//default session name
 	private $timeout = 1800;						//max allowed idle time (in seconds) before auto-logout
 	private $check_ip = true;						//if set to true, client will be logged out if client ip is changed during the session
-	private $sha1_key = 'rpxp8xkewljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
+	private $sha1_key = 'rpxp8xkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 
-	private $db = 0;										//reference to db handle
+	private $db;												//reference to db handle, used internally only
 	
-	public $ip = 0;		//alias of $_SESSION['IP'];
-	public $id = 0;		//alias of $_SESSION['id'];
-	public $username = '';
-	public $loggedIn = false;
-	public $mode = 0;
-	public $lastActive = 0;
-	public $isAdmin = 0;
-	public $isSuperAdmin = 0;
+	//Aliases of $_SESSION[] variables
+	public $error;
+	public $ip;
+	public $id;
+	public $username;
+	public $mode;
+	public $lastActive;
+	public $isAdmin;
+	public $isSuperAdmin;
 
 	public function __construct($db_handle, array $session_config)
 	{
@@ -35,32 +36,38 @@ class Session
 		session_name($this->session_name);
 		session_start();
 		
-		if (!isset($_SESSION['ip'])) $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+		if (!isset($_SESSION['error'])) $_SESSION['error'] = '';
+		if (!isset($_SESSION['ip'])) $_SESSION['ip'] = 0;
 		if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
 		if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
-		if (!isset($_SESSION['loggedIn'])) $_SESSION['loggedIn'] = false;
 		if (!isset($_SESSION['mode'])) $_SESSION['mode'] = 0;
 		if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
 		if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
 
+		$this->error = &$_SESSION['error'];
 		$this->ip = &$_SESSION['ip'];
-		$this->id = &$_SESSION['id'];
-		$this->username = $_SESSION['username'];
-		$this->loggedIn = &$_SESSION['loggedIn'];
+		$this->id = &$_SESSION['id'];	//if id is set, also means that the user is logged in
+		$this->username = &$_SESSION['username'];
 		$this->mode = &$_SESSION['mode'];
 		$this->lastActive = &$_SESSION['lastActive'];
 		$this->isAdmin = &$_SESSION['isAdmin'];
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
-		
-		if ($this->check_ip && $this->ip && ($this->ip != $_SERVER['REMOTE_ADDR'])) {
-				$this->logOut();
-				echo 'Session IP changed! Old IP was '.$this->ip.' but current registered is '.$_SERVER['REMOTE_ADDR'].'. Possible session hijacking attempt, closing session.';
+
+		if (!$this->ip) {
+			$this->ip = $_SERVER['REMOTE_ADDR'];
 		}
 
-		if (!$this->loggedIn) {
+		if ($this->check_ip && $this->ip && ($this->ip != $_SERVER['REMOTE_ADDR'])) {
+				$this->logOut();
+				$this->error = 'Client IP changed';
+				echo 'Client IP changed! Old IP: '.$this->ip.', current: '.$_SERVER['REMOTE_ADDR'];
+		}
+
+		if ($this->id) {
 			if ($this->lastActive < (time()-$this->timeout)) {
 				$this->logOut();
+				$this->error = 'Inactivity timeout';
 				echo 'Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')';
 			} else {
 				//Update last active timestamp
@@ -70,12 +77,12 @@ class Session
 		}
 
 		//POST to any page with 'usr' & 'pwd' variables set to log in
-		if (!$this->loggedIn && !empty($_POST['usr']) && isset($_POST['pwd'])) {
+		if (!$this->id && !empty($_POST['usr']) && isset($_POST['pwd'])) {
 			$this->logIn($_POST['usr'], $_POST['pwd']);
 		}
 
 		//GET to any page with 'logout' set to log out
-		if (isset($_GET['logout'])) {
+		if ($this->id && isset($_GET['logout'])) {
 			$this->logOut();
 			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
 			die;
@@ -93,8 +100,7 @@ class Session
 
 		$data = $this->db->getOneRow('SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"');
 		if (!$data) {
-			//todo: error messages!
-			//$_SESSION['lastError'] = 'Login failed';
+			$this->error = 'Login failed';
 			return false;
 		}
 
@@ -104,7 +110,6 @@ class Session
 
 		if ($this->mode >= 1) $this->isAdmin = 1;
 		if ($this->mode >= 2) $this->isSuperAdmin = 1;
-		$this->loggedIn = true;
 
 		//Update last login time
 		$this->db->query('UPDATE tblUsers SET lastLoginTime=NOW(), lastActive=NOW() WHERE userId='.$this->id);
@@ -117,7 +122,6 @@ class Session
 	{
 		$this->id = 0;
 		$this->ip = 0;
-		$this->loggedIn = false;
 		$this->mode = 0;
 		$this->isAdmin = 0;
 		$this->isSuperAdmin = 0;
@@ -126,17 +130,19 @@ class Session
 	public function showLoginForm()
 	{
 		echo '<form name="login_form" method="post">';
+		if ($this->error) {
+			echo 'Error: '.$this->error.'<br>';
+		}
 		echo 'Username: <input name="usr" type="text"><br>';
 		echo 'Password: <input name="pwd" type="password"><br>';
 		echo '<input type="submit" value="Log in">';
 		echo '</form>';
 	}
-	
 
 	public function showInfo()
 	{
-		echo 'Logged in: '. ($this->loggedIn?'YES':'NO').'<br>';
-		if ($this->loggedIn) {
+		echo 'Logged in: '. ($this->id?'YES':'NO').'<br>';
+		if ($this->id) {
 			echo '<b>User name: '.$this->username.'</b><br>';
 			echo '<b>User ID: '.$this->id.'</b><br>';
 			echo '<b>User mode: '.$this->mode.'</b><br>';
