@@ -36,8 +36,6 @@ abstract class DB_Base
 	abstract public function getOneItem($query);
 
 
-
-
 	/****************************************************/
 	/* PRIVATE INTERFACE USED INTERNALLY ONLY						*/
 	/****************************************************/
@@ -64,6 +62,8 @@ abstract class DB_Base
 	protected $queries_cnt = 0;
 	protected $queries = array();
 	protected $query_error = array();
+	
+	protected $session_handle = 0;
 
 	/* Constructor */
 	public function __construct(array $settings)
@@ -114,8 +114,7 @@ abstract class DB_Base
 		echo '<a href="#" onClick="return toggle_element_by_name(\'sql_profiling\');">'.$this->queries_cnt.' sql</a>';
 
 		//Shows all SQL queries from this page view
-		$sql_height = $this->queries_cnt*30;
-		if (!$sql_height) $sql_height = 12;
+		$sql_height = ($this->queries_cnt+1)*21;
 		if ($sql_height > 160) $sql_height = 160;
 
 		$sql_time = 0;
@@ -152,6 +151,20 @@ abstract class DB_Base
 		}
 		echo '</div>';
 	}
+	
+	public function attachSession(Session $sess)
+	{
+		$this->session_handle = &$sess;
+	}
+
+	/* Writes a log entry to tblLogs */
+	public function log($str)
+	{
+		$enc_str = $this->escape($str);
+		
+		$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId='.$this->session_handle->id.',userIP='.$this->session_handle->ip);
+	}
+
 
 }
 ?>

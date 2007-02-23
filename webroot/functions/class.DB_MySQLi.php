@@ -115,6 +115,5 @@ class DB_MySQLi extends DB_Base
 		if (!$data) return false;
 		return $data[0];
 	}
-
 }
 ?>

@@ -5,6 +5,8 @@
 	Written by Martin Lindhe, 2007
 */
 
+require_once('functions_ip.php');
+
 class Session
 {
 	private $session_name = 'sid';			//default session name
@@ -32,6 +34,8 @@ class Session
 		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
 		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
+		
+		$this->db->attachSession($this);
 
 		session_name($this->session_name);
 		session_start();
@@ -46,7 +50,7 @@ class Session
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
 
 		$this->error = &$_SESSION['error'];
-		$this->ip = &$_SESSION['ip'];
+		$this->ip = &$_SESSION['ip'];	//store IP as an unsigned 32bit int
 		$this->id = &$_SESSION['id'];	//if id is set, also means that the user is logged in
 		$this->username = &$_SESSION['username'];
 		$this->mode = &$_SESSION['mode'];
@@ -55,20 +59,20 @@ class Session
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
 
 		if (!$this->ip) {
-			$this->ip = $_SERVER['REMOTE_ADDR'];
+			$this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		}
 
-		if ($this->check_ip && $this->ip && ($this->ip != $_SERVER['REMOTE_ADDR'])) {
-				$this->logOut();
+		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
 				$this->error = 'Client IP changed';
-				echo 'Client IP changed! Old IP: '.$this->ip.', current: '.$_SERVER['REMOTE_ADDR'];
+				$this->db->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
+				$this->logOut();
 		}
 
 		if ($this->id) {
 			if ($this->lastActive < (time()-$this->timeout)) {
-				$this->logOut();
 				$this->error = 'Inactivity timeout';
-				echo 'Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')';
+				$this->db->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
+				$this->logOut();
 			} else {
 				//Update last active timestamp
 				$this->db->query('UPDATE tblUsers SET lastActive=NOW() WHERE userId='.$this->id);
@@ -83,6 +87,7 @@ class Session
 
 		//GET to any page with 'logout' set to log out
 		if ($this->id && isset($_GET['logout'])) {
+			$this->db->log('user logged out');
 			$this->logOut();
 			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
 			die;
@@ -104,6 +109,7 @@ class Session
 			return false;
 		}
 
+		$this->error = '';
 		$this->username = $enc_username;
 		$this->id = $data['userId'];
 		$this->mode = $data['userMode'];		//0=normal user. 1=admin, 2=super admin
@@ -114,6 +120,8 @@ class Session
 		//Update last login time
 		$this->db->query('UPDATE tblUsers SET lastLoginTime=NOW(), lastActive=NOW() WHERE userId='.$this->id);
 		$this->lastActive = time();
+
+		$this->db->log('user logged in');
 
 		return true;
 	}
