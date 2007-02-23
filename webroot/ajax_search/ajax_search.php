@@ -1,6 +1,4 @@
-<?
-	header('Content-type: text/xml');
-	echo '<?xml version="1.0" ?>';
+<? header('Content-type: text/xml'); echo '<?xml version="1.0" ?>';
 
 	if (empty($_GET['s'])) die('<x></x>');
 	$search = $_GET['s'];
@@ -8,21 +6,23 @@
 	/* fetches all rows from result and return as an array */
 	function dbFetchArray(&$db, $query)
 	{
-		$check = mysqli_query($db, $query);
-		$cnt = mysqli_num_rows($check);
+		$check = mysql_query($query, $db);
+		$cnt = mysql_num_rows($check);
 
 		if (!$cnt) return array();
 
 		for ($i=0; $i<$cnt; $i++) {
-			$result[$i] = mysqli_fetch_array($check, MYSQLI_ASSOC);
+			$result[$i] = mysql_fetch_array($check, MYSQLI_ASSOC);
 		}
 		return $result;
 	}
 
-	$db = @mysqli_connect('localhost', 'root', '', 'dbAJAXSearch', 3306);
+	$db = @ mysql_connect('localhost:3306', 'root', '');
 	if (!$db) die;
 
-	$search = mysqli_real_escape_string($db, $search);
+	mysql_select_db('dbAJAXSearch', $db);
+
+	$search = mysql_real_escape_string($search, $db);
 	$list = dbFetchArray($db, 'SELECT * FROM tblText WHERE txt LIKE "%'.$search.'%"');
 
 	echo '<x>';
