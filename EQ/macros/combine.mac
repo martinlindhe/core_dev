@@ -7,6 +7,7 @@ sub Main
 	/declare countsuccess	int outer 0
 	/declare countfail		int outer 0
 	/declare counttotal		int outer 0
+	/declare skillups			int outer 0
 	
 	/echo Starting
 
@@ -26,6 +27,7 @@ sub Main
 
 	/if (${finish}==1) {
 		/echo Done. ${countsuccess}/${counttotal} (${Math.Calc[ (${countsuccess}/${counttotal})*100 ]}%) items created
+		/echo ${skillups} skillups
 		/goto :Cleanup
 	}
 	/goto :CombineLoop
@@ -37,22 +39,28 @@ sub Main
 
 /return
 
-|------------------------------
-#Event nomore "Sorry, but you don't have everything you need for this recipe#*#"
+#event nomore "Sorry, but you don't have everything you need for this recipe#*#"
 Sub Event_nomore
 	/varset finish 1
 /return
 
-#Event create "You have fashioned the items together to create something new#*#"
+#event create "You have fashioned the items together to create something new#*#"
 Sub Event_create
 	/varcalc countsuccess ${countsuccess}+1
 	/varcalc counttotal ${countsuccess}+${countfail}
 	/echo ${countsuccess}/${counttotal} successes (${Math.Calc[ (${countsuccess}/${counttotal})*100 ]}% success rate)
 /return
 
-#Event failed "You lacked the skills#*#"
+#event failed "You lacked the skills#*#"
 Sub Event_failed
 	/varcalc countfail ${countfail}+1
 	/varcalc counttotal ${countsuccess}+${countfail}
 	/echo ${countfail}/${counttotal} failures (${Math.Calc[ (${countsuccess}/${counttotal})*100 ]}% success rate)
 /return
+
+#event skillup "You have become better at #1#! (#2#)"
+Sub Event_skillup(string line, string skillname, string num)
+	/varcalc skillups ${skillups}+1
+	/echo Skillup: ${skillname} = ${num}
+/return
+

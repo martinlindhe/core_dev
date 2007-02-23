@@ -32,7 +32,7 @@
 #define DO_REPTILE_PLAYER		Keosden
 
 | Percent levels
-#define QHEAL_PERCENT				70					| todo: om vi har clr i gruppen, kör på t.ex 40%, annars på t.ex 70%
+#define QHEAL_PERCENT				35					| todo: om vi har clr i gruppen, kör på t.ex 40%, annars på t.ex 70%
 #define CHEAL_PERCENT				85
 #define SNARE_PERCENT				99
 #define DEBUFF_PERCENT			97

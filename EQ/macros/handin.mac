@@ -1,0 +1,62 @@
+| keep handin item/stack on cursor & target npc to hand in then run macro
+
+Sub Main
+
+	/if (!${Cursor.ID}) {
+		/echo Keep item to handin on cursor and re-run.
+		/return
+	}
+
+	/if (!${Target.ID}) {
+		/echo Target NPC to hand in to and re-run.
+		/return
+	}
+
+	/declare ItemToGive string local ${Cursor.Name}
+	/declare n int local
+	
+	/autoinventory
+
+  /call OpenPacks
+
+	:Start
+	/if (${FindItemCount[=${ItemToGive}]} >= 4) {
+ 
+		/for n 1 to 4
+ 
+			/ctrl /itemnotify ${FindItem[=${ItemToGive}].InvSlot} leftmouseup
+			/delay 3s ${Cursor.ID}
+			/if (${Cursor.ID}) {
+				/click left target
+				/delay 1s !${Cursor.ID}
+			}
+		/next n
+ 
+		/nomodkey /notify GiveWnd GVW_Give_Button leftmouseup
+		/delay 2s !${Window[GiveWnd].Open}
+ 
+		/goto :Start
+	}
+
+	/call ClosePacks
+
+/return
+
+Sub OpenPacks
+	|todo: dont open new tradeskill container interfaces
+	/declare i int local
+	/for i 1 to 8
+		/if (${InvSlot[pack${i}].Item.Container}) {
+			/if (!${Window[Pack${i}].Open}) /itemnotify pack${i} rightmouseup
+		}
+	/next i
+/return
+
+Sub ClosePacks
+	/declare i int local
+	/for i 1 to 8
+		/if (${InvSlot[pack${i}].Item.Container}) {
+			/if (${Window[Pack${i}].Open}) /itemnotify pack${i} rightmouseup
+		}
+	/next i
+/return

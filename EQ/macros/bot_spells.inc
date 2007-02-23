@@ -197,14 +197,16 @@ Sub HandleGroupHeal(int PctHPs, string SpellName, string Spell2Name)
 	/for i 0 to 5
 		/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].PctHPs} <= ${PctHPs}) && ${Group.Member[${i}].State.NotEqual["DEAD"]} && (${Group.Member[${i}].Distance} < ${Me.Gem[${Me.Gem["${SpellName}"]}].Range})) {
 			/target pc ${Group.Member[${i}].Name}
-			/call WaitForSpellReady "${SpellName}"
-					
+				
 			| check if player been healed before reaching this code
 			/if (${Target.PctHPs} <= ${PctHPs}) {
-				/if (${Spell2Name.Length} && ${Me.SpellReady[${Spell2Name}]} && (${Target.PctHPs} <= 35)) {
+				/if (${Me.AltAbilityReady["Gathering of Spirits"]} && (${Target.PctHPs} <= 18)) {
+					/call DebugMsg "# GoS > ${Target.Name} < at ${Target.PctHPs}%"
+					/casting "Gathering of Spirits" alt
+				} else /if (${Spell2Name.Length} && ${Me.SpellReady[${Spell2Name}]} && (${Target.PctHPs} <= 32)) {
 					/call DebugMsg "# QHEAL2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 					/call BotCast "${Spell2Name}" HealCallback
-				} else {
+				} else /if (${Me.SpellReady[${SpellName}]}) {
 					/call DebugMsg "# QHEAL > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 					/call BotCast "${SpellName}" HealCallback
 				}
