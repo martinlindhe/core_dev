@@ -106,6 +106,7 @@ class Session
 		$data = $this->db->getOneRow('SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"');
 		if (!$data) {
 			$this->error = 'Login failed';
+			$this->db->log('failed login attempt: username '.$enc_username);
 			return false;
 		}
 
