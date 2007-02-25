@@ -252,8 +252,6 @@ Sub HandleAssistCallDruid(int SpawnId)
 	}
 
 	/if (DO_DEBUFF && !HEAL_ONLY_MODE && ${Target.Type.Equal[NPC]} && ${Me.Standing} && (${Target.PctHPs} >= 80) && (${Me.PctMana} > LOM_PERCENT) && (${Spawn[id ${SpawnId}].Level} >= 62)) {
-		/target npc id ${SpawnId}
-		/delay 2s ${Target.ID}==${SpawnId}
 		/call DruidWaitForTargetHP ${SpawnId} DEBUFF_PERCENT
 		/call WaitForSpellReady "${debuffName}"
 		/call DebugMsg "Debuffing ${Target.CleanName} at ${Target.PctHPs}% (${Me.PctMana}m)"
@@ -343,12 +341,11 @@ Sub HandleAssistCallDruid(int SpawnId)
 		/if (!${Me.Moving} && ${Me.Standing} && !${Window[LootWnd].Open} && (${Me.PctMana} < LOM_PERCENT) && !${Me.Buff["Summon Drogmor"].ID}) {
 			/if (${Spawn[npc radius 40 notid ${SpawnId}].LineOfSight}) {							
 				/call DebugMsg "LOM (${Me.PctMana}m) - But ${SpawnCount[npc radius 40 notid ${SpawnId}]} adds in camp!"
-				| fixme: delay här e farligt..
 				/delay 1s
 			} else {
 				/call DebugMsg "LOM - Medding (${Me.PctMana}m)"
 				/varset timerNuke 2m
-				/if (${Me.Standing} && !${Me.Moving}) /sit
+				/if (${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID}) /sit
 			}
 		}
 
@@ -387,9 +384,9 @@ Sub DruidUpdateBuffs
 	/if (${Group.Members}) {
 		/call RefreshBuff "Blessing of the Direwild Rk. II" 50
 		/if (!${Me.Song["Aura of Life Effect"].ID}) /call RefreshBuff "Aura of Life" 0
-		/if (!${Raid.Members} && (!HEAL_ONLY_MODE || !${Spawn[npc radius 60].LineOfSight})) {
-			/call RefreshBuff "Legacy of Viridiflora Rk. II" 50
-			/call RefreshBuff "Blessing of Oak" 50
+		/if (!${Raid.Members} && !HEAL_ONLY_MODE) {
+			/if (${Me.Gem["Legacy of Viridiflora Rk. II"]}) /call RefreshBuff "Legacy of Viridiflora Rk. II" 50
+			/if (${Me.Gem["Blessing of Oak"]}) /call RefreshBuff "Blessing of Oak" 50
 		}
 	}
 
@@ -425,7 +422,7 @@ Sub DruidUpdateBuffs
 
 Sub DruidRefreshAA_DS
 
-	/if (!${Me.AltAbilityReady["Wrath of the Wild"]} || ${Me.Moving} || ${Me.Casting.ID} || ${Target.ID} || ${Window[LootWnd].Open}) /return
+	/if (!${Me.AltAbilityReady["Wrath of the Wild"]} || ${Me.Moving} || ${Me.Sitting} || ${Me.Casting.ID} || ${Target.ID} || ${Window[LootWnd].Open}) /return
 
 	/declare tankId int local 0
 

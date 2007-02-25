@@ -123,19 +123,14 @@ Sub RefreshBuff(string Name, int Duration)
 	/declare i int local 0
 	/declare freeslot int local 0
 
-	| /if (${Spawn[radius 40 npc].ID} && ${Spawn[radius 40 npc].LineOfSight}) {
-	|   /call DebugMsg "# Avoiding refresh of ${Name} cause of NPC in camp"
-  |   /return
-	| }
+	/if (${Window[LootWnd].Open} || ${Cursor.ID} || ${Me.Casting.ID}) /return
 	
-	/if (${Window[LootWnd].Open} || ${Cursor.ID}) /return
-
 	| Is it a item clicky?
 	/if (${FindItem[${Name}].ID}) {
 		/varset BuffName ${FindItem[${Name}].Spell.Name}
 	} else /if (${Spell[${Name}].ID}) {
 		| It's a spell
-		/if (${Spell[${Name}].Mana} < ${Me.CurrentMana}) /return
+		/if (${Me.CurrentMana} < ${Spell[${Name}].Mana}) /return
 		/varset BuffName ${Name}
 	} else {
 		/echo UNKNOWN BUFF! ${Name}
@@ -203,6 +198,7 @@ Sub HandleGroupHeal(int PctHPs, string SpellName, string Spell2Name)
 				/if (${Me.AltAbilityReady["Gathering of Spirits"]} && (${Target.PctHPs} <= 18)) {
 					/call DebugMsg "# GoS > ${Target.Name} < at ${Target.PctHPs}%"
 					/casting "Gathering of Spirits" alt
+					/delay 1s !${Me.AltAbilityReady["Gathering of Spirits"]}
 				} else /if (${Spell2Name.Length} && ${Me.SpellReady[${Spell2Name}]} && (${Target.PctHPs} <= 32)) {
 					/call DebugMsg "# QHEAL2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 					/call BotCast "${Spell2Name}" HealCallback
