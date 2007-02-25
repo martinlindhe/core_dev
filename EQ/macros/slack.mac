@@ -49,6 +49,8 @@ Sub Main
 
 	| /squelch /target clear
 	
+	/call Init_HandleAssist
+	
 	/echo Waiting for mobs
 	
 	:Loop
@@ -83,13 +85,13 @@ Sub Main
 			}
 		}
 	}
-	
+
 	/doevents
 
-	/if (${Krust.Healer}) /call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME"
+	/call HandleGroupHeal QHEAL_PERCENT
 
 	/call UpdateBuffs
-	
+
 	/goto :Loop
 
 /return

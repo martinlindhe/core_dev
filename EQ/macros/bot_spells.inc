@@ -124,7 +124,7 @@ Sub RefreshBuff(string Name, int Duration)
 	/declare freeslot int local 0
 
 	/if (${Window[LootWnd].Open} || ${Cursor.ID} || ${Me.Casting.ID}) /return
-	
+
 	| Is it a item clicky?
 	/if (${FindItem[${Name}].ID}) {
 		/varset BuffName ${FindItem[${Name}].Spell.Name}
@@ -143,8 +143,10 @@ Sub RefreshBuff(string Name, int Duration)
 		/if (${FindItem[${Name}].ID}) {
 			/call MQ2Cast "${Name}" item
 		} else {
-			| target myself för att group buffs ska träffa rätt (todo: går det göra en check ifall /target är nödvändigt?)
-			/target myself
+			| target myself för att group buffs ska träffa rätt, bara ifall det behövs (target=PC som ej är i gruppen & spellen är en group spell)
+			/if (${Target.Type.Equal["PC"]} && !${Group.Member[${Target.Name}]} && ${Spell[${BuffName}].AERange}) {
+				/target myself
+			}
 			| Hitta en ledig spell-slot
 			/for i 1 to 9
 				/if (!${Me.Gem[${i}].ID}) /varset freeslot ${i}
@@ -183,65 +185,56 @@ Sub RefreshPetBuff(string SpellName)
 	}
 /return
 
-Sub HandleGroupHeal(int PctHPs, string SpellName, string Spell2Name)
+Sub PerformHeal(int SpawnId, int PctHPs)
+
+	/if (${Target.ID}!=${SpawnId}) {
+		/target id ${SpawnId}
+		/delay 2s ${Target.ID}==${SpawnId}
+	}
+
+	| check if player been healed before reaching this code
+	/if (${Target.PctHPs} > ${PctHPs}) /return
+
+	/if (${Me.AltAbilityReady[DRUID_INSTANTHEAL]} && (${Target.PctHPs} <= 18) && (${Target.Distance} < ${Spell[DRUID_INSTANTHEAL].Range})) {
+		/call DebugMsg "# GoS > ${Target.Name} < at ${Target.PctHPs}%"
+		/casting "DRUID_INSTANTHEAL" alt
+		/delay 1s !${Me.AltAbilityReady[DRUID_INSTANTHEAL]}
+	} else /if (${Me.SpellReady[DRUID_QH2]} && (${Target.PctHPs} <= 32) && (${Target.Distance} < ${Spell[DRUID_QH2].Range})) {
+		/call DebugMsg "# QHEAL2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+		/call BotCast "DRUID_QH2" HealCallback
+	} else /if (${Me.SpellReady[DRUID_QH1]} && (${Target.Distance} < ${Spell[DRUID_QH1].Range}) {
+		/call DebugMsg "# QHEAL > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+		/call BotCast "DRUID_QH1" HealCallback
+	}
+/return
+
+
+Sub HandleGroupHeal(int PctHPs)
+
+	/if (${Window[LootWnd].Open} || !${Krust.Healer}) /return
 
 	/declare i int local 0
-	
-	/if (${Window[LootWnd].Open}) /return
-	
-	/for i 0 to 5
-		/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].PctHPs} <= ${PctHPs}) && ${Group.Member[${i}].State.NotEqual["DEAD"]} && (${Group.Member[${i}].Distance} < ${Me.Gem[${Me.Gem["${SpellName}"]}].Range})) {
-			/target pc ${Group.Member[${i}].Name}
-				
-			| check if player been healed before reaching this code
-			/if (${Target.PctHPs} <= ${PctHPs}) {
-				/if (${Me.AltAbilityReady["Gathering of Spirits"]} && (${Target.PctHPs} <= 18)) {
-					/call DebugMsg "# GoS > ${Target.Name} < at ${Target.PctHPs}%"
-					/casting "Gathering of Spirits" alt
-					/delay 1s !${Me.AltAbilityReady["Gathering of Spirits"]}
-				} else /if (${Spell2Name.Length} && ${Me.SpellReady[${Spell2Name}]} && (${Target.PctHPs} <= 32)) {
-					/call DebugMsg "# QHEAL2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
-					/call BotCast "${Spell2Name}" HealCallback
-				} else /if (${Me.SpellReady[${SpellName}]}) {
-					/call DebugMsg "# QHEAL > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
-					/call BotCast "${SpellName}" HealCallback
-				}
-				/return
-			}
-		}
-	/next i
 
 	| Heal target if it's a player outside group
-	/if (${Target.ID} && ${Target.Type.Equal[PC]} && ${Target.PctHPs} <= ${PctHPs}) {
-		/call WaitForSpellReady "${SpellName}"
-
-		/if (${Spell2Name.Length} && ${Me.SpellReady[${Spell2Name}]} && (${Target.PctHPs} <= 35)) {
-			/call DebugMsg "# HoTT HEAL2!!! > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
-			/call BotCast "${Spell2Name}" HealCallback
-		} else {
-			/call DebugMsg "# HoTT HEAL!!! > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
-			/call BotCast "${SpellName}" HealCallback
-		}
+	/if (${Target.ID} && ${Target.Type.Equal[PC]} && ${Target.PctHPs} <= ${PctHPs} && ${Target.State.NotEqual["DEAD"]}) {
+		/call PerformHeal ${Target.ID} ${PctHPs}
 		/return
 	}
 
 	| See if HoTT is a player that needs a heal	
-	/if (${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && ${Me.TargetOfTarget.PctHPs} <= ${PctHPs}) {
-		/target pc ${Me.TargetOfTarget.Name}
-		/call WaitForSpellReady "${SpellName}"
-		
-		/if (${Spell2Name.Length} && ${Me.SpellReady[${Spell2Name}]} && (${Target.PctHPs} <= 35)) {
-			/call DebugMsg "# HoTT HEAL2!!! > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
-			/call BotCast "${Spell2Name}" HealCallback
-		} else {
-			/call DebugMsg "# HoTT HEAL!!! > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
-			/call BotCast "${SpellName}" HealCallback
-		}
+	/if (${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && ${Me.TargetOfTarget.PctHPs} <= ${PctHPs} && ${Me.TargetOfTarget.State.NotEqual["DEAD"]}) {
+		/call PerformHeal ${Me.TargetOfTarget.ID} ${PctHPs}
 		/return
 	}
-	
-/return
 
+	/for i 0 to 5
+		/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].PctHPs} <= ${PctHPs}) && ${Group.Member[${i}].State.NotEqual["DEAD"]}) {
+			/call PerformHeal ${Group.Member[${i}].ID} ${PctHPs}
+			/return
+		}
+	/next i
+
+/return
 
 
 Sub AttemptToStun(string name)

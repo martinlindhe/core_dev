@@ -51,8 +51,10 @@
 #define EPIC_ITEMNAME						"Staff of Everliving Brambles"			| "Staff of Living Brambles"
 
 #define CHEAL_SPELLNAME					"Karana's Renewal"									| Only used in HEAL_ONLY_MODE
-#define QHEAL_SPELLNAME					"Pure Life Rk. II"
-#define QHEAL2_SPELLNAME				"Adrenaline Surge Rk. II"						| even faster qheal spell, used if player % is low & spell is ready
+
+#define DRUID_QH1								"Pure Life Rk. II"
+#define DRUID_QH2								"Adrenaline Surge Rk. II"						| even faster qheal spell, used if player % is low & spell is ready
+#define DRUID_INSTANTHEAL				"Gathering of Spirits"
 
 |----------------------------------------------
 
@@ -110,7 +112,7 @@ Sub DruSnareMob(int SpawnId)
 	:SnareLoop
 		/doevents
 
-		/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME" "QHEAL2_SPELLNAME"
+		/call HandleGroupHeal QHEAL_PERCENT
 		/if (!${Spawn[id ${SpawnId} npc].ID}) {
 			/call DebugMsg "Stopping snare loop, target dead"
 			/goto :DoneSnaring
@@ -135,7 +137,7 @@ Sub DruSnareMob(int SpawnId)
 			| Loop until mob is snared
 			:DruidHandleSnareLoop
 				/doevents
-				/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME" "QHEAL2_SPELLNAME"
+				/call HandleGroupHeal QHEAL_PERCENT
 				/if (!${timerSnareCounter} || ${mobIsSnared} || ${mobSnareImmune} || ${mobNotTakeHold}) {
 					/if (${mobNotTakeHold}) {
 						/call DebugMsg "CANTSNARE: ${Target.CleanName} (dont take hold)"
@@ -181,7 +183,7 @@ Sub DruidWaitForTargetHP(int ID, int pct)
 	/if (${Target.PctHPs} > ${pct}) {
 		/doevents
 		| Dont spam heal on inc and such
-		/if (${Target.PctHPs} < 98) /call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME" "QHEAL2_SPELLNAME"
+		/if (${Target.PctHPs} < 98) /call HandleGroupHeal QHEAL_PERCENT
 		/goto :Loop
 	}
 	
@@ -232,7 +234,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 	/varset tankId ${Macro.Return}
 	/varset tankName ${Spawn[id ${tankId}].Name}
 
-	/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME" "QHEAL2_SPELLNAME"
+	/call HandleGroupHeal QHEAL_PERCENT
 
 	/if (!HEAL_ONLY_MODE) /target npc id ${SpawnId}
 
@@ -261,7 +263,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 
 	/if (DO_SNARE) {
 		/call DruidWaitForTargetHP ${SpawnId} SNARE_PERCENT
-		/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME" "QHEAL2_SPELLNAME"
+		/call HandleGroupHeal QHEAL_PERCENT
 		/call DruSnareMob ${SpawnId}
 	}
 
@@ -287,7 +289,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 			/return
 		}
 
-		/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME" "QHEAL2_SPELLNAME"
+		/call HandleGroupHeal QHEAL_PERCENT
 
 		/if (DO_REPTILE && !${reptileTimer} && ${Me.SpellReady["Skin of the Reptile"]} && ${Spawn[pc DO_REPTILE_PLAYER].Distance} < 100) {
 			/varset reptileTimer 90s
@@ -336,7 +338,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 			}
 		}
 
-		/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME" "QHEAL2_SPELLNAME"
+		/call HandleGroupHeal QHEAL_PERCENT
 
 		/if (!${Me.Moving} && ${Me.Standing} && !${Window[LootWnd].Open} && (${Me.PctMana} < LOM_PERCENT) && !${Me.Buff["Summon Drogmor"].ID}) {
 			/if (${Spawn[npc radius 40 notid ${SpawnId}].LineOfSight}) {							
@@ -352,34 +354,27 @@ Sub HandleAssistCallDruid(int SpawnId)
 	/goto :DruidLoop
 
 	:DruidDone
-	| heal group members below 40% at end of fight
-	| fixme: only call if i am in HEAL MODE
-	/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME" "QHEAL2_SPELLNAME"
+	/call HandleGroupHeal QHEAL_PERCENT
 	
 	/call UpdateBuffs
 	/call HandleEndOfFightCaster
 /return
 
-
+| Level 75 druid buffs & clickies
 Sub DruidUpdateBuffs
 
-	/declare oldSpell string local ${Me.Gem[7]}
-
-	| Level 75 druid buffs
-	/if (${Me.SpellReady["Second Life Rk. II"]}) /call RefreshBuff "Second Life Rk. II" 10
-	
 	| Clear debuffs:
 	/if (${Me.AltAbilityReady["Resplendent Cascade"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID})) {
 		/call DebugMsg "Curing debuffs"
-		/aa act Resplendent Cascade
+		/casting "Resplendent Cascade" alt
 		|3.5 sec cast time
 		/delay 40
 	}
-	
-	/if (DO_AA_DS) /call DruidRefreshAA_DS
 
 	/call RefreshBuff "Mask of the Wild" 50
 	/call RefreshBuff "Viridicoat Rk. II" 50
+
+	/if (${Me.SpellReady["Second Life Rk. II"]}) /call RefreshBuff "Second Life Rk. II" 10
 
 	/if (${Group.Members}) {
 		/call RefreshBuff "Blessing of the Direwild Rk. II" 50
@@ -391,12 +386,12 @@ Sub DruidUpdateBuffs
 	}
 
 	/if (!${Raid.Members} && !${Spawn[npc radius 60].LineOfSight}) {
-		/call RefreshBuff "Brazier of Endless Flame" 10
+		/call RefreshBuff "Brazier of Endless Flame" 20
 	}
 
 	| Clickies
-	/call RefreshBuff "Earring of Pain Deliverance" 10
-	/call RefreshBuff "Orb of Duskmold" 10
+	/call RefreshBuff "Earring of Pain Deliverance" 20
+	/call RefreshBuff "Orb of Duskmold" 20
 
 	| Pet buffs
 	/if (${Me.Pet.ID} && ${Me.Pet.CleanName.NotEqual["${Me.Name}`s familiar"]}) {
@@ -406,18 +401,9 @@ Sub DruidUpdateBuffs
 		}
 		/call RefreshPetBuff "Mammoth's Strength" 50
 	}
-	
-
-	/if (${Me.Gem[7].Name.NotEqual["${oldSpell}"]}) {
-		/delay 2s
-		/memspell 7 "${oldSpell}"
-		| /echo Restoring old spell gem
-	}
 
 	/if (!HEAL_ONLY_MODE && DO_AA_DS) /call DruidRefreshAA_DS
 	
-	| /squelch /target clear
-
 /return
 
 Sub DruidRefreshAA_DS

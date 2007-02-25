@@ -1,5 +1,4 @@
 #include MQ2Cast_Spell_Routines.inc
-#include bot_spells.inc
 
 /if (${Me.Class.Name.Equal[Druid]} {
 	#include bot_handleassist_druid.inc
@@ -8,6 +7,8 @@
 /if (${Me.Class.Name.Equal[Magician]} {
 	#include bot_handleassist_mage.inc
 }
+
+#include bot_spells.inc
 
 
 | #include bot_handleassist_cleric.inc
