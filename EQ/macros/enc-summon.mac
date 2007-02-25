@@ -1,7 +1,11 @@
 #include spell_routines.inc
 
 |funkar inte!!!!
-#Event	OutOfComponents		"You are missing#*#"
+#event OutOfComponents		"You are missing some required components."
+Sub Event_OutOfComponents
+	/echo You are out of components.
+	/endm
+/return
 
 Sub Main
 
@@ -73,11 +77,6 @@ Sub Main
 		/delay 6s
 	/goto :loop
 
-/return
-
-Sub Event_OutOfComponents
-	/echo You are out of components.
-	/endm
 /return
 
 Sub CheckGM

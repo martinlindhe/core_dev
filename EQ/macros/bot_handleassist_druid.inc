@@ -182,8 +182,8 @@ Sub DruidWaitForTargetHP(int ID, int pct)
 	:Loop
 	/if (${Target.PctHPs} > ${pct}) {
 		/doevents
-		| Dont spam heal on inc and such
-		/if (${Target.PctHPs} < 98) /call HandleGroupHeal QHEAL_PERCENT
+
+		/call HandleGroupHeal QHEAL_PERCENT
 		/goto :Loop
 	}
 	
@@ -340,13 +340,13 @@ Sub HandleAssistCallDruid(int SpawnId)
 
 		/call HandleGroupHeal QHEAL_PERCENT
 
-		/if (!${Me.Moving} && ${Me.Standing} && !${Window[LootWnd].Open} && (${Me.PctMana} < LOM_PERCENT) && !${Me.Buff["Summon Drogmor"].ID}) {
+		/if (${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID} && !${Window[LootWnd].Open} && (${Me.PctMana} < LOM_PERCENT) && !${Me.Buff["Summon Drogmor"].ID}) {
 			/if (${Spawn[npc radius 40 notid ${SpawnId}].LineOfSight}) {							
 				/call DebugMsg "LOM (${Me.PctMana}m) - But ${SpawnCount[npc radius 40 notid ${SpawnId}]} adds in camp!"
 				/delay 1s
 			} else {
 				/call DebugMsg "LOM - Medding (${Me.PctMana}m)"
-				/varset timerNuke 2m
+				/varset timerNuke 3m
 				/if (${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID}) /sit
 			}
 		}

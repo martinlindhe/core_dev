@@ -88,7 +88,7 @@ Sub NukeCallback
 		/interrupt
 		/varset interruptFlag TRUE
 		| /echo Mob died, cancelling nuke.
-	} else /if (${Krust.Healer} && ${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && (${Me.TargetOfTarget.PctHPs} <= 40)) {
+	} else /if (${Krust.Healer} && ${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && (${Me.TargetOfTarget.PctHPs} <= QHEAL_PERCENT)) {
 		/interrupt
 		/varset interruptFlag TRUE
 		/echo Player in HoTT need heal, cancelling nuke.
@@ -144,14 +144,13 @@ Sub RefreshBuff(string Name, int Duration)
 			/call MQ2Cast "${Name}" item
 		} else {
 			| target myself för att group buffs ska träffa rätt, bara ifall det behövs (target=PC som ej är i gruppen & spellen är en group spell)
-			/if (${Target.Type.Equal["PC"]} && !${Group.Member[${Target.Name}]} && ${Spell[${BuffName}].AERange}) {
-				/target myself
-			}
+			/if (${Target.Type.Equal["PC"]} && !${Group.Member[${Target.Name}]} && ${Spell[${BuffName}].AERange}) /target myself
+
 			| Hitta en ledig spell-slot
 			/for i 1 to 9
 				/if (!${Me.Gem[${i}].ID}) /varset freeslot ${i}
 			/next i
-			
+
 			/if (${freeslot}) {
 				/call MQ2Cast "${Name}" gem${freeslot}
 			} else {			
@@ -200,10 +199,10 @@ Sub PerformHeal(int SpawnId, int PctHPs)
 		/casting "DRUID_INSTANTHEAL" alt
 		/delay 1s !${Me.AltAbilityReady[DRUID_INSTANTHEAL]}
 	} else /if (${Me.SpellReady[DRUID_QH2]} && (${Target.PctHPs} <= 32) && (${Target.Distance} < ${Spell[DRUID_QH2].Range})) {
-		/call DebugMsg "# QHEAL2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+		/call DebugMsg "# DRUID_QH2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 		/call BotCast "DRUID_QH2" HealCallback
-	} else /if (${Me.SpellReady[DRUID_QH1]} && (${Target.Distance} < ${Spell[DRUID_QH1].Range}) {
-		/call DebugMsg "# QHEAL > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+	} else /if (${Me.SpellReady[DRUID_QH1]} && (${Target.Distance} < ${Spell[DRUID_QH1].Range})) {
+		/call DebugMsg "# DRUID_QH1 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 		/call BotCast "DRUID_QH1" HealCallback
 	}
 /return
