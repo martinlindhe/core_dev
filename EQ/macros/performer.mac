@@ -6,7 +6,7 @@ Sub Main
 	/declare  myfailures     int outer 0
 	/declare  othersfailure  int outer 0 
 
-	/echo Performer Event Macro Started, waiting for event to start ...
+	/echo Performer Event macro started...
 	:loop
 		/doevents
 		/delay 1s
@@ -26,6 +26,11 @@ Sub Event_mymistake
 	/popup YOU failed!
 	/echo [${Time}] YOU failed your line!
 	/varcalc myfailures ${myfailures}+1 
+/return
+
+#event mysuccess "Your performance is flawless.#*#"
+Sub Event_mysuccess
+	/echo [${Time}] Success!
 /return
 
 #event othermistake "The Performer says 'Come on, #1#, stay with us.#*#"

@@ -1,0 +1,38 @@
+| druid heal slack
+#define HEAL_ONLY_MODE			1						| heal only mode = only does heal tank & snare mob
+#define QHEAL_PERCENT				60
+#define CHEAL_PERCENT				85
+#define USE_CH							0
+
+#include bot_handleassist.inc
+
+Sub Main
+
+	/declare TankId						int local 0
+	/declare AbortLoop				int outer 0
+
+	/varset TankId ${Target.ID}
+	
+	/if (!${Krust.Healer}) {
+		/echo Current class is not a healer class, ending macro
+		/endmacro
+	}
+
+	/call Init_HandleAssist
+	
+	/echo Slack-heal started, MT is ${Target.Name}
+	
+	:Loop
+	/call HandleGroupHeal QHEAL_PERCENT
+	/doevents
+	/call UpdateBuffs
+	
+	/if (${TankId} && ${Me.SpellReady[DRUID_QH1]} && ${Target.ID} != ${TankId}) {
+		/echo Restoring tank target
+		/target id ${TankId}
+		/delay 1s ${Target.ID}==${TankId}
+	}
+
+	/goto :Loop
+
+/return

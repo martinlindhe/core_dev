@@ -1,19 +1,11 @@
-|*
+| druid normal slack
+#define HEAL_ONLY_MODE			0						| heal only mode = only does heal tank & snare mob
+#define QHEAL_PERCENT				35
+#define CHEAL_PERCENT				85
+#define USE_CH							0
 
-	todo:
-	- sätt heal only mode här så den ej assistar
-
-
-*|
-
-#define NOT_FOUND		0
-
-#define	IRC_CHANNEL		#beep
 
 #include bot_handleassist.inc
-| #include spell_routines.inc
-
-
 
 Sub Main
 

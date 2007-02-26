@@ -1,6 +1,8 @@
-|todo: ta en parameter för hur många combines som ska göras
+| todo: ta en parameter för hur många combines som ska göras
 
-sub Main
+| /mac combine force, gör combines även ifall det är slut på inventory slots
+
+Sub Main
 
 	/declare finish int outer 0
 
@@ -19,7 +21,7 @@ sub Main
 	/if (${Cursor.ID}) {
 		/autoinventory
 
-		/if (${Me.FreeInventory} < 1) {
+		/if (${Param0.NotEqual[force]} && ${Me.FreeInventory} < 1) {
 			/echo Out of inventory slots!
 			/goto :Cleanup
 		}

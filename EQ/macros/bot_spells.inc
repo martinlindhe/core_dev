@@ -2,7 +2,7 @@
 
 #event Heal "You have healed #1# for #2# points of damage."
 Sub Event_Heal(string line, string name, int value)
-	/echo Heal: ${name} -> ${value} HP
+	/echo Healed > ${name} < (${value} HP)
 /return
 
 #event TargetCured		"Your target has been cured.#*#"
@@ -210,7 +210,7 @@ Sub PerformHeal(int SpawnId, int PctHPs)
 
 Sub HandleGroupHeal(int PctHPs)
 
-	/if (${Window[LootWnd].Open} || !${Krust.Healer}) /return
+	/if (${Window[LootWnd].Open} || !${Krust.Healer} || ${Me.Casting.ID}) /return
 
 	/declare i int local 0
 

@@ -20,8 +20,6 @@
  
 *|
 
-#define HEAL_ONLY_MODE			0						| heal only mode = only does heal tank & snare mob
-#define USE_CH							0
 
 #define DO_SNARE						0						| shall i snare mobs? even snares in HEAL_ONLY_MODE
 #define DO_DEBUFF						1						| debuff will be cast once per mob, not in heal only mode
@@ -32,8 +30,6 @@
 #define DO_REPTILE_PLAYER		Keosden
 
 | Percent levels
-#define QHEAL_PERCENT				35					| todo: om vi har clr i gruppen, kör på t.ex 40%, annars på t.ex 70%
-#define CHEAL_PERCENT				85
 #define SNARE_PERCENT				99
 #define DEBUFF_PERCENT			97
 #define STARTNUKE_PERCENT		95
@@ -364,7 +360,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 Sub DruidUpdateBuffs
 
 	| Clear debuffs:
-	/if (${Me.AltAbilityReady["Resplendent Cascade"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID})) {
+	/if (${Me.AltAbilityReady["Resplendent Cascade"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID} || ${Me.Buff["Curse of Darkness"].ID} || ${Me.Buff["Flesh Rot"].ID})) {
 		/call DebugMsg "Curing debuffs"
 		/casting "Resplendent Cascade" alt
 		|3.5 sec cast time
