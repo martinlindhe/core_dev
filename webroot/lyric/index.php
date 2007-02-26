@@ -27,7 +27,7 @@ todo: dumpa databasen dagligen automatiskt
 <input type="text" name="query">
 <input type="submit" value="Search" class="buttonstyle">
 </form>
-<script language="JavaScript">
+<script type="text/javascript">
 <!--
 document.search.query.focus();
 //-->

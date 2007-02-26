@@ -409,6 +409,7 @@ promobenef.com
 purevideo.com
 qksrv.net
 qksz.net
+quantserve.com
 quarterserver.de
 questionmarket.com
 rad.msn.com
@@ -460,6 +461,7 @@ stats.liutilities.com
 stats.macworld.com
 stats.php
 stats.wired.com
+stats.wordpress.com
 support.microsoft.com/LTS/default
 svd.se/images/sys/admark
 svd.se/ssi/spam_vaccine

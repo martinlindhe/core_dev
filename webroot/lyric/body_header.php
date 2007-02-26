@@ -1,4 +1,9 @@
-<link rel="stylesheet" href="style.css" type="text/css">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head>
+	<title>lyrics</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
 <?
 	if ($_SESSION["loggedIn"] == false) {
 		echo "You need to be logged in to submit changes/additions. <a href=\"login.php\">Log in</a> | <a href=\"register.php\">Register</a><br><br>";

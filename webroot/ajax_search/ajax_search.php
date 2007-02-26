@@ -12,7 +12,7 @@
 		if (!$cnt) return array();
 
 		for ($i=0; $i<$cnt; $i++) {
-			$result[$i] = mysql_fetch_array($check, MYSQLI_ASSOC);
+			$result[$i] = mysql_fetch_array($check, MYSQL_ASSOC);
 		}
 		return $result;
 	}

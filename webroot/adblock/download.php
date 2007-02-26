@@ -1,6 +1,8 @@
 <?
 	include_once('include_all.php');
-	
+
+	define('CACHE_AGE', 3600*1);		//time before disk cache expires
+
 	define('DOWNLOAD_METHOD_WEBFORM', 'webform');
 	define('DOWNLOAD_METHOD_SUBSCRIPTION', 'subscription');
 	define('DOWNLOAD_METHOD_RSS', 'rss');		//todo...
@@ -57,7 +59,7 @@
 //		echo 'lastchanged: '.$lastchanged.'<br>';
 //		echo 'diff: '. (time()-$lastchanged);
 
-		if ($lastchanged < time()-(3600*4))
+		if ($lastchanged < time()-(CACHE_AGE))
 		{
 			$list = getAdblockRules($db, $types);
 
