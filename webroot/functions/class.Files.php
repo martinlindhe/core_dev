@@ -5,13 +5,21 @@
 	Written by Martin Lindhe, 2007
 	
 	todo:
+		- cleanup, vissa funktioner är nog överflödiga. se igenom all kod
+
+	todo file viewern:
 		- skapa en thumbnail av en bild direkt när den laddas upp
-		
-	todo: ajax file upload, submitta file-formuläret i bakgrunden,när man får "ok" svar från servern,
-		så läggs en <div> till som visar thumbnail på nyss uppladdad bild.
+
+		- tooltip hover på en bild med mer fil-detaljer (bredd, höjd, storlek)
+
+		- klicka en bild för att visa förstoring, mer detaljer etc
+
+		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
+
+		- ajax file upload, submitta file-formuläret i bakgrunden,när man får "ok" svar från servern,
+			så läggs en <div> till som visar thumbnail på nyss uppladdad bild.
+
 		- visa animerad gif medans filen laddas upp (senare: progress meter)
-		
-	todo: cleanup, vissa funktioner är nog överflödiga. se igenom all kod
 
 */
 
@@ -40,8 +48,6 @@ class Files
 	}
 
 
-	//todo: tooltip hover på en bild med mer fil-detaljer (bredd, höjd, storlek)
-	//todo: visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 	public function showFiles()
 	{
 		global $session, $db;
@@ -83,7 +89,7 @@ class Files
 
 		echo '<div class="file_gadget_upload">';
 		echo '<form name="ajax_show_files" action="" method="post" enctype="multipart/form-data">';
-		echo '<input type="file" name="file1">';
+		echo '<input type="file" name="file1"> ';
 		echo '<input type="submit" value="Upload">';
 		echo '</form>';
 		echo '</div>';
@@ -153,7 +159,7 @@ class Files
 	}
 	
 	
-	/* Returns array with width, height propotionally resized to maximum $to_width and $to_height */
+	/* Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio */
 	private function resizeImageCalc($filename, $to_width, $to_height)
 	{
 		if (!is_file($filename)) return false;
@@ -167,27 +173,20 @@ class Files
 		if ($to_width && ($to_width < $max_width)) $max_width = $to_width;
 		if ($to_height && ($to_height < $max_height)) $max_height = $to_height;
 
-		// Proportionally resize the image to the max sizes specified above
+		//Proportionally resize the image to the max sizes specified above
 		$x_ratio = $max_width / $orig_width;
 		$y_ratio = $max_height / $orig_height;
 
 		if (($orig_width <= $max_width) && ($orig_height <= $max_height))
 		{
-			$tn_width = $orig_width;
-			$tn_height = $orig_height;
+			return Array($orig_width, $orig_height);
 		}
 		elseif (($x_ratio * $orig_height) < $max_height)
 		{
-			$tn_height = ceil($x_ratio * $orig_height);
-			$tn_width = $max_width;
+			return Array($max_width, ceil($x_ratio * $orig_height));
 		}
-		else
-		{
-			$tn_width = ceil($y_ratio * $orig_width);
-			$tn_height = $max_height;
-		}
-		
-		return Array($tn_width, $tn_height);
+
+		return Array(ceil($y_ratio * $orig_width), $max_height);
 	}
 
 	private function resizeImage($in_filename, $out_filename, $to_width=0, $to_height=0)
