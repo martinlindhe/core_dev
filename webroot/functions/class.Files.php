@@ -6,13 +6,18 @@
 	
 	todo:
 		- cleanup, vissa funktioner är nog överflödiga. se igenom all kod
+		
+		- VIKTIGT: sätt inte cache header på bilder som visas med outputImage() om filens timestamp>sessionsstart
 
 	todo file viewern:
 		- skapa en thumbnail av en bild direkt när den laddas upp
 
 		- tooltip hover på en bild med mer fil-detaljer (bredd, höjd, storlek)
 
-		- klicka en bild för att visa förstoring, mer detaljer etc
+		- klicka på en bild så visas den i orginalstorlek centrerad i browsern,
+			all bakgrund blir utgråad
+			kika bildvisare: http://www.mameworld.net/gurudumps/
+			i detta läge visas även bild-editor knappar: rotate, resize, save
 
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 
@@ -32,10 +37,10 @@ class Files
 	private $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
 	private $allowed_audio_types	= array('mp3');
 
-	private $image_max_width		= 1280;	//bigger images will be resized to this size	
-	private $image_max_height		= 1024;
+	private $image_max_width		= 800;	//bigger images will be resized to this size	
+	private $image_max_height		= 600;
 	private $thumb_default_width = 100;
-	private $thumb_default_height = 100;
+	private $thumb_default_height = 80;
 	private $image_jpeg_quality	= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
 	private $resample_resized		= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
@@ -60,29 +65,28 @@ class Files
 		
 		//menu
 		echo '<div style="width: 100%; float: left;">';
-		echo '<div style="float: left; width: 150px; background-color: #886699;">Overview</div>';
-		echo '<div style="float: left; width: 150px; background-color: #886699;">Details</div>';
+		echo '<div style="float: left; width: 150px; background-color: #886699;">File Gadget Overview</div>';
 		echo '</div>';
 
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$session->id.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
 		
 		for ($i=0; $i<count($list); $i++)
 		{
-			list($file_firstname, $file_lastname) = explode('.', $list[$i]['fileName']);
+			list($file_firstname, $file_lastname) = explode('.', strtolower($list[$i]['fileName']));
 			
-			echo '<div id="file_'.$list[$i]['fileId'].'" class="file_gadget_entry">';
+			echo '<div id="file_'.$list[$i]['fileId'].'" class="file_gadget_entry"><center>';
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
 				echo '<a href="file.php?id='.$list[$i]['fileId'].'">';
-				echo '<img src="file.php?id='.$list[$i]['fileId'].'&w=100&h=100" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
+				echo '<img src="file.php?id='.$list[$i]['fileId'].'&w='.$this->thumb_default_width.'&h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
 				echo '</a>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for sound files
-				echo '<img src="/gfx/icon_audio_32.png" width=100 height=100 alt="Audio file" title="'.$list[$i]['fileName'].'">';
+				echo '<img src="/gfx/icon_audio_32.png" width=80 height=80 alt="Audio file" title="'.$list[$i]['fileName'].'">';
 			} else {
 				echo $list[$i]['fileMime'];
 			}
-			echo '</div>';
+			echo '</center></div>';
 		}
 
 		echo '</div>';
@@ -110,7 +114,7 @@ class Files
 		$dbFileName = $db->escape(basename(strip_tags($FileData['name'])));
 		$dbFileMime = $db->escape(strip_tags($FileData['type']));
 
-		list($file_firstname, $file_lastname) = explode('.', $dbFileName);
+		list($file_firstname, $file_lastname) = explode('.', strtolower($dbFileName));
 		
 		//Identify and handle various types of files
 		if (in_array($file_lastname, $this->allowed_image_types)) {
@@ -143,7 +147,7 @@ class Files
 	/* Handle image upload, used internally only */
 	private function handleImageUpload($FileData)
 	{
-		list($file_firstname, $file_lastname) = explode('.',basename(strip_tags($FileData['name'])));
+		list($file_firstname, $file_lastname) = explode('.', strtolower(basename(strip_tags($FileData['name']))));
 		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
 
 		//Resize the image if it is too big
@@ -207,7 +211,7 @@ class Files
    		case 'image/png':	$image = imagecreatefrompng($in_filename); break;
    		case 'image/jpeg': $image = imagecreatefromjpeg($in_filename); break;
    		case 'image/gif': $image = imagecreatefromgif($in_filename); break;
-   		default: echo 'Unknown mime type '.$mime_type; die;
+   		default: die('Unknown mime type '.$mime_type);
 		}
 
 		$image_p = imagecreatetruecolor($tn_width, $tn_height);
@@ -223,7 +227,7 @@ class Files
    		case 'image/png':	imagepng($image_p, $out_filename); break;
    		case 'image/jpeg': imagejpeg($image_p, $out_filename, $this->image_jpeg_quality); break;
    		case 'image/gif': imagegif($image_p, $out_filename); break;
-   		default: echo 'Unknown mime type '.$mime_type; die;
+   		default: die('Unknown mime type '.$mime_type);
 		}
 
 		imagedestroy($image);
@@ -265,12 +269,12 @@ class Files
 
 		header('Content-Transfer-Encoding: binary');
 	
-		list($file_firstname, $file_lastname) = explode('.', $data['fileName']);
+		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
 		
 		//Serves the file differently depending on what kind of file it is
 		if (in_array($file_lastname, $this->allowed_image_types)) {
 			//Generate resized image if needed
-			$this->outputImageFile($data['fileId']);
+			$this->outputImage($data['fileId']);
 		} else {
 			//Just delivers the file as-is
 			header('Content-Length: '. $data['fileSize']);
@@ -278,7 +282,7 @@ class Files
 		}
 	}
 	
-	private function outputImageFile($fileId)
+	private function outputImage($fileId)
 	{
 		$filename = $this->upload_dir.$fileId;
 		$img_size = getimagesize($filename);

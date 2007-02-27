@@ -10,13 +10,13 @@ img {
 	border: 1px solid #888;
 	margin-bottom: 5px;
 	
-	overflow-y: scroll;
+	overflow-y: auto;	/**/
 }
 
 .file_gadget_entry {
 	float: left;
 	width: 100px;
-	height: 100px;
+	height: 80px;
 	border: 5px solid #aaa;
 	background-color: #aaa;
 }
