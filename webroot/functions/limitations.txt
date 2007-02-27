@@ -1,0 +1,8 @@
+* Currently only one DB connection is supported, and must be named to $db
+		- Tried to implement db-links internally in different classes so they had to be initialized with a db-handle,
+		  to make it possible to use different db connections for different things. But i made a mess out of it
+		  and resorted to using "global $db;" for now.
+		  
+		  
+Martin Lindhe
+Feb 2007
