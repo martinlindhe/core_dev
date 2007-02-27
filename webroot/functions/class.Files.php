@@ -50,7 +50,7 @@ class Files
 			$this->handleUserUpload(FILETYPE_NORMAL_UPLOAD, $_FILES['file1']);
 		}
 
-		echo '<div style="width: 410px; background-color: #aaeecc; padding: 5px; border: 1px solid #888;">';
+		echo '<div class="file_gadget_holder">';
 		
 		//menu
 		echo '<div style="width: 100%; float: left;">';
@@ -64,7 +64,7 @@ class Files
 		{
 			list($file_firstname, $file_lastname) = explode('.', $list[$i]['fileName']);
 			
-			echo '<div id="file_'.$list[$i]['fileId'].'" style="width: 100px; height: 100px; border: 1px solid #000; float: left;">';
+			echo '<div id="file_'.$list[$i]['fileId'].'" class="file_gadget_entry">';
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
 				echo '<a href="file.php?id='.$list[$i]['fileId'].'">';
@@ -79,12 +79,15 @@ class Files
 			echo '</div>';
 		}
 
+		echo '</div>';
+
+		echo '<div class="file_gadget_upload">';
 		echo '<form name="ajax_show_files" action="" method="post" enctype="multipart/form-data">';
 		echo '<input type="file" name="file1">';
 		echo '<input type="submit" value="Upload">';
 		echo '</form>';
-
 		echo '</div>';
+		
 	}
 
 	/* Stores uploaded file associated to $session->id */
