@@ -4,8 +4,14 @@
 
 	Written by Martin Lindhe, 2007
 	
-	todo: thumb_default_width, thumb_default_height private
+	todo:
 		- skapa en thumbnail av en bild direkt när den laddas upp
+		
+	todo: ajax file upload, submitta file-formuläret i bakgrunden,när man får "ok" svar från servern,
+		så läggs en <div> till som visar thumbnail på nyss uppladdad bild.
+		- visa animerad gif medans filen laddas upp (senare: progress meter)
+		
+	todo: cleanup, vissa funktioner är nog överflödiga. se igenom all kod
 
 */
 
@@ -20,6 +26,8 @@ class Files
 
 	private $image_max_width		= 1280;	//bigger images will be resized to this size	
 	private $image_max_height		= 1024;
+	private $thumb_default_width = 100;
+	private $thumb_default_height = 100;
 	private $image_jpeg_quality	= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
 	private $resample_resized		= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
@@ -139,9 +147,13 @@ class Files
 		{
 			$resizedFile = $FileData['tmp_name'].'_resizetmp';
 			$resizedImage = $this->resizeImage($FileData['tmp_name'], $resizedFile, $this->image_max_width, $this->image_max_height);
-			unlink($FileData['tmp_name']);
-			rename($resizedFile, $FileData['tmp_name']);
+//			unlink($FileData['tmp_name']);
+//			rename($resizedFile, $FileData['tmp_name']);
 		}
+		
+		//create default sized thumbnail
+		//$thumb_filename = $this->thumbs_dir..'_'.$this->thumb_default_width.'x'.$this->thumb_default_height;
+		//$this->resizeImage($FileData['tmp_name'], $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
 	}
 	
 	
@@ -229,8 +241,7 @@ class Files
 
 		global $db;
 
-		$sql  = 'SELECT * FROM tblFiles WHERE fileId='.$fileId;
-		$data = $db->getOneRow($sql);
+		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$fileId);
 		if (!$data) die;
 
 		$last_name = '';
@@ -241,7 +252,7 @@ class Files
 		if (!$download && (($data['fileMime'] == 'application/octet-stream') || !$last_name)) {
 			header('Content-Type: text/plain');
 		} else {
-			header('Content-Type: ' . $data['fileMime']);
+			header('Content-Type: '.$data['fileMime']);
 		}
 
 		//These headers allows the browser to cache the images for 30 days. Works with MSIE6 and Firefox 1.5
@@ -259,7 +270,22 @@ class Files
 
 		header('Content-Transfer-Encoding: binary');
 	
-		$filename = $this->upload_dir.$data['fileId'];
+		list($file_firstname, $file_lastname) = explode('.', $data['fileName']);
+		
+		//Serves the file differently depending on what kind of file it is
+		if (in_array($file_lastname, $this->allowed_image_types)) {
+			//Generate resized image if needed
+			$this->outputImageFile($data['fileId']);
+		} else {
+			//Just delivers the file as-is
+			header('Content-Length: '. $data['fileSize']);
+			echo file_get_contents($filename);			
+		}
+	}
+	
+	private function outputImageFile($fileId)
+	{
+		$filename = $this->upload_dir.$fileId;
 		$img_size = getimagesize($filename);
 
 		$width = 0;
@@ -270,13 +296,12 @@ class Files
 		if (!empty($_GET['h']) && is_numeric($_GET['h'])) $height = $_GET['h'];
 		if (($height < 10) || ($height > 1500)) $height = 0;
 
-		if ($width && !$download && $img_size && (($width < $img_size[0]) || ($height < $img_size[1])) )  {
+		if ($width && $img_size && (($width < $img_size[0]) || ($height < $img_size[1])) )  {
 			/* Look for cached thumbnail */
 
-			$thumb_filename = $this->thumbs_dir.$data['fileId'].'_'.$width.'x'.$height;
+			$thumb_filename = $this->thumbs_dir.$fileId.'_'.$width.'x'.$height;
 
-			if (!file_exists($thumb_filename))
-			{
+			if (!file_exists($thumb_filename)) {
 				$this->resizeImage($filename, $thumb_filename, $width, $height);
 			}
 
@@ -284,7 +309,8 @@ class Files
 			header('Content-Length: '. $thumb_size);
 			echo file_get_contents($thumb_filename);
 		} else {
-			header('Content-Length: '. $data['fileSize']);
+			$file_size = filesize($filename);
+			header('Content-Length: '. $file_size);
 			echo file_get_contents($filename);
 		}
 	}
