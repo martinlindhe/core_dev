@@ -6,6 +6,7 @@
 */
 
 require_once('functions_ip.php');
+require_once('functions_settings.php');
 
 class Session
 {
@@ -14,8 +15,6 @@ class Session
 	private $check_ip = true;						//if set to true, client will be logged out if client ip is changed during the session
 	private $sha1_key = 'rpxp8xkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 
-	private $db;												//reference to db handle, used internally only
-	
 	//Aliases of $_SESSION[] variables
 	public $error;
 	public $ip;
@@ -26,20 +25,18 @@ class Session
 	public $isAdmin;
 	public $isSuperAdmin;
 
-	public function __construct($db_handle, array $session_config)
+	public function __construct(array $session_config)
 	{
-		$this->db = &$db_handle;
-
 		if (isset($session_config['name'])) $this->session_name = $session_config['name'];
 		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
 		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
-		
-		$this->db->attachSession($this);
+
+		global $db;
 
 		session_name($this->session_name);
 		session_start();
-		
+
 		if (!isset($_SESSION['error'])) $_SESSION['error'] = '';
 		if (!isset($_SESSION['ip'])) $_SESSION['ip'] = 0;
 		if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
@@ -64,18 +61,18 @@ class Session
 
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
 				$this->error = 'Client IP changed';
-				$this->db->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
+				$db->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
 				$this->logOut();
 		}
 
 		if ($this->id) {
 			if ($this->lastActive < (time()-$this->timeout)) {
 				$this->error = 'Inactivity timeout';
-				$this->db->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
+				$db->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
 				$this->logOut();
 			} else {
 				//Update last active timestamp
-				$this->db->query('UPDATE tblUsers SET lastActive=NOW() WHERE userId='.$this->id);
+				$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
 				$this->lastActive = time();
 			}
 		}
@@ -87,7 +84,7 @@ class Session
 
 		//GET to any page with 'logout' set to log out
 		if ($this->id && isset($_GET['logout'])) {
-			$this->db->log('user logged out');
+			$db->log('user logged out');
 			$this->logOut();
 			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
 			die;
@@ -100,13 +97,15 @@ class Session
 
 	public function logIn($username, $password)
 	{
-		$enc_username = $this->db->escape($username);
+		global $db;
+		
+		$enc_username = $db->escape($username);
 		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
 
-		$data = $this->db->getOneRow('SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"');
+		$data = $db->getOneRow('SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"');
 		if (!$data) {
 			$this->error = 'Login failed';
-			$this->db->log('failed login attempt: username '.$enc_username);
+			$db->log('failed login attempt: username '.$enc_username);
 			return false;
 		}
 
@@ -119,16 +118,19 @@ class Session
 		if ($this->mode >= 2) $this->isSuperAdmin = 1;
 
 		//Update last login time
-		$this->db->query('UPDATE tblUsers SET lastLoginTime=NOW(), lastActive=NOW() WHERE userId='.$this->id);
+		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
 		$this->lastActive = time();
 
-		$this->db->log('user logged in');
+		$db->log('user logged in');
 
 		return true;
 	}
 
 	public function logOut()
 	{
+		global $db;
+
+		$db->query('UPDATE tblUsers SET timeLastLogout=NOW()');
 		$this->id = 0;
 		$this->ip = 0;
 		$this->mode = 0;
@@ -157,12 +159,25 @@ class Session
 			echo '<b>User mode: '.$this->mode.'</b><br>';
 		}
 		echo 'Session name: '.$this->session_name.'<br>';
-		echo 'Current IP: '.$this->ip.'<br>';
+		echo 'Current IP: '.GeoIP_to_IPv4($this->ip).'<br>';
 		echo 'Session timeout: '.$this->timeout.'<br>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br>';
 		if ($this->isSuperAdmin) {
 			echo 'SHA1 key: '.$this->sha1_key.'<br>';
 		}
+	}
+	
+	/* Saves a setting associated with current user */
+	public function save($name, $value)
+	{
+		if (!$this->id) return;
+		
+		global $db;
+		
+		$enc_name = $db->escape($name);
+		$enc_value = $db->escape($value);
+
+		saveSetting(SETTING_USER, $this->id, $name, $value);
 	}
 
 }

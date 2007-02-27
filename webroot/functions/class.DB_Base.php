@@ -22,6 +22,9 @@ abstract class DB_Base
 	/* Performs a query that don't return anything
 		Example: INSERT a=1 INTO t */
 	abstract public function query($query);
+	
+	/* Returns the number of rows used in previous query */
+	abstract public function num_rows(&$resultset);
 
 	/* Returns an array with the results, with columns as array indexes
 		Example: SELECT * FROM t */
@@ -63,8 +66,6 @@ abstract class DB_Base
 	protected $queries = array();
 	protected $query_error = array();
 	
-	protected $session_handle = 0;
-
 	/* Constructor */
 	public function __construct(array $settings)
 	{
@@ -111,7 +112,9 @@ abstract class DB_Base
 
 		$total_time = microtime(true) - $pageload_start;
 
-		echo '<a href="#" onClick="return toggle_element_by_name(\'sql_profiling\');">'.$this->queries_cnt.' sql</a>';
+		$rand_id = mt_rand(1,5000000);
+
+		echo '<a href="#" onClick="return toggle_element_by_name(\'sql_profiling'.$rand_id.'\');">'.$this->queries_cnt.' sql</a>';
 
 		//Shows all SQL queries from this page view
 		$sql_height = ($this->queries_cnt+1)*21;
@@ -119,7 +122,7 @@ abstract class DB_Base
 
 		$sql_time = 0;
 
-		echo '<div id="sql_profiling" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana;">';
+		echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana;">';
 
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{
@@ -152,17 +155,14 @@ abstract class DB_Base
 		echo '</div>';
 	}
 	
-	public function attachSession(Session $sess)
-	{
-		$this->session_handle = &$sess;
-	}
-
 	/* Writes a log entry to tblLogs */
 	public function log($str)
 	{
-		$enc_str = $this->escape($str);
-		
-		$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId='.$this->session_handle->id.',userIP='.$this->session_handle->ip);
+		global $db, $session;
+
+		$enc_str = $db->escape($str);
+
+		$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
 	}
 
 

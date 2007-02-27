@@ -58,6 +58,13 @@ class DB_MySQLi extends DB_Base
 		}
 
 		if ($this->debug) $this->profileQuery($time_started, $query);
+		
+		return $result;
+	}
+	
+	public function num_rows(&$resultset)
+	{
+		return $resultset->num_rows;
 	}
 
 	public function getArray($query)
