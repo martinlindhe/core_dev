@@ -3,6 +3,9 @@
 	Files class - Handle file upload, image manipulating, file management
 
 	Written by Martin Lindhe, 2007
+	
+	todo: thumb_default_width, thumb_default_height private
+		- skapa en thumbnail av en bild direkt när den laddas upp
 
 */
 
@@ -15,8 +18,8 @@ class Files
 	private $allowed_image_types	= array('jpg', 'png', 'gif');
 	private $allowed_audio_types	= array('mp3');
 
-	private $image_max_width		= 200; //1280;	//bigger images will be resized to this size	
-	private $image_max_height		= 200; //1024;
+	private $image_max_width		= 1280;	//bigger images will be resized to this size	
+	private $image_max_height		= 1024;
 	private $image_jpeg_quality	= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
 	private $resample_resized		= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
@@ -30,6 +33,7 @@ class Files
 
 
 	//todo: tooltip hover på en bild med mer fil-detaljer (bredd, höjd, storlek)
+	//todo: visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 	public function showFiles()
 	{
 		global $session, $db;
@@ -39,6 +43,12 @@ class Files
 		}
 
 		echo '<div style="width: 410px; background-color: #aaeecc; padding: 5px; border: 1px solid #888;">';
+		
+		//menu
+		echo '<div style="width: 100%; float: left;">';
+		echo '<div style="float: left; width: 150px; background-color: #886699;">Overview</div>';
+		echo '<div style="float: left; width: 150px; background-color: #886699;">Details</div>';
+		echo '</div>';
 
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$session->id.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
 		
@@ -49,7 +59,7 @@ class Files
 			echo '<div id="file_'.$list[$i]['fileId'].'" style="width: 100px; height: 100px; border: 1px solid #000; float: left;">';
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
-				echo '<img src="file.php?id='.$list[$i]['fileId'].'&width=100&height=100" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
+				echo '<img src="file.php?id='.$list[$i]['fileId'].'&w=100&h=100" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for sound files
 				echo '<img src="/gfx/icon_audio_32.png" width=100 height=100 alt="Audio file" title="'.$list[$i]['fileName'].'">';
@@ -235,15 +245,15 @@ class Files
 		}
 
 		//These headers allows the browser to cache the images for 30 days. Works with MSIE6 and Firefox 1.5
-		header("Expires: " . date("D, j M Y H:i:s", time() + (86400 * 30)) . " UTC");
-		header("Cache-Control: Public");
-		header("Pragma: Public");
+		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
+		header('Cache-Control: Public');
+		header('Pragma: Public');
 
 		if ($download) {
 			/* Prompts the user to save the file */
 			header('Content-Disposition: attachment; filename="'.basename($data['fileName']).'"');
 		} else {
-			/* Assigns a filename for the browser's "save as..." features */
+			/* Displays the file in the browser, and assigns a filename for the browser's "save as..." features */
 			header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
 		}
 
@@ -253,11 +263,11 @@ class Files
 		$img_size = getimagesize($filename);
 
 		$width = 0;
-		if (!empty($_GET['width']) && is_numeric($_GET['width'])) $width = $_GET['width'];
+		if (!empty($_GET['w']) && is_numeric($_GET['w'])) $width = $_GET['w'];
 		if (($width < 10) || ($width > 1500)) $width = 0;
 
 		$height = 0;
-		if (!empty($_GET['height']) && is_numeric($_GET['height'])) $height = $_GET['height'];
+		if (!empty($_GET['h']) && is_numeric($_GET['h'])) $height = $_GET['h'];
 		if (($height < 10) || ($height > 1500)) $height = 0;
 
 		if ($width && !$download && $img_size && (($width < $img_size[0]) || ($height < $img_size[1])) )  {
