@@ -1,71 +1,66 @@
-/* ajax implementation by Martin Lindhe, Feb 2007
+/*
+	AJAX implementation with class interface in JavaScript by Martin Lindhe, Feb 2007
 
-	todo:
-		* använd class eller nåt sånt, för att slippa ha olika variabler för varje pågående request
+	Example:
+	
+	var request = new AJAX();
+	request.GET('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id, 'GET');
 
 */
 
-//Returns a XMLHttpRequest to be used by other AJAX functions
-function getXMLRequest()
+//constructor
+function AJAX()
 {
-	var http_request = false;
+	var _request = false;
+	this.GET = GET;
+	this.ResultReady = ResultReady;
+	this.EmptyResponse = EmptyResponse;
 
 	if (window.XMLHttpRequest) { // Mozilla, Safari, Opera...
-		http_request = new XMLHttpRequest();
-		if (http_request.overrideMimeType) http_request.overrideMimeType('text/xml');
+		this._request = new XMLHttpRequest();
+		if (this._request.overrideMimeType) this._request.overrideMimeType('text/xml');
 	} else if (window.ActiveXObject) { // IE
 		try {
-			http_request = new ActiveXObject("Msxml2.XMLHTTP");
+			this._request = new ActiveXObject("Msxml2.XMLHTTP");
 		} catch (e) {
 			try {
-				http_request = new ActiveXObject("Microsoft.XMLHTTP");
+				this._request = new ActiveXObject("Microsoft.XMLHTTP");
 			} catch (e) {}
 		}
 	}
 
-	if (!http_request) {
+	if (!this._request) {
 		alert('Giving up, Cannot create an XMLHTTP instance');
 		return false;
 	}
+	
+	// Performs an GET-request expected to return XML
+	function GET(url, callback, callbackparam, params)
+	{
+		if (!this._request) return false;
 
-	return http_request;
+		this._request.onreadystatechange = function() {
+			callback(callbackparam);
+		}
+		this._request.open('GET', url, true);
+		this._request.send(null);
+	}
+	
+	function ResultReady()
+	{
+		if (!this._request || this._request.readyState != 4) return false;
+		if (this._request.status == 200) return true;
+
+		return false;
+	}
+	
+	//Returns true if 'name' is the root tag of this xml object
+	function EmptyResponse(name)
+	{
+		return this._request.responseXML.getElementsByTagName(name).item(0);
+	}
 }
 
-/*
-	url - the file you want to run
-	callback - the function you want to handle the result with
-	method - (optional, default: GET) HTTP request method: GET, POST, HEAD
-	params - (optional, default: null) POST data, in this format: name=value&anothername=othervalue&so=on
-		note: varje param måste ha ett värde annars skickas dom inte med, alltså "var=1" istället för bara "var"
-	
-	Returns:
-	the XMLHttpRequest object for this AJAX call
-	
-	Examples:
-	AJAX_XML_Request('ajax.xml', alertContents, 0, 'GET');
-	AJAX_XML_Request('ajax_test.php', alertContents2, 0, 'POST', 'a=4');
-*/
-function AJAX_XML_Request(url, callback, callbackparam, method, params)
-{
-	if (!method) method = 'GET';
-
-	var http_request = getXMLRequest();
-	if (!http_request) return false;
-
-	http_request.onreadystatechange = function() {
-		callback(callbackparam);
-	}
-	http_request.open(method, url, true);
-	if (method == 'POST') {
-		http_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		http_request.send(params);
-	}
-	else {
-		http_request.send(null);
-	}
-
-	return http_request;
-}
 
 
 //todo: använd en timer så att 'ajax_anim' inte visas förräns efter 20ms
@@ -73,16 +68,16 @@ var delete_request = null;
 function perform_ajax_delete_uservar(id)
 {
 	show_element_by_name('ajax_anim');
-	delete_request = AJAX_XML_Request('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id, 'GET');
+
+	delete_request = new AJAX();
+	delete_request.GET('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id, 'GET');
 }
 
 function ajax_delete_uservar_callback(id)
 {
-	if (!delete_request || delete_request.readyState != 4) return;
-	if (delete_request.status == 200)
+	if (delete_request.ResultReady())
 	{
-		var root_node = delete_request.responseXML.getElementsByTagName('ok').item(0);
-		if (!root_node) {
+		if (!delete_request.EmptyResponse('ok')) {
 			var e = document.getElementById('ajax_anim_pic');
 			e.setAttribute('src', '/gfx/icon_warning_big.png');
 			e.setAttribute('title', 'Database error');
