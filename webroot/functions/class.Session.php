@@ -170,17 +170,37 @@ class Session
 			echo 'SHA1 key: '.$this->sha1_key.'<br>';
 		}
 	}
-	
+
 	/* Saves a setting associated with current user */
 	public function save($name, $value)
 	{
 		saveSetting(SETTING_USER, $this->id, $name, $value);
 	}
-	
+
 	/* Reads a setting associated with current user */
 	public function read($name, $default = '')
 	{
 		return readSetting(SETTING_USER, $this->id, $name, $default);
+	}
+
+	/* Renders html for editing all tblSettings field for current user */
+	//todo: use ajax to save changes
+	//todo: "delete" knapp vid varje fält (ajax i bakgrunden)
+	public function editSettings()
+	{
+		$list = readAllSettings(SETTING_USER, $this->id);
+
+		echo '<div id="edit_settings" style="width: 300px; background-color: #88EE99;">';
+		echo '<form name="edit_settings_frm" action="">';
+		for ($i=0; $i<count($list); $i++) {
+			echo '<div id="edit_setting_div_'.$list[$i]['settingId'].'">';
+			echo $list[$i]['settingName'].': <input type="text" name="edit_setting_'.$list[$i]['settingId'].'" value="'.$list[$i]['settingValue'].'">';
+			echo '<img src="/gfx/icon_error.png" alt="Delete" onClick="perform_ajax_delete_uservar('.$list[$i]['settingId'].');">';
+			echo '</div>';
+		}
+		echo '<input type="submit" value="Save" disabled>';
+		echo '</form>';
+		echo '</div>';
 	}
 
 }

@@ -1,0 +1,12 @@
+* SQL profiler
+		- Built into the core of the db classes are a accurate profiler that displays
+			which queries failed, or how much time each query took to execute.
+
+* Session handler
+		- Deals with all things related to users & sessions.
+		- Can store variables associated with each user for a variety of uses.
+
+* Database layer
+		- Transparent interface to different SQL databases (currently supports php_mysql.dll and php_mysqli.dll).
+			(todo: initial support pgsql, mssql)
+			Reduce time rewriting already working code for another db driver if you use this well defined class.

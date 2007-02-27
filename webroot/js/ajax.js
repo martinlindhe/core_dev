@@ -19,7 +19,7 @@ function getXMLRequest()
 	}
 
 	if (!http_request) {
-		alert('Giving up :( Cannot create an XMLHTTP instance');
+		alert('Giving up, Cannot create an XMLHTTP instance');
 		return false;
 	}
 
@@ -37,17 +37,19 @@ function getXMLRequest()
 	the XMLHttpRequest object for this AJAX call
 	
 	Examples:
-	AJAX_XML_Request('ajax.xml', alertContents, 'GET');
-	AJAX_XML_Request('ajax_test.php', alertContents2, 'POST', 'a=4');
+	AJAX_XML_Request('ajax.xml', alertContents, 0, 'GET');
+	AJAX_XML_Request('ajax_test.php', alertContents2, 0, 'POST', 'a=4');
 */
-function AJAX_XML_Request(url, callback, method, params)
+function AJAX_XML_Request(url, callback, callbackparam, method, params)
 {
 	if (!method) method = 'GET';
 
 	var http_request = getXMLRequest();
 	if (!http_request) return false;
 
-	http_request.onreadystatechange = callback;
+	http_request.onreadystatechange = function() {
+		callback(callbackparam);
+	}
 	http_request.open(method, url, true);
 	if (method == 'POST') {
 		http_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -60,37 +62,23 @@ function AJAX_XML_Request(url, callback, method, params)
 	return http_request;
 }
 
-var search_request = null;
 
-function perform_ajax_search()
+
+var delete_request = null;
+function perform_ajax_delete_uservar(id)
 {
-	//genomför sökningen
-	search_request = AJAX_XML_Request('ajax_search.php?s='+document.ajax.txt.value, ajax_search_callback, 'GET');
+	delete_request = AJAX_XML_Request('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id, 'GET');
 }
 
-function ajax_search_callback()
+function ajax_delete_uservar_callback(id)
 {
-	if (!search_request || search_request.readyState != 4) return;
-	if (search_request.status == 200)
+	if (!delete_request || delete_request.readyState != 4) return;
+	if (delete_request.status == 200)
 	{
-		//sökresultat mottaget
-		empty_element('search_results');
-
-		var e = document.getElementById('search_results');
-		
-		var root_node = search_request.responseXML.getElementsByTagName('x').item(0);
+		var root_node = delete_request.responseXML.getElementsByTagName('ok').item(0);
 		if (!root_node) return;
 
-		var items = root_node.childNodes;
-
-		for (var i=0; i<items.length; i++)
-		{
-			var cur = items[i].childNodes;
-			if (items[i].nodeName == 's') {		//<s> is search results
-				add_link_node(e, items[i].firstChild.nodeValue, 'show_result.php?i='+items[i].getAttribute('id'), 'search_result_'+i%2);
-			}
-		}
-
-		search_request = null;
+		hide_element_by_name('edit_setting_div_'+id);
+		delete_request = null;
 	}
 }

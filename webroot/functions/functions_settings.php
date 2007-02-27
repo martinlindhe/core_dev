@@ -44,4 +44,13 @@
 		return $defaultValue;
 	}
 
+	function readAllSettings($settingType, $ownerId)
+	{
+		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($settingType)) return false;
+
+		global $db;
+
+		return $db->getArray('SELECT settingId,settingName,settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$settingType);
+	}
+
 ?>
