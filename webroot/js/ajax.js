@@ -4,11 +4,10 @@
 	Example:
 	
 	var request = new AJAX();
-	request.GET('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id, 'GET');
-
+	request.GET('/ajax/url.php?i='+id, function_callback, id);
 */
 
-//constructor
+//class definition of AJAX
 function AJAX()
 {
 	var _request = false;
@@ -39,9 +38,7 @@ function AJAX()
 	{
 		if (!this._request) return false;
 
-		this._request.onreadystatechange = function() {
-			callback(callbackparam);
-		}
+		this._request.onreadystatechange = function() { callback(callbackparam); }
 		this._request.open('GET', url, true);
 		this._request.send(null);
 	}
@@ -62,15 +59,22 @@ function AJAX()
 }
 
 
-
-//todo: använd en timer så att 'ajax_anim' inte visas förräns efter 20ms
+//todo: försök kom på ett mer standardiserat interface till GET-funktionen så att mindre sådan här init&callback kod behövs
 var delete_request = null;
+
+function show_ajax_anim()
+{
+	if (delete_request && !delete_request.ResultReady()) show_element_by_name('ajax_anim');
+}
+
 function perform_ajax_delete_uservar(id)
 {
-	show_element_by_name('ajax_anim');
-
 	delete_request = new AJAX();
-	delete_request.GET('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id, 'GET');
+	delete_request.GET('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id);
+
+	//uses callback function to only display animated icon if request isnt already completed in 20ms
+	//this removes the flickering display of animated image if you have very low response times
+	setTimeout("show_ajax_anim()", 20);
 }
 
 function ajax_delete_uservar_callback(id)

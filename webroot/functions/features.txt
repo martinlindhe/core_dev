@@ -5,6 +5,7 @@
 * Session handler
 		- Deals with all things related to users & sessions.
 		- Can store variables associated with each user for a variety of uses.
+		- Editor to modify/delete user settings, using AJAX
 
 * Database layer
 		- Transparent interface to different SQL databases (currently supports php_mysql.dll and php_mysqli.dll).

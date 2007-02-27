@@ -7,3 +7,8 @@
 		<script type="text/javascript" src="/js/ajax.js"></script>
 	</head>
 <body>
+<?
+	if (!$session->id) {
+		$session->showLoginForm();
+	}
+?>
