@@ -50,7 +50,7 @@
 
 		global $db;
 
-		return $db->getArray('SELECT settingId,settingName,settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$settingType);
+		return $db->getArray('SELECT settingId,settingName,settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' ORDER BY settingName ASC');
 	}
 
 ?>

@@ -63,10 +63,11 @@ function AJAX_XML_Request(url, callback, callbackparam, method, params)
 }
 
 
-
+//todo: använd en timer så att 'ajax_anim' inte visas förräns efter 20ms
 var delete_request = null;
 function perform_ajax_delete_uservar(id)
 {
+	show_element_by_name('ajax_anim');
 	delete_request = AJAX_XML_Request('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id, 'GET');
 }
 
@@ -76,9 +77,15 @@ function ajax_delete_uservar_callback(id)
 	if (delete_request.status == 200)
 	{
 		var root_node = delete_request.responseXML.getElementsByTagName('ok').item(0);
-		if (!root_node) return;
+		if (!root_node) {
+			var e = document.getElementById('ajax_anim_pic');
+			e.setAttribute('src', '/gfx/icon_warning_big.png');
+			e.setAttribute('title', 'Database error');
+			return;
+		}
 
 		hide_element_by_name('edit_setting_div_'+id);
+		hide_element_by_name('ajax_anim');
 		delete_request = null;
 	}
 }

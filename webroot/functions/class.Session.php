@@ -125,7 +125,7 @@ class Session
 		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
 		$this->lastActive = time();
 
-		$db->log('user logged in');
+		//$db->log('user logged in');
 
 		return true;
 	}
@@ -185,17 +185,18 @@ class Session
 
 	/* Renders html for editing all tblSettings field for current user */
 	//todo: use ajax to save changes
-	//todo: "delete" knapp vid varje fält (ajax i bakgrunden)
 	public function editSettings()
 	{
 		$list = readAllSettings(SETTING_USER, $this->id);
+		if (!$list) return;
 
-		echo '<div id="edit_settings" style="width: 300px; background-color: #88EE99;">';
+		echo '<div id="edit_settings" style="width: 300px; background-color: #88EE99; border: 1px solid #aaa; padding: 5px;">';
+		echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;"><img id="ajax_anim_pic" src="/gfx/ajax_loading.gif"></div>';
 		echo '<form name="edit_settings_frm" action="">';
 		for ($i=0; $i<count($list); $i++) {
 			echo '<div id="edit_setting_div_'.$list[$i]['settingId'].'">';
 			echo $list[$i]['settingName'].': <input type="text" name="edit_setting_'.$list[$i]['settingId'].'" value="'.$list[$i]['settingValue'].'">';
-			echo '<img src="/gfx/icon_error.png" alt="Delete" onClick="perform_ajax_delete_uservar('.$list[$i]['settingId'].');">';
+			echo '<img src="/gfx/icon_error.png" title="Delete" alt="Delete" onClick="perform_ajax_delete_uservar('.$list[$i]['settingId'].');">';
 			echo '</div>';
 		}
 		echo '<input type="submit" value="Save" disabled>';

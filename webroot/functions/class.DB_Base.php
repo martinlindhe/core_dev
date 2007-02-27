@@ -158,13 +158,14 @@ abstract class DB_Base
 	/* Writes a log entry to tblLogs */
 	public function log($str)
 	{
-		global $db, $session;
+		global $session;
 
-		$enc_str = $db->escape($str);
+		$enc_str = $this->escape($str);
+		
+		echo $str;
 
 		$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
 	}
-
 
 }
 ?>

@@ -36,7 +36,8 @@ class DB_MySQLi extends DB_Base
 
 		if (mysqli_connect_errno()) {
 			$this->db_handle = false;
-			die('Database connection error.');
+
+			die('<bad>Database connection error.</bad>');
 		}
 
 		if ($this->debug) $this->profileConnect($time_started);
