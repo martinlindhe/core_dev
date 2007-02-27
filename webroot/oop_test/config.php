@@ -1,6 +1,10 @@
 <?
 	$time_start = microtime(true);
 	
+	error_reporting(E_ALL);
+	mb_internal_encoding('UTF-8');
+	date_default_timezone_set('Europe/Stockholm');
+
 /*
 	//autoload seems to slow down page load ALOT (PHP 5.2.1, Apache 2.2.4 WinXP)
 	function __autoload($class_name) {
@@ -10,6 +14,7 @@
 //	require_once('../functions/class.DB_MySQL.php');
 	require_once('../functions/class.DB_MySQLi.php');
 	require_once('../functions/class.Session.php');
+	require_once('../functions/class.Files.php');
 
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
@@ -24,4 +29,8 @@
 
 	/* A variable named $session must exist for all future functions to work. */
 	$session = new Session($config['session']);
+	
+	$config['files']['upload_dir'] = 'E:/Devel/webupload_ooptest/';
+	$config['files']['thumbs_dir'] = 'E:/Devel/webupload_ooptest/thumbs/';
+	$files = new Files($config['files']);
 ?>
