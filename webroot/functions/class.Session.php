@@ -3,6 +3,10 @@
 	Session class
 
 	Written by Martin Lindhe, 2007
+
+	//$session->save('kex', 'med blandade bullar');
+	//$kex = $session->read('kex');
+
 */
 
 require_once('functions_ip.php');
@@ -170,14 +174,13 @@ class Session
 	/* Saves a setting associated with current user */
 	public function save($name, $value)
 	{
-		if (!$this->id) return;
-		
-		global $db;
-		
-		$enc_name = $db->escape($name);
-		$enc_value = $db->escape($value);
-
 		saveSetting(SETTING_USER, $this->id, $name, $value);
+	}
+	
+	/* Reads a setting associated with current user */
+	public function read($name, $default = '')
+	{
+		return readSetting(SETTING_USER, $this->id, $name, $default);
 	}
 
 }

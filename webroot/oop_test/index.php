@@ -13,7 +13,9 @@
 		echo '<a href="?logout">log out</a><br>';
 	}
 	
-	$session->save('kex', 'med blandade bullar');
+	//$session->save('kex', 'med blandade bullar');
+	$kex = $session->read('ke2x');
+	echo 'kex: '.$kex;
 
 
 	$db->showProfile($time_start);
