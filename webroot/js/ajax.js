@@ -1,4 +1,9 @@
-//ajax implementation by Martin Lindhe
+/* ajax implementation by Martin Lindhe, Feb 2007
+
+	todo:
+		* använd class eller nåt sånt, för att slippa ha olika variabler för varje pågående request
+
+*/
 
 //Returns a XMLHttpRequest to be used by other AJAX functions
 function getXMLRequest()
@@ -64,7 +69,6 @@ function AJAX_XML_Request(url, callback, callbackparam, method, params)
 
 
 //todo: använd en timer så att 'ajax_anim' inte visas förräns efter 20ms
-//todo2: använd class eller nåt sånt, för att slippa ha olika variabler för varje pågående request
 var delete_request = null;
 function perform_ajax_delete_uservar(id)
 {
