@@ -5,6 +5,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<script type="text/javascript" src="/js/functions.js"></script>
 		<script type="text/javascript" src="/js/ajax.js"></script>
+		<link rel="stylesheet" href="/css/functions.css" type="text/css">
 	</head>
 <body>
 <?

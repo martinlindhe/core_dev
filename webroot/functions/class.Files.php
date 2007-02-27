@@ -21,7 +21,7 @@ class Files
 {
 	private $upload_dir = '/tmp/';
 	private $thumbs_dir = '/tmp/';
-	private $allowed_image_types	= array('jpg', 'png', 'gif');
+	private $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
 	private $allowed_audio_types	= array('mp3');
 
 	private $image_max_width		= 1280;	//bigger images will be resized to this size	
@@ -67,15 +67,14 @@ class Files
 			echo '<div id="file_'.$list[$i]['fileId'].'" style="width: 100px; height: 100px; border: 1px solid #000; float: left;">';
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
+				echo '<a href="file.php?id='.$list[$i]['fileId'].'">';
 				echo '<img src="file.php?id='.$list[$i]['fileId'].'&w=100&h=100" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
+				echo '</a>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for sound files
 				echo '<img src="/gfx/icon_audio_32.png" width=100 height=100 alt="Audio file" title="'.$list[$i]['fileName'].'">';
 			} else {
-				//echo $list[$i]['fileName'];
-				//echo $list[$i]['fileSize'];
 				echo $list[$i]['fileMime'];
-				//echo $list[$i]['timeUploaded'];
 			}
 			echo '</div>';
 		}
@@ -136,19 +135,13 @@ class Files
 	private function handleImageUpload($FileData)
 	{
 		list($file_firstname, $file_lastname) = explode('.',basename(strip_tags($FileData['name'])));
-
-		$img_size = getimagesize($FileData['tmp_name']);
-		if ($img_size['mime']) $dbFileMime = $img_size['mime'];
-
-		$fileSize = filesize($FileData['tmp_name']);
+		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
 
 		//Resize the image if it is too big
-		if (($img_size[0] > $this->image_max_width) || ($img_size[1] > $this->image_max_height))
+		if (($img_width > $this->image_max_width) || ($img_height > $this->image_max_height))
 		{
 			$resizedFile = $FileData['tmp_name'].'_resizetmp';
 			$resizedImage = $this->resizeImage($FileData['tmp_name'], $resizedFile, $this->image_max_width, $this->image_max_height);
-//			unlink($FileData['tmp_name']);
-//			rename($resizedFile, $FileData['tmp_name']);
 		}
 		
 		//create default sized thumbnail
