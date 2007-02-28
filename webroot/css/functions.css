@@ -39,12 +39,16 @@ img {
 	margin-bottom: 5px;
 }
 
-.zoom_image_style {
+#zoom_image {
 	position: absolute;
 	top: 0;
 	z-index: 100;
 	width: 100%;
 	height: 100%;
 	background-color: #333;
-	color: #999;
+	opacity: 0.8;
+}
+#zoom_image img {
+	opacity:0.999999;
+	border: 3px solid #000;
 }

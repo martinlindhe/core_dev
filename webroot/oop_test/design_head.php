@@ -10,7 +10,7 @@
 <body>
 <?
 	//todo: fixa denna sökväg
-	require_once('../layout/zoom_layer.html');
+	require_once('../layout/image_zoom_layer.html');
 
 	if (!$session->id) {
 		$session->showLoginForm();

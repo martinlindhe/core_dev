@@ -39,11 +39,8 @@ function add_div(e, idname, style)
 
 function zoomImage(id)
 {
+	show_element_by_name('zoom_image');
 	
-	var e = document.body;
-	add_div(e, 'zoom_image', 'zoom_image_style');
-	
-	//todo: toggle div till visible istället
-
-	trace('made zoom div');
+	var e = document.getElementById('zoom_image_holder');
+	e.setAttribute('src', 'file.php?id='+id);
 }

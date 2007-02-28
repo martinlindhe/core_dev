@@ -15,10 +15,9 @@
 
 		- tooltip hover på en bild med mer fil-detaljer (bredd, höjd, storlek)
 
-		- klicka på en bild så visas den i orginalstorlek centrerad i browsern,
-			all bakgrund blir utgråad
+		- all bakgrund blir utgråad (todo: bilden blir åxå transparent)
 			kika bildvisare: http://www.mameworld.net/gurudumps/
-			i detta läge visas även bild-editor knappar: rotate, resize, save
+			i detta läge visas även en rad knappar på botten: rotate, resize, save, previous, next, start/stop slideshow image
 
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 
