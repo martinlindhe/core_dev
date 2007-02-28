@@ -23,11 +23,18 @@ img {
 	height: 80px;
 	border: 5px solid #aaa;
 	background-color: #aaa;
+
+	opacity: 0.7;
+	filter: alpha(opacity=70);	/*ie6*/
+
 }
 .file_gadget_entry:hover {
-	border: 5px solid #eee;
-	background-color: #eee;
+	border: 5px solid #cceecc;
+	background-color: #cceecc;
 	cursor: pointer;
+
+	opacity: 1.0;
+	filter: alpha(opacity=100);	/*ie6*/
 }
 
 .file_gadget_upload {
@@ -39,16 +46,20 @@ img {
 	margin-bottom: 5px;
 }
 
-#zoom_image_layer {
+#zoom_image_backgroundlayer {
 	position: absolute;
 	top: 0;
-	z-index: 100;
 	width: 100%;
 	height: 100%;
 	background-color: #333;
+	z-index: 1;
 	opacity: 0.8;
 }
+#zoom_image_holder {
+	opacity: 1.0; /* todo: bilden som visas är inte opaque*/
+	z-index: 100;
+}
+
 #zoom_image_holder img {
-	opacity:0.999999;
 	border: 3px solid #000;
 }
