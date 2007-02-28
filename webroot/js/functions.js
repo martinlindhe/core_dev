@@ -39,8 +39,8 @@ function add_div(e, idname, style)
 
 function zoomImage(id)
 {
-	show_element_by_name('zoom_image');
+	show_element_by_name('zoom_image_layer');
 	
-	var e = document.getElementById('zoom_image_holder');
+	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', 'file.php?id='+id);
 }

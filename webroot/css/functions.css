@@ -39,7 +39,7 @@ img {
 	margin-bottom: 5px;
 }
 
-#zoom_image {
+#zoom_image_layer {
 	position: absolute;
 	top: 0;
 	z-index: 100;
@@ -48,7 +48,7 @@ img {
 	background-color: #333;
 	opacity: 0.8;
 }
-#zoom_image img {
+#zoom_image_holder img {
 	opacity:0.999999;
 	border: 3px solid #000;
 }
