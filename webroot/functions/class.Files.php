@@ -8,6 +8,7 @@
 		- cleanup, vissa funktioner är nog överflödiga. se igenom all kod
 		
 		- VIKTIGT: sätt inte cache header på bilder som visas med outputImage() om filens timestamp>sessionsstart
+			- just nu sätts inte cache headers alls för bilder
 
 	todo file viewern:
 		- skapa en thumbnail av en bild direkt när den laddas upp
@@ -37,12 +38,12 @@ class Files
 	private $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
 	private $allowed_audio_types	= array('mp3');
 
-	private $image_max_width		= 800;	//bigger images will be resized to this size	
-	private $image_max_height		= 600;
-	private $thumb_default_width = 100;
-	private $thumb_default_height = 80;
-	private $image_jpeg_quality	= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
-	private $resample_resized		= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
+	private $image_max_width			= 800;	//bigger images will be resized to this size	
+	private $image_max_height			= 600;
+	private $thumb_default_width	= 100;
+	private $thumb_default_height	= 80;
+	private $image_jpeg_quality		= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
+	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
 	public function __construct(array $files_config)
 	{
@@ -73,20 +74,20 @@ class Files
 		for ($i=0; $i<count($list); $i++)
 		{
 			list($file_firstname, $file_lastname) = explode('.', strtolower($list[$i]['fileName']));
-			
-			echo '<div id="file_'.$list[$i]['fileId'].'" class="file_gadget_entry"><center>';
+
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
-				echo '<a href="file.php?id='.$list[$i]['fileId'].'">';
+				echo '<div id="file_'.$list[$i]['fileId'].'" class="file_gadget_entry" onClick="zoomImage('.$list[$i]['fileId'].');"><center>';
 				echo '<img src="file.php?id='.$list[$i]['fileId'].'&w='.$this->thumb_default_width.'&h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
-				echo '</a>';
+				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for sound files
+				echo '<div id="file_'.$list[$i]['fileId'].'" class="file_gadget_entry"><center>';
 				echo '<img src="/gfx/icon_audio_32.png" width=80 height=80 alt="Audio file" title="'.$list[$i]['fileName'].'">';
+				echo '</center></div>';
 			} else {
-				echo $list[$i]['fileMime'];
+				die('todo: '. $list[$i]['fileMime']);
 			}
-			echo '</center></div>';
 		}
 
 		echo '</div>';
@@ -254,11 +255,6 @@ class Files
 			header('Content-Type: '.$data['fileMime']);
 		}
 
-		//These headers allows the browser to cache the images for 30 days. Works with MSIE6 and Firefox 1.5
-		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
-		header('Cache-Control: Public');
-		header('Pragma: Public');
-
 		if ($download) {
 			/* Prompts the user to save the file */
 			header('Content-Disposition: attachment; filename="'.basename($data['fileName']).'"');
@@ -276,6 +272,11 @@ class Files
 			//Generate resized image if needed
 			$this->outputImage($data['fileId']);
 		} else {
+			//These headers allows the browser to cache the images for 30 days. Works with MSIE6 and Firefox 1.5
+			header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
+			header('Cache-Control: Public');
+			header('Pragma: Public');
+
 			//Just delivers the file as-is
 			header('Content-Length: '. $data['fileSize']);
 			echo file_get_contents($filename);			
@@ -285,7 +286,7 @@ class Files
 	private function outputImage($fileId)
 	{
 		$filename = $this->upload_dir.$fileId;
-		$img_size = getimagesize($filename);
+		list($img_width, $img_height) = getimagesize($filename);
 
 		$width = 0;
 		if (!empty($_GET['w']) && is_numeric($_GET['w'])) $width = $_GET['w'];
@@ -295,7 +296,7 @@ class Files
 		if (!empty($_GET['h']) && is_numeric($_GET['h'])) $height = $_GET['h'];
 		if (($height < 10) || ($height > 1500)) $height = 0;
 
-		if ($width && $img_size && (($width < $img_size[0]) || ($height < $img_size[1])) )  {
+		if ($width && (($width < $img_width) || ($height < $img_height)) )  {
 			/* Look for cached thumbnail */
 
 			$thumb_filename = $this->thumbs_dir.$fileId.'_'.$width.'x'.$height;
@@ -305,11 +306,11 @@ class Files
 			}
 
 			$thumb_size = filesize($thumb_filename);
-			header('Content-Length: '. $thumb_size);
+			header('Content-Length: '.$thumb_size);
 			echo file_get_contents($thumb_filename);
 		} else {
 			$file_size = filesize($filename);
-			header('Content-Length: '. $file_size);
+			header('Content-Length: '.$file_size);
 			echo file_get_contents($filename);
 		}
 	}

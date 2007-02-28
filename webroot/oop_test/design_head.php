@@ -9,6 +9,9 @@
 	</head>
 <body>
 <?
+	//todo: fixa denna sökväg
+	require_once('../layout/zoom_layer.html');
+
 	if (!$session->id) {
 		$session->showLoginForm();
 	}
