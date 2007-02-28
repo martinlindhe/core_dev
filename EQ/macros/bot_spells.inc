@@ -1,11 +1,25 @@
 | requires MQ2Cast & MQ2Exchange
 
+| when im told to click AR, this one autoclicks
+#event ClickAR "#1# tells you, '#*#next#*#'"
+Sub Event_ClickAR(string line, string name, string txt)
+	/if (${Zone.ShortName.NotEqual['theatera_raid']}) /return
+	/echo ${name} told u: ${line}
+	/return
+
+	/popup Clicking AR!
+	/delay 1s
+	/echo Clicking AR!
+	/target npc Ayonae Ro
+	/casting "Divine fetters of ro" item
+/return
+
 #event Heal "You have healed #1# for #2# points of damage."
 Sub Event_Heal(string line, string name, int value)
 	/echo Healed > ${name} < (${value} HP)
 /return
 
-#event TargetCured		"Your target has been cured.#*#"
+#event TargetCured "Your target has been cured.#*#"
 Sub Event_TargetCured
 	/if (${Target.ID} && ${Target.Type.Equal["PC"]}) {
 		|Dont know for sure who I actually cured
@@ -145,6 +159,8 @@ Sub RefreshBuff(string Name, int Duration)
 		} else {
 			| target myself för att group buffs ska träffa rätt, bara ifall det behövs (target=PC som ej är i gruppen & spellen är en group spell)
 			/if (${Target.Type.Equal["PC"]} && !${Group.Member[${Target.Name}]} && ${Spell[${BuffName}].AERange}) /target myself
+			| target myself för att single target buff ska träffa rätt
+			/if (${Spell[${BuffName}].TargetType.Equal["Single"]}) /target myself
 
 			| Hitta en ledig spell-slot
 			/for i 1 to 9

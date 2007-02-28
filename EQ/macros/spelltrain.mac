@@ -1,9 +1,7 @@
-|Usage: Memorize low level spells of each type before script is started
+| Usage: Memorize low level spells of each type before script is started
 
-#chat tell
-
-
-#include spell_routines.inc
+#include bot_spells.inc
+#include general_stuff.inc
 
 #define HIDE_FROM_PLAYERS 0
 
@@ -31,13 +29,7 @@ Sub Main
 
 		/if (${Me.Skill[${skillName}]} >= ${maxSkill}) /goto :NextSpell
 
-		:GMCheck
-		/if (${SpawnCount[gm]}) {
-			/echo A GM or Guide is in zone, pausing for 10 minutes
-			/call MedBreak
-			/delay 10m
-			/goto :GMCheck
-		}
+		/call GMCheck
 
 		:PlayerCheck
 		/if (HIDE_FROM_PLAYERS && ${SpawnCount[pc radius 500 notid ${Me.ID}]}) {
@@ -66,16 +58,3 @@ Sub Main
 	/call MedBreak
 
 /return
-
-
-Sub Event_Chat
-	/echo [${Time}] Got a tell, stopping
-	/endmacro
-/return
-
-
-Sub MedBreak
-	/if (${Me.Standing}) /sit
-	:MedMore
-	/if (${Me.PctMana}<100) /goto :MedMore
-/return 

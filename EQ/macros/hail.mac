@@ -1,0 +1,24 @@
+| todo: make this ini driven
+
+Sub Main
+
+	/squelch /target clear
+
+	/if (${SpawnCount[npc Zhubis the Griffin Tamer radius 20]}) {
+		/echo Zhubis: enter ashengate (Ashengate East)
+		/target npc Zhubis the Griffin Tamer
+		/delay 2s ${Target.ID}
+		/say enter ashengate
+		/return
+	}
+	
+	/if (${SpawnCount[npc Scout Keshik radius 20]}) {
+		/echo Scout Keshik: summon a griffon
+		/target npc Scout Keshik
+		/delay 2s ${Target.ID}
+		/say summon a griffon
+		/return
+	}
+	
+	/echo Didn't see anyone to hail that i recognize
+/return

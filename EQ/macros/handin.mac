@@ -1,5 +1,7 @@
 | keep handin item/stack on cursor & target npc to hand in then run macro
 
+#include general_stuff.inc
+
 Sub Main
 
 	/if (!${Cursor.ID}) {
@@ -40,23 +42,4 @@ Sub Main
 
 	/call ClosePacks
 
-/return
-
-Sub OpenPacks
-	|todo: dont open new tradeskill container interfaces
-	/declare i int local
-	/for i 1 to 8
-		/if (${InvSlot[pack${i}].Item.Container}) {
-			/if (!${Window[Pack${i}].Open}) /itemnotify pack${i} rightmouseup
-		}
-	/next i
-/return
-
-Sub ClosePacks
-	/declare i int local
-	/for i 1 to 8
-		/if (${InvSlot[pack${i}].Item.Container}) {
-			/if (${Window[Pack${i}].Open}) /itemnotify pack${i} rightmouseup
-		}
-	/next i
 /return

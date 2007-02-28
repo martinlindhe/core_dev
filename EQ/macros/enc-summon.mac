@@ -1,6 +1,6 @@
-#include spell_routines.inc
+#include bot_spells.inc
+#include general_stuff.inc
 
-|funkar inte!!!!
 #event OutOfComponents		"You are missing some required components."
 Sub Event_OutOfComponents
 	/echo You are out of components.
@@ -55,35 +55,17 @@ Sub Main
 	}
 
 	:loop
+		/call SaveCursorItems
 		/if ( ${Me.CurrentMana} > ${spellMana} ) {
 			/if (${Me.Spawn.Sitting}) /stand
 			/call CheckGM
-			/call Cast "${spellName}"
+			/call BotCast "${spellName}"
 			/delay 5
-			/autoinventory
+			/call SaveCursorItems
 		} else {
-			/echo Medding
-			/goto :medtofull
+			/call MedBreak
 		}
-	/goto :loop
-
-
-	|Medding so i have enough mana to cast spell again
-	:medtofull
-		/if (!${Me.Spawn.Sitting}) /sit
-		/if ( ${Me.CurrentMana} <= ${spellMana} ) {
-			/goto :medtofull
-		}
-		/delay 6s
 	/goto :loop
 
 /return
 
-Sub CheckGM
-    :GMCheck
-    /if (${Bool[${Spawn[gm].ID}]}) {
-       /echo A GM or Guide has been detected in the zone, the macro will resume  when the zone is clear of GM/Guides
-       /delay 600s
-       /goto :GMCheck
-    }
-/return

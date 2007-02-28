@@ -1,0 +1,50 @@
+| keep handover item/stack on cursor & target player to hand over then run macro
+
+#include general_stuff.inc
+
+Sub Main
+
+	/if (!${Cursor.ID}) {
+		/echo Keep item to handin on cursor and re-run.
+		/return
+	}
+
+	/if (!${Target.ID}) {
+		/echo Target player to hand in to and re-run.
+		/return
+	}
+
+	/declare ItemToGive string local ${Cursor.Name}
+	/declare n int local
+	
+	/autoinventory
+
+  /call OpenPacks
+
+	:Start
+	/if (${FindItemCount[=${ItemToGive}]}) {
+ 
+		/for n 1 to 8
+			/if (${FindItemCount[=${ItemToGive}]}) { 
+				/nomodkey /itemnotify ${FindItem[=${ItemToGive}].InvSlot} leftmouseup
+				/delay 3s ${Cursor.ID}
+				/if (${Cursor.ID}) {
+					/nomodkey /click left target
+					/delay 1s !${Cursor.ID}
+					| lite delay så det ser mer mänskligt ut
+					/delay 2
+				}
+			}
+		/next n
+ 
+		/nomodkey /notify TradeWnd TRDW_Trade_Button leftmouseup
+		/echo Waiting for trade accept
+		:WaitForAccept
+		/if (${Window[TradeWnd].Open}) /goto :WaitForAccept
+ 
+		/goto :Start
+	}
+
+	/call ClosePacks
+
+/return

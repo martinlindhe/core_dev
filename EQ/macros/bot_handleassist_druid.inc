@@ -21,10 +21,10 @@
 *|
 
 
-#define DO_SNARE						0						| shall i snare mobs? even snares in HEAL_ONLY_MODE
+#define DO_SNARE						0						| shall i snare mobs?
 #define DO_DEBUFF						1						| debuff will be cast once per mob, not in heal only mode
-#define DO_EPIC							1						| click epic 1.5/2.0 when it is ready? never do epic in HEAL_ONLY_MODE
-#define DO_AA_DS						1						| Auto cast Wrath of the Wild anytime it is up. First on yourself, if you already have the buff, cast it on MA (auto OFF in HEAL_ONLY_MODE)
+#define DO_EPIC							1						| click epic 1.5/2.0 when it is ready?
+#define DO_AA_DS						1						| Auto cast Wrath of the Wild anytime it is up. First on yourself, if you already have the buff, cast it on MA
 
 #define DO_REPTILE					1						| casts skin of the reptile on tank at beginning of fight, good for monk tanks :)
 #define DO_REPTILE_PLAYER		Keosden
@@ -45,8 +45,6 @@
 
 #define SNARE_SPELLNAME					"Serpent Vines"
 #define EPIC_ITEMNAME						"Staff of Everliving Brambles"			| "Staff of Living Brambles"
-
-#define CHEAL_SPELLNAME					"Karana's Renewal"									| Only used in HEAL_ONLY_MODE
 
 #define DRUID_QH1								"Pure Life Rk. II"
 #define DRUID_QH2								"Adrenaline Surge Rk. II"						| even faster qheal spell, used if player % is low & spell is ready
@@ -79,8 +77,6 @@ Sub Event_DEBUFF_DruCold(string Line, string Name)
 	| DRU/72: Icefall Breath
 	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFF: ${Target.CleanName} (COLD)"
 /return
-
-
 
 
 
@@ -204,24 +200,22 @@ Sub HandleAssistCallDruid(int SpawnId)
 	/declare nukeName string local
 	/declare debuffName string local
 
-	/if (!HEAL_ONLY_MODE) {
-		/if (${Me.Gem[NUKE_SPELLNAME_COLD]}) {
-			/varset nukeName NUKE_SPELLNAME_COLD
-		} else /if (${Me.Gem[NUKE_SPELLNAME_FIRE]}) {
-			/varset nukeName NUKE_SPELLNAME_FIRE
-		} else {
-			/echo NO NUKE MEMORIZED!
-			/endmacro
-		}
+	/if (${Me.Gem[NUKE_SPELLNAME_COLD]}) {
+		/varset nukeName NUKE_SPELLNAME_COLD
+	} else /if (${Me.Gem[NUKE_SPELLNAME_FIRE]}) {
+		/varset nukeName NUKE_SPELLNAME_FIRE
+	} else {
+		/echo NO NUKE MEMORIZED!
+		/endmacro
+	}
 	
-		/if (${Me.Gem[DEBUFF_SPELLNAME_COLD]}) {
-			/varset debuffName DEBUFF_SPELLNAME_COLD
-		} else /if (${Me.Gem[DEBUFF_SPELLNAME_FIRE]}) {
-			/varset debuffName DEBUFF_SPELLNAME_FIRE
-		} else {
-			/echo NO DEBUFF MEMORIZED!
-			/endmacro
-		}
+	/if (${Me.Gem[DEBUFF_SPELLNAME_COLD]}) {
+		/varset debuffName DEBUFF_SPELLNAME_COLD
+	} else /if (${Me.Gem[DEBUFF_SPELLNAME_FIRE]}) {
+		/varset debuffName DEBUFF_SPELLNAME_FIRE
+	} else {
+		/echo NO DEBUFF MEMORIZED!
+		/endmacro
 	}
 
 	/declare zoneId int local ${Zone.ID}
@@ -232,9 +226,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 
 	/call HandleGroupHeal QHEAL_PERCENT
 
-	/if (!HEAL_ONLY_MODE) /target npc id ${SpawnId}
-
-	| /call DebugMsg "Assisting on ${Target.Name} (${Me.PctMana}m)"
+	/target npc id ${SpawnId}
 
 	| Send in pet if u have one
 	/if (${Me.Pet.ID}) {
@@ -249,7 +241,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 		}
 	}
 
-	/if (DO_DEBUFF && !HEAL_ONLY_MODE && ${Target.Type.Equal[NPC]} && ${Me.Standing} && (${Target.PctHPs} >= 80) && (${Me.PctMana} > LOM_PERCENT) && (${Spawn[id ${SpawnId}].Level} >= 62)) {
+	/if (DO_DEBUFF && ${Target.Type.Equal[NPC]} && ${Me.Standing} && (${Target.PctHPs} >= 80) && (${Me.PctMana} > LOM_PERCENT) && (${Spawn[id ${SpawnId}].Level} >= 62)) {
 		/call DruidWaitForTargetHP ${SpawnId} DEBUFF_PERCENT
 		/call WaitForSpellReady "${debuffName}"
 		/call DebugMsg "Debuffing ${Target.CleanName} at ${Target.PctHPs}% (${Me.PctMana}m)"
@@ -263,9 +255,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 		/call DruSnareMob ${SpawnId}
 	}
 
-	/if (!HEAL_ONLY_MODE && DO_AA_DS) {
-		/call DruidRefreshAA_DS
-	}
+	/if (DO_AA_DS) /call DruidRefreshAA_DS
 
 	/varset AbortLoop 0
 	:DruidLoop
@@ -295,46 +285,38 @@ Sub HandleAssistCallDruid(int SpawnId)
 			/call BotCast "Skin of the Reptile" NukeCallback
 		}
 
-		/if (HEAL_ONLY_MODE && USE_CH && !${Window[LootWnd].Open} && ${Target.Name.Equal[${tankName}]} && (${Target.PctHPs} <= CHEAL_PERCENT) && (${Target.Distance} < 100)) {
-			/if (${Target.Name.NotEqual[${tankName}]}) {
-				/target pc ${tankName}
-				/delay 5
-			}
-			/call WaitForSpellReady "CHEAL_SPELLNAME"
-			/call DebugMsg "CH > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
-			/call BotCast "CHEAL_SPELLNAME" HealCallback
-		}
-
-		/if (DO_EPIC && !HEAL_ONLY_MODE && !${Window[LootWnd].Open} && !${Me.Stunned} && ${Me.Standing} && !${FindItem[EPIC_ITEMNAME].Timer} && ${Target.ID} && (${Target.PctHPs} > 50) && (${Target.PctHPs} < 100) && ${Target.Type.Equal[NPC]} && (${Target.Level} >= 60) && ${Target.LineOfSight} && ${Target.Distance} < 100) {
+		/if (DO_EPIC && !${Window[LootWnd].Open} && !${Me.Stunned} && ${Me.Standing} && !${FindItem[EPIC_ITEMNAME].Timer} && ${Target.ID} && (${Target.PctHPs} > 50) && (${Target.PctHPs} < 100) && ${Target.Type.Equal[NPC]} && (${Target.Level} >= 60) && ${Target.LineOfSight} && ${Target.Distance} < 100) {
 			/call DebugMsg "DEBUFF: ${Target.CleanName} (Druid Epic)"
 			/call MQ2Cast "EPIC_ITEMNAME" item
 		}
 		
-		/if (!HEAL_ONLY_MODE && DO_AA_DS) /call DruidRefreshAA_DS
+		/if (DO_AA_DS) /call DruidRefreshAA_DS
 
-		/if (!HEAL_ONLY_MODE && (${Target.ID} != ${SpawnId}) && ${Spawn[npc id ${SpawnId}].ID} && ${Spawn[npc id ${SpawnId}].LineOfSight}) {
+		/if ((${Target.ID} != ${SpawnId}) && ${Spawn[npc id ${SpawnId}].ID} && ${Spawn[npc id ${SpawnId}].LineOfSight}) {
 			/target npc id ${SpawnId}
 			/delay 2s ${Target.ID}==${SpawnId}
 		}
 
-		/if (!HEAL_ONLY_MODE && !${Window[LootWnd].Open} && ${Me.Standing} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
+		/if (!${Window[LootWnd].Open} && ${Me.Standing} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
 			/call DebugMsg "Casting nuke clicky"
 			/call MQ2Cast "Everliving Bramble Tunic" item
 		}
 
-		/if (!HEAL_ONLY_MODE && !${timerNuke} && ${Me.Standing} && !${Window[LootWnd].Open} && !${Window[SpellBookWnd].Open} && ${Spawn[npc id ${SpawnId}].ID} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Me.TargetOfTarget.ID} != ${Me.ID})) {
-			/target npc id ${SpawnId}
-			/delay 2s ${Target.ID}==${SpawnId}
-			/call WaitForSpellReady "${nukeName}"
-			/if (${Target.ID} && ${Target.LineOfSight} && !${Me.Moving} !${Me.Stunned} && ${Target.Type.Equal[NPC]} && (${Target.Distance} < ${Me.Gem[${Me.Gem[${nukeName}]}].Range}) && (${Me.PctMana} > LOM_PERCENT)) {
-				/call DruidWaitForTargetHP ${SpawnId} STARTNUKE_PERCENT
-				/call DebugMsg "Nuking ${Target.CleanName} at ${Target.PctHPs}% (${Me.PctMana}m)"
-				/call BotCast "${nukeName}" NukeCallback
-				/varset timerNuke 5s
-			}
+		/if (!${timerNuke} && ${Me.Standing} && !${Me.Moving} !${Me.Stunned} && (${Target.ID}==${SpawnId}) && ${Target.Type.Equal[NPC]} && (${Target.PctHPs} <= STARTNUKE_PERCENT) && ${Target.LineOfSight} && ${Me.SpellReady[${nukeName}]} && !${Window[LootWnd].Open} && !${Window[SpellBookWnd].Open} && ${Spawn[npc id ${SpawnId}].ID} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Me.TargetOfTarget.ID} != ${Me.ID}) && (${Target.Distance} < ${Me.Gem[${Me.Gem[${nukeName}]}].Range}) && (${Me.PctMana} > LOM_PERCENT)) {
+			/call DebugMsg "Nuking ${Target.CleanName} at ${Target.PctHPs}% (${Me.PctMana}m)"
+			/call BotCast "${nukeName}" NukeCallback
+			/varset timerNuke 5s
 		}
 
 		/call HandleGroupHeal QHEAL_PERCENT
+
+		/if (!${Window[LootWnd].Open} && ${Me.Standing} && !${FindItem["Bark-Inlaid Leather Tunic"].Timer}) {
+			/call FindTank
+			/target id ${Macro.Return}
+			/delay 1s ${Target.ID}==${Macro.Return}
+			/call DebugMsg "DS Tunic on > ${Target.Name} <"
+			/call MQ2Cast "Bark-Inlaid Leather Tunic" item
+		}
 
 		/if (${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID} && !${Window[LootWnd].Open} && (${Me.PctMana} < LOM_PERCENT) && !${Me.Buff["Summon Drogmor"].ID}) {
 			/if (${Spawn[npc radius 40 notid ${SpawnId}].LineOfSight}) {							
@@ -360,7 +342,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 Sub DruidUpdateBuffs
 
 	| Clear debuffs:
-	/if (${Me.AltAbilityReady["Resplendent Cascade"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID} || ${Me.Buff["Curse of Darkness"].ID} || ${Me.Buff["Flesh Rot"].ID})) {
+	/if (${Me.AltAbilityReady["Resplendent Cascade"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID} || ${Me.Buff["Curse of Darkness"].ID} || ${Me.Buff["Flesh Rot"].ID} || ${Me.Buff["Suffocating Mist"].ID} || ${Me.Buff["Tainted Arrow Salvo"].ID} || ${Me.Buff["Depleting Wave"].ID})) {
 		/call DebugMsg "Curing debuffs"
 		/casting "Resplendent Cascade" alt
 		|3.5 sec cast time
@@ -374,7 +356,11 @@ Sub DruidUpdateBuffs
 
 	/if (${Group.Members}) {
 		/call RefreshBuff "Blessing of the Direwild Rk. II" 50
-		/if (!${Me.Song["Aura of Life Effect"].ID}) /call RefreshBuff "Aura of Life" 0
+		/if (!${Me.Song["Aura of Life Effect"].ID}) {
+			| this is a hack because it seems to fade sometimes when you move or lag
+			/delay 5
+			/if (!${Me.Song["Aura of Life Effect"].ID}) /call RefreshBuff "Aura of Life" 0
+		}
 		/if (!${Raid.Members} && !HEAL_ONLY_MODE) {
 			/if (${Me.Gem["Legacy of Viridiflora Rk. II"]}) /call RefreshBuff "Legacy of Viridiflora Rk. II" 50
 			/if (${Me.Gem["Blessing of Oak"]}) /call RefreshBuff "Blessing of Oak" 50
@@ -387,7 +373,11 @@ Sub DruidUpdateBuffs
 
 	| Clickies
 	/call RefreshBuff "Earring of Pain Deliverance" 20
-	/call RefreshBuff "Orb of Duskmold" 20
+	/if (${Raid.Members} < 18) /call RefreshBuff "Orb of Duskmold" 20
+
+	/if (${Zone.ShortName.Equal[ashengate_raid]}) {
+		/call RefreshBuff "Resist Corruption Rk. II"
+	}
 
 	| Pet buffs
 	/if (${Me.Pet.ID} && ${Me.Pet.CleanName.NotEqual["${Me.Name}`s familiar"]}) {

@@ -14,17 +14,14 @@ Sub Main
 	/echo Starting
 
 	:CombineLoop
-	|/notify COMBW_CombineArea COMBW_CombineButton leftmouseup
 	/notify TradeskillWnd CombineButton leftmouseup
 	/doevents
 	/delay 5
-	/if (${Cursor.ID}) {
-		/autoinventory
+	/if (${Cursor.ID}) /autoinventory
 
-		/if (${Param0.NotEqual[force]} && ${Me.FreeInventory} < 1) {
-			/echo Out of inventory slots!
-			/goto :Cleanup
-		}
+	/if (${Me.FreeInventory} <= 1) {
+		/echo Out of inventory slots!
+		/if (${Param0.NotEqual[force]}) /goto :Cleanup
 	}
 
 	/if (${finish}==1) {
