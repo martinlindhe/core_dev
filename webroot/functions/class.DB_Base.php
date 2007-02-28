@@ -159,6 +159,8 @@ abstract class DB_Base
 	public function log($str)
 	{
 		global $session;
+		
+		echo 'session id: '. $session->id.'<br>';
 
 		$enc_str = $this->escape($str);
 		

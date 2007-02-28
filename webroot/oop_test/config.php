@@ -24,6 +24,7 @@
 	/* A variable named $db must exist for all future functions to work. */
 	$db = new DB_MySQLi($config['database']);
 
+	$config['session']['timeout'] = 30;
 	$config['session']['name'] = 'OOPtest';
 	$config['session']['sha1_key'] = 'sitecode_uReply';		//todo: byt ut sitecode
 

@@ -59,16 +59,16 @@ class Session
 		$this->isAdmin = &$_SESSION['isAdmin'];
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
 
-		if (!$this->ip) {
-			$this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
-		}
+		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 
+		//Check if client ip has changed since last request, if so - log user out to avoid session hijacking
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
 				$this->error = 'Client IP changed';
 				$db->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
 				$this->logOut();
 		}
 
+		//Check user activity - log out inactive user
 		if ($this->id) {
 			if ($this->lastActive < (time()-$this->timeout)) {
 				$this->error = 'Inactivity timeout';
@@ -81,18 +81,18 @@ class Session
 			}
 		}
 
-		//POST to any page with 'usr' & 'pwd' variables set to log in
-		if (!$this->id && !empty($_POST['usr']) && isset($_POST['pwd'])) {
+		//Check for login/logout requests
+		if (!$this->id && !empty($_POST['usr']) && !empty($_POST['pwd'])) {
+			//POST to any page with 'usr' & 'pwd' variables set to log in
 			$this->logIn($_POST['usr'], $_POST['pwd']);
-		}
-
-		//GET to any page with 'logout' set to log out
-		if ($this->id && isset($_GET['logout'])) {
+		} else if ($this->id && isset($_GET['logout'])) {
+			//GET to any page with 'logout' set to log out
 			$db->log('user logged out');
 			$this->logOut();
 			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
 			die;
 		}
+
 	}
 
 	public function __destruct()
@@ -185,6 +185,7 @@ class Session
 
 	/* Renders html for editing all tblSettings field for current user */
 	//todo: use ajax to save changes
+	//todo: define this in a separate /design/ file, with alot of css in /css/functions.css
 	public function editSettings()
 	{
 		$list = readAllSettings(SETTING_USER, $this->id);
