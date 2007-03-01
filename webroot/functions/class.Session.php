@@ -3,9 +3,17 @@
 	Session class
 
 	Written by Martin Lindhe, 2007
-
-	//$session->save('kex', 'med blandade bullar');
-	//$kex = $session->read('kex');
+	
+	Todo: 
+		* gör färdigt login-bubblan
+			- register new user måste fungera (kräver email fält i tblUsers, kräv email aktivering av konton)
+			- forgot password måste fungera (kräver register new user)
+	
+	
+	
+	Examples:
+		$session->save('kex', 'med blandade bullar');
+		$kex = $session->read('kex');
 
 */
 

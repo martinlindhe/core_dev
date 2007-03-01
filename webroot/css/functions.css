@@ -17,7 +17,7 @@ input {
 }
 input:focus {
 	background: #fff;
-	border:1px solid #555;
+	border:1px solid #aaa;
 }
 
 /* General: <input type="button"> */
