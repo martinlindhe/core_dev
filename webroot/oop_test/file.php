@@ -11,5 +11,5 @@
 
 	include('config.php');
 
-	$files->outputFile($fileId, $download);
+	$files->sendFile($fileId, $download);
 ?>

@@ -6,13 +6,8 @@
 	
 	todo:
 		- cleanup, vissa funktioner är nog överflödiga. se igenom all kod
-		
-		- VIKTIGT: sätt inte cache header på bilder som visas med outputImage() om filens timestamp>sessionsstart
-			- just nu sätts inte cache headers alls för bilder
 
 	todo file viewern:
-		- skapa en thumbnail av en bild direkt när den laddas upp
-
 		- tooltip hover på en bild med mer fil-detaljer (bredd, höjd, storlek)
 
 		- all bakgrund blir utgråad (todo: bilden blir åxå transparent)
@@ -169,10 +164,7 @@ class Files
 	/* Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio */
 	private function resizeImageCalc($filename, $to_width, $to_height)
 	{
-		if (!is_file($filename)) return false;
-
 		list($orig_width, $orig_height) = getimagesize($filename);
-		if (!$orig_width || !$orig_height) return false;
 
 		$max_width = $this->image_max_width;
 		$max_height = $this->image_max_height;
@@ -200,11 +192,13 @@ class Files
 	{
 		if (empty($to_width) && empty($to_height)) return false;
 
-		$data = getimagesize($in_filename);
+		$data = getimagesize($in_filename);	//todo, kan man använda list() ?
 		$orig_width = $data[0];
 		$orig_height = $data[1];
 		$mime_type = $data['mime'];
+		if (!$orig_width || !$orig_height) return false;
 
+		//Calculate the real width & height to resize too (within $to_width & $to_height), while keeping aspect ratio
 		list($tn_width, $tn_height) = $this->resizeImageCalc($in_filename, $to_width, $to_height);
 
 		//echo 'Resizing from '.$orig_width.'x'.$orig_height.' to '.$tn_width.'x'.$tn_height.'<br>';
@@ -214,11 +208,11 @@ class Files
    		case 'image/png':	$image = imagecreatefrompng($in_filename); break;
    		case 'image/jpeg': $image = imagecreatefromjpeg($in_filename); break;
    		case 'image/gif': $image = imagecreatefromgif($in_filename); break;
-   		default: die('Unknown mime type '.$mime_type);
+   		default: die('Unsupported image type '.$mime_type);
 		}
 
 		$image_p = imagecreatetruecolor($tn_width, $tn_height);
-	
+
 		if ($this->resample_resized) {
 			imagecopyresampled($image_p, $image, 0,0,0,0, $tn_width, $tn_height, $orig_width, $orig_height);
 		} else {
@@ -230,14 +224,23 @@ class Files
    		case 'image/png':	imagepng($image_p, $out_filename); break;
    		case 'image/jpeg': imagejpeg($image_p, $out_filename, $this->image_jpeg_quality); break;
    		case 'image/gif': imagegif($image_p, $out_filename); break;
-   		default: die('Unknown mime type '.$mime_type);
+   		default: die('Unsupported image type '.$mime_type);
 		}
 
 		imagedestroy($image);
 	}
-	
+
+	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
+	function setCachedHeaders()
+	{
+		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
+		header('Cache-Control: Public');
+		header('Pragma: Public');
+	}
+
+
 	//Note: These header commands have been verified to work with IE6 and Firefox 1.5 only, no other browsers have been tested
-	function outputFile($fileId, $download)
+	function sendFile($fileId, $download)
 	{
 		if (!is_numeric($fileId)) return false;
 
@@ -246,12 +249,10 @@ class Files
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$fileId);
 		if (!$data) die;
 
-		$last_name = '';
-		$pos = strrpos($data['fileName'], '.');
-		if ($pos !== false) $last_name = substr($data['fileName'], $pos);
+		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
 
 		/* This sends files without extension etc as plain text if you didnt specify to download them */
-		if (!$download && (($data['fileMime'] == 'application/octet-stream') || !$last_name)) {
+		if (!$download && (($data['fileMime'] == 'application/octet-stream') || !$file_lastname)) {
 			header('Content-Type: text/plain');
 		} else {
 			header('Content-Type: '.$data['fileMime']);
@@ -266,27 +267,24 @@ class Files
 		}
 
 		header('Content-Transfer-Encoding: binary');
-	
-		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
-		
+
 		//Serves the file differently depending on what kind of file it is
 		if (in_array($file_lastname, $this->allowed_image_types)) {
 			//Generate resized image if needed
-			$this->outputImage($data['fileId']);
+			$this->sendImage($data['fileId']);
 		} else {
-			//These headers allows the browser to cache the images for 30 days. Works with MSIE6 and Firefox 1.5
-			header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
-			header('Cache-Control: Public');
-			header('Pragma: Public');
+			$this->setCachedHeaders();
 
 			//Just delivers the file as-is
 			header('Content-Length: '. $data['fileSize']);
-			echo file_get_contents($filename);			
+			echo file_get_contents($this->upload_dir.$fileId);
 		}
 	}
 	
-	private function outputImage($fileId)
+	private function sendImage($fileId)
 	{
+		global $session;
+
 		$filename = $this->upload_dir.$fileId;
 		list($img_width, $img_height) = getimagesize($filename);
 
@@ -301,20 +299,22 @@ class Files
 		if ($width && (($width < $img_width) || ($height < $img_height)) )  {
 			/* Look for cached thumbnail */
 
-			$thumb_filename = $this->thumbs_dir.$fileId.'_'.$width.'x'.$height;
+			$out_filename = $this->thumbs_dir.$fileId.'_'.$width.'x'.$height;
 
-			if (!file_exists($thumb_filename)) {
-				$this->resizeImage($filename, $thumb_filename, $width, $height);
+			if (!file_exists($out_filename)) {
+				//Thumbnail of this size dont exist, create one
+				$this->resizeImage($filename, $out_filename, $width, $height);
 			}
-
-			$thumb_size = filesize($thumb_filename);
-			header('Content-Length: '.$thumb_size);
-			echo file_get_contents($thumb_filename);
 		} else {
-			$file_size = filesize($filename);
-			header('Content-Length: '.$file_size);
-			echo file_get_contents($filename);
+			$out_filename = $filename;
 		}
+
+		if (filemtime($out_filename) < $session->started) {
+			$this->setCachedHeaders();
+		}
+
+		header('Content-Length: '.filesize($out_filename));
+		echo file_get_contents($out_filename);
 	}
 	
 }

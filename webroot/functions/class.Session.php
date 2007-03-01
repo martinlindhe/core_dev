@@ -8,9 +8,7 @@
 		* gör färdigt login-bubblan
 			- register new user måste fungera (kräver email fält i tblUsers, kräv email aktivering av konton)
 			- forgot password måste fungera (kräver register new user)
-	
-	
-	
+		
 	Examples:
 		$session->save('kex', 'med blandade bullar');
 		$kex = $session->read('kex');
@@ -36,6 +34,7 @@ class Session
 	public $lastActive;
 	public $isAdmin;
 	public $isSuperAdmin;
+	public $started;		//timestamp of when the session started
 
 	public function __construct(array $session_config)
 	{
@@ -49,6 +48,7 @@ class Session
 		session_name($this->session_name);
 		session_start();
 
+		if (!isset($_SESSION['started']) || !$_SESSION['started']) $_SESSION['started'] = time();
 		if (!isset($_SESSION['error'])) $_SESSION['error'] = '';
 		if (!isset($_SESSION['ip'])) $_SESSION['ip'] = 0;
 		if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
@@ -58,6 +58,7 @@ class Session
 		if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
 
+		$this->started = &$_SESSION['started'];
 		$this->error = &$_SESSION['error'];
 		$this->ip = &$_SESSION['ip'];	//store IP as an unsigned 32bit int
 		$this->id = &$_SESSION['id'];	//if id is set, also means that the user is logged in
@@ -150,6 +151,7 @@ class Session
 		global $db;
 
 		$db->query('UPDATE tblUsers SET timeLastLogout=NOW()');
+		$this->started = 0;
 		$this->id = 0;
 		$this->ip = 0;
 		$this->mode = 0;
@@ -163,7 +165,10 @@ class Session
 
 		echo '<div id="login_form_layer">';
 		echo '<form name="login_form" method="post" action="">';
-		if ($this->error) echo '<b>Error: '.$this->error.'</b><br>';
+		if ($this->error) {
+			echo '<b>Error: '.$this->error.'</b><br>';
+			$this->error = ''; //remove error message once it has been displayed
+		}
 		echo '<table cellpadding=2>';
 		echo '<tr><td>Username:</td><td><input name="login_usr" type="text"> <img src="/gfx/icon_user.png" align="absmiddle"></td></tr>';
 		echo '<tr><td>Password:</td><td><input name="login_pwd" type="password"> <img src="/gfx/icon_keys.png" align="absmiddle"></td></tr>';
