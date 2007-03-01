@@ -40,12 +40,8 @@ function add_div(e, idname, style)
 function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
-	e.setAttribute('src', '/gfx/ajax_loading.gif');
-
-	//fix background
-	document.body.setAttribute('opacity', '0.5');
+	e.setAttribute('src', 'file.php?id='+id);
+	//e.setAttribute('src', '/gfx/ajax_loading.gif');
 
 	show_element_by_name('zoom_image_layer');
-
-	e.setAttribute('src', 'file.php?id='+id);
 }

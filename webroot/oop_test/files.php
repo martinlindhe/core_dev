@@ -1,12 +1,12 @@
 <?
 /*
 	todo:
-	
-		- rita upp en "files-gadget"
-		- kunna ladda upp nya bilder direkt från gadgeten,
-			* visa upload progress med ajax---
+
+		file upload:
+			* visa upload progress med ajax callback
 			
-		- kunna redigera bilder:
+		bildvisare:
+			* centrera bilden i mitten av webbläsaren, över file-gadgeten (ska visas halvtransparent i bakgrunden)
 			* rotera
 			* förminska
 			* förstora
@@ -14,8 +14,8 @@
 			* spara
 			* med ajax
 			
-		- kunna spela .mp3or
-			* med flash modul
+		ljuduppspelare:
+			* flash modul
 */
 
 	require_once('config.php');

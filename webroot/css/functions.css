@@ -1,57 +1,80 @@
 body {
 	margin: 0;
-	padding: 5px;
+	padding: 0;
 	font-family: "Bitstream Vera Sans","Luxi Sans","Lucida Grande","Trebuchet MS",helvetica,verdana,arial,sans-serif;
 }
 img {
 	border: 0;
 }
-/* General: <input type="text> */
+/* General: <input type="text"> */
 input {
-	background: #fff url(/gfx/input_shadow.png) repeat-x scroll center top;
 	border:1px solid #8CACBB;
+	background: #fff url(/gfx/input_shadow.png) repeat-x scroll center top;
 	
 	margin:1px;
 	padding:0.2em 0.3em;
 	vertical-align:middle;
 }
 input:focus {
-	background: #fff;
 	border:1px solid #aaa;
+	background: #fff;
 }
 
 /* General: <input type="button"> */
 input.button {
+	border:1px solid #888;
 	background: #fff url(/gfx/button_shadow.png) repeat-x scroll center bottom;
 }
-
-input.button:hover {
+input.button:focus {
+	border:1px solid #aaa;
+	background: #fff;
 }
 
-/* for file gadget */
-.file_gadget_holder {
-	width: 460px;
+/* holder for file gadget, contains all the other parts */
+.file_gadget {
+	width: 440px;
 	height: 500px;
-	background-color: #aaeecc;
-	border: 1px solid #888;
-	margin-bottom: 5px;
 	
-	overflow-y: auto;	/**/
+	overflow-x: hidden;
+	overflow-y: auto;
+	
+	border: 1px solid #aaa;
+	background-color: #DDD;
+	padding: 10px;
+	-moz-border-radius-bottomleft:15px;
+	-moz-border-radius-bottomright:15px;
+	-moz-border-radius-topleft:15px;
+	-moz-border-radius-topright:15px;	
+}
+/* style of header for file gadget */
+.file_gadget_header {
+
+	background-color: #fff;
+	font-weight: bold;
+	
+	border: 1px solid #aaa;
+	padding: 10px;
+	-moz-border-radius-topleft:15px;
+	-moz-border-radius-topright:15px;	
+}
+
+/* holds all file entries */
+.file_gadget_content {
+
 }
 
 .file_gadget_entry {
 	float: left;
 	width: 100px;
 	height: 80px;
-	border: 5px solid #aaa;
 	background-color: #aaa;
+	padding: 5px;
 
 	opacity: 0.7;
 	filter: alpha(opacity=70);	/*ie6*/
 
 }
 .file_gadget_entry:hover {
-	border: 5px solid #cceecc;
 	background-color: #cceecc;
 	cursor: pointer;
 
@@ -62,14 +85,15 @@ input.button:hover {
 .file_gadget_upload {
 	float: left;
 	padding: 5px;
-	width: 450px;
 	background-color: #aaeecc;
 	border: 1px solid #888;
 	margin-bottom: 5px;
 }
 
+
+
 /* for image zoomin gadget */
-#zoom_image_backgroundlayer {
+.zoom_image_layer {
 	position: absolute;
 	top: 0;
 	width: 100%;
@@ -77,20 +101,18 @@ input.button:hover {
 	background-color: #333;
 	margin: 0;
 	padding: 0;
-	z-index: 1;
-	opacity: 0.8;
 }
-#zoom_image_holder {
-	opacity: 1.0; /* todo: bilden som visas är inte opaque*/
-	z-index: 100;
-}
-
-#zoom_image_holder img {
+.zoom_image_layer img {
 	border: 3px solid #000;
 }
 
+
+
+
+
+
 /* for login box gadget */
-#login_box {
+.login_box {
 	border: 1px solid #aaa;
 	width: 280px;
 	background-color: #DDD;

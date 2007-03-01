@@ -56,55 +56,57 @@ class Files
 	public function showFiles()
 	{
 		global $session, $db;
+		
+		if (!$session->id) return;
 
-		if (!empty($_FILES['file1'])) {
-			$this->handleUserUpload(FILETYPE_NORMAL_UPLOAD, $_FILES['file1']);
-		}
+		if (!empty($_FILES['file1'])) $this->handleUserUpload($_FILES['file1']);
 
-		echo '<div class="file_gadget_holder">';
+		echo '<div class="file_gadget">';
 
 		//menu
-		echo '<div style="float: left; width: 100%;">';
-		echo '<div style="float: left; width: 150px; background-color: #886699;">File Gadget Overview</div>';
-		echo '</div>';
+		echo '<div class="file_gadget_header">File Gadget Overview</div>';
 
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$session->id.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
 		
+		echo '<div class="file_gadget_content">';
 		for ($i=0; $i<count($list); $i++)
 		{
 			list($file_firstname, $file_lastname) = explode('.', strtolower($list[$i]['fileName']));
 
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
-				echo '<div id="file_'.$list[$i]['fileId'].'" class="file_gadget_entry" onClick="zoomImage('.$list[$i]['fileId'].');"><center>';
-				echo '<img src="file.php?id='.$list[$i]['fileId'].'&w='.$this->thumb_default_width.'&h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
+				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onClick="zoomImage('.$list[$i]['fileId'].');"><center>';
+				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
-				//show icon for sound files
-				echo '<div id="file_'.$list[$i]['fileId'].'" class="file_gadget_entry"><center>';
+				//show icon for audio files
+				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'"><center>';
 				echo '<img src="/gfx/icon_audio_32.png" width=80 height=80 alt="Audio file" title="'.$list[$i]['fileName'].'">';
 				echo '</center></div>';
 			} else {
 				die('todo: '. $list[$i]['fileMime']);
 			}
 		}
-
 		echo '</div>';
+		
+		echo '<br><br><br>';
 
 		echo '<div class="file_gadget_upload">';
 		echo '<form name="ajax_show_files" action="" method="post" enctype="multipart/form-data">';
 		echo '<input type="file" name="file1"> ';
-		echo '<input type="submit" value="Upload">';
+		echo '<input type="submit" class="button" value="Upload">';
 		echo '</form>';
+		echo '</div>';
+		
 		echo '</div>';
 		
 	}
 
 	/* Stores uploaded file associated to $session->id */
-	function handleUserUpload($fileType, $FileData, $categoryId = 0)
+	function handleUserUpload($FileData, $categoryId = 0)
 	{
 		global $db, $session;
-		if (!$session->id || !is_numeric($fileType) || !is_numeric($categoryId)) return false;
+		if (!$session->id || !is_numeric($categoryId)) return false;
 
 		if (!is_uploaded_file($FileData['tmp_name'])) {
 			$db->log('Possible file upload attack!');
@@ -128,7 +130,7 @@ class Files
 
 		$fileSize = filesize($FileData['tmp_name']);
 
-  	$sql = 'INSERT INTO tblFiles SET fileName="'.$dbFileName.'",fileSize='.$fileSize.',fileMime="'.$dbFileMime.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+  	$sql = 'INSERT INTO tblFiles SET fileName="'.$dbFileName.'",fileSize='.$fileSize.',fileMime="'.$dbFileMime.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.FILETYPE_NORMAL_UPLOAD.',categoryId='.$categoryId;
   	$db->query($sql);
   	$fileId = $db->insert_id;
 

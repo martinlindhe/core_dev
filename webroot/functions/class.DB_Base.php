@@ -5,6 +5,7 @@
 	Written by Martin Lindhe, 2007
 	
 	todo: metod för att anropa stored procedures
+	todo: rename GetArray() till Array() ? eller är det för confusing med array() datatyp ?
 */
 
 abstract class DB_Base

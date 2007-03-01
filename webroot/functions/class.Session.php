@@ -24,7 +24,7 @@ class Session
 {
 	private $session_name = 'sid';			//default session name
 	private $timeout = 1800;						//max allowed idle time (in seconds) before auto-logout
-	private $check_ip = true;						//if set to true, client will be logged out if client ip is changed during the session
+	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
 	private $sha1_key = 'rpxp8xkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 
 	//Aliases of $_SESSION[] variables
@@ -159,7 +159,7 @@ class Session
 	
 	public function showLoginForm()
 	{
-		echo '<div id="login_box">';
+		echo '<div class="login_box">';
 
 		echo '<div id="login_form_layer">';
 		echo '<form name="login_form" method="post" action="">';
@@ -202,7 +202,7 @@ class Session
 			echo '<tr><td>E-mail:</td><td><input type="text" size=26> <img src="/gfx/icon_mail.png" align="absmiddle"></td></tr>';
 			echo '</table>';
 			echo '<br>';
-			echo '<input type="submit" value="New password"><br><br>';
+			echo '<input type="submit" class="button" value="New password"><br><br>';
 
 			echo '<input type="button" class="button" value="Log in" onClick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');">';
 			echo '<input type="button" class="button" value="Register" onClick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');">';
