@@ -109,59 +109,60 @@ class Files
 		if (!$session->id || !is_numeric($categoryId)) return false;
 
 		if (!is_uploaded_file($FileData['tmp_name'])) {
-			$db->log('Possible file upload attack!');
+			$session->error = 'File too big';
+			$db->log('Attempt to upload too big file');
 			return false;
 		}
 
-		$dbFileName = $db->escape(basename(strip_tags($FileData['name'])));
-		$dbFileMime = $db->escape(strip_tags($FileData['type']));
+		$enc_filename = $db->escape(basename(strip_tags($FileData['name'])));
+		$enc_mimetype = $db->escape(strip_tags($FileData['type']));
 
-		list($file_firstname, $file_lastname) = explode('.', strtolower($dbFileName));
+		list($file_firstname, $file_lastname) = explode('.', strtolower($enc_filename));
+
+		$filesize = filesize($FileData['tmp_name']);
+
+  	$sql = 'INSERT INTO tblFiles SET fileName="'.$enc_filename.'",fileSize='.$filesize.',fileMime="'.$enc_mimetype.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.FILETYPE_NORMAL_UPLOAD.',categoryId='.$categoryId;
+  	$db->query($sql);
+  	$fileId = $db->insert_id;
 		
 		//Identify and handle various types of files
 		if (in_array($file_lastname, $this->allowed_image_types)) {
-			$this->handleImageUpload($FileData);
+			$this->handleImageUpload($FileData, $fileId);
 		} else if (in_array($file_lastname, $this->allowed_audio_types)) {
-			$this->handleAudioUpload($FileData);
+			$this->handleAudioUpload($FileData, $fileId);
 		} else {
 			unlink($FileData['tmp_name']);
 			return 'Unsupported filetype';
 		}
 
-		$fileSize = filesize($FileData['tmp_name']);
 
-  	$sql = 'INSERT INTO tblFiles SET fileName="'.$dbFileName.'",fileSize='.$fileSize.',fileMime="'.$dbFileMime.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.FILETYPE_NORMAL_UPLOAD.',categoryId='.$categoryId;
-  	$db->query($sql);
-  	$fileId = $db->insert_id;
-
-		$uploadfile = $this->upload_dir.$fileId;
-
-		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
-
-		$db->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
 	}
 
-	private function handleAudioUpload($FileData)
+	private function handleAudioUpload($FileData, $fileId)
 	{
 		//nothing happening here yet
 	}
 
 	/* Handle image upload, used internally only */
-	private function handleImageUpload($FileData)
+	private function handleImageUpload($FileData, $fileId)
 	{
-		list($file_firstname, $file_lastname) = explode('.', strtolower(basename(strip_tags($FileData['name']))));
 		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
 
-		//Resize the image if it is too big
+		//Resize the image if it is too big, overwrite the uploaded file
 		if (($img_width > $this->image_max_width) || ($img_height > $this->image_max_height))
 		{
-			$resizedFile = $FileData['tmp_name'].'_resizetmp';
+			$resizedFile = $FileData['tmp_name'];
 			$resizedImage = $this->resizeImage($FileData['tmp_name'], $resizedFile, $this->image_max_width, $this->image_max_height);
 		}
-		
+
 		//create default sized thumbnail
-		//$thumb_filename = $this->thumbs_dir..'_'.$this->thumb_default_width.'x'.$this->thumb_default_height;
-		//$this->resizeImage($FileData['tmp_name'], $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
+		$thumb_filename = $this->thumbs_dir.$fileId.'_'.$this->thumb_default_width.'x'.$this->thumb_default_height;
+		$this->resizeImage($FileData['tmp_name'], $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
+
+		//Move the uploaded file to upload directory
+		$uploadfile = $this->upload_dir.$fileId;
+		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
+		$db->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
 	}
 	
 	
