@@ -33,8 +33,7 @@ input.button:focus {
 /* holder for file gadget, contains all the other parts */
 .file_gadget {
 	width: 440px;
-	height: 500px;
-	
+	max-height: 500px;
 	overflow-x: hidden;
 	overflow-y: auto;
 	
@@ -102,7 +101,7 @@ input.button:focus {
 	margin: 0;
 	padding: 0;
 }
-.zoom_image_layer img {
+#zoom_image {
 	border: 3px solid #000;
 }
 

@@ -3,7 +3,7 @@
 	Files class - Handle file upload, image manipulating, file management
 
 	Written by Martin Lindhe, 2007
-	
+
 	todo:
 		- cleanup, vissa funktioner är nog överflödiga. se igenom all kod
 
