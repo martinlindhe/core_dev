@@ -4,7 +4,7 @@
 #event ClickAR "#1# tells you, '#*#next#*#'"
 Sub Event_ClickAR(string line, string name, string txt)
 	/if (${Zone.ShortName.NotEqual['theatera_raid']}) /return
-	/echo ${name} told u: ${line}
+	/echo ${name} Ayonae Ro event, some1 told u: ${line}
 	/return
 
 	/popup Clicking AR!
