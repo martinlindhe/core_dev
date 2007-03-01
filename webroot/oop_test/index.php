@@ -12,7 +12,7 @@
 	//$kex = $session->read('ke2x');
 	//echo 'kex: '.$kex;
 	
-	$db->log('test');
+	//$db->log('test');
 
 	require('design_foot.php');
 ?>

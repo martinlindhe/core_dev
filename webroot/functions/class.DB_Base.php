@@ -160,13 +160,16 @@ abstract class DB_Base
 	{
 		global $session;
 		
-		echo 'session id: '. $session->id.'<br>';
-
 		$enc_str = $this->escape($str);
 		
-		echo $str;
+		echo '<b>LOG: '.$str.'</b><br>';
 
-		$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
+		if ($session) {
+			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
+		} else {
+			echo 'WARNING - CANNOT LOG with session info!<br>';
+			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId=0,userIP=0');
+		}
 	}
 
 }

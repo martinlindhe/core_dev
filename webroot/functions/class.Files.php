@@ -62,9 +62,9 @@ class Files
 		}
 
 		echo '<div class="file_gadget_holder">';
-		
+
 		//menu
-		echo '<div style="width: 100%; float: left;">';
+		echo '<div style="float: left; width: 100%;">';
 		echo '<div style="float: left; width: 150px; background-color: #886699;">File Gadget Overview</div>';
 		echo '</div>';
 

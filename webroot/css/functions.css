@@ -1,9 +1,31 @@
 body {
 	margin: 0;
-	padding: 0;
+	padding: 5px;
+	font-family: "Bitstream Vera Sans","Luxi Sans","Lucida Grande","Trebuchet MS",helvetica,verdana,arial,sans-serif;
 }
 img {
 	border: 0;
+}
+/* General: <input type="text> */
+input {
+	background: #fff url(/gfx/input_shadow.png) repeat-x scroll center top;
+	border:1px solid #8CACBB;
+	
+	margin:1px;
+	padding:0.2em 0.3em;
+	vertical-align:middle;
+}
+input:focus {
+	background: #fff;
+	border:1px solid #555;
+}
+
+/* General: <input type="button"> */
+input.button {
+	background: #fff url(/gfx/button_shadow.png) repeat-x scroll center bottom;
+}
+
+input.button:hover {
 }
 
 /* for file gadget */
@@ -46,12 +68,15 @@ img {
 	margin-bottom: 5px;
 }
 
+/* for image zoomin gadget */
 #zoom_image_backgroundlayer {
 	position: absolute;
 	top: 0;
 	width: 100%;
 	height: 100%;
 	background-color: #333;
+	margin: 0;
+	padding: 0;
 	z-index: 1;
 	opacity: 0.8;
 }
@@ -62,4 +87,16 @@ img {
 
 #zoom_image_holder img {
 	border: 3px solid #000;
+}
+
+/* for login box gadget */
+#login_box {
+	border: 1px solid #aaa;
+	width: 280px;
+	background-color: #DDD;
+	padding: 10px;
+	-moz-border-radius-bottomleft:15px;
+	-moz-border-radius-bottomright:15px;
+	-moz-border-radius-topleft:15px;
+	-moz-border-radius-topright:15px;
 }
