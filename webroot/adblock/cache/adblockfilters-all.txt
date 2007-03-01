@@ -441,6 +441,7 @@ siggiez.com/cgi-bin
 sitemeter.com
 sitestat.com
 skunk.fazoon.com
+skunk.koigii.se
 skunk.spray.se/scripts/survey.js
 smack.se/netStats
 smarttargetting.com
