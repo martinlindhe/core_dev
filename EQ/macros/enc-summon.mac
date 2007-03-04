@@ -10,53 +10,31 @@ Sub Event_OutOfComponents
 Sub Main
 
 	/declare spellName string inner
-	/declare spellMana int inner 0
 
 	/if (${Defined[Param0]}) {
-		/if (${Param0.Equal["clay"]}) {
-			/varset spellName Mass Enchant Clay
-			/varset spellMana 180
-		}
+		/if (${Param0.Equal["clay"]}) /varset spellName Mass Enchant Clay
+		/if (${Param0.Equal["silver"]}) /varset spellName Mass Enchant Silver
+		/if (${Param0.Equal["thicken"]}) /varset spellName Mass Thicken Mana
+		/if (${Param0.Equal["crystallize"]}) /varset spellName Mass Crystallize Mana
+		/if (${Param0.Equal["clarify"]}) 	/varset spellName Mass Clarify Mana
 
-		/if (${Param0.Equal["silver"]}) {
-			/varset spellName Mass Enchant Silver
-			/varset spellMana 180
-		}
+		| Tunarean druids & clerics only:
+		/if (${Param0.Equal["emerald"]}) /varset spellName Mass Imbue Emerald
 
-		/if (${Param0.Equal["thicken"]}) {
-			/varset spellName Mass Thicken Mana
-			/varset spellMana 300
-		}
-
-		/if (${Param0.Equal["crystallize"]}) {
-			/varset spellName Mass Crystallize Mana
-			/varset spellMana 600
-		}
-		/if (${Param0.Equal["clarify"]}) {
-			/varset spellName Mass Clarify Mana
-			/varset spellMana 900
-		}
-
-		|Tunarean druids & clerics only:
-		/if (${Param0.Equal["emerald"]}) {
-			/varset spellName Mass Imbue Emerald
-			/varset spellMana 600
-		}
-		
 	} else {
 		/echo Call the script with parameter: [ clay | silver | thicken | crystallize | clarify | emerald ]
 		/return
 	}
 
-	/echo Enchanter summoning script started.
+	/echo Summoning script started. Casting ${spellName}
 
 	/if (!${Me.Gem["${spellName}"]}) {
 		/memspell 8 "${spellName}"
 	}
 
-	:loop
+	:summonLoop
 		/call SaveCursorItems
-		/if ( ${Me.CurrentMana} > ${spellMana} ) {
+		/if ( ${Me.CurrentMana} > ${Spell[${spellName}].Mana} ) {
 			/if (${Me.Spawn.Sitting}) /stand
 			/call CheckGM
 			/call BotCast "${spellName}"
@@ -65,7 +43,7 @@ Sub Main
 		} else {
 			/call MedBreak
 		}
-	/goto :loop
+	/goto :summonLoop
 
 /return
 

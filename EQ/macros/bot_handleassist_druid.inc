@@ -85,12 +85,12 @@ Sub DruSnareMob(int SpawnId)
 	/target npc id ${SpawnId}
 	/delay 2s ${Target.ID}==${SpawnId}
 
-	/if (${Ini[INI_FILE, ImmuneSnare_${Zone.ShortName}, ${Target.CleanName}, NOT_FOUND]}) {
+	/if (${Ini[INI_FILE, ImmuneSnare_${Zone.ShortName}, ${Target.CleanName}, 0]}) {
 		/call DebugMsg "IMMUNESNARE: ${Target.CleanName} (learned previously)"
 		/goto :DoneSnaring
 	}
 
-	/if (${Ini[INI_FILE, DontRun_${Zone.ShortName}, ${Target.CleanName}, NOT_FOUND]}) {
+	/if (${Ini[INI_FILE, DontRun_${Zone.ShortName}, ${Target.CleanName}, 0]}) {
 		/call DebugMsg "DONT RUN: ${Target.CleanName} (says INI)"
 		/goto :DoneSnaring
 	}
@@ -152,7 +152,7 @@ Sub DruSnareMob(int SpawnId)
 
 		} else {
 			/if (${Target.ID} && !${AbortLoop}) {
-				/call DebugMsg "Can't snare, mob is oor/no LoS!"
+				/call DebugMsg "Can't snare, mob is oor/no LoS/spell not memorized!"
 				/doevents
 				/delay 3s
 				/goto :SnareLoop

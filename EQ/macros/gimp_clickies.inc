@@ -966,6 +966,7 @@ Sub BuffedAttack1
 	/if (${Me.Buff["Celestial Tranquility"].ID})		/varset AttackBuff 40	
 	/if (${Me.Buff["Spiritual Vitality"].ID})				/varset AttackBuff 52
 	/if (${Me.Buff["Strength of Tunare"].ID})				/varset AttackBuff 60
+	/if (${Me.Buff["Spiritual Vim"].ID})						/varset AttackBuff 62
 	/if (${Me.Buff["Strength of the Hunter"].ID})		/varset AttackBuff 75
 	/if (${Me.Buff["Strength of the Forest Stalker"].ID})		/varset AttackBuff 90
 	/if (${Me.Buff["Strength of the Forest Stalker Rk. II"].ID})		/varset AttackBuff 94

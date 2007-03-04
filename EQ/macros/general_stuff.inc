@@ -45,6 +45,7 @@ Sub SaveCursorItems
 	/if (${Cursor.ID}) {
 		/echo Saving ${Cursor.Name}
 		/autoinventory
+		/delay 5
 		/goto :CheckCursor
 	}
 /return
