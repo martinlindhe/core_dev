@@ -67,10 +67,10 @@ Sub BotCast(string spellName, string mySub)
 	/if (${Window[SpellBookWnd].Open}) /keypress spellbook
 	/if (${Corpse.Open}) /notify LootWnd DoneButton leftmouseup
 
-:wait_for_stop
+	:wait_for_stop
 	/if (${Me.Casting.ID}) /goto :wait_for_stop
 		
-:cast_spell
+	:cast_spell
 	/if (${Me.AltAbility[${spellName}].ID}) {
 		/varset spellType alt
 	} else /if (${Spell[${spellName}].ID}) {
@@ -80,7 +80,8 @@ Sub BotCast(string spellName, string mySub)
 	| /echo spell: ${spellName} type: ${spellType}
 	/casting "${spellName}" ${spellType}
 
-:cast_spell_pending
+	:cast_spell_pending
+	/if (${interruptFlag}) /return ${Cast.Result}
 	/if (${Cast.Status.Find[C]}) {
 		/if (!${interruptFlag} && ${mySub.Length}) /call ${mySub}
 		/goto :cast_spell_pending
