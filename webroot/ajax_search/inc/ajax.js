@@ -77,7 +77,7 @@ function ajax_search_callback()
 		empty_element('search_results');
 
 		var e = document.getElementById('search_results');
-		
+
 		var root_node = search_request.responseXML.getElementsByTagName('x').item(0);
 		if (!root_node) return;
 
@@ -86,11 +86,10 @@ function ajax_search_callback()
 		for (var i=0; i<items.length; i++)
 		{
 			var cur = items[i].childNodes;
-			if (items[i].nodeName == 's') {		//<s> is search results
+			if (items[i].nodeName == 's') {		//<s>-taggen innehåller sökresultaten
 				add_link_node(e, items[i].firstChild.nodeValue, 'show_result.php?i='+items[i].getAttribute('id'), 'search_result_'+i%2);
 			}
 		}
-
 		search_request = null;
 	}
 }

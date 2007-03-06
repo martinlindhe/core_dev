@@ -1,9 +1,11 @@
-<? header('Content-type: text/xml'); echo '<?xml version="1.0" ?>';
+<?
+	header('Content-type: text/xml');
+	echo '<?xml version="1.0" ?>';
 
-	if (empty($_GET['s'])) die('<x></x>');
+	if (empty($_GET['s'])) die('<x/>');
 	$search = $_GET['s'];
 
-	/* fetches all rows from result and return as an array */
+	/* returnerar alla rows från ett result-set som en array */
 	function dbFetchArray(&$db, $query)
 	{
 		$check = mysql_query($query, $db);
@@ -18,7 +20,7 @@
 	}
 
 	$db = @ mysql_connect('localhost:3306', 'root', '');
-	if (!$db) die;
+	if (!$db) die('<x/>');
 
 	mysql_select_db('dbAJAXSearch', $db);
 
