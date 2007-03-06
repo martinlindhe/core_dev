@@ -267,6 +267,7 @@ private:
 		}
 
 		if (HasSHM &&
+			!HasBuff("Spirit of Persistence") && !HasBuff("Talisman of Persistence") &&
 			!HasBuff("Preternatural Foresight") && !HasBuff("Talisman of Foresight") &&
 			!HasBuff("Spirit of Sense") && !HasBuff("Talisman of Sense"))
 		{
