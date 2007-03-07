@@ -39,6 +39,7 @@
 101com.com
 114.com.cn
 163.com
+198.173.76.253
 1javastreet.com/dm.gif
 216.105.166.67
 216.65.38.226
@@ -360,6 +361,7 @@ mail.google.com/mail/images/c.gif
 marketing.888.com
 maxserving.com
 media-servers.net
+mediamgr.ugo.com
 mediaplazza.com
 mediaplex.com
 metro.se/*/ad
