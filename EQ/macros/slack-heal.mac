@@ -1,6 +1,6 @@
 | druid heal slack
 #define HEAL_ONLY_MODE			1						| heal only mode = only does heal tank & snare mob
-#define QHEAL_PERCENT				60
+#define QHEAL_PERCENT				72
 #define CHEAL_PERCENT				85
 #define USE_CH							0
 

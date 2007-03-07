@@ -232,19 +232,19 @@ Sub HandleGroupHeal(int PctHPs)
 	/declare i int local 0
 
 	| Heal target if it's a player outside group
-	/if (${Target.ID} && ${Target.Type.Equal[PC]} && ${Target.PctHPs} <= ${PctHPs} && ${Target.State.NotEqual["DEAD"]}) {
+	/if (${Target.ID} && ${Target.Type.Equal[PC]} && (${Target.Distance} < 200) && ${Target.PctHPs} <= ${PctHPs} && ${Target.State.NotEqual["DEAD"]}) {
 		/call PerformHeal ${Target.ID} ${PctHPs}
 		/return
 	}
 
 	| See if HoTT is a player that needs a heal	
-	/if (${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && ${Me.TargetOfTarget.PctHPs} <= ${PctHPs} && ${Me.TargetOfTarget.State.NotEqual["DEAD"]}) {
+	/if (${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && (${Me.TargetOfTarget.Distance} < 200) && ${Me.TargetOfTarget.PctHPs} <= ${PctHPs} && ${Me.TargetOfTarget.State.NotEqual["DEAD"]}) {
 		/call PerformHeal ${Me.TargetOfTarget.ID} ${PctHPs}
 		/return
 	}
 
 	/for i 0 to 5
-		/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].PctHPs} <= ${PctHPs}) && ${Group.Member[${i}].State.NotEqual["DEAD"]}) {
+		/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 200) && (${Group.Member[${i}].PctHPs} <= ${PctHPs}) && ${Group.Member[${i}].State.NotEqual["DEAD"]}) {
 			/call PerformHeal ${Group.Member[${i}].ID} ${PctHPs}
 			/return
 		}
