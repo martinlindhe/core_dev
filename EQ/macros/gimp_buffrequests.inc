@@ -81,14 +81,14 @@ Sub Init_BuffRequests
 /return
 
 #Event HandleBuffRequest		"#1# tells you, '#2#'"
-Sub Event_HandleBuffRequest(FullText, Player, Text)
+Sub Event_HandleBuffRequest(string FullText, string Player, string Text)
 	/if (${Spawn[PC ${Player}].Type.NotEqual["PC"]}) /return
 	/call Event_HandleBuffRequestGroup "${FullText}" "${Player}" "${Text}"
 /return
 
 |Handle incomming command
 #Event HandleBuffRequestGroup	"#1# tells the group, '#2#'"
-Sub Event_HandleBuffRequestGroup(FullText, Player, Text)
+Sub Event_HandleBuffRequestGroup(string FullText, string Player, string Text)
 
 	/if (!${gimp_buffrequests_loaded}) /call Init_BuffRequests
 	/if (!${gimp_buffrequests_activated}) /return

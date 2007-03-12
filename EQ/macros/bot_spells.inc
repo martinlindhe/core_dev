@@ -262,37 +262,37 @@ Sub HandleGroupHeal(int PctHPs)
 /return
 
 
-Sub AttemptToStun(string name)
+Sub AttemptToStun(string MobName)
 
-	/if (${Spawn[${name}].Level} > 75) /return
+	/if (${Spawn[${MobName}].Level} > 75) /return
 
 	/declare StunSpellName string local
 	
-	|Cleric stuns:
+	| Cleric stuns:
 	/if (${Me.Gem["Sound of Divinity"]}) /varset StunSpellName "Sound of Divinity"
 
-	|Druid stuns:
+	| Druid stuns:
 	/if (${Me.Gem["Stormwatch"]}) /varset StunSpellName "Stormwatch"
 	/if (${Me.Gem["Gale of the Stormborn"]}) /varset StunSpellName "Gale of the Stormborn"
 	/if (${Me.Gem["Gale of the Stormborn Rk. II"]}) /varset StunSpellName "Gale of the Stormborn Rk. II"
 	
 	/if (!${Me.Gem[${StunSpellName}]}) {
-		/echo # Debug: No stun spells memmed
+		/call DebugMsg "WARNING: No stun spells memmed!"
 		/return
 	}
 
 	/if (${Me.Casting.ID} && ${Me.Casting.SpellType.Equal[Detrimental]} && ${Me.Casting.Name.NotEqual[${StunSpellName}]}) {
 		|interrupta, ENBART om spellen som kastas e en nuke
-		/echo # ABORTING cast of ${Me.Casting.Name} for stun!
+		/call DebugMsg "ABORTING cast of ${Me.Casting.Name} for stun!"
 		/keypress d
 		/delay 1
 		/keypress d
 	}
 
-	/if (${Spawn[${name}].ID} && ${Spawn[${name}].LineOfSight}) {
-		/target npc ${name}
+	/if (${Spawn[${MobName}].ID} && ${Spawn[${MobName}].LineOfSight}) {
+		/target npc ${MobName}
 		/delay 5
-		/echo * Trying to stun ${name}
+		/call DebugMsg "Trying to stun ${MobName}"
 		/call MQ2Cast ${StunSpellName}
 	}
 
@@ -303,20 +303,19 @@ Sub AttemptToStun(string name)
 Sub WaitForSpellReady(string SpellName)
 
 	/if (!${Me.Book[${SpellName}]}) {
-		/call DebugMsg "ERROR: I dont have the spell: ${SpellName}"
+		/call DebugMsg "ERROR: I dont know the spell ${SpellName}"
 		/return
 	}
 
 	/if (!${Me.Gem["${SpellName}"]}) {
-		|todo: memorize in first free slot, or use default slot
 		/call DebugMsg "ERROR fixme: I dont have spell ${SpellName} MEMORIZED"
 		/return
 	}
 
-	:loop
+	:SpellReadyLoop
 	/if (!${Me.SpellReady[${SpellName}]} || ${Me.Moving}) {
 		/doevents
-		/goto :loop
+		/goto :SpellReadyLoop
 	}
 
 /return
