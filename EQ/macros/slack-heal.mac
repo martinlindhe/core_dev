@@ -22,7 +22,7 @@ Sub Main
 	
 	/echo Slack-heal started, MT is ${Target.Name}
 	
-	:Loop
+	:MainLoop
 	/call HandleGroupHeal QHEAL_PERCENT
 	/doevents
 	/call UpdateBuffs
@@ -32,7 +32,6 @@ Sub Main
 		/target id ${TankId}
 		/delay 1s ${Target.ID}==${TankId}
 	}
-
-	/goto :Loop
+	/goto :MainLoop
 
 /return

@@ -7,7 +7,7 @@
 Sub Event_YouHaveDied
 	/echo [${Time}] You died at ${Me.Y}, ${Me.X}, ${Me.Z}!
 
-	/delay 15s
+	/delay 25s
 	/varset AbortLoop 1
 
 	/if (${Group.Member[${i}].Class.NotEqual["Warrior"]} && ${Group.Member[${i}].Class.NotEqual["Monk"]} && ${Group.Member[${i}].Class.NotEqual["Rogue"]} && ${Group.Member[${i}].Class.NotEqual["Berserker"]}) {

@@ -339,6 +339,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 /return
 
 | Level 75 druid buffs & clickies
+| todo: return if 1 buff refresh is done, let this function be called often and do buffs 1 by 1 when needed instead of all at once (in case mobs are inc so bot dont waste times rebuffing)
 Sub DruidUpdateBuffs
 
 	| Clear debuffs:
@@ -349,34 +350,60 @@ Sub DruidUpdateBuffs
 		/delay 40
 	}
 
-	/call RefreshBuff "Mask of the Wild" 50
-	/call RefreshBuff "Viridicoat Rk. II" 50
+	| Razorthorn trash mobs cast AE that overwrites Mask of the Wild
+	/if (${Zone.ShortName.NotEqual["ragea_raid"]}) {
+		/call RefreshBuff "Mask of the Wild" 50
+		/if (${Macro.Return}) /return
+	}
 
-	/if (${Me.SpellReady["Second Life Rk. II"]}) /call RefreshBuff "Second Life Rk. II" 10
+	/call RefreshBuff "Viridicoat Rk. II" 50
+	/if (${Macro.Return}) /return
+
+	/if (${Me.SpellReady["Second Life Rk. II"]}) {
+		/call RefreshBuff "Second Life Rk. II" 10
+		/if (${Macro.Return}) /return
+	}
 
 	/if (${Group.Members}) {
 		/call RefreshBuff "Blessing of the Direwild Rk. II" 50
+		/if (${Macro.Return}) /return
 		/if (!${Me.Song["Aura of Life Effect"].ID}) {
 			| this is a hack because it seems to fade sometimes when you move or lag
 			/delay 5
-			/if (!${Me.Song["Aura of Life Effect"].ID}) /call RefreshBuff "Aura of Life" 0
+			/if (!${Me.Song["Aura of Life Effect"].ID}) {
+				/call RefreshBuff "Aura of Life" 0
+				/if (${Macro.Return}) /return
+			}
 		}
 		/if (!${Raid.Members} && !HEAL_ONLY_MODE) {
-			/if (${Me.Gem["Legacy of Viridiflora Rk. II"]}) /call RefreshBuff "Legacy of Viridiflora Rk. II" 50
-			/if (${Me.Gem["Blessing of Oak"]}) /call RefreshBuff "Blessing of Oak" 50
+			/if (${Me.Gem["Legacy of Viridiflora Rk. II"]}) {
+				/call RefreshBuff "Legacy of Viridiflora Rk. II" 50
+				/if (${Macro.Return}) /return
+			}
+			/if (${Me.Gem["Blessing of Oak"]}) {
+				/call RefreshBuff "Blessing of Oak" 50
+				/if (${Macro.Return}) /return
+			}
 		}
 	}
 
 	/if (!${Raid.Members} && !${Spawn[npc radius 60].LineOfSight}) {
 		/call RefreshBuff "Brazier of Endless Flame" 20
+		/if (${Macro.Return}) /return
 	}
 
 	| Clickies
 	/call RefreshBuff "Earring of Pain Deliverance" 20
-	/if (${Raid.Members} < 18) /call RefreshBuff "Orb of Duskmold" 20
+	/if (${Macro.Return}) /return
+
+	/if (${Raid.Members} < 18) {
+		/call RefreshBuff "Orb of Duskmold" 20
+		/if (${Macro.Return}) /return
+	}
 
 	/if (${Zone.ShortName.Equal[ashengate_raid]}) {
 		/call RefreshBuff "Resist Corruption Rk. II"
+		/if (${Macro.Return}) /return
 	}
 
 	| Pet buffs
@@ -387,6 +414,9 @@ Sub DruidUpdateBuffs
 		}
 		/call RefreshPetBuff "Mammoth's Strength" 50
 	}
+
+	| Shrink myself
+	/if (${Me.Height} > 2.00) /call ShrinkSelf "Bracelet of the Shadow Hive"
 
 	/if (!HEAL_ONLY_MODE && DO_AA_DS) /call DruidRefreshAA_DS
 	

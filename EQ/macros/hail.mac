@@ -11,7 +11,7 @@ Sub Main
 	}
 
 	| todo: zone short-name check
-	/if (${SpawnCount[npc Zhubis the Griffin Tamer radius 20]}) {
+	/if (${SpawnCount[npc Zhubis the Griffin Tamer radius 30]}) {
 		/echo Zhubis: enter ashengate (Ashengate East)
 		/target npc Zhubis the Griffin Tamer
 		/delay 2s ${Target.ID}
@@ -19,13 +19,22 @@ Sub Main
 		/return
 	}
 	
-	/if (${SpawnCount[npc Scout Keshik radius 20]}) {
+	/if (${SpawnCount[npc Scout Keshik radius 30]}) {
 		/echo Scout Keshik: summon a griffon
 		/target npc Scout Keshik
 		/delay 2s ${Target.ID}
 		/say summon a griffon
 		/return
 	}
-	
+
+	| katta - Solteris access group instances
+	/if (${Zone.ShortName.Equal["KattaCastrum"]} && ${SpawnCount[npc Tactician Sodut radius 30]}) {
+		/echo Tactician Sodut: finished
+		/target npc Tactician Sodut
+		/delay 2s ${Target.ID}
+		/say finished
+		/return
+	}
+
 	/echo Didn't see anyone to hail that i recognize
 /return

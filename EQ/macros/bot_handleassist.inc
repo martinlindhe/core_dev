@@ -271,54 +271,48 @@ Sub UpdateBuffs
 	
 	/if (${Me.Class.Name.Equal[Druid]}) {
 		/call DruidUpdateBuffs
-		/goto :Done
+		/goto :BuffsDone
 	}
 
 	/if (${Me.Class.Name.Equal[Cleric]}) {
 		/call ClericUpdateBuffs
-		/goto :Done
+		/goto :BuffsDone
 	}
 
 	/if (${Me.Class.Name.Equal[Enchanter]}) {
 		/call EnchanterUpdateBuffs
-		/goto :Done
+		/goto :BuffsDone
 	}
 
 	/if (${Me.Class.Name.Equal[Beastlord]}) {
 		/call BeastlordUpdateBuffs
-		/goto :Done
+		/goto :BuffsDone
 	}
 
 	/if (${Me.Class.Name.Equal["Shadow Knight"]}) {
 		/call ShadowKnightUpdateBuffs
-		/goto :Done
+		/goto :BuffsDone
 	}
 
 	/if (${Me.Class.Name.Equal["Wizard"]}) {
 		/call WizardUpdateBuffs
-		/goto :Done
+		/goto :BuffsDone
 	}
 
 	/if (${Me.Class.Name.Equal["Magician"]}) {
 		/call MageUpdateBuffs
-		/goto :Done
+		/goto :BuffsDone
 	}
 
 	/call DebugMsg "# I miss a buff function for class ${Me.Class.Name}"
 
-	:Done
+	:BuffsDone
 
 	/if (${Me.Standing} && ${wasSitting} && !${Me.Moving}) /sit
-	
-	|/if (${Target.ID}) {
-	|	/if (${Spawn[id ${Target.ID}].Type.NotEqual[PC]} || (${Target.ID} == ${Me.ID})) {
-	|		|cleara target om det e corpse etc
-	|		/squelch /target clear
-	|	}
-	|}
+
 /return
 
-|fixme: make this a ini section?
+| fixme: make this a ini section?
 Sub CheckNeutralZone
 	/if (${Zone.Name.Equal["The Plane of Knowledge"]} || ${Zone.Name.Equal["The Plane of Tranquility"]} || ${Zone.Name.Equal["The Nexus"]} || ${Zone.Name.Equal["The Bazaar"]} || ${Zone.Name.Equal["Guild Lobby"]} || ${Zone.Name.Equal["Guild Hall"]}) /return 1
 /return 0

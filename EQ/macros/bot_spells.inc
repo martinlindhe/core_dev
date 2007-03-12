@@ -47,8 +47,15 @@ Sub Event_MyselfVertigo(string Line)
 	/echo I need RGC! (Vertigo)
 	/if (${Zone.ShortName.Equal["theatera_raid"]} && ${Me.Book["Remove Greater Curse"]}) {
 		/target myself
+		/delay 1s
 		/call BotCast "Remove Greater Curse"
 	}
+/return
+
+#event WeZoning "LOADING, PLEASE WAIT..."
+Sub Event_WeZoning(string Line)
+	/echo ZONING!!!!!
+	/delay 30s
 /return
 
 
@@ -132,20 +139,21 @@ Sub HealCallback
 /return
 
 | Accepts a spell name, or a item name
+| Returns 1 if buff was refreshed, else returns 0
 Sub RefreshBuff(string Name, int Duration)
 
 	/declare BuffName string local
 	/declare i int local 0
 	/declare freeslot int local 0
 
-	/if (${Window[LootWnd].Open} || ${Cursor.ID} || ${Me.Casting.ID}) /return
+	/if (${Window[LootWnd].Open} || ${Cursor.ID} || ${Me.Casting.ID}) /return 0
 
 	| Is it a item clicky?
 	/if (${FindItem[${Name}].ID}) {
 		/varset BuffName ${FindItem[${Name}].Spell.Name}
 	} else /if (${Spell[${Name}].ID}) {
 		| It's a spell
-		/if (${Me.CurrentMana} < ${Spell[${Name}].Mana}) /return
+		/if (${Me.CurrentMana} < ${Spell[${Name}].Mana}) /return 0
 		/varset BuffName ${Name}
 	} else {
 		/echo UNKNOWN BUFF! ${Name}
@@ -175,12 +183,12 @@ Sub RefreshBuff(string Name, int Duration)
 			}
 		}
 		/doevents
-		/return
+		/return 1
 	}
 
 	/if (!${FindItem[${Name}].ID} && !${Me.Book[${Name}]}) /echo # ERROR: Can't find the spell ${Name}!
 
-/return
+/return 0
 
 Sub RefreshPetBuff(string SpellName)
 
@@ -206,9 +214,10 @@ Sub PerformHeal(int SpawnId, int PctHPs)
 	/if (${Target.ID}!=${SpawnId}) {
 		/target id ${SpawnId}
 		/delay 2s ${Target.ID}==${SpawnId}
+		/delay 2
 	}
 
-	| check if player been healed before reaching this code
+	| Check if player been healed before reaching this code
 	/if (${Target.PctHPs} > ${PctHPs}) /return
 
 	/if (${Me.AltAbilityReady[DRUID_INSTANTHEAL]} && (${Target.PctHPs} <= 18) && (${Target.Distance} < ${Spell[DRUID_INSTANTHEAL].Range})) {
@@ -310,4 +319,15 @@ Sub WaitForSpellReady(string SpellName)
 		/goto :loop
 	}
 
+/return
+
+Sub ShrinkSelf(string ShrinkItem)
+	| Note: When you are max shrinked, your Height == 2.00
+	/target myself
+	:ShrinkLoop
+	/if (${Me.Height} > 2.00) {
+		/casting "${ShrinkItem}" item
+		/goto :ShrinkLoop
+	}
+	/echo # Done Shrinking
 /return
