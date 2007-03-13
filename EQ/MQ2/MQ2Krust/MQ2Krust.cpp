@@ -267,7 +267,6 @@ private:
 		}
 
 		if (HasSHM &&
-			!HasBuff("Spirit of Persistence") && !HasBuff("Talisman of Persistence") &&
 			!HasBuff("Preternatural Foresight") && !HasBuff("Talisman of Foresight") &&
 			!HasBuff("Spirit of Sense") && !HasBuff("Talisman of Sense"))
 		{
@@ -275,7 +274,8 @@ private:
 		}
 
 		if (HasSHM &&
-			!HasBuff("Talisman of Fortitude") && !HasBuff("Spirit of Fortitude"))
+			!HasBuff("Spirit of Persistence") && !HasBuff("Talisman of Persistence") &&
+			!HasBuff("Spirit of Fortitude") && !HasBuff("Talisman of Fortitude"))
 		{
 			strcat(Temp, "FORTITUDE ");
 		}
