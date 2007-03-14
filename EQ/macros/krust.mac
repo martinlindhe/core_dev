@@ -315,7 +315,7 @@ Sub Main
 					}
 
 					|just taunt
-					/if (${Me.AbilityReady["Taunt"]} && (${Target.Distance} < 20)) {
+					/if (${Me.AbilityReady["Taunt"]} && (${Target.Distance} < 20) && ${Me.TargetOfTarget.Name.NotEqual[${Me.Name}]}) {
 						/echo # TAUNT: ${Target.CleanName} (${Me.TargetOfTarget.Name} has aggro)
 						/doability "Taunt"
 						/delay 10

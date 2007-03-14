@@ -1,6 +1,6 @@
 | druid heal slack
-#define HEAL_ONLY_MODE			1						| heal only mode = only does heal tank & snare mob
-#define QHEAL_PERCENT				72
+#define HEAL_ONLY_MODE			1
+#define QHEAL_PERCENT				73
 #define CHEAL_PERCENT				85
 #define USE_CH							0
 
@@ -19,9 +19,8 @@ Sub Main
 	}
 
 	/call Init_HandleAssist
-	
 	/echo Slack-heal started, MT is ${Target.Name}
-	
+
 	:MainLoop
 	/call HandleGroupHeal QHEAL_PERCENT
 	/doevents
@@ -32,6 +31,13 @@ Sub Main
 		/target id ${TankId}
 		/delay 1s ${Target.ID}==${TankId}
 	}
+	
+	| Cast Fernspur on tank if ready and nessecary
+	/if (!${Raid.Members} && !${Me.Invis} && ${Me.SpellReady["Fernspur Rk. II"]} && ${SpawnCount[npc radius 50]} && (${Target.ID}==${TankId}) && (${Target.PctHPs}>=70) ) {
+		/call DebugMsg "FERNSPUR > ${Target.Name} < (${Me.PctMana}m)"
+		/call BotCast "Fernspur Rk. II"
+	}
+	
 	/goto :MainLoop
 
 /return

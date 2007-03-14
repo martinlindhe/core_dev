@@ -21,13 +21,13 @@
 *|
 
 
-#define DO_SNARE						0						| shall i snare mobs?
+#define DO_SNARE						1						| shall i snare mobs?
 #define DO_DEBUFF						1						| debuff will be cast once per mob, not in heal only mode
 #define DO_EPIC							1						| click epic 1.5/2.0 when it is ready?
 #define DO_AA_DS						1						| Auto cast Wrath of the Wild anytime it is up. First on yourself, if you already have the buff, cast it on MA
 
 #define DO_REPTILE					1						| casts skin of the reptile on tank at beginning of fight, good for monk tanks :)
-#define DO_REPTILE_PLAYER		Keosden
+#define DO_REPTILE_PLAYER		Yamakasi
 
 | Percent levels
 #define SNARE_PERCENT				99

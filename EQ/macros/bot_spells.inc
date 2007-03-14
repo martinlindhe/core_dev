@@ -321,6 +321,10 @@ Sub WaitForSpellReady(string SpellName)
 /return
 
 Sub ShrinkSelf(string ShrinkItem)
+
+	/call CheckNeutralZone
+	/if (${Macro.Return} || ${Casting.ID}) /return
+
 	| Note: When you are max shrinked, your Height == 2.00
 	/target myself
 	:ShrinkLoop

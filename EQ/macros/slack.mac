@@ -1,6 +1,6 @@
 | druid normal slack
-#define HEAL_ONLY_MODE			0						| heal only mode = only does heal tank & snare mob
-#define QHEAL_PERCENT				35
+#define HEAL_ONLY_MODE			0
+#define QHEAL_PERCENT				75
 #define CHEAL_PERCENT				85
 #define USE_CH							0
 
@@ -11,7 +11,7 @@ Sub Main
 
 	/declare SpawnId int local 0
 	/declare assistRange int local 0
-	/declare AbortLoop				int outer 0
+	/declare AbortLoop int outer 0
 	/declare i int local 0
 
 	/if (!${Raid.Members} && !${Me.LADelegateMA} && (!${Target.ID} || ${Target.Type.Equal[NPC]})) {
@@ -30,7 +30,7 @@ Sub Main
 	/if (${Raid.Members} >= 18) {
 		/varset assistRange 90
 		/echo Raid slack.
-	} else /if (${Me.LADelegateMA}) {
+	} else /if (${Me.LADelegateMA} && (${Group.Members}>1)) {
 		/varset assistRange 70
 		/echo Group slack, using Delegate MA method.
 	} else {
