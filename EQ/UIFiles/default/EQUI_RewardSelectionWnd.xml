@@ -105,6 +105,7 @@
 		<LeftAnchorToLeft>true</LeftAnchorToLeft>
 		<RightAnchorToLeft>false</RightAnchorToLeft>
 		<Style_Border>true</Style_Border>
+		<Style_VScroll>true</Style_VScroll>
 	</STMLbox>
 	<Button item = "RewardSelectionIconButton">
 		<ScreenID>RewardSelectionIconButton</ScreenID>

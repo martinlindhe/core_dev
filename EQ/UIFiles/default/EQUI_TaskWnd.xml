@@ -595,7 +595,7 @@
 			<Heading>Role</Heading>
 		</Columns>
 		<Columns>
-			<Width>100</Width>
+			<Width>200</Width>
 			<Heading>Template</Heading>
 		</Columns>
 	</Listbox>

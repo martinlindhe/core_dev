@@ -1,8 +1,7 @@
-<?xml version = "1.0"?>
-<XML ID = "EQInterfaceDefinitionLanguage">
-	<Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
-
-	<Label item ="LW_CorpseName">
+<?xml version="1.0" ?>
+<XML ID="EQInterfaceDefinitionLanguage">
+	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />
+	<Label item="LW_CorpseName">
 		<ScreenID>LW_CorpseName</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -16,16 +15,15 @@
 		</Size>
 		<Text>Blahblahblah's Corpse</Text>
 		<TextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>255</B>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
 		</TextColor>
 		<NoWrap>false</NoWrap>
 		<AlignCenter>true</AlignCenter>
 		<AlignRight>false</AlignRight>
 	</Label>
-
-	<Button item = "LW_BroadcastButton">
+	<Button item="LW_BroadcastButton">
 		<ScreenID>BroadcastButton</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -55,8 +53,7 @@
 			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
-
-	<InvSlot item = "LW_LootSlot0">
+	<InvSlot item="LW_LootSlot0">
 		<ScreenID>LW_LootSlot0</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -73,7 +70,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot1">
+	<InvSlot item="LW_LootSlot1">
 		<ScreenID>LW_LootSlot1</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -90,7 +87,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot2">
+	<InvSlot item="LW_LootSlot2">
 		<ScreenID>LW_LootSlot2</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -107,7 +104,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot3">
+	<InvSlot item="LW_LootSlot3">
 		<ScreenID>LW_LootSlot3</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -124,7 +121,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot4">
+	<InvSlot item="LW_LootSlot4">
 		<ScreenID>LW_LootSlot4</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -141,7 +138,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot5">
+	<InvSlot item="LW_LootSlot5">
 		<ScreenID>LW_LootSlot5</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -158,7 +155,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot6">
+	<InvSlot item="LW_LootSlot6">
 		<ScreenID>LW_LootSlot6</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -175,7 +172,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot7">
+	<InvSlot item="LW_LootSlot7">
 		<ScreenID>LW_LootSlot7</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -192,7 +189,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot8">
+	<InvSlot item="LW_LootSlot8">
 		<ScreenID>LW_LootSlot8</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -209,7 +206,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot9">
+	<InvSlot item="LW_LootSlot9">
 		<ScreenID>LW_LootSlot9</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -226,7 +223,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot10">
+	<InvSlot item="LW_LootSlot10">
 		<ScreenID>LW_LootSlot10</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -243,7 +240,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot11">
+	<InvSlot item="LW_LootSlot11">
 		<ScreenID>LW_LootSlot11</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -260,7 +257,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot12">
+	<InvSlot item="LW_LootSlot12">
 		<ScreenID>LW_LootSlot12</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -277,7 +274,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot13">
+	<InvSlot item="LW_LootSlot13">
 		<ScreenID>LW_LootSlot13</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -294,7 +291,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot14">
+	<InvSlot item="LW_LootSlot14">
 		<ScreenID>LW_LootSlot14</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -311,7 +308,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot15">
+	<InvSlot item="LW_LootSlot15">
 		<ScreenID>LW_LootSlot15</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -328,7 +325,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot16">
+	<InvSlot item="LW_LootSlot16">
 		<ScreenID>LW_LootSlot16</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -345,7 +342,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot17">
+	<InvSlot item="LW_LootSlot17">
 		<ScreenID>LW_LootSlot17</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -362,7 +359,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot18">
+	<InvSlot item="LW_LootSlot18">
 		<ScreenID>LW_LootSlot18</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -379,7 +376,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot19">
+	<InvSlot item="LW_LootSlot19">
 		<ScreenID>LW_LootSlot19</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -396,7 +393,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot20">
+	<InvSlot item="LW_LootSlot20">
 		<ScreenID>LW_LootSlot20</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -413,7 +410,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot21">
+	<InvSlot item="LW_LootSlot21">
 		<ScreenID>LW_LootSlot21</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -430,7 +427,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot22">
+	<InvSlot item="LW_LootSlot22">
 		<ScreenID>LW_LootSlot22</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -447,7 +444,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot23">
+	<InvSlot item="LW_LootSlot23">
 		<ScreenID>LW_LootSlot23</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -464,7 +461,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot24">
+	<InvSlot item="LW_LootSlot24">
 		<ScreenID>LW_LootSlot24</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -481,7 +478,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot25">
+	<InvSlot item="LW_LootSlot25">
 		<ScreenID>LW_LootSlot25</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -498,7 +495,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot26">
+	<InvSlot item="LW_LootSlot26">
 		<ScreenID>LW_LootSlot26</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -515,7 +512,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot27">
+	<InvSlot item="LW_LootSlot27">
 		<ScreenID>LW_LootSlot27</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -532,7 +529,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot28">
+	<InvSlot item="LW_LootSlot28">
 		<ScreenID>LW_LootSlot28</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -549,7 +546,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	<InvSlot item = "LW_LootSlot29">
+	<InvSlot item="LW_LootSlot29">
 		<ScreenID>LW_LootSlot29</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -566,8 +563,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-
-	<InvSlot item = "LW_LootSlot30">
+	<InvSlot item="LW_LootSlot30">
 		<ScreenID>LW_LootSlot30</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -584,8 +580,7 @@
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	
-	<InvSlot item = "LW_LootSlot31">
+	<InvSlot item="LW_LootSlot31">
 		<ScreenID>LW_LootSlot31</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -598,12 +593,11 @@
 			<CY>40</CY>
 		</Size>
 		<Background>A_RecessedBox</Background>
-		<EQType>5030</EQType>
+		<EQType>5031</EQType>
 		<ItemOffsetX>2</ItemOffsetX>
 		<ItemOffsetY>2</ItemOffsetY>
 	</InvSlot>
-	
-	<Screen item = "LW_LootInvWnd">
+	<Screen item="LW_LootInvWnd">
 		<ScreenID>LootInvWnd</ScreenID>
 		<!--<Font/>-->
 		<RelativePosition>true</RelativePosition>
@@ -651,8 +645,7 @@
 		<Pieces>LW_LootSlot30</Pieces>
 		<Pieces>LW_LootSlot31</Pieces>
 	</Screen>
-
-	<Button item = "LW_DoneButton">
+	<Button item="LW_DoneButton">
 		<ScreenID>DoneButton</ScreenID>
 		<!--<Font>3</Font>-->
 		<RelativePosition>true</RelativePosition>
@@ -682,9 +675,7 @@
 			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
-
-
-	<Screen item = "LootWnd">
+	<Screen item="LootWnd">
 		<!--<ScreenID/>-->
 		<!--<Font/>-->
 		<RelativePosition>false</RelativePosition>
@@ -717,6 +708,4 @@
 		<Pieces>LW_BroadcastButton</Pieces>
 		<Pieces>LW_DoneButton</Pieces>
 	</Screen>
-
-
 </XML>

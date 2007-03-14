@@ -42,7 +42,7 @@
 		</Location>
 		<Size>
 			<CX>340</CX>
-			<CY>272</CY>
+			<CY>472</CY>
 		</Size>
 		<TextColor>
 			<R>255</R>
@@ -761,7 +761,7 @@
 		</Location>
 		<Size>
 			<CX>700</CX>
-			<CY>400</CY>
+			<CY>600</CY>
 		</Size>
 		<Text>Bazaar Search Window</Text>
 		<Style_Transparent>false</Style_Transparent>

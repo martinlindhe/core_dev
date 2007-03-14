@@ -1117,7 +1117,7 @@
 			<Pressed>A_VSBDownPressed</Pressed>
 			<Flyby>A_VSBDownFlyby</Flyby>
 			<Disabled>A_VSBDownDisabled</Disabled>
-			<PressedFlyby>A_VSBUpPressedFlyby</PressedFlyby>
+			<PressedFlyby>A_VSBDownPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
 	<Button item="HB_Button1">
