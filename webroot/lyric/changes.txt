@@ -1,3 +1,6 @@
+2007.03.15
+	* add_lyric_single.php: new file (to add a lyric associated with a band only)
+
 2006.08.06
 	* functions_db.php: uppdaterad för MySQLi extensionen
 

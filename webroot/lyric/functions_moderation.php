@@ -99,7 +99,7 @@
 		} else if ($type == MODERATIONCHANGE_RECORDNAME) { //db, type, record_id, title
 			if (!is_numeric($p1)) return false;
 
-			$p2 = dbAddSlashes($p2);
+			$p2 = dbAddSlashes($db, $p2);
 			dbQuery($db, "INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timestamp=".time());
 
 		} else {
@@ -167,8 +167,8 @@
 			case MODERATIONCHANGE_LYRIC:
 				$data["p2"] = dbStripSlashes($data["p2"]);
 				$data["p3"] = dbStripSlashes($data["p3"]);
-				$data["p2"] = dbAddSlashes($data["p2"]);
-				$data["p3"] = dbAddSlashes($data["p3"]);
+				$data["p2"] = dbAddSlashes($db, $data["p2"]);
+				$data["p3"] = dbAddSlashes($db, $data["p3"]);
 
 				updateLyric($db, $p1, $data["p2"], $data["p3"]);
 				break;

@@ -121,14 +121,16 @@
 	function addLyric($db, $user_id, $band_id, $record_id, $track, $lyric_name, $lyric_text)
 	{
 		if (!is_numeric($user_id) || !is_numeric($band_id) || !is_numeric($record_id) || !is_numeric($track)) return false;
-		
+
 		$lyric_name = cleanupText($lyric_name);
 		$lyric_text = cleanupText($lyric_text);
-		
-		dbQuery($db, "INSERT INTO tblLyrics SET bandId=".$band_id.",lyricName='".$lyric_name."',lyricText='".$lyric_text."',creatorId=".$user_id.",timestamp=".time());
+
+		dbQuery($db, 'INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$user_id.',timestamp='.time());
 		$lyric_id = mysql_insert_id();
-		
-		dbQuery($db, "UPDATE tblTracks SET lyricId=".$lyric_id.",bandId=".$band_id." WHERE recordId=".$record_id." AND trackNumber=".$track);
+
+		if ($record_id) {
+			dbQuery($db, 'UPDATE tblTracks SET lyricId='.$lyric_id.',bandId='.$band_id.' WHERE recordId='.$record_id.' AND trackNumber='.$track);
+		}
 		return $lyric_id;
 	}
 	
