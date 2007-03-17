@@ -131,10 +131,10 @@ Sub HealCallback
 		/interrupt
 		/varset interruptFlag TRUE
 		/echo ${Target.Name} at ${Target.PctHPs}%, cancelling heal.
-	} else /if (${Me.Moving} || ${Me.Stunned}) {
+	} else /if (${Me.Stunned}) {
 		/interrupt
 		/varset interruptFlag TRUE
-		/echo STUN/MOVE - INTERRUPT HEAL ${Target.Name}
+		/echo STUN - INTERRUPT HEAL ${Target.Name}
 	}
 /return
 
