@@ -229,7 +229,6 @@
 		imagejpeg($t_im, $file_thumb, $config['jpeg_quality']);
 	
 		//echo '<img src="../sfd_cache/'.basename($file_thumb).'"><br>';
-
 	}
 
 	function parse_sfd_data($xml_file)
