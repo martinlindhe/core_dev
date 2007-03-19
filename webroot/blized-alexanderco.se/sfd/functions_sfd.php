@@ -40,8 +40,9 @@
 
 	function aRSortBySecondIndex($multiArray, $secondIndex)
 	{
-		while (list($firstIndex, ) = each($multiArray))
-			$indexMap[$firstIndex] = $multiArray[$firstIndex][$secondIndex];
+		while (list($firstIndex, ) = each($multiArray)) {
+			if (isset($multiArray[$firstIndex][$secondIndex])) $indexMap[$firstIndex] = $multiArray[$firstIndex][$secondIndex];
+		}
 
 		arsort($indexMap);
 		while (list($firstIndex, ) = each($indexMap))
@@ -315,6 +316,8 @@
 			
 			if (empty($objekt[$i]['RUM']) && empty($objekt[$i]['BOAREA'])) {
 				$objekt[$i]['STORLEK'] = 'Uppgift saknas';
+			} else if (empty($objekt[$i]['RUM'])) {
+				$objekt[$i]['STORLEK'] = $objekt[$i]['BOAREA'].' kvm';
 			} else {
 				$objekt[$i]['STORLEK'] = $objekt[$i]['RUM'].' rum & k'.mb_convert_encoding('ö','UTF-8','ISO-8859-1').'k om '.$objekt[$i]['BOAREA'].' kvm';
 			}
