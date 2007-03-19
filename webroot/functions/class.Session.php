@@ -24,6 +24,7 @@ class Session
 	private $timeout = 1800;						//max allowed idle time (in seconds) before auto-logout
 	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
 	private $sha1_key = 'rpxp8xkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
+	private $allow_registration = true;	//set to false to disallow the possibility to register new users
 
 	//Aliases of $_SESSION[] variables
 	public $error;
@@ -42,6 +43,7 @@ class Session
 		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
 		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
+		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
 
 		global $db;
 
@@ -177,42 +179,43 @@ class Session
 		echo '<label for="login_lock_ip">Restrict session to current IP</label><br>';
 		echo '<br>';
 		echo '<input type="submit" class="button" value="Log in">';
-		echo '<input type="button" class="button" value="Register" onClick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');">';
-		echo '<input type="button" class="button" value="Forgot password" onClick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');">';
+		if ($this->allow_registration) {
+			echo '<input type="button" class="button" value="Register" onClick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');">';
+			echo '<input type="button" class="button" value="Forgot password" onClick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');">';
+		}
 		echo '</form>';
 		echo '</div>';
 		
-		echo '<div id="login_register_layer" style="display: none;">';
-			echo '<b>Register new account</b><br>';
-			echo '<br>';
-			
-			echo '<table cellpadding=2>';
-			echo '<tr><td>Username:</td><td><input name="register_usr" type="text"> <img src="/gfx/icon_user.png" align="absmiddle"></td></tr>';
-			echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"> <img src="/gfx/icon_keys.png" align="absmiddle"></td></tr>';
-			echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"> <img src="/gfx/icon_keys.png" align="absmiddle"></td></tr>';
-			echo '<tr><td>E-mail:</td><td><input name="register_email" type="password"> <img src="/gfx/icon_mail.png" align="absmiddle"></td></tr>';
-			echo '</table>';
-			echo '<br>';
+		if ($this->allow_registration) {
+			echo '<div id="login_register_layer" style="display: none;">';
+				echo '<b>Register new account</b><br><br>';
 
-			echo '<input type="button" class="button" value="Log in" onClick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');">';
-			echo '<input type="button" class="button" value="Register" disabled>';
-			echo '<input type="button" class="button" value="Forgot password" onClick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');">';
-		echo '</div>';
+				echo '<table cellpadding=2>';
+				echo '<tr><td>Username:</td><td><input name="register_usr" type="text"> <img src="/gfx/icon_user.png" align="absmiddle"></td></tr>';
+				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"> <img src="/gfx/icon_keys.png" align="absmiddle"></td></tr>';
+				echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"> <img src="/gfx/icon_keys.png" align="absmiddle"></td></tr>';
+				echo '<tr><td>E-mail:</td><td><input name="register_email" type="password"> <img src="/gfx/icon_mail.png" align="absmiddle"></td></tr>';
+				echo '</table><br>';
 
-		//todo: javascript som validerar input email, visa en "retrieve new password" knapp om emailen är korrekt
-		echo '<div id="login_forgot_pwd_layer" style="display: none;">';
-			echo 'Enter the e-mail address used when registering your account.<br><br>';
-			echo 'You will recieve an e-mail with a link to follow, where you can set a new password.<br><br>';
-			echo '<table cellpadding=2>';
-			echo '<tr><td>E-mail:</td><td><input type="text" size=26> <img src="/gfx/icon_mail.png" align="absmiddle"></td></tr>';
-			echo '</table>';
-			echo '<br>';
-			echo '<input type="submit" class="button" value="New password"><br><br>';
+				echo '<input type="button" class="button" value="Log in" onClick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');">';
+				echo '<input type="button" class="button" value="Register" disabled>';
+				echo '<input type="button" class="button" value="Forgot password" onClick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');">';
+			echo '</div>';
 
-			echo '<input type="button" class="button" value="Log in" onClick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');">';
-			echo '<input type="button" class="button" value="Register" onClick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');">';
-			echo '<input type="button" class="button" value="Forgot password" disabled>';
-		echo '</div>';
+			//todo: javascript som validerar input email, visa en "retrieve new password" knapp om emailen är korrekt
+			echo '<div id="login_forgot_pwd_layer" style="display: none;">';
+				echo 'Enter the e-mail address used when registering your account.<br><br>';
+				echo 'You will recieve an e-mail with a link to follow, where you can set a new password.<br><br>';
+				echo '<table cellpadding=2>';
+				echo '<tr><td>E-mail:</td><td><input type="text" size=26> <img src="/gfx/icon_mail.png" align="absmiddle"></td></tr>';
+				echo '</table><br>';
+				echo '<input type="submit" class="button" value="New password"><br><br>';
+
+				echo '<input type="button" class="button" value="Log in" onClick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');">';
+				echo '<input type="button" class="button" value="Register" onClick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');">';
+				echo '<input type="button" class="button" value="Forgot password" disabled>';
+			echo '</div>';
+		}
 
 		echo '</div>';
 	}
