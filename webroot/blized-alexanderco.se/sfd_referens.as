@@ -9,7 +9,6 @@ var SFDimageLoader:MovieClipLoader = new MovieClipLoader();
 
 var datafile_path = "sfd_cache/";
 
-
 trace('sfd_referens.as inkluderad');
 
 function SFD_readsections()
@@ -22,7 +21,6 @@ function SFD_readsections()
 
 	_level0.TotNumberOfImages = 0;
 	_level0.LoadedNumberOfImages = 0;
-
 
 	loadVariablesNum(datafile_path + _level0.datafile, 0);
 	
@@ -38,10 +36,12 @@ function mappa_alla_objekt()
 	if (_level0.sectionName2) mappa_objekt(_level0.sectionName2);
 	if (_level0.sectionName3) mappa_objekt(_level0.sectionName3);
 
+	
+	//fixme: den tror att antalobjekt är en string
 	_level0.antalobjekt = 0;
-	if (_level0.sectionName1) _level0.antalobjekt += _level0[_level0.sectionName1+'_antalobjekt'];
-	if (_level0.sectionName2) _level0.antalobjekt += _level0[_level0.sectionName2+'_antalobjekt'];
-	if (_level0.sectionName3) _level0.antalobjekt += _level0[_level0.sectionName3+'_antalobjekt'];
+	if (_level0.sectionName1) _level0.antalobjekt += Number(_level0[_level0.sectionName1+'_antalobjekt']);
+	if (_level0.sectionName2) _level0.antalobjekt += Number(_level0[_level0.sectionName2+'_antalobjekt']);
+	if (_level0.sectionName3) _level0.antalobjekt += Number(_level0[_level0.sectionName3+'_antalobjekt']);
 
 	trace('TOTALT ANTAL OBJEKT: ' + _level0.antalobjekt);
 
