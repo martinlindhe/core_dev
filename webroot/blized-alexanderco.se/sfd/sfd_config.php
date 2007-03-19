@@ -6,6 +6,7 @@
 	//storlek på thumbnails i referensobjekten:
 	$config['thumb_width']				= 181;
 	$config['thumb_height']				= 181;
+	$config['jpeg_quality']				= 85;
 
 	$config['max_images_per_object']	= 1;
 

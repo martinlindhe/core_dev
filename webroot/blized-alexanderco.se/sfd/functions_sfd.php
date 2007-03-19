@@ -65,7 +65,6 @@
 	nya xml-gränssnittet:
 	http://net.sfd.se/Gateway.aspx?SFDGatewayID=21
 	http://net.sfd.se/WebPack/ObjectList/(xa2dlgec0yr3k4iojxa5mpjt)/ObjectList.aspx?DBSpace=11816&Custom=1&RenderAsXML=1
-
 	*/
 
 	function startElement($parser, $name, $attrs)
@@ -141,7 +140,7 @@
 			$t_im = imagecreatetruecolor($new_width, $new_height);
 			imagecopyresampled($t_im, $o_im, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 			//imagecopyresized($t_im, $o_im, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-			imagejpeg($t_im, $file_normal);
+			imagejpeg($t_im, $file_normal, $config['jpeg_quality']);
 
 			$width = $new_width;
 			$height = $new_height;
@@ -199,7 +198,7 @@
 		$t_im = imagecreatetruecolor($thumb_width, $thumb_height);
 		imagecopyresampled($t_im, $o_im, 0, 0, 0, 0, $thumb_width, $thumb_height, $width, $height);
 		//imagecopyresized($t_im, $o_im, 0, 0, 0, 0, $thumb_width, $thumb_height, $width, $height);
-		imagejpeg($t_im, $file_thumb);
+		imagejpeg($t_im, $file_thumb, $config['jpeg_quality']);
 		imagedestroy($t_im);
 		imagedestroy($o_im);
 		echo $file_thumb.' saved.<br>';
@@ -227,7 +226,7 @@
 		}
 		//echo 'src_x = '.$src_x.', src_y = '.$src_y.'<br>';
 		imagecopy($t_im, $o_im, 0, 0, $src_x, $src_y, $config['thumb_width'], $config['thumb_height']);
-		imagejpeg($t_im, $file_thumb);
+		imagejpeg($t_im, $file_thumb, $config['jpeg_quality']);
 	
 		//echo '<img src="../sfd_cache/'.basename($file_thumb).'"><br>';
 
