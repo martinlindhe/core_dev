@@ -12,7 +12,6 @@
 	// Alexander & Co							 //
 	//*****************************//
 
-	//Laddar ner objektdata för alexander & co
 	parse_sfd_data('http://net.sfd.se/Gateway.aspx?SFDGatewayID=32');			//fixme: låt denna funktion returnera $objekt. nu deklareras den som global
 	store_sfd_data($objekt);
 	unset($objekt);

@@ -43,9 +43,6 @@ mouseListener.onMouseWheel = function(delta, buttonState, x, y) {
 	//trace('scrollsteg: ' + scrollsteg);
 	
 	moveDragger(-delta*scrollsteg);
-
-	if (dragger._y < 29) dragger._y = 29;
-	if (dragger._y > 485) dragger._y = 485;
 }
 Mouse.addListener(mouseListener);
 
@@ -81,6 +78,8 @@ moveDragger = function (d) {
 		dragger.scrollEase();
 		updateAfterEvent();
 	}
+	if (dragger._y < 29) dragger._y = 29;
+	if (dragger._y > 485) dragger._y = 485;
 };
 
 up_btn.onPress = function() {
@@ -89,7 +88,10 @@ up_btn.onPress = function() {
 down_btn.onPress = function() {
 	draggerInterval = setInterval(moveDragger, 5, 2);
 };
-up_btn.onMouseUp = down_btn.onMouseUp=function () {
+up_btn.onMouseUp = function () {
+	clearInterval(draggerInterval);
+};
+down_btn.onMouseUp = function () {
 	clearInterval(draggerInterval);
 };
 
