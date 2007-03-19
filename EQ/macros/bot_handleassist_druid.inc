@@ -326,6 +326,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 				/delay 1s
 			} else {
 				/call DebugMsg "LOM - Medding (${Me.PctMana}m)"
+				/delay 10
 				/varset timerNuke 3m
 				/if (${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID}) /sit
 			}

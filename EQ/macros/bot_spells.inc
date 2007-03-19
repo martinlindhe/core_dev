@@ -107,13 +107,16 @@ Sub BotCast(string spellName, string mySub)
 | Callback function for nukes
 Sub NukeCallback
 	/if (!${Target.ID} || (${Target.PctHPs} == 0) || ${Target.Type.Equal["Corpse"]}) {
+		| /echo Mob died, cancelling nuke.
 		/interrupt
 		/varset interruptFlag TRUE
-		| /echo Mob died, cancelling nuke.
-	} else /if (${Krust.Healer} && ${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && (${Me.TargetOfTarget.PctHPs} <= QHEAL_PERCENT)) {
+		/return
+	} else /if (${Krust.Healer} && ${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal["PC"]} && (${Me.TargetOfTarget.PctHPs} <= QHEAL_PERCENT)) {
 		/interrupt
 		/varset interruptFlag TRUE
 		/echo Player in HoTT need heal, cancelling nuke.
+		/delay 2s ${Me.SpellReady[DRUID_QH1]}
+		/return
 	} else /if (${Me.Moving} || ${Me.Stunned}) {
 		/interrupt
 		/varset interruptFlag TRUE
@@ -241,19 +244,19 @@ Sub HandleGroupHeal(int PctHPs)
 	/declare i int local 0
 
 	| Heal target if it's a player outside group
-	/if (${Target.ID} && ${Target.Type.Equal[PC]} && (${Target.Distance} < 200) && ${Target.PctHPs} <= ${PctHPs} && ${Target.State.NotEqual["DEAD"]}) {
+	/if (${Target.ID} && ${Target.Type.Equal[PC]} && (${Target.Distance} < 200) && ${Target.PctHPs} <= ${PctHPs} && ${Target.State.NotEqual["DEAD"]} && ${Me.SpellReady[DRUID_QH1]}) {
 		/call PerformHeal ${Target.ID} ${PctHPs}
 		/return
 	}
 
 	| See if HoTT is a player that needs a heal	
-	/if (${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && (${Me.TargetOfTarget.Distance} < 200) && ${Me.TargetOfTarget.PctHPs} <= ${PctHPs} && ${Me.TargetOfTarget.State.NotEqual["DEAD"]}) {
+	/if (${Me.LAHoTT} && ${Me.TargetOfTarget.Type.Equal[PC]} && (${Me.TargetOfTarget.Distance} < 200) && ${Me.TargetOfTarget.PctHPs} <= ${PctHPs} && ${Me.TargetOfTarget.State.NotEqual["DEAD"]} && ${Me.SpellReady[DRUID_QH1]}) {
 		/call PerformHeal ${Me.TargetOfTarget.ID} ${PctHPs}
 		/return
 	}
 
 	/for i 0 to 5
-		/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 200) && (${Group.Member[${i}].PctHPs} <= ${PctHPs}) && ${Group.Member[${i}].State.NotEqual["DEAD"]}) {
+		/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 200) && (${Group.Member[${i}].PctHPs} <= ${PctHPs}) && ${Group.Member[${i}].State.NotEqual["DEAD"]} && ${Me.SpellReady[DRUID_QH1]}) {
 			/call PerformHeal ${Group.Member[${i}].ID} ${PctHPs}
 			/return
 		}
