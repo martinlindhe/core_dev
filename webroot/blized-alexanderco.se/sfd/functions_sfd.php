@@ -329,7 +329,7 @@
 
 	
 	//skriver ut parsade sfd-datan i textfiler
-	function store_sfd_data($objekt)
+	function parse_sfd_data_to_sections($objekt)
 	{
 		global $config;
 		
@@ -367,13 +367,11 @@
 			}
 		}
 
-		foreach ($out as $key => $row) {
-			write_sfd_data($row, $key.'.txt');
-		}
-		
-		if (empty($out['villor']))			write_empty_sfd_data('villor.txt');
-		if (empty($out['lantstallen']))	write_empty_sfd_data('lantstallen.txt');
-		if (empty($out['vaningar']))		write_empty_sfd_data('vaningar.txt');
+		if (empty($out['villor']))			$out['villor'] = array();
+		if (empty($out['lantstallen']))	$out['lantstallen'] = array();
+		if (empty($out['vaningar']))		$out['vaningar'] = array();
+
+		return $out;
 	}
 	
 	function write_empty_sfd_data($filename)
@@ -391,79 +389,52 @@
 		fclose($fp);
 	}
 	
-	function write_sfd_data($objekt, $filename)
+	function write_sfd_data($objekt, $prefix, $filename)
 	{
 		global $config;
 
-		$filename = $config['server_cache_path'].$filename;
+		echo '<b>Writing "'.$prefix.'" section to '.$filename.' ...</b><br>';
 		
-		echo '<b>Writing '.$filename.' ...</b><br>';
-		
-		$fp = fopen($filename, 'w');
-	
+		$fp = fopen($filename, 'a');
+
 		/* Visa all data */
 		$cnt = count($objekt);
 		if ($cnt > $config['max_objects']) $cnt = $config['max_objects'];		//Force max 15 objects to be written to disk
 		
-		fwrite($fp, "antalobjekt=".$cnt."&");
+		fwrite($fp, $prefix.'_antalobjekt='.$cnt.'&');
 		for ($i=0; $i<$cnt; $i++)
-		{	
+		{
 			$objekt_id = $objekt[$i]['GID'];
+
+			fwrite($fp, $prefix.'_adress_'.($i+1).'='.urlencode($objekt[$i]['ADRESS']).'&');
+			fwrite($fp, $prefix.'_storlek_'.($i+1).'='.urlencode($objekt[$i]['STORLEK']).'&');
+			fwrite($fp, $prefix.'_pris_'.($i+1).'='.urlencode($objekt[$i]['PRIS']).'&');
 	
-			$obj = "objekt".($i+1);
-			
-			//fwrite($fp, "id_".$i."=".$objekt_id."\n");
-			//fwrite($fp, "firma_".$i."=".$objekt[$i]['ETTOBJEKT']['attrs']['FIRMANR']."\n");
-			//fwrite($fp, "typ_".$i."=".$objekt[$i]['OBJEKTTYP']['data']."\n");
-			fwrite($fp, "adress_".($i+1)."=".urlencode($objekt[$i]['ADRESS'])."&");
-			fwrite($fp, "storlek_".($i+1)."=".urlencode($objekt[$i]['STORLEK'])."&");
-			fwrite($fp, "pris_".($i+1)."=".urlencode($objekt[$i]['PRIS'])."&");
-	
-			fwrite($fp, "beskr_".($i+1)."=".urlencode($objekt[$i]['BESKRIVNING'])."&");
-			fwrite($fp, "url_".($i+1)."=".urlencode($objekt[$i]['URL'])."&");
+			fwrite($fp, $prefix.'_beskr_'.($i+1).'='.urlencode($objekt[$i]['BESKRIVNING']).'&');
+			fwrite($fp, $prefix.'_url_'.($i+1).'='.urlencode($objekt[$i]['URL']).'&');
 
 			$pic_cnt = $objekt[$i]['antalbilder'];
 			if ($pic_cnt > 1) $pic_cnt = 1;	//force max 1 image per object to be written to disk
 
 			if ($pic_cnt == 0) {
 				echo '<b>Image missing for object #'.($i+1).'!</b><br>';
-				fwrite($fp, "images_".($i+1)."=1&");
+				fwrite($fp, $prefix.'_images_'.($i+1).'=1&');
 				$thumb = $config['client_cache_path'].'noimage_thumb.jpg';
-				fwrite($fp, "thumburl".($i+1)."_1=".urlencode($thumb)."&");
+				fwrite($fp, $prefix.'_thumburl'.($i+1).'_1='.urlencode($thumb).'&');
 				
 				echo '<img src="'.$config['server_cache_path'].'noimage_thumb.jpg"><br>';
-
-			} else {			
-				fwrite($fp, "images_".($i+1)."=".$pic_cnt."&");
+			} else {
+				fwrite($fp, $prefix.'_images_'.($i+1).'='.$pic_cnt.'&');
 				for ($j=0; $j<$pic_cnt; $j++) {
-					//$image = "../sfd_cache/".$objekt_id."_".$j."_width".$config['image_width'].".jpg";
-					//fwrite($fp, "imageurl".($i+1)."_".$j."=".urlencode($image)."&");
-					//echo '<img src="'.$image.'"><br>';
-		
+
 					$thumb = $config['client_cache_path'].$objekt_id.'_'.$j.'_thumb.jpg';
-					fwrite($fp, "thumburl".($i+1)."_".($j+1)."=".urlencode($thumb)."&");
+					fwrite($fp, $prefix.'_thumburl'.($i+1).'_'.($j+1).'='.urlencode($thumb).'&');
 	
 					echo '<img src="'.$config['server_cache_path'].$objekt_id.'_'.$j.'_thumb.jpg"><br>';
 				}
 			}
-	
-			//echo 'Firma ID: '. $objekt[$i]['ETTOBJEKT']['attrs']['FIRMANR'].'<br>'; //alltid samma värde som skickades in med requesten (??)
-			//echo 'ID: '.$objekt_id.'<br>';
-			//echo 'Typ: '. $objekt[$i]['OBJEKTTYP']['data'].'<br>';
-			//echo 'Adress: '.	$adress.'<br>';
-			//echo 'Storlek: '.	$storlek.'<br>';
-			//echo 'Pris: '.		$pris.'<br>';
-			//echo 'Beskr.: '.	$beskr.'<br>';
-			//echo '<br>';
-	
-			//echo 'Typ ID: '. $objekt[$i]['OBJEKTTYP']['attrs']['TYP'].'<br>';
-			//echo '<img src="'. $objekt[$i]['PIC1URL'].'&sizex=400"><br>';
-			//echo 'Pic1URL: '. $objekt[$i]['PIC1URL'].'<br>';
-			//echo 'Pic1RelURL: '. $objekt[$i]['PICRELURL'].'<br>';
-			//echo 'PDF1URL: '. $objekt[$i]['PDF1URL'].'<br>';
-			//echo 'ObjektURL: '. $objekt[$i]['OBJEKTURL'].'<br>';
+
 		}
-		fwrite($fp, "q=1");
 		fclose($fp);		
 	}
 

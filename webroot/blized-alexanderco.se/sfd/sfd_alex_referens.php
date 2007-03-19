@@ -13,6 +13,10 @@
 	//*****************************//
 
 	parse_sfd_data('http://net.sfd.se/Gateway.aspx?SFDGatewayID=32&RefObject=3');
-	write_sfd_data($objekt, 'referens.txt');
+
+	unlink($config['server_cache_path'].'referens.txt');
+	write_sfd_data($objekt, 'referens', $config['server_cache_path'].'referens.txt');
+	file_put_contents($config['server_cache_path'].'referens.txt', 'q=1', FILE_APPEND);
+
 	unset($objekt);
 ?>
