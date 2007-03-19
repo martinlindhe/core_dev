@@ -368,8 +368,6 @@
 		}
 
 		foreach ($out as $key => $row) {
-			//echo $key.':<br>';
-			//print_r($row);
 			write_sfd_data($row, $key.'.txt');
 		}
 		

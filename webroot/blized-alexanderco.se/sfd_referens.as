@@ -131,7 +131,6 @@ function checkParamsLoaded()
 			SFDimageLoader.loadClip( _level0['thumburl'+i+'_1'], '_root.obj'+i+'_thumb' );
 			_root.holder.TotNumberOfImages++;
 		}
-
 	}
 
 	SendDataTimeout=0;
