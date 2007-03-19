@@ -1,4 +1,0 @@
-authname "Inloggning för statistik på Crystone"
-authtype basic
-authuserfile /home/alexanderco.se/www/statistics/.htpasswd
-require user alexanderco.se
