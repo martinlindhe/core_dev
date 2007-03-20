@@ -12,7 +12,7 @@
 
 		$sql = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$creator_id.",timestamp=".time();
 		dbQuery($db, $sql);
-		return mysql_insert_id(); //return id
+		return $db['insert_id'];
 	}
 	
 	function updateBandInfo($db, $band_id, $band_info)

@@ -51,7 +51,7 @@
 		
 		dbQuery($db, "INSERT INTO tblRecords SET recordName='".$record_name."',bandId=".$band_id.",recordInfo='".$record_info."',creatorId=".$creator_id.",timestamp=".time());
 
-		return mysql_insert_id();
+		return $db['insert_id'];
 	}
 	
 	function createTracks($db, $record_id, $tracks)

@@ -39,24 +39,27 @@
 	echo '</table>';
 	echo '<br>';
 
-	echo 'This song appears on the following records:<br>';
-
 	$list = getLyricRecords($db, $lyric_id);
-	for ($i=0; $i<count($list); $i++)
-	{
-		$record_name = dbStripSlashes($list[$i]['recordName']);
-		$author_name = $list[$i]['bandName'];
-		if (!$record_name) {
-			$record_name = 's/t';
+
+	if (count($list)) {
+		echo 'This song appars on the following records:<br>';
+
+		for ($i=0; $i<count($list); $i++)
+		{
+			$record_name = dbStripSlashes($list[$i]['recordName']);
+			$author_name = $list[$i]['bandName'];
+			if (!$record_name) {
+				$record_name = 's/t';
+			}
+			if ($author_name) {
+				echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$author_name.'</a>';
+			} else {
+				echo 'Compilation';
+			}
+			echo ' - <a href="show_record.php?id='.$list[$i]['recordId'].'">'.$record_name.'</a>, track #'.$list[$i]['trackNumber'].'<br>';
 		}
-		if ($author_name) {
-			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$author_name.'</a>';
-		} else {
-			echo 'Compilation';
-		}
-		echo ' - <a href="show_record.php?id='.$list[$i]['recordId'].'">'.$record_name.'</a>, track #'.$list[$i]['trackNumber'].'<br>';
+		echo '<br>';
 	}
-	echo '<br>';
 
 	echo '<a href="show_band.php?id='.$lyric_data['bandId'].'">Back to '.$band_name.' page</a><br>';
 	echo '<a href="index.php">Back to main</a><br>';

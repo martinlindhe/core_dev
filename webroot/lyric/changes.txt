@@ -1,3 +1,10 @@
+todo:
+	fixa add_band.php - mysql error när man lägger till ett band (bandet skapas ändå som det ska)
+	fixa add_lyric.php - även där nått mysql error men texten sparas iaf...
+
+
+
+
 2007.03.15
 	* add_lyric_single.php: new file (to add a lyric associated with a band only)
 

@@ -126,7 +126,7 @@
 		$lyric_text = cleanupText($lyric_text);
 
 		dbQuery($db, 'INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$user_id.',timestamp='.time());
-		$lyric_id = mysql_insert_id();
+		$lyric_id = $db['insert_id'];
 
 		if ($record_id) {
 			dbQuery($db, 'UPDATE tblTracks SET lyricId='.$lyric_id.',bandId='.$band_id.' WHERE recordId='.$record_id.' AND trackNumber='.$track);
