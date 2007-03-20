@@ -263,7 +263,7 @@
 		{
 			$objekt[$i]['antalbilder'] = 0;
 			
-			echo 'Processing object '.$i.' ...<br>';
+			echo 'Processing object '.$i.' ... '.$objekt[$i]['GID'].' '.$objekt[$i]['ADRESS'].'<br>';
 
 			for ($current_pic_num = 0; $current_pic_num < $config['max_images_per_object']; $current_pic_num++)
 			{
@@ -271,7 +271,7 @@
 				if (empty($current_pic)) continue;
 
 				$objekt[$i]['antalbilder']++;
-				
+
 				//ta bort &sizex=320&sizey=240 från url-namnet (sfd skickar med det by default)
 				$pos = strpos($current_pic, '&sizex');
 				if ($pos !== FALSE) $current_pic = substr($current_pic, 0, $pos);
@@ -279,12 +279,12 @@
 				$url = $current_pic.'&sizex='.$config['image_width'];
 				$file = $config['server_cache_path'].$objekt[$i]['GID'].'_'.$current_pic_num;
 				$objekt[$i]['bild'][$current_pic_num] = $file;
-				
+
 				download_sfd_image($url, $file);
 				generate_sfd_thumbnail($file);
 			}
 		}
-		
+
 		//rensa upp XML-strukturen: 'PRIS', 'ADRESS', 'RUM', 'STORLEK', 'BOAREA', 'OMRADE', 'ADRESS', 'BESKRIVNING'
 		for ($i=0; $i<count($objekt); $i++)
 		{	
@@ -319,11 +319,13 @@
 			} else {
 				$objekt[$i]['STORLEK'] = $objekt[$i]['RUM'].' rum & k'.mb_convert_encoding('ö','UTF-8','ISO-8859-1').'k om '.$objekt[$i]['BOAREA'].' kvm';
 			}
-	
+
 			$beskr = 'Beskrivning saknas';
 			if (!empty($objekt[$i]['BESKRIVNING'])) $beskr = $objekt[$i]['BESKRIVNING'];
 			$beskr = str_ireplace('&amp;', '&', $beskr);
 			$objekt[$i]['BESKRIVNING'] = $beskr;
+			
+			//echo 'Processed object '.$i.' ... '.$objekt[$i]['GID'].' '.$objekt[$i]['ADRESS'].', '.$objekt[$i]['BESKRIVNING'].'<br>';
 		}
 	}
 
@@ -333,15 +335,14 @@
 	{
 		global $config;
 		
-		//sorterar array efter antal rum, fallande:
-		$objekt = aRSortBySecondIndex($objekt, 'RUM');
-		
 		//skriv till olika filer beroende på 'OBJEKTTYP':
 		
 		$out = array();
 		
 		for ($i=0; $i<count($objekt); $i++)
 		{
+			echo 'Processing object '.$i.' ... '.$objekt[$i]['GID'].' '.$objekt[$i]['ADRESS'].', '.$objekt[$i]['BESKRIVNING'].'<br>';
+			
 			if (empty($objekt[$i]['OBJEKTTYP'])) $objekt[$i]['OBJEKTTYP'] = 0;
 			switch ($objekt[$i]['OBJEKTTYP'])
 			{

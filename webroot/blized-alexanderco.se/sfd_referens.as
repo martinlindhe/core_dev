@@ -33,25 +33,32 @@ function mappa_alla_objekt()
 	trace('MAPPAR ALLA OBJEKT!!');
 	
 	_level0.CurrentPos = 0;
+	_level0.RubrikerRitade = 0;
 	
 	if (_level0.sectionName1) {
 		if (Number(_level0[_level0.sectionName1+'_antalobjekt']) and _level0.sectionName1 == 'villor') {
 			//rubrik
 			trace('SKAPA RUBRIK 1');
+			trace('villor height: ' + _level0.holder.villor1._height);
+			_level0.holder.villor1._x = 0;
+			_level0.holder.villor1._y = -2;
+			_level0.RubrikerRitade++;
 		}
 		mappa_objekt(_level0.sectionName1);
 	}
 	if (_level0.sectionName2) {
-		if (Number(_level0[_level0.sectionName2+'_antalobjekt'])) {
+		if (Number(_level0[_level0.sectionName2+'_antalobjekt']) and _level0.sectionName2 == 'lantstallen') {
 			//rubrik
 			trace('SKAPA RUBRIK 2');
+			trace('lantstallen height: ' + _level0.holder.lant1._height);
 		}
 		mappa_objekt(_level0.sectionName2);
 	}
 	if (_level0.sectionName3) {
-		if (Number(_level0[_level0.sectionName3+'_antalobjekt'])) {
+		if (Number(_level0[_level0.sectionName3+'_antalobjekt']) and _level0.sectionName3 == 'vaningar') {
 			//rubrik
 			trace('SKAPA RUBRIK 3');
+			trace('vaning height: ' + _level0.holder.vaning1._height);
 		}
 		mappa_objekt(_level0.sectionName3);
 	}
@@ -67,14 +74,14 @@ function mappa_alla_objekt()
 
 	if (_level0.LoadedNumberOfImages < 3) {
 		//dölj tomma objekt
-		
+
 		if (_level0.LoadedNumberOfImages < 2) {
 			_level0.holder.main.obj2.gbar._visible = false;
 			_level0.holder.main.obj2.link._visible = false;
 			_level0.holder.main.obj2.objRubrik._visible = false;
 			_level0.holder.main.obj2.objText._visible = false;
 		}
-		
+
 		if (_level0.LoadedNumberOfImages < 1) {
 			//dölj objekt 1, visa noObj-texten
 			_level0.holder.main.obj1.gbar._visible = false;
@@ -101,25 +108,33 @@ function mappa_objekt(sectionName)
 	//nu är all data inladdat, och bilderna nerladdade. återstår bara att mappa ihop allt
 	trace('mappa_objekt('+sectionName+') called');
 
-	trace('rubrik 1 visible: ' + _level0.holder.main.obj1.objRubrik._visible ) ;
+	//trace('rubrik 1 visible: ' + _level0.holder.main.obj1.objRubrik._visible);
 
 	for (var i=1; i<=_level0[sectionName+'_NumberOfImages']; i++) {
 		_level0.CurrentPos++;
+		
+		//mappa till klickbar url
+		_level0['url_'+_level0.CurrentPos] = _level0[sectionName+'_url_'+i];
+
 		_level0['holder.main.obj'+_level0.CurrentPos+'.objRubrik'] = _level0[sectionName+'_adress_'+i];
 		_level0['holder.main.obj'+_level0.CurrentPos+'.objText'] = _level0[sectionName+'_beskr_'+i];
 	
 		bild_w = _level0[sectionName+'_obj'+i+'_thumb']._width;
 		bild_h = _level0[sectionName+'_obj'+i+'_thumb']._height;
 		trace('Kopierar '+bild_w+'x'+bild_h+' pixlar from ' + sectionName +'_obj'+i+'_thumb');
-		
+
 		_root.holder.tempBitmap = new BitmapData(bild_w, bild_h);
 		_root.holder.tempBitmap.draw(_level0[sectionName+'_obj'+i+'_thumb'], new Matrix());
-		
+
 		// Visa bilden
 		eval("_root.holder.main.obj"+_level0.CurrentPos+".objPic").attachBitmap(_root.holder.tempBitmap, 2);
+
+		//positionera om elementet
+		eval('_root.holder.main.obj'+_level0.CurrentPos)._y = ((_level0.CurrentPos-1)*211) + (_level0.RubrikerRitade*32);
+		trace('pos: ' + eval('_root.holder.main.obj'+_level0.CurrentPos)._y  );	
 	}
 
-	trace('noObj visible: ' +_level0.holder.noObj._visible );
+	//trace('noObj visible: ' +_level0.holder.noObj._visible );
 	_level0.holder.noObj._visible = false;
 
 }

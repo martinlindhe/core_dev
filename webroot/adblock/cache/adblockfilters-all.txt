@@ -41,6 +41,7 @@
 163.com
 198.173.76.253
 1javastreet.com/dm.gif
+213.91.8.214
 216.105.166.67
 216.65.38.226
 247realmedia.com
@@ -160,6 +161,7 @@ click4click.com
 clickability.com
 clickdensity.com
 clickhype.com
+clickintext.net
 clickpathmedia
 clicktorrent.info
 clicktracks.aristotle.net
@@ -174,6 +176,7 @@ codeproject.com/script/admentor/
 codeproject.com/script/ann/
 collect.realmedia.com
 com.com/*dm_client_CNET.js
+comclick.com
 confirmit.com
 connextra.com
 count.cgi
@@ -264,6 +267,7 @@ gavzad.keenspot.com
 gemius.pl
 geo.yahoo.com
 geocities.com/js_source
+gestionpub.com
 gfx.dagbladet.no/g2/ad-v4.gif
 gfx.dvlabs.com
 gon.se/adcount
@@ -420,6 +424,7 @@ questionmarket.com
 rad.msn.com
 ranking-hits.de
 rcm.amazon.com
+reactivpub.fr
 realcastmedia.com
 redirect.alexa.com
 rek.snyggast.se
@@ -463,6 +468,7 @@ static.tv4.se/swf/tv4/Ad
 statistici.ro
 statistik-gallup.net
 stats.big-boards.com
+stats.fr
 stats.liutilities.com
 stats.macworld.com
 stats.php
