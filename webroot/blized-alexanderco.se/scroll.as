@@ -12,7 +12,11 @@ antalobj = _root.antalobjekt;
 
 //orginal:
 //bottom = main._y+mask_mc._height-main._height-space;
-bottom = main._y+mask_mc._height-(antalobj*211)-space;
+if (_level0.RubrikerRitade) {
+	bottom = main._y+mask_mc._height-(antalobj*211)-((_level0.RubrikerRitade)*32)-space;
+} else {
+	bottom = main._y+mask_mc._height-(antalobj*211)-space;
+}
 
 //dölj scrollbar om det är 2 eller färre objekt
 if (antalobj < 3) {

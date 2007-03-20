@@ -40,10 +40,12 @@ function mappa_alla_objekt()
 	if (_level0.sectionName1.length) {
 		if (Number(_level0[_level0.sectionName1+'_antalobjekt']) and _level0.sectionName1 == 'villor') {
 			//rubrik
-			trace('SKAPA RUBRIK 1');
-			trace('villor height: ' + _level0.holder.main.villor1._height);
+			trace('SKAPA RUBRIK VILLOR');
 			_level0.holder.main.villor1._y = 0;
 			_level0.RubrikerRitade++;
+			//trace('main height1: ' + _level0.holder.main._height );
+			//_level0.holder.main._height += 32;
+			//trace('main height2: ' + _level0.holder.main._height );
 		}
 		mappa_objekt(_level0.sectionName1);
 	}
@@ -52,10 +54,11 @@ function mappa_alla_objekt()
 	if (_level0.sectionName2.length) {
 		if (Number(_level0[_level0.sectionName2+'_antalobjekt']) and _level0.sectionName2 == 'lantstallen') {
 			//rubrik
-			trace('SKAPA RUBRIK 2');
-			trace('lantstallen height: ' + _level0.holder.main.lant1._height);
+			trace('SKAPA RUBRIK LANTSTALLEN');
+			_level0.holder.main.lant1._y = (_level0.CurrentPos*211) + (_level0.RubrikerRitade*32) - 2;
+			_level0.RubrikerRitade++;
+			//_level0.holder.main._height += 32;
 		}
-		_level0.holder.main.lant1._y = ((_level0.CurrentPos)*211) + ((_level0.RubrikerRitade-1)*32);
 		mappa_objekt(_level0.sectionName2);
 	}
 
@@ -63,11 +66,12 @@ function mappa_alla_objekt()
 	if (_level0.sectionName3.length) {
 		if (Number(_level0[_level0.sectionName3+'_antalobjekt']) and _level0.sectionName3 == 'vaningar') {
 			//rubrik
-			trace('SKAPA RUBRIK 3');
-			trace('vaning height: ' + _level0.holder.main.vaning1._height);
+			trace('SKAPA RUBRIK VANINGAR');
+			_level0.holder.main.vaning1._y = (_level0.CurrentPos*211) + (_level0.RubrikerRitade*32) - 2;
+			_level0.RubrikerRitade++;
+			//_level0.holder.main._height += 32;
 		}
 		
-		_level0.holder.main.vaning1._y = ((_level0.CurrentPos)*211) + ((_level0.RubrikerRitade-1)*32);
 		mappa_objekt(_level0.sectionName3);
 	}
 	
@@ -138,7 +142,10 @@ function mappa_objekt(sectionName)
 
 		//positionera om elementet
 		eval('_root.holder.main.obj'+_level0.CurrentPos)._y = ((_level0.CurrentPos-1)*211) + (_level0.RubrikerRitade*32);
-		trace('pos: ' + eval('_root.holder.main.obj'+_level0.CurrentPos)._y  );	
+		
+		//göm bort nästföljande objekt så länge, så det inte overlappar i slutet
+		eval('_root.holder.main.obj'+(_level0.CurrentPos+1))._y = -200;
+
 	}
 
 	//trace('noObj visible: ' +_level0.holder.noObj._visible );
