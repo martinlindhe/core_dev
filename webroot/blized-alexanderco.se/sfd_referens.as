@@ -32,9 +32,29 @@ function mappa_alla_objekt()
 {
 	trace('MAPPAR ALLA OBJEKT!!');
 	
-	if (_level0.sectionName1) mappa_objekt(_level0.sectionName1);
-	if (_level0.sectionName2) mappa_objekt(_level0.sectionName2);
-	if (_level0.sectionName3) mappa_objekt(_level0.sectionName3);
+	_level0.CurrentPos = 0;
+	
+	if (_level0.sectionName1) {
+		if (Number(_level0[_level0.sectionName1+'_antalobjekt']) and _level0.sectionName1 == 'villor') {
+			//rubrik
+			trace('SKAPA RUBRIK 1');
+		}
+		mappa_objekt(_level0.sectionName1);
+	}
+	if (_level0.sectionName2) {
+		if (Number(_level0[_level0.sectionName2+'_antalobjekt'])) {
+			//rubrik
+			trace('SKAPA RUBRIK 2');
+		}
+		mappa_objekt(_level0.sectionName2);
+	}
+	if (_level0.sectionName3) {
+		if (Number(_level0[_level0.sectionName3+'_antalobjekt'])) {
+			//rubrik
+			trace('SKAPA RUBRIK 3');
+		}
+		mappa_objekt(_level0.sectionName3);
+	}
 
 	
 	//fixme: den tror att antalobjekt är en string
@@ -44,33 +64,6 @@ function mappa_alla_objekt()
 	if (_level0.sectionName3) _level0.antalobjekt += Number(_level0[_level0.sectionName3+'_antalobjekt']);
 
 	trace('TOTALT ANTAL OBJEKT: ' + _level0.antalobjekt);
-
-}
-
-function mappa_objekt(sectionName)
-{
-	_root.holder.stop();
-	//nu är all data inladdat, och bilderna nerladdade. återstår bara att mappa ihop allt
-	trace('mappa_objekt('+sectionName+') called');
-
-	trace('rubrik 1 visible: ' + _level0.holder.main.obj1.objRubrik._visible ) ;
-
-	for (var i=1; i<=_level0[sectionName+'_NumberOfImages']; i++) {
-		_level0['holder.main.obj'+i+'.objRubrik'] = _level0[sectionName+'_adress_'+i];
-		_level0['holder.main.obj'+i+'.objText'] = _level0[sectionName+'_beskr_'+i];
-	
-		bild_w = _level0[sectionName+'_obj'+i+'_thumb']._width;
-		bild_h = _level0[sectionName+'_obj'+i+'_thumb']._height;
-		trace('Kopierar '+bild_w+'x'+bild_h+' pixlar');
-		
-		_root.holder.tempBitmap = new BitmapData(bild_w, bild_h);
-		_root.holder.tempBitmap.draw(_level0[sectionName+'_obj'+i+'_thumb'], new Matrix());
-		
-		// Visa bilden
-		eval("_root.holder.main.obj"+i+".objPic").attachBitmap(_root.holder.tempBitmap, 2);
-	}
-	trace('noObj visible: ' +_level0.holder.noObj._visible );
-	_level0.holder.noObj._visible = false;
 
 	if (_level0.LoadedNumberOfImages < 3) {
 		//dölj tomma objekt
@@ -100,6 +93,35 @@ function mappa_objekt(sectionName)
 	}
 	
 	_root.holder.play();
+}
+
+function mappa_objekt(sectionName)
+{
+	_root.holder.stop();
+	//nu är all data inladdat, och bilderna nerladdade. återstår bara att mappa ihop allt
+	trace('mappa_objekt('+sectionName+') called');
+
+	trace('rubrik 1 visible: ' + _level0.holder.main.obj1.objRubrik._visible ) ;
+
+	for (var i=1; i<=_level0[sectionName+'_NumberOfImages']; i++) {
+		_level0.CurrentPos++;
+		_level0['holder.main.obj'+_level0.CurrentPos+'.objRubrik'] = _level0[sectionName+'_adress_'+i];
+		_level0['holder.main.obj'+_level0.CurrentPos+'.objText'] = _level0[sectionName+'_beskr_'+i];
+	
+		bild_w = _level0[sectionName+'_obj'+i+'_thumb']._width;
+		bild_h = _level0[sectionName+'_obj'+i+'_thumb']._height;
+		trace('Kopierar '+bild_w+'x'+bild_h+' pixlar from ' + sectionName +'_obj'+i+'_thumb');
+		
+		_root.holder.tempBitmap = new BitmapData(bild_w, bild_h);
+		_root.holder.tempBitmap.draw(_level0[sectionName+'_obj'+i+'_thumb'], new Matrix());
+		
+		// Visa bilden
+		eval("_root.holder.main.obj"+_level0.CurrentPos+".objPic").attachBitmap(_root.holder.tempBitmap, 2);
+	}
+
+	trace('noObj visible: ' +_level0.holder.noObj._visible );
+	_level0.holder.noObj._visible = false;
+
 }
 
 
