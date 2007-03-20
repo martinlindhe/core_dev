@@ -14,7 +14,7 @@ antalobj = _root.antalobjekt;
 //bottom = main._y+mask_mc._height-main._height-space;
 bottom = main._y+mask_mc._height-(antalobj*211)-space;
 
-//dölj scrollbar om det är 3 eller färre objekt
+//dölj scrollbar om det är 2 eller färre objekt
 if (antalobj < 3) {
 	trace('dragger visible: ' + _level0.holder.dragger._visible);
 	_level0.holder.dragger._visible = false;

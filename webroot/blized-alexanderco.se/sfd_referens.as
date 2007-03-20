@@ -35,34 +35,41 @@ function mappa_alla_objekt()
 	_level0.CurrentPos = 0;
 	_level0.RubrikerRitade = 0;
 	
-	if (_level0.sectionName1) {
+	
+	_level0.holder.main.villor1._y = -200;
+	if (_level0.sectionName1.length) {
 		if (Number(_level0[_level0.sectionName1+'_antalobjekt']) and _level0.sectionName1 == 'villor') {
 			//rubrik
 			trace('SKAPA RUBRIK 1');
-			trace('villor height: ' + _level0.holder.villor1._height);
-			_level0.holder.villor1._x = 0;
-			_level0.holder.villor1._y = -2;
+			trace('villor height: ' + _level0.holder.main.villor1._height);
+			_level0.holder.main.villor1._y = 0;
 			_level0.RubrikerRitade++;
 		}
 		mappa_objekt(_level0.sectionName1);
 	}
-	if (_level0.sectionName2) {
+
+	_level0.holder.main.lant1._y = -200;
+	if (_level0.sectionName2.length) {
 		if (Number(_level0[_level0.sectionName2+'_antalobjekt']) and _level0.sectionName2 == 'lantstallen') {
 			//rubrik
 			trace('SKAPA RUBRIK 2');
-			trace('lantstallen height: ' + _level0.holder.lant1._height);
+			trace('lantstallen height: ' + _level0.holder.main.lant1._height);
 		}
+		_level0.holder.main.lant1._y = ((_level0.CurrentPos)*211) + ((_level0.RubrikerRitade-1)*32);
 		mappa_objekt(_level0.sectionName2);
 	}
-	if (_level0.sectionName3) {
+
+	_level0.holder.main.vaning1._y = -200;
+	if (_level0.sectionName3.length) {
 		if (Number(_level0[_level0.sectionName3+'_antalobjekt']) and _level0.sectionName3 == 'vaningar') {
 			//rubrik
 			trace('SKAPA RUBRIK 3');
-			trace('vaning height: ' + _level0.holder.vaning1._height);
+			trace('vaning height: ' + _level0.holder.main.vaning1._height);
 		}
+		
+		_level0.holder.main.vaning1._y = ((_level0.CurrentPos)*211) + ((_level0.RubrikerRitade-1)*32);
 		mappa_objekt(_level0.sectionName3);
 	}
-
 	
 	//fixme: den tror att antalobjekt är en string
 	_level0.antalobjekt = 0;
