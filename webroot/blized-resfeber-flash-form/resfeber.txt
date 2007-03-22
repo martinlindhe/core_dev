@@ -1,0 +1,33 @@
+http://resor.se.msn.com/
+
+Storlek: 434x250
+design som på http://reisen.msn.de/
+
+formulär som på http://www.resfeber.se/se/partner/msn/feeds/434x250_msn.html
+
+---
+Specifikation MSN-banner i flashformat
+
+Exempel i html-format ligger på http://www.resfeber.se/se/partner/msn/feeds/434x250_msn.html
+
+- Dock i fel manér, skall ramas in och matcha övrigt redaktionellt material på  http://resor.se.msn.com/
+Beskrivning
+
+    * Sökbara produktgrupper: Flyg & hotell, Flyg, Hotell och Evenemang
+
+    * Det som behövs är en banner där val av restyp t ex triggar en av fyra olika movieclips,
+      ett för varje produktgrupp med olika valmöjligheter men som postar till samma URL.
+
+    * Alla fältnamn, även hidden-parametrar, måste ha samma namn som i html-versionen och skickas med vid postning.
+
+    * Det behövs ett actionscript som automatiskt sätter datumen i dropdownerna för avresedatum
+      till dagens datum plus 14 dagar, samt hemresedatum till dagens datum plus 21 dagar(om endast
+      flyg eller endast hotell dagens datum plus 17 dagar).
+
+    * Om användaren byter månad till en månad längre fram skall även hemresemånaden bytas till samma.
+      Samma, fast omvänt, gäller för det fall man byter till en tidigare hemresemånad än vad som är
+      satt för avresedatumet.
+
+    * Popup-kalendrar som i html-versionen behövs ej, endast datumkontroll enligt ovan.
+
+    * Särskild kontroll av ev felaktigt inmatade värden behövs ej då detta sker i nästa steg av systemet.

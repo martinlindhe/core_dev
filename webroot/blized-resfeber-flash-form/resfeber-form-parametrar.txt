@@ -1,0 +1,182 @@
+1. Paket sök (Hotell & Flyg):
+
+		http://www.resfeber.se/se/destination/cgi-bin/freetext_search.cgi		- GET
+
+	    <input name="partner" value="msn" type="hidden"> 
+			<input name="section" value="product" type="hidden">
+			<!-- <input name="source" value="cmp_msn_firstpage_061218" type="hidden"> -->				
+			<input name="next_page" value="http://www.resfeber.se/se/flight/cgi-bin/pre_search.cgi" type="hidden">	
+			<input name="btn_date.x" value="yes" type="hidden">
+			<input name="combo_id" value="10" type="hidden">
+			
+			<select name="dh_dep_id">			åka från
+				<option value="460001">Stockholm</option>
+				<option value="460098">Göteborg</option>
+				<option value="460139">Malmö</option>
+				<option value="450001">Köpenhamn</option>
+				<option>------------</option>
+				<option value="460098">Göteborg</option>
+				<option value="460126">Halmstad</option>
+				<option value="460109">Jönköping</option>
+				<option value="460148">Kalmar</option>
+				<option value="460160">Karlskrona/Ronne</option>
+				<option value="460070">Karlstad</option>
+				<option value="460009">Kiruna</option>
+				<option value="460143">Kristianstad</option>
+				<option value="450001">Köpenhamn</option>
+				<option value="460111">Linköping</option>
+				<option value="460031">Luleå</option>
+				<option value="460139">Malmö</option>
+				<option value="460117">Norrköping</option>
+				<option value="460159">Nyköping/Skavsta</option>
+				<option value="460052">Skellefteå</option>       
+				<option value="460001">Stockholm</option>
+				<option value="460063">Sundsvall</option>
+				<option value="460050">Umeå</option>
+				<option value="460124">Visby</option> 
+				<option value="460078">Västerås</option>
+				<option value="460141">Växjö</option>
+				<option value="460074">Örebro</option>
+				<option value="460046">Örnsköldsvik</option>
+				<option value="460041">Östersund</option>			
+
+			<select name="dh_dest_id">		åka till
+				<option value="340075">Alicante</option>
+				<option value="310005">Amsterdam</option>
+				<option value="297000">Aruba</option>
+				<option value="300026">Aten</option> 
+				<option value="660039">Bangkok</option>
+				<option value="340002">Barcelona</option>
+				<option value="860243">Beijing</option>
+				<option value="490106">Berlin</option>
+				<option value="390044">Bologna</option>
+				<option value="320011">Bryssel</option>
+				<option value="360037">Budapest</option>
+				<option value="330174">Disneyland® Resort Paris</option>
+				<option value="971002">Dubai</option>
+				<option value="353010">Dublin</option>
+				<option value="340137">Gran Canaria</option> 
+				<option value="460098">Göteborg</option>
+				<option value="900014">Istanbul</option>
+				<option value="200001">Kairo</option>
+				<option value="450001">Köpenhamn</option>
+				<option value="351044">Lissabon</option>
+				<option value="440002">London</option>
+				<option value="105002">Los Angeles</option>
+				<option value="340001">Madrid</option>
+				<option value="340094">Malaga</option>
+				<option value="340138">Mallorca</option>
+				<option value="440003">Manchester</option>
+				<option value="109001">Miami</option>
+				<option value="390016">Milano</option>
+				<option value="131001">New York City</option>
+				<option value="330002">Nice</option>
+				<option value="109069">Orlando</option>
+				<option value="470001">Oslo</option>
+				<option value="330001">Paris</option>
+				<option value="420012">Prag</option>
+				<option value="354012">Reykjavik</option>
+				<option value="390077">Rom</option>
+				<option value="650005">Singapore</option>
+				<option value="460001">Stockholm</option>
+				<option value="610387">Sydney</option>
+				<option value="390028">Venedig</option>
+				<option value="430023">Wien</option>
+				<option value="410018">Zürich</option> 
+
+  		<input name="dest_name">				skriv in resmål
+
+			<select name="start_day">			avrese-dag
+				<option value="01">1</option>
+  			<option value="02">2</option>
+  			<option value="03">3</option> osv till 31
+
+			<select name="start_year_month">		avrese-år & månad
+  			<option value="2007-03">mar 2007</option>
+  			<option value="2007-04">apr 2007</option>
+  			<option value="2007-05">maj 2007</option>
+  			
+			<select name="end_day">				hemrese dag
+
+			<select name="end_year_month">		hemrese år & månad
+			
+			<select name="adults">			antal vuxna
+			<select name="children">		antal barn
+			<input name="children_age">		barn ålder
+
+
+2. Flyg sök:
+
+		http://www.resfeber.se/se/flight/cgi-bin/pre_freetext_search.cgi		- GET
+		
+			<input name="partner" value="msn" type="hidden">
+			<input name="section" value="flight" type="hidden">
+			<input name="source" value="cmp_msn_firstpage_060616" type="hidden">
+			<input name="next_page" value="http://www.resfeber.se/se/flight/cgi-bin/pre_search.cgi" type="hidden">
+			<input name="combo_id" value="1" type="hidden">
+
+			resten är samma inputfält & namn som "1. Paket"
+
+
+3. Hotell sök:
+
+		http://www.resfeber.se/se/destination/cgi-bin/freetext_search.cgi
+
+			<input name="partner" value="msn" type="hidden">
+			<input name="section" value="hotel" type="hidden">
+			<!-- <input name="source" value="cmp_msn_firstpage_060616" type="hidden"> -->
+			<input name="next_page" value="http://www.resfeber.se/se/hotel/cgi-bin/pre_search.cgi" type="hidden">
+			<input name="combo_id" value="2" type="hidden">
+
+			<select name="dh_dest_id">
+				<option value="000000">Annat resmål</option>
+				+ resten av resmålen från "1. Paket" <select name="dh_dest_id">
+				
+			<select name="start_day">
+			<select name="start_year_month">
+			<select name="end_day">
+			<select name="end_year_month">
+			
+			<select name="adults">
+			<select name="children">
+			<input name="children_age">
+
+4. Evenemang sök:
+
+		http://www.resfeber.se/se/event/cgi-bin/pre_search.cgi			- GET
+
+			<input name="partner" value="msn" type="hidden">
+			<input name="combo_id" value="4" type="hidden">
+			<input name="source" value="cmp_msn_firstpage_060616" type="hidden">
+			<input name="adults" value="1" type="hidden">
+			
+			<select name="dh_dest_id">		destination stad
+				<option value="310005">Amsterdam</option>
+				<option value="340002">Barcelona</option>
+				<option value="440074">Edinburgh</option>
+				<option value="128038">Las Vegas</option>
+				<option value="440002">London</option>
+				<option value="340001">Madrid</option>
+				<option value="440003">Manchester</option>
+				<option value="390016">Milano</option>
+				<option value="131001">New York City</option>
+				<option value="330001">Paris</option>
+				<option value="420012">Prag</option>
+				<option value="390077">Rom</option>
+				<option value="440297">Stratford Upon Avon</option>
+				<option value="390013">Torino</option>
+				<option value="430023">Wien</option>
+
+			<select name="event_category">		event kategori
+		 			<option value="25">Båtturer</option>
+					<option value="8">Formel 1</option>
+					<option value="6">Fotboll</option>
+					<option value="9">Kabaréer</option>
+					<option value="21">Klassiska konserter</option>
+					<option value="5">Musikaler</option>
+					<option value="10">Opera</option>
+					<option value="7">Pjäser</option>
+					<option value="18">Tågpass</option>
+					<option value="4">Övrigt</option>
+
+			<input name="freetext">						fritext sökning

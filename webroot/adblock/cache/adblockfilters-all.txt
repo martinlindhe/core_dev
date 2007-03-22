@@ -112,6 +112,7 @@ angelfire.com/sys/common_scripts
 anonymouse.org/adbig.html
 anrdoezrs.net
 apcmag.com/mint
+app2.agentinteractive.se
 ask.com/i/i.gif
 assoc-amazon.com
 atdmt.com
@@ -197,6 +198,7 @@ deepmetrix.com
 dev-se.spray.se
 devx.com/jsww/
 digits.com
+direct-stats.com
 direct.ninemsn.com.au
 directnic.com
 disney.go.com/blast/media/iframe_ad
