@@ -1,8 +1,79 @@
 body {
 	margin: 10px;
 	padding: 10px;
-	
-	background-image: url(../gfx/background.jpg);
-	background-attachment: fixed;
-	background-repeat: no-repeat;
+
+	background-color: #fff;	
+	color: #000;
+	font-size: 12px;
+}
+
+#image_big {
+	height: 560px;
+	width: 750px;
+	position: absolute;
+	top: 30px;
+	left: 120px;
+	border: 2px #000 solid;
+}
+
+#image_thumbs_scroller {
+	height: 500px;
+	width: 70px;
+	position: absolute;
+	top: 50px;
+	left: 20px;
+	border: 2px #000 solid;
+}
+
+#image_thumbs_scroll_up {
+	width: 35px;
+	height: 7px;
+	position: absolute;
+	top: 41px;
+	left: 38px;
+	background: url('../gfx/scroll_up.png');
+}
+
+#image_thumbs_scroll_down {
+	width: 35px;
+	height: 7px;
+	position: absolute;
+	top: 556px;
+	left: 38px;
+	background: url('../gfx/scroll_down.png');
+}
+
+
+#menu {
+	color: #fff;
+	background-color: #000;
+	width: 1000px;
+	height: 80px;
+	position: absolute;
+	top: 620px;
+	left: 0px;
+	font-family: verdana;
+}
+
+#menu a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#menu a:hover {
+	text-decoration: underline;
+}
+
+
+#footer {
+	width: 1000px;
+	height: 80px;
+	position: absolute;
+	top: 706px;
+	left: 0px;
+	text-align: center;
+}
+#footer a {
+	color: #000;
+	text-decoration: none;
 }
