@@ -144,12 +144,13 @@
 4. Evenemang sök:
 
 		http://www.resfeber.se/se/event/cgi-bin/pre_search.cgi			- GET
-
 			<input name="partner" value="msn" type="hidden">
 			<input name="combo_id" value="4" type="hidden">
 			<input name="source" value="cmp_msn_firstpage_060616" type="hidden">
 			<input name="adults" value="1" type="hidden">
 			
+		http://www.resfeber.se/se/event/cgi-bin/pre_search.cgi?partner=msn&combo_id=4&source=cmp_msn_firstpage_060616&adults=1
+
 			<select name="dh_dest_id">		destination stad
 				<option value="310005">Amsterdam</option>
 				<option value="340002">Barcelona</option>
