@@ -131,6 +131,7 @@
 			<select name="dh_dest_id">
 				<option value="000000">Annat resmål</option>
 				+ resten av resmålen från "1. Paket" <select name="dh_dest_id">
+			<input name="dest_name">		text input resmål
 				
 			<select name="start_day">
 			<select name="start_year_month">
