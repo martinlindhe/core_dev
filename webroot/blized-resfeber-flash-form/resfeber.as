@@ -1,6 +1,51 @@
 //sätt radiobuttons till blå & fet-text
-radioGroup['Flyg'].setAttribute('color', '#07519a');
-radioGroup.setAttribute('fontWeight', 'bold');
+_level0.radioGroup.radioList[0].fontWeight = 'bold';
+_level0.radioGroup.radioList[0].fontFamily = 'verdana';
+_level0.radioGroup.radioList[0].fontSize = 11;
+_level0.radioGroup.radioList[0].color = 479642; //'#07519a';
+
+_level0.radioGroup.radioList[1].fontWeight = 'bold';
+_level0.radioGroup.radioList[1].fontFamily = 'verdana';
+_level0.radioGroup.radioList[1].fontSize = 11;
+_level0.radioGroup.radioList[1].color = 479642; //'#07519a';
+
+_level0.radioGroup.radioList[2].fontWeight = 'bold';
+_level0.radioGroup.radioList[2].fontFamily = 'verdana';
+_level0.radioGroup.radioList[2].fontSize = 11;
+_level0.radioGroup.radioList[2].color = 479642; //'#07519a';
+
+_level0.radioGroup.radioList[3].fontWeight = 'bold';
+_level0.radioGroup.radioList[3].fontFamily = 'verdana';
+_level0.radioGroup.radioList[3].fontSize = 11;
+_level0.radioGroup.radioList[3].color = 479642; //'#07519a';
+
+
+//blå toning på hover-effekten på knapparna för att passa med MSN style
+_level0.formFlygHotell.Knapp.stylecache.themeColor = 479642;	//'#07519a';
+_level0.formHotell.Knapp.stylecache.themeColor = 479642;	//'#07519a';
+_level0.formEvenemang.Knapp.stylecache.themeColor = 479642;	//'#07519a';
+
+//_level0.formFlygHotell.Dep.stylecache.borderCapColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.stylecache.borderColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.stylecache.buttonColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.stylecache.highlightColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.stylecache.shadowCapColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.stylecache.shadowColor = 479642;	//'#07519a';
+_level0.formFlygHotell.Dep.stylecache.themeColor = 479642;	//'#07519a';   - sätter hover-färgen på comboboxen
+//Todo: hur ändrar man hover-färgen & selected-färgen i expanderad combobox??
+
+
+//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.borderCapColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.focusTextField._color.color = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.buttonCapColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.highlightColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.shadowCapColor = 479642;	//'#07519a';
+//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.shadowColor = 479642;	//'#07519a';
+
+
+
+
+
 
 _level0.formFlygHotell.Dep.addItem({data:0, label:"Jag vill åka från..."});
 _level0.formFlygHotell.Dep.addItem({data:460001, label:"Stockholm"});
