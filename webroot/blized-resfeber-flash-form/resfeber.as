@@ -43,7 +43,7 @@ _level0.formFlygHotell.Dest.addItem({data:390044, label:"Bologna"});
 _level0.formFlygHotell.Dest.addItem({data:320011, label:"Bryssel"});
 _level0.formFlygHotell.Dest.addItem({data:360037, label:"Budapest"});
 _level0.formFlygHotell.Dest.addItem({data:330174, label:"Disneyland® Resort Paris"});
-_level0.formFlygHotell.Dest.addItem({data:971002, label:"Dubai"});
+_level0.formFlygHotell.Dest.addItem({data:971002, label:"Duai"});
 _level0.formFlygHotell.Dest.addItem({data:353010, label:"Dublin"});
 _level0.formFlygHotell.Dest.addItem({data:340137, label:"Gran Canaria"});
 _level0.formFlygHotell.Dest.addItem({data:460098, label:"Göteborg"});
@@ -82,31 +82,31 @@ for (i=1; i<=31; i++) {
 	_level0.formHotell.EndDay.addItem({data:i, label:i});
 }
 
-//todo: fixa bättre
-_level0.formFlygHotell.StartMonth.addItem({data:"2007-03", label:"mar 2007"});
-_level0.formFlygHotell.StartMonth.addItem({data:"2007-04", label:"apr 2007"});
-_level0.formFlygHotell.StartMonth.addItem({data:"2007-05", label:"maj 2007"});
-_level0.formFlygHotell.StartMonth.addItem({data:"2007-06", label:"jun 2007"});
-_level0.formFlygHotell.StartMonth.addItem({data:"2007-07", label:"jul 2007"});
 
-_level0.formFlygHotell.EndMonth.addItem({data:"2007-03", label:"mar 2007"});
-_level0.formFlygHotell.EndMonth.addItem({data:"2007-04", label:"apr 2007"});
-_level0.formFlygHotell.EndMonth.addItem({data:"2007-05", label:"maj 2007"});
-_level0.formFlygHotell.EndMonth.addItem({data:"2007-06", label:"jun 2007"});
-_level0.formFlygHotell.EndMonth.addItem({data:"2007-07", label:"jul 2007"});
+function formatMonth(i)
+{
+	if (i<10) return "0"+i;
+	else return i;
+}
 
-_level0.formHotell.StartMonth.addItem({data:"2007-03", label:"mar 2007"});
-_level0.formHotell.StartMonth.addItem({data:"2007-04", label:"apr 2007"});
-_level0.formHotell.StartMonth.addItem({data:"2007-05", label:"maj 2007"});
-_level0.formHotell.StartMonth.addItem({data:"2007-06", label:"jun 2007"});
-_level0.formHotell.StartMonth.addItem({data:"2007-07", label:"jul 2007"});
+aMonths = new Array('jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec');
 
-_level0.formHotell.EndMonth.addItem({data:"2007-03", label:"mar 2007"});
-_level0.formHotell.EndMonth.addItem({data:"2007-04", label:"apr 2007"});
-_level0.formHotell.EndMonth.addItem({data:"2007-05", label:"maj 2007"});
-_level0.formHotell.EndMonth.addItem({data:"2007-06", label:"jun 2007"});
-_level0.formHotell.EndMonth.addItem({data:"2007-07", label:"jul 2007"});
+myDate = new Date();
 
+for (i=0; i<5; i++) {
+	_level0.formFlygHotell.StartMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
+	_level0.formFlygHotell.EndMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
+	_level0.formHotell.StartMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
+	_level0.formHotell.EndMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
+
+	myDate.setMonth( myDate.getMonth() + 1);
+}
+
+_level0.formFlygHotell.StartDay.selectedIndex = myDate.getDate() - 1;
+_level0.formHotell.StartDay.selectedIndex = myDate.getDate() - 1;
+
+_level0.formFlygHotell.EndMonth.selectedIndex = 1;
+_level0.formHotell.EndMonth.selectedIndex = 1;
 
 
 
@@ -211,8 +211,6 @@ _level0.formEvenemang.Kategori.addItem({data:18, label:"Tågpass"});
 _level0.formEvenemang.Kategori.addItem({data:4,  label:"Övrigt"});
 
 
-
-
 formFlygHotell._visible = true;
 formEvenemang._visible = false;
 formHotell._visible = false;
@@ -243,6 +241,74 @@ radioButtonListener.click = function (evt) {
 	}
 }
 radioGroup.addEventListener("click", radioButtonListener);
+
+
+_level0.formFlygHotell.StartMonth.changeHandler = function() {
+	if (_level0.formFlygHotell.StartMonth.selectedItem.data > _level0.formFlygHotell.EndMonth.selectedItem.data) {
+		trace('end is too low, changing it');
+		_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
+	}
+	
+	_level0.formHotell.StartMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
+	_level0.formHotell.EndMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
+}
+
+_level0.formFlygHotell.EndMonth.changeHandler = function() {
+	if (_level0.formFlygHotell.EndMonth.selectedItem.data < _level0.formFlygHotell.StartMonth.selectedItem.data) {
+		trace('start is too low, changing it');
+		_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
+	}
+
+	_level0.formHotell.StartMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
+	_level0.formHotell.EndMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
+}
+
+_level0.formFlygHotell.StartDay.changeHandler = function() {
+	_level0.formHotell.StartDay.selectedIndex = _level0.formFlygHotell.StartDay.selectedIndex;
+	_level0.formHotell.EndDay.selectedIndex = _level0.formFlygHotell.EndDay.selectedIndex;
+}
+
+_level0.formFlygHotell.EndDay.changeHandler = function() {
+	_level0.formHotell.StartDay.selectedIndex = _level0.formFlygHotell.StartDay.selectedIndex;
+	_level0.formHotell.EndDay.selectedIndex = _level0.formFlygHotell.EndDay.selectedIndex;
+}
+
+
+
+
+
+_level0.formHotell.StartMonth.changeHandler = function() {
+	if (_level0.formFlygHotell.StartMonth.selectedItem.data > _level0.formFlygHotell.EndMonth.selectedItem.data) {
+		trace('end is too low, changing it');
+		_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
+	}
+
+	_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formHotell.StartMonth.selectedIndex;
+	_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formHotell.EndMonth.selectedIndex;
+}
+
+_level0.formHotell.EndMonth.changeHandler = function() {
+	if (_level0.formFlygHotell.EndMonth.selectedItem.data < _level0.formFlygHotell.StartMonth.selectedItem.data) {
+		trace('start is too low, changing it');
+		_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
+	}
+
+	_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formHotell.StartMonth.selectedIndex;
+	_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formHotell.EndMonth.selectedIndex;
+}
+
+_level0.formHotell.StartDay.changeHandler = function() {
+	_level0.formFlygHotell.StartDay.selectedIndex = _level0.formHotell.StartDay.selectedIndex;
+	_level0.formFlygHotell.EndDay.selectedIndex = _level0.formHotell.EndDay.selectedIndex;
+}
+
+_level0.formHotell.EndDay.changeHandler = function() {
+	_level0.formFlygHotell.StartDay.selectedIndex = _level0.formHotell.StartDay.selectedIndex;
+	_level0.formFlygHotell.EndDay.selectedIndex = _level0.formHotell.EndDay.selectedIndex;
+}
+
+
+
 
 
 _level0.formFlygHotell.Knapp.clickHandler = function() {
