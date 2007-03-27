@@ -25,24 +25,112 @@ _level0.formFlygHotell.Knapp.stylecache.themeColor = 479642;	//'#07519a';
 _level0.formHotell.Knapp.stylecache.themeColor = 479642;	//'#07519a';
 _level0.formEvenemang.Knapp.stylecache.themeColor = 479642;	//'#07519a';
 
-//_level0.formFlygHotell.Dep.stylecache.borderCapColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.stylecache.borderColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.stylecache.buttonColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.stylecache.highlightColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.stylecache.shadowCapColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.stylecache.shadowColor = 479642;	//'#07519a';
-_level0.formFlygHotell.Dep.stylecache.themeColor = 479642;	//'#07519a';   - sätter hover-färgen på comboboxen
-//Todo: hur ändrar man hover-färgen & selected-färgen i expanderad combobox??
+
+_level0.formFlygHotell.Dep.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formFlygHotell.Dep.setStyle('textRollOverColor', 0);
+_level0.formFlygHotell.Dep.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formFlygHotell.Dep.setStyle('textSelectedColor', 0)
+_level0.formFlygHotell.Dep.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formFlygHotell.Dest.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formFlygHotell.Dest.setStyle('textRollOverColor', 0);
+_level0.formFlygHotell.Dest.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formFlygHotell.Dest.setStyle('textSelectedColor', 0)
+_level0.formFlygHotell.Dest.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formFlygHotell.StartDay.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formFlygHotell.StartDay.setStyle('textRollOverColor', 0);
+_level0.formFlygHotell.StartDay.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formFlygHotell.StartDay.setStyle('textSelectedColor', 0)
+_level0.formFlygHotell.StartDay.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formFlygHotell.StartMonth.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formFlygHotell.StartMonth.setStyle('textRollOverColor', 0);
+_level0.formFlygHotell.StartMonth.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formFlygHotell.StartMonth.setStyle('textSelectedColor', 0)
+_level0.formFlygHotell.StartMonth.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formFlygHotell.EndDay.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formFlygHotell.EndDay.setStyle('textRollOverColor', 0);
+_level0.formFlygHotell.EndDay.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formFlygHotell.EndDay.setStyle('textSelectedColor', 0)
+_level0.formFlygHotell.EndDay.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formFlygHotell.EndMonth.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formFlygHotell.EndMonth.setStyle('textRollOverColor', 0);
+_level0.formFlygHotell.EndMonth.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formFlygHotell.EndMonth.setStyle('textSelectedColor', 0)
+_level0.formFlygHotell.EndMonth.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formFlygHotell.Adults.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formFlygHotell.Adults.setStyle('textRollOverColor', 0);
+_level0.formFlygHotell.Adults.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formFlygHotell.Adults.setStyle('textSelectedColor', 0)
+_level0.formFlygHotell.Adults.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formFlygHotell.Children.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formFlygHotell.Children.setStyle('textRollOverColor', 0);
+_level0.formFlygHotell.Children.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formFlygHotell.Children.setStyle('textSelectedColor', 0)
+_level0.formFlygHotell.Children.setStyle('selectionColor', 11193326);	//#AACBEE
 
 
-//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.borderCapColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.focusTextField._color.color = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.buttonCapColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.highlightColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.shadowCapColor = 479642;	//'#07519a';
-//_level0.formFlygHotell.Dep.__dropdown.border_mc._color.shadowColor = 479642;	//'#07519a';
+//------
+_level0.formHotell.Dest.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formHotell.Dest.setStyle('textRollOverColor', 0);
+_level0.formHotell.Dest.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formHotell.Dest.setStyle('textSelectedColor', 0)
+_level0.formHotell.Dest.setStyle('selectionColor', 11193326);	//#AACBEE
 
 
+_level0.formHotell.StartDay.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formHotell.StartDay.setStyle('textRollOverColor', 0);
+_level0.formHotell.StartDay.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formHotell.StartDay.setStyle('textSelectedColor', 0)
+_level0.formHotell.StartDay.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formHotell.StartMonth.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formHotell.StartMonth.setStyle('textRollOverColor', 0);
+_level0.formHotell.StartMonth.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formHotell.StartMonth.setStyle('textSelectedColor', 0)
+_level0.formHotell.StartMonth.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formHotell.EndDay.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formHotell.EndDay.setStyle('textRollOverColor', 0);
+_level0.formHotell.EndDay.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formHotell.EndDay.setStyle('textSelectedColor', 0)
+_level0.formHotell.EndDay.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formHotell.EndMonth.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formHotell.EndMonth.setStyle('textRollOverColor', 0);
+_level0.formHotell.EndMonth.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formHotell.EndMonth.setStyle('textSelectedColor', 0)
+_level0.formHotell.EndMonth.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formHotell.Adults.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formHotell.Adults.setStyle('textRollOverColor', 0);
+_level0.formHotell.Adults.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formHotell.Adults.setStyle('textSelectedColor', 0)
+_level0.formHotell.Adults.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formHotell.Children.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formHotell.Children.setStyle('textRollOverColor', 0);
+_level0.formHotell.Children.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formHotell.Children.setStyle('textSelectedColor', 0)
+_level0.formHotell.Children.setStyle('selectionColor', 11193326);	//#AACBEE
+//----
+
+_level0.formEvenemang.Stad.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formEvenemang.Stad.setStyle('textRollOverColor', 0);
+_level0.formEvenemang.Stad.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formEvenemang.Stad.setStyle('textSelectedColor', 0)
+_level0.formEvenemang.Stad.setStyle('selectionColor', 11193326);	//#AACBEE
+
+_level0.formEvenemang.Kategori.setStyle('themeColor', 479642);	//#07519a   - sätter hover-färgen på comboboxen
+_level0.formEvenemang.Kategori.setStyle('textRollOverColor', 0);
+_level0.formEvenemang.Kategori.setStyle('rollOverColor', 11193326);	//#AACBEE
+_level0.formEvenemang.Kategori.setStyle('textSelectedColor', 0)
+_level0.formEvenemang.Kategori.setStyle('selectionColor', 11193326);	//#AACBEE
 
 
 
