@@ -400,6 +400,7 @@ oddcast.com
 ojdinteractiva.com
 om.symantec.com
 onestat.com
+onlineservicesas.com
 osdn.com/pc.gif
 overture.com
 p.reuters.com
@@ -429,6 +430,7 @@ rcm.amazon.com
 reactivpub.fr
 realcastmedia.com
 redirect.alexa.com
+reinvigorate.net
 rek.snyggast.se
 reliablestats.com
 research-int.se
@@ -455,6 +457,7 @@ skunk.fazoon.com
 skunk.koigii.se
 skunk.spray.se/scripts/survey.js
 smack.se/netStats
+smartsource.wiley.com
 smarttargetting.com
 smarttargetting.net
 sodoit.com
@@ -553,6 +556,7 @@ wrapper.ign.com
 www.ad.
 xhit.com
 xiti.com
+xtractor.no
 xxx-hitz.org
 xxxcounter.de
 y.digg.com

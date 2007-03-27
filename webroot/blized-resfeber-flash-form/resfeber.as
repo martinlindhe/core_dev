@@ -1,3 +1,7 @@
+//sätt radiobuttons till blå & fet-text
+radioGroup['Flyg'].setAttribute('color', '#07519a');
+radioGroup.setAttribute('fontWeight', 'bold');
+
 _level0.formFlygHotell.Dep.addItem({data:0, label:"Jag vill åka från..."});
 _level0.formFlygHotell.Dep.addItem({data:460001, label:"Stockholm"});
 _level0.formFlygHotell.Dep.addItem({data:460098, label:"Göteborg"});
@@ -93,7 +97,7 @@ aMonths = new Array('jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep
 
 myDate = new Date();
 
-for (i=0; i<5; i++) {
+for (i=1; i<=12; i++) {
 	_level0.formFlygHotell.StartMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
 	_level0.formFlygHotell.EndMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
 	_level0.formHotell.StartMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
