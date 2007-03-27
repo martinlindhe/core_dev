@@ -286,6 +286,7 @@ hb.lycos.com
 helgon.net/lankar/lankar.asp
 helgon.net/picz/lankar.gif
 hera.hardocp.com
+histats.com
 hitbox.com
 hitslink.com
 hostingprod.com/js_source
