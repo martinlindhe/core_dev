@@ -239,12 +239,6 @@ for (i=1; i<=12; i++) {
 	myDate.setMonth( myDate.getMonth() + 1);
 }
 
-_level0.formFlygHotell.StartDay.selectedIndex = myDate.getDate() - 1;
-_level0.formHotell.StartDay.selectedIndex = myDate.getDate() - 1;
-
-_level0.formFlygHotell.EndMonth.selectedIndex = 1;
-_level0.formHotell.EndMonth.selectedIndex = 1;
-
 _level0.formFlygHotell.Adults.addItem({data:1, label:"1 vuxen"});
 _level0.formFlygHotell.Adults.addItem({data:2, label:"2 vuxna"});
 _level0.formFlygHotell.Adults.addItem({data:3, label:"3 vuxna"});
@@ -343,6 +337,17 @@ _level0.formEvenemang.Kategori.addItem({data:10, label:"Opera"});
 _level0.formEvenemang.Kategori.addItem({data:7,  label:"Pjäser"});
 _level0.formEvenemang.Kategori.addItem({data:18, label:"Tågpass"});
 _level0.formEvenemang.Kategori.addItem({data:4,  label:"Övrigt"});
+
+
+
+//Selects the default start & end dates, todo: start date = today + 7 days
+
+_level0.formFlygHotell.StartDay.selectedIndex = myDate.getDate() - 1;
+_level0.formHotell.StartDay.selectedIndex = myDate.getDate() - 1;
+
+_level0.formFlygHotell.EndMonth.selectedIndex = 1;
+_level0.formHotell.EndMonth.selectedIndex = 1;
+
 
 
 formFlygHotell._visible = true;
