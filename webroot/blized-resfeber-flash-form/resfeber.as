@@ -244,7 +244,6 @@ _level0.formFlygHotell.StartMonth.changeHandler = function() {
 	if (_level0.formFlygHotell.StartMonth.selectedItem.data > _level0.formFlygHotell.EndMonth.selectedItem.data) {
 		_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
 	}
-	
 	_level0.formHotell.StartMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
 	_level0.formHotell.EndMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
 }
@@ -253,7 +252,6 @@ _level0.formFlygHotell.EndMonth.changeHandler = function() {
 	if (_level0.formFlygHotell.EndMonth.selectedItem.data < _level0.formFlygHotell.StartMonth.selectedItem.data) {
 		_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
 	}
-
 	_level0.formHotell.StartMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
 	_level0.formHotell.EndMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
 }
@@ -271,12 +269,10 @@ _level0.formFlygHotell.EndDay.changeHandler = function() {
 
 
 
-
 _level0.formHotell.StartMonth.changeHandler = function() {
 	if (_level0.formFlygHotell.StartMonth.selectedItem.data > _level0.formFlygHotell.EndMonth.selectedItem.data) {
 		_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
 	}
-
 	_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formHotell.StartMonth.selectedIndex;
 	_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formHotell.EndMonth.selectedIndex;
 }
@@ -285,7 +281,6 @@ _level0.formHotell.EndMonth.changeHandler = function() {
 	if (_level0.formFlygHotell.EndMonth.selectedItem.data < _level0.formFlygHotell.StartMonth.selectedItem.data) {
 		_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
 	}
-
 	_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formHotell.StartMonth.selectedIndex;
 	_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formHotell.EndMonth.selectedIndex;
 }
@@ -307,30 +302,21 @@ _level0.formHotell.EndDay.changeHandler = function() {
 _level0.formFlygHotell.Knapp.clickHandler = function() {
 	if (_level0.radioGroup.selection.data == 'FlygHotell') {
 		trace('flyg & hotell - click');
-		
-		var formurl = 'http://www.resfeber.se/se/destination/cgi-bin/freetext_search.cgi?partner=msn&section=product&next_page=http://www.resfeber.se/se/flight/cgi-bin/pre_search.cgi&btn_date.x=yes&combo_id=10';
-    
-		//detta behövs kanske urlencodas: ??
-		//<input name="next_page" value="http://www.resfeber.se/se/flight/cgi-bin/pre_search.cgi" type="hidden">	
-
+		var formurl = 'http://www.resfeber.se/se/destination/cgi-bin/freetext_search.cgi?partner=msn&section=product&next_page=' + escape('http://www.resfeber.se/se/flight/cgi-bin/pre_search.cgi') + '&btn_date.x=yes&combo_id=10';
 	} else {
 		trace("flyg - click");
-
-		var formurl = 'http://www.resfeber.se/se/flight/cgi-bin/pre_freetext_search.cgi?partner=msn&section=flight&source=cmp_msn_firstpage_060616&next_page=http://www.resfeber.se/se/flight/cgi-bin/pre_search.cgi&combo_id=1';
-		
-		//<input name="next_page" value="http://www.resfeber.se/se/flight/cgi-bin/pre_search.cgi" type="hidden">
+		var formurl = 'http://www.resfeber.se/se/flight/cgi-bin/pre_freetext_search.cgi?partner=msn&section=flight&source=cmp_msn_firstpage_060616&next_page=' + escape('http://www.resfeber.se/se/flight/cgi-bin/pre_search.cgi') + '&combo_id=1';
 	}
-	
+
 	if (!_level0.formFlygHotell.Dep.selectedItem.data) return;
 	formurl += '&dh_dep_id=' + _level0.formFlygHotell.Dep.selectedItem.data;
-	
-	if (!_level0.formFlygHotell.Dest.selectedItem.data) return;
+
+	//if (!_level0.formFlygHotell.Dest.selectedItem.data) return;
 	formurl += '&dh_dest_id=' + _level0.formFlygHotell.Dest.selectedItem.data;
 
 	if (_level0.formFlygHotell.DestText.text != 'Eller skriv resmål...') {
 		trace('resa till text: ' + _level0.formFlygHotell.DestText.text );
-		//todo: urlencode!
-		formurl += '&dest_name=' + _level0.formFlygHotell.DestText.text;
+		formurl += '&dest_name=' + escape(_level0.formFlygHotell.DestText.text);
 	}
 
 	formurl += '&start_day=' + _level0.formFlygHotell.StartDay.selectedItem.data;
@@ -342,8 +328,7 @@ _level0.formFlygHotell.Knapp.clickHandler = function() {
 	
 	if (_level0.formFlygHotell.ChildrenAges.text != "") {
 		trace('barn ålder: ' + _level0.formFlygHotell.ChildrenAges.text );
-		//todo: urlencode
-		formurl += '&children_age=' + _level0.formFlygHotell.ChildrenAges.text;
+		formurl += '&children_age=' + escape(_level0.formFlygHotell.ChildrenAges.text);
 	}
 
 	trace('url: ' + formurl);
@@ -354,14 +339,11 @@ _level0.formFlygHotell.Knapp.clickHandler = function() {
 _level0.formHotell.Knapp.clickHandler = function() {
 	trace("hotell - click");
 	
-	var formurl = 'http://www.resfeber.se/se/destination/cgi-bin/freetext_search.cgi?partner=msn&section=hotel&next_page=http://www.resfeber.se/se/hotel/cgi-bin/pre_search.cgi&combo_id=2';
-	//<input name="next_page" value="http://www.resfeber.se/se/hotel/cgi-bin/pre_search.cgi" type="hidden">
-		
-	
+	var formurl = 'http://www.resfeber.se/se/destination/cgi-bin/freetext_search.cgi?partner=msn&section=hotel&next_page=' + escape('http://www.resfeber.se/se/hotel/cgi-bin/pre_search.cgi') + '&combo_id=2';
+
 	formurl += '&dh_dest_id=' + _level0.formHotell.Dest.selectedItem.data;
 	if (_level0.formHotell.DestText.text != "") {
-		//todo: urlencode
-		formurl += '&dest_name=' + _level0.formHotell.DestText.text;
+		formurl += '&dest_name=' + escape(_level0.formHotell.DestText.text);
 	}
 
 	formurl += '&start_day=' + _level0.formHotell.StartDay.selectedItem.data;
@@ -372,9 +354,7 @@ _level0.formHotell.Knapp.clickHandler = function() {
 	formurl += '&children=' +  _level0.formHotell.Children.selectedItem.data;
 	
 	if (_level0.formHotell.ChildrenAges.text != "") {
-		trace('barn ålder: ' + _level0.formHotell.ChildrenAges.text );
-		//todo: urlencode
-		formurl += '&children_age=' + _level0.formHotell.ChildrenAges.text;
+		formurl += '&children_age=' + escape(_level0.formHotell.ChildrenAges.text);
 	}
 
 	trace('url: ' + formurl);
@@ -385,11 +365,6 @@ _level0.formHotell.Knapp.clickHandler = function() {
 _level0.formEvenemang.Knapp.clickHandler = function() {
 	trace("evenemang - click");
 	
-	//Läs in data från följande element:
-	//Stad - dropdown
-	//Kategori - dropdown
-	//KategoriText - textfält
-
 	var formurl = 'http://www.resfeber.se/se/event/cgi-bin/pre_search.cgi?partner=msn&combo_id=4&source=cmp_msn_firstpage_060616&adults=1';
 	
 	if (!_level0.formEvenemang.Stad.selectedItem.data) return;
@@ -399,12 +374,10 @@ _level0.formEvenemang.Knapp.clickHandler = function() {
 	formurl += '&event_category=' + _level0.formEvenemang.Kategori.selectedItem.data;
 
 	if (_level0.formEvenemang.KategoriText.text != '... eller skriv fritext här') {
-		//todo: urlencode!
-		formurl += '&freetext=' + _level0.formEvenemang.KategoriText.text;
+		formurl += '&freetext=' + escape(_level0.formEvenemang.KategoriText.text);
 	}
 
 	trace('url: ' + formurl);
 
 	getURL(formurl, "_top");	
-
 }
