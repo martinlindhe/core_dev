@@ -108,8 +108,6 @@ _level0.formHotell.StartDay.selectedIndex = myDate.getDate() - 1;
 _level0.formFlygHotell.EndMonth.selectedIndex = 1;
 _level0.formHotell.EndMonth.selectedIndex = 1;
 
-
-
 _level0.formFlygHotell.Adults.addItem({data:1, label:"1 vuxen"});
 _level0.formFlygHotell.Adults.addItem({data:2, label:"2 vuxna"});
 _level0.formFlygHotell.Adults.addItem({data:3, label:"3 vuxna"});
@@ -119,7 +117,6 @@ _level0.formFlygHotell.Adults.addItem({data:6, label:"6 vuxna"});
 _level0.formFlygHotell.Adults.addItem({data:7, label:"7 vuxna"});
 _level0.formFlygHotell.Adults.addItem({data:8, label:"8 vuxna"});
 _level0.formFlygHotell.Adults.addItem({data:9, label:"9 vuxna"});
-
 
 _level0.formFlygHotell.Children.addItem({data:0, label:"0 barn"});
 _level0.formFlygHotell.Children.addItem({data:1, label:"1 barn"});
@@ -245,7 +242,6 @@ radioGroup.addEventListener("click", radioButtonListener);
 
 _level0.formFlygHotell.StartMonth.changeHandler = function() {
 	if (_level0.formFlygHotell.StartMonth.selectedItem.data > _level0.formFlygHotell.EndMonth.selectedItem.data) {
-		trace('end is too low, changing it');
 		_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
 	}
 	
@@ -255,7 +251,6 @@ _level0.formFlygHotell.StartMonth.changeHandler = function() {
 
 _level0.formFlygHotell.EndMonth.changeHandler = function() {
 	if (_level0.formFlygHotell.EndMonth.selectedItem.data < _level0.formFlygHotell.StartMonth.selectedItem.data) {
-		trace('start is too low, changing it');
 		_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
 	}
 
@@ -279,7 +274,6 @@ _level0.formFlygHotell.EndDay.changeHandler = function() {
 
 _level0.formHotell.StartMonth.changeHandler = function() {
 	if (_level0.formFlygHotell.StartMonth.selectedItem.data > _level0.formFlygHotell.EndMonth.selectedItem.data) {
-		trace('end is too low, changing it');
 		_level0.formFlygHotell.EndMonth.selectedIndex = _level0.formFlygHotell.StartMonth.selectedIndex;
 	}
 
@@ -289,7 +283,6 @@ _level0.formHotell.StartMonth.changeHandler = function() {
 
 _level0.formHotell.EndMonth.changeHandler = function() {
 	if (_level0.formFlygHotell.EndMonth.selectedItem.data < _level0.formFlygHotell.StartMonth.selectedItem.data) {
-		trace('start is too low, changing it');
 		_level0.formFlygHotell.StartMonth.selectedIndex = _level0.formFlygHotell.EndMonth.selectedIndex;
 	}
 
