@@ -113,8 +113,8 @@ class Files
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$ownerId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
 
 		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'"></div></div>';
-		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -120);"></div>';
-		echo '<div id="image_thumbs_scroll_down" onClick="scroll_element_content(\'image_thumbs_scroller\', 120);"></div>';
+		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -180);"></div>';
+		echo '<div id="image_thumbs_scroll_down" onClick="scroll_element_content(\'image_thumbs_scroller\', 180);"></div>';
 		echo '<div id="image_thumbs_scroller">';
 
 		echo '<div class="thumbnails_gadget">';

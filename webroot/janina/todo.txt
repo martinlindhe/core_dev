@@ -1,5 +1,4 @@
 todo:
-	- kunna radera bilder från file-gadgeten
 	- kategorier på filer!
 	
 
@@ -7,4 +6,4 @@ todo:
 	- image preload (finns kod i tracker-applikationen)
 	- kunna scrolla med hover
 
-	- centrera bilder horisontalt & vertikalt i inzoomat läge
+	- centrera bilder horisontalt & vertikalt i image_big

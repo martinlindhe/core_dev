@@ -96,7 +96,6 @@ input.button:focus {
 }
 
 .thumbnails_gadget_entry {
-	padding-bottom: 0px;
 	width: 70px;
 	height: 60px;
 }
@@ -120,7 +119,6 @@ input.button:focus {
 #zoom_image {
 	border: 3px solid #000;
 }
-
 
 
 

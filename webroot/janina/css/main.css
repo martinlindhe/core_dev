@@ -7,6 +7,40 @@ body {
 	font-size: 12px;
 }
 
+#menu {
+	color: #fff;
+	background-color: #000;
+	width: 1000px;
+	height: 80px;
+	position: absolute;
+	top: 620px;
+	left: 0px;
+	font-family: verdana;
+}
+
+#menu a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#menu a:hover {
+	text-decoration: underline;
+}
+
+
+#footer {
+	width: 1000px;
+	height: 20px;
+	position: absolute;
+	top: 706px;
+	left: 0px;
+	text-align: center;
+}
+#footer a {
+	color: #000;
+	text-decoration: none;
+}
+
 #image_big_holder {
 	position: absolute;
 	top: 20px;
@@ -46,39 +80,4 @@ body {
 	top: 556px;
 	left: 38px;
 	background: url('../gfx/scroll_down.png');
-}
-
-
-#menu {
-	color: #fff;
-	background-color: #000;
-	width: 1000px;
-	height: 80px;
-	position: absolute;
-	top: 620px;
-	left: 0px;
-	font-family: verdana;
-}
-
-#menu a {
-	color: #fff;
-	text-decoration: none;
-}
-
-#menu a:hover {
-	text-decoration: underline;
-}
-
-
-#footer {
-	width: 1000px;
-	height: 20px;
-	position: absolute;
-	top: 706px;
-	left: 0px;
-	text-align: center;
-}
-#footer a {
-	color: #000;
-	text-decoration: none;
 }
