@@ -51,7 +51,6 @@ class Files
 		
 		if (isset($files_config['image_max_width'])) $this->image_max_width = $files_config['image_max_width'];
 		if (isset($files_config['image_max_height'])) $this->image_max_height = $files_config['image_max_height'];
-
 		if (isset($files_config['thumb_default_width'])) $this->thumb_default_width = $files_config['thumb_default_width'];
 		if (isset($files_config['thumb_default_height'])) $this->thumb_default_height = $files_config['thumb_default_height'];
 	}
@@ -118,7 +117,7 @@ class Files
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for audio files
-				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onClick="zoomAudio('.$list[$i]['fileId'].');"><center>';
 				echo '<img src="/gfx/icon_audio_32.png" width=80 height=80 alt="Audio file" title="'.$list[$i]['fileName'].'">';
 				echo '</center></div>';
 			} else {

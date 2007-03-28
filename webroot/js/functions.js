@@ -51,16 +51,32 @@ function empty_element(e)
 
 
 var zoomed_id = 0;
+//closeup view of image file
 function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
-	//e.setAttribute('src', '/gfx/ajax_loading.gif');
 	e.setAttribute('src', 'file.php?id='+id);
-	
+
 	zoomed_id = id;
 
 	show_element_by_name('zoom_image_layer');
 }
+
+//closeup view of audio file
+function zoomAudio(id)
+{
+	zoomed_id = id;
+
+	//requires flashobject.js
+	var fo = new FlashObject("/flash/mp3_player.swf?id="+id, "animationName", "900", "550", "8", "#FFFFFF");
+	fo.addParam("allowScriptAccess", "sameDomain");
+	fo.addParam("quality", "high");
+	fo.addParam("scale", "noscale");
+	fo.write("zoom_audio");
+
+	show_element_by_name('zoom_audio_layer');
+}
+
 
 //used by image zoomer
 function delete_selected_file()
