@@ -7,8 +7,8 @@
 
 <div id="image_big"></div>
 
-<div id="image_thumbs_scroll_up" onClick="scroll_element_content('image_thumbs_scroller', -50);"></div>
-<div id="image_thumbs_scroll_down" onClick="scroll_element_content('image_thumbs_scroller', 50);"></div>
+<div id="image_thumbs_scroll_up" onClick="scroll_element_content('image_thumbs_scroller', -120);"></div>
+<div id="image_thumbs_scroll_down" onClick="scroll_element_content('image_thumbs_scroller', 120);"></div>
 <div id="image_thumbs_scroller">
 <?
 	$files->showThumbnails(1, 'image_big');
@@ -20,11 +20,11 @@
 		<tr>
 			<td width=120>&nbsp;</td>
 			<td width=250>
-			<b><a href="">In Front</a><br>
-			&nbsp;&nbsp;&nbsp;<a href="">Behind</a><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="">Projects</a><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="">Wallpaper</a><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="">My Art</a>
+			<b><a href="./?1">In Front</a><br>
+			&nbsp;&nbsp;&nbsp;<a href="./?2">Behind</a><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?3">Projects</a><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?4">Wallpaper</a><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?5">My Art</a>
 		</b>
 			</td>
 			<td>

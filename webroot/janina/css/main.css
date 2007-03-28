@@ -17,10 +17,10 @@ body {
 }
 
 #image_thumbs_scroller {
-	height: 500px;
+	height: 480px;
 	width: 70px;
 	position: absolute;
-	top: 50px;
+	top: 70px;
 	left: 20px;
 	border: 2px #000 solid;
 	
@@ -31,7 +31,7 @@ body {
 	width: 35px;
 	height: 7px;
 	position: absolute;
-	top: 41px;
+	top: 61px;
 	left: 38px;
 	background: url('../gfx/scroll_up.png');
 }

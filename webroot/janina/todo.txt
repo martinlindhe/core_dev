@@ -1,6 +1,6 @@
 todo:
 	- image preload (finns kod i tracker-applikationen)
-	- scrolla
+	- kunna scrolla med hover
 	- kunna radera bilder från file-gadgeten
 	- kategorier på filer!
 	

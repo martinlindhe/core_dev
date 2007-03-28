@@ -71,12 +71,37 @@ function loadImage(id, targetdiv)
 	e.appendChild(i);
 }
 
-//scroll the content of element name "n" down by offset pixels
+
+function scroll_up(e, step, offs)
+{
+	e.scrollTop -= step;
+	
+	if (offs<0) {
+		offs += step;
+		setTimeout(function() {scroll_up(e,step,offs)}, 1);
+	}
+}
+
+function scroll_down(e, step, offs)
+{
+	e.scrollTop += step;
+
+	if (offs>0) {
+		offs -= step;
+		setTimeout(function() {scroll_down(e,step,offs)}, 1);
+	}
+}
+
+//scroll the content of element name "n" by offset pixels. use negative value of offset to scroll up, positive to scroll down
 function scroll_element_content(n,offs)
 {
 	var e = document.getElementById(n);
 
-	trace('scroll by ' + offs + ' pixels, top of div: ' + e.scrollTop + ', height: ' + e.scrollHeight);
+	//trace('scroll by ' + offs + ' pixels, top of div: ' + e.scrollTop + ', height: ' + e.scrollHeight);
 
-	e.scrollTop += offs;
+	if (offs>0) {
+		setTimeout(function() {scroll_down(e,5,offs)}, 1);
+	} else {
+		setTimeout(function() {scroll_up(e,5,offs)}, 1);
+	}
 }
