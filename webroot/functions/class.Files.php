@@ -1,6 +1,8 @@
 <?
 /*
 	Files class - Handle file upload, image manipulating, file management
+	
+	Uses tblFiles & tblCategories
 
 	Written by Martin Lindhe, 2007
 
@@ -20,10 +22,11 @@
 			så läggs en <div> till som visar thumbnail på nyss uppladdad bild.
 
 		- visa animerad gif medans filen laddas upp (senare: progress meter)
-
 */
 
 require_once('functions_files.php');
+
+define('CATEGORY_TYPE_FILES', 1);
 
 class Files
 {
@@ -64,18 +67,44 @@ class Files
 		//todo: fixa denna sökväg
 		require_once('../layout/image_zoom_layer.html');
 
-		if (!empty($_FILES['file1'])) $this->handleUserUpload($_FILES['file1']);
+		$categoryId = 0;
+		if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
+
+		if (!empty($_FILES['file1'])) {
+			$this->handleUserUpload($_FILES['file1'], $categoryId);
+		}
 		
-		if (!empty($_POST['new_file_category'])) {
-			echo 'create file category!<br>';
+		if (!$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_global']))
+		{
+			//Create new category. Only allow categories inside root level
+			$this->createCategory($_POST['new_file_category'], $_POST['new_file_category_global']);
 		}
 
 		echo '<div class="file_gadget">';
 
 		//menu
-		echo '<div class="file_gadget_header">File Gadget Overview</div>';
+		echo '<div class="file_gadget_header">';
+		echo 'File Gadget Overview - Displaying ';
+		if (!$categoryId) echo 'Root Level content';
+		else echo $this->getCategoryName($categoryId).' content';
+		echo '</div>';
 
-		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$session->id.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
+		if (!$categoryId) {
+			$cat_list = $db->GetArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
+			if (!empty($cat_list)) {
+				echo 'Categories:<br>';
+				for ($i=0; $i<count($cat_list); $i++) {
+					echo '<a href="?file_gadget_category_id='.$cat_list[$i]['categoryId'].'">'.$cat_list[$i]['categoryName'].'</a><br>';
+				}
+				echo '<br>';
+			}
+		} else {
+			echo '<a href="?file_gadget_category_id=0">Go back to root level</a><br><br>';
+		}
+
+
+		//select the files in the current category (or root level for uncategorized files)
+		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$session->id.' AND categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
 		
 		echo '<div class="file_gadget_content">';
 		for ($i=0; $i<count($list); $i++)
@@ -99,30 +128,39 @@ class Files
 		echo '</div>';
 
 		echo '<div id="file_gadget_upload">';
-		echo '<input type="submit" class="button" value="New category" onClick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"><br>';
-		echo '<form name="ajax_show_files" method="post" action="" enctype="multipart/form-data">';
+		if (!$categoryId) {
+			echo '<input type="button" class="button" value="New category" onClick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"><br>';
+		}
+		echo '<form name="ajax_show_files" method="post" action="?file_gadget_category_id='.$categoryId.'" enctype="multipart/form-data">';
 		echo '<input type="file" name="file1"> ';
 		echo '<input type="submit" class="button" value="Upload">';
 		echo '</form>';
 		echo '</div>';
 		
-		echo '<div id="file_gadget_category" style="display: none;">';
-		echo '<form name="new_file_category" method="post" action="">';
-		echo 'Category name: <input type="text" name="new_file_category"> ';
-		echo '<input type="submit" class="button" value="Create"> ';
-		echo '<input type="button" class="button" value="Cancel" onClick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');">';
-		echo '</form>';
-		echo '</div>';
+		if (!$categoryId) {
+			echo '<div id="file_gadget_category" style="display: none;">';
+			echo '<form name="new_file_category" method="post" action="">';
+			echo 'Category name: <input type="text" name="new_file_category"> ';
+			if ($session->isSuperAdmin) {
+				echo '<br>';
+				echo '<input type="hidden" name="new_file_category_global" value="0">';
+				echo '<input type="checkbox" value="1" name="new_file_category_global">Make this category globally available<br><br>';
+			}
+			echo '<input type="submit" class="button" value="Create"> ';
+			echo '<input type="button" class="button" value="Cancel" onClick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');">';
+			echo '</form>';
+			echo '</div>';
+		}
 		
 		echo '</div>';
 	}
 
 	/* Visar bara thumbnails. klicka en thumbnail för att visa hela bilden i 'image_big' div:en */
-	public function showThumbnails($ownerId)
+	public function showThumbnails($categoryId)
 	{
 		global $session, $db;
 
-		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$ownerId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
+		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
 
 		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'"></div></div>';
 		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
@@ -144,6 +182,31 @@ class Files
 
 		echo '</div>';
 		echo '</div>';
+	}
+	
+	/* Creates a new category to store files in */
+	private function createCategory($categoryName, $globalCategory = 0)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($globalCategory)) return false;
+
+		if ($globalCategory && !$session->isSuperAdmin) $globalCategory = 0;
+
+		$enc_catname = $db->escape(trim(strip_tags($categoryName)));
+		if (!$enc_catname) return false;
+
+		$sql = 'INSERT INTO tblCategories SET categoryName="'.$enc_catname.'",categoryType='.CATEGORY_TYPE_FILES.',timeCreated=NOW(),globalCategory='.$globalCategory.',ownerId='.$session->id;
+		$db->query($sql);
+	}
+	
+	private function getCategoryName($categoryId)
+	{
+		global $db;
+		
+		if (!is_numeric($categoryId)) return false;
+	
+		$sql = 'SELECT categoryName FROM tblCategories WHERE categoryId='.$categoryId.' AND categoryType='.CATEGORY_TYPE_FILES;
+		return $db->getOneItem($sql);
 	}
 	
 	public function deleteFile($fileId)
@@ -295,7 +358,7 @@ class Files
 	}
 
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
-	function setCachedHeaders()
+	private function setCachedHeaders()
 	{
 		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
 		header('Cache-Control: Public');
@@ -304,7 +367,7 @@ class Files
 
 
 	//Note: These header commands have been verified to work with IE6 and Firefox 1.5 only, no other browsers have been tested
-	function sendFile($fileId, $download)
+	public function sendFile($fileId, $download)
 	{
 		if (!is_numeric($fileId)) return false;
 

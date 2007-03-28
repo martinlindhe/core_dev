@@ -7,3 +7,6 @@ todo:
 	- kunna scrolla med hover
 
 	- centrera bilder horisontalt & vertikalt i image_big
+
+
+	- bekräftelse-popup om man vill radera bild när man klickar "delete image"

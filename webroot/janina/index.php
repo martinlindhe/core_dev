@@ -6,7 +6,9 @@
 ?>
 
 <?
-	$files->showThumbnails(1);
+	$showCategory = 1;
+	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $showCategory = $_GET['c'];
+	$files->showThumbnails($showCategory);
 ?>
 
 <div id="menu">
@@ -14,11 +16,11 @@
 		<tr>
 			<td width=120>&nbsp;</td>
 			<td width=250>
-			<b><a href="./?1">In Front</a><br>
-			&nbsp;&nbsp;&nbsp;<a href="./?2">Behind</a><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?3">Projects</a><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?4">Wallpaper</a><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?5">My Art</a>
+			<b><a href="./?c=1">In Front</a><br>
+			&nbsp;&nbsp;&nbsp;<a href="./?c=2">Behind</a><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?c=3">Projects</a><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?c=4">Wallpaper</a><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?c=5">My Art</a>
 		</b>
 			</td>
 			<td>

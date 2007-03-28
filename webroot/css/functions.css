@@ -33,7 +33,7 @@ input.button:focus {
 /* holder for file gadget, contains all the other parts */
 .file_gadget {
 	width: 630px;
-	max-height: 500px;
+	max-height: 700px;
 	overflow-x: hidden;
 	overflow-y: auto;
 	
