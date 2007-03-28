@@ -70,7 +70,7 @@ function show_ajax_anim()
 function perform_ajax_delete_uservar(id)
 {
 	delete_request = new AJAX();
-	delete_request.GET('/ajax/ajax_del_uservar.php?i='+id, ajax_delete_uservar_callback, id);
+	delete_request.GET('/ajax/del_uservar.php?i='+id, ajax_delete_uservar_callback, id);
 
 	//uses callback function to only display animated icon if request isnt already completed in 20ms
 	//this removes the flickering display of animated image if you have very low response times
@@ -100,5 +100,5 @@ var delete_file_request = null;
 function ajax_delete_file(id)
 {
 	delete_file_request = new AJAX();
-	delete_file_request.GET('/ajax/ajax_del_file.php?i='+id, null);
+	delete_file_request.GET('/ajax/del_file.php?i='+id, null);
 }
