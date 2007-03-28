@@ -24,7 +24,6 @@
 /adview.php
 /ad_
 /awstats
-/banner
 /burst*ad.js
 /eluminate.js
 /hbx.js

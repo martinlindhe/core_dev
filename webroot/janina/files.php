@@ -22,9 +22,12 @@
 
 	require('design_head.php');
 
-	echo 'file area<br>';
-	
 	$files->showFiles();
+?>
 
+<br>
+<a href="index.php">Tillbaka till framsidan</a>
+
+<?
 	require('design_foot.php');
 ?>

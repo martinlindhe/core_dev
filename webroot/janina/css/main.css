@@ -49,8 +49,8 @@ body {
 }
 
 #image_big {
-	width: 800px;
-	height: 570px;
+	min-width: 100px;
+	min-height: 100px;
 }
 
 #image_thumbs_scroller {

@@ -1,13 +1,7 @@
 <?
 	require_once('config.php');
 	require('design_head.php');
-	
-	//todo: bygg ihop hela denna div-klump som har med bilderna att göra i showThumbnails funktionen
-?>
 
-<?
-	$showCategory = 1;
-	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $showCategory = $_GET['c'];
 	$files->showThumbnails($showCategory);
 ?>
 
@@ -20,8 +14,7 @@
 			&nbsp;&nbsp;&nbsp;<a href="./?c=2">Behind</a><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?c=3">Projects</a><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?c=4">Wallpaper</a><br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?c=5">My Art</a>
-		</b>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?c=5">My Art</a></b>
 			</td>
 			<td>
 				Residence: Stockholm, Sweden<br>

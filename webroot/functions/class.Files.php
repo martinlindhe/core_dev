@@ -71,7 +71,7 @@ class Files
 		if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
 
 		if (!empty($_FILES['file1'])) {
-			$this->handleUserUpload($_FILES['file1'], $categoryId);
+			$this->handleUpload($_FILES['file1'], $categoryId);
 		}
 		
 		if (!$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_global']))
@@ -84,7 +84,7 @@ class Files
 
 		//menu
 		echo '<div class="file_gadget_header">';
-		echo 'File Gadget Overview - Displaying ';
+		echo 'File Upload Overview - Displaying ';
 		if (!$categoryId) echo 'Root Level content';
 		else echo $this->getCategoryName($categoryId).' content';
 		echo '</div>';
@@ -162,7 +162,7 @@ class Files
 
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
 
-		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'"></div></div>';
+		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'" alt=""></div></div>';
 		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroll_down" onClick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroller">';
@@ -199,7 +199,7 @@ class Files
 		$db->query($sql);
 	}
 	
-	private function getCategoryName($categoryId)
+	public function getCategoryName($categoryId)
 	{
 		global $db;
 		
@@ -225,7 +225,7 @@ class Files
 	
 
 	/* Stores uploaded file associated to $session->id */
-	private function handleUserUpload($FileData, $categoryId = 0)
+	private function handleUpload($FileData, $categoryId = 0)
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($categoryId)) return false;

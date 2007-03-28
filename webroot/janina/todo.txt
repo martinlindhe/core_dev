@@ -1,7 +1,4 @@
 todo:
-	- kategorier på filer!
-	
-
 
 	- image preload (finns kod i tracker-applikationen)
 	- kunna scrolla med hover
