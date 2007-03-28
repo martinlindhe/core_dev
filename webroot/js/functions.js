@@ -49,12 +49,11 @@ function empty_element(e)
 	while (e.hasChildNodes()) e.removeChild(e.firstChild);
 }
 
-
 function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
-	e.setAttribute('src', 'file.php?id='+id);
 	//e.setAttribute('src', '/gfx/ajax_loading.gif');
+	e.setAttribute('src', 'file.php?id='+id);
 
 	show_element_by_name('zoom_image_layer');
 }
@@ -63,13 +62,21 @@ function zoomImage(id)
 function loadImage(id, targetdiv)
 {
 	var e = document.getElementById(targetdiv);
-	
 	empty_element(e);
 
 	var i = document.createElement('img');
 	i.setAttribute('src', 'file.php?id='+id);
+	//i.setAttribute('width', '100%');
+	//i.setAttribute('height', '100%');
 	e.appendChild(i);
+}
 
-	trace('loading image ' + id + ' into ' + targetdiv);
-	
+//scroll the content of element name "n" down by offset pixels
+function scroll_element_content(n,offs)
+{
+	var e = document.getElementById(n);
+
+	trace('scroll by ' + offs + ' pixels, top of div: ' + e.scrollTop + ', height: ' + e.scrollHeight);
+
+	e.scrollTop += offs;
 }

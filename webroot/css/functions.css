@@ -93,11 +93,17 @@ input.button:focus {
 /* show thumbnails gadget */
 .thumbnails_gadget {
 	width: 100%;
-	background-color: #aaa;
 }
 
 .thumbnails_gadget_entry {
 	padding-bottom: 0px;
+	width: 70px;
+	height: 60px;
+}
+
+.thumbnails_gadget_entry:hover {
+	opacity: 0.7;
+	filter: alpha(opacity=70);	/*ie6*/
 }
 
 

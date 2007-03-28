@@ -1,12 +1,14 @@
 <?
 	require_once('config.php');
 	require('design_head.php');
+	
+	//todo: bygg ihop hela denna div-klump som har med bilderna att göra i showThumbnails funktionen
 ?>
 
 <div id="image_big"></div>
 
-<div id="image_thumbs_scroll_up"></div>
-<div id="image_thumbs_scroll_down"></div>
+<div id="image_thumbs_scroll_up" onClick="scroll_element_content('image_thumbs_scroller', -50);"></div>
+<div id="image_thumbs_scroll_down" onClick="scroll_element_content('image_thumbs_scroller', 50);"></div>
 <div id="image_thumbs_scroller">
 <?
 	$files->showThumbnails(1, 'image_big');

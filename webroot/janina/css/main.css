@@ -24,8 +24,7 @@ body {
 	left: 20px;
 	border: 2px #000 solid;
 	
-	overflow-y: hidden; /* scroll */
-	overflow-x: hidden;
+	overflow: hidden;	/* required for scroll */
 }
 
 #image_thumbs_scroll_up {
