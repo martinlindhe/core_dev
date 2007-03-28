@@ -22,6 +22,9 @@
 
 	require('design_head.php');
 
+	//todo: fixa denna sökväg
+	require_once('../layout/image_zoom_layer.html');
+
 	echo 'file area<br>';
 	
 	$files->showFiles();

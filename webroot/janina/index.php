@@ -5,13 +5,8 @@
 	//todo: bygg ihop hela denna div-klump som har med bilderna att göra i showThumbnails funktionen
 ?>
 
-<div id="image_big"></div>
-
-<div id="image_thumbs_scroll_up" onClick="scroll_element_content('image_thumbs_scroller', -120);"></div>
-<div id="image_thumbs_scroll_down" onClick="scroll_element_content('image_thumbs_scroller', 120);"></div>
-<div id="image_thumbs_scroller">
 <?
-	$files->showThumbnails(1, 'image_big');
+	$files->showThumbnails(1);
 ?>
 </div>
 

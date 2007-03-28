@@ -102,22 +102,27 @@ class Files
 		echo '</div>';
 	}
 
-	/* Visar bara thumbnails. klicka en thumbnail för att visa hela bilden i $fullImageDiv */
-	public function showThumbnails($ownerId, $fullImageDiv)
+	/* Visar bara thumbnails. klicka en thumbnail för att visa hela bilden i 'image_big' div:en */
+	public function showThumbnails($ownerId)
 	{
 		global $session, $db;
 
-		echo '<div class="thumbnails_gadget">';
-
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$ownerId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
+
+		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'"></div></div>';
+		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -120);"></div>';
+		echo '<div id="image_thumbs_scroll_down" onClick="scroll_element_content(\'image_thumbs_scroller\', 120);"></div>';
+		echo '<div id="image_thumbs_scroller">';
+
+		echo '<div class="thumbnails_gadget">';
 
 		for ($i=0; $i<count($list); $i++)
 		{
 			list($file_firstname, $file_lastname) = explode('.', strtolower($list[$i]['fileName']));
 
+			//show thumbnail of image
 			if (in_array($file_lastname, $this->allowed_image_types)) {
-				//show thumbnail of image
-				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onClick="loadImage('.$list[$i]['fileId'].', \''.$fullImageDiv.'\');"><center>';
+				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onClick="loadImage('.$list[$i]['fileId'].', \'image_big\');"><center>';
 				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
 				echo '</center></div>';
 			}

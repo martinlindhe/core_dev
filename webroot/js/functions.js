@@ -58,16 +58,18 @@ function zoomImage(id)
 	show_element_by_name('zoom_image_layer');
 }
 
-//Loads image id into targetdiv
-function loadImage(id, targetdiv)
+//Loads image id into holder-div
+function loadImage(id, holder)
 {
-	var e = document.getElementById(targetdiv);
+	var e = document.getElementById(holder);
 	empty_element(e);
+
+	//horisontal center hack
+	//var c = document.createElement('center');
+	//e.appendChild(c);
 
 	var i = document.createElement('img');
 	i.setAttribute('src', 'file.php?id='+id);
-	//i.setAttribute('width', '100%');
-	//i.setAttribute('height', '100%');
 	e.appendChild(i);
 }
 

@@ -1,10 +1,10 @@
 todo:
-	- image preload (finns kod i tracker-applikationen)
-	- kunna scrolla med hover
 	- kunna radera bilder från file-gadgeten
 	- kategorier på filer!
 	
+
+
+	- image preload (finns kod i tracker-applikationen)
+	- kunna scrolla med hover
+
 	- centrera bilder horisontalt & vertikalt i inzoomat läge
-	
-	- någon sorts hover-effekt på thumbnailsen, 70% transparens?
-	- preloada första bilden i image_big

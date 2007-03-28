@@ -9,7 +9,3 @@
 		<link rel="stylesheet" href="css/main.css" type="text/css">
 	</head>
 <body>
-<?
-	//todo: fixa denna sökväg
-	require_once('../layout/image_zoom_layer.html');
-?>
