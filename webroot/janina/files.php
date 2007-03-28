@@ -3,7 +3,7 @@
 	todo:
 
 		file upload:
-			* visa upload progress med ajax callback
+			* visa upload progress med ajax callback (kräver nån custom apache modul tror jag)
 			
 		bildvisare:
 			* centrera bilden i mitten av webbläsaren, över file-gadgeten (ska visas halvtransparent i bakgrunden)

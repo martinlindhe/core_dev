@@ -123,7 +123,7 @@ abstract class DB_Base
 
 		$sql_time = 0;
 
-		echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana;">';
+		echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{

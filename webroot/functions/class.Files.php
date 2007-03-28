@@ -45,6 +45,12 @@ class Files
 		if (isset($files_config['thumbs_dir'])) $this->thumbs_dir = $files_config['thumbs_dir'];
 		if (isset($files_config['allowed_image_types'])) $this->allowed_image_types = $files_config['allowed_image_types'];
 		if (isset($files_config['allowed_audio_types'])) $this->allowed_audio_types = $files_config['allowed_audio_types'];
+		
+		if (isset($files_config['image_max_width'])) $this->image_max_width = $files_config['image_max_width'];
+		if (isset($files_config['image_max_height'])) $this->image_max_height = $files_config['image_max_height'];
+
+		if (isset($files_config['thumb_default_width'])) $this->thumb_default_width = $files_config['thumb_default_width'];
+		if (isset($files_config['thumb_default_height'])) $this->thumb_default_height = $files_config['thumb_default_height'];
 	}
 
 
@@ -94,7 +100,30 @@ class Files
 		echo '</div>';
 		
 		echo '</div>';
-		
+	}
+
+	/* Visar bara thumbnails. klicka en thumbnail för att visa hela bilden i $fullImageDiv */
+	public function showThumbnails($ownerId, $fullImageDiv)
+	{
+		global $session, $db;
+
+		echo '<div class="thumbnails_gadget">';
+
+		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$ownerId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
+
+		for ($i=0; $i<count($list); $i++)
+		{
+			list($file_firstname, $file_lastname) = explode('.', strtolower($list[$i]['fileName']));
+
+			if (in_array($file_lastname, $this->allowed_image_types)) {
+				//show thumbnail of image
+				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onClick="loadImage('.$list[$i]['fileId'].', \''.$fullImageDiv.'\');"><center>';
+				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
+				echo '</center></div>';
+			}
+		}
+
+		echo '</div>';
 	}
 
 	/* Stores uploaded file associated to $session->id */
@@ -102,6 +131,9 @@ class Files
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($categoryId)) return false;
+		
+		//ignore empty file uploads
+		if (!$FileData['name']) return;
 
 		if (!is_uploaded_file($FileData['tmp_name'])) {
 			$session->error = 'File too big';

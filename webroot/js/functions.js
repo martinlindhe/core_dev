@@ -3,7 +3,6 @@ function trace(s)
 	console.debug(s);
 }
 
-
 //Toggles element with name "n" between visible and hidden
 function toggle_element_by_name(n)
 {
@@ -37,6 +36,20 @@ function add_div(e, idname, style)
 	return c;
 }
 
+function empty_element_by_name(n)
+{
+	var e=document.getElementById(n);
+
+	while (e.hasChildNodes())
+		e.removeChild(e.firstChild);
+}
+
+function empty_element(e)
+{
+	while (e.hasChildNodes()) e.removeChild(e.firstChild);
+}
+
+
 function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
@@ -44,4 +57,19 @@ function zoomImage(id)
 	//e.setAttribute('src', '/gfx/ajax_loading.gif');
 
 	show_element_by_name('zoom_image_layer');
+}
+
+//Loads image id into targetdiv
+function loadImage(id, targetdiv)
+{
+	var e = document.getElementById(targetdiv);
+	
+	empty_element(e);
+
+	var i = document.createElement('img');
+	i.setAttribute('src', 'file.php?id='+id);
+	e.appendChild(i);
+
+	trace('loading image ' + id + ' into ' + targetdiv);
+	
 }

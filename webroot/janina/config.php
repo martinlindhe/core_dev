@@ -32,6 +32,10 @@
 	/* A variable named $session must exist for all future functions to work. */
 	$session = new Session($config['session']);
 	
+	$config['files']['image_max_width'] = 800;
+	$config['files']['image_max_height'] = 570;
+	$config['files']['thumb_default_width'] = 70;
+	$config['files']['thumb_default_height'] = 60;
 	$config['files']['upload_dir'] = 'E:/Devel/webupload_janina/';
 	$config['files']['thumbs_dir'] = 'E:/Devel/webupload_janina/thumbs/';
 	$files = new Files($config['files']);

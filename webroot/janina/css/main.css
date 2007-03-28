@@ -8,8 +8,8 @@ body {
 }
 
 #image_big {
-	height: 570px;
 	width: 800px;
+	height: 570px;
 	position: absolute;
 	top: 20px;
 	left: 120px;
@@ -23,6 +23,9 @@ body {
 	top: 50px;
 	left: 20px;
 	border: 2px #000 solid;
+	
+	overflow-y: hidden; /* scroll */
+	overflow-x: hidden;
 }
 
 #image_thumbs_scroll_up {
