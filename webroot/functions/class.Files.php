@@ -103,7 +103,7 @@ class Files
 
 
 		//select the files in the current category (or root level for uncategorized files)
-		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$session->id.' AND categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
+		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$session->id.' AND categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD.' ORDER BY timeUploaded ASC');
 		
 		echo '<div class="file_gadget_content">';
 		for ($i=0; $i<count($list); $i++)
@@ -159,7 +159,7 @@ class Files
 	{
 		global $session, $db;
 
-		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
+		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD.' ORDER BY timeUploaded ASC');
 
 		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'" alt=""></div></div>';
 		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';

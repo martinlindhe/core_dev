@@ -66,6 +66,8 @@ function zoomImage(id)
 function zoomAudio(id,name)
 {
 	zoomed_id = id;
+	
+	empty_element_by_name('zoom_audio');
 
 	//requires ext_flashobject.js
 	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/janina/file.php?id='+id, 'animationName', '180', '45', '8', '#FFFFFF');

@@ -2,13 +2,15 @@
 	Minimal mp3 player by Martin Lindhe, 2007
 
 	Pass a valid mp3 in a relative url in the "s" variable of the swf file
-	
+	Pass the song title / file name in the "n" variable
+
 	More info: http://www.metasphere.net/help/FAQ-1010.html
 
 	Todos:
 		* show mp3.position & mp3.duration while the song is playing.
-			- visa i formatet 00:13 / 03:49
 			- behöver en player loop. uppdatera även därifrån ljudvolymen beroende på var slidern är
+
+		* volume slider "onRelease" not triggering
 */
 
 var resourceURL = '';
@@ -22,6 +24,23 @@ if (_level0.s) {
 
 //trace('Loading resource: ' + resourceURL);
 
+function convertSeconds(secs)
+{
+	secs = Math.round(secs);
+
+	var m = Math.round(secs/60)-1;
+	if (m<0) m=0;
+	var s = secs-(m*60);
+
+	if (m<10) m = '0' + m;
+	if (s<10) s = '0' + s;
+
+	//trace('converted ' + secs + ' to ' + m + ':' + s);
+
+	return m + ':' + s;
+}
+
+
 cue = 0;
 paused = 0;
 mp3 = new Sound();
@@ -34,10 +53,10 @@ mp3.onLoad = function() {
 		return;
 	}
 	trace(resourceURL + ' loaded');
-	
+
 	_level0.songTitle.text = _level0.n;	//Display song title
 
-	_root.songPos.text = (mp3.position/1000) + ' / ' + (mp3.duration/1000);
+	_root.songPos.text = convertSeconds(mp3.position/1000) + ' / ' + convertSeconds(mp3.duration/1000);
 }
 
 mp3.onSoundComplete = function() {
@@ -46,6 +65,7 @@ mp3.onSoundComplete = function() {
 
 btnPlay.onRelease = function() {
 	mp3.start(cue);
+	paused = 0;
 }
 
 btnPause.onRelease = function() {
