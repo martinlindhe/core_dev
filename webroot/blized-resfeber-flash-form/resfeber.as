@@ -166,7 +166,6 @@ _level0.formFlygHotell.Dep.addItem({data:460074, label:"Örebro"});
 _level0.formFlygHotell.Dep.addItem({data:460046, label:"Örnsköldsvik"});
 _level0.formFlygHotell.Dep.addItem({data:460041, label:"Östersund"});
 
-
 _level0.formFlygHotell.Dest.addItem({data:0, label:"Jag vill resa till..."});
 _level0.formFlygHotell.Dest.addItem({data:340075, label:"Alicante"});
 _level0.formFlygHotell.Dest.addItem({data:310005, label:"Amsterdam"});
@@ -226,8 +225,8 @@ function formatMonth(i)
 	else return i;
 }
 
+//fyll i de närmsta 12 månaderna i comboboxarna
 aMonths = new Array('jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec');
-
 myDate = new Date();
 
 for (i=1; i<=12; i++) {
@@ -235,9 +234,42 @@ for (i=1; i<=12; i++) {
 	_level0.formFlygHotell.EndMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
 	_level0.formHotell.StartMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
 	_level0.formHotell.EndMonth.addItem({data:myDate.getFullYear()+"-"+formatMonth((myDate.getMonth()+1)), label:aMonths[myDate.getMonth()]+" "+myDate.getFullYear()});
-
 	myDate.setMonth( myDate.getMonth() + 1);
 }
+
+
+//Sätter förvalt avresedatum till dagens datum + 14 dagar
+currDate = new Date();
+myDate = new Date();
+myDate.setDate( myDate.getDate() + 14);
+monthDiff = myDate.getMonth() - currDate.getMonth();
+
+_level0.formFlygHotell.StartDay.selectedIndex = myDate.getDate() - 1;
+_level0.formFlygHotell.StartMonth.selectedIndex = monthDiff;
+
+_level0.formHotell.StartDay.selectedIndex = myDate.getDate() - 1;
+_level0.formHotell.StartMonth.selectedIndex = monthDiff;
+
+
+//Sätter förvalt hemresedatum (för flyg&hotell) till dagens datum + 21 dagar
+myDate = new Date();
+myDate.setDate( myDate.getDate() + 21);
+monthDiff = myDate.getMonth() - currDate.getMonth();
+
+_level0.formFlygHotell.EndDay.selectedIndex = myDate.getDate() - 1;
+_level0.formFlygHotell.EndMonth.selectedIndex = monthDiff;
+
+
+//Sätter förvalt hemresedatum (för hotell) till dagens datum + 17 dagar
+myDate = new Date();
+myDate.setDate( myDate.getDate() + 17);
+monthDiff = myDate.getMonth() - currDate.getMonth();
+
+_level0.formHotell.EndDay.selectedIndex = myDate.getDate() - 1;
+_level0.formHotell.EndMonth.selectedIndex = monthDiff;
+
+
+
 
 _level0.formFlygHotell.Adults.addItem({data:1, label:"1 vuxen"});
 _level0.formFlygHotell.Adults.addItem({data:2, label:"2 vuxna"});
@@ -338,15 +370,6 @@ _level0.formEvenemang.Kategori.addItem({data:7,  label:"Pjäser"});
 _level0.formEvenemang.Kategori.addItem({data:18, label:"Tågpass"});
 _level0.formEvenemang.Kategori.addItem({data:4,  label:"Övrigt"});
 
-
-
-//Selects the default start & end dates, todo: start date = today + 7 days
-
-_level0.formFlygHotell.StartDay.selectedIndex = myDate.getDate() - 1;
-_level0.formHotell.StartDay.selectedIndex = myDate.getDate() - 1;
-
-_level0.formFlygHotell.EndMonth.selectedIndex = 1;
-_level0.formHotell.EndMonth.selectedIndex = 1;
 
 
 
