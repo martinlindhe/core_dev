@@ -54,6 +54,7 @@ class Files
 	}
 
 
+	//Visar alla filer som en användare har laddat upp
 	public function showFiles()
 	{
 		global $session, $db;
@@ -64,6 +65,10 @@ class Files
 		require_once('../layout/image_zoom_layer.html');
 
 		if (!empty($_FILES['file1'])) $this->handleUserUpload($_FILES['file1']);
+		
+		if (!empty($_POST['new_file_category'])) {
+			echo 'create file category!<br>';
+		}
 
 		echo '<div class="file_gadget">';
 
@@ -92,13 +97,20 @@ class Files
 			}
 		}
 		echo '</div>';
-		
-		echo '<br><br><br>';
 
-		echo '<div class="file_gadget_upload">';
-		echo '<form name="ajax_show_files" action="" method="post" enctype="multipart/form-data">';
+		echo '<div id="file_gadget_upload">';
+		echo '<input type="submit" class="button" value="New category" onClick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"><br>';
+		echo '<form name="ajax_show_files" method="post" action="" enctype="multipart/form-data">';
 		echo '<input type="file" name="file1"> ';
 		echo '<input type="submit" class="button" value="Upload">';
+		echo '</form>';
+		echo '</div>';
+		
+		echo '<div id="file_gadget_category" style="display: none;">';
+		echo '<form name="new_file_category" method="post" action="">';
+		echo 'Category name: <input type="text" name="new_file_category"> ';
+		echo '<input type="submit" class="button" value="Create"> ';
+		echo '<input type="button" class="button" value="Cancel" onClick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');">';
 		echo '</form>';
 		echo '</div>';
 		
@@ -113,12 +125,11 @@ class Files
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$ownerId.' AND fileType='.FILETYPE_NORMAL_UPLOAD);
 
 		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'"></div></div>';
-		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -180);"></div>';
-		echo '<div id="image_thumbs_scroll_down" onClick="scroll_element_content(\'image_thumbs_scroller\', 180);"></div>';
+		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
+		echo '<div id="image_thumbs_scroll_down" onClick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroller">';
 
 		echo '<div class="thumbnails_gadget">';
-
 		for ($i=0; $i<count($list); $i++)
 		{
 			list($file_firstname, $file_lastname) = explode('.', strtolower($list[$i]['fileName']));
@@ -131,6 +142,7 @@ class Files
 			}
 		}
 
+		echo '</div>';
 		echo '</div>';
 	}
 	

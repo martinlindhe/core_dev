@@ -8,7 +8,6 @@
 <?
 	$files->showThumbnails(1);
 ?>
-</div>
 
 <div id="menu">
 	<table width="100%" cellpadding=0 cellspacing=4 border=0>
