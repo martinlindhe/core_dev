@@ -15,6 +15,8 @@
 
 var resourceURL = '';
 
+_level0.songTitle.text = 'Loading MP3...';
+
 if (_level0.s) {
 	resourceURL = _level0.s;
 } else {
