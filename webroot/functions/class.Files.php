@@ -57,8 +57,11 @@ class Files
 	public function showFiles()
 	{
 		global $session, $db;
-		
+
 		if (!$session->id) return;
+
+		//todo: fixa denna sökväg
+		require_once('../layout/image_zoom_layer.html');
 
 		if (!empty($_FILES['file1'])) $this->handleUserUpload($_FILES['file1']);
 
@@ -130,9 +133,24 @@ class Files
 
 		echo '</div>';
 	}
+	
+	public function deleteFile($fileId)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($fileId)) return false;
+
+		$sql = 'DELETE FROM tblFiles WHERE fileId='.$fileId.' AND ownerId='.$session->id;
+		$db->query($sql);
+
+		//physically remove the file from disk
+		unlink($this->upload_dir.$fileId);
+
+		//todo: also remove generated thumbnails
+	}
+	
 
 	/* Stores uploaded file associated to $session->id */
-	function handleUserUpload($FileData, $categoryId = 0)
+	private function handleUserUpload($FileData, $categoryId = 0)
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($categoryId)) return false;
@@ -166,8 +184,6 @@ class Files
 			unlink($FileData['tmp_name']);
 			return 'Unsupported filetype';
 		}
-
-
 	}
 
 	private function handleAudioUpload($FileData, $fileId)
@@ -196,8 +212,7 @@ class Files
 		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
 		$db->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
 	}
-	
-	
+
 	/* Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio */
 	private function resizeImageCalc($filename, $to_width, $to_height)
 	{

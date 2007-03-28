@@ -49,14 +49,35 @@ function empty_element(e)
 	while (e.hasChildNodes()) e.removeChild(e.firstChild);
 }
 
+
+var zoomed_id = 0;
 function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
 	//e.setAttribute('src', '/gfx/ajax_loading.gif');
 	e.setAttribute('src', 'file.php?id='+id);
+	
+	zoomed_id = id;
 
 	show_element_by_name('zoom_image_layer');
 }
+
+//used by image zoomer
+function delete_selected_file()
+{
+	trace('delete file...' + zoomed_id);
+	
+	//Send AJAX call for file delete
+	ajax_delete_file(zoomed_id);
+
+	//Hide selected file
+	hide_element_by_name('zoom_image_layer');
+	
+	//todo: remove zoomed_id from file gadget
+
+	zoomed_id = 0;
+}
+
 
 //Loads image id into holder-div
 function loadImage(id, holder)

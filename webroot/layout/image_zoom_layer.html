@@ -1,6 +1,9 @@
 <div id="zoom_image_layer" style="display:none">
 	
-	<center><img id="zoom_image" src="/gfx/ajax_loading.gif" alt="Image"></center><br>
-	<img src="/gfx/icon_error.png" alt="Close" onClick="hide_element_by_name('zoom_image_layer')">
+	<center>
+		<img id="zoom_image" src="/gfx/ajax_loading.gif" alt="Image"><br>
+		<input type="submit" value="Close" onClick="hide_element_by_name('zoom_image_layer')"> 
+		<input type="submit" value="Delete image" onClick="delete_selected_file()">
+	</center>
 
 </div>

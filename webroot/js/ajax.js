@@ -38,7 +38,7 @@ function AJAX()
 	{
 		if (!this._request) return false;
 
-		this._request.onreadystatechange = function() { callback(callbackparam); }
+		if (callback) this._request.onreadystatechange = function() { callback(callbackparam); }
 		this._request.open('GET', url, true);
 		this._request.send(null);
 	}
@@ -92,4 +92,13 @@ function ajax_delete_uservar_callback(id)
 		hide_element_by_name('ajax_anim');
 		delete_request = null;
 	}
+}
+
+
+//Sends an AJAX call to delete specified file
+var delete_file_request = null;
+function ajax_delete_file(id)
+{
+	delete_file_request = new AJAX();
+	delete_file_request.GET('/ajax/ajax_del_file.php?i='+id, null);
 }
