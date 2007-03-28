@@ -143,7 +143,8 @@ class Files
 			if ($session->isSuperAdmin) {
 				echo '<br>';
 				echo '<input type="hidden" name="new_file_category_global" value="0">';
-				echo '<input type="checkbox" value="1" name="new_file_category_global">Make this category globally available<br><br>';
+				echo '<input type="checkbox" value="1" name="new_file_category_global" id="new_file_category_global"> ';
+				echo '<label for="new_file_category_global">Make this category globally available</label><br><br>';
 			}
 			echo '<input type="submit" class="button" value="Create"> ';
 			echo '<input type="button" class="button" value="Cancel" onClick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');">';
