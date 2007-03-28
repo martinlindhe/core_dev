@@ -117,7 +117,7 @@ class Files
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for audio files
-				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onClick="zoomAudio('.$list[$i]['fileId'].');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onClick="zoomAudio('.$list[$i]['fileId'].',\''.$list[$i]['fileName'].'\');"><center>';
 				echo '<img src="/gfx/icon_audio_32.png" width=80 height=80 alt="Audio file" title="'.$list[$i]['fileName'].'">';
 				echo '</center></div>';
 			} else {
@@ -262,7 +262,10 @@ class Files
 
 	private function handleAudioUpload($FileData, $fileId)
 	{
-		//nothing happening here yet
+		//Move the uploaded file to upload directory
+		$uploadfile = $this->upload_dir.$fileId;
+		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
+		$db->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
 	}
 
 	/* Handle image upload, used internally only */

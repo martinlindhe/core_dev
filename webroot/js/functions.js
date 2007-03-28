@@ -63,16 +63,16 @@ function zoomImage(id)
 }
 
 //closeup view of audio file
-function zoomAudio(id)
+function zoomAudio(id,name)
 {
 	zoomed_id = id;
 
-	//requires flashobject.js
-	var fo = new FlashObject("/flash/mp3_player.swf?id="+id, "animationName", "900", "550", "8", "#FFFFFF");
-	fo.addParam("allowScriptAccess", "sameDomain");
-	fo.addParam("quality", "high");
-	fo.addParam("scale", "noscale");
-	fo.write("zoom_audio");
+	//requires ext_flashobject.js
+	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/janina/file.php?id='+id, 'animationName', '180', '45', '8', '#FFFFFF');
+	fo.addParam('allowScriptAccess', 'sameDomain');
+	fo.addParam('quality', 'high');
+	fo.addParam('scale', 'noscale');
+	fo.write('zoom_audio');
 
 	show_element_by_name('zoom_audio_layer');
 }
@@ -86,6 +86,7 @@ function delete_selected_file()
 
 	//Hide selected file
 	hide_element_by_name('zoom_image_layer');
+	hide_element_by_name('zoom_audio_layer');
 
 	//remove zoomed_id thumbnail from file gadget
 	hide_element_by_name('file_' + zoomed_id);

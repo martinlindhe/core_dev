@@ -6,13 +6,9 @@
 	More info: http://www.metasphere.net/help/FAQ-1010.html
 
 	Todos:
-		* show mp3.position & mp3.duration while the song is playing
-
-		* volume slider
-	
-		* show song name (flash Sound object dont seem to know about ID3 tags etc, take a 2nd parameter?)
-
-		* visa button-pressed grafik när man trycker på knapparna
+		* show mp3.position & mp3.duration while the song is playing.
+			- visa i formatet 00:13 / 03:49
+			- behöver en player loop. uppdatera även därifrån ljudvolymen beroende på var slidern är
 */
 
 var resourceURL = '';
@@ -24,7 +20,7 @@ if (_level0.s) {
 	resourceURL = 'song.mp3';
 }
 
-trace('Loading resource: ' + resourceURL);
+//trace('Loading resource: ' + resourceURL);
 
 cue = 0;
 paused = 0;
@@ -35,14 +31,17 @@ mp3.loadSound(resourceURL, true);
 mp3.onLoad = function() {
 	if (!mp3.duration) {
 		_level0.songTitle.text = 'Failed to load MP3';
+		return;
 	}
-	trace('song loaded, duration: ' + mp3.duration);
+	trace(resourceURL + ' loaded');
+	
+	_level0.songTitle.text = _level0.n;	//Display song title
 
 	_root.songPos.text = (mp3.position/1000) + ' / ' + (mp3.duration/1000);
 }
 
 mp3.onSoundComplete = function() {
-	trace('song played thru');
+	trace('Song played thru');
 }
 
 btnPlay.onRelease = function() {
@@ -64,3 +63,14 @@ btnStop.onRelease = function() {
 	cue = 0;
 	mp3.stop();
 }
+
+slider.onPress = function() {
+	startDrag('slider', true, sliderBG._x, slider._y, (sliderBG._x+sliderBG._width-slider._width+1), slider._y);
+}
+
+//todo: denna funktion triggar inte när man släpper musen, wtf?!?!
+slider.onRelease = function() {
+	stopDrag();
+}
+
+
