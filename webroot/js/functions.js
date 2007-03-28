@@ -65,15 +65,14 @@ function zoomImage(id)
 //used by image zoomer
 function delete_selected_file()
 {
-	trace('delete file...' + zoomed_id);
-	
 	//Send AJAX call for file delete
 	ajax_delete_file(zoomed_id);
 
 	//Hide selected file
 	hide_element_by_name('zoom_image_layer');
-	
-	//todo: remove zoomed_id from file gadget
+
+	//remove zoomed_id thumbnail from file gadget
+	hide_element_by_name('file_' + zoomed_id);
 
 	zoomed_id = 0;
 }
