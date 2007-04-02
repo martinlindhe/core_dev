@@ -17,6 +17,7 @@
 /ad.asp
 /ad.htm
 /ad.php
+/adimage.php
 /adjs.php
 /adlog.php
 /adplace.js
