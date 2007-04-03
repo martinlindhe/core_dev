@@ -10,6 +10,7 @@
 	<br/>
 	Rubrik: hallå<br/>
 	Meddelande: hej bllablablalba<br/>
+	<a href="mail_reply.php">SVARA</a>
 
 
 <?

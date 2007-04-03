@@ -1,0 +1,6 @@
+I slut-skedet:
+	* Optimera html. minimera ner antal onödiga tabbar och whitespace i design_head.php och design_foot.php
+	* Optimera css. -""-
+	* Optimera filnamn. Korta ner namn och parametrar så de tar upp färre bytes, samt är konsekventa:
+		- blogs_*.php till blog_*.php
+		- relations_*.php till friends_*.php

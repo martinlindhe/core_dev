@@ -7,11 +7,14 @@
 	<br/>
 
 	inloggad:<br/>
-	<a href="guestbook.php">DIN GÄSTBOK</a><br/>
-	<a href="mail.php">DIN MAIL</a><br/>
-	<a href="relations.php">DINA RELATIONER</a><br/>
+	<a href="guestbook.php">DIN GÄSTBOK</a> (0 olästa)<br/>
+	<a href="mail.php">DIN MAIL</a>(2 olästa)<br/>
+	<a href="relations.php">DINA VÄNNER</a>(2 online)<br/>
 	<a href="blogs.php">DINA BLOGGAR</a><br/>
+	<a href="user.php">DIN PROFIL</a><br/>
+	<a href="gallery.php">DITT GALLERI</a><br/>
 	
+	<br/>
 	<a href="search_users.php">SÖK ANVÄNDARE</a><br/>
 
 <?

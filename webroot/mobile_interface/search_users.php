@@ -8,7 +8,8 @@
 	<form method="post" action="search_users_result.php">
 		<input type="checkbox"/>Killar
 		<input type="checkbox"/>Tjejer
-		<input type="checkbox"/>Online nu<br/>
+		<input type="checkbox"/>Online nu
+		<input type="checkbox" checked/>Har bild<br/>
 		Fritext: <input type="text"/><br/>
 		
 		Stad:

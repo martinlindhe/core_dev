@@ -1,16 +1,12 @@
 <?
 	require('design_head.php');
-	
-	/*
-		todo: dropdown med folk från kompislistan
-	*/
 ?>
 
-	SKIV NYTT MAIL<br/>
+	SVARA PÅ MAIL<br/>
 	<br/>
 
 	<form method="post" action="">
-		Till: <input type="text"/><br/>
+		Till: test123<br/>
 		Rubrik: <input type="text"/><br/>
 		Meddelande:<br/>
 		<textarea></textarea><br/>

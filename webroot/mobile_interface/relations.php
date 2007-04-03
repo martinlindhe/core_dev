@@ -2,11 +2,11 @@
 	require('design_head.php');
 ?>
 
-	DINA RELATIONER<br/>
+	DINA VÄNNER<br/>
 	<br/>
 
-	<a href="user.php">test123</a> (<a href="guestbook_reply.php">SKRIV I GÄSTBOKEN</a>)<br/>
-	<a href="user.php">test456</a> (<a href="guestbook_reply.php">SKRIV I GÄSTBOKEN</a>)<br/>
+	(online) <a href="user.php">test123</a> K41 <a href="guestbook_reply.php">SKRIV I GÄSTBOKEN</a>, <a href="mail_new.php">MAILA</a><br/>
+	(offline) <a href="user.php">test456</a> T29 <a href="guestbook_reply.php">SKRIV I GÄSTBOKEN</a>, <a href="mail_new.php">MAILA</a><br/>
 
 
 <?

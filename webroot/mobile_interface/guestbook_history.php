@@ -2,7 +2,7 @@
 	require('design_head.php');
 ?>
 
-	DIN GÄSTBOK - HISTORIK<br/>
+	GÄSTBOK - HISTORIK MELLAN DIG OCH test123<br/>
 	<br/>
 	
 	Ingen historik finns.

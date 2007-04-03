@@ -23,7 +23,7 @@
 	test123 sa idag 14:55:<br/>
 	nice blogg!<br/>
 	<br/>
-	<a href="blog_comment.php">Kommentera bloggen</a>
+	<a href="blogs_comment.php">Kommentera bloggen</a>
 	
 <?
 	require('design_foot.php');
