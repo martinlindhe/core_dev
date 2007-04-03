@@ -115,7 +115,7 @@ abstract class DB_Base
 
 		$rand_id = mt_rand(1,5000000);
 
-		echo '<a href="#" onClick="return toggle_element_by_name(\'sql_profiling'.$rand_id.'\');">'.$this->queries_cnt.' sql</a>';
+		echo '<a href="#" onclick="return toggle_element_by_name(\'sql_profiling'.$rand_id.'\');">'.$this->queries_cnt.' sql</a>';
 
 		//Shows all SQL queries from this page view
 		$sql_height = ($this->queries_cnt+1)*21;

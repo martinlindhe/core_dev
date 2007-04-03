@@ -7,3 +7,6 @@ todo:
 
 
 	- bekräftelse-popup om man vill radera bild när man klickar "delete image"
+	
+	
+	- sidan visas ej i IE7, efter XHTML-konverteringen... ?!?!!

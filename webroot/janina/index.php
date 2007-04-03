@@ -6,10 +6,10 @@
 ?>
 
 <div id="menu">
-	<table width="100%" cellpadding=0 cellspacing=4 border=0>
+	<table width="100%" cellpadding="0" cellspacing="4" border="0">
 		<tr>
-			<td width=120>&nbsp;</td>
-			<td width=250>
+			<td width="120">&nbsp;</td>
+			<td width="250">
 			<b><a href="./?c=1">In Front</a><br/>
 			&nbsp;&nbsp;&nbsp;<a href="./?c=2">Behind</a><br/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?c=3">Projects</a><br/>

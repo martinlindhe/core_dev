@@ -112,13 +112,13 @@ class Files
 
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
-				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onClick="zoomImage('.$list[$i]['fileId'].');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onclick="zoomImage('.$list[$i]['fileId'].');"><center>';
 				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for audio files
-				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onClick="zoomAudio('.$list[$i]['fileId'].',\''.$list[$i]['fileName'].'\');"><center>';
-				echo '<img src="/gfx/icon_audio_32.png" width=80 height=80 alt="Audio file" title="'.$list[$i]['fileName'].'"/>';
+				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onclick="zoomAudio('.$list[$i]['fileId'].',\''.$list[$i]['fileName'].'\');"><center>';
+				echo '<img src="/gfx/icon_audio_32.png" width="80" height="80" alt="Audio file" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			} else {
 				die('todo: '. $list[$i]['fileMime']);
@@ -128,7 +128,7 @@ class Files
 
 		echo '<div id="file_gadget_upload">';
 		if (!$categoryId) {
-			echo '<input type="button" class="button" value="New category" onClick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
+			echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 		}
 		echo '<form name="ajax_show_files" method="post" action="?file_gadget_category_id='.$categoryId.'" enctype="multipart/form-data">';
 		echo '<input type="file" name="file1"/> ';
@@ -147,7 +147,7 @@ class Files
 				echo '<label for="new_file_category_global">Make this category globally available</label><br/><br/>';
 			}
 			echo '<input type="submit" class="button" value="Create"/> ';
-			echo '<input type="button" class="button" value="Cancel" onClick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
+			echo '<input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
 			echo '</form>';
 			echo '</div>';
 		}
@@ -163,8 +163,8 @@ class Files
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD.' ORDER BY timeUploaded ASC');
 
 		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'" alt=""/></div></div>';
-		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
-		echo '<div id="image_thumbs_scroll_down" onClick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
+		echo '<div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
+		echo '<div id="image_thumbs_scroll_down" onclick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroller">';
 
 		echo '<div class="thumbnails_gadget">';
@@ -174,7 +174,7 @@ class Files
 
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->allowed_image_types)) {
-				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onClick="loadImage('.$list[$i]['fileId'].', \'image_big\');"><center>';
+				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onclick="loadImage('.$list[$i]['fileId'].', \'image_big\');"><center>';
 				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			}
