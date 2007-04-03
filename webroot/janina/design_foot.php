@@ -6,9 +6,9 @@
 	//echo '<br>';
 
 	if ($session->id) {
-		echo '<br>';
+		echo '<br/>';
 		echo '<a href="?logout">log out</a> - ';
-		echo '<a href="files.php">files</a><br>';
+		echo '<a href="files.php">files</a><br/>';
 	}
 ?>
 <a href="mailto:janina.m@home.se">e:janina.m@home.se</a>

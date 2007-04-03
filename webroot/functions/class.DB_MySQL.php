@@ -18,9 +18,9 @@ class DB_MySQL extends DB_Base
 	
 	protected function showMoreSettings()
 	{
-		echo 'Server info: '.mysql_get_server_info($this->db_handle).' ('.mysql_get_host_info($this->db_handle).')<br>';
-		echo 'Client info: '.mysql_get_client_info().'<br>';
-		echo 'Character set: '.mysql_client_encoding($this->db_handle).'<br>';
+		echo 'Server info: '.mysql_get_server_info($this->db_handle).' ('.mysql_get_host_info($this->db_handle).')<br/>';
+		echo 'Client info: '.mysql_get_client_info().'<br/>';
+		echo 'Character set: '.mysql_client_encoding($this->db_handle).'<br/>';
 	}
 
 	public function escape($query)

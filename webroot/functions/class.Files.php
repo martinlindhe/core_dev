@@ -91,14 +91,14 @@ class Files
 		if (!$categoryId) {
 			$cat_list = $db->GetArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
 			if (!empty($cat_list)) {
-				echo 'Categories:<br>';
+				echo 'Categories:<br/>';
 				for ($i=0; $i<count($cat_list); $i++) {
-					echo '<a href="?file_gadget_category_id='.$cat_list[$i]['categoryId'].'">'.$cat_list[$i]['categoryName'].'</a><br>';
+					echo '<a href="?file_gadget_category_id='.$cat_list[$i]['categoryId'].'">'.$cat_list[$i]['categoryName'].'</a><br/>';
 				}
-				echo '<br>';
+				echo '<br/>';
 			}
 		} else {
-			echo '<a href="?file_gadget_category_id=0">Go back to root level</a><br><br>';
+			echo '<a href="?file_gadget_category_id=0">Go back to root level</a><br/><br/>';
 		}
 
 
@@ -113,12 +113,12 @@ class Files
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
 				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onClick="zoomImage('.$list[$i]['fileId'].');"><center>';
-				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
+				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for audio files
 				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onClick="zoomAudio('.$list[$i]['fileId'].',\''.$list[$i]['fileName'].'\');"><center>';
-				echo '<img src="/gfx/icon_audio_32.png" width=80 height=80 alt="Audio file" title="'.$list[$i]['fileName'].'">';
+				echo '<img src="/gfx/icon_audio_32.png" width=80 height=80 alt="Audio file" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			} else {
 				die('todo: '. $list[$i]['fileMime']);
@@ -128,26 +128,26 @@ class Files
 
 		echo '<div id="file_gadget_upload">';
 		if (!$categoryId) {
-			echo '<input type="button" class="button" value="New category" onClick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"><br>';
+			echo '<input type="button" class="button" value="New category" onClick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 		}
 		echo '<form name="ajax_show_files" method="post" action="?file_gadget_category_id='.$categoryId.'" enctype="multipart/form-data">';
-		echo '<input type="file" name="file1"> ';
-		echo '<input type="submit" class="button" value="Upload">';
+		echo '<input type="file" name="file1"/> ';
+		echo '<input type="submit" class="button" value="Upload"/>';
 		echo '</form>';
 		echo '</div>';
 		
 		if (!$categoryId) {
 			echo '<div id="file_gadget_category" style="display: none;">';
 			echo '<form name="new_file_category" method="post" action="">';
-			echo 'Category name: <input type="text" name="new_file_category"> ';
+			echo 'Category name: <input type="text" name="new_file_category"/> ';
 			if ($session->isSuperAdmin) {
-				echo '<br>';
-				echo '<input type="hidden" name="new_file_category_global" value="0">';
-				echo '<input type="checkbox" value="1" name="new_file_category_global" id="new_file_category_global"> ';
-				echo '<label for="new_file_category_global">Make this category globally available</label><br><br>';
+				echo '<br/>';
+				echo '<input type="hidden" name="new_file_category_global" value="0"/>';
+				echo '<input type="checkbox" value="1" name="new_file_category_global" id="new_file_category_global"/> ';
+				echo '<label for="new_file_category_global">Make this category globally available</label><br/><br/>';
 			}
-			echo '<input type="submit" class="button" value="Create"> ';
-			echo '<input type="button" class="button" value="Cancel" onClick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');">';
+			echo '<input type="submit" class="button" value="Create"/> ';
+			echo '<input type="button" class="button" value="Cancel" onClick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
 			echo '</form>';
 			echo '</div>';
 		}
@@ -162,7 +162,7 @@ class Files
 
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD.' ORDER BY timeUploaded ASC');
 
-		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'" alt=""></div></div>';
+		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'" alt=""/></div></div>';
 		echo '<div id="image_thumbs_scroll_up" onClick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroll_down" onClick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroller">';
@@ -175,7 +175,7 @@ class Files
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onClick="loadImage('.$list[$i]['fileId'].', \'image_big\');"><center>';
-				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'">';
+				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			}
 		}
@@ -331,7 +331,7 @@ class Files
 		//Calculate the real width & height to resize too (within $to_width & $to_height), while keeping aspect ratio
 		list($tn_width, $tn_height) = $this->resizeImageCalc($in_filename, $to_width, $to_height);
 
-		//echo 'Resizing from '.$orig_width.'x'.$orig_height.' to '.$tn_width.'x'.$tn_height.'<br>';
+		//echo 'Resizing from '.$orig_width.'x'.$orig_height.' to '.$tn_width.'x'.$tn_height.'<br/>';
 
 		switch ($mime_type)
 		{

@@ -22,7 +22,7 @@
 
 	require('design_head.php');
 
-	echo 'file area<br>';
+	echo 'file area<br/>';
 	
 	$files->showFiles();
 

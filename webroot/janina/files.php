@@ -25,7 +25,7 @@
 	$files->showFiles();
 ?>
 
-<br>
+<br/>
 <a href="index.php">Tillbaka till framsidan</a>
 
 <?

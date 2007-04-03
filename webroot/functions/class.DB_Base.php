@@ -83,11 +83,11 @@ abstract class DB_Base
 	/* Shows current settings */
 	public function showSettings()
 	{
-		echo 'Debug: '.($this->debug?'ON':'OFF').'<br>';
-		echo 'DB driver: '.$this->db_driver.'<br>';
-		echo 'Host: '.$this->host.':'.$this->port.'<br>';
-		echo 'Login: '.$this->username.':'.$this->password.'<br>';
-		echo 'Database: '.$this->database.'<br>';
+		echo 'Debug: '.($this->debug?'ON':'OFF').'<br/>';
+		echo 'DB driver: '.$this->db_driver.'<br/>';
+		echo 'Host: '.$this->host.':'.$this->port.'<br/>';
+		echo 'Login: '.$this->username.':'.$this->password.'<br/>';
+		echo 'Database: '.$this->database.'<br/>';
 
 		$this->showMoreSettings();
 	}
@@ -133,18 +133,18 @@ abstract class DB_Base
 
 			echo '<div style="width: 45px; float: left;">';
 				if (!empty($this->query_error[$i])) {
-					echo '<img src="/gfx/icon_error.png" align="absmiddle" title="SQL Error">';
+					echo '<img src="/gfx/icon_error.png" align="absmiddle" alt="SQL Error" title="SQL Error">';
 				} else {
 					echo round($this->time_spent[$i], 3).'s';
 				}
 			echo '</div> ';
 			if (!empty($this->query_error[$i])) {
-				echo '<b>'.$query.'</b><br>';
+				echo '<b>'.$query.'</b><br/>';
 				echo 'Error: <i>'.$this->query_error[$i].'</i>';
 			} else {
 				echo $query;
 			}
-			echo '<hr>';
+			echo '<hr/>';
 		}
 
 		if ($pageload_start) {
@@ -163,12 +163,12 @@ abstract class DB_Base
 		
 		$enc_str = $this->escape($str);
 		
-		echo '<b>LOG: '.$str.'</b><br>';
+		echo '<b>LOG: '.$str.'</b><br/>';
 
 		if ($session) {
 			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
 		} else {
-			echo 'WARNING - CANNOT LOG with session info!<br>';
+			echo 'WARNING - CANNOT LOG with session info!<br/>';
 			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId=0,userIP=0');
 		}
 	}

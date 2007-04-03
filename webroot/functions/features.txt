@@ -11,3 +11,6 @@
 		- Transparent interface to different SQL databases (currently supports php_mysql.dll and php_mysqli.dll).
 			(todo: initial support pgsql, mssql)
 			Reduce time rewriting already working code for another db driver if you use this well defined class.
+
+* Standards compatible
+		- XHTML 1.0
