@@ -5,7 +5,6 @@
 	PROFIL - test123 K30 (online)<br/>
 	<br/>
 	<a href="relations_create.php">BLI VÄN</a> 
-	<a href="blogs.php">BLOGGAR</a> 
 	<a href="gallery.php">GALLERI</a> 
 	<a href="relations.php">VÄNNER</a> 
 	<a href="mail_new.php">MAILA</a> 

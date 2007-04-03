@@ -9,13 +9,21 @@
 		<input type="checkbox"/>Killar
 		<input type="checkbox"/>Tjejer
 		<input type="checkbox"/>Online nu
-		<input type="checkbox" checked/>Har bild<br/>
+		<input type="checkbox" checked="true"/>Har bild<br/>
 		Fritext: <input type="text"/><br/>
+		<br/>
+		Ålder från <input type="text" size="2"/> till <input type="text" size="2"/><br/>
+		<br/>
 		
-		Stad:
 		<select name="xx">
-			<option>Alla städer
-			<option>Stockholm
+			<option>Alla län</option>
+			<option>Stockholm</option>
+		</select>
+
+
+		<select name="xx">
+			<option>Alla orter</option>
+			<option>Stockholm</option>
 		</select>
 		
 		<input type="submit" value="Sök"/>
