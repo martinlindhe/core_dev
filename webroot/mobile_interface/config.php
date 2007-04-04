@@ -4,6 +4,9 @@
 	require(dirname(__FILE__).'/www/_administrator/set_onl.php');		//skapar $sql och $user klasser
 	require(dirname(__FILE__).'/www/_modules/member/auth.php');			//skapar $user_auth klassen för logins
 
+	//funktioner
+	require(dirname(__FILE__).'/www/_modules/user/mail.fnc.php');		//funktioner för att skicka mail
+
 	
 	//vafan e dealen med dessa?!?!?!
 	$s = &$_SESSION['data'];
