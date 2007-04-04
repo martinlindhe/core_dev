@@ -50,8 +50,8 @@
 	
 	if (!$rule || $rule['deletedBy']) {
 	
-		if ($rule['deletedBy']) echo '<span style=background-color:#FF6666>Error:</span> This rule has been deleted by '.getUserName($db, $rule['deletedBy']).' at '.$rule['timeDeleted'].'.<br><br>';
-		if (!$rule) echo '<span style=background-color:#FF6666>Error:</span> No such rule exists<br><br>';
+		if ($rule['deletedBy']) echo '<span style="background-color:#FF6666">Error:</span> This rule has been deleted by '.getUserName($db, $rule['deletedBy']).' at '.$rule['timeDeleted'].'.<br/><br/>';
+		if (!$rule) echo '<span style="background-color:#FF6666">Error:</span> No such rule exists<br/><br/>';
 
 		include('design_foot.php');
 		die;

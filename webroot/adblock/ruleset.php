@@ -53,7 +53,7 @@
 		if ($page > 1) {
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?p='.($page-1);
 			if ($search) echo '&s='.$search;
-			echo '" title="Previous page"><img src="gfx/arrow_prev.png" alt="Previous" width="11" height="12" border="0"/></a>';
+			echo '" title="Previous page"><img src="gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
 		} else {
 				echo '<img src="gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
 		}
@@ -69,7 +69,7 @@
 		if ($page < $totPages) {
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?p='.($page+1);
 			if ($search) echo '&s='.$search;
-			echo '" title="Next page"><img src="gfx/arrow_next.png" alt="Next" width="11" height="12" border="0"/></a>';
+			echo '" title="Next page"><img src="gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
 		} else {
 			echo '<img src="gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
 		}

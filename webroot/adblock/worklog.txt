@@ -1,7 +1,7 @@
 todo:
 
 	hög prioritet:
-	- rensa upp HTML
+	- konvertera allt till att använda nya "functions"
 
 	låg prioritet:
 	- ruleset.php: efter en sökning som ger mer än 1 sida resultat, när man bläddar till nästa sida så är sökningen bortglömd

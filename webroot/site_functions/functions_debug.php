@@ -23,7 +23,7 @@
 				
 				echo '<div style="width: 50px; float: left;">';
 					echo round($db['time_spent'][$i],3).'s';
-					if (!empty($db['error'][$i])) echo '<img src="design/delete.png" title="'.$db['error'][$i].'">';
+					if (!empty($db['error'][$i])) echo '<img src="design/delete.png" title="'.$db['error'][$i].'" alt=""/>';
 				echo '</div> ';
 
 				echo htmlentities(nl2br($db['query'][$i]), ENT_COMPAT, 'UTF-8');
