@@ -16,16 +16,16 @@
 
 	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 
-	echo 'E-mail:<br>';
-	echo '<input size=30 type="text" name="email" value="'.getUserSetting($db, $_SESSION['userId'], 'email').'"><br>';
+	echo 'E-mail:<br/>';
+	echo '<input size="30" type="text" name="email" value="'.getUserSetting($db, $_SESSION['userId'], 'email').'"/><br/>';
 
-	echo '<input type="submit" value="Save">';
-	echo '</form><br>';
+	echo '<input type="submit" value="Save"/>';
+	echo '</form><br/>';
 
 	if ($_SESSION['isSuperAdmin']) {
-		echo 'Mode: Super admin<br>';
+		echo 'Mode: Super admin<br/>';
 	} else if ($_SESSION['isAdmin']) {
-		echo 'Mode: Administrator<br>';
+		echo 'Mode: Administrator<br/>';
 	}
 
 	include('design_foot.php');

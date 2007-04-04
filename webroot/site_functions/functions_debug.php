@@ -8,7 +8,7 @@
 		if ($_SESSION['isSuperAdmin'])
 		{
 			//admin info (sql query time)
-			echo $total_time.'s, <a href="#" onClick="return toggle_element_by_name(\'debug_layer\');">'.$db['queries'].' sql</a>';
+			echo $total_time.'s, <a href="#" onclick="return toggle_element_by_name(\'debug_layer\');">'.$db['queries'].' sql</a>';
 
 			//Shows all SQL queries from this page view
 			$sql_height = $db['queries']*30;
@@ -27,10 +27,10 @@
 				echo '</div> ';
 
 				echo htmlentities(nl2br($db['query'][$i]), ENT_COMPAT, 'UTF-8');
-				if ($i < $db['queries']) echo '<hr>';
+				if ($i < $db['queries']) echo '<hr/>';
 			}
 
-			echo '<hr>';
+			echo '<hr/>';
 			$php_time = $total_time - $sql_time;
 			echo 'Total time spent - SQL: '.round($sql_time,3).'s, PHP: '.round($php_time,3).'s';
 			echo '</div>';

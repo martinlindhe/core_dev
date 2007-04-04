@@ -42,7 +42,7 @@
 
 	include('design_head.php');
 
-	echo getInfoField($db, 'page_newuser').'<br>';
+	echo getInfoField($db, 'page_newuser').'<br/>';
 
 	$enteredUserName = '';
 	$enteredEmail = '';
@@ -51,16 +51,16 @@
 	
 	if ($registration_errors)
 	{
-		echo '<span style=background-color:#FF6666>'.$registration_errors.'</span><br><br>';
+		echo '<span style=background-color:#FF6666>'.$registration_errors.'</span><br/><br/>';
 	}
 ?>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>" name="newuserform">
-<table width="100%" cellpadding=0 cellspacing=0 border=0>
-	<tr><td width=90>User name:</td><td><input type="text" name="user" value="<?=$enteredUserName?>" size=25></td></tr>
-	<tr><td>Password:</td><td><input type="password" name="pass1" size=25></td></tr>
-	<tr><td>Repeat:</td><td><input type="password" name="pass2" size=25></td></tr>
-	<tr><td>E-mail:</td><td><input type="text" name="email" value="<?=$enteredEmail;?>" size=25></td></tr>
-	<tr><td>&nbsp;</td><td><input type="submit" value="Make user"></td></tr>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+	<tr><td width="90">User name:</td><td><input type="text" name="user" value="<?=$enteredUserName?>" size="25"/></td></tr>
+	<tr><td>Password:</td><td><input type="password" name="pass1" size="25"/></td></tr>
+	<tr><td>Repeat:</td><td><input type="password" name="pass2" size="25"/></td></tr>
+	<tr><td>E-mail:</td><td><input type="text" name="email" value="<?=$enteredEmail;?>" size="25"/></td></tr>
+	<tr><td>&nbsp;</td><td><input type="submit" value="Make user"/></td></tr>
 </table>
 </form>
 <?

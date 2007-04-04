@@ -224,9 +224,9 @@
 				if (!empty($data['timeEdited'])) $last_edited = $data['timeEdited'].' by '.$data['editorName'];
 
 				$info = '<form method="post" name="editinfofieldform" action="'.AddToURL('infoedit', $fieldName, $_SERVER['PHP_SELF']).'">'.
-								'<textarea name="infofield" cols=38 rows='.$rows.'>'.$text.'</textarea><br>'.
-								'Last edited '.$last_edited.'<br>'.
-								'<input type="submit" class="button" value="Save">';
+								'<textarea name="infofield" cols="38" rows="'.$rows.'">'.$text.'</textarea><br/>'.
+								'Last edited '.$last_edited.'<br/>'.
+								'<input type="submit" class="button" value="Save"/>';
 
 				if ($config['infofield']['allow_files']) {
 					$filelist = getFiles($db, $fieldId, FILETYPE_INFOFIELD);
@@ -276,11 +276,11 @@
 					$info .= '"'.$list[$i]['commentText'].'", skrivet '.getDatestringShort($list[$i]['commentTime']).' av '.$list[$i]['userName'].'<br>';
 				}
 				$info .=
-								'<br>'.
-								'Write a comment:<br>'.
+								'<br/>'.
+								'Write a comment:<br/>'.
 								'<form method="post" action="'.AddToURL('infocomments', $fieldName, $_SERVER['PHP_SELF']).'" name="infofieldcommentform">'.
-								'<table width="100%" cellpadding=0 cellspacing=0 border=0>'.
-									'<tr><td><textarea name="comment" cols=61 rows=4></textarea><br><img src="c.gif" width=1 height=5></td></tr>'.
+								'<table width="100%" cellpadding="0" cellspacing="0" border="0">'.
+									'<tr><td><textarea name="comment" cols="61" rows="4"></textarea><br/><img src="c.gif" width="1" height="5"></td></tr>'.
 									'<tr><td><input type="submit" class="button" value="Send"></td></tr>'.
 								'</table>'.
 								'</form>';
@@ -291,10 +291,10 @@
 			}
 			elseif ($config['infofield']['log_history'] && !empty($_GET['infohistory']) && ($_GET['infohistory'] == $fieldName))
 			{
-				$info  = 'History of '.$fieldName.' (id # '.$fieldId.')<br><br>';
+				$info  = 'History of '.$fieldName.' (id # '.$fieldId.')<br/><br/>';
 
-				$info .= 'Current version:<br>';
-				$info .= '<b><a href="#" onClick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['editorName'].' at '.$data['timeEdited'].' ('.strlen($text).' bytes)</b></a><br>';
+				$info .= 'Current version:<br/>';
+				$info .= '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['editorName'].' at '.$data['timeEdited'].' ('.strlen($text).' bytes)</a></b><br/>';
 				$info .= '<div id="layer_history_current" style="display: none; overflow:auto; width:100%; border: #000000 1px solid; background-color:#E0E0E0;">';
 
 				$tmptext = nl2br(htmlentities($text, ENT_COMPAT, 'UTF-8'));
@@ -305,10 +305,10 @@
 				$list = getInfoFieldHistory($db, $fieldId);
 				if ($list)
 				{
-					$info .= '<br>Archived versions ('.count($list).' entries):<br>';
+					$info .= '<br/>Archived versions ('.count($list).' entries):<br/>';
 					for ($i=0; $i<count($list); $i++)
 					{
-						$info .= '<br><li>#'.($i+1).': <a href="#" onClick="return toggle_element_by_name(\'layer_history'.$i.'\')">Written by '.$list[$i]['editorName']. ' at '.$list[$i]['timeEdited'].' ('.strlen($list[$i]['fieldText']).' bytes)</a><br>';
+						$info .= '<br/><li>#'.($i+1).': <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$i.'\')">Written by '.$list[$i]['editorName']. ' at '.$list[$i]['timeEdited'].' ('.strlen($list[$i]['fieldText']).' bytes)</a><br/>';
 						$info .= '<div id="layer_history'.$i.'" style="display: none; overflow:auto; width:100%; border: #000000 1px solid; background-color:#E0E0E0;">';
 
 
@@ -321,7 +321,7 @@
 				}
 				else
 				{
-					$info .= '<br><b>There is no edit history of this infofield in the database.</b><br>';
+					$info .= '<br/><b>There is no edit history of this infofield in the database.</b><br/>';
 				}
 			}
 			else
@@ -367,7 +367,7 @@
 		}
 
 		/* Display the infofield for a normal user */
-		return formatInfoField($db, $data, $fieldName).'<br>';
+		return formatInfoField($db, $data, $fieldName);
 	}
 
 

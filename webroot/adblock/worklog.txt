@@ -10,7 +10,8 @@ todo:
 
 	
 --------------[[changelog]]------------
-
+2007.04.04:
+	- konverterat det mesta från HTML till XHTML 1.0
 
 2006.11.27:
 	- fixade så att alla kommentarer visas till en regel, var en bugg i sql-querien pga ändringen till DATETIME

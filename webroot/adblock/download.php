@@ -84,7 +84,7 @@
 
 	$rules = getAdblockAllRulesCount($db);
 	
-	echo getInfoField($db, 'page_download').'<br>';
+	echo getInfoField($db, 'page_download').'<br/>';
 	
 ?>
 <script type="text/javascript">
@@ -93,17 +93,17 @@ function checkDLform() {
 	return true;
 }
 </script>
-<br>
+<br/>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>?send" name="dlruleset">
-<table width=500 cellpadding=0 cellspacing=0 border=0>
-	<tr><td width=20>&nbsp;</td>
+<table width="500" cellpadding="0" cellspacing="0" border="0">
+	<tr><td width="20">&nbsp;</td>
 		<td class="centermenu">
-			<input type="checkbox" name="type_1" value="1" checked>Ads (<?=$rules['ads']?> entries)<br>
-			<input type="checkbox" name="type_2" value="2" checked>Trackers (<?=$rules['trackers']?> entries)<br>
-			<input type="checkbox" name="type_3" value="3" checked>Counters (<?=$rules['counters']?> entries)<br>
-			<input type="checkbox" name="type_0" value="0" checked>Unsorted entries (<?=$rules['unsorted']?> entries)<br><br>
-			<?=$rules["total"]?> entries total<br><br>
-			<input type="submit" name="button" value="Download" onClick="return checkDLform();">
+			<input type="checkbox" name="type_1" value="1" checked="checked"/>Ads (<?=$rules['ads']?> entries)<br/>
+			<input type="checkbox" name="type_2" value="2" checked="checked"/>Trackers (<?=$rules['trackers']?> entries)<br/>
+			<input type="checkbox" name="type_3" value="3" checked="checked"/>Counters (<?=$rules['counters']?> entries)<br/>
+			<input type="checkbox" name="type_0" value="0" checked="checked"/>Unsorted entries (<?=$rules['unsorted']?> entries)<br/><br/>
+			<?=$rules["total"]?> entries total<br/><br/>
+			<input type="submit" name="button" value="Download" onclick="return checkDLform();"/>
 		</td>
 	</tr>
 </table>

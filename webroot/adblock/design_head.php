@@ -1,19 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<?
+	//<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>Adblock Filterset Database</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="css/main.css" type="text/css">
-<link rel="stylesheet" href="css/functions.css" type="text/css">
-<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-<script type="text/javascript" src="js/functions.js"></script>
+	<title>Adblock Filterset Database</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" href="css/main.css" type="text/css"/>
+	<link rel="stylesheet" href="css/functions.css" type="text/css"/>
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+	<script type="text/javascript" src="js/functions.js"></script>
 </head>
 <body>
 <div id="left-bg"></div>
 <div id="left-sep"></div>
 <div id="header">
 	<div id="header-logo">
-		<a href="index.php"><img src="gfx/logo.png" alt="Filterset Database"></a>
+		<a href="index.php"><img src="gfx/logo.png" alt="Filterset Database"/></a>
 	</div>
 	<div id="header-items">
 		<a href="contribute.php">Contribute</a>
@@ -51,18 +54,18 @@ if (!$_SESSION['loggedIn']) {
 
 	echo
 			'<table>'.
-			'<tr><td>Username:</td><td><input name="usr" type="text" value="'.$_SESSION['lastUserName'].'" size=9 onkeypress="return submitlogin(event);"></td></tr>'.
-			'<tr><td>Password:</td><td><input name="pwd" type="password" size=9 onKeyPress="return submitlogin(event);"></td></tr>'.
+			'<tr><td>Username:</td><td><input name="usr" type="text" value="'.$_SESSION['lastUserName'].'" size="9" onkeypress="return submitlogin(event);"/></td></tr>'.
+			'<tr><td>Password:</td><td><input name="pwd" type="password" size="9" onkeypress="return submitlogin(event);"/></td></tr>'.
 			'</table>'.
-			'<a href="#" onClick="javascript:return sendlogin();">Log in</a><br>'.
+			'<a href="#" onclick="javascript:return sendlogin();">Log in</a><br/>'.
 			'</form>';
 
 	if ($_SESSION['lastError']) {
-		echo '<a href="errorhelp.php?error='.urlencode($_SESSION['lastError']).'"><font color=red>Error: '.$_SESSION['lastError'].'</font></a><br>';
+		echo '<a href="errorhelp.php?error='.urlencode($_SESSION['lastError']).'"><font color=red>Error: '.$_SESSION['lastError'].'</font></a><br/>';
 		$_SESSION['lastError'] = '';
 	}
 ?>
-	<br>
+	<br/>
 	<ul class="side-nav">
 		<li><a href="newuser.php">New user</a></li>
 	</ul>
