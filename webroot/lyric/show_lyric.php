@@ -10,6 +10,8 @@
 	}
 
 	$lyric_data = getLyricData($db, $lyric_id);
+	if (!$lyric_data) die;
+
 	$lyric = $lyric_data['lyricText'];
 	$lyric_name = $lyric_data['lyricName'];
 	$band_name = $lyric_data['bandName'];

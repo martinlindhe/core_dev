@@ -63,6 +63,7 @@
 
 		$check = dbQuery($db, $sql);
 		$row = dbFetchArray($check);
+		if (!$row) return false;
 		$row["lyricName"] = dbStripSlashes($row["lyricName"]);
 		$row["lyricText"] = dbStripSlashes($row["lyricText"]);
 

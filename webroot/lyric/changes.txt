@@ -1,23 +1,24 @@
-todo:
-	* BORT MED TABLES & gör en ordentlig navigeringsmeny
-	* edit_record.php: kunna editera recordInfo
+todo hi prio:
+	#1: porta applikationen till nya "functions" systemet
+	#2: UNICODE stöd!
+	#3: gör en ordentlig navigeringsmeny
+	#4: BORT MED TABLES i den mån det går
+
+todo buggfix/mindre features:
 	* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
-	* edit_lyric.php: fuckar ur med ett felaktigt ID
-	* show_lyric.php: fuckar ur med ett felaktigt ID
+	* edit_record.php: kunna editera recordInfo
 	* add_single_lyric.php: integrera i add_lyric.php
-	* UNICODE stöd!
 
-	fixa add_band.php - mysql error när man lägger till ett band (bandet skapas ändå som det ska)
-	fixa add_lyric.php - även där nått mysql error men texten sparas iaf...
-
-todo: lista låtar som inte finns på nån skiva (admin)
-todo: lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
-todo: dumpa databasen dagligen automatiskt
+	* lista låtar som inte finns på nån skiva (admin)
+	* lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
+	* möjlighet att radera ett band
 
 ----
 2007.04.04
-	* konverterat det mesta HTML till XHTML
+	* konverterat all (?) HTML till XHTML 1.0
 	* ändrade body_footer.php, body_header.php till design_head, design_foot
+	* edit_lyric.php: fuckade ur med ett felaktigt ID
+	* show_lyric.php: fuckade ur med ett felaktigt ID
 
 2007.03.15
 	* add_lyric_single.php: new file (to add a lyric associated with a band only)

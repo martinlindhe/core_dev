@@ -1,10 +1,14 @@
 <?
 	include('include_all.php');
-	include('design_head.php');
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('Bad id');
 
 	$lyric_id = $_GET['id'];
+
+	$lyric_data = getLyricData($db, $lyric_id);
+	if (!$lyric_data) die;
+
+	include('design_head.php');
 
 	if (isset($_GET['delete'])) {
 		removeLyric($db, $lyric_id);
@@ -23,7 +27,6 @@
 		echo 'Changes submitted.<br/>';
 	}
 
-	$lyric_data = getLyricData($db, $lyric_id);
 	$lyric = $lyric_data['lyricText'];
 	$lyric_name = $lyric_data['lyricName'];
 	$band_name = $lyric_data['bandName'];
