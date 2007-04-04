@@ -2,60 +2,36 @@
 	$s = $l;
 	$own = true;
 	$page = 'in';
+
 	if(isset($_GET['out'])) $page = 'out';
-	if(!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM {$t}usermail WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
-		if(!empty($res) && count($res) && ($res[1] == '1' || $res[5] == '1')) {
-			if($res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
-				if($res[2] == $l['id_id'] && $res[1] == '1') {
-					$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-					if(!$res[4]) $user->notifyDecrease('mail', $res[2]);
-					$user->counterDecrease('mail', $res[2]);
-				}
-				if($res[3] == $l['id_id'] && $res[5] == '1') {
-					$sql->queryUpdate("UPDATE {$t}usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-				}
-			}
-			if(isset($_GET['p'])) popupACT('Meddelandet raderat.', '', '500', l('user', 'mail', $page));
+	if(!empty($_GET['del_msg'])) {
+		if (mailDelete($_GET['del_msg'])) {
+			if (isset($_GET['p'])) popupACT('Meddelandet raderat.', '', '500', l('user', 'mail', $page));
+
 			if($page == 'out')
 				reloadACT(l('user', 'mail').'&'.$page);
 			else
 				reloadACT(l('user', 'mail'));
 		}
-	} elseif(!empty($_POST['chg']) && is_array($_POST['chg']) && count($_POST['chg'])) {
-		foreach($_POST['chg'] as $val) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM {$t}usermail WHERE main_id = '".secureINS($val)."' LIMIT 1");
-		if(!empty($res) && count($res) && ($res[1] == '1' || $res[5] == '1')) {
-			if($isAdmin || $res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
-				if($res[2] == $l['id_id']) {
-					if($res[1] == '1') $user->counterDecrease('mail', $l['id_id']);
-					$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-				} elseif($res[3] == $l['id_id']) {
-					$sql->queryUpdate("UPDATE {$t}usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-				} else {
-					if($res[1] == '1') $user->counterDecrease('mail', $res[2]);
-					if($res[5] == '1') $user->counterDecrease('mail', $res[3]);
-					$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2', sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-				}
-				#$user->setinfo($s['id_id'], 'mail_offset', 'content - 1');
-				if(!$res[4]) $user->notifyDecrease('mail', $s['id_id']);
-			}
+
+	} else if (!empty($_POST['chg'])) {
+		
+		if (mailDeleteArray($_POST['chg'])) {		
+			if($page == 'out')
+				reloadACT(l('user', 'mail').'&'.$page);
+			else
+				reloadACT(l('user', 'mail'));
 		}
-		}
-		if($page == 'out')
-			reloadACT(l('user', 'mail').'&'.$page);
-		else
-			reloadACT(l('user', 'mail'));
 
 	}
 	$menu = array('in' => array(l('user', 'mail'), 'inkorg'), 'out' => array(l('user', 'mail').'&out', 'utkorg'));
 	$paging = paging(@$_GET['p'], 20);
 	if($page == 'in') {
-		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}usermail WHERE user_id = '".secureINS($l['id_id'])."' AND status_id = '1'");
-		$res = $sql->query("SELECT m.main_id, m.sent_date, m.user_read, m.sent_ttl, u.id_id, u.u_alias, u.u_picid, u.u_picvalid, u.u_picd, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM {$t}usermail m LEFT JOIN {$t}user u ON u.id_id = m.sender_id AND u.status_id = '1' WHERE m.user_id = '".secureINS($l['id_id'])."' AND m.status_id = '1' ORDER BY m.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$paging['co'] = mailInboxCount();
+		$res = mailInboxContent($paging['slimit'], $paging['limit']);
 	} else {
-		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}usermail WHERE sender_id = '".secureINS($l['id_id'])."' AND sender_status = '1'");
-		$res = $sql->query("SELECT m.main_id, m.sent_date, m.user_read, m.sent_ttl, u.id_id, u.u_alias, u.u_picid, u.u_picvalid, u.u_picd, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM {$t}usermail m LEFT JOIN {$t}user u ON u.id_id = m.user_id AND u.status_id = '1' WHERE m.sender_id = '".secureINS($l['id_id'])."' AND m.sender_status = '1' ORDER BY m.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$paging['co'] = mailOutboxCount();
+		$res = mailOutboxContent();
 	}
 	require(DESIGN."head.php");
 ?>

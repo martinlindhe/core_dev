@@ -1,75 +1,37 @@
 <?
 	if(!empty($_GET['r'])) $r = '1'; else $r = '0';
 	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;
+
 	require(CONFIG.'secure.fnc.php');
+
 	$error = false;
-	if(!empty($_POST['text_html']) && !empty($_POST['ins_to'])) {
-		$_POST['text_html'] = strip_tags($_POST['text_html'], NRMSTR);
-		$ins_to = $sql->queryResult("SELECT id_id FROM {$t}user WHERE u_alias = '".secureINS($_POST['ins_to'])."' AND status_id = '1' LIMIT 1");
-		if(!$ins_to) {
-			$error = 'Felaktig mottagare!';
-		} elseif($ins_to == $l['id_id']) {
-			$error = 'Du kan inte skicka till dig själv.';
-		}
-		/*if(!$error && !$isAdmin) {
-			$isBlocked = $sql->queryResult("SELECT rel_id FROM {$t}block WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($ins_to)."' LIMIT 1");
-			if($isBlocked) { if($isBlocked == 'u') popupACT('Du har blockerat personen.'); else popupACT('Du är blockerad.'); }
-		}*/
-		if(!$error && !empty($_POST['ins_cc'])) {
-			$ins_cc = $sql->queryResult("SELECT id_id FROM {$t}user WHERE u_alias = '".secureINS($_POST['ins_cc'])."' AND status_id = '1' LIMIT 1");
-			if($ins_cc && $ins_cc != $l['id_id'] && $ins_cc != $ins_to) {
-				if(!$user->blocked($ins_cc, 3)) {
-					$res = $sql->queryInsert("INSERT INTO {$t}usermail SET
-					user_id = '".$ins_cc."',
-					sender_id = '".$l['id_id']."',
-					status_id = '1',
-					sender_status = '1',
-					user_read = '0',
-					sent_cmt = '".secureINS($_POST['text_html'])."',
-					sent_ttl = '".secureINS($_POST['ins_ttl'])."',
-					sent_date = NOW()");
-					$user->counterIncrease('mail', $ins_cc);
-					$user->notifyIncrease('mail', $ins_cc);
-				}
-			}
-		}
-		if(!$error) {
-			$res = $sql->queryInsert("INSERT INTO {$t}usermail SET
-			user_id = '".$ins_to."',
-			sender_id = '".$l['id_id']."',
-			status_id = '1',
-			sender_status = '1',
-			user_read = '0',
-			sent_cmt = '".secureINS($_POST['text_html'])."',
-			sent_ttl = '".secureINS($_POST['ins_ttl'])."',
-			sent_date = NOW()");
-			$user->counterIncrease('mail', $ins_to);
-			$user->notifyIncrease('mail', $ins_to);
+
+	if (!empty($_POST['text_html']) && !empty($_POST['ins_to']))
+	{	
+		if (sendMail($_POST['ins_to'], $_POST['ins_cc'], $_POST['ins_ttl'], $_POST['text_html'])) {
 			popupACT('Meddelande skickat!', '', '', '500');
 		} else {
 			$res = array('sent_ttl' => $_POST['ins_ttl'], 'sent_cmt' => $_POST['text_html'], 'u_alias' => $_POST['ins_to']);
 		}
 	}
 
-	if(empty($_GET['id'])) {
+	if (empty($_GET['id'])) {
 		$s = false;
 	} else {
 		$s = (!is_numeric($_GET['id']))?false:$user->getuser($_GET['id']);
 	}
-	if($a) {
-		$ans = $sql->queryLine("SELECT sent_ttl, sent_cmt, sent_date, user_id, sender_id, status_id, sender_status FROM {$t}usermail WHERE main_id = '".secureINS($a)."' LIMIT 1");
+	if ($a) {
+		$ans = getMail($a);
 		if(!empty($ans) && count($ans)) {
 			if($ans[3] == $l['id_id'] && $ans[5] == '1' || $ans[4] == $l['id_id'] && $ans[6] == '1') {
-				$ans = array(secureOUT($ans[0]), $ans[1], $sql->queryResult("SELECT u_alias FROM {$t}user WHERE id_id = '".$ans[4]."' AND status_id = '1' LIMIT 1"), $ans[2], $sql->queryResult("SELECT u_alias FROM {$t}user WHERE id_id = '".$ans[3]."' AND status_id = '1' LIMIT 1"));
-			#} elseif($ans[4] == $l['id_id'] && $ans[6] == '1') {
-			#	$ans = array(secureOUT($ans[0]), $ans[1], $sql->queryResult("SELECT u_alias FROM {$t}user WHERE id_id = '".$ans[4]."' AND status_id = '1' LIMIT 1"), $ans[2], $sql->queryResult("SELECT u_alias FROM {$t}user WHERE id_id = '".$ans[3]."' AND status_id = '1' LIMIT 1"));
+				$ans = array(secureOUT($ans[0]), $ans[1], getUserIdFromAlias($ans[4]), $ans[2], getUserIdFromAlias($ans[3]));
 			} else $a = false;
 		} else $a = false;
 	}
 	if(isset($_GET['r']) && $a) $r = true; else $r = false;
 
 	$NAME_TITLE = 'BREV - SKRIV | '.NAME_TITLE;
-	$friends = $sql->query("SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM {$t}userrelation rel RIGHT JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($l['id_id'])."' ORDER BY u.u_alias ASC", 0, 1);
+	$friends = getUserFriends();
 	$fri = '';
 	foreach($friends as $friend) {
 		 $fri .= '<option value="'.secureOUT($friend['u_alias']).'">'.secureOUT($friend['u_alias'].' '.$sex[$friend['u_sex']].$user->doage($friend['u_birth'], 0)).'</option>';

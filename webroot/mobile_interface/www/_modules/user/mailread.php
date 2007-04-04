@@ -1,33 +1,20 @@
 <?
 	require(CONFIG."secure.fnc.php");
 	$page = '';
-	if(!empty($_GET['id'])) {
-#		$res = $sql->queryLine("SELECT m.main_id, m.status_id, m.user_id, m.sender_id, m.user_read, m.sender_status, m.sent_ttl, m.sent_cmt, m.sent_date, u.id_id, u.u_alias, u.u_birth, u.u_sex, u.account_date FROM {$tab['user']}mail m RIGHT JOIN {$tab['user']} u ON u.id_id = m.sender_id AND u.status_id = '1' WHERE m.main_id = '".secureINS($_GET['id'])."' LIMIT 1", 1);
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status, sent_ttl, sent_cmt, sent_date FROM {$t}usermail WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1", 1);
-		if(empty($res) || !count($res)) {
-			errorACT('Felaktigt inlägg.', l('user', 'mail'));
-		}
-		if($res['user_id'] == $l['id_id'] && $res['status_id'] != '1' || $res['sender_id'] == $l['id_id'] && $res['sender_status'] != '1') {
+
+	if (!empty($_GET['id'])) {
+		$res = getMail($_GET['id']);
+
+		if (empty($res) || !count($res) || ($res['user_id'] == $l['id_id'] && $res['status_id'] != '1') || ($res['sender_id'] == $l['id_id'] && $res['sender_status'] != '1')) {
 			popupACT('Felaktigt inlägg.');
 		}
 		$own_u = ($res['user_id'] == $l['id_id'])?true:false;
-		#$res_u = $sql->queryLine("SELECT id_id, u_alias, u_sex, u_birth, account_date, level_id, status_id FROM {$t}user WHERE id_id = '".(($own_u)?$res['sender_id']:$res['user_id'])."' LIMIT 1", 1);
-		#if(empty($res_u) || !count($res_u) || $res_u['status_id'] != '1') {
-		#	$res_u = false;
-		#}
 		$res_u = $user->getuser($own_u?$res['sender_id']:$res['user_id']);
 	} else errorACT('Felaktigt inlägg.', l('user', 'mail'));
 
-	#$s = (!$own)?$user->getuser($res['user_id'], ES):$user->getuser($res['sender_id'], ES);
-	#$deleted = false;
-	#if(!$s) {
-	#	$deleted = true;
-	#}
-	if(isset($_GET['out'])) $page = '&out';
-	if($own_u && !$res['user_read']) {
-		#if($user->getinfo($l['id_id'], 'mail_count') > 0) $user->setinfo($l['id_id'], 'mail_count', 'content - 1');
-		$user->notifyDecrease('mail', $l['id_id']);
-		$sql->queryUpdate("UPDATE {$t}usermail SET user_read = '1' WHERE main_id = '".$res['main_id']."' LIMIT 1");
+	if (isset($_GET['out'])) $page = '&out';
+	if ($own_u && !$res['user_read']) {
+		mailMarkAsRead($res['main_id']);
 	}
 	$s = $l;
 	$own = true;
