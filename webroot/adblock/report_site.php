@@ -17,7 +17,7 @@ we will look into this site as soon as possible!<br/><br/>
 			die;
 
 		} else {
-			echo 'Error adding problematic site to database!<br><br>';
+			echo 'Error adding problematic site to database!<br/><br/>';
 		}
 	}
 

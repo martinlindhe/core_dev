@@ -8,7 +8,7 @@
 		global $config;
 
 		if ($config['debug']) {
-			if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin']) echo 'dbLog: '.$str.'<br>';
+			if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin']) echo 'dbLog: '.$str.'<br/>';
 		}
 	}
 

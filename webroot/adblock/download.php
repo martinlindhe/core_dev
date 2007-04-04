@@ -56,9 +56,6 @@
 			$lastchanged = filemtime($cache_file);
 		}
 
-//		echo 'lastchanged: '.$lastchanged.'<br>';
-//		echo 'diff: '. (time()-$lastchanged);
-
 		if ($lastchanged < time()-(CACHE_AGE))
 		{
 			$list = getAdblockRules($db, $types);

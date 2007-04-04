@@ -1,8 +1,6 @@
 <?
 	//Adds a lyric associated with a existing band.
 
-	//todo: integrate this into add_lyric.php
-
 	include('include_all.php');
 
 	if (empty($_GET['band']) || !is_numeric($_GET['band'])) die('No id');
@@ -27,17 +25,17 @@
 
 	include('body_header.php');
 
-	echo 'Add new single lyric to the band <b>'.getBandName($db, $band_id).'</b>:<br>';
-	echo '<br>';
+	echo 'Add new single lyric to the band <b>'.getBandName($db, $band_id).'</b>:<br/>';
+	echo '<br/>';
 
 	echo '<form name="addlyric" method="post" action="'.$_SERVER['PHP_SELF'].'?band='.$band_id.'">';
-	echo 'Song name: <input type="text" name="songname" size=40><br>';
-	echo 'Lyric:<br>';
-	echo '<textarea name="lyrictext" cols=60 rows=30></textarea><br>';
-	echo '<input type="submit" value="Add" class="buttonstyle">';
+	echo 'Song name: <input type="text" name="songname" size="40"/><br/>';
+	echo 'Lyric:<br/>';
+	echo '<textarea name="lyrictext" cols="60" rows="30"></textarea><br/>';
+	echo '<input type="submit" value="Add" class="buttonstyle"/>';
 	echo '</form>';
 
-	echo '<script language="JavaScript">';
+	echo '<script type="text/javascript">';
 	echo 'document.addlyric.songname.focus();';
 	echo '</script>';
 

@@ -44,34 +44,34 @@
 	if ($band_id == 0) {
 		/* Skivan vi ska länka en text på är en split/compilation */
 		
-		echo 'Since this is a comp/split you first need to select a band.<br>';
-		echo 'Then you\'ll be able to select a lyric from that band to link to this track.<br>';
+		echo 'Since this is a comp/split you first need to select a band.<br/>';
+		echo 'Then you\'ll be able to select a lyric from that band to link to this track.<br/>';
 		
-		echo '<form>';
-		echo '<select name="url" pnChange="location.href=form.url.options[form.url.selectedIndex].value">';
-		echo '<option>--- Select band ---';
+		echo '<form action="">';
+		echo '<select name="url" onchange="location.href=form.url.options[form.url.selectedIndex].value">';
+		echo '<option>--- Select band ---</option>';
 		$list = getBands($db);
 		for ($i=0; $i<count($list); $i++)
 		{
-			echo '<option value="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&track='.$track.'&band='.$list[$i]['bandId'].'">'.$list[$i]['bandName'];
+			echo '<option value="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&amp;track='.$track.'&amp;band='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</option>';
 		}
-		echo '</select><br>';
+		echo '</select><br/>';
 		echo '</form>';
 
 	} else {
 
-		echo 'Here is existing lyrics in database with the band <b>'.getBandName($db, $band_id).'</b>,<br>';
-		echo 'select one to associate it with track <b>'.$track.'</b> on <b>'.getRecordName($db, $record_id).'</b>.<br>';
+		echo 'Here is existing lyrics in database with the band <b>'.getBandName($db, $band_id).'</b>,<br/>';
+		echo 'select one to associate it with track <b>'.$track.'</b> on <b>'.getRecordName($db, $record_id).'</b>.<br/>';
 
 		$list = getBandLyrics($db, $band_id);
-		echo '<form name="linklyric" method="post" action="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&track='.$track.'&band='.$band_id.'">';
+		echo '<form name="linklyric" method="post" action="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&amp;track='.$track.'&amp;band='.$band_id.'">';
 		echo '<select name="lyricid">';
 		for ($i=0; $i<count($list); $i++)
 		{
-			echo '<option value="'.$list[$i]['lyricId'].'">'.$list[$i]['lyricName'];
+			echo '<option value="'.$list[$i]['lyricId'].'">'.$list[$i]['lyricName'].'</option>';
 		}
-		echo '</select><br>';
-		echo '<input type="submit" value="Save link" class="buttonstyle">';
+		echo '</select><br/>';
+		echo '<input type="submit" value="Save link" class="buttonstyle"/>';
 		echo '</form>';
 ?>
 <script type="text/javascript">

@@ -6,17 +6,17 @@
 		
 		if (!isset($_GET['confirmed'])) {
 ?>
-			Are you sure you want to delete this rule?<br><br>
-			<a href="<?=$_SERVER['PHP_SELF'].'?remove='.$_GET['remove'].'&confirmed'?>">Yes, I am sure</a><br>
+			Are you sure you want to delete this rule?<br/><br/>
+			<a href="<?=$_SERVER['PHP_SELF'].'?remove='.$_GET['remove'].'&confirmed'?>">Yes, I am sure</a><br/>
 			<br>
-			<a href="<?=$_SERVER['PHP_SELF'].'?id='.$_GET['remove']?>">No, wrong button</a><br>
+			<a href="<?=$_SERVER['PHP_SELF'].'?id='.$_GET['remove']?>">No, wrong button</a><br/>
 <?
 		} else {
 			//remove rule
 			removeAdblockRule($db, $_SESSION['userId'], $_GET['remove']);
 			
-			echo 'Rule successfully removed!<br><br>';
-			echo '<a href="ruleset.php">Return to rules overview</a><br>';
+			echo 'Rule successfully removed!<br/><br/>';
+			echo '<a href="ruleset.php">Return to rules overview</a>';
 		}
 		include('design_foot.php');
 		die;

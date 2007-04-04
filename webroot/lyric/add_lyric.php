@@ -33,38 +33,38 @@
 	if ($band_id == 0) {
 		/* Skivan vi ska länka en text på är en split/compilation */
 
-		echo 'Since this is a comp/split you first need to select a band.<br>';
-		echo 'Then you\'ll be able to select a lyric from that band to link to this track.<br>';
+		echo 'Since this is a comp/split you first need to select a band.<br/>';
+		echo 'Then you\'ll be able to select a lyric from that band to link to this track.<br/>';
 
 		echo '<form name="linkband">';
-		echo '<select name="url" onChange="location.href=form.url.options[form.url.selectedIndex].value">';
-		echo '<option>--- Select band ---';
+		echo '<select name="url" onchange="location.href=form.url.options[form.url.selectedIndex].value">';
+		echo '<option>--- Select band ---</option>';
 		$list = getBands($db);
 		for ($i=0; $i<count($list); $i++)
 		{
-			echo '<option value="add_lyric.php?record='.$record_id.'&track='.$track.'&band='.$list[$i]['bandId'].'">'.$list[$i]['bandName'];
+			echo '<option value="add_lyric.php?record='.$record_id.'&amp;track='.$track.'&amp;band='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</option>';
 		}
-		echo '</select><br>';
+		echo '</select><br/>';
 		echo '</form>';
 
-		echo '<script language="JavaScript">';
+		echo '<script type="text/javascript">';
 		echo 'document.linkband.url.focus();';
 		echo '</script>';
 
 	} else {
 
-		echo '<b>'.getBandName($db, $band_id).' - '.getRecordName($db, $record_id).'</b><br>';
-		echo 'Type lyric for track <b>'.$track.'</b> below.<br>';
-		echo '<br>';
+		echo '<b>'.getBandName($db, $band_id).' - '.getRecordName($db, $record_id).'</b><br/>';
+		echo 'Type lyric for track <b>'.$track.'</b> below.<br/>';
+		echo '<br/>';
 
-		echo '<form name="addlyric" method="post" action="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&track='.$track.'&band='.$band_id.'">';
-		echo 'Song name: <input type="text" name="songname" size=40><br>';
-		echo 'Lyric:<br>';
-		echo '<textarea name="lyrictext" cols=60 rows=30></textarea><br>';
-		echo '<input type="submit" value="Add" class="buttonstyle">';
+		echo '<form name="addlyric" method="post" action="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&amp;track='.$track.'&amp;band='.$band_id.'">';
+		echo 'Song name: <input type="text" name="songname" size="40"/><br/>';
+		echo 'Lyric:<br/>';
+		echo '<textarea name="lyrictext" cols="60" rows="30"></textarea><br/>';
+		echo '<input type="submit" value="Add" class="buttonstyle"/>';
 		echo '</form>';
 
-		echo '<script language="JavaScript">';
+		echo '<script type="text/javascript">';
 		echo 'document.addlyric.songname.focus();';
 		echo '</script>';
 	}

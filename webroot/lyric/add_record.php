@@ -16,50 +16,44 @@
 		$record_id = addRecord($db, $_SESSION['userId'], $band_id, $record_name, $record_info);
 		if (!$record_id)
 		{
-			echo 'Problems adding record.<br>';
+			echo 'Problems adding record.<br/>';
 		}
 		else
 		{
 			createTracks($db, $record_id, $tracks);
 			
-			echo 'Record "'.$record_name.'" added.<br><br>';
+			echo 'Record "'.$record_name.'" added.<br/><br/>';
 			
 			if ($_SESSION['userMode'] == 0) {
 				/* Add recordId to moderation queue */
 				addModerationItem($db, $record_id, MODERATION_RECORD);
-				echo 'Record added to moderation queue aswell.<br><br>';
+				echo 'Record added to moderation queue aswell.<br/><br/>';
 			}
 
-			echo '<a href="show_record.php?id='.$record_id.'">Click here to go to it now</a>.<br><br>';
+			echo '<a href="show_record.php?id='.$record_id.'">Click here to go to it now</a>.<br/><br/>';
 		}
 	}
 
-
-	echo '<table width=400 cellpadding=0 cellspacing=0 border=0>';
 	echo '<form name="addrecord" method="post" action="'.$_SERVER['PHP_SELF'].'">';
-	echo '<tr><td width=120>Band name:</td><td><select name="band">';
-	echo '<option>--- Select band ---';
+	echo '<table width="400" cellpadding="0" cellspacing="0" border="0">';
+	echo '<tr><td width="120">Band name:</td><td><select name="band">';
+	echo '<option>--- Select band ---</option>';
 	$list = getBands($db);
 	for ($i=0; $i<count($list); $i++)
 	{
-		echo '<option value='.$list[$i]['bandId'];
-		if (isset($band_id)) {
-			if ($band_id == $list[$i]['bandId']) {
-				echo ' selected';
-			}
-		}
-		
-		echo '>'.$list[$i]['bandName'];
+		echo '<option value="'.$list[$i]['bandId'].'"';
+		if (isset($band_id) && $band_id == $list[$i]['bandId']) echo ' selected="selected"';
+		echo '>'.$list[$i]['bandName'].'</option>';
 	}
 	echo '</select></td></tr>';
 	
-	echo '<tr><td>Record name:</td><td><input type="text" name="recordname"> (leave empty for s/t)</td></tr>';
-	echo '<tr><td>Number of tracks:</td><td><input type="text" name="tracks" value="1"></td></tr>';
-	echo '<tr><td valign="top">Record info:<br>(optional)</td><td><textarea name="info" cols=40 rows=8></textarea></td></tr>';
-	echo '<tr><td colspan=2><input type="submit" value="Add" class="buttonstyle"></td></tr>';
-	echo '</form>';
+	echo '<tr><td>Record name:</td><td><input type="text" name="recordname"/> (leave empty for s/t)</td></tr>';
+	echo '<tr><td>Number of tracks:</td><td><input type="text" name="tracks" value="3"/></td></tr>';
+	echo '<tr><td valign="top">Record info:<br/>(optional)</td><td><textarea name="info" cols="40" rows="8"></textarea></td></tr>';
+	echo '<tr><td colspan="2"><input type="submit" value="Add" class="buttonstyle"/></td></tr>';
 	echo '</table>';
-	
+	echo '</form>';
+
 	if (isset($band_id)) {
 ?>
 <script type="text/javascript">
