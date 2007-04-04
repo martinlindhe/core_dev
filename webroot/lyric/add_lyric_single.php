@@ -23,7 +23,7 @@
 		die;
 	}
 
-	include('body_header.php');
+	include('design_head.php');
 
 	echo 'Add new single lyric to the band <b>'.getBandName($db, $band_id).'</b>:<br/>';
 	echo '<br/>';
@@ -39,5 +39,5 @@
 	echo 'document.addlyric.songname.focus();';
 	echo '</script>';
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

@@ -18,7 +18,7 @@
 	}
 
 	$title = 'inthc.net: "'.$band_name.' - '.$record_name.'" album, import track list';
-	include('body_header.php');
+	include('design_head.php');
 
 	if (isset($_POST['tracks']) && $_POST['tracks']) {
 		echo 'Trying to figure out titles.<br/><br/>';
@@ -122,5 +122,5 @@
 	echo '<input type="submit" value="Import"/><br/>';
 	echo '</form>';
 	
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

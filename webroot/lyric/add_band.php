@@ -1,6 +1,6 @@
 <?
 	include ('include_all.php');
-	include('body_header.php');
+	include('design_head.php');
 
 	if ($_SESSION['loggedIn'] && !empty($_POST['bandname']) && isset($_POST['bandinfo']))
 	{
@@ -49,5 +49,5 @@ document.addband.bandname.focus();
 </script>
 
 <?
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

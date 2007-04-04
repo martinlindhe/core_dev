@@ -28,7 +28,7 @@
 		die;
 	}
 
-	include('body_header.php');
+	include('design_head.php');
 
 	if ($band_id == 0) {
 		/* Skivan vi ska länka en text på är en split/compilation */
@@ -69,5 +69,5 @@
 		echo '</script>';
 	}
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

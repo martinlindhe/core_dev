@@ -1,6 +1,6 @@
 <?
 	include('include_all.php');
-	include('body_header.php');
+	include('design_head.php');
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('Bad id');
 
@@ -9,7 +9,7 @@
 	if (isset($_GET['delete'])) {
 		removeLyric($db, $lyric_id);
 		echo 'Lyric removed.<br/>';
-		include('body_footer.php');
+		include('design_foot.php');
 		die;
 	}
 
@@ -64,5 +64,5 @@
 	echo '<br/>';
 	echo '<a href="index.php">Back to main</a>';
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

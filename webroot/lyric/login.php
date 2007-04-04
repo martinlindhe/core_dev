@@ -47,7 +47,7 @@
 		}
 	}
 
-	include('body_header.php');
+	include('design_head.php');
 	
 	$usernamecookie = getUsernameCookie();
 ?>		
@@ -77,5 +77,5 @@ Log in<br/>
 	}
 	echo '</script>';
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

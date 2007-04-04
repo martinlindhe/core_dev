@@ -15,7 +15,7 @@
 
 	} else {
 
-		include('body_header.php');
+		include('design_head.php');
 
 		echo 'Search results on "'.$query.'" ('.count($list).' hits):<br/><br/>';
 
@@ -27,5 +27,5 @@
 		echo '<br/><a href="index.php">Back to main</a>';
 	}
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

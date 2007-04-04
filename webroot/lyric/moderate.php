@@ -5,7 +5,7 @@
 		die;
 	}
 	
-	include('body_header.php');
+	include('design_head.php');
 	
 	if ($_POST) {
 
@@ -131,5 +131,5 @@
 
 	echo '<a href="index.php">Back to main</a><br/>';
 	
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

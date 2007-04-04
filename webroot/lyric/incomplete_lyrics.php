@@ -1,6 +1,6 @@
 <?
 	include('include_all.php');
-	include('body_header.php');
+	include('design_head.php');
 
 	echo 'Incomplete lyrics:<br/><br/>';
 	echo 'For a incomplete lyric to be listed here, it must contain ??? at least once.<br/><br/>';
@@ -18,5 +18,5 @@
 	echo '<br/>';
 	echo count($list).' incomplete lyrics.<br/>';
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

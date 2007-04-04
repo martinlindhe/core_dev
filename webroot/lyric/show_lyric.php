@@ -15,7 +15,7 @@
 	$band_name = $lyric_data['bandName'];
 
 	$title = $band_name.' - "'.$lyric_name.'" lyric';
-	include('body_header.php');
+	include('design_head.php');
 
 	echo '<table cellpadding="3" cellspacing="0" border="1" width="100%">';
 
@@ -63,5 +63,5 @@
 	echo '<a href="show_band.php?id='.$lyric_data['bandId'].'">Back to '.$band_name.' page</a><br/>';
 	echo '<a href="index.php">Back to main</a><br/>';
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

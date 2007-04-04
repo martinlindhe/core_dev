@@ -1,6 +1,6 @@
 <?
 	include('include_all.php');
-	include('body_header.php');	
+	include('design_head.php');	
 
 	$list = getBands($db);
 
@@ -26,5 +26,5 @@
 	echo '<br/>';
 	echo '<a href="index.php">Back to main page.</a><br/>';
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

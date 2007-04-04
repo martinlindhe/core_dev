@@ -40,7 +40,7 @@
 		die('Bad id');
 	}
 	
-	include('body_header.php');	
+	include('design_head.php');	
 	
 	if ($coverband_id == 0) {
 		/* Bandet som gör covern */
@@ -99,5 +99,5 @@
 
 	echo '<a href="show_record.php?id='.$record_id.'">Back to record overview</a>';
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>

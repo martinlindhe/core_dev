@@ -1,6 +1,6 @@
 <?
 	include('include_all.php');
-	include('body_header.php');
+	include('design_head.php');
 	
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('Bad id');
 
@@ -49,5 +49,5 @@
 
 	echo '<a href="show_band.php?id='.$band_id.'">Back to '.$band_name.' page</a>';
 
-	include('body_footer.php');
+	include('design_foot.php');
 ?>
