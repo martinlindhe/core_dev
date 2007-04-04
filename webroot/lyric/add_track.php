@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 

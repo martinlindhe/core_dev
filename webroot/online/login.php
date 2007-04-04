@@ -52,7 +52,7 @@
 	echo "<br>";
 	echo "Did you forget your password?<br><a href=\"lost_password.php\">Click here</a> to have it sent to your e-mail account!<br>";
 		
-	echo "<script language=\"JavaScript\">\n<!--\n";
+	echo "<script type=\"text/javascript\">\n<!--\n";
 	if ($fillu == 1) {
 		echo "document.login.password.focus();\n";
 	} else {

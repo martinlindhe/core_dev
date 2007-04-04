@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('Bad id');
 
@@ -8,12 +8,12 @@
 	$lyric_data = getLyricData($db, $lyric_id);
 	if (!$lyric_data) die;
 
-	include('design_head.php');
+	require('design_head.php');
 
 	if (isset($_GET['delete'])) {
 		removeLyric($db, $lyric_id);
 		echo 'Lyric removed.<br/>';
-		include('design_foot.php');
+		require('design_foot.php');
 		die;
 	}
 
@@ -67,5 +67,5 @@
 	echo '<br/>';
 	echo '<a href="index.php">Back to main</a>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

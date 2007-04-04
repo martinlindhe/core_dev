@@ -1,7 +1,7 @@
 <?
 	//Adds a lyric associated with a existing band.
 
-	include('include_all.php');
+	require_once('config.php');
 
 	if (empty($_GET['band']) || !is_numeric($_GET['band'])) die('No id');
 
@@ -23,7 +23,7 @@
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
 	echo 'Add new single lyric to the band <b>'.getBandName($db, $band_id).'</b>:<br/>';
 	echo '<br/>';
@@ -39,5 +39,5 @@
 	echo 'document.addlyric.songname.focus();';
 	echo '</script>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

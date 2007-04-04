@@ -1,11 +1,11 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 	
 	if ($_SESSION['userMode'] != 1) {
 		die;
 	}
 	
-	include('design_head.php');
+	require('design_head.php');
 	
 	if ($_POST) {
 
@@ -131,5 +131,5 @@
 
 	echo '<a href="index.php">Back to main</a><br/>';
 	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

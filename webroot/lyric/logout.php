@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if ($_SESSION['loggedIn'] == true) {
 		$_SESSION = array();

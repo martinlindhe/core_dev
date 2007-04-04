@@ -3,7 +3,7 @@
 		header('Location: index.php'); die;
 	}
 
-	include('include_all.php');
+	require_once('config.php');
 
 	$query = $_POST['query'];
 
@@ -15,7 +15,7 @@
 
 	} else {
 
-		include('design_head.php');
+		require('design_head.php');
 
 		echo 'Search results on "'.$query.'" ('.count($list).' hits):<br/><br/>';
 
@@ -27,5 +27,5 @@
 		echo '<br/><a href="index.php">Back to main</a>';
 	}
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

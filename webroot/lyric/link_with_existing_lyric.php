@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 	
 	if (!empty($_GET['record']) && !empty($_GET['track']) && is_numeric($_GET['record']) && is_numeric($_GET['track']))
 	{
@@ -39,7 +39,7 @@
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
 	if ($band_id == 0) {
 		/* Skivan vi ska länka en text på är en split/compilation */
@@ -80,5 +80,5 @@ document.linklyric.lyricid.focus();
 <?
 	}
 	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

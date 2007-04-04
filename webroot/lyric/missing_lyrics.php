@@ -1,6 +1,6 @@
 <?
-	include('include_all.php');
-	include('design_head.php');
+	require_once('config.php');
+	require('design_head.php');
 	
 	echo 'Missing lyrics:<br/><br/>';
 
@@ -17,5 +17,5 @@
 	echo '<br/>';
 	echo count($list).' missing lyrics.<br/>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

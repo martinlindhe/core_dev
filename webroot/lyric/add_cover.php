@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 	
 	$band_id = 0;
 	if (!empty($_GET['band']) && is_numeric($_GET['band'])) $band_id = $_GET['band'];
@@ -40,7 +40,7 @@
 		die('Bad id');
 	}
 	
-	include('design_head.php');	
+	require('design_head.php');	
 	
 	if ($coverband_id == 0) {
 		/* Bandet som gör covern */
@@ -99,5 +99,5 @@
 
 	echo '<a href="show_record.php?id='.$record_id.'">Back to record overview</a>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

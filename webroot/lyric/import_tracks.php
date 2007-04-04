@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	$linked = false;
 
@@ -18,7 +18,7 @@
 	}
 
 	$title = 'inthc.net: "'.$band_name.' - '.$record_name.'" album, import track list';
-	include('design_head.php');
+	require('design_head.php');
 
 	if (isset($_POST['tracks']) && $_POST['tracks']) {
 		echo 'Trying to figure out titles.<br/><br/>';
@@ -122,5 +122,5 @@
 	echo '<input type="submit" value="Import"/><br/>';
 	echo '</form>';
 	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

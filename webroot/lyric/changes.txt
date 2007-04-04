@@ -4,6 +4,8 @@ todo hi prio:
 	#3: gör en ordentlig navigeringsmeny
 	#4: BORT MED TABLES i den mån det går
 
+
+
 todo buggfix/mindre features:
 	* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
 	* edit_record.php: kunna editera recordInfo
@@ -19,6 +21,8 @@ todo buggfix/mindre features:
 	* ändrade body_footer.php, body_header.php till design_head, design_foot
 	* edit_lyric.php: fuckade ur med ett felaktigt ID
 	* show_lyric.php: fuckade ur med ett felaktigt ID
+	* include('include_all.php') -> require_once('config.php')
+	* ändrade alla include's för design till require
 
 2007.03.15
 	* add_lyric_single.php: new file (to add a lyric associated with a band only)

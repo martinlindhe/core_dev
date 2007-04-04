@@ -1,6 +1,6 @@
 <?
-	include('include_all.php');
-	include('design_head.php');
+	require_once('config.php');
+	require('design_head.php');
 
 	if ($_SESSION['loggedIn'] == true) {
 		echo '<a href="add_band.php">Add band</a><br/>';
@@ -38,5 +38,5 @@ document.search.query.focus();
 		echo '<a href="login.php">Log in</a><br/>';
 	}
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

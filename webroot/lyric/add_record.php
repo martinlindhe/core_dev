@@ -1,6 +1,6 @@
 <?
-	include ('include_all.php');
-	include('design_head.php');
+	require_once('config.php');
+	require('design_head.php');
 
 	if (isset($_GET['band']) && $_GET['band']) {
 		$band_id = $_GET['band'];
@@ -62,5 +62,5 @@ document.addrecord.recordname.focus();
 <?
 	}
 	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

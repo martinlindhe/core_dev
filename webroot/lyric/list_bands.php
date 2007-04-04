@@ -1,6 +1,6 @@
 <?
-	include('include_all.php');
-	include('design_head.php');	
+	require_once('config.php');
+	require('design_head.php');	
 
 	$list = getBands($db);
 
@@ -26,5 +26,5 @@
 	echo '<br/>';
 	echo '<a href="index.php">Back to main page.</a><br/>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

@@ -1,6 +1,6 @@
 <?
-	include('include_all.php');
-	include('design_head.php');
+	require_once('config.php');
+	require('design_head.php');
 
 	if (!empty($_POST['recordname']) && !empty($_POST['tracks']) && isset($_POST['info']))
 	{
@@ -37,5 +37,5 @@
 	echo '</table>';
 	echo '</form>';
 	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

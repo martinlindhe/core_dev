@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('Bad id');
 
@@ -17,7 +17,7 @@
 	$band_name = $lyric_data['bandName'];
 
 	$title = $band_name.' - "'.$lyric_name.'" lyric';
-	include('design_head.php');
+	require('design_head.php');
 
 	echo '<table cellpadding="3" cellspacing="0" border="1" width="100%">';
 
@@ -65,5 +65,5 @@
 	echo '<a href="show_band.php?id='.$lyric_data['bandId'].'">Back to '.$band_name.' page</a><br/>';
 	echo '<a href="index.php">Back to main</a><br/>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

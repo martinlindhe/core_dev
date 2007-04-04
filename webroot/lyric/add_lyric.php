@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (empty($_GET['record']) || !is_numeric($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['track'])) die('No id');
 
@@ -28,7 +28,7 @@
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
 	if ($band_id == 0) {
 		/* Skivan vi ska länka en text på är en split/compilation */
@@ -69,5 +69,5 @@
 		echo '</script>';
 	}
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

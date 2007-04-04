@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 	
 	if ($_SESSION['loggedIn'] == true) {
 		header('Location: index.php');
@@ -47,7 +47,7 @@
 		}
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 	
 	$usernamecookie = getUsernameCookie();
 ?>		
@@ -77,5 +77,5 @@ Log in<br/>
 	}
 	echo '</script>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

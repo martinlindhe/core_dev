@@ -1,14 +1,14 @@
 <?
 	error_reporting(E_ALL);
 
-	include('functions_db.php');
-	include('functions_bands.php');
-	include('functions_records.php');
-	include('functions_lyrics.php');
-	include('functions_moderation.php');
+	require_once('functions_db.php');
+	require_once('functions_bands.php');
+	require_once('functions_records.php');
+	require_once('functions_lyrics.php');
+	require_once('functions_moderation.php');
 
-	include('functions_session.php');
-	include('functions_user.php');
+	require_once('functions_session.php');
+	require_once('functions_user.php');
 
 	$config['debug'] = true;
 

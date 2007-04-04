@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	$_SESSION['lastURL'] = $_SERVER['REQUEST_URI'];
 
@@ -17,7 +17,7 @@
 	$record_name = getRecordName($db, $record_id);
 
 	$title = 'inthc.net: "'.$band_name.' - '.$record_name.'" album overview';
-	include('design_head.php');
+	require('design_head.php');
 
 	echo '<table cellpadding="3" cellspacing="0" border="1">';
 	
@@ -101,5 +101,5 @@
 	}
 	echo '<a href="index.php">Back to main page</a><br/>';
 	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>
