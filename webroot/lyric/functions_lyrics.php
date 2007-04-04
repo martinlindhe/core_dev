@@ -36,11 +36,11 @@
 		return dbArray($db, $sql);
 	}
 	
-	function lyricCount($db)
+	function lyricCount()
 	{
-		$check = dbQuery($db, "SELECT COUNT(lyricId) AS cnt FROM tblLyrics WHERE lyricText != ''");
-		$data = dbFetchArray($check);
-		return $data["cnt"];
+		global $db;
+
+		return $db->getOneItem('SELECT COUNT(lyricId) FROM tblLyrics WHERE lyricText != ""');
 	}
 
 	function getLyricText($db, $lyric_id)
@@ -135,8 +135,10 @@
 		return $lyric_id;
 	}
 	
-	function getLyricsThatBandCovers($db, $band_id)
+	function getLyricsThatBandCovers($band_id)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 		
 		$sql  = "SELECT t1.recordId,t1.trackNumber,t1.lyricId,t2.lyricName,t2.bandId,t3.bandName,t4.recordName ";
@@ -148,11 +150,13 @@
 		$sql .= "GROUP BY t1.lyricId ";
 		$sql .= "ORDER BY t3.bandName ASC,t4.recordName ASC,t1.trackNumber ASC";
 		
-		return dbArray($db, $sql);		
+		return $db->getArray($sql);		
 	}
 	
-	function getLyricsThatOtherCovers($db, $band_id)
+	function getLyricsThatOtherCovers($band_id)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 		
 		$sql  = "SELECT t1.lyricId,t1.lyricName,t2.recordId,t2.bandId,t2.trackNumber,t3.bandName,t4.recordName ";
@@ -163,7 +167,7 @@
 		$sql .= "WHERE t1.bandId=".$band_id." AND t2.bandId!=".$band_id." ";
 		$sql .= "ORDER BY t3.bandName ASC,t4.recordName ASC,t2.trackNumber ASC";
 		
-		return dbArray($db, $sql);		
+		return $db->getArray($sql);		
 	}
 
 ?>

@@ -2,7 +2,7 @@
 	require_once('config.php');
 	require('design_head.php');
 
-	if ($_SESSION['loggedIn'] == true) {
+	if ($session->id) {
 		echo '<a href="add_band.php">Add band</a><br/>';
 		echo '<a href="add_record.php">Add normal record</a><br/>';
 		echo '<a href="add_record_comp.php">Add compilation / split</a><br/>';
@@ -24,11 +24,11 @@
 document.search.query.focus();
 </script>
 <?
-	echo 'There are '.bandCount($db).' bands, '.recordCount($db).' records, '.trackCount($db).' tracks and '.lyricCount($db).' lyrics in database.<br/>';
+	echo 'There are '.bandCount().' bands, '.recordCount().' records, '.trackCount().' tracks and '.lyricCount().' lyrics in database.<br/>';
 	echo '<br/>';
 
-	if ($_SESSION['loggedIn'] == true) {
-		if ($_SESSION['userMode'] == 1) {
+	if ($session->id) {
+		if ($session->isAdmin) {
 			echo 'You are a administrator<br/>';
 		} else {
 			echo 'You are a normal user<br/>';

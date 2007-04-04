@@ -5,7 +5,7 @@
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 	$band_id = $_GET['id'];
-	$band_name = getBandName($db, $band_id);
+	$band_name = getBandName($band_id);
 
 	echo '<table width="600" cellpadding="3" cellspacing="0" border="1">';
 	if (isModerated($db, $band_id, MODERATION_BAND)) {
@@ -17,12 +17,12 @@
 	echo '<br/>';
 
 	echo 'Albums:<br/>';
-	$list = getBandRecords($db, $band_id);
+	$list = getBandRecords($band_id);
 	echo '<table width="600" cellpadding="3" cellspacing="0" border="1">';
 	for ($i=0; $i<count($list); $i++)
 	{
 		$record_id = $list[$i]['recordId'];
-		$record_name = dbStripSlashes($list[$i]['recordName']);
+		$record_name = $db->escape($list[$i]['recordName']);
 		if (!$record_name) $record_name = 's/t';
 
 		if (isModerated($db, $record_id, MODERATION_RECORD) ||
@@ -32,7 +32,7 @@
 		} else {
 			echo '<tr><td class="subtitle">';
 		}
-		echo '<a href="show_record.php?id='.$record_id.'">'.$record_name.'</a> ('.getRecordTrackCount($db, $record_id).' tracks)';
+		echo '<a href="show_record.php?id='.$record_id.'">'.$record_name.'</a> ('.getRecordTrackCount($record_id).' tracks)';
 		echo '</td></tr>';
 	}
 	if (!count($list)) {
@@ -44,11 +44,11 @@
 
 	echo '<br/>';
 	echo 'Compilations / splits:<br/>';
-	$list = getBandCompilations($db, $band_id);
+	$list = getBandCompilations($band_id);
 	for ($i=0; $i<count($list); $i++)
 	{
 		$record_id = $list[$i]['recordId'];
-		$record_name = dbStripSlashes($list[$i]['recordName']);
+		$record_name = $db->escape($list[$i]['recordName']);
 		if (!$record_name) $record_name = 's/t';
 
 		echo '<a href="show_record.php?id='.$record_id.'">'.$record_name.'</a> ('.getRecordTrackCount($db, $record_id).' tracks)<br/>';
@@ -56,7 +56,7 @@
 	if (!count($list)) echo 'None<br/>';
 	echo '<br/>';
 
-	$list = getLyricsThatBandCovers($db, $band_id);	
+	$list = getLyricsThatBandCovers($band_id);	
 	if (count($list)) {
 		echo 'This band covers the following songs:<br/>';
 
@@ -68,7 +68,7 @@
 		echo '<br/>';
 	}
 
-	$list = getLyricsThatOtherCovers($db, $band_id);
+	$list = getLyricsThatOtherCovers($band_id);
 	if (count($list)) {
 		echo 'The following songs have been covered by other bands:<br/>';
 
@@ -82,12 +82,12 @@
 
 	echo '<form action="">';
 
-	$list = getBandLyrics($db, $band_id);
+	$list = getBandLyrics( $band_id);
 	echo 'Quickjump to lyric ('.count($list).' in total):<br/>';
 	echo '<select name="url" onchange="location.href=form.url.options[form.url.selectedIndex].value">';
 	for ($i=0; $i<count($list); $i++)
 	{
-		echo '<option value="show_lyric.php?id='.$list[$i]['lyricId'].'">'.dbStripSlashes($list[$i]['lyricName']).'</option>';
+		echo '<option value="show_lyric.php?id='.$list[$i]['lyricId'].'">'.$db->escape($list[$i]['lyricName']).'</option>';
 	}
 	echo '</select> ';
 	echo '<input type="submit" value="Go" class="buttonstyle" onclick="location.href=form.url.options[form.url.selectedIndex].value; return false;"/>';

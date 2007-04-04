@@ -1,11 +1,13 @@
 <?
-	if ($_SESSION['userMode'] == 1) {
+	if ($session->isAdmin) {
 		echo '<br/>';
 
-		echo 'There are '.countNewAdditions($db).' new additions to moderate.<br/>';
-		echo 'There are '.countPendingChanges($db).' pending changes to moderate.<br/>';
+		echo 'There are '.countNewAdditions().' new additions to moderate.<br/>';
+		echo 'There are '.countPendingChanges().' pending changes to moderate.<br/>';
 		echo '<a href="moderate.php">Go moderate</a>';
 	}
+
+	$db->showProfile($time_start);
 ?>
 </body>
 </html>

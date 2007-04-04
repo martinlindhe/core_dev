@@ -122,10 +122,11 @@ class Session
 		$enc_username = $db->escape($username);
 		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
 
-		$data = $db->getOneRow('SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"');
+		$q = 'SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"';
+		$data = $db->getOneRow($q);
 		if (!$data) {
 			$this->error = 'Login failed';
-			$db->log('failed login attempt: username '.$enc_username);
+			$db->log('Failed login attempt: username '.$enc_username);
 			return false;
 		}
 
@@ -169,6 +170,8 @@ class Session
 			echo '<b>Error: '.$this->error.'</b><br/>';
 			$this->error = ''; //remove error message once it has been displayed
 		}
+		
+		//todo: gör om tabellen till relativt positionerade element utifrån "login_form_layer"
 		echo '<table cellpadding="2">';
 		echo '<tr><td>Username:</td><td><input name="login_usr" type="text"/> <img src="/gfx/icon_user.png" alt="Username"/></td></tr>';
 		echo '<tr><td>Password:</td><td><input name="login_pwd" type="password"/> <img src="/gfx/icon_keys.png" alt="Password"/></td></tr>';

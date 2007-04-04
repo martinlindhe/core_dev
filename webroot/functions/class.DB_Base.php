@@ -3,7 +3,8 @@
 	SQL DB Base class
 
 	Written by Martin Lindhe, 2007
-	
+
+	TODO:!!!!! en funktion som returnerar mysql_num_rows av angiven query enbart 	
 	todo: metod för att anropa stored procedures
 	todo: rename GetArray() till Array() ? eller är det för confusing med array() datatyp ?
 */
@@ -133,7 +134,7 @@ abstract class DB_Base
 
 			echo '<div style="width: 45px; float: left;">';
 				if (!empty($this->query_error[$i])) {
-					echo '<img src="/gfx/icon_error.png" align="absmiddle" alt="SQL Error" title="SQL Error">';
+					echo '<img src="/gfx/icon_error.png" alt="SQL Error" title="SQL Error"/>';
 				} else {
 					echo round($this->time_spent[$i], 3).'s';
 				}

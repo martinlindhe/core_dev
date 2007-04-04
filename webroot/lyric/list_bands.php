@@ -9,14 +9,14 @@
 	for ($i=0; $i<count($list); $i++)
 	{
 		$band_id = $list[$i]['bandId'];
-		if (isModerated($db, $band_id, MODERATION_BAND)) {
+		if (isModerated($band_id, MODERATION_BAND)) {
 			echo '<tr><td class="titlemod">';
 			$mod++;
 		} else {
 			echo '<tr><td class="title">';
 		}
 
-		echo '<a href="show_band.php?id='.$band_id.'">'.$list[$i]['bandName'].' ('.getBandRecordCount($db, $band_id).' records)</a>';
+		echo '<a href="show_band.php?id='.$band_id.'">'.$list[$i]['bandName'].' ('.getBandRecordCount($band_id).' records)</a>';
 		echo '</td></tr>';
 	}
 	echo '</table>';

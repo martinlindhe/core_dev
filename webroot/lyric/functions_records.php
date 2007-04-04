@@ -101,10 +101,7 @@
 	
 	function getRecordTracks($db, $record_id)
 	{
-		if (!is_numeric($record_id))
-		{
-			return false;
-		}
+		if (!is_numeric($record_id)) return false;
 		
 		$sql  = "SELECT tblTracks.*, tblLyrics.lyricName, tblLyrics.lyricText, tblLyrics.bandId AS authorId, tblBands.bandName FROM tblTracks ";
 		$sql .= "LEFT OUTER JOIN tblLyrics ON (tblTracks.lyricId=tblLyrics.lyricId) ";
@@ -115,18 +112,12 @@
 		return dbArray($db, $sql);
 	}
 
-	function getRecordTrackCount($db, $record_id)
+	function getRecordTrackCount($record_id)
 	{
-		if (!is_numeric($record_id))
-		{
-			return false;
-		}
+		global $db;
+		if (!is_numeric($record_id)) return false;
 
-		$sql = "SELECT COUNT(trackNumber) AS cnt FROM tblTracks WHERE recordId=".$record_id;
-		$check = dbQuery($db, $sql);
-		$data = dbFetchArray($check);
-
-		return $data["cnt"];
+		return $db->getOneItem('SELECT COUNT(trackNumber) FROM tblTracks WHERE recordId='.$record_id);
 	}
 
 	function updateRecord($db, $record_id, $record_name)
@@ -142,18 +133,18 @@
 		return true;
 	}
 
-	function recordCount($db)
+	function recordCount()
 	{
-		$check = dbQuery($db, "SELECT COUNT(recordId) AS cnt FROM tblRecords");
-		$data = dbFetchArray($check);
-		return $data["cnt"];
+		global $db;
+
+		return $db->getOneItem('SELECT COUNT(recordId) FROM tblRecords');
 	}
 
-	function trackCount($db)
+	function trackCount()
 	{
-		$check = dbQuery($db, "SELECT COUNT(recordId) AS cnt FROM tblTracks");
-		$data = dbFetchArray($check);
-		return $data["cnt"];
+		global $db;
+
+		return $db->getOneItem('SELECT COUNT(recordId) FROM tblTracks');
 	}
 
 	function clearTrack($db, $record_id, $track)

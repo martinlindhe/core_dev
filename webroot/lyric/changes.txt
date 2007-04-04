@@ -2,7 +2,8 @@ todo hi prio:
 	#1: porta applikationen till nya "functions" systemet
 	#2: UNICODE stöd!
 	#3: gör en ordentlig navigeringsmeny
-	#4: BORT MED TABLES i den mån det går
+	#4: rensa upp modererings-logiken...
+	#5: BORT MED TABLES i den mån det går
 
 
 

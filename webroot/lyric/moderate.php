@@ -1,10 +1,8 @@
 <?
 	require_once('config.php');
 	
-	if ($_SESSION['userMode'] != 1) {
-		die;
-	}
-	
+	if (!$session->isAdmin) die;
+
 	require('design_head.php');
 	
 	if ($_POST) {
@@ -34,7 +32,7 @@
 
 	}
 	
-	$list = getNewAdditions($db);
+	$list = getNewAdditions();
 	if (count($list)) {
 		echo 'Moderate new additions ('.count($list).'):<br/>';
 		echo '<form name="additions" method="post" action="'.$_SERVER['PHP_SELF'].'">';
@@ -83,7 +81,7 @@
 
 	//--PENDING CHANGES
 	
-	$list = getPendingChanges($db);
+	$list = getPendingChanges();
 	if (count($list)) {
 		echo 'Moderate pending changes ('.count($list).'):<br/>';
 		echo '<form name="changes" method="post" action="'.$_SERVER['PHP_SELF'].'">';

@@ -26,18 +26,20 @@
 	}
 	
 	
-	function getBands($db)
+	function getBands()
 	{
-		return dbArray($db, "SELECT * FROM tblBands ORDER BY bandName ASC");
+		global $db;
+
+		return $db->getArray('SELECT * FROM tblBands ORDER BY bandName ASC');
 	}
 
-	function getBandName($db, $band_id)
+	function getBandName($band_id)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 
-		$check = dbQuery($db, "SELECT bandName FROM tblBands WHERE bandId=".$band_id);
-		$data = dbFetchArray($check);
-		return stripslashes($data["bandName"]);
+		return $db->getOneItem('SELECT bandName FROM tblBands WHERE bandId='.$band_id);
 	}
 
 	function getBandInfo($db, $band_id)
@@ -52,28 +54,36 @@
 		return dbFetchArray($check);
 	}	
 	
-	function bandCount($db)
+	function bandCount()
 	{
-		return dbOneResultItem($db, "SELECT COUNT(bandId) FROM tblBands");
+		global $db;
+
+		return $db->getOneItem('SELECT COUNT(bandId) FROM tblBands');
 	}
 
-	function getBandRecordCount($db, $band_id)
+	function getBandRecordCount($band_id)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 
-		return dbOneResultItem($db, "SELECT COUNT(recordId) FROM tblRecords WHERE bandId=".$band_id);
+		return $db->getOneItem('SELECT COUNT(recordId) FROM tblRecords WHERE bandId='.$band_id);
 	}
 	
 	/* Returns the records that this band has made */
-	function getBandRecords($db, $band_id)
+	function getBandRecords($band_id)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 
-		return dbArray($db, "SELECT * FROM tblRecords WHERE bandId=".$band_id." ORDER BY recordName ASC");
+		return $db->getArray('SELECT * FROM tblRecords WHERE bandId='.$band_id.' ORDER BY recordName ASC');
 	}
 	
-	function getBandCompilations($db, $band_id)
+	function getBandCompilations($band_id)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 		
 		$sql  = "SELECT t2.recordId,t2.recordName FROM tblTracks AS t1 ";
@@ -82,18 +92,20 @@
 		$sql .= "GROUP BY t2.recordId ";
 		$sql .= "ORDER BY t2.recordName ASC";
 
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
 	
 	/* Returnerar låttitlar och id till alla låtar med detta band i alfabetisk ordning */
-	function getBandLyrics($db, $band_id)
+	function getBandLyrics($band_id)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 
 		$sql  = "SELECT lyricId,lyricName FROM tblLyrics WHERE bandId=".$band_id." ";
 		$sql .= "ORDER BY lyricName ASC";
-		
-		return dbArray($db, $sql);
+
+		return $db->getArray($sql);
 	}
 
 ?>

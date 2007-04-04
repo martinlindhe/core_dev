@@ -6,7 +6,7 @@
 		$band_id = $_GET['band'];
 	}
 
-	if ($_SESSION['loggedIn'] && !empty($_POST['band']) && isset($_POST['recordname']) && isset($_POST['info']) && !empty($_POST['tracks']))
+	if ($session->id && !empty($_POST['band']) && isset($_POST['recordname']) && isset($_POST['info']) && !empty($_POST['tracks']))
 	{
 		$band_id = $_POST['band'];
 		$record_name = trim($_POST['recordname']);
@@ -38,7 +38,7 @@
 	echo '<table width="400" cellpadding="0" cellspacing="0" border="0">';
 	echo '<tr><td width="120">Band name:</td><td><select name="band">';
 	echo '<option>--- Select band ---</option>';
-	$list = getBands($db);
+	$list = getBands();
 	for ($i=0; $i<count($list); $i++)
 	{
 		echo '<option value="'.$list[$i]['bandId'].'"';

@@ -16,26 +16,30 @@
 		dbQuery($db, "INSERT INTO tblNewAdditions SET ID=".$id.",type=".$type.",timestamp=".time());
 	}
 	
-	function isModerated($db, $id, $type)
+	function isModerated($id, $type)
 	{
+		global $db;
+
 		if (!is_numeric($type) || !is_numeric($id)) return false;
 
-		$check = dbQuery($db, "SELECT ID FROM tblNewAdditions WHERE ID=".$id." AND type=".$type);
-		if (dbNumRows($check)) {
-			return true;
-		}
+		$check = $db->getOneItem('SELECT ID FROM tblNewAdditions WHERE ID='.$id.' AND type='.$type);
+		if ($check) return true;
 		return false;
 	}
 	
-	function countNewAdditions($db)
+	function countNewAdditions()
 	{
-		return dbOneResultItem($db, "SELECT COUNT(*) FROM tblNewAdditions");
+		global $db;
+
+		return $db->getOneItem('SELECT COUNT(*) FROM tblNewAdditions');
 	}
 	
-	/* Returns all new additions that needs to be moderated */
-	function getNewAdditions($db)
-	{	//älst först
-		return dbArray($db, "SELECT * FROM tblNewAdditions ORDER BY timestamp ASC");
+	/* Returns all new additions that needs to be moderated, oldest first */
+	function getNewAdditions()
+	{
+		global $db;
+
+		return $db->getArray('SELECT * FROM tblNewAdditions ORDER BY timestamp ASC');
 	}
 	
 	function acceptNewAddition($db, $type, $id)
@@ -108,38 +112,44 @@
 		}
 	}
 	
-	function countPendingChanges($db)
+	function countPendingChanges()
 	{
-		return dbOneResultItem($db, "SELECT COUNT(*) FROM tblPendingChanges");
+		global $db;
+
+		return $db->getOneItem('SELECT COUNT(*) FROM tblPendingChanges');
 	}
 	
-	function isPendingChange($db, $type, $p1, $p2="")
+	function isPendingChange($db, $type, $p1, $p2 = '')
 	{
+		global $db;
+
 		if ($type == MODERATIONCHANGE_LYRICLINK) {
 			if (!is_numeric($p1) || !is_numeric($p2)) return false;
-			$check = dbQuery($db, "SELECT type FROM tblPendingChanges WHERE p1=".$p1." AND p2=".$p2);
-			if (dbNumRows($check)) return true;
+			$check = $db->getOneItem('SELECT type FROM tblPendingChanges WHERE p1='.$p1.' AND p2='.$p2);
+			if ($check) return true;
 		} else if ($type == MODERATIONCHANGE_LYRIC) {
 			if (!is_numeric($p1)) return false;
-			$check = dbQuery($db, "SELECT type FROM tblPendingChanges WHERE p1=".$p1);
-			if (dbNumRows($check)) return true;
+			$check = $db->getOneItem('SELECT type FROM tblPendingChanges WHERE p1='.$p1);
+			if ($check) return true;
 
 		} else if ($type == MODERATIONCHANGE_RECORDNAME) {
 			if (!is_numeric($p1)) return false;
-			$check = dbQuery($db, "SELECT type FROM tblPendingChanges WHERE p1=".$p1);
-			if (dbNumRows($check)) return true;
+			$check = $db->getOneItem('SELECT type FROM tblPendingChanges WHERE p1='.$p1);
+			if ($check) return true;
 
 		} else {
-			echo "addPendingChange(): unknown TYPE: ".$type;
-			die;
+			die('addPendingChange(): unknown TYPE: '.$type);
 		}
 
 		return false;
 	}
 	
-	function getPendingChanges($db)
-	{//returnera älst först
-		return dbArray($db, "SELECT * FROM tblPendingChanges ORDER BY timestamp ASC");
+	//returnerar älst först
+	function getPendingChanges()
+	{
+		global $db;
+
+		return $db->getArray('SELECT * FROM tblPendingChanges ORDER BY timestamp ASC');
 	}
 	
 	function denyPendingChange($db, $type, $p1)

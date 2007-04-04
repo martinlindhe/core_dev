@@ -1,7 +1,7 @@
 body {
 	margin: 0;
 	padding: 0;
-	font-family: "Bitstream Vera Sans","Luxi Sans","Lucida Grande","Trebuchet MS",helvetica,verdana,arial,sans-serif;
+	font-family: helvetica,verdana,arial;
 }
 img {
 	border: 0;
@@ -131,8 +131,10 @@ input.button:focus {
 
 /* for login box gadget */
 .login_box {
+	font-size: 14px;
 	border: 1px solid #aaa;
 	width: 280px;
+	color: #000;
 	background-color: #DDD;
 	padding: 10px;
 	-moz-border-radius-bottomleft:15px;

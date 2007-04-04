@@ -6,11 +6,13 @@
 <head>
 	<title><?=isset($title)?$title:'lyrics'?></title>
 	<!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> -->
+	<script type="text/javascript" src="/js/functions.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/functions.css"/>
 	<link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
 <?
-	if ($_SESSION['loggedIn'] == false) {
+	if (!$session->id) {
 		echo 'You need to be logged in to submit changes/additions. <a href="login.php">Log in</a> | <a href="register.php">Register</a><br/><br/>';
 	}
 ?>

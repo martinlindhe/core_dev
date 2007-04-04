@@ -2,7 +2,7 @@
 	require_once('config.php');
 	require('design_head.php');
 
-	if ($_SESSION['loggedIn'] && !empty($_POST['bandname']) && isset($_POST['bandinfo']))
+	if ($session->id && !empty($_POST['bandname']) && isset($_POST['bandinfo']))
 	{
 		$band_name = trim($_POST['bandname']);
 		$band_info = $_POST['bandinfo'];
@@ -18,7 +18,7 @@
 			
 			echo '<b>'.$band_name.'</b> added.<br/><br/>';
 			
-			if ($_SESSION['userMode'] == 0) {
+			if (!$session->isAdmin) {
 				/* Add bandId to moderation queue */
 				addModerationItem($db, $band_id, MODERATION_BAND);
 				echo 'Band addition added to moderation queue aswell<br/><br/>';
