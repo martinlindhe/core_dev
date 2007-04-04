@@ -9,16 +9,9 @@
 	$allowed = true;
 	$page = 'gb';
 	if(!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read FROM {$t}usergb WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
-		if(!empty($res) && count($res) && $res[1] == '1') {
-			if($isAdmin || $res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
-				$sql->queryUpdate("UPDATE {$t}usergb SET status_id = '2', deleted_id = '".secureINS($l['id_id'])."', deleted_date = NOW() WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-				if(!$res[4]) $user->notifyDecrease('gb', $res[2]);
-				$user->counterDecrease('gb', $res[2]);
-			}
-			reloadACT(l('user', 'gb', $s['id_id']));
-			exit;
-		}
+		gbDelete($_GET['del_msg']);
+	}
+
 	} else if(!empty($_GET['key']) && is_numeric($_GET['key'])) {
 		$his = true;
 		if($isOk) {

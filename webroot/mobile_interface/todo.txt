@@ -1,7 +1,5 @@
 Steg 1 - att göra:
 
-	* kunna kommentera bilder i gallerti & visa kommentarer
-	* kunna se "blockerade" medlemmar
 	* Topp navigering "PROFIL", "???", "???"
 
 	* Vad klarar wap browers av?
@@ -30,6 +28,17 @@ Steg 2:
 		- Sony Ericsson K750i: 176x220
 		- Sony Ericsson K800i: 240x320
 
-
 -----------
-
+Steg 3: - Platform cleanup
+	* Uppdatera databas-driver från php_mysql till php_mysqli
+	* enkoda lösenordet med sha1 i databasen (s_user)
+	* rensa upp $_SESSION variabeln
+	* separera kod från design:
+		- Guestbook:
+			_modules/user/gb.php
+			_modules/user/gb_write.php
+			
+	* databasstruktur:
+	
+		- s_user		userinfo
+		- s_userg		gästbok

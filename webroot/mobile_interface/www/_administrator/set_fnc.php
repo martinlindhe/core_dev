@@ -91,8 +91,30 @@ function makeMenu($sel, $arr, $print = true) {
 	}
 	if($print) echo '</td></tr>';
 }
-function errorACT($msg, $js_mv) {
-	require("./_tpl/notice_admin.php");
+function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $topic = '', $tc = 1, $class = '') {
+	eval(GLOBAL_STRING);
+	if($type == 'main') {
+		$page = 'error.php';
+		if(!$l) $page = 'error_splash.php';
+		if(!empty($url) && substr($url, 0, 1) != '1') {
+			require(dirname(__FILE__).'/../_design/'.$page);
+			require(dirname(__FILE__).'/../_design/mv.php');
+		} elseif(substr($url, 0, 1) == '1') {
+			$url = substr($url, 1);
+			require(dirname(__FILE__).'/../_design/'.$page);
+		} else {
+			require(dirname(__FILE__).'/../_design/'.$page);
+		}
+	} elseif($type == 'popup') {
+		require(dirname(__FILE__).'/../_design/error_popup.php');
+	} elseif($type == 'popupbig') {
+		require(dirname(__FILE__).'/../_design/error_popupbig.php');
+	} elseif($type == 'splash') {
+		require(dirname(__FILE__).'/../_design/error_splash.php');
+		if(!empty($url)) {
+			require(dirname(__FILE__).'/../_design/mv.php');
+		}
+	}
 	exit;
 }
 function doPic($id) {
@@ -603,6 +625,100 @@ function get_browser_($user_agent)
 			return $browser;
 	}
 	return 'Unknown';
+}
+
+function now() {
+	return strftime('%Y-%m-%d %T');
+}
+function reloadACT($url) {
+	header('Location: '.$url);
+	die;
+}
+function dopaging($paging, $url, $anchor = '', $width = 'med', $text = '&nbsp;', $vice = 1) {
+	#if($width == 'big' || $width == 'bigmed') $max = 10; else $max = 5;
+	$max = 10;
+	$paging['s'] = $paging['slimit'];
+	$pages = ceil($paging['co'] / $paging['limit']);
+	if($pages > $max) {
+		$paging['slimit'] = $paging['p'] - floor($max / 2);
+		if($paging['slimit'] > ($pages - $max + 1)) {
+			$paging['slimit'] = $pages - $max + 1;
+		}
+	} else {
+		$paging['slimit'] = 1;
+	}
+	if($paging['slimit'] < 1) $paging['slimit'] = 1;
+	$stop = $paging['slimit'] + $max - 1;
+	if($stop > $pages) $stop = $pages;
+	if(strpos($text, '%') !== false)
+		$text = sprintf($text, (($paging['co'])?$paging['s']+1:0), ($paging['co'] > ($paging['s']+$paging['limit']))?$paging['s']+$paging['limit']:$paging['co'], $paging['co']);
+
+	if($width == 'med' || $width == 'medmin' || $width == 'big' || $width == 'medbig' || $width == 'biggest') echo '<table cellspacing="0" style="font-family: Verdana; font-size: 10px; width: '.($width == 'medmin'?'596':($width == 'big'?'596':($width == 'medbig'?'596':($width == 'biggest'?'786':'596')))).'px;"><tr>
+	<td class="pdg" nowrap="nowrap">'.$text.'</td>
+	<td class="pdg" align="right" nowrap="nowrap">'.($paging['p'] > 1?'<a href="'.$url.($paging['p']-1).$anchor.'" class="bld">« '.(($vice)?'bakåt':'framåt').'</a>':'&nbsp;').'&nbsp;&nbsp;';
+	if($paging['co'] > $paging['limit']) {
+		echo 'sida';
+		if($paging['slimit'] > 1) {
+			echo ' ...';
+		}
+		if($stop) { for($i = $paging['slimit']; $i <= $stop; $i++) {
+			if($paging['p'] != $i) {
+				echo ' <a href="'.$url.$i.$anchor.'">'.$i.'</a>';
+			} else {
+				echo ' <b>'.$i.'</b>';
+			}
+		} } else echo '1';
+		if($pages > $stop) {
+			echo ' ... av '.$pages;
+		}
+	} else echo '&nbsp;';
+
+	if($width == 'big' || $width == 'medbig' || $width == 'med' || $width == 'medmin' || $width == 'biggest') echo '&nbsp;&nbsp;'.($paging['p'] < $stop?'<a href="'.$url.($paging['p']+1).$anchor.'" class="bld">'.((!$vice)?'bakåt':'framåt').' »</a>':'&nbsp;').'</td>
+	</tr></table>';
+}
+
+/* By Martin, Creates a paging list suitable for mobile devices */
+function dopagingMobile($paging, $url, $anchor = '', $width = 'med', $text = '&nbsp;', $vice = 1) {
+
+	$max = 10;
+	$paging['s'] = $paging['slimit'];
+	$pages = ceil($paging['co'] / $paging['limit']);
+	if($pages > $max) {
+		$paging['slimit'] = $paging['p'] - floor($max / 2);
+		if($paging['slimit'] > ($pages - $max + 1)) {
+			$paging['slimit'] = $pages - $max + 1;
+		}
+	} else {
+		$paging['slimit'] = 1;
+	}
+	if($paging['slimit'] < 1) $paging['slimit'] = 1;
+	$stop = $paging['slimit'] + $max - 1;
+	if($stop > $pages) $stop = $pages;
+	if(strpos($text, '%') !== false)
+		$text = sprintf($text, (($paging['co'])?$paging['s']+1:0), ($paging['co'] > ($paging['s']+$paging['limit']))?$paging['s']+$paging['limit']:$paging['co'], $paging['co']);
+
+	if($width == 'med' || $width == 'medmin' || $width == 'big' || $width == 'medbig' || $width == 'biggest') echo $text;
+	echo ($paging['p'] > 1?'<a href="'.$url.($paging['p']-1).$anchor.'">« '.(($vice)?'bakåt':'framåt').'</a>':'&nbsp;').'&nbsp;&nbsp;';
+
+	if($paging['co'] > $paging['limit']) {
+		echo 'sida';
+		if($paging['slimit'] > 1) {
+			echo ' ...';
+		}
+		if($stop) { for($i = $paging['slimit']; $i <= $stop; $i++) {
+			if($paging['p'] != $i) {
+				echo ' <a href="'.$url.$i.$anchor.'">'.$i.'</a>';
+			} else {
+				echo ' <b>'.$i.'</b>';
+			}
+		} } else echo '1';
+		if($pages > $stop) {
+			echo ' ... av '.$pages;
+		}
+	} else echo ' ';
+
+	if($width == 'big' || $width == 'medbig' || $width == 'med' || $width == 'medmin' || $width == 'biggest') echo '&nbsp;&nbsp;'.($paging['p'] < $stop?'<a href="'.$url.($paging['p']+1).$anchor.'">'.((!$vice)?'bakåt':'framåt').' »</a>':'&nbsp;');
+
 }
 
 ?>

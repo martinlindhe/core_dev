@@ -9,8 +9,13 @@
 ?>
 
 	GALLERI - test123's bilder<br/>
+	<br/>
+	<a href="gallery_show.php">(bild1)</a><br/>
+	<br/>
+	<a href="gallery_show.php">(bild2)</a><br/>
+	<br/>
+	<a href="gallery_show.php">(bild3)</a><br/>
 
-	Mina bilder här.<br/>
 
 <?
 	require('design_foot.php');

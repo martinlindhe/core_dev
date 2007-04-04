@@ -1,8 +1,12 @@
 <?
-ini_set('error_reporting', E_ALL);
-error_reporting(E_ALL);
-require("./set_c.php");
-require("./set_fnc.php");
+	error_reporting(E_ALL);
+	require(dirname(__FILE__).'/set_c.php');
+	require(dirname(__FILE__).'/set_fnc.php');
+
+	//require(dirname(__FILE__).'/../_config/main.fnc.php');
+	
+	$user = new user($sql);
+
 /*
 	if(!empty($_REQUEST["PHPSESSID"]))
 		$sess5454 = md5($_REQUEST["PHPSESSID"].'SALTHELGVETE');
@@ -14,15 +18,16 @@ require("./set_fnc.php");
 	} else
 		$cookie_id = cookieSET("SOEBR", $sess5454);
 */
-$connection = @mysql_connect(SQL_H, SQL_U, SQL_P);
-if(!$connection) { 
-	echo 'Det går inte att kontakta databasen.';
-	#doMail('frans@freshfly.se', 'Connect', 'En error har uppstått! Kolla sidan!');
-	exit;
-}
-if(!@mysql_select_db(SQL_D)) { 
-	echo 'Det går inte att välja databas.';
-#	doMail('frans@freshfly.se', 'Select', 'En error har uppstått! Kolla sidan!');
-	exit;
-}
+
+	$connection = @mysql_connect(SQL_H, SQL_U, SQL_P);
+	if(!$connection) { 
+		echo 'Det går inte att kontakta databasen.';
+		#doMail('frans@freshfly.se', 'Connect', 'En error har uppstått! Kolla sidan!');
+		exit;
+	}
+	if(!@mysql_select_db(SQL_D)) { 
+		echo 'Det går inte att välja databas.';
+		#doMail('frans@freshfly.se', 'Select', 'En error har uppstått! Kolla sidan!');
+		exit;
+	}
 ?>

@@ -1,7 +1,7 @@
 <?
 class user {
 	var $sql, $self, $info, $t, $id;
-	function user($sql = false) {
+	function __construct($sql = false) {
 		if($sql) $this->sql = $sql;
 		$this->t = T;
 	}
@@ -92,7 +92,6 @@ class user {
 		$str = '';
 		foreach($info as $item) {
 			$str .= ($item[0]?$translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
-			$i++;
 		}
 		$cha_c = $this->sql->queryResult("SELECT COUNT(DISTINCT(sender_id)) as count FROM {$this->t}userchat WHERE user_id = '".secureINS($id)."' AND user_read = '0'");
 		if($cha_c > 0)
@@ -250,6 +249,29 @@ class user {
 			#return '<b><a href="'.l('user', 'view', $arr['id_id'.$suffix]).'">'.secureOUT($arr['u_alias'.$suffix]).' '.$sex[$arr['u_sex'.$suffix]].$this->doage($arr['u_birth'.$suffix]).'</a></b>'.((@empty($extra['noicon']) && $arr['level_id'.$suffix] > 1)?'&nbsp;<img alt="" src="./_img/'.$arr['level_id'.$suffix].'.gif" />':'');
 			#.((!empty($_SESSION['c_i']) && $arr['id_id'] != $_SESSION['c_i'] && @empty($extra['noicon']))?'&nbsp;<a target="commain" href="javascript:makeGb(\''.$arr['id_id'].'\''.(($extra && @$extra['gb'])?', \'&a='.$extra['gb'].'\'':'').');" title="Skriv GB-inlägg"><img alt="" src="./_img/link_gb.gif" height="12" style="margin-bottom: -1px;" /></a><a target="commain" href="javascript:makeChat(\''.$arr['id_id'].'\');" title="Öppna privatchat"><img alt="" src="./_img/link_cha.gif" height="12" style="margin: 0 0 -1px 3px;" /></a>':'');
 	}
+
+	/* By Martin: Returns clickable username, age & gender, suited for mobile display */
+	function getstringMobile($arr, $suffix = '', $extra = '') {
+		global $sex_name;
+		if(@$arr['id_id'] == @$_SESSION['data']['id_id']) {
+			if(!$this->isOnline($arr['account_date'])) {
+				$res = now();
+				$_SESSION['data']['account_date'] = $res;
+				$this->sql->queryUpdate("UPDATE {$this->t}user SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE {$this->t}useronline SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
+				$arr['account_date'] = $res;
+			}
+		}
+		if($arr['id_id'] == 'SYS')
+			return 'SYSTEM';
+		elseif(empty($arr['u_alias']))
+			return '[BORTTAGEN]';
+		else {
+			$own = ($arr['id_id'] == $this->id?true:false);
+			return '<a href="'.l('user', 'view', $arr['id_id'.$suffix]).'">'.secureOUT($arr['u_alias'.$suffix]).(empty($extra['nosex'])?' <img alt="'.$sex_name[$arr['u_sex'.$suffix]].'" src="www/_objects/icon_'.$arr['u_sex'.$suffix].'1.gif" border="0"/>':'').(empty($extra['noage'])?$this->doage($arr['u_birth'.$suffix]):'').'</a>';
+		}
+	}
+
 	function doagegroup($age) {
 		if($age <= 20) return 1;
 		elseif($age <= 25) return 2;
