@@ -1,5 +1,7 @@
 <?
+	require('mail.fnc.php');
 	require(CONFIG."secure.fnc.php");
+
 	$page = '';
 
 	if (!empty($_GET['id'])) {

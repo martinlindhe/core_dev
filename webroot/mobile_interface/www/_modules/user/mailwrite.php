@@ -2,6 +2,7 @@
 	if(!empty($_GET['r'])) $r = '1'; else $r = '0';
 	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;
 
+	require('mail.fnc.php');
 	require(CONFIG.'secure.fnc.php');
 
 	$error = false;
@@ -21,14 +22,16 @@
 		$s = (!is_numeric($_GET['id']))?false:$user->getuser($_GET['id']);
 	}
 	if ($a) {
+		
 		$ans = getMail($a);
+
 		if(!empty($ans) && count($ans)) {
-			if($ans[3] == $l['id_id'] && $ans[5] == '1' || $ans[4] == $l['id_id'] && $ans[6] == '1') {
-				$ans = array(secureOUT($ans[0]), $ans[1], getUserIdFromAlias($ans[4]), $ans[2], getUserIdFromAlias($ans[3]));
+			if($ans['user_id'] == $l['id_id'] && $ans['status_id'] == '1' || $ans['sender_id'] == $l['id_id'] && $ans['sender_status'] == '1') {
+
 			} else $a = false;
 		} else $a = false;
 	}
-	if(isset($_GET['r']) && $a) $r = true; else $r = false;
+	if (isset($_GET['r']) && $a) $r = true; else $r = false;
 
 	$NAME_TITLE = 'BREV - SKRIV | '.NAME_TITLE;
 	$friends = getUserFriends();
@@ -90,12 +93,12 @@ function cleanField(obj) {
 </tr>
 <tr>
 	<td class="pdg bld" style="padding-top: 9px; padding-right: 9px;">Rubrik:</td>
-	<td colspan="2" class="pdg_t" style="padding-left: 0;"><input type="text" class="txt" name="ins_ttl" style="width: 296px;" value="<?=(@$res['sent_ttl'])?@secureOUT($res['sent_ttl']):(($a)?(($r)?'Vb: ':'Sv: ').$ans[0]:'')?>"></td>
+	<td colspan="2" class="pdg_t" style="padding-left: 0;"><input type="text" class="txt" name="ins_ttl" style="width: 296px;" value="<?=(@$res['sent_ttl'])?@secureOUT($res['sent_ttl']):(($a)?(($r)?'Vb: ':'Sv: ').$ans['sent_ttl']:'')?>"></td>
 </tr>
 <tr>
 	<td colspan="3" class="pdg_t" style="height: 90%;">
 <table cellspacing="0" width="100%" style="height: 100%; display: none;" id="text_c_html" class="wht">
-<tr><td class="pdg"><textarea name="text_html" id="text_html" style="width: 100%; height: 100%; padding: 10px; font-family: Courier New, Courier; font-size: 12px;"><?=(@$res['sent_ttl'])?secureOUT($res['sent_cmt']):(($a)?secureOUT(makeNR($ans[1], $ans[2], nicedate($ans[3], 4), $ans[4])):'')?></textarea></td></tr>
+<tr><td class="pdg"><textarea name="text_html" id="text_html" style="width: 100%; height: 100%; padding: 10px; font-family: Courier New, Courier; font-size: 12px;"><?=(@$res['sent_ttl'])?secureOUT($res['sent_cmt']):(($a)?secureOUT(makeNR($ans['sent_cmt'], getUserIdFromAlias($ans['user_id']), nicedate($ans['sent_date'], 4), getUserIdFromAlias($ans['sender_id']))):'')?></textarea></td></tr>
 </table>
 <table cellspacing="0" width="100%" style="" class="wht" id="text_c_var">
 <tr><td class="pdg" style="padding-bottom: 0;"><b>Design:&nbsp;</b>

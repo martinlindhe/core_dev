@@ -1,4 +1,6 @@
 <?
+	require('mail.fnc.php');
+
 	$s = $l;
 	$own = true;
 	$page = 'in';
