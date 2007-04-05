@@ -1,137 +1,40 @@
 <?
+	require_once('relations.fnc.php');
+
 	if(isset($_GET['create'])) {
 		include('relations_create.php');
 		exit;
 	}
+
+	/*
+	//'ins_rel' är typen av relation
+	//martin kommenterade ut detta. samma sak hanteras redan i relations_create.php
+	//todo: eller var detta för att acceptera relation!?
 	if(!empty($_POST['ins_rel']) && !$own) {
-		if($isAdmin) {
-			$r = (is_numeric($_POST['ins_rel']))?getset($_POST['ins_rel'], 'r'):$_POST['ins_rel'];
-		} else {
-			$r = getset($_POST['ins_rel'], 'r');
-			if(!$r) errorACT('Relationen finns inte.', l('user', 'relations', $l['id_id']));
+		$error = sendRelationRequest($_POST['ins_rel']);
+		if ($error) {
+			errorACT($error, l('user', 'relations', $l['id_id']));
+			die;
 		}
-		$c = $sql->queryLine("SELECT main_id, rel_id FROM {$t}userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($s['id_id'])."' LIMIT 1");
-		if(!empty($c) && count($c)) {
-			if($r != $c[1]) {
-### ÄNDRA!
-				$sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."'");
-				$sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = '".secureINS($s['id_id'])."' AND sender_id = '".secureINS($l['id_id'])."'");
-				$sql->queryUpdate("DELETE FROM {$t}userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($s['id_id'])."'");
-				$sql->queryUpdate("DELETE FROM {$t}userrelation WHERE user_id = '".secureINS($s['id_id'])."' AND friend_id = '".secureINS($l['id_id'])."'");
-				$ins = $sql->queryInsert("INSERT {$t}userrelquest SET
-				sent_cmt = '".secureINS($r)."',
-				status_id = '0',
-				sent_date = NOW(),
-				user_id = '".secureINS($s['id_id'])."',
-				sender_id = '".secureINS($l['id_id'])."'");
-				#$user->setRelCount($s['id_id']);
-				#$user->setRelCount($l['id_id']);
-				$user->counterDecrease('rel', $s['id_id']);
-				$user->counterDecrease('rel', $l['id_id']);
-				#$user->get_cache();
-				errorACT('Nu har du skickat en förfrågan.', l('user', 'relations', $l['id_id']));
-			} else reloadACT('user_relation.php');
-		} else {
-			$c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userrelquest WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."' AND status_id = '0'");
-			if($c > 0) errorACT('Du har redan blivit tillfrågad.', l('user', 'relations', $l['id_id']));
+	}
+	*/
 
-			$c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userrelquest WHERE user_id = '".secureINS($s['id_id'])."' AND sender_id = '".secureINS($l['id_id'])."' AND status_id = '0'");
-			if($c > 0) {
-				$sql->queryUpdate("UPDATE {$t}userrelquest SET
-				sent_cmt = '".secureINS($r)."',
-				status_id = '0',
-				sent_date = NOW()
-				WHERE user_id = '".secureINS($s['id_id'])."' AND sender_id = '".secureINS($l['id_id'])."' AND status_id != '2'");
-				#$user->setRelCount($s['id_id']);
-				#$user->setRelCount($l['id_id']);
-				errorACT('Nu har du skickat en ny förfrågan.', l('user', 'relations', $l['id_id']));
-			}
-			$sql->queryInsert("INSERT INTO {$t}userrelquest SET
-			user_id = '".secureINS($s['id_id'])."',
-			sender_id = '".secureINS($l['id_id'])."',
-			sent_cmt = '".secureINS($r)."',
-			status_id = '0',
-			sent_date = NOW()");
-			#$user->setRelCount($s['id_id']);
-			#$user->setRelCount($l['id_id']);
-			#$user->get_cache();
-			$user->notifyIncrease('rel', $s['id_id']);
-			errorACT('Nu har du skickat en förfrågan.', l('user', 'relations', $l['id_id']));
-		}
-	} elseif(!empty($_POST['d']) && is_numeric($_POST['d']) || !empty($_GET['d']) && is_numeric($_GET['d'])) {
+	if (!empty($_POST['d']) && is_numeric($_POST['d']) || !empty($_GET['d']) && is_numeric($_GET['d'])) {
 		$d = (!empty($_POST['d'])?$_POST['d']:$_GET['d']);
-		$isFriends = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($s['id_id'])."' LIMIT 1");
-		if($isFriends) {
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."'");
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = '".secureINS($s['id_id'])."' AND sender_id = '".secureINS($l['id_id'])."'");
-			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($s['id_id'])."'");
-			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = '".secureINS($s['id_id'])."' AND friend_id = '".secureINS($l['id_id'])."'");
-			#sysMSG($s['id_id'], 'Relation', 'Your relation with '.$s->alias.' has ended!');
-			#$user->spy($s['id_id'], $l['id_id'], 'MSG', array('Din relation med <b>'.$l['u_alias'].'</b> har avslutats.'));
-			#$user->setRelCount($s['id_id']);
-			#$user->setRelCount($l['id_id']);
-			#$user->get_cache();
-			$user->counterDecrease('rel', $s['id_id']);
-			$user->counterDecrease('rel', $l['id_id']);
-			reloadACT(l('user', 'relations'));
-		} else {
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."'");
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = '".secureINS($s['id_id'])."' AND sender_id = '".secureINS($l['id_id'])."'");
-			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($s['id_id'])."'");
-			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = '".secureINS($s['id_id'])."' AND friend_id = '".secureINS($l['id_id'])."'");
+		removeRelation($d, $s['id_id']);
+	}
 
-			$c = $sql->queryResult("SELECT main_id FROM {$t}userrelquest WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."' AND main_id = '".secureINS($_GET['d'])."' LIMIT 1");
-			if(!empty($c) && count($c)) {
-				$sql = $sql->queryResult("UPDATE {$t}userrelquest SET status_id = '2' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."'");
-				#if(mysql_affected_rows()) sysMSG($s['id_id'], 'Relation', 'Your relation with '.$s->alias.' is denied!');
-				$user->notifyDecrease('rel', $l['id_id']);
-			} else {
-				$c = $sql->queryResult("SELECT main_id FROM {$t}userrelquest WHERE user_id = '".secureINS($s['id_id'])."' AND sender_id = '".secureINS($l['id_id'])."' AND main_id = '".secureINS($_GET['d'])."' AND status_id = '0' LIMIT 1");
-				if(!empty($c) && count($c)) {
-					$sql = $sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '2' WHERE user_id = '".secureINS($s['id_id'])."' AND sender_id = '".secureINS($l['id_id'])."'");
-					$user->notifyDecrease('rel', $s['id_id']);
-				}
-			}
-			#$user->setRelCount($s['id_id']);
-			#$user->setRelCount($l['id_id']);
-			#$user->get_cache();
-
-			reloadACT(l('user', 'relations'));
-		}
-	} elseif(!empty($_GET['a']) && is_numeric($_GET['a'])) {
-		$c = $sql->queryResult("SELECT sent_cmt FROM {$t}userrelquest WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."' AND main_id = '".secureINS($_GET['a'])."' AND status_id = '0' LIMIT 1");
-		if(!empty($c) && count($c)) {
-			$isFriends = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($s['id_id'])."' LIMIT 1");
-			if($isFriends) {
-				errorACT('Ni har redan en relation.', 'user_relation.php');
-			} else {
-				$sql->queryInsert("INSERT INTO {$t}userrelation SET
-				user_id = '".secureINS($l['id_id'])."',
-				friend_id = '".secureINS($s['id_id'])."',
-				rel_id = '".secureINS($c)."',
-				activated_date = NOW()");
-				$sql->queryInsert("INSERT INTO {$t}userrelation SET
-				user_id = '".secureINS($s['id_id'])."',
-				friend_id = '".secureINS($l['id_id'])."',
-				rel_id = '".secureINS($c)."',
-				activated_date = NOW()");
-				$check = $sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '1' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."' AND status_id = '0' LIMIT 1");
-				#if($check) sysMSG($u->id, 'Relation', 'Your relation with '.$s->alias.' is accepted!');
-				#$user->spy($s['id_id'], $l['id_id'], 'MSG', array('Din relation med <b>'.$l['u_alias'].'</b> har accepterats.'));
-				#$user->setRelCount($s['id_id']);
-				#$user->setRelCount($l['id_id']);
-				#$user->get_cache();
-				$user->notifyDecrease('rel', $l['id_id']);
-				$user->counterIncrease('rel', $l['id_id']);
-				$user->counterIncrease('rel', $s['id_id']);
-				reloadACT(l('user', 'relations'));
-			}
+	if(!empty($_GET['a'])) {
+		$error = acceptRelationRequest($_GET['a'], $s);
+		if ($error !== true) {
+			errorACT($error, l('user', 'relations'));
 		} else {
-			errorACT('Det finns ingen förfrågan.', l('user', 'relations'));
+			reloadACT(l('user', 'relations'));
 		}
 	}
 
-
+	
+	//Detta är möjligheter att välja hur kompislistan ska sorteras. Funktionen exponeras för stunden inte på citysurf
 	$thisord = 'A';
 	if(!empty($_POST['ord']) && ($_POST['ord'] == 'A' || $_POST['ord'] == 'L' || $_POST['ord'] == 'R' || $_POST['ord'] == 'O')) {
 		$thisord = $_POST['ord'];

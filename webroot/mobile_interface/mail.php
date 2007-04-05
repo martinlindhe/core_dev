@@ -28,7 +28,10 @@
 		
 		$from_alias = $user->getuser($list[$i]['sender_id']);
 		$from_alias = $from_alias['u_alias'];
-		echo ' från '.$from_alias.'<br/>';
+		echo ' från <a href="user.php?id='.$list[$i]['sender_id'].'">'.$from_alias.'</a> ';
+		
+		echo nicedate($list[$i]['sent_date']).'<br/>';
+		
 	}
 	
 	require('design_foot.php');

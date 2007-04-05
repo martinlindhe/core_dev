@@ -1,4 +1,6 @@
 <?
+	require_once('relations.fnc.php');
+
 	$rel = getset('', 'r', 'm');
 		if(!empty($paus) && count($paus)) {
 ?>

@@ -5,7 +5,8 @@
 	require(dirname(__FILE__).'/www/_modules/member/auth.php');			//skapar $user_auth klassen för logins
 
 	//funktioner
-	require(dirname(__FILE__).'/www/_modules/user/mail.fnc.php');		//funktioner för att skicka mail
+	require(dirname(__FILE__).'/www/_modules/user/mail.fnc.php');				//funktioner för att skicka mail
+	require(dirname(__FILE__).'/www/_modules/user/relations.fnc.php');	//funktioner för att hantera relationer
 
 	
 	//vafan e dealen med dessa?!?!?!
