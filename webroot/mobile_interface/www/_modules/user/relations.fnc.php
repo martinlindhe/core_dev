@@ -75,10 +75,10 @@
 	}
 	
 	/* Accepterar relation-request $_id */
-	function acceptRelationRequest($_id, $other_user)
+	function acceptRelationRequest($_id, $_other_user_id)
 	{
-		global $sql, $l;
-
+		global $sql, $user, $l, $t;
+		
 		if (!is_numeric($_id)) return false;
 
 		$c = $sql->queryResult("SELECT sent_cmt FROM {$t}userrelquest WHERE user_id = '".secureINS($l['id_id'])."' AND main_id = '".secureINS($_id)."' AND status_id = '0' LIMIT 1");
@@ -86,22 +86,26 @@
 			return 'Det finns ingen förfrågan.';
 		}
 		
-		$isFriends = areTheyFriends($l['id_id'], $other_user['id_id']);
+		$isFriends = areTheyFriends($l['id_id'], $_other_user_id);
 		if ($isFriends) {
 			return 'Ni har redan en relation.';
 		}
 				
-		$sql->queryInsert("INSERT INTO {$t}userrelation SET
+		$q = "INSERT INTO {$t}userrelation SET
 		user_id = '".secureINS($l['id_id'])."',
-		friend_id = '".secureINS($s['id_id'])."',
+		friend_id = '".secureINS($_other_user_id)."',
 		rel_id = '".secureINS($c)."',
-		activated_date = NOW()");
-		$sql->queryInsert("INSERT INTO {$t}userrelation SET
-		user_id = '".secureINS($s['id_id'])."',
+		activated_date = NOW()";
+		$sql->queryInsert($q);
+
+		$q = "INSERT INTO {$t}userrelation SET
+		user_id = '".secureINS($_other_user_id)."',
 		friend_id = '".secureINS($l['id_id'])."',
 		rel_id = '".secureINS($c)."',
-		activated_date = NOW()");
-		$check = $sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '1' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($s['id_id'])."' AND status_id = '0' LIMIT 1");
+		activated_date = NOW()";
+		$sql->queryInsert($q);
+
+		$check = $sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '1' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($_other_user_id)."' AND status_id = '0' LIMIT 1");
 		#if($check) sysMSG($u->id, 'Relation', 'Your relation with '.$s->alias.' is accepted!');
 		#$user->spy($s['id_id'], $l['id_id'], 'MSG', array('Din relation med <b>'.$l['u_alias'].'</b> har accepterats.'));
 		#$user->setRelCount($s['id_id']);
@@ -109,7 +113,7 @@
 		#$user->get_cache();
 		$user->notifyDecrease('rel', $l['id_id']);
 		$user->counterIncrease('rel', $l['id_id']);
-		$user->counterIncrease('rel', $s['id_id']);
+		$user->counterIncrease('rel', $_other_user_id);
 		return true;
 	}
 
@@ -161,6 +165,20 @@
 
 			return true;
 		}
+	}
+	
+	function unblockRelation($_id)
+	{
+		global $sql, $l, $t;
+		if (!is_numeric($_id)) return false;
+
+		$check = $sql->queryResult("SELECT friend_id FROM {$t}userblock WHERE main_id = '".secureINS($_id)."' AND user_id = '".$l['id_id']."' LIMIT 1");
+		if($check) {
+			$sql->queryUpdate("DELETE FROM {$t}userblock WHERE user_id = '".$l['id_id']."' AND friend_id = '".$check."' AND rel_id = 'u' LIMIT 1");
+			$sql->queryUpdate("DELETE FROM {$t}userblock WHERE friend_id = '".$l['id_id']."' AND user_id = '".$check."' AND rel_id = 'f' LIMIT 1");
+		}
+		
+		return true;
 	}
 
 ?>

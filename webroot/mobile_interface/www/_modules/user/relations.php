@@ -27,7 +27,7 @@
 
 	} else if(!empty($_GET['a']))
 	{
-		$error = acceptRelationRequest($_GET['a'], $s);
+		$error = acceptRelationRequest($_GET['a'], $s['id_id']);
 		if ($error === true) reloadACT(l('user', 'relations'));
 		errorACT($error, l('user', 'relations'));
 	}
@@ -60,11 +60,7 @@
 	if($own && isset($_GET['blocked'])) {
 		$blocked = true;
 		if(isset($_GET['del'])) {
-			$check = $sql->queryResult("SELECT friend_id FROM {$t}userblock WHERE main_id = '".secureINS($_GET['del'])."' AND user_id = '".$l['id_id']."' LIMIT 1");
-			if($check) {
-				$sql->queryUpdate("DELETE FROM {$t}userblock WHERE user_id = '".$l['id_id']."' AND friend_id = '".$check."' AND rel_id = 'u' LIMIT 1");
-				$sql->queryUpdate("DELETE FROM {$t}userblock WHERE friend_id = '".$l['id_id']."' AND user_id = '".$check."' AND rel_id = 'f' LIMIT 1");
-			}
+			unblockRelation($_GET['del']);
 			errorACT('Nu har du slutat att blockera personen.', l('user', 'relations').'&blocked');
 		}
 		$res = $sql->query("SELECT ".CH." b.main_id, b.friend_id, b.activated_date, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userblock b INNER JOIN {$t}user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = '".secureINS($l['id_id'])."' AND rel_id = 'u'", 0, 1);
