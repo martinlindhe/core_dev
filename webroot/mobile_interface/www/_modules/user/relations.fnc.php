@@ -180,5 +180,13 @@
 		
 		return true;
 	}
+	
+	function getBlockedRelations()
+	{
+		global $sql, $t, $l;
+
+		$q = "SELECT b.main_id, b.friend_id, b.activated_date, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userblock b INNER JOIN {$t}user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = '".secureINS($l['id_id'])."' AND rel_id = 'u'";
+		return $sql->query($q, 0, 1);
+	}
 
 ?>

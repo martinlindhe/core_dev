@@ -24,15 +24,14 @@
 		$d = !empty($_POST['d']) ? $_POST['d'] : $_GET['d'];
 
 		if (removeRelation($d, $s['id_id']) === true) reloadACT(l('user', 'relations'));
-
-	} else if(!empty($_GET['a']))
+	}
+	else if(!empty($_GET['a']))
 	{
 		$error = acceptRelationRequest($_GET['a'], $s['id_id']);
 		if ($error === true) reloadACT(l('user', 'relations'));
 		errorACT($error, l('user', 'relations'));
 	}
 
-	
 	//Detta är möjligheter att välja hur kompislistan ska sorteras. Funktionen exponeras för stunden inte på citysurf
 	$thisord = 'A';
 	if(!empty($_POST['ord']) && ($_POST['ord'] == 'A' || $_POST['ord'] == 'L' || $_POST['ord'] == 'R' || $_POST['ord'] == 'O')) {
@@ -51,6 +50,7 @@
 		$page = 'alpha';
 		$ord = 'u.u_alias ASC';
 	}
+	
 	$view = false;
 	if(!empty($_GET['key']) && is_numeric($_GET['key']) && $own) {
 		$view = $_GET['key'];
@@ -63,7 +63,7 @@
 			unblockRelation($_GET['del']);
 			errorACT('Nu har du slutat att blockera personen.', l('user', 'relations').'&blocked');
 		}
-		$res = $sql->query("SELECT ".CH." b.main_id, b.friend_id, b.activated_date, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userblock b INNER JOIN {$t}user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = '".secureINS($l['id_id'])."' AND rel_id = 'u'", 0, 1);
+		$res = getBlockedRelations();
 	} else { 
 		$paging = paging(@$_GET['p'], 50);
 		$paging['co'] = $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($s['id_id'])."'");
