@@ -66,16 +66,20 @@
 		$res = getBlockedRelations();
 	} else { 
 		$paging = paging(@$_GET['p'], 50);
-		$paging['co'] = $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($s['id_id'])."'");
-		$res = $sql->query("SELECT ".CH." rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.lastlog_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($s['id_id'])."' ORDER BY $ord LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$paging['co'] = getRelationsCount($s['id_id']);
+		$res = getRelations($s['id_id'], $ord, $paging['slimit'], $paging['limit']);
 	}
 	$is_blocked = $blocked;
 	$page = 'relations';
 
 	require(DESIGN.'head_user.php');
-	if($own && !$blocked) {
-		$paus = $sql->query("SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelquest q INNER JOIN {$t}user u ON u.id_id = q.sender_id AND u.status_id = '1' WHERE q.user_id = '".secureINS($l['id_id'])."' AND q.status_id = '0' ORDER BY q.main_id DESC", 0, 1);
-		$wait = $sql->query("SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelquest q INNER JOIN {$t}user u ON u.id_id = q.user_id AND u.status_id = '1' WHERE q.sender_id = '".secureINS($l['id_id'])."' AND q.status_id = '0' ORDER BY q.main_id DESC", 0, 1);
+	if ($own && !$blocked) {
+		
+		//paus är förfrågningar som andra skickat till dig
+		$paus = getRelationRequestsToMe();
+		
+		//wait är förfrågningar du väntar på svar på
+		$wait = getRelationRequestsFromMe();
 		require("relations_user.php");
 	}
 	$page = 'friends';
