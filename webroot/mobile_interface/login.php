@@ -2,7 +2,7 @@
 	require('config.php');
 
 	if (!empty($_POST['alias']) && !empty($_POST['pass'])) {
-		$user_auth->login('martin', 'test');
+		$user_auth->login($_POST['alias'], $_POST['pass']);
 	}
 
 	require('design_head.php');

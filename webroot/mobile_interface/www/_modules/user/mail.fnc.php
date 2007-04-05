@@ -137,11 +137,13 @@
 		return $sql->query("SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM {$t}userrelation rel RIGHT JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($l['id_id'])."' ORDER BY u.u_alias ASC", 0, 1);
 	}
 
-	function sendMail($_to_name, $_cc_name, $_title, $_text)
+	function sendMail($_to_name, $_cc_name, $_title, $_text, $allowed_html = '')
 	{
 		global $sql, $user, $l, $t;
 		
-		$_text = strip_tags($_text, NRMSTR);
+		$error = '';
+		
+		$_text = strip_tags($_text, $allowed_html);
 		$ins_to = getUserIdFromAlias($_to_name);
 		if (!$ins_to) {
 			$error = 'Felaktig mottagare!';
@@ -170,7 +172,7 @@
 				}
 			}
 		}
-		if ($error) return false;
+		if ($error) return $error;
 		
 		$res = $sql->queryInsert("INSERT INTO {$t}usermail SET
 		user_id = '".$ins_to."',

@@ -2,6 +2,11 @@
 	require('config.php');
 
 	require('design_head.php');
+	
+	/*
+	todo: $user->getuser() bör returnera "raderad användare" om användaren ej finns?
+	
+	*/
 ?>
 
 	DIN MAIL:<br/>
@@ -17,8 +22,13 @@
 	
 	for ($i=0; $i<count($list); $i++) {
 		if ($list[$i]['user_read']) echo '(läst) '; else echo '(oläst )';
-		echo '<a href="mail_read.php?id='.$list[$i]['main_id'].'">'.$list[$i]['sent_ttl'].'</a>';
-		echo ' från '.$user->getuser($list[$i]['sender_id']).'<br/>';
+		$rubrik = $list[$i]['sent_ttl'];
+		if (!$rubrik) $rubrik = '(ingen rubrik)';
+		echo '<a href="mail_read.php?id='.$list[$i]['main_id'].'">'.$rubrik.'</a>';
+		
+		$from_alias = $user->getuser($list[$i]['sender_id']);
+		$from_alias = $from_alias['u_alias'];
+		echo ' från '.$from_alias.'<br/>';
 	}
 	
 	require('design_foot.php');

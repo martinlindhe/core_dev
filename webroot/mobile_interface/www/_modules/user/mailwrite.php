@@ -9,7 +9,7 @@
 
 	if (!empty($_POST['text_html']) && !empty($_POST['ins_to']))
 	{	
-		if (sendMail($_POST['ins_to'], $_POST['ins_cc'], $_POST['ins_ttl'], $_POST['text_html'])) {
+		if (sendMail($_POST['ins_to'], $_POST['ins_cc'], $_POST['ins_ttl'], $_POST['text_html'], NRMSTR)) {
 			popupACT('Meddelande skickat!', '', '', '500');
 		} else {
 			$res = array('sent_ttl' => $_POST['ins_ttl'], 'sent_cmt' => $_POST['text_html'], 'u_alias' => $_POST['ins_to']);
