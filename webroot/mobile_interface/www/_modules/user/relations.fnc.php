@@ -116,10 +116,10 @@
 	/* Removes a relation, or a pending relation request from user $_user_id */
 	function removeRelation($_id, $_user_id)
 	{
-		global $sql, $user, $l;
-
+		global $sql, $user, $l, $t;
+		
 		if (!is_numeric($_id) || !is_numeric($_user_id)) return false;
-
+		
 		$isFriends = areTheyFriends($l['id_id'], $_user_id);
 		if($isFriends) {
 			//Ta bort relation
@@ -134,7 +134,7 @@
 			#$user->get_cache();
 			$user->counterDecrease('rel', $_user_id);
 			$user->counterDecrease('rel', $l['id_id']);
-			//reloadACT(l('user', 'relations'));
+
 			return true;
 		} else {
 			//Ta bort väntande relationsförfrågan
@@ -159,7 +159,6 @@
 			#$user->setRelCount($l['id_id']);
 			#$user->get_cache();
 
-			//reloadACT(l('user', 'relations'));
 			return true;
 		}
 	}

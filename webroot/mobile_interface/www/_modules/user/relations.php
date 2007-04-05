@@ -3,7 +3,7 @@
 
 	if(isset($_GET['create'])) {
 		include('relations_create.php');
-		exit;
+		die;
 	}
 
 	/*
@@ -19,18 +19,17 @@
 	}
 	*/
 
-	if (!empty($_POST['d']) && is_numeric($_POST['d']) || !empty($_GET['d']) && is_numeric($_GET['d'])) {
-		$d = (!empty($_POST['d'])?$_POST['d']:$_GET['d']);
-		removeRelation($d, $s['id_id']);
-	}
+	if (!empty($_POST['d']) || !empty($_GET['d']))
+	{
+		$d = !empty($_POST['d']) ? $_POST['d'] : $_GET['d'];
 
-	if(!empty($_GET['a'])) {
+		if (removeRelation($d, $s['id_id']) === true) reloadACT(l('user', 'relations'));
+
+	} else if(!empty($_GET['a']))
+	{
 		$error = acceptRelationRequest($_GET['a'], $s);
-		if ($error !== true) {
-			errorACT($error, l('user', 'relations'));
-		} else {
-			reloadACT(l('user', 'relations'));
-		}
+		if ($error === true) reloadACT(l('user', 'relations'));
+		errorACT($error, l('user', 'relations'));
 	}
 
 	
