@@ -6,9 +6,6 @@ Steg 1 - att göra:
 		- Cookies?
 		- Javascript?
 
-	* fixa användandet av $user->getuser(), jag trodde den returnerade alias men den returnerar hel array me user info
-
-
 -----------
 I slut-skedet av steg 1:
 	* Optimera html. minimera ner antal onödiga tabbar och whitespace i design_head.php och design_foot.php

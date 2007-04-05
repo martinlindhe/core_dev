@@ -1,11 +1,8 @@
 <?
 	require('config.php');
-
 	require('design_head.php');
 
-	print_r($_SESSION);
-
-
+	//print_r($_SESSION);
 
 	if (!empty($s['id_id'])) {
 		echo '<a href="logout.php">LOGGA UT</a><br/>';
@@ -18,7 +15,7 @@
 
 	inloggad:<br/>
 	<a href="guestbook.php">DIN GÄSTBOK</a> (0 olästa)<br/>
-	<a href="mail.php">DIN MAIL</a>(2 olästa)<br/>
+	<a href="mail.php">DIN MAIL</a>(<?=getUnreadMailCount()?> olästa)<br/>
 	<a href="relations.php">DINA VÄNNER</a>(2 online)<br/>
 	<a href="blocked.php">DINA BLOCKERINGAR</a><br/>
 	<a href="user.php">DIN PROFIL</a><br/>

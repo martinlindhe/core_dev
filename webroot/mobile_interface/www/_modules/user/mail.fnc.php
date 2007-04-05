@@ -104,8 +104,18 @@
 	function getMail($_id)
 	{
 		global $sql, $t;
+		if (!is_numeric($_id)) return false;
 
-		return $sql->queryLine("SELECT * FROM {$t}usermail WHERE main_id = '".secureINS($_id)."' LIMIT 1", 1);
+		return $sql->queryLine("SELECT * FROM {$t}usermail WHERE main_id = ".$_id." LIMIT 1", 1);
+	}
+	
+	function getUnreadMailCount()
+	{
+		global $sql, $user, $l, $t;
+
+		$q = "SELECT COUNT(*) FROM {$t}usermail WHERE user_id = ".$l['id_id']." AND user_read = '0'";
+
+		return $sql->queryResult($q);
 	}
 
 	function mailMarkAsRead($_id)

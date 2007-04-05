@@ -6,6 +6,8 @@
 	$mail = getMail($_GET['id']);
 	if (!$mail) die;
 	
+	mailMarkAsRead($_GET['id']);
+
 	require('design_head.php');
 
 	$from_alias = $user->getuser($mail['sender_id']);
