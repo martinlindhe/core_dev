@@ -42,22 +42,22 @@
 	
 
 	/* Optimization: Doesnt store identical entries if you hit Save button multiple times */
-	function updateInfoField(&$db, $userId, $fieldName, $fieldText)
+	function updateInfoField($fieldName, $fieldText)
 	{
-		global $config;
+		global $db, $session, $config;
 
-		if (!is_numeric($userId)) return false;
+		if (!$session->isAdmin) return false;
 
-		$fieldName = dbAddSlashes($db, trim($fieldName));
-		if (!$fieldName || !$_SESSION['isSuperAdmin']) return false;
+		$fieldName = $db->escape(trim($fieldName));
+		if (!$fieldName) return false;
 
 		$sql = 'SELECT fieldId,fieldText FROM tblInfoFields WHERE fieldName="'.$fieldName.'"';
-		$data = dbOneResult($db, $sql);
-		
+		$data = $db->getOneRow($sql);
+
 		/* Aborts if we are trying to save a exact copy as the last one */
 		if ($data['fieldText'] == $fieldText) return false;
-		
-		$fieldText = dbAddSlashes($db, trim($fieldText));
+
+		$fieldText = $db->escape(trim($fieldText));
 		
 		if ($data['fieldId'])
 		{
@@ -65,14 +65,14 @@
 			{
 				//Stores backup entry in tblInfoFieldsHistory
 				$sql  = 'INSERT INTO tblInfoFieldsHistory (fieldId,fieldText,editedBy,timeEdited) ';
-				$sql .= 'SELECT fieldId,fieldText,'.$userId.' AS editedBy,timeEdited FROM tblInfoFields WHERE fieldId='.$data['fieldId'];
-				dbQuery($db, $sql);
+				$sql .= 'SELECT fieldId,fieldText,'.$session->id.' AS editedBy,timeEdited FROM tblInfoFields WHERE fieldId='.$data['fieldId'];
+				$db->query($sql);
 			}
-			dbQuery($db, 'UPDATE tblInfoFields SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$userId.' WHERE fieldName="'.$fieldName.'"' );
+			$db->query('UPDATE tblInfoFields SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$fieldName.'"');
 		}
 		else
 		{
-			dbQuery($db, 'INSERT INTO tblInfoFields SET fieldName="'.$fieldName.'", fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$userId );
+			$db->query('INSERT INTO tblInfoFields SET fieldName="'.$fieldName.'", fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id);
 		}
 	}
 	
@@ -213,10 +213,10 @@
 				if (isset($_POST['infofield']))
 				{
 					//save changes to database
-					updateInfoField($db, $_SESSION['userId'], $fieldName, $_POST['infofield']);
+					updateInfoField($fieldName, $_POST['infofield']);
 					$text = $_POST['infofield'];
 					unset($_POST['infofield']);	//fixme: unsetta såhär på andra ställen med så dom inte körs flera gånger
-					JS_Alert('Changes saved!');
+					//JS_Alert('Changes saved!');
 				}
 
 				$rows = 6+substr_count($text, "\n");

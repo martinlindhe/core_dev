@@ -1,21 +1,21 @@
 <?
 	require_once('config.php');
 
-	if (!$_SESSION['isAdmin']) {
+	if (!$session->isAdmin) {
 		header('Location: index.php');
 		die;
 	}
 
 	if (!empty($_POST['rule'])) {
-		$ruleId = addAdblockRule($db, $_SESSION['userId'], $_POST['rule'], $_POST['type'], $_POST['sampleurl']);
+		$ruleId = addAdblockRule($_POST['rule'], $_POST['type'], $_POST['sampleurl']);
 		
 		//todo: checkbox "make comment private"
 		require('design_head.php');
 		if (is_numeric($ruleId) && $ruleId) {
-			logEntry($db, 'Adblock rule # '.$ruleId.' created');
+			$db->log('Adblock rule # '.$ruleId.' created');
 			$private = false;
 			if (isset($_POST['commentprivate'])) $private = true;
-			addComment($db, COMMENT_ADBLOCKRULE, $ruleId, $_POST['comment'], $private);
+			addComment(COMMENT_ADBLOCKRULE, $ruleId, $_POST['comment'], $private);
 
 			echo 'Rule <b>'.$_POST['rule'].'</b> added successfully!<br/><br/>';
 			echo '<a href="editrule.php?id='.$ruleId.'">Edit the new rule</a><br/><br/>';

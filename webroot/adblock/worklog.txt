@@ -1,7 +1,6 @@
 todo:
 
 	hög prioritet:
-	- konvertera allt till att använda nya "functions"
 
 	låg prioritet:
 	- ruleset.php: åter-implementera ändring av listlimit ??
@@ -11,6 +10,12 @@ todo:
 
 	
 --------------[[changelog]]------------
+2007.04.08:
+	- konverterat allt (?) till att använda nya "functions"
+	- övergått till nya settings funktionerna
+	- tog bort session ID som parameter från alla funktioner, använder $session->id istället
+
+
 2007.04.04:
 	- konverterat det mesta från HTML till XHTML 1.0
 

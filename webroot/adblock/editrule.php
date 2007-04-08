@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 
-	if ($_SESSION['isAdmin'] && !empty($_GET['remove']) && is_numeric($_GET['remove'])) {
+	if ($session->isAdmin && !empty($_GET['remove']) && is_numeric($_GET['remove'])) {
 		require('design_head.php');
 		
 		if (!isset($_GET['confirmed'])) {
@@ -13,8 +13,8 @@
 <?
 		} else {
 			//remove rule
-			removeAdblockRule($db, $_SESSION['userId'], $_GET['remove']);
-			
+			removeAdblockRule($_GET['remove']);
+
 			echo 'Rule successfully removed!<br/><br/>';
 			echo '<a href="ruleset.php">Return to rules overview</a>';
 		}
@@ -25,23 +25,23 @@
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$ruleId = $_GET['id'];
 
-	if ($_SESSION['isAdmin'] && !empty($_POST['rule']) && !empty($_POST['type']) && isset($_POST['sampleurl'])) {
-		updateAdblockRule($db, $_SESSION['userId'], $ruleId, $_POST['rule'], $_POST['type'], $_POST['sampleurl']);
+	if ($session->isAdmin && !empty($_POST['rule']) && !empty($_POST['type']) && isset($_POST['sampleurl'])) {
+		updateAdblockRule($ruleId, $_POST['rule'], $_POST['type'], $_POST['sampleurl']);
 	}
 		
 	if (!empty($_POST['comment'])) {
 		$private = false;
 		if (!empty($_POST['commentprivate'])) $private = true;
-		addComment($db, COMMENT_ADBLOCKRULE, $ruleId, $_POST['comment'], $private);
+		addComment(COMMENT_ADBLOCKRULE, $ruleId, $_POST['comment'], $private);
 	}
 	
 	/* Delete comments */
-	if ($_SESSION['isAdmin'] && !empty($_GET['deletecomment'])) {
-		deleteComment($db, $_GET['deletecomment']);
+	if ($session->isAdmin && !empty($_GET['deletecomment'])) {
+		deleteComment($_GET['deletecomment']);
 	}
 	
 	$rule = getAdblockRule($ruleId);
-	if (!$_SESSION['isSuperAdmin'] && $rule['deletedBy']) {
+	if (!$session->isAdmin && $rule['deletedBy']) {
 		header('Location: index.php');
 		die;
 	}
@@ -50,14 +50,14 @@
 	
 	if (!$rule || $rule['deletedBy']) {
 	
-		if ($rule['deletedBy']) echo '<span style="background-color:#FF6666">Error:</span> This rule has been deleted by '.getUserName($db, $rule['deletedBy']).' at '.$rule['timeDeleted'].'.<br/><br/>';
+		if ($rule['deletedBy']) echo '<span style="background-color:#FF6666">Error:</span> This rule has been deleted by '.$db->getUserName($rule['deletedBy']).' at '.$rule['timeDeleted'].'.<br/><br/>';
 		if (!$rule) echo '<span style="background-color:#FF6666">Error:</span> No such rule exists<br/><br/>';
 
 		require('design_foot.php');
 		die;
 	}
 	
-	if ($_SESSION['isAdmin']) {
+	if ($session->isAdmin) {
 ?>
 Edit rule # <?=$ruleId?>:<br/><br/>
 <form method="post" action="<?=$_SERVER['PHP_SELF'].'?id='.$ruleId?>" name="editrules">
@@ -101,7 +101,7 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 		echo '<br/><br/>';
 	}
 
-	if ($_SESSION['isAdmin']) {
+	if ($session->isAdmin) {
 		$list = getComments(COMMENT_ADBLOCKRULE, $ruleId, true);	//get private comments
 	} else {
 		$list = getComments(COMMENT_ADBLOCKRULE, $ruleId, false);
@@ -121,7 +121,7 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 			else $name = 'Unregistered';
 			echo '<span style="color: #606060;"><i>Written by '.$name;
 			echo ' at '.$list[$i]['timeCreated'].'</i></span>';
-			if ($_SESSION['isAdmin']) {
+			if ($session->isAdmin) {
 				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$ruleId.'&amp;deletecomment='.$list[$i]['commentId'].'"><img src="gfx/delete.png" width="16" height="16" title="Delete comment" alt="Delete comment"/></a>';
 			}
 			if ($list[$i]['commentPrivate']) echo '</span>';

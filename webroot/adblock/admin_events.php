@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 
-	if (!$_SESSION['isSuperAdmin']) {
+	if (!$session->isAdmin) {
 		header('Location: '.$config['start_page']);
 		die;
 	}

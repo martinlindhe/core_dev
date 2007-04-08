@@ -15,20 +15,6 @@
 	include_once('functions_adblock.php');
 	include_once('functions_comments.php');	//todo: gör en klass av detta
 
-
-	/* Include used function files */
-	//include_once('../site_functions/functions_settings.php');
-
-
-
-/*
-	include_once($config['path_functions'].'functions_time.php');
-	include_once($config['path_functions'].'functions_geoip.php');
-	
-	include_once($config['path_functions'].'functions_files.php');		//for sendTextFile() in download.php
-	include_once($config['path_functions'].'functions_misc.php');
-*/
-
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbAdblock';

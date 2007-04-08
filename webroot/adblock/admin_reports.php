@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 
-	if (!$_SESSION['isAdmin']) {
+	if (!$session->isAdmin) {
 		header('Location: index.php');
 		die;
 	}
@@ -9,11 +9,11 @@
 	require('design_head.php');
 
 	if (count($_POST)) {
-		$list = getProblemSites($db);
+		$list = getProblemSites();
 		$remove_cnt = 0;
 		for ($i=0; $i<count($list); $i++) {
 			if (!empty($_POST[ 'remove_'.$list[$i]['siteId'] ])) {
-				removeProblemSite($db, $_SESSION['userId'], $list[$i]['siteId']);
+				removeProblemSite($list[$i]['siteId']);
 				$remove_cnt++;
 			}
 		}

@@ -1,38 +1,44 @@
 <?
 
-	function addAdblockRule(&$db, $userId, $ruleText, $ruleType, $sampleUrl)
+	function addAdblockRule($ruleText, $ruleType, $sampleUrl)
 	{
-		if (!is_numeric($userId) || !is_numeric($ruleType)) return false;
+		global $db, $session;
 
-		$ruleText = dbAddSlashes($db, strip_tags(trim($ruleText)));
-		$sampleUrl = dbAddSlashes($db, strip_tags(trim($sampleUrl)));
+		if (!$session->id || !is_numeric($userId) || !is_numeric($ruleType)) return false;
+
+		$ruleText = $db->escape(strip_tags(trim($ruleText)));
+		$sampleUrl = $db->escape(strip_tags(trim($sampleUrl)));
 		
-		$exists = dbOneResultItem($db, 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0 AND ruleText="'.$ruleText.'"');
+		$exists = $db->getOneItem('SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0 AND ruleText="'.$ruleText.'"');
 		if ($exists) {
 			return 'This rule already exists!';
 		}	
 
-		dbQuery($db, 'INSERT INTO tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',creatorId='.$userId.',timeCreated=NOW()' );
+		$db->query('INSERT INTO tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',creatorId='.$session->id.',timeCreated=NOW()' );
 
-		return $db['insert_id'];
-	}
-	
-	function updateAdblockRule(&$db, $userId, $ruleId, $ruleText, $ruleType, $sampleUrl)
-	{
-		if (!is_numeric($ruleId) || !is_numeric($ruleType)) return false;
-		
-		$ruleText = dbAddSlashes($db, strip_tags(trim($ruleText)));
-		$sampleUrl = dbAddSlashes($db, strip_tags(trim($sampleUrl)));
-
-		dbQuery($db, 'UPDATE tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',editorId='.$userId.',timeEdited=NOW() WHERE ruleId='.$ruleId);
+		return $db->insert_id;
 	}
 
-	function removeAdblockRule(&$db, $userId, $ruleId)
+	function updateAdblockRule($ruleId, $ruleText, $ruleType, $sampleUrl)
 	{
-		if (!is_numeric($userId) || !is_numeric($ruleId)) return false;
+		global $db, $session;
+
+		if (!$session->id || !is_numeric($ruleId) || !is_numeric($ruleType)) return false;
 		
-		dbQuery($db, 'UPDATE tblAdblockRules SET deletedBy='.$userId.',timeDeleted=NOW() WHERE ruleId='.$ruleId);
-		dbQuery($db, 'UPDATE tblComments SET deletedBy='.$userId.',timeDeleted=NOW() WHERE ownerId='.$ruleId.' AND commentType='.COMMENT_ADBLOCKRULE);
+		$ruleText = $db->escape(strip_tags(trim($ruleText)));
+		$sampleUrl = $db->escape(strip_tags(trim($sampleUrl)));
+
+		$db->query('UPDATE tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',editorId='.$session->id.',timeEdited=NOW() WHERE ruleId='.$ruleId);
+	}
+
+	function removeAdblockRule($ruleId)
+	{
+		global $db, $session;
+
+		if (!$session->id || !is_numeric($ruleId)) return false;
+		
+		$db->query('UPDATE tblAdblockRules SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE ruleId='.$ruleId);
+		$db->query('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE ownerId='.$ruleId.' AND commentType='.COMMENT_ADBLOCKRULE);
 	}
 	
 	/* Return a row of data about $ruleId */
@@ -119,19 +125,23 @@
 	
 	
 	/* Return the number of rules added in database the last X days */
-	function getAdblockNewRuleCount(&$db, $days)
+	function getAdblockNewRuleCount($days)
 	{
+		global $db;
+
 		if (!is_numeric($days)) return false;
 		
 		$sql = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0 AND timeCreated>'. (time()-($days*24*3600));
-		return dbOneResultItem($db, $sql);
+		return $db->getOneItem($sql);
 	}
 	
 	/* Returns a list of rules from the db. $types looks like this: "1,2,3" */
 	// no types = get full list
-	function searchAdblockRules(&$db, $searchword, $types='', $page=0, $limit=10, $sortByTime=false)
+	function searchAdblockRules($searchword, $types='', $page=0, $limit=10, $sortByTime=false)
 	{
-		$searchword = dbAddSlashes($db, strip_tags($searchword));
+		global $db;
+
+		$searchword = $db->escape(strip_tags($searchword));
 
 		$types_sql = '';
 		if ($types) {
@@ -163,38 +173,44 @@
 			$sql .= ' ORDER BY ruleText ASC'.$limit_sql;		//returnerar alfabetiskt, a-z
 		}
 
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
-	
-	function searchAdblockRuleCount(&$db, $searchword)
+
+	function searchAdblockRuleCount($searchword)
 	{
-		$searchword = dbAddSlashes($db, strip_tags($searchword));
+		global $db;
+
+		$searchword = $db->escape($db, strip_tags($searchword));
 		$sql = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
 		
-		return dbOneResultItem($db, $sql);
+		return $db-getOneItem($sql);
 	}
 
 	
 	
 
 	//type being 1=site has ads, 2=site is broken by blocking rules
-	function addProblemSite(&$db, $url, $type, $comment)
+	function addProblemSite($url, $type, $comment)
 	{
+		global $db, $session;
+
 		if (!is_numeric($type)) return false;
 
-		$url = dbAddSlashes($db, trim($url));
-		$comment = dbAddSlashes($db, trim($comment));
+		$url = $db->escape(trim($url));
+		$comment = $db->escape(trim($comment));
 
-		dbQuery($db, 'INSERT INTO tblProblemSites SET url="'.$url.'",type='.$type.',comment="'.$comment.'",userId='.$_SESSION['userId'].',userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).',timeAdded='.time() );
-		
-		return $db['insert_id'];
+		$db->query('INSERT INTO tblProblemSites SET url="'.$url.'",type='.$type.',comment="'.$comment.'",userId='.$session->id.',userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).',timeCreated=NOW()');
+
+		return $db->insert_id;
 	}
 	
-	function removeProblemSite(&$db, $userId, $siteId)
+	function removeProblemSite($siteId)
 	{
-		if (!is_numeric($siteId)) return false;
+		global $db, $session;
+
+		if (!$session->id || !is_numeric($siteId)) return false;
 		
-		dbQuery($db, 'UPDATE tblProblemSites SET deletedBy='.$userId.',timeDeleted=NOW() WHERE siteId='.$siteId);
+		$db->query('UPDATE tblProblemSites SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE siteId='.$siteId);
 	}
 	
 	/* Return list of problem sites, oldest first */
@@ -232,7 +248,6 @@
 		$sql .= 'ORDER BY t1.timeCreated DESC LIMIT 0,'.$cnt;
 		
 		return $db->getArray($sql);
-
 	}
 
 ?>

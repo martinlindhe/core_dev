@@ -12,43 +12,50 @@
 	define('COMMENT_IP_RANGE',					151);	//används av AI trackern för att kommentera IP ranges
 
 
-	function addComment(&$db, $commentType, $ownerId, $commentText, $privateComment=false)
+	function addComment($commentType, $ownerId, $commentText, $privateComment=false)
 	{
-		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
-		$commentText = dbAddSlashes($db, htmlspecialchars($commentText));
+		global $db, $session;
+
+		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
+		$commentText = $db->escape(htmlspecialchars($commentText));
 
 		if ($privateComment) $private = 1;
 		else $private = 0;
 
-		$sql = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$_SESSION['userId'].', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$commentType.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
-		dbQuery($db, $sql);
+		$sql = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$commentType.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+		$db->query($sql);
 	}
 	
-	function updateComment(&$db, $commentType, $ownerId, $commentId, $commentText)
+	function updateComment($commentType, $ownerId, $commentId, $commentText)
 	{
-		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
-		$commentText = dbAddSlashes($db, htmlspecialchars($commentText));
+		global $db, $session;
+
+		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
+		$commentText = $db->escape(htmlspecialchars($commentText));
 
 		$sql  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).' ';
-		$sql .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$_SESSION['userId'];
+		$sql .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$session->id;
 
-		dbQuery($db, $sql);
+		$db->query($sql);
 	}
 	
-	function deleteComment(&$db, $commentId)
+	function deleteComment($commentId)
 	{
-		if (!is_numeric($commentId)) return false;
-		
-		dbQuery($db, 'UPDATE tblComments SET deletedBy='.$_SESSION['userId'].',timeDeleted=NOW() WHERE commentId='.$commentId);
+		global $db;
+
+		if (!$session->id || !is_numeric($commentId)) return false;
+
+		$db->query('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentId='.$commentId);
 	}
 	
 	/* Deletes all comments for this commentType & ownerId */
-	function deleteComments(&$db, $commentType, $ownerId)
+	function deleteComments($commentType, $ownerId)
 	{
-		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
+		global $db, $session;
+		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
 		
 		$sql = 'DELETE FROM tblComments WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
-		dbQuery($db, $sql);
+		$db->query($sql);
 	}
 
 	function getComments($commentType, $ownerId, $privateComments=false)
@@ -69,8 +76,10 @@
 	}
 
 	/* returns the last comment posted for $ownerId object. useful to retrieve COMMENT_FILE_DESC where max 1 comment is posted per object */
-	function getLastComment(&$db, $commentType, $ownerId, $privateComments=false)
+	function getLastComment($commentType, $ownerId, $privateComments=false)
 	{
+		global $db;
+
 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return false;
 
 		$sql  = 'SELECT * FROM tblComments '.
@@ -82,7 +91,7 @@
 		$sql .=	' ORDER BY timeCreated DESC';
 		$sql .= ' LIMIT 0,1';
 
-		return dbOneResult($db, $sql);
+		return $db->getOneRow($sql);
 	}
 	
 
