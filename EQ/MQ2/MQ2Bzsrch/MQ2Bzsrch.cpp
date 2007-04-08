@@ -533,7 +533,7 @@ VOID bzpc(PSPAWNINFO pChar, PCHAR szLine)
     if (pg_Item) memset(pg_Item, 0, sizeof(ITEMINFO));
     DebugSpewAlways("id = %d, name = %s\n", pc.id, pc.name);
     // this opcode is in CProgSelWnd__WndNotification
-    send_message(EQADDR_GWORLD, EQ_BAZAARSEARCHCREATE, &pc, sizeof(pc), TRUE);
+	 SendEQMessage(EQ_BAZAARSEARCHCREATE, &pc, sizeof(pc));
 } 
 
 
@@ -547,7 +547,8 @@ VOID BzSrchMe(PSPAWNINFO pChar, PCHAR szLine)
 
    // clear out the old list or the new entries will be
    // added to them
-   class CListWnd *ptr = *(class CListWnd **) ((char *)pBazaarSearchWnd+0x3ce8);
+   // this offset is in doQuery and SortItemList
+   class CListWnd *ptr = *(class CListWnd **) ((char *)pBazaarSearchWnd+0x3d08);
    ptr->DeleteAll();
 
 
@@ -711,7 +712,7 @@ VOID BzSrchMe(PSPAWNINFO pChar, PCHAR szLine)
 
    BzCount = 0;
    BzDone = 0;
-   send_message(EQADDR_GWORLD, EQ_BAZAARSEARCHME, &bsrp, sizeof(bsrp), TRUE);
+	SendEQMessage(EQ_BAZAARSEARCHME, &bsrp, sizeof(bsrp));
    return;
 
 error_out:
