@@ -5,6 +5,7 @@ todo hi prio:
 	#3: åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 	
 todo buggfix/mindre features:
+	* show_band.php: kunna ändra bandnamn
 	* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
 	* edit_record.php: kunna editera recordInfo
 	* add_single_lyric.php: integrera i add_lyric.php

@@ -1,3 +1,5 @@
+<br/>
+<br/>
 <?
 	if (!$session->id) {
 		echo '<div id="loginmenu">';
