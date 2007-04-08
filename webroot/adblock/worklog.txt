@@ -1,6 +1,8 @@
 todo:
 
 	hög prioritet:
+	- en sida wiki.php?View:Help, istället för help.php, about.php, contribute.php
+		
 
 	låg prioritet:
 	- ruleset.php: åter-implementera ändring av listlimit ??

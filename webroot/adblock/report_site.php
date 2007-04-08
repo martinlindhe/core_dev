@@ -32,8 +32,10 @@ we will look into this site as soon as possible!<br/><br/>
 			Site address:<br/>
 			<input type="text" name="site" size="86"/><br/>
 			<br/>
-			<input type="radio" name="type" value="1"/>Site contains advertisement &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-			<input type="radio" name="type" value="2"/>Blocking rules breaks the site<br/><br/><br/>
+			<input type="radio" name="type" id="radio1" value="1"/>
+			<label for="radio1">Site contains advertisement</label> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+			<input type="radio" name="type" id="radio2" value="2"/>
+			<label for="radio2">Blocking rules breaks the site</label><br/><br/><br/>
 			Comments (optional):<br/>
 			<textarea name="comment" rows="7" cols="84"></textarea><br/><br/>
 			<input type="submit" value="Report site"/>

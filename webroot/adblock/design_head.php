@@ -42,16 +42,11 @@
 	</ul>
 </div>
 
+<div id="middle">
 <?
 if (!$session->id) {
 ?>
-<div id="loginmenu">
-<?
-	$session->showLoginForm();
-?>
-</div>
+<div id="loginmenu"><? $session->showLoginForm(); ?></div>
 <?
 	}
 ?>
-
-<div id="middle">

@@ -45,9 +45,10 @@
 		<br/>
 		Comment:<br/>
 		<textarea name="comment" rows="8" cols="84"></textarea><br/>
-		<input type="checkbox" name="commentprivate"/>Make this comment private<br/>
+		<input type="checkbox" name="commentprivate" id="commentprivate"/>
+		<label for="commentprivate">Make this comment private</label><br/>
 		<br/>
-	
+
 		Type of rule:<br/>
 		<select name="type">
 			<option value="0">Unknown &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</option>
