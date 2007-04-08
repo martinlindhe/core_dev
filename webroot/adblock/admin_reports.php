@@ -20,7 +20,7 @@
 		if ($remove_cnt) JS_Alert($remove_cnt.' reported sites removed!');
 	}
 
-	$list = getProblemSites($db);
+	$list = getProblemSites();
 ?>
 List of all current reported sites in database, oldest first (<?=count($list)?> entries):<br/>
 <br/>

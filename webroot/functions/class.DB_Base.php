@@ -9,6 +9,11 @@
 	todo: rename GetArray() till Array() ? eller är det för confusing med array() datatyp ?
 */
 
+define('LOGLEVEL_ALL', 0);
+define('LOGLEVEL_NOTICE', 1);
+define('LOGLEVEL_WARNING', 2);
+define('LOGLEVEL_ERROR', 3);
+
 abstract class DB_Base
 {
 	/****************************************************/
@@ -158,22 +163,36 @@ abstract class DB_Base
 	}
 	
 	/* Writes a log entry to tblLogs */
-	function log($str)
+	function log($str, $entryLevel = 0)
 	{
 		global $session;
-		
+		if (!is_numeric($entryLevel)) return false;
+
 		$enc_str = $this->escape($str);
 		
 		echo '<b>LOG: '.$str.'</b><br/>';
 
 		if ($session) {
-			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
+			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
 		} else {
 			echo 'WARNING - CANNOT LOG with session info!<br/>';
-			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId=0,userIP=0');
+			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId=0,userIP=0');
 		}
 	}
-	
+
+	/* Gets all log entries */
+	function getLogEntries($entryLevel = 0)
+	{
+		global $session;
+		if (!$session->id || !is_numeric($entryLevel)) return false;
+
+		if ($entryLevel) {
+			return $this->getArray('SELECT * FROM tblLogs WHERE entryLevel <= '.$entryLevel.' ORDER BY timeCreated DESC');
+		} else {
+			return $this->getArray('SELECT * FROM tblLogs ORDER BY timeCreated DESC');
+		}
+	}
+
 	/* Looks up a username by id */
 	function getUserName($_id)
 	{

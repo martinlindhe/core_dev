@@ -198,8 +198,10 @@
 	}
 	
 	/* Return list of problem sites, oldest first */
-	function getProblemSites(&$db)
+	function getProblemSites()
 	{
+		global $db;
+
 		$sql  = 'SELECT t1.*,t2.userName,t3.ci ';
 		$sql .= 'FROM tblProblemSites AS t1 ';
 		$sql .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
@@ -207,7 +209,7 @@
 		$sql .= 'WHERE t1.deletedBy=0 ';
 		$sql .= 'ORDER BY t1.timeCreated ASC';
 
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
 	
 	/* Return number of items in problem site list */

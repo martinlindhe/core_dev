@@ -1,4 +1,9 @@
 <?
+	$config['url_rewrite_length'] = 50;
+	$config['url_rewrite_redirfile'] = '';
+	
+
+
 	function formatUserInputText($text, $convert_html = true)
 	{
 		global $config;
