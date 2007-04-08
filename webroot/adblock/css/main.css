@@ -27,7 +27,6 @@ img {
 	text-align: left;
 	color: #777;
 	padding-right: 40px;
-	z-index: 3;
 }
 #left-bg {
 	position: absolute;
@@ -36,7 +35,6 @@ img {
 	background-color: #F1F1C9;
 	width: 200px;
 	height: 100%;
-	z-index: 2;
 }
 #left-sep {
 	position: absolute;
@@ -50,17 +48,10 @@ img {
 	border-right: 1px solid #f5f5f5;
 }
 #footer {
-	position: absolute;
-	right: 0px;
-	bottom: 0px;
-	width: 100%;
 	font-size: 12px;
 	color: #777;
-	background-color: #f0f0f0;
-	z-index: 4;	/*över middle */
 }
 #header {
-	z-index: 10;
 	background-color: #F7F7DD;
 	height: 30px;
 	border-bottom: 1px dashed #000;
@@ -102,14 +93,6 @@ img {
 	font-size: 14px;
 	z-index: 2;
 }
-#loginmenu {
-	position: absolute;
-	left: 20px;
-	top: 140px;
-	width: 160px;
-	font-size: 14px;
-	z-index: 2;
-}
 .side-nav {
 	list-style: none;
 	margin: 0;
@@ -139,17 +122,6 @@ img {
 	font-weight: normal;
 	background-color: #CCCCCC;
 }
-
-
-#debug_layer {
-	overflow: auto;
-	padding: 4px 4px 4px 4px;
-	width: 99%;
-	border: #000000 1px solid;
-	color: #000;
-	background-color:#E0E0E0;
-}
-
 
 /* objects are forum posts, reported sites etc */
 .objectNormal {

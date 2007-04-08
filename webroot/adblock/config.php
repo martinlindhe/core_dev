@@ -29,18 +29,7 @@
 	$session = new Session($config['session']);
 
 	$config['start_page'] = 'index.php';
-
-
-
 	$config['infofield']['allow_html'] = true;
 
-/*
-	include_once($config['path_functions'].'locales_standard.php');	
-	$config['language'] = 'en';
-	$config['text'] = $config['text'][ $config['language'] ];
-*/
 	$config['adblock']['cachepath'] = 'cache/';
-
-
-	/* SITE CONFIGURATION END */
 ?>

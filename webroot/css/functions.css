@@ -142,3 +142,12 @@ input.button:focus {
 	-moz-border-radius-topleft:15px;
 	-moz-border-radius-topright:15px;
 }
+
+.event_log_header {
+	color: #000;
+	background-color: #aaeeaa;
+}
+.event_log_author {
+	color: #000;
+	background-color: #ee8888;
+}
