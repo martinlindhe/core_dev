@@ -1,12 +1,10 @@
 <?
 	require_once('config.php');
 
-	if (isset($_POST['l']) && is_numeric($_POST['l'])) { //l=limit, number of items per page
-		$_SESSION['listlimit'] = $_POST['l'];
-	}
-
 	$page = 1;
 	if (!empty($_GET['p']) && is_numeric($_GET['p'])) $page = $_GET['p'];
+
+	$l = 25;
 
 	//s=search phrase, search the adblock rules
 	$search = '';
@@ -19,20 +17,14 @@
 
 	if ($search || !empty($_POST['t0']) || !empty($_POST['t1']) || !empty($_POST['t2']) || !empty($_POST['t3'])) {
 		@$types = $_POST['t0'].','.$_POST['t1'].','.$_POST['t2'].','.$_POST['t3'];
-		$list = searchAdblockRules($db, $search, $types, $page, $_SESSION['listlimit'], $sortByTime);
+		$list = searchAdblockRules($db, $search, $types, $page, $l, $sortByTime);
 		$totRules = searchAdblockRuleCount($db, $search);	//fixme: count ignorerar $types
 	} else {
-		$list = getAdblockRules('', $page, $_SESSION['listlimit']);
+		$list = getAdblockRules('', $page, $l);
 		$totRules = getAdblockRulesCount();
 	}
-
-	if (!$_SESSION['listlimit']) {
-		$totPages = 1;
-	}
-	else {
-		$totPages = round($totRules / $_SESSION['listlimit']+0.5); // round to closest whole number
-	}
-	$l = $_SESSION['listlimit'];
+	
+	$totPages = round($totRules / $l+0.5); // round to closest whole number
 
 	require('design_head.php');
 ?>

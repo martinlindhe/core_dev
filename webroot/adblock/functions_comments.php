@@ -51,8 +51,10 @@
 		dbQuery($db, $sql);
 	}
 
-	function getComments(&$db, $commentType, $ownerId, $privateComments=false)
+	function getComments($commentType, $ownerId, $privateComments=false)
 	{
+		global $db;
+
 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
 
 		$sql  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 '.
@@ -63,7 +65,7 @@
 			$sql .= ' AND commentPrivate=0';
 
 		$sql .=	' ORDER BY timeCreated DESC';
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
 
 	/* returns the last comment posted for $ownerId object. useful to retrieve COMMENT_FILE_DESC where max 1 comment is posted per object */
@@ -84,13 +86,15 @@
 	}
 	
 
-	function getCommentsCount(&$db, $commentType, $ownerId)
+	function getCommentsCount($commentType, $ownerId)
 	{
+		global $db;
+
 		if (!is_numeric($commentType) || !is_numeric($ownerId)) return 0;
 
 		$sql =	'SELECT COUNT(commentId) FROM tblComments '.
 						'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
-		return dbOneResultItem($db, $sql);
+		return $db->getOneItem($sql);
 	}
 
 ?>

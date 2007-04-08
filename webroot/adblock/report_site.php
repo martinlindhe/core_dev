@@ -42,7 +42,7 @@ we will look into this site as soon as possible!<br/><br/>
 </form>
 <br/>
 <?
-	echo getInfoField($db, 'page_report_bottom');
+	echo getInfoField('page_report_bottom');
 ?>
 <script type="text/javascript">
 document.reportform.site.focus();

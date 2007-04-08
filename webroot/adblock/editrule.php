@@ -102,9 +102,9 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 	}
 
 	if ($_SESSION['isAdmin']) {
-		$list = getComments($db, COMMENT_ADBLOCKRULE, $ruleId, true);	//get private comments
+		$list = getComments(COMMENT_ADBLOCKRULE, $ruleId, true);	//get private comments
 	} else {
-		$list = getComments($db, COMMENT_ADBLOCKRULE, $ruleId, false);
+		$list = getComments(COMMENT_ADBLOCKRULE, $ruleId, false);
 	}
 
 	if (count($list)) {
