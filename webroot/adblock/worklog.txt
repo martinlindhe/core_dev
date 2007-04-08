@@ -1,8 +1,7 @@
 todo:
 
 	hög prioritet:
-	- en sida wiki.php?View:Help, istället för help.php, about.php, contribute.php
-		
+	
 
 	låg prioritet:
 	- ruleset.php: åter-implementera ändring av listlimit ??
@@ -16,6 +15,7 @@ todo:
 	- konverterat allt (?) till att använda nya "functions"
 	- övergått till nya settings funktionerna
 	- tog bort session ID som parameter från alla funktioner, använder $session->id istället
+	- gjorde en sida wiki.php?View:Help, istället för help.php, about.php, contribute.php, subscribe.php
 
 
 2007.04.04:

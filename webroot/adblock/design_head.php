@@ -16,15 +16,15 @@
 		<a href="index.php"><img src="gfx/logo.png" alt="Filterset Database"/></a>
 	</div>
 	<div id="header-items">
-		<a href="contribute.php">Contribute</a>
-		<a href="about.php">About</a>
-		<a href="help.php">Help</a>
+		<a href="wiki.php?View:Contribute">Contribute</a>
+		<a href="wiki.php?View:About">About</a>
+		<a href="wiki.php?View:Help">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
 	<ul class="side-nav">
 		<li><strong><a href="index.php">Home</a></strong></li>
-		<li><a href="subscribe.php">Subscribe</a></li>
+		<li><a href="wiki.php?View:Subscribe">Subscribe</a></li>
 		<li><a href="download.php">Download</a></li>
 		<li><a href="recent.php">Recent changes</a></li>
 <?
@@ -43,10 +43,3 @@
 </div>
 
 <div id="middle">
-<?
-if (!$session->id) {
-?>
-<div id="loginmenu"><? $session->showLoginForm(); ?></div>
-<?
-	}
-?>

@@ -41,7 +41,7 @@
 	
 	function deleteComment($commentId)
 	{
-		global $db;
+		global $db, $session;
 
 		if (!$session->id || !is_numeric($commentId)) return false;
 
@@ -94,7 +94,6 @@
 		return $db->getOneRow($sql);
 	}
 	
-
 	function getCommentsCount($commentType, $ownerId)
 	{
 		global $db;
@@ -105,5 +104,4 @@
 						'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
 		return $db->getOneItem($sql);
 	}
-
 ?>

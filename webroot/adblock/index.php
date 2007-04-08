@@ -3,7 +3,7 @@
 
 	require('design_head.php');
 
-	echo getInfoField('page_adblock');
+	echo getInfoField('Start page');
 
 	require('design_foot.php');
 ?>
