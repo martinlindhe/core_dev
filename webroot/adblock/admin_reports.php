@@ -1,12 +1,12 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
 	if (!$_SESSION['isAdmin']) {
 		header('Location: index.php');
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
 	if (count($_POST)) {
 		$list = getProblemSites($db);
@@ -81,5 +81,5 @@ List of all current reported sites in database, oldest first (<?=count($list)?> 
 </form>
 
 <?
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

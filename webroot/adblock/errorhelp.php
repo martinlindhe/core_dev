@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (empty($_GET['error'])) {
 		header('Location: '.$config['start_page']);
@@ -8,9 +8,9 @@
 
 	$error = htmlentities($_GET['error']);
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_errorhelp');
+	echo getInfoField('page_errorhelp');
 	
 	switch ($error) {
 		case 'session timeout':
@@ -26,5 +26,5 @@
 			break;
 	}
 	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

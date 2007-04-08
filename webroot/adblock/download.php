@@ -1,5 +1,5 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
 	define('CACHE_AGE', 3600*1);		//time before disk cache expires
 
@@ -58,7 +58,7 @@
 
 		if ($lastchanged < time()-(CACHE_AGE))
 		{
-			$list = getAdblockRules($db, $types);
+			$list = getAdblockRules($types);
 
 			$fp = fopen($cache_file, 'w');
 			fputs($fp, "[Adblock]\n");
@@ -77,11 +77,11 @@
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
-	$rules = getAdblockAllRulesCount($db);
+	$rules = getAdblockAllRulesCount();
 	
-	echo getInfoField($db, 'page_download').'<br/>';
+	echo getInfoField('page_download').'<br/>';
 	
 ?>
 <script type="text/javascript">
@@ -106,5 +106,5 @@ function checkDLform() {
 </table>
 </form>
 <?
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

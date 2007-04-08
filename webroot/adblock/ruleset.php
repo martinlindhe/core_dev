@@ -1,5 +1,5 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
 	if (isset($_POST['l']) && is_numeric($_POST['l'])) { //l=limit, number of items per page
 		$_SESSION['listlimit'] = $_POST['l'];
@@ -22,8 +22,8 @@
 		$list = searchAdblockRules($db, $search, $types, $page, $_SESSION['listlimit'], $sortByTime);
 		$totRules = searchAdblockRuleCount($db, $search);	//fixme: count ignorerar $types
 	} else {
-		$list = getAdblockRules($db, '', $page, $_SESSION['listlimit']);
-		$totRules = getAdblockRulesCount($db);
+		$list = getAdblockRules('', $page, $_SESSION['listlimit']);
+		$totRules = getAdblockRulesCount();
 	}
 
 	if (!$_SESSION['listlimit']) {
@@ -34,12 +34,12 @@
 	}
 	$l = $_SESSION['listlimit'];
 
-	include('design_head.php');
+	require('design_head.php');
 ?>
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 	<tr><td class="centermenu" valign="bottom">
 <?
-	echo getInfoField($db, 'page_ruleset');
+	echo getInfoField('page_ruleset');
 
 	if ($search) {
 		echo 'Search results for: "'.$search.'"<br/><br/>';
@@ -140,5 +140,5 @@
 	}
 	echo '</table>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

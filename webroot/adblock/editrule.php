@@ -1,8 +1,8 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
 	if ($_SESSION['isAdmin'] && !empty($_GET['remove']) && is_numeric($_GET['remove'])) {
-		include('design_head.php');
+		require('design_head.php');
 		
 		if (!isset($_GET['confirmed'])) {
 ?>
@@ -18,7 +18,7 @@
 			echo 'Rule successfully removed!<br/><br/>';
 			echo '<a href="ruleset.php">Return to rules overview</a>';
 		}
-		include('design_foot.php');
+		require('design_foot.php');
 		die;
 	}
 
@@ -40,20 +40,20 @@
 		deleteComment($db, $_GET['deletecomment']);
 	}
 	
-	$rule = getAdblockRule($db, $ruleId);
+	$rule = getAdblockRule($ruleId);
 	if (!$_SESSION['isSuperAdmin'] && $rule['deletedBy']) {
 		header('Location: index.php');
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 	
 	if (!$rule || $rule['deletedBy']) {
 	
 		if ($rule['deletedBy']) echo '<span style="background-color:#FF6666">Error:</span> This rule has been deleted by '.getUserName($db, $rule['deletedBy']).' at '.$rule['timeDeleted'].'.<br/><br/>';
 		if (!$rule) echo '<span style="background-color:#FF6666">Error:</span> No such rule exists<br/><br/>';
 
-		include('design_foot.php');
+		require('design_foot.php');
 		die;
 	}
 	
@@ -142,5 +142,5 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 document.ruleAddComment.comment.focus();
 </script>
 <?
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

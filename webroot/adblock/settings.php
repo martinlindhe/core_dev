@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 	
 	if (!$_SESSION['userId']) {
 		header('Location: index.php');
@@ -10,9 +10,9 @@
 		saveUserSetting($db, $_SESSION['userId'], 'email', $_POST['email']);
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_settings');
+	echo getInfoField('page_settings');
 
 	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 
@@ -28,5 +28,5 @@
 		echo 'Mode: Administrator<br/>';
 	}
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

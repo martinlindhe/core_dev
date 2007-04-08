@@ -1,9 +1,9 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_subscribe');
+	echo getInfoField('page_subscribe');
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

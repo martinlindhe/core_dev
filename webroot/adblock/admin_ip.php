@@ -3,14 +3,14 @@
 	if (empty($_GET['ip'])) $ip = '';
 	else $ip = $_GET['ip'];
 
-	include('include_all.php');
+	require_once('config.php');
 
 	if (!$_SESSION['isSuperAdmin']) {
 		header('Location: '.$config['start_page']);
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
 	echo 'admin IP - query IP information<br/><br/>';
 
@@ -39,5 +39,5 @@
 	echo '<input type="submit" value="query ip" class="button"/>';
 	echo '</form>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

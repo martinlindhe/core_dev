@@ -36,8 +36,10 @@
 	}
 	
 	/* Return a row of data about $ruleId */
-	function getAdblockRule(&$db, $ruleId)
+	function getAdblockRule($ruleId)
 	{
+		global $db;
+
 		if (!is_numeric($ruleId)) return false;
 		
 		$sql  = 'SELECT t1.*,t2.userName AS creatorName,t3.userName AS editorName FROM tblAdblockRules AS t1 ';
@@ -45,13 +47,15 @@
 		$sql .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
 		$sql .= 'WHERE t1.ruleId='.$ruleId;
 		
-		return dbOneResult($db, $sql);
+		return $db->getOneRow($sql);
 	}
 	
 	/* Returns a list of rules from the db. $types looks like this: "1,2,3" */
 	// no types = get full list
-	function getAdblockRules(&$db, $types='', $page=0, $limit=10)
+	function getAdblockRules($types='', $page=0, $limit=10)
 	{
+		global $db;
+
 		$types_sql = '';
 		if ($types) {
 		
@@ -77,23 +81,26 @@
 			$sql = 'SELECT * FROM tblAdblockRules WHERE deletedBy=0 ORDER BY ruleText ASC'.$limit_sql;
 		}
 		
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
 	
 	/* Returns the total number of rules in database */
-	function getAdblockRulesCount(&$db)
+	function getAdblockRulesCount()
 	{
-		return dbOneResultItem($db, 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0');
+		global $db;
+
+		return $db->getOneItem('SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0');
 	}
 
-	function getAdblockAllRulesCount(&$db)
+	function getAdblockAllRulesCount()
 	{
-		/* Returns array of count by type */
+		global $db;
 
+		/* Returns array of count by type */
 		$sql  = 'SELECT ruleType, COUNT(ruleId) AS cnt FROM tblAdblockRules WHERE deletedBy=0 ';
 		$sql .= 'GROUP BY ruleType';
 		
-		$list = dbArray($db, $sql);
+		$list = $db->getArray($sql);
 
 		$data['total'] = 0;
 
@@ -204,21 +211,25 @@
 	}
 	
 	/* Return number of items in problem site list */
-	function getProblemSiteCount(&$db)
+	function getProblemSiteCount()
 	{
-		return dbOneResultItem($db, 'SELECT COUNT(siteId) FROM tblProblemSites WHERE deletedBy=0');
+		global $db;
+
+		return $db->getOneItem('SELECT COUNT(siteId) FROM tblProblemSites WHERE deletedBy=0');
 	}
 
 	/* Returns a list of the last $cnt additions */
-	function getAdblockLatestAdditions(&$db, $cnt)
+	function getAdblockLatestAdditions($cnt)
 	{
+		global $db;
+
 		if (!is_numeric($cnt)) return false;
 		
 		$sql  = 'SELECT t1.*,t2.userName FROM tblAdblockRules AS t1 ';
 		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 		$sql .= 'ORDER BY t1.timeCreated DESC LIMIT 0,'.$cnt;
 		
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 
 	}
 

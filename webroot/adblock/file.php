@@ -12,7 +12,7 @@
 	if (!empty($_GET['width']) && is_numeric($_GET['width'])) $width = $_GET['width'];
 	if (($width < 10) || ($width > 1500)) $width = 0;
 	
-	include('include_all.php');
+	require('config.php');
 
 	$data = getFile($db, $fileId);
 	if (!$data) die;

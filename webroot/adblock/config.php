@@ -1,39 +1,59 @@
 <?
-	/* SITE CONFIGURATION START */
+	$time_start = microtime(true);
+
+	error_reporting(E_ALL);
+	mb_internal_encoding('UTF-8');
+	date_default_timezone_set('Europe/Stockholm');
+
+	require_once('../functions/class.DB_MySQLi.php');
+	require_once('../functions/class.Session.php');
+	require_once('../functions/class.Files.php');
+
+	include_once('../functions/functions_textformat.php');
+	include_once('../functions/functions_infofields.php');
+
+	include_once('functions_adblock.php');
+	include_once('functions_comments.php');	//todo: gör en klass av detta
+
 
 	/* Include used function files */
+	//include_once('../site_functions/functions_settings.php');
+
+
+
+/*
 	include_once($config['path_functions'].'functions_time.php');
 	include_once($config['path_functions'].'functions_geoip.php');
-	include_once($config['path_functions'].'functions_infofields.php');
-	include_once($config['path_functions'].'functions_comments.php');
-	include_once($config['path_functions'].'functions_settings.php');
-	include_once($config['path_functions'].'functions_adblock.php');
+	
 	include_once($config['path_functions'].'functions_files.php');		//for sendTextFile() in download.php
 	include_once($config['path_functions'].'functions_misc.php');
-	
-	$config['debug'] = true;		//if true, alot more events will be logEntry'ed
-	$config['database_1']['server']   = 'localhost';
-	$config['database_1']['port']     = 3306;
-	$config['database_1']['username'] = 'root';
-	$config['database_1']['password'] = '';
-	$config['database_1']['database'] = 'dbAdblock';
-	$db = dbOpen($config['database_1']);
+*/
 
-	$config['adblock']['cachepath'] = 'cache/';
+	$config['database']['username']	= 'root';
+	$config['database']['password']	= '';
+	$config['database']['database']	= 'dbAdblock';
+	$config['database']['debug']		= true;
+	$db = new DB_MySQLi($config['database']);
 
-	/* User and session configuration */
-	$config['session_name'] = 'AIsessID';	//name of session-id cookie
-	$config['session_timeout'] = 3600*4;		//4h idle = automatically logged out
+	$config['session']['timeout'] = 3600*4;		//4h idle = automatically logged out
+	$config['session']['name'] = 'adblockID';
+	$config['session']['sha1_key'] = 'sjxkxEadBL0ckjdhyhhHHxnjklsdvyuhu434nzkkz18ju222ha';
+	$config['session']['allow_registration'] = false;
+	$config['session']['home_page'] = 'index.php';
+	$session = new Session($config['session']);
 
-	/* The start page of the site. Unauthorized requests etc redirects to here. */
-	$config['start_page'] = '/adblock/';
-	
+
+
+
 	$config['infofield']['allow_html'] = true;
 
-
+/*
 	include_once($config['path_functions'].'locales_standard.php');	
 	$config['language'] = 'en';
 	$config['text'] = $config['text'][ $config['language'] ];
+*/
+	$config['adblock']['cachepath'] = 'cache/';
+
 
 	/* SITE CONFIGURATION END */
 ?>

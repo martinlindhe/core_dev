@@ -69,7 +69,7 @@ abstract class DB_Base
 	protected $query_error = array();
 	
 	/* Constructor */
-	public function __construct(array $settings)
+	function __construct(array $settings)
 	{
 		if (!empty($settings['debug'])) $this->debug = $settings['debug'];
 		if (!empty($settings['host'])) $this->host = $settings['host'];
@@ -82,7 +82,7 @@ abstract class DB_Base
 	}
 
 	/* Shows current settings */
-	public function showSettings()
+	function showSettings()
 	{
 		echo 'Debug: '.($this->debug?'ON':'OFF').'<br/>';
 		echo 'DB driver: '.$this->db_driver.'<br/>';
@@ -108,7 +108,7 @@ abstract class DB_Base
 	}
 
 	/* Shows profiling information */
-	public function showProfile($pageload_start = 0)
+	function showProfile($pageload_start = 0)
 	{
 		if (!$this->debug) return;
 
@@ -158,7 +158,7 @@ abstract class DB_Base
 	}
 	
 	/* Writes a log entry to tblLogs */
-	public function log($str)
+	function log($str)
 	{
 		global $session;
 		
@@ -172,6 +172,14 @@ abstract class DB_Base
 			echo 'WARNING - CANNOT LOG with session info!<br/>';
 			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'", timeCreated=NOW(),userId=0,userIP=0');
 		}
+	}
+	
+	/* Looks up a username by id */
+	function getUserName($_id)
+	{
+		if (!is_numeric($_id) || !$_id) return false;
+
+		return $this->getOneItem('SELECT userName FROM tblUsers WHERE userId='.$_id);
 	}
 
 }

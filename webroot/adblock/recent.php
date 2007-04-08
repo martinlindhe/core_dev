@@ -1,11 +1,11 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_recent changes').'<br/>';
+	echo getInfoField('page_recent changes').'<br/>';
 
-	$list = getAdblockLatestAdditions($db, 10);
+	$list = getAdblockLatestAdditions(10);
 
 	for ($i=0; $i<count($list); $i++) {
 		$mode = 'added';
@@ -18,11 +18,11 @@
 				break;
 
 			case 'edited':
-				echo 'Edited at '.$list[$i]['timeEdited'].' by '.getUserName($db, $list[$i]['editorId']);
+				echo 'Edited at '.$list[$i]['timeEdited'].' by '.$db->getUserName($list[$i]['editorId']);
 				break;
 
 			case 'deleted':
-				echo 'Deleted at '.$list[$i]['timeDeleted'].' by '.getUserName($db, $list[$i]['deletedBy']);
+				echo 'Deleted at '.$list[$i]['timeDeleted'].' by '.$db->getUserName($list[$i]['deletedBy']);
 				break;
 		}
 
@@ -30,5 +30,5 @@
 		echo '<a href="editrule.php?id='.$list[$i]['ruleId'].'">'.$list[$i]['ruleText'].'</a><br/><br/>';
 	}
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

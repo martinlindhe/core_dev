@@ -1,9 +1,9 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_adblock');
+	echo getInfoField('page_adblock');
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

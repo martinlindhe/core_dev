@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (!$_SESSION['isSuperAdmin']) {
 		header('Location: '.$config['start_page']);
@@ -10,9 +10,9 @@
 		clearLog($db, LOGLEVEL_ALL);
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_admin_eventlog');
+	echo getInfoField('page_admin_eventlog');
 	
 	$list = getLogEntries($db, LOGLEVEL_ALL);
 	echo '<br/>'.count($list).' entries in event log<br/><br/>';
@@ -40,5 +40,5 @@
 
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?clearlog">Clear log</a>';
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

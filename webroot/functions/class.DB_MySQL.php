@@ -11,7 +11,7 @@ require_once('class.DB_Base.php');
 
 class DB_MySQL extends DB_Base
 {
-	public function __destruct()
+	function __destruct()
 	{
 		if ($this->db_handle) mysql_close($this->db_handle);
 	}
@@ -23,7 +23,7 @@ class DB_MySQL extends DB_Base
 		echo 'Character set: '.mysql_client_encoding($this->db_handle).'<br/>';
 	}
 
-	public function escape($query)
+	function escape($query)
 	{
 		return mysql_real_escape_string($query, $this->db_handle);
 	}
@@ -46,7 +46,7 @@ class DB_MySQL extends DB_Base
 		if ($this->debug) $this->profileConnect($time_started);
 	}
 
-	public function query($query)
+	function query($query)
 	{
 		if ($this->debug) $time_started = microtime(true);
 
@@ -66,12 +66,12 @@ class DB_MySQL extends DB_Base
 		return $result;
 	}
 
-	public function num_rows(&$resultset)
+	function num_rows(&$resultset)
 	{
 		die('TODO IMPLEMENT num_rows');
 	}
 
-	public function getArray($query)
+	function getArray($query)
 	{
 		if ($this->debug) $time_started = microtime(true);
 
@@ -90,7 +90,7 @@ class DB_MySQL extends DB_Base
 		return $data;
 	}
 	
-	public function getOneRow($query)
+	function getOneRow($query)
 	{
 		if ($this->debug) $time_started = microtime(true);	
 
@@ -108,7 +108,7 @@ class DB_MySQL extends DB_Base
 		return $data;
 	}
 
-	public function getOneItem($query)
+	function getOneItem($query)
 	{
 		if ($this->debug) $time_started = microtime(true);	
 

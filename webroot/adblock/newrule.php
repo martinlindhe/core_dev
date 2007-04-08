@@ -1,5 +1,5 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
 	if (!$_SESSION['isAdmin']) {
 		header('Location: index.php');
@@ -10,7 +10,7 @@
 		$ruleId = addAdblockRule($db, $_SESSION['userId'], $_POST['rule'], $_POST['type'], $_POST['sampleurl']);
 		
 		//todo: checkbox "make comment private"
-		include('design_head.php');
+		require('design_head.php');
 		if (is_numeric($ruleId) && $ruleId) {
 			logEntry($db, 'Adblock rule # '.$ruleId.' created');
 			$private = false;
@@ -26,13 +26,13 @@
 			echo 'Failed to add the rule <b>'.$_POST['rule'].'</b><br/><br/>';
 		}
 		echo '<a href="'.$_SERVER['PHP_SELF'].'">Create another rule</a>';
-		include('design_foot.php');
+		require('design_foot.php');
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 	
-	echo getInfoField($db, 'page_new_adblock_rule').'<br/>';
+	echo getInfoField('page_new_adblock_rule').'<br/>';
 ?>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>" name="newrule">
 <table width="500" cellpadding="0" cellspacing="0" border="0">
@@ -64,5 +64,5 @@ document.newrule.rule.focus();
 </script>
 
 <?
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

@@ -1,13 +1,13 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_newuser_created');
+	echo getInfoField('page_newuser_created');
 
 	if ($_SESSION['isAdmin']) {
 		echo 'User created - <b>you are still logged in as '.$_SESSION['userName'].'</b>';
 	}
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

@@ -1,7 +1,7 @@
 <?
 	//todo: javascript form validation
 
-	include('include_all.php');
+	require_once('config.php');
 	
 	if ($_SESSION['loggedIn'] && !$_SESSION['isAdmin']) {
 		/* Redirect normal users */
@@ -40,9 +40,9 @@
 		$registration_errors .= 'Please fill in all forms';
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_newuser').'<br/>';
+	echo getInfoField('page_newuser').'<br/>';
 
 	$enteredUserName = '';
 	$enteredEmail = '';
@@ -64,6 +64,5 @@
 </table>
 </form>
 <?
-
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

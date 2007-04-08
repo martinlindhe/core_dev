@@ -1,17 +1,10 @@
 <?
 	$time_start = microtime(true);
-	
+
 	error_reporting(E_ALL);
 	mb_internal_encoding('UTF-8');
 	date_default_timezone_set('Europe/Stockholm');
 
-/*
-	//autoload seems to slow down page load ALOT (PHP 5.2.1, Apache 2.2.4 WinXP)
-	function __autoload($class_name) {
-  	require_once('../functions/class.'.$class_name.'.php');
-	}
-*/
-//	require_once('../functions/class.DB_MySQL.php');
 	require_once('../functions/class.DB_MySQLi.php');
 	require_once('../functions/class.Session.php');
 	require_once('../functions/class.Files.php');

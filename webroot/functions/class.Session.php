@@ -37,7 +37,7 @@ class Session
 	public $isSuperAdmin;
 	public $started;		//timestamp of when the session started
 
-	public function __construct(array $session_config)
+	function __construct(array $session_config)
 	{
 		if (isset($session_config['name'])) $this->session_name = $session_config['name'];
 		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
@@ -118,11 +118,11 @@ class Session
 		}
 	}
 
-	public function __destruct()
+	function __destruct()
 	{
 	}
 
-	public function logIn($username, $password)
+	function logIn($username, $password)
 	{
 		global $db;
 		
@@ -167,7 +167,7 @@ class Session
 		$this->isSuperAdmin = 0;
 	}
 	
-	public function showLoginForm()
+	function showLoginForm()
 	{
 		echo '<div class="login_box">';
 
@@ -228,7 +228,7 @@ class Session
 		echo '</div>';
 	}
 
-	public function showInfo()
+	function showInfo()
 	{
 		echo 'Logged in: '. ($this->id?'YES':'NO').'<br/>';
 		if ($this->id) {
@@ -247,13 +247,13 @@ class Session
 	}
 
 	/* Saves a setting associated with current user */
-	public function save($name, $value)
+	function save($name, $value)
 	{
 		saveSetting(SETTING_USER, $this->id, $name, $value);
 	}
 
 	/* Reads a setting associated with current user */
-	public function read($name, $default = '')
+	function read($name, $default = '')
 	{
 		return readSetting(SETTING_USER, $this->id, $name, $default);
 	}
@@ -261,7 +261,7 @@ class Session
 	/* Renders html for editing all tblSettings field for current user */
 	//todo: use ajax to save changes
 	//todo: define this in a separate /design/ file, with alot of css in /css/functions.css
-	public function editSettings()
+	function editSettings()
 	{
 		$list = readAllSettings(SETTING_USER, $this->id);
 		if (!$list) return;

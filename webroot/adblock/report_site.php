@@ -1,5 +1,5 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
 	if (!empty($_POST['site'])) {
 		$type = 0;
@@ -7,13 +7,13 @@
 		$siteId = addProblemSite($db, $_POST['site'], $type, $_POST['comment']);
 		if ($siteId) {
 
-			include('design_head.php');
+			require('design_head.php');
 ?>
 The report for site <b><?=htmlentities($_POST['site'])?></b> has been recieved,<br/>
 we will look into this site as soon as possible!<br/><br/>
 <a href="<?=$_SERVER['PHP_SELF']?>">Report another site</a><br/>
 <?
-			include('design_foot.php');
+			require('design_foot.php');
 			die;
 
 		} else {
@@ -21,9 +21,9 @@ we will look into this site as soon as possible!<br/><br/>
 		}
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
-	echo getInfoField($db, 'page_report_top');
+	echo getInfoField('page_report_top');
 ?>
 <br/>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>" name="reportform">
@@ -48,5 +48,5 @@ we will look into this site as soon as possible!<br/><br/>
 document.reportform.site.focus();
 </script>
 <?
-	include('design_foot.php');
+	require('design_foot.php');
 ?>
