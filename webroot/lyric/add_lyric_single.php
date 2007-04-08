@@ -12,12 +12,12 @@
 		$song_name = $_POST['songname'];
 		$lyric_text = $_POST['lyrictext'];
 
-		$lyric_id = addLyric($db, $_SESSION['userId'], $band_id, 0, 0, $song_name, $lyric_text);
+		$lyric_id = addLyric($_SESSION['userId'], $band_id, 0, 0, $song_name, $lyric_text);
 		if (!$lyric_id) die('Problems adding lyric');
 
 		if ($_SESSION['userMode'] == 0) {
 			/* Add lyricId to moderation queue */
-			addModerationItem($db, $lyric_id, MODERATION_LYRIC);
+			addModerationItem($lyric_id, MODERATION_LYRIC);
 		}
 		header('Location: show_record.php?id='.$record_id);
 		die;
@@ -25,7 +25,7 @@
 
 	require('design_head.php');
 
-	echo 'Add new single lyric to the band <b>'.getBandName($db, $band_id).'</b>:<br/>';
+	echo 'Add new single lyric to the band <b>'.getBandName($band_id).'</b>:<br/>';
 	echo '<br/>';
 
 	echo '<form name="addlyric" method="post" action="'.$_SERVER['PHP_SELF'].'?band='.$band_id.'">';

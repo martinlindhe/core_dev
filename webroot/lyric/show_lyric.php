@@ -9,7 +9,7 @@
 		$highlight = urldecode($_GET['highlight']);
 	}
 
-	$lyric_data = getLyricData($db, $lyric_id);
+	$lyric_data = getLyricData($lyric_id);
 	if (!$lyric_data) die;
 
 	$lyric = $lyric_data['lyricText'];
@@ -21,7 +21,7 @@
 
 	echo '<table cellpadding="3" cellspacing="0" border="1" width="100%">';
 
-	if (isModerated($db, $lyric_id, MODERATION_LYRIC) || isPendingChange($db, MODERATIONCHANGE_LYRIC, $lyric_id))
+	if (isModerated($lyric_id, MODERATION_LYRIC) || isPendingChange(MODERATIONCHANGE_LYRIC, $lyric_id))
 	{
 		echo '<tr><td class="subtitlemod">';
 	} else {
@@ -41,14 +41,14 @@
 	echo '</table>';
 	echo '<br/>';
 
-	$list = getLyricRecords($db, $lyric_id);
+	$list = getLyricRecords($lyric_id);
 
 	if (count($list)) {
 		echo 'This song appars on the following records:<br/>';
 
 		for ($i=0; $i<count($list); $i++)
 		{
-			$record_name = dbStripSlashes($list[$i]['recordName']);
+			$record_name = stripslashes($list[$i]['recordName']);
 			$author_name = $list[$i]['bandName'];
 			if (!$record_name) $record_name = 's/t';
 

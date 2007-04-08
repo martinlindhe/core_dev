@@ -14,18 +14,18 @@
 			if ($_POST['action'] == 'add') {
 				if ($val == 'accept') {
 					echo 'Accepting '.$key[1].'<br/>';
-					acceptNewAddition($db, $key[0], $key[1]);
+					acceptNewAddition($key[0], $key[1]);
 				} else if ($val == 'deny') {
 					echo 'Denying '.$key[1].'<br/>';
-					denyNewAddition($db, $key[0], $key[1]);
+					denyNewAddition($key[0], $key[1]);
 				}
 			} else if ($_POST['action'] == 'change') {
 				if ($val == 'accept') {
 					echo 'Accepting '.$key[1].'<br/>';
-					acceptPendingChange($db, $key[0], $key[1]);
+					acceptPendingChange($key[0], $key[1]);
 				} else if ($val == 'deny') {
 					echo 'Denying '.$key[1].'<br/>';
-					denyPendingChange($db, $key[0], $key[1]);
+					denyPendingChange($key[0], $key[1]);
 				}
 			}
 		}
@@ -42,14 +42,14 @@
 
 			switch ($list[$i]['type']) {
 				case MODERATION_BAND:
-					$band = getBandInfo($db, $list[$i]['ID']);
+					$band = getBandInfo($list[$i]['ID']);
 					echo '<b>Add band:</b> ';
 					echo '<a href="show_band.php?id='.$band['bandId'].'">'.$band['bandName'].'</a>, added by '.$band['userName'].'<br/>';
 					echo '<br/>';
 					break;
 
 				case MODERATION_RECORD:
-					$record = getRecordData($db, $list[$i]['ID']);
+					$record = getRecordData($list[$i]['ID']);
 					if (!$record) { $skip=true; break; }
 					echo '<b>Add record:</b> ';
 					echo '<a href="show_band.php?id='.$record['bandId'].'">'.$record['bandName'].'</a> - ';
@@ -58,7 +58,7 @@
 					break;
 
 				case MODERATION_LYRIC:
-					$lyric = getLyricData($db, $list[$i]['ID']);
+					$lyric = getLyricData($list[$i]['ID']);
 					echo '<b>Add lyric:</b> ';
 					echo '<a href="show_lyric.php?id='.$lyric['lyricId'].'">'.$lyric['lyricName'].'</a>:<br/>';
 					echo '<i>'.nl2br($lyric['lyricText']).'</i><br/>';
@@ -71,7 +71,7 @@
 				echo '<input class="radio" type="radio" name="'.$list[$i]['type'].'_'.$list[$i]['ID'].'" value="deny">Deny';
 				echo '<hr/>';
 			} else {
-				removeNewAddition($db, $list[$i]['type'], $list[$i]['ID']);
+				removeNewAddition($list[$i]['type'], $list[$i]['ID']);
 			}
 		}
 		echo '<input type="submit" value="Update" class="buttonstyle"/>';
@@ -92,7 +92,7 @@
 					echo '<b>Pending change in lyric, orginal to the left, suggested to the right:</b><br/>';
 					echo '<table width="1000" cellpadding="0" cellspacing="0" border="1"><tr>';
 						echo '<td valign="top" width="500">';
-						$org = getLyricData($db, $list[$i]['p1']);
+						$org = getLyricData($list[$i]['p1']);
 						echo '<b>'.$org['lyricName'].'</b><br/>';
 						echo nl2br(dbStripSlashes($org['lyricText']));
 						echo '</td>';
@@ -106,7 +106,7 @@
 
 				case MODERATIONCHANGE_RECORDNAME:
 					echo '<b>Pending change in record name</b><br/>';
-					echo 'Old name: '.getRecordName($db, $list[$i]['p1']).'<br/>';
+					echo 'Old name: '.getRecordName($list[$i]['p1']).'<br/>';
 					echo 'Suggested new name: '.$list[$i]['p2'].'<br/>';
 					break;
 

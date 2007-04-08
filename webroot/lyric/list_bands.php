@@ -2,7 +2,7 @@
 	require_once('config.php');
 	require('design_head.php');	
 
-	$list = getBands($db);
+	$list = getBands();
 
 	$mod = 0;
 	echo '<table width="400" cellpadding="3" cellspacing="0" border="1">';

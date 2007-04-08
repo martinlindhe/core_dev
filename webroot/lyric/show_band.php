@@ -8,7 +8,7 @@
 	$band_name = getBandName($band_id);
 
 	echo '<table width="600" cellpadding="3" cellspacing="0" border="1">';
-	if (isModerated($db, $band_id, MODERATION_BAND)) {
+	if (isModerated($band_id, MODERATION_BAND)) {
 		echo '<tr><td class="titlemod">'.$band_name.'</td></tr>';
 	} else {
 		echo '<tr><td class="title">'.$band_name.'</td></tr>';
@@ -25,8 +25,8 @@
 		$record_name = $db->escape($list[$i]['recordName']);
 		if (!$record_name) $record_name = 's/t';
 
-		if (isModerated($db, $record_id, MODERATION_RECORD) ||
-			isPendingChange($db, MODERATIONCHANGE_RECORDNAME, $record_id)
+		if (isModerated($record_id, MODERATION_RECORD) ||
+			isPendingChange(MODERATIONCHANGE_RECORDNAME, $record_id)
 			) {
 			echo '<tr><td class="subtitlemod">';
 		} else {
@@ -51,7 +51,7 @@
 		$record_name = $db->escape($list[$i]['recordName']);
 		if (!$record_name) $record_name = 's/t';
 
-		echo '<a href="show_record.php?id='.$record_id.'">'.$record_name.'</a> ('.getRecordTrackCount($db, $record_id).' tracks)<br/>';
+		echo '<a href="show_record.php?id='.$record_id.'">'.$record_name.'</a> ('.getRecordTrackCount($record_id).' tracks)<br/>';
 	}
 	if (!count($list)) echo 'None<br/>';
 	echo '<br/>';

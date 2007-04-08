@@ -7,11 +7,11 @@
 		$band_name = trim($_POST['bandname']);
 		$band_info = $_POST['bandinfo'];
 		
-		$band_id = addBand($db, $_SESSION['userId'], $band_name);
+		$band_id = addBand($_SESSION['userId'], $band_name);
 
 		if ($band_id)
 		{
-			if (!updateBandInfo($db, $band_id, $band_info))
+			if (!updateBandInfo($band_id, $band_info))
 			{
 				echo 'Update of band info failed.<br/>';
 			}
@@ -20,7 +20,7 @@
 			
 			if (!$session->isAdmin) {
 				/* Add bandId to moderation queue */
-				addModerationItem($db, $band_id, MODERATION_BAND);
+				addModerationItem($band_id, MODERATION_BAND);
 				echo 'Band addition added to moderation queue aswell<br/><br/>';
 			}
 			

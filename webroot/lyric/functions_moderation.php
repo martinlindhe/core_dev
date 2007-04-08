@@ -9,11 +9,13 @@
 
 
 	//lägg till ett nyskapat objekt i modereringskön
-	function addModerationItem($db, $id, $type)
+	function addModerationItem($id, $type)
 	{
+		global $db;
+
 		if (!is_numeric($type) || !is_numeric($id)) return false;
 		
-		dbQuery($db, "INSERT INTO tblNewAdditions SET ID=".$id.",type=".$type.",timestamp=".time());
+		$db->query('INSERT INTO tblNewAdditions SET ID='.$id.',type='.$type.',timestamp='.time());
 	}
 	
 	function isModerated($id, $type)
@@ -42,69 +44,74 @@
 		return $db->getArray('SELECT * FROM tblNewAdditions ORDER BY timestamp ASC');
 	}
 	
-	function acceptNewAddition($db, $type, $id)
+	function acceptNewAddition($type, $id)
 	{
 		if (!is_numeric($type) || !is_numeric($id)) return false;
 
-		removeNewAddition($db, $type, $id);
+		removeNewAddition($type, $id);
 	}
 
-	function denyNewAddition($db, $type, $id)
+	function denyNewAddition($type, $id)
 	{
+		global $db;
+
 		if (!is_numeric($type) || !is_numeric($id)) return false;
 
-		removeNewAddition($db, $type, $id);
+		removeNewAddition($type, $id);
 		switch ($type) {
 			case MODERATION_BAND:
-				dbQuery($db, "DELETE FROM tblBands WHERE bandId=".$id);
-				dbQuery($db, "DELETE FROM tblRecords WHERE bandId=".$id);
-				dbQuery($db, "DELETE FROM tblTracks WHERE bandId=".$id);
-				dbQuery($db, "DELETE FROM tblLyrics WHERE bandId=".$id);
+				$db->query('DELETE FROM tblBands WHERE bandId='.$id);
+				$db->query('DELETE FROM tblRecords WHERE bandId='.$id);
+				$db->query('DELETE FROM tblTracks WHERE bandId='.$id);
+				$db->query('DELETE FROM tblLyrics WHERE bandId='.$id);
 				break;
-				
+
 			case MODERATION_RECORD:
-				dbQuery($db, "DELETE FROM tblRecords WHERE recordId=".$id);
-				dbQuery($db, "DELETE FROM tblTracks WHERE recordId=".$id);
+				$db->query('DELETE FROM tblRecords WHERE recordId='.$id);
+				$db->query('DELETE FROM tblTracks WHERE recordId='.$id);
 				break;
-				
+
 			case MODERATION_LYRIC:
-				dbQuery($db, "DELETE FROM tblLyrics WHERE lyricId=".$id);
+				$db->query('DELETE FROM tblLyrics WHERE lyricId='.$id);
 				break;
 		}
 	}
-	
-	function removeNewAddition($db, $type, $id)
+
+	function removeNewAddition($type, $id)
 	{
+		global $db;
+
 		if (!is_numeric($type) || !is_numeric($id)) return false;
-		
-		dbQuery($db, "DELETE FROM tblNewAdditions WHERE ID=".$id." AND type=".$type);
+
+		$db->query('DELETE FROM tblNewAdditions WHERE ID='.$id.' AND type='.$type);
 	}
-	
-	
-	
+
+
 	//--- modify existing data-functions:
 	
 	
-	function addPendingChange($db, $type, $p1, $p2, $p3="")
+	function addPendingChange($type, $p1, $p2, $p3="")
 	{
+		global $db;
+
 		if (!is_numeric($type)) return false;
 		
 		if ($type == MODERATIONCHANGE_LYRICLINK) {	//db, type, record_id, track_id
 			if (!is_numeric($p1) || !is_numeric($p2)) return false;
-			dbQuery($db, "INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timestamp=".time());
+			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timestamp=".time());
 			
 		} else if ($type == MODERATIONCHANGE_LYRIC) { //db, type, lyric_id, title, text
 			if (!is_numeric($p1)) return false;
 			
-			$p2 = dbAddSlashes($db, $p2);
-			$p3 = dbAddSlashes($db, $p3);
-			dbQuery($db, "INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',p3='".$p3."',timestamp=".time());
+			$p2 = $db->escape($p2);
+			$p3 = $db->escape($p3);
+			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',p3='".$p3."',timestamp=".time());
 			
 		} else if ($type == MODERATIONCHANGE_RECORDNAME) { //db, type, record_id, title
 			if (!is_numeric($p1)) return false;
 
-			$p2 = dbAddSlashes($db, $p2);
-			dbQuery($db, "INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timestamp=".time());
+			$p2 = $db->escape($p2);
+			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timestamp=".time());
 
 		} else {
 			echo "addPendingChange(): unknown TYPE: ".$type;
@@ -119,7 +126,7 @@
 		return $db->getOneItem('SELECT COUNT(*) FROM tblPendingChanges');
 	}
 	
-	function isPendingChange($db, $type, $p1, $p2 = '')
+	function isPendingChange($type, $p1, $p2 = '')
 	{
 		global $db;
 
@@ -152,50 +159,55 @@
 		return $db->getArray('SELECT * FROM tblPendingChanges ORDER BY timestamp ASC');
 	}
 	
-	function denyPendingChange($db, $type, $p1)
+	function denyPendingChange($type, $p1)
 	{
+		global $db;
+
 		if (!is_numeric($type) || !is_numeric($p1)) return false;
-		
-		dbQuery($db, "DELETE FROM tblPendingChanges WHERE type=".$type." AND p1=".$p1);
+
+		$db->query('DELETE FROM tblPendingChanges WHERE type='.$type.' AND p1='.$p1);
 	}
-	
-	function getPendingChange($db, $type, $p1)
+
+	function getPendingChange($type, $p1)
 	{
+		global $db;
+
 		if (!is_numeric($type) || !is_numeric($p1)) return false;
-		
-		$check = dbQuery($db, "SELECT * FROM tblPendingChanges WHERE type=".$type." AND p1='".$p1."'");
-		return dbFetchArray($check);
+
+		return $db->getOneRow('SELECT * FROM tblPendingChanges WHERE type='.$type.' AND p1="'.$p1.'"');
 	}
-	
-	function acceptPendingChange($db, $type, $p1)
+
+	function acceptPendingChange($type, $p1)
 	{
+		global $db;
+
 		if (!is_numeric($type) || !is_numeric($p1)) return false;
 		
-		$data = getPendingChange($db, $type, $p1);
+		$data = getPendingChange($type, $p1);
 
 		switch ($type) {
 			case MODERATIONCHANGE_LYRIC:
-				$data["p2"] = dbStripSlashes($data["p2"]);
-				$data["p3"] = dbStripSlashes($data["p3"]);
-				$data["p2"] = dbAddSlashes($db, $data["p2"]);
-				$data["p3"] = dbAddSlashes($db, $data["p3"]);
+				$data["p2"] = stripslashes($data["p2"]);
+				$data["p3"] = stripslashes($data["p3"]);
+				$data["p2"] = $db->escape($data["p2"]);
+				$data["p3"] = $db->escape($data["p3"]);
 
-				updateLyric($db, $p1, $data["p2"], $data["p3"]);
+				updateLyric($p1, $data["p2"], $data["p3"]);
 				break;
 				
 			case MODERATIONCHANGE_RECORDNAME:
-				updateRecord($db, $p1, $data["p2"]);
+				updateRecord($p1, $data["p2"]);
 				break;
-				
+
 			case MODERATIONCHANGE_LYRICLINK:
 				//nothing to do but remove pending change
 				break;
-				
+
 			default:
 				echo "unimplemented acceptPendingChange type ".$type;
 		}
 
-		dbQuery($db, "DELETE FROM tblPendingChanges WHERE type=".$type." AND p1=".$p1." AND p2='".$data["p2"]."'"); // AND p3='".$data["p3"]."'");
+		$db->query("DELETE FROM tblPendingChanges WHERE type=".$type." AND p1=".$p1." AND p2='".$data["p2"]."'"); // AND p3='".$data["p3"]."'");
 	}
 	
 ?>

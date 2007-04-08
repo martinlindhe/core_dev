@@ -7,11 +7,11 @@
 
 	$record_id = $_GET['id'];
 
-	$record_name = getRecordName($db, $record_id);
+	$record_name = getRecordName($record_id);
 
-	$band_id = getBandIdFromRecordId($db, $record_id);
+	$band_id = getBandIdFromRecordId($record_id);
 	if ($band_id) {
-		$band_name = getBandName($db, $band_id);
+		$band_name = getBandName($band_id);
 	} else {
 		echo 'Only work for single artist.<br/>';
 		die;
@@ -67,14 +67,14 @@
 
 			if ($temp[0] == (string)($i+1)) {
 				$sql = "SELECT lyricId,lyricName FROM tblLyrics WHERE SOUNDEX(lyricName)=SOUNDEX('".$songname."') AND bandId=".$band_id;
-				$check = dbQuery($db, $sql);
+				$check = $db->query($sql);
 				if (dbNumRows($check)) {
 					$row = dbFetchArray($check);
 						
 					if (isset($_POST['ck'.$i]) && $_POST['ck'.$i]) {
 						/* Match was accepted, let's add it */
 						echo 'Adding id '.$_POST['ck'.$i].' to track '.($i+1).'<br/>';
-						linkLyric($db, $record_id, ($i+1), $_POST['ck'.$i], $band_id);
+						linkLyric($record_id, ($i+1), $_POST['ck'.$i], $band_id);
 						$linked = true;
 
 					} else {

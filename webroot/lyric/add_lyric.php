@@ -9,7 +9,7 @@
 	if (isset($_GET['band']) && $_GET['band']) {
 		$band_id = $_GET['band'];
 	} else {
-		$band_id = getBandIdFromRecordId($db, $record_id);
+		$band_id = getBandIdFromRecordId($record_id);
 	}
 
 	if (isset($_POST['songname']) && isset($_POST['lyrictext']) && $_POST['songname'])
@@ -17,12 +17,12 @@
 		$song_name = $_POST['songname'];
 		$lyric_text = $_POST['lyrictext'];
 
-		$lyric_id = addLyric($db, $_SESSION['userId'], $band_id, $record_id, $track, $song_name, $lyric_text);
+		$lyric_id = addLyric($_SESSION['userId'], $band_id, $record_id, $track, $song_name, $lyric_text);
 		if (!$lyric_id) die('Problems adding lyric');
 
 		if ($_SESSION['userMode'] == 0) {
 			/* Add lyricId to moderation queue */
-			addModerationItem($db, $lyric_id, MODERATION_LYRIC);
+			addModerationItem($lyric_id, MODERATION_LYRIC);
 		}
 		header('Location: show_record.php?id='.$record_id);
 		die;
@@ -39,7 +39,7 @@
 		echo '<form name="linkband">';
 		echo '<select name="url" onchange="location.href=form.url.options[form.url.selectedIndex].value">';
 		echo '<option>--- Select band ---</option>';
-		$list = getBands($db);
+		$list = getBands();
 		for ($i=0; $i<count($list); $i++)
 		{
 			echo '<option value="add_lyric.php?record='.$record_id.'&amp;track='.$track.'&amp;band='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</option>';
@@ -53,7 +53,7 @@
 
 	} else {
 
-		echo '<b>'.getBandName($db, $band_id).' - '.getRecordName($db, $record_id).'</b><br/>';
+		echo '<b>'.getBandName($band_id).' - '.getRecordName($record_id).'</b><br/>';
 		echo 'Type lyric for track <b>'.$track.'</b> below.<br/>';
 		echo '<br/>';
 

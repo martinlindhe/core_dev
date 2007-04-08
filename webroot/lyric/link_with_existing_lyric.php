@@ -9,14 +9,14 @@
 		if (isset($_GET['band']) && $_GET['band']) {
 			$band_id = $_GET['band'];
 		} else {
-			$band_id = getBandIdFromRecordId($db, $record_id);
+			$band_id = getBandIdFromRecordId($record_id);
 		}
 		
 		if (isset($_POST['lyricid']) && $_POST['lyricid'])
 		{
 			$lyric_id = $_POST['lyricid'];
 			
-			if (!linkLyric($db, $record_id, $track, $lyric_id, $band_id))
+			if (!linkLyric($record_id, $track, $lyric_id, $band_id))
 			{
 				echo 'Failed to add lyric link';
 			}
@@ -24,7 +24,7 @@
 			{
 				if ($_SESSION['userMode'] == 0) {
 					/* Add to pending changes queue */
-					addPendingChange($db, MODERATIONCHANGE_LYRICLINK, $record_id, $track);
+					addPendingChange(MODERATIONCHANGE_LYRICLINK, $record_id, $track);
 				}
 				
 				header('Location: show_record.php?id='.$record_id);
@@ -50,7 +50,7 @@
 		echo '<form action="">';
 		echo '<select name="url" onchange="location.href=form.url.options[form.url.selectedIndex].value">';
 		echo '<option>--- Select band ---</option>';
-		$list = getBands($db);
+		$list = getBands();
 		for ($i=0; $i<count($list); $i++)
 		{
 			echo '<option value="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&amp;track='.$track.'&amp;band='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</option>';
@@ -60,10 +60,10 @@
 
 	} else {
 
-		echo 'Here is existing lyrics in database with the band <b>'.getBandName($db, $band_id).'</b>,<br/>';
-		echo 'select one to associate it with track <b>'.$track.'</b> on <b>'.getRecordName($db, $record_id).'</b>.<br/>';
+		echo 'Here is existing lyrics in database with the band <b>'.getBandName($band_id).'</b>,<br/>';
+		echo 'select one to associate it with track <b>'.$track.'</b> on <b>'.getRecordName($record_id).'</b>.<br/>';
 
-		$list = getBandLyrics($db, $band_id);
+		$list = getBandLyrics($band_id);
 		echo '<form name="linklyric" method="post" action="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&amp;track='.$track.'&amp;band='.$band_id.'">';
 		echo '<select name="lyricid">';
 		for ($i=0; $i<count($list); $i++)

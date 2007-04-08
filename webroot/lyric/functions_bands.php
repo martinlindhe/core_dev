@@ -1,30 +1,33 @@
 <?
 	/* functions_bands.php */
 	
-	function addBand($db, $creator_id, $band_name)
+	function addBand($creator_id, $band_name)
 	{
+		global $db;
+
 		if (!is_numeric($creator_id)) return false;
 		
-		$band_name = dbAddSlashes($db, trim($band_name));
-		
-		$check = dbQuery($db, "SELECT * FROM tblBands WHERE bandName='".$band_name."'");
-		if (dbNumRows($check)) return false; //a band with this name already exists
+		$band_name = $db->escape(trim($band_name));
+
+		$check = $db->getOneRow("SELECT * FROM tblBands WHERE bandName='".$band_name."'");
+		if ($check) return false; //a band with this name already exists
 
 		$sql = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$creator_id.",timestamp=".time();
-		dbQuery($db, $sql);
-		return $db['insert_id'];
+		$db->query($sql);
+		return $db->insert_id;
 	}
 	
-	function updateBandInfo($db, $band_id, $band_info)
+	function updateBandInfo($band_id, $band_info)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 
-		$band_info = addslashes($band_info);
-		
-		dbQuery($db, "UPDATE tblBands SET bandInfo='".$band_info."' WHERE bandId=".$band_id);
+		$band_info = $db->escape($band_info);
+
+		$db->query('UPDATE tblBands SET bandInfo="'.$band_info.'" WHERE bandId='.$band_id);
 		return true;
 	}
-	
 	
 	function getBands()
 	{
@@ -42,16 +45,17 @@
 		return $db->getOneItem('SELECT bandName FROM tblBands WHERE bandId='.$band_id);
 	}
 
-	function getBandInfo($db, $band_id)
+	function getBandInfo($band_id)
 	{
+		global $db;
+
 		if (!is_numeric($band_id)) return false;
 
 		$sql  = "SELECT t1.*,t2.userName FROM tblBands AS t1 ";
 		$sql .= "INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ";
 		$sql .= "WHERE t1.bandId=".$band_id;
 
-		$check = dbQuery($db, $sql);
-		return dbFetchArray($check);
+		return $db->getOneRow($sql);
 	}	
 	
 	function bandCount()
@@ -102,8 +106,8 @@
 
 		if (!is_numeric($band_id)) return false;
 
-		$sql  = "SELECT lyricId,lyricName FROM tblLyrics WHERE bandId=".$band_id." ";
-		$sql .= "ORDER BY lyricName ASC";
+		$sql  = 'SELECT lyricId,lyricName FROM tblLyrics WHERE bandId='.$band_id;
+		$sql .= ' ORDER BY lyricName ASC';
 
 		return $db->getArray($sql);
 	}

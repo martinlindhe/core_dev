@@ -1,39 +1,42 @@
 <?
-	function searchLyrics($db, $query) {
-		
-		$query = addslashes(trim(strtolower($query)));
+	function searchLyrics($query)
+	{
+		global $db;
+
+		$query = $db->escape(trim(strtolower($query)));
 
 		$sql  = "SELECT t1.*, t2.bandName FROM tblLyrics AS t1 ";
 		$sql .= "INNER JOIN tblBands AS t2 ON (t1.bandId=t2.bandId) ";
 		$sql .= "WHERE LCASE(t1.lyricText) LIKE '%".$query."%' OR LCASE(t1.lyricName) LIKE '%".$query."%' ";
 		$sql .= "ORDER BY t2.bandName ASC, t1.lyricName ASC";
 		
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
 
 	/* Returns all lyrics with missing text */
-	function getMissingLyrics($db)
+	function getMissingLyrics()
 	{
+		global $db;
+
 		$sql  = "SELECT tblLyrics.*, tblBands.bandName FROM tblLyrics ";
 		$sql .= "LEFT OUTER JOIN tblBands ON (tblLyrics.bandId=tblBands.bandId) ";
 		$sql .= "WHERE lyricText = '' ORDER BY tblBands.bandName ASC, tblLyrics.lyricName ASC";
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
 
 	/* Returns which records this lyric is on */
-	function getLyricRecords($db, $lyric_id)
+	function getLyricRecords($lyric_id)
 	{
-		if (!is_numeric($lyric_id))
-		{
-			return false;
-		}
+		global $db;
+
+		if (!is_numeric($lyric_id)) return false;
 
 		$sql  = "SELECT tblTracks.trackNumber, tblTracks.recordId, tblRecords.recordName, tblBands.bandId, tblBands.bandName FROM tblTracks ";
 		$sql .= "LEFT OUTER JOIN tblRecords ON (tblTracks.recordId=tblRecords.recordId) ";
 		$sql .= "LEFT OUTER JOIN tblBands ON (tblRecords.bandId=tblBands.bandId) ";
 		$sql .= "WHERE lyricId = ".$lyric_id;
 
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
 	
 	function lyricCount()
@@ -43,17 +46,20 @@
 		return $db->getOneItem('SELECT COUNT(lyricId) FROM tblLyrics WHERE lyricText != ""');
 	}
 
-	function getLyricText($db, $lyric_id)
+	function getLyricText($lyric_id)
 	{
+		global $db;
+
 		if (!is_numeric($lyric_id)) return false;
 
-		$check = dbQuery($db, "SELECT lyricText FROM tblLyrics WHERE lyricId=".$lyric_id);
-		$data = dbFetchArray($check);
-		return stripslashes($data["lyricText"]);
+		$data = $db->getOneItem("SELECT lyricText FROM tblLyrics WHERE lyricId=".$lyric_id);
+		return stripslashes($data);
 	}
-	
-	function getLyricData($db, $lyric_id)
+
+	function getLyricData($lyric_id)
 	{
+		global $db;
+
 		if (!is_numeric($lyric_id)) return false;
 
 		$sql  = "SELECT t1.*,t2.userName,t3.bandName FROM tblLyrics AS t1 ";
@@ -61,76 +67,83 @@
 		$sql .= "INNER JOIN tblBands AS t3 ON (t1.bandId=t3.bandId) ";
 		$sql .= "WHERE lyricId=".$lyric_id;
 
-		$check = dbQuery($db, $sql);
-		$row = dbFetchArray($check);
+		$row = $db->getOneRow($sql);
 		if (!$row) return false;
-		$row["lyricName"] = dbStripSlashes($row["lyricName"]);
-		$row["lyricText"] = dbStripSlashes($row["lyricText"]);
+
+		$row['lyricName'] = stripslashes($row['lyricName']);
+		$row['lyricText'] = stripslashes($row['lyricText']);
 
 		return $row;
 	}	
 
-	function getLyricName($db, $lyric_id)
+	function getLyricName($lyric_id)
 	{
+		global $db;
+
 		if (!is_numeric($lyric_id)) return false;
 
-		$check = dbQuery($db, "SELECT lyricName FROM tblLyrics WHERE lyricId=".$lyric_id);
-		$data = dbFetchArray($check);
-		return stripslashes($data["lyricName"]);
+		$data = $db->getOneItem('SELECT lyricName FROM tblLyrics WHERE lyricId='.$lyric_id);
+		return stripslashes($data);
 	}
 
-	function getIncompleteLyrics($db)
+	function getIncompleteLyrics()
 	{
+		global $db;
+
 		$sql  = "SELECT tblLyrics.*,tblBands.bandName FROM tblLyrics ";
 		$sql .= "INNER JOIN tblBands ON (tblLyrics.bandId = tblBands.bandId) ";
 		$sql .= "WHERE INSTR(lyricText, '???') ";
 		$sql .= "ORDER BY tblBands.bandName ASC, tblLyrics.lyricName ASC";
-		return dbArray($db, $sql);
+		return $db->getArray($sql);
 	}
 
-	function linkLyric($db, $record_id, $track, $lyric_id, $band_id)
+	function linkLyric($record_id, $track, $lyric_id, $band_id)
 	{
-		if (!is_numeric($record_id) || !is_numeric($track) || !is_numeric($lyric_id) || !is_numeric($band_id))
-		{
-			return false;
-		}
+		global $db;
+
+		if (!is_numeric($record_id) || !is_numeric($track) || !is_numeric($lyric_id) || !is_numeric($band_id)) return false;
 		
-		dbQuery($db, "UPDATE tblTracks SET lyricId=".$lyric_id.",bandId=".$band_id." WHERE recordId=".$record_id." AND trackNumber=".$track);
+		$db->query("UPDATE tblTracks SET lyricId=".$lyric_id.",bandId=".$band_id." WHERE recordId=".$record_id." AND trackNumber=".$track);
 		return true;
 	}
 
-	function updateLyric($db, $lyric_id, $lyric_name, $lyric_text)
+	function updateLyric($lyric_id, $lyric_name, $lyric_text)
 	{
+		global $db;
+
 		if (!is_numeric($lyric_id)) return false;
 		
 		$lyric_name = cleanupText($lyric_name);
 		$lyric_text = cleanupText($lyric_text);
 
-		dbQuery($db, "UPDATE tblLyrics SET lyricName='".$lyric_name."', lyricText='".$lyric_text."' WHERE lyricId=".$lyric_id);
+		$db->query('UPDATE tblLyrics SET lyricName="'.$lyric_name.'", lyricText="'.$lyric_text.'" WHERE lyricId='.$lyric_id);
 		return true;
 	}
 	
-	function removeLyric($db, $lyric_id)
+	function removeLyric($lyric_id)
 	{
+		global $db;
+
 		if (!is_numeric($lyric_id)) return false;
-		
-		dbQuery($db, "DELETE FROM tblLyrics WHERE lyricId=".$lyric_id);
-		dbQuery($db, "UPDATE tblTracks SET lyricId=0,bandId=0 WHERE lyricId=".$lyric_id);
-		
+
+		$db->query('DELETE FROM tblLyrics WHERE lyricId='.$lyric_id);
+		$db->query('UPDATE tblTracks SET lyricId=0,bandId=0 WHERE lyricId='.$lyric_id);
 	}
 
-	function addLyric($db, $user_id, $band_id, $record_id, $track, $lyric_name, $lyric_text)
+	function addLyric($user_id, $band_id, $record_id, $track, $lyric_name, $lyric_text)
 	{
+		global $db;
+
 		if (!is_numeric($user_id) || !is_numeric($band_id) || !is_numeric($record_id) || !is_numeric($track)) return false;
 
 		$lyric_name = cleanupText($lyric_name);
 		$lyric_text = cleanupText($lyric_text);
 
-		dbQuery($db, 'INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$user_id.',timestamp='.time());
-		$lyric_id = $db['insert_id'];
+		$db->query('INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$user_id.',timestamp='.time());
+		$lyric_id = $db->insert_id;
 
 		if ($record_id) {
-			dbQuery($db, 'UPDATE tblTracks SET lyricId='.$lyric_id.',bandId='.$band_id.' WHERE recordId='.$record_id.' AND trackNumber='.$track);
+			$db->query('UPDATE tblTracks SET lyricId='.$lyric_id.',bandId='.$band_id.' WHERE recordId='.$record_id.' AND trackNumber='.$track);
 		}
 		return $lyric_id;
 	}
@@ -169,5 +182,4 @@
 		
 		return $db->getArray($sql);		
 	}
-
 ?>

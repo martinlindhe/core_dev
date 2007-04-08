@@ -7,22 +7,22 @@
 
 	$record_id = $_GET['id'];
 
-	$band_id = getBandIdFromRecordId($db, $record_id);
+	$band_id = getBandIdFromRecordId($record_id);
 	if ($band_id) {
-		$band_name = getBandName($db, $band_id);
+		$band_name = getBandName($band_id);
 	} else {
 		$band_name = 'Compilation';
 	}
 
-	$record_name = getRecordName($db, $record_id);
+	$record_name = getRecordName($record_id);
 
 	$title = 'inthc.net: "'.$band_name.' - '.$record_name.'" album overview';
 	require('design_head.php');
 
 	echo '<table cellpadding="3" cellspacing="0" border="1">';
 	
-	if (isModerated($db, $record_id, MODERATION_RECORD) ||
-		isPendingChange($db, MODERATIONCHANGE_RECORDNAME, $record_id)
+	if (isModerated($record_id, MODERATION_RECORD) ||
+		isPendingChange(MODERATIONCHANGE_RECORDNAME, $record_id)
 		) {
 		echo '<tr><td colspan="3" class="titlemod">';
 	} else {
@@ -30,7 +30,7 @@
 	}
 	echo $band_name.' - '.$record_name.'</td><td align="right"><a href="edit_record.php?id='.$record_id.'">Edit</a></td></tr>';
 
-	$list = getRecordTracks($db, $record_id);
+	$list = getRecordTracks($record_id);
 	for ($i=0; $i<count($list); $i++)
 	{
 		$track = $list[$i]['trackNumber'];
@@ -41,9 +41,9 @@
 
 		if ($lyric_id)
 		{
-			if (isModerated($db, $lyric_id, MODERATION_LYRIC) ||
-				isPendingChange($db, MODERATIONCHANGE_LYRICLINK, $record_id, $track) ||
-				isPendingChange($db, MODERATIONCHANGE_LYRIC, $lyric_id)
+			if (isModerated($lyric_id, MODERATION_LYRIC) ||
+				isPendingChange(MODERATIONCHANGE_LYRICLINK, $record_id, $track) ||
+				isPendingChange(MODERATIONCHANGE_LYRIC, $lyric_id)
 				) {
 				echo '<td class="subtitlemod">';
 			} else {
@@ -54,11 +54,11 @@
 				echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
 			}
 			
-			echo '<a href="show_lyric.php?id='.$lyric_id.'">'.dbStripSlashes($list[$i]['lyricName']).'</a>';
+			echo '<a href="show_lyric.php?id='.$lyric_id.'">'.stripslashes($list[$i]['lyricName']).'</a>';
 			
 			if ($list[$i]['authorId'] != $list[$i]['bandId'])
 			{
-				echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($db, $list[$i]['authorId']).'</a>)';
+				echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
 			}
 			
 			if (!$list[$i]['lyricText'])
@@ -92,7 +92,7 @@
 		echo '</tr>';
 	}
 	echo '<tr><td colspan="4"><a href="add_track.php?id='.$record_id.'">Add track</a> | <a href="import_tracks.php?id='.$record_id.'">Import tracklist</a> | <a href="show_record_lyrics.php?id='.$record_id.'">Show all lyrics</a></td></tr>';
-	echo '<tr><td colspan="4" bgcolor="#909090">'.nl2br(getRecordInfo($db, $record_id)).'</td></tr>';
+	echo '<tr><td colspan="4" bgcolor="#909090">'.nl2br(getRecordInfo($record_id)).'</td></tr>';
 	echo '</table>';
 	
 	echo '<br/>';

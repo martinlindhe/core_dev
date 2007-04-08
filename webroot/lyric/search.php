@@ -7,7 +7,7 @@
 
 	$query = $_POST['query'];
 
-	$list = searchLyrics($db, $query);
+	$list = searchLyrics($query);
 	if (count($list) == 1) {
 
 		header('Location: show_lyric.php?id='.$list[0]['lyricId'].'&highlight='.urlencode($query));

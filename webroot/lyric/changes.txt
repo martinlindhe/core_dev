@@ -1,9 +1,12 @@
 todo hi prio:
-	#1: porta applikationen till nya "functions" systemet
 	#2: UNICODE stöd!
 	#3: gör en ordentlig navigeringsmeny
 	#4: rensa upp modererings-logiken...
 	#5: BORT MED TABLES i den mån det går
+	
+	- ändra alla time() i queries till NOW(), samt ändra format i databasen
+	- $_SESSION['userMode'] -> $session->isAdmin
+	
 
 
 
@@ -17,6 +20,10 @@ todo buggfix/mindre features:
 	* möjlighet att radera ett band
 
 ----
+2007.04.08
+	* portat applikationen till att använda nya "functions" frameworket. alla databasanrop går genom $db
+
+
 2007.04.04
 	* konverterat all (?) HTML till XHTML 1.0
 	* ändrade body_footer.php, body_header.php till design_head, design_foot

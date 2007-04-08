@@ -5,26 +5,26 @@
 
 	$lyric_id = $_GET['id'];
 
-	$lyric_data = getLyricData($db, $lyric_id);
+	if (isset($_POST['lyric']) && isset($_POST['title']))
+	{
+		if (!$session->isAdmin) {
+			addPendingChange(MODERATIONCHANGE_LYRIC, $lyric_id, $_POST['title'], $_POST['lyric']);
+		} else {
+			updateLyric($lyric_id, $_POST['title'], $_POST['lyric']);
+		}
+		echo 'Changes submitted.<br/>';
+	}
+
+	$lyric_data = getLyricData($lyric_id);
 	if (!$lyric_data) die;
 
 	require('design_head.php');
 
 	if (isset($_GET['delete'])) {
-		removeLyric($db, $lyric_id);
+		removeLyric($lyric_id);
 		echo 'Lyric removed.<br/>';
 		require('design_foot.php');
 		die;
-	}
-
-	if (isset($_POST['lyric']) && isset($_POST['title']))
-	{
-		if ($_SESSION['userMode'] == 0) {
-			addPendingChange($db, MODERATIONCHANGE_LYRIC, $lyric_id, $_POST['title'], $_POST['lyric']);
-		} else {
-			updateLyric($db, $lyric_id, $_POST['title'], $_POST['lyric']);
-		}
-		echo 'Changes submitted.<br/>';
 	}
 
 	$lyric = $lyric_data['lyricText'];
@@ -41,7 +41,7 @@
 	echo '</form><br/>';
 
 	echo '<a href="show_lyric.php?id='.$lyric_id.'">Back to "View lyric" view</a><br/>';
-	echo '<a href="show_band.php?id='.getLyricBandId($db, $lyric_id).'">Go to '.$band_name.' page</a><br/>';
+	echo '<a href="show_band.php?id='.getLyricBandId($lyric_id).'">Go to '.$band_name.' page</a><br/>';
 
 	if (isset($_SESSION['lastURL']) && $_SESSION['lastURL']) {
 		echo '<a href="'.$_SESSION['lastURL'].'">Go back</a><br/>';
@@ -50,7 +50,7 @@
 	echo '<br/><br/>';
 	echo 'This song appears on the following records:<br/>';
 
-	$list = getLyricRecords($db, $lyric_id);
+	$list = getLyricRecords($lyric_id);
 	for ($i=0; $i<count($list); $i++)
 	{
 		$record_name = $list[$i]['recordName'];

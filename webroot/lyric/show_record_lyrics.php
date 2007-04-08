@@ -6,17 +6,17 @@
 
 	$record_id = $_GET['id'];
 		
-	$band_id = getBandIdFromRecordId($db, $record_id);
+	$band_id = getBandIdFromRecordId($record_id);
 
 	echo '<a name="top"></a>';
 	if ($band_id == 0) {
-		echo '<b>V/A - '.getRecordName($db, $record_id).'</b>';
+		echo '<b>V/A - '.getRecordName($record_id).'</b>';
 	} else {
-		echo '<b>'.getBandName($db, $band_id).' - '.getRecordName($db, $record_id).'</b>';
+		echo '<b>'.getBandName($band_id).' - '.getRecordName($record_id).'</b>';
 	}
 	echo '<br/><br/>';
 
-	$list = getRecordTracks($db, $record_id);
+	$list = getRecordTracks($record_id);
 	
 	/* First list track titles */
 	for ($i=0; $i<count($list); $i++)
@@ -31,7 +31,7 @@
 		}
 		
 		if ($list[$i]['authorId'] != $list[$i]['bandId']) {
-			echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($db, $list[$i]['authorId']).'</a>)';
+			echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
 		}
 		echo '<br/>';
 	}
@@ -45,17 +45,17 @@
 		$lyric_id = $list[$i]['lyricId'];
 
 		if ($band_id == 0) {
-			echo '<b>'.$track.'. '.$list[$i]['bandName'] .' - '.dbStripSlashes($list[$i]['lyricName']).'</b>';
+			echo '<b>'.$track.'. '.$list[$i]['bandName'] .' - '.stripslashes($list[$i]['lyricName']).'</b>';
 		} else {
-			echo '<b>'.$track.'. '.dbStripSlashes($list[$i]['lyricName']).'</b>';
+			echo '<b>'.$track.'. '.stripslashes($list[$i]['lyricName']).'</b>';
 		}
 
 		if ($list[$i]['authorId'] != $list[$i]['bandId']) {
-			echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($db, $list[$i]['authorId']).'</a>)';
+			echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
 		}
 		echo ' <a href="edit_lyric.php?id='.$lyric_id.'">Edit</a><br/>';
 		
-		$lyric = dbStripSlashes($list[$i]['lyricText']);
+		$lyric = stripslashes($list[$i]['lyricText']);
 		if ($lyric)
 		{
 			$lyric = str_replace('&amp;', '&', $lyric);
@@ -71,7 +71,7 @@
 	}
 
 	echo '<br/>';
-	echo '<a href="show_band.php?id='.$band_id.'">Back to '.getBandName($db, $band_id).' page</a><br/>';
+	echo '<a href="show_band.php?id='.$band_id.'">Back to '.getBandName($band_id).' page</a><br/>';
 
 	require('design_foot.php');
 ?>
