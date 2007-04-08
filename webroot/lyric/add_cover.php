@@ -23,7 +23,7 @@
 		}
 		else
 		{
-			//if ($_SESSION['userMode'] == 0) {
+			//if (!$session->isAdmin) {
 				/* Add to pending changes queue */
 				addPendingChange(MODERATIONCHANGE_LYRICLINK, $record_id, $track);
 			//}

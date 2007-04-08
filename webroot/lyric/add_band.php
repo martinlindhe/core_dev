@@ -7,7 +7,7 @@
 		$band_name = trim($_POST['bandname']);
 		$band_info = $_POST['bandinfo'];
 		
-		$band_id = addBand($_SESSION['userId'], $band_name);
+		$band_id = addBand($band_name);
 
 		if ($band_id)
 		{

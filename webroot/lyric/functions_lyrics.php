@@ -130,16 +130,16 @@
 		$db->query('UPDATE tblTracks SET lyricId=0,bandId=0 WHERE lyricId='.$lyric_id);
 	}
 
-	function addLyric($user_id, $band_id, $record_id, $track, $lyric_name, $lyric_text)
+	function addLyric($band_id, $record_id, $track, $lyric_name, $lyric_text)
 	{
-		global $db;
+		global $db, $session;
 
-		if (!is_numeric($user_id) || !is_numeric($band_id) || !is_numeric($record_id) || !is_numeric($track)) return false;
+		if (!$session->id || !is_numeric($band_id) || !is_numeric($record_id) || !is_numeric($track)) return false;
 
 		$lyric_name = cleanupText($lyric_name);
 		$lyric_text = cleanupText($lyric_text);
 
-		$db->query('INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$user_id.',timestamp='.time());
+		$db->query('INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$session->id.',timestamp='.time());
 		$lyric_id = $db->insert_id;
 
 		if ($record_id) {

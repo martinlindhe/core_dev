@@ -10,7 +10,7 @@
 		$record_info = trim($_POST['info']);
 		$tracks = $_POST['tracks'];
 
-		$record_id = addRecord($_SESSION['userId'], 0, $record_name, $record_info); //bandid=0 for records with multiple bands
+		$record_id = addRecord(0, $record_name, $record_info); //bandid=0 for records with multiple bands
 		if (!$record_id)
 		{
 			echo 'Problems adding record.<br/>';

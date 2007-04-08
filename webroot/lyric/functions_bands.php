@@ -1,18 +1,18 @@
 <?
 	/* functions_bands.php */
 	
-	function addBand($creator_id, $band_name)
+	function addBand($band_name)
 	{
-		global $db;
+		global $db, $session;
 
-		if (!is_numeric($creator_id)) return false;
-		
+		if (!$session->id) return false;
+
 		$band_name = $db->escape(trim($band_name));
 
 		$check = $db->getOneRow("SELECT * FROM tblBands WHERE bandName='".$band_name."'");
 		if ($check) return false; //a band with this name already exists
 
-		$sql = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$creator_id.",timestamp=".time();
+		$sql = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$session->id.",timestamp=".time();
 		$db->query($sql);
 		return $db->insert_id;
 	}

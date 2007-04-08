@@ -12,10 +12,10 @@
 		$song_name = $_POST['songname'];
 		$lyric_text = $_POST['lyrictext'];
 
-		$lyric_id = addLyric($_SESSION['userId'], $band_id, 0, 0, $song_name, $lyric_text);
+		$lyric_id = addLyric($band_id, 0, 0, $song_name, $lyric_text);
 		if (!$lyric_id) die('Problems adding lyric');
 
-		if ($_SESSION['userMode'] == 0) {
+		if (!$session->isAdmin) {
 			/* Add lyricId to moderation queue */
 			addModerationItem($lyric_id, MODERATION_LYRIC);
 		}

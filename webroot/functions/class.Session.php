@@ -24,11 +24,12 @@ class Session
 	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
 	private $sha1_key = 'rpxp8xkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 	private $allow_registration = true;	//set to false to disallow the possibility to register new users
+	private $home_page = '';						//if set, redirects user to this page after successful login
 
 	//Aliases of $_SESSION[] variables
 	public $error;
 	public $ip;
-	public $id;
+	public $id;													//current user's user ID
 	public $username;
 	public $mode;
 	public $lastActive;
@@ -43,6 +44,7 @@ class Session
 		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
+		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
 
 		global $db;
 
@@ -100,6 +102,11 @@ class Session
 			//See what IP checking policy that will be in use for the session
 			if (!empty($_POST['login_lock_ip'])) $this->check_ip = true;
 			else $this->check_ip = false; 
+
+			if ($this->home_page) {
+				header('Location: '.basename($this->home_page));
+				die;
+			}
 		}
 		else if ($this->id && isset($_GET['logout']))
 		{
@@ -233,6 +240,7 @@ class Session
 		echo 'Current IP: '.GeoIP_to_IPv4($this->ip).'<br/>';
 		echo 'Session timeout: '.$this->timeout.'<br/>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
+		echo 'Home page: '.$this->home_page.'<br/>';
 		if ($this->isSuperAdmin) {
 			echo 'SHA1 key: '.$this->sha1_key.'<br/>';
 		}

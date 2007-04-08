@@ -33,7 +33,7 @@ document.search.query.focus();
 		} else {
 			echo 'You are a normal user<br/>';
 		}
-		echo '<a href="logout.php">Log out</a><br/>';
+		echo '<a href="?logout">Log out</a><br/>';
 	} else {
 		echo '<a href="login.php">Log in</a><br/>';
 	}

@@ -13,7 +13,7 @@
 		$record_info = trim($_POST['info']);
 		$tracks = $_POST['tracks'];
 		
-		$record_id = addRecord($_SESSION['userId'], $band_id, $record_name, $record_info);
+		$record_id = addRecord($band_id, $record_name, $record_info);
 		if (!$record_id)
 		{
 			echo 'Problems adding record.<br/>';
@@ -24,7 +24,7 @@
 			
 			echo 'Record "'.$record_name.'" added.<br/><br/>';
 			
-			if ($_SESSION['userMode'] == 0) {
+			if (!$session->isAdmin) {
 				/* Add recordId to moderation queue */
 				addModerationItem($record_id, MODERATION_RECORD);
 				echo 'Record added to moderation queue aswell.<br/><br/>';

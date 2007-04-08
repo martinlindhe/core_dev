@@ -9,7 +9,7 @@
 		
 	if (isset($_POST['title']))
 	{
-		//if ($_SESSION['userMode'] == 0) {
+		//if (!$session->isAdmin) {
 			addPendingChange(MODERATIONCHANGE_RECORDNAME, $record_id, $_POST['title']);
 			echo 'Change added to moderation queue<br/>';
 		//} else {

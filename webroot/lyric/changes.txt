@@ -5,10 +5,7 @@ todo hi prio:
 	#5: BORT MED TABLES i den mån det går
 	
 	- ändra alla time() i queries till NOW(), samt ändra format i databasen
-	- $_SESSION['userMode'] -> $session->isAdmin
 	
-
-
 
 todo buggfix/mindre features:
 	* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!

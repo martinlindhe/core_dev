@@ -1,8 +1,6 @@
 <?
 	require_once('config.php');
 
-	$_SESSION['lastURL'] = $_SERVER['REQUEST_URI'];
-
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('Bad id');
 
 	$record_id = $_GET['id'];

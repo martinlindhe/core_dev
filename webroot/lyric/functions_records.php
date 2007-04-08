@@ -38,16 +38,16 @@
 	}
 	
 	
-	function addRecord($creator_id, $band_id, $record_name, $record_info)
+	function addRecord($band_id, $record_name, $record_info)
 	{
-		global $db;
+		global $db, $session;
 
-		if (!is_numeric($band_id) || !is_numeric($creator_id)) return false;
+		if (!$session->id || !is_numeric($band_id)) return false;
 
 		$record_name = $db->escape(trim($record_name));
 		$record_info = $db->escape(trim($record_info));
 		
-		$db->query("INSERT INTO tblRecords SET recordName='".$record_name."',bandId=".$band_id.",recordInfo='".$record_info."',creatorId=".$creator_id.",timestamp=".time());
+		$db->query("INSERT INTO tblRecords SET recordName='".$record_name."',bandId=".$band_id.",recordInfo='".$record_info."',creatorId=".$session->id.",timestamp=".time());
 
 		return $db->insert_id;
 	}

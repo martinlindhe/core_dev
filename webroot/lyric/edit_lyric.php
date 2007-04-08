@@ -43,10 +43,6 @@
 	echo '<a href="show_lyric.php?id='.$lyric_id.'">Back to "View lyric" view</a><br/>';
 	echo '<a href="show_band.php?id='.getLyricBandId($lyric_id).'">Go to '.$band_name.' page</a><br/>';
 
-	if (isset($_SESSION['lastURL']) && $_SESSION['lastURL']) {
-		echo '<a href="'.$_SESSION['lastURL'].'">Go back</a><br/>';
-	}
-
 	echo '<br/><br/>';
 	echo 'This song appears on the following records:<br/>';
 

@@ -1,42 +1,35 @@
 <?
 	require_once('config.php');
 	
-	if (!empty($_GET['record']) && !empty($_GET['track']) && is_numeric($_GET['record']) && is_numeric($_GET['track']))
-	{
-		$record_id = $_GET['record'];
-		$track = $_GET['track'];
+	if (empty($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['record']) || !is_numeric($_GET['track'])) die('Bad id');
+
+	$record_id = $_GET['record'];
+	$track = $_GET['track'];
 		
-		if (isset($_GET['band']) && $_GET['band']) {
-			$band_id = $_GET['band'];
-		} else {
-			$band_id = getBandIdFromRecordId($record_id);
-		}
-		
-		if (isset($_POST['lyricid']) && $_POST['lyricid'])
-		{
-			$lyric_id = $_POST['lyricid'];
-			
-			if (!linkLyric($record_id, $track, $lyric_id, $band_id))
-			{
-				echo 'Failed to add lyric link';
-			}
-			else
-			{
-				if ($_SESSION['userMode'] == 0) {
-					/* Add to pending changes queue */
-					addPendingChange(MODERATIONCHANGE_LYRICLINK, $record_id, $track);
-				}
-				
-				header('Location: show_record.php?id='.$record_id);
-				die;
-			}
-		}
-		
+	if (isset($_GET['band']) && $_GET['band']) {
+		$band_id = $_GET['band'];
+	} else {
+		$band_id = getBandIdFromRecordId($record_id);
 	}
-	else
+		
+	if (isset($_POST['lyricid']) && $_POST['lyricid'])
 	{
-		echo 'Bad id';
-		die;
+		$lyric_id = $_POST['lyricid'];
+			
+		if (!linkLyric($record_id, $track, $lyric_id, $band_id))
+		{
+			echo 'Failed to add lyric link';
+		}
+		else
+		{
+			if (!$session->isAdmin) {
+				/* Add to pending changes queue */
+				addPendingChange(MODERATIONCHANGE_LYRICLINK, $record_id, $track);
+			}
+				
+			header('Location: show_record.php?id='.$record_id);
+			die;
+		}
 	}
 
 	require('design_head.php');

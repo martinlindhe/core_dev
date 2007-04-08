@@ -29,8 +29,9 @@
 				}
 			}
 		}
-
 	}
+	
+	$session->showInfo();
 	
 	$list = getNewAdditions();
 	if (count($list)) {
