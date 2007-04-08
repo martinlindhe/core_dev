@@ -1,7 +1,10 @@
 todo:
 
 	hög prioritet:
-	
+	- infofield rewrite
+	- fixa variabelpassande från den inbyggda infofield-blobben
+	- byt namn på infofield till wiki, desamma i databasen, tblInfoField & tblInfoFieldHistory
+	- gör en generell tblRevisions och använd den istället för tblInfoFieldHistory
 
 	låg prioritet:
 	- kanske ska man uppdela regler mellan generella regler, och site-specifika regler.

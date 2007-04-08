@@ -1,45 +1,14 @@
 <?
+	/* functions_infofields.php																										*/
+	/* --------------------------------------------------------------------------	*/
+	/* Written by Martin Lindhe	<martin_lindhe@yahoo.se>													*/
+
 	//infofield module settings:
 	$config['infofield']['log_history'] = true;
 	$config['infofield']['allow_comments'] = false;
 	$config['infofield']['allow_files'] = false;
 	$config['infofield']['allow_html'] = false;
 	$config['infofield']['explain_words'] = false;
-
-	/* functions_infofields.php																										*/
-	/* --------------------------------------------------------------------------	*/
-	/* Written by Martin Lindhe	<martin_lindhe@yahoo.se>													*/
-	/*																																						*/
-	/* Module-specific tables: tblInfoFields, tblInfoFieldsHistory								*/
-	/* Module uses these tbls: tblUsers																						*/
-	/* --------------------------------------------------------------------------	*/
-	/* MODULE TODO's:																															*/
-	/*	- Multi-language support																									*/
-	/* ------------------------------------------------------------end of header-	*/
-	
-/*
-	//Swedish:
-	define('INFOFIELD_TABTEXT_HISTORY', 'Historik');
-	define('INFOFIELD_TABTEXT_FILES',		'Filer');
-	define('INFOFIELD_TABTEXT_HIDE', 		'G&ouml;m');
-	
-	define('INFOFIELD_TEXT_LASTEDITED',	'senast &auml;ndrad');
-
-	//Norweigan:
-	define('INFOFIELD_TABTEXT_HISTORY', 'Historikk');
-	define('INFOFIELD_TABTEXT_FILES',		'Filer');
-	define('INFOFIELD_TABTEXT_HIDE', 		'Gj&oslash;mm');
-	
-	define('INFOFIELD_TEXT_LASTEDITED',	'edited');
-*/
-
-	define('INFOFIELD_TABTEXT_HISTORY', 'History');
-	define('INFOFIELD_TABTEXT_FILES',		'Files');
-	define('INFOFIELD_TABTEXT_HIDE', 		'Hide');
-	
-	define('INFOFIELD_TEXT_LASTEDITED',	'edited');
-
-	
 
 	/* Optimization: Doesnt store identical entries if you hit Save button multiple times */
 	function updateInfoField($fieldName, $fieldText)
@@ -226,7 +195,7 @@
 				if (!empty($data['timeEdited'])) $last_edited = $data['timeEdited'].' by '.$data['editorName'];
 
 				$info = '<form method="post" name="editinfofieldform" action="'.AddToURL('infoedit', $fieldName, $_SERVER['PHP_SELF']).'">'.
-								'<textarea name="infofield" cols="38" rows="'.$rows.'">'.$text.'</textarea><br/>'.
+								'<textarea name="infofield" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
 								'Last edited '.$last_edited.'<br/>'.
 								'<input type="submit" class="button" value="Save"/>';
 
@@ -349,11 +318,11 @@
 									'<div class="infofield_head"><ul>'.
 										'<li>'.($current_tab=='main'?'<strong>':'').		'<a href="'.$_SERVER['PHP_SELF'].'">'.$fieldName.'</a>'.																					($current_tab=='main'?'</strong>':'').'</li>'.
 										'<li>'.($current_tab=='edit'?'<strong>':'').		'<a href="'.AddToURL('infoedit', $fieldName, $_SERVER['PHP_SELF']).'">Edit</a>'.	($current_tab=='edit'?'</strong>':'').'</li>'.
-										'<li>'.($current_tab=='history'?'<strong>':'').	'<a href="'.AddToURL('infohistory', $fieldName, $_SERVER['PHP_SELF']).'">'.INFOFIELD_TABTEXT_HISTORY.'</a>'.	($current_tab=='history'?'</strong>':'').'</li>';
+										'<li>'.($current_tab=='history'?'<strong>':'').	'<a href="'.AddToURL('infohistory', $fieldName, $_SERVER['PHP_SELF']).'">History</a>'.	($current_tab=='history'?'</strong>':'').'</li>';
 			if ($config['infofield']['allow_files']) {
-				$html .=		'<li>'.($current_tab=='files'?'<strong>':'').		'<a href="'.AddToURL('infofiles', $fieldName, $_SERVER['PHP_SELF']).'">'.INFOFIELD_TABTEXT_FILES.'</a>'.			($current_tab=='files'?'</strong>':'').'</li>';
+				$html .=		'<li>'.($current_tab=='files'?'<strong>':'').		'<a href="'.AddToURL('infofiles', $fieldName, $_SERVER['PHP_SELF']).'">Files</a>'.			($current_tab=='files'?'</strong>':'').'</li>';
 			}
-			$html .= 			'<li><a href="'.AddToURL('hideinfopanel', '', $_SERVER['PHP_SELF']).'">'.INFOFIELD_TABTEXT_HIDE.'</a></li>'.
+			$html .= 			'<li><a href="'.AddToURL('hideinfopanel', '', $_SERVER['PHP_SELF']).'">Hide</a></li>'.
 									'</ul></div>'.
 									'<div class="infofield_body">'.$info.'</div>';
 
