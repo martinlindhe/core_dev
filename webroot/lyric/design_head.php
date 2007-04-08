@@ -47,7 +47,7 @@
 		echo countNewAdditions().' new additions.<br/>';
 		echo countPendingChanges().' pending changes.<br/>';
 		echo '<a href="moderate.php">Go moderate</a>';
-	}
+	} else {
 ?>
 
 	<table cellpadding="0" cellspacing="0" border="0">
@@ -57,7 +57,9 @@
 		</tr>
 	</table>
 	<br/><br/>
-
+<?
+	}
+?>
 </div>
 
 <div id="main">

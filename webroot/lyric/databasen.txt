@@ -4,7 +4,7 @@ dbLyrics
 	tblBands
 		bandId			autoincrement index
 		bandName
-		bandInfo		blob
+		bandInfo		text
 		
 		
 	tblRecords
@@ -22,6 +22,6 @@ dbLyrics
 	tblLyrics
 		lyricId			autoincrement index
 		lyricName
-		lyricText		blob
+		lyricText		text
 		bandId			berättar vilket band som gjort låten
 

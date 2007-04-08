@@ -1,7 +1,8 @@
 todo hi prio:
-	#4: rensa upp modererings-logiken...
+	#1: rensa upp modererings-logiken...
 			- gör en moderate klass!
-	#5: BORT MED TABLES i den mån det går
+	#2: BORT MED TABLES i den mån det går
+	#3: åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 	
 todo buggfix/mindre features:
 	* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
@@ -19,6 +20,7 @@ todo buggfix/mindre features:
 	* ändrat alla databas-element "blob" till "text"
 	* ändrat all text i databasen till att sparas i utf8-format (100% unicode stöd)	
 	* gjorde en left_nav navigeringsmeny
+	* css cleanup
 
 
 2007.04.04

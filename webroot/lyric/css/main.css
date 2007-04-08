@@ -1,28 +1,17 @@
-/*Stylesheet för IE 4+ och NS6x*/
-
 body
 {
     margin: 5px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 0px;
-    list-style-type: square; 
-    line-height: normal; 
-    background-color: #000000;
-    list-style-type: square;
-    color: #ffffff;
+    padding: 0px;
+    background-color: #000;
+    color: #fff;
 }
 
-
-FORM {
-	font: 12px verdana, arial;
+A {
+	color: #555;
+	font-family: verdana, arial;
+	text-decoration: none;
 }
-
-A:link		{ color: #999999; font-family: verdana, arial; font-weight: bold; text-decoration: none; }
-A:visited	{ color: #999999; text-decoration: none; }
-A:hover		{ color: #FFFFFF; text-decoration: none; }
-
+A:hover { color: #FFFFFF; }
 
 .titlemod {
 	font: 16px verdana, arial;
