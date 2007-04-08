@@ -78,25 +78,24 @@
 		<form method="post" name="lf" action="<?=$_SERVER['PHP_SELF']?>">
 		<table width="100%" cellpadding="5" cellspacing="0" border="1">
 			<tr><td align="right" class="centermenu">
-				Advertisment<input name="t1" value="1" type="checkbox" class="checkbox"<? if ($t1check) echo ' checked'; ?>/><br/>
-				Tracking<input name="t2" value="2" type="checkbox" class="checkbox"<? if ($t2check) echo ' checked'; ?>/><br/>
-				Counter<input name="t3" value="3" type="checkbox" class="checkbox"<? if ($t3check) echo ' checked'; ?>/><br/>
-				Unknown<input name="t0" value="0" type="checkbox" class="checkbox"<? if ($t0check) echo ' checked'; ?>/>
+				<label for="t1">Advertisment</label>
+				<input name="t1" id="t1" value="1" type="checkbox" class="checkbox"<? if ($t1check) echo ' checked'; ?>/><br/>
+
+				<label for="t2">Tracking</label>
+				<input name="t2" id="t2" value="2" type="checkbox" class="checkbox"<? if ($t2check) echo ' checked'; ?>/><br/>
+
+				<label for="t3">Counter</label>
+				<input name="t3" id="t3" value="3" type="checkbox" class="checkbox"<? if ($t3check) echo ' checked'; ?>/><br/>
+				
+				<label for="t0">Unknown</label>
+				<input name="t0" id="t0" value="0" type="checkbox" class="checkbox"<? if ($t0check) echo ' checked'; ?>/>
 			</td>
 			<td align="right" valign="top" width="180">
 				<input type="text" name="s" value="<?=$search?>" size="14"/> 
 				<input type="submit" value="Search"/><br/>
 				<br/>
-				<select name="l">
-					<option value="15"<?if($l==15)echo ' selected="selected"'?>>15 per page</option>
-					<option value="25"<?if($l==25)echo ' selected="selected"'?>>25 per page</option>
-					<option value="40"<?if($l==40)echo ' selected="selected"'?>>40 per page</option>
-					<option value="100"<?if($l==100)echo ' selected="selected"'?>>100 per page</option>
-					<option value="500"<?if($l==500)echo ' selected="selected"'?>>500 per page</option>
-					<option value="0"<?if($l==0)echo ' selected="selected"'?>>Show all</option>
-				</select>&nbsp;<input type="submit" value="Set"/><br/>
-				<br/>
-				Sort by time created <input type="checkbox" name="sortbytime" value="1" class="checkbox"<? if ($sortByTime) echo ' checked="checked"'; ?>/>
+				<label for="sortbytime">Show newest first</label>
+				<input type="checkbox" name="sortbytime" id="sortbytime" value="1" class="checkbox"<? if ($sortByTime) echo ' checked="checked"'; ?>/>
 			</td></tr>
 		</table>
 		</form>

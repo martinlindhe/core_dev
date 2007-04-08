@@ -32,6 +32,10 @@
 		echo '<li><a href="newrule.php">New rule</a></li>';
 		echo '<li><a href="ruleset.php">Browse rules</a></li>';
 		echo '<li><a href="report_site.php">Report site</a></li>';
+
+		//admin menu if logged in
+		echo '<li><a href="admin_events.php">Admin</a></li>';
+		echo '<li><a href="admin_reports.php">Reported sites ('.getProblemSiteCount().')</a></li>';
 	}
 
 	if ($session->id) {

@@ -183,7 +183,7 @@
 		$searchword = $db->escape(strip_tags($searchword));
 		$sql = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
 		
-		return $db-getOneItem($sql);
+		return $db->getOneItem($sql);
 	}
 
 	

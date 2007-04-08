@@ -4,8 +4,6 @@ todo:
 	
 
 	låg prioritet:
-	- ruleset.php: åter-implementera ändring av listlimit ??
-	- ruleset.php: efter en sökning som ger mer än 1 sida resultat, när man bläddar till nästa sida så är sökningen bortglömd
 	- kanske ska man uppdela regler mellan generella regler, och site-specifika regler.
 
 
