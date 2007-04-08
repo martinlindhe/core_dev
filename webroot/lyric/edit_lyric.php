@@ -9,10 +9,10 @@
 	{
 		if (!$session->isAdmin) {
 			addPendingChange(MODERATIONCHANGE_LYRIC, $lyric_id, $_POST['title'], $_POST['lyric']);
+			echo 'Changes submitted for moderation.<br/>';
 		} else {
 			updateLyric($lyric_id, $_POST['title'], $_POST['lyric']);
 		}
-		echo 'Changes submitted.<br/>';
 	}
 
 	$lyric_data = getLyricData($lyric_id);

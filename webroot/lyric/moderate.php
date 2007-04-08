@@ -95,12 +95,12 @@
 						echo '<td valign="top" width="500">';
 						$org = getLyricData($list[$i]['p1']);
 						echo '<b>'.$org['lyricName'].'</b><br/>';
-						echo nl2br(dbStripSlashes($org['lyricText']));
+						echo nl2br(stripslashes($org['lyricText']));
 						echo '</td>';
 
 						echo '<td valign="top">';
 						echo '<b>'.$list[$i]['p2'].'</b><br/>';
-						echo nl2br(dbStripSlashes($list[$i]['p3']));
+						echo nl2br(stripslashes($list[$i]['p3']));
 						echo '</td>';
 					echo '</tr></table>';
 					break;

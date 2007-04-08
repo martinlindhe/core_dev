@@ -1,5 +1,4 @@
 todo hi prio:
-	#2: UNICODE stöd!
 	#3: gör en ordentlig navigeringsmeny
 	#4: rensa upp modererings-logiken...
 			- gör en moderate klass!
@@ -18,7 +17,8 @@ todo buggfix/mindre features:
 2007.04.08
 	* portat applikationen till att använda nya "functions" frameworket. alla databasanrop går genom $db
 	* uppdaterat alla queries till DATETIME created timestamp (från unix timestamp)
-	
+	* ändrat alla databas-element "blob" till "text"
+	* ändrat all text i databasen till att sparas i utf8-format (100% unicode stöd)	
 
 
 2007.04.04

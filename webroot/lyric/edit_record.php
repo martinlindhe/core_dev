@@ -9,13 +9,13 @@
 		
 	if (isset($_POST['title']))
 	{
-		//if (!$session->isAdmin) {
+		if (!$session->isAdmin) {
 			addPendingChange(MODERATIONCHANGE_RECORDNAME, $record_id, $_POST['title']);
 			echo 'Change added to moderation queue<br/>';
-		//} else {
-			//updateRecord($record_id, $_POST['title']);
-			//echo 'Title changed.<br/>';
-		//}
+		} else {
+			updateRecord($record_id, $_POST['title']);
+			echo 'Title changed.<br/>';
+		}
 	}
 
 	if (isset($_POST['band']) && $_POST['band'] && is_numeric($_POST['band'])) {

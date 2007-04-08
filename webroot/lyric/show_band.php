@@ -62,8 +62,8 @@
 
 		for ($i=0; $i<count($list); $i++) {
 			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
-			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'">'.dbStripSlashes($list[$i]['lyricName']).'</a>';
-			echo ' (On <a href="show_record.php?id='.$list[$i]['recordId'].'">'.dbStripSlashes($list[$i]['recordName']).'</a>, track #'.$list[$i]['trackNumber'].')<br/>';
+			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'">'.stripslashes($list[$i]['lyricName']).'</a>';
+			echo ' (On <a href="show_record.php?id='.$list[$i]['recordId'].'">'.stripslashes($list[$i]['recordName']).'</a>, track #'.$list[$i]['trackNumber'].')<br/>';
 		}
 		echo '<br/>';
 	}

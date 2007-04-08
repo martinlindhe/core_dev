@@ -21,7 +21,7 @@
 
 		for ($i=0; $i<count($list); $i++) {
 			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
-			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'&amp;highlight='.urlencode($query).'">'.dbStripSlashes($list[$i]['lyricName']).'</a><br/>';
+			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'&amp;highlight='.urlencode($query).'">'.stripslashes($list[$i]['lyricName']).'</a><br/>';
 		}
 
 		echo '<br/><a href="index.php">Back to main</a>';
