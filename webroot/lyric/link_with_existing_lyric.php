@@ -64,7 +64,7 @@
 			echo '<option value="'.$list[$i]['lyricId'].'">'.$list[$i]['lyricName'].'</option>';
 		}
 		echo '</select><br/>';
-		echo '<input type="submit" value="Save link" class="buttonstyle"/>';
+		echo '<input type="submit" value="Save link" class="button"/>';
 		echo '</form>';
 ?>
 <script type="text/javascript">

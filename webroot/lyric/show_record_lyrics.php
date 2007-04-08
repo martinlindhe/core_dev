@@ -12,7 +12,8 @@
 	if ($band_id == 0) {
 		echo '<b>V/A - '.getRecordName($record_id).'</b>';
 	} else {
-		echo '<b>'.getBandName($band_id).' - '.getRecordName($record_id).'</b>';
+		echo '<b><a href="show_band.php?id='.$band_id.'">'.getBandName($band_id).'</a>';
+		echo ' - '.getRecordName($record_id).'</b>';
 	}
 	echo '<br/><br/>';
 
@@ -27,7 +28,7 @@
 		if ($band_id == 0) {
 			echo '<b>'.$track.'. '.$list[$i]['bandName'] .' - '.$list[$i]['lyricName'].'</b>';
 		} else {
-			echo '<b><a href="#'.$i.'">'.$track.'. '.$list[$i]['lyricName'].'</a></b>';
+			echo '<b><a href="#'.$i.'">'.$track.'. '.stripslashes($list[$i]['lyricName']).'</a></b>';
 		}
 		
 		if ($list[$i]['authorId'] != $list[$i]['bandId']) {
@@ -69,9 +70,6 @@
 		echo '<a href="#top">To top</a><br/>';
 		echo '<br/><br/><br/><br/>';
 	}
-
-	echo '<br/>';
-	echo '<a href="show_band.php?id='.$band_id.'">Back to '.getBandName($band_id).' page</a><br/>';
 
 	require('design_foot.php');
 ?>

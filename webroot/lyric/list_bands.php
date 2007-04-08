@@ -23,8 +23,5 @@
 	echo count($list).' bands displayed.<br/>';
 	echo $mod.' of them are pending for approval.<br/>';
 
-	echo '<br/>';
-	echo '<a href="index.php">Back to main page.</a><br/>';
-
 	require('design_foot.php');
 ?>

@@ -26,7 +26,12 @@
 	} else {
 		echo '<tr><td colspan="3" class="title">';
 	}
-	echo $band_name.' - '.$record_name.'</td><td align="right"><a href="edit_record.php?id='.$record_id.'">Edit</a></td></tr>';
+	if ($band_id) {
+		echo '<a href="show_band.php?id='.$band_id.'">'.$band_name.'</a>';
+	} else {
+		echo $band_name;
+	}
+	echo ' - '.$record_name.'</td><td align="right"><a href="edit_record.php?id='.$record_id.'">Edit</a></td></tr>';
 
 	$list = getRecordTracks($record_id);
 	for ($i=0; $i<count($list); $i++)
@@ -51,7 +56,7 @@
 				/* Show the band name of current track if it's a split/compilation */
 				echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
 			}
-			
+
 			echo '<a href="show_lyric.php?id='.$lyric_id.'">'.stripslashes($list[$i]['lyricName']).'</a>';
 			
 			if ($list[$i]['authorId'] != $list[$i]['bandId'])
@@ -94,10 +99,6 @@
 	echo '</table>';
 	
 	echo '<br/>';
-	if ($band_id) {
-		echo '<a href="show_band.php?id='.$band_id.'">Back to '.$band_name.' page</a><br/>';
-	}
-	echo '<a href="index.php">Back to main page</a><br/>';
 	
 	require('design_foot.php');
 ?>

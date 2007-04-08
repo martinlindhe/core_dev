@@ -33,7 +33,9 @@
 		$lyric_name = str_ireplace($highlight, '<font color="yellow">'.$highlight.'</font>', $lyric_name);
 	}
 
-	echo '<b>'.$band_name.' - '.$lyric_name.'</b></td><td width="30" align="right"><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td></tr>';
+	echo '<b><a href="show_band.php?id='.$lyric_data['bandId'].'">'.$band_name.'</a>';
+
+	echo ' - '.$lyric_name.'</b></td><td width="30" align="right"><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td></tr>';
 	echo '<tr><td colspan="2">';
 
 	echo nl2br($lyric);
@@ -61,9 +63,6 @@
 		}
 		echo '<br/>';
 	}
-
-	echo '<a href="show_band.php?id='.$lyric_data['bandId'].'">Back to '.$band_name.' page</a><br/>';
-	echo '<a href="index.php">Back to main</a><br/>';
 
 	require('design_foot.php');
 ?>

@@ -50,7 +50,7 @@
 	echo '<tr><td>Record name:</td><td><input type="text" name="recordname"/> (leave empty for s/t)</td></tr>';
 	echo '<tr><td>Number of tracks:</td><td><input type="text" name="tracks" value="3"/></td></tr>';
 	echo '<tr><td valign="top">Record info:<br/>(optional)</td><td><textarea name="info" cols="40" rows="8"></textarea></td></tr>';
-	echo '<tr><td colspan="2"><input type="submit" value="Add" class="buttonstyle"/></td></tr>';
+	echo '<tr><td colspan="2"><input type="submit" value="Add" class="button"/></td></tr>';
 	echo '</table>';
 	echo '</form>';
 

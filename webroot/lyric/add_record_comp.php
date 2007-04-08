@@ -24,7 +24,7 @@
 		}
 	}
 
-	echo 'For comp and split records, you assign a band to each track in the next step,<br/>';
+	echo 'For compilations and split records, you assign a band to each track in the next step,<br/>';
 	echo 'first we just create the record entry, with the record name and track count.<br/>';
 
 	echo '<form name="addcomprecord" method="post" action="'.$_SERVER['PHP_SELF'].'">';
@@ -33,7 +33,7 @@
 	echo '<tr><td>Number of tracks:&nbsp;</td><td><input type="text" name="tracks" value="1"/></td></tr>';
 	echo '<tr><td valign="top">Record info:<br/>(optional)</td><td><textarea name="info" cols="40" rows="8"></textarea></td></tr>';
 
-	echo '<tr><td colspan="2"><input type="submit" value="Add" class="buttonstyle"/></td></tr>';
+	echo '<tr><td colspan="2"><input type="submit" value="Add" class="button"/></td></tr>';
 	echo '</table>';
 	echo '</form>';
 	

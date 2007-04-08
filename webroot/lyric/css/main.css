@@ -15,49 +15,13 @@ body
 }
 
 
-table, tr, td {
-	font: 12px verdana, arial;
-	color: #FFFFFF;
-}
-
 FORM {
 	font: 12px verdana, arial;
 }
 
-INPUT, TEXTAREA, SELECT {
-	font: 12px verdana, arial;
-	color: #FFFFFF;
-	background-color: #000000;
-	border-style: solid;
-	border-color: #888888;
-}
-
-INPUT.buttonstyle {
-	font: 12px verdana, arial;
-	border-style: solid;
-	border-color: #999999;
-	background-color: #DDDDDD;
-	color: black;
-}
-
-INPUT.radio {
-	border-color: #FFFFFF;
-}
-
-INPUT.checkbox {
-	border-color: #FFFFFF;
-}
-
-
 A:link		{ color: #999999; font-family: verdana, arial; font-weight: bold; text-decoration: none; }
 A:visited	{ color: #999999; text-decoration: none; }
-A:active	{ color: #FFFFFF; text-decoration: none; }
 A:hover		{ color: #FFFFFF; text-decoration: none; }
-
-
-
-
-
 
 
 .titlemod {
@@ -78,4 +42,28 @@ A:hover		{ color: #FFFFFF; text-decoration: none; }
 .subtitle {
 	font: 12px verdana, arial;
 	color: #FFFFFF;
+}
+
+
+#left_nav {
+	position: absolute;
+
+	height: 480px;
+	width: 150px;
+	top: 20px;
+	left: 10px;
+	
+	color: #000;
+	background-color: #cceeaa;
+}
+
+#main {
+	position: absolute;
+
+	width: 800px;
+	top: 20px;
+	left: 180px;
+	
+	background-color: #000;
+	border: 1px #fff solid;
 }

@@ -40,7 +40,7 @@
 <table width="400" cellpadding="0" cellspacing="0" border="0">
 	<tr><td width="100">Band name:</td><td><input type="text" name="bandname"/></td></tr>
 	<tr><td valign="top">Band info:</td><td><textarea name="bandinfo" cols="40" rows="6"></textarea></td></tr>
-	<tr><td colspan="2"><input type="submit" value="Add" class="buttonstyle"/></td></tr>
+	<tr><td colspan="2"><input type="submit" value="Add" class="button"/></td></tr>
 </table>
 </form>
 

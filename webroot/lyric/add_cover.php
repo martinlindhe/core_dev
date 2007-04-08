@@ -84,7 +84,7 @@
 			echo '<option value="'.$list[$i]['lyricId'].'">'.$list[$i]['lyricName'].'</option>';
 		}
 		echo '</select><br/>';
-		echo '<input type="submit" value="Save link" class="buttonstyle"/>';
+		echo '<input type="submit" value="Save link" class="button"/>';
 		echo '</form>';
 
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&amp;track='.$track.'&amp;coverband='.$coverband_id.'">Back to step 2</a><br/>';

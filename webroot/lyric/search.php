@@ -9,22 +9,17 @@
 
 	$list = searchLyrics($query);
 	if (count($list) == 1) {
-
 		header('Location: show_lyric.php?id='.$list[0]['lyricId'].'&highlight='.urlencode($query));
 		die;
+	}
 
-	} else {
+	require('design_head.php');
 
-		require('design_head.php');
+	echo 'Search results on "'.$query.'" ('.count($list).' hits):<br/><br/>';
 
-		echo 'Search results on "'.$query.'" ('.count($list).' hits):<br/><br/>';
-
-		for ($i=0; $i<count($list); $i++) {
-			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
-			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'&amp;highlight='.urlencode($query).'">'.stripslashes($list[$i]['lyricName']).'</a><br/>';
-		}
-
-		echo '<br/><a href="index.php">Back to main</a>';
+	for ($i=0; $i<count($list); $i++) {
+		echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
+		echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'&amp;highlight='.urlencode($query).'">'.stripslashes($list[$i]['lyricName']).'</a><br/>';
 	}
 
 	require('design_foot.php');

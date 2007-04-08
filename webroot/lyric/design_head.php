@@ -8,13 +8,48 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 </head>
 <body>
+<div id="left_nav">
+
+<a href="index.php">Start page</a><br/>
+<br/>
 <?
-	if (!$session->id) {
-		echo 'You need to be logged in to submit changes/additions. <a href="login.php">Log in</a> | <a href="register.php">Register</a><br/><br/>';
+	if ($session->id) {
+?>
+	<a href="add_band.php">Add band</a><br/>
+	<a href="add_record.php">Add normal record</a><br/>
+	<a href="add_record_comp.php">Add comp. / split</a><br/>
+	<a href="?logout">Log out</a><br/>
+<?
+	} else {
+?>
+	<a href="login.php">Log in</a><br/>
+<?
 	}
 ?>
 
-<div id="left_nav">
+<a href="list_bands.php">List bands</a><br/>
+<br/>
+
+<a href="missing_lyrics.php">List missing lyrics</a><br/>
+<a href="incomplete_lyrics.php">List incomplete lyrics</a><br/>
+<br/>
+
+<form name="search" method="post" action="search.php">
+	<input type="text" size="18" name="query"/><br/>
+	<input type="submit" value="Search" class="button"/>
+</form>
+
+<?
+	if ($session->isAdmin) {
+		echo '<br/>';
+		echo 'Moderation:<br/>';
+
+		echo countNewAdditions().' new additions.<br/>';
+		echo countPendingChanges().' pending changes.<br/>';
+		echo '<a href="moderate.php">Go moderate</a>';
+	}
+?>
+
 	<table cellpadding="0" cellspacing="0" border="0">
 		<tr>
 			<td class="subtitlemod" width="15">&nbsp;</td>
@@ -25,4 +60,4 @@
 
 </div>
 
-<div id="body">
+<div id="main">

@@ -90,12 +90,10 @@
 		echo '<option value="show_lyric.php?id='.$list[$i]['lyricId'].'">'.$db->escape($list[$i]['lyricName']).'</option>';
 	}
 	echo '</select> ';
-	echo '<input type="submit" value="Go" class="buttonstyle" onclick="location.href=form.url.options[form.url.selectedIndex].value; return false;"/>';
+	echo '<input type="submit" value="Go" class="button" onclick="location.href=form.url.options[form.url.selectedIndex].value; return false;"/>';
 	echo '</form>';
 	
 	echo '<a href="add_lyric_single.php?band='.$band_id.'">Add a single lyric</a><br/><br/>';
-
-	echo '<a href="index.php">Back to main page</a><br/>';
 
 	require('design_foot.php');
 ?>

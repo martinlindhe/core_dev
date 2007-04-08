@@ -75,7 +75,7 @@
 				removeNewAddition($list[$i]['type'], $list[$i]['ID']);
 			}
 		}
-		echo '<input type="submit" value="Update" class="buttonstyle"/>';
+		echo '<input type="submit" value="Update" class="button"/>';
 		echo '</form>';
 	}
 
@@ -124,11 +124,9 @@
 			echo '<input class="radio" type="radio" name="'.$list[$i]['type'].'_'.$list[$i]['p1'].'" value="deny"/>Deny';
 			echo '<hr>';
 		}
-		echo '<input type="submit" value="Update" class="buttonstyle"/>';
+		echo '<input type="submit" value="Update" class="button"/>';
 		echo '</form>';
 	}
 
-	echo '<a href="index.php">Back to main</a><br/>';
-	
 	require('design_foot.php');
 ?>

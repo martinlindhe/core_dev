@@ -37,7 +37,7 @@
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$lyric_id.'&amp;delete">Delete</a><br/>';
 	echo '<a href="show_lyric.php?id='.$lyric_id.'">Show</a><br/>';
 	echo '<textarea name="lyric" rows="27" cols="85">'.$lyric.'</textarea><br/>';
-	echo '<input type="submit" value="Save changes" class="buttonstyle"/>';
+	echo '<input type="submit" value="Save changes" class="button"/>';
 	echo '</form><br/>';
 
 	echo '<a href="show_lyric.php?id='.$lyric_id.'">Back to "View lyric" view</a><br/>';
@@ -60,8 +60,6 @@
 		}
 		echo ' - <a href="show_record.php?id='.$list[$i]['recordId'].'">'. $record_name.'</a>, track #'.$list[$i]['trackNumber'].'<br/>';
 	}
-	echo '<br/>';
-	echo '<a href="index.php">Back to main</a>';
 
 	require('design_foot.php');
 ?>

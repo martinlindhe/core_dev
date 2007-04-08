@@ -44,7 +44,7 @@
 	}
 	echo '</select><br/>';
 
-	echo '<input type="submit" value="Update changes" class="buttonstyle"/>';
+	echo '<input type="submit" value="Update changes" class="button"/>';
 	echo '</form>';
 
 	echo '<a href="show_band.php?id='.$band_id.'">Back to '.$band_name.' page</a>';

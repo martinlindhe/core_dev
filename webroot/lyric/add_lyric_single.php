@@ -32,7 +32,7 @@
 	echo 'Song name: <input type="text" name="songname" size="40"/><br/>';
 	echo 'Lyric:<br/>';
 	echo '<textarea name="lyrictext" cols="60" rows="30"></textarea><br/>';
-	echo '<input type="submit" value="Add" class="buttonstyle"/>';
+	echo '<input type="submit" value="Add" class="button"/>';
 	echo '</form>';
 
 	echo '<script type="text/javascript">';
