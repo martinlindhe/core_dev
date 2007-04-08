@@ -9,10 +9,10 @@
 	todo: rename GetArray() till Array() ? eller är det för confusing med array() datatyp ?
 */
 
-define('LOGLEVEL_ALL', 0);
 define('LOGLEVEL_NOTICE', 1);
 define('LOGLEVEL_WARNING', 2);
 define('LOGLEVEL_ERROR', 3);
+define('LOGLEVEL_ALL', 5);
 
 abstract class DB_Base
 {
@@ -66,7 +66,7 @@ abstract class DB_Base
 	protected $db_driver = '';
 
 	//debug variables
-	protected $debug = false;
+	public $debug = false;
 	protected $connect_time = 0;
 	protected $time_spent = array();
 	protected $queries_cnt = 0;
@@ -163,25 +163,25 @@ abstract class DB_Base
 	}
 	
 	/* Writes a log entry to tblLogs */
-	function log($str, $entryLevel = 0)
+	function log($str, $entryLevel = LOGLEVEL_NOTICE)
 	{
 		global $session;
 		if (!is_numeric($entryLevel)) return false;
 
 		$enc_str = $this->escape($str);
 		
-		echo '<b>LOG: '.$str.'</b><br/>';
+		//echo '<b>LOG: '.$str.'</b><br/>';
 
-		if ($session) {
+		//if ($session) {
 			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
-		} else {
-			echo 'WARNING - CANNOT LOG with session info!<br/>';
-			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId=0,userIP=0');
-		}
+		//} else {
+			//echo 'WARNING - CANNOT LOG with session info!<br/>';
+			//$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId=0,userIP=0');
+		//}
 	}
 
 	/* Gets all log entries */
-	function getLogEntries($entryLevel = 0)
+	function getLogEntries($entryLevel = LOGLEVEL_ALL)
 	{
 		global $session;
 		if (!$session->id || !is_numeric($entryLevel)) return false;
@@ -191,6 +191,15 @@ abstract class DB_Base
 		} else {
 			return $this->getArray('SELECT * FROM tblLogs ORDER BY timeCreated DESC');
 		}
+	}
+
+	function clearLog($entryLevel = LOGLEVEL_ALL)
+	{
+		global $session;
+
+		if (!$session->isAdmin || !is_numeric($entryLevel)) return false;
+
+		$this->query('DELETE FROM tblLogs WHERE entryLevel <= '.$entryLevel);
 	}
 
 	/* Looks up a username by id */

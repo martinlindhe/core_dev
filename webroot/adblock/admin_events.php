@@ -7,7 +7,7 @@
 	}
 
 	if (isset($_GET['clearlog'])) {
-		clearLog($db, LOGLEVEL_ALL);
+		$db->clearLog();
 	}
 
 	require('design_head.php');

@@ -17,8 +17,8 @@
 
 	if ($search || !empty($_POST['t0']) || !empty($_POST['t1']) || !empty($_POST['t2']) || !empty($_POST['t3'])) {
 		@$types = $_POST['t0'].','.$_POST['t1'].','.$_POST['t2'].','.$_POST['t3'];
-		$list = searchAdblockRules($db, $search, $types, $page, $l, $sortByTime);
-		$totRules = searchAdblockRuleCount($db, $search);	//fixme: count ignorerar $types
+		$list = searchAdblockRules($search, $types, $page, $l, $sortByTime);
+		$totRules = searchAdblockRuleCount($search);	//fixme: count ignorerar $types
 	} else {
 		$list = getAdblockRules('', $page, $l);
 		$totRules = getAdblockRulesCount();

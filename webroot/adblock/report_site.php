@@ -4,7 +4,7 @@
 	if (!empty($_POST['site'])) {
 		$type = 0;
 		if (!empty($_POST['type'])) $type = $_POST['type'];
-		$siteId = addProblemSite($db, $_POST['site'], $type, $_POST['comment']);
+		$siteId = addProblemSite($_POST['site'], $type, $_POST['comment']);
 		if ($siteId) {
 
 			require('design_head.php');

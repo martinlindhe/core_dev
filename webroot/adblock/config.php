@@ -28,6 +28,7 @@
 	$config['session']['home_page'] = 'index.php';
 	$session = new Session($config['session']);
 
+	$config['start_page'] = 'index.php';
 
 
 

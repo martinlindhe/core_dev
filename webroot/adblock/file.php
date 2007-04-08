@@ -14,10 +14,10 @@
 	
 	require('config.php');
 
-	$data = getFile($db, $fileId);
+	$data = getFile($fileId);
 	if (!$data) die;
 
-	if (empty($_GET['width']) && empty($_GET['height'])) updateFileViews($db, $fileId);	//dont count views for thumbnails
+	if (empty($_GET['width']) && empty($_GET['height'])) updateFileViews($fileId);	//dont count views for thumbnails
 	
 	$last_name = '';
 	$pos = strrpos($data['fileName'], '.');

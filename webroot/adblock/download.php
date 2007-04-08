@@ -45,10 +45,10 @@
 		
 		$cache_file = $config['adblock']['cachepath'].'adblockfilters'.$type_ext.'.txt';
 
-		if ($config['debug']) {
+		if ($db->debug) {
 			$str = 'Downloaded ruleset '.$cache_file.' ('.$requestType.')';
 			if (!empty($_GET['version'])) $str .= ' ('.strip_tags($_GET['version']).')';
-			logEntry($db, $str);
+			$db->log($str);
 		}
 
 		$lastchanged = 0;
