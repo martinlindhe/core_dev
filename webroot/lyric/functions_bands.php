@@ -12,7 +12,7 @@
 		$check = $db->getOneRow("SELECT * FROM tblBands WHERE bandName='".$band_name."'");
 		if ($check) return false; //a band with this name already exists
 
-		$sql = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$session->id.",timestamp=".time();
+		$sql = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$session->id.",timeCreated=NOW()";
 		$db->query($sql);
 		return $db->insert_id;
 	}

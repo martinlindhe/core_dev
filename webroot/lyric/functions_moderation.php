@@ -15,7 +15,7 @@
 
 		if (!is_numeric($type) || !is_numeric($id)) return false;
 		
-		$db->query('INSERT INTO tblNewAdditions SET ID='.$id.',type='.$type.',timestamp='.time());
+		$db->query('INSERT INTO tblNewAdditions SET ID='.$id.',type='.$type.',timeCreated=NOW()');
 	}
 	
 	function isModerated($id, $type)
@@ -98,20 +98,20 @@
 		
 		if ($type == MODERATIONCHANGE_LYRICLINK) {	//db, type, record_id, track_id
 			if (!is_numeric($p1) || !is_numeric($p2)) return false;
-			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timestamp=".time());
+			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timeCreated=NOW()");
 			
 		} else if ($type == MODERATIONCHANGE_LYRIC) { //db, type, lyric_id, title, text
 			if (!is_numeric($p1)) return false;
 			
 			$p2 = $db->escape($p2);
 			$p3 = $db->escape($p3);
-			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',p3='".$p3."',timestamp=".time());
+			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',p3='".$p3."',timeCreated=NOW()");
 			
 		} else if ($type == MODERATIONCHANGE_RECORDNAME) { //db, type, record_id, title
 			if (!is_numeric($p1)) return false;
 
 			$p2 = $db->escape($p2);
-			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timestamp=".time());
+			$db->query("INSERT INTO tblPendingChanges SET type=".$type.",p1=".$p1.",p2='".$p2."',timeCreated=NOW()");
 
 		} else {
 			echo "addPendingChange(): unknown TYPE: ".$type;
@@ -156,7 +156,7 @@
 	{
 		global $db;
 
-		return $db->getArray('SELECT * FROM tblPendingChanges ORDER BY timestamp ASC');
+		return $db->getArray('SELECT * FROM tblPendingChanges ORDER BY timeCreated ASC');
 	}
 	
 	function denyPendingChange($type, $p1)

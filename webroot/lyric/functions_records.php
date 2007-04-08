@@ -36,8 +36,7 @@
 
 		return $text;		
 	}
-	
-	
+
 	function addRecord($band_id, $record_name, $record_info)
 	{
 		global $db, $session;
@@ -46,12 +45,12 @@
 
 		$record_name = $db->escape(trim($record_name));
 		$record_info = $db->escape(trim($record_info));
-		
-		$db->query("INSERT INTO tblRecords SET recordName='".$record_name."',bandId=".$band_id.",recordInfo='".$record_info."',creatorId=".$session->id.",timestamp=".time());
+
+		$db->query('INSERT INTO tblRecords SET recordName="'.$record_name.'",bandId='.$band_id.',recordInfo="'.$record_info.'",creatorId='.$session->id.',timeCreated=NOW()');
 
 		return $db->insert_id;
 	}
-	
+
 	function createTracks($record_id, $tracks)
 	{
 		global $db;
