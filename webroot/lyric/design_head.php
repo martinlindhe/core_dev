@@ -30,8 +30,8 @@
 <a href="list_bands.php">List bands</a><br/>
 <br/>
 
-<a href="missing_lyrics.php">List missing lyrics</a><br/>
-<a href="incomplete_lyrics.php">List incomplete lyrics</a><br/>
+<a href="missing_lyrics.php">Missing lyrics</a><br/>
+<a href="incomplete_lyrics.php">Incomplete lyrics</a><br/>
 <br/>
 
 <form name="search" method="post" action="search.php">
@@ -53,7 +53,7 @@
 	<table cellpadding="0" cellspacing="0" border="0">
 		<tr>
 			<td class="subtitlemod" width="15">&nbsp;</td>
-			<td>Fields marked in this color means new additions/pending changes.</td>
+			<td>Fields marked in this color means new additions / pending changes.</td>
 		</tr>
 	</table>
 	<br/><br/>

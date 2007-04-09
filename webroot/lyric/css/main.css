@@ -49,10 +49,14 @@ A:hover { color: #FFFFFF; }
 #main {
 	position: absolute;
 
-	width: 800px;
+	min-width: 500px;
 	top: 20px;
 	left: 180px;
-	
-	background-color: #000;
+
+	color: #fff;
+	background-color: #333;
 	border: 1px #fff solid;
+}
+#main a {
+	color: #bbb;
 }

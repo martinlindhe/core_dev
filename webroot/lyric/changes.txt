@@ -3,9 +3,10 @@ todo hi prio:
 			- gör en moderate klass!
 	#2: BORT MED TABLES i den mån det går
 	#3: åter-inserta de texter som pajats pga latin1->utf8 konverteringen
+	#4: när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
+	#5: show_band.php: kunna ändra bandnamn
 	
 todo buggfix/mindre features:
-	* show_band.php: kunna ändra bandnamn
 	* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
 	* edit_record.php: kunna editera recordInfo
 	* add_single_lyric.php: integrera i add_lyric.php
