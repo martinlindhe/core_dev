@@ -20,6 +20,20 @@
 		
 		return $db->getArray($sql);
 	}
+
+	function addRevision($fieldType, $fieldId, $fieldText, $timeEdited, $editedBy)
+	{
+		global $db;
+
+		if (!is_numeric($fieldType) || !is_numeric($fieldId) || !is_numeric($editedBy)) return false;
+		
+		$timeEdited = $db->escape($timeEdited);		//todo: validate timeEdited bättre
+		$fieldText = $db->escape($fieldText);
+
+		$sql = 'INSERT INTO tblRevisions SET fieldId='.$fieldId.',fieldType='.$fieldType.',fieldText="'.$fieldText.'",editedBy='.$editedBy.',timeEdited="'.$timeEdited.'"';
+		$db->query($sql);
+	}
+
 /*	
 	function clearInfoFieldHistory(&$db)
 	{

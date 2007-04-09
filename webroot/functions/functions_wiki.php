@@ -1,5 +1,5 @@
 <?
-	/* functions_infofields.php																										*/
+	/* functions_wiki.php																													*/
 	/* --------------------------------------------------------------------------	*/
 	/* Written by Martin Lindhe	<martin_lindhe@yahoo.se>													*/
 
@@ -22,7 +22,7 @@
 		$fieldName = $db->escape(trim($fieldName));
 		if (!$fieldName) return false;
 
-		$sql = 'SELECT fieldId,fieldText FROM tblWiki WHERE fieldName="'.$fieldName.'"';
+		$sql = 'SELECT * FROM tblWiki WHERE fieldName="'.$fieldName.'"';
 		$data = $db->getOneRow($sql);
 
 		/* Aborts if we are trying to save a exact copy as the last one */
@@ -34,10 +34,7 @@
 		{
 			if ($config['infofield']['log_history'])
 			{
-				//Stores backup entry in tblInfoFieldsHistory
-				$sql  = 'INSERT INTO tblRevisions (fieldId,fieldText,editedBy,timeEdited,fieldType) ';
-				$sql .= 'SELECT fieldId,fieldText,'.$session->id.' AS editedBy,timeEdited,'.REVISIONS_WIKI.' AS fieldType FROM tblWiki WHERE fieldId='.$data['fieldId'];
-				$db->query($sql);
+				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy']);
 			}
 			$db->query('UPDATE tblWiki SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$fieldName.'"');
 		}
@@ -122,14 +119,11 @@
 
 	function wiki($fieldName = '')
 	{
-		//fixme: tillåt bara a-z, 0-9 och -_ tecken i $fieldName, samt mellanslag
 		global $db, $session;
-		//fixme: ta bort $config direktiv härifrån
 		global $config;
 
 		$current_tab = 'View';
 
-		//fixme: gör denna konfigurabel
 		$allowed_tabs = array('View', 'Edit', 'History', 'Comments', 'Files', 'Hide');
 		
 		//print_r($_GET);

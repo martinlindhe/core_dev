@@ -4,9 +4,9 @@ todo:
 
 
 	wiki rewrite:
-
 		- namn "Start page" blir "Start_page"
 		- kunna länka andra wikis i text, med [[Name|title]]
+		- gör konfigurations-direktiv till wikin, $config['wiki] ...
 
 
 	låg prioritet:
