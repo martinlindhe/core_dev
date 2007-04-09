@@ -3,6 +3,8 @@
 	/* --------------------------------------------------------------------------	*/
 	/* Written by Martin Lindhe	<martin_lindhe@yahoo.se>													*/
 
+	require_once('functions_revisions.php');
+
 	//infofield module settings:
 	$config['infofield']['log_history'] = true;
 	$config['infofield']['allow_comments'] = false;
@@ -33,8 +35,8 @@
 			if ($config['infofield']['log_history'])
 			{
 				//Stores backup entry in tblInfoFieldsHistory
-				$sql  = 'INSERT INTO tblInfoFieldsHistory (fieldId,fieldText,editedBy,timeEdited) ';
-				$sql .= 'SELECT fieldId,fieldText,'.$session->id.' AS editedBy,timeEdited FROM tblWiki WHERE fieldId='.$data['fieldId'];
+				$sql  = 'INSERT INTO tblRevisions (fieldId,fieldText,editedBy,timeEdited,fieldType) ';
+				$sql .= 'SELECT fieldId,fieldText,'.$session->id.' AS editedBy,timeEdited,'.REVISIONS_WIKI.' AS fieldType FROM tblWiki WHERE fieldId='.$data['fieldId'];
 				$db->query($sql);
 			}
 			$db->query('UPDATE tblWiki SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$fieldName.'"');
@@ -44,40 +46,9 @@
 			$db->query('INSERT INTO tblWiki SET fieldName="'.$fieldName.'", fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id);
 		}
 	}
-	
-	function getInfoFieldHistory($fieldId)
-	{
-		global $db;
 
-		if (!is_numeric($fieldId) || !$_SESSION['isSuperAdmin']) return false;
-
-		$sql  = 'SELECT t1.*,t2.userName AS editorName FROM tblInfoFieldsHistory AS t1 ';
-		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.editedBy=t2.userId) ';
-		$sql .= 'WHERE t1.fieldId='.$fieldId.' ';
-		$sql .= 'ORDER BY t1.timeEdited DESC';
-
-		return $db->getArray($sql);
-	}
-	
-	function clearInfoFieldHistory(&$db)
-	{
-		if (!$_SESSION['isSuperAdmin']) return false;
-
-		$sql  = 'DELETE FROM tblInfoFieldsHistory';
-		dbQuery($db, $sql);
-		return true;
-	}
-
-	function getInfoFieldHistoryCountAll(&$db)
-	{
-		if (!$_SESSION['isSuperAdmin']) return false;
-
-		$sql  = 'SELECT COUNT(fieldId) FROM tblInfoFieldsHistory';
-
-		return dbOneResultItem($db, $sql);
-	}
-
-	function formatInfoField(&$data, $fieldName)
+	/* formats text for wiki output */
+	function wikiFormat(&$data, $fieldName)
 	{
 		global $db, $config;
 		
@@ -195,7 +166,7 @@
 
 		if (!$session->isAdmin || $current_tab == 'Hide') {
 			//Visa enbart texten
-			echo formatInfoField($data, $fieldName);
+			echo wikiFormat($data, $fieldName);
 			return true;
 		}
 
@@ -307,7 +278,7 @@
 			echo $tmptext;
 			echo '</div>';
 
-			$list = getInfoFieldHistory($fieldId);
+			$list = getRevisions(REVISIONS_WIKI, $fieldId);
 			if ($list)
 			{
 				echo '<br/>Archived versions ('.count($list).' entries):<br/>';
@@ -330,7 +301,7 @@
 		}
 		else
 		{
-			echo formatInfoField($data, $fieldName);
+			echo wikiFormat($data, $fieldName);
 		}
 
 		if ($config['infofield']['allow_comments']) {

@@ -4,7 +4,6 @@ todo:
 
 
 	wiki rewrite:
-		- gör en generell tblRevisions och använd den istället för tblInfoFieldHistory
 
 		- namn "Start page" blir "Start_page"
 		- kunna länka andra wikis i text, med [[Name|title]]
@@ -20,6 +19,7 @@ todo:
 	- övergått till nya settings funktionerna
 	- tog bort session ID som parameter från alla funktioner, använder $session->id istället
 	- gjorde en sida wiki.php?View:Help, istället för help.php, about.php, contribute.php, subscribe.php
+	- gjorde en generell tblRevisions / functions_revisions.php och använd den istället för tblInfoFieldHistory
 
 
 2007.04.04:
