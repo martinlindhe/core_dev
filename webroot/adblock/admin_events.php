@@ -8,7 +8,7 @@
 
 	require('design_head.php');
 
-	echo getInfoField('page_admin_eventlog');
+	wiki('Admin_events');
 
 	$db->showEvents();
 

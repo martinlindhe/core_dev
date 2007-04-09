@@ -23,7 +23,7 @@ we will look into this site as soon as possible!<br/><br/>
 
 	require('design_head.php');
 
-	echo getInfoField('page_report_top');
+	wiki('Report_top');
 ?>
 <br/>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>" name="reportform">
@@ -44,7 +44,7 @@ we will look into this site as soon as possible!<br/><br/>
 </form>
 <br/>
 <?
-	echo getInfoField('page_report_bottom');
+	wiki('Report_bottom');
 ?>
 <script type="text/javascript">
 document.reportform.site.focus();

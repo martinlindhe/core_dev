@@ -12,7 +12,7 @@
 
 	require('design_head.php');
 
-	echo getInfoField('page_settings');
+	wiki('Settings');
 
 	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 

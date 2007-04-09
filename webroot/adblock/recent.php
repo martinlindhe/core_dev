@@ -3,7 +3,9 @@
 
 	require('design_head.php');
 
-	echo getInfoField('page_recent changes').'<br/>';
+	wiki('Recent');
+
+	echo '<br/>';
 
 	$list = getAdblockLatestAdditions(10);
 

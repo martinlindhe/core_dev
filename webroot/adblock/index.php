@@ -3,7 +3,7 @@
 
 	require('design_head.php');
 
-	echo getInfoField('Start page');
+	wiki('Home');
 
 	require('design_foot.php');
 ?>

@@ -31,9 +31,10 @@
 	}
 
 	require('design_head.php');
-	
-	echo getInfoField('page_new_adblock_rule').'<br/>';
+
+	wiki('New_rule');
 ?>
+<br/>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>" name="newrule">
 <table width="500" cellpadding="0" cellspacing="0" border="0">
 	<tr><td width="20">&nbsp;</td><td class="centermenu">
@@ -63,7 +64,6 @@
 <script type="text/javascript">
 document.newrule.rule.focus();
 </script>
-
 <?
 	require('design_foot.php');
 ?>

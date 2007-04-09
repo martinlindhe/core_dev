@@ -81,7 +81,7 @@
 
 	$rules = getAdblockAllRulesCount();
 	
-	echo getInfoField('page_download').'<br/>';
+	wiki('Download');
 	
 ?>
 <script type="text/javascript">
