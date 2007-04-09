@@ -1,17 +1,17 @@
 todo:
 
 	hög prioritet:
-	- infofield rewrite
-	- fixa variabelpassande från den inbyggda infofield-blobben
-	- byt namn på infofield till wiki, desamma i databasen, tblInfoField & tblInfoFieldHistory
-	- gör en generell tblRevisions och använd den istället för tblInfoFieldHistory
-	- wiki todo: namn "Start page" blir "Start_page"
-	- wiki todo: kunna länka andra wikis i text, med [[Name|title]]
+
+
+	wiki rewrite:
+		- gör en generell tblRevisions och använd den istället för tblInfoFieldHistory
+
+		- namn "Start page" blir "Start_page"
+		- kunna länka andra wikis i text, med [[Name|title]]
 
 
 	låg prioritet:
-	- kanske ska man uppdela regler mellan generella regler, och site-specifika regler.
-
+		- kanske ska man uppdela regler mellan generella regler, och site-specifika regler.
 
 	
 --------------[[changelog]]------------

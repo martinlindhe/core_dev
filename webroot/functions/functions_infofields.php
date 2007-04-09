@@ -20,7 +20,7 @@
 		$fieldName = $db->escape(trim($fieldName));
 		if (!$fieldName) return false;
 
-		$sql = 'SELECT fieldId,fieldText FROM tblInfoFields WHERE fieldName="'.$fieldName.'"';
+		$sql = 'SELECT fieldId,fieldText FROM tblWiki WHERE fieldName="'.$fieldName.'"';
 		$data = $db->getOneRow($sql);
 
 		/* Aborts if we are trying to save a exact copy as the last one */
@@ -34,14 +34,14 @@
 			{
 				//Stores backup entry in tblInfoFieldsHistory
 				$sql  = 'INSERT INTO tblInfoFieldsHistory (fieldId,fieldText,editedBy,timeEdited) ';
-				$sql .= 'SELECT fieldId,fieldText,'.$session->id.' AS editedBy,timeEdited FROM tblInfoFields WHERE fieldId='.$data['fieldId'];
+				$sql .= 'SELECT fieldId,fieldText,'.$session->id.' AS editedBy,timeEdited FROM tblWiki WHERE fieldId='.$data['fieldId'];
 				$db->query($sql);
 			}
-			$db->query('UPDATE tblInfoFields SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$fieldName.'"');
+			$db->query('UPDATE tblWiki SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$fieldName.'"');
 		}
 		else
 		{
-			$db->query('INSERT INTO tblInfoFields SET fieldName="'.$fieldName.'", fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id);
+			$db->query('INSERT INTO tblWiki SET fieldName="'.$fieldName.'", fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id);
 		}
 	}
 	
@@ -180,10 +180,10 @@
 
 		if (!$session->isAdmin || $current_tab == 'Hide')
 		{
-			$sql = 'SELECT fieldId,fieldText,hasFiles FROM tblInfoFields WHERE fieldName="'.$db->escape($fieldName).'"';
+			$sql = 'SELECT fieldId,fieldText,hasFiles FROM tblWiki WHERE fieldName="'.$db->escape($fieldName).'"';
 		} else {
 			$sql  = 'SELECT t1.fieldId,t1.fieldText,t1.hasFiles,t1.timeEdited,t2.userName AS editorName '.
-							'FROM tblInfoFields AS t1 '.
+							'FROM tblWiki AS t1 '.
 							'INNER JOIN tblUsers AS t2 ON (t1.editedBy=t2.userId) '.
 							'WHERE fieldName="'.$db->escape($fieldName).'"';
 		}
