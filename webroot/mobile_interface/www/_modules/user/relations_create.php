@@ -9,7 +9,7 @@
 	}
 
 	if(!empty($_POST['ins_rel'])) {
-		$error = sendRelationRequest($_POST['ins_rel']);
+		$error = sendRelationRequest($s['id_id'], $_POST['ins_rel']);
 		if ($error) {
 			popupACT($error);
 			die;

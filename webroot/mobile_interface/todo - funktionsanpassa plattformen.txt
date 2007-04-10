@@ -1,0 +1,45 @@
+Funktionalitet som behövs funktions-baseras för att användas i det mobil-baserade gränssnittet till plattformen:
+
+	* Gästbok: (in progress av frans)
+		- Skriv meddelande/svara på meddelande
+		- Markera meddelande som läst
+		- Markera meddelande som raderat
+		- Hämta meddelanden till en person
+		- Hämta meddelandehistorik mellan två personer
+		- Hämta ett meddelande
+
+	* Mail: (klart - av martin)
+		- Skriv nytt meddelande
+		- Hämta meddelanden till en person
+		- Skicka svar på ett meddelande
+		- Markera meddelande som läst
+		- Markera meddelande som raderat
+
+	* Vänner: (nästan klart - av martin)
+		- Skapa relation (skicka en förfrågan)
+		- Acceptera vän-förfrågan
+		- Ta bort relation
+		- Blockera användare
+		- Hämta en persons kompis-lista, inklusive deras online/offline status
+		- Hämta en lista på dina blockerade användare
+		- Hämta en persons online/offline status
+		- Funktion för att kontrollera om inloggad användare och en annan person redan är vänner
+
+	* Profil:
+		- Ändra fakta
+		- Ändra lösenord
+		- Funktion som returnerar url till en användares visningsbild
+
+	* Galleri:
+		- Hämta lista på en användares galleri / galleri X
+		- Hämta lista med kommentarer för en enskild bild
+		- Skriv kommentar till en enskild bild
+
+	* Sök användare:
+		- Funktion som tar några parametrar och returnerar sökresultat som en array,
+			de parametrar som ska användas i mobil-gränssnittet är:
+			* Killar, Tjejer, Online nu, Har bild, fritext (LIKE %fritext% match på username), ålder från & ålder till, län & ort.
+
+	* Senast online:
+		- Funktion som returnerar de X senaste inloggade
+		

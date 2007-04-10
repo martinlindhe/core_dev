@@ -5,6 +5,17 @@
 	require('config.php');
 	require('design_head.php');
 	
+	if (!empty($_POST['ins_rel'])) {
+		//Registrera relations-förfrågan
+		$check = sendRelationRequest($_id, $_POST['ins_rel']);
+		if ($check === true) {
+			echo 'Du har nu skickat en förfrågan.<br/><br/>';
+			echo '<a href="relations.php">MINA VÄNNER</a>';
+			require('design_foot.php');
+			die;
+		}
+	}
+	
 	$user_data = $user->getuser($_id);
 
 	echo 'SKAPA RELATION MED '.$user_data['u_alias'].'<br/>';

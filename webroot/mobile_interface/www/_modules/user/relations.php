@@ -11,7 +11,7 @@
 	//martin kommenterade ut detta. samma sak hanteras redan i relations_create.php
 	//todo: eller var detta för att acceptera relation!?
 	if(!empty($_POST['ins_rel']) && !$own) {
-		$error = sendRelationRequest($_POST['ins_rel']);
+		$error = sendRelationRequest($s['id_id'], $_POST['ins_rel']);
 		if ($error) {
 			errorACT($error, l('user', 'relations', $l['id_id']));
 			die;
@@ -23,11 +23,11 @@
 	{
 		$d = !empty($_POST['d']) ? $_POST['d'] : $_GET['d'];
 
-		if (removeRelation($d, $s['id_id']) === true) reloadACT(l('user', 'relations'));
+		if (removeRelation($d) === true) reloadACT(l('user', 'relations'));
 	}
 	else if(!empty($_GET['a']))
 	{
-		$error = acceptRelationRequest($_GET['a'], $s['id_id']);
+		$error = acceptRelationRequest($_GET['a']);
 		if ($error === true) reloadACT(l('user', 'relations'));
 		errorACT($error, l('user', 'relations'));
 	}

@@ -36,7 +36,13 @@ class sql {
 			while($row = mysql_fetch_row($result))
 				$return[] = $row;
 		}
-		return $return;
+		
+		if ($return !== false) return $return;
+
+		echo '<br/><span style="background-color:#ee88aa">';
+		echo 'SQL ERROR from query "'.$query.'"<br/>';
+		echo mysql_error();
+		echo '</span>';
 	}
 
 	function querybycontent($query, $debug = false, $assoc = false, $name = 'content_type') {
@@ -71,12 +77,21 @@ class sql {
 		$this->checkconnected();
 		if($debug) print $query;
 		$result = @mysql_query($query);
-		return @mysql_result($result, 0);
+		if ($result !== false) return @mysql_result($result, 0);
+
+		echo '<br/><span style="background-color:#ee88aa">';
+		echo 'SQL ERROR from query "'.$query.'"<br/>';
+		echo mysql_error();
+		echo '</span>';
 	}
 	function queryInsert($query) {
 		$this->checkconnected();
-		@mysql_query($query);
-		return(mysql_insert_id());
+		if (mysql_query($query) !== false) return(mysql_insert_id());
+		echo '<br/><span style="background-color:#ee88aa">';
+		echo 'SQL ERROR from query "'.$query.'"<br/>';
+		echo mysql_error();
+		echo '</span>';
+		
 	}
 	function queryNumrows($query) {
 		$this->checkconnected();
