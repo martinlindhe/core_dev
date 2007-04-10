@@ -13,13 +13,15 @@ todo:
 		- gör /core/wiki.php
 		- använd /core/file.php
 		- flytta /ajax/*.php till /core/ajax_*.php
-		- kanske kan ta bort getFiles() och getFilesByCategory() och göra sql:en direkt i de funktioner som använder dom? för det är väl bara 1 funktion var
+		- kanske kan ta bort getFiles() och getFilesByCategory() och göra sql:en direkt i de
+			funktioner som använder dom? för det är väl bara 1 funktion var
 		- file details: visa vem som laddade upp filen, och när
 		- går det lösa med en genväg ?
 
 	wiki rewrite:
 		- namn "Start page" blir "Start_page"
 		- implementera stöd för "talk" page _eller_ comments
+		- gör ny toppmeny med div & ul & li osv, bort med tables
 		- functions_wiki.php & class.Files.php, kolla igenom så funktionerna har konsekvent parameterordning
 
 	låg prioritet:

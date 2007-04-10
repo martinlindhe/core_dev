@@ -1,30 +1,36 @@
-* SQL profiler
+==== SQL profiler =====
 		- Built into the core of the db classes are a accurate profiler that displays
 			which queries failed, or how much time each query took to execute.
 
-* Session handler
+==== Session handler ====
 		- Deals with all things related to users & sessions.
 		- Can store variables associated with each user for a variety of uses.
 		- Editor to modify/delete user settings, using AJAX
 
-* Database layer
+==== Database layer ====
 		- Transparent interface to different SQL databases (currently supports php_mysql.dll and php_mysqli.dll).
 			(todo: initial support pgsql, mssql)
 			Reduce time rewriting already working code for another db driver if you use this well defined class.
 
-* Wiki engine
+==== Wiki engine ====
 		- You can easily attach images and other media to a wiki by a simple upload.
 		- Every change gets stored in a revision table
 
-* Standards compatible
-		- XHTML 1.0:
-			* Currently need to use Transitional because the others dont support <center>
+==== Standards compatible ====
+		- All generated HTML are checked to be 100% "XHTML 1.0 Transitional" compatible using the "HTML Validator" plugin for Firefox.
+			* The goal is to be 100% "XHTML 1.0 Strict" or maybe "XHTML 1.1" compatible.
+			* Currently need to use 1.0 Transitional because the others dont support <center>
+			* Currently need to use 1.0 Transitional because strict/1.1 dont support <a href="" target="_blank">
 
-			Transitional:
+			XHTML 1.0 Transitional:
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-			
+
 			XHTML 1.0 Strict:
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 			XHTML 1.1:
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+		- CSS
+			* We use some mozilla-specific css rules currently, for rounding borders.
+			* Also we use IE-specific rules for alpha-level of div:s
