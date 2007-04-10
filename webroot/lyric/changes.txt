@@ -4,7 +4,8 @@ todo hi prio:
 	#2: BORT MED TABLES i den mån det går
 	#3: åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 	#4: när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
-	#5: show_band.php: kunna ändra bandnamn
+	#5: när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
+	#6: show_band.php: kunna ändra bandnamn
 	
 todo buggfix/mindre features:
 	* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!

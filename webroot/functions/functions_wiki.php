@@ -17,10 +17,9 @@
 	{
 		global $db, $session, $config;
 
-		if (!$session->isAdmin) return false;
-
 		$fieldName = $db->escape(trim($fieldName));
-		if (!$fieldName) return false;
+
+		if (!$session->isAdmin || !$fieldName) return false;
 
 		$sql = 'SELECT * FROM tblWiki WHERE fieldName="'.$fieldName.'"';
 		$data = $db->getOneRow($sql);

@@ -16,13 +16,6 @@
 		//convert dos line-endings to Unix format for easy handling
 		$text = str_replace("\r\n", "\n", $text);
 		
-		//convert [[ and ]]to &amp-versions:
-		$text = str_replace('[[', '&#91;', $text);	//	[		left square bracket
-		$text = str_replace(']]', '&#93;', $text);	//	]		right square bracket
-		
-		//convert | to &amp-version since it's used as a special character:
-		$text = str_replace('|', '&#124;', $text);	//	|		vertical bar
-
 		/* [b]bold text[/b] */
 		$text = str_ireplace('[b]', '<b>', $text);
 		$text = str_ireplace('[/b]', '</b>', $text);
@@ -46,7 +39,7 @@
 			$pos2 = stripos($text, '[/code]');
 			if ($pos2 === false) break;
 			$codeblock = trim(substr($text, $pos1+strlen('[code]'), $pos2-$pos1-strlen('[code]')));
-			$codeblock = str_replace("\n", "(mybr)", $codeblock);
+			$codeblock = str_replace("\n", '(_br_)', $codeblock);
 
 			$codeblock =
 				'<div class="bb_code">'.
@@ -86,13 +79,43 @@
 
 			$text = substr($text, 0, $pos1) .$quoteblock. substr($text, $pos2+strlen('[/quote]'));
 		} while (1);
+		
+		//wiki links, example [[About]] links to wiki.php?View:About
+		//example 2: [[About|read about us]] links to wiki.php?View:About but "read about us" is link text
+
+
+		do {
+			$pos1 = stripos($text, '[[');
+			if ($pos1 === false) break;
+			
+			$pos2 = stripos($text, ']]');
+			if ($pos2 === false) break;
+
+			$wiki_link = substr($text, $pos1+strlen('[['), $pos2-$pos1-strlen(']]'));
+			
+			$qpos1 = strpos($wiki_link, '|');
+
+			if ($qpos1 !== false) {
+				//[[About|read about us]] format
+				$link_text = substr($wiki_link, $qpos1+strlen('|'));
+				$wiki_link = substr($wiki_link, 0, $qpos1);
+
+				$wiki = '<a href="wiki.php?View:'.$wiki_link.'">'.$link_text.'</a>';
+			} else {
+				//[[About]] format
+				$wiki = '<a href="wiki.php?View:'.$wiki_link.'">'.$wiki_link.'</a>';
+			}
+
+			$text = substr($text, 0, $pos1) .$wiki. substr($text, $pos2+strlen(']]'));
+		} while (1);
+
 
 		//todo: add [img]url[/img] tagg för bildlänkning! och checka för intern länkning
 
 		$text = replaceLinks($text);
 		
 		$text = nl2br($text);
-		$text = str_replace("(mybr)", "\n", $text);
+		$text = str_replace('(_br_)', "\n", $text);
 
 		return $text;
 	}
