@@ -24,13 +24,12 @@ class sql {
 		}
 	}
 	function query($query, $debug = false, $assoc = false, $error = false) {
-		//echo $query.'<br/>';
 		$this->checkconnected();
 		if($debug) print $query;
 		$result = mysql_query($query);
 		$return = array();
-		if($error) echo mysql_error();
-		if($assoc) {
+		if ($error) echo mysql_error();
+		if ($assoc) {
 			while($row = mysql_fetch_assoc($result))
 				$return[] = $row;
 		} else {

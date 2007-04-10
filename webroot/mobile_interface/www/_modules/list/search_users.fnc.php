@@ -6,23 +6,26 @@
 		Uppdaterad av Martin Lindhe, 2007-04-10
 	*/
 	
-	//Reads post variables and produces result
-	function performSearch()
+	//Reads post variables and produces result. $_start & $_end is to be used together with page splitting logic
+	//todo: rip out all commented out $paging stuff
+	function performSearch($_start = 0, $_end = 0)
 	{
-		global $sql, $user, $l;
-		
+		global $sql, $user, $t, $l;
+
 		$result = array();
 		$result['lan']		= '0';	//Län
 		$result['ort'] 		= '0';	//Ort
-		$result['single']	= '0'; //?? exponeras ej i sökgränssnittet
-		$result['online'] = '0'; //Sök användare online
+		$result['single']	= '0';	//?? exponeras ej i sökgränssnittet
+		$result['online'] = '0';	//Sök användare online
 		$result['pic']		= '1';	//sök bland folk som har bild
 		$result['alias']	= '';		//fritext i användarnamnet
 		$result['sex']		= '0';	//0 = alla kön, M = killar, F = tjejer
 		$result['level']	= '0';	//söka vip-medlemmar?
 		$result['ord']		= '0';	//sorterings-ordning ??? exponeras ej i sökgränssnittet
 		$result['age']		= '0';	//ålder?
-		$result['birth']	= '0';	//??? används ej???
+		$result['birth']	= '0';	//??? används ej ???
+
+		if (!is_numeric($_start) || !is_numeric($_end)) return $result;
 
 		$r = $user->getinfo($l['id_id'], 'random');
 		$page = 'user';
@@ -53,7 +56,7 @@
 				$bpic = 3;
 			}
 		}
-		$lan_sql = $sql->query("SELECT st_lan FROM {$t}pstlan ORDER BY main_id ASC");
+
 		if (!empty($_POST['do'])) $do = '1';
 		if ($do) {
 			$url[] = 'do=1&';
@@ -67,10 +70,6 @@
 				$result['ord'] = $_POST['ord'];
 			}
 			$str[] = '+ACTIVE';
-			if ($result['lan']) {
-				$ort_sql = $sql->query("SELECT st_ort FROM {$t}pstort WHERE st_lan = '".secureINS($result['lan'])."' ORDER BY st_ort");
-				if (!count($ort_sql)) { $result['lan'] = '0'; }
-			}
 			if (!empty($_POST['ort']) && $result['lan']) {
 				$result['ort'] = $_POST['ort'];
 				$ort_check = $sql->queryResult("SELECT st_lan FROM {$t}pstort WHERE st_ort = '".secureINS($result['ort'])."' LIMIT 1");
@@ -156,7 +155,7 @@
 						$res = "FROM {$t}userbirth b INNER JOIN {$t}userlevel l ON l.id_id = b.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
 				}*/ 
 			$lim = ($result['pic'])?45:50;
-			$paging = paging(@$_POST['p'], $lim);
+			//$paging = paging(@$_POST['p'], $lim);
 			if (count($str) > 1) {
 				if($result['online'])
 					$res = "FROM {$t}useronline o INNER JOIN {$t}userlevel l ON l.id_id = o.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."' AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
@@ -190,15 +189,17 @@
 			}
 			if ($result['ord']) $url[] = 'ord='.secureOUT($result['ord']).'&';
 			#$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count $res");
-	//$ord
 			#$res = $sql->query("SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd, u.u_pstlan, u.level_id, u.u_pstort, u.account_date, u.lastlog_date, u.lastonl_date $res  LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-	#execSt(1); print '<br>';
-			$paging['co'] = 200;
-			$res = $sql->query("SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd, u.u_pstlan, u.level_id, u.u_pstort, u.account_date, u.lastlog_date, u.lastonl_date $res LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-	#print '<br>'; execSt(1);
-			if(count($res) < $lim) {
-				$paging['co'] = (($paging['p']-1) * $lim) + count($res);
-			}
+			#execSt(1); print '<br>';
+			//$paging['co'] = 200;
+			
+			$q = "SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd, u.u_pstlan, u.level_id, u.u_pstort, u.account_date, u.lastlog_date, u.lastonl_date $res";
+			if ($_start || $_end) $q .= " LIMIT ".$_start.",".$_end;
+			$result['res'] = $sql->query($q, 0, 1);
+
+			#print '<br>'; execSt(1);
+			//if(count($res) < $lim) $paging['co'] = (($paging['p']-1) * $lim) + count($res);
+
 			#$paging['co'] = count($res);
 		}
 		$sext = array('F' => 'tjejer ', 'M' => 'killar ');

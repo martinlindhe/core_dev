@@ -28,21 +28,22 @@ function changePage(p) {
 				<td style="padding-right: 30px;">alias:<br /><input type="text" class="txt" style="width: 170px;" name="alias" value="<?=secureOUT($result['alias'])?>" /></td>
 				<td style="padding-right: 30px;">bor i:<br /><select class="txt" name="lan" onchange="this.form.submit();" style="width: 170px;"><option value="0">alla län</option>
 <?
+	$lan_sql = $sql->query("SELECT st_lan FROM {$t}pstlan ORDER BY main_id ASC");
 
 	foreach($lan_sql as $lan_res) {
 		$sel = ($result['lan'] === $lan_res[0])?' selected':'';
 		echo '<option value="'.$lan_res[0].'"'.$sel.'>'.secureOUT($lan_res[0]).'</option>';
 	}
-	#if(!empty($result['lan'])) {
-		echo '</select><br />';
-		echo '<select name="ort"'.(empty($result['lan'])?' disabled':'').' style="width: 170px;" class="txt" onchange="this.form.submit();">
-		<option value="0">i alla orter</option>';
-		foreach($ort_sql as $ort_res) {
-			$sel = ($result['ort'] === $ort_res[0])?' selected':'';
-			echo '<option value="'.$ort_res[0].'"'.$sel.'>'.$ort_res[0].'</option>';
-		}
-	#}
+	echo '</select><br />';
+	echo '<select name="ort"'.(empty($result['lan'])?' disabled':'').' style="width: 170px;" class="txt" onchange="this.form.submit();">
+	<option value="0">i alla orter</option>';
 
+	$ort_sql = $sql->query("SELECT st_ort FROM {$t}pstort WHERE st_lan = '".secureINS($result['lan'])."' ORDER BY st_ort");
+
+	foreach($ort_sql as $ort_res) {
+		$sel = ($result['ort'] === $ort_res[0])?' selected':'';
+		echo '<option value="'.$ort_res[0].'"'.$sel.'>'.$ort_res[0].'</option>';
+	}
 ?>
 				</select></td>
 				<td style="padding-right: 30px;">alternativ:<br />
@@ -73,14 +74,18 @@ function changePage(p) {
 			</table>
 			<input type="submit" class="btn2_sml r" value="sök" /><br class="clr" />
 			</div>
-			<div><?	if($do && count($res)) dopaging($paging, 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0); ?></div>
+			<div>
+<?
+			//if($do && count($result['res'])) dopaging($paging, 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0);
+?>
+			</div>
 			<table cellspacing="0"<?=($result['pic'])?'':' width="783"';?>>
 <?
-	if(!empty($res) && count($res)) {
+	if(!empty($result['res']) && count($result['res'])) {
 		$i = 0;
 		$nl = true;
 	if($result['pic']) {
-		foreach($res as $row) {
+		foreach($result['res'] as $row) {
 			if($nl) echo (($i)?'</tr>':'').'<tr>';
 			$i++;
 			echo '<td style="padding: 0 0 6px '.((!$nl)?'5':'0').'px;">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 0, array('text' => $row['u_alias'].' '.$sex[$row['u_sex']].$user->doage($row['u_birth'], 0))).'</td>';
@@ -88,7 +93,7 @@ function changePage(p) {
 		}
 	} else {
 		$i = 0;
-		foreach($res as $row) {
+		foreach($result['res'] as $row) {
 			$i++;
 			#$gotpic = ($row['u_picvalid'] == '1')?true:false;
 			$gotpic = false;
@@ -113,7 +118,7 @@ echo '
 ?>
 </table>
 <?
-	if($do && count($res)) dopaging($paging, 'javascript:changePage(\'', '\');', 'biggest', '&nbsp;', 0);
+	//if($do && count($result['res'])) dopaging($paging, 'javascript:changePage(\'', '\');', 'biggest', '&nbsp;', 0);
 ?>
 			</div>
 		</div>
