@@ -26,26 +26,19 @@ function changePage(p) {
 			<table cellspacing="0" class="mrg">
 			<tr>
 				<td style="padding-right: 30px;">alias:<br /><input type="text" class="txt" style="width: 170px;" name="alias" value="<?=secureOUT($result['alias'])?>" /></td>
-				<td style="padding-right: 30px;">bor i:<br /><select class="txt" name="lan" onchange="this.form.submit();" style="width: 170px;"><option value="0">alla län</option>
+				<td style="padding-right: 30px;">bor i:<br />
 <?
-	$lan_sql = $sql->query("SELECT st_lan FROM {$t}pstlan ORDER BY main_id ASC");
-
-	foreach($lan_sql as $lan_res) {
-		$sel = ($result['lan'] === $lan_res[0])?' selected':'';
-		echo '<option value="'.$lan_res[0].'"'.$sel.'>'.secureOUT($lan_res[0]).'</option>';
-	}
+	echo '<select class="txt" name="lan" onchange="this.form.submit();" style="width: 170px;">';
+	echo '<option value="0">alla län</option>';
+	optionLan($result['lan']);
 	echo '</select><br />';
-	echo '<select name="ort"'.(empty($result['lan'])?' disabled':'').' style="width: 170px;" class="txt" onchange="this.form.submit();">
-	<option value="0">i alla orter</option>';
 
-	$ort_sql = $sql->query("SELECT st_ort FROM {$t}pstort WHERE st_lan = '".secureINS($result['lan'])."' ORDER BY st_ort");
-
-	foreach($ort_sql as $ort_res) {
-		$sel = ($result['ort'] === $ort_res[0])?' selected':'';
-		echo '<option value="'.$ort_res[0].'"'.$sel.'>'.$ort_res[0].'</option>';
-	}
+	echo '<select name="ort"'.(empty($result['lan'])?' disabled':'').' style="width: 170px;" class="txt" onchange="this.form.submit();">';
+	echo '<option value="0">i alla orter</option>';
+	optionOrt($result['lan'], $result['ort']);
+	echo '</select>';
 ?>
-				</select></td>
+				</td>
 				<td style="padding-right: 30px;">alternativ:<br />
 					<input type="checkbox" class="chk" value="1" name="pic" id="pic1" onclick="this.form.submit();"<?=($result['pic'])?' checked':'';?>><label for="pic1"> har bild</label><br />
 					<input type="checkbox" class="chk" value="1" name="online" id="online1" onclick="this.form.submit();"<?=($result['online'])?' checked':'';?>><label for="online1"> är online</label><br />
@@ -76,7 +69,7 @@ function changePage(p) {
 			</div>
 			<div>
 <?
-			//if($do && count($result['res'])) dopaging($paging, 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0);
+			if($do && count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0);
 ?>
 			</div>
 			<table cellspacing="0"<?=($result['pic'])?'':' width="783"';?>>
@@ -118,7 +111,7 @@ echo '
 ?>
 </table>
 <?
-	//if($do && count($result['res'])) dopaging($paging, 'javascript:changePage(\'', '\');', 'biggest', '&nbsp;', 0);
+	if($do && count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', '&nbsp;', 0);
 ?>
 			</div>
 		</div>

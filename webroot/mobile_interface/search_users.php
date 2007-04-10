@@ -1,4 +1,5 @@
 <?
+	require_once('config.php');
 	require('design_head.php');
 ?>
 
@@ -6,24 +7,33 @@
 	<br/>
 
 	<form method="post" action="search_users_result.php">
-		<input type="checkbox"/>Killar
-		<input type="checkbox"/>Tjejer
-		<input type="checkbox"/>Online nu
-		<input type="checkbox" checked="true"/>Har bild<br/>
-		Fritext: <input type="text"/><br/>
-		<br/>
-		Ålder från <input type="text" size="2"/> till <input type="text" size="2"/><br/>
-		<br/>
+		Kön:
+		<input type="radio" name="sex" id="sex0" value="0" checked="checked"/><label for="sex0">Alla</label>
+		<input type="radio" name="sex" id="sexM" value="M"/><label for="sexM">Killar</label>
+		<input type="radio" name="sex" id="sexF" value="F"/><label for="sexF">Tjejer</label><br/>
 		
-		<select name="xx">
-			<option>Alla län</option>
-			<option>Stockholm</option>
+<!--		<input type="checkbox" name="online" id="online" value="1"/><label for="online">Online nu</label> -->
+		<input type="checkbox" name="pic" id="pic" value="1" checked="true"/><label for="pic">Har bild</label><br/>
+		Alias: <input type="text" name="alias"/><br/>
+		<br/>
+		Ålder:
+		<select name="age">
+			<option value="0">alla åldrar</option>
+			<option value="1">mellan 0-20 år</option>
+			<option value="2">mellan 21-25 år</option>
+			<option value="3">mellan 26-30 år</option>
+			<option value="4">mellan 31-35 år</option>
+			<option value="5">mellan 36-40 år</option>
+			<option value="6">mellan 41-45 år</option>
+			<option value="7">mellan 46-50 år</option>
+			<option value="8">mellan 51-55 år</option>
+			<option value="9">56 år och äldre</option>			
 		</select>
+		<br/>
 
-
-		<select name="xx">
-			<option>Alla orter</option>
-			<option>Stockholm</option>
+		<select name="lan">
+			<option value="0">Alla län</option>
+<?		optionLan($result['lan']); ?>
 		</select>
 		
 		<input type="submit" value="Sök"/>

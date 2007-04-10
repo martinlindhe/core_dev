@@ -7,6 +7,8 @@
 	//funktioner
 	require(dirname(__FILE__).'/www/_modules/user/mail.fnc.php');				//funktioner för att skicka mail
 	require(dirname(__FILE__).'/www/_modules/user/relations.fnc.php');	//funktioner för att hantera relationer
+	
+	require(dirname(__FILE__).'/www/_modules/list/search_users.fnc.php');	//funktioner för att söka användare
 
 	
 	//vafan e dealen med dessa?!?!?!

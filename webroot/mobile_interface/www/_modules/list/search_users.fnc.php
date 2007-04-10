@@ -7,23 +7,22 @@
 	*/
 	
 	//Reads post variables and produces result. $_start & $_end is to be used together with page splitting logic
-	//todo: rip out all commented out $paging stuff
 	function performSearch($_start = 0, $_end = 0)
 	{
 		global $sql, $user, $t, $l;
 
 		$result = array();
-		$result['lan']		= '0';	//Län
-		$result['ort'] 		= '0';	//Ort
-		$result['single']	= '0';	//?? exponeras ej i sökgränssnittet
-		$result['online'] = '0';	//Sök användare online
-		$result['pic']		= '1';	//sök bland folk som har bild
-		$result['alias']	= '';		//fritext i användarnamnet
-		$result['sex']		= '0';	//0 = alla kön, M = killar, F = tjejer
-		$result['level']	= '0';	//söka vip-medlemmar?
-		$result['ord']		= '0';	//sorterings-ordning ??? exponeras ej i sökgränssnittet
-		$result['age']		= '0';	//ålder?
-		$result['birth']	= '0';	//??? används ej ???
+		$result['lan']		= '0';	//$_POST['lan']				Län
+		$result['ort'] 		= '0';	//$_POST['ort']				Ort
+		$result['single']	= '0';	//$_POST['single']		?? exponeras ej i sökgränssnittet
+		$result['online'] = '0';	//$_POST['online']		Sök användare online
+		$result['pic']		= '1';	//$_POST['pic']				sök bland folk som har bild
+		$result['alias']	= '';		//$_POST['alias']			fritext i användarnamnet
+		$result['sex']		= '0';	//$_POST['sex']				0 = alla kön, M = killar, F = tjejer
+		$result['level']	= '0';	//$_POST['l']					söka vip-medlemmar?
+		$result['ord']		= '0';	//$_POST['ord']				sorterings-ordning ??? exponeras ej i sökgränssnittet
+		$result['age']		= '0';	//$_POST['age']				ålders-range
+		$result['birth']	= '0';	//$_POST['birth']			används ej ???
 
 		if (!is_numeric($_start) || !is_numeric($_end)) return $result;
 
@@ -119,43 +118,11 @@
 			}
 			$join = array();
 			if ($result['online']) {
-				#$join[] = "INNER JOIN {$t}useronline o ON o.id_id = l.id_id AND o.account_date > '".$user->timeout(UO)."'";
 				$url[] = 'online='.$result['online'].'&';
 			}
 	
-	/*
-			if(!empty($_POST['age']) && array_key_exists($_POST['age'], $ages)) {
-				$age = $ages[$_POST['age']];
-				$result['age'] = $_POST['age'];
-				if($age[0] != 'X') {
-					if($age[1] == 'X') {
-						$gotage = true;
-						#$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id))-1,'%Y') + 0) >= ".($age[0]);
-						if($result['online'])
-							$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0]);
-					} else {
-						$gotage = true;
-						#$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id))-1,'%Y') + 0) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1]);
-						if($result['online'])
-							$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1]);
-						#$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND b.level_id >= '1980-05-08' AND b.level_id <= '1988-05-08'";
-					}
-				}
-			}
-	
-			if($result['birth']) {
-				#if(!$result['online'])
-				$join[] = " INNER JOIN {$t}userbirth b2 ON b2.id_id = u.id_id AND b2.level_id LIKE '%-".date("m-d")."'";
-			}
-	*/
-				/*else if($result['age'] && $age[0] != 'X') {
-					if($age[1] != 'X')
-						$res = "FROM {$t}userbirth b INNER JOIN {$t}userlevel l ON l.id_id = b.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1])." AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
-					else
-						$res = "FROM {$t}userbirth b INNER JOIN {$t}userlevel l ON l.id_id = b.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
-				}*/ 
 			$lim = ($result['pic'])?45:50;
-			//$paging = paging(@$_POST['p'], $lim);
+			$result['paging'] = paging(@$_POST['p'], $lim);
 			if (count($str) > 1) {
 				if($result['online'])
 					$res = "FROM {$t}useronline o INNER JOIN {$t}userlevel l ON l.id_id = o.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."' AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
@@ -170,13 +137,8 @@
 			if ($result['alias']) {
 				$res .= " AND u.u_alias LIKE '%".$result['alias']."%'";
 			}
-	/*
-			if($gotage) {
-				$url[] = 'age='.$result['age'].'&';
-			}
-	*/
+
 			if ($result['online']) {
-				#$result['ord'] = false;
 				$page = 'online';
 				if($bpic == 3) $page = $result['sex'].'online';
 				if(@$_SERVER['QUERY_STRING'] == 'do=1&online=1&pic=1'.$sexu) $page = $sexs.'online';
@@ -188,19 +150,15 @@
 				$ord = 'ORDER BY u.u_alias ASC';
 			}
 			if ($result['ord']) $url[] = 'ord='.secureOUT($result['ord']).'&';
-			#$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count $res");
-			#$res = $sql->query("SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd, u.u_pstlan, u.level_id, u.u_pstort, u.account_date, u.lastlog_date, u.lastonl_date $res  LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-			#execSt(1); print '<br>';
-			//$paging['co'] = 200;
+			$result['paging']['co'] = 200;
 			
 			$q = "SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd, u.u_pstlan, u.level_id, u.u_pstort, u.account_date, u.lastlog_date, u.lastonl_date $res";
 			if ($_start || $_end) $q .= " LIMIT ".$_start.",".$_end;
+			else $q .= " LIMIT {$result['paging']['slimit']}, {$result['paging']['limit']}";
+
 			$result['res'] = $sql->query($q, 0, 1);
 
-			#print '<br>'; execSt(1);
-			//if(count($res) < $lim) $paging['co'] = (($paging['p']-1) * $lim) + count($res);
-
-			#$paging['co'] = count($res);
+			if (count($res) < $lim) $result['paging']['co'] = (($result['paging']['p']-1) * $lim) + count($res);
 		}
 		$sext = array('F' => 'tjejer ', 'M' => 'killar ');
 		if (!$r) {
@@ -217,6 +175,32 @@
 		}
 
 		return $result;
+	}
+
+	/* echos out <option> values for all "län" from database, to use with search windows */
+	function optionLan($_selected = 0)
+	{
+		global $sql, $t;
+
+		$list = $sql->query("SELECT st_lan FROM {$t}pstlan ORDER BY main_id ASC");
+
+		foreach ($list as $res) {
+			echo '<option value="'.$res[0].'"'.($_selected===$res[0] ? ' selected':'').'>'.secureOUT($res[0]).'</option>';
+		}
+	}
+	
+	/* echos out <option> values for all "ort" from database, to use with search windows */
+	function optionOrt($_lan, $_selected = 0)
+	{
+		global $sql, $t;
+
+		if (!$_lan) return false;
+
+		$list = $sql->query("SELECT st_ort FROM {$t}pstort WHERE st_lan = '".secureINS($_lan)."' ORDER BY st_ort");
+
+		foreach ($list as $res) {
+			echo '<option value="'.$res[0].'"'.($_selected===$res[0]?' selected':'').'>'.$res[0].'</option>';
+		}
 	}
 
 ?>

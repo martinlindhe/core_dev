@@ -113,6 +113,8 @@
 	{
 		global $sql, $user, $l, $t;
 
+		if (!$l['id_id']) return 0;
+
 		$q = "SELECT COUNT(*) FROM {$t}usermail WHERE user_id = ".$l['id_id']." AND user_read = '0'";
 
 		return $sql->queryResult($q);

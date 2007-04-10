@@ -1,18 +1,23 @@
 <?
+	require_once('config.php');
 	require('design_head.php');
 	
 	//todo: gå direkt till profilsidan vid bara 1 sökresultat
 	
+	$result = performSearch();
 ?>
 
 	SÖK ANVÄNDARE - RESULTAT<br/>
 	<br/>
 
-	2 träffar:<br/>
-	
-	(online) <a href="user.php">test123</a> K42 <a href="guestbook_reply.php">SKRIV I GÄSTBOKEN</a>, <a href="mail_new.php">MAILA</a><br/>
-	(offline) <a href="user.php">test456</a> T30 <a href="guestbook_reply.php">SKRIV I GÄSTBOKEN</a>, <a href="mail_new.php">MAILA</a><br/>
-
 <?
+	echo count($result['res']).' träffar:<br/>';
+
+	foreach ($result['res'] as $row)
+	{
+		echo '(online/offline) ';
+		echo '<a href="user.php?id='.$row['id_id'].'">'.$row['u_alias'].'</a> K42<br/>';
+	}
+
 	require('design_foot.php');
 ?>
