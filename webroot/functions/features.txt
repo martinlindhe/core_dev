@@ -12,11 +12,13 @@
 			(todo: initial support pgsql, mssql)
 			Reduce time rewriting already working code for another db driver if you use this well defined class.
 
+* Wiki engine
+		- You can easily attach images and other media to a wiki by a simple upload.
+		- Every change gets stored in a revision table
+
 * Standards compatible
 		- XHTML 1.0:
 			* Currently need to use Transitional because the others dont support <center>
-			* <br /> is not needed, <br/> is ok. Netscape 4 needs a ending space but nobody cares.
-		
 
 			Transitional:
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
