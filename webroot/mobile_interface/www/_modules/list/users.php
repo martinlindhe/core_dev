@@ -68,50 +68,43 @@ function changePage(p) {
 			<input type="submit" class="btn2_sml r" value="sök" /><br class="clr" />
 			</div>
 			<div>
-<?
-			if($do && count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0);
-?>
+				<? if(count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0); ?>
 			</div>
 			<table cellspacing="0"<?=($result['pic'])?'':' width="783"';?>>
 <?
-	if(!empty($result['res']) && count($result['res'])) {
+	if(empty($result['res']) || !count($result['res'])) {
+		echo '<tr><td class="spac pdg cnt" width="786">Inga listade.</td></tr>';
+	} else {
 		$i = 0;
 		$nl = true;
-	if($result['pic']) {
-		foreach($result['res'] as $row) {
-			if($nl) echo (($i)?'</tr>':'').'<tr>';
-			$i++;
-			echo '<td style="padding: 0 0 6px '.((!$nl)?'5':'0').'px;">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 0, array('text' => $row['u_alias'].' '.$sex[$row['u_sex']].$user->doage($row['u_birth'], 0))).'</td>';
-			if($i % 16 == 0) $nl = true; else $nl = false;
+		if($result['pic']) {
+			foreach($result['res'] as $row) {
+				if($nl) echo (($i)?'</tr>':'').'<tr>';
+				$i++;
+				echo '<td style="padding: 0 0 6px '.((!$nl)?'5':'0').'px;">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 0, array('text' => $row['u_alias'].' '.$sex[$row['u_sex']].$user->doage($row['u_birth'], 0))).'</td>';
+				if($i % 16 == 0) $nl = true; else $nl = false;
+			}
+		} else {
+			$i = 0;
+			foreach($result['res'] as $row) {
+				$i++;
+				#$gotpic = ($row['u_picvalid'] == '1')?true:false;
+				$gotpic = false;
+				echo '
+					<tr'.(($gotpic)?' onmouseover="this.className = \'t1\'; dumblemumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 1);" onmouseout="this.className = \'\'; mumbledumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 0, 1);"':' onmouseover="this.className = \'t1\';" onmouseout="this.className = \'\';"').'>
+						<td class="cur pdg spac" width="250">'.$user->getstring($row, '', array('icons' => 1)).'</td>
+						<td class="cur pdg spac" onclick="goUser(\''.$row['id_id'].'\');"><nobr>'.ucwords(strtolower($row['u_pstort'].($row['u_pstlan']?', ':'').$row['u_pstlan'])).'</nobr></td>
+						<td class="cur pdg spac cnt" onclick="goUser(\''.$row['id_id'].'\');">'.(($gotpic)?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>
+						<td class="cur pdg spac rgt" onclick="goUser(\''.$row['id_id'].'\');"><nobr>'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date'], 2).')</span>':'<span class="off">'.nicedate($row['lastonl_date'], 2).'</span>').'</nobr></td>
+					</tr>';
+				if($gotpic) echo '<tr id="pic:'.$i.'" style="display: none;"><td colspan="2">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td></tr>';
+			}
 		}
-	} else {
-		$i = 0;
-		foreach($result['res'] as $row) {
-			$i++;
-			#$gotpic = ($row['u_picvalid'] == '1')?true:false;
-			$gotpic = false;
-echo '
-<tr'.(($gotpic)?' onmouseover="this.className = \'t1\'; dumblemumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 1);" onmouseout="this.className = \'\'; mumbledumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 0, 1);"':' onmouseover="this.className = \'t1\';" onmouseout="this.className = \'\';"').'>
-	<td class="cur pdg spac" width="250">'.$user->getstring($row, '', array('icons' => 1)).'</td>
-	<td class="cur pdg spac" onclick="goUser(\''.$row['id_id'].'\');"><nobr>'.ucwords(strtolower($row['u_pstort'].($row['u_pstlan']?', ':'').$row['u_pstlan'])).'</nobr></td>
-	<td class="cur pdg spac cnt" onclick="goUser(\''.$row['id_id'].'\');">'.(($gotpic)?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>
-	<td class="cur pdg spac rgt" onclick="goUser(\''.$row['id_id'].'\');"><nobr>'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date'], 2).')</span>':'<span class="off">'.nicedate($row['lastonl_date'], 2).'</span>').'</nobr></td>
-</tr>';
-if($gotpic) echo '<tr id="pic:'.$i.'" style="display: none;"><td colspan="2">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td></tr>';
-		}
-	}
-	} else {
-		$do_p = false;
-echo '
-<tr>
-	<td class="spac pdg cnt" width="786">Inga listade.</td>
-</tr>
-';
 	}
 ?>
 </table>
 <?
-	if($do && count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', '&nbsp;', 0);
+	if(count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', '&nbsp;', 0);
 ?>
 			</div>
 		</div>
