@@ -2,7 +2,7 @@
 	require_once('config.php');
 	require('design_head.php');
 
-	$files->showThumbnails($showCategory);
+	$files->showThumbnails(FILETYPE_NORMAL_UPLOAD, $showCategory);
 ?>
 
 <div id="menu">

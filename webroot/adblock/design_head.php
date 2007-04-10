@@ -6,6 +6,8 @@
 	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
 	<link rel="stylesheet" href="css/main.css" type="text/css"/>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+	<script type="text/javascript" src="/js/ajax.js"></script>
+	<script type="text/javascript" src="/js/functions.js"></script>
 	<script type="text/javascript" src="js/functions.js"></script>
 </head>
 <body>

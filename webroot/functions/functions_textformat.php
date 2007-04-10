@@ -28,7 +28,7 @@
 		$text = str_ireplace('[u]', '<u>', $text);
 		$text = str_ireplace('[/u]', '</u>', $text);
 
-		$text = str_ireplace('[hr]', '<hr class="bb_hr">', $text);
+		$text = str_ireplace('[hr]', '<hr/>', $text);
 
 		//code block, example: [code]text text[/code]
 		$text = str_ireplace("[/code]\n", "[/code]", $text);

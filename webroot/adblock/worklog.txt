@@ -2,11 +2,16 @@ todo:
 
 	hög prioritet:
 
+	platform change:
+		- gör /core/wiki.php
+		- och /core/file.php
+		- flytta /ajax/*.php till /core/ajax_*.php
+		- kunna få dessa /core/ filer att läsa config från ../projekt/config.php eller nåt!
 
 	wiki rewrite:
+		- åter-implementera stöd för files
 		- namn "Start page" blir "Start_page"
-		- gör konfigurations-direktiv till wikin, $config['wiki] ...
-
+		- implementera stöd för "talk" page _eller_ comments
 
 	låg prioritet:
 		- kanske ska man uppdela regler mellan generella regler, och site-specifika regler.
@@ -24,6 +29,8 @@ todo:
 	- tog bort session ID som parameter från alla funktioner, använder $session->id istället
 	- gjorde en sida wiki.php?View:Help, istället för help.php, about.php, contribute.php, subscribe.php
 	- gjorde en generell tblRevisions / functions_revisions.php och använd den istället för tblInfoFieldHistory
+	- wiki: config $config['wiki] ...
+	- wiki: renamade allt "infofield" till wiki
 
 
 2007.04.04:

@@ -28,12 +28,19 @@ require_once('functions_files.php');
 
 define('CATEGORY_TYPE_FILES', 1);
 
+define('FILETYPE_WIKI',						100); /* File is attached to a wiki */
+define('FILETYPE_PR',							101);	/* File is attached to a PR */
+define('FILETYPE_BLOG',						102);	/* File is attached to a blog */
+define('FILETYPE_PHOTOALBUM',			103);	/* File is uploaded to a photoalbum */
+define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
+define('FILETYPE_NORMAL_UPLOAD',	105);	/* File is uploaded by a user */
+
 class Files
 {
-	private $upload_dir = '/tmp/';
-	private $thumbs_dir = '/tmp/';
-	private $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
-	private $allowed_audio_types	= array('mp3');
+	private $upload_dir = 'e:/devel/webupload/';						//	'/tmp/';
+	private $thumbs_dir = 'e:/devel/webupload/thumbs/';		//	'/tmp/';
+	public $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
+	public $allowed_audio_types	= array('mp3');
 
 	private $image_max_width			= 800;	//bigger images will be resized to this size	
 	private $image_max_height			= 600;
@@ -42,7 +49,7 @@ class Files
 	private $image_jpeg_quality		= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
-	public function __construct(array $files_config)
+	function __construct(array $files_config)
 	{
 		if (isset($files_config['upload_dir'])) $this->upload_dir = $files_config['upload_dir'];
 		if (isset($files_config['thumbs_dir'])) $this->thumbs_dir = $files_config['thumbs_dir'];
@@ -56,21 +63,24 @@ class Files
 	}
 
 
-	//Visar alla filer som en användare har laddat upp
-	public function showFiles()
+	//Visar alla filer som en användare har laddat upp (FILETYPE_NORMAL_UPLOAD)
+	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
+	function showFiles($fileType, $categoryId = 0)
 	{
 		global $session, $db;
 
-		if (!$session->id) return;
+		if (!$session->id || !is_numeric($fileType) || !is_numeric($categoryId)) return;
 
 		//todo: fixa denna sökväg
 		require_once('../layout/image_zoom_layer.html');
 
-		$categoryId = 0;
-		if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
+		if ($fileType == FILETYPE_NORMAL_UPLOAD) {
+			$categoryId = 0;
+			if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
+		}
 
 		if (!empty($_FILES['file1'])) {
-			$this->handleUpload($_FILES['file1'], $categoryId);
+			$this->handleUpload($_FILES['file1'], $fileType, $categoryId);
 		}
 		
 		if (!$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_global']))
@@ -84,26 +94,48 @@ class Files
 		//menu
 		echo '<div class="file_gadget_header">';
 		echo 'File Upload Overview - Displaying ';
-		if (!$categoryId) echo 'Root Level content';
-		else echo $this->getCategoryName($categoryId).' content';
+		switch ($fileType)
+		{
+			case FILETYPE_NORMAL_UPLOAD:
+				if (!$categoryId) echo 'Root Level content';
+				else echo $this->getCategoryName($categoryId).' content';
+				break;
+			case FILETYPE_WIKI:
+				echo 'wiki attachments';
+				break;
+		}
 		echo '</div>';
 
-		if (!$categoryId) {
-			$cat_list = $db->GetArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
-			if (!empty($cat_list)) {
-				echo 'Categories:<br/>';
-				for ($i=0; $i<count($cat_list); $i++) {
-					echo '<a href="?file_gadget_category_id='.$cat_list[$i]['categoryId'].'">'.$cat_list[$i]['categoryName'].'</a><br/>';
+		if ($fileType==FILETYPE_NORMAL_UPLOAD) {
+			if (!$categoryId) {
+				$cat_list = $db->GetArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
+				if (!empty($cat_list)) {
+					echo 'Categories:<br/>';
+					for ($i=0; $i<count($cat_list); $i++) {
+						echo '<a href="?file_gadget_category_id='.$cat_list[$i]['categoryId'].'">'.$cat_list[$i]['categoryName'].'</a><br/>';
+					}
+					echo '<br/>';
 				}
-				echo '<br/>';
+			} else {
+				echo '<a href="?file_gadget_category_id=0">Go back to root level</a><br/><br/>';
 			}
-		} else {
-			echo '<a href="?file_gadget_category_id=0">Go back to root level</a><br/><br/>';
 		}
 
+		switch ($fileType)
+		{
+			case FILETYPE_NORMAL_UPLOAD:
+				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$session->id.' ORDER BY timeUploaded ASC';
+				$action = '?file_gadget_category_id='.$categoryId;
+				break;
+
+			case FILETYPE_WIKI:
+				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
+				$action = '';
+				break;
+		}
 
 		//select the files in the current category (or root level for uncategorized files)
-		$list = $db->GetArray('SELECT * FROM tblFiles WHERE ownerId='.$session->id.' AND categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD.' ORDER BY timeUploaded ASC');
+		$list = $db->GetArray($q);
 		
 		echo '<div class="file_gadget_content">';
 		for ($i=0; $i<count($list); $i++)
@@ -130,7 +162,7 @@ class Files
 		if (!$categoryId) {
 			echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 		}
-		echo '<form name="ajax_show_files" method="post" action="?file_gadget_category_id='.$categoryId.'" enctype="multipart/form-data">';
+		echo '<form name="ajax_show_files" method="post" action="'.$action.'" enctype="multipart/form-data">';
 		echo '<input type="file" name="file1"/> ';
 		echo '<input type="submit" class="button" value="Upload"/>';
 		echo '</form>';
@@ -156,11 +188,13 @@ class Files
 	}
 
 	/* Visar bara thumbnails. klicka en thumbnail för att visa hela bilden i 'image_big' div:en */
-	public function showThumbnails($categoryId)
+	function showThumbnails($fileType, $categoryId)
 	{
 		global $session, $db;
+		
+		if (!is_numeric($fileType)) return false;
 
-		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.FILETYPE_NORMAL_UPLOAD.' ORDER BY timeUploaded ASC');
+		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
 
 		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'" alt=""/></div></div>';
 		echo '<div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
@@ -199,7 +233,7 @@ class Files
 		$db->query($sql);
 	}
 	
-	public function getCategoryName($categoryId)
+	function getCategoryName($categoryId)
 	{
 		global $db;
 		
@@ -209,7 +243,7 @@ class Files
 		return $db->getOneItem($sql);
 	}
 	
-	public function deleteFile($fileId)
+	function deleteFile($fileId)
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($fileId)) return false;
@@ -225,10 +259,10 @@ class Files
 	
 
 	/* Stores uploaded file associated to $session->id */
-	private function handleUpload($FileData, $categoryId = 0)
+	private function handleUpload($FileData, $fileType, $categoryId = 0)
 	{
 		global $db, $session;
-		if (!$session->id || !is_numeric($categoryId)) return false;
+		if (!$session->id || !is_numeric($fileType) || !is_numeric($categoryId)) return false;
 		
 		//ignore empty file uploads
 		if (!$FileData['name']) return;
@@ -246,7 +280,7 @@ class Files
 
 		$filesize = filesize($FileData['tmp_name']);
 
-  	$sql = 'INSERT INTO tblFiles SET fileName="'.$enc_filename.'",fileSize='.$filesize.',fileMime="'.$enc_mimetype.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.FILETYPE_NORMAL_UPLOAD.',categoryId='.$categoryId;
+  	$sql = 'INSERT INTO tblFiles SET fileName="'.$enc_filename.'",fileSize='.$filesize.',fileMime="'.$enc_mimetype.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
   	$db->query($sql);
   	$fileId = $db->insert_id;
 		
@@ -370,7 +404,7 @@ class Files
 
 
 	//Note: These header commands have been verified to work with IE6 and Firefox 1.5 only, no other browsers have been tested
-	public function sendFile($fileId, $download)
+	function sendFile($fileId, $download)
 	{
 		if (!is_numeric($fileId)) return false;
 
@@ -445,6 +479,48 @@ class Files
 
 		header('Content-Length: '.filesize($out_filename));
 		echo file_get_contents($out_filename);
+	}
+	
+	function getFiles($ownerId, $fileType=0)
+	{
+		global $db;
+
+		if (!is_numeric($ownerId) || !is_numeric($fileType)) return array();
+
+		$sql = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
+		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
+		$sql .= 'WHERE t1.ownerId='.$ownerId;
+		if ($fileType) $sql .= ' AND t1.fileType='.$fileType;
+		$sql .= ' ORDER BY t1.timeUploaded ASC';
+		
+		return $db->getArray($sql);
+	}
+
+	function getFilesByCategory($fileType, $categoryId)
+	{
+		global $db;
+
+		if (!is_numeric($categoryId) || !is_numeric($fileType)) return array();
+
+		$sql = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
+		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
+		$sql .= 'WHERE t1.categoryId='.$categoryId;
+		if ($fileType) $sql .= ' AND t1.fileType='.$fileType;
+		$sql .= ' ORDER BY t1.timeUploaded ASC';
+		
+		return $db->getArray($sql);
+	}
+
+	/* Returns a string like "2 KiB" */
+	//todo: använd...
+	function formatFileSize($bytes)
+	{
+		$units = array('bytes', 'KiB', 'MiB', 'GiB', 'TiB');
+		foreach ($units as $unit) {
+			if ($bytes < 1024) break;
+			$bytes = round($bytes/1024, 1);
+		}
+		return $bytes.' '.$unit;
 	}
 	
 }

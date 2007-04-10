@@ -28,8 +28,14 @@
 	$config['session']['home_page'] = 'index.php';
 	$session = new Session($config['session']);
 
-	$config['start_page'] = 'index.php';
-	$config['infofield']['allow_html'] = true;
+	$config['wiki']['allow_html'] = true;
+
+
+	//todo: används dessa: ?
+	$config['start_page'] = 'index.php';	//todo: använd ['session']['home_page'] istället
+
+	$config['files'] = array();
+	$files = new Files($config['files']);
 
 	$config['adblock']['cachepath'] = 'cache/';
 ?>

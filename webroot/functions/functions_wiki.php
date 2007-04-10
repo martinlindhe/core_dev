@@ -2,15 +2,29 @@
 	/* functions_wiki.php																													*/
 	/* --------------------------------------------------------------------------	*/
 	/* Written by Martin Lindhe	<martin_lindhe@yahoo.se>													*/
-
+	/*
+		core																				tblWiki	
+		för history-stöd: functions_revisions.php		tblRevisions
+		för files-stöd: $files objekt								tblFiles
+	*/
+	
 	require_once('functions_revisions.php');
+	require_once('functions_files.php');
 
-	//infofield module settings:
-	$config['infofield']['log_history'] = true;
-	$config['infofield']['allow_comments'] = false;
-	$config['infofield']['allow_files'] = false;
-	$config['infofield']['allow_html'] = false;
-	$config['infofield']['explain_words'] = false;
+	//wiki module settings:
+	$config['wiki']['log_history'] = true;
+	$config['wiki']['allow_html'] = false;
+	$config['wiki']['explain_words'] = false;
+
+
+	$config['wiki']['allow_comments'] = false;		//todo - försök att slipp allow_comments & allow_files,
+	$config['wiki']['allow_files'] = true;				//			acceptera bara de tabbar som finns i allowed_tabs
+
+	$config['wiki']['allowed_tabs'] =	array('View', 'Edit', 'History', 'Comments', 'Files', 'Hide');
+	$config['wiki']['first_tab'] = 'View';
+
+	
+	
 
 	/* Optimization: Doesnt store identical entries if you hit Save button multiple times */
 	function wikiUpdate($fieldName, $fieldText)
@@ -31,7 +45,7 @@
 		
 		if ($data['fieldId'])
 		{
-			if ($config['infofield']['log_history'])
+			if ($config['wiki']['log_history'])
 			{
 				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy']);
 			}
@@ -46,22 +60,22 @@
 	/* formats text for wiki output */
 	function wikiFormat(&$data, $fieldName)
 	{
-		global $db, $config;
+		global $db, $files, $config;
 		
 		$text = stripslashes($data['fieldText']);
 
-		if ($config['infofield']['allow_html']) {
+		if ($config['wiki']['allow_html']) {
 			$text = formatUserInputText($text, false);
 		} else {
 			$text = formatUserInputText($text, true);
 		}
 		
-		if ($config['infofield']['explain_words']) {
+		if ($config['wiki']['explain_words']) {
 			$text = dictExplainWords($text);
 		}
 
-		if ($config['infofield']['allow_files'] && $data['hasFiles']) {
-			$list = getFiles($db, $data['fieldId'], FILETYPE_INFOFIELD);
+		if ($config['wiki']['allow_files'] && $data['hasFiles']) {
+			$list = $files->getFiles($data['fieldId'], FILETYPE_WIKI);
 
 			$has_unshowed_files = 0;
 			for ($i=0; $i<count($list); $i++) {
@@ -94,11 +108,9 @@
 				}
 			}
 
-			if (!$has_unshowed_files) {
-				return $text;
-			}
+			if (!$has_unshowed_files) return $text;
 
-			//listar filer som inte redan är enkodade i infofältet
+			//listar filer som inte redan är enkodade i wikin som bilagor
 			$text .= '<br><br><b>Attached files:</b><br>';
 
 			$j = 0;
@@ -106,7 +118,7 @@
 				$bgcolor = '#F0F0F0';
 				if ($j%2) $bgcolor = '#FEFEFE';
 				if (!$list[$i]['replaced']) {
-					$text .= formatFileAttachment($db, $list[$i], $bgcolor, true, $fieldName).'<br>';
+					$text .= formatFileAttachment($list[$i], $bgcolor, true, $fieldName).'<br>';
 					$j++;
 				}
 			}
@@ -118,19 +130,16 @@
 
 	function wiki($fieldName = '')
 	{
-		global $db, $session;
-		global $config;
-
-		$current_tab = 'View';
-
-		$allowed_tabs = array('View', 'Edit', 'History', 'Comments', 'Files', 'Hide');
+		global $db, $files, $session, $config;
 		
 		//print_r($_GET);
+		
+		$current_tab = $config['wiki']['first_tab'];
 
 		foreach($_GET as $key => $val) {
 			//echo 'key: '.$key.'<br/>';
 			$arr = explode(':', $key);
-			if (empty($arr[1]) || !in_array($arr[0], $allowed_tabs)) continue;
+			if (empty($arr[1]) || !in_array($arr[0], $config['wiki']['allowed_tabs'])) continue;
 			$current_tab = $arr[0];
 			if (!$fieldName) $fieldName = $arr[1];
 			break;
@@ -163,27 +172,27 @@
 			return true;
 		}
 
-		echo '<div class="infofield">'.
-						'<div class="infofield_head"><ul>'.
+		echo '<div class="wiki">'.
+						'<div class="wiki_head"><ul>'.
 							'<li>'.($current_tab=='view'?'<strong>':'').		'<a href="'.wikiURLadd('View', $fieldName).'">View:'.$fieldName.'</a>'.($current_tab=='view'?'</strong>':'').'</li>'.
 							'<li>'.($current_tab=='edit'?'<strong>':'').		'<a href="'.wikiURLadd('Edit', $fieldName).'">Edit</a>'.				($current_tab=='edit'?'</strong>':'').'</li>'.
 							'<li>'.($current_tab=='history'?'<strong>':'').	'<a href="'.wikiURLadd('History', $fieldName).'">History</a>'.	($current_tab=='history'?'</strong>':'').'</li>';
-		if ($config['infofield']['allow_files']) {
+		if ($config['wiki']['allow_files']) {
 			echo 		'<li>'.($current_tab=='files'?'<strong>':'').		'<a href="'.wikiURLadd('Files', $fieldName).'">Files</a>'.			($current_tab=='files'?'</strong>':'').'</li>';
 		}
 		echo 		'<li><a href="'.wikiURLadd('Hide', $fieldName).'">Hide</a></li>'.
 					'</ul></div>'.
-					'<div class="infofield_body">';
+					'<div class="wiki_body">';
 			
-		/* Display the infofield toolbar for super admins */
+		/* Display the wiki toolbar for super admins */
 		if ($current_tab == 'Edit')
 		{
-			if (isset($_POST['infofield_'.$fieldId]))
+			if (isset($_POST['wiki_'.$fieldId]))
 			{
 				//save changes to database
-				wikiUpdate($fieldName, $_POST['infofield_'.$fieldId]);
-				$text = $_POST['infofield_'.$fieldId];
-				unset($_POST['infofield_'.$fieldId]);
+				wikiUpdate($fieldName, $_POST['wiki_'.$fieldId]);
+				$text = $_POST['wiki_'.$fieldId];
+				unset($_POST['wiki_'.$fieldId]);
 				//JS_Alert('Changes saved!');
 			}
 
@@ -193,13 +202,13 @@
 			$last_edited = 'never';
 			if (!empty($data['timeEdited'])) $last_edited = $data['timeEdited'].' by '.$data['editorName'];
 
-			echo '<form method="post" name="editinfofieldform" action="'.wikiURLadd('Edit', $fieldName).'">'.
-					 '<textarea name="infofield_'.$fieldId.'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
+			echo '<form method="post" name="wiki_edit" action="'.wikiURLadd('Edit', $fieldName).'">'.
+					 '<textarea name="wiki_'.$fieldId.'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
 					 'Last edited '.$last_edited.'<br/>'.
 					 '<input type="submit" class="button" value="Save"/>';
 
-			if ($config['infofield']['allow_files']) {
-				$filelist = getFiles($db, $fieldId, FILETYPE_INFOFIELD);
+			if ($config['wiki']['allow_files']) {
+				$filelist = $files->getFilesByCategory(FILETYPE_WIKI, $fieldId);
 				
 				$showedText = 0;
 				$str = '';
@@ -213,7 +222,7 @@
 					$pos = strrpos($filelist[$i]['fileName'], '.');
 					if ($pos !== false) $last_name = strtolower(substr($filelist[$i]['fileName'], $pos));
 
-					if (in_array($last_name, $config['allowed_image_extensions'])) {
+					if (in_array($last_name, $files->allowed_image_types)) {
 						$useTag = $imageTag;
 					} else {
 						$useTag = $fileTag;
@@ -224,7 +233,7 @@
 	
 					if (($pos1 === false) && ($pos2 === false)) {
 						if (!$showedText) { $str = ' <b>unused files:</b> '; $showedText=1; }
-						$str .= '<span onclick="document.editinfofieldform.infofield.value += \' '.$useTag.'\';">'.$useTag.'</span>, ';
+						$str .= '<span onclick="document.wiki_edit.wiki_'.$fieldId.'.value += \' '.$useTag.'\';">'.$useTag.'</span>, ';
 					}
 				}
 				if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
@@ -232,7 +241,7 @@
 			}
 			echo '</form>';				
 		}
-		elseif ($current_tab == 'Comments')
+		elseif ($config['wiki']['allow_comments'] && $current_tab == 'Comments')
 		{
 			if (!empty($_POST['comment_'.$fieldId])) {
 				addComment($db, COMMENT_INFOFIELD, $fieldId, $_POST['comment_'.$fieldId]);
@@ -247,18 +256,18 @@
 			}
 			echo 	'<br/>'.
 						'Write a comment:<br/>'.
-						'<form method="post" action="'.wikiURLadd('Comments', $fieldName).'" name="infofieldcommentform">'.
+						'<form method="post" action="'.wikiURLadd('Comments', $fieldName).'" name="wiki_comment">'.
 						'<table width="100%" cellpadding="0" cellspacing="0" border="0">'.
 							'<tr><td><textarea name="comment_'.$fieldId.'" cols="61" rows="4"></textarea><br/><img src="c.gif" width="1" height="5" alt=""/></td></tr>'.
 							'<tr><td><input type="submit" class="button" value="Send"/></td></tr>'.
 						'</table>'.
 						'</form>';
 		}
-		elseif ($current_tab == 'Files')
+		elseif ($config['wiki']['allow_files'] && $current_tab == 'Files')
 		{
-			echo showFileAttachments($db, $fieldId, FILETYPE_INFOFIELD, $fieldName);
+			echo $files->showFiles(FILETYPE_WIKI, $fieldId);
 		}
-		elseif ($config['infofield']['log_history'] && $current_tab == 'History')
+		elseif ($config['wiki']['log_history'] && $current_tab == 'History')
 		{
 			echo 'History of '.$fieldName.' (id # '.$fieldId.')<br/><br/>';
 
@@ -289,7 +298,7 @@
 			}
 			else
 			{
-				echo '<br/><b>There is no edit history of this infofield in the database.</b><br/>';
+				echo '<br/><b>There is no edit history of this wiki in the database.</b><br/>';
 			}
 		}
 		else
@@ -297,16 +306,14 @@
 			echo wikiFormat($data, $fieldName);
 		}
 
-		if ($config['infofield']['allow_comments']) {
+		echo 		'</div>';
+
+		if ($config['wiki']['allow_comments']) {
 			$talkbackComments = getCommentsCount($db, COMMENT_INFOFIELD, $fieldId);
 			if ($talkbackComments == 1) $talkback = 'Talkback: 1 comment';
 			else $talkback = 'Talkback: '.$talkbackComments.' comments';
-		}
 
-		echo 			'</div>';
-
-		if ($config['infofield']['allow_comments']) {
-			echo '<div class="infofield_foot"><ul>'.
+			echo '<div class="wiki_foot"><ul>'.
 							'<li>'.($current_tab=='comments'?'<strong>':'').'<a href="'.wikiURLadd('Comments', $fieldName).'">'.$talkback.'</a>'.($current_tab=='comments'?'</strong>':'').'</li>'.
 					'</ul></div>';
 		}
