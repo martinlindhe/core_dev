@@ -10,8 +10,8 @@
 
 	if(!empty($_POST['ins_rel'])) {
 		$error = sendRelationRequest($s['id_id'], $_POST['ins_rel']);
-		if ($error) {
-			popupACT($error);
+		if ($error == true) {
+			popupACT('Du har nu skickat en förfrågan.');
 			die;
 		}
 	}

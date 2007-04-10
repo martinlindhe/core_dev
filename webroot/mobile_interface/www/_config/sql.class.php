@@ -36,7 +36,7 @@ class sql {
 			while($row = mysql_fetch_row($result))
 				$return[] = $row;
 		}
-		
+
 		if ($return !== false) return $return;
 
 		echo '<br/><span style="background-color:#ee88aa">';
@@ -73,10 +73,13 @@ class sql {
 			return mysql_fetch_row($result);
 	}
 
-	function queryResult($query, $debug = false) {
+	function queryResult($query, $debug = false)
+	{
 		$this->checkconnected();
 		if($debug) print $query;
-		$result = @mysql_query($query);
+		$result = mysql_query($query);
+
+		//if ($result === true) return true;
 		if ($result !== false) return @mysql_result($result, 0);
 
 		echo '<br/><span style="background-color:#ee88aa">';
@@ -86,7 +89,7 @@ class sql {
 	}
 	function queryInsert($query) {
 		$this->checkconnected();
-		if (mysql_query($query) !== false) return(mysql_insert_id());
+		if (mysql_query($query) !== false) return mysql_insert_id();
 		echo '<br/><span style="background-color:#ee88aa">';
 		echo 'SQL ERROR from query "'.$query.'"<br/>';
 		echo mysql_error();

@@ -41,7 +41,8 @@
 		echo '<b>'.$list[$i]['rel_id'].':</b> ';
 		echo '<a href="user.php?id='.$list[$i]['id_id'].'">'.$list[$i]['u_alias'].'</a> K47 ';
 		echo '<a href="guestbook_reply.php?id='.$list[$i]['id_id'].'">GÄSTBOK</a> ';
-		echo '<a href="mail_new?id='.$list[$i]['id_id'].'">MAILA</a><br/>';
+		echo '<a href="mail_new?id='.$list[$i]['id_id'].'">MAILA</a> ';
+		echo '<a href="?remove='.$list[$i]['id_id'].'">RADERA</a><br/>';
 	}
 
 	require('design_foot.php');

@@ -130,10 +130,10 @@
 		if (!is_numeric($_user_id)) return false;
 
 		$isFriends = areTheyFriends($l['id_id'], $_user_id);
-		if($isFriends) {
+		if ($isFriends) {
 			//Ta bort relation
 			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id);
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$_user_id."' AND sender_id = ".$l['id_id']);
+			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id']);
 			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = ".$l['id_id']." AND friend_id = ".$_user_id);
 			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = ".$_user_id." AND friend_id = ".$l['id_id']);
 			#sysMSG($s['id_id'], 'Relation', 'Your relation with '.$s->alias.' has ended!');
@@ -226,7 +226,7 @@
 	function getRelationRequestsFromMe()
 	{
 		global $sql, $t, $l;
-		
+
 		$q = "SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelquest q INNER JOIN {$t}user u ON u.id_id = q.user_id AND u.status_id = '1' WHERE q.sender_id = ".$l['id_id']." AND q.status_id = '0' ORDER BY q.main_id DESC";
 		return $sql->query($q, 0, 1);
 	}
