@@ -136,7 +136,7 @@ class Files
 
 		//select the files in the current category (or root level for uncategorized files)
 		$list = $db->GetArray($q);
-		
+
 		echo '<div class="file_gadget_content">';
 		for ($i=0; $i<count($list); $i++)
 		{

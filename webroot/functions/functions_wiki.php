@@ -306,7 +306,7 @@
 			echo wikiFormat($data, $fieldName);
 		}
 
-		echo 		'</div>';
+		echo 	'</div>';
 
 		if ($config['wiki']['allow_comments']) {
 			$talkbackComments = getCommentsCount($db, COMMENT_INFOFIELD, $fieldId);

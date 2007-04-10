@@ -1,17 +1,25 @@
 todo:
 
 	hög prioritet:
+		- plocka ut paging från ruleset.php till generella funktioner
+		- styla upp ruleset.php ordentligt med divar & css istället för ful table med massa inbakat css i
+		- gör en generell funktion för att adda firefox quick sökmotorer, från /adblock/js/adblock.js
 
 	platform change:
+		- kunna få /core/ filer att läsa config från ../projekt/config.php eller nåt!
+		- detta måste lösas för att kunna dela ajax-anrop och vissa små corefiler mellan flera projekt
+			* t.ex nu går det ej att deleta filer från file upload widgeten
+
 		- gör /core/wiki.php
-		- och /core/file.php
+		- använd /core/file.php
 		- flytta /ajax/*.php till /core/ajax_*.php
-		- kunna få dessa /core/ filer att läsa config från ../projekt/config.php eller nåt!
+		- kanske kan ta bort getFiles() och getFilesByCategory() och göra sql:en direkt i de funktioner som använder dom? för det är väl bara 1 funktion var
+		- file details: visa vem som laddade upp filen, och när
 
 	wiki rewrite:
-		- åter-implementera stöd för files
 		- namn "Start page" blir "Start_page"
 		- implementera stöd för "talk" page _eller_ comments
+		- functions_wiki.php & class.Files.php, kolla igenom så funktionerna har konsekvent parameterordning
 
 	låg prioritet:
 		- kanske ska man uppdela regler mellan generella regler, och site-specifika regler.
@@ -20,7 +28,7 @@ todo:
 --------------[[changelog]]------------
 2007.04.10:
 	- wiki: kan nu länka andra wikis i text, med [[Name|title]]
-
+	- åter-implementerat stöd för files, genom Files klassen
 
 
 2007.04.08:
