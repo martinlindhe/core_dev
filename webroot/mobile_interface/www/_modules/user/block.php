@@ -1,8 +1,9 @@
 <?
+	require_once('relations.fnc.php');
+
 	if($own) popupACT('Du kan inte blocka dig själv.');
 	if(!empty($_POST['do'])) {
-		$sql->queryInsert("INSERT INTO {$t}userblock SET rel_id = 'u', user_id = '".secureINS($l['id_id'])."', friend_id = '".secureINS($s['id_id'])."', activated_date = NOW()");
-		$sql->queryInsert("INSERT INTO {$t}userblock SET rel_id = 'f', user_id = '".secureINS($s['id_id'])."', friend_id = '".secureINS($l['id_id'])."', activated_date = NOW()");
+		blockRelation($s['id_id']);
 		popupACT('Nu har du blockerat personen.', '', l('user', 'block', $s['id_id']));
 	}
 	require(DESIGN.'head_popup.php');

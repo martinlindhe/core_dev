@@ -1,5 +1,7 @@
 Steg 1 - att göra:
 
+	* funktionsuppdela plattformens komponenter - WIP
+
 	* Topp navigering "PROFIL", "???", "???"
 
 	* Vad klarar wap browers av?
@@ -13,8 +15,13 @@ I slut-skedet av steg 1:
 	* Optimera filnamn. Korta ner namn och parametrar så de tar upp färre bytes, samt är konsekventa:
 		- blogs_*.php till blog_*.php
 		- relations_*.php till friends_*.php
------------
 
+-----------
+Steg 1.5 - när steg 1 är färdigt:
+	* Galleri-funktionerna
+
+
+-----------
 Steg 2:
 	* WAP snabbinlogg funktion med 4-siffrig pinkod
 	* Blogg-funktionalitet, inklusive videoblogg & kunna blanda bilder & text (kunna ladda upp mer än en bild per blogg)
@@ -33,6 +40,7 @@ Steg 3: - Platform cleanup
 	* Uppdatera databas-driver från php_mysql till php_mysqli
 	* enkoda lösenordet med sha1 i databasen (s_user)
 	* rensa upp $_SESSION variabeln
+	* user.class.php, vad används $_SESSION['data']['cachestr'] till?? ta bort?
 	* separera kod från design:
 		- Guestbook:
 			_modules/user/gb.php

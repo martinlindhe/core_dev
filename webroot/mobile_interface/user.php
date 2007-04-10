@@ -10,6 +10,7 @@
 	echo 'PROFIL - <b>'.$user_data['u_alias'].'</b> kön&ålder (onlinestatus?)<br/>';
 	echo '<br/>';
 	echo '<a href="relations_create.php?id='.$_id.'">BLI VÄN</a> ';
+	echo '<a href="relations_block.php?id='.$_id.'">BLOCKERA</a> ';
 	echo '<a href="gallery.php?id='.$_id.'">GALLERI</a> ';
 	echo '<a href="relations.php?id='.$_id.'">VÄNNER</a> ';
 	echo '<a href="mail_new.php?id='.$_id.'">MAILA</a> ';

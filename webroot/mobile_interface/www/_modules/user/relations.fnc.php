@@ -23,7 +23,6 @@
 		}
 		$c = $sql->queryResult("SELECT main_id FROM {$t}userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".$_id."' LIMIT 1");
 		if(!empty($c)) {
-			echo 'x1';
 			### ÄNDRA!
 			$sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '2' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_id);
 			$sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '2' WHERE user_id = ".$_id." AND sender_id = ".$l['id_id']);
@@ -126,16 +125,17 @@
 	function removeRelation($_user_id)
 	{
 		global $sql, $user, $l, $t;
-		
+
 		if (!is_numeric($_user_id)) return false;
+
+		$sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id);
+		$sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id']);
+		$sql->queryUpdate("DELETE FROM {$t}userrelation WHERE user_id = ".$l['id_id']." AND friend_id = ".$_user_id);
+		$sql->queryUpdate("DELETE FROM {$t}userrelation WHERE user_id = ".$_user_id." AND friend_id = ".$l['id_id']);
 
 		$isFriends = areTheyFriends($l['id_id'], $_user_id);
 		if ($isFriends) {
 			//Ta bort relation
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id);
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id']);
-			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = ".$l['id_id']." AND friend_id = ".$_user_id);
-			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = ".$_user_id." AND friend_id = ".$l['id_id']);
 			#sysMSG($s['id_id'], 'Relation', 'Your relation with '.$s->alias.' has ended!');
 			#$user->spy($s['id_id'], $l['id_id'], 'MSG', array('Din relation med <b>'.$l['u_alias'].'</b> har avslutats.'));
 			#$user->setRelCount($s['id_id']);
@@ -147,20 +147,16 @@
 			return true;
 		} else {
 			//Ta bort väntande relationsförfrågan
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id);
-			$sql->queryResult("UPDATE {$t}userrelquest SET status_id = 'D' WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id']);
-			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = ".$l['id_id']." AND friend_id = ".$_user_id);
-			$sql->queryResult("DELETE FROM {$t}userrelation WHERE user_id = ".$_user_id." AND friend_id = ".$l['id_id']);
-
-			$c = $sql->queryResult("SELECT main_id FROM {$t}userrelquest WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id." LIMIT 1");
-			if(!empty($c) && count($c)) {
-				$sql = $sql->queryResult("UPDATE {$t}userrelquest SET status_id = '2' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id);
+			$q = "SELECT main_id FROM {$t}userrelquest WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id." LIMIT 1";
+			$c = $sql->queryResult($q);
+			if (!empty($c) && count($c)) {
+				$sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '2' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id.' AND main_id = '.$c);
 				#if(mysql_affected_rows()) sysMSG($s['id_id'], 'Relation', 'Your relation with '.$s->alias.' is denied!');
 				$user->notifyDecrease('rel', $l['id_id']);
 			} else {
 				$c = $sql->queryResult("SELECT main_id FROM {$t}userrelquest WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id']." AND status_id = '0' LIMIT 1");
-				if(!empty($c) && count($c)) {
-					$sql = $sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '2' WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id']);
+				if (!empty($c) && count($c)) {
+					$sql->queryUpdate("UPDATE {$t}userrelquest SET status_id = '2' WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id'].' AND main_id = '.$c);
 					$user->notifyDecrease('rel', $_user_id);
 				}
 			}
@@ -171,18 +167,27 @@
 			return true;
 		}
 	}
-	
+
+	function blockRelation($_id)
+	{
+		global $sql, $l, $t;
+
+		if (!is_numeric($_id)) return false;
+		
+		$sql->queryInsert("INSERT INTO {$t}userblock SET rel_id = 'u', user_id = ".$l['id_id'].", friend_id = ".$_id.", activated_date = NOW()");
+		$sql->queryInsert("INSERT INTO {$t}userblock SET rel_id = 'f', user_id = ".$_id.", friend_id = ".$l['id_id'].", activated_date = NOW()");
+		return true;
+	}
+
+	//id = user-id att sluta blockera
 	function unblockRelation($_id)
 	{
 		global $sql, $l, $t;
 		if (!is_numeric($_id)) return false;
 
-		$check = $sql->queryResult("SELECT friend_id FROM {$t}userblock WHERE main_id = ".$_id." AND user_id = ".$l['id_id']." LIMIT 1");
-		if($check) {
-			$sql->queryUpdate("DELETE FROM {$t}userblock WHERE user_id = ".$l['id_id']." AND friend_id = ".$check." AND rel_id = 'u' LIMIT 1");
-			$sql->queryUpdate("DELETE FROM {$t}userblock WHERE friend_id = ".$l['id_id']." AND user_id = ".$check." AND rel_id = 'f' LIMIT 1");
-		}
-		
+		$sql->queryUpdate("DELETE FROM {$t}userblock WHERE user_id = ".$l['id_id']." AND friend_id = ".$_id." AND rel_id = 'u' LIMIT 1");
+		$sql->queryUpdate("DELETE FROM {$t}userblock WHERE friend_id = ".$l['id_id']." AND user_id = ".$_id." AND rel_id = 'f' LIMIT 1");
+
 		return true;
 	}
 
@@ -220,12 +225,16 @@
 	{
 		global $sql, $t, $l;
 		
+		//if (!$sql) return array();
+		
 		return $sql->query("SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelquest q INNER JOIN {$t}user u ON u.id_id = q.sender_id AND u.status_id = '1' WHERE q.user_id = ".$l['id_id']." AND q.status_id = '0' ORDER BY q.main_id DESC", 0, 1);
 	}
 
 	function getRelationRequestsFromMe()
 	{
 		global $sql, $t, $l;
+		
+		//if (!$sql) return array();
 
 		$q = "SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelquest q INNER JOIN {$t}user u ON u.id_id = q.user_id AND u.status_id = '1' WHERE q.sender_id = ".$l['id_id']." AND q.status_id = '0' ORDER BY q.main_id DESC";
 		return $sql->query($q, 0, 1);

@@ -6,18 +6,14 @@
 		die;
 	}
 
-	/*
-	//'ins_rel' är typen av relation
-	//martin kommenterade ut detta. samma sak hanteras redan i relations_create.php
-	//todo: eller var detta för att acceptera relation!?
+	//detta ändrar typ av relations-förfrågan för pågående förfrågningar (t.ex från "Granne" till "Sambo")
 	if(!empty($_POST['ins_rel']) && !$own) {
 		$error = sendRelationRequest($s['id_id'], $_POST['ins_rel']);
-		if ($error) {
-			errorACT($error, l('user', 'relations', $l['id_id']));
+		if ($error === true) {
+			errorACT('Du har nu ändrat typ av förfrågan.', l('user', 'relations'));
 			die;
 		}
 	}
-	*/
 
 	if (!empty($_POST['d']) || !empty($_GET['d']))
 	{
@@ -105,7 +101,7 @@ echo '
 	<td class="cur spac pdg" onclick="goUser(\''.$row['id_id'].'\');">'.secureOUT($row['rel_id']).'</td>
 	<td class="cur pdg spac cnt">'.(($row['u_picvalid'] == '1')?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>
 	<td class="cur spac pdg rgt" onclick="goUser(\''.$row['id_id'].'\');">'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date']).')</span>':'<span class="off">'.nicedate($row['lastonl_date']).'</span>').'</td>
-	'.(($own)?'<td class="spac rgt pdg_tt"><a href="'.l('user', 'relations', $s['id_id'], $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&d='.$row['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" title="Radera" style="margin-bottom: -4px;" /></a></td>':'').'
+	'.(($own)?'<td class="spac rgt pdg_tt"><a href="'.l('user', 'relations', $s['id_id'], $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&d='.$row['id_id'].'\');"><img src="'.OBJ.'icon_del.gif" title="Radera" style="margin-bottom: -4px;" /></a></td>':'').'
 </tr>
 ';
 if($view == $row['main_id']) {
@@ -137,7 +133,7 @@ echo '
 <tr>
 	<td class="spac pdg">'.$user->getstring($row, '', array('nolink' => 1)).'</td>
 	<td class="spac pdg rgt">'.nicedate($row['activated_date']).'</td>
-	<td class="spac pdg rgt"><a class="cur" onclick="return confirm(\'Säker ?\')" href="'.l('user', 'relations').'&blocked&del='.$row['main_id'].'"><img src="'.OBJ.'icon_del.gif" title="Avblockera" style="margin-bottom: -4px;" /></a></td>
+	<td class="spac pdg rgt"><a class="cur" onclick="return confirm(\'Säker ?\')" href="'.l('user', 'relations').'&blocked&del='.$row['id_id'].'"><img src="'.OBJ.'icon_del.gif" title="Avblockera" style="margin-bottom: -4px;" /></a></td>
 </tr>';
 	  }
 	}

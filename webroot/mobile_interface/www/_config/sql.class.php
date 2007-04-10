@@ -24,6 +24,7 @@ class sql {
 		}
 	}
 	function query($query, $debug = false, $assoc = false, $error = false) {
+		//echo $query.'<br/>';
 		$this->checkconnected();
 		if($debug) print $query;
 		$result = mysql_query($query);
@@ -76,7 +77,6 @@ class sql {
 	function queryResult($query, $debug = false)
 	{
 		$this->checkconnected();
-		if($debug) print $query;
 		$result = mysql_query($query);
 
 		//if ($result === true) return true;

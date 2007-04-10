@@ -102,7 +102,7 @@ class user {
 		} else {
 			$str .= 'c:0:0';
 		}
-		$rel_onl = $this->sql->query("SELECT ".CH." rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id FROM {$this->t}userrelation rel INNER JOIN {$this->t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($id)."' AND u.account_date > '".$this->timeout(UO)."' ORDER BY u.u_alias");
+		$rel_onl = $this->sql->query("SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM {$this->t}userrelation rel INNER JOIN {$this->t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($id)."' AND u.account_date > '".$this->timeout(UO)."' ORDER BY u.u_alias");
 		$rel_s = '';
 		foreach($rel_onl as $row) {
 			$rel_s .= $row[0].'|'.rawurlencode($row[1]).'|'.$sex[$row[2]].$this->doage($row[3], 0).'|'.$this->dobirth($row[3]).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
