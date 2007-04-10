@@ -9,21 +9,22 @@ Funktionalitet som behövs funktions-baseras för att användas i det mobil-baserad
 		- Hämta ett meddelande
 
 	* Mail: (klart - av martin)
-		- Skriv nytt meddelande
-		- Hämta meddelanden till en person
-		- Skicka svar på ett meddelande
-		- Markera meddelande som läst
-		- Markera meddelande som raderat
+		[x] Skriv nytt meddelande
+		[x] Hämta meddelanden till en person
+		[x] Skicka svar på ett meddelande
+		[x] Markera meddelande som läst
+		[x] Markera meddelande som raderat
 
 	* Vänner: (nästan klart - av martin)
-		- Skapa relation (skicka en förfrågan)
-		- Acceptera vän-förfrågan
-		- Ta bort relation
-		- Blockera användare
-		- Hämta en persons kompis-lista, inklusive deras online/offline status
-		- Hämta en lista på dina blockerade användare
-		- Hämta en persons online/offline status
-		- Funktion för att kontrollera om inloggad användare och en annan person redan är vänner
+		[x] Skapa relation (skicka en förfrågan)
+		[x] Acceptera vän-förfrågan
+		[x] Ta bort relation
+		[x] Blockera användare
+		[/] Hämta en persons kompis-lista
+				- inklusive deras online/offline status
+		[x] Hämta en lista på dina blockerade användare
+		[ ] Hämta en persons online/offline status
+		[x] Funktion för att kontrollera om inloggad användare och en annan person redan är vänner
 
 	* Profil:
 		- Ändra fakta
