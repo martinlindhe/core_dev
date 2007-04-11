@@ -19,8 +19,8 @@
 ==== Standards compatible ====
 		- All generated HTML are checked to be 100% "XHTML 1.0 Transitional" compatible using the "HTML Validator" plugin for Firefox.
 			* The goal is to be 100% "XHTML 1.0 Strict" or maybe "XHTML 1.1" compatible.
-			* Currently need to use 1.0 Transitional because the others dont support <center>
-			* Currently need to use 1.0 Transitional because strict/1.1 dont support <a href="" target="_blank">
+			* Need to use 1.0 Transitional because the others dont support <center>
+			* Need to use 1.0 Transitional because strict/1.1 dont support <a href="" target="_blank">
 
 			XHTML 1.0 Transitional:
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,5 +32,13 @@
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
 		- CSS
-			* We use some mozilla-specific css rules currently, for rounding borders.
-			* Also we use IE-specific rules for alpha-level of div:s
+			* We use some mozilla-specific css rules currently, for rounding borders (dont work in Opera or IE7).
+				[x] Firefox 2
+				[ ] Opera 9.2
+				[ ] Internet Explorer 7
+			* Also we use IE-specific rules for alpha-level of div:s (todo: stödjer ie7 mozilla-varianten?)
+
+		- Compatiblity
+			* The platform are being developed using Firefox, but functionality are regularry tested
+				in Internet Explorer and Opera aswell.
+			* Some CSS might render differently, but all javascript should work  in all those three browsers.

@@ -345,7 +345,7 @@
 		}
 
 		if ($out_args) {
-			return $arr['path'].'?'.urlencode($out_args).'&'.$_wikiURL;
+			return $arr['path'].'?'.urlencode($out_args).'&amp;'.$_wikiURL;
 		}
 		return $arr['path'].'?'.$_wikiURL;
 	}

@@ -9,6 +9,7 @@
 	require_once('../functions/class.Session.php');
 	require_once('../functions/class.Files.php');
 
+	include_once('../functions/functions_general.php');
 	include_once('../functions/functions_textformat.php');
 	include_once('../functions/functions_wiki.php');
 

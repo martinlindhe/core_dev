@@ -1,36 +1,20 @@
 <?
 	require_once('config.php');
 
-	$page = 1;
-	if (!empty($_GET['p']) && is_numeric($_GET['p'])) $page = $_GET['p'];
-
-	$l = 25;
-
 	//s=search phrase, search the adblock rules
 	$search = '';
 	if (!empty($_GET['s'])) $search = $_GET['s'];
 	if (!empty($_POST['s'])) $search = $_POST['s'];
 
-	
-	$sortByTime = 0;
-	if (!empty($_POST['sortbytime'])) $sortByTime = 1;
+	@$types = $_POST['t0'].','.$_POST['t1'].','.$_POST['t2'].','.$_POST['t3'];
+	$totRules = searchAdblockRuleCount($search, $types);
 
-	if ($search || !empty($_POST['t0']) || !empty($_POST['t1']) || !empty($_POST['t2']) || !empty($_POST['t3'])) {
-		@$types = $_POST['t0'].','.$_POST['t1'].','.$_POST['t2'].','.$_POST['t3'];
-		$list = searchAdblockRules($search, $types, $page, $l, $sortByTime);
-		$totRules = searchAdblockRuleCount($search);	//fixme: count ignorerar $types
-	} else {
-		$list = getAdblockRules('', $page, $l);
-		$totRules = getAdblockRulesCount();
-	}
-	
-	$totPages = round($totRules / $l+0.5); // round to closest whole number
+	$pager = makePager($totRules, 25, ($search ? '&s='.$search : ''));
+
+	$list = searchAdblockRules($search, $types, $pager['page'], $pager['items_per_page'], !empty($_POST['sortbytime']));
 
 	require('design_head.php');
-?>
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
-	<tr><td class="centermenu" valign="bottom">
-<?
+
 	wiki('Ruleset');
 
 	if ($search) {
@@ -38,72 +22,35 @@
 	} else {
 		echo 'Displaying full list of adblock rules<br/><br/>';
 	}
-	echo 'Page '.$page.' of '.$totPages.' ('.count($list).' this page, '.$totRules.' total)<br/><br/>';
-
-	if ($totPages > 1) {
-
-		if ($page > 1) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?p='.($page-1);
-			if ($search) echo '&s='.$search;
-			echo '" title="Previous page"><img src="gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
-		} else {
-				echo '<img src="gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
-		}
-
-		for ($i=1; $i<=$totPages; $i++) {
-			if ($i==$page) echo '<b>';
-			echo ' <a href="'.$_SERVER['PHP_SELF'].'?p='.$i;
-			if ($search) echo '&s='.$search;
-			echo '">'.$i.'</a>';
-			if ($i==$page) echo '</b>';
-			echo ' ';
-		}
-		if ($page < $totPages) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?p='.($page+1);
-			if ($search) echo '&s='.$search;
-			echo '" title="Next page"><img src="gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
-		} else {
-			echo '<img src="gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
-		}
-	}
-
-	$t1check = 1; if (!isset($_POST['t2'])) $t1check = 0;
-	$t2check = 1;	if (!isset($_POST['t2'])) $t2check = 0;
-	$t3check = 1;	if (!isset($_POST['t3'])) $t3check = 0;
-	$t0check = 1;	if (!isset($_POST['t0'])) $t0check = 0;
 ?>
-	</td>
-	<td width="320">
+	<form method="post" name="lf" action="<?=$_SERVER['PHP_SELF']?>">
+	<table cellpadding="5" cellspacing="0" border="1">
+		<tr><td align="right" class="centermenu">
+			<label for="t1">Advertisment</label>
+			<input name="t1" id="t1" value="1" type="checkbox" class="checkbox"<? if (!empty($_POST['t1'])) echo ' checked'; ?>/><br/>
 
-		<form method="post" name="lf" action="<?=$_SERVER['PHP_SELF']?>">
-		<table width="100%" cellpadding="5" cellspacing="0" border="1">
-			<tr><td align="right" class="centermenu">
-				<label for="t1">Advertisment</label>
-				<input name="t1" id="t1" value="1" type="checkbox" class="checkbox"<? if ($t1check) echo ' checked'; ?>/><br/>
+			<label for="t2">Tracking</label>
+			<input name="t2" id="t2" value="2" type="checkbox" class="checkbox"<? if (!empty($_POST['t2'])) echo ' checked'; ?>/><br/>
 
-				<label for="t2">Tracking</label>
-				<input name="t2" id="t2" value="2" type="checkbox" class="checkbox"<? if ($t2check) echo ' checked'; ?>/><br/>
-
-				<label for="t3">Counter</label>
-				<input name="t3" id="t3" value="3" type="checkbox" class="checkbox"<? if ($t3check) echo ' checked'; ?>/><br/>
+			<label for="t3">Counter</label>
+			<input name="t3" id="t3" value="3" type="checkbox" class="checkbox"<? if (!empty($_POST['t3'])) echo ' checked'; ?>/><br/>
 				
-				<label for="t0">Unknown</label>
-				<input name="t0" id="t0" value="0" type="checkbox" class="checkbox"<? if ($t0check) echo ' checked'; ?>/>
-			</td>
-			<td align="right" valign="top" width="180">
-				<input type="text" name="s" value="<?=$search?>" size="14"/> 
-				<input type="submit" value="Search"/><br/>
-				<br/>
-				<label for="sortbytime">Show newest first</label>
-				<input type="checkbox" name="sortbytime" id="sortbytime" value="1" class="checkbox"<? if ($sortByTime) echo ' checked="checked"'; ?>/>
-			</td></tr>
-		</table>
-		</form>
-
-	</td></tr>
-</table>
-<br/>
+			<label for="t0">Unknown</label>
+			<input name="t0" id="t0" value="0" type="checkbox" class="checkbox"<? if (!empty($_POST['t4'])) echo ' checked'; ?>/>
+		</td>
+		<td align="right" valign="top" width="180">
+			<input type="text" name="s" value="<?=$search?>" size="13"/> 
+			<input type="submit" value="Search"/><br/>
+			<br/>
+			<label for="sortbytime">Show newest first</label>
+			<input type="checkbox" name="sortbytime" id="sortbytime" value="1" class="checkbox"<? if (!empty($_POST['sortbytime'])) echo ' checked="checked"'; ?>/>
+		</td></tr>
+	</table>
+	</form>
+	<br/>
 <?
+	echo $pager['head'];
+
 	echo '<table width="100%" cellpadding="0" cellspacing="0" border="0">';
 	for ($i=0; $i<count($list); $i++) {
 		$classname='objectNormal';

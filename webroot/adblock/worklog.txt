@@ -1,7 +1,6 @@
 todo:
 
 	hög prioritet:
-		- plocka ut paging från ruleset.php till generella funktioner
 		- styla upp ruleset.php ordentligt med divar & css istället för ful table med massa inbakat css i
 		- gör en generell funktion för att adda firefox quick sökmotorer, från /adblock/js/adblock.js
 
@@ -29,6 +28,12 @@ todo:
 
 	
 --------------[[changelog]]------------
+2007.04.11:
+	- adblock: plockade ut paging från ruleset.php till functions_general.php makePager() funktion
+
+
+
+
 2007.04.10:
 	- wiki: kan nu länka andra wikis i text, med [[Name|title]]
 	- åter-implementerat stöd för files, genom Files klassen

@@ -170,7 +170,7 @@ abstract class DB_Base
 
 		$enc_str = $this->escape($str);
 		
-		//echo '<b>LOG: '.$str.'</b><br/>';
+		echo '<b>LOG: '.$str.'</b><br/>';
 
 		//if ($session) {
 			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);

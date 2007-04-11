@@ -58,6 +58,7 @@
 	
 	/* Returns a list of rules from the db. $types looks like this: "1,2,3" */
 	// no types = get full list
+	//used to generate text files for subscriptions
 	function getAdblockRules($types='', $page=0, $limit=10)
 	{
 		global $db;
@@ -134,7 +135,21 @@
 		$sql = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0 AND timeCreated>'. (time()-($days*24*3600));
 		return $db->getOneItem($sql);
 	}
-	
+
+	function makeAdblockTypeSQL($types)
+	{
+		if (!$types) return '';
+
+		$types_sql = '';
+		$list = explode(',', $types);
+		for ($i=0; $i<count($list); $i++) {
+			if (is_numeric($list[$i])) $types_sql .= 'ruleType='.$list[$i].' OR ';
+		}
+
+		if (substr($types_sql,-4) == ' OR ') $types_sql = substr($types_sql,0,-4);
+		return trim($types_sql);
+	}
+
 	/* Returns a list of rules from the db. $types looks like this: "1,2,3" */
 	// no types = get full list
 	function searchAdblockRules($searchword, $types='', $page=0, $limit=10, $sortByTime=false)
@@ -143,17 +158,7 @@
 
 		$searchword = $db->escape(strip_tags($searchword));
 
-		$types_sql = '';
-		if ($types) {
-		
-			$list = explode(',', $types);
-			for ($i=0; $i<count($list); $i++) {
-				if (is_numeric($list[$i])) $types_sql .= 'ruleType='.$list[$i].' OR ';
-			}
-
-			if (substr($types_sql,-4) == ' OR ') $types_sql = substr($types_sql,0,-4);
-			$types_sql = trim($types_sql);
-		}
+		$types_sql = makeAdblockTypeSQL($types);
 
 		$limit_sql = '';
 		if (is_numeric($page) && $page && $limit) {
@@ -161,11 +166,8 @@
 			$limit_sql = ' LIMIT '.$index.','.$limit;
 		}
 
-		if ($types_sql) {
-			$sql = 'SELECT * FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0 AND ('.$types_sql.')';
-		} else {		
-			$sql = 'SELECT * FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
-		}
+		$sql = 'SELECT * FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
+		if ($types_sql) $sql .= ' AND ('.$types_sql.')';
 		
 		if ($sortByTime) {
 			$sql .= ' ORDER BY timeCreated DESC'.$limit_sql;		//returnerar senaste regeln först
@@ -176,12 +178,18 @@
 		return $db->getArray($sql);
 	}
 
-	function searchAdblockRuleCount($searchword)
+	
+	//used with adblock ruleset searches
+	function searchAdblockRuleCount($searchword, $types='')
 	{
 		global $db;
+		
+		$types_sql = makeAdblockTypeSQL($types);
 
 		$searchword = $db->escape(strip_tags($searchword));
 		$sql = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
+		if ($types_sql) $sql .= ' AND ('.$types_sql.')';
+		echo $sql;
 		
 		return $db->getOneItem($sql);
 	}
