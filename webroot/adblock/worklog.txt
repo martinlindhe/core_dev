@@ -14,11 +14,9 @@ todo:
 		- använd /core/file.php
 		- flytta /ajax/*.php till /core/ajax_*.php
 		
-		- massa queries faller bort från query tracen, vad beror det på?
+		- massa misslyckade queries faller bort från query tracen, vad beror det på? har försökt fånga dom med profileError(), behöver kikas
 
 	wiki rewrite:
-		- bygga in "install search plugins" javascriptet nån stans? kanske som ett wiki kommando?
-		- wiki kommando: url-länk, för att stänga av <a> taggen /helt förbjuda html
 		- namn "Start page" blir "Start_page"
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
@@ -27,7 +25,7 @@ todo:
 	låg prioritet:
 		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 		- kanske ska man uppdela regler mellan generella regler, och site-specifika regler.
-
+		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 	
 --------------[[changelog]]------------
 2007.04.11:
@@ -41,9 +39,12 @@ todo:
 	- gjorde en ajax-loading animation reusable i /layout/ajax_loading_layer.html
 	- visar thumbnails på oanvända uppladdade bilder i wiki:edit vyn
 	- class.DB_MySQLi & class.DB_MySQL: istället för att returnera tomma arrayer etc vid fel, loggar fel först med db profilern!
+	- wiki kommando: [[link:url|titel]] url-länk, för att stänga av <a> taggen /helt förbjuda html
+	- wiki kommando: [[search:url|titel]] för att känka in quicksearch-moduler i text, wip-javascriptet funkar inte riktigt
+
 
 2007.04.10:
-	- wiki: kan nu länka andra wikis i text, med [[Name|title]]
+	- wiki: kan nu länka andra wikis i text, med [[wiki:Name|title]]
 	- åter-implementerat stöd för files, genom Files klassen
 
 

@@ -95,27 +95,42 @@
 
 			$link = array();
 			list($link['coded'], $link['title']) = explode('|', $wiki_command);
-			list($link['cmd'], $link['param']) = explode(':', $link['coded']);
+			
+			$arr = explode(':', $link['coded']);
+			$link['cmd'] = $arr[0];
+			$link['param'] = '';
+			for ($i=1; $i<count($arr); $i++) {
+				$link['param'] .= $arr[$i];
+			}
+
 
 			if (empty($link['cmd'])) continue;
-	
+
+			$result = '';
+
 			switch ($link['cmd']) {
 				case 'wiki':
 					if ($link['title']) {
 						//[[wiki:About|read about us]] format
-						$wiki = '<a href="wiki.php?View:'.$link['param'].'">'.$link['title'].'</a>';
+						$result = '<a href="wiki.php?View:'.$link['param'].'">'.$link['title'].'</a>';
 					} else {
 						//[[wiki:About]] format
-						$wiki = '<a href="wiki.php?View:'.$link['param'].'">'.$link['param'].'</a>';
+						$result = '<a href="wiki.php?View:'.$link['param'].'">'.$link['param'].'</a>';
 					}
 					break;
 					
 				case 'link':
-					$wiki = '<a href="'.$link['param'].'">'.$link['title'].'</a>';
+					$result = '<a href="'.$link['param'].'">'.$link['title'].'</a>';
+					break;
+					
+				case 'search':
+					$result = '<a href="javascript:installSearchPlugin(\''.$link['param'].'\')">'.$link['title'].'</a>';
 					break;
 			}
+			
+			if (!$result) $result = '['.$wiki_command.']';
 
-			$text = substr($text, 0, $pos1) .$wiki. substr($text, $pos2+strlen(']]'));
+			$text = substr($text, 0, $pos1) .$result. substr($text, $pos2+strlen(']]'));
 		} while (1);
 
 
