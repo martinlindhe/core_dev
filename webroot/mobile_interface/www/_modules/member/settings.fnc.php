@@ -1,6 +1,9 @@
 <?
-	function makeSelection($name, $array, $sel) {
-		$ret = '<select style="width: 185px;" name="'.$name.'"><option value="">-- Välj --</option>';
+	function makeSelection($name, $sel)
+	{
+		$array = getset('', $name, 'mo', 'text_cmt ASC');
+
+		$ret = '<select style="width: 185px;" name="det_'.$name.'"><option value="">-- Välj --</option>';
 		foreach($array as $arr) $ret .= '<option value="'.$arr[1].'"'.($sel == $arr[1]?' selected':'').'>'.$arr[1].'</option>';
 		return $ret.'</select>';
 	}

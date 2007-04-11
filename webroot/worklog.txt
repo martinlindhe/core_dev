@@ -37,14 +37,15 @@
 		annars visas "TA BORT RELATION"
 	- Arbetar med _modules/member/settings*.php
 	- Flyttade ut "personal" koden från settings.php till settings_personal.php
-
+	- _modules/member/settings.fnc.php skapad
+	- "Ändra fakta" implementerat i mobila gränssnittet
+	- Visar fakta via mobil-gränssnittet på profilsidor
 
 
 ***********************************************************************************************************************************
 
 Kvar att göra för profiler:
 	- Kunna ändra lösenord via mobil-gränssnittet
-	- Kunna visa & ändra "fakta" via mobil-gränssnittet
 	- MMS koppling till bilduppladdning via mobil-gränssnittet
 	- TORSDAG: upload video-möte
 

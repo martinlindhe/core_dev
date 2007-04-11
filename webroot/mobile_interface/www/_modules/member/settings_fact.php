@@ -14,16 +14,6 @@
 	$page = 'settings_fact';
 	//$profile = $user->getcontent($l['id_id'], 'user_profile');
 
-	$civil = getset('', 'civil', 'mo', 'text_cmt ASC');
-	$attitude = getset('', 'attitude', 'mo', 'text_cmt ASC');
-	$alcohol = getset('', 'alcohol', 'mo', 'text_cmt ASC');
-	$children = getset('', 'children', 'mo', 'text_cmt ASC');
-	$drink = getset('', 'drink', 'mo', 'text_cmt ASC');
-	$tobacco = getset('', 'tobacco', 'mo', 'text_cmt ASC');
-	$sex = getset('', 'sex', 'mo', 'text_cmt ASC');
-	$music = getset('', 'music', 'mo', 'text_cmt ASC');
-	$length = getset('', 'length', 'mo', 'text_cmt ASC');
-
 	require(DESIGN.'head.php');
 ?>
 	<div id="mainContent">
@@ -38,16 +28,16 @@
 
 	<table cellspacing="0">
 	<tr>
-		<td class="pdg_t" style="padding-right: 10px;"><b>Civilstånd:</b><br /><?=makeSelection('det_civil', $civil, $head['det_civil'][1])?></td>	
-		<td class="pdg_t" style="padding-right: 6px;"><b>Attityd:</b><br /><?=makeSelection('det_attitude', $attitude, $head['det_attitude'][1])?></td>
-		<td class="pdg_t" style="padding-right: 6px;"><b>Barn:</b><br /><?=makeSelection('det_children', $children, $head['det_children'][1])?></td>
+		<td class="pdg_t" style="padding-right: 10px;"><b>Civilstånd:</b><br /><?=makeSelection('civil', $head['det_civil'][1])?></td>	
+		<td class="pdg_t" style="padding-right: 6px;"><b>Attityd:</b><br /><?=makeSelection('attitude', $head['det_attitude'][1])?></td>
+		<td class="pdg_t" style="padding-right: 6px;"><b>Barn:</b><br /><?=makeSelection('children', $head['det_children'][1])?></td>
 	</tr><tr>
-		<td class="pdg_t" style="padding-right: 6px;"><b>Alkohol:</b><br /><?=makeSelection('det_alcohol', $alcohol, $head['det_alcohol'][1])?></td>
-		<td class="pdg_t" style="padding-right: 6px;"><b>Tobak:</b><br /><?=makeSelection('det_tobacco', $tobacco, $head['det_tobacco'][1])?></td>
-		<td class="pdg_t" style="padding-right: 6px;"><b>Sexliv:</b><br /><?=makeSelection('det_sex', $sex, $head['det_sex'][1])?></td>
+		<td class="pdg_t" style="padding-right: 6px;"><b>Alkohol:</b><br /><?=makeSelection('alcohol', $head['det_alcohol'][1])?></td>
+		<td class="pdg_t" style="padding-right: 6px;"><b>Tobak:</b><br /><?=makeSelection('tobacco', $head['det_tobacco'][1])?></td>
+		<td class="pdg_t" style="padding-right: 6px;"><b>Sexliv:</b><br /><?=makeSelection('sex', $head['det_sex'][1])?></td>
 		</tr><tr>
-		<td class="pdg_t" style="padding-right: 6px;"><b>Musiksmak:</b><br /><?=makeSelection('det_music', $music, $head['det_music'][1])?></td>
-		<td class="pdg_t" style="padding-right: 6px;"><b>Längd:</b><br /><?=makeSelection('det_length', $length, $head['det_length'][1])?></td>
+		<td class="pdg_t" style="padding-right: 6px;"><b>Musiksmak:</b><br /><?=makeSelection('music', $head['det_music'][1])?></td>
+		<td class="pdg_t" style="padding-right: 6px;"><b>Längd:</b><br /><?=makeSelection('length', $head['det_length'][1])?></td>
 		<td class="pdg_t"><b>Vill ha:</b><br /><input type="text" class="txt" style="width: 185px;" name="det_wants" value="<?=@secureOUT($head['det_wants'][1])?>" /></td>
 	</tr>
 	</table>

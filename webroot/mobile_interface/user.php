@@ -7,6 +7,7 @@
 	require('design_head.php');
 
 	$user_data = $user->getuser($_id);
+	$head = $user->getcontent($_id, 'user_head');
 
 	if ($_id == $l['id_id']) {
 		echo 'DIN PROFIL<br/>';
@@ -34,10 +35,20 @@
 		echo '<a href="relations.php?id='.$_id.'">VÄNNER</a> ';
 		echo '<a href="guestbook.php?id='.$_id.'">GÄSTBOK</a>';
 	}
-	echo '<br/>';
+	echo '<br/><br/>';
 
-	echo 'Mina fakta här.<br/>';
-	echo 'Min persentation här...<br/>';
+	echo 'Mina fakta:<br/>';
+	echo '<b>Civilstånd:</b>: '.	(!empty($head['det_civil'][1])		? $head['det_civil'][1]:'obesvarat').'<br/>';
+	echo '<b>Attityd:</b>: '.			(!empty($head['det_attitude'][1])	? $head['det_attitude'][1]:'obesvarat').'<br/>';
+	echo '<b>Barn:</b>: '.				(!empty($head['det_children'][1])	? $head['det_children'][1]:'obesvarat').'<br/>';
+	echo '<b>Alkohol:</b>: '.			(!empty($head['det_alcohol'][1])	? $head['det_alcohol'][1]:'obesvarat').'<br/>';
+	echo '<b>Tobak:</b>: '.				(!empty($head['det_tobacco'][1])	? $head['det_tobacco'][1]:'obesvarat').'<br/>';
+	echo '<b>Sexliv:</b>: '.			(!empty($head['det_sex'][1])			?	$head['det_sex'][1]:'obesvarat').'<br/>';
+	echo '<b>Musiksmak:</b>: '.		(!empty($head['det_music'][1])		? $head['det_music'][1]:'obesvarat').'<br/>';
+	echo '<b>Längd:</b>: '.				(!empty($head['det_length'][1])		? $head['det_length'][1]:'obesvarat').'<br/>';
+	echo '<b>Vill ha:</b>: '.			(!empty($head['det_wants'][1])		? secureOUT($head['det_wants'][1]):'obesvarat').'<br/>';
+
+	//echo 'Min persentation här...<br/>';
 
 	require('design_foot.php');
 ?>
