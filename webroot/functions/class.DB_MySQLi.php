@@ -52,6 +52,7 @@ class DB_MySQLi extends DB_Base
 		if ($result) {
 			$this->insert_id = $this->db_handle->insert_id;
 		} else if ($this->debug && !$result) {
+			$this->insert_id = 0;
 			$this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 		} else {
 			//if debug is turned off (production) and a query fail, just die silently

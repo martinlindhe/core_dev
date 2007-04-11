@@ -5,18 +5,10 @@ body {
 	padding: 0;
 	background-color: #F7F7DD;
 }
-a:link {
-	color: #900;
-}
-a:visited {
-	color: #48468f;
-}
-a:hover {
-	color: #f20;
-}
-img {
-	border: 0;
-}
+a:link { color: #900; }
+a:visited { color: #48468f; }
+a:hover { color: #f20; }
+img { border: 0; }
 
 /* Design */
 #middle {
@@ -123,27 +115,6 @@ img {
 	background-color: #CCCCCC;
 }
 
-/* objects are forum posts, reported sites etc */
-.objectNormal {
-	color: #595930;
-	background-color: #E1E2B9;
-	padding: 5px;
-}
-.objectCritical {
-	background-color: #FB9B9B;
-	padding: 5px;
-}
-
-/* Should be used KONSEKVENT */
-.msg_success {
-	background-color: #66FF66;
-	padding: 5px;
-}
-.msg_error {
-	background-color: #FF6666;
-	padding: 5px;
-	line-height: 23px;
-}
 
 /* dictionary tooltip with overlib */
 div.domTTstyle {
@@ -168,12 +139,4 @@ div.domTTstyle .contents {
 dfn {
 	cursor: help;
 	border-bottom: dashed 1px #707070;
-}
-
-/* style on text formatting tags */
-pre.tagstyle_code {	/* [code]xxx[/code]*/
-	border: 1px solid #A0A0A0;
-	background-image: url(code_bg.png);
-	background-repeat: no-repeat;
-	background-color: #F0F0F0;
 }

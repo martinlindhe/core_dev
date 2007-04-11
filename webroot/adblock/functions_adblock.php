@@ -189,8 +189,7 @@
 		$searchword = $db->escape(strip_tags($searchword));
 		$sql = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
 		if ($types_sql) $sql .= ' AND ('.$types_sql.')';
-		echo $sql;
-		
+
 		return $db->getOneItem($sql);
 	}
 
@@ -207,7 +206,8 @@
 		$url = $db->escape(trim($url));
 		$comment = $db->escape(trim($comment));
 
-		$db->query('INSERT INTO tblProblemSites SET url="'.$url.'",type='.$type.',comment="'.$comment.'",userId='.$session->id.',userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).',timeCreated=NOW()');
+		$q = 'INSERT INTO tblProblemSites SET url="'.$url.'",type='.$type.',comment="'.$comment.'",userId='.$session->id.',userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).',timeCreated=NOW()';
+		$db->query($q);
 
 		return $db->insert_id;
 	}

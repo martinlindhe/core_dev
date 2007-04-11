@@ -56,7 +56,7 @@
 			<option value="1" selected="selected">Advertising</option>
 			<option value="2">Tracker</option>
 			<option value="3">Counter</option>
-		</select>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Add rule"/>
+		</select>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="Add rule"/>
 	</td></tr>
 </table>
 </form>

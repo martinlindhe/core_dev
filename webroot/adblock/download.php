@@ -104,7 +104,7 @@ function checkDLform() {
 			<input type="checkbox" name="type_0" id="type_0" value="0" checked="checked"/>
 			<label for="type_0">Unsorted entries (<?=$rules['unsorted']?> entries)</label><br/><br/>
 			<?=$rules["total"]?> entries total<br/><br/>
-			<input type="submit" name="button" value="Download" onclick="return checkDLform();"/>
+			<input type="submit" class="button" value="Download" onclick="return checkDLform();"/>
 		</td>
 	</tr>
 </table>

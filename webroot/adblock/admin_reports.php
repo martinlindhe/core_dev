@@ -26,7 +26,6 @@ List of all current reported sites in database, oldest first (<?=count($list)?> 
 <br/>
 
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
-
 <?
 	for ($i=0; $i<count($list); $i++) {
 		//fixme:
@@ -67,7 +66,6 @@ List of all current reported sites in database, oldest first (<?=count($list)?> 
 				$ip_v4 = GeoIP_to_IPv4($list[$i]['userIP']);
 				echo ' from <a href="admin_ip.php?ip='.$ip_v4.'">'.$ip_v4.'</a>';
 
-				echo ' <img src="../flags/'.GeoIP_ci_to_CountryShort($list[$i]['ci']).'.png" align="top" width="16" height="11" title="'.GeoIP_ci_to_Country($list[$i]['ci']).'" alt=""/> ';
 				echo $list[$i]['timeCreated'];
 			echo '</td>';
 			echo '<td width="90" class="'.$classname.'" align="right"><input type="checkbox" name="remove_'.$list[$i]['siteId'].'" value="1" class="checkbox"/>Remove&nbsp;</td></tr>';
@@ -76,8 +74,7 @@ List of all current reported sites in database, oldest first (<?=count($list)?> 
 		echo '<img src="gfx/c.gif" width="1" height="10" alt=""/><br/>';
 	}
 ?>
-
-<input type="submit" value="Remove selected"/>
+<input type="submit" class="button" value="Remove selected"/>
 </form>
 
 <?

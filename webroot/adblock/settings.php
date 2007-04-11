@@ -19,7 +19,7 @@
 	echo 'E-mail:<br/>';
 	echo '<input size="30" type="text" name="email" value="'.$session->read('email').'"/><br/>';
 
-	echo '<input type="submit" value="Save"/>';
+	echo '<input type="submit" class="button" value="Save"/>';
 	echo '</form><br/>';
 
 	if ($session->isAdmin) {

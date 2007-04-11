@@ -339,13 +339,13 @@
 			
 			$skipit = explode(':', $vals[0]);
 			
-			if (!isset($skipit[1])) {
-				$out_args .= $vals[0].'='.$vals[1].'&amp;';
+			if (!isset($skipit[1]) && isset($vals[1])) {
+				$out_args .= $vals[0].'='.urlencode($vals[1]).'&amp;';
 			}
 		}
 
 		if ($out_args) {
-			return $arr['path'].'?'.urlencode($out_args).'&amp;'.$_wikiURL;
+			return $arr['path'].'?'.$out_args.'&amp;'.$_wikiURL;
 		}
 		return $arr['path'].'?'.$_wikiURL;
 	}

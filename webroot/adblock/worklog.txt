@@ -1,8 +1,10 @@
 todo:
 
 	hög prioritet:
-		- styla upp ruleset.php ordentligt med divar & css istället för ful table med massa inbakat css i
+		- styla upp admin_reports.php ordentligt med divar & css istället för ful table med massa inbakat css i
 		- gör en generell funktion för att adda firefox quick sökmotorer, från /adblock/js/adblock.js
+		- ruleset.php: jobba mer på css:en för att få till listan som det var tänkt
+		
 
 	platform change:
 		- kunna få /core/ filer att läsa config från ../projekt/config.php eller nåt!
@@ -30,6 +32,9 @@ todo:
 --------------[[changelog]]------------
 2007.04.11:
 	- adblock: plockade ut paging från ruleset.php till functions_general.php makePager() funktion
+	- adblock: gjorde om ruleset.php tabell hack till div & nya css klasser: _row_container, _row_col1, _row_col2
+				Idén är att ha färdig "standard" css mall för att göra en lista med 2 eller fler kolumner i css
+	- adblock: fixade så report_site.php funkar igen
 
 
 

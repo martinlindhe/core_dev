@@ -36,7 +36,7 @@
 	echo 'Your IP is '.$_SERVER['REMOTE_ADDR'].'<br/>';
 	echo '<form method="get" action="'.$_SERVER['PHP_SELF'].'">';
 	echo '<input type="text" name="ip" value="'.$ip.'"/> ';
-	echo '<input type="submit" value="query ip" class="button"/>';
+	echo '<input type="submit" class="button" value="query ip"/>';
 	echo '</form>';
 
 	require('design_foot.php');
