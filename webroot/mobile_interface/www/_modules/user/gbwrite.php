@@ -1,28 +1,12 @@
 <?
+	include('gb.fnc.php');
 	if(!empty($_GET['r'])) $r = '1'; else $r = '0';
 	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;
 	if($own) popupACT('Du kan inte skicka till dig själv.');
 	if(!empty($_POST['ins_cmt'])) {
 		if($l['status_id'] == '1') {
 			$prv = (!empty($_POST['ins_priv']) && $isOk)?1:0;
-			$res = $sql->queryInsert("INSERT INTO {$t}usergb SET
-			user_id = '".$s['id_id']."',
-			sender_id = '".$l['id_id']."',
-			private_id = '$prv',
-			status_id = '1',
-			user_read = '0',
-			sent_cmt = '".secureINS($_POST['ins_cmt'])."',
-			sent_html = '".(($isAdmin)?'1':'0')."',
-			sent_date = NOW()");
-			$or = array($s['id_id'], $l['id_id']);
-			sort($or);
-			$sql->queryInsert("INSERT INTO {$t}usergbhistory SET users_id = '".implode('', $or)."', msg_id = '$res'");
-			if($a) {
-				$sql->queryUpdate("UPDATE {$t}usergb SET is_answered = '1' WHERE main_id = '".secureINS($a)."' AND sender_id = '".$s['id_id']."' AND user_id = '".$l['id_id']."' LIMIT 1");
-			}
-			$user->counterIncrease('gb', $s['id_id']);
-			$user->notifyIncrease('gb', $s['id_id']);
-
+			gbWrite($_POST['ins_cmt'], $s['id_id'], $a, $prv);
 			if(!empty($_GET['main'])) {
 				reloadACT(l('user', 'gb', $s['id_id']));
 			} else {

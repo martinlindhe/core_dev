@@ -7,10 +7,10 @@
 	//$uarr['noicons'] = 1;
 ?>
 	<div id="mainContent">
-		<div style="float: left; margin-bottom: 5px;"><?=$user->getimg($s['id_id'].$s['u_picid'].$s['u_picd'].$s['u_sex'], $s['u_picvalid'], 1)?></div>
-		<div style="float: left; margin-left: 10px;">
-			<h1 style="line-height: 24px;"><?=$user->getstring($s, '', @$uarr)?></h1>
-			<div style="margin-top: 30px;">
+		<div id="userImage"><?=$user->getimg($s['id_id'].$s['u_picid'].$s['u_picd'].$s['u_sex'], $s['u_picvalid'], 1)?></div>
+		<div id="userInfo">
+			<h1><?=$user->getstring($s, '', @$uarr)?></h1>
+			<div>
 			<b>• Civilstånd:</b> <?=(!empty($info['det_civil'][1]))?secureOUT($info['det_civil'][1]):@$det_type[$info['det_civil_type'][1]];?><br />
 			<b>• Attityd:</b> <?=@$info['det_attitude'][1]?><br />
 			<b>• Vill ha:</b> <?=@$info['det_wants'][1]?><br />
@@ -20,9 +20,9 @@
 			<b>• Sexliv:</b> <?=@$info['det_sex'][1]?><br />
 			</div>
 		</div>
-		<div style="float: right; text-align: right;"><p><?=(($user->isonline($s['account_date']))?'<span class="on">online sedan<br />'.nicedate($s['lastlog_date'], 2).'</span>':'<span class="off">offline sedan<br />'.nicedate($s['lastonl_date'], 2).'</span>')?></p></div>
+		<div id="userDetail"><p><?=(($user->isonline($s['account_date']))?'<span class="on">online sedan<br />'.nicedate($s['lastlog_date'], 2).'</span>':'<span class="off">offline sedan<br />'.nicedate($s['lastonl_date'], 2).'</span>')?></p></div>
 		<br class="clr" />
-<div style="margin-bottom: 20px;">
+<div id="userMenu">
 		<input type="button" class="btn<?=($page == 'view'?'3':'2')?>_min" accesskey="1" onclick="goLoc('<?=l('user', 'view', $s['id_id'])?>');" value="profil" />
 		<input type="button" class="btn<?=($page == 'gb'?'3':'2')?>_min" accesskey="2" onclick="goLoc('<?=l('user', 'gb', $s['id_id'])?>');" value="gästbok <?=@intval($info['gb_offset'][1])?>" />
 		<input type="button" class="btn<?=($page == 'gallery'?'3':'2')?>_min" accesskey="3" onclick="goLoc('<?=l('user', 'gallery', $s['id_id'])?>');" value="galleri <?=@intval($info['gal_offset'][1])?>" />

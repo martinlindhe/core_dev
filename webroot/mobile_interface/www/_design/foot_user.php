@@ -19,16 +19,6 @@ if(@!$own && $l) {
 	echo '
 			<div class="smallHeader3"><h4>matchmaking</h4></div>
 			<div class="smallFilled3">
-<style type="text/css">
-#diverse { width: 176px; }
-#diverse td { padding: 2px 2px 3px 2px; table-layout: fixed; }
-#diverse .rgt, #diverse .lft, #diverse .rgt div, #diverse .lft div { overflow: hidden; width: 80px; }
-#diverse .rgt { color: #974b4b; }
-#diverse .lft { color: #4c5195; }
-#diverse .rgt, #diverse .lft, #diverse .cnt { vertical-align: middle; }
-#diverse .cnt { padding: 2px 3px 3px 3px; }
-#diverse .usr, #diverse .usr { height: 32px; }
-</style>
 <table cellspacing="0" id="diverse">
 <tr>
 	<td class="rgt"><div class="usr">'.$user->getstring($s, '', array('noage' => 1)).'</div></td>
