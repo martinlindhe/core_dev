@@ -8,7 +8,6 @@
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 	<script type="text/javascript" src="/js/ajax.js"></script>
 	<script type="text/javascript" src="/js/functions.js"></script>
-	<script type="text/javascript" src="js/adblock.js"></script>
 </head>
 <body>
 <div id="left-bg"></div>

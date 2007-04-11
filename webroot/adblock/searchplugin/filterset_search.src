@@ -1,9 +1,9 @@
 <search
 	version="7.1"
-	name="filterset database"
-	description="Search adblock filters"
+	name="Filterset Database"
+	description="Search Adblock Filterset"
 	method="GET"
-	action="http://martin2/adblock/ruleset.php"
+	action="http://87.227.76.225/adblock/ruleset.php"
 >
 
 <input name="s" user>

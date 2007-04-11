@@ -1,7 +1,6 @@
 todo:
 
 	hög prioritet:
-		- gör en generell funktion för att adda firefox quick sökmotorer, från /adblock/js/adblock.js
 		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 		
 
@@ -17,6 +16,7 @@ todo:
 			funktioner som använder dom? för det är väl bara 1 funktion var
 		- file details: visa vem som laddade upp filen, och när
 		- går det lösa med en genväg ?
+		- bygga in "install search plugins" javascriptet nån stans?
 
 	wiki rewrite:
 		- namn "Start page" blir "Start_page"
@@ -35,6 +35,7 @@ todo:
 				_row_container, _row_col1, _row_col2, osv..
 				Idén är att ha färdig "standard" css mall för att göra en lista med 2 eller fler kolumner i css
 	- adblock: fixade så report_site.php funkar igen
+	- adblock: bort med js/adblock.js, gjorde en generell "add search engine" js-funktion i /js/functions.js
 
 
 

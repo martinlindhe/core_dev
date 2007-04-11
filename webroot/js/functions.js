@@ -141,3 +141,14 @@ function urlOpen(u)
 {
 	document.location = u;
 }
+
+//Works with Firefox 1.5 (?) and 2.0 (confirmed)
+function installSearchPlugin(url)
+{
+	if (!url) return;
+	if ((typeof window.sidebar=='object') && (typeof window.sidebar.addSearchEngine=='function')) {
+		window.sidebar.addSearchEngine(url+'.src', url+'.png', '', '0');
+	} else {
+		alert("Sorry, you need a Mozilla-based browser to install a search plugin.");
+	}
+}
