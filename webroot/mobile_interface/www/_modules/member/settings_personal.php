@@ -76,12 +76,7 @@
 		}
 		$newcity = '';
 		$reload = false;
-		/*if(!empty($_POST['opt_city']) && array_key_exists($_POST['opt_city'], $cities) && $l['city_id'] != $_POST['opt_city']) {
-			$_SESSION['cc'] = intval($_POST['opt_city']);
-			setcookie('TTT', $_SESSION['cc'], time() + 15 * 365 * 24 * 60 * 60);
-			$newcity = "location_id = '".secureINS($_POST['opt_city'])."',";
-			$reload = true;
-		}*/
+
 		$newpass = '';
 		if(!empty($_POST['ins_opass'])) {
 			$exists = $sql->queryLine("SELECT u_pass FROM {$t}user WHERE id_id = '" . secureINS($l['id_id']) . "' LIMIT 1");
@@ -228,12 +223,7 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 
-		/*if($reload) {
-			$line = '<script type="text/javascript">if(parent.comhead) parent.comhead.changeCity(\' - '.ucfirst(strtolower($cities[$_POST['opt_city']])).'\', \''.$_POST['opt_city'].'\', 1);</script>';
-			if(!empty($msg)) errorACT($msg.$line); else errorTACT('Uppdaterat!'.$line, l('member', 'settings', 'personal'), 1000);
-		} else {*/
-			if(!empty($msg)) errorACT($msg); else errorTACT('Uppdaterat!', l('member', 'settings', 'personal'), 1000);
-		#}
+		if(!empty($msg)) errorACT($msg); else errorTACT('Uppdaterat!', l('member', 'settings', 'personal'), 1000);
 	}
 	$page = 'settings';
 	include(DESIGN.'head.php');
@@ -256,18 +246,6 @@
 		<td class="pdg_t"><b>E-post:</b><br /><input type="text" class="txt" name="ins_email" value="<?=secureOUT($l['u_email'])?>" /></td>
 		<td class="pdg_t"><b>Mobilnummer:</b><br /><input type="text" class="txt" name="ins_cell" value="<?=secureOUT($l['u_cell'])?>" /></td>
 	</tr><?
-/*
-	<tr>
-		<td colspan="2" style="padding-bottom: 24px;" class="pdg_t"><b>Stad som förval:</b><br /><select name="opt_city" class="txt">
-<?
-	foreach($cities as $key => $val) {
-		echo '<option value="'.$key.'"'.(($l['city_id'] == $key)?' selected':'').'>'.ucwords(strtolower($val)).'</option>';
-	}
-?>
-		</select></td>
-	</tr>
-<?
-	*/
 ?>
 	<tr>
 		<td class="pdg_t" colspan="2"><br /><b>Om du vill byta lösenord, skriv in ditt nuvarande:</b><br /><input type="password" class="txt" name="ins_opass" value="" /></td>
@@ -341,18 +319,6 @@
 </form>
 		</div>
 <?
-/*
-		<div id="contentSmallR">
-<div class="box1">
-	<div class="box1mid cnt">
-	<table cellspacing="0" class="lft"><tr><td><?=safeOUT(gettxt('settings_text'))?></td></tr></table>
-	</div>
-</div>
-		</div></div>
-<br class="clr" />
-<?
-	#include(DESIGN.'foot_info.php');
-*/
 	include(DESIGN.'foot.php');
 	exit;
 ?>

@@ -1,14 +1,17 @@
 <?
 	session_start();
 
-	require(dirname(__FILE__).'/www/_administrator/set_onl.php');		//skapar $sql och $user klasser
-	require(dirname(__FILE__).'/www/_modules/member/auth.php');			//skapar $user_auth klassen för logins
+	require_once(dirname(__FILE__).'/www/_administrator/set_onl.php');		//skapar $sql och $user klasser
+	require_once(dirname(__FILE__).'/www/_modules/member/auth.php');			//skapar $user_auth klassen för logins
 
 	//funktioner
-	require(dirname(__FILE__).'/www/_modules/user/mail.fnc.php');				//funktioner för att skicka mail
-	require(dirname(__FILE__).'/www/_modules/user/relations.fnc.php');	//funktioner för att hantera relationer
+	require_once(dirname(__FILE__).'/www/_modules/user/mail.fnc.php');				//funktioner för att skicka mail
+	require_once(dirname(__FILE__).'/www/_modules/user/relations.fnc.php');	//funktioner för att hantera relationer
 	
-	require(dirname(__FILE__).'/www/_modules/list/search_users.fnc.php');	//funktioner för att söka användare
+	require_once(dirname(__FILE__).'/www/_modules/list/search_users.fnc.php');	//funktioner för att söka användare
+	
+	require_once(dirname(__FILE__).'/www/_modules/member/settings.fnc.php');	//funktioner för användar-inställningar
+	
 
 	
 	//vafan e dealen med dessa?!?!?!
