@@ -208,21 +208,25 @@ input.button:focus {
 	background-color: #CCCCCC;
 }
 
-/* used to mark somethings */
+/* used to make lists */
 ._row_container {
 	color: #595930;
 	background-color: #E1E2B9;
-	padding: 5px;
+
 }
 
 ._row_container:hover {
 	background-color: #AAC8E4;
+
 }
 
-._row_col1, ._row_col2 {
+._row_col1 {
+	float: left;
+	padding: 5px;
 }
-
-
+._row_col2 {
+	/* background-color: #aaa; */
+	padding: 5px;
 }
 
 /* used to mark something important, like a error message */

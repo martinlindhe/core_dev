@@ -46,17 +46,16 @@
 
 	for ($i=0; $i<count($list); $i++)
 	{
-		echo '<div class="_row_container">';
-		/*if ($list[$i]['ruleType'] == 0) echo '<div class="critical">'; //$classname='objectCritical';
-		else */
+		echo '<div class="_row_container" style="cursor: pointer;" onclick="urlOpen(\'editrule.php?id='.$list[$i]['ruleId'].'\')">';
+		//if ($list[$i]['ruleType'] == 0) $classname='objectCritical';
 		echo '<div class="_row_col1">';
 
 		if ($search) {
 			$rule = str_replace($search, '<b>'.$search.'</b>', $list[$i]['ruleText']);
 		} else {
 			$rule = $list[$i]['ruleText'];
-		}		
-		echo '<a href="editrule.php?id='.$list[$i]['ruleId'].'">'.$rule.'</a>';
+		}
+		echo $rule;
 		echo '</div>';
 		echo '<div class="_row_col2">';
 		switch ($list[$i]['ruleType']) {
@@ -66,11 +65,9 @@
 			case 3: echo 'Counter'; break;
 			default: echo 'INVALID RULE TYPE '.$list[$i]['ruleType'];
 		}
-		echo '</div>';
-		
-		echo '</div>';
+		echo '</div>'; //_row_col2
+		echo '</div>'; //_row_container
 	}
-
 
 	require('design_foot.php');
 ?>

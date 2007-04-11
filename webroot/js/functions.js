@@ -136,3 +136,8 @@ function scroll_element_content(n,offs)
 		setTimeout(function() {scroll_up(e,6,offs)}, 1);
 	}
 }
+
+function urlOpen(u)
+{
+	document.location = u;
+}
