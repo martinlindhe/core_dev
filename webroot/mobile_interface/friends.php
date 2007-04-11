@@ -7,7 +7,15 @@
 	}
 
 	if (!empty($_GET['remove'])) {
-		removeRelation($_GET['remove']);
+		if (isset($_GET['ok'])) {
+			removeRelation($_GET['remove']);
+		} else {
+			echo 'Är du säker på att du vill ta bort denna kompis-relation?<br/><br/>';
+			echo '<a href="friends.php?remove='.$_GET['remove'].'&amp;ok">Ja</a><br/><br/>';
+			echo '<a href="friends.php">Nej</a>';
+			require('design_foot.php');
+			die;
+		}
 	}
 
 	$list = getRelationRequestsFromMe();

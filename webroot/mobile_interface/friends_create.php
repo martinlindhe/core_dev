@@ -10,7 +10,7 @@
 		$check = sendRelationRequest($_id, $_POST['ins_rel']);
 		if ($check === true) {
 			echo 'Du har nu skickat en förfrågan.<br/><br/>';
-			echo '<a href="relations.php">MINA VÄNNER</a>';
+			echo '<a href="friends.php">MINA VÄNNER</a>';
 			require('design_foot.php');
 			die;
 		}

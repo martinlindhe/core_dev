@@ -12,9 +12,6 @@ Steg 1 - att göra:
 I slut-skedet av steg 1:
 	* Optimera html. minimera ner antal onödiga tabbar och whitespace i design_head.php och design_foot.php
 	* Optimera css. -""-
-	* Optimera filnamn. Korta ner namn och parametrar så de tar upp färre bytes, samt är konsekventa:
-		- blogs_*.php till blog_*.php
-		- relations_*.php till friends_*.php
 
 -----------
 Steg 1.5 - när steg 1 är färdigt:

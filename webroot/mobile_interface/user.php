@@ -14,7 +14,7 @@
 		echo '<br/>';
 		echo '<a href="mail.php?id='.$_id.'">MAIL</a> ';
 		//echo '<a href="gallery.php?id='.$_id.'">GALLERI</a> ';
-		echo '<a href="relations.php?id='.$_id.'">VÄNNER</a> ';
+		echo '<a href="friends.php?id='.$_id.'">VÄNNER</a> ';
 		echo '<a href="guestbook.php?id='.$_id.'">GÄSTBOK</a>';
 		echo '<br/>';
 		echo '<a href="settings.php">INSTÄLLNINGAR</a>';
@@ -25,17 +25,20 @@
 		echo 'PROFIL - <b>'.$user_data['u_alias'].'</b> kön &amp; ålder (onlinestatus?)<br/>';
 		echo '<br/>';
 		if (!$friends) {
-			echo '<a href="relations_create.php?id='.$_id.'">BLI VÄN</a> ';
-			echo '<a href="relations_block.php?id='.$_id.'">BLOCKERA</a> ';
+			echo '<a href="friends_create.php?id='.$_id.'">BLI VÄN</a> ';
+			echo '<a href="friends_block.php?id='.$_id.'">BLOCKERA</a> ';
 		} else {
-			echo '<a href="relations.php?remove='.$_id.'">TA BORT RELATION</a> ';
+			echo '<a href="friends.php?remove='.$_id.'">TA BORT RELATION</a> ';
 		}
 		echo '<a href="mail_new.php?id='.$_id.'">MAILA</a> ';
 		echo '<a href="gallery.php?id='.$_id.'">GALLERI</a> ';
-		echo '<a href="relations.php?id='.$_id.'">VÄNNER</a> ';
+		echo '<a href="friends.php?id='.$_id.'">VÄNNER</a> ';
 		echo '<a href="guestbook.php?id='.$_id.'">GÄSTBOK</a>';
 	}
 	echo '<br/><br/>';
+
+	echo '(MIN BILD HÄR)<br/>';
+	echo '<br/>';
 
 	echo 'Mina fakta:<br/>';
 	echo '<b>Civilstånd:</b>: '.	(!empty($head['det_civil'][1])		? $head['det_civil'][1]:'obesvarat').'<br/>';

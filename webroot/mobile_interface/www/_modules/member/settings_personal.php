@@ -1,9 +1,12 @@
 <?
+	require_once('settings.fnc.php');
+
 	$l = $user->getuserfill($l, ', u_email, u_pstort, u_pstlan, location_id');
 	$l = $user->getuserfillfrominfo($l, ', u_fname, u_sname, u_street, u_pstnr, u_cell');
 	$settings = $user->getcontent($l['id_id'], 'user_settings');
 	$hidlog = $user->getinfo($l['id_id'], 'hidlog');
-	if(!empty($_POST['do'])) {
+
+	if (!empty($_POST['do'])) {
 		include(CONFIG.'validate.fnc.php');
 		$newpst = '';
 		$newemail = '';
@@ -77,26 +80,15 @@
 		$newcity = '';
 		$reload = false;
 
-		$newpass = '';
-		if(!empty($_POST['ins_opass'])) {
-			$exists = $sql->queryLine("SELECT u_pass FROM {$t}user WHERE id_id = '" . secureINS($l['id_id']) . "' LIMIT 1");
-			if(!empty($exists) && count($exists)) {
-				if($exists[0] == $_POST['ins_opass']) {
-					if(!empty($_POST['ins_npass']) && !empty($_POST['ins_npass2']) && $_POST['ins_npass'] == $_POST['ins_npass2']) {
-						if(strlen($_POST['ins_npass']) > 15 || strlen($_POST['ins_npass']) < 5) {
-							errorACT('Felaktigt lösenord. Minst 5, max 15 tecken.', l('member', 'settings', 'personal'));
-						}
-						$sql->logADD($l['id_id'], $_POST['ins_opass'].'->'.$_POST['ins_npass'], 'NEW_PASS');
-						$newpass = "u_pass = '".secureINS($_POST['ins_npass'])."',";
-						if($user->level($l['level_id'], 7)) {
-							$sql->queryUpdate("UPDATE {$t}admin SET user_pass = '".secureINS($_POST['ins_npass'])."' WHERE main_id = '".$l['id_id']."' LIMIT 1");
-						}
-					} else errorACT('Lösenordet matchar inte.', l('member', 'settings', 'personal'));
-				} else errorACT('Felaktigt lösenord.', l('member', 'settings', 'personal'));
-			} else errorACT('Felaktigt lösenord.', l('member', 'settings', 'personal'));
+		if (!empty($_POST['ins_opass']) && !empty($_POST['ins_npass']) && !empty($_POST['ins_npass2'])) {
+			$error = setNewPassword($_POST['ins_opass'], $_POST['ins_npass'], $_POST['ins_npass2']);
+			if ($error !== true) {
+				 errorACT($error, l('member', 'settings', 'personal'));
+			}
 		}
-		if(strlen($newemail.$newpst1.$newcity.$newpass)) $ins = $sql->queryUpdate("UPDATE {$t}user SET
-		".substr($newemail.$newpst1.$newcity.$newpass, 0, -1)."
+
+		if(strlen($newemail.$newpst1.$newcity)) $ins = $sql->queryUpdate("UPDATE {$t}user SET
+		".substr($newemail.$newpst1.$newcity, 0, -1)."
 		WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
 		$ins++;
 		$ins = $sql->queryUpdate("UPDATE {$t}userinfo SET

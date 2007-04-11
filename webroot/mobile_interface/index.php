@@ -13,7 +13,7 @@
 ?>
 	<a href="guestbook.php">DIN GÄSTBOK</a> (0 olästa)<br/>
 	<a href="mail.php">DIN MAIL</a>(<?=getUnreadMailCount()?> olästa)<br/>
-	<a href="relations.php">DINA VÄNNER</a>(2 online)<br/>
+	<a href="friends.php">DINA VÄNNER</a>(2 online)<br/>
 	<a href="blocked.php">DINA BLOCKERINGAR</a><br/>
 	<a href="user.php">DIN PROFIL</a><br/>
 	<a href="logout.php">LOGGA UT</a><br/>
