@@ -3,7 +3,6 @@
 	require('design_head.php');
 	
 	//todo: kontrollera användare är inloggad
-	
 ?>
 	INSTÄLLNINGAR<br/>
 	<br/>

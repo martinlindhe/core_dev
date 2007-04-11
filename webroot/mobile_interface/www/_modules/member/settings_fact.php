@@ -3,18 +3,16 @@
 	require(CONFIG.'secure.fnc.php');
 
 	require_once('settings.fnc.php');
-	
+
 	$head = $user->getcontent($l['id_id'], 'user_head');
 
-	
-
-	if(!empty($_POST['do'])) {
+	if (!empty($_POST['do'])) {
 		storeFacts();
 
 		errorTACT('Uppdaterat!', l('member', 'settings', 'fact'), 1500);
 	}
 	$page = 'settings_fact';
-	$profile = $user->getcontent($l['id_id'], 'user_profile');
+	//$profile = $user->getcontent($l['id_id'], 'user_profile');
 
 	$civil = getset('', 'civil', 'mo', 'text_cmt ASC');
 	$attitude = getset('', 'attitude', 'mo', 'text_cmt ASC');
