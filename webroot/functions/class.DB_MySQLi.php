@@ -73,7 +73,10 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($query)) return array();
+		if (!$result = $this->db_handle->query($query)) {
+			if ($this->debug) profileError($time_started, $query, 'error');
+			return array();
+		}
 
 		$data = array();
 
@@ -92,7 +95,10 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);	
 
-		if (!$result = $this->db_handle->query($query)) return array();
+		if (!$result = $this->db_handle->query($query)) {
+			if ($this->debug) profileError($time_started, $query, 'error');
+			return array();
+		}
 
 		if ($result->num_rows > 1) {
 			die('ERROR: query '.$query.' in DB_MySQLi::getOneRow() returned more than 1 result!');
@@ -110,7 +116,10 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);	
 
-		if (!$result = $this->db_handle->query($query)) return array();
+		if (!$result = $this->db_handle->query($query)) {
+			if ($this->debug) $this->profileError($time_started, $query, 'error');
+			return '';
+		}
 
 		if ($result->num_rows > 1) {
 			die('ERROR: query '.$query.' in DB_MySQLi::getOneItem() returned more than 1 result!');

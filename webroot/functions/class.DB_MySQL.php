@@ -75,7 +75,10 @@ class DB_MySQL extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		if (!$result = mysql_query($query, $this->db_handle)) return array();
+		if (!$result = mysql_query($query, $this->db_handle)) {
+			if ($this->debug) $this->profileError($time_started, $query, 'error');
+			return array();
+		}
 
 		$data = array();
 
@@ -94,7 +97,10 @@ class DB_MySQL extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);	
 
-		if (!$result = mysql_query($query, $this->db_handle)) return array();
+		if (!$result = mysql_query($query, $this->db_handle)) {
+			if ($this->debug) $this->profileError($time_started, $query, 'error');
+			return array();
+		}
 
 		if (mysql_num_rows($result) > 1) {
 			die('ERROR: query '.$query.' in DB_MySQL::getOneRow() returned more than 1 result!');
@@ -112,7 +118,10 @@ class DB_MySQL extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);	
 
-		if (!$result = mysql_query($query, $this->db_handle)) return array();
+		if (!$result = mysql_query($query, $this->db_handle)) {
+			if ($this->debug) $this->profileError($time_started, $query, 'error');
+			return '';
+		}
 
 		if (mysql_num_rows($result) > 1) {
 			die('ERROR: query '.$query.' in DB_MySQL::getOneItem() returned more than 1 result!');

@@ -266,9 +266,9 @@ class Session
 		$list = readAllSettings(SETTING_USER, $this->id);
 		if (!$list) return;
 
+		require_once('../layout/ajax_loading_layer.html');
+
 		echo '<div id="edit_settings" style="width: 300px; background-color: #88EE99; border: 1px solid #aaa; padding: 5px;">';
-		echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;">';
-		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="/gfx/ajax_loading.gif"/></div>';
 		echo '<form name="edit_settings_frm" action="">';
 		for ($i=0; $i<count($list); $i++) {
 			echo '<div id="edit_setting_div_'.$list[$i]['settingId'].'">';

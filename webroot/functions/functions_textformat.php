@@ -80,30 +80,39 @@
 			$text = substr($text, 0, $pos1) .$quoteblock. substr($text, $pos2+strlen('[/quote]'));
 		} while (1);
 		
-		//wiki links, example [[About]] links to wiki.php?View:About
-		//example 2: [[About|read about us]] links to wiki.php?View:About but "read about us" is link text
-
+		//wiki links, example [[wiki:About]] links to wiki.php?View:About
+		//example 2: [[wiki:About|read about us]] links to wiki.php?View:About but "read about us" is link text
+		//example 3: [[link:page.php|click here]] makes a clickable link
 
 		do {
-			$pos1 = stripos($text, '[[');
+			$pos1 = strpos($text, '[[');
 			if ($pos1 === false) break;
-			
-			$pos2 = stripos($text, ']]');
+
+			$pos2 = strpos($text, ']]');
 			if ($pos2 === false) break;
 
-			$wiki_link = substr($text, $pos1+strlen('[['), $pos2-$pos1-strlen(']]'));
-			
-			$qpos1 = strpos($wiki_link, '|');
+			$wiki_command = substr($text, $pos1+strlen('[['), $pos2-$pos1-strlen(']]'));
 
-			if ($qpos1 !== false) {
-				//[[About|read about us]] format
-				$link_text = substr($wiki_link, $qpos1+strlen('|'));
-				$wiki_link = substr($wiki_link, 0, $qpos1);
+			$link = array();
+			list($link['coded'], $link['title']) = explode('|', $wiki_command);
+			list($link['cmd'], $link['param']) = explode(':', $link['coded']);
 
-				$wiki = '<a href="wiki.php?View:'.$wiki_link.'">'.$link_text.'</a>';
-			} else {
-				//[[About]] format
-				$wiki = '<a href="wiki.php?View:'.$wiki_link.'">'.$wiki_link.'</a>';
+			if (empty($link['cmd'])) continue;
+	
+			switch ($link['cmd']) {
+				case 'wiki':
+					if ($link['title']) {
+						//[[wiki:About|read about us]] format
+						$wiki = '<a href="wiki.php?View:'.$link['param'].'">'.$link['title'].'</a>';
+					} else {
+						//[[wiki:About]] format
+						$wiki = '<a href="wiki.php?View:'.$link['param'].'">'.$link['param'].'</a>';
+					}
+					break;
+					
+				case 'link':
+					$wiki = '<a href="'.$link['param'].'">'.$link['title'].'</a>';
+					break;
 			}
 
 			$text = substr($text, 0, $pos1) .$wiki. substr($text, $pos2+strlen(']]'));

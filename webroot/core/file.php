@@ -7,7 +7,8 @@
 	$download = false;
 	if (isset($_GET['dl'])) $download = true;
 
-	include('config.php');
+	//fixme: lös sökvägen!!!
+	include('../adblock/config.php');
 
 	$files->sendFile($fileId, $download);
 ?>

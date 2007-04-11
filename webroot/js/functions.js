@@ -56,8 +56,10 @@ function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', 'file.php?id='+id);
-
 	zoomed_id = id;
+
+	//Send AJAX request for info about this file, result will be shown in the div zoom_image_info
+	ajax_get_fileinfo(id);
 
 	show_element_by_name('zoom_image_layer');
 }

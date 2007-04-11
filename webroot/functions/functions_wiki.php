@@ -132,21 +132,16 @@
 	{
 		global $db, $files, $session, $config;
 		
-		//print_r($_GET);
-		
 		$current_tab = $config['wiki']['first_tab'];
 
+		//Looks for formatted wiki section commands, like: View:Page, Edit:Page, History:Page
 		foreach($_GET as $key => $val) {
-			//echo 'key: '.$key.'<br/>';
 			$arr = explode(':', $key);
 			if (empty($arr[1]) || !in_array($arr[0], $config['wiki']['allowed_tabs'])) continue;
 			$current_tab = $arr[0];
 			if (!$fieldName) $fieldName = $arr[1];
 			break;
 		}
-
-		//echo 'tab: '.$current_tab.'<br/>';
-		//echo 'field: '.$fieldName.'<br/><br/>';
 
 		$fieldName = trim($fieldName);
 		if (!$fieldName) return false;
@@ -207,37 +202,31 @@
 					 'Last edited '.$last_edited.'<br/>'.
 					 '<input type="submit" class="button" value="Save"/>';
 
+			//List "unused files" for this Wiki when in edit mode
 			if ($config['wiki']['allow_files']) {
 				$filelist = $files->getFilesByCategory(FILETYPE_WIKI, $fieldId);
 				
-				$showedText = 0;
 				$str = '';
 
-				for ($i=0; $i<count($filelist); $i++) {
-						
-					$fileTag = '[file'.$filelist[$i]['fileId'].']';
-					$imageTag = '[image'.$filelist[$i]['fileId'].']';
-	
-					$last_name = '';
-					$pos = strrpos($filelist[$i]['fileName'], '.');
-					if ($pos !== false) $last_name = strtolower(substr($filelist[$i]['fileName'], $pos));
+				for ($i=0; $i<count($filelist); $i++)
+				{
+					$temp = explode('.', $filelist[$i]['fileName']);
+					$last_name = strtolower($temp[1]);
 
+					$showTag = $linkTag = '[[file:'.$filelist[$i]['fileId'].']]';
+					
 					if (in_array($last_name, $files->allowed_image_types)) {
-						$useTag = $imageTag;
-					} else {
-						$useTag = $fileTag;
+						$showTag = '<img src="/core/file.php?id='.$filelist[$i]['fileId'].'&amp;w=60&amp;h=60" alt=""/>';
 					}
-	
-					$pos1 = strpos($text, $fileTag);
-					$pos2 = strpos($text, $imageTag);
-	
-					if (($pos1 === false) && ($pos2 === false)) {
-						if (!$showedText) { $str = ' <b>unused files:</b> '; $showedText=1; }
-						$str .= '<span onclick="document.wiki_edit.wiki_'.$fieldId.'.value += \' '.$useTag.'\';">'.$useTag.'</span>, ';
+
+					if (strpos($text, $linkTag) === false) {
+						$str .= '<span onclick="document.wiki_edit.wiki_'.$fieldId.'.value += \' '.$linkTag.'\';">'.$showTag.'</span>, ';
 					}
 				}
 				if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
-				echo $str;
+				if ($str) {
+					echo '<b>unused files:</b> '.$str;
+				}
 			}
 			echo '</form>';				
 		}

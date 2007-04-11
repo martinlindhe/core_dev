@@ -42,7 +42,7 @@ function AJAX()
 		this._request.open('GET', url, true);
 		this._request.send(null);
 	}
-	
+
 	function ResultReady()
 	{
 		if (!this._request || this._request.readyState != 4) return false;
@@ -57,16 +57,15 @@ function AJAX()
 		return this._request.responseXML.getElementsByTagName(name).item(0);
 	}
 }
-
+//todo: i show_ajax_anim kolla om den fortfarande behövs visas!
+var ajax_anim_abort = 0;
+function show_ajax_anim() { if (!ajax_anim_abort) show_element_by_name('ajax_anim'); ajax_anim_abort = 0; }
+function hide_ajax_anim() { hide_element_by_name('ajax_anim'); }
 
 //todo: försök kom på ett mer standardiserat interface till GET-funktionen så att mindre sådan här init&callback kod behövs
+
+
 var delete_request = null;
-
-function show_ajax_anim()
-{
-	if (delete_request && !delete_request.ResultReady()) show_element_by_name('ajax_anim');
-}
-
 function perform_ajax_delete_uservar(id)
 {
 	delete_request = new AJAX();
@@ -79,19 +78,18 @@ function perform_ajax_delete_uservar(id)
 
 function ajax_delete_uservar_callback(id)
 {
-	if (delete_request.ResultReady())
-	{
-		if (!delete_request.EmptyResponse('ok')) {
-			var e = document.getElementById('ajax_anim_pic');
-			e.setAttribute('src', '/gfx/icon_warning_big.png');
-			e.setAttribute('title', 'Database error');
-			return;
-		}
+	if (!delete_request.ResultReady()) return;
 
-		hide_element_by_name('edit_setting_div_'+id);
-		hide_element_by_name('ajax_anim');
-		delete_request = null;
+	if (!delete_request.EmptyResponse('ok')) {
+		var e = document.getElementById('ajax_anim_pic');
+		e.setAttribute('src', '/gfx/icon_warning_big.png');
+		e.setAttribute('title', 'Database error');
+		return;
 	}
+
+	hide_element_by_name('edit_setting_div_'+id);
+	hide_ajax_anim();
+	delete_request = null;
 }
 
 
@@ -101,4 +99,31 @@ function ajax_delete_file(id)
 {
 	delete_file_request = new AJAX();
 	delete_file_request.GET('/ajax/del_file.php?i='+id, null);
+}
+
+var fileinfo_request = null;
+function ajax_get_fileinfo(id)
+{
+	fileinfo_request = new AJAX();
+	fileinfo_request.GET('/ajax/fileinfo.php?i='+id, ajax_get_fileinfo_callback);
+	
+	setTimeout("show_ajax_anim()", 20);
+}
+
+function ajax_get_fileinfo_callback()
+{
+	if (!fileinfo_request.ResultReady()) return;
+
+	var e = document.getElementById('zoom_image_info');
+	empty_element(e);
+
+	var root_node = fileinfo_request._request.responseXML.getElementsByTagName('info').item(0);
+	if (!root_node) return;
+
+	var items = root_node.childNodes;
+	e.innerHTML = items[0].nodeValue;
+	ajax_anim_abort = true;
+	hide_ajax_anim();
+
+	fileinfo_request = null;
 }

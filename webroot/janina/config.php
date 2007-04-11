@@ -25,6 +25,7 @@
 	/* A variable named $session must exist for all future functions to work. */
 	$session = new Session($config['session']);
 	
+	$config['files']['count_file_views'] = true;
 	$config['files']['image_max_width'] = 800;
 	$config['files']['image_max_height'] = 570;
 	$config['files']['thumb_default_width'] = 70;

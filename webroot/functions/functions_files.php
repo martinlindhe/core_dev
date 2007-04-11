@@ -19,18 +19,6 @@
 		readfile($realFileName, 'r');
 	}
 
-	function getFilesByCategory(&$db, $fileType, $categoryId)
-	{
-		if (!is_numeric($fileType) || !is_numeric($categoryId)) return false;
-
-		$sql = 'SELECT * FROM tblFiles WHERE fileType='.$fileType.' AND categoryId='.$categoryId;
-		$sql .= ' ORDER BY timeCreated DESC ';
-
-		return dbArray($db, $sql);
-	}
-
-
-
 
 	function getFileName(&$db, $fileId)
 	{

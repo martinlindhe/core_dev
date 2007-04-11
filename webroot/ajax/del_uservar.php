@@ -6,7 +6,7 @@
 	$id = $_GET['i'];
 	
 	//todo: this path is not good!	
-	include('../oop_test/config.php');
+	include('../adblock/config.php');
 	if (!$session->id) die('<bad/>');
 
 	$db->query('DELETE FROM tblSettings WHERE ownerId='.$session->id.' AND settingId='.$id);

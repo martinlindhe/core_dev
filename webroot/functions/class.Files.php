@@ -10,8 +10,6 @@
 		- cleanup, vissa funktioner är nog överflödiga. se igenom all kod
 
 	todo file viewern:
-		- tooltip hover på en bild med mer fil-detaljer (bredd, höjd, storlek)
-
 		- all bakgrund blir utgråad (todo: bilden blir åxå transparent)
 			kika bildvisare: http://www.mameworld.net/gurudumps/
 			i detta läge visas även en rad knappar på botten: rotate, resize, save, previous, next, start/stop slideshow image
@@ -48,6 +46,7 @@ class Files
 	private $thumb_default_height	= 80;
 	private $image_jpeg_quality		= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
+	private $count_file_views			= false;	//auto increments the "cnt" in tblFiles in each $files->sendFile() call
 
 	function __construct(array $files_config)
 	{
@@ -60,6 +59,8 @@ class Files
 		if (isset($files_config['image_max_height'])) $this->image_max_height = $files_config['image_max_height'];
 		if (isset($files_config['thumb_default_width'])) $this->thumb_default_width = $files_config['thumb_default_width'];
 		if (isset($files_config['thumb_default_height'])) $this->thumb_default_height = $files_config['thumb_default_height'];
+
+		if (isset($files_config['count_file_views'])) $this->count_file_views = $files_config['count_file_views'];
 	}
 
 
@@ -73,6 +74,7 @@ class Files
 
 		//todo: fixa denna sökväg
 		require_once('../layout/image_zoom_layer.html');
+		require_once('../layout/ajax_loading_layer.html');
 
 		if ($fileType == FILETYPE_NORMAL_UPLOAD) {
 			$categoryId = 0;
@@ -145,7 +147,7 @@ class Files
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
 				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onclick="zoomImage('.$list[$i]['fileId'].');"><center>';
-				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
+				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for audio files
@@ -196,7 +198,7 @@ class Files
 
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
 
-		echo '<div id="image_big_holder"><div id="image_big"><img src="file.php?id='.$list[0]['fileId'].'" alt=""/></div></div>';
+		echo '<div id="image_big_holder"><div id="image_big"><img src="/core/file.php?id='.$list[0]['fileId'].'" alt=""/></div></div>';
 		echo '<div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroll_down" onclick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroller">';
@@ -209,7 +211,7 @@ class Files
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onclick="loadImage('.$list[$i]['fileId'].', \'image_big\');"><center>';
-				echo '<img src="file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
+				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			}
 		}
@@ -443,6 +445,11 @@ class Files
 			header('Content-Length: '. $data['fileSize']);
 			echo file_get_contents($this->upload_dir.$fileId);
 		}
+		
+		//Count the file downloads
+		if ($this->count_file_views) {
+			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$fileId);
+		}
 	}
 	
 	private function sendImage($fileId)
@@ -512,10 +519,10 @@ class Files
 	}
 
 	/* Returns a string like "2 KiB" */
-	//todo: använd...
 	function formatFileSize($bytes)
 	{
-		$units = array('bytes', 'KiB', 'MiB', 'GiB', 'TiB');
+		//$units = array('bytes', 'KiB', 'MiB', 'GiB', 'TiB');
+		$units = array('bytes', 'k', 'mb', 'gb', 'tb');
 		foreach ($units as $unit) {
 			if ($bytes < 1024) break;
 			$bytes = round($bytes/1024, 1);
@@ -523,4 +530,26 @@ class Files
 		return $bytes.' '.$unit;
 	}
 	
+	/* Används av ajax filen /ajax/fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
+	function getFileInfo($_id)
+	{
+		if (!is_numeric($_id)) return '';
+		
+		global $db;
+
+		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
+					'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
+					'WHERE t1.fileId='.$_id;
+		
+		$file = $db->getOneRow($q);
+		if (!$file) return '';
+		
+		$result = 'Name: '.$file['fileName'].'<br/>'.
+							'Filesize: '.$this->formatFileSize($file['fileSize']).'<br/>'.
+							'Uploader: '.$file['uploaderName'].'<br/>'.
+							'At: '.$file['timeUploaded'].'<br/>'.
+							'Downloaded: '.$file['cnt'].' times';
+
+		return $result;
+	}
 }

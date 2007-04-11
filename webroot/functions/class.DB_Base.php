@@ -112,6 +112,12 @@ abstract class DB_Base
 		$this->queries_cnt++;
 	}
 
+	protected function profileError($time_started, $query, $_error)
+	{
+		$this->query_error[ $this->queries_cnt ] = $_error;
+		profileQuery($time_started, $query);
+	}
+
 	/* Shows profiling information */
 	function showProfile($pageload_start = 0)
 	{
