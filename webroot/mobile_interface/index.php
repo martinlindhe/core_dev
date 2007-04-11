@@ -8,6 +8,7 @@
 		echo '<a href="login.php">LOGGA IN</a><br/>';
 	}
 
+	//<a href="gallery.php">DITT GALLERI</a><br/>
 	if (!empty($s['id_id'])) {
 ?>
 	<a href="guestbook.php">DIN GÄSTBOK</a> (0 olästa)<br/>
@@ -15,7 +16,6 @@
 	<a href="relations.php">DINA VÄNNER</a>(2 online)<br/>
 	<a href="blocked.php">DINA BLOCKERINGAR</a><br/>
 	<a href="user.php">DIN PROFIL</a><br/>
-	<a href="gallery.php">DITT GALLERI</a><br/>
 	<a href="logout.php">LOGGA UT</a><br/>
 <?
 	}

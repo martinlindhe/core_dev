@@ -1,0 +1,73 @@
+2007-04-04 Onsdag:
+	- Arbetar med _modules\user\mail*.php, flyttar ut programlogiken till mail.fnc.php
+	- mail.php är klar, och testad
+	- mailread.php är klar, och testad
+	- mailwrite.php är klar, och testad
+	- _modules\user\mail.fnc.php är skapad och ändringarna är uppladdade på dev-burken
+
+2007-04-05 Torsdag:
+	- Kopplar ihop det mobila gränssnittet med mail-funktionerna
+	- Mobila gränssnittet: mailöversikt, visa mail, skriv nytt mail, svara på mail klart, all (?) funktionalitet klar
+	- Arbetar med _modules\user\relations*.php, flyttar ut programlogiken till relations.fnc.php
+	- relations_create.php är klar, och testad
+	- relations_user.php innehåller ingen sql etc
+	- relations.php är klar är klar och testad
+-----	
+
+2007-04-10 Tisdag:
+	- Arbetar med mobila gränssnittet för relations / vänner.
+	- Skicka "bli kompis"-förfrågan implementerat i mobila gränssnittet.
+	- Lista vänner implementerati mobila gränssnittet.
+	- Lista mottagna "bli kompis" förfrågningar, samt acceptera/radera förfrågan klart i mobila gränssnittet.
+	- Man kan nu ta bort en relation från mobila gränssnittet
+	- Radera relation-request/relation funkar nu i mobila gränssnittet
+	- Uppdaterade webbgränssnittet så att det igen går att radera väntande relationer/skapade relationer
+	- Nu går det igen att ändra typ av relation på väntande relation-request via webb-gränssnittet
+	- Gått igenom _modules\user\block.php och åter-implementerat användar-blockering i både mobila- & webbgränssnittet
+	- Kan nu se blockerade användare och avblockera dessa från mobila gränssnittet
+	- Arbetar med _modules\list\users.php (sök users), flyttar ut programlogiken till search_users.fnc.php
+	- Sökfunktionen är nu separerad, men den behöver delas upp ytterligare för att kunna splitta sökresultatet över flera sidor
+	- Webb-gränssnittet: hanterar återigen paging för att visa flera sidors sökresultat
+	- Sök användare är nu integrerat i det mobila gränssnittet
+
+2007-04-11 Onsdag:
+	- Arbetar med profilers sidor. "Min sida" och visa annan profils sida.
+	- Skapat sidor "Inställningar" och "Ladda upp bild" för mobila gränssnittet
+	- Om man besöker en annan profil, visas "BLI VÄN" och "BLOCKERA" om man inte är vän,
+		annars visas "TA BORT RELATION"
+	- Arbetar med _modules/member/settings*.php
+	- Flyttade ut "personal" koden från settings.php till settings_personal.php
+
+
+
+***********************************************************************************************************************************
+
+Kvar att göra för profiler:
+	- Kunna ändra lösenord via mobil-gränssnittet
+	- Kunna visa & ändra "fakta" via mobil-gränssnittet
+	- MMS koppling till bilduppladdning via mobil-gränssnittet
+	- TORSDAG: upload video-möte
+
+Kvar att göra för modulerna "relationer/blockeringar" & "sök användare":
+	- mikhael: testa att webb-gränssnittet fungerar som det ska
+	- bekräftelse-sida innan kompis-relation raderas
+	- visa X online från din kompislista
+
+Kvar att göra för modulen guestbook, senare i veckan:
+	- frans påbörjade rewrite
+	- se vad som är gjort, vad som finns att göra
+	- koppla ihop funktionalitet med mobil-gränssnittet
+
+
+***********************************************************************************************************************************
+
+lokal db cleanup:
+	- får ej fram "test1" som sökresultat
+	- får 6 sökresultat på blank sökning, med 2 användare i databasen
+	
+databas-förändringar:
+	s_obj.content_more satt till default NULL
+	s_obj.sender_id satt till default NULL
+	s_userrelquest.deleted_id satt till default NULL
+	
+

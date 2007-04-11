@@ -46,6 +46,8 @@ Steg 3: - Platform cleanup
 			_modules/user/gb.php
 			_modules/user/gb_write.php
 			
+	* ta bort alla counters?
+			
 	* databasstruktur:
 	
 		- s_user		userinfo
