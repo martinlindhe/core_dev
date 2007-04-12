@@ -239,5 +239,21 @@
 		$q = "SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelquest q INNER JOIN {$t}user u ON u.id_id = q.user_id AND u.status_id = '1' WHERE q.sender_id = ".$l['id_id']." AND q.status_id = '0' ORDER BY q.main_id DESC";
 		return $sql->query($q, 0, 1);
 	}
+	
+	//Returns a number indicating how many of your friends are currently online
+	function relationsOnlineCount()
+	{
+		global $sql, $t, $l;
+
+		$timeout = date("Y-m-d H:i:s", strtotime('-30 MINUTES'));
+		
+		//$q = "SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$l['id_id']." AND u.account_date > '".$timeout."'";
+		
+		$q = "SELECT COUNT(rel.friend_id) FROM {$t}userrelation rel ".
+				"INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' ".
+				"WHERE rel.user_id = 1 AND u.account_date > '".$timeout."'";
+
+		return $sql->queryResult($q);
+	}
 
 ?>

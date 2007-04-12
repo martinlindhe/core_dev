@@ -37,7 +37,7 @@ Steg 3: - Platform cleanup
 	* Uppdatera databas-driver från php_mysql till php_mysqli
 	* enkoda lösenordet med sha1 i databasen (s_user)
 	* rensa upp $_SESSION variabeln
-	* user.class.php, vad används $_SESSION['data']['cachestr'] till?? ta bort?
+	* user.class.php, vad används $_SESSION['data']['cachestr'] till?? ta bort? den används för ajax-anrop. TA BORT...!
 	* separera kod från design:
 		- Guestbook:
 			_modules/user/gb.php
