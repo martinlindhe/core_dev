@@ -50,6 +50,8 @@
 	function gbHistory($first_user, $second_user, $_start = 0, $_end = 0)
 	{
 		global $sql, $t;
+
+		$or = array($first_user, $second_user);
 		sort($or);
 		$q = "SELECT gb.*, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM {$t}usergbhistory h INNER JOIN {$t}usergb gb ON gb.main_id = h.msg_id AND gb.status_id = '1' LEFT JOIN {$t}user u ON u.id_id = gb.sender_id AND u.status_id = '1' WHERE h.users_id = '".implode('-', $or)."' ORDER BY h.main_id DESC";
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
