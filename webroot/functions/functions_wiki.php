@@ -47,7 +47,7 @@
 		{
 			if ($config['wiki']['log_history'])
 			{
-				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy']);
+				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy'], REV_WIKI_TEXT_CHANGED);
 			}
 			$db->query('UPDATE tblWiki SET fieldText="'.$_text.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$wikiName.'"');
 		}
@@ -208,12 +208,14 @@
 				$db->query($q);
 				$data['lockedBy'] = $session->id;
 				$data['lockerName'] = $session->username;
+				addRevision(REVISIONS_WIKI, $data['fieldId'], 'The wiki has been locked', now(), $session->id, REV_WIKI_LOCKED);
 			}
 
 			if ($session->isAdmin && isset($_GET['wiki_unlock'])) {
 				$q = 'UPDATE tblWiki SET lockedBy=0 WHERE fieldId='.$wikiId;
 				$db->query($q);
 				$data['lockedBy'] = 0;
+				addRevision(REVISIONS_WIKI, $data['fieldId'], 'The wiki has been unlocked', now(), $session->id, REV_WIKI_UNLOCKED);
 			}
 
 			$rows = 6+substr_count($text, "\n");
@@ -294,7 +296,9 @@
 		}
 		elseif ($config['wiki']['log_history'] && $current_tab == 'History')
 		{
-			echo 'History of '.$wikiName.' (id # '.$wikiId.')<br/><br/>';
+			
+			
+			echo 'History of article '.$wikiName.'<br/><br/>';
 
 			echo 'Current version:<br/>';
 			echo '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['editorName'].' at '.$data['timeEdited'].' ('.strlen($text).' bytes)</a></b><br/>';
@@ -311,7 +315,7 @@
 				echo '<br/>Archived versions ('.count($list).' entries):<br/>';
 				for ($i=0; $i<count($list); $i++)
 				{
-					echo '<br/><li>#'.($i+1).': <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$i.'\')">Written by '.$list[$i]['editorName']. ' at '.$list[$i]['timeEdited'].' ('.strlen($list[$i]['fieldText']).' bytes)</a><br/>';
+					echo '<br/><li>#'.($i+1).': <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$i.'\')">Written by '.$list[$i]['creatorName']. ' at '.$list[$i]['timeCreated'].' ('.strlen($list[$i]['fieldText']).' bytes)</a><br/>';
 					echo '<div id="layer_history'.$i.'" style="display: none; overflow:auto; width:100%; border: #000000 1px solid; background-color:#E0E0E0;">';
 
 					$tmptext = nl2br(htmlentities($list[$i]['fieldText'], ENT_COMPAT, 'UTF-8'));

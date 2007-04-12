@@ -83,6 +83,9 @@ class Files
 
 		if (!empty($_FILES['file1'])) {
 			$this->handleUpload($_FILES['file1'], $fileType, $categoryId);
+			if ($fileType == FILETYPE_WIKI) {
+				addRevision(REVISIONS_WIKI, $categoryId, 'File uploaded...', now(), $session->id, REV_WIKI_FILE_UPLOADED);
+			}
 		}
 		
 		if (!$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_global']))
@@ -445,7 +448,7 @@ class Files
 			header('Content-Length: '. $data['fileSize']);
 			echo file_get_contents($this->upload_dir.$_id);
 		}
-		
+
 		//Count the file downloads
 		if ($this->count_file_views) {
 			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
@@ -488,7 +491,7 @@ class Files
 		echo file_get_contents($out_filename);
 	}
 	
-	function getFiles($ownerId, $fileType=0)
+	function getFiles($ownerId, $fileType = 0)
 	{
 		global $db;
 
@@ -547,8 +550,8 @@ class Files
 		$result = 'Name: '.htmlentities($file['fileName']).'<br/>'.
 							'Filesize: '.$this->formatFileSize($file['fileSize']).'<br/>'.
 							'Uploader: '.htmlentities($file['uploaderName']).'<br/>'.
-							'At: '.$file['timeUploaded'].'<br/>'.
-							'Downloaded: '.$file['cnt'].' times';
+							'At: '.$file['timeUploaded'].'<br/>';
+		if ($this->count_file_views) $result .= 'Downloaded: '.$file['cnt'].' times';
 
 		return $result;
 	}

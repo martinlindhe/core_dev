@@ -15,10 +15,18 @@ todo:
 		- flytta /ajax/*.php till /core/ajax_*.php
 
 	wiki rewrite:
+		- logga history för wiki file deletes
+			* gör hela history-koden till en separat funktion som e _generell_ till functions_revisions.php
+				- fixa html:en för den!! den ger xhtml error!
+			* paging för wiki history !??!
+				
+		- ändra några kolumnnamn i tblWiki och tblRevisions, inte fieldId etc plz
+
+
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
-		- logga history för file uploads & locking / unlocking
 
+		
 	låg prioritet:
 		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
@@ -32,6 +40,11 @@ todo:
 	- core: gjort icon_locked & icon_unlocked ikoner
 	- core: db driver buggfixar vid några error-paths vilket gör att alla sql fel nu fångas av profilern
 	- wiki: admins kan nu låsa en wiki, så att inte besökare/normala users kan redigera den
+	- core revisions: ny kolumn för revisions för att markera: TEXT_CHANGED, FILE_UPLOADED, FILE_DELETED, WIKI_LOCKED, WIKI_UNLOCKED
+	- wiki: loggar revisions för wiki lock, wiki unlock, file upload
+
+
+
 
 
 2007.04.11:
