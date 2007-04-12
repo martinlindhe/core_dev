@@ -628,7 +628,7 @@ function get_browser_($user_agent)
 }
 
 function now() {
-	return strftime('%Y-%m-%d %T');
+	return strftime('%Y-%m-%d %H:%M');
 }
 function reloadACT($url) {
 	header('Location: '.$url);

@@ -6,20 +6,14 @@ class user {
 		$this->t = T;
 	}
 	function auth($id) {
-		if(!@is_numeric($id)) return false;
-		#empty($_SESSION['c_h']) && 
-		if($this->timeout('15 MINUTES') > @$_SESSION['data']['account_date']) {
+		if (!is_numeric($id)) return false;
+		if ($this->timeout('15 MINUTES') > @$_SESSION['data']['account_date']) {
 			$res = now();
 			$_SESSION['data']['account_date'] = $res;
 			$this->sql->queryUpdate("UPDATE {$this->t}user SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
 			$this->sql->queryUpdate("UPDATE {$this->t}useronline SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
 		}
 		$this->id = $id;
-		//if(!@$_SESSION['data']['cachetime'] || $this->timeout('30 SECONDS') > @$_SESSION['data']['cachetime']) {
-			//$_SESSION['data']['cachetime'] = now();
-			//$this->setRelCount($id);
-			//$this->get_cache();
-		//}
 		return $this->getsessionuser($id);
 	}
 	function update_retrieve() {

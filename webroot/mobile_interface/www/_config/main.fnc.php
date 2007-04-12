@@ -154,7 +154,7 @@ function date_diff($current,$past) {
 	return array('days' => $days,'hours' => $hours,'minutes' => $min,'seconds' => $seconds); 
 }
 function now() {
-	return strftime('%Y-%m-%d %T');
+	return strftime('%Y-%m-%d %H:%M');
 }
 function addzero($str) {
 	if(strlen($str) == '1') $str = '0'.$str;

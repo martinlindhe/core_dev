@@ -15,7 +15,7 @@
 	
 
 	
-	//vafan e dealen med dessa?!?!?!
+	//$user->auth() uppdaterar "last online time" i databasen
 	$s = &$_SESSION['data'];
 	$l = $user->auth(@$_SESSION['data']['id_id'], true);
 	
