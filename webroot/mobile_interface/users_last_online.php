@@ -1,33 +1,21 @@
 <?
-	require_once('config');
+	require_once('config.php');
 	if (!$l) die;	//user not logged in
 
 	require('design_head.php');
-	
-	/*
-	todo: visa thumbnails
-	
-	*/
-?>
 
-	ANVÄNDARE SENAST ONLINE:<br/>
-	<br/>
-	(bild)<br/>
-	test123 K30<br/>
-	<br/>
+	echo 'ANVÄNDARE SENAST ONLINE:<br/><br/>';
 
-	(bild)<br/>
-	test456 K30<br/>
-	<br/>
+	$list = getLastUsersOnline(4);
 
-	(bild)<br/>
-	test789 K30<br/>
-	<br/>
+	//print_r($list);
+	foreach ($list as $row)
+	{
+		echo '(bild)<br/>';
+		echo $row['u_alias'].' K30<br/>';
+		echo $row['account_date'].'<br/>';
+		echo '<br/>';
+	}
 
-	(bild)<br/>
-	testABC K30<br/>
-	<br/>
-
-<?
 	require('design_foot.php');
 ?>
