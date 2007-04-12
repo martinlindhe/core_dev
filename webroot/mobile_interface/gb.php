@@ -14,7 +14,7 @@
 		
 		$text = substr($row['sent_cmt'], 0, 15);
 		if (!$text) $text = '(ingen text)';
-		echo '<a href="guestbook_view.php?id='.$row['main_id'].'">'.$text.'</a>';
+		echo '<a href="gb_view.php?id='.$row['main_id'].'">'.$text.'</a>';
 		if (strlen($text) < strlen($row['sent_cmt'])) echo '...';
 		echo '<br/>';
 	}

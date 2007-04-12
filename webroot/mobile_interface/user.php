@@ -12,10 +12,10 @@
 	if ($_id == $l['id_id']) {
 		echo 'DIN PROFIL<br/>';
 		echo '<br/>';
-		echo '<a href="mail.php?id='.$_id.'">MAIL</a> ';
-		//echo '<a href="gallery.php?id='.$_id.'">GALLERI</a> ';
-		echo '<a href="friends.php?id='.$_id.'">VÄNNER</a> ';
-		echo '<a href="guestbook.php?id='.$_id.'">GÄSTBOK</a>';
+		echo '<a href="mail.php">MAIL</a> ';
+		//echo '<a href="gallery.php">GALLERI</a> ';
+		echo '<a href="friends.php">VÄNNER</a> ';
+		echo '<a href="gb.php">GÄSTBOK</a>';
 		echo '<br/>';
 		echo '<a href="settings.php">INSTÄLLNINGAR</a>';
 	} else {
@@ -33,7 +33,7 @@
 		echo '<a href="mail_new.php?id='.$_id.'">MAILA</a> ';
 		//echo '<a href="gallery.php?id='.$_id.'">GALLERI</a> ';
 		echo '<a href="friends.php?id='.$_id.'">VÄNNER</a> ';
-		echo '<a href="guestbook.php?id='.$_id.'">GÄSTBOK</a>';
+		echo '<a href="gb.php?id='.$_id.'">GÄSTBOK</a>';
 	}
 	echo '<br/><br/>';
 

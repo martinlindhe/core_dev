@@ -19,8 +19,8 @@
 
 	echo 'Från '.$gb['u_alias'].', '.$gb['sent_date'].'<br/>';
 	echo $gb['sent_cmt'].'<br/><br/>';
-	echo '<a href="guestbook_write.php?id='.$gb['main_id'].'&amp;reply">SVARA</a><br/>';
-	echo '<a href="guestbook_history.php?id='.$gb['sender_id'].'">SE HISTORIK</a>';
+	echo '<a href="gb_write.php?id='.$gb['main_id'].'&amp;reply">SVARA</a><br/>';
+	echo '<a href="gb_history.php?id='.$gb['sender_id'].'">SE HISTORIK</a>';
 
 	require('design_foot.php');
 ?>
