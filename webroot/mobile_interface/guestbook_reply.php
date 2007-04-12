@@ -1,4 +1,5 @@
 <?
+	require('config.php');
 	require('design_head.php');
 ?>
 

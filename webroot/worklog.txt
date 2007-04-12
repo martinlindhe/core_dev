@@ -40,25 +40,28 @@
 	- _modules/member/settings.fnc.php skapad
 	- "Ändra fakta" implementerat i mobila gränssnittet
 	- Visar fakta via mobil-gränssnittet på profilsidor
-
+	- Separerat "ändra lösenord" från settings_personal.php
+	- Implementerat "ändra lösenord" i mobil-gränssnittet
+	- Skapade en bekräftelse-sida innan en kompis-relation raderas
+	- Gästbok översikt integrerad i mobil-gränssnittet
+	- Gästbok detaljvy på enskilt meddelande i mobil-gränssnittet
+	- Markerar inlägg som lästa när man visar det med guestbook_view.php (skapat ny funktion för ändamålet)
+	- Visar antal olästa gästboksinlägg (skapat ny funktion)
 
 ***********************************************************************************************************************************
 
 Kvar att göra för profiler:
-	- Kunna ändra lösenord via mobil-gränssnittet
-	- MMS koppling till bilduppladdning via mobil-gränssnittet
+	- MMS koppling till bilduppladdning via mobil-gränssnittet (väntar på frans feedback + mms_desc.doc)
 	- TORSDAG: upload video-möte
 
 Kvar att göra för modulerna "relationer/blockeringar" & "sök användare":
 	- mikhael: testa att webb-gränssnittet fungerar som det ska
-	- bekräftelse-sida innan kompis-relation raderas
-	- visa X online från din kompislista
+	- visa X vänner online på startsidan
 
 Kvar att göra för modulen guestbook, senare i veckan:
-	- frans påbörjade rewrite
-	- se vad som är gjort, vad som finns att göra
-	- koppla ihop funktionalitet med mobil-gränssnittet
-
+	mobilgränssnittet:
+	- svara på inlägg
+	- visa historik mellan dig & en annan person
 
 ***********************************************************************************************************************************
 
@@ -71,4 +74,3 @@ databas-förändringar:
 	s_obj.sender_id satt till default NULL
 	s_userrelquest.deleted_id satt till default NULL
 	
-
