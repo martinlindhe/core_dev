@@ -53,7 +53,9 @@
 	}
 
 	// insert new guestbook-msg
-	function gbWrite($msg, $user_id, $is_answer = false, $private = false)
+	//is_answer = id på gästboksinlägget som detta är ett svar till
+	//private = 0 eller 1, om det är ett privat gästboksinlägg
+	function gbWrite($msg, $user_id, $is_answer = 0, $private = 0)
 	{
 		global $sql, $user, $t, $l;
 		$res = $sql->queryInsert("INSERT INTO {$t}usergb SET

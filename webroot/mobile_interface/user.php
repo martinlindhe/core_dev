@@ -31,7 +31,7 @@
 			echo '<a href="friends.php?remove='.$_id.'">TA BORT RELATION</a> ';
 		}
 		echo '<a href="mail_new.php?id='.$_id.'">MAILA</a> ';
-		echo '<a href="gallery.php?id='.$_id.'">GALLERI</a> ';
+		//echo '<a href="gallery.php?id='.$_id.'">GALLERI</a> ';
 		echo '<a href="friends.php?id='.$_id.'">VÄNNER</a> ';
 		echo '<a href="guestbook.php?id='.$_id.'">GÄSTBOK</a>';
 	}

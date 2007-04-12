@@ -1,12 +1,11 @@
 <?
 	require('config.php');
 	require('design_head.php');
-	
 
 	echo 'DIN GÄSTBOK<br/><br/>';
 
 	$list = gbList($l['id_id'], 0, 6);
-	
+
 	//print_r($list);
 	foreach($list as $row)
 	{
@@ -19,7 +18,6 @@
 		if (strlen($text) < strlen($row['sent_cmt'])) echo '...';
 		echo '<br/>';
 	}
-
 
 	require('design_foot.php');
 ?>
