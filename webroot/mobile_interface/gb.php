@@ -2,21 +2,33 @@
 	require('config.php');
 	require('design_head.php');
 
-	echo 'DIN GÄSTBOK<br/><br/>';
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $_id = $_GET['id'];
+	else $_id = $l['id_id'];
 
-	$list = gbList($l['id_id'], 0, 6);
+	if ($_id == $l['id_id']) {
+		echo 'DIN GÄSTBOK<br/><br/>';
+	} else {
+		$user_data = $user->getuser($_id);
+		echo $user_data['u_alias'].'s GÄSTBOK<br/><br/>';
+	}
+
+	$list = gbList($_id, 0, 6);
 
 	//print_r($list);
 	foreach($list as $row)
 	{
-		echo ($row['user_read']?'läst':'oläst');
-		echo ' från '.$row['u_alias'].', '.$row['sent_date'];
+		if ($_id == $l['id_id']) echo ($row['user_read']?'läst ':'oläst ');
+		echo 'Från '.$row['u_alias'].', '.$row['sent_date'];
 		
 		$text = substr($row['sent_cmt'], 0, 15);
 		if (!$text) $text = '(ingen text)';
 		echo '<a href="gb_view.php?id='.$row['main_id'].'">'.$text.'</a>';
 		if (strlen($text) < strlen($row['sent_cmt'])) echo '...';
 		echo '<br/>';
+	}
+	
+	if ($_id != $l['id_id']) {
+		echo '<a href="gb_write.php?id='.$_id.'">SKRIV INLÄGG</a>';
 	}
 
 	require('design_foot.php');

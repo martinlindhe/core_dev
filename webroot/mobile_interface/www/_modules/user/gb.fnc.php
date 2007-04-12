@@ -15,15 +15,19 @@
 	}
 
 	// to return a specific guestbook entry by its id. will return false if the user or the message is deleted.
-	//only returns messages beloning to current user
 	function gbGetById($msg_id)
 	{
 		global $sql, $l, $t;
 
 		if (!is_numeric($msg_id)) return false;
 
-		$q = "SELECT gb.*, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM {$t}usergb gb LEFT JOIN {$t}user u ON u.id_id = gb.sender_id AND u.status_id = '1' WHERE gb.main_id = ".$msg_id." AND gb.user_id = ".$l['id_id']." AND gb.status_id = '1'";
-		return $sql->queryLine($q, 1);
+		$q = "SELECT gb.*, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM {$t}usergb gb LEFT JOIN {$t}user u ON u.id_id = gb.sender_id AND u.status_id = '1' WHERE gb.main_id = ".$msg_id." AND gb.status_id = '1'";
+		$result = $sql->queryLine($q, 1);
+
+		//dont return private messages to other ppl
+		if ($result['private_id'] && ($l['id_id'] != $result['user_id'])) return false;
+
+		return $result;
 	}
 
 	// count active msg from a user.

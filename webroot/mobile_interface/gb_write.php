@@ -31,10 +31,10 @@
 ?>
 	<br/>
 	<br/>
-	Skriv svar till <?=$user_data['u_alias']?>:<br/>
+	Skriv <?if (isset($_GET['reply'])) echo 'svar '; ?>till <?=$user_data['u_alias']?>:<br/>
 	<form method="post" action="<?=$_SERVER['PHP_SELF'].'?id='.$_GET['id'].(isset($_GET['reply'])?'&amp;reply':'')?>">
 		<textarea name="msg"></textarea><br/>
-		<input type="submit" value="Skicka svar"/>
+		<input type="submit" value="Skicka"/>
 	</form>
 
 <?
