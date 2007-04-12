@@ -48,6 +48,11 @@
 	- Markerar inlägg som lästa när man visar det med guestbook_view.php (skapat ny funktion för ändamålet)
 	- Visar antal olästa gästboksinlägg (skapat ny funktion)
 
+2007-04-12 Torsdag:
+	- gästboken: skriva nya inlägg & svara på inlägg integrerat i mobil-gränssnittet
+	- profilsidan: kan nu se andras gästböcker
+	- profilsidan: kan nu se andras kompislistor
+
 ***********************************************************************************************************************************
 
 Kvar att göra för profiler:
@@ -58,10 +63,10 @@ Kvar att göra för modulerna "relationer/blockeringar" & "sök användare":
 	- mikhael: testa att webb-gränssnittet fungerar som det ska
 	- visa X vänner online på startsidan
 
-Kvar att göra för modulen guestbook, senare i veckan:
+Kvar att göra för modulen guestbook:
 	mobilgränssnittet:
-	- svara på inlägg
 	- visa historik mellan dig & en annan person
+	
 
 ***********************************************************************************************************************************
 
@@ -73,4 +78,5 @@ databas-förändringar:
 	s_obj.content_more satt till default NULL
 	s_obj.sender_id satt till default NULL
 	s_userrelquest.deleted_id satt till default NULL
+	s_usergb.deleted_id satt till default value: 0
 	
