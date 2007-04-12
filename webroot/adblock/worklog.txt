@@ -15,12 +15,13 @@ todo:
 		- flytta /ajax/*.php till /core/ajax_*.php
 
 	wiki rewrite:
-		- logga history för wiki file deletes
 			* gör hela history-koden till en separat funktion som e _generell_ till functions_revisions.php
 				- fixa html:en för den!! den ger xhtml error!
 			* paging för wiki history !??!
 				
 		- ändra några kolumnnamn i tblWiki och tblRevisions, inte fieldId etc plz
+		
+		- är (mybr) deprecated?!?! ta bort isf från koden
 
 
 		- implementera stöd för "talk" page _eller_ comments
@@ -30,7 +31,8 @@ todo:
 	låg prioritet:
 		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
-	
+		- wiki: logga history för wiki file deletes via ajax
+
 --------------[[changelog]]------------
 2007.04.12:
 	- core: fixade en long-standing bugg i $db->log() kommandot

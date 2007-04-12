@@ -42,6 +42,32 @@
 		$q = 'INSERT INTO tblRevisions SET fieldId='.$fieldId.',fieldType='.$fieldType.',fieldText="'.$fieldText.'",createdBy='.$creatorId.',timeCreated="'.$timestamp.'",categoryId='.$categoryId;
 		$db->query($q);
 	}
+	
+	function showRevisions($articleType, $articleId, $articleName)
+	{
+		echo 'History of article '.$articleName.'<br/><br/>';
+
+		$list = getRevisions($articleType, $articleId);
+		if ($list)
+		{
+			echo '<br/>Archived versions ('.count($list).' entries):<br/>';
+			for ($i=0; $i<count($list); $i++)
+			{
+				echo '<br/>#'.($i+1).': <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$i.'\')">';
+				echo 'Written by '.$list[$i]['creatorName']. ' at '.$list[$i]['timeCreated'].' ('.strlen($list[$i]['fieldText']).' bytes)</a><br/>';
+				echo '<div id="layer_history'.$i.'" class="revision_entry" style="display: none;">';
+
+				echo nl2br(htmlentities($list[$i]['fieldText'], ENT_COMPAT, 'UTF-8'));
+
+				echo '</div>';
+			}
+		}
+		else
+		{
+			echo '<br/><b>There is no edit history of this wiki in the database.</b><br/>';
+		}
+
+	}
 
 
 ?>

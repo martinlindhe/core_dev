@@ -296,39 +296,13 @@
 		}
 		elseif ($config['wiki']['log_history'] && $current_tab == 'History')
 		{
-			
-			
-			echo 'History of article '.$wikiName.'<br/><br/>';
-
 			echo 'Current version:<br/>';
 			echo '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['editorName'].' at '.$data['timeEdited'].' ('.strlen($text).' bytes)</a></b><br/>';
-			echo '<div id="layer_history_current" style="display: none; overflow:auto; width:100%; border: #000000 1px solid; background-color:#E0E0E0;">';
-
-			$tmptext = nl2br(htmlentities($text, ENT_COMPAT, 'UTF-8'));
-			$tmptext = str_replace("(mybr)", "\n", $tmptext);
-			echo $tmptext;
+			echo '<div id="layer_history_current" class="revision_entry">';
+			echo nl2br(htmlentities($text, ENT_COMPAT, 'UTF-8'));
 			echo '</div>';
 
-			$list = getRevisions(REVISIONS_WIKI, $wikiId);
-			if ($list)
-			{
-				echo '<br/>Archived versions ('.count($list).' entries):<br/>';
-				for ($i=0; $i<count($list); $i++)
-				{
-					echo '<br/><li>#'.($i+1).': <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$i.'\')">Written by '.$list[$i]['creatorName']. ' at '.$list[$i]['timeCreated'].' ('.strlen($list[$i]['fieldText']).' bytes)</a><br/>';
-					echo '<div id="layer_history'.$i.'" style="display: none; overflow:auto; width:100%; border: #000000 1px solid; background-color:#E0E0E0;">';
-
-					$tmptext = nl2br(htmlentities($list[$i]['fieldText'], ENT_COMPAT, 'UTF-8'));
-					$tmptext = str_replace("(mybr)", "\n", $tmptext);
-					echo $tmptext;
-
-					echo '</div>';
-				}
-			}
-			else
-			{
-				echo '<br/><b>There is no edit history of this wiki in the database.</b><br/>';
-			}
+			showRevisions(REVISIONS_WIKI, $wikiId, $wikiName);
 		}
 		else
 		{
