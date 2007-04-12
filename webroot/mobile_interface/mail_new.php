@@ -1,5 +1,7 @@
 <?
-	require('config.php');
+	require_once('config.php');
+
+	if (!$l) die;	//user not logged in
 
 	$_to_alias = $_header = $_body = $error = '';
 

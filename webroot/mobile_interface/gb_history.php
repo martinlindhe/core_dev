@@ -5,7 +5,10 @@
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$_id = $_GET['id'];
 
-	require('config.php');
+	require_once('config.php');
+
+	if (!$l) die;	//user not logged in
+
 	require('design_head.php');
 	
 	$list = gbHistory($l['id_id'], $_id);

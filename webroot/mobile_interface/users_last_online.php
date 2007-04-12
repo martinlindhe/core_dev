@@ -1,4 +1,7 @@
 <?
+	require_once('config');
+	if (!$l) die;	//user not logged in
+
 	require('design_head.php');
 	
 	/*

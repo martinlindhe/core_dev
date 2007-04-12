@@ -1,5 +1,6 @@
 <?
-	require('config.php');
+	require_once('config.php');
+	if (!$l) die;	//user not logged in
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) $_id = $l['id_id'];
 	else $_id = $_GET['id'];

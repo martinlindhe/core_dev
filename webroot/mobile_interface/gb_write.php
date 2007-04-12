@@ -10,7 +10,10 @@
 	if (isset($_GET['reply'])) $_reply_to_msg_id = $_GET['id'];
 	else $_write_to_user_id = $_GET['id'];
 
-	require('config.php');
+	require_once('config.php');
+
+	if (!$l) die;	//user not logged in
+
 	require('design_head.php');
 
 	$gb = gbGetById($_reply_to_msg_id);

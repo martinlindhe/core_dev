@@ -1,5 +1,5 @@
 <?
-	require('config.php');
+	require_once('config.php');
 
 	if (!empty($_POST['alias']) && !empty($_POST['pass'])) {
 		$user_auth->login($_POST['alias'], $_POST['pass']);
