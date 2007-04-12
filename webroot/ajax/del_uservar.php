@@ -1,15 +1,13 @@
 <?
+	//todo: this path is not good!	
+	include('../adblock/config.php');
+
 	header('Content-type: text/xml');
 	echo '<?xml version="1.0" ?>';
 
-	if (empty($_GET['i']) || !is_numeric($_GET['i'])) die('<bad/>');
-	$id = $_GET['i'];
-	
-	//todo: this path is not good!	
-	include('../adblock/config.php');
-	if (!$session->id) die('<bad/>');
+	if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i'])) die('<bad/>');
 
-	$db->query('DELETE FROM tblSettings WHERE ownerId='.$session->id.' AND settingId='.$id);
-	
+	$db->query('DELETE FROM tblSettings WHERE ownerId='.$session->id.' AND settingId='.$_GET['i']);
+
 	echo '<ok/>';
 ?>

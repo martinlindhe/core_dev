@@ -24,7 +24,6 @@ todo:
 
 	låg prioritet:
 		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
-		- kanske ska man uppdela regler mellan generella regler, och site-specifika regler.
 		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 	
 --------------[[changelog]]------------
@@ -32,7 +31,7 @@ todo:
 	- core: fixade en long-standing bugg i $db->log() kommandot
 	- adblock ruleset.php fixad så den funkar igen, efter otestade ändringar från jobbet
 	- adblock: tömde gfx/ katalogen på allt utom loggan
-
+	- core: fixat lite med ajax.js & /ajax/*.php filerna
 
 2007.04.11:
 	- adblock: plockade ut paging från ruleset.php till functions_general.php makePager() funktion

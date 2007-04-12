@@ -12,12 +12,12 @@ function AJAX()
 {
 	var _request = false;
 	this.GET = GET;
+	this.GET_raw = GET_raw;
 	this.ResultReady = ResultReady;
 	this.EmptyResponse = EmptyResponse;
 
 	if (window.XMLHttpRequest) { // Mozilla, Safari, Opera...
 		this._request = new XMLHttpRequest();
-		if (this._request.overrideMimeType) this._request.overrideMimeType('text/xml');
 	} else if (window.ActiveXObject) { // IE
 		try {
 			this._request = new ActiveXObject("Msxml2.XMLHTTP");
@@ -37,12 +37,20 @@ function AJAX()
 	function GET(url, callback, callbackparam, params)
 	{
 		if (!this._request) return false;
-
+		if (this._request.overrideMimeType) this._request.overrideMimeType('text/xml');
 		if (callback) this._request.onreadystatechange = function() { callback(callbackparam); }
 		this._request.open('GET', url, true);
 		this._request.send(null);
 	}
 
+	// Performs an GET-request expected to return anything, like raw text or html
+	function GET_raw(url, callback, callbackparam, params)
+	{
+		if (!this._request) return false;
+		if (callback) this._request.onreadystatechange = function() { callback(callbackparam); }
+		this._request.open('GET', url, true);
+		this._request.send(null);
+	}
 	function ResultReady()
 	{
 		if (!this._request || this._request.readyState != 4) return false;
@@ -105,7 +113,7 @@ var fileinfo_request = null;
 function ajax_get_fileinfo(id)
 {
 	fileinfo_request = new AJAX();
-	fileinfo_request.GET('/ajax/fileinfo.php?i='+id, ajax_get_fileinfo_callback);
+	fileinfo_request.GET_raw('/ajax/fileinfo.php?i='+id, ajax_get_fileinfo_callback);
 	
 	setTimeout("show_ajax_anim()", 20);
 }
@@ -117,11 +125,7 @@ function ajax_get_fileinfo_callback()
 	var e = document.getElementById('zoom_image_info');
 	empty_element(e);
 
-	var root_node = fileinfo_request._request.responseXML.getElementsByTagName('info').item(0);
-	if (!root_node) return;
-
-	var items = root_node.childNodes;
-	e.innerHTML = items[0].nodeValue;
+	e.innerHTML = fileinfo_request._request.responseText;
 	ajax_anim_abort = true;
 	hide_ajax_anim();
 

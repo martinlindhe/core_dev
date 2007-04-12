@@ -2,19 +2,13 @@
 	/*
 		AJAX fileinfo.php
 
-		returns details about a certain file, in XHTML format for inclusion in a div element
+		returns details about a certain file, in HTML format for inclusion in a div element
 	*/
-	require_once('../adblock/config.php');
-
-	header('Content-type: text/xml');
-	echo '<?xml version="1.0" ?>';
-
-	if (empty($_GET['i']) || !is_numeric($_GET['i'])) die('<bad/>');
 
 	//todo: this path is not good!
-	if (!$session->id) die('<bad/>');
+	require_once('../adblock/config.php');
 
-	echo '<info><![CDATA[';
+	if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
+
 	echo $files->getFileInfo($_GET['i']);
-	echo ']]></info>';
 ?>

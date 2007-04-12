@@ -534,19 +534,19 @@ class Files
 	function getFileInfo($_id)
 	{
 		if (!is_numeric($_id)) return '';
-		
+
 		global $db;
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
 					'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
 					'WHERE t1.fileId='.$_id;
-		
+
 		$file = $db->getOneRow($q);
 		if (!$file) return '';
-		
-		$result = 'Name: '.$file['fileName'].'<br/>'.
+
+		$result = 'Name: '.htmlentities($file['fileName']).'<br/>'.
 							'Filesize: '.$this->formatFileSize($file['fileSize']).'<br/>'.
-							'Uploader: '.$file['uploaderName'].'<br/>'.
+							'Uploader: '.htmlentities($file['uploaderName']).'<br/>'.
 							'At: '.$file['timeUploaded'].'<br/>'.
 							'Downloaded: '.$file['cnt'].' times';
 
