@@ -115,7 +115,7 @@ abstract class DB_Base
 	protected function profileError($time_started, $query, $_error)
 	{
 		$this->query_error[ $this->queries_cnt ] = $_error;
-		profileQuery($time_started, $query);
+		$this->profileQuery($time_started, $query);
 	}
 
 	/* Shows profiling information */

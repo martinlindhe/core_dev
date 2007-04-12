@@ -5,7 +5,9 @@
 
 		- Would be useful to at least be able to have a separate db connection for the $session parts, to ease up with integration
 			of external user-databases by making a mini extension to the Session class.
-		  
-		  
-Martin Lindhe
-Feb 2007
+Martin Lindhe Feb 2007		  
+----
+
+* Wikis
+	- "En_artikel" och "En artikel" måste hanteras som densamma
+

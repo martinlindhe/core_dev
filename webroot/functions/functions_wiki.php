@@ -27,15 +27,15 @@
 	
 
 	/* Optimization: Doesnt store identical entries if you hit Save button multiple times */
-	function wikiUpdate($fieldName, $fieldText)
+	function wikiUpdate($wikiName, $fieldText)
 	{
 		global $db, $session, $config;
 
-		$fieldName = $db->escape(trim($fieldName));
+		$wikiName = $db->escape(trim($wikiName));
 
-		if (!$session->isAdmin || !$fieldName) return false;
+		if (!$session->isAdmin || !$wikiName) return false;
 
-		$sql = 'SELECT * FROM tblWiki WHERE fieldName="'.$fieldName.'"';
+		$sql = 'SELECT * FROM tblWiki WHERE fieldName="'.$wikiName.'"';
 		$data = $db->getOneRow($sql);
 
 		/* Aborts if we are trying to save a exact copy as the last one */
@@ -49,16 +49,16 @@
 			{
 				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy']);
 			}
-			$db->query('UPDATE tblWiki SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$fieldName.'"');
+			$db->query('UPDATE tblWiki SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$wikiName.'"');
 		}
 		else
 		{
-			$db->query('INSERT INTO tblWiki SET fieldName="'.$fieldName.'", fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id);
+			$db->query('INSERT INTO tblWiki SET fieldName="'.$wikiName.'", fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id);
 		}
 	}
 
 	/* formats text for wiki output */
-	function wikiFormat(&$data, $fieldName)
+	function wikiFormat(&$data, $wikiName)
 	{
 		global $db, $files, $config;
 		
@@ -85,7 +85,7 @@
 				$fileTag = '[file'.$list[$i]['fileId'].']';
 				$pos = strpos($text, $fileTag);
 				if ($pos !== false) {
-					$fileblock = formatFileAttachment($db, $list[$i], '#F0F0F0', false, $fieldName);
+					$fileblock = formatFileAttachment($db, $list[$i], '#F0F0F0', false, $wikiName);
 					$text = str_replace($fileTag, $fileblock, $text);
 					$list[$i]['replaced'] = 1;
 				}
@@ -118,7 +118,7 @@
 				$bgcolor = '#F0F0F0';
 				if ($j%2) $bgcolor = '#FEFEFE';
 				if (!$list[$i]['replaced']) {
-					$text .= formatFileAttachment($list[$i], $bgcolor, true, $fieldName).'<br>';
+					$text .= formatFileAttachment($list[$i], $bgcolor, true, $wikiName).'<br>';
 					$j++;
 				}
 			}
@@ -128,7 +128,7 @@
 		return $text;
 	}
 
-	function wiki($fieldName = '')
+	function wiki($wikiName = '')
 	{
 		global $db, $files, $session, $config;
 		
@@ -139,56 +139,77 @@
 			$arr = explode(':', $key);
 			if (empty($arr[1]) || !in_array($arr[0], $config['wiki']['allowed_tabs'])) continue;
 			$current_tab = $arr[0];
-			if (!$fieldName) $fieldName = $arr[1];
+			if (!$wikiName) $wikiName = $arr[1];
 			break;
 		}
 
-		$fieldName = trim($fieldName);
-		if (!$fieldName) return false;
-
+		$wikiName = trim($wikiName);
+		if (!$wikiName) return false;
+		
 		if (!$session->isAdmin || $current_tab == 'Hide')
 		{
-			$sql = 'SELECT fieldId,fieldText,hasFiles FROM tblWiki WHERE fieldName="'.$db->escape($fieldName).'"';
+			$q =	'SELECT fieldId,fieldText,hasFiles,lockedBy FROM tblWiki WHERE fieldName="'.$db->escape($wikiName).'"';
 		} else {
-			$sql  = 'SELECT t1.fieldId,t1.fieldText,t1.hasFiles,t1.timeEdited,t2.userName AS editorName '.
-							'FROM tblWiki AS t1 '.
-							'INNER JOIN tblUsers AS t2 ON (t1.editedBy=t2.userId) '.
-							'WHERE fieldName="'.$db->escape($fieldName).'"';
+			$q =	'SELECT t1.fieldId,t1.fieldText,t1.hasFiles,t1.timeEdited,t1.lockedBy,t1.timeLocked,t2.userName AS editorName, t3.userName AS lockerName '.
+						'FROM tblWiki AS t1 '.
+						'LEFT JOIN tblUsers AS t2 ON (t1.editedBy=t2.userId) '.
+						'LEFT JOIN tblUsers AS t3 ON (t1.lockedBy=t3.userId) '.
+						'WHERE t1.fieldName="'.$db->escape($wikiName).'"';
 		}
 
-		$data = $db->getOneRow($sql);
+		$data = $db->getOneRow($q);
 
-		$fieldId = $data['fieldId'];
+		$wikiId = $data['fieldId'];
 		$text = stripslashes($data['fieldText']);
 
-		if (!$session->isAdmin || $current_tab == 'Hide') {
-			//Visa enbart texten
-			echo wikiFormat($data, $fieldName);
+		//Visa enbart texten
+		if ($current_tab == 'Hide') {
+			echo wikiFormat($data, $wikiName);
+			return true;
+		}
+		
+		//kollar om den är låst
+		if (!$session->isAdmin && $data['lockedBy'])  {
+			echo 'WIKI IS CURRENTLY LOCKED FROM EDITING!<br/>';
+			echo wikiFormat($data, $wikiName);
 			return true;
 		}
 
 		echo '<div class="wiki">'.
 						'<div class="wiki_head"><ul>'.
-							'<li>'.($current_tab=='view'?'<strong>':'').		'<a href="'.wikiURLadd('View', $fieldName).'">View:'.$fieldName.'</a>'.($current_tab=='view'?'</strong>':'').'</li>'.
-							'<li>'.($current_tab=='edit'?'<strong>':'').		'<a href="'.wikiURLadd('Edit', $fieldName).'">Edit</a>'.				($current_tab=='edit'?'</strong>':'').'</li>'.
-							'<li>'.($current_tab=='history'?'<strong>':'').	'<a href="'.wikiURLadd('History', $fieldName).'">History</a>'.	($current_tab=='history'?'</strong>':'').'</li>';
+							'<li>'.($current_tab=='view'?'<strong>':'').		'<a href="'.wikiURLadd('View', $wikiName).'">View:'.$wikiName.'</a>'.($current_tab=='view'?'</strong>':'').'</li>'.
+							'<li>'.($current_tab=='edit'?'<strong>':'').		'<a href="'.wikiURLadd('Edit', $wikiName).'">Edit</a>'.				($current_tab=='edit'?'</strong>':'').'</li>'.
+							'<li>'.($current_tab=='history'?'<strong>':'').	'<a href="'.wikiURLadd('History', $wikiName).'">History</a>'.	($current_tab=='history'?'</strong>':'').'</li>';
 		if ($config['wiki']['allow_files']) {
-			echo 		'<li>'.($current_tab=='files'?'<strong>':'').		'<a href="'.wikiURLadd('Files', $fieldName).'">Files</a>'.			($current_tab=='files'?'</strong>':'').'</li>';
+			echo 		'<li>'.($current_tab=='files'?'<strong>':'').		'<a href="'.wikiURLadd('Files', $wikiName).'">Files</a>'.			($current_tab=='files'?'</strong>':'').'</li>';
 		}
-		echo 		'<li><a href="'.wikiURLadd('Hide', $fieldName).'">Hide</a></li>'.
+		echo 		'<li><a href="'.wikiURLadd('Hide', $wikiName).'">Hide</a></li>'.
 					'</ul></div>'.
 					'<div class="wiki_body">';
 			
 		/* Display the wiki toolbar for super admins */
 		if ($current_tab == 'Edit')
 		{
-			if (isset($_POST['wiki_'.$fieldId]))
+			if (isset($_POST['wiki_'.$wikiId]))
 			{
 				//save changes to database
-				wikiUpdate($fieldName, $_POST['wiki_'.$fieldId]);
-				$text = $_POST['wiki_'.$fieldId];
-				unset($_POST['wiki_'.$fieldId]);
+				wikiUpdate($wikiName, $_POST['wiki_'.$wikiId]);
+				$text = $_POST['wiki_'.$wikiId];
+				unset($_POST['wiki_'.$wikiId]);
 				//JS_Alert('Changes saved!');
+			}
+			
+			if ($session->isAdmin && isset($_GET['wiki_lock'])) {
+				$q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE fieldId='.$wikiId;
+				$db->query($q);
+				$data['lockedBy'] = $session->id;
+				$data['lockerName'] = $session->username;
+			}
+
+			if ($session->isAdmin && isset($_GET['wiki_unlock'])) {
+				$q = 'UPDATE tblWiki SET lockedBy=0 WHERE fieldId='.$wikiId;
+				$db->query($q);
+				$data['lockedBy'] = 0;
 			}
 
 			$rows = 6+substr_count($text, "\n");
@@ -197,14 +218,25 @@
 			$last_edited = 'never';
 			if (!empty($data['timeEdited'])) $last_edited = $data['timeEdited'].' by '.$data['editorName'];
 
-			echo '<form method="post" name="wiki_edit" action="'.wikiURLadd('Edit', $fieldName).'">'.
-					 '<textarea name="wiki_'.$fieldId.'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
+			echo '<form method="post" name="wiki_edit" action="'.wikiURLadd('Edit', $wikiName).'">'.
+					 '<textarea name="wiki_'.$wikiId.'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
 					 'Last edited '.$last_edited.'<br/>'.
 					 '<input type="submit" class="button" value="Save"/>';
 
+			if ($session->isAdmin) {
+				if ($data['lockedBy']) {
+					echo '<input type="button" class="button" value="Unlock" onclick="location.href=\''.wikiURLadd('Edit', $wikiName, '&amp;wiki_unlock').'\'"/>';
+					echo '<img src="/gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
+					echo '<b>Locked by '.$data['lockerName'].' at '.$data['timeLocked'].'</b>';
+				} else {
+					echo '<input type="button" class="button" value="Lock" onclick="location.href=\''.wikiURLadd('Edit', $wikiName, '&amp;wiki_lock').'\'"/>';
+					echo '<img src="/gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/>';
+				}
+			}
+
 			//List "unused files" for this Wiki when in edit mode
 			if ($config['wiki']['allow_files']) {
-				$filelist = $files->getFilesByCategory(FILETYPE_WIKI, $fieldId);
+				$filelist = $files->getFilesByCategory(FILETYPE_WIKI, $wikiId);
 				
 				$str = '';
 
@@ -220,7 +252,7 @@
 					}
 
 					if (strpos($text, $linkTag) === false) {
-						$str .= '<span onclick="document.wiki_edit.wiki_'.$fieldId.'.value += \' '.$linkTag.'\';">'.$showTag.'</span>, ';
+						$str .= '<span onclick="document.wiki_edit.wiki_'.$wikiId.'.value += \' '.$linkTag.'\';">'.$showTag.'</span>, ';
 					}
 				}
 				if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
@@ -232,12 +264,12 @@
 		}
 		elseif ($config['wiki']['allow_comments'] && $current_tab == 'Comments')
 		{
-			if (!empty($_POST['comment_'.$fieldId])) {
-				addComment($db, COMMENT_INFOFIELD, $fieldId, $_POST['comment_'.$fieldId]);
-				unset($_POST['comment_'.$fieldId]);
+			if (!empty($_POST['comment_'.$wikiId])) {
+				addComment($db, COMMENT_INFOFIELD, $wikiId, $_POST['comment_'.$wikiId]);
+				unset($_POST['comment_'.$wikiId]);
 			}
 
-			$list = getComments($db, COMMENT_INFOFIELD, $fieldId);
+			$list = getComments($db, COMMENT_INFOFIELD, $wikiId);
 
 			$info = '';
 			for ($i=0; $i<count($list); $i++) {
@@ -245,20 +277,20 @@
 			}
 			echo 	'<br/>'.
 						'Write a comment:<br/>'.
-						'<form method="post" action="'.wikiURLadd('Comments', $fieldName).'" name="wiki_comment">'.
+						'<form method="post" action="'.wikiURLadd('Comments', $wikiName).'" name="wiki_comment">'.
 						'<table width="100%" cellpadding="0" cellspacing="0" border="0">'.
-							'<tr><td><textarea name="comment_'.$fieldId.'" cols="61" rows="4"></textarea><br/><img src="c.gif" width="1" height="5" alt=""/></td></tr>'.
+							'<tr><td><textarea name="comment_'.$wikiId.'" cols="61" rows="4"></textarea><br/><img src="c.gif" width="1" height="5" alt=""/></td></tr>'.
 							'<tr><td><input type="submit" class="button" value="Send"/></td></tr>'.
 						'</table>'.
 						'</form>';
 		}
 		elseif ($config['wiki']['allow_files'] && $current_tab == 'Files')
 		{
-			echo $files->showFiles(FILETYPE_WIKI, $fieldId);
+			echo $files->showFiles(FILETYPE_WIKI, $wikiId);
 		}
 		elseif ($config['wiki']['log_history'] && $current_tab == 'History')
 		{
-			echo 'History of '.$fieldName.' (id # '.$fieldId.')<br/><br/>';
+			echo 'History of '.$wikiName.' (id # '.$wikiId.')<br/><br/>';
 
 			echo 'Current version:<br/>';
 			echo '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['editorName'].' at '.$data['timeEdited'].' ('.strlen($text).' bytes)</a></b><br/>';
@@ -269,7 +301,7 @@
 			echo $tmptext;
 			echo '</div>';
 
-			$list = getRevisions(REVISIONS_WIKI, $fieldId);
+			$list = getRevisions(REVISIONS_WIKI, $wikiId);
 			if ($list)
 			{
 				echo '<br/>Archived versions ('.count($list).' entries):<br/>';
@@ -292,18 +324,18 @@
 		}
 		else
 		{
-			echo wikiFormat($data, $fieldName);
+			echo wikiFormat($data, $wikiName);
 		}
 
 		echo 	'</div>';
 
 		if ($config['wiki']['allow_comments']) {
-			$talkbackComments = getCommentsCount($db, COMMENT_INFOFIELD, $fieldId);
+			$talkbackComments = getCommentsCount($db, COMMENT_INFOFIELD, $wikiId);
 			if ($talkbackComments == 1) $talkback = 'Talkback: 1 comment';
 			else $talkback = 'Talkback: '.$talkbackComments.' comments';
 
 			echo '<div class="wiki_foot"><ul>'.
-							'<li>'.($current_tab=='comments'?'<strong>':'').'<a href="'.wikiURLadd('Comments', $fieldName).'">'.$talkback.'</a>'.($current_tab=='comments'?'</strong>':'').'</li>'.
+							'<li>'.($current_tab=='comments'?'<strong>':'').'<a href="'.wikiURLadd('Comments', $wikiName).'">'.$talkback.'</a>'.($current_tab=='comments'?'</strong>':'').'</li>'.
 					'</ul></div>';
 		}
 		echo '</div>';
@@ -311,7 +343,7 @@
 		return true;
 	}
 
-	function wikiURLadd($_page, $_section)
+	function wikiURLadd($_page, $_section, $_extra = '')
 	{
 		$_wikiURL = $_page.':'.urlencode($_section);
 		
@@ -334,8 +366,8 @@
 		}
 
 		if ($out_args) {
-			return $arr['path'].'?'.$out_args.'&amp;'.$_wikiURL;
+			return $arr['path'].'?'.$out_args.'&amp;'.$_wikiURL.$_extra;
 		}
-		return $arr['path'].'?'.$_wikiURL;
+		return $arr['path'].'?'.$_wikiURL.$_extra;
 	}
 ?>

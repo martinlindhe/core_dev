@@ -14,13 +14,11 @@ todo:
 		- använd /core/file.php
 		- flytta /ajax/*.php till /core/ajax_*.php
 
-		- massa misslyckade queries faller bort från query tracen, vad beror det på? har försökt fånga dom med profileError(), behöver kikas
-
 	wiki rewrite:
-		- namn "Start page" blir "Start_page"
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		- functions_wiki.php & class.Files.php, kolla igenom så funktionerna har konsekvent parameterordning
+		- logga history för file uploads & locking / unlocking
 
 	låg prioritet:
 		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
@@ -32,6 +30,10 @@ todo:
 	- adblock ruleset.php fixad så den funkar igen, efter otestade ändringar från jobbet
 	- adblock: tömde gfx/ katalogen på allt utom loggan
 	- core: fixat lite med ajax.js & /ajax/*.php filerna
+	- core: gjort icon_locked & icon_unlocked ikoner
+	- core: db driver buggfixar vid några error-paths vilket gör att alla sql fel nu fångas av profilern
+	- wiki: admins kan nu låsa en wiki, så att inte besökare/normala users kan redigera den
+
 
 2007.04.11:
 	- adblock: plockade ut paging från ruleset.php till functions_general.php makePager() funktion

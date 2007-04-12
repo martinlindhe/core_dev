@@ -76,7 +76,7 @@ class DB_MySQL extends DB_Base
 		if ($this->debug) $time_started = microtime(true);
 
 		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($this->debug) $this->profileError($time_started, $query, 'error');
+			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -98,7 +98,7 @@ class DB_MySQL extends DB_Base
 		if ($this->debug) $time_started = microtime(true);	
 
 		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($this->debug) $this->profileError($time_started, $query, 'error');
+			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -119,7 +119,7 @@ class DB_MySQL extends DB_Base
 		if ($this->debug) $time_started = microtime(true);	
 
 		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($this->debug) $this->profileError($time_started, $query, 'error');
+			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
 			return '';
 		}
 
