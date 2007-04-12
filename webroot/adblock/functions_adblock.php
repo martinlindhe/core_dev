@@ -152,27 +152,25 @@
 
 	/* Returns a list of rules from the db. $types looks like this: "1,2,3" */
 	// no types = get full list
-	function searchAdblockRules($searchword, $types='', $page=0, $limit=10, $sortByTime=false)
+	//function searchAdblockRules($searchword, $types='', $page=0, $limit=10, $sortByTime=false)
+	//$_limit_sql = SQL code pre-made by makePager() in the form of " LIMIT 0,25" for current page
+	
+	function searchAdblockRules($searchword, $types='', $_limit_sql = '', $sortByTime = false)
 	{
 		global $db;
 
 		$searchword = $db->escape(strip_tags($searchword));
+		if (!$searchword || $_limit_sql != $db->escape($_limit_sql)) return false;	//verifies that LIMIT sql dont contain escape characters
 
 		$types_sql = makeAdblockTypeSQL($types);
-
-		$limit_sql = '';
-		if (is_numeric($page) && $page && $limit) {
-			$index = ($page-1)*$limit;
-			$limit_sql = ' LIMIT '.$index.','.$limit;
-		}
 
 		$sql = 'SELECT * FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
 		if ($types_sql) $sql .= ' AND ('.$types_sql.')';
 		
 		if ($sortByTime) {
-			$sql .= ' ORDER BY timeCreated DESC'.$limit_sql;		//returnerar senaste regeln först
+			$sql .= ' ORDER BY timeCreated DESC'.$_limit_sql;		//returnerar senaste regeln först
 		} else {
-			$sql .= ' ORDER BY ruleText ASC'.$limit_sql;		//returnerar alfabetiskt, a-z
+			$sql .= ' ORDER BY ruleText ASC'.$_limit_sql;		//returnerar alfabetiskt, a-z
 		}
 
 		return $db->getArray($sql);

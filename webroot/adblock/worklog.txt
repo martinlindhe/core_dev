@@ -13,10 +13,11 @@ todo:
 		- gör /core/wiki.php
 		- använd /core/file.php
 		- flytta /ajax/*.php till /core/ajax_*.php
-		
+
 		- massa misslyckade queries faller bort från query tracen, vad beror det på? har försökt fånga dom med profileError(), behöver kikas
 
 		- flytta bort adblock/gfx/delete.png, gör en global ikon i /gfx
+		- VIKTIGT: bekräfta att ändringarna i ruleset.php med pager & searchAdblockRules() funkar som de ska!
 
 	wiki rewrite:
 		- namn "Start page" blir "Start_page"

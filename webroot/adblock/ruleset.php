@@ -7,11 +7,11 @@
 	if (!empty($_POST['s'])) $search = $_POST['s'];
 
 	@$types = $_POST['t0'].','.$_POST['t1'].','.$_POST['t2'].','.$_POST['t3'];
-	$totRules = searchAdblockRuleCount($search, $types);
 
-	$pager = makePager($totRules, 25, ($search ? '&amp;s='.$search : ''));
+	$tot_cnt = searchAdblockRuleCount($search, $types);
+	$pager = makePager($tot_cnt, 25, ($search ? '&amp;s='.$search : '') );
 
-	$list = searchAdblockRules($search, $types, $pager['page'], $pager['items_per_page'], !empty($_POST['sortbytime']));
+	$list = searchAdblockRules($search, $types, $pager['limit'], !empty($_POST['sortbytime']));
 
 	require('design_head.php');
 
