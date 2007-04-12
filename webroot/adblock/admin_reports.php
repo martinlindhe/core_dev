@@ -51,7 +51,7 @@ List of all current reported sites in database, oldest first (<?=count($list)?> 
 		}
 			
 		$comment = nl2br(htmlspecialchars($list[$i]['comment'], ENT_NOQUOTES, 'utf-8'));
-		echo 'Comment: '.$comment.'<br/><img src="gfx/c.gif" width="1" height="10" alt=""/>';
+		echo 'Comment: '.$comment.'<br/><br/>';
 
 		echo 'From ';
 		if (!$list[$i]['userId']) {

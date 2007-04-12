@@ -16,6 +16,8 @@ todo:
 		
 		- massa misslyckade queries faller bort från query tracen, vad beror det på? har försökt fånga dom med profileError(), behöver kikas
 
+		- flytta bort adblock/gfx/delete.png, gör en global ikon i /gfx
+
 	wiki rewrite:
 		- namn "Start page" blir "Start_page"
 		- implementera stöd för "talk" page _eller_ comments

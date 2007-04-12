@@ -75,7 +75,7 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 			<option value="1"<? if ($rule['ruleType']==1) echo ' selected="selected"';?>>Advertising</option>
 			<option value="2"<? if ($rule['ruleType']==2) echo ' selected="selected"';?>>Tracker</option>
 			<option value="3"<? if ($rule['ruleType']==3) echo ' selected="selected"';?>>Counter</option>
-		</select>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Save changes"/><img src="gfx/c.gif" width="280" height="1" alt=""/>
+		</select>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Save changes"/> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 		<a href="<?=$_SERVER['PHP_SELF']?>?remove=<?=$ruleId?>"><img src="gfx/delete.png" align="top" width="16" height="16" title="Delete rule" alt="Delete rule"/></a><br/>
 		<br/>
 	</td></tr>

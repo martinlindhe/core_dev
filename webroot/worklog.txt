@@ -52,31 +52,38 @@
 	- gästboken: skriva nya inlägg & svara på inlägg integrerat i mobil-gränssnittet
 	- profilsidan: kan nu se andras gästböcker
 	- profilsidan: kan nu se andras kompislistor
+	- gästboken: visar historik mellan dig & en annan person
+	- alla delar av gästboksmodulen är nu integrerad i det mobila gränssnittet
+	- visar antal vänner online på startsidan, wip
+	- buggfix: senast online uppdaterades inte korrekt i databasen, så "vänner online" gick ej att visa korrekt: windows stödjer inte strftime("%T")
+	- mobila gränssnittet: döljer alla sidor förrutom start & login-sidan för oinloggade besökare
+	- mobila gränssnittet: gjort en "Senast online" sida
+
 
 ***********************************************************************************************************************************
 
 Kvar att göra för profiler:
-	- MMS koppling till bilduppladdning via mobil-gränssnittet (väntar på frans feedback + mms_desc.doc)
+	- MMS koppling till bilduppladdning via mobil-gränssnittet (fått frans feedback)
 	- TORSDAG: upload video-möte
 
 Kvar att göra för modulerna "relationer/blockeringar" & "sök användare":
 	- mikhael: testa att webb-gränssnittet fungerar som det ska
-	- visa X vänner online på startsidan
 
 Kvar att göra för modulen guestbook:
-	mobilgränssnittet:
-	- visa historik mellan dig & en annan person
-	
+	- inget
+
+allmänt:
+	- en funktion som skapar snygga användarnamn+ålder+kön-länkar
+		* ta bort $user->getstringMobile() ??? eller skriv om den iaf
+
+	- paging, för gästbok-översikt, dina mail-översikt, kompislista-översikt, blockeringar-översikt, sök användare-resultat
+
+	- bugg?: man försvinner inte från "vänner online" count när man loggar ut... u_user.account_date uppdateras ej vid logout!
 
 ***********************************************************************************************************************************
 
-lokal db cleanup:
-	- får ej fram "test1" som sökresultat
-	- får 6 sökresultat på blank sökning, med 2 användare i databasen
-	
 databas-förändringar:
 	s_obj.content_more satt till default NULL
 	s_obj.sender_id satt till default NULL
 	s_userrelquest.deleted_id satt till default NULL
 	s_usergb.deleted_id satt till default value: 0
-	
