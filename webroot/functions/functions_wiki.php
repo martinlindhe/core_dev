@@ -47,7 +47,7 @@
 		{
 			if ($config['wiki']['log_history'])
 			{
-				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy'], REV_WIKI_TEXT_CHANGED);
+				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy'], REV_CAT_TEXT_CHANGED);
 			}
 			$db->query('UPDATE tblWiki SET fieldText="'.$_text.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$wikiName.'"');
 		}
@@ -208,14 +208,14 @@
 				$db->query($q);
 				$data['lockedBy'] = $session->id;
 				$data['lockerName'] = $session->username;
-				addRevision(REVISIONS_WIKI, $data['fieldId'], 'The wiki has been locked', now(), $session->id, REV_WIKI_LOCKED);
+				addRevision(REVISIONS_WIKI, $data['fieldId'], 'The wiki has been locked', now(), $session->id, REV_CAT_LOCKED);
 			}
 
 			if ($session->isAdmin && isset($_GET['wiki_unlock'])) {
 				$q = 'UPDATE tblWiki SET lockedBy=0 WHERE fieldId='.$wikiId;
 				$db->query($q);
 				$data['lockedBy'] = 0;
-				addRevision(REVISIONS_WIKI, $data['fieldId'], 'The wiki has been unlocked', now(), $session->id, REV_WIKI_UNLOCKED);
+				addRevision(REVISIONS_WIKI, $data['fieldId'], 'The wiki has been unlocked', now(), $session->id, REV_CAT_UNLOCKED);
 			}
 
 			$rows = 6+substr_count($text, "\n");

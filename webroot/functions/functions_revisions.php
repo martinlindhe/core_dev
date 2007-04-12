@@ -9,26 +9,12 @@
 	define('REVISIONS_WIKI', 1);
 	
 	//revision categories:
-	define('REV_WIKI_TEXT_CHANGED', 1);
-	define('REV_WIKI_FILE_UPLOADED', 2);
-	define('REV_WIKI_FILE_DELETED', 3);
-	define('REV_WIKI_LOCKED', 4);
-	define('REV_WIKI_UNLOCKED', 5);
+	define('REV_CAT_TEXT_CHANGED', 1);
+	define('REV_CAT_FILE_UPLOADED', 2);
+	define('REV_CAT_FILE_DELETED', 3);
+	define('REV_CAT_LOCKED', 4);
+	define('REV_CAT_UNLOCKED', 5);
 	
-	function getRevisions($fieldType, $fieldId)
-	{
-		global $db;
-
-		if (!is_numeric($fieldType) || !is_numeric($fieldId)) return false;
-		
-		$sql  = 'SELECT t1.*,t2.userName AS creatorName FROM tblRevisions AS t1 ';
-		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) ';
-		$sql .= 'WHERE t1.fieldId='.$fieldId.' AND t1.fieldType='.$fieldType;
-		$sql .= ' ORDER BY t1.timeCreated DESC';
-		
-		return $db->getArray($sql);
-	}
-
 	//kanske kunna minska ner antalet parametrar på nåt sätt?
 	function addRevision($fieldType, $fieldId, $fieldText, $timestamp, $creatorId, $categoryId = 0)
 	{
@@ -45,21 +31,54 @@
 	
 	function showRevisions($articleType, $articleId, $articleName)
 	{
+		global $db;
+
+		if (!is_numeric($articleType) || !is_numeric($articleId)) return false;
+
 		echo 'History of article '.$articleName.'<br/><br/>';
 
-		$list = getRevisions($articleType, $articleId);
-		if ($list)
-		{
+		$tot_cnt = 100;
+		$pager = makePager($tot_cnt, 5);
+
+		$sql  = 'SELECT t1.*,t2.userName AS creatorName FROM tblRevisions AS t1 ';
+		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) ';
+		$sql .= 'WHERE t1.fieldId='.$articleId.' AND t1.fieldType='.$articleType;
+		$sql .= ' ORDER BY t1.timeCreated DESC';
+		$list = $db->getArray($sql);
+
+		if ($list) {
 			echo '<br/>Archived versions ('.count($list).' entries):<br/>';
-			for ($i=0; $i<count($list); $i++)
+			foreach ($list as $row)
 			{
-				echo '<br/>#'.($i+1).': <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$i.'\')">';
-				echo 'Written by '.$list[$i]['creatorName']. ' at '.$list[$i]['timeCreated'].' ('.strlen($list[$i]['fieldText']).' bytes)</a><br/>';
-				echo '<div id="layer_history'.$i.'" class="revision_entry" style="display: none;">';
+				switch ($row['categoryId'])
+				{
+					case REV_CAT_LOCKED:
+						echo '<img src="/gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
+						echo ' Locked by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
+						break;
 
-				echo nl2br(htmlentities($list[$i]['fieldText'], ENT_COMPAT, 'UTF-8'));
+					case REV_CAT_UNLOCKED:
+						echo '<img src="/gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
+						echo ' Unlocked by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
+						break;
 
-				echo '</div>';
+					case REV_CAT_FILE_UPLOADED:
+						echo ' File uploaded by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
+						break;
+
+					case REV_CAT_FILE_DELETED:
+						echo ' File deleted by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
+						break;
+
+					case REV_CAT_TEXT_CHANGED:
+					default:
+						echo '<br/># <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$row['indexId'].'\')">';
+						echo 'Text by '.$row['creatorName']. ' at '.$row['timeCreated'].' ('.strlen($row['fieldText']).' bytes)</a><br/>';
+						echo '<div id="layer_history'.$row['indexId'].'" class="revision_entry" style="display: none;">';
+						echo nl2br(htmlentities($row['fieldText'], ENT_COMPAT, 'UTF-8'));
+						echo '</div>';
+						break;
+				}
 			}
 		}
 		else

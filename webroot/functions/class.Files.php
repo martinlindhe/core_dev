@@ -84,7 +84,7 @@ class Files
 		if (!empty($_FILES['file1'])) {
 			$this->handleUpload($_FILES['file1'], $fileType, $categoryId);
 			if ($fileType == FILETYPE_WIKI) {
-				addRevision(REVISIONS_WIKI, $categoryId, 'File uploaded...', now(), $session->id, REV_WIKI_FILE_UPLOADED);
+				addRevision(REVISIONS_WIKI, $categoryId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
 			}
 		}
 		

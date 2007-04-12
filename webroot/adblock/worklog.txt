@@ -15,17 +15,14 @@ todo:
 		- flytta /ajax/*.php till /core/ajax_*.php
 
 	wiki rewrite:
-			* gör hela history-koden till en separat funktion som e _generell_ till functions_revisions.php
-				- fixa html:en för den!! den ger xhtml error!
-			* paging för wiki history !??!
+		- paging för wiki history !??!
 				
 		- ändra några kolumnnamn i tblWiki och tblRevisions, inte fieldId etc plz
 		
-		- är (mybr) deprecated?!?! ta bort isf från koden
-
-
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
+		
+		- visa history för en vanlig user på låst wiki
 
 		
 	låg prioritet:
@@ -44,7 +41,8 @@ todo:
 	- wiki: admins kan nu låsa en wiki, så att inte besökare/normala users kan redigera den
 	- core revisions: ny kolumn för revisions för att markera: TEXT_CHANGED, FILE_UPLOADED, FILE_DELETED, WIKI_LOCKED, WIKI_UNLOCKED
 	- wiki: loggar revisions för wiki lock, wiki unlock, file upload
-
+	- revisions: tog hela history-koden från wiki till en separat funktion som e _generell_ till functions_revisions.php
+	- revisions: implementerat flera typer av entries i revision-loggen, så nu visas det som revisions när den låses/låses upp, och fil laddas upp
 
 
 

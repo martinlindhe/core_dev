@@ -44,6 +44,6 @@
 	
 	function now()
 	{
-		return strftime('%Y-%m-%d %H:%M');
+		return strftime('%Y-%m-%d %H:%M:%S');
 	}
 ?>
