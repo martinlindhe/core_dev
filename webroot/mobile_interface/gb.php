@@ -14,8 +14,13 @@
 		$user_data = $user->getuser($_id);
 		echo $user_data['u_alias'].'s GÄSTBOK<br/><br/>';
 	}
+	
+	$tot_cnt = gbCountMsgByUserId($_id);
+	$pager = makePager($tot_cnt, 5);
 
-	$list = gbList($_id, 0, 6);
+	$list = gbList($_id, $pager['index'], $pager['items_per_page']);
+	
+	echo $pager['head'].'<br>';
 
 	//print_r($list);
 	foreach($list as $row)

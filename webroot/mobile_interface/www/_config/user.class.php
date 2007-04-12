@@ -85,7 +85,7 @@ class user {
 		$info = $this->getcontent($id, 'user_retrieve');
 		$str = '';
 		foreach($info as $item) {
-			$str .= ($item[0]?$translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
+			$str .= @($item[0]?$translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
 		}
 		$cha_c = $this->sql->queryResult("SELECT COUNT(DISTINCT(sender_id)) as count FROM {$this->t}userchat WHERE user_id = '".secureINS($id)."' AND user_read = '0'");
 		if($cha_c > 0)

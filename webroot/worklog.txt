@@ -58,7 +58,7 @@
 	- buggfix: senast online uppdaterades inte korrekt i databasen, så "vänner online" gick ej att visa korrekt: windows stödjer inte strftime("%T")
 	- mobila gränssnittet: döljer alla sidor förrutom start & login-sidan för oinloggade besökare
 	- mobila gränssnittet: gjort en "Senast online" sida
-
+	- mobila gränssnittet: byggt en ny pager funktion. integrerat med gästboke-översikt, mail-översikt, kompislista-översikt
 
 ***********************************************************************************************************************************
 
@@ -76,7 +76,14 @@ allmänt:
 	- en funktion som skapar snygga användarnamn+ålder+kön-länkar
 		* ta bort $user->getstringMobile() ??? eller skriv om den iaf
 
-	- paging, för gästbok-översikt, dina mail-översikt, kompislista-översikt, blockeringar-översikt, sök användare-resultat
+	- paging för dina , blockeringar-översikt, sök användare-resultat
+	
+	- friends.php: när man klickar "MAILA" på en kompis så ska hans namn va för-ifyllt i forumläret
+			* samma från user.php när man klickar "MAILA"
+			* även ens kompislista är ej korrekt ifylld i dropdownlistan på mail_new.php
+
+	- mail.php
+		* kunna se sin utkorg (skickad mail)
 
 	- bugg?: man försvinner inte från "vänner online" count när man loggar ut... u_user.account_date uppdateras ej vid logout!
 

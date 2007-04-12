@@ -52,7 +52,13 @@
 		$user_data = $user->getuser($_id);
 		echo $user_data['u_alias'].'s VÄNNER<br/>';
 	}
-	$list = getRelations($_id, 'u.u_alias ASC', 0, 10);
+	
+	$tot_cnt = getRelationsCount($_id);
+	$pager = makePager($tot_cnt, 10);
+
+	$list = getRelations($_id, 'u.u_alias ASC', $pager['index'], $pager['items_per_page']);
+
+	echo $pager['head'].'<br/>';
 
 	for ($i=0; $i<count($list); $i++)
 	{

@@ -13,7 +13,7 @@
 	
 	require_once(dirname(__FILE__).'/www/_modules/member/settings.fnc.php');	//funktioner för användar-inställningar
 	
-
+	require_once('../functions/functions_general.php');	//för min makePager()
 	
 	//$user->auth() uppdaterar "last online time" i databasen
 	$s = &$_SESSION['data'];

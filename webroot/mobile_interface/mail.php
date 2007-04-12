@@ -4,11 +4,6 @@
 	if (!$l) die;	//user not logged in
 
 	require('design_head.php');
-	
-	/*
-	todo: $user->getuser() bör returnera "raderad användare" om användaren ej finns?
-	
-	*/
 ?>
 
 	DIN MAIL:<br/>
@@ -18,9 +13,13 @@
 	<br/>
 
 <?
+	$tot_cnt = mailInboxCount();
+	$pager = makePager($tot_cnt, 5);
 
-	$list = mailInboxContent(0, 5);
+	$list = mailInboxContent($pager['index'], $pager['items_per_page']);
 	//print_r($list);
+	
+	echo $pager['head'].'<br/>';
 	
 	for ($i=0; $i<count($list); $i++) {
 		if ($list[$i]['user_read']) echo '(läst) '; else echo '(oläst )';
