@@ -68,13 +68,12 @@ class Files
 	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
 	function showFiles($fileType, $categoryId = 0)
 	{
-		global $session, $db;
+		global $session, $db, $config;
 
 		if (!$session->id || !is_numeric($fileType) || !is_numeric($categoryId)) return;
 
-		//todo: fixa denna sökväg
-		require_once('../layout/image_zoom_layer.html');
-		require_once('../layout/ajax_loading_layer.html');
+		require_once($config['core_root'].'layout/image_zoom_layer.html');
+		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
 		if ($fileType == FILETYPE_NORMAL_UPLOAD) {
 			$categoryId = 0;
@@ -111,6 +110,7 @@ class Files
 		}
 		echo '</div>';
 
+		//Visar kategorier / kataloger
 		if ($fileType==FILETYPE_NORMAL_UPLOAD) {
 			if (!$categoryId) {
 				$cat_list = $db->GetArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
@@ -129,7 +129,7 @@ class Files
 		switch ($fileType)
 		{
 			case FILETYPE_NORMAL_UPLOAD:
-				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$session->id.' ORDER BY timeUploaded ASC';
+				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ORDER BY timeUploaded ASC';
 				$action = '?file_gadget_category_id='.$categoryId;
 				break;
 
@@ -200,6 +200,11 @@ class Files
 		if (!is_numeric($fileType)) return false;
 
 		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
+		
+		if (!$list) {
+			echo 'No thumbnails to show!';
+			return;
+		}
 
 		echo '<div id="image_big_holder"><div id="image_big"><img src="/core/file.php?id='.$list[0]['fileId'].'" alt=""/></div></div>';
 		echo '<div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';

@@ -13,6 +13,15 @@ todo:
 		- gör /core/wiki.php
 		- använd /core/file.php
 		- flytta /ajax/*.php till /core/ajax_*.php
+		
+		- göra ordentliga .htaccess så man bara stänger av directory listing, testa på janinas sida
+		
+		- kunna skapa nya users från login grejen!
+
+		- renama FILETYPE_NORMAL_UPLOAD till FILETYPE_FILEAREA_UPLOAD
+
+		- konvertera ajax_chat!
+		- konvertera zine!
 
 	wiki rewrite:
 		- paging för wiki history !??!

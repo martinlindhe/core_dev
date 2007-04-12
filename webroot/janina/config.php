@@ -5,9 +5,10 @@
 	mb_internal_encoding('UTF-8');
 	date_default_timezone_set('Europe/Stockholm');
 
-	require_once('../functions/class.DB_MySQLi.php');
-	require_once('../functions/class.Session.php');
-	require_once('../functions/class.Files.php');
+	$config['core_root'] = '../';
+	require_once($config['core_root'].'functions/class.DB_MySQLi.php');
+	require_once($config['core_root'].'functions/class.Session.php');
+	require_once($config['core_root'].'functions/class.Files.php');
 
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
