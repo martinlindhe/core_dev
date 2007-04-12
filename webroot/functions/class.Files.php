@@ -235,26 +235,26 @@ class Files
 		$db->query($sql);
 	}
 	
-	function getCategoryName($categoryId)
+	function getCategoryName($_id)
 	{
 		global $db;
 		
-		if (!is_numeric($categoryId)) return false;
+		if (!is_numeric($_id)) return false;
 	
-		$sql = 'SELECT categoryName FROM tblCategories WHERE categoryId='.$categoryId.' AND categoryType='.CATEGORY_TYPE_FILES;
-		return $db->getOneItem($sql);
+		$q = 'SELECT categoryName FROM tblCategories WHERE categoryId='.$_id.' AND categoryType='.CATEGORY_TYPE_FILES;
+		return $db->getOneItem($q);
 	}
 	
-	function deleteFile($fileId)
+	function deleteFile($_id)
 	{
 		global $db, $session;
-		if (!$session->id || !is_numeric($fileId)) return false;
+		if (!$session->id || !is_numeric($_id)) return false;
 
-		$sql = 'DELETE FROM tblFiles WHERE fileId='.$fileId.' AND ownerId='.$session->id;
-		$db->query($sql);
+		$q = 'DELETE FROM tblFiles WHERE fileId='.$_id.' AND ownerId='.$session->id;
+		$db->query($q);
 
 		//physically remove the file from disk
-		unlink($this->upload_dir.$fileId);
+		unlink($this->upload_dir.$_id);
 
 		//todo: also remove generated thumbnails
 	}
@@ -288,16 +288,16 @@ class Files
 		
 		//Identify and handle various types of files
 		if (in_array($file_lastname, $this->allowed_image_types)) {
-			$this->handleImageUpload($FileData, $fileId);
+			$this->handleImageUpload($fileId, $FileData);
 		} else if (in_array($file_lastname, $this->allowed_audio_types)) {
-			$this->handleAudioUpload($FileData, $fileId);
+			$this->handleAudioUpload($fileId, $FileData);
 		} else {
 			unlink($FileData['tmp_name']);
 			return 'Unsupported filetype';
 		}
 	}
 
-	private function handleAudioUpload($FileData, $fileId)
+	private function handleAudioUpload($fileId, $FileData)
 	{
 		//Move the uploaded file to upload directory
 		$uploadfile = $this->upload_dir.$fileId;
@@ -306,7 +306,7 @@ class Files
 	}
 
 	/* Handle image upload, used internally only */
-	private function handleImageUpload($FileData, $fileId)
+	private function handleImageUpload($fileId, $FileData)
 	{
 		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
 
@@ -406,13 +406,13 @@ class Files
 
 
 	//Note: These header commands have been verified to work with IE6 and Firefox 1.5 only, no other browsers have been tested
-	function sendFile($fileId, $download)
+	function sendFile($_id, $download)
 	{
-		if (!is_numeric($fileId)) return false;
+		if (!is_numeric($_id)) return false;
 
 		global $db;
 
-		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$fileId);
+		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
 
 		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
@@ -437,26 +437,26 @@ class Files
 		//Serves the file differently depending on what kind of file it is
 		if (in_array($file_lastname, $this->allowed_image_types)) {
 			//Generate resized image if needed
-			$this->sendImage($data['fileId']);
+			$this->sendImage($_id);
 		} else {
 			$this->setCachedHeaders();
 
 			//Just delivers the file as-is
 			header('Content-Length: '. $data['fileSize']);
-			echo file_get_contents($this->upload_dir.$fileId);
+			echo file_get_contents($this->upload_dir.$_id);
 		}
 		
 		//Count the file downloads
 		if ($this->count_file_views) {
-			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$fileId);
+			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
 		}
 	}
 	
-	private function sendImage($fileId)
+	private function sendImage($_id)
 	{
 		global $session;
 
-		$filename = $this->upload_dir.$fileId;
+		$filename = $this->upload_dir.$_id;
 		list($img_width, $img_height) = getimagesize($filename);
 
 		$width = 0;
@@ -470,7 +470,7 @@ class Files
 		if ($width && (($width < $img_width) || ($height < $img_height)) )  {
 			/* Look for cached thumbnail */
 
-			$out_filename = $this->thumbs_dir.$fileId.'_'.$width.'x'.$height;
+			$out_filename = $this->thumbs_dir.$_id.'_'.$width.'x'.$height;
 
 			if (!file_exists($out_filename)) {
 				//Thumbnail of this size dont exist, create one

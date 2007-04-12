@@ -17,7 +17,6 @@ todo:
 	wiki rewrite:
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
-		- functions_wiki.php & class.Files.php, kolla igenom så funktionerna har konsekvent parameterordning
 		- logga history för file uploads & locking / unlocking
 
 	låg prioritet:

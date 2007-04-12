@@ -27,7 +27,7 @@
 	
 
 	/* Optimization: Doesnt store identical entries if you hit Save button multiple times */
-	function wikiUpdate($wikiName, $fieldText)
+	function wikiUpdate($wikiName, $_text)
 	{
 		global $db, $session, $config;
 
@@ -39,9 +39,9 @@
 		$data = $db->getOneRow($sql);
 
 		/* Aborts if we are trying to save a exact copy as the last one */
-		if ($data['fieldText'] == $fieldText) return false;
+		if ($data['fieldText'] == $_text) return false;
 
-		$fieldText = $db->escape(trim($fieldText));
+		$_text = $db->escape(trim($_text));
 		
 		if ($data['fieldId'])
 		{
@@ -49,16 +49,16 @@
 			{
 				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy']);
 			}
-			$db->query('UPDATE tblWiki SET fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$wikiName.'"');
+			$db->query('UPDATE tblWiki SET fieldText="'.$_text.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$wikiName.'"');
 		}
 		else
 		{
-			$db->query('INSERT INTO tblWiki SET fieldName="'.$wikiName.'", fieldText="'.$fieldText.'",timeEdited=NOW(),editedBy='.$session->id);
+			$db->query('INSERT INTO tblWiki SET fieldName="'.$wikiName.'", fieldText="'.$_text.'",timeEdited=NOW(),editedBy='.$session->id);
 		}
 	}
 
 	/* formats text for wiki output */
-	function wikiFormat(&$data, $wikiName)
+	function wikiFormat($wikiName, $data)
 	{
 		global $db, $files, $config;
 		
@@ -128,6 +128,10 @@
 		return $text;
 	}
 
+	/*
+		Visar en wiki för användaren. Normalt kan vem som helst redigera den samt ladda upp filer till den,
+		men en admin kan låsa wikin från att bli redigerad av vanliga användare
+	*/
 	function wiki($wikiName = '')
 	{
 		global $db, $files, $session, $config;
@@ -164,14 +168,14 @@
 
 		//Visa enbart texten
 		if ($current_tab == 'Hide') {
-			echo wikiFormat($data, $wikiName);
+			echo wikiFormat($wikiName, $data);
 			return true;
 		}
 		
 		//kollar om den är låst
 		if (!$session->isAdmin && $data['lockedBy'])  {
 			echo 'WIKI IS CURRENTLY LOCKED FROM EDITING!<br/>';
-			echo wikiFormat($data, $wikiName);
+			echo wikiFormat($wikiName, $data);
 			return true;
 		}
 
@@ -324,7 +328,7 @@
 		}
 		else
 		{
-			echo wikiFormat($data, $wikiName);
+			echo wikiFormat($wikiName, $data);
 		}
 
 		echo 	'</div>';

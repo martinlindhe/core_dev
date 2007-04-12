@@ -1,1 +1,1 @@
-	använda $_ prefix på input variabler till en funktion
+	använda $_ prefix på input variabler som är user supplied till en funktion
