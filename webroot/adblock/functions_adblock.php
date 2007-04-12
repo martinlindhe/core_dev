@@ -1,5 +1,4 @@
 <?
-
 	function addAdblockRule($ruleText, $ruleType, $sampleUrl)
 	{
 		global $db, $session;
@@ -159,12 +158,13 @@
 	{
 		global $db;
 
+		if ($_limit_sql != $db->escape($_limit_sql)) return false;	//verifies that LIMIT sql dont contain escape characters
 		$searchword = $db->escape(strip_tags($searchword));
-		if (!$searchword || $_limit_sql != $db->escape($_limit_sql)) return false;	//verifies that LIMIT sql dont contain escape characters
 
 		$types_sql = makeAdblockTypeSQL($types);
 
-		$sql = 'SELECT * FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
+		$sql = 'SELECT * FROM tblAdblockRules WHERE deletedBy=0';
+		if ($searchword) $sql .= ' AND ruleText LIKE "%'.$searchword.'%"';
 		if ($types_sql) $sql .= ' AND ('.$types_sql.')';
 		
 		if ($sortByTime) {
@@ -172,7 +172,7 @@
 		} else {
 			$sql .= ' ORDER BY ruleText ASC'.$_limit_sql;		//returnerar alfabetiskt, a-z
 		}
-
+		
 		return $db->getArray($sql);
 	}
 

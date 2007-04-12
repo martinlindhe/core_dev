@@ -76,7 +76,7 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 			<option value="2"<? if ($rule['ruleType']==2) echo ' selected="selected"';?>>Tracker</option>
 			<option value="3"<? if ($rule['ruleType']==3) echo ' selected="selected"';?>>Counter</option>
 		</select>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Save changes"/> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-		<a href="<?=$_SERVER['PHP_SELF']?>?remove=<?=$ruleId?>"><img src="gfx/delete.png" align="top" width="16" height="16" title="Delete rule" alt="Delete rule"/></a><br/>
+		<a href="<?=$_SERVER['PHP_SELF']?>?remove=<?=$ruleId?>"><img src="/gfx/icon_delete.png" align="top" width="16" height="16" title="Delete rule" alt="Delete rule"/></a><br/>
 		<br/>
 	</td></tr>
 </table>
@@ -122,7 +122,7 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 			echo '<span style="color: #606060;"><i>Written by '.$name;
 			echo ' at '.$list[$i]['timeCreated'].'</i></span>';
 			if ($session->isAdmin) {
-				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$ruleId.'&amp;deletecomment='.$list[$i]['commentId'].'"><img src="gfx/delete.png" width="16" height="16" title="Delete comment" alt="Delete comment"/></a>';
+				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$ruleId.'&amp;deletecomment='.$list[$i]['commentId'].'"><img src="/gfx/icon_delete.png" width="16" height="16" title="Delete comment" alt="Delete comment"/></a>';
 			}
 			if ($list[$i]['commentPrivate']) echo '</span>';
 			echo '<br/><br/>';

@@ -73,26 +73,6 @@ class Session
 
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 
-		//Check if client ip has changed since last request, if so - log user out to avoid session hijacking
-		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
-				$this->error = 'Client IP changed';
-				$db->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
-				$this->logOut();
-		}
-
-		//Check user activity - log out inactive user
-		if ($this->id) {
-			if ($this->lastActive < (time()-$this->timeout)) {
-				$this->error = 'Inactivity timeout';
-				$db->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
-				$this->logOut();
-			} else {
-				//Update last active timestamp
-				$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
-				$this->lastActive = time();
-			}
-		}
-
 		//Check for login/logout requests
 		if (!$this->id && !empty($_POST['login_usr']) && !empty($_POST['login_pwd']))
 		{
@@ -108,7 +88,11 @@ class Session
 				die;
 			}
 		}
-		else if ($this->id && isset($_GET['logout']))
+
+		if (!$this->id) return;
+
+		//Logged in: Check for a logout request
+		if (isset($_GET['logout']))
 		{
 			//GET to any page with 'logout' set to log out
 			$db->log('user logged out');
@@ -116,6 +100,25 @@ class Session
 			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
 			die;
 		}
+
+		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
+		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+				$this->error = 'Client IP changed';
+				$db->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
+				$this->logOut();
+		}
+
+		//Logged in: Check user activity - log out inactive user
+		if ($this->lastActive < (time()-$this->timeout)) {
+			$db->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
+			$this->error = 'Inactivity timeout';
+			$this->logOut();
+		} else {
+			//Update last active timestamp
+			$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
+			$this->lastActive = time();
+		}
+
 	}
 
 	function __destruct()

@@ -1,12 +1,5 @@
-todo:
+todo low prio:
 
 	- image preload (finns kod i tracker-applikationen)
 	- kunna scrolla med hover
-
 	- centrera bilder horisontalt & vertikalt i image_big
-
-
-	- bekräftelse-popup om man vill radera bild när man klickar "delete image"
-	
-	
-	- sidan visas ej i IE7, efter XHTML-konverteringen... ?!?!!

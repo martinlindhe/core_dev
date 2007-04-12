@@ -9,12 +9,12 @@
 	require_once('../functions/class.Session.php');
 	require_once('../functions/class.Files.php');
 
-	include_once('../functions/functions_general.php');
-	include_once('../functions/functions_textformat.php');
-	include_once('../functions/functions_wiki.php');
+	require_once('../functions/functions_general.php');
+	require_once('../functions/functions_textformat.php');
+	require_once('../functions/functions_wiki.php');
 
-	include_once('functions_adblock.php');
-	include_once('functions_comments.php');	//todo: gör en klass av detta
+	require_once('functions_adblock.php');
+	require_once('functions_comments.php');	//todo: gör en klass av detta
 
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
@@ -22,7 +22,7 @@
 	$config['database']['debug']		= true;
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = 3600*4;		//4h idle = automatically logged out
+	$config['session']['timeout'] = 30*60;		//in seconds
 	$config['session']['name'] = 'adblockID';
 	$config['session']['sha1_key'] = 'sjxkxEadBL0ckjdhyhhHHxnjklsdvyuhu434nzkkz18ju222ha';
 	$config['session']['allow_registration'] = false;

@@ -175,15 +175,11 @@ abstract class DB_Base
 		if (!is_numeric($entryLevel)) return false;
 
 		$enc_str = $this->escape($str);
-		
-		echo '<b>LOG: '.$str.'</b><br/>';
 
-		//if ($session) {
-			$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$session->id.',userIP='.$session->ip);
-		//} else {
-			//echo 'WARNING - CANNOT LOG with session info!<br/>';
-			//$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId=0,userIP=0');
-		//}
+		$userId = !empty($session) ? $session->id : 0;
+		$userIP = !empty($session) ? $session->ip : IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+
+		$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$userId.',userIP='.$userIP);
 	}
 
 	/* Displays all events from the event log */
