@@ -60,11 +60,13 @@
 	- mobila gränssnittet: gjort en "Senast online" sida
 	- mobila gränssnittet: byggt en ny pager funktion. integrerat med gästboke-översikt, mail-översikt, kompislista-översikt
 
+2007-04-13 Fredag:
+	- 
+
 ***********************************************************************************************************************************
 
 Kvar att göra för profiler:
 	- MMS koppling till bilduppladdning via mobil-gränssnittet (fått frans feedback)
-	- TORSDAG: upload video-möte
 
 Kvar att göra för modulerna "relationer/blockeringar" & "sök användare":
 	- mikhael: testa att webb-gränssnittet fungerar som det ska
