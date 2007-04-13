@@ -5,10 +5,14 @@
 	
 	Från början skrivet av Frans Rosén
 	Uppdaterat av Martin Lindhe, 2007-04-13
+	
+	POP 3 command summary: http://www.freesoft.org/CIE/RFC/1725/8.htm
+	
+	mer exempel & info: http://www.thewebmasters.net/php/POP3.phtml
 */
 
-require('./set_tmb.php');
-set_time_limit(0);
+require('set_tmb.php');
+//set_time_limit(0);
 	
 class email
 {
@@ -19,7 +23,12 @@ class email
 	var $sql;
 	var $flim = 300000;
 	var $llim = array('6' => 5, '7' => 5, '10' => 0);
-	
+
+
+	//martins variabler:
+	var $unread_mails = 0;		//STAT unreadmail totoctets
+	var $tot_octets = 0;
+
 	//todo: gör detta konfigurerbart
 	//var $pop3_server = 'mail.unicorn.tv';
 	var $pop3_server = 'mail.inconet.se';
@@ -47,7 +56,7 @@ class email
 	private function read()
 	{
 		$var = fgets($this->hdl, 128);
-		echo 'Read: '.$var.'<br/>';
+		//echo 'Read: '.$var.'<br/>';
 		return $var;
 	}
 
@@ -57,18 +66,38 @@ class email
 		fputs($this->hdl, $line."\r\n");
 	}
 
+	//Return true or false on +OK or -ERR
+	function is_ok($cmd = '')
+	{
+		if (!$cmd) $cmd = $this->read();
+		if (ereg("^\+OK", $cmd)) return true;
+		return false;
+	}
+
 	private function login($user, $pass)
 	{
-		$this->read();
+		//todo: APOP support, http://tools.ietf.org/html/rfc1939#page-15
+		//APOP username md5(server hash + ditt lösenord)
+		$apop_check = $this->read();
+		if (!$this->is_ok($apop_check)) {
+			echo 'Server not allowing connections?';
+			return false;
+		}
 
 		$this->write('USER '.$user);
-		$this->read();				//Response: +OK User:'martin@unicorn.tv' ok
+		if (!$this->is_ok()) {
+			//Expected response: +OK User:'martin@unicorn.tv' ok
+			echo 'Invalid username?';
+			return false;
+		}
 
 		$this->write('PASS '.$pass);
-		$result = explode(' ', $this->read() );
-		//Response 1: -ERR UserName or Password is incorrect
-		//Response 2: +OK logged in.
-		if ($result[0] == '-ERR') {
+		if (!$this->is_ok()) {
+			//Response 1: -ERR UserName or Password is incorrect
+			//Response 2: +OK logged in.
+
+			echo 'Wrong password';
+
 			$this->close();
 			return false;
 		}
@@ -76,40 +105,136 @@ class email
 		return true;
 	}
 
-	private function status()
+	function pop3_STAT()
 	{
 		$this->write('STAT');
-		$ret = $this->read();
-		//Response 1: +OK 0 0			first number means 0 unread mail. second means number of "octets" (totalt antal bytes i alla mailen)
 
-		return($ret);
+		//Response: +OK 0 0			first number means 0 unread mail. second means number of "octets" (totalt antal bytes i alla mailen)
+		$stat_response = $this->read();
+		if (!$this->is_ok($stat_response)) {
+			$this->close();
+			echo 'STAT error';
+			return false;
+		}
+
+		$arr = explode(' ', $stat_response);
+		$this->unread_mails = $arr[1];
+		$this->tot_octets = $arr[2];
+
+		return true;
 	}
 
-	function retrMail()
+	/* Tells the server to delete a mail */
+	function pop3_DELE($_id)
 	{
-		$stop = 0;
-		$ret = '';
-		$l = 0;
-		while ($stop != 1) {
-			$line = $this->read();
-			$line = ltrim($line);
-			if (!$l && substr($line, 0, 4) == '+OK ') {
-				$c = substr($line, 4);
-				$c = explode(' ', $c);
-				$c = $c[0];
-				if($c > ($this->flim+50000)) return false;
-			}
-			$l++;
-			$ret .= $line;
+		if (!is_numeric($_id)) return false;
 
-			$asc = ord(substr($line, 1, 1));
-			$asc2 = ord(substr($line, 2, 1));
-			if (substr($line, 0, 1) == '.' && $asc == 13 && $asc2 == 10) $stop = 1;
+		$this->write('DELE '.$_id);
+		if (!$this->is_ok()) {
+			echo 'Failed to DELE '.$_id.'<br/>';
+			return false;
 		}
-		if ((count(preg_split("`.`", $ret)) - 1) <= ($this->flim+50000)) return $this->parseFiles($ret);
+		return true;
+	}
+
+	function pop3_RETR($_id)
+	{
+		if (!is_numeric($_id)) return false;
+
+		//Retrieve email
+		$this->write('RETR '.$_id);
+		if (!$this->is_ok()) return false;		//+OK 39265 octets
+
+		$msg = '';
+		do {
+			$msg .= $this->read();
+		} while (substr($msg, -5) != "\r\n.\r\n");
+
+		echo $msg;
+
+		$this->parseAttachments($msg);
 
 		return false;
 	}
+	
+	/* takes a text string with email header and returns array */
+	//current limitation: multiple keys with same name will just be glued together (Received are one such common header key)
+	function parseHeader($raw_head)
+	{
+		$arr = explode("\n", $raw_head);
+
+		$header = array();
+
+		foreach ($arr as $row)
+		{
+			$pos = strpos($row, ': ');
+			if ($pos) $curr_key = substr($row, 0, $pos);
+			if (!$curr_key) die('super error');
+			if (empty($header[ $curr_key ])) {
+				$header[ $curr_key ] = substr($row, $pos + strlen(': '));
+			} else {
+				$header[ $curr_key ] .= $row;
+			}
+
+			$header[ $curr_key ] = str_replace("\r", ' ', $header[ $curr_key ]);
+			$header[ $curr_key ] = str_replace("\n", ' ', $header[ $curr_key ]);
+			$header[ $curr_key ] = str_replace("\t", ' ', $header[ $curr_key ]);
+			$header[ $curr_key ] = str_replace('  ', ' ', $header[ $curr_key ]);
+		}
+		return $header;
+	}	
+	
+	/* Takes a email as parameter, returns all attachments, body & header nicely parsed up */
+	function parseAttachments($msg)
+	{
+		//1. Klipp ut headern
+		$pos = strpos($msg, "\n\n");
+		if ($pos === false) return;
+		
+		$header = substr($msg, 0, $pos);
+		//Parse each header element into an array
+		$result['header'] = $this->parseHeader($header);
+
+		//Check content type
+		$check = explode(';', $result['header']['Content-Type']);
+		
+		print_r($check);
+		
+
+		switch ($check[0]) {
+			case 'multipart/mixed':
+				$check[1] = trim($check[1]);
+				if (substr($check[1], 0, 10) != 'boundary="') die('multipart header err');
+				$arr = explode('"', $check[1]);
+				$multipart_id = '--'.$arr[1];
+				echo 'MULTIPART message: '.$multipart_id.'<br/>';
+				break;
+
+			default:
+				echo 'unknown content type: '. $check[0];
+				die;
+		}
+
+			//Cut out the rest of the message
+		$msg = trim(substr($msg, $pos + strlen("\n\n")));
+
+		do {
+
+			$pos1 = strpos($msg, $multipart_id);
+			$pos2 = strpos($msg, $multipart_id, strlen($multipart_id));
+
+			if ($pos1 === false || $pos2 === false) die('error parsing attachment');
+
+			$current = substr($msg, $pos1 + strlen($multipart_id), $pos2 - strlen($multipart_id));
+			echo 'one part<br>';
+			
+			$msg = substr($msg, $pos2 + strlen($multipart_id));
+
+		} while (strlen($msg) && $msg != '--');
+
+		die;
+	}
+	
 
 	function parseFiles($mail)
 	{
@@ -272,31 +397,36 @@ class email
 	function getMail($user, $pass)
 	{
 		$this->open();
+		if ($this->errno) return;
 
-		if (!$this->errno) {
-			$mail = array();
-			$ret = array();
-			if ($this->login($user, $pass) === false) return;
-			$status = explode(' ', $this->status());		//Example: +OK 0 0			means 0 unread mail
+		if ($this->login($user, $pass) === false) return;
+	
+		$mail = array();
+		$ret = array();
+		
+		if (!$this->pop3_STAT()) return;
+
+		echo $this->unread_mails.' unread mails!<br/>';
+
+		for ($i=1; $i <= $this->unread_mails; $i++)
+		{
+			sleep(2);
+			echo 'Downloading mail '.$i.'...<br/>';
+
+			$active = $this->pop3_RETR($i);
 			
-			print_r($status);
-			
-			for ($i = 0; $i < @$status[1]; $i++) {		//todo: testa for ($i=1 ; $i <= $status[1]; $i++), och ta bort $i+1 nedanför
-				sleep(2);
-				$this->write('RETR '.($i+1));
-				$active = $this->retrMail();
-				if ($active && is_array($active[0])) {
-					foreach ($active[0] as $a) {
-						$mail[] = array($a[0], $active[1], $active[2], $active[3]);
-					}
-				} elseif ($active) $mail[] = array($active[0][0], $active[1], $active[2], $active[3]);
-				$this->write('DELE '.($i+1));
-				$ret[] = $this->read();
-			}
-			$this->close();
-			return $this->saveFiles($mail);
+			/*
+			if ($active && is_array($active[0])) {
+				foreach ($active[0] as $a) {
+					$mail[] = array($a[0], $active[1], $active[2], $active[3]);
+				}
+			} elseif ($active) $mail[] = array($active[0][0], $active[1], $active[2], $active[3]);
+			*/
+			//$this->pop3_DELE($i);
 		}
-		return;
+
+		$this->close();
+		//return $this->saveFiles($mail);
 	}
 
 	function fix_email($subj)
@@ -386,18 +516,5 @@ class email
 
 }
 
-$email = new email($sql);
-#for($i = 36; $i <=38; $i++) {
-#	print $i.': '; print_r($email->parseFiles($sql->queryResult("SELECT data_s FROM s_aadata WHERE main_id = '$i'"))); print '<br>';
-#}
-#print_r($email->parseFiles($sql->queryResult("SELECT data_s FROM s_aadata WHERE main_id = '1613'")));
-#print_r($email->getMail('foto@styleform.se', 'OIFGjfosdi'));
-
-//$email->getMail('foto@styleform.se', 'OIFGjfosdi');
-
-
-$email->getMail('cs@inconet.se', '1111');
-
- 
 
 ?>
