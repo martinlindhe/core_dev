@@ -1,13 +1,12 @@
-todo:
-
-	hög prioritet:
+--------------[[todo]]--------------
+	- uppdatera db dumpar till dbLyrics, dbAdblock, dbOOPTest, dbJanina i /sql/
+		* gör ett script som kör detta typ en gång om dygnet, med AHK:
+  			mysqldump --all-databases --no-data --compact > e:/devel/webroot/sql/db-structure.sql
 
 	platform change:
 		- flytta /ajax/*.php till /core/ajax_*.php
 		- gör så ajax-filerna funkar som file.php
 		- gör /core/wiki.php
-		
-		- göra ordentliga .htaccess så man bara stänger av directory listing, testa på janinas sida. "deny all" är bara bra för kataloger med web uploads
 		
 		- kunna skapa nya users från login grejen!
 
@@ -40,7 +39,11 @@ todo:
   	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen
   	- Försök bygga så mycket logik som möjligt i stored procedures
 
---------------[[changelog]]------------
+--------------[[changelog]]--------------
+2007.04.13:
+	- gjort ordentliga .htaccess så man bara stänger av directory listing
+
+
 2007.04.12:
 	- core: fixade en long-standing bugg i $db->log() kommandot
 	- adblock ruleset.php fixad så den funkar igen, efter otestade ändringar från jobbet
