@@ -7,7 +7,7 @@ todo:
 		- gör så ajax-filerna funkar som file.php
 		- gör /core/wiki.php
 		
-		- göra ordentliga .htaccess så man bara stänger av directory listing, testa på janinas sida
+		- göra ordentliga .htaccess så man bara stänger av directory listing, testa på janinas sida. "deny all" är bara bra för kataloger med web uploads
 		
 		- kunna skapa nya users från login grejen!
 
@@ -26,12 +26,19 @@ todo:
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		
 		- visa history för en vanlig user på låst wiki
-
 		
 	låg prioritet:
+		- file upload: skapa kataloger
+			* om file-upload & thumbs ej finns, skapa dessa samt skapa .htaccess med "deny all" i dessa kataloger automatiskt
+	
 		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- wiki: logga history för wiki file deletes via ajax
+
+  	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
+		- Konvertera functions_categories, functions_comments + några till användbara moduler till klasser
+  	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen
+  	- Försök bygga så mycket logik som möjligt i stored procedures
 
 --------------[[changelog]]------------
 2007.04.12:
