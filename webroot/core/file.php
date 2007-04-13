@@ -7,8 +7,12 @@
 	$download = false;
 	if (isset($_GET['dl'])) $download = true;
 
-	//fixme: lös sökvägen!!!
-	include('../adblock/config.php');
+	$project = '../';	//Defaults to a config.php in the directory below this one
+	if (!empty($_GET['pr']) && !strpbrk($_GET['pr'], '"\'/\\%&?;:.,')) {		//checks _pr for " ' \ / % & ? ; : . ,
+		$project = '../'.$_GET['pr'].'/';
+	}
+
+	require_once($project.'config.php');
 
 	$files->sendFile($fileId, $download);
 ?>

@@ -22,7 +22,7 @@
 
 	require('design_head.php');
 
-	$files->showFiles(FILETYPE_NORMAL_UPLOAD);
+	$files->showFiles(FILETYPE_FILEAREA_UPLOAD);
 ?>
 
 <br/>

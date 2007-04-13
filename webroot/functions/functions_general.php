@@ -42,8 +42,15 @@
 		return $pager;
 	}
 	
-	function now()
+	/* Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
+			run from the / path it will return nothing, else the directory name of the directory script are run from */
+	function getProjectPath()
 	{
-		return strftime('%Y-%m-%d %H:%M:%S');
+		$project_path = dirname($_SERVER['SCRIPT_NAME']);
+	
+		$pos = strrpos($project_path, '/');
+		$proj_name = substr($project_path, $pos+1);
+		if ($proj_name) return '&amp;pr='.$proj_name;
+		return '';
 	}
 ?>

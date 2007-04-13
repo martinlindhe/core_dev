@@ -3,25 +3,19 @@ todo:
 	hög prioritet:
 
 	platform change:
-		- kunna få /core/ filer att läsa config från ../projekt/config.php eller nåt!
-		- detta måste lösas för att kunna dela ajax-anrop och vissa små corefiler mellan flera projekt
-			* t.ex nu går det ej att deleta filer från file upload widgeten
-
-		- KANSKE går om man i config.php anropar en funktion som gör includes av alla dessa filer i formen ../core/wiki.php
-		- eller symlänkar + includes ?
-
-		- gör /core/wiki.php
-		- använd /core/file.php
 		- flytta /ajax/*.php till /core/ajax_*.php
+		- gör så ajax-filerna funkar som file.php
+		- gör /core/wiki.php
 		
 		- göra ordentliga .htaccess så man bara stänger av directory listing, testa på janinas sida
 		
 		- kunna skapa nya users från login grejen!
 
-		- renama FILETYPE_NORMAL_UPLOAD till FILETYPE_FILEAREA_UPLOAD
-
 		- konvertera ajax_chat!
 		- konvertera zine!
+		
+		- bra regexp för att ta bort farliga tecken från filnamn:
+			$sterile_filename = preg_replace( "/[^\w\.-]+/", "_", $filename );
 
 	wiki rewrite:
 		- paging för wiki history !??!
@@ -52,7 +46,10 @@ todo:
 	- wiki: loggar revisions för wiki lock, wiki unlock, file upload
 	- revisions: tog hela history-koden från wiki till en separat funktion som e _generell_ till functions_revisions.php
 	- revisions: implementerat flera typer av entries i revision-loggen, så nu visas det som revisions när den låses/låses upp, och fil laddas upp
-
+	- core: löste problemet med addressering till ajax-funktioner i /ajax/ och /core/ genom funktionen getProjectPath()
+		som skapar en parameter att skicka med alla genererade url:s mot dessa. getProjectPath() returnerar inget om projektet
+		körs från rotkatalgogen i webbservern (löst i /core/file.php)
+	- files: renamade FILETYPE_NORMAL_UPLOAD till FILETYPE_FILEAREA_UPLOAD
 
 
 

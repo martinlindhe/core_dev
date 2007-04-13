@@ -90,14 +90,14 @@
 					$list[$i]['replaced'] = 1;
 				}
 				
-				//ersätter [image123] med htmlkod för thumbnail+popup full image javascript
+				//ersätter [image123] med htmlkod för thumbnail
 				$imageTag = '[image'.$list[$i]['fileId'].']';
 				$imageFilename = $config['upload_dir'].$list[$i]['fileId'];
 
 				$pos = strpos($text, $imageTag);
 				if (file_exists($imageFilename) && $pos !== false) {
 					$img_size = getimagesize($imageFilename);
-					$imageblock = '<a href="javascript:wnd_imgview('.$list[$i]['fileId'].','.$img_size[0].','.$img_size[1].')"><img src="file.php?id='.$list[$i]['fileId'].'&width='.$config['thumbnail_width'].'" width='.$config['thumbnail_width'].' title="'.$imageTag.'"></a>';
+					$imageblock = '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$config['thumbnail_width'].getProjectPath().'" width='.$config['thumbnail_width'].' title="'.$imageTag.'">';
 
 					$text = str_replace($imageTag, $imageblock, $text);
 					$list[$i]['replaced'] = 1;
@@ -254,7 +254,7 @@
 					$showTag = $linkTag = '[[file:'.$filelist[$i]['fileId'].']]';
 					
 					if (in_array($last_name, $files->allowed_image_types)) {
-						$showTag = '<img src="/core/file.php?id='.$filelist[$i]['fileId'].'&amp;w=60&amp;h=60" alt=""/>';
+						$showTag = '<img src="/core/file.php?id='.$filelist[$i]['fileId'].'&amp;w=60&amp;h=60'.getProjectPath().'" alt=""/>';
 					}
 
 					if (strpos($text, $linkTag) === false) {

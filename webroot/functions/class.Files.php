@@ -23,6 +23,7 @@
 */
 
 require_once('functions_files.php');
+require_once('functions_general.php');
 
 define('CATEGORY_TYPE_FILES', 1);
 
@@ -31,7 +32,7 @@ define('FILETYPE_PR',							101);	/* File is attached to a PR */
 define('FILETYPE_BLOG',						102);	/* File is attached to a blog */
 define('FILETYPE_PHOTOALBUM',			103);	/* File is uploaded to a photoalbum */
 define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
-define('FILETYPE_NORMAL_UPLOAD',	105);	/* File is uploaded by a user */
+define('FILETYPE_FILEAREA_UPLOAD',105);	/* File is uploaded to a file area */
 
 class Files
 {
@@ -64,7 +65,7 @@ class Files
 	}
 
 
-	//Visar alla filer som en användare har laddat upp (FILETYPE_NORMAL_UPLOAD)
+	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
 	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
 	function showFiles($fileType, $categoryId = 0)
 	{
@@ -75,7 +76,7 @@ class Files
 		require_once($config['core_root'].'layout/image_zoom_layer.html');
 		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
-		if ($fileType == FILETYPE_NORMAL_UPLOAD) {
+		if ($fileType == FILETYPE_FILEAREA_UPLOAD) {
 			$categoryId = 0;
 			if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
 		}
@@ -100,7 +101,7 @@ class Files
 		echo 'File Upload Overview - Displaying ';
 		switch ($fileType)
 		{
-			case FILETYPE_NORMAL_UPLOAD:
+			case FILETYPE_FILEAREA_UPLOAD:
 				if (!$categoryId) echo 'Root Level content';
 				else echo $this->getCategoryName($categoryId).' content';
 				break;
@@ -111,7 +112,7 @@ class Files
 		echo '</div>';
 
 		//Visar kategorier / kataloger
-		if ($fileType==FILETYPE_NORMAL_UPLOAD) {
+		if ($fileType==FILETYPE_FILEAREA_UPLOAD) {
 			if (!$categoryId) {
 				$cat_list = $db->GetArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
 				if (!empty($cat_list)) {
@@ -128,7 +129,7 @@ class Files
 
 		switch ($fileType)
 		{
-			case FILETYPE_NORMAL_UPLOAD:
+			case FILETYPE_FILEAREA_UPLOAD:
 				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ORDER BY timeUploaded ASC';
 				$action = '?file_gadget_category_id='.$categoryId;
 				break;
@@ -150,7 +151,7 @@ class Files
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
 				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onclick="zoomImage('.$list[$i]['fileId'].');"><center>';
-				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
+				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for audio files
@@ -206,7 +207,7 @@ class Files
 			return;
 		}
 
-		echo '<div id="image_big_holder"><div id="image_big"><img src="/core/file.php?id='.$list[0]['fileId'].'" alt=""/></div></div>';
+		echo '<div id="image_big_holder"><div id="image_big"><img src="/core/file.php?id='.$list[0]['fileId'].getProjectPath().'" alt=""/></div></div>';
 		echo '<div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroll_down" onclick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroller">';
@@ -219,7 +220,7 @@ class Files
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onclick="loadImage('.$list[$i]['fileId'].', \'image_big\');"><center>';
-				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
+				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			}
 		}

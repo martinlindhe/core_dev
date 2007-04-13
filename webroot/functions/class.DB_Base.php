@@ -232,4 +232,12 @@ abstract class DB_Base
 	}
 
 }
+
+//General database related functions
+
+	/* Returns current time in MySQL "NOW()" format */
+	function now()
+	{
+		return strftime('%Y-%m-%d %H:%M:%S');
+	}
 ?>
