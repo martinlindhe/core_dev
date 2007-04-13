@@ -1,6 +1,14 @@
 <?
-	require('./set_tmb.php');
-	set_time_limit(0);
+/*
+	email class.
+	- läser in email från angiven address och söker igenom dessa efter "mms email", med bilagor
+	
+	Från början skrivet av Frans Rosén
+	Uppdaterat av Martin Lindhe, 2007-04-13
+*/
+
+require('./set_tmb.php');
+set_time_limit(0);
 	
 class email
 {
@@ -12,55 +20,68 @@ class email
 	var $flim = 300000;
 	var $llim = array('6' => 5, '7' => 5, '10' => 0);
 	
-	//todo: gör denna konfigurerbar
-	var $smtp_server = 'mail.styleform.se';
-	
+	//todo: gör detta konfigurerbart
+	//var $pop3_server = 'mail.unicorn.tv';
+	var $pop3_server = 'mail.inconet.se';
+	var $pop3_port	 = 110;
+	var $pop3_timeout = 5;
 
 	function __construct($sql)
 	{
 		$this->sql = $sql;
 	}
 
-	function open()
+	private function open()
 	{
-		$this->hdl = fsockopen($this->smtp_server, 110, $errno, $errstr, 5);
-		if (!$this->hdl) {
-			$this->errorno = $errno;
-			$this->errstr = $errstr;
-		}
+		$this->hdl = fsockopen($this->pop3_server, $this->pop3_port, $this->errorno, $this->errstr, $this->pop3_timeout);
 	}
 
-	function close()
+	private function close()
 	{
+		$this->write('QUIT');
+		$this->read();		//Response: +OK Bye-bye.
+
 		fclose($this->hdl);
 	}
 
-	function read()
+	private function read()
 	{
 		$var = fgets($this->hdl, 128);
-		return($var);
+		echo 'Read: '.$var.'<br/>';
+		return $var;
 	}
 
-	function write($line)
+	private function write($line)
 	{
+		echo 'Wrote: '.$line.'<br/>';
 		fputs($this->hdl, $line."\r\n");
 	}
 
-	function login($user, $pass)
+	private function login($user, $pass)
 	{
-		$ret = array();
-		$ret[] = $this->read();
+		$this->read();
+
 		$this->write('USER '.$user);
-		$ret[] = $this->read();
+		$this->read();				//Response: +OK User:'martin@unicorn.tv' ok
+
 		$this->write('PASS '.$pass);
-		$ret[] = $this->read();
+		$result = explode(' ', $this->read() );
+		//Response 1: -ERR UserName or Password is incorrect
+		//Response 2: +OK logged in.
+		if ($result[0] == '-ERR') {
+			$this->close();
+			return false;
+		}
+
 		return true;
 	}
 
-	function status()
+	private function status()
 	{
 		$this->write('STAT');
 		$ret = $this->read();
+		//Response 1: +OK 0 0			first number means 0 unread mail. second means number of "octets" (totalt antal bytes i alla mailen)
+
 		return($ret);
 	}
 
@@ -247,29 +268,31 @@ class email
 		} else return false;
 	}
 
+	/* fetches all mail from a pop3 inbox */
 	function getMail($user, $pass)
 	{
 		$this->open();
+
 		if (!$this->errno) {
 			$mail = array();
 			$ret = array();
-			$this->login($user,$pass);
-			$status = explode(' ', $this->status());
-			for ($i = 0; $i < @$status[1]; $i++) {
-				$j = $i + 1;
+			if ($this->login($user, $pass) === false) return;
+			$status = explode(' ', $this->status());		//Example: +OK 0 0			means 0 unread mail
+			
+			print_r($status);
+			
+			for ($i = 0; $i < @$status[1]; $i++) {		//todo: testa for ($i=1 ; $i <= $status[1]; $i++), och ta bort $i+1 nedanför
 				sleep(2);
-				$this->write("RETR $j");
+				$this->write('RETR '.($i+1));
 				$active = $this->retrMail();
 				if ($active && is_array($active[0])) {
 					foreach ($active[0] as $a) {
 						$mail[] = array($a[0], $active[1], $active[2], $active[3]);
 					}
 				} elseif ($active) $mail[] = array($active[0][0], $active[1], $active[2], $active[3]);
-				$this->write("DELE $j");
+				$this->write('DELE '.($i+1));
 				$ret[] = $this->read();
 			}
-			$this->write("QUIT");
-			$ret[] = $this->read();
 			$this->close();
 			return $this->saveFiles($mail);
 		}
@@ -371,6 +394,10 @@ $email = new email($sql);
 #print_r($email->getMail('foto@styleform.se', 'OIFGjfosdi'));
 
 //$email->getMail('foto@styleform.se', 'OIFGjfosdi');
-$email->getMail('martin@unicorn.tv', 'martin');
+
+
+$email->getMail('cs@inconet.se', '1111');
+
+ 
 
 ?>
