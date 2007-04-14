@@ -6,6 +6,8 @@
 		<input type="button" class="button" value="Close" onclick="hide_element_by_name('zoom_image_layer')"/> 
 <? if ($session->isAdmin) { ?>
 		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
+		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(-90)"/>
+		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(90)"/>
 <? } ?>
 	</center>
 

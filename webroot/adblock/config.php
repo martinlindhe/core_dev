@@ -36,6 +36,7 @@
 	$files = new Files($config['files']);
 
 	$config['wiki']['allow_html'] = true;
+	$config['wiki']['allow_files'] = true;
 
 
 	//todo: används dessa: ?

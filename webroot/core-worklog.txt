@@ -2,8 +2,6 @@
 	platform change:
 		- gör så ajax-filerna funkar som file.php
 		
-		- konvertera zine!
-
 	wiki rewrite:
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
@@ -19,8 +17,7 @@
 			
 		bildvisare:
 			* rotera
-			* förminska
-			* förstora
+			* förminska / förstora
 			* förhandsgranska
 			* spara
 
@@ -29,8 +26,8 @@
 		
 
 	misc:
-		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
-
+		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
+		- konvertera zine!
   	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 		- Konvertera functions_categories, functions_comments + några till användbara moduler till klasser
   	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen

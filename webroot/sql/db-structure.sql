@@ -154,7 +154,7 @@ CREATE TABLE `tblChat` (
   `timeCreated` datetime NOT NULL,
   `msg` blob,
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 CREATE TABLE `tblChatRooms` (
   `roomId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `roomName` varchar(50) DEFAULT NULL,
@@ -168,7 +168,7 @@ CREATE TABLE `tblChatUsers` (
   `userId` bigint(20) unsigned NOT NULL,
   `lastSeen` datetime NOT NULL,
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=31617 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=31884 DEFAULT CHARSET=utf8;
 CREATE TABLE `tblLogs` (
   `entryId` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `entryText` text CHARACTER SET utf8 NOT NULL,
