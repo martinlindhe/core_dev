@@ -98,6 +98,13 @@ function delete_selected_file()
 	zoomed_id = 0;
 }
 
+//used by image zoomer
+function rotate_selected_file(angle)
+{
+	var e = document.getElementById('zoom_image');
+	e.src = '/core/image_rotate.php?i=' + zoomed_id + '&a=' + angle;
+}
+
 
 //Loads image id into holder-div
 function loadImage(id, holder)

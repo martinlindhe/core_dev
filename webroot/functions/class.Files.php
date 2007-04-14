@@ -425,6 +425,7 @@ class Files
 		}
 
 		imagedestroy($image);
+		imagedestroy($image_p);
 	}
 
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
@@ -435,13 +436,52 @@ class Files
 		header('Pragma: Public');
 	}
 
+	/* Performs an image rotation and then pass on the result to the user */
+	function imageRotate($_id, $_angle)
+	{
+		global $db, $session;
 
-	//Note: These header commands have been verified to work with IE6 and Firefox 1.5 only, no other browsers have been tested
+		if (!$session->id || !is_numeric($_id) || !is_numeric($_angle)) return false;
+
+		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
+		if (!$data) die;
+		
+		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
+		if (!in_array($file_lastname, $this->allowed_image_types)) return false;
+
+		//header('Content-Type: '.$data['fileMime']);
+		header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
+		header('Content-Transfer-Encoding: binary');
+		
+		$filename = $this->upload_dir.$_id;
+		
+		switch ($data['fileMime'])
+		{
+   		case 'image/png':	$image = imagecreatefrompng($filename); break;
+   		case 'image/jpeg': $image = imagecreatefromjpeg($filename); break;
+   		case 'image/gif': $image = imagecreatefromgif($filename); break;
+   		default: die('Unsupported image type '.$data['fileMime']);
+		}
+		
+		$rotated = imagerotate($image, $_angle, 0);
+		
+		switch ($data['fileMime'])
+		{
+   		case 'image/png':	imagepng($rotated, $filename); imagepng($rotated); break;
+   		case 'image/jpeg': imagejpeg($rotated, $filename, $this->image_jpeg_quality); imagejpeg($rotated); break;
+   		case 'image/gif': imagegif($rotated, $filename); imagegif($rotated); break;
+   		default: die('Unsupported image type '.$data['fileMime']);
+		}
+
+		imagedestroy($image);
+	}
+
+
 	function sendFile($_id, $download)
 	{
-		if (!is_numeric($_id)) return false;
-
 		global $db;
+
+		if (!is_numeric($_id)) return false;
 
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
