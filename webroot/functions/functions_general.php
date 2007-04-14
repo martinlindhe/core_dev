@@ -20,7 +20,7 @@
 		if ($pager['tot_pages'] <= 1) return $pager;
 
 		if ($pager['page'] > 1) {
-			$pager['head'] .= '<a href="'.$_SERVER['PHP_SELF'].'?p='.($pager['page']-1).$_add_value.'">';
+			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
 			$pager['head'] .= '<img src="/gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
 		} else {
 			$pager['head'] .= '<img src="/gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
@@ -28,12 +28,12 @@
 
 		for ($i=1; $i <= $pager['tot_pages']; $i++) {
 			if ($i==$pager['page']) $pager['head'] .= '<b>';
-			$pager['head'] .= ' <a href="'.$_SERVER['PHP_SELF'].'?p='.$i.$_add_value.'">'.$i.'</a> ';
+			$pager['head'] .= ' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> ';
 			if ($i==$pager['page']) $pager['head'] .= '</b>';
 		}
 
 		if ($pager['page'] < $pager['tot_pages']) {
-			$pager['head'] .= '<a href="'.$_SERVER['PHP_SELF'].'?p='.($pager['page']+1).$_add_value.'">';
+			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
 			$pager['head'] .= '<img src="/gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
 		} else {
 			$pager['head'] .= '<img src="/gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
@@ -52,5 +52,66 @@
 		$proj_name = substr($project_path, $pos+1);
 		if ($proj_name) return '&amp;pr='.$proj_name;
 		return '';
+	}
+
+
+	function wikiURLadd($_page, $_section, $_extra = '')
+	{
+		$_wikiURL = $_page.':'.urlencode($_section);
+		
+		$arr = parse_url($_SERVER['REQUEST_URI']);
+		if (empty($arr['query'])) return $arr['path'].'?'.$_wikiURL;
+
+		$args = explode('&', $arr['query']);
+		
+		$out_args = '';
+
+		for ($i=0; $i<count($args); $i++) {
+			$vals = explode('=', $args[$i]);
+			
+			$skipit = explode(':', $vals[0]);
+			
+			if (!isset($skipit[1]) && isset($vals[1])) {
+				$out_args .= $vals[0].'='.urlencode($vals[1]).'&amp;';
+			}
+		}
+
+		if ($out_args) {
+			return $arr['path'].'?'.$out_args.'&amp;'.$_wikiURL.$_extra;
+		}
+		return $arr['path'].'?'.$_wikiURL.$_extra;
+	}
+
+	function URLadd($_key, $_val, $_extra)
+	{
+		$arr = parse_url($_SERVER['REQUEST_URI']);
+
+		if ($_val) {
+			$keyval = $_key.'='.$_val;
+		} else {
+			$keyval = $_key.'='.$_val;
+		}
+
+		if (empty($arr['query'])) return $arr['path'].'?'.$keyval.$_extra;
+
+		$args = explode('&', $arr['query']);
+		
+		$out_args = '';
+
+		for ($i=0; $i<count($args); $i++) {
+			$vals = explode('=', $args[$i]);
+			if ($vals[0] == $_key) continue;
+			if (isset($vals[1])) {
+				$out_args .= $vals[0].'='.urlencode($vals[1]).'&amp;';
+			} else {
+				$out_args .= $vals[0].'&amp;';
+			}
+		}
+
+		if ($out_args) {
+			return $arr['path'].'?'.$out_args.$keyval.$_extra;
+		} else {
+			return $arr['path'].'?'.$keyval.$_extra;
+		}
 	}
 ?>

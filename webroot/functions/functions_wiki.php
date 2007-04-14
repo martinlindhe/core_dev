@@ -319,32 +319,4 @@
 
 		return true;
 	}
-
-	function wikiURLadd($_page, $_section, $_extra = '')
-	{
-		$_wikiURL = $_page.':'.urlencode($_section);
-		
-		$arr = parse_url($_SERVER['REQUEST_URI']);
-		if (empty($arr['query'])) {
-			return $arr['path'].'?'.$_wikiURL;
-		}
-		$args = explode('&', $arr['query']);
-		
-		$out_args = '';
-
-		for ($i=0; $i<count($args); $i++) {
-			$vals = explode('=', $args[$i]);
-			
-			$skipit = explode(':', $vals[0]);
-			
-			if (!isset($skipit[1]) && isset($vals[1])) {
-				$out_args .= $vals[0].'='.urlencode($vals[1]).'&amp;';
-			}
-		}
-
-		if ($out_args) {
-			return $arr['path'].'?'.$out_args.'&amp;'.$_wikiURL.$_extra;
-		}
-		return $arr['path'].'?'.$_wikiURL.$_extra;
-	}
 ?>
