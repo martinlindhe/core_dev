@@ -157,3 +157,37 @@ function installSearchPlugin(u)
 		alert("Sorry, you need a Mozilla-based browser to install a search plugin.");
 	}
 }
+
+function in_arr(arr,val)
+{
+	for (var i=0; i<arr.length; i++) {
+		if (arr[i] == val) return true;
+	}
+	return false;
+}
+
+function arr_del(arr,val)
+{
+	for (var i=0; i<arr.length; i++) {
+		if (arr[i] == val) delete arr[i];	//fixme: this will leave arr[i] undefined, arr.length will not be changed
+	}
+}
+
+function set_class(e,c){
+	var x=document.getElementById(e);
+	x.className=c;
+}
+
+function add_node(e,t,s) {
+	var c=document.createElement('div');
+	e.appendChild(c);
+	var tx=document.createTextNode(t);
+	c.appendChild(tx);
+	c.className=s;
+	return c;
+}
+
+function add_node_and_focus(e,t,s) {
+	var c=add_node(e,t,s);
+	c.scrollIntoView(false);
+}

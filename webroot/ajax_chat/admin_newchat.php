@@ -1,20 +1,17 @@
 <?
-	include('include_all.php');
-	
-	if (!$_SESSION['isAdmin']) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
-	
+	require_once('config.php');
+
+	if (!$session->isAdmin) die;
+
 	if (!empty($_POST['roomname'])) {
-		$roomId = newChatRoom($db, $_POST['roomname']);
+		$roomId = newChatRoom($_POST['roomname']);
 		if ($roomId) {
 			header('Location: admin_editchat.php?id='.$roomId);
 			die;
 		}
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
 	echo '<h2>Chat administration - new chat room</h2><br>';
 	echo 'Here you can create a new chat room.<br>';
@@ -24,5 +21,5 @@
 	echo '<input type="submit" class="button" value="Create room">';
 	echo '</form>';
 	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

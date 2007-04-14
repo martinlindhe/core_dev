@@ -5,7 +5,7 @@
 		Returns the last few lines of text, usernames & timestamps entered in the specified chat room
 	*/
 
-	include_once('include_all.php');
+	require_once('config.php');
 
 	if (empty($_GET['r'])) {
 		if (empty($_POST['r']) || !is_numeric($_POST['r'])) die;
@@ -21,21 +21,19 @@
 	if (isset($_POST['all']) || !isset($_SESSION['chat']['lastUpdate'][$roomId]))
 	{
 		//Returns a full chat buffer, sorted by newest item first
-		$list = getChatEntries($db, $roomId, $lastEntryId, $config['chat']['buffer_lines']);
+		$list = getChatEntries($roomId, $lastEntryId, $config['chat']['buffer_lines']);
 
 	} else {
 		//Only return the new entries since the last call
-		$list = getNewChatEntries($db, $roomId, $lastEntryId, $_SESSION['chat']['lastUpdate'][$roomId]);
+		$list = getNewChatEntries($roomId, $lastEntryId, $_SESSION['chat']['lastUpdate'][$roomId]);
 	}
 
 	if ($list) $_SESSION['chat']['lastUpdate'][$roomId] = $lastEntryId;
 	if (!isset($_SESSION['chat'][$roomId])) $_SESSION['chat'][$roomId] = array();
 	
-	if ($_SESSION['loggedIn']) {
-		setChatRoomUser($db, $roomId, $_SESSION['userId']);
-	}
+	if ($session->id) setChatRoomUser($roomId);
 
-	$members_list = getCurrentChatUsers($db, $roomId);
+	$members_list = getCurrentChatUsers($roomId);
 
 	/*if (!empty($_GET['r'])) {
 		print_r($members_list); die;
@@ -47,7 +45,7 @@
 	
 	//Sort list by oldest item first
 	//todo: borde inte detta gå att göra direkt i SQL-satsen för getChatEntries() ? sort by time asc,time desc ? temporary tables?
-	if ($list) $list = aSortBySecondIndex($list, 'timeCreated');
+	//if ($list) $list = aSortBySecondIndex($list, 'timeCreated');
 
 	//Kolla vilka chat users som är nya i chattrumet
 	$new_members = array();

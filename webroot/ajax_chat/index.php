@@ -1,19 +1,22 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
-	include('design_head.php');
-	include('inc/noscript.html');
+	require('design_head.php');
+	require_once('inc/noscript.html');
 
-	$list = getChatRooms($db);
+	if (!$session->id) echo $session->showLoginForm();
+	else $session->showInfo();
+
+	$list = getChatRooms();
 	if (count($list)) {
-		echo 'Select chat room to join:<br>';
+		echo 'Select chat room to join:<br/>';
 		for ($i=0; $i<count($list); $i++)
 		{
-			echo '<a href="chat.php?id='.$list[$i]['roomId'].'">'.$list[$i]['roomName'].'</a>, created '.getDateStringShort($list[$i]['timeCreated']).' by '.getUserName($db, $list[$i]['createdBy']).'<br>';
+			echo '<a href="chat.php?id='.$list[$i]['roomId'].'">'.$list[$i]['roomName'].'</a>, created '.$list[$i]['timeCreated'].' by id '.$list[$i]['createdBy'].'<br/>';
 		}
 	} else {
-		echo 'There are no chat rooms to join!<br>';
+		echo 'There are no chat rooms to join!<br/>';
 	}
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

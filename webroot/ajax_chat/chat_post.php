@@ -5,9 +5,9 @@
 		Output: None
 	*/
 
-	include_once('include_all.php');
+	require_once('config.php');
 
-	if (!$_SESSION['loggedIn']) die;
+	if (!$session->id) die;
 
 	if (empty($_POST['t']) || empty($_POST['r']) || !is_numeric($_POST['r'])) die;
 
@@ -16,5 +16,7 @@
 	//cut out the first X letters	
 	$text = mb_substr($_POST['t'], 0, $config['chat']['max_text_length']);
 
-	addChatEntry($db, $roomId, $text);
+	addChatEntry($roomId, $text);
+	
+	echo 'OK';
 ?>

@@ -1,89 +1,29 @@
-<?
-	if ($_SESSION['browser']['name'] == 'Internet Explorer') {
-		$browser_css = 'main_ie.css';
-	} else {
-		$browser_css = 'main_ff.css';
-	}
-
-	$browser_css = 'main.css';
-	
-	$title = 'MMO';
-	$keywords = 'web based MMO, mmo';
-	$description = 'Web based MMO game';
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title><?=$title?></title>
+<title>ajax chat</title>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="keywords" content="<?=$keywords?>">
-<meta name="description" content="<?=$description?>">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-<link rel="stylesheet" href="inc/<?=$browser_css?>" type="text/css">
-<link rel="stylesheet" href="inc/functions.css" type="text/css">
-<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="inc/main.css" type="text/css"/>
+<link rel="stylesheet" href="inc/functions.css" type="text/css"/>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 
 <script type="text/javascript" src="inc/formatDate.js"></script>
 <script type="text/javascript" src="inc/functions.js"></script>
 <script type="text/javascript" src="inc/ajax.js"></script>
-
-<?
-	/* Learn the current sessions screen resolution */
-	if (empty($_SESSION['browser']) || !$_SESSION['browser']['width']) {
-?>
-<script type="text/javascript">
-if (screen.width&&screen.height){SetCookie('BrowserWidth',screen.width);SetCookie('BrowserHeight',screen.height);}
-</script>
-<?
-	}
-?>
-
+<script type="text/javascript" src="/js/functions.js"></script>
 </head>
 <body>
 
-<div id="header_holder">
-	<div id="header_left">
-		<?
-		if (!$_SESSION['loggedIn']) {
-			echo
-			'<form method="post" action="login.php">'.
-			'&nbsp;Username: <input type="text" name="usr" size=10> '.
-			'Password: <input type="password" name="pwd" size=10> '.
-			'<input type="submit" class="button" value="Log in"> ';
-	
-			if (!empty($_SESSION['lastError'])) {
-				echo '<span class="objectCritical">'.$_SESSION['lastError'].'</span>';
-				unset($_SESSION['lastError']);
-			}
-			echo '</form>';
-		} else {
-			echo 'Welcome '.$_SESSION['userName'].'!';
-		}
-		?>
-	</div> <!-- header_left -->
-	<?
-	if (!$_SESSION['loggedIn']) {
-		echo '<a href="newuser.php">Register</a>';
-	} else {
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?logout">Log out</a>';
-	}
-	?>
-&nbsp;
-</div> <!-- header_holder -->
+<div id="body_left">
+	<ul>
+		<li><a href="index.php">Start page</a></li>
+<?
+		if ($session->isAdmin) echo '<li><a href="admin_chat.php">Admin Chat</a></li>';
+		if ($session->id) echo '<li><a href="index.php?logout">Log out</a></li>';
+?>
+	</ul>
+</div>
 
 <div id="body_holder">
-	<div id="body_left">
-		<ul>
-			<li><a href="index.php">Start page</a></li>
-<?
-			if ($_SESSION['isAdmin']) echo '<li><a href="admin_chat.php">Admin Chat</a></li>';
-?>
-			<li><a href="settings.php">Settings</a></li>
-			<li><a href="forum.php">Forum</a></li>
-			<li><a href="bla.php">Option 6</a></li>
-			<li><a href="bla.php">Option 7</a></li>
-		</ul>
-	</div> <!-- body_left -->
-
-<!-- design_head.php end -->

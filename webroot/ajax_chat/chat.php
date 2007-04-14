@@ -1,27 +1,27 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
 	if (!isset($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$roomId = $_GET['id'];
 	
-	$room = getChatRoom($db, $roomId);
+	$room = getChatRoom($roomId);
 	if (!$room) die;
 	
-	if ($_SESSION['loggedIn']) {
-		setChatRoomUser($db, $roomId, $_SESSION['userId']);
+	if ($session->id) {
+		setChatRoomUser($roomId);
 	}
 
-	include('design_head.php');
-	include('inc/noscript.html');
+	require('design_head.php');
+	require_once('inc/noscript.html');
 
 	echo '<div id="ajax_chat_holder">';
 	echo '<div id="ajax_chat_room1">'.$room['roomName'].'</div>';
 	echo '<div id="ajax_chat"></div>';
 	echo '<div id="ajax_chat_members"></div>';
-	if ($_SESSION['loggedIn']) {
+	if ($session->id) {
 		echo '<form name="chat_form" action="">';
-		echo 'Type here: <input name="chat_text" type="text" size=60 maxlength='.$config['chat']['max_text_length'].' onKeyup="chars_left(this.form);" onKeydown="chars_left(this.form); return send_chat(event,'.$roomId.');"> ';
-		echo '<input name="chat_charsleft" readonly type="text" size=3 value="'.$config['chat']['max_text_length'].'">';
+		echo 'Type here: <input name="chat_text" type="text" size="60" maxlength="'.$config['chat']['max_text_length'].'" onkeyup="chars_left(this.form);" onkeydown="chars_left(this.form); return send_chat(event,'.$roomId.');"/> ';
+		echo '<input name="chat_charsleft" readonly="readonly" type="text" size="3" value="'.$config['chat']['max_text_length'].'"/>';
 		echo '<div id="ajax_send_status" class="ajax_status_idle"></div>';
 		echo '<div id="ajax_recv_status" class="ajax_status_idle"></div>';
 		echo '</form>';
@@ -33,6 +33,7 @@
 
 
 <script type="text/javascript">
+<!--
 if (document.chat_form) document.chat_form.chat_text.focus();
 
 function chars_left(form)
@@ -84,7 +85,7 @@ function send_chat_handler()
 
 function reload_chat(room)
 {
-	empty_element('ajax_chat');
+	empty_element_by_name('ajax_chat');
 	set_class('ajax_recv_status', 'ajax_status_loading');
 
 	get_request = AJAX_Request('chat_get.php', 'XML', load_chat_handler, 'POST', 'r='+room+'&all=1');
@@ -123,12 +124,14 @@ function load_chat_handler()
 		{
 			var time,uName,uId,msg,txt;
 			var cur = items[i].childNodes;
+			if (!cur) continue;
 
 			if (items[i].nodeName == 'l') {	//<l> is chat buffer lines
 				//loop through all of this <l>'s tags
 	
 				for (var j=0; j<cur.length; j++)
 				{
+					if (!cur[j].firstChild) continue;
 					var nodeName = cur[j].nodeName;
 					if (nodeName == 't') time = display_timestamp(cur[j].firstChild.nodeValue);
 					if (nodeName == 'u') uName = cur[j].firstChild.nodeValue;
@@ -136,7 +139,7 @@ function load_chat_handler()
 					if (nodeName == 'm') msg = cur[j].firstChild.nodeValue;
 				}
 	
-				if (uId==<?=$_SESSION['userId']?>) {
+				if (uId==<?=$session->id?>) {
 					txt = time + ' you said: ' + msg;
 					add_node_and_focus(e, txt, 'chat_line_mine');
 				} else {
@@ -147,6 +150,7 @@ function load_chat_handler()
 
 				for (var j=0; j<cur.length; j++)
 				{
+					if (!cur[j].firstChild) continue;
 					var nodeName = cur[j].nodeName;
 					if (nodeName == 'u') uName = cur[j].firstChild.nodeValue;
 					if (nodeName == 'i') uId = cur[j].firstChild.nodeValue;
@@ -164,6 +168,7 @@ function load_chat_handler()
 
 				for (var j=0; j<cur.length; j++)
 				{
+					if (!cur[j].firstChild) continue;
 					var nodeName = cur[j].nodeName;
 					if (nodeName == 'u') uName = cur[j].firstChild.nodeValue;
 					if (nodeName == 'i') uId = cur[j].firstChild.nodeValue;
@@ -178,7 +183,7 @@ function load_chat_handler()
 			}
 		}
 
-		uName = '<?=$_SESSION['userName']?>';
+		uName = '<?=$session->username?>';
 		if (!in_arr(chat_members, uName)) {
 			e = document.getElementById('ajax_chat_members');
 			add_node(e, uName, 'chat_member_normal');
@@ -197,15 +202,14 @@ window.onload = function()
 {
 	load_chat(<?=$roomId?>);
 }
+-->
 </script>
 
-
 <span style="cursor: pointer; text-decoration: underline;" onclick="reload_chat(<?=$roomId?>)">refresh chat buffer</span>
-<br>
-<br>
+<br/>
+<br/>
 <span style="cursor: pointer; text-decoration: underline;" onclick="empty_element('ajax_chat')">empty chat buffer</span>
 
-
 <?
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

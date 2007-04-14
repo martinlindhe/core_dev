@@ -2,7 +2,6 @@
 	platform change:
 		- gör så ajax-filerna funkar som file.php
 		
-		- konvertera ajax_chat!
 		- konvertera zine!
 
 	wiki rewrite:
@@ -51,7 +50,7 @@
 	- files: ny config setting: allow anon uploads, $files->anon_uploads bool
 	- files: admins kan nu ta bort andras uppladdade filer
 	- konverterade svnhosting koden
-		
+	- konverterade ajax_chat koden!
 		
 		
 2007.04.13:
