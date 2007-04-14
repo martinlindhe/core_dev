@@ -194,7 +194,7 @@ abstract class DB_Base
 		}
 
 		$list = $this->getArray('SELECT * FROM tblLogs WHERE entryLevel <= '.LOGLEVEL_ALL.' ORDER BY timeCreated DESC');
-		echo '<br/>'.count($list).' entries in event log<br/><br/>';
+		echo count($list).' entries in event log<br/><br/>';
 
 		for ($i=0; $i<count($list); $i++)
 		{

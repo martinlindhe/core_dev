@@ -4,12 +4,8 @@
 		
 		- konvertera ajax_chat!
 		- konvertera zine!
-		
-		- bra regexp för att ta bort farliga tecken från filnamn:
-			$sterile_filename = preg_replace( "/[^\w\.-]+/", "_", $filename );
 
 	wiki rewrite:
-				
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		
@@ -17,10 +13,9 @@
 		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- wiki: logga history för wiki file deletes via ajax
 
-	file upload:
-		- gör en config: allow anon uploads	
+	file area:
 
-		file upload:
+		upload:
 			* visa upload progress med ajax callback (kräver nån custom apache modul tror jag)
 			
 		bildvisare:
@@ -30,6 +25,10 @@
 			* förstora
 			* förhandsgranska
 			* spara
+
+		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
+		- ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
+		
 
 	misc:
 		- ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
@@ -48,9 +47,13 @@
 	- wiki: implementerat paging för wiki history
 	- core: gjorde en generell URLadd() funktion för att kunna klistra på variabler till aktuell url, tog bort wikiURLadd()
 	- core: flyttat över /ajax/*.php till /core/ajax_*.php
-	- files: om file-upload & thumbs ej finns, skapas dessa
+	- files: om file-upload & thumbs ej finns, skapas dessa. wip detta funkar inge bra i linux
 	- files: skapar .htaccess med "deny all" & tom index.html i dessa kataloger automatiskt
-
+	- files: ny config setting: allow anon uploads, $files->anon_uploads bool
+	- files: admins kan nu ta bort andras uppladdade filer
+		
+		
+		
 2007.04.13:
 	- gjort ordentliga .htaccess så man bara stänger av directory listing
 

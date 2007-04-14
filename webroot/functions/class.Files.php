@@ -5,21 +5,6 @@
 	Uses tblFiles & tblCategories
 
 	Written by Martin Lindhe, 2007
-
-	todo:
-		- cleanup, vissa funktioner är nog överflödiga. se igenom all kod
-
-	todo file viewern:
-		- all bakgrund blir utgråad (todo: bilden blir åxå transparent)
-			kika bildvisare: http://www.mameworld.net/gurudumps/
-			i detta läge visas även en rad knappar på botten: rotate, resize, save, previous, next, start/stop slideshow image
-
-		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
-
-		- ajax file upload, submitta file-formuläret i bakgrunden,när man får "ok" svar från servern,
-			så läggs en <div> till som visar thumbnail på nyss uppladdad bild.
-
-		- visa animerad gif medans filen laddas upp (senare: progress meter)
 */
 
 require_once('functions_files.php');
@@ -45,36 +30,38 @@ class Files
 
 	private $image_max_width			= 800;	//bigger images will be resized to this size	
 	private $image_max_height			= 600;
-	private $thumb_default_width	= 100;
+	private $thumb_default_width	= 80;
 	private $thumb_default_height	= 80;
 	private $image_jpeg_quality		= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 	private $count_file_views			= false;	//auto increments the "cnt" in tblFiles in each $files->sendFile() call
+	public $anon_uploads					= false;	//allow unregisterd users to upload files
 
-	function __construct(array $files_config)
+	function __construct(array $config)
 	{
 		global $db;
 
-		if (isset($files_config['upload_dir'])) $this->upload_dir = $files_config['upload_dir'];
-		if (isset($files_config['thumbs_dir'])) $this->thumbs_dir = $files_config['thumbs_dir'];
-		if (isset($files_config['allowed_image_types'])) $this->allowed_image_types = $files_config['allowed_image_types'];
-		if (isset($files_config['allowed_audio_types'])) $this->allowed_audio_types = $files_config['allowed_audio_types'];
+		if (isset($config['upload_dir'])) $this->upload_dir = $config['upload_dir'];
+		if (isset($config['thumbs_dir'])) $this->thumbs_dir = $config['thumbs_dir'];
+		if (isset($config['allowed_image_types'])) $this->allowed_image_types = $config['allowed_image_types'];
+		if (isset($config['allowed_audio_types'])) $this->allowed_audio_types = $config['allowed_audio_types'];
 		
-		if (isset($files_config['image_max_width'])) $this->image_max_width = $files_config['image_max_width'];
-		if (isset($files_config['image_max_height'])) $this->image_max_height = $files_config['image_max_height'];
-		if (isset($files_config['thumb_default_width'])) $this->thumb_default_width = $files_config['thumb_default_width'];
-		if (isset($files_config['thumb_default_height'])) $this->thumb_default_height = $files_config['thumb_default_height'];
+		if (isset($config['image_max_width'])) $this->image_max_width = $config['image_max_width'];
+		if (isset($config['image_max_height'])) $this->image_max_height = $config['image_max_height'];
+		if (isset($config['thumb_default_width'])) $this->thumb_default_width = $config['thumb_default_width'];
+		if (isset($config['thumb_default_height'])) $this->thumb_default_height = $config['thumb_default_height'];
 
-		if (isset($files_config['count_file_views'])) $this->count_file_views = $files_config['count_file_views'];
-		
-		if (!is_dir($this->upload_dir)) {
+		if (isset($config['count_file_views'])) $this->count_file_views = $config['count_file_views'];
+		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
+
+		if (!is_dir(realpath($this->upload_dir))) {
 			$db->log('Creating upload directory');
 			
 			mkdir($this->upload_dir);
 			file_put_contents($this->upload_dir.'.htaccess', $this->htaccess);
 			file_put_contents($this->upload_dir.'index.html', '');			
 	
-			if (!is_dir($this->thumbs_dir)) {
+			if (!is_dir(realpath($this->thumbs_dir))) {
 				$db->log('Creating thumbs directory');
 				mkdir($this->thumbs_dir);
 				file_put_contents($this->thumbs_dir.'.htaccess', $this->htaccess);
@@ -90,9 +77,9 @@ class Files
 	{
 		global $session, $db, $config;
 
-		if (!$session->id || !is_numeric($fileType) || !is_numeric($categoryId)) return;
+		if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
 
-		require_once($config['core_root'].'layout/image_zoom_layer.html');
+		require_once($config['core_root'].'layout/image_zoom_layer.php');
 		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
 		if ($fileType == FILETYPE_FILEAREA_UPLOAD) {
@@ -100,14 +87,14 @@ class Files
 			if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
 		}
 
-		if (!empty($_FILES['file1'])) {
+		if (($session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
 			$this->handleUpload($_FILES['file1'], $fileType, $categoryId);
 			if ($fileType == FILETYPE_WIKI) {
 				addRevision(REVISIONS_WIKI, $categoryId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
 			}
 		}
 		
-		if (!$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_global']))
+		if ($session->isAdmin && !$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_global']))
 		{
 			//Create new category. Only allow categories inside root level
 			$this->createCategory($_POST['new_file_category'], $_POST['new_file_category_global']);
@@ -117,7 +104,7 @@ class Files
 
 		//menu
 		echo '<div class="file_gadget_header">';
-		echo 'File Upload Overview - Displaying ';
+		echo 'File Area Overview - Displaying ';
 		switch ($fileType)
 		{
 			case FILETYPE_FILEAREA_UPLOAD:
@@ -183,30 +170,35 @@ class Files
 		}
 		echo '</div>';
 
-		echo '<div id="file_gadget_upload">';
-		if (!$categoryId) {
-			echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
-		}
-		echo '<form name="ajax_show_files" method="post" action="'.$action.'" enctype="multipart/form-data">';
-		echo '<input type="file" name="file1"/> ';
-		echo '<input type="submit" class="button" value="Upload"/>';
-		echo '</form>';
-		echo '</div>';
-		
-		if (!$categoryId) {
-			echo '<div id="file_gadget_category" style="display: none;">';
-			echo '<form name="new_file_category" method="post" action="">';
-			echo 'Category name: <input type="text" name="new_file_category"/> ';
-			if ($session->isSuperAdmin) {
-				echo '<br/>';
-				echo '<input type="hidden" name="new_file_category_global" value="0"/>';
-				echo '<input type="checkbox" value="1" name="new_file_category_global" id="new_file_category_global"/> ';
-				echo '<label for="new_file_category_global">Make this category globally available</label><br/><br/>';
+		if ($session->id || $this->anon_uploads)
+		{
+			echo '<div id="file_gadget_upload">';
+			if (!$categoryId) {
+				echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 			}
-			echo '<input type="submit" class="button" value="Create"/> ';
-			echo '<input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
+			echo '<form name="ajax_show_files" method="post" action="'.$action.'" enctype="multipart/form-data">';
+			echo '<input type="file" name="file1"/> ';
+			echo '<input type="submit" class="button" value="Upload"/>';
 			echo '</form>';
 			echo '</div>';
+		}
+	
+		if ($session->isAdmin) {
+			if (!$categoryId) {
+				echo '<div id="file_gadget_category" style="display: none;">';
+				echo '<form name="new_file_category" method="post" action="">';
+				echo 'Category name: <input type="text" name="new_file_category"/> ';
+				if ($session->isSuperAdmin) {
+					echo '<br/>';
+					echo '<input type="hidden" name="new_file_category_global" value="0"/>';
+					echo '<input type="checkbox" value="1" name="new_file_category_global" id="new_file_category_global"/> ';
+					echo '<label for="new_file_category_global">Make this category globally available</label><br/><br/>';
+				}
+				echo '<input type="submit" class="button" value="Create"/> ';
+				echo '<input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
+				echo '</form>';
+				echo '</div>';
+			}
 		}
 		
 		echo '</div>';
@@ -278,7 +270,11 @@ class Files
 		global $db, $session;
 		if (!$session->id || !is_numeric($_id)) return false;
 
-		$q = 'DELETE FROM tblFiles WHERE fileId='.$_id.' AND ownerId='.$session->id;
+		if ($session->isAdmin) {
+			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
+		} else {
+			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id.' AND ownerId='.$session->id;
+		}
 		$db->query($q);
 
 		//physically remove the file from disk
@@ -292,7 +288,7 @@ class Files
 	private function handleUpload($FileData, $fileType, $categoryId = 0)
 	{
 		global $db, $session;
-		if (!$session->id || !is_numeric($fileType) || !is_numeric($categoryId)) return false;
+		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($categoryId)) return false;
 		
 		//ignore empty file uploads
 		if (!$FileData['name']) return;
@@ -310,10 +306,10 @@ class Files
 
 		$filesize = filesize($FileData['tmp_name']);
 
-  	$sql = 'INSERT INTO tblFiles SET fileName="'.$enc_filename.'",fileSize='.$filesize.',fileMime="'.$enc_mimetype.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
-  	$db->query($sql);
+  	$q = 'INSERT INTO tblFiles SET fileName="'.$enc_filename.'",fileSize='.$filesize.',fileMime="'.$enc_mimetype.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+  	$db->query($q);
   	$fileId = $db->insert_id;
-		
+  	
 		//Identify and handle various types of files
 		if (in_array($file_lastname, $this->allowed_image_types)) {
 			$this->handleImageUpload($fileId, $FileData);
@@ -331,7 +327,10 @@ class Files
 
 		//Move the uploaded file to upload directory
 		$uploadfile = $this->upload_dir.$fileId;
-		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
+		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) {
+			chmod($uploadfile, 0777);
+			return $fileId;
+		}
 		$db->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
 	}
 
@@ -565,16 +564,16 @@ class Files
 	/* Används av ajax filen /core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
 	function getFileInfo($_id)
 	{
-		if (!is_numeric($_id)) return '';
+		if (!is_numeric($_id)) return false;
 
 		global $db;
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
-					'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
+					'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
 					'WHERE t1.fileId='.$_id;
 
 		$file = $db->getOneRow($q);
-		if (!$file) return '';
+		if (!$file) return false;
 
 		$result = 'Name: '.htmlentities($file['fileName']).'<br/>'.
 							'Filesize: '.$this->formatFileSize($file['fileSize']).'<br/>'.
