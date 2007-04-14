@@ -8,8 +8,6 @@
 
 	require('design_head.php');
 
-	wiki('Admin_events');
-
 	$db->showEvents();
 
 	require('design_foot.php');

@@ -268,7 +268,7 @@ CREATE TABLE `tblRevisions` (
   `timeCreated` datetime NOT NULL,
   `categoryId` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`indexId`)
-) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ownerId` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -290,15 +290,15 @@ CREATE TABLE `tblUsers` (
   PRIMARY KEY (`userId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblWiki` (
-  `fieldId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `fieldName` varchar(30) DEFAULT NULL,
-  `fieldText` text,
+  `wikiId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `wikiName` varchar(30) DEFAULT NULL,
+  `msg` text,
   `timeCreated` datetime NOT NULL,
   `createdBy` smallint(5) unsigned NOT NULL DEFAULT '0',
   `lockedBy` smallint(5) unsigned NOT NULL DEFAULT '0',
   `timeLocked` datetime NOT NULL,
   `hasFiles` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`fieldId`)
+  PRIMARY KEY (`wikiId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 DELIMITER ;;
 /*!50003 SET SESSION SQL_MODE=""*/;;
