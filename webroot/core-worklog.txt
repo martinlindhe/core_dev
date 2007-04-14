@@ -40,6 +40,11 @@
   	- Försök bygga så mycket logik som möjligt i stored procedures
 
 --------------[[changelog]]--------------
+2007.04.14:
+	- wiki edit funkar för ej inloggade
+
+
+
 2007.04.13:
 	- gjort ordentliga .htaccess så man bara stänger av directory listing
 

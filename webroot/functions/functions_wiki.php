@@ -33,7 +33,7 @@
 
 		$wikiName = $db->escape(trim($wikiName));
 
-		if (!$session->isAdmin || !$wikiName) return false;
+		if (!$wikiName) return false;
 
 		$sql = 'SELECT * FROM tblWiki WHERE fieldName="'.$wikiName.'"';
 		$data = $db->getOneRow($sql);
@@ -47,13 +47,13 @@
 		{
 			if ($config['wiki']['log_history'])
 			{
-				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeEdited'], $data['editedBy'], REV_CAT_TEXT_CHANGED);
+				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeCreated'], $data['createdBy'], REV_CAT_TEXT_CHANGED);
 			}
-			$db->query('UPDATE tblWiki SET fieldText="'.$_text.'",timeEdited=NOW(),editedBy='.$session->id.' WHERE fieldName="'.$wikiName.'"');
+			$db->query('UPDATE tblWiki SET fieldText="'.$_text.'",timeCreated=NOW(),createdBy='.$session->id.' WHERE fieldName="'.$wikiName.'"');
 		}
 		else
 		{
-			$db->query('INSERT INTO tblWiki SET fieldName="'.$wikiName.'", fieldText="'.$_text.'",timeEdited=NOW(),editedBy='.$session->id);
+			$db->query('INSERT INTO tblWiki SET fieldName="'.$wikiName.'", fieldText="'.$_text.'",timeCreated=NOW(),createdBy='.$session->id);
 		}
 	}
 
@@ -150,16 +150,11 @@
 		$wikiName = trim($wikiName);
 		if (!$wikiName) return false;
 		
-		if (!$session->isAdmin || $current_tab == 'Hide')
-		{
-			$q =	'SELECT fieldId,fieldText,hasFiles,lockedBy FROM tblWiki WHERE fieldName="'.$db->escape($wikiName).'"';
-		} else {
-			$q =	'SELECT t1.fieldId,t1.fieldText,t1.hasFiles,t1.timeEdited,t1.lockedBy,t1.timeLocked,t2.userName AS editorName, t3.userName AS lockerName '.
-						'FROM tblWiki AS t1 '.
-						'LEFT JOIN tblUsers AS t2 ON (t1.editedBy=t2.userId) '.
-						'LEFT JOIN tblUsers AS t3 ON (t1.lockedBy=t3.userId) '.
-						'WHERE t1.fieldName="'.$db->escape($wikiName).'"';
-		}
+		$q =	'SELECT t1.fieldId,t1.fieldText,t1.hasFiles,t1.timeCreated,t1.lockedBy,t1.timeLocked,t2.userName AS creatorName, t3.userName AS lockerName '.
+					'FROM tblWiki AS t1 '.
+					'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) '.
+					'LEFT JOIN tblUsers AS t3 ON (t1.lockedBy=t3.userId) '.
+					'WHERE t1.fieldName="'.$db->escape($wikiName).'"';
 
 		$data = $db->getOneRow($q);
 
@@ -222,7 +217,7 @@
 			if ($rows > 36) $rows = 36;
 
 			$last_edited = 'never';
-			if (!empty($data['timeEdited'])) $last_edited = $data['timeEdited'].' by '.$data['editorName'];
+			if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' by '.$data['creatorName'];
 
 			echo '<form method="post" name="wiki_edit" action="'.wikiURLadd('Edit', $wikiName).'">'.
 					 '<textarea name="wiki_'.$wikiId.'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
@@ -297,7 +292,7 @@
 		elseif ($config['wiki']['log_history'] && $current_tab == 'History')
 		{
 			echo 'Current version:<br/>';
-			echo '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['editorName'].' at '.$data['timeEdited'].' ('.strlen($text).' bytes)</a></b><br/>';
+			echo '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['creatorName'].' at '.$data['timeCreated'].' ('.strlen($text).' bytes)</a></b><br/>';
 			echo '<div id="layer_history_current" class="revision_entry">';
 			echo nl2br(htmlentities($text, ENT_COMPAT, 'UTF-8'));
 			echo '</div>';
