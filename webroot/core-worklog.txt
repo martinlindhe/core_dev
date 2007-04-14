@@ -11,7 +11,6 @@
 			$sterile_filename = preg_replace( "/[^\w\.-]+/", "_", $filename );
 
 	wiki rewrite:
-		- paging för wiki history !??!
 				
 		- ändra några kolumnnamn i tblWiki och tblRevisions, inte fieldId etc plz
 		
@@ -39,6 +38,7 @@
 	- gjort ett script som gör typ detta regelbundet, med AHK:
 		mysqldump --all-databases --no-data --compact > e:/devel/webroot/sql/db-structure.sql
 	- core: kan nu skapa nya users från login grejen
+	- wiki: implementerat paging för wiki history
 
 
 2007.04.13:

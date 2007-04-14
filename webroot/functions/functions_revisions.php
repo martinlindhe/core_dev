@@ -14,7 +14,7 @@
 	define('REV_CAT_FILE_DELETED', 3);
 	define('REV_CAT_LOCKED', 4);
 	define('REV_CAT_UNLOCKED', 5);
-	
+
 	//kanske kunna minska ner antalet parametrar på nåt sätt?
 	function addRevision($fieldType, $fieldId, $fieldText, $timestamp, $creatorId, $categoryId = 0)
 	{
@@ -37,14 +37,17 @@
 
 		echo 'History of article '.$articleName.'<br/><br/>';
 
-		$tot_cnt = 100;
+		$q = 'SELECT COUNT(*) FROM tblRevisions WHERE fieldId='.$articleId.' AND fieldType='.$articleType;
+		$tot_cnt = $db->getOneItem($q);
 		$pager = makePager($tot_cnt, 5);
 
-		$sql  = 'SELECT t1.*,t2.userName AS creatorName FROM tblRevisions AS t1 ';
-		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) ';
-		$sql .= 'WHERE t1.fieldId='.$articleId.' AND t1.fieldType='.$articleType;
-		$sql .= ' ORDER BY t1.timeCreated DESC';
-		$list = $db->getArray($sql);
+		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblRevisions AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) ';
+		$q .= 'WHERE t1.fieldId='.$articleId.' AND t1.fieldType='.$articleType;
+		$q .= ' ORDER BY t1.timeCreated DESC'.$pager['limit'];
+		$list = $db->getArray($q);
+
+		echo $pager['head'];
 
 		if ($list) {
 			echo '<br/>Archived versions ('.count($list).' entries):<br/>';
