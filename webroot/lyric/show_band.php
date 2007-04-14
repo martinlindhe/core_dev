@@ -7,12 +7,13 @@
 	$band_id = $_GET['id'];
 	$band_name = getBandName($band_id);
 
-	echo '<table width="600" cellpadding="3" cellspacing="0" border="1">';
+	echo '<table width="600" cellpadding="3" cellspacing="0" border="1"><tr>';
 	if (isModerated($band_id, MODERATION_BAND)) {
-		echo '<tr><td class="titlemod">'.$band_name.'</td></tr>';
+		echo '<td class="titlemod">'.$band_name.'</td>';
 	} else {
-		echo '<tr><td class="title">'.$band_name.'</td></tr>';
+		echo '<td class="title">'.$band_name.'</td>';
 	}
+	echo '<td width=50><a href="edit_band.php?id='.$band_id.'">Edit</a></td></tr>';
 	echo '</table>';
 	echo '<br/>';
 
@@ -22,7 +23,7 @@
 	for ($i=0; $i<count($list); $i++)
 	{
 		$record_id = $list[$i]['recordId'];
-		$record_name = $db->escape($list[$i]['recordName']);
+		$record_name = stripslashes($list[$i]['recordName']);
 		if (!$record_name) $record_name = 's/t';
 
 		if (isModerated($record_id, MODERATION_RECORD) ||

@@ -1,22 +1,27 @@
 todo hi prio:
 	#1: rensa upp modererings-logiken...
 			- gör en moderate klass!
+			- när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
+			- när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
+
 	#2: BORT MED TABLES i den mån det går
 	#3: åter-inserta de texter som pajats pga latin1->utf8 konverteringen
-	#4: när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
-	#5: när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
-	#6: show_band.php: kunna ändra bandnamn
+
 	
 todo buggfix/mindre features:
 	* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
 	* edit_record.php: kunna editera recordInfo
-	* add_single_lyric.php: integrera i add_lyric.php
 
 	* lista låtar som inte finns på nån skiva (admin)
 	* lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
 	* möjlighet att radera ett band
 
 ----
+2007.04.14
+	* edit_band.php: kan nu ändra bandnamn
+	* rättat alla band-titlar som blev fel pga latin1->utf8 konverteringen
+
+
 2007.04.08
 	* portat applikationen till att använda nya "functions" frameworket. alla databasanrop går genom $db
 	* uppdaterat alla queries till DATETIME created timestamp (från unix timestamp)

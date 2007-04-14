@@ -36,13 +36,22 @@
 		return $db->getArray('SELECT * FROM tblBands ORDER BY bandName ASC');
 	}
 
-	function getBandName($band_id)
+	function getBandName($_id)
 	{
 		global $db;
 
-		if (!is_numeric($band_id)) return false;
+		if (!is_numeric($_id)) return false;
 
-		return $db->getOneItem('SELECT bandName FROM tblBands WHERE bandId='.$band_id);
+		return $db->getOneItem('SELECT bandName FROM tblBands WHERE bandId='.$_id);
+	}
+
+	function setBandName($_id, $_name)
+	{
+		global $db;
+		
+		if (!is_numeric($_id)) return false;
+
+		$db->query('UPDATE tblBands SET bandName="'.$db->escape($_name).'" WHERE bandId='.$_id);
 	}
 
 	function getBandInfo($band_id)

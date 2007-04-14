@@ -6,6 +6,7 @@
 	define("MODERATIONCHANGE_LYRICLINK",	1);
 	define("MODERATIONCHANGE_LYRIC",		2);
 	define("MODERATIONCHANGE_RECORDNAME",	3);
+	define("MODERATIONCHANGE_BANDNAME",	4);
 
 
 	//lägg till ett nyskapat objekt i modereringskön
