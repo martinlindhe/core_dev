@@ -54,42 +54,18 @@
 		return '';
 	}
 
-
-	function wikiURLadd($_page, $_section, $_extra = '')
-	{
-		$_wikiURL = $_page.':'.urlencode($_section);
-		
-		$arr = parse_url($_SERVER['REQUEST_URI']);
-		if (empty($arr['query'])) return $arr['path'].'?'.$_wikiURL;
-
-		$args = explode('&', $arr['query']);
-		
-		$out_args = '';
-
-		for ($i=0; $i<count($args); $i++) {
-			$vals = explode('=', $args[$i]);
-			
-			$skipit = explode(':', $vals[0]);
-			
-			if (!isset($skipit[1]) && isset($vals[1])) {
-				$out_args .= $vals[0].'='.urlencode($vals[1]).'&amp;';
-			}
-		}
-
-		if ($out_args) {
-			return $arr['path'].'?'.$out_args.'&amp;'.$_wikiURL.$_extra;
-		}
-		return $arr['path'].'?'.$_wikiURL.$_extra;
-	}
-
-	function URLadd($_key, $_val, $_extra)
+	function URLadd($_key, $_val = '', $_extra = '')
 	{
 		$arr = parse_url($_SERVER['REQUEST_URI']);
+		
+		$wiki_link = false;
+		$pos = strpos($_key, ':');
+		if ($pos !== false) $wiki_link = substr($_key, $pos+1);
 
 		if ($_val) {
 			$keyval = $_key.'='.$_val;
 		} else {
-			$keyval = $_key.'='.$_val;
+			$keyval = $_key;
 		}
 
 		if (empty($arr['query'])) return $arr['path'].'?'.$keyval.$_extra;
@@ -100,7 +76,14 @@
 
 		for ($i=0; $i<count($args); $i++) {
 			$vals = explode('=', $args[$i]);
+			//Skip it here, $keyval will be added later
 			if ($vals[0] == $_key) continue;
+			
+			//Skip Wiki:Style links, $keyval will be added later
+			if ($wiki_link && strpos($vals[0], ':')) {
+				if (substr($vals[0], strpos($vals[0], ':')+1) == $wiki_link) continue;
+			}
+			
 			if (isset($vals[1])) {
 				$out_args .= $vals[0].'='.urlencode($vals[1]).'&amp;';
 			} else {
