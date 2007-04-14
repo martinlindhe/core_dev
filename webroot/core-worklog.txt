@@ -18,9 +18,6 @@
 		- wiki: logga history för wiki file deletes via ajax
 
 	file upload:
-		- skapa kataloger
-			* skapa .htaccess med "deny all" i dessa kataloger automatiskt
-			
 		- gör en config: allow anon uploads	
 
 		file upload:
@@ -52,6 +49,7 @@
 	- core: gjorde en generell URLadd() funktion för att kunna klistra på variabler till aktuell url, tog bort wikiURLadd()
 	- core: flyttat över /ajax/*.php till /core/ajax_*.php
 	- files: om file-upload & thumbs ej finns, skapas dessa
+	- files: skapar .htaccess med "deny all" & tom index.html i dessa kataloger automatiskt
 
 2007.04.13:
 	- gjort ordentliga .htaccess så man bara stänger av directory listing

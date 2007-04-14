@@ -38,6 +38,8 @@ class Files
 {
 	private $upload_dir = 'e:/devel/webupload/';						//	'/tmp/';
 	private $thumbs_dir = 'e:/devel/webupload/thumbs/';		//	'/tmp/';
+	private $htaccess = "Deny from all\nOptions All -Indexes";
+
 	public $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
 	public $allowed_audio_types	= array('mp3');
 
@@ -67,11 +69,17 @@ class Files
 		
 		if (!is_dir($this->upload_dir)) {
 			$db->log('Creating upload directory');
+			
 			mkdir($this->upload_dir);
-		}
-		if (!is_dir($this->thumbs_dir)) {
-			$db->log('Creating thumbs directory');
-			mkdir($this->thumbs_dir);
+			file_put_contents($this->upload_dir.'.htaccess', $this->htaccess);
+			file_put_contents($this->upload_dir.'index.html', '');			
+	
+			if (!is_dir($this->thumbs_dir)) {
+				$db->log('Creating thumbs directory');
+				mkdir($this->thumbs_dir);
+				file_put_contents($this->thumbs_dir.'.htaccess', $this->htaccess);
+				file_put_contents($this->thumbs_dir.'index.html', '');			
+			}
 		}
 	}
 
