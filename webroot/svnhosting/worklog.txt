@@ -2,7 +2,6 @@ affärside:
 	- hyra ut subversion-plats
 	
 
-används DestroySession() separat, eller bara av andra functions_session.php-funtioner, isåfall städa upp/ta bort den funktionen
 
 
 --

@@ -1,14 +1,14 @@
-<!-- foot start -->
-	</div>	<!-- menu_middle -->
+	</div>
 
 	<div id="menu_footer">
-		svnhost 1.0-dev<br>
+		svnhost 1.0-dev<br/>
 <?
-	if ($config['debug']) debugFooter($pageload_start);
+		//if ($session->isAdmin) 
+		$db->showProfile($time_start);
 ?>
 	</div>	
 
-</div> <!-- menu_holder -->
+</div>
 
 </body>
 </html>

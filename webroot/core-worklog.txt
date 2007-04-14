@@ -50,6 +50,7 @@
 	- files: skapar .htaccess med "deny all" & tom index.html i dessa kataloger automatiskt
 	- files: ny config setting: allow anon uploads, $files->anon_uploads bool
 	- files: admins kan nu ta bort andras uppladdade filer
+	- konverterade svnhosting koden
 		
 		
 		

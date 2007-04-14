@@ -1,36 +1,32 @@
 <?
-	/* SITE CONFIGURATION START */
-	
-	/* Include used function files */
-	include_once($config['path_functions'].'functions_categories.php');
-	include_once($config['path_functions'].'functions_settings.php');
-	//include_once($config['path_functions'].'functions_comments.php');
-	include_once($config['path_functions'].'functions_infofields.php');
-	include_once($config['path_functions'].'functions_dictionary.php');
-	include_once($config['path_functions'].'functions_misc.php');
-	
-	$config['debug'] = true;
-	$config['database_1']['server']   = 'localhost';
-	$config['database_1']['port']     = 3306;
-	$config['database_1']['username'] = 'root';
-	$config['database_1']['password'] = '';
-	$config['database_1']['database'] = 'dbSvnHosting';
-	$db = dbOpen($config['database_1']);
-	
-	$config['login_sha1_key'] = 'svnHost778zuu2xzuyYYe';	//used to encode passwords in database, to make brute forcing them more difficult
-	$config['session_name'] = 'svnID';				//name of session-id cookie
-	$config['session_timeout'] = 3600*4;			//4h session timeout
+	$time_start = microtime(true);
 
-	$config['start_page'] = '/svnhosting/index.php';
-	
+	error_reporting(E_ALL);
+	mb_internal_encoding('UTF-8');
+	date_default_timezone_set('Europe/Stockholm');
 
+	$config['core_root'] = '../';
+	require_once($config['core_root'].'functions/class.DB_MySQLi.php');
+	require_once($config['core_root'].'functions/class.Session.php');
+	require_once($config['core_root'].'functions/class.Files.php');
 
-	/* Set language and include used locales files */
-	$config['language'] = 'en';
-	include_once($config['path_functions'].'locales_standard.php');
-	include_once($config['path_functions'].'locales_time.php');
-	
-		$config['text'] = $config['text'][ $config['language'] ];
+	require_once($config['core_root'].'functions/functions_general.php');
+	require_once($config['core_root'].'functions/functions_textformat.php');
+	require_once($config['core_root'].'functions/functions_wiki.php');
 
-	/* SITE CONFIGURATION END */
+	$config['database']['username']	= 'root';
+	$config['database']['password']	= '';
+	$config['database']['database']	= 'dbSvnHosting';
+	$config['database']['debug']		= true;
+	$db = new DB_MySQLi($config['database']);
+
+	$config['session']['timeout'] = 30*60;		//in seconds
+	$config['session']['name'] = 'svnID';
+	$config['session']['sha1_key'] = 'svnHost778zuu2xzuyYYe';
+	$config['session']['allow_registration'] = false;
+	$config['session']['home_page'] = 'index.php';
+	$session = new Session($config['session']);
+
+	$config['wiki']['allow_html'] = true;
+
 ?>

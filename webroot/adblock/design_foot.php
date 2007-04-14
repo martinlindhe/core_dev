@@ -7,11 +7,7 @@
 		echo '</div>';
 	}
 
-	if ($session->isAdmin) {
-		echo '<div id="footer">';
-		$db->showProfile($time_start);
-		echo '</div>';
-	}
+	if ($session->isAdmin) $db->showProfile($time_start);
 ?>
 </div>
 </body></html>

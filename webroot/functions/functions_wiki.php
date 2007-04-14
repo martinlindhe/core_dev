@@ -18,7 +18,7 @@
 
 
 	$config['wiki']['allow_comments'] = false;		//todo - försök att slipp allow_comments & allow_files,
-	$config['wiki']['allow_files'] = true;				//			acceptera bara de tabbar som finns i allowed_tabs
+	$config['wiki']['allow_files'] = false;				//			acceptera bara de tabbar som finns i allowed_tabs
 
 	$config['wiki']['allowed_tabs'] =	array('View', 'Edit', 'History', 'Comments', 'Files', 'Hide');
 	$config['wiki']['first_tab'] = 'View';
@@ -157,6 +157,7 @@
 					'WHERE t1.wikiName="'.$db->escape($wikiName).'"';
 
 		$data = $db->getOneRow($q);
+		if (!$data) return false;
 
 		$wikiId = $data['wikiId'];
 		$text = stripslashes($data['msg']);
