@@ -6,8 +6,7 @@
 	
 	Todo: 
 		* gör färdigt login-bubblan
-			- register new user måste fungera (kräver email fält i tblUsers, kräv email aktivering av konton)
-			- forgot password måste fungera (kräver register new user)
+			- forgot password är ej kodat än
 		
 	Examples:
 		$session->save('kex', 'med blandade bullar');
@@ -89,13 +88,23 @@ class Session
 			}
 		}
 
+		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
+		{
+			//todo: läs och spara register_email
+			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
+			if (!is_numeric($check)) {
+				echo 'Registration failed: '.$check;
+				die;
+			}
+			$this->logIn($_POST['register_usr'], $_POST['register_pwd']);
+		}
+
 		if (!$this->id) return;
 
 		//Logged in: Check for a logout request
 		if (isset($_GET['logout']))
 		{
 			//GET to any page with 'logout' set to log out
-			$db->log('user logged out');
 			$this->logOut();
 			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
 			die;
@@ -121,8 +130,51 @@ class Session
 
 	}
 
-	function __destruct()
+	//returns the user ID of the newly created user
+	function registerUser($username, $password1, $password2, $userMode = 0)
 	{
+		global $db, $config;
+
+		if (!is_numeric($userMode)) return false;
+
+		$username = trim($username);
+		$password1 = trim($password1);
+		$password2 = trim($password2);
+		
+		if (($db->escape($username) != $username) || ($db->escape($password1) != $password1)) {
+			//if someone tries to enter ' or " etc as username/password letters
+			//with this check, we dont need to encode the strings for use in sql query
+			return 'Username or password contains invalid characters';
+		}
+		
+		if ($password1 && $password2 && ($password1 != $password2)) {
+			return 'The passwords doesnt match';
+		}
+		
+		if (strlen($username) < 3) return 'Username must be at least 3 characters long';
+		if (strlen($password1) < 4) return 'Password must be at least 4 characters long';
+
+		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
+		$checkId = $db->getOneItem($q);
+		//echo $checkId;
+		if ($checkId) {
+			return 'Username already exists';
+		}
+		
+		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
+		$db->query($q);
+		$newUserId = $db->insert_id;
+		
+		$db->log('User <b>'.$username.'</b> created');
+
+		/* Creates a Inbox and Outbox */
+		/*
+		if ($config['messages']['enabled']) {
+			addUserMessageFolder($db, $newUserId, $config['messages']['folder_inbox'],  MESSAGE_FOLDER_STATIC);
+			addUserMessageFolder($db, $newUserId, $config['messages']['folder_outbox'], MESSAGE_FOLDER_STATIC);
+		}*/
+
+		return $newUserId;
 	}
 
 	function logIn($username, $password)
@@ -152,16 +204,18 @@ class Session
 		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
 		$this->lastActive = time();
 
-		//$db->log('user logged in');
+		$db->log('User logged in');
 
 		return true;
 	}
 
-	public function logOut()
+	function logOut()
 	{
 		global $db;
 
+		$db->log('User logged out');
 		$db->query('UPDATE tblUsers SET timeLastLogout=NOW()');
+
 		$this->started = 0;
 		$this->id = 0;
 		$this->ip = 0;
@@ -170,6 +224,8 @@ class Session
 		$this->isSuperAdmin = 0;
 	}
 	
+	/*Shows a login form with tabs for Register & Forgot password functions */
+	//the handling of the result variables are in the __construct function above
 	function showLoginForm()
 	{
 		echo '<div class="login_box">';
@@ -201,6 +257,7 @@ class Session
 			echo '<div id="login_register_layer" style="display: none;">';
 				echo '<b>Register new account</b><br/><br/>';
 
+				echo '<form method="post" action="">';
 				echo '<table cellpadding="2">';
 				echo '<tr><td>Username:</td><td><input name="register_usr" type="text"/> <img src="/gfx/icon_user.png" alt="Username"/></td></tr>';
 				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="/gfx/icon_keys.png" alt="Password"/></td></tr>';
@@ -209,22 +266,24 @@ class Session
 				echo '</table><br/>';
 
 				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
-				echo '<input type="button" class="button" value="Register" disabled="disabled"/>';
+				echo '<input type="submit" class="button" value="Register" style="font-weight: bold;"/>';
 				echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
+				echo '</form>';
 			echo '</div>';
 
 			//todo: javascript som validerar input email, visa en "retrieve new password" knapp om emailen är korrekt
 			echo '<div id="login_forgot_pwd_layer" style="display: none;">';
+				echo '<form method="post" action="">';
 				echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 				echo 'You will recieve an e-mail with a link to follow, where you can set a new password.<br/><br/>';
 				echo '<table cellpadding="2">';
 				echo '<tr><td>E-mail:</td><td><input type="text" size="26"/> <img src="/gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
 				echo '</table><br/>';
-				echo '<input type="submit" class="button" value="New password"/><br/><br/>';
 
 				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/>';
 				echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');"/>';
-				echo '<input type="button" class="button" value="Forgot password" disabled="disabled"/>';
+				echo '<input type="submit" class="button" value="Forgot password" style="font-weight: bold;"/>';
+				echo '</form>';
 			echo '</div>';
 		}
 

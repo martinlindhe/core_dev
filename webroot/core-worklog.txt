@@ -1,15 +1,9 @@
 --------------[[todo]]--------------
-	- uppdatera db dumpar till dbLyrics, dbAdblock, dbOOPTest, dbJanina i /sql/
-		* gör ett script som kör detta typ en gång om dygnet, med AHK:
-  			mysqldump --all-databases --no-data --compact > e:/devel/webroot/sql/db-structure.sql
-
 	platform change:
 		- flytta /ajax/*.php till /core/ajax_*.php
 		- gör så ajax-filerna funkar som file.php
 		- gör /core/wiki.php
 		
-		- kunna skapa nya users från login grejen!
-
 		- konvertera ajax_chat!
 		- konvertera zine!
 		
@@ -25,7 +19,7 @@
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		
 		- visa history för en vanlig user på låst wiki
-		
+
 	låg prioritet:
 		- file upload: skapa kataloger
 			* om file-upload & thumbs ej finns, skapa dessa samt skapa .htaccess med "deny all" i dessa kataloger automatiskt
@@ -42,7 +36,9 @@
 --------------[[changelog]]--------------
 2007.04.14:
 	- wiki edit funkar för ej inloggade
-
+	- gjort ett script som gör typ detta regelbundet, med AHK:
+		mysqldump --all-databases --no-data --compact > e:/devel/webroot/sql/db-structure.sql
+	- core: kan nu skapa nya users från login grejen
 
 
 2007.04.13:

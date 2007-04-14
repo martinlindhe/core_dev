@@ -19,6 +19,8 @@ class DB_MySQLi extends DB_Base
 		echo 'Server info: '.$this->db_handle->server_info.' ('.$this->db_handle->host_info.')<br/>';
 		echo 'Client info: '.$this->db_handle->client_info.'<br/>';
 		echo 'Character set: '.$this->db_handle->character_set_name().'<br/>';
+		echo 'Current error: '.$this->db_handle->error.'<br/>';
+		echo 'Current errno: '.$this->db_handle->errno.'<br/>';
 	}
 
 	function escape($query)
@@ -43,11 +45,11 @@ class DB_MySQLi extends DB_Base
 		if ($this->debug) $this->profileConnect($time_started);
 	}
 
-	function query($query)
+	function query($q)
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		$result = $this->db_handle->query($query);
+		$result = $this->db_handle->query($q);
 
 		if ($result) {
 			$this->insert_id = $this->db_handle->insert_id;
@@ -59,7 +61,7 @@ class DB_MySQLi extends DB_Base
 			die;
 		}
 
-		if ($this->debug) $this->profileQuery($time_started, $query);
+		if ($this->debug) $this->profileQuery($time_started, $q);
 		
 		return $result;
 	}

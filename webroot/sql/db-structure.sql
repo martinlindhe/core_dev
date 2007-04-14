@@ -125,6 +125,8 @@ CREATE TABLE `trk_ext` (
   PRIMARY KEY (`info_hash`),
   KEY `scrape_url` (`scrape_url`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cluster` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
@@ -139,6 +141,8 @@ CREATE TABLE `binlog_index` (
   `schemaops` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`epoch`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbajaxsearch` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -148,6 +152,8 @@ CREATE TABLE `tblText` (
   `txt` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbajaxupload` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -186,6 +192,8 @@ CREATE TABLE `tblusers` (
   `userStatus` blob,
   PRIMARY KEY (`userId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbadblock` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
@@ -238,7 +246,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `userIP` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=322 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=329 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblProblemSites` (
   `siteId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -276,11 +284,11 @@ CREATE TABLE `tblUsers` (
   `userPass` varchar(40) NOT NULL,
   `userMode` tinyint(1) NOT NULL DEFAULT '0',
   `timeCreated` datetime NOT NULL,
-  `timeLastLogin` datetime NOT NULL,
-  `timeLastActive` datetime NOT NULL,
-  `timeLastLogout` datetime DEFAULT NULL,
+  `timeLastLogin` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `timeLastActive` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `timeLastLogout` datetime DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`userId`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblWiki` (
   `fieldId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fieldName` varchar(30) DEFAULT NULL,
@@ -292,6 +300,20 @@ CREATE TABLE `tblWiki` (
   `hasFiles` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`fieldId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+DELIMITER ;;
+/*!50003 SET SESSION SQL_MODE=""*/;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `getUser`(
+	usr varchar(50),
+	pwd varchar(50)
+)
+BEGIN
+	/* Returns user info if supplied user&pwd is correct, else it returns an empty result */
+	SELECT userId,userMode 
+	FROM tblUsers
+	WHERE userName = usr and userPass = pwd;
+END */;;
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE*/;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbcms` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -718,6 +740,8 @@ CREATE TABLE `tblVisitors` (
   `visitorId` bigint(20) unsigned NOT NULL DEFAULT '0',
   `timestamp` bigint(20) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbgeoip` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -760,6 +784,8 @@ CREATE TABLE `tblWHOIS` (
   `phone` varbinary(20) NOT NULL,
   PRIMARY KEY (`entryId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=159 DEFAULT CHARSET=utf8;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbguildsite` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
@@ -792,6 +818,8 @@ CREATE TABLE `tblUsers` (
   `email` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbjanina` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -839,6 +867,8 @@ CREATE TABLE `tblUsers` (
   `timeLastLogout` datetime NOT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dblang` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -887,6 +917,8 @@ CREATE TABLE `tblWords` (
   `pron` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=462 DEFAULT CHARSET=utf8;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dblyrics` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
@@ -952,6 +984,8 @@ CREATE TABLE `tblUsers` (
   `userMode` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `timeLastActive` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbmmo` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -1400,6 +1434,8 @@ CREATE TABLE `tblVisitors` (
   `visitorId` bigint(20) unsigned NOT NULL DEFAULT '0',
   `timestamp` bigint(20) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dboophp` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -1447,6 +1483,8 @@ CREATE TABLE `tblUsers` (
   `timeLastLogout` datetime NOT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbsvnhosting` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -1503,6 +1541,8 @@ CREATE TABLE `tblUsers` (
   `lastActive` datetime NOT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbzine` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -1929,6 +1969,8 @@ CREATE TABLE `tblVisitors` (
   `visitorId` bigint(20) unsigned NOT NULL DEFAULT '0',
   `timestamp` bigint(20) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dbtracker` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -2021,6 +2063,8 @@ CREATE TABLE `tblusers` (
   `userStatus` blob NOT NULL,
   PRIMARY KEY (`userId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `mysql` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
@@ -2279,6 +2323,8 @@ CREATE TABLE `user` (
   `max_user_connections` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`Host`,`User`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Users and global privileges';
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `online_game` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
@@ -2341,6 +2387,8 @@ CREATE TABLE `tblGuilds` (
   `timestamp` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guildId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `online_site` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
@@ -2482,7 +2530,11 @@ CREATE TABLE `tblUserstats` (
   `cntLogins` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`userId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+DELIMITER ;;
+DELIMITER ;
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `test` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 USE `test`;
+DELIMITER ;;
+DELIMITER ;

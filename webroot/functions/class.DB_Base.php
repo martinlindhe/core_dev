@@ -118,7 +118,7 @@ abstract class DB_Base
 		$this->profileQuery($time_started, $query);
 	}
 
-	/* Shows profiling information */
+	/* Shows sql query profiling information */
 	function showProfile($pageload_start = 0)
 	{
 		if (!$this->debug) return;
