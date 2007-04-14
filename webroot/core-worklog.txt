@@ -12,8 +12,6 @@
 
 	wiki rewrite:
 				
-		- ändra några kolumnnamn i tblWiki och tblRevisions, inte fieldId etc plz
-		
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		

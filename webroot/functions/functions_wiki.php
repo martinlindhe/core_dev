@@ -35,25 +35,25 @@
 
 		if (!$wikiName) return false;
 
-		$sql = 'SELECT * FROM tblWiki WHERE fieldName="'.$wikiName.'"';
+		$sql = 'SELECT * FROM tblWiki WHERE wikiName="'.$wikiName.'"';
 		$data = $db->getOneRow($sql);
 
 		/* Aborts if we are trying to save a exact copy as the last one */
-		if ($data['fieldText'] == $_text) return false;
+		if ($data['msg'] == $_text) return false;
 
 		$_text = $db->escape(trim($_text));
 		
-		if ($data['fieldId'])
+		if ($data['wikiId'])
 		{
 			if ($config['wiki']['log_history'])
 			{
-				addRevision(REVISIONS_WIKI, $data['fieldId'], $data['fieldText'], $data['timeCreated'], $data['createdBy'], REV_CAT_TEXT_CHANGED);
+				addRevision(REVISIONS_WIKI, $data['wikiId'], $data['msg'], $data['timeCreated'], $data['createdBy'], REV_CAT_TEXT_CHANGED);
 			}
-			$db->query('UPDATE tblWiki SET fieldText="'.$_text.'",timeCreated=NOW(),createdBy='.$session->id.' WHERE fieldName="'.$wikiName.'"');
+			$db->query('UPDATE tblWiki SET msg="'.$_text.'",timeCreated=NOW(),createdBy='.$session->id.' WHERE wikiName="'.$wikiName.'"');
 		}
 		else
 		{
-			$db->query('INSERT INTO tblWiki SET fieldName="'.$wikiName.'", fieldText="'.$_text.'",timeCreated=NOW(),createdBy='.$session->id);
+			$db->query('INSERT INTO tblWiki SET wikiName="'.$wikiName.'", msg="'.$_text.'",timeCreated=NOW(),createdBy='.$session->id);
 		}
 	}
 
@@ -62,7 +62,7 @@
 	{
 		global $db, $files, $config;
 		
-		$text = stripslashes($data['fieldText']);
+		$text = stripslashes($data['msg']);
 
 		if ($config['wiki']['allow_html']) {
 			$text = formatUserInputText($text, false);
@@ -75,7 +75,7 @@
 		}
 
 		if ($config['wiki']['allow_files'] && $data['hasFiles']) {
-			$list = $files->getFiles($data['fieldId'], FILETYPE_WIKI);
+			$list = $files->getFiles($data['wikiId'], FILETYPE_WIKI);
 
 			$has_unshowed_files = 0;
 			for ($i=0; $i<count($list); $i++) {
@@ -150,16 +150,16 @@
 		$wikiName = trim($wikiName);
 		if (!$wikiName) return false;
 		
-		$q =	'SELECT t1.fieldId,t1.fieldText,t1.hasFiles,t1.timeCreated,t1.lockedBy,t1.timeLocked,t2.userName AS creatorName, t3.userName AS lockerName '.
+		$q =	'SELECT t1.wikiId,t1.msg,t1.hasFiles,t1.timeCreated,t1.lockedBy,t1.timeLocked,t2.userName AS creatorName, t3.userName AS lockerName '.
 					'FROM tblWiki AS t1 '.
 					'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) '.
 					'LEFT JOIN tblUsers AS t3 ON (t1.lockedBy=t3.userId) '.
-					'WHERE t1.fieldName="'.$db->escape($wikiName).'"';
+					'WHERE t1.wikiName="'.$db->escape($wikiName).'"';
 
 		$data = $db->getOneRow($q);
 
-		$wikiId = $data['fieldId'];
-		$text = stripslashes($data['fieldText']);
+		$wikiId = $data['wikiId'];
+		$text = stripslashes($data['msg']);
 
 		//Visa enbart texten
 		if ($current_tab == 'Hide') {
@@ -199,18 +199,18 @@
 			}
 			
 			if ($session->isAdmin && isset($_GET['wiki_lock'])) {
-				$q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE fieldId='.$wikiId;
+				$q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE wikiId='.$wikiId;
 				$db->query($q);
 				$data['lockedBy'] = $session->id;
 				$data['lockerName'] = $session->username;
-				addRevision(REVISIONS_WIKI, $data['fieldId'], 'The wiki has been locked', now(), $session->id, REV_CAT_LOCKED);
+				addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been locked', now(), $session->id, REV_CAT_LOCKED);
 			}
 
 			if ($session->isAdmin && isset($_GET['wiki_unlock'])) {
-				$q = 'UPDATE tblWiki SET lockedBy=0 WHERE fieldId='.$wikiId;
+				$q = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$wikiId;
 				$db->query($q);
 				$data['lockedBy'] = 0;
-				addRevision(REVISIONS_WIKI, $data['fieldId'], 'The wiki has been unlocked', now(), $session->id, REV_CAT_UNLOCKED);
+				addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been unlocked', now(), $session->id, REV_CAT_UNLOCKED);
 			}
 
 			$rows = 6+substr_count($text, "\n");
