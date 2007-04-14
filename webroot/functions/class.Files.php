@@ -130,7 +130,7 @@ class Files
 		switch ($fileType)
 		{
 			case FILETYPE_FILEAREA_UPLOAD:
-				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ORDER BY timeUploaded ASC';
+				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
 				$action = '?file_gadget_category_id='.$categoryId;
 				break;
 
@@ -308,6 +308,8 @@ class Files
 
 	private function handleAudioUpload($fileId, $FileData)
 	{
+		global $db;
+
 		//Move the uploaded file to upload directory
 		$uploadfile = $this->upload_dir.$fileId;
 		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
@@ -317,6 +319,8 @@ class Files
 	/* Handle image upload, used internally only */
 	private function handleImageUpload($fileId, $FileData)
 	{
+		global $db;
+
 		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
 
 		//Resize the image if it is too big, overwrite the uploaded file
@@ -539,7 +543,7 @@ class Files
 		return $bytes.' '.$unit;
 	}
 	
-	/* Används av ajax filen /ajax/fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
+	/* Används av ajax filen /core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
 	function getFileInfo($_id)
 	{
 		if (!is_numeric($_id)) return '';

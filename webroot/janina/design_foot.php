@@ -2,8 +2,7 @@
 <?
 	//if (!$session->id) echo '<a href="login.php">login</a><br>';
 
-	//$db->showProfile($time_start);
-	//echo '<br>';
+	if ($session->username == "martin") $db->showProfile($time_start);
 
 	if ($session->id) {
 		echo '<br/>';

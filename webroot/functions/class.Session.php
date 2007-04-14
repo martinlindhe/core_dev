@@ -325,10 +325,12 @@ class Session
 	//todo: define this in a separate /design/ file, with alot of css in /css/functions.css
 	function editSettings()
 	{
+		global $config;
+
 		$list = readAllSettings(SETTING_USER, $this->id);
 		if (!$list) return;
 
-		require_once('../layout/ajax_loading_layer.html');
+		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
 		echo '<div id="edit_settings" style="width: 300px; background-color: #88EE99; border: 1px solid #aaa; padding: 5px;">';
 		echo '<form name="edit_settings_frm" action="">';
