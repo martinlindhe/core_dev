@@ -51,6 +51,8 @@ class Files
 
 	function __construct(array $files_config)
 	{
+		global $db;
+
 		if (isset($files_config['upload_dir'])) $this->upload_dir = $files_config['upload_dir'];
 		if (isset($files_config['thumbs_dir'])) $this->thumbs_dir = $files_config['thumbs_dir'];
 		if (isset($files_config['allowed_image_types'])) $this->allowed_image_types = $files_config['allowed_image_types'];
@@ -62,6 +64,15 @@ class Files
 		if (isset($files_config['thumb_default_height'])) $this->thumb_default_height = $files_config['thumb_default_height'];
 
 		if (isset($files_config['count_file_views'])) $this->count_file_views = $files_config['count_file_views'];
+		
+		if (!is_dir($this->upload_dir)) {
+			$db->log('Creating upload directory');
+			mkdir($this->upload_dir);
+		}
+		if (!is_dir($this->thumbs_dir)) {
+			$db->log('Creating thumbs directory');
+			mkdir($this->thumbs_dir);
+		}
 	}
 
 

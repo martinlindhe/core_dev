@@ -19,7 +19,7 @@
 
 	file upload:
 		- skapa kataloger
-			* om file-upload & thumbs ej finns, skapa dessa samt skapa .htaccess med "deny all" i dessa kataloger automatiskt
+			* skapa .htaccess med "deny all" i dessa kataloger automatiskt
 			
 		- gör en config: allow anon uploads	
 
@@ -50,7 +50,8 @@
 	- core: kan nu skapa nya users från login grejen
 	- wiki: implementerat paging för wiki history
 	- core: gjorde en generell URLadd() funktion för att kunna klistra på variabler till aktuell url, tog bort wikiURLadd()
-
+	- core: flyttat över /ajax/*.php till /core/ajax_*.php
+	- files: om file-upload & thumbs ej finns, skapas dessa
 
 2007.04.13:
 	- gjort ordentliga .htaccess så man bara stänger av directory listing
