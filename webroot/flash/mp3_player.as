@@ -21,10 +21,13 @@ if (_level0.s) {
 	resourceURL = _level0.s;
 } else {
 	//todo: ta bort detta. enbart för testning
-	resourceURL = 'song.mp3';
+	//resourceURL = 'song.mp3';
 }
 
-//trace('Loading resource: ' + resourceURL);
+//convert url-encoded stuff back to normal url
+resourceURL = resourceURL.split("&amp;").join("&"); 
+
+trace('Loading resource: ' + resourceURL);
 
 function convertSeconds(secs)
 {

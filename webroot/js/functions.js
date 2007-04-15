@@ -52,32 +52,34 @@ function empty_element(e)
 
 var zoomed_id = 0;
 //closeup view of image file
-function zoomImage(id)
+function zoomImage(id, ref)
 {
 	var e = document.getElementById('zoom_image');
-	e.setAttribute('src', 'file.php?id='+id);
+	e.setAttribute('src', '/core/file.php?id='+id+ref);
 	zoomed_id = id;
 
 	//Send AJAX request for info about this file, result will be shown in the div zoom_image_info
 	ajax_get_fileinfo(id);
 
+	hide_element_by_name('zoom_audio_layer');
 	show_element_by_name('zoom_image_layer');
 }
 
 //closeup view of audio file
-function zoomAudio(id,name)
+function zoomAudio(id, name, ref)
 {
 	zoomed_id = id;
 	
 	empty_element_by_name('zoom_audio');
 
 	//requires ext_flashobject.js
-	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/janina/file.php?id='+id, 'animationName', '180', '45', '8', '#FFFFFF');
+	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/core/file.php?id='+id+ref, 'animationName', '180', '45', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
 	fo.write('zoom_audio');
 
+	hide_element_by_name('zoom_image_layer');
 	show_element_by_name('zoom_audio_layer');
 }
 
@@ -108,13 +110,13 @@ function rotate_selected_file(angle)
 
 
 //Loads image id into holder-div
-function loadImage(id, holder)
+function loadImage(id, holder, ref)
 {
 	var e = document.getElementById(holder);
 	empty_element(e);
 
 	var i = document.createElement('img');
-	i.setAttribute('src', 'file.php?id='+id);
+	i.setAttribute('src', '/core/file.php?id='+id+ref);
 	e.appendChild(i);
 }
 

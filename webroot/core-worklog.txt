@@ -25,6 +25,12 @@
   	- Försök bygga så mycket logik som möjligt i stored procedures
 
 --------------[[changelog]]--------------
+2007.04.15
+	- files: kontrollerade alla file.php requests
+	- files: fixade så mp3-spelaren kan avkoda '&amp;' i url:en
+
+
+
 2007.04.14:
 	- wiki edit funkar för ej inloggade
 	- gjort ett script som gör typ detta regelbundet, med AHK:
