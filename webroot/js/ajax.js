@@ -131,3 +131,36 @@ function ajax_get_fileinfo_callback()
 
 	fileinfo_request = null;
 }
+
+function submit_apc_upload(id)
+{
+	//submit form
+	document.ajax_file_upload.submit();
+
+	show_element_by_name('file_gadget_apc_progress');
+
+	ajax_get_upload_progress(id);
+
+	return false;
+}
+
+var upload_progress_request = null;
+function ajax_get_upload_progress(id)
+{
+	upload_progress_request = new AJAX();
+	upload_progress_request.GET_raw('/core/ajax_upload_progress.php?s='+id, ajax_get_upload_progress_callback);
+
+	setTimeout("ajax_get_upload_progress("+id+")", 400);
+}
+
+function ajax_get_upload_progress_callback()
+{
+	if (!upload_progress_request.ResultReady()) return;
+
+	var e = document.getElementById('file_gadget_apc_progress');
+	empty_element(e);
+
+	e.innerHTML = upload_progress_request._request.responseText;
+
+	upload_progress_request = null;
+}

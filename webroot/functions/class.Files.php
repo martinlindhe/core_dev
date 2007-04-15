@@ -36,6 +36,7 @@ class Files
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 	private $count_file_views			= false;	//auto increments the "cnt" in tblFiles in each $files->sendFile() call
 	public $anon_uploads					= false;	//allow unregisterd users to upload files
+	private $apc_uploads					= true;		//enable support for php_apc + php_uploadprogress calls
 
 	function __construct(array $config)
 	{
@@ -165,22 +166,30 @@ class Files
 				echo '<img src="/gfx/icon_audio_32.png" width="80" height="80" alt="Audio file" title="'.$list[$i]['fileName'].'"/>';
 				echo '</center></div>';
 			} else {
-				die('todo: '. $list[$i]['fileMime']);
+				die('todo: '.$file_lastname.', '. $list[$i]['fileMime']);
 			}
 		}
 		echo '</div>';
 
+		//todo: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
 		if ($session->id || $this->anon_uploads)
 		{
 			echo '<div id="file_gadget_upload">';
-			if (!$categoryId) {
-				echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
+			if (!$categoryId) echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
+			if ($this->apc_uploads) {
+				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.');">';
+				echo '<input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$session->id.'"/>';
+			} else {
+				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
 			}
-			echo '<form name="ajax_show_files" method="post" action="'.$action.'" enctype="multipart/form-data">';
 			echo '<input type="file" name="file1"/> ';
 			echo '<input type="submit" class="button" value="Upload"/>';
 			echo '</form>';
 			echo '</div>';
+			if ($this->apc_uploads) {
+				echo '<div id="file_gadget_apc_progress" style="display:none">';
+				echo '</div>';
+			}
 		}
 	
 		if ($session->isAdmin) {
@@ -200,7 +209,7 @@ class Files
 				echo '</div>';
 			}
 		}
-		
+
 		echo '</div>';
 	}
 
@@ -502,8 +511,8 @@ class Files
 		$this->clearThumbs($_id);
 	}
 
-
-	function sendFile($_id, $download)
+	//takes get parameter 'dl' to send the file as an attachment
+	function sendFile($_id)
 	{
 		global $db;
 
@@ -515,13 +524,13 @@ class Files
 		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
 
 		/* This sends files without extension etc as plain text if you didnt specify to download them */
-		if (!$download && (($data['fileMime'] == 'application/octet-stream') || !$file_lastname)) {
+		if (!isset($_GET['dl']) || (($data['fileMime'] == 'application/octet-stream') || !$file_lastname)) {
 			header('Content-Type: text/plain');
 		} else {
 			header('Content-Type: '.$data['fileMime']);
 		}
 
-		if ($download) {
+		if (isset($_GET['dl'])) {
 			/* Prompts the user to save the file */
 			header('Content-Disposition: attachment; filename="'.basename($data['fileName']).'"');
 		} else {
@@ -548,7 +557,8 @@ class Files
 			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
 		}
 	}
-	
+
+	//takes get parameters 'w' and 'h'
 	private function sendImage($_id)
 	{
 		global $session;

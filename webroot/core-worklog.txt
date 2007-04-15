@@ -11,9 +11,8 @@
 
 
 	file area:
-		- visa file upload progress med ajax callback (kräver nån custom apache modul tror jag)
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
-		- ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
+		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
 
 
 	misc:
@@ -24,11 +23,12 @@
   	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen
   	- Försök bygga så mycket logik som möjligt i stored procedures
 
+
 --------------[[changelog]]--------------
 2007.04.15
 	- files: kontrollerade alla file.php requests
 	- files: fixade så mp3-spelaren kan avkoda '&amp;' i url:en
-
+	- files: file upload progress med ajax callback, kräver apc + uploadprogress extensions, wip
 
 
 2007.04.14:

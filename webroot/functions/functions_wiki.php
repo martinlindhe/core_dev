@@ -224,7 +224,7 @@
 				if ($data['lockedBy']) {
 					echo '<input type="button" class="button" value="Unlock" onclick="location.href=\''.URLadd('Edit:'.$wikiName, '&amp;wiki_unlock').'\'"/>';
 					echo '<img src="/gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
-					echo '<b>Locked by '.$data['lockerName'].' at '.$data['timeLocked'].'</b>';
+					echo '<b>Locked by '.$data['lockerName'].' at '.$data['timeLocked'].'</b><br/>';
 				} else {
 					echo '<input type="button" class="button" value="Lock" onclick="location.href=\''.URLadd('Edit:'.$wikiName, '&amp;wiki_lock').'\'"/>';
 					echo '<img src="/gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/>';
@@ -245,7 +245,7 @@
 					$showTag = $linkTag = '[[file:'.$filelist[$i]['fileId'].']]';
 					
 					if (in_array($last_name, $files->allowed_image_types)) {
-						$showTag = '<img src="/core/file.php?id='.$filelist[$i]['fileId'].'&amp;w=60&amp;h=60'.getProjectPath().'" alt=""/>';
+						$showTag = '<img src="/core/file.php?id='.$filelist[$i]['fileId'].'&amp;w=60&amp;h=60'.getProjectPath().'" title="'.$showTag.'" alt=""/>';
 					}
 
 					if (strpos($text, $linkTag) === false) {
@@ -254,7 +254,7 @@
 				}
 				if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
 				if ($str) {
-					echo '<b>unused files:</b> '.$str;
+					echo '<b>Unused files:</b> '.$str;
 				}
 			}
 			echo '</form>';				
