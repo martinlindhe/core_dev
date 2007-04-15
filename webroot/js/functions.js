@@ -102,7 +102,8 @@ function delete_selected_file()
 function rotate_selected_file(angle)
 {
 	var e = document.getElementById('zoom_image');
-	e.src = '/core/image_rotate.php?i=' + zoomed_id + '&a=' + angle;
+	var now = new Date();
+	e.src = '/core/image_rotate.php?i=' + zoomed_id + '&a=' + angle + '&' + now.getTime();
 }
 
 

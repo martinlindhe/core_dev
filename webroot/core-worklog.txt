@@ -48,6 +48,7 @@
 	- konverterade svnhosting koden
 	- konverterade ajax_chat koden!
 	- files: kan nu rotera bilder
+	- files: raderar thumbs när en fil raderas eller när en bild roteras
 		
 		
 2007.04.13:

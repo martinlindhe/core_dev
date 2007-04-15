@@ -280,7 +280,24 @@ class Files
 		//physically remove the file from disk
 		unlink($this->upload_dir.$_id);
 
-		//todo: also remove generated thumbnails
+		$this->clearThumbs($_id);
+	}
+	
+	/* Deletes all thumbnails for this file ID */
+	function clearThumbs($_id)
+	{
+		global $db;
+
+		if (!is_numeric($_id)) return false;
+
+		$dir = scandir($this->thumbs_dir);
+		foreach ($dir as $name)
+		{
+			if (strpos($name, $_id.'_') !== false) {
+				unlink($this->thumbs_dir.$name);
+			}
+		}
+		$db->log('Thumbs for '.$_id.' deleted');
 	}
 	
 
@@ -474,6 +491,9 @@ class Files
 		}
 
 		imagedestroy($image);
+		imagedestroy($rotated);
+		
+		$this->clearThumbs($_id);
 	}
 
 
