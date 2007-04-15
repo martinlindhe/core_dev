@@ -157,13 +157,13 @@ class Files
 
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
-				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onclick="zoomImage('.$list[$i]['fileId'].', \''.getProjectPath().'\');"><center>';
-				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
+				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" title="'.$list[$i]['fileName'].'" onclick="zoomImage('.$list[$i]['fileId'].', \''.getProjectPath().'\');"><center>';
+				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.getProjectPath().'" alt="Thumbnail"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for audio files
-				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" onclick="zoomAudio('.$list[$i]['fileId'].',\''.$list[$i]['fileName'].'\',\''.urlencode(getProjectPath()).'\');"><center>';
-				echo '<img src="/gfx/icon_audio_32.png" width="80" height="80" alt="Audio file" title="'.$list[$i]['fileName'].'"/>';
+				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" title="'.$list[$i]['fileName'].'" onclick="zoomAudio('.$list[$i]['fileId'].',\''.$list[$i]['fileName'].'\',\''.urlencode(getProjectPath()).'\');"><center>';
+				echo '<img src="/gfx/icon_audio_32.png" width="32" height="32" alt="Audio file"/>';
 				echo '</center></div>';
 			} else {
 				die('todo: '.$file_lastname.', '. $list[$i]['fileMime']);

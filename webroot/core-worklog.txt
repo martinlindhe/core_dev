@@ -28,7 +28,7 @@
 2007.04.15
 	- files: kontrollerade alla file.php requests
 	- files: fixade så mp3-spelaren kan avkoda '&amp;' i url:en
-	- files: file upload progress med ajax callback, kräver apc + uploadprogress extensions, wip
+	- files: file upload progress med ajax callback, kräver apc extension (obs funkar ej med uploadprogress), wip
 
 
 2007.04.14:

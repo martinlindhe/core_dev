@@ -5,7 +5,5 @@
 	if (empty($_GET['s']) || !is_numeric($_GET['s'])) die;
 	
   $status = apc_fetch('upload_'.$_GET['s']);
-  echo $status;
-
-	echo 'end';
+  print_r($status);
 ?>

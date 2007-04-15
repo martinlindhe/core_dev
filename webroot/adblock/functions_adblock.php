@@ -3,11 +3,11 @@
 	{
 		global $db, $session;
 
-		if (!$session->id || !is_numeric($userId) || !is_numeric($ruleType)) return false;
+		if (!$session->id || !is_numeric($ruleType)) return false;
 
 		$ruleText = $db->escape(strip_tags(trim($ruleText)));
 		$sampleUrl = $db->escape(strip_tags(trim($sampleUrl)));
-		
+
 		$exists = $db->getOneItem('SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0 AND ruleText="'.$ruleText.'"');
 		if ($exists) {
 			return 'This rule already exists!';

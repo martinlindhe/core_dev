@@ -16,6 +16,12 @@
 		- You can easily attach images and other media to a wiki by a simple upload.
 		- Every change gets stored in a revision table
 
+==== File areas ====
+		- There's a generic "file area" component which you can configure to allow anonymous uploads or not.
+		- The same component also integrates in other components, such as the wiki.
+		- File upload progress is available thru ajax + php_apc.dll extension
+		- Image rotate is available
+
 ==== Standards compatible ====
 		- All generated HTML are checked to be 100% "XHTML 1.0 Transitional" compatible using the "HTML Validator" plugin for Firefox.
 			* The goal is to be 100% "XHTML 1.0 Strict" or maybe "XHTML 1.1" compatible.
