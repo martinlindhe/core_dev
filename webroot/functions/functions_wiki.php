@@ -168,18 +168,13 @@
 			return true;
 		}
 		
-		//kollar om den är låst
-		if (!$session->isAdmin && $data['lockedBy'])  {
-			echo 'WIKI IS CURRENTLY LOCKED FROM EDITING!<br/>';
-			echo wikiFormat($wikiName, $data);
-			return true;
-		}
-
 		echo '<div class="wiki">'.
 						'<div class="wiki_head"><ul>'.
-							'<li>'.($current_tab=='view'?'<strong>':'').		'<a href="'.URLadd('View:'.$wikiName).'">View:'.$wikiName.'</a>'.($current_tab=='view'?'</strong>':'').'</li>'.
-							'<li>'.($current_tab=='edit'?'<strong>':'').		'<a href="'.URLadd('Edit:'.$wikiName).'">Edit</a>'.				($current_tab=='edit'?'</strong>':'').'</li>'.
-							'<li>'.($current_tab=='history'?'<strong>':'').	'<a href="'.URLadd('History:'.$wikiName).'">History</a>'.	($current_tab=='history'?'</strong>':'').'</li>';
+							'<li>'.($current_tab=='view'?'<strong>':'').		'<a href="'.URLadd('View:'.$wikiName).'">View:'.$wikiName.'</a>'.($current_tab=='view'?'</strong>':'').'</li>';
+		if ($session->isAdmin || !$data['lockedBy']) {
+			echo 		'<li>'.($current_tab=='edit'?'<strong>':'').		'<a href="'.URLadd('Edit:'.$wikiName).'">Edit</a>'.				($current_tab=='edit'?'</strong>':'').'</li>';
+		}
+			echo		'<li>'.($current_tab=='history'?'<strong>':'').	'<a href="'.URLadd('History:'.$wikiName).'">History</a>'.	($current_tab=='history'?'</strong>':'').'</li>';
 		if ($config['wiki']['allow_files']) {
 			echo 		'<li>'.($current_tab=='files'?'<strong>':'').		'<a href="'.URLadd('Files:'.$wikiName).'">Files</a>'.			($current_tab=='files'?'</strong>':'').'</li>';
 		}
@@ -188,7 +183,7 @@
 					'<div class="wiki_body">';
 			
 		/* Display the wiki toolbar for super admins */
-		if ($current_tab == 'Edit')
+		if ($current_tab == 'Edit' && ($session->isAdmin || !$data['lockedBy']))
 		{
 			if (isset($_POST['wiki_'.$wikiId]))
 			{
@@ -302,6 +297,9 @@
 		}
 		else
 		{
+			if ($data['lockedBy']) {
+				echo 'LOCKED<br/>';
+			}
 			echo wikiFormat($wikiName, $data);
 		}
 

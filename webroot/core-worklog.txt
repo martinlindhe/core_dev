@@ -1,28 +1,20 @@
 --------------[[todo]]--------------
 	platform change:
 		- gör så ajax-filerna funkar som file.php
-		
-	wiki rewrite:
+
+
+	wiki:
 		- implementera stöd för "talk" page _eller_ comments
 		- gör ny toppmeny med div & ul & li osv, bort med tables
-		
-		- visa history för en vanlig user på låst wiki
 		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- wiki: logga history för wiki file deletes via ajax
 
+
 	file area:
-
-		upload:
-			* visa upload progress med ajax callback (kräver nån custom apache modul tror jag)
-			
-		bildvisare:
-			* förminska / förstora
-			* förhandsgranska
-			* spara
-
+		- visa file upload progress med ajax callback (kräver nån custom apache modul tror jag)
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
-		
+
 
 	misc:
 		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
@@ -49,8 +41,11 @@
 	- konverterade ajax_chat koden!
 	- files: kan nu rotera bilder
 	- files: raderar thumbs när en fil raderas eller när en bild roteras
-		
-		
+	- wiki: visar bilder med taggen [[file:5]]
+	- files: sätter nocache headers för filer som ändrats efter att sessionen startades, funkar sådär. ibland cachar browsern iallafall bilderna
+	- wiki: visar history för en vanlig user på låst wiki
+
+	
 2007.04.13:
 	- gjort ordentliga .htaccess så man bara stänger av directory listing
 

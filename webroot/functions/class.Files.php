@@ -297,7 +297,7 @@ class Files
 				unlink($this->thumbs_dir.$name);
 			}
 		}
-		$db->log('Thumbs for '.$_id.' deleted');
+		//$db->log('Thumbs for '.$_id.' deleted');
 	}
 	
 
@@ -453,6 +453,12 @@ class Files
 		header('Pragma: Public');
 	}
 
+	private function setNoCacheHeaders()
+	{
+		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+	}
+
 	/* Performs an image rotation and then pass on the result to the user */
 	function imageRotate($_id, $_angle)
 	{
@@ -573,6 +579,8 @@ class Files
 
 		if (filemtime($out_filename) < $session->started) {
 			$this->setCachedHeaders();
+		} else {
+			$this->setNoCacheHeaders();
 		}
 
 		header('Content-Length: '.filesize($out_filename));

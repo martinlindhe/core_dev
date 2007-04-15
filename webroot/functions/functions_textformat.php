@@ -94,7 +94,12 @@
 			$wiki_command = substr($text, $pos1+strlen('[['), $pos2-$pos1-strlen(']]'));
 
 			$link = array();
-			list($link['coded'], $link['title']) = explode('|', $wiki_command);
+			if (strpos($wiki_command, '|') !== false) {
+				list($link['coded'], $link['title']) = explode('|', $wiki_command);
+			} else {
+				$link['coded'] = $wiki_command;
+				$link['title'] = 'title';
+			}
 			
 			$arr = explode(':', $link['coded']);
 			$link['cmd'] = $arr[0];
@@ -102,7 +107,6 @@
 			for ($i=1; $i<count($arr); $i++) {
 				$link['param'] .= $arr[$i];
 			}
-
 
 			if (empty($link['cmd'])) continue;
 
@@ -125,6 +129,14 @@
 					
 				case 'search':
 					$result = '<a href="javascript:installSearchPlugin(\''.$link['param'].'\')">'.$link['title'].'</a>';
+					break;
+					
+				case 'file':
+					$result = '<img src="/core/file.php?id='.$link['param'].getProjectPath().'" alt=""/>';
+					break;
+
+				default:
+					die('unknown command: '. $link['cmd']);
 					break;
 			}
 			
