@@ -190,6 +190,47 @@ class email
 		return $header;
 	}	
 	
+	/*	Identifierar mms koder i formatet:
+			BLOG 123456
+			PRES 123456
+			GALL 123456
+	*/
+	function findMMSCode($text)
+	{
+		//echo 'looking for mms code: '.$text.'<br>';
+
+		$text = strtoupper(trim(str_replace('  ', ' ', $text)));
+
+		if (strlen($text) < 5 || strlen($text) > 20) return false;
+
+		$arr = explode(' ', $text);
+		if (count($arr) < 2) return false;
+
+		$blog_aliases = array('BLOG', 'BLOGG');
+		$pres_aliases = array('PRES', 'PRESENTATION');
+		$gall_aliases = array('GALL', 'GALLERI', 'GALLERY');
+
+		$mms_code['code'] = $arr[1];
+		$mms_code['user'] = 1;
+
+		if (in_array($arr[0], $blog_aliases)) {
+			$mms_code['cmd'] = 'BLOG';
+			return $mms_code;
+		}
+
+		if (in_array($arr[0], $pres_aliases)) {
+			$mms_code['cmd'] = 'PRES';
+			return $mms_code;
+		}
+
+		if (in_array($arr[0], $gall_aliases)) {
+			$mms_code['cmd'] = 'GALL';
+			return $mms_code;
+		}
+
+		return false;
+	}
+	
 	/* Takes a email as parameter, returns all attachments, body & header nicely parsed up */
 	function parseAttachments($msg)
 	{
@@ -202,10 +243,16 @@ class email
 		$header = substr($msg, 0, $pos);
 		//Parse each header element into an array
 		$result['header'] = $this->parseHeader($header);
+		
+		$result['mms_code'] = $this->findMMSCode($result['header']['Subject']);
+		if (!$result['mms_code']) {
+			//todo: log failure
+			echo 'No MMS code identified!';
+			return false;
+		}
 
 		//Cut out the rest of the message
 		$msg = trim(substr($msg, $pos + strlen("\n\n")));
-
 
 		//Check content type
 		$check = explode(';', $result['header']['Content-Type']);

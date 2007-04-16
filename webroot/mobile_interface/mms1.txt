@@ -8,7 +8,7 @@ Message-ID: <29988215.1176467695926.JavaMail.wluser@atlas>
 Date: Fri, 13 Apr 2007 15:34:55 +0300
 From: +46702297439@mms.telia.com
 To: cs@inconet.se
-Subject: 1234
+Subject: blog 1234
 Mime-Version: 1.0
 Content-Type: multipart/mixed; 
 	boundary="----=_Part_828963_1865102.1176467695906"
