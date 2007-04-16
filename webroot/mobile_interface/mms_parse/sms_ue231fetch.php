@@ -21,6 +21,8 @@ require('set_tmb.php');
 $config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'video/3gpp');
 $config['email']['text_allowed_mime_types'] = array('text/plain');
 
+$config['email']['upload_dir'] = './user_mms/';
+
 	
 class email
 {
@@ -207,11 +209,11 @@ class email
 		if (count($arr) < 2) return false;
 
 		$blog_aliases = array('BLOG', 'BLOGG');
-		$pres_aliases = array('PRES', 'PRESENTATION');
-		$gall_aliases = array('GALL', 'GALLERI', 'GALLERY');
+		$pres_aliases = array('PRES', 'PRESS', 'PRESENTATION');
+		$gall_aliases = array('GALL', 'GALLERI', 'GALLERY', 'GALERI');
 
 		$mms_code['code'] = $arr[1];
-		$mms_code['user'] = 1;
+		$mms_code['user'] = 1;		//todo: look up mms code in db
 
 		if (in_array($arr[0], $blog_aliases)) {
 			$mms_code['cmd'] = 'BLOG';
@@ -356,8 +358,7 @@ class email
 						//echo 'Attachment mime type unrecognized: '. $attachment_mime.'<br>';
 						continue;
 					}
-					echo 'Writing '.$filename.' ('.$attachment_mime.') to disk...<br>';
-					//file_put_contents($filename, base64_decode($attachment['body']));
+					$this->saveFile($filename, $attachment_mime, base64_decode($attachment['body']), $result['mms_code']);
 					break;
 
 				default:
@@ -436,9 +437,6 @@ class email
 			}
 		}
 		if (($subj || $subj2 || $subj3) && !$found) {		
-			if (!empty($subj)) $subj = $this->fix_email($subj);
-			if (!empty($subj2)) $subj2 = $this->fix_email($subj2);
-			if (!empty($subj3)) $subj3 = $this->fix_email($subj3);
 
 			if (!empty($subj) && count($subj) >= 2) {
 				$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM {$t}user u LEFT JOIN {$t}userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj[0])."' AND u.status_id = '1'");
@@ -548,107 +546,43 @@ class email
 			echo 'Downloading mail '.$i.'...<br/>';
 
 			$active = $this->pop3_RETR($i);
-			
-			/*
-			if ($active && is_array($active[0])) {
-				foreach ($active[0] as $a) {
-					$mail[] = array($a[0], $active[1], $active[2], $active[3]);
-				}
-			} elseif ($active) $mail[] = array($active[0][0], $active[1], $active[2], $active[3]);
-			*/
+	
 			//$this->pop3_DELE($i);
 		}
 
 		$this->close();
-		//return $this->saveFiles($mail);
 	}
-
-	function fix_email($subj)
+	
+	//file_put_contents($filename, base64_decode($attachment['body']));
+	function saveFile($filename, $mime_type, $data, $mms_code)
 	{
-		if (substr($subj, 0, 2) == '=?') {
-			if (strpos($subj, '?B?') !== false) {
-				$subj = explode('?B?', substr($subj, 2));
-				unset($subj[0]);
-				$subj = utf8_decode(base64_decode(substr(implode('?B?', $subj), 0, -2)));
-			} elseif (strpos($subj, '?Q?') !== false) {
-				$subj = explode('?Q?', substr($subj, 2));
-				unset($subj[0]);
-				$subj = str_replace('_', ' ', str_replace('=', '%', substr(implode('?Q?', $subj), 0, -2)));
-				$subj = urldecode($subj);
-			}
-		} else {
-			$subj = str_replace('=', '%', $subj);
-			$subj = urldecode($subj);
-		}
-		return @explode(' ', trim($subj));
-	}
+		global $config, $t;
 
-	function saveFiles($files)
-	{
-		global $t;
-		$i = 0;
-		foreach ($files as $f) {
-			$i++;
-			$name = ADMIN_UE_DIR.'temp'.$i;
-			$file = base64_decode($f[0]);
-			unset($f[0]);
-			$fp = fopen($name, 'w');
-			fwrite($fp, $file);
-			fclose($fp);
-			$error = false;
-			$info = @getimagesize($name);
-			switch ($info[2]) {
-				case 1:
-					$file = '.gif';
-					break;
-				case 2:
-					$file = '.jpg';
-					break;
-				case 3:
-					$file = '.png';
-					break;
-				default:
-					$error = true;
-					@unlink($name);
-					break;
-			}
-			if (!$error) {
-				$id = $this->sql->queryInsert("INSERT INTO {$t}userphotomms SET id_id = '".$f[2]."', recieve_file = '".$file."', recieve_sender = '".secureOUT($f[1])."', recieve_date = NOW()");
-				//todo martin: bort med $this->user
-				$type = $this->user->getinfo($f[2], 'mmstype');
-				$address = ADMIN_UE_DIR.$id.$file;
+		echo 'Writing '.$filename.' ('.$mime_type.') to disk...<br>';
 
-				if($info[0] > 658)
-					make_thumb($name, $address, 658, 89);
-				else
-					rename($name, $address);
-					
-				//todo martin: bort med $this->user !!!
-				$priv = intval($this->user->getinfo($f[2], 'mmspriv'));
-				if (!$type || $type == 'B') {
-					//todo martin: bort med $this->user !!!
-					$this->user->spy($f[2], 'BLG', 'MSG', array('Du har skickat ett MMS till din blogg!'));
-					$alias = $this->sql->queryResult("SELECT u_alias FROM {$t}user WHERE id_id = '".$f[2]."' LIMIT 1");
-					$ii = $this->sql->queryInsert("INSERT INTO {$t}userblog SET blog_idx = NOW(), user_id = '".$f[2]."', hidden_id = '$priv', blog_cmt = '".'<p align="center"><img src="'.UE_DIR.$id.$file.'" /></p>'."', blog_title = 'MMS: ".@secureINS($f[3])."', blog_date = NOW()");
-					$res = $this->sql->query("SELECT p.user_id FROM {$t}userblogspy p INNER JOIN {$t}user u ON u.id_id = p.user_id AND u.status_id = '1' WHERE p.blogger_id = '".$f[2]."' AND p.status_id = '1'");
+		$filesize = strlen($data);
+		$q = 'INSERT INTO tblMMSRecieved SET userId='.$mms_code['user'].', fileName="'.secureINS($filename).'", mimeType="'.secureINS($mime_type).'", fileSize='.$filesize.',timeRecieved=NOW()';
+		$insert_id = $this->sql->queryInsert($q);
+		if (!$insert_id) return false;
 
-					//todo martin: bort med $this->user !!!
-					foreach ($res as $row) if($row[0] != $f[2]) $this->user->spy($row[0], $ii, 'BLG', array($alias));
-				} elseif ($type == 'P') {
-					//todo martin: bort med $this->user !!!
-					$this->user->spy($f[2], 'MSG', 'MSG', array('Du har skickat ett MMS till ditt fotoalbum!'));
-					$tmp = md5(microtime());
-					$ii = $this->sql->queryInsert("INSERT INTO {$t}userphoto SET picd = '".PD."', user_id = '".$f[2]."', pht_date = NOW(), hidden_id = '$priv', hidden_value = '".$tmp."', pht_name = '".substr($file, 1)."', pht_size = '".filesize($address)."', pht_cmt = 'MMS: ".@secureINS($f[3])."'");
-					if ($priv)
-						copy($address, ADMIN_PHOTO_DIR.PD.'/'.$ii.'_'.$tmp.$file);
-					else
-						copy($address, ADMIN_PHOTO_DIR.PD.'/'.$ii.$file);
-				}
-			}
+		file_put_contents($config['email']['upload_dir'].$insert_id, $data);
+
+		$priv = 0;
+		switch ($mms_code['cmd'])
+		{
+			case 'BLOG':
+				$this->sql->queryInsert("INSERT INTO {$t}userblog SET blog_idx = NOW(), user_id = ".$mms_code['user'].", hidden_id = '$priv', blog_cmt = '".'<p align="center"><img src="'.$config['email']['upload_dir'].$insert_id.'" /></p>'."', blog_title = 'MMS', blog_date = NOW()");
+				break;
+
+			case 'GALL':
+				$tmp = md5(microtime());
+				$this->sql->queryInsert("INSERT INTO {$t}userphoto SET picd = '".PD."', user_id = ".$mms_code['user'].", pht_date = NOW(), hidden_id = '$priv', hidden_value = '".$tmp."', pht_name = '".secureINS($filename)."', pht_size = '".$filesize."', pht_cmt = 'MMS'");
+
+			default:
+				echo 'KAOS';
+				break;
 		}
 	}
 
 }
-
-
 ?>
