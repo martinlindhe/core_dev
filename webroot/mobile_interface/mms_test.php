@@ -5,15 +5,12 @@
 	
 	require('mms_parse/sms_ue231fetch.php');
 
-$email = new email($sql);
-//$email->getMail('cs@inconet.se', '1111');
+	$email = new email($sql);
+	//$email->getMail('cs@inconet.se', '1111');
 
+	$text = file_get_contents('mms2.txt');
 
-$text = file_get_contents('mms2.txt');
-
-$xx = $email->parseAttachments($text);
-
-print_r($xx);
-
-
+	$msg = $email->parseAttachments($text);
+	
+	//print_r($msg);
 ?>

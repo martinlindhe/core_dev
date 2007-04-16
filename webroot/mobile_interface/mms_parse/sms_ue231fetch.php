@@ -9,6 +9,9 @@
 	POP 3 command summary: http://www.freesoft.org/CIE/RFC/1725/8.htm
 	
 	mer exempel & info: http://www.thewebmasters.net/php/POP3.phtml
+	
+	//todo: gör en funktion som extractar "content-type" datan
+	
 */
 
 require('set_tmb.php');
@@ -150,11 +153,9 @@ class email
 			$msg .= $this->read();
 		} while (substr($msg, -5) != "\r\n.\r\n");
 
-		echo $msg;
+		$mail = $this->parseAttachments($msg);
 
-		$this->parseAttachments($msg);
-
-		return false;
+		return true;
 	}
 	
 	/* takes a text string with email header and returns array */
@@ -272,6 +273,35 @@ class email
 			$msg = substr($msg, $pos2);
 
 		} while ($msg != $multipart_id.'--');
+
+		/* Stores all base64-encoded attachments to disk */
+		foreach ($result['attachment'] as $attachment)
+		{
+			//Check attachment content type
+			//echo 'Attachment type: '. $attachment['head']['Content-Type'].'<br>';
+			
+			$params = explode('; ', $attachment['head']['Content-Type']);
+			$attachment_mime = $params[0];
+			//print_r($params);
+
+			$filename = '';
+			if (!empty($attachment['head']['Content-Location'])) $filename = $attachment['head']['Content-Location'];
+			//echo 'filename: '.$filename.'<br><br>';
+		
+			switch ($attachment['head']['Content-Transfer-Encoding']) {
+				case '7bit':
+					break;
+
+				case 'base64':
+					echo 'Writing '.$filename.' ('.$attachment_mime.') to disk...<br>';
+					//file_put_contents($filename, base64_decode($attachment['body']));
+					break;
+					
+				default:
+					echo 'Unknown transfer encoding: '. $attachment['head']['Content-Transfer-Encoding'];
+					break;
+			}
+		}
 
 		return $result;
 	}
