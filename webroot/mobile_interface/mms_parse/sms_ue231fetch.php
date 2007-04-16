@@ -16,6 +16,11 @@
 
 require('set_tmb.php');
 //set_time_limit(0);
+
+//allowed mail attachment mime types
+$config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'video/3gpp');
+$config['email']['text_allowed_mime_types'] = array('text/plain');
+
 	
 class email
 {
@@ -188,6 +193,8 @@ class email
 	/* Takes a email as parameter, returns all attachments, body & header nicely parsed up */
 	function parseAttachments($msg)
 	{
+		global $config;
+
 		//1. Klipp ut headern
 		$pos = strpos($msg, "\n\n");
 		if ($pos === false) return;
@@ -281,22 +288,31 @@ class email
 			//echo 'Attachment type: '. $attachment['head']['Content-Type'].'<br>';
 			
 			$params = explode('; ', $attachment['head']['Content-Type']);
-			$attachment_mime = $params[0];
 			//print_r($params);
+			$attachment_mime = $params[0];
 
 			$filename = '';
 			if (!empty($attachment['head']['Content-Location'])) $filename = $attachment['head']['Content-Location'];
 			//echo 'filename: '.$filename.'<br><br>';
-		
+
 			switch ($attachment['head']['Content-Transfer-Encoding']) {
 				case '7bit':
+					if (!in_array($attachment_mime, $config['email']['text_allowed_mime_types'])) {
+						//echo 'Text mime type unrecongized: '. $attachment_mime.'<br>';
+						continue;
+					}
+					echo 'checking text: '.$attachment['body'];
 					break;
 
 				case 'base64':
+					if (!in_array($attachment_mime, $config['email']['attachments_allowed_mime_types'])) {
+						//echo 'Attachment mime type unrecognized: '. $attachment_mime.'<br>';
+						continue;
+					}
 					echo 'Writing '.$filename.' ('.$attachment_mime.') to disk...<br>';
 					//file_put_contents($filename, base64_decode($attachment['body']));
 					break;
-					
+
 				default:
 					echo 'Unknown transfer encoding: '. $attachment['head']['Content-Transfer-Encoding'];
 					break;
