@@ -166,7 +166,7 @@ class Files
 				echo '<img src="/gfx/icon_audio_32.png" width="32" height="32" alt="Audio file"/>';
 				echo '</center></div>';
 			} else {
-				die('todo: '.$file_lastname.', '. $list[$i]['fileMime']);
+				echo 'todo: '.$file_lastname.', '. $list[$i]['fileMime'];
 			}
 		}
 		echo '</div>';
