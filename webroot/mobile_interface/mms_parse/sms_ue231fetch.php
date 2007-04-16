@@ -219,7 +219,7 @@ class email
 				switch ($key) {
 					case 'boundary':
 						//echo 'boundary: '.$val;
-						$multipart_id = str_replace('"', '', $val);
+						$multipart_id = '--'.str_replace('"', '', $val);
 						break;
 					
 					default:
@@ -232,48 +232,48 @@ class email
 
 		if (!$multipart_id) die('didnt find multipart id');
 
-		//här är $msg ok
-		//echo 'x'.$msg.'x'; die;
+		//echo 'Splitting msg using id '.$multipart_id.'<br>';
 
 		$part_cnt = 0;
 		do {
 			$pos1 = strpos($msg, $multipart_id);
 			$pos2 = strpos($msg, $multipart_id, strlen($multipart_id));
 
+			//echo 'p1: '.$pos1.', p2: '.$pos2.'<br/>';
+
 			if ($pos1 === false || $pos2 === false) die('error parsing attachment');
 
 			//Current innehåller ett helt block med en attachment, inklusive attachment header
 			//$current = substr($msg, $pos1 + strlen($multipart_id) + strlen("\n"), $pos2 - strlen($multipart_id));
-			$current = substr($msg, $pos1, $pos2);
+			$current = substr($msg, $pos1 + strlen($multipart_id), $pos2 - strlen($multipart_id));
 
-			echo 'x'.$current.'x';
-			die;
+			//echo 'x'.$current.'x'; die;
 
 			$head_pos = strpos($current, "\n\n");
 			if ($head_pos) {
-				$head = substr($current, 0, $head_pos);
-				//echo $head.'<br>';
+				$head = trim(substr($current, 0, $head_pos));
+				//echo 'head: '.$head.'<br><br>';
 
-				$body = substr($current, $head_pos+2);
-				//echo 'x'.$body.'x<br>';
+				$body = trim(substr($current, $head_pos+2));
+				//echo 'body: Y'.$body.'Y<br>';
 			} else {
-				//echo 'error: "'.$current.'"';
+				echo 'error: "'.$current.'"';
+				die;
 			}
 
 			//echo $body;
 			//todo: klipp upp attachment headern
-			
-			
-			//$header['attachment'][ $part_cnt ] = 1;
-			//$header['attachment'][ $part_cnt ] = 2; //$current;
+
+			$result['attachment'][ $part_cnt ]['head'] = $this->parseHeader($head);
+			$result['attachment'][ $part_cnt ]['body'] = $body;
 
 			$part_cnt++;
 
-			$msg = substr($msg, $pos2 + strlen($multipart_id) + strlen($multipart_id));
+			$msg = substr($msg, $pos2);
 
-		} while ($msg != '--');
+		} while ($msg != $multipart_id.'--');
 
-		die;
+		return $result;
 	}
 	
 
