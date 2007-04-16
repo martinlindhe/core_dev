@@ -40,8 +40,7 @@ class email
 	var $tot_octets = 0;
 
 	//todo: gör detta konfigurerbart
-	//var $pop3_server = 'mail.unicorn.tv';
-	var $pop3_server = 'mail.inconet.se';
+	var $pop3_server = 'mail.inconet.se';		// 'mail.unicorn.tv';
 	var $pop3_port	 = 110;
 	var $pop3_timeout = 5;
 
@@ -160,8 +159,7 @@ class email
 			$msg .= $this->read();
 		} while (substr($msg, -5) != "\r\n.\r\n");
 
-		$mail = $this->parseAttachments($msg);
-
+		$this->parseAttachments($msg);
 		return true;
 	}
 	
@@ -543,7 +541,7 @@ class email
 		for ($i=1; $i <= $this->unread_mails; $i++)
 		{
 			sleep(2);
-			echo 'Downloading mail '.$i.'...<br/>';
+			echo 'Downloading #'.$i.'...<br/>';
 
 			$active = $this->pop3_RETR($i);
 	
