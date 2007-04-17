@@ -3,7 +3,7 @@
 	if (!$l) die;	//user not logged in
 
 	require('design_head.php');
-	
+
 	$error = updateMMSKey();
 
 	$settings = $user->getcontent($l['id_id'], 'user_settings');

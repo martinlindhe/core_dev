@@ -157,10 +157,14 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		*/
+		/*
 		if($isAdmin && @$settings['mmskey'] != @$_POST['ins_mmskey']) {
 			$id = $user->setinfo($l['id_id'], 'mmskey', "'".@$_POST['ins_mmskey']."'");
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
+		*/
+		$mmskey_error = updateMMSKey();
+		
 		if(@$settings['hidden_slogin'] != @$_POST['opt_shidden']) {
 			$hidden = (!empty($_POST['opt_shidden']) && $isOk)?'1':'0';
 			$id = $user->setinfo($l['id_id'], 'hidden_slogin', "'".$hidden."'");
@@ -303,7 +307,7 @@
 	if($isAdmin) {
 ?>
 	<tr>
-		<td class="pdg_t" colspan="2"><b>MMS-nyckel:</b><br /><input type="text" class="txt" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>" /></td>
+		<td class="pdg_t" colspan="2"><b>MMS-nyckel:</b><br /><input type="text" class="txt" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>" /><?=$mmskey_error?></td>
 	</tr>
 <?
 	}

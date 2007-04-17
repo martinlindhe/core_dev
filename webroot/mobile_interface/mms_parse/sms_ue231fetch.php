@@ -15,7 +15,6 @@
 */
 
 require('set_tmb.php');
-//set_time_limit(0);
 
 //allowed mail attachment mime types
 $config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'video/3gpp');
@@ -149,6 +148,8 @@ class email
 	function pop3_RETR($_id)
 	{
 		if (!is_numeric($_id)) return false;
+
+		set_time_limit(30);
 
 		//Retrieve email
 		$this->write('RETR '.$_id);
@@ -550,11 +551,13 @@ class email
 	/* fetches all mail from a pop3 inbox */
 	function getMail($user, $pass)
 	{
+		set_time_limit(30);
+
 		$this->open();
 		if ($this->errno) return;
 
 		if ($this->login($user, $pass) === false) return;
-	
+		
 		$mail = array();
 		$ret = array();
 		
