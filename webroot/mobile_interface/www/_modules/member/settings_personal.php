@@ -141,6 +141,7 @@
 			$id = $user->setinfo($l['id_id'], 'hidden_pview', "'".$hidden."'");
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
+		/*
 		if($isAdmin && @$settings['mmsenabled'] != @$_POST['opt_mmsenabled']) {
 			$id = $user->setinfo($l['id_id'], 'mmsenabled', "'".@$_POST['opt_mmsenabled']."'");
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
@@ -155,6 +156,7 @@
 			$id = $user->setinfo($l['id_id'], 'mmspriv', "'".@$hidden."'");
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
+		*/
 		if($isAdmin && @$settings['mmskey'] != @$_POST['ins_mmskey']) {
 			$id = $user->setinfo($l['id_id'], 'mmskey', "'".@$_POST['ins_mmskey']."'");
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
@@ -289,12 +291,14 @@
 	<tr>
 		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_email" value="1" id="opt_email1"<?=(empty($settings['send_email'][1]))?' checked':'';?> /><label for="opt_email1"> Ja, jag vill ha erbjudanden från 360 via e-post</label></td>
 	</tr>
+<!--
 	<tr>
 		<td class="pdg_t" style="padding-top: 24px;" colspan="2"><input type="checkbox" class="chk" name="opt_mmsenabled" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmsenabled1"<?=(!empty($settings['mmsenabled'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmsenabled1"> Ja, jag vill skicka MMS från mobil till <select name="opt_mmstype" class="txt" style="width: 100px;"<?=(!$isAdmin)?' disabled':'';?>><option value="B"<?=((empty($settings['mmstype'][1]) || $settings['mmstype'][1] == 'B') && $isAdmin)?' selected':'';?>>min blogg</option><option value="P"<?=((!empty($settings['mmstype'][1]) && $settings['mmstype'][1] == 'P') && $isAdmin)?' selected':'';?>>mitt fotoalbum</option></select> (<img src="<?=OBJ?>10.gif" title="Admin" />)</label></td>
 	</tr>
 	<tr>
 		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="ins_mmspriv" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmspriv1"<?=(!empty($settings['mmspriv'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmspriv1"> Ja, gör alla mina MMS privata (<img src="<?=OBJ?>10.gif" title="Admin" />)</label></td>
 	</tr>
+-->
 <?
 	if($isAdmin) {
 ?>

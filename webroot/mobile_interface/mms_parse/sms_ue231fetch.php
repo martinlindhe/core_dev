@@ -197,6 +197,8 @@ class email
 	*/
 	function findMMSCode($text)
 	{
+		global $sql;
+
 		//echo 'looking for mms code: '.$text.'<br>';
 
 		$text = strtoupper(trim(str_replace('  ', ' ', $text)));
@@ -211,8 +213,13 @@ class email
 		$gall_aliases = array('GALL', 'GALLERI', 'GALLERY', 'GALERI');
 
 		$mms_code['code'] = $arr[1];
-		$mms_code['user'] = 1;		//todo: look up mms code in db
-
+		
+		$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.secureINS($mms_code['code']).'" LIMIT 1';
+		$mms_code['user'] = $sql->queryResult($q);
+		if (!$mms_code['user']) return false;
+		
+		echo 'identified mms from user '.$mms_code['user'].'...<br>';
+		
 		if (in_array($arr[0], $blog_aliases)) {
 			$mms_code['cmd'] = 'BLOG';
 			return $mms_code;

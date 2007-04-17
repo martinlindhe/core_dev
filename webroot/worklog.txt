@@ -61,19 +61,26 @@
 	- mobila gränssnittet: byggt en ny pager funktion. integrerat med gästboke-översikt, mail-översikt, kompislista-översikt
 
 2007-04-13 Fredag:
-	- gått igenom och rensat upp frans kod för att läsa in mms från emails, tog mycket tid...
+	- gått igenom och rensat upp frans kod för att läsa in mms från emails, tog ganska mycket tid...
 -----
 2007-04-16 Måndag:
 	- ordnat det sista med mms email in i plattformen
 	- skapat en ny tabell för att hålla ordning på nyinkommna mms
+	- testat koden med lite olika typer av data
+
+2007-04-17 Tisdag:
+	- webbgränssnittet: gömt bort "Ja, jag vill skicka MMS från mobil till..." och "Ja, gör alla mina MMS privata"
+	- mms: gjort sista kopplingen mellan en MMS-kod och mottagar-användaren
+
 
 ***********************************************************************************************************************************
 
-Kvar att göra för profiler:
-	- MMS koppling till bilduppladdning via mobil-gränssnittet (fått frans feedback)
+Kvar att göra MMS:
+	- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
+	- parse error på ett mail i inboxen
 
 Kvar att göra för modulerna "relationer/blockeringar" & "sök användare":
-	- mikhael: testa att webb-gränssnittet fungerar som det ska
+	- inget
 
 Kvar att göra för modulen guestbook:
 	- inget
@@ -82,7 +89,7 @@ allmänt:
 	- en funktion som skapar snygga användarnamn+ålder+kön-länkar
 		* ta bort $user->getstringMobile() ??? eller skriv om den iaf
 
-	- paging för dina , blockeringar-översikt, sök användare-resultat
+	- paging för dina blockeringar-översikt, sök användare-resultat
 	
 	- friends.php: när man klickar "MAILA" på en kompis så ska hans namn va för-ifyllt i forumläret
 			* samma från user.php när man klickar "MAILA"
@@ -92,6 +99,7 @@ allmänt:
 		* kunna se sin utkorg (skickad mail)
 
 	- bugg?: man försvinner inte från "vänner online" count när man loggar ut... u_user.account_date uppdateras ej vid logout!
+		* ta data från s_usersess istället!
 
 ***********************************************************************************************************************************
 
