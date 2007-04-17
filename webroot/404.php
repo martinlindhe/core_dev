@@ -1,7 +1,6 @@
 <?
 	if (isset($_SERVER['REDIRECT_STATUS']) && $_SERVER['REDIRECT_STATUS'] == 404)
 	{
-
 		echo '<h1>File not found</h1>';
 		echo $_SERVER['REQUEST_URI'].' doesn\'t exist on the server<br><br>';
 		

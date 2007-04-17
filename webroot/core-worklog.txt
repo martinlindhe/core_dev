@@ -4,6 +4,10 @@
 			* gör wrapperfunktioner som genererar korrekt html för ajax-anropen, eller iaf skicka med getProjectName()
 
 
+	session/user settings:
+		- gör färdigt login-bubblan: forgot password är ej kodat än
+
+
 	wiki:
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		- implementera stöd för "talk" page _eller_ comments
@@ -18,20 +22,34 @@
 
 
 	misc:
-		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 		- konvertera zine!
   	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
   	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
   	- Försök bygga mer logik i sql queries / stored procedures
   	- gör en funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida
+
   	
   adblock:
   	- #1 gör en /core/wiki.php
-  	- #2 kolla adblocks egen changelog
+		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 
 
-	session/user settings:
-		- gör färdigt login-bubblan: forgot password är ej kodat än
+	lyrics:
+		- hi prio:
+			#1: rensa upp modererings-logiken...
+				- gör en moderate klass!
+				- när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
+				- när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
+
+			#2: BORT MED TABLES i den mån det går
+			#3: åter-inserta de texter som pajats pga latin1->utf8 konverteringen
+
+		- buggfix/mindre features:
+			* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
+			* edit_record.php: kunna editera recordInfo
+			* lista låtar som inte finns på nån skiva (admin)
+			* lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
+			* möjlighet att radera ett band
 
 --------------[[changelog]]--------------
 2007.04.17

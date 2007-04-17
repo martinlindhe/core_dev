@@ -49,47 +49,43 @@
 
 		echo $pager['head'];
 
-		if ($list) {
-			echo '<br/>Archived versions ('.count($list).' entries):<br/>';
-			foreach ($list as $row)
+		if (!$list) {
+			echo '<br/><b>There is no edit history of this wiki in the database.</b><br/>';
+			return;
+		}
+
+		echo '<br/>Archived versions ('.count($list).' entries):<br/>';
+		foreach ($list as $row)
+		{
+			switch ($row['categoryId'])
 			{
-				switch ($row['categoryId'])
-				{
-					case REV_CAT_LOCKED:
-						echo '<img src="/gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
-						echo ' Locked by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
-						break;
+				case REV_CAT_LOCKED:
+					echo '<img src="/gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
+					echo ' Locked by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
+					break;
 
-					case REV_CAT_UNLOCKED:
-						echo '<img src="/gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
-						echo ' Unlocked by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
-						break;
+				case REV_CAT_UNLOCKED:
+					echo '<img src="/gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
+					echo ' Unlocked by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
+					break;
 
-					case REV_CAT_FILE_UPLOADED:
-						echo ' File uploaded by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
-						break;
+				case REV_CAT_FILE_UPLOADED:
+					echo ' File uploaded by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
+					break;
 
-					case REV_CAT_FILE_DELETED:
-						echo ' File deleted by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
-						break;
+				case REV_CAT_FILE_DELETED:
+					echo ' File deleted by '.$row['creatorName']. ' at '.$row['timeCreated'].'<br/>';
+					break;
 
-					case REV_CAT_TEXT_CHANGED:
-					default:
-						echo '<br/># <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$row['indexId'].'\')">';
-						echo 'Text by '.$row['creatorName']. ' at '.$row['timeCreated'].' ('.strlen($row['fieldText']).' bytes)</a><br/>';
-						echo '<div id="layer_history'.$row['indexId'].'" class="revision_entry" style="display: none;">';
-						echo nl2br(htmlentities($row['fieldText'], ENT_COMPAT, 'UTF-8'));
-						echo '</div>';
-						break;
-				}
+				case REV_CAT_TEXT_CHANGED:
+				default:
+					echo '<br/># <a href="#" onclick="return toggle_element_by_name(\'layer_history'.$row['indexId'].'\')">';
+					echo 'Text edited by '.$row['creatorName']. ' at '.$row['timeCreated'].' ('.strlen($row['fieldText']).' bytes)</a><br/>';
+					echo '<div id="layer_history'.$row['indexId'].'" class="revision_entry" style="display: none;">';
+					echo nl2br(htmlentities($row['fieldText'], ENT_COMPAT, 'UTF-8'));
+					echo '</div>';
+					break;
 			}
 		}
-		else
-		{
-			echo '<br/><b>There is no edit history of this wiki in the database.</b><br/>';
-		}
-
 	}
-
-
 ?>
