@@ -294,7 +294,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `userIP` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=441 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=443 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblProblemSites` (
   `siteId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',

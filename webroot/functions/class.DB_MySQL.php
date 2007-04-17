@@ -22,7 +22,7 @@ class DB_MySQL extends DB_Base
 		echo 'Client info: '.mysql_get_client_info().'<br/>';
 		echo 'Character set: '.mysql_client_encoding($this->db_handle).'<br/>';
 		echo 'Last error: '.mysql_error($this->db_handle).'<br/>';
-		echo 'Last errno: '.mysql_errno($this->db_handle).'<br/>';
+		echo 'Last errno: '.mysql_errno($this->db_handle).'<br/><br/>';
 	}
 
 	function escape($query)
@@ -82,6 +82,28 @@ class DB_MySQL extends DB_Base
 
 		while ($row = mysql_fetch_assoc($result)) {
 			$data[] = $row;
+		}
+
+		mysql_free_result($result);
+
+		if ($this->debug) $this->profileQuery($time_started, $query);
+
+		return $data;
+	}
+	
+	function getMappedArray($query)
+	{
+		if ($this->debug) $time_started = microtime(true);
+
+		if (!$result = mysql_query($query, $this->db_handle)) {
+			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+			return array();
+		}
+
+		$data = array();
+
+		while ($row = mysql_fetch_row($result)) {
+			$data[ $row[0] ] = $row[1];
 		}
 
 		mysql_free_result($result);

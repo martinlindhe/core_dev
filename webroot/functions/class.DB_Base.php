@@ -97,7 +97,7 @@ abstract class DB_Base
 	function showConfig()
 	{
 		echo '<b>Current database configuration</b><br/>';
-		echo 'DB driver: '.$this->db_driver.'<br/>';
+		echo 'DB driver: <span class="okay">'.$this->db_driver.'</span><br/>';
 		echo 'Host: '.$this->host.':'.$this->port.'<br/>';
 		echo 'Login: '.$this->username.':'.($this->password?$this->password:'(blank)').'<br/>';
 		echo 'Database: '.$this->database.'<br/>';
@@ -105,6 +105,35 @@ abstract class DB_Base
 
 		echo '<b>DB driver specific settings</b><br/>';
 		$this->showDriverStatus();
+		
+		if ($this->dialect == 'mysql') {
+			/* Show MySQL query cache settings */
+			$data = $this->getMappedArray('SHOW VARIABLES LIKE "%query_cache%"');
+			if ($data['have_query_cache'] == 'YES') {
+				echo '<b>MySQL query cache settings</b><br/>';
+				echo 'Type: '. $data['query_cache_type'].'<br/>';		//valid values: ON, OFF or DEMAND
+				echo 'Size: '. formatDataSize($data['query_cache_size']).' (total size)<br/>';
+				echo 'Limit: '. formatDataSize($data['query_cache_limit']).' (per query)<br/>';
+				echo 'Min result unit: '. formatDataSize($data['query_cache_min_res_unit']).'<br/>';
+				echo 'Wlock invalidate: '. $data['query_cache_wlock_invalidate'].'<br/><br/>';
+	
+				/* Current query cache status */
+				$data = $this->getMappedArray('SHOW STATUS LIKE "%Qcache%"', 'Variable_name', 'Value');
+				echo '<b>MySQL query cache status</b><br/>';
+				echo 'Hits: '. formatNumber($data['Qcache_hits']).'<br/>';
+				echo 'Inserts: '. formatNumber($data['Qcache_inserts']).'<br/>';
+				echo 'Queries in cache: '. formatNumber($data['Qcache_queries_in_cache']).'<br/>';
+				echo 'Total blocks: '. formatNumber($data['Qcache_total_blocks']).'<br/>';
+				echo '<br/>';
+				echo 'Not cached: '. formatNumber($data['Qcache_not_cached']).'<br/>';
+				echo 'Free memory: '. formatDataSize($data['Qcache_free_memory']).'<br/>';
+				echo '<br/>';
+				echo 'Free blocks: '. formatNumber($data['Qcache_free_blocks']).'<br/>';
+				echo 'Lowmem prunes: '. formatNumber($data['Qcache_lowmem_prunes']).'<br/>';
+			} else {
+				echo '<b>MySQL Qcache is disabled!</b><br/>';
+			}
+		}
 	}
 
 	/* Stores profiling information about connect time to database */

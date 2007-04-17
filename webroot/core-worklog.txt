@@ -21,9 +21,8 @@
 		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 		- konvertera zine!
   	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
-  	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen
+  	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
   	- Försök bygga mer logik i sql queries / stored procedures
-  	- db mysql driver: implementera getMappedArray(), visa query cache status (testa mot /adblock/settings.php)
 
 
 	session/user settings:

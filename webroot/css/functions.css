@@ -253,10 +253,18 @@ input.button:focus {
 
 /* used to mark something important, like a error message */
 .critical {
+	color: #000;
 	background-color: #FB9B9B;
 	padding: 5px;
+	line-height: 20px;
 }
 
+.okay {
+	color: #000;
+	background-color: #B1F9AA;
+	padding: 5px;
+	line-height: 20px;
+}
 
 /* revision elements */
 .revision_entry {
