@@ -83,4 +83,26 @@
 		return true;
 	}
 
+	/* Updates mms key */
+	function updateMMSKey()
+	{
+		global $sql, $user, $l, $t;
+
+		if (!$l['id_id'] || empty($_POST['ins_mmskey'])) return;
+		
+		$blocked_keys = array(123, 1234, 12345, 1111, 4321, 54321);
+		
+		if (in_array($_POST['ins_mmskey'], $blocked_keys)) return 'Otillåten MMS-nyckel';
+		
+
+		//todo: if non-allowed return error
+
+		$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.secureINS($_POST['ins_mmskey']).'" AND owner_id != '.$l['id_id'].' LIMIT 1';
+		$check = $sql->queryResult($q);
+		if ($check) return 'MMS nyckel upptagen!';
+			
+		$id = $user->setinfo($l['id_id'], 'mmskey', "'".$_POST['ins_mmskey']."'");
+		if ($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+	}
+
 ?>

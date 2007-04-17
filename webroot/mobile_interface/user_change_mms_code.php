@@ -4,19 +4,15 @@
 
 	require('design_head.php');
 	
+	$error = updateMMSKey();
+
 	$settings = $user->getcontent($l['id_id'], 'user_settings');
 
-	//if($isAdmin && @$settings['mmskey'] != @$_POST['ins_mmskey']) {
-	if (@$settings['mmskey'] != @$_POST['ins_mmskey']) {
-		$id = $user->setinfo($l['id_id'], 'mmskey', "'".$_POST['ins_mmskey']."'");
-		if ($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
-		$settings['mmskey'][1] = $_POST['ins_mmskey'];
-	}
-
-	print_r($settings);	
+	//print_r($settings);	
 ?>
 	INSTÄLLNINGAR - ÄNDRA MMS KOD<br/>
 	<br/>
+	<?=$error?>
 	<form method="post" action="">
 		<input type="text" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>"/>
 		<input type="submit" value="Spara"/>
