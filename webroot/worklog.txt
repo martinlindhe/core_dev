@@ -61,7 +61,11 @@
 	- mobila gränssnittet: byggt en ny pager funktion. integrerat med gästboke-översikt, mail-översikt, kompislista-översikt
 
 2007-04-13 Fredag:
-	- gått igenom och rensat upp frans kod för att läsa in mms från emails
+	- gått igenom och rensat upp frans kod för att läsa in mms från emails, tog mycket tid...
+-----
+2007-04-16 Måndag:
+	- ordnat det sista med mms email in i plattformen
+	- skapat en ny tabell för att hålla ordning på nyinkommna mms
 
 ***********************************************************************************************************************************
 

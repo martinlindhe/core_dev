@@ -263,7 +263,10 @@
 		global $sql, $t;
 		if (!is_numeric($_cnt)) return false;
 		
-		$q = "SELECT id_id,u_alias,account_date FROM {$t}user ORDER BY account_date DESC LIMIT 0,".$_cnt;
+		$q =	"SELECT t1.id_id,t1.sess_date,t2.u_alias FROM s_usersess AS t1 ".
+					"INNER JOIN s_user AS t2 ON (t1.id_id=t2.id_id) ".
+					"ORDER BY t1.main_id DESC LIMIT 0,".$_cnt;
+					
 		return $sql->query($q, 0, 1);
 	}
 

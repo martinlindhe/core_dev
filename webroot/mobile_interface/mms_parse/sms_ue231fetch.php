@@ -71,7 +71,7 @@ class email
 
 	private function write($line)
 	{
-		echo 'Wrote: '.$line.'<br/>';
+		//echo 'Wrote: '.$line.'<br/>';
 		fputs($this->hdl, $line."\r\n");
 	}
 
@@ -232,14 +232,20 @@ class email
 	}
 	
 	/* Takes a email as parameter, returns all attachments, body & header nicely parsed up */
+	//also automatically extracts file attachments and handles them as file uploads
+	//allowed file types as attachments are $config['email']['attachments_allowed_mime_types']
 	function parseAttachments($msg)
 	{
 		global $config;
 
+		$msg = str_replace("\r\n", "\n", $msg);
+		
+		//echo $msg; die;
+
 		//1. Klipp ut headern
 		$pos = strpos($msg, "\n\n");
 		if ($pos === false) return;
-		
+
 		$header = substr($msg, 0, $pos);
 		//Parse each header element into an array
 		$result['header'] = $this->parseHeader($header);
@@ -247,7 +253,7 @@ class email
 		$result['mms_code'] = $this->findMMSCode($result['header']['Subject']);
 		if (!$result['mms_code']) {
 			//todo: log failure
-			echo 'No MMS code identified!';
+			echo $result['header']['From'].': No MMS code identified (title: '.$result['header']['Subject'].'), skipping mail<br/>';
 			return false;
 		}
 
@@ -287,12 +293,12 @@ class email
 
 		if (!$multipart_id) die('didnt find multipart id');
 
-		//echo 'Splitting msg using id '.$multipart_id.'<br>';
+		echo 'Splitting msg using id '.$multipart_id.'<br>';
 
 		$part_cnt = 0;
 		do {
 			$pos1 = strpos($msg, $multipart_id);
-			$pos2 = strpos($msg, $multipart_id, strlen($multipart_id));
+			$pos2 = strpos($msg, $multipart_id, $pos1+strlen($multipart_id));
 
 			//echo 'p1: '.$pos1.', p2: '.$pos2.'<br/>';
 
@@ -300,7 +306,7 @@ class email
 
 			//Current innehåller ett helt block med en attachment, inklusive attachment header
 			//$current = substr($msg, $pos1 + strlen($multipart_id) + strlen("\n"), $pos2 - strlen($multipart_id));
-			$current = substr($msg, $pos1 + strlen($multipart_id), $pos2 - strlen($multipart_id));
+			$current = substr($msg, $pos1 + strlen($multipart_id), $pos2 - $pos1 - strlen($multipart_id));
 
 			//echo 'x'.$current.'x'; die;
 
@@ -312,8 +318,7 @@ class email
 				$body = trim(substr($current, $head_pos+2));
 				//echo 'body: Y'.$body.'Y<br>';
 			} else {
-				echo 'error: "'.$current.'"';
-				die;
+				die('error: "'.$current.'"');
 			}
 
 			//echo $body;
@@ -325,6 +330,8 @@ class email
 			$part_cnt++;
 
 			$msg = substr($msg, $pos2);
+			
+			//echo 'x'.$msg.'x<br><br>';
 
 		} while ($msg != $multipart_id.'--');
 
@@ -340,18 +347,28 @@ class email
 
 			$filename = '';
 			if (!empty($attachment['head']['Content-Location'])) $filename = $attachment['head']['Content-Location'];
-			//echo 'filename: '.$filename.'<br><br>';
+			if (!$filename) {
+				//Extracta filename från: [Content-Type] => image/jpeg; name="header.jpg"
+				//fixme fulhack:
+				if (substr($params[1], 0, 5) == 'name=') {
+					$filename = str_replace('"', '', substr($params[1], 5) );
+				}
+			}
+
+			echo 'filename: '.$filename.'<br><br>';
 
 			switch ($attachment['head']['Content-Transfer-Encoding']) {
 				case '7bit':
+				/* text/html content */
 					if (!in_array($attachment_mime, $config['email']['text_allowed_mime_types'])) {
 						//echo 'Text mime type unrecongized: '. $attachment_mime.'<br>';
 						continue;
 					}
-					echo 'checking text: '.$attachment['body'];
+					//echo 'Checking text: '.$attachment['body'].'<br>';
 					break;
 
 				case 'base64':
+					/* file attachments like images, videos */
 					if (!in_array($attachment_mime, $config['email']['attachments_allowed_mime_types'])) {
 						//echo 'Attachment mime type unrecognized: '. $attachment_mime.'<br>';
 						continue;
@@ -545,7 +562,7 @@ class email
 
 			$active = $this->pop3_RETR($i);
 	
-			//$this->pop3_DELE($i);
+			$this->pop3_DELE($i);
 		}
 
 		$this->close();

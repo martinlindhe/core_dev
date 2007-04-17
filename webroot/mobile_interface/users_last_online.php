@@ -13,7 +13,7 @@
 	{
 		echo '(bild)<br/>';
 		echo $row['u_alias'].' K30<br/>';
-		echo $row['account_date'].'<br/>';
+		echo $row['sess_date'].'<br/>';
 		echo '<br/>';
 	}
 

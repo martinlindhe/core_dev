@@ -8,7 +8,7 @@ Received: from mmsc.tele2.se ([130.244.202.30] verified)
 Message-ID: <18504890.1176468093978.JavaMail.root@t2mmsc1>
 From: +46707165200 < no.reply@mms.tele2.se >
 To: cs@inconet.se
-Subject: test
+Subject: blog 47192
 Mime-Version: 1.0
 Content-Type: multipart/mixed; type="application/smil"; start="<smil>"; boundary="----=_Part_190474_28675767.1176468093974"
 Date: Fri, 13 Apr 2007 14:41:33 +0200
