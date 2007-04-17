@@ -18,7 +18,7 @@
 	/* A variable named $db must exist for all future functions to work. */
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = 30*60;
+	$config['session']['timeout'] = (60*60)*24;
 	$config['session']['name'] = 'Janina';
 	$config['session']['sha1_key'] = 'janinaSHAxyxtybhge3bbexudud81cujnm11wbvwcvvw';
 	$config['session']['allow_registration'] = false;

@@ -5,10 +5,7 @@
 
 	require_once('config.php');
 
-	if (!$session->isAdmin) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
+	$session->requireAdmin();
 
 	require('design_head.php');
 

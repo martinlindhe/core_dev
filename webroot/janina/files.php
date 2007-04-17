@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 	
-	if (!$session->id) die;
+	$session->requireLoggedIn();
 
 	require('design_head.php');
 

@@ -3,7 +3,7 @@
 
 	require_once('config.php');
 
-	if (empty($_GET['band']) || !is_numeric($_GET['band'])) die('No id');
+	if (empty($_GET['band']) || !is_numeric($_GET['band'])) die;
 
 	$band_id = $_GET['band'];
 

@@ -2,7 +2,7 @@
 	require_once('config.php');
 	require('design_head.php');
 	
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('Bad id');
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 	$band_id = $_GET['id'];
 		

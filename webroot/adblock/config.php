@@ -38,9 +38,4 @@
 
 	$config['adblock']['cachepath'] = 'cache/';
 	$config['adblock']['cacheage'] = 	1; //3600/4;		//time before disk cache expires, in seconds
-
-
-
-	//todo: används denna: ?
-	$config['start_page'] = 'index.php';	//todo: använd ['session']['home_page'] istället
 ?>

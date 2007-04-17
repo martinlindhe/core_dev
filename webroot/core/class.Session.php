@@ -356,6 +356,28 @@ class Session
 		echo '</form>';
 		echo '</div>';
 	}
+	
+	/* Locks unregistered users out from certain pages */
+	function requireLoggedIn()
+	{
+		global $config;
+
+		if (!$this->id) {
+			header('Location: '.$config['session']['home_page']);
+			die;
+		}
+	}
+
+	/* Locks unregistered users out from certain pages */
+	function requireAdmin()
+	{
+		global $config;
+
+		if (!$this->isAdmin) {
+			header('Location: '.$config['session']['home_page']);
+			die;
+		}
+	}
 
 }
 ?>

@@ -1,10 +1,7 @@
 <?
 	require_once('config.php');
 	
-	if (!$session->id) {
-		header('Location: index.php');
-		die;
-	}
+	$session->requireLoggedIn();
 
 	require('design_head.php');
 

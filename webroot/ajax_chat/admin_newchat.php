@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 
-	if (!$session->isAdmin) die;
+	$session->requireAdmin();
 
 	if (!empty($_POST['roomname'])) {
 		$roomId = newChatRoom($_POST['roomname']);

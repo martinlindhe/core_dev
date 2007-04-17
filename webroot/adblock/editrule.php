@@ -41,10 +41,7 @@
 	}
 	
 	$rule = getAdblockRule($ruleId);
-	if (!$session->isAdmin && $rule['deletedBy']) {
-		header('Location: index.php');
-		die;
-	}
+	if ($rule['deletedBy']) $session->requireAdmin();
 
 	require('design_head.php');
 	

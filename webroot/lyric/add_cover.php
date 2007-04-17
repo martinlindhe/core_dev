@@ -4,7 +4,7 @@
 	$band_id = 0;
 	if (!empty($_GET['band']) && is_numeric($_GET['band'])) $band_id = $_GET['band'];
 
-	if (empty($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['record']) || !is_numeric($_GET['track'])) die('Bad id');
+	if (empty($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['record']) || !is_numeric($_GET['track'])) die;
 
 	$record_id = $_GET['record'];
 	$track = $_GET['track'];

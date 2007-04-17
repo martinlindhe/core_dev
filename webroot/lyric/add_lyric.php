@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 
-	if (empty($_GET['record']) || !is_numeric($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['track'])) die('No id');
+	if (empty($_GET['record']) || !is_numeric($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['track'])) die;
 
 	$record_id = $_GET['record'];
 	$track = $_GET['track'];

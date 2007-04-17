@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 
-	if (!$session->isAdmin) die;
+	$session->requireAdmin();
 
 	if (!isset($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$roomId = $_GET['id'];

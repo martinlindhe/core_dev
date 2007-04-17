@@ -1,10 +1,7 @@
 <?
 	require_once('config.php');
 
-	if (!$session->isAdmin) {
-		header('Location: index.php');
-		die;
-	}
+	$session->requireAdmin();
 
 	$remove_cnt = 0;
 	if (count($_POST)) {

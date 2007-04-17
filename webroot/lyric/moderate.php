@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
-	
-	if (!$session->isAdmin) die;
+
+	$session->requireAdmin();
 
 	require('design_head.php');
 	

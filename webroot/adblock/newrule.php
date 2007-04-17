@@ -1,10 +1,7 @@
 <?
 	require_once('config.php');
 
-	if (!$session->isAdmin) {
-		header('Location: index.php');
-		die;
-	}
+	$session->requireAdmin();
 
 	if (!empty($_POST['rule'])) {
 		$ruleId = addAdblockRule($_POST['rule'], $_POST['type'], $_POST['sampleurl']);
