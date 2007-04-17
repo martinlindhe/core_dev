@@ -297,7 +297,9 @@
 		else
 		{
 			if ($data['lockedBy']) {
-				echo 'LOCKED<br/>';
+				echo '<div class="wiki_info_locked">';
+				echo '<img src="/gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
+				echo 'LOCKED FROM EDITING</div>';
 			}
 			echo wikiFormat($wikiName, $data);
 		}

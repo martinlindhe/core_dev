@@ -1,8 +1,31 @@
 <?
+	//todo: rename config variables
 	$config['url_rewrite_length'] = 50;
 	$config['url_rewrite_redirfile'] = '';
-	
 
+	/* Returns a string like "2 KiB" */
+	function formatDataSize($bytes)
+	{
+		//$units = array('bytes', 'KiB', 'MiB', 'GiB', 'TiB');
+		$units = array('bytes', 'k', 'mb', 'gb', 'tb');
+		foreach ($units as $unit) {
+			if ($bytes < 1024) break;
+			$bytes = round($bytes/1024, 1);
+		}
+		return $bytes.' '.$unit;
+	}
+
+	function formatNumber($number)
+	{
+		$decimal_mark = '.';
+		$thousand_mark = ',';
+		
+		//Formats integers with grouped thousands, example: 2005 => 2,005
+		if (intval($number) == $number) return number_format($number, 0, $decimal_mark, $thousand_mark);
+		
+		//Formats floats with 2 decimals and grouped thousands, example: 2005.4791 => 2,005.48
+		return number_format($number, 2, $decimal_mark, $thousand_mark);
+	}
 
 	function formatUserInputText($text, $convert_html = true)
 	{
@@ -194,5 +217,48 @@
 		$ret = '<a href="'.$config['url_rewrite_redirfile'].$matches[0].'" class="bb_url" target="_blank">'.$url_text.'</a>';
 
 		return $ret; 
+	}
+	
+
+	/* Returns a sting like: 4h10m3s */
+	function shortTimePeriod($seconds)
+	{
+		$retval='';
+
+		//år
+		$a = date('Y', $seconds) - 1970;
+		if ($a==1) $retval=$a.' year, ';
+		else if ($a>0) $retval=$a.' years, ';
+		$seconds -= (((($a*60)*60)*24)*30)*365;
+		
+		//månader
+		$a=date('n',$seconds)-1;
+		if($a==1) $retval.=$a.' month, ';
+		else if($a>0) $retval.=$a.' months, ';
+		$seconds -= ((($a*60)*60)*24)*30;
+
+		//dagar
+		$a=date('j',$seconds)-1;
+		if($a==1) $retval.=$a.' day, ';
+		else if ($a>0) $retval.=$a.' days, ';
+		$seconds -= (($a*60)*60)*24;
+
+		//timmar
+		$a=date('H',$seconds)-1;
+		if ($a>0) $retval.=$a.'h';
+		$seconds -= ($a*60)*60;
+
+		//minuter
+		$a=date('i',$seconds)-0; //translate from 09 to 9 quickly ;)
+		if ($a>0) $retval.=$a.'m';
+		$seconds -= $a*60;
+
+		//seconds
+		$a=date('s',$seconds)-0; //translate from 09 to 9 quickly ;)
+		if ($a>0) $retval.=$a.'s';
+		
+		if ($retval == '') $retval = '0s';
+			
+		return $retval;
 	}
 ?>

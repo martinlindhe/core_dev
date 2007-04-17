@@ -4,14 +4,9 @@
 
 	Written by Martin Lindhe, 2007
 
-	TODO:!!!!! en funktion som returnerar mysql_num_rows av angiven query enbart 	
 	todo: metod för att anropa stored procedures
-	todo: rename GetArray() till Array() ? eller är det för confusing med array() datatyp ?
-	
-	todo: renama getNumArray() ???? vad heter den typen av resultat. och finns det nån annan funktion för just det ändamålet istället för mysqli_fetch_array()
 	
 	todo: börja använda http://se2.php.net/manual/en/function.mysqli-fetch-object.php, returnera kolumnamn direkt som objektvariabler
-	
 */
 
 define('LOGLEVEL_NOTICE', 1);
@@ -28,6 +23,9 @@ abstract class DB_Base
 	/* Holds the ID of last successful INSERT */
 	public $insert_id = 0;
 
+	/* Holds a string indicating what "dialect" of sql is currently allowed by the db driver, possible values: mysql */
+	public $dialect = '';
+
 	/* Escapes a string for use in queries */
 	abstract function escape($query);
 
@@ -38,6 +36,10 @@ abstract class DB_Base
 	/* Returns an array with the results, with columns as array indexes
 		Example: SELECT * FROM t */
 	abstract function getArray($query);
+	
+	/* Returns an array with the results mapped as key => value
+		Example: SHOW VARIABLES LIKE "have_query_cache" */
+	abstract function getMappedArray($query);
 	
 	/* Returns an 1-dimensional array with a numeric index */
 	abstract function getNumArray($query);
@@ -58,8 +60,8 @@ abstract class DB_Base
 	/* Creates a database connection */
 	abstract protected function connect();
 	
-	/* Shows driver-specific settings */
-	abstract function showMoreSettings();
+	/* Shows driver-specific settings + status */
+	abstract function showDriverStatus();
 
 	//default settings
 	protected $host	= 'localhost';
@@ -92,15 +94,17 @@ abstract class DB_Base
 	}
 
 	/* Shows current settings */
-	function showSettings()
+	function showConfig()
 	{
-		echo 'Debug: '.($this->debug?'ON':'OFF').'<br/>';
+		echo '<b>Current database configuration</b><br/>';
 		echo 'DB driver: '.$this->db_driver.'<br/>';
 		echo 'Host: '.$this->host.':'.$this->port.'<br/>';
-		echo 'Login: '.$this->username.':'.$this->password.'<br/>';
+		echo 'Login: '.$this->username.':'.($this->password?$this->password:'(blank)').'<br/>';
 		echo 'Database: '.$this->database.'<br/>';
+		echo 'Debug: '.($this->debug?'ON':'OFF').'<br/><br/>';
 
-		$this->showMoreSettings();
+		echo '<b>DB driver specific settings</b><br/>';
+		$this->showDriverStatus();
 	}
 
 	/* Stores profiling information about connect time to database */
@@ -140,7 +144,10 @@ abstract class DB_Base
 
 		$sql_time = 0;
 
-		echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px; display: none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
+		if (count($this->query_error)) $css_display = '';
+		else $css_display = ' display: none;';
+
+		echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{

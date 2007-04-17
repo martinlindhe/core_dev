@@ -6,25 +6,20 @@
 		die;
 	}
 
-	if (isset($_POST['email'])) {
-		$session->save('email', $_POST['email']);
-	}
-
 	require('design_head.php');
 
 	wiki('Settings');
+	echo '<br/>';
 
-	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
-
-	echo 'E-mail:<br/>';
-	echo '<input size="30" type="text" name="email" value="'.$session->read('email').'"/><br/>';
-
-	echo '<input type="submit" class="button" value="Save"/>';
-	echo '</form><br/>';
+	$session->editSettings();
 
 	if ($session->isAdmin) {
-		echo 'Mode: Administrator<br/>';
+		echo 'Administrator<br/>';
+		
+		$db->showConfig();
+		echo '<br/>';
+		$session->showInfo();
 	}
-
+	
 	require('design_foot.php');
 ?>

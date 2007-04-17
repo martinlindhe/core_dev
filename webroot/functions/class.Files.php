@@ -639,18 +639,6 @@ class Files
 		return $db->getArray($sql);
 	}
 
-	/* Returns a string like "2 KiB" */
-	function formatFileSize($bytes)
-	{
-		//$units = array('bytes', 'KiB', 'MiB', 'GiB', 'TiB');
-		$units = array('bytes', 'k', 'mb', 'gb', 'tb');
-		foreach ($units as $unit) {
-			if ($bytes < 1024) break;
-			$bytes = round($bytes/1024, 1);
-		}
-		return $bytes.' '.$unit;
-	}
-	
 	/* Används av ajax filen /core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
 	function getFileInfo($_id)
 	{
@@ -666,7 +654,7 @@ class Files
 		if (!$file) return false;
 
 		$result = 'Name: '.htmlentities($file['fileName']).'<br/>'.
-							'Filesize: '.$this->formatFileSize($file['fileSize']).'<br/>'.
+							'Filesize: '.$this->formatDataSize($file['fileSize']).'<br/>'.
 							'Uploader: '.htmlentities($file['uploaderName']).'<br/>'.
 							'At: '.$file['timeUploaded'].'<br/>';
 		if ($this->count_file_views) $result .= 'Downloaded: '.$file['cnt'].' times';

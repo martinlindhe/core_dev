@@ -213,6 +213,23 @@ input.button:focus {
 	background-color: #CCCCCC;
 }
 
+.wiki_info_locked {
+	padding: 10px;
+	font-size: 20px;
+	background-color: #ee99aa;
+}
+
+
+/* default styles for "user settings" list */
+.edit_settings {
+ width: 300px;
+ background-color: #88EE99;
+ border: 1px solid #aaa;
+ padding: 5px;
+}
+
+
+
 /* used to make lists */
 ._row_container {
 	color: #595930;

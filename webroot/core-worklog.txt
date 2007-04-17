@@ -1,7 +1,7 @@
 --------------[[todo]]--------------
 	platform change:
 		- gör så ajax-filerna funkar som file.php
-		- implementera $db->getNumArray() i class.DB_MySQL.php
+
 
 	wiki:
 		- implementera stöd för "talk" page _eller_ comments
@@ -23,11 +23,11 @@
   	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
   	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen
   	- Försök bygga mer logik i sql queries / stored procedures
+  	- db mysql driver: implementera getMappedArray(), visa query cache status (testa mot /adblock/settings.php)
 
 
 	session/user settings:
-		- fixa till den, den funkar ej: http://localhost/oop_test/settings.php
-
+		- gör färdigt login-bubblan: forgot password är ej kodat än
 
 --------------[[changelog]]--------------
 2007.04.17
@@ -35,6 +35,10 @@
 	- adblock/download.php: flyttade över all download logik + ruleset cache koden till handleAdblockDownloadRequest()
 	- core: implementerade $db->getNumArray() för att returnera 1-dimensionella arrayer
 	- core db: tog bort num_rows() funktionerna
+	- session: fixade till editSettings() en del, http post för att spara ändringar funkar nu
+	- core db: auto expanderar sql-profil-loggen ifall något sql error förekom under scriptkörningen
+	- core db: varje db driver sätter nu $db->dialect, för att kunna göra specifika optimeringar för en viss dialekt t.ex mysql, samt erbjuda en fallback för andra databaser
+	- core db: visar query cache config+status för mysqli-extension
 	
 2007.04.15
 	- files: kontrollerade alla file.php requests

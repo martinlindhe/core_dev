@@ -14,13 +14,41 @@ class DB_MySQLi extends DB_Base
 		if ($this->db_handle) $this->db_handle->close();
 	}
 	
-	function showMoreSettings()
+	function showDriverStatus()
 	{
 		echo 'Server info: '.$this->db_handle->server_info.' ('.$this->db_handle->host_info.')<br/>';
 		echo 'Client info: '.$this->db_handle->client_info.'<br/>';
 		echo 'Character set: '.$this->db_handle->character_set_name().'<br/>';
-		echo 'Current error: '.$this->db_handle->error.'<br/>';
-		echo 'Current errno: '.$this->db_handle->errno.'<br/>';
+		echo 'Last error: '.$this->db_handle->error.'<br/>';
+		echo 'Last errno: '.$this->db_handle->errno.'<br/><br/>';
+
+		/* Show MySQL query cache settings */
+		$data = $this->getMappedArray('SHOW VARIABLES LIKE "%query_cache%"');
+		if ($data['have_query_cache'] == 'YES') {
+			echo '<b>MySQL query cache settings:</b><br/>';
+			echo 'Type: '. $data['query_cache_type'].'<br/>';		//valid values: ON, OFF or DEMAND
+			echo 'Size: '. formatDataSize($data['query_cache_size']).' (total size)<br/>';
+			echo 'Limit: '. formatDataSize($data['query_cache_limit']).' (per query)<br/>';
+			echo 'Min result unit: '. formatDataSize($data['query_cache_min_res_unit']).'<br/>';
+			echo 'Wlock invalidate: '. $data['query_cache_wlock_invalidate'].'<br/><br/>';
+
+			/* Current query cache status */
+			$data = $this->getMappedArray('SHOW STATUS LIKE "%Qcache%"', 'Variable_name', 'Value');
+			echo '<b>MySQL query cache status:</b><br/>';
+			echo 'Hits: '. formatNumber($data['Qcache_hits']).'<br/>';
+			echo 'Inserts: '. formatNumber($data['Qcache_inserts']).'<br/>';
+			echo 'Queries in cache: '. formatNumber($data['Qcache_queries_in_cache']).'<br/>';
+			echo 'Total blocks: '. formatNumber($data['Qcache_total_blocks']).'<br/>';
+			echo '<br/>';
+			echo 'Not cached: '. formatNumber($data['Qcache_not_cached']).'<br/>';
+			echo 'Free memory: '. formatDataSize($data['Qcache_free_memory']).'<br/>';
+			echo '<br/>';
+			echo 'Free blocks: '. formatNumber($data['Qcache_free_blocks']).'<br/>';
+			echo 'Lowmem prunes: '. formatNumber($data['Qcache_lowmem_prunes']).'<br/>';
+		} else {
+			echo '<b>MySQL Qcache is disabled!</b><br/>';
+		}
+
 	}
 
 	function escape($query)
@@ -33,6 +61,7 @@ class DB_MySQLi extends DB_Base
 		if ($this->debug) $time_started = microtime(true);
 
 		$this->db_driver = 'DB_MySQLi';
+		$this->dialect = 'mysql';
 
 		$this->db_handle = @ new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
@@ -41,7 +70,7 @@ class DB_MySQLi extends DB_Base
 
 			die('<bad>Database connection error.</bad>');
 		}
-
+		
 		if ($this->debug) $this->profileConnect($time_started);
 	}
 
@@ -79,6 +108,28 @@ class DB_MySQLi extends DB_Base
 
 		while ($row = $result->fetch_assoc()) {
 			$data[] = $row;
+		}
+
+		$result->free();
+
+		if ($this->debug) $this->profileQuery($time_started, $query);
+
+		return $data;
+	}
+
+	function getMappedArray($query)
+	{
+		if ($this->debug) $time_started = microtime(true);
+
+		if (!$result = $this->db_handle->query($query)) {
+			if ($this->debug) $this->profileError($time_started, $query, $this->db_handle->error);
+			return array();
+		}
+
+		$data = array();
+
+		while ($row = $result->fetch_row()) {
+			$data[ $row[0] ] = $row[1];
 		}
 
 		$result->free();

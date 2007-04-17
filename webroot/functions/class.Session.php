@@ -4,17 +4,14 @@
 
 	Written by Martin Lindhe, 2007
 	
-	Todo: 
-		* gör färdigt login-bubblan
-			- forgot password är ej kodat än
-		
-	Examples:
-		$session->save('kex', 'med blandade bullar');
-		$kex = $session->read('kex');
+	User setting examples:
+		$session->save('variablename', 'some random setting to save');
+		$kex = $session->read('variablename');
 */
 
 require_once('functions_ip.php');
 require_once('functions_settings.php');
+require_once('functions_textformat.php');
 
 class Session
 {
@@ -292,15 +289,22 @@ class Session
 
 	function showInfo()
 	{
+		echo '<b>Current session information</b><br/>';
 		echo 'Logged in: '. ($this->id?'YES':'NO').'<br/>';
 		if ($this->id) {
-			echo '<b>User name: '.$this->username.'</b><br/>';
-			echo '<b>User ID: '.$this->id.'</b><br/>';
-			echo '<b>User mode: '.$this->mode.'</b><br/>';
+			echo 'User name: '.$this->username.'<br/>';
+			echo 'User ID: '.$this->id.'<br/>';
 		}
+
+		echo 'User mode: ';
+		if ($this->isSuperAdmin) echo 'Super admin<br/>';
+		else if ($this->isAdmin) echo 'Admin<br/>';
+		else if ($this->id) echo 'Normal user<br/>';
+		else echo 'Visitor<br/>';
+
 		echo 'Session name: '.$this->session_name.'<br/>';
 		echo 'Current IP: '.GeoIP_to_IPv4($this->ip).'<br/>';
-		echo 'Session timeout: '.$this->timeout.'<br/>';
+		echo 'Session timeout: '.shortTimePeriod($this->timeout).'<br/>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
 		echo 'Home page: '.$this->home_page.'<br/>';
 		if ($this->isSuperAdmin) {
@@ -311,18 +315,21 @@ class Session
 	/* Saves a setting associated with current user */
 	function save($name, $value)
 	{
+		if (!$this->id) return;
+
 		saveSetting(SETTING_USER, $this->id, $name, $value);
 	}
 
 	/* Reads a setting associated with current user */
-	function read($name, $default = '')
+	function load($name, $default = '')
 	{
-		return readSetting(SETTING_USER, $this->id, $name, $default);
+		if (!$this->id) return;
+
+		return loadSetting(SETTING_USER, $this->id, $name, $default);
 	}
 
 	/* Renders html for editing all tblSettings field for current user */
 	//todo: use ajax to save changes
-	//todo: define this in a separate /design/ file, with alot of css in /css/functions.css
 	function editSettings()
 	{
 		global $config;
@@ -332,15 +339,20 @@ class Session
 
 		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
-		echo '<div id="edit_settings" style="width: 300px; background-color: #88EE99; border: 1px solid #aaa; padding: 5px;">';
-		echo '<form name="edit_settings_frm" action="">';
+		echo '<div class="edit_settings">';
+		echo '<form name="edit_settings_frm" method="post" action="">';
 		foreach($list as $row) {
+			if (!empty($_POST['edit_setting_'.$row['settingId']])) {
+				//Stores the setting
+				saveSetting(SETTING_USER, $this->id, $row['settingName'], $_POST['edit_setting_'.$row['settingId']]);
+				$row['settingValue'] = $_POST['edit_setting_'.$row['settingId']];
+			}
 			echo '<div id="edit_setting_div_'.$row['settingId'].'">';
 			echo $row['settingName'].': <input type="text" name="edit_setting_'.$row['settingId'].'" value="'.$row['settingValue'].'"/>';
 			echo '<img src="/gfx/icon_error.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].');"/>';
 			echo '</div>';
 		}
-		echo '<input type="submit" value="Save" disabled="disabled"/>';
+		echo '<input type="submit" class="button" value="Save"/>';
 		echo '</form>';
 		echo '</div>';
 	}

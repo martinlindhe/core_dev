@@ -1,5 +1,5 @@
 <?
-	//functions_settings.php - store user/server settings in database
+	//functions_settings.php - store user/server or other custom types of settings in database
 
 	define('SETTING_SERVER',				1);			//settings associated with the server
 	define('SETTING_USER',					2);			//settings associated with the user
@@ -15,7 +15,6 @@
 		$settingName = $db->escape($settingName);
 		$settingValue = $db->escape($settingValue);
 
-		//todo: använd mysql REPLACE kommando
 		$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' AND settingName="'.$settingName.'"';
 		if ($db->getOneItem($q)) {
 			$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' AND settingName="'.$settingName.'"';
@@ -28,7 +27,7 @@
 		return true;
 	}
 
-	function readSetting($settingType, $ownerId, $settingName, $defaultValue = '')
+	function loadSetting($settingType, $ownerId, $settingName, $defaultValue = '')
 	{
 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($settingType) || !$settingName) return false;
 

@@ -2,7 +2,7 @@
 /*
 	Object oriented interface for MySQL databases using the php_mysql.dll extension
 
-	When possible, use class.DB_MySQLi.php instead
+	When possible, use class.DB_MySQLi.php instead (it is faster)
 
 	Written by Martin Lindhe, 2007
 */
@@ -16,11 +16,13 @@ class DB_MySQL extends DB_Base
 		if ($this->db_handle) mysql_close($this->db_handle);
 	}
 	
-	function showMoreSettings()
+	function showDriverStatus()
 	{
 		echo 'Server info: '.mysql_get_server_info($this->db_handle).' ('.mysql_get_host_info($this->db_handle).')<br/>';
 		echo 'Client info: '.mysql_get_client_info().'<br/>';
 		echo 'Character set: '.mysql_client_encoding($this->db_handle).'<br/>';
+		echo 'Last error: '.mysql_error($this->db_handle).'<br/>';
+		echo 'Last errno: '.mysql_errno($this->db_handle).'<br/>';
 	}
 
 	function escape($query)
@@ -33,6 +35,7 @@ class DB_MySQL extends DB_Base
 		if ($this->debug) $time_started = microtime(true);
 
 		$this->db_driver = 'DB_MySQL';
+		$this->dialect = 'mysql';
 
 		$this->db_handle = @ mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
 

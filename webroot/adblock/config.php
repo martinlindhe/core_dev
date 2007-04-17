@@ -23,7 +23,7 @@
 	$config['database']['debug']		= true;
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = 30*60;		//in seconds
+	$config['session']['timeout'] = (60*60)*8;		//in seconds
 	$config['session']['name'] = 'adblockID';
 	$config['session']['sha1_key'] = 'sjxkxEadBL0ckjdhyhhHHxnjklsdvyuhu434nzkkz18ju222ha';
 	$config['session']['allow_registration'] = false;
