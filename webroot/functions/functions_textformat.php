@@ -2,6 +2,21 @@
 	//todo: rename config variables
 	$config['url_rewrite_length'] = 50;
 	$config['url_rewrite_redirfile'] = '';
+	
+	function makeThumbLink($_id, $_title = '')
+	{
+		global $files;
+		if (!is_numeric($_id)) return false;
+
+		return '<img src="/core/file.php?id='.$_id.'&amp;w='.$files->thumb_default_width.'&amp;h='.$files->thumb_default_width.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
+	}
+	
+	function makeImageLink($_id, $_title = '')
+	{
+		if (!is_numeric($_id)) return false;
+		
+		return '<img src="/core/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/>';
+	}
 
 	/* Returns a string like "2 KiB" */
 	function formatDataSize($bytes)
@@ -155,7 +170,7 @@
 					break;
 					
 				case 'file':
-					$result = '<img src="/core/file.php?id='.$link['param'].getProjectPath().'" alt=""/>';
+					$result = makeImageLink($link['param']);
 					break;
 
 				default:

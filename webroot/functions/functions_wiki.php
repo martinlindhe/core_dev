@@ -19,7 +19,7 @@
 	$config['wiki']['allow_comments'] = false;		//todo - försök att slipp allow_comments & allow_files,
 	$config['wiki']['allow_files'] = false;				//			acceptera bara de tabbar som finns i allowed_tabs
 
-	$config['wiki']['allowed_tabs'] =	array('View', 'Edit', 'History', 'Comments', 'Files', 'Hide');
+	$config['wiki']['allowed_tabs'] =	array('View', 'Edit', 'History', 'Comments', 'Files');
 	$config['wiki']['first_tab'] = 'View';
 
 	
@@ -63,65 +63,10 @@
 		
 		$text = stripslashes($data['msg']);
 
-		if ($config['wiki']['allow_html']) {
-			$text = formatUserInputText($text, false);
-		} else {
-			$text = formatUserInputText($text, true);
-		}
+		$text = formatUserInputText($text, !$config['wiki']['allow_html']);
 		
 		if ($config['wiki']['explain_words']) {
 			$text = dictExplainWords($text);
-		}
-
-		if ($config['wiki']['allow_files'] && $data['hasFiles']) {
-			$list = $files->getFiles($data['wikiId'], FILETYPE_WIKI);
-
-			$has_unshowed_files = 0;
-			for ($i=0; $i<count($list); $i++) {
-				$list[$i]['replaced'] = 0;
-
-				//ersätter [file123] med en htmlkod som visar fil-info
-				$fileTag = '[file'.$list[$i]['fileId'].']';
-				$pos = strpos($text, $fileTag);
-				if ($pos !== false) {
-					$fileblock = formatFileAttachment($db, $list[$i], '#F0F0F0', false, $wikiName);
-					$text = str_replace($fileTag, $fileblock, $text);
-					$list[$i]['replaced'] = 1;
-				}
-				
-				//ersätter [image123] med htmlkod för thumbnail
-				$imageTag = '[image'.$list[$i]['fileId'].']';
-				$imageFilename = $config['upload_dir'].$list[$i]['fileId'];
-
-				$pos = strpos($text, $imageTag);
-				if (file_exists($imageFilename) && $pos !== false) {
-					$img_size = getimagesize($imageFilename);
-					$imageblock = '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$config['thumbnail_width'].getProjectPath().'" width='.$config['thumbnail_width'].' title="'.$imageTag.'">';
-
-					$text = str_replace($imageTag, $imageblock, $text);
-					$list[$i]['replaced'] = 1;
-				}
-				
-				if ($list[$i]['replaced'] != 1) {
-					$has_unshowed_files = 1;
-				}
-			}
-
-			if (!$has_unshowed_files) return $text;
-
-			//listar filer som inte redan är enkodade i wikin som bilagor
-			$text .= '<br><br><b>Attached files:</b><br>';
-
-			$j = 0;
-			for ($i=0; $i<count($list); $i++) {
-				$bgcolor = '#F0F0F0';
-				if ($j%2) $bgcolor = '#FEFEFE';
-				if (!$list[$i]['replaced']) {
-					$text .= formatFileAttachment($list[$i], $bgcolor, true, $wikiName).'<br>';
-					$j++;
-				}
-			}
-
 		}
 
 		return $text;
@@ -137,7 +82,7 @@
 		
 		$current_tab = $config['wiki']['first_tab'];
 
-		//Looks for formatted wiki section commands, like: View:Page, Edit:Page, History:Page
+		//Looks for formatted wiki section commands, like: View:Page, Edit:Page, History:Page, Files:Page
 		foreach($_GET as $key => $val) {
 			$arr = explode(':', $key);
 			if (empty($arr[1]) || !in_array($arr[0], $config['wiki']['allowed_tabs'])) continue;
@@ -161,12 +106,6 @@
 		$wikiId = $data['wikiId'];
 		$text = stripslashes($data['msg']);
 
-		//Visa enbart texten
-		if ($current_tab == 'Hide') {
-			echo wikiFormat($wikiName, $data);
-			return true;
-		}
-		
 		echo '<div class="wiki">'.
 						'<div class="wiki_head"><ul>'.
 							'<li>'.($current_tab=='view'?'<strong>':'').		'<a href="'.URLadd('View:'.$wikiName).'">View:'.$wikiName.'</a>'.($current_tab=='view'?'</strong>':'').'</li>';
@@ -177,8 +116,7 @@
 		if ($config['wiki']['allow_files']) {
 			echo 		'<li>'.($current_tab=='files'?'<strong>':'').		'<a href="'.URLadd('Files:'.$wikiName).'">Files</a>'.			($current_tab=='files'?'</strong>':'').'</li>';
 		}
-		echo 		'<li><a href="'.URLadd('Hide:'.$wikiName).'">Hide</a></li>'.
-					'</ul></div>'.
+		echo		'</ul></div>'.
 					'<div class="wiki_body">';
 			
 		/* Display the wiki toolbar for super admins */
@@ -244,7 +182,7 @@
 					$showTag = $linkTag = '[[file:'.$filelist[$i]['fileId'].']]';
 					
 					if (in_array($last_name, $files->allowed_image_types)) {
-						$showTag = '<img src="/core/file.php?id='.$filelist[$i]['fileId'].'&amp;w=60&amp;h=60'.getProjectPath().'" title="'.$showTag.'" alt=""/>';
+						$showTag = makeThumbLink($filelist[$i]['fileId'], $showTag);
 					}
 
 					if (strpos($text, $linkTag) === false) {
@@ -299,7 +237,7 @@
 			if ($data['lockedBy']) {
 				echo '<div class="wiki_info_locked">';
 				echo '<img src="/gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
-				echo 'LOCKED FROM EDITING</div>';
+				echo 'LOCKED - This wiki can currently not be edited</div>';
 			}
 			echo wikiFormat($wikiName, $data);
 		}

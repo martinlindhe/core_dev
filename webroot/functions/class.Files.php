@@ -29,8 +29,8 @@ class Files
 
 	private $image_max_width			= 800;	//bigger images will be resized to this size	
 	private $image_max_height			= 600;
-	private $thumb_default_width	= 80;
-	private $thumb_default_height	= 80;
+	public $thumb_default_width		= 80;
+	public $thumb_default_height	= 80;
 	private $image_jpeg_quality		= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 	private $count_file_views			= false;	//auto increments the "cnt" in tblFiles in each $files->sendFile() call
@@ -120,7 +120,7 @@ class Files
 		//Visar kategorier / kataloger
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD) {
 			if (!$categoryId) {
-				$cat_list = $db->GetArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
+				$cat_list = $db->getArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
 				if (!empty($cat_list)) {
 					echo 'Categories:<br/>';
 					for ($i=0; $i<count($cat_list); $i++) {
@@ -147,25 +147,25 @@ class Files
 		}
 
 		//select the files in the current category (or root level for uncategorized files)
-		$list = $db->GetArray($q);
+		$list = $db->getArray($q);
 
 		echo '<div class="file_gadget_content">';
-		for ($i=0; $i<count($list); $i++)
+		foreach ($list as $row)
 		{
-			list($file_firstname, $file_lastname) = explode('.', strtolower($list[$i]['fileName']));
+			list($file_firstname, $file_lastname) = explode('.', strtolower($row['fileName']));
 
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				//show thumbnail of image
-				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" title="'.$list[$i]['fileName'].'" onclick="zoomImage('.$list[$i]['fileId'].', \''.getProjectPath().'\');"><center>';
-				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.getProjectPath().'" alt="Thumbnail"/>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomImage('.$row['fileId'].', \''.getProjectPath().'\');"><center>';
+				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
 				//show icon for audio files
-				echo '<div class="file_gadget_entry" id="file_'.$list[$i]['fileId'].'" title="'.$list[$i]['fileName'].'" onclick="zoomAudio('.$list[$i]['fileId'].',\''.$list[$i]['fileName'].'\',\''.urlencode(getProjectPath()).'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.urlencode(getProjectPath()).'\');"><center>';
 				echo '<img src="/gfx/icon_audio_32.png" width="32" height="32" alt="Audio file"/>';
 				echo '</center></div>';
 			} else {
-				echo 'todo: '.$file_lastname.', '. $list[$i]['fileMime'];
+				echo 'todo: '.$file_lastname.', '. $row['fileMime'];
 			}
 		}
 		echo '</div>';
@@ -219,14 +219,14 @@ class Files
 		
 		if (!is_numeric($fileType)) return false;
 
-		$list = $db->GetArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
+		$list = $db->getArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
 		
 		if (!$list) {
 			echo 'No thumbnails to show!';
 			return;
 		}
 
-		echo '<div id="image_big_holder"><div id="image_big"><img src="/core/file.php?id='.$list[0]['fileId'].getProjectPath().'" alt=""/></div></div>';
+		echo '<div id="image_big_holder"><div id="image_big">'.makeImageLink($list[0]['fileId'], $list[0]['fileName']).'</div></div>';
 		echo '<div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroll_down" onclick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroller">';
@@ -239,7 +239,7 @@ class Files
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->allowed_image_types)) {
 				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onclick="loadImage('.$list[$i]['fileId'].', \'image_big\', \''.urlencode(getProjectPath()).'\');"><center>';
-				echo '<img src="/core/file.php?id='.$list[$i]['fileId'].'&amp;w='.$this->thumb_default_width.'&amp;h='.$this->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.$list[$i]['fileName'].'"/>';
+				echo makeThumbLink($list[$i]['fileId'], $list[$i]['fileName']);
 				echo '</center></div>';
 			}
 		}

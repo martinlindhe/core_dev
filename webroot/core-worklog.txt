@@ -13,8 +13,7 @@
 	file area:
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
-		- adblock etc: göra en funktion som genererar korrekt html för <img src="/core/file.php?id=xx"> + parametrar,
-			kan även skicka med en rnd parameter till bilder som ändrats under sessionen så att de reloadas korrekt i browser cache
+		- kunna inspektera en "generell" datafil med filinfo ruta
 
 
 	misc:
@@ -38,6 +37,9 @@
 	- core db: auto expanderar sql-profil-loggen ifall något sql error förekom under scriptkörningen
 	- core db: varje db driver sätter nu $db->dialect, för att kunna göra specifika optimeringar för en viss dialekt t.ex mysql, samt erbjuda en fallback för andra databaser
 	- core db: visar query cache config+status för mysqli-extension
+	- wiki: tog bort "hide" funktionen helt
+	- files: gjort funktioner som autogenererar <img> taggar för att visa en bild, och för att visa en thumbnail vid default storlek
+	
 	
 2007.04.15
 	- files: kontrollerade alla file.php requests
