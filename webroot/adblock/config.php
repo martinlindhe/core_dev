@@ -6,14 +6,12 @@
 	date_default_timezone_set('Europe/Stockholm');
 
 	$config['core_root'] = '../';
-	require_once($config['core_root'].'functions/class.DB_MySQLi.php');
-	require_once($config['core_root'].'functions/class.Session.php');
-	require_once($config['core_root'].'functions/class.Files.php');
+	require_once($config['core_root'].'core/class.DB_MySQLi.php');
+	require_once($config['core_root'].'core/class.Session.php');
+	require_once($config['core_root'].'core/class.Files.php');
 
-	require_once($config['core_root'].'functions/functions_general.php');
-	require_once($config['core_root'].'functions/functions_textformat.php');
-	require_once($config['core_root'].'functions/functions_wiki.php');
-	require_once($config['core_root'].'functions/functions_comments.php');
+	require_once($config['core_root'].'core/functions_wiki.php');
+	require_once($config['core_root'].'core/functions_comments.php');
 
 	require_once('functions_adblock.php');
 

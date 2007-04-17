@@ -39,6 +39,7 @@
 	- core db: visar query cache config+status för mysqli-extension
 	- wiki: tog bort "hide" funktionen helt
 	- files: gjort funktioner som autogenererar <img> taggar för att visa en bild, och för att visa en thumbnail vid default storlek
+	- core: flyttade alla funktions-include files från /functions/* till /core/*
 	
 	
 2007.04.15
