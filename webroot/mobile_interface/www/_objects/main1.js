@@ -206,4 +206,6 @@ function toggleInp(obj, text, blur_text) {
 	if(text.length > 0 && obj.value == text) obj.value = '';
 	else if(blur_text.length > 0 && obj.value == text) obj.value = blur_text;
 }
+
+function trace(s) { console.debug(s); }
 <!-- End of forum functions //-->

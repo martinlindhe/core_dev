@@ -11,7 +11,7 @@ try {
 } catch (e) {
 	try {
 		xmlGet = new ActiveXObject("Microsoft.XMLHTTP");
-	} catch (E) {
+	} catch (e) {
 		xmlGet = false;
 	}
 }
@@ -72,27 +72,27 @@ function trim(str) {
 	return str.replace(/^\s*|\s*$/g,"");
 }
 function DoCallback(url, type, parameters) {
+	if (!xmlGet) return false;
 	if(!parameters) parameters = '';
-	if(xmlGet) {
-		if(type) {
-			xmlGet.open("POST", url);
-			xmlGet.onreadystatechange = processGet;
-		} else {
-			xmlGet.open("POST", url);
-		}
-		parameters += (parameters.length?'&':'') + 'rand=' + unique();
-		xmlGet.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		xmlGet.setRequestHeader("Content-length", parameters.length);
-		xmlGet.setRequestHeader("Connection", "close");
-		xmlGet.send(parameters);
-	} else return false;
+
+	if (type) {
+		xmlGet.open("POST", url);
+		xmlGet.onreadystatechange = processGet;
+	} else {
+		xmlGet.open("POST", url);
+	}
+	parameters += (parameters.length?'&':'') + 'rand=' + unique();
+	xmlGet.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xmlGet.setRequestHeader("Content-length", parameters.length);
+	xmlGet.setRequestHeader("Connection", "close");
+	xmlGet.send(parameters);
 }
 function processGet() {
 	if(xmlGet.readyState && xmlGet.readyState == 4 && xmlGet.status == 200) {
 		outputMSG(xmlGet);
 	}
 }
-function getMSG() {
+function getMSG() {	
 	if(start)
 		DoCallback('/user/relay/' + id + '/1/', 1);
 	else
@@ -111,14 +111,15 @@ function doMSG() {
 function outputMSG(xmlGet) {
 	gotmsgs = true;
 	if(xmlGet && xmlGet.responseText && xmlGet.responseText.length > 30) {
-		var md5 = xmlGet.responseText.substr(0, 35);
-		var array = xmlGet.responseText.split(md5);
+		//var md5 = xmlGet.responseText.substr(0, 35);
+		//var array = xmlGet.responseText.split(md5);
+		var array = xmlGet.responseText.split('.-.');
 		if(xmlGet.responseText && trim(xmlGet.responseText).length > 0 && !gotFocus) {
 			items++;
 			if(items == '1') taskBlink();
 		}
-		for(i = 1; i < array.length; i++) {
-			if(trim(array[i]).length > 0) {
+		for (i=1; i < array.length; i++) {
+			if (trim(array[i]).length > 0) {
 				var history = array[i].substr(0, 1);
 				var aliasLength = new Number(array[i].substr(1, 2));
 				var alias = array[i].substr(1 + 2, aliasLength);

@@ -1,3 +1,18 @@
+//Makes element with name "n" invisible in browser
+function hide_element_by_name(n)
+{
+	var e = document.getElementById(n);
+	e.style.display = 'none';
+}
+
+//Makes element with name "n" visible in browser
+function show_element_by_name(n)
+{
+	var e = document.getElementById(n);
+	e.style.display = '';
+}
+
+
 var interval, friendsC = 0, url = '/member/retrieveajax/', xmlObj = false, isDone = true;
 try {
 	xmlObj = new ActiveXObject("Msxml2.XMLHTTP");
@@ -57,10 +72,10 @@ function logout() {
 }
 function executeData(text) {
 	if(text) {
-		if(text == 'NAK') { logout(); return; }
+		if (text == 'NAK') { logout(); return; }
 		text = text.split('#');
 		str = '';
-		for(var i = 0; i < text.length; i++) {
+		for (var i = 0; i < text.length; i++) {
 			text[i] = text[i].split(':');
 			if(text[i][0] == 'f') { executeFriendsOnline(text[i][1]); continue; }
 			if(text[i][1] > 0) {
@@ -98,19 +113,28 @@ function activateData(info) {
 	switch(info[0]) {
 		case 'g':
 			obj = 'Xg';
-		break;
+			break;
+
 		case 'm':
 			obj = 'Xm';
-		break;
+			break;
+
 		case 'v':
 			obj = 'Xr';
-		break;
+			break;
+
+		case 'c':
+			//quickchat
+			document.getElementById('quickchat_indicator').onclick = function() {
+				makeChat(info[2]);
+				hide_element_by_name('quickchat_indicator');
+			};
+			show_element_by_name('quickchat_indicator');
+			return;
+
 		default:
 			return;
 		break;
-	}
-	if(info[0] == 'c') {
-		document.getElementById(obj).href = 'javascript:makeChat(\'' + info[2] + '\', 1);';
 	}
 	document.getElementById(obj).style.color = '#832e30';
 	document.getElementById(obj).innerHTML = ' (' + info[1] + ')';

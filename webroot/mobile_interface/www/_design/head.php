@@ -95,6 +95,14 @@ function checkTime(toggle) {
 <li><a href="/member/settings/" class="wht none"><img src="/_objects/icon_mail.gif" alt="" />inställningar</a></li>
 </ul>
 </div>
+
+<div id="quickchat_indicator" style="display: none;">
+	<div class="smallHeader3">
+		<h4 class="cur">Någon vill prata med dig!</h4>
+	</div>
+	<br/><br/>
+</div>
+
 <?
 	if($l) {
 ?>

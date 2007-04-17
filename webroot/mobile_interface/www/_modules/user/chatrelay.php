@@ -1,21 +1,29 @@
 <?
+	/*
+		tar emot text från quickchat-funktionen och sparar ner i databasen + gör nåt mer crap
+	
+	*/
 	if(!$l) {
 		die('.');
 	}
 
-	if(empty($_GET['id'])) {
-		$s = $l;
-	} else {
-		$s = (!is_md5($id))?false:$user->getuser($id);
-	}
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+
+	//$s = (!is_md5($id))?false:$user->getuser($id);
+	$s = $user->getuser($id);
 
 	$closed = false;
 	$blocked = false;
 	$notall = false;
-	if(!$s && is_md5($_GET['id'])) {
+
+/*
+	if (!$s && is_md5($_GET['id'])) {
 		$closed = true;
 		$id = $_GET['id'];
-	} else $id = $s['id_id'];
+	} else
+*/
+	$id = $s['id_id'];
+
 	$own = (!$closed && $s['id_id'] == $l['id_id'])?true:false;
 	if($own) die('.');
 	if(!$closed && $l['level_id'] != '10') {
