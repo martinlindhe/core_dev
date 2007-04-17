@@ -3,8 +3,6 @@
 	if (!$l) die;	//user not logged in
 
 	require('design_head.php');
-	
-	//todo: kontrollera användare är inloggad
 ?>
 	ÄNDRA PRESENTATIONSBILD<br/>
 	<br/>

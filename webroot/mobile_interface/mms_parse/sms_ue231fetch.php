@@ -159,6 +159,8 @@ class email
 		do {
 			$msg .= $this->read();
 		} while (substr($msg, -5) != "\r\n.\r\n");
+		
+		$msg = substr($msg, 0, -5);	//remove ending "\r\n.\r\n"
 
 		$this->parseAttachments($msg);
 		return true;
@@ -192,9 +194,9 @@ class email
 	}	
 	
 	/*	Identifierar mms koder i formatet:
-			BLOG 123456
-			PRES 123456
-			GALL 123456
+			BLOG 12345
+			PRES 12345
+			GALL 12345
 	*/
 	function findMMSCode($text)
 	{
@@ -203,42 +205,31 @@ class email
 		//echo 'looking for mms code: '.$text.'<br>';
 
 		$text = strtoupper(trim(str_replace('  ', ' ', $text)));
+		$text = str_replace('SPAML: ', '', $text);		//remove spam assassin-tagged mail subject
 
 		if (strlen($text) < 5 || strlen($text) > 20) return false;
 
 		$arr = explode(' ', $text);
 		if (count($arr) < 2) return false;
 
+		$mms_code['code'] = $arr[1];
+
 		$blog_aliases = array('BLOG', 'BLOGG');
 		$pres_aliases = array('PRES', 'PRESS', 'PRESENTATION');
 		$gall_aliases = array('GALL', 'GALLERI', 'GALLERY', 'GALERI');
 
-		$mms_code['code'] = $arr[1];
-		
+		if (in_array($arr[0], $blog_aliases)) $mms_code['cmd'] = 'BLOG';
+		if (in_array($arr[0], $pres_aliases)) $mms_code['cmd'] = 'PRES';
+		if (in_array($arr[0], $gall_aliases)) $mms_code['cmd'] = 'GALL';
+
 		$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.secureINS($mms_code['code']).'" LIMIT 1';
 		$mms_code['user'] = $sql->queryResult($q);
 		if (!$mms_code['user']) return false;
 		
-		echo 'identified mms from user '.$mms_code['user'].'...<br>';
-		
-		if (in_array($arr[0], $blog_aliases)) {
-			$mms_code['cmd'] = 'BLOG';
-			return $mms_code;
-		}
-
-		if (in_array($arr[0], $pres_aliases)) {
-			$mms_code['cmd'] = 'PRES';
-			return $mms_code;
-		}
-
-		if (in_array($arr[0], $gall_aliases)) {
-			$mms_code['cmd'] = 'GALL';
-			return $mms_code;
-		}
-
-		return false;
+		echo 'Identified MMS type '.$mms_code['cmd'].' from user '.$mms_code['user'].'...<br>';
+		return $mms_code;
 	}
-	
+
 	/* Takes a email as parameter, returns all attachments, body & header nicely parsed up */
 	//also automatically extracts file attachments and handles them as file uploads
 	//allowed file types as attachments are $config['email']['attachments_allowed_mime_types']
@@ -248,8 +239,6 @@ class email
 
 		$msg = str_replace("\r\n", "\n", $msg);
 		
-		//echo $msg; die;
-
 		//1. Klipp ut headern
 		$pos = strpos($msg, "\n\n");
 		if ($pos === false) return;
@@ -301,7 +290,7 @@ class email
 
 		if (!$multipart_id) die('didnt find multipart id');
 
-		echo 'Splitting msg using id '.$multipart_id.'<br>';
+		//echo 'Splitting msg using id '.$multipart_id.'<br>';
 
 		$part_cnt = 0;
 		do {
@@ -362,8 +351,6 @@ class email
 					$filename = str_replace('"', '', substr($params[1], 5) );
 				}
 			}
-
-			echo 'filename: '.$filename.'<br><br>';
 
 			switch ($attachment['head']['Content-Transfer-Encoding']) {
 				case '7bit':
@@ -570,9 +557,8 @@ class email
 			sleep(2);
 			echo 'Downloading #'.$i.'...<br/>';
 
-			$active = $this->pop3_RETR($i);
-	
-			$this->pop3_DELE($i);
+			$check = $this->pop3_RETR($i);
+			if ($check) $this->pop3_DELE($i);
 		}
 
 		$this->close();
@@ -583,7 +569,7 @@ class email
 	{
 		global $config, $t;
 
-		echo 'Writing '.$filename.' ('.$mime_type.') to disk...<br>';
+		echo 'Writing '.$filename.' ('.$mime_type.') to disk...<br/>';
 
 		$filesize = strlen($data);
 		$q = 'INSERT INTO tblMMSRecieved SET userId='.$mms_code['user'].', fileName="'.secureINS($filename).'", mimeType="'.secureINS($mime_type).'", fileSize='.$filesize.',timeRecieved=NOW()';
