@@ -16,7 +16,7 @@ class DB_MySQL extends DB_Base
 		if ($this->db_handle) mysql_close($this->db_handle);
 	}
 	
-	protected function showMoreSettings()
+	function showMoreSettings()
 	{
 		echo 'Server info: '.mysql_get_server_info($this->db_handle).' ('.mysql_get_host_info($this->db_handle).')<br/>';
 		echo 'Client info: '.mysql_get_client_info().'<br/>';
@@ -66,11 +66,6 @@ class DB_MySQL extends DB_Base
 		return $result;
 	}
 
-	function num_rows(&$resultset)
-	{
-		die('TODO IMPLEMENT num_rows');
-	}
-
 	function getArray($query)
 	{
 		if ($this->debug) $time_started = microtime(true);
@@ -82,8 +77,30 @@ class DB_MySQL extends DB_Base
 
 		$data = array();
 
-		for ($i=0; $i<mysql_num_rows($result); $i++) {
-			$data[$i] = mysql_fetch_array($result, MYSQL_ASSOC);
+		while ($row = mysql_fetch_assoc($result)) {
+			$data[] = $row;
+		}
+
+		mysql_free_result($result);
+
+		if ($this->debug) $this->profileQuery($time_started, $query);
+
+		return $data;
+	}
+
+	function getNumArray($query)
+	{
+		if ($this->debug) $time_started = microtime(true);
+
+		if (!$result = mysql_query($query, $this->db_handle)) {
+			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+			return array();
+		}
+
+		$data = array();
+
+		while ($row = mysql_fetch_row($result)) {
+			$data[] = $row[0];
 		}
 
 		mysql_free_result($result);

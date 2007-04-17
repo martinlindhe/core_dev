@@ -334,10 +334,10 @@ class Session
 
 		echo '<div id="edit_settings" style="width: 300px; background-color: #88EE99; border: 1px solid #aaa; padding: 5px;">';
 		echo '<form name="edit_settings_frm" action="">';
-		for ($i=0; $i<count($list); $i++) {
-			echo '<div id="edit_setting_div_'.$list[$i]['settingId'].'">';
-			echo $list[$i]['settingName'].': <input type="text" name="edit_setting_'.$list[$i]['settingId'].'" value="'.$list[$i]['settingValue'].'"/>';
-			echo '<img src="/gfx/icon_error.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$list[$i]['settingId'].');"/>';
+		foreach($list as $row) {
+			echo '<div id="edit_setting_div_'.$row['settingId'].'">';
+			echo $row['settingName'].': <input type="text" name="edit_setting_'.$row['settingId'].'" value="'.$row['settingValue'].'"/>';
+			echo '<img src="/gfx/icon_error.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].');"/>';
 			echo '</div>';
 		}
 		echo '<input type="submit" value="Save" disabled="disabled"/>';

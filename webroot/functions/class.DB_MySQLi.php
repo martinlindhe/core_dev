@@ -14,7 +14,7 @@ class DB_MySQLi extends DB_Base
 		if ($this->db_handle) $this->db_handle->close();
 	}
 	
-	protected function showMoreSettings()
+	function showMoreSettings()
 	{
 		echo 'Server info: '.$this->db_handle->server_info.' ('.$this->db_handle->host_info.')<br/>';
 		echo 'Client info: '.$this->db_handle->client_info.'<br/>';
@@ -66,11 +66,6 @@ class DB_MySQLi extends DB_Base
 		return $result;
 	}
 	
-	function num_rows(&$resultset)
-	{
-		return $resultset->num_rows;
-	}
-
 	function getArray($query)
 	{
 		if ($this->debug) $time_started = microtime(true);
@@ -82,8 +77,30 @@ class DB_MySQLi extends DB_Base
 
 		$data = array();
 
-		for ($i=0; $i<$result->num_rows; $i++) {
-			$data[$i] = $result->fetch_array(MYSQLI_ASSOC);
+		while ($row = $result->fetch_assoc()) {
+			$data[] = $row;
+		}
+
+		$result->free();
+
+		if ($this->debug) $this->profileQuery($time_started, $query);
+
+		return $data;
+	}
+
+	function getNumArray($query)
+	{
+		if ($this->debug) $time_started = microtime(true);
+
+		if (!$result = $this->db_handle->query($query)) {
+			if ($this->debug) $this->profileError($time_started, $query, $this->db_handle->error);
+			return array();
+		}
+
+		$data = array();
+
+		while ($row = $result->fetch_row()) {
+			$data[] = $row[0];
 		}
 
 		$result->free();

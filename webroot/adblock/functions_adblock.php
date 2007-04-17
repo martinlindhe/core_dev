@@ -82,12 +82,12 @@
 		
 
 		if ($types_sql) {
-			$sql = 'SELECT * FROM tblAdblockRules WHERE deletedBy=0 AND ('.$types_sql.') ORDER BY ruleText ASC'.$limit_sql;
+			$sql = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0 AND ('.$types_sql.') ORDER BY ruleText ASC'.$limit_sql;
 		} else {
-			$sql = 'SELECT * FROM tblAdblockRules WHERE deletedBy=0 ORDER BY ruleText ASC'.$limit_sql;
+			$sql = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0 ORDER BY ruleText ASC'.$limit_sql;
 		}
 		
-		return $db->getArray($sql);
+		return $db->getNumArray($sql);
 	}
 	
 	/* Returns the total number of rules in database */
@@ -254,6 +254,81 @@
 		$sql .= 'ORDER BY t1.timeCreated DESC LIMIT 0,'.$cnt;
 		
 		return $db->getArray($sql);
+	}
+
+	define('DOWNLOAD_METHOD_WEBFORM', 'webform');
+	define('DOWNLOAD_METHOD_SUBSCRIPTION', 'subscription');
+	define('DOWNLOAD_METHOD_RSS', 'rss');		//todo...
+
+	/* Handles a download request for the adblock ruleset */
+	//Input:
+	//POST param: type_0, type_1, type_2, type_3 bool
+	//POST param: type string
+	//POST param: 
+	function handleAdblockDownloadRequest()
+	{
+		global $db, $files, $config;
+
+		$requestType = 0;
+
+		if (isset($_POST['type_0']) || isset($_POST['type_1']) || isset($_POST['type_2']) || isset($_POST['type_3'])) {
+			@$types = $_POST['type_0'].','.$_POST['type_1'].','.$_POST['type_2'].','.$_POST['type_3'];
+			if ($types == ',,,') die;	//javascript blocks this from happening too
+			$requestType = DOWNLOAD_METHOD_WEBFORM;
+		}
+
+		if (isset($_GET['type'])) {
+			switch ($_GET['type']) {
+				case 'unsorted':	$types = '0'; break;
+				case 'ads':				$types = '1'; break;
+				case 'trackers':	$types = '2'; break;
+				case 'counters':	$types = '3'; break;
+				case 'all':				$types = '0,1,2,3'; break;
+				default: die;
+			}
+			$requestType = DOWNLOAD_METHOD_SUBSCRIPTION;
+		}
+
+		if (!$requestType) return;
+
+		$type_ext = '';
+
+		switch ($types) {
+			case '0': case '0,,,':	$type_ext = '-unsorted'; break;
+			case '1': case ',1,,':	$type_ext = '-ads'; break;
+			case '2': case ',,2,':	$type_ext = '-trackers'; break;
+			case '3': case ',,,3':	$type_ext = '-counters'; break;
+			case '0,1,2,3';					$type_ext = '-all'; break;
+			default:								$type_ext = '-custom-'.$types; break;
+		}
+
+		$datestr	= date('Ymd');
+		$hour			= date('H');
+
+		$cache_file = $config['adblock']['cachepath'].'adblockfilters'.$type_ext.'.txt';
+
+		if ($db->debug) {
+			$str = 'Downloaded ruleset '.$cache_file.' ('.$requestType.')';
+			$db->log($str);
+		}
+
+		$lastchanged = 0;
+		if (file_exists($cache_file)) $lastchanged = filemtime($cache_file);
+	
+		if ($lastchanged < time()-($config['adblock']['cacheage']))
+		{
+			$list = getAdblockRules($types);
+			$text = "[Adblock]\n".implode("\n", $list);
+			file_put_contents($cache_file, $text);
+		}
+			
+		if (DOWNLOAD_METHOD_SUBSCRIPTION) {
+			/* Send special headers to the subscriber */
+			header('Filterset-timestamp: '. $lastchanged);
+		}
+	
+		$files->sendTextfile($cache_file);
+		die;
 	}
 
 ?>

@@ -13,9 +13,9 @@
 	require_once($config['core_root'].'functions/functions_general.php');
 	require_once($config['core_root'].'functions/functions_textformat.php');
 	require_once($config['core_root'].'functions/functions_wiki.php');
+	require_once($config['core_root'].'functions/functions_comments.php');
 
 	require_once('functions_adblock.php');
-	require_once('functions_comments.php');	//todo: gör en klass av detta
 
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
@@ -38,8 +38,11 @@
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
 
-
-	//todo: används dessa: ?
-	$config['start_page'] = 'index.php';	//todo: använd ['session']['home_page'] istället
 	$config['adblock']['cachepath'] = 'cache/';
+	$config['adblock']['cacheage'] = 	1; //3600/4;		//time before disk cache expires, in seconds
+
+
+
+	//todo: används denna: ?
+	$config['start_page'] = 'index.php';	//todo: använd ['session']['home_page'] istället
 ?>

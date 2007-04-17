@@ -1,7 +1,7 @@
 --------------[[todo]]--------------
 	platform change:
 		- gör så ajax-filerna funkar som file.php
-
+		- implementera $db->getNumArray() i class.DB_MySQL.php
 
 	wiki:
 		- implementera stöd för "talk" page _eller_ comments
@@ -13,18 +13,29 @@
 	file area:
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
+		- adblock etc: göra en funktion som genererar korrekt html för <img src="/core/file.php?id=xx"> + parametrar,
+			kan även skicka med en rnd parameter till bilder som ändrats under sessionen så att de reloadas korrekt i browser cache
 
 
 	misc:
 		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 		- konvertera zine!
   	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
-		- Konvertera functions_categories, functions_comments + några till användbara moduler till klasser
   	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen
-  	- Försök bygga så mycket logik som möjligt i stored procedures
+  	- Försök bygga mer logik i sql queries / stored procedures
+
+
+	session/user settings:
+		- fixa till den, den funkar ej: http://localhost/oop_test/settings.php
 
 
 --------------[[changelog]]--------------
+2007.04.17
+	- adblock: flyttade ut den sista funktionen sendTextFile från functions_files.php och skrotade den filen
+	- adblock/download.php: flyttade över all download logik + ruleset cache koden till handleAdblockDownloadRequest()
+	- core: implementerade $db->getNumArray() för att returnera 1-dimensionella arrayer
+	- core db: tog bort num_rows() funktionerna
+	
 2007.04.15
 	- files: kontrollerade alla file.php requests
 	- files: fixade så mp3-spelaren kan avkoda '&amp;' i url:en

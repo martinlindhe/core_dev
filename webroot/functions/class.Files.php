@@ -7,7 +7,6 @@
 	Written by Martin Lindhe, 2007
 */
 
-require_once('functions_files.php');
 require_once('functions_general.php');
 
 define('CATEGORY_TYPE_FILES', 1);
@@ -556,6 +555,19 @@ class Files
 		if ($this->count_file_views) {
 			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
 		}
+	}
+
+	function sendTextfile($filename)
+	{
+		//required for IE6:
+		header('Cache-Control: cache, must-revalidate');
+
+		//header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($realFileName)) . ' GMT');
+		header('Content-Length: '.filesize($filename));
+		header('Content-Type: text/plain');
+		header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+
+		readfile($filename, 'r');
 	}
 
 	//takes get parameters 'w' and 'h'

@@ -7,6 +7,11 @@
 	TODO:!!!!! en funktion som returnerar mysql_num_rows av angiven query enbart 	
 	todo: metod för att anropa stored procedures
 	todo: rename GetArray() till Array() ? eller är det för confusing med array() datatyp ?
+	
+	todo: renama getNumArray() ???? vad heter den typen av resultat. och finns det nån annan funktion för just det ändamålet istället för mysqli_fetch_array()
+	
+	todo: börja använda http://se2.php.net/manual/en/function.mysqli-fetch-object.php, returnera kolumnamn direkt som objektvariabler
+	
 */
 
 define('LOGLEVEL_NOTICE', 1);
@@ -24,26 +29,26 @@ abstract class DB_Base
 	public $insert_id = 0;
 
 	/* Escapes a string for use in queries */
-	abstract public function escape($query);
+	abstract function escape($query);
 
 	/* Performs a query that don't return anything
 		Example: INSERT a=1 INTO t */
-	abstract public function query($query);
+	abstract function query($query);
 	
-	/* Returns the number of rows used in previous query */
-	abstract public function num_rows(&$resultset);
-
 	/* Returns an array with the results, with columns as array indexes
 		Example: SELECT * FROM t */
-	abstract public function getArray($query);
+	abstract function getArray($query);
+	
+	/* Returns an 1-dimensional array with a numeric index */
+	abstract function getNumArray($query);
 
 	/* Returns one row-result with columns as array indexes
 		Example: SELECT * FROM t WHERE id=1 (where id is distinct) */
-	abstract public function getOneRow($query);
+	abstract function getOneRow($query);
 
 	/* Returns one column-result only
 		Example: SELECT a FROM t WHERE id=1 (where id is distinct) */
-	abstract public function getOneItem($query);
+	abstract function getOneItem($query);
 
 
 	/****************************************************/
@@ -54,7 +59,7 @@ abstract class DB_Base
 	abstract protected function connect();
 	
 	/* Shows driver-specific settings */
-	abstract protected function showMoreSettings();
+	abstract function showMoreSettings();
 
 	//default settings
 	protected $host	= 'localhost';

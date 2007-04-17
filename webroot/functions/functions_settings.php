@@ -15,14 +15,14 @@
 		$settingName = $db->escape($settingName);
 		$settingValue = $db->escape($settingValue);
 
-		$sql = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' AND settingName="'.$settingName.'"';
-		$check = $db->query($sql);
-		if ($db->num_rows($check)) {
-			$sql = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' AND settingName="'.$settingName.'"';
-			$db->query($sql);
+		//todo: använd mysql REPLACE kommando
+		$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' AND settingName="'.$settingName.'"';
+		if ($db->getOneItem($q)) {
+			$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' AND settingName="'.$settingName.'"';
+			$db->query($q);
 		} else {
-			$sql = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$settingType.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
-			$db->query($sql);
+			$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$settingType.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
+			$db->query($q);
 		}
 
 		return true;

@@ -294,7 +294,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `userIP` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=404 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=438 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblProblemSites` (
   `siteId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -316,7 +316,7 @@ CREATE TABLE `tblRevisions` (
   `timeCreated` datetime NOT NULL,
   `categoryId` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`indexId`)
-) ENGINE=MyISAM AUTO_INCREMENT=122 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=124 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ownerId` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -1060,7 +1060,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `userIP` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=155 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=158 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ownerId` smallint(5) unsigned NOT NULL DEFAULT '0',

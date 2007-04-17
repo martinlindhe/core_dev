@@ -9,7 +9,6 @@
 	*/
 	
 	require_once('functions_revisions.php');
-	require_once('functions_files.php');
 
 	//wiki module settings:
 	$config['wiki']['log_history'] = true;
