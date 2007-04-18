@@ -14,12 +14,11 @@
 		- implementera stöd för "talk" page _eller_ comments
 		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- logga history för wiki file deletes via ajax
-
+  	- gör en /core/wiki.php,  ta bort /adblock/wiki.php
 
 	file area:
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
-		- kunna inspektera en "generell" datafil med filinfo ruta
 
 
 	admin gränssnitt:
@@ -52,7 +51,6 @@
 
 --------------[[projekt todo]]--------------
   adblock:
-  	- #1 gör en /core/wiki.php
 		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
 
 
@@ -79,6 +77,9 @@
 	- core: news modul skapad, news admin modul skapad. tblNews skapad
 	- core wiki: la till inställning för att helt gömma wiki-ramen
 	- core wiki: buggfix - om inte en wiki finns så visades inget alls av wiki();
+	- files: visar nu fil-inforuta för mp3:or med
+	- files: visar nu fil-inforuta för "generella" filer med
+
 
 2007.04.17
 	- adblock: flyttade ut den sista funktionen sendTextFile från functions_files.php och skrotade den filen

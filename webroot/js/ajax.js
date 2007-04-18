@@ -122,10 +122,7 @@ function ajax_get_fileinfo_callback()
 {
 	if (!fileinfo_request.ResultReady()) return;
 
-	var e = document.getElementById('zoom_image_info');
-	empty_element(e);
-
-	e.innerHTML = fileinfo_request._request.responseText;
+	zoomShowFileInfo(fileinfo_request._request.responseText);
 	ajax_anim_abort = true;
 	hide_ajax_anim();
 

@@ -79,7 +79,7 @@ class Files
 
 		if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
 
-		require_once($config['core_root'].'layout/image_zoom_layer.php');
+		require_once($config['core_root'].'layout/file_details_layer.php');
 		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
 		if ($fileType == FILETYPE_FILEAREA_UPLOAD) {
@@ -160,12 +160,15 @@ class Files
 				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
-				//show icon for audio files
+				//show icon for audio files. urlencodes project path so it gets passed thru to flash file
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.urlencode(getProjectPath()).'\');"><center>';
 				echo '<img src="/gfx/icon_audio_32.png" width="32" height="32" alt="Audio file"/>';
 				echo '</center></div>';
 			} else {
-				echo 'todo: '.$file_lastname.', '. $row['fileMime'];
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomFile('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
+				echo 'General file:<br/>';
+				echo $row['fileName'].'<br/>';
+				echo '</center></div>';
 			}
 		}
 		echo '</div>';
@@ -249,7 +252,7 @@ class Files
 	}
 	
 	/* Creates a new category to store files in */
-	private function createCategory($categoryName, $globalCategory = 0)
+	function createCategory($categoryName, $globalCategory = 0)
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($globalCategory)) return false;
@@ -310,43 +313,46 @@ class Files
 	
 
 	/* Stores uploaded file associated to $session->id */
-	private function handleUpload($FileData, $fileType, $categoryId = 0)
+	function handleUpload($FileData, $fileType, $categoryId = 0)
 	{
 		global $db, $session;
+
 		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($categoryId)) return false;
 		
 		//ignore empty file uploads
 		if (!$FileData['name']) return;
 
 		if (!is_uploaded_file($FileData['tmp_name'])) {
-			$session->error = 'File too big';
+			$session->error = 'File upload error';
 			$db->log('Attempt to upload too big file');
 			return false;
 		}
-
-		$enc_filename = $db->escape(basename(strip_tags($FileData['name'])));
-		$enc_mimetype = $db->escape(strip_tags($FileData['type']));
+		
+		$enc_filename = basename(strip_tags($FileData['name']));
+		$enc_mimetype = strip_tags($FileData['type']);
 
 		list($file_firstname, $file_lastname) = explode('.', strtolower($enc_filename));
 
-		$filesize = filesize($FileData['tmp_name']);
+		/*if (!in_array($file_lastname, $this->allowed_image_types) && !in_array($file_lastname, $this->allowed_audio_types)) {
+			return 'File type not allowed';
+		}*/
 
-  	$q = 'INSERT INTO tblFiles SET fileName="'.$enc_filename.'",fileSize='.$filesize.',fileMime="'.$enc_mimetype.'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+		$filesize = filesize($FileData['tmp_name']);
+  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
   	$db->query($q);
   	$fileId = $db->insert_id;
-  	
+
 		//Identify and handle various types of files
 		if (in_array($file_lastname, $this->allowed_image_types)) {
 			$this->handleImageUpload($fileId, $FileData);
 		} else if (in_array($file_lastname, $this->allowed_audio_types)) {
-			$this->handleAudioUpload($fileId, $FileData);
+			$this->handleGeneralUpload($fileId, $FileData);
 		} else {
-			unlink($FileData['tmp_name']);
-			return 'Unsupported filetype';
+			$this->handleGeneralUpload($fileId, $FileData);
 		}
 	}
 
-	private function handleAudioUpload($fileId, $FileData)
+	function handleGeneralUpload($fileId, $FileData)
 	{
 		global $db;
 
@@ -360,7 +366,7 @@ class Files
 	}
 
 	/* Handle image upload, used internally only */
-	private function handleImageUpload($fileId, $FileData)
+	function handleImageUpload($fileId, $FileData)
 	{
 		global $db;
 
@@ -384,7 +390,7 @@ class Files
 	}
 
 	/* Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio */
-	private function resizeImageCalc($filename, $to_width, $to_height)
+	function resizeImageCalc($filename, $to_width, $to_height)
 	{
 		list($orig_width, $orig_height) = getimagesize($filename);
 
@@ -410,7 +416,7 @@ class Files
 		return Array(ceil($y_ratio * $orig_width), $max_height);
 	}
 
-	private function resizeImage($in_filename, $out_filename, $to_width=0, $to_height=0)
+	function resizeImage($in_filename, $out_filename, $to_width=0, $to_height=0)
 	{
 		if (empty($to_width) && empty($to_height)) return false;
 
@@ -454,14 +460,14 @@ class Files
 	}
 
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
-	private function setCachedHeaders()
+	function setCachedHeaders()
 	{
 		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
 		header('Cache-Control: Public');
 		header('Pragma: Public');
 	}
 
-	private function setNoCacheHeaders()
+	function setNoCacheHeaders()
 	{
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
@@ -571,7 +577,7 @@ class Files
 	}
 
 	//takes get parameters 'w' and 'h'
-	private function sendImage($_id)
+	function sendImage($_id)
 	{
 		global $session;
 
@@ -653,8 +659,8 @@ class Files
 		$file = $db->getOneRow($q);
 		if (!$file) return false;
 
-		$result = 'Name: '.htmlentities($file['fileName']).'<br/>'.
-							'Filesize: '.$this->formatDataSize($file['fileSize']).'<br/>'.
+		$result = 'Name: '.strip_tags($file['fileName']).'<br/>'.
+							'Filesize: '.formatDataSize($file['fileSize']).'<br/>'.
 							'Uploader: '.htmlentities($file['uploaderName']).'<br/>'.
 							'At: '.$file['timeUploaded'].'<br/>';
 		if ($this->count_file_views) $result .= 'Downloaded: '.$file['cnt'].' times';

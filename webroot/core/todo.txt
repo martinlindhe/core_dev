@@ -1,1 +1,5 @@
-	använda $_ prefix på input variabler som är user supplied till en funktion
+coding style:
+
+	* använda $_ prefix på input variabler som är user supplied till en funktion
+	* använda foreach() istället för for() för att iterera över sql resultset arrayer i den mån det är praktiskt
+	  (=mer lättläst kod,kanske lite prestanda)

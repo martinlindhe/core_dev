@@ -285,7 +285,7 @@ CREATE TABLE `tblFiles` (
   `timeUploaded` datetime NOT NULL,
   `cnt` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`fileId`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblLogs` (
   `entryId` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `entryText` text CHARACTER SET utf8 NOT NULL,
@@ -328,7 +328,7 @@ CREATE TABLE `tblRevisions` (
   `timeCreated` datetime NOT NULL,
   `categoryId` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`indexId`)
-) ENGINE=MyISAM AUTO_INCREMENT=128 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=129 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ownerId` smallint(5) unsigned NOT NULL DEFAULT '0',
