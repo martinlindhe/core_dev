@@ -10,8 +10,6 @@
 		$project = '../'.$project.'/';
 	}
 
-	if (!file_exists($project.'config.php')) die;
-
 	require_once($project.'config.php');
 
 	$files->sendFile($fileId);

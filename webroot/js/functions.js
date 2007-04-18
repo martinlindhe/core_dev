@@ -59,7 +59,7 @@ function zoomImage(id, ref)
 	zoomed_id = id;
 
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id);
+	ajax_get_fileinfo(id, ref);
 
 	hide_element_by_name('zoom_audio_layer');
 	show_element_by_name('zoom_image_layer');
@@ -72,8 +72,8 @@ function zoomFile(id, ref)
 	zoomed_id = id;
 
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id);
-
+	ajax_get_fileinfo(id, ref);
+	
 	hide_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
 	show_element_by_name('zoom_file_layer');
@@ -94,7 +94,7 @@ function zoomAudio(id, name, ref)
 	fo.write('zoom_audio');
 	
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id);
+	ajax_get_fileinfo(id, ref);
 
 	show_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
@@ -120,10 +120,10 @@ function zoomHideElements()
 
 
 //used by image zoomer
-function delete_selected_file()
+function delete_selected_file(ref)
 {
 	//Send AJAX call for file delete
-	ajax_delete_file(zoomed_id);
+	ajax_delete_file(zoomed_id, ref);
 
 	//Hide selected file
 	zoomHideElements();
@@ -135,11 +135,11 @@ function delete_selected_file()
 }
 
 //used by image zoomer
-function rotate_selected_file(angle)
+function rotate_selected_file(angle, param)
 {
 	var e = document.getElementById('zoom_image');
 	var now = new Date();
-	e.src = '/core/image_rotate.php?i=' + zoomed_id + '&a=' + angle + '&' + now.getTime();
+	e.src = '/core/image_rotate.php?i=' + zoomed_id + '&a=' + angle + '&' + now.getTime() + param;
 }
 
 

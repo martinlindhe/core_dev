@@ -4,9 +4,9 @@
 		<img id="zoom_image" src="/gfx/ajax_loading.gif" alt="Image"/><br/>
 		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
-		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
-		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
+		<input type="button" class="button" value="Delete image" onclick="delete_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90,'<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90,'<?=getProjectPath()?>'))"/>
 <? } ?>
 	</center>
 
@@ -20,7 +20,7 @@
 		<br/>
 		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Delete song" onclick="delete_selected_file()"/>
+		<input type="button" class="button" value="Delete song" onclick="delete_selected_file('<?=getProjectPath()?>')"/>
 <? } ?>
 	</center>
 
@@ -31,7 +31,7 @@
 	<center>
 		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Delete file" onclick="delete_selected_file()"/>
+		<input type="button" class="button" value="Delete file" onclick="delete_selected_file('<?=getProjectPath()?>')"/>
 <? } ?>
 	</center>
 

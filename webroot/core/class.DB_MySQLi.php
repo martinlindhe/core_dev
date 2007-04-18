@@ -42,7 +42,7 @@ class DB_MySQLi extends DB_Base
 
 			die('<bad>Database connection error.</bad>');
 		}
-		
+
 		if ($this->debug) $this->profileConnect($time_started);
 	}
 
@@ -66,7 +66,29 @@ class DB_MySQLi extends DB_Base
 		
 		return $result;
 	}
-	
+
+	function delete($q)
+	{
+		if ($this->debug) $time_started = microtime(true);
+
+		$result = $this->db_handle->query($q);
+
+		$affected_rows = false;
+		if ($result) $affected_rows = $this->db_handle->affected_rows;
+
+		if (!$result && $this->debug) {
+			$this->insert_id = 0;
+			$this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+		} else if (!$result) {
+			//if debug is turned off (production) and a query fail, just die silently
+			die;
+		}
+
+		if ($this->debug) $this->profileQuery($time_started, $q);
+
+		return $affected_rows;
+	}
+
 	function getArray($query)
 	{
 		if ($this->debug) $time_started = microtime(true);

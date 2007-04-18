@@ -33,12 +33,16 @@ abstract class DB_Base
 		Example: INSERT a=1 INTO t */
 	abstract function query($query);
 	
+	/* Performs a query that does a DELETE, returns the number of rows affected
+		Example: DELETE FROM t WHERE id=1 */
+	abstract function delete($query);
+	
 	/* Returns an array with the results, with columns as array indexes
 		Example: SELECT * FROM t */
 	abstract function getArray($query);
 	
 	/* Returns an array with the results mapped as key => value
-		Example: SHOW VARIABLES LIKE "have_query_cache" */
+		Example: SHOW VARIABLES LIKE "%cache%" */
 	abstract function getMappedArray($query);
 	
 	/* Returns an 1-dimensional array with a numeric index */
@@ -71,7 +75,7 @@ abstract class DB_Base
 	protected $database = '';
 	protected $db_handle = false;
 	protected $db_driver = '';
-
+	
 	//debug variables
 	public $debug = false;
 	protected $connect_time = 0;

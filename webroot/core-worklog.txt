@@ -1,20 +1,16 @@
 --------------[[platform todo]]--------------
-	platform change:
-		- gör så ajax-filerna funkar som file.php:
-			* gör wrapperfunktioner som genererar korrekt html för ajax-anropen, eller iaf skicka med getProjectName()
-
-
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
-		- $db->log() för user logged in & user logged out visar aldrig username i loggen!
+	X	- $db->log() för user logged in & user logged out visar aldrig username i loggen!
 
 
 	wiki:
 		- gör ny toppmeny med div & ul & li osv, bort med tables
-		- implementera stöd för "talk" page _eller_ comments
+	X	- implementera stöd för "talk" page _eller_ comments
 		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- logga history för wiki file deletes via ajax
-  	- gör en /core/wiki.php,  ta bort /adblock/wiki.php
+  X	- gör en /core/wiki.php,  ta bort /adblock/wiki.php
+
 
 	file area:
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
@@ -22,32 +18,31 @@
 
 
 	admin gränssnitt:
-		- gör ett admin-gränssnitt som delas av alla "projekt":
+	X	- gör ett admin-gränssnitt som delas av alla "projekt":
 			* flytta ut admin_events.php från adblock till detta
-		- visa phpinfo
+	X	- visa phpinfo
 		- visa "kompatiblitets check", om denna php version är testad som "kompatibel" med aktuella plattformen, t:ex "5.2.*"
 			* visa även apache & mysql versioner samlat på en sida
 			* samt visa olika php settings och huruvida dom är felkonfade (show_errors borde ge varning om debug=off)
 
 
 	news modul:
-		- rss feed
-		- kommentarer
-		- vote på kvalitén
-		- nyhetskategorier. rss feed på alla + på enskild kategori
-		- rss html tag måste va i headern... hitta på nån lösning för det. xhtml error: /adblock/news.php
-		- kunna tagga upp heading vs body av en nyhetsartiekl. samt även kunna dela upp den på flera sidor
-		- kunna bifoga filer till en nyhet
+	X	- rss feed
+ 	 	* Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
+	X	- kommentarer
+		- vote på kvalitén:
+  		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
+	X	- nyhetskategorier. rss feed på alla + på enskild kategori
+	X	- rss html tag måste va i headern... hitta på nån lösning för det. xhtml error: /adblock/news.php
+	X	- kunna tagga upp heading vs body av en nyhetsartiekl. samt även kunna dela upp den på flera sidor
+	X	- kunna bifoga filer till en nyhet
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
 
 
 	misc:
 		- konvertera zine!
-  	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
-  	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
   	- Försök bygga mer logik i sql queries / stored procedures
-  	- gör en funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida
-
+  X	- gör en funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida
 
 --------------[[projekt todo]]--------------
   adblock:
@@ -55,21 +50,25 @@
 
 
 	lyrics:
-		- hi prio:
-			#1: rensa upp modererings-logiken...
-				- gör en moderate klass!
-				- när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
-				- när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
+	X	- rensa upp modererings-logiken...
+			* gör en moderate include!
+			* när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
+			* när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
 
-			#2: BORT MED TABLES i den mån det går
-			#3: åter-inserta de texter som pajats pga latin1->utf8 konverteringen
+		- BORT MED TABLES i den mån det går
+		- åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 
-		- buggfix/mindre features:
-			* edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
-			* edit_record.php: kunna editera recordInfo
-			* lista låtar som inte finns på nån skiva (admin)
-			* lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
-			* möjlighet att radera ett band
+		- edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
+		- edit_record.php: kunna editera recordInfo
+		- lista låtar som inte finns på nån skiva (admin)
+		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
+		- möjlighet att radera ett band
+
+
+--[[todo legend]]--
+X = hi prio task
+- = topic
+* = notes belonging to above topic
 
 --------------[[changelog]]--------------
 2007.04.18
@@ -79,6 +78,7 @@
 	- core wiki: buggfix - om inte en wiki finns så visades inget alls av wiki();
 	- files: visar nu fil-inforuta för mp3:or med
 	- files: visar nu fil-inforuta för "generella" filer med
+	- core: gjort så att /core/ajax*.php filerna funkar som /core/file.php, de kan ta en project-name parameter för att hitta rätt include
 
 
 2007.04.17

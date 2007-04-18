@@ -45,7 +45,7 @@ class DB_MySQL extends DB_Base
 		}
 
 		mysql_select_db($this->database, $this->db_handle);
-
+		
 		if ($this->debug) $this->profileConnect($time_started);
 	}
 

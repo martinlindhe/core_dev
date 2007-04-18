@@ -165,7 +165,7 @@ class Files
 				echo '<img src="/gfx/icon_audio_32.png" width="32" height="32" alt="Audio file"/>';
 				echo '</center></div>';
 			} else {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomFile('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
 				echo 'General file:<br/>';
 				echo $row['fileName'].'<br/>';
 				echo '</center></div>';
@@ -179,7 +179,7 @@ class Files
 			echo '<div id="file_gadget_upload">';
 			if (!$categoryId) echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 			if ($this->apc_uploads) {
-				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.');">';
+				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.',\''.getProjectPath().'\');">';
 				echo '<input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$session->id.'"/>';
 			} else {
 				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
@@ -286,11 +286,11 @@ class Files
 		} else {
 			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id.' AND ownerId='.$session->id;
 		}
-		$db->query($q);
+
+		if (!$db->delete($q)) return false;
 
 		//physically remove the file from disk
 		unlink($this->upload_dir.$_id);
-
 		$this->clearThumbs($_id);
 	}
 	
