@@ -7,7 +7,10 @@
 	ÄNDRA PRESENTATIONSBILD<br/>
 	<br/>
 	Du kan ladda upp en ny presentationsbild genom att<br/>
-	skicka ett MMS till följande nummer: 12345
+	skicka ett MMS till cs@inconet.se med rubriken "PRES xxx",
+	där xxx är din unika MMS-kod.<br/><br/>
+	
+	<a href="user_change_mms_code.php">ÄNDRA MMS-KOD</a>
 
 <?
 	require('design_foot.php');

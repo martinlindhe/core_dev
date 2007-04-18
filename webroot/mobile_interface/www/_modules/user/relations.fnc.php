@@ -213,11 +213,11 @@
 		global $sql, $t;
 
 		if (!is_numeric($_id) || !is_numeric($_start) || !is_numeric($_end)) return false;
-		
+
 		$q = "SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.lastlog_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$_id;
 		if ($_ord) $q .= ' ORDER BY '.$_ord;
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
-		
+
 		return $sql->query($q, 0, 1);
 	}
 
