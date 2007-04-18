@@ -44,13 +44,19 @@
 	
 	/* Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
 			run from the / path it will return nothing, else the directory name of the directory script are run from */
-	function getProjectPath()
+	function getProjectPath($_amp = true)
 	{
 		$project_path = dirname($_SERVER['SCRIPT_NAME']);
 	
 		$pos = strrpos($project_path, '/');
 		$proj_name = substr($project_path, $pos+1);
-		if ($proj_name) return '&amp;pr='.$proj_name;
+		if ($proj_name) {
+			if ($_amp) {
+				return '&amp;pr='.$proj_name;
+			} else {
+				return '?pr='.$proj_name;
+			}
+		}
 		return '';
 	}
 

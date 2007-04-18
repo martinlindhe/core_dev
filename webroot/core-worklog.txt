@@ -18,8 +18,6 @@
 
 
 	admin gränssnitt:
-	X	- gör ett admin-gränssnitt som delas av alla "projekt":
-			* flytta ut admin_events.php från adblock till detta
 	X	- visa phpinfo
 		- visa "kompatiblitets check", om denna php version är testad som "kompatibel" med aktuella plattformen, t:ex "5.2.*"
 			* visa även apache & mysql versioner samlat på en sida
@@ -79,7 +77,8 @@ X = hi prio task
 	- files: visar nu fil-inforuta för mp3:or med
 	- files: visar nu fil-inforuta för "generella" filer med
 	- core: gjort så att /core/ajax*.php filerna funkar som /core/file.php, de kan ta en project-name parameter för att hitta rätt include
-
+	- core: gjort ett admin-gränssnitt som delas av alla "projekt", i /admin/
+	- adblock: flyttade ut admin_events.php till /admin/
 
 2007.04.17
 	- adblock: flyttade ut den sista funktionen sendTextFile från functions_files.php och skrotade den filen

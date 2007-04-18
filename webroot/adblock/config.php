@@ -36,6 +36,8 @@
 
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
+	
+	$config['site']['web_root'] = '/adblock/';	//path on web server, to use to address paths for css & js includes
 
 	$config['adblock']['cachepath'] = 'cache/';
 	$config['adblock']['cacheage'] = 	1; //3600/4;		//time before disk cache expires, in seconds
