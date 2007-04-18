@@ -89,56 +89,51 @@
 <? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&ord='.$thisord, 'med', STATSTR); ?>
 <table cellspacing="0" width="586">
 <?
-	if(!empty($res) && count($res)) {
+if(!empty($res) && count($res)) {
 	if(!$blocked) {
-	$i = 0;
-	foreach($res as $row) {
-		$i++;
-		$gotpic = ($row['u_picvalid'] == '1')?true:false;
-echo '
-<tr'.(($gotpic && $view != $row['main_id'])?' onmouseover="this.className = \'t1\'; dumblemumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 2);" onmouseout="this.className = \'\'; mumbledumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 0, 2);"':' onmouseover="this.className = \'t1\';" onmouseout="this.className = \'\';"').'>
-	<td class="spac pdg"><a name="R'.$row['main_id'].'"></a>'.$user->getstring($row).'</td>
-	<td class="cur spac pdg" onclick="goUser(\''.$row['id_id'].'\');">'.secureOUT($row['rel_id']).'</td>
-	<td class="cur pdg spac cnt">'.(($row['u_picvalid'] == '1')?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>
-	<td class="cur spac pdg rgt" onclick="goUser(\''.$row['id_id'].'\');">'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date']).')</span>':'<span class="off">'.nicedate($row['lastonl_date']).'</span>').'</td>
-	'.(($own)?'<td class="spac rgt pdg_tt"><a href="'.l('user', 'relations', $s['id_id'], $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&d='.$row['id_id'].'\');"><img src="'.OBJ.'icon_del.gif" title="Radera" style="margin-bottom: -4px;" /></a></td>':'').'
-</tr>
-';
-if($view == $row['main_id']) {
-echo '
-	<tr>
-		<td colspan="5" class="pdg">
-		<form name="do" action="'.l('user', 'relations', $row['id_id']).'" method="post">
-';
-	if($isAdmin)
-		echo '<input type="text" class="txt" name="ins_rel" onfocus="this.select();" value="'.secureOUT($row['rel_id']).'" style="width: 205px; margin-right: 10px;">';
-	else {
-		echo '<select name="ins_rel" class="txt">';
-		foreach($rel as $r) {
-			$sel = ($r[1] == $row['rel_id'])?' selected':'';
-			echo '<option value="'.$r[0].'"'.$sel.'>'.secureOUT($r[1]).'</option>';
+		$i = 0;
+		foreach($res as $row) {
+			$i++;
+			$gotpic = ($row['u_picvalid'] == '1')?true:false;
+			echo '
+			<tr'.(($gotpic && $view != $row['main_id'])?' onmouseover="this.className = \'t1\'; dumblemumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 2);" onmouseout="this.className = \'\'; mumbledumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 0, 2);"':' onmouseover="this.className = \'t1\';" onmouseout="this.className = \'\';"').'>
+				<td class="spac pdg"><a name="R'.$row['main_id'].'"></a>'.$user->getstring($row).'</td>
+				<td class="cur spac pdg" onclick="goUser(\''.$row['id_id'].'\');">'.secureOUT($row['rel_id']).'</td>
+				<td class="cur pdg spac cnt">'.(($row['u_picvalid'] == '1')?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>
+				<td class="cur spac pdg rgt" onclick="goUser(\''.$row['id_id'].'\');">'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date']).')</span>':'<span class="off">'.nicedate($row['lastonl_date']).'</span>').'</td>
+				'.(($own)?'<td class="spac rgt pdg_tt"><a href="'.l('user', 'relations', $s['id_id'], $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&d='.$row['id_id'].'\');"><img src="'.OBJ.'icon_del.gif" title="Radera" style="margin-bottom: -4px;" /></a></td>':'').'
+			</tr>';
+
+			if($view == $row['main_id']) {
+				//Visar "Ändra typ av relation"
+				echo '<tr><td colspan="5" class="pdg">';
+				echo '<form name="do" action="'.l('user', 'relations', $row['id_id']).'" method="post">';
+				echo '<select name="ins_rel" class="txt">';
+				foreach($rel as $r) {
+					$sel = ($r[1] == $row['rel_id'])?' selected':'';
+					echo '<option value="'.$r[0].'"'.$sel.'>'.secureOUT($r[1]).'</option>';
+				}
+				echo '</select>';
+				echo '<input type="submit" class="br" value="spara" style="margin-left: 10px;"></form>';
+				echo '</td></tr>';
+			} else if($gotpic) {
+				echo '<tr id="m_pic:'.$i.'" style="display: none;"><td colspan="2">'.$user->getphoto($row['id_id'].$row['u_picid'].$row['u_picd'], $row['u_picvalid'], 0, 0, '', ' ').'<span style="display: none;">'.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'</span></td></tr>';
+			}
 		}
-		echo '</select>';
-	}
-echo'
-		<input type="submit" class="br" value="spara" style="margin-left: 10px;"></form>
-		</td>
-	</tr>
-';
-} elseif($gotpic) echo '<tr id="m_pic:'.$i.'" style="display: none;"><td colspan="2">'.$user->getphoto($row['id_id'].$row['u_picid'].$row['u_picd'], $row['u_picvalid'], 0, 0, '', ' ').'<span style="display: none;">'.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'</span></td></tr>';
-	}
-} else {
-	  foreach($res as $row){
-echo '
-<tr>
-	<td class="spac pdg">'.$user->getstring($row, '', array('nolink' => 1)).'</td>
-	<td class="spac pdg rgt">'.nicedate($row['activated_date']).'</td>
-	<td class="spac pdg rgt"><a class="cur" onclick="return confirm(\'Säker ?\')" href="'.l('user', 'relations').'&blocked&del='.$row['id_id'].'"><img src="'.OBJ.'icon_del.gif" title="Avblockera" style="margin-bottom: -4px;" /></a></td>
-</tr>';
+	} else {
+	  foreach($res as $row) {
+			echo '
+			<tr>
+				<td class="spac pdg">'.$user->getstring($row, '', array('nolink' => 1)).'</td>
+				<td class="spac pdg rgt">'.nicedate($row['activated_date']).'</td>
+				<td class="spac pdg rgt"><a class="cur" onclick="return confirm(\'Säker ?\')" href="'.l('user', 'relations').'&blocked&del='.$row['id_id'].'"><img src="'.OBJ.'icon_del.gif" title="Avblockera" style="margin-bottom: -4px;" /></a></td>
+			</tr>';
 	  }
 	}
 
-	} else echo '<tr><td class="spac pdg cnt">Inga '.($blocked?'ovänner':'vänner').'.</td></tr>';
+} else {
+	echo '<tr><td class="spac pdg cnt">Inga '.($blocked?'ovänner':'vänner').'.</td></tr>';
+}
 ?>
 </table>
 <? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&ord='.$thisord, 'medmin'); ?>

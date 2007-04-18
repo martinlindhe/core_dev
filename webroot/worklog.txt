@@ -83,29 +83,24 @@
 	- quickchat: lyckats återuppliva funktionaliteten, inklusive meddelandehistorik
 	- webb-galleri: kan nu ändra beskrivning på en bild
 
-***********************************************************************************************************************************
-Kvar att göra quickchat:
-	- inget
+2007-04-18 Onsdag:
+	- mobila gränssnittet: går direkt till profilsidan vid bara 1 sökresultat på användare
+	- mobila gränssnittet: la till paging på dina blockeringar-översikten
+	- mobila gränssnittet: listar ens kompislista i dropdownlista på "nytt mail"-sidan
+	- mobila gränssnittet: "MAILA" länkar leder nu till en "skicka mail" sida med förifylld mottagare
+	- skrivit "3 frågor" angående mobila gränssnittet till testpersonerna
+	- webbgränssnittet: "ändra relationstyp" är nu en dropdown lista istället för input-fält
 
+***********************************************************************************************************************************
 Kvar att göra MMS:
 	- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
-
-Kvar att göra för modulerna "relationer/blockeringar" & "sök användare":
-	- inget
-
-Kvar att göra för modulen guestbook:
-	- inget
 
 allmänt:
 	- en funktion som skapar snygga användarnamn+ålder+kön-länkar
 		* ta bort $user->getstringMobile() ??? eller skriv om den iaf
 
-	- paging för dina blockeringar-översikt, sök användare-resultat
+	- paging för sök användare-resultat. kräver en performSearchCnt() funktion samt lite omstrukturering i performSearch()
 	
-	- friends.php: när man klickar "MAILA" på en kompis så ska hans namn va för-ifyllt i forumläret
-			* samma från user.php när man klickar "MAILA"
-			* även ens kompislista är ej korrekt ifylld i dropdownlistan på mail_new.php
-
 	- mail.php
 		* kunna se sin utkorg (skickad mail)
 
