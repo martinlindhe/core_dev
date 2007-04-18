@@ -1,7 +1,8 @@
 --------------[[platform todo]]--------------
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
-	X	- $db->log() för user logged in & user logged out visar aldrig username i loggen!
+	X	- $db->log() för user logged in & user logged out visar aldrig username i loggen
+			* session verkar ej vara initierat när $db->log() anropas då !?!?
 
 
 	wiki:
@@ -9,7 +10,6 @@
 	X	- implementera stöd för "talk" page _eller_ comments
 		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- logga history för wiki file deletes via ajax
-  X	- gör en /core/wiki.php,  ta bort /adblock/wiki.php
 
 
 	file area:
