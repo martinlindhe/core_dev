@@ -1,4 +1,4 @@
---------------[[todo]]--------------
+--------------[[platform todo]]--------------
 	platform change:
 		- gör så ajax-filerna funkar som file.php:
 			* gör wrapperfunktioner som genererar korrekt html för ajax-anropen, eller iaf skicka med getProjectName()
@@ -6,9 +6,11 @@
 
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
+		- $db->log() för user logged in & user logged out visar aldrig username i loggen!
 
 
 	wiki:
+		- hög prio! om inte en wiki finns så visas inget alls av wiki();
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		- implementera stöd för "talk" page _eller_ comments
 		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
@@ -21,6 +23,25 @@
 		- kunna inspektera en "generell" datafil med filinfo ruta
 
 
+	admin gränssnitt:
+		- gör ett admin-gränssnitt som delas av alla "projekt":
+			* flytta ut admin_events.php från adblock till detta
+		- visa phpinfo
+		- visa "kompatiblitets check", om denna php version är testad som "kompatibel" med aktuella plattformen, t:ex "5.2.*"
+			* visa även apache & mysql versioner samlat på en sida
+			* samt visa olika php settings och huruvida dom är felkonfade (show_errors borde ge varning om debug=off)
+
+
+	news modul:
+		- rss feed
+		- kommentarer
+		- vote på kvalitén
+		- nyhetskategorier. rss feed på alla + på enskild kategori
+		- rss html tag måste va i headern... hitta på nån lösning för det. xhtml error: /adblock/news.php
+		- kunna tagga upp heading vs body av en nyhetsartiekl. samt även kunna dela upp den på flera sidor
+		- kunna bifoga filer till en nyhet
+
+
 	misc:
 		- konvertera zine!
   	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
@@ -28,7 +49,8 @@
   	- Försök bygga mer logik i sql queries / stored procedures
   	- gör en funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida
 
-  	
+
+--------------[[projekt todo]]--------------
   adblock:
   	- #1 gör en /core/wiki.php
 		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
@@ -52,6 +74,11 @@
 			* möjlighet att radera ett band
 
 --------------[[changelog]]--------------
+2007.04.18
+	- adblock: fixade så vänsternavigeringen markerar var man är i navigeringsmenyn
+	- core: news modul skapad, news admin modul skapad. tblNews skapad
+
+
 2007.04.17
 	- adblock: flyttade ut den sista funktionen sendTextFile från functions_files.php och skrotade den filen
 	- adblock/download.php: flyttade över all download logik + ruleset cache koden till handleAdblockDownloadRequest()

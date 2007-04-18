@@ -281,4 +281,9 @@ abstract class DB_Base
 	{
 		return strftime('%Y-%m-%d %H:%M:%S');
 	}
+
+	function sql_datetime($timestamp)
+	{
+		return date('Y-m-d H:i:s', $timestamp);
+	}
 ?>

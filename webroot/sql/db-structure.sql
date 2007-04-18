@@ -294,7 +294,19 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `userIP` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=444 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=450 DEFAULT CHARSET=latin1;
+CREATE TABLE `tblNews` (
+  `newsId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `body` text CHARACTER SET utf8 NOT NULL,
+  `rss_enabled` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `creatorId` int(10) unsigned NOT NULL,
+  `timeCreated` datetime NOT NULL,
+  `timeEdited` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `editorId` int(10) unsigned DEFAULT '0',
+  `timeToPublish` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`newsId`)
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblProblemSites` (
   `siteId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',

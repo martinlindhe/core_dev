@@ -22,6 +22,10 @@
 		- File upload progress is available thru ajax + php_apc.dll extension
 		- Image rotate is available
 
+==== News module ====
+		- Admins can easily publish news on the site
+		- You can easily enter news items in advance and choose when they should be published for general view
+
 ==== Standards compatible ====
 		- All generated HTML are checked to be 100% "XHTML 1.0 Transitional" compatible using the "HTML Validator" plugin for Firefox.
 			* The goal is to be 100% "XHTML 1.0 Strict" or maybe "XHTML 1.1" compatible.

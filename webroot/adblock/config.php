@@ -12,6 +12,7 @@
 
 	require_once($config['core_root'].'core/functions_wiki.php');
 	require_once($config['core_root'].'core/functions_comments.php');
+	require_once($config['core_root'].'core/functions_news.php');
 
 	require_once('functions_adblock.php');
 

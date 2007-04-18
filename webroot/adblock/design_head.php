@@ -24,23 +24,25 @@
 </div>
 <div id="leftmenu">
 	<ul class="side-nav">
-		<li><strong><a href="index.php">Home</a></strong></li>
-		<li><a href="wiki.php?View:Subscribe">Subscribe</a></li>
-		<li><a href="download.php">Download</a></li>
-		<li><a href="recent.php">Recent changes</a></li>
+		<? $cur = basename($_SERVER['SCRIPT_NAME']); ?>
+		<li><?=($cur=='index.php'?'<strong>':'');?><a href="index.php">Home</a><?=($cur=='index.php'?'</strong>':'')?></li>
+		<li><?=($cur=='news.php'?'<strong>':'')?><a href="news.php">News</a><?=($cur=='news.php'?'</strong>':'')?></li>
+		<li><?=($cur=='wiki.php'?'<strong>':'')?><a href="wiki.php?View:Subscribe">Subscribe</a><?=($cur=='wiki.php'?'</strong>':'')?></li>
+		<li><?=($cur=='download.php'?'<strong>':'')?><a href="download.php">Download</a><?=($cur=='download.php'?'</strong>':'')?></li>
+		<li><?=($cur=='recent.php'?'<strong>':'')?><a href="recent.php">Recent changes</a><?=($cur=='recent.php'?'</strong>':'')?></li>
 <?
 	if ($session->isAdmin) {
-		echo '<li><a href="newrule.php">New rule</a></li>';
-		echo '<li><a href="ruleset.php">Browse rules</a></li>';
-		echo '<li><a href="report_site.php">Report site</a></li>';
+		echo '<li>'.($cur=='newrule.php'?'<strong>':'').'<a href="newrule.php">New rule</a>'.($cur=='newrule.php'?'</strong>':'').'</li>';
+		echo '<li>'.($cur=='ruleset.php'?'<strong>':'').'<a href="ruleset.php">Browse rules</a>'.($cur=='ruleset.php'?'</strong>':'').'</li>';
+		echo '<li>'.($cur=='report_site.php'?'<strong>':'').'<a href="report_site.php">Report site</a>'.($cur=='report_site.php'?'</strong>':'').'</li>';
 
 		//admin menu if logged in
-		echo '<li><a href="admin_events.php">Admin</a></li>';
-		echo '<li><a href="admin_reports.php">Reported sites ('.getProblemSiteCount().')</a></li>';
+		echo '<li>'.($cur=='admin_events.php'?'<strong>':'').'<a href="admin_events.php">Admin</a>'.($cur=='admin_events.php'?'</strong>':'').'</li>';
+		echo '<li>'.($cur=='admin_reports.php'?'<strong>':'').'<a href="admin_reports.php">Reported sites ('.getProblemSiteCount().')</a>'.($cur=='admin_reports.php'?'</strong>':'').'</li>';
 	}
 
 	if ($session->id) {
-		echo '<li><a href="settings.php">Settings</a></li>';
+		echo '<li>'.($cur=='settings.php'?'<strong>':'').'<a href="settings.php">Settings</a>'.($cur=='settings.php'?'</strong>':'').'</li>';
 		echo '<li><a href="'.$_SERVER['PHP_SELF'].'?logout">Logout</a></li>';
 	}
 ?>
