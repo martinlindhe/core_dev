@@ -10,11 +10,10 @@
 
 
 	wiki:
-		- hög prio! om inte en wiki finns så visas inget alls av wiki();
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		- implementera stöd för "talk" page _eller_ comments
-		- wiki: [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
-		- wiki: logga history för wiki file deletes via ajax
+		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
+		- logga history för wiki file deletes via ajax
 
 
 	file area:
@@ -40,6 +39,7 @@
 		- rss html tag måste va i headern... hitta på nån lösning för det. xhtml error: /adblock/news.php
 		- kunna tagga upp heading vs body av en nyhetsartiekl. samt även kunna dela upp den på flera sidor
 		- kunna bifoga filer till en nyhet
+		- möjlighet att kunna prenumera på nyhets-inläggen via epost
 
 
 	misc:
@@ -77,7 +77,8 @@
 2007.04.18
 	- adblock: fixade så vänsternavigeringen markerar var man är i navigeringsmenyn
 	- core: news modul skapad, news admin modul skapad. tblNews skapad
-
+	- core wiki: la till inställning för att helt gömma wiki-ramen
+	- core wiki: buggfix - om inte en wiki finns så visades inget alls av wiki();
 
 2007.04.17
 	- adblock: flyttade ut den sista funktionen sendTextFile från functions_files.php och skrotade den filen

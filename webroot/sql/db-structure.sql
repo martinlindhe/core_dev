@@ -294,7 +294,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `userIP` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=450 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=452 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblNews` (
   `newsId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(100) CHARACTER SET utf8 NOT NULL,
@@ -328,7 +328,7 @@ CREATE TABLE `tblRevisions` (
   `timeCreated` datetime NOT NULL,
   `categoryId` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`indexId`)
-) ENGINE=MyISAM AUTO_INCREMENT=126 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=128 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ownerId` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -356,10 +356,10 @@ CREATE TABLE `tblWiki` (
   `timeCreated` datetime NOT NULL,
   `createdBy` smallint(5) unsigned NOT NULL DEFAULT '0',
   `lockedBy` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `timeLocked` datetime NOT NULL,
+  `timeLocked` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `hasFiles` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`wikiId`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`wikiId`,`timeLocked`)
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 DELIMITER ;;
 /*!50003 SET SESSION SQL_MODE=""*/;;
 /*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `getUser`(

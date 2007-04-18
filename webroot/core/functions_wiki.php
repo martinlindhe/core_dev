@@ -1,8 +1,8 @@
 <?
-	/* functions_wiki.php																													*/
-	/* --------------------------------------------------------------------------	*/
-	/* Written by Martin Lindhe	<martin_lindhe@yahoo.se>													*/
-	/*
+	/* functions_wiki.php
+		------------------------------------------------------------
+		Written by Martin Lindhe, 2007 <martin_lindhe@yahoo.se>
+
 		core																				tblWiki	
 		för history-stöd: functions_revisions.php		tblRevisions
 		för files-stöd: $files objekt								tblFiles
@@ -10,10 +10,12 @@
 	
 	require_once('functions_revisions.php');
 
-	//wiki module settings:
+	//wiki module default settings:
 	$config['wiki']['log_history'] = true;
 	$config['wiki']['allow_html'] = false;
 	$config['wiki']['explain_words'] = false;
+	
+	$config['wiki']['allow_edit'] = false;	//false = only allow admins to edit the wiki articles. true = allow all, even anonymous
 
 
 	$config['wiki']['allow_comments'] = false;		//todo - försök att slipp allow_comments & allow_files,
@@ -29,20 +31,19 @@
 	function wikiUpdate($wikiName, $_text)
 	{
 		global $db, $session, $config;
-
+		
 		$wikiName = $db->escape(trim($wikiName));
-
 		if (!$wikiName) return false;
 
 		$sql = 'SELECT * FROM tblWiki WHERE wikiName="'.$wikiName.'"';
 		$data = $db->getOneRow($sql);
 
 		/* Aborts if we are trying to save a exact copy as the last one */
-		if ($data['msg'] == $_text) return false;
+		if (!empty($data) && $data['msg'] == $_text) return false;
 
 		$_text = $db->escape(trim($_text));
 		
-		if ($data['wikiId'])
+		if (!empty($data) && $data['wikiId'])
 		{
 			if ($config['wiki']['log_history'])
 			{
@@ -52,7 +53,8 @@
 		}
 		else
 		{
-			$db->query('INSERT INTO tblWiki SET wikiName="'.$wikiName.'", msg="'.$_text.'",timeCreated=NOW(),createdBy='.$session->id);
+			$q = 'INSERT INTO tblWiki SET wikiName="'.$wikiName.'",msg="'.$_text.'",createdBy='.$session->id.',timeCreated=NOW()';
+			$db->query($q);
 		}
 	}
 
@@ -101,10 +103,16 @@
 					'WHERE t1.wikiName="'.$db->escape($wikiName).'"';
 
 		$data = $db->getOneRow($q);
-		if (!$data) return false;
 
 		$wikiId = $data['wikiId'];
 		$text = stripslashes($data['msg']);
+		
+		if (!$session->isAdmin && !$config['wiki']['allow_edit']) {
+			/* Only display the text for normal visitors */
+			echo wikiFormat($wikiName, $data);
+			return true;
+		}
+		
 
 		echo '<div class="wiki">'.
 						'<div class="wiki_head"><ul>'.
