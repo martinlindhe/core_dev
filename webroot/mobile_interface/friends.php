@@ -59,7 +59,7 @@
 	$list = getRelations($_id, 'u.u_alias ASC', $pager['index'], $pager['items_per_page']);
 
 	echo $pager['head'].'<br/>';
-
+	
 	for ($i=0; $i<count($list); $i++)
 	{
 		echo '(online/offline) ';

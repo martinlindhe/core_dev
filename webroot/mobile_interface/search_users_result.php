@@ -2,11 +2,13 @@
 	require_once('config.php');
 	if (!$l) die;	//user not logged in
 
-	require('design_head.php');
-	
-	//todo: gå direkt till profilsidan vid bara 1 sökresultat
-	
 	$result = performSearch();
+	if (count($result['res']) == 1) {
+		header('Location: user.php?id='.$result['res'][0]['id_id']);
+		die;
+	}
+
+	require('design_head.php');
 ?>
 
 	SÖK ANVÄNDARE - RESULTAT<br/>

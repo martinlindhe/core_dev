@@ -10,10 +10,13 @@
 	
 	echo 'DINA BLOCKERINGAR<br/>';
 	
-	$list = getBlockedRelations();
-	if (count($list)) {
-		//print_r($list);
+	$tot_cnt = getBlockedRelationsCnt();
+	$pager = makePager($tot_cnt, 5);
+	$list = getBlockedRelations($pager['limit']);
 
+	if (count($list))
+	{
+		echo $pager['head'].'<br/>';
 		for ($i=0; $i<count($list); $i++)
 		{
 			echo '<a href="user.php?id='.$list[$i]['id_id'].'">'.$list[$i]['u_alias'].'</a> K47 ';

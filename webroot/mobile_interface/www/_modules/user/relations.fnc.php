@@ -191,23 +191,33 @@
 		return true;
 	}
 
-	function getBlockedRelations()
+	/* for pager */
+	function getBlockedRelationsCnt()
 	{
 		global $sql, $t, $l;
 
-		$q = "SELECT b.main_id, b.friend_id, b.activated_date, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userblock b INNER JOIN {$t}user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = ".$l['id_id']." AND rel_id = 'u'";
+		$q = "SELECT COUNT(*) FROM {$t}userblock b INNER JOIN {$t}user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = ".$l['id_id']." AND rel_id = 'u'";
+		return $sql->queryResult($q, 0, 1);
+	}
+
+	function getBlockedRelations($_limit = '')
+	{
+		global $sql, $t, $l;
+
+		$q = "SELECT b.main_id, b.friend_id, b.activated_date, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userblock b INNER JOIN {$t}user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = ".$l['id_id']." AND rel_id = 'u'".$_limit;
 		return $sql->query($q, 0, 1);
 	}
 
-	function getRelations($_id, $_ord, $_start, $_end)
+	function getRelations($_id, $_ord = '', $_start = 0, $_end = 0)
 	{
 		global $sql, $t;
 
 		if (!is_numeric($_id) || !is_numeric($_start) || !is_numeric($_end)) return false;
 		
-		$q = "SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.lastlog_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$_id." ORDER BY ".$_ord;
+		$q = "SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.lastlog_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$_id;
+		if ($_ord) $q .= ' ORDER BY '.$_ord;
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
-
+		
 		return $sql->query($q, 0, 1);
 	}
 

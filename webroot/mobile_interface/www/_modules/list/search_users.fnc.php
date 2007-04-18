@@ -5,7 +5,7 @@
 		Koden från början skriven av Frans Rosén
 		Uppdaterad av Martin Lindhe, 2007-04-10
 	*/
-	
+
 	//Reads post variables and produces result. $_start & $_end is to be used together with page splitting logic
 	function performSearch($_start = 0, $_end = 0)
 	{

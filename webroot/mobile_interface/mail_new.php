@@ -5,7 +5,15 @@
 
 	$_to_alias = $_header = $_body = $error = '';
 
-	if (!empty($_POST['to_alias'])) $_to_alias = $_POST['to_alias'];
+	$_to_id = 0;
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $_to_id = $_GET['id'];
+
+	if (!$_to_id && !empty($_POST['to_alias'])) {
+		$_to_alias = $_POST['to_alias'];
+	} else {
+		$tmp = $user->getuser($_to_id);
+		$_to_alias = $tmp['u_alias'];
+	}
 	if (!empty($_POST['header'])) $_header = $_POST['header'];
 	if (!empty($_POST['body'])) $_body = $_POST['body'];
 
@@ -20,7 +28,6 @@
 	require('design_head.php');
 
 /*
-	todo: lista kompis-namn
 	todo: kopiera vald kompis från dropdownlistan till "to_alias" fältet med js
 */
 
@@ -30,14 +37,19 @@
 	if ($error) echo $error.'<br>';
 
 	echo '<form method="post" action="">';
-	echo 'Till: <input name="to_alias" type="text" size="8" value="'.$_to_alias.'"/> ';
-	$list = getUserFriends();
-	if ($list)
-	{
-		echo '<select name="friend_alias">';
-		echo '<option>- Dina vänner -</option>';
-		for ($i=0; $i<count($list); $i++) echo '<option>'.$list[$i]['xxx'].'</option>';
-		echo '</select>';
+	if ($_to_id) {
+		echo 'Till: '.$_to_alias;
+	} else {
+		echo 'Till: <input name="to_alias" type="text" size="8" value="'.$_to_alias.'"/> ';
+		$list = getRelations($l['id_id']);
+	
+		if ($list)
+		{
+			echo '<select name="friend_alias">';
+			echo '<option>- Dina vänner -</option>';
+			for ($i=0; $i<count($list); $i++) echo '<option value="'.$list[$i]['id_id'].'">'.$list[$i]['u_alias'].'</option>';
+			echo '</select>';
+		}
 	}
 	echo '<br/>';
 	echo 'Rubrik: <input name="header" type="text" value="'.$_header.'"/><br/>';
