@@ -294,7 +294,7 @@ CREATE TABLE `tblFiles` (
   `timeUploaded` datetime NOT NULL,
   `cnt` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`fileId`)
-) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblLogs` (
   `entryId` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `entryText` text CHARACTER SET utf8 NOT NULL,

@@ -7,7 +7,9 @@
 
 
 	file area:
-		- kunna markera en filkategori som privat (visas bara för dina vänner) och hemlig (visas inte för nån)
+		- kunna markera en filkategori som privat (visas bara för dina vänner) och hemlig (visas inte för nån):
+			* ändra på file category koden
+			
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
 
@@ -105,6 +107,7 @@ X = hi prio task
 	- files: påbörjat hantering av videofiler, behöver en videospelare i flash / silverlight
 	- files: admin ser mer fileinfo än normal user
 	- files: lagt till FILETYPE_USERFILE så man kan ha en "egen" fil-area åxå, och fixat så egen fil-area funkar
+	- files: börjat skriva kod för att hantera flera typer av fil kategorier: normal, privat (för vänner), hemlig, global (super admin), wip
 
 
 2007.04.18

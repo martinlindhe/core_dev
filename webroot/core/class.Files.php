@@ -202,11 +202,20 @@ class Files
 				echo '<div id="file_gadget_category" style="display: none;">';
 				echo '<form name="new_file_category" method="post" action="">';
 				echo 'Category name: <input type="text" name="new_file_category"/> ';
+				echo '<br/>';
+				echo '<input type="radio" value="normal" name="new_file_category" id="_normal" checked="checked"/> ';
+				echo '<label for="_normal">Normal category - everyone can see the content</label><br/><br/>';
+				if ($fileType == FILETYPE_USERFILE) {
+					echo '<input type="radio" value="private" name="new_file_category" id="_private"/> ';
+					echo '<label for="_private">Make this category private (only for your friends)</label><br/><br/>';
+
+					echo '<input type="radio" value="hidden" name="new_file_category" id="_hidden"/> ';
+					echo '<label for="_hidden">Make this category hidden (only for you)</label><br/><br/>';
+				}
+
 				if ($session->isSuperAdmin) {
-					echo '<br/>';
-					echo '<input type="hidden" name="new_file_category_global" value="0"/>';
-					echo '<input type="checkbox" value="1" name="new_file_category_global" id="new_file_category_global"/> ';
-					echo '<label for="new_file_category_global">Make this category globally available</label><br/><br/>';
+					echo '<input type="radio" value="global" name="new_file_category" id="_global"> ';
+					echo '<label for="_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
 				}
 				echo '<input type="submit" class="button" value="Create"/> ';
 				echo '<input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
