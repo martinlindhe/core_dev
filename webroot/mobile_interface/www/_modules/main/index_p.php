@@ -29,10 +29,10 @@
 	<div style="margin: 10px 0 0 20px;">
 	<img alt="" src="/_objects/top_logo.jpg" style="margin-bottom: 10px;" />
 		<div class="cnt" style="position: absolute; top: 36px; left: 481px; width: 137px; height: 54px; background: url('/_objects/bg_online_small.png');">
-		<table cellspacing="0" style="width: 127px;" class="cnti lft mrg">
-		<tr><td>online</a></td><td class="bld rgt"><?=@intval($online[0])?></td></tr>
-		<tr><td>män</a></td><td class="rgt bld sexM"><?=@intval($online[1])?></td></tr>
-		<tr><td>kvinnor</a></td><td class="rgt bld sexF"><?=@intval($online[2])?></td></tr>
+		<table summary="" cellspacing="0" style="width: 127px;" class="cnti lft mrg">
+		<tr><td>online</td><td class="bld rgt"><?=@intval($online[0])?></td></tr>
+		<tr><td>män</td><td class="rgt bld sexM"><?=@intval($online[1])?></td></tr>
+		<tr><td>kvinnor</td><td class="rgt bld sexF"><?=@intval($online[2])?></td></tr>
 		</table>
 		</div>
 	<div id="contentContainer">
@@ -45,7 +45,7 @@
 	<div style="float: right; margin: 5px 5px 0 0; text-align: right;">
 		<form name="l" action="/member/login" method="post">
 		<div style="">
-		<table cellspacing="0">
+		<table summary="" cellspacing="0">
 		<tr><td class="rgt" style="padding: 0 5px 3px 0;">alias: <input type="text" class="txt" name="a" style="margin-bottom: -4px;" value="frans" /></td></tr>
 		<tr><td class="rgt" style="padding: 2px 5px 4px 0;">lösenord: <input type="password" class="pass" style="margin-bottom: -4px;" name="p" value="" /></td></tr>
 		</table>
