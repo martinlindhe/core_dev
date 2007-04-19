@@ -13,7 +13,7 @@ ul#menu a { color: #ffffff; }
 #top_online_off .top { padding: 0 5px 3px 0; }
 #top_online_off .bottom { padding: 2px 5px 4px 0; }
 #top_online table { width: 127px; margin-right: auto; text-align: left; margin: 5px 5px 5px auto; }
-#userfind { display: none; position: absolute; top: 75px; left: 838px; }
+#userfind { position: absolute; top: 75px; left: 838px; }
 #userfind_inp { margin: 0 0 -4px 0; }
 #logout { position: absolute; top: 103px; left: 958px; }
 #login { position: absolute; top: 65px; left: 885px; }

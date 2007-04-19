@@ -12,6 +12,12 @@ function show_element_by_name(n)
 	e.style.display = '';
 }
 
+//Toggles element with name "n" between visible and hidden
+function toggle_element_by_name(n)
+{
+	var e = document.getElementById(n);
+	e.style.display = (e.style.display?'':'none');
+}
 
 var interval, friendsC = 0, url = '/member/retrieveajax/', xmlObj = false, isDone = true;
 try {

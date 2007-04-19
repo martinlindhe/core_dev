@@ -3,24 +3,15 @@
 	if($l) echo '<script type="text/javascript" src="/_objects/ajax.js"></script>';
 ?>
 </head>
-<body>
-	<div id="hoverCraft" style="position: absolute; display: none; top: 0px; left: 0px;"></div>
-	<div id="top">
-		<a href="/main/start/"><img alt="" src="/_objects/top_logo.jpg" id="top_img" /></a>
-<?
-	if($l) {
-		$online = gettxt('stat_online');
-		$online = explode(':', $online);
-?>
+
 <script type="text/javascript">
 var omoTime;
 function toggleFind(on) {
-	try {
-		document.getElementById('userfind').style.display = (on?'':'none');
+	if (on) {
+		show_element_by_name('userfind');
 		document.getElementById('userfind_inp').focus();
-	} catch(Exception) {
-		return;
 	}
+	else hide_element_by_name('userfind');
 }
 function checkTime(toggle) {
 	window.clearTimeout(omoTime);
@@ -31,6 +22,16 @@ function checkTime(toggle) {
 	}
 }
 </script>
+
+<body>
+	<div id="hoverCraft" style="position: absolute; display: none; top: 0px; left: 0px;"></div>
+	<div id="top">
+		<a href="/main/start/"><img alt="" src="/_objects/top_logo.jpg" id="top_img" /></a>
+<?
+	if($l) {
+		$online = gettxt('stat_online');
+		$online = explode(':', $online);
+?>
 		<ul id="menu">
 		<li><a href="/main/start/">start</a></li>
 		<li><a href="/list/users/">sök</a></li>
@@ -52,7 +53,7 @@ function checkTime(toggle) {
 		</table>
 		</div>
 		<form action="/list/userfind" method="post">
-		<div id="userfind" onmouseover="checkTime(1);"><input type="text" class="txt" id="userfind_inp" onfocus="checkTime(1);" onblur="checkTime(0);" name="a" value="" /></div>
+		<div id="userfind" style="display: none" onmouseover="checkTime(1);"><input type="text" class="txt" id="userfind_inp" onfocus="checkTime(1);" onblur="checkTime(0);" name="a" value="" /></div>
 		</form>
 		<form action="/member/logout" method="post">
 		<div id="logout"><input type="image" src="/_objects/icon_logout.png" /></div>
