@@ -1,4 +1,4 @@
-		<div class="smallContent mll" style="">
+<div class="smallContent mll">
 <?
 if(!defined('U_NOINFO')) echo '
 			<div class="smallHeader1"><h4>personliga fakta</h4></div>
@@ -10,9 +10,8 @@ if(!defined('U_NOINFO')) echo '
 				<b>• inloggningar:</b> '.@intval($info['login_offset'][1]).'<br />
 				<b>• besökare:</b> '.@intval($info['visit_cnt'][1]).'<br />
 			</div>
-			</div>
-';
-/*<!--			<b>registrerad:</b> '.(nicedate($s['u_regdate'], 2)).'<br />-->*/
+			</div>';
+
 if(@!$own && $l) {
 	$txt = array('age' => 'Ålder', 'sex' => 'Sexliv', 'children' => 'Barn', 'music' => 'Musiksmak', 'tobacco' => 'Tobak', 'alcohol' => 'Alkohol', 'wants' => 'Vill ha', 'civil' => 'Civilstatus', 'attitude' => 'Attityd');
 	$myinfo = $user->getcontent($l['id_id'], 'user_head');
@@ -84,14 +83,6 @@ if(defined('U_VISIT')) {
 	if(!empty($res) && count($res)) {
 		$i = 0;
 		$nl = true;
-		/*foreach($res as $row) {
-			if($nl) echo (($i)?'</tr>':'').'<tr>';
-			$extra=array();
-			$extra['text']=secureOUT($row['u_alias'].' '.$row['u_sex'].$user->doage($row['u_birth']));
-			//secureOUT($row['u_alias'].' '.$row['u_sex'].$user->doage($row['u_birth']));
-			echo '<td style="padding: 0 0 6px '.((!$nl)?'8':'1').'px;">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 0, 1, $user->getstring($s, '', @$uarr)).'</td>';
-			if($i % 8 == 0) $nl = true; else $nl = false;
-		}*/
 		if(isset($_GET['more'])) {
 		foreach($res as $row) {
 			echo '<li'.(!$i?' style="border: 0;"':'').'>'.$user->getstring($row).'<br /><br />besökte: '.nicedate($row['visit_date']).'</li>';
@@ -102,15 +93,10 @@ if(defined('U_VISIT')) {
 			$i++;
 		} }
 	} else {
-echo '
-	<li>Inga besökare.</li>
-';
+echo '<li>Inga besökare.</li>';
 	}
-echo '
-	</ul>
-	</div>
-';
+echo '</ul></div>';
 }
 ?>
 
-		</div>
+</div>

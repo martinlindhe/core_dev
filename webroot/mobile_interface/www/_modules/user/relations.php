@@ -57,7 +57,7 @@
 		$blocked = true;
 		if(isset($_GET['del'])) {
 			unblockRelation($_GET['del']);
-			errorACT('Nu har du slutat att blockera personen.', l('user', 'relations').'&blocked');
+			errorACT('Nu har du slutat att blockera personen.', l('user', 'relations').'&amp;blocked');
 		}
 		$res = getBlockedRelations();
 	} else { 
@@ -81,13 +81,13 @@
 	$page = 'friends';
 	$blocked = $is_blocked;
 	if($blocked) $page = 'blocked';
-	$menu = array('friends' => array(l('user', 'relations'), 'vänner'), 'blocked' => array(l('user', 'relations').'&blocked', 'ovänner'));
+	$menu = array('friends' => array(l('user', 'relations'), 'vänner'), 'blocked' => array(l('user', 'relations').'&amp;blocked', 'ovänner'));
 
 ?>
 			<?=($own?'<div class="mainHeader2"><h4>'.makeMenu($page, $menu).'</h4></div>':'<div class="mainHeader2"><h4>vänner</h4></div>')?>
 			<div class="mainBoxed2">
-<? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&ord='.$thisord, 'med', STATSTR); ?>
-<table cellspacing="0" width="586">
+<? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&amp;ord='.$thisord, 'med', STATSTR); ?>
+<table summary="" cellspacing="0" width="586">
 <?
 if(!empty($res) && count($res)) {
 	if(!$blocked) {
@@ -101,7 +101,7 @@ if(!empty($res) && count($res)) {
 				<td class="cur spac pdg" onclick="goUser(\''.$row['id_id'].'\');">'.secureOUT($row['rel_id']).'</td>
 				<td class="cur pdg spac cnt">'.(($row['u_picvalid'] == '1')?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>
 				<td class="cur spac pdg rgt" onclick="goUser(\''.$row['id_id'].'\');">'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date']).')</span>':'<span class="off">'.nicedate($row['lastonl_date']).'</span>').'</td>
-				'.(($own)?'<td class="spac rgt pdg_tt"><a href="'.l('user', 'relations', $s['id_id'], $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&d='.$row['id_id'].'\');"><img src="'.OBJ.'icon_del.gif" title="Radera" style="margin-bottom: -4px;" /></a></td>':'').'
+				'.(($own)?'<td class="spac rgt pdg_tt"><a href="'.l('user', 'relations', $s['id_id'], $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&amp;d='.$row['id_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a></td>':'').'
 			</tr>';
 
 			if($view == $row['main_id']) {
@@ -126,7 +126,7 @@ if(!empty($res) && count($res)) {
 			<tr>
 				<td class="spac pdg">'.$user->getstring($row, '', array('nolink' => 1)).'</td>
 				<td class="spac pdg rgt">'.nicedate($row['activated_date']).'</td>
-				<td class="spac pdg rgt"><a class="cur" onclick="return confirm(\'Säker ?\')" href="'.l('user', 'relations').'&blocked&del='.$row['id_id'].'"><img src="'.OBJ.'icon_del.gif" title="Avblockera" style="margin-bottom: -4px;" /></a></td>
+				<td class="spac pdg rgt"><a class="cur" onclick="return confirm(\'Säker ?\')" href="'.l('user', 'relations').'&amp;blocked&amp;del='.$row['id_id'].'"><img src="'.OBJ.'icon_del.gif" title="Avblockera" style="margin-bottom: -4px;" /></a></td>
 			</tr>';
 	  }
 	}
@@ -136,7 +136,7 @@ if(!empty($res) && count($res)) {
 }
 ?>
 </table>
-<? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&ord='.$thisord, 'medmin'); ?>
+<? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&amp;ord='.$thisord, 'medmin'); ?>
 		</div>
 	</div>
 <?

@@ -5,7 +5,7 @@
 	require(DESIGN."head.php");
 ?>
 		<div id="mainContent">
-		<table cellspacing="0" style="margin-bottom: 20px;">
+		<table cellspacing="0" summary="" style="margin-bottom: 20px;">
 		<tr>
 <?
 	$i = 0;
@@ -16,12 +16,12 @@
 		$d = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}f WHERE topic_id = '".secureINS($row['main_id'])."' AND parent_id != '0' AND status_id = '1'");
 		if($i && $nl) { echo '</tr><tr>'; $nl = false; $i = 0; $r++; }
 		echo '
-	<td>
-	<table cellspacing="0" style="margin-left: '.(($i)?'62px':'0').';">
-	<tr><td><a href="'.l('forum','list',$row['main_id']).'" class="bld"><img width="157" height="74" src="'.OBJ.$row['main_id'].'.jpg" onerror="this.src = \''.OBJ.'forum_nopic.jpg\';" /></a></td></tr>
-	<tr><td><h4>'.secureOUT($row['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg</td></tr>
-	</table>
-	</td>';
+			<td>
+			<table cellspacing="0" summary="" style="margin-left: '.(($i)?'62px':'0').';">
+			<tr><td><a href="'.l('forum','list',$row['main_id']).'" class="bld"><img width="157" height="74" src="'.OBJ.$row['main_id'].'.jpg" alt="" onerror="this.src = \''.OBJ.'forum_nopic.jpg\';" /></a></td></tr>
+			<tr><td><h4>'.secureOUT($row['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg</td></tr>
+			</table>
+			</td>';
 		if(++$i % 3 == 0) $nl = true;
 	}
 	$page = 'start';
@@ -36,18 +36,22 @@
 		</script>
 		<div class="mainHeader2"><h4><?=makeMenu($page, $menu)?> - 50 senaste inläggen</h4></div>
 		<div class="mainBoxed2">
+<table cellspacing="0" summary="" width="589">
 <?
-echo '<table cellspacing="0" width="589">';
-	if(count($last)) { foreach($last as $row) {
+if(count($last)) {
+	foreach($last as $row) {
 ?>
 <tr>
 	<td class="cur pdg" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');"><div style="width: 100%; height: 14px; overflow: hidden;"><a href="<?=l('forum','read', $row['top_id']).'&item='.$row['main_id'].'#R'.$row['main_id']?>" class="up"><?=secureOUT($row['sent_cmt'])?></a>&nbsp;</div></td>
 	<td class="cur pdg" onclick="openText('<?=$row['top_id']?>', '');"><div style="width: 100%; height: 14px; overflow: hidden;"><a href="<?=l('forum','read', $row['top_id'])?>" class="bld"><?=secureOUT($row['main_ttl'])?></a>&nbsp;</div></td>
-	<td class="mid"><nobr><?=$user->getstring($row)?></nobr></td>
-	<td class="cur pdg rgt" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');"><nobr><?=nicedate($row['sent_date'], 1, 1)?></nobr></td>
+	<td class="mid nobr"><?=$user->getstring($row)?></td>
+	<td class="cur pdg rgt nobr" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');"><?=nicedate($row['sent_date'], 1, 1)?></td>
 </tr>
 <?
-	} } else echo '<tr><td colspan="4" class="spac pdg cnt">Inga inlägg.</td></tr>';
+	}
+} else {
+	echo '<tr><td colspan="4" class="spac pdg cnt">Inga inlägg.</td></tr>';
+}
 ?>
 		</table>
 		</div>

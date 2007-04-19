@@ -3,7 +3,7 @@
 <?		
 	dopaging($paging, l('user', 'gallery', $s['id_id'], '0').'p=', '', 'med', STATSTR);
 
-	echo '<table cellspacing="0" width="586">';
+	echo '<table summary="" cellspacing="0" width="586">';
 	$restricted = ($own && $lim_v)?true:false;
 	$ti = 0;
 	if (!empty($res) && count($res)) {
@@ -21,11 +21,11 @@
 				echo '
 				<tr>
 				<td class="cur'.$cls.' pdg" onclick="'.$url.'"><div style="width: 100%; overflow: hidden;"><a href="'.l('user', 'gallery', $s['id_id'], $row['main_id']).'p='.$paging['p'].'#view" id="lnk'.$row['main_id'].'" class="bld '.(($view && $row['main_id'] == $res[0])?'on up':'up').'">'.secureOUT($row['pht_cmt']).'</a></div></td>
-				<td class="cur'.$cls.' pdg cnt" onclick="'.$url.'"><nobr>'.round($row['pht_size']/1024, 1).'kb</nobr></td>
+				<td class="cur'.$cls.' pdg cnt nobr" onclick="'.$url.'">'.round($row['pht_size']/1024, 1).'kb</td>
 				<td class="cur'.$cls.' pdg" onclick="'.$url.'">'.$row['pht_cmts'].' kommentarer</td>
 				<td class="cur'.$cls.' pdg" onclick="'.$url.'">'.secureOUT($row['pht_click']).' visningar</td>
-				<td class="cur'.$cls.' pdg rgt" onclick="'.$url.'"><nobr>'.nicedate($row['pht_date'], 2).'</nobr></td>
-				<td class="'.$cls.' rgt pdg_tt">'.(($own || $isAdmin)?'<nobr><a href="'.l('user', 'gallery', $s['id_id'], $row['main_id']).'c=1#view'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], '0').'&d='.$row['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" title="Radera" style="margin-bottom: -4px;" /></a>':'&nbsp;').'</nobr></td>
+				<td class="cur'.$cls.' pdg rgt nobr" onclick="'.$url.'">'.nicedate($row['pht_date'], 2).'</td>
+				<td class="'.$cls.' rgt pdg_tt nobr">'.(($own || $isAdmin)?'<a href="'.l('user', 'gallery', $s['id_id'], $row['main_id']).'c=1#view'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a>':'&nbsp;').'</td>
 				</tr>
 				'.(($own && $change && $change == $row['main_id'] && $l)?'
 				<tr>
@@ -35,7 +35,7 @@
 				':'').
 				(($showall || $view == $row['main_id'])?'
 				<tr>
-					<td colspan="6" style="padding-bottom: 6px;"><div class="cnt" style="width: 586px; overflow: hidden;"><img src="'.$file.'" onload="if(this.width > 510) this.width = 510;" /></a></div></td>
+					<td colspan="6" style="padding-bottom: 6px;"><div class="cnt" style="width: 586px; overflow: hidden;"><img src="'.$file.'" alt="" onload="if(this.width > 510) this.width = 510;" /></a></div></td>
 				</tr>
 				<tr>
 				<td align="right" colspan="8" class="pdg wht com_bg">

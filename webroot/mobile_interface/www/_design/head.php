@@ -43,7 +43,7 @@ function checkTime(toggle) {
 		</ul>
 		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" /></a></div>
 		<div id="top_online">
-		<table cellspacing="0">
+		<table cellspacing="0" summary="">
 		<tr><td><a href="<?=l('list', 'users', '1')?>">online</a></td><td class="bld rgt"><a href="<?=l('list', 'users', 1)?>"><?=@intval($online[0])?></a></td></tr>
 		<tr><td><a href="<?=l('list', 'users', 'M')?>">män</a></td><td class="rgt"><a href="<?=l('list', 'users', 'M')?>" class="bld sexM"><?=@intval($online[1])?></a></td></tr>
 		<tr><td><a href="<?=l('list', 'users', 'F')?>">kvinnor</a></td><td class="rgt"><a href="<?=l('list', 'users', 'F')?>" class="bld sexF"><?=@intval($online[2])?></a></td></tr>
@@ -51,10 +51,10 @@ function checkTime(toggle) {
 		<tr><td colspan="2" class="bld cnt cur" onmouseover="checkTime(1);">snabbsök</td></tr>
 		</table>
 		</div>
-		<form name="l" action="/list/userfind" method="post">
+		<form action="/list/userfind" method="post">
 		<div id="userfind" onmouseover="checkTime(1);"><input type="text" class="txt" id="userfind_inp" onfocus="checkTime(1);" onblur="checkTime(0);" name="a" value="" /></div>
 		</form>
-		<form name="l" action="/member/logout" method="post">
+		<form action="/member/logout" method="post">
 		<div id="logout"><input type="image" src="/_objects/icon_logout.png" /></div>
 		</form>
 <?
@@ -68,7 +68,7 @@ function checkTime(toggle) {
 		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" /></a></div>
 		<form name="l" action="/member/login" method="post">
 		<div id="top_online_off">
-		<table cellspacing="0">
+		<table cellspacing="0" summary="">
 		<tr><td class="top">alias: <input type="text" class="txt" name="a" style="margin-bottom: -4px;" value="frans" /></td></tr>
 		<tr><td class="bottom">lösenord: <input type="password" class="pass" style="margin-bottom: -4px;" name="p" value="" /></td></tr>
 		</table>
@@ -84,7 +84,7 @@ function checkTime(toggle) {
 	<div id="contentContainer">
 		<div class="smallContent">
 			<div class="smallHeader1"><h4>min meny</h4></div>
-			<div class="smallFilled2" class="wht">
+			<div class="smallFilled2 wht">
 <ul class="user_menu">
 <li><a href="/user/view/" class="wht none"><img src="/_objects/icon_mail.gif" alt="" />profil</a></li>
 <li><a href="/user/gb/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['gb_offset'])?> <span class="bld about" id="Xg"></span></span><img src="/_objects/icon_mail.gif" alt="" />gästbok</a></li>

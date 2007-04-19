@@ -23,11 +23,6 @@
 	define('ADMIN_FROM_EMAIL', 'frans@styleform.se');
 	$t = 's_';
 
-	function l($type = 'main', $action = 'start', $id = '', $key = '') {
-		return 'index.php?type='.$type.'&action='.$action.($id?'&id='.$id:'');
-		#return '/'.$type.'/'.$action.($id != ''?'/'.$id.($key != ''?'/'.$key:''):'').'/';
-	}
-
 	define('AOP', '../_output/');
 	define('OP', '_output/');
 	#$upl_full = explode('x', IMAGE_FULL);

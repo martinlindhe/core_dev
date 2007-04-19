@@ -55,64 +55,53 @@
 
 	require(DESIGN.'head.php');
 ?>
-		<div class="mainContent" width="100%">
-		<table cellspacing="0"><tr><td>
-<form action="<?=l('main', 'thought')?>" method="post">
-		<table cellspacing="0" cellpadding="0px" class="pdg" style="width: 400px;">
-	<tr><td><img alt="" src="<?=OBJ?>_heads/head_thought.png" /></td></tr>
-	<tr><td style="padding-bottom: 8px;"><?=gettxt('top-thought')?></td></tr>
-	<?=($l?'<tr><td><textarea class="txt" name="ins_cmt" style="width: 400px; height: 80px;"></textarea></td></tr>
-	':'<tr><td>Du måste vara inloggad för att kunna skriva.</td></tr>')?>
-	<tr><td align="right" style="padding-bottom: 8px;"><input type="image" src="<?=OBJ?>_heads/btn2_send.png" /></td></tr>
-	</table>
-</form>
-</td><td>
-<form action="<?=l('main', 'thought')?>" method="post">
-	
-	<table align="right" cellspacing="0" class="cnti" style="width: 120px;">
-	<tr><td class="cnt"><img alt="" src="<?=OBJ?>_heads/head_search_2.png" style="position: absolute; top: -10px; left: -10px;" /></td></tr>
-	<tr><td class="rgt"><input class="txt" name="s" value="<?=secureOUT($str)?>" style="width: 150px;" /></td></tr>
-	<tr><td class="rgt"><input type="image" src="<?=OBJ?>_heads/btn2_search.png" /></td></tr>
+<div class="mainContent" style="width: 100%;">
+	<table cellspacing="0" summary=""><tr><td>
+		<form action="<?=l('main', 'thought')?>" method="post">
+		<table cellspacing="0" summary="" cellpadding="0" class="pdg" style="width: 400px;">
+			<tr><td><img alt="" src="<?=OBJ?>_heads/head_thought.png" /></td></tr>
+			<tr><td style="padding-bottom: 8px;"><?=gettxt('top-thought')?></td></tr>
+			<?=($l?'<tr><td><textarea class="txt" name="ins_cmt" style="width: 400px; height: 80px;"></textarea></td></tr>':'<tr><td>Du måste vara inloggad för att kunna skriva.</td></tr>')?>
+			<tr><td align="right" style="padding-bottom: 8px;"><input type="image" src="<?=OBJ?>_heads/btn2_send.png" /></td></tr>
+		</table>
+		</form>
+	</td><td>
+		<form action="<?=l('main', 'thought')?>" method="post">
+		<table align="right" summary="" cellspacing="0" class="cnti" style="width: 120px;">
+		<tr><td class="cnt"><img alt="" src="<?=OBJ?>_heads/head_search_2.png" style="position: absolute; top: -10px; left: -10px;" /></td></tr>
+		<tr><td class="rgt"><input class="txt" name="s" value="<?=secureOUT($str)?>" style="width: 150px;" /></td></tr>
+		<tr><td class="rgt"><input type="image" src="<?=OBJ?>_heads/btn2_search.png" /></td></tr>
+		</table>
+		</form>
+	</td></tr>
 	</table>
 
-</form>
-</td></tr>
-</table>
-
-<!--		</div> -->
-			<div class="mainHeader2"><h4><?=makeMenu($page, $menu)?></h4></div>
-			<div class="mainBoxed2">
+	<div class="mainHeader2"><h4><?=makeMenu($page, $menu)?></h4></div>
+	<div class="mainBoxed2">
 <?
-
-//($search?secureOUT($_POST['s']):'')).($search?'p=':'')
-		dopaging($paging, l('main', 'thought'), '', 'med', STATSTR);
+	dopaging($paging, l('main', 'thought'), '', 'med', STATSTR);
 	if(count($gb) && !empty($gb)) {
 		$i = 0;
 		foreach($gb as $row) {
-			#if($i)  else $brd = false;
 			$brd = true;
-			#$i++;
 			$own = ($l && ($row['logged_in'] == $l['id_id'] || $isAdmin))?true:false;
-echo '
-<div class="pdg">
-	<div class="pdg">
-	<table cellspacing="0" class="cnti lft" style="margin-top: 5px; width: 450px;">
-	<tr><td style="width: 50px; padding: 0 5px 10px 0;">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td><td style="padding-bottom: 10px;"><div style="width: 440px; overflow: hidden;"><h5>'.$user->getstring($row).' - '.nicedate($row['gb_date']).'</h5><span class="">'.secureOUT($row['gb_msg'], 1).'</span></div></td></tr>
-	'.(!empty($row['answer_msg'])?'<tr><td style="width: 50px; padding: 0 5px 10px 0;">'.$user->getimg($row['id_id2'].$row['u_picid2'].$row['u_picd2'].$row['u_sex2'], $row['u_picvalid2']).'</td><td style="padding-bottom: 10px;"><div style="width: 440px; overflow: hidden;"><h5>'.$user->getstring($row, '2').' - '.nicedate($row['answer_date']).'</h5><span class="">'.secureOUT($row['answer_msg'], 1).'</span></div></td></tr>':'').'
-	</table>
-	</div>
-</div>';
+			echo '
+			<div class="pdg">
+				<div class="pdg">
+				<table cellspacing="0" summary="" class="cnti lft" style="margin-top: 5px; width: 450px;">
+				<tr><td style="width: 50px; padding: 0 5px 10px 0;">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td><td style="padding-bottom: 10px;"><div style="width: 440px; overflow: hidden;"><h5>'.$user->getstring($row).' - '.nicedate($row['gb_date']).'</h5><span class="">'.secureOUT($row['gb_msg'], 1).'</span></div></td></tr>
+				'.(!empty($row['answer_msg'])?'<tr><td style="width: 50px; padding: 0 5px 10px 0;">'.$user->getimg($row['id_id2'].$row['u_picid2'].$row['u_picd2'].$row['u_sex2'], $row['u_picvalid2']).'</td><td style="padding-bottom: 10px;"><div style="width: 440px; overflow: hidden;"><h5>'.$user->getstring($row, '2').' - '.nicedate($row['answer_date']).'</h5><span class="">'.secureOUT($row['answer_msg'], 1).'</span></div></td></tr>':'').'
+				</table>
+				</div>
+			</div>';
 		}
-	} else echo '
-	<table cellspacing="0" class="cnt" style="width: 450px;">
-	<tr><td>Inga inlägg.</td></tr>
-	</table>
-';
-
-		dopaging($paging, l('main', 'thought'), '', 'med');
+	} else {
+		echo '<table cellspacing="0" summary="" class="cnt" style="width: 450px;"><tr><td>Inga inlägg.</td></tr></table>';
+	}
+	dopaging($paging, l('main', 'thought'), '', 'med');
 ?>
-		</div>
 	</div>
+</div>
 <?
 	require(DESIGN.'foot.php');
 ?>

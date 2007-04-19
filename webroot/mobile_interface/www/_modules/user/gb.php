@@ -48,7 +48,7 @@
 	if(!empty($res) && count($res)) {
 	dopaging($paging, l('user', 'gb', $s['id_id']).'p=', '', 'med', ((!$his)?STATSTR:'<a href="'.l('user', 'gb', $s['id_id']).'">tillbaka</a>'));
 	foreach($res as $val) {
-	if(($own || $his && $c_his == $l['id_id']) && $allowed && $deadline > $val['sent_date']) { echo '<table cellspacing="0" style="width: 658px;"><tr><td class="pdg cnt spac">Meddelandena skrivna tidigare än <b>'.doDate($deadline, 1, 1).'</b> är nedstängda.<br>Du kan välja att uppgradera ditt medlemskap om du vill läsa äldre inlägg.</td></tr></table>'; break; }
+	if(($own || $his && $c_his == $l['id_id']) && $allowed && $deadline > $val['sent_date']) { echo '<table summary="" cellspacing="0" style="width: 658px;"><tr><td class="pdg cnt spac">Meddelandena skrivna tidigare än <b>'.doDate($deadline, 1, 1).'</b> är nedstängda.<br>Du kan välja att uppgradera ditt medlemskap om du vill läsa äldre inlägg.</td></tr></table>'; break; }
 	$prv = ($val['private_id'])?1:0;
 	$show_answer = (!$val['is_answered'])?false:true;
 	if($l['id_id'].$l['id_id'] == $val['user_id'].$val['sender_id']) {
@@ -78,7 +78,7 @@
 	} else $extra = false;
 	$odd = !$odd;
 echo '
-	<table cellspacing="0" class="msgList'.($odd?'':' msgListEven').'">
+	<table summary="" cellspacing="0" class="msgList'.($odd?'':' msgListEven').'">
 	<tr><td class="pdg msgListImage" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.((!$his)?'#'.$offset--.'&nbsp;':'').' '.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['sent_date']).'</h5><div class="r">'.((!$val['user_read'])?' <b>(oläst inlägg)</b>':((!$show_answer)?' [obesvarat inlägg]':'')).(($prv)?' <span class="off"'.(($isAdmin && !$arr[3])?'':'').'>[privat inlägg]</span>':'').'</div><br class="clr" />
 	'.(($arr[3])?(($val['sent_html'])?(safeOUT($val['sent_cmt'])):secureOUT($val['sent_cmt'])):'<span class="em"'.(($isAdmin)?' id="msg:'.$val['main_id'].'"':'').'>Privat inlägg</span>').'
 	</td></tr>
@@ -89,7 +89,7 @@ echo '
 	dopaging($paging, l('user', 'gb', $s['id_id']).'p=', '', 'med');
 	} else {
 echo <<<E
-	<table cellspacing="0" class="msgList">
+	<table summary="" cellspacing="0" class="msgList">
 	<tr><td class="cnt">Inga gästboksinlägg.</td></tr>
 	</table>
 E;

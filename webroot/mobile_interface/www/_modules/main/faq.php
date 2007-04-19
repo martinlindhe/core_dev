@@ -15,9 +15,9 @@ function selectFAQ(sel) {
 </script>
 		<div id="contentSmall" style="padding-left: 10px;">
 <div class="box2">
-	<img src="<?=CS?>_objects/_heads/head_faq.png" style="position: absolute; top: -10px; left: -10px;" />
+	<img src="<?=CS?>_objects/_heads/head_faq.png" alt="" style="position: absolute; top: -10px; left: -10px;" />
 	<div class="box2mid" style="padding-top: 38px;">
-		<table width="360" style="margin-bottom: 12px;">
+		<table summary="" width="360" style="margin-bottom: 12px;">
 <?
 	if(count($faq) && !empty($faq)) {
 		foreach($faq as $row) {
@@ -31,9 +31,9 @@ function selectFAQ(sel) {
 		</div>
 		<div id="contentBig">
 <div class="boxMid2">
-	<img src="<?=CS?>_objects/_heads/head_faq_q.png" style="position: absolute; top: -10px; left: -10px;" />
+	<img src="<?=CS?>_objects/_heads/head_faq_q.png" alt="" style="position: absolute; top: -10px; left: -10px;" />
 	<div class="boxMid2mid" style="padding-top: 38px;">
-		<table cellspacing="0" width="500">
+		<table summary="" cellspacing="0" width="500">
 <?
 	if(count($faq) && !empty($faq)) {
 		foreach($faq as $row) {
@@ -48,6 +48,5 @@ function selectFAQ(sel) {
 		</div>
 <br class="clr" />
 <?
-	#require(DESIGN.'foot_info.php');
 	require(DESIGN.'foot.php');
 ?>

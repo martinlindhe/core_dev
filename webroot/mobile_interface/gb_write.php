@@ -23,7 +23,7 @@
 	if (!empty($_POST['msg'])) {
 		//send guestbook message
 		gbWrite($_POST['msg'], $_write_to_user_id, $_reply_to_msg_id);
-		echo 'Gästboksinlägg till '.$user_data['u_alias'].' sparat!';
+		echo 'Gästboksinlägg till '.$user_data['u_alias'].' skickat!';
 		require('design_foot.php');
 		die;
 	}

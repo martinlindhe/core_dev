@@ -68,9 +68,9 @@
 			$ort_check = $sql->queryResult("SELECT st_lan FROM {$t}pstort WHERE st_ort = '".secureINS($result['ort'])."' LIMIT 1");
 			if (empty($ort_check) || $ort_check != $result['lan']) $result['ort'] = '0';
 		}
-		if (!empty($_POST['l']) && is_numeric($_POST['l'])) {
-			if($_POST['l'] > 0 && $_POST['l'] <= 10) {
-				$result['level'] = intval($_POST['l']);
+		if (!empty($_POST['l_6']) && is_numeric($_POST['l_6'])) {
+			if($_POST['l_6'] > 0 && $_POST['l_6'] <= 10) {
+				$result['level'] = intval($_POST['l_6']);
 			}
 		}
 		if(!empty($_POST['single'])) $result['single'] = '1';
