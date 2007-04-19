@@ -55,9 +55,9 @@
 	require(DESIGN."head.php");
 ?>
 		<div id="mainContent">
-			<table cellspacing="0" style="margin-bottom: 20px;">
+			<table summary="" cellspacing="0" style="margin-bottom: 20px;">
 			<tr>
-				<td style="width: 157px;"><a href="<?=l('forum','list',$r['main_id'])?>" class="bld"><img src="<?=OBJ.$r['main_id']?>.jpg" onerror="this.src = '<?=OBJ?>forum_nopic.jpg';" width="157" height="74" /></a></td>
+				<td style="width: 157px;"><a href="<?=l('forum','list',$r['main_id'])?>" class="bld"><img src="<?=OBJ.$r['main_id']?>.jpg" alt="" onerror="this.src = '<?=OBJ?>forum_nopic.jpg';" width="157" height="74" /></a></td>
 				<td class="pdg"><?=safeOUT($r['main_cmt'])?></td>
 			</tr>
 			<tr><td><?='<h4>'.secureOUT($r['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg'?></td></tr>
@@ -76,14 +76,14 @@ function openText(id) {
 $paging = paging(1, 10);
 $paging['co'] = 1;
 dopaging($paging, '', 2, 0, '');*/
-echo '<table cellspacing="0" width="589">';
+echo '<table summary="" cellspacing="0" width="589">';
 	if(count($res)) { foreach($res as $row) {
 ?>
 <tr onclick="openText('<?=$row['main_id']?>');" title="<?=secureOUT($row['sent_cmt'])?>">
 	<td class="cur pdg"><div style="width: 100%; height: 14px; padding-left: 1px; overflow: hidden;"><a href="<?=l('forum','read', $row['main_id'])?>" class="bld"><?=secureOUT($row['sent_ttl'])?></a>&nbsp;</div></td>
-	<td class="cur pdg rgt"><nobr><?=($row['count'])?'<b>'.$row['count'].'</b>':'0';?> svar</nobr></td>
-	<td class="cur mid rgt"><nobr><?=$user->getstring($row)?></nobr></td>
-	<td class="cur pdg rgt"><nobr><?=nicedate($row['change_date'])?> - (<a href="<?=l('forum','read', $row['main_id'])?>&showlast=1" onclick="clickonover = true;">senaste</a>)</nobr></td>
+	<td class="cur pdg rgt nobr"><?=($row['count'])?'<b>'.$row['count'].'</b>':'0';?> svar</td>
+	<td class="cur mid rgt nobr"><?=$user->getstring($row)?></td>
+	<td class="cur pdg rgt nobr"><?=nicedate($row['change_date'])?> - (<a href="<?=l('forum','read', $row['main_id'])?>&amp;showlast=1" onclick="clickonover = true;">senaste</a>)</td>
 </tr>
 <?
 	} } else echo '<tr><td colspan="4" class="spac pdg cnt">Inga inlägg.</td></tr>';

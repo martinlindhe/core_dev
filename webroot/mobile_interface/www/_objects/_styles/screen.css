@@ -100,7 +100,7 @@ ul.user_menu a:hover { text-decoration: none; color: #000; }
 .btn3_med { border: 0; padding: 0; background: url('/_objects/btn3_med.png'); width: 90px; height: 30px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
 .btn3_sml { border: 0; padding: 0; background: url('/_objects/btn3_sml.png'); width: 50px; height: 30px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
 #headContent { position: relative; height: 131px; width: 982px; margin-bottom: 10px; background-image: url('/_objects/top.png'); background-repeat: no-repeat; }
-#mainContent { float: left; margin: 0 0 0 15px; width: 596px; overflow: hidden; }
+#mainContent { margin: 0 0 0 15px; width: 596px; overflow: hidden; }
 #bigContent { float: left; margin: 0 0 0 15px; width: 786px; overflow: hidden; }
 #wholeContent { text-align: center; width: 982px; overflow: hidden; }
 .smallHeader1 { width: 176px; height: 27px; color: #fff; background: url('/_objects/box_header_small1.png'); background-repeat: no-repeat; }

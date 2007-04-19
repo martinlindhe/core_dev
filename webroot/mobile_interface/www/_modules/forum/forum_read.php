@@ -46,15 +46,15 @@
 		}
 		if(!empty($_GET['hide']) && is_numeric($_GET['hide'])) {
 			@$sql->queryUpdate("UPDATE {$t}f SET view_id = '2', check_id = '1' WHERE main_id = '".secureINS($_GET['hide'])."' LIMIT 1");
-			reloadACT('forum','read',$res['main_id'].'&item='.$item);
+			reloadACT('forum','read',$res['main_id'].'&amp;item='.$item);
 		}
 		if(!empty($_GET['off']) && is_numeric($_GET['off'])) {
 			@$sql->queryUpdate("UPDATE {$t}f SET status_id = '2' WHERE main_id = '".secureINS($_GET['off'])."' LIMIT 1");
-			reloadACT(l('forum','read',$res['main_id']).'&item='.$item);
+			reloadACT(l('forum','read',$res['main_id']).'&amp;item='.$item);
 		}
 		if(!empty($_GET['show']) && is_numeric($_GET['show'])) {
 			@$sql->queryUpdate("UPDATE {$t}f SET view_id = '1' WHERE main_id = '".secureINS($_GET['show'])."' LIMIT 1");
-			reloadACT(l('forum','read',$res['main_id']).'&item='.$item);
+			reloadACT(l('forum','read',$res['main_id']).'&amp;item='.$item);
 		}
 	}
 	if(!empty($_GET['spy'])) { $user->cleanspy($l['id_id'], $res['main_id'], 'FAN'); }
@@ -68,9 +68,9 @@
 	require(DESIGN."head.php");
 ?>
 		<div id="mainContent">
-			<table cellspacing="0" style="margin-bottom: 20px;">
+			<table summary="" cellspacing="0" style="margin-bottom: 20px;">
 			<tr>
-				<td style="width: 157px;"><a href="<?=l('forum','list', $r['main_id'])?>" class="bld"><img src="<?=OBJ.$r['main_id']?>.jpg" onerror="this.src = '<?=OBJ?>forum_nopic.jpg';" width="157" height="74" /></a></td>
+				<td style="width: 157px;"><a href="<?=l('forum','list', $r['main_id'])?>" class="bld"><img src="<?=OBJ.$r['main_id']?>.jpg" alt="" onerror="this.src = '<?=OBJ?>forum_nopic.jpg';" width="157" height="74" /></a></td>
 				<td class="pdg"><?=safeOUT($r['main_cmt'])?></td>
 			</tr>
 			<tr><td><?='<h4>'.secureOUT($r['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg'?></td></tr>
@@ -84,16 +84,26 @@
 	$id = 0;
 	foreach($list as $row) {
 		$odd = !$odd;
-echo '
-	<table cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
-	'.($i && $row['sent_ttl']?'<tr><td colspan="2" style="padding-bottom: 0;" class="em pdg">Svar på <b>'.secureOUT($row['sent_ttl']).'</b></td></tr>':(!$i?'<tr><td colspan="2" style="padding-bottom: 0;" class="pdg"><h3>'.secureOUT($row['sent_ttl']).'</h3></td></tr>':'')).'
-	<tr><td class="pdg" style="width: 55px;" rowspan="2"><a name="R'.$row['main_id'].'"></a>'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td>
-	<td class="pdg" style="width: 544px; padding-left: 0;"><h5 class="l">'.$user->getstring($row, '', array('noimg' => 1)).' - '.nicedate($row['sent_date']).'</h5><br class="clr" />
-	'.($row['status_id'] != '1'?'<em>Meddelande raderat</em>':secureOUT($row['sent_cmt'], 1)).'
-	</td></tr>
-	<tr><td class="btm rgt pdg"><input type="button" onclick="makeForumAns('.$row['main_id'].')" class="btn2_sml" value="svara" />'.(($isAdmin)?'<input type="button" class="btn2_sml" value="släck ner allt" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&item='.$row['main_id'].'&off='.$row['main_id'].'\';"><input type="button" class="btn2_sml" value="radera" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&item='.$row['main_id'].'&delete='.$row['main_id'].'\';"><input type="button" class="btn2_sml" value="'.(($row['view_id'] == '2')?'tänd upp':'släck ner').'" style="margin: 0 5px 0 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&item='.$row['main_id'].'&u='.$row['id_id'].'&'.(($row['view_id'] == '2')?'show':'hide').'='.$row['main_id'].'\';">':(($l['id_id'] == $row['id_id'] && $row['view_id'] == '1' && ($i || !$i && !count($list)))?'<input type="button" class="btn2_sml" value="radera" style="margin-right: 5px;" onclick="if(confirm(\'Säker ?\')) document.location.href = \''.l('forum','read',$res['main_id']).'&item='.$row['main_id'].'&del='.$row['main_id'].'\';">':'')).'</td></tr>
-	</table>
-';
+		echo '
+			<table summary="" cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
+			'.($i && $row['sent_ttl']?'<tr><td colspan="2" style="padding-bottom: 0;" class="em pdg">Svar på <b>'.secureOUT($row['sent_ttl']).'</b></td></tr>':(!$i?'<tr><td colspan="2" style="padding-bottom: 0;" class="pdg"><h3>'.secureOUT($row['sent_ttl']).'</h3></td></tr>':'')).'
+			<tr><td class="pdg" style="width: 55px;" rowspan="2"><a name="R'.$row['main_id'].'"></a>'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td>
+			<td class="pdg" style="width: 544px; padding-left: 0;"><h5 class="l">'.$user->getstring($row, '', array('noimg' => 1)).' - '.nicedate($row['sent_date']).'</h5><br class="clr" />
+			'.($row['status_id'] != '1'?'<em>Meddelande raderat</em>':secureOUT($row['sent_cmt'], 1)).'
+			</td></tr>
+			<tr><td class="btm rgt pdg">';
+		echo '<input type="button" onclick="makeForumAns('.$row['main_id'].')" class="btn2_sml" value="svara" />';
+		if ($isAdmin) {
+			echo '<input type="button" class="btn2_med" value="släck ner allt" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;off='.$row['main_id'].'\';"/>';
+			echo '<input type="button" class="btn2_sml" value="radera" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;delete='.$row['main_id'].'\';"/>';
+			echo '<input type="button" class="btn2_med" value="'.(($row['view_id'] == '2')?'tänd upp':'släck ner').'" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;u='.$row['id_id'].'&amp;'.(($row['view_id'] == '2')?'show':'hide').'='.$row['main_id'].'\';"/>';
+		} else {
+			if ($l['id_id'] == $row['id_id'] && $row['view_id'] == '1' && ($i || !$i && !count($list))) {
+				echo '<input type="button" class="btn2_sml" value="radera" style="margin-right: 5px;" onclick="if(confirm(\'Säker ?\')) document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;del='.$row['main_id'].'\';"/>';
+			}
+		}
+		echo '</td></tr>';
+		echo '</table>';
 		$i++;
 		$id = $row['main_id'];
 	}
