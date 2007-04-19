@@ -226,98 +226,99 @@
 	$page = 'settings';
 	include(DESIGN.'head.php');
 ?>
-	<div id="mainContent">
-			<div class="mainHeader2"><h4>inställningar - <?=makeMenu($page, $menu)?></h4></div>
-			<div class="mainBoxed2"><div style="padding: 5px;">
+<div id="mainContent">
+	<div class="mainHeader2"><h4>inställningar - <?=makeMenu($page, $menu)?></h4></div>
+	<div class="mainBoxed2">
 	<form action="<?=l('member', 'settings', 'personal')?>" method="post">
 	<input type="hidden" name="do" value="1" />
-	<table cellspacing="0" width="510">
-	<tr>
-		<td style="padding-right: 6px;"><b>Förnamn:</b><br /><input type="text" class="txt" name="ins_fname" value="<?=secureOUT($l['u_fname'])?>" /></td>
-		<td><b>Efternamn:</b><br /><input type="text" class="txt" name="ins_sname" value="<?=secureOUT($l['u_sname'])?>" /></td>
-	</tr>
-	<tr>
-		<td class="pdg_t"><b>Gatuadress:</b><br /><input type="text" class="txt" name="ins_street" value="<?=secureOUT($l['u_street'])?>" /></td>
-		<td class="pdg_t"><b>Postnummer:</b><br /><input type="text" class="txt" name="ins_pstnr" value="<?=secureOUT($l['u_pstnr'])?>" /></td>
-	</tr>
-	<tr>
-		<td class="pdg_t"><b>E-post:</b><br /><input type="text" class="txt" name="ins_email" value="<?=secureOUT($l['u_email'])?>" /></td>
-		<td class="pdg_t"><b>Mobilnummer:</b><br /><input type="text" class="txt" name="ins_cell" value="<?=secureOUT($l['u_cell'])?>" /></td>
-	</tr><?
-?>
-	<tr>
-		<td class="pdg_t" colspan="2"><br /><b>Om du vill byta lösenord, skriv in ditt nuvarande:</b><br /><input type="password" class="txt" name="ins_opass" value="" /></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" style="padding-bottom: 24px;"><b>Nytt lösenord:</b><br /><input type="password" class="txt" name="ins_npass" value="" /></td>
-		<td class="pdg_t" style="padding-bottom: 24px;"><b>Upprepa nytt lösenord:</b><br /><input type="password" class="txt" name="ins_npass2" value="" /></td>
-	</tr>
-	<tr>
-		<td colspan="2" class="pdg_t"><b>Kön att slumpa fram:</b><br /><select name="opt_random" class="txt">
-<option value="F"<?=((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'F') || (!empty($settings['random'][1]) && $settings['random'][1] == 'F'))?' selected':'';?>>Tjejer</option>
-<option value="M"<?=((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'M') || (!empty($settings['random'][1]) && $settings['random'][1] == 'M'))?' selected':'';?>>Killar</option>
-<option value="B"<?=(!empty($settings['random'][1]) && $settings['random'][1] == 'B')?' selected':'';?>>Båda könen</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2" style="padding-top: 12px;"><input type="checkbox" class="chk" name="opt_chat" value="1" id="opt_chat1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['private_chat'][1]))?' checked':'';?> /><label for="opt_chat1"> Använd privatchat endast med mina vänner (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_view" value="1" id="opt_view1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_view'][1]))?' checked':'';?> /><label for="opt_view1"> Dölj mig i besökslogg (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_bview" value="1" id="opt_bview1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_bview'][1]))?' checked':'';?> /><label for="opt_bview1"> Dölj mig i bloggar (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_pview" value="1" id="opt_pview1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_pview'][1]))?' checked':'';?> /><label for="opt_pview1"> Dölj mig i fotoalbum (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_shidden" value="1" id="opt_shidden1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_slogin'][1]))?' checked':'';?> /><label for="opt_shidden1"> Dölj mig i "senaste inloggade" (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_login'][1]))?' checked':'';?> /><label for="opt_hidden1"> Hemlig inloggning (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidlog" value="1" id="opt_hidlog"<?=(!$isOk)?' disabled':'';?><?=(!empty($hidlog))?' checked':'';?> /><label for="opt_hidlog"> Dold inloggningshistorik (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidchat" value="0" id="opt_hidchat"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_chat'][1]))?'':(($isOk)?' checked':'');?> /><label for="opt_hidchat"> Visa historik i privatchat (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_zoom" value="1" id="opt_zoom"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['zoom_auto'][1]))?' checked':'';?> /><label for="opt_zoom"> Gå till zoomverktyget automatiskt i vimmel (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['send_spec'][1]) && $isOk)?' checked':'';?> /><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (<img src="<?=OBJ?>6.gif" title="Guld" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_cell" value="1" id="opt_cell1"<?=(empty($settings['send_cell'][1]))?' checked':'';?> /><label for="opt_cell1"> Ja, jag vill ha erbjudanden från 360 via SMS</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_email" value="1" id="opt_email1"<?=(empty($settings['send_email'][1]))?' checked':'';?> /><label for="opt_email1"> Ja, jag vill ha erbjudanden från 360 via e-post</label></td>
-	</tr>
+	<div style="padding: 5px;">
+
+	<table summary="" cellspacing="0" width="510">
+		<tr>
+			<td style="padding-right: 6px;"><b>Förnamn:</b><br /><input type="text" class="txt" name="ins_fname" value="<?=secureOUT($l['u_fname'])?>" /></td>
+			<td><b>Efternamn:</b><br /><input type="text" class="txt" name="ins_sname" value="<?=secureOUT($l['u_sname'])?>" /></td>
+		</tr>
+		<tr>
+			<td class="pdg_t"><b>Gatuadress:</b><br /><input type="text" class="txt" name="ins_street" value="<?=secureOUT($l['u_street'])?>" /></td>
+			<td class="pdg_t"><b>Postnummer:</b><br /><input type="text" class="txt" name="ins_pstnr" value="<?=secureOUT($l['u_pstnr'])?>" /></td>
+		</tr>
+		<tr>
+			<td class="pdg_t"><b>E-post:</b><br /><input type="text" class="txt" name="ins_email" value="<?=secureOUT($l['u_email'])?>" /></td>
+			<td class="pdg_t"><b>Mobilnummer:</b><br /><input type="text" class="txt" name="ins_cell" value="<?=secureOUT($l['u_cell'])?>" /></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><br /><b>Om du vill byta lösenord, skriv in ditt nuvarande:</b><br /><input type="password" class="txt" name="ins_opass" value="" /></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" style="padding-bottom: 24px;"><b>Nytt lösenord:</b><br /><input type="password" class="txt" name="ins_npass" value="" /></td>
+			<td class="pdg_t" style="padding-bottom: 24px;"><b>Upprepa nytt lösenord:</b><br /><input type="password" class="txt" name="ins_npass2" value="" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="pdg_t"><b>Kön att slumpa fram:</b><br /><select name="opt_random" class="txt">
+				<option value="F"<?=((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'F') || (!empty($settings['random'][1]) && $settings['random'][1] == 'F'))?' selected':'';?>>Tjejer</option>
+				<option value="M"<?=((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'M') || (!empty($settings['random'][1]) && $settings['random'][1] == 'M'))?' selected':'';?>>Killar</option>
+				<option value="B"<?=(!empty($settings['random'][1]) && $settings['random'][1] == 'B')?' selected':'';?>>Båda könen</option>
+			</select></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2" style="padding-top: 12px;"><input type="checkbox" class="chk" name="opt_chat" value="1" id="opt_chat1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['private_chat'][1]))?' checked':'';?> /><label for="opt_chat1"> Använd privatchat endast med mina vänner (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_view" value="1" id="opt_view1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_view'][1]))?' checked':'';?> /><label for="opt_view1"> Dölj mig i besökslogg (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_bview" value="1" id="opt_bview1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_bview'][1]))?' checked':'';?> /><label for="opt_bview1"> Dölj mig i bloggar (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_pview" value="1" id="opt_pview1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_pview'][1]))?' checked':'';?> /><label for="opt_pview1"> Dölj mig i fotoalbum (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_shidden" value="1" id="opt_shidden1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_slogin'][1]))?' checked':'';?> /><label for="opt_shidden1"> Dölj mig i "senaste inloggade" (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_login'][1]))?' checked':'';?> /><label for="opt_hidden1"> Hemlig inloggning (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidlog" value="1" id="opt_hidlog"<?=(!$isOk)?' disabled':'';?><?=(!empty($hidlog))?' checked':'';?> /><label for="opt_hidlog"> Dold inloggningshistorik (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidchat" value="0" id="opt_hidchat"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_chat'][1]))?'':(($isOk)?' checked':'');?> /><label for="opt_hidchat"> Visa historik i privatchat (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_zoom" value="1" id="opt_zoom"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['zoom_auto'][1]))?' checked':'';?> /><label for="opt_zoom"> Gå till zoomverktyget automatiskt i vimmel (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['send_spec'][1]) && $isOk)?' checked':'';?> /><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_cell" value="1" id="opt_cell1"<?=(empty($settings['send_cell'][1]))?' checked':'';?> /><label for="opt_cell1"> Ja, jag vill ha erbjudanden från 360 via SMS</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_email" value="1" id="opt_email1"<?=(empty($settings['send_email'][1]))?' checked':'';?> /><label for="opt_email1"> Ja, jag vill ha erbjudanden från 360 via e-post</label></td>
+		</tr>
 <!--
-	<tr>
-		<td class="pdg_t" style="padding-top: 24px;" colspan="2"><input type="checkbox" class="chk" name="opt_mmsenabled" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmsenabled1"<?=(!empty($settings['mmsenabled'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmsenabled1"> Ja, jag vill skicka MMS från mobil till <select name="opt_mmstype" class="txt" style="width: 100px;"<?=(!$isAdmin)?' disabled':'';?>><option value="B"<?=((empty($settings['mmstype'][1]) || $settings['mmstype'][1] == 'B') && $isAdmin)?' selected':'';?>>min blogg</option><option value="P"<?=((!empty($settings['mmstype'][1]) && $settings['mmstype'][1] == 'P') && $isAdmin)?' selected':'';?>>mitt fotoalbum</option></select> (<img src="<?=OBJ?>10.gif" title="Admin" />)</label></td>
-	</tr>
-	<tr>
-		<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="ins_mmspriv" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmspriv1"<?=(!empty($settings['mmspriv'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmspriv1"> Ja, gör alla mina MMS privata (<img src="<?=OBJ?>10.gif" title="Admin" />)</label></td>
-	</tr>
+		<tr>
+			<td class="pdg_t" style="padding-top: 24px;" colspan="2"><input type="checkbox" class="chk" name="opt_mmsenabled" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmsenabled1"<?=(!empty($settings['mmsenabled'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmsenabled1"> Ja, jag vill skicka MMS från mobil till <select name="opt_mmstype" class="txt" style="width: 100px;"<?=(!$isAdmin)?' disabled':'';?>><option value="B"<?=((empty($settings['mmstype'][1]) || $settings['mmstype'][1] == 'B') && $isAdmin)?' selected':'';?>>min blogg</option><option value="P"<?=((!empty($settings['mmstype'][1]) && $settings['mmstype'][1] == 'P') && $isAdmin)?' selected':'';?>>mitt fotoalbum</option></select> (<img src="<?=OBJ?>10.gif" alt="" title="Admin" />)</label></td>
+		</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="ins_mmspriv" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmspriv1"<?=(!empty($settings['mmspriv'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmspriv1"> Ja, gör alla mina MMS privata (<img src="<?=OBJ?>10.gif" alt="" title="Admin" />)</label></td>
+		</tr>
 -->
 <?
 	if($isAdmin) {
 ?>
-	<tr>
-		<td class="pdg_t" colspan="2"><b>MMS-nyckel:</b><br /><input type="text" class="txt" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>" /><?=$mmskey_error?></td>
-	</tr>
+		<tr>
+			<td class="pdg_t" colspan="2"><b>MMS-nyckel:</b><br /><input type="text" class="txt" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>" /><?=$mmskey_error?></td>
+		</tr>
 <?
 	}
 ?>
 	</table>
 	</div>
 	<input type="submit" class="btn2_med r" value="spara!" />
+	</form>
+	</div>
 </div>
-</form>
-		</div>
 <?
 	include(DESIGN.'foot.php');
 	exit;

@@ -2,8 +2,6 @@
 	include('top.php');
 	if($l) echo '<script type="text/javascript" src="/_objects/ajax.js"></script>';
 ?>
-</head>
-
 <script type="text/javascript">
 var omoTime;
 function toggleFind(on) {
@@ -22,6 +20,7 @@ function checkTime(toggle) {
 	}
 }
 </script>
+</head>
 
 <body>
 	<div id="hoverCraft" style="position: absolute; display: none; top: 0px; left: 0px;"></div>
@@ -44,7 +43,7 @@ function checkTime(toggle) {
 		</ul>
 		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" /></a></div>
 		<div id="top_online">
-		<table cellspacing="0" summary="">
+		<table summary="" cellspacing="0">
 		<tr><td><a href="<?=l('list', 'users', '1')?>">online</a></td><td class="bld rgt"><a href="<?=l('list', 'users', 1)?>"><?=@intval($online[0])?></a></td></tr>
 		<tr><td><a href="<?=l('list', 'users', 'M')?>">män</a></td><td class="rgt"><a href="<?=l('list', 'users', 'M')?>" class="bld sexM"><?=@intval($online[1])?></a></td></tr>
 		<tr><td><a href="<?=l('list', 'users', 'F')?>">kvinnor</a></td><td class="rgt"><a href="<?=l('list', 'users', 'F')?>" class="bld sexF"><?=@intval($online[2])?></a></td></tr>
