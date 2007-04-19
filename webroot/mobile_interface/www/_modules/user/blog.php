@@ -29,7 +29,7 @@
 
 	require(DESIGN.'head_user.php');
 ?>
-			<div class="mainHeader2"><h4>blogg<?=($own?' - '.makeMenu(0, array('blog_write' => array('javascript:makeBlog(\''.$l['id_id'].'\', \'\')', 'skriv nytt'))):'')?></h4></div>
+			<div class="mainHeader2"><h4>blogg<?=($own?' - '.makeMenu(0, array('blog_write' => array('javascript:makeBlog(\''.$l['id_id'].'\',\'\')', 'skriv nytt'))):'')?></h4></div>
 			<div class="mainBoxed2">
 <? if(!empty($res) && count($res)) dopaging($paging, l('user', 'blog', $s['id_id'], '0').'p=', '', 'med', STATSTR); ?>
 <table summary="" cellspacing="0" width="586">
@@ -44,7 +44,7 @@ echo '
 	<td onclick="'.$url.'" class="cur pdg spac">'.$row['blog_cmts'].' kommentarer</td>
 	<td onclick="'.$url.'" class="cur pdg spac">'.$row['blog_visit'].' läsare</td>
 	<td onclick="'.$url.'" class="cur pdg spac rgt nobr">'.nicedate($row['blog_date']).'</td>
-	<td class="spac rgt pdg_tt nobr">'.(($own || $isAdmin)?'<a href="javascript:makeBlog(\''.$s['id_id'].'\', \''.$row['main_id'].'\')"><img src="'.OBJ.'icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'blog', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a>':'').'</td>
+	<td class="spac rgt pdg_tt nobr">'.(($own || $isAdmin)?'<a href="javascript:makeBlog(\''.$s['id_id'].'\',\''.$row['main_id'].'\')"><img src="'.OBJ.'icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'blog', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a>':'').'</td>
 </tr>';
 		}
 }

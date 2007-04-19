@@ -58,7 +58,7 @@
 <div class="mainHeader2"><h4><?=secureOUT($res['pht_cmt'])?> - publicerad: <?=nicedate($res['pht_date'])?> - <a class="wht" href="<?=l('user', 'gallery', $s['id_id'])?>">tillbaka</a></h4></div>
 <div class="mainBoxed2"><a name="view"></a>
 	<div class="cnt">
-	<img class="cnti mrg" src="<?='/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$res['pht_name']?>" border="0" />
+	<img src="<?='/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$res['pht_name']?>" class="cnti mrg" alt="" border="0" />
 	</div>
 <? 	if (!empty($_GET['c'])) { ?>
 	<div class="cnt">
@@ -72,7 +72,7 @@
 
 </div>
 
-<div class="mainHeader2"><a name="cmt"></a><h4>kommentarer - <a href="javascript:makePhotoComment('<?=$s['id_id']?>', '<?=$res['main_id']?>');">skriv kommentar</a></h4></div>
+<div class="mainHeader2"><a name="cmt"></a><h4>kommentarer - <a href="javascript:makePhotoComment('<?=$s['id_id']?>','<?=$res['main_id']?>');">skriv kommentar</a></h4></div>
 	<div class="mainBoxed2">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
@@ -85,15 +85,15 @@
 		$odd = !$odd;
 		echo
 '
-	<table cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
+	<table summary="" cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
 	<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).'</h5><div class="r"></div><br class="clr" />
 	'.secureOUT($val['c_msg']).'
 	</td></tr>
-	<tr><td class="btm rgt pdg">&nbsp;'.(($msg_own)?'<a href="'.l('user', 'gallery', $s['id_id'], $res['main_id']).'&del_msg='.$val['main_id'].'" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], $res['main_id']).'del_msg='.$val['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" style="margin-bottom: -2px;" /></a>':'').'</td></tr>
+	<tr><td class="btm rgt pdg">&nbsp;'.(($msg_own)?'<a href="'.l('user', 'gallery', $s['id_id'], $res['main_id']).'&del_msg='.$val['main_id'].'" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], $res['main_id']).'del_msg='.$val['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" style="margin-bottom: -2px;"/></a>':'').'</td></tr>
 	</table>
 ';
 
-	} } else { echo '<table cellspacing="0" width="100%"><tr><td class="cnt pdg spac">Inga kommentarer.</td></tr></table>'; }
+	} } else { echo '<table summary="" cellspacing="0" width="100%"><tr><td class="cnt pdg spac">Inga kommentarer.</td></tr></table>'; }
 ?>
 	</div>
 </div>

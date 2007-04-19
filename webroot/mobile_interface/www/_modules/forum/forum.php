@@ -31,7 +31,7 @@
 		</table>
 		<script type="text/javascript">
 		function openText(id, fid) {
-			document.location.href = '<?=l('forum','read');?>' + id + (fid?'&item=' + fid + '#R' + fid:'');
+			document.location.href = '<?=l('forum','read');?>' + id + (fid?'&amp;item=' + fid + '#R' + fid:'');
 		}
 		</script>
 		<div class="mainHeader2"><h4><?=makeMenu($page, $menu)?> - 50 senaste inläggen</h4></div>
@@ -42,7 +42,7 @@ if(count($last)) {
 	foreach($last as $row) {
 ?>
 <tr>
-	<td class="cur pdg" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');"><div style="width: 100%; height: 14px; overflow: hidden;"><a href="<?=l('forum','read', $row['top_id']).'&item='.$row['main_id'].'#R'.$row['main_id']?>" class="up"><?=secureOUT($row['sent_cmt'])?></a>&nbsp;</div></td>
+	<td class="cur pdg" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');"><div style="width: 100%; height: 14px; overflow: hidden;"><a href="<?=l('forum','read', $row['top_id']).'&amp;item='.$row['main_id'].'#R'.$row['main_id']?>" class="up"><?=secureOUT($row['sent_cmt'])?></a>&nbsp;</div></td>
 	<td class="cur pdg" onclick="openText('<?=$row['top_id']?>', '');"><div style="width: 100%; height: 14px; overflow: hidden;"><a href="<?=l('forum','read', $row['top_id'])?>" class="bld"><?=secureOUT($row['main_ttl'])?></a>&nbsp;</div></td>
 	<td class="mid nobr"><?=$user->getstring($row)?></td>
 	<td class="cur pdg rgt nobr" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');"><?=nicedate($row['sent_date'], 1, 1)?></td>

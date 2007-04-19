@@ -18,7 +18,7 @@ if(@!$own && $l) {
 	echo '
 			<div class="smallHeader3"><h4>matchmaking</h4></div>
 			<div class="smallFilled3">
-<table cellspacing="0" id="diverse">
+<table summary="" cellspacing="0" id="diverse">
 <tr>
 	<td class="rgt"><div class="usr">'.$user->getstring($s, '', array('noage' => 1)).'</div></td>
 	<td class="cnt">•</td>
@@ -76,7 +76,7 @@ if(@!$own && $l) {
 if(defined('U_VISIT')) {
 	$res = $sql->query("SELECT o.visit_date, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd FROM {$t}uservisit o INNER JOIN {$t}user u ON u.id_id = o.visitor_id AND u.status_id = '1' WHERE o.user_id = '".$s['id_id']."' ORDER BY o.main_id DESC LIMIT ".(isset($_GET['more'])?'10':'5'), 0, 1);
 	echo '<a name="visit"></a>
-	<div class="smallHeader2"><h4>senaste besökare - <a href="'.l('user', 'view', $s['id_id']).(!isset($_GET['more'])?'&more#visit">fler':'#visit">färre').'</a></h4></div>
+	<div class="smallHeader2"><h4>senaste besökare - <a href="'.l('user', 'view', $s['id_id']).(!isset($_GET['more'])?'&amp;more#visit">fler':'#visit">färre').'</a></h4></div>
 	<div class="smallBoxed2">
 	<ul class="userlist">
 ';
