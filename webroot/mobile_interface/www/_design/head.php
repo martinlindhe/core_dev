@@ -142,7 +142,7 @@ if(defined('U_GBWRITE')) echo '
 			<div class="smallBoxed2">
 				<?=($gotcon?'<div class="smallBoxed pdg">'.$user->getstring($contribute).'</div>':'')?>
 				<div class="smallMiniFilled1">
-					<p class="wht bld pdg brd_btm"><?=($gotcon?secureOUT($contribute['con_msg'], 1):'Vidsom finns ej för idag.')?></p>
+					<p class="wht bld pdg brd_btm"><?=($gotcon?secureOUT($contribute['con_msg'], 1):'Visdom finns ej för idag.')?></p>
 					<p class="wht pdg sml">Varje dag publicerar CitySurf en ny visdom, skicka in en du också!</p>
 					<input type="button" class="btn2_sml r" onclick="makeContribution();" value="skriv!" /><br class="clr" />
 				</div>

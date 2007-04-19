@@ -91,7 +91,26 @@
 	- skrivit "3 frågor" angående mobila gränssnittet till testpersonerna
 	- webbgränssnittet: "ändra relationstyp" är nu en dropdown lista istället för input-fält
 
+2007-04-19 Torsdag:
+	- webbgränssnittet: rensat upp output så den valideras som korrekt XHTML på större delen av sajten
+	- webbgränssnittet: forum-översikten var för smal tabell så all info syntes inte i den
+	- webbgränssnittet: visar senaste bloggarna på startsidan i inloggat läge
+	- webbgränssnittet: fixat positionering av diskussionstrådar, de flöt ut åt vänster
+	-	webbgränssnittet: fixat översiktsvyn på diskussioner, kolumnerna var alldeles för smala
+	- webbgränssnittet: i forum tråd-översikt var "släck ner" knappen felpositionerad
+	- webbgränssnittet: tog bort default username = "frans" i loginrutan
+	- webbgränssnittet: fixade utseendet på startsidan (ej inloggad) i firefox
+	- webbgränssnittet: fixade snabbsök-funktionen
+	- webbgränssnittet: fixade så att snabbsök "online", "män" och "kvinnor" länkarna funkar igen
+	- webbgränssnittet: autofokus på titeln när man skapar en ny diskussion i forumet, istället för fokus på meddelandetexten
+
+
 ***********************************************************************************************************************************
+XHTML cleanup:
+	- den genererade html:en för presentationsbilden genererar <IMG> tag med stora bokstäver, utan alt="", och ej escapade width & height, se presentationssida
+	- genererad html för bloggar genererar icke stängda <br> taggar och icke-stängda <img> taggar
+	- onerror används på en del images för att visa en default bild. onerror är ej accepterat i xhtml
+
 Kvar att göra MMS:
 	- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
 

@@ -7,7 +7,7 @@
 	*/
 
 	//Reads post variables and produces result. $_start & $_end is to be used together with page splitting logic
-	function performSearch($_start = 0, $_end = 0)
+	function performSearch($id, $_start = 0, $_end = 0)
 	{
 		global $sql, $user, $t, $l;
 

@@ -1,7 +1,7 @@
 <?
 	require_once('search_users.fnc.php');
 
-	$result = performSearch();
+	$result = performSearch($id);
 
 #if($sexu)
 	$menu = array('user' => array(l('list', 'users'), 'senast inloggade'), 'online' => array(l('list', 'users', '1'), 'visa online'), 'Fonline' => array(l('list', 'users', 'F'), 'tjejer online'), 'Monline' => array(l('list', 'users', 'M'), 'killar online'));

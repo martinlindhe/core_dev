@@ -48,16 +48,23 @@
 	}
 document.onkeydown = ActivateByKey;
 </script>
-<body style="border: 6px solid #FFF; background: #FFF;">
+<style type="text/css">
+body {
+	border: 6px solid #FFF;
+	background: #FFF;
+}
+</style>
+
 <div class="mainHeader2"><h4>svara på inlägg</h4></div>
 <form name="msg" action="<?=l('forum', 'answer' ,$res['main_id'])?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { sub_dis = true; this.sub.disabled = true; return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
 <div class="mainBoxed2">
-<table cellspacing="0" style="margin-left: 10px;">
-<tr><td class="pdg">Svar till: <b><?=secureOUT($res['sent_cmt'])?></b></td></tr>
-<tr><td class="pdg" style="padding-top: 0;"><textarea name="ins_cmt" class="txt" style="width: 550px; height: 100px;"></textarea><script type="text/javascript">document.msg.ins_cmt.focus();</script></td></tr>
-<tr><td class="pdg rgt" style="padding-top: 0;"><input type="submit" class="btn2_sml r" value="skicka" name="sub"></td></tr>
-</table>
+	<table summary="" cellspacing="0" style="margin-left: 10px;">
+		<tr><td class="pdg">Svar till: <b><?=secureOUT($res['sent_cmt'])?></b></td></tr>
+		<tr><td class="pdg" style="padding-top: 0;"><textarea name="ins_cmt" class="txt" style="width: 550px; height: 100px;"></textarea><script type="text/javascript">document.msg.ins_cmt.focus();</script></td></tr>
+		<tr><td class="pdg rgt" style="padding-top: 0;"><input type="submit" class="btn2_sml r" value="skicka" name="sub"/></td></tr>
+	</table>
 </div>
 </form>
+
 </body>
 </html>

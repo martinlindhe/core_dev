@@ -7,8 +7,7 @@ function trace(s)
 function toggle_element_by_name(n)
 {
 	var e = document.getElementById(n);
-	if (e.style.display != 'none') e.style.display = 'none';
-	else e.style.display = '';
+	e.style.display = (e.style.display?'':'none');
 }
 
 //Makes element with name "n" invisible in browser
