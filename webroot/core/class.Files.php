@@ -17,6 +17,7 @@ define('FILETYPE_BLOG',						102);	/* File is attached to a blog */
 define('FILETYPE_PHOTOALBUM',			103);	/* File is uploaded to a photoalbum */
 define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
 define('FILETYPE_FILEAREA_UPLOAD',105);	/* File is uploaded to a file area */
+define('FILETYPE_USERFILE',				106);	/* File is uploaded to the user's own file area */
 
 class Files
 {
@@ -26,6 +27,7 @@ class Files
 
 	public $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
 	public $allowed_audio_types	= array('mp3');
+	public $allowed_video_types = array('avi', '3gp');
 
 	private $image_max_width			= 800;	//bigger images will be resized to this size	
 	private $image_max_height			= 600;
@@ -45,6 +47,7 @@ class Files
 		if (isset($config['thumbs_dir'])) $this->thumbs_dir = $config['thumbs_dir'];
 		if (isset($config['allowed_image_types'])) $this->allowed_image_types = $config['allowed_image_types'];
 		if (isset($config['allowed_audio_types'])) $this->allowed_audio_types = $config['allowed_audio_types'];
+		if (isset($config['allowed_video_types'])) $this->allowed_video_types = $config['allowed_video_types'];
 		
 		if (isset($config['image_max_width'])) $this->image_max_width = $config['image_max_width'];
 		if (isset($config['image_max_height'])) $this->image_max_height = $config['image_max_height'];
@@ -82,7 +85,7 @@ class Files
 		require_once($config['core_root'].'layout/file_details_layer.php');
 		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
-		if ($fileType == FILETYPE_FILEAREA_UPLOAD) {
+		if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE) {
 			$categoryId = 0;
 			if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
 		}
@@ -93,8 +96,8 @@ class Files
 				addRevision(REVISIONS_WIKI, $categoryId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
 			}
 		}
-		
-		if ($session->isAdmin && !$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_global']))
+
+		if ($session->id && ($session->isAdmin || $fileType==FILETYPE_USERFILE)&& !$categoryId && !empty($_POST['new_file_category']) && isset($_POST['new_file_category_global']))
 		{
 			//Create new category. Only allow categories inside root level
 			$this->createCategory($_POST['new_file_category'], $_POST['new_file_category_global']);
@@ -107,18 +110,26 @@ class Files
 		echo 'File Area Overview - Displaying ';
 		switch ($fileType)
 		{
+			case FILETYPE_USERFILE:
+				echo 'Your file area: ';
+
 			case FILETYPE_FILEAREA_UPLOAD:
+				$action = '?file_gadget_category_id='.$categoryId;
 				if (!$categoryId) echo 'Root Level content';
 				else echo $this->getCategoryName($categoryId).' content';
 				break;
+
 			case FILETYPE_WIKI:
 				echo 'wiki attachments';
 				break;
+
+			default:
+				die('unknown filetype');
 		}
 		echo '</div>';
 
 		//Visar kategorier / kataloger
-		if ($fileType==FILETYPE_FILEAREA_UPLOAD) {
+		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
 			if (!$categoryId) {
 				$cat_list = $db->getArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
 				if (!empty($cat_list)) {
@@ -133,20 +144,8 @@ class Files
 			}
 		}
 
-		switch ($fileType)
-		{
-			case FILETYPE_FILEAREA_UPLOAD:
-				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
-				$action = '?file_gadget_category_id='.$categoryId;
-				break;
-
-			case FILETYPE_WIKI:
-				$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
-				$action = '';
-				break;
-		}
-
 		//select the files in the current category (or root level for uncategorized files)
+		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
 		$list = $db->getArray($q);
 
 		echo '<div class="file_gadget_content">';
@@ -160,9 +159,13 @@ class Files
 				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
-				//show icon for audio files. urlencodes project path so it gets passed thru to flash file
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.urlencode(getProjectPath()).'\');"><center>';
+				//show icon for audio files.
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
 				echo '<img src="/gfx/icon_audio_32.png" width="32" height="32" alt="Audio file"/>';
+				echo '</center></div>';
+			} else if (in_array($file_lastname, $this->allowed_video_types)) {
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
+				echo '<img src="/gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
 			} else {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
@@ -194,7 +197,7 @@ class Files
 			}
 		}
 	
-		if ($session->isAdmin) {
+		if ($session->isAdmin || $fileType == FILETYPE_USERFILE) {
 			if (!$categoryId) {
 				echo '<div id="file_gadget_category" style="display: none;">';
 				echo '<form name="new_file_category" method="post" action="">';
@@ -254,6 +257,7 @@ class Files
 	/* Creates a new category to store files in */
 	function createCategory($categoryName, $globalCategory = 0)
 	{
+
 		global $db, $session;
 		if (!$session->id || !is_numeric($globalCategory)) return false;
 
@@ -262,8 +266,8 @@ class Files
 		$enc_catname = $db->escape(trim(strip_tags($categoryName)));
 		if (!$enc_catname) return false;
 
-		$sql = 'INSERT INTO tblCategories SET categoryName="'.$enc_catname.'",categoryType='.CATEGORY_TYPE_FILES.',timeCreated=NOW(),globalCategory='.$globalCategory.',ownerId='.$session->id;
-		$db->query($sql);
+		$q = 'INSERT INTO tblCategories SET categoryName="'.$enc_catname.'",categoryType='.CATEGORY_TYPE_FILES.',timeCreated=NOW(),globalCategory='.$globalCategory.',ownerId='.$session->id;
+		$db->query($q);
 	}
 	
 	function getCategoryName($_id)
@@ -650,7 +654,7 @@ class Files
 	{
 		if (!is_numeric($_id)) return false;
 
-		global $db;
+		global $db, $session;
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
 					'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
@@ -663,7 +667,10 @@ class Files
 							'Filesize: '.formatDataSize($file['fileSize']).'<br/>'.
 							'Uploader: '.htmlentities($file['uploaderName']).'<br/>'.
 							'At: '.$file['timeUploaded'].'<br/>';
-		if ($this->count_file_views) $result .= 'Downloaded: '.$file['cnt'].' times';
+		if ($this->count_file_views) $result .= 'Downloaded: '.$file['cnt'].' times<br/>';
+		if ($session->isAdmin) {
+			$result .= 'Mime type: '.$file['fileMime'].'<br/>';
+		}
 
 		return $result;
 	}

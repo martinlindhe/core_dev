@@ -7,6 +7,8 @@
 
 	wiki('Settings');
 	echo '<br/>';
+	
+	$files->showFiles(FILETYPE_USERFILE);
 
 	$session->editSettings();
 

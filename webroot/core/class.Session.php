@@ -230,7 +230,7 @@ class Session
 		echo '<div id="login_form_layer">';
 		echo '<form name="login_form" method="post" action="">';
 		if ($this->error) {
-			echo '<b>Error: '.$this->error.'</b><br/>';
+			echo '<span class="critical">Error: '.$this->error.'</span><br/>';
 			$this->error = ''; //remove error message once it has been displayed
 		}
 		

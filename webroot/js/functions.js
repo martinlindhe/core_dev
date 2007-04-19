@@ -3,6 +3,41 @@ function trace(s)
 	console.debug(s);
 }
 
+function urlencode(str)	//function borrowed from http://www.albionresearch.com/misc/urlencode.php
+{
+	var SAFECHARS = "0123456789" +					// Numeric
+					"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +	// Alphabetic
+					"abcdefghijklmnopqrstuvwxyz" +
+					"-_.!~*'()";					// RFC2396 Mark characters
+	var HEX = "0123456789ABCDEF";
+
+	var encoded = "";
+	for (var i = 0; i < str.length; i++ ) {
+		var ch = str.charAt(i);
+	    if (ch == " ") {
+		    encoded += "+";				// x-www-urlencoded, rather than %20
+		} else if (SAFECHARS.indexOf(ch) != -1) {
+		    encoded += ch;
+		} else {
+		    var charCode = ch.charCodeAt(0);
+			if (charCode > 255) {
+			    alert( "Unicode Character '" 
+                        + ch 
+                        + "' cannot be encoded using standard URL encoding.\n" +
+				          "(URL encoding only supports 8-bit characters.)\n" +
+						  "A space (+) will be substituted." );
+				encoded += "+";
+			} else {
+				encoded += "%";
+				encoded += HEX.charAt((charCode >> 4) & 0xF);
+				encoded += HEX.charAt(charCode & 0xF);
+			}
+		}
+	}
+
+	return encoded;
+};
+
 //Toggles element with name "n" between visible and hidden
 function toggle_element_by_name(n)
 {
@@ -60,6 +95,7 @@ function zoomImage(id, ref)
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
 	ajax_get_fileinfo(id, ref);
 
+	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
 	show_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
@@ -73,6 +109,7 @@ function zoomFile(id, ref)
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
 	ajax_get_fileinfo(id, ref);
 	
+	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
 	show_element_by_name('zoom_file_layer');
@@ -86,7 +123,7 @@ function zoomAudio(id, name, ref)
 	empty_element_by_name('zoom_audio');
 
 	//requires ext_flashobject.js
-	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/core/file.php?id='+id+ref, 'animationName', '180', '45', '8', '#FFFFFF');
+	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/core/file.php?id='+id+urlencode(ref), 'animationName', '180', '45', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
@@ -95,7 +132,32 @@ function zoomAudio(id, name, ref)
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
 	ajax_get_fileinfo(id, ref);
 
+	hide_element_by_name('zoom_video_layer');
 	show_element_by_name('zoom_audio_layer');
+	hide_element_by_name('zoom_image_layer');
+	hide_element_by_name('zoom_file_layer');
+}
+
+//closeup view of video file
+function zoomVideo(id, name, ref)
+{
+	zoomed_id = id;
+	
+	empty_element_by_name('zoom_video');
+
+	//requires ext_flashobject.js
+	//urlencodes project path so it gets passed thru to flash file
+	var fo = new FlashObject('/flash/flv_player_test.swf?n='+name+'&s=/core/file.php?id='+id+urlencode(ref), 'animationName', '180', '45', '8', '#FFFFFF');
+	fo.addParam('allowScriptAccess', 'sameDomain');
+	fo.addParam('quality', 'high');
+	fo.addParam('scale', 'noscale');
+	fo.write('zoom_video');
+	
+	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
+	ajax_get_fileinfo(id, ref);
+
+	show_element_by_name('zoom_video_layer');
+	hide_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
 }
@@ -111,10 +173,16 @@ function zoomShowFileInfo(txt)
 
 function zoomHideElements()
 {
+	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
 	hide_element_by_name('zoom_fileinfo');
+}
+
+function download_selected_file(ref)
+{
+	document.location = '/core/file.php?id='+zoomed_id+'&dl'+ref;
 }
 
 

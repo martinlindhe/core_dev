@@ -1,18 +1,13 @@
 --------------[[platform todo]]--------------
+
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 	X	- $db->log() för user logged in & user logged out visar aldrig username i loggen
 			* session verkar ej vara initierat när $db->log() anropas då !?!?
 
 
-	wiki:
-		- gör ny toppmeny med div & ul & li osv, bort med tables
-	X	- implementera stöd för "talk" page _eller_ comments
-		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
-		- logga history för wiki file deletes via ajax
-
-
 	file area:
+		- kunna markera en filkategori som privat (visas bara för dina vänner) och hemlig (visas inte för nån)
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
 
@@ -37,7 +32,15 @@
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
 
 
+	wiki:
+		- gör ny toppmeny med div & ul & li osv, bort med tables
+		- implementera stöd för "talk" page _eller_ comments
+		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
+		- logga history för wiki file deletes via ajax
+
+
 	misc:
+		- exportera alla mysql databaser, gör en ny db from scratch och importera tillbaka, mysql klagar om db fel å shit
 		- konvertera zine!
   	- Försök bygga mer logik i sql queries / stored procedures
   X	- gör en funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida
@@ -68,7 +71,42 @@ X = hi prio task
 - = topic
 * = notes belonging to above topic
 
+--------------[[blized]]--------------
+		- sagt: kunna beskära bilder
+		- sagt: kompislista
+		- student community
+		- "valigaste funktionerna"
+		- nyheter
+		- forum
+		- admin
+		- lansering under "senhösten 2007"
+		- files: kunna ha privata filer / fil-kategorier (kunna markera en kategroi som privat när man skapar den)
+		- viktig: sökbart CV (formulär för att fylla i CV för användaren), autoskapa en PDF av cv:t med en av flera olika mallar (head+foot+logo)
+		- profil-sida
+		- kunna söka användare
+		- kunna redigera fakta, med dropdownmeny-val (tblCategories ?)
+		- Alla ska kunna skriva artiklar. senare: artiklarna ska modereras innan de publiceras. inkludera en "acceptedBy" (adminuserId) och "timeAccepted" datetime i tblArticles
+		- personinfo: namn, universitet (dropdown?), kön, ålder, nuvarande utblidning
+		- matchmaking på "fakta"
+		- användare ska kunna anmäla allt möjligt
+		- "tävlingar"
+		- låg prio/senare: användare ska kunna söka stipendier direkt från sidan. behöver isåfall databas med tillgängliga stipdendier osv
+		- arbetsgivare ska kunna söka bland CV:n
+		- företag ska kunna lägga upp presentationer av sitt företag och vad dom söker för typ av folk just nu
+		- låg prio/senare: info om olika universitet, vad de har för utbildningar osv
+		- senare: visa extern jobbsök (om vi får tillgång till sån data via en "kompis sajt"
+		- eventuellt/senare: flerspråkstöd, dirigera användaren till rätt språk automatiskt
+		- senare: filtrera bort material som är på fel språk för användaren (exempel: visa ej rysk text för indiska användare)
+
+
 --------------[[changelog]]--------------
+2007.04.19
+	- files: kan nu "download file" i filvisaren
+	- files: påbörjat hantering av videofiler, behöver en videospelare i flash / silverlight
+	- files: admin ser mer fileinfo än normal user
+	- files: lagt till FILETYPE_USERFILE så man kan ha en "egen" fil-area åxå, och fixat så egen fil-area funkar
+
+
 2007.04.18
 	- adblock: fixade så vänsternavigeringen markerar var man är i navigeringsmenyn
 	- core: news modul skapad, news admin modul skapad. tblNews skapad
