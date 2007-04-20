@@ -113,6 +113,11 @@
 
 
 ***********************************************************************************************************************************
+fortfarande inte medlem?
+http://213.80.11.163/member/forgot/ bort me register text här
+
+http://213.80.11.163/member/register/ ha text här
+
 hög prio - webbgränssnittet:
 	- namn-länkar vit bakgrund på "visa ett mail"
 	- visa login-error istället för välkomsttexten på oinloggad startsida, ej i popup eller ny sida som det är idag
