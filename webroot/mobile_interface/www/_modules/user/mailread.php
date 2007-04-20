@@ -21,7 +21,6 @@
 	$s = $l;
 	$own = true;
 	require(DESIGN."head.php");
-
 ?>
 	<div id="mainContent">
 			<div class="mainHeader2"><h4>från: <span class="bg_wht"><?=($own_u)?(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>'):$user->getstring($l);?></span> till <span class="bg_wht"><?=($own_u)?$user->getstring($l):(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>');?></span> - skickat: <?=(@$res['sent_date'])?nicedate($res['sent_date'], 1, 1):nicedate(date("Y-m-d"), 1, 1);?> - <a href="<?=l('user', 'mail').$page?>">tillbaka</a></h4></div>
