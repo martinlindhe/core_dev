@@ -1,0 +1,46 @@
+3gp audio:
+8000hz mono amr_nb (libavcodec)
+-----
+notes:
+	force h263 video output: -vcodec h263
+	force ac3 audio output: -acodec ac3
+	
+	för "amr" verkar det krävas extra lib: amrnb-6.1.0.2, lyckas ej kompilera under mingw - saknar "unzip" och "wget" under mingw
+	
+	amrnb configure:
+	* kompilerar i linux & cygwin
+	tar -jxvf amrnb-6.1.0.2.tar.bz2
+	./configure --libdir=/usr/lib --bindir=/usr/bin --includedir=/usr/include
+	make && make install
+	
+	armwb configure:
+	* kompilerar i linux & cygwin
+	./configure --libdir=/usr/lib --bindir=/usr/bin --includedir=/usr/include
+	make && make install
+	
+	ubuntu paketinstall
+	liblame-dev (mp3 stöd)
+	libxvidcore4-dev (xvid stöd)
+	libx264-dev (x264 stöd) funkar inte!!!		 --enable-x264
+	
+	ffmpeg configure:
+	./configure --enable-amr-nb --enable-amr-wb --enable-xvid --enable-gpl --enable-libmp3lame --enable-xvid
+	XviD enabled              yes
+	libmp3lame enabled        yes
+	AMR-NB float support      yes
+	AMR-NB fixed support      no
+	AMR-WB float support      yes
+	
+	cygwin make - error:
+	/usr/lib/gcc/i686-pc-cygwin/3.4.4/../../../libamrwb.a(enc_if.o): warning: common of `_dhf' overridden by definition
+	/usr/lib/gcc/i686-pc-cygwin/3.4.4/../../../libamrwb.a(if_rom.o): warning: defined here
+	/home/Eva-Lena/ffmpeg-svn/libavcodec/libavcodec.a(mpegaudiodec.o): In function `decode_init':
+	/home/Eva-Lena/ffmpeg-svn/libavcodec/mpegaudiodec.c:405: undefined reference to `_llrint'
+	/home/Eva-Lena/ffmpeg-svn/libavcodec/mpegaudiodec.c:407: undefined reference to `_llrint'
+	collect2: ld returned 1 exit status
+
+
+ffmpeg -i mike_vallely_vs_4_idiots.3gp -vcodec xvid -b 200 -acodec mp3 mike.avi
+
+producerar bra resultat!
+- blir inget ljud i tough_taxi_driver.3gp, men den e inte skapad med en mobiltelefon.. !?
