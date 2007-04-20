@@ -21,7 +21,7 @@
 	echo '<h1>Compatiblity check</h1>';
 
 	echo 'core version 0.1<br/>';
-	echo 'Debug: '.($db->debug?'<span class="critical">On - turn off for production use</span>':'<span class="okay">OFF</span>').'<br/>';
+	echo 'Debug: '.($config['debug']?'<span class="critical">On - turn off for production use</span>':'<span class="okay">OFF</span>').'<br/>';
 	echo '<br/>';
 
 	/************************************
@@ -71,7 +71,7 @@
 
 	//Settings checks
 	echo 'display_errors = '. ini_get('display_errors').'<br/>';
-	if (!$db->debug && ini_get('display_errors')) echo '<span class="critical">display_errors are turned ON on a production server!</span><br/>';
+	if (!$config['debug'] && ini_get('display_errors')) echo '<span class="critical">display_errors are turned ON on a production server!</span><br/>';
 	echo '<br/>';
 
 	/************************************

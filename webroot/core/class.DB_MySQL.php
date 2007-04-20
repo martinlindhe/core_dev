@@ -32,10 +32,9 @@ class DB_MySQL extends DB_Base
 
 	protected function connect()
 	{
-		if ($this->debug) $time_started = microtime(true);
+		global $config;
 
-		$this->db_driver = 'DB_MySQL';
-		$this->dialect = 'mysql';
+		if ($config['debug']) $time_started = microtime(true);
 
 		$this->db_handle = @ mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
 
@@ -45,36 +44,45 @@ class DB_MySQL extends DB_Base
 		}
 
 		mysql_select_db($this->database, $this->db_handle);
-		
-		if ($this->debug) $this->profileConnect($time_started);
+
+		$this->db_driver = 'DB_MySQL';
+		$this->dialect = 'mysql';
+		$this->server_version = mysql_get_server_info($this->db_handle);
+		$this->client_version = mysql_get_client_info();
+
+		if ($config['debug']) $this->profileConnect($time_started);
 	}
 
 	function query($query)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);
 
 		$result = mysql_query($query, $this->db_handle);
 
 		if ($result) {
 			$this->insert_id = mysql_insert_id($this->db_handle);
-		} else if ($this->debug && !$result) {
+		} else if ($config['debug'] && !$result) {
 			$this->query_error[ $this->queries_cnt ] = mysql_error($this->db_handle);
 		} else {
 			//if debug is turned off (production) and a query fail, just die silently
 			die;
 		}
 
-		if ($this->debug) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $query);
 
 		return $result;
 	}
 
 	function getArray($query)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);
 
 		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -86,17 +94,19 @@ class DB_MySQL extends DB_Base
 
 		mysql_free_result($result);
 
-		if ($this->debug) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $query);
 
 		return $data;
 	}
 	
 	function getMappedArray($query)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);
 
 		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -108,17 +118,19 @@ class DB_MySQL extends DB_Base
 
 		mysql_free_result($result);
 
-		if ($this->debug) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $query);
 
 		return $data;
 	}
 
 	function getNumArray($query)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);
 
 		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -130,17 +142,19 @@ class DB_MySQL extends DB_Base
 
 		mysql_free_result($result);
 
-		if ($this->debug) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $query);
 
 		return $data;
 	}
 	
 	function getOneRow($query)
 	{
-		if ($this->debug) $time_started = microtime(true);	
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);	
 
 		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -151,17 +165,19 @@ class DB_MySQL extends DB_Base
 		$data = mysql_fetch_array($result, MYSQL_ASSOC);
 		mysql_free_result($result);
 
-		if ($this->debug) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $query);
 
 		return $data;
 	}
 
 	function getOneItem($query)
 	{
-		if ($this->debug) $time_started = microtime(true);	
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);	
 
 		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($this->debug) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
 			return '';
 		}
 
@@ -172,7 +188,7 @@ class DB_MySQL extends DB_Base
 		$data = mysql_fetch_row($result);
 		mysql_free_result($result);
 
-		if ($this->debug) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $query);
 
 		if (!$data) return false;
 		return $data[0];

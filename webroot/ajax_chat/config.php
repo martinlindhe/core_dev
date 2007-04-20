@@ -14,10 +14,11 @@
 	
 	require_once('functions_chat.php');
 
+	$config['debug'] = true;
+
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbAJAXChat';
-	$config['database']['debug']		= true;
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = 30*60;		//in seconds

@@ -1,7 +1,7 @@
 --------------[[platform todo]]--------------
 
 	core general:
-		- gör $config['debug'] istället för $db->debug ...!!
+		- db: gör en "for production use" mysqli-db driver med all profile kod utplockad för att den ska va lite snabbare, nån gång när db klassen har varit orörd i några månader
 
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
@@ -109,7 +109,7 @@ X = hi prio task
 	- admin: compat check visar om php extension gd saknas (fixme detectar inte gd ok..)
 	- admin: compat check visar om php extension apc saknas
 	- admin: skapade sidor för att visa session info & db config
-
+	- core: gjorde $config['debug'] istället för $db->debug
 
 
 2007.04.19

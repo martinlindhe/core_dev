@@ -14,12 +14,11 @@
 	require_once('functions_lyrics.php');
 	require_once('functions_moderation.php');
 
+	$config['debug'] = true;
+
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbLyrics';
-	$config['database']['debug']		= true;
-
-	/* A variable named $db must exist for all future functions to work. */
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = (60*60)*24;
@@ -27,7 +26,5 @@
 	$config['session']['sha1_key'] = 'kekjhbkjsxfgyuejewjkx276786ddjhnhdzzz9716t6z';
 	$config['session']['allow_registration'] = false;
 	$config['session']['home_page'] = 'index.php';
-
-	/* A variable named $session must exist for all future functions to work. */
 	$session = new Session($config['session']);
 ?>

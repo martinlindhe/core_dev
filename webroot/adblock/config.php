@@ -16,10 +16,12 @@
 
 	require_once('functions_adblock.php');
 
+	$config['database']['debug']		= true;
+	$config['debug'] = true;
+
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbAdblock';
-	$config['database']['debug']		= true;
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = (60*60)*8;		//in seconds

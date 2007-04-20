@@ -81,8 +81,7 @@ abstract class DB_Base
 	public $server_version = '';	//used for version checking
 	public $client_version = '';	//used for version checking
 
-	//debug variables
-	public $debug = false;
+	//profiling variables
 	protected $connect_time = 0;
 	protected $time_spent = array();
 	protected $queries_cnt = 0;
@@ -93,7 +92,6 @@ abstract class DB_Base
 	/* Constructor */
 	function __construct(array $settings)
 	{
-		if (!empty($settings['debug'])) $this->debug = $settings['debug'];
 		if (!empty($settings['host'])) $this->host = $settings['host'];
 		if (!empty($settings['port'])) $this->port = $settings['port'];
 		if (!empty($settings['username'])) $this->username = $settings['username'];
@@ -111,7 +109,6 @@ abstract class DB_Base
 		echo 'Host: '.$this->host.':'.$this->port.'<br/>';
 		echo 'Login: '.$this->username.':'.($this->password?$this->password:'(blank)').'<br/>';
 		echo 'Database: '.$this->database.'<br/>';
-		echo 'Debug: '.($this->debug?'ON':'OFF').'<br/><br/>';
 
 		echo '<b>DB driver specific settings</b><br/>';
 		$this->showDriverStatus();
@@ -147,20 +144,20 @@ abstract class DB_Base
 	}
 
 	/* Stores profiling information about connect time to database */
-	protected function profileConnect($time_started)
+	function profileConnect($time_started)
 	{
 		$this->connect_time = microtime(true) - $time_started;
 	}
 
 	/* Stores profiling information about query execution time */
-	protected function profileQuery($time_started, $query)
+	function profileQuery($time_started, $query)
 	{
 		$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
 		$this->queries[ $this->queries_cnt ] = $query;
 		$this->queries_cnt++;
 	}
 
-	protected function profileError($time_started, $query, $_error)
+	function profileError($time_started, $query, $_error)
 	{
 		$this->query_error[ $this->queries_cnt ] = $_error;
 		$this->profileQuery($time_started, $query);
@@ -169,7 +166,8 @@ abstract class DB_Base
 	/* Shows sql query profiling information */
 	function showProfile($pageload_start = 0)
 	{
-		if (!$this->debug) return;
+		global $config;
+		if (!$config['debug']) return;
 
 		$total_time = microtime(true) - $pageload_start;
 

@@ -10,20 +10,17 @@
 	require_once($config['core_root'].'core/class.Session.php');
 	require_once($config['core_root'].'core/class.Files.php');
 
+	$config['debug'] = true;
+
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbJanina';
-	$config['database']['debug']		= true;
-
-	/* A variable named $db must exist for all future functions to work. */
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = (60*60)*24;
 	$config['session']['name'] = 'Janina';
 	$config['session']['sha1_key'] = 'janinaSHAxyxtybhge3bbexudud81cujnm11wbvwcvvw';
 	$config['session']['allow_registration'] = false;
-
-	/* A variable named $session must exist for all future functions to work. */
 	$session = new Session($config['session']);
 	
 	$config['files']['count_file_views'] = true;
