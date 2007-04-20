@@ -82,17 +82,13 @@
 
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
-			echo '<b>'.$row['title'].'</b> ';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['newsId'].'">'.$row['title'].'</a> ';
 			echo '(av '.$row['creatorName'].', publicerades '.$row['timeToPublish'].')<br/>';
 			echo $row['body'].'<br/>';
 			if ($row['timeEdited'] > $row['timeCreated']) {
 				echo 'Uppdaterades '.$row['timeEdited'].'<br/>';
 			}
 			echo '</div><br/>';
-		}
-		
-		if ($_SESSION['isAdmin']) {
-			echo '<a href="/admin/admin_news.php'.getProjectPath(false).'">Admin news</a><br/><br/>';
 		}
 	}
 ?>

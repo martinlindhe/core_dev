@@ -29,7 +29,7 @@
 	echo '<language>'.$language.'</language>';
 	echo '<pubDate>'.$publish_date.'</pubDate>';
 	echo '<copyright>'.$copyright.'</copyright>';
-	echo '<webMaster>".$webmaster."</webMaster>';
+	echo '<webMaster>'.$webmaster.'</webMaster>';
 	echo '<generator>uReply RSS propagator</generator>';
 
 	echo '<image>';
@@ -44,6 +44,7 @@
 	for ($i=0; $i<count($list); $i++) {
 		if (!$list[$i]['rss_enabled']) continue;
 			
+		//fixme: fixa url
 		$item_url = 'http://localhost/core/news.php?id='.$list[$i]['newsId'].getProjectPath();
 
 		echo '<item>';

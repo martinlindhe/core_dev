@@ -23,9 +23,9 @@ class DB_MySQLi extends DB_Base
 		echo 'Last errno: '.$this->db_handle->errno.'<br/><br/>';
 	}
 
-	function escape($query)
+	function escape($q)
 	{
-		return $this->db_handle->real_escape_string($query);
+		return $this->db_handle->real_escape_string($q);
 	}
 
 	protected function connect()
@@ -97,14 +97,14 @@ class DB_MySQLi extends DB_Base
 		return $affected_rows;
 	}
 
-	function getArray($query)
+	function getArray($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($query)) {
-			if ($config['debug']) $this->profileError($time_started, $query, $this->db_handle->error);
+		if (!$result = $this->db_handle->query($q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 
@@ -116,19 +116,19 @@ class DB_MySQLi extends DB_Base
 
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
 
-	function getMappedArray($query)
+	function getMappedArray($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($query)) {
-			if ($config['debug']) $this->profileError($time_started, $query, $this->db_handle->error);
+		if (!$result = $this->db_handle->query($q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 
@@ -140,19 +140,19 @@ class DB_MySQLi extends DB_Base
 
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
 
-	function getNumArray($query)
+	function getNumArray($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($query)) {
-			if ($config['debug']) $this->profileError($time_started, $query, $this->db_handle->error);
+		if (!$result = $this->db_handle->query($q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 
@@ -164,53 +164,53 @@ class DB_MySQLi extends DB_Base
 
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
 
-	function getOneRow($query)
+	function getOneRow($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);	
 
-		if (!$result = $this->db_handle->query($query)) {
-			if ($$config['debug']) $this->profileError($time_started, $query, $this->db_handle->error);
+		if (!$result = $this->db_handle->query($q)) {
+			if ($$config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 
 		if ($result->num_rows > 1) {
-			die('ERROR: query '.$query.' in DB_MySQLi::getOneRow() returned more than 1 result!');
+			die('ERROR: query '.$q.' in DB_MySQLi::getOneRow() returned more than 1 result!');
 		}
 
 		$data = $result->fetch_array(MYSQLI_ASSOC);
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
 
-	function getOneItem($query)
+	function getOneItem($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);	
 
-		if (!$result = $this->db_handle->query($query)) {
-			if ($config['debug']) $this->profileError($time_started, $query, $this->db_handle->error);
+		if (!$result = $this->db_handle->query($q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
 			return '';
 		}
 
 		if ($result->num_rows > 1) {
-			die('ERROR: query '.$query.' in DB_MySQLi::getOneItem() returned more than 1 result!');
+			die('ERROR: query '.$q.' in DB_MySQLi::getOneItem() returned more than 1 result!');
 		}
 
 		$data = $result->fetch_row();
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		if (!$data) return false;
 		return $data[0];

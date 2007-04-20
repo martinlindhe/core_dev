@@ -25,9 +25,9 @@ class DB_MySQL extends DB_Base
 		echo 'Last errno: '.mysql_errno($this->db_handle).'<br/><br/>';
 	}
 
-	function escape($query)
+	function escape($q)
 	{
-		return mysql_real_escape_string($query, $this->db_handle);
+		return mysql_real_escape_string($q, $this->db_handle);
 	}
 
 	protected function connect()
@@ -53,13 +53,13 @@ class DB_MySQL extends DB_Base
 		if ($config['debug']) $this->profileConnect($time_started);
 	}
 
-	function query($query)
+	function query($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		$result = mysql_query($query, $this->db_handle);
+		$result = mysql_query($q, $this->db_handle);
 
 		if ($result) {
 			$this->insert_id = mysql_insert_id($this->db_handle);
@@ -70,19 +70,19 @@ class DB_MySQL extends DB_Base
 			die;
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $result;
 	}
 
-	function getArray($query)
+	function getArray($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+		if (!$result = mysql_query($q, $this->db_handle)) {
+			if ($config['debug']) $this->profileError($time_started, $q, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -94,19 +94,19 @@ class DB_MySQL extends DB_Base
 
 		mysql_free_result($result);
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
 	
-	function getMappedArray($query)
+	function getMappedArray($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+		if (!$result = mysql_query($q, $this->db_handle)) {
+			if ($config['debug']) $this->profileError($time_started, $q, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -118,19 +118,19 @@ class DB_MySQL extends DB_Base
 
 		mysql_free_result($result);
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
 
-	function getNumArray($query)
+	function getNumArray($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+		if (!$result = mysql_query($q, $this->db_handle)) {
+			if ($config['debug']) $this->profileError($time_started, $q, mysql_error($this->db_handle));
 			return array();
 		}
 
@@ -142,53 +142,53 @@ class DB_MySQL extends DB_Base
 
 		mysql_free_result($result);
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
 	
-	function getOneRow($query)
+	function getOneRow($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);	
 
-		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+		if (!$result = mysql_query($q, $this->db_handle)) {
+			if ($config['debug']) $this->profileError($time_started, $q, mysql_error($this->db_handle));
 			return array();
 		}
 
 		if (mysql_num_rows($result) > 1) {
-			die('ERROR: query '.$query.' in DB_MySQL::getOneRow() returned more than 1 result!');
+			die('ERROR: query '.$q.' in DB_MySQL::getOneRow() returned more than 1 result!');
 		}
 
 		$data = mysql_fetch_array($result, MYSQL_ASSOC);
 		mysql_free_result($result);
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
 
-	function getOneItem($query)
+	function getOneItem($q)
 	{
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);	
 
-		if (!$result = mysql_query($query, $this->db_handle)) {
-			if ($config['debug']) $this->profileError($time_started, $query, mysql_error($this->db_handle));
+		if (!$result = mysql_query($q, $this->db_handle)) {
+			if ($config['debug']) $this->profileError($time_started, $q, mysql_error($this->db_handle));
 			return '';
 		}
 
 		if (mysql_num_rows($result) > 1) {
-			die('ERROR: query '.$query.' in DB_MySQL::getOneItem() returned more than 1 result!');
+			die('ERROR: query '.$q.' in DB_MySQL::getOneItem() returned more than 1 result!');
 		}
 
 		$data = mysql_fetch_row($result);
 		mysql_free_result($result);
 
-		if ($config['debug']) $this->profileQuery($time_started, $query);
+		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		if (!$data) return false;
 		return $data[0];

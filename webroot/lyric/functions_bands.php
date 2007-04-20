@@ -12,8 +12,8 @@
 		$check = $db->getOneRow("SELECT * FROM tblBands WHERE bandName='".$band_name."'");
 		if ($check) return false; //a band with this name already exists
 
-		$sql = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$session->id.",timeCreated=NOW()";
-		$db->query($sql);
+		$q = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$session->id.",timeCreated=NOW()";
+		$db->query($q);
 		return $db->insert_id;
 	}
 	
@@ -60,11 +60,11 @@
 
 		if (!is_numeric($band_id)) return false;
 
-		$sql  = "SELECT t1.*,t2.userName FROM tblBands AS t1 ";
-		$sql .= "INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ";
-		$sql .= "WHERE t1.bandId=".$band_id;
+		$q  = "SELECT t1.*,t2.userName FROM tblBands AS t1 ";
+		$q .= "INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ";
+		$q .= "WHERE t1.bandId=".$band_id;
 
-		return $db->getOneRow($sql);
+		return $db->getOneRow($q);
 	}	
 	
 	function bandCount()
@@ -99,13 +99,13 @@
 
 		if (!is_numeric($band_id)) return false;
 		
-		$sql  = "SELECT t2.recordId,t2.recordName FROM tblTracks AS t1 ";
-		$sql .= "INNER JOIN tblRecords AS t2 ON (t1.recordId=t2.recordId) ";
-		$sql .= "WHERE t1.bandId=".$band_id." AND t2.bandId=0 ";
-		$sql .= "GROUP BY t2.recordId ";
-		$sql .= "ORDER BY t2.recordName ASC";
+		$q  = "SELECT t2.recordId,t2.recordName FROM tblTracks AS t1 ";
+		$q .= "INNER JOIN tblRecords AS t2 ON (t1.recordId=t2.recordId) ";
+		$q .= "WHERE t1.bandId=".$band_id." AND t2.bandId=0 ";
+		$q .= "GROUP BY t2.recordId ";
+		$q .= "ORDER BY t2.recordName ASC";
 
-		return $db->getArray($sql);
+		return $db->getArray($q);
 	}
 	
 	/* Returnerar låttitlar och id till alla låtar med detta band i alfabetisk ordning */
@@ -115,10 +115,10 @@
 
 		if (!is_numeric($band_id)) return false;
 
-		$sql  = 'SELECT lyricId,lyricName FROM tblLyrics WHERE bandId='.$band_id;
-		$sql .= ' ORDER BY lyricName ASC';
+		$q  = 'SELECT lyricId,lyricName FROM tblLyrics WHERE bandId='.$band_id;
+		$q .= ' ORDER BY lyricName ASC';
 
-		return $db->getArray($sql);
+		return $db->getArray($q);
 	}
 
 ?>

@@ -66,8 +66,8 @@
 			}
 
 			if ($temp[0] == (string)($i+1)) {
-				$sql = "SELECT lyricId,lyricName FROM tblLyrics WHERE SOUNDEX(lyricName)=SOUNDEX('".$songname."') AND bandId=".$band_id;
-				$check = $db->query($sql);
+				$q = "SELECT lyricId,lyricName FROM tblLyrics WHERE SOUNDEX(lyricName)=SOUNDEX('".$songname."') AND bandId=".$band_id;
+				$check = $db->query($q);
 				if (dbNumRows($check)) {
 					$row = dbFetchArray($check);
 						

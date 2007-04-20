@@ -27,34 +27,34 @@ abstract class DB_Base
 	public $dialect = '';
 
 	/* Escapes a string for use in queries */
-	abstract function escape($query);
+	abstract function escape($q);
 
 	/* Performs a query that don't return anything
 		Example: INSERT a=1 INTO t */
-	abstract function query($query);
+	abstract function query($q);
 	
 	/* Performs a query that does a DELETE, returns the number of rows affected
 		Example: DELETE FROM t WHERE id=1 */
-	abstract function delete($query);
+	abstract function delete($q);
 	
 	/* Returns an array with the results, with columns as array indexes
 		Example: SELECT * FROM t */
-	abstract function getArray($query);
+	abstract function getArray($q);
 	
 	/* Returns an array with the results mapped as key => value
 		Example: SHOW VARIABLES LIKE "%cache%" */
-	abstract function getMappedArray($query);
+	abstract function getMappedArray($q);
 	
 	/* Returns an 1-dimensional array with a numeric index */
-	abstract function getNumArray($query);
+	abstract function getNumArray($q);
 
 	/* Returns one row-result with columns as array indexes
 		Example: SELECT * FROM t WHERE id=1 (where id is distinct) */
-	abstract function getOneRow($query);
+	abstract function getOneRow($q);
 
 	/* Returns one column-result only
 		Example: SELECT a FROM t WHERE id=1 (where id is distinct) */
-	abstract function getOneItem($query);
+	abstract function getOneItem($q);
 
 
 	/****************************************************/

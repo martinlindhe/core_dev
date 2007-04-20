@@ -112,6 +112,7 @@ class Files
 		//menu
 		echo '<div class="file_gadget_header">';
 		echo 'File Area Overview - Displaying ';
+		$action = '';
 		switch ($fileType)
 		{
 			case FILETYPE_USERFILE:
@@ -640,13 +641,13 @@ class Files
 
 		if (!is_numeric($ownerId) || !is_numeric($fileType)) return array();
 
-		$sql = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
-		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
-		$sql .= 'WHERE t1.ownerId='.$ownerId;
-		if ($fileType) $sql .= ' AND t1.fileType='.$fileType;
-		$sql .= ' ORDER BY t1.timeUploaded ASC';
+		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
+		$q .= 'WHERE t1.ownerId='.$ownerId;
+		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
+		$q .= ' ORDER BY t1.timeUploaded ASC';
 		
-		return $db->getArray($sql);
+		return $db->getArray($q);
 	}
 
 	function getFilesByCategory($fileType, $categoryId)
@@ -655,13 +656,13 @@ class Files
 
 		if (!is_numeric($categoryId) || !is_numeric($fileType)) return array();
 
-		$sql = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
-		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
-		$sql .= 'WHERE t1.categoryId='.$categoryId;
-		if ($fileType) $sql .= ' AND t1.fileType='.$fileType;
-		$sql .= ' ORDER BY t1.timeUploaded ASC';
+		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
+		$q .= 'WHERE t1.categoryId='.$categoryId;
+		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
+		$q .= ' ORDER BY t1.timeUploaded ASC';
 		
-		return $db->getArray($sql);
+		return $db->getArray($q);
 	}
 
 	/* Används av ajax filen /core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/

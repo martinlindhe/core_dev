@@ -47,12 +47,12 @@
 
 		if (!is_numeric($ruleId)) return false;
 		
-		$sql  = 'SELECT t1.*,t2.userName AS creatorName,t3.userName AS editorName FROM tblAdblockRules AS t1 ';
-		$sql .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
-		$sql .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
-		$sql .= 'WHERE t1.ruleId='.$ruleId;
+		$q  = 'SELECT t1.*,t2.userName AS creatorName,t3.userName AS editorName FROM tblAdblockRules AS t1 ';
+		$q .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
+		$q .= 'WHERE t1.ruleId='.$ruleId;
 		
-		return $db->getOneRow($sql);
+		return $db->getOneRow($q);
 	}
 	
 	/* Returns a list of rules from the db. $types looks like this: "1,2,3" */
@@ -82,12 +82,12 @@
 		
 
 		if ($types_sql) {
-			$sql = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0 AND ('.$types_sql.') ORDER BY ruleText ASC'.$limit_sql;
+			$q = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0 AND ('.$types_sql.') ORDER BY ruleText ASC'.$limit_sql;
 		} else {
-			$sql = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0 ORDER BY ruleText ASC'.$limit_sql;
+			$q = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0 ORDER BY ruleText ASC'.$limit_sql;
 		}
 		
-		return $db->getNumArray($sql);
+		return $db->getNumArray($q);
 	}
 	
 	/* Returns the total number of rules in database */
@@ -103,10 +103,10 @@
 		global $db;
 
 		/* Returns array of count by type */
-		$sql  = 'SELECT ruleType, COUNT(ruleId) AS cnt FROM tblAdblockRules WHERE deletedBy=0 ';
-		$sql .= 'GROUP BY ruleType';
+		$q  = 'SELECT ruleType, COUNT(ruleId) AS cnt FROM tblAdblockRules WHERE deletedBy=0 ';
+		$q .= 'GROUP BY ruleType';
 		
-		$list = $db->getArray($sql);
+		$list = $db->getArray($q);
 
 		$data['total'] = 0;
 
@@ -131,8 +131,8 @@
 
 		if (!is_numeric($days)) return false;
 		
-		$sql = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0 AND timeCreated>'. (time()-($days*24*3600));
-		return $db->getOneItem($sql);
+		$q = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE deletedBy=0 AND timeCreated>'. (time()-($days*24*3600));
+		return $db->getOneItem($q);
 	}
 
 	function makeAdblockTypeSQL($types)
@@ -163,17 +163,17 @@
 
 		$types_sql = makeAdblockTypeSQL($types);
 
-		$sql = 'SELECT * FROM tblAdblockRules WHERE deletedBy=0';
-		if ($searchword) $sql .= ' AND ruleText LIKE "%'.$searchword.'%"';
-		if ($types_sql) $sql .= ' AND ('.$types_sql.')';
+		$q = 'SELECT * FROM tblAdblockRules WHERE deletedBy=0';
+		if ($searchword) $q .= ' AND ruleText LIKE "%'.$searchword.'%"';
+		if ($types_sql) $q .= ' AND ('.$types_sql.')';
 		
 		if ($sortByTime) {
-			$sql .= ' ORDER BY timeCreated DESC'.$_limit_sql;		//returnerar senaste regeln först
+			$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;		//returnerar senaste regeln först
 		} else {
-			$sql .= ' ORDER BY ruleText ASC'.$_limit_sql;		//returnerar alfabetiskt, a-z
+			$q .= ' ORDER BY ruleText ASC'.$_limit_sql;		//returnerar alfabetiskt, a-z
 		}
 		
-		return $db->getArray($sql);
+		return $db->getArray($q);
 	}
 
 	
@@ -185,10 +185,10 @@
 		$types_sql = makeAdblockTypeSQL($types);
 
 		$searchword = $db->escape(strip_tags($searchword));
-		$sql = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
-		if ($types_sql) $sql .= ' AND ('.$types_sql.')';
+		$q = 'SELECT COUNT(ruleId) FROM tblAdblockRules WHERE ruleText LIKE "%'.$searchword.'%" AND deletedBy=0';
+		if ($types_sql) $q .= ' AND ('.$types_sql.')';
 
-		return $db->getOneItem($sql);
+		return $db->getOneItem($q);
 	}
 
 	
@@ -224,14 +224,14 @@
 	{
 		global $db;
 
-		$sql  = 'SELECT t1.*,t2.userName,t3.ci ';
-		$sql .= 'FROM tblProblemSites AS t1 ';
-		$sql .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
-		$sql .= 'LEFT OUTER JOIN dbGeoIP.tblGeoIP AS t3 ON (t1.userIP BETWEEN t3.start AND t3.end) ';
-		$sql .= 'WHERE t1.deletedBy=0 ';
-		$sql .= 'ORDER BY t1.timeCreated ASC';
+		$q  = 'SELECT t1.*,t2.userName,t3.ci ';
+		$q .= 'FROM tblProblemSites AS t1 ';
+		$q .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
+		$q .= 'LEFT OUTER JOIN dbGeoIP.tblGeoIP AS t3 ON (t1.userIP BETWEEN t3.start AND t3.end) ';
+		$q .= 'WHERE t1.deletedBy=0 ';
+		$q .= 'ORDER BY t1.timeCreated ASC';
 
-		return $db->getArray($sql);
+		return $db->getArray($q);
 	}
 	
 	/* Return number of items in problem site list */
@@ -249,11 +249,11 @@
 
 		if (!is_numeric($cnt)) return false;
 		
-		$sql  = 'SELECT t1.*,t2.userName FROM tblAdblockRules AS t1 ';
-		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
-		$sql .= 'ORDER BY t1.timeCreated DESC LIMIT 0,'.$cnt;
+		$q  = 'SELECT t1.*,t2.userName FROM tblAdblockRules AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'ORDER BY t1.timeCreated DESC LIMIT 0,'.$cnt;
 		
-		return $db->getArray($sql);
+		return $db->getArray($q);
 	}
 
 	define('DOWNLOAD_METHOD_WEBFORM', 'webform');

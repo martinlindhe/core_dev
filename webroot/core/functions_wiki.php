@@ -35,8 +35,8 @@
 		$wikiName = $db->escape(trim($wikiName));
 		if (!$wikiName) return false;
 
-		$sql = 'SELECT * FROM tblWiki WHERE wikiName="'.$wikiName.'"';
-		$data = $db->getOneRow($sql);
+		$q = 'SELECT * FROM tblWiki WHERE wikiName="'.$wikiName.'"';
+		$data = $db->getOneRow($q);
 
 		/* Aborts if we are trying to save a exact copy as the last one */
 		if (!empty($data) && $data['msg'] == $_text) return false;

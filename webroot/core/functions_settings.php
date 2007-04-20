@@ -36,8 +36,8 @@
 		$settingName = $db->escape($settingName);
 		$defaultValue = $db->escape($defaultValue);
 
-		$sql = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' AND settingName="'.$settingName.'"';
-		$result = $db->getOneItem($sql);
+		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$settingType.' AND settingName="'.$settingName.'"';
+		$result = $db->getOneItem($q);
 
 		if ($result) return $result;
 		return $defaultValue;
