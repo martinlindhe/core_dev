@@ -16,7 +16,6 @@
 		- compat check: identifiera om gd är installerat
 
 	news modul:
-	X	- rss feed
  	 	* Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
 	X	- kommentarer
 		- vote på kvalitén:
@@ -48,7 +47,7 @@
   	- när filen accessas nästa gång så ifall den är "processing" så gör man en extra lookup i jobb-tabellen ifall den är färdigprocessad,
   	  isåfall uppdateras tblFiles att den e done, och filen flyttas in i core uploadfile systemet, isåfall
   	 	* renama "thumbs" katalogen till "processed", och implementera ett liknande system som för thumbnails, fast för omkodade videos / musik
-
+		- skrota hela getProjectPath() på nåt smart sätt?
 
 --------------[[projekt todo]]--------------
   adblock:
@@ -118,6 +117,7 @@ X = hi prio task
 	- db: exporterade alla mysql databaser, gör en ny db from scratch och importera tillbaka, mysql klagade om db fel å shit
 	- admin: compat check basic os detection, identifierar windows
 	- news: rss html tag måste va i headern, gjorde en lösning med /adblock/news.php och design_head.php, $meta_rss
+	- news: implementerat rss feed
 
 2007.04.19
 	- files: kan nu "download file" i filvisaren
