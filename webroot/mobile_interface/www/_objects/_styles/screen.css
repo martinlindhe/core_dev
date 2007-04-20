@@ -156,3 +156,6 @@ ul.user_menu a:hover { text-decoration: none; color: #000; }
 #diverse .cnt { padding: 2px 3px 3px 3px; }
 #diverse .usr, #diverse .usr { height: 32px; }
 .nobr { white-space: nowrap; }
+#text_container { background-color: #FFF; font-family: Georgia, Verdana, Arial, sans-serif; }
+#text_container p { margin: 0; padding: 0; }
+

@@ -57,13 +57,6 @@
 	if($alias) $alias = $alias.': ';
 	require(DESIGN.'head_popup.php');
 ?>
-<style type="text/css">
-#text_container {
-	background-color: #FFFFFF;
-	font-family: Georgia, Verdana, Arial, sans-serif;
-}
-#text_container p { margin: 0; padding: 0; }
-</style>
 <script type="text/javascript" src="<?=OBJ?>text_control.js"></script>
 <script type="text/javascript">
 window.onload = TC_Init;

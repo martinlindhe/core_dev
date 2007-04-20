@@ -24,16 +24,8 @@
 
 ?>
 	<div id="mainContent">
-<style type="text/css">
-#text_container {
-	background-color: #FFFFFF;
-	font-family: Georgia, Verdana, Arial, sans-serif;
-}
-#formatText p { margin: 0; padding: 0; }
-</style>
 			<div class="mainHeader2"><h4>från: <span class="bg_wht"><?=($own_u)?(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>'):$user->getstring($l);?></span> till <span class="bg_wht"><?=($own_u)?$user->getstring($l):(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>');?></span> - skickat: <?=(@$res['sent_date'])?nicedate($res['sent_date'], 1, 1):nicedate(date("Y-m-d"), 1, 1);?> - <a href="<?=l('user', 'mail').$page?>">tillbaka</a></h4></div>
 			<div class="mainBoxed2">
-			<!--<div class="pdg l"><?=($s['id_id'] == $l['id_id'])?$user->getimg($res_u['id_id'].$res_u['u_picid'].$res_u['u_picd'].$res_u['u_sex'], $res_u['u_picvalid'], 1):$user->getimg($s['id_id'].$s['u_picid'].$s['u_picd'].$s['u_sex'], $s['u_picvalid'], 1);?></div>-->
 			<div class="pdg l" style="width: 589px; overflow: hidden;">
 			<h3><?=secureOUT($res['sent_ttl'])?></h3>
 			<p class="no" id="formatText"><?=formatText($res['sent_cmt'])?></p>

@@ -42,13 +42,6 @@ $NAME_TITLE = 'BLOGG - SKRIV | '.NAME_TITLE;
 	$result = $sql->query("SELECT ".CH." main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1' ORDER BY main_id DESC");
 	require(DESIGN.'head_popup.php');
 ?>
-<style type="text/css">
-#text_container {
-	background-color: #FFFFFF;
-	font-family: Georgia, Verdana, Arial, sans-serif;
-}
-#text_container p { margin: 0; padding: 0; }
-</style>
 <script type="text/javascript" src="<?=OBJ?>text_control.js"></script>
 <script type="text/javascript">
 window.onload = TC_Init;

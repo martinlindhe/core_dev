@@ -31,8 +31,8 @@
 			echo '<div style="padding: 5px 5px 4px 12px;">';
 			foreach($res as $row) {
 				$msg = $row['c_msg'];
-				if (strlen($msg) > 15) $msg = substr($msg, 0, 15).' [...]';
-				echo $msg.' av '.$user->getstring($row, '', array('icons' => 1)).'<br/>';
+				if (strlen($msg) >= 14) $msg = substr($msg, 0, 12).'[...]';
+				echo $msg.' av '.$user->getstring($row['user_id'], '', array('icons' => 1)).'<br/>';
 			}
 			echo '</div></div>';
 			echo '</div>';

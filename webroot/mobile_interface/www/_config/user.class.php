@@ -211,13 +211,18 @@ class user {
 		$arr = substr($arr, -5, -3);//style="width: 225px; height: 300px;"
 		return (!$id?'<a>':'<a href="'.l('user', 'view', $id).'"'.(!empty($extra['text'])?' title="'.secureOUT($extra['text']).'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>').'<img  alt="'.(!empty($extra['text'])?secureOUT($extra['text']):'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
 	}
+
 	function getministring($arr) {
 		global $sex_name;
 		return $arr['u_alias'].', '.$sex_name[$arr['u_sex']].' '.$this->doage($arr['u_birth']).'år';
 	}
+
 	function getstring($arr, $suffix = '', $extra = '') {
 		global $sex_name;
-		if(@$arr['id_id'] == @$_SESSION['data']['id_id']) {
+		if (!is_array($arr) && is_numeric($arr)) {
+			$arr = $this->getuser($arr);
+		}
+		if (@$arr['id_id'] == @$_SESSION['data']['id_id']) {
 			if(!$this->isOnline($arr['account_date'])) {
 				$res = now();
 				$_SESSION['data']['account_date'] = $res;
@@ -226,7 +231,7 @@ class user {
 				$arr['account_date'] = $res;
 			}
 		}
-		if($arr['id_id'] == 'SYS')
+		if ($arr['id_id'] == 'SYS')
 			return '<span class="bld">SYSTEM</span>';
 		elseif(empty($arr['u_alias']))
 			return '<span class="bld">[BORTTAGEN]</span>'; //($this->isOnline($arr['account_date'])
