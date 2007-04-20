@@ -40,7 +40,7 @@
 		echo '<li>'.($cur=='report_site.php'?'<strong>':'').'<a href="'.$r.'report_site.php">Report site</a>'.($cur=='report_site.php'?'</strong>':'').'</li>';
 
 		//admin menu if logged in
-		echo '<li>'.($cur=='admin_events.php'?'<strong>':'').'<a href="/admin/admin_events.php'.getProjectPath(false).'">Admin</a>'.($cur=='admin_events.php'?'</strong>':'').'</li>';
+		echo '<li>'.($cur=='admin.php'?'<strong>':'').'<a href="/admin/admin.php'.getProjectPath(false).'">Admin</a>'.($cur=='admin.php'?'</strong>':'').'</li>';
 		echo '<li>'.($cur=='admin_reports.php'?'<strong>':'').'<a href="'.$r.'admin_reports.php">Reported sites ('.getProblemSiteCount().')</a>'.($cur=='admin_reports.php'?'</strong>':'').'</li>';
 	}
 

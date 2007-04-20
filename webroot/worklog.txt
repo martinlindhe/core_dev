@@ -110,7 +110,7 @@
 	- webbgränssnittet: centrerat startsidan i utloggat läge
 	- webbgränssnittet: visar senaste blog-kommentarerna på startsidan i inloggat läge
 	- webbgränssnittet: mer xhtml-fixar + flyttat ut mer design till screen.css
-
+---[[mailat ovanstående]]---
 
 ***********************************************************************************************************************************
 fortfarande inte medlem?

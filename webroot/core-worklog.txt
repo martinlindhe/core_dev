@@ -15,11 +15,9 @@
 
 
 	admin gränssnitt:
-	X	- visa phpinfo
-		- visa "kompatiblitets check", om denna php version är testad som "kompatibel" med aktuella plattformen, t:ex "5.2.*"
-			* visa även apache & mysql versioner samlat på en sida
-			* samt visa olika php settings och huruvida dom är felkonfade (show_errors borde ge varning om debug=off)
-
+		- det är lite buggigt med navigeringen, getProjectPath() funkar inte så bra.-.. den borde ta $_GET['pr'] om den finns
+		- samt visa olika php settings och huruvida dom är felkonfade (show_errors borde ge varning om debug=off)
+		- gör om compat check funktionen så den tar minimum & maximum supported versionsnummer istället
 
 	news modul:
 	X	- rss feed
@@ -102,6 +100,13 @@ X = hi prio task
 
 
 --------------[[changelog]]--------------
+2007.04.20:
+	- admin: en phpinfo sida
+	- admin: compat check sida. visar överskådligt versioner av php mysql & apache på samma ställe och om dom är "supported"
+
+
+
+
 2007.04.19
 	- files: kan nu "download file" i filvisaren
 	- files: påbörjat hantering av videofiler, behöver en videospelare i flash / silverlight

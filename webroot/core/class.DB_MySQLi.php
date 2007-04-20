@@ -32,9 +32,6 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		$this->db_driver = 'DB_MySQLi';
-		$this->dialect = 'mysql';
-
 		$this->db_handle = @ new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
 		if (mysqli_connect_errno()) {
@@ -42,6 +39,11 @@ class DB_MySQLi extends DB_Base
 
 			die('<bad>Database connection error.</bad>');
 		}
+
+		$this->db_driver = 'DB_MySQLi';
+		$this->dialect = 'mysql';
+		$this->server_version = $this->db_handle->server_info;	//todo: detta i mysql drivern åxå!
+		$this->client_version = $this->db_handle->client_info;
 
 		if ($this->debug) $this->profileConnect($time_started);
 	}

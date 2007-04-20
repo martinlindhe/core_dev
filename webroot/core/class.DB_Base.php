@@ -73,9 +73,14 @@ abstract class DB_Base
 	protected $username = 'root';
 	protected $password = '';
 	protected $database = '';
-	protected $db_handle = false;
-	protected $db_driver = '';
-	
+
+	//db variables
+	public $db_handle = false;
+	public $db_driver = '';				//holds the full name of the db driver, example: DB_MySQLi, DB_MySQL
+	public $diaylect = '';					//holds the name of the database, example: mysql
+	public $server_version = '';	//used for version checking
+	public $client_version = '';	//used for version checking
+
 	//debug variables
 	public $debug = false;
 	protected $connect_time = 0;
@@ -83,6 +88,7 @@ abstract class DB_Base
 	protected $queries_cnt = 0;
 	protected $queries = array();
 	protected $query_error = array();
+	
 	
 	/* Constructor */
 	function __construct(array $settings)
