@@ -46,10 +46,14 @@
 			run from the / path it will return nothing, else the directory name of the directory script are run from */
 	function getProjectPath($_amp = true)
 	{
-		$project_path = dirname($_SERVER['SCRIPT_NAME']);
-	
-		$pos = strrpos($project_path, '/');
-		$proj_name = substr($project_path, $pos+1);
+		if (!empty($_GET['pr'])) {
+			$proj_name = basename(strip_tags($_GET['pr']));
+		} else {
+			$project_path = dirname($_SERVER['SCRIPT_NAME']);
+			$pos = strrpos($project_path, '/');
+			$proj_name = substr($project_path, $pos+1);
+		}
+
 		if ($proj_name) {
 			if ($_amp) {
 				return '&amp;pr='.$proj_name;

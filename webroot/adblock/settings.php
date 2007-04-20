@@ -12,13 +12,5 @@
 
 	$session->editSettings();
 
-	if ($session->isAdmin) {
-		echo 'Administrator<br/>';
-		
-		$db->showConfig();
-		echo '<br/>';
-		$session->showInfo();
-	}
-	
 	require('design_foot.php');
 ?>

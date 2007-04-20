@@ -18,8 +18,7 @@
 
 
 	admin gränssnitt:
-		- det är lite buggigt med navigeringen, getProjectPath() funkar inte så bra.-.. den borde ta $_GET['pr'] om den finns
-		- compat check: identifiera om gd är installerat. visa röd text om gd saknas
+		- compat check: identifiera om gd är installerat
 
 	news modul:
 	X	- rss feed
@@ -107,6 +106,9 @@ X = hi prio task
 	- admin: compat check sida. visar överskådligt versioner av php mysql & apache på samma ställe och om dom är "supported"
 	- admin: compat check sidan visar även om vissa php settings är fel
 	- admin: compat check gjort en bra version compare funktion
+	- admin: compat check visar om php extension gd saknas (fixme detectar inte gd ok..)
+	- admin: compat check visar om php extension apc saknas
+	- admin: skapade sidor för att visa session info & db config
 
 
 
