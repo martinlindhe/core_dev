@@ -97,9 +97,9 @@ function loadtop() {
 			<table cellspacing="2" style="margin: 5px 0 10px 0;">
 <?
  	foreach($todaydata as $key => $row) {
-		echo '<tr class="bg_gray"><td class="pdg"><nobr>'.specialDate($key).'</nobr></td>';
+		echo '<tr class="bg_gray nobr"><td class="pdg">'.specialDate($key).'</td>';
 		foreach($row as $name => $count)
-			echo '<td class="pdg"><nobr>'.((!empty($names[$name]))?$names[$name]:$name).':</nobr><br />'.(in_array($name, $exceptions)?'(T) ':'').'<b>'.$count.'</b></td>';
+			echo '<td class="pdg nobr">'.((!empty($names[$name]))?$names[$name]:$name).':<br />'.(in_array($name, $exceptions)?'(T) ':'').'<b>'.$count.'</b></td>';
 	}
 ?>
 			</table>

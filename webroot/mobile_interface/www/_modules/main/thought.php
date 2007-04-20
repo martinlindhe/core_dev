@@ -35,34 +35,30 @@
 	if(!empty($_POST['s'])) $search = true;
 	if(!$search) {
 		$paging = paging(@$_GET['id'], 20);
-		$gb = $sql->query("SELECT ".CH." a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-#		$gb = $sql->query("SELECT ".CH." a.*, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-		$paging['co'] = $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1'");
+		$gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1'");
 	} else {
 		$paging = paging(1, 20);
 		$str = $_POST['s'];
 		if(substr($str, 0, 1) == 't' && is_numeric(substr($str, 1))) {
-			 $gb = $sql->query("SELECT ".CH." a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND a.main_id = '".substr($str, 1)."' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-			#$gb = $sql->query("SELECT ".CH." a.*, u.u_alias, u.u_picid, u.u_picd, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' AND a.main_id = '".substr($str, 1)."' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-			$paging['co'] = count($gb); //$sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' AND a.main_id = '".substr($str, 1)."'");
-			#if(!empty($gb) && count($gb) == '1' && !empty($_GET['spy'])) { $user->cleanspy($l['id_id'], substr($str, 1), 'THO'); }
+			 $gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND a.main_id = '".substr($str, 1)."' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$paging['co'] = count($gb);
 		} else {
-			$gb = $sql->query("SELECT ".CH." a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND (a.gb_name LIKE '%".secureINS($str)."%' OR a.gb_email LIKE '%".secureINS($str)."%' OR a.gb_msg LIKE '%".secureINS($str)."%' OR a.answer_msg LIKE '%".secureINS($str)."%') ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-			#$gb = $sql->query("SELECT ".CH." a.*, u.u_alias, u.u_picid, u.u_picd, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' AND (a.gb_name LIKE '%".secureINS($str)."%' OR a.gb_email LIKE '%".secureINS($str)."%' OR a.gb_msg LIKE '%".secureINS($str)."%' OR a.answer_msg LIKE '%".secureINS($str)."%') ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-			$paging['co'] = count($gb); //$sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' AND (a.gb_name LIKE '%".secureINS($str)."%' OR a.gb_email LIKE '%".secureINS($str)."%' OR a.gb_msg LIKE '%".secureINS($str)."%' OR a.answer_msg LIKE '%".secureINS($str)."%')");
+			$gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND (a.gb_name LIKE '%".secureINS($str)."%' OR a.gb_email LIKE '%".secureINS($str)."%' OR a.gb_msg LIKE '%".secureINS($str)."%' OR a.answer_msg LIKE '%".secureINS($str)."%') ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$paging['co'] = count($gb);
 		}
 	}
 
 	require(DESIGN.'head.php');
 ?>
-<div class="mainContent" style="width: 100%;">
+
 	<table cellspacing="0" summary=""><tr><td>
 		<form action="<?=l('main', 'thought')?>" method="post">
 		<table cellspacing="0" summary="" cellpadding="0" class="pdg" style="width: 400px;">
 			<tr><td><img alt="" src="<?=OBJ?>_heads/head_thought.png" /></td></tr>
 			<tr><td style="padding-bottom: 8px;"><?=gettxt('top-thought')?></td></tr>
 			<?=($l?'<tr><td><textarea class="txt" name="ins_cmt" style="width: 400px; height: 80px;"></textarea></td></tr>':'<tr><td>Du måste vara inloggad för att kunna skriva.</td></tr>')?>
-			<tr><td align="right" style="padding-bottom: 8px;"><input type="image" src="<?=OBJ?>_heads/btn2_send.png" /></td></tr>
+			<tr><td align="right" style="padding-bottom: 8px;"><input type="button" class="btn2_sml" value="Skicka" /></td></tr>
 		</table>
 		</form>
 	</td><td>
@@ -70,12 +66,13 @@
 		<table align="right" summary="" cellspacing="0" class="cnti" style="width: 120px;">
 		<tr><td class="cnt"><img alt="" src="<?=OBJ?>_heads/head_search_2.png" style="position: absolute; top: -10px; left: -10px;" /></td></tr>
 		<tr><td class="rgt"><input class="txt" name="s" value="<?=secureOUT($str)?>" style="width: 150px;" /></td></tr>
-		<tr><td class="rgt"><input type="image" src="<?=OBJ?>_heads/btn2_search.png" /></td></tr>
+		<tr><td class="rgt"><input type="submit" class="btn2_sml" value="Sök" /></td></tr>
 		</table>
 		</form>
 	</td></tr>
 	</table>
 
+<div id="mainContent">
 	<div class="mainHeader2"><h4><?=makeMenu($page, $menu)?></h4></div>
 	<div class="mainBoxed2">
 <?

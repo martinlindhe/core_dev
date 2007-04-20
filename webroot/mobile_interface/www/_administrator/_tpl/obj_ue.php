@@ -126,7 +126,7 @@
 			<td class="pdg cnt"><a href="user.php?t&id='.$row['id_id'].'"><b>'.secureOUT($row['u_alias']).'</b></a></td>
 			<td class="pdg cnt"><b>'.secureOUT($row['recieve_sender']).'</b></td>
 			<td class="pdg cnt">'.niceDate($row['recieve_date']).'</td>
-			<td class="pdg" align="right"><nobr><a href="'.$thispage.'&del='.$row['main_id'].'&all='.$view_full.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></nobr></td>
+			<td class="pdg nobr" align="right"><a href="'.$thispage.'&del='.$row['main_id'].'&all='.$view_full.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
 		</tr>';
 		}
 		echo '</table>';

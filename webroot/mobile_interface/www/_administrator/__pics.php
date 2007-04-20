@@ -544,7 +544,7 @@ function changeOwner(id, val) {
 <div style="position: absolute; top: 4x; right: 20px;">Sök bildnummer: <input type="text" name="p_id" class="inp_adm" style="width: 50px;" value="<?=((!empty($numb) && $numb[0] > 0)?secureOUT($numb[0]):'');?>" /><?=(!empty($numb) && $numb[0] > 0)?' - Länk: <a href="javascript:vimmel(\''.$numb[0].'\', 692, 625);">#'.$numb[0].'</a>':'';?> - <input type="button" class="inp_orgbtn" value="Uppdatera data" style="margin: 0;" onclick="this.disabled = true; this.value = 'Laddar...'; document.location.href = (confirm('Vill du även justera bildinformation? Det kommer att ta ett tag.\n\nOK för JA, Avbryt för NEJ.'))?'pics.php?fix=1&fix_just=1':'pics.php?fix=1';"></div>
 </form>
 	<table width="100%" height="100%">
-	<tr><td height="25" colspan="3"><nobr><?makeMenu($page, $menu, 0);?></nobr></td></tr>
+	<tr><td height="25" colspan="3" class="nobr"><?makeMenu($page, $menu, 0);?></td></tr>
 	<tr>
 		<td width="50%" style="padding: 0 10px 20px 0;">
 
@@ -723,8 +723,8 @@ function changeOwner(id, val) {
 			#$count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM $pic_tab WHERE topic_id = '".secureINS($lrow['main_id'])."'"), 0, 'count');
 ?>
 		<tr>
-			<td><?=($lrow['status_id'] != '1')?'<nobr><a class="no_bld" ':'<a ';?>href="pics.php?<?=$df_lnk?>id=<?=$lrow['main_id']?>"><?=strtoupper(@$cities[$lrow['p_city']].' ').stripslashes($lrow['p_name'])?> - <?=specialDate($lrow['p_date'], $lrow['p_dday'])?></a><?=($lrow['status_id'] != '1')?(($lrow['status_id'] == '2')?' [S]':' [P]'):'';?><?=($got_film)?' [FILM'.(($film == '1')?' AKTIV':' <b>INAKTIV</b>').']':'';?></td>
-			<td align="right"><nobr><label>[<b><span></span><span onmouseover="toggle(this, 'Bilder: ');" onmouseout="toggle(this, '');"><?=$lrow['p_pics']?></span></b> <b><span></span><span onmouseover="toggle(this, '| Visningar: ');" onmouseout="toggle(this, '');"><?=$lrow['p_views']?></span></b> <b><span></span><span onmouseover="toggle(this, '| Kommentarer: ');" onmouseout="toggle(this, '');"><?=$lrow['p_cmts']?></span></b>]</label><?=($lrow['status_id'] != '2')?' - <a target="_blank" href="../gallery_multi.php?id='.$lrow['main_id'].'">RESULTAT</a>':'';?></nobr></td></tr>
+			<td class="nobr"><?=($lrow['status_id'] != '1')?'<a class="no_bld" ':'<a ';?>href="pics.php?<?=$df_lnk?>id=<?=$lrow['main_id']?>"><?=strtoupper(@$cities[$lrow['p_city']].' ').stripslashes($lrow['p_name'])?> - <?=specialDate($lrow['p_date'], $lrow['p_dday'])?></a><?=($lrow['status_id'] != '1')?(($lrow['status_id'] == '2')?' [S]':' [P]'):'';?><?=($got_film)?' [FILM'.(($film == '1')?' AKTIV':' <b>INAKTIV</b>').']':'';?></td>
+			<td align="right" class="nobr"><label>[<b><span></span><span onmouseover="toggle(this, 'Bilder: ');" onmouseout="toggle(this, '');"><?=$lrow['p_pics']?></span></b> <b><span></span><span onmouseover="toggle(this, '| Visningar: ');" onmouseout="toggle(this, '');"><?=$lrow['p_views']?></span></b> <b><span></span><span onmouseover="toggle(this, '| Kommentarer: ');" onmouseout="toggle(this, '');"><?=$lrow['p_cmts']?></span></b>]</label><?=($lrow['status_id'] != '2')?' - <a target="_blank" href="../gallery_multi.php?id='.$lrow['main_id'].'">RESULTAT</a>':'';?></td></tr>
 <?
 		}
 	} else print '<tr><td>Det finns inga bildsessioner.</td></tr>';
@@ -790,7 +790,7 @@ function changeOwner(id, val) {
 		for($t = 1; $t <= $q; $t++) {
 ?>
 		<tr>
-			<td><nobr><div style="float: left; margin-top: 1px; height: 22px; width: 24px;"><img src="./_img/status_none.gif" id="photopre<?=$t?>" onmouseoout="showSml(this)" onerror="showError(this);" name="photopre<?=$t?>" style="height: 22px; width: 24px;" alt=""></div><input type="file" name="file:<?=$t?>" id="photo<?=$t?>" class="inp_nrm" size="26" style="width: 140px;" dir="rtl" onchange="showPre(this.value, 'photopre<?=$t?>');" onclick="showPre(this.value, 'photopre<?=$t?>');"></nobr></td>
+			<td class="nobr"><div style="float: left; margin-top: 1px; height: 22px; width: 24px;"><img src="./_img/status_none.gif" id="photopre<?=$t?>" onmouseoout="showSml(this)" onerror="showError(this);" name="photopre<?=$t?>" style="height: 22px; width: 24px;" alt=""></div><input type="file" name="file:<?=$t?>" id="photo<?=$t?>" class="inp_nrm" size="26" style="width: 140px;" dir="rtl" onchange="showPre(this.value, 'photopre<?=$t?>');" onclick="showPre(this.value, 'photopre<?=$t?>');"></td>
 <td><select name="owner_id:X<?=$t?>" id="owner_id:X<?=$t?>" style="width: 155px; margin: 4px 0 0 0;">
 <option value="0">Välj</option>
 <?=$photopt[1]?>

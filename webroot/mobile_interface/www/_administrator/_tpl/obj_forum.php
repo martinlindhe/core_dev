@@ -120,9 +120,9 @@ $pp1 = $paging['p'] + 1;
 				</td>
 			</tr>
 			<tr class="<?=$class.$txt?>">
-				<td style="padding: 8px 0 0 0;">
+				<td style="padding: 8px 0 0 0;" class="nobr">
 				<div style="float: right;"><input type="hidden" name="status_id:<?=$row['main_id']?>" id="status_id:<?=$row['main_id']?>" value="<?=$row['status_id']?>"><a href="<?=$thispage?>&del=<?=$row['main_id']?>" onclick="return confirm('Säker ?');">RADERA</a> | <a href="javascript:openWin('obj_thought_answer.php?id=<?=$row['main_id']?>');">ÄNDRA/SVARA</a></div>
-				<nobr><a href="search.php?s=<?=secureOUT($row['sess_id'])?>"><?=substr(secureOUT($row['sess_id']), 0, 5)?></a> | <a href="search.php?s=<?=secureOUT($row['sess_ip'])?>"><?=secureOUT($row['sess_ip'])?></a></nobr>
+				<a href="search.php?s=<?=secureOUT($row['sess_id'])?>"><?=substr(secureOUT($row['sess_id']), 0, 5)?></a> | <a href="search.php?s=<?=secureOUT($row['sess_ip'])?>"><?=secureOUT($row['sess_ip'])?></a>
 				</td>
 			</tr>
 			<tr><td style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>

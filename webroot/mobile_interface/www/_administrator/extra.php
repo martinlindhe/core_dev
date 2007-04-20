@@ -235,12 +235,12 @@ function showPre(val, id) {
 	while($row = mysql_fetch_assoc($extra)) {
 		if(!empty($row['ad_img']) && file_exists(ADMIN_EXTRA_DIR.$row['ad_img'])) $gotpic = true; else $gotpic = false;
 		echo '<tr class="bg_gray">
-			<td style="width: 40px; padding: 1px 5px 0 4px;"><input type="hidden" name="status_id:'.$row['main_id'].'" id="status_id:'.$row['main_id'].'" value="'.$row['status_id'].'"><nobr><img src="./_img/status_'.(($row['status_id'] == '1')?'green':'none').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row['main_id'].'" alt="Ivägskickad" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row['status_id'] == '2')?'red':'none').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row['main_id'].'" onclick="changeStatus(\'status\', this.id);"><input type="text" name="order_id:'.$row['main_id'].'" value="'.$row['order_id'].'" style="width: 24px; padding: 0; margin-bottom: 2px; margin-left: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="3" class="inp_nrm"></nobr></td>
-			<td class="pdg cur" style="width: 350px;" onclick="document.location.href = \'extra.php?id='.$row['main_id'].'\';"'.(($gotpic)?' onmouseover="document.getElementById(\'tr:'.$row['main_id'].'\').style.display = \'\';" onmouseout="document.getElementById(\'tr:'.$row['main_id'].'\').style.display = \'none\';"':'').'><nobr>'.secureOUT($row['ad_name']).'</b></nobr></td>
-			<td class="pdg"><nobr>'.$levels[$row['ad_pos']].'</b></nobr></td>
-			<td class="pdg"><nobr>'.$row['ad_email'].'</b></nobr></td>
-			<td class="pdg"><nobr>'.$row['ad_cell'].'</b></nobr></td>
-			<td class="pdg" style="width: 100px;" align="right"><nobr><a href="extra.php?id='.$row['main_id'].'">ÄNDRA</a> | <a href="extra.php?del='.$row['main_id'].'" onclick="return confirm(\'Säker ?\');">RADERA</a></nobr></td>
+			<td style="width: 40px; padding: 1px 5px 0 4px;" class="nobr"><input type="hidden" name="status_id:'.$row['main_id'].'" id="status_id:'.$row['main_id'].'" value="'.$row['status_id'].'"><img src="./_img/status_'.(($row['status_id'] == '1')?'green':'none').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row['main_id'].'" alt="Ivägskickad" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row['status_id'] == '2')?'red':'none').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row['main_id'].'" onclick="changeStatus(\'status\', this.id);"><input type="text" name="order_id:'.$row['main_id'].'" value="'.$row['order_id'].'" style="width: 24px; padding: 0; margin-bottom: 2px; margin-left: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="3" class="inp_nrm"></td>
+			<td class="pdg cur nobr" style="width: 350px;" onclick="document.location.href = \'extra.php?id='.$row['main_id'].'\';"'.(($gotpic)?' onmouseover="document.getElementById(\'tr:'.$row['main_id'].'\').style.display = \'\';" onmouseout="document.getElementById(\'tr:'.$row['main_id'].'\').style.display = \'none\';"':'').'>'.secureOUT($row['ad_name']).'</b></td>
+			<td class="pdg nobr">'.$levels[$row['ad_pos']].'</b></td>
+			<td class="pdg nobr">'.$row['ad_email'].'</b></td>
+			<td class="pdg nobr">'.$row['ad_cell'].'</b></td>
+			<td class="pdg nobr" style="width: 100px;" align="right"><a href="extra.php?id='.$row['main_id'].'">ÄNDRA</a> | <a href="extra.php?del='.$row['main_id'].'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>
 		</tr>';
 		if($gotpic) echo '<tr id="tr:'.$row['main_id'].'" style="display: none;"><td colspan="6"><img src="'.ADMIN_EXTRA_DIR.$row['ad_img'].'"></td></tr>';
 	}

@@ -309,11 +309,11 @@ echo '<table cellspacing="2" style="margin: 5px 0 10px 0;">
 <tr><th>Status</th><th>Alias</th><th>E-post</th><th>Namn</th></tr>';
 	foreach($list as $row) {
 		echo '<tr class="bg_gray">
-			<td style="width: 60px; padding: 2px 0 0 4px;"><nobr><img src="./_img/status_green.gif" style="margin: 4px 1px 0 0;"> <input type="text" disabled value="'.$row['level_id'].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></nobr></td>
+			<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_green.gif" style="margin: 4px 1px 0 0;"> <input type="text" disabled value="'.$row['level_id'].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
 			<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row['id_id'].'"><b>'.secureOUT($row['u_alias']).'</b></a></td>
 			<td class="pdg">'.secureOUT($row['u_email']).'</td>
 			<td class="pdg">'.secureOUT($row['u_fname'].' '.$row['u_sname']).'</td>
-			<td class="pdg" align="right"><nobr><a href="user.php?id='.$row['id_id'].'">VISA</a> | <a href="user.php?del='.$row['id_id'].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></nobr></td>
+			<td class="pdg nobr" align="right"><a href="user.php?id='.$row['id_id'].'">VISA</a> | <a href="user.php?del='.$row['id_id'].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
 		</tr>';
 	} 
 echo '</table>';
@@ -419,12 +419,12 @@ listUserDisabled($list);
 #name="status_id:'.$row[0].'"
 			echo '<input type="hidden" id="status_id:'.$row[0].'" value="'.$row[1].'">';
 			echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
-				<td style="width: 60px; padding: 2px 0 0 4px;"><nobr><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" readonly value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></nobr></td>
+				<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" readonly value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
 				<td class="pdg">'.@$cities[$row[9]].'</td>
 				<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
 				<td class="pdg">'.$levels[$row[2]].'</td>
 				<td class="pdg">'.($row[8] == '0'?'<b>PENDLAR INTE!!!</b>':'<b class="up">'. $days['days'] .'</b> dag'.(($days['days'] == '1')?'':'ar').', <b class="up">'. $days['hours'] .'</b> timm'.(($days['hours'] == '1')?'e':'ar')).'</td>
-				<td class="pdg" align="right"><nobr><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></nobr></td>
+				<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
 			</tr>';
 		}
 		} elseif($status_id == '5') {
@@ -432,13 +432,13 @@ listUserDisabled($list);
 		foreach($list as $row) {
 			echo '<input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="'.$row[1].'">';
 			echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
-				<td style="width: 60px; padding: 2px 0 0 4px;"><nobr><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="level_id:'.$row[0].'" value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></nobr></td>
+				<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="level_id:'.$row[0].'" value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
 				<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
-				<td class="pdg"><nobr>'.niceDate($row[10]).'</nobr></td>
-				<td class="pdg"><nobr>'.niceDate($row[9]).'</nobr></td>
+				<td class="pdg nobr">'.niceDate($row[10]).'</td>
+				<td class="pdg nobr">'.niceDate($row[9]).'</td>
 				<td class="pdg">'.secureOUT($row[4]).'</td>
 				<td class="pdg">'.secureOUT($row[5].' '.$row[6]).'</td>
-				<td class="pdg" align="right"><nobr><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></nobr></td>
+				<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
 			</tr>';
 		}
 		} elseif($status_id == '3') {
@@ -457,11 +457,11 @@ listUserDisabled($list);
 		foreach($list as $row) {
 			echo '<input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="'.$row[1].'">';
 			echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
-				<td style="width: 60px; padding: 2px 0 0 4px;"><nobr><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="level_id:'.$row[0].'" value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></nobr></td>
+				<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="level_id:'.$row[0].'" value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
 				<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
 				<td class="pdg">'.secureOUT($row[4]).'</td>
 				<td class="pdg">'.secureOUT($row[5].' '.$row[6]).'</td>
-				<td class="pdg" align="right"><nobr><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></nobr></td>
+				<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
 			</tr>';
 		}
 		}
@@ -473,9 +473,9 @@ listUserDisabled($list);
 			<td class="pdg"><input style="width: 70px;" type="text" class="inp_nrm" name="code:'.$row[0].'" value="'.secureOUT($row[1]).'" /></td>
 			<td class="pdg">'.secureOUT($row[5]).'</td>
 			<td class="pdg">'.secureOUT($row[3]).'</td>
-			<td class="pdg"><nobr>'.niceDate($row[4]).'</nobr></td>
+			<td class="pdg nobr">'.niceDate($row[4]).'</td>
 			<td class="pdg"><input type="checkbox" name="sendemail:'.$row[0].'" value="1" /></td>
-			<td class="pdg" align="right"><nobr><a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></nobr></td>
+			<td class="pdg nobr" align="right"><a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
 		</tr>';
 		}
 	} } else {
@@ -656,7 +656,7 @@ if(this.value == \'3\' && this_status != \'3\') {
 $names = array('i' => 'in', 'o' => 'ut', 'f' => '<b>felaktig</b>');
 	foreach($v_sql as $val) {
 echo '<tr class="bg_gray">
-		<td class="pdg"><nobr>'.niceDate($val[2]).'</nobr></td>
+		<td class="pdg nobr">'.niceDate($val[2]).'</td>
 		<td class="pdg"><a href="search.php?t&view=s&s='.$val[0].'">'.substr($val[0], 0, 5).'</a></td>
 		<td class="pdg"><a href="search.php?t&view=s&s='.$val[1].'">'.$val[1].'</a></td>
 		<td class="pdg">'.$names[$val[3]].'</td>

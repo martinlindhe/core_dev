@@ -233,7 +233,7 @@ function notifyAboutSex() {
 		<td class="pdg_l"><span class="bld<?=(isset($error['cell']))?'_red':'';?>">mobilnummer</span> (ex 0701234567)<br /><input type="text" class="txt" name="ins_cell" value="<?=(!empty($_POST['ins_cell']))?secureOUT($_POST['ins_cell']):'';?>" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" class="pdg_t"><span class="bld<?=(isset($error['pnr']))?'_red':'';?>">personnummer</span> (ex 1980 02 23-1234)<br /><nobr>
+			<td colspan="2" class="pdg_t nobr"><span class="bld<?=(isset($error['pnr']))?'_red':'';?>">personnummer</span> (ex 1980 02 23-1234)<br />
 <select class="txt" name="Y" title="år" style="width: 60px; margin-bottom: 1px;" onchange="r.elements['notified'].value = '0';" onfocus="gotFocus = '1';" onblur="gotFocus = '0'; gotLet1 = '';">
 <option value="-">-</option>
 <?
@@ -266,7 +266,7 @@ echo '<option value="'.$i.'"'.$selected.'>'.$i.'</option>';
 ?>
 </select>
 - <input name="i" title="fyra sista" maxlength="4" onfocus="this.select();" onchange="r.elements['notified'].value = '0';" type="text" class="txt" style="width: 40px; margin-bottom: 1px;" value="<?=(!empty($_POST['i']) && is_numeric($_POST['i']))?substr($_POST['i'], 0, 4):'';?>" />
-</nobr></td>
+</td>
 	</tr>
 	<tr>
 		<td colspan="2">

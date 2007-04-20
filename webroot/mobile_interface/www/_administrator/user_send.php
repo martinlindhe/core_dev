@@ -232,8 +232,7 @@ echo '<input type="radio" name="from" id="u_'.$key.'" value="'.$key.'"'.$checked
 				</td>
 			</tr>
 			<tr>
-				<td><b>Till nivå/eller user:</b><br>
-				<nobr>
+				<td class="nobr"><b>Till nivå/eller user:</b><br>
 <?
 	$i = 0;
 	foreach($f_list as $key => $val) {
@@ -243,16 +242,13 @@ echo '<input type="radio" name="to" id="ul_'.$key.'" value="'.$key.'"'.$checked.
 	}
 	foreach($to_type as $key => $val) echo '<input name="to" value="'.$key.'" type="radio" id="s'.$key.'"><label for="s'.$key.'">'.$val.'</label>';
 ?>
-				</nobr>
 				</td>
 			</tr>
 			<tr>
-				<td><b>Till kön:</b><br>
-				<nobr>
+				<td class="nobr"><b>Till kön:</b><br>
 <input name="sex" value="0" type="radio" id="sex0" checked><label for="sex0">Alla</label>
 <input name="sex" value="M" type="radio" id="sexM"><label for="sexM">Killar</label>
 <input name="sex" value="F" type="radio" id="sexF"><label for="sexF">Tjejer</label>
-				</nobr>
 				</td>
 			</tr>
 			<tr>

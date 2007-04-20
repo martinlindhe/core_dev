@@ -1,6 +1,7 @@
 <?
 	session_start();
 
+	require_once(dirname(__FILE__).'/www/_config/main.fnc.php');		//l()
 	require_once(dirname(__FILE__).'/www/_administrator/set_onl.php');		//skapar $sql och $user klasser
 	require_once(dirname(__FILE__).'/www/_modules/member/auth.php');			//skapar $user_auth klassen för logins
 

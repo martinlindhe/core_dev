@@ -120,7 +120,7 @@ ORDER BY type_cnt DESC");
 <script type="text/javascript" src="fnc_adm.js"></script>
 <script type="text/javascript" src="fnc_txt.js"></script>
 	<table width="100%" height="100%">
-	<tr><td height="25" colspan="3"><nobr><?makeMenu($page, $menu, 0);?></td></tr>
+	<tr><td height="25" colspan="3" class="nobr"><?makeMenu($page, $menu, 0);?></td></tr>
 	<tr>
 		<td width="25%" style="padding: 0 10px 0 0">
 			<table width="100%">

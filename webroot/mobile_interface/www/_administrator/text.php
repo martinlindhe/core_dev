@@ -133,7 +133,7 @@ function loadtop() {
 <?=(isset($_GET['t']))?'loadtop();':'';?>
 </script>
 	<table width="100%" height="100%">
-	<tr><td colspan="2" height="25"><nobr><?makeMenu($page, $menu, 0);?></nobr></td></tr>
+	<tr><td colspan="2" height="25" class="nobr"><?makeMenu($page, $menu, 0);?></td></tr>
 	<tr>
 		<td width="50%" style="padding: 0 10px 0 0">
 			<form name="change" action="text.php" method="post">

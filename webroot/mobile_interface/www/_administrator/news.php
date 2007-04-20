@@ -215,7 +215,7 @@ function checkIf(val) {
 }
 	</script>
 	<table height="100%">
-	<tr><td colspan="2" height="25"><nobr><?makeMenu($page, $menu, 0);?></nobr></td></tr>
+	<tr><td colspan="2" height="25" class="nobr"><?makeMenu($page, $menu, 0);?></td></tr>
 	<tr>
 		<td width="50%" style="padding: 0 10px 0 0;">
 			<form name="news" method="post" action="./news.php?status=<?=$status_id?>" ENCTYPE="multipart/form-data">
@@ -330,12 +330,12 @@ function checkIf(val) {
 		#$row[0] = str_replace("[CELL]", $s->info[3], $row[0]);
 		echo '<input type="hidden" name="status_id:'.$row[3].'" id="status_id:'.$row[3].'" value="'.$row[7].'">';
 		echo '<tr class="bg_gray">
-			<td style="width: 80px; padding: 0 0 0 4px;"><nobr><img src="./_img/status_'.(($row[7] == '1')?'green':'none').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[3].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[7] == '2')?'red':'none').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[3].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="order_id:'.$row[3].'" value="'.$row[8].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="3" class="inp_nrm"></nobr></td>
+			<td style="width: 80px; padding: 0 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[7] == '1')?'green':'none').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[3].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[7] == '2')?'red':'none').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[3].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="order_id:'.$row[3].'" value="'.$row[8].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="3" class="inp_nrm"></td>
 			<td class="cur" onclick="document.location.href = \'news.php?id='.$row[3].'&status='.$status_id.'\';"'.(($gotpic)?' onmouseover="document.getElementById(\'tr:'.$row[3].'\').style.display = \'\';" onmouseout="document.getElementById(\'tr:'.$row[3].'\').style.display = \'none\';"':'').' style="width: 350px; padding: 4px 4px 4px 0;">'.$row[10].' <b>'.$row[4].'</b> (#'.$row[3].')</td>
 			<td style="padding: 4px;">'.$types[$row[9]].(($row[2] == 'event')?' <a target="_blank" href="news_extract.php?id='.$row[3].'">event</a>':'').'</td>
-			<td style="padding: 4px;"><nobr>'.plainDate($row[5], 0).'</nobr></td>
-			<td style="padding: 4px;"><nobr>'.plainDate($row[6], 0).'</nobr></td>
-			<td style="padding: 4px;" align="right"><nobr><a href="news.php?id='.$row[3].'&status='.$status_id.'">ÄNDRA</a> | <a href="news.php?del='.$row[3].'&status='.$status_id.'" onclick="return confirm(\'Säker ?\');">RADERA</a></nobr></td>
+			<td style="padding: 4px;" class="nobr">'.plainDate($row[5], 0).'</td>
+			<td style="padding: 4px;" class="nobr">'.plainDate($row[6], 0).'</td>
+			<td style="padding: 4px;" align="right" class="nobr"><a href="news.php?id='.$row[3].'&status='.$status_id.'">ÄNDRA</a> | <a href="news.php?del='.$row[3].'&status='.$status_id.'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>
 		</tr>';
 		if($gotpic) echo '<tr id="tr:'.$row[3].'" style="display: none;"><td colspan="6">'.(($row[2] == 'swf' || $row[2] == 'event')?stripslashes(str_replace("./", "../", $row[0])):'<img src="'.ADMIN_NEWS.$row[0].'">').'</td></tr>';
 		}

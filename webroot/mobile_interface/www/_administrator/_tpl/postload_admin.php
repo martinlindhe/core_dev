@@ -7,7 +7,7 @@
 
 		<table cellspacing="0" width="350" style="margin: 0 0 10px 0;">
 		<tr>
-			<td colspan="2" align="right"><nobr>Antal filer: <b>Alla</b></nobr></td>
+			<td colspan="2" align="right" class="nobr">Antal filer: <b>Alla</b></td>
 		</tr>
 		<tr>
 			<td colspan="2" style="padding: 18px 0 5px 0;">

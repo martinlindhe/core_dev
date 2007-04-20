@@ -73,7 +73,7 @@
 			<td class="pdg cnt">'.(($row['is_on'])?'<a href="obj_full_get.php?&all='.$view_full.'&get='.$row['pic_id'].'">'.secureOUT($row['main_id'].$row['rand_id']).'</a>':'AVSTÄNGD').'</td>
 			<td class="pdg cnt">'.secureOUT($row['download_times']).'</td>
 			<td class="pdg cnt">'.(($row['download_date'] != '0000-00-00 00:00:00')?'hämtad<br>'.niceDate($row['download_date']):((strtotime($row['order_date']) < strtotime("-2 DAYS"))?'<b>stängd</b><br><strike>'.niceDate($row['order_date']).'</strike>':'betald<br>'.niceDate($row['order_date']))).'</td>
-			<td class="pdg" align="right"><nobr><a href="'.$thispage.'&del='.$row['main_id'].'&all='.$view_full.'" onclick="return confirm(\'Säker ?\');">'.(($row['is_on'])?'STÄNG NER':'AKTIVERA').'</a></nobr></td>
+			<td class="pdg nobr" align="right"><a href="'.$thispage.'&del='.$row['main_id'].'&all='.$view_full.'" onclick="return confirm(\'Säker ?\');">'.(($row['is_on'])?'STÄNG NER':'AKTIVERA').'</a></td>
 		</tr>';
 		}
 		echo '</table>';

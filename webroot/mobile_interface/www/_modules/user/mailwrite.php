@@ -71,7 +71,7 @@ function cleanField(obj) {
 <tr>
 	<td class="pdg bld">Från:</td>
 	<td class="pdg" style="padding-left: 0; width: 100%;"><span class="nrm"><?=secureOUT($l['u_alias'])?></span></td>
-	<td class="pdg bld rgt"><nobr><?=(@$res['sent_date'])?nicedate($res['sent_date']):nicedate(date("Y-m-d"), 5);?></nobr></td>
+	<td class="pdg bld rgt nobr"><?=(@$res['sent_date'])?nicedate($res['sent_date']):nicedate(date("Y-m-d"), 5);?></td>
 </tr>
 <tr>
 	<td class="pdg bld" style="padding-top: 9px;">Till:</td>

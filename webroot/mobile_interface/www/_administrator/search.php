@@ -221,7 +221,7 @@ function selectingAll(selecting) {
 		if($view == 's') {
 			echo '<table cellspacing="2" style="margin-top: 10px;">';
 			while($row = mysql_fetch_assoc($s_sql)) {
-				echo '<tr class="bg_gray"><td class="pdg"><nobr>'.implode('</nobr></td><td class="pdg"><nobr>', $row).'</nobr></td></tr>';
+				echo '<tr class="bg_gray"><td class="pdg nobr">'.implode('</td><td class="pdg">', $row).'</td></tr>';
 			}
 		} elseif($view == 'ss') {
 			#echo '<pre>';
@@ -242,7 +242,7 @@ function selectingAll(selecting) {
 					$query = $sql->query("SELECT {$info[$table][3]} FROM $table a LEFT JOIN s_user u ON u.id_id = {$info[$table][1]}".(($info[$table][4])?" LEFT JOIN s_user u2 ON u2.id_id = {$info[$table][5]}":'')." WHERE ".$construct." ORDER BY ".$info[$table][6]);
 				foreach($query as $item) {
 					echo '<tr class="'.(($item[2] != '1')?'wht bg_blk':'bg_gray').'">';
-					echo '<td class="pdg"><nobr>'.niceDate($item[0]).'</nobr></td>';
+					echo '<td class="pdg nobr">'.niceDate($item[0]).'</td>';
 					$id = $item[1];
 					$s1 = $item[4];
 					$stat = $item[2];
@@ -291,7 +291,7 @@ function selectingAll(selecting) {
 				$query = $sql->query("SELECT {$info[$table][4]} FROM $table a LEFT JOIN s_user u ON u.id_id = {$info[$table][1]} LEFT JOIN s_user u2 ON u2.id_id = {$info[$table][2]} WHERE ".$construct." ORDER BY ".$info[$table][5]);
 				foreach($query as $item) {
 					echo '<tr class="'.(($item[2] != '1')?'wht bg_blk':'bg_gray').'">';
-					echo '<td class="pdg"><nobr>'.niceDate($item[0]).'</nobr></td>';
+					echo '<td class="pdg nobr">'.niceDate($item[0]).'</td>';
 					$s1 = $item[4];
 					$id = $item[1];
 					echo '<td class="pdg"><a href="user.php?t&id='.$item[3].'">'.secureOUT($item[4]).'</a></td>';
