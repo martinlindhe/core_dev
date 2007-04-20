@@ -5,6 +5,9 @@
 
 	require_once('find_config.php');
 
+	$_category = 0;
+	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $_category = $_GET['c'];	//todo: använd detta
+
 	$list = getPublishedNews(10);
 
 	$title = 'Nyheter';

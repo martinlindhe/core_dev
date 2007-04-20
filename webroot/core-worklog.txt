@@ -16,13 +16,12 @@
 		- compat check: identifiera om gd är installerat
 
 	news modul:
- 	 	* Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
-	X	- kommentarer
-		- vote på kvalitén:
-  		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 	X	- nyhetskategorier. rss feed på alla + på enskild kategori
+	X	- kommentarer
 	X	- kunna tagga upp heading vs body av en nyhetsartiekl. samt även kunna dela upp den på flera sidor
 	X	- kunna bifoga filer till en nyhet
+		- vote på kvalitén:
+  		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
 
 
@@ -48,6 +47,9 @@
   	  isåfall uppdateras tblFiles att den e done, och filen flyttas in i core uploadfile systemet, isåfall
   	 	* renama "thumbs" katalogen till "processed", och implementera ett liknande system som för thumbnails, fast för omkodade videos / musik
 		- skrota hela getProjectPath() på nåt smart sätt?
+ 	 	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
+		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
+
 
 --------------[[projekt todo]]--------------
   adblock:
@@ -117,7 +119,7 @@ X = hi prio task
 	- db: exporterade alla mysql databaser, gör en ny db from scratch och importera tillbaka, mysql klagade om db fel å shit
 	- admin: compat check basic os detection, identifierar windows
 	- news: rss html tag måste va i headern, gjorde en lösning med /adblock/news.php och design_head.php, $meta_rss
-	- news: implementerat rss feed
+	- news: implementerat rss news feed och förberett för stöd för att kunna prenumerera på en särskild kategori
 
 2007.04.19
 	- files: kan nu "download file" i filvisaren

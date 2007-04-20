@@ -4,7 +4,9 @@
 	$rss_tags = '';
 	if (!empty($meta_rss)) {
 		foreach ($meta_rss as $feed) {
-			$rss_tags .= 	"\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$feed['url'].'"/>'."\n";
+			if (!empty($feed['channel']) && is_numeric($feed['channel'])) $extra = '?c='.$feed['channel'].getProjectPath();
+			else $extra = getProjectPath(false);
+			$rss_tags .= 	"\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="/core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 		}
 	}
 ?>
