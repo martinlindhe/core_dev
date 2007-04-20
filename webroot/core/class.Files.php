@@ -97,10 +97,14 @@ class Files
 			}
 		}
 
-		if ($session->id && ($session->isAdmin || $fileType==FILETYPE_USERFILE)&& !$categoryId && !empty($_POST['new_file_category']) && isset($_POST['new_file_category_global']))
+		if ($session->id && ($session->isAdmin || $fileType==FILETYPE_USERFILE)&& !$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_type']))
 		{
 			//Create new category. Only allow categories inside root level
-			$this->createCategory($_POST['new_file_category'], $_POST['new_file_category_global']);
+			//todo: define these types elsewhere
+			$x = array(1 => 'normal', 2 => 'private', 3 => 'hidden', 10 => 'global');
+			$category_type = array_search($_POST['new_file_category_type'], $x);
+			
+			$this->createCategory($_POST['new_file_category'], $category_type);
 		}
 
 		echo '<div class="file_gadget">';
@@ -131,7 +135,8 @@ class Files
 		//Visar kategorier / kataloger
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
 			if (!$categoryId) {
-				$cat_list = $db->getArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR globalCategory=1) AND categoryType='.CATEGORY_TYPE_FILES);
+				//shows own categories & global categories (categoryPermissions==10)
+				$cat_list = $db->getArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR categoryPermissions=10) AND categoryType='.CATEGORY_TYPE_FILES);
 				if (!empty($cat_list)) {
 					echo 'Categories:<br/>';
 					for ($i=0; $i<count($cat_list); $i++) {
@@ -203,18 +208,18 @@ class Files
 				echo '<form name="new_file_category" method="post" action="">';
 				echo 'Category name: <input type="text" name="new_file_category"/> ';
 				echo '<br/>';
-				echo '<input type="radio" value="normal" name="new_file_category" id="_normal" checked="checked"/> ';
+				echo '<input type="radio" value="normal" name="new_file_category_type" id="_normal" checked="checked"/> ';
 				echo '<label for="_normal">Normal category - everyone can see the content</label><br/><br/>';
 				if ($fileType == FILETYPE_USERFILE) {
-					echo '<input type="radio" value="private" name="new_file_category" id="_private"/> ';
+					echo '<input type="radio" value="private" name="new_file_category_type" id="_private"/> ';
 					echo '<label for="_private">Make this category private (only for your friends)</label><br/><br/>';
 
-					echo '<input type="radio" value="hidden" name="new_file_category" id="_hidden"/> ';
+					echo '<input type="radio" value="hidden" name="new_file_category_type" id="_hidden"/> ';
 					echo '<label for="_hidden">Make this category hidden (only for you)</label><br/><br/>';
 				}
 
 				if ($session->isSuperAdmin) {
-					echo '<input type="radio" value="global" name="new_file_category" id="_global"> ';
+					echo '<input type="radio" value="global" name="new_file_category_type" id="_global"/> ';
 					echo '<label for="_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
 				}
 				echo '<input type="submit" class="button" value="Create"/> ';
@@ -264,18 +269,19 @@ class Files
 	}
 	
 	/* Creates a new category to store files in */
-	function createCategory($categoryName, $globalCategory = 0)
+	function createCategory($categoryName, $categoryPermissions)
 	{
-
 		global $db, $session;
-		if (!$session->id || !is_numeric($globalCategory)) return false;
 
-		if ($globalCategory && !$session->isSuperAdmin) $globalCategory = 0;
+		if (!$session->id || !is_numeric($categoryPermissions) || !$categoryPermissions) return false;
+
+		// 10 = "globally available" category
+		if ($categoryPermissions == 10 && !$session->isSuperAdmin) $categoryPermissions = 0;
 
 		$enc_catname = $db->escape(trim(strip_tags($categoryName)));
 		if (!$enc_catname) return false;
 
-		$q = 'INSERT INTO tblCategories SET categoryName="'.$enc_catname.'",categoryType='.CATEGORY_TYPE_FILES.',timeCreated=NOW(),globalCategory='.$globalCategory.',ownerId='.$session->id;
+		$q = 'INSERT INTO tblCategories SET categoryName="'.$enc_catname.'",categoryType='.CATEGORY_TYPE_FILES.',timeCreated=NOW(),categoryPermissions='.$categoryPermissions.',ownerId='.$session->id;
 		$db->query($q);
 	}
 	

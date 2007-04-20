@@ -94,7 +94,7 @@
 		}
 		
 		if ($_SESSION['isAdmin']) {
-			echo '<a href="admin_news.php">Admin news</a><br/><br/>';
+			echo '<a href="/admin/admin_news.php'.getProjectPath(false).'">Admin news</a><br/><br/>';
 		}
 	}
 ?>

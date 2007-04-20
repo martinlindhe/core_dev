@@ -21,6 +21,13 @@
 	echo '<h1>Compatiblity check</h1>';
 
 	echo 'core version 0.1<br/>';
+	echo 'Server OS: ';
+	if (!empty($_SERVER['WINDIR'])) {
+		echo 'Windows';
+	} else {
+		echo '<span class="critical">Unknown</span>';
+	}
+	echo '<br/>';
 	echo 'Debug: '.($config['debug']?'<span class="critical">On - turn off for production use</span>':'<span class="okay">OFF</span>').'<br/>';
 	echo '<br/>';
 

@@ -1,8 +1,5 @@
 --------------[[platform todo]]--------------
 
-	core general:
-		- db: gör en "for production use" mysqli-db driver med all profile kod utplockad för att den ska va lite snabbare, nån gång när db klassen har varit orörd i några månader
-
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 	X	- $db->log() för user logged in & user logged out visar aldrig username i loggen
@@ -10,9 +7,7 @@
 
 
 	file area:
-		- kunna markera en filkategori som privat (visas bara för dina vänner) och hemlig (visas inte för nån):
-			* ändra på file category koden
-			
+	X	- kunna beskära bilder (blized)
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
 
@@ -41,10 +36,20 @@
 
 
 	misc:
-		- exportera alla mysql databaser, gör en ny db from scratch och importera tillbaka, mysql klagar om db fel å shit
+	X - kompislista (blized)
 		- konvertera zine!
   	- Försök bygga mer logik i sql queries / stored procedures
   X	- gör en funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida
+  	- gör en "for production use" mysqli-db driver med all profile kod utplockad för att den ska va lite snabbare, nån gång när db klassen har varit orörd i några månader
+  	- gör en worker databas + ett worker script, som:
+  		* regelbundet kollar i en tabell efter jobb att göra
+  		* genomför jobben ett i taget. t:ex re-encoda en videofil till ett annat format, uppdaterar tabellen när det är klart
+  		plattformen gör då:
+  	- har en flagga satt på tblFile entryt att filen är under processing
+  	- när filen accessas nästa gång så ifall den är "processing" så gör man en extra lookup i jobb-tabellen ifall den är färdigprocessad,
+  	  isåfall uppdateras tblFiles att den e done, och filen flyttas in i core uploadfile systemet, isåfall
+  	 	* renama "thumbs" katalogen till "processed", och implementera ett liknande system som för thumbnails, fast för omkodade videos / musik
+
 
 --------------[[projekt todo]]--------------
   adblock:
@@ -110,6 +115,9 @@ X = hi prio task
 	- admin: compat check visar om php extension apc saknas
 	- admin: skapade sidor för att visa session info & db config
 	- core: gjorde $config['debug'] istället för $db->debug
+	- files: ändrade kategorikoden. nu är det categoryPermissions. en user file-kategori kan antingen vara: normal, private, hidden, global (admin only)
+	- db: exporterade alla mysql databaser, gör en ny db from scratch och importera tillbaka, mysql klagade om db fel å shit
+	- admin: compat check basic os detection, identifierar windows
 
 
 2007.04.19

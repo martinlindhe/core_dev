@@ -1,5 +1,5 @@
 <?
-	require_once('config.php');
+	require_once('find_config.php');
 
 	$session->requireAdmin();
 
@@ -14,13 +14,13 @@
 	if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 		if (!isset($_GET['confirmed'])) {
 			
-				include('design_head.php');
+				include($project.'design_head.php');
 
 				echo 'Are you sure you wish to delete this news entry?<br/><br/>';
 				echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$_GET['delete'].'&amp;confirmed">Yes</a><br/><br/>';
 				echo '<a href="'.$_SERVER['PHP_SELF'].'">No</a>';
 
-				include('design_foot.php');
+				include($project.'design_foot.php');
 				die;
 			
 		} else {
@@ -29,7 +29,7 @@
 	}
 
 	
-	include('design_head.php');
+	include($project.'design_head.php');
 	
 	if (!empty($_GET['edit'])) {
 
@@ -101,5 +101,5 @@
 		echo '<br/><br/>';
 	}
 
-	include('design_foot.php');
+	include($project.'design_foot.php');
 ?>
