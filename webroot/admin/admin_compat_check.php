@@ -1,11 +1,15 @@
 <?
-	/* Returns true if $curr_ver is "higher than or equal" than any of the versions in the array $arr */
-	function version_compare_array($arr, $curr_ver)
+	/* Returns true if $curr_ver is in the range of $ver_range */
+	function version_compare_array($ver_range, $curr_ver)
 	{
-		foreach ($arr as $supp_ver)
-		{
-			if (version_compare($supp_ver, $curr_ver, ">=")) return true;
+		list($min_ver, $max_ver) = $ver_range;
+		
+		//version_compare() returns -1 if the first version is lower than the second, 0 if they are equal, and +1 if the second is lower.
+		if (version_compare($min_ver, $curr_ver, "<=") && version_compare($max_ver, $curr_ver, ">=")) {
+			return true;
 		}
+
+
 		return false;
 	}
 
@@ -16,31 +20,48 @@
 
 	echo '<h1>Compatiblity check</h1>';
 
-	$supported_apache = array('2.2.0', '2.2.4');
-	
-	$current_apache = apache_get_version();
-		
-	echo 'core version 0.1<br/<br/>';
+	echo 'core version 0.1<br/>';
+	echo 'Debug: '.($db->debug?'<span class="critical">On - turn off for production use</span>':'<span class="okay">OFF</span>').'<br/>';
+	echo '<br/>';
 
-	echo 'Apache web server version: '.$current_apache.'<br/>';
+	/************************************
+	* Apache version checks             *
+	************************************/
+	$supported_apache = array('2.2.3', '2.2.4');
+	$current_apache = apache_get_version();
+	if ($current_apache == 'Apache') {
+		echo '<span class="okay">Apache version information is turned off</span><br/>';
+	} else {
+		echo 'Apache web server version: '.$current_apache.' '.(version_compare_array($supported_apache, $current_apache)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
+	}
+
 
 	/************************************
 	* PHP version checks                *
 	************************************/
-	$supported_php = array('5.1.6', '5.2.2');
+	$supported_php = array('5.2.0', '5.2.2');
 	$current_php = phpversion();
-	$current_php_gd = phpversion('gd2');	//todo: funkar ej
+
+	$supported_php_gd = array('2.0.34', '2.0.34');
+	$current_php_gd = phpversion('gd');	//fixme: returnerar ingenting
+
+	$supported_php_apc = array('3.0.14', '3.0.14');
 	$current_php_apc = phpversion('apc');
 
 	echo 'PHP script language version: '.$current_php.' '.(version_compare_array($supported_php, $current_php)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
-	echo 'Required PHP extension "gd2": '.$current_php_gd.'<br/>';
-	echo 'Optional PHP extension "apc": '.$current_php_apc.'<br/>';
+	echo 'Required PHP extension "gd": '.$current_php_gd.' '.(version_compare_array($supported_php_gd, $current_php_gd)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
+	echo 'Optional PHP extension "apc": '.$current_php_apc.' '.(version_compare_array($supported_php_apc, $current_php_apc)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
+
+	//Settings checks
+	echo 'display_errors = '. ini_get('display_errors').'<br/>';
+	if (!$db->debug && ini_get('display_errors')) echo '<span class="critical">display_errors are turned ON on a production server!</span><br/>';
+
 
 	/************************************
 	* MySQL version checks              *
 	************************************/
 	if ($db->dialect == 'mysql') {
-		$supported_mysql = array('5.1.17');
+		$supported_mysql = array('5.0.36', '5.1.17');
 		$current_mysql_server = $db->server_version;
 		$current_mysql_client = $db->client_version;
 

@@ -1,5 +1,8 @@
 --------------[[platform todo]]--------------
 
+	core general:
+		- gör $config['debug'] istället för $db->debug ...!!
+
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 	X	- $db->log() för user logged in & user logged out visar aldrig username i loggen
@@ -16,8 +19,7 @@
 
 	admin gränssnitt:
 		- det är lite buggigt med navigeringen, getProjectPath() funkar inte så bra.-.. den borde ta $_GET['pr'] om den finns
-		- samt visa olika php settings och huruvida dom är felkonfade (show_errors borde ge varning om debug=off)
-		- gör om compat check funktionen så den tar minimum & maximum supported versionsnummer istället
+		- compat check: identifiera om gd är installerat. visa röd text om gd saknas
 
 	news modul:
 	X	- rss feed
@@ -103,7 +105,8 @@ X = hi prio task
 2007.04.20:
 	- admin: en phpinfo sida
 	- admin: compat check sida. visar överskådligt versioner av php mysql & apache på samma ställe och om dom är "supported"
-
+	- admin: compat check sidan visar även om vissa php settings är fel
+	- admin: compat check gjort en bra version compare funktion
 
 
 
