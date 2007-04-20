@@ -80,8 +80,6 @@
 
 		$list = getPublishedNews($limit);
 
-		//echo '<link rel="alternate" type="application/rss+xml" title="RSS News feed" href="/rss/news.php"/>';
-
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
 			echo '<b>'.$row['title'].'</b> ';

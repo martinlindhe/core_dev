@@ -22,7 +22,6 @@
 		- vote på kvalitén:
   		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 	X	- nyhetskategorier. rss feed på alla + på enskild kategori
-	X	- rss html tag måste va i headern... hitta på nån lösning för det. xhtml error: /adblock/news.php
 	X	- kunna tagga upp heading vs body av en nyhetsartiekl. samt även kunna dela upp den på flera sidor
 	X	- kunna bifoga filer till en nyhet
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
@@ -118,7 +117,7 @@ X = hi prio task
 	- files: ändrade kategorikoden. nu är det categoryPermissions. en user file-kategori kan antingen vara: normal, private, hidden, global (admin only)
 	- db: exporterade alla mysql databaser, gör en ny db from scratch och importera tillbaka, mysql klagade om db fel å shit
 	- admin: compat check basic os detection, identifierar windows
-
+	- news: rss html tag måste va i headern, gjorde en lösning med /adblock/news.php och design_head.php, $meta_rss
 
 2007.04.19
 	- files: kan nu "download file" i filvisaren

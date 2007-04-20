@@ -1,5 +1,12 @@
 <?
 	$r = $config['site']['web_root'];
+
+	$rss_tags = '';
+	if (!empty($meta_rss)) {
+		foreach ($meta_rss as $feed) {
+			$rss_tags .= 	"\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$feed['url'].'"/>'."\n";
+		}
+	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -8,6 +15,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
 	<link rel="stylesheet" href="<?=$r?>css/main.css" type="text/css"/>
+<?=$rss_tags?>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 	<script type="text/javascript" src="/js/ajax.js"></script>
 	<script type="text/javascript" src="/js/functions.js"></script>
