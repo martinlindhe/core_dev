@@ -39,7 +39,7 @@
 			<p class="no" id="formatText"><?=formatText($res['sent_cmt'])?></p>
 			</div>
 			<br class="clr" />
-			<div class="r"><input type="button" onclick="if(confirm('Säker ?')) goLoc('<?=l('user', 'mail').'&'.$page.'&del_msg='.$res['main_id']?>');" class="btn2_med" value="radera" />&nbsp;<input type="button" onclick="makeMail('<?='&a='.$res['main_id'].'&r'?>');" class="btn2_med" value="vidarebefordra" />&nbsp;<?=($own_u && $res_u)?'<input type="button" onclick="makeMail(\''.$res_u['id_id'].'/&a='.$res['main_id'].'\');" class="btn2_med" value="svara" />':'';?></div>
+			<div class="r"><input type="button" onclick="if(confirm('Säker ?')) goLoc('<?=l('user', 'mail').'&amp;'.$page.'&amp;del_msg='.$res['main_id']?>');" class="btn2_med" value="radera" />&nbsp;<input type="button" onclick="makeMail('<?='&amp;a='.$res['main_id'].'&amp;r'?>');" class="btn2_med" value="vidarebefordra" />&nbsp;<?=($own_u && $res_u)?'<input type="button" onclick="makeMail(\''.$res_u['id_id'].'/&amp;a='.$res['main_id'].'\');" class="btn2_med" value="svara" />':'';?></div>
 			<br class="clr" />
 			</div>
 		</div>

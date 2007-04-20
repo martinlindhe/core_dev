@@ -27,10 +27,10 @@
 <script src="/_objects/swfobject.js" type="text/javascript"></script></head>
 <body>
 
-<div style="margin: 10px 0 0 20px;">
-	<img alt="" src="/_objects/top_logo.jpg" style="margin-bottom: 10px;" />
-
-	<div class="cnt" style="position: absolute; top: 36px; left: 481px; width: 137px; height: 54px; background: url('/_objects/bg_online_small.png');">
+<center>
+<div style="margin: 10px 0 0 20px; text-align: left; width: 600px;">
+	
+	<div class="cnt" style="position: relative; top: 16px; left: 450px; width: 137px; height: 54px; background: url('/_objects/bg_online_small.png');">
 		<table summary="" cellspacing="0" style="width: 127px;" class="cnti lft mrg">
 			<tr><td>online</td><td class="bld rgt"><?=@intval($online[0])?></td></tr>
 			<tr><td>män</td><td class="rgt bld sexM"><?=@intval($online[1])?></td></tr>
@@ -38,7 +38,11 @@
 		</table>
 	</div>
 
-	<div id="contentContainer">
+	<div style="position: absolute; top: 0px; clear: both;">
+		<img alt="" src="/_objects/top_logo.jpg" style="margin-bottom: 10px;" />
+	</div>
+
+	<div id="contentContainer" style="position: absolute; top: 100px">
 		<div class="mainContent">
 
 			<div class="mainHeader2"><h4>logga in</h4></div>
@@ -91,6 +95,7 @@
 		</div>
 	</div>
 </div>
+</center>
 
 </body>
 </html>
