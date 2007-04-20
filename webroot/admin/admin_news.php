@@ -5,10 +5,6 @@
 
 	if (!empty($_GET['edit']) && !empty($_POST['title'])) {
 		updateNews($_GET['edit'], $_POST['title'], $_POST['body'], strtotime($_POST['publish']), $_POST['rss']);
-	} else {
-		if (!empty($_POST['title']) && !empty($_POST['body']) && !empty($_POST['publish']) ) {
-			addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss']);
-		}
 	}
 
 	if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
@@ -35,17 +31,17 @@
 
 		$item = getNewsItem($_GET['edit']);
 
-		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?edit='.$_GET['edit'].'">';
+		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?edit='.$_GET['edit'].getProjectPath().'">';
 		echo '<input type="hidden" name="rss" value="0"/>';
-		echo 'Redigera nyhet:<br/>';
-		echo 'Titel: <input type="text" name="title" value="'.$item['title'].'"/><br/>';
+		echo 'Edit news:<br/>';
+		echo 'Title: <input type="text" name="title" value="'.$item['title'].'"/><br/>';
 		echo 'Text:<br/>';
 		echo '<textarea name="body" cols="40" rows="6">'.$item['body'].'</textarea><br/>';
 		echo '<input name="rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
 		echo '<label for="rss_check">';
 		echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
-		echo 'Inkludera denna nyhet i RSS-sändningen</label><br/><br/>';
-		echo 'Tid f&ouml;r publicering:<br/>';
+		echo 'Include this news in the RSS feed</label><br/><br/>';
+		echo 'Time for publication:<br/>';
 		echo '<input type="text" name="publish" value="'.$item['timeToPublish'].'"/> ';
 		echo '<input type="submit" class="button" value="Save changes"/><br/>';
 		echo '</form><br/>';
@@ -56,49 +52,33 @@
 	} else {
 
 		$list = getAllNews();
-		for ($i=0; $i<count($list); $i++) {
+		foreach ($list as $row) {
 			echo '<div class="newsitem">';
-			if ($list[$i]['rss_enabled']) echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
-			echo '<b>'.$list[$i]['title'].'</b> (av '.$list[$i]['creatorName'].', ';
-			echo 'skapad '.$list[$i]['timeCreated'].')<br/>';
-			echo $list[$i]['body'].'<br/>';
+			if ($row['rss_enabled']) echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
+			echo '<b>'.$row['title'].'</b> (av '.$row['creatorName'].', ';
+			echo 'skapad '.$row['timeCreated'].')<br/>';
 			
-			if ($list[$i]['timeToPublish'] != $list[$i]['timeCreated']) {
+			if ($row['timeToPublish'] != $row['timeCreated']) {
 				echo '<span class="critical">';
-				if ($list[$i]['timeToPublish'] > time()) {
-					echo 'Ska publiceras '.$list[$i]['timeToPublish'].'<br/>';
+				if ($row['timeToPublish'] > time()) {
+					echo 'Ska publiceras '.$row['timeToPublish'].'<br/>';
 				} else {
-					echo 'Publicerades '.$list[$i]['timeToPublish'].'<br/>';
+					echo 'Publicerades '.$row['timeToPublish'].'<br/>';
 				}
 				echo '</span>';
 			}
-			if ($list[$i]['timeEdited'] > $list[$i]['timeCreated']) {
-				echo 'Uppdaterad '.$list[$i]['timeEdited'].'<br/>';
+			if ($row['timeEdited'] > $row['timeCreated']) {
+				echo 'Uppdaterad '.$row['timeEdited'].' av '.$row['editorId'].'<br/>';
 			}
 			
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?edit='.$list[$i]['newsId'].'">Edit</a><br/>';
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$list[$i]['newsId'].'">Remove</a>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?edit='.$row['newsId'].getProjectPath().'">Edit</a><br/>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$row['newsId'].getProjectPath().'">Remove</a>';
 			echo '</div>';
 			echo '<br/>';
 		}
-		echo '<br/>';
-	
-		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
-		echo '<input type="hidden" name="rss" value="0"/>';
-		echo 'Lägg till nyhet:<br/>';
-		echo 'Titel: <input type="text" name="title"/><br/>';
-		echo 'Text:<br/>';
-		echo '<textarea name="body" cols="40" rows="6"></textarea><br/>';
-		echo '<input name="rss" id="rss_check" type="checkbox" class="checkbox" value="1" checked="checked"/>';
+		
+		echo '<a href="admin_news_add.php'.getProjectPath(false).'">Add news</a><br/>';
 
-		echo '<label for="rss_check">';
-		echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
-		echo 'Inkludera denna nyhet i RSS-sändningen</label><br/><br/>';
-		echo 'Tid för publicering:<br/>';
-		echo '<input type="text" name="publish" value="'.date('Y-m-d H:i').'"/> ';
-		echo '<input type="submit" class="button" value="Lägg till"/><br/>';
-		echo '</form>';
-		echo '<br/><br/>';
 	}
 
 	include($project.'design_foot.php');

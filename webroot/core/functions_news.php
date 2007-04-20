@@ -18,11 +18,11 @@
 	
 	function updateNews($newsId, $title, $body, $topublish, $rss_enabled)
 	{
-		global $db;
+		global $db, $session;
 
-		if (!is_numeric($newsId) || !is_numeric($topublish) || !is_numeric($rss_enabled)) return false;
+		if (!$session->isAdmin || !is_numeric($newsId) || !is_numeric($topublish) || !is_numeric($rss_enabled)) return false;
 
-		$q = 'UPDATE tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',timeEdited=NOW() WHERE newsId='.$newsId;
+		$q = 'UPDATE tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session->id.' WHERE newsId='.$newsId;
 		$db->query($q);
 
 		return true;
@@ -86,7 +86,7 @@
 			echo '(av '.$row['creatorName'].', publicerades '.$row['timeToPublish'].')<br/>';
 			echo $row['body'].'<br/>';
 			if ($row['timeEdited'] > $row['timeCreated']) {
-				echo 'Uppdaterades '.$row['timeEdited'].'<br/>';
+				echo 'Uppdaterades '.$row['timeEdited'].' av '.$row['editorId'].'<br/>';
 			}
 			echo '</div><br/>';
 		}

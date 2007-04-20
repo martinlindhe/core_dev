@@ -122,7 +122,8 @@ X = hi prio task
 	- news: rss html tag måste va i headern, gjorde en lösning med /adblock/news.php och design_head.php, $meta_rss
 	- news: implementerat rss news feed och förberett för stöd för att kunna prenumerera på en särskild kategori
 	- core cleanup: $sql eller $query blev $q för sql query strängar
-
+	- news: en separat "ny nyhet"-sida
+	- news: fixade så editorId sätts vid ändringar
 
 2007.04.19
 	- files: kan nu "download file" i filvisaren

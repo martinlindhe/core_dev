@@ -41,14 +41,14 @@
 		$db->query('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentId='.$commentId);
 	}
 	
-	/* Deletes all comments for this commentType & ownerId */
+	/* Deletes all comments for this commentType & ownerId. returns the number of rows deleted */
 	function deleteComments($commentType, $ownerId)
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
 		
 		$q = 'DELETE FROM tblComments WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
-		$db->query($q);
+		return $db->delete($q);
 	}
 
 	function getComments($commentType, $ownerId, $privateComments = false)
@@ -89,7 +89,7 @@
 	{
 		global $db;
 
-		if (!is_numeric($commentType) || !is_numeric($ownerId)) return 0;
+		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
 
 		$q =	'SELECT COUNT(commentId) FROM tblComments '.
 					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
