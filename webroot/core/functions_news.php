@@ -49,12 +49,14 @@
 		return $db->getArray($q);
 	}
 	
+	//used by getPublishedNews() and rss_news.php
 	function getPublishedNews($limit = '')
 	{
 		global $db;
 
-		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblNews AS t1 ';
+		$q  = 'SELECT t1.*,t2.userName AS creatorName, t3.userName AS editorName FROM tblNews AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
 		$q .= 'WHERE timeToPublish<NOW() ';
 		$q .= 'ORDER BY timeToPublish DESC';
 		if ($limit) $q .= ' LIMIT 0,'.$limit;
@@ -83,10 +85,10 @@
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['newsId'].'">'.$row['title'].'</a> ';
-			echo '(av '.$row['creatorName'].', publicerades '.$row['timeToPublish'].')<br/>';
+			echo '(by '.$row['creatorName'].', was published '.$row['timeToPublish'].')<br/>';
 			echo $row['body'].'<br/>';
 			if ($row['timeEdited'] > $row['timeCreated']) {
-				echo 'Uppdaterades '.$row['timeEdited'].' av '.$row['editorId'].'<br/>';
+				echo 'Updated '.$row['timeEdited'].' by '.$row['editorName'].'<br/>';
 			}
 			echo '</div><br/>';
 		}

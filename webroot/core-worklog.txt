@@ -124,6 +124,8 @@ X = hi prio task
 	- core cleanup: $sql eller $query blev $q för sql query strängar
 	- news: en separat "ny nyhet"-sida
 	- news: fixade så editorId sätts vid ändringar
+	- news: visar edited-by namn
+
 
 2007.04.19
 	- files: kan nu "download file" i filvisaren
