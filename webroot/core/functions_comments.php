@@ -95,4 +95,28 @@
 					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
 		return $db->getOneItem($q);
 	}
+
+	/* Helper function, standard "show comments" to be used by another module */
+	function showComments($commentType, $ownerId)
+	{
+		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
+
+		if (!empty($_POST['cmt'])) {
+			addComment($commentType, $ownerId, $_POST['cmt']);
+		}
+
+		/* Visar kommentarer till artikeln */
+		$list = getComments($commentType, $ownerId);
+
+		echo '<h3>Comments</h3>';
+
+		foreach ($list as $row) {
+			echo $row['commentText'].' by '.$row['userName'].' at '.$row['timeCreated'].'<br/>';
+		}
+			
+		echo '<form method="post" action="">';
+		echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
+		echo '<input type="submit" class="button" value="Add comment">';
+		echo '</form>';
+	}
 ?>

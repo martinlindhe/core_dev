@@ -99,27 +99,8 @@
 			if ($row['timeEdited'] > $row['timeCreated']) {
 				echo '<i>Updated '.$row['timeEdited'].' by '.$row['editorName'].'</i><br/>';
 			}
-			
-			if (!empty($_POST['cmt'])) {
-				addComment(COMMENT_NEWS, $_GET['news'], $_POST['cmt']);
-			}
-			
-			/* Visar kommentarer till artikeln */
-			$list = getComments(COMMENT_NEWS, $_GET['news']);
-			if (!count($list)) return;
 
-			echo '<br/>';
-			echo '<h3>Comments</h3>';
-
-			foreach ($list as $row) {
-				echo $row['commentText'].' by '.$row['userId'].' at '.$row['timeCreated'].'<br/>';
-			}
-			
-			echo '<form method="post" action="">';
-			echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
-			echo '<input type="submit" class="button" value="Add comment">';
-			echo '</form>';
-
+			showComments(COMMENT_NEWS, $_GET['news']);
 			return;
 		}
 

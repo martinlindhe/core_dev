@@ -111,7 +111,7 @@ X = hi prio task
 	- news: allt är nu på engelska
 	- news admin: visar namn på editor
 	- news: implementerat kommentarer
-
+	- news: gjorde en generell comments funktion "showComments()" som listar comments, tog bor koden från functions_news.php showNews()
 
 
 2007.04.20:
