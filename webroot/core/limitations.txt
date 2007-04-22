@@ -1,13 +1,2 @@
-* Currently only one DB connection is supported, and must be named to $db
-		- Tried to implement db-links internally in different classes so they had to be initialized with a db-handle,
-		  to make it possible to use different db connections for different things. But i made a mess out of it
-		  and resorted to using "global $db;" for now.
-
-		- Would be useful to at least be able to have a separate db connection for the $session parts, to ease up with integration
-			of external user-databases by making a mini extension to the Session class.
-Martin Lindhe Feb 2007		  
-----
-
 * Wikis
 	- "En_artikel" och "En artikel" måste hanteras som densamma
-

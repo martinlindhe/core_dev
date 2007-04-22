@@ -134,7 +134,7 @@ class Files
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
 			if (!$categoryId) {
 				//shows own categories & global categories
-				$cat_list = getGlobalAndUserCategories(CATEGORY_TYPE_FILES);
+				$cat_list = getGlobalAndUserCategories(CATEGORY_USERFILES);
 				if (!empty($cat_list)) {
 					echo 'Categories:<br/>';
 					for ($i=0; $i<count($cat_list); $i++) {

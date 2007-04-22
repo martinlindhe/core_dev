@@ -1,4 +1,5 @@
 <?
+	define('CATEGORY_USERFILES', 1);	//special type that represents 1-10
 	$config['categories']['files_types'] = array(1 => 'normal', 2 => 'private', 3 => 'hidden', 10 => 'global');
 
 	define('CATEGORY_NEWS',		20);
@@ -68,7 +69,11 @@
 
 		if (!$session->id || !is_numeric($_type)) return false;
 		
-		$q = 'SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type;
+		if ($_type == CATEGORY_USERFILES) {
+			$q = 'SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR categoryPermissions=10) AND categoryType>=1 AND categoryType<=10';
+		} else {		
+			$q = 'SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type;
+		}
 		return $db->getArray($q);
 	}
 
