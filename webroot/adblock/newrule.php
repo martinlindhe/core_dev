@@ -42,7 +42,7 @@
 		<input type="text" name="sampleurl" size="86"/><br/>
 		<br/>
 		Comment:<br/>
-		<textarea name="comment" rows="8" cols="84"></textarea><br/>
+		<textarea name="comment" rows="8" cols="60"></textarea><br/>
 		<input type="checkbox" name="commentprivate" id="commentprivate"/>
 		<label for="commentprivate">Make this comment private</label><br/>
 		<br/>

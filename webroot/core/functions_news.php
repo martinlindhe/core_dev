@@ -1,18 +1,19 @@
 <?
-	require_once('functions_comments.php');	//for news comment support
+	require_once('functions_comments.php');		//for news comment support
+	require_once('functions_categories.php');	//for news categories support
 
-	function addNews($title, $body, $topublish, $rss_enabled)
+	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 	{
 		global $db, $session;
 
-		if (!$session->id || !is_numeric($rss_enabled)) return false;
+		if (!$session->id || !is_numeric($rss_enabled) || !is_numeric($category_id)) return false;
 		
 		//$topublish är en sträng som innehåller ett datum, helst i detta format: 2007-04-02 18:22
 		$topublish_time = strtotime($topublish);
 		if ($topublish_time < time()) $topublish_time = time();
 		$topublish = sql_datetime($topublish_time);
 
-		$q = 'INSERT INTO tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session->id.',timeToPublish="'.$topublish.'",timeCreated=NOW()';
+		$q = 'INSERT INTO tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session->id.',timeToPublish="'.$topublish.'",timeCreated=NOW(),categoryId='.$category_id;
 		$db->query($q);
 
 		return true;
@@ -53,14 +54,17 @@
 	}
 	
 	//used by getPublishedNews() and rss_news.php
-	function getPublishedNews($limit = '')
+	function getPublishedNews($_categoryId = 0, $limit = '')
 	{
 		global $db;
+		
+		if (!is_numeric($_categoryId)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName, t3.userName AS editorName FROM tblNews AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
 		$q .= 'WHERE timeToPublish<NOW() ';
+		if  ($_categoryId) $q .= ' AND categoryId='.$_categoryId.' ';
 		$q .= 'ORDER BY timeToPublish DESC';
 		if ($limit) $q .= ' LIMIT 0,'.$limit;
 		
@@ -80,7 +84,7 @@
 		return $db->getOneRow($q);
 	}
 
-	function snowNews($limit = 3)
+	function showNews($limit = 3)
 	{
 		global $db;
 		
@@ -90,6 +94,9 @@
 			$row = getNewsItem($_GET['news']);
 
 			echo '<h2>'.$row['title'].'</h2>';
+			if ($row['categoryId']) {
+				echo '<a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName($row['categoryId']).'</a><br/>';
+			}
 			echo 'By '.$row['creatorName'].', published '.$row['timeToPublish'].'<br/>';
 			$art = parseArticle($row['body']);
 			
@@ -103,14 +110,22 @@
 			showComments(COMMENT_NEWS, $_GET['news']);
 			return;
 		}
+		
+		$_cat_id = 0;
+		if (!empty($_GET['cat']) && is_numeric($_GET['cat'])) $_cat_id = $_GET['cat'];
 
-		/* visar en lista med de senaste nyheternas headlines */
-		$list = getPublishedNews($limit);
+		/* visar en lista med de senaste nyheternas headlines, alla kategorier */
+		$list = getPublishedNews($_cat_id, $limit);
 
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?news='.$row['newsId'].'">'.$row['title'].'</a> ';
-			echo ', published '.$row['timeToPublish'].'<br/>';
+			echo ', published '.$row['timeToPublish'];
+			if ($row['categoryId']) {
+				echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName($row['categoryId']).'</a>';
+			}
+			echo '<br/>';
+
 			$art = parseArticle($row['body']);
 			echo $art['head'].'<br/>';
 			echo '</div><br/>';

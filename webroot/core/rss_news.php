@@ -6,9 +6,9 @@
 	require_once('find_config.php');
 
 	$_category = 0;
-	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $_category = $_GET['c'];	//todo: anv㭤 detta
+	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $_category = $_GET['c'];
 
-	$list = getPublishedNews(10);
+	$list = getPublishedNews($_category, 10);
 
 	$title = 'Nyheter';
 	$description = '10 senaste publicerade nyheterna';

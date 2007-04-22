@@ -1,10 +1,12 @@
 <?
 	require_once('config.php');
 
-	$meta_rss[] = array("title" => "RSS News feed", "name" => "news", "channel" => 1);
+	$_cat = 0;
+	if (!empty($_GET['cat']) && is_numeric($_GET['cat'])) $_cat = $_GET['cat'];
+	$meta_rss[] = array("title" => "RSS News feed", "name" => "news", "category" => $_cat);
 	require('design_head.php');
 
-	snowNews();
+	showNews();
 
 	require('design_foot.php');
 ?>

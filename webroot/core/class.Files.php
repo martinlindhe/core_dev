@@ -2,14 +2,13 @@
 /*
 	Files class - Handle file upload, image manipulating, file management
 	
-	Uses tblFiles & tblCategories
+	Uses tblFiles
 
 	Written by Martin Lindhe, 2007
 */
 
 require_once('functions_general.php');
-
-define('CATEGORY_TYPE_FILES', 1);
+require_once('functions_categories.php');		//for file categories support
 
 define('FILETYPE_WIKI',						100); /* File is attached to a wiki */
 define('FILETYPE_PR',							101);	/* File is attached to a PR */
@@ -100,11 +99,9 @@ class Files
 		if ($session->id && ($session->isAdmin || $fileType==FILETYPE_USERFILE)&& !$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_type']))
 		{
 			//Create new category. Only allow categories inside root level
-			//todo: define these types elsewhere
-			$x = array(1 => 'normal', 2 => 'private', 3 => 'hidden', 10 => 'global');
-			$category_type = array_search($_POST['new_file_category_type'], $x);
+			$category_type = array_search($_POST['new_file_category_type'], $config['categories']['files_types']);
 			
-			$this->createCategory($_POST['new_file_category'], $category_type);
+			addCategory($category_type, $_POST['new_file_category']);
 		}
 
 		echo '<div class="file_gadget">';
@@ -121,7 +118,7 @@ class Files
 			case FILETYPE_FILEAREA_UPLOAD:
 				$action = '?file_gadget_category_id='.$categoryId;
 				if (!$categoryId) echo 'Root Level content';
-				else echo $this->getCategoryName($categoryId).' content';
+				else echo getCategoryName($categoryId).' content';
 				break;
 
 			case FILETYPE_WIKI:
@@ -136,8 +133,8 @@ class Files
 		//Visar kategorier / kataloger
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
 			if (!$categoryId) {
-				//shows own categories & global categories (categoryPermissions==10)
-				$cat_list = $db->getArray('SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR categoryPermissions=10) AND categoryType='.CATEGORY_TYPE_FILES);
+				//shows own categories & global categories
+				$cat_list = getGlobalAndUserCategories(CATEGORY_TYPE_FILES);
 				if (!empty($cat_list)) {
 					echo 'Categories:<br/>';
 					for ($i=0; $i<count($cat_list); $i++) {
@@ -267,33 +264,6 @@ class Files
 
 		echo '</div>';
 		echo '</div>';
-	}
-	
-	/* Creates a new category to store files in */
-	function createCategory($categoryName, $categoryPermissions)
-	{
-		global $db, $session;
-
-		if (!$session->id || !is_numeric($categoryPermissions) || !$categoryPermissions) return false;
-
-		// 10 = "globally available" category
-		if ($categoryPermissions == 10 && !$session->isSuperAdmin) $categoryPermissions = 0;
-
-		$enc_catname = $db->escape(trim(strip_tags($categoryName)));
-		if (!$enc_catname) return false;
-
-		$q = 'INSERT INTO tblCategories SET categoryName="'.$enc_catname.'",categoryType='.CATEGORY_TYPE_FILES.',timeCreated=NOW(),categoryPermissions='.$categoryPermissions.',ownerId='.$session->id;
-		$db->query($q);
-	}
-	
-	function getCategoryName($_id)
-	{
-		global $db;
-		
-		if (!is_numeric($_id)) return false;
-	
-		$q = 'SELECT categoryName FROM tblCategories WHERE categoryId='.$_id.' AND categoryType='.CATEGORY_TYPE_FILES;
-		return $db->getOneItem($q);
 	}
 	
 	function deleteFile($_id)

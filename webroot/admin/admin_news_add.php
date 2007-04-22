@@ -4,7 +4,7 @@
 	$session->requireAdmin();
 
 	if (!empty($_POST['title']) && !empty($_POST['body']) && !empty($_POST['publish']) ) {
-		addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss']);
+		addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss'], $_POST['news_cat']);
 	}
 	
 	include($project.'design_head.php');
@@ -17,11 +17,15 @@
 	echo '<input type="text" name="title" size="50"/><br/>';
 	echo 'Text:<br/>';
 	echo '<textarea name="body" cols="60" rows="16"></textarea><br/>';
-	echo '<input name="rss" id="rss_check" type="checkbox" class="checkbox" value="1" checked="checked"/>';
 
+	echo 'Choose category: ';
+	echo getCategoriesSelect(CATEGORY_NEWS, 'news_cat').'<br/>';
+
+	echo '<input name="rss" id="rss_check" type="checkbox" class="checkbox" value="1" checked="checked"/>';
 	echo '<label for="rss_check">';
 	echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
 	echo 'Include this news in the RSS feed</label><br/><br/>';
+
 	echo 'Time for publication:<br/>';
 	echo '<input type="text" name="publish" value="'.date('Y-m-d H:i').'"/> ';
 	echo '<input type="submit" class="button" value="Store news"/><br/>';

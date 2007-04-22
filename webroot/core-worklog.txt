@@ -16,7 +16,6 @@
 
 	news modul:
 	X	- kunna bifoga bilder till en nyhet
-	X	- nyhetskategorier. rss feed på alla + på enskild kategori
 		- vote på kvalitén:
   		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
@@ -104,7 +103,7 @@ X = hi prio task
 
 --------------[[changelog]]--------------
 2007.04.22:
-	- core db: $db->log() för user logged in & user logged out visade inte username i loggen
+	- db: $db->log() för user logged in & user logged out visade inte username i loggen
 	- news: kan tagga upp heading vs body av en nyhetsartiekl med [head]xx[/head] och [body]xx[/body]
 	- news: kan nu visa en enskild nyhet
 	- news: fixade nyhetslänkarna från rss feeden
@@ -112,6 +111,14 @@ X = hi prio task
 	- news admin: visar namn på editor
 	- news: implementerat kommentarer
 	- news: gjorde en generell comments funktion "showComments()" som listar comments, tog bor koden från functions_news.php showNews()
+	- wiki: code cleanup. tog bort all kod för "Comments". ska inte använda comments på wikis, utan en "talk" page istället
+	- news: kan nu skapa nyhetskategorier
+	- db: added tblNews.categoryId
+	- files: plockade ut den interna category koden och hookade upp den med functions_categories.php istället
+	- news: kan välja kategori när man skapar en nyhet
+	- news: kan nu se översikt från bara en nyhetskategori
+	- news: rss feed på alla nyheter + på enskild kategori av nyheter är nu möjlig
+
 
 
 2007.04.20:

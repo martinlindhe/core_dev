@@ -128,7 +128,7 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 ?>
 Enter a new comment:
 <form method="post" action="<?=$_SERVER['PHP_SELF'].'?id='.$ruleId?>" name="ruleAddComment">
-<textarea name="comment" rows="8" cols="87"></textarea><br/>
+<textarea name="comment" rows="8" cols="60"></textarea><br/>
 <input type="checkbox" name="commentprivate"/>Make this comment private<br/>
 <input type="submit" class="button" value="Save comment"/>
 </form><br/>

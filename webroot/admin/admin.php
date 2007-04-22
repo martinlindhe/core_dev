@@ -8,6 +8,7 @@
 
 <a href="admin_news.php<?=getProjectPath(false)?>">Admin news</a><br/>
 <a href="admin_news_add.php<?=getProjectPath(false)?>">Add news</a><br/>
+<a href="admin_news_add_category.php<?=getProjectPath(false)?>">Create news category</a><br/>
 
 <hr/>
 maintainance:<br/>

@@ -18,10 +18,9 @@
 	$config['wiki']['allow_edit'] = false;	//false = only allow admins to edit the wiki articles. true = allow all, even anonymous
 
 
-	$config['wiki']['allow_comments'] = false;		//todo - försök att slipp allow_comments & allow_files,
 	$config['wiki']['allow_files'] = false;				//			acceptera bara de tabbar som finns i allowed_tabs
 
-	$config['wiki']['allowed_tabs'] =	array('View', 'Edit', 'History', 'Comments', 'Files');
+	$config['wiki']['allowed_tabs'] =	array('View', 'Edit', 'History', 'Files');
 	$config['wiki']['first_tab'] = 'View';
 
 	
@@ -204,28 +203,6 @@
 			}
 			echo '</form>';				
 		}
-		elseif ($config['wiki']['allow_comments'] && $current_tab == 'Comments')
-		{
-			if (!empty($_POST['comment_'.$wikiId])) {
-				addComment($db, COMMENT_INFOFIELD, $wikiId, $_POST['comment_'.$wikiId]);
-				unset($_POST['comment_'.$wikiId]);
-			}
-
-			$list = getComments($db, COMMENT_INFOFIELD, $wikiId);
-
-			$info = '';
-			for ($i=0; $i<count($list); $i++) {
-				$info .= '"'.$list[$i]['commentText'].'", skrivet '.getDatestringShort($list[$i]['commentTime']).' av '.$list[$i]['userName'].'<br>';
-			}
-			echo 	'<br/>'.
-						'Write a comment:<br/>'.
-						'<form method="post" action="'.URLadd('Comments:'.$wikiName).'" name="wiki_comment">'.
-						'<table width="100%" cellpadding="0" cellspacing="0" border="0">'.
-							'<tr><td><textarea name="comment_'.$wikiId.'" cols="61" rows="4"></textarea><br/><img src="c.gif" width="1" height="5" alt=""/></td></tr>'.
-							'<tr><td><input type="submit" class="button" value="Send"/></td></tr>'.
-						'</table>'.
-						'</form>';
-		}
 		elseif ($config['wiki']['allow_files'] && $current_tab == 'Files')
 		{
 			echo $files->showFiles(FILETYPE_WIKI, $wikiId);
@@ -252,15 +229,6 @@
 
 		echo 	'</div>';
 
-		if ($config['wiki']['allow_comments']) {
-			$talkbackComments = getCommentsCount($db, COMMENT_INFOFIELD, $wikiId);
-			if ($talkbackComments == 1) $talkback = 'Talkback: 1 comment';
-			else $talkback = 'Talkback: '.$talkbackComments.' comments';
-
-			echo '<div class="wiki_foot"><ul>'.
-							'<li>'.($current_tab=='comments'?'<strong>':'').'<a href="'.URLadd('Comments:'.$wikiName).'">'.$talkback.'</a>'.($current_tab=='comments'?'</strong>':'').'</li>'.
-					'</ul></div>';
-		}
 		echo '</div>';
 
 		return true;
