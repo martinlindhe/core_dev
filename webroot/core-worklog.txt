@@ -22,7 +22,7 @@
 
 	wiki:
 		- gör ny toppmeny med div & ul & li osv, bort med tables
-		- implementera stöd för "talk" page _eller_ comments
+		- implementera stöd för "talk" page
 		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- logga history för wiki file deletes via ajax
 
