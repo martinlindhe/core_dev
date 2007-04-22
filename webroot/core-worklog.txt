@@ -15,7 +15,6 @@
 		- compat check: identifiera om gd är installerat
 
 	news modul:
-	X	- kommentarer
 	X	- kunna bifoga bilder till en nyhet
 	X	- nyhetskategorier. rss feed på alla + på enskild kategori
 		- vote på kvalitén:
@@ -110,6 +109,9 @@ X = hi prio task
 	- news: kan nu visa en enskild nyhet
 	- news: fixade nyhetslänkarna från rss feeden
 	- news: allt är nu på engelska
+	- news admin: visar namn på editor
+	- news: implementerat kommentarer
+
 
 
 2007.04.20:

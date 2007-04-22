@@ -46,8 +46,8 @@
 		echo '<input type="submit" class="button" value="Save changes"/><br/>';
 		echo '</form><br/>';
 		
-		echo '<a href="admin_news.php?id='.$item['newsId'].getProjectPath().'">Show this news</a><br/>';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$item['newsId'].getProjectPath().'">Delete this news</a>';
+		//echo '<a href="admin_news.php?id='.$item['newsId'].getProjectPath().'">Show this news</a><br/>';
+		//echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$item['newsId'].getProjectPath().'">Delete this news</a>';
 
 	} else {
 
@@ -55,20 +55,20 @@
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
 			if ($row['rss_enabled']) echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
-			echo '<b>'.$row['title'].'</b> (av '.$row['creatorName'].', ';
-			echo 'skapad '.$row['timeCreated'].')<br/>';
+			echo '<b>'.$row['title'].'</b> (by '.$row['creatorName'].', ';
+			echo 'created '.$row['timeCreated'].')<br/>';
 			
 			if ($row['timeToPublish'] != $row['timeCreated']) {
 				echo '<span class="critical">';
 				if ($row['timeToPublish'] > time()) {
-					echo 'Ska publiceras '.$row['timeToPublish'].'<br/>';
+					echo 'Will be published '.$row['timeToPublish'].'<br/>';
 				} else {
-					echo 'Publicerades '.$row['timeToPublish'].'<br/>';
+					echo 'Was published '.$row['timeToPublish'].'<br/>';
 				}
 				echo '</span>';
 			}
 			if ($row['timeEdited'] > $row['timeCreated']) {
-				echo 'Uppdaterad '.$row['timeEdited'].' av '.$row['editorId'].'<br/>';
+				echo 'Updated '.$row['timeEdited'].' by '.$row['editorName'].'<br/>';
 			}
 			
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?edit='.$row['newsId'].getProjectPath().'">Edit</a> ';

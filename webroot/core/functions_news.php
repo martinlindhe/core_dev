@@ -1,4 +1,6 @@
 <?
+	require_once('functions_comments.php');	//for news comment support
+
 	function addNews($title, $body, $topublish, $rss_enabled)
 	{
 		global $db, $session;
@@ -42,8 +44,9 @@
 	{
 		global $db;
 
-		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblNews AS t1 ';
+		$q  = 'SELECT t1.*,t2.userName AS creatorName,t3.userName AS editorName FROM tblNews AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
 		$q .= 'ORDER BY timeCreated DESC';
 
 		return $db->getArray($q);
@@ -96,17 +99,36 @@
 			if ($row['timeEdited'] > $row['timeCreated']) {
 				echo '<i>Updated '.$row['timeEdited'].' by '.$row['editorName'].'</i><br/>';
 			}
+			
+			if (!empty($_POST['cmt'])) {
+				addComment(COMMENT_NEWS, $_GET['news'], $_POST['cmt']);
+			}
+			
+			/* Visar kommentarer till artikeln */
+			$list = getComments(COMMENT_NEWS, $_GET['news']);
+			if (!count($list)) return;
+
+			echo '<br/>';
+			echo '<h3>Comments</h3>';
+
+			foreach ($list as $row) {
+				echo $row['commentText'].' by '.$row['userId'].' at '.$row['timeCreated'].'<br/>';
+			}
+			
+			echo '<form method="post" action="">';
+			echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
+			echo '<input type="submit" class="button" value="Add comment">';
+			echo '</form>';
 
 			return;
 		}
 
-		/* visar en lista med de senaste nyheterna och headlines */
+		/* visar en lista med de senaste nyheternas headlines */
 		$list = getPublishedNews($limit);
 
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?news='.$row['newsId'].'">'.$row['title'].'</a> ';
-			//echo '(by '.$row['creatorName'].', published '.$row['timeToPublish'].')<br/>';
 			echo ', published '.$row['timeToPublish'].'<br/>';
 			$art = parseArticle($row['body']);
 			echo $art['head'].'<br/>';
