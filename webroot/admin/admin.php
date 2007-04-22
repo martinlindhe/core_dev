@@ -7,7 +7,7 @@
 <h1>Admin menu</h1><br/><br/>
 
 <a href="admin_news.php<?=getProjectPath(false)?>">Admin news</a><br/>
-
+<a href="admin_news_add.php'.getProjectPath(false).'">Add news</a><br/>
 
 <hr/>
 maintainance:<br/>

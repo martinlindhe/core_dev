@@ -13,9 +13,10 @@
 
 	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].getProjectPath(false).'">';
 	echo '<input type="hidden" name="rss" value="0"/>';
-	echo 'Title: <input type="text" name="title"/><br/>';
+	echo 'Title:<br/>';
+	echo '<input type="text" name="title" size="50"/><br/>';
 	echo 'Text:<br/>';
-	echo '<textarea name="body" cols="40" rows="6"></textarea><br/>';
+	echo '<textarea name="body" cols="60" rows="16"></textarea><br/>';
 	echo '<input name="rss" id="rss_check" type="checkbox" class="checkbox" value="1" checked="checked"/>';
 
 	echo '<label for="rss_check">';

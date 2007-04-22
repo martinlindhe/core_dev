@@ -70,8 +70,9 @@
 
 		if (!is_numeric($newsId)) return false;
 
-		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblNews AS t1 ';
+		$q  = 'SELECT t1.*,t2.userName AS creatorName,t3.userName AS editorName FROM tblNews AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
 		$q .= 'WHERE t1.newsId='.$newsId;
 		return $db->getOneRow($q);
 	}
@@ -79,17 +80,36 @@
 	function snowNews($limit = 3)
 	{
 		global $db;
+		
+		if (!empty($_GET['news']) && is_numeric($_GET['news'])) {
+			/* Visar en artikel */
+			
+			$row = getNewsItem($_GET['news']);
 
+			echo '<h2>'.$row['title'].'</h2>';
+			echo 'By '.$row['creatorName'].', published '.$row['timeToPublish'].'<br/>';
+			$art = parseArticle($row['body']);
+			
+			echo '<h4>'.$art['head'].'</h4>';
+			echo 'body: x'.$art['body'].'x<br/>';
+
+			if ($row['timeEdited'] > $row['timeCreated']) {
+				echo '<i>Updated '.$row['timeEdited'].' by '.$row['editorName'].'</i><br/>';
+			}
+
+			return;
+		}
+
+		/* visar en lista med de senaste nyheterna och headlines */
 		$list = getPublishedNews($limit);
 
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['newsId'].'">'.$row['title'].'</a> ';
-			echo '(by '.$row['creatorName'].', was published '.$row['timeToPublish'].')<br/>';
-			echo $row['body'].'<br/>';
-			if ($row['timeEdited'] > $row['timeCreated']) {
-				echo 'Updated '.$row['timeEdited'].' by '.$row['editorName'].'<br/>';
-			}
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?news='.$row['newsId'].'">'.$row['title'].'</a> ';
+			//echo '(by '.$row['creatorName'].', published '.$row['timeToPublish'].')<br/>';
+			echo ', published '.$row['timeToPublish'].'<br/>';
+			$art = parseArticle($row['body']);
+			echo $art['head'].'<br/>';
 			echo '</div><br/>';
 		}
 	}

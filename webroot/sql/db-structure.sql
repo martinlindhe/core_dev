@@ -75,7 +75,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=474 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=479 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblNews` (
   `newsId` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(100) character set utf8 NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE `tblNews` (
   `editorId` int(10) unsigned default '0',
   `timeToPublish` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`newsId`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblProblemSites` (
   `siteId` bigint(20) unsigned NOT NULL auto_increment,
   `userId` smallint(5) unsigned NOT NULL default '0',
