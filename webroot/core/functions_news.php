@@ -91,7 +91,7 @@
 			$art = parseArticle($row['body']);
 			
 			echo '<h4>'.$art['head'].'</h4>';
-			echo 'body: x'.$art['body'].'x<br/>';
+			echo $art['body'].'<br/>';
 
 			if ($row['timeEdited'] > $row['timeCreated']) {
 				echo '<i>Updated '.$row['timeEdited'].' by '.$row['editorName'].'</i><br/>';

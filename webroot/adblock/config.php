@@ -33,8 +33,8 @@
 
 	$config['files']['anon_uploads'] = false;
 	$config['files']['apc_uploads'] = false;
-	$config['files']['upload_dir'] = 'E:/devel/webroot/adblock/webupload/';
-	$config['files']['thumbs_dir'] = 'E:/devel/webroot/adblock/webupload/thumbs/';
+	$config['files']['upload_dir'] = 'C:/webroot/adblock/webupload/';
+	$config['files']['thumbs_dir'] = 'C:/webroot/adblock/webupload/thumbs/';
 	$files = new Files($config['files']);
 
 	$config['wiki']['allow_html'] = true;

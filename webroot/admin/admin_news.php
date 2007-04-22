@@ -46,8 +46,8 @@
 		echo '<input type="submit" class="button" value="Save changes"/><br/>';
 		echo '</form><br/>';
 		
-		echo '<a href="admin_news.php?id='.$item['newsId'].getProjectPath().'">Visa denna nyhet</a><br/>';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$item['newsId'].getProjectPath().'">Radera denna nyhet</a>';
+		echo '<a href="admin_news.php?id='.$item['newsId'].getProjectPath().'">Show this news</a><br/>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$item['newsId'].getProjectPath().'">Delete this news</a>';
 
 	} else {
 
@@ -72,7 +72,7 @@
 			}
 			
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?edit='.$row['newsId'].getProjectPath().'">Edit</a> ';
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$row['newsId'].getProjectPath().'">Remove</a>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?delete='.$row['newsId'].getProjectPath().'">Delete</a>';
 			echo '</div><br/>';
 		}
 	}

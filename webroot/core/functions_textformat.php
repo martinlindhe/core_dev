@@ -276,10 +276,8 @@
 			
 		return $retval;
 	}
-?>
+
 	/* Returns array with parsed up article texts */
-	function parseArticle($text)
-	{	/* Returns array with parsed up article texts */
 	function parseArticle($text)
 	{
 		$pos1 = strpos($text, '[head]');
@@ -294,23 +292,9 @@
 		if ($pos1 === false || $pos2 === false) return 'parse error';
 
 		$art['body'] = substr($text, $pos1+strlen('[body]')+1, $pos2-$pos1-strlen('[/body]') );
-		$art['body'] = nl2br(trim(strip_tags($art['body'])));
+
+		$art['body'] = formatUserInputText($art['body']);
 
 		return $art;
 	}
-		$pos1 = strpos($text, '[head]');
-		$pos2 = strpos($text, '[/head]');
-		if ($pos1 === false || $pos2 === false) return 'parse error';
-
-		$art['head'] = substr($text, $pos1+strlen('[head]')+1, $pos2-$pos1-strlen('[/head]') );
-		$art['head'] = nl2br(trim(strip_tags($art['head'])));
-
-		$pos1 = strpos($text, '[body]');
-		$pos2 = strpos($text, '[/body]');
-		if ($pos1 === false || $pos2 === false) return 'parse error';
-
-		$art['body'] = substr($text, $pos1+strlen('[body]')+1, $pos2-$pos1-strlen('[/body]') );
-		$art['body'] = nl2br(trim(strip_tags($art['body'])));
-
-		return $art;
-	}
+?>

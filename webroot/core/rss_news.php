@@ -6,7 +6,7 @@
 	require_once('find_config.php');
 
 	$_category = 0;
-	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $_category = $_GET['c'];	//todo: använd detta
+	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $_category = $_GET['c'];	//todo: anvã­¤ detta
 
 	$list = getPublishedNews(10);
 
@@ -41,11 +41,13 @@
 		echo '<height>45</height>';
 	echo '</image>';
 
+	$path = basename($_GET['pr']);
+	if ($db->escape($path) != $_GET['pr']) die;
+
 	for ($i=0; $i<count($list); $i++) {
 		if (!$list[$i]['rss_enabled']) continue;
 			
-		//fixme: fixa url
-		$item_url = 'http://localhost/core/news.php?id='.$list[$i]['newsId'].getProjectPath();
+		$item_url = 'http://localhost/'.$path.'/news.php?news='.$list[$i]['newsId'];
 
 		echo '<item>';
 			echo '<title>'.$list[$i]['title'].'</title>';
