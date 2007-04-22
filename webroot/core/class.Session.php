@@ -201,7 +201,7 @@ class Session
 		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
 		$this->lastActive = time();
 
-		$db->log('User logged in');
+		$db->log('User logged in', LOGLEVEL_NOTICE, $this->id);	//fixme: need to send user ID here because db->log is called from the session constructor, thus $session isnt created yet when the log() is invoked
 
 		return true;
 	}
@@ -210,7 +210,7 @@ class Session
 	{
 		global $db;
 
-		$db->log('User logged out');
+		$db->log('User logged out', LOGLEVEL_NOTICE, $this->id);
 		$db->query('UPDATE tblUsers SET timeLastLogout=NOW()');
 
 		$this->started = 0;

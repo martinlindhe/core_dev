@@ -2,8 +2,7 @@
 
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
-	X	- $db->log() för user logged in & user logged out visar aldrig username i loggen
-			* session verkar ej vara initierat när $db->log() anropas då !?!?
+	X - visa mer inputfält vid loginrutan
 
 
 	file area:
@@ -107,6 +106,12 @@ X = hi prio task
 
 
 --------------[[changelog]]--------------
+2007.04.22:
+	- core db: $db->log() för user logged in & user logged out visade inte username i loggen
+
+
+
+
 2007.04.20:
 	- admin: en phpinfo sida
 	- admin: compat check sida. visar överskådligt versioner av php mysql & apache på samma ställe och om dom är "supported"

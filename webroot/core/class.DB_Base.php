@@ -218,14 +218,15 @@ abstract class DB_Base
 	}
 	
 	/* Writes a log entry to tblLogs */
-	function log($str, $entryLevel = LOGLEVEL_NOTICE)
+	//todo: take user_id now only so it can log "user logged in" because that log entry is being called while still in the session constructor
+	function log($str, $entryLevel = LOGLEVEL_NOTICE, $_user_id = 0)
 	{
 		global $session;
-		if (!is_numeric($entryLevel)) return false;
+		if (!is_numeric($entryLevel) || !is_numeric($_user_id)) return false;
 
 		$enc_str = $this->escape($str);
 
-		$userId = !empty($session) ? $session->id : 0;
+		$userId = !empty($session) ? $session->id : $_user_id;
 		$userIP = !empty($session) ? $session->ip : IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 
 		$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$userId.',userIP='.$userIP);
@@ -268,7 +269,7 @@ abstract class DB_Base
 			echo '</i></span><br/><br/>';
 		}
 
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?events_clearlog">Clear log</a>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?events_clearlog'.getProjectPath().'">Clear log</a>';
 	}
 	
 
