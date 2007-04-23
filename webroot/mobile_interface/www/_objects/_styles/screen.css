@@ -120,7 +120,6 @@ p { margin: 0; padding: 5px 5px 5px 5px; }
 .msgListImage { width: 55px; }
 .msgListEven { background: #ecf1ea; }
 .msgWrite { width: 160px; height: 100px; }
-#userImage { float: left; margin-bottom: 5px; }
 #userInfo { float: left; margin-left: 10px; }
 #userInfo h1 { line-height: 24px; }
 #userInfo div { margin-top: 30px; }

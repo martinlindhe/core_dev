@@ -125,9 +125,9 @@ function checkTime(toggle) {
 					<li><a href="/user/view/" class="wht none"><img src="/_gfx/icon_profil.png" alt="" />profil</a></li>
 					<li><a href="/user/gb/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['gb_offset'])?> <span class="bld about" id="Xg"></span></span><img src="/_gfx/icon_gb.png" alt="" />gästbok</a></li>
 					<li><a href="/user/mail/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['mail_offset'])?> <span class="bld about" id="Xm"></span></span><img src="/_gfx/icon_mail.png" alt="" />brev</a></li>
-					<li><a href="/user/blog/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['blog_offset'])?></span><img src="/_gfx/icon_blogg.png" alt="" />blogg</a></li>
+					<li><a href="/user/blog/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['blog_offset'])?></span><img src="/_gfx/icon_blog.png" alt="" />blogg</a></li>
 					<li><a href="/user/relations/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['rel_offset'])?> <span class="bld about" id="Xr"></span></span><img src="/_gfx/icon_friends.png" alt="" />vänner</a></li>
-					<li><a href="/user/gallery/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['gal_offset'])?></span><img src="/_gfx/icon_galleri.png" alt="" />galleri</a></li>
+					<li><a href="/user/gallery/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['gal_offset'])?></span><img src="/_gfx/icon_gallery.png" alt="" />galleri</a></li>
 					<li><a href="/member/settings/" class="wht none"><img src="/_gfx/icon_settings.png" alt="" />inställningar</a></li>
 					<li>&nbsp;</li>
 				</ul>
