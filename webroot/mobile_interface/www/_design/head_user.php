@@ -24,20 +24,23 @@
 	<br class="clr" />
 
 	<div id="userMenu">
-		<div class="btnProfile"></div>
-		<div class="btnGuestbook">123</div>
-		<div class="btnBlog">123</div>
-		<div class="btnGallery">123</div>
-		<div class="btnMail"></div> <!-- skriv mail till denna person, fel ikon -->
-		<div class="btnBecomeFriend"></div> <!-- bli vän ikon -->
-		<div class="btnBlock"></div> <!-- okänd ikon -->
+		<div class="btnProfile" onclick="goLoc('<?=l('user', 'view', $s['id_id'])?>');"></div>
+		<div class="btnGuestbook" onclick="goLoc('<?=l('user', 'gb', $s['id_id'])?>');"><?=@intval($info['gb_offset'][1])?>&nbsp;</div>
+		<div class="btnBlog" onclick="goLoc('<?=l('user', 'blog', $s['id_id'])?>');"><?=@intval($info['blog_offset'][1])?>&nbsp;</div>
+		<div class="btnGallery" onclick="goLoc('<?=l('user', 'gallery', $s['id_id'])?>');"><?=@intval($info['gal_offset'][1])?>&nbsp;</div>
+<? if (!$own) { ?>
+		<div class="btnMail"></div> <!-- skriv mail till denna person, fel ikon? -->
+		<div class="btnBecomeFriend" onclick="makeRelation('<?=$s['id_id']?>');"></div> <!-- bli vän ikon -->
+		<div class="btnBlock" onclick="makeBlock('<?=$s['id_id']?>');"></div> <!-- okänd ikon -->
 		<div class="btnReport"></div> <!-- okänd ikon -->
-
-		<input type="button" class="btn<?=($page == 'view'?'3':'2')?>_min" accesskey="1" onclick="goLoc('<?=l('user', 'view', $s['id_id'])?>');" value="profil" />
-		<input type="button" class="btn<?=($page == 'gb'?'3':'2')?>_min" accesskey="2" onclick="goLoc('<?=l('user', 'gb', $s['id_id'])?>');" value="gästbok <?=@intval($info['gb_offset'][1])?>" />
-		<input type="button" class="btn<?=($page == 'gallery'?'3':'2')?>_min" accesskey="3" onclick="goLoc('<?=l('user', 'gallery', $s['id_id'])?>');" value="galleri <?=@intval($info['gal_offset'][1])?>" />
-		<input type="button" class="btn<?=($page == 'blog'?'3':'2')?>_min" accesskey="4" onclick="goLoc('<?=l('user', 'blog', $s['id_id'])?>');" value="blogg <?=@intval($info['blog_offset'][1])?>" />
+<? } ?>
+<!--
+		..<input type="button" class="btn<?=($page == 'view'?'3':'2')?>_min" accesskey="1" onclick="goLoc('<?=l('user', 'view', $s['id_id'])?>');" value="profil" />
+		..<input type="button" class="btn<?=($page == 'gb'?'3':'2')?>_min" accesskey="2" onclick="goLoc('<?=l('user', 'gb', $s['id_id'])?>');" value="gästbok <?=@intval($info['gb_offset'][1])?>" />
+		..<input type="button" class="btn<?=($page == 'gallery'?'3':'2')?>_min" accesskey="3" onclick="goLoc('<?=l('user', 'gallery', $s['id_id'])?>');" value="galleri <?=@intval($info['gal_offset'][1])?>" />
+		..<input type="button" class="btn<?=($page == 'blog'?'3':'2')?>_min" accesskey="4" onclick="goLoc('<?=l('user', 'blog', $s['id_id'])?>');" value="blogg <?=@intval($info['blog_offset'][1])?>" />
 		<input type="button" class="btn<?=($page == 'relations'?'3':'2')?>_min" accesskey="5" onclick="goLoc('<?=l('user', 'relations', $s['id_id'])?>');" value="vänner <?=@intval($info['rel_offset'][1])?>" />
+-->
 <?
 	if ($own) {
 		/*
@@ -49,8 +52,10 @@
 		*/
 	} elseif($l) {
 ?>
+<!--
 		<input type="button" class="btnon btn2_midi" onclick="makeRelation('<?=$s['id_id']?>');" value="bli vän!" />
 		<input type="button" class="btnon btn2_midi" onclick="makeBlock('<?=$s['id_id']?>');" value="blockera!" />
+-->
 <?
 	}
 ?>
