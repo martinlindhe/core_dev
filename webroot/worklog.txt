@@ -111,6 +111,8 @@
 	- webbgränssnittet: visar senaste blog-kommentarerna på startsidan i inloggat läge
 	- webbgränssnittet: mer xhtml-fixar + flyttat ut mer design till screen.css
 ---[[mailat ovanstående]]---
+2007-04-23 Måndag:
+	- webbgränssnittet: jobbat hela dan med den nya designen. gjort toppnavigering, vänstermeny & det mesta av profilsidan, wip...
 
 ***********************************************************************************************************************************
 fortfarande inte medlem?

@@ -28,6 +28,18 @@ function checkTime(toggle) {
 		<a href="/main/start/"><img alt="" src="/_gfx/head_bg.png" id="top_img" /></a>
 
 		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" /></a></div>
+		
+		<ul id="top_menu">
+			<li><a href="/main/start/">START</a></li>
+			<li><a href="/list/users/">SÖK</a></li>
+			<li><a href="/forum/start/">FORUM</a></li>
+			<li><a href="/main/thought/">TYCK TILL</a></li>
+			<li><a href="/main/public/">SURFCAFE</a></li>
+			<li><a href="/text/radio/">WEBBRADIO</a></li>
+			<li><a href="/main/faq/">HJÄLP &amp; FAQ</a></li>
+			<li><a href="/text/contact/">KONTAKT</a></li>
+		</ul>
+		
 <?
 	if($l) {
 		$online = gettxt('stat_online');
@@ -49,24 +61,6 @@ function checkTime(toggle) {
 			<form action="/member/logout" method="post">
 			<input type="image" src="/_objects/icon_logout.png" />
 			</form>
-		</div>
--->
-		<div id="top_menu">
-			<map name="topmenu">
-				<area href="/main/start/" alt="Start" coords="10,1,61,27">
-				<area href="/list/users/" alt="Sök" coords="62,1,106,27">
-				
-				<area href="x" alt="prata privat" coords="107,1,211,27">				
-				<area href="/main/public/" alt="Surfcafe" coords="212,1,298,27">
-
-				<area href="/text/radio/" alt="Webbradio" coords="299,1,396,27">
-				<area href="/main/faq/" alt="Hjälp &amp; FAQ" coords="398,1,502,27">
-				<area href="/text/contact/" alt="Kontakt" coords="504,1,578,27">
-				
-				<area href="/member/logout" alt="Logga ut" coords="953,6,969,22">				
-
-			</map>
-			<img src="/_gfx/head_menu_raw.png" usemap="#topmenu" alt="Menu"/>
 		</div>
 -->
 
