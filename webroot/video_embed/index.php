@@ -7,7 +7,7 @@
 <?
 	$width = 128;
 	$height = 96;
-	$filename = 'video.avi';
+	$filename = 'taxi.avi';
 
 	//if (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== false) {
 		/* Hack to make the player a little bit bigger for firefox users since it cant turn off controls */
@@ -30,10 +30,31 @@
 	*/
 ?>
 
-<object type="application/x-mplayer2" style="width: 200px; height: 200px;" data="<?=$filename?>">
-	<param name="filename" value="<?=$filename?>"/>
-	<embed type="application/x-mplayer2" width="200px" height="200px"  showcontrols="0" src="<?=$filename?>" />
-</object> 
+<OBJECT ID="MediaPlayer1" classid="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95"
+ CODEBASE="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701"
+ standby="Loading Microsoft Windows Media Player components..."
+ TYPE="application/x-oleobject" width="<?=$width?>" height="<?=$height?>">
+ <PARAM NAME="FileName" VALUE="<?=$filename?>">
 
+ <PARAM NAME="ClickToPlay" VALUE="TRUE">
+ <PARAM NAME="AutoStart" VALUE="TRUE">
+ <PARAM NAME="ShowControls" VALUE="TRUE">
+ <PARAM NAME="ShowDisplay" VALUE="TRUE">
+ <PARAM NAME="ShowStatusBar" VALUE="TRUE">
+ <embed TYPE="application/x-mplayer2"
+  pluginspage="http://www.microsoft.com/windows/windowsmedia/download/"
+  filename="<?=$filename?>"
+  SRC="<?=$filename?>"
+  Name=MediaPlayer1
+  ClickToPlay=1
+  AutoStart=0
+  ShowControls=1
+  ShowDisplay=1
+  ShowStatusBar=1
+  controls="PlayButton"
+  width=320
+  height=290>
+ </embed>
+</OBJECT>
 
 </body></html>

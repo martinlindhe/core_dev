@@ -11,6 +11,7 @@
 <meta name="robots" content="follow,index"/>
 <meta name="language" content="sv-SE"/>
 <link rel="stylesheet" type="text/css" title="default" media="screen" href="<?=CS?>_objects/_styles/screen.css"/>
+<link rel="stylesheet" type="text/css" href="/_gfx/site.css"/>
 <link rel="shortcut icon" href="<?=CS?>favicon.ico"/>
 <script src="<?=CS?>_objects/main1.js" type="text/javascript"></script>
 <script src="<?=CS?>_objects/swfobject.js" type="text/javascript"></script>
