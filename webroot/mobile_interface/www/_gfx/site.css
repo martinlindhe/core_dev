@@ -36,7 +36,7 @@ ul.user_menu a:hover { text-decoration: none; color: #000; }
 
 /* profile */
 #userImage { float: left; margin-bottom: 5px; border: 1px solid #899187; }
-.btnProfile				{ padding-right: 1px; float: left; background: url('/_gfx/btn_profil.png'); background-repeat: no-repeat; width: 56px; height: 26px; cursor: pointer; }
+.btnProfile				{ padding-right: 1px; float: left; background: url('/_gfx/btn_profile.png'); background-repeat: no-repeat; width: 56px; height: 26px; cursor: pointer; }
 .btnGuestbook 		{ padding-right: 1px; float: left; background: url('/_gfx/btn_gb.png'); background-repeat: no-repeat; width: 91px; height: 26px; cursor: pointer; }
 .btnBlog					{ padding-right: 1px; float: left; background: url('/_gfx/btn_blog.png'); background-repeat: no-repeat; width: 91px; height: 26px; cursor: pointer; }
 .btnGallery				{ padding-right: 1px; float: left; background: url('/_gfx/btn_gallery.png'); background-repeat: no-repeat; width: 76px; height: 26px; cursor: pointer; }
@@ -44,8 +44,9 @@ ul.user_menu a:hover { text-decoration: none; color: #000; }
 .btnBecomeFriend	{ padding-right: 1px; float: left; background: url('/_gfx/btn_friend.png'); background-repeat: no-repeat; width: 65px; height: 26px; cursor: pointer; }
 .btnBlock					{ padding-right: 1px; float: left; background: url('/_gfx/btn_block.png'); background-repeat: no-repeat; width: 64px; height: 26px; cursor: pointer; }
 .btnReport				{ padding-right: 1px; float: left; background: url('/_gfx/btn_report.png'); background-repeat: no-repeat; width: 65px; height: 26px; cursor: pointer; }
+
 .btnGuestbook, .btnBlog, .btnGallery {
-	font-size: 10p0x;
+	font-size: 10px;
 	color: #fff;
 	padding-top: 6px;
 	text-align: right;
