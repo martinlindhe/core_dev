@@ -1,4 +1,6 @@
-<div class="smallContent mll">
+</div>
+
+<div id="rightMenu">
 <?
 if(!defined('U_NOINFO')) echo '
 			<div class="smallHeader1"><h4>personliga fakta</h4></div>

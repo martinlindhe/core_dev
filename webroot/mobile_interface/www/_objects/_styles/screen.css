@@ -80,7 +80,6 @@ p { margin: 0; padding: 5px 5px 5px 5px; }
 .btn3_med { border: 0; padding: 0; background: url('/_objects/btn3_med.png'); width: 90px; height: 30px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
 .btn3_sml { border: 0; padding: 0; background: url('/_objects/btn3_sml.png'); width: 50px; height: 30px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
 #headContent { position: relative; height: 131px; width: 982px; margin-bottom: 10px; background-image: url('/_objects/top.png'); background-repeat: no-repeat; }
-#mainContent { margin: 0 0 0 15px; width: 596px; overflow: hidden; }
 #bigContent { float: left; margin: 0 0 0 15px; width: 786px; overflow: hidden; }
 #wholeContent { text-align: center; width: 982px; overflow: hidden; }
 .smallHeader1 { width: 176px; height: 27px; color: #fff; background: url('/_objects/box_header_small1.png'); background-repeat: no-repeat; }
@@ -91,12 +90,9 @@ p { margin: 0; padding: 5px 5px 5px 5px; }
 .wholeHeader2 { text-align: left; margin: 0 auto 0 auto; width: 596px; height: 27px; color: #fff; background: url('/_objects/box_header_big2.png'); background-repeat: no-repeat; }
 .wholeHeader2 h4, .mainHeader2 h4, .bigHeader2 h4, .smallHeader1 h4, .smallHeader2 h4, .smallHeader3 h4 { line-height: 20px; font-weight: bold; font-size: 12px; padding: 4px 0 0 5px; margin: 0; }
 .wholeHeader2 a, .mainHeader2 a, .bigHeader2 a, .smallHeader1 a, .smallHeader2 a, .smallHeader3 a, .btnon { color: #fffe9f; }
-#contentContainer { margin: 0 0 0 2px; }
-.smallContent { z-index: 1; float: left; width: 176px; }
 .smallWholeContent { width: 176px; }
 .popupWholeContent { width: 176px; margin-top: 20px; }
 .content { width: 596px; overflow: hidden; }
-.mll { margin-left: 15px; }
 .smallFilled1 { width: 176px; margin-bottom: 10px; background: #899187; }
 .smallBoxed1 { width: 174px; border: 1px solid #899187; border-width: 0 1px 1px 1px; margin-bottom: 10px; }
 .smallFilled2 { width: 176px; margin-bottom: 10px; background: #7ba06d; }

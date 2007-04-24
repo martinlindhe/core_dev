@@ -65,6 +65,8 @@
 		<? makeButton(false,	'makeRelation(\''.$s['id_id'].'\')',	'icon_friends.png',	'bli vän'); ?>
 		<? makeButton(false,	'makeBlock(\''.$s['id_id'].'\')',			'icon_block.png',	'blockera'); ?>
 		<? //makeButton(false,	'',	'icon_abuse.png',	'rapportera'); ?>
+<? } else {?>
+		<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'profile', '0').'&amp;go=1\')',	'icon', 'ändra profil'); ?>
 <? } ?>
 	<br/>
 <?
@@ -78,4 +80,4 @@
 	}
 	*/
 ?>
-</div>
+	</div>
