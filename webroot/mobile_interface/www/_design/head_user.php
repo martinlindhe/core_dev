@@ -4,6 +4,39 @@
 	$uarr = array();
 	if($l) $uarr['top'] = 1;
 	$uarr['noimg'] = 1;
+
+	function makeButton($bool, $js, $img, $text, $number = false)
+	{
+		if ($bool) $class = 'btnSelected';
+		else $class = 'btnNormal';
+
+		echo '<div class="'.$class.'" onclick="'.$js.'">';
+		echo '<table summary="" cellpadding="0" cellspacing="0">';
+		echo '<tr>';
+			echo '<td width="3"><img src="/_gfx/btn_c1.png" alt=""/></td>';
+			echo '<td style="background: url(\'/_gfx/btn_head.png\');"></td>';
+			echo '<td width="3"><img src="/_gfx/btn_c2.png" alt=""/></td>';
+		echo '</tr>';
+
+		echo '<tr style="height: 18px">';
+			echo '<td width="3" style="background: url(\'/_gfx/btn_left.png\');"></td>';
+			echo '<td style="padding-left: 19px; padding-right: 4px;">';
+			if ($img) echo '<img src="/_gfx/'.$img.'" style="position: absolute; top: 5px; left: 4px;" alt=""/> ';
+			echo $text;
+			if ($number !== false) echo '&nbsp;&nbsp;'.$number;
+			echo '</td>';
+			echo '<td width="3" style="background: url(\'/_gfx/btn_right.png\');"></td>';
+		echo '</tr>';
+
+		echo '<tr>';
+			echo '<td width="3"><img src="/_gfx/btn_c3.png" alt=""/></td>';
+			echo '<td style="background: url(\'/_gfx/btn_foot.png\');"></td>';
+			echo '<td width="3"><img src="/_gfx/btn_c4.png" alt=""/></td>';
+		echo '</tr>';
+
+		echo '</table>';
+		echo '</div>';
+	}
 ?>
 
 <div id="mainContent">
@@ -24,39 +57,27 @@
 	<br class="clr" />
 
 	<div id="userMenu">
-		<div class="btnProfile" onclick="goLoc('<?=l('user', 'view', $s['id_id'])?>');"></div>
-		<div class="btnGuestbook" onclick="goLoc('<?=l('user', 'gb', $s['id_id'])?>');"><?=@intval($info['gb_offset'][1])?>&nbsp;</div>
-		<div class="btnBlog" onclick="goLoc('<?=l('user', 'blog', $s['id_id'])?>');"><?=@intval($info['blog_offset'][1])?>&nbsp;</div>
-		<div class="btnGallery" onclick="goLoc('<?=l('user', 'gallery', $s['id_id'])?>');"><?=@intval($info['gal_offset'][1])?>&nbsp;</div>
+		<? makeButton($action=='view',		'goLoc(\''.l('user', 'view', $s['id_id']).'\')',			'icon_profile.png',	'profil'); ?>
+		<? makeButton($action=='gb',			'goLoc(\''.l('user', 'gb', $s['id_id']).'\')',				'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>
+		<? makeButton($action=='blog',		'goLoc(\''.l('user', 'blog', $s['id_id']).'\')',			'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
+		<? makeButton($action=='gallery',	'goLoc(\''.l('user', 'gallery', $s['id_id']).'\')',	'icon_gallery.png',	'galleri', @intval($info['gal_offset'][1]) ); ?>
+
 <? if (!$own) { ?>
-		<div class="btnMail"></div> <!-- skriv mail till denna person, fel ikon? -->
-		<div class="btnBecomeFriend" onclick="makeRelation('<?=$s['id_id']?>');"></div> <!-- bli vän ikon -->
-		<div class="btnBlock" onclick="makeBlock('<?=$s['id_id']?>');"></div> <!-- okänd ikon -->
-		<div class="btnReport"></div> <!-- okänd ikon -->
+		<? makeButton(false,	'makeMail(\''.$s['id_id'].'\')',	'icon_mail.png',	'maila'); ?><!-- fel ikon? -->
+		<? makeButton(false,	'makeRelation(\''.$s['id_id'].'\')',	'icon_friends.png',	'bli vänner'); ?>
+		<? makeButton(false,	'makeBlock(\''.$s['id_id'].'\')',	'',	'blockera'); ?>		<!-- okänd ikon -->
+		<? //makeButton(false,	'',	'',	'rapportera'); ?>		<!-- okänd ikon -->
 <? } ?>
-<!--
-		..<input type="button" class="btn<?=($page == 'view'?'3':'2')?>_min" accesskey="1" onclick="goLoc('<?=l('user', 'view', $s['id_id'])?>');" value="profil" />
-		..<input type="button" class="btn<?=($page == 'gb'?'3':'2')?>_min" accesskey="2" onclick="goLoc('<?=l('user', 'gb', $s['id_id'])?>');" value="gästbok <?=@intval($info['gb_offset'][1])?>" />
-		..<input type="button" class="btn<?=($page == 'gallery'?'3':'2')?>_min" accesskey="3" onclick="goLoc('<?=l('user', 'gallery', $s['id_id'])?>');" value="galleri <?=@intval($info['gal_offset'][1])?>" />
-		..<input type="button" class="btn<?=($page == 'blog'?'3':'2')?>_min" accesskey="4" onclick="goLoc('<?=l('user', 'blog', $s['id_id'])?>');" value="blogg <?=@intval($info['blog_offset'][1])?>" />
-		<input type="button" class="btn<?=($page == 'relations'?'3':'2')?>_min" accesskey="5" onclick="goLoc('<?=l('user', 'relations', $s['id_id'])?>');" value="vänner <?=@intval($info['rel_offset'][1])?>" />
--->
+	<br/>
 <?
+	/*
 	if ($own) {
-		/*
 		if(@intval($info['gb_offset'][1]) != @intval($_SESSION['data']['offsets']['gb_offset'])) $_SESSION['data']['offsets']['gb_offset'] = @intval($info['gb_offset'][1]);
 		if(@intval($info['gal_offset'][1]) != @intval($_SESSION['data']['offsets']['gal_offset'])) $_SESSION['data']['offsets']['gal_offset'] = @intval($info['gal_offset'][1]);
 		if(@intval($info['blog_offset'][1]) != @intval($_SESSION['data']['offsets']['blog_offset'])) $_SESSION['data']['offsets']['blog_offset'] = @intval($info['blog_offset'][1]);
 		if(@intval($info['rel_offset'][1]) != @intval($_SESSION['data']['offsets']['rel_offset'])) $_SESSION['data']['offsets']['rel_offset'] = @intval($info['rel_offset'][1]);
 		if(@intval($info['mail_offset'][1]) != @intval($_SESSION['data']['offsets']['mail_offset'])) $_SESSION['data']['offsets']['mail_offset'] = @intval($info['mail_offset'][1]);
-		*/
-	} elseif($l) {
-?>
-<!--
-		<input type="button" class="btnon btn2_midi" onclick="makeRelation('<?=$s['id_id']?>');" value="bli vän!" />
-		<input type="button" class="btnon btn2_midi" onclick="makeBlock('<?=$s['id_id']?>');" value="blockera!" />
--->
-<?
 	}
+	*/
 ?>
 </div>

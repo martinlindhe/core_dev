@@ -114,6 +114,10 @@
 2007-04-23 Måndag:
 	- webbgränssnittet: jobbat hela dan med den nya designen. gjort toppnavigering, vänstermeny & det mesta av profilsidan, wip...
 
+2007-04-24 Tisdag:
+	- webbgränssnittet: jobbat vidare med nya designen. gjort en funktion för att generera snitsiga knappar för nya webbgränssnittet
+
+
 ***********************************************************************************************************************************
 fortfarande inte medlem?
 http://213.80.11.163/member/forgot/ bort me register text här
