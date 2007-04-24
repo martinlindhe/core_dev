@@ -22,7 +22,7 @@
 	if($own) $user->fix_img();
 	define('U_VISIT', true);
 	require(DESIGN.'head_user.php');
-	
+
 	echo formatText($profile['user_pres'][1], $so, true, $s['id_id']);
 
 	require(DESIGN.'foot_user.php');

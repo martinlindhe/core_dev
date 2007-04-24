@@ -120,10 +120,15 @@
 	- webbgränssnittet: fixade "logout" i toppmenyn
 	- webbgränssnittet: tagit bort lite 360-grafik
 	- webbgränssnittet: ordnat till toppmenyn
-	- webbgränssnittet: blogg: klar med ny design på översikten iaf
+	- webbgränssnittet: blogg - typ klar med ny design
+	- webbgränssnittet: gästbok - typ klar med ny design
+	- webbgränssnittet: galleri - typ klart... inte allt
+	- webbgränssnittet: fixat positionering av mittenfältet i IE, wip...
+	
 
 ***********************************************************************************************************************************
 topp prio:
+
 	* in med nya rubriker & nya knappar överallt
 	* in med nya texter
 	* max 7 tecken i användarnamnet

@@ -1,9 +1,8 @@
-<div class="mainHeader2"><h4><?=$name.(count($menu)?' - ':'').makeMenu($page, $menu)?></h4></div>
-<div class="mainBoxed2">
+<div class="centerMenuBodyWhite">
 <?		
 	dopaging($paging, l('user', 'gallery', $s['id_id'], '0').'p=', '', 'med', STATSTR);
 
-	echo '<table summary="" cellspacing="0" width="586">';
+	echo '<table summary="" cellspacing="0" width="100%">';
 	$restricted = ($own && $lim_v)?true:false;
 	$ti = 0;
 	if (!empty($res) && count($res)) {
@@ -57,7 +56,5 @@
 		echo '<tr><td class="cnt">Inga foton uppladdade.</td></tr>';
 	}
 	echo '</table>';
-
-	dopaging($paging, l('user', 'gallery', $s['id_id'], '0').'p=', '', 'medmin');
 ?>
-</div>
+</div><br/>

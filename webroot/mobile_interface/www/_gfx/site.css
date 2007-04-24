@@ -59,5 +59,12 @@ ul.user_menu a:hover { text-decoration: none; color: #000; }
 }
 
 /* detta är huvudinnehållet */
-#mainContent { margin: 0 0 0 15px; width: 596px; overflow: hidden; }
+#mainContent {
+	margin: 0 0 0 15px;
+	width: 596px;
+	overflow: hidden;
+	position: absolute;
+	top: 140px;
+	left: 176px;
+}
 

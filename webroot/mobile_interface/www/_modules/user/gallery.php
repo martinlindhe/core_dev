@@ -32,19 +32,28 @@
 
 	require(DESIGN.'head_user.php');
 ?>
+	<img src="/_gfx/ttl_gallery.png" alt="Galleri"/><br/><br/>
+<?	
+	if ($own) {
+		makeButton(false, 'makeUpload();', 'icon_gallery.png', 'ladda upp ny');
+		echo '<br/><br/><br/>';
+	}
+?>
 <script type="text/javascript">
 var first = '<?=$first?>'; ext = '<?=$ext?>';
 </script>
 <?
-		if($own) $menu = array('gallery_upload' => array('javascript:makeUpload();', 'ladda upp ny!')); else $menu = array();
+//		if($own) $menu = array('gallery_upload' => array('javascript:makeUpload();', 'ladda upp ny!')); else $menu = array();
 		$paging = paging(1, 20);
 		$res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC", 0, 1);
 		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' LIMIT 1");
 		$name = 'galleri';
 		$all = true;
 		include('gallerylist.php');
-
-		if($own) $menu = array('gallery_upload' => array('javascript:makeUpload(\'priv=1\');', 'ladda upp ny!')); else $menu = array();
+?>
+<img src="/_gfx/ttl_gallery_x.png" alt="Galleri X"/><br/><br/>
+<?
+//		if($own) $menu = array('gallery_upload' => array('javascript:makeUpload(\'priv=1\');', 'ladda upp ny!')); else $menu = array();
 		$paging = paging(1, 20);
 		$res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1' ORDER BY main_id DESC", 0, 1);
 		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1'");
