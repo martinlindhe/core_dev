@@ -116,7 +116,7 @@
 			
 		echo '<form method="post" action="">';
 		echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
-		echo '<input type="submit" class="button" value="Add comment">';
+		echo '<input type="submit" class="button" value="Add comment"/>';
 		echo '</form>';
 	}
 ?>

@@ -36,10 +36,10 @@ CREATE TABLE `tblCategories` (
   `categoryName` varchar(100) NOT NULL default '',
   `categoryType` tinyint(1) unsigned default '0',
   `timeCreated` datetime default NULL,
-  `ownerId` int(10) unsigned NOT NULL default '0',
+  `creatorId` int(10) unsigned NOT NULL default '0',
   `categoryPermissions` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`categoryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 CREATE TABLE `tblComments` (
   `commentId` bigint(20) unsigned NOT NULL auto_increment,
   `commentType` tinyint(1) unsigned NOT NULL default '0',
@@ -52,7 +52,7 @@ CREATE TABLE `tblComments` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (`commentId`)
-) ENGINE=MyISAM AUTO_INCREMENT=405 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=408 DEFAULT CHARSET=utf8;
 CREATE TABLE `tblFiles` (
   `fileId` bigint(20) unsigned NOT NULL auto_increment,
   `fileName` varchar(250) character set utf8 default NULL,
@@ -75,7 +75,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=479 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=530 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblNews` (
   `newsId` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(100) character set utf8 NOT NULL,
@@ -86,8 +86,9 @@ CREATE TABLE `tblNews` (
   `timeEdited` datetime NOT NULL default '0000-00-00 00:00:00',
   `editorId` int(10) unsigned default '0',
   `timeToPublish` datetime NOT NULL default '0000-00-00 00:00:00',
+  `categoryId` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`newsId`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblProblemSites` (
   `siteId` bigint(20) unsigned NOT NULL auto_increment,
   `userId` smallint(5) unsigned NOT NULL default '0',

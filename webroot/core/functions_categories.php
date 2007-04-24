@@ -13,7 +13,7 @@
 		$_name = $db->escape(trim($_name));
 		if (!$_name) return false;
 
-		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",timeCreated=NOW(),ownerId='.$session->id.',creatorId='.$session->id;
+		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",timeCreated=NOW(),creatorId='.$session->id;
 
 		$db->query($q);
 		return $db->insert_id;
@@ -70,9 +70,9 @@
 		if (!$session->id || !is_numeric($_type)) return false;
 		
 		if ($_type == CATEGORY_USERFILES) {
-			$q = 'SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR categoryPermissions=10) AND categoryType>=1 AND categoryType<=10';
+			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType>=1 AND categoryType<=10';
 		} else {		
-			$q = 'SELECT * FROM tblCategories WHERE (ownerId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type;
+			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type;
 		}
 		return $db->getArray($q);
 	}

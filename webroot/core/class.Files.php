@@ -56,7 +56,13 @@ class Files
 		if (isset($config['count_file_views'])) $this->count_file_views = $config['count_file_views'];
 		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
 
-		if (!is_dir(realpath($this->upload_dir))) {
+		if (!is_dir($this->upload_dir)) {
+			//fixme: check if the path 1 level above "upload_dir" exists:
+			/*
+			if (!realpath($this->upload_dir.'/../')) {
+				die('FATAL: Cannot create upload directory at '.$this->upload_dir.'. Please check paths in config.php');
+			}*/
+			
 			$db->log('Creating upload directory');
 			
 			mkdir($this->upload_dir);
