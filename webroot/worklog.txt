@@ -120,6 +120,7 @@
 	- webbgränssnittet: fixade "logout" i toppmenyn
 	- webbgränssnittet: tagit bort lite 360-grafik
 	- webbgränssnittet: ordnat till toppmenyn
+	- webbgränssnittet: blogg: klar med ny design på översikten iaf
 
 ***********************************************************************************************************************************
 topp prio:

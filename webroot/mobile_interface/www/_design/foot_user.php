@@ -74,8 +74,7 @@
 	<td class="lft"><div>'.(@$myinfo['det_sex'][1]?@$myinfo['det_sex'][1]:'-').'</div></td>
 </tr>':'').'
 </table>
-			</div>
-';
+			</div><br/>';
 }
 if(defined('U_VISIT')) {
 	$res = $sql->query("SELECT o.visit_date, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd FROM {$t}uservisit o INNER JOIN {$t}user u ON u.id_id = o.visitor_id AND u.status_id = '1' WHERE o.user_id = '".$s['id_id']."' ORDER BY o.main_id DESC LIMIT ".(isset($_GET['more'])?'10':'5'), 0, 1);
