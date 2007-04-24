@@ -1,3 +1,9 @@
+User Name:  "Unicorn(955971)~  Single User License" (Note two spaces after ~
+character) (The name is case sensitive, and should be entered without
+quotes).
+
+Authorization Code for UltraEdit-32 v13.00:
+"H1N5P-L1I4F-I0O9B-Y8D2S-D7R2J-P7K2M"
 --------------[[platform todo]]--------------
 
 	session/user settings:

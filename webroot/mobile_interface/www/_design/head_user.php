@@ -1,9 +1,6 @@
 <?
 	$info = $user->getcontent($s['id_id'], 'user_head');
 	require('head.php');
-	$uarr = array();
-	if($l) $uarr['top'] = 1;
-	$uarr['noimg'] = 1;
 
 	function makeButton($bool, $js, $img, $text, $number = false)
 	{
@@ -20,7 +17,7 @@
 
 		echo '<tr style="height: 18px">';
 			echo '<td width="3" style="background: url(\'/_gfx/btn_left.png\');"></td>';
-			echo '<td style="padding-left: 19px; padding-right: 4px;">';
+			echo '<td style="padding-left: 19px; padding-right: 4px; padding-top: 1px;">';
 			if ($img) echo '<img src="/_gfx/'.$img.'" style="position: absolute; top: 5px; left: 4px;" alt=""/> ';
 			echo $text;
 			if ($number !== false) echo '&nbsp;&nbsp;'.$number;
@@ -42,7 +39,7 @@
 <div id="mainContent">
 	<div id="userImage"><?=$user->getimg($s['id_id'].$s['u_picid'].$s['u_picd'].$s['u_sex'], $s['u_picvalid'], 1)?></div>
 	<div id="userInfo">
-		<h1><?=$user->getstring($s, '', @$uarr)?></h1>
+		<h1><?=$user->getstring($s, '')?></h1>
 		<div>
 			• civilstånd: <?=(!empty($info['det_civil'][1]))?secureOUT($info['det_civil'][1]):@$det_type[$info['det_civil_type'][1]];?><br />
 			• attityd: <?=@$info['det_attitude'][1]?><br />
@@ -57,16 +54,17 @@
 	<br class="clr" />
 
 	<div id="userMenu">
-		<? makeButton($action=='view',		'goLoc(\''.l('user', 'view', $s['id_id']).'\')',			'icon_profile.png',	'profil'); ?>
-		<? makeButton($action=='gb',			'goLoc(\''.l('user', 'gb', $s['id_id']).'\')',				'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>
-		<? makeButton($action=='blog',		'goLoc(\''.l('user', 'blog', $s['id_id']).'\')',			'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
+		<? makeButton($action=='view',		'goLoc(\''.l('user', 'view', $s['id_id']).'\')',		'icon_profile.png',	'profil'); ?>
+		<? makeButton($action=='gb',			'goLoc(\''.l('user', 'gb', $s['id_id']).'\')',			'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>
+		<? makeButton($action=='blog',		'goLoc(\''.l('user', 'blog', $s['id_id']).'\')',		'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
 		<? makeButton($action=='gallery',	'goLoc(\''.l('user', 'gallery', $s['id_id']).'\')',	'icon_gallery.png',	'galleri', @intval($info['gal_offset'][1]) ); ?>
 
 <? if (!$own) { ?>
-		<? makeButton(false,	'makeMail(\''.$s['id_id'].'\')',	'icon_mail.png',	'maila'); ?><!-- fel ikon? -->
-		<? makeButton(false,	'makeRelation(\''.$s['id_id'].'\')',	'icon_friends.png',	'bli vänner'); ?>
-		<? makeButton(false,	'makeBlock(\''.$s['id_id'].'\')',	'',	'blockera'); ?>		<!-- okänd ikon -->
-		<? //makeButton(false,	'',	'',	'rapportera'); ?>		<!-- okänd ikon -->
+		<? makeButton(false,	'makeChat(\''.$s['id_id'].'\')',			'icon_qchat.png',	'chatta'); ?>
+		<? makeButton(false,	'makeMail(\''.$s['id_id'].'\')',			'icon_mail_new.png',	'maila'); ?>
+		<? makeButton(false,	'makeRelation(\''.$s['id_id'].'\')',	'icon_friends.png',	'bli vän'); ?>
+		<? makeButton(false,	'makeBlock(\''.$s['id_id'].'\')',			'icon_block.png',	'blockera'); ?>
+		<? //makeButton(false,	'',	'icon_abuse.png',	'rapportera'); ?>
 <? } ?>
 	<br/>
 <?

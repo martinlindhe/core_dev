@@ -231,16 +231,25 @@ class user {
 				$arr['account_date'] = $res;
 			}
 		}
-		if ($arr['id_id'] == 'SYS')
+		if ($arr['id_id'] == 'SYS') {
 			return '<span class="bld">SYSTEM</span>';
-		elseif(empty($arr['u_alias']))
+		}
+		
+		if (empty($arr['u_alias'])) {
 			return '<span class="bld">[BORTTAGEN]</span>'; //($this->isOnline($arr['account_date'])
-		else {
-			$own = ($arr['id_id'] == $this->id?true:false);
-		  	$mail_add = (!$own)?'<a href="javascript:makeMail(\''.$arr['id_id'].'\');" title="Skriv mail"><img alt="" src="'.OBJ.'mail_write.gif" style="margin: 0 0 -2px 3px;" /></a>':'';
-			return '<span class="nobr">'.(empty($extra['nolink'])?'<a href="'.l('user', 'view', $arr['id_id'.$suffix]).'"':'<span').' class="bld user"><span class="'.($this->isOnline($arr['account_date'.$suffix])?'on':'off').'"'.(!isset($extra['noimg'])?' onmouseover="launchHover(event, \''.$arr['id_id'].'\');" onmouseout="clearHover();"':'').'>'.secureOUT($arr['u_alias'.$suffix]).'</span>'.(empty($extra['nosex'])?' <img alt="'.$sex_name[$arr['u_sex'.$suffix]].'" src="/_objects/icon_'.$arr['u_sex'.$suffix].'1.gif" />':'').(empty($extra['noage'])?'<span class="sex'.$arr['u_sex'.$suffix].'">'.$this->doage($arr['u_birth'.$suffix]).'</span>':'').(empty($extra['nolink'])?'</a>':'</span>').(!empty($extra['top']) && !$own?'<a href="javascript:makeGb(\''.$arr['id_id'].'\''.(($extra && @$extra['gb'])?', \'&amp;a='.$extra['gb'].'\'':'').');" title="Skriv GB-inlägg"><img alt="Skriv GB-inlägg" src="'.OBJ.'guestbook_write.gif" style="margin: 0 0 -2px 3px;" /></a><a href="javascript:makeChat(\''.$arr['id_id'].'\');"><img alt="Öppna privatchat" src="'.OBJ.'chat_write.gif" style="margin: 0 0 -2px 3px;" /></a>'.$mail_add:'').'</span>';
 		}
 
+		//$own = ($arr['id_id'] == $this->id?true:false);
+	  //$mail_add = (!$own)?'<a href="javascript:makeMail(\''.$arr['id_id'].'\');" title="Skriv mail"><img alt="" src="'.OBJ.'mail_write.gif" style="margin: 0 0 -2px 3px;" /></a>':'';
+		$result = '<span class="nobr">';
+		$result .= (empty($extra['nolink'])?'<a href="'.l('user', 'view', $arr['id_id'.$suffix]).'" class="bld user">':'<span class="bld user">');
+		$result .= '<span class="'.($this->isOnline($arr['account_date'.$suffix])?'on':'off').'"'.(!isset($extra['noimg'])?' onmouseover="launchHover(event, \''.$arr['id_id'].'\');" onmouseout="clearHover();"':'').'>'.secureOUT($arr['u_alias'.$suffix]).'</span>';
+		$result .= (empty($extra['nosex'])?' <img alt="'.$sex_name[$arr['u_sex'.$suffix]].'" src="/_objects/icon_'.$arr['u_sex'.$suffix].'1.gif" />':'');
+		$result .= (empty($extra['noage'])?'<span class="sex'.$arr['u_sex'.$suffix].'">'.$this->doage($arr['u_birth'.$suffix]).'</span>':'');
+		$result .= (empty($extra['nolink'])?'</a>':'</span>');
+		$result .= '</span>';
+		return $result;
+		//(!empty($extra['top']) && !$own?'<a href="javascript:makeGb(\''.$arr['id_id'].'\''.(($extra && @$extra['gb'])?', \'&amp;a='.$extra['gb'].'\'':'').');" title="Skriv GB-inlägg"><img alt="Skriv GB-inlägg" src="'.OBJ.'guestbook_write.gif" style="margin: 0 0 -2px 3px;" /></a><a href="javascript:makeChat(\''.$arr['id_id'].'\');"><img alt="Öppna privatchat" src="'.OBJ.'chat_write.gif" style="margin: 0 0 -2px 3px;" /></a>'.$mail_add:'').'</span>';
 	}
 
 	/* By Martin: Returns clickable username, age & gender, suited for mobile display */
