@@ -37,7 +37,7 @@ we will look into this site as soon as possible!<br/><br/>
 			<input type="radio" name="type" id="radio2" value="2"/>
 			<label for="radio2">Blocking rules breaks the site</label><br/><br/><br/>
 			Comments (optional):<br/>
-			<textarea name="comment" rows="7" cols="84"></textarea><br/><br/>
+			<textarea name="comment" rows="7" cols="60"></textarea><br/><br/>
 			<input type="submit" class="button" value="Report site"/>
 	</td></tr>
 </table>

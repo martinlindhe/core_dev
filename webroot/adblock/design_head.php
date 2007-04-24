@@ -40,7 +40,7 @@
 		<? $cur = basename($_SERVER['SCRIPT_NAME']); ?>
 		<li><?=($cur=='index.php'?'<strong>':'');?><a href="<?=$r?>index.php">Home</a><?=($cur=='index.php'?'</strong>':'')?></li>
 		<li><?=($cur=='news.php'?'<strong>':'')?><a href="<?=$r?>news.php">News</a><?=($cur=='news.php'?'</strong>':'')?></li>
-		<li><?=($cur=='wiki.php'?'<strong>':'')?><a href="<?=$r?>wiki.php?View:Subscribe">Subscribe</a><?=($cur=='wiki.php'?'</strong>':'')?></li>
+		<li><a href="<?=$r?>wiki.php?View:Subscribe">Subscribe</a></li>
 		<li><?=($cur=='download.php'?'<strong>':'')?><a href="<?=$r?>download.php">Download</a><?=($cur=='download.php'?'</strong>':'')?></li>
 		<li><?=($cur=='recent.php'?'<strong>':'')?><a href="<?=$r?>recent.php">Recent changes</a><?=($cur=='recent.php'?'</strong>':'')?></li>
 <?
