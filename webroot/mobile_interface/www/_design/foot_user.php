@@ -1,7 +1,17 @@
 </div>
 
 <div id="rightMenu">
-<? if (!defined('U_NOINFO')) {
+<? if (defined('U_GBWRITE')) { ?>
+			<div class="leftMenuHeader">skriv i gästboken</div>
+			<div class="leftMenuBodyWhite">
+				<form name="msg" action="<?=l('user', 'gbwrite', $s['id_id'])?>main=1" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert(\'Felaktigt meddelande: Minst 2 tecken!\'); this.ins_cmt.select(); return false; }">
+				<textarea class="txt msgWrite" name="ins_cmt"></textarea>
+				<input type="submit" class="btn2_sml r" value="skicka!" /><br class="clr" />
+				</form>
+			</div><br/>
+<? }
+
+	if (!defined('U_NOINFO')) {
 		echo '
 			<div class="leftMenuHeader">personliga fakta</div>
 			<div class="leftMenuBodyWhite">

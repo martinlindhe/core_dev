@@ -137,17 +137,6 @@ function checkTime(toggle) {
 <?
 	}
 
-	if (defined('U_GBWRITE')) {
-?>
-			<div class="smallHeader1"><h4>skriv gästboksinlägg</h4></div>
-			<div class="smallFilled2 cnt pdg_t">
-				<form name="msg" action="<?=l('user', 'gbwrite', $s['id_id'])?>main=1" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert(\'Felaktigt meddelande: Minst 2 tecken!\'); this.ins_cmt.select(); return false; }">
-				<textarea class="txt msgWrite" name="ins_cmt"></textarea>
-				<input type="submit" class="btn2_sml r" value="skicka!" /><br class="clr" />
-				</form>
-			</div>
-<? }
-
 	$contribute = $sql->queryLine("SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM {$t}contribute c LEFT JOIN {$t}user u ON u.id_id = c.con_user AND u.status_id = '1' WHERE c.con_onday = NOW() AND c.status_id = '1' LIMIT 1", 1);
 	$gotcon = (!empty($contribute) && count($contribute))?true:false;
 ?>

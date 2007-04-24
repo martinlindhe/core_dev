@@ -44,20 +44,25 @@
 
 	require(DESIGN.'head_user.php');
 ?>
-<style type="text/css">
-	#blog_text p { margin: 0; padding: 0; }
-</style>
 
-<div class="mainHeader2"><h4><?=secureOUT($res['blog_title'])?> - publicerad: <?=nicedate($res['blog_date'])?> - <a class="wht" href="<?=l('user', 'blog', $s['id_id'])?>">tillbaka</a></h4></div>
-<div class="mainBoxed2">
-	<div style="width: 586px; overflow: hidden;" id="blog_text" class="pdg">
+<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
+
+<?
+	//makeButton(false,	'document.location=\''.l('user', 'blog', $s['id_id']).'\'',	'icon_blog.png',	'tillbaka');
+	makeButton(false, 'makeBlogComment('.$s['id_id'].','.$res['main_id'].')', 'icon_mail_new.png', 'skriv kommentar');
+
+	echo '<br/><br/><br/>';
+?>
+
+<div class="centerMenuHeader"><?=secureOUT($res['blog_title'])?> - publicerad: <?=nicedate($res['blog_date'])?></div>
+<div class="centerMenuBodyWhite">
+	<div style="width: 586px; overflow: hidden; margin: 0; padding: 0;" class="pdg">
 		<?=formatText($res['blog_cmt'])?>
 	</div>
-	<br class="clr" />
-</div>
+</div><br/>
 
-<div class="mainHeader2"><a name="cmt"></a><h4>kommentarer - <a class="wht" href="javascript:makeBlogComment('<?=$s['id_id']?>', '<?=$res['main_id']?>');">skriv kommentar</a></h4></div>
-	<div class="mainBoxed2">
+<div class="centerMenuHeader">kommentarer</div>
+	<div class="centerMenuBodyWhite">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
 	$c_paging['co'] = $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}userblogcmt WHERE blog_id = '".$res['main_id']."' AND status_id = '1'");
@@ -69,12 +74,17 @@
 			$msg_own = ($val['id_id'] == $l['id_id'] || $own || $isAdmin)?true:false;
 			$odd = !$odd;
 			echo
-				'<table cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
+				'<table summary="" cellspacing="0" style="width: 100%;'.($odd?'':' background: #ecf1ea;').'">
 				<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).'</h5><div class="r"></div><br class="clr" />
 				'.secureOUT($val['c_msg']).'
-				</td></tr>
-				<tr><td class="btm rgt pdg">&nbsp;'.(($msg_own)?'<a href="'.l('user', 'blog', $s['id_id'], $res['main_id']).'&del_msg='.$val['main_id'].'" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'blog', $s['id_id'], $res['main_id']).'del_msg='.$val['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" style="margin-bottom: -2px;" /></a>':'').'</td></tr>
-				</table>';
+				</td>';
+				if ($msg_own) {
+					echo '<td class="pdg" width="66"><br/>';
+					makeButton(false, 'if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'blog', $s['id_id'], $res['main_id']).'del_msg='.$val['main_id'].'\');', 'icon_delete.png', 'radera');
+					echo '</td>';
+				}
+				echo '</tr>';
+			echo '</table>';
 		}
 	} else {
 		echo '<table cellspacing="0" width="100%"><tr><td class="cnt pdg spac">Inga kommentarer.</td></tr></table>';
