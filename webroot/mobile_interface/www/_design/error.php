@@ -9,6 +9,5 @@
 			</div>
 		</div>
 <?
-	require(DESIGN.'foot_info.php');
 	require(DESIGN.'foot.php');
 ?>

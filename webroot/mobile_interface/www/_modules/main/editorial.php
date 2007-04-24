@@ -45,6 +45,5 @@ echo '<h3>'.extOUT($inf['ad_title']).'</h3>'.extOUT($inf['ad_cmt']);
 		</div>
 <br class="clr" />
 <?
-	#require(DESIGN.'foot_info.php');
 	require(DESIGN.'foot.php');
 ?>

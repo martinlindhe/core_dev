@@ -74,7 +74,7 @@ isLoaded = true;
 
 	function getINFO() {
 		document.getElementById('reloader').className = 'txt_chead';
-		DoCallback('foot_info.php');
+		//DoCallback('foot_info.php');
 	}
 
 	function outputINFO(xmlGet) {

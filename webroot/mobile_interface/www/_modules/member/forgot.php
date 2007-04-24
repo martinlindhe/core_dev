@@ -60,6 +60,5 @@
 			</div>
 			</div>
 <?
-	include(DESIGN.'foot_info.php');
 	include(DESIGN.'foot.php');
 ?>

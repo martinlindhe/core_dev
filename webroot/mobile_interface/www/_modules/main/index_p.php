@@ -22,6 +22,7 @@
 <meta name="robots" content="follow,index"/>
 <meta name="language" content="sv-SE"/>
 <link rel="stylesheet" type="text/css" title="default" media="screen" href="/_objects/_styles/screen.css"/>
+<link rel="stylesheet" type="text/css" href="/_gfx/site.css"/>
 <link rel="shortcut icon" href="/favicon.ico"/>
 <script src="/_objects/main1.js" type="text/javascript"></script>
 <script src="/_objects/swfobject.js" type="text/javascript"></script></head>
@@ -45,9 +46,9 @@
 	<div id="contentContainer" style="position: absolute; top: 100px">
 		<div class="mainContent">
 
-			<div class="mainHeader2"><h4>logga in</h4></div>
-			<div class="mainBoxed2">
-				<div style="float: left; width: 360px;"><p><?=gettxt('index_text', 0, 1)?></p></div>
+			<div class="centerMenuHeader">logga in</div>
+			<div class="centerMenuBodyWhite">
+				<div style="float: left; width: 320px;"><p><?=gettxt('index_text', 0, 1)?></p></div>
 
 				<div style="float: right; margin: 5px 5px 0 0; text-align: right;">
 					<form name="l" action="/member/login" method="post">
@@ -59,25 +60,26 @@
 
 					<script type="text/javascript">if(document.l.a.value.length > 0) document.l.p.focus(); else document.l.a.focus();</script>
 					<input type="button" onclick="goLoc('/member/forgot/');" class="btn2_min" value="glömt?" style="margin-top: 3px;" />
+					<input type="button" onclick="goLoc('/member/register/');" class="btn2_min" value="bli medlem" style="margin-top: 3px;" />
 					<input type="submit" class="btn2_min" value="logga in!" style="" />
 					</form>
 				</div>
-			</div>
+			</div><br/>
 <?
 	$res = $sql->query("SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.level_id, u.account_date, u_picid, u.u_picvalid, u.u_picd FROM {$t}userlogin s INNER JOIN {$t}user u ON u.id_id = s.id_id AND u.status_id = '1' ORDER BY s.main_id DESC LIMIT 11", 0, 1);
 	if (count($res)) {
-		echo '<div class="mainHeader2" style="clear: both"><h4>senast inloggade</h4></div>';
-		echo '<div class="mainBoxed2">';
+		echo '<div class="centerMenuHeader" style="clear: both">senast inloggade</div>';
+		echo '<div class="centerMenuBodyWhite">';
 		echo '<div style="padding: 5px 5px 4px 12px;">';
 		foreach($res as $row) {
 			echo $user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 0, array('text' => $user->getministring($row)));
 		}
-		echo '</div></div>';
+		echo '</div></div><br/>';
 	}
 	$res = $sql->query("SELECT main_id, picd, pht_cmt FROM {$t}userphoto WHERE view_id = '1' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC LIMIT 7", 0, 1);
 	if(count($res)) {
-		echo '<div class="mainHeader2"><h4>senaste galleribilder</h4></div>';
-		echo '<div class="mainBoxed2">';
+		echo '<div class="centerMenuHeader">senaste galleribilder</div>';
+		echo '<div class="centerMenuBodyWhite">';
 		echo '<div style="padding: 5px 5px 4px 12px;">';
 		foreach($res as $row) {
 			echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.jpg" style="margin-right: 10px;" onerror="this.style.display = \'none\';" />';

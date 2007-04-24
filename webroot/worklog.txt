@@ -124,6 +124,7 @@
 	- webbgränssnittet: gästbok - typ klar med ny design
 	- webbgränssnittet: galleri - typ klart... inte allt
 	- webbgränssnittet: fixat positionering av mittenfältet i IE, wip...
+	- webbgränssnittet: piffat upp startsidan i utloggat läge. lagt till "registrera dig" knapp
 	
 
 ***********************************************************************************************************************************
@@ -133,12 +134,6 @@ topp prio:
 	* in med nya texter
 	* max 7 tecken i användarnamnet
 
-
-
-fortfarande inte medlem?
-http://213.80.11.163/member/forgot/ bort me register text här
-
-http://213.80.11.163/member/register/ ha text här
 
 
 
