@@ -66,6 +66,7 @@
 		$text = str_ireplace('[u]', '<u>', $text);
 		$text = str_ireplace('[/u]', '</u>', $text);
 
+		$text = str_ireplace("[hr]\n", '<hr/>', $text);	//hack. a better solution would be to trim all whitespace directly following a [hr] tag
 		$text = str_ireplace('[hr]', '<hr/>', $text);
 
 		//code block, example: [code]text text[/code]
