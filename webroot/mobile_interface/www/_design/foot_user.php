@@ -3,8 +3,8 @@
 <div id="rightMenu">
 <? if (!defined('U_NOINFO')) {
 		echo '
-			<div class="smallHeader1"><h4>personliga fakta</h4></div>
-			<div class="smallBoxed1">
+			<div class="leftMenuHeader">personliga fakta</div>
+			<div class="leftMenuBodyWhite">
 			<div class="l mrg">'.str_replace(', ', '<br />', $user->tagline($s['u_pst'])).'</div>
 			'.($s['u_pstlan_id']?'<div class="pdg r"><img alt="'.$user->tagline($s['u_pst']).'" src="'.OBJ.'loc1_'.$s['u_pstlan_id'].'.gif" /></div>':'').'
 			<br class="clr" />
@@ -12,15 +12,16 @@
 				<b>• inloggningar:</b> '.@intval($info['login_offset'][1]).'<br />
 				<b>• besökare:</b> '.@intval($info['visit_cnt'][1]).'<br />
 			</div>
-			</div>';
+			</div><br/>';
+			
 	}
 
 	if (@!$own && $l) {
 	$txt = array('age' => 'Ålder', 'sex' => 'Sexliv', 'children' => 'Barn', 'music' => 'Musiksmak', 'tobacco' => 'Tobak', 'alcohol' => 'Alkohol', 'wants' => 'Vill ha', 'civil' => 'Civilstatus', 'attitude' => 'Attityd');
 	$myinfo = $user->getcontent($l['id_id'], 'user_head');
 	echo '
-			<div class="smallHeader3"><h4>matchmaking</h4></div>
-			<div class="smallFilled3">
+			<div class="leftMenuHeader">matchmaking</div>
+			<div class="leftMenuBodyWhite">
 <table summary="" cellspacing="0" id="diverse">
 <tr>
 	<td class="rgt"><div class="usr">'.$user->getstring($s, '', array('noage' => 1)).'</div></td>
@@ -79,8 +80,8 @@
 if(defined('U_VISIT')) {
 	$res = $sql->query("SELECT o.visit_date, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd FROM {$t}uservisit o INNER JOIN {$t}user u ON u.id_id = o.visitor_id AND u.status_id = '1' WHERE o.user_id = '".$s['id_id']."' ORDER BY o.main_id DESC LIMIT ".(isset($_GET['more'])?'10':'5'), 0, 1);
 	echo '<a name="visit"></a>
-	<div class="smallHeader2"><h4>senaste besökare - <a href="'.l('user', 'view', $s['id_id']).(!isset($_GET['more'])?'&amp;more#visit">fler':'#visit">färre').'</a></h4></div>
-	<div class="smallBoxed2">
+	<div class="leftMenuHeader">besökare - <a href="'.l('user', 'view', $s['id_id']).(!isset($_GET['more'])?'&amp;more#visit">fler':'#visit">färre').'</a></div>
+	<div class="leftMenuBodyWhite">
 	<ul class="userlist">
 ';
 	if(!empty($res) && count($res)) {

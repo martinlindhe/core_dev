@@ -19,11 +19,16 @@ ul#top_menu a { color: #fff; text-decoration: none; }
 #logout { position: absolute; top: 103px; left: 958px; }
 
 .leftMenuHeader { width: 176px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header1.png'); background-repeat: no-repeat; }
-.leftMenuBodyGreen { width: 176px; background: #75C66A; }
 .leftMenuFooter { width: 176px; height: 22px; background: url('/_gfx/left_menu_footer1.png'); background-repeat: no-repeat; margin-bottom: 10px; }
-
-.leftMenuBodyGray { width: 173px; background: #b2b7b0; border-top: 1px solid #ccc; border-left: 1px solid #75C66A; border-right: 1px solid #75C66A; }
 .leftMenuFooterGray { width: 176px; height: 2px; background: url('/_gfx/left_menu_footer_gray.png'); background-repeat: no-repeat; margin-bottom: 10px; }
+
+.leftMenuBodyGreen { width: 176px; background: #75C66A; }
+.leftMenuBodyGray { width: 173px; background: #b2b7b0; border-top: 1px solid #ccc; border-left: 1px solid #75C66A; border-right: 1px solid #75C66A; }
+.leftMenuBodyWhite { width: 174px; background: #fff; border: 1px solid #ccc; }
+
+.centerMenuHeader { width: 596px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header2.png'); background-repeat: no-repeat; }
+.centerMenuBodyWhite { width: 594px; background: #fff; border: 1px solid #ccc; }
+
 
 ul.user_menu { list-style-type: none; margin: 0 0 0 10px; padding: 6px 0 0 0; }
 ul.user_menu li { padding-top: 5px; height: 19px; font-size: 12px; background: url('/_gfx/left_menu_line.png'); background-repeat: no-repeat; }

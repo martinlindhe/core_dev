@@ -117,11 +117,12 @@
 2007-04-24 Tisdag:
 	- webbgränssnittet: jobbat vidare med nya designen. gjort en funktion för att generera snitsiga knappar för nya webbgränssnittet
 	- webbgränssnittet: tog bort "quickchat/gästbok/maila" knapparna vid profilnamnet på profilsidan, ersätts av knappar i profil-menyn
-
+	- webbgränssnittet: fixade "logout" i toppmenyn
+	- webbgränssnittet: tagit bort lite 360-grafik
+	- webbgränssnittet: ordnat till toppmenyn
 
 ***********************************************************************************************************************************
 topp prio:
-	* fixa floating högermenyn
 	* in med nya rubriker & nya knappar överallt
 	* in med nya texter
 	* max 7 tecken i användarnamnet

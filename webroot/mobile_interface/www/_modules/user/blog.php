@@ -28,9 +28,14 @@
 	$page = 'blog';
 
 	require(DESIGN.'head_user.php');
+
+	//<div class="centerMenuHeader"><?=($own?makeMenu(0, array('blog_write' => array('javascript:makeBlog(\''.$l['id_id'].'\',\'\')', 'skriv nytt'))):'')</div>
 ?>
-			<div class="mainHeader2"><h4>blogg<?=($own?' - '.makeMenu(0, array('blog_write' => array('javascript:makeBlog(\''.$l['id_id'].'\',\'\')', 'skriv nytt'))):'')?></h4></div>
-			<div class="mainBoxed2">
+			<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
+			<? makeButton(false,	'makeBlog(\''.$l['id_id'].'\')',	'icon_blog.png',	'skriv nytt'); ?>
+			<br/><br/>
+
+			<div class="centerMenuBodyWhite">
 <? if(!empty($res) && count($res)) dopaging($paging, l('user', 'blog', $s['id_id'], '0').'p=', '', 'med', STATSTR); ?>
 <table summary="" cellspacing="0" width="586">
 <?
