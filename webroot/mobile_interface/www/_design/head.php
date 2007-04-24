@@ -33,14 +33,14 @@ function checkTime(toggle) {
 		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" /></a></div>
 
 		<ul id="top_menu">
-			<li><a href="/main/start/">START</a></li>
-			<li><a href="/list/users/">SÖK</a></li>
-			<li><a href="/forum/start/">FORUM</a></li>
-			<li><a href="/main/thought/">TYCK TILL</a></li>
-			<li><a href="/main/public/">SURFCAFE</a></li>
-			<li><a href="/text/radio/">WEBBRADIO</a></li>
-			<li><a href="/main/faq/">HJÄLP &amp; FAQ</a></li>
-			<li><a href="/text/contact/">KONTAKT</a></li>
+			<li><a href="/main/start/">start</a>&nbsp;</li>
+			<li><a href="/list/users/">sök</a>&nbsp;</li>
+			<li><a href="/forum/start/">forum</a>&nbsp;</li>
+			<li><a href="/main/thought/">tyck till</a>&nbsp;</li>
+			<li><a href="/main/public/">surfcafe</a>&nbsp;</li>
+			<li><a href="/text/radio/">webbradio</a>&nbsp;</li>
+			<li><a href="/main/faq/">hjälp &amp; faq</a>&nbsp;</li>
+			<li><a href="/text/contact/">kontakt</a>&nbsp;</li>
 		</ul>
 <?
 	if($l) {
@@ -151,7 +151,7 @@ function checkTime(toggle) {
 	$contribute = $sql->queryLine("SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM {$t}contribute c LEFT JOIN {$t}user u ON u.id_id = c.con_user AND u.status_id = '1' WHERE c.con_onday = NOW() AND c.status_id = '1' LIMIT 1", 1);
 	$gotcon = (!empty($contribute) && count($contribute))?true:false;
 ?>
-			<div class="leftMenuHeader">dagens visdom</div>
+			<div class="leftMenuHeader">titta hit</div>
 			<div class="leftMenuBodyGray">
 				<?=($gotcon?'<div class="smallBoxed pdg">'.$user->getstring($contribute).'</div>':'')?>
 				<div class="leftMenuBodyGray">

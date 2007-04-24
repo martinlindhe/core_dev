@@ -9,9 +9,9 @@
 #top_ad { position: absolute; top: 20px; left: 352px; border: 1px solid #b4b9b3; }
 #top_ad img { margin: 1px; }
 
-ul#top_menu { list-style-type: none; position: absolute; left: 20px; top: 102px; margin: 0; padding: 0; }
-ul#top_menu li { margin-top: 3px; display: inline; font-size: 15px; font-family: Arial; font-weight: bold; }
-ul#top_menu a { color: #fff; }
+ul#top_menu { list-style-type: none; position: absolute; left: 20px; top: 99px; margin: 0; padding: 0; }
+ul#top_menu li { margin-top: 3px; display: inline; font-size: 16px; }
+ul#top_menu a { color: #fff; text-decoration: none; }
 
 
 #userfind { position: absolute; top: 75px; left: 838px; }

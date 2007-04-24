@@ -66,7 +66,7 @@
 		<? makeButton(false,	'makeBlock(\''.$s['id_id'].'\')',			'icon_block.png',	'blockera'); ?>
 		<? //makeButton(false,	'',	'icon_abuse.png',	'rapportera'); ?>
 <? } else {?>
-		<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'profile', '0').'&amp;go=1\')',	'icon', 'ändra profil'); ?>
+		<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'profile', '0').'&amp;go=1\')',	'icon_settings.png', 'ändra profil'); ?>
 <? } ?>
 	<br/>
 <?

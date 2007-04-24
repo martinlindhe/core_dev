@@ -1,8 +1,8 @@
 </div>
 
 <div id="rightMenu">
-<?
-if(!defined('U_NOINFO')) echo '
+<? if (!defined('U_NOINFO')) {
+		echo '
 			<div class="smallHeader1"><h4>personliga fakta</h4></div>
 			<div class="smallBoxed1">
 			<div class="l mrg">'.str_replace(', ', '<br />', $user->tagline($s['u_pst'])).'</div>
@@ -13,8 +13,9 @@ if(!defined('U_NOINFO')) echo '
 				<b>• besökare:</b> '.@intval($info['visit_cnt'][1]).'<br />
 			</div>
 			</div>';
+	}
 
-if(@!$own && $l) {
+	if (@!$own && $l) {
 	$txt = array('age' => 'Ålder', 'sex' => 'Sexliv', 'children' => 'Barn', 'music' => 'Musiksmak', 'tobacco' => 'Tobak', 'alcohol' => 'Alkohol', 'wants' => 'Vill ha', 'civil' => 'Civilstatus', 'attitude' => 'Attityd');
 	$myinfo = $user->getcontent($l['id_id'], 'user_head');
 	echo '
