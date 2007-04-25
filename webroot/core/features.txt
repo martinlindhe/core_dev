@@ -19,8 +19,9 @@
 ==== File areas ====
 		- There's a generic "file area" component which you can configure to allow anonymous uploads or not.
 		- The same component also integrates in other components, such as the wiki.
-		- File upload progress is available thru ajax + php_apc.dll extension
+		- File upload progress is available thru ajax + php_apc.dll extension (optional)
 		- Image rotate is available
+		- Automatically converts uploaded BMP:s to jpeg format using nconvert (optional)
 
 ==== News module ====
 		- Admins can easily publish news on the site

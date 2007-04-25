@@ -16,8 +16,7 @@ User Name:  "Unicorn(955971)~  Single User License"
 		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden
 		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments
 		- kunna flytta en fil från en kategori till en annan
-		- kunna konvertera uppladdade .bmp filer genom ett externt program till .png eller .jpg filer
-
+		- byt namn på "allowed_image_types" etc. till "image_types" ( == standardbildformat som alla webbläsare förväntas kunna visa
 
 
 	news modul:
@@ -122,6 +121,7 @@ X = hi prio task
 	- janina: fixade lite småbuggar som gjorde att janina-sidan inte funka längre pga core rewrite
 	- lyrics: import_tracks.php: cleanup & gjort den funktionell igen
 	- admin: compat check: identifierar om gd är installerat
+	- files: konverterar automatiskt uppladdade bmp bilder till jpeg
 
 
 2007.04.22:

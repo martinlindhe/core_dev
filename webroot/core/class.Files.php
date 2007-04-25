@@ -38,6 +38,8 @@ class Files
 	public $anon_uploads					= false;	//allow unregisterd users to upload files
 	private $apc_uploads					= false;		//enable support for php_apc + php_uploadprogress calls
 
+	private $bmp_convert					= true;		//uses nconvert to convert bmp:s into jpeg, http://perso.orange.fr/pierre.g/xnview/en_ncdownload.html
+
 	function __construct(array $config)
 	{
 		global $db;
@@ -335,6 +337,7 @@ class Files
 		}*/
 
 		$filesize = filesize($FileData['tmp_name']);
+		//maybe todo: flytta inserten till handleImageUpload / handleGeneralUpload istället?
   	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
   	$db->query($q);
   	$fileId = $db->insert_id;
@@ -353,13 +356,28 @@ class Files
 	{
 		global $db;
 
+		list($file_firstname, $file_lastname) = explode('.', strtolower(basename(strip_tags($FileData['name']))));
+		switch ($file_lastname) {
+			case 'bmp':
+				$c = 'nconvert -out jpeg -q '.$this->image_jpeg_quality.' -o c:\nc_outfile.jpg '.$FileData['tmp_name'];
+				exec($c);
+				unlink($FileData['tmp_name']);
+				rename('c:\nc_outfile.jpg', $FileData['tmp_name']);
+				$filesize = filesize($FileData['tmp_name']);
+				$q = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$db->escape($file_firstname).'.jpg",fileSize='.$filesize.' WHERE fileId='.$fileId;
+				$db->query($q);
+				$this->handleImageUpload($fileId, $FileData);
+				return true;
+		}
+
 		//Move the uploaded file to upload directory
 		$uploadfile = $this->upload_dir.$fileId;
 		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) {
 			chmod($uploadfile, 0777);
-			return $fileId;
+			return true;
 		}
 		$db->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+		return false;
 	}
 
 	/* Handle image upload, used internally only */
