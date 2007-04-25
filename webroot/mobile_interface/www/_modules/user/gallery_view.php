@@ -88,7 +88,7 @@
 
 
 <div class="centerMenuHeader">kommentarer</div>
-	<div class="centerMenuBodyWhite">
+<div class="centerMenuBodyWhite">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
 	$c_paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphotocmt WHERE photo_id = '".$res['main_id']."' AND status_id = '1'");
@@ -118,9 +118,8 @@
 		echo '<table summary="" cellspacing="0" width="100%"><tr><td class="cnt pdg spac">Inga kommentarer.</td></tr></table>';
 	}
 ?>
-	</div>
 </div>
+
 <?
 	require(DESIGN.'foot_user.php');
-	require(DESIGN.'foot.php');
 ?>

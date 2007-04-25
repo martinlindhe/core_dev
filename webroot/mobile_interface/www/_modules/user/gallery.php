@@ -60,9 +60,6 @@ var first = '<?=$first?>'; ext = '<?=$ext?>';
 		$name = 'galleri x';
 		$all = $allowed;
 		include('gallerylist.php');
-?>
-		</div>
-<?
+
 	require(DESIGN.'foot_user.php');
-	require(DESIGN.'foot.php');
 ?>

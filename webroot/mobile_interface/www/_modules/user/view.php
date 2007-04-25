@@ -26,5 +26,4 @@
 	echo formatText($profile['user_pres'][1], $so, true, $s['id_id']);
 
 	require(DESIGN.'foot_user.php');
-	require(DESIGN.'foot.php');
 ?>

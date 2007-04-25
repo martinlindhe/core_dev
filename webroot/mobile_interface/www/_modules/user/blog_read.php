@@ -94,5 +94,4 @@
 </div>
 <?
 	require(DESIGN.'foot_user.php');
-	require(DESIGN.'foot.php');
 ?>

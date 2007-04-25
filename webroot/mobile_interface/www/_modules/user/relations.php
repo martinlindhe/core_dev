@@ -69,8 +69,8 @@
 	$page = 'relations';
 
 	require(DESIGN.'head_user.php');
-	if ($own && !$blocked) {
-		
+
+	if ($own && !$blocked) {		
 		//paus är förfrågningar som andra skickat till dig
 		$paus = getRelationRequestsToMe();
 		
@@ -78,11 +78,11 @@
 		$wait = getRelationRequestsFromMe();
 		require("relations_user.php");
 	}
+
 	$page = 'friends';
 	$blocked = $is_blocked;
 	if($blocked) $page = 'blocked';
 	$menu = array('friends' => array(l('user', 'relations'), 'vänner'), 'blocked' => array(l('user', 'relations').'&amp;blocked', 'ovänner'));
-
 ?>
 			<?=($own?'<div class="mainHeader2"><h4>'.makeMenu($page, $menu).'</h4></div>':'<div class="mainHeader2"><h4>vänner</h4></div>')?>
 			<div class="mainBoxed2">
@@ -138,8 +138,7 @@ if(!empty($res) && count($res)) {
 </table>
 <? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&amp;ord='.$thisord, 'medmin'); ?>
 		</div>
-	</div>
+
 <?
 	require(DESIGN.'foot_user.php');
-	require(DESIGN.'foot.php');
 ?>
