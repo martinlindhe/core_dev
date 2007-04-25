@@ -23,6 +23,7 @@
 	$config['session']['allow_registration'] = false;
 	$session = new Session($config['session']);
 	
+	$config['files']['apc_uploads'] = false;
 	$config['files']['count_file_views'] = true;
 	$config['files']['image_max_width'] = 800;
 	$config['files']['image_max_height'] = 570;

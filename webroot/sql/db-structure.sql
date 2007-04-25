@@ -787,7 +787,7 @@ CREATE TABLE `tblFiles` (
   `timeUploaded` datetime NOT NULL,
   `cnt` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`fileId`)
-) ENGINE=MyISAM AUTO_INCREMENT=81 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblLogs` (
   `entryId` mediumint(8) unsigned NOT NULL auto_increment,
   `entryText` text character set utf8 NOT NULL,
@@ -796,7 +796,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblUsers` (
   `userId` int(10) unsigned NOT NULL auto_increment,
   `userName` varchar(20) character set utf8 NOT NULL,

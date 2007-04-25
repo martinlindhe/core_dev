@@ -151,7 +151,7 @@ function ajax_get_upload_progress(id,ref)
 		upload_progress_request = new AJAX();
 		upload_progress_request.GET_raw('/core/ajax_upload_progress.php?s='+id+ref, ajax_get_upload_progress_callback);
 //	}
-	setTimeout("ajax_get_upload_progress("+id+","+ref+")", 500);
+	setTimeout("ajax_get_upload_progress("+id+",'"+ref+"')", 500);
 }
 
 function ajax_get_upload_progress_callback()

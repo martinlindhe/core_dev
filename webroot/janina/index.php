@@ -1,8 +1,13 @@
 <?
 	require_once('config.php');
+
+	$_cat = 1;
+	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $_cat = $_GET['c'];
+
+	$title = 'Janina Magnusson - '.getCategoryName($_cat);
 	require('design_head.php');
 
-	$files->showThumbnails(FILETYPE_FILEAREA_UPLOAD, $showCategory);
+	$files->showThumbnails(FILETYPE_FILEAREA_UPLOAD, $_cat);
 ?>
 
 <div id="menu">

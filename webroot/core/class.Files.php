@@ -55,6 +55,7 @@ class Files
 
 		if (isset($config['count_file_views'])) $this->count_file_views = $config['count_file_views'];
 		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
+		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
 
 		if (!is_dir($this->upload_dir)) {
 			//fixme: check if the path 1 level above "upload_dir" exists:
