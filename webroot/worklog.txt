@@ -125,7 +125,13 @@
 	- webbgränssnittet: galleri - typ klart... inte allt
 	- webbgränssnittet: fixat positionering av mittenfältet i IE, wip...
 	- webbgränssnittet: piffat upp startsidan i utloggat läge. lagt till "registrera dig" knapp
-	
+
+2007-04-25 Onsdag:
+	- webbgränssnittet: galleri helt klart
+	- webbgränssnittet: mail nästan helt klart
+	- webbgränssnittet: tyck till sidan klar
+	- webbgränssnittet: skapat en "surfcafe" sida (tom)
+	- webbgränssnittet: ny design på forum
 
 ***********************************************************************************************************************************
 topp prio:

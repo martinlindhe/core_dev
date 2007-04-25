@@ -3,23 +3,16 @@
 
 	$result = performSearch($id);
 
-#if($sexu)
 	$menu = array('user' => array(l('list', 'users'), 'senast inloggade'), 'online' => array(l('list', 'users', '1'), 'visa online'), 'Fonline' => array(l('list', 'users', 'F'), 'tjejer online'), 'Monline' => array(l('list', 'users', 'M'), 'killar online'));
-#else
-#	$menu = array('user' => array(l('list', 'users'), 'senast inloggade'), 'online' => array(l('list', 'users', '1'), 'visa online'));
-
 
 	require(DESIGN.'head.php');
 ?>
-<script type="text/javascript">
-function changePage(p) {
-	document.search.p.value = p;
-	document.search.submit();
-}
-</script>
 
 <div id="bigContent">
-	<div class="bigHeader2"><h4>sök - <?=makeMenu($page, $menu)?></h4></div>
+	
+	<img src="/_gfx/ttl_search.png" alt="Sök användare"/><br/><br/>
+	
+	<div class="bigHeader2">sök - <?=makeMenu($page, $menu)?></div>
 	<div class="bigBoxed2">
 		<form name="search" action="<?=l('list', 'users', '2')?>" method="post">
 		<input type="hidden" name="do" value="1" />
@@ -86,7 +79,6 @@ function changePage(p) {
 			$i = 0;
 			foreach($result['res'] as $row) {
 				$i++;
-				#$gotpic = ($row['u_picvalid'] == '1')?true:false;
 				$gotpic = false;
 				echo '
 					<tr'.(($gotpic)?' onmouseover="this.className = \'t1\'; dumblemumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 1);" onmouseout="this.className = \'\'; mumbledumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 0, 1);"':' onmouseover="this.className = \'t1\';" onmouseout="this.className = \'\';"').'>

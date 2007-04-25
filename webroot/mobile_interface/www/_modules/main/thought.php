@@ -1,7 +1,6 @@
 <?
 	$str = '';
 	$page = 'start';
-	$menu = array('start' => array(l('main','thought'),'start'));
 	if($l) {
 		if(!empty($_POST['ins_cmt'])) {
 			checkBan(1);
@@ -52,29 +51,21 @@
 	require(DESIGN.'head.php');
 ?>
 
-	<table cellspacing="0" summary=""><tr><td>
-		<form action="<?=l('main', 'thought')?>" method="post">
-		<table cellspacing="0" summary="" cellpadding="0" class="pdg" style="width: 400px;">
-			<tr><td><img alt="" src="<?=OBJ?>_heads/head_thought.png" /></td></tr>
-			<tr><td style="padding-bottom: 8px;"><?=gettxt('top-thought')?></td></tr>
-			<?=($l?'<tr><td><textarea class="txt" name="ins_cmt" style="width: 400px; height: 80px;"></textarea></td></tr>':'<tr><td>Du måste vara inloggad för att kunna skriva.</td></tr>')?>
-			<tr><td align="right" style="padding-bottom: 8px;"><input type="button" class="btn2_sml" value="Skicka" /></td></tr>
-		</table>
-		</form>
-	</td><td>
-		<form action="<?=l('main', 'thought')?>" method="post">
-		<table align="right" summary="" cellspacing="0" class="cnti" style="width: 120px;">
-		<tr><td class="cnt"><img alt="" src="<?=OBJ?>_heads/head_search_2.png" style="position: absolute; top: -10px; left: -10px;" /></td></tr>
-		<tr><td class="rgt"><input class="txt" name="s" value="<?=secureOUT($str)?>" style="width: 150px;" /></td></tr>
-		<tr><td class="rgt"><input type="submit" class="btn2_sml" value="Sök" /></td></tr>
-		</table>
-		</form>
-	</td></tr>
-	</table>
-
 <div id="mainContent">
-	<div class="mainHeader2"><h4><?=makeMenu($page, $menu)?></h4></div>
-	<div class="mainBoxed2">
+
+	<?=gettxt('top-thought')?>
+	<form action="<?=l('main', 'thought')?>" method="post">
+	<?=($l?'<textarea class="txt" name="ins_cmt" style="width: 400px; height: 80px;"></textarea>':'Du måste vara inloggad för att kunna skriva.')?>
+	<input type="button" class="btn2_sml" value="Skicka" />
+	</form>
+
+	<form action="<?=l('main', 'thought')?>" method="post">
+	<input class="txt" name="s" value="<?=secureOUT($str)?>" style="width: 150px;" />
+	<input type="submit" class="btn2_sml" value="Sök" />
+	</form>
+	<br/>
+
+	<div class="centerMenuBodyWhite">
 <?
 	dopaging($paging, l('main', 'thought'), '', 'med', STATSTR);
 	if(count($gb) && !empty($gb)) {

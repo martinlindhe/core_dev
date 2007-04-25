@@ -224,3 +224,17 @@ function openMail(th, id) {
 	th.className = th.className.replace('act_bg', '');
 	makeBig(id);
 }
+
+var faq_oldsel = 0;
+function selectFAQ(sel) {
+	if(faq_oldsel) {
+		document.getElementById('F' + faq_oldsel).className = '';
+	}
+	document.getElementById('F' + sel).className = 'wht';
+	faq_oldsel = sel;
+}
+function changePage(p) {
+	document.search.p.value = p;
+	document.search.submit();
+}
+

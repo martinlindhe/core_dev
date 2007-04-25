@@ -22,6 +22,9 @@
 	} elseif($action == 'poll') {
 		require('poll.php');
 		exit;
+	} elseif($action == 'surfcafe') {
+		require('surfcafe.php');
+		exit;
 	} elseif($action == 'editorial') {
 		require('editorial.php');
 		exit;

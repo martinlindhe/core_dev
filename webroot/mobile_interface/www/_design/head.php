@@ -37,7 +37,7 @@ function checkTime(toggle) {
 			<li><a href="/list/users/">sök</a> | </li>
 			<li><a href="/forum/start/">forum</a> | </li>
 			<li><a href="/main/thought/">tyck till</a> | </li>
-			<li><a href="/main/public/">surfcafe</a> | </li>
+			<li><a href="/main/surfcafe/">surfcafe</a> | </li>
 			<li><a href="/text/radio/">webbradio</a> | </li>
 			<li><a href="/main/faq/">hjälp &amp; faq</a> | </li>
 			<li><a href="/text/contact/">kontakt</a></li>

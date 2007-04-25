@@ -67,16 +67,19 @@
 	$menu = array('start' => array(l('forum', 'start'), 'start'), 'list' => array(l('forum', 'list', $r['main_id']), secureOUT($r['main_ttl'])), 'read' => array(l('forum', 'read', $res['top_id']), 'läs tråd'));
 	require(DESIGN."head.php");
 ?>
-		<div id="mainContent">
-			<table summary="" cellspacing="0" style="margin-bottom: 20px;">
+	<div id="mainContent">
+		<img src="/_gfx/ttl_forum.png" alt="Forum"/><br/><br/>
+		
+		<table summary="" cellspacing="0" style="margin-bottom: 20px;">
 			<tr>
 				<td style="width: 157px;"><a href="<?=l('forum','list', $r['main_id'])?>" class="bld"><img src="<?=OBJ.$r['main_id']?>.jpg" alt="" onerror="this.src = '<?=OBJ?>forum_nopic.jpg';" width="157" height="74" /></a></td>
 				<td class="pdg"><?=safeOUT($r['main_cmt'])?></td>
 			</tr>
 			<tr><td><?='<h4>'.secureOUT($r['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg'?></td></tr>
-			</table>
-			<div class="mainHeader2"><h4><?=makeMenu($page, $menu)?></h4></div>
-			<div class="mainBoxed2">
+		</table>
+
+			<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
+			<div class="centerMenuBodyWhite">
 <?
 	array_unshift($list, $res);
 	$odd = true;

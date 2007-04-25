@@ -4,7 +4,17 @@
 	$own = $sql->query("SELECT o.main_id, o.top_id, o.sent_ttl, o.sent_date FROM {$t}f o INNER JOIN {$t}f p ON p.main_id = o.top_id AND p.status_id = '1' WHERE o.sender_id = '".secureINS($l['id_id'])."' AND o.status_id = '1' AND o.view_id = '1' ORDER BY o.main_id DESC LIMIT 5");
 	require(DESIGN."head.php");
 ?>
-		<div id="mainContent">
+
+<script type="text/javascript">
+function openText(id, fid) {
+	document.location.href = '<?=l('forum','read');?>' + id + (fid?'&amp;item=' + fid + '#R' + fid:'');
+}
+</script>
+
+	<div id="mainContent">
+
+		<img src="/_gfx/ttl_forum.png" alt="Forum"/><br/><br/>
+
 		<table cellspacing="0" summary="" style="margin-bottom: 20px;">
 		<tr>
 <?
@@ -29,13 +39,9 @@
 ?>
 		</tr>
 		</table>
-		<script type="text/javascript">
-		function openText(id, fid) {
-			document.location.href = '<?=l('forum','read');?>' + id + (fid?'&amp;item=' + fid + '#R' + fid:'');
-		}
-		</script>
-		<div class="mainHeader2"><h4><?=makeMenu($page, $menu)?> - 50 senaste inläggen</h4></div>
-		<div class="mainBoxed2">
+
+		<div class="centerMenuHeader"><?=makeMenu($page, $menu)?> - 50 senaste inläggen</div>
+		<div class="centerMenuBodyWhite">
 <table cellspacing="0" summary="" width="589">
 <?
 if(count($last)) {
