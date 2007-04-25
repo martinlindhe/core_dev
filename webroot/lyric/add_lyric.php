@@ -60,7 +60,7 @@
 		echo '<form name="addlyric" method="post" action="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&amp;track='.$track.'&amp;band='.$band_id.'">';
 		echo 'Song name: <input type="text" name="songname" size="40"/><br/>';
 		echo 'Lyric:<br/>';
-		echo '<textarea name="lyrictext" cols="60" rows="30"></textarea><br/>';
+		echo '<textarea name="lyrictext" cols="60" rows="25></textarea><br/>';
 		echo '<input type="submit" value="Add" class="button"/>';
 		echo '</form>';
 

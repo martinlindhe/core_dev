@@ -85,9 +85,6 @@ function checkTime(toggle) {
 		</form>
 <?
 	}
-	
-	//vänstermenyn här:
-	
 ?>
 	</div>
 
@@ -152,3 +149,4 @@ function checkTime(toggle) {
 			<div class="leftMenuFooterGray"></div>
 
 		</div>	<!-- end smallContent -->
+	</div>

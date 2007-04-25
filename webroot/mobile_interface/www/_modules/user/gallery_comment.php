@@ -52,15 +52,20 @@
 	if($alias) $alias = $alias.': ';
 	require(DESIGN.'head_popup.php');
 ?>
-<form name="msg" action="<?=l('user', 'gallerycomment', $s['id_id'], $res['main_id'])?>&r=<?=$r?>&a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
+
+<form name="msg" action="<?=l('user', 'gallerycomment', $s['id_id'], $res['main_id'])?>&amp;r=<?=$r?>&amp;a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
 		<div class="smallWholeContent cnti mrg">
-			<div class="smallHeader1"><h4>skriv kommentar</h4></div>
-			<div class="smallFilled2 cnt pdg_t">
-				<div class="rgt mrg wht">till: <br /><b><?=secureOUT($res['pht_cmt'])?></b><br /><span class="bg_wht"><?=$user->getstring($s, '', array('nolink' => 1))?></span></div>
-				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 128px;"><?=secureOUT($alias)?></textarea><script type="text/javascript">document.msg.ins_cmt.focus();</script>
+			<div class="leftMenuHeader">skriv kommentar</div>
+			<div class="leftMenuBodyWhite pdg_t">
+				kommentera bilden <br />
+				<b><?=secureOUT($res['pht_cmt'])?></b><br />
+				av <?=$user->getstring($s, '', array('nolink' => 1))?><br/>
+				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 128px;"><?=secureOUT($alias)?></textarea>
+				<script type="text/javascript">document.msg.ins_cmt.focus();</script>
 				<input type="submit" class="btn2_sml r" value="skicka!" style="margin-top: 5px;" /><br class="clr" />
 			</div>
 		</div>
 </form>
+
 </body>
 </html>
