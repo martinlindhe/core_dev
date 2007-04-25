@@ -2,8 +2,6 @@ UltraEdit-32 v13.00:
 User Name:  "Unicorn(955971)~  Single User License"
 "H1N5P-L1I4F-I0O9B-Y8D2S-D7R2J-P7K2M"
 --------------[[platform todo]]--------------
-	hi prio: table summary i lyrics för xhtml compatiblity!
-
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 	X - visa mer inputfält vid loginrutan
@@ -13,9 +11,9 @@ User Name:  "Unicorn(955971)~  Single User License"
 	X	- kunna beskära bilder (blized)
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
-		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden
-		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments
-		- kunna flytta en fil från en kategori till en annan
+		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden (piggy)
+		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
+		- kunna flytta en fil från en kategori till en annan (piggy)
 		- byt namn på "allowed_image_types" etc. till "image_types" ( == standardbildformat som alla webbläsare förväntas kunna visa
 
 
