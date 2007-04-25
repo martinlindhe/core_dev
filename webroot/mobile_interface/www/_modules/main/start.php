@@ -11,32 +11,29 @@
 		
 		if (count($res)) {
 			echo '<div style="float: left">';
-			echo '<div class="mainHeader2" style="width: 292px"><h4>senast bloggarna</h4></div>';
-			echo '<div class="mainBoxed2" style="width: 290px">';
-			echo '<div style="padding: 5px 5px 4px 12px;">';
-			foreach($res as $row) {
+			echo '<div class="centerMenuHeaderSmall">senast bloggarna</div>';
+			echo '<div class="centerMenuBodySmallWhite">';
+		foreach($res as $row) {
 				echo '<a href="'.l('user','blog',$row['id_id'],$row['main_id']).'">'.$row['blog_title'].'</a> av '.$user->getstring($row, '', array('icons' => 1)).'<br/>';
 			}
 			echo '</div></div>';			
-			echo '</div>';
 		}
 
 		//Listar de senaste blog-kommentarerna
-		$res = $sql->query("SELECT * FROM {$t}userblogcmt ORDER BY c_date DESC LIMIT 6", 0, 1);
+		$res = $sql->query("SELECT * FROM {$t}userblogcmt ORDER BY c_date DESC LIMIT 5", 0, 1);
 		
 		if (count($res)) {
 			echo '<div style="float: right">';
-			echo '<div class="mainHeader2" style="width: 292px"><h4>senaste kommentarerna</h4></div>';
-			echo '<div class="mainBoxed2" style="width: 290px">';
-			echo '<div style="padding: 5px 5px 4px 12px;">';
+			echo '<div class="centerMenuHeaderSmall">senaste kommentarerna</div>';
+			echo '<div class="centerMenuBodySmallWhite">';
 			foreach($res as $row) {
 				$msg = $row['c_msg'];
 				if (strlen($msg) >= 14) $msg = substr($msg, 0, 12).'[...]';
 				echo $msg.' av '.$user->getstring($row['user_id'], '', array('icons' => 1)).'<br/>';
 			}
 			echo '</div></div>';
-			echo '</div>';
 		}
+		echo '<br/><br/><br/>';
 
 
 		//Listar de senaste inloggade

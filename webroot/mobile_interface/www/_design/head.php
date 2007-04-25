@@ -33,14 +33,14 @@ function checkTime(toggle) {
 		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" /></a></div>
 
 		<ul id="top_menu">
-			<li><a href="/main/start/">start</a>&nbsp;</li>
-			<li><a href="/list/users/">sök</a>&nbsp;</li>
-			<li><a href="/forum/start/">forum</a>&nbsp;</li>
-			<li><a href="/main/thought/">tyck till</a>&nbsp;</li>
-			<li><a href="/main/public/">surfcafe</a>&nbsp;</li>
-			<li><a href="/text/radio/">webbradio</a>&nbsp;</li>
-			<li><a href="/main/faq/">hjälp &amp; faq</a>&nbsp;</li>
-			<li><a href="/text/contact/">kontakt</a>&nbsp;</li>
+			<li><a href="/main/start/">start</a> | </li>
+			<li><a href="/list/users/">sök</a> | </li>
+			<li><a href="/forum/start/">forum</a> | </li>
+			<li><a href="/main/thought/">tyck till</a> | </li>
+			<li><a href="/main/public/">surfcafe</a> | </li>
+			<li><a href="/text/radio/">webbradio</a> | </li>
+			<li><a href="/main/faq/">hjälp &amp; faq</a> | </li>
+			<li><a href="/text/contact/">kontakt</a></li>
 		</ul>
 <?
 	if($l) {

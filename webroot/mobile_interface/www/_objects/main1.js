@@ -209,3 +209,18 @@ function toggleInp(obj, text, blur_text) {
 
 function trace(s) { console.debug(s); }
 <!-- End of forum functions //-->
+
+function toggle2(type) {
+	type = (type.checked)?true:false;
+	for(i = 0; i < document.m.length; i++) {
+
+		var toggle = document.m.elements[i];
+		if(toggle.type == 'checkbox') {
+			toggle.checked = type;
+		}
+	}
+}
+function openMail(th, id) {
+	th.className = th.className.replace('act_bg', '');
+	makeBig(id);
+}

@@ -55,8 +55,14 @@
 
 	require(DESIGN.'head_user.php');
 ?>
-<div class="mainHeader2"><h4><?=secureOUT($res['pht_cmt'])?> - publicerad: <?=nicedate($res['pht_date'])?> - <a class="wht" href="<?=l('user', 'gallery', $s['id_id'])?>">tillbaka</a></h4></div>
-<div class="mainBoxed2"><a name="view"></a>
+
+<img src="/_gfx/ttl_gallery.png" alt="Galleri"/><br/><br/>
+
+<? makeButton(false, 'makePhotoComment('.$s['id_id'].','.$res['main_id'].')', 'icon_blog.png', 'skriv kommentar'); ?>
+<br/><br/><br/>
+
+<div class="centerMenuHeader"><?=secureOUT($res['pht_cmt'])?> - publicerad: <?=nicedate($res['pht_date'])?></div>
+<div class="centerMenuBodyWhite"><a name="view"></a>
 	<div class="cnt">
 	<img src="<?='/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$res['pht_name']?>" class="cnti mrg" alt="" border="0" />
 	</div>
@@ -69,31 +75,39 @@
 		</form>
 	</div>
 <?	} ?>
+</div><br/>
 
-</div>
 
-<div class="mainHeader2"><a name="cmt"></a><h4>kommentarer - <a href="javascript:makePhotoComment('<?=$s['id_id']?>','<?=$res['main_id']?>');">skriv kommentar</a></h4></div>
-	<div class="mainBoxed2">
+<div class="centerMenuHeader">kommentarer</div>
+	<div class="centerMenuBodyWhite">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
 	$c_paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphotocmt WHERE photo_id = '".$res['main_id']."' AND status_id = '1'");
-	#dopaging($c_paging, '', '', 'bigmed', STATSTR);
+
 	$odd = 1;
 	$cmt = $sql->query("SELECT b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.id_id, u.u_alias, u.u_sex, u.level_id, u.u_birth, u.u_picd, u.u_picid, u.u_picvalid, u.account_date FROM {$t}userphotocmt b LEFT JOIN {$t}user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.photo_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}", 0, 1);
-	if(count($cmt) && !empty($cmt)) { foreach($cmt as $val) {
-		$msg_own = ($val['id_id'] == $l['id_id'] || $own || $isAdmin)?true:false;
-		$odd = !$odd;
-		echo
-'
-	<table summary="" cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
-	<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).'</h5><div class="r"></div><br class="clr" />
-	'.secureOUT($val['c_msg']).'
-	</td></tr>
-	<tr><td class="btm rgt pdg">&nbsp;'.(($msg_own)?'<a href="'.l('user', 'gallery', $s['id_id'], $res['main_id']).'&del_msg='.$val['main_id'].'" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], $res['main_id']).'del_msg='.$val['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" style="margin-bottom: -2px;"/></a>':'').'</td></tr>
-	</table>
-';
+	if(count($cmt) && !empty($cmt)) {
+		foreach($cmt as $val) {
+			$msg_own = ($val['id_id'] == $l['id_id'] || $own || $isAdmin)?true:false;
+			$odd = !$odd;
+			echo '
+				<table summary="" cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
+				<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).'</h5><div class="r"></div><br class="clr" />
+				'.secureOUT($val['c_msg']).'
+				</td>';
+		
+			if ($msg_own) {
+				echo '<td class="pdg" width="66"><br/>';
+				makeButton(false, 'if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], $res['main_id']).'del_msg='.$val['main_id'].'\');', 'icon_delete.png', 'radera');
+				echo '</td>';
+			}
+		
+			echo '</tr></table>';
 
-	} } else { echo '<table summary="" cellspacing="0" width="100%"><tr><td class="cnt pdg spac">Inga kommentarer.</td></tr></table>'; }
+		}
+	} else {
+		echo '<table summary="" cellspacing="0" width="100%"><tr><td class="cnt pdg spac">Inga kommentarer.</td></tr></table>';
+	}
 ?>
 	</div>
 </div>

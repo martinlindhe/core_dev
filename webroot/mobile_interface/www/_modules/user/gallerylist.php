@@ -23,8 +23,16 @@
 				<td class="cur'.$cls.' pdg cnt nobr" onclick="'.$url.'">'.round($row['pht_size']/1024, 1).'kb</td>
 				<td class="cur'.$cls.' pdg" onclick="'.$url.'">'.$row['pht_cmts'].' kommentarer</td>
 				<td class="cur'.$cls.' pdg" onclick="'.$url.'">'.secureOUT($row['pht_click']).' visningar</td>
-				<td class="cur'.$cls.' pdg rgt nobr" onclick="'.$url.'">'.nicedate($row['pht_date'], 2).'</td>
-				<td class="'.$cls.' rgt pdg_tt nobr">'.(($own || $isAdmin)?'<a href="'.l('user', 'gallery', $s['id_id'], $row['main_id']).'c=1#view'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a>':'&nbsp;').'</td>
+				<td class="cur'.$cls.' pdg rgt nobr" onclick="'.$url.'">'.nicedate($row['pht_date'], 2).'</td>';
+
+				if ($own) {
+					echo '<td class="'.$cls.' rgt pdg_tt nobr" width="130">';
+					makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id'], $row['main_id']).'c=1#view'.$row['main_id'].'\')', 'icon_gallery.png', 'ändra');
+					makeButton(false, 'if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\');', 'icon_delete.png', 'radera');
+					echo '</td>';
+				}
+
+				echo '
 				</tr>
 				'.(($own && $change && $change == $row['main_id'] && $l)?'
 				<tr>

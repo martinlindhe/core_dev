@@ -9,7 +9,7 @@
 #top_ad { position: absolute; top: 20px; left: 352px; border: 1px solid #b4b9b3; }
 #top_ad img { margin: 1px; }
 
-ul#top_menu { list-style-type: none; position: absolute; left: 20px; top: 99px; margin: 0; padding: 0; }
+ul#top_menu { color: #fff; list-style-type: none; position: absolute; left: 20px; top: 99px; margin: 0; padding: 0; }
 ul#top_menu li { margin-top: 3px; display: inline; font-size: 16px; }
 ul#top_menu a { color: #fff; text-decoration: none; }
 
@@ -28,6 +28,9 @@ ul#top_menu a { color: #fff; text-decoration: none; }
 
 .centerMenuHeader { width: 596px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header2.png'); background-repeat: no-repeat; }
 .centerMenuBodyWhite { width: 594px; background: #fff; border: 1px solid #ccc; }
+
+.centerMenuHeaderSmall { width: 290px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header3.png'); background-repeat: no-repeat; }
+.centerMenuBodySmallWhite { width: 280px; background: #fff; border: 1px solid #ccc; padding: 5px; margin-bottom: 10px; }
 
 
 ul.user_menu { list-style-type: none; margin: 0 0 0 10px; padding: 6px 0 0 0; }
