@@ -83,20 +83,7 @@
 		echo '</td></tr>';
 		echo '<tr><td class="btm rgt pdg">';
 
-/*
-			if (!$arr[4]) {
-
-			echo 
-				($arr[0]?'<input type="button" class="btn2_min" onclick="makeGb(\''.$val['id_id'].'\''.
-				($arr[5]?', \'&a='.$val['main_id'].'\'':'').');" value="'.$arr[6].'" />':'').
-				($arr[1]?'<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', ($val['sender_id'] == $s['id_id']?$val['sender_id']:$val['user_id']), ($val['sender_id'] == $s['id_id']?$val['user_id']:$val['sender_id'])).'\');" value="historia" />':'').
-				'<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', $val['id_id']).'\');" value="gästbok " />';
-			}
-
-			//----
-			if ($arr[2]) echo '<input type="button" class="btn2_min" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gb', $s['id_id']).'del_msg='.$val['main_id'].'\');" value="radera" />';
-*/
-		echo (($arr[4])?''.(($arr[0])?'<input type="button" class="btn2_min" onclick="makeGb(\''.$val['id_id'].'\''.(($arr[5])?', \'&a='.$val['main_id'].'\'':'').');" value="'.$arr[6].'" />':'').(($arr[1])?'<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', ($val['sender_id'] == $s['id_id']?$val['sender_id']:$val['user_id']), ($val['sender_id'] == $s['id_id']?$val['user_id']:$val['sender_id'])).'\');" value="historia" />':'').'<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', $val['id_id']).'\');" value="gästbok " />':'').(($arr[2])?'<input type="button" class="btn2_min" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gb', $s['id_id']).'del_msg='.$val['main_id'].'\');" value="radera" />':'');
+		echo ($arr[4]?''.($arr[0]?'<input type="button" class="btn2_min" onclick="makeGb(\''.$val['id_id'].'\''.($arr[5]?', \'&a='.$val['main_id'].'\'':'').');" value="'.$arr[6].'" />':'').($arr[1]?'<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', ($val['sender_id'] == $s['id_id']?$val['sender_id']:$val['user_id']), ($val['sender_id'] == $s['id_id']?$val['user_id']:$val['sender_id'])).'\');" value="historia" />':'').'<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', $val['id_id']).'\');" value="gästbok " />':'').($arr[2]?'<input type="button" class="btn2_min" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gb', $s['id_id']).'del_msg='.$val['main_id'].'\');" value="radera" />':'');
 			
 			
 		echo '</td></tr>';

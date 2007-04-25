@@ -100,7 +100,6 @@ p { margin: 0; padding: 5px 5px 5px 5px; }
 .smallBoxed3 { width: 174px; border: 1px solid #974949; border-width: 0 1px 1px 1px; margin-bottom: 10px; }
 .smallBoxed { width: 162px; }
 .smallFilled3 { width: 174px; border: 1px solid #974949; border-width: 0 1px 1px 1px; margin-bottom: 10px; }
-#foot { width: 982px; color: #999; text-align: right; font-size: 10px; margin: 10px 0 0 0; padding: 5px 0 17px 0; border-top: 1px solid #ccc; }
 .mainBoxed2 { width: 594px; border: 1px solid #7ba06d; border-width: 0 1px 1px 1px; margin-bottom: 10px; }
 .bigBoxed2 { width: 784px; border: 1px solid #7ba06d; border-width: 0 1px 1px 1px; margin-bottom: 10px; }
 .mainFilled2 { width: 586px; padding: 5px; margin-bottom: 10px; background: #7ba06d; }

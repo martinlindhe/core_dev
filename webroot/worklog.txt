@@ -132,6 +132,7 @@
 	- webbgränssnittet: tyck till sidan klar
 	- webbgränssnittet: skapat en "surfcafe" sida (tom)
 	- webbgränssnittet: ny design på forum
+	- webbgränssnittet: ny design på "sök användare"
 
 ***********************************************************************************************************************************
 topp prio:
@@ -139,7 +140,6 @@ topp prio:
 	* in med nya rubriker & nya knappar överallt
 	* in med nya texter
 	* max 7 tecken i användarnamnet
-
 
 
 

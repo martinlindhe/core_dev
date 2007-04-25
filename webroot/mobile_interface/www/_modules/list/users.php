@@ -3,17 +3,21 @@
 
 	$result = performSearch($id);
 
-	$menu = array('user' => array(l('list', 'users'), 'senast inloggade'), 'online' => array(l('list', 'users', '1'), 'visa online'), 'Fonline' => array(l('list', 'users', 'F'), 'tjejer online'), 'Monline' => array(l('list', 'users', 'M'), 'killar online'));
-
 	require(DESIGN.'head.php');
 ?>
 
 <div id="bigContent">
 	
 	<img src="/_gfx/ttl_search.png" alt="Sök användare"/><br/><br/>
-	
-	<div class="bigHeader2">sök - <?=makeMenu($page, $menu)?></div>
-	<div class="bigBoxed2">
+<?
+	makeButton(!$id, 'goLoc(\''.l('list', 'users').'\')', 'icon_profile.png', 'senast inloggade');
+	makeButton($id=='1', 'goLoc(\''.l('list', 'users', '1').'\')', 'icon_profile.png', 'visa online');
+	makeButton($id=='F', 'goLoc(\''.l('list', 'users', 'F').'\')', 'icon_profile.png', 'tjejer online');
+	makeButton($id=='M', 'goLoc(\''.l('list', 'users', 'M').'\')', 'icon_profile.png', 'killar online');
+?>
+<br/><br/><br/>
+
+	<div class="centerMenuBodyWide">
 		<form name="search" action="<?=l('list', 'users', '2')?>" method="post">
 		<input type="hidden" name="do" value="1" />
 		<input type="hidden" name="p" value="0" />
