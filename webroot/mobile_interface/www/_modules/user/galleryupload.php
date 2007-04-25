@@ -2,7 +2,8 @@
 	$length = array('1' => 10, '3' => 10, '5' => 20, '6' => 40, '8' => 80, '10' => 0);
 	$lim = @$length[$l['level_id']];
 	$photo_limit = 510;
-$NAME_TITLE = 'LADDA UPP FOTO | '.NAME_TITLE;
+	$NAME_TITLE = 'LADDA UPP FOTO | '.NAME_TITLE;
+
 	if($lim && $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1'") >= $lim) {
 		popupACT('Du har laddat upp maximalt antal foton ( '.$lim.'st )<br />Du måste uppgradera för att kunna ladda upp fler.');
 	}
@@ -84,14 +85,12 @@ if(window.opener && window.opener.document && window.opener.document.getElementB
 	window.opener.addselOption(name, file);
 }
 </script>";
-			
+
 			popupACT($msg.$script, '', '', 3000);
 		} else {
 			popupACT('Uppladdad!', '', l('user', 'gallery', $l['id_id'], $res), 1000);
 		}
 	}
-
-
 
     $ua = strtolower($_SERVER['HTTP_USER_AGENT']);
     if(strpos($ua, 'msie') == true)
@@ -128,7 +127,6 @@ function validateUpl(tForm) {
 		alert('Felaktigt fält: Sökväg');
 		return false;
 	}
-
 	if(tForm.ins_msg.value.length <= 0) {
 		alert('Felaktigt fält: Beskrivning');
 		tForm.ins_msg.focus();
@@ -139,56 +137,18 @@ function validateUpl(tForm) {
 	return true;
 }
 
-function imgError(ie_obj) {
-	error = true;
-	hideAll(ie_obj);
-	return;
-}
-function scriptError(se_obj) {
-	hideAll(se_obj);
-	return;
-}
-function hideAll(h_obj) {
-	h_obj.src = error_image;
-	cont.style.display = 'none';
-}
-function showPre(val) {
-	size.src = error_image;
-	if(val != '') {
-		var showimg = false;
-		ext = val.split(".");
-		ext = ext[ext.length - 1].toLowerCase();
-		for(var i = 0; i <= allowedext.length; i++)
-			if(allowedext[i] == ext) 
-				showimg = true;
-		if(showimg) {
-			previewpic = val;
-			error = false;
-			obj.src = 'file://' + val.replace(/\\/g,'/');
-			size.src = 'file://' + val.replace(/\\/g,'/');
-			if(!error) {
-				cont.style.display = '';
-			}
-		} else {
-			scriptError(obj);
-		}
-	} else {
-			scriptError(obj);
-	}
-	oldval = val;
-}
 </script>
 <body style="border: 6px solid #FFF;">
 <form name="msg" action="<?=l('user', 'galleryupload')?><?=(!empty($_GET['do']))?'&do='.secureOUT($_GET['do']):'';?>" method="post" enctype="multipart/form-data" onsubmit="if(validateUpl(this)) { return true; } else return false;">
 		<div class="smallWholeContent cnti mrg">
-			<div class="smallHeader1"><h4>ladda upp till galleri</h4></div>
-			<div class="smallFilled2 pdg_t wht">
-				<div style="margin: 10px 0 0 5px;">
-				bläddra till fil:<br /><input type="file" name="ins_file" width="160" style="width: 160px; height: 22px; line-height: 14px;" class="txt" accept="image/jpeg, image/gif, image/png, image/pjpeg"><script type="text/javascript">document.msg.ins_file.focus();</script>
-				<br />beskrivning:<br /><input type="text" name="ins_msg" width="160" style="width: 160px;" class="txt">
-				<?=($isOk)?'<div style="float: left; margin-top: 3px;"><input type="checkbox" class="chk" name="ins_priv" id="ins_priv" '.(!empty($_GET['priv'])?'checked':'').' value="1"><label for="ins_priv"> Galleri X (för vänner)</label></div>':'';?>
-				</div>
-				<input type="submit" class="btn2_sml r" name="sub" value="skicka!" style="margin-top: 5px;" /><br class="clr" />
+			<div class="leftMenuHeader">ladda upp till galleri</div>
+			<div class="leftMenuBodyWhite pdg_t">
+				bläddra till fil:<br />
+				<input type="file" name="ins_file" style="width: 160px; height: 22px; line-height: 14px;" class="txt" accept="image/jpeg, image/gif, image/png, image/pjpeg"/><br />
+				beskrivning:<br />
+				<input type="text" name="ins_msg" style="width: 160px;" class="txt"/>
+				<input type="checkbox" class="chk" name="ins_priv" id="ins_priv"<? if (!empty($_GET['priv'])) echo ' checked="checked"'; ?> value="1"/><label for="ins_priv"> Galleri X (för vänner)</label>
+				<input type="submit" class="btn2_sml" name="sub" value="skicka!" /><br/>
 			</div>
 		</div>
 </form>

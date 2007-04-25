@@ -136,6 +136,14 @@
 	
 	- startsidan: "senaste kommentarer" går nu att klicka
 	- startsidan: klickbar länk på "senaste galleribilder"
+	- blogg: skriv ny blogg-sidan ny grafik
+	- blogg: skriv kommentar-sidan ny grafik
+	- gästbok: skriv svar-sidan ny grafik
+	- galleri: ladda upp ny bild-sidan ny grafik
+	- galleri: ändra bildbeskrivning-sida ny grafik
+	- mail: "läs brev"-sidan ny grafik
+	- mail buggfix: när man raderar mail i utkorgen så kommer man tillbaka till utkorgen nu (kom till inkorgen förrut)	
+	- tyck till: ny logga & buggfix: skicka-knappen fungerar igen
 
 ***********************************************************************************************************************************
 topp prio:

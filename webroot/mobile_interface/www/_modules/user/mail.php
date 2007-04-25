@@ -11,7 +11,7 @@
 			if (isset($_GET['p'])) popupACT('Meddelandet raderat.', '', '500', l('user', 'mail', $page));
 
 			if($page == 'out')
-				reloadACT(l('user', 'mail').'&amp;'.$page);
+				reloadACT(l('user', 'mail').'&'.$page);
 			else
 				reloadACT(l('user', 'mail'));
 		}

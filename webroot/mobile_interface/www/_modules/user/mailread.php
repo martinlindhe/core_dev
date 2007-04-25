@@ -20,20 +20,26 @@
 	}
 	$s = $l;
 	$own = true;
+
+	$titel = secureOUT($res['sent_ttl']);
+	if (!$titel) $titel = '<i>ingen titel</i>';
+
 	require(DESIGN."head.php");
 ?>
 	<div id="mainContent">
-			<div class="mainHeader2"><h4>från: <span class="bg_wht"><?=($own_u)?(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>'):$user->getstring($l);?></span> till <span class="bg_wht"><?=($own_u)?$user->getstring($l):(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>');?></span> - skickat: <?=(@$res['sent_date'])?nicedate($res['sent_date'], 1, 1):nicedate(date("Y-m-d"), 1, 1);?> - <a href="<?=l('user', 'mail').$page?>">tillbaka</a></h4></div>
-			<div class="mainBoxed2">
-			<div class="pdg l" style="width: 589px; overflow: hidden;">
-			<h3><?=secureOUT($res['sent_ttl'])?></h3>
+
+		<img src="/_gfx/ttl_mail.png" alt="Brev"/><br/><br/>
+
+		<div class="centerMenuHeader">från: <?=($own_u)?(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>'):$user->getstring($l);?> till <?=($own_u)?$user->getstring($l):(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>');?> - skickat: <?=(@$res['sent_date'])?nicedate($res['sent_date'], 1, 1):nicedate(date("Y-m-d"), 1, 1);?></div>
+			<div class="centerMenuBodyWhite" style="overflow: hidden;">
+			<h3><?=$titel?></h3>
+
 			<p class="no" id="formatText"><?=formatText($res['sent_cmt'])?></p>
-			</div>
-			<br class="clr" />
+
 			<div class="r"><input type="button" onclick="if(confirm('Säker ?')) goLoc('<?=l('user', 'mail').'&amp;'.$page.'&amp;del_msg='.$res['main_id']?>');" class="btn2_med" value="radera" />&nbsp;<input type="button" onclick="makeMail('<?='&amp;a='.$res['main_id'].'&amp;r'?>');" class="btn2_med" value="vidarebefordra" />&nbsp;<?=($own_u && $res_u)?'<input type="button" onclick="makeMail(\''.$res_u['id_id'].'/&amp;a='.$res['main_id'].'\');" class="btn2_med" value="svara" />':'';?></div>
-			<br class="clr" />
 			</div>
 		</div>
+	</div>
 <?
 	require(DESIGN.'foot.php');
 ?>

@@ -56,7 +56,8 @@ h6 { font-size: 10px; margin: 2px 0 5px 0; font-weight: bold; }
 .btm { vertical-align: bottom; }
 .bld { font-weight: bold; }
 .bld_red { font-weight: bold; color: red;}
-.on { color: #6c975c; } .off { color: #899187; }
+.on { font-weight: bold; }
+.off { font-weight: normal; }
 .tl { font-family: Verdana; color: #333; font-size: 9px; letter-spacing: -1px; }
 .mrg { margin: 5px; }
 .wht { color: #fff; }

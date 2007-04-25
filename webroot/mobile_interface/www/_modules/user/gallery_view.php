@@ -7,8 +7,8 @@
 	}
 	
 	if (!empty($_POST['chg_pic_desc']) && $res['user_id'] == $l['id_id']) {
-		echo 'SPARA ÄNDRING!';
 		$q = 'UPDATE s_userphoto SET pht_cmt="'.secureINS($_POST['chg_pic_desc']).'" WHERE main_id = "'.secureINS($key).'"';
+		echo $q;
 		$sql->query($q);
 		$res['pht_cmt'] = $_POST['chg_pic_desc'];
 	}
@@ -67,12 +67,21 @@
 	<img src="<?='/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$res['pht_name']?>" class="cnti mrg" alt="" border="0" />
 	</div>
 <? 	if (!empty($_GET['c'])) { ?>
-	<div class="cnt">
-		<form method="post" action="">
-		Ändra bildbeskrivningen:
-		<input type="text" name="chg_pic_desc" value="<?=secureOUT($res['pht_cmt'])?>"/>
-		<input type="submit" value="Spara"/>
+	<div>
+		<center>
+		<form name="gal_change" method="post" action="">
+			<table><tr>
+				<td>
+					Ändra bildbeskrivningen:
+					<input type="text" name="chg_pic_desc" value="<?=secureOUT($res['pht_cmt'])?>"/>
+				</td>
+				<td width="66">
+					<? makeButton(false, 'document.gal_change.submit();', 'icon_blog.png', 'spara'); ?>
+				</td>
+			</tr></table>
 		</form>
+		</center>
+
 	</div>
 <?	} ?>
 </div><br/>

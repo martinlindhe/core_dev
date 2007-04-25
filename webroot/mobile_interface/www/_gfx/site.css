@@ -35,7 +35,7 @@ ul#top_menu a { color: #fff; text-decoration: none; }
 .centerMenuHeaderWide { width: 786px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header4.png'); background-repeat: no-repeat; }
 .centerMenuBodyWideWhite { width: 784px; background: #fff; border: 1px solid #ccc; }
 
-
+.centerMenuHeader a { color: #fff; text-decoration: none; }
 
 
 ul.user_menu { list-style-type: none; margin: 0 0 0 10px; padding: 6px 0 0 0; }

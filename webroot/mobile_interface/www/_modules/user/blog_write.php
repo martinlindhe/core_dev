@@ -15,6 +15,8 @@
 	}
 
 	if(!empty($_POST['do']) && !empty($_POST['text_html'])) {
+
+
 		$hidden = (!empty($_POST['ins_priv']) && $user->level($l['level_id'], 2))?'1':'0';
 		$_POST['text_html'] = strip_tags($_POST['text_html'], NRMSTR);
 		if($edit) {
@@ -29,7 +31,7 @@
 		if(isset($_GET['m']))
 			popupACT('Publicerad!', '', '1000', 'user_blog.php?'.mt_rand(1000, 9999).'#R'.$id);
 		elseif(isset($_GET['d']))
-			popupACT('Publicerad!', '', '1000', 'user_blog.php?date='.secureOUT($_GET['d']).'&'.mt_rand(1000, 9999).'&#R'.$id);
+			popupACT('Publicerad!', '', '1000', 'user_blog.php?date='.secureOUT($_GET['d']).'&amp;'.mt_rand(1000, 9999).'&amp;#R'.$id);
 		else
 			popupACT('Publicerad!', '', l('user', 'blog', $l['id_id'], $id), 1000);
 	}
@@ -62,24 +64,24 @@ function validateIt(tForm) {
 }
 </script>
 
-<form name="blog_write" action="<?=l('user', 'blog', $l['id_id'], '0')?>&write&<?=isset($_GET['m'])?'m':((isset($_GET['d']))?'d='.secureOUT($_GET['d']):'n');?>&<?=($edit)?'i='.$res['main_id']:'';?>" method="post" onsubmit="return validateIt(this);">
-<input type="hidden" name="do" value="1">
+<form name="blog_write" action="<?=l('user', 'blog', $l['id_id'], '0')?>write=1&amp;i=<?=isset($_GET['m'])?'&amp;m':((isset($_GET['d']))?'&amp;d='.secureOUT($_GET['d']):'&amp;n');?><?=($edit)?'&amp;i='.$res['main_id']:'';?>" method="post" onsubmit="return validateIt(this);">
+<input type="hidden" name="do" value="1"/>
 
 <div class="boxMid4" style="margin: 25px 15px 0 15px;">
 		<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
 	<div class="boxMid4mid">
 
-<table cellspacing="0" width="510" style="height: 400px; margin-top: 38px; margin-bottom: 1px;" class="lft">
+<table summary="" cellspacing="0" width="510" style="height: 400px; margin-top: 38px; margin-bottom: 1px;" class="lft">
 <tr>
-	<td class="pdg bld"><b>Rubrik:&nbsp;</b><input type="text" class="txt" name="ins_title" style="width: 296px; margin-left: 6px; margin-bottom: -4px;" value="<?=@secureOUT($res['blog_title'])?>"></td>
+	<td class="pdg bld"><b>Rubrik:&nbsp;</b><input type="text" class="txt" name="ins_title" style="width: 296px; margin-left: 6px; margin-bottom: -4px;" value="<?=@secureOUT($res['blog_title'])?>"/></td>
 	<td class="pdg bld rgt"><?=(@$res['blog_date']?nicedate($res['blog_date']):'');?></td>
 </tr>
 <tr>
 	<td colspan="2" class="pdg" style="height: 100%; padding-top: 0;">
-<table cellspacing="0" width="100%" style="height: 100%; display: none;" id="text_c_html">
+<table summary="" cellspacing="0" width="100%" style="height: 100%; display: none;" id="text_c_html">
 <tr><td><textarea name="text_html" id="text_html" style="width: 510px; height: 100%; padding: 10px; font-family: Courier New, Courier; font-size: 12px;"><?=@secureFormat($res['blog_cmt'])?></textarea></td></tr>
 </table>
-<table cellspacing="0" width="100%" style="height: 100%;" class="mrg_t" id="text_c_var">
+<table summary="" cellspacing="0" width="100%" style="height: 100%;" class="mrg_t" id="text_c_var">
 <tr><td style="padding-bottom: 5px;"><b>Design:&nbsp;</b>
 
 <select onchange="if(this.value) { TC_Format('FontName', this.value); this.selectedIndex = 0; }">
@@ -168,44 +170,44 @@ function omo(obj, border) {
 .brrd img { border: 1px solid #7ca66a; }
 </style>
 
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_bold.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('bold');" title="Fet"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_italic.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('italic');" title="Kursiv"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_underl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('underline');" title="Understruken"><img src="<?=OBJ?>1x1.gif" width="20" height="20" style="margin-right: 10px;" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_bold.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('bold');" title="Fet"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_italic.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('italic');" title="Kursiv"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_underl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('underline');" title="Understruken"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyleft');" title="Vänsterjustera"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justc.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifycenter');" title="Centrera"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyright');" title="Högerjustera"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justm.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyfull');" title="Marginaljustera"><img src="<?=OBJ?>1x1.gif" width="20" height="20" style="margin-right: 10px;" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyleft');" title="Vänsterjustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justc.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifycenter');" title="Centrera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyright');" title="Högerjustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justm.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyfull');" title="Marginaljustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_ol.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertorderedlist');" title="Numrerad lista"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_ul.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertunorderedlist');" title="Punktlista"><img src="<?=OBJ?>1x1.gif" width="20" height="20" style="margin-right: 10px;" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_ol.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertorderedlist');" title="Numrerad lista"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_ul.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertunorderedlist');" title="Punktlista"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_out.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('outdent');" title="Minska indrag"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_in.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('indent');" title="Öka indrag"><img src="<?=OBJ?>1x1.gif" width="20" height="20" style="margin-right: 10px;" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_out.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('outdent');" title="Minska indrag"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_in.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('indent');" title="Öka indrag"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_hr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('inserthorizontalrule');" title="Horisontell linje"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
-<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_remove.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('removeformat');" title="Töm formatering"><img src="<?=OBJ?>1x1.gif" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_hr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('inserthorizontalrule');" title="Horisontell linje"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_remove.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('removeformat');" title="Töm formatering"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
 </div>
 <blockquote style="clear: both; margin: 10px 0 0 0;">
 <b>Foto:&nbsp;</b><select id="photo_list" name="photo_list" style="width: 142px; margin: 0 5px 0 17px;" onchange="if(TC_initialized) { if(this.value) { if(this.options[this.selectedIndex].innerHTML.indexOf('[privat]') == -1 || confirm('Denna bild är markerad som privat! Den kommer att visas för alla som läser om du lägger in den i ditt meddelande.')) { TC_Format('InsertImage', this.value); } else editor.focus(); } } this.selectedIndex = 0;">
 <option value="0">Välj bild från fotoalbum</option>
 <?
 	foreach($result as $pic) {
-		echo '<option value="'.P2B.USER_GALLERY.$pic[2].'/'.$pic[0].(($pic[3])?'_'.$pic[4]:'').'.'.$pic[5].'">'.secureOUT('#'.$pic[0].' - '.$pic[6]).' '.(($pic[3])?'<b>[privat]</b>':'').'</option>';
+		echo '<option value="'.P2B.USER_GALLERY.$pic[2].'/'.$pic[0].(($pic[3])?'_'.$pic[4]:'').'.'.$pic[5].'">'.secureOUT('#'.$pic[0].' - '.$pic[6]).' '.(($pic[3])?'[privat]':'').'</option>';
 	}
 ?>
-</select><input type="button" class="btn2_med" value="ladda upp ny" onclick="makeUpload('<?=$l['id_id']?>&do=blog'); return false;">
+</select><input type="button" class="btn2_med" value="ladda upp ny" onclick="makeUpload('<?=$l['id_id']?>&amp;do=blog'); return false;"/>
 </blockquote>
 </td></tr>
 <tr><td colspan="2" style="border: 1px solid #999; height: 100%; background: #FFF;"><iframe id="text_var" style="cursor: text" name="text_var" border="0" frameborder="0" width="100%" height="100%"></iframe></td></tr>
 </table>
 </td></tr>
 <tr>
-	<td class="pdg" colspan="2"><input type="checkbox" class="chk" value="1" name="ins_priv" id="ins_priv"<?=($edit && $res['hidden_id'])?' checked':'';?>><label for="ins_priv"> Privat inlägg [endast för vänner]</label></td>
+	<td class="pdg" colspan="2"><input type="checkbox" class="chk" value="1" name="ins_priv" id="ins_priv"<?=($edit && $res['hidden_id'])?' checked="checked"':'';?>/><label for="ins_priv"> Privat inlägg [endast för vänner]</label></td>
 </tr>
 </table>
 	</div>
-	<input type="image" accesskey="s" style="position: absolute; margin: 0; padding: 0; right: -10px; bottom: -11px;" src="/_objects/_heads/btn4_send.png" /></a>
+	<? makeButton(false, 'validateIt(blog_write); document.blog_write.submit();', 'icon_blog.png', 'skicka'); ?>
 </div>
 </form>
 </body>

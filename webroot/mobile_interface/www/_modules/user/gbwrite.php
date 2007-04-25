@@ -32,32 +32,20 @@
 	}
 document.onkeydown = ActivateByKey;
 </script>
+
 <body style="background: #FFF;" class="cnt">
-<form name="msg" action="<?=l('user', 'gbwrite', $s['id_id'])?>r=<?=$r?>&a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
+
+<form name="msg" action="<?=l('user', 'gbwrite', $s['id_id'])?>r=<?=$r?>&amp;a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
 		<div class="smallWholeContent cnti mrg">
-			<div class="smallHeader1"><h4>skriv gästboksinlägg</h4></div>
-			<div class="smallFilled2 cnt pdg_t">
-				<div class="rgt mrg"><span class="bg_wht">till: <?=$user->getstring($s, '', array('nolink' => 1))?></span></div>
-				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 160px;"></textarea><script type="text/javascript">document.msg.ins_cmt.focus();</script>
+			<div class="leftMenuHeader">gästboksinlägg</div>
+			<div class="leftMenuBodyWhite pdg_t">
+				skriv till <?=$user->getstring($s, '', array('nolink' => 1))?><br/>
+				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 160px;"></textarea>
+				<script type="text/javascript">document.msg.ins_cmt.focus();</script>
 				<input type="submit" class="btn2_sml r" value="skicka!" style="margin-top: 5px;" /><br class="clr" />
 			</div>
 		</div>
 </form>
-<?
-/*
-<div class="box1" style="margin: 25px 15px 0 15px;">
-		<img src="<?=CS?>_objects/_heads/head_gb_write.png" style="position: absolute; top: -10px; left: -10px;" />
-	<div class="box1mid">
-	<table cellspacing="0" style="margin: 38px 0 1px 0;">
-	<tr><td class="rgt">till: <?=$user->getstring($s, '', array('nolink' => 1))?></td></tr>
-	<tr><td><textarea name="ins_cmt" class="txt" style="width: 344px; height: 140px;"></textarea><script type="text/javascript">document.msg.ins_cmt.focus();</script></td></tr>
-	<tr><td class="rgt"><?=($isOk)?'<div style="float: left; margin-top: 3px;"><input type="checkbox" class="chk" name="ins_priv" id="ins_priv" value="1"><label for="ins_priv"> Privat inlägg</label></div>':'';?></td></tr>
-	</table>
-	</div>
-	<input type="image" accesskey="s" style="position: absolute; margin: 0; padding: 0; right: -10px; bottom: -11px;" src="/_objects/_heads/btn1_send.png" /></a>
-</div>
-</form>
-<!--<div style="padding-top: 6px;"><?doADP('468_inside_popup');?></div>-->
-*/?>
+
 </body>
 </html>

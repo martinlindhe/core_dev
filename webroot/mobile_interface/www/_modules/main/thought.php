@@ -52,11 +52,13 @@
 ?>
 
 <div id="mainContent">
+	
+	<img src="/_gfx/ttl_tyck_till.png" alt="Tyck till"/><br/><br/>
 
 	<?=gettxt('top-thought')?>
 	<form action="<?=l('main', 'thought')?>" method="post">
 	<?=($l?'<textarea class="txt" name="ins_cmt" style="width: 400px; height: 80px;"></textarea>':'Du måste vara inloggad för att kunna skriva.')?>
-	<input type="button" class="btn2_sml" value="Skicka" />
+	<input type="submit" class="btn2_sml" value="Skicka" />
 	</form>
 
 	<form action="<?=l('main', 'thought')?>" method="post">
