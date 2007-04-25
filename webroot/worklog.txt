@@ -133,6 +133,9 @@
 	- webbgränssnittet: skapat en "surfcafe" sida (tom)
 	- webbgränssnittet: ny design på forum
 	- webbgränssnittet: ny design på "sök användare"
+	
+	- startsidan: "senaste kommentarer" går nu att klicka
+	- startsidan: klickbar länk på "senaste galleribilder"
 
 ***********************************************************************************************************************************
 topp prio:

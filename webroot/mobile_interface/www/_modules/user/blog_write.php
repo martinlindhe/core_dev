@@ -1,6 +1,7 @@
 <?
 	include(CONFIG.'secure.fnc.php');
-$NAME_TITLE = 'BLOGG - SKRIV | '.NAME_TITLE;
+
+	$NAME_TITLE = 'BLOGG - SKRIV | '.NAME_TITLE;
 	$edit = false;
 	$gotone = true;
 	$lim = 5;
@@ -39,9 +40,10 @@ $NAME_TITLE = 'BLOGG - SKRIV | '.NAME_TITLE;
 		popupACT('Felaktigt inlägg.');
 	}
 
-	$result = $sql->query("SELECT ".CH." main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1' ORDER BY main_id DESC");
+	$result = $sql->query("SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1' ORDER BY main_id DESC");
 	require(DESIGN.'head_popup.php');
 ?>
+
 <script type="text/javascript" src="<?=OBJ?>text_control.js"></script>
 <script type="text/javascript">
 window.onload = TC_Init;
@@ -59,11 +61,12 @@ function validateIt(tForm) {
 	return true;
 }
 </script>
+
 <form name="blog_write" action="<?=l('user', 'blog', $l['id_id'], '0')?>&write&<?=isset($_GET['m'])?'m':((isset($_GET['d']))?'d='.secureOUT($_GET['d']):'n');?>&<?=($edit)?'i='.$res['main_id']:'';?>" method="post" onsubmit="return validateIt(this);">
 <input type="hidden" name="do" value="1">
 
 <div class="boxMid4" style="margin: 25px 15px 0 15px;">
-		<img src="<?=CS?>_objects/_heads/head_blog_write.png" style="position: absolute; top: -10px; left: -10px;" />
+		<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
 	<div class="boxMid4mid">
 
 <table cellspacing="0" width="510" style="height: 400px; margin-top: 38px; margin-bottom: 1px;" class="lft">

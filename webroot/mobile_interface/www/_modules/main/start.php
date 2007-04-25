@@ -20,7 +20,7 @@
 		}
 
 		//Listar de senaste blog-kommentarerna
-		$res = $sql->query("SELECT * FROM {$t}userblogcmt ORDER BY c_date DESC LIMIT 5", 0, 1);
+		$res = $sql->query("SELECT * FROM {$t}userblogcmt WHERE status_id = '1' ORDER BY c_date DESC LIMIT 5", 0, 1);
 		
 		if (count($res)) {
 			echo '<div style="float: right">';
@@ -29,7 +29,7 @@
 			foreach($res as $row) {
 				$msg = $row['c_msg'];
 				if (strlen($msg) >= 14) $msg = substr($msg, 0, 12).'[...]';
-				echo $msg.' av '.$user->getstring($row['user_id'], '', array('icons' => 1)).'<br/>';
+				echo '<a href="'.l('user','blog',$row['user_id'],$row['blog_id']).'">'.$msg.'</a> av '.$user->getstring($row['id_id'], '', array('icons' => 1)).'<br/>';
 			}
 			echo '</div></div>';
 		}
@@ -51,13 +51,15 @@
 		}
 
 		//Listar de senaste galleribilderna
-		$res = $sql->query("SELECT main_id, picd, pht_cmt FROM {$t}userphoto WHERE view_id = '1' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC LIMIT 7", 0, 1);
+		$res = $sql->query("SELECT main_id, user_id, picd, pht_cmt FROM {$t}userphoto WHERE view_id = '1' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC LIMIT 7", 0, 1);
 		if (count($res)) {
 			echo '<div class="centerMenuHeader">senaste galleribilder</div>';
 			echo '<div class="centerMenuBodyWhite">';
 			echo '<div style="padding: 5px 5px 4px 12px;">';
 			foreach($res as $row) {
-				echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.jpg" style="margin-right: 10px;" onerror="this.style.display = \'none\';" />';
+				echo '<a href="'.l('user','gallery',$row['user_id'],$row['main_id']).'">';
+				echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.jpg" style="margin-right: 10px;" />';
+				echo '</a>';
 			}
 			echo '</div></div>';
 		}
