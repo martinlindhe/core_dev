@@ -59,7 +59,10 @@
 	$current_php = phpversion();
 
 	$supported_php_gd = array('2.0.34', '2.0.34');
-	$current_php_gd = phpversion('gd');	//fixme: returnerar ingenting
+	$x = gd_info();
+	$current_php_gd = $x['GD Version'];	//looks like: "bundled (2.0.34 compatible)"
+	$current_php_gd = str_replace('bundled (', '', $current_php_gd);
+	$current_php_gd = str_replace(' compatible)', '', $current_php_gd);
 
 	$supported_php_apc = array('3.0.14', '3.0.14');
 	$current_php_apc = phpversion('apc');

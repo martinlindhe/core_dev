@@ -16,10 +16,9 @@ User Name:  "Unicorn(955971)~  Single User License"
 		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden
 		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments
 		- kunna flytta en fil från en kategori till en annan
+		- kunna konvertera uppladdade .bmp filer genom ett externt program till .png eller .jpg filer
 
 
-	admin gränssnitt:
-		- compat check: identifiera om gd är installerat
 
 	news modul:
 	X	- kunna bifoga bilder till en nyhet
@@ -78,6 +77,11 @@ User Name:  "Unicorn(955971)~  Single User License"
 		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
 		- möjlighet att radera ett band
 
+	janina, allt low prio:
+		- image preload (finns kod i tracker-applikationen)
+		- kunna scrolla med hover
+		- centrera bilder horisontalt & vertikalt i image_big
+
 
 --[[todo legend]]--
 X = hi prio task
@@ -117,6 +121,7 @@ X = hi prio task
 2007.04.25:
 	- janina: fixade lite småbuggar som gjorde att janina-sidan inte funka längre pga core rewrite
 	- lyrics: import_tracks.php: cleanup & gjort den funktionell igen
+	- admin: compat check: identifierar om gd är installerat
 
 
 2007.04.22:

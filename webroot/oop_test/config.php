@@ -22,7 +22,7 @@
 	$config['session']['sha1_key'] = 'sitecode_uReply';		//todo: byt ut sitecode
 	$session = new Session($config['session']);
 	
-	$config['files']['upload_dir'] = 'E:/Devel/webupload_ooptest/';
-	$config['files']['thumbs_dir'] = 'E:/Devel/webupload_ooptest/thumbs/';
+	$config['files']['upload_dir'] = 'E:/Devel/webupload/ooptest/';
+	$config['files']['thumbs_dir'] = 'E:/Devel/webupload/ooptest/thumbs/';
 	$files = new Files($config['files']);
 ?>

@@ -1,0 +1,83 @@
+body {
+	margin: 10px;
+	padding: 10px;
+
+	background-color: #fff;	
+	color: #000;
+	font-size: 12px;
+}
+
+#menu {
+	color: #fff;
+	background-color: #000;
+	width: 1000px;
+	height: 80px;
+	position: absolute;
+	top: 620px;
+	left: 0px;
+	font-family: verdana;
+}
+
+#menu a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#menu a:hover {
+	text-decoration: underline;
+}
+
+
+#footer {
+	width: 1000px;
+	height: 20px;
+	position: absolute;
+	top: 706px;
+	left: 0px;
+	text-align: center;
+}
+#footer a {
+	color: #000;
+	text-decoration: none;
+}
+
+#image_big_holder {
+	position: absolute;
+	top: 20px;
+	left: 120px;
+	border: 2px #000 solid;
+}
+
+#image_big {
+	min-width: 100px;
+	min-height: 100px;
+}
+
+#image_thumbs_scroller {
+	height: 480px;
+	width: 70px;
+	position: absolute;
+	top: 70px;
+	left: 20px;
+	border: 2px #000 solid;
+	
+	overflow: hidden;	/* required for scroll */
+}
+
+#image_thumbs_scroll_up {
+	width: 35px;
+	height: 7px;
+	position: absolute;
+	top: 61px;
+	left: 38px;
+	background: url('../gfx/scroll_up.png');
+}
+
+#image_thumbs_scroll_down {
+	width: 35px;
+	height: 7px;
+	position: absolute;
+	top: 556px;
+	left: 38px;
+	background: url('../gfx/scroll_down.png');
+}

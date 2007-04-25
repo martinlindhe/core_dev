@@ -14,13 +14,13 @@
 
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
-	$config['database']['database']	= 'dbJanina';
+	$config['database']['database']	= 'dbPigskin';
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = (60*60)*24;
-	$config['session']['name'] = 'Janina';
-	$config['session']['sha1_key'] = 'janinaSHAxyxtybhge3bbexudud81cujnm11wbvwcvvw';
-	$config['session']['allow_registration'] = false;
+	$config['session']['name'] = 'Piggy';
+	$config['session']['sha1_key'] = 'x89xoedfjlzkjsfgviuasvnavklnke5avnaoeviaeovoiav';
+	$config['session']['allow_registration'] = true;
 	$session = new Session($config['session']);
 	
 	$config['files']['apc_uploads'] = false;
@@ -29,7 +29,7 @@
 	$config['files']['image_max_height'] = 570;
 	$config['files']['thumb_default_width'] = 70;
 	$config['files']['thumb_default_height'] = 60;
-	$config['files']['upload_dir'] = 'E:/Devel/webupload/janina/';
-	$config['files']['thumbs_dir'] = 'E:/Devel/webupload/janina/thumbs/';
+	$config['files']['upload_dir'] = 'E:/Devel/webupload/pigskin/';
+	$config['files']['thumbs_dir'] = 'E:/Devel/webupload/pigskin/thumbs/';
 	$files = new Files($config['files']);
 ?>

@@ -20,8 +20,8 @@ define('FILETYPE_USERFILE',				106);	/* File is uploaded to the user's own file 
 
 class Files
 {
-	private $upload_dir = 'e:/devel/webupload/';						//	'/tmp/';
-	private $thumbs_dir = 'e:/devel/webupload/thumbs/';		//	'/tmp/';
+	private $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
+	private $thumbs_dir = 'e:/devel/webupload/default/thumbs/';		//	'/tmp/';
 	private $htaccess = "Deny from all\nOptions All -Indexes";
 
 	public $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
