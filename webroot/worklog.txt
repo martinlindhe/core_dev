@@ -151,14 +151,15 @@ topp prio:
 	* in med nya rubriker & nya knappar överallt
 	* in med nya texter
 	* max 7 tecken i användarnamnet
-
-
+	* frans kollar på: sökning på ålder funkar ej, jag listas inte trots att jag är 26. enligt frans har det nog att göra med att någon tabell inte har info om min ålder, vilket behövs...
+	* forum "tänd upp" / "släck ner": vad gör dessa knappar??
 
 
 hög prio - webbgränssnittet:
 	- namn-länkar vit bakgrund på "visa ett mail"
 	- visa login-error istället för välkomsttexten på oinloggad startsida, ej i popup eller ny sida som det är idag
 	- nya texter för mail
+	- ta bort head_start.php, foot_start.php, de används av nåra filer bland annat register.php
 
 	design:
 		- in med ny design

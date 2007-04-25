@@ -150,3 +150,5 @@ function checkTime(toggle) {
 
 		</div>	<!-- end smallContent -->
 	</div>
+	
+	<div style="background-color: #aaee00">	<!-- holder for all content except footer -->
