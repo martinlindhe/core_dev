@@ -21,14 +21,17 @@
 document.onkeydown = ActivateByKey;
 </script>
 <body style="background: #FFF;" class="cnt">
+
 <form name="msg" action="<?=l('main', 'speakerscorner', 'create')?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
-		<div class="popupWholeContent cnti mrg">
-			<div class="smallHeader1"><h4>skriv en visdom</h4></div>
-			<div class="smallFilled2 cnt pdg_t">
-				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 160px;"></textarea><script type="text/javascript">document.msg.ins_cmt.focus();</script>
-				<input type="submit" class="btn2_sml r" value="skicka!" style="margin-top: 5px;" /><br class="clr" />
-			</div>
+	<div class="smallWholeContent cnti mrg">
+		<div class="leftMenuHeader">skriv en visdom</div>
+		<div class="leftMenuBodyWhite pdg_t">
+			<textarea class="txt" name="ins_cmt" style="width: 160px; height: 160px;"></textarea>
+			<script type="text/javascript">document.msg.ins_cmt.focus();</script>
+			<input type="submit" class="btn2_sml" value="skicka" />
 		</div>
+	</div>
 </form>
+
 </body>
 </html>

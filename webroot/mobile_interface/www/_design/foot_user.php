@@ -108,7 +108,7 @@
 		} else {
 			echo '<li>Inga besökare.</li>';
 		}
-		echo '</ul></div>';
+		echo '</ul></div><br/>';
 	}
 ?>
 

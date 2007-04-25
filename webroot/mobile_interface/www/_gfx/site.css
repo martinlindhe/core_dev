@@ -60,21 +60,19 @@ ul.user_menu a:hover { text-decoration: none; color: #000; }
 
 /* högermenyn */
 #rightMenu {
-	position: absolute;
-	top: 140px;
-	left: 800px;
+	float: left;
+	/* position: absolute; top: 140px; left: 800px; */
+	padding-left: 14px;
 	width: 176px;
-	clear: both;
 }
 
 /* detta är huvudinnehållet */
 #mainContent {
+	float: left;
 	margin: 0 0 0 15px;
 	width: 596px;
 	overflow: hidden;
-	position: absolute;
-	top: 140px;
-	left: 176px;
+	/* position: absolute; top: 140px; left: 176px; */
 	min-height: 464px;
 	/* background-color: #aaa; */
 }

@@ -134,7 +134,6 @@
 	- webbgränssnittet: skapat en "surfcafe" sida (tom)
 	- webbgränssnittet: ny design på forum
 	- webbgränssnittet: ny design på "sök användare"
-	
 	- startsidan: "senaste kommentarer" går nu att klicka
 	- startsidan: klickbar länk på "senaste galleribilder"
 	- blogg: skriv ny blogg-sidan ny grafik
@@ -145,13 +144,13 @@
 	- mail: "läs brev"-sidan ny grafik
 	- mail buggfix: när man raderar mail i utkorgen så kommer man tillbaka till utkorgen nu (kom till inkorgen förrut)	
 	- tyck till: ny logga & buggfix: skicka-knappen fungerar igen
-	
+	- fixat <div> bugg, sidan renderar som den ska i IE 6/7 och Firefox. footern visas där den ska
+	- "skriv en visdom" popuprutan ny design
 
 
 ***********************************************************************************************************************************
 topp prio:
 
-	* in med nya rubriker & nya knappar överallt
 	* in med nya texter
 	* max 7 tecken i användarnamnet
 	* frans kollar på: sökning på ålder funkar ej, jag listas inte trots att jag är 26. enligt frans har det nog att göra med att någon tabell inte har info om min ålder, vilket behövs...
@@ -159,29 +158,20 @@ topp prio:
 
 
 hög prio - webbgränssnittet:
-	- namn-länkar vit bakgrund på "visa ett mail"
 	- visa login-error istället för välkomsttexten på oinloggad startsida, ej i popup eller ny sida som det är idag
-	- nya texter för mail
 	- ta bort head_start.php, foot_start.php, de används av nåra filer bland annat register.php
-
-	design:
-		- in med ny design
-		- implementera nya symboler
-		- div bugg på profilsidan, högerspalten flyter ner fel
-
-
-mobila gränssnittet:
-	- login redirectar användaren till webbgränssnittet, samma med logout
 
 Kvar att göra MMS:
 	- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
 
-allmänt:
-	- en funktion som skapar snygga användarnamn+ålder+kön-länkar
+allmänt mobila gränssnittet:
+	- login redirectar användaren till webbgränssnittet, samma med logout
+
+	- en funktion som skapar snygga användarnamn+ålder+kön-länkar för mobilen
 		* ta bort $user->getstringMobile() ??? eller skriv om den iaf
 
 	- paging för sök användare-resultat. kräver en performSearchCnt() funktion samt lite omstrukturering i performSearch()
-	
+
 	- mail.php
 		* kunna se sin utkorg (skickad mail)
 
@@ -190,7 +180,9 @@ allmänt:
 
 	- bugg: mail counter minskar inte när man raderar mail från sin inbox
 
-	- senare: waterstamp på uppladdade bilder
+
+senare:
+	- waterstamp på uppladdade bilder
 
 
 XHTML cleanup:
