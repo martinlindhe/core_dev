@@ -12,7 +12,7 @@
 		$showCategory = 1;
 		if (!empty($_GET['c']) && is_numeric($_GET['c'])) $showCategory = $_GET['c'];
 
-		echo '<title>Janina Magnusson - '.$files->getCategoryName($showCategory).'</title>';
+		echo '<title>Janina Magnusson - '.getCategoryName($showCategory).'</title>';
 ?>
 	</head>
 <body>

@@ -36,7 +36,7 @@ class Files
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 	private $count_file_views			= false;	//auto increments the "cnt" in tblFiles in each $files->sendFile() call
 	public $anon_uploads					= false;	//allow unregisterd users to upload files
-	private $apc_uploads					= true;		//enable support for php_apc + php_uploadprogress calls
+	private $apc_uploads					= false;		//enable support for php_apc + php_uploadprogress calls
 
 	function __construct(array $config)
 	{
@@ -262,7 +262,7 @@ class Files
 
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->allowed_image_types)) {
-				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onclick="loadImage('.$list[$i]['fileId'].', \'image_big\', \''.urlencode(getProjectPath()).'\');"><center>';
+				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onclick="loadImage('.$list[$i]['fileId'].', \'image_big\', \''.getProjectPath().'\');"><center>';
 				echo makeThumbLink($list[$i]['fileId'], $list[$i]['fileName']);
 				echo '</center></div>';
 			}
@@ -482,7 +482,7 @@ class Files
 		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
 		if (!in_array($file_lastname, $this->allowed_image_types)) return false;
 
-		//header('Content-Type: '.$data['fileMime']);
+		header('Content-Type: '.$data['fileMime']);
 		header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
 		header('Content-Transfer-Encoding: binary');
 		
@@ -557,6 +557,8 @@ class Files
 		if ($this->count_file_views) {
 			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
 		}
+		
+		die;
 	}
 
 	function sendTextfile($filename)

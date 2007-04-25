@@ -20,7 +20,7 @@ class Session
 	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
 	private $sha1_key = 'rpxp8xkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 	private $allow_registration = true;	//set to false to disallow the possibility to register new users
-	private $home_page = '';						//if set, redirects user to this page after successful login
+	private $home_page = 'index.php';		//if set, redirects user to this page after successful login
 
 	//Aliases of $_SESSION[] variables
 	public $error;
@@ -214,6 +214,7 @@ class Session
 		$db->query('UPDATE tblUsers SET timeLastLogout=NOW()');
 
 		$this->started = 0;
+		$this->username = '';
 		$this->id = 0;
 		$this->ip = 0;
 		$this->mode = 0;
@@ -259,7 +260,7 @@ class Session
 				echo '<tr><td>Username:</td><td><input name="register_usr" type="text"/> <img src="/gfx/icon_user.png" alt="Username"/></td></tr>';
 				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="/gfx/icon_keys.png" alt="Password"/></td></tr>';
 				echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="/gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
-				echo '<tr><td>E-mail:</td><td><input name="register_email" type="password"/> <img src="/gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
+				echo '<tr><td>E-mail:</td><td><input name="register_email" type="text"/> <img src="/gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
 				echo '</table><br/>';
 
 				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
@@ -360,10 +361,8 @@ class Session
 	/* Locks unregistered users out from certain pages */
 	function requireLoggedIn()
 	{
-		global $config;
-
 		if (!$this->id) {
-			header('Location: '.$config['session']['home_page']);
+			header('Location: '.$this->home_page);
 			die;
 		}
 	}
@@ -371,10 +370,8 @@ class Session
 	/* Locks unregistered users out from certain pages */
 	function requireAdmin()
 	{
-		global $config;
-
 		if (!$this->isAdmin) {
-			header('Location: '.$config['session']['home_page']);
+			header('Location: '.$this->home_page);
 			die;
 		}
 	}

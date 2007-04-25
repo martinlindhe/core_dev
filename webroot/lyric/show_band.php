@@ -13,7 +13,7 @@
 	} else {
 		echo '<td class="title">'.$band_name.'</td>';
 	}
-	echo '<td width=50><a href="edit_band.php?id='.$band_id.'">Edit</a></td></tr>';
+	echo '<td width="50"><a href="edit_band.php?id='.$band_id.'">Edit</a></td></tr>';
 	echo '</table>';
 	echo '<br/>';
 

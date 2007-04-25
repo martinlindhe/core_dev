@@ -8,7 +8,7 @@
 		global $files;
 		if (!is_numeric($_id)) return false;
 
-		return '<img src="/core/file.php?id='.$_id.'&amp;w='.$files->thumb_default_width.'&amp;h='.$files->thumb_default_width.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
+		return '<img src="/core/file.php?id='.$_id.'&amp;w='.$files->thumb_default_width.'&amp;h='.$files->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
 	}
 	
 	function makeImageLink($_id, $_title = '')

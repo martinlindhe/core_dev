@@ -130,7 +130,7 @@
 		$db->query('UPDATE tblTracks SET lyricId=0,bandId=0 WHERE lyricId='.$lyric_id);
 	}
 
-	function addLyric($band_id, $record_id, $track, $lyric_name, $lyric_text)
+	function addLyric($band_id, $record_id, $track, $lyric_name, $lyric_text = '')
 	{
 		global $db, $session;
 
