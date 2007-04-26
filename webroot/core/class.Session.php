@@ -110,13 +110,13 @@ class Session
 		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
 				$this->error = 'Client IP changed';
-				$db->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
+				$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
 				$this->logOut();
 		}
 
 		//Logged in: Check user activity - log out inactive user
 		if ($this->lastActive < (time()-$this->timeout)) {
-			$db->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
+			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
 			$this->error = 'Inactivity timeout';
 			$this->logOut();
 		} else {
@@ -126,6 +126,18 @@ class Session
 		}
 
 	}
+
+	/* Writes a log entry to tblLogs */
+	function log($str, $entryLevel = LOGLEVEL_NOTICE)
+	{
+		global $db;
+
+		if (!is_numeric($entryLevel)) return false;
+
+		$q = 'INSERT INTO tblLogs SET entryText="'.$db->escape($str).'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$this->id.',userIP='.$this->ip;
+		$db->query($q);
+	}
+
 
 	//returns the user ID of the newly created user
 	function registerUser($username, $password1, $password2, $userMode = 0)
@@ -162,7 +174,7 @@ class Session
 		$db->query($q);
 		$newUserId = $db->insert_id;
 		
-		$db->log('User <b>'.$username.'</b> created');
+		$this->log('User <b>'.$username.'</b> created');
 
 		/* Creates a Inbox and Outbox */
 		/*
@@ -185,7 +197,7 @@ class Session
 		$data = $db->getOneRow($q);
 		if (!$data) {
 			$this->error = 'Login failed';
-			$db->log('Failed login attempt: username '.$enc_username);
+			$this->log('Failed login attempt: username '.$enc_username);
 			return false;
 		}
 
@@ -201,7 +213,7 @@ class Session
 		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
 		$this->lastActive = time();
 
-		$db->log('User logged in', LOGLEVEL_NOTICE, $this->id);	//fixme: need to send user ID here because db->log is called from the session constructor, thus $session isnt created yet when the log() is invoked
+		$this->log('User logged in', LOGLEVEL_NOTICE);
 
 		return true;
 	}
@@ -210,7 +222,7 @@ class Session
 	{
 		global $db;
 
-		$db->log('User logged out', LOGLEVEL_NOTICE, $this->id);
+		$this->log('User logged out', LOGLEVEL_NOTICE);
 		$db->query('UPDATE tblUsers SET timeLastLogout=NOW()');
 
 		$this->started = 0;

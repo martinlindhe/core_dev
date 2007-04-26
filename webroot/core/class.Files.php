@@ -42,7 +42,7 @@ class Files
 
 	function __construct(array $config)
 	{
-		global $db;
+		global $session;
 
 		if (isset($config['upload_dir'])) $this->upload_dir = $config['upload_dir'];
 		if (isset($config['thumbs_dir'])) $this->thumbs_dir = $config['thumbs_dir'];
@@ -66,14 +66,14 @@ class Files
 				die('FATAL: Cannot create upload directory at '.$this->upload_dir.'. Please check paths in config.php');
 			}*/
 			
-			$db->log('Creating upload directory');
+			$session->log('Creating upload directory');
 			
 			mkdir($this->upload_dir);
 			file_put_contents($this->upload_dir.'.htaccess', $this->htaccess);
 			file_put_contents($this->upload_dir.'index.html', '');			
 	
 			if (!is_dir(realpath($this->thumbs_dir))) {
-				$db->log('Creating thumbs directory');
+				$session->log('Creating thumbs directory');
 				mkdir($this->thumbs_dir);
 				file_put_contents($this->thumbs_dir.'.htaccess', $this->htaccess);
 				file_put_contents($this->thumbs_dir.'index.html', '');			
@@ -307,7 +307,7 @@ class Files
 				unlink($this->thumbs_dir.$name);
 			}
 		}
-		//$db->log('Thumbs for '.$_id.' deleted');
+		//$session->log('Thumbs for '.$_id.' deleted');
 	}
 	
 
@@ -323,7 +323,7 @@ class Files
 
 		if (!is_uploaded_file($FileData['tmp_name'])) {
 			$session->error = 'File upload error';
-			$db->log('Attempt to upload too big file');
+			$session->log('Attempt to upload too big file');
 			return false;
 		}
 		
@@ -376,7 +376,7 @@ class Files
 			chmod($uploadfile, 0777);
 			return true;
 		}
-		$db->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+		$session->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
 		return false;
 	}
 
@@ -401,7 +401,7 @@ class Files
 		//Move the uploaded file to upload directory
 		$uploadfile = $this->upload_dir.$fileId;
 		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
-		$db->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+		$session->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
 	}
 
 	/* Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio */

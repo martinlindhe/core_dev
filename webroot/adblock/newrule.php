@@ -9,7 +9,7 @@
 		//todo: checkbox "make comment private"
 		require('design_head.php');
 		if (is_numeric($ruleId) && $ruleId) {
-			$db->log('Adblock rule # '.$ruleId.' created');
+			$session->log('Adblock rule # '.$ruleId.' created');
 			$private = false;
 			if (isset($_POST['commentprivate'])) $private = true;
 			addComment(COMMENT_ADBLOCKRULE, $ruleId, $_POST['comment'], $private);

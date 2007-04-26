@@ -267,7 +267,7 @@
 	//POST param: 
 	function handleAdblockDownloadRequest()
 	{
-		global $db, $files, $config;
+		global $session, $files, $config;
 
 		$requestType = 0;
 
@@ -309,7 +309,7 @@
 
 		if ($config['debug']) {
 			$str = 'Downloaded ruleset '.$cache_file.' ('.$requestType.')';
-			$db->log($str);
+			$session->log($str);
 		}
 
 		$lastchanged = 0;

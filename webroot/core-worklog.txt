@@ -2,10 +2,6 @@ UltraEdit-32 v13.00:
 User Name:  "Unicorn(955971)~  Single User License"
 "H1N5P-L1I4F-I0O9B-Y8D2S-D7R2J-P7K2M"
 --------------[[platform todo]]--------------
-TOP PRIO:
-	flytta ut db->log() till session! borde lösa alla cp problem med login/logout loggande
-
-
 
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
@@ -81,8 +77,6 @@ TOP PRIO:
 
 	janina, allt low prio:
 		- image preload (finns kod i tracker-applikationen)
-		- kunna scrolla med hover
-		- centrera bilder horisontalt & vertikalt i image_big
 
 
 --[[todo legend]]--
@@ -120,6 +114,11 @@ X = hi prio task
 
 
 --------------[[changelog]]--------------
+2007.04.26:
+	- db: fixade så $db->showProfile() exluderar "sql connect time" när den räknar ut "php time"
+	- core: flytta ut db->log() till session-log(), det borde lösa alla cp problem med login/logout loggande
+
+
 2007.04.25:
 	- janina: fixade lite småbuggar som gjorde att janina-sidan inte funka längre pga core rewrite
 	- lyrics: import_tracks.php: cleanup & gjort den funktionell igen

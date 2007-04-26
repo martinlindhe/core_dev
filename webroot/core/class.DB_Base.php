@@ -209,7 +209,7 @@ abstract class DB_Base
 		}
 
 		if ($pageload_start) {
-			$php_time = $total_time - $sql_time;
+			$php_time = $total_time - $this->connect_time - $sql_time;
 			echo 'Total time spent: '.round($total_time, 3).'s '.' (SQL connect: '.round($this->connect_time, 3).'s, SQL queries: '.round($sql_time, 3).'s, PHP: '.round($php_time, 3).'s)';
 		} else {
 			echo 'Time spent - SQL: '.round($sql_time, 3);
@@ -217,21 +217,6 @@ abstract class DB_Base
 		echo '</div>';
 	}
 	
-	/* Writes a log entry to tblLogs */
-	//todo: take user_id now only so it can log "user logged in" because that log entry is being called while still in the session constructor
-	function log($str, $entryLevel = LOGLEVEL_NOTICE, $_user_id = 0)
-	{
-		global $session;
-		if (!is_numeric($entryLevel) || !is_numeric($_user_id)) return false;
-
-		$enc_str = $this->escape($str);
-
-		$userId = !empty($session) ? $session->id : $_user_id;
-		$userIP = !empty($session) ? $session->ip : IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
-
-		$this->query('INSERT INTO tblLogs SET entryText="'.$enc_str.'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$userId.',userIP='.$userIP);
-	}
-
 	/* Displays all events from the event log */
 	function showEvents()
 	{
