@@ -152,9 +152,10 @@
 topp prio:
 
 	* in med nya texter
-	* max 7 tecken i användarnamnet
 	* frans kollar på: sökning på ålder funkar ej, jag listas inte trots att jag är 26. enligt frans har det nog att göra med att någon tabell inte har info om min ålder, vilket behövs...
+	* frans: mail-aktivering vid registerring
 	* forum "tänd upp" / "släck ner": vad gör dessa knappar??
+	* max 7 tecken i användarnamnet
 
 
 hög prio - webbgränssnittet:

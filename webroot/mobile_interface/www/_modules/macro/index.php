@@ -6,6 +6,9 @@
 	} elseif($action == 'fixmap') {
 		include('fixmap.php');
 		exit;
+	} elseif($action == 'fixdb') {
+		include('fixdb.php');
+		exit;
 	} elseif($action == 'cs') {
 		include('cs.php');
 		exit;

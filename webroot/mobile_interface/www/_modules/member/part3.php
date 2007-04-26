@@ -147,6 +147,8 @@ function validate(tForm) {
 	return true;
 }
 </script>
+		<div class="wholeHeader2"><h4>Slutför konto</h4></div>
+		<div class="wholeBoxed2">
 <form name="r" method="post" action="<?=l('member', 'activate', secureOUT($fid), secureOUT($key))?>" onsubmit="return validate(this);">
 			<input type="hidden" name="doit" value="1">
 			<table cellspacing="0" width="500" style="height: 150px; margin-bottom: 10px;">
@@ -192,8 +194,9 @@ function validate(tForm) {
 				</td>
 			</tr>
 			</table>
-	<input type="image" style="position: absolute; right: -10px; bottom: -11px;" src="<?=OBJ?>_heads/btn1_end.png" />
+	<input type="submit" class="btn2_med r" value="slutför" /><br class="clr" />
 			</form>
+		</div>
 <?
 	include(DESIGN.'foot_start.php');
 ?>

@@ -15,7 +15,7 @@
 		if($v == 1)
 			errorIACT(extOUT(gettxt($action_new)), $action, $v);
 		else
-			errorIACT(extOUT(gettxt($action_new), 'wht'), $action, $v, 'wht');
+			errorIACT(extOUT(gettxt($action_new)), $action, $v);
 	} else if($id == 1)
 		splashLACT(extOUT(gettxt($action_new), ''));
 	else if($id == 2)

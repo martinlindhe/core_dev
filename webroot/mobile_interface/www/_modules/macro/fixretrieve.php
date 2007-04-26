@@ -1,5 +1,5 @@
 <?
-	$users = $sql->query("SELECT id_id FROM {$t}user WHERE status_id = '1'");
+	$users = $sql->query("SELECT id_id FROM {$t}user WHERE status_id = '1' AND lastonl_date >= '2007-03-20'");
 	foreach($users as $us) {
 		$gb = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}usergb WHERE user_id = '".$us[0]."' AND user_read = '0' AND status_id = '1'");
 		$id = $user->setinfo($us[0], 'gb_count', intval($gb));
@@ -65,7 +65,7 @@
 			$user->setrel($id[1], 'user_retrieve', $us[0]);
 		}
 
-		$rel_c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userrelation WHERE user_id = '".secureINS($us[0])."'");
+		$rel_c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userrelation INNER JOIN {$t}user u on u.id_id = friend_id and u.status_id = '1' WHERE user_id = '".secureINS($us[0])."'");
 		$id = $user->setinfo($us[0], 'rel_offset', intval($rel_c));
 		//check if has got container
 		$gotrel = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}obj_rel WHERE content_type = 'user_head' AND owner_id = '".$us[0]."' AND object_id = '".$id[1]."' LIMIT 1");

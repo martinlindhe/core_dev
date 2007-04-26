@@ -67,11 +67,11 @@ function validateIt(tForm) {
 <form name="blog_write" action="<?=l('user', 'blog', $l['id_id'], '0')?>write=1&amp;i=<?=isset($_GET['m'])?'&amp;m':((isset($_GET['d']))?'&amp;d='.secureOUT($_GET['d']):'&amp;n');?><?=($edit)?'&amp;i='.$res['main_id']:'';?>" method="post" onsubmit="return validateIt(this);">
 <input type="hidden" name="do" value="1"/>
 
-<div class="boxMid4" style="margin: 25px 15px 0 15px;">
+<div class="boxMid4" style="margin: 15px 15px 0 15px;">
 		<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
 	<div class="boxMid4mid">
 
-<table summary="" cellspacing="0" width="510" style="height: 400px; margin-top: 38px; margin-bottom: 1px;" class="lft">
+<table summary="" cellspacing="0" width="510" style="height: 400px; margin-top: 15px; margin-bottom: 1px;" class="lft">
 <tr>
 	<td class="pdg bld"><b>Rubrik:&nbsp;</b><input type="text" class="txt" name="ins_title" style="width: 296px; margin-left: 6px; margin-bottom: -4px;" value="<?=@secureOUT($res['blog_title'])?>"/></td>
 	<td class="pdg bld rgt"><?=(@$res['blog_date']?nicedate($res['blog_date']):'');?></td>
@@ -199,7 +199,7 @@ function omo(obj, border) {
 </select><input type="button" class="btn2_med" value="ladda upp ny" onclick="makeUpload('<?=$l['id_id']?>&amp;do=blog'); return false;"/>
 </blockquote>
 </td></tr>
-<tr><td colspan="2" style="border: 1px solid #999; height: 100%; background: #FFF;"><iframe id="text_var" style="cursor: text" name="text_var" border="0" frameborder="0" width="100%" height="100%"></iframe></td></tr>
+<tr><td colspan="2" style="border: 1px solid #999; height: 300px; background: #FFF;"><iframe id="text_var" style="cursor: text" name="text_var" border="0" frameborder="0" width="100%" height="300"></iframe></td></tr>
 </table>
 </td></tr>
 <tr>

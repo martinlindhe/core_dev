@@ -12,7 +12,7 @@
 
 	function mailDelete($_id)
 	{
-		global $sql, $t, $l;
+		global $sql, $t, $l, $user;
 
 		if (!is_numeric($_id)) return false;
 
@@ -151,7 +151,7 @@
 
 	function sendMail($_to_name, $_cc_name, $_title, $_text, $allowed_html = '')
 	{
-		global $sql, $user, $l, $t;
+		global $sql, $user, $l, $t, $user;
 		
 		$error = '';
 		

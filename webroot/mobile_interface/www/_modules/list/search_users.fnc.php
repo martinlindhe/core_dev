@@ -181,7 +181,7 @@
 		$list = $sql->query("SELECT st_lan FROM {$t}pstlan ORDER BY main_id ASC");
 
 		foreach ($list as $res) {
-			echo '<option value="'.$res[0].'"'.($_selected===$res[0] ? ' selected':'').'>'.secureOUT($res[0]).'</option>';
+			echo '<option value="'.$res[0].'"'.($_selected===$res[0] ? ' selected':'').'>'.secureOUT(ucwords(strtolower($res[0]))).'</option>';
 		}
 	}
 	
@@ -195,7 +195,7 @@
 		$list = $sql->query("SELECT st_ort FROM {$t}pstort WHERE st_lan = '".secureINS($_lan)."' ORDER BY st_ort");
 
 		foreach ($list as $res) {
-			echo '<option value="'.$res[0].'"'.($_selected===$res[0]?' selected':'').'>'.$res[0].'</option>';
+			echo '<option value="'.$res[0].'"'.($_selected===$res[0]?' selected':'').'>'.secureOUT(ucwords(strtolower($res[0]))).'</option>';
 		}
 	}
 

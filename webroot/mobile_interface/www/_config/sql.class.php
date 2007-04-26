@@ -28,21 +28,15 @@ class sql {
 		if($debug) print $query;
 		$result = mysql_query($query);
 		$return = array();
-		if ($error) echo mysql_error();
-		if ($assoc) {
+		if($error) echo mysql_error();
+		if($assoc) {
 			while($row = mysql_fetch_assoc($result))
 				$return[] = $row;
 		} else {
 			while($row = mysql_fetch_row($result))
 				$return[] = $row;
 		}
-
-		if ($return !== false) return $return;
-
-		echo '<br/><span style="background-color:#ee88aa">';
-		echo 'SQL ERROR from query "'.$query.'"<br/>';
-		echo mysql_error();
-		echo '</span>';
+		return $return;
 	}
 
 	function querybycontent($query, $debug = false, $assoc = false, $name = 'content_type') {
@@ -73,27 +67,16 @@ class sql {
 			return mysql_fetch_row($result);
 	}
 
-	function queryResult($query, $debug = false)
-	{
+	function queryResult($query, $debug = false) {
 		$this->checkconnected();
-		$result = mysql_query($query);
-
-		//if ($result === true) return true;
-		if ($result !== false) return @mysql_result($result, 0);
-
-		echo '<br/><span style="background-color:#ee88aa">';
-		echo 'SQL ERROR from query "'.$query.'"<br/>';
-		echo mysql_error();
-		echo '</span>';
+		if($debug) print $query;
+		$result = @mysql_query($query);
+		return @mysql_result($result, 0);
 	}
 	function queryInsert($query) {
 		$this->checkconnected();
-		if (mysql_query($query) !== false) return mysql_insert_id();
-		echo '<br/><span style="background-color:#ee88aa">';
-		echo 'SQL ERROR from query "'.$query.'"<br/>';
-		echo mysql_error();
-		echo '</span>';
-		
+		@mysql_query($query);
+		return(mysql_insert_id());
 	}
 	function queryNumrows($query) {
 		$this->checkconnected();

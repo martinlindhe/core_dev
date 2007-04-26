@@ -1,15 +1,4 @@
 <?
-/*
-elseif($action == 'activate') {
-		include('auth.php');
-		include(CONFIG.'validate.fnc.php');
-		include("part2.php");
-		exit;
-	} elseif($action == 'update') {
-		include("update.php");
-		exit;
-	} 
-*/
 	if($action == 'logout') {
 		include('auth.php');
 		if(!empty($_GET['id']))
@@ -33,9 +22,16 @@ elseif($action == 'activate') {
 		include('forgot.php');
 		exit;
 	} elseif($action == 'register') {
+		include(CONFIG.'validate.fnc.php');
+		include('part1.php');
+		exit;
+	} elseif($action == 'activate') {
 		include('auth.php');
 		include(CONFIG.'validate.fnc.php');
-		include('register.php');
+		include("part2.php");
+		exit;
+	} elseif($action == 'update') {
+		include("update.php");
 		exit;
 	} elseif($action == 'mms') {
 		include("mms.php");

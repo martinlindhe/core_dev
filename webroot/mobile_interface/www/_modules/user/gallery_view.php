@@ -8,9 +8,9 @@
 	
 	if (!empty($_POST['chg_pic_desc']) && $res['user_id'] == $l['id_id']) {
 		$q = 'UPDATE s_userphoto SET pht_cmt="'.secureINS($_POST['chg_pic_desc']).'" WHERE main_id = "'.secureINS($key).'"';
-		echo $q;
-		$sql->query($q);
+		$sql->queryUpdate($q);
 		$res['pht_cmt'] = $_POST['chg_pic_desc'];
+		reloadACT(l('user', 'gallery', $res['user_id']));
 	}
 
 	//radera kommentar

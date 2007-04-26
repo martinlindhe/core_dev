@@ -1,8 +1,5 @@
 <?
-session_start();
-ob_start();
-    ob_implicit_flush(0);
-    ob_start('ob_gzhandler');
+	session_start();
 	setlocale(LC_TIME, "swedish");
 	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
 	require("./set_onl.php");
@@ -28,7 +25,8 @@ ob_start();
 		}
 		$list = (!empty($_POST['list']))?'1':'0';
 		if(!empty($_POST['id']) && is_md5($_POST['id'])) {
-			$check = mysql_result(mysql_query("SELECT u_crew FROM {$tab['admin']} WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1"), 0, 'u_crew');
+			$check = mysql_result(mysql_query("SELECT u_crew FROM {$t}admin WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1"), 0, 'u_crew');
+			$sql->queryUpdate("UPDATE {$t}user SET level_id = '10' WHERE id_id = '".$_POST['id']."' LIMIT 1");
 			$sql = mysql_query("UPDATE {$tab['admin']} SET
 			user_user = '".secureINS($_POST['s_u'])."',
 			".($isCrew && !$check?"pos_all = '".implode(',', $_POST['pospos'])."',":'')."
@@ -45,12 +43,13 @@ ob_start();
 		} else {
 			$id = $sql->queryLine("SELECT id_id, u_pass FROM {$t}user WHERE u_alias = '".$_POST['s_u']."' AND status_id = '1' LIMIT 1");
 			if(!empty($id) && count($id)) {
-			$sql = mysql_query("INSERT INTO {$tab['admin']} SET
+			$sql->queryUpdate("UPDATE {$t}user SET level_id = '10' WHERE id_id = '".$id[0]."' LIMIT 1");
+			$sql = mysql_query("INSERT INTO {$t}admin SET
 			user_user = '".secureINS($_POST['s_u'])."',
 			user_name = '".secureINS($_POST['s_n'])."',
 			main_id = '".$id[0]."',
 			user_pass = '".$id[1]."',
-			".($isCrew?"pos_all = '".implode(',', $_POST['pospos'])."',":'')."
+			".($isCrew?"pos_all = '".@implode(',', @$_POST['pospos'])."',":'')."
 			".(($list)?"status_id = 'L',":"status_id = '1',")."
 			u_owner = '".secureINS($_SESSION['u_i'])."'");
 			} else errorNEW('Användaren finns inte som medlem på communityn.', 'settings.php');
@@ -61,14 +60,14 @@ ob_start();
 
 	if(isset($_POST['ins_msg'])) {
 		if(!empty($_POST['id'])) {
-			mysql_query("UPDATE {$tab['text']} SET text_cmt = '".secureINS($_POST['ins_msg'])."', text_date = NOW() WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+			mysql_query("UPDATE {$t}text SET text_cmt = '".secureINS($_POST['ins_msg'])."', text_date = NOW() WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 		}
 		header("Location: settings.php");
 		exit;
 	}
 
 	if(!empty($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM {$tab['text']} WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM {$t}text WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
 		if(mysql_num_rows($sql) == '1') {
 			$change = true;
 			$row = mysql_fetch_assoc($sql);
@@ -77,7 +76,7 @@ ob_start();
 	$u_change = false;
 	$new = false;
 	if(!empty($_GET['c'])) {
-		$c_sql = mysql_query("SELECT * FROM {$tab['admin']} WHERE main_id = '".secureINS($_GET['c'])."' LIMIT 1");
+		$c_sql = mysql_query("SELECT * FROM {$t}admin WHERE main_id = '".secureINS($_GET['c'])."' LIMIT 1");
 		if(mysql_num_rows($c_sql) > 0) {
 			$c_row = mysql_fetch_assoc($c_sql);
 			if(!$_SESSION['u_c'] && $c_row['u_crew']) {
@@ -91,32 +90,32 @@ ob_start();
 	}
 
 	if(!empty($_GET['b']) && is_md5($_GET['b'])) {
-		mysql_query("UPDATE {$tab['admin']} SET status_id = '2' WHERE main_id = '".secureINS($_GET['b'])."' AND u_crew = '0' LIMIT 1");
+		mysql_query("UPDATE {$t}admin SET status_id = '2' WHERE main_id = '".secureINS($_GET['b'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 	if(!empty($_GET['b2']) && is_md5($_GET['b2'])) {
-		mysql_query("UPDATE {$tab['admin']} SET status_id = 'Z' WHERE main_id = '".secureINS($_GET['b2'])."' AND u_crew = '0' LIMIT 1");
+		mysql_query("UPDATE {$t}admin SET status_id = 'Z' WHERE main_id = '".secureINS($_GET['b2'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 	if(!empty($_GET['a']) && is_md5($_GET['a'])) {
-		mysql_query("UPDATE {$tab['admin']} SET status_id = '1' WHERE main_id = '".secureINS($_GET['a'])."' AND u_crew = '0' LIMIT 1");
+		mysql_query("UPDATE {$t}admin SET status_id = '1' WHERE main_id = '".secureINS($_GET['a'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 	if(!empty($_GET['a2']) && is_md5($_GET['a2'])) {
-		mysql_query("UPDATE {$tab['admin']} SET status_id = 'L' WHERE main_id = '".secureINS($_GET['a2'])."' AND u_crew = '0' LIMIT 1");
+		mysql_query("UPDATE {$t}admin SET status_id = 'L' WHERE main_id = '".secureINS($_GET['a2'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 	if(!empty($_GET['d']) && is_md5($_GET['d'])) {
-		mysql_query("DELETE FROM {$tab['admin']} WHERE main_id = '".secureINS($_GET['d'])."' AND u_crew = '0' AND (status_id = '0' OR status_id = '2') LIMIT 1");
+		mysql_query("DELETE FROM {$t}admin WHERE main_id = '".secureINS($_GET['d'])."' AND u_crew = '0' AND (status_id = '0' OR status_id = '2') LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 
-	$u_sql = mysql_query("SELECT a.*, u.user_user AS owner_u FROM {$tab['admin']} a LEFT JOIN {$tab['admin']} u ON u.main_id = a.u_owner ORDER BY a.u_crew DESC, a.status_id ASC, a.user_name");
+	$u_sql = mysql_query("SELECT a.*, u.user_user AS owner_u FROM {$t}admin a LEFT JOIN {$t}admin u ON u.main_id = a.u_owner ORDER BY a.u_crew DESC, a.status_id ASC, a.user_name");
 
 	$u_count = mysql_num_rows($u_sql);
 
@@ -170,7 +169,7 @@ ob_start();
 	}
 
 
-	$sql = mysql_query("SELECT * FROM $text_tab WHERE status_id = '1' ORDER BY main_id");
+	$sql = mysql_query("SELECT * FROM {$t}text WHERE status_id = '1' ORDER BY main_id");
 
 	require("./_tpl/admin_head.php");
 ?>
@@ -394,7 +393,7 @@ echo '<option value="'.$page.'"'.($sel?' selected':'').'>'.(array_key_exists($pa
 			</table>
 <?
 	if($u_change && ($_SESSION['u_c'] || $c_row['user_user'] == $_SESSION['u_u'])) {
-		$log = mysql_query("SELECT * FROM $ip_tab WHERE login_name LIKE '%".secureINS($c_row['user_user'])."%' ORDER BY login_date DESC");
+		$log = mysql_query("SELECT * FROM {$t}adminlog WHERE login_name LIKE '%".secureINS($c_row['user_user'])."%' ORDER BY login_date DESC");
 ?>
 			<hr /><div class="hr"></div>
 			<table style="margin-bottom: 5px;">
