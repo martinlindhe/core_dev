@@ -1,29 +1,22 @@
 <?
 	require_once('config.php');
 
-	if ($session->isAdmin && !empty($_GET['remove']) && is_numeric($_GET['remove'])) {
-		require('design_head.php');
-		
-		if (!isset($_GET['confirmed'])) {
-?>
-			Are you sure you want to delete this rule?<br/><br/>
-			<a href="<?=$_SERVER['PHP_SELF'].'?remove='.$_GET['remove'].'&confirmed'?>">Yes, I am sure</a><br/>
-			<br>
-			<a href="<?=$_SERVER['PHP_SELF'].'?id='.$_GET['remove']?>">No, wrong button</a><br/>
-<?
-		} else {
-			//remove rule
-			removeAdblockRule($_GET['remove']);
-
-			echo 'Rule successfully removed!<br/><br/>';
-			echo '<a href="ruleset.php">Return to rules overview</a>';
-		}
-		require('design_foot.php');
-		die;
-	}
-
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$ruleId = $_GET['id'];
+	
+	if ($session->isAdmin && isset($_GET['delete'])) {
+
+		if (confirmed('Are you sure you want to delete this rule?', 'id', $_GET['id'])) {
+			//delete rule
+			removeAdblockRule($ruleId);
+
+			require('design_head.php');
+			echo 'Rule successfully deleted!<br/><br/>';
+			echo '<a href="ruleset.php">Return to rules overview</a>';
+			require('design_foot.php');
+			die;
+		}
+	}
 
 	if ($session->isAdmin && !empty($_POST['rule']) && !empty($_POST['type']) && isset($_POST['sampleurl'])) {
 		updateAdblockRule($ruleId, $_POST['rule'], $_POST['type'], $_POST['sampleurl']);
@@ -73,7 +66,7 @@ Edit rule # <?=$ruleId?>:<br/><br/>
 			<option value="2"<? if ($rule['ruleType']==2) echo ' selected="selected"';?>>Tracker</option>
 			<option value="3"<? if ($rule['ruleType']==3) echo ' selected="selected"';?>>Counter</option>
 		</select>&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Save changes"/> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-		<a href="<?=$_SERVER['PHP_SELF']?>?remove=<?=$ruleId?>"><img src="/gfx/icon_delete.png" align="top" width="16" height="16" title="Delete rule" alt="Delete rule"/></a><br/>
+		<a href="<?=$_SERVER['PHP_SELF']?>?id=<?=$ruleId?>&amp;delete"><img src="/gfx/icon_delete.png" align="top" width="16" height="16" title="Delete rule" alt="Delete rule"/></a><br/>
 		<br/>
 	</td></tr>
 </table>

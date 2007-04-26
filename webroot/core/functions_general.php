@@ -113,4 +113,23 @@
 			return $arr['path'].'?'.$keyval.$_extra;
 		}
 	}
+
+	/* Helper function used to create "are you sure?" pages */
+	function confirmed($text, $_var, $_id)
+	{
+		global $project;	//path to design includes
+		global $config, $db, $session, $time_start;
+
+		if (!$_var || !is_numeric($_id) || isset($_GET['confirmed'])) return true;
+
+		require($project.'design_head.php');
+
+		echo $text.'<br/><br/>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;delete&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.getProjectPath().'">No, wrong button</a><br/>';
+		
+		require($project.'design_foot.php');
+		die;
+	}
+
 ?>

@@ -1,4 +1,6 @@
 ---[[todo]]---
+	- integrera med core. admin_*.php til /admin
+
 	- se användare i aktuellt chattrum
 		* markera användarnamnen efter status, normal / admin
 		* ta bort entry från <div>-ajax_chat_members när man lämnar chatten

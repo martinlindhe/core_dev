@@ -39,7 +39,6 @@ User Name:  "Unicorn(955971)~  Single User License"
 	X - kompislista (blized)
 		- konvertera zine!
   	- Försök bygga mer logik i sql queries / stored procedures
-  X	- gör en funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida
   	- gör en "for production use" mysqli-db driver med all profile kod utplockad för att den ska va lite snabbare, nån gång när db klassen har varit orörd i några månader
   	- gör en worker databas + ett worker script, som:
   		* regelbundet kollar i en tabell efter jobb att göra
@@ -77,6 +76,9 @@ User Name:  "Unicorn(955971)~  Single User License"
 
 	janina, allt low prio:
 		- image preload (finns kod i tracker-applikationen)
+
+	ajax chat:
+		- integrera i core vid nåt tillfälle
 
 
 --[[todo legend]]--
@@ -122,6 +124,9 @@ X = hi prio task
 	- files: lade till stöd för att konvertera svg till png vid file upload
 	- files: fixat stöd för filnamn med flera punkter i filnamnet
 	- core: optimerat lite sql på olika ställen
+  - core: confirmed(), ny funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida, wip...
+  				confirmed() används av adblock/editrule.php, adblock/admin_news_delete.php
+  - admin: la "edit news" koden i en egen fil
 
 
 2007.04.25:

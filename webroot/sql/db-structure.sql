@@ -79,7 +79,7 @@ CREATE TABLE `tblAdblockRules` (
   `deletedBy` smallint(5) unsigned NOT NULL default '0',
   `timeDeleted` datetime default NULL,
   PRIMARY KEY  (`ruleId`)
-) ENGINE=MyISAM AUTO_INCREMENT=683 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=687 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblCategories` (
   `categoryId` bigint(20) unsigned NOT NULL auto_increment,
   `categoryName` varchar(100) NOT NULL default '',
@@ -101,7 +101,7 @@ CREATE TABLE `tblComments` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (`commentId`)
-) ENGINE=MyISAM AUTO_INCREMENT=410 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=414 DEFAULT CHARSET=utf8;
 CREATE TABLE `tblFiles` (
   `fileId` bigint(20) unsigned NOT NULL auto_increment,
   `fileName` varchar(250) character set utf8 default NULL,
@@ -124,7 +124,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=556 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=560 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblNews` (
   `newsId` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(100) character set utf8 NOT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE `tblChat` (
   `timeCreated` datetime NOT NULL,
   `msg` blob,
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 CREATE TABLE `tblChatRooms` (
   `roomId` bigint(20) unsigned NOT NULL auto_increment,
   `roomName` varchar(50) default NULL,
@@ -230,7 +230,7 @@ CREATE TABLE `tblChatUsers` (
   `userId` bigint(20) unsigned NOT NULL,
   `lastSeen` datetime NOT NULL,
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=31884 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=32154 DEFAULT CHARSET=utf8;
 CREATE TABLE `tblLogs` (
   `entryId` mediumint(8) unsigned NOT NULL auto_increment,
   `entryText` text character set utf8 NOT NULL,
@@ -239,7 +239,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblUsers` (
   `userId` smallint(5) unsigned NOT NULL auto_increment,
   `userName` varchar(20) character set utf8 NOT NULL,
@@ -929,7 +929,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblLyrics` (
   `lyricId` bigint(20) unsigned NOT NULL auto_increment,
   `lyricName` varchar(200) character set utf8 NOT NULL,

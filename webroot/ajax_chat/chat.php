@@ -12,7 +12,6 @@
 	}
 
 	require('design_head.php');
-	require_once('inc/noscript.html');
 
 	echo '<div id="ajax_chat_holder">';
 	echo '<div id="ajax_chat_room1">'.$room['roomName'].'</div>';

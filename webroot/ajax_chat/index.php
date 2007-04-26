@@ -2,7 +2,6 @@
 	require_once('config.php');
 
 	require('design_head.php');
-	require_once('inc/noscript.html');
 
 	if (!$session->id) echo $session->showLoginForm();
 	else $session->showInfo();
