@@ -62,7 +62,7 @@
 </div><br/>
 
 <div class="centerMenuHeader">kommentarer</div>
-	<div class="centerMenuBodyWhite">
+<div class="centerMenuBodyWhite">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
 	$c_paging['co'] = $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}userblogcmt WHERE blog_id = '".$res['main_id']."' AND status_id = '1'");
@@ -87,10 +87,9 @@
 			echo '</table>';
 		}
 	} else {
-		echo '<table cellspacing="0" width="100%"><tr><td class="cnt pdg spac">Inga kommentarer.</td></tr></table>';
+		echo '<table summary="" cellspacing="0" width="100%"><tr><td class="cnt pdg spac">Inga kommentarer.</td></tr></table>';
 	}
 ?>
-	</div>
 </div>
 <?
 	require(DESIGN.'foot_user.php');
