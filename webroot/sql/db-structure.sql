@@ -115,7 +115,7 @@ CREATE TABLE `tblFiles` (
   `timeUploaded` datetime NOT NULL,
   `cnt` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`fileId`)
-) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=124 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblLogs` (
   `entryId` mediumint(8) unsigned NOT NULL auto_increment,
   `entryText` text character set utf8 NOT NULL,
@@ -124,7 +124,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=541 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=556 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblNews` (
   `newsId` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(100) character set utf8 NOT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE `tblRevisions` (
   `timeCreated` datetime NOT NULL,
   `categoryId` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY  (`indexId`)
-) ENGINE=MyISAM AUTO_INCREMENT=159 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=209 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL auto_increment,
   `ownerId` smallint(5) unsigned NOT NULL default '0',
@@ -929,7 +929,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL default '0',
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 CREATE TABLE `tblLyrics` (
   `lyricId` bigint(20) unsigned NOT NULL auto_increment,
   `lyricName` varchar(200) character set utf8 NOT NULL,
@@ -974,55 +974,6 @@ CREATE TABLE `tblUsers` (
   `userMode` tinyint(1) unsigned NOT NULL default '0',
   `timeLastActive` datetime default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-DELIMITER ;;
-DELIMITER ;
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `dboophp` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `dboophp`;
-CREATE TABLE `tblFiles` (
-  `fileId` bigint(20) unsigned NOT NULL auto_increment,
-  `fileName` varchar(250) character set utf8 default NULL,
-  `fileSize` bigint(20) unsigned NOT NULL default '0',
-  `fileMime` varchar(100) character set utf8 default NULL,
-  `ownerId` int(10) unsigned NOT NULL default '0',
-  `categoryId` int(10) unsigned NOT NULL default '0',
-  `uploaderId` int(10) unsigned NOT NULL default '0',
-  `uploaderIP` bigint(20) unsigned NOT NULL default '0',
-  `fileType` tinyint(1) unsigned NOT NULL default '0',
-  `timeUploaded` datetime NOT NULL,
-  `cnt` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`fileId`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
-CREATE TABLE `tblLogs` (
-  `entryId` mediumint(8) unsigned NOT NULL auto_increment,
-  `entryText` text character set utf8 NOT NULL,
-  `entryLevel` tinyint(1) unsigned NOT NULL default '0',
-  `timeCreated` datetime NOT NULL,
-  `userId` smallint(5) unsigned NOT NULL default '0',
-  `userIP` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=161 DEFAULT CHARSET=latin1;
-CREATE TABLE `tblSettings` (
-  `settingId` bigint(20) unsigned NOT NULL auto_increment,
-  `ownerId` smallint(5) unsigned NOT NULL default '0',
-  `settingName` varchar(50) character set utf8 NOT NULL,
-  `settingValue` text character set utf8 NOT NULL,
-  `settingType` tinyint(3) unsigned NOT NULL,
-  `timeSaved` datetime NOT NULL,
-  PRIMARY KEY  (`settingId`)
-) ENGINE=MyISAM AUTO_INCREMENT=160 DEFAULT CHARSET=latin1;
-CREATE TABLE `tblUsers` (
-  `userId` int(10) unsigned NOT NULL auto_increment,
-  `userName` varchar(20) character set utf8 NOT NULL,
-  `userPass` varchar(40) NOT NULL,
-  `userMode` tinyint(1) NOT NULL default '0',
-  `timeCreated` datetime NOT NULL,
-  `timeLastLogin` datetime NOT NULL,
-  `timeLastActive` datetime NOT NULL,
-  `timeLastLogout` datetime NOT NULL,
-  PRIMARY KEY  (`userId`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 DELIMITER ;;
 DELIMITER ;
 

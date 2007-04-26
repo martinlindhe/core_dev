@@ -5,7 +5,7 @@ User Name:  "Unicorn(955971)~  Single User License"
 
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
-	X - visa mer inputfält vid loginrutan
+	X - visa mer inputfält vid registerrutan (blized)
 
 
 	file area:
@@ -15,7 +15,6 @@ User Name:  "Unicorn(955971)~  Single User License"
 		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden (piggy)
 		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
 		- kunna flytta en fil från en kategori till en annan (piggy)
-		- byt namn på "allowed_image_types" etc. till "image_types" ( == standardbildformat som alla webbläsare förväntas kunna visa
 
 
 	news modul:
@@ -61,6 +60,8 @@ User Name:  "Unicorn(955971)~  Single User License"
 
 
 	lyrics:
+	X - edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
+
 	X	- rensa upp modererings-logiken...
 			* gör en moderate include!
 			* när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
@@ -69,7 +70,6 @@ User Name:  "Unicorn(955971)~  Single User License"
 		- BORT MED TABLES i den mån det går
 		- åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 
-		- edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
 		- edit_record.php: kunna editera recordInfo
 		- lista låtar som inte finns på nån skiva (admin)
 		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
@@ -116,7 +116,11 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.04.26:
 	- db: fixade så $db->showProfile() exluderar "sql connect time" när den räknar ut "php time"
-	- core: flytta ut db->log() till session-log(), det borde lösa alla cp problem med login/logout loggande
+	- core: flytta ut db->log() till session->log(), det fixade alla cp problem med login/logout loggande
+	- files: ändrade så att bmp->jpeg konverteraren är imagemagick istället (open source,får användas kommersiellt), nconvert support finns utkommenterat
+	- files: bytte namn på "allowed_image_types" etc. till "image_types" ( == standardbildformat som alla webbläsare förväntas kunna visa
+	- files: lade till stöd för att konvertera svg till png vid file upload
+	- files: fixat stöd för filnamn med flera punkter i filnamnet
 
 
 2007.04.25:

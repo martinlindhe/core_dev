@@ -23,14 +23,13 @@
 	$config['database']['database']	= 'dbAdblock';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = (60*60)*8;		//in seconds
+	$config['session']['timeout'] = (60*60)*24;		//in seconds
 	$config['session']['name'] = 'adblockID';
 	$config['session']['sha1_key'] = 'sjxkxEadBL0ckjdhyhhHHxnjklsdvyuhu434nzkkz18ju222ha';
 	$config['session']['allow_registration'] = false;
 	$config['session']['home_page'] = 'index.php';
 	$session = new Session($config['session']);
 
-	$config['files']['anon_uploads'] = false;
 	$config['files']['apc_uploads'] = false;
 	$config['files']['upload_dir'] = 'E:/devel/webupload/adblock/';
 	$config['files']['thumbs_dir'] = 'E:/devel/webupload/adblock/thumbs/';

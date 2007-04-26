@@ -20,25 +20,37 @@ define('FILETYPE_USERFILE',				106);	/* File is uploaded to the user's own file 
 
 class Files
 {
+	/* Non configurable, shouldnt be needed to be changed */
+	private $htaccess = "Deny from all\nOptions All -Indexes";
+	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
+
+	public $image_types	= array('jpg', 'jpeg', 'png', 'gif');
+	public $audio_types	= array('mp3');
+	public $video_types = array('avi', '3gp');
+
+
+	/* User configurable settings */
 	private $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
 	private $thumbs_dir = 'e:/devel/webupload/default/thumbs/';		//	'/tmp/';
-	private $htaccess = "Deny from all\nOptions All -Indexes";
-
-	public $allowed_image_types	= array('jpg', 'jpeg', 'png', 'gif');
-	public $allowed_audio_types	= array('mp3');
-	public $allowed_video_types = array('avi', '3gp');
 
 	private $image_max_width			= 800;	//bigger images will be resized to this size	
 	private $image_max_height			= 600;
 	public $thumb_default_width		= 80;
 	public $thumb_default_height	= 80;
 	private $image_jpeg_quality		= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
-	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
+
 	private $count_file_views			= false;	//auto increments the "cnt" in tblFiles in each $files->sendFile() call
 	public $anon_uploads					= false;	//allow unregisterd users to upload files
 	private $apc_uploads					= false;		//enable support for php_apc + php_uploadprogress calls
 
-	private $bmp_convert					= true;		//uses nconvert to convert bmp:s into jpeg, http://perso.orange.fr/pierre.g/xnview/en_ncdownload.html
+	/* If $image_convert are enabled, it uses ImageMagick to convert the following image formats:
+		- BMP images gets converted to JPG
+		- SVG images gets converted to PNG
+
+		 ImageMagick is a open source and multi platform command line image converter.
+		 http://www.imagemagick.org/download/
+	*/
+	private $image_convert				= true;
 
 	function __construct(array $config)
 	{
@@ -46,18 +58,17 @@ class Files
 
 		if (isset($config['upload_dir'])) $this->upload_dir = $config['upload_dir'];
 		if (isset($config['thumbs_dir'])) $this->thumbs_dir = $config['thumbs_dir'];
-		if (isset($config['allowed_image_types'])) $this->allowed_image_types = $config['allowed_image_types'];
-		if (isset($config['allowed_audio_types'])) $this->allowed_audio_types = $config['allowed_audio_types'];
-		if (isset($config['allowed_video_types'])) $this->allowed_video_types = $config['allowed_video_types'];
-		
+
 		if (isset($config['image_max_width'])) $this->image_max_width = $config['image_max_width'];
 		if (isset($config['image_max_height'])) $this->image_max_height = $config['image_max_height'];
 		if (isset($config['thumb_default_width'])) $this->thumb_default_width = $config['thumb_default_width'];
 		if (isset($config['thumb_default_height'])) $this->thumb_default_height = $config['thumb_default_height'];
+		if (isset($config['image_jpeg_quality'])) $this->image_jpeg_quality = $config['image_jpeg_quality'];
 
 		if (isset($config['count_file_views'])) $this->count_file_views = $config['count_file_views'];
 		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
 		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
+		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
 
 		if (!is_dir($this->upload_dir)) {
 			//fixme: check if the path 1 level above "upload_dir" exists:
@@ -163,19 +174,20 @@ class Files
 		echo '<div class="file_gadget_content">';
 		foreach ($list as $row)
 		{
-			list($file_firstname, $file_lastname) = explode('.', strtolower($row['fileName']));
+			$file_lastname = $this->getFileLastname($row['fileName']);
+			if (!$file_lastname) continue;
 
-			if (in_array($file_lastname, $this->allowed_image_types)) {
+			if (in_array($file_lastname, $this->image_types)) {
 				//show thumbnail of image
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomImage('.$row['fileId'].', \''.getProjectPath().'\');"><center>';
 				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
-			} else if (in_array($file_lastname, $this->allowed_audio_types)) {
+			} else if (in_array($file_lastname, $this->audio_types)) {
 				//show icon for audio files.
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
 				echo '<img src="/gfx/icon_audio_32.png" width="32" height="32" alt="Audio file"/>';
 				echo '</center></div>';
-			} else if (in_array($file_lastname, $this->allowed_video_types)) {
+			} else if (in_array($file_lastname, $this->video_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
 				echo '<img src="/gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
@@ -261,10 +273,10 @@ class Files
 		echo '<div class="thumbnails_gadget">';
 		for ($i=0; $i<count($list); $i++)
 		{
-			list($file_firstname, $file_lastname) = explode('.', strtolower($list[$i]['fileName']));
+			$file_lastname = $this->getFileLastname($list[$i]['fileName']);
 
 			//show thumbnail of image
-			if (in_array($file_lastname, $this->allowed_image_types)) {
+			if (in_array($file_lastname, $this->image_types)) {
 				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onclick="loadImage('.$list[$i]['fileId'].', \'image_big\', \''.getProjectPath().'\');"><center>';
 				echo makeThumbLink($list[$i]['fileId'], $list[$i]['fileName']);
 				echo '</center></div>';
@@ -330,9 +342,9 @@ class Files
 		$enc_filename = basename(strip_tags($FileData['name']));
 		$enc_mimetype = strip_tags($FileData['type']);
 
-		list($file_firstname, $file_lastname) = explode('.', strtolower($enc_filename));
+		$file_lastname = $this->getFileLastname($enc_filename);
 
-		/*if (!in_array($file_lastname, $this->allowed_image_types) && !in_array($file_lastname, $this->allowed_audio_types)) {
+		/*if (!in_array($file_lastname, $this->image_types) && !in_array($file_lastname, $this->audio_types)) {
 			return 'File type not allowed';
 		}*/
 
@@ -343,9 +355,9 @@ class Files
   	$fileId = $db->insert_id;
 
 		//Identify and handle various types of files
-		if (in_array($file_lastname, $this->allowed_image_types)) {
+		if (in_array($file_lastname, $this->image_types)) {
 			$this->handleImageUpload($fileId, $FileData);
-		} else if (in_array($file_lastname, $this->allowed_audio_types)) {
+		} else if (in_array($file_lastname, $this->audio_types)) {
 			$this->handleGeneralUpload($fileId, $FileData);
 		} else {
 			$this->handleGeneralUpload($fileId, $FileData);
@@ -354,20 +366,48 @@ class Files
 
 	function handleGeneralUpload($fileId, $FileData)
 	{
-		global $db;
+		global $db, $session;
 
-		list($file_firstname, $file_lastname) = explode('.', strtolower(basename(strip_tags($FileData['name']))));
-		switch ($file_lastname) {
-			case 'bmp':
-				$c = 'nconvert -out jpeg -q '.$this->image_jpeg_quality.' -o c:\nc_outfile.jpg '.$FileData['tmp_name'];
+		switch ($FileData['type']) {
+			case 'image/bmp':	//IE 7, Firefox 2, Opera 9.2
+				if (!$this->image_convert) break;
+				$out_tempfile = 'c:\core_outfile.jpg';
+				//$c = 'nconvert -out jpeg -q '.$this->image_jpeg_quality.' -o '.$out_tempfile.' '.$FileData['tmp_name'];
+				$c = 'convert -quality '.$this->image_jpeg_quality.' BMP:'.$FileData['tmp_name'].' JPG:'.$out_tempfile;
 				exec($c);
+
+				if (!file_exists($out_tempfile)) {
+					$session->log('Failed to convert bmp to jpeg! cmd: '.$db->escape($c));
+					break;
+				}
+
 				unlink($FileData['tmp_name']);
-				rename('c:\nc_outfile.jpg', $FileData['tmp_name']);
+				rename($out_tempfile, $FileData['tmp_name']);
 				$filesize = filesize($FileData['tmp_name']);
-				$q = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$db->escape($file_firstname).'.jpg",fileSize='.$filesize.' WHERE fileId='.$fileId;
+				$q = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.jpg",fileSize='.$filesize.' WHERE fileId='.$fileId;
 				$db->query($q);
 				$this->handleImageUpload($fileId, $FileData);
 				return true;
+
+			case 'image/svg+xml':	//IE 7, Firefox 2
+			case 'image/svg-xml':	//Opera 9.2
+				if (!$this->image_convert) break;
+				$out_tempfile = 'c:\core_outfile.png';
+				$c = 'convert SVG:'.$FileData['tmp_name'].' PNG:'.$out_tempfile;
+				exec($c);
+
+				if (!file_exists($out_tempfile)) {
+					$session->log('Failed to convert svg to png! cmd: '.$db->escape($c));
+					break;
+				}
+
+				unlink($FileData['tmp_name']);
+				rename($out_tempfile, $FileData['tmp_name']);
+				$filesize = filesize($FileData['tmp_name']);
+				$q = 'UPDATE tblFiles SET fileMime="image/png", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.png",fileSize='.$filesize.' WHERE fileId='.$fileId;
+				$db->query($q);
+				$this->handleImageUpload($fileId, $FileData);
+				break;
 		}
 
 		//Move the uploaded file to upload directory
@@ -386,7 +426,7 @@ class Files
 		global $db;
 
 		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
-
+		
 		//Resize the image if it is too big, overwrite the uploaded file
 		if (($img_width > $this->image_max_width) || ($img_height > $this->image_max_height))
 		{
@@ -498,8 +538,8 @@ class Files
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
 		
-		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
-		if (!in_array($file_lastname, $this->allowed_image_types)) return false;
+		$file_lastname = $this->getFileLastname($data['fileName']);
+		if (!in_array($file_lastname, $this->image_types)) return false;
 
 		header('Content-Type: '.$data['fileMime']);
 		header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
@@ -541,7 +581,7 @@ class Files
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
 
-		list($file_firstname, $file_lastname) = explode('.', strtolower($data['fileName']));
+		$file_lastname = $this->getFileLastname($data['fileName']);
 
 		/* This sends files without extension etc as plain text if you didnt specify to download them */
 		if (!isset($_GET['dl']) || (($data['fileMime'] == 'application/octet-stream') || !$file_lastname)) {
@@ -561,7 +601,7 @@ class Files
 		header('Content-Transfer-Encoding: binary');
 
 		//Serves the file differently depending on what kind of file it is
-		if (in_array($file_lastname, $this->allowed_image_types)) {
+		if (in_array($file_lastname, $this->image_types)) {
 			//Generate resized image if needed
 			$this->sendImage($_id);
 		} else {
@@ -686,5 +726,12 @@ class Files
 		}
 
 		return $result;
+	}
+	
+	function getFileLastname($name)
+	{
+		$result = substr($name, strrpos($name, '.') + 1);
+		if (!$result) return false;
+		return strtolower($result);
 	}
 }

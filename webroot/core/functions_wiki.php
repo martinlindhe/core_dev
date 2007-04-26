@@ -188,7 +188,7 @@
 
 					$showTag = $linkTag = '[[file:'.$filelist[$i]['fileId'].']]';
 					
-					if (in_array($last_name, $files->allowed_image_types)) {
+					if (in_array($last_name, $files->image_types)) {
 						$showTag = makeThumbLink($filelist[$i]['fileId'], $showTag);
 					}
 
