@@ -6,7 +6,7 @@
 <style type="text/css">
 table { border-collapse: collapse; }
 body {
-	background: #fff;
+	background: #fafafa;
 	color: #000;
 	margin: 0px;
 	height: 100%;

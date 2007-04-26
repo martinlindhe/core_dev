@@ -162,11 +162,21 @@
 ***********************************************************************************************************************************
 topp prio:
 	* bett frans kika på file upload till galleri, funkar för mej men inte för testfolket
+	* det dyker upp nåt extra id i slutet av text i quick-chat historiken
 
 	* in med nya texter
 	
 	* forum "tänd upp" / "släck ner": vad gör dessa knappar??
 	* max 7 tecken i användarnamnet
+
+test feedback:
+	miss_pryd:
+		- lägga upp bilder och se bilder i fotoalbum *även mitt eget* samt flytta bilder från galleri till galleri x ((nu fick ja radera dem istället))
+		- Varför får man inte skriva komentar till galleri x bilder som man får se? 
+		- Varför får man inte skriva komentar till galleri x bilder som man får se? 
+		- sen undrar ja, om ja nu får lägga till en kompis bild i min press (vilket var en rolig ide) så borde den väll ändå länka vidare till kompisens sida dessutom
+		- nu ligger de inte i galleri x när ni lägger över. dessutom tog ni med bilder ja har raderat, från gamla cs. de e ju rätt crazy
+		- skapa länk till kompis presnetation funkar itne för miss_pryd (bild visas men blir ej klickbar), det funkar dock för mig (krävs det VIP?)
 
 
 hög prio - webbgränssnittet:

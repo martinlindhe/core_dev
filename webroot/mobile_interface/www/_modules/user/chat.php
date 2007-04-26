@@ -28,11 +28,11 @@ var you = \''.($l['u_alias']).'\';
 <script type="text/javascript" src="<?=OBJ?>xml_chat.js"></script>
 <script type="text/javascript">document.onkeydown = ActivateByKey;</script>
 
-<div class="boxMid1" style="margin: 15px 15px 0 15px;">
+<div class="boxMid1">
 
 	<img src="/_gfx/ttl_chat.png" alt="Chat"/><br/>
 	<div class="boxMid1mid">
-		<table summary="" cellspacing="0" style="width: 510px; height: 100%;">
+		<table summary="" cellspacing="0" style="width: 510px;">
 		<tr>
 				<td style="padding: 6px 6px 0 6px;">
 					<iframe name="msgs" src="<?=l('user', 'chatwin', $s['id_id'])?>" frameborder="no" scrolling="auto" style="width:100%; height:270px;"></iframe>
@@ -48,7 +48,7 @@ var you = \''.($l['u_alias']).'\';
 					<textarea name="msgTextbox"<?=($closed)?' readonly':'';?> class="txt" id="msgTextbox" onblur="gotFocus = false;" onclick="taskStop();" onfocus="taskStop();" style="height: 50px; width: 330px;" onkeyup="fixlimit(this, 'cha_lim');" onkeydown="fixlimit(this, 'cha_lim');" onchange="fixlimit(this, 'cha_lim');"></textarea>
 				</td>
 				<td class="btm">
-					<? makeButton(false, 'doMSG();', 'icon_chat.png', 'Skicka'); ?>
+					<? makeButton(false, 'doMSG();', 'icon_qchat.png', 'Skicka'); ?>
 				</td>
 			</tr>
 		</table>
