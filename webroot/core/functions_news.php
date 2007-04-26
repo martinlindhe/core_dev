@@ -61,8 +61,8 @@
 		if (!is_numeric($_categoryId)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName, t3.userName AS editorName FROM tblNews AS t1 ';
-		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
-		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
 		$q .= 'WHERE timeToPublish<NOW() ';
 		if  ($_categoryId) $q .= ' AND categoryId='.$_categoryId.' ';
 		$q .= 'ORDER BY timeToPublish DESC';

@@ -121,6 +121,7 @@ X = hi prio task
 	- files: bytte namn på "allowed_image_types" etc. till "image_types" ( == standardbildformat som alla webbläsare förväntas kunna visa
 	- files: lade till stöd för att konvertera svg till png vid file upload
 	- files: fixat stöd för filnamn med flera punkter i filnamnet
+	- core: optimerat lite sql på olika ställen
 
 
 2007.04.25:

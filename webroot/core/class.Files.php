@@ -344,10 +344,6 @@ class Files
 
 		$file_lastname = $this->getFileLastname($enc_filename);
 
-		/*if (!in_array($file_lastname, $this->image_types) && !in_array($file_lastname, $this->audio_types)) {
-			return 'File type not allowed';
-		}*/
-
 		$filesize = filesize($FileData['tmp_name']);
 		//maybe todo: flytta inserten till handleImageUpload / handleGeneralUpload istället?
   	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
@@ -679,7 +675,7 @@ class Files
 		if (!is_numeric($ownerId) || !is_numeric($fileType)) return array();
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
-		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
 		$q .= 'WHERE t1.ownerId='.$ownerId;
 		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
 		$q .= ' ORDER BY t1.timeUploaded ASC';
@@ -694,7 +690,7 @@ class Files
 		if (!is_numeric($categoryId) || !is_numeric($fileType)) return array();
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
-		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
 		$q .= 'WHERE t1.categoryId='.$categoryId;
 		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
 		$q .= ' ORDER BY t1.timeUploaded ASC';

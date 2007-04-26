@@ -58,7 +58,7 @@
 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
 
 		$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 '.
-					'LEFT OUTER JOIN tblUsers AS t2 ON (t1.userId=t2.userId) '.
+					'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) '.
 					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
 
 		if ($privateComments === false) $q .= ' AND commentPrivate=0';

@@ -48,8 +48,8 @@
 		if (!is_numeric($ruleId)) return false;
 		
 		$q  = 'SELECT t1.*,t2.userName AS creatorName,t3.userName AS editorName FROM tblAdblockRules AS t1 ';
-		$q .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
-		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
 		$q .= 'WHERE t1.ruleId='.$ruleId;
 		
 		return $db->getOneRow($q);
@@ -224,10 +224,9 @@
 	{
 		global $db;
 
-		$q  = 'SELECT t1.*,t2.userName,t3.ci ';
+		$q  = 'SELECT t1.*,t2.userName ';
 		$q .= 'FROM tblProblemSites AS t1 ';
-		$q .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
-		$q .= 'LEFT OUTER JOIN dbGeoIP.tblGeoIP AS t3 ON (t1.userIP BETWEEN t3.start AND t3.end) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
 		$q .= 'WHERE t1.deletedBy=0 ';
 		$q .= 'ORDER BY t1.timeCreated ASC';
 
@@ -250,7 +249,7 @@
 		if (!is_numeric($cnt)) return false;
 		
 		$q  = 'SELECT t1.*,t2.userName FROM tblAdblockRules AS t1 ';
-		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 		$q .= 'ORDER BY t1.timeCreated DESC LIMIT 0,'.$cnt;
 		
 		return $db->getArray($q);

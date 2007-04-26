@@ -42,7 +42,7 @@
 		$pager = makePager($tot_cnt, 5);
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblRevisions AS t1 ';
-		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) ';
 		$q .= 'WHERE t1.fieldId='.$articleId.' AND t1.fieldType='.$articleType;
 		$q .= ' ORDER BY t1.timeCreated DESC'.$pager['limit'];
 		$list = $db->getArray($q);
