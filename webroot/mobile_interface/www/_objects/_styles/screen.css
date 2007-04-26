@@ -105,11 +105,6 @@ p { margin: 0; padding: 5px 5px 5px 5px; }
 .bigBoxed2 { width: 784px; border: 1px solid #7ba06d; border-width: 0 1px 1px 1px; margin-bottom: 10px; }
 .mainFilled2 { width: 586px; padding: 5px; margin-bottom: 10px; background: #7ba06d; }
 .wholeBoxed2 { width: 594px; text-align: left; margin: 0 auto 10px auto; border: 1px solid #7ba06d; border-width: 0 1px 1px 1px; }
-#friendsOnline { height: 27px; width: 300px; overflow-y: hidden; margin-bottom: 10px; }
-#friendsTog { line-height: 23px; float: right; margin-right: 5px; }
-#ffriendsOnline h4 { }
-#friendsOnlineList ul { border-top: 1px solid #f1f1f1; border-width: 1px 0 0 0; margin: 3px 0 0 0; padding: 0; }
-#friendsOnlineList li { width: 166px; border-bottom: 1px solid #f1f1f1; border-top: 1px solid #ccc; list-style-type: none; list-style-position: outside; margin: 0; padding: 3px 0 4px 0; }
 .userlist { margin: 3px 0 0 0; padding: 0; }
 .userlist li { width: 169px; border-top: 1px solid #ccc; list-style-type: none; list-style-position: outside; margin: 0; padding: 3px 0 4px 5px; }
 .msgList { width: 596px; }

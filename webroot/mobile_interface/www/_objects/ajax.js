@@ -101,20 +101,29 @@ function executeFriendsOnline(text) {
 	document.getElementById('friendsOnlineCount').innerHTML = (text.length-1);
 	friendsC = (text.length-1);
 	obj = document.getElementById('friendsOnlineList');
-	ret = '<ul style="margin: 0; padding: 0;">';
+	ret = '';
 	if(text.length > 1) {
+		ret = '<ul>';
 		for(i = 0; i < text.length-1; i++) {
 			text[i] = text[i].split('|');
-			ret += '<li style="' + (!i?'border: 0; ':'') + 'padding-left: 5px;"><a href="/user/view/' + text[i][0] + '" class="bld user"><span class="on" onmouseover="launchHover(event, \'' + text[i][0] + '\');" onmouseout="clearHover();">' + unescape(text[i][1]) + '</span></a><b> ' + text[i][2] + '</b><img class="cur" onclick="makeGb(\'' + text[i][0] + '\')" src="/_objects/guestbook_write.gif" style="margin: 0 0 -4px 5px;" /><img class="cur" onclick="makeChat(\'' + text[i][0] + '\')" src="/_objects/chat_write.gif" style="margin: 0 0 -4px 5px;" /></li>';
+			ret += '<li>';
+			ret += '<span onmouseover="launchHover(event, \'' + text[i][0] + '\');" onmouseout="clearHover();">';
+			ret += '<a href="/user/view/' + text[i][0] + '">' + unescape(text[i][1]) + ' <b>' + text[i][2] + '</b></a>';
+			ret += '</span>';
+			//ret += '<span style="float: right">';
+			ret += ' <img onclick="makeGb(\'' + text[i][0] + '\')" title="Skriv i gästboken" alt="Skriv i gästboken" src="/_gfx/icon_gb.png" />';
+			ret += '<img onclick="makeChat(\'' + text[i][0] + '\')" title="Chatta" alt="Chatta" src="/_gfx/icon_qchat.png" />';
+			//ret += '</span>';
+			ret += '</li>';
 		}
+		ret += '</ul>';
 	}
-	ret += '</ul>';
 	obj.innerHTML = ret;
 	delete ret;
 	delete text;
-	if(friendsMaximized == '1') friendsExpand(document.getElementById('friendsOnline'))
-	//friendsExpand(document.getElementById('friendsOnline'))
+	if (friendsMaximized == '1') obj.style.display = '';
 }
+
 function activateData(info) {
 	switch(info[0]) {
 		case 'g':

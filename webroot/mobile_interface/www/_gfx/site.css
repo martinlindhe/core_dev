@@ -19,12 +19,16 @@ ul#top_menu a { color: #fff; text-decoration: none; }
 #logout { position: absolute; top: 103px; left: 958px; }
 
 .leftMenuHeader { width: 176px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header1.png'); background-repeat: no-repeat; }
+.leftMenuHeaderRed { width: 176px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header_red.png'); background-repeat: no-repeat; }
+
+
 .leftMenuFooter { width: 176px; height: 22px; background: url('/_gfx/left_menu_footer1.png'); background-repeat: no-repeat; margin-bottom: 10px; }
 .leftMenuFooterGray { width: 176px; height: 2px; background: url('/_gfx/left_menu_footer_gray.png'); background-repeat: no-repeat; margin-bottom: 10px; }
 
 .leftMenuBodyGreen { width: 176px; background: #75C66A; }
 .leftMenuBodyGray { width: 173px; background: #b2b7b0; border-top: 1px solid #ccc; border-left: 1px solid #75C66A; border-right: 1px solid #75C66A; }
 .leftMenuBodyWhite { width: 174px; background: #fff; border: 1px solid #ccc; }
+.leftMenuBodyRed { width: 174px; background: #995F5F; border: 1px solid #ccc; }
 
 .centerMenuHeader { width: 596px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header2.png'); background-repeat: no-repeat; }
 .centerMenuBodyWhite { width: 594px; background: #fff; border: 1px solid #ccc; }
@@ -78,3 +82,10 @@ ul.user_menu a:hover { text-decoration: none; color: #000; }
 }
 
 #foot { width: 982px; color: #999; text-align: right; font-size: 10px; margin: 10px 0 0 0; padding: 5px 0 17px 0; border-top: 1px solid #ccc; }
+
+
+#friendsOnline { overflow: hidden; margin-bottom: 10px; }
+#friendsTog { line-height: 23px; float: right; margin-right: 5px; }
+#friendsOnlineList ul { border: 0; margin: 3px 0 0 0; padding: 0; }
+#friendsOnlineList li { border: 0; list-style-type: none; list-style-position: outside; margin: 0; padding-left: 5px; }
+#friendsOnlineList li a { color: #fff }

@@ -74,11 +74,13 @@
 
 		if(empty($error) && !count($error)) $complete = true;
 	} else $sex_c = $sex;
+
+	//level_id = '1',			//1 = normal user, 10 = wip!
 	if($complete) {
 		$pstlan = $sql->queryResult("SELECT main_id FROM {$t}pstlan WHERE st_lan = '".secureINS($pst_lan)."' LIMIT 1");
 		$sql->queryUpdate("UPDATE {$t}user SET
 		u_sex = '$sex_c',
-		level_id = '1',
+		level_id = '10',
 		u_alias = '".secureINS($alias)."',
 		u_pstort = '".secureINS($pst_ort)."',
 		u_pstlan = '".secureINS($pst_lan)."',
@@ -108,7 +110,7 @@
 		level_id = '$birth'");
 		$sql->queryInsert("INSERT INTO {$t}userlevel SET
 		id_id = '".$id_u."',
-		level_id = ' ACTIVE SEX$sex LEVEL1 ORT".str_replace('-', '', str_replace(' ', '', $pst_ort))." LÄN".str_replace('-', '', str_replace(' ', '', $pst_lan))."'");
+		level_id = ' ACTIVE SEX$sex LEVEL10 ORT".str_replace('-', '', str_replace(' ', '', $pst_ort))." LÄN".str_replace('-', '', str_replace(' ', '', $pst_lan))."'");
 		$sql->logADD($alias, $id_u, 'REG_DONE');
 		$user_auth->login_data(array($id_u, $alias, '1', '00', PD, '1', $sex_c, $birth, $pstlan, $pst_ort.', '.$pst_lan, now(), now(), now())); 
 /*

@@ -99,7 +99,7 @@ function checkTime(toggle) {
 					<li><a href="/user/gb/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['gb_offset'])?> <span class="bld about" id="Xg"></span></span><img src="/_gfx/icon_gb.png" alt="" />gästbok</a></li>
 					<li><a href="/user/mail/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['mail_offset'])?> <span class="bld about" id="Xm"></span></span><img src="/_gfx/icon_mail.png" alt="" />brev</a></li>
 					<li><a href="/user/blog/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['blog_offset'])?></span><img src="/_gfx/icon_blog.png" alt="" />blogg</a></li>
-					<li><a href="/user/relations/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['rel_offset'])?> <span class="bld about" id="Xr"></span></span><img src="/_gfx/icon_friends.png" alt="" />vänner</a></li>
+					<li><a href="/user/relations/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['rel_offset'])?> <span class="bld about" id="Xr"></span></span><img src="/_gfx/icon_friends.png" alt="" />relationer</a></li>
 					<li><a href="/user/gallery/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['gal_offset'])?></span><img src="/_gfx/icon_gallery.png" alt="" />galleri</a></li>
 					<li><a href="/member/settings/" class="wht none"><img src="/_gfx/icon_settings.png" alt="" />inställningar</a></li>
 					<li>&nbsp;</li>
@@ -119,18 +119,20 @@ function checkTime(toggle) {
 ?>
 	<? if (!defined('NO_FOL')) { ?>
 			<div id="friendsOnline">
-				<div class="smallHeader3"><b id="friendsTog" class="cur" onclick="friendsToggle();">öppna</b><h4 ondblclick="return friendsToggle();" class="cur">vänner online (<span id="friendsOnlineCount">0</span>)</h4></div>
-				<div class="smallBoxed3">
-					<div id="friendsOnlineList"></div>
+				<div class="leftMenuHeaderRed" onclick="friendsToggle();">
+					vänner online (<span id="friendsOnlineCount">0</span>)
+				</div>
+				<div class="leftMenuBodyRed">
+					<div id="friendsOnlineList" style="display:none;"></div>
 				</div>
 			</div>
 			<script type="text/javascript" src="/_objects/fol.js"></script>
-	<? } ?>
 			<script type="text/javascript">
 			executeTimeout();
 			executeData('<?=@$_SESSION['data']['cachestr']?>');
-			<?=(!defined('NO_FOL')?'friendsSetPos(\''.@secureOUT($_COOKIE['friendsOnline']).'\');':'')?>
-			</script>	
+			<?= (!empty($_COOKIE['friendsOnline'])?"friendsToggle();":'')?>
+			</script>
+	<? } ?>
 <?
 	}
 

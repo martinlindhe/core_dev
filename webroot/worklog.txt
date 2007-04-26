@@ -147,13 +147,20 @@
 	- fixat <div> bugg, sidan renderar som den ska i IE 6/7 och Firefox. footern visas där den ska
 	- "skriv en visdom" popuprutan ny design
 
+2007.04.26 Torsdag:
+	- synkat med frans kodändringar
+	- ny design på quickchat-popupen
+	- vänner-lista ny design
+	- frans har fixat sökfunktionen (sökning på ålder funkar ej, jag listas inte trots att jag är 26)
+	- fixat "vänner online"-rutan, fuckade upp layout i IE6 + ny design
+
 
 ***********************************************************************************************************************************
 topp prio:
+	* bett frans kika på file upload till galleri, funkar för mej men inte för testfolket
 
 	* in med nya texter
-	* frans kollar på: sökning på ålder funkar ej, jag listas inte trots att jag är 26. enligt frans har det nog att göra med att någon tabell inte har info om min ålder, vilket behövs...
-	* frans: mail-aktivering vid registerring
+	
 	* forum "tänd upp" / "släck ner": vad gör dessa knappar??
 	* max 7 tecken i användarnamnet
 
