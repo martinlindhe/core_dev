@@ -20,27 +20,27 @@
 
 	require(DESIGN.'head_popup.php');
 ?>
-<body>
-<form name="msg" action="<?=l('user', 'relations', $s['id_id'], '0')?>create=1" method="post">
-		<div class="popupWholeContent cnti mrg">
-			<div class="smallHeader1 lft"><h4>bli vän</h4></div>
-			<div class="smallFilled2 cnt pdg_t wht">
-			<table cellspacing="0" style="height: 150px;"><tr><td style="height: 150px; vertical-align: middle;">
-bli vän med:<br /><span class="bg_wht"><?=$user->getstring($s, '', array('nolink' => true))?></span>
-<br /><br /><b>relationstyp:</b><br /><select name="ins_rel" class="txt">
-<?
-	foreach($rel as $row) {
-echo '<option value="'.$row[0].'">'.secureOUT($row[1]).'</option>';
-	}
-?>
-</select>
-			</td></tr></table>
-				<input type="submit" class="btn2_sml r" value="spara!" style="margin-top: 5px;" /><br class="clr" />
-			</div>
-		</div>
-</form>
-</body>
-</html>
+
+<div class="popupWholeContent cnti mrg">
+	<div class="leftMenuHeader">bli vän</div>
+	<div class="leftMenuBodyWhite pdg_t">
+
+		<form name="msg" action="<?=l('user', 'relations', $s['id_id'], '0')?>create=1" method="post">
+		<table summary="" cellspacing="0" style="height: 150px;"><tr>
+			<td style="height: 150px; vertical-align: middle;">
+				bli vän med:<br />
+				<?=$user->getstring($s, '', array('nolink' => true))?><br /><br />
+				<b>relationstyp:</b><br />
+				<select name="ins_rel" class="txt">
+				<? foreach($rel as $row) echo '<option value="'.$row[0].'">'.secureOUT($row[1]).'</option>'; ?>
+				</select>
+			</td>
+		</tr></table>
+		<input type="submit" class="btn2_sml r" value="spara!" style="margin-top: 5px;" /><br class="clr" />
+		</form>
+
+	</div>
 </div>
+
 </body>
 </html>

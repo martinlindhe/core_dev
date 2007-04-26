@@ -207,8 +207,11 @@ function intern_get(obj) {
 </form>
 
 <div id="mainContent">
-	<div class="mainHeader2"><h4>inställningar - <?=makeMenu($page, $menu)?></h4></div>
-	<div class="mainBoxed2">
+
+	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
+
+	<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
+	<div class="centerMenuBodyWhite">
 		
 	<form action="<?=l('member', 'settings', 'img')?>" method="post" enctype="multipart/form-data" onsubmit="if(alreadyupl == 1) { if(!confirm('Du har redan laddat upp en bild för att använda den som\nprofilbild, men du har inte slutfört beskärningen.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } if(alreadyupl == 2) { if(!confirm('Du har redan laddat upp en bild som väntar på att granskas.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } this.submitbtn.disabled = true;">
 	<input type="hidden" name="dopost" value="1"/>

@@ -153,6 +153,10 @@
 	- vänner-lista ny design
 	- frans har fixat sökfunktionen (sökning på ålder funkar ej, jag listas inte trots att jag är 26)
 	- fixat "vänner online"-rutan, fuckade upp layout i IE6 + ny design
+	- ny design på "bli vän"-popupen
+	- fixat visning av andras presentation
+	- ny design på "inställningar"-sidorna
+	- "titta hit" har nu vit bakgrund
 
 
 ***********************************************************************************************************************************

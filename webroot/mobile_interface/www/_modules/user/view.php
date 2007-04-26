@@ -23,7 +23,7 @@
 	define('U_VISIT', true);
 	require(DESIGN.'head_user.php');
 
-	echo formatText($profile['user_pres'][1], $so, true, $s['id_id']);
+	echo formatText($profile['user_pres'][1], true);
 
 	require(DESIGN.'foot_user.php');
 ?>

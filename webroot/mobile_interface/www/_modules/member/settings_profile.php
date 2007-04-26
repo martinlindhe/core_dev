@@ -75,8 +75,11 @@ var actID = '';
 </style>
 
 <div id="mainContent">
-	<div class="mainHeader2"><h4>inställningar - <?=makeMenu($page, $menu)?></h4></div>
-	<div class="mainBoxed2"><div style="padding: 5px;">
+
+	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
+
+	<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
+	<div class="centerMenuBodyWhite"><div style="padding: 5px;">
 		<form name="pres" action="<?=l('member', 'settings')?>" method="post" onsubmit="if(TC_active) TC_VarToHidden();">
 		<input type="hidden" name="do" value="1" />
 		<?=(!empty($_GET['go']))?'<input type="hidden" name="go" value="1" />':'';?>
@@ -161,7 +164,7 @@ var actID = '';
 								<option value="0">Välj bild från fotoalbum</option>
 								<?
 								foreach($result as $pic) {
-									echo '<option value="'.P2B.USER_GALLERY.$pic[2].'/'.$pic[0].(($pic[3])?'_'.$pic[4]:'').'.'.$pic[5].'">'.secureOUT('#'.$pic[0].' - '.$pic[6]).' '.(($pic[3])?'<b>[privat]</b>':'').'</option>';
+									echo '<option value="'.P2B.USER_GALLERY.$pic[2].'/'.$pic[0].(($pic[3])?'_'.$pic[4]:'').'.'.$pic[5].'">'.secureOUT('#'.$pic[0].' - '.$pic[6]).' '.(($pic[3])?'[privat]':'').'</option>';
 								}
 								?>
 								</select><input type="button" class="b" value="ladda upp ny" onclick="makeUpload('type=pres'); return false;" style="margin-right: 10px;"/>

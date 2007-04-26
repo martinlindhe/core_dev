@@ -18,8 +18,10 @@
 ?>
 <div id="mainContent">
 
-	<div class="mainHeader2"><h4>inställningar - <?=makeMenu($page, $menu)?></h4></div>
-	<div class="mainBoxed2">
+	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
+
+	<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
+	<div class="centerMenuBodyWhite">
 		<form name="pres" action="<?=l('member', 'settings', 'fact')?>" method="post" onsubmit="if(TC_active) TC_VarToHidden();">
 		<input type="hidden" name="do" value="1" />
 

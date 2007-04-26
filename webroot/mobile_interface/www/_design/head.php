@@ -140,11 +140,11 @@ function checkTime(toggle) {
 	$gotcon = (!empty($contribute) && count($contribute))?true:false;
 ?>
 			<div class="leftMenuHeader">titta hit</div>
-			<div class="leftMenuBodyGray">
-				<?=($gotcon?'<div class="smallBoxed pdg">'.$user->getstring($contribute).'</div>':'')?>
-				<div class="leftMenuBodyGray">
-					<p class="wht bld pdg brd_btm"><?=($gotcon?secureOUT($contribute['con_msg'], 1):'Visdom finns ej för idag.')?></p>
-					<p class="wht pdg sml">Varje dag publicerar CitySurf en ny visdom, skicka in en du också!</p>
+			<div class="leftMenuBodyWhite">
+				<?=($gotcon?'<div class="pdg">'.$user->getstring($contribute).'</div>':'')?>
+				<div class="leftMenuBodyWhite">
+					<p class="bld pdg brd_btm"><?=($gotcon?secureOUT($contribute['con_msg'], 1):'Visdom finns ej för idag.')?></p>
+					<p class="pdg sml">Varje dag publicerar CitySurf en ny visdom, skicka in en du också!</p>
 					<input type="button" class="btn2_sml r" onclick="makeContribution();" value="skriv" /><br class="clr" />
 				</div>
 			</div>
