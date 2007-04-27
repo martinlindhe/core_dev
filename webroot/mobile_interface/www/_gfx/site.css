@@ -1,10 +1,7 @@
 #top_img { position: absolute; top: 0px; left: 0px; }
 
 #top_online { position: absolute; top: 5px; left: 840px; width: 137px; height: 90px; text-align: center; background: url('/_objects/bg_online.png'); }
-#top_online_off { position: absolute; left: 770px; top: 8px; }
-#top_online_off .top { padding: 0 5px 3px 0; }
-#top_online_off .bottom { padding: 2px 5px 4px 0; }
-#top_online table { width: 127px; margin-right: auto; text-align: left; margin: 5px 5px 5px auto; }
+#top_online_off { position: absolute; left: 826px; top: 25px; }
 
 #top_ad { position: absolute; top: 20px; left: 352px; border: 1px solid #b4b9b3; }
 #top_ad img { margin: 1px; }

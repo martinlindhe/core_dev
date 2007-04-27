@@ -1,7 +1,7 @@
 html { overflow: -moz-scrollbars-vertical; }
 html, body { height: 100%; margin: 0; padding: 0; }
 body { background: #fff; font: 11px Verdana, Arial, sans-serif; color: #666; }
-#top { position: relative; height: 131px; width: 982px; margin-bottom: 10px; background-image: url('/_objects/top.png'); background-repeat: no-repeat; }
+#top { position: relative; height: 131px; width: 982px; margin-bottom: 10px; }
 #login { position: absolute; top: 65px; left: 885px; }
 #forgot { position: absolute; top: 65px; left: 803px; }
 td { vertical-align: top; padding: 0; }

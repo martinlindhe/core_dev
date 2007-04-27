@@ -229,8 +229,14 @@
 <div id="mainContent">
 	
 	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
-	
-	<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
+
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings').'\')', 'icon_settings.png', 'publika'); ?>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'fact').'\')', 'icon_settings.png', 'fakta'); ?>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'img').'\')', 'icon_settings.png', 'bild'); ?>
+	<? makeButton(true, 'goLoc(\''.l('member', 'settings', 'personal').'\')', 'icon_settings.png', 'personliga'); ?>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'delete').'\')', 'icon_settings.png', 'radera konto'); ?>
+	<br/><br/><br/>
+
 	<div class="centerMenuBodyWhite">
 	<form action="<?=l('member', 'settings', 'personal')?>" method="post">
 	<input type="hidden" name="do" value="1" />
@@ -293,11 +299,12 @@
 		<tr>
 			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['send_spec'][1]) && $isOk)?' checked':'';?> /><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
+
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_cell" value="1" id="opt_cell1"<?=(empty($settings['send_cell'][1]))?' checked':'';?> /><label for="opt_cell1"> Ja, jag vill ha erbjudanden från 360 via SMS</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_cell" value="1" id="opt_cell1"<?=(empty($settings['send_cell'][1]))?' checked':'';?> /><label for="opt_cell1"> Ja, jag vill ha erbjudanden via SMS</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_email" value="1" id="opt_email1"<?=(empty($settings['send_email'][1]))?' checked':'';?> /><label for="opt_email1"> Ja, jag vill ha erbjudanden från 360 via e-post</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_email" value="1" id="opt_email1"<?=(empty($settings['send_email'][1]))?' checked':'';?> /><label for="opt_email1"> Ja, jag vill ha erbjudanden via e-post</label></td>
 		</tr>
 <!--
 		<tr>

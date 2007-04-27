@@ -48,13 +48,13 @@ function checkTime(toggle) {
 		$online = explode(':', $online);
 ?>
 		<div id="top_online">
-		<table summary="" cellspacing="0">
-		<tr><td><a href="<?=l('list', 'users', '1')?>">online</a></td><td class="bld rgt"><a href="<?=l('list', 'users', 1)?>"><?=@intval($online[0])?></a></td></tr>
-		<tr><td><a href="<?=l('list', 'users', 'M')?>">killar</a></td><td class="rgt"><a href="<?=l('list', 'users', 'M')?>" class="bld sexM"><?=@intval($online[1])?></a></td></tr>
-		<tr><td><a href="<?=l('list', 'users', 'F')?>">tjejer</a></td><td class="rgt"><a href="<?=l('list', 'users', 'F')?>" class="bld sexF"><?=@intval($online[2])?></a></td></tr>
-		<tr><td colspan="2" class="cnt"><br /><a href="<?=l('list', 'users')?>">senast inloggade</a></td></tr>
-		<tr><td colspan="2" class="bld cnt cur" onmouseover="checkTime(1);">snabbsök</td></tr>
-		</table>
+			<table summary="" cellspacing="0">
+				<tr><td><a href="<?=l('list', 'users', '1')?>">online</a></td><td class="bld rgt"><a href="<?=l('list', 'users', 1)?>"><?=@intval($online[0])?></a></td></tr>
+				<tr><td><a href="<?=l('list', 'users', 'M')?>">killar</a></td><td class="rgt"><a href="<?=l('list', 'users', 'M')?>" class="bld sexM"><?=@intval($online[1])?></a></td></tr>
+				<tr><td><a href="<?=l('list', 'users', 'F')?>">tjejer</a></td><td class="rgt"><a href="<?=l('list', 'users', 'F')?>" class="bld sexF"><?=@intval($online[2])?></a></td></tr>
+				<tr><td colspan="2" class="cnt"><br /><a href="<?=l('list', 'users')?>">senast inloggade</a></td></tr>
+				<tr><td colspan="2" class="bld cnt cur" onmouseover="checkTime(1);">snabbsök</td></tr>
+			</table>
 		</div>
 
 		<div id="userfind" style="display: none" onmouseover="checkTime(1);">
@@ -64,25 +64,22 @@ function checkTime(toggle) {
 		</div>
 <?
 	} else {
-		//ej inloggad meny: todo!!!1
+		//ej inloggad
 ?>
-		<ul id="menu">
-		<li><a href="/main/start/">start</a></li>
-		<li><a href="/main/faq/">hjälp</a></li>
-		<li><a href="/member/register/">registrera dig!</a></li>
-		</ul>
-
-		<form name="l" action="/member/login" method="post">
 		<div id="top_online_off">
-		<table cellspacing="0" summary="">
-		<tr><td class="top">alias: <input type="text" class="txt" name="a" style="margin-bottom: -4px;" /></td></tr>
-		<tr><td class="bottom">lösenord: <input type="password" class="pass" style="margin-bottom: -4px;" name="p" /></td></tr>
-		</table>
+			<form name="l" action="/member/login" method="post">
+
+			<table summary="" cellspacing="0">
+				<tr><td>alias:</td><td><input type="text" class="txt" style="width: 70px" name="a" /></td></tr>
+				<tr><td>lösenord:</td><td><input type="password" class="pass" style="width: 70px" name="p" /></td></tr>
+				<tr><td colspan="2">
+					<input type="submit" class="btn2_min" value="logga in" id="login" />
+				</td></tr>
+			</table>
+
+			<script type="text/javascript">if(document.l.a.value.length > 0) document.l.p.focus(); else document.l.a.focus();</script>
+			</form>
 		</div>
-		<script type="text/javascript">if(document.l.a.value.length > 0) document.l.p.focus(); else document.l.a.focus();</script>
-		<input type="button" onclick="goLoc('<?=l('member', 'forgot')?>');" class="btn2_min" value="glömt?" id="forgot" />
-		<input type="submit" class="btn2_min" value="logga in!" id="login" />
-		</form>
 <?
 	}
 ?>

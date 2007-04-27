@@ -20,7 +20,13 @@
 
 	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
 
-	<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings').'\')', 'icon_settings.png', 'publika'); ?>
+	<? makeButton(true, 'goLoc(\''.l('member', 'settings', 'fact').'\')', 'icon_settings.png', 'fakta'); ?>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'img').'\')', 'icon_settings.png', 'bild'); ?>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'personal').'\')', 'icon_settings.png', 'personliga'); ?>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'delete').'\')', 'icon_settings.png', 'radera konto'); ?>
+	<br/><br/><br/>
+
 	<div class="centerMenuBodyWhite">
 		<form name="pres" action="<?=l('member', 'settings', 'fact')?>" method="post" onsubmit="if(TC_active) TC_VarToHidden();">
 		<input type="hidden" name="do" value="1" />
