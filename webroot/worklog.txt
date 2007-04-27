@@ -159,8 +159,12 @@
 	- "titta hit" har nu vit bakgrund
 
 2007.04.27 Fredag:
-	- inställningar-sidorna ny navigeringsmeny, bort med referenser till "360"
-	- fixade loginrutan uppe i högra hörnet så den ser bra ut
+	webbgränssnittet:
+		- inställningar-sidorna ny navigeringsmeny, bort med referenser till "360"
+		- fixade loginrutan uppe i högra hörnet så den ser bra ut
+	mobila gränssnittet:
+		- koduppdatering så sidan funkar igen med kodändringar från webb-gränssnittet
+		
 
 
 ***********************************************************************************************************************************

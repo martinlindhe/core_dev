@@ -125,19 +125,19 @@ function flash($s) {
 function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC') {
 	global $t, $sql;
 	if($type == 's') {
-		$result = $sql->queryResult("SELECT ".CH." text_cmt FROM {$t}textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
+		$result = $sql->queryResult("SELECT text_cmt FROM {$t}textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
 		if(!$result) return false; else return $result;
 	} elseif($type == 'm') {
-		$result = $sql->query("SELECT ".CH." main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt'");
+		$result = $sql->query("SELECT main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt'");
 		if(!$result) return false; else return $result;
 	} elseif($type == 'mo') {
-		$result = $sql->query("SELECT ".CH." main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt' ORDER BY $order");
+		$result = $sql->query("SELECT main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt' ORDER BY $order");
 		if(!$result) return false; else return $result;
 	}
 }
 function gettxt($id, $opt = '0', $ext = false) {
 	global $t, $sql;
-	$result = $sql->queryResult("SELECT ".CH." text_cmt FROM {$t}text WHERE main_id = '$id' AND option_id = '$opt' LIMIT 1");
+	$result = $sql->queryResult("SELECT text_cmt FROM {$t}text WHERE main_id = '$id' AND option_id = '$opt' LIMIT 1");
 	if(!$result) return false; else if(!$ext) return $result; else return extOUT($result);
 }
 function headline($id = '') {
@@ -187,10 +187,8 @@ function extOUT($str, $class = '') {
 	return nl2br(doURL(doMailto(stripslashes($str), $class), $class));
 }
 function is_md5($str) {
-	if(!empty($str) && preg_match('/^[A-Fa-f0-9]{32}$/', $str))
-		return true;
-	else
-		return false;
+	if (!empty($str) && preg_match('/^[A-Fa-f0-9]{32}$/', $str))	return true;
+	return false;
 }
 function l($type = 'main', $action = 'start', $id = '', $key = '') {
 	#return 'index.php?type='.$type.'&action='.$action.($id?'&id='.$id:'');
@@ -215,22 +213,22 @@ function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $
 		$page = 'error.php';
 		if(!$l) $page = 'error_splash.php';
 		if(!empty($url) && substr($url, 0, 1) != '1') {
-			require(DESIGN.$page);
-			require(DESIGN.'mv.php');
+			require(dirname(__FILE__).'/../_design/'.$page);
+			require(dirname(__FILE__).'/../_design/mv.php');
 		} elseif(substr($url, 0, 1) == '1') {
 			$url = substr($url, 1);
-			require(DESIGN.$page);
+			require(dirname(__FILE__).'/../_design/'.$page);
 		} else {
-			require(DESIGN.$page);
+			require(dirname(__FILE__).'/../_design/'.$page);
 		}
 	} elseif($type == 'popup') {
-		require(DESIGN.'error_popup.php');
+		require(dirname(__FILE__).'/../_design/error_popup.php');
 	} elseif($type == 'popupbig') {
-		require(DESIGN.'error_popupbig.php');
+		require(dirname(__FILE__).'/../_design/error_popupbig.php');
 	} elseif($type == 'splash') {
-		require(DESIGN.'error_splash.php');
+		require(dirname(__FILE__).'/../_design/error_splash.php');
 		if(!empty($url)) {
-			require(DESIGN.'mv.php');
+			require(dirname(__FILE__).'/../_design/mv.php');
 		}
 	}
 	exit;

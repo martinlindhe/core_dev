@@ -52,16 +52,6 @@ function getEnumOptions($table, $field) {
    }
    return $finalResult;
 }
-function date_diff($current,$past) { 
-	$seconds = strtotime($current) - strtotime($past);    
-	$min = $seconds/60; 
-	$hours = $min/60; 
-	$days = floor($hours/24); 
-	$hours = floor($hours-($days*24)); 
-	$min = floor($min-($days*60*24)-($hours*60)); 
-	$seconds = floor($seconds-($days*60*60*24)-($hours*60*60)-($min*60)); 
-	return array('days' => $days,'hours' => $hours,'minutes' => $min,'seconds' => $seconds); 
-}
 function smallDate($date) {
 	return stripzero(strftime("%d", strtotime($date))) . strftime(" %b %H:%m", strtotime($date));
 }
@@ -75,48 +65,6 @@ function getPic($str) {
 	return $str;
 }
 
-function paging($p = '1', $limit = 20) {
-	if(empty($p) || !is_numeric($p)) {
-		$p = 1;
-	}
-	return array('p' => $p, 'limit' => $limit, 'slimit' => ($p - 1) * $limit);
-}
-
-function makeMenu($sel, $arr, $print = true) {
-	if($print) echo '<tr><td height="25">';
-	$i = false;
-	foreach($arr as $key => $val) {
-		if(!$i) $i = true; else echo ' | ';
-		echo '<a href="'.$val.'"'.((strtolower($key) == strtolower($sel))?' class="no_lnk"':'').'>'.$key.'</a>';
-	}
-	if($print) echo '</td></tr>';
-}
-function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $topic = '', $tc = 1, $class = '') {
-	eval(GLOBAL_STRING);
-	if($type == 'main') {
-		$page = 'error.php';
-		if(!$l) $page = 'error_splash.php';
-		if(!empty($url) && substr($url, 0, 1) != '1') {
-			require(dirname(__FILE__).'/../_design/'.$page);
-			require(dirname(__FILE__).'/../_design/mv.php');
-		} elseif(substr($url, 0, 1) == '1') {
-			$url = substr($url, 1);
-			require(dirname(__FILE__).'/../_design/'.$page);
-		} else {
-			require(dirname(__FILE__).'/../_design/'.$page);
-		}
-	} elseif($type == 'popup') {
-		require(dirname(__FILE__).'/../_design/error_popup.php');
-	} elseif($type == 'popupbig') {
-		require(dirname(__FILE__).'/../_design/error_popupbig.php');
-	} elseif($type == 'splash') {
-		require(dirname(__FILE__).'/../_design/error_splash.php');
-		if(!empty($url)) {
-			require(dirname(__FILE__).'/../_design/mv.php');
-		}
-	}
-	exit;
-}
 function doPic($id) {
 	return '<a href="showSingleNormal.php?id='.$id.'&l" target="bunnymain"><img src="showSingleNormal.php?id='.$id.'" style="margin: 0 0 0 -9px;"></a>';
 }
@@ -179,20 +127,6 @@ function sify($str) {
     return (strtolower(substr($str, -1))=='s')?$str:$str.'s';
 }
 
-function cookieSET($id, $val, $expire = '') {
-	if(empty($expire)) $expire = time() + 15 * 365 * 24 * 60 * 60;
-	setcookie($id, $val, $expire);
-	return $val;
-}
-
-function is_md5($str) {
-	if(!empty($str) && preg_match('/^[A-Fa-f0-9]{32}$/', $str)) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
 function checkPic($id = '') {
 	GLOBAL $pic_view, $pic_tab, $cookie_id;
 	$sql = @mysql_query("INSERT INTO $pic_view SET
@@ -226,16 +160,6 @@ function getppl() {
 	return str_replace(",", ".", number_format($return));
 }
 
-function gettxt($opt) {
-	global $t, $sql;
-	$res = $sql->queryResult("SELECT text_cmt FROM {$t}text WHERE main_id = '$opt' LIMIT 1");
-	if(!$res) return false; else return $res;
-}
-
-function secureOUT($str) {
-    return stripslashes(htmlentities($str));
-}
-
 function secureOUT2($str) {
     return nl2br(stripslashes(htmlentities($str)));
 }
@@ -248,26 +172,10 @@ function secureBOX($str) {
     return doURL(fixLIST($str));
 }
 
-function safeOUT($str, $nl = true) {
-    return ($nl?nl2br(stripslashes($str)):stripslashes($str));
-}
-
-function secureINS($str) {
-    return addslashes($str);
-}
-
 function secureMAIL($str) {
     $pattern = array("@", ".");
     $matches = array(" (at) ", " (dot) ");
     return str_replace($pattern, $matches, $str);
-}
-
-function doInt($str) {
-	return str_replace(",", ".", number_format($str));
-}
-
-function doMailto($str) {
-    return preg_replace("/([\w\.\-_]+)(@)([\w\.\-_]+)/i", "<a href=\"mailto:$0\" class=\"txt_look\">$0</a>", $str);
 }
 
 function plainDate($str, $type = true) {
@@ -284,32 +192,6 @@ function doDate($str) {
 	return 'igår';
     else
 	return strftime("%A", strtotime($str));
-}
-
-function specialDate($date, $dday = 0, $type = 1) {
-	if($type) {
-		if($dday) {
-			$first_date = stripzero(date("d", strtotime($date)));
-			$first_month = strtoupper(strftime("%B", strtotime($date)));
-			$sec_date = stripzero(date("d", strtotime($date.' +1 DAY')));
-			if($sec_date < $first_date) {
-	# månadsskifte
-				$first_month = stripzero(date("m", strtotime($date)));
-				$sec_month = strtoupper(strftime("%B", strtotime($date.' +1 DAY')));
-				return "$first_date/$first_month & $sec_date $sec_month";
-			} else {
-				return "$first_date & $sec_date $first_month";
-			}
-		} else {
-			if(date("Y", strtotime($date)) == date("Y")) {
-				return stripzero(date("d", strtotime($date))).' '.strtoupper(strftime("%B", strtotime($date)));
-			} else {
-				return stripzero(date("d", strtotime($date))).' '.strtoupper(strftime("%B", strtotime($date))).' '.date("Y", strtotime($date));
-			}
-		}
-	} else {
-		return strtoupper(strftime("%A", strtotime($date))).' '.stripzero(date("d", strtotime($date))).' '.strtoupper(strftime("%B", strtotime($date)));
-	}
 }
 
 function dooDate($str) {
@@ -337,11 +219,6 @@ function doBirth($date) {
 	}
 }
 
-function execSt() {
-    list($usec, $sec) = explode(" ",microtime());
-    return ((float)$usec + (float)$sec);
-}
-
 function fixLIST($str) {
     $pattern = array("<ul>", "</ul>");
     $matches = array("	</p>\n	<ul>", "</ul>\n		<p class=\"bre_txt\">\n");
@@ -351,10 +228,6 @@ function fixLIST($str) {
 
 function doSPEC($str) {
     return nl2br(urldecode(doURL(htmlentities($str))));
-}
-
-function doURL($str) {
-    return preg_replace("/(?<=^|\s)((https?|ftps?):\/\/)?(([-_a-zA-Z]+\.)+)([a-zA-Z]{2,6})(\/[^\]\[\s]*)?(?=\s|$)/e","'$1'!=''? '<a href=\"$1$3$5$6\" class=\"txt_look txt_bld\" target=\"_blank\">$3$5</a>':'<a href=\"http://$3$5$6\" target=\"_blank\">$3$5$6</a>'",$str);
 }
 
 function checkURL($str) {
@@ -456,17 +329,6 @@ GLOBAL $gtable, $local_imagedir;
 	return true;
 }
 
-function niceDate($str) {
-	if(date("Y-m-d", strtotime($str)) == date("Y-m-d"))
-		return strftime("idag, %H:%M", strtotime($str));
-	elseif(date("Y-m-d", strtotime($str)) == date("Y-m-d", strtotime("-1 day")))
-		return strftime("igår, %H:%M", strtotime($str));
-	elseif(date("Y", strtotime($str)) != date("Y"))
-		return 'den '.stripzero(strftime("%d", strtotime($str))).strftime(" %B %Y, %H:%M", strtotime($str));
-	else
-		return 'den '.stripzero(strftime("%d", strtotime($str))).strftime(" %B, %H:%M", strtotime($str));
-}
-
 function specDate($str) {
 	if(date("Y-m-d", strtotime($str)) == date("Y-m-d"))
 		return '<span class="txt_chead">'.strftime("%y%m%d", strtotime($str)).'</span>';
@@ -505,16 +367,6 @@ function verify_uploaded_file($str, $size, $own = '10000000') {
     
 	return true;
 
-}
-
-function addzero($str) {
-	if(strlen($str) == '1') $str = '0'.$str;
-	return $str;
-}
-
-function stripzero($str) {
-	if(substr($str, 0, 1) == '0') $str = substr($str, 1, 1);
-	return $str;
 }
 
 function easyOUT($str) {
@@ -627,15 +479,6 @@ function get_browser_($user_agent)
 	return 'Unknown';
 }
 
-function now() {
-	return strftime('%Y-%m-%d %H:%M');
-}
-function reloadACT($url) {
-	header('Location: '.$url);
-	die;
-}
-
-
 /* By Martin, Creates a paging list suitable for mobile devices */
 function dopagingMobile($paging, $url, $anchor = '', $width = 'med', $text = '&nbsp;', $vice = 1) {
 
@@ -679,17 +522,4 @@ function dopagingMobile($paging, $url, $anchor = '', $width = 'med', $text = '&n
 	if($width == 'big' || $width == 'medbig' || $width == 'med' || $width == 'medmin' || $width == 'biggest') echo '&nbsp;&nbsp;'.($paging['p'] < $stop?'<a href="'.$url.($paging['p']+1).$anchor.'">'.((!$vice)?'bakåt':'framåt').' »</a>':'&nbsp;');
 }
 
-function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC') {
-	global $t, $sql;
-	if($type == 's') {
-		$result = $sql->queryResult("SELECT ".CH." text_cmt FROM {$t}textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
-		if(!$result) return false; else return $result;
-	} elseif($type == 'm') {
-		$result = $sql->query("SELECT ".CH." main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt'");
-		if(!$result) return false; else return $result;
-	} elseif($type == 'mo') {
-		$result = $sql->query("SELECT ".CH." main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt' ORDER BY $order");
-		if(!$result) return false; else return $result;
-	}
-}
 ?>
