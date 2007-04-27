@@ -162,10 +162,11 @@
 	webbgränssnittet:
 		- inställningar-sidorna ny navigeringsmeny, bort med referenser till "360"
 		- fixade loginrutan uppe i högra hörnet så den ser bra ut
+		- små fixar
 	mobila gränssnittet:
 		- koduppdatering så sidan funkar igen med kodändringar från webb-gränssnittet
-		
-
+		- börjat lägga in ikoner etc i mobila gränssnittet
+---[[mailat ovanstående]]---
 
 ***********************************************************************************************************************************
 topp prio:
@@ -177,6 +178,11 @@ topp prio:
 	
 	* forum "tänd upp" / "släck ner": vad gör dessa knappar??
 	* max 7 tecken i användarnamnet
+
+	* mailutskick, från frans:
+		Om du har några headers som du vet hjälper till att få de att gå förbi spamfiltrena, så får du gärna lägga till dem. Tror mail-funktionen ligger i veri..
+
+
 
 test feedback:
 	miss_pryd:
@@ -198,6 +204,7 @@ Kvar att göra MMS:
 	- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
 
 allmänt mobila gränssnittet:
+	- behövs /_administrator/set_fnc.php alls?
 	- login redirectar användaren till webbgränssnittet, samma med logout
 
 	- en funktion som skapar snygga användarnamn+ålder+kön-länkar för mobilen

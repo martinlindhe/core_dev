@@ -10,4 +10,4 @@
 <link rel="stylesheet" href="css/mobile.css" type="text/css"/>
 </head>
 <body>
-MOBIL-INTERFACE<br/><br/>
+<img src="gfx/logo_170x30.jpg" alt="citysurf.tv"/><br/><br/>
