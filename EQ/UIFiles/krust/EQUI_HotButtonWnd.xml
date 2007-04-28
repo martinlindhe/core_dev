@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- for EQTypes see http://www.eqinterface.com/forums/showthread.php?t=18784 -->
 <!-- VERT's HOTBOTTON / INV TOOL -->
 <XML ID="EQInterfaceDefinitionLanguage">
 	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes"/>
@@ -1327,8 +1328,8 @@
 			<CX>36</CX>
 			<CY>36</CY>
 		</Size>
-		<Background>A_InvEar</Background>
-		<EQType>1</EQType>
+		<Background>A_InvLegs</Background>
+		<EQType>18</EQType>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
@@ -1430,8 +1431,8 @@
 			<CX>36</CX>
 			<CY>36</CY>
 		</Size>
-		<Background>A_InvChest</Background>
-		<EQType>17</EQType>
+		<Background>A_InvRange</Background>
+		<EQType>11</EQType>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
