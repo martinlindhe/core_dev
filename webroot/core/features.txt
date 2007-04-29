@@ -9,7 +9,6 @@
 
 ==== Database layer ====
 		- Transparent interface to different SQL databases (currently supports php_mysql.dll and php_mysqli.dll).
-			(todo: initial support pgsql, mssql)
 			Reduce time rewriting already working code for another db driver if you use this well defined class.
 
 ==== Wiki engine ====
@@ -21,11 +20,12 @@
 		- The same component also integrates in other components, such as the wiki.
 		- File upload progress is available thru ajax + php_apc.dll extension (optional)
 		- Image rotate is available
-		- Automatically converts uploaded BMP:s to jpeg format using nconvert (optional)
+		- Automatically converts uploaded BMP:s or SVG:s to jpeg or png formats using ImageMagick (optional)
 
 ==== News module ====
 		- Admins can easily publish news on the site
 		- You can easily enter news items in advance and choose when they should be published for general view
+		- RSS feeds are automatically created
 
 ==== Standards compatible ====
 		- All generated HTML are checked to be 100% "XHTML 1.0 Transitional" compatible using the "HTML Validator" plugin for Firefox.
@@ -53,6 +53,6 @@
 				* We use IE-specific rules for alpha-level of div:s
 
 		- Compatiblity
-			* The platform are being developed using Firefox, but functionality are regularry tested
-				in Internet Explorer and Opera aswell.
-			* Some CSS might render differently, but all javascript should work  in all those three browsers.
+			* The platform are being developed using Firefox 2, but functionality are regularry tested
+				in Internet Explorer 7 and Opera 9 aswell.
+			* Some CSS might render differently, but all javascript should work in those three browsers.
