@@ -7,7 +7,7 @@
 	$band_id = $_GET['id'];
 	$band_name = getBandName($band_id);
 
-	echo '<table width="600" cellpadding="3" cellspacing="0" border="1"><tr>';
+	echo '<table summary="" width="600" cellpadding="3" cellspacing="0" border="1"><tr>';
 	if (isModerated($band_id, MODERATION_BAND)) {
 		echo '<td class="titlemod">'.$band_name.'</td>';
 	} else {
@@ -19,7 +19,7 @@
 
 	echo 'Albums:<br/>';
 	$list = getBandRecords($band_id);
-	echo '<table width="600" cellpadding="3" cellspacing="0" border="1">';
+	echo '<table summary="" width="600" cellpadding="3" cellspacing="0" border="1">';
 	for ($i=0; $i<count($list); $i++)
 	{
 		$record_id = $list[$i]['recordId'];

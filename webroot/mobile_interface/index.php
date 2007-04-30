@@ -2,12 +2,6 @@
 	require_once('config.php');
 	require('design_head.php');
 
-	//print_r($_SESSION);
-
-	if (empty($s['id_id'])) {
-		echo '<a href="login.php">LOGGA IN</a><br/>';
-	}
-
 	//<a href="gallery.php">DITT GALLERI</a><br/>
 	if (!empty($s['id_id'])) {
 ?>

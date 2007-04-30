@@ -19,7 +19,7 @@
 	$title = $band_name.' - "'.$lyric_name.'" lyric';
 	require('design_head.php');
 
-	echo '<table cellpadding="3" cellspacing="0" border="1" width="100%">';
+	echo '<table summary="" cellpadding="3" cellspacing="0" border="1" width="100%">';
 
 	if (isModerated($lyric_id, MODERATION_LYRIC) || isPendingChange(MODERATIONCHANGE_LYRIC, $lyric_id))
 	{

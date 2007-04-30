@@ -36,7 +36,7 @@
 	echo '<b>'.$band_name.'</b> - <input type="text" name="title" size="50" value="'.$lyric_name.'"/> ';
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$lyric_id.'&amp;delete">Delete</a><br/>';
 	echo '<a href="show_lyric.php?id='.$lyric_id.'">Show</a><br/>';
-	echo '<textarea name="lyric" rows="27" cols="85">'.$lyric.'</textarea><br/>';
+	echo '<textarea name="lyric" rows="27" cols="80">'.$lyric.'</textarea><br/>';
 	echo '<input type="submit" value="Save changes" class="button"/>';
 	echo '</form><br/>';
 

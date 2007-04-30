@@ -41,7 +41,7 @@
 	/* Then list the lyrics */
 	for ($i=0; $i<count($list); $i++)
 	{
-		echo '<a name="'.$i.'"></a>';
+		echo '<a name="'.$i.'"></a><br/>';
 		$track = $list[$i]['trackNumber'];
 		$lyric_id = $list[$i]['lyricId'];
 
@@ -68,7 +68,7 @@
 		}
 		echo '<br/>';
 		echo '<a href="#top">To top</a><br/>';
-		echo '<br/><br/><br/><br/>';
+		echo '<br/><br/><br/>';
 	}
 
 	require('design_foot.php');

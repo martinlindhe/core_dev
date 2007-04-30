@@ -1,6 +1,4 @@
 <?
-	echo '<?xml version="1.0" encoding="iso-8859-1"?>';
-
 	//<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -8,8 +6,13 @@
 <head>
 <title>mobil interface</title>
 <link rel="stylesheet" href="css/mobile.css" type="text/css"/>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 </head>
 <body>
 <img src="gfx/logo_170x30.jpg" alt="citysurf.tv"/><br/>
-<a href="user.php"><img src="gfx/q_profil.png"></a> <a href="mail.php"><img src="gfx/q_mail.png"></a> <a href="gb.php"><img src="gfx/q_gb.png"></a><br/>
+<? if (empty($s['id_id'])) { ?>
+		<a href="login.php">LOGGA IN</a>
+<? } else { ?>
+		<a href="user.php"><img src="gfx/q_profil.png" alt="Profil"/></a> <a href="mail.php"><img src="gfx/q_mail.png" alt="Mail"/></a> <a href="gb.php"><img src="gfx/q_gb.png" alt="Gästbok"/></a><br/>
+<? } ?>
 <br/>

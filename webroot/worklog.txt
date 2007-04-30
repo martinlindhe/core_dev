@@ -168,6 +168,14 @@
 		- börjat lägga in ikoner etc i mobila gränssnittet
 ---[[mailat ovanstående]]---
 
+2007.04.30 Måndag:
+	 mobila gränssnittet:
+	 	- lite uppdateringar på utseendet
+	 	
+	 webbgränssnittet:
+	 	- profil: ändrat matchmakingrutan till "du vs. användare", dina fakta står till vänster
+	 	- mailutskick: fixat så mailutskick kommer fram till alla mottagare
+
 ***********************************************************************************************************************************
 topp prio:
 	* alla testare ska ha mms funktion (vip)
