@@ -186,6 +186,8 @@
 			* ignorerar alla filtyper förrutom jpg, gif och png
 		- blogg: bloggar utan titel (importerade från gamla cs) visas nu med rubriken "ingen rubrik"
 		- text rutor (t.ex "kontakt" och "webbradio") har nu ny design frame
+		- gjort ny backup av befintlig kod samt sqldump
+
 
 ***********************************************************************************************************************************
 topp prio:
