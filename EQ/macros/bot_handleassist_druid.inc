@@ -4,19 +4,22 @@
 	battlespam checker för om en mob snarats, + gör en spawncount check på npc med det namnet inom viss
 	range så vet vi om en mobb e snarad av en sk så skippar druiden autosnaring
 
- - end nuke loop efter att man zonat
+	- ändra nuke loopen:
+		1) när man fått ett target, vänta tills det droppar till "start nuke pct", t.ex 96% hp
+		2) spara % hp i en variabel när min nuke landar (?). sen nuka inte igen förräns % hp är lägre än förra gången
 
- - läsa DO_SNARE från ini, av/på beroende på zon:
-   ashengate:av
-   frostcrypt: av
-   splitpaw:av
-   tipt:på
-   vergalid mines:på
-   arcstone:på
-   
- - autodetecta vilken healspell som är memorizad
- 
- - reagera på "Your target resisted the XXX spell." för snares
+
+	- läsa DO_SNARE från ini, av/på beroende på zon:
+		ashengate:av
+		frostcrypt: av
+		splitpaw:av
+		tipt:på
+		vergalid mines:på
+		arcstone:på
+
+	- autodetecta vilken healspell som är memorizad
+
+	- reagera på "Your target resisted the XXX spell." för snares
  
 *|
 
@@ -26,7 +29,7 @@
 #define DO_EPIC							1						| click epic 1.5/2.0 when it is ready?
 #define DO_AA_DS						1						| Auto cast Wrath of the Wild anytime it is up. First on yourself, if you already have the buff, cast it on MA
 
-#define DO_REPTILE					1						| casts skin of the reptile on tank at beginning of fight, good for monk tanks :)
+#define DO_REPTILE					0						| casts skin of the reptile on tank at beginning of fight, good for monk tanks :)
 #define DO_REPTILE_PLAYER		Yamakasi
 
 | Percent levels
@@ -68,14 +71,14 @@ Sub Event_DEBUFF_DruNaturesSerenity(string Line, string Name)
 Sub Event_DEBUFF_DruImmolationOfSun(string Line, string Name)
 	| DRU/67: Immolation of the Sun
 	| DRU/71: Blistering Sunray
-	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFF: ${Target.CleanName} (FIRE, AC)"
+	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (FIRE, AC)"
 /return
 
 #event DEBUFF_DruCold "#1#s body is covered in a film of ice."
 Sub Event_DEBUFF_DruCold(string Line, string Name)
 	| DRU/67: Glacier Breath
 	| DRU/72: Icefall Breath
-	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFF: ${Target.CleanName} (COLD)"
+	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (COLD)"
 /return
 
 
@@ -363,7 +366,7 @@ Sub DruidUpdateBuffs
 	/if (${Macro.Return}) /return
 
 	/if (${Me.SpellReady["Second Life Rk. II"]}) {
-		/call RefreshBuff "Second Life Rk. II" 10
+		/call RefreshBuff "Second Life Rk. II" 20
 		/if (${Macro.Return}) /return
 	}
 
