@@ -175,6 +175,17 @@
 	 webbgränssnittet:
 	 	- profil: ändrat matchmakingrutan till "du vs. användare", dina fakta står till vänster
 	 	- mailutskick: fixat så mailutskick kommer fram till alla mottagare
+		- skrivit nytt script för att flytta alla användarbilder in i nya cs plattformen
+
+2007.05.02 Onsdag:
+	webbgränssnittet:
+		- profil: ändrat till "jag vs. användare" i matchmakingsrutan
+		- dataflytt: småfixar till importera-bilder-scriptet, testat å kört på cs dev:
+			* sätter in fildatum, bildtyp (normal / galleri X)
+			* kopierar in filerna på rätt plats i filsystemet
+			* ignorerar alla filtyper förrutom jpg, gif och png
+		- blogg: bloggar utan titel (importerade från gamla cs) visas nu med rubriken "ingen rubrik"
+		- text rutor (t.ex "kontakt" och "webbradio") har nu ny design frame
 
 ***********************************************************************************************************************************
 topp prio:
@@ -187,8 +198,6 @@ topp prio:
 
 	* mailutskick, från frans:
 		Om du har några headers som du vet hjälper till att få de att gå förbi spamfiltrena, så får du gärna lägga till dem. Tror mail-funktionen ligger i veri..
-
-
 
 test feedback:
 	miss_pryd:
