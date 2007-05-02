@@ -55,6 +55,7 @@ Sub Event_MyselfVertigo(string Line)
 #event WeZoning "LOADING, PLEASE WAIT..."
 Sub Event_WeZoning(string Line)
 	/echo ZONING!!!!!
+	/varset AbortLoop 1
 	/delay 30s
 /return
 

@@ -8,10 +8,10 @@
 
 Sub Main
 
-	/declare TankId						int local 0
+	/declare TankName					string local
 	/declare AbortLoop				int outer 0
 
-	/varset TankId ${Target.ID}
+	/varset TankName ${Target.Name}
 	
 	/if (!${Krust.Healer}) {
 		/echo Current class is not a healer class, ending macro
@@ -19,25 +19,25 @@ Sub Main
 	}
 
 	/call Init_HandleAssist
-	/echo Slack-heal started, MT is ${Target.Name}
+	/echo Slack-heal started, MT is ${TankName}
 
 	:MainLoop
 	/call HandleGroupHeal QHEAL_PERCENT
 	/doevents
 	/call UpdateBuffs
 	
-	/if (${TankId} && ${Me.SpellReady[DRUID_QH1]} && ${Target.ID} != ${TankId}) {
+	/if (${TankName.Length} && ${Me.SpellReady[DRUID_QH1]} && ${Target.Name.NotEqual[${TankName}]}) {
 		/echo Restoring tank target
-		/target id ${TankId}
-		/delay 1s ${Target.ID}==${TankId}
+		/target pc ${TankName}
+		/delay 1s ${Target.Name.Equal[${TankName}]}
 	}
-	
+
 	| Cast Fernspur on tank if ready and nessecary
-	/if (!${Raid.Members} && !${Me.Invis} && ${Me.SpellReady["Fernspur Rk. II"]} && ${SpawnCount[npc radius 50]} && (${Target.ID}==${TankId}) && (${Target.PctHPs}>=70) ) {
+	/if (!${Raid.Members} && !${Me.Invis} && ${Me.SpellReady["Fernspur Rk. II"]} && ${SpawnCount[npc radius 50]} && (${Target.Name.Equal[${TankName}]}) && (${Target.PctHPs}>=70) ) {
 		/call DebugMsg "FERNSPUR > ${Target.Name} < (${Me.PctMana}m)"
 		/call BotCast "Fernspur Rk. II"
 	}
-	
+
 	/goto :MainLoop
 
 /return

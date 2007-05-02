@@ -264,7 +264,7 @@ Sub UpdateBuffs
 
 	/call CheckNeutralZone
 	/if (${Macro.Return}) /return
-	/if (${Me.Moving} || ${Me.Invis}) /return
+	/if (${Me.Moving} || ${Me.Invis} || ${Me.State.Equal["HOVER"]}) /return
 
 	/declare wasSitting int local 0
 	/if (${Me.Sitting}) /varset wasSitting 1

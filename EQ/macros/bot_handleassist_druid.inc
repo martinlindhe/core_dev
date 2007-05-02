@@ -221,8 +221,6 @@ Sub HandleAssistCallDruid(int SpawnId)
 		/endmacro
 	}
 
-	/declare zoneId int local ${Zone.ID}
-	
 	/call FindTank
 	/varset tankId ${Macro.Return}
 	/varset tankName ${Spawn[id ${tankId}].Name}
@@ -272,11 +270,6 @@ Sub HandleAssistCallDruid(int SpawnId)
 		/if (${Target.Feigning}) /goto :DruidDone
 
 		/if (${AbortLoop}) /goto :DruidDone
-
-		/if (${Zone.ID} != ${zoneId}) {
-			/call DebugMsg "Stopping loop, zoned"
-			/return
-		}
 
 		/call HandleGroupHeal QHEAL_PERCENT
 
@@ -356,7 +349,7 @@ Sub DruidUpdateBuffs
 		/delay 40
 	}
 
-	| Razorthorn trash mobs cast AE that overwrites Mask of the Wild
+	| Razorthorn (ragea_raid) trash mobs cast AE that overwrites Mask of the Wild
 	/if (${Zone.ShortName.NotEqual["ragea_raid"]}) {
 		/call RefreshBuff "Mask of the Wild" 50
 		/if (${Macro.Return}) /return
