@@ -187,6 +187,9 @@
 		- blogg: bloggar utan titel (importerade från gamla cs) visas nu med rubriken "ingen rubrik"
 		- text rutor (t.ex "kontakt" och "webbradio") har nu ny design frame
 		- gjort ny backup av befintlig kod samt sqldump
+	
+	mobila gränssnittet:
+		- lagt upp på http://cs.icn.se/_mobil/
 
 
 ***********************************************************************************************************************************
