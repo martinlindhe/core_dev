@@ -1,0 +1,11 @@
+RewriteEngine on
+RewriteBase /
+RewriteRule ^([a-z]*)/([a-z]*)/([a-zA-Z0-9\.\@\-\_]*)/([a-fA-F0-9]*)/(.*) index.php?type=$1&action=$2&id=$3&key=$4&$5 [L]
+RewriteRule ^user/image/([a-fA-F0-9]*).jpg index.php?type=main&action=image&id=$1 [L]
+RewriteRule ^([a-z]*)/([a-z]*)/([a-zA-Z0-9\.\@\-\_]*)/(.*) index.php?type=$1&action=$2&id=$3&$4 [L]
+RewriteRule ^([a-z]*)/([a-z]*)/([a-zA-Z0-9\.\@\-\_]*)/([0-9]*)(\/?) index.php?type=$1&action=$2&id=$3&key=$4 [L]
+RewriteRule ^([a-z]*)/([a-z]*)/&(.*) index.php?type=$1&action=$2&$3 [L]
+RewriteRule ^([a-z]*)/([a-z]*)/([a-zA-Z0-9\.\@\-\_]*)(\/?) index.php?type=$1&action=$2&id=$3 [L]
+
+RewriteRule ^([a-z]*)/([a-z]*)(\/?) index.php?type=$1&action=$2 [L]
+#RewriteRule ^$ index.php [L]

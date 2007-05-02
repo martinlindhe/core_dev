@@ -1,0 +1,51 @@
+Steg 1 - att göra:
+
+	* funktionsuppdela plattformens komponenter - WIP
+
+	* Topp navigering "PROFIL", "???", "???"
+
+	* Vad klarar wap browers av?
+		- Cookies?
+		- Javascript?
+
+-----------
+I slut-skedet av steg 1:
+	* Optimera html. minimera ner antal onödiga tabbar och whitespace i design_head.php och design_foot.php
+	* Optimera css. -""-
+
+-----------
+Steg 1.5 - när steg 1 är färdigt:
+	* Galleri-funktionerna
+
+
+-----------
+Steg 2:
+	* WAP snabbinlogg funktion med 4-siffrig pinkod
+	* Blogg-funktionalitet, inklusive videoblogg & kunna blanda bilder & text (kunna ladda upp mer än en bild per blogg)
+	* Kunna ladda upp ny presentationsbild
+
+	* Eventuellt använda http://wurfl.sourceforge.net/ för att enkelt kunna identifera mobilens egenskaper
+
+	* Auto-resiza uppladdade bilder till vanliga mobil-upplösningar:
+		- Samsung D500: 176x220	(sån jag har)
+		- Samsung D600: 240x320
+		- Sony Ericsson K750i: 176x220
+		- Sony Ericsson K800i: 240x320
+
+-----------
+Steg 3: - Platform cleanup
+	* Uppdatera databas-driver från php_mysql till php_mysqli
+	* enkoda lösenordet med sha1 i databasen (s_user)
+	* rensa upp $_SESSION variabeln
+	* user.class.php, vad används $_SESSION['data']['cachestr'] till?? ta bort? den används för ajax-anrop. TA BORT...!
+	* separera kod från design:
+		- Guestbook:
+			_modules/user/gb.php
+			_modules/user/gb_write.php
+			
+	* ta bort alla counters?
+			
+	* databasstruktur:
+	
+		- s_user		userinfo
+		- s_userg		gästbok
