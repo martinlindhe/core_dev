@@ -197,6 +197,7 @@
 		- krashade för kiano i ie6 med qt 7.1.5, ej testat att uppgradera än
 		- gått igenom och justerat dokumentet med vip-nivåerna med kiano
 		- mailat frans med fråga om hur man redigerar texter i admingränssnittet
+		- fixat så användare "senast online" visas i korrekt ordning
 		
 	mobila gränssnittet:
 		- fixat inloggning & utloggning så man hamnar rätt
