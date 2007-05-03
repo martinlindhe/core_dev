@@ -120,6 +120,9 @@ X = hi prio task
 
 
 --------------[[changelog]]--------------
+2007.05.03:
+	- session: tydligare felmeddelande vid misslyckad inloggning
+
 2007.04.26:
 	- db: fixade så $db->showProfile() exluderar "sql connect time" när den räknar ut "php time"
 	- core: flytta ut db->log() till session->log(), det fixade alla cp problem med login/logout loggande

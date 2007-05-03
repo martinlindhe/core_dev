@@ -243,7 +243,7 @@ class Session
 		echo '<div id="login_form_layer">';
 		echo '<form name="login_form" method="post" action="">';
 		if ($this->error) {
-			echo '<span class="critical">Error: '.$this->error.'</span><br/>';
+			echo '<div class="critical"><img src="/gfx/icon_warning_big.png" alt="Error"/> '.$this->error.'</div>';
 			$this->error = ''; //remove error message once it has been displayed
 		}
 		
@@ -362,7 +362,7 @@ class Session
 			}
 			echo '<div id="edit_setting_div_'.$row['settingId'].'">';
 			echo $row['settingName'].': <input type="text" name="edit_setting_'.$row['settingId'].'" value="'.$row['settingValue'].'"/>';
-			echo '<img src="/gfx/icon_error.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].',\''.getProjectPath().'\');"/>';
+			echo '<img src="/gfx/icon_delete.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].',\''.getProjectPath().'\');"/>';
 			echo '</div>';
 		}
 		echo '<input type="submit" class="button" value="Save"/>';

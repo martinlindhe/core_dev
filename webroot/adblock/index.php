@@ -10,7 +10,7 @@
 ?>
 <br/>
 <a href="http://validator.w3.org/check?uri=referer" target="_blank">
-<img src="/gfx/valid-xhtml10" alt="Valid XHTML 1.0 Transitional" height="31" width="88" />
+<img src="/gfx/valid-xhtml10.png" alt="Valid XHTML 1.0 Transitional" height="31" width="88" />
 </a>
 
 <?
