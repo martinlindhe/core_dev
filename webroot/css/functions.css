@@ -148,15 +148,21 @@ input.button:focus {
 	-moz-border-radius-topright:15px;
 }
 
-.event_log_header {
+.event_log_notice {
 	color: #000;
 	background-color: #aaeeaa;
+	padding: 4px;
 }
-.event_log_author {
+.event_log_warning {
 	color: #000;
 	background-color: #ee8888;
+	padding: 4px;
 }
-
+.event_log_error {
+	color: #000;
+	background-color: #ee4444;
+	padding: 4px;
+}
 
 
 

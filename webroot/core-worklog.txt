@@ -122,6 +122,8 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.05.03:
 	- session: tydligare felmeddelande vid misslyckad inloggning
+	- admin events: fixade så de olika logg-typerna har olika css, notice, warning & error
+
 
 2007.04.26:
 	- db: fixade så $db->showProfile() exluderar "sql connect time" när den räknar ut "php time"
@@ -162,7 +164,6 @@ X = hi prio task
 	- adblock: visar rss news feed på startsidan
 	
 
-
 2007.04.20:
 	- admin: en phpinfo sida
 	- admin: compat check sida. visar överskådligt versioner av php mysql & apache på samma ställe och om dom är "supported"
@@ -201,6 +202,7 @@ X = hi prio task
 	- core: gjort så att /core/ajax*.php filerna funkar som /core/file.php, de kan ta en project-name parameter för att hitta rätt include
 	- core: gjort ett admin-gränssnitt som delas av alla "projekt", i /admin/
 	- adblock: flyttade ut admin_events.php till /admin/
+
 
 2007.04.17
 	- adblock: flyttade ut den sista funktionen sendTextFile från functions_files.php och skrotade den filen
