@@ -13,17 +13,15 @@
 
 	$filename = 'tough_taxi_driver.3gp';
 	//$filename = 'VIDEO_00007.3gp';
-	
 	//$filename = 'mike_vallely_vs_4_idiots.3gp';
 ?>
 
 <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="<?=$width?>" height="<?=$height?>" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
-<param name="SRC" value="<?=$filename?>">
-<param name="AUTOPLAY" value="true">
-<param NAME="type" value="video/quicktime">
-<param name="CONTROLLER" value="<?=$show_controls?>">
-<embed src="<?=$filename?>" width="<?=$width?>" height="<?=$height?>" autoplay="true" controller="<?=$show_controls?>" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/">
-</embed>
+<param name="src" value="<?=$filename?>">
+<param name="autoplay" value="true">
+<param name="type" value="video/quicktime">
+<param name="controller" value="<?=$show_controls?>">
+<embed src="<?=$filename?>" width="<?=$width?>" height="<?=$height?>" autoplay="true" controller="<?=$show_controls?>" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/"></embed>
 </object>
 
 

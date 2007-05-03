@@ -196,64 +196,49 @@
 		- embeddat 3gp med quicktime, fungerar i firefox 2, opera 9.2, internet explorer 7 med quicktime 7.1.6
 		- krashade för kiano i ie6 med qt 7.1.5, ej testat att uppgradera än
 		- gått igenom och justerat dokumentet med vip-nivåerna med kiano
+		- mailat frans med fråga om hur man redigerar texter i admingränssnittet
 		
 	mobila gränssnittet:
 		- fixat inloggning & utloggning så man hamnar rätt
-
+		- snyggat till några av sidorna
 
 ***********************************************************************************************************************************
 topp prio:
-	* alla testare ska ha mms funktion (vip)
 
 	* in med nya texter
-	
-	* forum "tänd upp" / "släck ner": vad gör dessa knappar?? TA BORT!
+
+	* gör gränssnitt för "redigera bevakningar". frans ska koda själva bevaknings-logikenß
+
+	* alla ska ha mms funktion (vip) under testet
+
+	* spara in mms uploads i databasen, samt visa video-uploads på rätt sätt:
+		- visa <embed> tagg för video, spela i quicktime.
+		- plocka fram videoupplösningen när videon laddas upp
+		- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
+
+	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
+
 	* max 7 tecken i användarnamnet
 
 	* mailutskick, från frans:
-		Om du har några headers som du vet hjälper till att få de att gå förbi spamfiltrena, så får du gärna lägga till dem. Tror mail-funktionen ligger i veri..
+		Om du har några headers som du vet hjälper till att få de att gå förbi spamfiltrena, så får du gärna lägga till dem.
+		Tror mail-funktionen ligger i veri..
+
+	* visa login-error istället för välkomsttexten på oinloggad startsida, ej i popup eller ny sida som det är idag
+
 
 test feedback:
 	miss_pryd:
 		- Varför får man inte skriva komentar till galleri x bilder som man får se? 
-		- "någon vill prata med dig" dyker upp igen även när man redan har en öppnad chat med den personen
-		- besäkr bild (för profilbild upload) funkar inte jättebra i firefox iaf, går ej klicka beskär utan att tabba till knappen
-			har med doctype att göra?!
 		- kompis länkar funkar itne för miss_pryd (vanlig user!) funkar för kiano & martin2
 
-hög prio - webbgränssnittet:
-	- visa login-error istället för välkomsttexten på oinloggad startsida, ej i popup eller ny sida som det är idag
-	- ta bort head_start.php, foot_start.php, de används av nåra filer bland annat register.php
-
-Kvar att göra MMS:
-	- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
 
 allmänt mobila gränssnittet:
-	- behövs /_administrator/set_fnc.php alls?
-	- login redirectar användaren till webbgränssnittet, samma med logout
 
 	- en funktion som skapar snygga användarnamn+ålder+kön-länkar för mobilen
 		* ta bort $user->getstringMobile() ??? eller skriv om den iaf
 
 	- paging för sök användare-resultat. kräver en performSearchCnt() funktion samt lite omstrukturering i performSearch()
-
-	- mail.php
-		* kunna se sin utkorg (skickad mail)
-
-	- bugg?: man försvinner inte från "vänner online" count när man loggar ut... u_user.account_date uppdateras ej vid logout!
-		* ta data från s_usersess istället!
-
-	- bugg: mail counter minskar inte när man raderar mail från sin inbox
-
-
-senare:
-	- waterstamp på uppladdade bilder
-
-
-XHTML cleanup:
-	- den genererade html:en för presentationsbilden genererar <IMG> tag med stora bokstäver, utan alt="", och ej escapade width & height, se presentationssida
-	- genererad html för bloggar genererar icke stängda <br> taggar och icke-stängda <img> taggar
-	- onerror används på en del images för att visa en default bild. onerror är ej accepterat i xhtml
 
 ***********************************************************************************************************************************
 databasen:
