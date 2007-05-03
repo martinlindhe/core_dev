@@ -191,6 +191,15 @@
 	mobila gränssnittet:
 		- lagt upp på http://cs.icn.se/_mobil/
 
+2007.05.03 Torsdag:
+	webbgränssnittet:
+		- embeddat 3gp med quicktime, fungerar i firefox 2, opera 9.2, internet explorer 7 med quicktime 7.1.6
+		- krashade för kiano i ie6 med qt 7.1.5, ej testat att uppgradera än
+		- gått igenom och justerat dokumentet med vip-nivåerna med kiano
+		
+	mobila gränssnittet:
+		- fixat inloggning & utloggning så man hamnar rätt
+
 
 ***********************************************************************************************************************************
 topp prio:

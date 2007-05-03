@@ -1,0 +1,18 @@
+There are two different standards for this format:
+		* 3GPP (for GSM Based Phones, may have filename extension .3gp)
+		* 3GPP2 (for CDMA Based Phones, may have filename extension .3g2)
+		Both are based on MPEG-4 and H263 video, and AAC or AMR audio.
+		
+		för "3GPP" så står det "3gp4" eller "3gp5" i headern
+		för "3GPP2" så står det "3g2a" i headern
+
+		The fields in the objects are stored with the most significant byte first, commonly known as network byte orde
+		or big-endian format. 
+
+.3gp filformatet:
+
+0x0000:		0000 00x1 6674 7970 3367 7034 0000 x200
+										f t  y p  3 g  p 4
+
+					x1 = 1C, 14
+					x2 = 01, 02

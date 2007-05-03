@@ -3,8 +3,10 @@
 	require('design_head.php');
 
 	//<a href="gallery.php">DITT GALLERI</a><br/>
-	if (!empty($s['id_id'])) {
+	if (empty($s['id_id'])) {
 ?>
+		<a href="login.php">LOGGA IN</a>
+<? } else { ?>
 	<a href="gb.php">DIN GÄSTBOK</a> (<?=gbCountUnread();?> olästa)<br/>
 	<a href="mail.php">DIN MAIL</a>(<?=getUnreadMailCount();?> olästa)<br/>
 	<a href="friends.php">DINA VÄNNER</a>(<?=relationsOnlineCount();?> online)<br/>
