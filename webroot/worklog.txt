@@ -212,24 +212,37 @@
 		- fixat så "tyck till" listas i datumordning
 		- fixat räknaren i tyck till listan
 		- "skriv blogg" nollställde formuläret om man glömt att skriva in en rubrik, fixat
+		- visar 3gp-videoklipp i galleriet
+		- ändrat font-storlek på några ställen (toppmenyn, "läs brev")
+
+	mms-in parse:
+		- kollar hur stora mailen är innan de hanteras, på så sätt kan vi snabbare hoppa över extremt stora / små mail
+		- APOP support i pop3-klassen
+		- integrerat "GALL" (galleri) mms upload med plattformen
+		- kör email-checken regelbundet
+		- skapar thumbnails vid mms bilduppladdning
+---[[mailat]---
+
+
 
 ***********************************************************************************************************************************
 topp prio:
 
-	* spara in mms uploads i databasen, samt visa video-uploads på rätt sätt:
-		- visa <embed> tagg för video, spela i quicktime.
+	* mms upload image & video:
 		- plocka fram videoupplösningen när videon laddas upp
-		- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
+		- hantera "BLOG" och "PRES" kommandon
 
 	* alla ska ha mms funktion (vip) under testet
 
-	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
-
-	* gör gränssnitt för "redigera bevakningar". frans ska koda själva bevaknings-logikenß
+	* gör gränssnitt för "redigera bevakningar". frans har kodat själva logiken
 
 	* max 7 tecken i användarnamnet
 
 	* visa login-error istället för välkomsttexten på oinloggad startsida, ej i popup eller ny sida som det är idag
+
+
+senare under betatestet, mitten av maj:
+	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
 
 
 test feedback:
