@@ -211,6 +211,7 @@
 		- lagt in nya texter fån eva-lena
 		- fixat så "tyck till" listas i datumordning
 		- fixat räknaren i tyck till listan
+		- "skriv blogg" nollställde formuläret om man glömt att skriva in en rubrik, fixat
 
 ***********************************************************************************************************************************
 topp prio:
