@@ -198,32 +198,35 @@
 		- gått igenom och justerat dokumentet med vip-nivåerna med kiano
 		- mailat frans med fråga om hur man redigerar texter i admingränssnittet
 		- fixat så användare "senast online" visas i korrekt ordning
-		
+
 	mobila gränssnittet:
 		- fixat inloggning & utloggning så man hamnar rätt
 		- snyggat till några av sidorna
+		
+	var borta 2.5 timme under torsdagen
+		
+
+2007.05.04 Fredag:
+	webbgränssnittet:
+		- lagt in nya texter fån eva-lena
+		- fixat så "tyck till" listas i datumordning
+		- fixat räknaren i tyck till listan
 
 ***********************************************************************************************************************************
 topp prio:
-
-	* in med nya texter
-
-	* gör gränssnitt för "redigera bevakningar". frans ska koda själva bevaknings-logikenß
-
-	* alla ska ha mms funktion (vip) under testet
 
 	* spara in mms uploads i databasen, samt visa video-uploads på rätt sätt:
 		- visa <embed> tagg för video, spela i quicktime.
 		- plocka fram videoupplösningen när videon laddas upp
 		- flytta mms-uppladdningen från tblMMSRecieved till befintliga upload-systemet
 
+	* alla ska ha mms funktion (vip) under testet
+
 	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
 
-	* max 7 tecken i användarnamnet
+	* gör gränssnitt för "redigera bevakningar". frans ska koda själva bevaknings-logikenß
 
-	* mailutskick, från frans:
-		Om du har några headers som du vet hjälper till att få de att gå förbi spamfiltrena, så får du gärna lägga till dem.
-		Tror mail-funktionen ligger i veri..
+	* max 7 tecken i användarnamnet
 
 	* visa login-error istället för välkomsttexten på oinloggad startsida, ej i popup eller ny sida som det är idag
 
