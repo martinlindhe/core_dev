@@ -55,7 +55,6 @@
 	}
 
 	if ($session->id) {
-		echo '<li>'.($cur=='settings.php'?'<strong>':'').'<a href="'.$r.'settings.php">Settings</a>'.($cur=='settings.php'?'</strong>':'').'</li>';
 		echo '<li><a href="'.$_SERVER['PHP_SELF'].'?logout">Logout</a></li>';
 	}
 ?>
