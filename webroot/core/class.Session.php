@@ -220,16 +220,16 @@ class Session
 		$this->username = $enc_username;
 		$this->id = $data['userId'];
 		$this->mode = $data['userMode'];		//0=normal user. 1=admin, 2=super admin
+		$this->lastActive = time();
 
 		if ($this->mode >= 1) $this->isAdmin = 1;
 		if ($this->mode >= 2) $this->isSuperAdmin = 1;
 
 		//Update last login time
 		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
-		$this->lastActive = time();
+		$db->query('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$this->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
 		$this->log('User logged in', LOGLEVEL_NOTICE);
-
 		return true;
 	}
 

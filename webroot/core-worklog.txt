@@ -2,6 +2,7 @@
 	hög prio!:
 		- sätt getProjectPath() till en javascript variabel i början av pageload istället för å passa på den till massa funktioner, se file_details_layer.php
 		- gör klart "cut tool" i bildvisaren
+		- öppna "pass thru" fil-länkar i en ny tabb
 
 
 	session/user settings:
@@ -27,19 +28,23 @@
   		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
 
+
 	wiki:
 		- gör ny toppmeny med div & ul & li osv, bort med tables
 		- implementera stöd för "talk" page
 		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- logga history för wiki file deletes via ajax
-		
+
+
 	gästbok:
 		- gör en modul som kan användas som gästbok för en person
 		- även som gästbok för en hel sajt
 		- tblComments .... ?
 
+
 	admin:
 		- visa statistik i adminpanelen
+
 
 	misc:
 	X - kompislista (blized)
@@ -68,6 +73,7 @@
 	X - edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
 
 	X	- rensa upp modererings-logiken...
+			- ta bort den helt, och återimplementera ny kod
 			* gör en moderate include!
 			* när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
 			* när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
@@ -132,6 +138,7 @@ X = hi prio task
 	- skapade en "sample" katalog, för att bygga en exempel sajt som utnyttjar de olika funktionerna, istället för å mixa med adblock
 	- session: dödar session om client user agent ändras, på samma sätt som IP change
 	- adblock: tog bort settings.php
+	- session: skapat tblLogins, som skapar ett entry för varje inloggning. för att kunna visa statistik över detta i admin
 
 
 2007.05.03:

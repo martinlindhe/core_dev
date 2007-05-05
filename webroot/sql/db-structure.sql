@@ -51,6 +51,14 @@ CREATE TABLE tblFiles (
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
 ) ENGINE=MyISAM AUTO_INCREMENT=136 DEFAULT CHARSET=latin1;
+CREATE TABLE tblLogins (
+  mainId int(10) unsigned NOT NULL auto_increment,
+  userId int(10) unsigned NOT NULL,
+  timeCreated datetime default NULL,
+  IP int(10) unsigned NOT NULL,
+  userAgent text,
+  PRIMARY KEY  (mainId)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -59,7 +67,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=620 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=625 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -166,6 +174,14 @@ CREATE TABLE tblChatUsers (
   lastSeen datetime NOT NULL,
   PRIMARY KEY  (entryId)
 ) ENGINE=MyISAM AUTO_INCREMENT=32154 DEFAULT CHARSET=utf8;
+CREATE TABLE tblLogins (
+  mainId int(10) unsigned NOT NULL auto_increment,
+  userId int(10) unsigned NOT NULL,
+  timeCreated datetime default NULL,
+  IP int(10) unsigned NOT NULL,
+  userAgent text,
+  PRIMARY KEY  (mainId)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -215,6 +231,14 @@ CREATE TABLE tblFiles (
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
 ) ENGINE=MyISAM AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
+CREATE TABLE tblLogins (
+  mainId int(10) unsigned NOT NULL auto_increment,
+  userId int(10) unsigned NOT NULL,
+  timeCreated datetime default NULL,
+  IP int(10) unsigned NOT NULL,
+  userAgent text,
+  PRIMARY KEY  (mainId)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -299,6 +323,14 @@ CREATE TABLE tblBands (
   timeCreated datetime NOT NULL,
   PRIMARY KEY  (bandId)
 ) ENGINE=MyISAM AUTO_INCREMENT=230 DEFAULT CHARSET=latin1;
+CREATE TABLE tblLogins (
+  mainId int(10) unsigned NOT NULL auto_increment,
+  userId int(10) unsigned NOT NULL,
+  timeCreated datetime default NULL,
+  IP int(10) unsigned NOT NULL,
+  userAgent text,
+  PRIMARY KEY  (mainId)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -394,6 +426,14 @@ CREATE TABLE tblFiles (
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+CREATE TABLE tblLogins (
+  mainId int(10) unsigned NOT NULL auto_increment,
+  userId int(10) unsigned NOT NULL,
+  timeCreated datetime default NULL,
+  IP int(10) unsigned NOT NULL,
+  userAgent text,
+  PRIMARY KEY  (mainId)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -402,7 +442,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
