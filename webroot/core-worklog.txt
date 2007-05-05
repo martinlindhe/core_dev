@@ -1,8 +1,5 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-		- ajax show info, filesize är orginal upload size innan filen resizades
-		- ta bort core/show_file.php när mattias sätt länken
-	
 		* spara useragent när sessionen startar, döda session om den ändras, på samma sätt som IP change
 		* visa statistik i adminpanelen
 		* ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
@@ -21,6 +18,7 @@
 		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
 		- kunna flytta en fil från en kategori till en annan (piggy)
 		- byta värdena för file types (FILETYPE_WIKI etc) att börja från 1 iställer för från 100
+		- bugg: ajax show info, filesize är orginal upload size innan filen resizades
 
 
 	news modul:
@@ -128,6 +126,7 @@ X = hi prio task
 	- core: tagit bort de sista for-looparna på arrayer där foreach passade bättre
 	- admin: visar max upload file size i admin compat check
 	- admin compat check: snyggat upp utseendet lite
+	- admin ip query page skapad
 
 2007.05.03:
 	- session: tydligare felmeddelande vid misslyckad inloggning

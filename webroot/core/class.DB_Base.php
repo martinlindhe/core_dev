@@ -246,7 +246,7 @@ abstract class DB_Base
 			else echo 'Unregistered';
 			echo '</b> at '.$row['timeCreated'];
 
-			echo ' from <b>'.GeoIP_to_IPv4($row['userIP']).'</b>';
+			echo ' from <a href="/admin/admin_ip.php?ip='.GeoIP_to_IPv4($row['userIP']).getProjectPath().'">'.GeoIP_to_IPv4($row['userIP']).'</a>';
 			echo '</i></div><br/>';
 		}
 
