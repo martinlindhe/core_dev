@@ -18,13 +18,17 @@ class Session
 	private $session_name = 'sid';			//default session name
 	private $timeout = 1800;						//max allowed idle time (in seconds) before auto-logout
 	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
+	private $check_useragent = true;		//keeps track if the client user agent string changes during the session
+
 	private $sha1_key = 'rpxp8xkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 	private $allow_registration = true;	//set to false to disallow the possibility to register new users
 	private $home_page = 'index.php';		//if set, redirects user to this page after successful login
+	
 
 	//Aliases of $_SESSION[] variables
 	public $error;
 	public $ip;
+	public $user_agent;
 	public $id;													//current user's user ID
 	public $username;
 	public $mode;
@@ -38,6 +42,7 @@ class Session
 		if (isset($session_config['name'])) $this->session_name = $session_config['name'];
 		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
 		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
+		if (isset($session_config['check_useragent'])) $this->check_useragent = $session_config['check_useragent'];
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
 		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
@@ -50,6 +55,7 @@ class Session
 		if (!isset($_SESSION['started']) || !$_SESSION['started']) $_SESSION['started'] = time();
 		if (!isset($_SESSION['error'])) $_SESSION['error'] = '';
 		if (!isset($_SESSION['ip'])) $_SESSION['ip'] = 0;
+		if (!isset($_SESSION['user_agent'])) $_SESSION['user_agent'] = '';
 		if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
 		if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
 		if (!isset($_SESSION['mode'])) $_SESSION['mode'] = 0;
@@ -59,7 +65,8 @@ class Session
 
 		$this->started = &$_SESSION['started'];
 		$this->error = &$_SESSION['error'];
-		$this->ip = &$_SESSION['ip'];	//store IP as an unsigned 32bit int
+		$this->ip = &$_SESSION['ip'];
+		$this->user_agent = &$_SESSION['user_agent'];
 		$this->id = &$_SESSION['id'];	//if id is set, also means that the user is logged in
 		$this->username = &$_SESSION['username'];
 		$this->mode = &$_SESSION['mode'];
@@ -68,6 +75,7 @@ class Session
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
 
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+		if (!$this->user_agent) $this->user_agent = $_SERVER['HTTP_USER_AGENT'];
 
 		//Check for login/logout requests
 		if (!$this->id && !empty($_POST['login_usr']) && !empty($_POST['login_pwd']))
@@ -109,9 +117,16 @@ class Session
 
 		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
-				$this->error = 'Client IP changed';
-				$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
-				$this->logOut();
+			$this->error = 'Client IP changed';
+			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
+			$this->logOut();
+		}
+
+		//Logged in: Check if client user agent string changed
+		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
+			$this->error = 'Client user agent string changed';
+			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"');
+			$this->logOut();
 		}
 
 		//Logged in: Check user activity - log out inactive user

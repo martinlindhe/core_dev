@@ -1,6 +1,5 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-		* spara useragent när sessionen startar, döda session om den ändras, på samma sätt som IP change
 		* visa statistik i adminpanelen
 		* ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
 
@@ -127,6 +126,8 @@ X = hi prio task
 	- admin: visar max upload file size i admin compat check
 	- admin compat check: snyggat upp utseendet lite
 	- admin ip query page skapad
+	- skapade en "sample" katalog, för att bygga en exempel sajt som utnyttjar de olika funktionerna, istället för å mixa med adblock
+	- session: dödar session om client user agent ändras, på samma sätt som IP change
 
 2007.05.03:
 	- session: tydligare felmeddelande vid misslyckad inloggning
