@@ -1,6 +1,7 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-		* visa statistik i adminpanelen
+		- sätt getProjectPath() till en javascript variabel i början av pageload istället för å passa på den till massa funktioner, se file_details_layer.php
+		- gör klart "cut tool" i bildvisaren
 
 
 	session/user settings:
@@ -37,6 +38,8 @@
 		- även som gästbok för en hel sajt
 		- tblComments .... ?
 
+	admin:
+		- visa statistik i adminpanelen
 
 	misc:
 	X - kompislista (blized)

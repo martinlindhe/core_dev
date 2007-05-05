@@ -1,4 +1,4 @@
-<div id="zoom_image_layer" style="display:none">
+﻿<div id="zoom_image_layer" style="display:none">
 	
 	<center>
 		<img id="zoom_image" src="/gfx/ajax_loading.gif" alt="Image"/><br/>
@@ -7,6 +7,7 @@
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file('<?=getProjectPath()?>')"/>
 
 <? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Cut tool" onclick="cut_selected_file('<?=getProjectPath()?>')"/>
 		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90,'<?=getProjectPath()?>')"/>
 		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90,'<?=getProjectPath()?>')"/>
 		<input type="button" class="button" value="Delete image" onclick="delete_selected_file('<?=getProjectPath()?>')"/>
