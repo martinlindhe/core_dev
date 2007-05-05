@@ -260,16 +260,20 @@ input.button:focus {
 /* used to mark something important, like a error message */
 .critical {
 	color: #000;
-	background-color: #FB9B9B;
 	padding: 5px;
+	padding-left: 25px;
 	line-height: 20px;
+	background: #FB9B9B url('/gfx/icon_error.png') no-repeat;
+	background-position: 5px 50%;
 }
 
 .okay {
 	color: #000;
-	background-color: #B1F9AA;
 	padding: 5px;
+	padding-left: 25px;
 	line-height: 20px;
+	background: #B1F9AA url('/gfx/icon_good.png') no-repeat;
+	background-position: 5px 50%;
 }
 
 /* revision elements */

@@ -1,4 +1,12 @@
 <?
+	$supported_apache = array('2.2.3', '2.2.4');
+
+	$supported_php = array('5.2.0', '5.2.2');
+	$supported_php_gd = array('2.0.34', '2.0.34');
+	$supported_php_apc = array('3.0.14', '3.0.15');
+
+	$supported_mysql = array('5.0.36', '5.1.17');
+
 	/* Returns true if $curr_ver is in the range of $ver_range */
 	function version_compare_array($ver_range, $curr_ver)
 	{
@@ -6,11 +14,10 @@
 		
 		//version_compare() returns -1 if the first version is lower than the second, 0 if they are equal, and +1 if the second is lower.
 		if (version_compare($min_ver, $curr_ver, "<=") && version_compare($max_ver, $curr_ver, ">=")) {
-			return true;
+			return '<div class="okay">';
 		}
 
-
-		return false;
+		return '<div class="critical">';
 	}
 
 	require_once('find_config.php');
@@ -28,19 +35,18 @@
 		echo '<span class="critical">Unknown</span>';
 	}
 	echo '<br/>';
-	echo 'Debug: '.($config['debug']?'<span class="critical">On - turn off for production use</span>':'<span class="okay">OFF</span>').'<br/>';
+	echo ($config['debug']?'<div class="critical">Debug: On - turn off for production use</div>':'<div class="okay">Debug: OFF</div>');
 	echo '<br/>';
 
 	/************************************
 	* Apache version checks             *
 	************************************/
 	echo '<h2>Apache</h2>';
-	$supported_apache = array('2.2.3', '2.2.4');
 	$current_apache = apache_get_version();
 	if ($current_apache == 'Apache') {
-		echo '<span class="okay" onclick="toggle_element_by_name(\'apache_info_noversion\')">';
+		echo '<div class="okay" onclick="toggle_element_by_name(\'apache_info_noversion\')">';
 		echo '(show-more-info image)';
-		echo ' Version information not available</span><br/>';
+		echo ' Version information not available</div>1';
 		echo '<div id="apache_info_noversion" style="display: none">';
 		echo 'Production servers are sometimes configured not to report version information (ServerTokens Prod), this also makes Apache not report version information to PHP).';
 		echo '</div>';
@@ -55,33 +61,38 @@
 	* PHP version checks                *
 	************************************/
 	echo '<h2>PHP</h2>';
-	$supported_php = array('5.2.0', '5.2.2');
+
 	$current_php = phpversion();
 
-	$supported_php_gd = array('2.0.34', '2.0.34');
 	$x = gd_info();
 	$current_php_gd = $x['GD Version'];	//looks like: "bundled (2.0.34 compatible)"
 	$current_php_gd = str_replace('bundled (', '', $current_php_gd);
 	$current_php_gd = str_replace(' compatible)', '', $current_php_gd);
-
-	$supported_php_apc = array('3.0.14', '3.0.14');
 	$current_php_apc = phpversion('apc');
 
-	echo 'PHP script language version: '.$current_php.' '.(version_compare_array($supported_php, $current_php)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
+	echo version_compare_array($supported_php, $current_php);
+	echo 'PHP script language version: '.$current_php.'</div>';
+
 	if ($current_php_gd === false) {
-		echo '<span class="critical">gd extension not found! it is required for image handling to function</span><br/>';
+		echo '<div class="critical">gd extension not found! it is required for image handling to function</div>';
 	} else {
-		echo 'Required PHP extension "gd": '.$current_php_gd.' '.(version_compare_array($supported_php_gd, $current_php_gd)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
+		echo version_compare_array($supported_php_gd, $current_php_gd);
+		echo 'Required PHP extension "gd": '.$current_php_gd.'</div>';
 	}
 	if ($current_php_apc === false) {
-		echo '<span class="okay">apc extension not found. ajax file upload progress not available</span><br/>';
+		echo '<div class="okay">apc extension not found. ajax file upload progress not available</div>';
 	} else {
-		echo 'Optional PHP extension "apc": '.$current_php_apc.' '.(version_compare_array($supported_php_apc, $current_php_apc)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
+		echo version_compare_array($supported_php_apc, $current_php_apc);
+		echo 'Optional PHP extension "apc": '.$current_php_apc.'</div>';
+		
 	}
 
 	//Settings checks
-	echo 'display_errors = '. ini_get('display_errors').'<br/>';
-	if (!$config['debug'] && ini_get('display_errors')) echo '<span class="critical">display_errors are turned ON on a production server!</span><br/>';
+	echo 'display_errors = '.ini_get('display_errors').'<br/>';
+	if (!$config['debug'] && ini_get('display_errors')) echo '<div class="critical">display_errors are turned ON on a production server!</div>';
+	
+	echo 'post_max_size = '.ini_get('post_max_size').'<br/>';
+	echo 'upload_max_filesize = '.ini_get('upload_max_filesize').'<br/>';
 	echo '<br/>';
 
 	/************************************
@@ -89,12 +100,14 @@
 	************************************/
 	if ($db->dialect == 'mysql') {
 		echo '<h2>MySQL</h2>';
-		$supported_mysql = array('5.0.36', '5.1.17');
 		$current_mysql_server = $db->server_version;
 		$current_mysql_client = $db->client_version;
 
-		echo 'MySQL database server version: '.$current_mysql_server.' '.(version_compare_array($supported_mysql, $current_mysql_server)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
-		echo 'MySQL database client version: '.$current_mysql_client.' '.(version_compare_array($supported_mysql, $current_mysql_client)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
+		echo version_compare_array($supported_mysql, $current_mysql_server);
+		echo 'MySQL database server version: '.$current_mysql_server.'</div>';
+		
+		echo version_compare_array($supported_mysql, $current_mysql_client);
+		echo 'MySQL database client version: '.$current_mysql_client.'</div>';
 	}
 
 	require($project.'design_foot.php');

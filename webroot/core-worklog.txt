@@ -21,7 +21,6 @@
 		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
 		- kunna flytta en fil från en kategori till en annan (piggy)
 		- byta värdena för file types (FILETYPE_WIKI etc) att börja från 1 iställer för från 100
-		- visa max upload file size i admin
 
 
 	news modul:
@@ -127,6 +126,8 @@ X = hi prio task
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning
 	- files: visar bild-bredd & höjd i ajax_fileinfo.php
 	- core: tagit bort de sista for-looparna på arrayer där foreach passade bättre
+	- admin: visar max upload file size i admin compat check
+	- admin compat check: snyggat upp utseendet lite
 
 2007.05.03:
 	- session: tydligare felmeddelande vid misslyckad inloggning
