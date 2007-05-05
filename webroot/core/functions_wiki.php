@@ -181,15 +181,14 @@
 				
 				$str = '';
 
-				for ($i=0; $i<count($filelist); $i++)
-				{
-					$temp = explode('.', $filelist[$i]['fileName']);
+				foreach ($filelist as $row) {
+					$temp = explode('.', $row['fileName']);
 					$last_name = strtolower($temp[1]);
 
-					$showTag = $linkTag = '[[file:'.$filelist[$i]['fileId'].']]';
+					$showTag = $linkTag = '[[file:'.$row['fileId'].']]';
 					
 					if (in_array($last_name, $files->image_types)) {
-						$showTag = makeThumbLink($filelist[$i]['fileId'], $showTag);
+						$showTag = makeThumbLink($row['fileId'], $showTag);
 					}
 
 					if (strpos($text, $linkTag) === false) {

@@ -126,7 +126,7 @@ X = hi prio task
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning
 	- files: visar bild-bredd & höjd i ajax_fileinfo.php
-
+	- core: tagit bort de sista for-looparna på arrayer där foreach passade bättre
 
 2007.05.03:
 	- session: tydligare felmeddelande vid misslyckad inloggning

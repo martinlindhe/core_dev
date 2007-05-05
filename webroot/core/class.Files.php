@@ -276,18 +276,16 @@ class Files
 		echo '<div id="image_thumbs_scroller">';
 
 		echo '<div class="thumbnails_gadget">';
-		for ($i=0; $i<count($list); $i++)
-		{
-			$file_lastname = $this->getFileLastname($list[$i]['fileName']);
+		foreach ($list as $row) {
+			$file_lastname = $this->getFileLastname($row['fileName']);
 
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->image_types)) {
-				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$list[$i]['fileId'].'" onclick="loadImage('.$list[$i]['fileId'].', \'image_big\', \''.getProjectPath().'\');"><center>';
-				echo makeThumbLink($list[$i]['fileId'], $list[$i]['fileName']);
+				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$row['fileId'].'" onclick="loadImage('.$row['fileId'].', \'image_big\', \''.getProjectPath().'\');"><center>';
+				echo makeThumbLink($row['fileId'], $row['fileName']);
 				echo '</center></div>';
 			}
 		}
-
 		echo '</div>';
 		echo '</div>';
 	}

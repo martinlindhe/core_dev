@@ -119,8 +119,7 @@
 
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?news='.$row['newsId'].'">'.$row['title'].'</a> ';
-			echo ', published '.$row['timeToPublish'];
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?news='.$row['newsId'].'">'.$row['title'].'</a>, published '.$row['timeToPublish'];
 			if ($row['categoryId']) {
 				echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName($row['categoryId']).'</a>';
 			}
