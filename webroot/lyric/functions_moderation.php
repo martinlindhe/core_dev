@@ -42,7 +42,7 @@
 	{
 		global $db;
 
-		return $db->getArray('SELECT * FROM tblNewAdditions ORDER BY timestamp ASC');
+		return $db->getArray('SELECT * FROM tblNewAdditions ORDER BY timeCreated ASC');
 	}
 	
 	function acceptNewAddition($type, $id)
