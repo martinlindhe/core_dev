@@ -1,10 +1,11 @@
-UltraEdit-32 v13.00:
-User Name:  "Unicorn(955971)~  Single User License"
-"H1N5P-L1I4F-I0O9B-Y8D2S-D7R2J-P7K2M"
 --------------[[platform todo]]--------------
 	hög prio!:
+		- ajax show info, filesize är orginal upload size innan filen resizades
+		- ta bort core/show_file.php när mattias sätt länken
+	
 		* spara useragent när sessionen startar, döda session om den ändras, på samma sätt som IP change
 		* visa statistik i adminpanelen
+		* ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
 
 
 	session/user settings:
@@ -19,6 +20,8 @@ User Name:  "Unicorn(955971)~  Single User License"
 		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden (piggy)
 		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
 		- kunna flytta en fil från en kategori till en annan (piggy)
+		- byta värdena för file types (FILETYPE_WIKI etc) att börja från 1 iställer för från 100
+		- visa max upload file size i admin
 
 
 	news modul:
@@ -120,6 +123,11 @@ X = hi prio task
 
 
 --------------[[changelog]]--------------
+2007.05.05:
+	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning
+	- files: visar bild-bredd & höjd i ajax_fileinfo.php
+
+
 2007.05.03:
 	- session: tydligare felmeddelande vid misslyckad inloggning
 	- admin events: fixade så de olika logg-typerna har olika css, notice, warning & error

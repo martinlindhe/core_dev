@@ -185,6 +185,10 @@ function download_selected_file(ref)
 	document.location = '/core/file.php?id='+zoomed_id+'&dl'+ref;
 }
 
+function passthru_selected_file(ref)
+{
+	document.location = '/core/file_pt.php?id='+zoomed_id+ref;
+}
 
 //used by image zoomer
 function delete_selected_file(ref)

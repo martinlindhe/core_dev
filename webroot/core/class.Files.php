@@ -11,10 +11,10 @@ require_once('functions_general.php');
 require_once('functions_categories.php');		//for file categories support
 
 define('FILETYPE_WIKI',						100); /* File is attached to a wiki */
-define('FILETYPE_PR',							101);	/* File is attached to a PR */
-define('FILETYPE_BLOG',						102);	/* File is attached to a blog */
-define('FILETYPE_PHOTOALBUM',			103);	/* File is uploaded to a photoalbum */
-define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
+//define('FILETYPE_PR',							101);	/* File is attached to a PR */
+//define('FILETYPE_BLOG',						102);	/* File is attached to a blog */
+//define('FILETYPE_PHOTOALBUM',			103);	/* File is uploaded to a photoalbum */
+//define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
 define('FILETYPE_FILEAREA_UPLOAD',105);	/* File is uploaded to a file area */
 define('FILETYPE_USERFILE',				106);	/* File is uploaded to the user's own file area */
 
@@ -25,6 +25,7 @@ class Files
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
 	public $image_types	= array('jpg', 'jpeg', 'png', 'gif');
+	public $image_mime_types = array('image/jpeg', 'image/png', 'image/gif');
 	public $audio_types	= array('mp3');
 	public $video_types = array('avi', '3gp');
 
@@ -33,8 +34,8 @@ class Files
 	private $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
 	private $thumbs_dir = 'e:/devel/webupload/default/thumbs/';		//	'/tmp/';
 
-	private $image_max_width			= 800;	//bigger images will be resized to this size	
-	private $image_max_height			= 600;
+	private $image_max_width			= 1100;	//bigger images will be resized to this size	
+	private $image_max_height			= 900;
 	public $thumb_default_width		= 80;
 	public $thumb_default_height	= 80;
 	private $image_jpeg_quality		= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
@@ -47,7 +48,7 @@ class Files
 		- BMP images gets converted to JPG
 		- SVG images gets converted to PNG
 
-		 ImageMagick is a open source and multi platform command line image converter.
+		 ImageMagick is a open source and multi platform image converter
 		 http://www.imagemagick.org/download/
 	*/
 	private $image_convert				= true;
@@ -185,11 +186,15 @@ class Files
 			} else if (in_array($file_lastname, $this->audio_types)) {
 				//show icon for audio files.
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
-				echo '<img src="/gfx/icon_audio_32.png" width="32" height="32" alt="Audio file"/>';
+				echo '<img src="/gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->video_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
 				echo '<img src="/gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
+				echo '</center></div>';
+			} else if ($file_lastname == 'pdf') {
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
+				echo '<img src="/gfx/icon_pdf_32.png" width="32" height="32" alt="PDF document"/>';
 				echo '</center></div>';
 			} else {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
@@ -568,7 +573,7 @@ class Files
 	}
 
 	//takes get parameter 'dl' to send the file as an attachment
-	function sendFile($_id)
+	function sendFile($_id, $force_mime = false)
 	{
 		global $db;
 
@@ -580,13 +585,13 @@ class Files
 		$file_lastname = $this->getFileLastname($data['fileName']);
 
 		/* This sends files without extension etc as plain text if you didnt specify to download them */
-		if (!isset($_GET['dl']) || (($data['fileMime'] == 'application/octet-stream') || !$file_lastname)) {
+		if (!$force_mime && (!isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream' || !$file_lastname)) {
 			header('Content-Type: text/plain');
 		} else {
 			header('Content-Type: '.$data['fileMime']);
 		}
 
-		if (isset($_GET['dl'])) {
+		if (!$force_mime && isset($_GET['dl'])) {
 			/* Prompts the user to save the file */
 			header('Content-Disposition: attachment; filename="'.basename($data['fileName']).'"');
 		} else {
@@ -597,7 +602,7 @@ class Files
 		header('Content-Transfer-Encoding: binary');
 
 		//Serves the file differently depending on what kind of file it is
-		if (in_array($file_lastname, $this->image_types)) {
+		if (!$force_mime && in_array($file_lastname, $this->image_types)) {
 			//Generate resized image if needed
 			$this->sendImage($_id);
 		} else {
@@ -635,7 +640,12 @@ class Files
 		global $session;
 
 		$filename = $this->upload_dir.$_id;
-		list($img_width, $img_height) = getimagesize($filename);
+
+		$temp = getimagesize($filename);
+		
+		$img_width = $temp[0];
+		$img_height = $temp[1];
+		$mime_type = $temp['mime'];
 
 		$width = 0;
 		if (!empty($_GET['w']) && is_numeric($_GET['w'])) $width = $_GET['w'];
@@ -663,7 +673,7 @@ class Files
 		} else {
 			$this->setNoCacheHeaders();
 		}
-
+		header('Content-Type: '.$mime_type);
 		header('Content-Length: '.filesize($out_filename));
 		echo file_get_contents($out_filename);
 	}
@@ -719,6 +729,12 @@ class Files
 		if ($this->count_file_views) $result .= 'Downloaded: '.$file['cnt'].' times<br/>';
 		if ($session->isAdmin) {
 			$result .= 'Mime type: '.$file['fileMime'].'<br/>';
+		}
+		
+		if (in_array($file['fileMime'], $this->image_mime_types)) {
+			list($img_width, $img_height) = getimagesize($this->upload_dir.$_id);
+
+			$result .= 'Width: '.$img_width.', Height: '.$img_height.'<br/>';
 		}
 
 		return $result;
