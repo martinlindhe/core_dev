@@ -8,6 +8,7 @@
 
 	- bot_handleassist.inc:
 		* försöker inte längre refresha buffs när man är i hover
+		* FindTank() buggfix så den skippar HOVER spelare / corpse
 		
 	- slack_heal.mac:
 		* cleanup för att fortsätta funka efter zonande

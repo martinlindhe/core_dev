@@ -12,7 +12,7 @@ Sub Main
 	/declare AbortLoop				int outer 0
 
 	/varset TankName ${Target.Name}
-	
+
 	/if (!${Krust.Healer}) {
 		/echo Current class is not a healer class, ending macro
 		/endmacro
@@ -25,8 +25,8 @@ Sub Main
 	/call HandleGroupHeal QHEAL_PERCENT
 	/doevents
 	/call UpdateBuffs
-	
-	/if (${TankName.Length} && ${Me.SpellReady[DRUID_QH1]} && ${Target.Name.NotEqual[${TankName}]}) {
+
+	/if (${TankName.NotEqual["NULL"]} && ${Me.SpellReady[DRUID_QH1]} && ${Target.Name.NotEqual[${TankName}]}) {
 		/echo Restoring tank target
 		/target pc ${TankName}
 		/delay 1s ${Target.Name.Equal[${TankName}]}

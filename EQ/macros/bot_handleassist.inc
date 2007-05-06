@@ -244,7 +244,7 @@ Sub FindTank
 
 	| 1. find the closest tank class in group
 	/for i 1 to 5
-		/if ((${Group.Member[${i}].Distance} < 300) && !${Group.Member[${i}].State.Equal["DEAD"]} && (${Group.Member[${i}].Level} >= ${tankLvl}) && (${Group.Member[${i}].Class.Name.Equal["Warrior"]} || ${Group.Member[${i}].Class.Name.Equal["Shadow Knight"]} || ${Group.Member[${i}].Class.Name.Equal["Paladin"]})) {
+		/if ((${Group.Member[${i}].Distance} < 300) && !${Group.Member[${i}].State.Equal["HOVER"]} && !${Group.Member[${i}].Type.Equal["Corpse"]} && (${Group.Member[${i}].Level} >= ${tankLvl}) && (${Group.Member[${i}].Class.Name.Equal["Warrior"]} || ${Group.Member[${i}].Class.Name.Equal["Shadow Knight"]} || ${Group.Member[${i}].Class.Name.Equal["Paladin"]})) {
 			/varset tankId ${Group.Member[${i}].ID}
 			/varset tankLvl ${Group.Member[${i}].Level}
 		}
