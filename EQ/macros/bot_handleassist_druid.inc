@@ -351,11 +351,11 @@ Sub DruidUpdateBuffs
 
 	| Razorthorn (ragea_raid) trash mobs cast AE that overwrites Mask of the Wild
 	/if (${Zone.ShortName.NotEqual["ragea_raid"]}) {
-		/call RefreshBuff "Mask of the Wild" 50
+		/call RefreshBuff "Mask of the Wild" 30
 		/if (${Macro.Return}) /return
 	}
 
-	/call RefreshBuff "Viridicoat Rk. II" 50
+	/call RefreshBuff "Viridicoat Rk. II" 30
 	/if (${Macro.Return}) /return
 
 	/if (${Me.SpellReady["Second Life Rk. II"]}) {
@@ -396,7 +396,8 @@ Sub DruidUpdateBuffs
 	/if (${Macro.Return}) /return
 
 	/if (${Raid.Members} < 18) {
-		/call RefreshBuff "Orb of Duskmold" 20
+		| fixme: checka om man har prylen i RefreshBuff, script error om man saknar prylen nu
+		| /call RefreshBuff "Orb of Duskmold" 20
 		/if (${Macro.Return}) /return
 	}
 
@@ -415,7 +416,7 @@ Sub DruidUpdateBuffs
 	}
 
 	| Shrink myself
-	/if (${Me.Height} > 2.00) /call ShrinkSelf "Bracelet of the Shadow Hive"
+	/if (${Raid.Members} && ${Me.Height} > 2.00) /call ShrinkSelf "Bracelet of the Shadow Hive"
 
 	/if (!HEAL_ONLY_MODE && DO_AA_DS) /call DruidRefreshAA_DS
 	

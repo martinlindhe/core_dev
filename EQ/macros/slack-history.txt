@@ -1,3 +1,7 @@
+2007.05.06:
+	- bot_spells.inc:
+		* PerformHeal() skippar heals på pullers (monk/bard) om dom inte är line of sight
+
 2007.05.02:
 	- bot_spells.inc:
 		* PerformHeal() använder heal clicky "Mask of the Ancient" för druider

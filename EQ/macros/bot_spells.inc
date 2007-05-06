@@ -215,6 +215,11 @@ Sub RefreshPetBuff(string SpellName)
 
 Sub PerformHeal(int SpawnId, int PctHPs)
 
+	/if (!${Spawn[id ${SpawnId}].LineOfSight} && (${Spawn[id ${SpawnId}].Class.Name.Equal["Monk"]} || ${Spawn[id ${SpawnId}].Class.Name.Equal["Bard"]})) {
+		/echo DEBUG: skipping heal of puller!
+		/return
+	}
+
 	/if (${Target.ID}!=${SpawnId}) {
 		/target id ${SpawnId}
 		/delay 2s ${Target.ID}==${SpawnId}
@@ -223,7 +228,7 @@ Sub PerformHeal(int SpawnId, int PctHPs)
 
 	| Check if player been healed before reaching this code
 	/if (${Target.PctHPs} > ${PctHPs}) /return
-
+	
 	/if (${Me.AltAbilityReady[DRUID_INSTANTHEAL]} && (${Target.PctHPs} <= 18) && (${Target.Distance} < ${Spell[DRUID_INSTANTHEAL].Range})) {
 		/call DebugMsg "# GoS > ${Target.Name} < at ${Target.PctHPs}%"
 		/casting "DRUID_INSTANTHEAL" alt
