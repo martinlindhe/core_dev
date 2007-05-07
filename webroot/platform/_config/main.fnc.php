@@ -125,20 +125,22 @@ function flash($s) {
 function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC') {
 	global $t, $sql;
 	if($type == 's') {
-		$result = $sql->queryResult("SELECT ".CH." text_cmt FROM {$t}textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
+		$result = $sql->queryResult("SELECT text_cmt FROM {$t}textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
 		if(!$result) return false; else return $result;
 	} elseif($type == 'm') {
-		$result = $sql->query("SELECT ".CH." main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt'");
+		$result = $sql->query("SELECT main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt'");
 		if(!$result) return false; else return $result;
 	} elseif($type == 'mo') {
-		$result = $sql->query("SELECT ".CH." main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt' ORDER BY $order");
+		$result = $sql->query("SELECT main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt' ORDER BY $order");
 		if(!$result) return false; else return $result;
 	}
 }
 function gettxt($id, $opt = '0', $ext = false) {
 	global $t, $sql;
-	$result = $sql->queryResult("SELECT ".CH." text_cmt FROM {$t}text WHERE main_id = '$id' AND option_id = '$opt' LIMIT 1");
-	if(!$result) return false; else if(!$ext) return $result; else return extOUT($result);
+	$result = $sql->queryResult("SELECT text_cmt FROM {$t}text WHERE main_id = '$id' AND option_id = '$opt' LIMIT 1");
+	if (!$result) return false;
+	if (!$ext) return $result;
+	return extOUT($result);
 }
 function headline($id = '') {
 	return CS.'_objects/_heads/head_'.$id.'.gif';

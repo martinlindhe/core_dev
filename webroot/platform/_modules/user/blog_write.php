@@ -60,6 +60,7 @@ function validateIt(tForm) {
 		return false;
 	}
 	if(TC_active) TC_VarToHidden();
+	tForm.submit();
 	return true;
 }
 </script>
@@ -207,7 +208,7 @@ function omo(obj, border) {
 </tr>
 </table>
 	</div>
-	<? makeButton(false, 'validateIt(blog_write); document.blog_write.submit();', 'icon_blog.png', 'skicka'); ?>
+	<? makeButton(false, 'return validateIt(blog_write);', 'icon_blog.png', 'skicka'); ?>
 </div>
 </form>
 </body>

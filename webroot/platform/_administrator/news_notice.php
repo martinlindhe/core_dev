@@ -93,7 +93,7 @@ session_start();
 ?>
 	<script type="text/javascript" src="fnc_adm.js"></script>
 	<table height="100%">
-	<tr><td colspan="2" height="25" class="nobr"><?makeMenu($page, $menu, 0);?></td></tr>
+	<tr><td colspan="2" height="25" class="nobr"><?makeMenuAdmin($page, $menu, 0);?></td></tr>
 	<tr>
 		<td width="50%" style="padding: 0 10px 0 0;">
 			<form name="news" method="post" action="./news_notice.php?status=<?=$status_id?>">

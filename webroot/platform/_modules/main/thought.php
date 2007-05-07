@@ -34,8 +34,10 @@
 	if(!empty($_POST['s'])) $search = true;
 	if(!$search) {
 		$paging = paging(@$_GET['id'], 20);
-		$gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1'");
+		$q = "SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1' WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' ORDER BY a.gb_date DESC LIMIT {$paging['slimit']}, {$paging['limit']}";
+		$gb = $sql->query($q, 0, 1);
+		$q = "SELECT COUNT(*) FROM {$t}thought a INNER JOIN {$t}user u ON u.id_id = a.answer_id AND u.status_id = '1' WHERE a.status_id = '1'";
+		$paging['co'] = $sql->queryResult($q);
 	} else {
 		$paging = paging(1, 20);
 		$str = $_POST['s'];

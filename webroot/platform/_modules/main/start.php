@@ -51,7 +51,7 @@
 		}
 
 		//Listar de senaste galleribilderna
-		$q = "SELECT main_id, user_id, picd, pht_cmt FROM {$t}userphoto WHERE status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC LIMIT 7";
+		$q = "SELECT main_id, user_id, picd, pht_cmt FROM {$t}userphoto WHERE status_id = '1' AND hidden_id = '0' AND pht_name != '' ORDER BY main_id DESC LIMIT 5";
 		//echo $q;
 		$res = $sql->query($q, 0, 1);
 		if (count($res)) {

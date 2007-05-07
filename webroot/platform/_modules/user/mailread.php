@@ -30,7 +30,7 @@
 
 		<img src="/_gfx/ttl_mail.png" alt="Brev"/><br/><br/>
 
-		<div class="centerMenuHeader">från: <?=($own_u)?(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>'):$user->getstring($l);?> till <?=($own_u)?$user->getstring($l):(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>');?> - skickat: <?=(@$res['sent_date'])?nicedate($res['sent_date'], 1, 1):nicedate(date("Y-m-d"), 1, 1);?></div>
+		<div class="centerMenuHeader2">från: <?=($own_u)?(($res_u)?$user->getstring($res_u):($res['sender_id']?'<b class="blk">[BORTTAGEN]</b>':'SYSTEM')):$user->getstring($l);?> till <?=($own_u)?$user->getstring($l):(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>');?> - skickat: <?=(@$res['sent_date'])?nicedate($res['sent_date'], 1, 1):nicedate(date("Y-m-d"), 1, 1);?></div>
 			<div class="centerMenuBodyWhite" style="overflow: hidden;">
 			<h3><?=$titel?></h3>
 

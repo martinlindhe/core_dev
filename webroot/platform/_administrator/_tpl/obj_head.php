@@ -10,7 +10,7 @@ function loadtop() {
 <?=(isset($_GET['t']))?'loadtop();':'';?>
 	</script>
 	<table height="100%">
-<?makeMenu($page, $menu);?>
+<?makeMenuAdmin($page, $menu);?>
 	<tr>
 		<td width="100%">
 			<table cellspacing="0">

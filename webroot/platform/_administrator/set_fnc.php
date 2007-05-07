@@ -10,9 +10,19 @@ function doLog($string = '', $about = '') {
 	global $t, $sql;
 	$sql->queryInsert("INSERT INTO {$t}admindolog SET owner_id = '".$_SESSION['u_i']."', string_info = '".$string."', about_id = '".$about."'");
 }
+
 function errorNEW($msg, $mv = '', $ttl = 'ERROR') {
 		require("./_tpl/notice_apopup.php");
 		exit;
+}
+function makeMenuAdmin($sel, $arr, $print = true) {
+	if($print) echo '<tr><td height="25">';
+	$i = false;
+	foreach($arr as $key => $val) {
+		if(!$i) $i = true; else echo ' | ';
+		echo '<a href="'.$val.'"'.((strtolower($key) == strtolower($sel))?' class="no_lnk"':'').'>'.$key.'</a>';
+	}
+	if($print) echo '</td></tr>';
 }
 function highlight($x,$var) {
    if ($var != "") { 

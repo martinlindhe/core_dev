@@ -261,7 +261,7 @@ function CSV() {
 <input type="hidden" name="extype" value="skv">
 </form>
 	<table height="100%">
-<?makeMenu($page, $menu);?>
+<?makeMenuAdmin($page, $menu);?>
 	<tr>
 		<td width="100%" style="padding: 0 10px 0 0;">
 			<form action="user.php" method="post">

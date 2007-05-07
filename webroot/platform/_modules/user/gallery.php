@@ -25,8 +25,9 @@
 	}
 
 	$paging = paging(@$_GET['p'], 10);
-	$res = $sql->query("SELECT main_id, pht_cmt, pht_cmts, pht_date, hidden_id FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' ORDER BY main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1'");
+	$q = "SELECT main_id, pht_cmt, pht_cmts, pht_date, hidden_id FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' ORDER BY main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}";
+	$res = $sql->query($q, 0, 1);
+	$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1'");
 
 	$page = 'gallery';
 

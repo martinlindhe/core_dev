@@ -1,9 +1,9 @@
 <?
 	error_reporting(E_ALL);
-	require(dirname(__FILE__).'/set_c.php');
-	require(dirname(__FILE__).'/set_fnc.php');
+	require_once(dirname(__FILE__).'/set_c.php');
+	require_once(dirname(__FILE__).'/set_fnc.php');
 
-	//require(dirname(__FILE__).'/../_config/main.fnc.php');
+	//require_once(dirname(__FILE__).'/../_config/main.fnc.php');
 	
 	$user = new user($sql);
 

@@ -1,8 +1,8 @@
 <?
 session_start();
-ob_start();
-    ob_implicit_flush(0);
-    ob_start('ob_gzhandler');
+#ob_start();
+#    ob_implicit_flush(0);
+#    ob_start('ob_gzhandler');
 	setlocale(LC_TIME, "swedish");
 	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
 	require("./set_onl.php");
@@ -74,7 +74,7 @@ isLoaded = true;
 
 	function getINFO() {
 		document.getElementById('reloader').className = 'txt_chead';
-		//DoCallback('foot_info.php');
+		DoCallback('foot_info.php');
 	}
 
 	function outputINFO(xmlGet) {

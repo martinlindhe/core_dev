@@ -90,7 +90,7 @@ function loadtop() {
 <input type="hidden" name="level" value="0">
 </form>
 	<table height="100%">
-	<tr class="hideme"><td><?makeMenu($page, $menu, 0);?></td></tr>
+	<tr class="hideme"><td><?makeMenuAdmin($page, $menu, 0);?></td></tr>
 	<tr>
 		<td width="100%" style="padding: 0 10px 0 0;">
 <input type="submit" class="inp_orgbtn hideme" value="UPPDATERA" onclick="document.location.href = 'update_levels.php?rtu';" style="width: 80px; margin: 11px 0 0 20px;"> Senast uppdaterad: <?=niceDate(gettxt('admin_latestupdate'))?>

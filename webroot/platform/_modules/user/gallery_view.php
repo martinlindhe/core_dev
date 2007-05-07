@@ -1,7 +1,8 @@
 <?
 	include(CONFIG.'secure.fnc.php');
 	
-	$res = $sql->queryLine("SELECT main_id, status_id, user_id, pht_name, picd, pht_date, pht_cmt, hidden_id, hidden_value, pht_cmts FROM {$t}userphoto WHERE main_id = '".secureINS($key)."' LIMIT 1", 1);
+	$q = "SELECT * FROM {$t}userphoto WHERE main_id = '".secureINS($key)."' LIMIT 1";
+	$res = $sql->queryLine($q, 1);
 	if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $s['id_id'] != $res['user_id'] || ($res['hidden_id'] && !$allowed)) {
 		errorACT('Felaktigt galleriinlägg.', l('user', 'gallery', $s['id_id']));
 	}
@@ -54,6 +55,10 @@
 	$page = 'gallery';
 
 	require(DESIGN.'head_user.php');
+
+	$file_ext = explode('.', $res['old_filename']);
+	$file_ext = stripslashes(strtolower($file_ext[count($file_ext)-1]));
+	if (!$file_ext) $file_ext = $res['pht_name'];
 ?>
 
 <img src="/_gfx/ttl_gallery.png" alt="Galleri"/><br/><br/>
@@ -64,7 +69,36 @@
 <div class="centerMenuHeader"><?=secureOUT($res['pht_cmt'])?> - publicerad: <?=nicedate($res['pht_date'])?></div>
 <div class="centerMenuBodyWhite"><a name="view"></a>
 	<div class="cnt">
-	<img src="<?='/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$res['pht_name']?>" class="cnti mrg" alt="" border="0" />
+<?
+	switch ($file_ext) {
+		case 'jpg':
+		case 'jpeg':
+		case 'gif':
+		case 'png':
+			?><img src="<?='/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext?>" class="cnti mrg" alt="" border="0" /><?
+			break;
+		
+		case '3gp':
+			$vid_filename = '/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext;
+			$vid_width = 176;
+			$vid_height = 144;
+			$vid_bg_color = '#000000';
+			$show_controls = 'false';
+			
+		?>3gp video<br/>
+			<object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="<?=$vid_width?>" height="<?=$vid_height?>" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
+			<param name="src" value="<?=$vid_filename?>">
+			<param name="autoplay" value="true">
+			<param name="type" value="video/quicktime">
+			<param name="controller" value="<?=$show_controls?>">
+			<embed src="<?=$vid_filename?>" width="<?=$vid_width?>" height="<?=$vid_height?>" autoplay="true" controller="<?=$show_controls?>" bgcolor="<?=$vid_bg_color?>" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/"></embed>
+			</object>		
+		<?
+			break;
+			
+		default: die('ext '.$file_ext);
+	}
+?>
 	</div>
 <? 	if (!empty($_GET['c'])) { ?>
 	<div>

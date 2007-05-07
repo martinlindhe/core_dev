@@ -1,9 +1,9 @@
 <?
-	require_once('config.php');
-	
+	require_once('../_mobil/config.php');
+
 	echo '<pre>';
 	
-	require('mms_parse/sms_ue231fetch.php');
+	require('functions_mms_fetch.php');
 
 	$email = new email($sql);
 	$email->getMail('cs@inconet.se', '1111'); die;

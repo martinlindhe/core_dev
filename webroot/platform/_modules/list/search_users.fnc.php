@@ -146,10 +146,10 @@
 		if ($result['ord']) $url[] = 'ord='.secureOUT($result['ord']).'&';
 		$result['paging']['co'] = 200;
 			
-		$q = "SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd, u.u_pstlan, u.level_id, u.u_pstort, u.account_date, u.lastlog_date, u.lastonl_date $res";
+		$q = "SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd, u.u_pstlan, u.level_id, u.u_pstort, u.account_date, u.lastlog_date, u.lastonl_date $res $ord";
 		if ($_start || $_end) $q .= " LIMIT ".$_start.",".$_end;
 		else $q .= " LIMIT {$result['paging']['slimit']}, {$result['paging']['limit']}";
-			
+
 		//echo $q;
 			
 		$result['res'] = $sql->query($q, 0, 1);

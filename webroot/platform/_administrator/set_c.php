@@ -1,9 +1,9 @@
 <?
-	require(dirname(__FILE__).'/../_config/config.include.php');
-	require(dirname(__FILE__).'/../_config/main.fnc.php');
-	require(dirname(__FILE__).'/../_config/sql.class.php');
+	require_once(dirname(__FILE__).'/../_config/config.include.php');
+	require_once(dirname(__FILE__).'/../_config/main.fnc.php');
+	require_once(dirname(__FILE__).'/../_config/sql.class.php');
 	#require("../../_config/set_vimmel.php");
-	require(dirname(__FILE__).'/../_config/user.class.php');
+	require_once(dirname(__FILE__).'/../_config/user.class.php');
 	$isCrew = @$_SESSION['u_c'];
 	$t_pages = array('news' => 'Nyheter', 'gb' => 'Gästbok', 'extra' => 'Extra', 'send' => 'Register', 'stat' => 'Statistik', 'pics' => 'Vimmel', 'settings' => 'Inställningar', 'changes' => 'Ändringar');
 	$in_dir = '../_postloadinside1594/';

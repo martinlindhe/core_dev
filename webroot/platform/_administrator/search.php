@@ -146,7 +146,7 @@ function selectingAll(selecting) {
 <?=(isset($_GET['t']))?'loadtop();':'';?>
 </script>
 	<table width="100%" height="100%">
-<?makeMenu($page, $menu);?>
+<?makeMenuAdmin($page, $menu);?>
 	<tr>
 		<td width="75%" style="padding: 0 10px 0 0;">
 

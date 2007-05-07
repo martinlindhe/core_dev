@@ -4,18 +4,27 @@
 	- läser in email från angiven address och söker igenom dessa efter "mms email", med bilagor
 	- parsar mime parts efter attachments
 	- sparar ut base64-enkodade attachments
+	- stödjer APOP login, med normal USER/PASS fallback
 	
 	Från början skrivet av Frans Rosén
 	Uppdaterat av Martin Lindhe, 2007-04-13
-	
+
+	Important: POP3 standard uses "octets", it is equal to "bytes", an octet is a 8-bit value
+
+
+	References
+	----	
 	POP 3 command summary: http://www.freesoft.org/CIE/RFC/1725/8.htm
-	
-	mer exempel & info: http://www.thewebmasters.net/php/POP3.phtml
+	More examples & info: http://www.thewebmasters.net/php/POP3.phtml
+	APOP details: http://tools.ietf.org/html/rfc1939#page-15
 	
 	//todo: gör en funktion som extractar "content-type" datan
+	//todo: lägg en file lock i constructorn å lås upp den i destructorn, så inte 2 script kan köras parallellt
+	
+	//todo: skrota parseFiles
 */
 
-require('set_tmb.php');
+require('set_tmb.php');		//fixme: vad behövs den för? iaf make_thumb()
 
 //allowed mail attachment mime types
 $config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'video/3gpp');
@@ -36,25 +45,27 @@ class email
 
 
 	//martins variabler:
-	var $unread_mails = 0;		//STAT unreadmail totoctets
-	var $tot_octets = 0;
+	var $unread_mails = 0;		//STAT unreadmail totbytes
+	var $tot_bytes = 0;
 
 	//todo: gör detta konfigurerbart
 	var $pop3_server = 'mail.inconet.se';		// 'mail.unicorn.tv';
 	var $pop3_port	 = 110;
 	var $pop3_timeout = 5;
 
+	var $debug = false;			//echos POP3 commands and responses if enabled
+
 	function __construct($sql)
 	{
 		$this->sql = $sql;
 	}
 
-	private function open()
+	function open()
 	{
 		$this->hdl = fsockopen($this->pop3_server, $this->pop3_port, $this->errorno, $this->errstr, $this->pop3_timeout);
 	}
 
-	private function close()
+	function close()
 	{
 		$this->write('QUIT');
 		$this->read();		//Response: +OK Bye-bye.
@@ -62,16 +73,16 @@ class email
 		fclose($this->hdl);
 	}
 
-	private function read()
+	function read()
 	{
 		$var = fgets($this->hdl, 128);
-		//echo 'Read: '.$var.'<br/>';
+		if ($this->debug) echo 'Read: '.trim(htmlentities($var)).'<br/>';
 		return $var;
 	}
 
-	private function write($line)
+	function write($line)
 	{
-		//echo 'Wrote: '.$line.'<br/>';
+		if ($this->debug) echo 'Wrote: '.htmlentities($line).'<br/>';
 		fputs($this->hdl, $line."\r\n");
 	}
 
@@ -83,20 +94,31 @@ class email
 		return false;
 	}
 
-	private function login($user, $pass)
+	function login($user, $pass)
 	{
-		//todo: APOP support, http://tools.ietf.org/html/rfc1939#page-15
-		//APOP username md5(server hash + ditt lösenord)
-		$apop_check = $this->read();
-		if (!$this->is_ok($apop_check)) {
+		$server_ready = $this->read();
+		if (!$this->is_ok($server_ready)) {
 			echo 'Server not allowing connections?';
 			return false;
+		}
+		
+		//Checks for APOP id in connection response
+		$pos = strpos($server_ready, '<');
+		if ($pos !== false) {
+			//APOP support assumed
+			$apop_string = trim(substr($server_ready, $pos));
+			$this->write('APOP '.$user.' '.md5($apop_string.$pass));
+			if ($this->is_ok()) {
+				return true;
+			}
+
+			echo 'APOP login failed, trying normal method<br/>';
 		}
 
 		$this->write('USER '.$user);
 		if (!$this->is_ok()) {
 			//Expected response: +OK User:'martin@unicorn.tv' ok
-			echo 'Invalid username?';
+			echo 'Wrong username';
 			return false;
 		}
 
@@ -118,19 +140,37 @@ class email
 	{
 		$this->write('STAT');
 
-		//Response: +OK 0 0			first number means 0 unread mail. second means number of "octets" (totalt antal bytes i alla mailen)
-		$stat_response = $this->read();
-		if (!$this->is_ok($stat_response)) {
+		//Response: +OK 0 0			first number means 0 unread mail. second means number of bytes for all mail
+		$response = $this->read();
+		if (!$this->is_ok($response)) {
 			$this->close();
 			echo 'STAT error';
 			return false;
 		}
 
-		$arr = explode(' ', $stat_response);
+		$arr = explode(' ', $response);
 		$this->unread_mails = $arr[1];
-		$this->tot_octets = $arr[2];
+		$this->tot_bytes = $arr[2];
 
 		return true;
+	}
+
+	/* Ask the server for size of a specific message */
+	function pop3_LIST($_id)
+	{
+		if (!is_numeric($_id)) return false;
+
+		$this->write('LIST '.$_id);
+		
+		//Response: +OK 1 1234		first number = $_id, sencond number is bytes in current mail
+		$response = $this->read();
+		if (!$this->is_ok($response)) {
+			echo 'Failed to LIST '.$_id.'<br/>';
+			return false;
+		}
+
+		$arr = explode(' ', $response);
+		return intval($arr[2]);	//returns number of bytes in current mail
 	}
 
 	/* Tells the server to delete a mail */
@@ -251,7 +291,7 @@ class email
 		$result['mms_code'] = $this->findMMSCode($result['header']['Subject']);
 		if (!$result['mms_code']) {
 			//todo: log failure
-			echo $result['header']['From'].': No MMS code identified (title: '.$result['header']['Subject'].'), skipping mail<br/>';
+			echo htmlentities($result['header']['From']).': No MMS code identified (title: '.$result['header']['Subject'].'), skipping mail<br/>';
 			return false;
 		}
 
@@ -543,23 +583,26 @@ class email
 
 		$this->open();
 		if ($this->errno) return;
-
-		if ($this->login($user, $pass) === false) return;
 		
+		if ($this->login($user, $pass) === false) return;
+
 		$mail = array();
 		$ret = array();
 		
 		if (!$this->pop3_STAT()) return;
 
-		echo $this->unread_mails.' unread mails!<br/>';
-
+		echo $this->unread_mails.' unread mails!<br/><br/>';
+		
 		for ($i=1; $i <= $this->unread_mails; $i++)
 		{
-			sleep(2);
-			echo 'Downloading #'.$i.'...<br/>';
+			$msg_size = $this->pop3_LIST($i);
+			if (!$msg_size) continue;
+
+			echo 'Downloading #'.$i.'... ('.$msg_size.' bytes)<br/>';
 
 			$check = $this->pop3_RETR($i);
 			if ($check) $this->pop3_DELE($i);
+			sleep(2);
 		}
 
 		$this->close();
@@ -573,27 +616,42 @@ class email
 		echo 'Writing '.$filename.' ('.$mime_type.') to disk...<br/>';
 
 		$filesize = strlen($data);
+		/*
 		$q = 'INSERT INTO tblMMSRecieved SET userId='.$mms_code['user'].', fileName="'.secureINS($filename).'", mimeType="'.secureINS($mime_type).'", fileSize='.$filesize.',timeRecieved=NOW()';
 		$insert_id = $this->sql->queryInsert($q);
 		if (!$insert_id) return false;
-
-		file_put_contents($config['email']['upload_dir'].$insert_id, $data);
+		*/
 
 		$priv = 0;
 		switch ($mms_code['cmd'])
 		{
 			case 'BLOG':
-				$this->sql->queryInsert("INSERT INTO {$t}userblog SET blog_idx = NOW(), user_id = ".$mms_code['user'].", hidden_id = '$priv', blog_cmt = '".'<p align="center"><img src="'.$config['email']['upload_dir'].$insert_id.'" /></p>'."', blog_title = 'MMS', blog_date = NOW()");
+				$insert_id = $this->sql->queryInsert("INSERT INTO {$t}userblog SET blog_idx = NOW(), user_id = ".$mms_code['user'].", hidden_id = '$priv', blog_cmt = '".'<p align="center"><img src="'.$config['email']['upload_dir'].$insert_id.'" /></p>'."', blog_title = 'MMS', blog_date = NOW()");
 				break;
 
 			case 'GALL':
 				$tmp = md5(microtime());
-				$this->sql->queryInsert("INSERT INTO {$t}userphoto SET picd = '".PD."', user_id = ".$mms_code['user'].", pht_date = NOW(), hidden_id = '$priv', hidden_value = '".$tmp."', pht_name = '".secureINS($filename)."', pht_size = '".$filesize."', pht_cmt = 'MMS'");
+				$file_ext = explode('.', $filename);
+				$file_ext = stripslashes(strtolower($file_ext[count($file_ext)-1]));
+
+				$pht_cmt = 'MMS - '.strip_tags($filename);
+
+				$q = "INSERT INTO {$t}userphoto SET picd = '".PD."', old_filename = '$filename', user_id = ".$mms_code['user'].", pht_date = NOW(), status_id='1', hidden_id = '$priv', pht_name = '".$file_ext."', pht_size = '".$filesize."', pht_cmt = '$pht_cmt'";
+				$insert_id = $this->sql->queryInsert($q);
+
+				$out_filename = '/var/www/'.USER_GALLERY.PD.'/'.$insert_id.'.'.$file_ext;
+				$out_thumbname = '/var/www/'.USER_GALLERY.PD.'/'.$insert_id.'-tmb.'.$file_ext;
+				echo 'Writing to file '.$out_filename.' ...<br/>';
+				file_put_contents($out_filename, $data);
+
+				//skapa thumb
+				make_thumb($out_filename, $out_thumbname, '100', 89);
+				break;
 
 			default:
-				echo 'KAOS';
-				break;
+				die('KAOS');
 		}
+
 	}
 
 }

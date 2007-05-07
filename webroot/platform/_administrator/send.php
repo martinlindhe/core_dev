@@ -68,7 +68,7 @@ function loadtop() {
 <?=(isset($_GET['t']))?'loadtop();':'';?>
 </script>
 	<table width="100%" height="100%">
-<tr><td colspan="2"><?makeMenu($page, $menu, 0);?></td></tr>
+<tr><td colspan="2"><?makeMenuAdmin($page, $menu, 0);?></td></tr>
 	<tr>
 		<td width="45%" style="padding: 0 10px 0 0">
 			<table width="100%">

@@ -29,7 +29,7 @@ ob_start();
 		$code = (!empty($_POST['code']) && $_POST['code'] == '1')?'event':'pic';
 		if(!empty($_POST['code']) && $_POST['code'] == '2') $code = 'swf';
 		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			$sql->queryUpdate("UPDATE {$tab['ad']} SET
+			$sql->queryUpdate("UPDATE {$t}ad SET
 			ad_img = '".secureINS($_POST['ins_cmt'])."',
 			ad_name = '".secureINS($_POST['ins_head'])."',
 			ad_pos = '".secureINS($_POST['ins_pos'])."',
@@ -46,10 +46,10 @@ ob_start();
 			ad_stop = '".secureINS($_POST['ins_stop'])."',
 			ad_type = '".$code."'
 			WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
-			$sql->queryUpdate("UPDATE {$tab['ad']} SET ad_order = '0' WHERE ad_pos = '".$_POST['ins_pos']."'");
+			$sql->queryUpdate("UPDATE {$t}ad SET ad_order = '0' WHERE ad_pos = '".$_POST['ins_pos']."'");
 			$d_id = $_POST['id'];
 		} else {
-			$d_id = $sql->queryInsert("INSERT INTO {$tab['ad']} SET
+			$d_id = $sql->queryInsert("INSERT INTO {$t}ad SET
 			ad_img = '".secureINS($_POST['ins_cmt'])."',
 			city_id = '".secureINS(implode(',', $_POST['ins_city']))."',
 			ad_name = '".secureINS($_POST['ins_head'])."',
@@ -64,7 +64,7 @@ ob_start();
 			ad_stop = '".secureINS($_POST['ins_stop'])."',
 			ad_type = '".$code."',
 			status_id = '$status'");
-			$sql->queryUpdate("UPDATE {$tab['ad']} SET ad_order = '0' WHERE ad_pos = '".$_POST['ins_pos']."'");
+			$sql->queryUpdate("UPDATE {$t}ad SET ad_order = '0' WHERE ad_pos = '".$_POST['ins_pos']."'");
 		}
 
 		$gotpic = false;
@@ -92,9 +92,9 @@ ob_start();
 								$swf = str_replace('[h]', $swf_h, $swf);
 								$swf_f = secureINS($d_id.'_'.$unique.'.'.$p_name);
 								$swf = str_replace('[f]', AD_DIR.$swf_f, $swf);
-								$sql->queryUpdate("UPDATE {$tab['ad']} SET ad_img = '".$swf."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
+								$sql->queryUpdate("UPDATE {$t}ad SET ad_img = '".$swf."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
 							} else {
-								$sql->queryUpdate("UPDATE {$tab['ad']} SET ad_img = '".secureINS($d_id.'_'.$unique.'.'.$p_name)."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
+								$sql->queryUpdate("UPDATE {$t}ad SET ad_img = '".secureINS($d_id.'_'.$unique.'.'.$p_name)."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
 							}
 						} else {
 							$msg = 'Felaktigt format, storlek eller bredd & höjd.';
@@ -127,7 +127,7 @@ ob_start();
 				$kid = $kid[1];
 				if(isset($_POST['status_id:' . $kid])) {
 					#$pos = explode(':', $_POST['order_id:' . $kid]);
-					$sql->queryUpdate("UPDATE {$tab['ad']} SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
+					$sql->queryUpdate("UPDATE {$t}ad SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
 				}
 			}
 		}
@@ -136,10 +136,10 @@ ob_start();
 	}
 	$change = false;
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$row = $sql->query("SELECT ad_img FROM {$tab['ad']} WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$row = $sql->query("SELECT ad_img FROM {$t}ad WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		if(count($row) > 0) {
 			@unlink(ADMIN_AD_DIR.$row[0][0]);
-			$sql->queryUpdate("DELETE FROM {$tab['ad']} WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+			$sql->queryUpdate("DELETE FROM {$t}ad WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 			
 		}
 		header("Location: adver.php?status=$status_id");
@@ -147,18 +147,18 @@ ob_start();
 	}
 
 	if(!empty($_GET['del_pic']) && is_numeric($_GET['del_pic'])) {
-		$row = $sql->queryLine("SELECT ad_img, ad_type FROM {$tab['ad']} WHERE main_id = '".secureINS($_GET['del_pic'])."' LIMIT 1", 1);
+		$row = $sql->queryLine("SELECT ad_img, ad_type FROM {$t}ad WHERE main_id = '".secureINS($_GET['del_pic'])."' LIMIT 1", 1);
 		if(!empty($row['ad_img'])) {
 			if($row['ad_type'] == 'pic')
 				@unlink(ADMIN_AD_DIR.$row['ad_img']);
-			$sql->queryUpdate("UPDATE {$tab['ad']} SET ad_img = '' WHERE main_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
+			$sql->queryUpdate("UPDATE {$t}ad SET ad_img = '' WHERE main_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
 		}
 		header("Location: adver.php?id=".$_GET['del_pic']."&status=$status_id");
 		exit;
 	}
 
 	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
-		$row = $sql->queryAssoc("SELECT * FROM {$tab['ad']} WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
+		$row = $sql->queryAssoc("SELECT * FROM {$t}ad WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
 		if(!count($row)) {
 			$change = false;
 		} else {
@@ -167,17 +167,16 @@ ob_start();
 	}
 
 			$view_arr = array(
-				"1" => $sql->queryResult("SELECT COUNT(*) as count FROM {$tab['ad']} WHERE ad_start < NOW() AND ad_stop > NOW() AND status_id = '1'"),
-				"2" => $sql->queryResult("SELECT COUNT(*) as count FROM {$tab['ad']} WHERE status_id = '2'"));
+				"1" => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}ad WHERE ad_start < NOW() AND ad_stop > NOW() AND status_id = '1'"),
+				"2" => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}ad WHERE status_id = '2'"));
 
 	if($status_id != '2') {
-		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_order, ad_show, ad_click, ad_tclick, city_id FROM {$tab['ad']} WHERE status_id = '1' ORDER BY ad_pos ASC, ad_order ASC");
+		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_order, ad_show, ad_click, ad_tclick, city_id FROM {$t}ad WHERE status_id = '1' ORDER BY ad_pos ASC, ad_order ASC");
 	} else {
-		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_order, ad_show, ad_click, ad_tclick, city_id FROM {$tab['ad']} WHERE status_id = '2' ORDER BY ad_start ASC");
+		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_order, ad_show, ad_click, ad_tclick, city_id FROM {$t}ad WHERE status_id = '2' ORDER BY ad_start ASC");
 	}
 
-	$list = mysql_query("SELECT main_id, p_date, p_dday, p_name FROM $topic_tab WHERE status_id = '1' ORDER BY p_date DESC");
-	$listmv = mysql_query("SELECT a.m_id, b.p_date, b.p_dday, b.p_name FROM {$tab['movie']} a, $topic_tab b WHERE a.status_id = '1' AND a.topic_id = b.main_id AND b.status_id = '1' ORDER BY b.p_date DESC");
+#	$listmv = mysql_query("SELECT a.m_id, b.p_date, b.p_dday, b.p_name FROM {$tab['movie']} a, $topic_tab b WHERE a.status_id = '1' AND a.topic_id = b.main_id AND b.status_id = '1' ORDER BY b.p_date DESC");
 	require("./_tpl/admin_head.php");
 ?>
 	<script type="text/javascript" src="fnc_adm.js"></script>
@@ -217,7 +216,7 @@ function loadtop() {
 <?=(isset($_GET['t']))?'loadtop();':'';?>
 	</script>
 	<table height="100%">
-	<tr><td colspan="2" height="25"><?makeMenu($page, $menu, 0);?></td></tr>
+	<tr><td colspan="2" height="25"><?makeMenuAdmin($page, $menu, 0);?></td></tr>
 	<tr>
 		<td width="50%" style="padding: 0 10px 0 0;">
 			<form name="news" method="post" action="./adver.php?status=<?=$status_id?>" ENCTYPE="multipart/form-data">
@@ -280,6 +279,7 @@ Stad<br /><select name="ins_city[]" size="6" multiple=1 class="inp_nrm" style="h
 <select style="width: 100%;" name="ins_lnk" onchange="if(this.value.length > 0) document.getElementById('ins_url').value = this.value;">
 	<option value="">välj</option>
 <?
+/*
 	echo '<optgroup label="Vimmel">';
 	while($list_row = mysql_fetch_assoc($list)) {
 		$selected = ($change && $row['ad_url'] == 'gallery_multi.php?id='.$list_row['main_id'])?' selected':'';
@@ -292,7 +292,7 @@ Stad<br /><select name="ins_city[]" size="6" multiple=1 class="inp_nrm" style="h
 		echo '<option value="gallery_movie.php?id='.$list_row['m_id'].'"'.$selected.'>'.specialDate($list_row['p_date'], $list_row['p_dday']).'</option>';
 	}
 	echo '</optgroup>';
-
+*/
 ?>
 
 </select>

@@ -69,6 +69,13 @@
 	} else if($action == 'visit') {
 		include('visit.php');
 		exit;
+	} else if($action == 'test') {
+include('spy.fnc.php');
+$l['id_id'] = 1;
+print '<pre>';
+print_r(spyGetList());
+print(spyPost(194738, 'g', 'gimp'));
+print mysql_error();
 	} else {
 		include('view.php');
 		exit;

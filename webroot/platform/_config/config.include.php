@@ -21,18 +21,10 @@ define('DEFAULT_USER', '48d40b8b5dee4c06cd8864be1b35456d');
 define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
 $NAME_TITLE = NAME_TITLE;
 define('CH', ' SQL_CACHE ');
-
-/*
 define('SQL_U', 'webaccount');
 define('SQL_P', 'df43534gbhDFAJpt455');
-*/
-
-define('SQL_U', 'root');
-define('SQL_P', '');
-
 define('SQL_D', 'platform');
 define('SQL_H', 'localhost');
-
 define('SMTP_SERVER', 'localhost');
 define('P2B', 'http://cs.icn.se/');
 define('URL', 'cs.icn.se');
