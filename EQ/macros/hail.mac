@@ -10,16 +10,24 @@ Sub Main
 		/delay 2s !${Me.Buff["Shared Camouflage"].ID}
 	}
 
-	| todo: zone short-name check
-	/if (${SpawnCount[npc Zhubis the Griffin Tamer radius 30]}) {
+	/if (${Zone.ShortName.Equal["Direwind"]} && ${SpawnCount[npc Zhubis the Griffin Tamer radius 30]}) {
 		/echo Zhubis: enter ashengate (Ashengate East)
 		/target npc Zhubis the Griffin Tamer
 		/delay 2s ${Target.ID}
 		/say enter ashengate
 		/return
 	}
-	
-	/if (${SpawnCount[npc Scout Keshik radius 30]}) {
+
+	/if (${Zone.ShortName.Equal["Direwind"]} && ${SpawnCount[npc Jenray radius 30]}) {
+		| todo: måste ha vapen unequippat här!
+		/echo Jenray: enter ashengate (Ashengate West)
+		/target npc Jenray
+		/delay 2s ${Target.ID}
+		/say enter ashengate
+		/return
+	}
+
+	/if (${Zone.ShortName.Equal["Direwind"]} && ${SpawnCount[npc Scout Keshik radius 30]}) {
 		/echo Scout Keshik: summon a griffon
 		/target npc Scout Keshik
 		/delay 2s ${Target.ID}
