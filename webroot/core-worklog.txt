@@ -3,6 +3,7 @@
 		- sätt getProjectPath() till en javascript variabel i början av pageload istället för å passa på den till massa funktioner, se file_details_layer.php
 		- gör klart "cut tool" i bildvisaren
 		- öppna "pass thru" fil-länkar i en ny tabb
+		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 
 
 	session/user settings:
