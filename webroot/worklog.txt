@@ -1,5 +1,13 @@
 2007.05.07 Måndag:
-	
+	webbgränssnittet:
+		* skapat en "bevakningar" sida under inställningar
+		* "bevaka" & "sluta bevaka" på forumtråd. system-meddelande utskick på forum-tråd-bevakningar testat
+		* spyActive() ny funktion
+		* forum "svara på inlägg" ny design
+		* "bevaka" och "sluta bevaka" på en annan användares bloggar. system-meddelande utskick på blogg-bevakningar testat
+		* relationer: "du väntar svar från" och "bli vän-förfrågningar" ny design
+		* "bevaka" och "sluta bevaka" på annan användares galleri. system-meddelande utskick på ny galleribild-bevakningar testat
+		* inställningar->bevakningar: ny sida
 
 
 ***********************************************************************************************************************************
