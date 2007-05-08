@@ -112,6 +112,7 @@ class Files
 
 		if (($session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
 			$this->handleUpload($_FILES['file1'], $fileType, $categoryId);
+			unset($_FILES['file1']);	//to avoid further processing of this file upload elsewhere
 			if ($fileType == FILETYPE_WIKI) {
 				addRevision(REVISIONS_WIKI, $categoryId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
 			}
@@ -178,28 +179,29 @@ class Files
 			$file_lastname = $this->getFileLastname($row['fileName']);
 			if (!$file_lastname) continue;
 
+			$title = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
 			if (in_array($file_lastname, $this->image_types)) {
 				//show thumbnail of image
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomImage('.$row['fileId'].', \''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].', \''.getProjectPath().'\');"><center>';
 				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->audio_types)) {
 				//show icon for audio files.
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
 				echo '<img src="/gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->video_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
 				echo '<img src="/gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
 			} else if ($file_lastname == 'pdf') {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
 				echo '<img src="/gfx/icon_pdf_32.png" width="32" height="32" alt="PDF document"/>';
 				echo '</center></div>';
 			} else {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$row['fileName'].'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
 				echo 'General file:<br/>';
-				echo $row['fileName'].'<br/>';
+				echo $row['fileMime'].'<br/>';
 				echo '</center></div>';
 			}
 		}
@@ -332,7 +334,9 @@ class Files
 		global $db, $session;
 
 		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($categoryId)) return false;
-		
+
+		set_time_limit(90);
+
 		//ignore empty file uploads
 		if (!$FileData['name']) return;
 

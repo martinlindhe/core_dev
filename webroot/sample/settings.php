@@ -6,10 +6,7 @@
 	require('design_head.php');
 
 	wiki('Settings');
-	echo '<br/>';
 	
-	$files->showFiles(FILETYPE_USERFILE);
-
 	$session->editSettings();
 
 	require('design_foot.php');

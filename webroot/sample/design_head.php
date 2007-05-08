@@ -39,9 +39,9 @@
 		<? $cur = basename($_SERVER['SCRIPT_NAME']); ?>
 		<li><?=($cur=='index.php'?'<strong>':'');?><a href="<?=$r?>index.php">Home</a><?=($cur=='index.php'?'</strong>':'')?></li>
 		<li><?=($cur=='news.php'?'<strong>':'')?><a href="<?=$r?>news.php">News</a><?=($cur=='news.php'?'</strong>':'')?></li>
+		<li><?=($cur=='files.php'?'<strong>':'')?><a href="<?=$r?>files.php">Files</a><?=($cur=='files.php'?'</strong>':'')?></li>
 <?
 	if ($session->isAdmin) {
-
 		//admin menu if logged in
 		echo '<li>'.($cur=='admin.php'?'<strong>':'').'<a href="/admin/admin.php'.getProjectPath(false).'">Admin</a>'.($cur=='admin.php'?'</strong>':'').'</li>';
 	}

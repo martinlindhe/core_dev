@@ -7,7 +7,8 @@
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file('<?=getProjectPath()?>')"/>
 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Cut tool" onclick="cut_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Cut" onclick="cut_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Resize" onclick="resize_selected_file('<?=getProjectPath()?>')"/>
 		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90,'<?=getProjectPath()?>')"/>
 		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90,'<?=getProjectPath()?>')"/>
 		<input type="button" class="button" value="Delete image" onclick="delete_selected_file('<?=getProjectPath()?>')"/>

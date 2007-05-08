@@ -180,6 +180,17 @@ function zoomHideElements()
 	hide_element_by_name('zoom_fileinfo');
 }
 
+/* draws a square box on the image, box is resizable to select what area to cut */
+function cut_selected_file(ref)
+{
+	alert('cut_selected_file() not yet iplemented');
+}
+
+function resize_selected_file(ref)
+{
+	alert('resize_selected_file() not yet iplemented')
+}
+
 function download_selected_file(ref)
 {
 	document.location = '/core/file.php?id='+zoomed_id+'&dl'+ref;

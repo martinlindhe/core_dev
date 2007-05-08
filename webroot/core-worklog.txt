@@ -1,12 +1,8 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-		- använd $files->convertImage() i class.Files.php på flera ställen (bmp till jpg, svg till png)
-				gjort ändringar. EJ TESTAT!
-		- öka "maximum execution time" vid file upload (timeout vid 10 sec när man laddar upp mp3 från jobbet)
-	
-	
 		- sätt getProjectPath() till en javascript variabel i början av pageload istället för å passa på den till massa funktioner, se file_details_layer.php
-		- gör klart "cut tool" i bildvisaren
+		- gör klart "cut" i bildvisaren
+		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
 		- öppna "pass thru" fil-länkar i en ny tabb
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 
@@ -137,6 +133,8 @@ X = hi prio task
 2007.05.07:
 	- files: skapat $files->convertImage() för att gömma undan imagemagick & exponera konverterings-funktionaliteten utanför klassen
 	- admin events: möjlighet att ändra sorteringsordningen på events
+	- files: ökar "maximum execution time" vid file upload, otestad, timade ut för tidigt när jag försökte uploada en större fil från jobbet
+	- files: visar file size på hover på filöversikt i file arean
 
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning
