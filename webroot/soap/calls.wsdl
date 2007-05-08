@@ -37,7 +37,7 @@
 
 	<service name="StockQuoteService">
 	  <port name="StockQuotePort" binding="StockQuoteBinding">
-	    <soap:address location="http://[insert real path here]/server1.php"/>
+	    <soap:address location="http://localhost/soap/server.php"/>
 	  </port>
 	</service>
 

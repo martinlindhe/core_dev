@@ -7,6 +7,7 @@
 			this module requires:
 			- php_soap.dll extension (included in windows php dist, disabled by default)
 			- allow_url_fopen = On
+			- always_populate_raw_post_data = On (required by php_soap.dll)
 
 		todo:
 			* SOAP interface
