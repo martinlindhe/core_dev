@@ -10,29 +10,25 @@
 <body>
 <div id="left_nav">
 
-<a href="index.php">Start page</a><br/>
-<br/>
 <?
+	$menu = array(
+		'index.php' => 'Start page',
+		'login.php' => 'Log in',
+		'list_bands.php' => 'List bands',
+		'missing_lyrics.php' => 'Missing lyrics',
+		'incomplete_lyrics.php' => 'Incomplete lyrics');
+	createMenu($menu, 'side-nav');
+	
 	if ($session->id) {
-?>
-	<a href="add_band.php">Add band</a><br/>
-	<a href="add_record.php">Add normal record</a><br/>
-	<a href="add_record_comp.php">Add comp. / split</a><br/>
-	<a href="?logout">Log out</a><br/>
-<?
-	} else {
-?>
-	<a href="login.php">Log in</a><br/>
-<?
+		$menu = array(
+			'add_band.php' => 'Add band',
+			'add_record.php' => 'Add normal record',
+			'add_record_comp.php' => 'Add comp. / split',
+			'?logout' => 'Log out');
+		createMenu($menu, 'side-nav');
 	}
 ?>
 
-<a href="list_bands.php">List bands</a><br/>
-<br/>
-
-<a href="missing_lyrics.php">Missing lyrics</a><br/>
-<a href="incomplete_lyrics.php">Incomplete lyrics</a><br/>
-<br/>
 
 <form name="search" method="post" action="search.php">
 	<input type="text" size="18" name="query"/><br/>
@@ -47,19 +43,16 @@
 		echo countNewAdditions().' new additions.<br/>';
 		echo countPendingChanges().' pending changes.<br/>';
 		echo '<a href="moderate.php">Go moderate</a>';
-	} else {
+	}
 ?>
 
 	<table cellpadding="0" cellspacing="0" border="0">
 		<tr>
 			<td class="subtitlemod" width="15">&nbsp;</td>
-			<td>Fields marked in this color means new additions / pending changes.</td>
+			<td>Fields marked like this is new additions / pending changes.</td>
 		</tr>
 	</table>
-	<br/><br/>
-<?
-	}
-?>
+
 </div>
 
 <div id="main">

@@ -8,6 +8,9 @@
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 	X - visa mer inputfält vid registerrutan (blized)
 
+	blog:
+		- gör om en massa, gör det mer som en wiki
+
 
 	file area:
 	X	- kunna beskära bilder (blized)
@@ -137,6 +140,8 @@ X = hi prio task
 	- allt: renamade alla main.css till site.css
 	- blogs: skapat generella funktioner för bloggar i core/functions_blogs.php
 	- konverterat zine-projektet till nya plattformen
+	- general: gjort createMenu() som skapar leftmenu på adblock, lyrics, sample. generell funktion för att snabbt skapa menyer
+	- general: gjort linkRSSfeeds() som skapar <link> taggar för aktuell sida för att exponera alla tillgängliga rss feeds
 
 
 2007.05.05:

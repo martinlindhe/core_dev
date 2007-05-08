@@ -9,6 +9,8 @@
 	require_once($config['core_root'].'core/class.DB_MySQLi.php');
 	require_once($config['core_root'].'core/class.Session.php');
 
+	require_once($config['core_root'].'core/functions_general.php');
+
 	require_once('functions_bands.php');
 	require_once('functions_records.php');
 	require_once('functions_lyrics.php');

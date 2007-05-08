@@ -137,4 +137,37 @@
 		die;
 	}
 
+	/* Takes an array of menu entries and creates a <ul><li>-style menu */
+	function createMenu($menu_arr, $class)
+	{
+		$cur = basename($_SERVER['SCRIPT_NAME']);
+
+		$project_path = '';
+		if (!empty($_GET['pr'])) $project_path = '../'.$_GET['pr'].'/';
+
+		echo '<ul class="'.$class.'">';
+			foreach($menu_arr as $url => $text) {
+				echo '<li>';
+				if ($cur == $url) echo '<strong>';
+				echo '<a href="'.$project_path.$url.'">'.$text.'</a>';
+				if ($cur == $url) echo '</strong>';
+				echo '</li>';
+			}
+		echo '</ul>';
+	}
+	
+	/* Called in design_head.php to generate xhtml for rss feeds for current page. other pages can add more feeds to $meta_rss before including design */
+	function linkRSSfeeds()
+	{
+		global $meta_rss;
+
+		$rss_tags = '';
+		if (!empty($meta_rss)) {
+			foreach ($meta_rss as $feed) {
+				if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
+				else $extra = getProjectPath(false);
+				echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="/core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
+			}
+		}
+	}
 ?>
