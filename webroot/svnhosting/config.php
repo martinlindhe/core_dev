@@ -12,10 +12,11 @@
 
 	require_once($config['core_root'].'core/functions_wiki.php');
 
+	$config['debug'] = true;
+
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbSvnHosting';
-	$config['database']['debug']		= true;
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = 30*60;		//in seconds

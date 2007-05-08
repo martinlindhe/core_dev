@@ -15,7 +15,6 @@
 
 	require_once('functions_adblock.php');
 
-	$config['database']['debug']		= true;
 	$config['debug'] = true;
 
 	$config['database']['username']	= 'root';
