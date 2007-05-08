@@ -69,7 +69,7 @@ class DB_MySQLi extends DB_Base
 		}
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
-		
+
 		return $result;
 	}
 

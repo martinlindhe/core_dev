@@ -19,7 +19,8 @@
 		* loggar all aktivitet
 		* klarar av följande tasks:
 			- resiza en stillbild
-			- konvertera en stillbild till JPEG, PNG eller GIF
+			- konvertera en stillbild till ett annat format (läser i stort sett alla bildformat), konverterar till PNG, JPEG eller GIF
+		* påbörjat implementation av SOAP-interface
 
 ***********************************************************************************************************************************
 topp prio:

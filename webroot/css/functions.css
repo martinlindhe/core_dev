@@ -155,12 +155,12 @@ input.button:focus {
 }
 .event_log_warning {
 	color: #000;
-	background-color: #ee8888;
+	background-color: #eeaaaa;
 	padding: 4px;
 }
 .event_log_error {
 	color: #000;
-	background-color: #ee4444;
+	background-color: #ee5555;
 	padding: 4px;
 }
 
