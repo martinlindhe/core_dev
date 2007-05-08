@@ -371,12 +371,9 @@ class Files
 			case 'image/bmp':	//IE 7, Firefox 2, Opera 9.2
 				if (!$this->image_convert) break;
 				$out_tempfile = 'c:\core_outfile.jpg';
-				//$c = 'nconvert -out jpeg -q '.$this->image_jpeg_quality.' -o '.$out_tempfile.' '.$FileData['tmp_name'];
-				$c = 'convert -quality '.$this->image_jpeg_quality.' BMP:'.$FileData['tmp_name'].' JPG:'.$out_tempfile;
-				exec($c);
-
-				if (!file_exists($out_tempfile)) {
-					$session->log('Failed to convert bmp to jpeg! cmd: '.$db->escape($c));
+				$check = $this->convertImage($FileData['tmp_name'], $out_tempfile, 'image/jpeg');
+				if (!$check) {
+					$session->log('Failed to convert bmp to jpeg!');
 					break;
 				}
 
@@ -392,11 +389,11 @@ class Files
 			case 'image/svg-xml':	//Opera 9.2
 				if (!$this->image_convert) break;
 				$out_tempfile = 'c:\core_outfile.png';
-				$c = 'convert SVG:'.$FileData['tmp_name'].' PNG:'.$out_tempfile;
-				exec($c);
+				
+				$check = $this->convertImage($FileData['tmp_name'], $out_tempfile, 'image/png');
 
-				if (!file_exists($out_tempfile)) {
-					$session->log('Failed to convert svg to png! cmd: '.$db->escape($c));
+				if (!$check) {
+					$session->log('Failed to convert svg to png!');
 					break;
 				}
 
@@ -511,6 +508,29 @@ class Files
 
 		imagedestroy($image);
 		imagedestroy($image_p);
+		return true;
+	}
+
+	function convertImage($src_file, $dst_file, $dst_mime_type)
+	{
+		switch ($dst_mime_type)
+		{
+			case 'image/jpeg':
+				$c = 'convert -quality '.$this->image_jpeg_quality.' '.$src_file.' JPG:'.$dst_file;
+				break;
+
+			case 'image/png':
+				$c = 'convert '.$src_file.' PNG:'.$dst_file;
+				break;
+
+			default:
+				echo 'Unknown mime type for convertImage: '.$dst_mime_type.'<br/>';
+				return false;
+		}
+		exec($c);
+
+		if (!file_exists($dst_file)) return false;
+
 		return true;
 	}
 

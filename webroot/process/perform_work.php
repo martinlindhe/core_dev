@@ -15,14 +15,15 @@
 		$session->log('WORK OERDER QUEUE - Processing '.count($work_list).' work orders');
 	}
 
+	$src_temp_file = 'D:/work_temp.dat';
+	$dst_temp_file = 'D:/work_temp2.dat';
+
+	@unlink($src_temp_file);
+	@unlink($dst_temp_file);
+
 	foreach ($work_list as $work)
 	{
 		$params = unserialize($work['orderParams']);
-
-		$src_temp_file = 'D:/work_temp.dat';
-		$dst_temp_file = 'D:/work_temp2.dat';
-		@unlink($src_temp_file);
-		@unlink($dst_temp_file);
 
 		//1. Läs in src
 		echo 'Reading src from '.$params['src'].' ...<br/>';
@@ -53,13 +54,11 @@
 				echo 'Performing task: Convert image<br/>';
 				echo ' &nbsp; order params: format='.$params['format'].'<br/>';
 
-				//2. Perform convert. todo gör detta till en funktion i class.Files.php, återanvänd i class.Files.php:handleGeneralUpload()
-				$c = 'convert -quality 75 GIF:'.$src_temp_file.' JPG:'.$dst_temp_file;
-				exec($c);
-
-				if (!file_exists($dst_temp_file)) {
-					$session->log('#'.$work['entryId'].': Image convert failed! cmd: '.$db->escape($c));
-					echo 'Error: Convert failed!<br/>';
+				//2. Perform convert
+				$check = $files->convertImage($src_temp_file, $dst_temp_file, $params['format']);
+				if (!$check) {
+					$session->log('#'.$work['entryId'].': Image conversion failed! format='.$params['format']);
+					echo 'Error: Image conversion failed!<br/>';
 					continue;
 				}
 				$session->log('#'.$work['entryId'].': Image convert performed successfully');
@@ -69,16 +68,20 @@
 				echo 'UNKNOWN WORK ORDER TYPE: '.$work['orderType'].'<br/>';
 				continue;
 		}
-		
+
 		//3. Write result to destination file
 		echo 'Writing result to dst '.$params['dst'].' ...<br/>';
 		copy($dst_temp_file, $params['dst']);
 
 		//4. Ta bort utfört arbete från loggen
+		/*
 		$q = 'DELETE FROM tblOrders WHERE entryId='.$work['entryId'];
 		$db->query($q);
-
+		*/
 		echo '<br/>';
+	
+		unlink($src_temp_file);
+		unlink($dst_temp_file);
 	}
 
 	if ($work_list) {
