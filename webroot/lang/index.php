@@ -3,8 +3,7 @@
 
 	require('design_head.php');
 
-	$session->showLoginForm();
-
+	if (!$session->id) $session->showLoginForm();
 
 	wiki('Start');
 

@@ -5,6 +5,7 @@
 	<script type="text/javascript" src="js/functions.js"></script>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" href="css/main.css" type="text/css"/>
 	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 	<script type="text/javascript" src="/js/ajax.js"></script>
@@ -15,7 +16,7 @@
 <body>
 
 <div id="menu_holder">
-	<div id="menu_left">
+	<div id="leftmenu">
 		<a href="index.php">Start</a><br/>
 		<br/>
 		<? if ($session->id) { ?>
@@ -33,5 +34,5 @@
 		<? } ?>
 	</div>
 
-	<div id="menu_middle">
+	<div id="middle">
 <!-- head end -->
