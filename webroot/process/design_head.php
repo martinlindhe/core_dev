@@ -12,20 +12,26 @@
 <body>
 
 <div id="leftmenu">
-	<ul class="side-nav">
-		<? $cur = basename($_SERVER['SCRIPT_NAME']); ?>
-		<li><a href="<?=$r?>index.php">Home</a></li>
 <?
+	$menu = array(
+		'index.php' => 'Home'
+	);
+	createMenu($menu);
+	
 	if ($session->isAdmin) {
-		//admin menu if logged in
-		echo '<li>'.($cur=='admin.php'?'<strong>':'').'<a href="/admin/admin.php'.getProjectPath(false).'">Admin</a>'.($cur=='admin.php'?'</strong>':'').'</li>';
+		$menu = array(
+			'/admin/admin.php'.getProjectPath(false) => 'Admin'
+		);
+		createMenu($menu);
 	}
 
 	if ($session->id) {
-		echo '<li><a href="'.$_SERVER['PHP_SELF'].'?logout">Logout</a></li>';
+		$menu = array(
+			'?logout' => 'Log out'
+		);
+		createMenu($menu);
 	}
 ?>
-	</ul>
 </div>
 
 <div id="middle">

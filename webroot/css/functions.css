@@ -285,3 +285,34 @@ input.button:focus {
 	border: #000000 1px solid;
 	background-color:#E0E0E0;
 }
+
+
+.ulli_menu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid #E1E2B9;
+	border-top: 0;
+}
+.ulli_menu li {
+	border: 1px solid #E1E2B9;
+}
+.ulli_menu li:hover {
+	border: 1px solid #CCCCCC;
+}
+.ulli_menu a {
+	color: #000;
+	display: block;
+	text-decoration: none;
+	padding: 4px 6px;
+}
+.ulli_menu a:hover {
+	background-color: #FFFFFF;
+}
+.ulli_menu ul {
+	list-style: none;
+}
+.ulli_menu strong a {
+	font-weight: normal;
+	background-color: #CCCCCC;
+}

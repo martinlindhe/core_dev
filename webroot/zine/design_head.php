@@ -14,33 +14,36 @@
 
 	<link rel="stylesheet" href="inc/site.css" type="text/css">
 	<link rel="stylesheet" href="/css/functions.css" type="text/css">
+	<link rel="stylesheet" href="css/site.css" type="text/css">
 
 	<script type="text/javascript" src="/js/functions.js"></script>
 </head>
 <body>
 
-<div id="header_holder">
-	<div id="header_left">
-		<? if (!$session->id) $session->showLoginForm(); ?>
-	</div> <!-- header_left -->
-	<?
-	if ($session->id) {
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?logout">Log out</a>';
+<div id="left_menu">
+<?
+	$menu = array(
+			'index.php' => 'Home',
+			'blogs.php' => 'Blogs',
+			'blogs_archive.php?y=2006&m=7' => 'Blog archive');
+
+	createMenu($menu);
+		
+	if ($session->isAdmin) {
+		$menu = array(
+			'/admin/admin.php'.getProjectPath(false) => 'Admin');
+		createMenu($menu);
 	}
-	?>
-&nbsp;
+
+	if ($session->id) {
+		$menu = array(
+			'?logout' => 'Logout');
+		createMenu($menu);
+	}
+?>
 </div> <!-- header_holder -->
 
-<div id="body_holder">
-	<div id="body_left">
-		<ul>
-			<li><a href="index.php">Startsidan</a></li>
-<?
-			if ($_SESSION['isAdmin']) echo '<li><a href="admin.php">Admin</a></li>';
-?>
-			<li><a href="blogs.php">Blogs</a></li>
-			<li><a href="blogs_archive.php?y=2006&m=7">Blog archive</a></li>
-		</ul>
-	</div> <!-- body_left -->
+<div id="main_body">
+
 
 <!-- design_head.php end -->

@@ -35,19 +35,19 @@ var _ext_ref='<?=getProjectPath()?>';
 			'news.php' => 'News',
 			'files.php' => 'Files');
 
-	createMenu($menu, 'side-nav');
+	createMenu($menu);
 		
 	if ($session->isAdmin) {
 		$menu = array(
 			'/admin/admin.php'.getProjectPath(false) => 'Admin');
-		createMenu($menu, 'side-nav');
+		createMenu($menu);
 	}
-		
+
 	if ($session->id) {
 		$menu = array(
 			'settings.php' => 'Settings',
 			'?logout' => 'Logout');
-		createMenu($menu, 'side-nav');
+		createMenu($menu);
 	}
 ?>
 </div>

@@ -17,21 +17,28 @@ var _ext_ref='<?=getProjectPath()?>';
 
 <div id="menu_holder">
 	<div id="leftmenu">
-		<a href="index.php">Start</a><br/>
-		<br/>
-		<? if ($session->id) { ?>
-			<a href="addword.php">Add word</a><br/>
-			<a href="add_text.php">Add longer text</a><br/>
-			<a href="show_words.php">Show words</a><br/>
-			<a href="guess_language.php">Guess language</a><br/>
-			<br/>
-			<? if ($session->isAdmin) { ?>
-				<a href="admin_addlang.php">Add language</a><br/>
-				<br/>
-			<? } ?>
-			
-			<a href="?logout">Log out</a>
-		<? } ?>
+<?
+	$menu = array(
+			'index.php' => 'Home');
+	createMenu($menu);
+
+	if ($session->isAdmin) {
+		$menu = array(
+			'admin_addlang.php' => 'Add language',
+			'/admin/admin.php'.getProjectPath(false) => 'Admin');
+		createMenu($menu);
+	}
+
+	if ($session->id) {
+		$menu = array(
+			'add_word.php' => 'Add word',
+			'add_text.php' => 'Add longer text',
+			'show_words.php' => 'Show words',
+			'guess_language.php' => 'Guess language',
+			'?logout' => 'Logout');
+		createMenu($menu);
+	}
+?>
 	</div>
 
 	<div id="middle">

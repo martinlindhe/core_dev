@@ -38,7 +38,7 @@ var _ext_ref='<?=getProjectPath()?>';
 			'download.php' => 'Download',
 			'report_site.php' => 'Report site',
 			'recent.php' => 'Recent changes');
-	createMenu($menu, 'side-nav');
+	createMenu($menu);
 		
 	if ($session->isAdmin) {
 		$menu = array(
@@ -46,12 +46,12 @@ var _ext_ref='<?=getProjectPath()?>';
 			'ruleset.php' => 'Browse ruleset',
 			'/admin/admin.php'.getProjectPath(false) => 'Admin',
 			'admin_reports.php' => 'Reported sites');
-		createMenu($menu, 'side-nav');
+		createMenu($menu);
 	}
 		
 	if ($session->id) {
 		$menu = array('?logout' => 'Logout');
-		createMenu($menu, 'side-nav');
+		createMenu($menu);
 	}
 ?>
 </div>

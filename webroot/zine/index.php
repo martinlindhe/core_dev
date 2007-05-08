@@ -3,6 +3,8 @@
 
 	require('design_head.php');
 
+	if (!$session->id) $session->showLoginForm();
+
 	$content = '';
 	$list = getLatestBlogs(5);
 	for ($i=0; $i<count($list); $i++) {
@@ -12,7 +14,6 @@
 	}
 	
 	echo $content;
-
 
 	require('design_foot.php');
 ?>

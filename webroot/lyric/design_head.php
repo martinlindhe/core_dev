@@ -17,7 +17,7 @@
 		'list_bands.php' => 'List bands',
 		'missing_lyrics.php' => 'Missing lyrics',
 		'incomplete_lyrics.php' => 'Incomplete lyrics');
-	createMenu($menu, 'side-nav');
+	createMenu($menu);
 	
 	if ($session->id) {
 		$menu = array(
@@ -25,7 +25,7 @@
 			'add_record.php' => 'Add normal record',
 			'add_record_comp.php' => 'Add comp. / split',
 			'?logout' => 'Log out');
-		createMenu($menu, 'side-nav');
+		createMenu($menu);
 	}
 ?>
 

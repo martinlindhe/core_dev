@@ -59,33 +59,3 @@ A:hover { color: #FFFFFF; }
 #main a {
 	color: #bbb;
 }
-
-.side-nav {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	border: 1px solid #E1E2B9;
-	border-top: 0;
-}
-.side-nav li {
-	border: 1px solid #E1E2B9;
-}
-.side-nav li:hover {
-	border: 1px solid #CCCCCC;
-}
-.side-nav a {
-	color: #000;
-	display: block;
-	text-decoration: none;
-	padding: 4px 6px;
-}
-.side-nav a:hover {
-	background-color: #FFFFFF;
-}
-.side-nav ul {
-	list-style: none;
-}
-.side-nav strong a {
-	font-weight: normal;
-	background-color: #CCCCCC;
-}

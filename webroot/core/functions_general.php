@@ -138,7 +138,7 @@
 	}
 
 	/* Takes an array of menu entries and creates a <ul><li>-style menu */
-	function createMenu($menu_arr, $class)
+	function createMenu($menu_arr, $class = 'ulli_menu')
 	{
 		$cur = basename($_SERVER['SCRIPT_NAME']);
 
