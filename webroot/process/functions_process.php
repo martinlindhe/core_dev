@@ -5,9 +5,8 @@
 
 		configuration:
 			this module requires:
-			- php_soap.dll extension (default extension in windows php dist)
+			- php_soap.dll extension (included in windows php dist, disabled by default)
 			- allow_url_fopen = On
-
 
 		todo:
 			* SOAP interface
