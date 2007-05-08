@@ -12,7 +12,7 @@
 2007.05.08 Tisdag:
 	webbgränssnittet:
 		* snyggat till "inställningar->bevakningar" så den ser mycket bättre ut
-		
+
 	process-server:
 		* skapat databas och planerat upp programflödet
 		* byggt ett script som utför de arbeten som finns att göra
