@@ -1,12 +1,12 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (!$_SESSION['loggedIn']) {
 		header('Location: '.$config['start_page']);
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 	
 	$text = '';
 	if (!empty($_POST['text'])) {
@@ -26,5 +26,5 @@
 	</form>
 
 <?	
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

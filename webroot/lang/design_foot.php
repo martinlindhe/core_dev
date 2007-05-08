@@ -4,7 +4,7 @@
 	<div id="menu_footer">
 		lang 1.0-dev<br>
 <?
-	if ($config['debug']) debugFooter($pageload_start);
+	if ($session->isAdmin) $db->showProfile($time_start);
 ?>
 	</div>	
 

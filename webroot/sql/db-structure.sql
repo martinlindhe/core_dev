@@ -271,37 +271,48 @@ CREATE TABLE tblCategories (
   categoryType tinyint(3) unsigned NOT NULL default '0',
   timeCreated datetime NOT NULL,
   creatorId smallint(5) unsigned NOT NULL default '0',
-  globalCategory tinyint(1) unsigned NOT NULL default '0',
+  categoryPermissions tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+CREATE TABLE tblLogins (
+  mainId int(10) unsigned NOT NULL auto_increment,
+  userId int(10) unsigned NOT NULL,
+  timeCreated datetime default NULL,
+  IP int(10) unsigned NOT NULL,
+  userAgent text,
+  PRIMARY KEY  (mainId)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
-  entryId bigint(20) unsigned NOT NULL auto_increment,
-  entryText blob,
+  entryId mediumint(8) unsigned NOT NULL auto_increment,
+  entryText text character set utf8 NOT NULL,
   entryLevel tinyint(1) unsigned NOT NULL default '0',
-  entryTime bigint(20) unsigned NOT NULL default '0',
-  userId bigint(20) unsigned NOT NULL default '0',
-  userIP bigint(20) unsigned NOT NULL default '0',
+  timeCreated datetime NOT NULL,
+  userId smallint(5) unsigned NOT NULL default '0',
+  userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-CREATE TABLE tblSettings (
-  settingId int(10) unsigned NOT NULL auto_increment,
-  settingType tinyint(3) unsigned NOT NULL,
-  ownerId int(10) unsigned NOT NULL default '0',
-  settingName varchar(50) character set utf8 NOT NULL,
-  settingValue text character set utf8 NOT NULL,
-  timeSaved datetime NOT NULL,
-  PRIMARY KEY  (settingId)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 CREATE TABLE tblUsers (
-  userId bigint(20) unsigned NOT NULL auto_increment,
-  userName varchar(20) NOT NULL,
+  userId smallint(5) unsigned NOT NULL auto_increment,
+  userName varchar(20) character set utf8 NOT NULL,
   userPass varchar(40) NOT NULL,
   userMode tinyint(1) NOT NULL default '0',
-  createdTime datetime NOT NULL,
-  lastLoginTime datetime NOT NULL,
-  lastActive datetime NOT NULL,
+  timeCreated datetime NOT NULL,
+  timeLastLogin datetime NOT NULL default '0000-00-00 00:00:00',
+  timeLastActive datetime NOT NULL default '0000-00-00 00:00:00',
+  timeLastLogout datetime default '0000-00-00 00:00:00',
   PRIMARY KEY  (userId)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+CREATE TABLE tblWiki (
+  wikiId bigint(20) unsigned NOT NULL auto_increment,
+  wikiName varchar(30) default NULL,
+  msg text,
+  timeCreated datetime NOT NULL,
+  createdBy smallint(5) unsigned NOT NULL default '0',
+  lockedBy smallint(5) unsigned NOT NULL default '0',
+  timeLocked datetime NOT NULL default '0000-00-00 00:00:00',
+  hasFiles tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (wikiId)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE tblWords (
   id int(10) unsigned NOT NULL auto_increment,
   lang smallint(5) unsigned NOT NULL,

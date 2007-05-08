@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	$wordId = 0;
 	if ($_GET['id'] && is_numeric($_GET['id'])) $wordId = $_GET['id'];
@@ -8,12 +8,11 @@
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
 	$word = getWord($db, $wordId);
 	
 	print_r($word);
 
-
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

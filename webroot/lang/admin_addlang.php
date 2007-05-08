@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (!$_SESSION['loggedIn']) {
 		header('Location: '.$config['start_page']);
@@ -10,7 +10,7 @@
 		$langId = addCategory($db, CATEGORY_LANGUAGES, $_POST['lang']);
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 ?>
 	<h2>Add new language</h2>
 	
@@ -23,7 +23,7 @@
 	</form>
 
 <?	
-	include('design_foot.php');
+	require('design_foot.php');
 
 	if (!empty($langId)) JS_Alert('Language added');
 ?>

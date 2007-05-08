@@ -1,12 +1,12 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (!$_SESSION['loggedIn']) {
 		header('Location: '.$config['start_page']);
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 	
 	if (empty($_GET['lang']) || !is_numeric($_GET['lang'])) {
 		?><h2>Show words</h2>Select language first<br><br><?
@@ -25,5 +25,5 @@
 		}
 	}
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

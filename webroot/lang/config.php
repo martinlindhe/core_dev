@@ -1,32 +1,40 @@
 <?
-	/* SITE CONFIGURATION START */
+	$time_start = microtime(true);
+
+	error_reporting(E_ALL);
+	mb_internal_encoding('UTF-8');
+	date_default_timezone_set('Europe/Stockholm');
+
+	$config['core_root'] = '../';
+	require_once($config['core_root'].'core/class.DB_MySQLi.php');
+	require_once($config['core_root'].'core/class.Session.php');
+	require_once($config['core_root'].'core/class.Files.php');
+
+	require_once($config['core_root'].'core/functions_wiki.php');
 	
-	/* Include used function files */
-	include_once($config['path_functions'].'functions_lang.php');
-	include_once($config['path_functions'].'functions_categories.php');
-	include_once($config['path_functions'].'functions_settings.php');
-	include_once($config['path_functions'].'functions_misc.php');
-	
+	require_once('functions_lang.php');
+
 	$config['debug'] = true;
-	$config['database_1']['server']   = 'localhost';
-	$config['database_1']['port']     = 3306;
-	$config['database_1']['username'] = 'root';
-	$config['database_1']['password'] = '';
-	$config['database_1']['database'] = 'dbLang';
-	$db = dbOpen($config['database_1']);
-	
-	$config['login_sha1_key'] = 'sitecode_AB';	//used to encode passwords in database, to make brute forcing them more difficult
-	$config['session_name'] = 'trackerSessID';	//name of session-id cookie
-	$config['session_timeout'] = 3600*4;	//4h session timeout
 
-	$config['start_page'] = '/lang/index.php';
-	
+	$config['database']['username']	= 'root';
+	$config['database']['password']	= '';
+	$config['database']['database']	= 'dbLang';
+	$db = new DB_MySQLi($config['database']);
 
+	$config['session']['timeout'] = (60*60)*24;		//in seconds
+	$config['session']['name'] = 'langID';
+	$config['session']['sha1_key'] = 'sdalkj8vkjncjksdSdFsdfg70kcvvcvGFzadeg5ae5h';
+	$config['session']['allow_registration'] = true;
+	$config['session']['home_page'] = 'index.php';
+	$session = new Session($config['session']);
 
-	/* Set language and include used locales files */
-	$config['language'] = 'en';
-	include_once($config['path_functions'].'locales_standard.php');
-	include_once($config['path_functions'].'locales_time.php');
+	$config['files']['apc_uploads'] = false;
+	$config['files']['upload_dir'] = 'E:/devel/webupload/sample/';
+	$config['files']['thumbs_dir'] = 'E:/devel/webupload/sample/thumbs/';
+	$files = new Files($config['files']);
 
-	/* SITE CONFIGURATION END */
+	$config['wiki']['allow_html'] = true;
+	$config['wiki']['allow_files'] = true;
+
+	$config['site']['web_root'] = '/lang/';	//path on web server, to use to address paths for css & js includes
 ?>
