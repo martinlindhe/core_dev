@@ -2,6 +2,7 @@
 	hög prio!:
 		- använd $files->convertImage() i class.Files.php på flera ställen (bmp till jpg, svg till png)
 				gjort ändringar. EJ TESTAT!
+		- öka "maximum execution time" vid file upload (timeout vid 10 sec när man laddar upp mp3 från jobbet)
 	
 	
 		- sätt getProjectPath() till en javascript variabel i början av pageload istället för å passa på den till massa funktioner, se file_details_layer.php

@@ -12,6 +12,7 @@
 			* SOAP interface
 			* locking. enbart en performWorkOrders() åt gången
 			* kolla om php_soap.dll extension är laddad
+			* kolla om soap config är ok. cache = ON, temp path ska va korrekt, ttl ska va minst 24 timmar
 	*/
 
 	define('ORDER_RESIZE_IMG',		1);		//orderParams håller önskad bredd & höjd som serialized array.. ?
