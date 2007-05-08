@@ -1,10 +1,7 @@
 <?
 	require_once('config.php');
 
-	if (!$_SESSION['loggedIn']) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
+	$session->requireLoggedIn();
 
 	require('design_head.php');
 	
@@ -13,23 +10,23 @@
 
 	if (!empty($_POST['text']) && !empty($_POST['lang']) && is_numeric($_POST['lang'])) {
 		$selectedLang = $_POST['lang'];
-		
+
 		$text = $_POST['text'];
 
-		analyzeText($db, $selectedLang, $text);
+		analyzeText($selectedLang, $text);
 	}
 
 ?>
 	<h2>Add text</h2>
 	
-	Here you can add longer chunks of text, and choose a language.<br>
-	Each unique words, and their relations with other words within the sentences will be recorded.<br>
-	Only useful for natural written language.<br>
+	Here you can add longer chunks of text, and choose a language.<br/>
+	Each unique words, and their relations with other words within the sentences will be recorded.<br/>
+	Only useful for natural written language.<br/>
 	
 	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
-		Language: <select name="lang"><?=getCategoriesHTML_Options($db, CATEGORY_LANGUAGES, $selectedLang)?></select><br>
-		Text: <textarea name="text" rows=20 cols=70><?=$text?></textarea><br>
-		<input type="submit" value="Add">
+		Language: <?=getCategoriesSelect(CATEGORY_LANGUAGES, 'lang')?><br/>
+		Text: <textarea name="text" cols="70" rows="20"><?=$text?></textarea><br/>
+		<input type="submit" class="button" value="Add"/>
 	</form>
 
 <?	

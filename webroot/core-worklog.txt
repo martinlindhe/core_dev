@@ -49,7 +49,7 @@
 
 	misc:
 	X - kompislista (blized)
-		- konvertera zine!
+		- konvertera zine! (kräver portning av blog)
   	- Försök bygga mer logik i sql queries / stored procedures
   	- gör en "for production use" mysqli-db driver med all profile kod utplockad för att den ska va lite snabbare, nån gång när db klassen har varit orörd i några månader
   	- gör en worker databas + ett worker script, som:
@@ -127,7 +127,7 @@ X = hi prio task
 		- eventuellt/senare: flerspråkstöd, dirigera användaren till rätt språk automatiskt
 		- senare: filtrera bort material som är på fel språk för användaren (exempel: visa ej rysk text för indiska användare)
 
-
+email sattes till mitt password i register rutan..!?!?!
 --------------[[changelog]]--------------
 2007.05.07:
 	- files: skapat $files->convertImage() för att gömma undan imagemagick & exponera konverterings-funktionaliteten utanför klassen
@@ -135,7 +135,7 @@ X = hi prio task
 	- files: ökar "maximum execution time" vid file upload, otestad, timade ut för tidigt när jag försökte uploada en större fil från jobbet
 	- files: visar file size på hover på filöversikt i file arean
 	- core: sätter getProjectPath() till en js variabel i början av pageload istället för å passa på den till massa funktioner
-
+	- lang projekt: portat till nya plattformen
 
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning

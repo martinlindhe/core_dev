@@ -84,9 +84,10 @@
 
 		if (!is_numeric($_type)) return false;
 
+		if (!$selectName) $selectName = 'default';
 		$content = '<select name="'.strip_tags($selectName).'">';
 
-		$content .= '<option value="0"></option>';
+		$content .= '<option value="0">&nbsp;</option>';
 		$list = getGlobalAndUserCategories($_type);
 		$shown_global_grop = 0;
 

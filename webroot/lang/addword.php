@@ -4,7 +4,7 @@
 	$session->requireLoggedIn();
 
 	if (!empty($_POST['word']) && !empty($_POST['lang']) && is_numeric($_POST['lang']) && !empty($_POST['pron'])) {
-		$wordId = addWord($db, $_POST['lang'], $_POST['word'], $_POST['pron']);
+		$wordId = addWord($_POST['lang'], $_POST['word'], $_POST['pron']);
 		
 		if (is_numeric($wordId)) {
 			header('Location: word.php?id='.$wordId);
@@ -17,10 +17,10 @@
 	<h2>Add new word</h2>
 	
 	<form method="post" action="">
-		Word: <input type="text" name="word"><br>
-		Pronunciation: <input type="text" name="pron"><br>
+		Word: <input type="text" name="word"/><br/>
+		Pronunciation: <input type="text" name="pron"/><br/>
 		Language: <?=getCategoriesSelect(CATEGORY_LANGUAGES, 'lang')?>
-		<input type="submit" value="Add">
+		<input type="submit" class="button" value="Add"/>
 	</form>
 
 <?	

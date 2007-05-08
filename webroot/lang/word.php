@@ -10,7 +10,7 @@
 
 	require('design_head.php');
 
-	$word = getWord($db, $wordId);
+	$word = getWord($wordId);
 	
 	print_r($word);
 

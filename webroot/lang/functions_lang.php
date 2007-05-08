@@ -1,58 +1,63 @@
 <?
 	//lang stuff
 	
-	function addWord(&$db, $langId, $word, $pron)
+	function addWord($langId, $word, $pron)
 	{
+		global $db;
+
 		if (!is_numeric($langId)) return false;
-		
+
 		$word = trim($word);
 		$pron = trim($pron);
 		if (!$word) return false;
-		
-		$word = dbAddSlashes($db, $word);
-		$pron = dbAddSlashes($db, $pron);
-		
-		$sql = 'SELECT id FROM tblWords WHERE word="'.$word.'" AND lang='.$langId;
-		$check = dbQuery($db, $sql);
-		if (dbNumRows($check)) return false;
 
-		$sql = 'INSERT INTO tblWords SET word="'.$word.'",pron="'.$pron.'",lang='.$langId;
-		dbQuery($db, $sql);
+		$word = $db->escape($word);
+		$pron = $db->escape($pron);
 
-		return $db['insert_id'];
+		$q = 'SELECT id FROM tblWords WHERE word="'.$word.'" AND lang='.$langId;
+		$check = $db->getOneItem($q);
+		if ($check) return false;
+
+		$q = 'INSERT INTO tblWords SET word="'.$word.'",pron="'.$pron.'",lang='.$langId;
+		$db->query($q);
+
+		return $db->insert_id;
 	}
 
-	function getWord(&$db, $wordId)
+	function getWord($wordId)
 	{
+		global $db;
+
 		if (!is_numeric($wordId)) return false;
-		
-		$sql = 'SELECT * FROM tblWords WHERE id='.$wordId;
-		return dbOneResult($db, $sql);
+
+		$q = 'SELECT * FROM tblWords WHERE id='.$wordId;
+		return $db->getOneRow($q);
 	}
 	
 	/* Returns all words for this language */
-	function getWords(&$db, $langId)
+	function getWords($langId)
 	{
+		global $db;
+
 		if (!is_numeric($langId)) return false;
-		
-		$sql = 'SELECT id,word FROM tblWords WHERE lang='.$langId;
-		
-		return dbArray($db, $sql);
+
+		$q = 'SELECT id,word FROM tblWords WHERE lang='.$langId;
+		return $db->getArray($q);
 	}
 	
 	/* Returns all entries that match this word */
-	function getWordMatches(&$db, $word)
+	function getWordMatches($word)
 	{
+		global $db;
+
 		$word = trim($word);
 		if (!$word) return false;
 
-		$word = dbAddSlashes($db, $word);
-		
-		$sql = 'SELECT * FROM tblWords WHERE word="'.$word.'"';
-		return dbArray($db, $sql);
+		$q = 'SELECT * FROM tblWords WHERE word="'.$db->escape($word).'"';
+		return $db->getArray($q);
 	}
-	
-	function analyzeText(&$db, $langId, $text)
+
+	function analyzeText($langId, $text)
 	{
 		$text = trim($text);
 		if (!is_numeric($langId) || !$text) return false;
@@ -82,7 +87,7 @@
 			for ($j=0; $j<count($words); $j++) {
 				//För varje ord, kolla om det finns i databasen, annars spara
 
-				$check = addWord($db, $langId, $words[$j], '');
+				$check = addWord($langId, $words[$j], '');
 				if ($check) {
 					echo '<b>'.$words[$j].'</b> added to database<br>';
 				} else {
@@ -94,7 +99,7 @@
 
 
 	//todo: all of parsing is same to analyzeText(), lets share functions
-	function guessLanguage(&$db, $text)
+	function guessLanguage($text)
 	{
 		$text = trim($text);
 		if (!$text) return false;
@@ -125,8 +130,8 @@
 
 			for ($j=0; $j<count($words); $j++) {
 				//För varje ord, kolla vilka språk det matchar med i databasen
-				
-				$list = getWordMatches($db, $words[$j]);
+
+				$list = getWordMatches($words[$j]);
 				for ($k=0; $k<count($list); $k++) {
 					//echo $list[$k]['lang'].'<br>';
 					$result[$words[$j]][$k] = $list[$k]['lang'];
