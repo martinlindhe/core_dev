@@ -382,7 +382,7 @@ class Session
 			}
 			echo '<div id="edit_setting_div_'.$row['settingId'].'">';
 			echo $row['settingName'].': <input type="text" name="edit_setting_'.$row['settingId'].'" value="'.$row['settingValue'].'"/>';
-			echo '<img src="/gfx/icon_delete.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].',\''.getProjectPath().'\');"/>';
+			echo '<img src="/gfx/icon_delete.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].');"/>';
 			echo '</div>';
 		}
 		echo '<input type="submit" class="button" value="Save"/>';

@@ -86,14 +86,14 @@ function empty_element(e)
 
 var zoomed_id = 0;
 //closeup view of image file
-function zoomImage(id, ref)
+function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
-	e.setAttribute('src', '/core/file.php?id='+id+ref);
+	e.setAttribute('src', '/core/file.php?id='+id+_ext_ref);
 	zoomed_id = id;
 
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id, ref);
+	ajax_get_fileinfo(id, _ext_ref);
 
 	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
@@ -102,12 +102,12 @@ function zoomImage(id, ref)
 }
 
 //show file details of general file
-function zoomFile(id, ref)
+function zoomFile(id)
 {
 	zoomed_id = id;
 
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id, ref);
+	ajax_get_fileinfo(id, _ext_ref);
 	
 	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
@@ -116,21 +116,21 @@ function zoomFile(id, ref)
 }
 
 //closeup view of audio file
-function zoomAudio(id, name, ref)
+function zoomAudio(id, name)
 {
 	zoomed_id = id;
 	
 	empty_element_by_name('zoom_audio');
 
 	//requires ext_flashobject.js
-	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/core/file.php?id='+id+urlencode(ref), 'animationName', '180', '45', '8', '#FFFFFF');
+	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/core/file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
 	fo.write('zoom_audio');
 	
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id, ref);
+	ajax_get_fileinfo(id);
 
 	hide_element_by_name('zoom_video_layer');
 	show_element_by_name('zoom_audio_layer');
@@ -139,7 +139,7 @@ function zoomAudio(id, name, ref)
 }
 
 //closeup view of video file
-function zoomVideo(id, name, ref)
+function zoomVideo(id, name)
 {
 	zoomed_id = id;
 	
@@ -147,14 +147,14 @@ function zoomVideo(id, name, ref)
 
 	//requires ext_flashobject.js
 	//urlencodes project path so it gets passed thru to flash file
-	var fo = new FlashObject('/flash/flv_player_test.swf?n='+name+'&s=/core/file.php?id='+id+urlencode(ref), 'animationName', '180', '45', '8', '#FFFFFF');
+	var fo = new FlashObject('/flash/flv_player_test.swf?n='+name+'&s=/core/file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
 	fo.write('zoom_video');
 	
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id, ref);
+	ajax_get_fileinfo(id);
 
 	show_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
@@ -181,31 +181,31 @@ function zoomHideElements()
 }
 
 /* draws a square box on the image, box is resizable to select what area to cut */
-function cut_selected_file(ref)
+function cut_selected_file()
 {
 	alert('cut_selected_file() not yet iplemented');
 }
 
-function resize_selected_file(ref)
+function resize_selected_file()
 {
 	alert('resize_selected_file() not yet iplemented')
 }
 
-function download_selected_file(ref)
+function download_selected_file()
 {
-	document.location = '/core/file.php?id='+zoomed_id+'&dl'+ref;
+	document.location = '/core/file.php?id='+zoomed_id+'&dl'+_ext_ref;
 }
 
-function passthru_selected_file(ref)
+function passthru_selected_file()
 {
-	document.location = '/core/file_pt.php?id='+zoomed_id+ref;
+	document.location = '/core/file_pt.php?id='+zoomed_id+_ext_ref;
 }
 
 //used by image zoomer
-function delete_selected_file(ref)
+function delete_selected_file()
 {
 	//Send AJAX call for file delete
-	ajax_delete_file(zoomed_id, ref);
+	ajax_delete_file(zoomed_id);
 
 	//Hide selected file
 	zoomHideElements();
@@ -217,22 +217,22 @@ function delete_selected_file(ref)
 }
 
 //used by image zoomer
-function rotate_selected_file(angle, param)
+function rotate_selected_file(angle)
 {
 	var e = document.getElementById('zoom_image');
 	var now = new Date();
-	e.src = '/core/image_rotate.php?i=' + zoomed_id + '&a=' + angle + '&' + now.getTime() + param;
+	e.src = '/core/image_rotate.php?i=' + zoomed_id + '&a=' + angle + '&' + now.getTime() + _ext_ref;
 }
 
 
 //Loads image id into holder-div
-function loadImage(id, holder, ref)
+function loadImage(id, holder)
 {
 	var e = document.getElementById(holder);
 	empty_element(e);
 
 	var i = document.createElement('img');
-	i.setAttribute('src', '/core/file.php?id='+id+ref);
+	i.setAttribute('src', '/core/file.php?id='+id+_ext_ref);
 	e.appendChild(i);
 }
 

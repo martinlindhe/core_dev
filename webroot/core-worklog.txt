@@ -1,6 +1,5 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-		- sätt getProjectPath() till en javascript variabel i början av pageload istället för å passa på den till massa funktioner, se file_details_layer.php
 		- gör klart "cut" i bildvisaren
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
 		- öppna "pass thru" fil-länkar i en ny tabb
@@ -135,6 +134,8 @@ X = hi prio task
 	- admin events: möjlighet att ändra sorteringsordningen på events
 	- files: ökar "maximum execution time" vid file upload, otestad, timade ut för tidigt när jag försökte uploada en större fil från jobbet
 	- files: visar file size på hover på filöversikt i file arean
+	- core: sätter getProjectPath() till en js variabel i början av pageload istället för å passa på den till massa funktioner
+
 
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning

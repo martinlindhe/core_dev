@@ -23,6 +23,9 @@
 	<script type="text/javascript" src="/js/functions.js"></script>
 </head>
 <body>
+<script type="text/javascript">
+var _ext_ref='<?=getProjectPath()?>';
+</script>
 <div id="left-bg"></div>
 <div id="left-sep"></div>
 <div id="header">

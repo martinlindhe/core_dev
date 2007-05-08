@@ -9,3 +9,6 @@
 	<title><?=@$title?></title>
 	</head>
 <body>
+<script type="text/javascript">
+var _ext_ref='<?=getProjectPath()?>';
+</script>

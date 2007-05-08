@@ -3,15 +3,15 @@
 	<center>
 		<img id="zoom_image" src="/gfx/ajax_loading.gif" alt="Image"/><br/>
 		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file('<?=getProjectPath()?>')"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Cut" onclick="cut_selected_file('<?=getProjectPath()?>')"/>
-		<input type="button" class="button" value="Resize" onclick="resize_selected_file('<?=getProjectPath()?>')"/>
-		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90,'<?=getProjectPath()?>')"/>
-		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90,'<?=getProjectPath()?>')"/>
-		<input type="button" class="button" value="Delete image" onclick="delete_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
+		<input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
+		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
+		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
+		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
 
@@ -24,11 +24,11 @@
 		<div id="zoom_audio" style="width: 160px; height: 50px;"></div>
 		<br/>
 		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file('<?=getProjectPath()?>')"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Delete song" onclick="delete_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Delete song" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
 
@@ -40,11 +40,11 @@
 		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
 		<br/>
 		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file('<?=getProjectPath()?>')"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Delete video" onclick="delete_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Delete video" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
 
@@ -54,11 +54,11 @@
 	
 	<center>
 		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file('<?=getProjectPath()?>')"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Delete file" onclick="delete_selected_file('<?=getProjectPath()?>')"/>
+		<input type="button" class="button" value="Delete file" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
 

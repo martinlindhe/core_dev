@@ -56,7 +56,7 @@
 
 		if ($proj_name) {
 			if ($_amp) {
-				return '&amp;pr='.$proj_name;
+				return '&pr='.$proj_name;
 			} else {
 				return '?pr='.$proj_name;
 			}

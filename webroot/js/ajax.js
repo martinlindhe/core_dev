@@ -74,10 +74,10 @@ function hide_ajax_anim() { hide_element_by_name('ajax_anim'); }
 
 
 var delete_request = null;
-function perform_ajax_delete_uservar(id,ref)
+function perform_ajax_delete_uservar(id)
 {
 	delete_request = new AJAX();
-	delete_request.GET('/core/ajax_del_uservar.php?i='+id+ref, ajax_delete_uservar_callback, id);
+	delete_request.GET('/core/ajax_del_uservar.php?i='+id+_ext_ref, ajax_delete_uservar_callback, id);
 
 	//uses callback function to only display animated icon if request isnt already completed in 20ms
 	//this removes the flickering display of animated image if you have very low response times
@@ -103,19 +103,17 @@ function ajax_delete_uservar_callback(id)
 
 //Sends an AJAX call to delete specified file
 var delete_file_request = null;
-function ajax_delete_file(id, ref)
+function ajax_delete_file(id)
 {
-	if (!ref) ref='';
 	delete_file_request = new AJAX();
-	delete_file_request.GET('/core/ajax_del_file.php?i='+id+ref, null);
+	delete_file_request.GET('/core/ajax_del_file.php?i='+id+_ext_ref, null);
 }
 
 var fileinfo_request = null;
-function ajax_get_fileinfo(id, ref)
+function ajax_get_fileinfo(id)
 {
-	if (!ref) ref='';
 	fileinfo_request = new AJAX();
-	fileinfo_request.GET_raw('/core/ajax_fileinfo.php?i='+id+ref, ajax_get_fileinfo_callback);
+	fileinfo_request.GET_raw('/core/ajax_fileinfo.php?i='+id+_ext_ref, ajax_get_fileinfo_callback);
 	
 	setTimeout("show_ajax_anim()", 20);
 }
@@ -131,27 +129,25 @@ function ajax_get_fileinfo_callback()
 	fileinfo_request = null;
 }
 
-function submit_apc_upload(id,ref)
+function submit_apc_upload(id)
 {
-	if (!ref) ref='';
 	//submit form
 	document.ajax_file_upload.submit();
 	show_element_by_name('file_gadget_apc_progress');
 
-	ajax_get_upload_progress(id,ref);
+	ajax_get_upload_progress(id,_ext_ref);
 
 	return false;
 }
 
 var upload_progress_request = null;
-function ajax_get_upload_progress(id,ref)
+function ajax_get_upload_progress(id)
 {
-	if (!ref) ref='';
 //	if (upload_progress_request == null) {
 		upload_progress_request = new AJAX();
-		upload_progress_request.GET_raw('/core/ajax_upload_progress.php?s='+id+ref, ajax_get_upload_progress_callback);
+		upload_progress_request.GET_raw('/core/ajax_upload_progress.php?s='+id+_ext_ref, ajax_get_upload_progress_callback);
 //	}
-	setTimeout("ajax_get_upload_progress("+id+",'"+ref+"')", 500);
+	setTimeout("ajax_get_upload_progress("+id+",'"+_ext_ref+"')", 500);
 }
 
 function ajax_get_upload_progress_callback()

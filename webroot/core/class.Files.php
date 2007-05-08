@@ -182,24 +182,24 @@ class Files
 			$title = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
 			if (in_array($file_lastname, $this->image_types)) {
 				//show thumbnail of image
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].', \''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].');"><center>';
 				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->audio_types)) {
 				//show icon for audio files.
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\');"><center>';
 				echo '<img src="/gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->video_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\');"><center>';
 				echo '<img src="/gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
 			} else if ($file_lastname == 'pdf') {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
 				echo '<img src="/gfx/icon_pdf_32.png" width="32" height="32" alt="PDF document"/>';
 				echo '</center></div>';
 			} else {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].',\''.getProjectPath().'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
 				echo 'General file:<br/>';
 				echo $row['fileMime'].'<br/>';
 				echo '</center></div>';
@@ -213,7 +213,7 @@ class Files
 			echo '<div id="file_gadget_upload">';
 			if (!$categoryId) echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 			if ($this->apc_uploads) {
-				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.',\''.getProjectPath().'\');">';
+				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.');">';
 				echo '<input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$session->id.'"/>';
 			} else {
 				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
@@ -283,7 +283,7 @@ class Files
 
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->image_types)) {
-				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$row['fileId'].'" onclick="loadImage('.$row['fileId'].', \'image_big\', \''.getProjectPath().'\');"><center>';
+				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$row['fileId'].'" onclick="loadImage('.$row['fileId'].', \'image_big\'\');"><center>';
 				echo makeThumbLink($row['fileId'], $row['fileName']);
 				echo '</center></div>';
 			}
