@@ -1,4 +1,6 @@
 <?
+	//fixme: använd standard-are-you-sure funktionen
+
 	require_once('config.php');
 
 	$session->requireLoggedIn();
@@ -21,15 +23,13 @@
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 	
-		$content = 'Are you sure you want to delete this blog? <b>'.$blog['blogTitle'].'</b>?<br><br>';
-		$content .= '<table width="100%"><tr>';
-		$content .= '<td width="50%" align="center"><a href="'.$_SERVER['PHP_SELF'].'?id='.$blogId.'&confirmed">Yes, im sure</a></td>';
-		$content .= '<td align="center"><a href="javascript:history.go(-1);">No</a></td>';
-		$content .= '</tr></table>';
+	echo 'Are you sure you want to delete this blog? <b>'.$blog['blogTitle'].'</b>?<br><br>';
+	echo '<table width="100%"><tr>';
+	echo '<td width="50%" align="center"><a href="'.$_SERVER['PHP_SELF'].'?id='.$blogId.'&confirmed">Yes, im sure</a></td>';
+	echo '<td align="center"><a href="javascript:history.go(-1);">No</a></td>';
+	echo '</tr></table>';
 
-		echo $content;
-
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

@@ -59,12 +59,12 @@
 
 		if (!is_numeric($userId) || !is_numeric($limit)) return false;
 
-		$q  = 'SELECT t1.*,t2.categoryName,t2.globalCategory FROM tblBlogs AS t1';
-		$q .= ' LEFT OUTER JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOGS.')';
+		$q  = 'SELECT t1.*,t2.categoryName,t2.categoryPermissions FROM tblBlogs AS t1';
+		$q .= ' LEFT JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOGS.')';
 		$q .= ' WHERE t1.userId='.$userId;
 
 		/* Return order: First blogs categorized in global categories, then blogs categorized in user's categories, then uncategorized blogs */
-		$q .= ' ORDER BY t2.globalCategory DESC, t1.categoryId ASC, t1.timeCreated DESC';
+		$q .= ' ORDER BY t2.categoryPermissions DESC, t1.categoryId ASC, t1.timeCreated DESC';
 		if ($limit) $q .= ' LIMIT 0,'.$limit;
 
 		return $db->getArray($q);

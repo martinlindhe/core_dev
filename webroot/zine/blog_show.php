@@ -14,34 +14,26 @@
 		header('Location: '.$config['start_page']);
 		die;
 	}
-	
-	include('design_head.php');
-	
-		$content = '<div style="float:right; width:150px;">';
-			$c2 = '';
-			if ($session->id == $blog['userId']) {
-				$c2 .= '<a href="blog_edit.php?id='.$blogId.'">Edit blog</a><br><br>';
-			} else {
-				$c2 .= '<a href="blog_report.php?id='.$blogId.'">Report blog</a><br><br>';
-			}
 
-			$content .= $c2;
-		$content .= '</div>';
-		
-		
-		$content .= '<span style="font-size:16px; font-weight:bold;">'.$blog['blogTitle'].'</span><br>';
-		if ($blog['categoryId']) $content .= '(in the category <b>'.$blog['categoryName'].'</b>)<br><br>';
-		else $content .= ' (ingen kategori)<br><br>';
+	require('design_head.php');
 
-		$content .= 'Published '. $blog['timeCreated'].' by '.nameLink($blog['userId'], $blog['userName']).'<br>';
-		if ($blog['timeUpdated']) {
-			$content .= '<b>Updated '. $blog['timeUpdated'].'</b><br>';
-		}
+	if ($session->id == $blog['userId']) {
+		echo '<a href="blog_edit.php?id='.$blogId.'">Edit blog</a><br/><br/>';
+	} else {
+		echo '<a href="blog_report.php?id='.$blogId.'">Report blog</a><br/><br/>';
+	}
 
-		$content .= '<br>';
-		$content .= '<div class="blog">'.formatUserInputText($blog['blogBody']).'</div>';
+	echo '<span style="font-size:16px; font-weight:bold;">'.$blog['blogTitle'].'</span><br/>';
+	if ($blog['categoryId']) echo '(in the category <b>'.$blog['categoryName'].'</b>)<br/><br/>';
+	else echo ' (no category)<br/><br/>';
 
-		echo $content;
+	echo 'Published '. $blog['timeCreated'].' by '.nameLink($blog['userId'], $blog['userName']).'<br/>';
+	if ($blog['timeUpdated']) {
+		echo '<b>Updated '. $blog['timeUpdated'].'</b><br/>';
+	}
 
-	include('design_foot.php');
+	echo '<br>';
+	echo '<div class="blog">'.formatUserInputText($blog['blogBody']).'</div>';
+
+	require('design_foot.php');
 ?>

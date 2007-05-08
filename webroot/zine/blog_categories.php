@@ -15,20 +15,18 @@
 		}
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
-	$content  = 'Create a new category...<br><br>';
-	$content .= 'The already existing categories are: <br>';
-	$content .= getCategoriesSelect(CATEGORY_BLOGS);
-	$content .= '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
-	$content .= 'Category name:<br><input type="text" name="name" size="42" maxlength="40"><br/><br/>';
+	echo 'Create a new category...<br/><br/>';
+	echo 'The already existing categories are: <br/>';
+	echo getCategoriesSelect(CATEGORY_BLOGS);
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
+	echo 'Category name:<br><input type="text" name="name" size="42" maxlength="40"><br/><br/>';
 	if ($session->isAdmin) {
-		$content .= '<input type="checkbox" name="global" value="1"/>Global category<br/><br/>';
+		echo '<input type="checkbox" name="global" value="1"/>Global category<br/><br/>';
 	}
-	$content .= '<input type="submit" class="button" value="Save"/>';
-	$content .= '</form><br/>';
+	echo '<input type="submit" class="button" value="Save"/>';
+	echo '</form><br/>';
 
-	echo $content;
-
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

@@ -29,7 +29,6 @@
   		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
 		- ej kunna dubbel-submitta news (det går nu)
-		- ej kunna skapa identisk nyhets-kategori (det går nu)
 		- mer css
 		- visa news-admin länkar direkt på nyhetsartikeln för admins
 
@@ -146,6 +145,9 @@ X = hi prio task
 	- general: gjort linkRSSfeeds() som skapar <link> taggar för aktuell sida för att exponera alla tillgängliga rss feeds
 	- core: renamade functions_comments.php, functions_categories.php, functions_revisions.php till "atom_comments.php" etc,
 		eftersom dom inte är fristående "moduler"
+	- categories: check om kategorin redan finns när den skapas, kan ej längre skapa identiska kategorier i news & blogs etc
+
+
 
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning

@@ -5,15 +5,12 @@
 
 	if (!$session->id) $session->showLoginForm();
 
-	$content = '';
 	$list = getLatestBlogs(5);
-	for ($i=0; $i<count($list); $i++) {
-		$content .= $list[$i]['timeCreated'].' - <a href="blog_show.php?id='.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a> ';
-		$content .= 'av '.nameLink($list[$i]['userId'], $list[$i]['userName']).'<br>';
-		$content .= $list[$i]['blogBody'];
+	foreach ($list as $row) {
+		echo $row['timeCreated'].' - <a href="blog_show.php?id='.$row['blogId'].'">'.$row['blogTitle'].'</a> ';
+		echo 'by '.nameLink($row['userId'], $row['userName']).'<br>';
+		echo $row['blogBody'];
 	}
-	
-	echo $content;
 
 	require('design_foot.php');
 ?>

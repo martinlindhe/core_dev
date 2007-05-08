@@ -21,8 +21,11 @@
 		$_name = $db->escape(trim($_name));
 		if (!$_name) return false;
 
-		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",timeCreated=NOW(),creatorId='.$session->id;
+		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND creatorId='.$session->id;
+		$check = $db->getOneItem($q);
+		if ($check) return false;
 
+		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",timeCreated=NOW(),creatorId='.$session->id;
 		$db->query($q);
 		return $db->insert_id;
 	}

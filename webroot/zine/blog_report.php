@@ -21,22 +21,19 @@
 		die;
 	}
 
-	include('design_head.php');
+	require('design_head.php');
 
-		$content  = 'Report blog - <b>'.$data['blogTitle'].'</b><br><br>';
+	echo 'Report blog - <b>'.$data['blogTitle'].'</b><br/><br/>';
 
-		$content .= '<br><br>';
-		$content .= '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$blogId.'">';
-		$content .= 'Why do you want to report this:<br>';
-		$content .= '<textarea name="reason" cols="64" rows="6"></textarea><br/><br/>';
+	echo '<br/><br/>';
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$blogId.'">';
+	echo 'Why do you want to report this:<br/>';
+	echo '<textarea name="reason" cols="64" rows="6"></textarea><br/><br/>';
 
-		$content .= '<input type="submit" class="button" value="Report">';
-		$content .= '</form><br><br>';
+	echo '<input type="submit" class="button" value="Report"/>';
+	echo '</form><br/><br/>';
 
-		$content .= '<a href="blogs_show.php?id='.$blogId.'">Back to blog overview</a>';
+	echo '<a href="blogs_show.php?id='.$blogId.'">Back to blog overview</a>';
 
-		echo $content;
-
-	include('design_foot.php');
-
+	require('design_foot.php');
 ?>

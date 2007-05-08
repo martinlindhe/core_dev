@@ -19,7 +19,10 @@ var _ext_ref='<?=getProjectPath()?>';
 	$menu = array(
 			'index.php' => 'Home',
 			'blogs.php' => 'Blogs',
-			'blogs_archive.php?y=2006&amp;m=7' => 'Blog archive');
+			'blogs_archive.php?y=2006&amp;m=7' => 'Blog archive',
+			'blog_new.php' => 'New blog',
+			'blog_categories.php' => 'New blog category'			
+			);
 
 	createMenu($menu);
 		
