@@ -2,6 +2,7 @@
 	hög prio!:
 	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
+		- renama functions_comments.php, functions_categories.php och nån till till "atom_comments.php" etc. eftersom dom inte är fristående "moduler"
 
 
 	session/user settings:
@@ -29,6 +30,10 @@
 		- vote på kvalitén:
   		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
+		- ej kunna dubbel-submitta news (det går nu)
+		- ej kunna skapa identisk nyhets-kategori (det går nu)
+		- mer css
+		- visa news-admin länkar direkt på nyhetsartikeln för admins
 
 
 	wiki:

@@ -27,19 +27,22 @@
 		- You can easily enter news items in advance and choose when they should be published for general view
 		- RSS feeds are automatically created
 
+==== Blogs ====
+		- WIP!
+		- coming: Blog center, showing latest blogs, most popular etc
+
+==== Personal areas ====
+		- WIP
+
 ==== Standards compatible ====
 		- All generated HTML are checked to be 100% "XHTML 1.0 Transitional" compatible using the "HTML Validator" plugin for Firefox.
-			* The goal is to be 100% "XHTML 1.0 Strict" or maybe "XHTML 1.1" compatible.
-			* Need to use 1.0 Transitional because the others dont support <center>
+			* The goal is to be 100% "XHTML 1.0 Strict" compatible.
+			* Need to use 1.0 Transitional because strict/1.1 dont support <center>
 			* Need to use 1.0 Transitional because strict/1.1 dont support <a href="" target="_blank">
 
-			XHTML 1.0 Transitional:
+			doctypes:
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-			XHTML 1.0 Strict:
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-			XHTML 1.1:
 			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
 		- CSS

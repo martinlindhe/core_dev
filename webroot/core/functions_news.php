@@ -100,7 +100,7 @@
 			echo 'By '.$row['creatorName'].', published '.$row['timeToPublish'].'<br/>';
 			$art = parseArticle($row['body']);
 			
-			echo '<h4>'.$art['head'].'</h4>';
+			if ($art['head']) echo '<h4>'.$art['head'].'</h4>';
 			echo $art['body'].'<br/>';
 
 			if ($row['timeEdited'] > $row['timeCreated']) {

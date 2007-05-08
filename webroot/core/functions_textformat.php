@@ -278,25 +278,33 @@
 		return $retval;
 	}
 
-	/* Returns array with parsed up article texts */
+	/* Returns array with parsed up news article texts */
 	function parseArticle($text)
 	{
-		$art['head'] = substr($text, 0, 30).' [...]';
-		$art['body'] = $text;
-
 		$pos1 = strpos($text, '[head]');
 		$pos2 = strpos($text, '[/head]');
-		if ($pos1 === false || $pos2 === false) return $art;
+		if ($pos1 === false || $pos2 === false) {
+			//handle as raw text, no markups found
+
+			$text = htmlentities($text);
+			if (strlen($text) > 30) {
+				$art['head'] = substr($text, 0, 30).' [...]';
+			} else {
+				$art['head'] = $text;
+			}
+			$art['body'] = $text;
+
+			return $art;
+		}
 
 		$art['head'] = substr($text, $pos1+strlen('[head]')+1, $pos2-$pos1-strlen('[/head]') );
-		$art['head'] = nl2br(trim(strip_tags($art['head'])));
+		$art['head'] = nl2br(trim(htmlentities($art['head'])));
 
 		$pos1 = strpos($text, '[body]');
 		$pos2 = strpos($text, '[/body]');
 		if ($pos1 === false || $pos2 === false) return $art;
 
 		$art['body'] = substr($text, $pos1+strlen('[body]')+1, $pos2-$pos1-strlen('[/body]') );
-
 		$art['body'] = formatUserInputText($art['body']);
 
 		return $art;

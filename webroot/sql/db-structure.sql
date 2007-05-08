@@ -23,7 +23,7 @@ CREATE TABLE tblCategories (
   creatorId int(10) unsigned NOT NULL default '0',
   categoryPermissions tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(1) unsigned NOT NULL default '0',
@@ -80,7 +80,7 @@ CREATE TABLE tblNews (
   timeToPublish datetime NOT NULL default '0000-00-00 00:00:00',
   categoryId int(10) unsigned NOT NULL,
   PRIMARY KEY  (newsId)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 CREATE TABLE tblProblemSites (
   siteId bigint(20) unsigned NOT NULL auto_increment,
   userId smallint(5) unsigned NOT NULL default '0',
