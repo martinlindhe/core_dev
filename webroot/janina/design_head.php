@@ -5,7 +5,7 @@
 	<script type="text/javascript" src="/js/ajax.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="stylesheet" type="text/css" href="/css/functions.css"/>
-	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<link rel="stylesheet" type="text/css" href="css/site.css"/>
 	<title><?=@$title?></title>
 	</head>
 <body>

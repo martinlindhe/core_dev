@@ -3,7 +3,7 @@
 <head>
 <title>svnhosting</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link rel="stylesheet" href="css/main.css" type="text/css"/>
+<link rel="stylesheet" href="css/site.css" type="text/css"/>
 <link rel="stylesheet" href="/css/functions.css" type="text/css"/>
 <script type="text/javascript" src="/js/functions.js"></script>
 </head>

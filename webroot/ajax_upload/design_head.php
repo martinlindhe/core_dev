@@ -4,7 +4,7 @@
 <head>
 <title>ajax upload</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" href="design/main.css" type="text/css">
+<link rel="stylesheet" href="design/site.css" type="text/css">
 <link rel="shortcut icon" href="design/ai_icon.ico" type="image/x-icon">
 <script type="text/javascript" src="js/functions.js"></script>
 </head>

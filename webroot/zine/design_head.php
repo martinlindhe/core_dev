@@ -1,11 +1,5 @@
 <?
-	if ($_SESSION['browser']['name'] == 'Internet Explorer') {
-		$browser_css = 'main_ie.css';
-	} else {
-		$browser_css = 'main_ff.css';
-	}
-
-	$browser_css = 'main.css';
+	$browser_css = 'site.css';
 	
 	$title = 'Zine';
 	$keywords = 'web zine, fuck off';

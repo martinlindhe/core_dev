@@ -5,7 +5,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-<link rel="stylesheet" href="inc/main.css" type="text/css"/>
+<link rel="stylesheet" href="inc/site.css" type="text/css"/>
 <link rel="stylesheet" href="inc/functions.css" type="text/css"/>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 

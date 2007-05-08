@@ -53,7 +53,7 @@
 <html>
 <head>
 	<title>ajax paint</title>
-<link rel="stylesheet" href="design/main.css" type="text/css">
+<link rel="stylesheet" href="design/site.css" type="text/css">
 <script type="text/javascript" src="js/functions.js"></script>
 </head>
 

@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<script type="text/javascript" src="/js/functions.js"></script>
 	<link rel="stylesheet" type="text/css" href="/css/functions.css"/>
-	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<link rel="stylesheet" type="text/css" href="css/site.css"/>
 </head>
 <body>
 <div id="left_nav">

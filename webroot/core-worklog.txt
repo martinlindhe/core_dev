@@ -127,7 +127,7 @@ X = hi prio task
 		- eventuellt/senare: flerspråkstöd, dirigera användaren till rätt språk automatiskt
 		- senare: filtrera bort material som är på fel språk för användaren (exempel: visa ej rysk text för indiska användare)
 
-email sattes till mitt password i register rutan..!?!?!
+
 --------------[[changelog]]--------------
 2007.05.07:
 	- files: skapat $files->convertImage() för att gömma undan imagemagick & exponera konverterings-funktionaliteten utanför klassen
@@ -136,6 +136,7 @@ email sattes till mitt password i register rutan..!?!?!
 	- files: visar file size på hover på filöversikt i file arean
 	- core: sätter getProjectPath() till en js variabel i början av pageload istället för å passa på den till massa funktioner
 	- lang projekt: portat till nya plattformen
+	- allt: renamade alla main.css till site.css
 
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning

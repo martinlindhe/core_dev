@@ -167,8 +167,8 @@ class Session
 		if (!is_numeric($userMode)) return false;
 
 		$username = trim($username);
-		$password1 = trim($password1);
-		$password2 = trim($password2);
+		$password1 = $password1;
+		$password2 = $password2;
 		
 		if (($db->escape($username) != $username) || ($db->escape($password1) != $password1)) {
 			//if someone tries to enter ' or " etc as username/password letters
@@ -185,7 +185,6 @@ class Session
 
 		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
 		$checkId = $db->getOneItem($q);
-		//echo $checkId;
 		if ($checkId) {
 			return 'Username already exists';
 		}
@@ -193,15 +192,8 @@ class Session
 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
 		$db->query($q);
 		$newUserId = $db->insert_id;
-		
-		$this->log('User <b>'.$username.'</b> created');
 
-		/* Creates a Inbox and Outbox */
-		/*
-		if ($config['messages']['enabled']) {
-			addUserMessageFolder($db, $newUserId, $config['messages']['folder_inbox'],  MESSAGE_FOLDER_STATIC);
-			addUserMessageFolder($db, $newUserId, $config['messages']['folder_outbox'], MESSAGE_FOLDER_STATIC);
-		}*/
+		$this->log('User <b>'.$username.'</b> created');
 
 		return $newUserId;
 	}
