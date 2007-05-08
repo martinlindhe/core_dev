@@ -12,7 +12,7 @@
 	$work_list = getWorkOrders(10);
 
 	if ($work_list) {
-		$session->log('WORK OERDER QUEUE - Processing '.count($work_list).' work orders');
+		$session->log('WORK ORDER QUEUE - Processing '.count($work_list).' work orders');
 	}
 
 	$src_temp_file = 'D:/work_temp.dat';
@@ -38,12 +38,12 @@
 		{
 			case ORDER_RESIZE_IMG:
 				echo 'Performing task: Resize image<br/>';
-				echo ' &nbsp; order params: width='.$params['width'].', height='.$params['height'].'<br/>';
+				echo ' &nbsp; params: width='.$params['width'].', height='.$params['height'].'<br/>';
 
 				//2. Perform resize
 				$check = $files->resizeImage($src_temp_file, $dst_temp_file, $params['width'], $params['height']);
 				if (!$check) {
-					$session->log('#'.$work['entryId'].': Image resize failed! w='.$params['width'].', h='.$params['height']);
+					$session->log('#'.$work['entryId'].': Image resize failed! w='.$params['width'].', h='.$params['height'], LOGLEVEL_ERROR);
 					echo 'Error: Image resize failed!<br/>';
 					continue;
 				}
@@ -52,12 +52,12 @@
 
 			case ORDER_CONVERT_IMG:
 				echo 'Performing task: Convert image<br/>';
-				echo ' &nbsp; order params: format='.$params['format'].'<br/>';
+				echo ' &nbsp; params: format='.$params['format'].'<br/>';
 
 				//2. Perform convert
 				$check = $files->convertImage($src_temp_file, $dst_temp_file, $params['format']);
 				if (!$check) {
-					$session->log('#'.$work['entryId'].': Image conversion failed! format='.$params['format']);
+					$session->log('#'.$work['entryId'].': Image conversion failed! format='.$params['format'], LOGLEVEL_ERROR);
 					echo 'Error: Image conversion failed!<br/>';
 					continue;
 				}
@@ -77,13 +77,13 @@
 		$q = 'DELETE FROM tblOrders WHERE entryId='.$work['entryId'];
 		$db->query($q);
 		echo '<br/>';
-	
+
 		unlink($src_temp_file);
 		unlink($dst_temp_file);
 	}
 
 	if ($work_list) {
-		$session->log('WORK OERDER QUEUE - Completed');
+		$session->log('WORK ORDER QUEUE - Completed');
 	}
 
 ?>

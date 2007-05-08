@@ -133,6 +133,10 @@ X = hi prio task
 
 
 --------------[[changelog]]--------------
+2007.05.07:
+	- files: skapat $files->convertImage() för att gömma undan imagemagick & exponera konverterings-funktionaliteten utanför klassen
+	- admin events: möjlighet att ändra sorteringsordningen på events
+
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning
 	- files: visar bild-bredd & höjd i ajax_fileinfo.php

@@ -1,3 +1,6 @@
+<?
+	$r = $config['site']['web_root'];
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -11,7 +14,7 @@
 <div id="leftmenu">
 	<ul class="side-nav">
 		<? $cur = basename($_SERVER['SCRIPT_NAME']); ?>
-		<li><a href="index.php">Home</a></li>
+		<li><a href="<?=$r?>index.php">Home</a></li>
 <?
 	if ($session->isAdmin) {
 		//admin menu if logged in

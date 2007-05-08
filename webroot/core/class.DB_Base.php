@@ -9,11 +9,6 @@
 	todo: börja använda http://se2.php.net/manual/en/function.mysqli-fetch-object.php, returnera kolumnamn direkt som objektvariabler
 */
 
-define('LOGLEVEL_NOTICE', 1);
-define('LOGLEVEL_WARNING', 2);
-define('LOGLEVEL_ERROR', 3);
-define('LOGLEVEL_ALL', 5);
-
 abstract class DB_Base
 {
 	/****************************************************/
@@ -225,11 +220,21 @@ abstract class DB_Base
 		if (!$session->isAdmin) return false;
 
 		if (isset($_GET['events_clearlog'])) {
-			$this->query('DELETE FROM tblLogs WHERE entryLevel <= '.LOGLEVEL_ALL);
+			//$this->query('DELETE FROM tblLogs WHERE entryLevel <= '.LOGLEVEL_ALL);
+			$this->query('TRUNCATE tblLogs');
 		}
 
-		$list = $this->getArray('SELECT * FROM tblLogs WHERE entryLevel <= '.LOGLEVEL_ALL.' ORDER BY timeCreated DESC');
-		echo count($list).' entries in event log<br/><br/>';
+		$q = 'SELECT * FROM tblLogs WHERE entryLevel <= '.LOGLEVEL_ALL;
+		if (!empty($_GET['sort']) && $_GET['sort']=='asc') {
+			$q .= ' ORDER BY timeCreated ASC';
+			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(false).'">show newest first</a>]<br/>';
+		} else {
+			$q .= ' ORDER BY timeCreated DESC';
+			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(false).'&sort=asc">show oldest first</a>]<br/>';
+		}
+
+		$list = $this->getArray($q);
+		echo count($list).' entries in event log.<br/><br/>';
 
 		foreach ($list as $row)
 		{

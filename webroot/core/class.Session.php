@@ -13,6 +13,11 @@ require_once('functions_ip.php');
 require_once('functions_settings.php');
 require_once('functions_textformat.php');
 
+define('LOGLEVEL_NOTICE', 1);
+define('LOGLEVEL_WARNING', 2);
+define('LOGLEVEL_ERROR', 3);
+define('LOGLEVEL_ALL', 5);
+
 class Session
 {
 	private $session_name = 'sid';			//default session name
