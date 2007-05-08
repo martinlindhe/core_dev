@@ -9,6 +9,10 @@
 		* "bevaka" och "sluta bevaka" på annan användares galleri. system-meddelande utskick på ny galleribild-bevakningar testat
 		* inställningar->bevakningar: ny sida
 
+2007.05.08 Tisdag:
+	webbgränssnittet:
+		* snyggat till "inställningar->bevakningar" så den ser mycket bättre ut
+
 
 ***********************************************************************************************************************************
 topp prio:
