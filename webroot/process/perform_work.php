@@ -11,7 +11,9 @@
 
 	$work_list = getWorkOrders(10);
 
-	//echo '<pre>';print_r($work_list);
+	if ($work_list) {
+		$session->log('WORK OERDER QUEUE - Processing '.count($work_list).' work orders');
+	}
 
 	foreach ($work_list as $work)
 	{
@@ -38,7 +40,13 @@
 				echo ' &nbsp; order params: width='.$params['width'].', height='.$params['height'].'<br/>';
 
 				//2. Perform resize
-				$files->resizeImage($src_temp_file, $dst_temp_file, $params['width'], $params['height']);
+				$check = $files->resizeImage($src_temp_file, $dst_temp_file, $params['width'], $params['height']);
+				if (!$check) {
+					$session->log('#'.$work['entryId'].': Image resize failed! w='.$params['width'].', h='.$params['height']);
+					echo 'Error: Image resize failed!<br/>';
+					continue;
+				}
+				$session->log('#'.$work['entryId'].': Image resize performed successfully');
 				break;
 
 			case ORDER_CONVERT_IMG:
@@ -46,16 +54,15 @@
 				echo ' &nbsp; order params: format='.$params['format'].'<br/>';
 
 				//2. Perform convert. todo gör detta till en funktion i class.Files.php, återanvänd i class.Files.php:handleGeneralUpload()
-
-				//$c = 'convert -quality '.$this->image_jpeg_quality.' GIF:'.$src_temp_file.' JPG:'.$dst_temp_file;
 				$c = 'convert -quality 75 GIF:'.$src_temp_file.' JPG:'.$dst_temp_file;
-				echo $c.'<br/>';
 				exec($c);
 
 				if (!file_exists($dst_temp_file)) {
-					$session->log('Failed to convert image! cmd: '.$db->escape($c));
-					die('convert failed');
+					$session->log('#'.$work['entryId'].': Image convert failed! cmd: '.$db->escape($c));
+					echo 'Error: Convert failed!<br/>';
+					continue;
 				}
+				$session->log('#'.$work['entryId'].': Image convert performed successfully');
 				break;
 
 			default:
@@ -68,12 +75,14 @@
 		copy($dst_temp_file, $params['dst']);
 
 		//4. Ta bort utfört arbete från loggen
-		/*
 		$q = 'DELETE FROM tblOrders WHERE entryId='.$work['entryId'];
 		$db->query($q);
-		*/
 
 		echo '<br/>';
+	}
+
+	if ($work_list) {
+		$session->log('WORK OERDER QUEUE - Completed');
 	}
 
 ?>

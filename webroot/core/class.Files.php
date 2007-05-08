@@ -511,6 +511,7 @@ class Files
 
 		imagedestroy($image);
 		imagedestroy($image_p);
+		return true;
 	}
 
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5

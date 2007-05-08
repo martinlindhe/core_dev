@@ -19,6 +19,8 @@
 
 		$q = 'INSERT INTO tblOrders SET orderType='.$_type.', orderParams="'.$_params.'", ownerId='.$session->id.', timeCreated=NOW()';
 		$db->query($q);
+
+		$session->log('Added new work order type '.$_type);
 	}
 
 	/* Returns the oldest 10 work orders still active for processing */
