@@ -8,8 +8,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
 	<link rel="stylesheet" href="<?=$r?>css/site.css" type="text/css"/>
-<?linkRSSfeeds()?>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+<?linkRSSfeeds()?>
 	<script type="text/javascript" src="/js/ajax.js"></script>
 	<script type="text/javascript" src="/js/functions.js"></script>
 </head>

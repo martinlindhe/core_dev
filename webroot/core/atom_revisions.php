@@ -1,7 +1,7 @@
 <?
 	/*
-		Generic set of functions & db-table to generate revisioned backups of other field data for other modules
-		
+		atom_revisions.php - set of functions to implement revisioned backups of data, used by various modules
+
 		By Martin Lindhe, 2007
 	*/
 	

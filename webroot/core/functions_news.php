@@ -1,6 +1,6 @@
 <?
-	require_once('functions_comments.php');		//for news comment support
-	require_once('functions_categories.php');	//for news categories support
+	require_once('atom_comments.php');		//for news comment support
+	require_once('atom_categories.php');	//for news categories support
 
 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 	{

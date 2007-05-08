@@ -1,5 +1,9 @@
 <?
-	//functions_comments.php - kommentarer till whatever
+	/*
+		atom_comments.php - set of functions to implement comments, used by various modules
+
+		By Martin Lindhe, 2007
+	*/
 
 	define('COMMENT_NEWS',					1);
 

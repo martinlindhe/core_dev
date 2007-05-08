@@ -1,31 +1,25 @@
-<?
-	$title = 'Zine';
-	$keywords = 'web zine, fuck off';
-	$description = 'Web zine go away';
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title><?=$title?></title>
-
+	<title>zine</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="keywords" content="<?=$keywords?>">
-	<meta name="description" content="<?=$description?>">
-
 	<link rel="stylesheet" href="inc/site.css" type="text/css">
 	<link rel="stylesheet" href="/css/functions.css" type="text/css">
 	<link rel="stylesheet" href="css/site.css" type="text/css">
-
+<?linkRSSfeeds()?>
 	<script type="text/javascript" src="/js/functions.js"></script>
 </head>
 <body>
+<script type="text/javascript">
+var _ext_ref='<?=getProjectPath()?>';
+</script>
 
 <div id="left_menu">
 <?
 	$menu = array(
 			'index.php' => 'Home',
 			'blogs.php' => 'Blogs',
-			'blogs_archive.php?y=2006&m=7' => 'Blog archive');
+			'blogs_archive.php?y=2006&amp;m=7' => 'Blog archive');
 
 	createMenu($menu);
 		
@@ -41,9 +35,6 @@
 		createMenu($menu);
 	}
 ?>
-</div> <!-- header_holder -->
+</div>
 
 <div id="main_body">
-
-
-<!-- design_head.php end -->

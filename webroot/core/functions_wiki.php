@@ -3,12 +3,12 @@
 		------------------------------------------------------------
 		Written by Martin Lindhe, 2007 <martin_lindhe@yahoo.se>
 
-		core																				tblWiki	
-		för history-stöd: functions_revisions.php		tblRevisions
-		för files-stöd: $files objekt								tblFiles
+		core																			tblWiki	
+		för history-stöd: atom_revisions.php			tblRevisions
+		för files-stöd: $files objekt							tblFiles
 	*/
 	
-	require_once('functions_revisions.php');
+	require_once('atom_revisions.php');
 
 	//wiki module default settings:
 	$config['wiki']['log_history'] = true;

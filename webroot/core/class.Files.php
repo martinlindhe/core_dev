@@ -8,7 +8,7 @@
 */
 
 require_once('functions_general.php');
-require_once('functions_categories.php');		//for file categories support
+require_once('atom_categories.php');		//for file categories support
 
 define('FILETYPE_WIKI',						100); /* File is attached to a wiki */
 //define('FILETYPE_PR',							101);	/* File is attached to a PR */

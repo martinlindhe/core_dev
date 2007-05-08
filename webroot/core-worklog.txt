@@ -2,8 +2,6 @@
 	hög prio!:
 	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
-		- renama functions_comments.php, functions_categories.php och nån till till "atom_comments.php" etc. eftersom dom inte är fristående "moduler"
-
 
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
@@ -146,7 +144,8 @@ X = hi prio task
 	- konverterat zine-projektet till nya plattformen
 	- general: gjort createMenu() som skapar leftmenu på adblock, lyrics, sample. generell funktion för att snabbt skapa menyer
 	- general: gjort linkRSSfeeds() som skapar <link> taggar för aktuell sida för att exponera alla tillgängliga rss feeds
-
+	- core: renamade functions_comments.php, functions_categories.php, functions_revisions.php till "atom_comments.php" etc,
+		eftersom dom inte är fristående "moduler"
 
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning

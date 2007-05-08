@@ -1,4 +1,10 @@
 <?
+	/*
+		atom_categories.php - set of functions to implement categories, used by various modules
+
+		By Martin Lindhe, 2007
+	*/
+
 	define('CATEGORY_USERFILES', 1);	//special type that represents 1-10
 	$config['categories']['files_types'] = array(1 => 'normal', 2 => 'private', 3 => 'hidden', 10 => 'global');
 
