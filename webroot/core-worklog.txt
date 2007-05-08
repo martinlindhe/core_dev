@@ -48,7 +48,6 @@
 
 	misc:
 	X - kompislista (blized)
-		- konvertera zine! (kräver portning av blog)
   	- Försök bygga mer logik i sql queries / stored procedures
   	- gör en "for production use" mysqli-db driver med all profile kod utplockad för att den ska va lite snabbare, nån gång när db klassen har varit orörd i några månader
   	- gör en worker databas + ett worker script, som:
@@ -136,6 +135,8 @@ X = hi prio task
 	- core: sätter getProjectPath() till en js variabel i början av pageload istället för å passa på den till massa funktioner
 	- lang projekt: portat till nya plattformen
 	- allt: renamade alla main.css till site.css
+	- blogs: skapat generella funktioner för bloggar i core/functions_blogs.php
+	- konverterat zine-projektet till nya plattformen
 
 
 2007.05.05:

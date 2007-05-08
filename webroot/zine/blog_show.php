@@ -1,51 +1,47 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
-	if (!$_SESSION['loggedIn'] || empty($_GET['id']) || !is_numeric($_GET['id'])) {
+	$session->requireLoggedIn();
+
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
 		header('Location: '.$config['start_page']);
 		die;
 	}
 
 	$blogId = $_GET['id'];
-	$blog = getBlog($db, $blogId);
+	$blog = getBlog($blogId);
 	if (!$blog) {
 		header('Location: '.$config['start_page']);
 		die;
 	}
 	
 	include('design_head.php');
-	include('design_user_head.php');
 	
 		$content = '<div style="float:right; width:150px;">';
 			$c2 = '';
-			if ($_SESSION['userId'] == $blog['userId']) {
-				$c2 .= '<a href="blog_edit.php?id='.$blogId.'">'.$config['text']['link_edit'].' bloggen</a><br><br>';
+			if ($session->id == $blog['userId']) {
+				$c2 .= '<a href="blog_edit.php?id='.$blogId.'">Edit blog</a><br><br>';
 			} else {
-				$c2 .= '<a href="blog_report.php?id='.$blogId.'">'.$config['text']['link_report'].' bloggen</a><br><br>';
+				$c2 .= '<a href="blog_report.php?id='.$blogId.'">Report blog</a><br><br>';
 			}
 
-			$c2 .= '<a href="javascript:history.go(-1);">'.$config['text']['link_return'].'</a>';
-			$content .= MakeBox('|'.$config['text']['link_select'], $c2);
+			$content .= $c2;
 		$content .= '</div>';
 		
 		
 		$content .= '<span style="font-size:16px; font-weight:bold;">'.$blog['blogTitle'].'</span><br>';
-		if ($blog['categoryId']) $content .= '('.$config['text']['in_the_category'].' <b>'.$blog['categoryName'].'</b>)<br><br>';
+		if ($blog['categoryId']) $content .= '(in the category <b>'.$blog['categoryName'].'</b>)<br><br>';
 		else $content .= ' (ingen kategori)<br><br>';
 
-		$content .= $config['text']['published'].' '. getRelativeTimeLong($blog['timeCreated']).' av '.nameLink($blog['userId'], $blog['userName']).'<br>';
+		$content .= 'Published '. $blog['timeCreated'].' by '.nameLink($blog['userId'], $blog['userName']).'<br>';
 		if ($blog['timeUpdated']) {
-			$content .= '<b>Oppdatert '. getRelativeTimeLong($blog['timeUpdated']).'</b><br>';
+			$content .= '<b>Updated '. $blog['timeUpdated'].'</b><br>';
 		}
 
 		$content .= '<br>';
 		$content .= '<div class="blog">'.formatUserInputText($blog['blogBody']).'</div>';
-		//$content .= showFileAttachments($db, $blogId, FILETYPE_BLOG);
 
-		echo '<div id="user_blog_content">';
-		echo MakeBox('<a href="blogs.php">'.$config['blog']['text']['blogs'].'</a>|'.$config['blog']['text']['show_blog'], $content);
-		echo '</div>';
+		echo $content;
 
-	include('design_blog_foot.php');
 	include('design_foot.php');
 ?>

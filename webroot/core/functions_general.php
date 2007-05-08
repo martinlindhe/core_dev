@@ -113,6 +113,11 @@
 			return $arr['path'].'?'.$keyval.$_extra;
 		}
 	}
+	
+	function nameLink($id, $name)
+	{
+		return '<a href="user.php?id='.$id.'">'.$name.'</a>';
+	}
 
 	/* Helper function used to create "are you sure?" pages */
 	function confirmed($text, $_var, $_id)

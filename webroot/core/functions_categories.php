@@ -2,8 +2,9 @@
 	define('CATEGORY_USERFILES', 1);	//special type that represents 1-10
 	$config['categories']['files_types'] = array(1 => 'normal', 2 => 'private', 3 => 'hidden', 10 => 'global');
 
-	define('CATEGORY_LANGUAGES', 11);	//represents a language, for multi-language features & used by "lang" project
-	define('CATEGORY_NEWS',		20);
+	define('CATEGORY_LANGUAGES',	11);	//represents a language, for multi-language features & used by "lang" project
+	define('CATEGORY_BLOGS', 			12);
+	define('CATEGORY_NEWS',				20);
 
 	function addCategory($_type, $_name)
 	{

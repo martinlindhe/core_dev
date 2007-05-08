@@ -1,14 +1,12 @@
 <?
-	include_once('include_all.php');
+	require_once('config.php');
 
-	include('design_head.php');
-	include('inc/noscript.html');
-
+	require('design_head.php');
 
 	$content = '';
-	$list = getBlogsNewest($db, 5);
+	$list = getLatestBlogs(5);
 	for ($i=0; $i<count($list); $i++) {
-		$content .= formatShortDate($list[$i]['timeCreated']).' - <a href="blog_show.php?id='.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a> ';
+		$content .= $list[$i]['timeCreated'].' - <a href="blog_show.php?id='.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a> ';
 		$content .= 'av '.nameLink($list[$i]['userId'], $list[$i]['userName']).'<br>';
 		$content .= $list[$i]['blogBody'];
 	}
@@ -16,5 +14,5 @@
 	echo $content;
 
 
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

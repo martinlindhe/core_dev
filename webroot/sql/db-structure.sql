@@ -401,6 +401,16 @@ DELIMITER ;
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ dbsample /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 USE dbSample;
+CREATE TABLE tblBlogs (
+  blogId int(10) unsigned NOT NULL auto_increment,
+  userId int(10) unsigned NOT NULL default '0',
+  blogTitle varchar(100) NOT NULL default '',
+  blogBody text NOT NULL,
+  timeCreated datetime default NULL,
+  timeUpdated datetime default NULL,
+  categoryId bigint(20) unsigned NOT NULL default '0',
+  PRIMARY KEY  (blogId)
+) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 CREATE TABLE tblCategories (
   categoryId bigint(20) unsigned NOT NULL auto_increment,
   categoryName varchar(100) NOT NULL default '',
