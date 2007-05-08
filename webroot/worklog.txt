@@ -17,6 +17,9 @@
 		* skapat databas och planerat upp programflödet
 		* byggt ett script som utför de arbeten som finns att göra
 		* loggar all aktivitet
+		* klarar av följande tasks:
+			- resiza en stillbild
+			- konvertera en stillbild till JPEG, PNG eller GIF
 
 ***********************************************************************************************************************************
 topp prio:

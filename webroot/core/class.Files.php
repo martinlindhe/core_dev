@@ -511,6 +511,7 @@ class Files
 		return true;
 	}
 
+	/* Uses ImageMagick commandline image converter */
 	function convertImage($src_file, $dst_file, $dst_mime_type)
 	{
 		switch ($dst_mime_type)
@@ -521,6 +522,10 @@ class Files
 
 			case 'image/png':
 				$c = 'convert '.$src_file.' PNG:'.$dst_file;
+				break;
+
+			case 'image/gif':
+				$c = 'convert '.$src_file.' GIF:'.$dst_file;
 				break;
 
 			default:

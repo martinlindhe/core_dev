@@ -74,10 +74,8 @@
 		copy($dst_temp_file, $params['dst']);
 
 		//4. Ta bort utfört arbete från loggen
-		/*
 		$q = 'DELETE FROM tblOrders WHERE entryId='.$work['entryId'];
 		$db->query($q);
-		*/
 		echo '<br/>';
 	
 		unlink($src_temp_file);
