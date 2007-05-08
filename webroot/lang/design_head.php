@@ -2,18 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>lang</title>
-	<script type="text/javascript" src="js/functions.js"></script>
-
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="stylesheet" href="css/site.css" type="text/css"/>
 	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 	<script type="text/javascript" src="/js/ajax.js"></script>
 	<script type="text/javascript" src="/js/functions.js"></script>
-
 </head>
 
 <body>
+<script type="text/javascript">
+var _ext_ref='<?=getProjectPath()?>';
+</script>
 
 <div id="menu_holder">
 	<div id="leftmenu">

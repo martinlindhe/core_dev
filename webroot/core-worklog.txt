@@ -2,8 +2,6 @@
 	hög prio!:
 		- gör klart "cut" i bildvisaren
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
-		- öppna "pass thru" fil-länkar i en ny tabb
-		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 
 
 	session/user settings:
@@ -21,6 +19,7 @@
 		- byta värdena för file types (FILETYPE_WIKI etc) att börja från 1 iställer för från 100
 		- bugg: ajax show info, filesize är orginal upload size innan filen resizades
 		- ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
+		- öppna "pass thru" fil-länkar i en ny tabb om det går med javascript
 
 
 	news modul:
@@ -63,7 +62,7 @@
 		- skrota hela getProjectPath() på nåt smart sätt?
  	 	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
-
+		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 
 --------------[[projekt todo]]--------------
   adblock:
@@ -137,6 +136,7 @@ X = hi prio task
 	- core: sätter getProjectPath() till en js variabel i början av pageload istället för å passa på den till massa funktioner
 	- lang projekt: portat till nya plattformen
 	- allt: renamade alla main.css till site.css
+
 
 2007.05.05:
 	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning
