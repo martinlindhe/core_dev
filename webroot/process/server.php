@@ -1,25 +1,37 @@
 <?
+	/* Todo: use a "getSID()" function to get a unique ID to encode the password with. 
+	currently I dont know a good solution since the password is already encoded using several sha1-sums
+	in the database, it can not easily be confirmed to be correct this way.
+	For the moment, we solve this by hiding the Process service behind SSL */
+
 	ini_set('soap.wsdl_cache_enabled', '0');
+
+	require_once('config.php');
 
 	class SOAP_ProcessService
 	{
-		/* Returns a unique ID for this session used to encode the password in the login() step */
-		function getSID()
-		{
-			/* Todo: use this function from the client to get a unique ID to encode the password with. 
-				currently I dont know a good solution since the password is already encoded using several sha1-sums
-				in the database, it can not easily be confirmed to be correct this way.
-
-				For the moment, we solve this by hiding the Process service behind SSL
-			*/
-			return 'abc123';
-		}
-
+		/* Returns the session id to the client to be used as a cookie */
 		function login($username, $password)
 		{
-			return 'you wanted to log in with user '.$username.', password '.$password;
+			global $session;
+
+			if (!$session->logIn($username, $password)) {
+				return false;
+			}
+
+			return SID;
 		}
 
+		function newOrder($_type, $serialized_params)
+		{
+			global $session;
+			
+			return 'sid = '.$session->id;
+			
+			$params = unserialize($serialized_params);
+
+			return addWorkOrder($_type, $params);
+		}
 	}
 
 	$server = new SoapServer('process.wsdl', array('trace' => 1));

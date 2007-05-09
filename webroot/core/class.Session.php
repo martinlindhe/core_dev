@@ -201,13 +201,13 @@ class Session
 	function logIn($username, $password)
 	{
 		global $db;
-		
+
 		$enc_username = $db->escape($username);
 		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
 
 		$q = 'SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"';
-		$data = $db->getOneRow($q);
-		if (!$data) {
+		$check = $db->getOneRow($q);
+		if (!$check) {
 			$this->error = 'Login failed';
 			$this->log('Failed login attempt: username '.$enc_username);
 			return false;

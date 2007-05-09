@@ -29,15 +29,17 @@
 	function addWorkOrder($_type, $_params)
 	{
 		global $db, $session, $WORK_OPRDER_TYPES;
-
-		if (!is_numeric($_type)) return false;
-
+		
+		if (!$session->id || !is_numeric($_type)) return false;
+		$session->log('im aliive2');
+		
 		$_params = $db->escape(serialize($_params));
 
 		$q = 'INSERT INTO tblOrders SET orderType='.$_type.', orderParams="'.$_params.'", ownerId='.$session->id.', timeCreated=NOW()';
 		$db->query($q);
 		
 		$session->log('#'.$db->insert_id.': Added work order: '.$WORK_OPRDER_TYPES[$_type]);
+		return true;
 	}
 
 	/* Returns the oldest 10 work orders still active for processing */
