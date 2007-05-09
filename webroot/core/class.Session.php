@@ -25,7 +25,7 @@ class Session
 	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
 	private $check_useragent = true;		//keeps track if the client user agent string changes during the session
 
-	private $sha1_key = 'rpxp8xkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
+	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 	private $allow_registration = true;	//set to false to disallow the possibility to register new users
 	private $home_page = 'index.php';		//if set, redirects user to this page after successful login
 	
@@ -44,6 +44,8 @@ class Session
 
 	function __construct(array $session_config)
 	{
+		global $db;
+
 		if (isset($session_config['name'])) $this->session_name = $session_config['name'];
 		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
 		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
@@ -51,8 +53,6 @@ class Session
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
 		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
-
-		global $db;
 
 		session_name($this->session_name);
 		session_start();
@@ -206,15 +206,15 @@ class Session
 		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
 
 		$q = 'SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"';
-		$check = $db->getOneRow($q);
-		if (!$check) {
+		$data = $db->getOneRow($q);
+		if (!$data) {
 			$this->error = 'Login failed';
 			$this->log('Failed login attempt: username '.$enc_username);
 			return false;
 		}
 
 		$this->error = '';
-		$this->username = $enc_username;
+		$this->username = $data['userName'];
 		$this->id = $data['userId'];
 		$this->mode = $data['userMode'];		//0=normal user. 1=admin, 2=super admin
 		$this->lastActive = time();

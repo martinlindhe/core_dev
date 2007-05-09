@@ -14,7 +14,7 @@
 	<part name="password" type="xsd:string"/>
 </message>
 <message name="loginResponse">
-	<part name="Result" type="xsd:string"/>
+	<part name="Result" type="xsd:boolean"/>
 </message>
 
 <message name="newOrderRequest">

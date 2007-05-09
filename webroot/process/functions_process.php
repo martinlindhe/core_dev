@@ -31,7 +31,6 @@
 		global $db, $session, $WORK_OPRDER_TYPES;
 		
 		if (!$session->id || !is_numeric($_type)) return false;
-		$session->log('im aliive2');
 		
 		$_params = $db->escape(serialize($_params));
 

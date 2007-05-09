@@ -19,15 +19,11 @@
 				return false;
 			}
 
-			return SID;
+			return true;
 		}
 
 		function newOrder($_type, $serialized_params)
 		{
-			global $session;
-			
-			return 'sid = '.$session->id;
-			
 			$params = unserialize($serialized_params);
 
 			return addWorkOrder($_type, $params);
