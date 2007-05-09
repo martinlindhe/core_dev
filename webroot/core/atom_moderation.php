@@ -44,7 +44,7 @@
 	function checkStopword($text, $_type)
 	{
 		global $db;
-		
+
 		if (!is_numeric($_type)) return false;
 
 		/* Removes non-letters */
@@ -139,7 +139,7 @@
 
 
 	/* Adds a stopword of type $type if not already exists, else returns false */
-	function addStopword($word, $type, $full)
+	function addStopword($word, $type, $full)	//fixme: parameter order: $type, $word, $full
 	{
 		global $db;
 
@@ -175,7 +175,7 @@
 	}
 
 	/* Adds the forum item $itemId to the moderation queue tagged with reason $queueType */
-	function addToModerationQueue($itemId, $queueType)
+	function addToModerationQueue($queueType, $itemId)
 	{
 		global $db;
 
@@ -228,7 +228,7 @@
 	}
 
 	/* Removes both moderation queue and comments entry */
-	function removeFromModerationQueueByItemId($itemId, $queueType)
+	function removeFromModerationQueueByItemId($itemId, $queueType)	//fixme: parameter order: $queueType, $itemId
 	{
 		global $db;
 

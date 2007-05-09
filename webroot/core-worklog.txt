@@ -14,6 +14,8 @@
 		- kommentarer
 		- flytta över mer sql kod direkt i showBlog() om dom endast anropas på 1 ställe
 		- gör om "new blog category" dialogen så den har flervalsalternativ som "new filearea category"
+		- testa att modereringen fungerar som den ska
+		- bygg adminpaneler för "moderation queue", och "manage stopwords"
 
 
 	file area:

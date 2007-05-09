@@ -21,7 +21,7 @@
 
 		/* Add entry to moderation queue */
 		if ($config['blog']['moderation']) {
-			if (isSensitive($title) || isSensitive($body)) addToModerationQueue($blogId, MODERATION_SENSITIVE_BLOG);
+			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_SENSITIVE_BLOG, $blogId);
 		}
 
 		return $blogId;
@@ -51,7 +51,7 @@
 
 		/* Add entry to moderation queue */
 		if ($config['blog']['moderation']) {
-			if (isSensitive($db, $title) || isSensitive($db, $body)) addToModerationQueue($db, $blogId, MODERATION_SENSITIVE_BLOG);
+			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_SENSITIVE_BLOG, $blogId);
 		}
 	}
 
@@ -212,7 +212,7 @@
 
 			if (isset($_POST['blog_reportreason'])) {
 				//fixme: handle submission
-				$queueId = addToModerationQueue($blogId, MODERATION_REPORTED_BLOG);
+				$queueId = addToModerationQueue(MODERATION_REPORTED_BLOG, $blogId);
 				addComment(COMMENT_MODERATION_QUEUE, $queueId, $_POST['blog_reportreason']);
 
 				echo 'Your report has been recieved<br/>';
