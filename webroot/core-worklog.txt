@@ -9,7 +9,7 @@
 
 
 	blog:
-		-
+		- gör en egen blog-meny css som inte är identisk med wiki-menyn
 
 
 	file area:
@@ -135,6 +135,8 @@ X = hi prio task
 2007.05.09:
 	- blog: byggt om en massa så det funkar snarlikt som en wiki, med en egen meny & går att baka in i en annan sida, wip
 	- wiki: använder createMenu() för att skapa wiki-menyn
+	- blog: markerar bloggar som raderade, tas ej bort från databasen. delete blog inbyggt i showBlog()
+
 
 2007.05.07:
 	- files: skapat $files->convertImage() för att gömma undan imagemagick & exponera konverterings-funktionaliteten utanför klassen

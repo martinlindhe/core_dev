@@ -24,15 +24,13 @@
 		return $blogId;
 	}
 
-	function deleteBlog($blogId, $ownerId = 0)
+	function deleteBlog($blogId)
 	{
 		global $db, $session;
 
-		if (!$session->id || !is_numeric($blogId) || !is_numeric($ownerId)) return false;
+		if (!$session->id || !is_numeric($blogId)) return false;
 
-		$q = 'DELETE FROM tblBlogs WHERE blogId='.$blogId;
-		if ($ownerId) $q .= ' AND userId='.$ownerId;
-
+		$q = 'UPDATE tblBlogs SET timeDeleted=NOW(),deletedBy='.$session->id.' WHERE blogId='.$blogId;
 		$db->query($q);
 	}
 
@@ -63,7 +61,7 @@
 
 		$q  = 'SELECT t1.*,t2.categoryName,t2.categoryPermissions FROM tblBlogs AS t1';
 		$q .= ' LEFT JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOGS.')';
-		$q .= ' WHERE t1.userId='.$userId;
+		$q .= ' WHERE t1.userId='.$userId.' AND t1.deletedBy=0';
 
 		/* Return order: First blogs categorized in global categories, then blogs categorized in user's categories, then uncategorized blogs */
 		$q .= ' ORDER BY t2.categoryPermissions DESC, t1.categoryId ASC, t1.timeCreated DESC';
@@ -81,6 +79,7 @@
 
 		$q  = 'SELECT t1.*,t2.userName FROM tblBlogs AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
+		$q .= 'WHERE t1.deletedBy=0 ';
 		$q .= 'ORDER BY t1.timeCreated DESC';
 		if ($_cnt) $q .= ' LIMIT '.$_cnt;
 
@@ -96,7 +95,7 @@
 		$q  = 'SELECT t1.*,t2.categoryName,t3.userName FROM tblBlogs AS t1 ';
 		$q .= 'LEFT OUTER JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOGS.') ';
 		$q .= 'INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
-		$q .= 'WHERE t1.blogId='.$blogId;
+		$q .= 'WHERE t1.blogId='.$blogId.' AND t1.deletedBy=0';
 
 		return $db->getOneRow($q);
 	}
@@ -114,7 +113,7 @@
 		$time_end   = mktime(23, 59, 59, $month+1, 0, $year);	//23:59 at last day of month
 
 		$q  = 'SELECT * FROM tblBlogs ';
-		$q .= 'WHERE userId='.$userId.' ';
+		$q .= 'WHERE userId='.$userId.' AND deletedBy=0 ';
 		$q .= 'AND timeCreated BETWEEN "'.sql_datetime($time_start).'" AND "'.sql_datetime($time_end).'"';
 		if ($order_desc === true) {
 			$q .= ' ORDER BY timeCreated DESC';
@@ -138,9 +137,16 @@
 			updateBlog($_id, $_POST['blog_cat'], $_POST['blog_title'], $_POST['blog_body']);
 		}
 
-
 		$blog = getBlog($_id);
-		if (!$blog) return false;
+		if (!$blog) {
+			echo 'The specified blog doesnt exist!<br/>';
+			return false;
+		}
+		
+		if ($blog['deletedBy']) {
+			echo 'This blog has been deleted!<br/>';
+			return false;
+		}
 
 		echo '<div class="blog">';
 
@@ -157,7 +163,7 @@
 		if ($session->id == $blog['userId']) {
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id => 'Edit blog'));
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id => 'Delete blog'));
-		} else {
+		//} else {
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id => 'Report blog'));
 		}
 		
@@ -181,6 +187,37 @@
 			echo '<textarea name="blog_body" cols="65" rows="25">'.$body.'</textarea><br/><br/>';
 			echo '<input type="submit" class="button" value="Save changes"/><br/>';
 			echo '</form>';
+		} else if ($current_tab == 'BlogDelete') {
+			//fixme: använd standard-are-you-sure funktionen
+
+			if (isset($_GET['confirmed'])) {
+				deleteBlog($_id);
+				echo 'The blog has been deleted.<br/>';
+			} else {
+				echo 'Are you sure you want to delete this blog? <b>'.$blog['blogTitle'].'</b>?<br><br>';
+				echo '<table width="100%"><tr>';
+				echo '<td width="50%" align="center"><a href="'.$_SERVER['PHP_SELF'].'?BlogDelete:'.$_id.'&confirmed">Yes, im sure</a></td>';
+				echo '<td align="center"><a href="javascript:history.go(-1);">No</a></td>';
+				echo '</tr></table>';
+			}
+		} else if ($current_tab == 'BlogReport') {
+
+			if (isset($_POST['blog_reportreason'])) {
+				//fixme: handle submission
+				$queueId = addToModerationQueue($db, $blogId, MODERATION_REPORTED_BLOG);
+				addComment($db, COMMENT_MODERATION_QUEUE, $queueId, $_POST['blog_reportreason']);
+
+				echo 'Your report has been recieved<br/>';
+			} else {
+				echo 'Report blog - <b>'.$blog['blogTitle'].'</b><br/><br/>';
+	
+				echo 'Why do you want to report this:<br/>';
+				echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogReport:'.$_id.'">';
+				echo '<textarea name="blog_reportreason" cols="64" rows="6"></textarea><br/><br/>';
+	
+				echo '<input type="submit" class="button" value="Report"/>';
+				echo '</form>';
+			}
 
 		} else {
 			echo formatUserInputText($blog['blogBody']);
