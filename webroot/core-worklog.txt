@@ -13,6 +13,7 @@
 		- filer
 		- kommentarer
 		- flytta över mer sql kod direkt i showBlog() om dom endast anropas på 1 ställe
+		- gör om "new blog category" dialogen så den har flervalsalternativ som "new filearea category"
 
 
 	file area:
@@ -140,6 +141,9 @@ X = hi prio task
 	- wiki: använder createMenu() för att skapa wiki-menyn
 	- blog: markerar bloggar som raderade, tas ej bort från databasen. delete blog inbyggt i showBlog()
 	- zine: tog bort hela zine projektet å integrerade blog-delen i "sample" projektet
+	- atom_moderation.php: ny modul med modereringsfunktioner
+	- blog: "sensitive" automatisk moderering
+	- db: nya tabeller tblModerationQueue, tblStopwords
 
 
 2007.05.07:

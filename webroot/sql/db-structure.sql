@@ -409,8 +409,10 @@ CREATE TABLE tblBlogs (
   timeCreated datetime default NULL,
   timeUpdated datetime default NULL,
   categoryId bigint(20) unsigned NOT NULL default '0',
+  deletedBy int(10) unsigned NOT NULL default '0',
+  timeDeleted datetime default NULL,
   PRIMARY KEY  (blogId)
-) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 CREATE TABLE tblCategories (
   categoryId bigint(20) unsigned NOT NULL auto_increment,
   categoryName varchar(100) NOT NULL default '',
@@ -419,7 +421,7 @@ CREATE TABLE tblCategories (
   creatorId int(10) unsigned NOT NULL default '0',
   categoryPermissions tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(1) unsigned NOT NULL default '0',
@@ -454,7 +456,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -463,7 +465,14 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+CREATE TABLE tblModerationQueue (
+  queueId bigint(20) unsigned NOT NULL auto_increment,
+  queueType tinyint(3) unsigned NOT NULL default '0',
+  itemId int(10) unsigned NOT NULL default '0',
+  timeCreated datetime default NULL,
+  PRIMARY KEY  (queueId)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Modereringskö med olika objekt som behöver ';
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -496,6 +505,13 @@ CREATE TABLE tblSettings (
   timeSaved datetime NOT NULL,
   PRIMARY KEY  (settingId)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+CREATE TABLE tblStopwords (
+  wordId smallint(10) unsigned NOT NULL auto_increment,
+  wordText varchar(30) character set utf8 default NULL,
+  wordType tinyint(3) unsigned NOT NULL default '0',
+  wordMatch tinyint(3) unsigned NOT NULL default '0',
+  PRIMARY KEY  (wordId)
+) ENGINE=MyISAM AUTO_INCREMENT=1318580895 DEFAULT CHARSET=latin1;
 CREATE TABLE tblUsers (
   userId smallint(5) unsigned NOT NULL auto_increment,
   userName varchar(20) character set utf8 NOT NULL,
@@ -517,6 +533,6 @@ CREATE TABLE tblWiki (
   timeLocked datetime NOT NULL default '0000-00-00 00:00:00',
   hasFiles tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (wikiId)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 DELIMITER ;;
 DELIMITER ;

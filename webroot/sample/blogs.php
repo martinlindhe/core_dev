@@ -36,7 +36,7 @@
 	}
 	
 	if ($session->isAdmin) {
-		echo '<a href="blog_archive.php?y=2006&m=7">Blog categories</a><br/>';
+		echo '<a href="blog_archive.php?y=2006&m=7">Blog archive</a><br/>';
 		echo '<a href="blog_categories.php">Blog categories</a><br/>';
 	}
 

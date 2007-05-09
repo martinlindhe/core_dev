@@ -9,12 +9,12 @@
 	function addBlog($categoryId, $title, $body)
 	{
 		global $db, $session, $config;
-
+		
 		if (!$session->id || !is_numeric($categoryId)) return false;
 
 		$title = $db->escape($title);
 		$body = $db->escape($body);
-		
+
 		$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id.',blogTitle="'.$title.'",blogBody="'.$body.'",timeCreated=NOW()';
 		$db->query($q);
 		$blogId = $db->insert_id;
