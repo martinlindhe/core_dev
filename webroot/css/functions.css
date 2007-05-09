@@ -165,25 +165,9 @@ input.button:focus {
 }
 
 
-
 /* wiki style */
 .wiki {
 	font-size: 14px;
-}
-.wiki_head ul li {
-	border-color: #000;
-	border-style: solid;
-	border-width: 1px;
-	border-bottom-style: none;
-}
-.wiki_foot ul li {
-	border-color: #000;
-	border-style: solid;
-	border-width: 1px;
-	border-top-style: none;
-}
-.wiki_foot {
-	text-align: right;
 }
 .wiki_body {
 	padding: 10px;
@@ -195,31 +179,7 @@ input.button:focus {
 	border-bottom-style: solid;
 	border-top-style: solid;
 }
-.wiki ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-}
-.wiki li {
-	margin: 5px;
-	display: inline;
-}
-.wiki ul li strong a {
-	font-weight: normal;
-	background-color: #F0F0F0;
-	color: #000;
-}
-.wiki ul li a {
-	text-decoration: none;
-	color: #fff;
-	background-color: #AAAAAA;
-}
-.wiki ul li a:hover {
-	color: #fff;
-	background-color: #CCCCCC;
-}
-
-.wiki_info_locked {
+.wiki_locked {
 	padding: 5px;
 	padding-left: 25px;
 	font-size: 20px;
@@ -313,6 +273,52 @@ input.button:focus {
 	list-style: none;
 }
 .ulli_menu strong a {
+	font-weight: normal;
+	background-color: #CCCCCC;
+}
+
+.blog {
+	font-size: 14px;	
+}
+
+.blog_head, .blog_foot {
+	margin: 10px;
+	padding: 10px;
+	background-color: #fff;
+	border: 1px #000 solid;
+}
+.blog_title {
+	font-size: 22px;
+	font-weight: bold;
+}
+.blog_body {
+	padding: 10px;
+	background-color: #eee;
+}
+.blog_foot {
+	font-weight: bold;
+}
+
+
+.blog_menu {
+	font-size: 12px;
+}
+.blog_menu li {
+	margin-left: 2px;
+	margin-right: 2px;
+	display: inline;
+	border: 1px #000 solid;
+	background-color: #ddd;
+	padding: 4px;
+}
+.blog_menu li a {
+	color: #000;
+	text-decoration: none;
+}
+.blog_menu li:hover {
+	background-color: #fff;
+}
+.blog_menu strong a {
 	font-weight: normal;
 	background-color: #CCCCCC;
 }

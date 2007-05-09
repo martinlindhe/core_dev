@@ -6,7 +6,7 @@
 	$session->requireLoggedIn();
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
-		header('Location: '.$config['start_page']);
+		header('Location: '.$config['session']['home_page']);
 		die;
 	}
 

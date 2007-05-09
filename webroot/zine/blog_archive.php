@@ -4,12 +4,12 @@
 	$session->requireLoggedIn();
 
 	if (empty($_GET['y']) || !is_numeric($_GET['y']) || empty($_GET['m']) || !is_numeric($_GET['m'])) {
-		header('Location: '.$config['start_page']);
+		header('Location: '.$config['session']['home_page']);
 		die;
 	}
 
 	$show = $session->id;
-	if (isset($_GET['id']) && is_numeric($_GET['id']) $show = $_GET['id'];
+	if (isset($_GET['id']) && is_numeric($_GET['id'])) $show = $_GET['id'];
 
 	require('design_head.php');
 

@@ -148,9 +148,9 @@
 		echo '<ul class="'.$class.'">';
 			foreach($menu_arr as $url => $text) {
 				echo '<li>';
-				if ($cur == $url) echo '<strong>';
+				if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<strong>';
 				echo '<a href="'.$project_path.$url.'">'.$text.'</a>';
-				if ($cur == $url) echo '</strong>';
+				if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '</strong>';
 				echo '</li>';
 			}
 		echo '</ul>';
@@ -170,4 +170,23 @@
 			}
 		}
 	}
+
+	/* Looks for formatted wiki section commands, like: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
+		used by functions_wiki.php, functions_blogs.php for special url creation to allow these modules to be embedded in other pages
+	*/
+	function fetchSpecialParams($allowed_tabs)
+	{
+		$paramName = '';
+		$current_tab = '';
+
+		foreach($_GET as $key => $val) {
+			$arr = explode(':', $key);
+			if (empty($arr[1]) || !in_array($arr[0], $allowed_tabs)) continue;
+			$arr[1] = trim($arr[1]);
+			return $arr;
+		}
+		
+		return false;
+	}
+	
 ?>

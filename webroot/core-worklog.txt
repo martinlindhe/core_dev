@@ -7,8 +7,9 @@
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 	X - visa mer inputfält vid registerrutan (blized)
 
+
 	blog:
-		- gör om en massa, gör det mer som en wiki
+		-
 
 
 	file area:
@@ -131,6 +132,10 @@ X = hi prio task
 
 
 --------------[[changelog]]--------------
+2007.05.09:
+	- blog: byggt om en massa så det funkar snarlikt som en wiki, med en egen meny & går att baka in i en annan sida, wip
+	- wiki: använder createMenu() för att skapa wiki-menyn
+
 2007.05.07:
 	- files: skapat $files->convertImage() för att gömma undan imagemagick & exponera konverterings-funktionaliteten utanför klassen
 	- admin events: möjlighet att ändra sorteringsordningen på events

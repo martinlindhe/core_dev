@@ -7,7 +7,7 @@
 		för history-stöd: atom_revisions.php			tblRevisions
 		för files-stöd: $files objekt							tblFiles
 	*/
-	
+
 	require_once('atom_revisions.php');
 
 	//wiki module default settings:
@@ -20,11 +20,8 @@
 
 	$config['wiki']['allow_files'] = false;				//			acceptera bara de tabbar som finns i allowed_tabs
 
-	$config['wiki']['allowed_tabs'] =	array('View', 'Edit', 'History', 'Files');
-	$config['wiki']['first_tab'] = 'View';
-
-	
-	
+	$config['wiki']['allowed_tabs'] =	array('Wiki', 'WikiEdit', 'WikiHistory', 'WikiFiles');
+	$config['wiki']['first_tab'] = 'Wiki';
 
 	/* Optimization: Doesnt store identical entries if you hit Save button multiple times */
 	function wikiUpdate($wikiName, $_text)
@@ -83,23 +80,18 @@
 		
 		$current_tab = $config['wiki']['first_tab'];
 
-		//Looks for formatted wiki section commands, like: View:Page, Edit:Page, History:Page, Files:Page
-		foreach($_GET as $key => $val) {
-			$arr = explode(':', $key);
-			if (empty($arr[1]) || !in_array($arr[0], $config['wiki']['allowed_tabs'])) continue;
-			$current_tab = $arr[0];
-			if (!$wikiName) $wikiName = $arr[1];
-			break;
-		}
-
-		$wikiName = trim($wikiName);
+		//Looks for formatted wiki section commands, like: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
+		$cmd = fetchSpecialParams($config['wiki']['allowed_tabs']);
+		if ($cmd) list($current_tab, $wikiName) = $cmd;
 		if (!$wikiName) return false;
-		
-		$q =	'SELECT t1.wikiId,t1.msg,t1.hasFiles,t1.timeCreated,t1.lockedBy,t1.timeLocked,t2.userName AS creatorName, t3.userName AS lockerName '.
-					'FROM tblWiki AS t1 '.
-					'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) '.
-					'LEFT JOIN tblUsers AS t3 ON (t1.lockedBy=t3.userId) '.
-					'WHERE t1.wikiName="'.$db->escape($wikiName).'"';
+
+		$wikiName = str_replace(' ', '_', $wikiName);
+
+		$q ='SELECT t1.wikiId,t1.msg,t1.hasFiles,t1.timeCreated,t1.lockedBy,t1.timeLocked,t2.userName AS creatorName, t3.userName AS lockerName '.
+				'FROM tblWiki AS t1 '.
+				'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) '.
+				'LEFT JOIN tblUsers AS t3 ON (t1.lockedBy=t3.userId) '.
+				'WHERE t1.wikiName="'.$db->escape($wikiName).'"';
 
 		$data = $db->getOneRow($q);
 
@@ -111,23 +103,19 @@
 			echo wikiFormat($wikiName, $data);
 			return true;
 		}
-		
 
-		echo '<div class="wiki">'.
-						'<div class="wiki_head"><ul>'.
-							'<li>'.($current_tab=='view'?'<strong>':'').		'<a href="'.URLadd('View:'.$wikiName).'">View:'.$wikiName.'</a>'.($current_tab=='view'?'</strong>':'').'</li>';
-		if ($session->isAdmin || !$data['lockedBy']) {
-			echo 		'<li>'.($current_tab=='edit'?'<strong>':'').		'<a href="'.URLadd('Edit:'.$wikiName).'">Edit</a>'.				($current_tab=='edit'?'</strong>':'').'</li>';
-		}
-			echo		'<li>'.($current_tab=='history'?'<strong>':'').	'<a href="'.URLadd('History:'.$wikiName).'">History</a>'.	($current_tab=='history'?'</strong>':'').'</li>';
-		if ($config['wiki']['allow_files']) {
-			echo 		'<li>'.($current_tab=='files'?'<strong>':'').		'<a href="'.URLadd('Files:'.$wikiName).'">Files</a>'.			($current_tab=='files'?'</strong>':'').'</li>';
-		}
-		echo		'</ul></div>'.
-					'<div class="wiki_body">';
-			
+		$menu = array(
+			'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
+			'?WikiEdit:'.$wikiName => 'Edit',
+			'?WikiHistory:'.$wikiName => 'History',
+			'?WikiFiles:'.$wikiName => 'Files');
+
+		echo '<div class="wiki">';
+		createMenu($menu, 'blog_menu');
+		echo '<div class="wiki_body">';
+
 		/* Display the wiki toolbar for super admins */
-		if ($current_tab == 'Edit' && ($session->isAdmin || !$data['lockedBy']))
+		if ($current_tab == 'WikiEdit' && ($session->isAdmin || !$data['lockedBy']))
 		{
 			if (isset($_POST['wiki_'.$wikiId]))
 			{
@@ -159,18 +147,18 @@
 			$last_edited = 'never';
 			if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' by '.$data['creatorName'];
 
-			echo '<form method="post" name="wiki_edit" action="'.URLadd('Edit:'.$wikiName).'">'.
+			echo '<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">'.
 					 '<textarea name="wiki_'.$wikiId.'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
 					 'Last edited '.$last_edited.'<br/>'.
 					 '<input type="submit" class="button" value="Save"/>';
 
 			if ($session->isAdmin) {
 				if ($data['lockedBy']) {
-					echo '<input type="button" class="button" value="Unlock" onclick="location.href=\''.URLadd('Edit:'.$wikiName, '&amp;wiki_unlock').'\'"/>';
+					echo '<input type="button" class="button" value="Unlock" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_unlock').'\'"/>';
 					echo '<img src="/gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
 					echo '<b>Locked by '.$data['lockerName'].' at '.$data['timeLocked'].'</b><br/>';
 				} else {
-					echo '<input type="button" class="button" value="Lock" onclick="location.href=\''.URLadd('Edit:'.$wikiName, '&amp;wiki_lock').'\'"/>';
+					echo '<input type="button" class="button" value="Lock" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_lock').'\'"/>';
 					echo '<img src="/gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/>';
 				}
 			}
@@ -202,11 +190,11 @@
 			}
 			echo '</form>';				
 		}
-		elseif ($config['wiki']['allow_files'] && $current_tab == 'Files')
+		elseif ($config['wiki']['allow_files'] && $current_tab == 'WikiFiles')
 		{
 			echo $files->showFiles(FILETYPE_WIKI, $wikiId);
 		}
-		elseif ($config['wiki']['log_history'] && $current_tab == 'History')
+		elseif ($config['wiki']['log_history'] && $current_tab == 'WikiHistory')
 		{
 			echo 'Current version:<br/>';
 			echo '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['creatorName'].' at '.$data['timeCreated'].' ('.strlen($text).' bytes)</a></b><br/>';
@@ -219,7 +207,7 @@
 		else
 		{
 			if ($data['lockedBy']) {
-				echo '<div class="wiki_info_locked">LOCKED - This wiki can currently not be edited</div>';
+				echo '<div class="wiki_locked">LOCKED - This wiki can currently not be edited</div>';
 			}
 			echo wikiFormat($wikiName, $data);
 		}

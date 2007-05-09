@@ -281,4 +281,16 @@ abstract class DB_Base
 	{
 		return date('Y-m-d H:i:s', $timestamp);
 	}
+
+
+
+
+
+	/* debug function! do not use */
+	function d($v)
+	{
+		echo '<pre>';
+		print_r($v);
+		echo '</pre>';
+	}
 ?>

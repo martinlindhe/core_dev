@@ -1,5 +1,7 @@
 <?
-	$config['blog']['moderation'] = false;
+	$config['blog']['moderation'] = false;	//todo: gör funktionell
+	
+	$config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport');
 	
 	function addBlog($categoryId, $title, $body)
 	{
@@ -120,6 +122,77 @@
 			$q .= ' ORDER BY timeCreated ASC';
 		}
 		return $db->getArray($q);
+	}
+
+	//todo: renama till "blog" ?
+	function showBlog()
+	{
+		global $session, $config;
+
+		//Looks for formatted blog section commands, like: Blog:Page, BlogEdit:Page, BlogDelete:Page, BlogReport:Page
+		$cmd = fetchSpecialParams($config['blog']['allowed_tabs']);
+		if ($cmd) list($current_tab, $_id) = $cmd;
+		if (empty($_id) || !is_numeric($_id)) return false;
+
+		if (isset($_POST['blog_cat']) && isset($_POST['blog_title']) && isset($_POST['blog_body'])) {
+			updateBlog($_id, $_POST['blog_cat'], $_POST['blog_title'], $_POST['blog_body']);
+		}
+
+
+		$blog = getBlog($_id);
+		if (!$blog) return false;
+
+		echo '<div class="blog">';
+
+		echo '<div class="blog_head">';
+		echo '<div class="blog_title">'.$blog['blogTitle'].'</div>';
+		if ($blog['categoryName']) echo '(category <b>'.$blog['categoryName'].'</b>)<br/><br/>';
+		else echo ' (no category)<br/><br/>';
+		echo 'Published '. $blog['timeCreated'].' by '.nameLink($blog['userId'], $blog['userName']).'<br/>';
+		echo '</div>'; //class="blog_head"
+
+		$menu = array();
+
+		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?Blog:'.$_id => 'Show blog'));
+		if ($session->id == $blog['userId']) {
+			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id => 'Edit blog'));
+			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id => 'Delete blog'));
+		} else {
+			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id => 'Report blog'));
+		}
+		
+		createMenu($menu, 'blog_menu');
+
+		echo '<div class="blog_body">';
+
+		if ($current_tab == 'BlogEdit') {
+			echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogEdit:'.$_id.'">';
+			echo '<input type="text" name="blog_title" value="'.$blog['blogTitle'].'" size="40" maxlength="40"/>';
+
+			echo ' Category: ';
+			echo getCategoriesSelect(CATEGORY_BLOGS, 'blog_cat', $blog['categoryId']);
+			echo '<br/><br/>';
+
+			$body = trim($blog['blogBody']);
+			//convert | to &amp-version since it's used as a special character:
+			$body = str_replace('|', '&#124;', $body);	//	|		vertical bar
+			$body = $body."\n";	//always start with an empty line when getting focus
+
+			echo '<textarea name="blog_body" cols="65" rows="25">'.$body.'</textarea><br/><br/>';
+			echo '<input type="submit" class="button" value="Save changes"/><br/>';
+			echo '</form>';
+
+		} else {
+			echo formatUserInputText($blog['blogBody']);
+		}
+
+		echo '</div>';
+
+		if ($blog['timeUpdated']) {
+			echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
+		}
+
+		echo '</div>'; //class="blog"
 	}
 	
 ?>

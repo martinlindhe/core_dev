@@ -32,9 +32,7 @@ var _ext_ref='<?=getProjectPath()?>';
 <?
 	$menu = array(
 			'index.php' => 'Home',
-			'news.php' => 'News',
-			'files.php' => 'Files');
-
+			'news.php' => 'News');
 	createMenu($menu);
 		
 	if ($session->isAdmin) {
@@ -45,6 +43,7 @@ var _ext_ref='<?=getProjectPath()?>';
 
 	if ($session->id) {
 		$menu = array(
+			'files.php' => 'Files',
 			'settings.php' => 'Settings',
 			'?logout' => 'Logout');
 		createMenu($menu);

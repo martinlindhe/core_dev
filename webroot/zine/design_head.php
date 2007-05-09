@@ -1,11 +1,13 @@
+<?
+	$r = $config['site']['web_root'];
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	<title>zine</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel="stylesheet" href="inc/site.css" type="text/css">
 	<link rel="stylesheet" href="/css/functions.css" type="text/css">
-	<link rel="stylesheet" href="css/site.css" type="text/css">
+	<link rel="stylesheet" href="<?=$r?>css/site.css" type="text/css">
 <?linkRSSfeeds()?>
 	<script type="text/javascript" src="/js/functions.js"></script>
 </head>
@@ -19,7 +21,7 @@ var _ext_ref='<?=getProjectPath()?>';
 	$menu = array(
 			'index.php' => 'Home',
 			'blogs.php' => 'Blogs',
-			'blogs_archive.php?y=2006&amp;m=7' => 'Blog archive',
+			'blog_archive.php?y=2006&amp;m=7' => 'Blog archive',
 			'blog_new.php' => 'New blog',
 			'blog_categories.php' => 'New blog category'			
 			);
