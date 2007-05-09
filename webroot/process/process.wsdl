@@ -58,7 +58,7 @@
 
 <service name="ProcessService">
 	<port name="ProcessPort" binding="tns:ProcessBinding">
-		<soap:address location="http://localhost/soap/server.php"/>
+		<soap:address location="http://localhost/process/server.php"/>
 	</port>
 </service>
 

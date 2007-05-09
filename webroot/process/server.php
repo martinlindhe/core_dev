@@ -6,6 +6,12 @@
 		/* Returns a unique ID for this session used to encode the password in the login() step */
 		function getSID()
 		{
+			/* Todo: use this function from the client to get a unique ID to encode the password with. 
+				currently I dont know a good solution since the password is already encoded using several sha1-sums
+				in the database, it can not easily be confirmed to be correct this way.
+
+				For the moment, we solve this by hiding the Process service behind SSL
+			*/
 			return 'abc123';
 		}
 
