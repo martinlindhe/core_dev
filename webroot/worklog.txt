@@ -27,6 +27,9 @@
 		* implementerat SOAP-interface funktioner "login" och "newOrder"
 		* implementerat ett gränssnitt för att kunna kolla upp status på en order.
 
+	mms-hantering:
+		* buggfix i mail header parsing (telenor mms funkar nu)
+
 ***********************************************************************************************************************************
 topp prio:
 
