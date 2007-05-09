@@ -1,4 +1,6 @@
 <?
+	ini_set('soap.wsdl_cache_enabled', '0');
+
 	/*
 		exempel med login:
 		http://www.suraski.net/blog/index.php?/archives/5-PHP-5s-SOAP-extension-and-SalesForce.html
@@ -6,19 +8,20 @@
 
 	class SOAP_ProcessService
 	{
-		private $quotes = array('ibm' => 98.42);  
+		private $quotes = array('ibm' => "spex");  
 
 		function getQuote($symbol)
 		{
 			if (isset($this->quotes[$symbol])) return $this->quotes[$symbol];
-	
+
 			throw new SoapFault('Server', 'Unknown Symbol '.$symbol);
 		}
 
-		function login($username)
+		function login($username, $password)
 		{
-			return 'you wanted to log in with user '.$username; //', password '.$params['password'];
+			return 'you wanted to log in with user '.$username.', password '.$password;
 		}
+
 	}
 
 	$server = new SoapServer('process.wsdl', array('trace' => 1));
@@ -36,8 +39,8 @@
 	} else {
 	  echo 'This SOAP server can handle following functions: <br/>';
 	  $functions = $server->getFunctions();
-	  foreach($functions as $func) {
-	   echo $func.'<br/>';
+	  foreach($functions as $name) {
+	   echo $name.'<br/>';
 	  }
 	}
 

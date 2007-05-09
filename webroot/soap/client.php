@@ -1,11 +1,12 @@
 <?
+	ini_set('soap.wsdl_cache_enabled', '0');
+
   echo '<pre>';
 
-	$client = new SoapClient("http://localhost/soap/calls.wsdl", array('trace' => 1));
+	$client = new SoapClient("http://localhost/soap/process.wsdl", array('trace' => 1));
 
 	try {
-		//echo 'getQuote: '. $client->getQuote("ibm").'<br/>';
-		echo $client->login('martin'); //, 'test');
+		echo $client->login('martin', 'test');
 
 		echo '<br/>';
 		echo 'Request :'.htmlspecialchars($client->__getLastRequest()).'<br/>';

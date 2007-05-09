@@ -9,26 +9,15 @@
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns="http://schemas.xmlsoap.org/wsdl/">
 
-<message name="getQuoteRequest">
-	<part name="symbol" type="xsd:string"/>
-</message>
-<message name="getQuoteResponse">
-	<part name="Result" type="xsd:float"/>
-</message>
-
 <message name="loginRequest">
 	<part name="username" type="xsd:string"/>
+	<part name="password" type="xsd:string"/>
 </message>
 <message name="loginResponse">
 	<part name="Result" type="xsd:string"/>
 </message>
 
 <portType name="ProcessPortType">
-	<operation name="getQuote">
-		<input message="tns:getQuoteRequest"/>
-		<output message="tns:getQuoteResponse"/>
-	</operation>
-
 	<operation name="login">
 		<input message="tns:loginRequest"/>
 		<output message="tns:loginResponse"/>
@@ -37,15 +26,6 @@
 
 <binding name="ProcessBinding" type="tns:ProcessPortType">
 	<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-	<operation name="getQuote">
-		<soap:operation soapAction="urn:#getQuote"/>
-		<input>
-			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-		</input>
-		<output>
-			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-		</output>
-	</operation>
 
 	<operation name="login">
 		<soap:operation soapAction="urn:#login"/>
@@ -56,6 +36,7 @@
 			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 		</output>
 	</operation>
+
 </binding>
 
 <service name="ProcessService">
