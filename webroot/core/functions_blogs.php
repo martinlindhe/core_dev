@@ -1,5 +1,8 @@
 <?
-	$config['blog']['moderation'] = false;	//todo: gör funktionell
+	require_once('atom_moderation.php');		//for automatic moderation of new blogs, and for "report blog" feature
+	require_once('atom_comments.php');			//for comment support for blogs
+
+	$config['blog']['moderation'] = true;		//enables automatic moderation of new blogs
 	
 	$config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport');
 	
@@ -18,7 +21,7 @@
 
 		/* Add entry to moderation queue */
 		if ($config['blog']['moderation']) {
-			if (isSensitive($db, $title) || isSensitive($db, $body)) addToModerationQueue($db, $blogId, MODERATION_SENSITIVE_BLOG);
+			if (isSensitive($title) || isSensitive($body)) addToModerationQueue($blogId, MODERATION_SENSITIVE_BLOG);
 		}
 
 		return $blogId;
@@ -187,6 +190,11 @@
 			echo '<textarea name="blog_body" cols="65" rows="25">'.$body.'</textarea><br/><br/>';
 			echo '<input type="submit" class="button" value="Save changes"/><br/>';
 			echo '</form>';
+
+			if ($blog['timeUpdated']) {
+				echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
+			}
+
 		} else if ($current_tab == 'BlogDelete') {
 			//fixme: använd standard-are-you-sure funktionen
 
@@ -204,8 +212,8 @@
 
 			if (isset($_POST['blog_reportreason'])) {
 				//fixme: handle submission
-				$queueId = addToModerationQueue($db, $blogId, MODERATION_REPORTED_BLOG);
-				addComment($db, COMMENT_MODERATION_QUEUE, $queueId, $_POST['blog_reportreason']);
+				$queueId = addToModerationQueue($blogId, MODERATION_REPORTED_BLOG);
+				addComment(COMMENT_MODERATION_QUEUE, $queueId, $_POST['blog_reportreason']);
 
 				echo 'Your report has been recieved<br/>';
 			} else {
@@ -221,13 +229,13 @@
 
 		} else {
 			echo formatUserInputText($blog['blogBody']);
+
+			if ($blog['timeUpdated']) {
+				echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
+			}
 		}
 
 		echo '</div>';
-
-		if ($blog['timeUpdated']) {
-			echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
-		}
 
 		echo '</div>'; //class="blog"
 	}

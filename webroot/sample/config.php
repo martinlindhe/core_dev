@@ -12,6 +12,7 @@
 
 	require_once($config['core_root'].'core/functions_wiki.php');
 	require_once($config['core_root'].'core/functions_news.php');
+	require_once($config['core_root'].'core/functions_blogs.php');
 
 	$config['debug'] = true;
 

@@ -9,6 +9,9 @@
 
 	define('COMMENT_ADBLOCKRULE',		20);
 
+	/* Comment types only meant for the admin's eyes */
+	define('COMMENT_MODERATION_QUEUE',	30);
+
 	function addComment($commentType, $ownerId, $commentText, $privateComment = false)
 	{
 		global $db, $session;

@@ -32,7 +32,8 @@ var _ext_ref='<?=getProjectPath()?>';
 <?
 	$menu = array(
 			'index.php' => 'Home',
-			'news.php' => 'News');
+			'news.php' => 'News',
+			'blogs.php' => 'Blogs');
 	createMenu($menu);
 		
 	if ($session->isAdmin) {

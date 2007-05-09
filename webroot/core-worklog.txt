@@ -10,6 +10,9 @@
 
 	blog:
 		- gör en egen blog-meny css som inte är identisk med wiki-menyn
+		- filer
+		- kommentarer
+		- flytta över mer sql kod direkt i showBlog() om dom endast anropas på 1 ställe
 
 
 	file area:
@@ -136,6 +139,7 @@ X = hi prio task
 	- blog: byggt om en massa så det funkar snarlikt som en wiki, med en egen meny & går att baka in i en annan sida, wip
 	- wiki: använder createMenu() för att skapa wiki-menyn
 	- blog: markerar bloggar som raderade, tas ej bort från databasen. delete blog inbyggt i showBlog()
+	- zine: tog bort hela zine projektet å integrerade blog-delen i "sample" projektet
 
 
 2007.05.07:
