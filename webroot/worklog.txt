@@ -32,6 +32,7 @@ topp prio:
 	* mms upload image & video:
 		- plocka fram videoupplösningen när videon laddas upp
 		- hantera "BLOG" och "PRES" kommandon
+		- skriv till en loggfil
 
 	* alla ska ha mms funktion (vip) under testet
 

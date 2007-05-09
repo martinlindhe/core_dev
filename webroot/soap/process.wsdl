@@ -9,6 +9,12 @@
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns="http://schemas.xmlsoap.org/wsdl/">
 
+<message name="getSIDRequest">
+</message>
+<message name="getSIDResponse">
+	<part name="Result" type="xsd:string"/>
+</message>
+
 <message name="loginRequest">
 	<part name="username" type="xsd:string"/>
 	<part name="password" type="xsd:string"/>
@@ -18,6 +24,10 @@
 </message>
 
 <portType name="ProcessPortType">
+	<operation name="getSID">
+		<output message="tns:loginResponse"/>
+	</operation>
+
 	<operation name="login">
 		<input message="tns:loginRequest"/>
 		<output message="tns:loginResponse"/>
@@ -26,6 +36,13 @@
 
 <binding name="ProcessBinding" type="tns:ProcessPortType">
 	<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+	<operation name="getSID">
+		<soap:operation soapAction="urn:#getSID"/>
+		<output>
+			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</output>
+	</operation>
 
 	<operation name="login">
 		<soap:operation soapAction="urn:#login"/>

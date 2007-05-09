@@ -6,6 +6,7 @@
 	$client = new SoapClient("http://localhost/soap/process.wsdl", array('trace' => 1));
 
 	try {
+		echo 'sid: '.$client->getSID().'<br/>';
 		echo $client->login('martin', 'test');
 
 		echo '<br/>';

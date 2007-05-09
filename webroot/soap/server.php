@@ -1,20 +1,12 @@
 <?
 	ini_set('soap.wsdl_cache_enabled', '0');
 
-	/*
-		exempel med login:
-		http://www.suraski.net/blog/index.php?/archives/5-PHP-5s-SOAP-extension-and-SalesForce.html
-	*/
-
 	class SOAP_ProcessService
 	{
-		private $quotes = array('ibm' => "spex");  
-
-		function getQuote($symbol)
+		/* Returns a unique ID for this session used to encode the password in the login() step */
+		function getSID()
 		{
-			if (isset($this->quotes[$symbol])) return $this->quotes[$symbol];
-
-			throw new SoapFault('Server', 'Unknown Symbol '.$symbol);
+			return 'abc123';
 		}
 
 		function login($username, $password)
