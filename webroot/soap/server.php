@@ -15,9 +15,9 @@
 			throw new SoapFault('Server', 'Unknown Symbol '.$symbol);
 		}
 
-		function login($params)
+		function login($username)
 		{
-			return 'you wanted to log in with user '.$params['username'].', password '.$params['password'];
+			return 'you wanted to log in with user '.$username; //', password '.$params['password'];
 		}
 	}
 

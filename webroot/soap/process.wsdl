@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <definitions name="Process"
-	targetNamespace="http://example.org/Process"
-	xmlns:tns=" http://example.org/Process"
+	targetNamespace="http://example.org/process.wsdl"
+	xmlns:tns=" http://example.org/process.wsdl"
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
@@ -18,13 +18,12 @@
 
 <message name="loginRequest">
 	<part name="username" type="xsd:string"/>
-	<part name="password" type="xsd:string"/>
 </message>
 <message name="loginResponse">
 	<part name="Result" type="xsd:string"/>
 </message>
 
-<portType name="ProcessePortType">
+<portType name="ProcessPortType">
 	<operation name="getQuote">
 		<input message="tns:getQuoteRequest"/>
 		<output message="tns:getQuoteResponse"/>
@@ -39,16 +38,23 @@
 <binding name="ProcessBinding" type="tns:ProcessPortType">
 	<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 	<operation name="getQuote">
-		<soap:operation soapAction="urn:xmethods-delayed-quotes#getQuote"/>
-		<input><soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
-		<output><soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+		<soap:operation soapAction="urn:#getQuote"/>
+		<input>
+			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</input>
+		<output>
+			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</output>
 	</operation>
 
-	<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 	<operation name="login">
-		<soap:operation soapAction="urn:xmethods-delayed-quotes#login"/>
-		<input><soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
-		<output><soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+		<soap:operation soapAction="urn:#login"/>
+		<input>
+			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</input>
+		<output>
+			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</output>
 	</operation>
 </binding>
 
