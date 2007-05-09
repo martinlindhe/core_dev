@@ -1,0 +1,13 @@
+#left_menu {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	width: 200px;
+}
+
+#main_body {
+	position: absolute;
+	left: 220px;
+	top: 10px;
+	width: 700px;	
+}

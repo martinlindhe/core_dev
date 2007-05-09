@@ -18,7 +18,7 @@
 		'width' => 60,
 		'height' => 40
 	);
-	addWorkOrder(ORDER_RESIZE_IMG, $params);
+	$client->newOrder(ORDER_RESIZE_IMG, $params);
 	
 	$params = array (
 		'src' => 'http://localhost/process/in/sample.bmp',
@@ -26,7 +26,7 @@
 
 		'format' => 'image/jpeg'
 	);
-	addWorkOrder(ORDER_CONVERT_IMG, $params);
+	$client->newOrder(ORDER_CONVERT_IMG, $params);
 
 	$params = array (
 		'src' => 'http://localhost/process/in/sample.bmp',
@@ -34,9 +34,8 @@
 		
 		'format' => 'image/png'
 	);
-	addWorkOrder(ORDER_CONVERT_IMG, $params);
+	$client->newOrder(ORDER_CONVERT_IMG, $params);
 */
-
 
 		$params = array (
 			'src' => 'http://localhost/process/in/sample.gif',
@@ -46,10 +45,10 @@
 		);
 
 		$result = $client->newOrder(ORDER_RESIZE_IMG, serialize($params));
-		if ($result) {
-			echo 'Order added successfully';
-		} else {
+		if (!$result) {
 			echo 'Failed to add order!';
+		} else {
+			echo 'Order added successfully. Order ID is '.$result;
 		}
 
 	} catch (Exception $e) {

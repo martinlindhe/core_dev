@@ -29,16 +29,22 @@
 	function addWorkOrder($_type, $_params)
 	{
 		global $db, $session, $WORK_OPRDER_TYPES;
+
+		if (!is_numeric($_type)) return false;
 		
-		if (!$session->id || !is_numeric($_type)) return false;
+		if (!$session->id) {
+			$session->log('Un-authenticated user attempted to add work order');
+			return false;
+		}
 		
 		$_params = $db->escape(serialize($_params));
 
 		$q = 'INSERT INTO tblOrders SET orderType='.$_type.', orderParams="'.$_params.'", ownerId='.$session->id.', timeCreated=NOW()';
 		$db->query($q);
-		
+		$order_id = $db->insert_id;
+
 		$session->log('#'.$db->insert_id.': Added work order: '.$WORK_OPRDER_TYPES[$_type]);
-		return true;
+		return $order_id;
 	}
 
 	/* Returns the oldest 10 work orders still active for processing */
@@ -48,10 +54,19 @@
 
 		if (!is_numeric($_limit)) return false;
 		
-		$q = 'SELECT * FROM tblOrders ORDER BY timeCreated ASC LIMIT '.$_limit;
+		$q = 'SELECT * FROM tblOrders WHERE orderCompleted=0 ORDER BY timeCreated ASC LIMIT '.$_limit;
 		return $db->getArray($q);
 	}
 
+	function getWorkOrderStatus($_id)
+	{
+		global $db;
+
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT orderCompleted FROM tblOrders WHERE entryId='.$_id;
+		return $db->getOneItem($q);
+	}
 
 	function performWorkOrders($_limit = 10)
 	{
@@ -128,13 +143,13 @@
 			echo 'Writing result to dst '.$params['dst'].' ...<br/>';
 			copy($dst_temp_file, $params['dst']);
 	
-			//4. Ta bort utfört arbete från loggen
-			$q = 'DELETE FROM tblOrders WHERE entryId='.$work['entryId'];
+			//4. Markera utförd order
+			$q = 'UPDATE tblOrders SET orderCompleted=1 WHERE entryId='.$work['entryId'];
 			$db->query($q);
-	
+
 			unlink($src_temp_file);
 			unlink($dst_temp_file);
-	
+
 			echo '<br/>';
 		}
 

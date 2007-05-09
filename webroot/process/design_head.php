@@ -7,11 +7,12 @@
 	<title>process server</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
+	<link rel="stylesheet" href="<?=$r?>css/site.css" type="text/css"/>
 	<script type="text/javascript" src="/js/functions.js"></script>
 </head>
 <body>
 
-<div id="leftmenu">
+<div id="left_menu">
 <?
 	$menu = array(
 		'index.php' => 'Home'
@@ -34,4 +35,4 @@
 ?>
 </div>
 
-<div id="middle">
+<div id="main_body">

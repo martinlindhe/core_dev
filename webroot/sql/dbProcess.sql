@@ -27,7 +27,7 @@ CREATE TABLE `tblLogins` (
   `IP` int(10) unsigned NOT NULL,
   `userAgent` text,
   PRIMARY KEY (`mainId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tblLogs` */
 
@@ -41,7 +41,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `userIP` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `tblOrders` */
 
@@ -53,6 +53,7 @@ CREATE TABLE `tblOrders` (
   `ownerId` int(10) unsigned DEFAULT NULL,
   `orderType` tinyint(3) unsigned NOT NULL,
   `orderParams` text,
+  `orderCompleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

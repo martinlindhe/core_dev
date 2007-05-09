@@ -22,7 +22,7 @@
 	<part name="params" type="xsd:string"/>
 </message>
 <message name="newOrderResponse">
-	<part name="Result" type="xsd:string"/>
+	<part name="Result" type="xsd:integer"/>
 </message>
 
 

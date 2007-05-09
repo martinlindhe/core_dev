@@ -24,7 +24,8 @@
 
 2007.05.09 Onsdag:
 	process-server:
-		* 
+		* implementerat SOAP-interface funktioner "login" och "newOrder"
+		* implementerat ett gränssnitt för att kunna kolla upp status på en order.
 
 ***********************************************************************************************************************************
 topp prio:
