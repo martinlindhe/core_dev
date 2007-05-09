@@ -22,6 +22,10 @@
 			- konvertera en stillbild till ett annat format (läser i stort sett alla bildformat), konverterar till PNG, JPEG eller GIF
 		* påbörjat implementation av SOAP-interface
 
+2007.05.09 Onsdag:
+	process-server:
+		* 
+
 ***********************************************************************************************************************************
 topp prio:
 

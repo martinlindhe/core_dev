@@ -1,20 +1,19 @@
 <?
-	ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
+  echo '<pre>';
 
-	
-	$params = array(
-							'trace' => 1,
-							'exceptions' => 1 );
-	$client = new SoapClient("calls.wsdl", $params);
+	$client = new SoapClient("http://localhost/soap/calls.wsdl", array('trace' => 1));
+
 	try {
-		print($client->getQuote("ibm"));
+		//echo $client->getQuote("ibm");
+		echo $client->login('martin', 'test');
 
-  	echo '<pre>';
-  	echo 'Request:<br/>'.htmlspecialchars($client->__getLastRequest()).'<br/>';
-  	echo 'Response:<br/>'.htmlspecialchars($client->__getLastResponse()).'<br/>';
-  	echo '</pre>';
-
-	} catch (SoapFault $e) {
-  	echo $e->getMessage();
+		echo '<br/>';
+		echo 'Request :'.htmlspecialchars($client->__getLastRequest()).'<br/>';
+  	echo 'Response:'.htmlspecialchars($client->__getLastResponse()).'<br/>';
+	} catch (Exception $e) {
+		echo 'exception: '.$e.'<br/><br/>';
+		echo 'last request header: '.htmlspecialchars($client->__getLastRequestHeaders()).'<br/>';
+		echo 'last request body: '.htmlspecialchars($client->__getLastRequest()).'<br/>';
+		echo 'last response: '.htmlspecialchars($client->__getLastResponse()).'<br/>';
 	}
-?> 
+?>
