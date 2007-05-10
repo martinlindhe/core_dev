@@ -34,10 +34,10 @@
 	$list = getModerationQueue();
 	if (count($list)) {
 		
-		echo count($list).' objekt<br><br>';
+		echo count($list).' object(s)<br/><br/>';
 		
 		echo '<form method="post" action="">';
-		echo '<input type="hidden" name="datasent" value="1">';
+		echo '<input type="hidden" name="datasent" value="1"/>';
 
 		for ($i=0; $i<count($list); $i++) {
 			echo '<table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#000000" height="*"><tr><td>';
@@ -46,9 +46,9 @@
 
 			$title = 'STATUS: ';
 			switch ($list[$i]['queueType']) {
-				case MODERATION_REPORTED_BLOG:			$title .= 'Rapporterad blogg'; break;
-				case MODERATION_SENSITIVE_BLOG:			$title .= 'Autotriggat k&auml;nslig blogg'; break;
-				default: $title .= '<span class="objectCritical">Ok&auml;nd queueType '.$list[$i]['queueType'].', itemId '.$list[$i]['itemId'].'</span>';
+				case MODERATION_REPORTED_BLOG:			$title .= 'Reported blog'; break;
+				case MODERATION_SENSITIVE_BLOG:			$title .= 'Auto trigger: Sensitive blog'; break;
+				default: $title .= '<div class="critical">Unknown queueType '.$list[$i]['queueType'].', itemId '.$list[$i]['itemId'].'</div>';
 			}
 			echo '<b>'.$title.'</b><br/>';
 
@@ -60,21 +60,25 @@
 			}
 			echo '</td></tr>';
 			echo '<tr>';
-			echo '<td width="40%"><input type="radio" class="radio" name="method_'.$list[$i]['queueId'].'" value="accept"> Accept</td>';
-			
-			echo '<td><input type="radio" class="radio" name="method_'.$list[$i]['queueId'].'" value="delete"> Delete';
+			echo '<td width="40%">';
+			echo '<input type="radio" class="radio" name="method_'.$list[$i]['queueId'].'" id="accept_'.$list[$i]['queueId'].'" value="accept"/>';
+			echo '<label for="accept_'.$list[$i]['queueId'].'"> Accept</label>';
 			echo '</td>';
-			
-			
+
+			echo '<td>';
+			echo '<input type="radio" class="radio" name="method_'.$list[$i]['queueId'].'" id="delete_'.$list[$i]['queueId'].'" value="delete"/>';
+			echo '<label for="delete_'.$list[$i]['queueId'].'"> Delete</label>';
+			echo '</td>';
+
 			echo '<td width="25%">';
 				if (
 						($list[$i]['queueType'] == MODERATION_REPORTED_BLOG)
-							) {
+				) {
 					$mcnt = getCommentsCount(COMMENT_MODERATION_QUEUE, $list[$i]['queueId']);
 					if ($mcnt) {
-						echo '<a href="admin_moderationqueuecomments.php?id='.$list[$i]['queueId'].getProjectPath().'">Motiveringar ('.$mcnt.') &raquo;</a>';
+						echo '<a href="admin_moderationqueuecomments.php?id='.$list[$i]['queueId'].getProjectPath().'">Motivations ('.$mcnt.') &raquo;</a>';
 					} else {
-						echo 'Motiveringar (0)';
+						echo 'Motivations (0)';
 					}
 				} else {
 					echo '&nbsp;';
@@ -83,12 +87,12 @@
 			echo '</tr>';
 			echo '</table>';
 			echo '</td></tr></table>';
-			echo '<br>';
+			echo '<br/>';
 		}
-		echo '<input type="submit" class="button" value="Commit changes">';
+		echo '<input type="submit" class="button" value="Commit changes"/>';
 		echo '</form>';
 	} else {
-		echo 'The moderation queue is empty!<br>';
+		echo 'The moderation queue is empty!<br/>';
 	}
 
 	require($project.'design_foot.php');

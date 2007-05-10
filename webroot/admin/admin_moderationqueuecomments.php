@@ -11,7 +11,7 @@
 	$item = getModerationQueueItem($queueId);
 	switch ($item['queueType']) {
 		case MODERATION_REPORTED_BLOG:
-			echo '<a href="'.$project.'blog_show.php?Blog:'.$item['itemId'].'" target="_blank">L&auml;s bloggen</a>';
+			echo '<a href="'.$project.'blog_show.php?Blog:'.$item['itemId'].'" target="_blank">Read the blog</a>';
 			break;
 
 		default:

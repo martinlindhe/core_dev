@@ -103,6 +103,7 @@ X = hi prio task
 	- admin: byggt adminpanel för "manage stopwords"
 	- blog: byggt adminpaneler för "moderation queue"
 
+
 2007.05.09:
 	- blog: byggt om en massa så det funkar snarlikt som en wiki, med en egen meny & går att baka in i en annan sida, wip
 	- wiki: använder createMenu() för att skapa wiki-menyn
