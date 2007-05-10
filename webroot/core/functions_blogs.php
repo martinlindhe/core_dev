@@ -63,7 +63,7 @@
 		if (!is_numeric($userId) || !is_numeric($limit)) return false;
 
 		$q  = 'SELECT t1.*,t2.categoryName,t2.categoryPermissions FROM tblBlogs AS t1';
-		$q .= ' LEFT JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOGS.')';
+		$q .= ' LEFT JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOG.')';
 		$q .= ' WHERE t1.userId='.$userId.' AND t1.deletedBy=0';
 
 		/* Return order: First blogs categorized in global categories, then blogs categorized in user's categories, then uncategorized blogs */
@@ -96,7 +96,7 @@
 		if (!is_numeric($blogId)) return false;
 		
 		$q  = 'SELECT t1.*,t2.categoryName,t3.userName FROM tblBlogs AS t1 ';
-		$q .= 'LEFT OUTER JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOGS.') ';
+		$q .= 'LEFT OUTER JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOG.') ';
 		$q .= 'INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
 		$q .= 'WHERE t1.blogId='.$blogId.' AND t1.deletedBy=0';
 
@@ -162,15 +162,15 @@
 
 		$menu = array();
 
-		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?Blog:'.$_id => 'Show blog'));
+		$menu = array_merge($menu, array('?Blog:'.$_id => 'Show blog'));
 		if ($session->id == $blog['userId'] || $session->isAdmin) {
-			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id => 'Edit blog'));
-			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
-			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id => 'Delete blog'));
+			$menu = array_merge($menu, array('?BlogEdit:'.$_id => 'Edit blog'));
+			$menu = array_merge($menu, array('?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
+			$menu = array_merge($menu, array('?BlogDelete:'.$_id => 'Delete blog'));
 		} else {
-			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id => 'Report blog'));
+			$menu = array_merge($menu, array('?BlogReport:'.$_id => 'Report blog'));
 		}
-		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
+		$menu = array_merge($menu, array('?BlogComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
 		
 		createMenu($menu, 'blog_menu');
 
@@ -181,7 +181,7 @@
 			echo '<input type="text" name="blog_title" value="'.$blog['blogTitle'].'" size="40" maxlength="40"/>';
 
 			echo ' Category: ';
-			echo getCategoriesSelect(CATEGORY_BLOGS, 'blog_cat', $blog['categoryId']);
+			echo getCategoriesSelect(CATEGORY_BLOG, 'blog_cat', $blog['categoryId']);
 			echo '<br/><br/>';
 
 			$body = trim($blog['blogBody']);

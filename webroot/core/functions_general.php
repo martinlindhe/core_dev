@@ -138,7 +138,7 @@
 	}
 
 	/* Takes an array of menu entries and creates a <ul><li>-style menu */
-	function createMenu($menu_arr, $class = 'ulli_menu')
+	function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_current')
 	{
 		$cur = basename($_SERVER['SCRIPT_NAME']);
 
@@ -147,10 +147,10 @@
 
 		echo '<ul class="'.$class.'">';
 			foreach($menu_arr as $url => $text) {
-				echo '<li>';
-				if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<strong>';
+				if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<li class="'.$current_class.'">';
+				else echo '<li>';
+
 				echo '<a href="'.$project_path.$url.'">'.$text.'</a>';
-				if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '</strong>';
 				echo '</li>';
 			}
 		echo '</ul>';

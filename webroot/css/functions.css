@@ -186,6 +186,25 @@ input.button:focus {
 	background: #ee99aa url('/gfx/icon_locked.png') no-repeat;
 	background-position: 5px 50%;
 }
+.wiki_menu {
+	font-size: 12px;
+}
+.wiki_menu li {
+	margin-left: 2px;
+	margin-right: 2px;
+	display: inline;
+	border: 1px #000 solid;
+	background-color: #ddd;
+	padding: 4px;
+	
+}
+.wiki_menu li a {
+	color: #000;
+	text-decoration: none;
+}
+.wiki_menu li:hover {
+	background-color: #fff;
+}
 
 
 /* default styles for "user settings" list */
@@ -272,20 +291,18 @@ input.button:focus {
 .ulli_menu ul {
 	list-style: none;
 }
-.ulli_menu strong a {
-	font-weight: normal;
-	background-color: #CCCCCC;
+.ulli_menu_current {
+	background-color: #eee !important;
 }
 
 .blog {
 	font-size: 14px;	
 }
-
 .blog_head, .blog_foot {
 	margin: 10px;
 	padding: 10px;
 	background-color: #fff;
-	border: 1px #000 solid;
+	border: 1px #888 solid;
 }
 .blog_title {
 	font-size: 22px;
@@ -293,7 +310,8 @@ input.button:focus {
 }
 .blog_body {
 	padding: 10px;
-	background-color: #eee;
+	background-color: #ABDFF8;
+	border: 1px #888 solid;
 }
 .blog_foot {
 	font-weight: bold;
@@ -307,18 +325,16 @@ input.button:focus {
 	margin-left: 2px;
 	margin-right: 2px;
 	display: inline;
-	border: 1px #000 solid;
-	background-color: #ddd;
+	border: 1px #888 solid;
+	background-color: #fff;
 	padding: 4px;
+	
 }
 .blog_menu li a {
 	color: #000;
 	text-decoration: none;
 }
 .blog_menu li:hover {
-	background-color: #fff;
+	background-color: #eee;
 }
-.blog_menu strong a {
-	font-weight: normal;
-	background-color: #CCCCCC;
-}
+

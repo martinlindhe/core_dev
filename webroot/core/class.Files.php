@@ -118,14 +118,6 @@ class Files
 			}
 		}
 
-		if ($session->id && ($session->isAdmin || $fileType==FILETYPE_USERFILE)&& !$categoryId && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_type']))
-		{
-			//Create new category. Only allow categories inside root level
-			$category_type = array_search($_POST['new_file_category_type'], $config['categories']['files_types']);
-
-			addCategory($category_type, $_POST['new_file_category']);
-		}
-
 		echo '<div class="file_gadget">';
 
 		//menu
@@ -159,7 +151,7 @@ class Files
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
 			if (!$categoryId) {
 				//shows own categories & global categories
-				$cat_list = getGlobalAndUserCategories(CATEGORY_USERFILES);
+				$cat_list = getGlobalAndUserCategories(CATEGORY_USERFILE);	//fixme:denna funktionen borde renamas till nåt som har me userfile å göra, eller sql direkt här..
 				if (!empty($cat_list)) {
 					echo 'Categories:<br/>';
 					for ($i=0; $i<count($cat_list); $i++) {
@@ -234,26 +226,8 @@ class Files
 		if ($session->isAdmin || $fileType == FILETYPE_USERFILE) {
 			if (!$categoryId) {
 				echo '<div id="file_gadget_category" style="display: none;">';
-				echo '<form name="new_file_category" method="post" action="">';
-				echo 'Category name: <input type="text" name="new_file_category"/> ';
-				echo '<br/>';
-				echo '<input type="radio" value="normal" name="new_file_category_type" id="_normal" checked="checked"/> ';
-				echo '<label for="_normal">Normal category - everyone can see the content</label><br/><br/>';
-				if ($fileType == FILETYPE_USERFILE) {
-					echo '<input type="radio" value="private" name="new_file_category_type" id="_private"/> ';
-					echo '<label for="_private">Make this category private (only for your friends)</label><br/><br/>';
-
-					echo '<input type="radio" value="hidden" name="new_file_category_type" id="_hidden"/> ';
-					echo '<label for="_hidden">Make this category hidden (only for you)</label><br/><br/>';
-				}
-
-				if ($session->isSuperAdmin) {
-					echo '<input type="radio" value="global" name="new_file_category_type" id="_global"/> ';
-					echo '<label for="_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
-				}
-				echo '<input type="submit" class="button" value="Create"/> ';
-				echo '<input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
-				echo '</form>';
+				
+				echo makeNewCategoryDialog(CATEGORY_USERFILE);
 				echo '</div>';
 			}
 		}

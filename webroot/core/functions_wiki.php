@@ -110,7 +110,7 @@
 			'?WikiFiles:'.$wikiName => 'Files ('.$files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')');
 
 		echo '<div class="wiki">';
-		createMenu($menu, 'blog_menu');
+		createMenu($menu, 'wiki_menu');
 		echo '<div class="wiki_body">';
 
 		/* Display the wiki toolbar for super admins */

@@ -8,9 +8,6 @@
 
 
 	blog:
-		- gör en egen blog-meny css som inte är identisk med wiki-menyn
-		- flytta över mer sql kod direkt i showBlog() om dom endast anropas på 1 ställe
-		- gör om "new blog category" dialogen så den har flervalsalternativ som "new filearea category"
 		- testa att modereringen fungerar som den ska
 		- bygg adminpaneler för "moderation queue", och "manage stopwords"
 
@@ -91,35 +88,6 @@ X = hi prio task
 - = topic
 * = notes belonging to above topic
 
---------------[[blized]]--------------
-		- sagt: kunna beskära bilder
-		- sagt: kompislista
-		- student community
-		- engelska ska va huvudspråket
-		- "valigaste funktionerna"
-		- nyheter
-		- forum
-		- admin
-		- lansering under "senhösten 2007"
-		- files: kunna ha privata filer / fil-kategorier (kunna markera en kategroi som privat när man skapar den)
-		- viktig: sökbart CV (formulär för att fylla i CV för användaren), autoskapa en PDF av cv:t med en av flera olika mallar (head+foot+logo)
-		- profil-sida
-		- kunna söka användare
-		- kunna redigera fakta, med dropdownmeny-val (tblCategories ?)
-		- Alla ska kunna skriva artiklar. senare: artiklarna ska modereras innan de publiceras. inkludera en "acceptedBy" (adminuserId) och "timeAccepted" datetime i tblArticles
-		- personinfo: namn, universitet (dropdown?), kön, ålder, nuvarande utblidning
-		- matchmaking på "fakta"
-		- användare ska kunna anmäla allt möjligt
-		- "tävlingar"
-		- låg prio/senare: användare ska kunna söka stipendier direkt från sidan. behöver isåfall databas med tillgängliga stipdendier osv
-		- arbetsgivare ska kunna söka bland CV:n
-		- företag ska kunna lägga upp presentationer av sitt företag och vad dom söker för typ av folk just nu
-		- låg prio/senare: info om olika universitet, vad de har för utbildningar osv
-		- senare: visa extern jobbsök (om vi får tillgång till sån data via en "kompis sajt"
-		- eventuellt/senare: flerspråkstöd, dirigera användaren till rätt språk automatiskt
-		- senare: filtrera bort material som är på fel språk för användaren (exempel: visa ej rysk text för indiska användare)
-
-
 --------------[[changelog]]--------------
 2007.05.10:
 	- lyrics: visa ej "log in" om man e inloggad
@@ -129,6 +97,8 @@ X = hi prio task
 	- lyrics: tagit bort all modereringslogik. man måste nu vara inloggad för att kunna ändra något
 	- blog: stöd för kommentarer, visningen är inte gjord
 	- blog: stöd för fil-attachments, går ej länka in bilder än direkt i bloggeditorn
+	- core: css fixande, hover funkar igen häråvar, och current page i createMenu() menyer är stylad korrekt nu
+	- categories: gjort en generell funktion för att skapa nya kategorier, den stödjer "new blog category" och "new filearea category"
 
 
 2007.05.09:
