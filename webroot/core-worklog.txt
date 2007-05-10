@@ -33,11 +33,10 @@
 
 	news modul:
 	X	- kunna bifoga bilder till en nyhet
-		- vote på kvalitén:
+		- css meny på nyhetsartiklarna (edit, delete, attachments, vote, comment)
+		- vote på kvalitén (eller "rating")
   		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
-		- möjlighet att kunna prenumera på nyhets-inläggen via epost
 		- ej kunna dubbel-submitta news (det går nu)
-		- mer css
 
 
 
@@ -61,12 +60,11 @@
 --------------[[projekt todo]]--------------
 	lyrics:
 		- edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
-		- BORT MED TABLES i den mån det går
 		- åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 		- edit_record.php: kunna editera recordInfo
 		- lista låtar som inte finns på nån skiva (admin)
 		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
-		- möjlighet att radera ett band
+		- admin: möjlighet att radera ett band
 
 	ajax chat:
 		- integrera i core vid nåt tillfälle (blized vill ha)
