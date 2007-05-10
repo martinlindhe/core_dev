@@ -2,7 +2,6 @@
 	$time_start = microtime(true);
 
 	error_reporting(E_ALL);
-	mb_internal_encoding('UTF-8');
 	date_default_timezone_set('Europe/Stockholm');
 
 	$config['core_root'] = '../';
@@ -27,5 +26,4 @@
 	$session = new Session($config['session']);
 
 	$config['wiki']['allow_html'] = true;
-
 ?>

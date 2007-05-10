@@ -292,13 +292,13 @@
 			} else {
 				$art['head'] = $text;
 			}
-			$art['body'] = $text;
+			$art['body'] = '';
 
 			return $art;
 		}
 
 		$art['head'] = substr($text, $pos1+strlen('[head]')+1, $pos2-$pos1-strlen('[/head]') );
-		$art['head'] = nl2br(trim(htmlentities($art['head'])));
+		$art['head'] = nl2br(trim(strip_tags($art['head'])));
 
 		$pos1 = strpos($text, '[body]');
 		$pos2 = strpos($text, '[/body]');

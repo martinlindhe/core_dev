@@ -9,6 +9,8 @@
 	todo: börja använda http://se2.php.net/manual/en/function.mysqli-fetch-object.php, returnera kolumnamn direkt som objektvariabler
 */
 
+mb_internal_encoding('UTF-8');
+
 abstract class DB_Base
 {
 	/****************************************************/

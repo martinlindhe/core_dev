@@ -1,2 +1,8 @@
 * Wikis
 	- "En_artikel" och "En artikel" måste hanteras som densamma
+
+* Unicode-support
+	- Currently requires PHP 5.2.2 (current) or older to be configured with:
+		mbstring.func_overload = 2
+		or similar, to turn on mb function overloading for str* functions
+		PHP 6 will come with full unicode support in the core, so hopefully this can be deprecated soon

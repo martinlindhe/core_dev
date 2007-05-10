@@ -338,3 +338,21 @@ input.button:focus {
 	background-color: #eee;
 }
 
+.news {
+}
+.news_top {
+	background-color: #fff;
+	border: 1px #888 solid;
+	padding: 10px;
+	font-size: 12px;
+}
+.news_title {
+	font-size: 20px;
+}
+.news_head { /* news article heading */
+	font-size: 16px;
+	font-weight: bold;
+}
+.news_body { /* news article body */
+	font-size: 12px;
+}

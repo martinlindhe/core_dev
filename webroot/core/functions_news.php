@@ -86,28 +86,37 @@
 
 	function showNews($limit = 3)
 	{
-		global $db;
+		global $db, $session;
 		
 		if (!empty($_GET['news']) && is_numeric($_GET['news'])) {
 			/* Visar en artikel */
 			
 			$row = getNewsItem($_GET['news']);
 
-			echo '<h2>'.$row['title'].'</h2>';
+			echo '<div class="news">';
+			echo '<div class="news_top">';
+			echo '<div class="news_title">'.$row['title'].'</div>';
 			if ($row['categoryId']) {
 				echo '<a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName($row['categoryId']).'</a><br/>';
 			}
 			echo 'By '.$row['creatorName'].', published '.$row['timeToPublish'].'<br/>';
-			$art = parseArticle($row['body']);
-			
-			if ($art['head']) echo '<h4>'.$art['head'].'</h4>';
-			echo $art['body'].'<br/>';
+			echo '</div>'; //class="news_top"
 
-			if ($row['timeEdited'] > $row['timeCreated']) {
-				echo '<i>Updated '.$row['timeEdited'].' by '.$row['editorName'].'</i><br/>';
+			$art = parseArticle($row['body']);
+
+			if ($row['editorId']) echo '<i>Updated '.$row['timeEdited'].' by '.$row['editorName'].'</i><br/>';
+
+			if ($art['head']) echo '<div class="news_head">'.$art['head'].'</div>';
+
+			if ($session->isAdmin) {
+				echo '<a href="/admin/admin_news_edit.php?id='.$row['newsId'].getProjectPath().'">Edit news</a>';
 			}
 
+			echo '<div class="news_body">'.$art['body'].'</div>';
+
 			showComments(COMMENT_NEWS, $_GET['news']);
+			
+			echo '</div>'; //class="news"
 			return;
 		}
 		

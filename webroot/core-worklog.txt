@@ -36,7 +36,7 @@
 		- möjlighet att kunna prenumera på nyhets-inläggen via epost
 		- ej kunna dubbel-submitta news (det går nu)
 		- mer css
-		- visa news-admin länkar direkt på nyhetsartikeln för admins
+
 
 
 	wiki:
@@ -104,7 +104,7 @@ X = hi prio task
 	- categories: cleanup & buggfixande, nu funkar globala kategorier som det var tänkt
 	- admin: byggt adminpanel för "manage stopwords"
 	- blog: byggt adminpaneler för "moderation queue"
-
+	- news: visar edit news länk direkt på nyhetsartikeln för admins
 
 
 2007.05.09:

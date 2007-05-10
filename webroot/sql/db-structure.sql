@@ -485,7 +485,7 @@ CREATE TABLE tblNews (
   timeToPublish datetime NOT NULL default '0000-00-00 00:00:00',
   categoryId int(10) unsigned NOT NULL,
   PRIMARY KEY  (newsId)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 CREATE TABLE tblRevisions (
   indexId int(10) unsigned NOT NULL auto_increment,
   fieldId bigint(20) unsigned NOT NULL,

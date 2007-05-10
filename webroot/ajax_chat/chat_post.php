@@ -14,7 +14,7 @@
 	$roomId = $_POST['r'];
 	
 	//cut out the first X letters	
-	$text = mb_substr($_POST['t'], 0, $config['chat']['max_text_length']);
+	$text = substr($_POST['t'], 0, $config['chat']['max_text_length']);
 
 	addChatEntry($roomId, $text);
 	

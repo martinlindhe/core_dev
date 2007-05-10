@@ -54,10 +54,6 @@ img { border: 0; }
 	left: 220px;
 	top: 0px;
 }
-#header-logo img {
-	width: 309px;
-	height: 29px;
-}
 #header-items {
 	position: absolute;
 	right: 10px;
