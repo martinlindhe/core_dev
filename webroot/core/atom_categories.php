@@ -94,6 +94,10 @@
 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
 				break;
 
+			case CATEGORY_NEWS:
+				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
+				break;
+
 			default:
 				die('bleek');
 		}

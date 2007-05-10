@@ -412,7 +412,7 @@ CREATE TABLE tblBlogs (
   deletedBy int(10) unsigned NOT NULL default '0',
   timeDeleted datetime default NULL,
   PRIMARY KEY  (blogId)
-) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 CREATE TABLE tblCategories (
   categoryId bigint(20) unsigned NOT NULL auto_increment,
   categoryName varchar(100) NOT NULL default '',
@@ -421,7 +421,7 @@ CREATE TABLE tblCategories (
   creatorId int(10) unsigned NOT NULL default '0',
   categoryPermissions tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(1) unsigned NOT NULL default '0',
@@ -472,7 +472,7 @@ CREATE TABLE tblModerationQueue (
   itemId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   PRIMARY KEY  (queueId)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COMMENT='Modereringskö med olika objekt som behöver ';
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COMMENT='Modereringskö med olika objekt som behöver ';
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
