@@ -1,0 +1,33 @@
+process-server:
+
+	"beställare" i texten nedan hänvisar till den server som lägger till kommandot
+	"order" i texten nedan hänvisar till det arbete som beställaren vill ska utföras
+
+	* en egen webbserver med php installerat
+		- idag apache, eventuellt lighthttpd i framtiden
+
+	* en egen databasserver
+
+	* ett script som gör följande:
+		- tar emot order från beställaren och lägger till ordern i process-serverns egna databas
+
+	* ett cron-job som gör följande:
+		- tittar i databasen efter nya ordrar att utföra, till exempel följande:
+			* resiza en stillbild
+			* konvertera en stillbild till ett annat format (t.ex bmp till jpg)
+			* konvertera en video till ett annat format (t.ex 3gp till mpeg)
+
+			databasen ska även innehålla instruktioner om var resultatet ska placeras
+
+		- genomför ordern
+		
+		- placerar resultatet på rätt ställe
+			detta innebär att fysiskt flytta den processade filen till beställarens filsystem (till en network share / mountad katalog)
+
+		- meddela beställarenm att arbetet är färdigt
+			detta görs genom en INSERT / UPDATE i respektive tabell i mottagarens databas
+
+-------------
+	eventuellt:
+		* skicka kommandon genom soap-interface
+		* kör servern bakom https

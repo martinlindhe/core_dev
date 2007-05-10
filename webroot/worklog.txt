@@ -32,7 +32,13 @@
 		
 2007.05.10 Torsdag:
 	dev-servern:
-		* gjort ett backupscript som gör regelbundna backups av källkoden
+		* gjort ett backupscript som gör regelbundna backups av källkoden vid midnatt varje dygn
+		* konfigurerat apache lite. php errors loggas nu till /var/log/apache2/error.log
+		
+	mms-hantering:
+		* all aktivitet loggas nu till /var/log/mms.log med timestamps, istället för till stdout
+		* renamar *.jpeg filer till *.jpg vid bildhantering (thumbnail visas nu även för .jpeg's)
+
 
 ***********************************************************************************************************************************
 topp prio:
@@ -40,11 +46,7 @@ topp prio:
 	* mms upload image & video:
 		- plocka fram videoupplösningen när videon laddas upp
 		- hantera "BLOG" och "PRES" kommandon
-		- skriv till en loggfil
-
-	* alla ska ha mms funktion (vip) under testet
-
-	* gör gränssnitt för "redigera bevakningar". frans har kodat själva logiken
+		- alla ska ha mms funktion (vip) under testet
 
 	* max 7 tecken i användarnamnet
 
@@ -53,12 +55,6 @@ topp prio:
 
 senare under betatestet, mitten av maj:
 	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
-
-
-test feedback:
-	miss_pryd:
-		- Varför får man inte skriva komentar till galleri x bilder som man får se? 
-		- kompis länkar funkar itne för miss_pryd (vanlig user!) funkar för kiano & martin2
 
 
 allmänt mobila gränssnittet:
