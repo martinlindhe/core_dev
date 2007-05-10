@@ -8,16 +8,14 @@
 	define('CATEGORY_USERFILE',		1);	//normal, public userfile
 	define('CATEGORY_USERFILE_PRIVATE', 2);	//private userfile, only visible for the users friends / invited ppl
 	define('CATEGORY_USERFILE_HIDDEN', 3);	//files here are only visible by the owner
-	define('CATEGORY_USERFILE_GLOBAL',	4);	//can only be made by admins, global so it can be used by everyone
 
 	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
-	define('CATEGORY_BLOG_GLOBAL',	11);		//can only be made by admins, global so it can be used by everyone
 
 	define('CATEGORY_NEWS',				20);
 
 	define('CATEGORY_LANGUAGE',		50);	//represents a language, for multi-language features & used by "lang" project
 
-	function addCategory($_type, $_name)
+	function addCategory($_type, $_name, $_global = false)
 	{
 		global $db, $session;
 
@@ -31,6 +29,7 @@
 		if ($check) return false;
 
 		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",timeCreated=NOW(),creatorId='.$session->id;
+		if ($session->isAdmin && $_global) $q .= ',categoryPermissions=10';
 		$db->query($q);
 		return $db->insert_id;
 	}
@@ -84,11 +83,19 @@
 		global $db, $session;
 
 		if (!$session->id || !is_numeric($_type)) return false;
-		
-		if ($_type == CATEGORY_USERFILE) {
-			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType>=1 AND categoryType<=10';
-		} else {		
-			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type;
+
+		switch ($_type)
+		{
+			case CATEGORY_USERFILE:
+				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType BETWEEN 1 AND 3 ORDER BY categoryPermissions DESC';
+				break;
+
+			case CATEGORY_BLOG:
+				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
+				break;
+
+			default:
+				die('bleek');
 		}
 		return $db->getArray($q);
 	}
@@ -107,11 +114,11 @@
 		$shown_global_grop = 0;
 
 		foreach ($list as $row) {
-			if (!$shown_global_grop && $row['categoryType']==10) {
+			if (!$shown_global_grop && $row['categoryPermissions']==10) {
 				$content .= '<optgroup label="Global categories">';
 				$shown_global_grop = 1;
 			}
-			if ($shown_global_grop && !$row['globalCategory']) {
+			if ($shown_global_grop && $row['categoryPermissions']!=10) {
 				$content .= '</optgroup>';
 				$content .= '<optgroup label="Your categories">';
 				$shown_global_grop = 0;
@@ -132,10 +139,20 @@
 	{
 		global $config, $session;
 
-		if ($session->id && ($session->isAdmin || $_type==FILETYPE_USERFILE) && !empty($_POST['new_file_category']) && is_numeric($_POST['new_file_category_type']))
+		if ($session->id && ($session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_type']))
 		{
+			$global = false;
 			//Create new category. Only allow categories inside root level
-			addCategory($_POST['new_file_category_type'], $_POST['new_file_category']);
+			if (is_numeric($_POST['new_file_category_type'])) {
+				$cat_id = $_POST['new_file_category_type'];
+			} else {
+				if ($_POST['new_file_category_type'] == 'global') $global = true;
+
+				if ($_type == CATEGORY_USERFILE) 		$cat_id = CATEGORY_USERFILE;
+				else if ($_type == CATEGORY_BLOG) 	$cat_id = CATEGORY_BLOG;
+				else 																die('bad category');
+			}
+			addCategory($cat_id, $_POST['new_file_category'], $global);
 		}
 
 		echo '<form name="new_file_category" method="post" action="">';
@@ -150,18 +167,13 @@
 
 			echo '<input type="radio" value="'.CATEGORY_USERFILE_HIDDEN.'" name="new_file_category_type" id="_hidden"/> ';
 			echo '<label for="_hidden">Make this category hidden (only for you)</label><br/><br/>';
-
-			if ($session->isSuperAdmin) {
-				echo '<input type="radio" value="'.CATEGORY_USERFILE_GLOBAL.'" name="new_file_category_type" id="_global"/> ';
-				echo '<label for="_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
-			}
 		} else if ($_type == CATEGORY_BLOG) {
 			echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="_normal" checked="checked"/> ';
-			echo '<label for="_normal">Normal category - everyone can see the content</label><br/><br/>';
-			if ($session->isSuperAdmin) {
-				echo '<input type="radio" value="'.CATEGORY_BLOG_GLOBAL.'" name="new_file_category_type" id="_global"/> ';
-				echo '<label for="_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
-			}
+			echo '<label for="_normal">Your personal blog category</label><br/><br/>';
+		}
+		if ($session->isSuperAdmin) {
+			echo '<input type="radio" value="global" name="new_file_category_type" id="_global"/> ';
+			echo '<label for="_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
 		}
 
 		echo '<input type="submit" class="button" value="Create"/> ';

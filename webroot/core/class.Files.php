@@ -71,12 +71,14 @@ class Files
 		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
 
+		/*
+		//todo: flytta ut hela denna logiken nån annan stans, till en funktion som anropas av ett setup-script
 		if (!is_dir($this->upload_dir)) {
+			
 			//fixme: check if the path 1 level above "upload_dir" exists:
-			/*
 			if (!realpath($this->upload_dir.'/../')) {
 				die('FATAL: Cannot create upload directory at '.$this->upload_dir.'. Please check paths in config.php');
-			}*/
+			}
 			
 			$session->log('Creating upload directory');
 			
@@ -91,6 +93,7 @@ class Files
 				file_put_contents($this->thumbs_dir.'index.html', '');			
 			}
 		}
+		*/
 	}
 
 
@@ -151,6 +154,8 @@ class Files
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
 			if (!$categoryId) {
 				//shows own categories & global categories
+				echo getCategoriesSelect(CATEGORY_USERFILE);
+				/*
 				$cat_list = getGlobalAndUserCategories(CATEGORY_USERFILE);	//fixme:denna funktionen borde renamas till nåt som har me userfile å göra, eller sql direkt här..
 				if (!empty($cat_list)) {
 					echo 'Categories:<br/>';
@@ -159,6 +164,7 @@ class Files
 					}
 					echo '<br/>';
 				}
+				*/
 			} else {
 				echo '<a href="?file_gadget_category_id=0">Go back to root level</a><br/><br/>';
 			}

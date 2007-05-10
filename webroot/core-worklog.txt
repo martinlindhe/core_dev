@@ -99,6 +99,7 @@ X = hi prio task
 	- blog: stöd för fil-attachments, går ej länka in bilder än direkt i bloggeditorn
 	- core: css fixande, hover funkar igen häråvar, och current page i createMenu() menyer är stylad korrekt nu
 	- categories: gjort en generell funktion för att skapa nya kategorier, den stödjer "new blog category" och "new filearea category"
+	- categories: cleanup & buggfixande, nu funkar globala kategorier som det var tänkt
 
 
 2007.05.09:
