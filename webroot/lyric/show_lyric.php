@@ -20,13 +20,7 @@
 	require('design_head.php');
 
 	echo '<table summary="" cellpadding="3" cellspacing="0" border="1" width="100%">';
-
-	if (isModerated($lyric_id, MODERATION_LYRIC) || isPendingChange(MODERATIONCHANGE_LYRIC, $lyric_id))
-	{
-		echo '<tr><td class="subtitlemod">';
-	} else {
-		echo '<tr><td class="subtitle">';
-	}
+	echo '<tr><td class="subtitle">';
 
 	if (isset($highlight)) {
 		$lyric = str_ireplace($highlight, '<font color="yellow">'.$highlight.'</font>', $lyric);
@@ -35,7 +29,8 @@
 
 	echo '<b><a href="show_band.php?id='.$lyric_data['bandId'].'">'.$band_name.'</a>';
 
-	echo ' - '.$lyric_name.'</b></td><td width="30" align="right"><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td></tr>';
+	echo ' - '.$lyric_name.'</b></td>';
+	if ($session->id) echo '<td width="30" align="right"><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td></tr>';
 	echo '<tr><td colspan="2">';
 
 	echo nl2br($lyric);

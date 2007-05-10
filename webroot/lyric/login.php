@@ -3,9 +3,7 @@
 
 	require('design_head.php');
 
-	if (!$session->id) {
-		$session->showLoginForm();
-	}
+	if (!$session->id) $session->showLoginForm();
 
 	require('design_foot.php');
 ?>

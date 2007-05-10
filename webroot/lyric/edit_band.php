@@ -1,5 +1,8 @@
 <?
 	require_once('config.php');
+
+	$session->requireLoggedIn();
+
 	require('design_head.php');
 	
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
@@ -8,13 +11,8 @@
 		
 	if (isset($_POST['title']))
 	{
-		if (!$session->isAdmin) {
-			addPendingChange(MODERATIONCHANGE_BANDNAME, $band_id, $_POST['title']);
-			echo 'Change added to moderation queue<br/>';
-		} else {
-			setBandName($band_id, $_POST['title']);
-			echo 'Band name changed.<br/>';
-		}
+		setBandName($band_id, $_POST['title']);
+		echo 'Band name changed.<br/>';
 	}
 
 	$band_name = getBandName($band_id);

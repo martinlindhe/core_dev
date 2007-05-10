@@ -1,29 +1,25 @@
 <?
 	require_once('config.php');
+
+	$session->requireLoggedIn();
+
 	require('design_head.php');
 
-	if ($session->id && !empty($_POST['bandname']) && isset($_POST['bandinfo']))
+	if (!empty($_POST['bandname']) && isset($_POST['bandinfo']))
 	{
 		$band_name = trim($_POST['bandname']);
 		$band_info = $_POST['bandinfo'];
-		
-		$band_id = addBand($band_name);
 
+		$band_id = addBand($band_name);
 		if ($band_id)
 		{
 			if (!updateBandInfo($band_id, $band_info))
 			{
 				echo 'Update of band info failed.<br/>';
 			}
-			
+
 			echo '<b>'.$band_name.'</b> added.<br/><br/>';
-			
-			if (!$session->isAdmin) {
-				/* Add bandId to moderation queue */
-				addModerationItem($band_id, MODERATION_BAND);
-				echo 'Band addition added to moderation queue aswell<br/><br/>';
-			}
-			
+
 			echo '<a href="show_band.php?id='.$band_id.'">Click here to go to '.$band_name.' page</a><br/>';
 			echo '<br/><br/>';
 			die;

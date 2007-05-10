@@ -1,18 +1,15 @@
 <?
 	require_once('config.php');
 
+	$session->requireLoggedIn();
+
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 	$lyric_id = $_GET['id'];
 
 	if (isset($_POST['lyric']) && isset($_POST['title']))
 	{
-		if (!$session->isAdmin) {
-			addPendingChange(MODERATIONCHANGE_LYRIC, $lyric_id, $_POST['title'], $_POST['lyric']);
-			echo 'Changes submitted for moderation.<br/>';
-		} else {
-			updateLyric($lyric_id, $_POST['title'], $_POST['lyric']);
-		}
+		updateLyric($lyric_id, $_POST['title'], $_POST['lyric']);
 	}
 
 	$lyric_data = getLyricData($lyric_id);

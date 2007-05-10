@@ -82,14 +82,6 @@
 		return $db->getArray($q);
 	}
 
-	function getRecordTrackCount($record_id)
-	{
-		global $db;
-		if (!is_numeric($record_id)) return false;
-
-		return $db->getOneItem('SELECT COUNT(trackNumber) FROM tblTracks WHERE recordId='.$record_id);
-	}
-
 	function updateRecord($record_id, $record_name)
 	{
 		global $db;

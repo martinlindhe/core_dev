@@ -36,24 +36,6 @@
 	<input type="submit" value="Search" class="button"/>
 </form>
 
-<?
-	if ($session->isAdmin) {
-		echo '<br/>';
-		echo 'Moderation:<br/>';
-
-		echo countNewAdditions().' new additions.<br/>';
-		echo countPendingChanges().' pending changes.<br/>';
-		echo '<a href="moderate.php">Go moderate</a>';
-	}
-?>
-
-	<table cellpadding="0" cellspacing="0" border="0">
-		<tr>
-			<td class="subtitlemod" width="15">&nbsp;</td>
-			<td>Fields marked like this is new additions / pending changes.</td>
-		</tr>
-	</table>
-
 </div>
 
 <div id="main">

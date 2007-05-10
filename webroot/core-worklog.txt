@@ -76,33 +76,17 @@
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 
 --------------[[projekt todo]]--------------
-  adblock:
-		- adblock: ruleset.php / admin_reports.php: jobba mer på css:en för att få till listan som det var tänkt
-
-
 	lyrics:
-	X - edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
-
-	X	- rensa upp modererings-logiken...
-			- ta bort den helt, och återimplementera ny kod
-			* gör en moderate include!
-			* när man editerar en skiv-titel oinloggad så hamnar den aldrig i modereringskön
-			* när man editerar en text oinloggad & sen accepterar den så försvinner radbryten & blir "rnrn"
-
+		- edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
 		- BORT MED TABLES i den mån det går
 		- åter-inserta de texter som pajats pga latin1->utf8 konverteringen
-
 		- edit_record.php: kunna editera recordInfo
 		- lista låtar som inte finns på nån skiva (admin)
 		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
 		- möjlighet att radera ett band
 
-	janina, allt low prio:
-		- image preload (finns kod i tracker-applikationen)
-
 	ajax chat:
-		- integrera i core vid nåt tillfälle
-
+		- integrera i core vid nåt tillfälle (blized vill ha)
 
 --[[todo legend]]--
 X = hi prio task
@@ -143,6 +127,8 @@ X = hi prio task
 	- lyrics: visa ej "log in" om man e inloggad
 	- lyrics: cleanupText() uppstädad, den fuckade upp en del unicode-text
 	- lyrics: import tracklist improvements. hanterar titlar med punkt i, tex "D.O.W.N.". visar inte matches i lower case
+	- lyrics: optimerat sql-queries på några sidor med väldigt mycke onödiga queries
+	- lyrics: tagit bort all modereringslogik. man måste nu vara inloggad för att kunna ändra något
 
 
 2007.05.09:

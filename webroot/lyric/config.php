@@ -14,7 +14,6 @@
 	require_once('functions_bands.php');
 	require_once('functions_records.php');
 	require_once('functions_lyrics.php');
-	require_once('functions_moderation.php');
 
 	$config['debug'] = true;
 

@@ -8,51 +8,38 @@
 	$band_name = getBandName($band_id);
 
 	echo '<table summary="" width="600" cellpadding="3" cellspacing="0" border="1"><tr>';
-	if (isModerated($band_id, MODERATION_BAND)) {
-		echo '<td class="titlemod">'.$band_name.'</td>';
-	} else {
-		echo '<td class="title">'.$band_name.'</td>';
-	}
-	echo '<td width="50"><a href="edit_band.php?id='.$band_id.'">Edit</a></td></tr>';
+	echo '<td class="title">'.$band_name.'</td>';
+	if ($session->id) echo '<td width="50"><a href="edit_band.php?id='.$band_id.'">Edit</a></td></tr>';
 	echo '</table>';
 	echo '<br/>';
 
 	echo 'Albums:<br/>';
 	$list = getBandRecords($band_id);
 	echo '<table summary="" width="600" cellpadding="3" cellspacing="0" border="1">';
-	for ($i=0; $i<count($list); $i++)
+	foreach ($list as $row)
 	{
-		$record_id = $list[$i]['recordId'];
-		$record_name = stripslashes($list[$i]['recordName']);
+		$record_name = stripslashes($row['recordName']);
 		if (!$record_name) $record_name = 's/t';
 
-		if (isModerated($record_id, MODERATION_RECORD) ||
-			isPendingChange(MODERATIONCHANGE_RECORDNAME, $record_id)
-			) {
-			echo '<tr><td class="subtitlemod">';
-		} else {
-			echo '<tr><td class="subtitle">';
-		}
-		echo '<a href="show_record.php?id='.$record_id.'">'.$record_name.'</a> ('.getRecordTrackCount($record_id).' tracks)';
+		echo '<tr><td class="subtitle">';
+		echo '<a href="show_record.php?id='.$row['recordId'].'">'.$record_name.'</a> ('.$row['cnt'].' tracks)';
 		echo '</td></tr>';
 	}
 	if (!count($list)) {
 		echo '<tr><td>None</td></tr>';
 	}
-	echo '<tr><td>';
-	echo '<a href="add_record.php?band='.$band_id.'">Add record</a>';
-	echo '</td></tr></table>';
+	if ($session->id) echo '<tr><td><a href="add_record.php?band='.$band_id.'">Add record</a></td></tr>';
+	echo '</table>';
 
 	echo '<br/>';
 	echo 'Compilations / splits:<br/>';
 	$list = getBandCompilations($band_id);
-	for ($i=0; $i<count($list); $i++)
+	foreach ($list as $row)
 	{
-		$record_id = $list[$i]['recordId'];
-		$record_name = $db->escape($list[$i]['recordName']);
+		$record_name = $db->escape($row['recordName']);
 		if (!$record_name) $record_name = 's/t';
 
-		echo '<a href="show_record.php?id='.$record_id.'">'.$record_name.'</a> ('.getRecordTrackCount($record_id).' tracks)<br/>';
+		echo '<a href="show_record.php?id='.$row['recordId'].'">'.$record_name.'</a> ('.$row['cnt'].' tracks)<br/>';
 	}
 	if (!count($list)) echo 'None<br/>';
 	echo '<br/>';
@@ -94,8 +81,8 @@
 		echo '<input type="submit" value="Go" class="button" onclick="location.href=form.url.options[form.url.selectedIndex].value; return false;"/>';
 		echo '</form>';
 	}
-	
-	echo '<a href="add_lyric_single.php?band='.$band_id.'">Add a single lyric</a><br/><br/>';
+
+	if ($session->id) echo '<a href="add_lyric_single.php?band='.$band_id.'">Add a single lyric</a><br/><br/>';
 
 	require('design_foot.php');
 ?>

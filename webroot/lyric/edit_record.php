@@ -1,5 +1,8 @@
 <?
 	require_once('config.php');
+
+	$session->requireLoggedIn();
+
 	require('design_head.php');
 	
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
@@ -9,13 +12,8 @@
 		
 	if (isset($_POST['title']))
 	{
-		if (!$session->isAdmin) {
-			addPendingChange(MODERATIONCHANGE_RECORDNAME, $record_id, $_POST['title']);
-			echo 'Change added to moderation queue<br/>';
-		} else {
-			updateRecord($record_id, $_POST['title']);
-			echo 'Title changed.<br/>';
-		}
+		updateRecord($record_id, $_POST['title']);
+		echo 'Title changed.<br/>';
 	}
 
 	if (isset($_POST['band']) && $_POST['band'] && is_numeric($_POST['band'])) {

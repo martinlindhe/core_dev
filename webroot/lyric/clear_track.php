@@ -1,6 +1,8 @@
 <?
 	require_once('config.php');
 
+	$session->requireLoggedIn();
+
 	if (empty($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['record']) || !is_numeric($_GET['track'])) die;
 
 	clearTrack($_GET['record'], $_GET['track']);

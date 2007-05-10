@@ -36,6 +36,16 @@
 		return $db->getArray('SELECT * FROM tblBands ORDER BY bandName ASC');
 	}
 
+	function getBandsWithRecordCount()
+	{
+		global $db;
+
+		$q = 'SELECT t1.*,
+					(SELECT COUNT(recordId) FROM tblRecords WHERE bandId=t1.bandId) AS cnt FROM tblBands AS t1
+					ORDER BY t1.bandName ASC';
+		return $db->getArray($q);
+	}
+
 	function getBandName($_id)
 	{
 		global $db;
@@ -74,15 +84,6 @@
 		return $db->getOneItem('SELECT COUNT(bandId) FROM tblBands');
 	}
 
-	function getBandRecordCount($band_id)
-	{
-		global $db;
-
-		if (!is_numeric($band_id)) return false;
-
-		return $db->getOneItem('SELECT COUNT(recordId) FROM tblRecords WHERE bandId='.$band_id);
-	}
-	
 	/* Returns the records that this band has made */
 	function getBandRecords($band_id)
 	{
@@ -90,7 +91,7 @@
 
 		if (!is_numeric($band_id)) return false;
 
-		return $db->getArray('SELECT * FROM tblRecords WHERE bandId='.$band_id.' ORDER BY recordName ASC');
+		return $db->getArray('SELECT t1.*, (SELECT COUNT(trackNumber) FROM tblTracks WHERE recordId=t1.recordId) AS cnt FROM tblRecords AS t1 WHERE t1.bandId='.$band_id.' ORDER BY t1.recordName ASC');
 	}
 	
 	function getBandCompilations($band_id)
@@ -99,8 +100,8 @@
 
 		if (!is_numeric($band_id)) return false;
 		
-		$q  = "SELECT t2.recordId,t2.recordName FROM tblTracks AS t1 ";
-		$q .= "INNER JOIN tblRecords AS t2 ON (t1.recordId=t2.recordId) ";
+		$q  = "SELECT t2.recordId,t2.recordName, (SELECT COUNT(trackNumber) FROM tblTracks WHERE recordId=t2.recordId) AS cnt FROM tblTracks AS t1 ";
+		$q .= "LEFT JOIN tblRecords AS t2 ON (t1.recordId=t2.recordId) ";
 		$q .= "WHERE t1.bandId=".$band_id." AND t2.bandId=0 ";
 		$q .= "GROUP BY t2.recordId ";
 		$q .= "ORDER BY t2.recordName ASC";

@@ -54,7 +54,7 @@
 		if ($list[$i]['authorId'] != $list[$i]['bandId']) {
 			echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
 		}
-		echo ' <a href="edit_lyric.php?id='.$lyric_id.'">Edit</a><br/>';
+		if ($session->id) echo ' <a href="edit_lyric.php?id='.$lyric_id.'">Edit</a><br/>';
 		
 		$lyric = stripslashes($list[$i]['lyricText']);
 		if ($lyric)

@@ -1,6 +1,8 @@
 <?
 	require_once('config.php');
 
+	$session->requireLoggedIn();
+
 	$linked = false;
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;

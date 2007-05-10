@@ -1,6 +1,8 @@
 <?
 	require_once('config.php');
-	
+
+	$session->requireLoggedIn();
+
 	$band_id = 0;
 	if (!empty($_GET['band']) && is_numeric($_GET['band'])) $band_id = $_GET['band'];
 
@@ -23,11 +25,6 @@
 		}
 		else
 		{
-			//if (!$session->isAdmin) {
-				/* Add to pending changes queue */
-				addPendingChange(MODERATIONCHANGE_LYRICLINK, $record_id, $track);
-			//}
-
 			header('Location: show_record.php?id='.$record_id);
 			die;
 		}
@@ -37,10 +34,10 @@
 	
 	if ($coverband_id == 0) {
 		/* Bandet som gör covern */
-		
+
 		echo '1. Select the band who is doing the cover in the dropdown below.<br/>';
 		echo '(Adding cover to track <b>'.$track.'</b> on <b>'.getRecordName($record_id).'</b>).<br/><br/>';
-		
+
 		echo '<form action="">';
 		echo '<select name="url" onchange="location.href=form.url.options[form.url.selectedIndex].value">';
 		echo '<option>--- Select band ---</option>';

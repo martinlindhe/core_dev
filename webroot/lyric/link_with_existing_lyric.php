@@ -1,6 +1,8 @@
 <?
 	require_once('config.php');
-	
+
+	$session->requireLoggedIn();
+
 	if (empty($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['record']) || !is_numeric($_GET['track'])) die;
 
 	$record_id = $_GET['record'];
@@ -22,11 +24,6 @@
 		}
 		else
 		{
-			if (!$session->isAdmin) {
-				/* Add to pending changes queue */
-				addPendingChange(MODERATIONCHANGE_LYRICLINK, $record_id, $track);
-			}
-				
 			header('Location: show_record.php?id='.$record_id);
 			die;
 		}

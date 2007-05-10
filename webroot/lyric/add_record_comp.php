@@ -1,5 +1,8 @@
 <?
 	require_once('config.php');
+
+	$session->requireLoggedIn();
+
 	require('design_head.php');
 
 	if (!empty($_POST['recordname']) && !empty($_POST['tracks']) && isset($_POST['info']))

@@ -1,6 +1,8 @@
 <?
 	require_once('config.php');
 
+	$session->requireLoggedIn();
+
 	if (empty($_GET['record']) || !is_numeric($_GET['record']) || empty($_GET['track']) || !is_numeric($_GET['track'])) die;
 
 	$record_id = $_GET['record'];
@@ -20,10 +22,6 @@
 		$lyric_id = addLyric($band_id, $record_id, $track, $song_name, $lyric_text);
 		if (!$lyric_id) die('Problems adding lyric');
 
-		if (!$session->isAdmin) {
-			/* Add lyricId to moderation queue */
-			addModerationItem($lyric_id, MODERATION_LYRIC);
-		}
 		header('Location: show_record.php?id='.$record_id);
 		die;
 	}

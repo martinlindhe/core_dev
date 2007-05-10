@@ -18,20 +18,14 @@
 	require('design_head.php');
 
 	echo '<table cellpadding="3" cellspacing="0" border="1">';
-	
-	if (isModerated($record_id, MODERATION_RECORD) ||
-		isPendingChange(MODERATIONCHANGE_RECORDNAME, $record_id)
-		) {
-		echo '<tr><td colspan="3" class="titlemod">';
-	} else {
-		echo '<tr><td colspan="3" class="title">';
-	}
+	echo '<tr><td colspan="3" class="title">';
 	if ($band_id) {
 		echo '<a href="show_band.php?id='.$band_id.'">'.$band_name.'</a>';
 	} else {
 		echo $band_name;
 	}
-	echo ' - '.$record_name.'</td><td align="right"><a href="edit_record.php?id='.$record_id.'">Edit</a></td></tr>';
+	echo ' - '.$record_name.'</td>';
+	if ($session->id) echo '<td align="right"><a href="edit_record.php?id='.$record_id.'">Edit</a></td></tr>';
 
 	$list = getRecordTracks($record_id);
 	for ($i=0; $i<count($list); $i++)
@@ -44,14 +38,7 @@
 
 		if ($lyric_id)
 		{
-			if (isModerated($lyric_id, MODERATION_LYRIC) ||
-				isPendingChange(MODERATIONCHANGE_LYRICLINK, $record_id, $track) ||
-				isPendingChange(MODERATIONCHANGE_LYRIC, $lyric_id)
-				) {
-				echo '<td class="subtitlemod">';
-			} else {
-				echo '<td class="subtitle">';
-			}
+			echo '<td class="subtitle">';
 			if ($band_id == 0) {
 				/* Show the band name of current track if it's a split/compilation */
 				echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
@@ -71,10 +58,12 @@
 				echo ' (Incomplete)';
 			}
 			echo '</td>';
-			echo '<td><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td>';
-			echo '<td><a href="clear_track.php?record='.$record_id.'&amp;track='.$track.'">Clear</a></td>';
+			if ($session->id) {
+				echo '<td><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td>';
+				echo '<td><a href="clear_track.php?record='.$record_id.'&amp;track='.$track.'">Clear</a></td>';
+			}
 		}
-		else
+		else if ($session->id)
 		{
 			if ($i == count($list)-1) {
 				echo '<td bgcolor="#802040">';
@@ -90,12 +79,22 @@
 				echo '<a href="remove_track.php?record='.$record_id.'&amp;track='.$track.'">Remove</a>';
 				echo '</td>';
 			}
+		} else {
+			echo '<td>&nbsp;</td>';
 		}
 
 		echo '</tr>';
 	}
-	echo '<tr><td colspan="4"><a href="add_track.php?id='.$record_id.'">Add track</a> | <a href="import_tracks.php?id='.$record_id.'">Import tracklist</a> | <a href="show_record_lyrics.php?id='.$record_id.'">Show all lyrics</a></td></tr>';
+	echo '<tr><td colspan="4">';
+	if ($session->id) {
+		echo '<a href="add_track.php?id='.$record_id.'">Add track</a> | ';
+		echo '<a href="import_tracks.php?id='.$record_id.'">Import tracklist</a> | ';
+	}
+	echo '<a href="show_record_lyrics.php?id='.$record_id.'">Show all lyrics</a>';
+	echo '</td></tr>';
+
 	echo '<tr><td colspan="4" bgcolor="#909090">'.nl2br(getRecordInfo($record_id)).'</td></tr>';
+
 	echo '</table>';
 	
 	echo '<br/>';

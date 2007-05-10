@@ -1,12 +1,15 @@
 <?
 	require_once('config.php');
+
+	$session->requireLoggedIn();
+
 	require('design_head.php');
 
 	if (isset($_GET['band']) && $_GET['band']) {
 		$band_id = $_GET['band'];
 	}
 
-	if ($session->id && !empty($_POST['band']) && isset($_POST['recordname']) && isset($_POST['info']) && !empty($_POST['tracks']))
+	if (!empty($_POST['band']) && isset($_POST['recordname']) && isset($_POST['info']) && !empty($_POST['tracks']))
 	{
 		$band_id = $_POST['band'];
 		$record_name = trim($_POST['recordname']);
@@ -24,12 +27,6 @@
 			
 			echo 'Record "'.$record_name.'" added.<br/><br/>';
 			
-			if (!$session->isAdmin) {
-				/* Add recordId to moderation queue */
-				addModerationItem($record_id, MODERATION_RECORD);
-				echo 'Record added to moderation queue aswell.<br/><br/>';
-			}
-
 			echo '<a href="show_record.php?id='.$record_id.'">Click here to go to it now</a>.<br/><br/>';
 		}
 	}
