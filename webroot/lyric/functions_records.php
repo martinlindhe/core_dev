@@ -1,6 +1,6 @@
 <?
 	/* functions_records.php */
-	
+
 	function cleanupText($text)
 	{
 		global $db;
@@ -9,30 +9,12 @@
 		
 		do { /* Remove chunks of whitespace */
 			$temp = $text;
-			$text = str_replace("  ", " ", $text);
+			$text = str_replace('  ', ' ', $text);
 		} while ($text != $temp);
-		
+
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace(" \n", "\n", $text);
 		$text = str_replace("\n ", "\n", $text);
-
-		$text = str_replace("`", "'", $text);
-		$text = str_replace("’", "'", $text);
-		$text = str_replace("´", "'", $text);
-		$text = str_replace("…", "...", $text);
-		
-		$text = str_replace("“", "\"", $text);
-		$text = str_replace("”", "\"", $text);
-		$text = str_replace("‘", "\"", $text);
-		
-		/* Clean up common miswriting */
-		$text = str_replace(" youve ", " you\'ve ", $text);
-		$text = str_replace(" youre ", " you\'re ", $text);
-		$text = str_replace(" yourll ", " you\'ll ", $text);
-		$text = str_replace(" theyre ", " they\'re ", $text);
-		$text = str_replace(" i\'m ", " I\'m ", $text);
-
-		$text = $db->escape($text);
 
 		return $text;		
 	}
@@ -114,7 +96,7 @@
 
 		if (!is_numeric($record_id)) return false;
 
-		$record_name = cleanupText($record_name);
+		$record_name = $db->escape($record_name);
 
 		$db->query("UPDATE tblRecords SET recordName='".$record_name."' WHERE recordId=".$record_id);
 		return true;

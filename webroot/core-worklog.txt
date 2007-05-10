@@ -1,14 +1,5 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-		- lyrics import tracklist
-			titel "D.O.W.N." splittas upp till "D", exempel:
-			http://gracenote.com/music/album.html/gangsta/b21f6348bb9921056411a0f0f06b1240.html
-
-		- full lyrics dump så kan återskapa i laptopen
-		- ändra lyric titel till svensk tecken funkar ej.!!! exempel: 
-			http://87.227.76.225/lyric/show_lyric.php?id=4863
-			
-		- lyrics: visa ej "log in" om man e inloggad
 
 
 	session/user settings:
@@ -148,6 +139,12 @@ X = hi prio task
 
 
 --------------[[changelog]]--------------
+2007.05.10:
+	- lyrics: visa ej "log in" om man e inloggad
+	- lyrics: cleanupText() uppstädad, den fuckade upp en del unicode-text
+	- lyrics: import tracklist improvements. hanterar titlar med punkt i, tex "D.O.W.N.". visar inte matches i lower case
+
+
 2007.05.09:
 	- blog: byggt om en massa så det funkar snarlikt som en wiki, med en egen meny & går att baka in i en annan sida, wip
 	- wiki: använder createMenu() för att skapa wiki-menyn

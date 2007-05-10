@@ -113,9 +113,8 @@
 
 		if (!is_numeric($lyric_id)) return false;
 		
-		$lyric_name = cleanupText($lyric_name);
-		$lyric_text = cleanupText($lyric_text);
-
+		$lyric_name = $db->escape($lyric_name);
+		$lyric_text = $db->escape(cleanupText($lyric_text));
 		$db->query('UPDATE tblLyrics SET lyricName="'.$lyric_name.'", lyricText="'.$lyric_text.'" WHERE lyricId='.$lyric_id);
 		return true;
 	}
@@ -136,8 +135,8 @@
 
 		if (!$session->id || !is_numeric($band_id) || !is_numeric($record_id) || !is_numeric($track)) return false;
 
-		$lyric_name = cleanupText($lyric_name);
-		$lyric_text = cleanupText($lyric_text);
+		$lyric_name = $db->escape($lyric_name);
+		$lyric_text = $db->escape(cleanupText($lyric_text));
 
 		$db->query('INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$session->id.',timeCreated=NOW()');
 		$lyric_id = $db->insert_id;

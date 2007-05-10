@@ -13,7 +13,6 @@
 <?
 	$menu = array(
 		'index.php' => 'Start page',
-		'login.php' => 'Log in',
 		'list_bands.php' => 'List bands',
 		'missing_lyrics.php' => 'Missing lyrics',
 		'incomplete_lyrics.php' => 'Incomplete lyrics');
@@ -25,8 +24,10 @@
 			'add_record.php' => 'Add normal record',
 			'add_record_comp.php' => 'Add comp. / split',
 			'?logout' => 'Log out');
-		createMenu($menu);
+	} else {
+		$menu = array('login.php' => 'Log in');
 	}
+	createMenu($menu);
 ?>
 
 

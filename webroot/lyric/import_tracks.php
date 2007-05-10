@@ -31,92 +31,75 @@
 			
 		$tracks = explode("\n", $tracks_text);
 
-		for ($i=0; $i<count($tracks); $i++) {	//fixme: foreach
+		for ($i=0; $i<count($tracks); $i++) {
 
 			/* Remove some common parts in song titles to make matching easier */
-			$tracks[$i] = trim(strtolower($tracks[$i]));
-			$tracks[$i] = str_replace('[demo version]', '', $tracks[$i]);
-			$tracks[$i] = str_replace('[alternative version]', '', $tracks[$i]);
-			$tracks[$i] = str_replace('[interlude]', '', $tracks[$i]);
-			$tracks[$i] = str_replace('[live]', '', $tracks[$i]);
-			$tracks[$i] = str_replace('(live)', '', $tracks[$i]);
+			$tracks[$i] = str_ireplace('[demo version]', '', $tracks[$i]);
+			$tracks[$i] = str_ireplace('[alternative version]', '', $tracks[$i]);
+			$tracks[$i] = str_ireplace('[interlude]', '', $tracks[$i]);
+			$tracks[$i] = str_ireplace('[live]', '', $tracks[$i]);
+			$tracks[$i] = str_ireplace('(live)', '', $tracks[$i]);
 			$tracks[$i] = trim($tracks[$i]);
 
-			$songname = '';
-			$temp = explode('.', $tracks[$i]);  /* Format: 12.Titel */
-			$temp[0] = trim($temp[0]);
-			if (isset($temp[1])) $songname = trim($temp[1]);
+			$temp = explode('.', $tracks[$i]);  
 
-			if ($temp[0] != ($i+1)) {
+			$index = trim(array_shift($temp));	//The first number
 
-				$temp = explode(')', $tracks[$i]);  /* Format: 12)Titel */
-				$temp[0] = trim($temp[0]);
-				if (isset($temp[1])) $songname = trim($temp[1]);
-
-				if ($temp[0] != ($i+1)) {
-					$temp = explode(' ', $tracks[$i]);  /* Format: 12 Titel */
-					$temp[0] = trim($temp[0]);
-					if (isset($temp[1])) {
-						$songname = '';
-						for ($j=1; $j<count($temp); $j++) {
-							$songname .= ' '.$temp[$j];
-						}
-					}
-				}
-			}
-
-			if ($songname == '') {
+			if (isset($temp[0]) && is_numeric($index)) {
+				/* Format: 12.Titel - Used at gracenote.com */
+				$songname = trim(implode('.', $temp));
+			} else {
 				/* Format: Titel */
 				$songname = $tracks[$i];
 			}
+			
+			if (!is_numeric($index)) $index = $i+1;
 
-			if ($temp[0] == ($i+1))
+			if ($index != ($i+1)) continue;
+
+			$q = 'SELECT lyricId,lyricName FROM tblLyrics WHERE SOUNDEX(lyricName)=SOUNDEX("'.$db->escape($songname).'") AND bandId='.$band_id;
+			$row = $db->getOneRow($q);
+
+			if (isset($_POST['ck'.$i]))
 			{
-
-				$q = 'SELECT lyricId,lyricName FROM tblLyrics WHERE SOUNDEX(lyricName)=SOUNDEX("'.$db->escape($songname).'") AND bandId='.$band_id;
-				$row = $db->getOneRow($q);
-
-				if (isset($_POST['ck'.$i]))
-				{
-					if ($row) {
-						/* Match was accepted, let's add it */
-						echo 'Linking track '.($i+1).' to existing lyric "'.$row['lyricName'].'"<br/>';
-						linkLyric($record_id, ($i+1), $_POST['ck'.$i], $band_id);
-						$linked = true;
-					} else {
-						/* Add new entry using found title */
-						echo 'Creating new lyric entry for song titled '.ucfirst($songname).' and linking to track '.($i+1).'<br/>';
-						$new_id = addLyric($band_id, $record_id, ($i+1), ucfirst($songname));
-						linkLyric($record_id, ($i+1), $new_id, $band_id);
-					}
-
+				if ($row) {
+					/* Match was accepted, let's add it */
+					echo 'Linking track '.$index.' to existing lyric "'.$row['lyricName'].'"<br/>';
+					linkLyric($record_id, $index, $_POST['ck'.$i], $band_id);
+					$linked = true;
 				} else {
-					//todo: visa inga checkboxar för lyrics som redan är länkad
-					
-					echo '<input type="checkbox" name="ck'.$i.'" id="ck'.$i.'" value="'.$row['lyricId'].'"'.($row?' checked="checked"':'').'/>';
-
-					echo '<label for="ck'.$i.'">';
-					if ($row) {
-						echo ($i+1).': <b>'.$songname.'</b>';
-
-						echo ' => <a href="show_lyric.php?id='.$row['lyricId'].'">'.$row['lyricName'].'</a> ';
-
-						$match = similar_text(strtolower($songname), strtolower($row['lyricName']), $p);
-						echo '('.round($p,2).'%)';
-
-						/* We should be pretty picky about guessing */
-						if ($p < 95.0) {
-							echo ' <b><font color="red">SUSPECTED MISMATCH</font></b>';
-						}
-					} else {
-						echo ($i+1).'. <b>'.$songname.'</b> => <b><font color="red">NO MATCH</font></b>';
-					}
-					echo '</label><br/>';
+					/* Add new entry using found title */
+					echo 'Creating new lyric entry for song titled '.ucfirst($songname).' and linking to track '.$index.'<br/>';
+					$new_id = addLyric($band_id, $record_id, $index, ucfirst($songname));
+					linkLyric($record_id, $index, $new_id, $band_id);
 				}
+
+			} else {
+				//todo: visa inga checkboxar för lyrics som redan är länkad
+					
+				echo '<input type="checkbox" name="ck'.$i.'" id="ck'.$i.'" value="'.$row['lyricId'].'"'.($row?' checked="checked"':'').'/>';
+
+				echo '<label for="ck'.$i.'">';
+				if ($row) {
+					echo ($index).': <b>'.$songname.'</b>';
+
+					echo ' => <a href="show_lyric.php?id='.$row['lyricId'].'">'.$row['lyricName'].'</a> ';
+
+					$match = similar_text(strtolower($songname), strtolower($row['lyricName']), $p);
+					echo '('.round($p,2).'%)';
+
+					/* We should be pretty picky about guessing */
+					if ($p < 95.0) {
+						echo ' <b><font color="red">SUSPECTED MISMATCH</font></b>';
+					}
+				} else {
+					echo ($index).'. <b>'.$songname.'</b> => <b><font color="red">NO MATCH</font></b>';
+				}
+				echo '</label><br/>';
 			}
 		}
 
-		echo '<input type="submit" value="Link matches"/>';
+		echo '<input type="submit" class="button" value="Link matches"/>';
 		echo '</form>';
 	}
 
