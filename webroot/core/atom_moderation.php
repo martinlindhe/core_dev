@@ -205,7 +205,7 @@
 		if (!is_numeric($queueId)) return false;
 
 		$q = 'SELECT * FROM tblModerationQueue WHERE queueId='.$queueId;
-		return $db->getOneItem($q);
+		return $db->getOneRow($q);
 	}
 
 	function getModerationQueueCount()

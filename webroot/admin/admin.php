@@ -11,6 +11,11 @@
 <a href="admin_news_add_category.php<?=getProjectPath(false)?>">Create news category</a><br/>
 
 <hr/>
+super admin stuff:<br/>
+<a href="admin_stopwords.php<?=getProjectPath(false)?>">Manage stopwords</a><br/>
+<a href="admin_moderationqueue.php<?=getProjectPath(false)?>">Moderation queue</a><br/>
+<hr/>
+
 maintainance:<br/>
 <a href="admin_events.php<?=getProjectPath(false)?>">Event log</a><br/>
 <a href="admin_compat_check.php<?=getProjectPath(false)?>">Compatiblity check</a><br/>

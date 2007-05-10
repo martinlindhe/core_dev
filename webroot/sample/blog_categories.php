@@ -15,7 +15,7 @@
 	if (isset($_POST['name'])) {
 		$global = false;
 		if (!empty($_POST['global'])) $global = true;
-		$categoryId = addCategory(CATEGORY_BLOGS, $_POST['name'], $global);
+		$categoryId = addCategory(CATEGORY_BLOG, $_POST['name'], $global);
 		if ($categoryId) {
 			header('Location: blogs.php');
 			die;

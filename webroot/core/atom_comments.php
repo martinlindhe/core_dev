@@ -55,7 +55,7 @@
 		global $db, $session;
 		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
 		
-		$q = 'DELETE FROM tblComments WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
+		$q = 'UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
 		return $db->delete($q);
 	}
 

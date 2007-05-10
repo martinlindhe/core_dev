@@ -8,8 +8,7 @@
 
 
 	blog:
-		- testa att modereringen fungerar som den ska
-		- bygg adminpaneler för "moderation queue", och "manage stopwords"
+
 
 
 	file area:
@@ -24,6 +23,7 @@
 		- öppna "pass thru" fil-länkar i en ny tabb om det går med javascript
 	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
+		- rename FILETYPE_USERFILE, CATEGORY_USERFILE kanske?
 
 
 	news modul:
@@ -100,7 +100,8 @@ X = hi prio task
 	- core: css fixande, hover funkar igen häråvar, och current page i createMenu() menyer är stylad korrekt nu
 	- categories: gjort en generell funktion för att skapa nya kategorier, den stödjer "new blog category" och "new filearea category"
 	- categories: cleanup & buggfixande, nu funkar globala kategorier som det var tänkt
-
+	- admin: byggt adminpanel för "manage stopwords"
+	- blog: byggt adminpaneler för "moderation queue"
 
 2007.05.09:
 	- blog: byggt om en massa så det funkar snarlikt som en wiki, med en egen meny & går att baka in i en annan sida, wip

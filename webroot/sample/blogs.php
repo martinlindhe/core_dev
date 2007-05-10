@@ -15,7 +15,7 @@
 		if ($list[$i]['categoryId'] != $shown_category) {
 			$catName = $list[$i]['categoryName'];
 			if (!$catName) $catName = 'Uncategorized';
-			echo '<br><b>'.$catName.'</b><br>';
+			echo '<br/><b>'.$catName.'</b><br/>';
 			$shown_category = $list[$i]['categoryId'];
 		}
 		echo $list[$i]['timeCreated'].' - <a href="blog_show.php?Blog:'.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a><br/>';
@@ -26,7 +26,7 @@
 	$list = getLatestBlogs(5);
 	for ($i=0; $i<count($list); $i++) {
 		echo '<a href="blog_show.php?Blog:'.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a> - '.$list[$i]['timeCreated'];
-		echo ' by '.nameLink($list[$i]['userId'], $list[$i]['userName']).'<br>';
+		echo ' by '.nameLink($list[$i]['userId'], $list[$i]['userName']).'<br/>';
 	}
 
 	if ($session->id) {
@@ -34,7 +34,7 @@
 	}
 
 	if ($session->isAdmin) {
-		echo '<a href="blog_archive.php?y=2006&m=7">Blog archive</a><br/>';
+		echo '<a href="blog_archive.php?y=2006&amp;m=7">Blog archive</a><br/>';
 		echo '<a href="blog_categories.php">Blog categories</a><br/>';
 	}
 
