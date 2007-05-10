@@ -4,7 +4,7 @@
 
 	$config['blog']['moderation'] = true;		//enables automatic moderation of new blogs
 	
-	$config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport');
+	$config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport', 'BlogComment', 'BlogFiles');
 	
 	function addBlog($categoryId, $title, $body)
 	{
@@ -126,12 +126,12 @@
 		return $db->getArray($q);
 	}
 
-	//todo: renama till "blog" ?
+	/* Default display of the blog module. Shows one blog, with some built in features */
 	function showBlog()
 	{
-		global $session, $config;
+		global $session, $files, $config;
 
-		//Looks for formatted blog section commands, like: Blog:Page, BlogEdit:Page, BlogDelete:Page, BlogReport:Page
+		//Looks for formatted blog section commands, like: Blog:ID, BlogEdit:ID, BlogDelete:ID, BlogReport:ID, BlogComment:ID, BlogFiles:ID
 		$cmd = fetchSpecialParams($config['blog']['allowed_tabs']);
 		if ($cmd) list($current_tab, $_id) = $cmd;
 		if (empty($_id) || !is_numeric($_id)) return false;
@@ -163,18 +163,20 @@
 		$menu = array();
 
 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?Blog:'.$_id => 'Show blog'));
-		if ($session->id == $blog['userId']) {
+		if ($session->id == $blog['userId'] || $session->isAdmin) {
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id => 'Edit blog'));
+			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id => 'Delete blog'));
-		//} else {
+		} else {
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id => 'Report blog'));
 		}
+		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
 		
 		createMenu($menu, 'blog_menu');
 
 		echo '<div class="blog_body">';
 
-		if ($current_tab == 'BlogEdit') {
+		if ($current_tab == 'BlogEdit' && (($session->id && $session->id == $blog['userId']) || $session->isAdmin) ) {
 			echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogEdit:'.$_id.'">';
 			echo '<input type="text" name="blog_title" value="'.$blog['blogTitle'].'" size="40" maxlength="40"/>';
 
@@ -195,7 +197,7 @@
 				echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
 			}
 
-		} else if ($current_tab == 'BlogDelete') {
+		} else if ($current_tab == 'BlogDelete' && (($session->id && $session->id == $blog['userId']) || $session->isAdmin) ) {
 			//fixme: använd standard-are-you-sure funktionen
 
 			if (isset($_GET['confirmed'])) {
@@ -211,8 +213,7 @@
 		} else if ($current_tab == 'BlogReport') {
 
 			if (isset($_POST['blog_reportreason'])) {
-				//fixme: handle submission
-				$queueId = addToModerationQueue(MODERATION_REPORTED_BLOG, $blogId);
+				$queueId = addToModerationQueue(MODERATION_REPORTED_BLOG, $_id);
 				addComment(COMMENT_MODERATION_QUEUE, $queueId, $_POST['blog_reportreason']);
 
 				echo 'Your report has been recieved<br/>';
@@ -226,6 +227,27 @@
 				echo '<input type="submit" class="button" value="Report"/>';
 				echo '</form>';
 			}
+
+		} else if ($current_tab == 'BlogComment') {
+
+			if (!empty($_POST['blog_comment'])) {
+				addComment(COMMENT_BLOG, $_id, $_POST['blog_comment']);
+			}
+
+			echo 'Comment on the blog below<br/><br/>';
+			
+			$list = getComments(COMMENT_BLOG, $_id,  ($session->id == $blog['userId'] || $session->isAdmin ? true : false) );
+			d($list);
+
+			echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogComment:'.$_id.'">';
+			echo '<textarea name="blog_comment" cols="64" rows="6"></textarea><br/><br/>';
+
+			echo '<input type="submit" class="button" value="Add comment"/>';
+			echo '</form>';
+
+		} else if ($current_tab == 'BlogFiles') {
+
+			echo $files->showFiles(FILETYPE_BLOG, $_id);
 
 		} else {
 			echo formatUserInputText($blog['blogBody']);

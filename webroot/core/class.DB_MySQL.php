@@ -170,7 +170,7 @@ class DB_MySQL extends DB_Base
 		return $data;
 	}
 
-	function getOneItem($q)
+	function getOneItem($q, $num = false)
 	{
 		global $config;
 
@@ -190,7 +190,10 @@ class DB_MySQL extends DB_Base
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
-		if (!$data) return false;
+		if (!$data) {
+			if ($num) return 0;
+			return false;
+		}
 		return $data[0];
 	}
 

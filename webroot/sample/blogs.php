@@ -6,8 +6,6 @@
 
 	require('design_head.php');
 	
-	wiki('Blog portal');
-
 	$list = getBlogsByCategory($show);
 
 	echo 'User #'.$show.' - blogs:<br/>';
@@ -34,7 +32,7 @@
 	if ($session->id) {
 		echo '<a href="blog_new.php">New blog</a><br/>';
 	}
-	
+
 	if ($session->isAdmin) {
 		echo '<a href="blog_archive.php?y=2006&m=7">Blog archive</a><br/>';
 		echo '<a href="blog_categories.php">Blog categories</a><br/>';

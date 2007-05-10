@@ -6,6 +6,7 @@
 	*/
 
 	define('COMMENT_NEWS',					1);
+	define('COMMENT_BLOG',					2);	//anonymous or registered users comments on a blog
 
 	define('COMMENT_ADBLOCKRULE',		20);
 

@@ -10,10 +10,10 @@
 require_once('functions_general.php');
 require_once('atom_categories.php');		//for file categories support
 
-define('FILETYPE_WIKI',						100); /* File is attached to a wiki */
+define('FILETYPE_WIKI',						100); // The file is a wiki attachment
+define('FILETYPE_BLOG',						101);	// The file is a blog attachment
+
 //define('FILETYPE_PR',							101);	/* File is attached to a PR */
-//define('FILETYPE_BLOG',						102);	/* File is attached to a blog */
-//define('FILETYPE_PHOTOALBUM',			103);	/* File is uploaded to a photoalbum */
 //define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
 define('FILETYPE_FILEAREA_UPLOAD',105);	/* File is uploaded to a file area */
 define('FILETYPE_USERFILE',				106);	/* File is uploaded to the user's own file area */
@@ -122,7 +122,7 @@ class Files
 		{
 			//Create new category. Only allow categories inside root level
 			$category_type = array_search($_POST['new_file_category_type'], $config['categories']['files_types']);
-			
+
 			addCategory($category_type, $_POST['new_file_category']);
 		}
 
@@ -130,21 +130,24 @@ class Files
 
 		//menu
 		echo '<div class="file_gadget_header">';
-		echo 'File Area Overview - Displaying ';
 		$action = '';
 		switch ($fileType)
 		{
 			case FILETYPE_USERFILE:
-				echo 'Your file area: ';
+				echo 'Your file area';
 
 			case FILETYPE_FILEAREA_UPLOAD:
 				$action = '?file_gadget_category_id='.$categoryId;
-				if (!$categoryId) echo 'Root Level content';
-				else echo getCategoryName($categoryId).' content';
+				if (!$categoryId) echo ' - Root Level content';
+				else echo ' - '.getCategoryName($categoryId).' content';
 				break;
 
 			case FILETYPE_WIKI:
-				echo 'wiki attachments';
+				echo 'Wiki attachments';
+				break;
+
+			case FILETYPE_BLOG:
+				echo 'Blog attachments';
 				break;
 
 			default:
@@ -705,7 +708,7 @@ class Files
 		header('Content-Length: '.filesize($out_filename));
 		echo file_get_contents($out_filename);
 	}
-	
+
 	function getFiles($ownerId, $fileType = 0)
 	{
 		global $db;
@@ -725,7 +728,7 @@ class Files
 	{
 		global $db;
 
-		if (!is_numeric($categoryId) || !is_numeric($fileType)) return array();
+		if (!is_numeric($fileType) || !is_numeric($categoryId)) return array();
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
@@ -734,6 +737,16 @@ class Files
 		$q .= ' ORDER BY t1.timeUploaded ASC';
 		
 		return $db->getArray($q);
+	}
+
+	function getFileCount($fileType, $categoryId)
+	{
+		global $db;
+
+		if (!is_numeric($fileType) || !is_numeric($categoryId)) return 0;
+
+		$q = 'SELECT COUNT(fileId) FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType;
+		return $db->getOneItem($q, true);
 	}
 
 	/* Används av ajax filen /core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/

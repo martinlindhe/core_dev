@@ -9,8 +9,6 @@
 
 	blog:
 		- gör en egen blog-meny css som inte är identisk med wiki-menyn
-		- filer
-		- kommentarer
 		- flytta över mer sql kod direkt i showBlog() om dom endast anropas på 1 ställe
 		- gör om "new blog category" dialogen så den har flervalsalternativ som "new filearea category"
 		- testa att modereringen fungerar som den ska
@@ -129,6 +127,8 @@ X = hi prio task
 	- lyrics: import tracklist improvements. hanterar titlar med punkt i, tex "D.O.W.N.". visar inte matches i lower case
 	- lyrics: optimerat sql-queries på några sidor med väldigt mycke onödiga queries
 	- lyrics: tagit bort all modereringslogik. man måste nu vara inloggad för att kunna ändra något
+	- blog: stöd för kommentarer, visningen är inte gjord
+	- blog: stöd för fil-attachments, går ej länka in bilder än direkt i bloggeditorn
 
 
 2007.05.09:

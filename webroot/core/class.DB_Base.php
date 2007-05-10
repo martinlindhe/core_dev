@@ -48,8 +48,10 @@ abstract class DB_Base
 	abstract function getOneRow($q);
 
 	/* Returns one column-result only
-		Example: SELECT a FROM t WHERE id=1 (where id is distinct) */
-	abstract function getOneItem($q);
+		Example: SELECT a FROM t WHERE id=1 (where id is distinct)
+		Set $num to true if you expect a numeric response (to return 0 on failure rather than boolean false)
+	*/
+	abstract function getOneItem($q, $num = false);
 
 
 	/****************************************************/

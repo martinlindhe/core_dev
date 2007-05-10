@@ -87,7 +87,7 @@
 
 		$wikiName = str_replace(' ', '_', $wikiName);
 
-		$q ='SELECT t1.wikiId,t1.msg,t1.hasFiles,t1.timeCreated,t1.lockedBy,t1.timeLocked,t2.userName AS creatorName, t3.userName AS lockerName '.
+		$q ='SELECT t1.*,t2.userName AS creatorName, t3.userName AS lockerName '.
 				'FROM tblWiki AS t1 '.
 				'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) '.
 				'LEFT JOIN tblUsers AS t3 ON (t1.lockedBy=t3.userId) '.
@@ -95,7 +95,6 @@
 
 		$data = $db->getOneRow($q);
 
-		$wikiId = $data['wikiId'];
 		$text = stripslashes($data['msg']);
 		
 		if (!$session->isAdmin && !$config['wiki']['allow_edit']) {
@@ -108,7 +107,7 @@
 			'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
 			'?WikiEdit:'.$wikiName => 'Edit',
 			'?WikiHistory:'.$wikiName => 'History',
-			'?WikiFiles:'.$wikiName => 'Files');
+			'?WikiFiles:'.$wikiName => 'Files ('.$files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')');
 
 		echo '<div class="wiki">';
 		createMenu($menu, 'blog_menu');
@@ -117,17 +116,17 @@
 		/* Display the wiki toolbar for super admins */
 		if ($current_tab == 'WikiEdit' && ($session->isAdmin || !$data['lockedBy']))
 		{
-			if (isset($_POST['wiki_'.$wikiId]))
+			if (isset($_POST['wiki_'.$data['wikiId']]))
 			{
 				//save changes to database
-				wikiUpdate($wikiName, $_POST['wiki_'.$wikiId]);
-				$text = $_POST['wiki_'.$wikiId];
-				unset($_POST['wiki_'.$wikiId]);
+				wikiUpdate($wikiName, $_POST['wiki_'.$data['wikiId']]);
+				$text = $_POST['wiki_'.$data['wikiId']];
+				unset($_POST['wiki_'.$data['wikiId']]);
 				//JS_Alert('Changes saved!');
 			}
 			
 			if ($session->isAdmin && isset($_GET['wiki_lock'])) {
-				$q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE wikiId='.$wikiId;
+				$q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE wikiId='.$data['wikiId'];
 				$db->query($q);
 				$data['lockedBy'] = $session->id;
 				$data['lockerName'] = $session->username;
@@ -135,7 +134,7 @@
 			}
 
 			if ($session->isAdmin && isset($_GET['wiki_unlock'])) {
-				$q = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$wikiId;
+				$q = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$data['wikiId'];
 				$db->query($q);
 				$data['lockedBy'] = 0;
 				addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been unlocked', now(), $session->id, REV_CAT_UNLOCKED);
@@ -148,7 +147,7 @@
 			if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' by '.$data['creatorName'];
 
 			echo '<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">'.
-					 '<textarea name="wiki_'.$wikiId.'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
+					 '<textarea name="wiki_'.$data['wikiId'].'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
 					 'Last edited '.$last_edited.'<br/>'.
 					 '<input type="submit" class="button" value="Save"/>';
 
@@ -165,7 +164,7 @@
 
 			//List "unused files" for this Wiki when in edit mode
 			if ($config['wiki']['allow_files']) {
-				$filelist = $files->getFilesByCategory(FILETYPE_WIKI, $wikiId);
+				$filelist = $files->getFilesByCategory(FILETYPE_WIKI, $data['wikiId']);
 				
 				$str = '';
 
@@ -180,7 +179,7 @@
 					}
 
 					if (strpos($text, $linkTag) === false) {
-						$str .= '<span onclick="document.wiki_edit.wiki_'.$wikiId.'.value += \' '.$linkTag.'\';">'.$showTag.'</span>, ';
+						$str .= '<span onclick="document.wiki_edit.wiki_'.$data['wikiId'].'.value += \' '.$linkTag.'\';">'.$showTag.'</span>, ';
 					}
 				}
 				if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
@@ -192,7 +191,7 @@
 		}
 		elseif ($config['wiki']['allow_files'] && $current_tab == 'WikiFiles')
 		{
-			echo $files->showFiles(FILETYPE_WIKI, $wikiId);
+			echo $files->showFiles(FILETYPE_WIKI, $data['wikiId']);
 		}
 		elseif ($config['wiki']['log_history'] && $current_tab == 'WikiHistory')
 		{
@@ -202,7 +201,7 @@
 			echo nl2br(htmlentities($text, ENT_COMPAT, 'UTF-8'));
 			echo '</div>';
 
-			showRevisions(REVISIONS_WIKI, $wikiId, $wikiName);
+			showRevisions(REVISIONS_WIKI, $data['wikiId'], $wikiName);
 		}
 		else
 		{
