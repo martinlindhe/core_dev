@@ -1,7 +1,15 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
-		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
+		- lyrics import tracklist
+			titel "D.O.W.N." splittas upp till "D", exempel:
+			http://gracenote.com/music/album.html/gangsta/b21f6348bb9921056411a0f0f06b1240.html
+
+		- full lyrics dump så kan återskapa i laptopen
+		- ändra lyric titel till svensk tecken funkar ej.!!! exempel: 
+			http://87.227.76.225/lyric/show_lyric.php?id=4863
+			
+		- lyrics: visa ej "log in" om man e inloggad
+
 
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
@@ -28,6 +36,8 @@
 		- bugg: ajax show info, filesize är orginal upload size innan filen resizades
 		- ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
 		- öppna "pass thru" fil-länkar i en ny tabb om det går med javascript
+	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
+		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
 
 
 	news modul:

@@ -29,16 +29,26 @@
 
 	mms-hantering:
 		* buggfix i mail header parsing (telenor mms funkar nu)
-		
+
 2007.05.10 Torsdag:
 	dev-servern:
 		* gjort ett backupscript som gör regelbundna backups av källkoden vid midnatt varje dygn
 		* konfigurerat apache lite. php errors loggas nu till /var/log/apache2/error.log
-		
+
 	mms-hantering:
 		* all aktivitet loggas nu till /var/log/mms.log med timestamps, istället för till stdout
 		* renamar *.jpeg filer till *.jpg vid bildhantering (thumbnail visas nu även för .jpeg's)
 
+	webbgränssnittet:
+		* mms-upload info popup i ditt galleri
+		* "glömt lösenord"-sidan fick ny design
+		* "ny användare"-sidorna fick ny design
+
+	mobila gränssnittet:
+		* gästboksöversikten lite upprensad från feedback, la till ikon för "läst" / "oläst" inlägg
+		* "skriv mail" fixad så dropdownlistan med kompisar funkar, osv - från feedback
+		* "din mail"-översikten upprensad från feedback, la till ikon för "läst" / "oläst" inlägg
+		* längst ner på alla sidor finns nu en "hem"-knapp som leder till startsidan, från feedback
 
 ***********************************************************************************************************************************
 topp prio:
@@ -49,13 +59,20 @@ topp prio:
 		- alla ska ha mms funktion (vip) under testet
 
 	* max 7 tecken i användarnamnet
+	
+	* hitta mysql-prestanda-utbildningar
+	
+	* kika efter lastbalans-test mjukvara, mika visste nåt. och det finns nåt apache-projekt
 
-	* visa login-error istället för välkomsttexten på oinloggad startsida, ej i popup eller ny sida som det är idag
+	* visa login-error istället för välkomsttexten på oinloggad startsida,
+		ej i popup eller ny sida som det är idag - kräver mycket omstrukturering i index_p.php och auth.php
+		index_p.php ska förövrigt bort helt så det är dubbeljobb isåfall
 
 
 senare under betatestet, mitten av maj:
 	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
 
+	* EFTER BETA: bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
 
 allmänt mobila gränssnittet:
 
