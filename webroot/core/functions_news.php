@@ -106,11 +106,12 @@
 
 			if ($row['editorId']) echo '<i>Updated '.$row['timeEdited'].' by '.$row['editorName'].'</i><br/>';
 
-			if ($art['head']) echo '<div class="news_head">'.$art['head'].'</div>';
-
 			if ($session->isAdmin) {
 				echo '<a href="/admin/admin_news_edit.php?id='.$row['newsId'].getProjectPath().'">Edit news</a>';
+				echo '<a href="/admin/admin_news_delete.php?id='.$row['newsId'].getProjectPath().'">Delete news</a>';
 			}
+
+			if ($art['head']) echo '<div class="news_head">'.$art['head'].'</div>';
 
 			echo '<div class="news_body">'.$art['body'].'</div>';
 
@@ -137,6 +138,9 @@
 			$art = parseArticle($row['body']);
 			echo $art['head'].'<br/>';
 			echo '</div><br/>';
+		}
+		if ($session->isAdmin) {
+			echo '<a href="/admin/admin_news_add.php'.getProjectPath(false).'">Add news</a>';
 		}
 	}
 ?>

@@ -352,7 +352,13 @@ input.button:focus {
 .news_head { /* news article heading */
 	font-size: 16px;
 	font-weight: bold;
+	padding: 10px;
+	border: 1px #888 solid;
+	background-color: #eee;
 }
 .news_body { /* news article body */
 	font-size: 12px;
+	padding: 10px;
+	border: 1px #888 solid;
+	background-color: #eee;
 }

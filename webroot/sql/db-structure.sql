@@ -434,7 +434,7 @@ CREATE TABLE tblComments (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (commentId)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 CREATE TABLE tblFiles (
   fileId bigint(20) unsigned NOT NULL auto_increment,
   fileName varchar(250) character set utf8 default NULL,
