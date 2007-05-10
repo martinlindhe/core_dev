@@ -3,7 +3,7 @@
 #top_online { position: absolute; top: 5px; left: 840px; width: 137px; height: 90px; text-align: center; background: url('/_objects/bg_online.png'); }
 #top_online_off { position: absolute; left: 826px; top: 25px; }
 
-#top_ad { position: absolute; top: 20px; left: 352px; border: 1px solid #b4b9b3; }
+#top_ad { position: absolute; top: 2px; left: 246px; border: 1px solid #b4b9b3; }
 #top_ad img { margin: 1px; }
 
 ul#top_menu { color: #fff; list-style-type: none; position: absolute; left: 20px; top: 99px; margin: 0; padding: 0; }
@@ -15,8 +15,8 @@ ul#top_menu a { color: #fff; text-decoration: none; }
 #userfind_inp { margin: 0 0 -4px 0; }
 #logout { position: absolute; top: 103px; left: 958px; }
 
-.leftMenuHeader { width: 176px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header1.png'); background-repeat: no-repeat; }
-.leftMenuHeaderRed { width: 176px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header_red.png'); background-repeat: no-repeat; }
+.leftMenuHeader { width: 176px; height: 19px; padding-left: 8px; padding-top: 2px; font-size: 14px; color: #fff; background: url('/_gfx/left_menu_header1.png'); background-repeat: no-repeat; }
+.leftMenuHeaderRed { width: 176px; height: 19px; padding-left: 8px; padding-top: 2px; font-size: 14px; color: #fff; background: url('/_gfx/left_menu_header_red.png'); background-repeat: no-repeat; }
 /* added by frans */
 #friendsOnline .leftMenuHeaderRed { cursor: pointer; }
 
@@ -28,15 +28,15 @@ ul#top_menu a { color: #fff; text-decoration: none; }
 .leftMenuBodyWhite { width: 174px; background: #fff; border: 1px solid #ccc; }
 .leftMenuBodyRed { width: 174px; background: #995F5F; border: 1px solid #ccc; }
 
-.centerMenuHeader { width: 596px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header2.png'); background-repeat: no-repeat; }
-.centerMenuHeader2 { width: 596px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 12px; color: #fff; background: url('/_gfx/left_menu_header2.png'); background-repeat: no-repeat; }
+.centerMenuHeader { width: 596px; height: 19px; padding-left: 8px; padding-top: 2px; font-size: 14px; color: #fff; background: url('/_gfx/left_menu_header2.png'); background-repeat: no-repeat; }
+.centerMenuHeader2 { width: 596px; height: 19px; padding-left: 8px; padding-top: 2px; font-size: 12px; color: #fff; background: url('/_gfx/left_menu_header2.png'); background-repeat: no-repeat; }
 
 .centerMenuBodyWhite { width: 594px; background: #fff; border: 1px solid #ccc; }
 
-.centerMenuHeaderSmall { width: 290px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header3.png'); background-repeat: no-repeat; }
+.centerMenuHeaderSmall { width: 290px; height: 19px; padding-left: 8px; padding-top: 2px; font-size: 14px; color: #fff; background: url('/_gfx/left_menu_header3.png'); background-repeat: no-repeat; }
 .centerMenuBodySmallWhite { width: 280px; background: #fff; border: 1px solid #ccc; padding: 5px; margin-bottom: 10px; }
 
-.centerMenuHeaderWide { width: 786px; height: 23px; padding-left: 8px; padding-top: 4px; font-size: 16px; color: #fff; background: url('/_gfx/left_menu_header4.png'); background-repeat: no-repeat; }
+.centerMenuHeaderWide { width: 786px; height: 19px; padding-left: 8px; padding-top: 2px; font-size: 14px; color: #fff; background: url('/_gfx/left_menu_header4.png'); background-repeat: no-repeat; }
 .centerMenuBodyWideWhite { width: 784px; background: #fff; border: 1px solid #ccc; }
 
 .centerMenuHeader a { color: #fff; text-decoration: none; }

@@ -29,6 +29,10 @@
 
 	mms-hantering:
 		* buggfix i mail header parsing (telenor mms funkar nu)
+		
+2007.05.10 Torsdag:
+	dev-servern:
+		* gjort ett backupscript som gör regelbundna backups av källkoden
 
 ***********************************************************************************************************************************
 topp prio:

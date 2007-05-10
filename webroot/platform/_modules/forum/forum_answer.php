@@ -1,4 +1,6 @@
 <?
+	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
+
 	if(empty($_GET['id']) || !is_numeric($_GET['id'])) {
 		popupACT('Tråden existerar inte.');
 	}
@@ -17,6 +19,7 @@
 		if($l['status_id'] == '1') {
 			$parent = $res['main_id'];
 			$top = $res['top_id'];
+
 			$ins = $sql->queryInsert("INSERT INTO {$t}f SET
 			topic_id = '{$r['main_id']}',
 			parent_id = '".secureINS($top)."',
@@ -27,10 +30,12 @@
 			sent_ttl = '".secureINS($res['sent_cmt'])."',
 			sent_cmt = '".secureINS($_POST['ins_cmt'])."',
 			sent_date = NOW()");
+
+			spyPost($top, 'f', $ins);
+
 			$sql->queryUpdate("UPDATE {$t}f SET change_date = NOW() WHERE main_id = '".secureINS($top)."' LIMIT 1");
-			/*if($res['sender_id'] != $l['id_id']) $user->spy($res['sender_id'], $res['top_id'], 'FAN', array($ins, $l['u_alias'], $res['sent_ttl']));*/
 			$user->counterDecrease('forum', $s['id_id']);
-			//if(!$res[4]) $user->notifyDecrease('mail', $s['id_id']);
+
 			popupACT('Meddelande skickat!', '', l('forum','read',$res['top_id']).'&item='.$ins.'#R'.$ins, '500');
 		} else popupACT('Meddelande ej sparat!', '', l('forum','read',$res['top_id']), '500');
 	}
@@ -48,16 +53,10 @@
 	}
 document.onkeydown = ActivateByKey;
 </script>
-<style type="text/css">
-body {
-	border: 6px solid #FFF;
-	background: #FFF;
-}
-</style>
 
-<div class="mainHeader2"><h4>svara på inlägg</h4></div>
+<div class="centerMenuHeader">svara på inlägg</div>
 <form name="msg" action="<?=l('forum', 'answer' ,$res['main_id'])?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { sub_dis = true; this.sub.disabled = true; return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
-<div class="mainBoxed2">
+<div class="centerMenuBodyWhite">
 	<table summary="" cellspacing="0" style="margin-left: 10px;">
 		<tr><td class="pdg">Svar till: <b><?=secureOUT($res['sent_cmt'])?></b></td></tr>
 		<tr><td class="pdg" style="padding-top: 0;"><textarea name="ins_cmt" class="txt" style="width: 550px; height: 100px;"></textarea><script type="text/javascript">document.msg.ins_cmt.focus();</script></td></tr>

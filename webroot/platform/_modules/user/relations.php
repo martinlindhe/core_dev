@@ -73,7 +73,7 @@
 	if ($own && !$blocked) {		
 		//paus är förfrågningar som andra skickat till dig
 		$paus = getRelationRequestsToMe();
-		
+
 		//wait är förfrågningar du väntar på svar på
 		$wait = getRelationRequestsFromMe();
 		require("relations_user.php");

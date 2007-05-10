@@ -1,4 +1,6 @@
 <?
+	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
+
 	$isFriends = $user->isFriends($s['id_id']);
 	$allowed = ($own || $isFriends || $isAdmin)?true:false;
 
@@ -12,6 +14,16 @@
 		include('gallery_view.php');
 		exit;
 	}
+
+	/* bevakningar */
+	if ($s['id_id'] && isset($_GET['subscribe'])) {
+		spyAdd($s['id_id'], 'g');
+	}
+
+	if ($s['id_id'] && isset($_GET['unsubscribe'])) {
+		spyDelete($s['id_id'], 'g');
+	}
+
 	//Markera en bild som raderad
 	if(!empty($_GET['d'])) {
 		$res = $sql->queryLine("SELECT main_id, status_id, user_id, pht_date, pht_cmt FROM {$t}userphoto WHERE main_id = '".secureINS($_GET['d'])."' LIMIT 1", 1);
@@ -37,9 +49,16 @@
 <?	
 	if ($own) {
 		makeButton(false, 'makeUpload();', 'icon_gallery.png', 'ladda upp ny');
-		echo '<br/><br/><br/>';
+	} else {
+		if (spyActive($s['id_id'], 'g')) {
+			makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
+		} else {
+			makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+		}		
 	}
 ?>
+<br/><br/><br/>
+
 <script type="text/javascript">
 var first = '<?=$first?>'; ext = '<?=$ext?>';
 </script>

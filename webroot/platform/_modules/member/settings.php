@@ -18,6 +18,9 @@
 	} elseif($id == 'personal') {
 		include('settings_personal.php');
 		exit;
+	} elseif($id == 'subscription') {
+		include('settings_subscription.php');
+		exit;
 	} else {
 		include('settings_profile.php');
 		exit;

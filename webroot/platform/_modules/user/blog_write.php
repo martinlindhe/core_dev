@@ -24,9 +24,10 @@
 			$id = $res['main_id'];
 		} else {
 			$id = $sql->queryInsert("INSERT INTO {$t}userblog SET blog_idx = NOW(), user_id = '".$l['id_id']."', hidden_id = '$hidden', blog_cmt = '".@secureINS($_POST['text_html'])."', blog_title = '".@secureINS($_POST['ins_title'])."', blog_date = NOW()");
-#			$res = $sql->query("SELECT p.user_id FROM {$t}userblogspy p INNER JOIN {$t}user u ON u.id_id = p.user_id AND u.status_id = '1' WHERE p.blogger_id = '".$l['id_id']."' AND p.status_id = '1'");
+
+			spyPost($l['id_id'], 'b', $id);
+
 			$user->counterIncrease('blog', $l['id_id']);
-#			if(!$hidden) foreach($res as $row) if($row[0] != $l['id_id']) $user->spy($row[0], $id, 'BLG', array($l['u_alias']));
 		}
 		if(isset($_GET['m']))
 			popupACT('Publicerad!', '', '1000', 'user_blog.php?'.mt_rand(1000, 9999).'#R'.$id);

@@ -30,7 +30,7 @@ function checkTime(toggle) {
 		</map>
 		<img alt="" src="/_gfx/head_bg.png" id="top_img" usemap="#topmap" />
 
-		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" /></a></div>
+		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" width="728" height="90" /></a></div>
 
 		<ul id="top_menu">
 			<li><a href="/main/start/">start</a> | </li>

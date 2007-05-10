@@ -1,4 +1,6 @@
 <?
+	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
+
 	$length = array('1' => 10, '3' => 10, '5' => 20, '6' => 40, '8' => 80, '10' => 0);
 	$lim = @$length[$l['level_id']];
 	$photo_limit = 510;
@@ -54,13 +56,10 @@
 					if($res) {
 						@unlink($file);
 						@rename($file2, USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name);
-						try {
-							if(!@make_thumb(USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name, USER_GALLERY.PD.'/'.$res.'-tmb.'.$p_name, '100', 89)) {
-								throw new Exception($error);
-							}
-						} catch(Exception $e) {
+						@make_thumb(USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name, USER_GALLERY.PD.'/'.$res.'-tmb.'.$p_name, '100', 89);
 
-						}
+						spyPost($l['id_id'], 'g', $res);
+
 					} else {
 						@unlink($file);
 						@unlink($file2);

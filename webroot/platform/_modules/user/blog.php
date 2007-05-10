@@ -1,4 +1,6 @@
 <?
+	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
+
 	if(isset($_GET['write'])) {
 		include('blog_write.php');
 		exit;
@@ -7,6 +9,16 @@
    		include('blog_comment.php');
 		exit;
 	}
+	
+	/* bevakningar */
+	if ($s['id_id'] && isset($_GET['subscribe'])) {
+		spyAdd($s['id_id'], 'b');
+	}
+
+	if ($s['id_id'] && isset($_GET['unsubscribe'])) {
+		spyDelete($s['id_id'], 'b');
+	}
+
 	$allowed = $user->isFriends($s['id_id']);
 	if(!empty($key) && is_numeric($key)) {
 		include('blog_read.php');
@@ -29,15 +41,21 @@
 
 	require(DESIGN.'head_user.php');
 ?>
-			<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
+<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
 <?
 			if ($own) {
 				makeButton(false,	'makeBlog(\''.$l['id_id'].'\')',	'icon_blog.png',	'skriv nytt');
-				echo '<br/><br/><br/>';
+			} else {
+				if (spyActive($s['id_id'], 'b')) {
+					makeButton(false, 'goLoc(\''.l('user', 'blog', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
+				} else {
+					makeButton(false, 'goLoc(\''.l('user', 'blog', $s['id_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+				}
 			}
 ?>
+<br/><br/><br/>
 
-			<div class="centerMenuBodyWhite">
+<div class="centerMenuBodyWhite">
 <?
 	if (!empty($res) && count($res)) dopaging($paging, l('user', 'blog', $s['id_id'], '0').'p=', '', 'med', STATSTR);
 
@@ -69,7 +87,7 @@
 	}
 	echo '</table>';
 ?>
-			</div>
+</div>
 <?
 	require(DESIGN.'foot_user.php');
 ?>

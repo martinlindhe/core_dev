@@ -1,4 +1,6 @@
 <?
+	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
+
 	if(empty($_GET['id']) || !is_numeric($_GET['id'])) {
 		errorACT('Tråden existerar inte', l('forum','list'));
 	}
@@ -32,6 +34,15 @@
 			$s = @$sql->queryUpdate("UPDATE {$t}f SET view_id = '2', check_id = '1' WHERE main_id = '".secureINS($_GET['del'])."' AND sender_id = '".secureINS($l['id_id'])."' LIMIT 1");
 		}
 		reloadACT(l('forum', 'read', $res['main_id']));
+	}
+
+	/* bevakningar */
+	if ($res['main_id'] && isset($_GET['subscribe'])) {
+		spyAdd($res['main_id'], 'f');
+	}
+
+	if ($res['main_id'] && isset($_GET['unsubscribe'])) {
+		spyDelete($res['main_id'], 'f');
 	}
 
 	if($isAdmin) {
@@ -78,8 +89,17 @@
 			<tr><td><?='<h4>'.secureOUT($r['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg'?></td></tr>
 		</table>
 
-			<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
-			<div class="centerMenuBodyWhite">
+		<? 
+			if (spyActive($res['main_id'], 'f')) {
+				makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
+			} else {
+				makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+			}
+		?>
+		<br/><br/><br/>
+
+		<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
+		<div class="centerMenuBodyWhite">
 <?
 	array_unshift($list, $res);
 	$odd = true;

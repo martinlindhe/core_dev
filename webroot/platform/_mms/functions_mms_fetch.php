@@ -11,40 +11,26 @@
 
 	Important: POP3 standard uses "octets", it is equal to "bytes", an octet is a 8-bit value
 
-
 	References
 	----	
 	POP 3 command summary: http://www.freesoft.org/CIE/RFC/1725/8.htm
 	More examples & info: http://www.thewebmasters.net/php/POP3.phtml
 	APOP details: http://tools.ietf.org/html/rfc1939#page-15
-	
+
 	//todo: gör en funktion som extractar "content-type" datan
 	//todo: lägg en file lock i constructorn å lås upp den i destructorn, så inte 2 script kan köras parallellt
-	
-	//todo: skrota parseFiles
 */
-
-require('set_tmb.php');		//fixme: vad behövs den för? iaf make_thumb()
 
 //allowed mail attachment mime types
 $config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'video/3gpp');
 $config['email']['text_allowed_mime_types'] = array('text/plain');
 
-$config['email']['upload_dir'] = './user_mms/';
-
-	
 class email
 {
-	var $hdl;
-	var $boundary;
+	var $handle;
 	var $errno;
 	var $errstr;
-	var $sql;
-	var $flim = 300000;
-	var $llim = array('6' => 5, '7' => 5, '10' => 0);
 
-
-	//martins variabler:
 	var $unread_mails = 0;		//STAT unreadmail totbytes
 	var $tot_bytes = 0;
 
@@ -55,14 +41,13 @@ class email
 
 	var $debug = false;			//echos POP3 commands and responses if enabled
 
-	function __construct($sql)
+	function __construct()
 	{
-		$this->sql = $sql;
 	}
 
 	function open()
 	{
-		$this->hdl = fsockopen($this->pop3_server, $this->pop3_port, $this->errorno, $this->errstr, $this->pop3_timeout);
+		$this->handle = fsockopen($this->pop3_server, $this->pop3_port, $this->errorno, $this->errstr, $this->pop3_timeout);
 	}
 
 	function close()
@@ -70,12 +55,12 @@ class email
 		$this->write('QUIT');
 		$this->read();		//Response: +OK Bye-bye.
 
-		fclose($this->hdl);
+		fclose($this->handle);
 	}
 
 	function read()
 	{
-		$var = fgets($this->hdl, 128);
+		$var = fgets($this->handle, 128);
 		if ($this->debug) echo 'Read: '.trim(htmlentities($var)).'<br/>';
 		return $var;
 	}
@@ -83,7 +68,7 @@ class email
 	function write($line)
 	{
 		if ($this->debug) echo 'Wrote: '.htmlentities($line).'<br/>';
-		fputs($this->hdl, $line."\r\n");
+		fputs($this->handle, $line."\r\n");
 	}
 
 	//Return true or false on +OK or -ERR
@@ -231,6 +216,9 @@ class email
 			$header[ $curr_key ] = str_replace("\t", ' ', $header[ $curr_key ]);
 			$header[ $curr_key ] = str_replace('  ', ' ', $header[ $curr_key ]);
 		}
+		
+		//echo '<pre>';print_r($header);
+		
 		return $header;
 	}	
 	
@@ -271,9 +259,10 @@ class email
 		return $mms_code;
 	}
 
-	/* Takes a email as parameter, returns all attachments, body & header nicely parsed up */
-	//also automatically extracts file attachments and handles them as file uploads
-	//allowed file types as attachments are $config['email']['attachments_allowed_mime_types']
+	/* Takes a raw email (including headers) as parameter, returns all attachments, body & header nicely parsed up
+		also automatically extracts file attachments and handles them as file uploads
+		allowed file types as attachments are $config['email']['attachments_allowed_mime_types']
+	*/
 	function parseAttachments($msg)
 	{
 		global $config;
@@ -307,7 +296,7 @@ class email
 		foreach ($check as $part)
 		{
 			$part = trim($part);
-			if ($part == 'multipart/mixed') {
+			if ($part == 'multipart/mixed' || $part == 'multipart/related') {
 
 			} else {
 				$pos = strpos($part, '=');
@@ -325,7 +314,6 @@ class email
 						//echo 'unknown param: '.$key.' = '.$val.'<br>';
 						break;
 				}
-
 			}
 		}
 
@@ -376,9 +364,11 @@ class email
 		/* Stores all base64-encoded attachments to disk */
 		foreach ($result['attachment'] as $attachment)
 		{
+			//print_r($attachment['head']);
+
 			//Check attachment content type
 			//echo 'Attachment type: '. $attachment['head']['Content-Type'].'<br>';
-			
+
 			$params = explode('; ', $attachment['head']['Content-Type']);
 			//print_r($params);
 			$attachment_mime = $params[0];
@@ -387,8 +377,10 @@ class email
 			if (!empty($attachment['head']['Content-Location'])) $filename = $attachment['head']['Content-Location'];
 			if (!$filename) {
 				//Extracta filename från: [Content-Type] => image/jpeg; name="header.jpg"
+				//Eller									: [Content-Type] => image/jpeg; name=DSC00071.jpeg
+
 				//fixme fulhack:
-				if (substr($params[1], 0, 5) == 'name=') {
+				if (isset($params[1]) && substr($params[1], 0, 5) == 'name=') {
 					$filename = str_replace('"', '', substr($params[1], 5) );
 				}
 			}
@@ -419,161 +411,6 @@ class email
 		}
 
 		return $result;
-	}
-	
-
-	function parseFiles($mail)
-	{
-		global $t;
-		$complete = false;
-		$found = false;
-		$needle = "\r\n";
-		$this->sql->queryInsert('INSERT INTO s_aadata SET data_s = "'.$mail.'"');
-		$mail = explode($needle, $mail);
-		$start_collect = false;
-		$collected = array();
-		$active_file = -1;
-		$from = '';
-#print_r($mail);
-#die();
-		$text = '';
-		$subj = '';
-		$subj2 = '';
-		$subj3 = '';
-#print_r($mail);
-		for ($i = 0; $i < count($mail); $i++) {
-			$line = $mail[$i];
-			if (substr($line, 0, 4) == '/9j/' || (@$mail[$i-1] && substr($mail[$i-1], 0, 31) == 'Content-Disposition: attachment')) {
-				$start_collect = true;
-				$active_file++;
-				#$i = $i - 2;
-			}
-			if (substr($line, 0, 5) == 'From:') {
-				$f = trim(substr($line, 5));
-				#if(preg_match("/(.*?)/is", $line, $from_arr)) {
-					#foreach($from_arr as $f) {
-						if(!empty($f) && strpos($f, '@') !== false) {
-							$from = str_replace('>', '', str_replace('<', '', $f));
-						}
-					#}
-				#}
-			}
-			if (substr($line, 0, 8) == 'Subject:') {
-				$subj = trim(substr($line, 8));
-				if(substr($subj, 0, 5) == 'SPAM-' && strpos($subj, ':') !== false) {
-					$subj = explode(':', $subj);
-					unset($subj[0]);
-					$subj = trim(implode(':', $subj));
-				}
-			}
-			if (strtolower(substr($line, 0, 25)) == 'content-type: text/plain;') {
-				$act = '';
-				for ($ei = 0; $ei <= 10; $ei++) {
-					$ex_line = $mail[$i+$ei];
-					if (substr($ex_line, 0, 8) != 'Content-' && substr($ex_line, 0, 7) != 'charset') {
-						if(substr($ex_line, 0, 7) == '------=') {
-							break;
-						}
-						$act .= trim($ex_line);
-					}
-				}
-				if (!empty($subj2)) {
-					$subj3 = $act;
-				} else $subj2 = $act;
-
-			}
-
-			if ($start_collect) {
-				if(substr($line, 0, 4) == '----') $start_collect = false; else $collected[$active_file][] = $line;
-			}
-		}
-		if (($subj || $subj2 || $subj3) && !$found) {		
-
-			if (!empty($subj) && count($subj) >= 2) {
-				$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM {$t}user u LEFT JOIN {$t}userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj[0])."' AND u.status_id = '1'");
-				if (!empty($check) && count($check)) {
-					if ($check[1] >= 6) {
-						//todo martin: bort med $this->user !!!
-						if($this->user->getinfo($check[0], 'mmsenabled') && strtolower($subj[1]) == strtolower($this->user->getinfo($check[0], 'mmskey'))) {
-							$complete = true;
-							$id_id = $check[0];
-							$text = $subj;
-							unset($text[0]);
-							unset($text[1]);
-							$text = implode(' ', $text);
-						} # else wrong key
-					} # else not gotit valid
-				} # else wrong user
-			} # else wrong format
-			if (!$complete) {
-				if (!empty($subj2) && count($subj2) >= 2) {
-					$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM {$t}user u LEFT JOIN {$t}userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj2[0])."' AND u.status_id = '1'");
-					if (!empty($check) && count($check)) {
-						if ($check[1] >= 6) {
-							//todo martin: bort med $this->user!!!
-							if ($this->user->getinfo($check[0], 'mmsenabled') && strtolower($subj2[1]) == strtolower($this->user->getinfo($check[0], 'mmskey'))) {
-								$complete = true;
-								$id_id = $check[0];
-								$text = $subj2;
-								unset($text[0]);
-								unset($text[1]);
-								$text = implode(' ', $text);
-							} # else wrong key
-						} # else not gotit valid
-					} # else wrong user
-				} # else wrong format
-			}
-			if (!$complete) {
-				if (!empty($subj3) && count($subj3) >= 2) {
-					$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM {$t}user u LEFT JOIN {$t}userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj3[0])."' AND u.status_id = '1'");
-					if (!empty($check) && count($check)) {
-						if ($check[1] >= 6) {
-							//todo martin: bort med $this->user!!!
-							if ($this->user->getinfo($check[0], 'mmsenabled') && strtolower($subj3[1]) == strtolower($this->user->getinfo($check[0], 'mmskey'))) {
-								$complete = true;
-								$id_id = $check[0];
-								$text = $subj3;
-								unset($text[0]);
-								unset($text[1]);
-								$text = implode(' ', $text);
-								} # else wrong key
-						} # else not gotit valid
-					} # else wrong user
-				} # else wrong format
-			}
-			$found = true;
-		}
-		if ($complete) {
-			if (!empty($check[2]) && $check[2] == date("Y-m-d") && @$this->llim[$check[1]] && $check[3] >= @$this->llim[$check[1]]) {
-				//martin todo: bort med $this->user!!!
-				$this->user->spy($check[0], 'MSG', 'MSG', array('Du har skickat maximalt antal MMS idag. Pröva igen imorgon.'));
-				return false;
-			} else {
-				if (!empty($check[2])) {
-					if ($check[2] == date("Y-m-d"))
-						$this->sql->queryUpdate("UPDATE {$t}userphotomms_limit SET last_times = last_times + 1 WHERE id_id = '".$check[0]."' LIMIT 1");
-					else
-						$this->sql->queryUpdate("UPDATE {$t}userphotomms_limit SET last_date = NOW(), last_times = 1 WHERE id_id = '".$check[0]."' LIMIT 1");
-				} else {
-					$this->sql->queryInsert("INSERT INTO {$t}userphotomms_limit SET last_date = NOW(), last_times = 1, id_id = '".$check[0]."'");
-				}
-				$files = array();
-				$total = 0;
-				foreach ($collected as $c) {
-					#if(!empty($c)) {
-						$c = implode('', $c);
-						if(substr($c, 0, 6) != '<smil>') {
-							$n = count(preg_split("`.`", $c)) - 1;
-							$files[] = array($c, $n);
-							$total += $n;
-						}
-					#}
-				}
-				if ($total <= $this->flim)
-					return array($files, $from, $id_id, $text, $total);
-				else return false;
-			}
-		} else return false;
 	}
 
 	/* fetches all mail from a pop3 inbox */
@@ -611,24 +448,15 @@ class email
 	//file_put_contents($filename, base64_decode($attachment['body']));
 	function saveFile($filename, $mime_type, $data, $mms_code)
 	{
-		global $config, $t;
+		global $config, $sql, $t;
 
 		echo 'Writing '.$filename.' ('.$mime_type.') to disk...<br/>';
 
 		$filesize = strlen($data);
-		/*
-		$q = 'INSERT INTO tblMMSRecieved SET userId='.$mms_code['user'].', fileName="'.secureINS($filename).'", mimeType="'.secureINS($mime_type).'", fileSize='.$filesize.',timeRecieved=NOW()';
-		$insert_id = $this->sql->queryInsert($q);
-		if (!$insert_id) return false;
-		*/
 
 		$priv = 0;
 		switch ($mms_code['cmd'])
 		{
-			case 'BLOG':
-				$insert_id = $this->sql->queryInsert("INSERT INTO {$t}userblog SET blog_idx = NOW(), user_id = ".$mms_code['user'].", hidden_id = '$priv', blog_cmt = '".'<p align="center"><img src="'.$config['email']['upload_dir'].$insert_id.'" /></p>'."', blog_title = 'MMS', blog_date = NOW()");
-				break;
-
 			case 'GALL':
 				$tmp = md5(microtime());
 				$file_ext = explode('.', $filename);
@@ -637,7 +465,7 @@ class email
 				$pht_cmt = 'MMS - '.strip_tags($filename);
 
 				$q = "INSERT INTO {$t}userphoto SET picd = '".PD."', old_filename = '$filename', user_id = ".$mms_code['user'].", pht_date = NOW(), status_id='1', hidden_id = '$priv', pht_name = '".$file_ext."', pht_size = '".$filesize."', pht_cmt = '$pht_cmt'";
-				$insert_id = $this->sql->queryInsert($q);
+				$insert_id = $sql->queryInsert($q);
 
 				$out_filename = '/var/www/'.USER_GALLERY.PD.'/'.$insert_id.'.'.$file_ext;
 				$out_thumbname = '/var/www/'.USER_GALLERY.PD.'/'.$insert_id.'-tmb.'.$file_ext;
@@ -653,6 +481,40 @@ class email
 		}
 
 	}
+}
 
+function make_thumb($src, $dst, $dstWW = 90, $quality = 91) {
+	if(!file_exists($src) || (is_dir($dst) && $dst != '')) {
+		return false;
+	}
+ 
+	$info = getimagesize($src);
+	switch($info[2]) {
+	case 1:
+		$im_src = imagecreatefromgif($src);
+		break;
+	case 2:
+		$im_src = imagecreatefromjpeg($src);
+		break;
+	case 3:
+		$im_src = imagecreatefrompng($src);
+		break;
+	}
+	if($info[0] >= $dstWW) {
+		$thumb_width = $dstWW;
+		$thumb_height = ($info[1] * ($dstWW / $info[0]));
+	} else {
+		$thumb_width = ($info[0] * ($dstWW / $info[1]));
+		$thumb_height = $dstWW;
+	}
+
+	$img_thumb = imagecreatetruecolor($thumb_width, $thumb_height);
+	imagecopyresampled($img_thumb, $im_src, 0, 0, 0, 0, $thumb_width, $thumb_height, $info[0], $info[1]);
+
+	imageJPEG($img_thumb, $dst, $quality);
+
+	ImageDestroy($img_thumb);
+	ImageDestroy($im_src);
+	return true;
 }
 ?>

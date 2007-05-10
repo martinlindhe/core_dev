@@ -176,6 +176,7 @@
 		}
 	}
 	$page = 'settings_img';
+	$html4_head = true;
 	if($second) {
 		define('ABORT_LNK', l('member', 'settings', 'img').'0/&del_key');
 		require(DESIGN.'head_start.php');
@@ -214,6 +215,7 @@ function intern_get(obj) {
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'fact').'\')', 'icon_settings.png', 'fakta'); ?>
 	<? makeButton(true, 'goLoc(\''.l('member', 'settings', 'img').'\')', 'icon_settings.png', 'bild'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'personal').'\')', 'icon_settings.png', 'personliga'); ?>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'subscription').'\')', 'icon_settings.png', 'bevakningar'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'delete').'\')', 'icon_settings.png', 'radera konto'); ?>
 	<br/><br/><br/>
 

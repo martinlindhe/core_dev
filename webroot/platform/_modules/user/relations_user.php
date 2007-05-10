@@ -4,8 +4,8 @@
 	$rel = getset('', 'r', 'm');
 	if(!empty($paus) && count($paus)) {
 ?>
-<div class="mainHeader2"><h4>bli vän-förfrågningar</h4></div>
-<div class="mainBoxed2">
+<div class="centerMenuHeader">bli vän-förfrågningar</div>
+<div class="centerMenuBodyWhite">
 	<table summary="" cellspacing="0" width="586">
 <?
 	$i = 0;
@@ -30,8 +30,8 @@
 
 		if(!empty($wait) && count($wait)) {
 ?>
-<div class="mainHeader2"><h4>du väntar svar från</h4></div>
-<div class="mainBoxed2">
+<div class="centerMenuHeader">du väntar svar från</div>
+<div class="centerMenuBodyWhite">
 	<table summary="" cellspacing="0" width="586">
 <?
 	if(!empty($_GET['c_w']) && is_numeric($_GET['c_w'])) $c = $_GET['c_w']; else $c = 0;
