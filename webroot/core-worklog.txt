@@ -91,6 +91,7 @@ X = hi prio task
 	- blog: kommentarer visas nu med showComments()
 	- blog: gjort en funktion för att visa översikt av dina egna bloggar
 	- files: generell filtyp "dokument", inkluderar .doc .txt och .pdf filer
+	- categories: xhtml fix i autogenererad kod i getCategoriesSelect()
 
 
 2007.05.10:

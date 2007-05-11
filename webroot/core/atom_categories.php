@@ -119,26 +119,31 @@
 			$content .= '<option value="0">&nbsp;</option>';
 		}
 
-		$list = getGlobalAndUserCategories($_type);
-		$shown_global_grop = 0;
+		$shown_global_cats = false;
+		$shown_my_cats = false;
 
-		foreach ($list as $row) {
-			if (!$shown_global_grop && $row['categoryPermissions']==10) {
+		$list = getGlobalAndUserCategories($_type);
+		foreach ($list as $row)
+		{
+			if (!$shown_global_cats && $row['categoryPermissions']==10) {
 				$content .= '<optgroup label="Global categories">';
-				$shown_global_grop = 1;
+				$shown_global_cats = true;
 			}
-			if ($shown_global_grop && $row['categoryPermissions']!=10) {
+			if (!$shown_my_cats && $row['categoryPermissions']!=10) {
 				$content .= '</optgroup>';
 				$content .= '<optgroup label="Your categories">';
-				$shown_global_grop = 0;
+				$shown_my_cats = true;
 			}
 			$content .= '<option value="'.$row['categoryId'].'"';
 			if ($selectedId == $row['categoryId']) $content .= ' selected="selected"';
 			else if ($url) $content .= ' onclick="location.href=\'?'.$url.'='.$row['categoryId'].'\'"';
 
-			$content .= '>'.$row['categoryName'].'</option>';
+			$content .= '>'.$row['categoryName'];
+			if ($row['categoryType'] == CATEGORY_USERFILE_PRIVATE) $content .= ' (PRIVATE)';
+			if ($row['categoryType'] == CATEGORY_USERFILE_HIDDEN) $content .= ' (HIDDEN)';
+			$content .= '</option>';
 		}
-		if ($shown_global_grop) $content .= '</optgroup>';
+		if ($shown_global_cats || $shown_my_cats) $content .= '</optgroup>';
 
 		$content .= '</select>';
 
