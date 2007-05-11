@@ -2,8 +2,9 @@
 	hög prio!:
 		- file area: växla mellan kategorier funkar ej för stunden. kopppla js event till dropdown listan med kategorier
 		- visa file area med invalid categori id.. visas nåt då?
-
-
+		- news kommentearer: css
+			http://localhost/sample/news.php?news=2
+			
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 	X - visa mer inputfält vid registerrutan (blized)
@@ -77,6 +78,13 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.11:
+	- core: kom på ett lite finare sätt att includa core filer
+	- session: login-hantering sköts nu automatiskt av sessionshanteraren.
+	  skicka GET parametern "login" på vilken url som helst för att visa login-dialogen
+	- session: gjort om $config['site']['web_root'] till $config['session']['web_root'], och skapat $session->web_root
+
+
 2007.05.10:
 	- lyrics: visa ej "log in" om man e inloggad
 	- lyrics: cleanupText() uppstädad, den fuckade upp en del unicode-text

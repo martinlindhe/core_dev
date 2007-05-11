@@ -2,13 +2,14 @@
 	$time_start = microtime(true);
 
 	error_reporting(E_ALL);
-	mb_internal_encoding('UTF-8');
 	date_default_timezone_set('Europe/Stockholm');
 
 	$config['core_root'] = '../';
-	require_once($config['core_root'].'core/class.DB_MySQLi.php');
-	require_once($config['core_root'].'core/class.Session.php');
-	require_once($config['core_root'].'core/class.Files.php');
+	set_include_path($config['core_root'].'core/');
+	require_once('class.DB_MySQLi.php');
+	require_once('class.Session.php');
+	require_once('class.Files.php');
+	restore_include_path();
 
 	$config['debug'] = true;
 

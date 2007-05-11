@@ -25,7 +25,7 @@
 			'add_record_comp.php' => 'Add comp. / split',
 			'?logout' => 'Log out');
 	} else {
-		$menu = array('login.php' => 'Log in');
+		$menu = array('?login' => 'Log in');
 	}
 	createMenu($menu);
 ?>

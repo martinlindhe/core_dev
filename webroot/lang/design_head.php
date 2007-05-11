@@ -3,9 +3,8 @@
 <head>
 	<title>lang</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<link rel="stylesheet" href="css/site.css" type="text/css"/>
 	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+	<link rel="stylesheet" href="<?=$session->web_root?>css/site.css" type="text/css"/>
 	<script type="text/javascript" src="/js/ajax.js"></script>
 	<script type="text/javascript" src="/js/functions.js"></script>
 </head>
@@ -35,9 +34,11 @@ var _ext_ref='<?=getProjectPath()?>';
 			'add_text.php' => 'Add longer text',
 			'show_words.php' => 'Show words',
 			'guess_language.php' => 'Guess language',
-			'?logout' => 'Logout');
-		createMenu($menu);
+			'?logout' => 'Log out');
+	} else {
+		$menu = array('?login' => 'Log in');
 	}
+	createMenu($menu);
 ?>
 	</div>
 

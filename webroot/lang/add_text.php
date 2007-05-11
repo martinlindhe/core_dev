@@ -24,7 +24,7 @@
 	Only useful for natural written language.<br/>
 	
 	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
-		Language: <?=getCategoriesSelect(CATEGORY_LANGUAGES, 'lang')?><br/>
+		Language: <?=getCategoriesSelect(CATEGORY_LANGUAGE, 'lang')?><br/>
 		Text: <textarea name="text" cols="70" rows="20"><?=$text?></textarea><br/>
 		<input type="submit" class="button" value="Add"/>
 	</form>

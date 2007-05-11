@@ -8,7 +8,7 @@
 	if (empty($_GET['lang']) || !is_numeric($_GET['lang'])) {
 		echo '<h2>Show words</h2>Select language first<br/><br/>';
 
-		$list = getCategories(CATEGORY_LANGUAGES);
+		$list = getCategories(CATEGORY_LANGUAGE);
 		for ($i=0; $i<count($list); $i++) {
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?lang='.$list[$i]['categoryId'].'">'.$list[$i]['categoryName'].'</a><br/>';
 		}

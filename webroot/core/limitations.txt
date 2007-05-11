@@ -6,3 +6,17 @@
 		mbstring.func_overload = 2
 		or similar, to turn on mb function overloading for str* functions
 		PHP 6 will come with full unicode support in the core, so hopefully this can be deprecated soon
+
+* Multi-project server space sharing
+	- To enable the same core and admin code work seamlessly over multiple projects,
+		certain scripts require the passing around of a 'pr' GET parameter, containing
+		the current project path, so the local config.php can be found for /admin/ pages
+		for example.
+		This parameter is not required to pass around if you set up only one project on a website, like this:
+
+		/admin				admin files
+		/core					core functionality
+		/css
+		/js
+		/gfx
+		/					place your project files & config.php here

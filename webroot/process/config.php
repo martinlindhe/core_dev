@@ -23,6 +23,7 @@
 	$config['session']['sha1_key'] = 'x8xijemjshjkljhkjhs88t68kioxkijhkjsh';
 	$config['session']['allow_registration'] = false;
 	$config['session']['home_page'] = 'index.php';
+	$config['session']['web_root'] = '/process/';
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;
@@ -30,5 +31,4 @@
 	$config['files']['thumbs_dir'] = 'D:/devel/webupload/process/thumbs/';
 	$files = new Files($config['files']);
 
-	$config['site']['web_root'] = '/process/';	//path on web server, to use to address paths for css & js includes
 ?>

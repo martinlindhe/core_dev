@@ -1,6 +1,6 @@
 <div id="footer">
 <?
-	//if (!$session->id) echo '<a href="login.php">login</a><br>';
+	if (!$session->id) echo '<a href="?login">login</a><br>';
 
 	if ($session->username == "martin") $db->showProfile($time_start);
 

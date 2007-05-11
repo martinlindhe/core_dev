@@ -1,13 +1,10 @@
-<?
-	$r = $config['site']['web_root'];
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Adblock Filterset Database</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
-	<link rel="stylesheet" href="<?=$r?>css/site.css" type="text/css"/>
+	<link rel="stylesheet" href="<?=$session->web_root?>css/site.css" type="text/css"/>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 <?linkRSSfeeds()?>
 	<script type="text/javascript" src="/js/ajax.js"></script>
@@ -21,12 +18,12 @@ var _ext_ref='<?=getProjectPath()?>';
 <div id="left-sep"></div>
 <div id="header">
 	<div id="header-logo">
-		<a href="<?=$r?>index.php"><img src="<?=$r?>gfx/logo.png" alt="Filterset Database"/></a>
+		<img src="<?=$session->web_root?>gfx/logo.png" alt="Filterset Database"/>
 	</div>
 	<div id="header-items">
-		<a href="<?=$r?>wiki.php?View:Contribute">Contribute</a>
-		<a href="<?=$r?>wiki.php?View:About">About</a>
-		<a href="<?=$r?>wiki.php?View:Help">Help</a>
+		<a href="<?=$session->web_root?>wiki.php?View:Contribute">Contribute</a>
+		<a href="<?=$session->web_root?>wiki.php?View:About">About</a>
+		<a href="<?=$session->web_root?>wiki.php?View:Help">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
@@ -51,8 +48,10 @@ var _ext_ref='<?=getProjectPath()?>';
 		
 	if ($session->id) {
 		$menu = array('?logout' => 'Logout');
-		createMenu($menu);
+	} else {
+		$menu = array('?login' => 'Log in');
 	}
+	createMenu($menu);
 ?>
 </div>
 

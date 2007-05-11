@@ -28,7 +28,7 @@ class Session
 	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 	private $allow_registration = true;	//set to false to disallow the possibility to register new users
 	private $home_page = 'index.php';		//if set, redirects user to this page after successful login
-	
+	public $web_root = '/';							//the webpath to the root level of the project
 
 	//Aliases of $_SESSION[] variables
 	public $error;
@@ -44,7 +44,7 @@ class Session
 
 	function __construct(array $session_config)
 	{
-		global $db;
+		global $db, $config;
 
 		if (isset($session_config['name'])) $this->session_name = $session_config['name'];
 		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
@@ -53,6 +53,7 @@ class Session
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
 		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
+		if (isset($session_config['web_root'])) $this->web_root = $session_config['web_root'];
 
 		session_name($this->session_name);
 		session_start();
@@ -83,17 +84,25 @@ class Session
 		if (!$this->user_agent) $this->user_agent = $_SERVER['HTTP_USER_AGENT'];
 
 		//Check for login/logout requests
-		if (!$this->id && !empty($_POST['login_usr']) && !empty($_POST['login_pwd']))
-		{
-			//POST to any page with 'usr' & 'pwd' variables set to log in
-			$this->logIn($_POST['login_usr'], $_POST['login_pwd']);
+		if (!$this->id && isset($_GET['login'])) {
+			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']))
+			{
+				//POST to any page with 'usr' & 'pwd' variables set to log in
+				$this->logIn($_POST['login_usr'], $_POST['login_pwd']);
 
-			//See what IP checking policy that will be in use for the session
-			if (!empty($_POST['login_lock_ip'])) $this->check_ip = true;
-			else $this->check_ip = false; 
+				//See what IP checking policy that will be in use for the session
+				if (!empty($_POST['login_lock_ip'])) $this->check_ip = true;
+				else $this->check_ip = false; 
 
-			if ($this->home_page) {
-				header('Location: '.basename($this->home_page));
+				if ($this->home_page) {
+					header('Location: '.basename($this->home_page));
+					die;
+				}
+			} else {
+				$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
+				require('design_head.php');
+				$this->showLoginForm();
+				require('design_foot.php');
 				die;
 			}
 		}

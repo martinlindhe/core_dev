@@ -3,9 +3,6 @@
 
 	require('design_head.php');
 
-	if (!$session->id) echo $session->showLoginForm();
-	else $session->showInfo();
-
 	$list = getChatRooms();
 	if (count($list)) {
 		echo 'Select chat room to join:<br/>';

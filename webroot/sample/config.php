@@ -5,13 +5,14 @@
 	date_default_timezone_set('Europe/Stockholm');
 
 	$config['core_root'] = '../';
-	require_once($config['core_root'].'core/class.DB_MySQLi.php');
-	require_once($config['core_root'].'core/class.Session.php');
-	require_once($config['core_root'].'core/class.Files.php');
-
-	require_once($config['core_root'].'core/functions_wiki.php');
-	require_once($config['core_root'].'core/functions_news.php');
-	require_once($config['core_root'].'core/functions_blogs.php');
+	set_include_path($config['core_root'].'core/');
+	require_once('class.DB_MySQLi.php');
+	require_once('class.Session.php');
+	require_once('class.Files.php');
+	require_once('functions_wiki.php');
+	require_once('functions_news.php');
+	require_once('functions_blogs.php');
+	restore_include_path();
 
 	$config['debug'] = true;
 
@@ -25,6 +26,7 @@
 	$config['session']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
 	$config['session']['allow_registration'] = true;
 	$config['session']['home_page'] = 'index.php';
+	$config['session']['web_root'] = '/sample/';
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;
@@ -34,6 +36,4 @@
 
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
-	
-	$config['site']['web_root'] = '/sample/';	//path on web server, to use to address paths for css & js includes
 ?>
