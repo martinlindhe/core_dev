@@ -104,10 +104,10 @@
 		}
 
 		$menu = array(
-			'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
-			'?WikiEdit:'.$wikiName => 'Edit',
-			'?WikiHistory:'.$wikiName => 'History',
-			'?WikiFiles:'.$wikiName => 'Files ('.$files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')');
+			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
+			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => 'Edit',
+			$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName => 'History',
+			$_SERVER['PHP_SELF'].'?WikiFiles:'.$wikiName => 'Files ('.$files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')');
 
 		echo '<div class="wiki">';
 		createMenu($menu, 'wiki_menu');

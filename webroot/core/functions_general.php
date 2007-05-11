@@ -127,14 +127,14 @@
 
 		if (!$_var || !is_numeric($_id) || isset($_GET['confirmed'])) return true;
 
-		require($project.'design_head.php');
+		require_once($project.'design_head.php');
 
 		echo $text.'<br/><br/>';
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;delete&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
 		//echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.getProjectPath().'">No, wrong button</a><br/>';
 		echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
 		
-		require($project.'design_foot.php');
+		require_once($project.'design_foot.php');
 		die;
 	}
 
@@ -148,7 +148,10 @@
 
 		echo '<ul class="'.$class.'">';
 			foreach($menu_arr as $url => $text) {
-				if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<li class="'.$current_class.'">';
+				
+				//if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<li class="'.$current_class.'">';
+				//fixme: highlitar inte på parametrar, t.ex "Wiki:Hello", "Blog:243"
+				if ($cur == $url) echo '<li class="'.$current_class.'">';
 				else echo '<li>';
 
 				echo '<a href="'.($url[0] != '/' ? $project_path : '').$url.'">'.$text.'</a>';

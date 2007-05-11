@@ -3,9 +3,9 @@
 	require_once('atom_comments.php');			//for comment support for blogs
 
 	$config['blog']['moderation'] = true;		//enables automatic moderation of new blogs
-	
+
 	$config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport', 'BlogComment', 'BlogFiles');
-	
+
 	function addBlog($categoryId, $title, $body)
 	{
 		global $db, $session, $config;
@@ -160,16 +160,16 @@
 		echo 'Published '. $blog['timeCreated'].' by '.nameLink($blog['userId'], $blog['userName']).'<br/>';
 		echo '</div>'; //class="blog_head"
 
-		$menu = array('?Blog:'.$_id => 'Show blog');
+		$menu = array($_SERVER['PHP_SELF'].'?Blog:'.$_id => 'Show blog');
 		if ($session->id == $blog['userId'] || $session->isAdmin) {
-			$menu = array_merge($menu, array('?BlogEdit:'.$_id => 'Edit blog'));
-			$menu = array_merge($menu, array('?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
-			$menu = array_merge($menu, array('?BlogDelete:'.$_id => 'Delete blog'));
+			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id => 'Edit blog'));
+			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
+			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id => 'Delete blog'));
 		} else {
-			$menu = array_merge($menu, array('?BlogReport:'.$_id => 'Report blog'));
+			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id => 'Report blog'));
 		}
-		$menu = array_merge($menu, array('?BlogComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
-		
+		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
+
 		createMenu($menu, 'blog_menu');
 
 		echo '<div class="blog_body">';

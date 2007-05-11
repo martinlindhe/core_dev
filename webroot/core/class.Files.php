@@ -10,8 +10,10 @@
 require_once('functions_general.php');
 require_once('atom_categories.php');		//for file categories support
 
+//fixme: börja index från 1 istället för 100
 define('FILETYPE_WIKI',						100); // The file is a wiki attachment
 define('FILETYPE_BLOG',						101);	// The file is a blog attachment
+define('FILETYPE_NEWS',						102);	// The file is a news attachment
 
 //define('FILETYPE_PR',							101);	/* File is attached to a PR */
 //define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
@@ -148,6 +150,10 @@ class Files
 
 			case FILETYPE_BLOG:
 				echo 'Blog attachments';
+				break;
+
+			case FILETYPE_NEWS:
+				echo 'News article attachments';
 				break;
 
 			default:
