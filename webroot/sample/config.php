@@ -12,6 +12,7 @@
 	require_once('functions_wiki.php');
 	require_once('functions_news.php');
 	require_once('functions_blogs.php');
+	require_once('functions_guestbook.php');
 	restore_include_path();
 
 	$config['debug'] = true;
@@ -36,4 +37,13 @@
 
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
+
+	/* Visas på alla olika sidor som hör till ens egen användarprofil */
+	$profile_menu = array(
+	'user.php' => 'Overview',
+	'files.php' => 'My files',
+	'blog.php' => 'My blogs',
+	'guestbook.php' => 'Guestbook ('.getNewGuestbookCount($session->id).')',	//shows number of unread guestbook messages
+	'settings.php' => 'Settings');
+
 ?>

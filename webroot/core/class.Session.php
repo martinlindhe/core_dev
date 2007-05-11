@@ -83,6 +83,17 @@ class Session
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		if (!$this->user_agent) $this->user_agent = $_SERVER['HTTP_USER_AGENT'];
 
+		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
+		{
+			//todo: läs och spara register_email
+			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
+			if (!is_numeric($check)) {
+				echo 'Registration failed: '.$check;
+				die;
+			}
+			$this->logIn($_POST['register_usr'], $_POST['register_pwd']);
+		}
+
 		//Check for login/logout requests
 		if (!$this->id && isset($_GET['login'])) {
 			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']))
@@ -105,17 +116,6 @@ class Session
 				require('design_foot.php');
 				die;
 			}
-		}
-
-		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
-		{
-			//todo: läs och spara register_email
-			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
-			if (!is_numeric($check)) {
-				echo 'Registration failed: '.$check;
-				die;
-			}
-			$this->logIn($_POST['register_usr'], $_POST['register_pwd']);
 		}
 
 		if (!$this->id) return;

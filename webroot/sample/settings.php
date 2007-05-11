@@ -5,6 +5,8 @@
 
 	require('design_head.php');
 
+	createMenu($profile_menu, 'blog_menu');
+
 	wiki('Settings');
 	
 	$session->editSettings();

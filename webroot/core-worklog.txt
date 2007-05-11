@@ -12,7 +12,6 @@
 
 	personlig sida:
 	X - kompislista (blized)
-		- gästbok
 
 
 	news modul:
@@ -44,7 +43,7 @@
 		- öppna "pass thru" fil-länkar i en ny tabb om det går med javascript
 	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
-		- gör en generell dokument-ikon, och skrota pdf-ikonen
+
 
 
 	core/lågprio/förändringar under övervägning:
@@ -95,6 +94,8 @@ X = hi prio task
 	- news: speciell css för rss-enabled news artikel header .news_title_rss
 	- profil: ny sida
 	- profil: visar "mina filer", "mina bloggar", "inställningar" under personlig sida
+	- gästbok: ny funktion
+	- files: gjorde en generell dokument-ikon, skrotade pdf-ikonen
 
 
 2007.05.10:

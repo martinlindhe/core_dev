@@ -193,7 +193,7 @@ class Files
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $this->document_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
-				echo '<img src="/gfx/icon_pdf_32.png" width="32" height="32" alt="Document"/>';
+				echo '<img src="/gfx/icon_document.png" width="40" height="49" alt="Document"/>';
 				echo '</center></div>';
 			} else {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';

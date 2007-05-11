@@ -396,3 +396,9 @@ input.button:focus {
 	background-color: #ccc;
 	margin-bottom: 5px;
 }
+
+.guestbook_entry {
+	padding: 10px;
+	background-color: #eee;
+	border: 1px #888 solid;
+}

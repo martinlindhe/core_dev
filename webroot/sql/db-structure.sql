@@ -449,6 +449,19 @@ CREATE TABLE tblFiles (
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
 ) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+CREATE TABLE tblGuestbooks (
+  userId bigint(20) unsigned NOT NULL default '0',
+  authorId bigint(20) unsigned NOT NULL default '0',
+  timeCreated datetime default NULL,
+  `subject` varchar(255) character set utf8 NOT NULL,
+  body text,
+  entryId bigint(20) unsigned NOT NULL auto_increment,
+  entryDeleted tinyint(1) unsigned NOT NULL default '0',
+  timeDeleted datetime default NULL,
+  entryRead tinyint(1) unsigned NOT NULL default '0',
+  timeRead datetime default NULL,
+  PRIMARY KEY  (entryId)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 CREATE TABLE tblLogins (
   mainId int(10) unsigned NOT NULL auto_increment,
   userId int(10) unsigned NOT NULL,
@@ -456,7 +469,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -465,7 +478,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 CREATE TABLE tblModerationQueue (
   queueId bigint(20) unsigned NOT NULL auto_increment,
   queueType tinyint(3) unsigned NOT NULL default '0',
@@ -497,7 +510,7 @@ CREATE TABLE tblRevisions (
   timeCreated datetime NOT NULL,
   categoryId tinyint(3) unsigned NOT NULL,
   PRIMARY KEY  (indexId)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 CREATE TABLE tblSettings (
   settingId bigint(20) unsigned NOT NULL auto_increment,
   ownerId smallint(5) unsigned NOT NULL default '0',
@@ -524,7 +537,7 @@ CREATE TABLE tblUsers (
   timeLastActive datetime NOT NULL default '0000-00-00 00:00:00',
   timeLastLogout datetime default '0000-00-00 00:00:00',
   PRIMARY KEY  (userId)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 CREATE TABLE tblWiki (
   wikiId bigint(20) unsigned NOT NULL auto_increment,
   wikiName varchar(30) default NULL,
@@ -535,6 +548,6 @@ CREATE TABLE tblWiki (
   timeLocked datetime NOT NULL default '0000-00-00 00:00:00',
   hasFiles tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (wikiId)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 DELIMITER ;;
 DELIMITER ;
