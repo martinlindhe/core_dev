@@ -24,19 +24,23 @@
 	echo 'The guestbook contains '.getGuestbookSize($userId).' messages.<br/><br/>';
 
 	$list = getGuestbook($userId);	//fixme: paging stöd
-	for ($i=0; $i<count($list); $i++) {
+	foreach ($list as $row) {
 		echo '<div class="guestbook_entry">';
 
-		echo '<b>'.$list[$i]['timeCreated'].', from '.nameLink($list[$i]['authorId'], $list[$i]['authorName']). '</b><br/>';
+		echo '<div class="guestbook_entry_head">';
+		echo 'From '.nameLink($row['authorId'], $row['authorName']);
+		echo ', '.$row['timeCreated'];
+		echo '</div>';
+
 		if ($session->id == $userId) {
-			if ($list[$i]['entryRead'] == 0) {
+			if ($row['entryRead'] == 0) {
 				echo '<img src="/gfx/icon_mail.png" alt="Unread">';
 			}
 		}
-		echo stripslashes($list[$i]['body']).'<br/>';
+		echo stripslashes($row['body']).'<br/>';
 
 		if ($session->isAdmin || $session->id == $userId) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&remove='.$list[$i]['entryId'].'">Remove</a>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;remove='.$row['entryId'].'">Remove</a>';
 		}
 		echo '</div><br/>';
 	}

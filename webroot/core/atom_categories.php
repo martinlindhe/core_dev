@@ -173,20 +173,20 @@
 		echo '<br/>';
 
 		if ($_type == CATEGORY_USERFILE) {
-			echo '<input type="radio" value="'.CATEGORY_USERFILE.'" name="new_file_category_type" id="_normal" checked="checked"/> ';
-			echo '<label for="_normal">Normal category - everyone can see the content</label><br/><br/>';
-			echo '<input type="radio" value="'.CATEGORY_USERFILE_PRIVATE.'" name="new_file_category_type" id="_private"/> ';
-			echo '<label for="_private">Make this category private (only for your friends)</label><br/><br/>';
+			echo '<input type="radio" value="'.CATEGORY_USERFILE.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
+			echo '<label for="l_normal">Normal category - everyone can see the content</label><br/><br/>';
+			echo '<input type="radio" value="'.CATEGORY_USERFILE_PRIVATE.'" name="new_file_category_type" id="l_private"/> ';
+			echo '<label for="l_private">Make this category private (only for your friends)</label><br/><br/>';
 
-			echo '<input type="radio" value="'.CATEGORY_USERFILE_HIDDEN.'" name="new_file_category_type" id="_hidden"/> ';
-			echo '<label for="_hidden">Make this category hidden (only for you)</label><br/><br/>';
+			echo '<input type="radio" value="'.CATEGORY_USERFILE_HIDDEN.'" name="new_file_category_type" id="l_hidden"/> ';
+			echo '<label for="l_hidden">Make this category hidden (only for you)</label><br/><br/>';
 		} else if ($_type == CATEGORY_BLOG) {
-			echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="_normal" checked="checked"/> ';
-			echo '<label for="_normal">Your personal blog category</label><br/><br/>';
+			echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
+			echo '<label for="l_normal">Your personal blog category</label><br/><br/>';
 		}
 		if ($_type != CATEGORY_NEWS && $session->isSuperAdmin) {
-			echo '<input type="radio" value="global" name="new_file_category_type" id="_global"/> ';
-			echo '<label for="_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
+			echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
+			echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
 		}
 
 		echo '<input type="submit" class="button" value="Create"/> ';

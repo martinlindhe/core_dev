@@ -402,3 +402,6 @@ input.button:focus {
 	background-color: #eee;
 	border: 1px #888 solid;
 }
+.guestbook_entry_head {
+	font-weight: bold;
+}
