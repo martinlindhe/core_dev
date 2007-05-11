@@ -2,6 +2,8 @@
 	/*
 		for image conversions I am using: ImageMagick-6.3.4-0-Q16-windows-dll.exe
 				in ubuntu: sudo apt-get install imagemagick  (v6.2.4 in ubuntu 7.4)
+				
+				uses MySQL table locking to ensure atomic operation 
 
 		configuration:
 			this module requires:
@@ -12,9 +14,6 @@
 			suggested config:
 			soap.wsdl_cache_enabled=1
 			soap.wsdl_cache_ttl=172800
-
-		todo:
-			* locking. enbart en performWorkOrders() åt gången
 	*/
 
 	define('ORDER_RESIZE_IMG',		1);		//orderParams håller önskad bredd & höjd som serialized array.. ?
@@ -76,9 +75,14 @@
 		$ini_check = ini_get('allow_url_fopen');
 		if ($ini_check != 1) die('FATAL: allow_url_fopen disabled!');
 
+		//Aquire table lock
+		$db->query('LOCK TABLES tblOrders WRITE, tblLogs WRITE');
+
 		$work_list = getWorkOrders($_limit);
 
 		if (!$work_list) {
+			//Release table lock
+			$db->query('UNLOCK TABLES');
 			echo 'Nothing to do!';
 			return false;
 		}
@@ -155,5 +159,8 @@
 		}
 
 		$session->log('WORK ORDER QUEUE - Completed');
+
+		//Release table lock
+		$db->query('UNLOCK TABLES');
 	}
 ?>
