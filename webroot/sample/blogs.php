@@ -16,9 +16,6 @@
 
 	echo createMenu($menu, 'blog_menu');
 
-	showUserBlogs();
-	echo '<br/>';
-
 	echo 'Newest blogs:<br/>';
 	$list = getLatestBlogs(5);
 	for ($i=0; $i<count($list); $i++) {

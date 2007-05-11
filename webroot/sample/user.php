@@ -1,5 +1,7 @@
 <?
 	require_once('config.php');
+	
+	$session->requireLoggedIn();
 
 	require('design_head.php');
 
@@ -9,12 +11,6 @@
 		'settings.php' => 'Settings');
 
 	createMenu($menu, 'blog_menu');
-
-	if (empty($_GET)) {
-		showUserBlogs();
-	} else {
-		showBlog();
-	}
 
 	require('design_foot.php');
 ?>

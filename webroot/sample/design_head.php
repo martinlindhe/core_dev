@@ -41,8 +41,7 @@ var _ext_ref='<?=getProjectPath()?>';
 
 	if ($session->id) {
 		$menu = array(
-			'files.php' => 'Files',
-			'settings.php' => 'Settings',
+			'user.php' => 'My profile',
 			'?logout' => 'Logout');
 	} else {
 		$menu = array('?login' => 'Log in');

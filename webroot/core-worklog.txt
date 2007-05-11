@@ -12,7 +12,6 @@
 
 	personlig sida:
 	X - kompislista (blized)
-		- visa "mina filer", "mina bloggar" under personlig sida
 		- gästbok
 
 
@@ -93,8 +92,10 @@ X = hi prio task
 	- news: css meny på nyhetsartiklarna (edit, delete, attachments, comment)
 	- news: ändrat så news markeras som deleted men tas ej bort i databasen
 	- news: kan ej längre dubbel-submitta news
-	- newS: speciell css för rss-enabled news artikel header .news_title_rss
-	
+	- news: speciell css för rss-enabled news artikel header .news_title_rss
+	- profil: ny sida
+	- profil: visar "mina filer", "mina bloggar", "inställningar" under personlig sida
+
 
 2007.05.10:
 	- lyrics: visa ej "log in" om man e inloggad
