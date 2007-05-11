@@ -261,16 +261,6 @@ abstract class DB_Base
 
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?events_clearlog'.getProjectPath().'">Clear log</a>';
 	}
-	
-
-	/* Looks up a username by id */
-	function getUserName($_id)
-	{
-		if (!is_numeric($_id) || !$_id) return false;
-
-		return $this->getOneItem('SELECT userName FROM tblUsers WHERE userId='.$_id);
-	}
-
 }
 
 //General database related functions

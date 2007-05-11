@@ -40,7 +40,7 @@
 	
 	if (!$rule || $rule['deletedBy']) {
 	
-		if ($rule['deletedBy']) echo '<span style="background-color:#FF6666">Error:</span> This rule has been deleted by '.$db->getUserName($rule['deletedBy']).' at '.$rule['timeDeleted'].'.<br/><br/>';
+		if ($rule['deletedBy']) echo '<span style="background-color:#FF6666">Error:</span> This rule has been deleted by '.$session->getUserName($rule['deletedBy']).' at '.$rule['timeDeleted'].'.<br/><br/>';
 		if (!$rule) echo '<span style="background-color:#FF6666">Error:</span> No such rule exists<br/><br/>';
 
 		require('design_foot.php');

@@ -338,6 +338,14 @@ input.button:focus {
 	background-color: #eee;
 }
 
+.blogs_cathead {
+	padding: 10px;
+	border: 1px #888 solid;
+	background-color: #eee;
+	font-size: 16px;
+	font-weight: bold;
+}
+
 .news {
 }
 .news_top {

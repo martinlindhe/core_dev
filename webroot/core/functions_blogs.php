@@ -160,9 +160,7 @@
 		echo 'Published '. $blog['timeCreated'].' by '.nameLink($blog['userId'], $blog['userName']).'<br/>';
 		echo '</div>'; //class="blog_head"
 
-		$menu = array();
-
-		$menu = array_merge($menu, array('?Blog:'.$_id => 'Show blog'));
+		$menu = array('?Blog:'.$_id => 'Show blog');
 		if ($session->id == $blog['userId'] || $session->isAdmin) {
 			$menu = array_merge($menu, array('?BlogEdit:'.$_id => 'Edit blog'));
 			$menu = array_merge($menu, array('?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
@@ -230,20 +228,7 @@
 
 		} else if ($current_tab == 'BlogComment') {
 
-			if (!empty($_POST['blog_comment'])) {
-				addComment(COMMENT_BLOG, $_id, $_POST['blog_comment']);
-			}
-
-			echo 'Comment on the blog below<br/><br/>';
-			
-			$list = getComments(COMMENT_BLOG, $_id,  ($session->id == $blog['userId'] || $session->isAdmin ? true : false) );
-			d($list);
-
-			echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogComment:'.$_id.'">';
-			echo '<textarea name="blog_comment" cols="64" rows="6"></textarea><br/><br/>';
-
-			echo '<input type="submit" class="button" value="Add comment"/>';
-			echo '</form>';
+			showComments(COMMENT_BLOG, $_id);
 
 		} else if ($current_tab == 'BlogFiles') {
 
@@ -260,6 +245,36 @@
 		echo '</div>';
 
 		echo '</div>'; //class="blog"
+	}
+
+	/* Displays one user's blogs overview */	
+	function showUserBlogs()
+	{
+		global $session;
+
+
+		if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+			$userId = $_GET['id'];
+			echo 'User '.$session->getUserName($userId).' - blogs:<br/>';
+		} else {
+			$userId = $session->id;
+			echo 'Your blogs:<br/>';
+		}
+
+		$list = getBlogsByCategory($userId);
+
+		$shown_category = false;
+		foreach ($list as $row) {
+			if ($row['categoryId'] != $shown_category) {
+				if (!$row['categoryName']) echo '<div class="blogs_cathead">Uncategorized</div>';
+				else echo '<div class="blogs_cathead">'.$row['categoryName'].'</div>';
+				$shown_category = $row['categoryId'];
+			}
+			echo '<div class="X">';
+			echo '<a href="blog_show.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
+			echo $row['timeCreated'];
+			echo '</div>';
+		}
 	}
 	
 ?>

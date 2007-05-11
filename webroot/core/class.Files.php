@@ -24,11 +24,16 @@ class Files
 	private $htaccess = "Deny from all\nOptions All -Indexes";
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
+	//fixme: sluta använd filändelser, och använd bara mime typer
 	protected $image_types	= array('jpg', 'jpeg', 'png', 'gif');
 	protected $image_mime_types = array('image/jpeg', 'image/png', 'image/gif');
 	protected $audio_types	= array('mp3');
 	protected $video_types = array('avi', '3gp');
 
+	protected $document_types = array(
+							'text/plain',					//normal text file
+							'application/msword',	//Microsoft .doc file
+							'application/pdf');		//Adobe .pdf file
 
 	/* User configurable settings */
 	private $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
@@ -180,9 +185,9 @@ class Files
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\');"><center>';
 				echo '<img src="/gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
-			} else if ($file_lastname == 'pdf') {
+			} else if (in_array($row['fileMime'], $this->document_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
-				echo '<img src="/gfx/icon_pdf_32.png" width="32" height="32" alt="PDF document"/>';
+				echo '<img src="/gfx/icon_pdf_32.png" width="32" height="32" alt="Document"/>';
 				echo '</center></div>';
 			} else {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';

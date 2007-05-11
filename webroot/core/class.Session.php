@@ -409,5 +409,15 @@ class Session
 		}
 	}
 
+	/* Looks up a username by id */
+	function getUserName($_id)
+	{
+		global $db;
+
+		if (!is_numeric($_id) || !$_id) return false;
+
+		$q = 'SELECT userName FROM tblUsers WHERE userId='.$_id;
+		return $db->getOneItem($q);
+	}
 }
 ?>

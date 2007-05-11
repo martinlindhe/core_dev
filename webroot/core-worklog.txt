@@ -2,20 +2,13 @@
 	hög prio!:
 
 
-	core:
-  	- implementera process-servern för att konvertera bilder / skapa thumbnails
-		- skrota hela getProjectPath() på nåt smart sätt?
- 	 	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
-		- gör en funktion som visar rss news feeds, för news-modulen, packa ihop den utspridda kod som finns i sample/news.php, sample/design_head.php
-
-			
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 	X - visa mer inputfält vid registerrutan (blized)
 
 
 	blog:
-		- blogg-kommentarer: visa fint
+
 
 	personlig sida:
 	X - kompislista (blized)
@@ -36,6 +29,7 @@
 	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
 		- rename FILETYPE_USERFILE, CATEGORY_USERFILE kanske?
+		- gör en generell dokument-ikon, och skrota pdf-ikonen
 
 
 	news modul:
@@ -57,6 +51,12 @@
 	admin:
 		- visa statistik i adminpanelen
 
+
+	core/lågprio/förändringar under övervägning:
+  	- implementera process-servern för att konvertera bilder / skapa thumbnails
+		- skrota hela getProjectPath() på nåt smart sätt?
+ 	 	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
+		- gör en funktion som visar rss news feeds, för news-modulen, packa ihop den utspridda kod som finns i sample/news.php, sample/design_head.php
 
 	misc/senare:
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
@@ -88,6 +88,9 @@ X = hi prio task
 	- categories: getCategoriesSelect() kan nu växla mellan kategorier med dropdownlist, används i file area kategorier
 	- comments: gjort defualt css till showComments()
 	- admin: fixade admin länk i left menu när man e på en admin-sida funkade ej
+	- blog: kommentarer visas nu med showComments()
+	- blog: gjort en funktion för att visa översikt av dina egna bloggar
+	- files: generell filtyp "dokument", inkluderar .doc .txt och .pdf filer
 
 
 2007.05.10:
