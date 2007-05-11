@@ -60,13 +60,19 @@
 		* tog bort (igen) "släck ner" / "tänd upp" knappar från forumet
 		* $HTTP_POST_FILES => $_FILES cleanup
 
+	mobila gränssnittet:
+		* lite mindre ikoner i toppmenyn
+		* fixat visning av systemmmeddelanden i mailen
+		* kan ej längre svara på system-meddelande mail
+		* fixat användar-sökningen
+
 
 ***********************************************************************************************************************************
 topp prio:
 
 	* mms upload image & video:
-		- plocka fram videoupplösningen när videon laddas upp
 		- hantera "BLOG" och "PRES" kommandon
+		- plocka fram videoupplösningen när videon laddas upp
 		- alla ska ha mms funktion (vip) under testet
 
 	* max 7 tecken i användarnamnet
