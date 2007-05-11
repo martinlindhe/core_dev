@@ -104,7 +104,7 @@
 		return $db->getArray($q);
 	}
 
-	function getCategoriesSelect($_type, $selectName = '', $selectedId = 0)
+	function getCategoriesSelect($_type, $selectName = '', $selectedId = 0, $url = '')
 	{
 		global $config;
 
@@ -113,7 +113,12 @@
 		if (!$selectName) $selectName = 'default';
 		$content = '<select name="'.strip_tags($selectName).'">';
 
-		$content .= '<option value="0">&nbsp;</option>';
+		if ($url) {
+			$content .= '<option value="0" onclick="location.href=\'?'.$url.'=0\'">&nbsp;</option>';
+		} else {
+			$content .= '<option value="0">&nbsp;</option>';
+		}
+
 		$list = getGlobalAndUserCategories($_type);
 		$shown_global_grop = 0;
 
@@ -129,6 +134,8 @@
 			}
 			$content .= '<option value="'.$row['categoryId'].'"';
 			if ($selectedId == $row['categoryId']) $content .= ' selected="selected"';
+			else if ($url) $content .= ' onclick="location.href=\'?'.$url.'='.$row['categoryId'].'\'"';
+
 			$content .= '>'.$row['categoryName'].'</option>';
 		}
 		if ($shown_global_grop) $content .= '</optgroup>';

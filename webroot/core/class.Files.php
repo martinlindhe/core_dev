@@ -24,10 +24,10 @@ class Files
 	private $htaccess = "Deny from all\nOptions All -Indexes";
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
-	public $image_types	= array('jpg', 'jpeg', 'png', 'gif');
-	public $image_mime_types = array('image/jpeg', 'image/png', 'image/gif');
-	public $audio_types	= array('mp3');
-	public $video_types = array('avi', '3gp');
+	protected $image_types	= array('jpg', 'jpeg', 'png', 'gif');
+	protected $image_mime_types = array('image/jpeg', 'image/png', 'image/gif');
+	protected $audio_types	= array('mp3');
+	protected $video_types = array('avi', '3gp');
 
 
 	/* User configurable settings */
@@ -105,9 +105,6 @@ class Files
 
 		if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
 
-		require_once($config['core_root'].'layout/file_details_layer.php');
-		require_once($config['core_root'].'layout/ajax_loading_layer.html');
-
 		if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE) {
 			$categoryId = 0;
 			if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
@@ -120,6 +117,9 @@ class Files
 				addRevision(REVISIONS_WIKI, $categoryId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
 			}
 		}
+
+		require_once($config['core_root'].'layout/file_details_layer.php');
+		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
 		echo '<div class="file_gadget">';
 
@@ -152,22 +152,7 @@ class Files
 
 		//Visar kategorier / kataloger
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
-			if (!$categoryId) {
-				//shows own categories & global categories
-				echo getCategoriesSelect(CATEGORY_USERFILE);
-				/*
-				$cat_list = getGlobalAndUserCategories(CATEGORY_USERFILE);	//fixme:denna funktionen borde renamas till nåt som har me userfile å göra, eller sql direkt här..
-				if (!empty($cat_list)) {
-					echo 'Categories:<br/>';
-					for ($i=0; $i<count($cat_list); $i++) {
-						echo '<a href="?file_gadget_category_id='.$cat_list[$i]['categoryId'].'">'.$cat_list[$i]['categoryName'].'</a><br/>';
-					}
-					echo '<br/>';
-				}
-				*/
-			} else {
-				echo '<a href="?file_gadget_category_id=0">Go back to root level</a><br/><br/>';
-			}
+			echo getCategoriesSelect(CATEGORY_USERFILE, '', $categoryId, 'file_gadget_category_id');
 		}
 
 		//select the files in the current category (or root level for uncategorized files)

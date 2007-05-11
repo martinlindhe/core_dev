@@ -1,9 +1,10 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-		- file area: växla mellan kategorier funkar ej för stunden. kopppla js event till dropdown listan med kategorier
-		- visa file area med invalid categori id.. visas nåt då?
 		- news kommentearer: css
 			http://localhost/sample/news.php?news=2
+		- kunna flytta en fil till annan kategori!
+		
+		- admin länk i left menu när man e i admin funkar ej
 			
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
@@ -83,7 +84,7 @@ X = hi prio task
 	- session: login-hantering sköts nu automatiskt av sessionshanteraren.
 	  skicka GET parametern "login" på vilken url som helst för att visa login-dialogen
 	- session: gjort om $config['site']['web_root'] till $config['session']['web_root'], och skapat $session->web_root
-
+	- categories: getCategoriesSelect() kan nu växla mellan kategorier med dropdownlist, används i file area kategorier
 
 2007.05.10:
 	- lyrics: visa ej "log in" om man e inloggad
