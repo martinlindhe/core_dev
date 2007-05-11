@@ -151,12 +151,12 @@
 				if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<li class="'.$current_class.'">';
 				else echo '<li>';
 
-				echo '<a href="'.$project_path.$url.'">'.$text.'</a>';
+				echo '<a href="'.($url[0] != '/' ? $project_path : '').$url.'">'.$text.'</a>';
 				echo '</li>';
 			}
 		echo '</ul>';
 	}
-	
+
 	/* Called in design_head.php to generate xhtml for rss feeds for current page. other pages can add more feeds to $meta_rss before including design */
 	function linkRSSfeeds()
 	{

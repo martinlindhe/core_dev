@@ -1,8 +1,6 @@
 --------------[[platform todo]]--------------
 	hög prio!:
-		- kunna flytta en fil till annan kategori!
-		
-		- admin länk i left menu när man e i admin funkar ej
+
 
 	core:
   	- implementera process-servern för att konvertera bilder / skapa thumbnails
@@ -30,7 +28,7 @@
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
 		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden (piggy)
 		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
-		- kunna flytta en fil från en kategori till en annan (piggy)
+		- kunna flytta en fil från en kategori till en annan (js function move_selected_file() finns) (piggy)
 		- byta värdena för file types (FILETYPE_WIKI etc) att börja från 1 iställer för från 100
 		- bugg: ajax show info, filesize är orginal upload size innan filen resizades
 		- ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
@@ -89,6 +87,8 @@ X = hi prio task
 	- session: gjort om $config['site']['web_root'] till $config['session']['web_root'], och skapat $session->web_root
 	- categories: getCategoriesSelect() kan nu växla mellan kategorier med dropdownlist, används i file area kategorier
 	- comments: gjort defualt css till showComments()
+	- admin: fixade admin länk i left menu när man e på en admin-sida funkade ej
+
 
 2007.05.10:
 	- lyrics: visa ej "log in" om man e inloggad

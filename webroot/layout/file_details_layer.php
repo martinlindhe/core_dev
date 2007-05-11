@@ -1,4 +1,12 @@
-﻿<div id="zoom_image_layer" style="display:none">
+﻿<?
+	/*
+		todo:
+			- renama filen och flytta till /core/
+				t.ex /core/class.Files.layer.php
+					eller nåt liknande, så man ser att den till hör class.Files.php men att det inte är en class-fil
+	*/
+?>
+<div id="zoom_image_layer" style="display:none">
 	
 	<center>
 		<img id="zoom_image" src="/gfx/ajax_loading.gif" alt="Image"/><br/>
@@ -11,6 +19,7 @@
 		<input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
 		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
 		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
+		<input type="button" class="button" value="Move image" onclick="move_selected_file()"/>
 		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
@@ -28,6 +37,7 @@
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
 <? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move song" onclick="move_selected_file()"/>
 		<input type="button" class="button" value="Delete song" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
@@ -44,6 +54,7 @@
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
 <? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move video" onclick="move_selected_file()"/>
 		<input type="button" class="button" value="Delete video" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
@@ -58,6 +69,7 @@
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
 <? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move file" onclick="move_selected_file()"/>
 		<input type="button" class="button" value="Delete file" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>

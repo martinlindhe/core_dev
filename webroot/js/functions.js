@@ -186,9 +186,16 @@ function cut_selected_file()
 	alert('cut_selected_file() not yet iplemented');
 }
 
+/* displays a percentage-bar ranging 0-100% and a slider, lets the user move it and see the image resize live in browser. with a save button to commit the resize */
 function resize_selected_file()
 {
 	alert('resize_selected_file() not yet iplemented')
+}
+
+/* displays dialog for moving selected file to another file area category */
+function move_selected_file()
+{
+	alert('move_selected_file() not yet iplemented')
 }
 
 function download_selected_file()
