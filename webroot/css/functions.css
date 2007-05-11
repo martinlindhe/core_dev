@@ -357,6 +357,11 @@ input.button:focus {
 .news_title {
 	font-size: 20px;
 }
+.news_title_rss {
+	font-size: 20px;
+	background: url('/gfx/icon_rss.png') no-repeat;
+	background-position: 100% 50%;
+}
 .news_head { /* news article heading */
 	font-size: 16px;
 	font-weight: bold;

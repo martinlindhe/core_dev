@@ -155,20 +155,17 @@
 	{
 		global $config, $session;
 
-		if ($session->id && ($session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category']) && !empty($_POST['new_file_category_type']))
+		if ($session->id && ($session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category']))
 		{
 			$global = false;
 			//Create new category. Only allow categories inside root level
-			if (is_numeric($_POST['new_file_category_type'])) {
-				$cat_id = $_POST['new_file_category_type'];
-			} else {
-				if ($_POST['new_file_category_type'] == 'global') $global = true;
 
-				if ($_type == CATEGORY_USERFILE) 		$cat_id = CATEGORY_USERFILE;
-				else if ($_type == CATEGORY_BLOG) 	$cat_id = CATEGORY_BLOG;
-				else 																die('bad category');
+			$cat_type = $_type;
+			if (!empty($_POST['new_file_category_type'])) {
+				if (is_numeric($_POST['new_file_category_type'])) $cat_type = $_POST['new_file_category_type'];
+				else if ($_POST['new_file_category_type'] == 'global') $global = true;
 			}
-			addCategory($cat_id, $_POST['new_file_category'], $global);
+			addCategory($cat_type, $_POST['new_file_category'], $global);
 		}
 
 		echo '<form name="new_file_category" method="post" action="">';
@@ -187,7 +184,7 @@
 			echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="_normal" checked="checked"/> ';
 			echo '<label for="_normal">Your personal blog category</label><br/><br/>';
 		}
-		if ($session->isSuperAdmin) {
+		if ($_type != CATEGORY_NEWS && $session->isSuperAdmin) {
 			echo '<input type="radio" value="global" name="new_file_category_type" id="_global"/> ';
 			echo '<label for="_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
 		}

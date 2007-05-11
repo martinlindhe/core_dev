@@ -2,7 +2,7 @@
 	require_once('atom_comments.php');		//for news comment support
 	require_once('atom_categories.php');	//for news categories support
 
-	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsComment', 'NewsFiles');
+	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsNewCategory', 'NewsComment', 'NewsFiles');
 
 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 	{
@@ -105,7 +105,10 @@
 
 		echo '<div class="news">';
 		echo '<div class="news_top">';
-		echo '<div class="news_title">'.$news['title'].'</div>';
+		if ($news['rss_enabled']) echo '<div class="news_title_rss">';
+		else echo '<div class="news_title">';
+		echo $news['title'].'</div>';
+
 		if ($news['categoryId']) {
 			echo '<a href="news.php?cat='.$news['categoryId'].'">'.getCategoryName($news['categoryId']).'</a><br/>';
 		}
@@ -125,6 +128,7 @@
 				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id => 'Edit',
 				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => 'Attachments',
 				$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id => 'Delete',
+				$_SERVER['PHP_SELF'].'?NewsNewCategory:'.$_id => 'New category',
 				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
 				);
 			echo createMenu($menu, 'blog_menu');
@@ -161,6 +165,10 @@
 				header('Location: admin_news.php'.getProjectPath(false));
 				die;
 			}
+
+		} else if ($current_tab == 'NewsNewCategory') {
+
+			makeNewCategoryDialog(CATEGORY_NEWS);
 
 		} else if ($current_tab == 'NewsFiles') {
 

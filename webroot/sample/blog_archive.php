@@ -20,7 +20,7 @@
 
 	$list = getBlogsByMonth($show, $show_month, $show_year);
 	foreach($list as $row) {
-		echo $row['timeCreated'].' - <a href="blog_show.php?id='.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
+		echo $row['timeCreated'].' - <a href="blog.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
 	}
 		
 	if (!count($list)) {

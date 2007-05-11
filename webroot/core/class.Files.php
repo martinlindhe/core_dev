@@ -224,11 +224,10 @@ class Files
 				echo '</div>';
 			}
 		}
-	
+
 		if ($session->isAdmin || $fileType == FILETYPE_USERFILE) {
 			if (!$categoryId) {
 				echo '<div id="file_gadget_category" style="display: none;">';
-				
 				echo makeNewCategoryDialog(CATEGORY_USERFILE);
 				echo '</div>';
 			}

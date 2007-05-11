@@ -16,26 +16,11 @@
 		- gästbok
 
 
-	file area:
-		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
-		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
-		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden (piggy)
-		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
-		- kunna flytta en fil från en kategori till en annan (js function move_selected_file() finns) (piggy)
-		- byta värdena för file types (FILETYPE_WIKI etc) att börja från 1 iställer för från 100
-		- bugg: ajax show info, filesize är orginal upload size innan filen resizades
-		- ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
-		- öppna "pass thru" fil-länkar i en ny tabb om det går med javascript
-	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
-		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
-		- rename FILETYPE_USERFILE, CATEGORY_USERFILE kanske?
-		- gör en generell dokument-ikon, och skrota pdf-ikonen
-
-
 	news modul:
-		- delete news: funkar ej för att confirmed() skickar fel parametrar
+		- delete news funkar ej för att confirmed() skickar fel parametrar
 		- vote på kvalitén (eller "rating")
-  		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
+  		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt,
+  			tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 
 
 	wiki:
@@ -48,15 +33,31 @@
 		- visa statistik i adminpanelen
 
 
+	file area:
+		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
+		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
+		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden (piggy)
+		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
+		- kunna flytta en fil från en kategori till en annan (js function move_selected_file() finns) (piggy)
+		- byta värdena för file types (FILETYPE_WIKI etc) att börja från 1 iställer för från 100
+		- bugg: ajax show info, filesize är orginal upload size innan filen resizades
+		- ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
+		- öppna "pass thru" fil-länkar i en ny tabb om det går med javascript
+	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
+		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
+		- gör en generell dokument-ikon, och skrota pdf-ikonen
+
+
 	core/lågprio/förändringar under övervägning:
   	- implementera process-servern för att konvertera bilder / skapa thumbnails
-		- skrota hela getProjectPath() på nåt smart sätt?
  	 	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
 		- gör en funktion som visar rss news feeds, för news-modulen, packa ihop den utspridda kod som finns i sample/news.php, sample/design_head.php
 
+
 	misc/senare:
-		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
+		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
+
 
 --------------[[projekt todo]]--------------
 	lyrics:
@@ -92,6 +93,8 @@ X = hi prio task
 	- news: css meny på nyhetsartiklarna (edit, delete, attachments, comment)
 	- news: ändrat så news markeras som deleted men tas ej bort i databasen
 	- news: kan ej längre dubbel-submitta news
+	- newS: speciell css för rss-enabled news artikel header .news_title_rss
+	
 
 2007.05.10:
 	- lyrics: visa ej "log in" om man e inloggad

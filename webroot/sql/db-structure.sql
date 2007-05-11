@@ -421,7 +421,7 @@ CREATE TABLE tblCategories (
   creatorId int(10) unsigned NOT NULL default '0',
   categoryPermissions tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(1) unsigned NOT NULL default '0',
@@ -448,7 +448,7 @@ CREATE TABLE tblFiles (
   timeUploaded datetime NOT NULL,
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 CREATE TABLE tblLogins (
   mainId int(10) unsigned NOT NULL auto_increment,
   userId int(10) unsigned NOT NULL,
@@ -484,8 +484,10 @@ CREATE TABLE tblNews (
   editorId int(10) unsigned default '0',
   timeToPublish datetime NOT NULL default '0000-00-00 00:00:00',
   categoryId int(10) unsigned NOT NULL,
+  deletedBy int(10) unsigned NOT NULL default '0',
+  timeDeleted datetime default NULL,
   PRIMARY KEY  (newsId)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 CREATE TABLE tblRevisions (
   indexId int(10) unsigned NOT NULL auto_increment,
   fieldId bigint(20) unsigned NOT NULL,

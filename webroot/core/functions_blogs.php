@@ -271,7 +271,7 @@
 				$shown_category = $row['categoryId'];
 			}
 			echo '<div class="X">';
-			echo '<a href="blog_show.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
+			echo '<a href="blog.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
 			echo $row['timeCreated'];
 			echo '</div>';
 		}

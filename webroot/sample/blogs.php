@@ -22,7 +22,7 @@
 	echo 'Newest blogs:<br/>';
 	$list = getLatestBlogs(5);
 	for ($i=0; $i<count($list); $i++) {
-		echo '<a href="blog_show.php?Blog:'.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a> - '.$list[$i]['timeCreated'];
+		echo '<a href="blog.php?Blog:'.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a> - '.$list[$i]['timeCreated'];
 		echo ' by '.nameLink($list[$i]['userId'], $list[$i]['userName']).'<br/>';
 	}
 
