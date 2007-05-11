@@ -1,7 +1,7 @@
 <?
-	/* perform_work.php - körs regelbundet
+	/* perform_work.php - execute scheduled work orders
 	
-		detta script plockar fram de 10 äldsta arbetsuppgifterna från databasen och utför dessa en i taget
+		This script takes the 10 olderst work orders that's still uncompleted and performs them one by one
 	*/
 
 	require_once('config.php');

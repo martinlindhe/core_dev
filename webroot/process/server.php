@@ -1,9 +1,4 @@
 <?
-	/* Todo: use a "getSID()" function to get a unique ID to encode the password with. 
-	currently I dont know a good solution since the password is already encoded using several sha1-sums
-	in the database, it can not easily be confirmed to be correct this way.
-	For the moment, we solve this by hiding the Process service behind SSL */
-
 	ini_set('soap.wsdl_cache_enabled', '0');
 
 	require_once('config.php');

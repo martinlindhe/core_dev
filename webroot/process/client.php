@@ -6,7 +6,7 @@
 	$client = new SoapClient("http://localhost/process/process.wsdl"); //, array('trace' => 1));
 
 	try {
-		if (!$client->login('martin', 'nutana')) {
+		if (!$client->login('test-server', 'test')) {
 			echo 'login failed';
 			die;
 		}

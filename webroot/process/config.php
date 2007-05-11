@@ -21,7 +21,7 @@
 	$config['session']['timeout'] = (60*60)*24;		//in seconds
 	$config['session']['name'] = 'procId';
 	$config['session']['sha1_key'] = 'x8xijemjshjkljhkjhs88t68kioxkijhkjsh';
-	$config['session']['allow_registration'] = true;
+	$config['session']['allow_registration'] = false;
 	$config['session']['home_page'] = 'index.php';
 	$session = new Session($config['session']);
 

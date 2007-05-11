@@ -50,6 +50,16 @@
 		* "din mail"-översikten upprensad från feedback, la till ikon för "läst" / "oläst" inlägg
 		* längst ner på alla sidor finns nu en "hem"-knapp som leder till startsidan, från feedback
 
+2007.05.11 Fredag:
+	process-servern:
+		* lite uppstädning & dokumentering av koden
+		* kontrollerar att php SOAP extension är laddad
+
+	webbservern:
+		* tog bort (igen) "släck ner" / "tänd upp" knappar från forumet
+		* $HTTP_POST_FILES => $_FILES cleanup
+
+
 ***********************************************************************************************************************************
 topp prio:
 
@@ -68,6 +78,8 @@ topp prio:
 		ej i popup eller ny sida som det är idag - kräver mycket omstrukturering i index_p.php och auth.php
 		index_p.php ska förövrigt bort helt så det är dubbeljobb isåfall
 
+	* process server:
+		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
 
 senare under betatestet, mitten av maj:
 	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail

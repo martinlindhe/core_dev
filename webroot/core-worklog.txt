@@ -1,5 +1,7 @@
 --------------[[platform todo]]--------------
 	hög prio!:
+		- file area: växla mellan kategorier funkar ej för stunden. kopppla js event till dropdown listan med kategorier
+		- visa file area med invalid categori id.. visas nåt då?
 
 
 	session/user settings:
