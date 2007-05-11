@@ -50,6 +50,11 @@ function makeBig(url) {
 	makePop(url, '', 666, 520, 1, ',scrollbars=0', 'resizable=1, status=1, ');
 	return true;
 }
+function makeTiny(url) {
+	makePop(url, '', 200, 280, ',scrollbars=0', 'resizable=0, status=0, ');
+	return false;
+}
+
 function makeMail(id) {
 	if(!id) id = '';
 	window.open('/user/mailwrite/' + id, '', 'width=650, height=560, scrollbars=0, resizable=1, status=no, location=0');

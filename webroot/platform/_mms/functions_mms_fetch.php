@@ -6,8 +6,8 @@
 	- sparar ut base64-enkodade attachments
 	- stödjer APOP login, med normal USER/PASS fallback
 	
-	Från början skrivet av Frans Rosén
-	Uppdaterat av Martin Lindhe, 2007-04-13
+	Baserat på kod av Frans Rosén
+	Omskrivet av Martin Lindhe, 2007-04-13
 
 	Important: POP3 standard uses "octets", it is equal to "bytes", an octet is a 8-bit value
 
@@ -24,6 +24,14 @@
 //allowed mail attachment mime types
 $config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'video/3gpp');
 $config['email']['text_allowed_mime_types'] = array('text/plain');
+$config['email']['log_activity'] = true;
+$config['email']['logfile'] = '/var/log/mms.log';
+
+$config['email']['pop3_server'] = 'mail.inconet.se';		// 'mail.unicorn.tv';
+$config['email']['pop3_port']		= 110;
+$config['email']['pop3_timeout'] = 5;
+
+$config['email']['debug'] = false;				//echos POP3 commands and responses if enabled
 
 class email
 {
@@ -34,20 +42,27 @@ class email
 	var $unread_mails = 0;		//STAT unreadmail totbytes
 	var $tot_bytes = 0;
 
-	//todo: gör detta konfigurerbart
-	var $pop3_server = 'mail.inconet.se';		// 'mail.unicorn.tv';
-	var $pop3_port	 = 110;
-	var $pop3_timeout = 5;
-
-	var $debug = false;			//echos POP3 commands and responses if enabled
-
 	function __construct()
 	{
 	}
 
+	/* Writes log entries to log file */
+	function logAct($text, $echo_text = false)
+	{
+		global $config;
+
+		if ($config['email']['debug'] || $echo_text) echo $text.'<br/>';
+		if (!$config['email']['log_activity']) return;
+
+		$out_text = date('Y-m-d H:i:s').': '.$text."\n";
+		file_put_contents($config['email']['logfile'], $out_text, FILE_APPEND);
+	}
+
 	function open()
 	{
-		$this->handle = fsockopen($this->pop3_server, $this->pop3_port, $this->errorno, $this->errstr, $this->pop3_timeout);
+		global $config;
+
+		$this->handle = fsockopen($config['email']['pop3_server'], $config['email']['pop3_port'], $this->errorno, $this->errstr, $config['email']['pop3_timeout']);
 	}
 
 	function close()
@@ -60,14 +75,18 @@ class email
 
 	function read()
 	{
+		global $config;
+
 		$var = fgets($this->handle, 128);
-		if ($this->debug) echo 'Read: '.trim(htmlentities($var)).'<br/>';
+		if ($config['email']['debug']) $this->logAct('Read: '.trim(htmlentities($var)));
 		return $var;
 	}
 
 	function write($line)
 	{
-		if ($this->debug) echo 'Wrote: '.htmlentities($line).'<br/>';
+		global $config;
+
+		if ($config['email']['debug']) $this->logAct('Wrote: '.htmlentities($line));
 		fputs($this->handle, $line."\r\n");
 	}
 
@@ -83,7 +102,7 @@ class email
 	{
 		$server_ready = $this->read();
 		if (!$this->is_ok($server_ready)) {
-			echo 'Server not allowing connections?';
+			$this->logAct('$email->login() failed! Server not allowing connections?');
 			return false;
 		}
 		
@@ -97,13 +116,14 @@ class email
 				return true;
 			}
 
-			echo 'APOP login failed, trying normal method<br/>';
+			$this->logAct('APOP login failed, trying normal method');
 		}
 
 		$this->write('USER '.$user);
 		if (!$this->is_ok()) {
 			//Expected response: +OK User:'martin@unicorn.tv' ok
-			echo 'Wrong username';
+			$this->logAct('$email->login(): Wrong username');
+			$this->close();
 			return false;
 		}
 
@@ -112,8 +132,7 @@ class email
 			//Response 1: -ERR UserName or Password is incorrect
 			//Response 2: +OK logged in.
 
-			echo 'Wrong password';
-
+			$this->logAct('$email->login(): Wrong password');
 			$this->close();
 			return false;
 		}
@@ -129,7 +148,7 @@ class email
 		$response = $this->read();
 		if (!$this->is_ok($response)) {
 			$this->close();
-			echo 'STAT error';
+			$this->logAct('pop3_STAT(): STAT error');
 			return false;
 		}
 
@@ -150,7 +169,7 @@ class email
 		//Response: +OK 1 1234		first number = $_id, sencond number is bytes in current mail
 		$response = $this->read();
 		if (!$this->is_ok($response)) {
-			echo 'Failed to LIST '.$_id.'<br/>';
+			$this->logAct('pop3_LIST(): Failed to LIST '.$_id);
 			return false;
 		}
 
@@ -165,7 +184,7 @@ class email
 
 		$this->write('DELE '.$_id);
 		if (!$this->is_ok()) {
-			echo 'Failed to DELE '.$_id.'<br/>';
+			$this->logAct('pop3_DELE() Failed to DELE '.$_id);
 			return false;
 		}
 		return true;
@@ -255,7 +274,7 @@ class email
 		$mms_code['user'] = $sql->queryResult($q);
 		if (!$mms_code['user']) return false;
 		
-		echo 'Identified MMS type '.$mms_code['cmd'].' from user '.$mms_code['user'].'...<br>';
+		$this->logAct('Identified MMS type '.$mms_code['cmd'].' from user '.$mms_code['user'].'...', true);
 		return $mms_code;
 	}
 
@@ -279,8 +298,7 @@ class email
 		
 		$result['mms_code'] = $this->findMMSCode($result['header']['Subject']);
 		if (!$result['mms_code']) {
-			//todo: log failure
-			echo htmlentities($result['header']['From']).': No MMS code identified (title: '.$result['header']['Subject'].'), skipping mail<br/>';
+			$this->logAct(htmlentities($result['header']['From']).': No MMS code identified (title: '.$result['header']['Subject'].'), skipping mail');
 			return false;
 		}
 
@@ -398,14 +416,14 @@ class email
 				case 'base64':
 					/* file attachments like images, videos */
 					if (!in_array($attachment_mime, $config['email']['attachments_allowed_mime_types'])) {
-						//echo 'Attachment mime type unrecognized: '. $attachment_mime.'<br>';
+						$this->logAct('Attachment mime type unrecognized: '. $attachment_mime, true);
 						continue;
 					}
 					$this->saveFile($filename, $attachment_mime, base64_decode($attachment['body']), $result['mms_code']);
 					break;
 
 				default:
-					echo 'Unknown transfer encoding: '. $attachment['head']['Content-Transfer-Encoding'];
+					$this->logAct('Unknown transfer encoding: '. $attachment['head']['Content-Transfer-Encoding']);
 					break;
 			}
 		}
@@ -419,7 +437,7 @@ class email
 		set_time_limit(30);
 
 		$this->open();
-		if ($this->errno) return;
+		if (!$this->handle || $this->errno) return;
 		
 		if ($this->login($user, $pass) === false) return;
 
@@ -428,14 +446,14 @@ class email
 		
 		if (!$this->pop3_STAT()) return;
 
-		echo $this->unread_mails.' unread mails!<br/><br/>';
+		$this->logAct($this->unread_mails.' new mails', true);
 		
 		for ($i=1; $i <= $this->unread_mails; $i++)
 		{
 			$msg_size = $this->pop3_LIST($i);
 			if (!$msg_size) continue;
 
-			echo 'Downloading #'.$i.'... ('.$msg_size.' bytes)<br/>';
+			$this->logAct('Downloading #'.$i.'... ('.$msg_size.' bytes)', true);
 
 			$check = $this->pop3_RETR($i);
 			if ($check) $this->pop3_DELE($i);
@@ -444,13 +462,16 @@ class email
 
 		$this->close();
 	}
-	
-	//file_put_contents($filename, base64_decode($attachment['body']));
+
 	function saveFile($filename, $mime_type, $data, $mms_code)
 	{
 		global $config, $sql, $t;
+		
+		if ($mime_type == 'image/jpeg') {
+			$filename = str_ireplace('.jpeg', '.jpg', $filename);
+		}
 
-		echo 'Writing '.$filename.' ('.$mime_type.') to disk...<br/>';
+		$this->logAct('Writing '.$filename.' ('.$mime_type.') to disk...', true);
 
 		$filesize = strlen($data);
 
@@ -469,38 +490,32 @@ class email
 
 				$out_filename = '/var/www/'.USER_GALLERY.PD.'/'.$insert_id.'.'.$file_ext;
 				$out_thumbname = '/var/www/'.USER_GALLERY.PD.'/'.$insert_id.'-tmb.'.$file_ext;
-				echo 'Writing to file '.$out_filename.' ...<br/>';
+				$this->logAct('Writing to file '.$out_filename.' ...', true);
 				file_put_contents($out_filename, $data);
 
 				//skapa thumb
-				make_thumb($out_filename, $out_thumbname, '100', 89);
+				make_thumb($out_filename, $out_thumbname, 100, 89);
 				break;
 
 			default:
+				//fixme: DÖ inte här
 				die('KAOS');
 		}
 
 	}
 }
 
-function make_thumb($src, $dst, $dstWW = 90, $quality = 91) {
-	if(!file_exists($src) || (is_dir($dst) && $dst != '')) {
-		return false;
-	}
- 
+function make_thumb($src, $dst, $dstWW = 90, $quality = 91)
+{
+	if (!file_exists($src) || (is_dir($dst) && $dst != '')) return false;
+
 	$info = getimagesize($src);
-	switch($info[2]) {
-	case 1:
-		$im_src = imagecreatefromgif($src);
-		break;
-	case 2:
-		$im_src = imagecreatefromjpeg($src);
-		break;
-	case 3:
-		$im_src = imagecreatefrompng($src);
-		break;
+	switch ($info[2]) {
+		case IMAGETYPE_GIF: $im_src = imagecreatefromgif($src); break;
+		case IMAGETYPE_JPEG: $im_src = imagecreatefromjpeg($src); break;
+		case IMAGETYPE_PNG: $im_src = imagecreatefrompng($src); break;
 	}
-	if($info[0] >= $dstWW) {
+	if ($info[0] >= $dstWW) {
 		$thumb_width = $dstWW;
 		$thumb_height = ($info[1] * ($dstWW / $info[0]));
 	} else {
@@ -511,10 +526,10 @@ function make_thumb($src, $dst, $dstWW = 90, $quality = 91) {
 	$img_thumb = imagecreatetruecolor($thumb_width, $thumb_height);
 	imagecopyresampled($img_thumb, $im_src, 0, 0, 0, 0, $thumb_width, $thumb_height, $info[0], $info[1]);
 
-	imageJPEG($img_thumb, $dst, $quality);
+	imagejpeg($img_thumb, $dst, $quality);
 
-	ImageDestroy($img_thumb);
-	ImageDestroy($im_src);
+	imagedestroy($img_thumb);
+	imagedestroy($im_src);
 	return true;
 }
 ?>

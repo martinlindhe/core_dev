@@ -49,6 +49,7 @@
 <?	
 	if ($own) {
 		makeButton(false, 'makeUpload();', 'icon_gallery.png', 'ladda upp ny');
+		makeButton(false, 'makeTiny(\''.l('text', 'mmshelp', '2').'\')', 'icon_gallery.png', 'mms-uppladdning');
 	} else {
 		if (spyActive($s['id_id'], 'g')) {
 			makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
@@ -63,7 +64,6 @@
 var first = '<?=$first?>'; ext = '<?=$ext?>';
 </script>
 <?
-//		if($own) $menu = array('gallery_upload' => array('javascript:makeUpload();', 'ladda upp ny!')); else $menu = array();
 		$paging = paging(1, 20);
 		$res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC", 0, 1);
 		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' LIMIT 1");
@@ -73,7 +73,6 @@ var first = '<?=$first?>'; ext = '<?=$ext?>';
 ?>
 <img src="/_gfx/ttl_gallery_x.png" alt="Galleri X"/><br/><br/>
 <?
-//		if($own) $menu = array('gallery_upload' => array('javascript:makeUpload(\'priv=1\');', 'ladda upp ny!')); else $menu = array();
 		$paging = paging(1, 20);
 		$res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1' ORDER BY main_id DESC", 0, 1);
 		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1'");

@@ -10,12 +10,16 @@
 
 	if (!$_to_id && !empty($_POST['to_alias'])) {
 		$_to_alias = $_POST['to_alias'];
-	} else {
+	} else if ($_to_id) {
 		$tmp = $user->getuser($_to_id);
 		$_to_alias = $tmp['u_alias'];
+	} else {
+		//bara "skriv nytt mail", låt användaren fylla i mottagare
 	}
 	if (!empty($_POST['header'])) $_header = $_POST['header'];
 	if (!empty($_POST['body'])) $_body = $_POST['body'];
+
+	if (!empty($_POST['friend_alias'])) $_to_alias = $_POST['friend_alias'];
 
 	if ($_to_alias && $_header && $_body) {
 		$error = sendMail($_to_alias, '', $_header, $_body);
@@ -34,7 +38,7 @@
 	echo 'SKRIV NYTT MAIL<br/>';
 	echo '<br/>';
 
-	if ($error) echo $error.'<br>';
+	if ($error) echo $error.'<br/>';
 
 	echo '<form method="post" action="">';
 	if ($_to_id) {
@@ -47,7 +51,7 @@
 		{
 			echo '<select name="friend_alias">';
 			echo '<option>- Dina vänner -</option>';
-			for ($i=0; $i<count($list); $i++) echo '<option value="'.$list[$i]['id_id'].'">'.$list[$i]['u_alias'].'</option>';
+			for ($i=0; $i<count($list); $i++) echo '<option value="'.$list[$i]['u_alias'].'">'.$list[$i]['u_alias'].'</option>';
 			echo '</select>';
 		}
 	}

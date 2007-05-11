@@ -1,11 +1,11 @@
 <?
-include("_config/online.include.php");
+require("_config/online.include.php");
 	$photo_limit = 510;
 	$get=$sql->query("SELECT user_id,picd,old_filename FROM {$t}userphoto");
 		require(CONFIG."cut.fnc.php");
-		$p = $HTTP_POST_FILES['ins_file']['tmp_name'];
-		$p_name = $HTTP_POST_FILES['ins_file']['name'];
-		$p_size = $HTTP_POST_FILES['ins_file']['size'];
+		$p = $_FILES['ins_file']['tmp_name'];
+		$p_name = $_FILES['ins_file']['name'];
+		$p_size = $_FILES['ins_file']['size'];
 		if(verify_uploaded_file($p_name, $p_size)) {
 
 			$p_name = explode('.', $p_name);

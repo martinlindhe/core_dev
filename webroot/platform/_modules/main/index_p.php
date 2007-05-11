@@ -48,9 +48,10 @@
 
 			<div class="centerMenuHeader">logga in</div>
 			<div class="centerMenuBodyWhite">
-				<div style="float: left; width: 320px;"><p><?=gettxt('index_text', 0, 1)?></p></div>
+				<div style="float: left; width: 320px;"><p><?=gettxt('index_text', 0, 1)?></p><br/></div>
 
 				<div style="float: right; margin: 5px 5px 0 0; text-align: right;">
+					<br/>
 					<form name="l" action="/member/login" method="post">
 
 					<table summary="" cellspacing="0">

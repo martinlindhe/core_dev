@@ -52,7 +52,7 @@ function checkTime(toggle) {
 				<tr><td><a href="<?=l('list', 'users', '1')?>">online</a></td><td class="bld rgt"><a href="<?=l('list', 'users', 1)?>"><?=@intval($online[0])?></a></td></tr>
 				<tr><td><a href="<?=l('list', 'users', 'M')?>">killar</a></td><td class="rgt"><a href="<?=l('list', 'users', 'M')?>" class="bld sexM"><?=@intval($online[1])?></a></td></tr>
 				<tr><td><a href="<?=l('list', 'users', 'F')?>">tjejer</a></td><td class="rgt"><a href="<?=l('list', 'users', 'F')?>" class="bld sexF"><?=@intval($online[2])?></a></td></tr>
-				<tr><td colspan="2" class="cnt"><br /><a href="<?=l('list', 'users')?>">senast inloggade</a></td></tr>
+				<tr><td colspan="2" class="cnt"><br /><a href="<?=l('list', 'users')?>">senaste</a> - <a href="/list/userfind/1">slumpa</a></td></tr>
 				<tr><td colspan="2" class="bld cnt cur" onmouseover="checkTime(1);">snabbsök</td></tr>
 			</table>
 		</div>

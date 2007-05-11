@@ -148,8 +148,8 @@ function validate(tForm) {
 	return true;
 }
 </script>
-		<div class="wholeHeader2"><h4>Slutför konto</h4></div>
-		<div class="wholeBoxed2">
+	<div class="centerMenuHeader">Slutför konto</div>
+		<div class="centerMenuBodyWhite">
 <form name="r" method="post" action="<?=l('member', 'activate', secureOUT($fid), secureOUT($key))?>" onsubmit="return validate(this);">
 			<input type="hidden" name="doit" value="1">
 			<table cellspacing="0" width="500" style="height: 150px; margin-bottom: 10px;">

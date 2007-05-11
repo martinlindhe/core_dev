@@ -20,24 +20,22 @@
 
 	$list = gbList($_id, $pager['index'], $pager['items_per_page']);
 	
-	echo $pager['head'].'<br>';
+	if ($_id != $l['id_id']) {
+		echo '<a href="gb_write.php?id='.$_id.'">SKRIV INLÄGG</a><br/>';
+	}
 
-	//print_r($list);
+	echo $pager['head'].'<br/>';
+
 	foreach($list as $row)
 	{
-		if ($_id == $l['id_id']) echo ($row['user_read']?'läst ':'oläst ');
-		echo 'Från '.$row['u_alias'].', '.$row['sent_date'];
+		echo ($row['user_read']?'<img src="gfx/icon_mail_opened.png" alt="Läst" title="Läst" width="16" height="16"/> ':'<img src="gfx/icon_mail_unread.png" alt="Oläst" title="Oläst" width="16" height="16"/> ');
 		
 		$text = substr($row['sent_cmt'], 0, 15);
 		if (!$text) $text = '(ingen text)';
 		echo '<a href="gb_view.php?id='.$row['main_id'].'">'.$text.'</a>';
 		if (strlen($text) < strlen($row['sent_cmt'])) echo '...';
-		echo '<br/>';
+		echo ' från '.$row['u_alias'].'<br/>';
 	}
 	
-	if ($_id != $l['id_id']) {
-		echo '<a href="gb_write.php?id='.$_id.'">SKRIV INLÄGG</a>';
-	}
-
 	require('design_foot.php');
 ?>

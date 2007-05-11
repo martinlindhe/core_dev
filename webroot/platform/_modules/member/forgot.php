@@ -43,22 +43,26 @@
 	}
 	include(DESIGN.'head.php');
 ?>
-			<div id="mainContent">
-			<div class="mainHeader2"><h4>glömt lösenordet</h4></div>
-			<div class="mainBoxed2">
-			<form name="l" method="post" action="<?=l('member', 'forgot')?>">
+	<div id="mainContent">
+
+		<div class="centerMenuHeader">glömt lösenordet</div>
+		<div class="centerMenuBodyWhite">
+			<form name="forgot" method="post" action="<?=l('member', 'forgot')?>">
 			<input type="hidden" name="do" value="1" />
 				<p>
 				<?=safeOUT(gettxt('register-forgot'))?>
-				</p><br />
-				<div style="padding: 5px;">
-				<span class="bld<?=(isset($error['a']))?'_red':'';?>">alias eller e-post</span><br /><input type="text" class="txt" name="a" value="<?=(!empty($_POST['a']))?secureOUT($_POST['a']):'';?>" /><script type="text/javascript"><?=(empty($_POST) || !count($_POST))?'document.l.a.focus();':'';?></script>
-<?=(!empty($msg) && count($msg))?'<br /><br /><span class="bld">OBS!</span><br />'.implode('<br />', $msg):'';?>
-				<input type="submit" value="fortsätt" class="btn2_med r">
-				</div>
+				<br/><br/>
+
+				<b>alias eller e-post</b><br />
+				<input type="text" class="txt" name="a" value="<?=(!empty($_POST['a']))?secureOUT($_POST['a']):'';?>" />
+				<script type="text/javascript"><?=(empty($_POST) || !count($_POST))?'document.forgot.a.focus();':'';?></script>
+				<?=(!empty($msg) && count($msg))?'<br /><br /><span class="bld">OBS!</span><br />'.implode('<br />', $msg):''?>
+				<input type="submit" value="fortsätt" class="btn2_med"/>
+				</p>
 			</form>
-			</div>
-			</div>
+		</div>
+
+	</div>
 <?
 	include(DESIGN.'foot.php');
 ?>

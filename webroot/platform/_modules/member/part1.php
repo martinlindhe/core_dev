@@ -1,5 +1,4 @@
 <?
-#splashACT('test');
 	$topic = 'register';
 		$complete = false;
 		$error = array();
@@ -172,8 +171,8 @@ function select_search(val, arr) {
 }
 document.onkeydown = changeselected;
 </script>
-			<div class="wholeHeader2"><h4>registrering</h4></div>
-			<div class="wholeBoxed2">
+		<div class="centerMenuHeader">registrering</div>
+			<div class="centerMenuBodyWhite">
 	<form name="r" method="post" action="<?=l('member', 'register')?>">
 	<input type="hidden" name="do" value="1" />
 	<table cellspacing="0" width="510" class="mrg" style="margin-bottom: 15px;">

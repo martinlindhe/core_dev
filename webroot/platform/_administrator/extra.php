@@ -46,14 +46,14 @@ ob_start();
 		}
 
 		$gotpic = false;
-		foreach($HTTP_POST_FILES as $key => $val) {
+		foreach($_FILES as $key => $val) {
 			if(strpos($key, 'file') !== false) {
 				$kid = explode(":", $key);
 				$kid = $kid[1];
-				if(!$HTTP_POST_FILES['file:'. $kid]['error']) {
-					$p = $HTTP_POST_FILES['file:'. $kid]['tmp_name'];
-					$p_name = $HTTP_POST_FILES['file:'. $kid]['name'];
-					$p_size = $HTTP_POST_FILES['file:'. $kid]['size'];
+				if(!$_FILES['file:'. $kid]['error']) {
+					$p = $_FILES['file:'. $kid]['tmp_name'];
+					$p_name = $_FILES['file:'. $kid]['name'];
+					$p_size = $_FILES['file:'. $kid]['size'];
 					if(verify_uploaded_file($p_name, $p_size)) {
 						$unique = md5(microtime());
 						$p_name = explode('.', $p_name);

@@ -2,7 +2,8 @@
 	if($action == 'upgrade') {
 		errorACT('Kommer snart!');
 	}
-	$sections = array('cookies', 'openhours', 'radio', 'disclaimer', 'about', 'agree', 'contact', 'url', 'info-mms-help');
+
+	$sections = array('cookies', 'openhours', 'radio', 'disclaimer', 'about', 'agree', 'contact', 'url', 'mmshelp');
 	$action_new = $action;
 	if(in_array($action, $sections)) {
 		if($action == 'agree')

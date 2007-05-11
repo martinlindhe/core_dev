@@ -69,8 +69,8 @@
 	}
 	require(DESIGN.'head_start.php');
 ?>
-		<div class="wholeHeader2"><h4>Aktivera konto</h4></div>
-		<div class="wholeBoxed2">
+		<div class="centerMenuHeader">Aktivera konto</div>
+		<div class="centerMenuBodyWhite">
 			<form name="l" method="post" action="<?=l('member', 'activate')?>">
 			<input type="hidden" name="activate">
 			<input type="hidden" name="go" value="1">

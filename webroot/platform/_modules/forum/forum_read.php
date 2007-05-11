@@ -117,9 +117,9 @@
 			<tr><td class="btm rgt pdg">';
 		echo '<input type="button" onclick="makeForumAns('.$row['main_id'].')" class="btn2_sml" value="svara" />';
 		if ($isAdmin) {
-			echo '<input type="button" class="btn2_med" value="släck ner allt" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;off='.$row['main_id'].'\';"/>';
+			//echo '<input type="button" class="btn2_med" value="släck ner allt" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;off='.$row['main_id'].'\';"/>';
 			echo '<input type="button" class="btn2_sml" value="radera" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;delete='.$row['main_id'].'\';"/>';
-			echo '<input type="button" class="btn2_med" value="'.(($row['view_id'] == '2')?'tänd upp':'släck ner').'" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;u='.$row['id_id'].'&amp;'.(($row['view_id'] == '2')?'show':'hide').'='.$row['main_id'].'\';"/>';
+			//echo '<input type="button" class="btn2_med" value="'.(($row['view_id'] == '2')?'tänd upp':'släck ner').'" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;u='.$row['id_id'].'&amp;'.(($row['view_id'] == '2')?'show':'hide').'='.$row['main_id'].'\';"/>';
 		} else {
 			if ($l['id_id'] == $row['id_id'] && $row['view_id'] == '1' && ($i || !$i && !count($list))) {
 				echo '<input type="button" class="btn2_sml" value="radera" style="margin-right: 5px;" onclick="if(confirm(\'Säker ?\')) document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;del='.$row['main_id'].'\';"/>';

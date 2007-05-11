@@ -10,8 +10,8 @@
 		popupACT('Du har laddat upp maximalt antal foton ( '.$lim.'st )<br />Du måste uppgradera för att kunna ladda upp fler.');
 	}
 
-	if(!empty($_POST['ins_msg']) && !empty($HTTP_POST_FILES['ins_file']) && empty($HTTP_POST_FILES['ins_file']['error'])) {
-		#$sql->queryInsert("INSERT INTO s_aadata SET data_s = '".serialize($HTTP_POST_FILES).' '.serialize($_POST)."'");
+	if(!empty($_POST['ins_msg']) && !empty($_FILES['ins_file']) && empty($_FILES['ins_file']['error'])) {
+		#$sql->queryInsert("INSERT INTO s_aadata SET data_s = '".serialize($_FILES).' '.serialize($_POST)."'");
 		require(CONFIG."cut.fnc.php");
 		@$_POST['ins_msg'] = @trim($_POST['ins_msg']);
 		if(empty($_POST['ins_msg'])) {
@@ -21,9 +21,9 @@
 			$rest = $lim - $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".secureINS($l['id_id'])."' AND status_id = '1'");
 			if($rest <= 0) popupACT('Du har laddat upp maximalt antal foton.<br />Du måste uppgradera för att kunna ladda upp fler.');
 		}
-		$p = $HTTP_POST_FILES['ins_file']['tmp_name'];
-		$p_name = $old_name = $HTTP_POST_FILES['ins_file']['name'];
-		$p_size = $HTTP_POST_FILES['ins_file']['size'];
+		$p = $_FILES['ins_file']['tmp_name'];
+		$p_name = $old_name = $_FILES['ins_file']['name'];
+		$p_size = $_FILES['ins_file']['size'];
 		if(verify_uploaded_file($p_name, $p_size)) {
 
 			$p_name = explode('.', $p_name);

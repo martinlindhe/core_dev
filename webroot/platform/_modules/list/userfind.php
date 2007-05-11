@@ -3,6 +3,7 @@
 		$src = $_POST['a'];
 	}
 	if(!empty($src)) {
+		if(is_md5($src)) reloadACT(l('user', 'view', $src));
 		$other = false;
 		if(strpos($src, ':') !== false) {
 			$other = true;
@@ -47,6 +48,33 @@
 			reloadACT(l('list', 'users')); #reloadACT('list_user.php?do=1&alias='.$src);
 		} else {
 			reloadACT(l('list', 'users')); #reloadACT('list_user.php?do=1&alias='.$src);
+		}
+	} elseif(isset($_GET['id'])) {
+		$r = $user->getinfo($l['id_id'], 'random');
+		if(!$r) {
+			$sexs = array('M' => 'F', 'F' => 'M', '' => 'F');
+			$sexs = $sexs[$l['u_sex']];
+		} else {
+			if($r == 'B') $sexs = false;
+			else $sexs = $r;
+		}
+		if($sexs) {
+			$c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userlevel WHERE MATCH(level_id) AGAINST('+VALID +SEX".$sexs."' IN BOOLEAN MODE)");
+			$c = mt_rand(0, $c);
+			$res = $sql->queryResult("SELECT id_id FROM {$t}userlevel WHERE MATCH(level_id) AGAINST('+VALID +SEX".$sexs."' IN BOOLEAN MODE) LIMIT $c, 1");
+		} else {
+			$c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userlevel WHERE MATCH(level_id) AGAINST('+VALID' IN BOOLEAN MODE)");
+			$c = mt_rand(0, $c);
+			$res = $sql->queryResult("SELECT id_id FROM {$t}userlevel WHERE MATCH(level_id) AGAINST('+VALID' IN BOOLEAN MODE) LIMIT $c, 1");
+		}
+		if(!empty($res)) {
+			if($res == $l['id_id']) {
+				$res = $sql->queryResult("SELECT id_id FROM {$t}uservalid WHERE id_id != '".$l['id_id']."' AND status_id = '".$sexs."' ORDER BY RAND() LIMIT 1");
+			}
+			reloadACT(l('user', 'view', $res));
+		} else {
+			$res = $sql->queryResult("SELECT id_id FROM {$t}user WHERE id_id != '".$l['id_id']."' AND status_id = '1' AND u_sex = '".$sexs."' ORDER BY RAND() LIMIT 1");
+			reloadACT(l('user', 'view', $res));
 		}
 	} else {
 		reloadACT(l('list', 'users'));
