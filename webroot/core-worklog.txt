@@ -36,7 +36,6 @@
 		- delete news: funkar ej för att confirmed() skickar fel parametrar
 		- vote på kvalitén (eller "rating")
   		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt, tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
-		- ej kunna dubbel-submitta news (det går nu)
 
 
 	wiki:
@@ -92,7 +91,7 @@ X = hi prio task
 	- news: kan bifoga filer till nyheter
 	- news: css meny på nyhetsartiklarna (edit, delete, attachments, comment)
 	- news: ändrat så news markeras som deleted men tas ej bort i databasen
-
+	- news: kan ej längre dubbel-submitta news
 
 2007.05.10:
 	- lyrics: visa ej "log in" om man e inloggad

@@ -3,11 +3,20 @@
 
 	$session->requireAdmin();
 
-	if (!empty($_POST['title']) && !empty($_POST['body']) && !empty($_POST['publish']) ) {
-		addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss'], $_POST['news_cat']);
-	}
-	
 	include($project.'design_head.php');
+
+	if (!empty($_POST['title']) && !empty($_POST['body']) && !empty($_POST['publish']) ) {
+		$check = addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss'], $_POST['news_cat']);
+
+		if ($check) {
+			echo 'News article successfully added!';
+		} else {
+			echo 'There were problems adding news article. Most likley you pressed submit more than once.';
+		}
+
+		include($project.'design_foot.php');
+		die;
+	}
 
 	echo '<h1>Add news</h1>';
 

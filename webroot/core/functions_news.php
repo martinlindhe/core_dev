@@ -9,13 +9,14 @@
 		global $db, $session;
 
 		if (!$session->id || !is_numeric($rss_enabled) || !is_numeric($category_id)) return false;
-		
-		//$topublish är en sträng som innehåller ett datum, helst i detta format: 2007-04-02 18:22
+
+		$q = 'SELECT newsId FROM tblNews WHERE title="'.$db->escape($title).'" AND body="'.$db->escape($body).'"';
+		if ($db->getOneItem($q)) return false;
+
 		$topublish_time = strtotime($topublish);
 		if ($topublish_time < time()) $topublish_time = time();
-		$topublish = sql_datetime($topublish_time);
 
-		$q = 'INSERT INTO tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session->id.',timeToPublish="'.$topublish.'",timeCreated=NOW(),categoryId='.$category_id;
+		$q = 'INSERT INTO tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session->id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
 		$db->query($q);
 
 		return true;
