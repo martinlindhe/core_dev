@@ -362,3 +362,24 @@ input.button:focus {
 	border: 1px #888 solid;
 	background-color: #eee;
 }
+
+.comment_header {
+	font-size: 16px;
+	padding: 10px;
+	margin: 4px;
+	border: 1px #888 solid;
+	cursor: pointer;
+}
+.comment_text {
+	padding: 10px;
+	border: 1px #888 solid;
+	border-bottom: 0px;
+	background-color: #eee;
+}
+.comment_details {
+	padding: 10px;
+	border: 1px #888 solid;
+	border-top: 0px;
+	background-color: #ccc;
+	margin-bottom: 5px;
+}

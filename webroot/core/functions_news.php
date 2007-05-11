@@ -52,8 +52,8 @@
 
 		return $db->getArray($q);
 	}
-	
-	//used by getPublishedNews() and rss_news.php
+
+	//used by showNews() and /core/rss_news.php
 	function getPublishedNews($_categoryId = 0, $limit = '')
 	{
 		global $db;
@@ -89,8 +89,8 @@
 		global $db, $session;
 		
 		if (!empty($_GET['news']) && is_numeric($_GET['news'])) {
-			/* Visar en artikel */
-			
+			/* Displays one news article */
+
 			$row = getNewsItem($_GET['news']);
 
 			echo '<div class="news">';
@@ -116,11 +116,11 @@
 			echo '<div class="news_body">'.$art['body'].'</div>';
 
 			showComments(COMMENT_NEWS, $_GET['news']);
-			
+
 			echo '</div>'; //class="news"
 			return;
 		}
-		
+
 		$_cat_id = 0;
 		if (!empty($_GET['cat']) && is_numeric($_GET['cat'])) $_cat_id = $_GET['cat'];
 
@@ -142,5 +142,5 @@
 		if ($session->isAdmin) {
 			echo '<a href="/admin/admin_news_add.php'.getProjectPath(false).'">Add news</a>';
 		}
-	}
+	}	
 ?>

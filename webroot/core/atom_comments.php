@@ -104,7 +104,9 @@
 		return $db->getOneItem($q);
 	}
 
-	/* Helper function, standard "show comments" to be used by another module */
+	/* Helper function, standard "show comments" to be used by another module
+		Used by these modules: functions_news.php
+	*/
 	function showComments($commentType, $ownerId)
 	{
 		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
@@ -116,15 +118,19 @@
 		/* Visar kommentarer till artikeln */
 		$list = getComments($commentType, $ownerId);
 
-		echo '<h3>Comments</h3>';
+		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' Comments</div>';
 
+		echo '<div id="comments_holder">';
 		foreach ($list as $row) {
-			echo $row['commentText'].' by '.$row['userName'].' at '.$row['timeCreated'].'<br/>';
+			echo '<div class="comment_text">'.$row['commentText'].'</div>';
+			echo '<div class="comment_details">'.'By '.$row['userName'].' at '.$row['timeCreated'].'</div>';
 		}
-			
+
 		echo '<form method="post" action="">';
 		echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
 		echo '<input type="submit" class="button" value="Add comment"/>';
 		echo '</form>';
+		
+		echo '</div>';	//id="comments"
 	}
 ?>
