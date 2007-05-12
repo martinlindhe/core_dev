@@ -1,4 +1,4 @@
---------------[[platform todo]]--------------
+----[[platform todo]]----
 	hög prio:
 
 
@@ -11,7 +11,8 @@
 
 
 	personlig sida:
-		- en atom_groups.php för att skapa tblGroups som håller contact groups (som skapas från admin!)
+		- använd atom_categories.php för att hålla contact groups (som skapas från admin!)
+		- implementera godkännande av relation
 
 
 
@@ -29,7 +30,11 @@
 
 
 	admin:
-		- visa statistik i adminpanelen (admin_statistics.php)
+		- visa statistik i adminpanelen (admin_statistics.php):
+			* visa ett diagram månadsvis. som visar två staplar, en för registreringar, en för inloggningar
+			* måste ha ett cron-script som körs regelbundet som samlar upp alla entries från tblLogins och sparar statistik för föregående
+				timme i en annan tabell
+				måste även kolla nya registreringar i tblUsers
 
 
 	file area:

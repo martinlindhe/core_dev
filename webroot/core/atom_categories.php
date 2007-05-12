@@ -10,6 +10,7 @@
 	define('CATEGORY_USERFILE_HIDDEN', 3);	//files here are only visible by the owner
 
 	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
+	define('CATEGORY_CONTACT',			11);		//friend relation category, like "Old friends", "Family"
 
 	define('CATEGORY_NEWS',				20);
 

@@ -272,7 +272,8 @@
 		//seconds
 		$a=date('s',$seconds)-0; //translate from 09 to 9 quickly ;)
 		if ($a>0) $retval.=$a.'s';
-		
+
+		if (substr($retval, -2) == ', ') $retval = substr($retval, 0, -2);
 		if ($retval == '') $retval = '0s';
 			
 		return $retval;

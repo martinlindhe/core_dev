@@ -338,6 +338,7 @@ class Session
 
 		echo 'Session name: '.$this->session_name.'<br/>';
 		echo 'Current IP: '.GeoIP_to_IPv4($this->ip).'<br/>';
+		echo 'User Agent: '.$this->user_agent.'<br/>';
 		echo 'Session timeout: '.shortTimePeriod($this->timeout).'<br/>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
 		echo 'Home page: '.$this->home_page.'<br/>';

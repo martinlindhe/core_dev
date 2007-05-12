@@ -15,7 +15,6 @@
 var _ext_ref='<?=getProjectPath()?>';
 </script>
 <div id="left-bg"></div>
-<div id="left-sep"></div>
 <div id="header">
 	<div id="header-logo">
 		<img src="<?=$session->web_root?>gfx/logo.png" alt="Filterset Database"/>

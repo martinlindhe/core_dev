@@ -5,6 +5,11 @@
 
 	$session->requireAdmin();
 
+	/* Remove */
+	if (isset($_GET['del'])) {
+		removeStopword($_GET['del']);
+	}
+	
 	if (count($_POST)) {
 		$list = getStopwords();
 
@@ -19,16 +24,6 @@
 				$full=0;
 			}
 
-			/* Remove */
-			if (isset($_POST[$del])) {
-				removeStopword($id);
-			} else
-			
-			/* Raderar även om man bara har tömt texten i fältet och tryckt Uppdatera */
-			if (!$_POST[$chg]) {
-				removeStopword($id);
-			}
-			
 			/* Update has less priority */
 			if (($_POST[$chg] != $list[$i]['wordText']) || ($full != $list[$i]['wordMatch'])) {
 				setStopword($id, $_POST[$chg], $full);
@@ -55,12 +50,11 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
-	echo '<form name="update" method="post" action="'.$_SERVER['PHP_SELF'].'">';
+	echo '<form name="update" method="post" action="">';
 	echo '<table width="100%" border=0 cellspacing=0 cellpadding=3>';
 	echo '<tr>';
 	
 	for($x=1; $x<=3; $x++) {
-		
 		switch($x) {
 			case STOPWORD_OBJECTIONABLE:
 				$txt='Objectionable';
@@ -87,16 +81,15 @@
 
 		$list = getStopwords($x);
 		foreach ($list as $row) {
-			$chg  = 'change_'.$row['wordId'];
-			$full = 'full_'.$row['wordId'];
-			$del  = 'del_'.$row['wordId'];
-
 			echo '<tr>';
-			echo '<td><input type="text" name="'.$chg.'" value="'.$row['wordText'].'" size="16"/></td>';
-			echo '<td><input type="checkbox" class="checkbox" name="'.$full.'" value="1"';
+			echo '<td><input type="text" name="change_'.$row['wordId'].'" value="'.$row['wordText'].'" size="16"/></td>';
+			echo '<td><input type="checkbox" class="checkbox" name="full_'.$row['wordId'].'" value="1"';
 			if ($row['wordMatch']==1) echo ' checked="checked"';
 			echo '/></td>';
-			echo '<td><input type="checkbox" class="checkbox" name="'.$del.'"/></td>';
+			echo '<td>';
+				//echo '<input type="checkbox" class="checkbox" name="del_'.$row['wordId'].'"/>';
+				echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="/gfx/icon_delete.png"></a>';
+			echo '</td>';
 			echo '</tr>';
 		}
 

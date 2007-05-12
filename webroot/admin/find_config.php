@@ -11,13 +11,14 @@
 
 	$admin_menu = array(
 		'/admin/admin.php'.getProjectPath(false) => 'Admin start',
-		'/admin/admin_stopwords.php'.getProjectPath(false) => 'Manage stopwords',
+		'/admin/admin_stopwords.php'.getProjectPath(false) => 'Stopwords',
 		'/admin/admin_moderationqueue.php'.getProjectPath(false) => 'Moderation queue',
+		'/admin/admin_contact_categories.php'.getProjectPath(false) => 'Contact categories',
 		'/admin/admin_events.php'.getProjectPath(false) => 'Event log',
-		'/admin/admin_compat_check.php'.getProjectPath(false) => 'Compatiblity check',
-		'/admin/admin_db_info.php'.getProjectPath(false) => 'DB info',
-		'/admin/admin_session_info.php'.getProjectPath(false) => 'session info',
+		'/admin/admin_compat_check.php'.getProjectPath(false) => 'Compat check',
 		'/admin/admin_statistics.php'.getProjectPath(false) => 'stats',
+		'/admin/admin_db_info.php'.getProjectPath(false) => '$db',
+		'/admin/admin_session_info.php'.getProjectPath(false) => '$session',
 		'/admin/admin_phpinfo.php'.getProjectPath(false) => 'PHP'
 	);
 ?>
