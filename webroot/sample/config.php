@@ -43,7 +43,7 @@
 	'user.php' => 'Overview',
 	'files.php' => 'My files',
 	'blog.php' => 'My blogs',
-	'guestbook.php' => 'Guestbook ('.getNewGuestbookCount($session->id).')',	//shows number of unread guestbook messages
+	'guestbook.php' => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
 	'settings.php' => 'Settings');
 
 ?>

@@ -21,10 +21,11 @@
 		addGuestbookEntry($userId, '', $_POST['body']);
 	}
 
-	echo 'The guestbook contains '.getGuestbookSize($userId).' messages.<br/><br/>';
+	echo 'The guestbook contains '.getGuestbookCount($userId).' messages.<br/><br/>';
 
 	$list = getGuestbook($userId);	//fixme: paging stöd
 	foreach ($list as $row) {
+		echo '<a name="gb'.$row['entryId'].'"></a>';
 		echo '<div class="guestbook_entry">';
 
 		echo '<div class="guestbook_entry_head">';

@@ -17,7 +17,7 @@
 	//define('MODERATION_OBJECTIONABLE_POST',		2);
 	//define('MODERATION_SENSITIVE_POST',				3);
 	//define('MODERATION_REPORTED_USER',				10);
-	define('MODERATION_SENSITIVE_GUESTBOOK',	11);
+	define('MODERATION_SENSITIVE_GUESTBOOK',	11);	//itemId = tblGuestbook.entryId
 	//define('MODERATION_REPORTED_PHOTO',				12);
 	define('MODERATION_REPORTED_BLOG',				13);
 	define('MODERATION_SENSITIVE_BLOG',				14);
@@ -177,7 +177,7 @@
 	/* Adds the forum item $itemId to the moderation queue tagged with reason $queueType */
 	function addToModerationQueue($queueType, $itemId)
 	{
-		global $db;
+		global $db, $session;
 
 		if (!is_numeric($itemId) || !is_numeric($queueType)) return false;
 
@@ -185,7 +185,7 @@
 		$queueId = $db->getOneItem($q);
 		if ($queueId) return $queueId;
 
-		$q = 'INSERT INTO tblModerationQueue SET queueType='.$queueType.',itemId='.$itemId.',timeCreated=NOW()';
+		$q = 'INSERT INTO tblModerationQueue SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',timeCreated=NOW()';
 		$db->query($q);
 		return $db->insert_id;
 	}

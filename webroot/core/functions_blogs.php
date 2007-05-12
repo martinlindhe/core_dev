@@ -255,7 +255,7 @@
 
 		if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 			$userId = $_GET['id'];
-			echo 'User '.$session->getUserName($userId).' - blogs:<br/>';
+			echo 'User '.getUserName($userId).' - blogs:<br/>';
 		} else {
 			$userId = $session->id;
 			echo 'Your blogs:<br/>';

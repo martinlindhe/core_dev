@@ -14,6 +14,7 @@
 	X - kompislista (blized)
 
 
+
 	news modul:
 		- delete news funkar ej för att confirmed() skickar fel parametrar
 		- vote på kvalitén (eller "rating")
@@ -96,6 +97,7 @@ X = hi prio task
 	- profil: visar "mina filer", "mina bloggar", "inställningar" under personlig sida
 	- gästbok: ny funktion
 	- files: gjorde en generell dokument-ikon, skrotade pdf-ikonen
+	- gästbok: auto-moderation trigger på känslig text, admin testat osv
 
 
 2007.05.10:

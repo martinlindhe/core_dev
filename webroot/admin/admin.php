@@ -3,8 +3,21 @@
 	$session->requireAdmin();
 
 	require($project.'design_head.php');
+
+	echo '<div class="item">Admin menu</div>';
+	
+	$menu = array(
+		'/admin/admin_stopwords.php'.getProjectPath(false) => 'Manage stopwords',
+		'/admin/admin_moderationqueue.php'.getProjectPath(false) => 'Moderation queue',
+		'/admin/admin_events.php'.getProjectPath(false) => 'Event log',
+		'/admin/admin_compat_check.php'.getProjectPath(false) => 'Compatiblity check',
+		'/admin/admin_db_info.php'.getProjectPath(false) => 'DB info',
+		'/admin/admin_session_info.php'.getProjectPath(false) => 'session info',
+		'/admin/admin_php_info.php'.getProjectPath(false) => 'PHP'
+	);
+	echo createMenu($menu, 'blog_menu');
 ?>
-<h1>Admin menu</h1><br/><br/>
+
 
 <hr/>
 super admin stuff:<br/>

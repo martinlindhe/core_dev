@@ -1,4 +1,6 @@
 <?
+	require_once('atom_moderation.php');	//for moderation functionality
+
 	function addGuestbookEntry($ownerId, $subject, $body)
 	{
 		global $db, $session;
@@ -17,7 +19,7 @@
 
 		/* Add entry to moderation queue */
 		if (isSensitive($subject) || isSensitive($body)) {
-			addToModerationQueue($entryId, MODERATION_SENSITIVE_GUESTBOOK);
+			addToModerationQueue(MODERATION_SENSITIVE_GUESTBOOK, $entryId);
 		}
 	}
 	
@@ -26,13 +28,13 @@
 		global $db;
 
 		if (!is_numeric($entryId)) return false;
-
+//deletedby, så admin-deletes syns
 		$q = 'UPDATE tblGuestbooks SET entryDeleted=1,timeDeleted=NOW() WHERE entryId='.$entryId;
 		$db->query($q);
 	}
 
-	/* Return $userId's guestbook entries, if $page is omitted the full guestbook is returned */
-	function getGuestbook($userId, $page = '')
+	/* Return $userId's guestbook entries */
+	function getGuestbook($userId)
 	{
 		global $db;
 
@@ -44,10 +46,6 @@
 		$q .= 'WHERE t1.userId='.$userId.' ';
 		$q .= 'AND t1.entryDeleted=0 ';
 		$q .= 'ORDER BY t1.timeCreated DESC';
-		/*
-		if (is_numeric($page)) {
-			$sql .= ' LIMIT ' . ($config['guestbook']['items_per_page'] * ($page-1)). ','. $config['guestbook']['items_per_page'];
-		}*/
 
 		return $db->getArray($q);
 	}
@@ -87,7 +85,7 @@
 
 	
 	/* Returns the number of items in the guestbook */
-	function getGuestbookSize($userId)
+	function getGuestbookCount($userId)
 	{
 		global $db;
 
@@ -96,7 +94,18 @@
 		$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND entryDeleted=0';
 		return $db->getOneItem($q);
 	}
-	
+
+	/* Returns the number of unread items in the guestbook */
+	function getGuestbookUnreadCount($userId)
+	{
+		global $db;
+
+		if (!is_numeric($userId)) return false;
+		
+		$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND entryRead=0';
+		return $db->getOneItem($q);
+	}
+
 	/* Markerar alla inlägg i gästboken som lästa */
 	function markGuestbookRead()
 	{	
@@ -108,13 +117,4 @@
 		$db->query($q);
 	}
 	
-	function getNewGuestbookCount($userId)
-	{
-		global $db;
-
-		if (!is_numeric($userId)) return false;
-		
-		$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND entryRead=0';
-		return $db->getOneItem($q);
-	}
 ?>

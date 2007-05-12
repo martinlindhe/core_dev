@@ -80,27 +80,27 @@
 		echo '<table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#000000"><tr><td>';
 		echo '<table width="100%" border=0 cellspacing=0 cellpadding=2 bgcolor="#FFFFFF">';
 		echo '<tr><td colspan=3 height=25 valign="top"><b>'.$txt.'</b></td></tr>';
-		echo '<tr><td colspan=3 height=25 valign="top">'.$help.'<br><br></td></tr>';
+		echo '<tr><td colspan=3 height=25 valign="top">'.$help.'<br/><br/></td></tr>';
 		echo '<tr><td>&nbsp;</td><td valign="bottom">Full match</td><td valign="bottom">Remove</td></tr>';
 
 		$list = getStopwords($x);
-		for ($i=0; $i<count($list); $i++) {
-			$chg  = 'change_'.$list[$i]['wordId'];
-			$full = 'full_'.$list[$i]['wordId'];
-			$del  = 'del_'.$list[$i]['wordId'];
+		foreach ($list as $row) {
+			$chg  = 'change_'.$row['wordId'];
+			$full = 'full_'.$row['wordId'];
+			$del  = 'del_'.$row['wordId'];
 
 			echo '<tr>';
-			echo '<td><input type="text" name="'.$chg.'" value="'.$list[$i]['wordText'].'" size=16></td>';
-			echo '<td><input type="checkbox" class="checkbox" name="'.$full.'" value=1';
-			if ($list[$i]['wordMatch']==1) echo ' checked';
-			echo '></td>';
-			echo '<td><input type="checkbox" class="checkbox" name="'.$del.'"></td>';
+			echo '<td><input type="text" name="'.$chg.'" value="'.$row['wordText'].'" size="16"/></td>';
+			echo '<td><input type="checkbox" class="checkbox" name="'.$full.'" value="1"';
+			if ($row['wordMatch']==1) echo ' checked="checked"';
+			echo '/></td>';
+			echo '<td><input type="checkbox" class="checkbox" name="'.$del.'"/></td>';
 			echo '</tr>';
 		}
 
 		echo '<tr>';
-			echo '<td><br><br>Add new word:<br><input type="text" name="newname_'.$x.'" size=16></td>';
-			echo '<td><br><br><input type="checkbox" class="checkbox" value="1" name="newfull_'.$x.'"></td>';
+			echo '<td><br/><br/>Add new word:<br/><input type="text" name="newname_'.$x.'" size="16"/></td>';
+			echo '<td><br/><br/><input type="checkbox" class="checkbox" value="1" name="newfull_'.$x.'"/></td>';
 			echo '<td>&nbsp;</td>';
 		echo '</tr>';
 
@@ -114,7 +114,7 @@
 	echo '</td></tr>';
 
 	echo '<tr><td colspan=3 align="right">';
-	echo '<input type="submit" class="button" value="Uppdatera">';
+	echo '<input type="submit" class="button" value="Update"/>';
 	echo '</td></tr>';
 	echo '</table>';
 	echo '</form>';

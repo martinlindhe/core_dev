@@ -67,7 +67,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=663 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=664 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -461,7 +461,7 @@ CREATE TABLE tblGuestbooks (
   entryRead tinyint(1) unsigned NOT NULL default '0',
   timeRead datetime default NULL,
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 CREATE TABLE tblLogins (
   mainId int(10) unsigned NOT NULL auto_increment,
   userId int(10) unsigned NOT NULL,
@@ -485,7 +485,7 @@ CREATE TABLE tblModerationQueue (
   itemId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   PRIMARY KEY  (queueId)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COMMENT='Modereringskö med olika objekt som behöver ';
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COMMENT='Modereringskö med olika objekt som behöver ';
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,

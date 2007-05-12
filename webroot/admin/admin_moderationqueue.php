@@ -7,86 +7,86 @@
 
 	require($project.'design_head.php');
 
-	if (isset($_POST['datasent'])) {
-		$list = getModerationQueue();
+	$list = getModerationQueue();
 		
-		for ($i=0; $i<count($list); $i++) {
-			if (isset($_POST['method_'.$list[$i]['queueId']])) {
-				$method = $_POST['method_'.$list[$i]['queueId']];
-				
-				if ($method == 'accept') {
-					/* Accepts forum item and removes it from queue */
-					deleteComments(COMMENT_MODERATION_QUEUE, $list[$i]['queueId']);
-					removeFromModerationQueue($list[$i]['queueId']);
-				} else {
-					switch ($list[$i]['queueType']) {
-						case MODERATION_REPORTED_BLOG:
-						case MODERATION_SENSITIVE_BLOG:
-							deleteBlog($list[$i]['itemId']);
-							removeFromModerationQueue($list[$i]['queueId']);
-							break;
-					}
-				}
-			}
+	foreach ($list as $row) {
+		if (!isset($_POST['method_'.$row['queueId']])) continue;
+
+		if ($_POST['method_'.$row['queueId']] == 'accept') {
+			/* Accepts forum item and removes it from queue */
+			deleteComments(COMMENT_MODERATION_QUEUE, $row['queueId']);
+			removeFromModerationQueue($row['queueId']);
+			continue;
+		}
+
+		switch ($list[$i]['queueType']) {
+			case MODERATION_SENSITIVE_GUESTBOOK:
+				removeGuestbookEntry($row['itemId']);
+				removeFromModerationQueue($row['queueId']);
+				break;
+
+			case MODERATION_REPORTED_BLOG:
+			case MODERATION_SENSITIVE_BLOG:
+				deleteBlog($row['itemId']);
+				removeFromModerationQueue($row['queueId']);
+				break;
 		}
 	}
 
-	$list = getModerationQueue();
+	$list = getModerationQueue();	//fixme: paging support
 	if (count($list)) {
 		
-		echo count($list).' object(s)<br/><br/>';
+		echo 'Displaying '.count($list).' object(s) in the moderation queue. Showing oldest items first.<br/><br/>';
 		
 		echo '<form method="post" action="">';
-		echo '<input type="hidden" name="datasent" value="1"/>';
 
-		for ($i=0; $i<count($list); $i++) {
-			echo '<table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#000000" height="*"><tr><td>';
-			echo '<table width="100%" cellpadding=2 cellspacing=0 border=0 bgcolor="#FFFFFF">';
-			echo '<tr><td colspan=3>';
+		foreach ($list as $row) {
+			echo '<div class="item">';
 
 			$title = 'STATUS: ';
-			switch ($list[$i]['queueType']) {
+			switch ($row['queueType']) {
+				case MODERATION_SENSITIVE_GUESTBOOK:$title .= 'Auto trigger: Sensitive guestbook'; break;
 				case MODERATION_REPORTED_BLOG:			$title .= 'Reported blog'; break;
 				case MODERATION_SENSITIVE_BLOG:			$title .= 'Auto trigger: Sensitive blog'; break;
-				default: $title .= '<div class="critical">Unknown queueType '.$list[$i]['queueType'].', itemId '.$list[$i]['itemId'].'</div>';
+				default: $title .= '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 			}
-			echo '<b>'.$title.'</b><br/>';
+			echo '<div class="item_head">'.$title.'</div>';
+			
+			echo 'Triggered by '.getUserName($row['creatorId']).' at '.$row['timeCreated'].'<br/>';
 
-			switch ($list[$i]['queueType']) {
+			switch ($row['queueType']) {
+				case MODERATION_SENSITIVE_GUESTBOOK:
+					$gb = getGuestbookItem($row['itemId']);
+					echo '<a href="'.$project.'guestbook.php?id='.$gb['userId'].'#gb'.$row['itemId'].'" target="_blank">Read the entry</a>';
+					break;
+				
 				case MODERATION_REPORTED_BLOG:
 				case MODERATION_SENSITIVE_BLOG:
-					echo '<a href="'.$project.'blog_show.php?Blog:'.$list[$i]['itemId'].'" target="_blank">Read the blog</a>';
+					echo '<a href="'.$project.'blog_show.php?Blog:'.$row['itemId'].'" target="_blank">Read the blog</a>';
 					break;
 			}
-			echo '</td></tr>';
-			echo '<tr>';
-			echo '<td width="40%">';
-			echo '<input type="radio" class="radio" name="method_'.$list[$i]['queueId'].'" id="accept_'.$list[$i]['queueId'].'" value="accept"/>';
-			echo '<label for="accept_'.$list[$i]['queueId'].'"> Accept</label>';
-			echo '</td>';
 
+			echo '<table width="100%"><tr><td width="50%">';
+			echo '<input type="radio" class="radio" name="method_'.$row['queueId'].'" id="accept_'.$row['queueId'].'" value="accept"/>';
+			echo '<label for="accept_'.$row['queueId'].'"> Accept</label>';
+			echo '</td>';
 			echo '<td>';
-			echo '<input type="radio" class="radio" name="method_'.$list[$i]['queueId'].'" id="delete_'.$list[$i]['queueId'].'" value="delete"/>';
-			echo '<label for="delete_'.$list[$i]['queueId'].'"> Delete</label>';
-			echo '</td>';
-
-			echo '<td width="25%">';
-				if (
-						($list[$i]['queueType'] == MODERATION_REPORTED_BLOG)
-				) {
-					$mcnt = getCommentsCount(COMMENT_MODERATION_QUEUE, $list[$i]['queueId']);
-					if ($mcnt) {
-						echo '<a href="admin_moderationqueuecomments.php?id='.$list[$i]['queueId'].getProjectPath().'">Motivations ('.$mcnt.') &raquo;</a>';
-					} else {
-						echo 'Motivations (0)';
-					}
-				} else {
-					echo '&nbsp;';
-				}
-			echo '</td>';
-			echo '</tr>';
-			echo '</table>';
+			echo '<input type="radio" class="radio" name="method_'.$row['queueId'].'" id="delete_'.$row['queueId'].'" value="delete"/>';
+			echo '<label for="delete_'.$row['queueId'].'"> Delete</label>';
 			echo '</td></tr></table>';
+
+			if (
+					($row['queueType'] == MODERATION_REPORTED_BLOG)
+			) {
+				$mcnt = getCommentsCount(COMMENT_MODERATION_QUEUE, $row['queueId']);
+				if ($mcnt) {
+					echo '<a href="admin_moderationqueuecomments.php?id='.$row['queueId'].getProjectPath().'">Motivations ('.$mcnt.')</a>';
+				} else {
+					echo 'Motivations (0)';
+				}
+			}
+
+			echo '</div>'; //class="item"
 			echo '<br/>';
 		}
 		echo '<input type="submit" class="button" value="Commit changes"/>';

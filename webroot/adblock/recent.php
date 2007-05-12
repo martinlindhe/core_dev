@@ -20,11 +20,11 @@
 				break;
 
 			case 'edited':
-				echo 'Edited at '.$list[$i]['timeEdited'].' by '.$session->getUserName($list[$i]['editorId']);
+				echo 'Edited at '.$list[$i]['timeEdited'].' by '.getUserName($list[$i]['editorId']);
 				break;
 
 			case 'deleted':
-				echo 'Deleted at '.$list[$i]['timeDeleted'].' by '.$session->getUserName($list[$i]['deletedBy']);
+				echo 'Deleted at '.$list[$i]['timeDeleted'].' by '.getUserName($list[$i]['deletedBy']);
 				break;
 		}
 

@@ -405,3 +405,14 @@ input.button:focus {
 .guestbook_entry_head {
 	font-weight: bold;
 }
+
+/* generic container for text */
+.item {
+	padding: 10px;
+	border: 1px #888 solid;
+	background-color: #dbc9ea;
+}
+.item_head {
+	font-size: 16px;
+	font-weight: bold;
+}
