@@ -7,6 +7,8 @@
 
 	require($project.'design_head.php');
 
+	echo createMenu($admin_menu, 'blog_menu');
+
 	$list = getModerationQueue();
 		
 	foreach ($list as $row) {

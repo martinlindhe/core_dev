@@ -484,6 +484,7 @@ CREATE TABLE tblModerationQueue (
   queueType tinyint(3) unsigned NOT NULL default '0',
   itemId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
+  creatorId int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (queueId)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COMMENT='Modereringskö med olika objekt som behöver ';
 CREATE TABLE tblNews (

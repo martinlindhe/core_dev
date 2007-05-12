@@ -6,7 +6,7 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
-	$db->showConfig();
+	echo 'feature not yet implemented';
 
 	require($project.'design_foot.php');
 ?>

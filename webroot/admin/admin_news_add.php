@@ -5,6 +5,8 @@
 
 	include($project.'design_head.php');
 
+	echo createMenu($admin_menu, 'blog_menu');
+
 	if (!empty($_POST['title']) && !empty($_POST['body']) && !empty($_POST['publish']) ) {
 		$check = addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss'], $_POST['news_cat']);
 

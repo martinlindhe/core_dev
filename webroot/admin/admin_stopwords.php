@@ -53,6 +53,8 @@
 
 	require($project.'design_head.php');
 
+	echo createMenu($admin_menu, 'blog_menu');
+
 	echo '<form name="update" method="post" action="'.$_SERVER['PHP_SELF'].'">';
 	echo '<table width="100%" border=0 cellspacing=0 cellpadding=3>';
 	echo '<tr>';

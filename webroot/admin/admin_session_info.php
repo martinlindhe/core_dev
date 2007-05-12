@@ -4,6 +4,8 @@
 
 	require($project.'design_head.php');
 
+	echo createMenu($admin_menu, 'blog_menu');
+
 	$session->showInfo();
 
 	require($project.'design_foot.php');

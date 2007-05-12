@@ -8,4 +8,16 @@
 	}
 
 	require_once($project.'config.php');
+
+	$admin_menu = array(
+		'/admin/admin.php'.getProjectPath(false) => 'Admin start',
+		'/admin/admin_stopwords.php'.getProjectPath(false) => 'Manage stopwords',
+		'/admin/admin_moderationqueue.php'.getProjectPath(false) => 'Moderation queue',
+		'/admin/admin_events.php'.getProjectPath(false) => 'Event log',
+		'/admin/admin_compat_check.php'.getProjectPath(false) => 'Compatiblity check',
+		'/admin/admin_db_info.php'.getProjectPath(false) => 'DB info',
+		'/admin/admin_session_info.php'.getProjectPath(false) => 'session info',
+		'/admin/admin_statistics.php'.getProjectPath(false) => 'stats',
+		'/admin/admin_phpinfo.php'.getProjectPath(false) => 'PHP'
+	);
 ?>

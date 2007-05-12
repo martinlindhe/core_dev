@@ -5,6 +5,8 @@
 
 	require($project.'design_head.php');
 
+	echo createMenu($admin_menu, 'blog_menu');
+
 	if (!isset($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$queueId = $_GET['id'];
 

@@ -25,6 +25,8 @@
 
 	require($project.'design_head.php');
 
+	echo createMenu($admin_menu, 'blog_menu');
+
 	echo '<h1>Compatiblity check</h1>';
 
 	echo 'core version 0.1<br/>';
@@ -45,10 +47,12 @@
 	$current_apache = apache_get_version();
 	if ($current_apache == 'Apache') {
 		echo '<div class="okay" onclick="toggle_element_by_name(\'apache_info_noversion\')">';
-		echo '(show-more-info image)';
-		echo ' Version information not available</div>1';
+		echo ' Version information not available';
+		echo ' <img src="/gfx/icon_info.png">';
+		echo '</div>';
 		echo '<div id="apache_info_noversion" style="display: none">';
-		echo 'Production servers are sometimes configured not to report version information (ServerTokens Prod), this also makes Apache not report version information to PHP).';
+		echo 'Production servers are sometimes configured not to report version information (ServerTokens Prod), ';
+		echo 'this also makes Apache not report version information to PHP). This is not a bad thing.';
 		echo '</div>';
 	} else {
 		//Version string come in this form: Apache/2.2.4 (Win32)

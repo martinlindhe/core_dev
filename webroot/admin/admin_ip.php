@@ -8,6 +8,8 @@
 
 	require($project.'design_head.php');
 
+	echo createMenu($admin_menu, 'blog_menu');
+
 	echo 'admin IP - query IP information<br/><br/>';
 
 	if ($ip) {	
