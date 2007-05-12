@@ -1,5 +1,5 @@
 --------------[[platform todo]]--------------
-	hög prio!:
+	hög prio:
 
 
 	session/user settings:
@@ -11,7 +11,7 @@
 
 
 	personlig sida:
-	X - kompislista (blized)
+		- en atom_groups.php för att skapa tblGroups som håller contact groups (som skapas från admin!)
 
 
 
@@ -77,6 +77,11 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.12:
+	- friends: skapat sida
+	- friends: visa kompislista, bli vänner, ta bort relation implemneterat
+
+
 2007.05.11:
 	- core: kom på ett lite finare sätt att includa core filer
 	- session: login-hantering sköts nu automatiskt av sessionshanteraren.

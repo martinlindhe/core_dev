@@ -13,6 +13,7 @@
 	require_once('functions_news.php');
 	require_once('functions_blogs.php');
 	require_once('functions_guestbook.php');
+	require_once('functions_contacts.php');
 	restore_include_path();
 
 	$config['debug'] = true;
@@ -44,6 +45,7 @@
 	'files.php' => 'My files',
 	'blog.php' => 'My blogs',
 	'guestbook.php' => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
+	'friends.php' => 'Friends',
 	'settings.php' => 'Settings');
 
 ?>

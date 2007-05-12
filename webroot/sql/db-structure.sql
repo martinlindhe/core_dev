@@ -435,6 +435,15 @@ CREATE TABLE tblComments (
   userIP bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (commentId)
 ) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+CREATE TABLE tblContacts (
+  contactId int(10) unsigned NOT NULL auto_increment,
+  contactType tinyint(1) unsigned NOT NULL default '0',
+  groupId int(10) unsigned NOT NULL default '0',
+  userId int(10) unsigned NOT NULL default '0',
+  otherUserId int(10) unsigned NOT NULL default '0',
+  timeCreated datetime default NULL,
+  PRIMARY KEY  (contactId)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 CREATE TABLE tblFiles (
   fileId bigint(20) unsigned NOT NULL auto_increment,
   fileName varchar(250) character set utf8 default NULL,
