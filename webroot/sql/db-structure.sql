@@ -421,7 +421,7 @@ CREATE TABLE tblCategories (
   creatorId int(10) unsigned NOT NULL default '0',
   categoryPermissions tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(1) unsigned NOT NULL default '0',
@@ -536,7 +536,7 @@ CREATE TABLE tblStatistics (
   logins int(10) unsigned NOT NULL default '0',
   registrations int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=3625 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=721 DEFAULT CHARSET=utf8;
 CREATE TABLE tblStopwords (
   wordId smallint(10) unsigned NOT NULL auto_increment,
   wordText varchar(30) character set utf8 default NULL,

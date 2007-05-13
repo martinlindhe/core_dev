@@ -95,6 +95,7 @@
 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
 				break;
 
+			case CATEGORY_CONTACT:
 			case CATEGORY_NEWS:
 				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
 				break;
@@ -126,11 +127,11 @@
 		$list = getGlobalAndUserCategories($_type);
 		foreach ($list as $row)
 		{
-			if (!$shown_global_cats && $row['categoryPermissions']==10) {
+			if ($_type != CATEGORY_CONTACT && !$shown_global_cats && $row['categoryPermissions']==10) {
 				$content .= '<optgroup label="Global categories">';
 				$shown_global_cats = true;
 			}
-			if (!$shown_my_cats && $row['categoryPermissions']!=10) {
+			if ($_type != CATEGORY_CONTACT && !$shown_my_cats && $row['categoryPermissions']!=10) {
 				$content .= '</optgroup>';
 				$content .= '<optgroup label="Your categories">';
 				$shown_my_cats = true;
@@ -185,7 +186,7 @@
 			echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
 			echo '<label for="l_normal">Your personal blog category</label><br/><br/>';
 		}
-		if ($_type != CATEGORY_NEWS && $session->isSuperAdmin) {
+		if ($_type != CATEGORY_NEWS && $_type != CATEGORY_CONTACT && $session->isSuperAdmin) {
 			echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
 			echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
 		}

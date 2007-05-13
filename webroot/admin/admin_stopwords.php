@@ -51,19 +51,18 @@
 	echo createMenu($admin_menu, 'blog_menu');
 
 	echo '<form name="update" method="post" action="">';
-	echo '<table width="100%" border=0 cellspacing=0 cellpadding=3>';
-	echo '<tr>';
-	
+
 	for($x=1; $x<=3; $x++) {
+		echo '<div class="admin_stopword">';
 		switch($x) {
 			case STOPWORD_OBJECTIONABLE:
 				$txt='Objectionable';
-				$help = 'Inl&auml;gg inneh&aring;llande st&ouml;tande ord till&aring;ts inte att publiceras.';
+				$help = 'Offensive words, that arent allowed to be published.<br/><b>Currently not enabled</b>.';
 				break;
 
 			case STOPWORD_SENSITIVE:
 				$txt='Sensitive';
-				$help = 'Inl&auml;gg inneh&aring;llande k&auml;nsliga ord hamnar automatiskt i modereringsk&ouml;n utan att inl&auml;gget blockeras.<br/><b>Used in following modules: BLOG</b>';
+				$help = 'Inl&auml;gg inneh&aring;llande k&auml;nsliga ord hamnar automatiskt i modereringsk&ouml;n utan att inl&auml;gget blockeras.<br/><b>Used in the following modules: BLOG, GUESTBOOK</b>';
 				break;
 
 			case STOPWORD_RESERVED_USERNAME:
@@ -72,46 +71,24 @@
 				break;
 		}
 
-		echo '<td valign="top" align="center">';
-		echo '<table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#000000"><tr><td>';
-		echo '<table width="100%" border=0 cellspacing=0 cellpadding=2 bgcolor="#FFFFFF">';
-		echo '<tr><td colspan=3 height=25 valign="top"><b>'.$txt.'</b></td></tr>';
-		echo '<tr><td colspan=3 height=25 valign="top">'.$help.'<br/><br/></td></tr>';
-		echo '<tr><td>&nbsp;</td><td valign="bottom">Full match</td><td valign="bottom">Remove</td></tr>';
-
+		echo $txt.'<br/>'.$help.'<br/>';
+		
 		$list = getStopwords($x);
 		foreach ($list as $row) {
-			echo '<tr>';
-			echo '<td><input type="text" name="change_'.$row['wordId'].'" value="'.$row['wordText'].'" size="16"/></td>';
-			echo '<td><input type="checkbox" class="checkbox" name="full_'.$row['wordId'].'" value="1"';
-			if ($row['wordMatch']==1) echo ' checked="checked"';
-			echo '/></td>';
-			echo '<td>';
-				//echo '<input type="checkbox" class="checkbox" name="del_'.$row['wordId'].'"/>';
-				echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="/gfx/icon_delete.png"></a>';
-			echo '</td>';
-			echo '</tr>';
+			echo '<input type="text" name="change_'.$row['wordId'].'" value="'.$row['wordText'].'" size="16"/>';
+			echo '<input type="checkbox" class="checkbox" name="full_'.$row['wordId'].'" id="full_'.$row['wordId'].'" value="1"'.($row['wordMatch']==1?' checked="checked"':'').'/>';
+			echo '<label for="full_'.$row['wordId'].'">Full</label> ';
+			echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="/gfx/icon_delete.png" alt="Delete"/></a>';
 		}
 
-		echo '<tr>';
-			echo '<td><br/><br/>Add new word:<br/><input type="text" name="newname_'.$x.'" size="16"/></td>';
-			echo '<td><br/><br/><input type="checkbox" class="checkbox" value="1" name="newfull_'.$x.'"/></td>';
-			echo '<td>&nbsp;</td>';
-		echo '</tr>';
+		echo '<br/><br/>Add new word:<br/><input type="text" name="newname_'.$x.'" size="16"/>';
+		echo '<input type="checkbox" class="checkbox" value="1" name="newfull_'.$x.'" id="newfull_'.$x.'"/>';
+		echo '<label for="newfull_'.$x.'">Full</label>';
 
-		echo '</table>';
-		echo '</td></tr></table>';
-
-		if ($x<3) {
-			echo '</td>';
-		}
+		echo '</div>'; //class="admin_stopword"
 	}
-	echo '</td></tr>';
 
-	echo '<tr><td colspan=3 align="right">';
 	echo '<input type="submit" class="button" value="Update"/>';
-	echo '</td></tr>';
-	echo '</table>';
 	echo '</form>';
 
 	require($project.'design_foot.php');

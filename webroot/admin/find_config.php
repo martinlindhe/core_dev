@@ -13,7 +13,7 @@
 		'/admin/admin.php'.getProjectPath(false) => 'Admin start',
 		'/admin/admin_stopwords.php'.getProjectPath(false) => 'Stopwords',
 		'/admin/admin_moderationqueue.php'.getProjectPath(false) => 'Moderation queue',
-		'/admin/admin_contact_categories.php'.getProjectPath(false) => 'Contact categories',
+		'/admin/admin_contact_groups.php'.getProjectPath(false) => 'Contact groups',
 		'/admin/admin_events.php'.getProjectPath(false) => 'Event log',
 		'/admin/admin_compat_check.php'.getProjectPath(false) => 'Compat check',
 		'/admin/admin_statistics.php'.getProjectPath(false) => 'stats',

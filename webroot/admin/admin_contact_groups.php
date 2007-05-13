@@ -6,7 +6,11 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
-	echo 'contact categories..<br/>';
+	echo '<h1>Contact groups</h1>';
+	
+	echo 'Existing contact groups: '.getCategoriesSelect(CATEGORY_CONTACT);
+	
+	makeNewCategoryDialog(CATEGORY_CONTACT);
 
 	require($project.'design_foot.php');
 ?>
