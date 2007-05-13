@@ -42,7 +42,9 @@ abstract class DB_Base
 		Example: SHOW VARIABLES LIKE "%cache%" */
 	abstract function getMappedArray($q);
 
-	/* Returns an 1-dimensional array with a numeric index */
+	/* Returns an 1-dimensional array with a numeric index
+		Example: fixme-need sample
+	*/
 	abstract function getNumArray($q);
 
 	/* Returns one row-result with columns as array indexes

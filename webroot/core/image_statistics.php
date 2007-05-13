@@ -6,12 +6,9 @@
 	$year = $_GET['y'];
 	$month = $_GET['m'];
 
-	//header('Content-type: image/png');
+	header('Content-type: image/png');
 	$im = imagecreate(500, 200);
 	$background_color = imagecolorallocate($im, 20, 20, 20);
-	$text_color = imagecolorallocate($im, 233, 220, 110);
-	imagestring($im, 1, 5, 5,  "A Simple Text String", $text_color);
-
 
 	$month_start = mktime(0, 0, 0, $month, 1, $year);
 	$month_days  = date('t', $month_start);
@@ -19,21 +16,20 @@
 
 	$q = 'SELECT * FROM tblStatistics WHERE time BETWEEN "'.sql_datetime($month_start).'" AND "'.sql_datetime($month_end).'"';
 	$list = $db->getArray($q);
-	d($list);
+	//d($list);
 
-	for ($day=1; $day<= $month_days; $day++) {
-		//Generate stats for each day
-		for ($h=1; $h<=24; $h++) {
+	$col = imagecolorallocate($im, 233, 220, 110);
 
-			//$logins = $list[$
-			$col = imagecolorallocate($im, 233, 220, 110);
-			imageline($im, ($day*10), $logins*5, ($day*10)+9, $logins*5, $col);
+	$bottom_y = 100;
 
-		}
+	foreach($list as $row) {
+		$timestamp = strtotime($row['time']);
+		$day = date('j', $timestamp);
+		$logins = $row['logins'];
+		imageline($im, ($day*10), $bottom_y-($logins*10), ($day*10)+9, $bottom_y-($logins*10), $col);
+
+		imagestring($im, 1, $day*10, 110,  $day, $col);
 	}
-
-
-
 
 	imagepng($im); imagedestroy($im);
 ?>
