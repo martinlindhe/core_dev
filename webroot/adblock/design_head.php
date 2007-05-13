@@ -12,7 +12,7 @@
 </head>
 <body>
 <script type="text/javascript">
-var _ext_ref='<?=getProjectPath()?>';
+var _ext_ref='<?=getProjectPath(2)?>';
 </script>
 <div id="left-bg"></div>
 <div id="left-sep"></div>
@@ -41,7 +41,7 @@ var _ext_ref='<?=getProjectPath()?>';
 		$menu = array(
 			'newrule.php' => 'New rule',
 			'ruleset.php' => 'Browse ruleset',
-			'/admin/admin.php'.getProjectPath(false) => 'Admin',
+			'/admin/admin.php'.getProjectPath(0) => 'Admin',
 			'admin_reports.php' => 'Reported sites');
 		createMenu($menu);
 	}

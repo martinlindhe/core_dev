@@ -420,8 +420,9 @@ CREATE TABLE tblCategories (
   timeCreated datetime default NULL,
   creatorId int(10) unsigned NOT NULL default '0',
   categoryPermissions tinyint(1) unsigned NOT NULL default '0',
+  ownerId bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(1) unsigned NOT NULL default '0',
@@ -554,7 +555,7 @@ CREATE TABLE tblUserDatafields (
   fieldPriority tinyint(3) unsigned NOT NULL default '0',
   regRequire tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (fieldId)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 CREATE TABLE tblUsers (
   userId smallint(5) unsigned NOT NULL auto_increment,
   userName varchar(20) character set utf8 NOT NULL,

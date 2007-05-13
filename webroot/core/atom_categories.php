@@ -11,25 +11,27 @@
 
 	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
 	define('CATEGORY_CONTACT',			11);		//friend relation category, like "Old friends", "Family"
+	define('CATEGORY_USERDATA',			12);		//used for multi-choice userdata types
 
 	define('CATEGORY_NEWS',				20);
 
 	define('CATEGORY_LANGUAGE',		50);	//represents a language, for multi-language features & used by "lang" project
 
-	function addCategory($_type, $_name, $_global = false)
+	function addCategory($_type, $_name, $_owner = 0, $_global = false)
 	{
 		global $db, $session;
 
-		if (!$session->id || !is_numeric($_type)) return false;
+		if (!$session->id || !is_numeric($_type) || !is_numeric($_owner)) return false;
 
 		$_name = $db->escape(trim($_name));
 		if (!$_name) return false;
 
-		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND creatorId='.$session->id;
+		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND ownerId='.$_owner;
+		if (!$_global) $q .= ' AND creatorId='.$session->id;
 		$check = $db->getOneItem($q);
 		if ($check) return false;
 
-		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",timeCreated=NOW(),creatorId='.$session->id;
+		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner.',timeCreated=NOW(),creatorId='.$session->id;
 		if ($session->isAdmin && $_global) $q .= ',categoryPermissions=10';
 		$db->query($q);
 		return $db->insert_id;
@@ -55,6 +57,17 @@
 		return $db->getOneRow($q);
 	}
 
+	function getCategoriesByOwner($_type, $_owner)
+	{
+		global $db;
+
+		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+
+		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND ownerId='.$_owner;
+
+		return $db->getArray($q);
+	}
+
 	function getCategoryName($_id)
 	{
 		global $db;
@@ -66,13 +79,14 @@
 		return $db->getOneItem($q);
 	}
 
-	function getCategories($_type)
+	function getCategories($_type, $_owner)
 	{
 		global $db;
 
-		if (!is_numeric($_type)) return false;
+		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 		
 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' ';
+		if ($_owner) $q .= 'AND ownerId='.$_owner.' ';
 		$q .= 'ORDER BY categoryName ASC';
 
 		return $db->getArray($q);
@@ -167,7 +181,7 @@
 				if (is_numeric($_POST['new_file_category_type'])) $cat_type = $_POST['new_file_category_type'];
 				else if ($_POST['new_file_category_type'] == 'global') $global = true;
 			}
-			addCategory($cat_type, $_POST['new_file_category'], $global);
+			addCategory($cat_type, $_POST['new_file_category'], 0, $global);
 		}
 
 		echo '<form name="new_file_category" method="post" action="">';

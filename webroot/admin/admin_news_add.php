@@ -22,7 +22,7 @@
 
 	echo '<h1>Add news</h1>';
 
-	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].getProjectPath(false).'">';
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">';
 	echo '<input type="hidden" name="rss" value="0"/>';
 	echo 'Title:<br/>';
 	echo '<input type="text" name="title" size="50"/><br/>';

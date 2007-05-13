@@ -1,4 +1,5 @@
 <?
+	require_once('atom_categories.php');	//for multi-choise userdata types
 
 	//userdata module settings:
 	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
@@ -96,35 +97,6 @@
 		$db->query('UPDATE tblUserdataFields SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
 	}
 
-	/* Skapar ett nytt alternativ för ett userfield */
-	function addUserdataFieldOption(&$db, $fieldId, $optionName)
-	{
-		if (!is_numeric($fieldId)) return false;
-		$optionName = dbAddSlashes($db, $optionName);
-
-		$check = dbQuery($db, 'SELECT optionId FROM tblUserdataFieldOptions WHERE optionName="'.$optionName.'"');
-		if (dbNumRows($check)) {
-			return false;
-		} else {
-			dbQuery($db, 'INSERT INTO tblUserdataFieldOptions SET fieldId='.$fieldId.',optionName="'.$optionName.'"');
-			return true;
-		}
-	}
-
-	/* Returnerar alla alternativ för userfield $fieldId */
-	function getUserdataFieldOptions($fieldId, $sorted = true)
-	{
-		global $db;
-
-		if (!is_numeric($fieldId)) return false;
-		$q = 'SELECT * FROM tblUserdataFieldOptions WHERE fieldId='.$fieldId;
-		if ($sorted == true) {
-			$q .= ' ORDER BY optionName ASC';
-		}
-
-		return $db->getArray($q);
-	}
-
 	/* Returns all userdata fields, if userId is specified it also returns the set values for the fields */
 	function getUserdataFields($userId = 0)
 	{
@@ -172,38 +144,30 @@
 				break;
 
 			case USERDATA_TYPE_TEXTAREA:
-				$result  = '<textarea name="'.$fieldId.'" rows=6 cols=40>'.$value.'</textarea>';
+				$result  = '<textarea name="'.$fieldId.'" rows="6" cols="40">'.$value.'</textarea>';
 				break;
 
 			case USERDATA_TYPE_CHECKBOX:
-				$result = '<input type="checkbox" class="checkbox" name="'.$fieldId.'" value="1"';
-				if ($value == '1') {
-					$result .= ' checked="checked"';
-				}
-				$result .= '/>';
+				$result = '<input type="checkbox" class="checkbox" name="'.$fieldId.'" value="1"'.($value == '1'?' checked="checked"':'').'/>';
 				break;
 
 			case USERDATA_TYPE_RADIO:
-				$options = getUserdataFieldOptions($fieldId);
+				$options = getCategories(CATEGORY_USERDATA, $fieldId);
 				$result = '';
 
-				for ($j=0; $j<count($options); $j++) {
-					$result .= '<input type="radio" class="radiostyle" name="'.$options[$j]['fieldId'].'" value="'.$options[$j]['optionId'].'"';
-
-					if ($options[$j]['optionId'] == $value) {
-						$result .= ' checked="checked"';
-					}
-					$result .= '/>'.$options[$j]['optionName'];
+				foreach($options as $row) {
+					$result .= '<input type="radio" class="radiostyle" name="'.$fieldId.'" id="lab_'.$row['categoryId'].'" value="'.$row['categoryId'].'"'.($row['categoryId'] == $value?' checked="checked"':'').'/>';
+					$result .= ' <label for="lab_'.$row['categoryId'].'">'.$row['categoryName'].'</label>';
 				}
 				break;
 
 			case USERDATA_TYPE_SELECT:
-				$options = getUserdataFieldOptions($fieldId);
+				$options = getCategories(CATEGORY_USERDATA, $fieldId);	//todo: use getCategorySelect()
 
 				$hasvalue = false;
 				
 				for ($j=0; $j<count($options); $j++) {
-					if ($options[$j]['optionId'] == $value) {
+					if ($options[$j]['categoryId'] == $value) {
 						$hasvalue = true;
 					}
 				}
@@ -215,11 +179,11 @@
 				}
 
 				for($j=0; $j<count($options); $j++) {
-					$result .= '<option value="'.$options[$j]['optionId'].'"';
-					if ($options[$j]['optionId'] == $value) {
+					$result .= '<option value="'.$options[$j]['categoryId'].'"';
+					if ($options[$j]['categoryId'] == $value) {
 						$result .= ' selected';
 					}
-					$result .= '>'.$options[$j]['optionName'];
+					$result .= '>'.$options[$j]['categoryName'];
 				}
 				$result .= '</select>';
 				break;
@@ -251,35 +215,32 @@
 					$y = '';
 				}
 				
-				global $day;
-				global $month;
-
 				$result  = '<select name="'.$fieldId.'_day">';
-				$result .= '<option value="">- Dag -';
+				$result .= '<option value="">- Day -';
 
 				$selected = '';
 				for ($j=1; $j<=31; $j++) {
 					$k = $j;
 					if ($j<10) $k = '0'.$k;
 					if ($j == $d) $selected = ' selected'; else $selected = '';
-					$result .= '<option value="'.$k.'"'.$selected.'>'.$day['pron'][$j];
+					$result .= '<option value="'.$k.'"'.$selected.'>'.$j;
 				}
 				$result .= '</select>';
 
 				$result .= '<select name="'.$fieldId.'_month">';
-				$result .= '<option value="">- Månad -';
+				$result .= '<option value="">- Month -';
 				
 				for ($j=1; $j<=12; $j++) {
 					$k = $j;
 					if ($j<10) $k = '0'.$k;
 					if ($j == $m) $selected = ' selected'; else $selected = '';
-					$result .= '<option value="'.$k.'"'.$selected.'>'.$month['long'][$j];
+					$result .= '<option value="'.$k.'"'.$selected.'>'.$j;
 				}
 				$result .= '</select>';
 
 				$result .= '<select name="'.$fieldId.'_year">';
-				$result .= '<option value="">- År -';
-				for ($j=1920; $j<=2000; $j++) {
+				$result .= '<option value="">- Year -';
+				for ($j=1980; $j<=date('Y'); $j++) {
 					if ($j == $y) $selected = ' selected'; else $selected = '';
 					$result .= '<option value="'.$j.'"'.$selected.'>'.$j;
 				}

@@ -10,5 +10,5 @@
 	</head>
 <body>
 <script type="text/javascript">
-var _ext_ref='<?=getProjectPath()?>';
+var _ext_ref='<?=getProjectPath(2)?>';
 </script>

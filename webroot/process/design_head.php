@@ -19,7 +19,7 @@
 	if ($session->isAdmin) {
 		$menu = array(
 			'perform_work.php' => 'Perform work',
-			'/admin/admin.php'.getProjectPath(false) => 'Admin'
+			'/admin/admin.php'.getProjectPath(0) => 'Admin'
 		);
 		createMenu($menu);
 	}

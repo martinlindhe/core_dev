@@ -11,7 +11,7 @@
 
 <body>
 <script type="text/javascript">
-var _ext_ref='<?=getProjectPath()?>';
+var _ext_ref='<?=getProjectPath(2)?>';
 </script>
 
 <div id="menu_holder">
@@ -24,7 +24,7 @@ var _ext_ref='<?=getProjectPath()?>';
 	if ($session->isAdmin) {
 		$menu = array(
 			'admin_addlang.php' => 'Add language',
-			'/admin/admin.php'.getProjectPath(false) => 'Admin');
+			'/admin/admin.php'.getProjectPath(0) => 'Admin');
 		createMenu($menu);
 	}
 

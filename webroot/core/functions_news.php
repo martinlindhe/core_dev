@@ -162,7 +162,7 @@
 			//fixme: confirmed() skickar fel parametrar, så detta funkar inte
 			if (confirmed('Are you sure you wish to delete this news entry?', 'id', $_id)) {
 				removeNews($newsId);
-				header('Location: admin_news.php'.getProjectPath(false));
+				header('Location: admin_news.php'.getProjectPath(0));
 				die;
 			}
 
@@ -214,7 +214,7 @@
 			echo '</div><br/>';
 		}
 		if ($session->isAdmin) {
-			echo '<a href="/admin/admin_news_add.php'.getProjectPath(false).'">Add news</a>';
+			echo '<a href="/admin/admin_news_add.php'.getProjectPath(0).'">Add news</a>';
 		}
 	}	
 ?>

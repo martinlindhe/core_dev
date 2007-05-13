@@ -12,7 +12,7 @@
 </head>
 <body>
 <script type="text/javascript">
-var _ext_ref='<?=getProjectPath()?>';
+var _ext_ref='<?=getProjectPath(2)?>';
 </script>
 <div id="left-bg"></div>
 <div id="header">
@@ -34,7 +34,7 @@ var _ext_ref='<?=getProjectPath()?>';
 	
 	if ($session->isAdmin) {
 		$menu = array(
-			'/admin/admin.php'.getProjectPath(false) => 'Admin');
+			'/admin/admin.php'.getProjectPath(0) => 'Admin');
 		createMenu($menu);
 	}
 

@@ -10,16 +10,16 @@
 	require_once($project.'config.php');
 
 	$admin_menu = array(
-		'/admin/admin.php'.getProjectPath(false) => 'Admin start',
-		'/admin/admin_userdata.php'.getProjectPath(false) => 'Userdata',
-		'/admin/admin_stopwords.php'.getProjectPath(false) => 'Stopwords',
-		'/admin/admin_moderationqueue.php'.getProjectPath(false) => 'Moderation queue',
-		'/admin/admin_contact_groups.php'.getProjectPath(false) => 'Contact groups',
-		'/admin/admin_events.php'.getProjectPath(false) => 'Event log',
-		'/admin/admin_compat_check.php'.getProjectPath(false) => 'Compat check',
-		'/admin/admin_statistics.php'.getProjectPath(false) => 'stats',
-		'/admin/admin_db_info.php'.getProjectPath(false) => '$db',
-		'/admin/admin_session_info.php'.getProjectPath(false) => '$session',
-		'/admin/admin_phpinfo.php'.getProjectPath(false) => 'PHP'
+		'/admin/admin.php'.getProjectPath(0) => 'Admin start',
+		'/admin/admin_userdata.php'.getProjectPath(0) => 'Userdata',
+		'/admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',
+		'/admin/admin_moderationqueue.php'.getProjectPath(0) => 'Moderation queue',
+		'/admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups',
+		'/admin/admin_events.php'.getProjectPath(0) => 'Event log',
+		'/admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
+		'/admin/admin_statistics.php'.getProjectPath(0) => 'stats',
+		'/admin/admin_db_info.php'.getProjectPath(0) => '$db',
+		'/admin/admin_session_info.php'.getProjectPath(0) => '$session',
+		'/admin/admin_phpinfo.php'.getProjectPath(0) => 'PHP'
 	);
 ?>

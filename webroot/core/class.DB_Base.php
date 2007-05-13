@@ -233,10 +233,10 @@ abstract class DB_Base
 		$q = 'SELECT * FROM tblLogs WHERE entryLevel <= '.LOGLEVEL_ALL;
 		if (!empty($_GET['sort']) && $_GET['sort']=='asc') {
 			$q .= ' ORDER BY timeCreated ASC';
-			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(false).'">show newest first</a>]<br/>';
+			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">show newest first</a>]<br/>';
 		} else {
 			$q .= ' ORDER BY timeCreated DESC';
-			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(false).'&sort=asc">show oldest first</a>]<br/>';
+			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'&sort=asc">show oldest first</a>]<br/>';
 		}
 
 		$list = $this->getArray($q);

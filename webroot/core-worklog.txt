@@ -25,7 +25,6 @@
 
 	admin:
 		- userdata fält:
-			* använd tblCategories för att implementera dropdownlistor, istället för tblUserdataFieldOptions
 			* spara userdata i tblSettings
 	
 		- visa statistik i adminpanelen (admin_statistics.php):
@@ -88,6 +87,9 @@ X = hi prio task
 2007.05.13:
 	- friends: använder atom_categories.php för att hålla contact groups (som skapas från admin)
 	- userdata: påbörjat implementation
+	- categories: .ownerId added
+	- userdata: använder tblCategories för att implementera dropdownlistor
+	- core: getProjectPath() fix-trix
 
 
 2007.05.12:

@@ -9,10 +9,6 @@
 
 	$session->requireAdmin();
 
-	define("TEXT_ARROW_UP",			'<img src="gfx/arrow_up.png" alt="Move up" align="absmiddle"/>');
-	define("TEXT_ARROW_DOWN",		'<img src="gfx/arrow_down.png" alt="Move down" align="absmiddle"/>');
-	define("TEXT_ARROW_SPACE",	'<img src="gfx/arrow_space.png" align="absmiddle"/>');
-
 	$allowHTML = 0;
 	$regRequire = 0;
 
@@ -23,11 +19,9 @@
 		$fieldId = $_GET['id'];
 	}
 
-
 	/* Remove field */
-	if (isset($_GET['remove'])) {
-		$remove = $_GET['remove'];
-		removeUserdataField($remove);
+	if (!empty($_GET['remove'])) {
+		removeUserdataField($_GET['remove']);
 	}
 
 	require($project.'design_head.php');
@@ -83,7 +77,7 @@
 		setUserdataField($changeId, $fieldName, $fieldType, $fieldDefault, $allowHTML, $fieldAccess, $regRequire);
 
 		/* Update changes for the field-options */
-		$list = getUserdataFieldOptions($changeId);
+		$list = getCategory(CATEGORY_USERDATA, $changeId);
 		for($i=0; $i<count($list); $i++) {
 			$chg = 'change_'.$list[$i]['optionId'];
 			$del = 'delete_'.$list[$i]['optionId'];
@@ -105,7 +99,7 @@
 	if (isset($_GET['change']) && isset($_POST['optionname']) && $_POST['optionname']) {
 		$changeId	 = $_GET['change'];
 		$optionName  = $_POST['optionname'];
-		if (!addUserdataFieldOption($changeId, $optionName)) {
+		if (!addCategory(CATEGORY_USERDATA, $optionName, $changeId)) {
 			echo 'The option already exists<br/>';
 		}
 	}
@@ -128,14 +122,10 @@
 		$prio_up = $prio-1;
 		$prio_dn = $prio+1;
 		if ($prio_up >= 0) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&old='.$prio.'&new='.$prio_up.getProjectPath().'">'.TEXT_ARROW_UP.'</a>';
-		} else {
-			echo TEXT_ARROW_SPACE;
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.getProjectPath().'"><img src="/gfx/arrow_up.png" alt="Move up"/></a>';
 		}
 		if ($prio_dn < $max) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&old='.$prio.'&new='.$prio_dn.getProjectPath().'">'.TEXT_ARROW_DOWN.'</a>';
-		} else {
-			echo TEXT_ARROW_SPACE;
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="/gfx/arrow_down.png" alt="Move down"/></a>';
 		}
 
 		echo '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?change='.$list[$i]['fieldId'].getProjectPath().'">'.$fieldName.'</a><br/>';
@@ -231,17 +221,17 @@
 
 	if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT))) {
 		echo '<tr><td colspan=3>&nbsp;</td></tr>';
-		$list = getUserdataFieldOptions($data['fieldId']);
+		$list = getCategoriesByOwner(CATEGORY_USERDATA, $data['fieldId']);
 		echo '<tr><td valign="top" colspan=3>Current options ('.count($list).' st)</td></tr>';
 
 		for($i=0; $i<count($list); $i++) {
 			echo '<tr>';
 			echo '<td>&nbsp;</td>';
 			echo '<td>';
-			echo '<input type="text" name="change_'.$list[$i]['optionId'].'" value="'.$list[$i]['optionName'].'"/>';
+			echo '<input type="text" name="change_'.$list[$i]['categoryId'].'" value="'.$list[$i]['categoryName'].'"/>';
 			echo '</td>';
 			echo '<td>';
-			echo '<input type="checkbox" name="delete_'.$list[$i]['optionId'].'" value="1" class="checkbox"/>Delete';
+			echo '<input type="checkbox" name="delete_'.$list[$i]['categoryId'].'" value="1" class="checkbox"/>Delete';
 			echo '</td>';
 			echo '</tr>';
 		}
@@ -253,7 +243,9 @@
 	}
 
 	echo '<tr><td colspan=3><input type="submit" class="button" value="'.$submit.'"/></td></tr>';
-	echo '</form></table>';
+	echo '</table>';
+
+	echo '</form>';
 
 	require($project.'design_foot.php');
 ?>

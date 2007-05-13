@@ -44,7 +44,7 @@
 	
 	/* Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
 			run from the / path it will return nothing, else the directory name of the directory script are run from */
-	function getProjectPath($_amp = true)
+	function getProjectPath($_amp = 1)
 	{
 		if (!empty($_GET['pr'])) {
 			$proj_name = basename(strip_tags($_GET['pr']));
@@ -55,10 +55,10 @@
 		}
 
 		if ($proj_name) {
-			if ($_amp) {
-				return '&pr='.$proj_name;
-			} else {
-				return '?pr='.$proj_name;
+			switch ($_amp) {
+				case 0: return '?pr='.$proj_name;
+				case 1: return '&amp;pr='.$proj_name;
+				case 2: return '&pr='.$proj_name;
 			}
 		}
 		return '';
@@ -169,7 +169,7 @@
 		if (!empty($meta_rss)) {
 			foreach ($meta_rss as $feed) {
 				if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
-				else $extra = getProjectPath(false);
+				else $extra = getProjectPath(0);
 				echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="/core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 			}
 		}
