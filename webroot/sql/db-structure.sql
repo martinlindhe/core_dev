@@ -457,7 +457,7 @@ CREATE TABLE tblFiles (
   timeUploaded datetime NOT NULL,
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 CREATE TABLE tblGuestbooks (
   userId bigint(20) unsigned NOT NULL default '0',
   authorId bigint(20) unsigned NOT NULL default '0',
@@ -554,7 +554,7 @@ CREATE TABLE tblUserDatafields (
   fieldPriority tinyint(3) unsigned NOT NULL default '0',
   regRequire tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (fieldId)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 CREATE TABLE tblUsers (
   userId smallint(5) unsigned NOT NULL auto_increment,
   userName varchar(20) character set utf8 NOT NULL,
