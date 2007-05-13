@@ -5,7 +5,5 @@
 
 	require_once('find_config.php');
 
-	require_once($project.'config.php');
-
 	$files->sendFile($_GET['id']);
 ?>
