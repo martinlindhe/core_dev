@@ -435,7 +435,7 @@ CREATE TABLE tblComments (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (commentId)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 CREATE TABLE tblContacts (
   contactId int(10) unsigned NOT NULL auto_increment,
   contactType tinyint(1) unsigned NOT NULL default '0',

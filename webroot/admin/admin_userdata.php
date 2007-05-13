@@ -114,7 +114,7 @@
 	$max = count($list);
 
 	for ($i=0; $i<$max; $i++) {
-		echo '<table width="100%" border=0 cellspacing=0 cellpadding=3 bgcolor="#FFFFFF">';
+		echo '<table bgcolor="#FFFFFF">';
 		echo '<tr><td width="38%" valign="top">';
 
 		$fieldName = stripslashes($list[$i]['fieldName']);
@@ -122,14 +122,14 @@
 		$prio_up = $prio-1;
 		$prio_dn = $prio+1;
 		if ($prio_up >= 0) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.getProjectPath().'"><img src="/gfx/arrow_up.png" alt="Move up"/></a>';
+			echo '<a href="?prio='.$list[$i]['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.getProjectPath().'"><img src="/gfx/arrow_up.png" alt="Move up"/></a>';
 		}
 		if ($prio_dn < $max) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="/gfx/arrow_down.png" alt="Move down"/></a>';
+			echo '<a href="?prio='.$list[$i]['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="/gfx/arrow_down.png" alt="Move down"/></a>';
 		}
 
-		echo '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?change='.$list[$i]['fieldId'].getProjectPath().'">'.$fieldName.'</a><br/>';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?remove='.$list[$i]['fieldId'].getProjectPath().'">Remove</a><br/>';
+		echo '&nbsp;<a href="?change='.$list[$i]['fieldId'].getProjectPath().'">'.$fieldName.'</a><br/>';
+		echo '<a href="?remove='.$list[$i]['fieldId'].getProjectPath().'">Remove</a><br/>';
 
 		if ($list[$i]['allowTags']) echo 'May contain HTML<br/>';
 		if ($list[$i]['regRequire']) echo 'Require at registration<br/>';
@@ -151,9 +151,9 @@
 
 	if (isset($_GET['change'])) {
 		$changeId = $_GET['change'];
-		echo '<form name="addOrUpdateField" method="post" action="?change='.$changeId.getProjectPath().'">';
+		echo '<form name="admin_userdata" method="post" action="?change='.$changeId.getProjectPath().'">';
 	} else {
-		echo '<form name="addOrUpdateField" method="post" action="?mode=create'.getProjectPath().'">';
+		echo '<form name="admin_userdata" method="post" action="?mode=create'.getProjectPath().'">';
 	}
 
 	if (isset($_GET['change'])) {
@@ -169,7 +169,7 @@
 		$fieldName = '';
 	}
 
-	echo '<table cellspacing=0 cellpadding=2 width="100%" border=0 bgcolor="#FFFFFF">';
+	echo '<table bgcolor="#FFFFFF">';
 	echo '<tr><td colspan=3><b>'.$header.'</b><br/></td></tr>';
 	echo '<tr><td>Field name</td>';
 	echo '<td>';
@@ -193,9 +193,9 @@
 		echo '<option value="'.USERDATA_TYPE_TEXT.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXT)			echo ' selected'; echo '>Text';
 		echo '<option value="'.USERDATA_TYPE_TEXTAREA.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXTAREA)	echo ' selected'; echo '>Textarea';
 		echo '<option value="'.USERDATA_TYPE_CHECKBOX.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_CHECKBOX)	echo ' selected'; echo '>Checkbox';
-		echo '<option value="'.USERDATA_TYPE_RADIO.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_RADIO)		echo ' selected'; echo '>Radioknappar';
+		echo '<option value="'.USERDATA_TYPE_RADIO.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_RADIO)			echo ' selected'; echo '>Radioknappar';
 		echo '<option value="'.USERDATA_TYPE_SELECT.		'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)		echo ' selected'; echo '>Dropdown-lista';
-		echo '<option value="'.USERDATA_TYPE_IMAGE.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)		echo ' selected'; echo '>Bild';
+		echo '<option value="'.USERDATA_TYPE_IMAGE.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)			echo ' selected'; echo '>Bild';
 		echo '<option value="'.USERDATA_TYPE_DATE.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_DATE)			echo ' selected'; echo '>Datum-f&auml;lt';
 	echo '</select>';
 	echo '</td>';
@@ -224,14 +224,15 @@
 		$list = getCategoriesByOwner(CATEGORY_USERDATA, $data['fieldId']);
 		echo '<tr><td valign="top" colspan=3>Current options ('.count($list).' st)</td></tr>';
 
-		for($i=0; $i<count($list); $i++) {
+		foreach($list as $row) {
 			echo '<tr>';
 			echo '<td>&nbsp;</td>';
 			echo '<td>';
-			echo '<input type="text" name="change_'.$list[$i]['categoryId'].'" value="'.$list[$i]['categoryName'].'"/>';
+			echo '<input type="text" name="change_'.$row['categoryId'].'" value="'.$row['categoryName'].'"/>';
 			echo '</td>';
 			echo '<td>';
-			echo '<input type="checkbox" name="delete_'.$list[$i]['categoryId'].'" value="1" class="checkbox"/>Delete';
+			echo '<input type="checkbox" name="delete_'.$row['categoryId'].'" id="delete_'.$row['categoryId'].'" value="1" class="checkbox"/>';
+			echo '<label for="delete_'.$row['categoryId'].'">Delete</label>';
 			echo '</td>';
 			echo '</tr>';
 		}

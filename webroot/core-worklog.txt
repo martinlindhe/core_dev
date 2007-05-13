@@ -25,7 +25,8 @@
 
 	admin:
 		- userdata fält:
-			* spara userdata i tblSettings
+			* spara userdata i tblSettings, visa tillgängliga inputfält under settings.php
+			* går ej radera userdatafält options från admin
 	
 		- visa statistik i adminpanelen (admin_statistics.php):
 			* visa ett diagram månadsvis. som visar två staplar, en för registreringar, en för inloggningar
