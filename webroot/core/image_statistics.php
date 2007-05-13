@@ -20,15 +20,25 @@
 
 	$col = imagecolorallocate($im, 233, 220, 110);
 
+	imagestring($im, 2, 0, 0, '00:00', $col);
+	imagestring($im, 2, 0, 20, '06:00', $col);
+	imagestring($im, 2, 0, 40, '12:00', $col);
+	imagestring($im, 2, 0, 60, '18:00', $col);
+	imagestring($im, 2, 0, 80, '24:00', $col);
+
 	$bottom_y = 100;
+	$start_x = 30;
 
 	foreach($list as $row) {
 		$timestamp = strtotime($row['time']);
 		$day = date('j', $timestamp);
 		$logins = $row['logins'];
-		imageline($im, ($day*10), $bottom_y-($logins*10), ($day*10)+9, $bottom_y-($logins*10), $col);
+		
+		$x = $start_x+($day*10);
+		$y = $bottom_y-($logins*10);
+		imageline($im, $x, $y, $x+8, $y, $col);
 
-		imagestring($im, 1, $day*10, 110,  $day, $col);
+		imagestring($im, 2, $start_x+($day*10), $bottom_y,  $day, $col);
 	}
 
 	imagepng($im); imagedestroy($im);
