@@ -97,16 +97,18 @@
 		return $i;
 	}
 
-	function setUserdataFieldPriority(&$db, $fieldId, $old, $new)
+	function setUserdataFieldPriority($fieldId, $old, $new)
 	{
+		global $db;
+
 		if (!is_numeric($fieldId) || !is_numeric($old) || !is_numeric($new)) return false;
 
 		/* get fieldId for the one to be replaced */
-		$sql = 'SELECT fieldId FROM tblUserdataFields WHERE fieldPriority='.$new;
-		$newfieldId = dbOneResultItem($db, $sql);
+		$q = 'SELECT fieldId FROM tblUserdataFields WHERE fieldPriority='.$new;
+		$newfieldId = $db->getOneItem($q);
 
-		dbQuery($db, 'UPDATE tblUserdataFields SET fieldPriority='.$new.' WHERE fieldId='.$fieldId );
-		dbQuery($db, 'UPDATE tblUserdataFields SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId );
+		$db->query('UPDATE tblUserdataFields SET fieldPriority='.$new.' WHERE fieldId='.$fieldId);
+		$db->query('UPDATE tblUserdataFields SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
 	}
 
 	/* Skapar ett nytt alternativ för ett userfield */
@@ -408,7 +410,7 @@
 				$result = '<select name="'.$fieldId.'">';
 
 				if ($hasvalue == false) {
-					$result .= '<option value="">'.TEXT_DEFAULT_OPTION;
+					$result .= '<option value="">&nbsp;';
 				}
 
 				for($j=0; $j<count($options); $j++) {

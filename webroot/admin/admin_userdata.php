@@ -31,6 +31,8 @@
 	}
 
 	require($project.'design_head.php');
+
+	echo createMenu($admin_menu, 'blog_menu');
 	
 	/* Create new field */
 	if (isset($_GET['mode']) && ($_GET['mode'] == 'create')) {
@@ -118,7 +120,6 @@
 	$max = count($list);
 
 	for ($i=0; $i<$max; $i++) {
-		echo '<table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#000000"><tr><td>';
 		echo '<table width="100%" border=0 cellspacing=0 cellpadding=3 bgcolor="#FFFFFF">';
 		echo '<tr><td width="38%" valign="top">';
 
@@ -127,12 +128,12 @@
 		$prio_up = $prio-1;
 		$prio_dn = $prio+1;
 		if ($prio_up >= 0) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&old='.$prio.'&new='.$prio_up.'">'.TEXT_ARROW_UP.'</a>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&old='.$prio.'&new='.$prio_up.getProjectPath().'">'.TEXT_ARROW_UP.'</a>';
 		} else {
 			echo TEXT_ARROW_SPACE;
 		}
 		if ($prio_dn < $max) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&old='.$prio.'&new='.$prio_dn.'">'.TEXT_ARROW_DOWN.'</a>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?prio='.$list[$i]['fieldId'].'&old='.$prio.'&new='.$prio_dn.getProjectPath().'">'.TEXT_ARROW_DOWN.'</a>';
 		} else {
 			echo TEXT_ARROW_SPACE;
 		}
@@ -140,19 +141,14 @@
 		echo '&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?change='.$list[$i]['fieldId'].getProjectPath().'">'.$fieldName.'</a><br/>';
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?remove='.$list[$i]['fieldId'].getProjectPath().'">Remove</a><br/>';
 
-		if ($list[$i]['allowTags'] != 0) {
-			echo '('.$TEXT_ADMIN[TVAL_ADMIN_ALLOWHTML].')<br/>';
-		}
+		if ($list[$i]['allowTags']) echo 'May contain HTML<br/>';
+		if ($list[$i]['regRequire']) echo 'Require at registration<br/>';
 
-		if ($list[$i]['regRequire']) {
-			echo 'Kr&auml;vs vid registrering<br/>';
-		}
-
-		echo 'Visas f&ouml;r ';
+		echo 'Field will be displayed to ';
 		switch ($list[$i]['fieldAccess']) {
-			case 0: echo 'enbart admin'; break;
-			case 1: echo 'admin&anv&auml;ndaren'; break;
-			case 2: echo 'alla'; break;
+			case 0: echo 'only admin'; break;
+			case 1: echo 'admin and user'; break;
+			case 2: echo 'everyone'; break;
 		}
 		echo '</td>';
 
@@ -160,7 +156,6 @@
 
 		echo '</tr>';
 		echo '</table>';
-		echo '</td></tr></table>';
 		echo '<br/>';
 	}
 
@@ -175,37 +170,35 @@
 		$changeId	 = $_GET['change'];
 		$data = getUserdataField($changeId);
 		$fieldName = stripslashes($data['fieldName']);
-		$header = '&Auml;ndra inst&auml;llningar f&ouml;r f&auml;ltet "'.$fieldName.'"';
-		$submit = 'Uppdatera';
+		$header = 'Edit userdata field "'.$fieldName.'"';
+		$submit = 'Update';
 
 	} else {
-		$header = 'Skapa nytt anv&auml;ndarinfof&auml;lt';
-		$submit = 'Skapa';
+		$header = 'Create a new userdata field';
+		$submit = 'Create';
 		$fieldName = '';
 	}
 
-	echo '<table width="100%" border=0 cellspacing=0 cellpadding=1 bgcolor="#000000" height="*"><tr><td>';
 	echo '<table cellspacing=0 cellpadding=2 width="100%" border=0 bgcolor="#FFFFFF">';
 	echo '<tr><td colspan=3><b>'.$header.'</b><br/></td></tr>';
-	echo '<tr><td>F&auml;ltnamn</td>';
+	echo '<tr><td>Field name</td>';
 	echo '<td>';
 		echo '<input type="text" name="fieldname" value="'.$fieldName.'" maxlength="30"/>';
 	echo '</td>';
 	echo '<td>';
-		echo '<input type="checkbox" name="regrequire" value="1" class="checkbox"';
-		if (isset($data['regRequire']) && $data['regRequire']) echo ' checked="checked"';
-		echo '/> Kr&auml;v vid registrering';
+		echo '<input type="checkbox" name="regrequire" id="regrequire" value="1" class="checkbox"'.(!empty($data['regRequire'])?' checked="checked"':'').'/>';
+		echo ' <label for="regrequire">Require at registration</label>';
 	echo '</td></tr>';
 
 	/* Visa bara alternativet för textfält vid ändring */
 	if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
-		echo '<tr><td>Defaultv&auml;rde</td>';
+		echo '<tr><td>Default value</td>';
 		echo '<td colspan=2>';
 		echo '<input type="text" name="fielddefault" value="'.$data['fieldDefault'].'"/>';
 		echo '</td></tr>';
 	}
 
-	echo '<tr><td>Typ</td><td>';
+	echo '<tr><td>Type</td><td>';
 	echo '<select name="fieldtype">';
 		echo '<option value="'.USERDATA_TYPE_TEXT.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXT)			echo ' selected'; echo '>Text';
 		echo '<option value="'.USERDATA_TYPE_TEXTAREA.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXTAREA)	echo ' selected'; echo '>Textarea';
@@ -220,9 +213,8 @@
 	/* Visa bara alternativet för textfält vid ändring */
 	if (!isset($_GET['change']) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
 		echo '<td>';
-		echo '<input type="checkbox" name="allowhtml" value="1" class="checkbox"';
-		if (isset($data) && $data['allowTags']) echo ' checked="checked"';
-		echo '/> F&aring;r inneh&aring;lla HTML';
+		echo '<input type="checkbox" name="allowhtml" id="allowhtml" value="1" class="checkbox"'.(!empty($data['allowTags'])?' checked="checked"':'').'/>';
+		echo ' <label for="allowhtml">May contain HTML</label>';
 		echo '</td>';
 	} else {
 		echo '<td>&nbsp;</td>';
@@ -231,16 +223,16 @@
 
 	echo '<tr><td>Access</td>';
 	echo '<td colspan=2><select name="fieldaccess">';
-		echo '<option value="0"'; if (isset($data) && $data['fieldAccess']==0) echo ' selected'; echo '>Visas bara f&ouml;r admins';
-		echo '<option value="1"'; if (isset($data) && $data['fieldAccess']==1) echo ' selected'; echo '>Visas f&ouml;r admins och anv&auml;ndaren';
-		echo '<option value="2"'; if (isset($data) && $data['fieldAccess']==2) echo ' selected'; echo '>Visas f&ouml;r alla';
+		echo '<option value="0"'; if (isset($data) && $data['fieldAccess']==0) echo ' selected'; echo '>Only show to admins';
+		echo '<option value="1"'; if (isset($data) && $data['fieldAccess']==1) echo ' selected'; echo '>Show to admins and the user';
+		echo '<option value="2"'; if (isset($data) && $data['fieldAccess']==2) echo ' selected'; echo '>Show to everyone';
 	echo '</select>';
 	echo '</td></tr>';
 
 	if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT))) {
 		echo '<tr><td colspan=3>&nbsp;</td></tr>';
 		$list = getUserdataFieldOptions($data['fieldId']);
-		echo '<tr><td valign="top" colspan=3>'.$TEXT_ADMIN[TVAL_ADMIN_CURRENTOPTIONS].' ('.count($list).' st)</td></tr>';
+		echo '<tr><td valign="top" colspan=3>Current options ('.count($list).' st)</td></tr>';
 
 		for($i=0; $i<count($list); $i++) {
 			echo '<tr>';
@@ -249,12 +241,12 @@
 			echo '<input type="text" name="change_'.$list[$i]['optionId'].'" value="'.$list[$i]['optionName'].'"/>';
 			echo '</td>';
 			echo '<td>';
-			echo '<input type="checkbox" name="delete_'.$list[$i]['optionId'].'" value="1" class="checkbox"/> '.$TEXT_ADMIN[TVAL_ADMIN_REMOVE];
+			echo '<input type="checkbox" name="delete_'.$list[$i]['optionId'].'" value="1" class="checkbox"/>Delete';
 			echo '</td>';
 			echo '</tr>';
 		}
 
-		echo '<tr><td>'.$TEXT_ADMIN[TVAL_ADMIN_ADDOPTION].'</td>';
+		echo '<tr><td>Add</td>';
 		echo '<td colspan=2>';
 		echo '<input type="text" name="optionname"/>';
 		echo '</td></tr>';
@@ -262,7 +254,6 @@
 
 	echo '<tr><td colspan=3><input type="submit" class="button" value="'.$submit.'"/></td></tr>';
 	echo '</form></table>';
-	echo '</td></tr></table>';
 
 	require($project.'design_foot.php');
 ?>
