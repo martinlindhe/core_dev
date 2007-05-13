@@ -12,11 +12,12 @@
 
 	/*for ($m = 1; $m <= date('n'); $m++) {
 		echo 'Month '.$m.' 2007:<br/>';
-		//generateStatsMonth(2007, $m);		
+		//generateStatsMonth(2007, $m);
 		showStatsMonth(2007, $m);
 	}*/
 	
-	showStatsMonth(2007, 5);
+	//generateStatsMonth(2007, 4);
+	showStatsMonth(2007, 4);
 
 
 	require($project.'design_foot.php');

@@ -45,11 +45,12 @@
 		$x = $start_x+($day*10);
 		$y = ($hour*10);
 		//imageline($im, $x, $y, $x+9, $y, $col);
-		if ($logins) $use_col = $col;
+		if ($logins) $use_col = imagecolorallocate($im, 233, 220, 110);
 		else $use_col = imagecolorallocate($im, 80, 80, 80);
+
 		imagestring($im, 2, $x, $y, $logins, $use_col);
 
-		imagestring($im, 2, $start_x+($day*10), $bottom_y, $day, $col);
+		imagestring($im, 2, $x, $bottom_y, $day, $col);
 	}
 
 	imagepng($im); imagedestroy($im);

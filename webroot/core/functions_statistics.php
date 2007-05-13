@@ -32,7 +32,7 @@
 
 		for ($day=1; $day<= $month_days; $day++) {
 			//Generate stats for each day
-			for ($h=1; $h<=24; $h++) {
+			for ($h=0; $h<24; $h++) {
 
 				//Count logins
 				$time_start = mktime($h, 0, 0, $month, $day, $year);
