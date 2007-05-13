@@ -544,6 +544,17 @@ CREATE TABLE tblStopwords (
   wordMatch tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (wordId)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+CREATE TABLE tblUserDatafields (
+  fieldId int(10) unsigned NOT NULL auto_increment,
+  fieldName varchar(30) character set utf8 default NULL,
+  fieldType tinyint(3) unsigned NOT NULL default '0',
+  fieldDefault varchar(30) character set utf8 NOT NULL,
+  allowTags tinyint(3) unsigned NOT NULL default '0',
+  fieldAccess tinyint(3) unsigned NOT NULL default '2',
+  fieldPriority tinyint(3) unsigned NOT NULL default '0',
+  regRequire tinyint(3) unsigned NOT NULL default '0',
+  PRIMARY KEY  (fieldId)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 CREATE TABLE tblUsers (
   userId smallint(5) unsigned NOT NULL auto_increment,
   userName varchar(20) character set utf8 NOT NULL,

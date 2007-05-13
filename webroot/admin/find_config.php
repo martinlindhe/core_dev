@@ -11,6 +11,7 @@
 
 	$admin_menu = array(
 		'/admin/admin.php'.getProjectPath(false) => 'Admin start',
+		'/admin/admin_userdata.php'.getProjectPath(false) => 'Userdata',
 		'/admin/admin_stopwords.php'.getProjectPath(false) => 'Stopwords',
 		'/admin/admin_moderationqueue.php'.getProjectPath(false) => 'Moderation queue',
 		'/admin/admin_contact_groups.php'.getProjectPath(false) => 'Contact groups',

@@ -24,6 +24,10 @@
 
 
 	admin:
+		- userdata fält:
+			* använd tblCategories för att implementera dropdownlistor, istället för tblUserdataFieldOptions
+			* spara userdata i tblSettings
+	
 		- visa statistik i adminpanelen (admin_statistics.php):
 			* visa ett diagram månadsvis. som visar två staplar, en för registreringar, en för inloggningar
 			* måste ha ett cron-script som körs regelbundet som samlar upp alla entries från tblLogins och sparar statistik för föregående
@@ -83,6 +87,7 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.05.13:
 	- friends: använder atom_categories.php för att hålla contact groups (som skapas från admin)
+	- userdata: påbörjat implementation
 
 
 2007.05.12:

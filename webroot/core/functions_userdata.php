@@ -32,61 +32,65 @@
 
 
 	/* Skapar ett nytt userfield, och ger fältet en prioritetsnivå som är ledig */
-	function addUserdataField(&$db, $fieldName, $fieldType, $fieldDefault, $allowTags, $fieldAccess, $regRequire)
+	function addUserdataField($fieldName, $fieldType, $fieldDefault, $allowTags, $fieldAccess, $regRequire)
 	{
+		global $db;
+
 		if (!is_numeric($fieldType) || !is_numeric($allowTags) || !is_numeric($fieldAccess) || !is_numeric($regRequire)) return false;
 
-		$fieldName = dbAddSlashes($db, $fieldName);
-		$fieldDefault = dbAddSlashes($db, $fieldDefault);
+		$fieldName = $db->escape($fieldName);
+		$fieldDefault = $db->escape($fieldDefault);
 
-		$check = dbQuery($db, 'SELECT fieldId FROM tblUserdataFields WHERE fieldName="'.$fieldName.'"');
-		if (dbNumRows($check)) {
-			return false;
-		} else {
-			$prio = compactUserdataFields($db);	//returnerar högsta prioritetstalet
+		$check = $db->getOneItem('SELECT fieldId FROM tblUserdataFields WHERE fieldName="'.$fieldName.'"');
+		if ($check) return false;
 
-			$sql = 'INSERT INTO tblUserdataFields SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',fieldPriority='.$prio.',regRequire='.$regRequire;
-			dbQuery($db, $sql);
-			return true;
-		}
+		$prio = compactUserdataFields();	//returnerar högsta prioritetstalet
+
+		$q = 'INSERT INTO tblUserdataFields SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',fieldPriority='.$prio.',regRequire='.$regRequire;
+		$db->query($q);
+		return true;
 	}
 
 	/* Uppdaterar inställningarna för $fieldId */
-	function setUserdataField(&$db, $fieldId, $fieldName, $fieldType, $fieldDefault, $allowTags, $fieldAccess, $regRequire)
+	function setUserdataField($fieldId, $fieldName, $fieldType, $fieldDefault, $allowTags, $fieldAccess, $regRequire)
 	{
+		global $db;
+
 		if (!is_numeric($fieldType) || !is_numeric($allowTags) || !is_numeric($fieldAccess) || !is_numeric($regRequire)) return false;
 
-		$fieldName = dbAddSlashes($db, $fieldName);
-		$fieldDefault = dbAddSlashes($db, $fieldDefault);
+		$fieldName = $db->escape($fieldName);
+		$fieldDefault = $db->escape($fieldDefault);
 
-		$sql = 'UPDATE tblUserdataFields SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',regRequire='.$regRequire.' WHERE fieldId='.$fieldId;
-		dbQuery($db, $sql);
-		
+		$q = 'UPDATE tblUserdataFields SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',regRequire='.$regRequire.' WHERE fieldId='.$fieldId;
+		$db->query($q);
+
 		return true;
 	}
 
 	/* Tar bort ett userfield */
-	function removeUserdataField(&$db, $fieldId)
+	function removeUserdataField($fieldId)
 	{
+		global $db;
+
 		if (!is_numeric($fieldId)) return false;
 
-		dbQuery($db, 'DELETE FROM tblUserdataFields WHERE fieldId='.$fieldId );
-		dbQuery($db, 'DELETE FROM tblUserdataFieldOptions WHERE fieldId='.$fieldId );
-		dbQuery($db, 'DELETE FROM tblUserdata WHERE fieldId='.$fieldId );
+		$db->query('DELETE FROM tblUserdataFields WHERE fieldId='.$fieldId);
+		//$db->query($db, 'DELETE FROM tblUserdataFieldOptions WHERE fieldId='.$fieldId );
+		//$db->query($db, 'DELETE FROM tblUserdata WHERE fieldId='.$fieldId );
 	}
 
 	/* Compacts the userdata field priorities, so the boundary 0-max is used */
 	/* Returns the first free priority number */
 	
-	function compactUserdataFields(&$db)
+	function compactUserdataFields()
 	{
-		$check = dbQuery($db, 'SELECT fieldId,fieldPriority FROM tblUserdataFields ORDER BY fieldPriority ASC');
-		$cnt = dbNumRows($check);
+		global $db;
 
-		for($i=0; $i<$cnt; $i++) {
-			$row = dbFetchArray($check);
-			if ($row['fieldPriority'] != $i) {
-				dbQuery($db, 'UPDATE tblUserdataFields SET fieldPriority='.$i.' WHERE fieldId='.$row['fieldId'] );
+		$list = $db->getArray('SELECT fieldId,fieldPriority FROM tblUserdataFields ORDER BY fieldPriority ASC');
+
+		for ($i=0; $i<count($list); $i++) {
+			if ($list[$i]['fieldPriority'] != $i) {
+				$db->query('UPDATE tblUserdataFields SET fieldPriority='.$i.' WHERE fieldId='.$list[$i]['fieldId'] );
 			}
 		}
 
@@ -138,15 +142,17 @@
 	}
 
 	/* Returnerar alla alternativ för userfield $fieldId */
-	function getUserdataFieldOptions(&$db, $fieldId, $sorted = true)
+	function getUserdataFieldOptions($fieldId, $sorted = true)
 	{
+		global $db;
+
 		if (!is_numeric($fieldId)) return false;
-		$sql = 'SELECT * FROM tblUserdataFieldOptions WHERE fieldId='.$fieldId;
+		$q = 'SELECT * FROM tblUserdataFieldOptions WHERE fieldId='.$fieldId;
 		if ($sorted == true) {
-			$sql .= ' ORDER BY optionName ASC';
+			$q .= ' ORDER BY optionName ASC';
 		}
 
-		return dbArray($db, $sql);
+		return $db->getArray($q);
 	}
 
 	/* Returns all datafields that is required for registration, ordered by field priority */
@@ -179,19 +185,21 @@
 	}
 
 	/* Returns all userdata fields, if userId is specified it also returns the set values for the fields */
-	function getUserdataFields(&$db, $userId = '')
+	function getUserdataFields($userId = 0)
 	{
+		global $db;
+
 		if ($userId && is_numeric($userId)) {
-			$sql  = 'SELECT tblUserdataFields.*, tblUserdata.value AS value ';
-			$sql .= 'FROM tblUserdataFields ';
-			$sql .= 'LEFT OUTER JOIN tblUserdata ON (tblUserdata.fieldId=tblUserdataFields.fieldId AND tblUserdata.userId='.$userId.') ';
-			$sql .= 'ORDER BY tblUserdataFields.fieldPriority ASC';
+			$q  = 'SELECT tblUserdataFields.*, tblUserdata.value AS value ';
+			$q .= 'FROM tblUserdataFields ';
+			$q .= 'LEFT OUTER JOIN tblUserdata ON (tblUserdata.fieldId=tblUserdataFields.fieldId AND tblUserdata.userId='.$userId.') ';
+			$q .= 'ORDER BY tblUserdataFields.fieldPriority ASC';
 
 		} else {
-			$sql  = 'SELECT * FROM tblUserdataFields ORDER BY fieldPriority ASC';
+			$q  = 'SELECT * FROM tblUserdataFields ORDER BY fieldPriority ASC';
 		}
 
-		return dbArray($db, $sql);
+		return $db->getArray($q);
 	}
 
 
@@ -243,12 +251,14 @@
 	}
 
 	/* Returnerar inställningarna för ett fält */
-	function getUserdataField(&$db, $fieldId)
+	function getUserdataField($fieldId)
 	{
+		global $db;
+
 		if (!is_numeric($fieldId)) return false;
 
-		$sql = 'SELECT * FROM tblUserdataFields WHERE fieldId='.$fieldId;
-		return dbOneResult($db, $sql);
+		$q = 'SELECT * FROM tblUserdataFields WHERE fieldId='.$fieldId;
+		return $db->getOneRow($q);
 	}
 
 	/* Returnerar inställningarna för ett fält */
@@ -342,7 +352,7 @@
 	}
 
 	/* Returns a input field from the passed data, used together with getUserdataFieldsHTMLEdit() */
-	function getUserdataInput(&$db, $row)
+	function getUserdataInput($row)
 	{
 		global $config;
 
@@ -355,7 +365,7 @@
 
 		switch ($row['fieldType']) {
 			case USERDATA_TYPE_TEXT:
-				$result = '<input type="text" name="'.$fieldId.'" value="'.$value.'" size=30 maxlength=50>';
+				$result = '<input type="text" name="'.$fieldId.'" value="'.$value.'" size="30" maxlength="50"/>';
 				break;
 
 			case USERDATA_TYPE_TEXTAREA:
@@ -365,27 +375,27 @@
 			case USERDATA_TYPE_CHECKBOX:
 				$result = '<input type="checkbox" class="checkbox" name="'.$fieldId.'" value="1"';
 				if ($value == '1') {
-					$result .= ' checked';
+					$result .= ' checked="checked"';
 				}
-				$result .= '>';
+				$result .= '/>';
 				break;
 
 			case USERDATA_TYPE_RADIO:
-				$options = getUserdataFieldOptions($db, $fieldId);
+				$options = getUserdataFieldOptions($fieldId);
 				$result = '';
 
 				for ($j=0; $j<count($options); $j++) {
 					$result .= '<input type="radio" class="radiostyle" name="'.$options[$j]['fieldId'].'" value="'.$options[$j]['optionId'].'"';
 
 					if ($options[$j]['optionId'] == $value) {
-						$result .= ' checked';
+						$result .= ' checked="checked"';
 					}
-					$result .= '>'.$options[$j]['optionName'];
+					$result .= '/>'.$options[$j]['optionName'];
 				}
 				break;
 
 			case USERDATA_TYPE_SELECT:
-				$options = getUserdataFieldOptions($db, $fieldId);
+				$options = getUserdataFieldOptions($fieldId);
 
 				$hasvalue = false;
 				
@@ -422,8 +432,7 @@
 					$result .= '<a href="javascript:wnd_imgview('.$value.','.$org_width.','.$org_height.')">';
 					$result .= '<img src="file.php?id='.$value.'&width='.$tn_width.'" width="'.$tn_width.'" height="'.$tn_height.'" border=0>';
 					$result .= '</a>';
-					//$result .= '&nbsp;&nbsp;<input type="checkbox" class="checkbox" name="'.$fieldId.'_remove">Radera bilden<br>';
-					$result .= '&nbsp;&nbsp;<input type="checkbox" class="checkbox" name="'.$fieldId.'_remove">Slette bilde<br>';
+					$result .= '&nbsp;&nbsp;<input type="checkbox" class="checkbox" name="'.$fieldId.'_remove">Delete image<br>';
 				}
 				$result .= '<input type="file" name="'.$fieldId.'">';
 				break;
