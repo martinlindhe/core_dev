@@ -8,12 +8,13 @@
 		Dumps all found url's to a file, for later processing
 	*/
 
-	set_time_limit(60*10);
+	set_time_limit(60*3);
 
 
 	//Bas-url:en som vi börjar spindla ifrån, normalt sett roten på webbservern:
 	//$site['url'] = 'http://localhost/adblock/';
-	$site['url'] = 'http://localhost/lyric/';
+	//$site['url'] = 'http://www.unicorn.tv/';
+	$site['url'] = 'http://www.dn.se/';
 	$site['url_parsed'] = nice_parse_url($site['url']);
 	
 
@@ -72,53 +73,21 @@
 	echo "Identified ".count($site['all_urls'])." URL's, through ".$http_request_counter." HTTP requests:\n";
 	d($site['all_urls']);
 
-	/* Maps up an array of all different script paths and their different parameters, for later use */
-	$path = array();
-	foreach($site['all_urls'] as $url)
-	{
-		$parsed = parse_url($url);
-
-		if (!isset($path[$parsed['path']])) $path[ $parsed['path'] ] = array();
-		if (!empty($parsed['query'])) $path[ $parsed['path'] ] [] = $parsed['query'];
-	}
-	//d($path);
-
-	/* Further maps up the array, and figures out each parameter name for each script, and the default data type */
-	foreach($path as $row => $val)
-	{
-		//Set this value if you want the resulting $scripts array to contain entries for script-files without parameters aswell
-		//$scripts[ $row ] = array();
-		foreach($val as $query)
-		{
-			$res = explode('=', $query);
-			if (isset($res[1])) {
-				//analyserar datatyp
-				if (is_numeric($res[1])) {
-					if (!empty($scripts[$row][$res[0]]) && $scripts[$row][$res[0]] != 'numeric') {
-						$scripts[$row][$res[0]] = 'mixed';
-					} else {
-						$scripts[$row][$res[0]] = 'numeric';
-					}
-				} else {
-					$scripts[$row][$res[0]] = 'unknown ('.$res[1].')';
-				}
-			} else {
-				$scripts[$row][$res[0]] = 'unset';
-			}
-		}
-	}
-	d($scripts);
-
-	file_put_contents('dump.txt', serialize($scripts) );
+	file_put_contents('dump.txt', serialize($site['all_urls']) );
 	
 	if (!empty($site['404'])) {
-		echo "File not found:\n";
-		print_r($site['404']);
+		echo 'File not found:<br>';
+		d($site['404']);
+	}
+
+	if (!empty($site['403'])) {
+		echo 'Forbidden:<br>';
+		d($site['403']);
 	}
 
 	if (!empty($site['302'])) {
-		echo "Objects moved:\n";
-		print_r($site['302']);
+		echo 'Objects moved:<br>';
+		d($site['302']);
 	}
 
 	require('design_foot.php');

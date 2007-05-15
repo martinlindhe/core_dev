@@ -14,14 +14,40 @@
 		todo/senare: definiera login-url, scriptet klurar ut login-forumuläret å gissar username / password parametrar
 			sen med detta automatiskt logga in i systemet med angivet user/pwd och auto-behåll sessionen hela tiden
 
+		todo: skippa denna typ av url:
+				Skipping download of http://www.aftonbladet.se/javascript:logout();) - Using cache
+				Skipping download of .loginform.submit(); (from http://www.unicorn.tv/login/javascript:document.loginform.submit();)
+				Skipping download of .jsp'); (from http://www.dn.se/javascript:openBildspel('/DNet/road/Classic/article/47/jsp/bildspel.jsp');)
+
+		todo: parameter parsing funkar ej som den ska:
+			http://www.dn.se/DNet/jsp/polopoly.jsp?d=147&a=650638
+				=>
+    [/DNet/jsp/polopoly.jsp] => Array
+        (
+            [a] => numeric
+            [d] => unknown (2836&a)
+        )
+
+    [101] => http://www.dn.se/DNet/jsp/polopoly.jsp?d=1348&a=66290&previousRenderType=3			
+    [86] => http://www.dn.se/DNet/jsp/polopoly.jsp?d=772&homeView=true
+    [13] => http://www.dn.se/DNet/jsp/polopoly.jsp?d=145&a=617242&tab=b&period=bmonth
+
 		Features:
 			Keeps an internal web page cache for faster operation
+			
+		Notice:
+			This script may use some RAM. Tweak php.ini and set memory_limit to at least 32M
 	*/
 
 	//framtida alternativ: skicka en HEAD request till webbservern och kolla "Content-Type" responsen.
 	//PDF:		Content-Type: application/pdf
 	$config['spider']['allowed_extensions'] = array('.html', '.htm', '.asp', '.aspx', '.jsp', '.php', '.php4', '.php5', '.pl');
 
+	$config['spider']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.3) Gecko/20070309 Firefox/2.0.0.3';
+	
+	$config['spider']['cache_age'] = 3600*24;	//24 hour
+
+	$config['spider']['max_http_requests'] = 50;	//max number of http requests to do during one execution of the script, to avoid server overload
 
 	//Tar en sträng med parametrar till en html-tagg, och returnerar en array med dom parsade
 	function parse_html_parameters($str)
@@ -78,6 +104,7 @@
 	function nice_parse_url(&$url)
 	{
 		$url = trim($url);
+		$url = str_replace('\"', '', $url);
 
 		$pos = strpos($url, '://');
 		if ($pos === false) {
@@ -85,6 +112,10 @@
 		}
 
 		$arr = parse_url($url);
+		if (!isset($arr['scheme'])) {
+			echo 'Scheme undefined!! '.$url.'<br>';
+			return false;
+		}
 
 		$arr['file_ext'] = '';
 
@@ -104,7 +135,9 @@
 		}
 
 		if ($arr['scheme'] != 'http' && $arr['scheme'] != 'https') {
-			echo 'Unsupported scheme: <b>'.$arr['scheme'].'</b> in URL <b>'.$url.'</b><br>';
+			if ($arr['scheme'] != 'javascript') {
+				echo 'Unsupported scheme: <b>'.$arr['scheme'].'</b> in URL <b>'.$url.'</b><br>';
+			}
 			return false;
 		}
 
@@ -143,8 +176,12 @@
 				$tag_name = strtolower(substr($tag, 0, $tag_pos));
 	
 				$tag_params_org = substr($tag, $tag_pos+1);
-				$tag_params = parse_html_parameters($tag_params_org);
-	
+				if (strpos($tag_params_org, 'javascript:') === false) {
+					$tag_params = parse_html_parameters($tag_params_org);
+				} else {
+					$tag_params = array();
+				}
+
 			} else {
 				$tag_name = $tag;
 				$tag_params = array();
@@ -260,16 +297,17 @@
 	}
 	
 	//This function acts like file_get_contents() very much, except that instead of returning FALSE on failure,
-	//it will set $errno to the HTTP error number returned. $errno = 9999 if connection could not be established
+	//it will set $errno to the HTTP error number returned
 	function get_http_contents($url, &$errno)
 	{
 		//todo: $site ska nog inte va global, utan en parameter..
 		global $db, $site, $config, $http_request_counter;
 
 		$errno = 0;
+		//echo 'get_http_contents('.$url.')<br>';
 		
 		//check if cached version is not out of date
-		$q = 'SELECT body FROM tblSpiderCache WHERE url="'.$db->escape($url).'" AND timeCreated >= NOW()-'.(3600*4);	//4 hour cache
+		$q = 'SELECT body FROM tblSpiderCache WHERE url="'.$db->escape($url).'" AND timeCreated >= NOW()-'.$config['spider']['cache_age'];
 		$body = $db->getOneItem($q);
 		if ($body) {
 			echo '<b>Skipping download of '.$url.')</b> - Using cache<br>';
@@ -279,14 +317,14 @@
 		$host = nice_parse_url($url);
 		
 		if (!empty($host['file_ext']) && !in_array($host['file_ext'], $config['spider']['allowed_extensions'])) {
-			echo '<b>Skipping download of '.$host['file_ext'].' (from '.$url.')</b><br>';
+			echo '<b>Skipping download of '.$host['file_ext'].'</b> (from '.$url.')<br>';
 			return false;
 		}
 
 		echo 'Downloading and parsing '.$url.' ...<br>';
 		
-		if ($http_request_counter > 10000) {
-			echo 'http request '.$http_request_counter.', dying<br>';
+		if ($http_request_counter >= $config['spider']['max_http_requests']) {
+			echo 'Done '.$http_request_counter.' HTTP requests now. Please reload this page to do some more, dont want to overload the target server<br>';
 			die;
 		}
 
@@ -302,7 +340,7 @@
 		
 		$header  = "GET ".$file." HTTP/1.0\r\n";
 		$header .= "Host: ".$host['host']."\r\n";
-		$header .= "User-Agent: Agent Interactive Web Spider (www.agentinteractive.se)\r\n";
+		$header .= "User-Agent: ".$config['spider']['user_agent']."\r\n";
 		$header .= "Connection: close\r\n\r\n";
 		fwrite($fp, $header);
 
@@ -323,9 +361,11 @@
 		foreach ($arr as $val) {
 			if (substr($val, 0, 9) == 'HTTP/1.1 ') $errno = intval(substr($val, 9));
 		}
-		
-		if ($errno == 0) {
-			echo '<b>ERROR! Failed to extract HTTP error number from request for '.$url.'</b><br>';
+
+		if ($header && $errno == 0) {
+			d($header);
+			d($arr);
+			die('<b>ERROR! Failed to extract HTTP error number from request for '.$url.'</b><br>');
 		}
 
 		//HTTP/1.1 200 OK
@@ -348,6 +388,14 @@
 			$errno = 0;
 		}
 
+		//403 - forbidden
+		if ($errno == 403)
+		{
+			echo '<b>403 - Forbidden: '.$url.'</b><br>';
+			$site['403'][$url] = true;
+			$errno = 0;
+		}
+
 		//404 - file not found
 		if ($errno == 404)
 		{
@@ -359,14 +407,17 @@
 		if (!$errno) {
 			//delete old revisions
 			$q = 'DELETE FROM tblSpiderCache WHERE url="'.$db->escape($url).'"';
-			$db->query($q);
+			$db->delete($q);
 
 			//store header & body in database
 			$q = 'INSERT INTO tblSpiderCache SET url="'.$db->escape($url).'",header="'.$db->escape($header).'",body="'.$db->escape($body).'",sha1="'.sha1($body).'",timeCreated=NOW()';
-			$db->query($q);
+			$db->insert($q);
+		} else {
+			echo 'errno: '.$errno.'<br>';
 		}
 
 		$http_request_counter++;
+		//echo 'done<br/>';
 
 		return $body;
 	}
@@ -378,7 +429,7 @@
 
 		$result =
 			"# http://".$host."/robots.txt\n".
-			"# Generated by ai-crawler at ".date('Y-m-d H:i')."\n".
+			"# Generated by crawler at ".date('Y-m-d H:i')."\n".
 			"\n".
 			"User-agent: *\n";
 

@@ -27,12 +27,14 @@ abstract class DB_Base
 	abstract function escape($q);
 
 	/* Performs a query that don't return anything
-		Example: INSERT a=1 INTO t */
+		Example: LOCK TABLES */
 	abstract function query($q);
 
 	/* Performs a query that does a DELETE, returns the number of rows affected
 		Example: DELETE FROM t WHERE id=1 */
 	abstract function delete($q);
+	/* For INSERTs, returns number of rows inserted */
+	function insert($q) { $this->delete($q); }
 
 	/* Returns an array with the results, with columns as array indexes
 		Example: SELECT * FROM t */
@@ -286,7 +288,8 @@ abstract class DB_Base
 	function d($v)
 	{
 		echo '<pre>';
-		print_r($v);
+		if (is_string($v)) echo htmlentities($v);
+		else print_r($v);
 		echo '</pre>';
 	}
 ?>

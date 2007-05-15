@@ -1,8 +1,9 @@
 <?
 	require_once('config.php');
-	require('design_head.php');
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+
+	require('design_head.php');
 
 	$band_id = $_GET['id'];
 	$band_name = getBandName($band_id);
