@@ -10,9 +10,6 @@
 		todo: allow input of site to crawl from browser
 		todo: store result of the crawl in database
 		todo: cacha nerladdningar av sidor i databasen, med checksumma & timestamp
-		todo:
-			ett verktyg som listar ut alla scriptnamn och deras respektive parametrar, utifrån dump.txt, och
-			sparar denna data som mapped-dump.txt
 		
 		todo: ett vekrtyg som tar mapped-dump.txt data och genomför olika request med invalid data,
 		försök sätta in olika tecken som ' och " i parametrar och spara alla svar, leta efter keywords som "warning / error" i resultaten
@@ -99,13 +96,48 @@
 	$site['all_urls'] = array_merge($site['all_urls']);
 
 
-	echo '<pre>';
-
 	echo "Identified ".count($site['all_urls'])." URL's, through ".$http_request_counter." HTTP requests:\n";
+	d($site['all_urls']);
 
-	print_r($site['all_urls']);
+	/* Maps up an array of all different script paths and their different parameters, for later use */
+	$path = array();
+	foreach($site['all_urls'] as $url)
+	{
+		$parsed = parse_url($url);
 
-	file_put_contents('dump.txt', serialize($site['all_urls']) );
+		if (!isset($path[$parsed['path']])) $path[ $parsed['path'] ] = array();
+		if (!empty($parsed['query'])) $path[ $parsed['path'] ] [] = $parsed['query'];
+	}
+	//d($path);
+
+	/* Further maps up the array, and figures out each parameter name for each script, and the default data type */
+	foreach($path as $row => $val)
+	{
+		//echo 'script name: '.$row.'<br/>';
+		$scripts[ $row ] = array();
+		foreach($val as $query)
+		{
+			//echo $query.'<br>';
+			$res = explode('=', $query);
+			if (isset($res[1])) {
+				//todo: analysera datatyp
+				if (is_numeric($res[1])) {
+					if (!empty($scripts[$row][$res[0]]) && $scripts[$row][$res[0]] != 'numeric') {
+						$scripts[$row][$res[0]] = 'numeric';
+					} else {
+						$scripts[$row][$res[0]] = 'mixed';
+					}
+				} else {
+					$scripts[$row][$res[0]] = 'unknown ('.$res[1].')';
+				}
+			} else {
+				$scripts[$row][$res[0]] = 'unset';
+			}
+		}
+	}
+	//d($scripts);
+
+	file_put_contents('dump.txt', serialize($scripts) );
 	
 	if (!empty($site['404'])) {
 		echo "File not found:\n";

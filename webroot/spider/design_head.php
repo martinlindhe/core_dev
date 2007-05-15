@@ -17,7 +17,8 @@ var _ext_ref='<?=getProjectPath(2)?>';
 <?
 	$menu = array(
 			'index.php' => 'Home',
-			'crawl_site.php' => 'Crawl site');
+			'crawl_site.php' => '1. Crawl site',
+			'perform_query_test.php' => '2. Perform query test');
 	createMenu($menu);
 ?>
 </div>
