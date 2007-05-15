@@ -265,7 +265,6 @@
 		$fp = fsockopen($host['host'], 80, $errno, $errstr, 30);
 		if (!$fp) {
 			echo "$errstr ($errno)<br />\n";
-			$errno = 9999;
 			return false;
 		}
 		
