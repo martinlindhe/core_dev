@@ -86,7 +86,7 @@ X = hi prio task
 
 --------------[[changelog]]--------------
 2007.05.15:
-	- spider: nytt projekt
+	- spider: nytt projekt, genomför en automatisk userdata input audit av en webbsajt
 
 
 2007.05.13:

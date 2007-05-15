@@ -113,19 +113,17 @@
 	/* Further maps up the array, and figures out each parameter name for each script, and the default data type */
 	foreach($path as $row => $val)
 	{
-		//echo 'script name: '.$row.'<br/>';
 		$scripts[ $row ] = array();
 		foreach($val as $query)
 		{
-			//echo $query.'<br>';
 			$res = explode('=', $query);
 			if (isset($res[1])) {
-				//todo: analysera datatyp
+				//analyserar datatyp
 				if (is_numeric($res[1])) {
 					if (!empty($scripts[$row][$res[0]]) && $scripts[$row][$res[0]] != 'numeric') {
-						$scripts[$row][$res[0]] = 'numeric';
-					} else {
 						$scripts[$row][$res[0]] = 'mixed';
+					} else {
+						$scripts[$row][$res[0]] = 'numeric';
 					}
 				} else {
 					$scripts[$row][$res[0]] = 'unknown ('.$res[1].')';

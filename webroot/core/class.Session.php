@@ -81,7 +81,7 @@ class Session
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
 
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
-		if (!$this->user_agent) $this->user_agent = $_SERVER['HTTP_USER_AGENT'];
+		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
 
 		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
 		{
