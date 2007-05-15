@@ -65,30 +65,63 @@
 		* fixat visning av systemmmeddelanden i mailen
 		* kan ej längre svara på system-meddelande mail
 		* fixat användar-sökningen
+---[[mailat ovanstående]]---
 
+2007.05.14 Måndag:
+	webbgränssnittet, efter feedback från bitte:
+		* mail i inkorg/utkorg visas nu sorterat efter datumordning
+		* visar nu även "musiksmak", "längd" och "antal barn" på profilöversikt
+		* bytte ut 360 mot CitySurf i texten på "ladda upp profilbild"-sidan
+		* gått igenom feedback från bitte och gjort mindre förändringar
+
+2007.05.15 Tisdag:
+	mobila gränssnittet:
+		* fixade ett problem som gjorde att det inte gick att logga in från vissa mobiler
+
+	webbgränssnittet:
+		* system-mailet på forumbevakningar visar nu forum-titeln i texten
+		* visar info-text på profiluppladdsidan om att man kan ladda upp en ny bild för granskning
 
 ***********************************************************************************************************************************
 topp prio:
+
+	* anmälningar/abuse:
+		- adminpanel som listar alla anmälningar (översikt)
+		- möjlighet för admin att godkänna/ta bort från översikten
+		- alla anmälningar sparas, men markeras som behandlade
+		- senare: kunna knyta admin-kommentarer till enskild användare
+
+
+	* NU:
+		forum - "skriv inlägg" knapp på toppen av en tråd istället för flera i tråden
+		maila kiano functions_ratings.php som ska användas
+		resultatet av "glömt lösenord"-sidan ska ha ny design
+		resultatet av felaktig login ska ha ny design
+		
+
 
 	* mms upload image & video:
 		- hantera "BLOG" och "PRES" kommandon
 		- plocka fram videoupplösningen när videon laddas upp
 		- alla ska ha mms funktion (vip) under testet
 
-	* max 7 tecken i användarnamnet
+	* senare: max 7 tecken i användarnamnet
 	
 	* hitta mysql-prestanda-utbildningar
 	
-	* kika efter lastbalans-test mjukvara, mika visste nåt. och det finns nåt apache-projekt
+	* kika efter lastbalans-test mjukvara, mika "apache-flood", martin "webload" eller "siege"
 
-	* visa login-error istället för välkomsttexten på oinloggad startsida,
-		ej i popup eller ny sida som det är idag - kräver mycket omstrukturering i index_p.php och auth.php
-		index_p.php ska förövrigt bort helt så det är dubbeljobb isåfall
+	* galleriet:
+		- SENARE: högerklick-skydda bilder
+
+	* profilsida:
+		- SENARE: anmäl användare-funktion
+		- FRANS: länk till vän med bild funkar ej för alla
 
 	* process server:
 		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
 
-senare under betatestet, mitten av maj:
+senare under betatestet, slutet av maj:
 	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
 
 	* EFTER BETA: bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
