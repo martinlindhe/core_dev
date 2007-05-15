@@ -1,5 +1,27 @@
 <?
-	//functions for implementing a web spider / web crawler
+	/*
+		functions for implementing a web spider / web crawler
+
+		crawl_site.php:
+		todo: allow input of site to crawl from browser
+		todo: store result of the crawl in database (currently in dump.txt)
+		
+		perform_query_test.php:
+			* leta efter keywords som "warning / error" i resultaten
+		
+		todo: förbättra hittandet av parametrar och url, stöd även post-parametrar samt javascript-url
+		todo: sessioner, eller iaf till en början en möjlighet att attacha en hårdkodad cookie / get-parameter som fejkar session handling
+		todo/senare: definiera login-url, scriptet klurar ut login-forumuläret å gissar username / password parametrar
+			sen med detta automatiskt logga in i systemet med angivet user/pwd och auto-behåll sessionen hela tiden
+
+		Features:
+			Keeps an internal web page cache for faster operation
+	*/
+
+	//framtida alternativ: skicka en HEAD request till webbservern och kolla "Content-Type" responsen.
+	//PDF:		Content-Type: application/pdf
+	$config['spider']['allowed_extensions'] = array('.html', '.htm', '.asp', '.aspx', '.jsp', '.php', '.php4', '.php5', '.pl');
+
 
 	//Tar en sträng med parametrar till en html-tagg, och returnerar en array med dom parsade
 	function parse_html_parameters($str)
@@ -242,22 +264,29 @@
 	function get_http_contents($url, &$errno)
 	{
 		//todo: $site ska nog inte va global, utan en parameter..
-		global $site, $config, $http_request_counter;
-		
+		global $db, $site, $config, $http_request_counter;
+
 		$errno = 0;
+		
+		//check if cached version is not out of date
+		$q = 'SELECT body FROM tblSpiderCache WHERE url="'.$db->escape($url).'" AND timeCreated >= NOW()-'.(3600*4);	//4 hour cache
+		$body = $db->getOneItem($q);
+		if ($body) {
+			echo '<b>Skipping download of '.$url.')</b> - Using cache<br>';
+			return $body;
+		}
 
 		$host = nice_parse_url($url);
 		
-		if (!empty($host['file_ext']) && !in_array($host['file_ext'], $config['allowed_extensions'])) {
+		if (!empty($host['file_ext']) && !in_array($host['file_ext'], $config['spider']['allowed_extensions'])) {
 			echo '<b>Skipping download of '.$host['file_ext'].' (from '.$url.')</b><br>';
 			return false;
 		}
 
 		echo 'Downloading and parsing '.$url.' ...<br>';
 		
-		if ($http_request_counter > 100) {
+		if ($http_request_counter > 10000) {
 			echo 'http request '.$http_request_counter.', dying<br>';
-			//sleep(1);
 			die;
 		}
 
@@ -289,8 +318,7 @@
 		$body = substr($result, $pos);
 
 		$arr = explode("\r\n", $header);
-		//echo '<pre>'; print_r($arr);
-		
+
 		//todo: kanske parsa upp header-elementen mer tillgängliga som keys i en array,om vi ska göra mycket med header-datan
 		foreach ($arr as $val) {
 			if (substr($val, 0, 9) == 'HTTP/1.1 ') $errno = intval(substr($val, 9));
@@ -326,6 +354,16 @@
 			echo '<b>File not found: '.$url.'</b><br>';
 			$site['404'][$url] = true;
 			$errno = 0;
+		}
+
+		if (!$errno) {
+			//delete old revisions
+			$q = 'DELETE FROM tblSpiderCache WHERE url="'.$db->escape($url).'"';
+			$db->query($q);
+
+			//store header & body in database
+			$q = 'INSERT INTO tblSpiderCache SET url="'.$db->escape($url).'",header="'.$db->escape($header).'",body="'.$db->escape($body).'",sha1="'.sha1($body).'",timeCreated=NOW()';
+			$db->query($q);
 		}
 
 		$http_request_counter++;

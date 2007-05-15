@@ -6,40 +6,14 @@
 		Crawls a site from a base url, extracting all url's found on pages linked from the first page
 
 		Dumps all found url's to a file, for later processing
-
-		todo: allow input of site to crawl from browser
-		todo: store result of the crawl in database
-		todo: cacha nerladdningar av sidor i databasen, med checksumma & timestamp
-		
-		todo: ett vekrtyg som tar mapped-dump.txt data och genomför olika request med invalid data,
-		försök sätta in olika tecken som ' och " i parametrar och spara alla svar, leta efter keywords som "warning / error" i resultaten
 	*/
 
 	set_time_limit(60*10);
 
-	//framtida alternativ: skicka en HEAD request till webbservern och kolla "Content-Type" responsen.
-	//PDF:		Content-Type: application/pdf
-	$config['allowed_extensions'] = array('.html', '.htm', '.asp', '.aspx', '.jsp', '.php', '.php4', '.php5', '.pl');
-
-
-/*
-	echo '<pre>';
-	$url = 'http://www.telgeenergi.se/ten/pdf/taxa2006_A4.pdf';
-	$data = get_http_contents($url, $errno);
-	//$data = file_get_contents('elnat.htm');
-	//echo $errno;
-	//echo $data;
-	$list = extract_filenames($data);
-	$urls = generate_absolute_urls($list, $url);
-	echo '<pre>'; print_r($urls);
-	die;*/
-
-/*************************************
-***************************************
- ************************************/
 
 	//Bas-url:en som vi börjar spindla ifrån, normalt sett roten på webbservern:
-	$site['url'] = 'http://localhost/adblock/';
+	//$site['url'] = 'http://localhost/adblock/';
+	$site['url'] = 'http://localhost/lyric/';
 	$site['url_parsed'] = nice_parse_url($site['url']);
 	
 
@@ -49,7 +23,6 @@
 	//fixme: gör hela detta rekursivt på nåt sätt, så även detta get_http_contents() får samma error handling som nästa
 	$data = get_http_contents($site['url'], $errno);
 	if ($errno) die('get_http_contents() failed');
-	//$data = file_get_contents('www.agentinteractive.se.htm');
 
 	$list = extract_filenames($data);
 	
@@ -113,7 +86,8 @@
 	/* Further maps up the array, and figures out each parameter name for each script, and the default data type */
 	foreach($path as $row => $val)
 	{
-		$scripts[ $row ] = array();
+		//Set this value if you want the resulting $scripts array to contain entries for script-files without parameters aswell
+		//$scripts[ $row ] = array();
 		foreach($val as $query)
 		{
 			$res = explode('=', $query);
@@ -133,7 +107,7 @@
 			}
 		}
 	}
-	//d($scripts);
+	d($scripts);
 
 	file_put_contents('dump.txt', serialize($scripts) );
 	

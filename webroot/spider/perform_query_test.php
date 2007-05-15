@@ -31,8 +31,8 @@
 	foreach($url as $key => $val)
 	{
 		echo '<h3>'.$val.'</h3>';
-		$x = file_get_contents($val);
-		echo strip_tags($x);
+		$x = get_http_contents($val, $errno);
+		//echo strip_tags($x);
 	}
 
 	require('design_foot.php');
