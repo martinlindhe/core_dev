@@ -479,7 +479,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -488,7 +488,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 CREATE TABLE tblModerationQueue (
   queueId bigint(20) unsigned NOT NULL auto_increment,
   queueType tinyint(3) unsigned NOT NULL default '0',
@@ -532,7 +532,7 @@ CREATE TABLE tblRevisions (
   timeCreated datetime NOT NULL,
   categoryId tinyint(3) unsigned NOT NULL,
   PRIMARY KEY  (indexId)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 CREATE TABLE tblSettings (
   settingId bigint(20) unsigned NOT NULL auto_increment,
   ownerId smallint(5) unsigned NOT NULL default '0',
@@ -562,11 +562,11 @@ CREATE TABLE tblUserdata (
   fieldType tinyint(3) unsigned NOT NULL default '0',
   fieldDefault varchar(30) character set utf8 NOT NULL,
   allowTags tinyint(3) unsigned NOT NULL default '0',
-  fieldAccess tinyint(3) unsigned NOT NULL default '2',
+  private tinyint(1) unsigned NOT NULL default '0',
   fieldPriority tinyint(3) unsigned NOT NULL default '0',
   regRequire tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (fieldId)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 CREATE TABLE tblUsers (
   userId smallint(5) unsigned NOT NULL auto_increment,
   userName varchar(20) character set utf8 NOT NULL,

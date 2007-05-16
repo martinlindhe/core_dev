@@ -1,10 +1,12 @@
 <?
 	require_once('atom_moderation.php');		//for automatic moderation of new blogs, and for "report blog" feature
 	require_once('atom_comments.php');			//for comment support for blogs
+	require_once('atom_rating.php');				//for rating support for blogs
 
 	$config['blog']['moderation'] = true;		//enables automatic moderation of new blogs
 
 	$config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport', 'BlogComment', 'BlogFiles');
+	$config['blog']['allow_rating'] = true;	//allow users to rate blogs
 
 	function addBlog($categoryId, $title, $body)
 	{
@@ -239,6 +241,16 @@
 
 			if ($blog['timeUpdated']) {
 				echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
+			}
+			
+			if ($config['blog']['allow_rating']) {
+				echo '<div class="news_rate">';
+				if ($session->id != $blog['userId']) {
+					echo ratingGadget(RATE_BLOG, $_id);
+				} else {
+					echo showRating(RATE_BLOG, $_id);
+				}
+				echo '</div>';
 			}
 		}
 

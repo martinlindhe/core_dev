@@ -8,7 +8,7 @@
 
 	define('RATE_NEWS',		1);
 	define('RATE_BLOG',		2);
-	define('RATE_IMAGE',	3);
+	define('RATE_IMAGE',	3);	//todo: implement
 
 	/* Lägg ett omdöme + håll reda på att användaren lagt sitt omdöme
 		$_rating är ett heltal mellan 1 till 5, eller 1 till 100 (eller vad nu min & max-värdena är)
@@ -35,6 +35,12 @@
 		$ratingcnt = $db->getOneItem($q);
 
 		switch ($_type) {
+			case RATE_BLOG:
+				//4. uppdatera medelvärdet
+				$q = 'UPDATE tblBlogs SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE blogId='.$_id;
+				$db->query($q);
+				break;
+
 			case RATE_NEWS:
 				//4. uppdatera medelvärdet
 				$q = 'UPDATE tblNews SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE newsId='.$_id;
@@ -65,7 +71,19 @@
 
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-		$q = 'SELECT rating,ratingCnt FROM tblNews WHERE newsId='.$_id;
+		switch ($_type) {
+			case RATE_BLOG:
+				$q = 'SELECT rating,ratingCnt FROM tblBlogs WHERE blogId='.$_id;
+				break;
+
+			case RATE_NEWS:
+				$q = 'SELECT rating,ratingCnt FROM tblNews WHERE newsId='.$_id;
+				break;
+
+			default:
+				die('getRating dies');
+		}
+
 		return $db->getOneRow($q);
 	}
 
@@ -76,7 +94,7 @@
 
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 		
-		$not_rated = !isRated(RATE_NEWS, $_id);
+		$not_rated = !isRated($_type, $_id);
 
 		if ($not_rated && !empty($_POST['rate_gadget'])) {
 			rateItem($_type, $_id, $_POST['rate_gadget']);
@@ -84,7 +102,7 @@
 		}
 
 		if ($not_rated) {
-			$result  = 'Rate this news article:<br/>';
+			$result  = 'Rate this:<br/>';
 			$result .= '<form method="post" action="">';
 			$result .= '<select name="rate_gadget">';
 			$result .= '<option value="">&nbsp;</option>';
@@ -95,19 +113,26 @@
 			$result .= ' <input type="submit" class="button" value="Rate"/>';
 			$result .= '</form>';
 		} else {
-			//Show current votes
-			$result  = 'Current rating<br/><br/>';
-			$row = getRating($_type, $_id);
-			for ($i=1; $i<=5; $i++) {
-				if ($i <= $row['rating']) {
-					$result .= '<img src="/gfx/icon_star_full.png" alt="star"/>';
-				} else {
-					$result .= '<img src="/gfx/icon_star_empty.png" alt="star"/>';
-				}
-			}
-			$result .= '<br/><br/>';
-			$result .= $row['rating'].' / 5 in '.$row['ratingCnt'].' votes<br/>';
+			$result = showRating($_type, $_id);
 		}
+
+		return $result;
+	}
+
+	function showRating($_type, $_id)
+	{
+		//Show current votes
+		$result  = 'Current rating<br/><br/>';
+		$row = getRating($_type, $_id);
+		for ($i=1; $i<=5; $i++) {
+			if ($i <= $row['rating']) {
+				$result .= '<img src="/gfx/icon_star_full.png" alt="star"/>';
+			} else {
+				$result .= '<img src="/gfx/icon_star_empty.png" alt="star"/>';
+			}
+		}
+		$result .= '<br/><br/>';
+		$result .= $row['rating'].' / 5 in '.$row['ratingCnt'].' votes<br/>';
 
 		return $result;
 	}
