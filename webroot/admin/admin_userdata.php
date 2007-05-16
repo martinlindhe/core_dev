@@ -1,8 +1,6 @@
 <?
 	/*
 		todo: kräv bekräftelse innan ett fält tas bort!
-		
-		clean up tables
 	*/
 	
 	require_once('find_config.php');
@@ -29,32 +27,14 @@
 	echo createMenu($admin_menu, 'blog_menu');
 	
 	/* Create new field */
-	if (isset($_GET['mode']) && ($_GET['mode'] == 'create')) {
+	if (isset($_GET['mode']) && ($_GET['mode'] == 'create') && isset($_POST['fieldname']) && $_POST['fieldname']) {
+		$fieldType = $fieldAccess = $fieldDefault = '';
+		if (isset($_POST['fieldtype'])) $fieldType = $_POST['fieldtype'];
+		if (isset($_POST['fieldaccess'])) $fieldAccess = $_POST['fieldaccess'];
+		if (isset($_POST['fielddefault'])) $fieldDefault = $_POST['fielddefault'];
 
-		if (isset($_POST['fieldname']) && $_POST['fieldname']) {
-
-			$fieldName = $_POST['fieldname'];
-			if (isset($_POST['fieldtype'])) {
-				$fieldType = $_POST['fieldtype'];
-			} else {
-				$fieldType = '';
-			}
-
-			if (isset($_POST['fieldaccess'])) {
-				$fieldAccess = $_POST['fieldaccess'];
-			} else {
-				$fieldAccess = '';
-			}
-
-			if (isset($_POST['fielddefault'])) {
-				$fieldDefault = $_POST['fielddefault'];
-			} else {
-				$fieldDefault = '';
-			}
-
-			if (!addUserdataField($fieldName, $fieldType, $fieldDefault, $allowHTML, $fieldAccess, $regRequire)) {
-				echo 'A field with the name '.$fieldName.' already exists<br/>';
-			}
+		if (!addUserdataField($_POST['fieldname'], $fieldType, $fieldDefault, $allowHTML, $fieldAccess, $regRequire)) {
+			echo 'A field with the name '.$_POST['fieldname'].' already exists<br/>';
 		}
 	}
 
@@ -62,35 +42,27 @@
 
 	if (isset($_GET['change']) && isset($_POST['fieldname']) && isset($_POST['fieldtype']) && isset($_POST['fieldaccess'])) {
 
-		$changeId	 = $_GET['change'];
+		$changeId	= $_GET['change'];
 
-		$fieldName	 = $_POST['fieldname'];
-		$fieldType    = $_POST['fieldtype'];
-		$fieldAccess  = $_POST['fieldaccess'];
-		if (isset($_POST['fielddefault'])) {
-			$fieldDefault = $_POST['fielddefault'];
-		} else {
-			$fieldDefault = '';
-		}
+		$fieldName = $_POST['fieldname'];
+		$fieldType = $_POST['fieldtype'];
+		$fieldAccess = $_POST['fieldaccess'];
+		$fieldDefault = '';
+		if (isset($_POST['fielddefault'])) $fieldDefault = $_POST['fielddefault'];
 
 		/* Update changes for the field */
 		setUserdataField($changeId, $fieldName, $fieldType, $fieldDefault, $allowHTML, $fieldAccess, $regRequire);
 
 		/* Update changes for the field-options */
-		$list = getCategory(CATEGORY_USERDATA, $changeId);
-		for($i=0; $i<count($list); $i++) {
-			$chg = 'change_'.$list[$i]['optionId'];
-			$del = 'delete_'.$list[$i]['optionId'];
+		$list = getCategoriesByOwner(CATEGORY_USERDATA, $changeId);
 
-			if (isset($_POST[$del]) && $_POST[$del] == '1') {
-
+		foreach ($list as $row) {
+			if (!empty($_POST['delete_'.$row['categoryId']])) {
 				/* Delete have highest priority */
-				removeUserdataFieldOption($list[$i]['optionId']);
-
-			} else if ($_POST[$chg] && ($list[$i]['optionName'] != $_POST[$chg])) {
-
+				removeCategory(CATEGORY_USERDATA, $row['categoryId']);
+			} else if (!empty($_POST['change_'.$row['categoryId']]) && ($row['categoryName'] != $_POST['change_'.$row['categoryId']])) {
 				/* If not delete, update */
-				setUserdataFieldOption($list[$i]['optionId'], $_POST[$chg]);
+				updateCategory(CATEGORY_USERDATA, $row['categoryId'], $_POST['change_'.$row['categoryId']]);
 			}
 		}
 	}
@@ -111,38 +83,38 @@
 
 	compactUserdataFields();	//make sure the priorities are compacted
 	$list = getUserdataFields();
-	$max = count($list);
 
-	for ($i=0; $i<$max; $i++) {
+	//for ($i=0; $i<count($list); $i++) {
+	foreach ($list as $row) {
 		echo '<table bgcolor="#FFFFFF">';
 		echo '<tr><td width="38%" valign="top">';
 
-		$fieldName = stripslashes($list[$i]['fieldName']);
-		$prio = $list[$i]['fieldPriority'];
+		$fieldName = stripslashes($row['fieldName']);
+		$prio = $row['fieldPriority'];
 		$prio_up = $prio-1;
 		$prio_dn = $prio+1;
 		if ($prio_up >= 0) {
-			echo '<a href="?prio='.$list[$i]['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.getProjectPath().'"><img src="/gfx/arrow_up.png" alt="Move up"/></a>';
+			echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.getProjectPath().'"><img src="/gfx/arrow_up.png" alt="Move up"/></a>';
 		}
-		if ($prio_dn < $max) {
-			echo '<a href="?prio='.$list[$i]['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="/gfx/arrow_down.png" alt="Move down"/></a>';
+		if ($prio_dn < count($list)) {
+			echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="/gfx/arrow_down.png" alt="Move down"/></a>';
 		}
 
-		echo '&nbsp;<a href="?change='.$list[$i]['fieldId'].getProjectPath().'">'.$fieldName.'</a><br/>';
-		echo '<a href="?remove='.$list[$i]['fieldId'].getProjectPath().'">Remove</a><br/>';
+		echo '&nbsp;<a href="?change='.$row['fieldId'].getProjectPath().'">'.$fieldName.'</a><br/>';
+		echo '<a href="?remove='.$row['fieldId'].getProjectPath().'">Remove</a><br/>';
 
-		if ($list[$i]['allowTags']) echo 'May contain HTML<br/>';
-		if ($list[$i]['regRequire']) echo 'Require at registration<br/>';
+		if ($row['allowTags']) echo 'May contain HTML<br/>';
+		if ($row['regRequire']) echo 'Require at registration<br/>';
 
 		echo 'Field will be displayed to ';
-		switch ($list[$i]['fieldAccess']) {
+		switch ($row['fieldAccess']) {
 			case 0: echo 'only admin'; break;
 			case 1: echo 'admin and user'; break;
 			case 2: echo 'everyone'; break;
 		}
 		echo '</td>';
 
-		echo '<td valign="top">'.getUserdataInput($list[$i]).'</td>';
+		echo '<td valign="top">'.getUserdataInput($row).'</td>';
 
 		echo '</tr>';
 		echo '</table>';
@@ -162,7 +134,6 @@
 		$fieldName = stripslashes($data['fieldName']);
 		$header = 'Edit userdata field "'.$fieldName.'"';
 		$submit = 'Update';
-
 	} else {
 		$header = 'Create a new userdata field';
 		$submit = 'Create';

@@ -22,7 +22,7 @@
 	echo '<br/>';
 
 	echo 'Select blog category:<br/>';
-	echo getCategoriesSelect(CATEGORY_BLOG, 'catid');
+	echo getCategoriesSelect(CATEGORY_BLOG, 0, 'catid');
 	echo '<br/><br/>';
 
 	echo '<textarea name="body" cols="64" rows="24"></textarea><br/><br/>';

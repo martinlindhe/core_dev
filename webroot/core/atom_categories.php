@@ -11,7 +11,7 @@
 
 	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
 	define('CATEGORY_CONTACT',			11);		//friend relation category, like "Old friends", "Family"
-	define('CATEGORY_USERDATA',			12);		//used for multi-choice userdata types
+	define('CATEGORY_USERDATA',			12);		//used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
 
 	define('CATEGORY_NEWS',				20);
 
@@ -36,7 +36,16 @@
 		$db->query($q);
 		return $db->insert_id;
 	}
-	
+
+	function updateCategory($_type, $_id, $name)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
+
+		$q = 'UPDATE tblCategories SET categoryName="'.$db->escape($name).'" WHERE categoryType='.$_type.' AND categoryId='.$_id;
+		$db->query($q);
+	}
+
 	function removeCategory($_type, $_id)
 	{
 		global $db, $session;
@@ -93,11 +102,12 @@
 	}
 
 	//returns own categories & global categories (categoryPermissions==10)
-	function getGlobalAndUserCategories($_type)
+	//some category types (like CATEGORY_USERDATA) uses the $_owner parameter, to specify what userdata field this category belongs to
+	function getGlobalAndUserCategories($_type, $_owner = 0)
 	{
 		global $db, $session;
 
-		if (!$session->id || !is_numeric($_type)) return false;
+		if (!$session->id || !is_numeric($_type) || !is_numeric($_owner)) return false;
 
 		switch ($_type)
 		{
@@ -107,6 +117,11 @@
 
 			case CATEGORY_BLOG:
 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
+				break;
+
+			case CATEGORY_USERDATA:
+				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
+				if ($_owner) $q .= ' AND ownerId='.$_owner;
 				break;
 
 			case CATEGORY_CONTACT:
@@ -120,11 +135,11 @@
 		return $db->getArray($q);
 	}
 
-	function getCategoriesSelect($_type, $selectName = '', $selectedId = 0, $url = '')
+	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '')
 	{
 		global $config;
 
-		if (!is_numeric($_type)) return false;
+		if (!is_numeric($_type) || !is_numeric($_owner) || !is_numeric($selectedId)) return false;
 
 		if (!$selectName) $selectName = 'default';
 		$content = '<select name="'.strip_tags($selectName).'">';
@@ -138,14 +153,14 @@
 		$shown_global_cats = false;
 		$shown_my_cats = false;
 
-		$list = getGlobalAndUserCategories($_type);
+		$list = getGlobalAndUserCategories($_type, $_owner);
 		foreach ($list as $row)
 		{
-			if ($_type != CATEGORY_CONTACT && !$shown_global_cats && $row['categoryPermissions']==10) {
+			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && !$shown_global_cats && $row['categoryPermissions']==10) {
 				$content .= '<optgroup label="Global categories">';
 				$shown_global_cats = true;
 			}
-			if ($_type != CATEGORY_CONTACT && !$shown_my_cats && $row['categoryPermissions']!=10) {
+			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && !$shown_my_cats && $row['categoryPermissions']!=10) {
 				$content .= '</optgroup>';
 				$content .= '<optgroup label="Your categories">';
 				$shown_my_cats = true;

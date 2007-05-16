@@ -325,11 +325,14 @@ select {
 
 .blog_menu {
 	font-size: 12px;
+	margin-top: 0;
+	padding-left: 0;
 }
 .blog_menu li {
 	margin-left: 2px;
 	margin-right: 2px;
 	display: inline;
+	list-style-type: none;
 	border: 1px #888 solid;
 	background-color: #fff;
 	padding: 4px;

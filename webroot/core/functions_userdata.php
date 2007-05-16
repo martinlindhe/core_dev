@@ -4,8 +4,6 @@
 	//userdata module settings:
 	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
-	//todo: rensa upp!
-
 	/* Userdata field types */
 	define('USERDATA_TYPE_TEXT',			1);
 	define('USERDATA_TYPE_CHECKBOX',	2);
@@ -27,12 +25,12 @@
 		$fieldName = $db->escape($fieldName);
 		$fieldDefault = $db->escape($fieldDefault);
 
-		$check = $db->getOneItem('SELECT fieldId FROM tblUserdataFields WHERE fieldName="'.$fieldName.'"');
+		$check = $db->getOneItem('SELECT fieldId FROM tblUserdata WHERE fieldName="'.$fieldName.'"');
 		if ($check) return false;
 
 		$prio = compactUserdataFields();	//returnerar högsta prioritetstalet
 
-		$q = 'INSERT INTO tblUserdataFields SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',fieldPriority='.$prio.',regRequire='.$regRequire;
+		$q = 'INSERT INTO tblUserdata SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',fieldPriority='.$prio.',regRequire='.$regRequire;
 		$db->query($q);
 		return true;
 	}
@@ -47,7 +45,7 @@
 		$fieldName = $db->escape($fieldName);
 		$fieldDefault = $db->escape($fieldDefault);
 
-		$q = 'UPDATE tblUserdataFields SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',regRequire='.$regRequire.' WHERE fieldId='.$fieldId;
+		$q = 'UPDATE tblUserdata SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',regRequire='.$regRequire.' WHERE fieldId='.$fieldId;
 		$db->query($q);
 
 		return true;
@@ -60,9 +58,9 @@
 
 		if (!is_numeric($fieldId)) return false;
 
-		$db->query('DELETE FROM tblUserdataFields WHERE fieldId='.$fieldId);
-		//$db->query($db, 'DELETE FROM tblUserdataFieldOptions WHERE fieldId='.$fieldId );
-		//$db->query($db, 'DELETE FROM tblUserdata WHERE fieldId='.$fieldId );
+		$db->query('DELETE FROM tblUserdata WHERE fieldId='.$fieldId);
+		//$db->query($db, 'DELETE FROM tblCategories WHERE fieldId='.$fieldId );
+		//$db->query($db, 'DELETE FROM tblSettings WHERE fieldId='.$fieldId );
 	}
 
 	/* Compacts the userdata field priorities, so the boundary 0-max is used */
@@ -72,11 +70,11 @@
 	{
 		global $db;
 
-		$list = $db->getArray('SELECT fieldId,fieldPriority FROM tblUserdataFields ORDER BY fieldPriority ASC');
+		$list = $db->getArray('SELECT fieldId,fieldPriority FROM tblUserdata ORDER BY fieldPriority ASC');
 
 		for ($i=0; $i<count($list); $i++) {
 			if ($list[$i]['fieldPriority'] != $i) {
-				$db->query('UPDATE tblUserdataFields SET fieldPriority='.$i.' WHERE fieldId='.$list[$i]['fieldId'] );
+				$db->query('UPDATE tblUserdata SET fieldPriority='.$i.' WHERE fieldId='.$list[$i]['fieldId'] );
 			}
 		}
 
@@ -90,28 +88,19 @@
 		if (!is_numeric($fieldId) || !is_numeric($old) || !is_numeric($new)) return false;
 
 		/* get fieldId for the one to be replaced */
-		$q = 'SELECT fieldId FROM tblUserdataFields WHERE fieldPriority='.$new;
+		$q = 'SELECT fieldId FROM tblUserdata WHERE fieldPriority='.$new;
 		$newfieldId = $db->getOneItem($q);
 
-		$db->query('UPDATE tblUserdataFields SET fieldPriority='.$new.' WHERE fieldId='.$fieldId);
-		$db->query('UPDATE tblUserdataFields SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
+		$db->query('UPDATE tblUserdata SET fieldPriority='.$new.' WHERE fieldId='.$fieldId);
+		$db->query('UPDATE tblUserdata SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
 	}
 
-	/* Returns all userdata fields, if userId is specified it also returns the set values for the fields */
-	function getUserdataFields($userId = 0)
+	/* Returns all userdata fields */
+	function getUserdataFields()
 	{
 		global $db;
 
-		if ($userId && is_numeric($userId)) {
-			$q  = 'SELECT tblUserdataFields.*, tblUserdata.value AS value ';
-			$q .= 'FROM tblUserdataFields ';
-			$q .= 'LEFT OUTER JOIN tblUserdata ON (tblUserdata.fieldId=tblUserdataFields.fieldId AND tblUserdata.userId='.$userId.') ';
-			$q .= 'ORDER BY tblUserdataFields.fieldPriority ASC';
-
-		} else {
-			$q  = 'SELECT * FROM tblUserdataFields ORDER BY fieldPriority ASC';
-		}
-
+		$q = 'SELECT * FROM tblUserdata ORDER BY fieldPriority ASC';
 		return $db->getArray($q);
 	}
 
@@ -122,7 +111,7 @@
 
 		if (!is_numeric($fieldId)) return false;
 
-		$q = 'SELECT * FROM tblUserdataFields WHERE fieldId='.$fieldId;
+		$q = 'SELECT * FROM tblUserdata WHERE fieldId='.$fieldId;
 		return $db->getOneRow($q);
 	}
 
@@ -152,42 +141,19 @@
 				break;
 
 			case USERDATA_TYPE_RADIO:
-				$options = getCategories(CATEGORY_USERDATA, $fieldId);
+				$options = getCategoriesByOwner(CATEGORY_USERDATA, $fieldId);
 				$result = '';
 
 				foreach($options as $row) {
 					$result .= '<input type="radio" class="radiostyle" name="'.$fieldId.'" id="lab_'.$row['categoryId'].'" value="'.$row['categoryId'].'"'.($row['categoryId'] == $value?' checked="checked"':'').'/>';
-					$result .= ' <label for="lab_'.$row['categoryId'].'">'.$row['categoryName'].'</label>';
+					$result .= ' <label for="lab_'.$row['categoryId'].'">'.$row['categoryName'].'</label><br/>';
 				}
 				break;
 
 			case USERDATA_TYPE_SELECT:
-				$options = getCategories(CATEGORY_USERDATA, $fieldId);	//todo: use getCategorySelect()
-
-				$hasvalue = false;
-				
-				for ($j=0; $j<count($options); $j++) {
-					if ($options[$j]['categoryId'] == $value) {
-						$hasvalue = true;
-					}
-				}
-
-				$result = '<select name="'.$fieldId.'">';
-
-				if ($hasvalue == false) {
-					$result .= '<option value="">&nbsp;';
-				}
-
-				for($j=0; $j<count($options); $j++) {
-					$result .= '<option value="'.$options[$j]['categoryId'].'"';
-					if ($options[$j]['categoryId'] == $value) {
-						$result .= ' selected';
-					}
-					$result .= '>'.$options[$j]['categoryName'];
-				}
-				$result .= '</select>';
+				$result = getCategoriesSelect(CATEGORY_USERDATA, $fieldId);
 				break;
-
+			
 			case USERDATA_TYPE_IMAGE:
 				$result = '';
 				if ($value) {

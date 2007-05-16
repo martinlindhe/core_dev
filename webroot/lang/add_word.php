@@ -19,7 +19,7 @@
 	<form method="post" action="">
 		Word: <input type="text" name="word"/><br/>
 		Pronunciation: <input type="text" name="pron"/><br/>
-		Language: <?=getCategoriesSelect(CATEGORY_LANGUAGE, 'lang')?>
+		Language: <?=getCategoriesSelect(CATEGORY_LANGUAGE, 0, 'lang')?>
 		<input type="submit" class="button" value="Add"/>
 	</form>
 

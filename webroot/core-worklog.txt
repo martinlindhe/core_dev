@@ -1,5 +1,5 @@
 ----[[platform todo]]----
-	hög prio:
+	core/gör snart:
 		- skins support: låt user kunna välja ett skin (dropdownlista + tblSettings save) av flera,
 		 	vilket sätter en specifik css för usern, som sätter utseende på blog, news, etc
 		- gör ett default-tema (måste dela upp functions.css i två filer)
@@ -22,7 +22,7 @@
 		- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
 			"Gillar du fisk? JA/NEJ"
 			"Brukar du motionera? JA/NEJ/IBLAND"
-		- via admin kunna schemalägga användaromröstningar, start&slut-tid
+		- via admin kunna schemalägga användaromröstningar, start&slut-tid (veckans fråga / dagens fråga)
 		- fler-fråge-formulär med blandade multival och fritext-fält
 
 
@@ -30,10 +30,14 @@
 		- delete news funkar ej för att confirmed() skickar fel parametrar
 
 
+	kategorier (atom_categories.php):
+		- använd makeNewCategoryDialog() för att skapa dialog för att skapa userdata-kategorier
+		- gör så att man kan ändra namn och radera kategorier från makeNewCategoryDialog()
+
+
 	admin:
 		- userdata fält:
 			* spara userdata i tblSettings, visa tillgängliga inputfält under settings.php
-			* går ej radera userdatafält options från admin
 			
 		- moderation:
 			* kunna knyta admin-kommentarer till enskild användare
@@ -92,7 +96,7 @@
 		- admin: möjlighet att radera ett band
 
 	ajax chat:
-		- integrera i core vid nåt tillfälle (blized vill ha)
+		- integrera i core vid nåt tillfälle (blized)
 
 --[[todo legend]]--
 X = hi prio task
@@ -107,7 +111,8 @@ X = hi prio task
 	- admin moderation: gjort så att REPORTED / TRIGGERED är ett extra värde istället för en typ av modereringsobjekt
 	- db: tblRatings - ny tabell för atom_ratings.php
 	- news: implementerat news rating
-
+	- admin userdata: gick ej radera/ändra userdatafält options från admin
+	- categories: lite cleanup
 
 2007.05.15:
 	- spider: nytt projekt, genomför en automatisk userdata input audit av en webbsajt

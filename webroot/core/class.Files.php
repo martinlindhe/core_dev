@@ -163,7 +163,7 @@ class Files
 
 		//Visar kategorier / kataloger
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
-			echo getCategoriesSelect(CATEGORY_USERFILE, '', $categoryId, 'file_gadget_category_id');
+			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, 'file_gadget_category_id');
 		}
 
 		//select the files in the current category (or root level for uncategorized files)

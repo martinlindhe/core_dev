@@ -30,7 +30,7 @@
 	echo '<textarea name="body" cols="60" rows="16"></textarea><br/>';
 
 	echo 'Choose category: ';
-	echo getCategoriesSelect(CATEGORY_NEWS, 'news_cat').'<br/>';
+	echo getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat').'<br/>';
 
 	echo '<input name="rss" id="rss_check" type="checkbox" class="checkbox" value="1" checked="checked"/>';
 	echo '<label for="rss_check">';

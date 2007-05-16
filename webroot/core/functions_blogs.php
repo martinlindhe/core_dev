@@ -179,7 +179,7 @@
 			echo '<input type="text" name="blog_title" value="'.$blog['blogTitle'].'" size="40" maxlength="40"/>';
 
 			echo ' Category: ';
-			echo getCategoriesSelect(CATEGORY_BLOG, 'blog_cat', $blog['categoryId']);
+			echo getCategoriesSelect(CATEGORY_BLOG, 0, 'blog_cat', $blog['categoryId']);
 			echo '<br/><br/>';
 
 			$body = trim($blog['blogBody']);
