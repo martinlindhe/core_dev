@@ -247,7 +247,7 @@ class Session
 		global $db;
 
 		$this->log('User logged out', LOGLEVEL_NOTICE);
-		$db->query('UPDATE tblUsers SET timeLastLogout=NOW()');
+		$db->query('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this->id);
 
 		$this->started = 0;
 		$this->username = '';

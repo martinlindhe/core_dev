@@ -81,8 +81,7 @@
 	$list = getUserdataFields();
 
 	foreach ($list as $row) {
-		echo '<table bgcolor="#FFFFFF">';
-		echo '<tr><td width="38%" valign="top">';
+		echo '<div class="item">';
 
 		$prio = $row['fieldPriority'];
 		$prio_up = $prio-1;
@@ -99,21 +98,11 @@
 
 		if ($row['allowTags']) echo 'May contain HTML<br/>';
 		if ($row['regRequire']) echo 'Require at registration<br/>';
-		if ($row['private']) echo 'Private field';
-		echo '</td>';
+		if ($row['private']) echo 'Private field<br/>';
 
-		echo '<td valign="top">'.getUserdataInput($row).'</td>';
+		echo getUserdataInput($row);
 
-		echo '</tr>';
-		echo '</table>';
-		echo '<br/>';
-	}
-
-	if (isset($_GET['change'])) {
-		$changeId = $_GET['change'];
-		echo '<form name="admin_userdata" method="post" action="?change='.$changeId.getProjectPath().'">';
-	} else {
-		echo '<form name="admin_userdata" method="post" action="?mode=create'.getProjectPath().'">';
+		echo '</div><br/>';
 	}
 
 	if (isset($_GET['change'])) {
@@ -128,27 +117,26 @@
 		$fieldName = '';
 	}
 
-	echo '<table bgcolor="#FFFFFF">';
-	echo '<tr><td colspan=3><b>'.$header.'</b><br/></td></tr>';
-	echo '<tr><td>Field name</td>';
-	echo '<td>';
-		echo '<input type="text" name="fieldname" value="'.$fieldName.'" maxlength="30"/>';
-	echo '</td>';
-	echo '<td>';
-		echo '<input type="checkbox" name="regrequire" id="regrequire" value="1" class="checkbox"'.(!empty($data['regRequire'])?' checked="checked"':'').'/>';
-		echo ' <label for="regrequire">Require at registration</label>';
-	echo '</td></tr>';
+	echo '<div class="item">';
 
-	/* Visa bara alternativet för textfält vid ändring */
-	if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
-		echo '<tr><td>Default value</td>';
-		echo '<td colspan=2>';
-		echo '<input type="text" name="fielddefault" value="'.$data['fieldDefault'].'"/>';
-		echo '</td></tr>';
-	}
+		if (isset($_GET['change'])) {
+			echo '<form name="admin_userdata" method="post" action="?change='.$_GET['change'].getProjectPath().'">';
+		} else {
+			echo '<form name="admin_userdata" method="post" action="?mode=create'.getProjectPath().'">';
+		}
 
-	echo '<tr><td>Type</td><td>';
-	echo '<select name="fieldtype">';
+		echo '<b>'.$header.'</b><br/>';
+		echo 'Field name:';
+		echo '<input type="text" name="fieldname" value="'.$fieldName.'" maxlength="30"/><br/>';
+
+		/* Visa bara alternativet för textfält vid ändring */
+		if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
+			echo 'Default value:<br/>';
+			echo '<input type="text" name="fielddefault" value="'.$data['fieldDefault'].'"/><br/>';
+		}
+
+		echo 'Type: ';
+		echo '<select name="fieldtype">';
 		echo '<option value="'.USERDATA_TYPE_TEXT.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXT)			echo ' selected'; echo '>Text';
 		echo '<option value="'.USERDATA_TYPE_TEXTAREA.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXTAREA)	echo ' selected'; echo '>Textarea';
 		echo '<option value="'.USERDATA_TYPE_CHECKBOX.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_CHECKBOX)	echo ' selected'; echo '>Checkbox';
@@ -156,55 +144,42 @@
 		echo '<option value="'.USERDATA_TYPE_SELECT.		'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)		echo ' selected'; echo '>Dropdown-lista';
 		echo '<option value="'.USERDATA_TYPE_IMAGE.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)			echo ' selected'; echo '>Bild';
 		echo '<option value="'.USERDATA_TYPE_DATE.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_DATE)			echo ' selected'; echo '>Datum-f&auml;lt';
-	echo '</select>';
-	echo '</td>';
+		echo '</select>';
+		echo '<br/>';
 
-	/* Visa bara alternativet för textfält vid ändring */
-	if (!isset($_GET['change']) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
-		echo '<td>';
-		echo '<input type="checkbox" name="allowhtml" id="allowhtml" value="1" class="checkbox"'.(!empty($data['allowTags'])?' checked="checked"':'').'/>';
-		echo ' <label for="allowhtml">May contain HTML</label>';
-		echo '</td>';
-	} else {
-		echo '<td>&nbsp;</td>';
-	}
-	echo '</tr>';
+		echo '<input type="checkbox" name="regrequire" id="regrequire" value="1" class="checkbox"'.(!empty($data['regRequire'])?' checked="checked"':'').'/>';
+		echo ' <label for="regrequire">Require at registration</label>';
+		echo '<br/>';
 
-	echo '<tr>';
-	echo '<td colspan=3>';
-		echo '<input name="fieldprivate" type="hidden" value="0"/>';
-		echo '<input name="fieldprivate" id="fieldprivate" type="checkbox" class="checkbox" value="1"'.(!empty($data['private'])?' checked="checked"':'').'/>';
-		echo ' <label for="fieldprivate">Make field private</label>';
-	echo '</td></tr>';
-
-	if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT))) {
-		echo '<tr><td colspan=3>&nbsp;</td></tr>';
-		$list = getCategoriesByOwner(CATEGORY_USERDATA, $data['fieldId']);
-		echo '<tr><td valign="top" colspan=3>Current options ('.count($list).' st)</td></tr>';
-
-		foreach($list as $row) {
-			echo '<tr>';
-			echo '<td>&nbsp;</td>';
-			echo '<td>';
-			echo '<input type="text" name="change_'.$row['categoryId'].'" value="'.$row['categoryName'].'"/>';
-			echo '</td>';
-			echo '<td>';
-			echo '<input type="checkbox" name="delete_'.$row['categoryId'].'" id="delete_'.$row['categoryId'].'" value="1" class="checkbox"/>';
-			echo '<label for="delete_'.$row['categoryId'].'">Delete</label>';
-			echo '</td>';
-			echo '</tr>';
+		/* Visa bara alternativet för textfält vid ändring */
+		if (!isset($_GET['change']) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
+			echo '<input type="checkbox" name="allowhtml" id="allowhtml" value="1" class="checkbox"'.(!empty($data['allowTags'])?' checked="checked"':'').'/>';
+			echo ' <label for="allowhtml">May contain HTML</label><br/>';
 		}
 
-		echo '<tr><td>Add</td>';
-		echo '<td colspan=2>';
+		echo '<input name="fieldprivate" type="hidden" value="0"/>';
+		echo '<input name="fieldprivate" id="fieldprivate" type="checkbox" class="checkbox" value="1"'.(!empty($data['private'])?' checked="checked"':'').'/>';
+		echo ' <label for="fieldprivate">Make field private</label><br/>';
+
+	if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT))) {
+
+		$list = getCategoriesByOwner(CATEGORY_USERDATA, $data['fieldId']);
+		echo 'Current options ('.count($list).' options)<br/>';
+
+		foreach($list as $row) {
+			echo '<input type="text" name="change_'.$row['categoryId'].'" value="'.$row['categoryName'].'"/> ';
+			echo '<input type="checkbox" name="delete_'.$row['categoryId'].'" id="delete_'.$row['categoryId'].'" value="1" class="checkbox"/>';
+			echo '<label for="delete_'.$row['categoryId'].'">Delete</label><br/>';
+		}
+
+		echo 'Add:<br/>';
 		echo '<input type="text" name="optionname"/>';
-		echo '</td></tr>';
 	}
 
-	echo '<tr><td colspan=3><input type="submit" class="button" value="'.$submit.'"/></td></tr>';
-	echo '</table>';
+	echo '<input type="submit" class="button" value="'.$submit.'"/>';
 
 	echo '</form>';
+	echo '</div>';
 
 	require($project.'design_foot.php');
 ?>

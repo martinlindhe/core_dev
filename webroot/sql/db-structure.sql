@@ -411,6 +411,8 @@ CREATE TABLE tblBlogs (
   categoryId bigint(20) unsigned NOT NULL default '0',
   deletedBy int(10) unsigned NOT NULL default '0',
   timeDeleted datetime default NULL,
+  rating tinyint(3) unsigned NOT NULL default '0',
+  ratingCnt int(10) unsigned NOT NULL,
   PRIMARY KEY  (blogId)
 ) ENGINE=MyISAM AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 CREATE TABLE tblCategories (
@@ -458,7 +460,7 @@ CREATE TABLE tblFiles (
   timeUploaded datetime NOT NULL,
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 CREATE TABLE tblGuestbooks (
   userId bigint(20) unsigned NOT NULL default '0',
   authorId bigint(20) unsigned NOT NULL default '0',
@@ -479,7 +481,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -488,7 +490,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 CREATE TABLE tblModerationQueue (
   queueId bigint(20) unsigned NOT NULL auto_increment,
   queueType tinyint(3) unsigned NOT NULL default '0',
@@ -522,7 +524,7 @@ CREATE TABLE tblRatings (
   rating tinyint(3) unsigned NOT NULL default '0',
   timeRated datetime default NULL,
   PRIMARY KEY  (rateId)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 CREATE TABLE tblRevisions (
   indexId int(10) unsigned NOT NULL auto_increment,
   fieldId bigint(20) unsigned NOT NULL,
@@ -541,7 +543,7 @@ CREATE TABLE tblSettings (
   settingType tinyint(3) unsigned NOT NULL,
   timeSaved datetime NOT NULL,
   PRIMARY KEY  (settingId)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 CREATE TABLE tblStatistics (
   entryId bigint(20) unsigned NOT NULL auto_increment,
   `time` datetime default NULL,

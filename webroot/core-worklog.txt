@@ -7,7 +7,6 @@
 
 	session/userdata settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
-		- low prio: ajax för att spara ändringar i $session->editSettings()
 
 
 	blog:
