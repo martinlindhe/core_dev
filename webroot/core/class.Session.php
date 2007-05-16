@@ -367,10 +367,7 @@ class Session
 				$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 			}
 			echo '<div id="edit_setting_div_'.$row['fieldId'].'">';
-			
 			echo getUserdataInput($row);
-			
-			//echo '<img src="/gfx/icon_delete.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].');"/>';
 			echo '</div>';
 		}
 		echo '<input type="submit" class="button" value="Save"/>';

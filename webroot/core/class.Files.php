@@ -27,12 +27,12 @@ class Files
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
 	//fixme: sluta använd filändelser, och använd bara mime typer
-	protected $image_types	= array('jpg', 'jpeg', 'png', 'gif');
-	protected $image_mime_types = array('image/jpeg', 'image/png', 'image/gif');
-	protected $audio_types	= array('mp3');
-	protected $video_types = array('avi', '3gp');
+	public $image_types	= array('jpg', 'jpeg', 'png', 'gif');
+	public $image_mime_types = array('image/jpeg', 'image/png', 'image/gif');
+	public $audio_types	= array('mp3');
+	public $video_types = array('avi', '3gp');
 
-	protected $document_types = array(
+	public $document_types = array(
 							'text/plain',					//normal text file
 							'application/msword',	//Microsoft .doc file
 							'application/pdf');		//Adobe .pdf file

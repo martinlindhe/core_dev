@@ -458,7 +458,7 @@ CREATE TABLE tblFiles (
   timeUploaded datetime NOT NULL,
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 CREATE TABLE tblGuestbooks (
   userId bigint(20) unsigned NOT NULL default '0',
   authorId bigint(20) unsigned NOT NULL default '0',
@@ -532,7 +532,7 @@ CREATE TABLE tblRevisions (
   timeCreated datetime NOT NULL,
   categoryId tinyint(3) unsigned NOT NULL,
   PRIMARY KEY  (indexId)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 CREATE TABLE tblSettings (
   settingId bigint(20) unsigned NOT NULL auto_increment,
   ownerId smallint(5) unsigned NOT NULL default '0',

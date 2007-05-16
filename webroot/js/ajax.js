@@ -73,33 +73,6 @@ function hide_ajax_anim() { hide_element_by_name('ajax_anim'); }
 //todo: försök kom på ett mer standardiserat interface till GET-funktionen så att mindre sådan här init&callback kod behövs
 
 
-var delete_request = null;
-function perform_ajax_delete_uservar(id)
-{
-	delete_request = new AJAX();
-	delete_request.GET('/core/ajax_del_uservar.php?i='+id+_ext_ref, ajax_delete_uservar_callback, id);
-
-	//uses callback function to only display animated icon if request isnt already completed in 20ms
-	//this removes the flickering display of animated image if you have very low response times
-	setTimeout("show_ajax_anim()", 20);
-}
-
-function ajax_delete_uservar_callback(id)
-{
-	if (!delete_request.ResultReady()) return;
-
-	if (!delete_request.EmptyResponse('ok')) {
-		var e = document.getElementById('ajax_anim_pic');
-		e.setAttribute('src', '/gfx/icon_warning_big.png');
-		e.setAttribute('title', 'Database error');
-		return;
-	}
-
-	hide_element_by_name('edit_setting_div_'+id);
-	hide_ajax_anim();
-	delete_request = null;
-}
-
 
 //Sends an AJAX call to delete specified file
 var delete_file_request = null;

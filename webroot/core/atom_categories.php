@@ -139,7 +139,7 @@
 	{
 		global $config;
 
-		if (!is_numeric($_type) || !is_numeric($_owner) || !is_numeric($selectedId)) return false;
+		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 		if (!$selectName) $selectName = 'default';
 		$content = '<select name="'.strip_tags($selectName).'">';

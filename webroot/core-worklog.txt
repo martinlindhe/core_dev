@@ -8,7 +8,6 @@
 	session/userdata settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
 		- low prio: ajax för att spara ändringar i $session->editSettings()
-		- kommenterat bort js som anropade ajax-delete setting. ska den funktionen tas bort helt?
 		- accessnivåer, kanske ta bort nån och byta namn på dom:
 			"show for everyone": visas på profilsidan för andra
 			"show for admin & user": t.ex email, som används för att skicka lösenord-påminnelse och annat,men som i övrigt ska hållas privat
@@ -18,6 +17,7 @@
 					checkbox: HAS BEEN TEMPORARY BANNED
 					
 					behövs detta om man implementerar admin-log koppliad till enskild user?
+					gör om det till: PUBLIC / PRIVATE checkbox
 
 
 	blog:
@@ -122,6 +122,8 @@ X = hi prio task
 	- admin userdata: gick ej radera/ändra userdatafält options från admin
 	- categories: lite cleanup
 	- visar userdata-fält vid registerrutan
+	- tog bort ajax-delete uservar-funktionen, den fyller inte rätt syfte
+
 
 2007.05.15:
 	- spider: nytt projekt, genomför en automatisk userdata input audit av en webbsajt
