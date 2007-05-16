@@ -1,11 +1,18 @@
 * Wikis
 	- "En_artikel" och "En artikel" måste hanteras som densamma
 
+
 * Unicode-support
 	- Currently requires PHP 5.2.2 (current) or older to be configured with:
 		mbstring.func_overload = 2
 		or similar, to turn on mb function overloading for str* functions
 		PHP 6 will come with full unicode support in the core, so hopefully this can be deprecated soon
+
+
+* Cellphones
+	- Some (older) cellphones have trouble interpreting <form> tags with an empty action="",
+		For example the phone model XXX (kianos)
+
 
 * Multi-project server space sharing
 	- To enable the same core and admin code work seamlessly over multiple projects,

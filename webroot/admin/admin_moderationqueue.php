@@ -66,7 +66,7 @@
 					break;
 			}
 
-			echo '<table width="100%"><tr><td width="50%">';
+			echo '<table summary="" width="100%"><tr><td width="50%">';
 			echo '<input type="radio" class="radio" name="method_'.$row['queueId'].'" id="accept_'.$row['queueId'].'" value="accept"/>';
 			echo '<label for="accept_'.$row['queueId'].'"> Accept</label>';
 			echo '</td>';

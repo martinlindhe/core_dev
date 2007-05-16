@@ -90,35 +90,41 @@
 		* alla anmälningar sparas, men markeras som behandlade
 		* gjort så att REPORTED / TRIGGERED är ett extra värde istället för en typ av modereringsobjekt
 
+	webbgränssnittet:
+		* visar olästa brev markerat med fet text i titeln
+		* forum - "skriv inlägg" knapp visas på toppen av en tråd istället för flera i tråden
+		* ny design: resultatet av "glömt lösenord"-sidan
+		* ny design: resultatet av felaktig login
+		* galleriet: högerklick-skyddar kopiering av bilder (fungerar endast i Internet Explorer)
 
+	mobila gränssnittet:
+		* profil: visar ej fakta som ej är besvarade
+		* gjort en ny funktion som visar username + kön + ålder + onlinestatus för mobiler, används överallt där användarnamn visas
+		* gjort symboler för "MAN" och "KVINNA" för mobilen
+		* gjort symboler "pil framåt", "pil bakåt" för mobilen
+		* centrerat text på gästboken, mail
+		* visar felmeddelande (röd text) vid felaktig inlogg på login-sidan
+		* ändrade "Page 1 of 3" till svenska..
+		* vänster-alignat text på en mängd med sidor
+		* gjort några nya ikoner
 
 ***********************************************************************************************************************************
 topp prio:
 
 	* NU:
-		forum - "skriv inlägg" knapp på toppen av en tråd istället för flera i tråden
+		online/offline visning i mobila gränssnittet
 		maila kiano functions_ratings.php som ska användas
-		resultatet av "glömt lösenord"-sidan ska ha ny design
-		resultatet av felaktig login ska ha ny design
-		
-
 
 	* mms upload image & video:
-		- hantera "BLOG" och "PRES" kommandon
+		- hantera "BLOG" och "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
 		- plocka fram videoupplösningen när videon laddas upp
 		- alla ska ha mms funktion (vip) under testet
 
-	* senare: max 7 tecken i användarnamnet
-	
 	* hitta mysql-prestanda-utbildningar
-	
+
 	* kika efter lastbalans-test mjukvara, mika "apache-flood", martin "webload" eller "siege"
 
-	* galleriet:
-		- SENARE: högerklick-skydda bilder
-
 	* profilsida:
-		- SENARE: anmäl användare-funktion
 		- FRANS: länk till vän med bild funkar ej för alla
 
 	* process server:
@@ -126,27 +132,18 @@ topp prio:
 
 senare under betatestet, slutet av maj:
 	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
-
 	* EFTER BETA: bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
+	* SENARE/efter beta: anmäl användare-funktion
 
-allmänt mobila gränssnittet:
-
-	- en funktion som skapar snygga användarnamn+ålder+kön-länkar för mobilen
-		* ta bort $user->getstringMobile() ??? eller skriv om den iaf
-
+senare, låg prio:
 	- paging för sök användare-resultat. kräver en performSearchCnt() funktion samt lite omstrukturering i performSearch()
+	- max 7 tecken i användarnamnet (går ej pga alla existerande användare med långa namn)
 
 ***********************************************************************************************************************************
-databasen:
-	s_userchat = för quickchat meddelanden
-
-
-databas-förändringar:
-	s_obj.content_more satt till default NULL
-	s_obj.sender_id satt till default NULL
-	s_userrelquest.deleted_id satt till default NULL
-	s_usergb.deleted_id satt till default value: 0
-
 
 testkonton:
 	tresexti.se: paradox,martin    samt   martin666,test1
+	
+	
+	LG U880 - form action="" problem
+	Sony Ericsson

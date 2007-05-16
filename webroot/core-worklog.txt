@@ -14,13 +14,18 @@
 		- implementera godkännande av relation
 		- implementera "välj typ av relation" när man skickar bli-vän förfrågan
 
+	rating/vote (atom_ratings.php):
+		- nyheter: kunna ge sin rating på kvalitén (t.ex 1-10)
+  	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt,
+  			tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
+  	- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
+  		"Gillar du fisk? JA/NEJ"
+  		"Brukar du motionera? JA/NEJ/IBLAND"
+		- via admin kunna schemalägga användaromröstningar, start&slut-tid
 
 
 	news modul:
 		- delete news funkar ej för att confirmed() skickar fel parametrar
-		- vote på kvalitén (eller "rating")
-  		* Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt,
-  			tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
 
 
 	admin:
