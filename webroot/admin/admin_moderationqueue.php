@@ -1,6 +1,4 @@
 <?
-	//todo: städa upp, färre switch:ar
-
 	require_once('find_config.php');
 
 	$session->requireAdmin();
@@ -9,10 +7,11 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
+	$changed_list = false;
 	$list = getModerationQueue();
-		
 	foreach ($list as $row) {
 		if (!isset($_POST['method_'.$row['queueId']])) continue;
+		$changed_list = true;
 
 		if ($_POST['method_'.$row['queueId']] == 'accept') {
 			/* Accepts forum item and removes it from queue */
@@ -21,21 +20,21 @@
 			continue;
 		}
 
-		switch ($list[$i]['queueType']) {
-			case MODERATION_SENSITIVE_GUESTBOOK:
+		switch ($row['queueType']) {
+			case MODERATION_GUESTBOOK:
 				removeGuestbookEntry($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
 				break;
 
-			case MODERATION_REPORTED_BLOG:
-			case MODERATION_SENSITIVE_BLOG:
+			case MODERATION_BLOG:
 				deleteBlog($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
 				break;
 		}
 	}
 
-	$list = getModerationQueue();	//fixme: paging support
+	if ($changed_list) $list = getModerationQueue();	//fixme: paging support
+
 	if (count($list)) {
 		
 		echo 'Displaying '.count($list).' object(s) in the moderation queue. Showing oldest items first.<br/><br/>';
@@ -45,26 +44,25 @@
 		foreach ($list as $row) {
 			echo '<div class="item">';
 
-			$title = 'STATUS: ';
 			switch ($row['queueType']) {
-				case MODERATION_SENSITIVE_GUESTBOOK:$title .= 'Auto trigger: Sensitive guestbook'; break;
-				case MODERATION_REPORTED_BLOG:			$title .= 'Reported blog'; break;
-				case MODERATION_SENSITIVE_BLOG:			$title .= 'Auto trigger: Sensitive blog'; break;
-				default: $title .= '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
+				case MODERATION_GUESTBOOK:$title = 'Guestbook entry'; break;
+				case MODERATION_BLOG:			$title = 'Blog'; break;
+				default: $title = '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 			}
-			echo '<div class="item_head">'.$title.'</div>';
+			echo '<div class="item_head">'.$title;
+			if ($row['autoTriggered']) echo ' (auto-triggered)';
+			echo '</div>';
 			
-			echo 'Triggered by '.getUserName($row['creatorId']).' at '.$row['timeCreated'].'<br/>';
+			echo 'By '.$row['creatorName'].' at '.$row['timeCreated'].'<br/>';
 
 			switch ($row['queueType']) {
-				case MODERATION_SENSITIVE_GUESTBOOK:
+				case MODERATION_GUESTBOOK:
 					$gb = getGuestbookItem($row['itemId']);
-					echo '<a href="'.$project.'guestbook.php?id='.$gb['userId'].'#gb'.$row['itemId'].'" target="_blank">Read the entry</a>';
+					echo '<a href="'.$project.'guestbook.php?id='.$gb['userId'].getProjectPath().'#gb'.$row['itemId'].'" target="_blank">Read the entry</a>';
 					break;
-				
-				case MODERATION_REPORTED_BLOG:
-				case MODERATION_SENSITIVE_BLOG:
-					echo '<a href="'.$project.'blog_show.php?Blog:'.$row['itemId'].'" target="_blank">Read the blog</a>';
+
+				case MODERATION_BLOG:
+					echo '<a href="'.$project.'blog.php?Blog:'.$row['itemId'].getProjectPath().'" target="_blank">Read the blog</a>';
 					break;
 			}
 
@@ -77,9 +75,7 @@
 			echo '<label for="delete_'.$row['queueId'].'"> Delete</label>';
 			echo '</td></tr></table>';
 
-			if (
-					($row['queueType'] == MODERATION_REPORTED_BLOG)
-			) {
+			if (!$row['autoTriggered']) {
 				$mcnt = getCommentsCount(COMMENT_MODERATION_QUEUE, $row['queueId']);
 				if ($mcnt) {
 					echo '<a href="admin_moderationqueuecomments.php?id='.$row['queueId'].getProjectPath().'">Motivations ('.$mcnt.')</a>';

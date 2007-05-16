@@ -17,10 +17,10 @@
 	//define('MODERATION_OBJECTIONABLE_POST',		2);
 	//define('MODERATION_SENSITIVE_POST',				3);
 	//define('MODERATION_REPORTED_USER',				10);
-	define('MODERATION_SENSITIVE_GUESTBOOK',	11);	//itemId = tblGuestbook.entryId
 	//define('MODERATION_REPORTED_PHOTO',				12);
-	define('MODERATION_REPORTED_BLOG',				13);
-	define('MODERATION_SENSITIVE_BLOG',				14);
+
+	define('MODERATION_GUESTBOOK',	11);	//itemId = tblGuestbook.entryId
+	define('MODERATION_BLOG',				13);
 
 
 	/* Stopwords */
@@ -175,17 +175,18 @@
 	}
 
 	/* Adds the forum item $itemId to the moderation queue tagged with reason $queueType */
-	function addToModerationQueue($queueType, $itemId)
+	function addToModerationQueue($queueType, $itemId, $auto_triggered = false)
 	{
 		global $db, $session;
 
-		if (!is_numeric($itemId) || !is_numeric($queueType)) return false;
+		if (!is_numeric($itemId) || !is_numeric($queueType) || !is_bool($auto_triggered)) return false;
+		if ($auto_triggered != '1') $auto_triggered = 0;
 
-		$q = 'SELECT queueId FROM tblModerationQueue WHERE itemId='.$itemId.' AND queueType='.$queueType;
+		$q = 'SELECT queueId FROM tblModerationQueue WHERE itemId='.$itemId.' AND queueType='.$queueType.' AND autoTriggered='.$auto_triggered;
 		$queueId = $db->getOneItem($q);
 		if ($queueId) return $queueId;
 
-		$q = 'INSERT INTO tblModerationQueue SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',timeCreated=NOW()';
+		$q = 'INSERT INTO tblModerationQueue SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
 		$db->query($q);
 		return $db->insert_id;
 	}
@@ -194,7 +195,10 @@
 	{
 		global $db;
 
-		$q = 'SELECT * FROM tblModerationQueue ORDER BY timeCreated ASC';
+		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblModerationQueue AS t1 ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'WHERE t1.moderatedBy=0 ORDER BY t1.timeCreated ASC';
+
 		return $db->getArray($q);
 	}
 	
@@ -219,26 +223,12 @@
 	/* Removes the specified queue-id from the moderation queue */
 	function removeFromModerationQueue($queueId)
 	{
-		global $db;
+		global $db, $session;
 
-		if (!is_numeric($queueId)) return false;
+		if (!$session->isAdmin || !is_numeric($queueId)) return false;
 
-		$q = 'DELETE FROM tblModerationQueue WHERE queueId='.$queueId;
+		$q = 'UPDATE tblModerationQueue SET moderatedBy='.$session->id.',timeModerated=NOW() WHERE queueId='.$queueId;
 		$db->query($q);
 	}
 
-	/* Removes both moderation queue and comments entry */
-	function removeFromModerationQueueByItemId($itemId, $queueType)	//fixme: parameter order: $queueType, $itemId
-	{
-		global $db;
-
-		if (!is_numeric($itemId) || !is_numeric($queueType)) return false;
-
-		$q = 'SELECT queueId FROM tblModerationQueue WHERE itemId='.$itemId.' AND queueType='.$queueType;
-		$queueId = $db->getOneItem($q);
-		if (!$queueId) return false;
-
-		removeFromModerationQueue($queueId);
-		deleteComments(COMMENT_MODERATION_QUEUE, $queueId);
-	}
 ?>

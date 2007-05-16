@@ -57,7 +57,9 @@
 	} else {
 		//Version string come in this form: Apache/2.2.4 (Win32)
 		if (substr($current_apache, 0, 7) == 'Apache/') $current_apache = substr($current_apache, strlen('Apache/'));
-		echo 'Apache web server version: '.$current_apache.' '.(version_compare_array($supported_apache, $current_apache)?'<span class="okay">OK</span>':'<span class="critical">NOT TESTED</span>').'<br/>';
+		echo version_compare_array($supported_apache, $current_apache);
+		echo 'Apache web server version: '.$current_apache.'</div>';
+		
 	}
 	echo '<br/>';
 

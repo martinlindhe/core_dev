@@ -25,11 +25,11 @@
 	}
 
 	if ($session->id) {
-		$menu = array(
-			'?logout' => 'Log out'
-		);
-		createMenu($menu);
+		$menu = array('?logout' => 'Log out');
+	} else {
+		$menu = array('?login' => 'Log in');
 	}
+	createMenu($menu);
 ?>
 </div>
 

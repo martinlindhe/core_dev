@@ -21,7 +21,7 @@
 
 		/* Add entry to moderation queue */
 		if ($config['blog']['moderation']) {
-			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_SENSITIVE_BLOG, $blogId);
+			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_BLOG, $blogId, true);
 		}
 
 		return $blogId;
@@ -51,7 +51,7 @@
 
 		/* Add entry to moderation queue */
 		if ($config['blog']['moderation']) {
-			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_SENSITIVE_BLOG, $blogId);
+			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_BLOG, $blogId, true);
 		}
 	}
 
@@ -211,7 +211,7 @@
 		} else if ($current_tab == 'BlogReport') {
 
 			if (isset($_POST['blog_reportreason'])) {
-				$queueId = addToModerationQueue(MODERATION_REPORTED_BLOG, $_id);
+				$queueId = addToModerationQueue(MODERATION_BLOG, $_id);
 				addComment(COMMENT_MODERATION_QUEUE, $queueId, $_POST['blog_reportreason']);
 
 				echo 'Your report has been recieved<br/>';

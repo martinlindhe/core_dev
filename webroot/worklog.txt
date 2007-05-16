@@ -81,16 +81,19 @@
 	webbgränssnittet:
 		* system-mailet på forumbevakningar visar nu forum-titeln i texten
 		* visar info-text på profiluppladdsidan om att man kan ladda upp en ny bild för granskning
+		* skissat upp & diskuterat hur modererings-gränssnittet ska se ut
+
+2007.05.16 Onsdag:
+	adminpanel:
+		* adminpanel som listar alla anmälningar (översikt)
+		* möjlighet för admin att godkänna/ta bort från översikten
+		* alla anmälningar sparas, men markeras som behandlade
+		* gjort så att REPORTED / TRIGGERED är ett extra värde istället för en typ av modereringsobjekt
+
+
 
 ***********************************************************************************************************************************
 topp prio:
-
-	* anmälningar/abuse:
-		- adminpanel som listar alla anmälningar (översikt)
-		- möjlighet för admin att godkänna/ta bort från översikten
-		- alla anmälningar sparas, men markeras som behandlade
-		- senare: kunna knyta admin-kommentarer till enskild användare
-
 
 	* NU:
 		forum - "skriv inlägg" knapp på toppen av en tråd istället för flera i tråden

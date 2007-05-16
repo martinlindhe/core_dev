@@ -18,9 +18,7 @@
 		$entryId = $db->insert_id;
 
 		/* Add entry to moderation queue */
-		if (isSensitive($subject) || isSensitive($body)) {
-			addToModerationQueue(MODERATION_SENSITIVE_GUESTBOOK, $entryId);
-		}
+		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_GUESTBOOK, $entryId, true);
 	}
 	
 	function removeGuestbookEntry($entryId)

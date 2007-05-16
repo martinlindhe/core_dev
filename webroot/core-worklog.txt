@@ -27,6 +27,9 @@
 		- userdata fält:
 			* spara userdata i tblSettings, visa tillgängliga inputfält under settings.php
 			* går ej radera userdatafält options från admin
+			
+		- moderation:
+			* kunna knyta admin-kommentarer till enskild användare
 	
 		- visa statistik i adminpanelen (admin_statistics.php):
 			* visa ett diagram månadsvis. som visar två staplar, en för registreringar, en för inloggningar
@@ -85,6 +88,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.16:
+	- admin: admin_events sql optimering
+	- db: tblModerationQueue.autoTriggered added
+	- admin moderation: alla anmälningar sparas, men markeras som behandlade
+	- admin moderation: gjort så att REPORTED / TRIGGERED är ett extra värde istället för en typ av modereringsobjekt
+
 2007.05.15:
 	- spider: nytt projekt, genomför en automatisk userdata input audit av en webbsajt
 
