@@ -96,11 +96,9 @@ class Session
 
 		//Check for login/logout requests
 		if (!$this->id && isset($_GET['login'])) {
-			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']))
+			//POST to any page with 'login_usr' & 'login_pwd' variables set to log in
+			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']) && $this->logIn($_POST['login_usr'], $_POST['login_pwd']))
 			{
-				//POST to any page with 'usr' & 'pwd' variables set to log in
-				$this->logIn($_POST['login_usr'], $_POST['login_pwd']);
-
 				//See what IP checking policy that will be in use for the session
 				if (!empty($_POST['login_lock_ip'])) $this->check_ip = true;
 				else $this->check_ip = false; 

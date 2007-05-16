@@ -1,8 +1,10 @@
 <?
 	require_once('atom_comments.php');		//for news comment support
 	require_once('atom_categories.php');	//for news categories support
+	require_once('atom_rating.php');			//for news rating support
 
 	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsNewCategory', 'NewsComment', 'NewsFiles');
+	$config['news']['allow_rating'] = true;	//allow users to rate articles
 
 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 	{
@@ -115,6 +117,7 @@
 		echo 'By '.$news['creatorName'].', published '.$news['timeToPublish'].'<br/>';
 		if ($news['editorId']) echo '<i>Updated '.$news['timeEdited'].' by '.$news['editorName'].'</i><br/>';
 		echo '</div>'; //class="news_top"
+		echo '<br/>';
 
 		if ($session->isAdmin) {
 			/*
@@ -181,6 +184,13 @@
 			$art = parseArticle($news['body']);
 			if ($art['head']) echo '<div class="news_head">'.$art['head'].'</div>';
 			echo '<div class="news_body">'.$art['body'].'</div>';
+			
+			if ($config['news']['allow_rating']) {
+				echo '<br/>';
+				echo '<div class="news_rate">';
+				echo ratingGadget(RATE_NEWS, $_id);
+				echo '</div>';
+			}
 		}
 
 		echo '</div>'; //class="news"
@@ -204,9 +214,7 @@
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
 			echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a>, published '.$row['timeToPublish'];
-			if ($row['categoryId']) {
-				echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName($row['categoryId']).'</a>';
-			}
+			if ($row['categoryId']) echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName($row['categoryId']).'</a>';
 			echo '<br/>';
 
 			$art = parseArticle($row['body']);

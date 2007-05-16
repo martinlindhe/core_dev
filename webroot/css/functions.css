@@ -31,6 +31,11 @@ input.button:focus {
 	background: #fff;
 }
 
+select {
+	border:1px solid #888;
+	color: #000;
+}
+
 /* holder for file gadget, contains all the other parts */
 .file_gadget {
 	width: 630px;
@@ -349,6 +354,8 @@ input.button:focus {
 .news {
 }
 .news_top {
+	-moz-border-radius-topleft:15px;
+	-moz-border-radius-bottomright:15px;	
 	background-color: #fff;
 	border: 1px #888 solid;
 	padding: 10px;
@@ -363,13 +370,22 @@ input.button:focus {
 	background-position: 100% 50%;
 }
 .news_head { /* news article heading */
+	-moz-border-radius-topleft:15px;
 	font-size: 16px;
 	font-weight: bold;
 	padding: 10px;
 	border: 1px #888 solid;
+	border-bottom: 0px;
 	background-color: #eee;
 }
 .news_body { /* news article body */
+	-moz-border-radius-bottomright:15px;
+	font-size: 12px;
+	padding: 10px;
+	border: 1px #888 solid;
+	background-color: #eee;
+}
+.news_rate {
 	font-size: 12px;
 	padding: 10px;
 	border: 1px #888 solid;

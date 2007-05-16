@@ -176,7 +176,7 @@ class DB_MySQLi extends DB_Base
 		if ($config['debug']) $time_started = microtime(true);	
 
 		if (!$result = $this->db_handle->query($q)) {
-			if ($$config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
+			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 

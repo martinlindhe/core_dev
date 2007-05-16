@@ -9,7 +9,7 @@
 
 		requires tblModerationQueue and tblStopwords
 
-		todo: this atom module has two admin pages: "moderation queue" and "edit stopwords"
+		Admin: this atom module has two admin pages: "moderation queue" and "edit stopwords"
 	*/
 
 	/* Moderation queue entry types */

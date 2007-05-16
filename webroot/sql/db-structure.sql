@@ -67,7 +67,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=674 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=677 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -479,7 +479,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -488,7 +488,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 CREATE TABLE tblModerationQueue (
   queueId bigint(20) unsigned NOT NULL auto_increment,
   queueType tinyint(3) unsigned NOT NULL default '0',
@@ -510,8 +510,19 @@ CREATE TABLE tblNews (
   categoryId int(10) unsigned NOT NULL,
   deletedBy int(10) unsigned NOT NULL default '0',
   timeDeleted datetime default NULL,
+  rating tinyint(3) unsigned NOT NULL default '0',
+  ratingCnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (newsId)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+CREATE TABLE tblRatings (
+  rateId bigint(20) unsigned NOT NULL auto_increment,
+  `type` tinyint(3) unsigned NOT NULL default '0',
+  itemId bigint(20) unsigned NOT NULL default '0',
+  userId int(10) unsigned NOT NULL default '0',
+  rating tinyint(3) unsigned NOT NULL default '0',
+  timeRated datetime default NULL,
+  PRIMARY KEY  (rateId)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 CREATE TABLE tblRevisions (
   indexId int(10) unsigned NOT NULL auto_increment,
   fieldId bigint(20) unsigned NOT NULL,

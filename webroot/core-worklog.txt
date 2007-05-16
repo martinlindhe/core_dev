@@ -8,23 +8,26 @@
 
 
 	blog:
+		- kunna ge rating på en blog
 
 
 	personlig sida:
 		- implementera godkännande av relation
 		- implementera "välj typ av relation" när man skickar bli-vän förfrågan
 
-	rating/vote (atom_ratings.php):
-		- nyheter: kunna ge sin rating på kvalitén (t.ex 1-10)
-  	- Gör en generell vote-modul som implementerar en ajax-gadget där man kan rösta på ett objekt,
-  			tillåt flera typer t.ex VOTE_NEWSITEM, VOTE_BLOGPOST
-  	- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
-  		"Gillar du fisk? JA/NEJ"
-  		"Brukar du motionera? JA/NEJ/IBLAND"
+
+	ratings (atom_ratings.php):
+		- 
+
+	omröstningar/undersökningar:
+		- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
+			"Gillar du fisk? JA/NEJ"
+			"Brukar du motionera? JA/NEJ/IBLAND"
 		- via admin kunna schemalägga användaromröstningar, start&slut-tid
+		- fler-fråge-formulär med blandade multival och fritext-fält
 
 
-	news modul:
+	news modul (functions_news.php):
 		- delete news funkar ej för att confirmed() skickar fel parametrar
 
 
@@ -55,6 +58,7 @@
 		- öppna "pass thru" fil-länkar i en ny tabb om det går med javascript
 	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
+		- kunna ge rating på en bild
 
 
 	wiki:
@@ -98,6 +102,9 @@ X = hi prio task
 	- db: tblModerationQueue.autoTriggered added
 	- admin moderation: alla anmälningar sparas, men markeras som behandlade
 	- admin moderation: gjort så att REPORTED / TRIGGERED är ett extra värde istället för en typ av modereringsobjekt
+	- db: tblRatings - ny tabell för atom_ratings.php
+	- news: implementerat news rating
+
 
 2007.05.15:
 	- spider: nytt projekt, genomför en automatisk userdata input audit av en webbsajt
