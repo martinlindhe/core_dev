@@ -4,9 +4,9 @@
 		 	vilket sätter en specifik css för usern, som sätter utseende på blog, news, etc
 		- gör ett default-tema (måste dela upp functions.css i två filer)
 
+
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
-	X - visa mer inputfält vid registerrutan (blized)
 
 
 	blog:
@@ -37,7 +37,7 @@
 
 	admin:
 		- userdata fält:
-			* spara userdata i tblSettings, visa tillgängliga inputfält under settings.php
+			* visa tillgängliga inputfält under settings.php - snygga till
 			
 		- moderation:
 			* kunna knyta admin-kommentarer till enskild användare
@@ -71,7 +71,7 @@
 
 
 	ratings (atom_ratings.php):
-		- gör om ratingGadget() till ajax-gadget
+		- senare: gör om ratingGadget() till ajax-gadget
 
 
 	core/lågprio/förändringar under övervägning:
@@ -113,6 +113,7 @@ X = hi prio task
 	- news: implementerat news rating
 	- admin userdata: gick ej radera/ändra userdatafält options från admin
 	- categories: lite cleanup
+	- visar userdata-fält vid registerrutan
 
 2007.05.15:
 	- spider: nytt projekt, genomför en automatisk userdata input audit av en webbsajt

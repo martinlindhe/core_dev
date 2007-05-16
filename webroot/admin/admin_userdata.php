@@ -44,14 +44,11 @@
 
 		$changeId	= $_GET['change'];
 
-		$fieldName = $_POST['fieldname'];
-		$fieldType = $_POST['fieldtype'];
-		$fieldAccess = $_POST['fieldaccess'];
 		$fieldDefault = '';
 		if (isset($_POST['fielddefault'])) $fieldDefault = $_POST['fielddefault'];
 
 		/* Update changes for the field */
-		setUserdataField($changeId, $fieldName, $fieldType, $fieldDefault, $allowHTML, $fieldAccess, $regRequire);
+		setUserdataField($changeId, $_POST['fieldname'], $_POST['fieldtype'], $fieldDefault, $allowHTML, $_POST['fieldaccess'], $regRequire);
 
 		/* Update changes for the field-options */
 		$list = getCategoriesByOwner(CATEGORY_USERDATA, $changeId);
@@ -84,12 +81,10 @@
 	compactUserdataFields();	//make sure the priorities are compacted
 	$list = getUserdataFields();
 
-	//for ($i=0; $i<count($list); $i++) {
 	foreach ($list as $row) {
 		echo '<table bgcolor="#FFFFFF">';
 		echo '<tr><td width="38%" valign="top">';
 
-		$fieldName = stripslashes($row['fieldName']);
 		$prio = $row['fieldPriority'];
 		$prio_up = $prio-1;
 		$prio_dn = $prio+1;
@@ -100,7 +95,7 @@
 			echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="/gfx/arrow_down.png" alt="Move down"/></a>';
 		}
 
-		echo '&nbsp;<a href="?change='.$row['fieldId'].getProjectPath().'">'.$fieldName.'</a><br/>';
+		echo '&nbsp;<a href="?change='.$row['fieldId'].getProjectPath().'">Modify</a><br/>';
 		echo '<a href="?remove='.$row['fieldId'].getProjectPath().'">Remove</a><br/>';
 
 		if ($row['allowTags']) echo 'May contain HTML<br/>';

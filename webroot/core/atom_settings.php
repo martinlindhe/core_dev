@@ -1,8 +1,8 @@
 <?
-	//functions_settings.php - store user/server or other custom types of settings in database
+	//atom_settings.php - store user/server or other custom types of settings in database
 
 	define('SETTING_SERVER',				1);			//settings associated with the server
-	define('SETTING_USER',					2);			//settings associated with the user
+	define('SETTING_USERDATA',			2);			//settings used to store personal userdata
 	define('SETTING_LANGUAGE',			10);		//används av lang modulen för inställningar för varje språk
 	define('SETTING_SUBSCRIPTION',	11);		//en inställning till en subscription
 

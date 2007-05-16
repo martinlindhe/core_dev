@@ -10,8 +10,10 @@
 */
 
 require_once('functions_ip.php');
-require_once('functions_settings.php');
 require_once('functions_textformat.php');
+require_once('functions_userdata.php');
+
+require_once('atom_settings.php');	//for storing userdata
 
 define('LOGLEVEL_NOTICE', 1);
 define('LOGLEVEL_WARNING', 2);
@@ -85,7 +87,6 @@ class Session
 
 		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
 		{
-			//todo: läs och spara register_email
 			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
 			if (!is_numeric($check)) {
 				echo 'Registration failed: '.$check;
@@ -201,6 +202,9 @@ class Session
 		$newUserId = $db->insert_id;
 
 		$this->log('User <b>'.$username.'</b> created');
+		
+		//Stores the additional data from the userdata fields that's required at registration
+		handleRequiredUserdataFields($newUserId);
 
 		return $newUserId;
 	}
@@ -291,7 +295,7 @@ class Session
 				echo '<tr><td>Username:</td><td><input name="register_usr" type="text"/> <img src="/gfx/icon_user.png" alt="Username"/></td></tr>';
 				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="/gfx/icon_keys.png" alt="Password"/></td></tr>';
 				echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="/gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
-				echo '<tr><td>E-mail:</td><td><input name="register_email" type="text"/> <img src="/gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
+				showRequiredUserdataFields();
 				echo '</table><br/>';
 
 				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
@@ -350,7 +354,7 @@ class Session
 	{
 		if (!$this->id) return;
 
-		saveSetting(SETTING_USER, $this->id, $name, $value);
+		saveSetting(SETTING_USERDATA, $this->id, $name, $value);
 	}
 
 	/* Reads a setting associated with current user */
@@ -358,7 +362,7 @@ class Session
 	{
 		if (!$this->id) return;
 
-		return loadSetting(SETTING_USER, $this->id, $name, $default);
+		return loadSetting(SETTING_USERDATA, $this->id, $name, $default);
 	}
 
 	/* Renders html for editing all tblSettings field for current user */
@@ -367,7 +371,7 @@ class Session
 	{
 		global $config;
 
-		$list = readAllSettings(SETTING_USER, $this->id);
+		$list = readAllSettings(SETTING_USERDATA, $this->id);
 		if (!$list) return;
 
 		require_once($config['core_root'].'layout/ajax_loading_layer.html');
@@ -377,7 +381,7 @@ class Session
 		foreach($list as $row) {
 			if (!empty($_POST['edit_setting_'.$row['settingId']])) {
 				//Stores the setting
-				saveSetting(SETTING_USER, $this->id, $row['settingName'], $_POST['edit_setting_'.$row['settingId']]);
+				saveSetting(SETTING_USERDATA, $this->id, $row['settingName'], $_POST['edit_setting_'.$row['settingId']]);
 				$row['settingValue'] = $_POST['edit_setting_'.$row['settingId']];
 			}
 			echo '<div id="edit_setting_div_'.$row['settingId'].'">';

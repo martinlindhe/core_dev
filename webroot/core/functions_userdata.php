@@ -22,15 +22,12 @@
 
 		if (!is_numeric($fieldType) || !is_numeric($allowTags) || !is_numeric($fieldAccess) || !is_numeric($regRequire)) return false;
 
-		$fieldName = $db->escape($fieldName);
-		$fieldDefault = $db->escape($fieldDefault);
-
-		$check = $db->getOneItem('SELECT fieldId FROM tblUserdata WHERE fieldName="'.$fieldName.'"');
+		$check = $db->getOneItem('SELECT fieldId FROM tblUserdata WHERE fieldName="'.$db->escape($fieldName).'"');
 		if ($check) return false;
 
 		$prio = compactUserdataFields();	//returnerar högsta prioritetstalet
 
-		$q = 'INSERT INTO tblUserdata SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',fieldPriority='.$prio.',regRequire='.$regRequire;
+		$q = 'INSERT INTO tblUserdata SET fieldName="'.$db->escape($fieldName).'",fieldDefault="'.$db->escape($fieldDefault).'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',fieldPriority='.$prio.',regRequire='.$regRequire;
 		$db->query($q);
 		return true;
 	}
@@ -42,12 +39,8 @@
 
 		if (!is_numeric($fieldType) || !is_numeric($allowTags) || !is_numeric($fieldAccess) || !is_numeric($regRequire)) return false;
 
-		$fieldName = $db->escape($fieldName);
-		$fieldDefault = $db->escape($fieldDefault);
-
-		$q = 'UPDATE tblUserdata SET fieldName="'.$fieldName.'",fieldDefault="'.$fieldDefault.'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',regRequire='.$regRequire.' WHERE fieldId='.$fieldId;
+		$q = 'UPDATE tblUserdata SET fieldName="'.$db->escape($fieldName).'",fieldDefault="'.$db->escape($fieldDefault).'",fieldType='.$fieldType.',allowTags='.$allowTags.',fieldAccess='.$fieldAccess.',regRequire='.$regRequire.' WHERE fieldId='.$fieldId;
 		$db->query($q);
-
 		return true;
 	}
 
@@ -126,36 +119,35 @@
 		} else { //for default values in admin display
 			$value = stripslashes($row['fieldDefault']);
 		}
+		$result = stripslashes($row['fieldName']).':<br/>';
 
 		switch ($row['fieldType']) {
 			case USERDATA_TYPE_TEXT:
-				$result = '<input type="text" name="'.$fieldId.'" value="'.$value.'" size="30" maxlength="50"/>';
+				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';
 				break;
 
 			case USERDATA_TYPE_TEXTAREA:
-				$result  = '<textarea name="'.$fieldId.'" rows="6" cols="40">'.$value.'</textarea>';
+				$result .= '<textarea name="userdata_'.$fieldId.'" rows="6" cols="40">'.$value.'</textarea>';
 				break;
 
 			case USERDATA_TYPE_CHECKBOX:
-				$result = '<input type="checkbox" class="checkbox" name="'.$fieldId.'" value="1"'.($value == '1'?' checked="checked"':'').'/>';
+				$result .= '<input name="userdata_'.$fieldId.'" type="checkbox" class="checkbox" value="1"'.($value == '1'?' checked="checked"':'').'/>';
 				break;
 
 			case USERDATA_TYPE_RADIO:
 				$options = getCategoriesByOwner(CATEGORY_USERDATA, $fieldId);
-				$result = '';
 
 				foreach($options as $row) {
-					$result .= '<input type="radio" class="radiostyle" name="'.$fieldId.'" id="lab_'.$row['categoryId'].'" value="'.$row['categoryId'].'"'.($row['categoryId'] == $value?' checked="checked"':'').'/>';
+					$result .= '<input name="userdata_'.$fieldId.'" type="radio" id="lab_'.$row['categoryId'].'" value="'.$row['categoryId'].'"'.($row['categoryId'] == $value?' checked="checked"':'').'/>';
 					$result .= ' <label for="lab_'.$row['categoryId'].'">'.$row['categoryName'].'</label><br/>';
 				}
 				break;
 
 			case USERDATA_TYPE_SELECT:
-				$result = getCategoriesSelect(CATEGORY_USERDATA, $fieldId);
+				$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId);
 				break;
 			
 			case USERDATA_TYPE_IMAGE:
-				$result = '';
 				if ($value) {
 					$fullname = $config['upload_dir'].$value;
 
@@ -163,13 +155,13 @@
 					list($tn_width, $tn_height) = resizeImageCalc($fullname, $config['thumbnail_width'], $config['thumbnail_height']);
 
 					$result .= '<a href="javascript:wnd_imgview('.$value.','.$org_width.','.$org_height.')">';
-					$result .= '<img src="file.php?id='.$value.'&width='.$tn_width.'" width="'.$tn_width.'" height="'.$tn_height.'" border=0>';
+					$result .= '<img src="file.php?id='.$value.'&width='.$tn_width.'" width="'.$tn_width.'" height="'.$tn_height.'"/>';
 					$result .= '</a>';
-					$result .= '&nbsp;&nbsp;<input type="checkbox" class="checkbox" name="'.$fieldId.'_remove">Delete image<br>';
+					$result .= '&nbsp;&nbsp;<input name="userdata_'.$fieldId.'_remove" type="checkbox" class="checkbox"/>Delete image<br/>';
 				}
-				$result .= '<input type="file" name="'.$fieldId.'">';
+				$result .= '<input name="userdata_'.$fieldId.'" type="file"/>';
 				break;
-				
+
 			case USERDATA_TYPE_DATE:
 				if ($value && (strlen($value) == 8)) {
 					$y = substr($value,0,4);
@@ -180,11 +172,9 @@
 					$m = '';
 					$y = '';
 				}
-				
-				$result  = '<select name="'.$fieldId.'_day">';
-				$result .= '<option value="">- Day -';
 
-				$selected = '';
+				$result .= '<select name="userdata_'.$fieldId.'_day">';
+				$result .= '<option value="">- Day -';
 				for ($j=1; $j<=31; $j++) {
 					$k = $j;
 					if ($j<10) $k = '0'.$k;
@@ -193,9 +183,8 @@
 				}
 				$result .= '</select>';
 
-				$result .= '<select name="'.$fieldId.'_month">';
+				$result .= '<select name="userdata_'.$fieldId.'_month">';
 				$result .= '<option value="">- Month -';
-				
 				for ($j=1; $j<=12; $j++) {
 					$k = $j;
 					if ($j<10) $k = '0'.$k;
@@ -204,7 +193,7 @@
 				}
 				$result .= '</select>';
 
-				$result .= '<select name="'.$fieldId.'_year">';
+				$result .= '<select name="userdata_'.$fieldId.'_year">';
 				$result .= '<option value="">- Year -';
 				for ($j=1980; $j<=date('Y'); $j++) {
 					if ($j == $y) $selected = ' selected'; else $selected = '';
@@ -214,6 +203,30 @@
 		}
 
 		return $result;
+	}
+
+	/* Shows all input fields that are required to be filled in by the user at time of registration */
+	function showRequiredUserdataFields()
+	{
+		$list = getUserdataFields();
+		foreach ($list as $row) {
+			echo '<tr><td colspan="2">'.getUserdataInput($row).'</td></tr>';
+		}
+	}
+
+	/* Processes all userdata input from registration and stores the entries */
+	function handleRequiredUserdataFields($userId)
+	{
+		global $db;
+		if (!is_numeric($userId)) return false;
+
+		$list = getUserdataFields();
+		foreach ($list as $row) {
+			if (!empty($_POST['userdata_'.$row['fieldId']])) {
+				saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
+			}
+		}
+		
 	}
 
 ?>

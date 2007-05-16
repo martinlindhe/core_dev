@@ -14,7 +14,6 @@
 	require_once('functions_blogs.php');
 	require_once('functions_guestbook.php');
 	require_once('functions_contacts.php');
-	require_once('functions_userdata.php');
 	restore_include_path();
 
 	$config['debug'] = true;
