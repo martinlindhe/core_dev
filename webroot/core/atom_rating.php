@@ -96,9 +96,17 @@
 			$result .= '</form>';
 		} else {
 			//Show current votes
-			$result  = 'Current rating:<br/>';
+			$result  = 'Current rating<br/><br/>';
 			$row = getRating($_type, $_id);
-			$result .= $row['rating'].' / 5 in '.$row['ratingCnt'].' votes';
+			for ($i=1; $i<=5; $i++) {
+				if ($i <= $row['rating']) {
+					$result .= '<img src="/gfx/icon_star_full.png" alt="star"/>';
+				} else {
+					$result .= '<img src="/gfx/icon_star_empty.png" alt="star"/>';
+				}
+			}
+			$result .= '<br/><br/>';
+			$result .= $row['rating'].' / 5 in '.$row['ratingCnt'].' votes<br/>';
 		}
 
 		return $result;

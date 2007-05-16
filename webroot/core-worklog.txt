@@ -1,6 +1,8 @@
 ----[[platform todo]]----
 	hög prio:
-
+		- skins support: låt user kunna välja ett skin (dropdownlista + tblSettings save) av flera,
+		 	vilket sätter en specifik css för usern, som sätter utseende på blog, news, etc
+		- gör ett default-tema (måste dela upp functions.css i två filer)
 
 	session/user settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
@@ -15,9 +17,6 @@
 		- implementera godkännande av relation
 		- implementera "välj typ av relation" när man skickar bli-vän förfrågan
 
-
-	ratings (atom_ratings.php):
-		- 
 
 	omröstningar/undersökningar:
 		- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
@@ -65,6 +64,10 @@
 		- implementera stöd för "talk" page
 		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- logga history för wiki file deletes via ajax
+
+
+	ratings (atom_ratings.php):
+		- gör om ratingGadget() till ajax-gadget
 
 
 	core/lågprio/förändringar under övervägning:
