@@ -124,6 +124,8 @@ topp prio:
 
 	* kika efter lastbalans-test mjukvara, mika "apache-flood", martin "webload" eller "siege"
 
+	* design: kunna välja skins (olika css-filer), när design är klar från anneli
+
 	* profilsida:
 		- FRANS: länk till vän med bild funkar ej för alla
 
@@ -142,8 +144,5 @@ senare, låg prio:
 ***********************************************************************************************************************************
 
 testkonton:
-	tresexti.se: paradox,martin    samt   martin666,test1
-	
-	
-	LG U880 - form action="" problem
-	Sony Ericsson
+	tresexti.se: paradox,martin    samt   martin666,test1	
+	citysurf.tv: webmaster_Zeratul, jerry (admin)

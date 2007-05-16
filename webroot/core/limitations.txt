@@ -11,7 +11,7 @@
 
 * Cellphones
 	- Some (older) cellphones have trouble interpreting <form> tags with an empty action="",
-		For example the phone model XXX (kianos)
+		For example the phone model LG U880 (kianos)
 
 
 * Multi-project server space sharing
