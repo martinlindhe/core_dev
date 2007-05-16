@@ -38,12 +38,11 @@
 
 
 	news modul (functions_news.php):
-		- delete news funkar ej för att confirmed() skickar fel parametrar
 
 
 	kategorier (atom_categories.php):
 		- använd makeNewCategoryDialog() för att skapa dialog för att skapa userdata-kategorier
-		- gör så att man kan ändra namn och radera kategorier från makeNewCategoryDialog()
+		- gör så att man kan ändra namn och radera kategorier från makeNewCategoryDialog() - rename till manageCategoriesDialog()
 
 
 	admin:
@@ -123,6 +122,8 @@ X = hi prio task
 	- categories: lite cleanup
 	- visar userdata-fält vid registerrutan
 	- tog bort ajax-delete uservar-funktionen, den fyller inte rätt syfte
+	- session: checkar isReservedUsername() check i register-funktionen
+	- news: fixat så delete news fungerar
 
 
 2007.05.15:

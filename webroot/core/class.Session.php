@@ -186,9 +186,11 @@ class Session
 		if ($password1 && $password2 && ($password1 != $password2)) {
 			return 'The passwords doesnt match';
 		}
-		
+
 		if (strlen($username) < 3) return 'Username must be at least 3 characters long';
 		if (strlen($password1) < 4) return 'Password must be at least 4 characters long';
+
+		if (isReservedUsername($username)) return 'Username is not allowed';
 
 		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
 		$checkId = $db->getOneItem($q);

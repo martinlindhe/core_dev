@@ -130,8 +130,7 @@
 		require_once($project.'design_head.php');
 
 		echo $text.'<br/><br/>';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;delete&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
-		//echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.getProjectPath().'">No, wrong button</a><br/>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
 		echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
 		
 		require_once($project.'design_foot.php');

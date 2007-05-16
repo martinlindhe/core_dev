@@ -88,18 +88,17 @@
 
 	/* kontrollerar om ordet i $text är ett reserverat användarnamn */
 	//todo: integrera denna med checkStopword somehow
-	//todo2: använd i register-funktionen!
 	function isReservedUsername($text)
 	{
 		global $db;
 
 		/* Removes non-letters */
-		$text = str_replace(".", "", $text);
-		$text = str_replace(",", "", $text);
-		$text = str_replace("!", "", $text);
-		$text = str_replace("?", "", $text);
-		$text = str_replace("(", "", $text);
-		$text = str_replace(")", "", $text);
+		$text = str_replace('.', '', $text);
+		$text = str_replace(',', '', $text);
+		$text = str_replace('!', '', $text);
+		$text = str_replace('?', '', $text);
+		$text = str_replace('(', '', $text);
+		$text = str_replace(')', '', $text);
 
 		$text = $db->escape($text);
 

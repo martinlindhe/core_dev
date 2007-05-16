@@ -38,13 +38,12 @@
 		return true;
 	}
 
-	function removeNews($newsId)
+	function removeNews($_id)
 	{
 		global $db, $session;
+		if (!$session->isAdmin || !is_numeric($_id)) return false;
 
-		if (!$session->isAdmin || is_numeric($newsId)) return false;
-
-		$db->query('UPDATE tblNews SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE newsId='.$newsId);
+		$db->query('UPDATE tblNews SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE newsId='.$_id);
 		return true;
 	}
 	
@@ -94,7 +93,7 @@
 
 	function showNewsArticle($_id = 0)
 	{
-		global $session, $files, $config;
+		global $db, $session, $files, $config, $project;
 
 		if (!is_numeric($_id)) return false;
 
@@ -163,9 +162,12 @@
 		} else if ($current_tab == 'NewsDelete') {
 
 			//fixme: confirmed() skickar fel parametrar, så detta funkar inte
-			if (confirmed('Are you sure you wish to delete this news entry?', 'id', $_id)) {
-				removeNews($newsId);
-				header('Location: admin_news.php'.getProjectPath(0));
+			if (confirmed('Are you sure you wish to delete this news entry?', 'NewsDelete:'.$_id, $_id)) {
+				removeNews($_id);
+
+				require_once($project.'design_head.php');
+				echo 'News article successfully deleted!<br/><br/>';
+				require_once($project.'design_foot.php');
 				die;
 			}
 

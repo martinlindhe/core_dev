@@ -236,10 +236,10 @@ abstract class DB_Base
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
 		$q .= 'WHERE t1.entryLevel <= '.LOGLEVEL_ALL;
 		if (!empty($_GET['sort']) && $_GET['sort']=='asc') {
-			$q .= ' ORDER BY t1.timeCreated ASC';
+			$q .= ' ORDER BY t1.timeCreated ASC,t1.entryId ASC';
 			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">show newest first</a>]<br/>';
 		} else {
-			$q .= ' ORDER BY t1.timeCreated DESC';
+			$q .= ' ORDER BY t1.timeCreated DESC,t1.entryId DESC';
 			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'&sort=asc">show oldest first</a>]<br/>';
 		}
 
