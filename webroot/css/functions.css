@@ -217,11 +217,12 @@ select {
 
 
 /* default styles for "user settings" list */
-.edit_settings {
- width: 300px;
- background-color: #88EE99;
- border: 1px solid #aaa;
- padding: 5px;
+.settings {
+	min-width: 300px;
+	color: #000;
+	background-color: #aaEEaa;
+	border: 1px solid #888;
+	padding: 10px;
 }
 
 

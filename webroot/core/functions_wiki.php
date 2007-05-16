@@ -99,7 +99,11 @@
 		
 		if (!$session->isAdmin && !$config['wiki']['allow_edit']) {
 			/* Only display the text for normal visitors */
+			echo '<div class="wiki">';
+			echo '<div class="wiki_body">';
 			echo wikiFormat($wikiName, $data);
+			echo '</div>';
+			echo '</div>';
 			return true;
 		}
 

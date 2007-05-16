@@ -8,6 +8,7 @@
 	createMenu($profile_menu, 'blog_menu');
 
 	wiki('Settings');
+	echo '<br/>';
 	
 	$session->editSettings();
 

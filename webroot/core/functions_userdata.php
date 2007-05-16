@@ -89,22 +89,25 @@
 	}
 
 	/* Returns all userdata fields */
-	function getUserdataFields()
+	function getUserdataFields($_required = false)
 	{
 		global $db;
-
-		$q = 'SELECT * FROM tblUserdata ORDER BY fieldPriority ASC';
+		
+		$q = 'SELECT * FROM tblUserdata ';
+		if ($_required) $q .= 'WHERE regRequire=1 ';
+		$q .= 'ORDER BY fieldPriority ASC';
+		
 		return $db->getArray($q);
 	}
 
 	/* Returnerar inställningarna för ett fält */
-	function getUserdataField($fieldId)
+	function getUserdataField($_id)
 	{
 		global $db;
 
-		if (!is_numeric($fieldId)) return false;
+		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT * FROM tblUserdata WHERE fieldId='.$fieldId;
+		$q = 'SELECT * FROM tblUserdata WHERE fieldId='.$_id;
 		return $db->getOneRow($q);
 	}
 
@@ -116,6 +119,8 @@
 		$fieldId = $row['fieldId'];
 		if (isset($row['value'])) {
 			$value = stripslashes($row['value']);	//doesnt nessecary exist
+		} else if (!empty($row['settingValue'])) {
+			$value = stripslashes($row['settingValue']);
 		} else { //for default values in admin display
 			$value = stripslashes($row['fieldDefault']);
 		}
@@ -144,7 +149,7 @@
 				break;
 
 			case USERDATA_TYPE_SELECT:
-				$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId);
+				$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId, 'userdata_'.$fieldId, $value);
 				break;
 			
 			case USERDATA_TYPE_IMAGE:
@@ -208,7 +213,7 @@
 	/* Shows all input fields that are required to be filled in by the user at time of registration */
 	function showRequiredUserdataFields()
 	{
-		$list = getUserdataFields();
+		$list = getUserdataFields(true);
 		foreach ($list as $row) {
 			echo '<tr><td colspan="2">'.getUserdataInput($row).'</td></tr>';
 		}
@@ -220,13 +225,23 @@
 		global $db;
 		if (!is_numeric($userId)) return false;
 
-		$list = getUserdataFields();
+		$list = getUserdataFields(true);
 		foreach ($list as $row) {
 			if (!empty($_POST['userdata_'.$row['fieldId']])) {
 				saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
 			}
 		}
-		
 	}
 
+	function readAllUserdata($ownerId)
+	{
+		if (!is_numeric($ownerId)) return false;
+
+		global $db;
+
+		$q  = 'SELECT t1.*,t2.settingValue FROM tblUserdata AS t1 ';
+		$q .= 'LEFT JOIN tblSettings AS t2 ON (t1.fieldId=t2.settingName AND t2.ownerId='.$ownerId.') ORDER BY t1.fieldPriority ASC';
+
+		return $db->getArray($q);
+	}
 ?>

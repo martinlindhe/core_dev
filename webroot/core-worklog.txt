@@ -5,8 +5,19 @@
 		- gör ett default-tema (måste dela upp functions.css i två filer)
 
 
-	session/user settings:
+	session/userdata settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
+		- low prio: ajax för att spara ändringar i $session->editSettings()
+		- kommenterat bort js som anropade ajax-delete setting. ska den funktionen tas bort helt?
+		- accessnivåer, kanske ta bort nån och byta namn på dom:
+			"show for everyone": visas på profilsidan för andra
+			"show for admin & user": t.ex email, som används för att skicka lösenord-påminnelse och annat,men som i övrigt ska hållas privat
+			"only show to admins" kan ej ses av användaren själv, det är speciella settings för den användaren
+					som en admin ska kunna sätta, t.ex:
+					checkbox: HAS BEEN WARNED
+					checkbox: HAS BEEN TEMPORARY BANNED
+					
+					behövs detta om man implementerar admin-log koppliad till enskild user?
 
 
 	blog:
@@ -36,12 +47,9 @@
 
 
 	admin:
-		- userdata fält:
-			* visa tillgängliga inputfält under settings.php - snygga till
-			
 		- moderation:
 			* kunna knyta admin-kommentarer till enskild användare
-	
+			
 		- visa statistik i adminpanelen (admin_statistics.php):
 			* visa ett diagram månadsvis. som visar två staplar, en för registreringar, en för inloggningar
 			* måste ha ett cron-script som körs regelbundet som samlar upp alla entries från tblLogins och sparar statistik för föregående

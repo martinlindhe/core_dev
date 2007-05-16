@@ -22,7 +22,7 @@ define('LOGLEVEL_ALL', 5);
 
 class Session
 {
-	private $session_name = 'sid';			//default session name
+	private $session_name = 'someSID';	//default session name
 	private $timeout = 1800;						//max allowed idle time (in seconds) before auto-logout
 	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
 	private $check_useragent = true;		//keeps track if the client user agent string changes during the session
@@ -144,15 +144,14 @@ class Session
 
 		//Logged in: Check user activity - log out inactive user
 		if ($this->lastActive < (time()-$this->timeout)) {
-			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
 			$this->error = 'Inactivity timeout';
+			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
 			$this->logOut();
-		} else {
-			//Update last active timestamp
-			$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
-			$this->lastActive = time();
 		}
 
+		//Update last active timestamp
+		$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
+		$this->lastActive = time();
 	}
 
 	/* Writes a log entry to tblLogs */
@@ -349,44 +348,29 @@ class Session
 		}
 	}
 
-	/* Saves a setting associated with current user */
-	function save($name, $value)
-	{
-		if (!$this->id) return;
-
-		saveSetting(SETTING_USERDATA, $this->id, $name, $value);
-	}
-
-	/* Reads a setting associated with current user */
-	function load($name, $default = '')
-	{
-		if (!$this->id) return;
-
-		return loadSetting(SETTING_USERDATA, $this->id, $name, $default);
-	}
-
 	/* Renders html for editing all tblSettings field for current user */
-	//todo: use ajax to save changes
 	function editSettings()
 	{
 		global $config;
 
-		$list = readAllSettings(SETTING_USERDATA, $this->id);
+		$list = readAllUserdata($this->id);
 		if (!$list) return;
 
 		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
-		echo '<div class="edit_settings">';
+		echo '<div class="settings">';
 		echo '<form name="edit_settings_frm" method="post" action="">';
 		foreach($list as $row) {
-			if (!empty($_POST['edit_setting_'.$row['settingId']])) {
+			if (!empty($_POST['userdata_'.$row['fieldId']])) {
 				//Stores the setting
-				saveSetting(SETTING_USERDATA, $this->id, $row['settingName'], $_POST['edit_setting_'.$row['settingId']]);
-				$row['settingValue'] = $_POST['edit_setting_'.$row['settingId']];
+				saveSetting(SETTING_USERDATA, $this->id, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
+				$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 			}
-			echo '<div id="edit_setting_div_'.$row['settingId'].'">';
-			echo $row['settingName'].': <input type="text" name="edit_setting_'.$row['settingId'].'" value="'.$row['settingValue'].'"/>';
-			echo '<img src="/gfx/icon_delete.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].');"/>';
+			echo '<div id="edit_setting_div_'.$row['fieldId'].'">';
+			
+			echo getUserdataInput($row);
+			
+			//echo '<img src="/gfx/icon_delete.png" alt="Delete" title="Delete" onclick="perform_ajax_delete_uservar('.$row['settingId'].');"/>';
 			echo '</div>';
 		}
 		echo '<input type="submit" class="button" value="Save"/>';
