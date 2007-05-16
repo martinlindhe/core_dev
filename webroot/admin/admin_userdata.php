@@ -28,18 +28,18 @@
 	
 	/* Create new field */
 	if (isset($_GET['mode']) && ($_GET['mode'] == 'create') && isset($_POST['fieldname']) && $_POST['fieldname']) {
-		$fieldType = $fieldAccess = $fieldDefault = '';
+		$fieldType = $fieldPrivate = $fieldDefault = '';
 		if (isset($_POST['fieldtype'])) $fieldType = $_POST['fieldtype'];
-		if (isset($_POST['fieldaccess'])) $fieldAccess = $_POST['fieldaccess'];
+		if (isset($_POST['fieldprivate'])) $fieldPrivate = $_POST['fieldprivate'];
 		if (isset($_POST['fielddefault'])) $fieldDefault = $_POST['fielddefault'];
 
-		if (!addUserdataField($_POST['fieldname'], $fieldType, $fieldDefault, $allowHTML, $fieldAccess, $regRequire)) {
+		if (!addUserdataField($_POST['fieldname'], $fieldType, $fieldDefault, $allowHTML, $fieldPrivate, $regRequire)) {
 			echo 'A field with the name '.$_POST['fieldname'].' already exists<br/>';
 		}
 	}
 
 	/* Update changes */
-	if (isset($_GET['change']) && isset($_POST['fieldname']) && isset($_POST['fieldtype']) && isset($_POST['fieldaccess'])) {
+	if (isset($_GET['change']) && isset($_POST['fieldname']) && isset($_POST['fieldtype']) && isset($_POST['fieldprivate'])) {
 
 		$changeId	= $_GET['change'];
 
@@ -47,7 +47,7 @@
 		if (isset($_POST['fielddefault'])) $fieldDefault = $_POST['fielddefault'];
 
 		/* Update changes for the field */
-		setUserdataField($changeId, $_POST['fieldname'], $_POST['fieldtype'], $fieldDefault, $allowHTML, $_POST['fieldaccess'], $regRequire);
+		setUserdataField($changeId, $_POST['fieldname'], $_POST['fieldtype'], $fieldDefault, $allowHTML, $_POST['fieldprivate'], $regRequire);
 
 		/* Update changes for the field-options */
 		$list = getCategoriesByOwner(CATEGORY_USERDATA, $changeId);
@@ -99,13 +99,7 @@
 
 		if ($row['allowTags']) echo 'May contain HTML<br/>';
 		if ($row['regRequire']) echo 'Require at registration<br/>';
-
-		echo 'Field will be displayed to ';
-		switch ($row['fieldAccess']) {
-			case 0: echo 'only admin'; break;
-			case 1: echo 'admin and user'; break;
-			case 2: echo 'everyone'; break;
-		}
+		if ($row['private']) echo 'Private field';
 		echo '</td>';
 
 		echo '<td valign="top">'.getUserdataInput($row).'</td>';
@@ -176,12 +170,11 @@
 	}
 	echo '</tr>';
 
-	echo '<tr><td>Access</td>';
-	echo '<td colspan=2><select name="fieldaccess">';
-		echo '<option value="0"'; if (isset($data) && $data['fieldAccess']==0) echo ' selected'; echo '>Only show to admins';
-		echo '<option value="1"'; if (isset($data) && $data['fieldAccess']==1) echo ' selected'; echo '>Show to admins and the user';
-		echo '<option value="2"'; if (isset($data) && $data['fieldAccess']==2) echo ' selected'; echo '>Show to everyone';
-	echo '</select>';
+	echo '<tr>';
+	echo '<td colspan=3>';
+		echo '<input name="fieldprivate" type="hidden" value="0"/>';
+		echo '<input name="fieldprivate" id="fieldprivate" type="checkbox" class="checkbox" value="1"'.(!empty($data['private'])?' checked="checked"':'').'/>';
+		echo ' <label for="fieldprivate">Make field private</label>';
 	echo '</td></tr>';
 
 	if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT))) {
