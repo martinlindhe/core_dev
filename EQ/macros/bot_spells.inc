@@ -29,6 +29,11 @@ Sub Event_TargetCured
 	}
 /return
 
+#event Silenced "You *CANNOT* cast spells, you have been silenced!"
+Sub Event_Silenced
+	/echo I AM SILENCED, delay 10s
+	/delay 10s
+/return
 
 |Raid: DK Event 2 - Guests
 #event SomeoneVertigo "#1# looks as if they are going to lose their balance!"

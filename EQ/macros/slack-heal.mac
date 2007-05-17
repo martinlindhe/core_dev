@@ -1,6 +1,6 @@
 | druid heal slack
 #define HEAL_ONLY_MODE			1
-#define QHEAL_PERCENT				73
+#define QHEAL_PERCENT				53
 #define CHEAL_PERCENT				85
 #define USE_CH							0
 
