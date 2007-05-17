@@ -447,7 +447,7 @@ CREATE TABLE tblContacts (
   otherUserId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   PRIMARY KEY  (contactId)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 CREATE TABLE tblFiles (
   fileId bigint(20) unsigned NOT NULL auto_increment,
   fileName varchar(250) character set utf8 default NULL,
@@ -462,6 +462,14 @@ CREATE TABLE tblFiles (
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
 ) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+CREATE TABLE tblFriendRequests (
+  reqId int(10) unsigned NOT NULL auto_increment,
+  senderId int(10) unsigned NOT NULL default '0',
+  recieverId int(10) unsigned NOT NULL default '0',
+  timeCreated datetime NOT NULL,
+  categoryId int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (reqId)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 CREATE TABLE tblGuestbooks (
   userId bigint(20) unsigned NOT NULL default '0',
   authorId bigint(20) unsigned NOT NULL default '0',

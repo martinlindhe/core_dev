@@ -1,5 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
+		- FÖRST!!! functions_contacts.php: implementera "välj typ av relation" när man skickar bli-vän förfrågan, se addFriendRequest() etc
+	
 		- skins support: låt user kunna välja ett skin (dropdownlista + tblSettings save) av flera,
 		 	vilket sätter en specifik css för usern, som sätter utseende på blog, news, etc
 		- gör ett default-tema (måste dela upp functions.css i två filer)
@@ -14,7 +16,6 @@
 
 	profil/personliga sidor:
 		- implementera godkännande av relation
-		- implementera "välj typ av relation" när man skickar bli-vän förfrågan
 		- sök användare-funktion, som söker på userdata
 
 
@@ -116,6 +117,8 @@ X = hi prio task
 	- userdata accessnivåer - gjorde om till en PRIVATE flagga (kan endast ses av användaren & admins), om fältet ej är PRIVATE så kan alla se det
 	- blog: kan ge rating på en blog
 	- news: kan flytta en nyhet till en annan kategori genom "edit news"
+	- friends: skickar nu relations-request, och visar pågående och inkommande requests på din vänlista
+
 
 
 2007.05.15:
