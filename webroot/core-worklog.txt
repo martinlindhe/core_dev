@@ -101,6 +101,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.17:
+	- userdata: fixade så kategorier & personliga settings tas bort när admin raderar ett userdata fält
+	- userdata: fixade så checkbox typen funkar
+	- userdata: fixat userdata typen image så den funkar + går att radera uppladdade bilder
+
+
 2007.05.16:
 	- admin: admin_events sql optimering
 	- db: tblModerationQueue.autoTriggered added

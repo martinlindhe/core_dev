@@ -1,9 +1,6 @@
 <?
 	require_once('atom_categories.php');	//for multi-choise userdata types
 
-	//userdata module settings:
-	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
-
 	/* Userdata field types */
 	define('USERDATA_TYPE_TEXT',			1);
 	define('USERDATA_TYPE_CHECKBOX',	2);
@@ -12,7 +9,9 @@
 	define('USERDATA_TYPE_TEXTAREA',	5);
 	define('USERDATA_TYPE_IMAGE',			6);
 	define('USERDATA_TYPE_DATE',			7);
-	
+
+	//userdata module settings:
+	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 
 	/* Skapar ett nytt userfield, och ger fältet en prioritetsnivå som är ledig */
@@ -52,8 +51,8 @@
 		if (!is_numeric($fieldId)) return false;
 
 		$db->query('DELETE FROM tblUserdata WHERE fieldId='.$fieldId);
-		//$db->query($db, 'DELETE FROM tblCategories WHERE fieldId='.$fieldId );
-		//$db->query($db, 'DELETE FROM tblSettings WHERE fieldId='.$fieldId );
+		$db->query('DELETE FROM tblCategories WHERE categoryType='.CATEGORY_USERDATA.' AND ownerId='.$fieldId);
+		$db->query('DELETE FROM tblSettings WHERE settingName='.$fieldId);
 	}
 
 	/* Compacts the userdata field priorities, so the boundary 0-max is used */
@@ -124,7 +123,12 @@
 		} else { //for default values in admin display
 			$value = stripslashes($row['fieldDefault']);
 		}
-		$result = stripslashes($row['fieldName']).':<br/>';
+
+		if ($row['fieldType'] != USERDATA_TYPE_CHECKBOX) {
+			$result = stripslashes($row['fieldName']).':<br/>';
+		} else {
+			$result = '';
+		}
 
 		switch ($row['fieldType']) {
 			case USERDATA_TYPE_TEXT:
@@ -136,7 +140,9 @@
 				break;
 
 			case USERDATA_TYPE_CHECKBOX:
-				$result .= '<input name="userdata_'.$fieldId.'" type="checkbox" class="checkbox" value="1"'.($value == '1'?' checked="checked"':'').'/>';
+				$result .= '<input name="userdata_'.$fieldId.'" type="hidden" value="0"/>';
+				$result .= '<input name="userdata_'.$fieldId.'" id="userdata_'.$fieldId.'" type="checkbox" class="checkbox" value="1"'.($value == '1'?' checked="checked"':'').'/>';
+				$result .= ' <label for="userdata_'.$fieldId.'">'.$row['fieldName'].'</label>';
 				break;
 
 			case USERDATA_TYPE_RADIO:
@@ -154,17 +160,12 @@
 			
 			case USERDATA_TYPE_IMAGE:
 				if ($value) {
-					$fullname = $config['upload_dir'].$value;
-
-					list($org_width, $org_height) = getimagesize($fullname);
-					list($tn_width, $tn_height) = resizeImageCalc($fullname, $config['thumbnail_width'], $config['thumbnail_height']);
-
-					$result .= '<a href="javascript:wnd_imgview('.$value.','.$org_width.','.$org_height.')">';
-					$result .= '<img src="file.php?id='.$value.'&width='.$tn_width.'" width="'.$tn_width.'" height="'.$tn_height.'"/>';
-					$result .= '</a>';
-					$result .= '&nbsp;&nbsp;<input name="userdata_'.$fieldId.'_remove" type="checkbox" class="checkbox"/>Delete image<br/>';
+					$result .= makeThumbLink($value);
+					$result .= '<input name="userdata_'.$fieldId.'_remove" id="userdata_'.$fieldId.'_remove" type="checkbox" class="checkbox"/>';
+					$result .= '<label for="userdata_'.$fieldId.'_remove">Delete image</label>';
+				} else {
+					$result .= '<input name="userdata_'.$fieldId.'" type="file"/>';
 				}
-				$result .= '<input name="userdata_'.$fieldId.'" type="file"/>';
 				break;
 
 			case USERDATA_TYPE_DATE:

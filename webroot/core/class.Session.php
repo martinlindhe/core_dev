@@ -353,7 +353,7 @@ class Session
 	/* Renders html for editing all tblSettings field for current user */
 	function editSettings()
 	{
-		global $config;
+		global $config, $files;
 
 		$list = readAllUserdata($this->id);
 		if (!$list) return;
@@ -361,13 +361,21 @@ class Session
 		require_once($config['core_root'].'layout/ajax_loading_layer.html');
 
 		echo '<div class="settings">';
-		echo '<form name="edit_settings_frm" method="post" action="">';
+		echo '<form name="edit_settings_frm" method="post" enctype="multipart/form-data" action="">';
 		foreach($list as $row) {
-			if (!empty($_POST['userdata_'.$row['fieldId']])) {
+			if (!empty($_POST)) {
+				if ($row['fieldType'] == USERDATA_TYPE_IMAGE && !empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {
+					$files->deleteFile($row['settingValue']);
+					$row['settingValue'] = 0;
+				} else if ($row['fieldType'] == USERDATA_TYPE_IMAGE && isset($_FILES['userdata_'.$row['fieldId']])) {
+					$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA);
+				} else if (isset($_POST['userdata_'.$row['fieldId']])) {
+					$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+				}
 				//Stores the setting
-				saveSetting(SETTING_USERDATA, $this->id, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
-				$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+				saveSetting(SETTING_USERDATA, $this->id, $row['fieldId'], $row['settingValue']);
 			}
+
 			echo '<div id="edit_setting_div_'.$row['fieldId'].'">';
 			echo getUserdataInput($row);
 			echo '</div>';

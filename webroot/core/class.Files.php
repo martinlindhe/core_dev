@@ -19,6 +19,7 @@ define('FILETYPE_NEWS',						102);	// The file is a news attachment
 //define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
 define('FILETYPE_FILEAREA_UPLOAD',105);	/* File is uploaded to a file area */
 define('FILETYPE_USERFILE',				106);	/* File is uploaded to the user's own file area */
+define('FILETYPE_USERDATA',				107);	/* File is uploaded to a userdata field */
 
 class Files
 {
@@ -343,6 +344,8 @@ class Files
 		} else {
 			$this->handleGeneralUpload($fileId, $FileData);
 		}
+
+		return $fileId;
 	}
 
 	function handleGeneralUpload($fileId, $FileData)
