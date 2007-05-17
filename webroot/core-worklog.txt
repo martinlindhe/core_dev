@@ -2,7 +2,6 @@
 	core/gör snart:
 		- skins support: låt user kunna välja ett skin (dropdownlista + tblSettings save) av flera,
 		 	vilket sätter en specifik css för usern, som sätter utseende på blog, news, etc
-		- gör ett default-tema (måste dela upp functions.css i två filer)
 
 
 	session/userdata settings:
@@ -102,7 +101,8 @@ X = hi prio task
 	- userdata: fixade så kategorier & personliga settings tas bort när admin raderar ett userdata fält
 	- userdata: fixade så checkbox typen funkar
 	- userdata: fixat userdata typen image så den funkar + går att radera uppladdade bilder
-
+	- core: förberett för skins-support genom att dela /css/functions.css i /css/core.css och /css/themes/default.css
+	
 
 2007.05.16:
 	- admin: admin_events sql optimering

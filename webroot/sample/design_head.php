@@ -3,7 +3,8 @@
 <head>
 	<title>sample site</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<link rel="stylesheet" href="/css/functions.css" type="text/css"/>
+	<link rel="stylesheet" href="/css/core.css" type="text/css"/>
+	<link rel="stylesheet" href="/css/themes/default.css" type="text/css"/>
 	<link rel="stylesheet" href="<?=$session->web_root?>css/site.css" type="text/css"/>
 <?linkRSSfeeds()?>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>

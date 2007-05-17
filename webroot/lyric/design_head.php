@@ -4,7 +4,9 @@
 	<title><?=isset($title)?$title:'lyrics'?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<script type="text/javascript" src="/js/functions.js"></script>
-	<link rel="stylesheet" type="text/css" href="/css/functions.css"/>
+
+	<link rel="stylesheet" href="/css/core.css" type="text/css"/>
+	<link rel="stylesheet" href="/css/themes/default.css" type="text/css"/>
 	<link rel="stylesheet" type="text/css" href="css/site.css"/>
 </head>
 <body>

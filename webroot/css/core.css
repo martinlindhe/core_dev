@@ -1,0 +1,57 @@
+img {
+	border: 0;
+}
+
+.admin_stopword {
+	border: 1px #888 solid;
+	padding: 10px;
+	background-color: #fff;
+	width: 200px;
+	float: left;
+	margin: 5px;
+}
+
+.event_log_notice {
+	color: #000;
+	background-color: #aaeeaa;
+	padding: 4px;
+}
+.event_log_warning {
+	color: #000;
+	background-color: #eeaaaa;
+	padding: 4px;
+}
+.event_log_error {
+	color: #000;
+	background-color: #ee5555;
+	padding: 4px;
+}
+
+.ulli_menu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid #E1E2B9;
+	border-top: 0;
+}
+.ulli_menu li {
+	border: 1px solid #E1E2B9;
+}
+.ulli_menu li:hover {
+	border: 1px solid #CCCCCC;
+}
+.ulli_menu a {
+	color: #000;
+	display: block;
+	text-decoration: none;
+	padding: 4px 6px;
+}
+.ulli_menu a:hover {
+	background-color: #FFFFFF;
+}
+.ulli_menu ul {
+	list-style: none;
+}
+.ulli_menu_current {
+	background-color: #eee !important;
+}
