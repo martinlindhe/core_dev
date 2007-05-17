@@ -66,6 +66,17 @@
 		return $db->getOneRow($q);
 	}
 
+	function getCategoryName($_type, $_id)
+	{
+		global $db;
+
+		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+
+		$q  = 'SELECT categoryName FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+
+		return $db->getOneItem($q);
+	}
+
 	function getCategoriesByOwner($_type, $_owner)
 	{
 		global $db;
@@ -75,17 +86,6 @@
 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND ownerId='.$_owner;
 
 		return $db->getArray($q);
-	}
-
-	function getCategoryName($_id)
-	{
-		global $db;
-
-		if (!is_numeric($_id)) return false;
-
-		$q  = 'SELECT categoryName FROM tblCategories WHERE categoryId='.$_id;
-
-		return $db->getOneItem($q);
 	}
 
 	function getCategories($_type, $_owner = 0)

@@ -29,6 +29,7 @@
 	$config['session']['allow_registration'] = true;
 	$config['session']['home_page'] = 'index.php';
 	$config['session']['web_root'] = '/sample/';
+	$config['session']['allow_themes'] = true;
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;

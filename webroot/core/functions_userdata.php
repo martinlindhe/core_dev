@@ -57,7 +57,6 @@
 
 	/* Compacts the userdata field priorities, so the boundary 0-max is used */
 	/* Returns the first free priority number */
-	
 	function compactUserdataFields()
 	{
 		global $db;
@@ -86,6 +85,14 @@
 		$db->query('UPDATE tblUserdata SET fieldPriority='.$new.' WHERE fieldId='.$fieldId);
 		$db->query('UPDATE tblUserdata SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
 	}
+	
+	function getUserdataFieldIdByName($_name)
+	{
+		global $db;
+
+		$q = 'SELECT fieldId FROM tblUserdata WHERE fieldName="'.$db->escape($_name).'"';
+		return $db->getOneItem($q);
+	}
 
 	/* Returns all userdata fields */
 	function getUserdataFields($_required = false)
@@ -99,7 +106,7 @@
 		return $db->getArray($q);
 	}
 
-	/* Returnerar inställningarna för ett fält */
+	/* Returns the settings for one userdata field */
 	function getUserdataField($_id)
 	{
 		global $db;

@@ -43,6 +43,8 @@ class Session
 	public $isAdmin;
 	public $isSuperAdmin;
 	public $started;		//timestamp of when the session started
+	public $theme = 'default.css';			//name of css file for this users theme
+	private $allow_themes = false;
 
 	function __construct(array $session_config)
 	{
@@ -56,6 +58,8 @@ class Session
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
 		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
 		if (isset($session_config['web_root'])) $this->web_root = $session_config['web_root'];
+		if (isset($session_config['theme'])) $this->theme = $session_config['theme'];
+		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
 
 		session_name($this->session_name);
 		session_start();
@@ -70,6 +74,7 @@ class Session
 		if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
 		if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
+		if (!isset($_SESSION['theme'])) $_SESSION['theme'] = '';
 
 		$this->started = &$_SESSION['started'];
 		$this->error = &$_SESSION['error'];
@@ -81,6 +86,7 @@ class Session
 		$this->lastActive = &$_SESSION['lastActive'];
 		$this->isAdmin = &$_SESSION['isAdmin'];
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
+		$this->theme = &$_SESSION['theme'];
 
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
@@ -147,6 +153,11 @@ class Session
 			$this->error = 'Inactivity timeout';
 			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
 			$this->logOut();
+		}
+
+		if ($this->allow_themes) {
+			$catId = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), 'default.css');
+			$this->theme = getCategoryName(CATEGORY_USERDATA, $catId);
 		}
 
 		//Update last active timestamp

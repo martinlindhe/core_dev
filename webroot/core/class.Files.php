@@ -142,7 +142,7 @@ class Files
 			case FILETYPE_FILEAREA_UPLOAD:
 				$action = '?file_gadget_category_id='.$categoryId;
 				if (!$categoryId) echo ' - Root Level content';
-				else echo ' - '.getCategoryName($categoryId).' content';
+				else echo ' - '.getCategoryName(CATEGORY_USERFILE, $categoryId).' content';
 				break;
 
 			case FILETYPE_WIKI:

@@ -111,7 +111,7 @@
 		echo $news['title'].'</div>';
 
 		if ($news['categoryId']) {
-			echo '<a href="news.php?cat='.$news['categoryId'].'">'.getCategoryName($news['categoryId']).'</a><br/>';
+			echo '<a href="news.php?cat='.$news['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $news['categoryId']).'</a><br/>';
 		}
 		echo 'By '.$news['creatorName'].', published '.$news['timeToPublish'].'<br/>';
 		if ($news['editorId']) echo '<i>Updated '.$news['timeEdited'].' by '.$news['editorName'].'</i><br/>';
@@ -217,7 +217,7 @@
 		foreach ($list as $row) {
 			echo '<div class="newsitem">';
 			echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a>, published '.$row['timeToPublish'];
-			if ($row['categoryId']) echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName($row['categoryId']).'</a>';
+			if ($row['categoryId']) echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $row['categoryId']).'</a>';
 			echo '<br/>';
 
 			$art = parseArticle($row['body']);

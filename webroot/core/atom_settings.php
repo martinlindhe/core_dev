@@ -30,6 +30,7 @@
 	function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
 	{
 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+		echo 'yy';
 
 		global $db;
 
@@ -38,6 +39,8 @@
 
 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
 		$result = $db->getOneItem($q);
+
+$db->showProfile();
 
 		if ($result) return $result;
 		return $defaultValue;

@@ -1,7 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- skins support: låt user kunna välja ett skin (dropdownlista + tblSettings save) av flera,
-		 	vilket sätter en specifik css för usern, som sätter utseende på blog, news, etc
+		- krävs ett extra sid-reload när man ändrat skin theme
 
 
 	session/userdata settings:
@@ -102,6 +101,7 @@ X = hi prio task
 	- userdata: fixade så checkbox typen funkar
 	- userdata: fixat userdata typen image så den funkar + går att radera uppladdade bilder
 	- core: förberett för skins-support genom att dela /css/functions.css i /css/core.css och /css/themes/default.css
+	- core: lagt dit skins-support. kräver ett userdata fält som heter "Theme" som är en dropdown eller radiobutton med css-filnamn
 	
 
 2007.05.16:

@@ -4,7 +4,7 @@
 	$_cat = 1;
 	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $_cat = $_GET['c'];
 
-	$title = 'Pontiac - '.getCategoryName($_cat);
+	$title = 'Pontiac - '.getCategoryName(CATEGORY_USERFILE, $_cat);
 	require('design_head.php');
 
 	$files->showThumbnails(FILETYPE_FILEAREA_UPLOAD, $_cat);
