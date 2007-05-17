@@ -115,6 +115,8 @@ X = hi prio task
 	- news: fixat så delete news fungerar
 	- userdata accessnivåer - gjorde om till en PRIVATE flagga (kan endast ses av användaren & admins), om fältet ej är PRIVATE så kan alla se det
 	- blog: kan ge rating på en blog
+	- news: kan flytta en nyhet till en annan kategori genom "edit news"
+
 
 2007.05.15:
 	- spider: nytt projekt, genomför en automatisk userdata input audit av en webbsajt

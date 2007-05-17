@@ -24,15 +24,15 @@
 		return true;
 	}
 	
-	function updateNews($newsId, $title, $body, $topublish, $rss_enabled)
+	function updateNews($newsId, $categoryId, $title, $body, $topublish, $rss_enabled)
 	{
 		global $db, $session;
 
-		if (!$session->isAdmin || !is_numeric($newsId) || !is_numeric($rss_enabled)) return false;
+		if (!$session->isAdmin || !is_numeric($newsId) || !is_numeric($categoryId) || !is_numeric($rss_enabled)) return false;
 
 		$topublish = strtotime($topublish);
 
-		$q = 'UPDATE tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session->id.' WHERE newsId='.$newsId;
+		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session->id.' WHERE newsId='.$newsId;
 		$db->query($q);
 
 		return true;
@@ -139,7 +139,7 @@
 		if ($current_tab == 'NewsEdit' && $session->isAdmin) {
 
 			if (!empty($_POST['news_title'])) {
-				updateNews($_id, $_POST['news_title'], $_POST['news_body'], $_POST['news_publish'], $_POST['news_rss']);
+				updateNews($_id, $_POST['news_cat'], $_POST['news_title'], $_POST['news_body'], $_POST['news_publish'], $_POST['news_rss']);
 			}
 
 			$item = getNewsItem($_id);
@@ -151,14 +151,15 @@
 			echo 'Text:<br/>';
 			echo '<textarea name="news_body" cols="60" rows="16">'.$item['body'].'</textarea><br/>';
 			echo '<input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
-			echo '<label for="rss_check">';
+			echo ' <label for="rss_check">';
 			echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
-			echo 'Include this news in the RSS feed</label><br/><br/>';
+			echo ' Include this news in the RSS feed</label><br/><br/>';
+			echo 'Category: '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
 			echo 'Time for publication:<br/>';
 			echo '<input type="text" name="news_publish" value="'.$item['timeToPublish'].'"/> ';
 			echo '<input type="submit" class="button" value="Save changes"/><br/>';
 			echo '</form><br/>';
-			
+
 		} else if ($current_tab == 'NewsDelete') {
 
 			//fixme: confirmed() skickar fel parametrar, så detta funkar inte

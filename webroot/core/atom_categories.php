@@ -88,7 +88,7 @@
 		return $db->getOneItem($q);
 	}
 
-	function getCategories($_type, $_owner)
+	function getCategories($_type, $_owner = 0)
 	{
 		global $db;
 
@@ -124,6 +124,7 @@
 				if ($_owner) $q .= ' AND ownerId='.$_owner;
 				break;
 
+			case CATEGORY_LANGUAGE:
 			case CATEGORY_CONTACT:
 			case CATEGORY_NEWS:
 				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
@@ -156,11 +157,12 @@
 		$list = getGlobalAndUserCategories($_type, $_owner);
 		foreach ($list as $row)
 		{
-			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && !$shown_global_cats && $row['categoryPermissions']==10) {
+			
+			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && $row['categoryPermissions']==10) {
 				$content .= '<optgroup label="Global categories">';
 				$shown_global_cats = true;
 			}
-			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && !$shown_my_cats && $row['categoryPermissions']!=10) {
+			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_LANGUAGE && !$shown_my_cats && $row['categoryPermissions']!=10) {
 				$content .= '</optgroup>';
 				$content .= '<optgroup label="Your categories">';
 				$shown_my_cats = true;
