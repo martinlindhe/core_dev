@@ -461,7 +461,7 @@ CREATE TABLE tblFiles (
   timeUploaded datetime NOT NULL,
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 CREATE TABLE tblFriendRequests (
   reqId int(10) unsigned NOT NULL auto_increment,
   senderId int(10) unsigned NOT NULL default '0',
@@ -506,6 +506,9 @@ CREATE TABLE tblModerationQueue (
   itemId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   creatorId int(10) unsigned NOT NULL default '0',
+  moderatedBy int(10) unsigned NOT NULL default '0',
+  timeModerated datetime default NULL,
+  autoTriggered tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (queueId)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COMMENT='Modereringskö med olika objekt som behöver ';
 CREATE TABLE tblNews (

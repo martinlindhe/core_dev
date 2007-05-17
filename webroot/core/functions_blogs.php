@@ -11,7 +11,7 @@
 	function addBlog($categoryId, $title, $body)
 	{
 		global $db, $session, $config;
-		
+
 		if (!$session->id || !is_numeric($categoryId)) return false;
 
 		$title = $db->escape($title);

@@ -1,7 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- FÖRST!!! functions_contacts.php: implementera "välj typ av relation" när man skickar bli-vän förfrågan, se addFriendRequest() etc
-	
 		- skins support: låt user kunna välja ett skin (dropdownlista + tblSettings save) av flera,
 		 	vilket sätter en specifik css för usern, som sätter utseende på blog, news, etc
 		- gör ett default-tema (måste dela upp functions.css i två filer)
@@ -15,7 +13,6 @@
 
 
 	profil/personliga sidor:
-		- implementera godkännande av relation
 		- sök användare-funktion, som söker på userdata
 
 

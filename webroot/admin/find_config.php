@@ -17,7 +17,7 @@
 		'/admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups',
 		'/admin/admin_events.php'.getProjectPath(0) => 'Event log',
 		'/admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
-		'/admin/admin_statistics.php'.getProjectPath(0) => 'stats',
+		'/admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
 		'/admin/admin_db_info.php'.getProjectPath(0) => '$db',
 		'/admin/admin_session_info.php'.getProjectPath(0) => '$session',
 		'/admin/admin_phpinfo.php'.getProjectPath(0) => 'PHP'

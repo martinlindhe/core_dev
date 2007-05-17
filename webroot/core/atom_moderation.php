@@ -187,6 +187,7 @@
 
 		$q = 'INSERT INTO tblModerationQueue SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
 		$db->query($q);
+
 		return $db->insert_id;
 	}
 
