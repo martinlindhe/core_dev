@@ -78,6 +78,7 @@
 		</Size>
 		<Animation>A_NoteBG04</Animation>
 	</StaticAnimation>
+
 	<Button item = "NW_DoneButton">
 		<ScreenID>DoneButton</ScreenID>
 		<!--<Font>3</Font>-->
@@ -112,6 +113,83 @@
 		<!--<<SoundUp/>-->
 		<!--<SoundFlyby/>-->
 	</Button>
+
+	<Button item="NW_ScribeButton">
+		<ScreenID>ScribeButton</ScreenID>
+		<!--<Font>3</Font>-->
+		<!--<Font>3</Font>-->
+		<RelativePosition>true</RelativePosition>
+		<AutoStretch>true</AutoStretch>
+
+		<LeftAnchorToLeft>false</LeftAnchorToLeft>
+		<LeftAnchorOffset>294</LeftAnchorOffset>
+
+		<TopAnchorToTop>false</TopAnchorToTop>
+		<TopAnchorOffset>26</TopAnchorOffset>
+
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<RightAnchorOffset>218</RightAnchorOffset>
+
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<BottomAnchorOffset>2</BottomAnchorOffset>
+
+		<Style_Transparent>false</Style_Transparent>
+		<!--<TooltipReference/>-->
+		<Style_Checkbox>false</Style_Checkbox>
+		<!--<RadioGroup/>-->
+		<Text>Scribe</Text>
+		<TextColor>
+				<R>255</R>
+				<G>255</G>
+				<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>A_BtnNormal</Normal>
+			<Pressed>A_BtnPressed</Pressed>
+			<Flyby>A_BtnFlyby</Flyby>
+			<Disabled>A_BtnDisabled</Disabled>
+			<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
+
+	<Button item="NW_CastSpellButton">
+		<ScreenID>CastSpellButton</ScreenID>
+
+		<!--<Font>3</Font>-->
+		<RelativePosition>true</RelativePosition>
+		<AutoStretch>true</AutoStretch>
+
+		<LeftAnchorToLeft>false</LeftAnchorToLeft>
+		<LeftAnchorOffset>130</LeftAnchorOffset>
+
+		<TopAnchorToTop>false</TopAnchorToTop>
+		<TopAnchorOffset>26</TopAnchorOffset>
+
+		<RightAnchorToLeft>false</RightAnchorToLeft>
+		<RightAnchorOffset>34</RightAnchorOffset>
+
+		<BottomAnchorToTop>false</BottomAnchorToTop>
+		<BottomAnchorOffset>2</BottomAnchorOffset>
+
+		<Style_Transparent>false</Style_Transparent>
+		<!--<TooltipReference/>-->
+		<Style_Checkbox>false</Style_Checkbox>
+		<!--<RadioGroup/>-->
+		<Text>Cast Spell</Text>
+		<TextColor>
+				<R>255</R>
+				<G>255</G>
+				<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>A_BtnNormal</Normal>
+			<Pressed>A_BtnPressed</Pressed>
+			<Flyby>A_BtnFlyby</Flyby>
+			<Disabled>A_BtnDisabled</Disabled>
+			<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
+
 	<Screen item = "NoteWindow">
 		<!--<ScreenID/>-->
 		<!--<Font>3</Font>-->
@@ -141,6 +219,8 @@
 		<Pieces>NW_BG4</Pieces>
 		<Pieces>NW_NoteDisplay</Pieces>
 		<Pieces>NW_DoneButton</Pieces>
+		<Pieces>NW_CastSpellButton</Pieces>
+		<Pieces>NW_ScribeButton</Pieces>
 	</Screen>
 
 </XML>

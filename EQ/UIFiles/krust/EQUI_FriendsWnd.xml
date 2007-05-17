@@ -480,144 +480,6 @@
 		<AlignRight>false</AlignRight>
 	</Label>
 
-	<Label item="HUD_MeleeBuffsLabel">
-		<Font>3</Font>
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>2</X>
-			<Y>26</Y>
-		</Location>
-		<Size>
-			<CX>50</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>Melee:</Text>
-		<TextColor>
-			<R>255</R>
-			<G>255</G>
-			<B>255</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item="HUD_MeleeBuffs">
-		<Font>3</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Krust.MeleeBuffs}</TooltipReference>  
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>54</X>
-			<Y>26</Y>
-		</Location>
-		<Size>
-			<CX>260</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-
-	<Label item="HUD_CasterBuffsLabel">
-		<Font>3</Font>
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>2</X>
-			<Y>38</Y>
-		</Location>
-		<Size>
-			<CX>50</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>Caster:</Text>
-		<TextColor>
-			<R>255</R>
-			<G>255</G>
-			<B>255</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item="HUD_CasterBuffs">
-		<Font>3</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Krust.CasterBuffs}</TooltipReference>  
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>54</X>
-			<Y>38</Y>
-		</Location>
-		<Size>
-			<CX>260</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>	
-
-	<Label item="HUD_ResistBuffsLabel">
-		<Font>3</Font>
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>2</X>
-			<Y>50</Y>
-		</Location>
-		<Size>
-			<CX>50</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>Resists:</Text>
-		<TextColor>
-			<R>255</R>
-			<G>255</G>
-			<B>255</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item="HUD_ResistBuffs">
-		<Font>3</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Krust.ResistBuffs}</TooltipReference>  
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>54</X>
-			<Y>50</Y>
-		</Location>
-		<Size>
-			<CX>260</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-		<TextColor>
-			<R>200</R>
-			<G>200</G>
-			<B>200</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-
 <!-- Custom Ends -->
 	<Screen item="FriendsWindow">
 		<!--<ScreenID/>-->
@@ -628,7 +490,7 @@
 		</Location>
 		<Size>
 			<CX>280</CX>
-			<CY>84</CY>
+			<CY>48</CY>
 		</Size>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
@@ -655,13 +517,6 @@
 		<Pieces>HUD_BuffSlotsLabel</Pieces>
 		<Pieces>HUD_BuffSlots</Pieces>
 
-		<Pieces>HUD_MeleeBuffsLabel</Pieces>
-		<Pieces>HUD_MeleeBuffs</Pieces>
-		<Pieces>HUD_CasterBuffsLabel</Pieces>
-		<Pieces>HUD_CasterBuffs</Pieces>
-		<Pieces>HUD_ResistBuffsLabel</Pieces>
-		<Pieces>HUD_ResistBuffs</Pieces>
-		
 		<Pieces>HUD_DPS</Pieces>
 	</Screen>
 </XML>

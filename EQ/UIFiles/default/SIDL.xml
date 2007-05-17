@@ -301,6 +301,10 @@
 				<default>0</default>
 			</element>
 		</ElementType>
+		<ElementType name="HtmlComponent">
+			<superType type="Control" />
+			<element name="StartUri" type="string" />
+		</ElementType>
 		<ElementType name="InvSlot">
 			<superType type="Control" />
 			<element name="EQType" type="int" />

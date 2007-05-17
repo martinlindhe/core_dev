@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <XML ID="EQInterfaceDefinitionLanguage">
+
 	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />
+
 	<Button item="BOOK_DoneButton">
 		<ScreenID>DoneButton</ScreenID>
 		<!--<Font>3</Font>-->
@@ -31,6 +33,73 @@
 			<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
+
+
+	<Button item="BOOK_CastSpellButton">
+		<ScreenID>CastSpellButton</ScreenID>
+		<!--<Font>3</Font>-->
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>281</X>
+			<Y>294</Y>
+		</Location>
+		<Size>
+			<CX>102</CX>
+			<CY>24</CY>
+		</Size>
+		<Style_Transparent>false</Style_Transparent>
+		<!--<TooltipReference/>-->
+		<Style_Checkbox>false</Style_Checkbox>
+		<!--<RadioGroup/>-->
+		<Text>Cast Spell</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>A_BtnNormal</Normal>
+			<Pressed>A_BtnPressed</Pressed>
+			<Flyby>A_BtnFlyby</Flyby>
+			<Disabled>A_BtnDisabled</Disabled>
+			<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
+
+
+	<Button item="BOOK_ScribeButton">
+		<ScreenID>ScribeButton</ScreenID>
+		<!--<Font>3</Font>-->
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>383</X>
+			<Y>294</Y>
+		</Location>
+		<Size>
+			<CX>52</CX>
+			<CY>24</CY>
+		</Size>
+		<Style_Transparent>false</Style_Transparent>
+		<!--<TooltipReference/>-->
+		<Style_Checkbox>false</Style_Checkbox>
+		<!--<RadioGroup/>-->
+		<Text>Scribe</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>A_BtnNormal</Normal>
+			<Pressed>A_BtnPressed</Pressed>
+			<Flyby>A_BtnFlyby</Flyby>
+			<Disabled>A_BtnDisabled</Disabled>
+			<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
+
+
+
 	<Button item="BOOK_RightButton">
 		<ScreenID>RightButton</ScreenID>
 		<!--<Font>3</Font>-->
@@ -63,6 +132,8 @@
 			<PressedFlyby>A_RightArrowBtnPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
+
+
 	<Button item="BOOK_LeftButton">
 		<ScreenID>LeftButton</ScreenID>
 		<!--<Font>3</Font>-->
@@ -95,6 +166,8 @@
 			<PressedFlyby>A_LeftArrowBtnPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
+
+
 	<StaticText item="BOOK_Page0Number">
 		<ScreenID>Page0Number</ScreenID>
 		<!--<Font>3</Font>-->
@@ -117,6 +190,8 @@
 		<AlignCenter>true</AlignCenter>
 		<AlignRight>false</AlignRight>
 	</StaticText>
+
+
 	<StaticText item="BOOK_Page1Number">
 		<ScreenID>Page1Number</ScreenID>
 		<!--<Font>3</Font>-->
@@ -139,6 +214,8 @@
 		<AlignCenter>true</AlignCenter>
 		<AlignRight>false</AlignRight>
 	</StaticText>
+
+
 	<Editbox item="BOOK_Page0">
 		<ScreenID>Page0</ScreenID>
 		<DrawTemplate>WDT_Inner</DrawTemplate>
@@ -160,6 +237,8 @@
 		</TextColor>
 		<Style_Multiline>true</Style_Multiline>
 	</Editbox>
+
+
 	<Editbox item="BOOK_Page1">
 		<ScreenID>Page1</ScreenID>
 		<DrawTemplate>WDT_Inner</DrawTemplate>
@@ -181,6 +260,8 @@
 		</TextColor>
 		<Style_Multiline>true</Style_Multiline>
 	</Editbox>
+
+
 	<StaticAnimation item="BOOK_BookBG1">
 		<ScreenID>BookBG1</ScreenID>
 		<RelativePosition>true</RelativePosition>
@@ -194,6 +275,8 @@
 		</Size>
 		<Animation>A_book1</Animation>
 	</StaticAnimation>
+
+
 	<StaticAnimation item="BOOK_BookBG2">
 		<ScreenID>BookBG2</ScreenID>
 		<RelativePosition>true</RelativePosition>
@@ -207,6 +290,8 @@
 		</Size>
 		<Animation>A_book2</Animation>
 	</StaticAnimation>
+
+
 	<StaticAnimation item="BOOK_BookBG3">
 		<ScreenID>BookBG3</ScreenID>
 		<RelativePosition>true</RelativePosition>
@@ -220,6 +305,8 @@
 		</Size>
 		<Animation>A_book3</Animation>
 	</StaticAnimation>
+
+
 	<StaticAnimation item="BOOK_BookBG4">
 		<ScreenID>BookBG4</ScreenID>
 		<RelativePosition>true</RelativePosition>
@@ -233,6 +320,8 @@
 		</Size>
 		<Animation>A_book4</Animation>
 	</StaticAnimation>
+
+
 	<Screen item="BookWindow">
 		<!--<ScreenID/>-->
 		<!--<Font/>-->
@@ -266,5 +355,9 @@
 		<Pieces>BOOK_Page0Number</Pieces>
 		<Pieces>BOOK_Page1Number</Pieces>
 		<Pieces>BOOK_DoneButton</Pieces>
+		<Pieces>BOOK_CastSpellButton</Pieces>
+		<Pieces>BOOK_ScribeButton</Pieces>
 	</Screen>
+
+
 </XML>

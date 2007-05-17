@@ -142,7 +142,8 @@
         <Include>EQUI_GroupMentorWnd.xml</Include>
         <Include>EQUI_SpellDisplay.xml</Include>
         <Include>EQUI_RewardSelectionWnd.xml</Include>
-	<Include>EQUI_NewPointMerchantWnd.xml</Include>        
+		<Include>EQUI_NewPointMerchantWnd.xml</Include>        
+		<Include>EQUI_HtmlWnd.xml</Include>
 </Composite>
 
     <Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
