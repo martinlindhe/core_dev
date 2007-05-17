@@ -1,6 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- krävs ett extra sid-reload när man ändrat skin theme
+
 
 
 	session/userdata settings:
@@ -71,7 +71,7 @@
  	 	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
 		- gör en funktion som visar rss news feeds, för news-modulen, packa ihop den utspridda kod som finns i sample/news.php, sample/design_head.php
 		- även nån funktion som låter en adda extra css eller ändra default css (skins!)
-
+		- det krävs ett extra sid-reload när man ändrat skin theme
 
 	misc/senare:
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)

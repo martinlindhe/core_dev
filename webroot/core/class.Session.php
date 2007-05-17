@@ -74,7 +74,6 @@ class Session
 		if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
 		if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
-		if (!isset($_SESSION['theme'])) $_SESSION['theme'] = '';
 
 		$this->started = &$_SESSION['started'];
 		$this->error = &$_SESSION['error'];
@@ -86,7 +85,6 @@ class Session
 		$this->lastActive = &$_SESSION['lastActive'];
 		$this->isAdmin = &$_SESSION['isAdmin'];
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
-		$this->theme = &$_SESSION['theme'];
 
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';

@@ -4,7 +4,7 @@
 	<title>spider</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="stylesheet" href="/css/core.css" type="text/css"/>
-	<link rel="stylesheet" href="/css/themes/default.css" type="text/css"/>
+	<link rel="stylesheet" href="/css/themes/<?=$session->theme?>" type="text/css"/>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 	<script type="text/javascript" src="/js/ajax.js"></script>
 	<script type="text/javascript" src="/js/functions.js"></script>

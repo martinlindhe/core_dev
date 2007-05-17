@@ -6,7 +6,7 @@
 	<script type="text/javascript" src="/js/functions.js"></script>
 
 	<link rel="stylesheet" href="/css/core.css" type="text/css"/>
-	<link rel="stylesheet" href="/css/themes/default.css" type="text/css"/>
+	<link rel="stylesheet" href="/css/themes/<?=$session->theme?>" type="text/css"/>
 	<link rel="stylesheet" type="text/css" href="css/site.css"/>
 </head>
 <body>
