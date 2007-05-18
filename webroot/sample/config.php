@@ -50,4 +50,5 @@
 	'friends.php' => 'Friends',
 	'settings.php' => 'Settings');
 
+	$session->handleSessionActions();
 ?>

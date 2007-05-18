@@ -22,6 +22,7 @@
 	$config['session']['name'] = 'Piggy';
 	$config['session']['sha1_key'] = 'x89xoedfjlzkjsfgviuasvnavklnke5avnaoeviaeovoiav';
 	$config['session']['allow_registration'] = true;
+	$config['session']['web_root'] = '/pigskin/';
 	$session = new Session($config['session']);
 	
 	$config['files']['apc_uploads'] = false;
@@ -33,4 +34,6 @@
 	$config['files']['upload_dir'] = 'E:/Devel/webupload/pigskin/';
 	$config['files']['thumbs_dir'] = 'E:/Devel/webupload/pigskin/thumbs/';
 	$files = new Files($config['files']);
+
+	$session->handleSessionActions();
 ?>

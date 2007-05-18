@@ -30,4 +30,6 @@
 	$config['session']['web_root'] = '/lyric/';
 	$config['session']['default_title'] = 'lyric database';
 	$session = new Session($config['session']);
+
+	$session->handleSessionActions();
 ?>

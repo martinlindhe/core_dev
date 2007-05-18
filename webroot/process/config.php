@@ -31,4 +31,5 @@
 	$config['files']['thumbs_dir'] = 'D:/devel/webupload/process/thumbs/';
 	$files = new Files($config['files']);
 
+	$session->handleSessionActions();
 ?>

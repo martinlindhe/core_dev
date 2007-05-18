@@ -44,7 +44,7 @@ class Session
 	public $isSuperAdmin;
 	public $started;		//timestamp of when the session started
 	public $theme = '';			//contains the currently selected theme
-	public $default_theme = 'default.css';			//default theme if none is choosen
+	private $default_theme = 'default.css';			//default theme if none is choosen
 	private $allow_themes = false;
 	public $default_title = 'untitled';	//default title for pages if no title is specified for that page
 
@@ -77,7 +77,7 @@ class Session
 		if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
 		if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
-		if (!isset($_SESSION['theme'])) $_SESSION['theme'] = '';
+		if (!isset($_SESSION['theme'])) $_SESSION['theme'] = $this->default_theme;
 
 		$this->started = &$_SESSION['started'];
 		$this->error = &$_SESSION['error'];
@@ -93,6 +93,43 @@ class Session
 
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
+
+		//$this->handleSessionActions();
+
+		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
+		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+			$this->error = 'Client IP changed';
+			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
+			$this->logOut();
+		}
+
+		//Logged in: Check if client user agent string changed
+		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
+			$this->error = 'Client user agent string changed';
+			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"');
+			$this->logOut();
+		}
+
+		//Logged in: Check user activity - log out inactive user
+		if ($this->lastActive < (time()-$this->timeout)) {
+			$this->error = 'Inactivity timeout';
+			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
+			$this->logOut();
+		}
+
+		if ($this->allow_themes && !$this->theme) {
+			$catId = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), $this->default_theme);
+			$this->theme = getCategoryName(CATEGORY_USERDATA, $catId);
+		}
+
+		//Update last active timestamp
+		$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
+		$this->lastActive = time();
+	}
+
+	function handleSessionActions()
+	{
+		global $db;
 
 		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
 		{
@@ -136,36 +173,6 @@ class Session
 			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
 			die;
 		}
-
-		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
-		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
-			$this->error = 'Client IP changed';
-			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
-			$this->logOut();
-		}
-
-		//Logged in: Check if client user agent string changed
-		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
-			$this->error = 'Client user agent string changed';
-			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"');
-			$this->logOut();
-		}
-
-		//Logged in: Check user activity - log out inactive user
-		if ($this->lastActive < (time()-$this->timeout)) {
-			$this->error = 'Inactivity timeout';
-			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
-			$this->logOut();
-		}
-
-		if ($this->allow_themes && !$this->theme) {
-			$catId = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), $this->default_theme);
-			$this->theme = getCategoryName(CATEGORY_USERDATA, $catId);
-		}
-
-		//Update last active timestamp
-		$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
-		$this->lastActive = time();
 	}
 
 	/* Writes a log entry to tblLogs */
@@ -270,7 +277,7 @@ class Session
 		$this->mode = 0;
 		$this->isAdmin = 0;
 		$this->isSuperAdmin = 0;
-		$this->theme = '';
+		$this->theme = $this->default_theme;
 	}
 	
 	/*Shows a login form with tabs for Register & Forgot password functions */

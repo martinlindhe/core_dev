@@ -41,4 +41,6 @@
 	
 	$config['adblock']['cachepath'] = 'cache/';
 	$config['adblock']['cacheage'] = 	1; //3600/4;		//time before disk cache expires, in seconds
+
+	$session->handleSessionActions();
 ?>

@@ -22,6 +22,7 @@
 	$config['session']['name'] = 'Janina';
 	$config['session']['sha1_key'] = 'janinaSHAxyxtybhge3bbexudud81cujnm11wbvwcvvw';
 	$config['session']['allow_registration'] = false;
+	$config['session']['web_root'] = '/janina/';
 	$session = new Session($config['session']);
 	
 	$config['files']['apc_uploads'] = false;
@@ -33,4 +34,6 @@
 	$config['files']['upload_dir'] = 'E:/Devel/webupload/janina/';
 	$config['files']['thumbs_dir'] = 'E:/Devel/webupload/janina/thumbs/';
 	$files = new Files($config['files']);
+
+	$session->handleSessionActions();
 ?>

@@ -36,4 +36,6 @@
 	$config['chat']['idle_timeout']			=	3;		//idle timeout, in seconds, too low value will cause lots of join/left spam in channel (10 or more recommended)
 
 	$meta_js = array('js/formatDate.js', 'js/functions.js', 'js/ajax.js');
+
+	$session->handleSessionActions();
 ?>

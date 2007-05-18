@@ -28,11 +28,14 @@
 	$config['session']['sha1_key'] = 'CAXadshq4jJAJRsjrzXFTszdfsJRzrj66rua43y';
 	$config['session']['allow_registration'] = false;
 	$config['session']['home_page'] = 'index.php';
-	$config['session']['web_root'] = '/spider/';	//path on web server, to use to address paths for css & js includes
+	$config['session']['web_root'] = '/spider/';
+	$config['session']['default_title'] = 'spider project';
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;
 	$config['files']['upload_dir'] = 'E:/devel/webupload/spider/';
 	$config['files']['thumbs_dir'] = 'E:/devel/webupload/spider/thumbs/';
 	$files = new Files($config['files']);
+
+	$session->handleSessionActions();
 ?>

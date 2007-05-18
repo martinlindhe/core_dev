@@ -36,4 +36,6 @@
 
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
+
+	$session->handleSessionActions();
 ?>
