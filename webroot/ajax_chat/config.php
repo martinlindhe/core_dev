@@ -25,7 +25,6 @@
 	$config['session']['name'] = 'ajaxChatID';
 	$config['session']['sha1_key'] = 'ajaxchat8x8jdszfoklxcvuykFFaadvdfvzw434fg3f3';
 	$config['session']['allow_registration'] = true;
-	$config['session']['home_page'] = 'index.php';
 	$config['session']['default_title'] = 'ajax chat project';
 	$config['session']['web_root'] = '/ajax_chat/';
 	$session = new Session($config['session']);

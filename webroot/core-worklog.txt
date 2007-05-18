@@ -4,9 +4,6 @@
 
 	session/userdata settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
-		- gör så att man inte behöver logga ut & in igen för att ändring av userdata "Theme" ska läsas in på nytt,
-			genom att göra ett special case i userdata handlingen för ett fält med namnet "Theme" (gör fältnamnet konfigurerbart)
-		- gör även samma typ av special case fast för det fält som innehåller E-mail, för att kunna köra email-validering på input
 
 
 	blog:
@@ -109,6 +106,10 @@ X = hi prio task
 			default.css|Default style
 			blah.css|Another style by kenta
 			hanteras i getCategoriesSelect()
+	- session/userdata: gjort så att man inte behöver logga ut & in igen för att ändring av userdata "Theme" ska läsas in på nytt,
+		genom att göra ett special case i userdata handlingen för ett fält med namnet "Theme" (gör fältnamnet konfigurerbart)
+	- gör även samma typ av special case fast för det fält som innehåller E-mail, för att köra email-validering på input
+
 
 
 2007.05.17:

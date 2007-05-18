@@ -26,7 +26,6 @@
 	$config['session']['name'] = 'adblockID';
 	$config['session']['sha1_key'] = 'sjxkxEadBL0ckjdhyhhHHxnjklsdvyuhu434nzkkz18ju222ha';
 	$config['session']['allow_registration'] = false;
-	$config['session']['home_page'] = 'index.php';
 	$config['session']['web_root'] = '/adblock/';	//path on web server, to use to address paths for css & js includes
 	$config['session']['default_title'] = 'Adblock Filterset Database';
 	$session = new Session($config['session']);

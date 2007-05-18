@@ -310,4 +310,24 @@
 
 		return $art;
 	}
+	
+	//Denna regexp har jag testat ordentligt den verkar ultimat
+	//http://www.regexlib.com/REDetails.aspx?regexp_id=295:
+/*
+	echo ValidEmail('hej@kex.com').'<br>'; //ok
+	echo ValidEmail('apa sxev ke@com.com').'<br>'; //deny
+	echo ValidEmail('kuvös@kom.uk').'<br>'; //deny
+	echo ValidEmail('kuvös').'<br>';	 //deny
+	echo ValidEmail('martin.partin@hotmail.se').'<br>'; //ok
+	echo ValidEmail('gupp_golo@cnn.com').'<br>'; //ok
+	echo ValidEmail('<gupp@kep.com').'<br>'; //deny
+	echo ValidEmail('rl@123.22.11.92').'<br>'; //deny
+*/
+	define('REGEXP_VALID_EMAIL', '/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/');
+	function ValidEmail($email)
+	{
+		if (preg_match(REGEXP_VALID_EMAIL, $email)) return true;
+		return false;
+	}
+
 ?>

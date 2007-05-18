@@ -490,7 +490,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -499,7 +499,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=103 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=120 DEFAULT CHARSET=latin1;
 CREATE TABLE tblModerationQueue (
   queueId bigint(20) unsigned NOT NULL auto_increment,
   queueType tinyint(3) unsigned NOT NULL default '0',

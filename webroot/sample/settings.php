@@ -10,7 +10,7 @@
 	wiki('Settings');
 	echo '<br/>';
 	
-	$session->editSettings();
+	editSettings();
 
 	require('design_foot.php');
 ?>

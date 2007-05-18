@@ -27,7 +27,6 @@
 	$config['session']['name'] = 'coreID';
 	$config['session']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
 	$config['session']['allow_registration'] = true;
-	$config['session']['home_page'] = 'index.php';
 	$config['session']['web_root'] = '/sample/';
 	$config['session']['default_title'] = 'sample project';
 	$config['session']['allow_themes'] = true;

@@ -25,7 +25,6 @@
 	$config['session']['name'] = 'langID';
 	$config['session']['sha1_key'] = 'sdalkj8vkjncjksdSdFsdfg70kcvvcvGFzadeg5ae5h';
 	$config['session']['allow_registration'] = true;
-	$config['session']['home_page'] = 'index.php';
 	$config['session']['web_root'] = '/lang/';
 	$session = new Session($config['session']);
 

@@ -22,7 +22,6 @@
 	$config['session']['name'] = 'procId';
 	$config['session']['sha1_key'] = 'x8xijemjshjkljhkjhs88t68kioxkijhkjsh';
 	$config['session']['allow_registration'] = false;
-	$config['session']['home_page'] = 'index.php';
 	$config['session']['web_root'] = '/process/';
 	$session = new Session($config['session']);
 

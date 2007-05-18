@@ -27,7 +27,6 @@
 	$config['session']['name'] = 'spiderID';
 	$config['session']['sha1_key'] = 'CAXadshq4jJAJRsjrzXFTszdfsJRzrj66rua43y';
 	$config['session']['allow_registration'] = false;
-	$config['session']['home_page'] = 'index.php';
 	$config['session']['web_root'] = '/spider/';
 	$config['session']['default_title'] = 'spider project';
 	$session = new Session($config['session']);
