@@ -65,7 +65,6 @@
 		* fixat visning av systemmmeddelanden i mailen
 		* kan ej längre svara på system-meddelande mail
 		* fixat användar-sökningen
----[[mailat ovanstående]]---
 
 2007.05.14 Måndag:
 	webbgränssnittet, efter feedback från bitte:
@@ -108,10 +107,16 @@
 		* vänster-alignat text på en mängd med sidor
 		* gjort några nya ikoner
 
+2007.05.18 Fredag:
+	bråkat med Fedora Core 6-installation på process-servern
+	gick hem 14:30 för jag är förkyld
+---[[mailat ovanstående]]---
+
 ***********************************************************************************************************************************
 topp prio:
 
 	* NU:
+		fixa "användare senast online" på mobilsajten, listar samma user flera gånger
 		online/offline visning i mobila gränssnittet
 		maila kiano functions_ratings.php som ska användas
 
