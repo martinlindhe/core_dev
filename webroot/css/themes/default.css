@@ -266,6 +266,7 @@ select {
 .blog_head, .blog_foot {
 	margin: 10px;
 	padding: 10px;
+
 	background-color: #fff;
 	border: 1px #888 solid;
 }
@@ -289,14 +290,14 @@ select {
 	padding-left: 0;
 }
 .blog_menu li {
-	margin-left: 2px;
-	margin-right: 2px;
+	margin-left: 0;
+	margin-right: 4px;
+
 	display: inline;
 	list-style-type: none;
 	border: 1px #888 solid;
 	background-color: #fff;
 	padding: 4px;
-	
 }
 .blog_menu li a {
 	color: #000;
@@ -304,6 +305,7 @@ select {
 }
 .blog_menu li:hover {
 	background-color: #eee;
+	border: 1px #000 solid;
 }
 
 .blogs_cathead {

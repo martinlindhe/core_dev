@@ -28,6 +28,7 @@
 	$config['session']['allow_registration'] = false;
 	$config['session']['home_page'] = 'index.php';
 	$config['session']['web_root'] = '/adblock/';	//path on web server, to use to address paths for css & js includes
+	$config['session']['default_title'] = 'Adblock Filterset Database';
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;

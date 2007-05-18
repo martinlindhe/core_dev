@@ -159,20 +159,6 @@
 		echo '</ul>';
 	}
 
-	/* Called in design_head.php to generate xhtml for rss feeds for current page. other pages can add more feeds to $meta_rss before including design */
-	function linkRSSfeeds()
-	{
-		global $meta_rss;
-
-		$rss_tags = '';
-		if (!empty($meta_rss)) {
-			foreach ($meta_rss as $feed) {
-				if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
-				else $extra = getProjectPath(0);
-				echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="/core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
-			}
-		}
-	}
 
 	/* Looks for formatted wiki section commands, like: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
 		used by functions_wiki.php, functions_blogs.php for special url creation to allow these modules to be embedded in other pages
@@ -201,5 +187,58 @@
 
 		$q = 'SELECT userName FROM tblUsers WHERE userId='.$_id;
 		return $db->getOneItem($q);
+	}
+
+	/* Creates a complete XHTML header, showing rss feeds if available, etc
+		Uses the following global variables, if they are set:
+
+		$title			- <title> of current page. set the default title with $config['session']['default_title']		todo: rename
+		$meta_rss		- array of rss feeds to expose for current page
+		$meta_js		- array of javascripts that needs to be included for current page
+	
+	*/
+	function createXHTMLHeader()
+	{
+		global $session, $title, $meta_js;
+
+		if (!$title) $title = $session->default_title;
+
+		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
+		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
+		echo '<head>';
+			echo '<title>'.$title.'</title>';
+			echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
+			echo '<link rel="stylesheet" href="/css/core.css" type="text/css"/>';
+			echo '<link rel="stylesheet" href="/css/themes/'.$session->theme.'" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$session->web_root.'css/site.css" type="text/css"/>';
+			linkRSSfeeds();
+			echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
+			echo '<script type="text/javascript" src="/js/ajax.js"></script>';
+			echo '<script type="text/javascript" src="/js/functions.js"></script>';
+			if ($meta_js) {
+				foreach ($meta_js as $script) {
+					echo '<script type="text/javascript" src="'.$script.'"></script>';
+				}
+			}
+		echo '</head>';
+		echo '<body>';
+		echo '<script type="text/javascript">';
+		echo 'var _ext_ref="'.getProjectPath(2).'";';
+		echo '</script>';
+	}
+
+	/* Called by createXHTMLHeader() to generate xhtml for rss feeds for current page.
+	 other pages can add more feeds to $meta_rss before including design */
+	function linkRSSfeeds()
+	{
+		global $meta_rss;
+
+		if (empty($meta_rss)) return;
+		
+		foreach ($meta_rss as $feed) {
+			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
+			else $extra = getProjectPath(0);
+			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="/core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
+		}
 	}
 ?>

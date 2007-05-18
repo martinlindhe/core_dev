@@ -1,6 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
-
+		- fixa så sessionen cachar valt theme
 
 
 	session/userdata settings:
@@ -12,6 +12,7 @@
 
 	profil/personliga sidor:
 		- sök användare-funktion, som söker på userdata
+		- visa andra personers info...
 
 
 	omröstningar/undersökningar:
@@ -96,6 +97,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.18:
+	- session: $session->default_title added, default titel för en sida, om ingen specifik titel satts för att overrrida default
+	- core: gjort en funktion som genererar en hel xhtml-header
+
+
+
 2007.05.17:
 	- userdata: fixade så kategorier & personliga settings tas bort när admin raderar ett userdata fält
 	- userdata: fixade så checkbox typen funkar

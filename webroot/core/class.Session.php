@@ -45,6 +45,7 @@ class Session
 	public $started;		//timestamp of when the session started
 	public $theme = 'default.css';			//name of css file for this users theme
 	private $allow_themes = false;
+	public $default_title = 'untitled';	//default title for pages if no title is specified for that page
 
 	function __construct(array $session_config)
 	{
@@ -60,6 +61,7 @@ class Session
 		if (isset($session_config['web_root'])) $this->web_root = $session_config['web_root'];
 		if (isset($session_config['theme'])) $this->theme = $session_config['theme'];
 		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
+		if (isset($session_config['default_title'])) $this->default_title = $session_config['default_title'];
 
 		session_name($this->session_name);
 		session_start();
@@ -114,7 +116,7 @@ class Session
 				}
 			} else {
 				$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
-				require('design_head.php');
+				require('design_head.php');	//fixme: hur kan jag slippa detta
 				$this->showLoginForm();
 				require('design_foot.php');
 				die;

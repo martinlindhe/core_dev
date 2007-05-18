@@ -27,5 +27,7 @@
 	$config['session']['sha1_key'] = 'kekjhbkjsxfgyuejewjkx276786ddjhnhdzzz9716t6z';
 	$config['session']['allow_registration'] = false;
 	$config['session']['home_page'] = 'index.php';
+	$config['session']['web_root'] = '/lyric/';
+	$config['session']['default_title'] = 'lyric database';
 	$session = new Session($config['session']);
 ?>
