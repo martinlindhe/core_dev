@@ -43,7 +43,8 @@ class Session
 	public $isAdmin;
 	public $isSuperAdmin;
 	public $started;		//timestamp of when the session started
-	public $theme = 'default.css';			//name of css file for this users theme
+	public $theme = '';			//contains the currently selected theme
+	public $default_theme = 'default.css';			//default theme if none is choosen
 	private $allow_themes = false;
 	public $default_title = 'untitled';	//default title for pages if no title is specified for that page
 
@@ -76,6 +77,7 @@ class Session
 		if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
 		if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
+		if (!isset($_SESSION['theme'])) $_SESSION['theme'] = '';
 
 		$this->started = &$_SESSION['started'];
 		$this->error = &$_SESSION['error'];
@@ -87,6 +89,7 @@ class Session
 		$this->lastActive = &$_SESSION['lastActive'];
 		$this->isAdmin = &$_SESSION['isAdmin'];
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
+		$this->theme = &$_SESSION['theme'];
 
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
@@ -155,8 +158,8 @@ class Session
 			$this->logOut();
 		}
 
-		if ($this->allow_themes) {
-			$catId = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), 'default.css');
+		if ($this->allow_themes && !$this->theme) {
+			$catId = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), $this->default_theme);
 			$this->theme = getCategoryName(CATEGORY_USERDATA, $catId);
 		}
 
@@ -267,6 +270,7 @@ class Session
 		$this->mode = 0;
 		$this->isAdmin = 0;
 		$this->isSuperAdmin = 0;
+		$this->theme = '';
 	}
 	
 	/*Shows a login form with tabs for Register & Forgot password functions */

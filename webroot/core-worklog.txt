@@ -1,10 +1,11 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- fixa så sessionen cachar valt theme
+
 
 
 	session/userdata settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
+		- gör så att man inte behöver logga ut & in igen för att ändring av userdata "Theme" ska läsas in på nytt
 
 
 	blog:
@@ -100,7 +101,7 @@ X = hi prio task
 2007.05.18:
 	- session: $session->default_title added, default titel för en sida, om ingen specifik titel satts för att overrrida default
 	- core: gjort en funktion som genererar en hel xhtml-header
-
+	- session: fixade så sessionen cachar valt theme, men nu krävs logout & login-igen för att valt theme ska börja användas
 
 
 2007.05.17:
