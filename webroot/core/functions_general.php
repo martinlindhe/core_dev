@@ -3,8 +3,6 @@
 	//reads the 'p' get parameter for current page
 	//example: $pager = makePager(102, 25);		will create a pager for total of 102 items with 25 items per page
 	
-	//$pager['limit'] är för-genererad LIMIT sql för att använda tillsammans med query som hämtar en del av en lista
-	//  alternativt kan $pager['index'] och $pager['items_per_page'] användas för samma syfte
 	function makePager($_total_cnt, $_items_per_page, $_add_value = '')
 	{
 		$pager['page'] = 1;
@@ -149,7 +147,7 @@
 			foreach($menu_arr as $url => $text) {
 				
 				//if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<li class="'.$current_class.'">';
-				//fixme: highlitar inte på parametrar, t.ex "Wiki:Hello", "Blog:243"
+				//fixme: highlitar inte wiki parametrar t.ex "Wiki:Hello", "Blog:243"
 				if ($cur == $url) echo '<li class="'.$current_class.'">';
 				else echo '<li>';
 

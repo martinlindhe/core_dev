@@ -119,8 +119,8 @@
 			$text = substr($text, 0, $pos1) .$quoteblock. substr($text, $pos2+strlen('[/quote]'));
 		} while (1);
 		
-		//wiki links, example [[wiki:About]] links to wiki.php?View:About
-		//example 2: [[wiki:About|read about us]] links to wiki.php?View:About but "read about us" is link text
+		//wiki links, example [[wiki:About]] links to wiki.php?Wiki:About
+		//example 2: [[wiki:About|read about us]] links to wiki.php?Wiki:About but "read about us" is link text
 		//example 3: [[link:page.php|click here]] makes a clickable link
 
 		do {
@@ -155,10 +155,10 @@
 				case 'wiki':
 					if ($link['title']) {
 						//[[wiki:About|read about us]] format
-						$result = '<a href="wiki.php?View:'.$link['param'].'">'.$link['title'].'</a>';
+						$result = '<a href="wiki.php?Wiki:'.$link['param'].'">'.$link['title'].'</a>';
 					} else {
 						//[[wiki:About]] format
-						$result = '<a href="wiki.php?View:'.$link['param'].'">'.$link['param'].'</a>';
+						$result = '<a href="wiki.php?Wiki:'.$link['param'].'">'.$link['param'].'</a>';
 					}
 					break;
 					

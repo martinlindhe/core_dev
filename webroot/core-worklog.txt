@@ -2,10 +2,11 @@
 	core/gör snart:
 
 
-
 	session/userdata settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
-		- gör så att man inte behöver logga ut & in igen för att ändring av userdata "Theme" ska läsas in på nytt
+		- gör så att man inte behöver logga ut & in igen för att ändring av userdata "Theme" ska läsas in på nytt,
+			genom att göra ett special case i userdata handlingen för ett fält med namnet "Theme" (gör fältnamnet konfigurerbart)
+		- gör även samma typ av special case fast för det fält som innehåller E-mail, för att kunna köra email-validering på input
 
 
 	blog:
@@ -102,6 +103,12 @@ X = hi prio task
 	- session: $session->default_title added, default titel för en sida, om ingen specifik titel satts för att overrrida default
 	- core: gjort en funktion som genererar en hel xhtml-header
 	- session: fixade så sessionen cachar valt theme, men nu krävs logout & login-igen för att valt theme ska börja användas
+	- session: flyttat ut login/logout/register logik från constructorn å lagt i egen funktion, $session->handleSessionActions()
+	- userdata: kan nu ge multichoice-typer data såhär: "123|Click here", där 123 är värdet av valet, och Click here är texten på valet,
+			exempel:
+			default.css|Default style
+			blah.css|Another style by kenta
+			hanteras i getCategoriesSelect()
 
 
 2007.05.17:

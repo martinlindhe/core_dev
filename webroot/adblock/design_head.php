@@ -6,9 +6,9 @@
 		<img src="<?=$session->web_root?>gfx/logo.png" alt="Filterset Database"/>
 	</div>
 	<div id="header-items">
-		<a href="<?=$session->web_root?>wiki.php?View:Contribute">Contribute</a>
-		<a href="<?=$session->web_root?>wiki.php?View:About">About</a>
-		<a href="<?=$session->web_root?>wiki.php?View:Help">Help</a>
+		<a href="<?=$session->web_root?>wiki.php?Wiki:Contribute">Contribute</a>
+		<a href="<?=$session->web_root?>wiki.php?Wiki:About">About</a>
+		<a href="<?=$session->web_root?>wiki.php?Wiki:Help">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
@@ -16,7 +16,7 @@
 	$menu = array(
 			'index.php' => 'Home',
 			'news.php' => 'News',
-			'wiki.php?View:Subscribe' => 'Subscribe',
+			'wiki.php?Wiki:Subscribe' => 'Subscribe',
 			'download.php' => 'Download',
 			'report_site.php' => 'Report site',
 			'recent.php' => 'Recent changes');

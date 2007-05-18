@@ -264,6 +264,7 @@
 	//POST param: type_0, type_1, type_2, type_3 bool
 	//POST param: type string
 	//POST param: 
+	//GET param: type
 	function handleAdblockDownloadRequest()
 	{
 		global $session, $files, $config;

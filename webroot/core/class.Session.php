@@ -60,7 +60,6 @@ class Session
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
 		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
 		if (isset($session_config['web_root'])) $this->web_root = $session_config['web_root'];
-		if (isset($session_config['theme'])) $this->theme = $session_config['theme'];
 		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
 		if (isset($session_config['default_title'])) $this->default_title = $session_config['default_title'];
 
@@ -93,38 +92,6 @@ class Session
 
 		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
-
-		//$this->handleSessionActions();
-
-		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
-		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
-			$this->error = 'Client IP changed';
-			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
-			$this->logOut();
-		}
-
-		//Logged in: Check if client user agent string changed
-		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
-			$this->error = 'Client user agent string changed';
-			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"');
-			$this->logOut();
-		}
-
-		//Logged in: Check user activity - log out inactive user
-		if ($this->lastActive < (time()-$this->timeout)) {
-			$this->error = 'Inactivity timeout';
-			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
-			$this->logOut();
-		}
-
-		if ($this->allow_themes && !$this->theme) {
-			$catId = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), $this->default_theme);
-			$this->theme = getCategoryName(CATEGORY_USERDATA, $catId);
-		}
-
-		//Update last active timestamp
-		$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
-		$this->lastActive = time();
 	}
 
 	function handleSessionActions()
@@ -173,6 +140,31 @@ class Session
 			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
 			die;
 		}
+
+		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
+		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+			$this->error = 'Client IP changed';
+			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
+			$this->logOut();
+		}
+
+		//Logged in: Check if client user agent string changed
+		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
+			$this->error = 'Client user agent string changed';
+			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"');
+			$this->logOut();
+		}
+
+		//Logged in: Check user activity - log out inactive user
+		if ($this->lastActive < (time()-$this->timeout)) {
+			$this->error = 'Inactivity timeout';
+			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
+			$this->logOut();
+		}
+
+		//Update last active timestamp
+		$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
+		$this->lastActive = time();
 	}
 
 	/* Writes a log entry to tblLogs */
@@ -258,6 +250,12 @@ class Session
 		//Update last login time
 		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
 		$db->query('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$this->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
+
+		/* Read in current users settings */
+		if ($this->allow_themes) {
+			//todo: optimera detta till en funktion (1 sql) istället för idag 2 sql
+			$this->theme = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), $this->default_theme);
+		}
 
 		$this->log('User logged in', LOGLEVEL_NOTICE);
 		return true;

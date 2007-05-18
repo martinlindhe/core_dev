@@ -167,11 +167,22 @@
 				$content .= '<optgroup label="Your categories">';
 				$shown_my_cats = true;
 			}
-			$content .= '<option value="'.$row['categoryId'].'"';
-			if ($selectedId == $row['categoryId']) $content .= ' selected="selected"';
+
+			/* If text is formatted like "123|Text" then 123 will be used as value for this option */
+			$data = explode('|', $row['categoryName']);
+			if (!empty($data[1])) {
+				$val = $data[0];
+				$text = $data[1];
+			} else {
+				$val = $row['categoryId'];
+				$text = $data[0];
+			}
+
+			$content .= '<option value="'.$val.'"';
+			if ($selectedId == $val) $content .= ' selected="selected"';
 			else if ($url) $content .= ' onclick="location.href=\'?'.$url.'='.$row['categoryId'].'\'"';
 
-			$content .= '>'.$row['categoryName'];
+			$content .= '>'.$text;
 			if ($row['categoryType'] == CATEGORY_USERFILE_PRIVATE) $content .= ' (PRIVATE)';
 			if ($row['categoryType'] == CATEGORY_USERFILE_HIDDEN) $content .= ' (HIDDEN)';
 			$content .= '</option>';

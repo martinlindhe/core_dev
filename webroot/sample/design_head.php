@@ -5,8 +5,8 @@
 		<img src="<?=$session->web_root?>gfx/logo.png" alt="Filterset Database"/>
 	</div>
 	<div id="header-items">
-		<a href="<?=$session->web_root?>wiki.php?View:About">About</a>
-		<a href="<?=$session->web_root?>wiki.php?View:Help">Help</a>
+		<a href="<?=$session->web_root?>wiki.php?Wiki:About">About</a>
+		<a href="<?=$session->web_root?>wiki.php?Wiki:Help">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
