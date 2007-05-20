@@ -17,7 +17,7 @@
 		$lyric_id = addLyric($band_id, 0, 0, $song_name, $lyric_text);
 		if (!$lyric_id) die('Problems adding lyric');
 
-		header('Location: show_record.php?id='.$record_id);
+		header('Location: show_lyric.php?id='.$lyric_id);
 		die;
 	}
 

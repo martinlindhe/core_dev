@@ -80,7 +80,6 @@
 
 --------------[[projekt todo]]--------------
 	lyrics:
-		- edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
 		- åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 		- edit_record.php: kunna editera recordInfo
 		- lista låtar som inte finns på nån skiva (admin)
@@ -96,6 +95,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.20:
+	- lyric: buggfix för add_lyric_single, visade ej rätt sida när lyric var skapad
+	- lyric edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
+
 2007.05.18:
 	- session: $session->default_title added, default titel för en sida, om ingen specifik titel satts för att overrrida default
 	- core: gjort en funktion som genererar en hel xhtml-header

@@ -15,14 +15,13 @@
 	$lyric_data = getLyricData($lyric_id);
 	if (!$lyric_data) die;
 
-	require('design_head.php');
-
-	if (isset($_GET['delete'])) {
+	if (isset($_GET['delete']) && confirmed('Are you sure you want to delete this file?', 'delete', $lyric_id)) {
 		removeLyric($lyric_id);
-		echo 'Lyric removed.<br/>';
-		require('design_foot.php');
+		header('Location: show_band.php?id='.$lyric_data['bandId']);
 		die;
 	}
+
+	require('design_head.php');
 
 	$lyric = $lyric_data['lyricText'];
 	$lyric_name = $lyric_data['lyricName'];
@@ -30,7 +29,7 @@
 
 	echo '<form name="editlyric" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$lyric_id.'">';
 
-	echo '<b>'.$band_name.'</b> - <input type="text" name="title" size="50" value="'.$lyric_name.'"/> ';
+	echo '<a href="show_band.php?id='.getLyricBandId($lyric_id).'">'.$band_name.'</a> - <input type="text" name="title" size="50" value="'.$lyric_name.'"/> ';
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$lyric_id.'&amp;delete">Delete</a><br/>';
 	echo '<a href="show_lyric.php?id='.$lyric_id.'">Show</a><br/>';
 	echo '<textarea name="lyric" rows="27" cols="80">'.$lyric.'</textarea><br/>';
@@ -38,7 +37,6 @@
 	echo '</form><br/>';
 
 	echo '<a href="show_lyric.php?id='.$lyric_id.'">Back to "View lyric" view</a><br/>';
-	echo '<a href="show_band.php?id='.getLyricBandId($lyric_id).'">Go to '.$band_name.' page</a><br/>';
 
 	echo '<br/><br/>';
 	echo 'This song appears on the following records:<br/>';
