@@ -41,13 +41,19 @@
 	$config['wiki']['allow_files'] = true;
 
 	/* Visas på alla olika sidor som hör till ens egen användarprofil */
+	$param = '';
+	$user_name = '';
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+		$param = '?id='.$_GET['id'];
+		$user_name = getUserName($_GET['id']);
+	}
 	$profile_menu = array(
-	'user.php' => 'Overview',
-	'files.php' => 'My files',
-	'blog.php' => 'My blogs',
-	'guestbook.php' => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
-	'friends.php' => 'Friends',
-	'settings.php' => 'Settings');
+	'user.php'.$param => 'Overview:'.$user_name,
+	'files.php'.$param => 'My files',
+	'blog.php'.$param => 'My blogs',
+	'guestbook.php'.$param => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
+	'friends.php'.$param => 'Friends',
+	'settings.php'.$param => 'Settings');
 
 	$session->handleSessionActions();
 ?>

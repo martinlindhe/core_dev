@@ -3,7 +3,7 @@ body {
 	font-family: bitstream vera sans,sans-serif;
 	margin: 0;
 	padding: 0;
-	background-color: #F7F7DD;
+	background-color: #D8DED1;
 }
 a:link { color: #900; }
 a:visited { color: #48468f; }
@@ -24,7 +24,6 @@ img { border: 0; }
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	background-color: #F7F7DD;
 	width: 200px;
 	height: 100%;
 }
@@ -66,7 +65,7 @@ img { border: 0; }
 #leftmenu {
 	position: absolute;
 	left: 20px;
-	top: 20px;
+	top: 40px;
 	width: 160px;
 	font-size: 14px;
 }

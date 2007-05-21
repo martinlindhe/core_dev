@@ -30,15 +30,15 @@ img {
 .ulli_menu {
 	list-style: none;
 	margin: 0;
-	padding: 0;
-	border: 1px solid #E1E2B9;
 	border-top: 0;
+	padding-left: 0;
 }
 .ulli_menu li {
-	border: 1px solid #E1E2B9;
+	background-color: #d0d0d0;
+	border: 1px solid #888;
 }
 .ulli_menu li:hover {
-	border: 1px solid #CCCCCC;
+	border: 1px solid #000;
 }
 .ulli_menu a {
 	color: #000;

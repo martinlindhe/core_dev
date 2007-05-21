@@ -5,17 +5,18 @@
 		By Martin Lindhe, 2007
 	*/
 
-	define('CATEGORY_USERFILE',		1);	//normal, public userfile
-	define('CATEGORY_USERFILE_PRIVATE', 2);	//private userfile, only visible for the users friends / invited ppl
-	define('CATEGORY_USERFILE_HIDDEN', 3);	//files here are only visible by the owner
+	//System categories. Reserved 1-50. Use a number above 50 for your own category types
+	define('CATEGORY_USERFILE',					1);	//normal, public userfile
+	define('CATEGORY_USERFILE_PRIVATE',	2);	//private userfile, only visible for the users friends / invited ppl
+	define('CATEGORY_USERFILE_HIDDEN',	3);	//files here are only visible by the owner
 
 	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
 	define('CATEGORY_CONTACT',			11);		//friend relation category, like "Old friends", "Family"
 	define('CATEGORY_USERDATA',			12);		//used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
 
-	define('CATEGORY_NEWS',				20);
+	define('CATEGORY_NEWS',					20);
 
-	define('CATEGORY_LANGUAGE',		50);	//represents a language, for multi-language features & used by "lang" project
+	define('CATEGORY_LANGUAGE',			51);		//represents a language, for multi-language features & used by "lang" project
 
 	function addCategory($_type, $_name, $_owner = 0, $_global = false)
 	{
@@ -157,12 +158,11 @@
 		$list = getGlobalAndUserCategories($_type, $_owner);
 		foreach ($list as $row)
 		{
-			
-			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && $row['categoryPermissions']==10) {
+			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && $row['categoryPermissions']==10) {
 				$content .= '<optgroup label="Global categories">';
 				$shown_global_cats = true;
 			}
-			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_LANGUAGE && !$shown_my_cats && $row['categoryPermissions']!=10) {
+			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_my_cats && $row['categoryPermissions']!=10) {
 				$content .= '</optgroup>';
 				$content .= '<optgroup label="Your categories">';
 				$shown_my_cats = true;

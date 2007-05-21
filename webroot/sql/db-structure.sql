@@ -14,7 +14,7 @@ CREATE TABLE tblAdblockRules (
   deletedBy smallint(5) unsigned NOT NULL default '0',
   timeDeleted datetime default NULL,
   PRIMARY KEY  (ruleId)
-) ENGINE=MyISAM AUTO_INCREMENT=701 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=703 DEFAULT CHARSET=latin1;
 CREATE TABLE tblCategories (
   categoryId bigint(20) unsigned NOT NULL auto_increment,
   categoryName varchar(100) NOT NULL default '',
@@ -36,7 +36,7 @@ CREATE TABLE tblComments (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (commentId)
-) ENGINE=MyISAM AUTO_INCREMENT=429 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=431 DEFAULT CHARSET=utf8;
 CREATE TABLE tblFiles (
   fileId bigint(20) unsigned NOT NULL auto_increment,
   fileName varchar(250) character set utf8 default NULL,
@@ -58,7 +58,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=699 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=708 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -425,7 +425,7 @@ CREATE TABLE tblCategories (
   categoryPermissions tinyint(1) unsigned NOT NULL default '0',
   ownerId bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(1) unsigned NOT NULL default '0',
@@ -461,7 +461,7 @@ CREATE TABLE tblFiles (
   timeUploaded datetime NOT NULL,
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 CREATE TABLE tblFriendRequests (
   reqId int(10) unsigned NOT NULL auto_increment,
   senderId int(10) unsigned NOT NULL default '0',
@@ -490,7 +490,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -499,7 +499,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=121 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=122 DEFAULT CHARSET=latin1;
 CREATE TABLE tblModerationQueue (
   queueId bigint(20) unsigned NOT NULL auto_increment,
   queueType tinyint(3) unsigned NOT NULL default '0',

@@ -292,7 +292,6 @@ select {
 .blog_menu li {
 	margin-left: 0;
 	margin-right: 4px;
-
 	display: inline;
 	list-style-type: none;
 	border: 1px #888 solid;
