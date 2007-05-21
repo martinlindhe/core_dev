@@ -6,10 +6,12 @@
 	}
 
 	require('design_head.php');
+
+	if (isset($_GET['err'])) echo '<span class="critical">FELAKTIG LOGIN!</span><br/><br/>';
 ?>
 
-	<form method="post" action="">
-		ANVÄNDARE:<br/>
+	<form method="post" action="login.php">
+		ANVÄNDARNAMN:<br/>
 		<input type="text" name="alias"/><br/>
 		<br/>
 		LÖSENORD:<br/>

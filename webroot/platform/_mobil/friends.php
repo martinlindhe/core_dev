@@ -28,9 +28,9 @@
 		$list = getRelationRequestsFromMe();
 		if (count($list)) {
 			echo 'DU VÄNTAR SVAR FRÅN<br/>';
-			for ($i=0; $i<count($list); $i++) {
-				echo 'Du vill bli <b>'.$list[$i]['sent_cmt'].'</b> med '.$list[$i]['u_alias'].', skickat '.$list[$i]['sent_date'];
-				echo ' <a href="?remove='.$list[$i]['id_id'].'">RADERA</a><br/>';
+			foreach($list as $row) {
+				echo 'Du vill bli <b>'.$row['sent_cmt'].'</b> med '.getstringMobile($row['main_id']).', skickat '.$row['sent_date'];
+				echo ' <a href="?remove='.$row['id_id'].'">RADERA</a><br/>';
 			}
 			echo '<br/>';
 		}
@@ -38,10 +38,10 @@
 		$list = getRelationRequestsToMe();
 		if (count($list)) {
 			echo 'OBESVARADE FÖRFRÅGNINGAR<br/>';
-			for ($i=0; $i<count($list); $i++) {
-				echo $list[$i]['u_alias'].' vill bli <b>'.$list[$i]['sent_cmt'].'</b> med dig, skickat '.$list[$i]['sent_date'];
-				echo ' <a href="?accept='.$list[$i]['main_id'].'">ACCEPTERA</a> ';
-				echo '<a href="?remove='.$list[$i]['id_id'].'">RADERA</a><br/>';
+			foreach($list as $row) {
+				echo getstringMobile($row['main_id']).' vill bli <b>'.$row['sent_cmt'].'</b> med dig, skickat '.$row['sent_date'];
+				echo ' <a href="?accept='.$row['main_id'].'">ACCEPTERA</a> ';
+				echo '<a href="?remove='.$row['id_id'].'">RADERA</a><br/>';
 			}
 			echo '<br/>';
 		}
@@ -49,8 +49,7 @@
 
 	if ($_id == $l['id_id']) echo 'DINA VÄNNER<br/>';
 	else {
-		$user_data = $user->getuser($_id);
-		echo $user_data['u_alias'].'s VÄNNER<br/>';
+		echo $user->getstringMobile($_id).' VÄNNER<br/>';
 	}
 	
 	$tot_cnt = getRelationsCount($_id);
@@ -58,18 +57,20 @@
 
 	$list = getRelations($_id, 'u.u_alias ASC', $pager['index'], $pager['items_per_page']);
 
-	echo $pager['head'].'<br/>';
-	
-	for ($i=0; $i<count($list); $i++)
+	echo '<div class="mid_content">';
+	foreach($list as $row)
 	{
-		echo '(online/offline) ';
-		echo '<b>'.$list[$i]['rel_id'].':</b> ';
-		echo '<a href="user.php?id='.$list[$i]['id_id'].'">'.$list[$i]['u_alias'].'</a> K47 ';
-		echo '<a href="gb_write.php?id='.$list[$i]['id_id'].'">GÄSTBOK</a> ';
-		echo '<a href="mail_new.php?id='.$list[$i]['id_id'].'">MAILA</a> ';
-		if ($_id == $l['id_id']) echo '<a href="?remove='.$list[$i]['id_id'].'">RADERA</a>';
+		echo $user->getstringMobile($row['id_id']). '<br/>';
+
+		echo '<a href="mail_new.php?id='.$row['id_id'].'"><img src="gfx/q_mail.png" alt="Mail"/></a> ';
+		echo '<a href="gb_write.php?id='.$row['id_id'].'"><img src="gfx/q_gb.png" alt="Gästbok"/></a> ';
+
+		if ($_id == $l['id_id']) echo '<a href="?remove='.$row['id_id'].'"><img src="gfx/q_delete.png" alt="Ta bort"/></a>';
 		echo '<br/>';
 	}
+	echo '</div>';
+
+	echo $pager['head'];
 
 	require('design_foot.php');
 ?>

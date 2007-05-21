@@ -23,6 +23,7 @@
 	$config['session']['sha1_key'] = 'x8xijemjshjkljhkjhs88t68kioxkijhkjsh';
 	$config['session']['allow_registration'] = false;
 	$config['session']['web_root'] = '/process/';
+	$config['session']['default_title'] = 'process server';
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;

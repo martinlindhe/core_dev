@@ -19,6 +19,15 @@ function checkTime(toggle) {
 		omoTime = window.setTimeout('toggleFind(1)', 100);
 	}
 }
+
+function blockRightClick(event) {
+	if (!event.srcElement) return false;
+  var tname=event.srcElement.tagName;
+  if (event.button==2 && tname=="IMG") pressed="picture";
+  if (pressed=="picture") window.alert("!");
+  pressed=0;
+}
+
 </script>
 </head>
 

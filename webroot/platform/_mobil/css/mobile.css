@@ -1,3 +1,19 @@
 img { border: 0; }
 html { background-color: #83FA92; text-align: center; }
 a { font-weight: bold; color: #000; }
+.user_online { font-weight: bold; }
+.user_offline { font-weight: normal; }
+
+.main_content {
+}
+.mid_content {
+	text-align: left;
+	width: 175px;
+	border: 1px #000 solid;
+	margin: auto;
+	padding: 4px;
+}
+.critical {
+	font-weight: bold;
+	color: #ff0000;
+}

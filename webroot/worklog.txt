@@ -7,28 +7,21 @@
 
 
 ***************************************************************************************************
-topp prio:
+måndag+tisdag, lastbalans:
+	- webload
+	- kunna klara minst 200 användare
+	- skippa mobila gränssnitet. testa bara webbgränssnittet
 
-	* NU:
-		- kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
-		- design: kunna välja skins (olika css-filer), när design är klar från anneli
+torsdag+fredag implementation:
+	* #1: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
+	* #1: anmäl användare-funktion (abuse)
 
-	* faceum:
-		- skriv test-kod mot deras API
-		- visa face-match på en annan användares profilsida
-
-	* rating på bilder i galleriet, med atom_rating.php
-	
-	* bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
-
+blandat:
 	* mms upload image & video:
 		- hantera "BLOG" och "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
-		- plocka fram videoupplösningen när videon laddas upp
 		- alla ska ha mms funktion (vip) under testet
 
 	* hitta mysql-prestanda-utbildningar
-
-	* kika efter lastbalans-test mjukvara, mika "apache-flood", martin "webload" eller "siege"
 
 	* profilsida:
 		- FRANS: länk till vän med bild funkar ej för alla
@@ -36,16 +29,20 @@ topp prio:
 	* process server:
 		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
 
-senare under betatestet, slutet av maj:
-	* hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
-	* EFTER BETA: bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
-	* SENARE/efter beta: anmäl användare-funktion
+EFETER TEST:
+	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
+	* design: kunna välja skins (olika css-filer), när design är klar från anneli
+	* bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
+	* faceum:
+		- skriv test-kod mot deras API
+		- visa face-match på en annan användares profilsida
+	* rating på bilder i galleriet, med atom_rating.php
+	* bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
+
 
 senare, låg prio:
 	- VMX (voicemail) inspelning & uppspelning
 	- shoutbox (megafon-funktion) på startsidan
-	- paging för sök användare-resultat. kräver en performSearchCnt() funktion samt lite omstrukturering i performSearch()
-	- max 7 tecken i användarnamnet (går ej pga alla existerande användare med långa namn)
 
 ***********************************************************************************************************************************
 

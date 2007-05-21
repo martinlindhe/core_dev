@@ -5,19 +5,18 @@
 	require('design_head.php');
 ?>
 
-	SÖK ANVÄNDARE<br/>
-	<br/>
+	SÖK ANVÄNDARE<br/><br/>
 
+	<div class="mid_content">
 	<form method="post" action="search_users_result.php">
 		Kön:
-		<input type="radio" name="sex" id="sex0" value="0" checked="checked"/><label for="sex0">Alla</label>
+		<input type="hidden" name="sex" value="0"/>
 		<input type="radio" name="sex" id="sexM" value="M"/><label for="sexM">Killar</label>
 		<input type="radio" name="sex" id="sexF" value="F"/><label for="sexF">Tjejer</label><br/>
 		
 <!--		<input type="checkbox" name="online" id="online" value="1"/><label for="online">Online nu</label> -->
 		<input type="checkbox" name="pic" id="pic" value="1" checked="true"/><label for="pic">Har bild</label><br/>
-		Alias: <input type="text" name="alias"/><br/>
-		<br/>
+		Alias: <input type="text" name="alias" size="15"/><br/>
 		Ålder:
 		<select name="age">
 			<option value="0">alla åldrar</option>
@@ -40,6 +39,7 @@
 		
 		<input type="submit" value="Sök"/>
 	</form>
+</div>
 
 <?
 	require('design_foot.php');

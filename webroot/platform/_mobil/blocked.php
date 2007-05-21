@@ -17,13 +17,13 @@
 	if (count($list))
 	{
 		echo $pager['head'].'<br/>';
-		for ($i=0; $i<count($list); $i++)
+		foreach($list as $row)
 		{
-			echo '<a href="user.php?id='.$list[$i]['id_id'].'">'.$list[$i]['u_alias'].'</a> K47 ';
-			echo '<a href="?remove='.$list[$i]['id_id'].'">HÄV BLOCKERING</a><br/>';
+			echo $user->getstringMobile($row['id_id']);
+			echo ' <a href="?remove='.$row['id_id'].'">HÄV BLOCKERING</a><br/>';
 		}
 	} else {
-		echo 'Du har inga blockeringar.';
+		echo 'Du har inga blockeringar.<br/>';
 	}
 
 	require('design_foot.php');

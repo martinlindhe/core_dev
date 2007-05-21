@@ -12,21 +12,22 @@
 
 	require('design_head.php');
 
-	$from_alias = $user->getuser($mail['sender_id']);
-	$from_alias = $mail['sender_id'] ? '<a href="user.php?id='.$mail['sender_id'].'">'.$from_alias['u_alias'].'</a>' : 'SYSTEM';
-
 	echo 'DIN MAIL<br/>';
-	echo 'Visar mail från '.$from_alias.', skrivet '.$mail['sent_date'].':<br/>';
 	echo '<br/>';
-	echo 'Rubrik: '.$mail['sent_ttl'].'<br/>';
+	echo 'Rubrik: '.($mail['sent_ttl']?$mail['sent_ttl']:'(ingen rubrik)').'<br/>';
+	echo 'Avsändare: '.$user->getstringMobile($mail['sender_id']).'<br/>';
+	echo 'Skrivet: '.$mail['sent_date'].'<br/><br/>';
 
 	$body = strip_tags($mail['sent_cmt'], '<BR>');
 
-	echo 'Meddelande: '.$body.'<br/>';
+	echo '<div class="mid_content">';
+	echo $body;
+	echo '</div>';
 
 	if ($mail['sender_id']) {
-		echo '<a href="mail_reply.php?id='.$mail['main_id'].'">SVARA</a>';
+		echo '<a href="mail_reply.php?id='.$mail['main_id'].'">SVARA</a><br/>';
 	}
+	
 
 	require('design_foot.php');
 ?>

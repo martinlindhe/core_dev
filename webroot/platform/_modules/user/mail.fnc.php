@@ -54,7 +54,7 @@
 		
 		if (!is_numeric($_start) || !is_numeric($_end)) return false;
 
-		$q = 'SELECT m.*, u.* FROM '.$t.'usermail m LEFT JOIN '.$t.'user u ON u.id_id = m.sender_id AND u.status_id = "1" WHERE m.user_id = "'.secureINS($l['id_id']).'" AND m.status_id = "1" ORDER BY m.main_id DESC';
+		$q = 'SELECT m.*, u.* FROM '.$t.'usermail m LEFT JOIN '.$t.'user u ON u.id_id = m.sender_id AND u.status_id = "1" WHERE m.user_id = "'.secureINS($l['id_id']).'" AND m.status_id = "1" ORDER BY m.sent_date DESC';
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
 
 		return $sql->query($q, 0, 1);
@@ -66,7 +66,7 @@
 
 		if (!is_numeric($_start) || !is_numeric($_end)) return false;
 
-		$q = 'SELECT m.*, u.* FROM '.$t.'usermail m LEFT JOIN '.$t.'user u ON u.id_id = m.user_id AND u.status_id = "1" WHERE m.sender_id = "'.secureINS($l['id_id']).'" AND m.sender_status = "1" ORDER BY m.main_id DESC';
+		$q = 'SELECT m.*, u.* FROM '.$t.'usermail m LEFT JOIN '.$t.'user u ON u.id_id = m.user_id AND u.status_id = "1" WHERE m.sender_id = "'.secureINS($l['id_id']).'" AND m.sender_status = "1" ORDER BY m.sent_date DESC';
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
 
 		return $sql->query($q, 0, 1);

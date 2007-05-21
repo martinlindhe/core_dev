@@ -6,16 +6,17 @@
 
 	echo 'ANVÄNDARE SENAST ONLINE:<br/><br/>';
 
-	$list = getLastUsersOnline(4);
+	$list = getLastUsersOnline(5);
 
-	//print_r($list);
+	echo '<div class="mid_content">';
 	foreach ($list as $row)
 	{
-		echo '(bild)<br/>';
-		echo $row['u_alias'].' K30<br/>';
+		//echo '(bild)<br/>';
+		echo $user->getstringMobile($row['id_id']).'<br/>';
 		echo $row['sess_date'].'<br/>';
 		echo '<br/>';
 	}
+	echo '</div>';
 
 	require('design_foot.php');
 ?>

@@ -95,6 +95,8 @@
 			} else {
 				makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
 			}
+			
+			makeButton(false, 'makeForumAns('.$res['main_id'].')', 'icon_forum.png', 'skriv inlägg');
 		?>
 		<br/><br/><br/>
 
@@ -115,7 +117,7 @@
 			'.($row['status_id'] != '1'?'<em>Meddelande raderat</em>':secureOUT($row['sent_cmt'], 1)).'
 			</td></tr>
 			<tr><td class="btm rgt pdg">';
-		echo '<input type="button" onclick="makeForumAns('.$row['main_id'].')" class="btn2_sml" value="svara" />';
+		//echo '<input type="button" onclick="makeForumAns('.$row['main_id'].')" class="btn2_sml" value="svara" />';
 		if ($isAdmin) {
 			//echo '<input type="button" class="btn2_med" value="släck ner allt" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;off='.$row['main_id'].'\';"/>';
 			echo '<input type="button" class="btn2_sml" value="radera" style="margin-left: 5px;" onclick="document.location.href = \''.l('forum','read',$res['main_id']).'&amp;item='.$row['main_id'].'&amp;delete='.$row['main_id'].'\';"/>';

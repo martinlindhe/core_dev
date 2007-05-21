@@ -24,8 +24,7 @@
 		echo '<a href="gb_write.php?id='.$_id.'">SKRIV INLÄGG</a><br/>';
 	}
 
-	echo $pager['head'].'<br/>';
-
+	echo '<div class="mid_content">';
 	foreach($list as $row)
 	{
 		echo ($row['user_read']?'<img src="gfx/icon_mail_opened.png" alt="Läst" title="Läst" width="16" height="16"/> ':'<img src="gfx/icon_mail_unread.png" alt="Oläst" title="Oläst" width="16" height="16"/> ');
@@ -34,8 +33,12 @@
 		if (!$text) $text = '(ingen text)';
 		echo '<a href="gb_view.php?id='.$row['main_id'].'">'.$text.'</a>';
 		if (strlen($text) < strlen($row['sent_cmt'])) echo '...';
-		echo ' från '.$row['u_alias'].'<br/>';
+		echo '<br/>';
+		echo 'från '.$user->getstringMobile($row['sender_id']).'<br/>';
 	}
+	echo '</div>';
+
+	echo $pager['head'].'<br/>';
 	
 	require('design_foot.php');
 ?>

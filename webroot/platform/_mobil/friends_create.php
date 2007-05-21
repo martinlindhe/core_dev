@@ -18,9 +18,7 @@
 		}
 	}
 	
-	$user_data = $user->getuser($_id);
-
-	echo 'SKAPA RELATION MED '.$user_data['u_alias'].'<br/>';
+	echo 'SKAPA RELATION MED '.$user->getstringMobile($_id).'<br/>';
 	echo '<br/>';
 
 	echo '<form method="post" action="">';

@@ -12,7 +12,7 @@
 		if (!empty($_GET['p']) && is_numeric($_GET['p'])) $pager['page'] = $_GET['p'];
 
 		$pager['tot_pages'] = round($_total_cnt / $_items_per_page+0.4); // round to closest whole number
-		$pager['head'] = 'Page '.$pager['page'].' of '.$pager['tot_pages'].' ('.$_total_cnt.' total)<br/><br/>';
+		$pager['head'] = 'Sida '.$pager['page'].' av '.$pager['tot_pages'].' (tot. '.$_total_cnt.')<br/><br/>';
 
 		$pager['index'] = ($pager['page']-1) * $pager['items_per_page'];
 		$pager['limit'] = ' LIMIT '.$pager['index'].','.$pager['items_per_page'];
@@ -21,9 +21,9 @@
 
 		if ($pager['page'] > 1) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
-			$pager['head'] .= '<img src="/gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
+			$pager['head'] .= '<img src="gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
 		} else {
-			$pager['head'] .= '<img src="/gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
+			//$pager['head'] .= '<img src="/gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
 		}
 
 		for ($i=1; $i <= $pager['tot_pages']; $i++) {
@@ -34,36 +34,14 @@
 
 		if ($pager['page'] < $pager['tot_pages']) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
-			$pager['head'] .= '<img src="/gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
+			$pager['head'] .= '<img src="gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
 		} else {
-			$pager['head'] .= '<img src="/gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
+			//$pager['head'] .= '<img src="/gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
 		}
 
 		return $pager;
 	}
 	
-	/* Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
-			run from the / path it will return nothing, else the directory name of the directory script are run from */
-	function getProjectPath($_amp = true)
-	{
-		if (!empty($_GET['pr'])) {
-			$proj_name = basename(strip_tags($_GET['pr']));
-		} else {
-			$project_path = dirname($_SERVER['SCRIPT_NAME']);
-			$pos = strrpos($project_path, '/');
-			$proj_name = substr($project_path, $pos+1);
-		}
-
-		if ($proj_name) {
-			if ($_amp) {
-				return '&amp;pr='.$proj_name;
-			} else {
-				return '?pr='.$proj_name;
-			}
-		}
-		return '';
-	}
-
 	function URLadd($_key, $_val = '', $_extra = '')
 	{
 		$arr = parse_url($_SERVER['REQUEST_URI']);
@@ -112,24 +90,6 @@
 		} else {
 			return $arr['path'].'?'.$keyval.$_extra;
 		}
-	}
-
-	/* Helper function used to create "are you sure?" pages */
-	function confirmed($text, $_var, $_id)
-	{
-		global $project;	//path to design includes
-		global $config, $db, $session, $time_start;
-
-		if (!$_var || !is_numeric($_id) || isset($_GET['confirmed'])) return true;
-
-		require($project.'design_head.php');
-
-		echo $text.'<br/><br/>';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;delete&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.getProjectPath().'">No, wrong button</a><br/>';
-		
-		require($project.'design_foot.php');
-		die;
 	}
 
 ?>

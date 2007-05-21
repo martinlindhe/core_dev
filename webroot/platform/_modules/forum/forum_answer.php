@@ -31,7 +31,10 @@
 			sent_cmt = '".secureINS($_POST['ins_cmt'])."',
 			sent_date = NOW()");
 
-			spyPost($top, 'f', $ins);
+			$q = "SELECT sent_ttl FROM ${t}f WHERE main_id = '".secureINS($parent)."'";
+			$res2 = $sql->queryLine($q, 1);
+			spyPost($top, 'f', $res2['sent_ttl']);
+			//spyPost($top, 'f', $ins);
 
 			$sql->queryUpdate("UPDATE {$t}f SET change_date = NOW() WHERE main_id = '".secureINS($top)."' LIMIT 1");
 			$user->counterDecrease('forum', $s['id_id']);

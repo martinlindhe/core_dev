@@ -42,7 +42,7 @@
 
 	echo '<form method="post" action="">';
 	if ($_to_id) {
-		echo 'Till: '.$_to_alias;
+		echo 'Till: '.$user->getstringMobile($_to_id);
 	} else {
 		echo 'Till: <input name="to_alias" type="text" size="8" value="'.$_to_alias.'"/> ';
 		$list = getRelations($l['id_id']);

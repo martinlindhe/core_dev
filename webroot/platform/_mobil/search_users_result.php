@@ -9,19 +9,18 @@
 	}
 
 	require('design_head.php');
-?>
 
-	SÖK ANVÄNDARE - RESULTAT<br/>
-	<br/>
 
-<?
+	echo 'SÖK ANVÄNDARE - RESULTAT<br/><br/>';
+
 	echo count($result['res']).' träffar:<br/>';
 
+	echo '<div class="mid_content">';
 	foreach ($result['res'] as $row)
 	{
-		echo '(online/offline) ';
-		echo '<a href="user.php?id='.$row['id_id'].'">'.$row['u_alias'].'</a> K42<br/>';
+		echo $user->getstringMobile($row['id_id']).'<br/>';
 	}
+	echo '</div>';
 
 	require('design_foot.php');
 ?>

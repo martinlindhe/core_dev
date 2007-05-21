@@ -259,7 +259,7 @@ function intern_get(obj) {
 <?
 	if ($waiting && $waiting[1] == '3') {
 		echo '<table summary="" cellspacing="0" width="800" class="mrg_t">
-			<tr><td class="pdg up">Du har en bild uppladdad som väntar på att beskäras. Vill du fortsätta att beskära?</td></tr>
+			<tr><td class="pdg up">Du har en bild uppladdad som väntar på att beskäras. Vill du fortsätta att beskära?<br/><br/>Om du vill sluta vänta, kan du ladda upp en ny bild.</td></tr>
 			<tr><td class="pdg"><input type="button" value="fortsätt" class="b" onclick="goLoc(\''.l('member', 'settings', 'img').'0/&key='.$waiting[2].'\');" /></td></tr>
 			</table>
 			<script type="text/javascript">alreadyupl = 1;</script>';

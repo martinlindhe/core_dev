@@ -255,25 +255,20 @@ class user {
 	}
 
 	/* By Martin: Returns clickable username, age & gender, suited for mobile display */
-	function getstringMobile($arr, $suffix = '', $extra = '') {
+	function getstringMobile($user_id, $suffix = '', $extra = '') {
 		global $sex_name;
-		if(@$arr['id_id'] == @$_SESSION['data']['id_id']) {
-			if(!$this->isOnline($arr['account_date'])) {
-				$res = now();
-				$_SESSION['data']['account_date'] = $res;
-				$this->sql->queryUpdate("UPDATE {$this->t}user SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
-				$this->sql->queryUpdate("UPDATE {$this->t}useronline SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
-				$arr['account_date'] = $res;
-			}
-		}
-		if($arr['id_id'] == 'SYS')
-			return 'SYSTEM';
-		elseif(empty($arr['u_alias']))
-			return '[BORTTAGEN]';
-		else {
-			$own = ($arr['id_id'] == $this->id?true:false);
-			return '<a href="'.l('user', 'view', $arr['id_id'.$suffix]).'">'.secureOUT($arr['u_alias'.$suffix]).(empty($extra['nosex'])?' <img alt="'.$sex_name[$arr['u_sex'.$suffix]].'" src="www/_objects/icon_'.$arr['u_sex'.$suffix].'1.gif" border="0"/>':'').(empty($extra['noage'])?$this->doage($arr['u_birth'.$suffix]):'').'</a>';
-		}
+		if (!$user_id) return 'SYSTEM';
+
+		$own = ($user_id == $this->id?true:false);
+		
+		$user = $this->getuser($user_id);
+		//print_r($user);
+		$online = $this->isOnline($user['lastonl_date']);
+		
+		$out = '<a class="'.($online?'user_online':'user_offline').'" href="user.php?id='.$user_id.'">'.$user['u_alias'].'</a>';
+		$out .= ' <img alt="'.$sex_name[$user['u_sex']].'" src="gfx/icon_'.$user['u_sex'].'.png" border="0"/>'.$this->doage($user['u_birth']);
+		
+		return $out;
 	}
 
 	function doagegroup($age) {

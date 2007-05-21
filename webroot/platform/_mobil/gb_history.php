@@ -12,18 +12,20 @@
 	require('design_head.php');
 	
 	$list = gbHistory($l['id_id'], $_id);
-	$user_data = $user->getuser($_id);
-	
-	echo 'GÄSTBOK - HISTORIK MELLAN DIG OCH '.$user_data['u_alias'].'<br/><br/>';
+
+	echo 'GÄSTBOK<br/><br/>';
+	echo 'Historik med '.$user->getstringMobile($_id).'<br/><br/>';
 
 	if (!count($list)) {
 		echo 'Ingen historik finns.';
 	} else {
-		//print_r($list);
+		echo '<div class="mid_content">';
 		foreach ($list as $row) {
-			echo $row['u_alias'].' sa '.$row['sent_date'].':<br/>';
+			echo $user->getstringMobile($row['sender_id']).'<br/>';
+			echo 'skrev '.$row['sent_date'].'<br/>';
 			echo $row['sent_cmt'].'<br/><br/>';
 		}
+		echo '</div>';
 	}
 
 	require('design_foot.php');

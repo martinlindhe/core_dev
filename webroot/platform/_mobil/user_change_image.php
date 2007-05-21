@@ -10,7 +10,7 @@
 	skicka ett MMS till cs@inconet.se med rubriken "PRES xxx",
 	där xxx är din unika MMS-kod.<br/><br/>
 	
-	<a href="user_change_mms_code.php">ÄNDRA MMS-KOD</a>
+	<a href="user_change_mms_code.php">ÄNDRA MMS-KOD</a><br/>
 
 <?
 	require('design_foot.php');

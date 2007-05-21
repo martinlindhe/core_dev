@@ -24,9 +24,6 @@
 
 	require('design_head.php');
 
-	$to_alias = $user->getuser($mail['sender_id']);
-	$to_alias = $to_alias['u_alias'];
-	
 	if (!$_header) $_header = 'Sv: '.$mail['sent_ttl'];
 ?>
 
@@ -35,7 +32,7 @@
 
 	<form method="post" action="">
 		<input type="hidden" name="to_alias" value="<?=$to_alias?>"/>
-		Till: <?=$to_alias?><br/>
+		Till: <?=$user->getstringMobile($mail['sender_id'])?><br/>
 		Rubrik: <input type="text" name="header" value="<?=$_header?>"/><br/>
 		Meddelande:<br/>
 		<textarea name="body"><?=$_body?></textarea><br/>
