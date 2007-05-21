@@ -103,6 +103,7 @@
 		if (empty($_id) || !is_numeric($_id)) return false;
 
 		$news = getNewsItem($_id);
+		if (!$news) return;
 
 		echo '<div class="news">';
 		echo '<div class="news_top">';
@@ -119,12 +120,6 @@
 		echo '<br/>';
 
 		if ($session->isAdmin) {
-			/*
-			$menu = array(
-				'/admin/admin_news_edit.php?id='.$row['newsId'].getProjectPath() => 'Edit news',
-				'/admin/admin_news_delete.php?id='.$row['newsId'].getProjectPath() => 'Delete news'
-				);
-			*/
 			$menu = array(
 				$_SERVER['PHP_SELF'].'?News:'.$_id => 'Show news',
 				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id => 'Edit',

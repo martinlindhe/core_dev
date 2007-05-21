@@ -22,7 +22,7 @@
 
 	echo '<h1>Add news</h1>';
 
-	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">';
+	echo '<form name="add_news" method="post" action="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">';
 	echo '<input type="hidden" name="rss" value="0"/>';
 	echo 'Title:<br/>';
 	echo '<input type="text" name="title" size="50"/><br/>';
@@ -38,7 +38,7 @@
 	echo 'Include this news in the RSS feed</label><br/><br/>';
 
 	echo 'Time for publication:<br/>';
-	echo '<input type="text" name="publish" value="'.date('Y-m-d H:i').'"/> ';
+	echo '<input type="text" name="publish" value="NOW" onclick="document.forms.add_news.publish.value=\''.date('Y-m-d H:i').'\';"/> ';
 	echo '<input type="submit" class="button" value="Store news"/><br/>';
 	echo '</form>';
 

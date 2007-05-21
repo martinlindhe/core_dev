@@ -132,7 +132,7 @@
 			}
 		}
 		$result .= '<br/><br/>';
-		$result .= $row['rating'].' / 5 in '.$row['ratingCnt'].' votes<br/>';
+		$result .= $row['rating'].' / 5 in '.$row['ratingCnt'].($row['ratingCnt']==1?' vote':' votes');
 
 		return $result;
 	}

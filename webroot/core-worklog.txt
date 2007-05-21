@@ -18,7 +18,7 @@
 		- "Detta med att "tjäna poäng" får vi diskutera närmare."
 
 
-
+delete news rating när news deletas
 
 
 	session/userdata settings:
