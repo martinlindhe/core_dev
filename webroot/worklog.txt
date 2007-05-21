@@ -1,124 +1,25 @@
-2007.05.07 Måndag:
-	webbgränssnittet:
-		* skapat en "bevakningar" sida under inställningar
-		* "bevaka" & "sluta bevaka" på forumtråd. system-meddelande utskick på forum-tråd-bevakningar testat
-		* spyActive() ny funktion
-		* forum "svara på inlägg" ny design
-		* "bevaka" och "sluta bevaka" på en annan användares bloggar. system-meddelande utskick på blogg-bevakningar testat
-		* relationer: "du väntar svar från" och "bli vän-förfrågningar" ny design
-		* "bevaka" och "sluta bevaka" på annan användares galleri. system-meddelande utskick på ny galleribild-bevakningar testat
-		* inställningar->bevakningar: ny sida
-
-2007.05.08 Tisdag:
-	webbgränssnittet:
-		* snyggat till "inställningar->bevakningar" så den ser mycket bättre ut
+2007.05.21 Måndag:
+	mobila gränssnittet:
+		* fixade listningen av "användare senast online", så att inga dubletter visas
 
 	process-server:
-		* skapat databas och planerat upp programflödet
-		* byggt ett script som utför de arbeten som finns att göra
-		* loggar all aktivitet
-		* klarar av följande tasks:
-			- resiza en stillbild
-			- konvertera en stillbild till ett annat format (läser i stort sett alla bildformat), konverterar till PNG, JPEG eller GIF
-		* påbörjat implementation av SOAP-interface
+		* ändrat soap-api:t så login & kommando skickas i ett och samma soaprequest
 
-2007.05.09 Onsdag:
-	process-server:
-		* implementerat SOAP-interface funktioner "login" och "newOrder"
-		* implementerat ett gränssnitt för att kunna kolla upp status på en order.
 
-	mms-hantering:
-		* buggfix i mail header parsing (telenor mms funkar nu)
-
-2007.05.10 Torsdag:
-	dev-servern:
-		* gjort ett backupscript som gör regelbundna backups av källkoden vid midnatt varje dygn
-		* konfigurerat apache lite. php errors loggas nu till /var/log/apache2/error.log
-
-	mms-hantering:
-		* all aktivitet loggas nu till /var/log/mms.log med timestamps, istället för till stdout
-		* renamar *.jpeg filer till *.jpg vid bildhantering (thumbnail visas nu även för .jpeg's)
-
-	webbgränssnittet:
-		* mms-upload info popup i ditt galleri
-		* "glömt lösenord"-sidan fick ny design
-		* "ny användare"-sidorna fick ny design
-
-	mobila gränssnittet:
-		* gästboksöversikten lite upprensad från feedback, la till ikon för "läst" / "oläst" inlägg
-		* "skriv mail" fixad så dropdownlistan med kompisar funkar, osv - från feedback
-		* "din mail"-översikten upprensad från feedback, la till ikon för "läst" / "oläst" inlägg
-		* längst ner på alla sidor finns nu en "hem"-knapp som leder till startsidan, från feedback
-
-2007.05.11 Fredag:
-	process-servern:
-		* lite uppstädning & dokumentering av koden
-		* kontrollerar att php SOAP extension är laddad
-		* implementerat locking i process-servern för att försäkra oss om att varje operation endast utförs en gång
-
-	webbservern:
-		* tog bort (igen) "släck ner" / "tänd upp" knappar från forumet
-		* $HTTP_POST_FILES => $_FILES cleanup
-
-	mobila gränssnittet:
-		* lite mindre ikoner i toppmenyn
-		* fixat visning av systemmmeddelanden i mailen
-		* kan ej längre svara på system-meddelande mail
-		* fixat användar-sökningen
-
-2007.05.14 Måndag:
-	webbgränssnittet, efter feedback från bitte:
-		* mail i inkorg/utkorg visas nu sorterat efter datumordning
-		* visar nu även "musiksmak", "längd" och "antal barn" på profilöversikt
-		* bytte ut 360 mot CitySurf i texten på "ladda upp profilbild"-sidan
-		* gått igenom feedback från bitte och gjort mindre förändringar
-
-2007.05.15 Tisdag:
-	mobila gränssnittet:
-		* fixade ett problem som gjorde att det inte gick att logga in från vissa mobiler
-
-	webbgränssnittet:
-		* system-mailet på forumbevakningar visar nu forum-titeln i texten
-		* visar info-text på profiluppladdsidan om att man kan ladda upp en ny bild för granskning
-		* skissat upp & diskuterat hur modererings-gränssnittet ska se ut
-
-2007.05.16 Onsdag:
-	adminpanel:
-		* adminpanel som listar alla anmälningar (översikt)
-		* möjlighet för admin att godkänna/ta bort från översikten
-		* alla anmälningar sparas, men markeras som behandlade
-		* gjort så att REPORTED / TRIGGERED är ett extra värde istället för en typ av modereringsobjekt
-
-	webbgränssnittet:
-		* visar olästa brev markerat med fet text i titeln
-		* forum - "skriv inlägg" knapp visas på toppen av en tråd istället för flera i tråden
-		* ny design: resultatet av "glömt lösenord"-sidan
-		* ny design: resultatet av felaktig login
-		* galleriet: högerklick-skyddar kopiering av bilder (fungerar endast i Internet Explorer)
-
-	mobila gränssnittet:
-		* profil: visar ej fakta som ej är besvarade
-		* gjort en ny funktion som visar username + kön + ålder + onlinestatus för mobiler, används överallt där användarnamn visas
-		* gjort symboler för "MAN" och "KVINNA" för mobilen
-		* gjort symboler "pil framåt", "pil bakåt" för mobilen
-		* centrerat text på gästboken, mail
-		* visar felmeddelande (röd text) vid felaktig inlogg på login-sidan
-		* ändrade "Page 1 of 3" till svenska..
-		* vänster-alignat text på en mängd med sidor
-		* gjort några nya ikoner
-
-2007.05.18 Fredag:
-	bråkat med Fedora Core 6-installation på process-servern
-	gick hem 14:30 för jag är förkyld
----[[mailat ovanstående]]---
-
-***********************************************************************************************************************************
+***************************************************************************************************
 topp prio:
 
 	* NU:
-		fixa "användare senast online" på mobilsajten, listar samma user flera gånger
-		online/offline visning i mobila gränssnittet
-		maila kiano functions_ratings.php som ska användas
+		- kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
+		- design: kunna välja skins (olika css-filer), när design är klar från anneli
+
+	* faceum:
+		- skriv test-kod mot deras API
+		- visa face-match på en annan användares profilsida
+
+	* rating på bilder i galleriet, med atom_rating.php
+	
+	* bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
 
 	* mms upload image & video:
 		- hantera "BLOG" och "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
@@ -128,8 +29,6 @@ topp prio:
 	* hitta mysql-prestanda-utbildningar
 
 	* kika efter lastbalans-test mjukvara, mika "apache-flood", martin "webload" eller "siege"
-
-	* design: kunna välja skins (olika css-filer), när design är klar från anneli
 
 	* profilsida:
 		- FRANS: länk till vän med bild funkar ej för alla
@@ -143,6 +42,8 @@ senare under betatestet, slutet av maj:
 	* SENARE/efter beta: anmäl användare-funktion
 
 senare, låg prio:
+	- VMX (voicemail) inspelning & uppspelning
+	- shoutbox (megafon-funktion) på startsidan
 	- paging för sök användare-resultat. kräver en performSearchCnt() funktion samt lite omstrukturering i performSearch()
 	- max 7 tecken i användarnamnet (går ej pga alla existerande användare med långa namn)
 

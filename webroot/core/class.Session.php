@@ -144,21 +144,21 @@ class Session
 		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
 			$this->error = 'Client IP changed';
-			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']));
+			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
 			$this->logOut();
 		}
 
 		//Logged in: Check if client user agent string changed
 		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
 			$this->error = 'Client user agent string changed';
-			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"');
+			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
 			$this->logOut();
 		}
 
 		//Logged in: Check user activity - log out inactive user
 		if ($this->lastActive < (time()-$this->timeout)) {
 			$this->error = 'Inactivity timeout';
-			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')');
+			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')', LOGLEVEL_NOTICE);
 			$this->logOut();
 		}
 
@@ -234,7 +234,7 @@ class Session
 		$data = $db->getOneRow($q);
 		if (!$data) {
 			$this->error = 'Login failed';
-			$this->log('Failed login attempt: username '.$enc_username);
+			$this->log('Failed login attempt: username '.$enc_username, LOGLEVEL_WARNING);
 			return false;
 		}
 

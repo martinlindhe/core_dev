@@ -27,13 +27,14 @@
 
 	kategorier (atom_categories.php):
 		- använd makeNewCategoryDialog() för att skapa dialog för att skapa userdata-kategorier
-		- gör så att man kan ändra namn och radera kategorier från makeNewCategoryDialog() - rename till manageCategoriesDialog()
+		- gör så att man kan ändra namn och radera kategorier från makeNewCategoryDialog()
+		- rename makeNewCategoryDialog() till manageCategoriesDialog()
 
 
 	admin:
 		- moderation:
 			* kunna knyta admin-kommentarer till enskild användare
-			
+
 		- visa statistik i adminpanelen (admin_statistics.php):
 			* visa ett diagram månadsvis. som visar två staplar, en för registreringar, en för inloggningar
 			* måste ha ett cron-script som körs regelbundet som samlar upp alla entries från tblLogins och sparar statistik för föregående

@@ -29,5 +29,6 @@ process-server:
 
 -------------
 	eventuellt:
-		* skicka kommandon genom soap-interface
 		* kör servern bakom https
+		* använd php-imagick extension http://pecl4win.php.net/ext.php/php_imagick.dll
+			för native ImageMagick api i PHP

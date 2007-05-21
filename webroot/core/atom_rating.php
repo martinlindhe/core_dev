@@ -3,7 +3,7 @@
 
 		Currently used by the following modules: News
 
-		By Martin Lindhe, 2007
+		By Martin Lindhe, 2006-2007
 	*/
 
 	define('RATE_NEWS',		1);

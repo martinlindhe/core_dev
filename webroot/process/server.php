@@ -5,27 +5,21 @@
 
 	class SOAP_ProcessService
 	{
-		/* Returns the session id to the client to be used as a cookie */
-		function login($username, $password)
+		function newOrder($_type, $serialized_params)
 		{
 			global $session;
 
-			if (!$session->logIn($username, $password)) {
+			$params = unserialize($serialized_params);
+
+			if (!$session->logIn($params['username'], $params['password'])) {
 				return false;
 			}
-
-			return true;
-		}
-
-		function newOrder($_type, $serialized_params)
-		{
-			$params = unserialize($serialized_params);
 
 			return addWorkOrder($_type, $params);
 		}
 	}
 
-	$server = new SoapServer('process.wsdl', array('trace' => 1));
+	$server = new SoapServer('process.wsdl'); //, array('trace' => 1));
 	$server->setClass('SOAP_ProcessService');
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
