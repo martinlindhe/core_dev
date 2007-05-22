@@ -598,7 +598,7 @@ CREATE TABLE tblVisits (
   creatorId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   PRIMARY KEY  (visitId)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 CREATE TABLE tblWiki (
   wikiId bigint(20) unsigned NOT NULL auto_increment,
   wikiName varchar(30) default NULL,
