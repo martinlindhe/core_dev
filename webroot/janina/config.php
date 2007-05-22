@@ -18,7 +18,7 @@
 	$config['database']['database']	= 'dbJanina';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = (60*60)*24;
+	$config['session']['timeout'] = (60*60)*24*7;	//7 days
 	$config['session']['name'] = 'Janina';
 	$config['session']['sha1_key'] = 'janinaSHAxyxtybhge3bbexudud81cujnm11wbvwcvvw';
 	$config['session']['allow_registration'] = false;

@@ -61,6 +61,12 @@ delete news rating när news deletas
 				måste även kolla nya registreringar i tblUsers
 
 
+	ajax chat:
+		- integrera i core (blized)
+		- utnyttja APC feature global variabel mellan sessioner om det går, för att implementera chat-servern bra
+		- fixa css
+
+
 	file area:
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
@@ -105,9 +111,6 @@ delete news rating när news deletas
 		- lista låtar som inte finns på nån skiva (admin)
 		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
 		- admin: möjlighet att radera ett band
-
-	ajax chat:
-		- integrera i core vid nåt tillfälle (blized)
 
 --[[todo legend]]--
 X = hi prio task

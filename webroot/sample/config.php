@@ -23,7 +23,7 @@
 	$config['database']['database']	= 'dbSample';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = (60*60)*24;		//in seconds
+	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
 	$config['session']['name'] = 'coreID';
 	$config['session']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
 	$config['session']['allow_registration'] = true;

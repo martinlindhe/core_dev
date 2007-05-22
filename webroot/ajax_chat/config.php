@@ -21,7 +21,7 @@
 	$config['database']['database']	= 'dbAJAXChat';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = 30*60;		//in seconds
+	$config['session']['timeout'] = (60*60)*24*7;	//7 days
 	$config['session']['name'] = 'ajaxChatID';
 	$config['session']['sha1_key'] = 'ajaxchat8x8jdszfoklxcvuykFFaadvdfvzw434fg3f3';
 	$config['session']['allow_registration'] = true;

@@ -18,7 +18,7 @@
 	$config['database']['database']	= 'dbPigskin';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = (60*60)*24;
+	$config['session']['timeout'] = (60*60)*24*7;	//7 days
 	$config['session']['name'] = 'Piggy';
 	$config['session']['sha1_key'] = 'x89xoedfjlzkjsfgviuasvnavklnke5avnaoeviaeovoiav';
 	$config['session']['allow_registration'] = true;

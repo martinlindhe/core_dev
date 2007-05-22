@@ -22,7 +22,7 @@
 	$config['database']['database']	= 'dbLyrics';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = (60*60)*24;
+	$config['session']['timeout'] = (60*60)*24*7;	//7 days
 	$config['session']['name'] = 'hcLyrics';
 	$config['session']['sha1_key'] = 'kekjhbkjsxfgyuejewjkx276786ddjhnhdzzz9716t6z';
 	$config['session']['allow_registration'] = false;

@@ -18,7 +18,7 @@
 	$config['database']['database']	= 'dbProcess';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = (60*60)*24;		//in seconds
+	$config['session']['timeout'] = (60*60)*24*7;	//7 days
 	$config['session']['name'] = 'procId';
 	$config['session']['sha1_key'] = 'x8xijemjshjkljhkjhs88t68kioxkijhkjsh';
 	$config['session']['allow_registration'] = false;

@@ -21,7 +21,7 @@
 	$config['database']['database']	= 'dbLang';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = (60*60)*24;		//in seconds
+	$config['session']['timeout'] = (60*60)*24*7;	//7 days
 	$config['session']['name'] = 'langID';
 	$config['session']['sha1_key'] = 'sdalkj8vkjncjksdSdFsdfg70kcvvcvGFzadeg5ae5h';
 	$config['session']['allow_registration'] = true;
