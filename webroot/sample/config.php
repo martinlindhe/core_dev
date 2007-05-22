@@ -50,7 +50,7 @@
 	$profile_menu = array(
 	'user.php'.$param => 'Overview:'.$username,
 	'files.php'.$param => 'Files',
-	'blog.php'.$param => 'Blogs',
+	'user_blogs.php'.$param => 'Blogs',
 	'guestbook.php'.$param => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
 	'friends.php'.$param => 'Friends',
 	'settings.php'.$param => 'Settings');

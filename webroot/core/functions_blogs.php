@@ -138,10 +138,6 @@
 		if ($cmd) list($current_tab, $_id) = $cmd;
 		if (empty($_id) || !is_numeric($_id)) return false;
 
-		if (isset($_POST['blog_cat']) && isset($_POST['blog_title']) && isset($_POST['blog_body'])) {
-			updateBlog($_id, $_POST['blog_cat'], $_POST['blog_title'], $_POST['blog_body']);
-		}
-
 		$blog = getBlog($_id);
 		if (!$blog) {
 			echo 'The specified blog doesnt exist!<br/>';
@@ -151,6 +147,10 @@
 		if ($blog['deletedBy']) {
 			echo 'This blog has been deleted!<br/>';
 			return false;
+		}
+
+		if (($session->id == $blog['userId'] || $session->isAdmin) && isset($_POST['blog_cat']) && isset($_POST['blog_title']) && isset($_POST['blog_body'])) {
+			updateBlog($_id, $_POST['blog_cat'], $_POST['blog_title'], $_POST['blog_body']);
 		}
 
 		echo '<div class="blog">';
@@ -176,7 +176,7 @@
 
 		echo '<div class="blog_body">';
 
-		if ($current_tab == 'BlogEdit' && (($session->id && $session->id == $blog['userId']) || $session->isAdmin) ) {
+		if ($current_tab == 'BlogEdit' && ($session->id == $blog['userId'] || $session->isAdmin) ) {
 			echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogEdit:'.$_id.'">';
 			echo '<input type="text" name="blog_title" value="'.$blog['blogTitle'].'" size="40" maxlength="40"/>';
 
@@ -260,13 +260,13 @@
 	}
 
 	/* Displays one user's blogs overview */	
-	function showUserBlogs()
+	function showUserBlogs($_userid_name = '')
 	{
 		global $session;
 
 
-		if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-			$userId = $_GET['id'];
+		if ($_userid_name && isset($_GET[$_userid_name]) && is_numeric($_GET[$_userid_name])) {
+			$userId = $_GET[$_userid_name];
 			echo 'User '.getUserName($userId).' - blogs:<br/>';
 		} else {
 			$userId = $session->id;
