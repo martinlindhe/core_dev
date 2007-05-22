@@ -6,8 +6,8 @@
 	echo 'Search for users<br/><br/>';
 
 	if (isset($_POST['c'])) {
-		//$list = getUserSearchResult($db, $_POST);
-		$list = getUserSearchResultOnNickname($db, $_POST['c']);
+		$list = getUserSearchResult($_POST);
+		//$list = getUserSearchResultOnNickname($_POST['c']);
 
 		echo 'Search result for "'.$_POST['c'].'", ';
 		echo (count($list)?count($list).' hits':'1 hit');
@@ -30,8 +30,8 @@
 	} else if (isset($_GET['l']) && $_GET['l']) {
 		/* Lista alla användare som börjar på en bokstav */
 		
-		//$list = searchUsernameBeginsWith($db, $_GET['l']);
-		$list = searchNicknameBeginsWith($db, $_GET['l']);
+		$list = searchUsernameBeginsWith($_GET['l']);
+		//$list = searchNicknameBeginsWith($_GET['l']);
 
 		echo 'Search result for users beginning with "'.$_GET['l'].'", ';
 

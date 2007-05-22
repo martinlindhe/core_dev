@@ -179,8 +179,8 @@ abstract class DB_Base
 		echo '<a href="#" onclick="return toggle_element_by_name(\'sql_profiling'.$rand_id.'\');">'.$this->queries_cnt.' sql</a>';
 
 		//Shows all SQL queries from this page view
-		$sql_height = ($this->queries_cnt+1)*21;
-		if ($sql_height > 200) $sql_height = 200;
+		$sql_height = ($this->queries_cnt+1)*40;
+		if ($sql_height > 400) $sql_height = 400;
 
 		$sql_time = 0;
 
@@ -195,19 +195,24 @@ abstract class DB_Base
 			
 			$query = htmlentities(nl2br($this->queries[$i]), ENT_COMPAT, 'UTF-8');
 
-			echo '<div style="width: 45px; float: left;">';
-				if (!empty($this->query_error[$i])) {
-					echo '<img src="/gfx/icon_error.png" alt="SQL Error" title="SQL Error"/>';
-				} else {
-					echo round($this->time_spent[$i], 3).'s';
-				}
-			echo '</div> ';
+			$sql_syntax = array('FROM', 'SET', 'WHERE', 'LEFT', 'GROUP', 'ORDER');
+			$encoded_syntax = array('<br/>FROM', '<br/>SET', '<br/>WHERE', '<br/>LEFT', '<br/>GROUP', '<br/>ORDER');
+			$query = str_replace($sql_syntax, $encoded_syntax, $query);
+
+			echo '<table><tr><td width="40">';
+			if (!empty($this->query_error[$i])) {
+				echo '<img src="/gfx/icon_error.png" alt="SQL Error" title="SQL Error"/>';
+			} else {
+				echo round($this->time_spent[$i], 3).'s';
+			}
+			echo '</td><td>';
 			if (!empty($this->query_error[$i])) {
 				echo '<b>'.$query.'</b><br/>';
 				echo 'Error: <i>'.$this->query_error[$i].'</i>';
 			} else {
 				echo $query;
 			}
+			echo '</tr></table>';
 			echo '<hr/>';
 		}
 

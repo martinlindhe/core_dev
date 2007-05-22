@@ -1,8 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
 
-		- "	Idag finns en sök-användare funktion. Den kan även söka på olika användardata,
-			till exempel kön, ålder, "har bild", fritext i presentation, användarnamn osv."
 		- Idag finns en FAQ-modul. Den fungerar såhär:
 				Admin lägger in några standard Frågor & Svar.
 				Dessa listas för användaren. Om användaren ej hittar svar på sin fråga så kan han skicka in en fråga till admin.
@@ -124,7 +122,9 @@ X = hi prio task
 	- visar andra personers info... fixat så man kan se andras filarea, andras bloggar, osv
 	- friend list: html cleanup, visar online/offline status
 	- user: implementerat besöksstatistik på ens profil + visning av den
-
+	- db: snyggare sql profiler output
+	- sök användare implementerat
+		
 
 2007.05.21:
 	- news: kategorier: tog bort global/own kategori-visning
