@@ -27,7 +27,8 @@ delete news rating när news deletas
 		-	RSS flöde för en kategori av bloggar (både personlga & globala kategorier). skippa kategori för att få de X senaste bloggarna
 
 
-	profil/personliga sidor:
+	profil/personliga sidor/user search:
+		- sök användare funkar ej om man vill lista användare som har laddat upp presentationsbild
 
 
 	omröstningar/undersökningar:

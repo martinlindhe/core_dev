@@ -10,7 +10,7 @@
 		//$list = getUserSearchResultOnNickname($_POST['c']);
 
 		echo 'Search result for "'.$_POST['c'].'", ';
-		echo (count($list)?count($list).' hits':'1 hit');
+		echo (count($list)!=1?count($list).' hits':'1 hit');
 		echo '<br/><br/>';
 
 		$ids = '';
@@ -35,7 +35,7 @@
 
 		echo 'Search result for users beginning with "'.$_GET['l'].'", ';
 
-		echo (count($list)?count($list).' hits':'1 hit');
+		echo (count($list)!=1?count($list).' hits':'1 hit');
 		echo '<br/><br/>';
 		
 		for ($i=0; $i<count($list); $i++) {
@@ -82,6 +82,11 @@
 						if ($row['fieldName'] == $config['settings']['default_theme']) break;
 						echo getCategoriesSelect(CATEGORY_USERDATA, $row['fieldId'], 'userdata_'.$row['fieldId']);
 						break;
+
+					case USERDATA_TYPE_IMAGE:
+						if ($row['fieldName'] != $config['settings']['default_image']) break;
+						echo '<input name="'.$row['fieldId'].'" id="chk_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
+						echo ' <label for="chk_'.$row['fieldId'].'">Has image</label>';
 				}
 				echo '<br/>';
 			}
