@@ -115,7 +115,7 @@ class Files
 
 		if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE) {
 			$categoryId = 0;
-			if (!empty($_GET['file_gadget_category_id']) && is_numeric($_GET['file_gadget_category_id'])) $categoryId = $_GET['file_gadget_category_id'];
+			if (!empty($_GET['file_category_id']) && is_numeric($_GET['file_category_id'])) $categoryId = $_GET['file_category_id'];
 		}
 
 		if (($session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
@@ -137,10 +137,17 @@ class Files
 		switch ($fileType)
 		{
 			case FILETYPE_USERFILE:
-				echo 'Your file area';
+				if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+					$userid = $_GET['id'];
+					$username = getUserName($userid);
+				} else {
+					$userid = $session->id;
+					$username = $session->username;
+				}
+				echo 'Files:'.$username;
 
 			case FILETYPE_FILEAREA_UPLOAD:
-				$action = '?file_gadget_category_id='.$categoryId;
+				$action = '?file_category_id='.$categoryId;
 				if (!$categoryId) echo ' - Root Level content';
 				else echo ' - '.getCategoryName(CATEGORY_USERFILE, $categoryId).' content';
 				break;
@@ -164,11 +171,18 @@ class Files
 
 		//Visar kategorier / kataloger
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
-			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, 'file_gadget_category_id');
+			$extra = '';
+			if ($fileType==FILETYPE_USERFILE) $extra = '&amp;id='.$userid;
+			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, 'file_category_id', $extra);
 		}
 
 		//select the files in the current category (or root level for uncategorized files)
-		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
+		if ($fileType == FILETYPE_USERFILE) {
+			$q = 'SELECT * FROM tblFiles WHERE ownerId='.$userid.' AND categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
+		} else {
+			$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
+		}
+
 		$list = $db->getArray($q);
 
 		echo '<div class="file_gadget_content">';

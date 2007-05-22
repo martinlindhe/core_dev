@@ -137,7 +137,7 @@
 		return $db->getArray($q);
 	}
 
-	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '')
+	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '', $extra = '')
 	{
 		global $config;
 
@@ -180,7 +180,9 @@
 
 			$content .= '<option value="'.$val.'"';
 			if ($selectedId == $val) $content .= ' selected="selected"';
-			else if ($url) $content .= ' onclick="location.href=\'?'.$url.'='.$row['categoryId'].'\'"';
+			else if ($url) {
+				$content .= ' onclick="location.href=\'?'.$url.'='.$row['categoryId'].$extra.'\'"';
+			}
 
 			$content .= '>'.$text;
 			if ($row['categoryType'] == CATEGORY_USERFILE_PRIVATE) $content .= ' (PRIVATE)';

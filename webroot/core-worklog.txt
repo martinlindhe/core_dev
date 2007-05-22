@@ -118,6 +118,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.22:
+	- files: kan se andra personers filareor
+	- visar "last logged in" och "users online" listor
+
+
+
 2007.05.21:
 	- news: kategorier: tog bort global/own kategori-visning
 

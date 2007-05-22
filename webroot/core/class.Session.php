@@ -12,6 +12,7 @@
 require_once('functions_ip.php');
 require_once('functions_textformat.php');
 require_once('functions_userdata.php');
+require_once('functions_users.php');
 
 require_once('atom_settings.php');	//for storing userdata
 
@@ -23,7 +24,9 @@ define('LOGLEVEL_ALL', 5);
 class Session
 {
 	private $session_name = 'someSID';	//default session name
-	private $timeout = 1800;						//max allowed idle time (in seconds) before auto-logout
+	private $timeout = 86400;					//24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+	public $online_timeout = 1800;		//30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
+	//todo: make online_timeout configurable
 	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
 	private $check_useragent = true;		//keeps track if the client user agent string changes during the session
 

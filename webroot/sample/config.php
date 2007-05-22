@@ -42,15 +42,15 @@
 
 	/* Visas på alla olika sidor som hör till ens egen användarprofil */
 	$param = '';
-	$user_name = '';
+	$username = $session->username;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		$param = '?id='.$_GET['id'];
-		$user_name = getUserName($_GET['id']);
+		$username = getUserName($_GET['id']);
 	}
 	$profile_menu = array(
-	'user.php'.$param => 'Overview:'.$user_name,
-	'files.php'.$param => 'My files',
-	'blog.php'.$param => 'My blogs',
+	'user.php'.$param => 'Overview:'.$username,
+	'files.php'.$param => 'Files',
+	'blog.php'.$param => 'Blogs',
 	'guestbook.php'.$param => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
 	'friends.php'.$param => 'Friends',
 	'settings.php'.$param => 'Settings');
