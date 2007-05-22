@@ -67,7 +67,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=715 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=716 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -598,7 +598,7 @@ CREATE TABLE tblVisits (
   creatorId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   PRIMARY KEY  (visitId)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 CREATE TABLE tblWiki (
   wikiId bigint(20) unsigned NOT NULL auto_increment,
   wikiName varchar(30) default NULL,
