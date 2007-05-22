@@ -264,10 +264,9 @@
 	{
 		global $session;
 
-
 		if ($_userid_name && isset($_GET[$_userid_name]) && is_numeric($_GET[$_userid_name])) {
 			$userId = $_GET[$_userid_name];
-			echo 'User '.getUserName($userId).' - blogs:<br/>';
+			echo 'Blogs:'.getUserName($userId).'<br/>';
 		} else {
 			$userId = $session->id;
 			echo 'Your blogs:<br/>';

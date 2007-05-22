@@ -1,11 +1,14 @@
 <?
 	require_once('config.php');
 
+	$session->requireLoggedIn();
+
+	$userId = $session->id;
+	$username = $session->username;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		$userId = $_GET['id'];
-	} else if ($session->id) {
-		$userId = $session->id;
-	} else $session->requireLoggedIn();
+		$username = getUserName($userId);
+	}
 
 	require('design_head.php');
 	
@@ -21,7 +24,7 @@
 		addGuestbookEntry($userId, '', $_POST['body']);
 	}
 
-	echo 'The guestbook contains '.getGuestbookCount($userId).' messages.<br/><br/>';
+	echo 'Guestbook:'.$username.' contains '.getGuestbookCount($userId).' messages.<br/><br/>';
 
 	$list = getGuestbook($userId);	//fixme: paging stöd
 	foreach ($list as $row) {

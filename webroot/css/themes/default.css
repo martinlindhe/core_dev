@@ -386,6 +386,17 @@ select {
 	font-weight: bold;
 }
 
+.friend_online {
+	background-color: #eee;
+	font-weight: bold;
+}
+
+.friend_offline {
+	background-color: #ccc;
+	font-weight: normal;
+}
+
+
 /* generic container for text */
 .item {
 	padding: 10px;

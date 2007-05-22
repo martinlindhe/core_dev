@@ -1,6 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- visa andra personers info...
+
 		- "	Idag finns en sök-användare funktion. Den kan även söka på olika användardata,
 			till exempel kön, ålder, "har bild", fritext i presentation, användarnamn osv."
 		- Idag finns en FAQ-modul. Den fungerar såhär:
@@ -10,7 +10,6 @@
 				denna fråga till FAQ-listan, så att svaret kan ses av alla.
 		- kunna skicka privata meddelanden (BLIZED)
 
-		- kunna se vilka som har besökt din profil (BLIZED)
 		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra personer ska se hans sida, stämmer det?"
 		- "Ert önskemål: "Groups - diskussionsgrupper""
 				Menar ni ett forum? Eller ska det vara en användargrupp, som har en gemensam yta där gruppen diskuterar?
@@ -102,6 +101,7 @@ delete news rating när news deletas
 	misc/senare:
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
+		- gör om tblVisitors till generell med en kategori, så man kan logga läsare av bloggar, tittare av bilder, läsare av nyheter
 
 
 --------------[[projekt todo]]--------------
@@ -121,7 +121,9 @@ X = hi prio task
 2007.05.22:
 	- files: kan se andra personers filareor
 	- visar "last logged in" och "users online" listor
-
+	- visar andra personers info... fixat så man kan se andras filarea, andras bloggar, osv
+	- friend list: html cleanup, visar online/offline status
+	- user: implementerat besöksstatistik på ens profil + visning av den
 
 
 2007.05.21:

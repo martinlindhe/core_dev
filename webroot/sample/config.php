@@ -46,14 +46,23 @@
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		$param = '?id='.$_GET['id'];
 		$username = getUserName($_GET['id']);
+		$profile_menu = array(
+			'user.php'.$param => 'Overview:'.$username,
+			'files.php'.$param => 'Files',
+			'user_blogs.php'.$param => 'Blogs',
+			'guestbook.php'.$param => 'Guestbook',
+			'friends.php'.$param => 'Friends'
+		);
+	} else {
+		$profile_menu = array(
+			'user.php' => 'Overview:'.$username,
+			'files.php' => 'Files',
+			'user_blogs.php' => 'Blogs',
+			'guestbook.php' => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
+			'friends.php' => 'Friends',
+			'settings.php' => 'Settings',
+			'user_visits.php' => 'Visitors'
+		);
 	}
-	$profile_menu = array(
-	'user.php'.$param => 'Overview:'.$username,
-	'files.php'.$param => 'Files',
-	'user_blogs.php'.$param => 'Blogs',
-	'guestbook.php'.$param => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
-	'friends.php'.$param => 'Friends',
-	'settings.php'.$param => 'Settings');
-
 	$session->handleSessionActions();
 ?>

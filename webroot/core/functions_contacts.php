@@ -62,14 +62,15 @@
 		return $db->getArray($q);
 	}
 	
-	/* Returns an array with $userId's all friends, including usernames but no other info */
+	/* Returns an array with $userId's all friends, including usernames & "isOnline" boolean, but no other info */
 	function getContactsFlat($_type, $userId)
 	{
 		global $db;
 
 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
-
-		$q  = 'SELECT t1.*,t2.userName AS contactName ';
+		
+		$q  = 'SELECT t1.*,t2.userName AS contactName,';
+		$q .= '(SELECT timeLastActive>=DATE_SUB(NOW(),INTERVAL 30 MINUTE)) AS isOnline ';
 		$q .= 'FROM tblContacts AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t2.userId = t1.otherUserId) ';
 		$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
@@ -77,7 +78,6 @@
 
 		return $db->getArray($q);
 	}
-
 
 	function displayFriendList()
 	{
@@ -104,8 +104,10 @@
 
 			if (hasPendingFriendRequest($userId)) {
 
+				echo '<div class="item">';
 				echo 'You already have a pending relation request with this user.<br/><br/>';
-				echo 'You can remove your pending relation requests <a href="user_relations.php">here</a>.<br/>';
+				echo 'You can remove your pending relation requests <a href="user_relations.php">here</a>.';
+				echo '</div><br/>';
 
 			} else {
 				if (!haveContact(CONTACT_FRIEND, $session->id, $userId)) {
@@ -156,7 +158,7 @@
 		$list = getContactsFlat(CONTACT_FRIEND, $userId);
 
 		if ($session->id != $userId) {
-			echo 'User '.getUserName($userId).' friend list:<br/>';
+			echo 'Friends:'.getUserName($userId).'<br/>';
 		} else {
 			echo 'Your friend list:<br/>';
 		}
@@ -166,29 +168,14 @@
 			return;
 		}
 
-		echo '<table border=1>';	//fixme: bort med table
-
 		foreach ($list as $row) {
-			echo '<tr bgcolor="#E4E0D7"><td>';
-			//fixme: show online koden e paj
-			if (isset($row['timeLastActive']) && (time()-$row['timeLastActive'] < $config['session_timeout']) && ($row['timeLastActive'] > $row['timeLastLogout'])  ) {
-				echo '<span class="breadbold">';
-				$isonline = true;
-			} else {
-				echo '<span class="bread">';
-				$isonline = false;
-			}
+			echo '<div class="'.($row['isOnline']?'friend_online':'friend_offline').'">';
 
 			echo nameLink($row['contactId'], $row['contactName']);
-			echo '</span>';
-			if ($isonline == true) {
-				echo ' ('.$row['userStatus'].')';
-			}
-			echo '</td><td width=20>';
+
 			echo '<a href="mess_new.php?id='.$row['contactId'].'"><img src="/gfx/icon_mail.png" alt="Send a message to '.$row['contactName'].'"/></a>';
-			echo '</td></tr>';
+			echo '</div>';
 		}
-		echo '</table>';
 	}
 
 	/* Adds a request-to-become-friends to $userId, from current user, with the optional relation category type */

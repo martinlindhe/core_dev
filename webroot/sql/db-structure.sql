@@ -469,7 +469,7 @@ CREATE TABLE tblFriendRequests (
   timeCreated datetime NOT NULL,
   categoryId int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (reqId)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 CREATE TABLE tblGuestbooks (
   userId bigint(20) unsigned NOT NULL default '0',
   authorId bigint(20) unsigned NOT NULL default '0',
@@ -482,7 +482,7 @@ CREATE TABLE tblGuestbooks (
   entryRead tinyint(1) unsigned NOT NULL default '0',
   timeRead datetime default NULL,
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 CREATE TABLE tblLogins (
   mainId int(10) unsigned NOT NULL auto_increment,
   userId int(10) unsigned NOT NULL,
@@ -490,7 +490,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -499,7 +499,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=130 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=136 DEFAULT CHARSET=latin1;
 CREATE TABLE tblModerationQueue (
   queueId bigint(20) unsigned NOT NULL auto_increment,
   queueType tinyint(3) unsigned NOT NULL default '0',
@@ -592,6 +592,13 @@ CREATE TABLE tblUsers (
   timeLastLogout datetime default '0000-00-00 00:00:00',
   PRIMARY KEY  (userId)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+CREATE TABLE tblVisits (
+  visitId int(10) unsigned NOT NULL auto_increment,
+  ownerId int(10) unsigned NOT NULL default '0',
+  creatorId int(10) unsigned NOT NULL default '0',
+  timeCreated datetime default NULL,
+  PRIMARY KEY  (visitId)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 CREATE TABLE tblWiki (
   wikiId bigint(20) unsigned NOT NULL auto_increment,
   wikiName varchar(30) default NULL,
