@@ -125,6 +125,7 @@ X = hi prio task
 	- db: tagit bort $db->insert_id variabeln, använd $db->insert() istället
 	- db: uppdaterat alla INSERT-queries att använda $db->insert() istället för $db->query()
 				och ändrat en del return-codes från true till insert_id
+	- admin: visar vilka användare som e associerade med ett IP på admin_ip.php
 
 
 2007.05.22:

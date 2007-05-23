@@ -46,7 +46,9 @@
 	{
 		if (!empty($_GET['pr'])) {
 			$proj_name = basename(strip_tags($_GET['pr']));
+			if ($_amp == 3) return '../'.$proj_name.'/';
 		} else {
+			if ($_amp == 3) return '';
 			$project_path = dirname($_SERVER['SCRIPT_NAME']);
 			$pos = strrpos($project_path, '/');
 			$proj_name = substr($project_path, $pos+1);
@@ -114,7 +116,7 @@
 	
 	function nameLink($id, $name)
 	{
-		return '<a href="user.php?id='.$id.'">'.$name.'</a>';
+		return '<a href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
 	}
 
 	/* Helper function used to create "are you sure?" pages */
@@ -140,9 +142,6 @@
 	{
 		$cur = basename($_SERVER['SCRIPT_NAME']);
 
-		$project_path = '';
-		if (!empty($_GET['pr'])) $project_path = '../'.$_GET['pr'].'/';
-
 		echo '<ul class="'.$class.'">';
 			foreach($menu_arr as $url => $text) {
 				
@@ -151,7 +150,7 @@
 				if ($cur == $url) echo '<li class="'.$current_class.'">';
 				else echo '<li>';
 
-				echo '<a href="'.($url[0] != '/' ? $project_path : '').$url.'">'.$text.'</a>';
+				echo '<a href="'.($url[0] != '/' ? getProjectPath(3) : '').$url.'">'.$text.'</a>';
 				echo '</li>';
 			}
 		echo '</ul>';

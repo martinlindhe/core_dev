@@ -8,13 +8,13 @@
 	if ($session->isSuperAdmin) echo createMenu($super_admin_menu, 'blog_menu');
 ?>
 
-	todo - visa lite siffror<br/><br/>
+	Admin overview<br/><br/>
 	
-	Moderation queue: XXX items<br/>
+	Moderation queue: <a href="admin_moderationqueue.php?pr=sample"><?=getModerationQueueCount()?> items</a><br/>
 	FAQ questions: XXX<br/>
 	<br/>
-	Registered users: XXX<br/>
-	Users logged in: YYY<br/>
+	Registered users: <?=getUsersCnt()?><br/>
+	Users logged in: <a href="/sample/users_online.php"><?=getUsersOnlineCnt()?></a><br/>
 
 <?
 	require($project.'design_foot.php');

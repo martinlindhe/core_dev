@@ -37,6 +37,25 @@
 		return $db->getArray($q);
 	}
 
+	function getUsersOnlineCnt()
+	{
+		global $db, $session;
+
+		$q = 'SELECT COUNT(userId) FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+		$q .= ' ORDER BY timeLastLogin DESC';
+
+		return $db->getOneItem($q);
+	}
+
+	function getUsersCnt()
+	{
+		global $db, $session;
+
+		$q = 'SELECT COUNT(userId) FROM tblUsers';
+
+		return $db->getOneItem($q);
+	}
+
 	function getUserVisitors($_id)
 	{
 		global $db;
@@ -69,6 +88,22 @@
 
 		echo 'show public settings - todo';
 	}
+
+	/* Admin function used by admin_ip.php to show information about a IP-address */
+	function getUsersByIP($geoip)
+	{
+		global $db;
+
+		if (!is_numeric($geoip)) return false;
+
+		$q  = 'SELECT DISTINCT t1.userId,';
+		$q .= '(SELECT userName FROM tblUsers WHERE userId=t1.userId) AS userName ';
+ 		$q .= 'FROM tblLogins AS t1 WHERE t1.IP='.$geoip;
+
+		return $db->getArray($q);
+	}
+
+
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

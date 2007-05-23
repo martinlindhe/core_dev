@@ -17,7 +17,14 @@
 
 		echo '<h1>'.$ip.' ('.gethostbyaddr($ip).')</h1>';
 		echo '<br/><br/>';
+		
+		$list = getUsersByIP($geoip);
 
+		echo 'This IP is associated with '.count($list).' registered users:<br/>';
+		foreach ($list as $row) {
+			echo nameLink($row['userId'], $row['userName']).'<br/>';
+		}
+		echo '<hr/>';
 		echo '<a href="http://www.dnsstuff.com/tools/whois.ch?ip='.$ip.'" target="_blank">whois</a><br/>';
 		echo '<a href="http://www.dnsstuff.com/tools/tracert.ch?ip='.$ip.'" target="_blank">traceroute</a><br/>';
 		echo '<a href="http://visualroute.visualware.com/" target="_blank">visual route (java traceroute)</a><br/>';
