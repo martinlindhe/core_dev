@@ -13,6 +13,7 @@
 		'/admin/admin.php'.getProjectPath(0) => 'Admin::',
 		'/admin/admin_moderationqueue.php'.getProjectPath(0) => 'Moderation',
 		'/admin/admin_faq.php'.getProjectPath(0) => 'FAQ',
+		'/admin/admin_feedback.php'.getProjectPath(0) => 'Feedback',
 		'/admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
 		'/admin/admin_events.php'.getProjectPath(0) => 'Event log',
 		'/admin/admin_userdata.php'.getProjectPath(0) => 'Userdata',			//kanske super-admin?

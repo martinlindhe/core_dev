@@ -10,6 +10,7 @@
 	require_once('class.Session.php');
 	require_once('class.Files.php');
 	require_once('functions_faq.php');
+	require_once('functions_feedback.php');
 	require_once('functions_wiki.php');
 	require_once('functions_news.php');
 	require_once('functions_blogs.php');

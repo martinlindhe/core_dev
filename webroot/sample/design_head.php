@@ -11,10 +11,11 @@
 <div id="leftmenu">
 <?
 	$menu = array(
-			'index.php' => 'Home',
-			'news.php' => 'News',
-			'faq.php' => 'FAQ',
-			'users.php' => 'Users');
+		'index.php' => 'Home',
+		'news.php' => 'News',
+		'faq.php' => 'FAQ',
+		'feedback.php' => 'Feedback',
+		'users.php' => 'Users');
 	createMenu($menu);
 
 	if ($session->isAdmin) {

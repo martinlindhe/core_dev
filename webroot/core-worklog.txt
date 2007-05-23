@@ -1,10 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- Feedback-modul:
-				Om användaren ej hittar svar på sin fråga i FAQ:n så kan han skicka in en fråga till admin.
-				Denna fråga visas sedan i adminpanelen, där admin kan besvara frågan. (genom modereringskön)
-				Admin kan även välja att publicera svaret från denna fråga till FAQ-listan, så att svaret kan ses av alla.
-
 		- kunna skicka privata meddelanden (BLIZED)
 
 	frågetecken:
@@ -18,6 +13,12 @@
 	FAQ-modul:
 		- kunna attacha bilder till ett FAQ-svar
 		- kunna kommentera ett FAQ-svar
+
+
+	feedback-modul:
+		- feedback admin - design
+		- admin ska kunna besvara frågan (som ett privat meddelande)
+		- admin ska kunna publicera svaret som en FAQ
 
 
 	session/userdata settings:
@@ -109,6 +110,9 @@
 
 
 --------------[[projekt todo]]--------------
+	adblock:
+		- konvertera "report site" funktionen till att använda functions_feedback.php
+
 	lyrics:
 		- åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 		- edit_record.php: kunna editera recordInfo
