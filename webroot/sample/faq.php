@@ -5,13 +5,7 @@
 
 	echo 'Frequently asked Questions<br/><br/>';
 
-	$list = getFAQ();
-	foreach ($list as $row) {
-		echo '<b>Q: '.$row['question'].'</b><br/>';
-		echo '<b>A:</b><br/>';
-		echo $row['answer'];
-		echo '<hr/>';
-	}
+	showFAQ();
 
 	require('design_foot.php');
 ?>

@@ -455,7 +455,7 @@ CREATE TABLE tblFAQ (
   createdBy int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   PRIMARY KEY  (faqId)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 CREATE TABLE tblFiles (
   fileId bigint(20) unsigned NOT NULL auto_increment,
   fileName varchar(250) character set utf8 default NULL,
@@ -554,7 +554,7 @@ CREATE TABLE tblRevisions (
   timeCreated datetime NOT NULL,
   categoryId tinyint(3) unsigned NOT NULL,
   PRIMARY KEY  (indexId)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 CREATE TABLE tblSettings (
   settingId bigint(20) unsigned NOT NULL auto_increment,
   ownerId smallint(5) unsigned NOT NULL default '0',
@@ -617,6 +617,6 @@ CREATE TABLE tblWiki (
   timeLocked datetime NOT NULL default '0000-00-00 00:00:00',
   hasFiles tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (wikiId)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 DELIMITER ;;
 DELIMITER ;

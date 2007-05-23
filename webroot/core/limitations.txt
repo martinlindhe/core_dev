@@ -33,3 +33,14 @@
 		/js
 		/gfx
 		/					place your project files & config.php here
+
+
+* XHTML short tags stuff
+
+	These tags passes as valid XHTML according to HtmlValidator firefox plugin, however Firefox dont handle them correctly
+
+	Dont work in browsers: <script type="text/javascript" src="/js/ajax.js"/>
+	Correct: <script type="text/javascript" src="/js/ajax.js"></script>
+	
+	Dont work in browsers: <a name="xx"/>
+	Correct: <a name="xx"></a>

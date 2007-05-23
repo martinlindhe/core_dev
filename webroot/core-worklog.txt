@@ -3,7 +3,7 @@
 
 		- Feedback-modul:
 				Om användaren ej hittar svar på sin fråga i FAQ:n så kan han skicka in en fråga till admin.
-				Denna fråga visas sedan i adminpanelen, där admin kan besvara frågan.
+				Denna fråga visas sedan i adminpanelen, där admin kan besvara frågan. (genom modereringskön)
 				Admin kan även välja att publicera svaret från denna fråga till FAQ-listan, så att svaret kan ses av alla.
 
 		- kunna skicka privata meddelanden (BLIZED)
@@ -130,6 +130,7 @@ X = hi prio task
 				och ändrat en del return-codes från true till insert_id
 	- admin: visar vilka användare som e associerade med ett IP på admin_ip.php
 	- faq-modul skapad, med admin-gränssnitt
+	- gjort lite css&js-effekter på faq-listan
 
 
 2007.05.22:

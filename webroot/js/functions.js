@@ -324,3 +324,19 @@ function add_node_and_focus(e,t,s) {
 	var c=add_node(e,t,s);
 	c.scrollIntoView(false);
 }
+
+/* focuses on the faq item #i */
+function faq_focus(n)
+{
+	e = document.getElementById('faq_'+n);
+	if (!e) return;
+	
+	e.style.display = '';	//show
+	
+	for (i=0;i<=100;i++) {
+		if (i==n) continue;
+		e = document.getElementById('faq_'+i);
+		if (!e) return;
+		e.style.display = 'none';	//hide
+	}
+}
