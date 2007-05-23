@@ -1,17 +1,15 @@
 <?
-	require_once('functions_process.php');
-
-	ini_set('soap.wsdl_cache_enabled', '0');
+	require_once('config.php');
 
 	$client = new SoapClient("http://europe.ipx.com/api/services/SmsApi50?wsdl", array('trace' => 1));
 
 	try {
 		$params = array(
 			//element										value					data type
-			'correlationId'					=>	'corrID',			//string	- id som klienten sätter för att hålla reda på requesten, returneras tillsammans med soap-response från IPX
-			'orginatingAddress'			=>	'72777',			//string	- orginating number for SMS sent by us
+			'correlationId'					=>	'corrID2',			//string	- id som klienten sätter för att hålla reda på requesten, returneras tillsammans med soap-response från IPX
+			'originatingAddress'		=>	'72777',			//string	- orginating number for SMS sent by us
 			'destinationAddress'		=>	'46707308763',//string	- mottagare till sms:et, med landskod, format: 46707308763
-			'orginatorAlpha'				=>	'0',					//bool		- ?
+			'originatorAlpha'				=>	'0',					//bool		- ?
 			'userData'							=>	'hej lalala',	//string	- meddelandetexten
 			'userDataHeader'				=>	'#NULL#',			//string	- ?
 			'dcs'										=>	'-1',					//int			- ? data coding scheme
@@ -28,7 +26,7 @@
 			'password'							=>	'3koA4enpE'		//string
 		);
 
-		$result = $client->send( array('request' => $params) );
+		$result = $client->send( $params );
 		d($result);
 
 	} catch (Exception $e) {

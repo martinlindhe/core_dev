@@ -288,9 +288,6 @@ abstract class DB_Base
 	}
 
 
-
-
-
 	/* debug function! do not use */
 	function d($v)
 	{

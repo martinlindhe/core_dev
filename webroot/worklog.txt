@@ -80,6 +80,7 @@ blandat:
 	* process server:
 		- ip-restrictions för varje klient
 		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
+		- kika på hur ipx enkodar parametrar, för att slippa serialize
 
 EFETER TEST:
 	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
