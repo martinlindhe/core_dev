@@ -7,24 +7,25 @@
 
 	try {
 		$params = array(
-			'correlationId' => 'x',
-			'orginatingAddress' => 'x',
-			'destinationAddress' => 'x',
-			'orginatorAlpha' => '0',		//bool
-			'userData' => 'hej världen lalal',
-			'userDataHeader' => '#NULL#',
-			'dcs' => '-1',
-			'pid' => '-1',
-			'relativeValidityTime' => '-1',
-			'deliveryTime' => '#NULL#',
-			'statusReportFlags' => '-1',
-			'accountName' => '#NULL#',
-			'blocking' => '1'	//bool
-			'tariffClass' => 'SEK0',
-			'referenceId' => '#NULL#',
-			'contentCategory' => '#NULL#',
-			'username' => 'lwcg',
-			'password' => '3koA4enpE'
+			//element										value					data type
+			'correlationId'					=>	'corrID',			//string	- id som klienten sätter för att hålla reda på requesten, returneras tillsammans med soap-response från IPX
+			'orginatingAddress'			=>	'72777',			//string	- orginating number for SMS sent by us
+			'destinationAddress'		=>	'46707308763',//string	- mottagare till sms:et, med landskod, format: 46707308763
+			'orginatorAlpha'				=>	'0',					//bool		- ?
+			'userData'							=>	'hej lalala',	//string	- meddelandetexten
+			'userDataHeader'				=>	'#NULL#',			//string	- ?
+			'dcs'										=>	'-1',					//int			- ? data coding scheme
+			'pid'										=>	'-1',					//int			- reserved
+			'relativeValidityTime'	=>	'-1',					//int			- relative validity time in seconds, from the time of submiussion to IPX
+			'deliveryTime'					=>	'#NULL#',			//string	- used for delayed delivery of sms
+			'statusReportFlags'			=>	'0',					//int			- 0 = no delivery report, 1 = delivery report requested
+			'accountName'						=>	'#NULL#',			//string	- ?
+			'blocking'							=>	'1',					//bool		- reserved
+			'tariffClass'						=>	'SEK0',				//string	- price of the premium message
+			'referenceId'						=>	'#NULL#',			//string	- refenrence order of premium message
+			'contentCategory'				=>	'#NULL#',			//string	- reserved
+			'username'							=>	'lwcg',				//string
+			'password'							=>	'3koA4enpE'		//string
 		);
 
 		$result = $client->send( array('request' => $params) );
