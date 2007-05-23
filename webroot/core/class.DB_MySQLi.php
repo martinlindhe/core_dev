@@ -48,11 +48,6 @@ class DB_MySQLi extends DB_Base
 		$this->client_version = $this->db_handle->client_info;
 
 		if ($config['debug']) $this->profileConnect($time_started);
-
-		/* change character set to utf8 */
-		//this messes things up. php defaults the connection to latin1. but strings are stored in utf8, some unnessecary
-		//conversions seem to occur. need php to not default to latin1 - fixme
-		//if (!$this->db_handle->set_charset('utf8')) echo 'Error loading character set utf8: '.$this->db_handle->error;
 	}
 
 	function query($q)

@@ -1,8 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- Make sure that all of your database code (in your php, perl, whatever)
-			issues the "SET NAMES utf8" SQL statement before issuing any further SQL commands. 
-	
+
 		- visa andra personers info...
 		- "	Idag finns en sök-användare funktion. Den kan även söka på olika användardata,
 			till exempel kön, ålder, "har bild", fritext i presentation, användarnamn osv."
