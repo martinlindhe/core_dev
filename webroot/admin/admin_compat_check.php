@@ -1,4 +1,12 @@
 <?
+	require_once('find_config.php');
+	$session->requireSuperAdmin();
+
+	require($project.'design_head.php');
+
+	echo createMenu($admin_menu, 'blog_menu');
+	echo createMenu($super_admin_menu, 'blog_menu');
+
 	$supported_apache = array('2.2.3', '2.2.4');
 
 	$supported_php = array('5.2.0', '5.2.2');
@@ -19,13 +27,6 @@
 
 		return '<div class="critical">';
 	}
-
-	require_once('find_config.php');
-	$session->requireAdmin();
-
-	require($project.'design_head.php');
-
-	echo createMenu($admin_menu, 'blog_menu');
 
 	echo '<h1>Compatiblity check</h1>';
 

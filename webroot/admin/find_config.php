@@ -15,9 +15,14 @@
 		'/admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',
 		'/admin/admin_moderationqueue.php'.getProjectPath(0) => 'Moderation queue',
 		'/admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups',
-		'/admin/admin_events.php'.getProjectPath(0) => 'Event log',
-		'/admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
 		'/admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
+		'/admin/admin_events.php'.getProjectPath(0) => 'Event log'
+	);
+
+	$super_admin_menu = array(
+		'/admin/admin_super.php'.getProjectPath(0) => 'SuperAdmin start',
+		'/admin/admin_add_admin.php'.getProjectPath(0) => 'Add admin',
+		'/admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
 		'/admin/admin_db_info.php'.getProjectPath(0) => '$db',
 		'/admin/admin_session_info.php'.getProjectPath(0) => '$session',
 		'/admin/admin_phpinfo.php'.getProjectPath(0) => 'PHP'

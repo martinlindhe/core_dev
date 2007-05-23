@@ -3,11 +3,13 @@
 	$session->requireSuperAdmin();
 
 	require($project.'design_head.php');
-
+	
 	echo createMenu($admin_menu, 'blog_menu');
 	echo createMenu($super_admin_menu, 'blog_menu');
+?>
 
-	$session->showInfo();
-
+	super-admin overview...<br/><br/>
+	
+<?
 	require($project.'design_foot.php');
 ?>

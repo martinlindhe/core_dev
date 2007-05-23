@@ -1,9 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
 
-		- visa andra personers info...
-		- "	Idag finns en sök-användare funktion. Den kan även söka på olika användardata,
-			till exempel kön, ålder, "har bild", fritext i presentation, användarnamn osv."
 		- Idag finns en FAQ-modul. Den fungerar såhär:
 				Admin lägger in några standard Frågor & Svar.
 				Dessa listas för användaren. Om användaren ej hittar svar på sin fråga så kan han skicka in en fråga till admin.
@@ -126,7 +123,8 @@ X = hi prio task
 2007.05.23:
 	- db: $db->insert($q) skapad, returnerar insert_id från INSERT-queryn
 	- db: tagit bort $db->insert_id variabeln, använd $db->insert() istället
-	- db: uppdaterat alla INSERT-queries att använda $db->insert() istället för $db->query() och ändrat en del return-codes från true till insert_id
+	- db: uppdaterat alla INSERT-queries att använda $db->insert() istället för $db->query()
+				och ändrat en del return-codes från true till insert_id
 
 
 2007.05.22:

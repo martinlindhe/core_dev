@@ -375,19 +375,25 @@ class Session
 	/* Locks unregistered users out from certain pages */
 	function requireLoggedIn()
 	{
-		if (!$this->id) {
-			header('Location: '.$this->home_page);
-			die;
-		}
+		if ($this->id) return;
+		header('Location: '.$this->home_page);
+		die;
 	}
 
 	/* Locks unregistered users out from certain pages */
 	function requireAdmin()
 	{
-		if (!$this->isAdmin) {
-			header('Location: '.$this->home_page);
-			die;
-		}
+		if ($this->isAdmin) return;
+		header('Location: '.$this->home_page);
+		die;
+	}
+
+	/* Locks out everyone except for super-admin from certain pages */
+	function requireSuperAdmin()
+	{
+		if ($this->isSuperAdmin) return;
+		header('Location: '.$this->home_page);
+		die;
 	}
 }
 ?>
