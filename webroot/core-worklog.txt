@@ -16,9 +16,8 @@
 
 
 	feedback-modul:
-		- feedback admin - design
-		- admin ska kunna besvara frågan (som ett privat meddelande)
-		- admin ska kunna publicera svaret som en FAQ
+		- admin ska kunna besvara frågan (som ett privat meddelande) - kräver privat-meddelande modul
+		- admin ska kunna publicera svaret som en FAQ - kräver föregående punkt
 
 
 	session/userdata settings:
@@ -134,6 +133,7 @@ X = hi prio task
 	- admin: visar vilka användare som e associerade med ett IP på admin_ip.php
 	- faq-modul skapad, med admin-gränssnitt
 	- gjort lite css&js-effekter på faq-listan
+	- feedback-modul skapad, med admin-gränssnitt
 
 
 2007.05.22:

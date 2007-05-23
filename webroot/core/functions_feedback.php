@@ -11,7 +11,8 @@
 	{
 		global $db;
 		
-		$q = 'SELECT * FROM tblFeedback';
+		$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1 ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
 		return $db->getArray($q);
 	}
 

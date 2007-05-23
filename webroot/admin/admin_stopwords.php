@@ -16,13 +16,10 @@
 		for($i=0; $i<count($list); $i++) {
 			$id = $list[$i]['wordId'];
 
-			$del  = 'del_'.$id;
-			$chg  = 'change_'.$id;
-			if (isset($_POST['full_'.$id])) {
-				$full = $_POST['full_'.$id];	
-			} else {
-				$full=0;
-			}
+			$del = 'del_'.$id;
+			$chg = 'change_'.$id;
+			$full = 0;
+			if (isset($_POST['full_'.$id])) $full = $_POST['full_'.$id];	
 
 			/* Update has less priority */
 			if (($_POST[$chg] != $list[$i]['wordText']) || ($full != $list[$i]['wordMatch'])) {
@@ -32,12 +29,9 @@
 		
 		for($i=1; $i<4; $i++) {
 			$word = 'newname_'.$i;
-			if (isset($_POST['newfull_'.$i])) {
-				$full = $_POST['newfull_'.$i];
-			} else {
-				$full=0;
-			}
-			
+			$full = 0;
+			if (isset($_POST['newfull_'.$i])) $full = $_POST['newfull_'.$i];
+
 			if (!empty($_POST[$word])) {
 				if (!addStopword($i, $_POST[$word], $full)) {
 					echo 'Failed to add '.$_POST[$word].'<br>';
@@ -78,7 +72,7 @@
 			echo '<input type="text" name="change_'.$row['wordId'].'" value="'.$row['wordText'].'" size="16"/>';
 			echo '<input type="checkbox" class="checkbox" name="full_'.$row['wordId'].'" id="full_'.$row['wordId'].'" value="1"'.($row['wordMatch']==1?' checked="checked"':'').'/>';
 			echo '<label for="full_'.$row['wordId'].'">Full</label> ';
-			echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="/gfx/icon_delete.png" alt="Delete"/></a>';
+			echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="/gfx/icon_delete.png" alt="Delete"/></a><br/>';
 		}
 
 		echo '<br/><br/>Add new word:<br/><input type="text" name="newname_'.$x.'" size="16"/>';
@@ -87,7 +81,6 @@
 
 		echo '</div>'; //class="admin_stopword"
 	}
-
 	echo '<input type="submit" class="button" value="Update"/>';
 	echo '</form>';
 
