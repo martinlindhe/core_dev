@@ -15,11 +15,14 @@
 		* communityt fungerar nu som det ska på dammsugar-datorn, förrutom att bilder saknas
 
 2007.05.23 Onsdag:
-	sms debitering:
-		* planerat programflöde och features
-		
 	mobila gränssnittet:
 		* visar "ANVÄNDAREN BORTTAGEN" om användare ej finns
+
+	sms debitering:
+		* planerat programflöde och features
+		* påbörjat implementation
+		* stödjer SSL-anslutning till IPX
+
 
 ***************************************************************************************************
 måndag+tisdag: flytt till dammsugaren & lastbalans:

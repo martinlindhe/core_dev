@@ -1,4 +1,9 @@
 <?
+	/*
+	extension=php_soap.dll (required)
+	extension=php_openssl.dll (required for https support)
+	*/	
+
 	require_once('config.php');	//för d() debug dump
 
 	$config['sms']['originating_number'] = '72777';
@@ -12,7 +17,7 @@
 		//$msg must be a UTF-8 encoded string for swedish characters to work
 		global $db, $config;
 
-		$client = new SoapClient("http://europe.ipx.com/api/services/SmsApi50?wsdl", array('trace' => 1));
+		$client = new SoapClient("https://europe.ipx.com/api/services/SmsApi50?wsdl", array('trace' => 1));
 		//d($client->__getTypes());
 
 		try {
@@ -48,6 +53,9 @@
 			d($response);
 			
 			$q = 'INSERT INTO tblSendResponses SET correlationId='.$corrId.',messageId="'.$db->escape($response->messageId).'",responseCode='.$response->responseCode.',responseMessage="'.$db->escape($response->responseMessage).'",temporaryError='.intval($response->temporaryError).',timeCreated=NOW()';
+			if ($response->responseCode) {
+				$q .= ',params="'.$db->escape(serialize($params)).'"';
+			}
 			$db->insert($q);
 
 		} catch (Exception $e) {

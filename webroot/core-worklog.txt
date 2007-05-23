@@ -1,5 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
+		- fyller $db->insert_id nån funktion nu när $db->insert() returnerar insert-id ?
 		- Make sure that all of your database code (in your php, perl, whatever) issues the "SET NAMES utf8" SQL statement before issuing any further SQL commands. 
 	
 		- visa andra personers info...
