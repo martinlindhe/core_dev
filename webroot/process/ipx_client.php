@@ -38,7 +38,7 @@
 				'originatorAlpha'				=>	'0',					//bool		- ?
 				'userData'							=>	$msg,					//string	- meddelandetexten
 				'userDataHeader'				=>	'#NULL#',			//string	- ?
-				'dcs'										=>	'-1',					//int			- ? data coding scheme
+				'dcs'										=>	'-1',					//int			- data coding scheme, how the userData text are encoded
 				'pid'										=>	'-1',					//int			- reserved
 				'relativeValidityTime'	=>	'-1',					//int			- relative validity time in seconds, from the time of submiussion to IPX
 				'deliveryTime'					=>	'#NULL#',			//string	- used for delayed delivery of sms

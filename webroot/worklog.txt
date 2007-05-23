@@ -23,10 +23,11 @@
 		* påbörjat implementation
 		* stödjer SSL-anslutning till IPX
 		* stödjer IPX-max "read timeout" på 10 minuter
-		
-		
-		http://cs.icn.se/_process/ipx_incoming.php
-		prefix "POG" var ledig
+		* SMS-utskick impementerat
+		* inkommande SMS-hantering förberedd. IPX måste konfigurera destinations-url åt oss:		
+			http://cs.icn.se/_process/ipx_incoming.php
+			prefix "POG" var ledig, vi kommer använda den för test
+			vi vill ha datan som GET-data
 
 ***************************************************************************************************
 måndag+tisdag: flytt till dammsugaren & lastbalans:

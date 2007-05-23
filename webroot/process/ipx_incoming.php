@@ -21,4 +21,8 @@
 	$q = 'INSERT INTO tblIncomingSMS SET get="'.$get.'",post="'.$post.'",timeReceived=NOW()';
 	$db->insert($q);
 
+	//Acknowledgment - Tell IPX that the SMS received
+	header('HTTP/1.1 200 OK');
+	header('Content-Type: text/plain');
+	echo '<DeliveryResponse ack="true"/>';
 ?>
