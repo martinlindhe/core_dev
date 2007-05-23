@@ -14,8 +14,7 @@
 		if (!$body) return false;
 
 		$q = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',authorId='.$session->id.',subject="'.$subject.'",body="'.$body.'",timeCreated=NOW()';
-		$db->query($q);
-		$entryId = $db->insert_id;
+		$entryId = $db->insert($q);
 
 		/* Add entry to moderation queue */
 		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_GUESTBOOK, $entryId, true);

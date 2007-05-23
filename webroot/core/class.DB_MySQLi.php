@@ -73,6 +73,30 @@ class DB_MySQLi extends DB_Base
 		return $result;
 	}
 
+	function insert($q)
+	{
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);
+
+		$result = $this->db_handle->query($q);
+
+		$ret_id = 0;
+
+		if ($result) {
+			$ret_id = $this->db_handle->insert_id;
+		} else if ($config['debug'] && !$result) {
+			$this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+		} else {
+			//if debug is turned off (production) and a query fail, just die silently
+			die;
+		}
+
+		if ($config['debug']) $this->profileQuery($time_started, $q);
+
+		return $ret_id;
+	}
+
 	function delete($q)
 	{
 		global $config;

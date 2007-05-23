@@ -215,8 +215,7 @@ class Session
 		}
 		
 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
-		$db->query($q);
-		$newUserId = $db->insert_id;
+		$newUserId = $db->insert($q);
 
 		$this->log('User <b>'.$username.'</b> created');
 		

@@ -13,8 +13,8 @@
 		if ($check) return false; //a band with this name already exists
 
 		$q = "INSERT INTO tblBands SET bandName='".$band_name."',creatorId=".$session->id.",timeCreated=NOW()";
-		$db->query($q);
-		return $db->insert_id;
+
+		return $db->insert($q);
 	}
 	
 	function updateBandInfo($band_id, $band_info)

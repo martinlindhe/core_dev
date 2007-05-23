@@ -59,9 +59,8 @@
 		if (!$roomName) return false;
 
 		$q = 'INSERT INTO tblChatRooms SET roomName="'.$db->escape($roomName).'",timeCreated=NOW(),createdBy='.$session->id;
-		$db->query($q);
-		
-		return $db->insert_id;
+
+		return $db->insert($q);
 	}
 	
 	function getChatRooms()

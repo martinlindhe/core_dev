@@ -28,9 +28,9 @@
 		$record_name = $db->escape(trim($record_name));
 		$record_info = $db->escape(trim($record_info));
 
-		$db->query('INSERT INTO tblRecords SET recordName="'.$record_name.'",bandId='.$band_id.',recordInfo="'.$record_info.'",creatorId='.$session->id.',timeCreated=NOW()');
+		$q = 'INSERT INTO tblRecords SET recordName="'.$record_name.'",bandId='.$band_id.',recordInfo="'.$record_info.'",creatorId='.$session->id.',timeCreated=NOW()';
 
-		return $db->insert_id;
+		return $db->insert($q);
 	}
 
 	function createTracks($record_id, $tracks)

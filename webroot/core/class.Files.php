@@ -347,8 +347,8 @@ class Files
 		$filesize = filesize($FileData['tmp_name']);
 		//maybe todo: flytta inserten till handleImageUpload / handleGeneralUpload istället?
   	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
-  	$db->query($q);
-  	$fileId = $db->insert_id;
+
+  	$fileId = $db->insert($q);
 
 		//Identify and handle various types of files
 		if (in_array($file_lastname, $this->image_types)) {

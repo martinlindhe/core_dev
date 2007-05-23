@@ -138,8 +138,8 @@
 		$lyric_name = $db->escape($lyric_name);
 		$lyric_text = $db->escape(cleanupText($lyric_text));
 
-		$db->query('INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$session->id.',timeCreated=NOW()');
-		$lyric_id = $db->insert_id;
+		$q = 'INSERT INTO tblLyrics SET bandId='.$band_id.',lyricName="'.$lyric_name.'",lyricText="'.$lyric_text.'",creatorId='.$session->id.',timeCreated=NOW()';
+		$lyric_id = $db->insert($q);
 
 		if ($record_id) {
 			$db->query('UPDATE tblTracks SET lyricId='.$lyric_id.',bandId='.$band_id.' WHERE recordId='.$record_id.' AND trackNumber='.$track);

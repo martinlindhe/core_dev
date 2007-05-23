@@ -40,10 +40,9 @@
 		$_params = $db->escape(serialize($_params));
 
 		$q = 'INSERT INTO tblOrders SET orderType='.$_type.', orderParams="'.$_params.'", ownerId='.$session->id.', timeCreated=NOW()';
-		$db->query($q);
-		$order_id = $db->insert_id;
+		$order_id = $db->insert($q);
 
-		$session->log('#'.$db->insert_id.': Added work order: '.$WORK_OPRDER_TYPES[$_type]);
+		$session->log('#'.$order_id.': Added work order: '.$WORK_OPRDER_TYPES[$_type]);
 		return $order_id;
 	}
 

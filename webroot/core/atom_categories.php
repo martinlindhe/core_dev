@@ -34,8 +34,8 @@
 
 		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner.',timeCreated=NOW(),creatorId='.$session->id;
 		if ($session->isAdmin && $_global) $q .= ',categoryPermissions=10';
-		$db->query($q);
-		return $db->insert_id;
+
+		return $db->insert($q);
 	}
 
 	function updateCategory($_type, $_id, $name)

@@ -19,9 +19,8 @@
 		if ($check) return false;
 
 		$q = 'INSERT INTO tblWords SET word="'.$word.'",pron="'.$pron.'",lang='.$langId;
-		$db->query($q);
 
-		return $db->insert_id;
+		return $db->insert($q);
 	}
 
 	function getWord($wordId)

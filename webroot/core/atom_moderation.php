@@ -186,9 +186,8 @@
 		if ($queueId) return $queueId;
 
 		$q = 'INSERT INTO tblModerationQueue SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
-		$db->query($q);
 
-		return $db->insert_id;
+		return $db->insert($q);
 	}
 
 	function getModerationQueue()

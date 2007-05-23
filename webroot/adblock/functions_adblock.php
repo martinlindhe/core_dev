@@ -13,9 +13,7 @@
 			return 'This rule already exists!';
 		}	
 
-		$db->query('INSERT INTO tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',creatorId='.$session->id.',timeCreated=NOW()' );
-
-		return $db->insert_id;
+		return $db->insert('INSERT INTO tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',creatorId='.$session->id.',timeCreated=NOW()' );
 	}
 
 	function updateAdblockRule($ruleId, $ruleText, $ruleType, $sampleUrl)
@@ -205,9 +203,8 @@
 		$comment = $db->escape(trim($comment));
 
 		$q = 'INSERT INTO tblProblemSites SET url="'.$url.'",type='.$type.',comment="'.$comment.'",userId='.$session->id.',userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).',timeCreated=NOW()';
-		$db->query($q);
 
-		return $db->insert_id;
+		return $db->insert($q);
 	}
 	
 	function removeProblemSite($siteId)

@@ -18,8 +18,8 @@
 		$body = $db->escape($body);
 
 		$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id.',blogTitle="'.$title.'",blogBody="'.$body.'",timeCreated=NOW()';
-		$db->query($q);
-		$blogId = $db->insert_id;
+
+		$blogId = $db->insert($q);
 
 		/* Add entry to moderation queue */
 		if ($config['blog']['moderation']) {
