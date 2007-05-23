@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 	require('design_head.php');
-	
+
 	echo 'Missing lyrics:<br/><br/>';
 
 	$list = getMissingLyrics();

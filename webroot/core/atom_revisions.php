@@ -4,10 +4,10 @@
 
 		By Martin Lindhe, 2007
 	*/
-	
+
 	//revision types:
 	define('REVISIONS_WIKI', 1);
-	
+
 	//revision categories:
 	define('REV_CAT_TEXT_CHANGED', 1);
 	define('REV_CAT_FILE_UPLOADED', 2);
@@ -21,13 +21,13 @@
 		global $db;
 
 		if (!is_numeric($fieldType) || !is_numeric($fieldId) || !is_numeric($creatorId) || !is_numeric($categoryId)) return false;
-		
+
 		$timestamp = $db->escape($timestamp);		//todo: validate timestamp bättre
 
 		$q = 'INSERT INTO tblRevisions SET fieldId='.$fieldId.',fieldType='.$fieldType.',fieldText="'.$db->escape($fieldText).'",createdBy='.$creatorId.',timeCreated="'.$timestamp.'",categoryId='.$categoryId;
 		return $db->insert($q);
 	}
-	
+
 	function showRevisions($articleType, $articleId, $articleName)
 	{
 		global $db;

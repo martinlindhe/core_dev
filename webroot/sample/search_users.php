@@ -30,7 +30,7 @@
 
 	} else if (isset($_GET['l']) && $_GET['l']) {
 		/* Lista alla användare som börjar på en bokstav */
-		
+
 		$list = searchUsernameBeginsWith($_GET['l']);
 		//$list = searchNicknameBeginsWith($_GET['l']);
 
@@ -38,7 +38,7 @@
 
 		echo (count($list)!=1?count($list).' hits':'1 hit');
 		echo '<br/><br/>';
-		
+
 		for ($i=0; $i<count($list); $i++) {
 			echo nameLink($list[$i]['userId'], $list[$i]['userName']).'<br>';
 		}
@@ -53,7 +53,7 @@
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?l='.chr($i).'">'.chr($i).'</a> ';
 		}
 		echo '<br/><br/>';
-		
+
 		echo'<form name="searchusers" method="post" action="'.$_SERVER['PHP_SELF'].'">';
 
 		echo 'Free-text: ';

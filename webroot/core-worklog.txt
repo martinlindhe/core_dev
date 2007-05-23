@@ -141,7 +141,7 @@ X = hi prio task
 	- user: implementerat besöksstatistik på ens profil + visning av den
 	- db: snyggare sql profiler output
 	- sök användare implementerat
-		
+
 
 2007.05.21:
 	- news: kategorier: tog bort global/own kategori-visning
@@ -174,7 +174,7 @@ X = hi prio task
 	- userdata: fixat userdata typen image så den funkar + går att radera uppladdade bilder
 	- core: förberett för skins-support genom att dela /css/functions.css i /css/core.css och /css/themes/default.css
 	- core: lagt dit skins-support. kräver ett userdata fält som heter "Theme" som är en dropdown eller radiobutton med css-filnamn
-	
+
 
 2007.05.16:
 	- admin: admin_events sql optimering
@@ -337,7 +337,7 @@ X = hi prio task
 	- news: kan nu se översikt från bara en nyhetskategori
 	- news: rss feed på alla nyheter + på enskild kategori av nyheter är nu möjlig
 	- adblock: visar rss news feed på startsidan
-	
+
 
 2007.04.20:
 	- admin: en phpinfo sida
@@ -393,8 +393,8 @@ X = hi prio task
 	- core: flyttade alla funktions-include files från /functions/* till /core/*
 	- adblock: rensade upp gammal config
 	- session: nya funktioner: requireLoggedIn(), requireAdmin(). redirectar användaren till 'session' start_page config direktivet och stoppar scriptet
-	
-	
+
+
 2007.04.15
 	- files: kontrollerade alla file.php requests
 	- files: fixade så mp3-spelaren kan avkoda '&amp;' i url:en
@@ -421,7 +421,7 @@ X = hi prio task
 	- files: sätter nocache headers för filer som ändrats efter att sessionen startades, funkar sådär. ibland cachar browsern iallafall bilderna
 	- wiki: visar history för en vanlig user på låst wiki
 
-	
+
 2007.04.13:
 	- gjort ordentliga .htaccess så man bara stänger av directory listing
 

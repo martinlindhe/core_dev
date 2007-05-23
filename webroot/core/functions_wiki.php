@@ -3,7 +3,7 @@
 		------------------------------------------------------------
 		Written by Martin Lindhe, 2007 <martin_lindhe@yahoo.se>
 
-		core																			tblWiki	
+		core																			tblWiki
 		för history-stöd: atom_revisions.php			tblRevisions
 		för files-stöd: $files objekt							tblFiles
 	*/
@@ -14,7 +14,7 @@
 	$config['wiki']['log_history'] = true;
 	$config['wiki']['allow_html'] = false;
 	$config['wiki']['explain_words'] = false;
-	
+
 	$config['wiki']['allow_edit'] = false;	//false = only allow admins to edit the wiki articles. true = allow all, even anonymous
 
 
@@ -27,7 +27,7 @@
 	function wikiUpdate($wikiName, $_text)
 	{
 		global $db, $session, $config;
-		
+
 		$wikiName = $db->escape(trim($wikiName));
 		if (!$wikiName) return false;
 
@@ -38,7 +38,7 @@
 		if (!empty($data) && $data['msg'] == $_text) return false;
 
 		$_text = $db->escape(trim($_text));
-		
+
 		if (!empty($data) && $data['wikiId'])
 		{
 			if ($config['wiki']['log_history'])
@@ -58,11 +58,11 @@
 	function wikiFormat($wikiName, $data)
 	{
 		global $db, $files, $config;
-		
+
 		$text = stripslashes($data['msg']);
 
 		$text = formatUserInputText($text, !$config['wiki']['allow_html']);
-		
+
 		if ($config['wiki']['explain_words']) {
 			$text = dictExplainWords($text);
 		}
@@ -77,7 +77,7 @@
 	function wiki($wikiName = '')
 	{
 		global $db, $files, $session, $config;
-		
+
 		$current_tab = $config['wiki']['first_tab'];
 
 		//Looks for formatted wiki section commands, like: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
@@ -96,7 +96,7 @@
 		$data = $db->getOneRow($q);
 
 		$text = stripslashes($data['msg']);
-		
+
 		if (!$session->isAdmin && !$config['wiki']['allow_edit']) {
 			/* Only display the text for normal visitors */
 			echo '<div class="wiki">';
@@ -128,7 +128,7 @@
 				unset($_POST['wiki_'.$data['wikiId']]);
 				//JS_Alert('Changes saved!');
 			}
-			
+
 			if ($session->isAdmin && isset($_GET['wiki_lock'])) {
 				$q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE wikiId='.$data['wikiId'];
 				$db->query($q);
@@ -169,7 +169,7 @@
 			//List "unused files" for this Wiki when in edit mode
 			if ($config['wiki']['allow_files']) {
 				$filelist = $files->getFilesByCategory(FILETYPE_WIKI, $data['wikiId']);
-				
+
 				$str = '';
 
 				foreach ($filelist as $row) {
@@ -177,7 +177,7 @@
 					$last_name = strtolower($temp[1]);
 
 					$showTag = $linkTag = '[[file:'.$row['fileId'].']]';
-					
+
 					if (in_array($last_name, $files->image_types)) {
 						$showTag = makeThumbLink($row['fileId'], $showTag);
 					}
@@ -191,7 +191,7 @@
 					echo '<b>Unused files:</b> '.$str;
 				}
 			}
-			echo '</form>';				
+			echo '</form>';
 		}
 		elseif ($config['wiki']['allow_files'] && $current_tab == 'WikiFiles')
 		{

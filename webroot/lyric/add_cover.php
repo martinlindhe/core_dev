@@ -10,7 +10,7 @@
 
 	$record_id = $_GET['record'];
 	$track = $_GET['track'];
-		
+
 	/* Will be 0 if this is a comp/split */
 	$coverband_id = getBandIdFromRecordId($record_id);
 	if (!empty($_GET['coverband']) && is_numeric($_GET['coverband'])) $coverband_id = $_GET['coverband'];
@@ -30,8 +30,8 @@
 		}
 	}
 
-	require('design_head.php');	
-	
+	require('design_head.php');
+
 	if ($coverband_id == 0) {
 		/* Bandet som gör covern */
 
@@ -65,7 +65,7 @@
 		}
 		echo '</select><br/>';
 		echo '</form>';
-		
+
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?record='.$record_id.'&amp;track='.$track.'">Back to step 1</a><br/>';
 
 	} else {

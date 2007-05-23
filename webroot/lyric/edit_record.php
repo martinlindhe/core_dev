@@ -4,12 +4,12 @@
 	$session->requireLoggedIn();
 
 	require('design_head.php');
-	
+
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 	$record_id = $_GET['id'];
 	$band_id = getBandIdFromRecordId($record_id);
-		
+
 	if (isset($_POST['title']))
 	{
 		updateRecord($record_id, $_POST['title']);
@@ -27,7 +27,7 @@
 	$record_name = getRecordName($record_id);
 
 	echo 'If you added this record by mistake to the wrong band, you can set it to a different band here.<br/><br/>';
-	
+
 	echo '<form name="editrecord" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$record_id.'">';
 
 	echo '<b>'.$band_name.' - </b><input type="text" name="title" size="50" value="'.$record_name.'"/><br/>';

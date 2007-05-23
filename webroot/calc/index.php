@@ -3,7 +3,7 @@
 		enkel webbaserad programmerings-kalkylator
 
 		konceptuellt snarlik analogx' pcalc
-		
+
 
 
 		exempel input:					expempel output:
@@ -14,9 +14,9 @@
 
 	if (!empty($_GET['expr'])) {
 		$expr = $_GET['expr'];
-		
+
 		$result = calcExpr($expr);
-		
+
 		echo '<pre>result: '; print_r($result);
 	}
 ?>

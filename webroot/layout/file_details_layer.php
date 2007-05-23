@@ -7,10 +7,10 @@
 	*/
 ?>
 <div id="zoom_image_layer" style="display:none">
-	
+
 	<center>
 		<img id="zoom_image" src="/gfx/ajax_loading.gif" alt="Image"/><br/>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/>
 		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 

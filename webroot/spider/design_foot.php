@@ -1,7 +1,7 @@
 <br/>
 <br/>
 <?
-	//if ($session->isAdmin) 
+	//if ($session->isAdmin)
 	$db->showProfile($time_start);
 ?>
 </div>

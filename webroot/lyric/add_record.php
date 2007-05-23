@@ -15,7 +15,7 @@
 		$record_name = trim($_POST['recordname']);
 		$record_info = trim($_POST['info']);
 		$tracks = $_POST['tracks'];
-		
+
 		$record_id = addRecord($band_id, $record_name, $record_info);
 		if (!$record_id)
 		{
@@ -24,9 +24,9 @@
 		else
 		{
 			createTracks($record_id, $tracks);
-			
+
 			echo 'Record "'.$record_name.'" added.<br/><br/>';
-			
+
 			echo '<a href="show_record.php?id='.$record_id.'">Click here to go to it now</a>.<br/><br/>';
 		}
 	}
@@ -43,7 +43,7 @@
 		echo '>'.$list[$i]['bandName'].'</option>';
 	}
 	echo '</select></td></tr>';
-	
+
 	echo '<tr><td>Record name:</td><td><input type="text" name="recordname"/> (leave empty for s/t)</td></tr>';
 	echo '<tr><td>Number of tracks:</td><td><input type="text" name="tracks" value="3"/></td></tr>';
 	echo '<tr><td valign="top">Record info:<br/>(optional)</td><td><textarea name="info" cols="40" rows="8"></textarea></td></tr>';
@@ -58,6 +58,6 @@ document.addrecord.recordname.focus();
 </script>
 <?
 	}
-	
+
 	require('design_foot.php');
 ?>

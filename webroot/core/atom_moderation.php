@@ -198,7 +198,7 @@
 
 		return $db->getArray($q);
 	}
-	
+
 	function getModerationQueueItem($queueId)
 	{
 		global $db;

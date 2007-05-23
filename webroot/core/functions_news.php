@@ -23,7 +23,7 @@
 
 		return true;
 	}
-	
+
 	function updateNews($newsId, $categoryId, $title, $body, $topublish, $rss_enabled)
 	{
 		global $db, $session;
@@ -46,7 +46,7 @@
 		$db->query('UPDATE tblNews SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE newsId='.$_id);
 		return true;
 	}
-	
+
 	function getAllNews()
 	{
 		global $db;
@@ -64,7 +64,7 @@
 	function getPublishedNews($_categoryId = 0, $limit = '')
 	{
 		global $db;
-		
+
 		if (!is_numeric($_categoryId)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName, t3.userName AS editorName FROM tblNews AS t1 ';
@@ -74,10 +74,10 @@
 		if  ($_categoryId) $q .= ' AND categoryId='.$_categoryId.' ';
 		$q .= 'ORDER BY timeToPublish DESC';
 		if ($limit) $q .= ' LIMIT 0,'.$limit;
-		
-		return $db->getArray($q);		
+
+		return $db->getArray($q);
 	}
-	
+
 	function getNewsItem($newsId)
 	{
 		global $db;
@@ -182,7 +182,7 @@
 			$art = parseArticle($news['body']);
 			if ($art['head']) echo '<div class="news_head">'.$art['head'].'</div>';
 			echo '<div class="news_body">'.$art['body'].'</div>';
-			
+
 			if ($config['news']['allow_rating']) {
 				echo '<br/>';
 				echo '<div class="news_rate">';
@@ -199,7 +199,7 @@
 	function showNews($limit = 3)
 	{
 		global $db, $session;
-		
+
 		/* Displays one news article - returns if successful */
 		if (showNewsArticle()) return;
 
@@ -222,5 +222,5 @@
 		if ($session->isAdmin) {
 			echo '<a href="/admin/admin_news_add.php'.getProjectPath(0).'">Add news</a>';
 		}
-	}	
+	}
 ?>

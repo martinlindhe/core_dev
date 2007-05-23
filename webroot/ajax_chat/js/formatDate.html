@@ -12,7 +12,7 @@
 <div style="margin-left: auto; margin-right: auto; width: 40em; text-align: right; position: relative;">
     <a href="http://www.svendtofte.com/"><img src="svendtofte.com%20-%20Date%20formatting%20in%20JavaScript_files/st.gif" id="stlogo" alt="st" height="92" width="78"></a>
     <h1>Date formatting in JavaScript</h1>
-    <br><span id="subtitle">PHP like date formatting</span></div>    
+    <br><span id="subtitle">PHP like date formatting</span></div>
 </div>
 
 
@@ -24,38 +24,38 @@
     <a class="external" href="http://www.php.net/date" title="External link: date method synopsis"><code>
     date</code></a> method, and maybe thought it was really neat.
     I certainly have, and since formatting and otherwise
-    working with date strings in JavaScript isn't 
+    working with date strings in JavaScript isn't
     exactly easy (a lot of <code>getSomeUnit</code>), I thought I'd implement
     a generic solution once and for all, similar to the PHP one.</p>
 
     <p>This is a pure client-side solution, and because of that, you can't
     always be sure it'll work correctly. Time and date issues are some
-    of the <a class="external" href="http://www.xs4all.nl/%7Eppk/js/introdate.html" title="External link: Peter Paul Kochs JavaScript date section">more 
-    complex</a> matters in JavaScript. 
+    of the <a class="external" href="http://www.xs4all.nl/%7Eppk/js/introdate.html" title="External link: Peter Paul Kochs JavaScript date section">more
+    complex</a> matters in JavaScript.
     <a class="external" href="http://www.dannyg.com/" title="External link: JavaScript guru, and much more">
-    Danny Goodman</a>'s article, 
+    Danny Goodman</a>'s article,
     <a class="external" href="http://developer.netscape.com/viewsource/goodman_dateobject.html">
     JavaScript Date Object Techniques</a> is hideously old
     (Netscape 3!), but still
     provides a valuable first look at date programming and it's pitfalls.
-    Most important of all, <strong>this script in no way helps you determine 
+    Most important of all, <strong>this script in no way helps you determine
     a time, and set it</strong>. All this does, is, when given a <code>Date</code>
     object (where the date is always set), is to print
     it out, in a easier way, compared to what JavaScript usually allows.</p>
-    
-    
+
+
     <p>Always test your script, to ensure
     it works in whatever browser you need it to work in. If you're using this code
     for sensitive code, where accurate dating is required, you are out of
     your mind. Use this for cosmetic features and otherwise non-critical code.</p>
-    
+
     <p class="note">Over the years I've gotten alot of feedback on this code,
     such as bug fixes and improvements. I've tried to update the JavaScript
     file to contain all contributors, but if you are not listed, my apologies.
     </p>
-    
+
     <h2>How it works</h2>
-    
+
     <p>Using this function is very simple. You start by downloading, and
     linking the JavaScript file <a href="http://www.svendtofte.com/code/date_format/formatDate.js">formatDate.js</a>.
     You then need to create a date, that you want to format. Let's start
@@ -68,41 +68,41 @@ alert(d.formatDate("h:i A")); // shows "01:52 am", or something
     <p>All the various codes you can use, are listed in a table below,
     and they all depend on whatever date the date object has. So,
     if we want to create a specific date:</p>
-    
+
 
 <pre>// notice that month and date are zero indexed (1st is 0)
 d = new Date(1999, 11, 30);   // millenium new years eve
-alert(d.formatDate("F dS"));  // shows "December 31st"</pre>    
+alert(d.formatDate("F dS"));  // shows "December 31st"</pre>
 
     <p>If you want a letter, not to be interpreted as a code, but instead
     as the mere letter, and you don't want to muck around with
     string building, you can simply escape it. But instead of normal
-    escaping (using a single <code>\</code>), 
+    escaping (using a single <code>\</code>),
     you need to escape here with two slashes <code>\\</code>.
     Like the letter <code>F</code>, is usually a code, for the month
-    name (January, etc), if you instead just want "F", you just go: 
+    name (January, etc), if you instead just want "F", you just go:
     <code>\\F</code>.</p>
-    
+
 <pre>d = new Date(1999,11,30);   // millennium new years eve
 
 // shows "31st of December, the year 1999"
-alert(d.formatDate("dS of F, \\t\\he \\ye\\a\\r Y"));  </pre>        
+alert(d.formatDate("dS of F, \\t\\he \\ye\\a\\r Y"));  </pre>
 
     <p>Notice, how you you only need to escape those letters, that are actual
     codes. Therefore, the letters <code>o,f</code> and <code>e</code>
     doesn't need escaping.</p>
-    
+
     <p>For the full lowdown on how to set dates on <code>Date</code> objects I
     refer to the <a class="external" href="http://devedge.netscape.com/library/manuals/2000/javascript/1.5/reference/date.html">
     JavaScript 1.5 documentation on the <code>Date</code> object</a>.</p>
-    
+
     <h3>What is supported, and what isn't</h3>
-    
+
     <p>Most of PHP's date method's switches are supported. Are few aren't.</p>
-    
+
     <p>Here is a full list of supported switches, unsupported ones, and
     ones, that I might include in the future. The switches are compared against PHP 5.1.3.</p>
-    
+
     <table class="tufteDesign">
     <tbody><tr>
         <td>Supported switches</td>
@@ -110,30 +110,30 @@ alert(d.formatDate("dS of F, \\t\\he \\ye\\a\\r Y"));  </pre>
         <td>Currently unsupported, but might be included in the future</td>
     </tr>
     <tr class="lastrow">
-        <td>a, A, B, c, d, D, F, g, G, h, H, i, I (uppercase i), j, l (lowecase L), 
+        <td>a, A, B, c, d, D, F, g, G, h, H, i, I (uppercase i), j, l (lowecase L),
             L, m, M, n, N, O, P, r, s, S, t, U, w, W, y, Y, z, Z</td>
         <td>T, e, o</td>
         <td></td>
     </tr>
     </tbody></table>
-    
+
 
     <p>And here is a full listing of that they do. Pretty much ripped from
     <a class="external" href="http://www.php.net/date" title="External link: PHP date method">PHP's own page</a>.
     </p>
-    
+
     <table class="tufteDesign">
     <tbody><tr>
         <td>Switch</td>
         <td>Description</td>
         <td>Example of returned values</td>
     </tr>
-    <tr>    
+    <tr>
         <td><code>a</code></td>
         <td>Lowercase Ante meridiem and Post meridiem</td>
         <td><code>am</code> or <code>pm</code></td>
     </tr>
-    <tr>    
+    <tr>
         <td><code>A</code></td>
         <td>Uppercase Ante meridiem and Post meridiem</td>
         <td><code>AM</code> or <code>PM</code></td>
@@ -192,7 +192,7 @@ alert(d.formatDate("dS of F, \\t\\he \\ye\\a\\r Y"));  </pre>
         <td><code>I</code> (uppercase i)</td>
         <td>Whether or not the date is in daylights savings time</td>
         <td><code>1</code> if Daylight Savings Time, <code>0</code> otherwise</td>
-    </tr>    
+    </tr>
     <tr>
         <td><code>j</code></td>
         <td>Day of the month without leading zeros</td>
@@ -297,38 +297,38 @@ offset in seconds. The offset for timezones west of UTC is always
 negative, and for those east of UTC is always positive</td>
         <td><code>-43200</code> through <code>43200</code></td>
     </tr>
-    </tbody></table>    
+    </tbody></table>
 
     <h2>Notes</h2>
 
     <p>The script was written, with emphasis on compatibility. Thankfully,
     the <code>Date</code> object is part of Core JavaScript and
-    is thus standardized in 
+    is thus standardized in
     <a class="external" href="http://www.ecma-international.org/publications/standards/ECMA-262.HTM" title="External link: Standard ECMA-262 : ECMAScript Language Specification">ECMAScript</a>
     3rd edition. Only methods, which are in that specification have been
-    used. ECMAScript 3rd edition corresponds roughly to 
-    <a class="external" href="http://devedge.netscape.com/library/manuals/2000/javascript/1.5/reference/" title="External link: Core JavaScript 1.5 Reference">JavaScript 1.5</a>, and to 
+    used. ECMAScript 3rd edition corresponds roughly to
+    <a class="external" href="http://devedge.netscape.com/library/manuals/2000/javascript/1.5/reference/" title="External link: Core JavaScript 1.5 Reference">JavaScript 1.5</a>, and to
     <a class="external" href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/script56/html/js56jsoriJScript.asp" title="External link: I couldn't find 5.5, so here's 5.6, very similar">JScript 5.5</a>.
     So that should cover the major newer browsers.</p>
-    
+
     <p>Nonetheless, older browsers might stumble a bit at places,
     especially problems with timezone offsets, and such things
     is hairy stuff, that one shouldn't really try and fix.
     For more on dates, and how browsers deal with it, Peter-Paul Koch, has
     <a class="external" href="http://www.xs4all.nl/%7Eppk/js/index.html?/%7Eppk/js/introdate.html" title="External link: PPK's Date section">a lot of good stuff on it</a>.</p>
-    
+
     <p>You can pretty much count on the basic stuff, like getting days,
     date and year. What you might abstain from relying on (at least
     not without testing first), is things such as timezone offsets,
     and other similar switches.</p>
-    
+
     <h3>Browser support</h3>
-    
+
     <p>The following browsers have been tested with the script, and
     found to work as expect. If there's any problems, these have been
-    noted. If you know any of these to be wrong, or a browser, 
+    noted. If you know any of these to be wrong, or a browser,
     where something fails, <a href="mailto:svendtofte@svendtofte.com" title="Email me">please email me</a>, and tell me.</p>
-    
+
     <table class="tufteDesign">
         <tbody><tr>
             <td>Browser</td>
@@ -387,8 +387,8 @@ negative, and for those east of UTC is always positive</td>
 
 
     <h3>How to localize a script</h3>
-    
-    <p>One of the major strengths of a this script, over 
+
+    <p>One of the major strengths of a this script, over
     <a class="external" href="http://www.php.net/date">PHP's date function</a>, is
     that PHP's <code>date</code> function can only
     spit out English, this one can be easily modified, to
@@ -397,55 +397,55 @@ negative, and for those east of UTC is always positive</td>
     it will be capable of both things at once. So if a user
     with English set as his language, comes in, he will get
     June, as well, "June", but a Dane will get it as "Juni" (Danish for June).</p>
-    
+
     <p>In the following section, I'll show how to make the script
-    show Danish and English weekdays, instead of only English. The 
+    show Danish and English weekdays, instead of only English. The
     technique can be easily applied to all the other words just
     as easily (months, day suffix, and so forth).</p>
-    
-    <p>In the top of the <a href="http://www.svendtofte.com/code/date_format/formatDate.js" title="formatDate.js">script</a>, 
+
+    <p>In the top of the <a href="http://www.svendtofte.com/code/date_format/formatDate.js" title="formatDate.js">script</a>,
     you will find this array entry:</p>
-    
-<pre>var daysLong = ["Sunday", "Monday", "Tuesday", "Wednesday", 
+
+<pre>var daysLong = ["Sunday", "Monday", "Tuesday", "Wednesday",
                 "Thursday", "Friday", "Saturday"];</pre>
-                
+
     <p>Of course, we could just change that into Danish, and we'd
     be fine, but then there'd be no English of course. The solution
-    is instead, to create two arrays, and rename them, so they 
+    is instead, to create two arrays, and rename them, so they
     show their language.</p>
 
-<pre>var daysLong_en = ["Sunday", "Monday", "Tuesday", "Wednesday", 
+<pre>var daysLong_en = ["Sunday", "Monday", "Tuesday", "Wednesday",
                    "Thursday", "Friday", "Saturday"];
 
-var daysLong_dk = ["Søndag", "Mandag", "Tirsdag", "Onsdag", 
+var daysLong_dk = ["Søndag", "Mandag", "Tirsdag", "Onsdag",
                    "Torsdag", "Fredag", "Lørdag"];</pre>
-    
+
     <p>And we now need to change the function, which goes into that
     array, so that, before getting the weekday, it checks for language
     the user has set.</p>
-    
+
     <p>Your options for seeing what language a user has set are
     pretty limited and browser specific I'm afraid. Netscape
-    has traditionally (since version 4, Mozilla supports this one too) 
+    has traditionally (since version 4, Mozilla supports this one too)
     supported the <code>navigator.language</code>
     attribute, while Internet Explorer, also since version 4, has supported
     <code>navigator.browserLanguage</code>. Opera supports both these (
     though I do not know from what version).</p>
-    
+
     <p>You also need to write an array, with "supported" languages, so
     that in case the language could be detected, but it's not one that
     you've written text for, it'll just go back to English again.</p>
 
-<pre>var supportedLang = ["en", "dk"]; // for our little example, 
+<pre>var supportedLang = ["en", "dk"]; // for our little example,
                                   // danish and english is it</pre>
-    
+
     <p>The function that finds the week day is the following (the syntax may seem curious to you, but trust me, it works)</p>
 
 <pre>"l" : function () {
     // A full textual representation of the day of the week
     return daysLong[self.getDay()];
 }</pre>
-    
+
     <p>Which can then be rewritten into:</p>
 
 <pre>"l" : function () {
@@ -459,25 +459,25 @@ var daysLong_dk = ["Søndag", "Mandag", "Tirsdag", "Onsdag",
             lang = navigator.browserLanguage;
         }
     }
-       
+
     // if language isn't supported
     if (!supportedLang.exists(en)) lang = "en";
 
     var a = eval("daysLong_" + lang);
     return a[self.getDay()];
 }</pre>
-    
-    <p>Of course, you can do the usual 
+
+    <p>Of course, you can do the usual
     browser checking stuff, so you don't have to
-    write that whole thing over and over. I'll leave it up to the reader, 
+    write that whole thing over and over. I'll leave it up to the reader,
     to make the script as small as possible :)</p>
 
     <h3>Test table</h3>
-    
+
     <p>Here is a table, of how your browser handles the script. Use
-    this table, to load up the various browser you want to check, 
+    this table, to load up the various browser you want to check,
     and see if they work as expected.</p>
-    
+
     <p>The date used, is April 16, 1981, at 01:30 after midnight, that's my
     birthday, and the second date used is whatever it's right now.
     Of course, there's no "expected output" from the "now" time.
@@ -485,7 +485,7 @@ var daysLong_dk = ["Søndag", "Mandag", "Tirsdag", "Onsdag",
     have a "expected", it's because the script always runs in YOUR
     timezone, and as such, that will show whatever timezone offset you
     currently have with UTC.</p>
-    
+
 <script type="text/javascript" src="svendtofte.com%20-%20Date%20formatting%20in%20JavaScript_files/formatDate.js"></script>
 <script type="text/javascript">
 d = new Date("April 16 1981 01:30:00");
@@ -499,7 +499,7 @@ now = new Date();
         <td>Expected (4/1981)</td>
         <td>Your browser (now)</td>
     </tr>
-    <tr>    
+    <tr>
         <td><code>a</code></td>
         <td><code>
         <script type="text/javascript">
@@ -513,7 +513,7 @@ now = new Date();
         </script>pm
         </code></td>
     </tr>
-    <tr>    
+    <tr>
         <td><code>A</code></td>
         <td><code>
         <script type="text/javascript">
@@ -880,7 +880,7 @@ now = new Date();
     </tr>
 </tbody></table>
 
-    <p>For a truly exercising test page, I've made <a href="http://www.svendtofte.com/code/date_format/php_random_test.php">a 
+    <p>For a truly exercising test page, I've made <a href="http://www.svendtofte.com/code/date_format/php_random_test.php">a
     huge table</a>, that tests all switches. It randomly generates dates,
     and you can then compare PHP's results, to the one generated by this script.
     Keep in mind, that results printed by my script will be localized,
@@ -889,7 +889,7 @@ now = new Date();
 however, the PHP version will often be wrong, since it works of
 whatever the server believes. The script version will work off the
 JavaScript date algorithms (which may or not be localized). Still, if
-there's anything that isn't doing what I hope it's doing. Please <a href="mailto:svendtofte@svendtofte.com">let me know what 
+there's anything that isn't doing what I hope it's doing. Please <a href="mailto:svendtofte@svendtofte.com">let me know what
     I'm doing</a> (wrong).</p>
 
 </div>

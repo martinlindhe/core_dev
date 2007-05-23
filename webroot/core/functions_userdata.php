@@ -85,7 +85,7 @@
 		$db->query('UPDATE tblUserdata SET fieldPriority='.$new.' WHERE fieldId='.$fieldId);
 		$db->query('UPDATE tblUserdata SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
 	}
-	
+
 	function getUserdataFieldIdByName($_name)
 	{
 		global $db;
@@ -98,11 +98,11 @@
 	function getUserdataFields($_required = false)
 	{
 		global $db;
-		
+
 		$q = 'SELECT * FROM tblUserdata ';
 		if ($_required) $q .= 'WHERE regRequire=1 ';
 		$q .= 'ORDER BY fieldPriority ASC';
-		
+
 		return $db->getArray($q);
 	}
 
@@ -164,7 +164,7 @@
 			case USERDATA_TYPE_SELECT:
 				$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId, 'userdata_'.$fieldId, $value);
 				break;
-			
+
 			case USERDATA_TYPE_IMAGE:
 				if ($value) {
 					$result .= makeThumbLink($value);

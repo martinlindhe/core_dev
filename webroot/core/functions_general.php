@@ -2,7 +2,7 @@
 	//returns a $pager array with some properties filled
 	//reads the 'p' get parameter for current page
 	//example: $pager = makePager(102, 25);		will create a pager for total of 102 items with 25 items per page
-	
+
 	function makePager($_total_cnt, $_items_per_page, $_add_value = '')
 	{
 		$pager['page'] = 1;
@@ -39,7 +39,7 @@
 
 		return $pager;
 	}
-	
+
 	/* Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
 			run from the / path it will return nothing, else the directory name of the directory script are run from */
 	function getProjectPath($_amp = 1)
@@ -67,7 +67,7 @@
 	function URLadd($_key, $_val = '', $_extra = '')
 	{
 		$arr = parse_url($_SERVER['REQUEST_URI']);
-		
+
 		$wiki_link = false;
 		$pos = strpos($_key, ':');
 		if ($pos !== false) $wiki_link = substr($_key, $pos+1);
@@ -81,7 +81,7 @@
 		if (empty($arr['query'])) return $arr['path'].'?'.$keyval.$_extra;
 
 		$args = explode('&', $arr['query']);
-		
+
 		$out_args = '';
 
 		for ($i=0; $i<count($args); $i++) {
@@ -113,7 +113,7 @@
 			return $arr['path'].'?'.$keyval.$_extra;
 		}
 	}
-	
+
 	function nameLink($id, $name)
 	{
 		return '<a href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
@@ -132,7 +132,7 @@
 		echo $text.'<br/><br/>';
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
 		echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
-		
+
 		require_once($project.'design_foot.php');
 		die;
 	}
@@ -144,7 +144,7 @@
 
 		echo '<ul class="'.$class.'">';
 			foreach($menu_arr as $url => $text) {
-				
+
 				//if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<li class="'.$current_class.'">';
 				//fixme: highlitar inte wiki parametrar t.ex "Wiki:Hello", "Blog:243"
 				if ($cur == $url) echo '<li class="'.$current_class.'">';
@@ -171,7 +171,7 @@
 			$arr[1] = trim($arr[1]);
 			return $arr;
 		}
-		
+
 		return false;
 	}
 

@@ -5,7 +5,7 @@
 		'index.php' => 'Home'
 	);
 	createMenu($menu);
-	
+
 	if ($session->isAdmin) {
 		$menu = array(
 			'perform_work.php' => 'Perform work',

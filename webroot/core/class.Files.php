@@ -1,7 +1,7 @@
 <?
 /*
 	Files class - Handle file upload, image manipulating, file management
-	
+
 	Uses tblFiles
 
 	Written by Martin Lindhe, 2007
@@ -42,7 +42,7 @@ class Files
 	private $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
 	private $thumbs_dir = 'e:/devel/webupload/default/thumbs/';		//	'/tmp/';
 
-	private $image_max_width			= 1100;	//bigger images will be resized to this size	
+	private $image_max_width			= 1100;	//bigger images will be resized to this size
 	private $image_max_height			= 900;
 	public $thumb_default_width		= 80;
 	public $thumb_default_height	= 80;
@@ -82,23 +82,23 @@ class Files
 		/*
 		//todo: flytta ut hela denna logiken nån annan stans, till en funktion som anropas av ett setup-script
 		if (!is_dir($this->upload_dir)) {
-			
+
 			//fixme: check if the path 1 level above "upload_dir" exists:
 			if (!realpath($this->upload_dir.'/../')) {
 				die('FATAL: Cannot create upload directory at '.$this->upload_dir.'. Please check paths in config.php');
 			}
-			
+
 			$session->log('Creating upload directory');
-			
+
 			mkdir($this->upload_dir);
 			file_put_contents($this->upload_dir.'.htaccess', $this->htaccess);
-			file_put_contents($this->upload_dir.'index.html', '');			
-	
+			file_put_contents($this->upload_dir.'index.html', '');
+
 			if (!is_dir(realpath($this->thumbs_dir))) {
 				$session->log('Creating thumbs directory');
 				mkdir($this->thumbs_dir);
 				file_put_contents($this->thumbs_dir.'.htaccess', $this->htaccess);
-				file_put_contents($this->thumbs_dir.'index.html', '');			
+				file_put_contents($this->thumbs_dir.'index.html', '');
 			}
 		}
 		*/
@@ -255,11 +255,11 @@ class Files
 	function showThumbnails($fileType, $categoryId)
 	{
 		global $session, $db;
-		
+
 		if (!is_numeric($fileType)) return false;
 
 		$list = $db->getArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
-		
+
 		if (!$list) {
 			echo 'No thumbnails to show!';
 			return;
@@ -284,7 +284,7 @@ class Files
 		echo '</div>';
 		echo '</div>';
 	}
-	
+
 	function deleteFile($_id)
 	{
 		global $db, $session;
@@ -302,7 +302,7 @@ class Files
 		unlink($this->upload_dir.$_id);
 		$this->clearThumbs($_id);
 	}
-	
+
 	/* Deletes all thumbnails for this file ID */
 	function clearThumbs($_id)
 	{
@@ -319,7 +319,7 @@ class Files
 		}
 		//$session->log('Thumbs for '.$_id.' deleted');
 	}
-	
+
 
 	/* Stores uploaded file associated to $session->id */
 	function handleUpload($FileData, $fileType, $categoryId = 0)
@@ -338,7 +338,7 @@ class Files
 			$session->log('Attempt to upload too big file');
 			return false;
 		}
-		
+
 		$enc_filename = basename(strip_tags($FileData['name']));
 		$enc_mimetype = strip_tags($FileData['type']);
 
@@ -388,7 +388,7 @@ class Files
 			case 'image/svg-xml':	//Opera 9.2
 				if (!$this->image_convert) break;
 				$out_tempfile = 'c:\core_outfile.png';
-				
+
 				$check = $this->convertImage($FileData['tmp_name'], $out_tempfile, 'image/png');
 
 				if (!$check) {
@@ -421,7 +421,7 @@ class Files
 		global $db;
 
 		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
-		
+
 		//Resize the image if it is too big, overwrite the uploaded file
 		if (($img_width > $this->image_max_width) || ($img_height > $this->image_max_height))
 		{
@@ -561,16 +561,16 @@ class Files
 
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
-		
+
 		$file_lastname = $this->getFileLastname($data['fileName']);
 		if (!in_array($file_lastname, $this->image_types)) return false;
 
 		header('Content-Type: '.$data['fileMime']);
 		header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
 		header('Content-Transfer-Encoding: binary');
-		
+
 		$filename = $this->upload_dir.$_id;
-		
+
 		switch ($data['fileMime'])
 		{
    		case 'image/png':	$image = imagecreatefrompng($filename); break;
@@ -578,9 +578,9 @@ class Files
    		case 'image/gif': $image = imagecreatefromgif($filename); break;
    		default: die('Unsupported image type '.$data['fileMime']);
 		}
-		
+
 		$rotated = imagerotate($image, $_angle, 0);
-		
+
 		switch ($data['fileMime'])
 		{
    		case 'image/png':	imagepng($rotated, $filename); imagepng($rotated); break;
@@ -591,7 +591,7 @@ class Files
 
 		imagedestroy($image);
 		imagedestroy($rotated);
-		
+
 		$this->clearThumbs($_id);
 	}
 
@@ -640,7 +640,7 @@ class Files
 		if ($this->count_file_views) {
 			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
 		}
-		
+
 		die;
 	}
 
@@ -665,7 +665,7 @@ class Files
 		$filename = $this->upload_dir.$_id;
 
 		$temp = getimagesize($filename);
-		
+
 		$img_width = $temp[0];
 		$img_height = $temp[1];
 		$mime_type = $temp['mime'];
@@ -712,7 +712,7 @@ class Files
 		$q .= 'WHERE t1.ownerId='.$ownerId;
 		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
 		$q .= ' ORDER BY t1.timeUploaded ASC';
-		
+
 		return $db->getArray($q);
 	}
 
@@ -727,7 +727,7 @@ class Files
 		$q .= 'WHERE t1.categoryId='.$categoryId;
 		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
 		$q .= ' ORDER BY t1.timeUploaded ASC';
-		
+
 		return $db->getArray($q);
 	}
 
@@ -763,7 +763,7 @@ class Files
 		if ($session->isAdmin) {
 			$result .= 'Mime type: '.$file['fileMime'].'<br/>';
 		}
-		
+
 		if (in_array($file['fileMime'], $this->image_mime_types)) {
 			list($img_width, $img_height) = getimagesize($this->upload_dir.$_id);
 
@@ -772,7 +772,7 @@ class Files
 
 		return $result;
 	}
-	
+
 	function getFileLastname($name)
 	{
 		$result = substr($name, strrpos($name, '.') + 1);

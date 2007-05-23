@@ -6,7 +6,7 @@
 <?
 	if ($session->isAdmin) $db->showProfile($time_start);
 ?>
-	</div>	
+	</div>
 
 </div> <!-- menu_holder -->
 

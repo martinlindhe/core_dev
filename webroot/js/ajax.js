@@ -2,7 +2,7 @@
 	AJAX implementation with class interface in JavaScript by Martin Lindhe, Feb 2007
 
 	Example:
-	
+
 	var request = new AJAX();
 	request.GET('/ajax/url.php?i='+id, function_callback, id);
 */
@@ -32,7 +32,7 @@ function AJAX()
 		alert('Giving up, Cannot create an XMLHTTP instance');
 		return false;
 	}
-	
+
 	// Performs an GET-request expected to return XML
 	function GET(url, callback, callbackparam, params)
 	{
@@ -58,7 +58,7 @@ function AJAX()
 
 		return false;
 	}
-	
+
 	//Returns true if 'name' is the root tag of this xml object
 	function EmptyResponse(name)
 	{
@@ -87,7 +87,7 @@ function ajax_get_fileinfo(id)
 {
 	fileinfo_request = new AJAX();
 	fileinfo_request.GET_raw('/core/ajax_fileinfo.php?i='+id+_ext_ref, ajax_get_fileinfo_callback);
-	
+
 	setTimeout("show_ajax_anim()", 20);
 }
 

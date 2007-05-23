@@ -21,7 +21,7 @@
 	$title = 'inthc.net: "'.$band_name.' - '.$record_name.'" album, import track list';
 	require('design_head.php');
 
-	$tracks_text = '';	
+	$tracks_text = '';
 	if (!empty($_POST['tracks']))
 	{
 		$tracks_text = trim(strip_tags($_POST['tracks']));
@@ -30,7 +30,7 @@
 		echo 'Trying to figure out titles.<br/><br/>';
 		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$record_id.'">';
 		echo '<input type="hidden" name="tracks" value="'.$tracks_text.'"/>';
-			
+
 		$tracks = explode("\n", $tracks_text);
 
 		for ($i=0; $i<count($tracks); $i++) {
@@ -43,7 +43,7 @@
 			$tracks[$i] = str_ireplace('(live)', '', $tracks[$i]);
 			$tracks[$i] = trim($tracks[$i]);
 
-			$temp = explode('.', $tracks[$i]);  
+			$temp = explode('.', $tracks[$i]);
 
 			$index = trim(array_shift($temp));	//The first number
 
@@ -54,7 +54,7 @@
 				/* Format: Titel */
 				$songname = $tracks[$i];
 			}
-			
+
 			if (!is_numeric($index)) $index = $i+1;
 
 			if ($index != ($i+1)) continue;
@@ -78,7 +78,7 @@
 
 			} else {
 				//todo: visa inga checkboxar för lyrics som redan är länkad
-					
+
 				echo '<input type="checkbox" name="ck'.$i.'" id="ck'.$i.'" value="'.$row['lyricId'].'"'.($row?' checked="checked"':'').'/>';
 
 				echo '<label for="ck'.$i.'">';
@@ -112,8 +112,8 @@
 	echo '<textarea name="tracks" rows="16" cols="60">'.$tracks_text.'</textarea><br/>';
 	echo '<input type="submit" value="Import"/><br/>';
 	echo '</form>';
-	
+
 	echo '<a href="show_record.php?id='.$record_id.'">Back to record overview</a>';
-	
+
 	require('design_foot.php');
 ?>

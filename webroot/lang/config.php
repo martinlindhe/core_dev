@@ -11,7 +11,7 @@
 	require_once('class.Files.php');
 	require_once('functions_wiki.php');
 	restore_include_path();
-	
+
 	require_once('functions_lang.php');
 
 	$config['debug'] = true;

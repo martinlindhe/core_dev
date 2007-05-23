@@ -46,7 +46,7 @@ List of all current reported sites in database, oldest first (<?=count($list)?> 
 			}
 			echo '</b><br/>';
 		}
-			
+
 		$comment = nl2br(htmlspecialchars($list[$i]['comment'], ENT_NOQUOTES, 'utf-8'));
 		echo 'Comment: '.$comment.'<br/><br/>';
 

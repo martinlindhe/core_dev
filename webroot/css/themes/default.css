@@ -8,7 +8,7 @@ body {
 input {
 	border:1px solid #8CACBB;
 	background: #fff url(/gfx/input_shadow.png) repeat-x scroll center top;
-	
+
 	margin:1px;
 	padding:0.2em 0.3em;
 	vertical-align:middle;
@@ -45,25 +45,25 @@ select {
 	max-height: 700px;
 	overflow-x: hidden;
 	overflow-y: auto;
-	
+
 	border: 1px solid #aaa;
 	background-color: #DDD;
 	padding: 10px;
 	-moz-border-radius-bottomleft:15px;
 	-moz-border-radius-bottomright:15px;
 	-moz-border-radius-topleft:15px;
-	-moz-border-radius-topright:15px;	
+	-moz-border-radius-topright:15px;
 }
 /* style of header for file gadget */
 .file_gadget_header {
 
 	background-color: #fff;
 	font-weight: bold;
-	
+
 	border: 1px solid #aaa;
 	padding: 10px;
 	-moz-border-radius-topleft:15px;
-	-moz-border-radius-topright:15px;	
+	-moz-border-radius-topright:15px;
 }
 
 /* holds all file entries */
@@ -189,7 +189,7 @@ select {
 	border: 1px #000 solid;
 	background-color: #ddd;
 	padding: 4px;
-	
+
 }
 .wiki_menu li a {
 	color: #000;
@@ -261,7 +261,7 @@ select {
 
 
 .blog {
-	font-size: 14px;	
+	font-size: 14px;
 }
 .blog_head, .blog_foot {
 	margin: 10px;
@@ -319,7 +319,7 @@ select {
 }
 .news_top {
 	-moz-border-radius-topleft:15px;
-	-moz-border-radius-bottomright:15px;	
+	-moz-border-radius-bottomright:15px;
 	background-color: #fff;
 	border: 1px #888 solid;
 	padding: 10px;

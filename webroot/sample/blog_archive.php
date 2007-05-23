@@ -22,7 +22,7 @@
 	foreach($list as $row) {
 		echo $row['timeCreated'].' - <a href="blog.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
 	}
-		
+
 	if (!count($list)) {
 		echo '<div class="critical">No archive for specified month.</div>';
 	}

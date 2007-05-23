@@ -20,7 +20,7 @@ process-server:
 			databasen ska även innehålla instruktioner om var resultatet ska placeras
 
 		- genomför ordern
-		
+
 		- placerar resultatet på rätt ställe
 			detta innebär att fysiskt flytta den processade filen till beställarens filsystem (till en network share / mountad katalog)
 

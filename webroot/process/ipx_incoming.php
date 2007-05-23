@@ -9,10 +9,10 @@
 			MessageId							- unique message ID
 			TimeStamp							- timestamp in CET / CEST time zone format
 			Operator							- name of the consumers mobile operator
-			
+
 			All parameters are set, however some may have a value with length 0
 	*/
-	
+
 	require_once('config.php');
 
 	$allowed_ips = array(
@@ -21,13 +21,13 @@
 		'87.227.76.225',	//Martin glocalnet hem-ip
 		'ipx.com'					//Ericsson IPX - fixme: rätt ip/hostname
 	);
-	
+
 	if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ips)) {
 		$session->log('ipx_incoming.php accessed by unlisted IP', LOGLEVEL_ERROR);
 		//fixme: ska stoppa här vid okänt ip, gör det ej nu för debuggande
 		//die('ip not allowed');
 	}
-	
+
 
 	$get = '';
 	$post = '';

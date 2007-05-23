@@ -4,11 +4,11 @@
 	$session->requireLoggedIn();
 
 	require('design_head.php');
-	
+
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 	$band_id = $_GET['id'];
-		
+
 	if (isset($_POST['title']))
 	{
 		setBandName($band_id, $_POST['title']);

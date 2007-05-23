@@ -45,7 +45,7 @@
 	if (!count($list)) echo 'None<br/>';
 	echo '<br/>';
 
-	$list = getLyricsThatBandCovers($band_id);	
+	$list = getLyricsThatBandCovers($band_id);
 	if (count($list)) {
 		echo 'This band covers the following songs:<br/>';
 

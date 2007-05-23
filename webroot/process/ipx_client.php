@@ -2,7 +2,7 @@
 	/*
 	extension=php_soap.dll (required)
 	extension=php_openssl.dll (required for https support)
-	*/	
+	*/
 
 	require_once('config.php');	//för d() debug dump
 
@@ -14,7 +14,7 @@
 	ini_set('default_socket_timeout', '600');	//10 minute timeout for SOAP requests
 
 	sendSMS('46707308763', 'tjenna åäö test ÅÄÖ lalalaa');
-	
+
 	function sendSMS($dest_number, $msg)
 	{
 		//$msg must be a UTF-8 encoded string for swedish characters to work

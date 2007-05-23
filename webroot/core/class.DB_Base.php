@@ -5,7 +5,7 @@
 	Written by Martin Lindhe, 2007
 
 	todo: metod för att anropa stored procedures
-	
+
 	todo: börja använda http://se2.php.net/manual/en/function.mysqli-fetch-object.php, returnera kolumnamn direkt som objektvariabler
 */
 
@@ -64,7 +64,7 @@ abstract class DB_Base
 
 	/* Creates a database connection */
 	abstract function connect();
-	
+
 	/* Shows driver-specific settings + status */
 	abstract function showDriverStatus();
 
@@ -88,8 +88,8 @@ abstract class DB_Base
 	protected $queries_cnt = 0;
 	protected $queries = array();
 	protected $query_error = array();
-	
-	
+
+
 	/* Constructor */
 	function __construct(array $settings)
 	{
@@ -113,7 +113,7 @@ abstract class DB_Base
 
 		echo '<b>DB driver specific settings</b><br/>';
 		$this->showDriverStatus();
-		
+
 		if ($this->dialect == 'mysql') {
 			/* Show MySQL query cache settings */
 			$data = $this->getMappedArray('SHOW VARIABLES LIKE "%query_cache%"');
@@ -124,7 +124,7 @@ abstract class DB_Base
 				echo 'Limit: '. formatDataSize($data['query_cache_limit']).' (per query)<br/>';
 				echo 'Min result unit: '. formatDataSize($data['query_cache_min_res_unit']).'<br/>';
 				echo 'Wlock invalidate: '. $data['query_cache_wlock_invalidate'].'<br/><br/>';
-	
+
 				/* Current query cache status */
 				$data = $this->getMappedArray('SHOW STATUS LIKE "%Qcache%"', 'Variable_name', 'Value');
 				echo '<b>MySQL query cache status</b><br/>';
@@ -190,7 +190,7 @@ abstract class DB_Base
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{
 			$sql_time += $this->time_spent[$i];
-			
+
 			$query = htmlentities(nl2br($this->queries[$i]), ENT_COMPAT, 'UTF-8');
 
 			$sql_syntax = array('FROM', 'SET', 'WHERE', 'LEFT', 'GROUP', 'ORDER');
@@ -222,7 +222,7 @@ abstract class DB_Base
 		}
 		echo '</div>';
 	}
-	
+
 	/* Displays all events from the event log */
 	function showEvents()
 	{
@@ -252,9 +252,9 @@ abstract class DB_Base
 		foreach ($list as $row)
 		{
 			switch ($row['entryLevel']) {
-				case LOGLEVEL_NOTICE:  echo '<div class="event_log_notice">'; break; 
-				case LOGLEVEL_WARNING: echo '<div class="event_log_warning">Warning: '; break; 
-				case LOGLEVEL_ERROR:   echo '<div class="event_log_error">Error: '; break; 
+				case LOGLEVEL_NOTICE:  echo '<div class="event_log_notice">'; break;
+				case LOGLEVEL_WARNING: echo '<div class="event_log_warning">Warning: '; break;
+				case LOGLEVEL_ERROR:   echo '<div class="event_log_error">Error: '; break;
 				default: die('Errorx2');
 			}
 

@@ -26,7 +26,7 @@
 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$commentType.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
 		return $db->insert($q);
 	}
-	
+
 	function updateComment($commentType, $ownerId, $commentId, $commentText)
 	{
 		global $db, $session;
@@ -39,7 +39,7 @@
 
 		$db->query($q);
 	}
-	
+
 	function deleteComment($commentId)
 	{
 		global $db, $session;
@@ -48,13 +48,13 @@
 
 		$db->query('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentId='.$commentId);
 	}
-	
+
 	/* Deletes all comments for this commentType & ownerId. returns the number of rows deleted */
 	function deleteComments($commentType, $ownerId)
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
-		
+
 		$q = 'UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
 		return $db->delete($q);
 	}
@@ -92,7 +92,7 @@
 
 		return $db->getOneRow($q);
 	}
-	
+
 	function getCommentsCount($commentType, $ownerId)
 	{
 		global $db;
@@ -130,7 +130,7 @@
 		echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
 		echo '<input type="submit" class="button" value="Add comment"/>';
 		echo '</form>';
-		
+
 		echo '</div>';	//id="comments"
 	}
 ?>

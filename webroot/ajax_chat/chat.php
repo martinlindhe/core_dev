@@ -3,10 +3,10 @@
 
 	if (!isset($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$roomId = $_GET['id'];
-	
+
 	$room = getChatRoom($roomId);
 	if (!$room) die;
-	
+
 	if ($session->id) {
 		setChatRoomUser($roomId);
 	}
@@ -78,7 +78,7 @@ function send_chat_handler()
 	} else {
 		alert('There was a problem with the request.');
 	}
-	
+
 	send_request = null;
 }
 
@@ -127,7 +127,7 @@ function load_chat_handler()
 
 			if (items[i].nodeName == 'l') {	//<l> is chat buffer lines
 				//loop through all of this <l>'s tags
-	
+
 				for (var j=0; j<cur.length; j++)
 				{
 					if (!cur[j].firstChild) continue;
@@ -137,7 +137,7 @@ function load_chat_handler()
 					if (nodeName == 'i') uId = cur[j].firstChild.nodeValue;
 					if (nodeName == 'm') msg = cur[j].firstChild.nodeValue;
 				}
-	
+
 				if (uId==<?=$session->id?>) {
 					txt = time + ' you said: ' + msg;
 					add_node_and_focus(e, txt, 'chat_line_mine');

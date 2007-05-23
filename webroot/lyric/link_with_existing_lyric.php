@@ -7,17 +7,17 @@
 
 	$record_id = $_GET['record'];
 	$track = $_GET['track'];
-		
+
 	if (isset($_GET['band']) && $_GET['band']) {
 		$band_id = $_GET['band'];
 	} else {
 		$band_id = getBandIdFromRecordId($record_id);
 	}
-		
+
 	if (isset($_POST['lyricid']) && $_POST['lyricid'])
 	{
 		$lyric_id = $_POST['lyricid'];
-			
+
 		if (!linkLyric($record_id, $track, $lyric_id, $band_id))
 		{
 			echo 'Failed to add lyric link';
@@ -33,10 +33,10 @@
 
 	if ($band_id == 0) {
 		/* Skivan vi ska länka en text på är en split/compilation */
-		
+
 		echo 'Since this is a comp/split you first need to select a band.<br/>';
 		echo 'Then you\'ll be able to select a lyric from that band to link to this track.<br/>';
-		
+
 		echo '<form action="">';
 		echo '<select name="url" onchange="location.href=form.url.options[form.url.selectedIndex].value">';
 		echo '<option>--- Select band ---</option>';
@@ -69,6 +69,6 @@ document.linklyric.lyricid.focus();
 </script>
 <?
 	}
-	
+
 	require('design_foot.php');
 ?>

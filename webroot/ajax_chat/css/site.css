@@ -4,7 +4,7 @@ html,body { /* hack for div height:100% to work */
 	padding: 0;
 }
 
-body { 
+body {
 	background-color: #0080AF;
 }
 
@@ -57,7 +57,7 @@ img {
 
 #body_left {
 	float: left;
-	width: 100px;	
+	width: 100px;
 }
 
 #body_left li {
@@ -129,7 +129,7 @@ img {
 	background: transparent url('../gfx/chat_sending.png') top left no-repeat;
 }
 .chat_line_mine {
-	background-color: #EEE;	
+	background-color: #EEE;
 	padding: 4px;
 	border-bottom: 1px solid;
 }

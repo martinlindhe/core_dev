@@ -3,7 +3,7 @@
 	Object oriented interface for MySQL databases using the php_mysql.dll extension
 
 	When possible, use class.DB_MySQLi.php instead (it is faster)
-	
+
 	Written by Martin Lindhe, 2007
 */
 
@@ -15,7 +15,7 @@ class DB_MySQL extends DB_Base
 	{
 		if ($this->db_handle) mysql_close($this->db_handle);
 	}
-	
+
 	function showDriverStatus()
 	{
 		echo 'Server info: '.mysql_get_server_info($this->db_handle).' ('.mysql_get_host_info($this->db_handle).')<br/>';
@@ -92,7 +92,7 @@ class DB_MySQL extends DB_Base
 
 		return $ret_id;
 	}
-	
+
 	function delete($q)
 	{
 		global $config;
@@ -138,7 +138,7 @@ class DB_MySQL extends DB_Base
 
 		return $data;
 	}
-	
+
 	function getMappedArray($q)
 	{
 		global $config;
@@ -186,12 +186,12 @@ class DB_MySQL extends DB_Base
 
 		return $data;
 	}
-	
+
 	function getOneRow($q)
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);	
+		if ($config['debug']) $time_started = microtime(true);
 
 		if (!$result = mysql_query($q, $this->db_handle)) {
 			if ($config['debug']) $this->profileError($time_started, $q, mysql_error($this->db_handle));
@@ -214,7 +214,7 @@ class DB_MySQL extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);	
+		if ($config['debug']) $time_started = microtime(true);
 
 		if (!$result = mysql_query($q, $this->db_handle)) {
 			if ($config['debug']) $this->profileError($time_started, $q, mysql_error($this->db_handle));

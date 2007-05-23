@@ -11,7 +11,7 @@
 	require('design_head.php');
 
 	$word = getWord($wordId);
-	
+
 	print_r($word);
 
 	require('design_foot.php');

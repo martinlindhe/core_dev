@@ -93,7 +93,7 @@
 		global $db;
 
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
-		
+
 		$not_rated = !isRated($_type, $_id);
 
 		if ($not_rated && !empty($_POST['rate_gadget'])) {

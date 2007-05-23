@@ -2,9 +2,9 @@
 	require_once('config.php');
 
 	require_once('design_head.php');
-?>	
+?>
 	<h1>Process server</h1>
-	
+
 	<a href="client.php">Simulate client adding work order</a><br/>
 	<br/>
 	<a href="ipx_client.php">Send a test SMS with IPX</a><br/>

@@ -45,12 +45,12 @@
 			}
 
 			echo '<a href="show_lyric.php?id='.$lyric_id.'">'.stripslashes($list[$i]['lyricName']).'</a>';
-			
+
 			if ($list[$i]['authorId'] != $list[$i]['bandId'])
 			{
 				echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
 			}
-			
+
 			if (!$list[$i]['lyricText'])
 			{
 				echo ' (Missing)';
@@ -96,8 +96,8 @@
 	echo '<tr><td colspan="4" bgcolor="#909090">'.nl2br(getRecordInfo($record_id)).'</td></tr>';
 
 	echo '</table>';
-	
+
 	echo '<br/>';
-	
+
 	require('design_foot.php');
 ?>

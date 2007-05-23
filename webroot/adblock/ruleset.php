@@ -32,7 +32,7 @@
 		<label for="t0">Unknown</label><input name="t0" id="t0" value="0" type="checkbox" class="checkbox"<? if (!empty($_POST['t4'])) echo ' checked="checked"'; ?>/>
 	</td>
 	<td align="right" valign="top" width="180">
-		<input type="text" name="s" value="<?=$search?>" size="13"/> 
+		<input type="text" name="s" value="<?=$search?>" size="13"/>
 		<input type="submit" class="button" value="Search"/><br/>
 		<br/>
 		<label for="sortbytime">Show newest first</label>

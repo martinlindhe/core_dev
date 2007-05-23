@@ -3,7 +3,7 @@
 	Session class
 
 	Written by Martin Lindhe, 2007
-	
+
 	User setting examples:
 		$session->save('variablename', 'some random setting to save');
 		$kex = $session->read('variablename');
@@ -118,7 +118,7 @@ class Session
 			{
 				//See what IP checking policy that will be in use for the session
 				if (!empty($_POST['login_lock_ip'])) $this->check_ip = true;
-				else $this->check_ip = false; 
+				else $this->check_ip = false;
 
 				if ($this->home_page) {
 					header('Location: '.basename($this->home_page));
@@ -192,13 +192,13 @@ class Session
 		$username = trim($username);
 		$password1 = $password1;
 		$password2 = $password2;
-		
+
 		if (($db->escape($username) != $username) || ($db->escape($password1) != $password1)) {
 			//if someone tries to enter ' or " etc as username/password letters
 			//with this check, we dont need to encode the strings for use in sql query
 			return 'Username or password contains invalid characters';
 		}
-		
+
 		if ($password1 && $password2 && ($password1 != $password2)) {
 			return 'The passwords doesnt match';
 		}
@@ -213,12 +213,12 @@ class Session
 		if ($checkId) {
 			return 'Username already exists';
 		}
-		
+
 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
 		$newUserId = $db->insert($q);
 
 		$this->log('User <b>'.$username.'</b> created');
-		
+
 		//Stores the additional data from the userdata fields that's required at registration
 		handleRequiredUserdataFields($newUserId);
 
@@ -279,7 +279,7 @@ class Session
 		$this->isSuperAdmin = 0;
 		$this->theme = $this->default_theme;
 	}
-	
+
 	/*Shows a login form with tabs for Register & Forgot password functions */
 	//the handling of the result variables are in the __construct function above
 	function showLoginForm()
@@ -292,7 +292,7 @@ class Session
 			echo '<div class="critical"><img src="/gfx/icon_warning_big.png" alt="Error"/> '.$this->error.'</div>';
 			$this->error = ''; //remove error message once it has been displayed
 		}
-		
+
 		//todo: gör om tabellen till relativt positionerade element utifrån "login_form_layer"
 		echo '<table cellpadding="2">';
 		echo '<tr><td>Username:</td><td><input name="login_usr" type="text"/> <img src="/gfx/icon_user.png" alt="Username"/></td></tr>';
@@ -308,7 +308,7 @@ class Session
 		}
 		echo '</form>';
 		echo '</div>';
-		
+
 		if ($this->allow_registration) {
 			echo '<div id="login_register_layer" style="display: none;">';
 				echo '<b>Register new account</b><br/><br/>';

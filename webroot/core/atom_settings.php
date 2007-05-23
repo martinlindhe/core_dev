@@ -77,7 +77,7 @@
 				} else if (isset($_POST['userdata_'.$row['fieldId']])) {
 					$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 				}
-				
+
 				if ($row['fieldName'] == $config['settings']['default_email']) {
 					if (!ValidEmail($row['settingValue'])) {
 						echo '<div class="critical">WARNING: The email entered is not valid!</div>';

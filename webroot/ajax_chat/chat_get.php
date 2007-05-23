@@ -1,7 +1,7 @@
 <?
 	/*
 		Called regularry
-	
+
 		Returns the last few lines of text, usernames & timestamps entered in the specified chat room
 	*/
 
@@ -30,7 +30,7 @@
 
 	if ($list) $_SESSION['chat']['lastUpdate'][$roomId] = $lastEntryId;
 	if (!isset($_SESSION['chat'][$roomId])) $_SESSION['chat'][$roomId] = array();
-	
+
 	if ($session->id) setChatRoomUser($roomId);
 
 	$members_list = getCurrentChatUsers($roomId);
@@ -42,7 +42,7 @@
 	header('Content-type: text/xml');
 
 	echo '<?xml version="1.0" ?>';
-	
+
 	//Sort list by oldest item first
 	//todo: borde inte detta gå att göra direkt i SQL-satsen för getChatEntries() ? sort by time asc,time desc ? temporary tables?
 	//if ($list) $list = aSortBySecondIndex($list, 'timeCreated');
@@ -58,7 +58,7 @@
 		}
 		$all_members[] = $members_list[$i]['userName'];
 	}
-	
+
 	if (!empty($_GET['r']) && $new_members) {
 		echo 'new members:';
 		print_r($new_members);
@@ -68,7 +68,7 @@
 	//Loopar igenom alla "kända" users för detta chattrum, för att leta efter inaktiva users
 	foreach ($_SESSION['chat'][$roomId] as &$username) {
 		if ($username && !in_array($username, $all_members)) {
-				
+
 			$left_members[] = array('userName' => $username, 'userId' => 666);	//todo: skicka med userId
 			$username = '';	//fixme: unset() verkar inte funka?
 			//unset($_SESSION['chat'][$roomId][$username]);
@@ -85,7 +85,7 @@
 		echo '<x></x>';
 		die;
 	}
-	
+
 	echo '<x>';
 	for ($i=0; $i<count($list); $i++) {
 		echo '<l>';

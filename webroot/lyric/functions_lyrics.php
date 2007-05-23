@@ -9,7 +9,7 @@
 		$q .= "INNER JOIN tblBands AS t2 ON (t1.bandId=t2.bandId) ";
 		$q .= "WHERE LCASE(t1.lyricText) LIKE '%".$query."%' OR LCASE(t1.lyricName) LIKE '%".$query."%' ";
 		$q .= "ORDER BY t2.bandName ASC, t1.lyricName ASC";
-		
+
 		return $db->getArray($q);
 	}
 
@@ -38,7 +38,7 @@
 
 		return $db->getArray($q);
 	}
-	
+
 	function lyricCount()
 	{
 		global $db;
@@ -74,7 +74,7 @@
 		$row['lyricText'] = stripslashes($row['lyricText']);
 
 		return $row;
-	}	
+	}
 
 	function getLyricName($lyric_id)
 	{
@@ -102,7 +102,7 @@
 		global $db;
 
 		if (!is_numeric($record_id) || !is_numeric($track) || !is_numeric($lyric_id) || !is_numeric($band_id)) return false;
-		
+
 		$db->query("UPDATE tblTracks SET lyricId=".$lyric_id.",bandId=".$band_id." WHERE recordId=".$record_id." AND trackNumber=".$track);
 		return true;
 	}
@@ -112,13 +112,13 @@
 		global $db;
 
 		if (!is_numeric($lyric_id)) return false;
-		
+
 		$lyric_name = $db->escape($lyric_name);
 		$lyric_text = $db->escape(cleanupText($lyric_text));
 		$db->query('UPDATE tblLyrics SET lyricName="'.$lyric_name.'", lyricText="'.$lyric_text.'" WHERE lyricId='.$lyric_id);
 		return true;
 	}
-	
+
 	function removeLyric($lyric_id)
 	{
 		global $db;
@@ -146,13 +146,13 @@
 		}
 		return $lyric_id;
 	}
-	
+
 	function getLyricsThatBandCovers($band_id)
 	{
 		global $db;
 
 		if (!is_numeric($band_id)) return false;
-		
+
 		$q  = "SELECT t1.recordId,t1.trackNumber,t1.lyricId,t2.lyricName,t2.bandId,t3.bandName,t4.recordName ";
 		$q .= "FROM tblTracks AS t1 ";
 		$q .= "INNER JOIN tblLyrics AS t2 ON (t1.lyricId=t2.lyricId) ";
@@ -161,16 +161,16 @@
 		$q .= "WHERE t1.bandId=".$band_id." AND t1.bandId!=t2.bandId ";
 		$q .= "GROUP BY t1.lyricId ";
 		$q .= "ORDER BY t3.bandName ASC,t4.recordName ASC,t1.trackNumber ASC";
-		
-		return $db->getArray($q);		
+
+		return $db->getArray($q);
 	}
-	
+
 	function getLyricsThatOtherCovers($band_id)
 	{
 		global $db;
 
 		if (!is_numeric($band_id)) return false;
-		
+
 		$q  = "SELECT t1.lyricId,t1.lyricName,t2.recordId,t2.bandId,t2.trackNumber,t3.bandName,t4.recordName ";
 		$q .= "FROM tblLyrics AS t1 ";
 		$q .= "INNER JOIN tblTracks AS t2 ON (t1.lyricId=t2.lyricId) ";
@@ -178,7 +178,7 @@
 		$q .= "INNER JOIN tblRecords AS t4 ON (t2.recordId=t4.recordId) ";
 		$q .= "WHERE t1.bandId=".$band_id." AND t2.bandId!=".$band_id." ";
 		$q .= "ORDER BY t3.bandName ASC,t4.recordName ASC,t2.trackNumber ASC";
-		
-		return $db->getArray($q);		
+
+		return $db->getArray($q);
 	}
 ?>

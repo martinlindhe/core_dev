@@ -7,9 +7,9 @@
 	require('design_head.php');
 
 	$rules = getAdblockAllRulesCount();
-	
+
 	wiki('Download');
-	
+
 ?>
 <script type="text/javascript">
 function checkDLform() {

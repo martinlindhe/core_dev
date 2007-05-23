@@ -33,10 +33,10 @@ function getHttpRequest(format)
 	method - (optional, default: GET) HTTP request method: GET, POST, HEAD
 	params - (optional, default: null) POST data, in this format: name=value&anothername=othervalue&so=on
 		note: varje param måste ha ett värde annars skickas dom inte med, alltså "var=1" istället för bara "var"
-	
+
 	Returns:
 	the XMLHttpRequest object for this AJAX call
-	
+
 	Examples:
 	AJAX_Request('ajax.xml', 'XML', alertContents, 'GET');
 	AJAX_Request('ajax_test.php', 'TEXT', alertContents2, 'POST', 'a=4');

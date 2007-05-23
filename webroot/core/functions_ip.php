@@ -10,7 +10,7 @@
 		$ipnum = ($iparr[0]*16777216) + ($iparr[1]*65536) + ($iparr[2]*256) + $iparr[3];
 		return $ipnum;
 	}
-	
+
 	/* Takes a GeoIP address in the form 32bit unsigned integer and returns a IPv4 address */
 	function GeoIP_to_IPv4($ip)
 	{

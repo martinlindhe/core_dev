@@ -3,7 +3,7 @@
 	{
 		echo '<h1>File not found</h1>';
 		echo $_SERVER['REQUEST_URI'].' doesn\'t exist on the server<br><br>';
-		
+
 		if ($_SERVER['REQUEST_URI'] != '/') {
 			echo '&middot; <a href="/">Go to site index</a><br>';
 		}

@@ -1,6 +1,6 @@
 <?
 	/* functions_bands.php */
-	
+
 	function addBand($band_name)
 	{
 		global $db, $session;
@@ -16,7 +16,7 @@
 
 		return $db->insert($q);
 	}
-	
+
 	function updateBandInfo($band_id, $band_info)
 	{
 		global $db;
@@ -28,7 +28,7 @@
 		$db->query('UPDATE tblBands SET bandInfo="'.$band_info.'" WHERE bandId='.$band_id);
 		return true;
 	}
-	
+
 	function getBands()
 	{
 		global $db;
@@ -58,7 +58,7 @@
 	function setBandName($_id, $_name)
 	{
 		global $db;
-		
+
 		if (!is_numeric($_id)) return false;
 
 		$db->query('UPDATE tblBands SET bandName="'.$db->escape($_name).'" WHERE bandId='.$_id);
@@ -75,8 +75,8 @@
 		$q .= "WHERE t1.bandId=".$band_id;
 
 		return $db->getOneRow($q);
-	}	
-	
+	}
+
 	function bandCount()
 	{
 		global $db;
@@ -93,13 +93,13 @@
 
 		return $db->getArray('SELECT t1.*, (SELECT COUNT(trackNumber) FROM tblTracks WHERE recordId=t1.recordId) AS cnt FROM tblRecords AS t1 WHERE t1.bandId='.$band_id.' ORDER BY t1.recordName ASC');
 	}
-	
+
 	function getBandCompilations($band_id)
 	{
 		global $db;
 
 		if (!is_numeric($band_id)) return false;
-		
+
 		$q  = "SELECT t2.recordId,t2.recordName, (SELECT COUNT(trackNumber) FROM tblTracks WHERE recordId=t2.recordId) AS cnt FROM tblTracks AS t1 ";
 		$q .= "LEFT JOIN tblRecords AS t2 ON (t1.recordId=t2.recordId) ";
 		$q .= "WHERE t1.bandId=".$band_id." AND t2.bandId=0 ";
@@ -108,7 +108,7 @@
 
 		return $db->getArray($q);
 	}
-	
+
 	/* Returnerar låttitlar och id till alla låtar med detta band i alfabetisk ordning */
 	function getBandLyrics($band_id)
 	{

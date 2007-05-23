@@ -9,7 +9,7 @@
 		'missing_lyrics.php' => 'Missing lyrics',
 		'incomplete_lyrics.php' => 'Incomplete lyrics');
 	createMenu($menu);
-	
+
 	if ($session->id) {
 		$menu = array(
 			'add_band.php' => 'Add band',

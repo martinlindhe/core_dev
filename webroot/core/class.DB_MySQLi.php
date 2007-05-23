@@ -13,7 +13,7 @@ class DB_MySQLi extends DB_Base
 	{
 		if ($this->db_handle) $this->db_handle->close();
 	}
-	
+
 	function showDriverStatus()
 	{
 		echo 'Server info: '.$this->db_handle->server_info.' ('.$this->db_handle->host_info.')<br/>';
@@ -188,7 +188,7 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);	
+		if ($config['debug']) $time_started = microtime(true);
 
 		if (!$result = $this->db_handle->query($q)) {
 			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
@@ -211,7 +211,7 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);	
+		if ($config['debug']) $time_started = microtime(true);
 
 		if (!$result = $this->db_handle->query($q)) {
 			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);

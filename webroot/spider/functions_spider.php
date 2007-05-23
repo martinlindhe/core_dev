@@ -5,10 +5,10 @@
 		crawl_site.php:
 		todo: allow input of site to crawl from browser
 		todo: store result of the crawl in database (currently in dump.txt)
-		
+
 		perform_query_test.php:
 			* leta efter keywords som "warning / error" i resultaten
-		
+
 		todo: förbättra hittandet av parametrar och url, stöd även post-parametrar samt javascript-url
 		todo: sessioner, eller iaf till en början en möjlighet att attacha en hårdkodad cookie / get-parameter som fejkar session handling
 		todo/senare: definiera login-url, scriptet klurar ut login-forumuläret å gissar username / password parametrar
@@ -28,13 +28,13 @@
             [d] => unknown (2836&a)
         )
 
-    [101] => http://www.dn.se/DNet/jsp/polopoly.jsp?d=1348&a=66290&previousRenderType=3			
+    [101] => http://www.dn.se/DNet/jsp/polopoly.jsp?d=1348&a=66290&previousRenderType=3
     [86] => http://www.dn.se/DNet/jsp/polopoly.jsp?d=772&homeView=true
     [13] => http://www.dn.se/DNet/jsp/polopoly.jsp?d=145&a=617242&tab=b&period=bmonth
 
 		Features:
 			Keeps an internal web page cache for faster operation
-			
+
 		Notice:
 			This script may use some RAM. Tweak php.ini and set memory_limit to at least 32M
 	*/
@@ -44,7 +44,7 @@
 	$config['spider']['allowed_extensions'] = array('.html', '.htm', '.asp', '.aspx', '.jsp', '.php', '.php4', '.php5', '.pl');
 
 	$config['spider']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.3) Gecko/20070309 Firefox/2.0.0.3';
-	
+
 	$config['spider']['cache_age'] = 3600*24;	//24 hour
 
 	$config['spider']['max_http_requests'] = 50;	//max number of http requests to do during one execution of the script, to avoid server overload
@@ -53,7 +53,7 @@
 	function parse_html_parameters($str)
 	{
 		$arr = array();
-		
+
 		//Normalize parameters
 		$str = str_replace(' =', '=', $str);
 		$str = str_replace('= ', '=', $str);
@@ -62,7 +62,7 @@
 		do {
 			$param_pos1 = strpos($str, '=');
 			$param_name = substr($str, 0, $param_pos1);
-			
+
 			if (substr($str, $param_pos1+1, 1) == '"') {
 				//handle "quouted" parameter
 				$param_pos2 = strpos($str, '"', $param_pos1+2); //hitta nästföljande ", EFTER det öppnande "
@@ -127,7 +127,7 @@
 			$pos = strrpos($arr['path'], '/');	//last position of a /
 			$dir = substr($arr['path'], 0, $pos+1);
 			$arr['path_only'] = $dir;
-			
+
 			//Find the file extension, if one exists
 			$filename = substr($arr['path'], $pos+1);
 			$pos2 = strpos($filename, '.');			//fixme: är detta korrekt, tänk med en fil med flera punkter i namnet, strrpos() istället?
@@ -143,7 +143,7 @@
 
 		return $arr;
 	}
-	
+
 	//Returns an array with all URL's it encounters (as seen in the HTML)
 	function extract_filenames($data)
 	{
@@ -151,30 +151,30 @@
 		$data = str_replace("\n", " ", $data);
 		$data = str_replace("\r", " ", $data);
 		$data = str_replace("\t", " ", $data);
-	
+
 		$files_found = array();
-	
+
 		//Upprepar "  " -> " " tills strängen inte ändras
 		do {
 			$org_data = $data;
 			$data = str_replace("  ", " ", $data);
 		} while ($org_data != $data);
-	
+
 		//Parsa taggar, identifiera relevanta taggar
 
 		//echo '<pre>';
 		do {
 			$pos1 = strpos($data, '<');					//Find first opening bracket
 			$pos2 = strpos($data, '>', $pos1);	//Find first closing bracket occuring after $pos1
-	
+
 			if ($pos1 === false || $pos2 === false) break;
-	
+
 			$tag = trim(substr($data, $pos1+1, $pos2-$pos1-1));
-	
+
 			$tag_pos = strpos($tag, ' ');
 			if ($tag_pos) {
 				$tag_name = strtolower(substr($tag, 0, $tag_pos));
-	
+
 				$tag_params_org = substr($tag, $tag_pos+1);
 				if (strpos($tag_params_org, 'javascript:') === false) {
 					$tag_params = parse_html_parameters($tag_params_org);
@@ -186,7 +186,7 @@
 				$tag_name = $tag;
 				$tag_params = array();
 			}
-	
+
 			switch ($tag_name)
 			{
 				case 'a':				//<a href="filename.html">
@@ -198,7 +198,7 @@
 					if (!$tag_params['href']) break;
 
 					if (substr($tag_params['href'], 0, 7) == 'mailto:') break;
-	
+
 					if (!in_array($tag_params['href'], $files_found)) {
 						//echo '* Located new link: '.$tag_params['href'].'<br>';
 						$files_found[] = $tag_params['href'];
@@ -211,21 +211,21 @@
 				case 'script':		//<script src="/inc/global.js" language="javascript" type="text/javascript">
 					break;
 			}
-	
+
 		} while ( $data = trim(substr($data, $pos2)) );
-		
+
 		return $files_found;
 	}
-	
+
 
 	//Takes a array of URL's, relative & absolute, applies "$url" basename to the relative ones and returns the array
 	//$url must be a proper URL that has already been processed with nice_parse_url(), we expect it to look like this: http://www.domain.com/
 	function generate_absolute_urls($list, $url)
 	{
 		$url_arr = nice_parse_url($url);
-		
+
 		$result = array();
-		
+
 		foreach ($list as $val)
 		{
 			if (strpos($val, '://') === false)
@@ -251,9 +251,9 @@
 				{
 					//Is relative url starting with a ../? Then relative path is 1 level below $url's level
 					//echo '<b>'.$url.'</b> referrs to '.$val.'<br><br>';
-					
+
 					$val = substr($val, 3);		//remove the ../ part
-					
+
 					$temp = $url_arr['path_only'];
 					if (substr($temp, -1) == '/') $temp = substr($temp, 0, -1);
 					if ($temp) {
@@ -295,7 +295,7 @@
 
 		return $result;
 	}
-	
+
 	//This function acts like file_get_contents() very much, except that instead of returning FALSE on failure,
 	//it will set $errno to the HTTP error number returned
 	function get_http_contents($url, &$errno)
@@ -305,7 +305,7 @@
 
 		$errno = 0;
 		//echo 'get_http_contents('.$url.')<br>';
-		
+
 		//check if cached version is not out of date
 		$q = 'SELECT body FROM tblSpiderCache WHERE url="'.$db->escape($url).'" AND timeCreated >= NOW()-'.$config['spider']['cache_age'];
 		$body = $db->getOneItem($q);
@@ -315,14 +315,14 @@
 		}
 
 		$host = nice_parse_url($url);
-		
+
 		if (!empty($host['file_ext']) && !in_array($host['file_ext'], $config['spider']['allowed_extensions'])) {
 			echo '<b>Skipping download of '.$host['file_ext'].'</b> (from '.$url.')<br>';
 			return false;
 		}
 
 		echo 'Downloading and parsing '.$url.' ...<br>';
-		
+
 		if ($http_request_counter >= $config['spider']['max_http_requests']) {
 			echo 'Done '.$http_request_counter.' HTTP requests now. Please reload this page to do some more, dont want to overload the target server<br>';
 			die;
@@ -334,10 +334,10 @@
 			echo "$errstr ($errno)<br />\n";
 			return false;
 		}
-		
+
 		//fixme: url parametrar ignoreras här ?!?!?!
 		$file = $host['path'];
-		
+
 		$header  = "GET ".$file." HTTP/1.0\r\n";
 		$header .= "Host: ".$host['host']."\r\n";
 		$header .= "User-Agent: ".$config['spider']['user_agent']."\r\n";
@@ -349,7 +349,7 @@
 			$result .= fgets($fp, 128);
 		}
 		fclose($fp);
-		
+
 		//Cut off header
 		$pos = strpos($result, "\r\n\r\n");
 		$header = substr($result, 0, $pos);
@@ -370,7 +370,7 @@
 
 		//HTTP/1.1 200 OK
 		if ($errno == 200) $errno = 0;
-		
+
 		//HTTP/1.1 302 Object Moved
 		if ($errno == 302)
 		{
@@ -421,7 +421,7 @@
 
 		return $body;
 	}
-	
+
 	/* Tar en array med absoluta url:er. Genererar en robots.txt utifrån url:erna */
 	function generate_robots_txt($host, $arr)
 	{
@@ -436,12 +436,12 @@
 		for ($i=0; $i<count($arr); $i++)
 		{
 			$parsed = nice_parse_url($arr[$i]);
-			
+
 			if ($parsed['host'] != $host) {
 				echo 'generate_robots_txt() ERROR: IGNORING HOST '.$parsed['host']."\n";
 				continue;
 			}
-			
+
 			$parsed['dir'] = dirname($parsed['path']);
 			if ($parsed['dir'] == '\\') $parsed['dir'] = '/';
 
@@ -454,7 +454,7 @@
 
 		return $result;
 	}
-	
+
 	/* Tar en array med absoluta url:er. Genererar en Google XML sitemap utifrån url:erna
 		Implementering enligt https://www.google.com/webmasters/tools/docs/en/protocol.html
 

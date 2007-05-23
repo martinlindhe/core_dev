@@ -45,7 +45,7 @@
 	}
 ?>
 	</select>
-	
+
 	<select name="month">
 <?
 	for ($i = 1; $i <= 12; $i++) {
@@ -61,9 +61,9 @@
 	}
 ?>
 	</select>
-	
+
 	<input name="ctrl" type="text" size="4" value="<?=$ctrl?>"/><br/>
-	
+
 	<input type="radio" name="gender" id="gender1" value="1"<?if($_gender==1) echo' checked="checked"';?>/>
 	<label for="gender1">Man</label>
 	<input type="radio" name="gender" id="gender2" value="2"<?if($_gender==2) echo' checked="checked"';?>/>

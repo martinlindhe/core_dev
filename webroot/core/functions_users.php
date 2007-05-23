@@ -75,7 +75,7 @@
 		if ($_userid_name && isset($_GET[$_userid_name]) && is_numeric($_GET[$_userid_name]) && $_GET[$_userid_name] != $session->id) {
 			$userId = $_GET[$_userid_name];
 			echo 'User overview:'.getUserName($userId).'<br/>';
-			
+
 			if ($config['user']['log_visitors']) {
 				$q = 'INSERT INTO tblVisits SET ownerId='.$userId.',creatorId='.$session->id.',timeCreated=NOW()';
 				$db->insert($q);
@@ -112,7 +112,7 @@
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	
+
 	/* data är $_POST å kan innehålla irrelevant info! */
 	function getUserSearchResult($data)
 	{
@@ -145,7 +145,7 @@
 		} else {
 
 			$start = 2; //autogenererade INNER JOIN tables kommer heta a1, a2 osv.
-			
+
 			/* Add one INNER JOIN for each parameter we want to search on */
 			for ($i=0; $i<count($list); $i++) {
 				if (isset($data[ $list[$i]['fieldId'] ])) {

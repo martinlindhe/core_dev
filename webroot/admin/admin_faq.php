@@ -10,10 +10,10 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
-	echo 'FAQ<br/><br/>';
+	echo 'Admin FAQ<br/><br/>';
 	
-	$list = getFAQ();
-	d($list);
+	showFAQ();
+	echo '<br/>';
 
 	echo '<form method="post" action="">';
 	echo 'Add new question: <input type="text" name="faq_q" size="40"/><br/>';

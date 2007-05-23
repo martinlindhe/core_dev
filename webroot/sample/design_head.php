@@ -17,7 +17,7 @@
 			'faq.php' => 'FAQ',
 			'users.php' => 'Users');
 	createMenu($menu);
-	
+
 	if ($session->isAdmin) {
 		$menu = array(
 			'/admin/admin.php'.getProjectPath(0) => 'Admin');

@@ -6,7 +6,7 @@
 		global $db;
 
 		$text = trim($text);
-		
+
 		do { /* Remove chunks of whitespace */
 			$temp = $text;
 			$text = str_replace('  ', ' ', $text);
@@ -16,7 +16,7 @@
 		$text = str_replace(" \n", "\n", $text);
 		$text = str_replace("\n ", "\n", $text);
 
-		return $text;		
+		return $text;
 	}
 
 	function addRecord($band_id, $record_name, $record_info)
@@ -38,23 +38,23 @@
 		global $db;
 
 		if (!is_numeric($record_id) || !is_numeric($tracks)) return false;
-		
+
 		for ($i=1; $i<=$tracks; $i++)
 		{
 			$db->insert('INSERT INTO tblTracks SET recordId='.$record_id.',trackNumber='.$i.',lyricId=0');
 		}
 	}
-	
+
 	function getBandIdFromRecordId($record_id)
 	{
 		global $db;
 
 		if (!is_numeric($record_id)) return false;
-		
+
 		return $db->getOneItem('SELECT bandId FROM tblRecords WHERE recordId='.$record_id);
 	}
-	
-	
+
+
 	function getRecordName($record_id)
 	{
 		global $db;
@@ -65,14 +65,14 @@
 		$name = stripslashes($name);
 		if (!$name) return 's/t';
 		return $name;
-	}	
-	
+	}
+
 	function getRecordTracks($record_id)
 	{
 		global $db;
 
 		if (!is_numeric($record_id)) return false;
-		
+
 		$q  = 'SELECT tblTracks.*, tblLyrics.lyricName, tblLyrics.lyricText, tblLyrics.bandId AS authorId, tblBands.bandName FROM tblTracks ';
 		$q .= 'LEFT OUTER JOIN tblLyrics ON (tblTracks.lyricId=tblLyrics.lyricId) ';
 		$q .= 'LEFT OUTER JOIN tblBands ON (tblTracks.bandId=tblBands.bandId) ';
@@ -162,33 +162,33 @@
 
 		return $db->getOneItem('SELECT bandId FROM tblLyrics WHERE lyricId='.$lyric_id);
 	}
-	
+
 	/* Returns the recordInfo field on recordId */
 	function getRecordInfo($record_id)
 	{
 		global $db;
-		
+
 		if (!is_numeric($record_id)) return false;
 
 		$info = $db->getOneItem('SELECT recordInfo FROM tblRecords WHERE recordId='.$record_id);
 
 		return stripslashes($info);
 	}
-	
+
 	function getRecordData($record_id)
-	{	
+	{
 		global $db;
 
 		if (!is_numeric($record_id)) return false;
-		
+
 		$q  = 'SELECT t1.*,t2.userName,t3.bandName FROM tblRecords AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 		$q .= 'INNER JOIN tblBands AS t3 ON (t1.bandId=t3.bandId) ';
 		$q .= 'WHERE t1.recordId='.$record_id;
-		
+
 		return $db->getOneItem($q);
-	}	
-	
+	}
+
 	/* Changes the band who created this record + all its associated lyrics to $band_id */
 	function changeRecordOwner($record_id, $band_id)
 	{
@@ -196,10 +196,10 @@
 
 		$q = 'UPDATE tblTracks SET bandId='.$band_id.' WHERE recordId='.$record_id;
 		$db->query($q);
-		
+
 		$q = 'UPDATE tblRecords SET bandId='.$band_id.' WHERE recordId='.$record_id;
 		$db->query($q);
-		
+
 		$q = 'SELECT lyricId FROM tblTracks WHERE recordId='.$record_id;
 		$list = $db->getArray($q);
 

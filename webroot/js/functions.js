@@ -21,8 +21,8 @@ function urlencode(str)	//function borrowed from http://www.albionresearch.com/m
 		} else {
 		    var charCode = ch.charCodeAt(0);
 			if (charCode > 255) {
-			    alert( "Unicode Character '" 
-                        + ch 
+			    alert( "Unicode Character '"
+                        + ch
                         + "' cannot be encoded using standard URL encoding.\n" +
 				          "(URL encoding only supports 8-bit characters.)\n" +
 						  "A space (+) will be substituted." );
@@ -108,7 +108,7 @@ function zoomFile(id)
 
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
 	ajax_get_fileinfo(id, _ext_ref);
-	
+
 	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
@@ -119,7 +119,7 @@ function zoomFile(id)
 function zoomAudio(id, name)
 {
 	zoomed_id = id;
-	
+
 	empty_element_by_name('zoom_audio');
 
 	//requires ext_flashobject.js
@@ -128,7 +128,7 @@ function zoomAudio(id, name)
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
 	fo.write('zoom_audio');
-	
+
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
 	ajax_get_fileinfo(id);
 
@@ -142,7 +142,7 @@ function zoomAudio(id, name)
 function zoomVideo(id, name)
 {
 	zoomed_id = id;
-	
+
 	empty_element_by_name('zoom_video');
 
 	//requires ext_flashobject.js
@@ -152,7 +152,7 @@ function zoomVideo(id, name)
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
 	fo.write('zoom_video');
-	
+
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
 	ajax_get_fileinfo(id);
 
@@ -330,9 +330,9 @@ function faq_focus(n)
 {
 	e = document.getElementById('faq_'+n);
 	if (!e) return;
-	
+
 	e.style.display = '';	//show
-	
+
 	for (i=0;i<=100;i++) {
 		if (i==n) continue;
 		e = document.getElementById('faq_'+i);

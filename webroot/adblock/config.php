@@ -37,7 +37,7 @@
 
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
-	
+
 	$config['adblock']['cachepath'] = 'cache/';
 	$config['adblock']['cacheage'] = 	1; //3600/4;		//time before disk cache expires, in seconds
 

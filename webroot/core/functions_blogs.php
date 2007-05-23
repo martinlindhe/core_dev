@@ -40,7 +40,7 @@
 	function updateBlog($blogId, $categoryId, $title, $body)
 	{
 		global $db, $session, $config;
-		
+
 		if (!$session->id || !is_numeric($blogId) || !is_numeric($categoryId)) return false;
 
 		$title = $db->escape($title);
@@ -72,7 +72,7 @@
 
 		return $db->getArray($q);
 	}
-	
+
 	/* Returns the latest blogs posted on the site */
 	function getLatestBlogs($_cnt = 5)
 	{
@@ -94,7 +94,7 @@
 		global $db;
 
 		if (!is_numeric($blogId)) return false;
-		
+
 		$q  = 'SELECT t1.*,t2.categoryName,t3.userName FROM tblBlogs AS t1 ';
 		$q .= 'LEFT OUTER JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOG.') ';
 		$q .= 'INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
@@ -102,10 +102,10 @@
 
 		return $db->getOneRow($q);
 	}
-	
+
 	/* Returns all blogs from $userId for the specified month */
 		//fixme: this function is broken, the SQL needs updating for DATETIME format change
-	
+
 	function getBlogsByMonth($userId, $month, $year, $order_desc = true)
 	{
 		global $db;
@@ -141,7 +141,7 @@
 			echo 'The specified blog doesnt exist!<br/>';
 			return false;
 		}
-		
+
 		if ($blog['deletedBy']) {
 			echo 'This blog has been deleted!<br/>';
 			return false;
@@ -217,11 +217,11 @@
 				echo 'Your report has been recieved<br/>';
 			} else {
 				echo 'Report blog - <b>'.$blog['blogTitle'].'</b><br/><br/>';
-	
+
 				echo 'Why do you want to report this:<br/>';
 				echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogReport:'.$_id.'">';
 				echo '<textarea name="blog_reportreason" cols="64" rows="6"></textarea><br/><br/>';
-	
+
 				echo '<input type="submit" class="button" value="Report"/>';
 				echo '</form>';
 			}
@@ -240,7 +240,7 @@
 			if ($blog['timeUpdated']) {
 				echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
 			}
-			
+
 			if ($config['blog']['allow_rating']) {
 				echo '<div class="news_rate">';
 				if ($session->id != $blog['userId']) {
@@ -257,7 +257,7 @@
 		echo '</div>'; //class="blog"
 	}
 
-	/* Displays one user's blogs overview */	
+	/* Displays one user's blogs overview */
 	function showUserBlogs($_userid_name = '')
 	{
 		global $session;
@@ -285,5 +285,5 @@
 			echo '</div>';
 		}
 	}
-	
+
 ?>

@@ -19,7 +19,7 @@
 		/* Add entry to moderation queue */
 		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_GUESTBOOK, $entryId, true);
 	}
-	
+
 	function removeGuestbookEntry($entryId)
 	{
 		global $db;
@@ -46,7 +46,7 @@
 
 		return $db->getArray($q);
 	}
-	
+
 	/* Returns $count last entries from $userId's guestbook */
 	function getGuestbookItems($userId, $count = 5)
 	{
@@ -71,7 +71,7 @@
 		global $db;
 
 		if (!is_numeric($entryId)) return false;
-		
+
 		$q  = 'SELECT t1.*,t2.userName AS authorName,t3.userName FROM tblGuestbooks AS t1 ';
 		$q .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
 		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
@@ -80,7 +80,7 @@
 		return $db->getOneRow($q);
 	}
 
-	
+
 	/* Returns the number of items in the guestbook */
 	function getGuestbookCount($userId)
 	{
@@ -98,14 +98,14 @@
 		global $db;
 
 		if (!is_numeric($userId)) return false;
-		
+
 		$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND entryRead=0';
 		return $db->getOneItem($q);
 	}
 
 	/* Markerar alla inlägg i gästboken som lästa */
 	function markGuestbookRead()
-	{	
+	{
 		global $db, $session;
 
 		if (!$session->id) return false;
@@ -113,5 +113,5 @@
 		$q = 'UPDATE tblGuestbooks SET entryRead=1,timeRead=NOW() WHERE entryRead=0 AND userId='.$session->id;
 		$db->query($q);
 	}
-	
+
 ?>

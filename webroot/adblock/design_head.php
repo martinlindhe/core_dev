@@ -21,7 +21,7 @@
 			'report_site.php' => 'Report site',
 			'recent.php' => 'Recent changes');
 	createMenu($menu);
-		
+
 	if ($session->isAdmin) {
 		$menu = array(
 			'newrule.php' => 'New rule',
@@ -30,7 +30,7 @@
 			'admin_reports.php' => 'Reported sites');
 		createMenu($menu);
 	}
-		
+
 	if ($session->id) {
 		$menu = array('?logout' => 'Logout');
 	} else {

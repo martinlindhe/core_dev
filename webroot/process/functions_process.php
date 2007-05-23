@@ -2,15 +2,15 @@
 	/*
 		for image conversions I am using: ImageMagick-6.3.4-0-Q16-windows-dll.exe
 				in ubuntu: sudo apt-get install imagemagick  (v6.2.4 in ubuntu 7.4)
-				
-				uses MySQL table locking to ensure atomic operation 
+
+				uses MySQL table locking to ensure atomic operation
 
 		configuration:
 			this module requires:
 			- php_soap.dll extension (included in windows php dist, disabled by default)
 			- allow_url_fopen = On
 			- always_populate_raw_post_data = On (required by php_soap.dll)
-			
+
 			suggested config:
 			soap.wsdl_cache_enabled=1
 			soap.wsdl_cache_ttl=172800
@@ -31,12 +31,12 @@
 		global $db, $session, $WORK_OPRDER_TYPES;
 
 		if (!is_numeric($_type)) return false;
-		
+
 		if (!$session->id) {
 			$session->log('Un-authenticated user attempted to add work order');
 			return false;
 		}
-		
+
 		$_params = $db->escape(serialize($_params));
 
 		$q = 'INSERT INTO tblOrders SET orderType='.$_type.', orderParams="'.$_params.'", ownerId='.$session->id.', timeCreated=NOW()';
@@ -52,7 +52,7 @@
 		global $db;
 
 		if (!is_numeric($_limit)) return false;
-		
+
 		$q = 'SELECT * FROM tblOrders WHERE orderCompleted=0 ORDER BY timeCreated ASC LIMIT '.$_limit;
 		return $db->getArray($q);
 	}
@@ -107,13 +107,13 @@
 				continue;
 			}
 			file_put_contents($src_temp_file, $src_data);
-	
+
 			switch ($work['orderType'])
 			{
 				case ORDER_RESIZE_IMG:
 					echo 'Performing task: Image resize<br/>';
 					echo ' &nbsp; params: width='.$params['width'].', height='.$params['height'].'<br/>';
-	
+
 					//2. Perform resize
 					$check = $files->resizeImage($src_temp_file, $dst_temp_file, $params['width'], $params['height']);
 					if (!$check) {
@@ -123,11 +123,11 @@
 					}
 					$session->log('#'.$work['entryId'].': IMAGE RESIZE performed successfully');
 					break;
-	
+
 				case ORDER_CONVERT_IMG:
 					echo 'Performing task: Image convert<br/>';
 					echo ' &nbsp; params: format='.$params['format'].'<br/>';
-	
+
 					//2. Perform convert
 					$check = $files->convertImage($src_temp_file, $dst_temp_file, $params['format']);
 					if (!$check) {
@@ -137,16 +137,16 @@
 					}
 					$session->log('#'.$work['entryId'].': IMAGE CONVERT performed successfully');
 					break;
-	
+
 				default:
 					echo 'UNKNOWN WORK ORDER TYPE: '.$work['orderType'].'<br/>';
 					continue;
 			}
-	
+
 			//3. Write result to destination file
 			echo 'Writing result to dst '.$params['dst'].' ...<br/>';
 			copy($dst_temp_file, $params['dst']);
-	
+
 			//4. Markera utförd order
 			$q = 'UPDATE tblOrders SET orderCompleted=1 WHERE entryId='.$work['entryId'];
 			$db->query($q);

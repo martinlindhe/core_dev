@@ -133,7 +133,7 @@ function domLib_clone(obj)
 function Hash()
 {
 	this.length = 0;
-	this.numericLength = 0; 
+	this.numericLength = 0;
 	this.elementData = [];
 	for (var i = 0; i < arguments.length; i += 2)
 	{
@@ -141,7 +141,7 @@ function Hash()
 		{
 			this.elementData[arguments[i]] = arguments[i + 1];
 			this.length++;
-			if (arguments[i] == parseInt(arguments[i])) 
+			if (arguments[i] == parseInt(arguments[i]))
 			{
 				this.numericLength++;
 			}
@@ -149,7 +149,7 @@ function Hash()
 	}
 }
 
-// using prototype as opposed to inner functions saves on memory 
+// using prototype as opposed to inner functions saves on memory
 Hash.prototype.get = function(in_key)
 {
 	return this.elementData[in_key];
@@ -162,7 +162,7 @@ Hash.prototype.set = function(in_key, in_value)
 		if (typeof(this.elementData[in_key]) == 'undefined')
 		{
 			this.length++;
-			if (in_key == parseInt(in_key)) 
+			if (in_key == parseInt(in_key))
 			{
 				this.numericLength++;
 			}
@@ -180,7 +180,7 @@ Hash.prototype.remove = function(in_key)
 	if (typeof(this.elementData[in_key]) != 'undefined')
 	{
 		this.length--;
-		if (in_key == parseInt(in_key)) 
+		if (in_key == parseInt(in_key))
 		{
 			this.numericLength--;
 		}
@@ -204,9 +204,9 @@ Hash.prototype.has = function(in_key)
 
 Hash.prototype.find = function(in_obj)
 {
-	for (var tmp_key in this.elementData) 
+	for (var tmp_key in this.elementData)
 	{
-		if (this.elementData[tmp_key] == in_obj) 
+		if (this.elementData[tmp_key] == in_obj)
 		{
 			return tmp_key;
 		}
@@ -215,12 +215,12 @@ Hash.prototype.find = function(in_obj)
 
 Hash.prototype.merge = function(in_hash)
 {
-	for (var tmp_key in in_hash.elementData) 
+	for (var tmp_key in in_hash.elementData)
 	{
-		if (typeof(this.elementData[tmp_key]) == 'undefined') 
+		if (typeof(this.elementData[tmp_key]) == 'undefined')
 		{
 			this.length++;
-			if (tmp_key == parseInt(tmp_key)) 
+			if (tmp_key == parseInt(tmp_key))
 			{
 				this.numericLength++;
 			}
@@ -232,19 +232,19 @@ Hash.prototype.merge = function(in_hash)
 
 Hash.prototype.compare = function(in_hash)
 {
-	if (this.length != in_hash.length) 
+	if (this.length != in_hash.length)
 	{
 		return false;
 	}
 
-	for (var tmp_key in this.elementData) 
+	for (var tmp_key in this.elementData)
 	{
-		if (this.elementData[tmp_key] != in_hash.elementData[tmp_key]) 
+		if (this.elementData[tmp_key] != in_hash.elementData[tmp_key])
 		{
 			return false;
 		}
 	}
-	
+
 	return true;
 }
 
@@ -373,7 +373,7 @@ function domLib_detectCollisions(in_object, in_recover, in_useCache)
 			thisElement.hideList = new Hash();
 		}
 
-		var selectOffsets = domLib_getOffsets(thisElement); 
+		var selectOffsets = domLib_getOffsets(thisElement);
 		var center2centerDistance = Math.sqrt(Math.pow(selectOffsets.get('leftCenter') - objectOffsets.get('leftCenter'), 2) + Math.pow(selectOffsets.get('topCenter') - objectOffsets.get('topCenter'), 2));
 		var radiusSum = selectOffsets.get('radius') + objectOffsets.get('radius');
 		// the encompassing circles are overlapping, get in for a closer look
@@ -442,7 +442,7 @@ function domLib_getOffsets(in_object)
 		'bottom',	offsetTop + originalHeight,
 		'leftCenter',	offsetLeft + originalWidth/2,
 		'topCenter',	offsetTop + originalHeight/2,
-		'radius',	Math.max(originalWidth, originalHeight) 
+		'radius',	Math.max(originalWidth, originalHeight)
 	);
 }
 
@@ -581,8 +581,8 @@ function domLib_getIFrameReference(in_frame)
 
 function domLib_getElementsByClass(in_class)
 {
-	var elements = domLib_isIE5 ? document.all : document.getElementsByTagName('*');	
-	var matches = [];	
+	var elements = domLib_isIE5 ? document.all : document.getElementsByTagName('*');
+	var matches = [];
 	var cnt = 0;
 	for (var i = 0; i < elements.length; i++)
 	{
@@ -611,7 +611,7 @@ function domLib_getElementsByTagNames(in_list, in_excludeHidden)
 				continue;
 			}
 
-			elements[elements.length] = matches[j];	
+			elements[elements.length] = matches[j];
 		}
 	}
 

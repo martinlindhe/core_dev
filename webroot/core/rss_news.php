@@ -46,13 +46,13 @@
 
 	for ($i=0; $i<count($list); $i++) {
 		if (!$list[$i]['rss_enabled']) continue;
-			
+
 		$item_url = 'http://localhost/'.$path.'/news.php?news='.$list[$i]['newsId'];
 
 		echo '<item>';
 			echo '<title>'.$list[$i]['title'].'</title>';
 			echo '<pubDate>'.$list[$i]['timeToPublish'].'</pubDate>';	//fixme: hur ska publish date formateras?
-	
+
 			echo '<link>'.$item_url.'</link>';
 			echo '<guid>'.$item_url.'</guid>';
 			echo '<description>'.$list[$i]['body'].'</description>';

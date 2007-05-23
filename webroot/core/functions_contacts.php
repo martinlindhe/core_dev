@@ -1,9 +1,9 @@
 <?
 	//functions_contacts.php - implements friend lists. also implements blocked contacts
-	
+
 	define('CONTACT_FRIEND', 1);
 	define('CONTACT_BLOCKED', 2);
-	
+
 	$config['contacts']['friend_requests'] = true; //sends a request to another user to become friends,if false, it simply adds other user to your contact list
 
 	function haveContact($_type, $userId, $otherId)
@@ -61,14 +61,14 @@
 
 		return $db->getArray($q);
 	}
-	
+
 	/* Returns an array with $userId's all friends, including usernames & "isOnline" boolean, but no other info */
 	function getContactsFlat($_type, $userId)
 	{
 		global $db;
 
 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
-		
+
 		$q  = 'SELECT t1.*,t2.userName AS contactName,';
 		$q .= '(SELECT timeLastActive>=DATE_SUB(NOW(),INTERVAL 30 MINUTE)) AS isOnline ';
 		$q .= 'FROM tblContacts AS t1 ';
@@ -117,20 +117,20 @@
 				}
 			}
 		}
-		
+
 		if ($userId == $session->id) {
 			if (!empty($_GET['request_stopwait'])) {
 				removeSentFriendRequest($_GET['request_stopwait']);
 			}
-	
+
 			if (isset($_GET['request_deny'])) {
 				denyFriendRequest($_GET['request_deny']);
 			}
-		
+
 			if (isset($_GET['request_accept'])) {
 				acceptFriendRequest($_GET['request_accept']);
 			}
-	
+
 			$list = getSentFriendRequests();
 			if (count($list)) {
 				echo '<div class="item">';
@@ -239,7 +239,7 @@
 		global $db, $session;
 
 		if (!$session->id || !is_numeric($requestId)) return false;
-		
+
 		$q  = 'DELETE FROM tblFriendRequests';
 		$q .= ' WHERE reqId='.$requestId.' AND senderId='.$session->id;
 		$db->delete($q);
@@ -258,7 +258,7 @@
 		$q  = 'DELETE FROM tblFriendRequests';
 		$q .= ' WHERE reqId='.$requestId.' AND recieverId='.$session->id;
 		$db->delete($q);
-		
+
 		//tell the request sender that the request was denied
 		//addMessageToInbox($db, $config['messages']['system_id'], $data['senderId'], '', nameLink($_SESSION['userId'], $_SESSION['userName']).' '.$config['friends']['denied_friend_request'], MESSAGETYPE_INSTANT);
 
@@ -271,14 +271,14 @@
 		global $db, $session, $config;
 
 		if (!$session->id || !is_numeric($requestId)) return false;
-		
+
 		$data = getFriendRequest($requestId);
 		if (!$data) return false;
 
 		$q  = 'DELETE FROM tblFriendRequests';
 		$q .= ' WHERE reqId='.$requestId.' AND recieverId='.$session->id;
 		$db->delete($q);
-		
+
 		//create a friend relation
 		setContact(CONTACT_FRIEND, $session->id, $data['senderId']);
 		setContact(CONTACT_FRIEND, $data['senderId'], $session->id);

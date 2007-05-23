@@ -39,6 +39,6 @@
 	echo '<tr><td colspan="2"><input type="submit" value="Add" class="button"/></td></tr>';
 	echo '</table>';
 	echo '</form>';
-	
+
 	require('design_foot.php');
 ?>

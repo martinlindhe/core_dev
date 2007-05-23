@@ -16,7 +16,7 @@
 	//$site['url'] = 'http://www.unicorn.tv/';
 	$site['url'] = 'http://www.dn.se/';
 	$site['url_parsed'] = nice_parse_url($site['url']);
-	
+
 
 	$http_request_counter = 0;
 
@@ -26,7 +26,7 @@
 	if ($errno) die('get_http_contents() failed');
 
 	$list = extract_filenames($data);
-	
+
 	$site['page'][$site['url']] = generate_absolute_urls($list, $site['url']);
 
 	$site['all_urls'] = $site['page'][$site['url']];
@@ -38,7 +38,7 @@
 		$loop_cnt++;
 		echo '<hr>';
 		echo '<b>Loop '.$loop_cnt.' started. I know '.count($site['all_urls']).' URLs</b><br>';
-		
+
 		$pages_processed = 0;
 		$pages_discovered = count($site['all_urls']);
 
@@ -63,7 +63,7 @@
 	} while ($pages_processed != 0);
 
 	//Then finally we clean up the array
-	
+
 	//todo: behövs array_unique() & array_merge() ens anropas här? koden ska väl se till att inte dupes hamnar i arrayen???
 	$site['all_urls'] = array_unique($site['all_urls']);
 	natsort($site['all_urls']);
@@ -74,7 +74,7 @@
 	d($site['all_urls']);
 
 	file_put_contents('dump.txt', serialize($site['all_urls']) );
-	
+
 	if (!empty($site['404'])) {
 		echo 'File not found:<br>';
 		d($site['404']);

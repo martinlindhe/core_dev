@@ -3,7 +3,7 @@
 		functions_statistics.php - used by admin module to display statistics
 	*/
 
-	/* Displays stats for each month. 
+	/* Displays stats for each month.
 		Will create tblStatistics entries if any are missing for requested page.
 		Hopefully a cron-script updates this regularry, but otherwise the pages will load a bit slow the first times they are accessed
 	*/
@@ -12,7 +12,7 @@
 		global $db;
 
 		if (!is_numeric($year) || !is_numeric($month)) return false;
-		
+
 		echo '<img src="/core/image_statistics.php?y='.$year.'&amp;m='.$month.getProjectPath().'" alt="Stats"/>';
 	}
 
@@ -43,7 +43,7 @@
 				//Count registrations
 				$q = 'SELECT COUNT(*) FROM tblUsers WHERE timeCreated BETWEEN "'.sql_datetime($time_start).'" AND "'.sql_datetime($time_end).'"';
 				$registrations = $db->getOneItem($q);
-				
+
 				//Store information
 				$q = 'INSERT INTO tblStatistics SET time="'.sql_datetime($time_start).'",logins='.$logins.',registrations='.$registrations;
 				$db->insert($q);

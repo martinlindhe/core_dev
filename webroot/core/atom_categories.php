@@ -94,7 +94,7 @@
 		global $db;
 
 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
-		
+
 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' ';
 		if ($_owner) $q .= 'AND ownerId='.$_owner.' ';
 		$q .= 'ORDER BY categoryName ASC';

@@ -22,7 +22,7 @@
 	/*
 	$max_logins = 0;
 	foreach($list as $row) {
-		if ($row['logins'] > $max_logins) $max_logins = $row['logins']; 
+		if ($row['logins'] > $max_logins) $max_logins = $row['logins'];
 	}*/
 
 	//echo 'max logins:'. $max_logins;
@@ -41,7 +41,7 @@
 		$day = date('j', $timestamp);
 		$hour = date('G', $timestamp);
 		$logins = $row['logins'];
-		
+
 		$x = $start_x+($day*10);
 		$y = ($hour*10);
 		//imageline($im, $x, $y, $x+9, $y, $col);

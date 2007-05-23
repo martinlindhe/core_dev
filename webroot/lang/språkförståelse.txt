@@ -16,7 +16,7 @@ språkförståelse:
 		* om det finns tillräckligt med data insamlat i databasen, så ska programmet
 			gissa vilket språk texten är på, men till en början ska den i så fall fråga admin vilket språk den ska köra med,
 			detta ska ske för varje enskild url
-			
+
 		* webb-spindla sig igenom alla undersidor på en sajt för att hitta ny text
 		* följ inte externa länkar, men redovisa dem
 

@@ -11,7 +11,7 @@
 	}
 
 	require('design_head.php');
-	
+
 	createMenu($profile_menu, 'blog_menu');
 
 	if ($session->isAdmin || $session->id == $userId) {

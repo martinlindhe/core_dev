@@ -4,7 +4,7 @@
 		global $db, $session;
 
 		if (!$session->id || !is_numeric($roomId)) return false;
-		
+
 		//Sanitize text
 		$text = str_replace(']]>', '', $text);	//Guard against XML feed poisoning
 		$text = $db->escape($text);
@@ -19,7 +19,7 @@
 		global $db;
 
 		if (!is_numeric($roomId) || !is_numeric($limit)) return false;
-		
+
 		$q = 'SELECT * FROM tblChat WHERE roomId='.$roomId.' ORDER BY entryId DESC LIMIT 0,1';
 		$lastEntryId = $db->getOneItem($q);
 
@@ -31,7 +31,7 @@
 
 		return $db->getArray($q);
 	}
-	
+
 	/* Returns all chat entries from $fromTime and newer */
 	function getNewChatEntries($roomId, &$lastEntryId, $fromEntryId)
 	{
@@ -62,7 +62,7 @@
 
 		return $db->insert($q);
 	}
-	
+
 	function getChatRooms()
 	{
 		global $db;
@@ -70,13 +70,13 @@
 		$q = 'SELECT * FROM tblChatRooms ORDER BY roomName ASC';
 		return $db->getArray($q);
 	}
-	
+
 	function getChatRoom($roomId)
 	{
 		global $db;
 
 		if (!is_numeric($roomId)) return false;
-		
+
 		$q = 'SELECT * FROM tblChatRooms WHERE roomId='.$roomId;
 		return $db->getOneRow($q);
 	}
@@ -86,7 +86,7 @@
 		global $db;
 
 		if (!is_numeric($roomId)) return false;
-		
+
 		$roomName = trim($roomName);
 		if (!$roomName) return false;
 
@@ -120,10 +120,10 @@
 	function setChatRoomUser($roomId)
 	{
 		global $db, $session;
-		
+
 		//todo: detta fragmenterar säkerligen tabellen som fan eftersom det uppdateras så ofta, vore nog bättre att återanvända entryId's
 		if (!$session->id || !is_numeric($roomId)) return false;
-		
+
 		$q = 'DELETE FROM tblChatUsers WHERE roomId='.$roomId.' AND userId='.$session->id;
 		$db->delete($q);
 

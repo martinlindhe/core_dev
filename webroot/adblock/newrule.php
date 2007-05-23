@@ -5,7 +5,7 @@
 
 	if (!empty($_POST['rule'])) {
 		$ruleId = addAdblockRule($_POST['rule'], $_POST['type'], $_POST['sampleurl']);
-		
+
 		//todo: checkbox "make comment private"
 		require('design_head.php');
 		if (is_numeric($ruleId) && $ruleId) {

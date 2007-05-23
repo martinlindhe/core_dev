@@ -1,6 +1,6 @@
 <?
 	//lang stuff
-	
+
 	function addWord($langId, $word, $pron)
 	{
 		global $db;
@@ -32,7 +32,7 @@
 		$q = 'SELECT * FROM tblWords WHERE id='.$wordId;
 		return $db->getOneRow($q);
 	}
-	
+
 	/* Returns all words for this language */
 	function getWords($langId)
 	{
@@ -43,7 +43,7 @@
 		$q = 'SELECT id,word FROM tblWords WHERE lang='.$langId;
 		return $db->getArray($q);
 	}
-	
+
 	/* Returns all entries that match this word */
 	function getWordMatches($word)
 	{
@@ -60,7 +60,7 @@
 	{
 		$text = trim($text);
 		if (!is_numeric($langId) || !$text) return false;
-		
+
 		//Clean up the text
 		$text = str_replace("\t", ' ', $text);		//Turn tab into space
 		$text = str_replace("\n", ' ', $text);		//Newline into space
@@ -102,7 +102,7 @@
 	{
 		$text = trim($text);
 		if (!$text) return false;
-		
+
 		//Clean up the text
 		$text = str_replace("\t", ' ', $text);		//Turn tab into space
 		$text = str_replace("\n", ' ', $text);		//Newline into space
@@ -120,7 +120,7 @@
 
 		//Split up the text in array of sentences separated by .
 		$sentences = explode('.', $text);
-		
+
 		$result = array();
 
 		for ($i=0; $i<count($sentences); $i++) {

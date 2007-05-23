@@ -24,7 +24,7 @@
 	$config['session']['allow_registration'] = true;
 	$config['session']['web_root'] = '/pigskin/';
 	$session = new Session($config['session']);
-	
+
 	$config['files']['apc_uploads'] = false;
 	$config['files']['count_file_views'] = true;
 	$config['files']['image_max_width'] = 800;
