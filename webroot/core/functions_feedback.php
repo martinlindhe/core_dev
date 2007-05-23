@@ -16,4 +16,13 @@
 		return $db->getArray($q);
 	}
 
+	function deleteFeedback($_id)
+	{
+		global $db, $session;
+
+		if (!$session->isAdmin || !is_numeric($_id)) return false;
+
+		$q = 'DELETE FROM tblFeedback WHERE feedbackId='.$_id;
+		return $db->delete($q);
+	}
 ?>
