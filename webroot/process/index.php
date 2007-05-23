@@ -3,7 +3,11 @@
 
 	require_once('design_head.php');
 ?>	
-	process server...
+	<h1>Process server</h1>
+	
+	<a href="client.php">Simulate client adding work order</a><br/>
+	<br/>
+	<a href="ipx_client.php">Send a test SMS with IPX</a><br/>
 <?
 	$current_php_soap = phpversion('soap');
 	if (!defined('SOAP_1_2')) {
