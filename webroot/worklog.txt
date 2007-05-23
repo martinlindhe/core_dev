@@ -14,23 +14,6 @@
 		* flyttat över php-script & databas & konfigurerat dammsugar-datorn
 		* communityt fungerar nu som det ska på dammsugar-datorn, förrutom att bilder saknas
 
-2007.05.23 Onsdag:
-	mobila gränssnittet:
-		* visar "ANVÄNDAREN BORTTAGEN" om användare ej finns
-
-	sms debitering:
-		* planerat programflöde och features
-		* påbörjat implementation
-		* stödjer SSL-anslutning till IPX
-		* stödjer IPX-max "read timeout" på 10 minuter
-		* SMS-utskick impementerat
-		* inkommande SMS-hantering förberedd. IPX måste konfigurera destinations-url åt oss:		
-			http://cs.icn.se/_process/ipx_incoming.php
-			prefix "POG" var ledig, vi kommer använda den för test
-			vi vill ha datan som GET-data
-
-***************************************************************************************************
-måndag+tisdag: flytt till dammsugaren & lastbalans:
 	[x] 1. installera apache,php,mysql på dammsugaren
 				# sudo apt-get install apache2 php5 mysql-server
 	[x] 2. gör backup på senaste versionen av all kod & databas från dev-burken
@@ -66,10 +49,29 @@ måndag+tisdag: flytt till dammsugaren & lastbalans:
 
 	[x] 6. konfigurera cron-jobb
 	[x] 7. testa att allt funkar
-	[ ] 8. webload:
+	[x] 8. webload:
 					- mrtg installerat: http://cs.icn.se/_mrtg/
 					- kunna klara minst 200 användare
 					- skippa mobila gränssnitet. testa bara webbgränssnittet
+
+2007.05.23 Onsdag:
+	mobila gränssnittet:
+		* visar "ANVÄNDAREN BORTTAGEN" om användare ej finns
+
+	sms debitering:
+		* planerat programflöde och features
+		* påbörjat implementation
+		* stödjer SSL-anslutning till IPX
+		* stödjer IPX-max "read timeout" på 10 minuter
+		* SMS-utskick impementerat
+		* inkommande SMS-hantering förberedd. IPX måste konfigurera destinations-url åt oss:		
+			http://cs.icn.se/_process/ipx_incoming.php
+			prefix "POG" var ledig, vi kommer använda den för test
+			vi vill ha datan som GET-data
+		* ip-restrictions för IPX-incoming script
+
+
+***************************************************************************************************
 
 torsdag+fredag implementation:
 	* #1: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
@@ -80,15 +82,15 @@ blandat:
 		- hantera "BLOG" och "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
 		- alla ska ha mms funktion (vip) under testet
 
-	* hitta mysql-prestanda-utbildningar
+	* process server:
+		- IPX vill ha "HTTP basic authentication" för att accessa ipx_incoming.php (optional?)
+		- ip-restrictions för SOAP klienter
+		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
+		- kika på hur ipx enkodar parametrar, för att slippa serialize
 
 	* profilsida:
 		- FRANS: länk till vän med bild funkar ej för alla
 
-	* process server:
-		- ip-restrictions för varje klient
-		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
-		- kika på hur ipx enkodar parametrar, för att slippa serialize
 
 EFETER TEST:
 	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
@@ -102,6 +104,7 @@ EFETER TEST:
 
 
 senare, låg prio:
+	- hitta mysql-prestanda-utbildningar
 	- VMX (voicemail) inspelning & uppspelning
 	- shoutbox (megafon-funktion) på startsidan
 

@@ -200,7 +200,7 @@ abstract class DB_Base
 			$encoded_syntax = array('<br/>FROM', '<br/>SET', '<br/>WHERE', '<br/>LEFT', '<br/>GROUP', '<br/>ORDER');
 			$query = str_replace($sql_syntax, $encoded_syntax, $query);
 
-			echo '<table><tr><td width="40">';
+			echo '<table summary=""><tr><td width="40">';
 			if (!empty($this->query_error[$i])) {
 				echo '<img src="/gfx/icon_error.png" alt="SQL Error" title="SQL Error"/>';
 			} else {
@@ -246,7 +246,7 @@ abstract class DB_Base
 			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">show newest first</a>]<br/>';
 		} else {
 			$q .= ' ORDER BY t1.timeCreated DESC,t1.entryId DESC';
-			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'&sort=asc">show oldest first</a>]<br/>';
+			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'&amp;sort=asc">show oldest first</a>]<br/>';
 		}
 
 		$list = $this->getArray($q);
