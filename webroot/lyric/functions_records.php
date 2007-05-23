@@ -41,7 +41,7 @@
 		
 		for ($i=1; $i<=$tracks; $i++)
 		{
-			$db->query("INSERT INTO tblTracks SET recordId=".$record_id.",trackNumber=".$i.",lyricId=0");
+			$db->insert('INSERT INTO tblTracks SET recordId='.$record_id.',trackNumber='.$i.',lyricId=0');
 		}
 	}
 	
@@ -73,11 +73,11 @@
 
 		if (!is_numeric($record_id)) return false;
 		
-		$q  = "SELECT tblTracks.*, tblLyrics.lyricName, tblLyrics.lyricText, tblLyrics.bandId AS authorId, tblBands.bandName FROM tblTracks ";
-		$q .= "LEFT OUTER JOIN tblLyrics ON (tblTracks.lyricId=tblLyrics.lyricId) ";
-		$q .= "LEFT OUTER JOIN tblBands ON (tblTracks.bandId=tblBands.bandId) ";
-		$q .= "WHERE tblTracks.recordId = ".$record_id." ";
-		$q .= "ORDER BY tblTracks.trackNumber ASC";
+		$q  = 'SELECT tblTracks.*, tblLyrics.lyricName, tblLyrics.lyricText, tblLyrics.bandId AS authorId, tblBands.bandName FROM tblTracks ';
+		$q .= 'LEFT OUTER JOIN tblLyrics ON (tblTracks.lyricId=tblLyrics.lyricId) ';
+		$q .= 'LEFT OUTER JOIN tblBands ON (tblTracks.bandId=tblBands.bandId) ';
+		$q .= 'WHERE tblTracks.recordId = '.$record_id.' ';
+		$q .= 'ORDER BY tblTracks.trackNumber ASC';
 
 		return $db->getArray($q);
 	}
@@ -90,7 +90,7 @@
 
 		$record_name = $db->escape($record_name);
 
-		$db->query("UPDATE tblRecords SET recordName='".$record_name."' WHERE recordId=".$record_id);
+		$db->query('UPDATE tblRecords SET recordName="'.$record_name.'" WHERE recordId='.$record_id);
 		return true;
 	}
 
@@ -112,7 +112,7 @@
 	{
 		global $db;
 
-		$q = "UPDATE tblTracks SET lyricId=0,bandId=0 WHERE recordId=".$record_id." AND trackNumber=".$track;
+		$q = 'UPDATE tblTracks SET lyricId=0,bandId=0 WHERE recordId='.$record_id.' AND trackNumber='.$track;
 		$db->query($q);
 	}
 
@@ -123,20 +123,20 @@
 
 		if (!is_numeric($record_id)) return false;
 
-		$q  = "SELECT MAX(trackNumber) AS num,bandId FROM tblTracks ";
-		$q .= "WHERE recordId=".$record_id." ";
-		$q .= "GROUP BY bandId";
+		$q  = 'SELECT MAX(trackNumber) AS num,bandId FROM tblTracks ';
+		$q .= 'WHERE recordId='.$record_id.' ';
+		$q .= 'GROUP BY bandId';
 		$row = $db->getOneRow($q);
 
-		$q = "INSERT INTO tblTracks SET trackNumber=".($row["num"]+1).",recordId=".$record_id.",bandId=".$row["bandId"];
-		$db->query($q);
+		$q = 'INSERT INTO tblTracks SET trackNumber='.($row['num']+1).',recordId='.$record_id.',bandId='.$row['bandId'];
+		$db->insert($q);
 	}
 
 	function removeTrack($record_id, $track)
 	{
 		global $db;
 
-		$q = "DELETE FROM tblTracks WHERE recordId=".$record_id." AND trackNumber=".$track;
+		$q = 'DELETE FROM tblTracks WHERE recordId='.$record_id.' AND trackNumber='.$track;
 		$db->query($q);
 	}
 
@@ -146,9 +146,9 @@
 
 		if (!is_numeric($lyric_id)) return false;
 
-		$q = "SELECT bandName FROM tblLyrics ";
-		$q .= "LEFT OUTER JOIN tblBands ON (tblLyrics.bandId=tblBands.bandId) ";
-		$q .= "WHERE lyricId=".$lyric_id;
+		$q = 'SELECT bandName FROM tblLyrics ';
+		$q .= 'LEFT OUTER JOIN tblBands ON (tblLyrics.bandId=tblBands.bandId) ';
+		$q .= 'WHERE lyricId='.$lyric_id;
 
 		$data = $db->getOneItem($q);
 		return stripslashes($data);
@@ -181,10 +181,10 @@
 
 		if (!is_numeric($record_id)) return false;
 		
-		$q  = "SELECT t1.*,t2.userName,t3.bandName FROM tblRecords AS t1 ";
-		$q .= "INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ";
-		$q .= "INNER JOIN tblBands AS t3 ON (t1.bandId=t3.bandId) ";
-		$q .= "WHERE t1.recordId=".$record_id;
+		$q  = 'SELECT t1.*,t2.userName,t3.bandName FROM tblRecords AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'INNER JOIN tblBands AS t3 ON (t1.bandId=t3.bandId) ';
+		$q .= 'WHERE t1.recordId='.$record_id;
 		
 		return $db->getOneItem($q);
 	}	
@@ -194,17 +194,17 @@
 	{
 		global $db;
 
-		$q = "UPDATE tblTracks SET bandId=".$band_id." WHERE recordId=".$record_id;
+		$q = 'UPDATE tblTracks SET bandId='.$band_id.' WHERE recordId='.$record_id;
 		$db->query($q);
 		
-		$q = "UPDATE tblRecords SET bandId=".$band_id." WHERE recordId=".$record_id;
+		$q = 'UPDATE tblRecords SET bandId='.$band_id.' WHERE recordId='.$record_id;
 		$db->query($q);
 		
-		$q = "SELECT lyricId FROM tblTracks WHERE recordId=".$record_id;
+		$q = 'SELECT lyricId FROM tblTracks WHERE recordId='.$record_id;
 		$list = $db->getArray($q);
 
 		for ($i=0; $i<count($list); $i++) {
-			$q = "UPDATE tblLyrics SET bandId=".$band_id." WHERE lyricId=".$list[$i]["lyricId"];
+			$q = 'UPDATE tblLyrics SET bandId='.$band_id.' WHERE lyricId='.$list[$i]['lyricId'];
 			$db->query($q);
 		}
 	}

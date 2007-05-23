@@ -27,7 +27,7 @@
 		$prio = compactUserdataFields();	//returnerar högsta prioritetstalet
 
 		$q = 'INSERT INTO tblUserdata SET fieldName="'.$db->escape($fieldName).'",fieldDefault="'.$db->escape($fieldDefault).'",fieldType='.$fieldType.',allowTags='.$allowTags.',private='.$isPrivate.',fieldPriority='.$prio.',regRequire='.$regRequire;
-		$db->query($q);
+		$db->insert($q);
 		return true;
 	}
 

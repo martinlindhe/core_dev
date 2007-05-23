@@ -19,7 +19,7 @@
 		if ($topublish_time < time()) $topublish_time = time();
 
 		$q = 'INSERT INTO tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session->id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
-		$db->query($q);
+		$db->insert($q);
 
 		return true;
 	}

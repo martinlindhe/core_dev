@@ -10,7 +10,7 @@
 		$text = $db->escape($text);
 
 		$q = 'INSERT INTO tblChat SET userId='.$session->id.',timeCreated=NOW(),roomId='.$roomId.',msg="'.$text.'"';
-		$db->query($q);
+		return $db->insert($q);
 	}
 
 	/* Returns the last $limit chat entries from chat room $roomId */
@@ -125,10 +125,10 @@
 		if (!$session->id || !is_numeric($roomId)) return false;
 		
 		$q = 'DELETE FROM tblChatUsers WHERE roomId='.$roomId.' AND userId='.$session->id;
-		$db->query($q);
-		
+		$db->delete($q);
+
 		$q = 'INSERT INTO tblChatUsers SET roomId='.$roomId.',userId='.$session->id.',lastSeen=NOW()';
-		$db->query($q);
+		$db->insert($q);
 	}
 
 	function getCurrentChatUsers($roomId)

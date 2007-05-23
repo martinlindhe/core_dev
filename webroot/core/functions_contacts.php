@@ -36,7 +36,7 @@
 		if (!haveContact($_type, $session->id, $otherId)) {
 			/* Create new contact */
 			$q = 'INSERT INTO tblContacts SET userId='.$userId.',contactType='.$_type.',otherUserId='.$otherId.',groupId='.$groupId.',timeCreated=NOW()';
-			$db->query($q);
+			$db->insert($q);
 		} else {
 			/* Change the contact group */
 			$q = 'UPDATE tblContacts SET groupId='.$groupId.' WHERE userId='.$userId.' AND contactType='.$_type.' AND otherUserId='.$otherId;
@@ -189,7 +189,7 @@
 		if ($db->getOneItem($q)) return false;
 
 		$q = 'INSERT INTO tblFriendRequests SET senderId='.$session->id.',recieverId='.$userId.',timeCreated=NOW(),categoryId='.$categoryId;
-		$db->query($q);
+		$db->insert($q);
 		return true;
 	}
 

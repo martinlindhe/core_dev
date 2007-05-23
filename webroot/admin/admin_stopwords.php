@@ -39,7 +39,7 @@
 			}
 			
 			if (!empty($_POST[$word])) {
-				if (!addStopword($_POST[$word], $i, $full)) {
+				if (!addStopword($i, $_POST[$word], $full)) {
 					echo 'Failed to add '.$_POST[$word].'<br>';
 				}
 			}

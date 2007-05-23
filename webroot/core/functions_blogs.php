@@ -22,9 +22,7 @@
 		$blogId = $db->insert($q);
 
 		/* Add entry to moderation queue */
-		if ($config['blog']['moderation']) {
-			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_BLOG, $blogId, true);
-		}
+		if ($config['blog']['moderation'] && (isSensitive($title) || isSensitive($body))) addToModerationQueue(MODERATION_BLOG, $blogId, true);
 
 		return $blogId;
 	}

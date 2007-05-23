@@ -178,7 +178,7 @@ class Session
 		if (!is_numeric($entryLevel)) return false;
 
 		$q = 'INSERT INTO tblLogs SET entryText="'.$db->escape($str).'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$this->id.',userIP='.$this->ip;
-		$db->query($q);
+		return $db->insert($q);
 	}
 
 
@@ -251,7 +251,7 @@ class Session
 
 		//Update last login time
 		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
-		$db->query('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$this->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
+		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$this->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
 		/* Read in current users settings */
 		if ($this->allow_themes) {

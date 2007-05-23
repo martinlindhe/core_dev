@@ -527,7 +527,7 @@ CREATE TABLE tblNews (
   rating tinyint(3) unsigned NOT NULL default '0',
   ratingCnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (newsId)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 CREATE TABLE tblRatings (
   rateId bigint(20) unsigned NOT NULL auto_increment,
   `type` tinyint(3) unsigned NOT NULL default '0',

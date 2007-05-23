@@ -56,9 +56,7 @@
 			d($response);
 			
 			$q = 'INSERT INTO tblSendResponses SET correlationId='.$corrId.',messageId="'.$db->escape($response->messageId).'",responseCode='.$response->responseCode.',responseMessage="'.$db->escape($response->responseMessage).'",temporaryError='.intval($response->temporaryError).',timeCreated=NOW()';
-			if ($response->responseCode) {
-				$q .= ',params="'.$db->escape(serialize($params)).'"';
-			}
+			if ($response->responseCode) $q .= ',params="'.$db->escape(serialize($params)).'"';
 			$db->insert($q);
 
 		} catch (Exception $e) {

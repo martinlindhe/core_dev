@@ -24,7 +24,7 @@
 		else $private = 0;
 
 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$commentType.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
-		$db->query($q);
+		return $db->insert($q);
 	}
 	
 	function updateComment($commentType, $ownerId, $commentId, $commentText)

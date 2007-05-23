@@ -25,7 +25,7 @@
 		$timestamp = $db->escape($timestamp);		//todo: validate timestamp bättre
 
 		$q = 'INSERT INTO tblRevisions SET fieldId='.$fieldId.',fieldType='.$fieldType.',fieldText="'.$db->escape($fieldText).'",createdBy='.$creatorId.',timeCreated="'.$timestamp.'",categoryId='.$categoryId;
-		$db->query($q);
+		return $db->insert($q);
 	}
 	
 	function showRevisions($articleType, $articleId, $articleName)

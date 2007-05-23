@@ -50,7 +50,7 @@
 		else
 		{
 			$q = 'INSERT INTO tblWiki SET wikiName="'.$wikiName.'",msg="'.$_text.'",createdBy='.$session->id.',timeCreated=NOW()';
-			$db->query($q);
+			$db->insert($q);
 		}
 	}
 

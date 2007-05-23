@@ -137,8 +137,8 @@
 	}
 
 
-	/* Adds a stopword of type $type if not already exists, else returns false */
-	function addStopword($word, $type, $full)	//fixme: parameter order: $type, $word, $full
+	/* Adds a stopword of type $type if not already exists, return false on failure */
+	function addStopword($type, $word, $full)
 	{
 		global $db;
 
@@ -146,11 +146,9 @@
 		$word = $db->escape($word);
 
 		$id = $db->getOneItem('SELECT wordId FROM tblStopwords WHERE wordText="'.$word.'" AND wordType='.$type);
-		if (!$id) {
-			$db->query('INSERT INTO tblStopwords SET wordText="'.$word.'",wordType='.$type.',wordMatch='.$full);
-			return true;
-		}
-		return false;
+		if ($id) return false;
+
+		return $db->insert('INSERT INTO tblStopwords SET wordText="'.$word.'",wordType='.$type.',wordMatch='.$full);
 	}
 
 	function removeStopword($wordId)

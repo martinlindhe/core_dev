@@ -25,7 +25,7 @@
 			$db->query($q);
 		} else {
 			$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$_type.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
-			$db->query($q);
+			$db->insert($q);
 		}
 
 		return true;

@@ -46,7 +46,7 @@
 				
 				//Store information
 				$q = 'INSERT INTO tblStatistics SET time="'.sql_datetime($time_start).'",logins='.$logins.',registrations='.$registrations;
-				$db->query($q);
+				$db->insert($q);
 			}
 		}
 	}

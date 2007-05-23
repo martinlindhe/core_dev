@@ -25,7 +25,7 @@
 
 		//2. spara röstningen
 		$q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$session->id.',timeRated=NOW()';
-		$db->query($q);
+		$db->insert($q);
 
 		//3. räkna ut aktuella medelvärdet av omdömet
 		$q = 'SELECT AVG(rating) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
