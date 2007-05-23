@@ -1,7 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- fyller $db->insert_id nån funktion nu när $db->insert() returnerar insert-id ?
-		- Make sure that all of your database code (in your php, perl, whatever) issues the "SET NAMES utf8" SQL statement before issuing any further SQL commands. 
+		- Make sure that all of your database code (in your php, perl, whatever)
+			issues the "SET NAMES utf8" SQL statement before issuing any further SQL commands. 
 	
 		- visa andra personers info...
 		- "	Idag finns en sök-användare funktion. Den kan även söka på olika användardata,
@@ -72,6 +72,9 @@ delete news rating när news deletas
 
 	file area:
 		- visa en papperskorg, kunna drag-droppa en fil och släppa i papperskorgen (ta bort med ajax)
+		- kunna titta i papperskorgen, och ångra file deletes. filer i papperskorgen sparas i MINST 30 dagar (konfigrerbart),
+			och försvinner när admin väljer att manuellt ta bort gamla filer.
+			* behöver admin-gränssnitt som visar att X filer, på totalt Y megabyte uppfyller kravet för att raderas
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
 		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden (piggy)
 		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
@@ -122,6 +125,11 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.23:
+	- db: $db->insert($q) skapad, returnerar insert_id från INSERT-queryn
+	- db: tagit bort $db->insert_id variabeln, använd $db->insert() istället
+
+
 2007.05.22:
 	- files: kan se andra personers filareor
 	- visar "last logged in" och "users online" listor

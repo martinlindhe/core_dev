@@ -4,8 +4,6 @@
 
 	When possible, use class.DB_MySQLi.php instead (it is faster)
 	
-	//TODO: implement $db->insert()
-
 	Written by Martin Lindhe, 2007
 */
 
@@ -32,7 +30,7 @@ class DB_MySQL extends DB_Base
 		return mysql_real_escape_string($q, $this->db_handle);
 	}
 
-	protected function connect()
+	function connect()
 	{
 		global $config;
 
@@ -63,18 +61,58 @@ class DB_MySQL extends DB_Base
 
 		$result = mysql_query($q, $this->db_handle);
 
-		if ($result) {
-			$this->insert_id = mysql_insert_id($this->db_handle);
-		} else if ($config['debug'] && !$result) {
-			$this->query_error[ $this->queries_cnt ] = mysql_error($this->db_handle);
-		} else {
-			//if debug is turned off (production) and a query fail, just die silently
-			die;
+		if (!$result) {
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = mysql_error($this->db_handle);
+			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		return $result;
+	}
+
+	function insert($q)
+	{
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);
+
+		$result = mysql_query($q, $this->db_handle);
+
+		$ret_id = 0;
+
+		if ($result) {
+			$ret_id = mysql_insert_id($this->db_handle);
+		} else {
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = mysql_error($this->db_handle);
+			else die; //if debug is turned off (production) and a query fail, just die silently
+		}
+
+		if ($config['debug']) $this->profileQuery($time_started, $q);
+
+		return $ret_id;
+	}
+	
+	function delete($q)
+	{
+		global $config;
+
+		if ($config['debug']) $time_started = microtime(true);
+
+		$result = mysql_query($q, $this->db_handle);
+
+		$affected_rows = false;
+
+		if ($result) {
+			$affected_rows = mysql_affected_rows($this->db_handle);
+		} else {
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = mysql_error($this->db_handle);
+			else die; //if debug is turned off (production) and a query fail, just die silently
+		}
+
+		if ($config['debug']) $this->profileQuery($time_started, $q);
+
+		return $affected_rows;
 	}
 
 	function getArray($q)

@@ -28,7 +28,7 @@ class DB_MySQLi extends DB_Base
 		return $this->db_handle->real_escape_string($q);
 	}
 
-	protected function connect()
+	function connect()
 	{
 		global $config;
 
@@ -48,6 +48,11 @@ class DB_MySQLi extends DB_Base
 		$this->client_version = $this->db_handle->client_info;
 
 		if ($config['debug']) $this->profileConnect($time_started);
+
+		/* change character set to utf8 */
+		//this messes things up. php defaults the connection to latin1. but strings are stored in utf8, some unnessecary
+		//conversions seem to occur. need php to not default to latin1 - fixme
+		//if (!$this->db_handle->set_charset('utf8')) echo 'Error loading character set utf8: '.$this->db_handle->error;
 	}
 
 	function query($q)
@@ -58,14 +63,9 @@ class DB_MySQLi extends DB_Base
 
 		$result = $this->db_handle->query($q);
 
-		if ($result) {
-			$this->insert_id = $this->db_handle->insert_id;
-		} else if ($config['debug'] && !$result) {
-			$this->insert_id = 0;
-			$this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-		} else {
-			//if debug is turned off (production) and a query fail, just die silently
-			die;
+		if (!$result) {
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			else die;	//if debug is turned off (production) and a query fail, just die silently
 		}
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
@@ -85,11 +85,9 @@ class DB_MySQLi extends DB_Base
 
 		if ($result) {
 			$ret_id = $this->db_handle->insert_id;
-		} else if ($config['debug'] && !$result) {
-			$this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 		} else {
-			//if debug is turned off (production) and a query fail, just die silently
-			die;
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
@@ -106,14 +104,12 @@ class DB_MySQLi extends DB_Base
 		$result = $this->db_handle->query($q);
 
 		$affected_rows = false;
-		if ($result) $affected_rows = $this->db_handle->affected_rows;
 
-		if ($config['debug'] && !$result) {
-			$this->insert_id = 0;
-			$this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-		} else if (!$result) {
-			//if debug is turned off (production) and a query fail, just die silently
-			die;
+		if ($result) {
+			$affected_rows = $this->db_handle->affected_rows;
+		} else {
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);

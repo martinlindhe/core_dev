@@ -17,9 +17,6 @@ abstract class DB_Base
 	/* PUBLIC INTERFACE EXPOSED BY ALL DB MODULES				*/
 	/****************************************************/
 
-	/* Holds the ID of last successful INSERT */
-	public $insert_id = 0;
-
 	/* Holds a string indicating what "dialect" of sql is currently allowed by the db driver, possible values: mysql */
 	public $dialect = '';
 
@@ -66,7 +63,7 @@ abstract class DB_Base
 	/****************************************************/
 
 	/* Creates a database connection */
-	abstract protected function connect();
+	abstract function connect();
 	
 	/* Shows driver-specific settings + status */
 	abstract function showDriverStatus();
