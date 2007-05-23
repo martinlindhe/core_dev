@@ -18,7 +18,7 @@
 	if (!empty($_GET)) $get = $db->escape(serialize($_GET));
 	if (!empty($_POST)) $get = $db->escape(serialize($_POST));
 
-	$q = 'INSERT INTO tblIncomingSMS SET get="'.$get.'",post="'.$post.'",timeReceived=NOW()';
+	$q = 'INSERT INTO tblIncomingSMS SET get="'.$get.'",post="'.$post.'",IP='.$session->ip.',timeReceived=NOW()';
 	$db->insert($q);
 
 	//Acknowledgment - Tell IPX that the SMS received

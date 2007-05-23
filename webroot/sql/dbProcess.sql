@@ -1,5 +1,5 @@
 /*
-SQLyog Community Edition- MySQL GUI v5.30
+SQLyog Community Edition- MySQL GUI v5.31
 Host - 5.1.16-beta-community-nt : Database - dbProcess
 *********************************************************************
 Server version : 5.1.16-beta-community-nt
@@ -16,6 +16,17 @@ USE `dbProcess`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+/*Table structure for table `tblIncomingSMS` */
+
+DROP TABLE IF EXISTS `tblIncomingSMS`;
+
+CREATE TABLE `tblIncomingSMS` (
+  `get` text,
+  `post` text,
+  `timeReceived` datetime DEFAULT NULL,
+  `IP` int(10) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*Table structure for table `tblLogins` */
 
 DROP TABLE IF EXISTS `tblLogins`;
@@ -27,7 +38,7 @@ CREATE TABLE `tblLogins` (
   `IP` int(10) unsigned NOT NULL,
   `userAgent` text,
   PRIMARY KEY (`mainId`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tblLogs` */
 
@@ -41,7 +52,7 @@ CREATE TABLE `tblLogs` (
   `userId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `userIP` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `tblOrders` */
 
@@ -55,6 +66,32 @@ CREATE TABLE `tblOrders` (
   `orderParams` text,
   `orderCompleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`entryId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `tblSendResponses` */
+
+DROP TABLE IF EXISTS `tblSendResponses`;
+
+CREATE TABLE `tblSendResponses` (
+  `correlationId` bigint(20) unsigned NOT NULL,
+  `messageId` varchar(22) DEFAULT NULL,
+  `responseCode` int(10) unsigned NOT NULL DEFAULT '0',
+  `responseMessage` text,
+  `temporaryError` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `timeCreated` datetime DEFAULT NULL,
+  `params` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `tblSentSMS` */
+
+DROP TABLE IF EXISTS `tblSentSMS`;
+
+CREATE TABLE `tblSentSMS` (
+  `correlationId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `dest` varchar(20) DEFAULT NULL,
+  `msg` text,
+  `timeSent` datetime DEFAULT NULL,
+  PRIMARY KEY (`correlationId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tblUsers` */
@@ -71,7 +108,7 @@ CREATE TABLE `tblUsers` (
   `timeLastActive` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `timeLastLogout` datetime DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`userId`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
