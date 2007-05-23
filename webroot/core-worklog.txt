@@ -1,13 +1,14 @@
 ----[[platform todo]]----
 	core/gör snart:
 
-		- Idag finns en FAQ-modul. Den fungerar såhär:
-				Admin lägger in några standard Frågor & Svar.
-				Dessa listas för användaren. Om användaren ej hittar svar på sin fråga så kan han skicka in en fråga till admin.
-				Denna fråga visas sedan i adminpanelen, där admin kan besvara frågan. Admin kan även välja att publicera svaret från
-				denna fråga till FAQ-listan, så att svaret kan ses av alla.
+		- Feedback-modul:
+				Om användaren ej hittar svar på sin fråga i FAQ:n så kan han skicka in en fråga till admin.
+				Denna fråga visas sedan i adminpanelen, där admin kan besvara frågan.
+				Admin kan även välja att publicera svaret från denna fråga till FAQ-listan, så att svaret kan ses av alla.
+
 		- kunna skicka privata meddelanden (BLIZED)
 
+	frågetecken:
 		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra personer ska se hans sida, stämmer det?"
 		- "Ert önskemål: "Groups - diskussionsgrupper""
 				Menar ni ett forum? Eller ska det vara en användargrupp, som har en gemensam yta där gruppen diskuterar?
@@ -15,7 +16,9 @@
 		- "Detta med att "tjäna poäng" får vi diskutera närmare."
 
 
-delete news rating när news deletas
+	FAQ-modul:
+		- kunna attacha bilder till ett FAQ-svar
+		- kunna kommentera ett FAQ-svar
 
 
 	session/userdata settings:
@@ -126,6 +129,7 @@ X = hi prio task
 	- db: uppdaterat alla INSERT-queries att använda $db->insert() istället för $db->query()
 				och ändrat en del return-codes från true till insert_id
 	- admin: visar vilka användare som e associerade med ett IP på admin_ip.php
+	- faq-modul skapad, med admin-gränssnitt
 
 
 2007.05.22:

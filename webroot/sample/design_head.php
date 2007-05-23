@@ -14,6 +14,7 @@
 	$menu = array(
 			'index.php' => 'Home',
 			'news.php' => 'News',
+			'faq.php' => 'FAQ',
 			'users.php' => 'Users');
 	createMenu($menu);
 	
