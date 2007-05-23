@@ -20,14 +20,6 @@ img { border: 0; }
 	color: #777;
 	padding-right: 40px;
 }
-#left-bg {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	background-color: #F1F1C9;
-	width: 200px;
-	height: 100%;
-}
 #left-sep {
 	position: absolute;
 	left: 200px;

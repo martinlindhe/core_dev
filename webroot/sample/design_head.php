@@ -1,5 +1,4 @@
 <?createXHTMLHeader();?>
-<div id="left-bg"></div>
 <div id="header">
 	<div id="header-logo">
 		<img src="<?=$session->web_root?>gfx/logo.png" alt="Filterset Database"/>

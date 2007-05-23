@@ -1,6 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-
 		- Feedback-modul:
 				Om användaren ej hittar svar på sin fråga i FAQ:n så kan han skicka in en fråga till admin.
 				Denna fråga visas sedan i adminpanelen, där admin kan besvara frågan. (genom modereringskön)

@@ -1,5 +1,4 @@
 <?createXHTMLHeader()?>
-<div id="left-bg"></div>
 <div id="left-sep"></div>
 <div id="header">
 	<div id="header-logo">

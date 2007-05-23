@@ -191,7 +191,7 @@ class Files
 			$file_lastname = $this->getFileLastname($row['fileName']);
 			if (!$file_lastname) continue;
 
-			$title = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
+			$title = htmlspecialchars($row['fileName']).' ('.formatDataSize($row['fileSize']).')';
 			if (in_array($file_lastname, $this->image_types)) {
 				//show thumbnail of image
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].');"><center>';
@@ -199,11 +199,11 @@ class Files
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->audio_types)) {
 				//show icon for audio files.
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.$row['fileName'].'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
 				echo '<img src="/gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->video_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.$row['fileName'].'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
 				echo '<img src="/gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $this->document_types)) {

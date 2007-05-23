@@ -398,20 +398,18 @@ select {
 
 .faq_holder {
 	border: 1px #888 solid;
+	background-color: #fff;
 	max-width: 600px;
 }
-
+.faq_holder:hover {
+	background-color: #eee;
+}
 .faq_q {
 	font-size: 20px;
 	font-weight: bold;
 	padding: 10px;
 	cursor: pointer;
 }
-
-.faq_q:hover {
-	background-color: #eee;
-}
-
 .faq_a {
 	padding: 10px;
 }

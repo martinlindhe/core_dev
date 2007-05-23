@@ -13,19 +13,12 @@ img { border: 0; }
 /* Design */
 #middle {
 	position: absolute;
-	left: 250px;
-	top: 70px;
+	left: 190px;
+	top: 50px;
 	font-size: 14px;
 	text-align: left;
 	color: #777;
 	padding-right: 40px;
-}
-#left-bg {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 200px;
-	height: 100%;
 }
 
 #footer {
@@ -64,7 +57,7 @@ img { border: 0; }
 /* left menu */
 #leftmenu {
 	position: absolute;
-	left: 20px;
+	left: 14px;
 	top: 40px;
 	width: 160px;
 	font-size: 14px;
