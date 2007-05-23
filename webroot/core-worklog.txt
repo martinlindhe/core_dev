@@ -1,6 +1,10 @@
 ----[[platform todo]]----
 	core/gör snart:
-
+		- Make sure that all of your database code (in your php, perl, whatever) issues the "SET NAMES utf8" SQL statement before issuing any further SQL commands. 
+	
+		- visa andra personers info...
+		- "	Idag finns en sök-användare funktion. Den kan även söka på olika användardata,
+			till exempel kön, ålder, "har bild", fritext i presentation, användarnamn osv."
 		- Idag finns en FAQ-modul. Den fungerar såhär:
 				Admin lägger in några standard Frågor & Svar.
 				Dessa listas för användaren. Om användaren ej hittar svar på sin fråga så kan han skicka in en fråga till admin.

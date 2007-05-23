@@ -5,12 +5,56 @@
 	process-server:
 		* ändrat soap-api:t så login & kommando skickas i ett och samma soaprequest
 
+	dataphone:
+		* vart med mika och installerat dammsugar-datorn hos dataphone
+		* konfigurerat & installerat mjukvara på dammsugaren
+
+2007.05.22 Tisdag:
+	dataphone:
+		* flyttat över php-script & databas & konfigurerat dammsugar-datorn
+		* communityt fungerar nu som det ska på dammsugar-datorn, förrutom att bilder saknas
 
 ***************************************************************************************************
-måndag+tisdag, lastbalans:
-	- webload
-	- kunna klara minst 200 användare
-	- skippa mobila gränssnitet. testa bara webbgränssnittet
+måndag+tisdag: flytt till dammsugaren & lastbalans:
+	[x] 1. installera apache,php,mysql på dammsugaren
+				# sudo apt-get install apache2 php5 mysql-server
+	[x] 2. gör backup på senaste versionen av all kod & databas från dev-burken
+				# ./www-backup.sh
+				# mysqldump platform --user=root --password dev3l0p3r > out.sql && 7z a db.7z out.sql
+	[x] 3. lagt upp backupen på ftp.inconet.se (2007.05.21)
+	[x] 4. konfigurera mysql,php,apache,mod_rewrite
+
+				Apache:
+				config: /etc/apache2/apache2.conf
+				config: /etc/apache2/sites-enabled/000-default
+				/home/martin/www = webroot
+
+				/home/martin/www/.htaccess innehåller url rewrite rules
+				
+				MySQL:
+				# mysql -u root --password
+				mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('dravelsql');
+				mysql> CREATE DATABASE platform;
+
+  			mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
+  							ON platform.*
+  							TO 'webaccount'@'localhost'
+  							IDENTIFIED BY 'df43534gbhDFAJpt455';
+
+				config: /etc/mysql/my.cnf
+
+	[x] 5. installera php-script & importera databas
+				# cd /home/martin/www
+				# 7z x www-dump.7z
+
+				# mysql -u root --password -p platform --default-character-set=utf8 < out.sql
+
+	[x] 6. konfigurera cron-jobb
+	[x] 7. testa att allt funkar
+	[ ] 8. webload:
+					- mrtg installerat: http://cs.icn.se/_mrtg/
+					- kunna klara minst 200 användare
+					- skippa mobila gränssnitet. testa bara webbgränssnittet
 
 torsdag+fredag implementation:
 	* #1: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
@@ -27,6 +71,7 @@ blandat:
 		- FRANS: länk till vän med bild funkar ej för alla
 
 	* process server:
+		- ip-restrictions för varje klient
 		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
 
 EFETER TEST:
