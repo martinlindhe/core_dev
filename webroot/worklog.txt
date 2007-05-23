@@ -22,7 +22,11 @@
 		* planerat programflöde och features
 		* påbörjat implementation
 		* stödjer SSL-anslutning till IPX
-
+		* stödjer IPX-max "read timeout" på 10 minuter
+		
+		
+		http://cs.icn.se/_process/ipx_incoming.php
+		prefix "POG" var ledig
 
 ***************************************************************************************************
 måndag+tisdag: flytt till dammsugaren & lastbalans:

@@ -10,6 +10,9 @@
 	$config['sms']['auth_username'] = 'lwcg';
 	$config['sms']['auth_password'] = '3koA4enpE';
 
+	set_time_limit(600);
+	ini_set('default_socket_timeout', '600');	//10 minute timeout for SOAP requests
+
 	sendSMS('46707308763', 'tjenna åäö test ÅÄÖ lalalaa');
 	
 	function sendSMS($dest_number, $msg)
