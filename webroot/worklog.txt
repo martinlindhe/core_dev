@@ -14,6 +14,13 @@
 		* flyttat över php-script & databas & konfigurerat dammsugar-datorn
 		* communityt fungerar nu som det ska på dammsugar-datorn, förrutom att bilder saknas
 
+2007.05.23 Onsdag:
+	sms debitering:
+		* planerat programflöde och features
+		
+	mobila gränssnittet:
+		* visar "ANVÄNDAREN BORTTAGEN" om användare ej finns
+
 ***************************************************************************************************
 måndag+tisdag: flytt till dammsugaren & lastbalans:
 	[x] 1. installera apache,php,mysql på dammsugaren
@@ -92,5 +99,8 @@ senare, låg prio:
 ***********************************************************************************************************************************
 
 testkonton:
-	tresexti.se: paradox,martin    samt   martin666,test1	
-	citysurf.tv: webmaster_Zeratul, jerry (admin)
+	tresexti.se:	paradox,martin    	samt   martin666,test1	
+	citysurf.tv:	webmaster_Zeratul, jerry (admin)
+	
+	ipx.com:			lwcg, 3koA4enpE			http://europe.ipx.com/api/services/SmsApi50?wsdl
+	
