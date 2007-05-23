@@ -65,5 +65,14 @@
 			'user_visits.php' => 'Visitors'
 		);
 	}
+
+	$user_menu = array(
+		'users.php' => 'Users:Overview',
+		'blogs.php' => 'Blogs',
+		'search_users.php' => 'Search users',
+		'last_logged_in.php' => 'Last logged in',
+		'users_online.php' => 'Users online'
+	);
+
 	$session->handleSessionActions();
 ?>

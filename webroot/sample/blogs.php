@@ -3,6 +3,8 @@
 
 	require('design_head.php');
 
+	createMenu($user_menu, 'blog_menu');
+
 	$menu = array($_SERVER['PHP_SELF'] => 'Blogs');
 
 	if ($session->id) {

@@ -3,13 +3,7 @@
 
 	require('design_head.php');
 
-	$menu = array(
-			'blogs.php' => 'Blogs',
-			'search_users.php' => 'Search users',	//todo: implement
-			'last_logged_in.php' => 'Last logged in',	//todo: implement
-			'users_online.php' => 'Users online'	//todo: implement
-			);
-	createMenu($menu, 'blog_menu');
+	createMenu($user_menu, 'blog_menu');
 	
 	require('design_foot.php');
 ?>

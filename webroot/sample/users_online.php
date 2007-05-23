@@ -3,7 +3,9 @@
 
 	require('design_head.php');
 
-	echo 'Users online (was active in the last '.$session->online_timeout.' time)<br/><br/>';
+	createMenu($user_menu, 'blog_menu');
+
+	echo 'Users online (was active in the last '.shortTimePeriod($session->online_timeout).')<br/><br/>';
 
 	$list = getUsersOnline();
 	foreach ($list as $row) {

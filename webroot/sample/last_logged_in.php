@@ -3,6 +3,8 @@
 
 	require('design_head.php');
 
+	createMenu($user_menu, 'blog_menu');
+
 	echo 'Here is the 50 last users logged in<br/><br/>';
 
 	$list = getUsersLastLoggedIn(50);
