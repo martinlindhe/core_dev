@@ -6,7 +6,7 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
-	echo 'Admin feedback<br/><br/>';
+	echo 'Admin feedback - showing oldest items first<br/><br/>';
 	
 	if (!empty($_GET['delete'])) deleteFeedback($_GET['delete']);
 

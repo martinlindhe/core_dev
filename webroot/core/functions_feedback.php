@@ -16,6 +16,14 @@
 		return $db->getArray($q);
 	}
 
+	function getFeedbackCnt()
+	{
+		global $db;
+		
+		$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
+		return $db->getOneItem($q);
+	}
+
 	function deleteFeedback($_id)
 	{
 		global $db, $session;

@@ -11,7 +11,7 @@
 	Admin overview<br/><br/>
 	
 	Moderation queue: <a href="admin_moderationqueue.php?pr=sample"><?=getModerationQueueCount()?> items</a><br/>
-	Feedback questions: XXX<br/>
+	Feedback questions: <?=getFeedbackCnt()?><br/>
 	<br/>
 	Registered users: <?=getUsersCnt()?><br/>
 	Users logged in: <a href="/sample/users_online.php"><?=getUsersOnlineCnt()?></a><br/>
