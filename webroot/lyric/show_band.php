@@ -9,7 +9,7 @@
 	$band_name = getBandName($band_id);
 
 	echo '<table summary="" width="600" cellpadding="3" cellspacing="0" border="1"><tr>';
-	echo '<td class="title">'.$band_name.'</td>';
+	echo '<td class="title">'.htmlspecialchars($band_name).'</td>';
 	if ($session->id) echo '<td width="50"><a href="edit_band.php?id='.$band_id.'">Edit</a></td></tr>';
 	echo '</table>';
 	echo '<br/>';

@@ -111,8 +111,11 @@
 --------------[[projekt todo]]--------------
 	adblock:
 		- konvertera "report site" funktionen till att använda functions_feedback.php
+		- använd en sån där <link> tag för sökmotor som youtube använder, så "add search" dyker upp under search-engine dropdownen i firefox
+			* ta bort sökmotor-länk grejen från wikin
 
 	lyrics:
+		- använda faq-modulens javascript på show_record_lyrics.php för bättre översikt
 		- åter-inserta de texter som pajats pga latin1->utf8 konverteringen
 		- edit_record.php: kunna editera recordInfo
 		- lista låtar som inte finns på nån skiva (admin)
@@ -125,6 +128,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.24:
+	- lyric: lite cleanups
+
+
 2007.05.23:
 	- db: $db->insert($q) skapad, returnerar insert_id från INSERT-queryn
 	- db: tagit bort $db->insert_id variabeln, använd $db->insert() istället

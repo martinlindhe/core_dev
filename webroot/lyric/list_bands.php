@@ -8,7 +8,7 @@
 	foreach ($list as $band)
 	{
 		echo '<tr><td class="title">';
-		echo '<a href="show_band.php?id='.$band['bandId'].'">'.$band['bandName'].' ('.$band['cnt'].' records)</a>';
+		echo '<a href="show_band.php?id='.$band['bandId'].'">'.htmlspecialchars($band['bandName']).' ('.$band['cnt'].' records)</a>';
 		echo '</td></tr>';
 	}
 	echo '</table>';

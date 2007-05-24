@@ -14,13 +14,13 @@
 
 	$record_name = getRecordName($record_id);
 
-	$title = 'inthc.net: "'.$band_name.' - '.$record_name.'" album overview';
+	$title = 'inthc.net: "'.htmlspecialchars($band_name).' - '.htmlspecialchars($record_name).'" album overview';
 	require('design_head.php');
 
 	echo '<table cellpadding="3" cellspacing="0" border="1">';
 	echo '<tr><td colspan="3" class="title">';
 	if ($band_id) {
-		echo '<a href="show_band.php?id='.$band_id.'">'.$band_name.'</a>';
+		echo '<a href="show_band.php?id='.$band_id.'">'.htmlspecialchars($band_name).'</a>';
 	} else {
 		echo $band_name;
 	}

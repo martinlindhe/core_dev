@@ -16,7 +16,7 @@
 	$lyric_name = $lyric_data['lyricName'];
 	$band_name = $lyric_data['bandName'];
 
-	$title = $band_name.' - "'.$lyric_name.'" lyric';
+	$title = htmlspecialchars($band_name).' - "'.htmlspecialchars($lyric_name).'" lyric';
 	require('design_head.php');
 
 	echo '<table summary="" cellpadding="3" cellspacing="0" border="1" width="100%">';
@@ -27,7 +27,7 @@
 		$lyric_name = str_ireplace($highlight, '<font color="yellow">'.$highlight.'</font>', $lyric_name);
 	}
 
-	echo '<b><a href="show_band.php?id='.$lyric_data['bandId'].'">'.$band_name.'</a>';
+	echo '<b><a href="show_band.php?id='.$lyric_data['bandId'].'">'.htmlspecialchars($band_name).'</a>';
 
 	echo ' - '.$lyric_name.'</b></td>';
 	if ($session->id) echo '<td width="30" align="right"><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td></tr>';
@@ -50,11 +50,11 @@
 			if (!$record_name) $record_name = 's/t';
 
 			if ($author_name) {
-				echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$author_name.'</a>';
+				echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.htmlspecialchars($author_name).'</a>';
 			} else {
 				echo 'Compilation';
 			}
-			echo ' - <a href="show_record.php?id='.$list[$i]['recordId'].'">'.$record_name.'</a>, track #'.$list[$i]['trackNumber'].'<br/>';
+			echo ' - <a href="show_record.php?id='.$list[$i]['recordId'].'">'.htmlspecialchars($record_name).'</a>, track #'.$list[$i]['trackNumber'].'<br/>';
 		}
 		echo '<br/>';
 	}

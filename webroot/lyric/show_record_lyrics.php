@@ -12,7 +12,7 @@
 	if ($band_id == 0) {
 		echo '<b>V/A - '.getRecordName($record_id).'</b>';
 	} else {
-		echo '<b><a href="show_band.php?id='.$band_id.'">'.getBandName($band_id).'</a>';
+		echo '<b><a href="show_band.php?id='.$band_id.'">'.htmlspecialchars(getBandName($band_id)).'</a>';
 		echo ' - '.getRecordName($record_id).'</b>';
 	}
 	echo '<br/><br/>';
@@ -20,45 +20,40 @@
 	$list = getRecordTracks($record_id);
 
 	/* First list track titles */
-	for ($i=0; $i<count($list); $i++)
+	foreach ($list as $row)
 	{
-		$track = $list[$i]['trackNumber'];
-		$lyric_id = $list[$i]['lyricId'];
-
 		if ($band_id == 0) {
-			echo '<b>'.$track.'. '.$list[$i]['bandName'] .' - '.$list[$i]['lyricName'].'</b>';
+			echo '<b>'.$row['trackNumber'].'. '.htmlspecialchars($row['bandName']) .' - '.htmlspecialchars($row['lyricName']).'</b>';
 		} else {
-			echo '<b><a href="#'.$i.'">'.$track.'. '.stripslashes($list[$i]['lyricName']).'</a></b>';
+			echo '<b><a href="#lyric_'.$row['trackNumber'].'">'.$row['trackNumber'].'. '.stripslashes($row['lyricName']).'</a></b>';
 		}
 
-		if ($list[$i]['authorId'] != $list[$i]['bandId']) {
-			echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
+		if ($row['authorId'] != $row['bandId']) {
+			echo ' (Cover by <a href="show_band.php?id='.$row['authorId'].'">'.getBandName($row['authorId']).'</a>)';
 		}
 		echo '<br/>';
 	}
 	echo '<br/><br/><br/>';
 
 	/* Then list the lyrics */
-	for ($i=0; $i<count($list); $i++)
+	foreach ($list as $row)
 	{
-		echo '<a name="'.$i.'"></a><br/>';
-		$track = $list[$i]['trackNumber'];
-		$lyric_id = $list[$i]['lyricId'];
+		echo '<a name="lyric_'.$row['trackNumber'].'"></a><br/><b>'.$row['trackNumber'].'. ';
 
 		if ($band_id == 0) {
-			echo '<b>'.$track.'. '.$list[$i]['bandName'] .' - '.stripslashes($list[$i]['lyricName']).'</b>';
+			echo $row['bandName'] .' - '.stripslashes($row['lyricName']).'</b>';
 		} else {
-			echo '<b>'.$track.'. '.stripslashes($list[$i]['lyricName']).'</b>';
+			echo stripslashes($row['lyricName']).'</b>';
 		}
 
-		if ($list[$i]['authorId'] != $list[$i]['bandId']) {
-			echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
+		if ($row['authorId'] != $row['bandId']) {
+			echo ' (Cover by <a href="show_band.php?id='.$row['authorId'].'">'.getBandName($row['authorId']).'</a>)';
 		}
-		if ($session->id) echo ' <a href="edit_lyric.php?id='.$lyric_id.'">Edit</a><br/>';
+		echo '<br/>';
+		if ($session->id) echo '<a href="edit_lyric.php?id='.$row['lyricId'].'">Edit</a><br/>';
 
-		$lyric = stripslashes($list[$i]['lyricText']);
-		if ($lyric)
-		{
+		$lyric = stripslashes($row['lyricText']);
+		if ($lyric) {
 			$lyric = str_replace('&amp;', '&', $lyric);
 			$lyric = str_replace('&', '&amp;', $lyric);
 			echo nl2br($lyric);
