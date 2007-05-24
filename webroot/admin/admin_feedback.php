@@ -6,6 +6,41 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
+	if (!empty($_GET['reply']) && is_numeric($_GET['reply'])) {
+		
+		$msg = getFeedbackItem($_GET['reply']);
+
+		if (!empty($_POST['msg'])) {
+			//Send response to user as a private message
+			sendMessage($msg['userId'], $_POST['msg']);
+			echo 'The response has been sent!<br/>';
+
+			if (!empty($_POST['fb_del'])) {
+				echo 'Feedback entry deleted.<br/>';
+				deleteFeedback($_GET['reply']);
+			}
+
+			require($project.'design_foot.php');
+			die;
+		}
+		
+		echo 'Reply to message:<br/>';
+
+		$text = "In response to:\n".
+						'"'.$msg['text']."\"\n".
+						"\n\n\n----------------------\n- Best regards\n- Administrator ".$session->username;
+
+		echo '<form method="post" action="">';
+		echo '<textarea name="msg" rows="8" cols="40">'.$text.'</textarea><br/>';
+		echo '<input type="checkbox" name="fb_del" id="fb_del" value="1" checked="checked"/>';
+		echo '<label for="fb_del">Delete from feedback queue</label><br/>';
+		echo '<input type="submit" class="button" value="Send response"/>';
+		echo '</form>';
+		require($project.'design_foot.php');
+		die;
+	}
+
+
 	echo 'Admin feedback - showing oldest items first<br/><br/>';
 	
 	if (!empty($_GET['delete'])) deleteFeedback($_GET['delete']);
@@ -15,7 +50,8 @@
 		echo 'From ',nameLink($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
 		echo $row['text'].'<br/>';
 		
-		echo '<a href="?delete='.$row['feedbackId'].getProjectPath().'">Delete</a>';
+		echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">Reply</a><br/>';
+		echo '<a href="?delete='.$row['feedbackId'].getProjectPath().'">Delete</a><br/>';
 		echo '<hr/>';
 	}
 	

@@ -15,8 +15,8 @@
 
 
 	feedback-modul:
-		- admin ska kunna besvara frågan (som ett privat meddelande) - kräver privat-meddelande modul
 		- admin ska kunna publicera svaret som en FAQ - kräver föregående punkt
+		- kunna ha flera typer av feedback
 
 
 	session/userdata settings:
@@ -130,6 +130,9 @@ X = hi prio task
 	- lyric: åter-insertade de texter som pajats pga latin1->utf8 konverteringen
 	- lyric: använder faq-modulens javascript på show_record_lyrics.php för bättre översikt
 	- messages: ny modul, kan nu skicka privata meddelanden, saknar design
+	- feedback: admin kan besvara frågan (som ett privat meddelande)
+
+
 
 2007.05.23:
 	- db: $db->insert($q) skapad, returnerar insert_id från INSERT-queryn

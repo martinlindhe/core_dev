@@ -27,4 +27,18 @@
 		return $db->getArray($q);
 	}
 
+	/*
+	//används inte-än. kanske nåt behöver detta...
+	function getMessage($_id)
+	{
+		global $db, $session;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT * FROM tblMessages WHERE msgId='.$_id;
+		$result = $db->getOneRow($q);
+
+		if ($result['ownerId'] != $session->id) die('MSG STEALer!');
+		return $result;
+	}*/
+
 ?>

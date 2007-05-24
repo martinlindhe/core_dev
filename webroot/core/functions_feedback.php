@@ -33,4 +33,14 @@
 		$q = 'DELETE FROM tblFeedback WHERE feedbackId='.$_id;
 		return $db->delete($q);
 	}
+
+	function getFeedbackItem($_id)
+	{
+		global $db, $session;
+
+		if (!$session->isAdmin || !is_numeric($_id)) return false;
+
+		$q = 'SELECT * FROM tblFeedback WHERE feedbackId='.$_id;
+		return $db->getOneRow($q);
+	}
 ?>

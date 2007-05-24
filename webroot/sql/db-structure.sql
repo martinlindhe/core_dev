@@ -517,13 +517,15 @@ CREATE TABLE tblLogs (
 ) ENGINE=MyISAM AUTO_INCREMENT=140 DEFAULT CHARSET=latin1;
 CREATE TABLE tblMessages (
   msgId bigint(20) unsigned NOT NULL auto_increment,
-  senderId int(10) unsigned NOT NULL default '0',
   ownerId int(10) unsigned NOT NULL default '0',
+  fromId int(10) unsigned NOT NULL default '0',
+  toId int(10) unsigned NOT NULL,
   body text,
   timeCreated datetime default NULL,
   timeRead datetime default NULL,
+  groupId int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (msgId)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 CREATE TABLE tblModerationQueue (
   queueId bigint(20) unsigned NOT NULL auto_increment,
   queueType tinyint(3) unsigned NOT NULL default '0',
@@ -622,7 +624,7 @@ CREATE TABLE tblVisits (
   creatorId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   PRIMARY KEY  (visitId)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 CREATE TABLE tblWiki (
   wikiId bigint(20) unsigned NOT NULL auto_increment,
   wikiName varchar(30) default NULL,
