@@ -33,7 +33,7 @@
 	if ($session->id) echo '<td width="30" align="right"><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td></tr>';
 	echo '<tr><td colspan="2">';
 
-	echo nl2br($lyric);
+	echo nl2br(htmlspecialchars($lyric));
 	echo '</td></tr>';
 	echo '</table>';
 	echo '<br/>';

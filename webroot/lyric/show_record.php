@@ -14,7 +14,7 @@
 
 	$record_name = getRecordName($record_id);
 
-	$title = 'inthc.net: "'.htmlspecialchars($band_name).' - '.htmlspecialchars($record_name).'" album overview';
+	$title = '"'.htmlspecialchars($band_name).' - '.htmlspecialchars($record_name).'" album overview';
 	require('design_head.php');
 
 	echo '<table cellpadding="3" cellspacing="0" border="1">';
@@ -28,33 +28,33 @@
 	if ($session->id) echo '<td align="right"><a href="edit_record.php?id='.$record_id.'">Edit</a></td></tr>';
 
 	$list = getRecordTracks($record_id);
-	for ($i=0; $i<count($list); $i++)
+	foreach ($list as $row)
 	{
-		$track = $list[$i]['trackNumber'];
-		$lyric_id = $list[$i]['lyricId'];
+		$track = $row['trackNumber'];
+		$lyric_id = $row['lyricId'];
 
 		echo '<tr>';
 		echo '<td width="25" align="right">'.$track.'</td>';
 
 		if ($lyric_id)
 		{
-			echo '<td class="subtitle">';
+			echo '<td>';
 			if ($band_id == 0) {
 				/* Show the band name of current track if it's a split/compilation */
-				echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
+				echo '<a href="show_band.php?id='.$row['bandId'].'">'.$row['bandName'].'</a> - ';
 			}
 
-			echo '<a href="show_lyric.php?id='.$lyric_id.'">'.stripslashes($list[$i]['lyricName']).'</a>';
+			echo '<a href="show_lyric.php?id='.$lyric_id.'">'.htmlspecialchars(stripslashes($row['lyricName'])).'</a>';
 
-			if ($list[$i]['authorId'] != $list[$i]['bandId'])
+			if ($row['authorId'] != $row['bandId'])
 			{
-				echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
+				echo ' (Cover by <a href="show_band.php?id='.$row['authorId'].'">'.getBandName($row['authorId']).'</a>)';
 			}
 
-			if (!$list[$i]['lyricText'])
+			if (!$row['lyricText'])
 			{
 				echo ' (Missing)';
-			} else if (strstr($list[$i]['lyricText'], '???')) {
+			} else if (strstr($row['lyricText'], '???')) {
 				echo ' (Incomplete)';
 			}
 			echo '</td>';

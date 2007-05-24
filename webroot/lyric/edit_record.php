@@ -30,7 +30,7 @@
 
 	echo '<form name="editrecord" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$record_id.'">';
 
-	echo '<b>'.$band_name.' - </b><input type="text" name="title" size="50" value="'.$record_name.'"/><br/>';
+	echo '<a href="show_band.php?id='.$band_id.'">'.htmlspecialchars($band_name).' - </a><input type="text" name="title" size="50" value="'.$record_name.'"/><br/>';
 
 	echo 'Change band: <select name="band">';
 	$list = getBands();
@@ -38,14 +38,12 @@
 	{
 		echo '<option value="'.$list[$i]['bandId'].'"';
 		if ($band_id == $list[$i]['bandId']) echo ' selected="selected"';
-		echo '>'.$list[$i]['bandName'].'</option>';
+		echo '>'.htmlspecialchars($list[$i]['bandName']).'</option>';
 	}
 	echo '</select><br/>';
 
-	echo '<input type="submit" value="Update changes" class="button"/>';
+	echo '<input type="submit" class="button" value="Update changes"/>';
 	echo '</form>';
-
-	echo '<a href="show_band.php?id='.$band_id.'">Back to '.$band_name.' page</a>';
 
 	require('design_foot.php');
 ?>

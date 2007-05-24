@@ -227,4 +227,27 @@
 			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="/core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 		}
 	}
+
+
+	//used by lyrics project only - maybe remove?
+	function cleanupText($text)
+	{
+		global $db;
+
+		$text = trim($text);
+
+		do { /* Remove chunks of whitespace */
+			$temp = $text;
+			$text = str_replace('  ', ' ', $text);
+		} while ($text != $temp);
+		
+		$text = str_replace('\n', "\n", $text);	//ersätter strängen '\n' mot en linefeed
+		$text = str_replace('\r', "\r", $text);	//ersätter strängen '\r' mot en carriage return
+
+		$text = str_replace("\r\n", "\n", $text);
+		$text = str_replace(" \n", "\n", $text);
+		$text = str_replace("\n ", "\n", $text);
+
+		return $text;
+	}
 ?>

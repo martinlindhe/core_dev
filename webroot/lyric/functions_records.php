@@ -1,24 +1,6 @@
 <?
 	/* functions_records.php */
 
-	function cleanupText($text)
-	{
-		global $db;
-
-		$text = trim($text);
-
-		do { /* Remove chunks of whitespace */
-			$temp = $text;
-			$text = str_replace('  ', ' ', $text);
-		} while ($text != $temp);
-
-		$text = str_replace("\r\n", "\n", $text);
-		$text = str_replace(" \n", "\n", $text);
-		$text = str_replace("\n ", "\n", $text);
-
-		return $text;
-	}
-
 	function addRecord($band_id, $record_name, $record_info)
 	{
 		global $db, $session;

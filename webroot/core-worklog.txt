@@ -116,7 +116,7 @@
 
 	lyrics:
 		- använda faq-modulens javascript på show_record_lyrics.php för bättre översikt
-		- åter-inserta de texter som pajats pga latin1->utf8 konverteringen
+		- sök på ",   och kolla. även sök på "font", nåra texter har <font> taggar i sig, går ej att se i edit lyric...
 		- edit_record.php: kunna editera recordInfo
 		- lista låtar som inte finns på nån skiva (admin)
 		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
@@ -129,8 +129,8 @@ X = hi prio task
 
 --------------[[changelog]]--------------
 2007.05.24:
-	- lyric: lite cleanups
-
+	- lyric: lite cleanups, inklusive formatering av visad data
+	- åter-insertade de texter som pajats pga latin1->utf8 konverteringen
 
 2007.05.23:
 	- db: $db->insert($q) skapad, returnerar insert_id från INSERT-queryn

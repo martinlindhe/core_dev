@@ -40,7 +40,7 @@
 		$record_name = $db->escape($row['recordName']);
 		if (!$record_name) $record_name = 's/t';
 
-		echo '<a href="show_record.php?id='.$row['recordId'].'">'.$record_name.'</a> ('.$row['cnt'].' tracks)<br/>';
+		echo '<a href="show_record.php?id='.$row['recordId'].'">'.htmlspecialchars($record_name).'</a> ('.$row['cnt'].' tracks)<br/>';
 	}
 	if (!count($list)) echo 'None<br/>';
 	echo '<br/>';
@@ -50,7 +50,7 @@
 		echo 'This band covers the following songs:<br/>';
 
 		for ($i=0; $i<count($list); $i++) {
-			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
+			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.htmlspecialchars($list[$i]['bandName']).'</a> - ';
 			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'">'.stripslashes($list[$i]['lyricName']).'</a>';
 			echo ' (On <a href="show_record.php?id='.$list[$i]['recordId'].'">'.stripslashes($list[$i]['recordName']).'</a>, track #'.$list[$i]['trackNumber'].')<br/>';
 		}
@@ -62,9 +62,9 @@
 		echo 'The following songs have been covered by other bands:<br/>';
 
 		for ($i=0; $i<count($list); $i++) {
-			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.$list[$i]['bandName'].'</a> - ';
-			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'">'.$list[$i]['lyricName'].'</a>';
-			echo ' (On <a href="show_record.php?id='.$list[$i]['recordId'].'">'.$list[$i]['recordName'].'</a>, track #'.$list[$i]['trackNumber'].')<br/>';
+			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.htmlspecialchars($list[$i]['bandName']).'</a> - ';
+			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'">'.htmlspecialchars($list[$i]['lyricName']).'</a>';
+			echo ' (On <a href="show_record.php?id='.$list[$i]['recordId'].'">'.htmlspecialchars($list[$i]['recordName']).'</a>, track #'.$list[$i]['trackNumber'].')<br/>';
 		}
 		echo '<br/>';
 	}

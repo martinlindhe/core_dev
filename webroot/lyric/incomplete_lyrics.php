@@ -11,8 +11,8 @@
 	{
 		$query = '+"'.$list[$i]['bandName'].'" +"'.$list[$i]['lyricName'].'" +lyric';
 
-		echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.stripslashes($list[$i]['bandName']).'</a> - ';
-		echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'">'.stripslashes($list[$i]['lyricName']).'</a> ';
+		echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.htmlspecialchars(stripslashes($list[$i]['bandName'])).'</a> - ';
+		echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'">'.htmlspecialchars(stripslashes($list[$i]['lyricName'])).'</a> ';
 		echo '(<a href="http://www.google.com/search?q='.urlencode($query).'" target="_blank">google</a>)<br/>';
 	}
 	echo '<br/>';

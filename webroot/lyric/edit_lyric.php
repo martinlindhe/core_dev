@@ -36,9 +36,6 @@
 	echo '<input type="submit" value="Save changes" class="button"/>';
 	echo '</form><br/>';
 
-	echo '<a href="show_lyric.php?id='.$lyric_id.'">Back to "View lyric" view</a><br/>';
-
-	echo '<br/><br/>';
 	echo 'This song appears on the following records:<br/>';
 
 	$list = getLyricRecords($lyric_id);
