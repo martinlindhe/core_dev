@@ -1,6 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- kunna skicka privata meddelanden (BLIZED)
 
 	frågetecken:
 		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra personer ska se hans sida, stämmer det?"
@@ -130,7 +129,7 @@ X = hi prio task
 	- lyric: lite cleanups, inklusive formatering av visad data
 	- lyric: åter-insertade de texter som pajats pga latin1->utf8 konverteringen
 	- lyric: använder faq-modulens javascript på show_record_lyrics.php för bättre översikt
-
+	- messages: ny modul, kan nu skicka privata meddelanden, saknar design
 
 2007.05.23:
 	- db: $db->insert($q) skapad, returnerar insert_id från INSERT-queryn

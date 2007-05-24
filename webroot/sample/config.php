@@ -16,6 +16,7 @@
 	require_once('functions_blogs.php');
 	require_once('functions_guestbook.php');
 	require_once('functions_contacts.php');
+	require_once('functions_messages.php');
 	restore_include_path();
 
 	$config['debug'] = true;
@@ -53,12 +54,14 @@
 			'files.php'.$param => 'Files',
 			'user_blogs.php'.$param => 'Blogs',
 			'guestbook.php'.$param => 'Guestbook',
+			'messages.php'.$param => 'Message',
 			'friends.php'.$param => 'Friends'
 		);
 	} else {
 		$profile_menu = array(
 			'user.php' => 'Overview:'.$username,
 			'files.php' => 'Files',
+			'messages.php' => 'Messages',
 			'user_blogs.php' => 'Blogs',
 			'guestbook.php' => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
 			'friends.php' => 'Friends',
