@@ -15,7 +15,7 @@
 
 
 	feedback-modul:
-		- admin ska kunna publicera svaret som en FAQ - kräver föregående punkt
+		- admin ska kunna publicera svaret som en FAQ. kryssruta vid svar - leder till skapa faq-med förifylld text
 		- kunna ha flera typer av feedback
 
 
