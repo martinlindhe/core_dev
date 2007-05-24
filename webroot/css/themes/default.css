@@ -400,6 +400,7 @@ select {
 	border: 1px #888 solid;
 	background-color: #fff;
 	max-width: 600px;
+	color: #444;
 }
 .faq_holder:hover {
 	background-color: #eee;

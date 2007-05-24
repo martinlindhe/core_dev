@@ -8,7 +8,6 @@
 
 	$band_id = getBandIdFromRecordId($record_id);
 
-	echo '<a name="top"></a>';
 	if ($band_id == 0) {
 		echo '<b>V/A - '.getRecordName($record_id).'</b>';
 	} else {
@@ -19,40 +18,27 @@
 
 	$list = getRecordTracks($record_id);
 
-	/* First list track titles */
-	foreach ($list as $row)
-	{
-		if ($band_id == 0) {
-			echo '<b>'.$row['trackNumber'].'. '.htmlspecialchars($row['bandName']) .' - '.htmlspecialchars($row['lyricName']).'</b>';
-		} else {
-			echo '<b><a href="#lyric_'.$row['trackNumber'].'">'.$row['trackNumber'].'. '.stripslashes($row['lyricName']).'</a></b>';
-		}
-
-		if ($row['authorId'] != $row['bandId']) {
-			echo ' (Cover by <a href="show_band.php?id='.$row['authorId'].'">'.getBandName($row['authorId']).'</a>)';
-		}
-		echo '<br/>';
-	}
-	echo '<br/><br/><br/>';
-
 	/* Then list the lyrics */
-	foreach ($list as $row)
-	{
-		echo '<a name="lyric_'.$row['trackNumber'].'"></a><br/><b>'.$row['trackNumber'].'. ';
+	$active = 1;
+	for ($i=0; $i<count($list); $i++) {
+		echo '<div class="faq_holder">';
+		echo '<div class="faq_q" onclick="faq_focus('.$i.')">';
+		echo '<b>'.$list[$i]['trackNumber'].'. ';
 
 		if ($band_id == 0) {
-			echo $row['bandName'] .' - '.stripslashes($row['lyricName']).'</b>';
+			echo $list[$i]['bandName'] .' - '.stripslashes($list[$i]['lyricName']).'</b>';
 		} else {
-			echo stripslashes($row['lyricName']).'</b>';
+			echo stripslashes($list[$i]['lyricName']).'</b>';
 		}
 
-		if ($row['authorId'] != $row['bandId']) {
-			echo ' (Cover by <a href="show_band.php?id='.$row['authorId'].'">'.getBandName($row['authorId']).'</a>)';
+		if ($list[$i]['authorId'] != $list[$i]['bandId']) {
+			echo ' (Cover by <a href="show_band.php?id='.$list[$i]['authorId'].'">'.getBandName($list[$i]['authorId']).'</a>)';
 		}
-		echo '<br/>';
-		if ($session->id) echo '<a href="edit_lyric.php?id='.$row['lyricId'].'">Edit</a><br/>';
+		if ($session->id) echo ' <a href="edit_lyric.php?id='.$list[$i]['lyricId'].'">Edit</a>';
+		echo '</div>';
 
-		$lyric = stripslashes($row['lyricText']);
+		echo '<div class="faq_a" id="faq_'.$i.'" style="'.($list[$i]['trackNumber']!=$active?'display:none':'').'">';
+		$lyric = stripslashes($list[$i]['lyricText']);
 		if ($lyric) {
 			$lyric = str_replace('&amp;', '&', $lyric);
 			$lyric = str_replace('&', '&amp;', $lyric);
@@ -61,9 +47,9 @@
 		} else {
 			echo 'Lyric missing.';
 		}
-		echo '<br/>';
-		echo '<a href="#top">To top</a><br/>';
-		echo '<br/><br/><br/>';
+		echo '</div>';
+	echo '</div>';	//class="faq_holder"
+
 	}
 
 	require('design_foot.php');
