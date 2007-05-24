@@ -71,7 +71,19 @@
 		* ip-restrictions för IPX-incoming script
 
 
+2007.05.24 Torsdag:
+	mobila gränssnittet - från feedbck av bitte:
+		* visar bekräftelse att mail har skickats
+		* ändrat placering av ikonerna på startsidan, logga ut längst ner
+		* visar bara "ändringar sparade" på fakta-redigering
+		* fixat formulär på alla mobil-sidor för mobiler som har buggiga webbläsare
+		
+	webbgränssnittet:
+		* lagt till alla bilder från test-importen
+		* tagit bort "radera" inlägg knappen i forum för vanliga användare
+
 ***************************************************************************************************
+NU: på "brev" ska min egen user-header följa med
 
 torsdag+fredag implementation:
 	* #1: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail

@@ -6,7 +6,9 @@
 	
 	if(!empty($_POST['do'])) {
 		storeFacts();
-		echo 'Uppdaterat!';
+		echo 'Ändringar sparade!<br/>';
+		require('design_foot.php');
+		die;
 	}
 
 	$head = $user->getcontent($l['id_id'], 'user_head');
@@ -17,7 +19,7 @@
 	ÄNDRA FAKTA<br/>
 	<br/>
 
-	<form action="" method="post">
+	<form action="<?=$_SERVER['PHP_SELF']?>" method="post">
 	<input type="hidden" name="do" value="1"/>
 	<b>Civilstånd:</b><br /><?=makeSelection('civil', $head['det_civil'][1])?><br/>
 	<b>Attityd:</b><br /><?=makeSelection('attitude', $head['det_attitude'][1])?><br/>

@@ -30,7 +30,7 @@
 	SVARA PÅ MAIL<br/>
 	<br/>
 
-	<form method="post" action="">
+	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
 		<input type="hidden" name="to_alias" value="<?=$to_alias?>"/>
 		Till: <?=$user->getstringMobile($mail['sender_id'])?><br/>
 		Rubrik: <input type="text" name="header" value="<?=$_header?>"/><br/>

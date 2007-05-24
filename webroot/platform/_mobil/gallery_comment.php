@@ -9,7 +9,7 @@
 	Uppladdad av test123, igår 14:30<br/>
 	<br/>
 
-	<form method="post" action="">
+	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
 		Kommentar:<br/>
 		<textarea></textarea>
 	</form>

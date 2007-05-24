@@ -12,7 +12,7 @@
 Ändra MMS-kod<br/>
 	<br/>
 	<?=$error?>
-	<form method="post" action="">
+	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
 		<input type="text" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>" size="12"/><br/>
 		<input type="submit" value="Spara"/>
 	</form>

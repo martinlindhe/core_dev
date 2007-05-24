@@ -1,5 +1,4 @@
 <?createXHTMLHeader()?>
-<body>
 <div id="left_nav">
 
 <?

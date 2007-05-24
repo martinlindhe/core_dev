@@ -21,7 +21,7 @@
 	echo 'SKAPA RELATION MED '.$user->getstringMobile($_id).'<br/>';
 	echo '<br/>';
 
-	echo '<form method="post" action="">';
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 
 	$rel = getset('', 'r', 'mo', 'text_cmt ASC');
 

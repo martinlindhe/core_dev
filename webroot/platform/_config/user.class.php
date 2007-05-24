@@ -262,7 +262,8 @@ class user {
 		$own = ($user_id == $this->id?true:false);
 		
 		$user = $this->getuser($user_id);
-		//print_r($user);
+		if (!$user) return 'ANVÄNDAREN BORTTAGEN';
+
 		$online = $this->isOnline($user['lastonl_date']);
 		
 		$out = '<a class="'.($online?'user_online':'user_offline').'" href="user.php?id='.$user_id.'">'.$user['u_alias'].'</a>';

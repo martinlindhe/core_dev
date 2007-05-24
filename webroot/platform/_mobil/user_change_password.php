@@ -21,7 +21,7 @@
 	if ($error) echo 'Fel: '.$error.'<br/><br/>';
 ?>
 
-	<form method="post" action="">
+	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
 		Gammalt lösenord: <input name="ins_opass" type="password"/><br/>
 		Nytt lösenord: <input name="ins_npass" type="password"/><br/>
 		Bekräfta lösenord: <input name="ins_npass2" type="password"/><br/>

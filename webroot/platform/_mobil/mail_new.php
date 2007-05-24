@@ -3,6 +3,8 @@
 
 	if (!$l) die;	//user not logged in
 
+	require('design_head.php');
+
 	$_to_alias = $_header = $_body = $error = '';
 
 	$_to_id = 0;
@@ -24,12 +26,12 @@
 	if ($_to_alias && $_header && $_body) {
 		$error = sendMail($_to_alias, '', $_header, $_body);
 		if ($error === true) {
-			header('Location: mail.php');
+			echo 'Ditt mail har skickats!<br/>';
+			require('design_foot.php');
 			die;
 		}
 	}
 
-	require('design_head.php');
 
 /*
 	todo: kopiera vald kompis från dropdownlistan till "to_alias" fältet med js
@@ -40,7 +42,7 @@
 
 	if ($error) echo $error.'<br/>';
 
-	echo '<form method="post" action="">';
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 	if ($_to_id) {
 		echo 'Till: '.$user->getstringMobile($_to_id);
 	} else {

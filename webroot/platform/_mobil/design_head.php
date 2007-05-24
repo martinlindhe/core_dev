@@ -12,10 +12,9 @@
 <body>
 
 <div class="main_content">
-<a href="index.php"><img src="gfx/logo_170x30.jpg" alt="citysurf.tv"/></a><br/>
+<a href="index.php"><img src="gfx/logo_170x30.jpg" alt="citysurf.tv"/></a><br/><br/>
 <? if (!empty($s['id_id'])) { ?>
 		<a href="user.php"><img src="gfx/q_profil.png" alt="Profil"/></a>
 		<a href="mail.php"><img src="gfx/q_mail.png" alt="Mail"/></a>
 		<a href="gb.php"><img src="gfx/q_gb.png" alt="Gästbok"/></a><br/>
 <? } ?>
-<br/>
