@@ -81,15 +81,27 @@
 	webbgränssnittet:
 		* lagt till alla bilder från test-importen
 		* tagit bort "radera" inlägg knappen i forum för vanliga användare
+		* påbörjat implementation av teman. mycket design/kod-förändring och cleanup-grovjobb gjort för att kunna genomföra detta
+
+
+2007.05.25 Fredag:
+	webbgränssnittet:
+		* fortsätter med implementation av teman, gått igenom och tagit bort massor med gammal css
+		* teman är klara, funktion för att kunna välja tema saknas
+---[[mailat ovanstående]]---
 
 ***************************************************************************************************
 NU: på "brev" ska min egen user-header följa med
+NU: kunna välja tema
+NU: ny design utloggad startsida
 
 torsdag+fredag implementation:
 	* #1: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
 	* #1: anmäl användare-funktion (abuse)
 
 blandat:
+	* konfa virtual hosts: mobil.cs.se, process.cs.se
+
 	* mms upload image & video:
 		- hantera "BLOG" och "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
 		- alla ska ha mms funktion (vip) under testet

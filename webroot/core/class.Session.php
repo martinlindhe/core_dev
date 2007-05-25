@@ -14,6 +14,7 @@ require_once('functions_textformat.php');
 require_once('functions_userdata.php');
 require_once('functions_users.php');
 
+require_once('atom_moderation.php');	//for checking if username is reserved on user registration
 require_once('atom_settings.php');	//for storing userdata
 
 define('LOGLEVEL_NOTICE', 1);
