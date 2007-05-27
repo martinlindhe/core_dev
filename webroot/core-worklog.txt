@@ -34,10 +34,10 @@
 
 
 	messages:
-		- mottagna brev ska markeras som lästa av mottagaren (i mottagarens inbox)
 		- skickade brev ska markeras som lästa av mottagaren (i skickarens outbox)
-4		- kunna skapa custom folders att flytta meddelanden till
+		- kunna skapa custom folders att flytta meddelanden till
 		- pager support
+		- os3grid: gör sortable & highlight default true
 
 
 	omröstningar/undersökningar:
@@ -139,6 +139,8 @@ X = hi prio task
 	- messages: la till rubriker
 	- använder os3grid-0.6 från http://sourceforge.net/projects/os3grid/, LGPL. används för att lista privata meddelanden
 	- messages: gjort klart översikten
+	- messages: mottagna brev markeras som lästa av mottagaren (i mottagarens inbox)
+
 
 2007.05.24:
 	- lyric: lite cleanups, inklusive formatering av visad data

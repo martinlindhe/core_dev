@@ -30,6 +30,8 @@ abstract class DB_Base
 	/* Performs a query that does a DELETE, returns the number of rows affected
 		Example: DELETE FROM t WHERE id=1 */
 	abstract function delete($q);
+	
+	function update($q) { return $this->delete($q); }	//also returns number of rows affected
 
 	/* For INSERTs, returns insert_id (autoincrement primary key of table) */
 	abstract function insert($q);
