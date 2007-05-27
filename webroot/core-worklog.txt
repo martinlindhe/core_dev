@@ -1,6 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- ta bort hårdkodade sökvägar /css, /js, /gfx från createXHTMLHeader() - för process-servern
+
 
 	frågetecken:
 		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra personer ska se hans sida, stämmer det?"
@@ -126,6 +126,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.27:
+	- session: tog bort hårdkodade sökvägar /css, /js, /gfx från createXHTMLHeader(), added setting $session->core_web_root
+	- session: setting: allow-login. man kan slå av login för alla utan superadmin
+
 2007.05.24:
 	- lyric: lite cleanups, inklusive formatering av visad data
 	- lyric: åter-insertade de texter som pajats pga latin1->utf8 konverteringen

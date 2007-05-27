@@ -32,9 +32,11 @@ class Session
 	private $check_useragent = true;		//keeps track if the client user agent string changes during the session
 
 	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
-	private $allow_registration = true;	//set to false to disallow the possibility to register new users
+	public $allow_login = true;				//set to false to only let superadmins log in to the site
+	private $allow_registration = true;	//set to false to disallow the possibility to register new users. will be disabled if login is disabled
 	private $home_page = 'index.php';		//if set, redirects user to this page after successful login
 	public $web_root = '/';							//the webpath to the root level of the project
+	public $core_web_root = '/';				//the webpath to root level of core files (css, js, gfx directories)
 
 	//Aliases of $_SESSION[] variables
 	public $error;
@@ -61,9 +63,11 @@ class Session
 		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
 		if (isset($session_config['check_useragent'])) $this->check_useragent = $session_config['check_useragent'];
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
+		if (isset($session_config['allow_login'])) $this->allow_login = $session_config['allow_login'];
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
 		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
 		if (isset($session_config['web_root'])) $this->web_root = $session_config['web_root'];
+		if (isset($session_config['core_web_root'])) $this->core_web_root = $session_config['core_web_root'];
 		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
 		if (isset($session_config['default_title'])) $this->default_title = $session_config['default_title'];
 
@@ -241,6 +245,11 @@ class Session
 			return false;
 		}
 
+		if ($data['userMode'] != 2 && !$this->allow_login) {
+			$this->error = 'Logins currently not allowed.';
+			return false;
+		}
+		
 		$this->error = '';
 		$this->username = $data['userName'];
 		$this->id = $data['userId'];
@@ -249,7 +258,7 @@ class Session
 
 		if ($this->mode >= 1) $this->isAdmin = 1;
 		if ($this->mode >= 2) $this->isSuperAdmin = 1;
-
+		
 		//Update last login time
 		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
 		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$this->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
@@ -288,6 +297,9 @@ class Session
 		echo '<div class="login_box">';
 
 		echo '<div id="login_form_layer">';
+		if (!$this->allow_login) {
+			echo '<div class="critical">Logins are currently not allowed.<br/>Please try again later.</div>';
+		}
 		echo '<form name="login_form" method="post" action="">';
 		if ($this->error) {
 			echo '<div class="critical"><img src="/gfx/icon_warning_big.png" alt="Error"/> '.$this->error.'</div>';
@@ -303,14 +315,14 @@ class Session
 		echo '<label for="login_lock_ip">Restrict session to current IP</label><br/>';
 		echo '<br/>';
 		echo '<input type="submit" class="button" value="Log in"/>';
-		if ($this->allow_registration) {
+		if ($this->allow_login && $this->allow_registration) {
 			echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');"/>';
 			echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
 		}
 		echo '</form>';
 		echo '</div>';
 
-		if ($this->allow_registration) {
+		if ($this->allow_login && $this->allow_registration) {
 			echo '<div id="login_register_layer" style="display: none;">';
 				echo '<b>Register new account</b><br/><br/>';
 

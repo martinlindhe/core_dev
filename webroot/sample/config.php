@@ -29,6 +29,7 @@
 	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
 	$config['session']['name'] = 'coreID';
 	$config['session']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
+	$config['session']['allow_login'] = true;
 	$config['session']['allow_registration'] = true;
 	$config['session']['web_root'] = '/sample/';
 	$config['session']['default_title'] = 'sample project';

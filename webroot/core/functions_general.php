@@ -194,13 +194,13 @@
 		echo '<head>';
 			echo '<title>'.$title.'</title>';
 			echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
-			echo '<link rel="stylesheet" href="/css/core.css" type="text/css"/>';
-			echo '<link rel="stylesheet" href="/css/themes/'.$session->theme.'" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$session->core_web_root.'css/core.css" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$session->core_web_root.'css/themes/'.$session->theme.'" type="text/css"/>';
 			echo '<link rel="stylesheet" href="'.$session->web_root.'css/site.css" type="text/css"/>';
 			linkRSSfeeds();
 			echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
-			echo '<script type="text/javascript" src="/js/ajax.js"></script>';
-			echo '<script type="text/javascript" src="/js/functions.js"></script>';
+			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/ajax.js"></script>';
+			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/functions.js"></script>';
 			if ($meta_js) {
 				foreach ($meta_js as $script) {
 					echo '<script type="text/javascript" src="'.$script.'"></script>';
