@@ -14,8 +14,6 @@
 
 	createMenu($profile_menu, 'blog_menu');
 
-	echo 'messages!!<br/><br/>';
-	
 	if ($userId != $session->id) {
 
 		if (isset($_POST['msg_subj']) && !empty($_POST['msg'])) {
@@ -33,11 +31,7 @@
 		echo '</form>';
 		
 	} else {
-		showMessages(MESSAGE_GROUP_INBOX);
-
-		echo '<hr/>';
-
-		showMessages(MESSAGE_GROUP_OUTBOX);
+		showMessages();
 	}
 
 	require('design_foot.php');

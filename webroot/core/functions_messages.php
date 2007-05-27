@@ -1,6 +1,6 @@
 <?
-	define('MESSAGE_GROUP_INBOX',		0);
-	define('MESSAGE_GROUP_OUTBOX',	1);
+	define('MESSAGE_GROUP_INBOX',		1);
+	define('MESSAGE_GROUP_OUTBOX',	2);
 
 	function sendMessage($_id, $_subj, $_msg)
 	{
@@ -47,21 +47,19 @@
 		return $db->getArray($q);
 	}
 
-	function showMessages($_group)
+	function showMessages($_group = 0)
 	{
 		global $db, $session;
 		if (!is_numeric($_group)) return false;
 		
-		echo 'My messages - ';
-		switch ($_group) {
-			case MESSAGE_GROUP_INBOX:
-				echo 'INBOX<br/>';
-				break;
+		if (!$_group && !empty($_GET['g']) && is_numeric($_GET['g'])) $_group = $_GET['g'];
+		if (!$_group) $_group = MESSAGE_GROUP_INBOX;
 
-			case MESSAGE_GROUP_OUTBOX:
-				echo 'OUTBOX<br/>';
-				break;
-		}
+		echo 'My messages<br/><br/>';
+
+		echo ($_group==MESSAGE_GROUP_INBOX?'<b>INBOX</b>':'<a href="?g='.MESSAGE_GROUP_INBOX.'">INBOX</a>').'<br/>';
+		echo ($_group==MESSAGE_GROUP_OUTBOX?'<b>OUTBOX</b>':'<a href="?g='.MESSAGE_GROUP_OUTBOX.'">OUTBOX</a>').'<br/>';
+		echo '<br/>';
 
 		$list = getMessages($_group);
 		if (!$list) {
@@ -72,12 +70,12 @@
 		echo '<div id="grid"></div>';
 
 		echo '<script type="text/javascript">';
-		echo 'var g = new OS3Grid ();';
-		echo 'g.set_headers ("Subject", "Time", "Unread" );';
+		echo 'var g = new OS3Grid();';
+		echo 'g.set_headers("Subject", "Time", "Status");';
 		
 		$i=0;
 		foreach ($list as $row) {
-			echo 'g.add_row("'.($row['subject']?$row['subject']:'<i>no subject</i>').'","'.$row['timeCreated'].'","'.(!$row['timeRead']?'UNREAD':'READ').'");';
+			echo 'g.add_row("'.($row['subject']?$row['subject']:'no subject').'","'.$row['timeCreated'].'","'.(!$row['timeRead']?'UNREAD':'READ').'");';
 		}
 		echo 'g.set_sortable(true);';
 		echo 'g.set_highlight(true);';
