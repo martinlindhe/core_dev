@@ -137,7 +137,7 @@ X = hi prio task
 	- session: tog bort hårdkodade sökvägar /css, /js, /gfx från createXHTMLHeader(), added setting $session->core_web_root
 	- session: setting: allow-login. man kan slå av login för alla utan superadmin
 	- messages: la till rubriker
-	- använder grid från http://www.goweb.de/grid.htm, behöver be om lov för användande
+	- använder os3grid-0.6 från http://sourceforge.net/projects/os3grid/, LGPL
 
 
 2007.05.24:

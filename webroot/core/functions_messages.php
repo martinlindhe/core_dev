@@ -72,14 +72,16 @@
 		echo '<div id="grid"></div>';
 
 		echo '<script type="text/javascript">';
-		echo 'Grid.addcell("Subject",170);';
-		echo 'Grid.addcell("Time",230);';
-		echo 'Grid.addcell("Read",110);';
-		echo 'Grid.Draw();';
-
+		echo 'var g = new OS3Grid ();';
+		echo 'g.set_headers ("Subject", "Time", "Unread" );';
+		
+		$i=0;
 		foreach ($list as $row) {
-			echo "Grid.addrow([['".($row['subject']?$row['subject']:'<i>no subject</i>')."','".$row['timeCreated']."','".(!$row['timeRead']?'UNREAD':'READ')."']]);\n";
+			echo 'g.add_row("'.($row['subject']?$row['subject']:'<i>no subject</i>').'","'.$row['timeCreated'].'","'.(!$row['timeRead']?'UNREAD':'READ').'");';
 		}
+		echo 'g.set_sortable(true);';
+		echo 'g.set_highlight(true);';
+		echo 'g.render("grid");';
 		echo '</script>';
 	}
 
