@@ -24,7 +24,7 @@
 			die;
 		}
 		
-		echo 'Reply to message:<br/>';
+		echo 'Reply to message from '.nameLink($msg['userId']).':<br/>';
 
 		$text = "In response to:\n".
 						'"'.$msg['text']."\"\n".

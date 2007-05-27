@@ -195,8 +195,8 @@ abstract class DB_Base
 
 			$query = htmlentities(nl2br($this->queries[$i]), ENT_COMPAT, 'UTF-8');
 
-			$sql_syntax = array('FROM', 'SET', 'WHERE', 'LEFT', 'GROUP', 'ORDER');
-			$encoded_syntax = array('<br/>FROM', '<br/>SET', '<br/>WHERE', '<br/>LEFT', '<br/>GROUP', '<br/>ORDER');
+			$sql_syntax = array('SET', 'WHERE', 'LEFT', 'GROUP', 'ORDER');
+			$encoded_syntax = array('<br/>SET', '<br/>WHERE', '<br/>LEFT', '<br/>GROUP', '<br/>ORDER');
 			$query = str_replace($sql_syntax, $encoded_syntax, $query);
 
 			echo '<table summary=""><tr><td width="40">';

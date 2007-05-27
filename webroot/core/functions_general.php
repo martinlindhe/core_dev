@@ -206,6 +206,7 @@
 			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/ajax.js"></script>';
 			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/functions.js"></script>';
 			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/os3grid.js"></script>';
+			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/drag_drop.js"></script>';
 			if ($meta_js) {
 				foreach ($meta_js as $script) {
 					echo '<script type="text/javascript" src="'.$script.'"></script>';

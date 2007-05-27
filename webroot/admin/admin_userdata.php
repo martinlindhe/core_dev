@@ -80,8 +80,10 @@
 	compactUserdataFields();	//make sure the priorities are compacted
 	$list = getUserdataFields();
 
+	$i = 0;
+	echo '<div id="itemholder_1">';
 	foreach ($list as $row) {
-		echo '<div class="item">';
+		echo '<div id="item_'.++$i.'" class="item">';
 
 		$prio = $row['fieldPriority'];
 		$prio_up = $prio-1;
@@ -101,10 +103,10 @@
 		if ($row['private']) echo 'Private field<br/>';
 
 		echo getUserdataInput($row);
-
 		echo '</div><br/>';
 	}
-
+	echo '</div>';
+	
 	if (isset($_GET['change'])) {
 		$changeId	 = $_GET['change'];
 		$data = getUserdataField($changeId);

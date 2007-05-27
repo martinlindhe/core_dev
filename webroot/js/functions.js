@@ -340,3 +340,4 @@ function faq_focus(n)
 		e.style.display = 'none';	//hide
 	}
 }
+
