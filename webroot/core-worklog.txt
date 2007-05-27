@@ -33,6 +33,13 @@
 		- sök användare funkar ej om man vill lista användare som har laddat upp presentationsbild
 
 
+	messages:
+		- mottagna brev ska markeras som lästa av mottagaren (i mottagarens inbox)
+		- skickade brev ska markeras som lästa av mottagaren (i skickarens outbox)
+		- pager support
+		- översikt
+
+
 	omröstningar/undersökningar:
 		- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
 			"Gillar du fisk? JA/NEJ"
@@ -129,6 +136,9 @@ X = hi prio task
 2007.05.27:
 	- session: tog bort hårdkodade sökvägar /css, /js, /gfx från createXHTMLHeader(), added setting $session->core_web_root
 	- session: setting: allow-login. man kan slå av login för alla utan superadmin
+	- messages: la till rubriker
+	- använder grid från http://www.goweb.de/grid.htm, behöver be om lov för användande
+
 
 2007.05.24:
 	- lyric: lite cleanups, inklusive formatering av visad data

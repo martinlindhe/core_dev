@@ -12,7 +12,7 @@
 
 		if (!empty($_POST['msg'])) {
 			//Send response to user as a private message
-			sendMessage($msg['userId'], $_POST['msg']);
+			sendMessage($msg['userId'], 'System message', $_POST['msg']);
 			echo 'The response has been sent!<br/>';
 
 			if (!empty($_POST['fb_del'])) {
@@ -47,10 +47,10 @@
 
 	$list = getFeedback();
 	foreach ($list as $row) {
-		echo 'From ',nameLink($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
+		echo 'From '.nameLink($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
 		echo $row['text'].'<br/>';
 		
-		echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">Reply</a><br/>';
+		if ($row['userId']) echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">Reply</a><br/>';
 		echo '<a href="?delete='.$row['feedbackId'].getProjectPath().'">Delete</a><br/>';
 		echo '<hr/>';
 	}

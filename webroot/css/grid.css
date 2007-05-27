@@ -1,0 +1,100 @@
+/* GRID STYLES */
+
+div#grid	{
+	width: 610px; border: 0px; overflow: hidden;
+}
+
+div.gridrow0	{
+	background: #ebeadb; float: left;
+	border-bottom: 2px solid #b1afa9;
+	border-right: 1px solid #b1afa9;
+	font-size: 10px; font-weight: bold;
+	margin-right: 1px; margin-bottom: 1px;
+	padding: 1px; color: black;
+	background-image:url('./empty.gif');
+	background-position:right center;
+	background-repeat:no-repeat;
+}
+
+div.gridrow0on	{
+	background: #fffdf0; float: left;
+	border-bottom: 2px solid #ffbe23;
+	border-right: 1px solid #b1afa9;
+	font-size: 10px; font-weight: bold;
+	margin-right: 1px; margin-bottom: 1px;
+	padding: 1px; color: black;
+	background-image:url('./empty.gif');
+	background-position:right center;
+	background-repeat:no-repeat; 
+}
+
+div.gridcol0	{
+	background: #ebeadb; float: left;
+	border-bottom: 1px solid #b1afa9;
+	border-right: 1px solid #b1afa9;
+	font-size: 10px; width: 20px;
+	margin-right: 1px; margin-bottom: 1px;
+	padding: 1px; color: black;
+	text-align: center;
+}
+
+div.gridcol0on	{
+	background: #fffdf0; float: left;
+	border-bottom: 1px solid #ffbe23;
+	border-right: 1px solid #b1afa9;
+	font-size: 10px; width: 20px;
+	margin-right: 1px; margin-bottom: 1px;
+	padding: 1px; color: black;
+	text-align: center; 
+}
+
+div.gridcolx	{
+	background: white; float: left;
+	border-bottom: 1px solid #b1afa9;
+	border-right: 1px solid #b1afa9;
+	font-size: 10px; letter-spacing: 0;
+	font-family: verdana,arial,sans-serif;
+	margin-right: 1px; margin-bottom: 1px;
+	padding: 1px; color: black;
+	text-align: left; overflow: hidden;
+}
+
+input.gridin	{
+	border: 1px solid #f2f2f2; height: 19px;
+	font-size: 9px; 
+}
+
+div#contextmenu	{
+	position: absolute; top: 0px; left: 0px;
+	border: 1px solid black; display: none;
+	width: 180px;
+}
+
+div#ctc	{
+	border-left: 1px solid white;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #6c6c6c;
+	border-right: 1px solid #6c6c6c;
+	background: #dcdad5; position: relative;
+	padding: 2px 0px; 
+	font-size: 10px; line-height: 1.6em; 
+/*	letter-spacing: 0.1em;*/
+}
+
+div#ctc span	{
+	color: #8c8c8c;	padding: 0px 15px;
+}
+
+div#ctc b	{
+	color: black; padding: 0px 15px;
+}
+
+div#ctc a	{
+	color: black;
+	text-decoration: none; 
+	padding: 0px 15px;
+}
+
+div#ctc a:hover	{
+	text-decoration:underline;
+}

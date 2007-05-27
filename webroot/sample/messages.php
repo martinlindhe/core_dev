@@ -18,8 +18,8 @@
 	
 	if ($userId != $session->id) {
 
-		if (!empty($_POST['msg'])) {
-			sendMessage($userId, $_POST['msg']);
+		if (isset($_POST['msg_subj']) && !empty($_POST['msg'])) {
+			sendMessage($userId, $_POST['msg_subj'], $_POST['msg']);
 			echo 'The message has been sent!';
 			require('design_foot.php');
 			die;
@@ -27,19 +27,17 @@
 
 		echo 'Send a private message to '.$username.'<br/>';
 		echo '<form method="post" action="">';
+		echo 'Subject: <input type="text" name="msg_subj"/><br/>';
 		echo '<textarea name="msg" rows="8" cols="40"></textarea><br/>';
 		echo '<input type="submit" class="button" value="Send"/>';
 		echo '</form>';
 		
 	} else {
-		echo 'my messages - INBOX<br/>';
-		$list = getMessages(MESSAGE_GROUP_INBOX);
-		d($list);
+		showMessages(MESSAGE_GROUP_INBOX);
 
 		echo '<hr/>';
-		echo 'my messages - OUTBOX<br/>';
-		$list = getMessages(MESSAGE_GROUP_OUTBOX);
-		d($list);
+
+		showMessages(MESSAGE_GROUP_OUTBOX);
 	}
 
 	require('design_foot.php');

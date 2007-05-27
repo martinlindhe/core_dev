@@ -415,6 +415,20 @@ select {
 	padding: 10px;
 }
 
+.msg_head {
+	background-color: #fff;
+	color: #888;
+	padding: 10px;
+	border: 1px #888 solid;
+}
+.msg_body {
+	background-color: #eee;
+	color: #888;
+	padding: 10px;
+	border: 1px #888 solid;
+}
+
+
 
 
 /* generic container for text */

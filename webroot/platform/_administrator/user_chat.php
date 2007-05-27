@@ -121,7 +121,7 @@ exit;
 		}
 	}
 
-	function SendMessage() {
+	function SendChatMessage() {
 		if(trim(document.getElementById("msgTextbox").value).length > 0) {
 			var msg = escape(document.getElementById("msgTextbox").value.substr(0, 250));
 			xmlGet = DoCallback('user_chat_relay.php?id=' + id + '&msg=' + msg);
@@ -164,11 +164,11 @@ exit;
 			return true;
 		}
 		if(e.ctrlKey && e['keyCode'] == 13) {
-			SendMessage();
+			SendChatMessage();
 			return false;
 		} else
 		if(e['keyCode'] == 13) {
-			SendMessage();
+			SendChatMessage();
 			return false;
 		}
 	}
@@ -221,7 +221,7 @@ document.onkeydown = ActivateByKey;
 		</tr>
 		<tr>
 			<td style="padding: 3px 0 3px 3px;"><textarea name="msgTextbox" class="inp_nrm" style="width: 208px; height: 50px; overflow-y: auto;" id="msgTextbox" onblur="gotFocus = false;" onfocus="top.document.title = '<?=secureOUT(ucfirst($row['user_name']))?> | CHAT';" style="height: 50px; width: 312px;" onkeyup="fixlimit(this, 'cha_lim');" onkeydown="fixlimit(this, 'cha_lim');" onchange="fixlimit(this, 'cha_lim');"></textarea></td>
-			<td style="padding: 3px 0 0 0;" valign="top"><input type="button" class="inp_orgbtn" onclick="javascript:SendMessage();" accesskey="s" style="margin-top: 1px; width: 50px; height: 50px;" value="Skicka" /></td>
+			<td style="padding: 3px 0 0 0;" valign="top"><input type="button" class="inp_orgbtn" onclick="javascript:SendChatMessage();" accesskey="s" style="margin-top: 1px; width: 50px; height: 50px;" value="Skicka" /></td>
 		</tr>
 		</table>
 	</td>
