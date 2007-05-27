@@ -432,18 +432,19 @@ document.onmousemove = mouseMove;
 document.onmousedown = mouseDown;
 document.onmouseup   = mouseUp;
 
-window.onload = function(){
-
-	CreateDragContainer(document.getElementById('itemholder_1'));
-	CreateDragContainer(document.getElementById('itemholder_2'));
-	CreateDragContainer(document.getElementById('itemholder_3'));
+window.onload = function()
+{
+	for (i=1; i<=10; i++) {
+		e = document.getElementById('itemholder_'+i);
+		if (!e) break;
+		CreateDragContainer(e);
+	}
 
 	// Create our helper object that will show the item while dragging
 	dragHelper = document.createElement('DIV');
 	dragHelper.style.cssText = 'position:absolute;display:none;';
 	document.body.appendChild(dragHelper);
 
-	
 	for (i=1; i<=100; i++) {
 		e = document.getElementById('item_'+i);
 		if (!e) return;
