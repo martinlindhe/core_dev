@@ -10,12 +10,7 @@
 ?>
 <br/>
 
-<STYLE>LI {
-	MARGIN-BOTTOM: 10px
-}
-OL {
-	MARGIN-TOP: 5px
-}
+<STYLE>
 .DragContainer {
 	BORDER-RIGHT: #669999 2px solid; PADDING-RIGHT: 5px; BORDER-TOP: #669999 2px solid; PADDING-LEFT: 5px; FLOAT: left; PADDING-BOTTOM: 0px; MARGIN: 3px; BORDER-LEFT: #669999 2px solid; WIDTH: 100px; PADDING-TOP: 5px; BORDER-BOTTOM: #669999 2px solid
 }
@@ -55,45 +50,34 @@ FIELDSET {
 .History {
 	FONT-SIZE: 10px; OVERFLOW: auto; WIDTH: 100%; FONT-FAMILY: verdana, tahoma, arial; HEIGHT: 82px
 }
-#DragContainer8 {
-	BORDER-RIGHT: #669999 1px solid; PADDING-RIGHT: 0px; BORDER-TOP: #669999 1px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 0px; BORDER-LEFT: #669999 1px solid; WIDTH: 110px; PADDING-TOP: 5px; BORDER-BOTTOM: #669999 1px solid; HEIGHT: 110px
-}
 .miniDragBox {
 	FLOAT: left; MARGIN: 0px 5px 5px 0px; WIDTH: 20px; HEIGHT: 20px
 }
 </STYLE>
 
 
-<FIELDSET<LEGEND>Demo - Drag and Drop any item</LEGEND>
+<FIELDSET>
+<LEGEND>Demo - Drag and Drop any item</LEGEND>
 <DIV>
 <DIV class=DragContainer id=itemholder_1 overClass="OverDragContainer">
-<DIV class=DragBox id=item_1 overClass="OverDragBox" dragClass="DragDragBox">Item
-#1</DIV>
-<DIV class=DragBox id=item_2 overClass="OverDragBox" dragClass="DragDragBox">Item
-#2</DIV>
-<DIV class=DragBox id=item_3 overClass="OverDragBox" dragClass="DragDragBox">Item
-#3</DIV>
-<DIV class=DragBox id=item_4 overClass="OverDragBox" dragClass="DragDragBox">Item
-#4</DIV></DIV>
+<DIV class=DragBox id=item_1 overClass="OverDragBox" dragClass="DragDragBox">Item #1</DIV>
+<DIV class=DragBox id=item_2 overClass="OverDragBox" dragClass="DragDragBox">Item #2</DIV>
+<DIV class=DragBox id=item_3 overClass="OverDragBox" dragClass="DragDragBox">Item #3</DIV>
+<DIV class=DragBox id=item_4 overClass="OverDragBox" dragClass="DragDragBox">Item #4</DIV></DIV>
 
 <DIV class=DragContainer id=itemholder_2 overClass="OverDragContainer">
-<DIV class=DragBox id=item_5 overClass="OverDragBox" dragClass="DragDragBox">Item
-#5</DIV>
-<DIV class=DragBox id=item_6 overClass="OverDragBox" dragClass="DragDragBox">Item
-#6</DIV>
-<DIV class=DragBox id=item_7 overClass="OverDragBox" dragClass="DragDragBox">Item
-#7</DIV>
-<DIV class=DragBox id=item_8 overClass="OverDragBox" dragClass="DragDragBox">Item
-#8</DIV></DIV>
+<DIV class=DragBox id=item_5 overClass="OverDragBox" dragClass="DragDragBox">Item #5</DIV>
+<DIV class=DragBox id=item_6 overClass="OverDragBox" dragClass="DragDragBox">Item #6</DIV>
+<DIV class=DragBox id=item_7 overClass="OverDragBox" dragClass="DragDragBox">Item #7</DIV>
+<DIV class=DragBox id=item_8 overClass="OverDragBox" dragClass="DragDragBox">Item #8</DIV></DIV>
 <DIV class=DragContainer id=itemholder_3 overClass="OverDragContainer">
-<DIV class=DragBox id=item_9 overClass="OverDragBox" dragClass="DragDragBox">Item
-#9</DIV>
-<DIV class=DragBox id=item_10 overClass="OverDragBox"
-dragClass="DragDragBox">Item #10</DIV>
-<DIV class=DragBox id=item_11 overClass="OverDragBox"
-dragClass="DragDragBox">Item #11</DIV>
-<DIV class=DragBox id=item_12 overClass="OverDragBox"
-dragClass="DragDragBox">Item #12</DIV></DIV></DIV></FIELDSET>
+<DIV class=DragBox id=item_9 overClass="OverDragBox" dragClass="DragDragBox">Item #9</DIV>
+<DIV class=DragBox id=item_10 overClass="OverDragBox" dragClass="DragDragBox">Item #10</DIV>
+<DIV class=DragBox id=item_11 overClass="OverDragBox" dragClass="DragDragBox">Item #11</DIV>
+<DIV class=DragBox id=item_12 overClass="OverDragBox" dragClass="DragDragBox">Item #12</DIV>
+</DIV>
+</DIV>
+</FIELDSET>
 
 
 <?

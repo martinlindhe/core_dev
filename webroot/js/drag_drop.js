@@ -1,7 +1,5 @@
 //from: http://www.webreference.com/programming/javascript/mk/column2/
 
-var Demos       = [];
-var nDemos      = 8;
 
 // Demo variables
 // iMouseDown represents the current mouse button state: up or down
@@ -48,6 +46,7 @@ function CreateDragContainer(){
 	*/
 	for(var i=0; i<arguments.length; i++){
 		var cObj = arguments[i];
+		if (!cObj) continue;
 		DragDrops[cDrag].push(cObj);
 		cObj.setAttribute('DropObj', cDrag);
 
@@ -84,32 +83,19 @@ function getPosition(e){
 }
 
 function mouseCoords(ev){
-	if(ev.pageX || ev.pageY){
-		return {x:ev.pageX, y:ev.pageY};
-	}
-	return {
+	if (ev.pageX || ev.pageY) return {x:ev.pageX, y:ev.pageY};	//Firefox
+
+	return { //IE
 		x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,
 		y:ev.clientY + document.body.scrollTop  - document.body.clientTop
 	};
 }
 
-function writeHistory(object, message){
-	if(!object || !object.parentNode || !object.parentNode.getAttribute) return;
-	var historyDiv = object.parentNode.getAttribute('history');
-	if(historyDiv){
-		historyDiv = document.getElementById(historyDiv);
-		historyDiv.appendChild(document.createTextNode(object.id+': '+message));
-		historyDiv.appendChild(document.createElement('BR'));
-
-		historyDiv.scrollTop += 50;
-	}
-}
-
 function getMouseOffset(target, ev){
 	ev = ev || window.event;
 
-	var docPos    = getPosition(target);
-	var mousePos  = mouseCoords(ev);
+	var docPos = getPosition(target);
+	var mousePos = mouseCoords(ev);
 	return {x:mousePos.x - docPos.x, y:mousePos.y - docPos.y};
 }
 
@@ -124,123 +110,121 @@ function mouseMove(ev){
 	var target   = ev.target || ev.srcElement;
 	var mousePos = mouseCoords(ev);
 
-	if(Demos[0] || Demos[4]){
-		// mouseOut event - fires if the item the mouse is on has changed
-		if(lastTarget && (target!==lastTarget)){
-			writeHistory(lastTarget, 'Mouse Out Fired');
+	// mouseOut event - fires if the item the mouse is on has changed
+	if(lastTarget && (target!==lastTarget)){
+		//trace('Mouse Out Fired');
 
-			// reset the classname for the target element
-			var origClass = lastTarget.getAttribute('origClass');
-			if(origClass) lastTarget.className = origClass;
+		// reset the classname for the target element
+		var origClass = lastTarget.getAttribute('origClass');
+		if(origClass) lastTarget.className = origClass;
+	}
+
+	/*
+	dragObj is the grouping our item is in (set from the createDragContainer function).
+	if the item is not in a grouping we ignore it since it can't be dragged with this
+	script.
+	*/
+	var dragObj = target.getAttribute('DragObj');
+
+	 // if the mouse was moved over an element that is draggable
+	if(dragObj!=null){
+
+		// mouseOver event - Change the item's class if necessary
+		if(target!=lastTarget){
+			//trace('Mouse Over Fired');
+
+			var oClass = target.getAttribute('overClass');
+			if(oClass){
+				target.setAttribute('origClass', target.className);
+				target.className = oClass;
+			}
 		}
 
-		/*
-		dragObj is the grouping our item is in (set from the createDragContainer function).
-		if the item is not in a grouping we ignore it since it can't be dragged with this
-		script.
-		*/
-		var dragObj = target.getAttribute('DragObj');
+		// if the user is just starting to drag the element
+		if(iMouseDown && !lMouseState){
+			trace('Start Dragging');
 
-		 // if the mouse was moved over an element that is draggable
-		if(dragObj!=null){
+			// mouseDown target
+			curTarget     = target;
 
-			// mouseOver event - Change the item's class if necessary
-			if(target!=lastTarget){
-				writeHistory(target, 'Mouse Over Fired');
+			// Record the mouse x and y offset for the element
+			rootParent    = curTarget.parentNode;
+			rootSibling   = curTarget.nextSibling;
 
-				var oClass = target.getAttribute('overClass');
-				if(oClass){
-					target.setAttribute('origClass', target.className);
-					target.className = oClass;
-				}
+			mouseOffset   = getMouseOffset(target, ev);
+
+			// We remove anything that is in our dragHelper DIV so we can put a new item in it.
+			for(var i=0; i<dragHelper.childNodes.length; i++) dragHelper.removeChild(dragHelper.childNodes[i]);
+
+			// Make a copy of the current item and put it in our drag helper.
+			dragHelper.appendChild(curTarget.cloneNode(true));
+			dragHelper.style.display = 'block';
+
+			// set the class on our helper DIV if necessary
+			var dragClass = curTarget.getAttribute('dragClass');
+			if(dragClass){
+				dragHelper.firstChild.className = dragClass;
 			}
 
-			// if the user is just starting to drag the element
-			if(iMouseDown && !lMouseState){
-				writeHistory(target, 'Start Dragging');
+			// disable dragging from our helper DIV (it's already being dragged)
+			dragHelper.firstChild.removeAttribute('DragObj');
 
-				// mouseDown target
-				curTarget     = target;
+			/*
+			Record the current position of all drag/drop targets related
+			to the element.  We do this here so that we do not have to do
+			it on the general mouse move event which fires when the mouse
+			moves even 1 pixel.  If we don't do this here the script
+			would run much slower.
+			*/
+			var dragConts = DragDrops[dragObj];
 
-				// Record the mouse x and y offset for the element
-				rootParent    = curTarget.parentNode;
-				rootSibling   = curTarget.nextSibling;
+			/*
+			first record the width/height of our drag item.  Then hide it since
+			it is going to (potentially) be moved out of its parent.
+			*/
+			curTarget.setAttribute('startWidth',  parseInt(curTarget.offsetWidth));
+			curTarget.setAttribute('startHeight', parseInt(curTarget.offsetHeight));
+			curTarget.style.display  = 'none';
 
-				mouseOffset   = getMouseOffset(target, ev);
+			// loop through each possible drop container
+			for(var i=0; i<dragConts.length; i++){
+				with(dragConts[i]){
+					var pos = getPosition(dragConts[i]);
 
-				// We remove anything that is in our dragHelper DIV so we can put a new item in it.
-				for(var i=0; i<dragHelper.childNodes.length; i++) dragHelper.removeChild(dragHelper.childNodes[i]);
+					/*
+					save the width, height and position of each container.
 
-				// Make a copy of the current item and put it in our drag helper.
-				dragHelper.appendChild(curTarget.cloneNode(true));
-				dragHelper.style.display = 'block';
+					Even though we are saving the width and height of each
+					container back to the container this is much faster because
+					we are saving the number and do not have to run through
+					any calculations again.  Also, offsetHeight and offsetWidth
+					are both fairly slow.  You would never normally notice any
+					performance hit from these two functions but our code is
+					going to be running hundreds of times each second so every
+					little bit helps!
 
-				// set the class on our helper DIV if necessary
-				var dragClass = curTarget.getAttribute('dragClass');
-				if(dragClass){
-					dragHelper.firstChild.className = dragClass;
+					Note that the biggest performance gain here, by far, comes
+					from not having to run through the getPosition function
+					hundreds of times.
+					*/
+					setAttribute('startWidth',  parseInt(offsetWidth));
+					setAttribute('startHeight', parseInt(offsetHeight));
+					setAttribute('startLeft',   pos.x);
+					setAttribute('startTop',    pos.y);
 				}
 
-				// disable dragging from our helper DIV (it's already being dragged)
-				dragHelper.firstChild.removeAttribute('DragObj');
+				// loop through each child element of each container
+				for(var j=0; j<dragConts[i].childNodes.length; j++){
+					with(dragConts[i].childNodes[j]){
+						if((nodeName=='#text') || (dragConts[i].childNodes[j]==curTarget)) continue;
 
-				/*
-				Record the current position of all drag/drop targets related
-				to the element.  We do this here so that we do not have to do
-				it on the general mouse move event which fires when the mouse
-				moves even 1 pixel.  If we don't do this here the script
-				would run much slower.
-				*/
-				var dragConts = DragDrops[dragObj];
+						var pos = getPosition(dragConts[i].childNodes[j]);
 
-				/*
-				first record the width/height of our drag item.  Then hide it since
-				it is going to (potentially) be moved out of its parent.
-				*/
-				curTarget.setAttribute('startWidth',  parseInt(curTarget.offsetWidth));
-				curTarget.setAttribute('startHeight', parseInt(curTarget.offsetHeight));
-				curTarget.style.display  = 'none';
-
-				// loop through each possible drop container
-				for(var i=0; i<dragConts.length; i++){
-					with(dragConts[i]){
-						var pos = getPosition(dragConts[i]);
-
-						/*
-						save the width, height and position of each container.
-
-						Even though we are saving the width and height of each
-						container back to the container this is much faster because
-						we are saving the number and do not have to run through
-						any calculations again.  Also, offsetHeight and offsetWidth
-						are both fairly slow.  You would never normally notice any
-						performance hit from these two functions but our code is
-						going to be running hundreds of times each second so every
-						little bit helps!
-
-						Note that the biggest performance gain here, by far, comes
-						from not having to run through the getPosition function
-						hundreds of times.
-						*/
+						// save the width, height and position of each element
 						setAttribute('startWidth',  parseInt(offsetWidth));
 						setAttribute('startHeight', parseInt(offsetHeight));
 						setAttribute('startLeft',   pos.x);
 						setAttribute('startTop',    pos.y);
-					}
-
-					// loop through each child element of each container
-					for(var j=0; j<dragConts[i].childNodes.length; j++){
-						with(dragConts[i].childNodes[j]){
-							if((nodeName=='#text') || (dragConts[i].childNodes[j]==curTarget)) continue;
-
-							var pos = getPosition(dragConts[i].childNodes[j]);
-
-							// save the width, height and position of each element
-							setAttribute('startWidth',  parseInt(offsetWidth));
-							setAttribute('startHeight', parseInt(offsetHeight));
-							setAttribute('startLeft',   pos.x);
-							setAttribute('startTop',    pos.y);
-						}
 					}
 				}
 			}
@@ -282,7 +266,7 @@ function mouseMove(ev){
 			// Our target object is in one of our containers.  Check to see where our div belongs
 			if(activeCont){
 				if(activeCont!=curTarget.parentNode){
-					writeHistory(curTarget, 'Moved into '+activeCont.id);
+					trace('Moved into '+activeCont.id);
 				}
 
 				// beforeNode will hold the first node AFTER where our div belongs
@@ -305,7 +289,7 @@ function mouseMove(ev){
 				// the item being dragged belongs before another item
 				if(beforeNode){
 					if(beforeNode!=curTarget.nextSibling){
-						writeHistory(curTarget, 'Inserted Before '+beforeNode.id);
+						trace('Inserted Before '+beforeNode.id);
 
 						activeCont.insertBefore(curTarget, beforeNode);
 					}
@@ -313,7 +297,7 @@ function mouseMove(ev){
 				// the item being dragged belongs at the end of the current container
 				} else {
 					if((curTarget.nextSibling) || (curTarget.parentNode!=activeCont)){
-						writeHistory(curTarget, 'Inserted at end of '+activeCont.id);
+						trace('Inserted at end of '+activeCont.id);
 
 						activeCont.appendChild(curTarget);
 					}
@@ -329,7 +313,7 @@ function mouseMove(ev){
 
 				// make our drag item visible
 				if(curTarget.style.display!=''){
-					writeHistory(curTarget, 'Made Visible');
+					trace('Made Visible');
 					curTarget.style.display    = '';
 					curTarget.style.visibility = 'hidden';
 				}
@@ -337,7 +321,7 @@ function mouseMove(ev){
 
 				// our drag item is not in a container, so hide it.
 				if(curTarget.style.display!='none'){
-					writeHistory(curTarget, 'Hidden');
+					trace('Hidden');
 					curTarget.style.display  = 'none';
 				}
 			}
@@ -348,10 +332,6 @@ function mouseMove(ev){
 
 		// mouseMove target
 		lastTarget  = target;
-	}
-	if(Demos[2]){
-		document.getElementById('MouseXPosition').value = mousePos.x;
-		document.getElementById('MouseYPosition').value = mousePos.y;
 	}
 
 	if(dragObject){
@@ -369,23 +349,23 @@ function mouseMove(ev){
 
 function mouseUp(ev){
 
-	if(Demos[0] || Demos[4]){
-		if(curTarget){
-			writeHistory(curTarget, 'Mouse Up Fired');
+	if(curTarget){
+		trace('Mouse Up Fired');
 
-			dragHelper.style.display = 'none';
-			if(curTarget.style.display == 'none'){
-				if(rootSibling){
-					rootParent.insertBefore(curTarget, rootSibling);
-				} else {
-					rootParent.appendChild(curTarget);
-				}
+		dragHelper.style.display = 'none';
+		if(curTarget.style.display == 'none'){
+			if(rootSibling){
+				rootParent.insertBefore(curTarget, rootSibling);
+			} else {
+				rootParent.appendChild(curTarget);
 			}
-			curTarget.style.display    = '';
-			curTarget.style.visibility = 'visible';
 		}
-		curTarget  = null;
+		curTarget.style.display    = '';
+		curTarget.style.visibility = 'visible';
 	}
+	curTarget  = null;
+
+/*
 	if(Demos[6] && dragObject){
 		ev           = ev || window.event;
 		var mousePos = mouseCoords(ev);
@@ -409,7 +389,7 @@ function mouseUp(ev){
 			}
 		}
 	}
-
+*/
 	dragObject = null;
 
 	iMouseDown = false;
@@ -420,10 +400,8 @@ function mouseDown(ev){
 	var target = ev.target || ev.srcElement;
 
 	iMouseDown = true;
-	if(Demos[0] || Demos[4]){
-		if(lastTarget){
-			writeHistory(lastTarget, 'Mouse Down Fired');
-		}
+	if(lastTarget){
+		trace('Mouse Down Fired');
 	}
 	if(target.onmousedown || target.getAttribute('DragObj')){
 		return false;
@@ -433,7 +411,7 @@ function mouseDown(ev){
 function makeDraggable(item){
 	if(!item) return;
 	item.onmousedown = function(ev){
-		dragObject  = this;
+		dragObject = this;
 		mouseOffset = getMouseOffset(this, ev);
 		return false;
 	}

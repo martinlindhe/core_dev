@@ -1,6 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- fixa drag-drop js
+		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
 
 	frågetecken:
 		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra personer ska se hans sida, stämmer det?"
