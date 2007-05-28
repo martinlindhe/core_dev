@@ -1,4 +1,4 @@
-<?php
+<?
 die;
 
 /* ***** BEGIN LICENSE BLOCK *****
@@ -60,33 +60,31 @@ die;
 set_time_limit(600);
 date_default_timezone_set('Europe/Stockholm');
 
-list($usec, $sec) = explode(" ", microtime());
-$start = ((float)$usec + (float)$sec); 
+$start = microtime(true); 
 
 require_once('wurfl_config.php');
+require_once('wurfl_parser.php');
 define('FORCED_UPDATE', true);
 
-list($usec, $sec) = explode(" ", microtime());
-$load_parser = ((float)$usec + (float)$sec); 
+$load_parser = microtime(true); 
 
-wurfl_log('update_cache', "Forced cache update started");
+echo 'Forced cache update started<br/>';
 if (WURFL_USE_CACHE === true) {
 	parse();
 	if ( WURFL_USE_MULTICACHE === true ) {
-		wurfl_log('update_cache', "Updating multicache dir");
+		echo 'Updating multicache dir<br/>';
 		touch(MULTICACHE_TOUCH);
 		if ( is_dir(MULTICACHE_DIR) )
 			rename(substr(MULTICACHE_DIR, 0, -1), substr(MULTICACHE_DIR, 0, -1).'.'.time());
 		rename(substr(MULTICACHE_TMP_DIR, 0, -1), substr(MULTICACHE_DIR, 0, -1));
 		unlink(MULTICACHE_TOUCH);
 	}
-	wurfl_log('update_cache', "Done updating cache");
+	echo 'Done updating cache<br/>';
 } else {
-	wurfl_log('update_cache', "Why update cache if WURFL_URE_CACHE is not set to true?");
+	echo 'Why update cache if WURFL_URE_CACHE is not set to true?<br/>';
 }
 
-list($usec, $sec) = explode(" ", microtime());
-$parse = ((float)$usec + (float)$sec); 
+$parse = microtime(true);
 
 echo 'Parser load time: '.($load_parser-$start).'<br/>';
 echo 'Parsing time: '.($parse-$load_parser).'<br/>';

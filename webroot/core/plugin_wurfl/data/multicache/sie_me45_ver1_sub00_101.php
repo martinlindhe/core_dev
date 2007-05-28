@@ -1,7 +1,0 @@
-<?php
-$_cached_devices['sie_me45_ver1_sub00_101']=array (
-  'user_agent' => 'SIE-ME45/00 UP.Browser/5.0.2.1.101 (GUI)',
-  'fall_back' => 'sie_me45_ver1',
-  'id' => 'sie_me45_ver1_sub00_101',
-);
-?>

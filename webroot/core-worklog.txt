@@ -117,6 +117,9 @@
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 		- gör om tblVisitors till generell med en kategori, så man kan logga läsare av bloggar, tittare av bilder, läsare av nyheter
 
+	plugin/wurfl:
+		- flytta ut cache-config till update_cache.php
+
 
 --------------[[projekt todo]]--------------
 	adblock:
@@ -136,6 +139,13 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.28:
+	- plugin: påbörjat ett "plugin" för wurfl, arbetar med att utforma en "plugin-standard"
+	- plugins: loadPlugins() skapad
+	- rating: fixade så rating-modul bara visar current rating om användaren ej är inloggad
+	- plugin wurfl: versionerar enskild cache.php, WURFL_USE_MULTICACHE=false (blir bra prestanda tillsammans med APC, och bara 1 fil att versionera)
+
+
 2007.05.27:
 	- session: tog bort hårdkodade sökvägar /css, /js, /gfx från createXHTMLHeader(), added setting $session->core_web_root
 	- session: setting: allow-login. man kan slå av login för alla utan superadmin
@@ -143,9 +153,6 @@ X = hi prio task
 	- använder os3grid-0.6 från http://sourceforge.net/projects/os3grid/, LGPL. används för att lista privata meddelanden
 	- messages: gjort klart översikten
 	- messages: mottagna brev markeras som lästa av mottagaren (i mottagarens inbox)
-	- plugin: påbörjat ett "plugin" för wurfl, arbetar med att utforma en "plugin-standard"
-	- plugins: loadPlugins() skapad
-	- rating: fixade så rating-modul bara visar current rating om användaren ej är inloggad
 
 
 2007.05.24:

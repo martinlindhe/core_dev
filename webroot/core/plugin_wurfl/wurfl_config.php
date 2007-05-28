@@ -1,4 +1,4 @@
-<?php
+<?
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1
  *
@@ -97,7 +97,7 @@ define ("WURFL_USE_CACHE", true);
 //  but will not dump the entire XML as PHP into cache.php. As a result
 //  cache.php will be MUCH smaller and load WAY faster; as a drawback you will
 //  have many more I/O accesses to the single tiny files.
-define ("WURFL_USE_MULTICACHE", true);
+define ("WURFL_USE_MULTICACHE", false);
 
 // Path and name of the cache file
 define ("CACHE_FILE", DATADIR."cache.php");
