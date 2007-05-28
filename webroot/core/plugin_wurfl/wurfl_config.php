@@ -54,10 +54,6 @@
  *				shared memory with a ton of tiny files.
  * CACHE_FILE		string, with full path and filename of the cache file to
  *				use
- * WURFL_CACHE_AUTOUPDATE	boolean, tells the class to automatically update the
- *				cached files with a new XML is found. This is NOT suggested when
- *				using MULICACHE because of the high number of files to be updated.
- *				Race conditions are highly possible to happen.
  * WURFL_PATCH_FILE	string, optional patch file for WURFL
  * WURFL_AGENT2ID_FILE	string, used by wurfl_class.php. needs to be removed
  *				when a new WURFL is found
@@ -90,11 +86,7 @@ define("WURFL_CONFIG", true);
 // Where all data is stored (wurfl.xml, cache file, logs, etc)
 define("DATADIR", './data/');
 
-// Path and filename of wurfl_parser.php
-define("WURFL_PARSER_FILE", './wurfl_parser.php');
-
-// Path and filename of wurfl_class.php
-define("WURFL_CLASS_FILE", './wurfl_class.php');
+require_once('wurfl_class.php');
 
 // Set this true if you want to use cache. Strongly suggested
 define ("WURFL_USE_CACHE", true);
@@ -127,12 +119,6 @@ define ("MULTICACHE_SUFFIX",".php");
 // Autoload set to false, I will load it when needed
 define ("WURFL_AUTOLOAD", false);
 
-// This parameter tells the class to automatically update cache files when a
-// new XML is found.
-// Using the multicache is not suggested to automatically update it. Use the
-// external scripts.
-define ("WURFL_CACHE_AUTOUPDATE", false);
-
 // Path and name of the wurfl
 define ("WURFL_FILE", DATADIR."wurfl.xml");
 
@@ -141,7 +127,7 @@ define ("WURFL_LOG_FILE", DATADIR."wurfl.log");
 
 // Path and name of the file to store user_agent->id relation
 // (ignored if caching is disabled)
-define ("WURFL_AGENT2ID_FILE", DATADIR."agent2id.php4");
+define ("WURFL_AGENT2ID_FILE", DATADIR."agent2id.php");
 
 // Set the maximum number of user_agents to cache
 define ("MAX_UA_CACHE", 30);

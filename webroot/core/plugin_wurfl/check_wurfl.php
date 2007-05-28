@@ -17,7 +17,6 @@ list($usec, $sec) = explode(" ", microtime());
 $start = ((float)$usec + (float)$sec); 
 
 require_once('./wurfl_config.php');
-require_once(WURFL_CLASS_FILE);
 
 list($usec, $sec) = explode(" ", microtime());
 $load_class = ((float)$usec + (float)$sec); 

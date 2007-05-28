@@ -36,8 +36,6 @@ die;
  *
  * This script should be called manually (CLI is suggested) to update the
  * multicache files when a new XML is availabled.
- * This script should be used when you have configured WURFL_CACHE_AUTOUPDATE
- * to false.
  *
  * KNOWN BUG: cache.php will be updated automatically, a race condition might
  * happen while generating the new files in the temporary directory and before
@@ -67,7 +65,6 @@ $start = ((float)$usec + (float)$sec);
 
 require_once('./wurfl_config.php');
 define('FORCED_UPDATE', true);
-require_once(WURFL_PARSER_FILE);
 
 list($usec, $sec) = explode(" ", microtime());
 $load_parser = ((float)$usec + (float)$sec); 

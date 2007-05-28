@@ -79,12 +79,6 @@
  *
  */
 
-if ( !defined('WURFL_CONFIG') )
-	@require_once('./wurfl_config.php');
-
-if ( !defined('WURFL_CONFIG') )
-	die("NO CONFIGURATION");
-
 $wurfl = array();
 $wurfl_agents = array();
 $patch_params = Array();

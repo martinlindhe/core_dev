@@ -52,17 +52,6 @@
  *
  */
 
-if ( !defined('WURFL_CONFIG') )
-	@require_once('./wurfl_config.php');
-
-if ( !defined('WURFL_CONFIG') )
-	die("NO CONFIGURATION");
-
-if ( defined('WURFL_PARSER_FILE') )
-	require_once(WURFL_PARSER_FILE);
-else
-	require_once("./wurfl_parser.php");
-
 /**
  *
  * wurfl_class
@@ -598,6 +587,8 @@ class wurfl_class {
 	 */
 	function _cacheIsValid() {
 
+		return true; //function disabled.
+		/*
 		// First of all check configuration. If autoupdate is set to false always
 		// return true, otherwise check
 		if ( WURFL_CACHE_AUTOUPDATE === false )
@@ -619,6 +610,7 @@ class wurfl_class {
 			$this->_toLog('_cacheIsValid', 'cache file is outdated', LOG_INFO);
 			return false;
 		}
+		*/
 	}
 
 	/**
