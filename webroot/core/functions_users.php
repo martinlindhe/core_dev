@@ -20,9 +20,8 @@
 		global $db, $session;
 		if (!is_numeric($_limit)) return false;
 
-		$q = 'SELECT * FROM tblUsers ORDER BY timeLastLogin DESC';
+		$q  = 'SELECT * FROM tblUsers ORDER BY timeLastLogin DESC';
 		$q .= ' LIMIT 0,'.$_limit;
-
 		return $db->getArray($q);
 	}
 
@@ -31,9 +30,8 @@
 	{
 		global $db, $session;
 
-		$q = 'SELECT * FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+		$q  = 'SELECT * FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
 		$q .= ' ORDER BY timeLastLogin DESC';
-
 		return $db->getArray($q);
 	}
 
@@ -41,9 +39,8 @@
 	{
 		global $db, $session;
 
-		$q = 'SELECT COUNT(userId) FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+		$q  = 'SELECT COUNT(userId) FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
 		$q .= ' ORDER BY timeLastLogin DESC';
-
 		return $db->getOneItem($q);
 	}
 
@@ -52,7 +49,22 @@
 		global $db, $session;
 
 		$q = 'SELECT COUNT(userId) FROM tblUsers';
+		return $db->getOneItem($q);
+	}
 
+	function getAdminsCnt()
+	{
+		global $db, $session;
+
+		$q = 'SELECT COUNT(userId) FROM tblUsers WHERE userMode=1';
+		return $db->getOneItem($q);
+	}
+
+	function getSuperAdminsCnt()
+	{
+		global $db, $session;
+
+		$q = 'SELECT COUNT(userId) FROM tblUsers WHERE userMode=2';
 		return $db->getOneItem($q);
 	}
 
@@ -62,7 +74,7 @@
 
 		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT t1.*,t2.userName AS creatorName FROM tblVisits AS t1 ';
+		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblVisits AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 		$q .= 'WHERE ownerId='.$_id.' ORDER BY timeCreated DESC';
 		return $db->getArray($q);
@@ -99,7 +111,18 @@
 		$q  = 'SELECT DISTINCT t1.userId,';
 		$q .= '(SELECT userName FROM tblUsers WHERE userId=t1.userId) AS userName ';
  		$q .= 'FROM tblLogins AS t1 WHERE t1.IP='.$geoip;
+		return $db->getArray($q);
+	}
 
+	/* Admin function used by admin_list_users.php */
+	function getUsers($_mode = 0)
+	{
+		global $db;
+
+		if (!is_numeric($_mode)) return false;
+
+		$q = 'SELECT * FROM tblUsers';
+		if ($_mode) $q .= ' WHERE userMode='.$_mode;
 		return $db->getArray($q);
 	}
 

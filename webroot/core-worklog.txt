@@ -144,7 +144,7 @@ X = hi prio task
 	- plugins: loadPlugins() skapad
 	- rating: fixade så rating-modul bara visar current rating om användaren ej är inloggad
 	- plugin wurfl: versionerar enskild cache.php, WURFL_USE_MULTICACHE=false (blir bra prestanda tillsammans med APC, och bara 1 fil att versionera)
-
+	- admin: list users added
 
 2007.05.27:
 	- session: tog bort hårdkodade sökvägar /css, /js, /gfx från createXHTMLHeader(), added setting $session->core_web_root
