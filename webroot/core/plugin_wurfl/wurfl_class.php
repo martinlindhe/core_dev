@@ -182,17 +182,10 @@ class wurfl_class {
 		$_final = $generic;
 		for ( $i=sizeof($_fallback_list)-2; $i>= 0; $i-- ) {
 			$curr_device = $_fallback_list[$i];
-//echo "capabilities di $curr_device<br>\n";
 			while ( list($key, $val) = each($$curr_device) ) {
 				if ( is_array($val) ) {
-//echo "array_merge per $key:<br>";
-//echo "<pre>\n";
-//var_export($_final[$key]);
-//var_export($val);
-//echo "</pre>\n";
 					$_final[$key] = array_merge($_final[$key], $val);
 				} else {
-//echo "scrivo $key=$val<br>\n";
 					$_final[$key] = $val;
 				}
 			}
@@ -383,7 +376,7 @@ class wurfl_class {
 			// If the list of user agents that match the first 4 chars of the current user
 			//  agent is empty I can quit searching
 			if ( $_short_ua_len == 4 && count($_short_wurfl_ua) == 0 ) {
-				// DEBUG fast search echo "no match even for the first 4 chars<br>\n";
+				// DEBUG fast search echo "no match even for the first 4 chars<br/>\n";
 				break;
 			} else if ( count($_short_wurfl_ua) == 0 ) {
 				// I restore the last good list of short user agents
@@ -407,7 +400,6 @@ class wurfl_class {
 			$_ua = substr($_ua, 0, -1);
 			$_ua_len--;
 			reset($_wurfl_user_agents);
-			// DEBUG fast search echo "<br>\n";
 		}
 
 		$this->_toLog('GetDeviceCapabilitiesFromAgent', "I couldn't find the device in my list, the headers are my last chance", LOG_WARNING);

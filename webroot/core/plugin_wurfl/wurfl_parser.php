@@ -225,7 +225,7 @@ function startElement($parser, $name, $attr) {
 			break;
 		case "default":
 			// unknown events are not welcome
-			die($name." is an unknown event<br>");
+			die($name." is an unknown event<br/>");
 			break;
 	}
 }
@@ -257,7 +257,6 @@ function characterData($parser, $data) {
 	global $curr_event;
 	if (trim($data) != "" ) {
 		$curr_event.=$data;
-		//echo "data=".$data."<br>\n";
 	}
 }
 
@@ -338,12 +337,6 @@ function parse() {
 	} else {
 		wurfl_log('parse', "No XML patch file defined");
 	}
-
-
-	//reset($wurfl);
-	//echo "<pre>";
-	//print_r($wurfl);
-	//echo "</pre>";
 
 	reset($wurfl);
 	$devices = $wurfl["devices"];
@@ -515,9 +508,6 @@ if ( WURFL_AUTOLOAD === true ) {
 	}
 	if (WURFL_USE_CACHE && $wurfl_stat <= $cache_stat && $patch_stat <= $cache_stat) {
 		// cache file is updated
-		//echo "wurfl date = ".$wurfl_stat."<br>\n";
-		//echo "patch date = ".$patch_stat."<br>\n";
-		//echo "cache date = ".$cache_stat."<br>\n";
 
 		list($cache_stat, $wurfl, $wurfl_agents) = load_cache();
 

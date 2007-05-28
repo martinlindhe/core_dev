@@ -63,7 +63,7 @@ date_default_timezone_set('Europe/Stockholm');
 list($usec, $sec) = explode(" ", microtime());
 $start = ((float)$usec + (float)$sec); 
 
-require_once('./wurfl_config.php');
+require_once('wurfl_config.php');
 define('FORCED_UPDATE', true);
 
 list($usec, $sec) = explode(" ", microtime());
@@ -88,8 +88,8 @@ if (WURFL_USE_CACHE === true) {
 list($usec, $sec) = explode(" ", microtime());
 $parse = ((float)$usec + (float)$sec); 
 
-echo "Parser load time:".($load_parser-$start)."<br>\n";
-echo "Parsing time:".($parse-$load_parser)."<br>\n";
-echo "Total:".($parse-$start)."<br>\n";
+echo 'Parser load time: '.($load_parser-$start).'<br/>';
+echo 'Parsing time: '.($parse-$load_parser).'<br/>';
+echo 'Total: '.($parse-$start).'<br/>';
 
 ?>

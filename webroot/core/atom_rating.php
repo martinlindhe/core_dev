@@ -98,7 +98,7 @@
 
 		if (!empty($_POST['rate_gadget'])) {
 			rateItem($_type, $_id, $_POST['rate_gadget']);
-			$not_rated = false;
+			return showRating($_type, $_id);
 		}
 
 		$result  = 'Rate this:<br/>';

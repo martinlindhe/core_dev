@@ -1,54 +1,25 @@
-<form action="check_wurfl.php" method="GET">
-force ua:<input type="text" name="force_ua" size="100">
-</form>
-<?php
-/*
- * $Id: check_wurfl.php,v 1.1 2005/04/16 16:01:37 atrasatti Exp $
- * $RCSfile: check_wurfl.php,v $ v2.1 beta2 (Apr, 16 2005)
- *
- * Author: Andrea Trasatti ( atrasatti AT users DOT sourceforge DOT net )
- *
- */
+<?
+	set_time_limit(600);
+	date_default_timezone_set('Europe/Stockholm');
 
-set_time_limit(600);
-date_default_timezone_set('Europe/Stockholm');
+	require_once('wurfl_config.php');
 
-list($usec, $sec) = explode(" ", microtime());
-$start = ((float)$usec + (float)$sec); 
+	$start =  microtime(true); 
 
-require_once('./wurfl_config.php');
+	$wurflObj = new wurfl_class();
 
-list($usec, $sec) = explode(" ", microtime());
-$load_class = ((float)$usec + (float)$sec); 
+	$init_class =  microtime(true);
 
-$wurflObj = new wurfl_class();
-
-list($usec, $sec) = explode(" ", microtime());
-$init_class = ((float)$usec + (float)$sec); 
-
-if ( !empty($_GET['force_ua']) ) {
-	$wurflObj->GetDeviceCapabilitiesFromAgent($_GET['force_ua']);
-} else {
-	//Forcing a test agent
-	//$wurflObj->GetDeviceCapabilitiesFromAgent("MOT-c350");
-	
 	//Testing client agent
 	$wurflObj->GetDeviceCapabilitiesFromAgent($_SERVER['HTTP_USER_AGENT']);
-}
 
-list($usec, $sec) = explode(" ", microtime());
-$end = ((float)$usec + (float)$sec); 
+	$end =  microtime(true);
 
-echo "Time to load wurfl_class.php:".($load_class-$start)."<br>\n";
-echo "Time to initialize class:".($init_class-$load_class)."<br>\n";
-echo "Time to find the user agent:".($end-$init_class)."<br>\n";
-echo "Total:".($end-$start)."<br>\n";
+	echo 'Time to initialize class: '.round($init_class-$start,6).'<br/>';
+	echo 'Time to find the user agent: '.round($end-$init_class,6).'<br/>';
+	echo 'Total: '.round($end-$start,6).'<br/>';
 
-echo "<pre>";
-var_export($wurflObj->capabilities);
-echo "</pre>";
-
+	echo '<pre>';
+	var_export($wurflObj->capabilities);
+	echo '</pre>';
 ?>
-<form action="check_wurfl.php" method="GET">
-force ua:<input type="text" name="force_ua" size="100">
-</form>

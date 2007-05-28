@@ -202,7 +202,7 @@
 				deleteBlog($_id);
 				echo 'The blog has been deleted.<br/>';
 			} else {
-				echo 'Are you sure you want to delete this blog? <b>'.$blog['blogTitle'].'</b>?<br><br>';
+				echo 'Are you sure you want to delete this blog? <b>'.$blog['blogTitle'].'</b>?<br/><br/>';
 				echo '<table width="100%"><tr>';
 				echo '<td width="50%" align="center"><a href="'.$_SERVER['PHP_SELF'].'?BlogDelete:'.$_id.'&confirmed">Yes, im sure</a></td>';
 				echo '<td align="center"><a href="javascript:history.go(-1);">No</a></td>';
