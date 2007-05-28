@@ -256,4 +256,17 @@
 
 		return $text;
 	}
+	
+
+	/* loads all active plugins */
+	function loadPlugins()
+	{
+		global $config;
+		
+		if (empty($config['plugins'])) return;
+		
+		foreach ($config['plugins'] as $plugin) {
+			require_once($config['core_root'].'core/plugin_'.$plugin.'/plugin.php');
+		}
+	}
 ?>

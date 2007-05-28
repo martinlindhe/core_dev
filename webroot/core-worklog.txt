@@ -2,6 +2,7 @@
 	core/gör snart:
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
 
+
 	frågetecken:
 		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra personer ska se hans sida, stämmer det?"
 		- "Ert önskemål: "Groups - diskussionsgrupper""
@@ -142,6 +143,8 @@ X = hi prio task
 	- använder os3grid-0.6 från http://sourceforge.net/projects/os3grid/, LGPL. används för att lista privata meddelanden
 	- messages: gjort klart översikten
 	- messages: mottagna brev markeras som lästa av mottagaren (i mottagarens inbox)
+	- plugin: påbörjat ett "plugin" eller "addon" för wurfl, arbetar med att utforma en "plugin-standard"
+	- plugins: loadPlugins() skapad
 
 
 2007.05.24:

@@ -20,6 +20,9 @@
 	restore_include_path();
 
 	$config['debug'] = true;
+	
+	$config['plugins'] = array('wurfl');
+	loadPlugins();
 
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
