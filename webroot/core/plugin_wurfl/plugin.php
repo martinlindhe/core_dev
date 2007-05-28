@@ -4,7 +4,7 @@
 
 	http://wurfl.sourceforge.net/php/index.php
 	
-	Plugin by Martin Lindhe, wurfl by Andrea Trasatti
+	wurfl by Andrea Trasatti
 */
 
 require_once('wurfl_config.php');

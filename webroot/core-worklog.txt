@@ -143,8 +143,9 @@ X = hi prio task
 	- använder os3grid-0.6 från http://sourceforge.net/projects/os3grid/, LGPL. används för att lista privata meddelanden
 	- messages: gjort klart översikten
 	- messages: mottagna brev markeras som lästa av mottagaren (i mottagarens inbox)
-	- plugin: påbörjat ett "plugin" eller "addon" för wurfl, arbetar med att utforma en "plugin-standard"
+	- plugin: påbörjat ett "plugin" för wurfl, arbetar med att utforma en "plugin-standard"
 	- plugins: loadPlugins() skapad
+	- rating: fixade så rating-modul bara visar current rating om användaren ej är inloggad
 
 
 2007.05.24:

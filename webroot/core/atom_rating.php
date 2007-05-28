@@ -90,31 +90,27 @@
 	/* Generates a general "rate this"-gadget used by various modules */
 	function ratingGadget($_type, $_id)
 	{
-		global $db;
+		global $db, $session;
 
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-		$not_rated = !isRated($_type, $_id);
+		if (!$session->id || isRated($_type, $_id)) return showRating($_type, $_id);
 
-		if ($not_rated && !empty($_POST['rate_gadget'])) {
+		if (!empty($_POST['rate_gadget'])) {
 			rateItem($_type, $_id, $_POST['rate_gadget']);
 			$not_rated = false;
 		}
 
-		if ($not_rated) {
-			$result  = 'Rate this:<br/>';
-			$result .= '<form method="post" action="">';
-			$result .= '<select name="rate_gadget">';
-			$result .= '<option value="">&nbsp;</option>';
-			for ($i=1; $i<=5; $i++) {
-				$result .= '<option value="'.$i.'">'.$i.'</option>';
-			}
-			$result .= '</select>';
-			$result .= ' <input type="submit" class="button" value="Rate"/>';
-			$result .= '</form>';
-		} else {
-			$result = showRating($_type, $_id);
+		$result  = 'Rate this:<br/>';
+		$result .= '<form method="post" action="">';
+		$result .= '<select name="rate_gadget">';
+		$result .= '<option value="">&nbsp;</option>';
+		for ($i=1; $i<=5; $i++) {
+			$result .= '<option value="'.$i.'">'.$i.'</option>';
 		}
+		$result .= '</select>';
+		$result .= ' <input type="submit" class="button" value="Rate"/>';
+		$result .= '</form>';
 
 		return $result;
 	}
