@@ -1,0 +1,77 @@
+<?php
+$_cached_devices['kwc_kx1_ver1']=array (
+  'user_agent' => 'KWC-KX1',
+  'actual_device_root' => 'true',
+  'fall_back' => 'opwv_v62_generic',
+  'id' => 'kwc_kx1_ver1',
+  'product_info' => 
+  array (
+    'brand_name' => 'Kyocera',
+    'model_name' => 'KX1',
+  ),
+  'display' => 
+  array (
+    'resolution_width' => 128,
+    'resolution_height' => 128,
+    'max_image_width' => 128,
+    'max_image_height' => 128,
+    'rows' => 4,
+    'columns' => 16,
+  ),
+  'sound_format' => 
+  array (
+    'imelody' => true,
+    'midi_monophonic' => true,
+    'midi_polyphonic' => true,
+    'sp_midi' => true,
+    'compactmidi' => true,
+    'voices' => 16,
+  ),
+  'j2me' => 
+  array (
+    'j2me_screen_height' => 128,
+    'j2me_midp_1_0' => true,
+    'j2me_cldc_1_0' => true,
+    'j2me_screen_width' => 128,
+  ),
+  'object_download' => 
+  array (
+    'directdownload_support' => true,
+    'ringtone' => true,
+    'ringtone_imelody' => true,
+    'ringtone_compactmidi' => true,
+    'ringtone_midi_monophonic' => true,
+    'ringtone_midi_polyphonic' => true,
+    'ringtone_spmidi' => true,
+    'ringtone_voices' => 16,
+    'wallpaper' => true,
+    'wallpaper_gif' => true,
+    'wallpaper_jpg' => true,
+    'wallpaper_png' => true,
+    'wallpaper_preferred_width' => 128,
+    'wallpaper_preferred_height' => 128,
+    'wallpaper_colors' => 16,
+    'screensaver' => true,
+    'screensaver_gif' => true,
+    'screensaver_jpg' => true,
+    'screensaver_png' => true,
+    'screensaver_max_width' => 128,
+    'screensaver_max_height' => 128,
+    'screensaver_preferred_width' => 128,
+    'screensaver_preferred_height' => 128,
+    'screensaver_colors' => 16,
+    'picture' => true,
+    'picture_bmp' => true,
+    'picture_png' => true,
+    'picture_max_width' => 128,
+    'picture_max_height' => 128,
+    'picture_preferred_height' => 128,
+    'picture_preferred_width' => 128,
+    'picture_greyscale' => true,
+    'picture_wbmp' => true,
+    'picture_gif' => true,
+    'picture_jpg' => true,
+    'picture_colors' => 16,
+  ),
+);
+?>

@@ -1,4 +1,6 @@
 <?php
+die;
+
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1
  *
@@ -58,6 +60,7 @@
  */
 
 set_time_limit(600);
+date_default_timezone_set('Europe/Stockholm');
 
 list($usec, $sec) = explode(" ", microtime());
 $start = ((float)$usec + (float)$sec); 
@@ -90,6 +93,6 @@ $parse = ((float)$usec + (float)$sec);
 
 echo "Parser load time:".($load_parser-$start)."<br>\n";
 echo "Parsing time:".($parse-$load_parser)."<br>\n";
-echo "Total:".($end-$start)."<br>\n";
+echo "Total:".($parse-$start)."<br>\n";
 
 ?>

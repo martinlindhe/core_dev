@@ -11,7 +11,6 @@ force ua:<input type="text" name="force_ua" size="100">
  */
 
 set_time_limit(600);
-
 date_default_timezone_set('Europe/Stockholm');
 
 list($usec, $sec) = explode(" ", microtime());
@@ -28,11 +27,14 @@ $wurflObj = new wurfl_class();
 list($usec, $sec) = explode(" ", microtime());
 $init_class = ((float)$usec + (float)$sec); 
 
-if ( isset($_GET['force_ua']) && strlen($_GET['force_ua'])>0 ) {
+if ( !empty($_GET['force_ua']) ) {
 	$wurflObj->GetDeviceCapabilitiesFromAgent($_GET['force_ua']);
 } else {
 	//Forcing a test agent
-	$wurflObj->GetDeviceCapabilitiesFromAgent("MOT-c350");
+	//$wurflObj->GetDeviceCapabilitiesFromAgent("MOT-c350");
+	
+	//Testing client agent
+	$wurflObj->GetDeviceCapabilitiesFromAgent($_SERVER['HTTP_USER_AGENT']);
 }
 
 list($usec, $sec) = explode(" ", microtime());

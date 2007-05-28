@@ -1,0 +1,7 @@
+<?php
+$_cached_devices['nokia_e70_ver1_sub30306330300']=array (
+  'user_agent' => 'NokiaE70-1/3.0 (3.0633.03.00) SymbianOS/9.1 Series60/3.0 Profile/MIDP-2.0 Configuration/CLDC-1.1',
+  'fall_back' => 'nokia_e70_ver1',
+  'id' => 'nokia_e70_ver1_sub30306330300',
+);
+?>

@@ -1,0 +1,7 @@
+<?php
+$_cached_devices['sec_e715_ver1_sube315']=array (
+  'user_agent' => 'SEC-SGHE715-E315UVDG1_TE1-TSS1.01',
+  'fall_back' => 'sec_e715_ver1',
+  'id' => 'sec_e715_ver1_sube315',
+);
+?>
