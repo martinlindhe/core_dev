@@ -8,7 +8,7 @@
 
 <div id="bigContent">
 	
-	<img src="/_gfx/ttl_search.png" alt="Sök användare"/><br/><br/>
+	<div class="subHead">sök användare</div><br class="clr"/>
 <?
 	makeButton(!$id, 'goLoc(\''.l('list', 'users').'\')', 'icon_profile.png', 'senast inloggade');
 	makeButton($id=='1', 'goLoc(\''.l('list', 'users', '1').'\')', 'icon_profile.png', 'visa online');

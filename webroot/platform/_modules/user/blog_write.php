@@ -70,7 +70,7 @@ function validateIt(tForm) {
 <input type="hidden" name="do" value="1"/>
 
 <div class="boxMid4" style="margin: 15px 15px 0 15px;">
-		<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
+		<div class="subHead">blogg</div><br class="clr"/>
 	<div class="boxMid4mid">
 
 <table summary="" cellspacing="0" width="510" style="height: 400px; margin-top: 15px; margin-bottom: 1px;" class="lft">
@@ -198,7 +198,7 @@ function omo(obj, border) {
 		echo '<option value="'.P2B.USER_GALLERY.$pic[2].'/'.$pic[0].(($pic[3])?'_'.$pic[4]:'').'.'.$pic[5].'">'.secureOUT('#'.$pic[0].' - '.$pic[6]).' '.(($pic[3])?'[privat]':'').'</option>';
 	}
 ?>
-</select><input type="button" class="btn2_med" value="ladda upp ny" onclick="makeUpload('<?=$l['id_id']?>&amp;do=blog'); return false;"/>
+</select><input type="button" class="btn2_min" value="ladda upp ny" onclick="makeUpload('<?=$l['id_id']?>&amp;do=blog'); return false;"/>
 </blockquote>
 </td></tr>
 <tr><td colspan="2" style="border: 1px solid #999; height: 300px; background: #FFF;"><iframe id="text_var" style="cursor: text" name="text_var" border="0" frameborder="0" width="100%" height="300"></iframe></td></tr>

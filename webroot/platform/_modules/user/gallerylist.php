@@ -26,7 +26,7 @@
 				<td class="cur'.$cls.' pdg rgt nobr" onclick="'.$url.'">'.nicedate($row['pht_date'], 2).'</td>';
 
 				if ($own) {
-					echo '<td class="'.$cls.' rgt pdg_tt nobr" width="130">';
+					echo '<td class="'.$cls.' rgt pdg_tt nobr" width="150">';
 					makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id'], $row['main_id']).'c=1#view'.$row['main_id'].'\')', 'icon_gallery.png', 'ändra');
 					makeButton(false, 'if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\');', 'icon_delete.png', 'radera');
 					echo '</td>';

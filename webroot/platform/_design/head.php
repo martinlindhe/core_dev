@@ -1,6 +1,5 @@
 <?
 	include('top.php');
-	if($l) echo '<script type="text/javascript" src="/_objects/ajax.js"></script>';
 ?>
 <script type="text/javascript">
 var omoTime;
@@ -27,21 +26,22 @@ function blockRightClick(event) {
   if (pressed=="picture") window.alert("!");
   pressed=0;
 }
-
 </script>
 </head>
 
 <body>
-	<div id="hoverCraft" style="position: absolute; display: none; top: 0px; left: 0px;"></div>
+	<div id="hoverCraft" style="position: absolute; z-index: 10; display: none; top: 0px; left: 0px;"></div>
 	<div id="top">
-		<map name="topmap">
-			<area href="/member/logout" shape="rect" coords="956,102,972,118" alt="Logga ut">
-		</map>
-		<img alt="" src="/_gfx/head_bg.png" id="top_img" usemap="#topmap" />
+		<div id="top_logo"></div>
+		<div id="top_bg"></div>
 
-		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad" width="728" height="90" /></a></div>
+		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad"  /></a></div>
 
-		<ul id="top_menu">
+		<div id="top_border"><img src="/_gfx/themes/head_border.png" alt=""/></div>
+
+		<div id="top_logout"><a href="/member/logout"><img src="/_gfx/themes/head_logout.png" alt=""/></a></div>
+
+		<ul id="menu_main">
 			<li><a href="/main/start/">start</a> | </li>
 			<li><a href="/list/users/">sök</a> | </li>
 			<li><a href="/forum/start/">forum</a> | </li>
@@ -51,113 +51,141 @@ function blockRightClick(event) {
 			<li><a href="/main/faq/">hjälp &amp; faq</a> | </li>
 			<li><a href="/text/contact/">kontakt</a></li>
 		</ul>
-<?
-	if($l) {
-		$online = gettxt('stat_online');
-		$online = explode(':', $online);
-?>
-		<div id="top_online">
-			<table summary="" cellspacing="0">
-				<tr><td><a href="<?=l('list', 'users', '1')?>">online</a></td><td class="bld rgt"><a href="<?=l('list', 'users', 1)?>"><?=@intval($online[0])?></a></td></tr>
-				<tr><td><a href="<?=l('list', 'users', 'M')?>">killar</a></td><td class="rgt"><a href="<?=l('list', 'users', 'M')?>" class="bld sexM"><?=@intval($online[1])?></a></td></tr>
-				<tr><td><a href="<?=l('list', 'users', 'F')?>">tjejer</a></td><td class="rgt"><a href="<?=l('list', 'users', 'F')?>" class="bld sexF"><?=@intval($online[2])?></a></td></tr>
-				<tr><td colspan="2" class="cnt"><br /><a href="<?=l('list', 'users')?>">senaste</a> - <a href="/list/userfind/1">slumpa</a></td></tr>
-				<tr><td colspan="2" class="bld cnt cur" onmouseover="checkTime(1);">snabbsök</td></tr>
-			</table>
-		</div>
 
-		<div id="userfind" style="display: none" onmouseover="checkTime(1);">
-			<form action="/list/userfind" method="post">
-			<input type="text" class="txt" id="userfind_inp" onfocus="checkTime(1);" onblur="checkTime(0);" name="a" value="" />
-			</form>
-		</div>
-<?
-	} else {
-		//ej inloggad
-?>
-		<div id="top_online_off">
-			<form name="l" action="/member/login" method="post">
-
-			<table summary="" cellspacing="0">
-				<tr><td>alias:</td><td><input type="text" class="txt" style="width: 70px" name="a" /></td></tr>
-				<tr><td>lösenord:</td><td><input type="password" class="pass" style="width: 70px" name="p" /></td></tr>
-				<tr><td colspan="2">
-					<input type="submit" class="btn2_min" value="logga in" id="login" />
-				</td></tr>
-			</table>
-
-			<script type="text/javascript">if(document.l.a.value.length > 0) document.l.p.focus(); else document.l.a.focus();</script>
-			</form>
-		</div>
-<?
-	}
-?>
+		<ul id="menu_user">
+			<li><img align="absmiddle" src="/_gfx/icon_profil.png" alt="" /><a href="/user/view/">min profil</a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_gb.png" alt="" /><a href="/user/gb/">gästbok <?=@intval($_SESSION['data']['offsets']['gb_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_mail.png" alt="" /><a href="/user/mail/">brev <?=@intval($_SESSION['data']['offsets']['mail_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_blog.png" alt="" /><a href="/user/blog/">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_friends.png" alt="" /><a href="/user/relations/">relationer <?=@intval($_SESSION['data']['offsets']['rel_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_gallery.png" alt="" /><a href="/user/gallery/">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/member/settings/">inställningar</a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/member/settings/">uppgradera</a> &nbsp;</li>
+		</ul>
 	</div>
 
-	<div id="contentContainer">
+	<div id="contentContainer"><!-- holder for all content except footer -->
 		<div id="leftMenu">
 
-			<div class="leftMenuHeader">min meny</div>
+<?
+	if ($own) {
+		if(@intval($info['gb_offset'][1]) != @intval($_SESSION['data']['offsets']['gb_offset'])) $_SESSION['data']['offsets']['gb_offset'] = @intval($info['gb_offset'][1]);
+		if(@intval($info['gal_offset'][1]) != @intval($_SESSION['data']['offsets']['gal_offset'])) $_SESSION['data']['offsets']['gal_offset'] = @intval($info['gal_offset'][1]);
+		if(@intval($info['blog_offset'][1]) != @intval($_SESSION['data']['offsets']['blog_offset'])) $_SESSION['data']['offsets']['blog_offset'] = @intval($info['blog_offset'][1]);
+		if(@intval($info['rel_offset'][1]) != @intval($_SESSION['data']['offsets']['rel_offset'])) $_SESSION['data']['offsets']['rel_offset'] = @intval($info['rel_offset'][1]);
+		if(@intval($info['mail_offset'][1]) != @intval($_SESSION['data']['offsets']['mail_offset'])) $_SESSION['data']['offsets']['mail_offset'] = @intval($info['mail_offset'][1]);
+	}
+	
+	if ($s['id_id']) {
+		echo '<div class="smallHeader">profil</div>';
+		echo '<div class="smallBody">';
+			echo '• civilstånd: '.(!empty($info['det_civil'][1])?secureOUT($info['det_civil'][1]):@$det_type[$info['det_civil_type'][1]]).'<br />';
+			echo '• attityd: '.@$info['det_attitude'][1].'<br />';
+			echo '• musik: '.@$info['det_music'][1].'<br />';
+			echo '• vill ha: '.@$info['det_wants'][1].'<br />';
+			echo '• alkohol: '.@$info['det_alcohol'][1].'<br />';
+			echo '• tobak: '.@$info['det_tobacco'][1].'<br />';
+			echo '• sexliv: '.@$info['det_sex'][1].'<br />';
+			echo '• barn: '.@$info['det_children'][1].'<br />';
+			echo '• längd: '.@$info['det_length'][1].'<br />';
+		echo '</div><br/>';
+	}
 
-			<div class="leftMenuBodyGreen">
-				<ul class="user_menu">
-					<li><a href="/user/view/" class="wht none"><img src="/_gfx/icon_profil.png" alt="" />profil</a></li>
-					<li><a href="/user/gb/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['gb_offset'])?> <span class="bld about" id="Xg"></span></span><img src="/_gfx/icon_gb.png" alt="" />gästbok</a></li>
-					<li><a href="/user/mail/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['mail_offset'])?> <span class="bld about" id="Xm"></span></span><img src="/_gfx/icon_mail.png" alt="" />brev</a></li>
-					<li><a href="/user/blog/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['blog_offset'])?></span><img src="/_gfx/icon_blog.png" alt="" />blogg</a></li>
-					<li><a href="/user/relations/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['rel_offset'])?> <span class="bld about" id="Xr"></span></span><img src="/_gfx/icon_friends.png" alt="" />relationer</a></li>
-					<li><a href="/user/gallery/" class="wht none"><span class="i"><?=@intval($_SESSION['data']['offsets']['gal_offset'])?></span><img src="/_gfx/icon_gallery.png" alt="" />galleri</a></li>
-					<li><a href="/member/settings/" class="wht none"><img src="/_gfx/icon_settings.png" alt="" />inställningar</a></li>
-					<li>&nbsp;</li>
-				</ul>
-			</div>
-			<div class="leftMenuFooter"></div>
+	if (@!$own && $s['id_id']) {
+		$txt = array('age' => 'Ålder', 'sex' => 'Sexliv', 'children' => 'Barn', 'music' => 'Musiksmak', 'tobacco' => 'Tobak', 'alcohol' => 'Alkohol', 'wants' => 'Vill ha', 'civil' => 'Civilstatus', 'attitude' => 'Attityd');
+		$myinfo = $user->getcontent($l['id_id'], 'user_head');
+		
+		echo '<div class="smallHeader">matchmaking</div>';
+		echo '<div class="smallBody">';
+			echo '<table summary="" cellspacing="0" id="diverse">';
+			echo '<tr>';
+					echo '<td class="cnt" colspan="3"><div class="usr">jag vs. '.$user->getstring($s, '', array('noage' => 1)).'</div></td>';
+				echo '</tr>';
+				echo '<tr title="'.$txt['age'].'">';
+					echo '<td class="rgt"><div>'.$user->doage($l['u_birth']).' år</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.$user->doage($s['u_birth']).' år</div></td>';
+				echo '</tr>';
 
+				if (@$det_type[$info['det_civil_type'][1]] && @$det_type[$myinfo['det_civil_type'][1]]) {
+					echo '<tr title="'.$txt['civil'].'">';
+					echo '<td class="rgt"><div>'.(!empty($myinfo['det_civil'][1])?secureOUT($myinfo['det_civil'][1]):(@$det_type[$myinfo['det_civil_type'][1]]?@$det_type[$myinfo['det_civil_type'][1]]:'-')).'</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.(!empty($info['det_civil'][1])?secureOUT($info['det_civil'][1]):(@$det_type[$info['det_civil_type'][1]]?@$det_type[$info['det_civil_type'][1]]:'-')).'</div></td>';
+					echo '</tr>';
+				}
+				if (@$info['det_attitude'][1] && @$myinfo['det_attitude'][1]) {
+					echo '<tr title="'.$txt['attitude'].'">';
+					echo '<td class="rgt"><div>'.(@$myinfo['det_attitude'][1]?@$myinfo['det_attitude'][1]:'-').'</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.(@$info['det_attitude'][1]?@$info['det_attitude'][1]:'-').'</div></td>';
+					echo '</tr>';
+				}
+				if (@$info['det_wants'][1] && @$myinfo['det_wants'][1]) {
+					echo '<tr title="'.$txt['wants'].'">';
+					echo '<td class="rgt"><div>'.(@$myinfo['det_wants'][1]?@$myinfo['det_wants'][1]:'-').'</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.(@$info['det_wants'][1]?@$info['det_wants'][1]:'-').'</div></td>';
+					echo '</tr>';
+				}
+				if (@$info['det_alcohol'][1] && @$myinfo['det_alcohol'][1]) {
+					echo '<tr title="'.$txt['alcohol'].'">';
+					echo '<td class="rgt"><div>'.(@$myinfo['det_alcohol'][1]?@$myinfo['det_alcohol'][1]:'-').'</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.(@$info['det_alcohol'][1]?@$info['det_alcohol'][1]:'-').'</div></td>';
+					echo '</tr>';
+				}
+				if (@$myinfo['det_tobacco'][1] && @$info['det_tobacco'][1]) {
+					echo '<tr title="'.$txt['tobacco'].'">';
+					echo '<td class="rgt"><div>'.(@$myinfo['det_tobacco'][1]?@$myinfo['det_tobacco'][1]:'-').'</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.(@$info['det_tobacco'][1]?@$info['det_tobacco'][1]:'-').'</div></td>';
+					echo '</tr>';
+				}
+				if (@$myinfo['det_children'][1] && @$info['det_children'][1]) {
+					echo '<tr title="'.$txt['children'].'">';
+					echo '<td class="rgt"><div>'.(@$myinfo['det_children'][1]?@$myinfo['det_children'][1]:'-').'</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.(@$info['det_children'][1]?@$info['det_children'][1]:'-').'</div></td>';
+					echo '</tr>';
+				}
+				if (@$myinfo['det_music'][1] && @$info['det_music'][1]) {
+					echo '<tr title="'.$txt['music'].'">';
+					echo '<td class="rgt"><div>'.(@$myinfo['det_music'][1]?@$myinfo['det_music'][1]:'-').'</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.(@$info['det_music'][1]?@$info['det_music'][1]:'-').'</div></td>';
+					echo '</tr>';
+				}
+				if (@$info['det_sex'][1] && @$myinfo['det_sex'][1]) {
+					echo '<tr title="'.$txt['sex'].'">';
+					echo '<td class="rgt"><div>'.(@$myinfo['det_sex'][1]?@$myinfo['det_sex'][1]:'-').'</div></td>';
+					echo '<td class="cnt">•</td>';
+					echo '<td class="lft"><div>'.(@$info['det_sex'][1]?@$info['det_sex'][1]:'-').'</div></td>';
+					echo '</tr>';
+				}
+				echo '</table>';
+			echo '</div><br/>';
+	}
+?>
 			<div id="quickchat_indicator" style="display: none;">
 				<div class="smallHeader3">
 					<h4 class="cur">Någon vill prata med dig!</h4>
 				</div>
 				<br/><br/>
 			</div>
-
 <?
-	if($l) {
-?>
-	<? if (!defined('NO_FOL')) { ?>
-			<div id="friendsOnline">
-				<div class="leftMenuHeaderRed" onclick="friendsToggle();">
-					vänner online (<span id="friendsOnlineCount">0</span>)
-				</div>
-				<div class="leftMenuBodyRed">
-					<div id="friendsOnlineList" style="display:none;"></div>
-				</div>
-			</div>
-			<script type="text/javascript" src="/_objects/fol.js"></script>
-			<script type="text/javascript">
-			executeTimeout();
-			executeData('<?=@$_SESSION['data']['cachestr']?>');
-			<?= (!empty($_COOKIE['friendsOnline'])?"friendsToggle();":'')?>
-			</script>
-	<? } ?>
-<?
-	}
-
 	$contribute = $sql->queryLine("SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM {$t}contribute c LEFT JOIN {$t}user u ON u.id_id = c.con_user AND u.status_id = '1' WHERE c.con_onday = NOW() AND c.status_id = '1' LIMIT 1", 1);
 	$gotcon = (!empty($contribute) && count($contribute))?true:false;
 ?>
-			<div class="leftMenuHeader">titta hit</div>
-			<div class="leftMenuBodyWhite">
-				<?=($gotcon?'<div class="pdg">'.$user->getstring($contribute).'</div>':'')?>
-				<div class="leftMenuBodyWhite">
-					<p class="bld pdg brd_btm"><?=($gotcon?secureOUT($contribute['con_msg'], 1):'Visdom finns ej för idag.')?></p>
-					<p class="pdg sml">Varje dag publicerar CitySurf en ny visdom, skicka in en du också!</p>
-					<input type="button" class="btn2_sml r" onclick="makeContribution();" value="skriv" /><br class="clr" />
+			<div class="smallHeader">megafonen</div>
+			<div class="smallBody">
+				<div class="bld">
+				<?=($contribute?$user->getstring($contribute).secureOUT($contribute['con_msg'], 1):'Visdom finns ej för idag.')?>
 				</div>
+				<br/>Varje dag publicerar CitySurf en ny visdom, skicka in en du också!<br/><br/>
+				<input type="button" class="btn2_sml r" onclick="makeContribution();" value="skriv" /><br class="clr" />
 			</div>
 
-		</div>	<!-- end smallContent -->
-	</div>
-	
-	<!-- holder for all content except footer -->
-	<!-- <div style="background-color: #aaee00"> -->
-	<div>
+		</div>	<!-- end leftMenu -->
+		
+		<div id="mainContent">

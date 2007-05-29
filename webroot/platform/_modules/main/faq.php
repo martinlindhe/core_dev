@@ -4,20 +4,18 @@
 	require(DESIGN.'head.php');
 ?>
 
-<img src="/_gfx/ttl_faq.png" alt="Hjälp &amp; FAQ"/><br/><br/>
+<div class="subHead">hjälp &amp; faq</div><br class="clr"/>
 
 <div id="contentSmall" style="padding-left: 10px;">
 	<div class="box2">
-		<div class="box2mid" style="padding-top: 38px;">
-			<table summary="" width="360" style="margin-bottom: 12px;">
+		<div class="box2mid">
 			<?
 				if(count($faq) && !empty($faq)) {
 					foreach($faq as $row) {
-						echo '<tr><td class="bld" style="padding-top: 5px;"><a href="#F'.$row['main_id'].'" onclick="selectFAQ(\''.$row['main_id'].'\');"> - '.extOUT($row['item_q']).'</a></td></tr>';
+						echo '<div style="padding-top: 5px;"><a href="#F'.$row['main_id'].'" onclick="selectFAQ(\''.$row['main_id'].'\');"> - '.extOUT($row['item_q']).'</a></div>';
 					}
-				} else echo '<tr><td class="spac_b pdg cnt">Inga inlägg finns.</td></tr>';
+				} else echo 'Inga inlägg finns.';
 			?>
-			</table>
 		</div>
 	</div>
 </div>
@@ -29,7 +27,7 @@
 			<?
 				if(count($faq) && !empty($faq)) {
 					foreach($faq as $row) {
-					echo '<tr><td class="pdg_nt bld up" style="padding-top: 10px; width: 20px;">Q</td><td class="pdg_nt bld up" style="padding-top: 10px;"><a name="F'.$row['main_id'].'" id="F'.$row['main_id'].'">'.extOUT($row['item_q']).'</a></td></tr>';
+					echo '<tr><td class="pdg_nt bld up" style="padding-top: 10px; width: 20px;"><a name="F'.$row['main_id'].'"></a>Q</td><td class="pdg_nt bld up" style="padding-top: 10px;">'.extOUT($row['item_q']).'</td></tr>';
 					echo '<tr><td class="pdg spac_b" style="width: 20px;">A</td><td class="pdg spac_b" style="padding-bottom: 12px;">'.extOUT($row['item_a']).'</td></tr>';
 					}
 				}

@@ -1,16 +1,17 @@
-var friendsC = 0, friendsMaximized = 0, friendObj = document.getElementById('friendsOnlineList');
+var friendsC = 0, friendsMaximized = 0;
 
 function friendsToggle() {
-	if (friendObj.style.display == 'none') {
+	e = document.getElementById('friendsOnlineList');
+	if (e.style.display == 'none') {
 		//expand
 		friendsMaximized = 1;
 		friendsC = 10;
-		//friendObj.style.height = ((friendsC * 27) + 'px');
-		friendObj.style.display = '';
+		//e.style.height = ((friendsC * 27) + 'px');
+		e.style.display = '';
 	} else {
 		//minimize
 		friendsMaximized = 0;
-		friendObj.style.display = 'none';
+		e.style.display = 'none';
 	}
 
 	friendsSavePos();

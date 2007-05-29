@@ -13,7 +13,7 @@ function openText(id, fid) {
 
 	<div id="mainContent">
 
-		<img src="/_gfx/ttl_forum.png" alt="Forum"/><br/><br/>
+		<div class="subHead">forum</div><br class="clr"/>
 
 		<table cellspacing="0" summary="" style="margin-bottom: 20px;">
 		<tr>
@@ -40,8 +40,8 @@ function openText(id, fid) {
 		</tr>
 		</table>
 
-		<div class="centerMenuHeader"><?=makeMenu($page, $menu)?> - 50 senaste inläggen</div>
-		<div class="centerMenuBodyWhite">
+		<div class="bigHeader"><?=makeMenu($page, $menu)?> - 50 senaste inläggen</div>
+		<div class="bigBody">
 <table cellspacing="0" summary="" width="589">
 <?
 if(count($last)) {
@@ -62,6 +62,7 @@ if(count($last)) {
 		</table>
 		</div>
 		</div>
+
 <?
 	require(DESIGN."foot.php");
 ?>

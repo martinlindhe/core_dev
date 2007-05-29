@@ -67,10 +67,10 @@
 		require("part3.php");
 		exit;
 	}
-	require(DESIGN.'head_start.php');
+	require(DESIGN.'head.php');
 ?>
-		<div class="centerMenuHeader">Aktivera konto</div>
-		<div class="centerMenuBodyWhite">
+		<div class="bigHeader">Aktivera konto</div>
+		<div class="bigBody">
 			<form name="l" method="post" action="<?=l('member', 'activate')?>">
 			<input type="hidden" name="activate">
 			<input type="hidden" name="go" value="1">
@@ -85,9 +85,9 @@
 	<td colspan="2"><br /><?=(!empty($msg) && count($msg))?'<span class="bld">OBS!</span><br />'.implode('<br />', $msg):'';?></td>
 </tr>
 </table>
-	<input type="submit" class="btn2_med r" value="nästa" /><br class="clr" />
+	<input type="submit" class="btn2_min r" value="nästa" /><br class="clr" />
 			</form>
 		</div>
 <?
-	include(DESIGN.'foot_start.php');
+	include(DESIGN.'foot.php');
 ?>

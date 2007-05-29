@@ -45,20 +45,21 @@
 ?>
 	<div id="mainContent">
 
-		<div class="centerMenuHeader">glömt lösenordet</div>
-		<div class="centerMenuBodyWhite">
+		<div class="bigHeader">glömt lösenordet</div>
+		<div class="bigBody">
 			<form name="forgot" method="post" action="<?=l('member', 'forgot')?>">
 			<input type="hidden" name="do" value="1" />
-				<p>
 				<?=safeOUT(gettxt('register-forgot'))?>
 				<br/><br/>
 
 				<b>alias eller e-post</b><br />
 				<input type="text" class="txt" name="a" value="<?=(!empty($_POST['a']))?secureOUT($_POST['a']):'';?>" />
-				<script type="text/javascript"><?=(empty($_POST) || !count($_POST))?'document.forgot.a.focus();':'';?></script>
-				<?=(!empty($msg) && count($msg))?'<br /><br /><span class="bld">OBS!</span><br />'.implode('<br />', $msg):''?>
+				<?
+					if (!empty($msg) && count($msg)) echo '<br /><br /><span class="bld">OBS!</span><br />'.implode('<br />', $msg);
+				?>
 				<input type="submit" value="fortsätt" class="btn2_med"/>
-				</p>
+
+				<? if (empty($_POST)) echo '<script type="text/javascript">document.forgot.a.focus();</script>'; ?>
 			</form>
 		</div>
 

@@ -1,103 +1,37 @@
-2007.05.21 Måndag:
-	mobila gränssnittet:
-		* fixade listningen av "användare senast online", så att inga dubletter visas
-
-	process-server:
-		* ändrat soap-api:t så login & kommando skickas i ett och samma soaprequest
-
-	dataphone:
-		* vart med mika och installerat dammsugar-datorn hos dataphone
-		* konfigurerat & installerat mjukvara på dammsugaren
-
-2007.05.22 Tisdag:
-	dataphone:
-		* flyttat över php-script & databas & konfigurerat dammsugar-datorn
-		* communityt fungerar nu som det ska på dammsugar-datorn, förrutom att bilder saknas
-
-	[x] 1. installera apache,php,mysql på dammsugaren
-				# sudo apt-get install apache2 php5 mysql-server
-	[x] 2. gör backup på senaste versionen av all kod & databas från dev-burken
-				# ./www-backup.sh
-				# mysqldump platform --user=root --password dev3l0p3r > out.sql && 7z a db.7z out.sql
-	[x] 3. lagt upp backupen på ftp.inconet.se (2007.05.21)
-	[x] 4. konfigurera mysql,php,apache,mod_rewrite
-
-				Apache:
-				config: /etc/apache2/apache2.conf
-				config: /etc/apache2/sites-enabled/000-default
-				/home/martin/www = webroot
-
-				/home/martin/www/.htaccess innehåller url rewrite rules
-				
-				MySQL:
-				# mysql -u root --password
-				mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('dravelsql');
-				mysql> CREATE DATABASE platform;
-
-  			mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
-  							ON platform.*
-  							TO 'webaccount'@'localhost'
-  							IDENTIFIED BY 'df43534gbhDFAJpt455';
-
-				config: /etc/mysql/my.cnf
-
-	[x] 5. installera php-script & importera databas
-				# cd /home/martin/www
-				# 7z x www-dump.7z
-
-				# mysql -u root --password -p platform --default-character-set=utf8 < out.sql
-
-	[x] 6. konfigurera cron-jobb
-	[x] 7. testa att allt funkar
-	[x] 8. webload:
-					- mrtg installerat: http://cs.icn.se/_mrtg/
-					- kunna klara minst 200 användare
-					- skippa mobila gränssnitet. testa bara webbgränssnittet
-
-2007.05.23 Onsdag:
-	mobila gränssnittet:
-		* visar "ANVÄNDAREN BORTTAGEN" om användare ej finns
-
-	sms debitering:
-		* planerat programflöde och features
-		* påbörjat implementation
-		* stödjer SSL-anslutning till IPX
-		* stödjer IPX-max "read timeout" på 10 minuter
-		* SMS-utskick impementerat
-		* inkommande SMS-hantering förberedd. IPX måste konfigurera destinations-url åt oss:		
-			http://cs.icn.se/_process/ipx_incoming.php
-			prefix "POG" var ledig, vi kommer använda den för test
-			vi vill ha datan som GET-data
-		* ip-restrictions för IPX-incoming script
-
-
-2007.05.24 Torsdag:
-	mobila gränssnittet - från feedbck av bitte:
-		* visar bekräftelse att mail har skickats
-		* ändrat placering av ikonerna på startsidan, logga ut längst ner
-		* visar bara "ändringar sparade" på fakta-redigering
-		* fixat formulär på alla mobil-sidor för mobiler som har buggiga webbläsare
-		
+2007.05.28 Måndag:
 	webbgränssnittet:
-		* lagt till alla bilder från test-importen
-		* tagit bort "radera" inlägg knappen i forum för vanliga användare
-		* påbörjat implementation av teman. mycket design/kod-förändring och cleanup-grovjobb gjort för att kunna genomföra detta
+		* designfix på forumsidor, blogg-sidor
+		* nya symboler för kille/tjej
+		* återställt så hover-thumbnails visas
+		* nya knappar på lite olika sidor som jag missade förra veckan
+		* fixat utseende på användarlänkar, de får olika färg beroende på kön.
+			dessutom visas det med vit bakgrund när de ligger i rubriker, så att de blir läsbara (exempel: läs mail)
+		* fixat så bildbeskärning fungerar _bättre_ i Firefox (fortfarande problem)
+		* fixat så matchmaking bara visas när man besöker andras profiler
+		* fixat design på "blockera användare"-popup
+			(all feedback från Bitte är nu avverkad)
+		* visar profil-info till vänster, enligt designskiss från anneli
+		* utseende på besökare-listan fixat (ser rätt ut i IE)
+		* lagt tillbaka logga-ut knappen i övre högra hörnet
+		* ny design på utloggad startsida, enligt designskiss från anneli
 
 
-2007.05.25 Fredag:
+2007.05.29 Tisdag:
 	webbgränssnittet:
-		* fortsätter med implementation av teman, gått igenom och tagit bort massor med gammal css
-		* teman är klara, funktion för att kunna välja tema saknas
----[[mailat ovanstående]]---
+		* ny design på sidorna "glömt lösenord", "registrering"
+		* på "brev"-sidan följer min egen user-header följa med (kiano)
+		* ny design på "bli vän"-popup
+		* visar ej "bli vän" på profilsidor för användare man redan är vän med
+
 
 ***************************************************************************************************
-NU: på "brev" ska min egen user-header följa med
-NU: kunna välja tema
-NU: ny design utloggad startsida
 
-torsdag+fredag implementation:
-	* #1: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
-	* #1: anmäl användare-funktion (abuse)
+NU: kunna välja tema
+
+NU: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
+NU: anmäl användare-funktion (abuse)
+
+NU: uppgradera-sida. info om hur du uppgraderar till VIP etc
 
 blandat:
 	* konfa virtual hosts: mobil.cs.se, process.cs.se
@@ -118,13 +52,12 @@ blandat:
 
 EFETER TEST:
 	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
-	* design: kunna välja skins (olika css-filer), när design är klar från anneli
 	* bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
+	* rating på bilder i galleriet, med atom_rating.php
+	* bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
 	* faceum:
 		- skriv test-kod mot deras API
 		- visa face-match på en annan användares profilsida
-	* rating på bilder i galleriet, med atom_rating.php
-	* bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
 
 
 senare, låg prio:

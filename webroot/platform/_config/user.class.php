@@ -243,12 +243,14 @@ class user {
 
 		//$own = ($arr['id_id'] == $this->id?true:false);
 	  //$mail_add = (!$own)?'<a href="javascript:makeMail(\''.$arr['id_id'].'\');" title="Skriv mail"><img alt="" src="'.OBJ.'mail_write.gif" style="margin: 0 0 -2px 3px;" /></a>':'';
-		$result = '<span class="nobr">';
-		$result .= (empty($extra['nolink'])?'<a href="'.l('user', 'view', $arr['id_id'.$suffix]).'" class="bld user">':'<span class="bld user">');
-		$result .= '<span class="'.($this->isOnline($arr['account_date'.$suffix])?'on':'off').'"'.(!isset($extra['noimg'])?' onmouseover="launchHover(event, \''.$arr['id_id'].'\');" onmouseout="clearHover();"':'').'>'.secureOUT($arr['u_alias'.$suffix]).'</span>';
-		$result .= (empty($extra['nosex'])?' <img alt="'.$sex_name[$arr['u_sex'.$suffix]].'" src="/_objects/icon_'.$arr['u_sex'.$suffix].'1.gif" />':'');
-		$result .= (empty($extra['noage'])?'<span class="sex'.$arr['u_sex'.$suffix].'">'.$this->doage($arr['u_birth'.$suffix]).'</span>':'');
-		$result .= (empty($extra['nolink'])?'</a>':'</span>');
+		$result  = (empty($extra['nolink'])?'<a href="'.l('user', 'view', $arr['id_id'.$suffix]).'">':'');
+		
+		$curr_class = ($this->isOnline($arr['account_date'.$suffix])?'on':'off').'_'.$sex_name[$arr['u_sex'.$suffix]];
+
+		$result .= '<span class="'.$curr_class.'"'.(!isset($extra['noimg'])?' onmouseover="launchHover(event, \''.$arr['id_id'].'\');" onmouseout="clearHover();"':'').'>'.secureOUT($arr['u_alias'.$suffix]);
+		$result .= (empty($extra['nosex'])?' <img alt="'.$sex_name[$arr['u_sex'.$suffix]].'" align="absmiddle" src="/_objects/icon_'.$arr['u_sex'.$suffix].'1.png" />':'');
+		$result .= (empty($extra['noage'])?$this->doage($arr['u_birth'.$suffix]):'');
+		$result .= (empty($extra['nolink'])?'</a>':'');
 		$result .= '</span>';
 		return $result;
 		//(!empty($extra['top']) && !$own?'<a href="javascript:makeGb(\''.$arr['id_id'].'\''.(($extra && @$extra['gb'])?', \'&amp;a='.$extra['gb'].'\'':'').');" title="Skriv GB-inlägg"><img alt="Skriv GB-inlägg" src="'.OBJ.'guestbook_write.gif" style="margin: 0 0 -2px 3px;" /></a><a href="javascript:makeChat(\''.$arr['id_id'].'\');"><img alt="Öppna privatchat" src="'.OBJ.'chat_write.gif" style="margin: 0 0 -2px 3px;" /></a>'.$mail_add:'').'</span>';

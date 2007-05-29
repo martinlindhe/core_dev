@@ -103,17 +103,15 @@ function executeFriendsOnline(text) {
 	obj = document.getElementById('friendsOnlineList');
 	ret = '';
 	if(text.length > 1) {
-		ret = '<ul>';
+		ret = '<ul class="friends_list">';
 		for(i = 0; i < text.length-1; i++) {
 			text[i] = text[i].split('|');
 			ret += '<li>';
 			ret += '<span onmouseover="launchHover(event, \'' + text[i][0] + '\');" onmouseout="clearHover();">';
 			ret += '<a href="/user/view/' + text[i][0] + '">' + unescape(text[i][1]) + ' <b>' + text[i][2] + '</b></a>';
 			ret += '</span>';
-			//ret += '<span style="float: right">';
 			ret += ' <img onclick="makeGb(\'' + text[i][0] + '\')" title="Skriv i gästboken" alt="Skriv i gästboken" src="/_gfx/icon_gb.png" />';
 			ret += '<img onclick="makeChat(\'' + text[i][0] + '\')" title="Chatta" alt="Chatta" src="/_gfx/icon_qchat.png" />';
-			//ret += '</span>';
 			ret += '</li>';
 		}
 		ret += '</ul>';
@@ -126,18 +124,9 @@ function executeFriendsOnline(text) {
 
 function activateData(info) {
 	switch(info[0]) {
-		case 'g':
-			obj = 'Xg';
-			break;
-
-		case 'm':
-			obj = 'Xm';
-			break;
-
-		case 'v':
-			obj = 'Xr';
-			break;
-
+		case 'g': obj = 'Xg'; break;
+		case 'm': obj = 'Xm'; break;
+		case 'v': obj = 'Xr'; break;
 		case 'c':
 			//quickchat
 			document.getElementById('quickchat_indicator').onclick = function() {
@@ -147,30 +136,26 @@ function activateData(info) {
 			show_element_by_name('quickchat_indicator');
 			return;
 
-		default:
-			return;
+		default: return;
 		break;
 	}
-	document.getElementById(obj).style.color = '#832e30';
-	document.getElementById(obj).innerHTML = ' (' + info[1] + ')';
+	e = document.getElementById(obj);
+	if (!e) return;
+	e.style.color = '#832e30';
+	e.innerHTML = ' (' + info[1] + ')';
 }
 function deactivateData(info) {
 	switch(info[0]) {
-		case 'g':
-			obj = 'Xg';
-		break;
-		case 'm':
-			obj = 'Xm';
-		break;
-		case 'v':
-			obj = 'Xr';
-		break;
-		default:
-			return;
+		case 'g': obj = 'Xg'; break;
+		case 'm': obj = 'Xm'; break;
+		case 'v': obj = 'Xr'; break;
+		default: return;
 		break;
 	}
-	document.getElementById(obj).innerHTML = '';
-	document.getElementById(obj).style.color = '';
+	e = document.getElementById(obj);
+	if (!e) return;
+	e.innerHTML = '';
+	e.style.color = '';
 }
 function emptyChat() {
 	check = parseInt(document.getElementById('Xc').childNodes[1].innerHTML);

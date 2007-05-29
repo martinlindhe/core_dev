@@ -18,7 +18,7 @@
 ?>
 <div id="mainContent">
 
-	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
+	<div class="subHead">inställningar</div><br class="clr"/>
 
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings').'\')', 'icon_settings.png', 'publika'); ?>
 	<? makeButton(true, 'goLoc(\''.l('member', 'settings', 'fact').'\')', 'icon_settings.png', 'fakta'); ?>
@@ -52,7 +52,7 @@
 				</td>
 			</tr></table>
 		</div>
-		<input type="submit" value="spara!" class="btn2_sml r" />
+		<input type="submit" value="spara!" class="btn2_sml r" /><br class="clr"/>
 		</form>
 	</div>
 </div>

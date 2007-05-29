@@ -61,14 +61,14 @@
 	if (!$file_ext) $file_ext = $res['pht_name'];
 ?>
 
-<img src="/_gfx/ttl_gallery.png" alt="Galleri"/><br/><br/>
+<div class="subHead">galleri</div><br class="clr"/>
 
 <? makeButton(false, 'makePhotoComment('.$s['id_id'].','.$res['main_id'].')', 'icon_blog.png', 'skriv kommentar'); ?>
 <br/><br/><br/>
 
-<div class="centerMenuHeader"><?=secureOUT($res['pht_cmt'])?> - publicerad: <?=nicedate($res['pht_date'])?></div>
-<div class="centerMenuBodyWhite"><a name="view"></a>
-	<div class="cnt">
+<div class="bigHeader"><?=secureOUT($res['pht_cmt'])?> - publicerad: <?=nicedate($res['pht_date'])?></div>
+<div class="bigBody cnt">
+	<a name="view"></a>
 <?
 	switch ($file_ext) {
 		case 'jpg':
@@ -99,7 +99,6 @@
 		default: die('ext '.$file_ext);
 	}
 ?>
-	</div>
 <? 	if (!empty($_GET['c'])) { ?>
 	<div>
 		<center>
@@ -121,8 +120,8 @@
 </div><br/>
 
 
-<div class="centerMenuHeader">kommentarer</div>
-<div class="centerMenuBodyWhite">
+<div class="bigHeader">kommentarer</div>
+<div class="bigBody">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
 	$c_paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphotocmt WHERE photo_id = '".$res['main_id']."' AND status_id = '1'");

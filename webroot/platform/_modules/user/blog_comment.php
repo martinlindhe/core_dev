@@ -76,8 +76,8 @@ function validateIt(tForm) {
 </script>
 <form name="msg" action="<?=l('user', 'blogcomment', $s['id_id'], $res['main_id'])?>&amp;r=<?=$r?>&amp;a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
 		<div class="smallWholeContent cnti mrg">
-			<div class="leftMenuHeader">bloggkommentar</div>
-			<div class="leftMenuBodyWhite pdg_t">
+			<div class="smallHeader">bloggkommentar</div>
+			<div class="smallBody pdg_t">
 				skriv kommentar till bloggen<br />
 				<b><?=secureOUT($res['blog_title'])?></b><br />
 				av <?=$user->getstring($s, '', array('nolink' => 1))?><br/>

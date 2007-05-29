@@ -30,7 +30,7 @@ var you = \''.($l['u_alias']).'\';
 
 <div class="boxMid1">
 
-	<img src="/_gfx/ttl_chat.png" alt="Chat"/><br/>
+	<div class="subHead">chat</div><br class="clr"/>
 	<div class="boxMid1mid">
 		<table summary="" cellspacing="0" style="width: 510px;">
 		<tr>

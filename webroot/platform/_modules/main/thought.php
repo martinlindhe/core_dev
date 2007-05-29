@@ -55,7 +55,7 @@
 
 <div id="mainContent">
 	
-	<img src="/_gfx/ttl_tyck_till.png" alt="Tyck till"/><br/><br/>
+	<div class="subHead">tyck till</div><br class="clr"/>
 
 	<?=gettxt('top-thought')?>
 	<form action="<?=l('main', 'thought')?>" method="post">

@@ -37,8 +37,8 @@ document.onkeydown = ActivateByKey;
 
 <form name="msg" action="<?=l('user', 'gbwrite', $s['id_id'])?>r=<?=$r?>&amp;a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
 		<div class="smallWholeContent cnti mrg">
-			<div class="leftMenuHeader">gästboksinlägg</div>
-			<div class="leftMenuBodyWhite pdg_t">
+			<div class="smallHeader">gästboksinlägg</div>
+			<div class="smallBody pdg_t">
 				skriv till <?=$user->getstring($s, '', array('nolink' => 1))?><br/>
 				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 160px;"></textarea>
 				<script type="text/javascript">document.msg.ins_cmt.focus();</script>

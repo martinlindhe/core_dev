@@ -176,17 +176,11 @@
 		}
 	}
 	$page = 'settings_img';
-	$html4_head = true;
-	if($second) {
-		define('ABORT_LNK', l('member', 'settings', 'img').'0/&del_key');
-		require(DESIGN.'head_start.php');
-	}
-	else require(DESIGN.'head.php');
+
+	//$html4_head = true;
+	require(DESIGN.'head.php');
 ?>
 
-<?
-	if(!$second) {
-?>
 <script type="text/javascript">
 var alreadyupl = 0;
 function reForm(v) {
@@ -209,7 +203,7 @@ function intern_get(obj) {
 
 <div id="mainContent">
 
-	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
+	<div class="subHead">inställningar</div><br class="clr"/>
 
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings').'\')', 'icon_settings.png', 'publika'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'fact').'\')', 'icon_settings.png', 'fakta'); ?>
@@ -219,19 +213,15 @@ function intern_get(obj) {
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'delete').'\')', 'icon_settings.png', 'radera konto'); ?>
 	<br/><br/><br/>
 
-	<div class="centerMenuBodyWhite">
-		
+	<div class="bigHeader">presentationsbild</div>
+	<div class="bigBody">
+<?
+	if (!$second) {
+?>
 	<form action="<?=l('member', 'settings', 'img')?>" method="post" enctype="multipart/form-data" onsubmit="if(alreadyupl == 1) { if(!confirm('Du har redan laddat upp en bild för att använda den som\nprofilbild, men du har inte slutfört beskärningen.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } if(alreadyupl == 2) { if(!confirm('Du har redan laddat upp en bild som väntar på att granskas.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } this.submitbtn.disabled = true;">
 	<input type="hidden" name="dopost" value="1"/>
 		
-	<div style="padding: 5px; text-align: left;">
-
-<table summary="" cellspacing="0" width="580">
-<tr>
-	<td colspan="2" class="pdg"><?=safeOUT(gettxt('top-settings_img'))?></td>
-</tr>
-<tr>
-	<td colspan="2" class="pdg">
+		<?=safeOUT(gettxt('top-settings_img'))?>
 <?
 	$gotnew = false;
 	$waiting = $sql->queryLine("SELECT flow_id, status_id, key_id FROM {$t}userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
@@ -240,95 +230,78 @@ function intern_get(obj) {
 ?>
 	<table summary="" cellspacing="0" width="100%">
 	<tr>
-		<td width="50%"><?=(intval($l['u_picid']) > 0)?'<b>Aktuell profilbild</b><br/>'.$user->getimg($l['id_id'].$l['u_picid'].$l['u_picd'].$l['u_sex'], $l['u_picvalid'], 1).'<br /><input type="button" style="margin-bottom: 3px;" onclick="if(confirm(\''.((@$length[$l['level_id']])?'Du kommer inte att kunna ladda upp en ny bild på '.$length[$l['level_id']].' dagar.\n\n':'').'Säker ?\')) reForm(\'d\');" class="btn2_med" value="radera bild"/>':'&nbsp;';?></td>
+		<td width="50%"><?=(intval($l['u_picid']) > 0)?'<b>Aktuell profilbild</b><br/>'.$user->getimg($l['id_id'].$l['u_picid'].$l['u_picd'].$l['u_sex'], $l['u_picvalid'], 1).'<br /><input type="button" style="margin-bottom: 3px;" onclick="if(confirm(\''.((@$length[$l['level_id']])?'Du kommer inte att kunna ladda upp en ny bild på '.$length[$l['level_id']].' dagar.\n\n':'').'Säker ?\')) reForm(\'d\');" class="btn2_min" value="radera bild"/><br/><br/>':'&nbsp;';?></td>
 		<?
 			if ($gotnew) {
-				echo '<td style="background: url(\'./_img/topic_loading1.gif\'); background-repeat: no-repeat; background-position: 0 14px;"><b>Väntar på att granskas</b><script type="text/javascript">alreadyupl = 2;</script><br/><img width="150" height="150" src="'.l('member', 'preimage').'?'.mt_rand(1000, 9999).'" /><!-- <input type="button" class="b" style="margin-bottom: 3px;" onclick="if(confirm(\'Säker ?\')) reForm(\'w\');" value="missnöjd?">--></td>';
+				echo '<td style="background: url(\'./_img/topic_loading1.gif\'); background-repeat: no-repeat; background-position: 0 14px;"><b>Väntar på att granskas</b><script type="text/javascript">alreadyupl = 2;</script><br/><img width="150" height="150" alt="" src="'.l('member', 'preimage').'?'.mt_rand(1000, 9999).'" /><!-- <input type="button" class="b" style="margin-bottom: 3px;" onclick="if(confirm(\'Säker ?\')) reForm(\'w\');" value="missnöjd?">--></td>';
 			} else {
 				echo '<td>&nbsp;</td>';
 			}
 		?>
 	</tr>
 	</table>
-	</td>
-</tr>
 <?
 	}
-?>
-</table>
-<?
+
 	if ($waiting && $waiting[1] == '3') {
-		echo '<table summary="" cellspacing="0" width="800" class="mrg_t">
-			<tr><td class="pdg up">Du har en bild uppladdad som väntar på att beskäras. Vill du fortsätta att beskära?<br/><br/>Om du vill sluta vänta, kan du ladda upp en ny bild.</td></tr>
-			<tr><td class="pdg"><input type="button" value="fortsätt" class="b" onclick="goLoc(\''.l('member', 'settings', 'img').'0/&key='.$waiting[2].'\');" /></td></tr>
-			</table>
-			<script type="text/javascript">alreadyupl = 1;</script>';
+		echo 'Du har en bild uppladdad som väntar på att beskäras. Vill du fortsätta att beskära?<br/><br/>Om du vill sluta vänta, kan du ladda upp en ny bild.<br/>';
+		echo '<input type="button" value="fortsätt" class="btn2_min" onclick="goLoc(\''.l('member', 'settings', 'img').'0/&key='.$waiting[2].'\');" /><br/><br/>';
+		echo '<script type="text/javascript">alreadyupl = 1;</script>';
 	}
+
+	if($actual) {
 ?>
-<table summary="" cellspacing="0" width="910" class="mrg_t">
-<?
-		if($actual) {
-?>
-	<tr>
-		<td class="pdg up">
-			Du har <b><?=$actual?></b> dagar kvar till du får ladda upp en ny bild. Du kan välja att uppgradera för att få en kortare väntetid.<br/><br/>
-			<input type="button" onclick="goLoc('<?=l('text', 'upgrade')?>');" class="b" value="uppgradera!"/>
-		</td>
-	</tr>
+		Du har <b><?=$actual?></b> dagar kvar till du får ladda upp en ny bild. Du kan välja att uppgradera för att få en kortare väntetid.<br/><br/>
+		<input type="button" onclick="goLoc('<?=l('text', 'upgrade')?>');" class="b" value="uppgradera!"/>
 <?
 	} else {
 ?>
-	<tr>
-		<td class="pdg">
-			<b>Bild från dator:</b><span id="errorlog"></span><br/>
-			<input type="file" name="ins_img" class="txt" style="width: 250px;"/>
-		</td>
-	</tr>
+		<b>Bild från dator:</b><span id="errorlog"></span><br/>
+		<input type="file" name="ins_img" class="txt" style="width: 250px;"/><br/>
 <?
 	}
 ?>
-</table>
-
-</div>
-
-<input type="submit" value="ladda upp!" class="btn2_med r" />
-</form>
-
-</div>
-</div>
+	<input type="submit" value="ladda upp!" class="btn2_min" /><br class="clr"/>
+	</form>
 <?
-	include(DESIGN.'foot.php');
-	exit;
 } else {
 ?>
 <div style="padding: 0px; text-align: left;">
+	<script type="text/javascript" src="<?=OBJ?>img_cut.js"></script>
+	<script type="text/javascript" src="<?=OBJ?>img_cutcon<?=(!$ua)?'_nn':'';?>.js"></script>
 	<form action="<?=l('member', 'settings', 'img')?>0/&key=<?=$key?>&get=<?=$get?>" method="post" onsubmit="this.submitbtn.disabled = true;">
-	<input type="hidden" name="docut" value="1"/>
-<script type="text/javascript" src="<?=OBJ?>img_cut.js"></script>
-<script type="text/javascript" src="<?=OBJ?>img_cutcon<?=(!$ua)?'_nn':'';?>.js"></script>
-<input type="submit" name="submitbtn" id="submitbtn" class="btn2_med r" value="beskär bild"/>
-<div id="everything" style="display: none; position: relative;">
-	<div id="imDrag" align="right" style="display: none; z-index: 4; visibility: visible; position: absolute; cursor: pointer; top: 0; left: 0;">
-		<div id="imBorder" style="z-index: 3; visibility: visible; border: #00FF66 1px solid;"><img src="<?=OBJ?>1x1.gif" name="theSpace" onmouseup="stopDrag()" onmousedown="doDrag('imDrag')" id="theSpace" style="width: 150px; height: 150px;"></div>
-		<a href="javascript:void(0);" id="imSize" class="wht bld" style="background: #000;" onmouseup="stopDrag()" onmousedown="doDrag('imDrag', 1)">STORLEK»»</a>
-	</div>
-	<div id="imDiv" style="z-index: 1; visibility: visible; top: 0; left: 0; width: 330px;"><img src="<?=$img?>" id="theImage" id="theImage" onload="checkSrc(this);" onerror="imgError(this);" style="display: none;" alt=""></div>
-	</div>
 	<input name="ActImageW" id="ActImageW" type="hidden" value="150"/>
 	<input name="ActImageH" id="ActImageH" type="hidden" value="150"/>
 	<input name="UserImageX" id="UserImageX" type="hidden" value="0"/>
 	<input name="UserImageY" id="UserImageY" type="hidden" value="0"/>
 	<input name="UserImageW" id="UserImageW" type="hidden" value="150"/>
 	<input name="UserImageH" id="UserImageH" type="hidden" value="150"/>
-	<img src="<?=$img?>" id="theSize" name="theSize" style="visibility: hidden; position: absolute;" onload="checkSize(this);">
+	<input type="hidden" name="docut" value="1"/>
+	<div id="everything" style="display: none; position: relative;">
+		<div id="imDrag" align="right" style="display: none; z-index: 4; visibility: visible; position: absolute; cursor: pointer; top: 0; left: 0;">
+			<div id="imBorder" style="z-index: 3; visibility: visible; border: #00FF66 1px solid;">
+				<img src="<?=OBJ?>1x1.gif" name="theSpace" onmouseup="stopDrag()" onmousedown="doDrag('imDrag')" id="theSpace" style="width: 150px; height: 150px;" alt=""/>
+			</div>
+			<a href="javascript:void(0);" id="imSize" class="wht bld" style="background: #000;" onmouseup="stopDrag()" onmousedown="doDrag('imDrag', 1)">STORLEK»»</a>
+		</div>
+		<div id="imDiv" style="z-index: 1; visibility: visible; top: 0; left: 0; width: 330px;"><img src="<?=$img?>" id="theImage" onload="checkSrc(this);" onerror="imgError(this);" style="display: none;" alt=""></div>
+	</div>
+	<img src="<?=$img?>" id="theSize" name="theSize" style="visibility: hidden; position: absolute;" onload="checkSize(this);" alt=""/>
+	<input type="submit" name="submitbtn" id="submitbtn" class="btn2_min" value="beskär bild"/>
+	</form>
 </div>
-<script type="text/javascript">initiate(); document.getElementById('submitbtn').disabled = true;</script>
+
+<script type="text/javascript">
+	initiate();
+	document.getElementById('submitbtn').disabled = true;
+</script>
 <?
 }
 ?>
-</div>
-		</div>
-	</div>
+
+	</div>	<!-- bigBody -->
+</div> <!-- mainContent -->
+
 <?
 	include(DESIGN.'foot.php');
 ?>

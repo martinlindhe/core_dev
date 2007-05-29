@@ -10,7 +10,7 @@
 ?>
 <div id="mainContent">
 
-	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
+	<div class="subHead">inställningar</div><br class="clr"/>
 
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings').'\')', 'icon_settings.png', 'publika'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'fact').'\')', 'icon_settings.png', 'fakta'); ?>
@@ -37,41 +37,41 @@
 	}
 
 	if ($spy_forum) {
-		echo '<div class="centerMenuHeader">Forum-bevakningar</div>';
-		echo '<div class="centerMenuBodyWhite"><div style="padding: 5px;"><table width="100%">';
+		echo '<div class="bigHeader">Forum-bevakningar</div>';
+		echo '<div class="bigBody"><div style="padding: 5px;"><table width="100%">';
 	}
 	foreach ($spy_forum as $row)
 	{
 		echo '<tr><td>';
 		echo 'Forum - <a href="'.l('forum', 'read', $row['object_id']).'">'.$row['title'].'</a></td><td width="100">';
-		makeButton(false, 'goLoc(\''.l('forum', 'read', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'sluta bevaka');
+		makeButton(false, 'goLoc(\''.l('forum', 'read', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
 		echo '</td></tr>';
 		
 	}
 	if ($spy_forum) echo '</table></div></div><br/>';
 
 	if ($spy_blog) {
-		echo '<div class="centerMenuHeader">Blogg-bevakningar</div>';
-		echo '<div class="centerMenuBodyWhite"><div style="padding: 5px;"><table width="100%">';
+		echo '<div class="bigHeader">Blogg-bevakningar</div>';
+		echo '<div class="bigBody"><div style="padding: 5px;"><table width="100%">';
 	}
 	foreach ($spy_blog as $row)
 	{
 		echo '<tr><td>';
 		echo 'Blogg - <a href="'.l('user', 'blog', $row['object_id']).'">'.$row['title'].'</a></td><td width="100">';
-		makeButton(false, 'goLoc(\''.l('user', 'blog', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'sluta bevaka');
+		makeButton(false, 'goLoc(\''.l('user', 'blog', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
 		echo '</td></tr>';
 	}
 	if ($spy_blog) echo '</table></div></div><br/>';
 	
 	if ($spy_gal) {
-		echo '<div class="centerMenuHeader">Galleri-bevakningar</div>';
-		echo '<div class="centerMenuBodyWhite"><div style="padding: 5px;"><table width="100%">';
+		echo '<div class="bigHeader">Galleri-bevakningar</div>';
+		echo '<div class="bigBody"><div style="padding: 5px;"><table width="100%">';
 	}
 	foreach ($spy_gal as $row)
 	{
 		echo '<tr><td>';
 		echo 'Gallieri - <a href="'.l('user', 'gallery', $row['object_id']).'">'.$row['title'].'</a></td><td width="100">';
-		makeButton(false, 'goLoc(\''.l('user', 'gallery', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'sluta bevaka');
+		makeButton(false, 'goLoc(\''.l('user', 'gallery', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
 		echo '</td></tr>';
 	}
 	if ($spy_gal) echo '</table></div></div>';

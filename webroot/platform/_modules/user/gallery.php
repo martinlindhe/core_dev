@@ -45,7 +45,7 @@
 
 	require(DESIGN.'head_user.php');
 ?>
-	<img src="/_gfx/ttl_gallery.png" alt="Galleri"/><br/><br/>
+	<div class="subHead">galleri</div><br class="clr"/>
 <?	
 	if ($own) {
 		makeButton(false, 'makeUpload();', 'icon_gallery.png', 'ladda upp ny');
@@ -71,7 +71,8 @@ var first = '<?=$first?>'; ext = '<?=$ext?>';
 		$all = true;
 		include('gallerylist.php');
 ?>
-<img src="/_gfx/ttl_gallery_x.png" alt="Galleri X"/><br/><br/>
+<br/>
+<div class="subHead">galleri x</div><br class="clr"/>
 <?
 		$paging = paging(1, 20);
 		$res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1' ORDER BY main_id DESC", 0, 1);

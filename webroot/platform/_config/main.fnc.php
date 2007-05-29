@@ -213,9 +213,11 @@ function errorTACT($msg, $url, $time) {
 }
 function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $topic = '', $tc = 1, $class = '') {
 	eval(GLOBAL_STRING);
+
 	if($type == 'main') {
 		$page = 'error.php';
 		if(!$l) $page = 'error_splash.php';
+		
 		if(!empty($url) && substr($url, 0, 1) != '1') {
 			require(dirname(__FILE__).'/../_design/'.$page);
 			require(dirname(__FILE__).'/../_design/mv.php');

@@ -85,10 +85,10 @@
 	$menu = array('friends' => array(l('user', 'relations'), 'vänner'), 'blocked' => array(l('user', 'relations').'&amp;blocked', 'ovänner'));
 ?>
 
-<img src="/_gfx/ttl_friends.png" alt="Vänner"/><br/><br/>
+<div class="subHead">relationer</div><br class="clr"/>
 
-<?=($own?'<div class="centerMenuHeader">'.makeMenu($page, $menu).'</div>':'<div class="centerMenuHeader">vänner</div>')?>
-<div class="centerMenuBodyWhite">
+<div class="bigHeader"><?=($own?makeMenu($page, $menu):'vänner')?></div>
+<div class="bigBody">
 	<? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&amp;ord='.$thisord, 'med', STATSTR); ?>
 	<table summary="" cellspacing="0" width="586">
 	<?

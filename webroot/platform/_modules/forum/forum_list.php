@@ -64,7 +64,7 @@ function openText(id) {
 
 	<div id="mainContent">
 		
-		<img src="/_gfx/ttl_forum.png" alt="Forum"/><br/><br/>
+		<div class="subHead">forum</div><br class="clr"/>
 		
 		<table summary="" cellspacing="0" style="margin-bottom: 20px;">
 			<tr>
@@ -74,9 +74,9 @@ function openText(id) {
 			<tr><td><?='<h4>'.secureOUT($r['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg'?></td></tr>
 		</table>
 
-		<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
+		<div class="bigHeader"><?=makeMenu($page, $menu)?></div>
 
-			<div class="centerMenuBodyWhite">
+			<div class="bigBody">
 				<table summary="" cellspacing="0" width="589">
 <?
 	if(count($res)) { foreach($res as $row) {

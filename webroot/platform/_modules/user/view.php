@@ -22,6 +22,10 @@
 	if($own) $user->fix_img();
 	define('U_VISIT', true);
 	require(DESIGN.'head_user.php');
+	
+?>
+	<div class="subHead">presentation</div><br class="clr"/>
+<?
 
 	echo formatText($profile['user_pres'][1], true);
 

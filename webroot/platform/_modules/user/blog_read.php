@@ -45,7 +45,7 @@
 	require(DESIGN.'head_user.php');
 ?>
 
-<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
+<div class="subHead">blogg</div><br class="clr"/>
 
 <?
 	//makeButton(false,	'document.location=\''.l('user', 'blog', $s['id_id']).'\'',	'icon_blog.png',	'tillbaka');

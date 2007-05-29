@@ -34,11 +34,10 @@
 		$paging['co'] = mailOutboxCount();
 		$res = mailOutboxContent();
 	}
-	require(DESIGN."head.php");
+	require(DESIGN."head_user.php");
 ?>
-<div id="mainContent">
 
-	<img src="/_gfx/ttl_mail.png" alt="Brev"/><br/><br/>
+	<div class="subHead">brev</div><br class="clr"/>
 	<? makeButton(!isset($_GET['out']), 	'goLoc(\''.l('user', 'mail').'\')',	'icon_mail.png', 'inkorg'); ?>
 	<? makeButton(isset($_GET['out']), 	'goLoc(\''.l('user', 'mail').'&amp;out\')',	'icon_mail.png', 'utkorg'); ?>
 	<br/><br/><br/>
@@ -74,8 +73,7 @@ if(count($res) && !empty($res)) {
 ?>
 </table>
 </form>
-			</div>
 	</div>
 <?
-	require(DESIGN.'foot.php');
+	require(DESIGN.'foot_user.php');
 ?>

@@ -24,22 +24,22 @@
 	$titel = secureOUT($res['sent_ttl']);
 	if (!$titel) $titel = '<i>ingen titel</i>';
 
-	require(DESIGN."head.php");
+	require(DESIGN."head_user.php");
 ?>
-	<div id="mainContent">
+	<div class="subHead">brev</div><br class="clr"/>
 
-		<img src="/_gfx/ttl_mail.png" alt="Brev"/><br/><br/>
+	<div class="bigHeader">från: <?=($own_u)?(($res_u)?$user->getstring($res_u):($res['sender_id']?'<b class="blk">[BORTTAGEN]</b>':'SYSTEM')):$user->getstring($l);?> till <?=($own_u)?$user->getstring($l):(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>');?> - skickat: <?=(@$res['sent_date'])?nicedate($res['sent_date'], 1, 1):nicedate(date("Y-m-d"), 1, 1);?></div>
+	<div class="bigBody">
+		<h3><?=$titel?></h3>
 
-		<div class="centerMenuHeader2">från: <?=($own_u)?(($res_u)?$user->getstring($res_u):($res['sender_id']?'<b class="blk">[BORTTAGEN]</b>':'SYSTEM')):$user->getstring($l);?> till <?=($own_u)?$user->getstring($l):(($res_u)?$user->getstring($res_u):'<b class="blk">[BORTTAGEN]</b>');?> - skickat: <?=(@$res['sent_date'])?nicedate($res['sent_date'], 1, 1):nicedate(date("Y-m-d"), 1, 1);?></div>
-			<div class="centerMenuBodyWhite" style="overflow: hidden;">
-			<h3><?=$titel?></h3>
+		<p class="no" id="formatText"><?=formatText($res['sent_cmt'])?></p>
 
-			<p class="no" id="formatText"><?=formatText($res['sent_cmt'])?></p>
-
-			<div class="r"><input type="button" onclick="if(confirm('Säker ?')) goLoc('<?=l('user', 'mail').'&amp;'.$page.'&amp;del_msg='.$res['main_id']?>');" class="btn2_med" value="radera" />&nbsp;<input type="button" onclick="makeMail('<?='&amp;a='.$res['main_id'].'&amp;r'?>');" class="btn2_med" value="vidarebefordra" />&nbsp;<?=($own_u && $res_u)?'<input type="button" onclick="makeMail(\''.$res_u['id_id'].'/&amp;a='.$res['main_id'].'\');" class="btn2_med" value="svara" />':'';?></div>
-			</div>
+		<div class="r">
+			<input type="button" onclick="if(confirm('Säker ?')) goLoc('<?=l('user', 'mail').'&amp;'.$page.'&amp;del_msg='.$res['main_id']?>');" class="btn2_min" value="radera" />
+			<input type="button" onclick="makeMail('<?='&amp;a='.$res['main_id'].'&amp;r'?>');" class="btn2_min" value="skicka vidare" />&nbsp;<?=($own_u && $res_u)?'<input type="button" onclick="makeMail(\''.$res_u['id_id'].'/&amp;a='.$res['main_id'].'\');" class="btn2_min" value="svara" />':'';?>
 		</div>
+		<br class="clr"/>
 	</div>
 <?
-	require(DESIGN.'foot.php');
+	require(DESIGN.'foot_user.php');
 ?>

@@ -41,7 +41,7 @@
 
 	require(DESIGN.'head_user.php');
 ?>
-<img src="/_gfx/ttl_blog.png" alt="Blogg"/><br/><br/>
+<div class="subHead">blogg</div><br class="clr"/>
 <?
 			if ($own) {
 				makeButton(false,	'makeBlog(\''.$l['id_id'].'\')',	'icon_blog.png',	'skriv nytt');
@@ -74,7 +74,7 @@
 					<td onclick="'.$url.'" class="cur pdg spac">'.$row['blog_visit'].' läsare</td>
 					<td onclick="'.$url.'" class="cur pdg spac rgt nobr">'.nicedate($row['blog_date']).'</td>';
 				if ($own) {
-					echo '<td width="130">';
+					echo '<td width="150">';
 					makeButton(false, 'makeBlog(\''.$s['id_id'].'\',\''.$row['main_id'].'\')', 'icon_blog.png', 'ändra');
 					makeButton(false, 'if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'blog', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\')', 'icon_delete.png', 'radera');
 					echo '</td>';

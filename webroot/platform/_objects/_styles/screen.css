@@ -8,7 +8,7 @@ td { vertical-align: top; padding: 0; }
 A:link, A:active, A:visited { text-decoration: none; }
 A:hover { text-decoration: underline; }
 A.down { color: #999; } A.down:hover { text-decoration: underline; }
-A { color: #666; }
+
 A.wht { color: #fff; }
 .brd_on { border: 1px solid #ff9900; }
 .nrm { font-weight: normal; }
@@ -38,7 +38,6 @@ img { border: 0; }
 hr { clear: both; border: 0; border-bottom: 1px solid #D0CFCB; padding: 8px 0 0 0; background: transparent; color: #f8f8f8; }
 img.brd { border: 1px solid #fff; }
 img.bbrd { border: 1px solid #b5b5b5; }
-.sexM { color: #4c5195; letter-spacing: 0; } .sexF { color: #974b4b; letter-spacing: 0; }
 .user { font-style: normal; font-weight: bold; }
 a.user:hover { text-decoration: none; }
 .age { color: #974b4b; }
@@ -56,8 +55,6 @@ h6 { font-size: 10px; margin: 2px 0 5px 0; font-weight: bold; }
 .btm { vertical-align: bottom; }
 .bld { font-weight: bold; }
 .bld_red { font-weight: bold; color: red;}
-.on { font-weight: bold; }
-.off { font-weight: normal; }
 .tl { font-family: Verdana; color: #333; font-size: 9px; letter-spacing: -1px; }
 .mrg { margin: 5px; }
 .wht { color: #fff; }
@@ -74,9 +71,7 @@ select { border: 1px solid #b2b2b2; font-family: Arial; height: 24px; font-size:
 p { margin: 0; padding: 5px 5px 5px 5px; }
 
 .btn2_med { border: 0; padding: 0; background: url('/_objects/btn2_med.png'); width: 90px; height: 30px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
-.btn2_min { border: 0; padding: 0; background: url('/_objects/btn2_min.png'); width: 78px; height: 20px; color: #fff; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
 .btn2_midi { border: 0; padding: 0; background: url('/_objects/btn2_midi.png'); width: 67px; height: 20px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
-.btn2_sml { border: 0; padding: 0; background: url('/_objects/btn2_sml.png'); width: 50px; height: 30px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
 .btn3_min { border: 0; padding: 0; background: url('/_objects/btn3_min.png'); width: 78px; height: 20px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
 .btn3_med { border: 0; padding: 0; background: url('/_objects/btn3_med.png'); width: 90px; height: 30px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
 .btn3_sml { border: 0; padding: 0; background: url('/_objects/btn3_sml.png'); width: 50px; height: 30px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; margin: 5px 5px 5px 0; }
@@ -105,16 +100,10 @@ p { margin: 0; padding: 5px 5px 5px 5px; }
 .bigBoxed2 { width: 784px; border: 1px solid #7ba06d; border-width: 0 1px 1px 1px; margin-bottom: 10px; }
 .mainFilled2 { width: 586px; padding: 5px; margin-bottom: 10px; background: #7ba06d; }
 .wholeBoxed2 { width: 594px; text-align: left; margin: 0 auto 10px auto; border: 1px solid #7ba06d; border-width: 0 1px 1px 1px; }
-.userlist { margin: 3px 0 0 0; padding: 0; }
-.userlist li { width: 169px; border-top: 1px solid #ccc; list-style-type: none; list-style-position: outside; margin: 0; padding: 3px 0 4px 5px; }
 .msgList { width: 596px; }
 .msgListImage { width: 55px; }
 .msgListEven { background: #ecf1ea; }
 .msgWrite { width: 160px; height: 100px; }
-#userInfo { float: left; margin-left: 10px; }
-#userInfo h1 { line-height: 24px; }
-#userInfo div { margin-top: 30px; }
-#userDetail { float: right; text-align: right; }
 #userMenu { margin-bottom: 20px; }
 #diverse { width: 176px; }
 #diverse td { padding: 2px 2px 3px 2px; table-layout: fixed; }

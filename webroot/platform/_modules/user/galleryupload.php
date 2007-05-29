@@ -140,14 +140,14 @@ function validateUpl(tForm) {
 <body style="border: 6px solid #FFF;">
 <form name="msg" action="<?=l('user', 'galleryupload')?><?=(!empty($_GET['do']))?'&do='.secureOUT($_GET['do']):'';?>" method="post" enctype="multipart/form-data" onsubmit="if(validateUpl(this)) { return true; } else return false;">
 		<div class="smallWholeContent cnti mrg">
-			<div class="leftMenuHeader">ladda upp till galleri</div>
-			<div class="leftMenuBodyWhite pdg_t">
+			<div class="smallHeader">ladda upp till galleri</div>
+			<div class="smallBody pdg_t">
 				bläddra till fil:<br />
 				<input type="file" name="ins_file" style="width: 160px; height: 22px; line-height: 14px;" class="txt" accept="image/jpeg, image/gif, image/png, image/pjpeg"/><br />
 				beskrivning:<br />
 				<input type="text" name="ins_msg" style="width: 160px;" class="txt"/>
 				<input type="checkbox" class="chk" name="ins_priv" id="ins_priv"<? if (!empty($_GET['priv'])) echo ' checked="checked"'; ?> value="1"/><label for="ins_priv"> Galleri X (för vänner)</label>
-				<input type="submit" class="btn2_sml" name="sub" value="skicka!" /><br/>
+				<input type="submit" class="btn2_sml r" name="sub" value="skicka!" /><br class="clr"/>
 			</div>
 		</div>
 </form>

@@ -76,7 +76,8 @@ var actID = '';
 
 <div id="mainContent">
 
-	<img src="/_gfx/ttl_settings.png" alt="Inställningar"/><br/><br/>
+	<div class="subHead">inställningar</div><br class="clr"/>
+
 	<? makeButton(true, 'goLoc(\''.l('member', 'settings').'\')', 'icon_settings.png', 'publika'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'fact').'\')', 'icon_settings.png', 'fakta'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'img').'\')', 'icon_settings.png', 'bild'); ?>
@@ -196,7 +197,7 @@ var actID = '';
 				<td class="pdg" colspan="2"><a class="cur bld" onclick="TC_Switch();">text/HTML</a></td>
 			</tr>
 		</table>
-		<input type="submit" value="spara!" class="btn2_sml r" />
+		<input type="submit" value="spara!" class="btn2_sml r" /><br class="clr"/>
 		</form>
 		
 	</div>

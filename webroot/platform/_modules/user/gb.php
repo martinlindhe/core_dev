@@ -40,9 +40,13 @@
 	if(!$own) define('U_GBWRITE', 1);
 
 	require(DESIGN.'head_user.php');
-?>
-	<img src="/_gfx/ttl_gb.png" alt="Gästbok"/><br/><br/>
-<?
+
+	if ($his) {
+		?><div class="subHead">gästbok - historik</div><br class="clr"/><?
+	} else {
+		?><div class="subHead">gästbok</div><br class="clr"/><?
+	}
+
 	$odd = true;
 	if(!empty($res) && count($res)) {
 		dopaging($paging, l('user', 'gb', $s['id_id']).'p=', '', 'med', ((!$his)?STATSTR:'<a href="'.l('user', 'gb', $s['id_id']).'">tillbaka</a>'));

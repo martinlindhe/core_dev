@@ -79,7 +79,7 @@
 	require(DESIGN."head.php");
 ?>
 	<div id="mainContent">
-		<img src="/_gfx/ttl_forum.png" alt="Forum"/><br/><br/>
+		<div class="subHead">forum</div><br class="clr"/>
 		
 		<table summary="" cellspacing="0" style="margin-bottom: 20px;">
 			<tr>
@@ -100,8 +100,8 @@
 		?>
 		<br/><br/><br/>
 
-		<div class="centerMenuHeader"><?=makeMenu($page, $menu)?></div>
-		<div class="centerMenuBodyWhite">
+		<div class="bigHeader"><?=makeMenu($page, $menu)?></div>
+		<div class="bigBody">
 <?
 	array_unshift($list, $res);
 	$odd = true;

@@ -108,7 +108,8 @@
 			exit;
 			//splashACT('Ett mail har skickats med en aktiveringskod för att aktivera ditt konto!<br><br><input type="button" onclick="document.location.href = \''..'\';" class="b" value="aktivera konto!">');
 		}
-		include(DESIGN.'head_start.php');
+
+		include(DESIGN.'head.php');
 ?>
 <script type="text/javascript">
 function tryThis(e) {
@@ -171,8 +172,8 @@ function select_search(val, arr) {
 }
 document.onkeydown = changeselected;
 </script>
-		<div class="centerMenuHeader">registrering</div>
-			<div class="centerMenuBodyWhite">
+		<div class="bigHeader">registrering</div>
+			<div class="bigBody">
 	<form name="r" method="post" action="<?=l('member', 'register')?>">
 	<input type="hidden" name="do" value="1" />
 	<table cellspacing="0" width="510" class="mrg" style="margin-bottom: 15px;">
@@ -230,9 +231,9 @@ echo '<option value="'.$i.'"'.$selected.'>'.$i.'</option>';
 		</td>
 	</tr>
 	</table>
-	<input type="submit" class="btn2_med r" value="nästa!" /><br class="clr" />
+	<input type="submit" class="btn2_min r" value="nästa!" /><br class="clr" />
 	</form>
 			</div>
 <?
-	include(DESIGN.'foot_start.php');
+	include(DESIGN.'foot.php');
 ?>

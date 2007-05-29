@@ -2,13 +2,13 @@
 	require(DESIGN.'top.php');
 ?>
 </head>
-<body style="background: #FFF;" class="cnt">
+<body class="cnt">
 
-	<div class="popupWholeContent cnti mrg">
-		<div class="leftMenuHeader">meddelande</div>
-		<div class="leftMenuBodyWhite">
-			<table cellspacing="0" style="width: 160px; height: 150px;"><tr><td style="vertical-align: middle; width: 160px; text-align: center; height: 150px;"><?=$msg?></td></tr></table>
-			<input type="submit" onclick="self.close();" class="btn2_sml r" value="stäng!" style="margin-top: 5px;" /><br class="clr" />
+	<div class="popupWholeContent mrg">
+		<div class="smallHeader">meddelande</div>
+		<div class="smallBody">
+			<?=$msg?><br/>
+			<input type="submit" onclick="self.close();" class="btn2_sml r" value="stäng!" /><br class="clr"/>
 		</div>
 	</div>
 <?

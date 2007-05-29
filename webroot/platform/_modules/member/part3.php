@@ -134,7 +134,7 @@ $_SESSION['data'] = array('u_pst' => $result[9], 'u_pstlan_id' => $result[8], 'l
 
 		splashACT('Välkommen som medlem!<br />Vänta...', l('main', 'start'), 1000);
 	}
-	require(DESIGN."head_start.php");
+	require(DESIGN."head.php");
 ?>
 <script type="text/javascript">
 function validate(tForm) {
@@ -148,8 +148,8 @@ function validate(tForm) {
 	return true;
 }
 </script>
-	<div class="centerMenuHeader">Slutför konto</div>
-		<div class="centerMenuBodyWhite">
+	<div class="bigHeader">Slutför konto</div>
+		<div class="bigBody">
 <form name="r" method="post" action="<?=l('member', 'activate', secureOUT($fid), secureOUT($key))?>" onsubmit="return validate(this);">
 			<input type="hidden" name="doit" value="1">
 			<table cellspacing="0" width="500" style="height: 150px; margin-bottom: 10px;">
@@ -174,14 +174,17 @@ function validate(tForm) {
 					<option value="M"<?=($sex_c == 'M')?' selected':'';?>>Kille</option>
 					<option value="F"<?=($sex_c == 'F')?' selected':'';?>>Tjej</option>
 				</select></td>
-					<?/*<td style="padding-bottom: 6px;"><span class="bld<?=(isset($error['city']))?' red':'';?>">stad som förval</span><br /><select name="ins_city" class="txt">
+<?
+/*<td style="padding-bottom: 6px;"><span class="bld<?=(isset($error['city']))?' red':'';?>">stad som förval</span><br /><select name="ins_city" class="txt">
 <?
 	foreach($cities as $key => $val) {
 		if($val != '?')
 			echo '<option value="'.$key.'"'.(@$_POST['ins_city'] == $key?' selected':(CITY == $key?' selected':'')).'>'.ucwords(strtolower($val)).'</option>';
 	}
 ?>
-					</select></td>*/?>
+					</select></td>
+*/
+?>
 				</tr>
 				<tr>
 					<td colspan="2" style="padding-bottom: 6px;"><span class="bld<?=(isset($error['alias']))?'_red':'';?>">önskat alias</span><br /><input type="text" class="txt" name="ins_alias" value="<?=(!empty($_POST['ins_alias']))?secureOUT($_POST['ins_alias']):'';?>" /></td>
@@ -199,5 +202,5 @@ function validate(tForm) {
 			</form>
 		</div>
 <?
-	include(DESIGN.'foot_start.php');
+	include(DESIGN.'foot.php');
 ?>

@@ -55,8 +55,8 @@
 
 <form name="msg" action="<?=l('user', 'gallerycomment', $s['id_id'], $res['main_id'])?>&amp;r=<?=$r?>&amp;a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
 		<div class="smallWholeContent cnti mrg">
-			<div class="leftMenuHeader">skriv kommentar</div>
-			<div class="leftMenuBodyWhite pdg_t">
+			<div class="smallHeader">skriv kommentar</div>
+			<div class="smallBody pdg_t">
 				kommentera bilden <br />
 				<b><?=secureOUT($res['pht_cmt'])?></b><br />
 				av <?=$user->getstring($s, '', array('nolink' => 1))?><br/>
