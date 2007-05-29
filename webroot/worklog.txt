@@ -22,14 +22,24 @@
 		* på "brev"-sidan följer min egen user-header följa med (kiano)
 		* ny design på "bli vän"-popup
 		* visar ej "bli vän" på profilsidor för användare man redan är vän med
+		* snyggat till listan "vänner online"
+		* snyggat till "läs blogg"-sidan
+		* fått i ordning på IPX inkommande SMS
+		* mailat frans med nya inloggningsuppgifter till cs.icn.se
+		* anmäl användare funktion skapad, anmälan tas emot och sparas i databasen. admin-gränssnitt saknas
+		* ny sida under inställningar där man kan ändra val av tema
+		* fixat en mängd php-varningar
 
 
 ***************************************************************************************************
 
-NU: kunna välja tema
-
 NU: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
+
 NU: anmäl användare-funktion (abuse)
+	- admin ser översikt på inkommande anmälningar
+
+NU: Mail utskick. smtp-servern funkar, men timar ut ibland (mail.unicorn.tv)
+		titta på att sätta upp egen mailserver på cs.icn.se
 
 NU: uppgradera-sida. info om hur du uppgraderar till VIP etc
 
