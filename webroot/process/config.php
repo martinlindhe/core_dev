@@ -9,6 +9,8 @@
 
 	$config['web_root'] = '/_process/';
 	$config['default_title'] = 'process server';
+	
+	$config['plugins'] = array('ipx');	//hehe implementera imörra!
 
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');

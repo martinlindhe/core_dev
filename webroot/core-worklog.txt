@@ -1,10 +1,9 @@
 ----[[platform todo]]----
 	core/gör snart:
+		- kunna stänga av moduler: feedback, moderation (visa ej då deras admin-sidor)
 
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
-		- kunna stänga av moduler: feedback, moderation (visa ej då deras admin-sidor)
 		- gör process-funktionaliteten som ett plugin
-		- gör ipx-grejset som ett plugin
 		- admin: kunna skriva note till ip på admin_ip.php, för process-server
 		
 
@@ -116,12 +115,21 @@
 		- senare: gör om ratingGadget() till ajax-gadget
 
 
+	db drivers:
+		- microsoft sql server 2005 driver, pg-sql driver compatible with current pg-sql
+		- mysqli: går ej få $this->db_handle->character_set_name() att påstå att det
+			är utf8-encoding trots att jag forcar det med SET NAMES utf8.
+			om jag ej gör detta så blir default "latin1" trots att mysql-servern är konfad till utf8
+			vet ej om nåt kanske är felkonfat?
+
+
 	core/lågprio/förändringar under övervägning:
   	- implementera process-servern för att konvertera bilder / skapa thumbnails
  	 	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
 		- gör en funktion som visar rss news feeds, för news-modulen, packa ihop den utspridda kod som finns i sample/news.php, sample/design_head.php
 		- även nån funktion som låter en adda extra css eller ändra default css (skins!)
 		- det krävs ett extra sid-reload när man ändrat skin theme
+
 
 	misc/senare:
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
@@ -133,8 +141,6 @@
 
 
 --------------[[projekt todo]]--------------
-	janina:
-
 	adblock:
 		- konvertera "report site" funktionen till att använda functions_feedback.php
 		- använd en sån där <link> tag för sökmotor som youtube använder, så "add search" dyker upp under search-engine dropdownen i firefox
@@ -161,6 +167,7 @@ X = hi prio task
 		* egen katalog för docs
 		* ny katalog "api" för ajax-script, rss-genererande script, och img-manipulation script
 		* ny katalog "plugins" för plugins
+	- plugins: gjort ipx-grejset som ett plugin, steg 1/2
 
 
 2007.05.28:

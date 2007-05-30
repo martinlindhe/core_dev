@@ -33,10 +33,12 @@ class DB_MySQLi extends DB_Base
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
+		
+		$this->db_handle = mysqli_init();
+		//$this->db_handle->options(MYSQLI_INIT_COMMAND, 'SET NAMES utf8');
 
-		$this->db_handle = @ new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
-
-		if (mysqli_connect_errno()) {
+		if (!$this->db_handle->real_connect($this->host, $this->username, $this->password, $this->database, $this->port))
+		{
 			$this->db_handle = false;
 
 			die('<bad>Database connection error.</bad>');
