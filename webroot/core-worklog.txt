@@ -1,8 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- egna kataloger core_dev/ajax, core_dev/rss
-
-
 
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
 		- kunna stänga av moduler: feedback, moderation (visa ej då deras admin-sidor)
@@ -160,7 +157,10 @@ X = hi prio task
 	- core: renamed $config['session']['core_web_root'] to $config['core_web_root']
 	- core: renamed $config['session']['default_title'] to $config['default_title']
 	- core: cleanup för att kunna konfigurera var core-projektets filer finns, bättre struktur & flexibilitet
-
+	- core: katalogstruktur-cleanup:
+		* egen katalog för docs
+		* ny katalog "api" för ajax-script, rss-genererande script, och img-manipulation script
+		* ny katalog "plugins" för plugins
 
 
 2007.05.28:

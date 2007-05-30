@@ -8,7 +8,7 @@
 		global $files, $config;
 		if (!is_numeric($_id)) return false;
 
-		return '<img src="'.$config['core_web_root'].'core/file.php?id='.$_id.'&amp;w='.$files->thumb_default_width.'&amp;h='.$files->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
+		return '<img src="'.$config['core_web_root'].'api/file.php?id='.$_id.'&amp;w='.$files->thumb_default_width.'&amp;h='.$files->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
 	}
 
 	function makeImageLink($_id, $_title = '')
@@ -16,7 +16,7 @@
 		global $config;
 		if (!is_numeric($_id)) return false;
 
-		return '<img src="'.$config['core_web_root'].'core/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/>';
+		return '<img src="'.$config['core_web_root'].'api/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/>';
 	}
 
 	/* Returns a string like "2 KiB" */

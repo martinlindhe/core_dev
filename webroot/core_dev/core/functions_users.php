@@ -6,9 +6,10 @@
 	/* Looks up a username by id */
 	function getUserName($_id)
 	{
-		global $db;
+		global $db, $session;
 
 		if (!is_numeric($_id) || !$_id) return false;
+		if ($_id == $session->id) return $session->username;
 
 		$q = 'SELECT userName FROM tblUsers WHERE userId='.$_id;
 		return $db->getOneItem($q);

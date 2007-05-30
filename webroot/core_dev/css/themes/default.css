@@ -7,7 +7,7 @@ body {
 /* General: <input type="text"> */
 input {
 	border:1px solid #8CACBB;
-	background: #fff url(/gfx/input_shadow.png) repeat-x scroll center top;
+	background: #fff url('../../gfx/input_shadow.png') repeat-x scroll center top;
 
 	margin:1px;
 	padding:0.2em 0.3em;
@@ -21,7 +21,7 @@ input:focus {
 /* General: <input type="button"> */
 input.button {
 	border:1px solid #888;
-	background: #fff url(/gfx/button_shadow.png) repeat-x scroll center bottom;
+	background: #fff url('../../gfx/button_shadow.png') repeat-x scroll center bottom;
 	color: #000;
 }
 input.button:focus {
@@ -174,7 +174,7 @@ select {
 	padding: 5px;
 	padding-left: 25px;
 	font-size: 20px;
-	background: #ee99aa url('/gfx/icon_locked.png') no-repeat;
+	background: #ee99aa url('../../gfx/icon_locked.png') no-repeat;
 	background-position: 5px 50%;
 }
 .wiki_menu {
@@ -238,7 +238,7 @@ select {
 	padding: 5px;
 	padding-left: 25px;
 	line-height: 20px;
-	background: #FB9B9B url('/gfx/icon_error.png') no-repeat;
+	background: #FB9B9B url('../../gfx/icon_error.png') no-repeat;
 	background-position: 5px 50%;
 }
 
@@ -247,7 +247,7 @@ select {
 	padding: 5px;
 	padding-left: 25px;
 	line-height: 20px;
-	background: #B1F9AA url('/gfx/icon_good.png') no-repeat;
+	background: #B1F9AA url('../../gfx/icon_good.png') no-repeat;
 	background-position: 5px 50%;
 }
 
@@ -330,7 +330,7 @@ select {
 }
 .news_title_rss {
 	font-size: 20px;
-	background: url('/gfx/icon_rss.png') no-repeat;
+	background: url('../../gfx/icon_rss.png') no-repeat;
 	background-position: 100% 50%;
 }
 .news_head { /* news article heading */

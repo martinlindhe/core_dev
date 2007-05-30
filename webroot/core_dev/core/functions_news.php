@@ -198,7 +198,7 @@
 
 	function showNews($limit = 3)
 	{
-		global $db, $session;
+		global $db, $session, $config;
 
 		/* Displays one news article - returns if successful */
 		if (showNewsArticle()) return;
@@ -220,7 +220,7 @@
 			echo '</div><br/>';
 		}
 		if ($session->isAdmin) {
-			echo '<a href="/admin/admin_news_add.php'.getProjectPath(0).'">Add news</a>';
+			echo '<a href="'.$config['core_web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">Add news</a>';
 		}
 	}
 ?>

@@ -4,10 +4,8 @@
 	$session->requireLoggedIn();
 
 	$userId = $session->id;
-	$username = $session->username;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		$userId = $_GET['id'];
-		$username = getUserName($userId);
 	}
 
 	require('design_head.php');
@@ -23,7 +21,7 @@
 			die;
 		}
 
-		echo 'Send a private message to '.$username.'<br/>';
+		echo 'Send a private message to '.nameLink($userId).'<br/>';
 		echo '<form method="post" action="">';
 		echo 'Subject: <input type="text" name="msg_subj"/><br/>';
 		echo '<textarea name="msg" rows="8" cols="40"></textarea><br/>';

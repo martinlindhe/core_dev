@@ -57,7 +57,7 @@ List of all current reported sites in database, oldest first (<?=count($list)?> 
 			echo $list[$i]['userName'];
 		}
 		$ip_v4 = GeoIP_to_IPv4($list[$i]['userIP']);
-		echo ', <a href="/admin/admin_ip.php?ip='.$ip_v4.getProjectPath().'">'.$ip_v4.'</a>';
+		echo ', <a href="'.$config['core_web_root'].'admin/admin_ip.php?ip='.$ip_v4.getProjectPath().'">'.$ip_v4.'</a>';
 
 		echo ' at '.$list[$i]['timeCreated'];
 		echo '</div>';	//_row_col1

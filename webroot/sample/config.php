@@ -5,11 +5,10 @@
 	date_default_timezone_set('Europe/Stockholm');
 
 	$config['core_root'] = 'E:/devel/webroot/core_dev/';	//use of an absolute path is highly recommended
-	$config['core_web_root'] = '/core_dev/';
+	$config['core_web_root'] = '/core_dev/';							//the webpath to root level of core files (css, js, gfx directories)
 
-	$config['web_root'] = '/sample/';
-	$config['default_title'] = 'sample project';
-
+	$config['web_root'] = '/sample/';											//the webpath to the root level of the project
+	$config['default_title'] = 'sample project';					//default title for pages if no title is specified for that page
 
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');

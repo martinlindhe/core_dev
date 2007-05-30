@@ -1,9 +1,6 @@
 ﻿<?
 	/*
 		todo:
-			- renama filen och flytta till /core/
-				t.ex /core/class.Files.layer.php
-					eller nåt liknande, så man ser att den till hör class.Files.php men att det inte är en class-fil
 	*/
 ?>
 <div id="zoom_image_layer" style="display:none">

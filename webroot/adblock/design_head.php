@@ -25,7 +25,7 @@
 		$menu = array(
 			'newrule.php' => 'New rule',
 			'ruleset.php' => 'Browse ruleset',
-			'/admin/admin.php'.getProjectPath(0) => 'Admin',
+			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin',
 			'admin_reports.php' => 'Reported sites');
 		createMenu($menu);
 	}

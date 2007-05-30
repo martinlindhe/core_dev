@@ -219,7 +219,7 @@
 		echo '</head>';
 		echo '<body>';
 		echo '<script type="text/javascript">';
-		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core_web_root'].'core/";';
+		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core_web_root'].'api/";';
 		echo '</script>';
 	}
 
@@ -234,7 +234,7 @@
 		foreach ($meta_rss as $feed) {
 			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
 			else $extra = getProjectPath(0);
-			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core_web_root'].'core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
+			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core_web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 		}
 	}
 
@@ -266,11 +266,11 @@
 	function loadPlugins()
 	{
 		global $config;
-		
+
 		if (empty($config['plugins'])) return;
-		
+
 		foreach ($config['plugins'] as $plugin) {
-			require_once($config['core_root'].'core/plugin_'.$plugin.'/plugin.php');
+			require_once($config['core_root'].'plugins/'.$plugin.'/plugin.php');
 		}
 	}
 ?>
