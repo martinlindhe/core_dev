@@ -122,8 +122,10 @@ function zoomAudio(id, name)
 
 	empty_element_by_name('zoom_audio');
 
-	//requires ext_flashobject.js
-	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s='+_ext_core+'file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
+	//requires flash_obj.js
+	url = _ext_core+'flash/mp3_player.swf?n='+name+'&s='+_ext_core+'file.php?id='+id+urlencode(_ext_ref);
+	trace(url);
+	var fo = new FlashObject(url, 'animationName', '180', '45', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
@@ -145,9 +147,9 @@ function zoomVideo(id, name)
 
 	empty_element_by_name('zoom_video');
 
-	//requires ext_flashobject.js
+	//requires flash_obj.js
 	//urlencodes project path so it gets passed thru to flash file
-	var fo = new FlashObject('/flash/flv_player_test.swf?n='+name+'&s='+_ext_core+'file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
+	var fo = new FlashObject(_ext_core+'flash/flv_player_test.swf?n='+name+'&s='+_ext_core+'file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');

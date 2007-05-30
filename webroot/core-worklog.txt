@@ -1,6 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
 		- kunna stänga av moduler: feedback, moderation (visa ej då deras admin-sidor)
+		- mp3-spelaren funkar ej atm
 
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
 		- gör process-funktionaliteten som ett plugin

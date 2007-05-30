@@ -6,7 +6,7 @@
 <div id="zoom_image_layer" style="display:none">
 
 	<center>
-		<img id="zoom_image" src="/gfx/ajax_loading.gif" alt="Image"/><br/>
+		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
 		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/>
 		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
@@ -23,7 +23,6 @@
 
 </div>
 
-<script type="text/javascript" src="/js/ext_flashobject.js"></script>
 <div id="zoom_audio_layer" style="display:none">
 
 	<center>
