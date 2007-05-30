@@ -72,7 +72,7 @@ abstract class DB_Base
 
 	//default settings
 	protected $host	= 'localhost';
-	protected $port	= 3306;
+	protected $port	= 3306;	//3306 is MySQL default. 5432 is PostgreSQL default. fixme-initialize default from inherited connect()-function
 	protected $username = 'root';
 	protected $password = '';
 	protected $database = '';

@@ -98,7 +98,7 @@ class Session
 
 	function handleSessionActions()
 	{
-		global $db;
+		global $db, $config;
 
 		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
 		{

@@ -116,12 +116,12 @@
 
 
 	db drivers:
-		- microsoft sql server 2005 driver, pg-sql driver compatible with current pg-sql
+		- microsoft sql server 2005 driver
 		- mysqli: går ej få $this->db_handle->character_set_name() att påstå att det
 			är utf8-encoding trots att jag forcar det med SET NAMES utf8.
 			om jag ej gör detta så blir default "latin1" trots att mysql-servern är konfad till utf8
 			vet ej om nåt kanske är felkonfat?
-
+			kika vad som händer i linux
 
 	core/lågprio/förändringar under övervägning:
   	- implementera process-servern för att konvertera bilder / skapa thumbnails
@@ -168,6 +168,8 @@ X = hi prio task
 		* ny katalog "api" för ajax-script, rss-genererande script, och img-manipulation script
 		* ny katalog "plugins" för plugins
 	- plugins: gjort ipx-grejset som ett plugin, steg 1/2
+	- rensat upp db schemat för dbSample
+	- class.DB_PostgreSQL.php, preliminary pg-sql driver for php_pgsql.dll extension, not really working
 
 
 2007.05.28:
