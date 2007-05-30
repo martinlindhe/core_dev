@@ -89,7 +89,7 @@ var zoomed_id = 0;
 function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
-	e.setAttribute('src', '/core/file.php?id='+id+_ext_ref);
+	e.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
 	zoomed_id = id;
 
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
@@ -123,7 +123,7 @@ function zoomAudio(id, name)
 	empty_element_by_name('zoom_audio');
 
 	//requires ext_flashobject.js
-	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s=/core/file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
+	var fo = new FlashObject('/flash/mp3_player.swf?n='+name+'&s='+_ext_core+'file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
@@ -147,7 +147,7 @@ function zoomVideo(id, name)
 
 	//requires ext_flashobject.js
 	//urlencodes project path so it gets passed thru to flash file
-	var fo = new FlashObject('/flash/flv_player_test.swf?n='+name+'&s=/core/file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
+	var fo = new FlashObject('/flash/flv_player_test.swf?n='+name+'&s='+_ext_core+'file.php?id='+id+urlencode(_ext_ref), 'animationName', '180', '45', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');
 	fo.addParam('quality', 'high');
 	fo.addParam('scale', 'noscale');
@@ -200,12 +200,12 @@ function move_selected_file()
 
 function download_selected_file()
 {
-	document.location = '/core/file.php?id='+zoomed_id+'&dl'+_ext_ref;
+	document.location = _ext_core+'file.php?id='+zoomed_id+'&dl'+_ext_ref;
 }
 
 function passthru_selected_file()
 {
-	document.location = '/core/file_pt.php?id='+zoomed_id+_ext_ref;
+	document.location = _ext_core+'file_pt.php?id='+zoomed_id+_ext_ref;
 }
 
 //used by image zoomer
@@ -228,7 +228,7 @@ function rotate_selected_file(angle)
 {
 	var e = document.getElementById('zoom_image');
 	var now = new Date();
-	e.src = '/core/image_rotate.php?i=' + zoomed_id + '&a=' + angle + '&' + now.getTime() + _ext_ref;
+	e.src = _ext_core+'image_rotate.php?i=' + zoomed_id + '&a=' + angle + '&' + now.getTime() + _ext_ref;
 }
 
 
@@ -239,7 +239,7 @@ function loadImage(id, holder)
 	empty_element(e);
 
 	var i = document.createElement('img');
-	i.setAttribute('src', '/core/file.php?id='+id+_ext_ref);
+	i.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
 	e.appendChild(i);
 }
 

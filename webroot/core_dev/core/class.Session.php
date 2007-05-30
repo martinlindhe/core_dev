@@ -35,8 +35,6 @@ class Session
 	public $allow_login = true;				//set to false to only let superadmins log in to the site
 	private $allow_registration = true;	//set to false to disallow the possibility to register new users. will be disabled if login is disabled
 	private $home_page = 'index.php';		//if set, redirects user to this page after successful login
-	public $web_root = '/';							//the webpath to the root level of the project
-	public $core_web_root = '/';				//the webpath to root level of core files (css, js, gfx directories)
 
 	//Aliases of $_SESSION[] variables
 	public $error;
@@ -52,7 +50,6 @@ class Session
 	public $theme = '';			//contains the currently selected theme
 	private $default_theme = 'default.css';			//default theme if none is choosen
 	private $allow_themes = false;
-	public $default_title = 'untitled';	//default title for pages if no title is specified for that page
 
 	function __construct(array $session_config)
 	{
@@ -66,10 +63,7 @@ class Session
 		if (isset($session_config['allow_login'])) $this->allow_login = $session_config['allow_login'];
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
 		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
-		if (isset($session_config['web_root'])) $this->web_root = $session_config['web_root'];
-		if (isset($session_config['core_web_root'])) $this->core_web_root = $session_config['core_web_root'];
 		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
-		if (isset($session_config['default_title'])) $this->default_title = $session_config['default_title'];
 
 		session_name($this->session_name);
 		session_start();
@@ -294,6 +288,7 @@ class Session
 	//the handling of the result variables are in the __construct function above
 	function showLoginForm()
 	{
+		global $config;
 		echo '<div class="login_box">';
 
 		echo '<div id="login_form_layer">';
@@ -302,14 +297,14 @@ class Session
 		}
 		echo '<form name="login_form" method="post" action="">';
 		if ($this->error) {
-			echo '<div class="critical"><img src="/gfx/icon_warning_big.png" alt="Error"/> '.$this->error.'</div>';
+			echo '<div class="critical"><img src="'.$config['core_web_root'].'gfx/icon_warning_big.png" alt="Error"/> '.$this->error.'</div>';
 			$this->error = ''; //remove error message once it has been displayed
 		}
 
 		//todo: gör om tabellen till relativt positionerade element utifrån "login_form_layer"
 		echo '<table cellpadding="2">';
-		echo '<tr><td>Username:</td><td><input name="login_usr" type="text"/> <img src="/gfx/icon_user.png" alt="Username"/></td></tr>';
-		echo '<tr><td>Password:</td><td><input name="login_pwd" type="password"/> <img src="/gfx/icon_keys.png" alt="Password"/></td></tr>';
+		echo '<tr><td>Username:</td><td><input name="login_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/></td></tr>';
+		echo '<tr><td>Password:</td><td><input name="login_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
 		echo '</table>';
 		echo '<input id="login_lock_ip" name="login_lock_ip" value="1" type="checkbox" checked="checked"/> ';
 		echo '<label for="login_lock_ip">Restrict session to current IP</label><br/>';
@@ -328,9 +323,9 @@ class Session
 
 				echo '<form method="post" action="">';
 				echo '<table cellpadding="2">';
-				echo '<tr><td>Username:</td><td><input name="register_usr" type="text"/> <img src="/gfx/icon_user.png" alt="Username"/></td></tr>';
-				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="/gfx/icon_keys.png" alt="Password"/></td></tr>';
-				echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="/gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
+				echo '<tr><td>Username:</td><td><input name="register_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/></td></tr>';
+				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
+				echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
 				showRequiredUserdataFields();
 				echo '</table><br/>';
 
@@ -346,7 +341,7 @@ class Session
 				echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 				echo 'You will recieve an e-mail with a link to follow, where you can set a new password.<br/><br/>';
 				echo '<table cellpadding="2">';
-				echo '<tr><td>E-mail:</td><td><input type="text" size="26"/> <img src="/gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
+				echo '<tr><td>E-mail:</td><td><input type="text" size="26"/> <img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
 				echo '</table><br/>';
 
 				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/>';

@@ -79,14 +79,14 @@ var delete_file_request = null;
 function ajax_delete_file(id)
 {
 	delete_file_request = new AJAX();
-	delete_file_request.GET('/core/ajax_del_file.php?i='+id+_ext_ref, null);
+	delete_file_request.GET(_ext_core+'ajax_del_file.php?i='+id+_ext_ref, null);
 }
 
 var fileinfo_request = null;
 function ajax_get_fileinfo(id)
 {
 	fileinfo_request = new AJAX();
-	fileinfo_request.GET_raw('/core/ajax_fileinfo.php?i='+id+_ext_ref, ajax_get_fileinfo_callback);
+	fileinfo_request.GET_raw(_ext_core+'ajax_fileinfo.php?i='+id+_ext_ref, ajax_get_fileinfo_callback);
 
 	setTimeout("show_ajax_anim()", 20);
 }
@@ -118,7 +118,7 @@ function ajax_get_upload_progress(id)
 {
 //	if (upload_progress_request == null) {
 		upload_progress_request = new AJAX();
-		upload_progress_request.GET_raw('/core/ajax_upload_progress.php?s='+id+_ext_ref, ajax_get_upload_progress_callback);
+		upload_progress_request.GET_raw(_ext_core+'ajax_upload_progress.php?s='+id+_ext_ref, ajax_get_upload_progress_callback);
 //	}
 	setTimeout("ajax_get_upload_progress("+id+",'"+_ext_ref+"')", 500);
 }

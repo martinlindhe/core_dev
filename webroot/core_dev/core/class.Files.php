@@ -200,15 +200,15 @@ class Files
 			} else if (in_array($file_lastname, $this->audio_types)) {
 				//show icon for audio files.
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
-				echo '<img src="/gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 				echo '</center></div>';
 			} else if (in_array($file_lastname, $this->video_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
-				echo '<img src="/gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $this->document_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
-				echo '<img src="/gfx/icon_document.png" width="40" height="49" alt="Document"/>';
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_document.png" width="40" height="49" alt="Document"/>';
 				echo '</center></div>';
 			} else {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
@@ -276,7 +276,7 @@ class Files
 
 			//show thumbnail of image
 			if (in_array($file_lastname, $this->image_types)) {
-				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$row['fileId'].'" onclick="loadImage('.$row['fileId'].', \'image_big\'\');"><center>';
+				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$row['fileId'].'" onclick="loadImage('.$row['fileId'].', \'image_big\');"><center>';
 				echo makeThumbLink($row['fileId'], $row['fileName']);
 				echo '</center></div>';
 			}
@@ -741,7 +741,7 @@ class Files
 		return $db->getOneItem($q, true);
 	}
 
-	/* Används av ajax filen /core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
+	/* Används av ajax filen core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
 	function getFileInfo($_id)
 	{
 		if (!is_numeric($_id)) return false;

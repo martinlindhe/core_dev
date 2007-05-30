@@ -5,6 +5,8 @@
 
 	function makePager($_total_cnt, $_items_per_page, $_add_value = '')
 	{
+		global $config;
+
 		$pager['page'] = 1;
 		$pager['items_per_page'] = $_items_per_page;
 		if (!empty($_GET['p']) && is_numeric($_GET['p'])) $pager['page'] = $_GET['p'];
@@ -19,9 +21,9 @@
 
 		if ($pager['page'] > 1) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
-			$pager['head'] .= '<img src="/gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
+			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
 		} else {
-			$pager['head'] .= '<img src="/gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
+			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
 		}
 
 		for ($i=1; $i <= $pager['tot_pages']; $i++) {
@@ -32,9 +34,9 @@
 
 		if ($pager['page'] < $pager['tot_pages']) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
-			$pager['head'] .= '<img src="/gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
+			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
 		} else {
-			$pager['head'] .= '<img src="/gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
+			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
 		}
 
 		return $pager;
@@ -44,9 +46,11 @@
 			run from the / path it will return nothing, else the directory name of the directory script are run from */
 	function getProjectPath($_amp = 1)
 	{
+		global $config;
+
 		if (!empty($_GET['pr'])) {
 			$proj_name = basename(strip_tags($_GET['pr']));
-			if ($_amp == 3) return '../'.$proj_name.'/';
+			if ($_amp == 3) return $config['web_root'];
 		} else {
 			if ($_amp == 3) return '';
 			$project_path = dirname($_SERVER['SCRIPT_NAME']);
@@ -144,7 +148,7 @@
 	function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_current')
 	{
 		$cur = basename($_SERVER['SCRIPT_NAME']);
-
+		
 		echo '<ul class="'.$class.'">';
 			foreach($menu_arr as $url => $text) {
 
@@ -188,25 +192,25 @@
 	*/
 	function createXHTMLHeader()
 	{
-		global $session, $title, $meta_js;
+		global $config, $session, $title, $meta_js;
 
-		if (!$title) $title = $session->default_title;
+		if (!$title) $title = $config['default_title'];
 
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
 		echo '<head>';
 			echo '<title>'.$title.'</title>';
 			echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
-			echo '<link rel="stylesheet" href="'.$session->core_web_root.'css/core.css" type="text/css"/>';
-			echo '<link rel="stylesheet" href="'.$session->core_web_root.'css/os3grid.css" type="text/css"/>';
-			echo '<link rel="stylesheet" href="'.$session->core_web_root.'css/themes/'.$session->theme.'" type="text/css"/>';
-			echo '<link rel="stylesheet" href="'.$session->web_root.'css/site.css" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/core.css" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/os3grid.css" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/themes/'.$session->theme.'" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$config['web_root'].'css/site.css" type="text/css"/>';
 			linkRSSfeeds();
 			echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
-			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/ajax.js"></script>';
-			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/functions.js"></script>';
-			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/os3grid.js"></script>';
-			echo '<script type="text/javascript" src="'.$session->core_web_root.'js/drag_drop.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ajax.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/functions.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/os3grid.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/drag_drop.js"></script>';
 			if ($meta_js) {
 				foreach ($meta_js as $script) {
 					echo '<script type="text/javascript" src="'.$script.'"></script>';
@@ -215,7 +219,7 @@
 		echo '</head>';
 		echo '<body>';
 		echo '<script type="text/javascript">';
-		echo 'var _ext_ref="'.getProjectPath(2).'";';
+		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core_web_root'].'core/";';
 		echo '</script>';
 	}
 
@@ -223,14 +227,14 @@
 	 other pages can add more feeds to $meta_rss before including design */
 	function linkRSSfeeds()
 	{
-		global $meta_rss;
+		global $meta_rss, $config;
 
 		if (empty($meta_rss)) return;
 		
 		foreach ($meta_rss as $feed) {
 			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
 			else $extra = getProjectPath(0);
-			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="/core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
+			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core_web_root'].'core/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 		}
 	}
 

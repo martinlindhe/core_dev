@@ -4,7 +4,12 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '../';
+	$config['core_root'] = '../core_dev/';
+	$config['core_web_root'] = '/core_dev/';
+
+	$config['web_root'] = '/adblock/';	//path on web server, to use to address paths for css & js includes
+	$config['default_title'] = 'Adblock Filterset Database';
+
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
@@ -26,8 +31,6 @@
 	$config['session']['name'] = 'adblockID';
 	$config['session']['sha1_key'] = 'sjxkxEadBL0ckjdhyhhHHxnjklsdvyuhu434nzkkz18ju222ha';
 	$config['session']['allow_registration'] = false;
-	$config['session']['web_root'] = '/adblock/';	//path on web server, to use to address paths for css & js includes
-	$config['session']['default_title'] = 'Adblock Filterset Database';
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;

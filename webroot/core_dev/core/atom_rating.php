@@ -117,14 +117,16 @@
 
 	function showRating($_type, $_id)
 	{
+		global $config;
+
 		//Show current votes
 		$result  = 'Current rating<br/><br/>';
 		$row = getRating($_type, $_id);
 		for ($i=1; $i<=5; $i++) {
 			if ($i <= $row['rating']) {
-				$result .= '<img src="/gfx/icon_star_full.png" alt="star"/>';
+				$result .= '<img src="'.$config['core_web_root'].'gfx/icon_star_full.png" alt="star"/>';
 			} else {
-				$result .= '<img src="/gfx/icon_star_empty.png" alt="star"/>';
+				$result .= '<img src="'.$config['core_web_root'].'gfx/icon_star_empty.png" alt="star"/>';
 			}
 		}
 		$result .= '<br/><br/>';

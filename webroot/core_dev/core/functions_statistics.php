@@ -9,11 +9,11 @@
 	*/
 	function showStatsMonth($year, $month)
 	{
-		global $db;
+		global $db, $config;
 
 		if (!is_numeric($year) || !is_numeric($month)) return false;
 
-		echo '<img src="/core/image_statistics.php?y='.$year.'&amp;m='.$month.getProjectPath().'" alt="Stats"/>';
+		echo '<img src="'.$config['core_web_root'].'core/image_statistics.php?y='.$year.'&amp;m='.$month.getProjectPath().'" alt="Stats"/>';
 	}
 
 	function generateStatsMonth($year, $month)

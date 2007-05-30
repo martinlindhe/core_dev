@@ -60,7 +60,7 @@
 		return $db->getArray($q);
 	}
 
-	//used by showNews() and /core/rss_news.php
+	//used by showNews() and core/rss_news.php
 	function getPublishedNews($_categoryId = 0, $limit = '')
 	{
 		global $db;
@@ -147,7 +147,7 @@
 			echo '<textarea name="news_body" cols="60" rows="16">'.$item['body'].'</textarea><br/>';
 			echo '<input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
 			echo ' <label for="rss_check">';
-			echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
+			echo '<img src="'.$config['core_web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
 			echo ' Include this news in the RSS feed</label><br/><br/>';
 			echo 'Category: '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
 			echo 'Time for publication:<br/>';

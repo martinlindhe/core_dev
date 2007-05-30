@@ -4,7 +4,12 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '../';
+	$config['core_root'] = 'E:/devel/webroot/core_dev/';
+	$config['core_web_root'] = '/core_dev/';
+
+	$config['web_root'] = '/janina/';
+
+
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
@@ -22,7 +27,6 @@
 	$config['session']['name'] = 'Janina';
 	$config['session']['sha1_key'] = 'janinaSHAxyxtybhge3bbexudud81cujnm11wbvwcvvw';
 	$config['session']['allow_registration'] = false;
-	$config['session']['web_root'] = '/janina/';
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;

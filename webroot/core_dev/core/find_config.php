@@ -4,7 +4,7 @@
 		if (strpbrk($_GET['pr'], '"\'/\\%&?;:.,')) die;				//checks _pr for " ' \ / % & ? ; : . ,
 		$project = preg_replace( "/[^\w\.-]+/", "_", $_GET['pr']); //bra regexp för att ta bort farliga tecken från filnamn
 		if ($project != $_GET['pr']) die;	//invalid chars in path
-		$project = '../'.$project.'/';
+		$project = '../../'.$project.'/';
 	}
 
 	require_once($project.'config.php');

@@ -173,7 +173,7 @@
 
 			echo nameLink($row['contactId'], $row['contactName']);
 
-			echo '<a href="mess_new.php?id='.$row['contactId'].'"><img src="/gfx/icon_mail.png" alt="Send a message to '.$row['contactName'].'"/></a>';
+			echo '<a href="mess_new.php?id='.$row['contactId'].'"><img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="Send a message to '.$row['contactName'].'"/></a>';
 			echo '</div>';
 		}
 	}

@@ -2,12 +2,12 @@
 <div id="left-sep"></div>
 <div id="header">
 	<div id="header-logo">
-		<img src="<?=$session->web_root?>gfx/logo.png" alt="Filterset Database"/>
+		<img src="<?=$config['web_root']?>gfx/logo.png" alt="Filterset Database"/>
 	</div>
 	<div id="header-items">
-		<a href="<?=$session->web_root?>wiki.php?Wiki:Contribute">Contribute</a>
-		<a href="<?=$session->web_root?>wiki.php?Wiki:About">About</a>
-		<a href="<?=$session->web_root?>wiki.php?Wiki:Help">Help</a>
+		<a href="<?=$config['web_root']?>wiki.php?Wiki:Contribute">Contribute</a>
+		<a href="<?=$config['web_root']?>wiki.php?Wiki:About">About</a>
+		<a href="<?=$config['web_root']?>wiki.php?Wiki:Help">Help</a>
 	</div>
 </div>
 <div id="leftmenu">

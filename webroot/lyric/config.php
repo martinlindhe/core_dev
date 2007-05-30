@@ -4,7 +4,12 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '../';
+	$config['core_root'] = '../core_dev/';
+	$config['core_web_root'] = '/core_dev/';
+
+	$config['web_root'] = '/lyric/';
+	$config['default_title'] = 'lyric database';
+
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
@@ -26,8 +31,6 @@
 	$config['session']['name'] = 'hcLyrics';
 	$config['session']['sha1_key'] = 'kekjhbkjsxfgyuejewjkx276786ddjhnhdzzz9716t6z';
 	$config['session']['allow_registration'] = false;
-	$config['session']['web_root'] = '/lyric/';
-	$config['session']['default_title'] = 'lyric database';
 	$session = new Session($config['session']);
 
 	$session->handleSessionActions();

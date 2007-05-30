@@ -1,7 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- fix-trix så css & js & gfx patsh blir rätt för process-servern
-			leder åxå till att vi kan lägga allt under egen katalog i webroot (bättre struktur)
+		- egna kataloger core_dev/ajax, core_dev/rss
+
 
 
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
@@ -136,6 +136,8 @@
 
 
 --------------[[projekt todo]]--------------
+	janina:
+
 	adblock:
 		- konvertera "report site" funktionen till att använda functions_feedback.php
 		- använd en sån där <link> tag för sökmotor som youtube använder, så "add search" dyker upp under search-engine dropdownen i firefox
@@ -153,12 +155,21 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.30:
+	- core: renamed $config['session']['web_root'] to $config['web_root']
+	- core: renamed $config['session']['core_web_root'] to $config['core_web_root']
+	- core: renamed $config['session']['default_title'] to $config['default_title']
+	- core: cleanup för att kunna konfigurera var core-projektets filer finns, bättre struktur & flexibilitet
+
+
+
 2007.05.28:
 	- plugin: påbörjat ett "plugin" för wurfl, arbetar med att utforma en "plugin-standard"
 	- plugins: loadPlugins() skapad
 	- rating: fixade så rating-modul bara visar current rating om användaren ej är inloggad
 	- plugin wurfl: versionerar enskild cache.php, WURFL_USE_MULTICACHE=false (blir bra prestanda tillsammans med APC, och bara 1 fil att versionera)
 	- admin: list users added
+
 
 2007.05.27:
 	- session: tog bort hårdkodade sökvägar /css, /js, /gfx från createXHTMLHeader(), added setting $session->core_web_root

@@ -4,7 +4,12 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '../';
+	$config['core_root'] = '../core_dev/';
+	$config['core_web_root'] = '/core_dev/';
+
+	$config['web_root'] = '/lang/';
+	$config['default_title'] = 'lang project';
+
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
@@ -25,7 +30,6 @@
 	$config['session']['name'] = 'langID';
 	$config['session']['sha1_key'] = 'sdalkj8vkjncjksdSdFsdfg70kcvvcvGFzadeg5ae5h';
 	$config['session']['allow_registration'] = true;
-	$config['session']['web_root'] = '/lang/';
 	$session = new Session($config['session']);
 
 	$config['files']['apc_uploads'] = false;

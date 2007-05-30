@@ -4,7 +4,12 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '../';
+	$config['core_root'] = '../core_dev/';
+	$config['core_web_root'] = '/core_dev/';
+
+	$config['web_root'] = '/ajax_chat/';
+	$config['default_title'] = 'ajax chat project';
+
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
@@ -25,8 +30,6 @@
 	$config['session']['name'] = 'ajaxChatID';
 	$config['session']['sha1_key'] = 'ajaxchat8x8jdszfoklxcvuykFFaadvdfvzw434fg3f3';
 	$config['session']['allow_registration'] = true;
-	$config['session']['default_title'] = 'ajax chat project';
-	$config['session']['web_root'] = '/ajax_chat/';
 	$session = new Session($config['session']);
 
 	//chat config options

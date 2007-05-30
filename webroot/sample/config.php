@@ -4,7 +4,13 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '../';
+	$config['core_root'] = 'E:/devel/webroot/core_dev/';	//use of an absolute path is highly recommended
+	$config['core_web_root'] = '/core_dev/';
+
+	$config['web_root'] = '/sample/';
+	$config['default_title'] = 'sample project';
+
+
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
@@ -34,9 +40,6 @@
 	$config['session']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
 	$config['session']['allow_login'] = true;
 	$config['session']['allow_registration'] = true;
-	$config['session']['web_root'] = '/sample/';
-	$config['session']['core_web_root'] = '/core_dev/';
-	$config['session']['default_title'] = 'sample project';
 	$config['session']['allow_themes'] = true;
 	$session = new Session($config['session']);
 
