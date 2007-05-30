@@ -225,7 +225,7 @@ class user {
 			$arr = $this->getuser($arr);
 		}
 		if (@$arr['id_id'] == @$_SESSION['data']['id_id']) {
-			if(!$this->isOnline($arr['account_date'])) {
+			if(empty($arr['account_date']) || !$this->isOnline($arr['account_date'])) {
 				$res = now();
 				$_SESSION['data']['account_date'] = $res;
 				$this->sql->queryUpdate("UPDATE {$this->t}user SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
@@ -245,7 +245,11 @@ class user {
 	  //$mail_add = (!$own)?'<a href="javascript:makeMail(\''.$arr['id_id'].'\');" title="Skriv mail"><img alt="" src="'.OBJ.'mail_write.gif" style="margin: 0 0 -2px 3px;" /></a>':'';
 		$result  = (empty($extra['nolink'])?'<a href="'.l('user', 'view', $arr['id_id'.$suffix]).'">':'');
 		
-		$curr_class = ($this->isOnline($arr['account_date'.$suffix])?'on':'off').'_'.$sex_name[$arr['u_sex'.$suffix]];
+		if (!empty($arr['account_date'.$suffix])) {
+			$curr_class = ($this->isOnline($arr['account_date'.$suffix])?'on':'off').'_'.$sex_name[$arr['u_sex'.$suffix]];
+		} else {
+			$curr_class = 'off_'.$sex_name[$arr['u_sex'.$suffix]];
+		}
 
 		$result .= '<span class="'.$curr_class.'"'.(!isset($extra['noimg'])?' onmouseover="launchHover(event, \''.$arr['id_id'].'\');" onmouseout="clearHover();"':'').'>'.secureOUT($arr['u_alias'.$suffix]);
 		$result .= (empty($extra['nosex'])?' <img alt="'.$sex_name[$arr['u_sex'.$suffix]].'" align="absmiddle" src="/_objects/icon_'.$arr['u_sex'.$suffix].'1.png" />':'');
@@ -383,11 +387,11 @@ class user {
 	function setinfo($id, $opt, $val) {
 		$res = $this->sql->queryLine("SELECT content, main_id FROM {$this->t}obj WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
 		if(!$res[1]) {
-			$obj = $this->sql->queryInsert("INSERT INTO {$this->t}obj SET content = $val, content_type = '$opt', owner_id = '$id', obj_date = NOW()");
+			$obj = $this->sql->queryInsert("INSERT INTO {$this->t}obj SET content = '".$val."', content_type = '$opt', owner_id = '$id', obj_date = NOW()");
 			$ret = array('1', $obj);
 		} else {
 			$ret = array('0', $res[1]);
-			$this->sql->queryUpdate("UPDATE {$this->t}obj SET content = $val, obj_date = NOW() WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
+			$this->sql->queryUpdate("UPDATE {$this->t}obj SET content = '".$val."', obj_date = NOW() WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
 		}
 		return $ret;
 	}

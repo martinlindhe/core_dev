@@ -56,15 +56,15 @@
 	$title = $res['blog_title'] ? secureOUT($res['blog_title']) : '<i>ingen rubrik</i>';
 ?>
 
-<div class="centerMenuHeader"><?=$title?> - publicerad: <?=nicedate($res['blog_date'])?></div>
-<div class="centerMenuBodyWhite">
+<div class="bigHeader"><?=$title?> - publicerad: <?=nicedate($res['blog_date'])?></div>
+<div class="bigBody">
 	<div style="width: 586px; overflow: hidden; margin: 0; padding: 0;" class="pdg">
 		<?=formatText($res['blog_cmt'])?>
 	</div>
 </div><br/>
 
-<div class="centerMenuHeader">kommentarer</div>
-<div class="centerMenuBodyWhite">
+<div class="bigHeader">kommentarer</div>
+<div class="bigBody">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
 	$c_paging['co'] = $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}userblogcmt WHERE blog_id = '".$res['main_id']."' AND status_id = '1'");

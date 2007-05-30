@@ -31,9 +31,13 @@
 		* fixat en mängd php-varningar
 
 
-***************************************************************************************************
+2007.05.30 Onsdag:
+	
 
+***************************************************************************************************
 NU: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
+
+NU: png upload blir inga thumbs
 
 NU: anmäl användare-funktion (abuse)
 	- admin ser översikt på inkommande anmälningar

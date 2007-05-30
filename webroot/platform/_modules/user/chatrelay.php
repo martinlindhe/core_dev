@@ -3,14 +3,14 @@
 		tar emot text från quickchat-funktionen och sparar ner i databasen + gör nåt mer crap
 	
 	*/
-	if(!$l) {
-		die('.');
-	}
+	if(!$l) die('.');
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 	//$s = (!is_md5($id))?false:$user->getuser($id);
 	$s = $user->getuser($id);
+
+	$isFriends = $user->isFriends($s['id_id']);
 
 	$closed = false;
 	$blocked = false;

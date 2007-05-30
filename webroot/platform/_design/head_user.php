@@ -7,6 +7,7 @@
 		<div class="userName"><?=$user->getstring($s, '')?></div>
 		<div id="userImage">
 			<?=$user->getimg($s['id_id'].$s['u_picid'].$s['u_picd'].$s['u_sex'], $s['u_picvalid'], 1)?>
+			<br class="clr"/>
 		</div>
 
 		<div id="userDetail">
@@ -44,9 +45,7 @@
 				makeButton(false,	'makeRelation(\''.$s['id_id'].'\')',	'icon_friends.png',	'bli vän');
 			}
 		?>
-		<? makeButton(false,	'makeBlock(\''.$s['id_id'].'\')',			'icon_block.png',	'blockera'); ?>
-		<? makeButton(false,	'goLoc(\''.l('user', 'abuse', $s['id_id']).'\')',	'icon_abuse.png',	'anmäl'); ?>
-		<? /* makeButton(false,	'',	'icon_abuse.png',	'rapportera'); */ ?>
+		<? makeButton(false,	'goLoc(\''.l('user', 'abuse', $s['id_id']).'\')',	'icon_abuse.png',	'abuse'); ?>
 <? } ?>
 	<br class="clr" />
 <?

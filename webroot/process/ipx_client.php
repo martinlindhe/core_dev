@@ -6,7 +6,7 @@
 
 	require_once('config.php');	//för d() debug dump
 
-	$config['sms']['originating_number'] = '72777';
+	$config['sms']['originating_number'] = '71160';
 	$config['sms']['auth_username'] = 'lwcg';
 	$config['sms']['auth_password'] = '3koA4enpE';
 

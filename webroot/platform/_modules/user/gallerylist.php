@@ -2,14 +2,16 @@
 <?		
 	dopaging($paging, l('user', 'gallery', $s['id_id'], '0').'p=', '', 'med', STATSTR);
 
+	$showall = false;//visa bilderna istället för thumbs
+	$view = 0;	//aktuelll bild, för showall=true
+	$change = false;//redigera bilden?
+
 	echo '<table summary="" cellspacing="0" width="100%">';
-	$restricted = ($own && $lim_v)?true:false;
 	$ti = 0;
 	if (!empty($res) && count($res)) {
 		if($all) {
 
 			foreach($res as $row) {
-				#if($restricted && $ti >= $lim) { echo '<tr><td colspan="5"><table cellspacing="0" style="width: 658px;"><tr><td class="pdg cnt spac">Det visas bara <b>'.$lim.'</b>st foton från ditt fotoalbum.<br>Du kan välja att uppgradera ditt medlemskap om du vill se alla foton.</td></tr></table></td></tr>'; break; }
 				if(!$row['hidden_id'])
 					$file = '/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'.'.$row['pht_name'];
 				else
@@ -51,10 +53,11 @@
 				</td>
 				</tr>':'');
 			}
+			/*
 			$res_cmts=$sql->query("SELECT p.main_id, p.user_id, p.c_msg, p.c_date, p.status_id, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.u_birth, u.u_sex, u.account_date, u.level_id FROM {$t}userphotocmt p LEFT JOIN {$t}user u ON p.user_id = u.id_id AND u.status_id = '1' WHERE p.photo_id = '".$_GET['key']."' ORDER BY main_id DESC", 0, 1);
 			foreach($res_cmts as $line) {
 				echo '<tr><td class="spac pdg"><div style="width: 100%; overflow: hidden;">'.$line['u_alias'].'<br />'.$line['u_picd'].'<br />'.$line['u_birth'].'<br />'.$line['u_sex'].'<br />'.$line['c_msg'].'</div></td></tr>';
-			}
+			}*/
 		} else {
 			foreach($res as $row) {
 				echo '<tr><td class="spac pdg"><div style="width: 100%; overflow: hidden;"><b>[privat]</b></div></td></tr>';

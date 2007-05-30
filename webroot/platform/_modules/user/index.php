@@ -68,6 +68,9 @@
 	} else if($action == 'visit') {
 		include('visit.php');
 		exit;
+	} else if($action == 'abuse') {
+		include('user_abuse.php');
+		exit;
 /*
 	} else if($action == 'test') {
 include('spy.fnc.php');

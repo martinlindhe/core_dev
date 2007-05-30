@@ -39,7 +39,7 @@
 		}
 	}
 	if($complete) {
-		errorACT('Du har fått ett e-postmeddelande skickat till dig med dina användaruppgifter!<br /><input type="button" class="btn2_med r" onclick="goLoc(\''.l('main', 'start').'\');" value="till startsidan!" /><br class="clr" />');
+		errorACT('Du har fått ett e-postmeddelande skickat till dig med dina användaruppgifter!<br /><input type="button" class="btn2_min r" onclick="goLoc(\''.l('main', 'start').'\');" value="fortsätt &raquo;" /><br class="clr" />');
 	}
 	include(DESIGN.'head.php');
 ?>
@@ -57,7 +57,7 @@
 				<?
 					if (!empty($msg) && count($msg)) echo '<br /><br /><span class="bld">OBS!</span><br />'.implode('<br />', $msg);
 				?>
-				<input type="submit" value="fortsätt" class="btn2_med"/>
+				<input type="submit" value="fortsätt" class="btn2_sml"/>
 
 				<? if (empty($_POST)) echo '<script type="text/javascript">document.forgot.a.focus();</script>'; ?>
 			</form>

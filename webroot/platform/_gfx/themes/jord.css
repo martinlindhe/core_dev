@@ -1,0 +1,19 @@
+#top_logo { background: url('jord/logo.png'); }
+#top_bg { background: url('jord/head_bg.png'); }
+
+ul#menu_main { background-color: #5B3E04; }
+ul#menu_user { background-color: #EBD685; }
+
+.smallHeader, .mediumHeader, .bigHeader {
+	background-color: #5B3E04;
+}
+
+.btnNormal:hover, .btnSelected {
+	background-color: #F1F0D4;
+}
+
+.btnNormal, .btn2_min, .btn2_sml { 
+	background-color: #EBD685;
+}
+
+.subHead { color: #5B3E04; }

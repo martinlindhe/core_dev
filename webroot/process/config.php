@@ -4,7 +4,8 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '../';
+	//$config['core_root'] = '../';
+	$config['core_root'] = '';
 	require_once($config['core_root'].'core/class.DB_MySQLi.php');
 	require_once($config['core_root'].'core/class.Session.php');
 	require_once($config['core_root'].'core/class.Files.php');
@@ -14,7 +15,7 @@
 	$config['debug'] = true;
 
 	$config['database']['username']	= 'root';
-	$config['database']['password']	= '';
+	$config['database']['password']	= 'dravelsql';
 	$config['database']['database']	= 'dbProcess';
 	$db = new DB_MySQLi($config['database']);
 
@@ -22,7 +23,7 @@
 	$config['session']['name'] = 'procId';
 	$config['session']['sha1_key'] = 'x8xijemjshjkljhkjhs88t68kioxkijhkjsh';
 	$config['session']['allow_registration'] = false;
-	$config['session']['web_root'] = '/process/';
+	$config['session']['web_root'] = '/_process/';
 	$config['session']['default_title'] = 'process server';
 	$session = new Session($config['session']);
 

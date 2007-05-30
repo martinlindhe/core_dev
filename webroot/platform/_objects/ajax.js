@@ -107,11 +107,13 @@ function executeFriendsOnline(text) {
 		for(i = 0; i < text.length-1; i++) {
 			text[i] = text[i].split('|');
 			ret += '<li>';
+			ret += '<table width="100%" cellpadding="0" cellspacing="0"><tr><td>';
 			ret += '<span onmouseover="launchHover(event, \'' + text[i][0] + '\');" onmouseout="clearHover();">';
 			ret += '<a href="/user/view/' + text[i][0] + '">' + unescape(text[i][1]) + ' <b>' + text[i][2] + '</b></a>';
-			ret += '</span>';
-			ret += ' <img onclick="makeGb(\'' + text[i][0] + '\')" title="Skriv i gästboken" alt="Skriv i gästboken" src="/_gfx/icon_gb.png" />';
-			ret += '<img onclick="makeChat(\'' + text[i][0] + '\')" title="Chatta" alt="Chatta" src="/_gfx/icon_qchat.png" />';
+			ret += '</span></td><td width="36">';
+			ret += '<img align="absmiddle" onclick="makeGb(\'' + text[i][0] + '\')" title="Skriv i gästboken" alt="Skriv i gästboken" src="/_gfx/icon_gb.png" />';
+			ret += '<img align="absmiddle" onclick="makeChat(\'' + text[i][0] + '\')" title="Chatta" alt="Chatta" src="/_gfx/icon_qchat.png" />';
+			ret += '</td></tr></table>';
 			ret += '</li>';
 		}
 		ret += '</ul>';

@@ -2,13 +2,13 @@
 	/*
 		This script is called by IPX for incoming SMS
 
-		The following parameters are set:
-			DestinationAddress		- number the SMS was sent to
-			OriginatorAddress			- number the SMS came from
-			Message								- message text
-			MessageId							- unique message ID
-			TimeStamp							- timestamp in CET / CEST time zone format
-			Operator							- name of the consumers mobile operator
+		The following parameters are set as GET parameters:
+			OriginatorAddress			- number the SMS came from, in the format 46702297439
+			DestinationAddress		- number the SMS was sent to, in the format 71160
+			Message								- message text: ""Pog 123 TEST"
+			MessageId							- unique message ID, "1-797950504"
+			Operator							- name of the consumers mobile operator, "Telia"
+			TimeStamp							- timestamp in CET / CEST time zone format, "20070529 13:11:41"
 
 			All parameters are set, however some may have a value with length 0
 	*/
@@ -29,12 +29,12 @@
 	}
 
 
-	$get = '';
-	$post = '';
-	if (!empty($_GET)) $get = $db->escape(serialize($_GET));
-	if (!empty($_POST)) $get = $db->escape(serialize($_POST));
+	//All incoming data is set as GET parameters
+	$params = '';
+	if (!empty($_GET)) $params = $db->escape(serialize($_GET));
+	//if (!empty($_POST)) $params = $db->escape(serialize($_POST));
 
-	$q = 'INSERT INTO tblIncomingSMS SET get="'.$get.'",post="'.$post.'",IP='.$session->ip.',timeReceived=NOW()';
+	$q = 'INSERT INTO tblIncomingSMS SET params="'.$params.'",IP='.$session->ip.',timeReceived=NOW()';
 	$db->insert($q);
 
 	//Acknowledgment - Tell IPX that the SMS received

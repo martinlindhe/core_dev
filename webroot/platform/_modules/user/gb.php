@@ -52,7 +52,7 @@
 		dopaging($paging, l('user', 'gb', $s['id_id']).'p=', '', 'med', ((!$his)?STATSTR:'<a href="'.l('user', 'gb', $s['id_id']).'">tillbaka</a>'));
 	
 		foreach($res as $val) {
-			if(($own || $his && $c_his == $l['id_id']) && $allowed && $deadline > $val['sent_date']) { echo '<table summary="" cellspacing="0" style="width: 658px;"><tr><td class="pdg cnt spac">Meddelandena skrivna tidigare än <b>'.doDate($deadline, 1, 1).'</b> är nedstängda.<br>Du kan välja att uppgradera ditt medlemskap om du vill läsa äldre inlägg.</td></tr></table>'; break; }
+			//if(($own || $his && $c_his == $l['id_id']) && $allowed && $deadline > $val['sent_date']) { echo '<table summary="" cellspacing="0" style="width: 658px;"><tr><td class="pdg cnt spac">Meddelandena skrivna tidigare än <b>'.doDate($deadline, 1, 1).'</b> är nedstängda.<br>Du kan välja att uppgradera ditt medlemskap om du vill läsa äldre inlägg.</td></tr></table>'; break; }
 			$prv = ($val['private_id'])?1:0;
 			$show_answer = (!$val['is_answered'])?false:true;
 			if($l['id_id'].$l['id_id'] == $val['user_id'].$val['sender_id']) {

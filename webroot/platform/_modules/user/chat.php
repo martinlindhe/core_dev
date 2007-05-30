@@ -1,6 +1,10 @@
 <?
 	if($own) popupACT('Du kan inte skicka till dig själv.');
 	$user->blocked($s['id_id']);
+	
+	$isFriends = $user->isFriends($s['id_id']);
+	$closed = false; //Default
+	
 	if(!$isFriends) {
 		$onlL = $user->getinfo($l['id_id'], 'private_chat');
 		$onlS = $user->getinfo($s['id_id'], 'private_chat');
