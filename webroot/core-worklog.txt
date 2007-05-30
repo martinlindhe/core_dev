@@ -1,18 +1,27 @@
 ----[[platform todo]]----
 	core/gör snart:
+		- fix-trix så css & js & gfx patsh blir rätt för process-servern
+			leder åxå till att vi kan lägga allt under egen katalog i webroot (bättre struktur)
+
+
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
 		- kunna stänga av moduler: feedback, moderation (visa ej då deras admin-sidor)
-		- fix-trix så css & js & gfx patsh blir rätt för process-servern
 		- gör process-funktionaliteten som ett plugin
 		- gör ipx-grejset som ett plugin
 		- admin: kunna skriva note till ip på admin_ip.php, för process-server
 		
 
 	frågetecken:
-		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra personer ska se hans sida, stämmer det?"
+		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra
+			personer ska se hans sida, stämmer det?"
+			Mikael svarar: Ja, det stämmer – en möjlighet att ”personalisera” sin sida.
+			
 		- "Ert önskemål: "Groups - diskussionsgrupper""
 				Menar ni ett forum? Eller ska det vara en användargrupp, som har en gemensam yta där gruppen diskuterar?
+			Mikael svarar: Idén var ett forum, men en användargrupp låter också intressant. Skulle det då bli som ett slutet diskussionsrum?
+
 		- "Ert önskemål: "Listings, olika former av topplistor" Vi får diskutera närmare vad för sorts data som ni vill ha topplistor på.
+
 		- "Detta med att "tjäna poäng" får vi diskutera närmare."
 
 

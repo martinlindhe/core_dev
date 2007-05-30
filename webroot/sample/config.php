@@ -35,6 +35,7 @@
 	$config['session']['allow_login'] = true;
 	$config['session']['allow_registration'] = true;
 	$config['session']['web_root'] = '/sample/';
+	$config['session']['core_web_root'] = '/core_dev/';
 	$config['session']['default_title'] = 'sample project';
 	$config['session']['allow_themes'] = true;
 	$session = new Session($config['session']);

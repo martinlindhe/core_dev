@@ -1,0 +1,16 @@
+coding style:
+
+	* använda $_ prefix på input variabler som är user supplied till en funktion
+	* använda foreach() istället för for() för att iterera över sql resultset arrayer i den mån det är praktiskt
+	  (=mer lättläst kod,kanske lite prestanda)
+
+
+	* strings named $q always hold SQL queries
+	
+	
+	Subversion rules/common sense:
+	
+	* Never checkin non-functional code.
+		Always run/compile your code before a check-in to ensure that it dont produce parse errors/compile errors,
+		in such state as it will break the HEAD codebase for other developers.
+		When you realize that you did, please commit fix as soon as you possibly can.
