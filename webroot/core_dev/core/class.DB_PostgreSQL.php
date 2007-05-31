@@ -14,23 +14,6 @@ class DB_PostgreSQL extends DB_Base
 		if ($this->db_handle) pg_close($this->db_handle);
 	}
 
-	function showDriverStatus()
-	{
-		die('fixme-showDriverStatus()');
-		/*
-		echo 'Server info: '.$this->db_handle->server_info.' ('.$this->db_handle->host_info.')<br/>';
-		echo 'Client info: '.$this->db_handle->client_info.'<br/>';
-		echo 'Character set: '.$this->db_handle->character_set_name().'<br/>';
-		echo 'Last error: '.pg_last_error($this->db_handle).'<br/>';
-		echo 'Last errno: '.$this->db_handle->errno.'<br/><br/>';
-		*/
-	}
-
-	function escape($q)
-	{
-		return pg_escape_string($this->db_handle, $q);
-	}
-
 	function connect()
 	{
 		global $config;
@@ -53,11 +36,26 @@ class DB_PostgreSQL extends DB_Base
 		}
 
 		$this->db_driver = 'DB_PostgreSQL';
-		$this->dialect = 'mysql';
-		$this->server_version = 'unknown-fixme';//$this->db_handle->server_info;
-		$this->client_version = 'unknown-fixme';//$this->db_handle->client_info;
+		$this->dialect = 'pgsql';
+
+		$this->server_version = pg_parameter_status($this->db_handle, 'server_version');
+		$info = pg_version($this->db_handle);
+		$this->client_version = $info['client'];
 
 		if ($config['debug']) $this->profileConnect($time_started);
+	}
+
+	function showDriverStatus()
+	{
+		echo 'Server encoding: '.pg_parameter_status($this->db_handle, 'server_encoding').'<br/>';
+		echo 'Client encoding: '.pg_parameter_status($this->db_handle, 'client_encoding').'<br/>';
+		echo 'Last error: '.pg_last_error($this->db_handle).'<br/>';
+		echo 'Last notice: '.pg_last_notice($this->db_handle).'<br/>';
+	}
+
+	function escape($q)
+	{
+		return pg_escape_string($this->db_handle, $q);
 	}
 
 	function query($q)

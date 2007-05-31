@@ -11,8 +11,9 @@
 	$config['default_title'] = 'sample project';					//default title for pages if no title is specified for that page
 
 	set_include_path($config['core_root'].'core/');
+	//require_once('class.DB_MySQL.php');
 	require_once('class.DB_MySQLi.php');
-//	require_once('class.DB_PostgreSQL.php');
+	//require_once('class.DB_PostgreSQL.php');
 	require_once('class.Session.php');
 	require_once('class.Files.php');
 	require_once('functions_faq.php');
@@ -30,17 +31,16 @@
 	$config['plugins'] = array('wurfl');
 	loadPlugins();
 
+	$config['database']['username']	= 'root';
+	$config['database']['password']	= '';
+	$config['database']['database']	= 'dbSample';
+	$db = new DB_MySQLi($config['database']);
 /*
 	$config['database']['username']	= 'postgres';
 	$config['database']['password']	= 'test';
 	$config['database']['database']	= 'dbSample';
 	$db = new DB_PostgreSQL($config['database']);
 */
-
-	$config['database']['username']	= 'root';
-	$config['database']['password']	= '';
-	$config['database']['database']	= 'dbSample';
-	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
 	$config['session']['name'] = 'coreID';

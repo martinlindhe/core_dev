@@ -14,20 +14,6 @@ class DB_MySQLi extends DB_Base
 		if ($this->db_handle) $this->db_handle->close();
 	}
 
-	function showDriverStatus()
-	{
-		echo 'Server info: '.$this->db_handle->server_info.' ('.$this->db_handle->host_info.')<br/>';
-		echo 'Client info: '.$this->db_handle->client_info.'<br/>';
-		echo 'Character set: '.$this->db_handle->character_set_name().'<br/>';
-		echo 'Last error: '.$this->db_handle->error.'<br/>';
-		echo 'Last errno: '.$this->db_handle->errno.'<br/><br/>';
-	}
-
-	function escape($q)
-	{
-		return $this->db_handle->real_escape_string($q);
-	}
-
 	function connect()
 	{
 		global $config;
@@ -39,14 +25,16 @@ class DB_MySQLi extends DB_Base
 		if (!$this->port) $this->port = 3306;	//MySQL default port
 		if (!$this->username) $this->username = 'root';
 
-		$this->db_handle = mysqli_init();
-		//$this->db_handle->options(MYSQLI_INIT_COMMAND, 'SET NAMES utf8');
+		$this->db_handle = @ new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
-		if (!$this->db_handle->real_connect($this->host, $this->username, $this->password, $this->database, $this->port))
-		{
+		if (mysqli_connect_errno()) {
 			$this->db_handle = false;
+			if ($config['debug']) die('DB_MySQLi: Database connection error '.mysqli_connect_errno().': '.mysqli_connect_error().'.</bad>');
+			else die;
+		}
 
-			die('<bad>Database connection error.</bad>');
+		if (!$this->db_handle->set_charset('utf8')) {
+			die('Error loading character set utf8: '.$this->db_handle->error);
 		}
 
 		$this->db_driver = 'DB_MySQLi';
@@ -55,6 +43,19 @@ class DB_MySQLi extends DB_Base
 		$this->client_version = $this->db_handle->client_info;
 
 		if ($config['debug']) $this->profileConnect($time_started);
+	}
+
+	function showDriverStatus()
+	{
+		echo 'Host info: '.$this->db_handle->host_info.'<br/>';
+		echo 'Connection character set: '.$this->db_handle->character_set_name().'<br/>';
+		echo 'Last error: '.$this->db_handle->error.'<br/>';
+		echo 'Last errno: '.$this->db_handle->errno.'<br/><br/>';
+	}
+
+	function escape($q)
+	{
+		return $this->db_handle->real_escape_string($q);
 	}
 
 	function query($q)

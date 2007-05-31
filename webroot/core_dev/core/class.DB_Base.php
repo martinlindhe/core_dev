@@ -4,9 +4,7 @@
 
 	Written by Martin Lindhe, 2007
 
-	todo: metod för att anropa stored procedures
-
-	todo: börja använda http://se2.php.net/manual/en/function.mysqli-fetch-object.php, returnera kolumnamn direkt som objektvariabler
+	todo: method to call stored procedures
 */
 
 mb_internal_encoding('UTF-8');
@@ -16,9 +14,6 @@ abstract class DB_Base
 	/****************************************************/
 	/* PUBLIC INTERFACE EXPOSED BY ALL DB MODULES				*/
 	/****************************************************/
-
-	/* Holds a string indicating what "dialect" of sql is currently allowed by the db driver, possible values: mysql */
-	public $dialect = '';
 
 	/* Escapes a string for use in queries */
 	abstract function escape($q);
@@ -58,6 +53,10 @@ abstract class DB_Base
 		Set $num to true if you expect a numeric response (to return 0 on failure rather than boolean false)
 	*/
 	abstract function getOneItem($q, $num = false);
+
+	/* Holds a string indicating what "dialect" of sql is currently allowed by the db driver, possible values: mysql */
+	public $dialect = '';
+
 
 
 	/****************************************************/
@@ -107,7 +106,9 @@ abstract class DB_Base
 	function showConfig()
 	{
 		echo '<b>Current database configuration</b><br/>';
-		echo 'DB driver: <span class="okay">'.$this->db_driver.'</span><br/>';
+		echo 'DB driver: '.$this->db_driver.'<br/>';
+		echo 'Server version: '.$this->server_version.'<br/>';
+		echo 'Client version: '.$this->client_version.'<br/>';
 		echo 'Host: '.$this->host.':'.$this->port.'<br/>';
 		echo 'Login: '.$this->username.':'.($this->password?$this->password:'(blank)').'<br/>';
 		echo 'Database: '.$this->database.'<br/>';

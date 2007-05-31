@@ -120,11 +120,6 @@
 
 	db drivers:
 		- microsoft sql server 2005 driver
-		- mysqli: går ej få $this->db_handle->character_set_name() att påstå att det
-			är utf8-encoding trots att jag forcar det med SET NAMES utf8.
-			om jag ej gör detta så blir default "latin1" trots att mysql-servern är konfad till utf8
-			vet ej om nåt kanske är felkonfat?
-			i ubuntu 7.04 blir det åxå latin1! (mysql 5.0.38 client&server)
 
 
 	core/lågprio/förändringar under övervägning:
@@ -169,6 +164,9 @@ X = hi prio task
 	- admin compat check: förbättrat apache version detection
 	- admin compat check: förbättrat GD version detection
 	- admin compat check: förbättrat OS detection litegrann (identifierar iaf windows & ubuntu linux)
+	- session: buggfix, går nu logga in igen om man blir utloggad pga "client useragent changed"
+	- db pgsql: visar client & server info & character encoding
+
 
 
 2007.05.30:

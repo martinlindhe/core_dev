@@ -118,14 +118,12 @@
 	************************************/
 	if ($db->dialect == 'mysql') {
 		echo '<h2>MySQL</h2>';
-		$current_mysql_server = $db->server_version;
-		$current_mysql_client = $db->client_version;
 
-		echo version_compare_array($supported_mysql, $current_mysql_server);
-		echo 'MySQL database server version: '.$current_mysql_server.'</div>';
+		echo version_compare_array($supported_mysql, $db->server_version);
+		echo 'MySQL database server version: '.$db->server_version.'</div>';
 		
-		echo version_compare_array($supported_mysql, $current_mysql_client);
-		echo 'MySQL database client version: '.$current_mysql_client.'</div>';
+		echo version_compare_array($supported_mysql, $db->client_version);
+		echo 'MySQL database client version: '.$db->client_version.'</div>';
 	}
 
 	require($project.'design_foot.php');

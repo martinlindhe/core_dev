@@ -16,20 +16,6 @@ class DB_MySQL extends DB_Base
 		if ($this->db_handle) mysql_close($this->db_handle);
 	}
 
-	function showDriverStatus()
-	{
-		echo 'Server info: '.mysql_get_server_info($this->db_handle).' ('.mysql_get_host_info($this->db_handle).')<br/>';
-		echo 'Client info: '.mysql_get_client_info().'<br/>';
-		echo 'Character set: '.mysql_client_encoding($this->db_handle).'<br/>';
-		echo 'Last error: '.mysql_error($this->db_handle).'<br/>';
-		echo 'Last errno: '.mysql_errno($this->db_handle).'<br/><br/>';
-	}
-
-	function escape($q)
-	{
-		return mysql_real_escape_string($q, $this->db_handle);
-	}
-
 	function connect()
 	{
 		global $config;
@@ -43,9 +29,10 @@ class DB_MySQL extends DB_Base
 
 		$this->db_handle = @ mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
 
-		if (mysqli_connect_errno()) {
+		if (!$this->db_handle) {
 			$this->db_handle = false;
-			die('Database connection error.');
+			if ($config['debug']) die('DB_MySQL: Database connection error '.mysql_errno().': '.mysql_error().'.</bad>');
+			else die;
 		}
 
 		mysql_select_db($this->database, $this->db_handle);
@@ -56,6 +43,19 @@ class DB_MySQL extends DB_Base
 		$this->client_version = mysql_get_client_info();
 
 		if ($config['debug']) $this->profileConnect($time_started);
+	}
+
+	function showDriverStatus()
+	{
+		echo 'Host info: '.mysql_get_host_info($this->db_handle).'<br/>';
+		echo 'Connection character set: '.mysql_client_encoding($this->db_handle).'<br/>';
+		echo 'Last error: '.mysql_error($this->db_handle).'<br/>';
+		echo 'Last errno: '.mysql_errno($this->db_handle).'<br/><br/>';
+	}
+
+	function escape($q)
+	{
+		return mysql_real_escape_string($q, $this->db_handle);
 	}
 
 	function query($q)

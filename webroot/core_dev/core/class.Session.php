@@ -278,6 +278,7 @@ class Session
 		$this->username = '';
 		$this->id = 0;
 		$this->ip = 0;
+		$this->user_agent = '';
 		$this->mode = 0;
 		$this->isAdmin = 0;
 		$this->isSuperAdmin = 0;
