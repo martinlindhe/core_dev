@@ -3,21 +3,18 @@
 
 
 * Unicode-support
-	- Currently requires PHP 5.2.2 (current) or older to be configured with:
-		mbstring.func_overload = 2
-		or similar, to turn on mb function overloading for str* functions
+	- We chose utf8 as our preferred unicode encoding.
+	- Currently uses a number of configure tweaks to enable unicode support across the platform.
+	
+		Example:
+			The php_mysql.dll and php_mysqli.dll extensions on both Windows and Linux run with latin1
+			as default charset, regardless of other settings.
+			PostgreSQL drivers dont suffer from this problem.
+			
+			Our solution:
+			We force set utf8 encoding at the connect time by mysqli_set_charset() or "SET NAMES utf8"
+
 		PHP 6 will come with full unicode support in the core, so hopefully this can be deprecated soon
-		* Stämmer detta? Jag har func_overload=0 nu och min utf8-hantering verkar funka bra ändå..
-
-		/* change character set to utf8 */
-		//this messes things up. php defaults the connection to latin1. but strings are stored in utf8, some unnessecary
-		//conversions seem to occur. need php to not default to latin1 - fixme
-
-		- mysqli: går ej få $this->db_handle->character_set_name() att påstå att det
-			är utf8-encoding trots att jag forcar det med SET NAMES utf8.
-			om jag ej gör detta så blir default "latin1" trots att mysql-servern är konfad till utf8
-			vet ej om nåt kanske är felkonfat?
-			i ubuntu 7.04 blir det åxå latin1! (mysql 5.0.38 client&server)
 
 
 * Cellphones
@@ -32,11 +29,12 @@
 		for example.
 		This parameter is not required to pass around if you set up only one project on a website, like this:
 
-		/admin				admin files
-		/core					core functionality
-		/css
-		/js
-		/gfx
+		/admin/				admin files
+		/api/
+		/core/				core functionality
+		/css/
+		/js/
+		/gfx/
 		/					place your project files & config.php here
 
 

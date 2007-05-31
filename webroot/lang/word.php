@@ -1,12 +1,8 @@
 <?
 	require_once('config.php');
 
-	$wordId = 0;
-	if ($_GET['id'] && is_numeric($_GET['id'])) $wordId = $_GET['id'];
-	if (!$wordId) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+	$wordId = $_GET['id'];
 
 	require('design_head.php');
 

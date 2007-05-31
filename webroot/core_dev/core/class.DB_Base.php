@@ -7,8 +7,6 @@
 	todo: method to call stored procedures
 */
 
-mb_internal_encoding('UTF-8');
-
 abstract class DB_Base
 {
 	/****************************************************/

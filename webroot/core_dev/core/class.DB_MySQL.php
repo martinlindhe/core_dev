@@ -37,6 +37,8 @@ class DB_MySQL extends DB_Base
 
 		mysql_select_db($this->database, $this->db_handle);
 
+		$this->query('SET NAMES utf8');
+
 		$this->db_driver = 'DB_MySQL';
 		$this->dialect = 'mysql';
 		$this->server_version = mysql_get_server_info($this->db_handle);

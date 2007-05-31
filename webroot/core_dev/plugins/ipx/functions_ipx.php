@@ -129,7 +129,7 @@
 		$in_cmd = explode(' ', strtoupper($params['Message']));
 
 		if (empty($in_cmd[0]) || empty($in_cmd[1]) || empty($in_cmd[2]) || !is_numeric($in_cmd[2])) {
-			$session->log('Invalid SMS cmd: '.$params['Message']);
+			$session->log('Invalid SMS cmd: '.$params['Message'], LOGLEVEL_WARNING);
 			die;
 		}
 		$vip_codes = array(
@@ -147,7 +147,7 @@
 		);
 
 		if (!array_key_exists($in_cmd[1], $vip_codes) && !array_key_exists($in_cmd[1], $vip_delux_codes)) {
-			$session->log('Unknown incoming SMS code "'.$in_cmd[1].'" ('.$params['Message'].')');
+			$session->log('Unknown incoming SMS code "'.$in_cmd[1].'" ('.$params['Message'].')', LOGLEVEL_WARNING);
 			die;
 		}
 
@@ -161,7 +161,7 @@
 		$q = 'SELECT u_alias FROM s_user WHERE id_id='.$in_cmd[2];
 		$username = $user_db->getOneItem($q);
 		if (!$username) {
-			$session->log('Specified user dont exist: '.$in_cmd[2]);
+			$session->log('Specified user dont exist: '.$in_cmd[2], LOGLEVEL_WARNING);
 			die;
 		}
 

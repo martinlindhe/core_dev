@@ -1,10 +1,7 @@
 <?
-	if (empty($_POST['query'])) {
-		header('Location: index.php'); die;
-	}
-
 	require_once('config.php');
 
+	if (empty($_POST['query'])) die;
 	$query = $_POST['query'];
 
 	$list = searchLyrics($query);

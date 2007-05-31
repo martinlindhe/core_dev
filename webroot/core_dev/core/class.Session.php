@@ -34,7 +34,9 @@ class Session
 	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 	public $allow_login = true;				//set to false to only let superadmins log in to the site
 	private $allow_registration = true;	//set to false to disallow the possibility to register new users. will be disabled if login is disabled
-	private $home_page = 'index.php';		//if set, redirects user to this page after successful login
+
+	private $start_page = '';						//redirects user to this page (in $config['web_root'] directory) after successful login
+	private $error_page = 'error.php';	//redirects the user to this page (in $config['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
 	public $error;
@@ -62,7 +64,8 @@ class Session
 		if (isset($session_config['sha1_key'])) $this->sha1_key = $session_config['sha1_key'];
 		if (isset($session_config['allow_login'])) $this->allow_login = $session_config['allow_login'];
 		if (isset($session_config['allow_registration'])) $this->allow_registration = $session_config['allow_registration'];
-		if (isset($session_config['home_page'])) $this->home_page = $session_config['home_page'];
+		if (isset($session_config['start_page'])) $this->start_page = $session_config['start_page'];
+		if (isset($session_config['error_page'])) $this->error_page = $session_config['error_page'];
 		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
 
 		session_name($this->session_name);
@@ -110,19 +113,17 @@ class Session
 			$this->logIn($_POST['register_usr'], $_POST['register_pwd']);
 		}
 
-		//Check for login/logout requests
-		if (!$this->id && isset($_GET['login'])) {
-			//POST to any page with 'login_usr' & 'login_pwd' variables set to log in
+		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
+		if (!$this->id && isset($_GET['login']))
+		{
 			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']) && $this->logIn($_POST['login_usr'], $_POST['login_pwd']))
 			{
 				//See what IP checking policy that will be in use for the session
 				if (!empty($_POST['login_lock_ip'])) $this->check_ip = true;
 				else $this->check_ip = false;
 
-				if ($this->home_page) {
-					header('Location: '.basename($this->home_page));
-					die;
-				}
+				header('Location: '.$config['web_root'].$this->start_page);
+				die;
 			} else {
 				$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
 				require('design_head.php');	//fixme: hur kan jag slippa detta
@@ -134,26 +135,13 @@ class Session
 
 		if (!$this->id) return;
 
-		//Logged in: Check for a logout request
-		if (isset($_GET['logout']))
-		{
-			//GET to any page with 'logout' set to log out
-			$this->logOut();
-			header('Location: '.basename($_SERVER['SCRIPT_NAME']));
-			die;
-		}
+		//Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
+		if (isset($_GET['logout'])) $this->logOut();
 
 		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
 			$this->error = 'Client IP changed';
 			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
-			$this->logOut();
-		}
-
-		//Logged in: Check if client user agent string changed
-		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
-			$this->error = 'Client user agent string changed';
-			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
 			$this->logOut();
 		}
 
@@ -163,6 +151,15 @@ class Session
 			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')', LOGLEVEL_NOTICE);
 			$this->logOut();
 		}
+
+		//Logged in: Check if client user agent string changed, after active check to avoid useragent change log on auto browser upgrade (Firefox)
+		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
+			$this->error = 'Client user agent string changed';
+			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
+			$this->logOut();
+		}
+
+		if (!$this->id) return;
 
 		//Update last active timestamp
 		$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
@@ -375,7 +372,8 @@ class Session
 		echo 'User Agent: '.$this->user_agent.'<br/>';
 		echo 'Session timeout: '.shortTimePeriod($this->timeout).'<br/>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
-		echo 'Home page: '.$this->home_page.'<br/>';
+		echo 'Start page: '.$this->start_page.'<br/>';
+		echo 'Error page: '.$this->error_page.'<br/>';
 		if ($this->isSuperAdmin) {
 			echo 'SHA1 key: '.$this->sha1_key.'<br/>';
 		}
@@ -384,24 +382,40 @@ class Session
 	/* Locks unregistered users out from certain pages */
 	function requireLoggedIn()
 	{
+		global $config;
 		if ($this->id) return;
-		header('Location: '.$this->home_page);
+
+		$this->error = 'The page you requested requires you to be logged in';
+		header('Location: '.$config['web_root'].$this->error_page);
 		die;
 	}
 
 	/* Locks unregistered users out from certain pages */
 	function requireAdmin()
 	{
+		global $config;
 		if ($this->isAdmin) return;
-		header('Location: '.$this->home_page);
+
+		$this->error = 'The page you requested requires admin rights to view';
+		header('Location: '.$config['web_root'].$this->error_page);
 		die;
 	}
 
 	/* Locks out everyone except for super-admin from certain pages */
 	function requireSuperAdmin()
 	{
+		global $config;
 		if ($this->isSuperAdmin) return;
-		header('Location: '.$this->home_page);
+
+		$this->error = 'The page you requested requires superadmin rights to view';
+		header('Location: '.$config['web_root'].$this->error_page);
+		die;
+	}
+
+	/* Locks out everyone not from localhost (for setup scripts) */
+	function requireLocalhost()
+	{
+		if (GeoIP_to_IPv4($this->ip) == '127.0.0.1') return;
 		die;
 	}
 }

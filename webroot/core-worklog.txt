@@ -1,7 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- session timeout dirigerar user till startisda på fel stället, t.ex /_process/core_dev/admin/index.php
-
 		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
 			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
 
@@ -11,6 +9,8 @@
 
 		- kolla access-kontroll. vad är privat data, kan andra se det?
 			t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
+
+		- jobbet: kika på process server om de blev utf8 över linux mysqli db driver åxå
 
 
 	blized frågetecken:
@@ -154,6 +154,7 @@
 		- lista låtar som inte finns på nån skiva (admin)
 		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
 		- admin: möjlighet att radera ett band
+		- bugg: textsök på svenska tecken funkar ej
 
 --[[todo legend]]--
 X = hi prio task
@@ -173,8 +174,11 @@ X = hi prio task
 	- admin: visar query ip funktionen för super admins
 	- admin: kan skriva note till ip (tblComments) på admin_ip.php
 	- core: kan nu stänga av moduler feedback, moderation (visar ej då deras admin-sidor), för process-server & framtida customization möjligheter
-
-
+	- gjort "the final" databas-konvertering till utf8 för dbSample, dbLyrics
+	- setup: skapat katalog & påbörjat create_config.php, autodetektar vilka db drivers som är konfigurerade på php-servern
+	- session: ändrade $session->home_page till $session->start_page
+	- session: skapade $session->error_page, en sida som visar session error
+	- session: buggfix: session timeout dirigerade user till startisda på fel ställe, t.ex /_process/core_dev/admin/index.php
 
 
 2007.05.30:
