@@ -36,7 +36,12 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
-		
+
+		//PostgreSQL defaults
+		if (!$this->host) $this->host = 'localhost';
+		if (!$this->port) $this->port = 5432;	//PostgreSQL default port
+		if (!$this->username) $this->username = 'postgres';
+
 		$str = 'host='.$this->host.' user='.$this->username.' password='.$this->password.' dbname='.$this->database.' port='.$this->port;
 		$this->db_handle = pg_connect($str);
 

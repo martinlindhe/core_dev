@@ -33,7 +33,6 @@
 /*
 	$config['database']['username']	= 'postgres';
 	$config['database']['password']	= 'test';
-	$config['database']['port']	= 5432;	//postgresql default port. fixme-ska ej behöva välja default-port när postgresql drivern används
 	$config['database']['database']	= 'dbSample';
 	$db = new DB_PostgreSQL($config['database']);
 */

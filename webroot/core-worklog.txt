@@ -164,6 +164,8 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.05.31:
 	- plugins: ipx-plugin steg 2/2
+	- db drivers: fixat så att db drivers sätter default värden i respektive connect() funktion istället,
+		så att PostgreSQL-drivern kan använda pgsql default port och desamma för mysql, ifall ingen port är angiven i config.php
 
 
 2007.05.30:

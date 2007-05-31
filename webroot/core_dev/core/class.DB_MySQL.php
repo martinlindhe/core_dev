@@ -36,6 +36,11 @@ class DB_MySQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
+		//MySQL defaults
+		if (!$this->host) $this->host = 'localhost';
+		if (!$this->port) $this->port = 3306;	//MySQL default port
+		if (!$this->username) $this->username = 'root';
+
 		$this->db_handle = @ mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
 
 		if (mysqli_connect_errno()) {

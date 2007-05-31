@@ -58,7 +58,8 @@
 		* png och gif uppladdningar visade inga thumbnails
 		* fixat utseende på IE6 utloggad startsida
 		* login-felmeddelanden visas på utloggad startsida
-
+		* skapat en vip-status sida, som visar din aktuella vip-nivå, vilka andra nivåer som finns och hur många dagar som återstår på dessa
+		* skapat en "uppgradera till vip" sida, med info om de olika vip-nivåerna och priser
 
 ***************************************************************************************************
 NU: SMS debitering:

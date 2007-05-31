@@ -33,7 +33,12 @@ class DB_MySQLi extends DB_Base
 		global $config;
 
 		if ($config['debug']) $time_started = microtime(true);
-		
+
+		//MySQL defaults
+		if (!$this->host) $this->host = 'localhost';
+		if (!$this->port) $this->port = 3306;	//MySQL default port
+		if (!$this->username) $this->username = 'root';
+
 		$this->db_handle = mysqli_init();
 		//$this->db_handle->options(MYSQLI_INIT_COMMAND, 'SET NAMES utf8');
 
