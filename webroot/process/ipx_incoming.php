@@ -1,44 +1,125 @@
 <?
 	/*
 		This script is called by IPX for incoming SMS
-
-		The following parameters are set as GET parameters:
-			OriginatorAddress			- number the SMS came from, in the format 46702297439
-			DestinationAddress		- number the SMS was sent to, in the format 71160
-			Message								- message text: ""Pog 123 TEST"
-			MessageId							- unique message ID, "1-797950504"
-			Operator							- name of the consumers mobile operator, "Telia"
-			TimeStamp							- timestamp in CET / CEST time zone format, "20070529 13:11:41"
-
-			All parameters are set, however some may have a value with length 0
 	*/
 
 	require_once('config.php');
 
-	$allowed_ips = array(
+	define('VIP_LEVEL1',	1);	//Normal VIP
+	define('VIP_LEVEL2',	2);	//VIP delux
+
+	function addVIP($user_id, $vip_level, $days)
+	{
+		global $user_db;
+		
+		if (!is_numeric($user_id) || !is_numeric($vip_level) || !is_numeric($days)) return false;
+
+		$q = 'SELECT userId FROM s_vip WHERE userId='.$user_id.' AND level='.$vip_level;
+		
+		if ($user_db->getOneItem($q)) {
+			$q = 'UPDATE s_vip SET days=days+'.$days.',timeSet=NOW() WHERE userId='.$user_id.' AND level='.$vip_level;
+			$user_db->update($q);
+		} else {
+			$q = 'INSERT INTO s_vip SET userId='.$user_id.',level='.$vip_level.',days='.$days.',timeSet=NOW()';
+			$user_db->insert($q);
+		}
+		$user_db->showProfile();
+	}
+
+
+	$allowed_ip = array(
 		'127.0.0.1',
 		'213.80.11.162',	//Unicorn kontor oxtorgsgränd 3
 		'87.227.76.225',	//Martin glocalnet hem-ip
-		'ipx.com'					//Ericsson IPX - fixme: rätt ip/hostname
+		'217.151.193.80'	//Ericsson IPX (ipx-pat.ipx.com)
 	);
 
-	if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ips)) {
+	if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ip)) {
 		$session->log('ipx_incoming.php accessed by unlisted IP', LOGLEVEL_ERROR);
 		//fixme: ska stoppa här vid okänt ip, gör det ej nu för debuggande
 		//die('ip not allowed');
 	}
 
-
 	//All incoming data is set as GET parameters
 	$params = '';
-	if (!empty($_GET)) $params = $db->escape(serialize($_GET));
-	//if (!empty($_POST)) $params = $db->escape(serialize($_POST));
+	if (!empty($_GET)) $params = $_GET;
+	if (!$params) die('nothing to do');
 
-	$q = 'INSERT INTO tblIncomingSMS SET params="'.$params.'",IP='.$session->ip.',timeReceived=NOW()';
+	//Log the incoming SMS
+	$q = 'INSERT INTO tblIncomingSMS SET params="'.$db->escape(serialize($params)).'",IP='.$session->ip.',timeReceived=NOW()';
 	$db->insert($q);
 
 	//Acknowledgment - Tell IPX that the SMS received
 	header('HTTP/1.1 200 OK');
 	header('Content-Type: text/plain');
 	echo '<DeliveryResponse ack="true"/>';
+
+//	$params['Message'] = 'POG VIP 194712';
+
+	//1. parse sms, format "POG vipnivå userid"
+	$in_cmd = explode(' ', strtoupper($params['Message']));
+
+	if (empty($in_cmd[0]) || empty($in_cmd[1]) || empty($in_cmd[2]) || !is_numeric($in_cmd[2])) {
+		$session->log('Invalid SMS cmd: '.$params['Message']);
+		die;
+	}
+
+	$vip_codes = array(
+										//days, price i öre, SEK2000 = 20.00 kronor
+		'VIP'			=> array(14, 'SEK2000'),
+		'VIP-2V'	=> array(14, 'SEK2000')/*,
+		'VIP-1M'	=> array(30, 'SEK3000'),
+		'VIP-6M'	=> array(180, 'SEK15000')*/
+	);
+	
+	$vip_delux_codes = array(
+		'VIPD'			=> array(10, 'SEK2000'),
+		'VIDP-10D'	=> array(10, 'SEK2000')/*,
+		'VIPD-1M'		=> array(30, 'SEK5000')*/
+	);
+
+	if (!array_key_exists($in_cmd[1], $vip_codes) && !array_key_exists($in_cmd[1], $vip_delux_codes)) {
+		$session->log('Unknown incoming SMS code "'.$in_cmd[1].'" ('.$params['Message'].')');
+		die;
+	}
+	
+	//identifiera användaren
+	$config['user_db']['username']	= 'root';
+	$config['user_db']['password']	= 'dravelsql';
+	$config['user_db']['database']	= 'platform';
+	$user_db = new DB_MySQLi($config['user_db']);
+
+	$q = 'SELECT u_alias FROM s_user WHERE id_id='.$in_cmd[2];
+	$username = $user_db->getOneItem($q);
+	if (!$username) {
+		$session->log('Specified user dont exist: '.$in_cmd[2]);
+		die;
+	}
+
+	if (array_key_exists($in_cmd[1], $vip_codes)) {
+
+		$days = $vip_codes[$in_cmd[1]][0];
+		$tariff = $vip_codes[$in_cmd[1]][1];
+
+		$session->log('Giving '.$username.' '.$days.' days VIP for '.$tariff.' (cmd: '.$in_cmd[1].')');	
+
+		addVIP($in_cmd[2], VIP_LEVEL1, $days);
+
+	} else if (array_key_exists($in_cmd[1], $vip_delux_codes)) {
+		$days = $vip_delux_codes[$in_cmd[1]][0];
+		$tariff = $vip_delux_codes[$in_cmd[1]][1];
+
+		$session->log('Giving '.$username.' '.$days.' days VIP DELUX for '.$tariff.' (cmd: '.$in_cmd[1].')');	
+
+		addVIP($in_cmd[2], VIP_LEVEL2, $days);
+
+		$msg = 'Du debiteras nu '.$tariff.' för '.$days.' dagar VIP DELUX';
+
+	} else {
+		$session->log('SMS - impossible codepath!!');
+		die;
+	}
+
+	//2. skicka ett nytt sms till avsändaren, med TARIFF satt samt med messageid från incoming sms satt som "reference id"
+	sendSMS($params['OriginatorAddress'], $msg, $tariff, $params['MessageId']);
 ?>

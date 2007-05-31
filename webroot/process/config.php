@@ -4,8 +4,8 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '';
-	$config['core_web_root'] = '/_process/';
+	$config['core_root'] = '/home/martin/www/_process/core_dev/';	//use of absolute path is required for admin pages to function
+	$config['core_web_root'] = '/_process/core_dev/';
 
 	$config['web_root'] = '/_process/';
 	$config['default_title'] = 'process server';
@@ -16,9 +16,11 @@
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
 	require_once('class.Files.php');
+	require_once('functions_feedback.php');	//todo: ta bort, behövs för att admin inte ska dö i fatal error
 	restore_include_path();
 
 	require_once('functions_process.php');
+	require_once('functions_ipx.php');
 
 	$config['debug'] = true;
 

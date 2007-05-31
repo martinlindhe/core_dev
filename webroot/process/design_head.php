@@ -9,7 +9,7 @@
 	if ($session->isAdmin) {
 		$menu = array(
 			'perform_work.php' => 'Perform work',
-			$config['core_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
+			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
 		);
 		createMenu($menu);
 	}

@@ -1,10 +1,10 @@
 ----[[platform todo]]----
 	core/gör snart:
+		- process: en funktion som tar en sträng med user input (mobilnummer) och returnerar det i formatet 46707308763, ipx format
 		- kunna stänga av moduler: feedback, moderation (visa ej då deras admin-sidor)
-		- mp3-spelaren funkar ej atm
+		- gör process-funktionaliteten som ett plugin
 
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
-		- gör process-funktionaliteten som ett plugin
 		- admin: kunna skriva note till ip på admin_ip.php, för process-server
 		
 
@@ -122,7 +122,8 @@
 			är utf8-encoding trots att jag forcar det med SET NAMES utf8.
 			om jag ej gör detta så blir default "latin1" trots att mysql-servern är konfad till utf8
 			vet ej om nåt kanske är felkonfat?
-			kika vad som händer i linux
+			i ubuntu 7.04 blir det åxå latin1! (mysql 5.0.38 client&server)
+
 
 	core/lågprio/förändringar under övervägning:
   	- implementera process-servern för att konvertera bilder / skapa thumbnails

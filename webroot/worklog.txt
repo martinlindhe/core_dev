@@ -32,6 +32,11 @@
 
 
 2007.05.30 Onsdag:
+	ipx:
+		* gjort översiktssida för mottagna SMS
+		* gjort översiktssida för skickade SMS
+		* implementerat MT billing
+		* skapat databastabell s_vip, som håller reda på akteulla vip-nivåer
 	
 
 ***************************************************************************************************
