@@ -22,8 +22,8 @@
 		if ($pager['page'] > 1) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
 			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
-		} else {
-			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
+		//} else {
+		//	$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
 		}
 
 		for ($i=1; $i <= $pager['tot_pages']; $i++) {
@@ -35,9 +35,11 @@
 		if ($pager['page'] < $pager['tot_pages']) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
 			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
-		} else {
-			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
+		//} else {
+		//	$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
 		}
+		
+		$pager['head'] .= '<br/>';
 
 		return $pager;
 	}

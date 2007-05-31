@@ -179,6 +179,7 @@ X = hi prio task
 	- session: ändrade $session->home_page till $session->start_page
 	- session: skapade $session->error_page, en sida som visar session error
 	- session: buggfix: session timeout dirigerade user till startisda på fel ställe, t.ex /_process/core_dev/admin/index.php
+	- admin phpinfo: hax för att ta bort phpinfo() css så den passar in i designen
 
 
 2007.05.30:

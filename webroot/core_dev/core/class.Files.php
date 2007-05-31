@@ -56,6 +56,8 @@ class Files
 		- BMP images gets converted to JPG
 		- SVG images gets converted to PNG
 
+		Used regularry with ImageMagick-6.3.4-4-Q16-windows-static.exe
+
 		 ImageMagick is a open source and multi platform image converter
 		 http://www.imagemagick.org/download/
 	*/

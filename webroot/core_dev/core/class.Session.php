@@ -354,6 +354,8 @@ class Session
 
 	function showInfo()
 	{
+		global $config;
+
 		echo '<b>Current session information</b><br/>';
 		echo 'Logged in: '. ($this->id?'YES':'NO').'<br/>';
 		if ($this->id) {
@@ -372,8 +374,8 @@ class Session
 		echo 'User Agent: '.$this->user_agent.'<br/>';
 		echo 'Session timeout: '.shortTimePeriod($this->timeout).'<br/>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
-		echo 'Start page: '.$this->start_page.'<br/>';
-		echo 'Error page: '.$this->error_page.'<br/>';
+		echo 'Start page: '.$config['web_root'].$this->start_page.'<br/>';
+		echo 'Error page: '.$config['web_root'].$this->error_page.'<br/>';
 		if ($this->isSuperAdmin) {
 			echo 'SHA1 key: '.$this->sha1_key.'<br/>';
 		}
