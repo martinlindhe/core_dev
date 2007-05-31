@@ -76,7 +76,6 @@
 		$i = 0;
 		foreach($gb as $row) {
 			$brd = true;
-			$own = ($l && ($row['logged_in'] == $l['id_id'] || $isAdmin))?true:false;
 			echo '
 			<div class="pdg">
 				<div class="pdg">

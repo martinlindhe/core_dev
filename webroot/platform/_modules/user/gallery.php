@@ -60,10 +60,9 @@
 ?>
 <br/><br/><br/>
 
-<script type="text/javascript">
-var first = '<?=$first?>'; ext = '<?=$ext?>';
-</script>
 <?
+/*<script type="text/javascript">var first = '<?=$first?>'; ext = '<?=$ext?>';</script> */
+
 		$paging = paging(1, 20);
 		$res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC", 0, 1);
 		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' LIMIT 1");

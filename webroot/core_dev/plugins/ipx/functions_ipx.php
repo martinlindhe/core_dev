@@ -152,6 +152,7 @@
 		}
 
 		//identifiera användaren
+		$config['user_db']['host']	= 'localhost';
 		$config['user_db']['username']	= 'root';
 		$config['user_db']['password']	= 'dravelsql';
 		$config['user_db']['database']	= 'platform';
@@ -169,6 +170,7 @@
 			$tariff = $vip_codes[$in_cmd[1]][1];
 			$vip_level = VIP_LEVEL1;
 			$msg = 'Du debiteras nu '.$tariff.' för '.$days.' dagar VIP till användare '.$username;
+			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP';
 
 			$session->log('Attempting to charge '.$username.' for '.$days.' days VIP ('.$tariff.') (cmd: '.$in_cmd[1].')');	
 
@@ -177,6 +179,7 @@
 			$tariff = $vip_delux_codes[$in_cmd[1]][1];
 			$vip_level = VIP_LEVEL2;
 			$msg = 'Du debiteras nu '.$tariff.' för '.$days.' dagar VIP DELUX till användare '.$username;
+			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP DELUX';
 
 			$session->log('Attempting to charge '.$username.' for '.$days.' days VIP DELUX ('.$tariff.') (cmd: '.$in_cmd[1].')');	
 
@@ -190,6 +193,12 @@
 		if ($sms_err === true) {
 			addVIP($in_cmd[2], $vip_level, $days);
 			$session->log('Charge to '.$username.' of '.$tariff.' succeeded');
+			
+			//Leave a confirmation message in the users inbox
+			$internal_title = 'VIP-bekräftelse';
+			$q = 'INSERT INTO s_usermail SET sender_id=0, user_id='.$in_cmd[2].',sent_ttl="'.$internal_title.'",sent_cmt="'.$internal_msg.'",sent_date=NOW()';
+			$user_db->insert($q);
+
 			return true;
 		}
 

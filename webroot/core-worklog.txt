@@ -1,5 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
+		- session timeout dirigerar user till startisda på fel stället, t.ex /_process/core_dev/admin/index.php
+	
 		- process: en funktion som tar en sträng med user input (mobilnummer) och returnerar det i formatet 46707308763, ipx format
 		- kunna stänga av moduler: feedback, moderation (visa ej då deras admin-sidor)
 		- gör process-funktionaliteten som ett plugin

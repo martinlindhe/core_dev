@@ -74,7 +74,7 @@
 	
 	function mailDeleteArray($_arr)
 	{
-		global $sql, $user, $isAdmin, $l, $t;
+		global $sql, $user, $isAdmin, $l, $s, $t;
 
 		if (!is_array($_arr) || !count($_arr)) return false;
 		

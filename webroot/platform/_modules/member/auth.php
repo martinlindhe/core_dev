@@ -49,68 +49,42 @@ class user_auth {
 		$online = intval($online[0]);
 		$result = $this->sql->queryLine("SELECT id_id, u_alias, level_id, u_picid, u_picd, status_id, u_sex, u_birth, u_pstlan_id, CONCAT(u_pstort, ', ', u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, u_pass, location_id, u_picvalid FROM {$this->t}user WHERE u_alias = '".secureINS($a)."' LIMIT 1");
 
-		if (!empty($result) && count($result)) {
-			if($online > MAXIMUM_USERS && $result[2] == '1') errorACT('Det är över '.MAXIMUM_USERS.' inloggade. Du måste vara VIP för att kunna logga in nu.', l('main', 'index'));
-			if($result[5] == '1' || $result[5] == '4') {
-				if($result[13] === $p) {
-					$this->login_data($result);
-					$this->user->setRelCount($result[0]);
-					if(!empty($_POST['redir'])) {
-						$this->notify_user($result[0], gettxt('moved_login'), $result[1]);
-						echo '<script type="text/javascript">window.setTimeout(\'document.location.href = "'.l('main', 'start').'"\', 6000);</script>';
-						die();
-					}
-					if (!$mobile) {
-						reloadACT(l('main', 'start'));
-					} else {
-						header('Location: index.php'); die;
-					}
-				} else {
-					$this->sql->queryInsert("INSERT INTO {$this->t}usersess SET id_id = '".secureINS($result[0])."', sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', sess_id = '".secureINS($this->sql->gc())."', sess_date = NOW(), type_inf = 'f'");
-					if (!$mobile) {
-						errorACT('Felaktigt alias eller lösenord.', '1'.l('main', 'start'));
-					} else {
-						header('Location: login.php?err=wrong'); die;
-					}
+		if (!$result) return 'Felaktigt alias eller lösenord.';
+
+		if($online > MAXIMUM_USERS && $result[2] == '1') return 'Det är över '.MAXIMUM_USERS.' inloggade. Du måste vara VIP för att kunna logga in nu.';
+		if($result[5] == '1' || $result[5] == '4') {
+			if($result[13] === $p) {
+				$this->login_data($result);
+				$this->user->setRelCount($result[0]);
+				if(!empty($_POST['redir'])) {
+					$this->notify_user($result[0], gettxt('moved_login'), $result[1]);
+					echo '<script type="text/javascript">window.setTimeout(\'document.location.href = "'.l('main', 'start').'"\', 6000);</script>';
+					die();
 				}
-			} elseif($result[5] == '3') {
 				if (!$mobile) {
-					errorACT('Du är blockerad.');
+					reloadACT(l('main', 'start'));
 				} else {
-					header('Location: login.php?err=blocked'); die;
+					header('Location: index.php'); die;
 				}
 			} else {
+				$this->sql->queryInsert("INSERT INTO {$this->t}usersess SET id_id = '".secureINS($result[0])."', sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', sess_id = '".secureINS($this->sql->gc())."', sess_date = NOW(), type_inf = 'f'");
 				if (!$mobile) {
-					errorACT('Felaktigt alias eller lösenord.', '1'.l('main', 'start'));
+					return 'Felaktigt alias eller lösenord.';
 				} else {
 					header('Location: login.php?err=wrong'); die;
 				}
 			}
-		} else {
-			$result = $this->sql->queryLine("SELECT id_id, u_alias, level_id, u_picid, u_picd, status_id, u_sex, u_birth, u_pstlan_id, CONCAT(u_pstort, ', ', u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, u_pass, location_id FROM {$this->t}user WHERE u_email = '".secureINS($a)."' LIMIT 1");
-			if(!empty($result) && count($result) && !empty($result[5]) && $result[5] == '1') {
-			if($online > MAXIMUM_USERS && $result[2] == '1') errorACT('Det är över '.MAXIMUM_USERS.' inloggade. Du måste vara VIP för att kunna logga in nu.', l('main', 'index'));
-				if($result[13] === $p) {
-					$this->login_data($result);
-					if (!$mobile) {
-						reloadACT(l('main', 'start'));
-					} else {
-						header('Location: index.php'); die;
-					}
-				} else {
-					$this->sql->queryInsert("INSERT INTO {$this->t}usersess SET id_id = '".secureINS($result[0])."', sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', sess_id = '".secureINS($this->sql->gc())."', sess_date = NOW(), type_inf = 'f'");
-					if (!$mobile) {
-						errorACT('Felaktigt alias eller lösenord.', '1'.l('main', 'start'));
-					} else {
-						header('Location: login.php?err=wrong'); die;
-					}
-				}
+		} elseif($result[5] == '3') {
+			if (!$mobile) {
+				return 'Du är blockerad.';
 			} else {
-				if (!$mobile) {
-					errorACT('Felaktigt alias eller lösenord.', '1'.l('main', 'start'));
-				} else {
-					header('Location: login.php?err=wrong'); die;
-				}
+				header('Location: login.php?err=blocked'); die;
+			}
+		} else {
+			if (!$mobile) {
+				return 'Felaktigt alias eller lösenord.';
+			} else {
+				header('Location: login.php?err=wrong'); die;
 			}
 		}
 	}

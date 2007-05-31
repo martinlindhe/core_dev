@@ -237,8 +237,9 @@ function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $
 			require(dirname(__FILE__).'/../_design/mv.php');
 		}
 	}
-	exit;
+	die;
 }
+
 function popupLACT($msg, $cnt = false) {
 	errorACT($msg, 1, 'popup', '', 5000, $cnt);
 }

@@ -20,7 +20,7 @@
 		
 		if (mailDeleteArray($_POST['chg'])) {		
 			if($page == 'out')
-				reloadACT(l('user', 'mail').'&amp;'.$page);
+				reloadACT(l('user', 'mail').'&'.$page);
 			else
 				reloadACT(l('user', 'mail'));
 		}
@@ -44,7 +44,7 @@
 
 	<div class="centerMenuBodyWhite">
 <?dopaging($paging, l('user', 'mail', $s['id_id']).'&amp;'.$page.'&amp;p=', '', 'big', STATSTR);?>
-<form name="m" action="<?=l('user', 'mail', $s['id_id']).'&amp;'.$page?>" method="post">
+<form name="m" action="<?=l('user', 'mail', $s['id_id']).'&'.$page?>" method="post">
 <?
 if(count($res) && !empty($res)) {
 echo '<input type="checkbox" onclick="toggle2(this);" class="chk" style="margin-bottom: 3px;"/><input type="submit" value="radera mark." class="btn2_min" /><hr />';

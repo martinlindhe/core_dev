@@ -49,15 +49,14 @@
 		}
 
 		//Listar de senaste galleribilderna
-		$q = "SELECT main_id, user_id, picd, pht_cmt FROM {$t}userphoto WHERE status_id = '1' AND hidden_id = '0' AND pht_name != '' ORDER BY main_id DESC LIMIT 5";
-		//echo $q;
+		$q = "SELECT main_id, user_id, picd, pht_name, pht_cmt FROM {$t}userphoto WHERE status_id = '1' AND hidden_id = '0' AND pht_name != '' ORDER BY main_id DESC LIMIT 5";
 		$res = $sql->query($q, 0, 1);
 		if (count($res)) {
 			echo '<div class="bigHeader">senaste galleribilder</div>';
 			echo '<div class="bigBody">';
 			foreach($res as $row) {
 				echo '<a href="'.l('user','gallery',$row['user_id'],$row['main_id']).'">';
-				echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.jpg" style="margin-right: 10px;" />';
+				echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'].'" style="margin-right: 10px;" />';
 				echo '</a>';
 			}
 			echo '</div>';

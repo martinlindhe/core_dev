@@ -11,6 +11,9 @@
 	{
 		global $sql, $user, $t, $l;
 
+		$sexs = '';
+		$sexu = '';
+
 		$result = array();
 		$result['lan']		= '0';	//$_POST['lan']				Län
 		$result['ort'] 		= '0';	//$_POST['ort']				Ort

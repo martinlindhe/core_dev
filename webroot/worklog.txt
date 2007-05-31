@@ -39,23 +39,40 @@
 		* skapat databastabell s_vip, som håller reda på akteulla vip-nivåer
 		* utarbetat hur VIP-nivåer ska fungera tekniskt, samt implementerat databastabell & addVIP() funktion
 
+
 2007.05.31 Torsdag:
 	ipx:
 		* loggar ifall MT-debitering misslyckas
+		* skickar kvittering till användaren som uppgraderats via intern-mail
+		
+	webbgränssnittet:
+		* fixat fel som kiano listade, vid följande sidor/händelser:
+			- personliga inställningar
+			- tyck till
+			- radera egna mail
+			- visa presentation för användare som ej skrivit någon
+			- snabbsök användare
+			- radera mail i utkorgen skickar användaren till inkorgen
+
+		* tog bort användarnavigeringsmenyn om man kikar på sina egna sidor
+		* png och gif uppladdningar visade inga thumbnails
+		* fixat utseende på IE6 utloggad startsida
+		* login-felmeddelanden visas på utloggad startsida
 
 
 ***************************************************************************************************
-NU: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail
+NU: SMS debitering:
+	- kontrollera att IPX mt billing funkar
+	- kontrollera att intern-mail kvittering skickas korrekt
+	- implementera userlevels
 
-NU: png upload blir inga thumbs
+NU: uppgradera-sida. info om hur du uppgraderar till VIP etc
 
-NU: anmäl användare-funktion (abuse)
-	- admin ser översikt på inkommande anmälningar
+NU: anmäl användare-funktion:
+	- admin ska kunna se översikt på inkommande anmälningar
 
 NU: Mail utskick. smtp-servern funkar, men timar ut ibland (mail.unicorn.tv)
 		titta på att sätta upp egen mailserver på cs.icn.se
-
-NU: uppgradera-sida. info om hur du uppgraderar till VIP etc
 
 blandat:
 	* konfa virtual hosts: mobil.cs.se, process.cs.se

@@ -27,7 +27,11 @@
 	<div class="subHead">presentation</div><br class="clr"/>
 <?
 
-	echo formatText($profile['user_pres'][1], true);
+	if (!empty($profile['user_pres'][1])) {
+		echo formatText($profile['user_pres'][1], true);
+	} else {
+		echo 'Användaren har inte skrivit någon presentation.';
+	}
 
 	require(DESIGN.'foot_user.php');
 ?>

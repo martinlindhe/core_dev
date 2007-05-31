@@ -31,13 +31,13 @@
 	</div><!-- userInfo -->
 	<br class="clr"/>
 
+<? if (!$own) { ?>
 	<div id="userMenu">
 		<? makeButton($action=='view',		'goLoc(\''.l('user', 'view', $s['id_id']).'\')',		'icon_profile.png',	'profil'); ?>
 		<? makeButton($action=='gb',			'goLoc(\''.l('user', 'gb', $s['id_id']).'\')',			'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>
 		<? makeButton($action=='blog',		'goLoc(\''.l('user', 'blog', $s['id_id']).'\')',		'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
 		<? makeButton($action=='gallery',	'goLoc(\''.l('user', 'gallery', $s['id_id']).'\')',	'icon_gallery.png',	'galleri', @intval($info['gal_offset'][1]) ); ?>
 
-<? if (!$own) { ?>
 		<? makeButton(false,	'makeChat(\''.$s['id_id'].'\')',			'icon_qchat.png',	'chatta'); ?>
 		<? makeButton(false,	'makeMail(\''.$s['id_id'].'\')',			'icon_mail_new.png',	'maila'); ?>
 		<?
@@ -46,9 +46,7 @@
 			}
 		?>
 		<? makeButton(false,	'goLoc(\''.l('user', 'abuse', $s['id_id']).'\')',	'icon_abuse.png',	'abuse'); ?>
-<? } ?>
-	<br class="clr" />
-<?
-	
-?>
 	</div>
+	<br class="clr" />
+<? } ?>
+

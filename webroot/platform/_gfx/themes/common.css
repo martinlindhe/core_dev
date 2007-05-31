@@ -278,3 +278,11 @@ A { color: #666; }
 
 .on_kvinna, .off_kvinna { color: #974b4b; }
 .on_man, .off_man { color: #4c5195; }
+
+.startPageBody {
+	min-height: 300px;
+	height: auto !important; height: 300px; /* ie6 hack to simulate min-height */
+	background: url('/_gfx/themes/start_gfx.png');
+	background-repeat: no-repeat;
+	background-position: 100% 100%;
+}

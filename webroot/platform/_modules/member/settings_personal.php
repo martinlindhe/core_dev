@@ -6,6 +6,8 @@
 	$settings = $user->getcontent($l['id_id'], 'user_settings');
 	$hidlog = $user->getinfo($l['id_id'], 'hidlog');
 
+	$mmskey_error = '';
+
 	if (!empty($_POST['do'])) {
 		include(CONFIG.'validate.fnc.php');
 		$newpst = '';
