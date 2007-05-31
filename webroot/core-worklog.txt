@@ -1,16 +1,19 @@
 ----[[platform todo]]----
 	core/gör snart:
 		- session timeout dirigerar user till startisda på fel stället, t.ex /_process/core_dev/admin/index.php
-	
-		- process: en funktion som tar en sträng med user input (mobilnummer) och returnerar det i formatet 46707308763, ipx format
-		- kunna stänga av moduler: feedback, moderation (visa ej då deras admin-sidor)
-		- gör process-funktionaliteten som ett plugin
+
+		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
+			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
+
+		- gör om tblVisitors till generell med en kategori, så man kan logga läsare av bloggar, tittare av bilder, läsare av nyheter
 
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
-		- admin: kunna skriva note till ip på admin_ip.php, för process-server
-		
 
-	frågetecken:
+		- kolla access-kontroll. vad är privat data, kan andra se det?
+			t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
+
+
+	blized frågetecken:
 		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra
 			personer ska se hans sida, stämmer det?"
 			Mikael svarar: Ja, det stämmer – en möjlighet att ”personalisera” sin sida.
@@ -133,7 +136,8 @@
 	misc/senare:
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
-		- gör om tblVisitors till generell med en kategori, så man kan logga läsare av bloggar, tittare av bilder, läsare av nyheter
+		- kolla att sample project & alla admin-funktioner funkar med lighttpd+php
+
 
 	plugin/wurfl:
 		- flytta ut cache-config till update_cache.php
@@ -166,6 +170,10 @@ X = hi prio task
 	- admin compat check: förbättrat OS detection litegrann (identifierar iaf windows & ubuntu linux)
 	- session: buggfix, går nu logga in igen om man blir utloggad pga "client useragent changed"
 	- db pgsql: visar client & server info & character encoding
+	- admin: visar query ip funktionen för super admins
+	- admin: kan skriva note till ip (tblComments) på admin_ip.php
+	- core: kan nu stänga av moduler feedback, moderation (visar ej då deras admin-sidor), för process-server & framtida customization möjligheter
+
 
 
 

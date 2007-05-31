@@ -9,8 +9,8 @@
 
 	echo 'Admin overview<br/><br/>';
 	
-	echo 'Moderation queue: <a href="admin_moderationqueue.php?pr=sample">'.getModerationQueueCount().' objects</a><br/>';
-	echo 'Feedback: '.getFeedbackCnt().' entries<br/>';
+	if (!empty($config['moderation']['enabled'])) echo 'Moderation: <a href="admin_moderation.php?pr=sample">'.getModerationQueueCount().' objects</a><br/>';
+	if (!empty($config['feedback']['enabled'])) echo 'Feedback: '.getFeedbackCnt().' entries<br/>';
 	echo '<br/>';
 	echo 'Registered users: <a href="admin_list_users.php'.getProjectPath(false).'">'.getUsersCnt().'</a><br/>';
 	echo 'Admins: <a href="admin_list_users.php?mode=1'.getProjectPath().'">'.getAdminsCnt().'</a><br/>';

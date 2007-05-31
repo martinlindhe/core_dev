@@ -6,7 +6,8 @@
 	*/
 
 	define('COMMENT_NEWS',					1);
-	define('COMMENT_BLOG',					2);	//anonymous or registered users comments on a blog
+	define('COMMENT_BLOG',					2);		//anonymous or registered users comments on a blog
+	define('COMMENT_ADMIN_IP',			10);	//a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 
 	define('COMMENT_ADBLOCKRULE',		20);
 
@@ -65,13 +66,13 @@
 
 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
 
-		$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 '.
-					'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) '.
-					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
+		$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
+		$q .= 'WHERE t1.ownerId='.$ownerId.' AND t1.commentType='.$commentType.' AND t1.deletedBy=0';
 
-		if ($privateComments === false) $q .= ' AND commentPrivate=0';
+		if ($privateComments === false) $q .= ' AND t1.commentPrivate=0';
 
-		$q .=	' ORDER BY timeCreated DESC';
+		$q .=	' ORDER BY t1.timeCreated DESC';
 		return $db->getArray($q);
 	}
 

@@ -12,6 +12,8 @@
 		Admin: this atom module has two admin pages: "moderation queue" and "edit stopwords"
 	*/
 
+	$config['moderation']['enabled'] = true;
+
 	/* Moderation queue entry types */
 	//define('MODERATION_REPORTED_POST',				1);
 	//define('MODERATION_OBJECTIONABLE_POST',		2);

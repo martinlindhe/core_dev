@@ -30,18 +30,15 @@
 
 	echo '<h1>Compatiblity check</h1>';
 
-	echo 'core version 0.1<br/>';
-
-	if (empty($_SERVER['SERVER_SOFTWARE'])) {
-		echo '<span class="critical">Server OS: CANT DETECT</span>';
+	if (empty($_SERVER['SERVER_SOFTWARE'])) {	//This is available if php is running thru Apache
+		echo '<div class="critical">Server OS: CANT DETECT</div>';
 	} else if (strpos($_SERVER['SERVER_SOFTWARE'], 'Win32') !== false) {	//Apache/2.2.4 (Win32)
 		echo '<div class="okay">Server OS: Windows</div>';
 	} else if (strpos($_SERVER['SERVER_SOFTWARE'], 'Ubuntu') !== false) {	//Apache/2.2.3 (Ubuntu) PHP/5.2.1 mod_ssl/2.2.3 OpenSSL/0.9.8c
 		echo '<div class="okay">Server OS: Ubuntu Linux</div>';
 	} else {
-		echo '<span class="critical">Server OS: Unrecognized</span>';
+		echo '<div class="critical">Server OS: Unrecognized</div>';
 	}
-	echo '<br/>';
 	echo ($config['debug']?'<div class="critical">Debug: On - turn off for production use</div>':'<div class="okay">Debug: OFF</div>');
 	echo '<br/>';
 

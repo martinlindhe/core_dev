@@ -6,6 +6,12 @@
 	require($project.'design_head.php');
 
 	echo createMenu($admin_menu, 'blog_menu');
+	
+	if (empty($config['moderation']['enabled'])) {
+		echo 'Moderation feature is not enabled';
+		require($project.'design_foot.php');
+		die;
+	}
 
 	$changed_list = false;
 	$list = getModerationQueue();
@@ -53,7 +59,7 @@
 			if ($row['autoTriggered']) echo ' (auto-triggered)';
 			echo '</div>';
 			
-			echo 'By '.$row['creatorName'].' at '.$row['timeCreated'].'<br/>';
+			echo 'By '.nameLink($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
 
 			switch ($row['queueType']) {
 				case MODERATION_GUESTBOOK:

@@ -1,4 +1,6 @@
 <?
+	$config['feedback']['enabled'] = true;
+
 	function saveFeedback($_text)
 	{
 		global $db, $session;

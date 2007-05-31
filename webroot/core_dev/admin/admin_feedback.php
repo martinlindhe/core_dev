@@ -6,6 +6,12 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
+	if (empty($config['feedback']['enabled'])) {
+		echo 'Feedback feature is not enabled';
+		require($project.'design_foot.php');
+		die;
+	}
+
 	if (!empty($_GET['reply']) && is_numeric($_GET['reply'])) {
 		
 		$msg = getFeedbackItem($_GET['reply']);
@@ -54,6 +60,6 @@
 		echo '<a href="?delete='.$row['feedbackId'].getProjectPath().'">Delete</a><br/>';
 		echo '<hr/>';
 	}
-	
+
 	require($project.'design_foot.php');
 ?>

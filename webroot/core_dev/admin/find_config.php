@@ -15,7 +15,7 @@
 
 	$admin_menu = array(
 		$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin::',
-		$config['core_web_root'].'admin/admin_moderationqueue.php'.getProjectPath(0) => 'Moderation',
+		$config['core_web_root'].'admin/admin_moderation.php'.getProjectPath(0) => 'Moderation',
 		$config['core_web_root'].'admin/admin_faq.php'.getProjectPath(0) => 'FAQ',
 		$config['core_web_root'].'admin/admin_feedback.php'.getProjectPath(0) => 'Feedback',	//todo: dölj om feedback är disabled
 		$config['core_web_root'].'admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
@@ -31,6 +31,7 @@
 		$config['core_web_root'].'admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
 		$config['core_web_root'].'admin/admin_db_info.php'.getProjectPath(0) => '$db',
 		$config['core_web_root'].'admin/admin_session_info.php'.getProjectPath(0) => '$session',
+		$config['core_web_root'].'admin/admin_ip.php'.getProjectPath(0) => 'Query IP',
 		$config['core_web_root'].'admin/admin_phpinfo.php'.getProjectPath(0) => 'PHP'
 	);
 ?>
