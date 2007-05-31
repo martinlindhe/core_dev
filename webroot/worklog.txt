@@ -37,7 +37,12 @@
 		* gjort översiktssida för skickade SMS
 		* implementerat MT billing
 		* skapat databastabell s_vip, som håller reda på akteulla vip-nivåer
-	
+		* utarbetat hur VIP-nivåer ska fungera tekniskt, samt implementerat databastabell & addVIP() funktion
+
+2007.05.31 Torsdag:
+	ipx:
+		* loggar ifall MT-debitering misslyckas
+
 
 ***************************************************************************************************
 NU: hooka upp sms-debitering. kvitteringar ska skickas via epost / internt mail

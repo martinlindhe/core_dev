@@ -29,14 +29,14 @@
 
 	$allowed_ip = array(
 		'127.0.0.1',
-		'213.80.11.162',	//Unicorn kontor oxtorgsgränd 3
+		'213.80.11.162',	//Unicorn kontor oxtorgsgrÃ¤nd 3
 		'87.227.76.225',	//Martin glocalnet hem-ip
 		'217.151.193.80'	//Ericsson IPX (ipx-pat.ipx.com)
 	);
 
 	if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ip)) {
 		$session->log('ipx_incoming.php accessed by unlisted IP', LOGLEVEL_ERROR);
-		//fixme: ska stoppa här vid okänt ip, gör det ej nu för debuggande
+		//fixme: ska stoppa hÃ¤r vid okÃ¤nt ip, gÃ¶r det ej nu fÃ¶r debuggande
 		//die('ip not allowed');
 	}
 
@@ -56,7 +56,7 @@
 
 //	$params['Message'] = 'POG VIP 194712';
 
-	//1. parse sms, format "POG vipnivå userid"
+	//1. parse sms, format "POG vipnivÃ¥ userid"
 	$in_cmd = explode(' ', strtoupper($params['Message']));
 
 	if (empty($in_cmd[0]) || empty($in_cmd[1]) || empty($in_cmd[2]) || !is_numeric($in_cmd[2])) {
@@ -65,7 +65,7 @@
 	}
 
 	$vip_codes = array(
-										//days, price i öre, SEK2000 = 20.00 kronor
+										//days, price i Ã¶re, SEK2000 = 20.00 kronor
 		'VIP'			=> array(14, 'SEK2000'),
 		'VIP-2V'	=> array(14, 'SEK2000')/*,
 		'VIP-1M'	=> array(30, 'SEK3000'),
@@ -83,7 +83,7 @@
 		die;
 	}
 	
-	//identifiera användaren
+	//identifiera anvÃ¤ndaren
 	$config['user_db']['username']	= 'root';
 	$config['user_db']['password']	= 'dravelsql';
 	$config['user_db']['database']	= 'platform';
@@ -100,26 +100,32 @@
 
 		$days = $vip_codes[$in_cmd[1]][0];
 		$tariff = $vip_codes[$in_cmd[1]][1];
+		$vip_level = VIP_LEVEL1;
+		$msg = 'Du debiteras nu '.$tariff.' fÃ¶r '.$days.' dagar VIP till anvÃ¤ndare '.$username;
 
-		$session->log('Giving '.$username.' '.$days.' days VIP for '.$tariff.' (cmd: '.$in_cmd[1].')');	
-
-		addVIP($in_cmd[2], VIP_LEVEL1, $days);
+		$session->log('Attempting to charge '.$username.' for '.$days.' days VIP ('.$tariff.') (cmd: '.$in_cmd[1].')');	
 
 	} else if (array_key_exists($in_cmd[1], $vip_delux_codes)) {
 		$days = $vip_delux_codes[$in_cmd[1]][0];
 		$tariff = $vip_delux_codes[$in_cmd[1]][1];
+		$vip_level = VIP_LEVEL2;
 
-		$session->log('Giving '.$username.' '.$days.' days VIP DELUX for '.$tariff.' (cmd: '.$in_cmd[1].')');	
+		$msg = 'Du debiteras nu '.$tariff.' fÃ¶r '.$days.' dagar VIP DELUX till anvÃ¤ndare '.$username;
 
-		addVIP($in_cmd[2], VIP_LEVEL2, $days);
-
-		$msg = 'Du debiteras nu '.$tariff.' för '.$days.' dagar VIP DELUX';
+		$session->log('Attempting to charge '.$username.' for '.$days.' days VIP DELUX ('.$tariff.') (cmd: '.$in_cmd[1].')');	
 
 	} else {
-		$session->log('SMS - impossible codepath!!');
+		$session->log('SMS - impossible codepath!!', LOGLEVEL_ERROR);
 		die;
 	}
 
-	//2. skicka ett nytt sms till avsändaren, med TARIFF satt samt med messageid från incoming sms satt som "reference id"
-	sendSMS($params['OriginatorAddress'], $msg, $tariff, $params['MessageId']);
+	//2. skicka ett nytt sms till avsÃ¤ndaren, med TARIFF satt samt med messageid frÃ¥n incoming sms satt som "reference id"
+	$sms_err = sendSMS($params['OriginatorAddress'], $msg, $tariff, $params['MessageId']);
+	if ($sms_err === true) {
+		addVIP($in_cmd[2], $vip_level, $days);
+		$session->log('Charge to '.$username.' of '.$tariff.' succeeded');
+	} else {
+		$session->log('Charge to '.$username.' of '.$tariff.' failed with error '.$sms_err, LOGLEVEL_ERROR);
+	}
+
 ?>

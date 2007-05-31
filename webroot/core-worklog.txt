@@ -160,6 +160,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.05.31:
+	- plugins: ipx-plugin steg 2/2
+
+
 2007.05.30:
 	- core: renamed $config['session']['web_root'] to $config['web_root']
 	- core: renamed $config['session']['core_web_root'] to $config['core_web_root']

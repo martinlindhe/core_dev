@@ -23,9 +23,11 @@ var dragHelper  = null;
 var tempDiv     = null;
 var rootParent  = null;
 var rootSibling = null;
-var nImg        = new Image();
 
+/*
+var nImg        = new Image();
 nImg.src        = 'images/drag_drop_poof.gif';
+*/
 
 // Demo1 variables
 var D1Target    = null;

@@ -10,8 +10,6 @@
 	$config['web_root'] = '/_process/';
 	$config['default_title'] = 'process server';
 	
-	$config['plugins'] = array('ipx');	//hehe implementera imörra!
-
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
@@ -20,9 +18,11 @@
 	restore_include_path();
 
 	require_once('functions_process.php');
-	require_once('functions_ipx.php');
 
 	$config['debug'] = true;
+
+	$config['plugins'] = array('ipx');
+	loadPlugins();
 
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= 'dravelsql';
