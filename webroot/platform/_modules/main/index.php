@@ -30,6 +30,9 @@
 	} elseif($action == 'editorial') {
 		require('editorial.php');
 		exit;
+	} elseif($action == 'upgrade') {
+		require('upgrade.php');
+		exit;
 	} }
 	if(!empty($_SESSION['data']['id_id'])) reloadACT(l('main', 'start'));
 	require('index_p.php');

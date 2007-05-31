@@ -61,13 +61,12 @@
 		* skapat en vip-status sida, som visar din aktuella vip-nivå, vilka andra nivåer som finns och hur många dagar som återstår på dessa
 		* skapat en "uppgradera till vip" sida, med info om de olika vip-nivåerna och priser
 
+
 ***************************************************************************************************
 NU: SMS debitering:
 	- kontrollera att IPX mt billing funkar
 	- kontrollera att intern-mail kvittering skickas korrekt
 	- implementera userlevels
-
-NU: uppgradera-sida. info om hur du uppgraderar till VIP etc
 
 NU: anmäl användare-funktion:
 	- admin ska kunna se översikt på inkommande anmälningar
@@ -83,10 +82,8 @@ blandat:
 		- alla ska ha mms funktion (vip) under testet
 
 	* process server:
-		- IPX vill ha "HTTP basic authentication" för att accessa ipx_incoming.php (optional?)
 		- ip-restrictions för SOAP klienter
 		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
-		- kika på hur ipx enkodar parametrar, för att slippa serialize
 
 	* profilsida:
 		- FRANS: länk till vän med bild funkar ej för alla

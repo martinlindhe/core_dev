@@ -166,6 +166,9 @@ X = hi prio task
 	- plugins: ipx-plugin steg 2/2
 	- db drivers: fixat så att db drivers sätter default värden i respektive connect() funktion istället,
 		så att PostgreSQL-drivern kan använda pgsql default port och desamma för mysql, ifall ingen port är angiven i config.php
+	- admin compat check: förbättrat apache version detection
+	- admin compat check: förbättrat GD version detection
+	- admin compat check: förbättrat OS detection litegrann (identifierar iaf windows & ubuntu linux)
 
 
 2007.05.30:

@@ -10,7 +10,7 @@
 	$supported_apache = array('2.2.3', '2.2.4');
 
 	$supported_php = array('5.2.0', '5.2.2');
-	$supported_php_gd = array('2.0.34', '2.0.34');
+	$supported_php_gd = array('2.0', '2.0.34');
 	$supported_php_apc = array('3.0.14', '3.0.15');
 
 	$supported_mysql = array('5.0.36', '5.1.17');
@@ -31,11 +31,15 @@
 	echo '<h1>Compatiblity check</h1>';
 
 	echo 'core version 0.1<br/>';
-	echo 'Server OS: ';
-	if (!empty($_SERVER['WINDIR'])) {
-		echo 'Windows';
+
+	if (empty($_SERVER['SERVER_SOFTWARE'])) {
+		echo '<span class="critical">Server OS: CANT DETECT</span>';
+	} else if (strpos($_SERVER['SERVER_SOFTWARE'], 'Win32') !== false) {	//Apache/2.2.4 (Win32)
+		echo '<div class="okay">Server OS: Windows</div>';
+	} else if (strpos($_SERVER['SERVER_SOFTWARE'], 'Ubuntu') !== false) {	//Apache/2.2.3 (Ubuntu) PHP/5.2.1 mod_ssl/2.2.3 OpenSSL/0.9.8c
+		echo '<div class="okay">Server OS: Ubuntu Linux</div>';
 	} else {
-		echo '<span class="critical">Unknown</span>';
+		echo '<span class="critical">Server OS: Unrecognized</span>';
 	}
 	echo '<br/>';
 	echo ($config['debug']?'<div class="critical">Debug: On - turn off for production use</div>':'<div class="okay">Debug: OFF</div>');
@@ -56,11 +60,14 @@
 		echo 'this also makes Apache not report version information to PHP). This is not a bad thing.';
 		echo '</div>';
 	} else {
-		//Version string come in this form: Apache/2.2.4 (Win32)
+		//Apache version strings look like this:
+		//	Apache/2.2.4 (Win32)
+		//	Apache/2.2.3 (Ubuntu) PHP/5.2.1 mod_ssl/2.2.3 OpenSSL/0.9.8c
 		if (substr($current_apache, 0, 7) == 'Apache/') $current_apache = substr($current_apache, strlen('Apache/'));
+		$pos = strpos($current_apache, '(');
+		if ($pos !== false) $current_apache = trim(substr($current_apache, 0, $pos));
 		echo version_compare_array($supported_apache, $current_apache);
 		echo 'Apache web server version: '.$current_apache.'</div>';
-		
 	}
 	echo '<br/>';
 
@@ -72,9 +79,13 @@
 	$current_php = phpversion();
 
 	$x = gd_info();
-	$current_php_gd = $x['GD Version'];	//looks like: "bundled (2.0.34 compatible)"
+	$current_php_gd = $x['GD Version'];
+	//GD version string looks like this:
+	//	Windows: "bundled (2.0.34 compatible)"
+	//	Linux: "2.0 or higher"
 	$current_php_gd = str_replace('bundled (', '', $current_php_gd);
 	$current_php_gd = str_replace(' compatible)', '', $current_php_gd);
+	$current_php_gd = str_replace(' or higher', '', $current_php_gd);
 	$current_php_apc = phpversion('apc');
 
 	echo version_compare_array($supported_php, $current_php);

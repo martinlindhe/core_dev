@@ -17,6 +17,9 @@
 	} elseif($id == 'theme') {
 		include('settings_theme.php');
 		exit;
+	} elseif($id == 'vipstatus') {
+		include('settings_vipstatus.php');
+		exit;
 	} else {
 		include('settings_profile.php');
 		exit;
