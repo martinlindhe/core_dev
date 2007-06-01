@@ -76,7 +76,7 @@ session_start();
 
 
 	if($search && $view == 's') {
-			if(is_md5($str)) {
+			if(is_numeric($str)) {
 				$s_sql = mysql_query("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM $log_tab a WHERE a.sess_id = '".secureINS($str)."' ORDER BY a.date_cnt DESC");
 			} else {
 				$s_sql = mysql_query("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM $log_tab a WHERE a.sess_ip = '".secureINS($str)."' ORDER BY a.date_cnt DESC");
@@ -267,7 +267,7 @@ function selectingAll(selecting) {
 					}
 					foreach($item as $key => $column) {
 						foreach($highmatch as $line) $column = highlight($column, $line);
-						if($table == 's_userphoto' && $key == '6') echo '<td class="pdg">'.$column.'</td>'; else echo '<td class="pdg">'.formatText($column).'</td>';
+						if($table == 's_userphoto' && $key == '6') echo '<td class="pdg">'.$column.'</td>'; else echo '<td class="pdg">'.secureOUT($column).'</td>';
 					}
 					if($info[$table][4]) echo '<td class="pdg"><a href="search.php?view=sss&s1='.$s1.'&s2='.$s2.'">VISA</a></td>';
 					echo '<td class="pdg"><a href="'.$info[$table][7].$id.'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>';
@@ -308,7 +308,7 @@ function selectingAll(selecting) {
 					unset($item[4]);
 					foreach($item as $column) {
 						#foreach($highmatch as $line) $column = highlight($column, $line);
-						echo '<td class="pdg">'.formatText($column).'</td>';
+						echo '<td class="pdg">'.secureOUT($column).'</td>';
 					}
 					echo '<td class="pdg"><a href="search.php?view=sss&s1='.$s1.'&s2='.$s2.'">VISA</a></td>';
 					echo '<td class="pdg"><a href="'.$info[$table][6].$id.'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>';

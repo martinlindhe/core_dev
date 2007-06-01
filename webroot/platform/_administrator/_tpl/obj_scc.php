@@ -42,13 +42,13 @@
 	}
 	if($view_gb == 1) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday >= NOW() ORDER BY a.con_onday ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday >= NOW() ORDER BY a.con_onday ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} elseif($view_gb == 2) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday < NOW() ORDER BY a.con_onday DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday < NOW() ORDER BY a.con_onday DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} else { 
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '0' ORDER BY a.main_id ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '0' ORDER BY a.main_id ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	}
 #print_r($list);
 #print mysql_error();
@@ -114,7 +114,7 @@ $pp1 = $paging['p'] + 1;
 				<td>
 				<table cellspacing="0">
 				<tr>
-<?=(!empty($row['id_id']))?'					<td style="width: 57px; padding-right: 10px;">'.getadminimg($row['id_id'].$row['u_picid'].$row['u_picd']).'</td>':'';?>
+<?=(!empty($row['id_id']))?'					<td style="width: 57px; padding-right: 10px;">'.getadminimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td>':'';?>
 					<td style="width: 100%;"><div style="width: 450px; overflow: hidden;">
 <?=secureOUT($row['con_msg'])?><br>
 					</div></td>

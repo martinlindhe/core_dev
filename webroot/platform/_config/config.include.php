@@ -1,11 +1,12 @@
 <?
 #local date-settings
 #setlocale(LC_TIME, "swedish");
-setlocale(LC_ALL, 'sv_SE.iso88591');
+#setlocale(LC_ALL, 'sv_SE.iso88591');
+setlocale(LC_ALL, 'sv_SE');
 #setlocale(LC_ALL, 'sv_SE');
 #setlocale(LC_ALL,"swedish");
 #setlocale(LC_ALL,"sv_SE");
-#setlocale(LC_ALL,"sv_SE.ISO8859-1");
+#setlocale(LC_ALL,"sv_SE.ISO-8859-1");
 #absolute path to www-root
 define('CS', '/');
 define('OBJ', CS.'_objects/');

@@ -1,4 +1,6 @@
 <?
+	$config['faq']['enabled'] = true;
+
 	function addFAQ($_q, $_a)
 	{
 		global $db, $session;

@@ -1,10 +1,17 @@
 <?
-	function getadminimg($arr, $big = 0) {
+	/*function getadminimg($arr, $big = 0) {
 		$id = substr($arr, 0, 32);
 		$pd = substr($arr, 34, 2);
 		$sex = substr($arr, 36, 1);
 		$arr = substr($arr, 32, 2);//style="width: 225px; height: 300px;"
 		return '<a href="user.php?id='.$id.'"><img onerror="this.src=\'../_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif\';" src="'.(intval($arr) != '0'?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd"':'class="brd" style="width: 50px; height: 67px;"').' /></a>';
+	}*/
+		function getadminimg($arr, $valid = 1, $big = 0, $extra = '') {
+		$id = substr($arr, 0, -5);
+		$pd = substr($arr, -3, -1);
+		$sex = substr($arr, -1);
+		$arr = substr($arr, -5, -3);//style="width: 225px; height: 300px;"
+		return (!$id?'<a>':'<a href="user.php?id='.$id.'"'.(!empty($extra['text'])?' title="'.secureOUT($extra['text']).'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>').'<img  alt="'.(!empty($extra['text'])?secureOUT($extra['text']):'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
 	}
 function doLog($string = '', $about = '') {
 	global $t, $sql;

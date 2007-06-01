@@ -8,7 +8,7 @@
 			if(substr($_POST['text_html'], 0, 6) == '&nbsp;') $_POST['text_html'] = substr($_POST['text_html'], 6);
 			if(substr($_POST['text_html'], 0, 1) == ' ') $_POST['text_html'] = substr($_POST['text_html'], 1);
 			$_POST['text_html'] = strip_tags($_POST['text_html'], NRMSTR);
-			$id = $user->setinfo($l['id_id'], 'user_pres', "'".@$_POST['text_html']."'");
+			$id = $user->setinfo($l['id_id'], 'user_pres', @$_POST['text_html']);
 			if($id[0]) $user->setrel($id[1], 'user_profile', $l['id_id']);
 		}
 
@@ -58,10 +58,9 @@ function replaceALIAS(id) {
 	n_id = n_id.split('.');
 	n_id = n_id[0];
 	TC_VarToHidden();
-	str = '<img src="' + id + '">';
-	str2 = '<img src="' + id + '">';
-	_d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace(str, '<a href="<?=P2B?>user/view/' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
-	_d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace(str2, '<a href="./user.php?id=' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
+  _d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace('<img src="' + id + '">', '<a href="<?=P2B?>user/view/' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
+  _d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace('<IMG src="' + id + '">', '<a href="<?=P2B?>user/view/' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
+	//_d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace(str2, '<a href="./user.php?id=' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
 	//_d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace(/_blank/gi, 'commain');
 	TC_HiddenToVar();
 }
@@ -179,7 +178,7 @@ var actID = '';
 								?>
 								</select><input type="button" class="b" value="ladda upp ny" onclick="makeUpload('type=pres'); return false;" style="margin-right: 10px;"/>
 								
-								<b>Länk till vän med bild:&nbsp;</b><select id="friend_list" name="friend_list" style="margin: 0 5px 0 17px;" onchange="if(TC_initialized) { if(this.value) { TC_Format('InsertImage', this.value); actName = this[this.selectedIndex].innerHTML; actID = this.value + ':::' + actName; window.setTimeout('replaceALIAS(actID)', 100); } else editor.focus(); } this.selectedIndex = 0;">
+								<b>Länk till vän med bild:&nbsp;</b><select id="friend_list" name="friend_list" style="margin: 0 5px 0 17px;" onchange="if(TC_initialized) { if(this.value) { TC_Format('InsertImage', this.value); actName = this[this.selectedIndex].innerHTML; actID = this.value + ':::' + actName; window.setTimeout('replaceALIAS(actID)', 200); } else editor.focus(); } this.selectedIndex = 0;">
 								<option value="0">Välj vän</option>
 								<?
 								foreach($friends as $friend) {

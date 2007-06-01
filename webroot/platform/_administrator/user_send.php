@@ -23,7 +23,7 @@ ob_start();
 		$check = $_GET['id'];
 	}
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql->queryUpdate("DELETE FROM {$tab['admin_send']} WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		#$sql->queryUpdate("DELETE FROM {$tab['admin_send']} WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		reloadACT('aMsgInfo.php');
 	}
 	$imgdir = './nyheter';
@@ -32,13 +32,14 @@ ob_start();
 		$f_list = array();
 		$u_list = explode("\n", $u_list);
 		foreach($u_list as $val) {
-			$u_id = $sql->queryResult("SELECT id_id FROM {$tab['user']} WHERE u_alias = '".trim($val)."' AND status_id = '1' LIMIT 1");
+			$u_id = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".trim($val)."' AND status_id = '1' LIMIT 1");
 			if($u_id) {
 				$f_list[$u_id] = $val;
 			}
 		}
 	}
-	$dir = getDirList('.'.$imgdir);
+	#$dir = getDirList('.'.$imgdir);
+	$dir = array('files' => array());
 sort($dir['files']);
 $send_copy = array(
 '0aa9d5754dc1d4ec9e47a9cd7661138a',
@@ -78,7 +79,7 @@ $to_sex_str = array(
 			if(is_md5($_POST['from'])) {
 				$from = $_POST['from'];
 			} else {
-				$from = $sql->queryResult("SELECT id_id FROM {$tab['user']} WHERE u_alias = '".secureINS($_POST['from'])."' AND status_id = '1' LIMIT 1");
+				$from = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_POST['from'])."' AND status_id = '1' LIMIT 1");
 				if(!$from) errorNEW('Felaktig avsändare.', 'user_send.php');
 			}
 		} else $msg = '-A';
@@ -122,7 +123,7 @@ $to_sex_str = array(
 					$_POST['ins_cmt'] = '<img src="'.$imgdir.'/'.$_POST['img'].'" style="margin-bottom: 6px;" /><div style="padding: 6px;">'.$_POST['ins_cmt'].'</div>';
 				}
 			}
-			$c = $sql->query("SELECT u.id_id FROM {$tab['user']} u WHERE $msg_str");
+			$c = $sql->query("SELECT u.id_id FROM s_user u WHERE $msg_str");
 			if(empty($c) || !count($c)) {
 				$error = 'Ingen mottagare.';
 				$_SESSION['temp_msg'] = $_POST['ins_cmt'];

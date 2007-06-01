@@ -9,6 +9,7 @@
 		$kex = $session->read('variablename');
 */
 
+require_once('functions_general.php');
 require_once('functions_ip.php');
 require_once('functions_textformat.php');
 require_once('functions_userdata.php');

@@ -229,6 +229,27 @@
 		return $db->getArray($q);
 	}
 
+	function setUserMode($_id, $_mode)
+	{
+		global $db, $session;
+		if (!$session->isSuperAdmin || !is_numeric($_id) || !is_numeric($_mode)) return false;
+		
+		$q = 'UPDATE tblUsers SET userMode='.$_mode.' WHERE userId='.$_id;
+		$db->update($q);
+
+		if ($_id == $session->id) return true;
+
+		switch ($_mode) {
+			case 0: $msg = $session->username.' has reduced your usermode to normal member.'; break;
+			case 1: $msg = $session->username.' has granted you admin rights.'; break;
+			case 2: $msg = $session->username.' has granted you super admin rights.'; break;
+		}
+
+		sendMessage($_id, 'System message', $msg);
+		return true;
+	}
+
+
 	/*
 	//todo: gör till "sök i ett userfält" funktion, ta tillexempel 'Nickname' eller 'E-mail' som parameter
 	function getUserSearchResultOnNickname($search_phrase)

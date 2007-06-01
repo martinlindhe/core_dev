@@ -47,14 +47,14 @@
 	if($view_gb) {
 		$paging = paging(@$_GET['p'], 20);
 		if($arr)
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE $arr ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE $arr ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 		else
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} else {
 		if($arr)
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE ($arr) AND a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
+			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE ($arr) AND a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
 		else
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
+			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
 	}
 	if($arr)
 	$view_c = array(
@@ -132,7 +132,7 @@ $pp1 = $paging['p'] + 1;
 				<td>
 				<table cellspacing="0">
 				<tr>
-<?=(!empty($row['logged_in']))?'					<td style="width: 57px; padding-right: 10px;">'.getadminimg($row['id_id'].$row['u_picid'].$row['u_picd']).'</td>':'';?>
+<?=(!empty($row['logged_in']))?'					<td style="width: 57px; padding-right: 10px;">'.getadminimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td>':'';?>
 					<td style="width: 100%;"><div style="width: 450px; overflow: hidden;">
 <?=($row['gb_html'])?stripslashes($row['gb_msg']):secureOUT($row['gb_msg']);?><br>
 <?	if(!empty($row['answer_msg'])) { ?>

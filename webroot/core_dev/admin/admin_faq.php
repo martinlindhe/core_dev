@@ -4,13 +4,19 @@
 
 	require($project.'design_head.php');
 
-	if (!empty($_POST['faq_q']) && isset($_POST['faq_a'])) {
-		addFAQ($_POST['faq_q'], $_POST['faq_a']);
-	}
-
 	echo createMenu($admin_menu, 'blog_menu');
 
 	echo 'Admin FAQ<br/><br/>';
+	
+	if (empty($config['faq']['enabled'])) {
+		echo 'FAQ module is not enabled.<br/>';
+		require($project.'design_foot.php');
+		die;
+	}
+
+	if (!empty($_POST['faq_q']) && isset($_POST['faq_a'])) {
+		addFAQ($_POST['faq_q'], $_POST['faq_a']);
+	}
 	
 	showFAQ();
 	echo '<br/>';

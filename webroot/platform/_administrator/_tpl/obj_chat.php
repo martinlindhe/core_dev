@@ -64,8 +64,8 @@
 	' till '.((!empty($r['id_id2']))?'<a href="user.php?t&id='.$r['id_id2'].'" class="txt_big user">'.secureOUT($r['u_alias2']).'</a>':'[raderad]');?>
  - <em>inl&auml;gg skrivet <?=niceDate($r['sent_date'])?></em> (#<?=$r['main_id']?>)</span><?=(!$r['user_read'])?' <b>[oläst]</b>':'';?></td></tr>
 				<tr>
-					<td style="width: 100%;"><?='<table cellspacing="0"><tr><td>'.$user->getimg($r['id_id'].$r['u_picid'].$r['u_picd'].$r['u_sex'], $r['u_picvalid']).'</td><td style="padding-left: 5px;"><div style="width: 470px; overflow: hidden;">'.secureOUT($r['sent_cmt']).'</div></td></tr></table>';?></td>
-					<td><?=$user->getimg($r['id_id2'].$r['u_picid2'].$r['u_picd2'].$r['u_sex2'], $r['u_picvalid2'])?></td>
+					<td style="width: 100%;"><?='<table cellspacing="0"><tr><td>'.getadminimg($r['id_id'].$r['u_picid'].$r['u_picd'].$r['u_sex'], $r['u_picvalid']).'</td><td style="padding-left: 5px;"><div style="width: 470px; overflow: hidden;">'.secureOUT($r['sent_cmt']).'</div></td></tr></table>';?></td>
+					<td><?=getadminimg($r['id_id2'].$r['u_picid2'].$r['u_picd2'].$r['u_sex2'], $r['u_picvalid2'])?></td>
 				</tr>
 				</table>
 				</td>

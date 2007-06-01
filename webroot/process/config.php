@@ -14,7 +14,6 @@
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Session.php');
 	require_once('class.Files.php');
-	require_once('functions_feedback.php');	//todo: ta bort, behövs för att admin inte ska dö i fatal error
 	restore_include_path();
 
 	require_once('functions_process.php');

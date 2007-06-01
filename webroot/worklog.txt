@@ -61,8 +61,26 @@
 		* skapat en vip-status sida, som visar din aktuella vip-nivå, vilka andra nivåer som finns och hur många dagar som återstår på dessa
 		* skapat en "uppgradera till vip" sida, med info om de olika vip-nivåerna och priser
 
+2007.06.01 Fredag:
+	* ipx:
+		- mt-billing fixar
+		- inkommande & utgånde sms-loggar visar mer detaljerad info (och ser lite bättre ut)
+
+	* webbgränssnittet:
+		- frans var här och fixade massa grejer:
+			* räknare är nu rätt
+			* antal användare online är nu rätt
+			* en massa adminsidor fixade
+			* user-länkar i presentationen funkar
+			* osv
 
 ***************************************************************************************************
+server conf - dammsugaren:
+	- sätt SE_latin1 locale för svenska datum i php
+	- konfa virtual hosts: mobil.cs.se, process.cs.se
+	- Mail utskick. smtp-servern funkar, men timar ut ibland (mail.unicorn.tv)
+		titta på att sätta upp egen mailserver på cs.icn.se
+
 NU: SMS debitering:
 	- kontrollera att IPX mt billing funkar
 	- kontrollera att intern-mail kvittering skickas korrekt
@@ -71,12 +89,7 @@ NU: SMS debitering:
 NU: anmäl användare-funktion:
 	- admin ska kunna se översikt på inkommande anmälningar
 
-NU: Mail utskick. smtp-servern funkar, men timar ut ibland (mail.unicorn.tv)
-		titta på att sätta upp egen mailserver på cs.icn.se
-
 blandat:
-	* konfa virtual hosts: mobil.cs.se, process.cs.se
-
 	* mms upload image & video:
 		- hantera "BLOG" och "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
 		- alla ska ha mms funktion (vip) under testet
@@ -84,10 +97,6 @@ blandat:
 	* process server:
 		- ip-restrictions för SOAP klienter
 		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
-
-	* profilsida:
-		- FRANS: länk till vän med bild funkar ej för alla
-
 
 EFETER TEST:
 	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild

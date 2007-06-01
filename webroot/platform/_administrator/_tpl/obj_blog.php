@@ -9,7 +9,7 @@
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
 		$res = $sql->queryLine("SELECT user_id FROM {$t}userblog WHERE main_id = '".$_GET['del']."' LIMIT 1");
 		if(!empty($res) && count($res)) {
-			$sql->queryUpdate("UPDATE {$tab['user']}blog SET status_id = '2' WHERE main_id = '".$_GET['del']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userblog SET status_id = '2' WHERE main_id = '".$_GET['del']."' LIMIT 1");
 		}
 		@header("Location: ".$thispage);
 		exit;
@@ -19,7 +19,7 @@
 	$cmt_arr = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userblog");
 
 	$paging = paging(@$_GET['p'], 20);
-	$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM {$t}userblog a LEFT JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+	$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid, u_sex FROM {$t}userblog a LEFT JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 ?>
 			<input type="radio" class="inp_chk" name="view" value="0" id="view_0" onclick="document.location.href = '<?=$thispage?>';" checked><label for="view_0" class="txt_bld txt_look">Alla</label> [<?=$cmt_arr?>]
 
@@ -63,7 +63,7 @@
 	((!empty($r['id_id']))?'<a href="user.php?t&id='.$r['id_id'].'" class="txt_big user">'.secureOUT($r['u_alias']).'</a>':'[raderad]');?>
  - <em>inl&auml;gg skrivet <?=niceDate($r['blog_date'])?></em> (#<?=$r['main_id']?>)</span></td></tr>
 				<tr>
-					<td style="width: 100%;"><?='<table cellspacing="0"><tr><td>'.$user->getphoto($r['id_id'].$r['u_picid'].$r['u_picd'], $r['u_picvalid'], 1, 1).'</td><td style="padding-left: 5px;"><div style="width: 470px; overflow: hidden;"><b>'.secureOUT($r['blog_title']).'</b><br /><br />'.formatText($r['blog_cmt']).'</div></td></tr></table>';?></td>
+					<td style="width: 100%;"><?='<table cellspacing="0"><tr><td>'.getadminimg($r['id_id'].$r['u_picid'].$r['u_picd'].$r['u_sex'], $r['u_picvalid']).'</td><td style="padding-left: 5px;"><div style="width: 470px; overflow: hidden;"><b>'.secureOUT($r['blog_title']).'</b><br /><br />'.secureOUT($r['blog_cmt']).'</div></td></tr></table>';?></td>
 				</tr>
 				</table>
 				</td>

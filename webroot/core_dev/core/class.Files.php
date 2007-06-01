@@ -7,7 +7,6 @@
 	Written by Martin Lindhe, 2007
 */
 
-require_once('functions_general.php');
 require_once('atom_categories.php');		//for file categories support
 
 //fixme: börja index från 1 istället för 100

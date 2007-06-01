@@ -1,5 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
+
+		- jag ska ej kunna skapa kategorier i nån annans filarea även om jag är admin
 		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
 			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
 
@@ -10,7 +12,6 @@
 		- kolla access-kontroll. vad är privat data, kan andra se det?
 			t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
 
-		- jobbet: kika på process server om de blev utf8 över linux mysqli db driver åxå
 
 
 	blized frågetecken:
@@ -162,6 +163,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.01:
+	- admin list users: visar en snyggare lista
+	- admin: kan göra normal users till admin/super admin + privat msg confirmation ("Martin has granted you administrator rights")
+		genom admin_list_users.php
+
+
 2007.05.31:
 	- plugins: ipx-plugin steg 2/2
 	- db drivers: fixat så att db drivers sätter default värden i respektive connect() funktion istället,
@@ -221,7 +228,6 @@ X = hi prio task
 	- feedback: admin kan besvara frågan (som ett privat meddelande)
 
 
-
 2007.05.23:
 	- db: $db->insert($q) skapad, returnerar insert_id från INSERT-queryn
 	- db: tagit bort $db->insert_id variabeln, använd $db->insert() istället
@@ -267,7 +273,6 @@ X = hi prio task
 	- gör även samma typ av special case fast för det fält som innehåller E-mail, för att köra email-validering på input
 
 
-
 2007.05.17:
 	- userdata: fixade så kategorier & personliga settings tas bort när admin raderar ett userdata fält
 	- userdata: fixade så checkbox typen funkar
@@ -293,7 +298,6 @@ X = hi prio task
 	- blog: kan ge rating på en blog
 	- news: kan flytta en nyhet till en annan kategori genom "edit news"
 	- friends: skickar nu relations-request, och visar pågående och inkommande requests på din vänlista
-
 
 
 2007.05.15:

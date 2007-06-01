@@ -7,15 +7,19 @@
 	set_time_limit(600);
 	ini_set('default_socket_timeout', '600');	//10 minute timeout for SOAP requests
 
-	$config['sms']['originating_number'] = '71160';
+	$config['sms']['originating_number'] = '72777';
 	$config['sms']['auth_username'] = 'lwcg';
 	$config['sms']['auth_password'] = '3koA4enpE';
 
 	//set $tariff & $reference to charge a previous MT-SMS. requires the originating_number to be configured for MT billing
-	function sendSMS($dest_number, $msg, $tariff = 'SEK0', $reference = '#NULL#')
+	function sendSMS($dest_number, $msg, $from_number = '', $tariff = 'SEK0', $reference = '#NULL#')
 	{
 		//$msg must be a UTF-8 encoded string for swedish characters to work
 		global $db, $config, $session;
+
+		//anvÃ¤nder det nummret som inkommande sms kom pÃ¥ fÃ¶r att skicka utgÃ¥ende, fÃ¶r mt billing
+		//detta nummer ska bara anvÃ¤ndas fÃ¶r utgÃ¥ende sms (MO)
+		if (!$from_number) $from_number = $config['sms']['originating_number'];
 
 		$client = new SoapClient('https://europe.ipx.com/api/services/SmsApi50?wsdl');//, array('trace' => 1));
 
@@ -27,7 +31,7 @@
 
 			$params = array(
 				//element										value					data type
-				'correlationId'					=>	$corrId,			//string	- id som klienten sätter för att hålla reda på requesten, returneras tillsammans med soap-response från IPX
+				'correlationId'					=>	$corrId,			//string	- id som klienten sÃ¤tter fÃ¶r att hÃ¥lla reda pÃ¥ requesten, returneras tillsammans med soap-response frÃ¥n IPX
 				'originatingAddress'		=>	$config['sms']['originating_number'],	//string	- orginating number for SMS sent by us
 				'destinationAddress'		=>	$dest_number,	//string	- mottagare till sms:et, med landskod, format: 46707308763
 				'originatorAlpha'				=>	'0',					//bool		- ?
@@ -61,8 +65,9 @@
 			echo 'Request header: '.htmlspecialchars($client->__getLastRequestHeaders()).'<br/>';
 			echo 'Request: '.htmlspecialchars($client->__getLastRequest()).'<br/>';
 			echo 'Response: '.htmlspecialchars($client->__getLastResponse()).'<br/>';
-			
+
 			$session->log('Exception in sendSMS(): '.$e, LOGLEVEL_ERROR);
+			return false;
 		}
 	}
 
@@ -74,11 +79,14 @@
 		$list = $db->getArray($q);
 
 		foreach ($list as $row) {
-			echo $row['timeSent'].' to '.$row['dest'].'<br/>';
-			echo 'Message: '.$row['msg'].'<br/>';
+			echo $row['timeSent'].' to <b>'.$row['dest'].'</b><br/>';
+			echo 'Message: '.mb_convert_encoding($row['msg'], 'ISO-8859-1', 'utf8').'<br/><br/>';	//fixme: unicode probs. strÃ¤ngen ska va unicode men visas inte korrekt :(
 
 			$q = 'SELECT * FROM tblSendResponses WHERE correlationId='.$row['correlationId'];
 			$response = $db->getOneRow($q);
+
+			echo 'Sent message parameters:<br/>';
+			d(unserialize($response['params']));
 
 			echo 'IPX status response: ';
 			d($response);
@@ -98,11 +106,15 @@
 			echo $row['timeReceived'].' (local time) incoming data from <a href="'.$config['core_web_root'].'admin/admin_ip.php?ip='.$ipv4.getProjectPath().'">'.$ipv4.'</a><br/>';
 			$msg = unserialize($row['params']);
 
-			echo 'SMS from '.$msg['OriginatorAddress'].' operator '.$msg['Operator'].' (to '.$msg['DestinationAddress'].')<br/>';
-			echo 'Message: '.$msg['Message'].' (id '.$msg['MessageId'].')<br/>';
+			echo 'SMS from <b>'.$msg['OriginatorAddress'].'</b> operator <b>'.$msg['Operator'].'</b> (to <b>'.$msg['DestinationAddress'].'</b>)<br/>';
+			echo 'Message: <b>'.$msg['Message'].'</b> (id <b>'.$msg['MessageId'].'</b>)<br/>';
 
 			$ts = sql_datetime(strtotime($msg['TimeStamp']));
 			echo 'Message sent: '.$ts.' (IPX time)<br/>';
+
+			echo 'Incoming message parameters:<br/>';
+			d(unserialize($row['params']));
+
 			echo '<hr/>';
 		}
 	}
@@ -125,7 +137,7 @@
 		header('Content-Type: text/plain');
 		echo '<DeliveryResponse ack="true"/>';
 
-		//1. parse sms, format "POG vipnivå userid"
+		//1. parse sms, format "POG vipnivÃ¥ userid"
 		$in_cmd = explode(' ', strtoupper($params['Message']));
 
 		if (empty($in_cmd[0]) || empty($in_cmd[1]) || empty($in_cmd[2]) || !is_numeric($in_cmd[2])) {
@@ -133,7 +145,7 @@
 			die;
 		}
 		$vip_codes = array(
-											//days, price i öre, SEK2000 = 20.00 kronor
+											//days, price i Ã¶re, SEK2000 = 20.00 kronor
 			'VIP'			=> array(14, 'SEK2000'),
 			'VIP-2V'	=> array(14, 'SEK2000')/*,
 			'VIP-1M'	=> array(30, 'SEK3000'),
@@ -151,7 +163,7 @@
 			die;
 		}
 
-		//identifiera användaren
+		//identifiera anvÃ¤ndaren
 		$config['user_db']['host']	= 'localhost';
 		$config['user_db']['username']	= 'root';
 		$config['user_db']['password']	= 'dravelsql';
@@ -169,7 +181,7 @@
 			$days = $vip_codes[$in_cmd[1]][0];
 			$tariff = $vip_codes[$in_cmd[1]][1];
 			$vip_level = VIP_LEVEL1;
-			$msg = 'Du debiteras nu '.$tariff.' för '.$days.' dagar VIP till användare '.$username;
+			$msg = 'Du debiteras nu '.$tariff.' fÃ¶r '.$days.' dagar VIP till anvÃ¤ndare '.$username;
 			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP';
 
 			$session->log('Attempting to charge '.$username.' for '.$days.' days VIP ('.$tariff.') (cmd: '.$in_cmd[1].')');	
@@ -178,7 +190,7 @@
 			$days = $vip_delux_codes[$in_cmd[1]][0];
 			$tariff = $vip_delux_codes[$in_cmd[1]][1];
 			$vip_level = VIP_LEVEL2;
-			$msg = 'Du debiteras nu '.$tariff.' för '.$days.' dagar VIP DELUX till användare '.$username;
+			$msg = 'Du debiteras nu '.$tariff.' fÃ¶r '.$days.' dagar VIP DELUX till anvÃ¤ndare '.$username;
 			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP DELUX';
 
 			$session->log('Attempting to charge '.$username.' for '.$days.' days VIP DELUX ('.$tariff.') (cmd: '.$in_cmd[1].')');	
@@ -188,14 +200,15 @@
 			die;
 		}
 
-		//2. skicka ett nytt sms till avsändaren, med TARIFF satt samt med messageid från incoming sms satt som "reference id"
-		$sms_err = sendSMS($params['OriginatorAddress'], $msg, $tariff, $params['MessageId']);
+		//2. skicka ett nytt sms till avsÃ¤ndaren, med TARIFF satt samt med messageid frÃ¥n incoming sms satt som "reference id"
+		//	anvÃ¤nder samma avsÃ¤ndar-nummer som det inkommande SMS:et skickades till
+		$sms_err = sendSMS($params['OriginatorAddress'], $msg, $params['DestinationAddress'], $tariff, $params['MessageId']);
 		if ($sms_err === true) {
 			addVIP($in_cmd[2], $vip_level, $days);
 			$session->log('Charge to '.$username.' of '.$tariff.' succeeded');
 			
 			//Leave a confirmation message in the users inbox
-			$internal_title = 'VIP-bekräftelse';
+			$internal_title = 'VIP-bekrÃ¤ftelse';
 			$q = 'INSERT INTO s_usermail SET sender_id=0, user_id='.$in_cmd[2].',sent_ttl="'.$internal_title.'",sent_cmt="'.$internal_msg.'",sent_date=NOW()';
 			$user_db->insert($q);
 

@@ -18,11 +18,11 @@ function fixSemi($a) { return str_replace(';', ':', $a); }
 	$error = false;
 	$type = 'all';
 	$where = '';
-	$tpass = $sql->queryResult("SELECT user_pass FROM {$tab['admin']} WHERE main_id = '".secureINS($_SESSION['u_i'])."' LIMIT 1");
+	$tpass = $sql->queryResult("SELECT user_pass FROM s_admin WHERE main_id = '".secureINS($_SESSION['u_i'])."' LIMIT 1");
 	$pass = @$_POST['pass'];
 	$gotsec = false;
-		$try = mysql_query("SELECT id_id, status_id, u_pass FROM {$tab['user']} WHERE id_id = '".secureINS($_SESSION['u_i'])."'");
-		$try = @mysql_fetch_assoc($try);
+		$try = $sql->queryLine("SELECT id_id, status_id, u_pass FROM s_user WHERE id_id = '".secureINS($_SESSION['u_i'])."'", 1);
+		//$try = @mysql_fetch_assoc($try);
 		if($try['status_id'] == '4') errorNEW('Ingen behörighet.');
 	if(substr($pass, 0, 1) == '!') { $pass = substr($pass, 1); $gotsec = true; }
 	if(!empty($pass) && $pass === $tpass) {
@@ -30,10 +30,10 @@ function fixSemi($a) { return str_replace(';', ':', $a); }
 			$level = $_POST['level'];
 			if($level == '10' || $level == '30' || $level == '50' || $level == '60' || $level == '100') {
 				$where = "WHERE level_id = '".secureINS((intval($_POST['level'])/10))."' AND status_id = '1'";
-				$sqlord = 'id_id ASC';
+				$sqlord = 'u.id_id ASC';
 				$type = 'NIVÅ_'.($level/10);
 			} elseif($level == '99') {
-				$where = "WHERE level_id = '6' AND status_id = '1'";
+				$where = "WHERE status_id = '1'";
 				$sqlord = 'u_fname ASC, u_sname ASC';
 				$type = 'MEDLEMSLISTA';
 			} elseif($level == '2') {
@@ -88,9 +88,9 @@ function fixSemi($a) { return str_replace(';', ':', $a); }
 		elseif($level == '33' || $level == '34')
 			$select = 'u_cell, city_id';
 		else
-			$select = 'u_alias, u_pass, u_email, u_fname, u_sname, u_sex, reg_ip, reg_sess, u_birth, u_birth_x, u_cell, u_regdate, u_street, u_pstnr, u_pstort, u_pstlan, city_id';
-		if($level == '99') $select = 'u_alias, u_fname, u_sname, city_id';
-		$res = "SELECT $select FROM {$tab['user']} u $where ORDER BY $sqlord";
+			$select = 'u_alias, u_pass, u_email, u_fname, u_sname, u_sex, reg_ip, reg_sess, u_birth, u_birth_x, u_cell, u_regdate, u_street, u_pstnr, u_pstort, u_pstlan';
+		if($level == '99') $select = 'u_alias, u_fname, u_sname';
+		$res = "SELECT $select FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id $where ORDER BY $sqlord";
 		$res = $sql->query($res, 0, 1);
 		$totalrow = '';
 #$res = array_map('fixSemi', $res);

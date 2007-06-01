@@ -28,7 +28,8 @@ class sql {
 		if($debug) print $query;
 		$result = mysql_query($query);
 		$return = array();
-		if($error) echo mysql_error();
+		#if($error)
+		echo mysql_error();
 		if($assoc) {
 			while($row = mysql_fetch_assoc($result))
 				$return[] = $row;

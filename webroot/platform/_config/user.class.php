@@ -23,12 +23,12 @@ class user {
 	function counterIncrease($type, $user) {
 		$c = $this->getinfo($user, $type.'_offset');
 		if(!$c) $c = 0;
-		$id = $this->setinfo($user, $type.'_offset', "'".($c+1)."'");
+		$id = $this->setinfo($user, $type.'_offset', ($c+1));
 		if($id[0]) $this->setrel($id[1], 'user_head', $user);
 		@$_SESSION['data']['offsets'][$type.'_offset'] = ($c+1);
 	}
 	function obj_set($type, $rel = '', $user, $val = '') {
-		$id = $this->setinfo($user, $type, "'".$val."'");
+		$id = $this->setinfo($user, $type, $val);
 		if($id[0]) $this->setrel($id[1], $rel, $user);
 	}
 	function counterSet($id) {
@@ -38,26 +38,26 @@ class user {
 	function counterDecrease($type, $user) {
 		$c = $this->getinfo($user, $type.'_offset');
 		if(!$c || $c <= 0) $c = 1;
-		$id = $this->setinfo($user, $type.'_offset', "'".($c-1)."'");
+		$id = $this->setinfo($user, $type.'_offset', ($c-1));
 		if($id[0]) $this->setrel($id[1], 'user_head', $user);
 		@$_SESSION['data']['offsets'][$type.'_offset'] = ($c-1);
 	}
 	function notifyReset($type, $user) {
-		$id = $this->setinfo($user, $type.'_count', "'0'");
+		$id = $this->setinfo($user, $type.'_count', "0");
 		if($id[0]) $this->setrel($id[1], 'user_head', $user);
 		if($user == $this->id) $this->update_retrieve();
 	}
 	function notifyIncrease($type, $user) {
 		$c = $this->getinfo($user, $type.'_count');
 		if(!$c) $c = 0;
-		$id = $this->setinfo($user, $type.'_count', "'".($c+1)."'");
+		$id = $this->setinfo($user, $type.'_count', ($c+1));
 		if($id[0]) $this->setrel($id[1], 'user_retrieve', $user);
 		if($user == $this->id) $this->update_retrieve();
 	}
 	function notifyDecrease($type, $user) {
 		$c = $this->getinfo($user, $type.'_count');
 		if(!$c || $c <= 0) $c = 1;
-		$id = $this->setinfo($user, $type.'_count', "'".($c-1)."'");
+		$id = $this->setinfo($user, $type.'_count', ($c-1));
 		if($id[0]) $this->setrel($id[1], 'user_retrieve', $user);
 		if($user == $this->id) $this->update_retrieve();
 	}
@@ -349,7 +349,7 @@ class user {
 			$this->sql->queryInsert("INSERT INTO {$this->t}userspy SET user_id = '".$user."', status_id = '1', spy_date = NOW(), msg_id = '".secureINS($info)."', link_id = '".@$url."', object_id = '$id', type_id = '$type'");
 			$c = $this->getinfo($user, 'spy_count');
 			if(!$c) $c = 0;
-			$this->setinfo($user, 'spy_count', "'".($c+1)."'");
+			$this->setinfo($user, 'spy_count', ($c+1));
 		}
 */
 			$this->sql->queryInsert("INSERT INTO {$this->t}usermail SET
@@ -391,7 +391,8 @@ class user {
 			$ret = array('1', $obj);
 		} else {
 			$ret = array('0', $res[1]);
-			$this->sql->queryUpdate("UPDATE {$this->t}obj SET content = '".$val."', obj_date = NOW() WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
+			$q = "UPDATE {$this->t}obj SET content = '".$val."', obj_date = NOW() WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1";
+			$this->sql->queryUpdate($q);
 		}
 		return $ret;
 	}

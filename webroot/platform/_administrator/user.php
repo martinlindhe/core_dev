@@ -38,16 +38,16 @@ $reasons = array(
 
 
 	if(!empty($_POST['doupd'])) {
-		if(!empty($_POST['id']) && is_md5($_POST['id'])) {
+		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
 			if($_POST['alias'] != $_POST['oldalias']) {
-				$res = $sql->queryLine("SELECT status_id, u_alias FROM {$t}user WHERE u_alias = '".secureINS($_POST['alias'])."' LIMIT 1");
+				$res = $sql->queryLine("SELECT status_id, u_alias FROM s_user WHERE u_alias = '".secureINS($_POST['alias'])."' LIMIT 1");
 				if(!empty($res) && count($res)) if($res[0] == '1' || $res[0] == '3' || $res[0] == 'F') errorACT('Aliaset finns redan. ( '.$res[1].' )', 'user.php?id='.$_POST['id']);
 			}
 			if($_POST['email'] != $_POST['oldemail']) {
-				$res = $sql->queryResult("SELECT u_alias FROM {$t}user WHERE u_email = '".secureINS($_POST['email'])."' AND status_id = '1' LIMIT 1");
+				$res = $sql->queryResult("SELECT u_alias FROM s_user WHERE u_email = '".secureINS($_POST['email'])."' AND status_id = '1' LIMIT 1");
 				if($res) errorACT('E-postadressen finns redan. ( '.$res.' )', 'user.php?id='.$_POST['id']);
 			}
-			$row = $sql->queryLine("SELECT u.id_id, u.level_enddate, u.level_pending, u.level_id, l.level_id AS search, status_id FROM {$t}user u LEFT JOIN {$t}userlevel l ON l.id_id = u.id_id WHERE u.id_id = '".$_POST['id']."'", 1);
+			$row = $sql->queryLine("SELECT u.id_id, u.level_enddate, u.level_pending, u.level_id, l.level_id AS search, status_id FROM s_user u LEFT JOIN s_userlevel l ON l.id_id = u.id_id WHERE u.id_id = '".$_POST['id']."'", 1);
 			if(!empty($row['search'])) {
 				if(strpos($row['search'], 'LEVEL'.$row['level_id'])) {
 					$row['search'] = str_replace('LEVEL'.$row['level_id'], 'LEVEL'.$_POST['level'], $row['search']);
@@ -59,19 +59,19 @@ $reasons = array(
 					$row['search'] = str_replace('SEXF', 'SEX'.($_POST['sex'] == 'M'?'M':'F'), $row['search']);
 				}
 			}
-			$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '{$row['search']}' WHERE id_id = '".$row['id_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '{$row['search']}' WHERE id_id = '".$row['id_id']."' LIMIT 1");
 			if(!empty($row['status_id']) && $row['status_id'] != $_POST['status']) {
 				if($row['status_id'] == '1' && ($_POST['status'] == '2' || $_POST['status'] == '3')) {
-					$res = $sql->queryResult("SELECT l.level_id FROM {$t}userlevel l WHERE l.id_id = '".$_POST['id']."' LIMIT 1");
-					if(!empty($res)) $sql->queryUpdate("REPLACE INTO {$t}userlevel_off SET id_id = '".$_POST['id']."', level_id = '".secureINS($res)."'");
-					$sql->queryUpdate("DELETE FROM {$t}userlevel WHERE id_id = '".$_POST['id']."' LIMIT 1");
+					$res = $sql->queryResult("SELECT l.level_id FROM s_userlevel l WHERE l.id_id = '".$_POST['id']."' LIMIT 1");
+					if(!empty($res)) $sql->queryUpdate("REPLACE INTO s_userlevel_off SET id_id = '".$_POST['id']."', level_id = '".secureINS($res)."'");
+					$sql->queryUpdate("DELETE FROM s_userlevel WHERE id_id = '".$_POST['id']."' LIMIT 1");
 				} elseif(($row['status_id'] == '2' || $row['status_id'] == '3') && $_POST['status'] == '1') {
-					$res = $sql->queryResult("SELECT l.level_id FROM {$t}userlevel_off l WHERE l.id_id = '".$_POST['id']."' LIMIT 1");
-					if(!empty($res)) $sql->queryUpdate("REPLACE INTO {$t}userlevel SET id_id = '".$_POST['id']."', level_id = '".secureINS($res)."'");
-					$sql->queryUpdate("DELETE FROM {$t}userlevel_off WHERE id_id = '".$_POST['id']."' LIMIT 1");					
+					$res = $sql->queryResult("SELECT l.level_id FROM s_userlevel_off l WHERE l.id_id = '".$_POST['id']."' LIMIT 1");
+					if(!empty($res)) $sql->queryUpdate("REPLACE INTO s_userlevel SET id_id = '".$_POST['id']."', level_id = '".secureINS($res)."'");
+					$sql->queryUpdate("DELETE FROM s_userlevel_off WHERE id_id = '".$_POST['id']."' LIMIT 1");					
 				}
 			}
-			$sql->queryUpdate("UPDATE {$t}user SET
+			$sql->queryUpdate("UPDATE s_user SET
 				u_alias = '".secureINS($_POST['alias'])."',
 				u_email = '".secureINS($_POST['email'])."',
 				location_id = '".secureINS($_POST['city'])."',
@@ -86,7 +86,7 @@ $reasons = array(
 				u_sex = '".secureINS($_POST['sex'])."',
 				u_birth = '".secureINS($_POST['birth'])."'
 			WHERE id_id = '".secureINS($_POST['id'])."' LIMIT 1");
-			$sql->queryUpdate("UPDATE {$t}userinfo SET
+			$sql->queryUpdate("UPDATE s_userinfo SET
 				u_fname = '".secureINS($_POST['fname'])."',
 				u_sname = '".secureINS($_POST['sname'])."',
 				u_street = '".secureINS($_POST['street'])."',
@@ -103,7 +103,7 @@ $reasons = array(
 					$msg = sprintf($msg, $_POST['alias'], $_POST['block_reason'], $_POST['block_disc']);
 					$titl = 'Din profil är blockerad!';
 					$type = 'BLOCKERAD';
-					$sql->queryUpdate("UPDATE {$t}user SET
+					$sql->queryUpdate("UPDATE s_user SET
 					lastlog_date = NOW()
 					WHERE id_id = '".secureINS($_POST['id'])."' LIMIT 1");
  				} elseif($_POST['domail'] == 'unblocked') {
@@ -118,7 +118,7 @@ $reasons = array(
 			header("Location: user.php?id={$_POST['id']}");
 			exit;
 		} elseif(!empty($_POST['a'])) {
-			$res = $sql->queryResult("SELECT id_id FROM {$t}user WHERE u_alias = '".secureINS($_POST['a'])."' LIMIT 1");
+			$res = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_POST['a'])."' LIMIT 1");
 			if($res) header("Location: user.php?id=".$res);
 		} else {
 			foreach($_POST as $key => $val) {
@@ -126,7 +126,7 @@ $reasons = array(
 					$kid = explode(":", $key);
 					$kid = $kid[1];
 					if(isset($_POST['status_id:' . $kid])) {
-						$sql->queryUpdate("UPDATE {$t}user SET status_id = '".secureINS($_POST['status_id:' . $kid])."', level_id = '".secureINS($_POST['level_id:' . $kid])."', view_id = '1' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
+						$sql->queryUpdate("UPDATE s_user SET status_id = '".secureINS($_POST['status_id:' . $kid])."', level_id = '".secureINS($_POST['level_id:' . $kid])."', view_id = '1' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
 					}
 				}
 			}
@@ -135,14 +135,14 @@ $reasons = array(
 					$kid = explode(":", $key);
 					$kid = $kid[1];
 					if(isset($_POST['code:' . $kid]) && !empty($_POST['code:' . $kid])) {
-						$sql->queryUpdate("UPDATE {$t}userinfo SET reg_code = '".secureINS($_POST['code:' . $kid])."' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
+						$sql->queryUpdate("UPDATE s_userinfo SET reg_code = '".secureINS($_POST['code:' . $kid])."' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
 					}
 					if(isset($_POST['email:' . $kid]) && !empty($_POST['email:' . $kid])) {
-						$got = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE u_email = '".secureINS($_POST['email:' . $kid])."' WHERE status_id = '1' LIMIT 1");
-						if(!$got) $sql->queryUpdate("UPDATE {$t}user SET u_email = '".secureINS($_POST['email:' . $kid])."' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
+						$got = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE u_email = '".secureINS($_POST['email:' . $kid])."' WHERE status_id = '1' LIMIT 1");
+						if(!$got) $sql->queryUpdate("UPDATE s_user SET u_email = '".secureINS($_POST['email:' . $kid])."' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
 					}
 					if(isset($_POST['sendemail:' . $kid]) && !empty($_POST['sendemail:' . $kid])) {
-						$inf = $sql->queryLine("SELECT i.reg_code, u.u_email FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".$kid."' LIMIT 1");
+						$inf = $sql->queryLine("SELECT i.reg_code, u.u_email FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".$kid."' LIMIT 1");
 						if(!empty($inf) && count($inf)) {
 							$msg = sprintf(gettxt('email_activate'), $inf[0], substr(P2B, 0, -1).l('member', 'activate', secureOUT(str_replace('@', '__at__', $inf[1])), $inf[0]));
 							doMail(secureOUT($inf[1]), 'Din aktiveringskod: '.$inf[0], $msg);
@@ -157,33 +157,32 @@ $reasons = array(
 	}
 
 	$change = false;
-	if(!empty($_GET['del']) && is_md5($_GET['del'])) {
-		$row = $sql->queryResult("SELECT status_id FROM {$t}user WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
+	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
+		$row = $sql->queryResult("SELECT status_id FROM s_user WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		if($row == 'F' || $row == '2') {
-			$sql->queryUpdate("DELETE FROM {$t}user WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");	
-		} else $sql->query("UPDATE {$t}user SET status_id = '2' WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
+			$sql->queryUpdate("DELETE FROM s_user WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");	
+		} else $sql->query("UPDATE s_user SET status_id = '2' WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		header("Location: user.php?status=$status_id");
 		exit;
 	}
 
-	if(!empty($_GET['id']) && is_md5($_GET['id'])) {
-		$row = $sql->queryLine("SELECT u.*, i.* FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".secureINS($_GET['id'])."' LIMIT 1", 1);
+	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
+		$row = $sql->queryLine("SELECT u.*, i.* FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".secureINS($_GET['id'])."' LIMIT 1", 1);
 		if(!count($row)) {
 			$change = false;
 		} else {
 			$change = true;
 		}
 	}
-
 	if(!empty($_GET['del_pic'])) {
-		$res = $sql->queryLine("SELECT id_id, u_picd, u_picid FROM {$t}user WHERE id_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
+		$res = $sql->queryLine("SELECT id_id, u_picd, u_picid FROM s_user WHERE id_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
 		if(!empty($res) && count($res)) {
 			@rename('../user_img/'.$res[1].'/'.$res[0].$res[2].'.jpg', '../user_img_off/'.$res[0].'_'.md5(microtime()).'.jpg');
 			@unlink('../user_img/'.$res[1].'/'.$res[0].$res[2].'_2.jpg');
 		}
-		$string = $sql->queryResult("SELECT level_id FROM {$t}userlevel WHERE id_id = '".$res[0]."' LIMIT 1");
+		$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$res[0]."' LIMIT 1");
 		$string = str_replace('VALID', '', $string);
-		$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$string' WHERE id_id = '".$res[0]."' LIMIT 1");
+		$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$res[0]."' LIMIT 1");
 		if(!empty($_GET['reason'])) {
 			if(!empty($_GET['reasontext']) && $_GET['reason'] == 'X')
 				$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats på grund av: <b>'.$_GET['reasontext'].'</b> Prova med en ny.'));
@@ -191,7 +190,7 @@ $reasons = array(
 				$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats'.$reasons[$_GET['reason']].' Prova med en ny.'));
 		} else
 			$user->spy($res[0], 'ID', 'MSG', array('Din profilbild har nekats. Prova igen'));
-		$sql->queryUpdate("UPDATE {$t}user SET u_picvalid = '0', u_picdate = '' WHERE id_id = '".secureINS($res[0])."' LIMIT 1");
+		$sql->queryUpdate("UPDATE s_user SET u_picvalid = '0', u_picdate = '' WHERE id_id = '".secureINS($res[0])."' LIMIT 1");
 		if($change)
 			header("Location: user.php?id=".$row['id_id']);
 		else
@@ -204,16 +203,16 @@ $reasons = array(
 	$list = array();
 	if(!$change) {
 		if(!$status_id) {
-			$list = $sql->query("SELECT a.id_id, i.reg_code, a.u_email, a.u_birth, a.u_regdate, i.u_cell FROM {$t}user a LEFT JOIN {$t}userinfo i ON i.id_id = a.id_id WHERE a.status_id = 'F' ORDER BY a.u_regdate DESC");
+			$list = $sql->query("SELECT a.id_id, i.reg_code, a.u_email, a.u_birth, a.u_regdate, i.u_cell FROM s_user a LEFT JOIN s_userinfo i ON i.id_id = a.id_id WHERE a.status_id = 'F' ORDER BY a.u_regdate DESC");
 		} elseif($status_id == 'N') {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND view_id = '0' ORDER BY u_regdate DESC");
+			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND view_id = '0' ORDER BY u_regdate DESC");
 		} elseif($status_id == '2') {
 			$sex = false;
 			if(!empty($_GET['sex'])) {
 				$sex = $_GET['sex'];
-				$pics = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, u_picd FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND u_picvalid = '1' AND u_sex = '$sex' ORDER BY u_regdate DESC");
+				$pics = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, u_picd, u_sex FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND u_picvalid = '1' AND u_sex = '$sex' ORDER BY u_regdate DESC");
 			} else
-				$pics = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, u_picd FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND u_picvalid = '1' ORDER BY u_regdate DESC");
+				$pics = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, u_picd, u_sex FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND u_picvalid = '1' ORDER BY u_regdate DESC");
 		} elseif($status_id == '3') {
 			$sort = '';
 			if(!empty($_GET['sort'])) $sort = $_GET['sort'];
@@ -221,18 +220,18 @@ $reasons = array(
 			$type = 'date';
 			if(!empty($_GET['sorttype'])) $type = $_GET['sorttype'];
 			if(!empty($_POST['sorttype'])) $type = $_POST['sorttype'];
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, location_id, lastlog_date, lastonl_date, account_date FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND account_date > '".$user->timeout('30 MINUTES')."' ORDER BY ".(!$sort?'u_regdate DESC':($type == 'date'?'location_id '.$sort.', u_alias ASC':'lastlog_date '.$sort)));
+			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, location_id, lastlog_date, lastonl_date, account_date FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND account_date > '".$user->timeout('30 MINUTES')."' ORDER BY ".(!$sort?'u_regdate DESC':($type == 'date'?'location_id '.$sort.', u_alias ASC':'lastlog_date '.$sort)));
 		} elseif($status_id == '5') {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, lastlog_date, u_regdate FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE status_id = '2' ORDER BY lastlog_date DESC");
+			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, lastlog_date, u_regdate FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '2' ORDER BY lastlog_date DESC");
 		} elseif($status_id == '10') {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, level_enddate, level_pending, location_id FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND (level_pending = '1' OR level_pending = '0' AND level_id > 1) ORDER BY level_enddate ASC");
+			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, level_enddate, level_pending, location_id FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND (level_pending = '1' OR level_pending = '0' AND level_id > 1) ORDER BY level_enddate ASC");
 		} elseif($status_id == '6') {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE status_id = '3' ORDER BY lastlog_date DESC");
+			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '3' ORDER BY lastlog_date DESC");
 		} elseif($status_id == '4') {
 			$list = false;
 			$pics = false;
 		} else {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM {$t}user u LEFT JOIN {$t}userinfo i ON i.id_id = u.id_id WHERE view_id = '1' AND status_id = '1' ORDER BY u_regdate DESC");
+			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE view_id = '1' AND status_id = '1' ORDER BY u_regdate DESC");
 		}
 	} else $list = '';
 	require("./_tpl/admin_head.php");
@@ -322,37 +321,37 @@ echo '</table>';
 
 foreach($cities as $key => $val) {
 ################
-		$total = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1' AND location_id = '".$key."'");
+		$total = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND location_id = '".$key."'");
 		if(!empty($_GET['show'])) {
 			if(is_numeric($_GET['show'])) {
-				$list = $sql->query("SELECT * FROM {$t}user WHERE status_id = '1' AND YEAR(u_birth) = '".$_GET['show']."' AND location_id = '".$key."'", 0, 1);
+				$list = $sql->query("SELECT * FROM s_user WHERE status_id = '1' AND YEAR(u_birth) = '".$_GET['show']."' AND location_id = '".$key."'", 0, 1);
 			} elseif($_GET['show'] == 'F') {
-				$list = $sql->query("SELECT * FROM {$t}user WHERE status_id = '1' AND u_sex = 'F' AND location_id = '".$key."'", 0, 1);
+				$list = $sql->query("SELECT * FROM s_user WHERE status_id = '1' AND u_sex = 'F' AND location_id = '".$key."'", 0, 1);
 			} elseif($_GET['show'] == 'M') {
-				$list = $sql->query("SELECT * FROM {$t}user WHERE status_id = '1' AND u_sex = 'M' AND location_id = '".$key."'", 0, 1);
+				$list = $sql->query("SELECT * FROM s_user WHERE status_id = '1' AND u_sex = 'M' AND location_id = '".$key."'", 0, 1);
 			}
 		}
 ?>
-			<tr><td colspan="8"><br><br><br><br><b><?=$val?></b> - Antal i ålder:<br><? 	for($t = 2000; $t >= 1930; $t--) { $t1 = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1' AND YEAR(u_birth) = '$t' AND location_id = '".$key."'"); if($t1) echo $t.': <a href="user.php?status=4&show='.$t.'"><b class="txt_chead">'.$t1.'</b></a><br> ';
+			<tr><td colspan="8"><br><br><br><br><b><?=$val?></b> - Antal i ålder:<br><? 	for($t = 2000; $t >= 1930; $t--) { $t1 = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND YEAR(u_birth) = '$t' AND location_id = '".$key."'"); if($t1) echo $t.': <a href="user.php?status=4&show='.$t.'"><b class="txt_chead">'.$t1.'</b></a><br> ';
 	if(!empty($_GET['show']) && $_GET['show'] == $t) {
 listUserDisabled($list);
 	}
 } ?></tr>
-			<tr><td colspan="8"><b><?=$val?></b> - Antal tjejer: <a href="user.php?status=4&show=F"><b class="txt_chead"><?=$female = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1' AND u_sex = 'F' AND location_id = '".$key."'")?></b></a>.
+			<tr><td colspan="8"><b><?=$val?></b> - Antal tjejer: <a href="user.php?status=4&show=F"><b class="txt_chead"><?=$female = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND u_sex = 'F' AND location_id = '".$key."'")?></b></a>.
 <?
 	if(!empty($_GET['show']) && $_GET['show'] == 'F') {
 listUserDisabled($list);
 	}
 ?>
 			</td></tr>
-			<tr><td colspan="8"><b><?=$val?></b> - Antal killar: <a href="user.php?status=4&show=M"><b class="txt_chead"><?=$sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1' AND location_id = '".$key."'") - $female?></b></a>.
+			<tr><td colspan="8"><b><?=$val?></b> - Antal killar: <a href="user.php?status=4&show=M"><b class="txt_chead"><?=$sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND location_id = '".$key."'") - $female?></b></a>.
 <?
 	if(!empty($_GET['show']) && $_GET['show'] == 'M') {
 listUserDisabled($list);
 	}
 ?>
 <br>&nbsp;</td></tr>
-			<tr><td colspan="8"><b><?=$val?></b> - Antal med profilbild: <b class="txt_chead"><?=$without = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1' AND u_picvalid = '1' AND location_id = '".$key."'")?></b></a>.
+			<tr><td colspan="8"><b><?=$val?></b> - Antal med profilbild: <b class="txt_chead"><?=$without = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND u_picvalid = '1' AND location_id = '".$key."'")?></b></a>.
 			<tr><td colspan="8"><b><?=$val?></b> - Antal utan profilbild: <b class="txt_chead"><?=$total-$without?></b></a>.
 			<tr><td colspan="8"><b><?=$val?></b> - Totalt: <b class="txt_chead"><?=$total?></b></a>.
 <?
@@ -360,37 +359,37 @@ listUserDisabled($list);
 ################
 }
 
-		$total = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1'");
+		$total = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1'");
 		if(!empty($_GET['show'])) {
 			if(is_numeric($_GET['show'])) {
-				$list = $sql->query("SELECT * FROM {$t}user WHERE status_id = '1' AND YEAR(u_birth) = '".$_GET['show']."'", 0, 1);
+				$list = $sql->query("SELECT * FROM s_user WHERE status_id = '1' AND YEAR(u_birth) = '".$_GET['show']."'", 0, 1);
 			} elseif($_GET['show'] == 'F') {
-				$list = $sql->query("SELECT * FROM {$t}user WHERE status_id = '1' AND u_sex = 'F'", 0, 1);
+				$list = $sql->query("SELECT * FROM s_user WHERE status_id = '1' AND u_sex = 'F'", 0, 1);
 			} elseif($_GET['show'] == 'M') {
-				$list = $sql->query("SELECT * FROM {$t}user WHERE status_id = '1' AND u_sex = 'M'", 0, 1);
+				$list = $sql->query("SELECT * FROM s_user WHERE status_id = '1' AND u_sex = 'M'", 0, 1);
 			}
 		}
 ?>
-			<tr><td colspan="8"><br><br><br><br><b>TOTALT</b> - Antal i ålder:<br><? 	for($t = 2000; $t >= 1930; $t--) { $t1 = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1' AND YEAR(u_birth) = '$t'"); if($t1) echo $t.': <a href="user.php?status=4&show='.$t.'"><b class="txt_chead">'.$t1.'</b></a><br> ';
+			<tr><td colspan="8"><br><br><br><br><b>TOTALT</b> - Antal i ålder:<br><? 	for($t = 2000; $t >= 1930; $t--) { $t1 = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND YEAR(u_birth) = '$t'"); if($t1) echo $t.': <a href="user.php?status=4&show='.$t.'"><b class="txt_chead">'.$t1.'</b></a><br> ';
 	if(!empty($_GET['show']) && $_GET['show'] == $t) {
 listUserDisabled($list);
 	}
 } ?></tr>
-			<tr><td colspan="8"><b>TOTALT</b> - Antal tjejer: <a href="user.php?status=4&show=F"><b class="txt_chead"><?=$female = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1' AND u_sex = 'F'")?></b></a>.
+			<tr><td colspan="8"><b>TOTALT</b> - Antal tjejer: <a href="user.php?status=4&show=F"><b class="txt_chead"><?=$female = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND u_sex = 'F'")?></b></a>.
 <?
 	if(!empty($_GET['show']) && $_GET['show'] == 'F') {
 listUserDisabled($list);
 	}
 ?>
 			</td></tr>
-			<tr><td colspan="8"><b>TOTALT</b> - Antal killar: <a href="user.php?status=4&show=M"><b class="txt_chead"><?=$sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1'") - $female?></b></a>.
+			<tr><td colspan="8"><b>TOTALT</b> - Antal killar: <a href="user.php?status=4&show=M"><b class="txt_chead"><?=$sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1'") - $female?></b></a>.
 <?
 	if(!empty($_GET['show']) && $_GET['show'] == 'M') {
 listUserDisabled($list);
 	}
 ?>
 <br>&nbsp;</td></tr>
-			<tr><td colspan="8"><b>TOTALT</b> - Antal med profilbild: <b class="txt_chead"><?=$without = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}user WHERE status_id = '1' AND u_picvalid = '1'")?></b></a>.
+			<tr><td colspan="8"><b>TOTALT</b> - Antal med profilbild: <b class="txt_chead"><?=$without = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND u_picvalid = '1'")?></b></a>.
 			<tr><td colspan="8"><b>TOTALT</b> - Antal utan profilbild: <b class="txt_chead"><?=$total-$without?></b></a>.
 			<tr><td colspan="8"><b>TOTALT</b> - Totalt: <b class="txt_chead"><?=$total?></b></a>.
 <?
@@ -518,7 +517,7 @@ function denyAns(val, id, extra) {
 <input type="text" name="reasontext_id:'.$row[0].'" id="reasontext_id:'.$row[0].'" style="width: 100px; display: none;" value="" class="inp_nrm"><br />
 <input type="button" class="inp_orgbtn" id="retb_id:'.$row[0].'" style="margin: 0;" style="display: none;" value="skicka valfri" onclick="denyAns(\'X\', \''.$row[0].'\', document.getElementById(\'reasontext_id:'.$row[0].'\').value);" />
 </div>
-'.getadminimg($row[0].$row[8].$row[9]).'<br><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>';
+'.getadminimg($row[0].$row[8].$row[9].$row[10], $row[7], 1).'<br><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>';
 			}
 			echo '</tr>';
 		} else {
@@ -544,8 +543,8 @@ function denyAns(val, id, extra) {
 </script>
 		<table cellspacing="0">
 		<tr>
-			<td>'.getadminimg($row['id_id'].$row['u_picid'].$row['u_picd'], 1).'</td>
-			<td style="padding-bottom: 5px;"><a href="../user.php?id='.$row['id_id'].'" target="commain" onclick="if(parent.window.opener) parent.window.opener.focus();">Visa profil</a><br /><br /><b>Alternativ:</b><br><a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row['id_id'].'\').style.display = \'\';">NEKA</a><br>
+			<td>'.getadminimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 1).'</td>
+			<td style="padding-bottom: 5px;"><a href="/user/view/'.$row['id_id'].'" target="_blank" onclick="if(parent.window.opener) parent.window.opener.focus();">Visa profil</a><br /><br /><b>Alternativ:</b><br><a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row['id_id'].'\').style.display = \'\';">NEKA</a><br>
 <div id="reason_reason:'.$row['id_id'].'" style="display: none;">
 <input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="R" id="reason_id:'.$row['id_id'].':R"><label for="reason_id:'.$row['id_id'].':R">Reklam</label>
 <input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="AB" id="reason_id:'.$row['id_id'].':AB"><label for="reason_id:'.$row['id_id'].':AB">Stötande</label><br />
@@ -652,7 +651,7 @@ if(this.value == \'3\' && this_status != \'3\') {
 		<table cellspacing="2">
 		<tr class="bg_gray"><td colspan="4" class="pdg bld">40 senaste händelser</td></tr>
 ';
-	$v_sql = $sql->query("SELECT sess_id, sess_ip, sess_date, type_inf FROM {$t}usersess WHERE id_id = '".secureINS($row['id_id'])."' ORDER BY main_id DESC LIMIT 40");
+	$v_sql = $sql->query("SELECT sess_id, sess_ip, sess_date, type_inf FROM s_usersess WHERE id_id = '".secureINS($row['id_id'])."' ORDER BY main_id DESC LIMIT 40");
 $names = array('i' => 'in', 'o' => 'ut', 'f' => '<b>felaktig</b>');
 	foreach($v_sql as $val) {
 echo '<tr class="bg_gray">
