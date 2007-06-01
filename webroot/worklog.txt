@@ -75,8 +75,19 @@
 			* osv
 
 ***************************************************************************************************
+anteckningar från fre 1 jun fransmöte:
+	- sätt SE_latin1 locale för svenska datum i php (frans kollar om han kommer ihåg!)
+	- gör om admingränssnit att fungera med nuvarande s_vip
+	- gör cronjobb som uppdaterar s_vip varje dygn. och som ändrar s_user till aktuell userlevel för varje user
+	- gör ett script för att importera profilbilder från gamla cs:
+		* mika dumpar csv på TISDAG
+		* vi påbörjar kopiering av alla bilder på TISDAG till dammsugaren
+		* pic_valid=1 ska sättas på alla profilbilder i batch-importen för att allt ska räknas som godkänt
+	- räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
+	- när en användares bild blir nekad, ska de få ett privat meddelande-svar med anledning. i obj_photo.php
+
 server conf - dammsugaren:
-	- sätt SE_latin1 locale för svenska datum i php
+	- sätt servertime till svensk tid
 	- konfa virtual hosts: mobil.cs.se, process.cs.se
 	- Mail utskick. smtp-servern funkar, men timar ut ibland (mail.unicorn.tv)
 		titta på att sätta upp egen mailserver på cs.icn.se

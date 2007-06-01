@@ -92,7 +92,6 @@
 						if($res[5] == '1') $user->counterDecrease('mail', $res[3]);
 						$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2', sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 					}
-					#$user->setinfo($s['id_id'], 'mail_offset', 'content - 1');
 					if(!$res[4]) $user->notifyDecrease('mail', $s['id_id']);
 				}
 			}
@@ -126,7 +125,6 @@
 		
 		if (!is_numeric($_id)) return false;
 
-		#if($user->getinfo($l['id_id'], 'mail_count') > 0) $user->setinfo($l['id_id'], 'mail_count', 'content - 1');
 		$user->notifyDecrease('mail', $l['id_id']);
 		$sql->queryUpdate("UPDATE {$t}usermail SET user_read = '1' WHERE main_id = '".$_id."' LIMIT 1");
 		

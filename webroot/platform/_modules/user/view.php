@@ -14,7 +14,7 @@
 		}
 		if(!$beenhere) {
 			$c = $user->getinfo($s['id_id'], 'visit_cnt');
-			$id = $user->setinfo($s['id_id'], 'visit_cnt', "'".($c+1)."'");
+			$id = $user->setinfo($s['id_id'], 'visit_cnt', ($c+1));
 			if($id[0]) $user->setrel($id[1], 'user_head', $s['id_id']);
 		}
 		

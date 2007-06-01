@@ -52,7 +52,7 @@
 		user_read = '0'");
 	/*	$c = $user->getinfo($s['id_id'], 'chat_count');
 		if(!$c) $c = 0;
-		$id = $user->setinfo($s['id_id'], 'chat_count', "'".($c+1)."'");
+		$id = $user->setinfo($s['id_id'], 'chat_count', ($c+1));
 		if($id[0]) $user->setrel($id[1], 'user_retrieve', $s['id_id']);
 	*/
 		exit;

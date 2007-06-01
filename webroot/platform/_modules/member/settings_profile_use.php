@@ -11,29 +11,29 @@
 			if(substr($_POST['text_html'], 0, 1) == ' ') $_POST['text_html'] = substr($_POST['text_html'], 1);
 			$_POST['text_html'] = strip_tags($_POST['text_html'], NRMSTR);
 			#$_POST['text_html'] = str_replace('<a href', '<a target="_blank" href', $_POST['text_html']);
-			$id = $user->setinfo($l['id_id'], 'user_pres', "'".@$_POST['text_html']."'");
+			$id = $user->setinfo($l['id_id'], 'user_pres', @$_POST['text_html']);
 			if($id[0]) $user->setrel($id[1], 'user_profile', $l['id_id']);
 		}
 		if(isset($_POST['ins_color'])) {
-			$id = $user->setinfo($l['id_id'], 'user_pres_color', "'".@substr($_POST['ins_color'], 0, 10)."'");
+			$id = $user->setinfo($l['id_id'], 'user_pres_color', @substr($_POST['ins_color'], 0, 10));
 			if($id[0]) $user->setrel($id[1], 'user_profile', $l['id_id']);
 		}
 		if(isset($_POST['ins_back'])) {
-			$id = $user->setinfo($l['id_id'], 'user_pres_back', "'".@substr($_POST['ins_back'], 0, 10)."'");
+			$id = $user->setinfo($l['id_id'], 'user_pres_back', @substr($_POST['ins_back'], 0, 10));
 			if($id[0]) $user->setrel($id[1], 'user_profile', $l['id_id']);
 		}
 		if(isset($_POST['ins_music'])) {
-			$id = $user->setinfo($l['id_id'], 'user_music', "'".@$_POST['ins_music']."'");
+			$id = $user->setinfo($l['id_id'], 'user_music', @$_POST['ins_music']);
 			if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 		}
 
 
 		if(isset($_POST['det_opt']) && @$head['det_civil'][1] != $_POST['det_opt']) {
-			$id = $user->setinfo($l['id_id'], 'det_civil', "'".@$_POST['det_opt']."'");
+			$id = $user->setinfo($l['id_id'], 'det_civil', @$_POST['det_opt']);
 			if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 		}
 		if(isset($_POST['det']) && @$head['det_civil_type'][1] != $_POST['det']) {
-			$id = $user->setinfo($l['id_id'], 'det_civil_type', "'".@$_POST['det']."'");
+			$id = $user->setinfo($l['id_id'], 'det_civil_type', @$_POST['det']);
 			if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 			$string = $sql->queryResult("SELECT level_id FROM {$t}userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
 			if(!empty($head['det_civil_type'][1])) {
@@ -43,19 +43,19 @@
 			$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$string' WHERE id_id = '".$l['id_id']."' LIMIT 1");
 		}
 		if(isset($_POST['det_music']) && @$head['det_music'][1] != $_POST['det_music']) {
-			$id = $user->setinfo($l['id_id'], 'det_music', "'".@$_POST['det_music']."'");
+			$id = $user->setinfo($l['id_id'], 'det_music', @$_POST['det_music']);
 			if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 		}
 		if(isset($_POST['det_drink']) && @$head['det_drink'][1] != $_POST['det_drink']) {
-			$id = $user->setinfo($l['id_id'], 'det_drink', "'".@$_POST['det_drink']."'");
+			$id = $user->setinfo($l['id_id'], 'det_drink', @$_POST['det_drink']);
 			if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 		}
 		if(isset($_POST['det_idol']) && @$head['det_idol'][1] != $_POST['det_idol']) {
-			$id = $user->setinfo($l['id_id'], 'det_idol', "'".@$_POST['det_idol']."'");
+			$id = $user->setinfo($l['id_id'], 'det_idol', @$_POST['det_idol']);
 			if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 		}
 		if(isset($_POST['det_wants']) && @$head['det_wants'][1] != $_POST['det_wants']) {
-			$id = $user->setinfo($l['id_id'], 'det_wants', "'".@$_POST['det_wants']."'");
+			$id = $user->setinfo($l['id_id'], 'det_wants', @$_POST['det_wants']);
 			if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 		}
 		}

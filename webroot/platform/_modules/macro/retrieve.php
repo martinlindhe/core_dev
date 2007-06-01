@@ -6,7 +6,7 @@
 	$idle = $user->getinfo($l['id_id'], 'active_status');
 	$idle_arr = array('0', '1', '2');
 	if($idle != $_GET['idle'] && in_array($_GET['idle'], $idle_arr)) {
-		$id = $user->setinfo($l['id_id'], 'active_status', "'".$_GET['idle']."'");
+		$id = $user->setinfo($l['id_id'], 'active_status', $_GET['idle']);
 		if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 	}
 	exit;

@@ -50,7 +50,7 @@
 		}
 		echo '</center></div><br/>';
 	}
-	$res = $sql->query("SELECT main_id, picd, pht_name, pht_cmt FROM {$t}userphoto WHERE view_id = '1' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC LIMIT 7", 0, 1);
+	$res = $sql->query("SELECT main_id, picd, pht_name, pht_cmt FROM {$t}userphoto WHERE view_id = '1' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC LIMIT 5", 0, 1);
 	if(count($res)) {
 		echo '<div class="bigHeader">senaste galleribilder</div>';
 		echo '<div class="bigBody"><center>';

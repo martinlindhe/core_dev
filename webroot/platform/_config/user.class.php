@@ -43,7 +43,7 @@ class user {
 		@$_SESSION['data']['offsets'][$type.'_offset'] = ($c-1);
 	}
 	function notifyReset($type, $user) {
-		$id = $this->setinfo($user, $type.'_count', "0");
+		$id = $this->setinfo($user, $type.'_count', '0');
 		if($id[0]) $this->setrel($id[1], 'user_head', $user);
 		if($user == $this->id) $this->update_retrieve();
 	}
@@ -364,17 +364,6 @@ class user {
 			$this->counterIncrease('mail', $user);
 			$this->notifyIncrease('mail', $user);
 	}
-	/*function getactions($id, $own = false, $s = 0, $l = 50) {
-	 	if($own) {
-			return $this->sql->query("SELECT r.main_id, o.main_id as obj_id, o.content_type, o.content, o.content_more, o.obj_date, o.state_id, o.section_id, o.sender_id, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picid, u.u_picvalid, u.account_date FROM {$this->t}objrel r LEFT JOIN {$this->t}obj o ON o.main_id = r.object_id LEFT JOIN {$this->t}user u ON u.id_id = o.sender_id WHERE r.content_type = 'MESS' AND r.owner_id = '".secureINS($id)."' ORDER BY r.main_id DESC".(($l)?" LIMIT $s, $l":''), 0, 1);
-		} else {
-			return $this->sql->query("SELECT o.content, o.main_id as obj_id, o.content_type, o.obj_date, o.content_more, o.state_id, o.section_id, o.sender_id, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picid, u.u_picvalid, u.account_date FROM {$this->t}objrel r LEFT JOIN {$this->t}obj o ON o.main_id = r.object_id LEFT JOIN {$this->t}user u ON u.id_id = o.sender_id WHERE r.content_type = 'MESS' AND r.owner_id = '".secureINS($id)."' ORDER BY r.main_id DESC".(($l)?" LIMIT $s, $l":''), 0, 1);
-		}
-	}
-	function cleanspy($user, $id, $type) {
-		$r = $this->sql->queryUpdate("UPDATE {$this->t}userspy SET status_id = '2' WHERE user_id = '".$user."' AND status_id = '1' AND object_id = '$id' AND type_id = '$type'");
-		if($r) $this->setinfo($user, 'spy_count', "content - ".$r);
-	}*/
 	function getline($opt, $id) {
 		$res = $this->sql->queryResult("SELECT $opt FROM {$this->t}user WHERE id_id = '$id' LIMIT 1");
 		if(!$res) return false;

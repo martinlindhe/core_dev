@@ -125,43 +125,43 @@
 		}
 		if(@$settings['private_chat'] != @$_POST['opt_chat'] || (@$settings['private_chat'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_chat']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'private_chat', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'private_chat', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(@$settings['hidden_view'] != @$_POST['opt_view'] || (@$settings['hidden_view'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_view']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_view', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'hidden_view', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(@$settings['hidden_bview'] != @$_POST['opt_bview'] || (@$settings['hidden_bview'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_bview']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_bview', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'hidden_bview', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(@$settings['hidden_pview'] != @$_POST['opt_pview'] || (@$settings['hidden_pview'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_pview']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_pview', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'hidden_pview', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		/*
 		if($isAdmin && @$settings['mmsenabled'] != @$_POST['opt_mmsenabled']) {
-			$id = $user->setinfo($l['id_id'], 'mmsenabled', "'".@$_POST['opt_mmsenabled']."'");
+			$id = $user->setinfo($l['id_id'], 'mmsenabled', @$_POST['opt_mmsenabled']);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if($isAdmin && @$settings['mmstype'] != @$_POST['opt_mmstype']) {
 			$hidden = (!empty($_POST['opt_mmstype']) && $_POST['opt_mmstype'] == 'B')?'B':'P';
-			$id = $user->setinfo($l['id_id'], 'mmstype', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'mmstype', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if($isAdmin && @$settings['mmspriv'] != @$_POST['ins_mmspriv']) {
 			$hidden = (!empty($_POST['ins_mmspriv']))?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'mmspriv', "'".@$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'mmspriv', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		*/
 		/*
 		if($isAdmin && @$settings['mmskey'] != @$_POST['ins_mmskey']) {
-			$id = $user->setinfo($l['id_id'], 'mmskey', "'".@$_POST['ins_mmskey']."'");
+			$id = $user->setinfo($l['id_id'], 'mmskey', @$_POST['ins_mmskey']);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		*/
@@ -169,24 +169,24 @@
 		
 		if(@$settings['hidden_slogin'] != @$_POST['opt_shidden']) {
 			$hidden = (!empty($_POST['opt_shidden']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_slogin', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'hidden_slogin', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(@$settings['zoom_auto'] != @$_POST['opt_zoom']) {
 			$hidden = (!empty($_POST['opt_zoom']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'zoom_auto', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'zoom_auto', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(@$settings['hidden_login'] != @$_POST['opt_hidden']) {
 			$hidden = (!empty($_POST['opt_hidden']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_login', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'hidden_login', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 			$_SESSION['c_h'] = $hidden;
 			if($hidden) $_SESSION['c_d'] = 0;
 		}
 		if($hidlog != @$_POST['opt_hidlog'] || ($hidlog && !$isOk)) {
 			$hidden = (!empty($_POST['opt_hidlog']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidlog', "'".@$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'hidlog', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_profile', $l['id_id']);
 		}
 		if(isset($_POST['opt_hidchat']))
@@ -194,22 +194,22 @@
 		else $hidchat = 1;
 		if(@$settings['hidden_chat'] != @$hidchat || (@$settings['hidden_chat'] && !$isOk)) {
 			$hidden = (!empty($hidchat) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_chat', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'hidden_chat', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(@$settings['send_spec'] != @$_POST['opt_spec'] || (@$settings['send_spec'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_spec']))?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'send_spec', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'send_spec', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(isset($_POST['opt_cell']) && !isset($settings['send_cell']) || @$settings['send_cell'] != @$_POST['opt_cell'] || !isset($settings['send_cell']) && !isset($_POST['opt_cell'])) {
 			$hidden = (!empty($_POST['opt_cell']))?'0':'1';
-			$id = $user->setinfo($l['id_id'], 'send_cell', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'send_cell', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(isset($_POST['opt_email']) && !isset($settings['send_email']) || @$settings['send_email'] != @$_POST['opt_email'] || !isset($settings['send_email']) && !isset($_POST['opt_email'])) {
 			$hidden = (!empty($_POST['opt_email']))?'0':'1';
-			$id = $user->setinfo($l['id_id'], 'send_email', "'".$hidden."'");
+			$id = $user->setinfo($l['id_id'], 'send_email', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		if(@$settings['random'] != @$_POST['opt_random']) {
@@ -219,7 +219,7 @@
 				elseif($_POST['opt_random'] == 'F') $r = 'F';
 				else $r = 'B';
 			}
-			$id = $user->setinfo($l['id_id'], 'random', "'".$r."'");
+			$id = $user->setinfo($l['id_id'], 'random', $r);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 

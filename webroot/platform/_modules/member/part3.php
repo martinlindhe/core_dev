@@ -120,7 +120,7 @@ $_SESSION['data'] = array('u_pst' => $result[9], 'u_pstlan_id' => $result[8], 'l
 			cookieSET("TTT", $_SESSION['cc']);
 			cookieSET("a65", $alias);
 			$c = intval($user->getinfo($id_u, 'login_cnt'));
-			$id = $user->setinfo($id_u, 'login_cnt', "'".($c+1)."'");
+			$id = $user->setinfo($id_u, 'login_cnt', ($c+1));
 			if($id[0]) $user->setrel($id[1], 'user_head', $id_u);
 			$res = $sql->queryResult("SELECT NOW()");
 			$_SESSION['c_d'] = $res;
