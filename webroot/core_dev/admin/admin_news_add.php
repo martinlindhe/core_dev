@@ -34,7 +34,7 @@
 
 	echo '<input name="rss" id="rss_check" type="checkbox" class="checkbox" value="1" checked="checked"/>';
 	echo '<label for="rss_check">';
-	echo '<img src="/gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
+	echo '<img src="'.$config['core_web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
 	echo 'Include this news in the RSS feed</label><br/><br/>';
 
 	echo 'Time for publication:<br/>';

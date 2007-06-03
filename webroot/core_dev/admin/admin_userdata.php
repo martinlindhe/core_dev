@@ -89,10 +89,10 @@
 		$prio_up = $prio-1;
 		$prio_dn = $prio+1;
 		if ($prio_up >= 0) {
-			echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.getProjectPath().'"><img src="/gfx/arrow_up.png" alt="Move up"/></a>';
+			echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.getProjectPath().'"><img src="'.$config['core_web_root'].'gfx/arrow_up.png" alt="Move up"/></a>';
 		}
 		if ($prio_dn < count($list)) {
-			echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="/gfx/arrow_down.png" alt="Move down"/></a>';
+			echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="'.$config['core_web_root'].'gfx/arrow_down.png" alt="Move down"/></a>';
 		}
 
 		echo '&nbsp;<a href="?change='.$row['fieldId'].getProjectPath().'">Modify</a><br/>';

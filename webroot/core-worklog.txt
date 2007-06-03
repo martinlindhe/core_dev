@@ -163,6 +163,11 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.03:
+	- categories: buggfix för ej-inloggad användare
+	- user search: buggfix & cleanup
+
+
 2007.06.01:
 	- admin list users: visar en snyggare lista
 	- admin: kan göra normal users till admin/super admin + privat msg confirmation ("Martin has granted you administrator rights")

@@ -108,15 +108,17 @@
 	{
 		global $db, $session;
 
-		if (!$session->id || !is_numeric($_type) || !is_numeric($_owner)) return false;
+		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 		switch ($_type)
 		{
 			case CATEGORY_USERFILE:
+				if (!$session->id) return false;
 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType BETWEEN 1 AND 3 ORDER BY categoryPermissions DESC';
 				break;
 
 			case CATEGORY_BLOG:
+				if (!$session->id) return false;
 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
 				break;
 
@@ -134,6 +136,7 @@
 			default:
 				die('bleek');
 		}
+
 		return $db->getArray($q);
 	}
 
@@ -156,6 +159,7 @@
 		$shown_my_cats = false;
 
 		$list = getGlobalAndUserCategories($_type, $_owner);
+
 		foreach ($list as $row)
 		{
 			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && $row['categoryPermissions']==10) {

@@ -131,7 +131,7 @@
 			$value = stripslashes($row['fieldDefault']);
 		}
 
-		if ($row['fieldType'] != USERDATA_TYPE_CHECKBOX) {
+		if ($row['fieldType'] != USERDATA_TYPE_CHECKBOX && $row['fieldType'] != USERDATA_TYPE_SELECT) {
 			$result = stripslashes($row['fieldName']).':<br/>';
 		} else {
 			$result = '';
@@ -162,6 +162,7 @@
 				break;
 
 			case USERDATA_TYPE_SELECT:
+				$result = stripslashes($row['fieldName']).': ';
 				$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId, 'userdata_'.$fieldId, $value);
 				break;
 
@@ -217,6 +218,24 @@
 
 		return $result;
 	}
+
+
+	/* Returns a input field from the passed data, used in search_users.php */
+	function getUserdataSearch($row)
+	{
+		global $config;
+
+		if ($row['fieldType'] == USERDATA_TYPE_IMAGE) {
+			if ($row['fieldName'] != $config['settings']['default_image']) return '';
+			$result  = '<input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
+			$result .= ' <label for="userdata_'.$row['fieldId'].'">Has image</label>';
+		} else {
+			$result = getUserdataInput($row);
+		}
+
+		return $result;
+	}
+
 
 	/* Shows all input fields that are required to be filled in by the user at time of registration */
 	function showRequiredUserdataFields()
