@@ -219,8 +219,10 @@
 			case 1: $msg = $session->username.' has granted you admin rights.'; break;
 			case 2: $msg = $session->username.' has granted you super admin rights.'; break;
 		}
-
 		sendMessage($_id, 'System message', $msg);
+
+		$session->log('Set '.getUserName($_id).' usermode to '.$_mode);
+
 		return true;
 	}
 
