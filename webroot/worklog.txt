@@ -36,21 +36,24 @@
 	Nationaldag
 
 2007.06.06 Torsdag:
+	server config:
+		mobil.citysurf.tv är konfigurerad och "up and running"
+		process.citysurf.tv är konfigurerad och "up and running"
 
 
 
 ***************************************************************************************************
-	- gör om admingränssnitt att fungera med nuvarande s_vip
-
-	- bugg: du kan inte logga in om du redan är inloggad!
-
 	- gör ett script för att importera profilbilder från gamla cs:
 		* vi påbörjar kopiering av alla bilder på TISDAG till dammsugaren
 		* pic_valid=1 ska sättas på alla profilbilder i batch-importen för att allt ska räknas som godkänt
 		* sätt upp db på rix.fm-burken
 
+	- bugg: du kan inte logga in om du redan är inloggad!
+
 	- poll på inloggad startsida (admingränssnitt finns)
 	- userlevels: implementera funktionen "hemlig användare"
+
+	- gör om admingränssnitt att fungera med nuvarande s_vip
 
 
 NU: SMS debitering:
@@ -64,7 +67,6 @@ server conf - dammsugaren:
 		- bugg: länken som skapas är felaktig: http://cs.icn.se/auth.php?update&go=1&i=194712&key=
 
 	- skapa mailkonto på lokala servern och använd den för inkommande mms-mail check
-	- konfa virtual hosts: mobil.cs.icn.se, process.cs.icn.se
 
 
 blandat:

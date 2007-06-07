@@ -2,13 +2,13 @@
 <div id="left_menu">
 <?
 	$menu = array(
-		'index.php' => 'Home'
+		$config['web_root'].'index.php' => 'Home'
 	);
 	createMenu($menu);
 
 	if ($session->isAdmin) {
 		$menu = array(
-			'perform_work.php' => 'Perform work',
+			$config['web_root'].'perform_work.php' => 'Perform work',
 			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
 		);
 		createMenu($menu);

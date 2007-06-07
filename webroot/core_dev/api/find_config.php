@@ -5,10 +5,11 @@
 		$project = preg_replace( "/[^\w\.-]+/", "_", $_GET['pr']); //bra regexp för att ta bort farliga tecken från filnamn
 		if ($project != $_GET['pr']) die;	//invalid chars in path
 		$project = '../../'.$project.'/';
-		if (!is_dir($project)) {
-			$project = '../../';
-			if (!is_dir($project)) die('cant find config path');
-		}
+	}
+
+	if (!is_file($project.'config.php')) {
+		$project = '../../';
+		if (!is_file($project.'config.php')) die('cant find config path');
 	}
 
 	require_once($project.'config.php');

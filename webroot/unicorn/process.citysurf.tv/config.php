@@ -5,9 +5,9 @@
 	date_default_timezone_set('Europe/Stockholm');
 
 	$config['core_root'] = '/home/martin/www/_process/core_dev/';	//use of absolute path is required for admin pages to function
-	$config['core_web_root'] = '/_process/core_dev/';
+	$config['core_web_root'] = '/core_dev/';
 
-	$config['web_root'] = '/_process/';
+	$config['web_root'] = '/';
 	$config['default_title'] = 'process server';
 	
 	set_include_path($config['core_root'].'core/');

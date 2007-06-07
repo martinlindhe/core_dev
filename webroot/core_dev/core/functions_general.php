@@ -208,7 +208,7 @@
 			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/themes/'.$session->theme.'" type="text/css"/>';
 			echo '<link rel="stylesheet" href="'.$config['web_root'].'css/site.css" type="text/css"/>';
 			linkRSSfeeds();
-			echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
+			//echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ajax.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/drag_drop.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/flash_obj.js"></script>';
