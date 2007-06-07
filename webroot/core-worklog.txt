@@ -12,6 +12,10 @@
 		- kolla access-kontroll. vad är privat data, kan andra se det?
 			t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
 
+		- använd ImageMagick's PHP extension för mer prestanda:
+			http://www.magickwand.org/
+			http://www.magickwand.org/download/php/windows/php-5.2.0/php_magickwand_q16_st.dll
+			http://www.imagemagick.org/discourse-server/viewforum.php?f=10
 
 
 	blized frågetecken:

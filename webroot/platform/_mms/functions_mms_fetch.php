@@ -25,11 +25,13 @@
 $config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'video/3gpp');
 $config['email']['text_allowed_mime_types'] = array('text/plain');
 $config['email']['log_activity'] = true;
-$config['email']['logfile'] = '/var/log/mms.log';
+$config['email']['logfile'] = '/home/martin/mms.log';
 
 $config['email']['pop3_server'] = 'mail.inconet.se';		// 'mail.unicorn.tv';
 $config['email']['pop3_port']		= 110;
 $config['email']['pop3_timeout'] = 5;
+
+define('WEBROOT', '/home/martin/www/');
 
 $config['email']['debug'] = false;				//echos POP3 commands and responses if enabled
 
@@ -298,7 +300,7 @@ class email
 		
 		$result['mms_code'] = $this->findMMSCode($result['header']['Subject']);
 		if (!$result['mms_code']) {
-			$this->logAct(htmlentities($result['header']['From']).': No MMS code identified (title: '.$result['header']['Subject'].'), skipping mail');
+			$this->logAct(htmlentities($result['header']['From']).': Invalid MMS code (title: '.$result['header']['Subject'].'), skipping mail');
 			return false;
 		}
 
@@ -471,8 +473,6 @@ class email
 			$filename = str_ireplace('.jpeg', '.jpg', $filename);
 		}
 
-		$this->logAct('Writing '.$filename.' ('.$mime_type.') to disk...', true);
-
 		$filesize = strlen($data);
 
 		$priv = 0;
@@ -488,8 +488,8 @@ class email
 				$q = "INSERT INTO {$t}userphoto SET picd = '".PD."', old_filename = '$filename', user_id = ".$mms_code['user'].", pht_date = NOW(), status_id='1', hidden_id = '$priv', pht_name = '".$file_ext."', pht_size = '".$filesize."', pht_cmt = '$pht_cmt'";
 				$insert_id = $sql->queryInsert($q);
 
-				$out_filename = '/var/www/'.USER_GALLERY.PD.'/'.$insert_id.'.'.$file_ext;
-				$out_thumbname = '/var/www/'.USER_GALLERY.PD.'/'.$insert_id.'-tmb.'.$file_ext;
+				$out_filename = WEBROOT.USER_GALLERY.PD.'/'.$insert_id.'.'.$file_ext;
+				$out_thumbname = WEBROOT.USER_GALLERY.PD.'/'.$insert_id.'-tmb.'.$file_ext;
 				$this->logAct('Writing to file '.$out_filename.' ...', true);
 				file_put_contents($out_filename, $data);
 
@@ -498,9 +498,12 @@ class email
 				break;
 
 			default:
-				//fixme: DÖ inte här
-				die('KAOS');
+				$this->logAct('Unhandled MMS command: '. $mms_code['cmd']);
+				echo 'Unhandled MMS command: '. $mms_code['cmd'].'<br/>';
+				return;
 		}
+
+		$this->logAct('Written '.$filename.' ('.$mime_type.') to disk.', true);
 
 	}
 }

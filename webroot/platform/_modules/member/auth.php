@@ -13,13 +13,7 @@ class user_auth {
 	function login_data($result) {
 		cookieSET("a65", $result[1]);
 		$this->user->counterIncrease('login', $result[0]);
-		# enable for hidden login
-		#if($this->user->level($result[2], 5) && $this->user->getinfo($result[0], 'hidden_login')) {
-		#	$_SESSION['c_h'] = true;
-		#} else {
 		$res = now();
-		#if($this->user->level($result[2], 5) && $this->user->getinfo($result[0], 'hidden_slogin')) {
-		#} elseif($result[4])
 		$this->sql->queryInsert("REPLACE INTO {$this->t}userlogin SET id_id = '".secureINS($result[0])."', sess_date = '".$res."'");
 		$this->sql->queryInsert("INSERT INTO {$this->t}usersess SET id_id = '".secureINS($result[0])."', sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', sess_id = '".secureINS($this->sql->gc())."', sess_date = NOW(), type_inf = 'i'");
 		$this->sql->queryUpdate("UPDATE {$this->t}user SET lastlog_date = '".$res."', lastonl_date = '".$res."', account_date = '".$res."' WHERE id_id = '".secureINS($result[0])."'");
@@ -28,12 +22,6 @@ class user_auth {
 		$this->user->counterSet($result[0]);
 		$_SESSION['data']['account_date'] = $res;
 		$_SESSION['data']['cachestr'] = $this->user->cachestr($result[0]);
-		#}
-		#if(!empty($_POST['redir']) && is_md5($_POST['redir']))
-		#	reloadACT('frameset.php?redir='.$_POST['redir']);
-		#else {
-		#if($result[1] == 'demo2') splashACT('Du har adminrättigheter. Kontot är endast till för presentation och allting loggas. Vänta...', 'frameset.php');
-		#}
 	}
 
 	function notify_user($id, $msg, $alias = '') {
@@ -51,7 +39,7 @@ class user_auth {
 
 		if (!$result) return 'Felaktigt alias eller lösenord.';
 
-		if($online > MAXIMUM_USERS && $result[2] == '1') return 'Det är över '.MAXIMUM_USERS.' inloggade. Du måste vara VIP för att kunna logga in nu.';
+		if($online >= MAXIMUM_USERS && $result[2] == '1') return 'Det är över '.MAXIMUM_USERS.' inloggade. Du måste vara VIP Delux för att kunna logga in nu.';
 		if($result[5] == '1' || $result[5] == '4') {
 			if($result[13] === $p) {
 				$this->login_data($result);

@@ -28,10 +28,13 @@
 
 
 <? if (defined('U_GBWRITE')) { ?>
-	<div class="leftMenuHeader">skriv i gästboken</div>
-	<div class="leftMenuBodyWhite">
+	<div class="smallHeader">skriv i gästboken</div>
+	<div class="smallBody">
 		<form name="msg" action="<?=l('user', 'gbwrite', $s['id_id'])?>main=1" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
 		<textarea class="txt msgWrite" name="ins_cmt"></textarea>
+		<?
+			if ($user->vip_check(VIP_LEVEL1)) echo '<input type="checkbox" name="ins_priv" id="ins_priv"><label for="ins_priv">Privat (VIP)</label>';
+		?>
 		<input type="submit" class="btn2_sml r" value="skicka!" /><br class="clr" />
 		</form>
 	</div><br/>
@@ -55,10 +58,14 @@
 
 	if(defined('U_VISIT')) {
 		$res = $sql->query("SELECT o.visit_date, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd FROM {$t}uservisit o INNER JOIN {$t}user u ON u.id_id = o.visitor_id AND u.status_id = '1' WHERE o.user_id = '".$s['id_id']."' ORDER BY o.main_id DESC LIMIT ".(isset($_GET['more'])?'10':'5'), 0, 1);
-		echo '<a name="visit"></a>
-		<div class="smallHeader">besökare (<a href="'.l('user', 'view', $s['id_id']).(!isset($_GET['more'])?'&amp;more#visit">fler':'#visit">färre').'</a>)</div>
-		<div class="smallBody">
-		<ul class="friends_list">';
+		echo '<a name="visit"></a>';
+		if ($own && $user->vip_check(VIP_LEVEL2)) {
+			echo '<div class="smallHeader">besökare (<a href="'.l('user', 'view', $s['id_id']).(!isset($_GET['more'])?'&amp;more#visit">fler':'#visit">färre').'</a>)</div>';
+		} else {
+			echo '<div class="smallHeader">besökare</div>';
+		}
+		echo '<div class="smallBody">';
+		echo '<ul class="friends_list">';
 		if(!empty($res) && count($res)) {
 			$i = 0;
 			$nl = true;

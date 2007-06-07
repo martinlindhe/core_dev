@@ -46,16 +46,27 @@
 	require(DESIGN.'head_user.php');
 ?>
 	<div class="subHead">galleri</div><br class="clr"/>
-<?	
+<?
+	/*
+	if (!$user->vip_check(VIP_LEVEL1)) {
+		echo 'Du måste vara VIP för att kunna se andras galleribilder.<br/><br/>';
+		echo '<a href="/main/upgrade/">Klicka här</a> för mer information.';
+		require(DESIGN.'foot_user.php');
+		die;
+	}
+	*/
+
 	if ($own) {
 		makeButton(false, 'makeUpload();', 'icon_gallery.png', 'ladda upp ny');
 		makeButton(false, 'makeTiny(\''.l('text', 'mmshelp', '2').'\')', 'icon_gallery.png', 'mms-uppladdning');
 	} else {
-		if (spyActive($s['id_id'], 'g')) {
-			makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
-		} else {
-			makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
-		}		
+		if ($user->vip_check(VIP_LEVEL1)) {
+			if (spyActive($s['id_id'], 'g')) {
+				makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
+			} else {
+				makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+			}
+		}
 	}
 ?>
 <br/><br/><br/>

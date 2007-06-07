@@ -89,11 +89,13 @@
 			<tr><td><?='<h4>'.secureOUT($r['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg'?></td></tr>
 		</table>
 
-		<? 
-			if (spyActive($res['main_id'], 'f')) {
-				makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
-			} else {
-				makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+		<?
+			if ($user->vip_check(VIP_LEVEL1)) {
+				if (spyActive($res['main_id'], 'f')) {
+					makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
+				} else {
+					makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+				}
 			}
 			
 			makeButton(false, 'makeForumAns('.$res['main_id'].')', 'icon_forum.png', 'skriv inlägg');

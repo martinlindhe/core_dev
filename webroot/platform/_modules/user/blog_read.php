@@ -73,11 +73,12 @@
 	$cmt = $sql->query("SELECT ".CH." b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.id_id, u.u_alias, u.u_sex, u.level_id, u.u_birth, u.u_picd, u.u_picid, u.u_picvalid, u.account_date FROM {$t}userblogcmt b LEFT JOIN {$t}user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.blog_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}", 0, 1);
 	if(count($cmt) && !empty($cmt)) {
 		foreach($cmt as $val) {
+			if ($val['private_id'] && (!$own && !$isAdmin)) continue;
 			$msg_own = ($val['id_id'] == $l['id_id'] || $own || $isAdmin)?true:false;
 			$odd = !$odd;
 			echo
 				'<table summary="" cellspacing="0" style="width: 100%;'.($odd?'':' background: #ecf1ea;').'">
-				<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).'</h5><div class="r"></div><br class="clr" />
+				<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).($val['private_id']?' <b>[privat inlägg]</b>':'').'</h5><div class="r"></div><br class="clr" />
 				'.secureOUT($val['c_msg']).'
 				</td>';
 				if ($msg_own) {

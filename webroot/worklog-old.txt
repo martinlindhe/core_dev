@@ -427,3 +427,79 @@
 		* fortsätter med implementation av teman, gått igenom och tagit bort massor med gammal css
 		* teman är klara, funktion för att kunna välja tema saknas
 ---[[mailat ovanstående]]---
+2007.05.28 Måndag:
+	webbgränssnittet:
+		* designfix på forumsidor, blogg-sidor
+		* nya symboler för kille/tjej
+		* återställt så hover-thumbnails visas
+		* nya knappar på lite olika sidor som jag missade förra veckan
+		* fixat utseende på användarlänkar, de får olika färg beroende på kön.
+			dessutom visas det med vit bakgrund när de ligger i rubriker, så att de blir läsbara (exempel: läs mail)
+		* fixat så bildbeskärning fungerar _bättre_ i Firefox (fortfarande problem)
+		* fixat så matchmaking bara visas när man besöker andras profiler
+		* fixat design på "blockera användare"-popup
+			(all feedback från Bitte är nu avverkad)
+		* visar profil-info till vänster, enligt designskiss från anneli
+		* utseende på besökare-listan fixat (ser rätt ut i IE)
+		* lagt tillbaka logga-ut knappen i övre högra hörnet
+		* ny design på utloggad startsida, enligt designskiss från anneli
+
+
+2007.05.29 Tisdag:
+	webbgränssnittet:
+		* ny design på sidorna "glömt lösenord", "registrering"
+		* på "brev"-sidan följer min egen user-header följa med (kiano)
+		* ny design på "bli vän"-popup
+		* visar ej "bli vän" på profilsidor för användare man redan är vän med
+		* snyggat till listan "vänner online"
+		* snyggat till "läs blogg"-sidan
+		* fått i ordning på IPX inkommande SMS
+		* mailat frans med nya inloggningsuppgifter till cs.icn.se
+		* anmäl användare funktion skapad, anmälan tas emot och sparas i databasen. admin-gränssnitt saknas
+		* ny sida under inställningar där man kan ändra val av tema
+		* fixat en mängd php-varningar
+
+
+2007.05.30 Onsdag:
+	ipx:
+		* gjort översiktssida för mottagna SMS
+		* gjort översiktssida för skickade SMS
+		* implementerat MT billing
+		* skapat databastabell s_vip, som håller reda på akteulla vip-nivåer
+		* utarbetat hur VIP-nivåer ska fungera tekniskt, samt implementerat databastabell & addVIP() funktion
+
+
+2007.05.31 Torsdag:
+	ipx:
+		* loggar ifall MT-debitering misslyckas
+		* skickar kvittering till användaren som uppgraderats via intern-mail
+		
+	webbgränssnittet:
+		* fixat fel som kiano listade, vid följande sidor/händelser:
+			- personliga inställningar
+			- tyck till
+			- radera egna mail
+			- visa presentation för användare som ej skrivit någon
+			- snabbsök användare
+			- radera mail i utkorgen skickar användaren till inkorgen
+
+		* tog bort användarnavigeringsmenyn om man kikar på sina egna sidor
+		* png och gif uppladdningar visade inga thumbnails
+		* fixat utseende på IE6 utloggad startsida
+		* login-felmeddelanden visas på utloggad startsida
+		* skapat en vip-status sida, som visar din aktuella vip-nivå, vilka andra nivåer som finns och hur många dagar som återstår på dessa
+		* skapat en "uppgradera till vip" sida, med info om de olika vip-nivåerna och priser
+
+2007.06.01 Fredag:
+	* ipx:
+		- mt-billing fixar
+		- inkommande & utgånde sms-loggar visar mer detaljerad info (och ser lite bättre ut)
+
+	* webbgränssnittet:
+		- frans var här och fixade massa grejer:
+			* räknare är nu rätt
+			* antal användare online är nu rätt
+			* en massa adminsidor fixade
+			* user-länkar i presentationen funkar
+			* osv
+---[mailat ovanstående]---

@@ -73,6 +73,7 @@
 		if($newemail) {
 			$start_code = mt_rand(100000, 999999);
 			$r = array($start_code, $l['id_id']);
+			//fixme: länken är felaktig
 			$msg = sprintf(gettxt('email_update'), $r[0], P2B.'auth.php?update&go=1&i='.$r[1].'&key=');
 			$newemail = "u_tempemail = '" . secureINS($_POST['ins_email']) . "',";
 			doMail($_POST['ins_email'], 'Uppdatera din e-postadress', $msg);
@@ -275,6 +276,8 @@
 				<option value="B"<?=(!empty($settings['random'][1]) && $settings['random'][1] == 'B')?' selected':'';?>>Båda könen</option>
 			</select></td>
 		</tr>
+		<?
+		/*
 		<tr>
 			<td class="pdg_t" colspan="2" style="padding-top: 12px;"><input type="checkbox" class="chk" name="opt_chat" value="1" id="opt_chat1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['private_chat'][1]))?' checked':'';?> /><label for="opt_chat1"> Använd privatchat endast med mina vänner (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
@@ -291,9 +294,6 @@
 			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_shidden" value="1" id="opt_shidden1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_slogin'][1]))?' checked':'';?> /><label for="opt_shidden1"> Dölj mig i "senaste inloggade" (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_login'][1]))?' checked':'';?> /><label for="opt_hidden1"> Hemlig inloggning (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
-		</tr>
-		<tr>
 			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidlog" value="1" id="opt_hidlog"<?=(!$isOk)?' disabled':'';?><?=(!empty($hidlog))?' checked':'';?> /><label for="opt_hidlog"> Dold inloggningshistorik (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
@@ -302,9 +302,13 @@
 		<tr>
 			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_zoom" value="1" id="opt_zoom"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['zoom_auto'][1]))?' checked':'';?> /><label for="opt_zoom"> Gå till zoomverktyget automatiskt i vimmel (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
-		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['send_spec'][1]) && $isOk)?' checked':'';?> /><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
-		</tr>
+		*/
+
+			if ($user->vip_check(VIP_LEVEL2))
+				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"'.(!$isOk?' disabled':'').(!empty($settings['hidden_login'][1])?' checked':'').'/><label for="opt_hidden1"> Hemlig inloggning (VIP-Delux)</label></td></tr>';
+			if ($user->vip_check(VIP_LEVEL1))
+				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"'.(!$isOk?' disabled':'').(!empty($settings['send_spec'][1]) && $isOk?' checked':'').'/><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (VIP)</label></td></tr>';
+		?>
 
 		<tr>
 			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_cell" value="1" id="opt_cell1"<?=(empty($settings['send_cell'][1]))?' checked':'';?> /><label for="opt_cell1"> Ja, jag vill ha erbjudanden via SMS</label></td>

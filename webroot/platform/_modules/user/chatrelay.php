@@ -57,7 +57,8 @@
 	*/
 		exit;
 	}
-	$history = (!empty($key))?true:false;
+	//$history = (!empty($key))?true:false;
+	$history = $user->vip_check(VIP_LEVEL1);
 	if(!$notall && !$closed && !$blocked) {
 		if($history && $isOk && !$user->getinfo($l['id_id'], 'hidden_chat')) {
 			if($isOk) $his_lim = 6; else $his_lim = 3;
@@ -71,7 +72,6 @@
 	}
 	$guid = md5($s['id_id']);#substr($s['id_id'], 0, 16).'.'.substr($s['id_id'], 16, 4).'-'.substr($s['id_id'], 20, 8).'.'.substr($s['id_id'], 28, 4);
 	if($history) {
-		//print_r($his); die;
 		for($i = count($his)-1; $i >= 0; $i--) {
 			$len = strlen(rawurlencode($his[$i][1]));
 			if(strlen($len) == '1') $len = '0'.$len;

@@ -1,115 +1,80 @@
-2007.05.28 Måndag:
+2007.06.04 Måndag:
+	* gjort ett script (cronjob, vipupdate.php) som uppdaterar s_vip varje dygn
+		ändrar s_user till aktuell userlevel för varje user
+	* påbörjat implementation av userlevels, wip
+	* implementerat & testat: entre vid över 750 online
+
+	mms:
+		- fixat sökvägar så att mms uppladdning fungerar igen
+
+
+2007.06.05 Tisdag:
+	userlevels / vip-förmåner:
+		- implementerat & testat: zoom på alla bilder
+		- implementerat & testat: bevakningar
+		- implementerat & testat: privata gästboksinlägg
+		- implementerat & testat: privata fotokommentarer
+		- implementerat & testat: privata blogg-kommentarer
+		- implementerat & testat: gästbokshistorik
+		- implementerat & testat: chatt-historik
+		- implementerat & testat: utökad profilstatistik
+
 	webbgränssnittet:
-		* designfix på forumsidor, blogg-sidor
-		* nya symboler för kille/tjej
-		* återställt så hover-thumbnails visas
-		* nya knappar på lite olika sidor som jag missade förra veckan
-		* fixat utseende på användarlänkar, de får olika färg beroende på kön.
-			dessutom visas det med vit bakgrund när de ligger i rubriker, så att de blir läsbara (exempel: läs mail)
-		* fixat så bildbeskärning fungerar _bättre_ i Firefox (fortfarande problem)
-		* fixat så matchmaking bara visas när man besöker andras profiler
-		* fixat design på "blockera användare"-popup
-			(all feedback från Bitte är nu avverkad)
-		* visar profil-info till vänster, enligt designskiss från anneli
-		* utseende på besökare-listan fixat (ser rätt ut i IE)
-		* lagt tillbaka logga-ut knappen i övre högra hörnet
-		* ny design på utloggad startsida, enligt designskiss från anneli
+		- personliga inställningar: tagit bort en massa olika inställningar
+		- gjort en "GE VIP"-sida, så användare kan ge vip till någon annan
+		- visar thumbnails i översikt i gallerier för vip. klicka thumbnail för att se hela bilden + kommentarer
+		- visar senaste krönikan på inloggad startsida (design saknas)
+
+	server config:
+		- satt dammusgarens systemtid rätt
+		- satt rätt locale så svenska datuum visas nu (istället för engelska månadsnamn osv)
+		- kör updatevip cronjobb 00:10 varje natt
+		- installerat, konfigurerat & testat sendmail på cs.icn.se
+		- påbörjat pill med virtual hosts
+
+2007.06.05 Onsdag:
+	Nationaldag
+
+2007.06.06 Torsdag:
 
 
-2007.05.29 Tisdag:
-	webbgränssnittet:
-		* ny design på sidorna "glömt lösenord", "registrering"
-		* på "brev"-sidan följer min egen user-header följa med (kiano)
-		* ny design på "bli vän"-popup
-		* visar ej "bli vän" på profilsidor för användare man redan är vän med
-		* snyggat till listan "vänner online"
-		* snyggat till "läs blogg"-sidan
-		* fått i ordning på IPX inkommande SMS
-		* mailat frans med nya inloggningsuppgifter till cs.icn.se
-		* anmäl användare funktion skapad, anmälan tas emot och sparas i databasen. admin-gränssnitt saknas
-		* ny sida under inställningar där man kan ändra val av tema
-		* fixat en mängd php-varningar
-
-
-2007.05.30 Onsdag:
-	ipx:
-		* gjort översiktssida för mottagna SMS
-		* gjort översiktssida för skickade SMS
-		* implementerat MT billing
-		* skapat databastabell s_vip, som håller reda på akteulla vip-nivåer
-		* utarbetat hur VIP-nivåer ska fungera tekniskt, samt implementerat databastabell & addVIP() funktion
-
-
-2007.05.31 Torsdag:
-	ipx:
-		* loggar ifall MT-debitering misslyckas
-		* skickar kvittering till användaren som uppgraderats via intern-mail
-		
-	webbgränssnittet:
-		* fixat fel som kiano listade, vid följande sidor/händelser:
-			- personliga inställningar
-			- tyck till
-			- radera egna mail
-			- visa presentation för användare som ej skrivit någon
-			- snabbsök användare
-			- radera mail i utkorgen skickar användaren till inkorgen
-
-		* tog bort användarnavigeringsmenyn om man kikar på sina egna sidor
-		* png och gif uppladdningar visade inga thumbnails
-		* fixat utseende på IE6 utloggad startsida
-		* login-felmeddelanden visas på utloggad startsida
-		* skapat en vip-status sida, som visar din aktuella vip-nivå, vilka andra nivåer som finns och hur många dagar som återstår på dessa
-		* skapat en "uppgradera till vip" sida, med info om de olika vip-nivåerna och priser
-
-2007.06.01 Fredag:
-	* ipx:
-		- mt-billing fixar
-		- inkommande & utgånde sms-loggar visar mer detaljerad info (och ser lite bättre ut)
-
-	* webbgränssnittet:
-		- frans var här och fixade massa grejer:
-			* räknare är nu rätt
-			* antal användare online är nu rätt
-			* en massa adminsidor fixade
-			* user-länkar i presentationen funkar
-			* osv
 
 ***************************************************************************************************
-anteckningar från fre 1 jun fransmöte:
-	- sätt SE_latin1 locale för svenska datum i php (frans kollar om han kommer ihåg!)
-	- gör om admingränssnit att fungera med nuvarande s_vip
-	- gör cronjobb som uppdaterar s_vip varje dygn. och som ändrar s_user till aktuell userlevel för varje user
+	- gör om admingränssnitt att fungera med nuvarande s_vip
+
+	- bugg: du kan inte logga in om du redan är inloggad!
+
 	- gör ett script för att importera profilbilder från gamla cs:
-		* mika dumpar csv på TISDAG
 		* vi påbörjar kopiering av alla bilder på TISDAG till dammsugaren
 		* pic_valid=1 ska sättas på alla profilbilder i batch-importen för att allt ska räknas som godkänt
-	- räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
-	- när en användares bild blir nekad, ska de få ett privat meddelande-svar med anledning. i obj_photo.php
+		* sätt upp db på rix.fm-burken
 
-server conf - dammsugaren:
-	- sätt servertime till svensk tid
-	- konfa virtual hosts: mobil.cs.se, process.cs.se
-	- Mail utskick. smtp-servern funkar, men timar ut ibland (mail.unicorn.tv)
-		titta på att sätta upp egen mailserver på cs.icn.se
+	- poll på inloggad startsida (admingränssnitt finns)
+	- userlevels: implementera funktionen "hemlig användare"
+
 
 NU: SMS debitering:
 	- kontrollera att IPX mt billing funkar
 	- kontrollera att intern-mail kvittering skickas korrekt
-	- implementera userlevels
 
-NU: anmäl användare-funktion:
-	- admin ska kunna se översikt på inkommande anmälningar
+
+server conf - dammsugaren:
+	* MAIL UTSKICK:
+		- ändrad-epost bekräftelse mail utskick är felaktig, textfältet är "email_update"
+		- bugg: länken som skapas är felaktig: http://cs.icn.se/auth.php?update&go=1&i=194712&key=
+
+	- skapa mailkonto på lokala servern och använd den för inkommande mms-mail check
+	- konfa virtual hosts: mobil.cs.icn.se, process.cs.icn.se
+
 
 blandat:
 	* mms upload image & video:
-		- hantera "BLOG" och "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
-		- alla ska ha mms funktion (vip) under testet
+		- hantera "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
 
-	* process server:
-		- ip-restrictions för SOAP klienter
-		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
+EFETER RELEASE:
+	- anmäl användare-funktion:
+		* admin ska kunna se översikt på inkommande anmälningar
 
-EFETER TEST:
 	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
 	* bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
 	* rating på bilder i galleriet, med atom_rating.php
@@ -117,6 +82,12 @@ EFETER TEST:
 	* faceum:
 		- skriv test-kod mot deras API
 		- visa face-match på en annan användares profilsida
+	* räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
+	* när en användares bild blir nekad, ska de få ett privat meddelande-svar med anledning. i obj_photo.php
+
+	* process server:
+		- ip-restrictions för SOAP klienter
+		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
 
 
 senare, låg prio:

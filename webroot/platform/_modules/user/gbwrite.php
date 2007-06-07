@@ -5,7 +5,8 @@
 	if($own) popupACT('Du kan inte skicka till dig själv.');
 	if(!empty($_POST['ins_cmt'])) {
 		if($l['status_id'] == '1') {
-			$prv = (!empty($_POST['ins_priv']) && $isOk)?1:0;
+			$prv = 0;
+			if ($user->vip_check(VIP_LEVEL1) && !empty($_POST['ins_priv'])) $prv = 1;
 			gbWrite($_POST['ins_cmt'], $s['id_id'], $a, $prv);
 			if(!empty($_GET['main'])) {
 				reloadACT(l('user', 'gb', $s['id_id']));
@@ -40,8 +41,9 @@ document.onkeydown = ActivateByKey;
 			<div class="smallHeader">gästboksinlägg</div>
 			<div class="smallBody pdg_t">
 				skriv till <?=$user->getstring($s, '', array('nolink' => 1))?><br/>
-				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 160px;"></textarea>
+				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 145px;"></textarea>
 				<script type="text/javascript">document.msg.ins_cmt.focus();</script>
+				<? if ($user->vip_check(VIP_LEVEL1)) echo '<input type="checkbox" name="ins_priv" id="ins_priv"><label for="ins_priv">Privat (VIP)</label>'; ?>
 				<input type="submit" class="btn2_sml r" value="skicka!" style="margin-top: 5px;" /><br class="clr" />
 			</div>
 		</div>

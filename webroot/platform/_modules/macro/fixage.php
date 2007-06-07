@@ -17,7 +17,7 @@
 			if(strpos($org_data, 'AGEOF') !== false) {
 				$ageof = @explode("AGEOF", $org_data);
 				if(count($ageof) > 1) {
-					$ageof = explode(' ', $ageof);
+					$ageof = @explode(' ', $ageof);
 					$ageof = $ageof[0];
 				}
 			} else $ageof = false;
@@ -47,7 +47,7 @@
 			if(strpos($org_data, 'AGEOF') !== false) {
 				$ageof = @explode("AGEOF", $org_data);
 				if(count($ageof) > 1) {
-					$ageof = explode(' ', $ageof);
+					$ageof = @explode(' ', $ageof);
 					$ageof = $ageof[0];
 				}
 			} else $ageof = false;

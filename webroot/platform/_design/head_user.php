@@ -4,7 +4,13 @@
 ?>
 
 	<div id="userInfo" style="clear:both;">
-		<div class="userName"><?=$user->getstring($s, '')?></div>
+		<div class="userName">
+			<?
+				echo $user->getstring($s, '');
+				//todo: visa ej ge vip länken för vip-användare?
+				if (!$own) echo ' <b>(<a href="'.l('user', 'givevip', $s['id_id']).'">ge VIP</a>)</b>';
+			?>
+		</div>
 		<div id="userImage">
 			<?=$user->getimg($s['id_id'].$s['u_picid'].$s['u_picd'].$s['u_sex'], $s['u_picvalid'], 1)?>
 			<br class="clr"/>

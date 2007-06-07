@@ -1,4 +1,9 @@
 <?
+
+	define('VIP_NONE',	1);		//normal user
+	define('VIP_LEVEL1', 2);
+	define('VIP_LEVEL2', 3);
+
 class user {
 	var $sql, $self, $info, $t, $id;
 	function __construct($sql = false) {
@@ -16,6 +21,16 @@ class user {
 		$this->id = $id;
 		return $this->getsessionuser($id);
 	}
+	
+	//kollar ifall aktuell user har tillräckligt med vip
+	function vip_check($_level) {
+		if (!is_numeric($_level)) return false;
+		$result = $this->sql->queryLine('SELECT level_id FROM s_user WHERE id_id = '.$this->id.' LIMIT 1', 0, 1);
+		if ($result[0] >= $_level) return true;
+		return false;
+	}
+	
+	
 	function update_retrieve() {
 		$info = $this->cachestr();
 		$_SESSION['data']['cachestr'] = $info;

@@ -89,6 +89,7 @@
 			d(unserialize($response['params']));
 
 			echo 'IPX status response: ';
+			unset($response['params']);
 			d($response);
 			echo '<hr/>';
 		}

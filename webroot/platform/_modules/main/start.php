@@ -59,6 +59,15 @@
 				echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'].'" style="margin-right: 10px;" />';
 				echo '</a>';
 			}
+			echo '</div><br/>';
+		}
+
+		//Visa den senaste krönikan
+		$res = $sql->query("SELECT * FROM s_editorial WHERE status_id = '1' ORDER BY ad_date DESC LIMIT 1", 0, 1);
+		if(count($res)) {
+			echo '<div class="bigHeader">krönika</div>';
+			echo '<div class="bigBody">';
+			echo $res[0]['ad_cmt'];
 			echo '</div>';
 		}
 

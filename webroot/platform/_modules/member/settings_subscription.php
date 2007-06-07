@@ -22,8 +22,14 @@
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'vipstatus').'\')', 'icon_settings.png', 'VIP'); ?>
 	<br class="clr"/>
 
-
 <?
+	if (!$user->vip_check(VIP_LEVEL1)) {
+		echo 'För att få tillgång till bevakningsfunktionen så måste du ha ett VIP-konto.<br/><br/>';
+		echo '<a href="/main/upgrade/">Klicka här</a> för mer information.';
+		include(DESIGN.'foot.php');
+		die;
+	}
+
 	$list = spyGetList();
 	
 	if (!$list) echo 'Du har inga bevakningar.';

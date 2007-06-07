@@ -36,6 +36,9 @@
 	} elseif($action == 'fixage') {
 		include('fixage.php');
 		exit;
+	} elseif($action == 'updatevip') {
+		include('updatevip.php');
+		exit;
 	}
 	reloadACT(l());
 ?>

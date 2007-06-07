@@ -5,8 +5,9 @@
 
 	require_once('config.php');
 
-	define('VIP_LEVEL1',	1);	//Normal VIP
-	define('VIP_LEVEL2',	2);	//VIP delux
+														//level 1=normal user
+	define('VIP_LEVEL1',	2);	//Normal VIP
+	define('VIP_LEVEL2',	3);	//VIP delux
 
 	function addVIP($user_id, $vip_level, $days)
 	{
@@ -29,8 +30,7 @@
 
 	$allowed_ip = array(
 		'127.0.0.1',
-		'213.80.11.162',	//Unicorn kontor oxtorgsgränd 3
-		'87.227.76.225',	//Martin glocalnet hem-ip
+		'217.151.193.79',	//Ericsson IPX (ipx-pat.ipx.com)
 		'217.151.193.80'	//Ericsson IPX (ipx-pat.ipx.com)
 	);
 

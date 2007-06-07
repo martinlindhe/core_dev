@@ -60,8 +60,9 @@
 				kommentera bilden <br />
 				<b><?=secureOUT($res['pht_cmt'])?></b><br />
 				av <?=$user->getstring($s, '', array('nolink' => 1))?><br/>
-				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 128px;"><?=secureOUT($alias)?></textarea>
+				<textarea class="txt" name="ins_cmt" style="width: 160px; height: 120px;"><?=secureOUT($alias)?></textarea>
 				<script type="text/javascript">document.msg.ins_cmt.focus();</script>
+				<? if ($user->vip_check(VIP_LEVEL2)) echo '<input type="checkbox" name="ins_priv" id="ins_priv"><label for="ins_priv">Privat (VIP)</label>'; ?>
 				<input type="submit" class="btn2_sml r" value="skicka!" style="margin-top: 5px;" /><br class="clr" />
 			</div>
 		</div>

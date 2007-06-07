@@ -1,20 +1,17 @@
 <?
-/*
-function doMail($to = '', $title = '', $text = '')
-{
-	ini_set('sendmail_from', 'info@'.URL);
-	ini_set("SMTP", SMTP_SERVER); #193.13.74.200"); #195.26.11.113");
-	$border = md5(time());
 
-	$headers  = "Return-Path: <info@".URL.">\nFrom: \"".NAME_URL."\" <info@".URL.">\nReply-To: <info@".URL.">\nMIME-Version: 1.0\nContent-Type: text/plain; charset=ISO-8859-1\n"; 
+function doMail($to, $title, $text)
+{
+	$headers =
+		'From: City Surf <martin@cs.icn.se>' . "\r\n" .
+		'Content-Type: text/plain; charset=ISO-8859-1';
 
 	if (mail($to, $title, $text, $headers)) return true;
 	return false;
 }
-*/
-	require_once('class.phpmailer.php');
 
-	function doMail($to, $subject, $body)
+	//require_once('class.phpmailer.php');
+	function doMail_phpmailer($to, $subject, $body)		//används inte
 	{
 		global $config;
 		
