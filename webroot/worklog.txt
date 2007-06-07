@@ -68,6 +68,9 @@ server conf - dammsugaren:
 
 	- skapa mailkonto på lokala servern och använd den för inkommande mms-mail check
 
+	- eventuellt sätta upp mms.citysurf.tv åxå
+	- eventuellt sätta upp APC på dammsugaren (finns inget färdigt paket för ubuntu)
+
 
 blandat:
 	* mms upload image & video:

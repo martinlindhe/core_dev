@@ -1,4 +1,8 @@
 <?
+	/*
+		script för att importera presentationsbilder från gamla citysurf.tv till nya av Martin Lindhe, 2007
+	*/
+
 	function getFileLastname($name)
 	{
 		$result = substr($name, strrpos($name, '.') + 1);

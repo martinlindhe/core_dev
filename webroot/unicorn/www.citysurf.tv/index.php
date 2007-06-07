@@ -1,9 +1,5 @@
 <?
 	if(@$_GET['type'] != 'macro') session_start();
-	#ob_start();#
-	#ob_implicit_flush(0);
-	#ob_start('ob_gzhandler');
-	#print_r($_SESSION);
 	include('_config/online.include.php');
 	//	noticeACT('erererrer');
 	$action = (!empty($_GET['action'])?$_GET['action']:false);
