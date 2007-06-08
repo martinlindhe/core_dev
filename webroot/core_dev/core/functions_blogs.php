@@ -104,8 +104,6 @@
 	}
 
 	/* Returns all blogs from $userId for the specified month */
-		//fixme: this function is broken, the SQL needs updating for DATETIME format change
-
 	function getBlogsByMonth($userId, $month, $year, $order_desc = true)
 	{
 		global $db;
@@ -149,6 +147,7 @@
 
 		if (($session->id == $blog['userId'] || $session->isAdmin) && isset($_POST['blog_cat']) && isset($_POST['blog_title']) && isset($_POST['blog_body'])) {
 			updateBlog($_id, $_POST['blog_cat'], $_POST['blog_title'], $_POST['blog_body']);
+			$blog = getBlog($_id);
 		}
 
 		echo '<div class="blog">';
@@ -196,18 +195,12 @@
 			}
 
 		} else if ($current_tab == 'BlogDelete' && (($session->id && $session->id == $blog['userId']) || $session->isAdmin) ) {
-			//fixme: använd standard-are-you-sure funktionen
 
-			if (isset($_GET['confirmed'])) {
+			if (confirmed('Are you sure you want to delete this blog?', 'BlogDelete:'.$_id)) {
 				deleteBlog($_id);
 				echo 'The blog has been deleted.<br/>';
-			} else {
-				echo 'Are you sure you want to delete this blog? <b>'.$blog['blogTitle'].'</b>?<br/><br/>';
-				echo '<table width="100%"><tr>';
-				echo '<td width="50%" align="center"><a href="'.$_SERVER['PHP_SELF'].'?BlogDelete:'.$_id.'&confirmed">Yes, im sure</a></td>';
-				echo '<td align="center"><a href="javascript:history.go(-1);">No</a></td>';
-				echo '</tr></table>';
 			}
+
 		} else if ($current_tab == 'BlogReport') {
 
 			if (isset($_POST['blog_reportreason'])) {

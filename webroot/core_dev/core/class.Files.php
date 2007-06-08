@@ -9,16 +9,13 @@
 
 require_once('atom_categories.php');		//for file categories support
 
-//fixme: börja index från 1 istället för 100
-define('FILETYPE_WIKI',						100); // The file is a wiki attachment
-define('FILETYPE_BLOG',						101);	// The file is a blog attachment
-define('FILETYPE_NEWS',						102);	// The file is a news attachment
+define('FILETYPE_WIKI',						1); // The file is a wiki attachment
+define('FILETYPE_BLOG',						2);	// The file is a blog attachment
+define('FILETYPE_NEWS',						3);	// The file is a news attachment
 
-//define('FILETYPE_PR',							101);	/* File is attached to a PR */
-//define('FILETYPE_USERDATAFIELD',	104); /* File belongs to a userdata field */
-define('FILETYPE_FILEAREA_UPLOAD',105);	/* File is uploaded to a file area */
-define('FILETYPE_USERFILE',				106);	/* File is uploaded to the user's own file area */
-define('FILETYPE_USERDATA',				107);	/* File is uploaded to a userdata field */
+define('FILETYPE_FILEAREA_UPLOAD',4);	/* File is uploaded to a file area */
+define('FILETYPE_USERFILE',				5);	/* File is uploaded to the user's own file area */
+define('FILETYPE_USERDATA',				6);	/* File is uploaded to a userdata field */
 
 class Files
 {
@@ -26,16 +23,24 @@ class Files
 	private $htaccess = "Deny from all\nOptions All -Indexes";
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
-	//fixme: sluta använd filändelser, och använd bara mime typer
-	public $image_types	= array('jpg', 'jpeg', 'png', 'gif');
-	public $image_mime_types = array('image/jpeg', 'image/png', 'image/gif');
-	public $audio_types	= array('mp3');
-	public $video_types = array('avi', '3gp');
+	public $image_mime_types = array(
+		'image/jpeg',
+		'image/png',
+		'image/gif');
 
-	public $document_types = array(
-							'text/plain',					//normal text file
-							'application/msword',	//Microsoft .doc file
-							'application/pdf');		//Adobe .pdf file
+	public $audio_mime_types	= array(
+		'audio/mpeg', 'audio/x-mpeg');	//.mp3 file
+
+	public $video_mime_types = array(
+		'video/mpeg',			//.mpg file
+		'video/avi',			//.avi file
+		'video/x-ms-wmv',	//Microsoft .wmv file
+		'video/3gpp');		//.3gp video file
+
+	public $document_mime_types = array(
+		'text/plain',					//normal text file
+		'application/msword',	//Microsoft .doc file
+		'application/pdf');		//Adobe .pdf file
 
 	/* User configurable settings */
 	private $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
@@ -79,30 +84,6 @@ class Files
 		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
 		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
-
-		/*
-		//todo: flytta ut hela denna logiken nån annan stans, till en funktion som anropas av ett setup-script
-		if (!is_dir($this->upload_dir)) {
-
-			//fixme: check if the path 1 level above "upload_dir" exists:
-			if (!realpath($this->upload_dir.'/../')) {
-				die('FATAL: Cannot create upload directory at '.$this->upload_dir.'. Please check paths in config.php');
-			}
-
-			$session->log('Creating upload directory');
-
-			mkdir($this->upload_dir);
-			file_put_contents($this->upload_dir.'.htaccess', $this->htaccess);
-			file_put_contents($this->upload_dir.'index.html', '');
-
-			if (!is_dir(realpath($this->thumbs_dir))) {
-				$session->log('Creating thumbs directory');
-				mkdir($this->thumbs_dir);
-				file_put_contents($this->thumbs_dir.'.htaccess', $this->htaccess);
-				file_put_contents($this->thumbs_dir.'index.html', '');
-			}
-		}
-		*/
 	}
 
 
@@ -174,7 +155,7 @@ class Files
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
 			$extra = '';
 			if ($fileType==FILETYPE_USERFILE) $extra = '&amp;id='.$userid;
-			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, 'file_category_id', $extra);
+			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, '', 'file_category_id', $extra);
 		}
 
 		//select the files in the current category (or root level for uncategorized files)
@@ -189,27 +170,24 @@ class Files
 		echo '<div class="file_gadget_content">';
 		foreach ($list as $row)
 		{
-			$file_lastname = $this->getFileLastname($row['fileName']);
-			if (!$file_lastname) continue;
-
 			$title = htmlspecialchars($row['fileName']).' ('.formatDataSize($row['fileSize']).')';
-			if (in_array($file_lastname, $this->image_types)) {
+			if (in_array($row['fileMime'], $this->image_mime_types)) {
 				//show thumbnail of image
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].');"><center>';
 				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
-			} else if (in_array($file_lastname, $this->audio_types)) {
+			} else if (in_array($row['fileMime'], $this->audio_mime_types)) {
 				//show icon for audio files.
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 				echo '</center></div>';
-			} else if (in_array($file_lastname, $this->video_types)) {
+			} else if (in_array($row['fileMime'], $this->video_mime_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_video_32.png" width="32" height="32" alt="Video file"/>';
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_video.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
-			} else if (in_array($row['fileMime'], $this->document_types)) {
+			} else if (in_array($row['fileMime'], $this->document_mime_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_document.png" width="40" height="49" alt="Document"/>';
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_document.png" width="40" height="49" alt="Document"/>';
 				echo '</center></div>';
 			} else {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
@@ -244,7 +222,7 @@ class Files
 		if ($session->isAdmin || $fileType == FILETYPE_USERFILE) {
 			if (!$categoryId) {
 				echo '<div id="file_gadget_category" style="display: none;">';
-				echo makeNewCategoryDialog(CATEGORY_USERFILE);
+				echo manageCategoriesDialog(CATEGORY_USERFILE);
 				echo '</div>';
 			}
 		}
@@ -273,10 +251,9 @@ class Files
 
 		echo '<div class="thumbnails_gadget">';
 		foreach ($list as $row) {
-			$file_lastname = $this->getFileLastname($row['fileName']);
 
 			//show thumbnail of image
-			if (in_array($file_lastname, $this->image_types)) {
+			if (in_array($row['fileMime'], $this->image_mime_types)) {
 				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$row['fileId'].'" onclick="loadImage('.$row['fileId'].', \'image_big\');"><center>';
 				echo makeThumbLink($row['fileId'], $row['fileName']);
 				echo '</center></div>';
@@ -343,8 +320,6 @@ class Files
 		$enc_filename = basename(strip_tags($FileData['name']));
 		$enc_mimetype = strip_tags($FileData['type']);
 
-		$file_lastname = $this->getFileLastname($enc_filename);
-
 		$filesize = filesize($FileData['tmp_name']);
 		//maybe todo: flytta inserten till handleImageUpload / handleGeneralUpload istället?
   	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
@@ -352,9 +327,9 @@ class Files
   	$fileId = $db->insert($q);
 
 		//Identify and handle various types of files
-		if (in_array($file_lastname, $this->image_types)) {
+		if (in_array($FileData['type'], $this->image_mime_types)) {
 			$this->handleImageUpload($fileId, $FileData);
-		} else if (in_array($file_lastname, $this->audio_types)) {
+		} else if (in_array($FileData['type'], $this->audio_mime_types)) {
 			$this->handleGeneralUpload($fileId, $FileData);
 		} else {
 			$this->handleGeneralUpload($fileId, $FileData);
@@ -563,8 +538,7 @@ class Files
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
 
-		$file_lastname = $this->getFileLastname($data['fileName']);
-		if (!in_array($file_lastname, $this->image_types)) return false;
+		if (!in_array($data['fileMime'], $this->image_mime_types)) return false;
 
 		header('Content-Type: '.$data['fileMime']);
 		header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
@@ -606,10 +580,8 @@ class Files
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
 
-		$file_lastname = $this->getFileLastname($data['fileName']);
-
 		/* This sends files without extension etc as plain text if you didnt specify to download them */
-		if (!$force_mime && (!isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream' || !$file_lastname)) {
+		if (!$force_mime && (!isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream')) {
 			header('Content-Type: text/plain');
 		} else {
 			header('Content-Type: '.$data['fileMime']);
@@ -626,7 +598,7 @@ class Files
 		header('Content-Transfer-Encoding: binary');
 
 		//Serves the file differently depending on what kind of file it is
-		if (!$force_mime && in_array($file_lastname, $this->image_types)) {
+		if (!$force_mime && in_array($data['fileMime'], $this->image_mime_types)) {
 			//Generate resized image if needed
 			$this->sendImage($_id);
 		} else {
@@ -774,10 +746,4 @@ class Files
 		return $result;
 	}
 
-	function getFileLastname($name)
-	{
-		$result = substr($name, strrpos($name, '.') + 1);
-		if (!$result) return false;
-		return strtolower($result);
-	}
 }

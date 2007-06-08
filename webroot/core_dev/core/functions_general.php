@@ -72,7 +72,9 @@
 
 	function URLadd($_key, $_val = '', $_extra = '')
 	{
-		$arr = parse_url($_SERVER['REQUEST_URI']);
+		$curr_url = 'http://localhost'.$_SERVER['REQUEST_URI'];
+		
+		$arr = parse_url($curr_url);
 
 		$wiki_link = false;
 		$pos = strpos($_key, ':');
@@ -90,8 +92,10 @@
 
 		$out_args = '';
 
-		for ($i=0; $i<count($args); $i++) {
+		for ($i=0; $i<count($args); $i++) {		//fixme: use foreach
+			
 			$vals = explode('=', $args[$i]);
+
 			//Skip it here, $keyval will be added later
 			if ($vals[0] == $_key) continue;
 
@@ -128,8 +132,21 @@
 		return '<a href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
 	}
 
-	/* Helper function used to create "are you sure?" pages */
-	function confirmed($text, $_var, $_id)
+	/* Helper function used to create "are you sure?" pages
+	
+		Example use:
+		
+		if (confirmed('Are you sure you want to delete this rule?', 'id', $_GET['id'])) {
+			deleteItem($_GET['id']);
+		}
+		
+		Wiki-style link example use:
+		
+		if (confirmed('Are you sure you want to delete this blog?', 'BlogDelete:'.$_id)) {
+			deleteBlog($_GET['BlogDelete:'.$_id]);
+		}
+	*/
+	function confirmed($text, $_var, $_id = 0)
 	{
 		global $project;	//path to design includes
 		global $config, $db, $session, $time_start;
@@ -139,7 +156,13 @@
 		require_once($project.'design_head.php');
 
 		echo $text.'<br/><br/>';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
+		if ($_id) {
+			//Normal links
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
+		} else {
+			//Wiki-style links
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
+		}
 		echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
 
 		require_once($project.'design_foot.php');

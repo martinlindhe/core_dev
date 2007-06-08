@@ -18,6 +18,18 @@
 		return true;
 	}
 
+	function systemMessage($_id, $_subj, $_msg)
+	{
+		global $db, $session;
+		if (!is_numeric($_id)) return false;
+
+		//Adds message to recievers inbox
+		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId=0,toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+		$db->insert($q);
+
+		return true;
+	}
+
 	function getMessages($_group = 0)
 	{
 		global $db, $session;

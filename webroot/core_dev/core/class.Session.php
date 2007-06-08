@@ -29,7 +29,7 @@ class Session
 	private $timeout = 86400;					//24h - max allowed idle time (in seconds) before session times out and user needs to log in again
 	public $online_timeout = 1800;		//30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 	//todo: make online_timeout configurable
-	private $check_ip = true;						//client will be logged out if client ip is changed during the session, this can be overridden with _POST['login_lock_ip']
+	private $check_ip = true;						//client will be logged out if client ip is changed during the session
 	private $check_useragent = true;		//keeps track if the client user agent string changes during the session
 
 	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
@@ -119,19 +119,14 @@ class Session
 		{
 			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']) && $this->logIn($_POST['login_usr'], $_POST['login_pwd']))
 			{
-				//See what IP checking policy that will be in use for the session
-				if (!empty($_POST['login_lock_ip'])) $this->check_ip = true;
-				else $this->check_ip = false;
-
 				header('Location: '.$config['web_root'].$this->start_page);
 				die;
-			} else {
-				$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
-				require('design_head.php');	//fixme: hur kan jag slippa detta
-				$this->showLoginForm();
-				require('design_foot.php');
-				die;
 			}
+			$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
+			require('design_head.php');	//fixme: hur kan jag slippa detta
+			$this->showLoginForm();
+			require('design_foot.php');
+			die;
 		}
 
 		if (!$this->id) return;
@@ -257,7 +252,6 @@ class Session
 
 		/* Read in current users settings */
 		if ($this->allow_themes) {
-			//todo: optimera detta till en funktion (1 sql) istället för idag 2 sql
 			$this->theme = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), $this->default_theme);
 		}
 
@@ -300,13 +294,10 @@ class Session
 			$this->error = ''; //remove error message once it has been displayed
 		}
 
-		//todo: gör om tabellen till relativt positionerade element utifrån "login_form_layer"
 		echo '<table cellpadding="2">';
 		echo '<tr><td>Username:</td><td><input name="login_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/></td></tr>';
 		echo '<tr><td>Password:</td><td><input name="login_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
 		echo '</table>';
-		echo '<input id="login_lock_ip" name="login_lock_ip" value="1" type="checkbox" checked="checked"/> ';
-		echo '<label for="login_lock_ip">Restrict session to current IP</label><br/>';
 		echo '<br/>';
 		echo '<input type="submit" class="button" value="Log in"/>';
 		if ($this->allow_login && $this->allow_registration) {

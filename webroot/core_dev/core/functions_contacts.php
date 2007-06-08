@@ -88,15 +88,28 @@
 
 		if ($session->id != $userId && isset($_GET['addfriend'])) {
 			if ($config['contacts']['friend_requests']) {
-				//sends a request to create a contact to user
-				addFriendRequest($userId, 0);	//fixme! använd friend category!
-				echo 'A request has been sent to the user to create a contact<br/>';
-				echo 'You will recieve a message when the user responds to the request.<br/><br/>';
+
+				if (!empty($_POST['type_id'])) {
+					//sends a request to create a contact to user
+					addFriendRequest($userId, $_POST['type_id'], $_POST['msg']);
+					echo 'A request has been sent to the user to create a contact<br/>';
+					echo 'You will recieve a message when the user responds to the request.<br/><br/>';
+					return;
+				}
+				echo '<h1>Send friend request</h1>';
+				echo '<form method="post" action="">';
+				echo 'So you wish to send a friend request to '.nameLink($userId).'?<br/>';
+				echo 'First, you need to choose relation type: ';
+				echo getCategoriesSelect(CATEGORY_CONTACT, 0, 'type_id').'<br/>';
+				echo '(Optional) send a message:<br/>';
+				echo '<textarea name="msg" cols="40" rows="6"></textarea><br/>';
+				echo '<input type="submit" class="button" value="Send request"/>';
+				echo '</form>';
+				return;
 			} else {
 				//directly add contact to own contact list, dont send request
 				setContact(CONTACT_FRIEND, $session->id, $userId);
 			}
-
 		}
 
 		if ($session->id != $userId) {
@@ -106,7 +119,7 @@
 
 				echo '<div class="item">';
 				echo 'You already have a pending relation request with this user.<br/><br/>';
-				echo 'You can remove your pending relation requests <a href="user_relations.php">here</a>.';
+				echo 'You can remove your pending relation requests by clicking <a href="'.$_SERVER['PHP_SELF'].'?request_stopwait='.$userId.'">here</a>.';
 				echo '</div><br/>';
 
 			} else {
@@ -116,6 +129,7 @@
 					echo '<a href="?id='.$userId.'&amp;removefriend">Remove friend contact</a><br/>';
 				}
 			}
+			return;
 		}
 
 		if ($userId == $session->id) {
@@ -133,25 +147,29 @@
 
 			$list = getSentFriendRequests();
 			if (count($list)) {
-				echo '<div class="item">';
 				echo 'Your sent friend requests:<br/>';
 
 				foreach ($list as $row) {
-					echo nameLink($row['recieverId'], $row['recieverName']).'<br/>';
-					echo '<a href="?id='.$userId.'&amp;request_stopwait='.$row['reqId'].'">Remove</a><br/>';
+					echo '<div class="item">';
+					echo nameLink($row['recieverId'], $row['recieverName']).' - ';
+					echo '<a href="?request_stopwait='.$row['recieverId'].'">Remove</a><br/>';
+					echo '</div><br/>';
 				}
-				echo '</div><br/>';
 			}
 
 			$list = getRecievedFriendRequests();
 			if (count($list)) {
-				echo '<div class="item">';
 				echo 'Your recieved friend requests:<br/>';
 				foreach ($list as $row) {
-					echo '<a href="?id='.$userId.'&amp;request_accept='.$row['reqId'].'">Accept request from '.$row['senderName'].'</a><br/>';
-					echo '<a href="?id='.$userId.'&amp;request_deny='.$row['reqId'].'">Deny request from '.$row['senderName'].'</a><br/>';
+					echo '<div class="item">';
+					echo nameLink($row['senderId'], $row['senderName']).' wants to be '.$row['categoryName'].' - Do you ';
+					echo '<a href="?request_accept='.$row['senderId'].'">Accept</a> or ';
+					echo '<a href="?request_deny='.$row['senderId'].'">Deny</a>?<br/>';
+					if ($row['msg']) {
+						echo 'Personal message: '.nl2br($row['msg']);
+					}
+					echo '</div><br/>';
 				}
-				echo '</div><br/>';
 			}
 		}
 
@@ -179,16 +197,16 @@
 	}
 
 	/* Adds a request-to-become-friends to $userId, from current user, with the optional relation category type */
-	function addFriendRequest($userId, $categoryId)
+	function addFriendRequest($userId, $categoryId, $msg = '')
 	{
 		global $db, $session;
 
 		if (!$session->id || !is_numeric($userId) || !is_numeric($categoryId) || haveContact(CONTACT_FRIEND, $session->id, $userId)) return false;
 
-		$q = 'SELECT reqId FROM tblFriendRequests WHERE senderId='.$session->id.' AND recieverId='.$userId;
+		$q = 'SELECT COUNT(reqId) FROM tblFriendRequests WHERE senderId='.$session->id.' AND recieverId='.$userId;
 		if ($db->getOneItem($q)) return false;
 
-		$q = 'INSERT INTO tblFriendRequests SET senderId='.$session->id.',recieverId='.$userId.',timeCreated=NOW(),categoryId='.$categoryId;
+		$q = 'INSERT INTO tblFriendRequests SET senderId='.$session->id.',recieverId='.$userId.',timeCreated=NOW(),categoryId='.$categoryId.',msg="'.$db->escape($msg).'"';
 		$db->insert($q);
 		return true;
 	}
@@ -199,7 +217,7 @@
 		global $db, $session;
 
 		$q  = 'SELECT t1.*,t2.userName AS recieverName FROM tblFriendRequests AS t1';
-		$q .= ' INNER JOIN tblUsers AS t2 ON (t1.recieverId=t2.userId)';
+		$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.recieverId=t2.userId)';
 		$q .= ' WHERE t1.senderId='.$session->id;
 		$q .= ' ORDER BY t1.timeCreated DESC';
 
@@ -211,8 +229,9 @@
 	{
 		global $db, $session;
 
-		$q  = 'SELECT t1.*,t2.userName AS senderName FROM tblFriendRequests AS t1';
-		$q .= ' INNER JOIN tblUsers AS t2 ON (t1.senderId=t2.userId)';
+		$q  = 'SELECT t1.*,t2.userName AS senderName,t3.categoryName FROM tblFriendRequests AS t1';
+		$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.senderId=t2.userId)';
+		$q .= ' LEFT JOIN tblCategories AS t3 ON (t1.categoryId=t3.categoryId)';
 		$q .= ' WHERE t1.recieverId='.$session->id;
 		$q .= ' ORDER BY t1.timeCreated DESC';
 
@@ -234,58 +253,55 @@
 	}
 
 	/* Deletes a friend request, only doable for the person who created the request */
-	function removeSentFriendRequest($requestId)
+	function removeSentFriendRequest($otherId)
 	{
 		global $db, $session;
 
-		if (!$session->id || !is_numeric($requestId)) return false;
+		if (!$session->id || !is_numeric($otherId)) return false;
 
 		$q  = 'DELETE FROM tblFriendRequests';
-		$q .= ' WHERE reqId='.$requestId.' AND senderId='.$session->id;
+		$q .= ' WHERE recieverId='.$otherId.' AND senderId='.$session->id;
 		$db->delete($q);
 	}
 
 	/* Deletes a friend request, only doable for the person who recieved the request */
-	function denyFriendRequest($requestId)
+	function denyFriendRequest($otherId)
 	{
 		global $db, $session, $config;
 
-		if (!$session->id || !is_numeric($requestId)) return false;
-
-		$data = getFriendRequest($requestId);
-		if (!$data) return false;
+		if (!$session->id || !is_numeric($otherId)) return false;
 
 		$q  = 'DELETE FROM tblFriendRequests';
-		$q .= ' WHERE reqId='.$requestId.' AND recieverId='.$session->id;
+		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
 		$db->delete($q);
 
 		//tell the request sender that the request was denied
-		//addMessageToInbox($db, $config['messages']['system_id'], $data['senderId'], '', nameLink($_SESSION['userId'], $_SESSION['userName']).' '.$config['friends']['denied_friend_request'], MESSAGETYPE_INSTANT);
+		$msg = nameLink($session->id).' denied your friend request.';
+		systemMessage($otherId, 'Denied friend request', $msg);
 
 		return true;
 	}
 
 	/* Deletes a friend request & creates a relation, only doable for the person who recieved the request */
-	function acceptFriendRequest($requestId)
+	function acceptFriendRequest($otherId)
 	{
 		global $db, $session, $config;
 
-		if (!$session->id || !is_numeric($requestId)) return false;
-
-		$data = getFriendRequest($requestId);
-		if (!$data) return false;
+		if (!$session->id || !is_numeric($otherId)) return false;
 
 		$q  = 'DELETE FROM tblFriendRequests';
-		$q .= ' WHERE reqId='.$requestId.' AND recieverId='.$session->id;
-		$db->delete($q);
+		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
+		$cnt = $db->delete($q);
+		
+		if ($cnt != 1) die('acceptfriendrequest xxkrash');
 
 		//create a friend relation
-		setContact(CONTACT_FRIEND, $session->id, $data['senderId']);
-		setContact(CONTACT_FRIEND, $data['senderId'], $session->id);
+		setContact(CONTACT_FRIEND, $session->id, $otherId);
+		setContact(CONTACT_FRIEND, $otherId, $session->id);
 
-		//tell the request sender that the request was denied
-		//addMessageToInbox($db, $config['messages']['system_id'], $data['senderId'], '', nameLink($_SESSION['userId'], $_SESSION['userName']).' '.$config['friends']['accepted_friend_request'], MESSAGETYPE_INSTANT);
-
+		//tell the request sender that the request was accepted
+		$msg = nameLink($session->id).' accepted your friend request, and has been added to your contact list.';
+		systemMessage($otherId, 'Accepted friend request', $msg);
 		return true;
 	}
 

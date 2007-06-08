@@ -1,6 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
-
+		- paging stöd i guestbook
+	
 		- jag ska ej kunna skapa kategorier i nån annans filarea även om jag är admin
 		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
 			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
@@ -9,27 +10,16 @@
 
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
 
-		- kolla access-kontroll. vad är privat data, kan andra se det?
-			t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
+
+		- säkerhets-check:
+			- kolla access-kontroll. vad är privat data, kan andra se det?
+				t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
+			- gör en ordentlig audit var html är tillåtet att skriva in i olika textfält
 
 		- använd ImageMagick's PHP extension för mer prestanda:
 			http://www.magickwand.org/
 			http://www.magickwand.org/download/php/windows/php-5.2.0/php_magickwand_q16_st.dll
 			http://www.imagemagick.org/discourse-server/viewforum.php?f=10
-
-
-	blized frågetecken:
-		- "Men jag tolkar ert önskemål som att ni vill att en användare ska kunna välja hur den vill att andra
-			personer ska se hans sida, stämmer det?"
-			Mikael svarar: Ja, det stämmer – en möjlighet att ”personalisera” sin sida.
-			
-		- "Ert önskemål: "Groups - diskussionsgrupper""
-				Menar ni ett forum? Eller ska det vara en användargrupp, som har en gemensam yta där gruppen diskuterar?
-			Mikael svarar: Idén var ett forum, men en användargrupp låter också intressant. Skulle det då bli som ett slutet diskussionsrum?
-
-		- "Ert önskemål: "Listings, olika former av topplistor" Vi får diskutera närmare vad för sorts data som ni vill ha topplistor på.
-
-		- "Detta med att "tjäna poäng" får vi diskutera närmare."
 
 
 	FAQ-modul:
@@ -59,9 +49,9 @@
 	messages:
 		- skickade brev ska markeras som lästa av mottagaren (i skickarens outbox)
 		- kunna skapa custom folders att flytta meddelanden till
-		- pager support
 		- os3grid: gör sortable & highlight default true
 		- bugg: msg id blir fel när man ändrar sorteringsordningen i listan, så då visas fel msg när man klickar
+		- eventuellt: pager support. detta funkar dåligt med os3grid :-/ ajax-variant?
 
 
 	omröstningar/undersökningar:
@@ -76,9 +66,7 @@
 
 
 	kategorier (atom_categories.php):
-		- använd makeNewCategoryDialog() för att skapa dialog för att skapa userdata-kategorier
-		- gör så att man kan ändra namn och radera kategorier från makeNewCategoryDialog()
-		- rename makeNewCategoryDialog() till manageCategoriesDialog()
+		- använd manageCategoriesDialog() för att skapa dialog för att skapa userdata-kategorier
 
 
 	admin:
@@ -167,6 +155,15 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.08:
+	- tog bort "check ip" checkbox på login, går bara sätta via config.php. default = true
+	- confirmed() småfixar, stöd för wiki-style-länkar
+	- functions_contacts: implementerat friend category och man kan skicka med ett frivilligt meddelande till friend-requesten
+	- skickar priv msg vid accepted eller denied friend request
+	- rename makeNewCategoryDialog() till manageCategoriesDialog()
+	- gjort så att man kan ändra namn och radera kategorier från manageCategoriesDialog()
+
+
 2007.06.03:
 	- categories: buggfix för ej-inloggad användare
 	- user search: buggfix & cleanup

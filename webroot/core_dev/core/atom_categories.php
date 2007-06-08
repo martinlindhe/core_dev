@@ -140,7 +140,7 @@
 		return $db->getArray($q);
 	}
 
-	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '', $extra = '')
+	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '', $varName = '', $extra = '')
 	{
 		global $config;
 
@@ -149,8 +149,8 @@
 		if (!$selectName) $selectName = 'default';
 		$content = '<select name="'.strip_tags($selectName).'">';
 
-		if ($url) {
-			$content .= '<option value="0" onclick="location.href=\'?'.$url.'=0\'">&nbsp;</option>';
+		if ($_type == CATEGORY_USERFILE) {
+			$content .= '<option value="0" onclick="location.href=\'?file_category_id=0\'">&nbsp;</option>';
 		} else {
 			$content .= '<option value="0">&nbsp;</option>';
 		}
@@ -185,9 +185,12 @@
 			$content .= '<option value="'.$val.'"';
 			if ($selectedId == $val) $content .= ' selected="selected"';
 			else if ($url) {
-				$content .= ' onclick="location.href=\'?'.$url.'='.$row['categoryId'].$extra.'\'"';
+				if ($varName) {
+					$content .= ' onclick="location.href=\''.$url.'?'.$varName.'='.$row['categoryId'].$extra.'\'"';
+				} else {
+					$content .= ' onclick="location.href=\''.$url.'='.$row['categoryId'].$extra.'\'"';
+				}
 			}
-
 			$content .= '>'.$text;
 			if ($row['categoryType'] == CATEGORY_USERFILE_PRIVATE) $content .= ' (PRIVATE)';
 			if ($row['categoryType'] == CATEGORY_USERFILE_HIDDEN) $content .= ' (HIDDEN)';
@@ -200,12 +203,15 @@
 		return $content;
 	}
 
-	/* Default "create a new category" dialog, used by "create blog category" and "create category in personal file area" */
-	function makeNewCategoryDialog($_type)
+	/* Default "create a new category" dialog, used by "create blog category" and "create category in personal file area"
+		also allows for managing and deleting categories				*/
+	function manageCategoriesDialog($_type)
 	{
 		global $config, $session;
+		
+		if (!$session->id) return getCategoriesSelect($_type);
 
-		if ($session->id && ($session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category']))
+		if (($session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category']))
 		{
 			$global = false;
 			//Create new category. Only allow categories inside root level
@@ -218,11 +224,42 @@
 			addCategory($cat_type, $_POST['new_file_category'], 0, $global);
 		}
 
+		if (!empty($_GET['cat_del_id']) && is_numeric($_GET['cat_del_id'])) {
+			removeCategory($_type, $_GET['cat_del_id']);
+			echo 'Category removed!';
+			return;
+		}
+		
+		$edit_id = 0;
+		if (!empty($_GET['cat_edit_id']) && is_numeric($_GET['cat_edit_id'])) $edit_id = $_GET['cat_edit_id'];
+
+		if ($edit_id && !empty($_POST['cat_name'])) {
+			updateCategory($_type, $edit_id, $_POST['cat_name']);
+		} else if ($edit_id) {
+			
+			$data = getCategory($_type, $edit_id);
+			if (!$data) die;
+
+			echo '<form method="post" action="">';
+			echo '<h2>Edit category</h2>';
+			echo 'Current name: '.$data['categoryName'].'<br/>';
+			echo 'New name: <input type="text" name="cat_name" value="'.$data['categoryName'].'"/> ';
+			echo '<input type="submit" class="button" value="Save"/>';
+			echo '</form>';
+			echo '<a href="'.URLadd('cat_del_id', $edit_id).'">Delete category</a>';
+			return;
+		}
+
+		echo 'Existing contact groups: '.getCategoriesSelect($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
+
+		echo 'Select one from the dropdown list to edit it.<br/><br/>';
+
 		echo '<form name="new_file_category" method="post" action="">';
-		echo 'Category name: <input type="text" name="new_file_category"/> ';
-		echo '<br/>';
+		echo 'Create new category:<br/>';
+		echo '<input type="text" name="new_file_category"/> ';
 
 		if ($_type == CATEGORY_USERFILE) {
+			echo '<br/>';
 			echo '<input type="radio" value="'.CATEGORY_USERFILE.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
 			echo '<label for="l_normal">Normal category - everyone can see the content</label><br/><br/>';
 			echo '<input type="radio" value="'.CATEGORY_USERFILE_PRIVATE.'" name="new_file_category_type" id="l_private"/> ';
@@ -231,16 +268,18 @@
 			echo '<input type="radio" value="'.CATEGORY_USERFILE_HIDDEN.'" name="new_file_category_type" id="l_hidden"/> ';
 			echo '<label for="l_hidden">Make this category hidden (only for you)</label><br/><br/>';
 		} else if ($_type == CATEGORY_BLOG) {
+			echo '<br/>';
 			echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
 			echo '<label for="l_normal">Your personal blog category</label><br/><br/>';
 		}
 		if ($_type != CATEGORY_NEWS && $_type != CATEGORY_CONTACT && $session->isSuperAdmin) {
+			echo '<br/>';
 			echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
 			echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
 		}
 
 		echo '<input type="submit" class="button" value="Create"/> ';
-		echo '<input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
+		//echo '<input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
 		echo '</form>';
 	}
 ?>

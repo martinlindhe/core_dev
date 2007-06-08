@@ -3,7 +3,7 @@
 	require_once('atom_categories.php');	//for news categories support
 	require_once('atom_rating.php');			//for news rating support
 
-	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsNewCategory', 'NewsComment', 'NewsFiles');
+	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsCategories', 'NewsComment', 'NewsFiles');
 	$config['news']['allow_rating'] = true;	//allow users to rate articles
 
 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
@@ -125,7 +125,7 @@
 				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id => 'Edit',
 				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => 'Attachments',
 				$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id => 'Delete',
-				$_SERVER['PHP_SELF'].'?NewsNewCategory:'.$_id => 'New category',
+				$_SERVER['PHP_SELF'].'?NewsCategories:'.$_id => 'Categories',
 				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
 				);
 			echo createMenu($menu, 'blog_menu');
@@ -157,8 +157,7 @@
 
 		} else if ($current_tab == 'NewsDelete') {
 
-			//fixme: confirmed() skickar fel parametrar, så detta funkar inte
-			if (confirmed('Are you sure you wish to delete this news entry?', 'NewsDelete:'.$_id, $_id)) {
+			if (confirmed('Are you sure you wish to delete this news entry?', 'NewsDelete:'.$_id)) {
 				removeNews($_id);
 
 				require_once($project.'design_head.php');
@@ -167,9 +166,9 @@
 				die;
 			}
 
-		} else if ($current_tab == 'NewsNewCategory') {
+		} else if ($current_tab == 'NewsCategories') {
 
-			makeNewCategoryDialog(CATEGORY_NEWS);
+			manageCategoriesDialog(CATEGORY_NEWS);
 
 		} else if ($current_tab == 'NewsFiles') {
 
