@@ -40,20 +40,28 @@
 		mobil.citysurf.tv är konfigurerad och "up and running"
 		process.citysurf.tv är konfigurerad och "up and running"
 
+	- gjort ett script för att importera profilbilder från gamla cs,
+		pic_valid=1 sätts på alla profilbilder i batch-importen för att allt ska räknas som godkänt
+	- kombinerade scriptet med frans cs.php script för userdata import
 
 
+2007.06.07 Fredag:
+	db flytt etc:
+		- satt upp databas på rix.fm burken
+		- färdigställt & kontollkört script för import av profilbilder från gamla cs
+		- uppdaterat script för import av galleribilder från gamla cs
+
+	webbgränssnittet:
+		- genomfört åtgärder som listats i mail från bitte
+		- fixat så att sidan slutar ladda vid misslyckad databasanslutning
+
+--[[mailat ovanstående]--
 ***************************************************************************************************
-	- gör ett script för att importera profilbilder från gamla cs:
+
 		* vi påbörjar kopiering av alla bilder på TISDAG till dammsugaren
-		* pic_valid=1 ska sättas på alla profilbilder i batch-importen för att allt ska räknas som godkänt
-		* sätt upp db på rix.fm-burken
 
-	- bugg: du kan inte logga in om du redan är inloggad!
-
-	- poll på inloggad startsida (admingränssnitt finns)
 	- userlevels: implementera funktionen "hemlig användare"
 
-	- gör om admingränssnitt att fungera med nuvarande s_vip
 
 
 NU: SMS debitering:
@@ -77,8 +85,11 @@ blandat:
 		- hantera "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
 
 EFETER RELEASE:
+	- bugg: du kan inte logga in om du redan är inloggad!
+	- poll på inloggad startsida (admingränssnitt finns)
+
 	- anmäl användare-funktion:
-		* admin ska kunna se översikt på inkommande anmälningar
+		* gör om admingränssnitt att fungera med nuvarande s_vip: "admin ska kunna se översikt på inkommande anmälningar"
 
 	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
 	* bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
