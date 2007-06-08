@@ -12,6 +12,14 @@
 		$body    = $db->escape(strip_tags($body));
 
 		if (!$body) return false;
+		
+		/*
+			spam / repeated message protection
+			checks if the user has written a identical message in the last 5 minutes
+		*/
+		$q  = 'SELECT COUNT(*) FROM tblGuestbooks WHERE userId='.$ownerId.' AND authorId='.$session->id;
+		$q .= ' AND subject="'.$subject.'" AND body="'.$body.'" AND timeCreated>=DATE_SUB(NOW(),INTERVAL 5 MINUTE)';
+		if ($db->getOneItem($q)) return false;
 
 		$q = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',authorId='.$session->id.',subject="'.$subject.'",body="'.$body.'",timeCreated=NOW()';
 		$entryId = $db->insert($q);
@@ -31,7 +39,7 @@
 	}
 
 	/* Return $userId's guestbook entries */
-	function getGuestbook($userId)
+	function getGuestbook($userId, $_limit_sql = '')
 	{
 		global $db;
 
@@ -42,7 +50,7 @@
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
 		$q .= 'WHERE t1.userId='.$userId.' ';
 		$q .= 'AND t1.entryDeleted=0 ';
-		$q .= 'ORDER BY t1.timeCreated DESC';
+		$q .= 'ORDER BY t1.timeCreated DESC'.$_limit_sql;
 
 		return $db->getArray($q);
 	}

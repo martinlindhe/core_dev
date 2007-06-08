@@ -1,7 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- paging stöd i guestbook
-	
 		- jag ska ej kunna skapa kategorier i nån annans filarea även om jag är admin
 		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
 			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
@@ -66,7 +64,6 @@
 
 
 	kategorier (atom_categories.php):
-		- använd manageCategoriesDialog() för att skapa dialog för att skapa userdata-kategorier
 
 
 	admin:
@@ -162,6 +159,9 @@ X = hi prio task
 	- skickar priv msg vid accepted eller denied friend request
 	- rename makeNewCategoryDialog() till manageCategoriesDialog()
 	- gjort så att man kan ändra namn och radera kategorier från manageCategoriesDialog()
+	- guestbook repeated message spam protection
+	- gjort paging stöd i guestbook
+	- gått igenom core-koden efter en massa "fixme" kommentarer
 
 
 2007.06.03:
