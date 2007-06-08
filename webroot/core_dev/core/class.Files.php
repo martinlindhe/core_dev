@@ -17,6 +17,100 @@ define('FILETYPE_FILEAREA_UPLOAD',4);	/* File is uploaded to a file area */
 define('FILETYPE_USERFILE',				5);	/* File is uploaded to the user's own file area */
 define('FILETYPE_USERDATA',				6);	/* File is uploaded to a userdata field */
 
+
+	function showImageGadgetXHTML()
+	{
+		global $config, $session;
+?>
+<div id="zoom_image_layer" style="display:none">
+	<center>
+		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/>
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+
+<? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
+		<input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
+		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
+		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
+		<input type="button" class="button" value="Move image" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
+<? } ?>
+<? if ($config['news']['allow_rating']) { ?>
+		<br/>
+		<div class="image_rate">
+		<?
+			//ratingGadget(RATE_IMAGE, 1)
+			//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
+		?>
+		</div>
+<? } ?>
+	</center>
+</div>
+<?
+	}
+
+	function showAudioGadgetXHTML()
+	{
+		global $session;
+?>
+<div id="zoom_audio_layer" style="display:none">
+	<center>
+		<div id="zoom_audio" style="width: 160px; height: 50px;"></div>
+		<br/>
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+
+<? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move song" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete song" onclick="delete_selected_file()"/>
+<? } ?>
+	</center>
+</div>
+<?
+	}
+	
+	function showVideoGadgetXHTML()
+	{
+		global $session;
+?>
+<div id="zoom_video_layer" style="display:none">
+	<center>
+		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
+		<br/>
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+
+<? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move video" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete video" onclick="delete_selected_file()"/>
+<? } ?>
+	</center>
+</div>
+<?
+	}
+
+	function showDocumentGadgetXHTML()
+	{
+		global $session;
+?>
+<div id="zoom_file_layer" style="display:none">
+	<center>
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+<? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move file" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete file" onclick="delete_selected_file()"/>
+<? } ?>
+	</center>
+</div>
+<?
+	}
+
 class Files
 {
 	/* Non configurable, shouldnt be needed to be changed */
@@ -86,7 +180,6 @@ class Files
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
 	}
 
-
 	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
 	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
 	function showFiles($fileType, $categoryId = 0)
@@ -108,8 +201,8 @@ class Files
 			}
 		}
 
-		require_once($config['core_root'].'layout/file_details_layer.php');
-		require_once($config['core_root'].'layout/ajax_loading_layer.html');
+		echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;">';
+		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="/gfx/ajax_loading.gif"/></div>';
 
 		echo '<div class="file_gadget">';
 
@@ -153,9 +246,7 @@ class Files
 
 		//Visar kategorier / kataloger
 		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
-			$extra = '';
-			if ($fileType==FILETYPE_USERFILE) $extra = '&amp;id='.$userid;
-			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, '', 'file_category_id', $extra);
+			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
 		}
 
 		//select the files in the current category (or root level for uncategorized files)
@@ -167,17 +258,22 @@ class Files
 
 		$list = $db->getArray($q);
 
+		showImageGadgetXHTML();
+		showAudioGadgetXHTML();
+		showVideoGadgetXHTML();
+		showDocumentGadgetXHTML();
+
+		echo '<div id="zoom_fileinfo" style="display:none"></div>';
 		echo '<div class="file_gadget_content">';
+
 		foreach ($list as $row)
 		{
 			$title = htmlspecialchars($row['fileName']).' ('.formatDataSize($row['fileSize']).')';
 			if (in_array($row['fileMime'], $this->image_mime_types)) {
-				//show thumbnail of image
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].');"><center>';
 				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $this->audio_mime_types)) {
-				//show icon for audio files.
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 				echo '</center></div>';
@@ -199,7 +295,7 @@ class Files
 		echo '</div>';
 
 		//todo: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
-		if ($session->id || $this->anon_uploads)
+		if ($this->anon_uploads || ($session->id && $fileType == FILETYPE_USERFILE && $session->id == $userid))
 		{
 			echo '<div id="file_gadget_upload">';
 			if (!$categoryId) echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
@@ -745,5 +841,4 @@ class Files
 
 		return $result;
 	}
-
 }

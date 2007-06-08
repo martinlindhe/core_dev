@@ -67,7 +67,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=795 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=796 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -425,7 +425,7 @@ CREATE TABLE tblCategories (
   categoryPermissions tinyint(3) unsigned NOT NULL default '0',
   ownerId bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(3) unsigned NOT NULL default '0',
@@ -498,7 +498,7 @@ CREATE TABLE tblGuestbooks (
   entryRead tinyint(3) unsigned NOT NULL default '0',
   timeRead datetime default NULL,
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 CREATE TABLE tblLogins (
   mainId int(10) unsigned NOT NULL auto_increment,
   userId int(10) unsigned NOT NULL default '0',
@@ -626,7 +626,7 @@ CREATE TABLE tblVisits (
   creatorId int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
   PRIMARY KEY  (visitId)
-) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 CREATE TABLE tblWiki (
   wikiId bigint(20) unsigned NOT NULL auto_increment,
   wikiName varchar(200) default NULL,

@@ -1,14 +1,9 @@
 <?
-	//todo: rensa upp html-tabellerna
-
 	require_once('find_config.php');
 
 	$session->requireAdmin();
 
-	/* Remove */
-	if (isset($_GET['del'])) {
-		removeStopword($_GET['del']);
-	}
+	if (!empty($_GET['del'])) removeStopword($_GET['del']);
 	
 	if (count($_POST)) {
 		$list = getStopwords();

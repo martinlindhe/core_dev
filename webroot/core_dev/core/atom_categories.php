@@ -250,7 +250,11 @@
 			return;
 		}
 
-		echo 'Existing contact groups: '.getCategoriesSelect($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
+		if ($_type == CATEGORY_USERFILE) {
+			echo 'Existing categories: '.getCategoriesSelect($_type).'<br/>';
+		} else {
+			echo 'Existing categories: '.getCategoriesSelect($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
+		}
 
 		echo 'Select one from the dropdown list to edit it.<br/><br/>';
 

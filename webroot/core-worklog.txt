@@ -1,6 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- jag ska ej kunna skapa kategorier i nån annans filarea även om jag är admin
 		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
 			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
 
@@ -64,6 +63,9 @@
 
 
 	kategorier (atom_categories.php):
+	
+	guestbook (functions_guestbook.php):
+		- gör koden i guestbook.php till en standard-funktion
 
 
 	admin:
@@ -108,7 +110,7 @@
 
 
 	ratings (atom_ratings.php):
-		- senare: gör om ratingGadget() till ajax-gadget
+		- gör om ratingGadget() till ajax-gadget (krävs för att implementera image rating snyggt)
 
 
 	db drivers:
@@ -119,7 +121,6 @@
   	- implementera process-servern för att konvertera bilder / skapa thumbnails
  	 	- Försök bygga en generell RSS-modul som kan återanvändas av t.ex news-modulen, wiki historik (blir i praktiken en bevakning)
 		- gör en funktion som visar rss news feeds, för news-modulen, packa ihop den utspridda kod som finns i sample/news.php, sample/design_head.php
-		- även nån funktion som låter en adda extra css eller ändra default css (skins!)
 		- det krävs ett extra sid-reload när man ändrat skin theme
 
 
@@ -127,10 +128,9 @@
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 		- kolla att sample project & alla admin-funktioner funkar med lighttpd+php
-
+		- konvertera alla scriptfiler osv till utf8-format så åäö funkar i linux fint när man editerar kod :)
 
 	plugin/wurfl:
-		- flytta ut cache-config till update_cache.php
 
 
 --------------[[projekt todo]]--------------
@@ -153,7 +153,7 @@ X = hi prio task
 
 --------------[[changelog]]--------------
 2007.06.08:
-	- tog bort "check ip" checkbox på login, går bara sätta via config.php. default = true
+	- tog bort "check ip" checkbox på login, går bara sätta via config.php. default = true (anledning: användare begriper inte/skiter i funktionen)
 	- confirmed() småfixar, stöd för wiki-style-länkar
 	- functions_contacts: implementerat friend category och man kan skicka med ett frivilligt meddelande till friend-requesten
 	- skickar priv msg vid accepted eller denied friend request
@@ -162,6 +162,10 @@ X = hi prio task
 	- guestbook repeated message spam protection
 	- gjort paging stöd i guestbook
 	- gått igenom core-koden efter en massa "fixme" kommentarer
+	- kan ej längre skapa kategorier i nån annans filarea även om jag är admin
+	- paging support på moderation queue
+	- droppat layout-katalogen, allt e i files-klassen
+
 
 
 2007.06.03:

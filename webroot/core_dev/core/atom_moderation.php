@@ -89,7 +89,7 @@
 	}
 
 	/* kontrollerar om ordet i $text är ett reserverat användarnamn */
-	//todo: integrera denna med checkStopword somehow
+	//todo: integrate this with checkStopword() somehow
 	function isReservedUsername($text)
 	{
 		global $db;
@@ -190,13 +190,13 @@
 		return $db->insert($q);
 	}
 
-	function getModerationQueue()
+	function getModerationQueue($_sql_limit = '')
 	{
 		global $db;
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblModerationQueue AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
-		$q .= 'WHERE t1.moderatedBy=0 ORDER BY t1.timeCreated ASC';
+		$q .= 'WHERE t1.moderatedBy=0 ORDER BY t1.timeCreated ASC'.$_sql_limit;
 
 		return $db->getArray($q);
 	}

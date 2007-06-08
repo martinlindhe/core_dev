@@ -13,8 +13,14 @@
 		die;
 	}
 
+	$tot_cnt = getModerationQueueCount();
+	
+	$pager = makePager($tot_cnt, 5);
+
 	$changed_list = false;
-	$list = getModerationQueue();
+	
+	echo $pager['head'];
+	$list = getModerationQueue($pager['limit']);
 	foreach ($list as $row) {
 		if (!isset($_POST['method_'.$row['queueId']])) continue;
 		$changed_list = true;
@@ -39,7 +45,7 @@
 		}
 	}
 
-	if ($changed_list) $list = getModerationQueue();	//fixme: paging support
+	if ($changed_list) $list = getModerationQueue($pager['limit']);
 
 	if (count($list)) {
 		
