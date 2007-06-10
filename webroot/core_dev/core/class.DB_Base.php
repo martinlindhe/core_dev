@@ -284,6 +284,13 @@ abstract class DB_Base
 	{
 		return date('Y-m-d H:i:s', $timestamp);
 	}
+	
+	//returns true if $d1 is older date than $d2
+	function datetime_less($d1, $d2)
+	{
+		if (strtotime($d1) < strtotime($d2)) return true;
+		return false;
+	}
 
 
 	/* debug function! do not use */

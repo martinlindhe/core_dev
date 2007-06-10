@@ -8,15 +8,14 @@
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
 
 
-		- säkerhets-check:
-			- kolla access-kontroll. vad är privat data, kan andra se det?
-				t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
-			- gör en ordentlig audit var html är tillåtet att skriva in i olika textfält
-
-		- använd ImageMagick's PHP extension för mer prestanda:
-			http://www.magickwand.org/
-			http://www.magickwand.org/download/php/windows/php-5.2.0/php_magickwand_q16_st.dll
-			http://www.imagemagick.org/discourse-server/viewforum.php?f=10
+	omröstningar/undersökningar:
+		- kunna koppla en omröstning till en nyhetsartikel, som på aftonnladet:
+			"är det rätt att sätta Paris Hilton i fängelse igen? ja / nej / vet ej"
+		- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
+			"Gillar du fisk? JA/NEJ"
+			"Brukar du motionera? JA/NEJ/IBLAND"
+		- via admin kunna schemalägga användaromröstningar, start&slut-tid (veckans fråga / dagens fråga)
+		- fler-fråge-formulär med blandade multival och fritext-fält
 
 
 	FAQ-modul:
@@ -49,14 +48,6 @@
 		- os3grid: gör sortable & highlight default true
 		- bugg: msg id blir fel när man ändrar sorteringsordningen i listan, så då visas fel msg när man klickar
 		- eventuellt: pager support. detta funkar dåligt med os3grid :-/ ajax-variant?
-
-
-	omröstningar/undersökningar:
-		- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
-			"Gillar du fisk? JA/NEJ"
-			"Brukar du motionera? JA/NEJ/IBLAND"
-		- via admin kunna schemalägga användaromröstningar, start&slut-tid (veckans fråga / dagens fråga)
-		- fler-fråge-formulär med blandade multival och fritext-fält
 
 
 	news modul (functions_news.php):
@@ -101,6 +92,10 @@
 	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
 		- kunna ge rating på en bild
+		- använd ImageMagick's PHP extension för mer prestanda:
+			http://www.magickwand.org/
+			http://www.magickwand.org/download/php/windows/php-5.2.0/php_magickwand_q16_st.dll
+			http://www.imagemagick.org/discourse-server/viewforum.php?f=10
 
 
 	wiki:
@@ -130,6 +125,12 @@
 		- kolla att sample project & alla admin-funktioner funkar med lighttpd+php
 		- konvertera alla scriptfiler osv till utf8-format så åäö funkar i linux fint när man editerar kod :)
 
+		- säkerhets-check:
+			- kolla access-kontroll. vad är privat data, kan andra se det?
+				t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
+			- gör en ordentlig audit var html är tillåtet att skriva in i olika textfält
+
+
 	plugin/wurfl:
 
 
@@ -152,6 +153,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.10:
+	- news: kan ej visa artiklar som ej än publicerats för icke-admins
+	- news: kan ändra "time for publication" på nyheter
+	- news: admin_news.php ny fil som listar alla ej ännu pulbicerade nyheter & gamla
+
+
 2007.06.08:
 	- tog bort "check ip" checkbox på login, går bara sätta via config.php. default = true (anledning: användare begriper inte/skiter i funktionen)
 	- confirmed() småfixar, stöd för wiki-style-länkar

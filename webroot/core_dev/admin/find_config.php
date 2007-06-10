@@ -18,6 +18,7 @@
 		$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin::',
 		$config['core_web_root'].'admin/admin_moderation.php'.getProjectPath(0) => 'Moderation',
 		$config['core_web_root'].'admin/admin_faq.php'.getProjectPath(0) => 'FAQ',
+		$config['core_web_root'].'admin/admin_news.php'.getProjectPath(0) => 'News',
 		$config['core_web_root'].'admin/admin_feedback.php'.getProjectPath(0) => 'Feedback',	//todo: hide if feedback-module is disabled
 		$config['core_web_root'].'admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
 		$config['core_web_root'].'admin/admin_events.php'.getProjectPath(0) => 'Event log',

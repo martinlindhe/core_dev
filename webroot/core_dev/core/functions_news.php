@@ -30,9 +30,9 @@
 
 		if (!$session->isAdmin || !is_numeric($newsId) || !is_numeric($categoryId) || !is_numeric($rss_enabled)) return false;
 
-		$topublish = strtotime($topublish);
+		$topublish = sql_datetime(strtotime($topublish));
 
-		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session->id.' WHERE newsId='.$newsId;
+		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db->escape($title).'",body="'.$db->escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session->id.' WHERE newsId='.$newsId;
 		$db->query($q);
 
 		return true;
@@ -78,6 +78,22 @@
 		return $db->getArray($q);
 	}
 
+	function getUnpublishedNews($_categoryId = 0)
+	{
+		global $db;
+
+		if (!is_numeric($_categoryId)) return false;
+
+		$q  = 'SELECT t1.*,t2.userName AS creatorName, t3.userName AS editorName FROM tblNews AS t1 ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
+		$q .= 'WHERE timeToPublish>NOW() AND deletedBy=0 ';
+		if  ($_categoryId) $q .= ' AND categoryId='.$_categoryId.' ';
+		$q .= 'ORDER BY timeToPublish DESC';
+
+		return $db->getArray($q);
+	}
+
 	function getNewsItem($newsId)
 	{
 		global $db;
@@ -97,13 +113,15 @@
 
 		if (!is_numeric($_id)) return false;
 
-		//Looks for formatted news section commands, like: News:ID, NewsEdit:ID, NewsDelete:ID, NewsComment:ID, BlogFiles:ID
+		//Looks for formatted news section commands, like: News:ID, NewsEdit:ID, NewsDelete:ID, NewsComment:ID, NewsFiles:ID
 		$cmd = fetchSpecialParams($config['news']['allowed_tabs']);
 		if ($cmd) list($current_tab, $_id) = $cmd;
 		if (empty($_id) || !is_numeric($_id)) return false;
 
 		$news = getNewsItem($_id);
 		if (!$news) return;
+		
+		if (!$session->isAdmin && !datetime_less($news['timeToPublish'], now())) return false;
 
 		echo '<div class="news">';
 		echo '<div class="news_top">';
@@ -114,7 +132,14 @@
 		if ($news['categoryId']) {
 			echo '<a href="news.php?cat='.$news['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $news['categoryId']).'</a><br/>';
 		}
-		echo 'By '.$news['creatorName'].', published '.$news['timeToPublish'].'<br/>';
+		echo 'By '.nameLink($news['creatorId'], $news['creatorName']);
+		if (datetime_less($news['timeToPublish'], now())) {
+			echo ', published '.$news['timeToPublish'].'<br/>';
+		} else {
+			echo ', <b>will be published '.$news['timeToPublish'].'</b><br/>';
+		}
+		
+		
 		if ($news['editorId']) echo '<i>Updated '.$news['timeEdited'].' by '.$news['editorName'].'</i><br/>';
 		echo '</div>'; //class="news_top"
 		echo '<br/>';
@@ -219,7 +244,8 @@
 			echo '</div><br/>';
 		}
 		if ($session->isAdmin) {
-			echo '<a href="'.$config['core_web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">Add news</a>';
+			echo '<a href="'.$config['core_web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">Add news</a><br/>';
+			echo '<a href="'.$config['core_web_root'].'admin/admin_news.php'.getProjectPath(0).'">Manage news</a><br/>';
 		}
 	}
 ?>
