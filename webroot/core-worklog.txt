@@ -13,8 +13,9 @@
 			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod	- DONE
 			2) fråga kopplad till ett objekt (nyhetsartikel, blogg, etc)						- 
 			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
+			
+		- removePoll(): ta bort svarsalternativen?
 		
-		- kunna ta bort poll
 
 	FAQ-modul:
 		- kunna redigera / ta bort ett FAQ-svar
@@ -165,6 +166,7 @@ X = hi prio task
 	- admin_polls visar översikt över aktiva + kommande polls
 	- kan välja starttid för polls "måndagen denna vecka" eller "nästa lediga tid"
 	- site poll: kan redigera frågan & svaren
+	- site poll: man kan ta bort polls (markeras som borttagna)
 
 
 2007.06.08:

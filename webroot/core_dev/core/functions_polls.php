@@ -71,17 +71,17 @@
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;		
 
-		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' ORDER BY timeStart ASC,pollText ASC';
+		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 ORDER BY timeStart ASC,pollText ASC';
 		return $db->getArray($q);
 	}
 
-	/* get all polls */
+	/* get one poll */
 	function getPoll($_type, $_id)
 	{
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;		
 
-		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND pollId='.$_id;
+		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND pollId='.$_id.' AND deletedBy=0';
 		return $db->getOneRow($q);
 	}
 
@@ -91,7 +91,7 @@
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;		
 
-		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND NOW() BETWEEN timeStart AND timeEnd ORDER BY timeStart ASC,pollText ASC';
+		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 AND NOW() BETWEEN timeStart AND timeEnd ORDER BY timeStart ASC,pollText ASC';
 		return $db->getArray($q);
 	}
 
@@ -188,13 +188,12 @@
 		return $db->getArray($q);
 	}
 
-/*
-	function removePoll($ownerId, $_id)
+	function removePoll($_type, $_id)
 	{
-		global $db;
-		if (!is_numeric($ownerId) || !is_numeric($_id)) return false;
+		global $db, $session;
+		if (!$session->isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
 
-		$db->delete('DELETE FROM tblPolls WHERE ownerId='.$ownerId.' AND pollID='.$_id);
+		$db->update('UPDATE tblPolls SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id);
 	}
-*/
+
 ?>

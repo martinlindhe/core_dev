@@ -19,6 +19,10 @@
 				}
 			}
 		}
+		
+		if (isset($_GET['delete']) && confirmed('Are you sure you want to delete this site poll?', 'delete&amp;id', $pollId)) {
+			removePoll(POLL_SITE, $pollId);
+		}
 
 		$poll = getPoll(POLL_SITE, $pollId);
 
@@ -32,13 +36,17 @@
 		echo 'Poll ends: '.$poll['timeEnd'].'<br/>';
 		echo '<br/>';
 
-		$list = getCategories(CATEGORY_POLL, $pollId);
-		for ($i=0; $i<count($list); $i++) {
-			echo 'Answer '.($i+1).': <input type="text" size="30" name="poll_a'.$i.'" value="'.$list[$i]['categoryName'].'"/><br/>';
+		if ($poll) {
+			$list = getCategories(CATEGORY_POLL, $pollId);
+			for ($i=0; $i<count($list); $i++) {
+				echo 'Answer '.($i+1).': <input type="text" size="30" name="poll_a'.$i.'" value="'.$list[$i]['categoryName'].'"/><br/>';
+			}
 		}
 
 		echo '<input type="submit" class="button" value="Save changes"/>';
 		echo '</form>';
+		
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$pollId.'&amp;delete'.getProjectPath().'">Delete poll</a>';
 
 		require($project.'design_foot.php');
 		die;
