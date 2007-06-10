@@ -24,6 +24,7 @@
 	require_once('functions_guestbook.php');
 	require_once('functions_contacts.php');
 	require_once('functions_messages.php');
+	require_once('functions_polls.php');
 	restore_include_path();
 
 	$config['debug'] = true;

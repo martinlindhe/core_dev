@@ -7,56 +7,92 @@
 	//define('POLL_USER',		2);
 	//define('POLL_GROUP',	3);
 
-
-	function addPoll($itemType, $ownerId, $parentId, $text, $starttime = '', $length = 0)
+	function addPoll($itemType, $ownerId, $text, $duration_mode)
 	{
 		global $db;
 
-		if (!is_numeric($itemType) || !is_numeric($ownerId) || !is_numeric($parentId) || !is_numeric($starttime) || !is_numeric($length)) return false;
+		if (!is_numeric($itemType) || !is_numeric($ownerId)) return false;
 
 		$text = $db->escape(trim($text));
 		
-		$starttime = sql_datetime(strtotime($starttime));
+		switch ($duration_mode) {
+			case 'day';
+				$length = 1;
+				break;
 
-		$q = 'INSERT INTO tblPolls SET parentId='.$parentId.',ownerId='.$ownerId.',itemType='.$itemType.',itemText="'.$text.'",timeStart="'.$starttime.'",timeLength='.$length;
+			case 'week':
+				//week start at monday 00:00
+				$length = 7;
+				break;
+
+			default: die('eep addpoll');
+		}
+		
+		$q = 'SELECT timeEnd FROM tblPolls ORDER BY timeStart ASC LIMIT 1';
+		$data = $db->getOneRow($q);
+		if ($data) {
+			$timeStart = ',timeStart="'.$data['timeEnd'].'"';
+		} else {
+			$timeStart = ',timeStart=NOW()';
+		}
+		$timeEnd = ',timeEnd=DATE_ADD(timeStart, INTERVAL '.$length.' DAY)';
+
+		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',itemType='.$itemType.',itemText="'.$text.'"'.$timeStart.$timeEnd;
 		return $db->insert($q);
 	}
-	
-	function getPolls($itemType, $ownerId)
+
+
+	/* get all polls */
+	function getPolls($_type, $ownerId = 0)
 	{
 		global $db;
+		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;		
 
-		if (!is_numeric($itemType) || !is_numeric($ownerId)) return false;		
-
-		/* Get all questions */
-		$q = 'SELECT * FROM tblPolls WHERE itemType='.$itemType.' AND ownerId='.$ownerId.' AND parentId=0 ORDER BY timeStart ASC,itemText ASC';
+		$q = 'SELECT * FROM tblPolls WHERE itemType='.$_type.' AND ownerId='.$ownerId.' ORDER BY timeStart ASC,itemText ASC';
 		$list = $db->getArray($q);
-		
-		/* Get all response alternatives */
-		for ($i=0; $i<count($list); $i++) {
-			$q = 'SELECT * FROM tblPolls WHERE parentId='.$list[$i]['itemId'];
-			$list[$i]['alt'] = $db->getArray($q);
-		}
 
 		return $list;
 	}
-	
+
+	/* Get active polls */
+	function getActivePolls($_type, $ownerId = 0)
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;		
+
+		$q = 'SELECT * FROM tblPolls WHERE itemType='.$_type.' AND ownerId='.$ownerId.' AND NOW() BETWEEN timeStart AND timeEnd ORDER BY timeStart ASC,itemText ASC';
+		$list = $db->getArray($q);
+
+		return $list;
+	}
+
+	function showPoll($row)
+	{
+		echo '<div class="item">';
+		echo $row['itemText'].'<br/>';
+		echo 'Starts: '.$row['timeStart'].', ends '.$row['timeEnd'].' '.getCategoriesSelect(CATEGORY_POLL, $row['pollId']);
+		echo '</div>';
+	}
+
+	function showPolls($_type)
+	{
+		global $db;
+		if (!is_numeric($_type)) return false;
+
+		$list = getActivePolls($_type);
+		
+		foreach ($list as $row) {
+			showPoll($row);
+		}
+	}
+
+/*
 	function removePoll($ownerId, $itemId)
 	{
 		global $db;
 		if (!is_numeric($ownerId) || !is_numeric($itemId)) return false;
 
-		$db->delete('DELETE FROM tblPolls WHERE ownerId='.$ownerId.' AND (itemId='.$itemId.' OR parentId='.$itemId.')');
-	}
-
-	/* Returns the results from the poll so far */
-	function getPollResults($itemId)
-	{
-		global $db;
-		if (!is_numeric($itemId)) return false;
-
-		$q = 'SELECT itemText,voteCnt FROM tblPolls WHERE parentId='.$itemId;
-		return $db->getArray($q);
+		$db->delete('DELETE FROM tblPolls WHERE ownerId='.$ownerId.' AND itemId='.$itemId);
 	}
 
 	function addSitePollVote($userId, $itemId, $voteId)
@@ -72,8 +108,7 @@
 		$db->query('UPDATE tblPolls SET voteCnt=voteCnt+1 WHERE itemId='.$voteId);
 		return true;
 	}
-	
-	/* Returns true if user has already voted here */
+
 	function hasUserVoted($userId, $voteId)
 	{
 		global $db;
@@ -85,5 +120,5 @@
 		if ($check) return true;
 		return false;
 	}
-	
+*/
 ?>

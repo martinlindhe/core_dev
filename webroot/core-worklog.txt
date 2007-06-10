@@ -9,14 +9,10 @@
 
 
 	omröstningar/undersökningar:
-		- kunna koppla en omröstning till en nyhetsartikel, som på aftonnladet:
-			"är det rätt att sätta Paris Hilton i fängelse igen? ja / nej / vet ej"
-		- via admin kunna schemalägga användaromröstningar, start&slut-tid (veckans fråga / dagens fråga)
-		
-		alltså, vi behöver flera typer av omröstningar:
-			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod
-			2) fråga kopplad till ett objekt (nyhetsartikel, blogg, etc)
-			3) fler-fråge-formulär med blandade multival och fritext-fält
+		vi behöver flera typer av omröstningar:
+			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod	- DONE
+			2) fråga kopplad till ett objekt (nyhetsartikel, blogg, etc)						- 
+			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
 					
 		
 
@@ -161,7 +157,9 @@ X = hi prio task
 	- news: kan ändra "time for publication" på nyheter
 	- news: admin_news.php ny fil som listar alla ej ännu pulbicerade nyheter & gamla
 	- admin port checker added
-
+	- via admin kunna schemalägga användaromröstningar, start&slut-tid (veckans fråga / dagens fråga)
+	- skapat "site polls" sajtomröstningar. wip
+	
 
 2007.06.08:
 	- tog bort "check ip" checkbox på login, går bara sätta via config.php. default = true (anledning: användare begriper inte/skiter i funktionen)

@@ -13,6 +13,7 @@
 	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
 	define('CATEGORY_CONTACT',			11);		//friend relation category, like "Old friends", "Family"
 	define('CATEGORY_USERDATA',			12);		//used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
+	define('CATEGORY_POLL',					13);		//used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
 
 	define('CATEGORY_NEWS',					20);
 
@@ -123,6 +124,7 @@
 				break;
 
 			case CATEGORY_USERDATA:
+			case CATEGORY_POLL:
 				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
 				if ($_owner) $q .= ' AND ownerId='.$_owner;
 				break;
