@@ -292,6 +292,11 @@ abstract class DB_Base
 		return false;
 	}
 
+	//returns MySQL datetime in unix timestamp format
+	function datetime_to_timestamp($datetime)
+	{
+		return strtotime($datetime);
+	}
 
 	/* debug function! do not use */
 	function d($v)

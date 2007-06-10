@@ -13,14 +13,10 @@
 			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod	- DONE
 			2) fråga kopplad till ett objekt (nyhetsartikel, blogg, etc)						- 
 			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
-		- veckans fråga ska starta måndag morgon. när man skapar en ny fråga, visa 2:a dialog:
-			"ska frågan börja från och med i måndags (det är ondsdag idag)
-			"eller från nästa måndag (alltså måndagen den 14:e juni)"
-			eller välj valfri start-dag (dropdowns)
-			
-		- admin_polls ska visa översikt över aktuella + kommande polls
-			klicka en poll för att redigera & visa detaljer om den
-			+ egen sida för "new poll"	
+		
+		- kunna ta bort poll
+		- kunna redigera frågan & svaren
+		- bugg: veckans fråga ska starta måndag 06:00, blir nu onsdag 06:00.. urkk zzzz
 
 
 	FAQ-modul:
@@ -167,6 +163,10 @@ X = hi prio task
 	- skapat "site polls" sajtomröstningar. wip
 	- gjort så man kan rösta på polls med ajax
 	- visar "current standings" på site poll när man redan har röstat			
+	- kan bara rösta på active polls
+	- visar om pollen har avslutats eller ej (visar final stats om den är avslutad)
+	- admin_polls visar översikt över aktiva + kommande polls
+	- kan välja starttid för polls "måndagen denna vecka" eller "nästa lediga tid"
 	
 
 2007.06.08:
@@ -182,7 +182,6 @@ X = hi prio task
 	- kan ej längre skapa kategorier i nån annans filarea även om jag är admin
 	- paging support på moderation queue
 	- droppat layout-katalogen, allt e i files-klassen
-
 
 
 2007.06.03:

@@ -7,7 +7,7 @@
 	//define('POLL_USER',		2);
 	//define('POLL_GROUP',	3);
 
-	function addPoll($itemType, $ownerId, $text, $duration_mode)
+	function addPoll($itemType, $ownerId, $text, $duration_mode, $start_mode)
 	{
 		global $db;
 
@@ -28,13 +28,34 @@
 			default: die('eep addpoll');
 		}
 		
-		$q = 'SELECT timeEnd FROM tblPolls ORDER BY timeStart ASC LIMIT 1';
-		$data = $db->getOneRow($q);
-		if ($data) {
-			$timeStart = ',timeStart="'.$data['timeEnd'].'"';
-		} else {
-			$timeStart = ',timeStart=NOW()';
+		switch ($start_mode) {
+			case 'thismonday':
+				$dayofweek = date('N');
+				$mon = date('n');
+				$day = date('j');
+				echo 'day: '.$day.'<br/>';
+				$day -= $dayofweek;
+				echo 'day: '.$day.'<br/>';
+				
+				//06:00 Monday current week
+				$thismonday = mktime(6, 0, 0, 0, $mon, $day);
+				echo $thismonday;
+				$timeStart = ',timeStart="'.sql_datetime($thismonday).'"';
+				break;
+
+			case 'nextfree':
+				$q = 'SELECT timeEnd FROM tblPolls ORDER BY timeStart ASC LIMIT 1';
+				$data = $db->getOneRow($q);
+				if ($data) {
+					$timeStart = ',timeStart="'.$data['timeEnd'].'"';
+				} else {
+					$timeStart = ',timeStart=NOW()';
+				}
+				break;
+			
+			default: die('eexp');
 		}
+
 		$timeEnd = ',timeEnd=DATE_ADD(timeStart, INTERVAL '.$length.' DAY)';
 
 		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',itemType='.$itemType.',itemText="'.$text.'"'.$timeStart.$timeEnd;
@@ -68,23 +89,33 @@
 	function showPoll($data)
 	{
 		global $session;
+		
+		$active = false;
+
+		if (time() >= datetime_to_timestamp($data['timeStart']) && time() <= datetime_to_timestamp($data['timeEnd'])) {
+			$active = true;
+		}
 
 		echo '<div class="item">';
-
-		echo $data['itemText'].'<br/>';
+		if ($active) echo 'ACTIVE POLL: ';
+		echo $data['itemText'].'<br/><br/>';
 		$list = getCategories(CATEGORY_POLL, $data['pollId']);
 
 		echo '<div id="poll'.$data['pollId'].'">';
 		if ($session->isAdmin) echo 'Starts: '.$data['timeStart'].', ends '.$data['timeEnd'].'<br/>';
 
-		if (!hasAnsweredPoll($data['pollId'])) {
+		if ($active && !hasAnsweredPoll($data['pollId'])) {
 			foreach ($list as $row) {
 				echo '<span onclick="submit_poll('.$data['pollId'].','.$row['categoryId'].')">';
 				echo $row['categoryName'];
 				echo '</span><br/>';
 			}
 		} else {
-			echo 'You already voted, showing current standings:<br/>';
+			if ($active) {
+				echo 'You already voted, showing current standings:<br/>';
+			} else {
+				echo 'The poll closed, final result:You already voted, showing current standings:<br/>';
+			}
 
 			$votes = getPollStats($data['pollId']);
 			$tot_votes = 0;
