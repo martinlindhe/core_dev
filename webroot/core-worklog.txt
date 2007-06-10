@@ -13,8 +13,14 @@
 			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod	- DONE
 			2) fråga kopplad till ett objekt (nyhetsartikel, blogg, etc)						- 
 			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
-		- visa "current standings" snyggare på site poll när man redan har röstat			
-		
+		- veckans fråga ska starta måndag morgon. när man skapar en ny fråga, visa 2:a dialog:
+			"ska frågan börja från och med i måndags (det är ondsdag idag)
+			"eller från nästa måndag (alltså måndagen den 14:e juni)"
+			eller välj valfri start-dag (dropdowns)
+			
+		- admin_polls ska visa översikt över aktuella + kommande polls
+			klicka en poll för att redigera & visa detaljer om den
+			+ egen sida för "new poll"	
 
 
 	FAQ-modul:
@@ -160,6 +166,7 @@ X = hi prio task
 	- via admin kunna schemalägga användaromröstningar, start&slut-tid (veckans fråga / dagens fråga)
 	- skapat "site polls" sajtomröstningar. wip
 	- gjort så man kan rösta på polls med ajax
+	- visar "current standings" på site poll när man redan har röstat			
 	
 
 2007.06.08:

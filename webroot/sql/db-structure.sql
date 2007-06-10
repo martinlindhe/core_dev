@@ -558,7 +558,7 @@ CREATE TABLE tblNews (
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 CREATE TABLE tblPollVotes (
   voteId bigint(20) unsigned NOT NULL auto_increment,
-  itemId int(10) unsigned NOT NULL default '0',
+  pollId int(10) unsigned NOT NULL default '0',
   userId int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (voteId)
 ) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;

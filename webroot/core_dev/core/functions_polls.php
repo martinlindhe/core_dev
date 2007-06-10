@@ -87,7 +87,12 @@
 			echo 'You already voted, showing current standings:<br/>';
 
 			$votes = getPollStats($data['pollId']);
-			d($votes);
+			$tot_votes = 0;
+			foreach ($votes as $row) $tot_votes += $row['cnt'];
+
+			foreach ($votes as $row) {
+				echo $row['categoryName'].' got '.$row['cnt'].' ('.(($row['cnt'] / $tot_votes)*100).'%) votes<br/>';
+			}
 		}
 		echo '</div>';
 
@@ -134,8 +139,13 @@
 	function getPollStats($_id)
 	{
 		global $db;
+		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT COUNT(voteId) AS cnt FROM tblPollVotes WHERE pollId='.$_id.' GROUP BY voteId';
+		$q  = 'SELECT t1.categoryName, ';
+		$q .= '(SELECT COUNT(*) FROM tblPollVotes WHERE voteId=t1.categoryId) AS cnt ';
+ 		$q .= 'FROM tblCategories AS t1 ';
+		$q .= 'WHERE t1.ownerId='.$_id.' AND t1.categoryType='.CATEGORY_POLL;
+
 		return $db->getArray($q);
 	}
 
