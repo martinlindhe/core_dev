@@ -6,6 +6,44 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+		$pollId = $_GET['id'];
+		
+		if (!empty($_POST['poll_q'])) {
+			updatePoll(POLL_SITE, $pollId, $_POST['poll_q']);
+
+			$list = getCategories(CATEGORY_POLL, $pollId);
+			for ($i=0; $i<count($list); $i++) {
+				if (!empty($_POST['poll_a'.$i])) {
+					updateCategory(CATEGORY_POLL, $list[$i]['categoryId'], $_POST['poll_a'.$i]);
+				}
+			}
+		}
+
+		$poll = getPoll(POLL_SITE, $pollId);
+
+		echo '<h1>Edit site poll</h1>';
+
+		echo '<form method="post" action="">';
+		echo 'Question: ';
+		echo '<input type="text" name="poll_q" size="30" value="'.$poll['pollText'].'"/><br/>';
+
+		echo 'Poll starts: '.$poll['timeStart'].'<br/>';
+		echo 'Poll ends: '.$poll['timeEnd'].'<br/>';
+		echo '<br/>';
+
+		$list = getCategories(CATEGORY_POLL, $pollId);
+		for ($i=0; $i<count($list); $i++) {
+			echo 'Answer '.($i+1).': <input type="text" size="30" name="poll_a'.$i.'" value="'.$list[$i]['categoryName'].'"/><br/>';
+		}
+
+		echo '<input type="submit" class="button" value="Save changes"/>';
+		echo '</form>';
+
+		require($project.'design_foot.php');
+		die;
+	}
+
 	if (!empty($_POST['poll_q']) && !empty($_POST['poll_dur']) && !empty($_POST['poll_start'])) {
 		$pollId = addPoll(POLL_SITE, 0, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
 		
@@ -37,9 +75,8 @@
 		} else {
 			echo '<tr>';
 		}
-		
 
-		echo '<td>'.$row['itemText'].'</td>';
+		echo '<td><a href="'.$_SERVER['PHP_SELF'].'?id='.$row['pollId'].getProjectPath().'">'.$row['pollText'].'</a></td>';
 		echo '<td>'.$row['timeStart'].'</td>';
 		echo '<td>'.$row['timeEnd'].'</td>';
 		echo '</tr>';
@@ -66,11 +103,9 @@
 	echo '</select><br/>';
 	echo '<br/>';
 
-	echo 'Answer 1: <input type="text" size="30" name="poll_a1"/><br/>';
-	echo 'Answer 2: <input type="text" size="30" name="poll_a2"/><br/>';
-	echo 'Answer 3: <input type="text" size="30" name="poll_a3"/><br/>';
-	echo 'Answer 4: <input type="text" size="30" name="poll_a4"/><br/>';
-	echo 'Answer 5: <input type="text" size="30" name="poll_a5"/><br/>';
+	for ($i=1; $i<=5; $i++) {
+		echo 'Answer '.$i.': <input type="text" size="30" name="poll_a'.$i.'"/><br/>';
+	}
 
 	echo '<input type="submit" class="button" value="Create"/>';
 	echo '</form>';

@@ -7,11 +7,11 @@
 	//define('POLL_USER',		2);
 	//define('POLL_GROUP',	3);
 
-	function addPoll($itemType, $ownerId, $text, $duration_mode, $start_mode)
+	function addPoll($_type, $ownerId, $text, $duration_mode, $start_mode)
 	{
-		global $db;
+		global $db, $session;
 
-		if (!is_numeric($itemType) || !is_numeric($ownerId)) return false;
+		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
 		$text = $db->escape(trim($text));
 		
@@ -33,13 +33,7 @@
 				$dayofweek = date('N');
 				$mon = date('n');
 				$day = date('j');
-				echo 'day: '.$day.'<br/>';
-				$day -= $dayofweek;
-				echo 'day: '.$day.'<br/>';
-				
-				//06:00 Monday current week
-				$thismonday = mktime(6, 0, 0, 0, $mon, $day);
-				echo $thismonday;
+				$thismonday = mktime(6, 0, 0, $mon, $day - $dayofweek + 1);	//06:00 Monday current week
 				$timeStart = ',timeStart="'.sql_datetime($thismonday).'"';
 				break;
 
@@ -58,8 +52,17 @@
 
 		$timeEnd = ',timeEnd=DATE_ADD(timeStart, INTERVAL '.$length.' DAY)';
 
-		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',itemType='.$itemType.',itemText="'.$text.'"'.$timeStart.$timeEnd;
+		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session->id.',timeCreated=NOW()'.$timeStart.$timeEnd;
 		return $db->insert($q);
+	}
+
+	function updatePoll($_type, $_id, $_text)
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+
+		$q = 'UPDATE tblPolls SET pollText="'.$db->escape($_text).'" WHERE pollType='.$_type.' AND pollId='.$_id;
+		$db->update($q);	
 	}
 
 	/* get all polls */
@@ -68,10 +71,18 @@
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;		
 
-		$q = 'SELECT * FROM tblPolls WHERE itemType='.$_type.' AND ownerId='.$ownerId.' ORDER BY timeStart ASC,itemText ASC';
-		$list = $db->getArray($q);
+		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' ORDER BY timeStart ASC,pollText ASC';
+		return $db->getArray($q);
+	}
 
-		return $list;
+	/* get all polls */
+	function getPoll($_type, $_id)
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($_id)) return false;		
+
+		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND pollId='.$_id;
+		return $db->getOneRow($q);
 	}
 
 	/* Get active polls */
@@ -80,10 +91,8 @@
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;		
 
-		$q = 'SELECT * FROM tblPolls WHERE itemType='.$_type.' AND ownerId='.$ownerId.' AND NOW() BETWEEN timeStart AND timeEnd ORDER BY timeStart ASC,itemText ASC';
-		$list = $db->getArray($q);
-
-		return $list;
+		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND NOW() BETWEEN timeStart AND timeEnd ORDER BY timeStart ASC,pollText ASC';
+		return $db->getArray($q);
 	}
 
 	function showPoll($data)
@@ -98,7 +107,7 @@
 
 		echo '<div class="item">';
 		if ($active) echo 'ACTIVE POLL: ';
-		echo $data['itemText'].'<br/><br/>';
+		echo $data['pollText'].'<br/><br/>';
 		$list = getCategories(CATEGORY_POLL, $data['pollId']);
 
 		echo '<div id="poll'.$data['pollId'].'">';
@@ -176,7 +185,6 @@
 		$q .= '(SELECT COUNT(*) FROM tblPollVotes WHERE voteId=t1.categoryId) AS cnt ';
  		$q .= 'FROM tblCategories AS t1 ';
 		$q .= 'WHERE t1.ownerId='.$_id.' AND t1.categoryType='.CATEGORY_POLL;
-
 		return $db->getArray($q);
 	}
 

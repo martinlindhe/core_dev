@@ -15,9 +15,6 @@
 			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
 		
 		- kunna ta bort poll
-		- kunna redigera frågan & svaren
-		- bugg: veckans fråga ska starta måndag 06:00, blir nu onsdag 06:00.. urkk zzzz
-
 
 	FAQ-modul:
 		- kunna redigera / ta bort ett FAQ-svar
@@ -167,7 +164,8 @@ X = hi prio task
 	- visar om pollen har avslutats eller ej (visar final stats om den är avslutad)
 	- admin_polls visar översikt över aktiva + kommande polls
 	- kan välja starttid för polls "måndagen denna vecka" eller "nästa lediga tid"
-	
+	- site poll: kan redigera frågan & svaren
+
 
 2007.06.08:
 	- tog bort "check ip" checkbox på login, går bara sätta via config.php. default = true (anledning: användare begriper inte/skiter i funktionen)

@@ -425,7 +425,7 @@ CREATE TABLE tblCategories (
   categoryPermissions tinyint(3) unsigned NOT NULL default '0',
   ownerId bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(3) unsigned NOT NULL default '0',
@@ -561,16 +561,18 @@ CREATE TABLE tblPollVotes (
   pollId int(10) unsigned NOT NULL default '0',
   userId int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (voteId)
-) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 CREATE TABLE tblPolls (
   pollId int(10) unsigned NOT NULL auto_increment,
-  itemType tinyint(1) unsigned NOT NULL,
-  itemText text,
+  pollType tinyint(1) unsigned NOT NULL,
+  pollText text,
   timeStart datetime default NULL,
   timeEnd datetime NOT NULL,
   ownerId int(10) unsigned NOT NULL default '0',
+  createdBy int(10) unsigned NOT NULL default '0',
+  timeCreated datetime default NULL,
   PRIMARY KEY  (pollId)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 CREATE TABLE tblRatings (
   rateId bigint(20) unsigned NOT NULL auto_increment,
   `type` tinyint(3) unsigned NOT NULL default '0',
