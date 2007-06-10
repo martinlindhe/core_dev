@@ -41,7 +41,6 @@
 		return $db->insert($q);
 	}
 
-
 	/* get all polls */
 	function getPolls($_type, $ownerId = 0)
 	{
@@ -66,12 +65,37 @@
 		return $list;
 	}
 
-	function showPoll($row)
+	function showPoll($data)
 	{
+		global $session;
+
 		echo '<div class="item">';
-		echo $row['itemText'].'<br/>';
-		echo 'Starts: '.$row['timeStart'].', ends '.$row['timeEnd'].' '.getCategoriesSelect(CATEGORY_POLL, $row['pollId']);
+
+		echo $data['itemText'].'<br/>';
+		$list = getCategories(CATEGORY_POLL, $data['pollId']);
+
+		echo '<div id="poll'.$data['pollId'].'">';
+		if ($session->isAdmin) echo 'Starts: '.$data['timeStart'].', ends '.$data['timeEnd'].'<br/>';
+
+		if (!hasAnsweredPoll($data['pollId'])) {
+			foreach ($list as $row) {
+				echo '<span onclick="submit_poll('.$data['pollId'].','.$row['categoryId'].')">';
+				echo $row['categoryName'];
+				echo '</span><br/>';
+			}
+		} else {
+			echo 'You already voted, showing current standings:<br/>';
+
+			$votes = getPollStats($data['pollId']);
+			d($votes);
+		}
 		echo '</div>';
+
+		echo '<div id="poll_voted'.$data['pollId'].'" style="display:none">';
+			echo 'Your vote has been registered!';
+		echo '</div>';
+
+		echo '</div>';	//class="item"
 	}
 
 	function showPolls($_type)
@@ -86,39 +110,42 @@
 		}
 	}
 
-/*
-	function removePoll($ownerId, $itemId)
+	function addPollVote($_id, $voteId)
 	{
-		global $db;
-		if (!is_numeric($ownerId) || !is_numeric($itemId)) return false;
+		global $db, $session;
+		if (!is_numeric($_id) || !is_numeric($voteId)) return false;
 
-		$db->delete('DELETE FROM tblPolls WHERE ownerId='.$ownerId.' AND itemId='.$itemId);
-	}
-
-	function addSitePollVote($userId, $itemId, $voteId)
-	{
-		global $db;
-		if (!is_numeric($itemId) || !is_numeric($voteId)) return false;
-
-		if ($userId && is_numeric($userId)) {
-			$check = $db->getOneItem($db, 'SELECT userId FROM tblPollVotes WHERE itemId='.$itemId.' AND userId='.$userId);
-			if ($check) return false;
-			$db->insert('INSERT INTO tblPollVotes SET userId='.$userId.',itemId='.$itemId.',voteId='.$voteId);
-		}
-		$db->query('UPDATE tblPolls SET voteCnt=voteCnt+1 WHERE itemId='.$voteId);
+		$check = $db->getOneItem('SELECT userId FROM tblPollVotes WHERE pollId='.$_id.' AND userId='.$session->id);
+		if ($check) return false;
+		$db->insert('INSERT INTO tblPollVotes SET userId='.$session->id.',pollId='.$_id.',voteId='.$voteId);
 		return true;
 	}
 
-	function hasUserVoted($userId, $voteId)
+	function hasAnsweredPoll($_id)
+	{
+		global $db, $session;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT pollId FROM tblPollVotes WHERE userId='.$session->id.' AND pollId='.$_id;
+		if ($db->getOneItem($q)) return true;
+		return false;
+	}
+	
+	function getPollStats($_id)
 	{
 		global $db;
-		if (!is_numeric($userId) || !is_numeric($voteId)) return false;
 
-		$q = 'SELECT itemId FROM tblPollVotes WHERE userId='.$userId.' AND itemId='.$voteId;
-		$check = $db->getOneItem($q);
+		$q = 'SELECT COUNT(voteId) AS cnt FROM tblPollVotes WHERE pollId='.$_id.' GROUP BY voteId';
+		return $db->getArray($q);
+	}
 
-		if ($check) return true;
-		return false;
+/*
+	function removePoll($ownerId, $_id)
+	{
+		global $db;
+		if (!is_numeric($ownerId) || !is_numeric($_id)) return false;
+
+		$db->delete('DELETE FROM tblPolls WHERE ownerId='.$ownerId.' AND pollID='.$_id);
 	}
 */
 ?>

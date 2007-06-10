@@ -73,6 +73,14 @@ function hide_ajax_anim() { hide_element_by_name('ajax_anim'); }
 //todo: försök kom på ett mer standardiserat interface till GET-funktionen så att mindre sådan här init&callback kod behövs
 
 
+//Sends an AJAX call to submit someones vote for a site poll
+var poll_request = null;
+function ajax_poll(id,opt)
+{
+	poll_request = new AJAX();
+	poll_request.GET(_ext_core+'ajax_poll.php?i='+id+'&o='+opt+_ext_ref, null);
+}
+
 
 //Sends an AJAX call to delete specified file
 var delete_file_request = null;
