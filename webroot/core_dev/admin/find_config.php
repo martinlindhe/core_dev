@@ -19,6 +19,7 @@
 		$config['core_web_root'].'admin/admin_moderation.php'.getProjectPath(0) => 'Moderation',
 		$config['core_web_root'].'admin/admin_faq.php'.getProjectPath(0) => 'FAQ',
 		$config['core_web_root'].'admin/admin_news.php'.getProjectPath(0) => 'News',
+		$config['core_web_root'].'admin/admin_polls.php'.getProjectPath(0) => 'Polls',
 		$config['core_web_root'].'admin/admin_feedback.php'.getProjectPath(0) => 'Feedback',	//todo: hide if feedback-module is disabled
 		$config['core_web_root'].'admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
 		$config['core_web_root'].'admin/admin_events.php'.getProjectPath(0) => 'Event log',
@@ -34,6 +35,7 @@
 		$config['core_web_root'].'admin/admin_db_info.php'.getProjectPath(0) => '$db',
 		$config['core_web_root'].'admin/admin_session_info.php'.getProjectPath(0) => '$session',
 		$config['core_web_root'].'admin/admin_ip.php'.getProjectPath(0) => 'Query IP',
+		$config['core_web_root'].'admin/admin_portcheck.php'.getProjectPath(0) => 'Portcheck',
 		$config['core_web_root'].'admin/admin_phpinfo.php'.getProjectPath(0) => 'PHP'
 	);
 ?>

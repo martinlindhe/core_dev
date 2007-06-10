@@ -11,11 +11,14 @@
 	omröstningar/undersökningar:
 		- kunna koppla en omröstning till en nyhetsartikel, som på aftonnladet:
 			"är det rätt att sätta Paris Hilton i fängelse igen? ja / nej / vet ej"
-		- använd tblRatings eller motsvarande, för att implementera användaromröstningar till flervalsfrågor, t.ex:
-			"Gillar du fisk? JA/NEJ"
-			"Brukar du motionera? JA/NEJ/IBLAND"
 		- via admin kunna schemalägga användaromröstningar, start&slut-tid (veckans fråga / dagens fråga)
-		- fler-fråge-formulär med blandade multival och fritext-fält
+		
+		alltså, vi behöver flera typer av omröstningar:
+			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod
+			2) fråga kopplad till ett objekt (nyhetsartikel, blogg, etc)
+			3) fler-fråge-formulär med blandade multival och fritext-fält
+					
+		
 
 
 	FAQ-modul:
@@ -157,6 +160,7 @@ X = hi prio task
 	- news: kan ej visa artiklar som ej än publicerats för icke-admins
 	- news: kan ändra "time for publication" på nyheter
 	- news: admin_news.php ny fil som listar alla ej ännu pulbicerade nyheter & gamla
+	- admin port checker added
 
 
 2007.06.08:
