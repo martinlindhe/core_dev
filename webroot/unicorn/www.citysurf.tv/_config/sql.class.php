@@ -8,6 +8,7 @@ class sql {
 	function connect() {
 		try {
 			$link = @mysql_connect(SQL_H, SQL_U, SQL_P);
+			if (!$link) die('databasproblem '.mysql_error());
 			@mysql_select_db(SQL_D);
 			$this->db = SQL_D;
 		} catch(Exception $e) {

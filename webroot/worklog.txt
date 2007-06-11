@@ -1,90 +1,36 @@
-2007.06.04 Måndag:
-	* gjort ett script (cronjob, vipupdate.php) som uppdaterar s_vip varje dygn
-		ändrar s_user till aktuell userlevel för varje user
-	* påbörjat implementation av userlevels, wip
-	* implementerat & testat: entre vid över 750 online
+2007.06.11 Måndag:
 
-	mms:
-		- fixat sökvägar så att mms uppladdning fungerar igen
+	db-flytt:
+		* mindre fix för galleribilder-thumbnails
+		* gjort & testat script för galleri-x flytt (galleri x bilder är importerade)
 
+	webb-gränssnitt:
+		* visar snabblänkar till galleri & galleri x + antal bilder i varje galleri (från bitte feedback mail)
 
-2007.06.05 Tisdag:
-	userlevels / vip-förmåner:
-		- implementerat & testat: zoom på alla bilder
-		- implementerat & testat: bevakningar
-		- implementerat & testat: privata gästboksinlägg
-		- implementerat & testat: privata fotokommentarer
-		- implementerat & testat: privata blogg-kommentarer
-		- implementerat & testat: gästbokshistorik
-		- implementerat & testat: chatt-historik
-		- implementerat & testat: utökad profilstatistik
+		* hemlig användare: räknar ej när användaren ser andras sida, galleribilder, visas ej på "senast inloggade"
+		* fixat så räknare för visningar av galleribilder fungerar
 
-	webbgränssnittet:
-		- personliga inställningar: tagit bort en massa olika inställningar
-		- gjort en "GE VIP"-sida, så användare kan ge vip till någon annan
-		- visar thumbnails i översikt i gallerier för vip. klicka thumbnail för att se hela bilden + kommentarer
-		- visar senaste krönikan på inloggad startsida (design saknas)
-
-	server config:
-		- satt dammusgarens systemtid rätt
-		- satt rätt locale så svenska datuum visas nu (istället för engelska månadsnamn osv)
-		- kör updatevip cronjobb 00:10 varje natt
-		- installerat, konfigurerat & testat sendmail på cs.icn.se
-		- påbörjat pill med virtual hosts
-
-2007.06.05 Onsdag:
-	Nationaldag
-
-2007.06.06 Torsdag:
-	server config:
-		mobil.citysurf.tv är konfigurerad och "up and running"
-		process.citysurf.tv är konfigurerad och "up and running"
-
-	- gjort ett script för att importera profilbilder från gamla cs,
-		pic_valid=1 sätts på alla profilbilder i batch-importen för att allt ska räknas som godkänt
-	- kombinerade scriptet med frans cs.php script för userdata import
+	ipx:
+		* gått igenom koden ännu mera, kors-checkat med mika & mailat IPX support.
 
 
-2007.06.07 Fredag:
-	db flytt etc:
-		- satt upp databas på rix.fm burken
-		- färdigställt & kontollkört script för import av profilbilder från gamla cs
-		- uppdaterat script för import av galleribilder från gamla cs
-
-	webbgränssnittet:
-		- genomfört åtgärder som listats i mail från bitte
-		- fixat så att sidan slutar ladda vid misslyckad databasanslutning
-
---[[mailat ovanstående]--
 ***************************************************************************************************
-
-		* vi påbörjar kopiering av alla bilder på TISDAG till dammsugaren
-
-	- userlevels: implementera funktionen "hemlig användare"
-
-
-
+verifiera "hemlig i senast inloggade"
+	
 NU: SMS debitering:
 	- kontrollera att IPX mt billing funkar
 	- kontrollera att intern-mail kvittering skickas korrekt
 
 
-server conf - dammsugaren:
-	* MAIL UTSKICK:
-		- ändrad-epost bekräftelse mail utskick är felaktig, textfältet är "email_update"
-		- bugg: länken som skapas är felaktig: http://cs.icn.se/auth.php?update&go=1&i=194712&key=
-
-	- skapa mailkonto på lokala servern och använd den för inkommande mms-mail check
-
-	- eventuellt sätta upp mms.citysurf.tv åxå
-	- eventuellt sätta upp APC på dammsugaren (finns inget färdigt paket för ubuntu)
-
-
-blandat:
-	* mms upload image & video:
-		- hantera "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
 
 EFETER RELEASE:
+	server conf - dammsugaren:
+		- ändrad-epost bekräftelse mail utskick är felaktig, textfältet är "email_update"
+		- bugg: länken som skapas är felaktig: http://cs.icn.se/auth.php?update&go=1&i=194712&key=
+		- skapa mailkonto på lokala servern och använd den för inkommande mms-mail check
+		- eventuellt sätta upp mms.citysurf.tv åxå
+		- eventuellt sätta upp APC på dammsugaren (finns inget färdigt paket för ubuntu)
+
 	- bugg: du kan inte logga in om du redan är inloggad!
 	- poll på inloggad startsida (admingränssnitt finns)
 
@@ -105,6 +51,9 @@ EFETER RELEASE:
 		- ip-restrictions för SOAP klienter
 		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
 
+blandat:
+	* mms upload image & video:
+		- hantera "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
 
 senare, låg prio:
 	- hitta mysql-prestanda-utbildningar

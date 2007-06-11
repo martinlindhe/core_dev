@@ -27,28 +27,22 @@
 			reloadACT(l('user', 'gallery', $s['id_id'], $res['main_id']));
 		}
 	}
-
+	
 	//räkna visning av bilden
-	if(!$own) {
-		$hidden = $user->getinfo($l['id_id'], 'hidden_bview');
-		if($isAdmin && $res['hidden_id']) {
-			$beenhere = true;
-		} else {
-			if(!$hidden) {
-				$visit = @$sql->queryUpdate("REPLACE INTO {$t}userphotovisit SET status_id = '1', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', photo_id = '".secureINS($res['main_id'])."'");
-				$beenhere = ($visit != '2')?false:true;
-			} else {
-				$visit = @$sql->queryUpdate("REPLACE INTO {$t}userphotovisit SET status_id = '2', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', photo_id = '".secureINS($res['main_id'])."'");
-				$beenhere = ($visit != '2')?false:true;
-			}
+	if (!$own) {
+		$hidden = $user->getinfo($l['id_id'], 'hidden_login');
+		if (!$hidden) {
+			$q = 'REPLACE INTO s_userphotovisit SET status_id = "1", visit_date=NOW(), visitor_id = "'.secureINS($l['id_id']).'", visitor_obj = "'.secureINS($res['main_id']).'"';
+			$visit = $sql->queryUpdate($q);
+			$beenhere = ($visit != '2')?false:true;
 		}
-		if(!$beenhere) {
+
+		if (!$hidden && !$beenhere) {
 			$sql->queryUpdate("UPDATE {$t}userphotovisit SET visit_item = visit_item + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
-			if(!$hidden) {
-				$sql->queryUpdate("UPDATE {$t}userphotovisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND photo_id = '".secureINS($res['main_id'])."' LIMIT 1");
-			} else {
-				$sql->queryUpdate("UPDATE {$t}userphotovisit SET status_id = '2', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND photo_id = '".secureINS($res['main_id'])."' LIMIT 1");
-			}
+			$sql->queryUpdate("UPDATE {$t}userphotovisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND photo_id = '".secureINS($res['main_id'])."' LIMIT 1");
+
+			$q = 'UPDATE s_userphoto SET pht_click=pht_click+1 WHERE main_id='.secureINS($key);
+			$sql->queryUpdate($q);
 		}
 	}
 

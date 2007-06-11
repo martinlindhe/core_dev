@@ -4,7 +4,6 @@
 	$l = $user->getuserfill($l, ', u_email, u_pstort, u_pstlan, location_id');
 	$l = $user->getuserfillfrominfo($l, ', u_fname, u_sname, u_street, u_pstnr, u_cell');
 	$settings = $user->getcontent($l['id_id'], 'user_settings');
-	$hidlog = $user->getinfo($l['id_id'], 'hidlog');
 
 	$mmskey_error = '';
 
@@ -93,7 +92,6 @@
 		if(strlen($newemail.$newpst1.$newcity)) $ins = $sql->queryUpdate("UPDATE {$t}user SET
 		".substr($newemail.$newpst1.$newcity, 0, -1)."
 		WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
-		$ins++;
 		$ins = $sql->queryUpdate("UPDATE {$t}userinfo SET
 		$newpst2
 		u_fname = '".secureINS($_POST['ins_fname'])."',
@@ -124,11 +122,14 @@
 		if(!$ins) {
 			errorTACT('Någonting gick fel.', l('member', 'settings', 'personal'), 1500);
 		}
+		/*
 		if(@$settings['private_chat'] != @$_POST['opt_chat'] || (@$settings['private_chat'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_chat']) && $isOk)?'1':'0';
 			$id = $user->setinfo($l['id_id'], 'private_chat', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
+		*/
+		/*
 		if(@$settings['hidden_view'] != @$_POST['opt_view'] || (@$settings['hidden_view'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_view']) && $isOk)?'1':'0';
 			$id = $user->setinfo($l['id_id'], 'hidden_view', $hidden);
@@ -144,6 +145,7 @@
 			$id = $user->setinfo($l['id_id'], 'hidden_pview', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
+		*/
 		/*
 		if($isAdmin && @$settings['mmsenabled'] != @$_POST['opt_mmsenabled']) {
 			$id = $user->setinfo($l['id_id'], 'mmsenabled', @$_POST['opt_mmsenabled']);
@@ -168,6 +170,7 @@
 		*/
 		$mmskey_error = updateMMSKey();
 		
+		/*
 		if(@$settings['hidden_slogin'] != @$_POST['opt_shidden']) {
 			$hidden = (!empty($_POST['opt_shidden']) && $isOk)?'1':'0';
 			$id = $user->setinfo($l['id_id'], 'hidden_slogin', $hidden);
@@ -178,6 +181,7 @@
 			$id = $user->setinfo($l['id_id'], 'zoom_auto', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
+		*/
 		if(@$settings['hidden_login'] != @$_POST['opt_hidden']) {
 			$hidden = (!empty($_POST['opt_hidden']) && $isOk)?'1':'0';
 			$id = $user->setinfo($l['id_id'], 'hidden_login', $hidden);
@@ -185,6 +189,7 @@
 			$_SESSION['c_h'] = $hidden;
 			if($hidden) $_SESSION['c_d'] = 0;
 		}
+		/*
 		if($hidlog != @$_POST['opt_hidlog'] || ($hidlog && !$isOk)) {
 			$hidden = (!empty($_POST['opt_hidlog']) && $isOk)?'1':'0';
 			$id = $user->setinfo($l['id_id'], 'hidlog', $hidden);
@@ -198,6 +203,7 @@
 			$id = $user->setinfo($l['id_id'], 'hidden_chat', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
+		*/
 		if(@$settings['send_spec'] != @$_POST['opt_spec'] || (@$settings['send_spec'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_spec']))?'1':'0';
 			$id = $user->setinfo($l['id_id'], 'send_spec', $hidden);
@@ -238,7 +244,7 @@
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'theme').'\')', 'icon_settings.png', 'tema'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'img').'\')', 'icon_settings.png', 'bild'); ?>
 	<? makeButton(true, 'goLoc(\''.l('member', 'settings', 'personal').'\')', 'icon_settings.png', 'personliga'); ?>
-	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'subscription').'\')', 'icon_settings.png', 'bevakningar'); ?>
+	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'subscription').'\')', 'icon_settings.png', 'span'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'delete').'\')', 'icon_settings.png', 'radera konto'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'vipstatus').'\')', 'icon_settings.png', 'VIP'); ?>
 	<br class="clr"/>
@@ -305,7 +311,7 @@
 		*/
 
 			if ($user->vip_check(VIP_LEVEL2))
-				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"'.(!$isOk?' disabled':'').(!empty($settings['hidden_login'][1])?' checked':'').'/><label for="opt_hidden1"> Hemlig inloggning (VIP-Delux)</label></td></tr>';
+				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"'.(!$isOk?' disabled':'').(!empty($settings['hidden_login'][1])?' checked':'').'/><label for="opt_hidden1"> Hemlig användare (VIP-Delux) *</label></td></tr>';
 			if ($user->vip_check(VIP_LEVEL1))
 				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"'.(!$isOk?' disabled':'').(!empty($settings['send_spec'][1]) && $isOk?' checked':'').'/><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (VIP)</label></td></tr>';
 		?>
@@ -334,6 +340,9 @@
 	}
 ?>
 	</table>
+	<br/>
+	* = När du är hemlig användare så visas du inte på andra personers besöksloggar.
+	
 	</div>
 	<input type="submit" class="btn2_min r" value="spara!" /><br class="clr"/>
 	</form>

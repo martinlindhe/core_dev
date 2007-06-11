@@ -43,11 +43,11 @@ function blockRightClick(event) {
 
 		<ul id="menu_main">
 			<li><a href="/main/start/">start</a> | </li>
-			<li><a href="/list/users/">sök</a> | </li>
+			<li><a href="/list/users/">leta</a> | </li>
 			<li><a href="/forum/start/">forum</a> | </li>
 			<li><a href="/main/thought/">tyck till</a> | </li>
 			<li><a href="/main/surfcafe/">surfcafé</a> | </li>
-			<li><a href="/text/radio/">webbradio</a> | </li>
+			<!--<li><a href="/text/radio/">webbradio</a> | </li>-->
 			<li><a href="/main/faq/">hjälp &amp; faq</a> | </li>
 			<li><a href="/text/contact/">kontakt</a></li>
 		</ul>

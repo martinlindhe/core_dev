@@ -34,7 +34,7 @@
 
 		$gotage = false;
 		$str = array();
-		$url = array();
+		//$url = array();
 		$bpic = false;
 
 		if (!empty($id)) {
@@ -55,7 +55,7 @@
 			}
 		}
 
-		$url[] = '';
+		//$url[] = '';
 		if(!empty($_POST['lan'])) {
 			$result['lan'] = $_POST['lan'];
 		}
@@ -84,38 +84,38 @@
 		if(!empty($_POST['age']) && is_numeric($_POST['age']) && $_POST['age'] > 0 && $_POST['age'] < 10) $result['age'] = $_POST['age'];
 		if ($result['lan']) {
 			$str[] = '+LÄN'.str_replace('-', '', str_replace(' ', '', $result['lan']));
-			$url[] = 'lan='.$result['lan'].'&';
+			//$url[] = 'lan='.$result['lan'].'&';
 		}
 		if ($result['ort']) {
 			$str[] = '+ORT'.str_replace('-', '', str_replace(' ', '', $result['ort']));
-			$url[] = 'ort='.$result['ort'].'&';
+			//$url[] = 'ort='.$result['ort'].'&';
 		}
 		if ($result['single']) {
 			$str[] = '+SINGLEYES';
-			$url[] = 'single='.$result['single'].'&';
+			//$url[] = 'single='.$result['single'].'&';
 		}
 		if ($result['level']) {
 			$str[] = '+LEVEL'.$result['level'];
-			$url[] = 'l='.$result['level'].'&';
+			//$url[] = 'l='.$result['level'].'&';
 		}
 		if ($result['pic']) {
 			$str[] = '+VALID';
-			$url[] = 'pic='.$result['pic'].'&';
+			//$url[] = 'pic='.$result['pic'].'&';
 		}
 		if ($result['sex'] && ($result['sex'] == 'M' || $result['sex'] == 'F')) {
 			$str[] = '+SEX'.$result['sex'];
-			$url[] = 'sex='.$result['sex'].'&';
+			//$url[] = 'sex='.$result['sex'].'&';
 		}
 		if ($result['alias']) {
-			$url[] = 'alias='.secureOUT($result['alias']).'&';
+			//$url[] = 'alias='.secureOUT($result['alias']).'&';
 		}
 		if ($result['age']) {
 			$str[] = '+AGEOF'.$result['age'];
-			$url[] = 'age='.$result['age'].'&';
+			//$url[] = 'age='.$result['age'].'&';
 		}
 		$join = array();
 		if ($result['online']) {
-			$url[] = 'online='.$result['online'].'&';
+			//$url[] = 'online='.$result['online'].'&';
 		}
 	
 		$lim = ($result['pic'])?45:50;
@@ -146,10 +146,11 @@
 		} else {
 			$ord = 'ORDER BY u.u_alias ASC';
 		}
-		if ($result['ord']) $url[] = 'ord='.secureOUT($result['ord']).'&';
+		//if ($result['ord']) $url[] = 'ord='.secureOUT($result['ord']).'&';
 		$result['paging']['co'] = 200;
 			
-		$q = "SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd, u.u_pstlan, u.level_id, u.u_pstort, u.account_date, u.lastlog_date, u.lastonl_date $res $ord";
+		$q = "SELECT u.* $res $ord";
+		
 		if ($_start || $_end) $q .= " LIMIT ".$_start.",".$_end;
 		else $q .= " LIMIT {$result['paging']['slimit']}, {$result['paging']['limit']}";
 

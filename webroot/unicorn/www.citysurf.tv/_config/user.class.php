@@ -226,7 +226,15 @@ class user {
 		$pd = substr($arr, -3, -1);
 		$sex = substr($arr, -1);
 		$arr = substr($arr, -5, -3);//style="width: 225px; height: 300px;"
-		return (!$id?'<a>':'<a href="'.l('user', 'view', $id).'"'.(!empty($extra['text'])?' title="'.secureOUT($extra['text']).'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>').'<img  alt="'.(!empty($extra['text'])?secureOUT($extra['text']):'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
+		
+		//$x = (!$id?'<a>':'<a href="'.l('user', 'view', $id).'"'.(!empty($extra['text'])?' title="'.secureOUT($extra['text']).'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>').'<img  alt="'.(!empty($extra['text'])?secureOUT($extra['text']):'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
+		
+		$x = '<a href="'.l('user', 'view', $id).'"'.(!empty($extra['text'])?' title="'.secureOUT($extra['text']).'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>';
+					
+		$x .= '<img  alt="'.(!empty($extra['text'])?secureOUT($extra['text']):'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
+		
+
+		return $x;
 	}
 
 	function getministring($arr) {

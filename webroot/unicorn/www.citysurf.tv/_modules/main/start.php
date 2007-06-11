@@ -13,7 +13,7 @@
 			echo '<div style="float: left">';
 			echo '<div class="mediumHeader">senast bloggarna</div>';
 			echo '<div class="mediumBody">';
-		foreach($res as $row) {
+			foreach($res as $row) {
 				echo '<a href="'.l('user','blog',$row['id_id'],$row['main_id']).'">'.$row['blog_title'].'</a> av '.$user->getstring($row, '', array('icons' => 1)).'<br/>';
 			}
 			echo '</div></div>';			
@@ -36,7 +36,7 @@
 		echo '<br class="clr" /><br/>';
 
 		//Listar de senaste inloggade
-		$res = $sql->query("SELECT u.id_id, u.u_alias, u.u_sex, u.u_birth, u.level_id, u.account_date, u_picid, u.u_picvalid, u.u_picd FROM {$t}userlogin s INNER JOIN {$t}user u ON u.id_id = s.id_id AND u.status_id = '1' ORDER BY s.main_id DESC LIMIT 11", 0, 1);
+		$res = $sql->query("SELECT u.* FROM s_userlogin s INNER JOIN {$t}user u ON u.id_id = s.id_id AND u.status_id = '1' ORDER BY s.main_id DESC LIMIT 11", 0, 1);
 		if (count($res)) {
 			echo '<div style="clear: both">';
 			echo '<div class="bigHeader">senast inloggade</div>';
@@ -67,7 +67,7 @@
 		if(count($res)) {
 			echo '<div class="bigHeader">krönika</div>';
 			echo '<div class="bigBody">';
-			echo $res[0]['ad_cmt'];
+			echo nl2br(stripslashes($res[0]['ad_cmt']));
 			echo '</div>';
 		}
 

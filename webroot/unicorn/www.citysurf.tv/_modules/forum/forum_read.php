@@ -92,9 +92,9 @@
 		<?
 			if ($user->vip_check(VIP_LEVEL1)) {
 				if (spyActive($res['main_id'], 'f')) {
-					makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
+					makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta spana');
 				} else {
-					makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+					makeButton(false, 'goLoc(\''.l('forum', 'read', $res['main_id']).'&subscribe'.'\')', 'icon_settings.png', 'spana');
 				}
 			}
 			

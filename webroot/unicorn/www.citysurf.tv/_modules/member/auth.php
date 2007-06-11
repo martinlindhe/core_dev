@@ -14,7 +14,12 @@ class user_auth {
 		cookieSET("a65", $result[1]);
 		$this->user->counterIncrease('login', $result[0]);
 		$res = now();
-		$this->sql->queryInsert("REPLACE INTO {$this->t}userlogin SET id_id = '".secureINS($result[0])."', sess_date = '".$res."'");
+
+		$hidden = $this->user->getinfo($result[0], 'hidden_login');
+		if (!$hidden) {
+			$this->sql->queryInsert("REPLACE INTO {$this->t}userlogin SET id_id = '".secureINS($result[0])."', sess_date = '".$res."'");
+		}
+
 		$this->sql->queryInsert("INSERT INTO {$this->t}usersess SET id_id = '".secureINS($result[0])."', sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', sess_id = '".secureINS($this->sql->gc())."', sess_date = NOW(), type_inf = 'i'");
 		$this->sql->queryUpdate("UPDATE {$this->t}user SET lastlog_date = '".$res."', lastonl_date = '".$res."', account_date = '".$res."' WHERE id_id = '".secureINS($result[0])."'");
 		$this->sql->queryUpdate("REPLACE INTO {$this->t}useronline SET account_date = '".$res."', id_id = '".secureINS($result[0])."', u_sex = '".$result[6]."'");

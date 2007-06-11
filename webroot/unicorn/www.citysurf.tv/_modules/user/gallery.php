@@ -44,9 +44,7 @@
 	$page = 'gallery';
 
 	require(DESIGN.'head_user.php');
-?>
-	<div class="subHead">galleri</div><br class="clr"/>
-<?
+
 	/*
 	if (!$user->vip_check(VIP_LEVEL1)) {
 		echo 'Du måste vara VIP för att kunna se andras galleribilder.<br/><br/>';
@@ -62,33 +60,41 @@
 	} else {
 		if ($user->vip_check(VIP_LEVEL1)) {
 			if (spyActive($s['id_id'], 'g')) {
-				makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
+				makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta spana');
 			} else {
-				makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+				makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id']).'&subscribe'.'\')', 'icon_settings.png', 'spana');
 			}
 		}
 	}
+	
+	$gall_res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC", 0, 1);
+	$gallx_res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1' ORDER BY main_id DESC", 0, 1);
+	
+	makeButton(false, 'document.location=\'#gall\'', 'icon_gallery.png', 'galleri ['.count($gall_res).']');
+	makeButton(false, 'document.location=\'#gallx\'', 'icon_gallery.png', 'galleri X ['.count($gallx_res).']');
 ?>
 <br/><br/><br/>
 
+<a name="gall"></a>
+<div class="subHead">galleri</div><br class="clr"/>
 <?
-/*<script type="text/javascript">var first = '<?=$first?>'; ext = '<?=$ext?>';</script> */
-
+/* <script type="text/javascript">var first = '<?=$first?>'; ext = '<?=$ext?>';</script> */
 		$paging = paging(1, 20);
-		$res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC", 0, 1);
 		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' LIMIT 1");
 		$name = 'galleri';
 		$all = true;
+		$res = $gall_res;
 		include('gallerylist.php');
 ?>
 <br/>
+<a name="gallx"></a>
 <div class="subHead">galleri x</div><br class="clr"/>
 <?
 		$paging = paging(1, 20);
-		$res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1' ORDER BY main_id DESC", 0, 1);
 		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1'");
 		$name = 'galleri x';
 		$all = $allowed;
+		$res = $gallx_res;
 		include('gallerylist.php');
 
 	require(DESIGN.'foot_user.php');

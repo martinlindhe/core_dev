@@ -10,14 +10,14 @@
 ?>
 <div id="mainContent">
 
-	<div class="subHead">inställningar</div><br class="clr"/>
+	<div class="subHead">inställningar - span</div><br class="clr"/>
 
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings').'\')', 'icon_settings.png', 'publika'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'fact').'\')', 'icon_settings.png', 'fakta'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'theme').'\')', 'icon_settings.png', 'tema'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'img').'\')', 'icon_settings.png', 'bild'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'personal').'\')', 'icon_settings.png', 'personliga'); ?>
-	<? makeButton(true, 'goLoc(\''.l('member', 'settings', 'subscription').'\')', 'icon_settings.png', 'bevakningar'); ?>
+	<? makeButton(true, 'goLoc(\''.l('member', 'settings', 'subscription').'\')', 'icon_settings.png', 'span'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'delete').'\')', 'icon_settings.png', 'radera konto'); ?>
 	<? makeButton(false, 'goLoc(\''.l('member', 'settings', 'vipstatus').'\')', 'icon_settings.png', 'VIP'); ?>
 	<br class="clr"/>
@@ -46,7 +46,7 @@
 	}
 
 	if ($spy_forum) {
-		echo '<div class="bigHeader">Forum-bevakningar</div>';
+		echo '<div class="bigHeader">Forum span</div>';
 		echo '<div class="bigBody"><div style="padding: 5px;"><table width="100%">';
 	}
 	foreach ($spy_forum as $row)
@@ -60,7 +60,7 @@
 	if ($spy_forum) echo '</table></div></div><br/>';
 
 	if ($spy_blog) {
-		echo '<div class="bigHeader">Blogg-bevakningar</div>';
+		echo '<div class="bigHeader">Blogg span</div>';
 		echo '<div class="bigBody"><div style="padding: 5px;"><table width="100%">';
 	}
 	foreach ($spy_blog as $row)
@@ -73,7 +73,7 @@
 	if ($spy_blog) echo '</table></div></div><br/>';
 	
 	if ($spy_gal) {
-		echo '<div class="bigHeader">Galleri-bevakningar</div>';
+		echo '<div class="bigHeader">Galleri span</div>';
 		echo '<div class="bigBody"><div style="padding: 5px;"><table width="100%">';
 	}
 	foreach ($spy_gal as $row)

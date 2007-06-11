@@ -7,7 +7,7 @@
 	}
 
 	$theme_css = 'jord.css';
-	include(DESIGN.'top.php');
+	require_once(DESIGN.'top.php');
 ?>
 </head>
 <body>

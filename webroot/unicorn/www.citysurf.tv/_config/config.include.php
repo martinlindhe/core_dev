@@ -17,10 +17,19 @@ define('DEFAULT_USER', '48d40b8b5dee4c06cd8864be1b35456d');
 define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
 $NAME_TITLE = NAME_TITLE;
 define('CH', ' SQL_CACHE ');
+
+/*
 define('SQL_U', 'webaccount');
 define('SQL_P', 'df43534gbhDFAJpt455');
 define('SQL_D', 'platform');
 define('SQL_H', 'localhost');
+*/
+define('SQL_U', 'cs_user');
+define('SQL_P', 'cs8x8x9ozoSSpp');
+define('SQL_D', 'cs_platform');
+define('SQL_H', 'pc3.icn.se');
+
+
 define('SMTP_SERVER', 'localhost');
 define('P2B', 'http://cs.icn.se/');
 define('URL', 'cs.icn.se');
@@ -41,7 +50,36 @@ define("STATSTR", "listar <b>%1\$d</b> - <b>%2\$d</b> (totalt: <b>%3\$d</b>)");
 
 
 
+	function makeButton($bool, $js, $img, $text, $number = false)
+	{
+		echo '<div class="'.($bool?'btnSelected':'btnNormal').'"'.($js?'onclick="'.$js.'"':'').'>';
+		echo '<table summary="" cellpadding="0" cellspacing="0">';
+		echo '<tr>';
+			echo '<td width="3"><img src="/_gfx/themes/btn_c1.png" alt=""/></td>';
+			echo '<td style="background: url(\'/_gfx/themes/btn_head.png\');"></td>';
+			echo '<td width="3"><img src="/_gfx/themes/btn_c2.png" alt=""/></td>';
+		echo '</tr>';
 
+		echo '<tr style="height: 18px">';
+			echo '<td width="3" style="background: url(\'/_gfx/themes/btn_left.png\');"></td>';
+			echo '<td style="padding-left: 19px; padding-right: 4px; padding-top: 1px;">';
+			if ($img) echo '<img src="/_gfx/'.$img.'" style="position: absolute; top: 5px; left: 4px;" alt=""/> ';
+			echo $text;
+			if ($number !== false) echo '&nbsp;&nbsp;'.$number;
+			echo '</td>';
+			echo '<td width="3" style="background: url(\'/_gfx/themes/btn_right.png\');"></td>';
+		echo '</tr>';
+
+		echo '<tr>';
+			echo '<td width="3"><img src="/_gfx/themes/btn_c3.png" alt=""/></td>';
+			echo '<td style="background: url(\'/_gfx/themes/btn_foot.png\');"></td>';
+			echo '<td width="3"><img src="/_gfx/themes/btn_c4.png" alt=""/></td>';
+		echo '</tr>';
+
+		echo '</table>';
+		echo '</div>';
+	}
+	
 
 
 

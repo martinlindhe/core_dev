@@ -47,9 +47,9 @@
 				makeButton(false,	'makeBlog(\''.$l['id_id'].'\')',	'icon_blog.png',	'skriv nytt');
 			} else {
 				if (spyActive($s['id_id'], 'b')) {
-					makeButton(false, 'goLoc(\''.l('user', 'blog', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta bevaka');
+					makeButton(false, 'goLoc(\''.l('user', 'blog', $s['id_id']).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta spana');
 				} else {
-					makeButton(false, 'goLoc(\''.l('user', 'blog', $s['id_id']).'&subscribe'.'\')', 'icon_settings.png', 'bevaka');
+					makeButton(false, 'goLoc(\''.l('user', 'blog', $s['id_id']).'&subscribe'.'\')', 'icon_settings.png', 'spana');
 				}
 			}
 ?>
