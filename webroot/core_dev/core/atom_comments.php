@@ -110,9 +110,11 @@
 	*/
 	function showComments($commentType, $ownerId)
 	{
+		global $session;
+
 		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
 
-		if (!empty($_POST['cmt'])) {
+		if ($session->id && !empty($_POST['cmt'])) {
 			addComment($commentType, $ownerId, $_POST['cmt']);
 		}
 
@@ -123,15 +125,20 @@
 
 		echo '<div id="comments_holder">';
 		foreach ($list as $row) {
+			echo '<div class="comment_details">';
+			echo nameLink($row['userId'], $row['userName']).'<br/>';
+			echo $row['timeCreated'];
+			echo '</div>';
 			echo '<div class="comment_text">'.$row['commentText'].'</div>';
-			echo '<div class="comment_details">'.'By '.$row['userName'].' at '.$row['timeCreated'].'</div>';
 		}
 
-		echo '<form method="post" action="">';
-		echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
-		echo '<input type="submit" class="button" value="Add comment"/>';
-		echo '</form>';
+		if ($session->id) {
+			echo '<form method="post" action="">';
+			echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
+			echo '<input type="submit" class="button" value="Add comment"/>';
+			echo '</form>';
+		}
 
-		echo '</div>';	//id="comments"
+		echo '</div>';	//id="comments_holder"
 	}
 ?>

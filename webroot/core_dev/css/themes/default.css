@@ -363,13 +363,13 @@ select {
 	border: 1px #888 solid;
 	cursor: pointer;
 }
-.comment_text {
+.comment_details {
 	padding: 10px;
 	border: 1px #888 solid;
 	border-bottom: 0px;
 	background-color: #eee;
 }
-.comment_details {
+.comment_text {
 	padding: 10px;
 	border: 1px #888 solid;
 	border-top: 0px;

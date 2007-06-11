@@ -2,8 +2,9 @@
 	require_once('atom_comments.php');		//for news comment support
 	require_once('atom_categories.php');	//for news categories support
 	require_once('atom_rating.php');			//for news rating support
+	require_once('atom_polls.php');				//for support of polls attached to news article
 
-	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsCategories', 'NewsComment', 'NewsFiles');
+	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsCategories', 'NewsComment', 'NewsFiles', 'NewsPolls');
 	$config['news']['allow_rating'] = true;	//allow users to rate articles
 
 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
@@ -148,13 +149,20 @@
 			$menu = array(
 				$_SERVER['PHP_SELF'].'?News:'.$_id => 'Show news',
 				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id => 'Edit',
+				$_SERVER['PHP_SELF'].'?NewsPolls:'.$_id => 'Polls',
 				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => 'Attachments',
 				$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id => 'Delete',
 				$_SERVER['PHP_SELF'].'?NewsCategories:'.$_id => 'Categories',
 				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
 				);
-			echo createMenu($menu, 'blog_menu');
+		} else {
+			$menu = array(
+				$_SERVER['PHP_SELF'].'?News:'.$_id => 'Show article',
+				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
+				);
 		}
+
+		echo createMenu($menu, 'blog_menu');
 
 		if ($current_tab == 'NewsEdit' && $session->isAdmin) {
 
@@ -180,7 +188,11 @@
 			echo '<input type="submit" class="button" value="Save changes"/><br/>';
 			echo '</form><br/>';
 
-		} else if ($current_tab == 'NewsDelete') {
+		} else if ($current_tab == 'NewsPolls' && $session->isAdmin) {
+			//showPolls(POLL_NEWS);
+			managePolls(POLL_NEWS, $_id);
+
+		} else if ($current_tab == 'NewsDelete' && $session->isAdmin) {
 
 			if (confirmed('Are you sure you wish to delete this news entry?', 'NewsDelete:'.$_id)) {
 				removeNews($_id);
@@ -191,11 +203,11 @@
 				die;
 			}
 
-		} else if ($current_tab == 'NewsCategories') {
+		} else if ($current_tab == 'NewsCategories' && $session->isAdmin) {
 
 			manageCategoriesDialog(CATEGORY_NEWS);
 
-		} else if ($current_tab == 'NewsFiles') {
+		} else if ($current_tab == 'NewsFiles' && $session->isAdmin) {
 
 			echo $files->showFiles(FILETYPE_NEWS, $_id);
 

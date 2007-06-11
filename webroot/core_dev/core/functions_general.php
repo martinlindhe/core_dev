@@ -158,9 +158,10 @@
 		echo $text.'<br/><br/>';
 		if ($_id) {
 			//Normal links
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'='.$_id.'&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
+			echo '<a href="'.URLadd('confirmed&amp;'.$_var, $_id).'">Yes, I am sure</a><br/><br/>';
 		} else {
 			//Wiki-style links
+			//fixme: use URLadd() here
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
 		}
 		echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';

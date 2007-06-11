@@ -11,8 +11,8 @@
 	$config['default_title'] = 'sample project';					//default title for pages if no title is specified for that page
 
 	set_include_path($config['core_root'].'core/');
-	//require_once('class.DB_MySQL.php');
 	require_once('class.DB_MySQLi.php');
+	//require_once('class.DB_MySQL.php');
 	//require_once('class.DB_PostgreSQL.php');
 	require_once('class.Session.php');
 	require_once('class.Files.php');
@@ -24,7 +24,7 @@
 	require_once('functions_guestbook.php');
 	require_once('functions_contacts.php');
 	require_once('functions_messages.php');
-	require_once('functions_polls.php');
+	require_once('atom_polls.php');				//for site polls, note: not nessecary here since this project use news module which force includes it, but included for clarity
 	restore_include_path();
 
 	$config['debug'] = true;

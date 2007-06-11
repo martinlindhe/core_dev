@@ -174,6 +174,10 @@
 				case 'file':
 					$result = makeImageLink($link['param']);
 					break;
+					
+				case 'poll':
+					$result = poll(POLL_NEWS, $link['param']);
+					break;
 
 				default:
 					die('unknown command: '. $link['cmd']);
@@ -280,7 +284,11 @@
 		return $retval;
 	}
 
-	/* Returns array with parsed up news article texts */
+	/* Returns array with parsed up news article texts
+		[head]news article heading[/head]
+		
+		[body]news article body[/body]
+	*/
 	function parseArticle($text)
 	{
 		$pos1 = strpos($text, '[head]');

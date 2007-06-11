@@ -67,7 +67,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=801 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=805 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -425,7 +425,7 @@ CREATE TABLE tblCategories (
   categoryPermissions tinyint(3) unsigned NOT NULL default '0',
   ownerId bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(3) unsigned NOT NULL default '0',
@@ -438,7 +438,7 @@ CREATE TABLE tblComments (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (commentId)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 CREATE TABLE tblContacts (
   contactId int(10) unsigned NOT NULL auto_increment,
   contactType tinyint(3) unsigned NOT NULL default '0',
@@ -506,7 +506,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL default '0',
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=108 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId int(10) unsigned NOT NULL auto_increment,
   entryText text,
@@ -515,7 +515,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=196 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=202 DEFAULT CHARSET=utf8;
 CREATE TABLE tblMessages (
   msgId bigint(20) unsigned NOT NULL auto_increment,
   ownerId int(10) unsigned NOT NULL default '0',
@@ -561,18 +561,20 @@ CREATE TABLE tblPollVotes (
   pollId int(10) unsigned NOT NULL default '0',
   userId int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (voteId)
-) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
 CREATE TABLE tblPolls (
   pollId int(10) unsigned NOT NULL auto_increment,
   pollType tinyint(1) unsigned NOT NULL,
   pollText text,
   timeStart datetime default NULL,
-  timeEnd datetime NOT NULL,
+  timeEnd datetime default NULL,
   ownerId int(10) unsigned NOT NULL default '0',
   createdBy int(10) unsigned NOT NULL default '0',
+  deletedBy int(10) unsigned NOT NULL default '0',
   timeCreated datetime default NULL,
+  timeDeleted datetime default NULL,
   PRIMARY KEY  (pollId)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 CREATE TABLE tblRatings (
   rateId bigint(20) unsigned NOT NULL auto_increment,
   `type` tinyint(3) unsigned NOT NULL default '0',

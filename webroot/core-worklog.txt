@@ -1,5 +1,8 @@
 ----[[platform todo]]----
 	core/gör snart:
+		- kunna använda innehållet i en filkategori till en nyhetsartikel/bloggartikel som material för ett bildspel
+
+
 		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
 			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
 
@@ -11,12 +14,9 @@
 	omröstningar/undersökningar:
 		vi behöver flera typer av omröstningar:
 			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod	- DONE
-			2) fråga kopplad till ett objekt (nyhetsartikel, blogg, etc)						- 
+			2) fråga kopplad till ett objekt (t.ex nyhetsartikel)										- DONE
 			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
 			
-		- removePoll(): ta bort svarsalternativen?
-		- bugg: ej kunna rösta när man ej är inloggad. visa bara resultat
-		
 
 	FAQ-modul:
 		- kunna redigera / ta bort ett FAQ-svar
@@ -153,6 +153,14 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.11:
+	- polls: gjorde om functions_polls.php till atom_polls.php
+	- atom_comments: kräver inloggad för att kunna skriva kommentarer
+	- news: kan koppla en eller flera polls till en nyhetsartikel
+	- polls: kan koppla en eller flera polls till en nyhetsartikel & placera dessa var man vill i artikeln
+	- bugg: kunde rösta när man ej var inloggad. visar nu istället resultat
+
+
 2007.06.10:
 	- news: kan ej visa artiklar som ej än publicerats för icke-admins
 	- news: kan ändra "time for publication" på nyheter
