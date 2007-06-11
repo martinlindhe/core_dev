@@ -1,7 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- kunna använda innehållet i en filkategori till en nyhetsartikel/bloggartikel som material för ett bildspel
-
 
 		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
 			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
@@ -51,6 +49,7 @@
 
 
 	news modul (functions_news.php):
+		- kunna använda innehållet i en filkategori till en nyhetsartikel/bloggartikel som material för ett bildspel
 
 
 	kategorier (atom_categories.php):

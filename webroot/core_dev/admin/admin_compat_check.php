@@ -9,7 +9,7 @@
 
 	$supported_apache = array('2.2.3', '2.2.4');
 
-	$supported_php = array('5.2.0', '5.2.2');
+	$supported_php = array('5.2.0', '5.2.99');	//PHP 5.2.x is the current version for target of development
 	$supported_php_gd = array('2.0', '2.0.34');
 	$supported_php_apc = array('3.0.14', '3.0.15');
 
