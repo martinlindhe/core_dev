@@ -295,7 +295,10 @@ class Files
 		echo '</div>';
 
 		//todo: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
-		if ($this->anon_uploads || ($session->id && $fileType == FILETYPE_USERFILE && $session->id == $userid))
+		if ($this->anon_uploads || 
+				($fileType == FILETYPE_USERFILE && $session->id == $userid) ||
+				($fileType == FILETYPE_NEWS && $session->isAdmin)
+				)
 		{
 			echo '<div id="file_gadget_upload">';
 			if (!$categoryId) echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';

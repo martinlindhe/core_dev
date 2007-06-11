@@ -506,7 +506,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL default '0',
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId int(10) unsigned NOT NULL auto_increment,
   entryText text,
@@ -515,7 +515,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=202 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=204 DEFAULT CHARSET=utf8;
 CREATE TABLE tblMessages (
   msgId bigint(20) unsigned NOT NULL auto_increment,
   ownerId int(10) unsigned NOT NULL default '0',
@@ -561,7 +561,7 @@ CREATE TABLE tblPollVotes (
   pollId int(10) unsigned NOT NULL default '0',
   userId int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (voteId)
-) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
 CREATE TABLE tblPolls (
   pollId int(10) unsigned NOT NULL auto_increment,
   pollType tinyint(1) unsigned NOT NULL,

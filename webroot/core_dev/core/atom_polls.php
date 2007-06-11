@@ -201,8 +201,23 @@
 				removePoll($_type, $pollId);
 				return;
 			}
-
+			
 			$poll = getPoll($_type, $pollId);
+
+			if (!empty($_GET['poll_stats'])) {
+				echo '<h1>Poll stats</h1>';
+
+				$votes = getPollStats($pollId);
+				$tot_votes = 0;
+				foreach ($votes as $row) $tot_votes += $row['cnt'];
+
+				foreach ($votes as $row) {
+					$pct = 0;
+					if ($tot_votes) $pct = (($row['cnt'] / $tot_votes)*100);
+					echo $row['categoryName'].' got '.$row['cnt'].' ('.$pct.'%) votes<br/>';
+				}
+				return;
+			}
 
 			echo '<h1>Edit poll</h1>';
 
@@ -224,7 +239,8 @@
 			echo '<input type="submit" class="button" value="Save changes"/>';
 			echo '</form>';
 
-			echo '<a href="'.URLadd('delete&amp;poll_edit', $pollId).'">Delete poll</a>';
+			echo '<a href="'.URLadd('poll_stats', $pollId).'">Poll stats</a><br/>';
+			echo '<a href="'.URLadd('delete&amp;poll_edit', $pollId).'">Delete poll</a><br/>';
 
 			return;
 		}
@@ -294,7 +310,7 @@
 		}
 		if (count($list)) echo '</table>';
 
-		echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">Add new weekly poll</h2>';
+		echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">Add new poll</h2>';
 		echo '<div id="new_poll_form">'; // style="display:none">';
 		echo '<form method="post" action="">';
 		echo 'Question: ';

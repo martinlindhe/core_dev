@@ -159,6 +159,7 @@ X = hi prio task
 	- news: kan koppla en eller flera polls till en nyhetsartikel
 	- polls: kan koppla en eller flera polls till en nyhetsartikel & placera dessa var man vill i artikeln
 	- bugg: kunde rösta när man ej var inloggad. visar nu istället resultat
+	- kan se stats under "edit poll"
 
 
 2007.06.10:
