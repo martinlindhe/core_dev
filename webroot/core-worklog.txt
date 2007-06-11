@@ -15,6 +15,7 @@
 			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
 			
 		- removePoll(): ta bort svarsalternativen?
+		- bugg: ej kunna rösta när man ej är inloggad. visa bara resultat
 		
 
 	FAQ-modul:
