@@ -26,5 +26,8 @@
 		echo $row['timeToPublish'].':<br/>';
 		echo '<a href="'.$config['web_root'].'news.php?News:'.$row['newsId'].'">'.$row['title'].'</a><br/>';
 	}
+	
+	echo '<a href="admin_news_add.php'.getProjectPath(0).'">Add news</a>';
+	
 	include($project.'design_foot.php');
 ?>

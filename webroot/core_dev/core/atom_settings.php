@@ -1,10 +1,10 @@
 <?
 	//atom_settings.php - store user/server or other custom types of settings in database
 
-	define('SETTING_SERVER',				1);			//settings associated with the server
+	//define('SETTING_SERVER',				1);			//settings associated with the server
 	define('SETTING_USERDATA',			2);			//settings used to store personal userdata
-	define('SETTING_LANGUAGE',			10);		//används av lang modulen för inställningar för varje språk
-	define('SETTING_SUBSCRIPTION',	11);		//en inställning till en subscription
+	//define('SETTING_LANGUAGE',			10);		//används av lang modulen för inställningar för varje språk
+	//define('SETTING_SUBSCRIPTION',	11);		//en inställning till en subscription
 
 	$config['settings']['default_email'] = 'E-mail';	//default name of the userdata field used to contain email address
 	$config['settings']['default_theme'] = 'Theme';		//default name of the userdata field used to contain the preferred "Theme"
@@ -41,6 +41,23 @@
 		$defaultValue = $db->escape($defaultValue);
 
 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+		$result = $db->getOneItem($q);
+
+		if ($result) return $result;
+		return $defaultValue;
+	}
+
+	//looks up setting id from tblUserdata. useful for SETTING_USERDATA
+	function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
+	{
+		if (!is_numeric($ownerId) || !$ownerId || !$settingName) return false;
+
+		global $db;
+
+		$settingName = getUserdataFieldIdByName($settingName);
+		$defaultValue = $db->escape($defaultValue);
+
+		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.SETTING_USERDATA.' AND settingName="'.$settingName.'"';
 		$result = $db->getOneItem($q);
 
 		if ($result) return $result;

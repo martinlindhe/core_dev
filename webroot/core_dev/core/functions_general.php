@@ -124,14 +124,6 @@
 		}
 	}
 
-	function nameLink($id, $name = '')
-	{
-		if (!$id) return 'UNREGISTERED';
-		if (!$name) $name = getUserName($id);
-
-		return '<a href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
-	}
-
 	/* Helper function used to create "are you sure?" pages
 	
 		Example use:

@@ -252,7 +252,7 @@ class Session
 
 		/* Read in current users settings */
 		if ($this->allow_themes) {
-			$this->theme = loadSetting(SETTING_USERDATA, $this->id, getUserdataFieldIdByName('Theme'), $this->default_theme);
+			$this->theme = loadUserdataSetting($this->id, 'Theme', $this->default_theme);
 		}
 
 		$this->log('User logged in', LOGLEVEL_NOTICE);

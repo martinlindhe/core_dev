@@ -109,6 +109,7 @@
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 		
 		$data = getPoll($_type, $_id);
+		if (!$data) return false;
 
 		$active = false;
 		if (time() >= datetime_to_timestamp($data['timeStart']) && time() <= datetime_to_timestamp($data['timeEnd'])) {
@@ -135,7 +136,7 @@
 				if ($active) {
 					$result .= 'You already voted, showing current standings:<br/>';
 				} else {
-					$result .= 'The poll closed, final result:You already voted, showing current standings:<br/>';
+					$result .= 'The poll closed, final result:<br/>';
 				}
 			}
 
@@ -379,5 +380,26 @@
 		if (!$session->isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
 
 		$db->update('UPDATE tblPolls SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id);
+	}
+	
+	//useful to list 1 or more polls attached to news article
+	function showAttachedPolls($_type, $_owner)
+	{
+		global $db, $session;
+		if (!$session->isAdmin || !is_numeric($_type) || !is_numeric($_owner)) return false;
+
+		$list = getPolls($_type, $_owner);
+		if (!$list) return;
+
+		foreach ($list as $row) {
+			echo '<div class="poll_attached">';
+			echo '<b>'.$row['pollText'].'</b><br/>';
+			$answers = getCategories(CATEGORY_POLL, $row['pollId']);
+			foreach ($answers as $an) {
+				echo $an['categoryName'].' ';
+			}
+			echo '<a href="">See results</a>';
+			echo '</div>';
+		}
 	}
 ?>

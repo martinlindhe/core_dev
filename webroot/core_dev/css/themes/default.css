@@ -429,6 +429,26 @@ select {
 }
 
 
+.news_item_overview {
+	border-top: 1px #888 solid;
+	padding-top: 10px;
+	max-width: 550px;
+
+}
+.news_item_overview h1 {
+	margin: 0;
+}
+.news_item_picl {
+	float: left;
+	padding-right: 10px;
+	padding-bottom: 10px;
+}
+
+.poll_attached {
+	background-color: #eee;
+	margin-bottom: 5px;
+}
+
 
 
 /* generic container for text */

@@ -292,6 +292,28 @@
 		echo '<script type="text/javascript">if (document.src) document.src.c.focus();</script>';
 	}
 
+	function nameLink($id, $name = '')
+	{
+		if (!$id) return 'UNREGISTERED';
+		if (!$name) $name = getUserName($id);
+		if (!$name) die;
+
+		return '<a href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
+	}
+
+	function nameThumbLink($id, $name = '')
+	{
+		global $config;
+
+		if (!$id) return 'UNREGISTERED';
+		if (!$name) $name = getUserName($id);
+		if (!$name) die;
+		
+		$pic_id = loadUserdataSetting($id, $config['settings']['default_image']);
+
+		return makeThumbLink($pic_id, $name);
+	}
+
 
 	/*
 	//todo: gör till "sök i ett userfält" funktion, ta tillexempel 'Nickname' eller 'E-mail' som parameter

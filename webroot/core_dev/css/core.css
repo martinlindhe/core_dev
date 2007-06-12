@@ -54,3 +54,7 @@ img {
 .ulli_menu_current {
 	background-color: #eee !important;
 }
+
+.clr {
+	clear: both;
+}

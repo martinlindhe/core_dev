@@ -186,6 +186,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.12:
+	- news: snyggat till utseendet på autogenererade nyhets-sammanfattningar
+
+
 2007.06.11:
 	- polls: gjorde om functions_polls.php till atom_polls.php
 	- atom_comments: kräver inloggad för att kunna skriva kommentarer

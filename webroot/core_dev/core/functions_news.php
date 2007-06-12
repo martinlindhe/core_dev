@@ -189,7 +189,6 @@
 			echo '</form><br/>';
 
 		} else if ($current_tab == 'NewsPolls' && $session->isAdmin) {
-			//showPolls(POLL_NEWS);
 			managePolls(POLL_NEWS, $_id);
 
 		} else if ($current_tab == 'NewsDelete' && $session->isAdmin) {
@@ -246,18 +245,35 @@
 		$list = getPublishedNews($_cat_id, $limit);
 
 		foreach ($list as $row) {
-			echo '<div class="newsitem">';
-			echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a>, published '.$row['timeToPublish'];
-			if ($row['categoryId']) echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $row['categoryId']).'</a>';
-			echo '<br/>';
-
-			$art = parseArticle($row['body']);
-			echo $art['head'].'<br/>';
-			echo '</div><br/>';
+			showNewsOverview($row);
 		}
 		if ($session->isAdmin) {
 			echo '<a href="'.$config['core_web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">Add news</a><br/>';
 			echo '<a href="'.$config['core_web_root'].'admin/admin_news.php'.getProjectPath(0).'">Manage news</a><br/>';
 		}
+	}
+	
+	function showNewsOverview($row)
+	{
+		echo '<div class="news_item_overview">';
+			
+		echo '<h1>'.$row['title'].'</h1>';
+		echo '<div>';
+		echo '<div class="news_item_picl">'.nameThumbLink($row['creatorId'], $row['creatorName']).'</div>';
+			echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a> '.$row['timeToPublish'].'<br/>';	//fixme: show optional link title instead
+			$art = parseArticle($row['body']);
+			echo $art['head'];
+		echo '</div>';
+		/*
+		echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a>, published '.$row['timeToPublish'];
+		if ($row['categoryId']) echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $row['categoryId']).'</a>';
+		$art = parseArticle($row['body']);
+		echo '<br/>'.$art['head'].'<br/>';
+		*/
+		echo '</div><br class="clr"/>';
+		
+		//show news polls
+		showAttachedPolls(POLL_NEWS, $row['newsId']);
+		echo '<br/>';
 	}
 ?>
