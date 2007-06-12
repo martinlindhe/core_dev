@@ -188,6 +188,7 @@ X = hi prio task
 	- feedback: kan ha flera typer av feedback. ny typ FEEDBACK_ABUSE för user abuse reports
 	- kan nu anmäla användare. anmälningar visas under feedback i admin
 	- mergade admin_moderationqueuecomments.php med admin_moderation.php
+	- pager på feedback listan i admin
 
 
 2007.06.11:

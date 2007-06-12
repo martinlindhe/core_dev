@@ -51,7 +51,12 @@
 	
 	if (!empty($_GET['delete'])) deleteFeedback($_GET['delete']);
 
-	$list = getFeedback();
+	$tot_cnt = getFeedbackCnt(0);
+	$pager = makePager($tot_cnt, 5);
+
+	$list = getFeedback(0, $pager['limit']);
+	echo $pager['head'];
+	
 	foreach ($list as $row) {
 		echo '<div class="item">';
 		switch ($row['feedbackType']) {

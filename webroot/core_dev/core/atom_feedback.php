@@ -14,23 +14,24 @@
 		$db->insert($q);
 	}
 
-	function getFeedback($_type = 0)
+	function getFeedback($_type = 0, $_sql_limit = '')
 	{
 		global $db;
 		if (!is_numeric($_type)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1 ';
-		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)'.$_sql_limit;
 		if ($_type) $q .= 'WHERE t1.feedbackType='.$_type;
 		return $db->getArray($q);
 	}
 
-	function getFeedbackCnt($_type)
+	function getFeedbackCnt($_type = 0)
 	{
 		global $db;
 		if (!is_numeric($_type)) return false;
 
-		$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback WHERE feedbackType='.$_type;
+		$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
+		if ($_type) $q .= ' WHERE feedbackType='.$_type;
 		return $db->getOneItem($q);
 	}
 

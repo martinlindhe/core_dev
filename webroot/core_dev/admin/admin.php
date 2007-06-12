@@ -13,7 +13,7 @@
 		echo 'Moderation: <a href="admin_moderation.php'.getProjectPath(0).'">'.getModerationQueueCount().' objects</a><br/>';
 	}
 	if (!empty($config['feedback']['enabled'])) {
-		echo 'Feedback: <a href="admin_feedback.php'.getProjectPath(0).'">'.getFeedbackCnt(FEEDBACK_SUBMIT).' entries</a><br/>';
+		echo 'Feedback: <a href="admin_feedback.php'.getProjectPath(0).'">'.getFeedbackCnt().' entries</a><br/>';
 	}
 	echo '<br/>';
 

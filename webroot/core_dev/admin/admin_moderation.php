@@ -45,18 +45,9 @@
 	}
 
 	if (!empty($_GET['comments'])) {
-		$item = getModerationQueueItem($_GET['comments']);
-		switch ($item['queueType']) {
-			case MODERATION_BLOG:
-				echo '<a href="'.$project.'blog.php?Blog:'.$item['itemId'].'" target="_blank">Read the blog</a>';
-				break;
-
-			default:
-				echo('Unknown type');
-		}
 
 		$list = getComments(COMMENT_MODERATION_QUEUE, $_GET['comments']);
-		foreach ($list as $row) { // ($i=0; $i<count($list); $i++) {
+		foreach ($list as $row) {
 			echo '<div class="comment">';
 			if ($row['userId'] == 0) {
 				echo 'Anonymous reporter';
