@@ -175,7 +175,7 @@
 		}
 
 		foreach ($list as $row) {
-			echo poll($row['pollId']);
+			echo poll($row['pollType'], $row['pollId']);
 		}
 	}
 

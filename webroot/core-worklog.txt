@@ -50,9 +50,39 @@
 
 	news modul (functions_news.php):
 		- kunna använda innehållet i en filkategori till en nyhetsartikel/bloggartikel som material för ett bildspel
+		- kunna koppla ett diskussionforum till en nyhet (kräver forum modul)
+		- kunna välja en av 4 fördefinierade upplägg på hur översikten på denna nyhet ska visas
+		
+				exempel 1                  exempel 2
+				|-----------------|        |-----------------|
+				| stor |  rubrik  |        | rubrik          |
+				| bild |----------|        |-----------------|
+				|      |  heading |        |author|  heading |
+				|-----------------|				 | pic  |          |
+				| omröstning      |        |-----------------|
+				|-----------------|        | forum           |
+				| forum           |        |-----------------|
+				|-----------------|
+				
+				exempel 3                  exempel 4
+				|-----------------|        |-----------------|
+				| kategori-bild		|        | stooor  bild    |
+				|-----------------|        |                 |
+				| rubrik          |        |-----------------|
+				|-----------------|        | kategori: rubrik|
+				| heading  | stor |        |                 |
+				|          | bild |        |-----------------|
+				|-----------------|        | heading         |
+				                           |-----------------|
+
+				
+		- kunna ladda upp en bild som specifikt ska vara news headline bild (visas då automatiskt i nyhetsöversikt & detaljvy)
+				
 
 
 	kategorier (atom_categories.php):
+		- kunna ladda upp en bild som ska visas som kategori-rubrik istället för texten
+
 	
 	guestbook (functions_guestbook.php):
 		- gör koden i guestbook.php till en standard-funktion
@@ -129,6 +159,10 @@
 				t.ex en fil i en hemlig filarea, går den att accessa med en direkt-url för annan user?
 			- gör en ordentlig audit var html är tillåtet att skriva in i olika textfält
 
+		- output buffering. echo:a ut kod i funktioner som genererar html. använd output buffering för att baka in dess output i t.ex nyhetsartiklar
+			* då slipper vi de funktioner som kör $content .= 'html ...'
+			* kan använda output buffering för att generera hela sidor utifrån xml defineringar av ui:t...
+		- xml definieringar av ui:t. xml fil som beskriver hur varje sida ska se ut (include head + gadget/module + foot ) typ
 
 	plugin/wurfl:
 
