@@ -3,7 +3,6 @@
 
 
 	forum:
-		- integrera
 
 
 	omröstningar/undersökningar:
@@ -186,6 +185,7 @@ X = hi prio task
 	- file area: öppnar "pass thru" fil-länkar i en ny tabb med javascript
 	- adblock: använder opensearch <link> tag för sökmotor, baserat på den från youtube
 	- stöd för autogenerera opensearch <link> taggar i createXHTMLHeader()
+	- forum funktionalitet påbörjad
 
 
 

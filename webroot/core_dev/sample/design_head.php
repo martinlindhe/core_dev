@@ -15,6 +15,7 @@
 		'news.php' => 'News',
 		'faq.php' => 'FAQ',
 		'feedback.php' => 'Feedback',
+		'forum.php' => 'Forum',
 		'users.php' => 'Users');
 	createMenu($menu);
 
