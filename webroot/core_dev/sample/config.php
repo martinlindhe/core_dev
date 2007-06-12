@@ -17,7 +17,6 @@
 	require_once('class.Session.php');
 	require_once('class.Files.php');
 	require_once('functions_faq.php');
-	require_once('functions_feedback.php');
 	require_once('functions_wiki.php');
 	require_once('functions_news.php');
 	require_once('functions_blogs.php');
@@ -59,10 +58,11 @@
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
 
-	/* Visas på alla olika sidor som hör till ens egen användarprofil */
+	/* Visas på alla olika sidor som hör till någons användarprofil */
 	$param = '';
 	$username = $session->username;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+		//Someones profile
 		$param = '?id='.$_GET['id'];
 		$username = getUserName($_GET['id']);
 		$profile_menu = array(
@@ -71,9 +71,11 @@
 			'user_blogs.php'.$param => 'Blogs',
 			'guestbook.php'.$param => 'Guestbook',
 			'messages.php'.$param => 'Message',
-			'friends.php'.$param => 'Friends'
+			'friends.php'.$param => 'Friends',
+			'abuse.php'.$param => 'Abuse'
 		);
 	} else {
+		//My profile
 		$profile_menu = array(
 			'user.php' => 'Overview:'.$username,
 			'files.php' => 'Files',

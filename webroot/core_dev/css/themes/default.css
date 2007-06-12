@@ -457,6 +457,10 @@ select {
 	border: 1px #888 solid;
 	background-color: #dbc9ea;
 }
+.item h1,h2 {
+	margin: 0;
+}
+
 .item_head {
 	font-size: 16px;
 	font-weight: bold;

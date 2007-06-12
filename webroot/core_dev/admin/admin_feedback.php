@@ -47,18 +47,30 @@
 	}
 
 
-	echo 'Admin feedback - showing oldest items first<br/><br/>';
+	echo 'Showing user-submitted feedback - oldest items first<br/><br/>';
 	
 	if (!empty($_GET['delete'])) deleteFeedback($_GET['delete']);
 
 	$list = getFeedback();
 	foreach ($list as $row) {
+		echo '<div class="item">';
+		switch ($row['feedbackType']) {
+			case FEEDBACK_ABUSE:
+				echo '<h2>Reported user: '.nameLink($row['subjectId']).'</h2>';
+				break;
+
+			case FEEDBACK_SUBMIT:
+				echo '<h2>General feedback</h2>';
+				break;
+			
+			default: die('aouiu');
+		}
 		echo 'From '.nameLink($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
 		echo $row['text'].'<br/>';
 		
 		if ($row['userId']) echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">Reply</a><br/>';
 		echo '<a href="?delete='.$row['feedbackId'].getProjectPath().'">Delete</a><br/>';
-		echo '<hr/>';
+		echo '</div><br/>';
 	}
 
 	require($project.'design_foot.php');

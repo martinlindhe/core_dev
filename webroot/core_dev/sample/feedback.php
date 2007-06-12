@@ -6,7 +6,7 @@
 	wiki('Feedback');
 	
 	if (!empty($_POST['feedback_q'])) {
-		saveFeedback($_POST['feedback_q']);
+		saveFeedback(FEEDBACK_SUBMIT, $_POST['feedback_q']);
 		echo 'Thank you - your question will be answered as soon as possible.<br/><br/>';
 	}
 

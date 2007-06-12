@@ -160,11 +160,12 @@
 		echo '</div>'; //class="blog_head"
 
 		$menu = array($_SERVER['PHP_SELF'].'?Blog:'.$_id => 'Show blog');
-		if ($session->id == $blog['userId'] || $session->isAdmin) {
+		if ($session->id == $blog['userId'] || $session->isSuperAdmin) {
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id => 'Edit blog'));
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id => 'Delete blog'));
-		} else {
+		}
+		if ($session->id != $blog['userId']) {
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id => 'Report blog'));
 		}
 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));

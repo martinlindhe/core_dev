@@ -93,7 +93,11 @@
 			echo '<div class="msg">';
 			echo '<div class="msg_head">';
 				echo ($msg['subject'] ? $msg['subject']:'no subject').' at '.$msg['timeCreated'].'<br/>';
-				echo 'From '.nameLink($msg['fromId']).'<br/>';
+				if ($msg['fromId']) {
+					echo 'From '.nameLink($msg['fromId']).'<br/>';
+				} else {
+					echo '<b>System message</b><br/>';
+				}
 				echo 'To '.nameLink($msg['toId']).'<br/>';
 				echo (!$msg['timeRead']?'UNREAD':'READ');
 			echo '</div>';

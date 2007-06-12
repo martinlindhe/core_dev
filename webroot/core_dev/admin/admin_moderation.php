@@ -19,7 +19,6 @@
 
 	$changed_list = false;
 	
-	echo $pager['head'];
 	$list = getModerationQueue($pager['limit']);
 	foreach ($list as $row) {
 		if (!isset($_POST['method_'.$row['queueId']])) continue;
@@ -45,10 +44,39 @@
 		}
 	}
 
+	if (!empty($_GET['comments'])) {
+		$item = getModerationQueueItem($_GET['comments']);
+		switch ($item['queueType']) {
+			case MODERATION_BLOG:
+				echo '<a href="'.$project.'blog.php?Blog:'.$item['itemId'].'" target="_blank">Read the blog</a>';
+				break;
+
+			default:
+				echo('Unknown type');
+		}
+
+		$list = getComments(COMMENT_MODERATION_QUEUE, $_GET['comments']);
+		foreach ($list as $row) { // ($i=0; $i<count($list); $i++) {
+			echo '<div class="comment">';
+			if ($row['userId'] == 0) {
+				echo 'Anonymous reporter';
+			} else {
+				echo 'Reported by '.nameLink($row['userId'], $row['userName']);
+			}
+			echo ', '.$row['timeCreated'].': <br>';
+			echo $row['commentText'].'</div><br>';
+		}
+
+		require($project.'design_foot.php');
+		die;
+	}
+
 	if ($changed_list) $list = getModerationQueue($pager['limit']);
 
+	echo $pager['head'];
+
 	if (count($list)) {
-		
+
 		echo 'Displaying '.count($list).' object(s) in the moderation queue. Showing oldest items first.<br/><br/>';
 		
 		echo '<form method="post" action="">';
@@ -90,7 +118,7 @@
 			if (!$row['autoTriggered']) {
 				$mcnt = getCommentsCount(COMMENT_MODERATION_QUEUE, $row['queueId']);
 				if ($mcnt) {
-					echo '<a href="admin_moderationqueuecomments.php?id='.$row['queueId'].getProjectPath().'">Motivations ('.$mcnt.')</a>';
+					echo '<a href="?comments='.$row['queueId'].getProjectPath().'">Motivations ('.$mcnt.')</a>';
 				} else {
 					echo 'Motivations (0)';
 				}

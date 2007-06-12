@@ -1,5 +1,6 @@
 <?
 	require_once('atom_settings.php');
+	require_once('atom_feedback.php');	//for user abuse reporting feature
 
 	$config['user']['log_visitors'] = true;	//log each visit on users personal page from another user
 

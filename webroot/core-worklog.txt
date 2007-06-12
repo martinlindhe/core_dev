@@ -1,9 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-
-		- kunna anmäla annan användare, ska då hamna i moderation queue + user comment
-			när detta e gjort, merga admin_moderationqueuecomments.php med admin_moderation.php
-
 		- gör om tblVisitors till generell med en kategori, så man kan logga läsare av bloggar, tittare av bilder, läsare av nyheter
 
 		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
@@ -24,7 +20,6 @@
 
 	feedback-modul:
 		- admin ska kunna publicera svaret som en FAQ. kryssruta vid svar - leder till skapa faq-med förifylld text
-		- kunna ha flera typer av feedback
 
 
 	session/userdata settings:
@@ -163,6 +158,7 @@
 			* då slipper vi de funktioner som kör $content .= 'html ...'
 			* kan använda output buffering för att generera hela sidor utifrån xml defineringar av ui:t...
 		- xml definieringar av ui:t. xml fil som beskriver hur varje sida ska se ut (include head + gadget/module + foot ) typ
+		- flytta ut admin-relaterad css i en egen admin.css som bara includas på adminsidor
 
 	plugin/wurfl:
 
@@ -188,6 +184,10 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.06.12:
 	- news: snyggat till utseendet på autogenererade nyhets-sammanfattningar
+	- feedback: renamed till atom_feedback.php
+	- feedback: kan ha flera typer av feedback. ny typ FEEDBACK_ABUSE för user abuse reports
+	- kan nu anmäla användare. anmälningar visas under feedback i admin
+	- mergade admin_moderationqueuecomments.php med admin_moderation.php
 
 
 2007.06.11:
