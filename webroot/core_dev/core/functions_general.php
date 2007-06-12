@@ -210,7 +210,7 @@
 	*/
 	function createXHTMLHeader()
 	{
-		global $config, $session, $title, $meta_js;
+		global $config, $session, $title, $meta_rss, $meta_js, $meta_search;
 
 		if (!$title) $title = $config['default_title'];
 
@@ -223,7 +223,21 @@
 			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/os3grid.css" type="text/css"/>';
 			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/themes/'.$session->theme.'" type="text/css"/>';
 			echo '<link rel="stylesheet" href="'.$config['web_root'].'css/site.css" type="text/css"/>';
-			linkRSSfeeds();
+
+			if ($meta_rss) {
+				foreach ($meta_rss as $feed) {
+					if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
+					else $extra = getProjectPath(0);
+					echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core_web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
+				}
+			}
+
+			if ($meta_search) {
+				foreach ($meta_search as $search) {
+					echo '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
+				}
+			}
+
 			//echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ajax.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/drag_drop.js"></script>';
@@ -235,28 +249,13 @@
 					echo '<script type="text/javascript" src="'.$script.'"></script>';
 				}
 			}
+
 		echo '</head>';
 		echo '<body>';
 		echo '<script type="text/javascript">';
 		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core_web_root'].'api/";';
 		echo '</script>';
 	}
-
-	/* Called by createXHTMLHeader() to generate xhtml for rss feeds for current page.
-	 other pages can add more feeds to $meta_rss before including design */
-	function linkRSSfeeds()
-	{
-		global $meta_rss, $config;
-
-		if (empty($meta_rss)) return;
-		
-		foreach ($meta_rss as $feed) {
-			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
-			else $extra = getProjectPath(0);
-			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core_web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
-		}
-	}
-
 
 	//used by lyrics project only - maybe remove?
 	function cleanupText($text)

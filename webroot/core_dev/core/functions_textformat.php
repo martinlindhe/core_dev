@@ -167,10 +167,6 @@
 					$result = '<a href="'.$link['param'].'">'.$link['title'].'</a>';
 					break;
 
-				case 'search':
-					$result = '<a href="javascript:installSearchPlugin(\''.$link['param'].'\')">'.$link['title'].'</a>';
-					break;
-
 				case 'file':
 					$result = makeImageLink($link['param']);
 					break;

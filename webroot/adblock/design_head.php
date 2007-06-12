@@ -1,4 +1,8 @@
-<?createXHTMLHeader()?>
+<?
+	$meta_search[] = array('url' => '/adblock/opensearch.xml', 'name' => 'Adblock Ruleset Search');
+
+	createXHTMLHeader()
+?>
 <div id="left-sep"></div>
 <div id="header">
 	<div id="header-logo">

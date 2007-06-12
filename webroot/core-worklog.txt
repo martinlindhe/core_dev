@@ -1,8 +1,9 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- gör om tblVisitors till generell med en kategori, så man kan logga läsare av bloggar, tittare av bilder, läsare av nyheter
 
-		- fixa drag-drop js, har nåt med absolut/relativ positionering att göra
+
+	forum:
+		- integrera
 
 
 	omröstningar/undersökningar:
@@ -10,7 +11,7 @@
 			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod	- DONE
 			2) fråga kopplad till ett objekt (t.ex nyhetsartikel)										- DONE
 			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
-			
+
 
 	FAQ-modul:
 		- kunna redigera / ta bort ett FAQ-svar
@@ -24,6 +25,11 @@
 
 	session/userdata settings:
 		- gör färdigt login-bubblan: forgot password är ej kodat än
+		- gör user activation via email
+
+
+	logging:
+		- gör om tblVisitors till generell med en kategori, så man kan logga läsare av bloggar, tittare av bilder, läsare av nyheter
 
 
 	blog:
@@ -32,11 +38,11 @@
 
 
 	profil/personliga sidor/user search:
-		- sök användare funkar ej om man vill lista användare som har laddat upp presentationsbild
+		- bugg: sök användare funkar ej om man vill lista användare som har laddat upp presentationsbild
 
 
 	messages:
-		- skickade brev ska markeras som lästa av mottagaren (i skickarens outbox)
+		- bugg: skickade brev ska markeras som lästa av mottagaren (i skickarens outbox)
 		- kunna skapa custom folders att flytta meddelanden till
 		- os3grid: gör sortable & highlight default true
 		- bugg: msg id blir fel när man ändrar sorteringsordningen i listan, så då visas fel msg när man klickar
@@ -70,7 +76,6 @@
 				|-----------------|        | heading         |
 				                           |-----------------|
 
-				
 		- kunna ladda upp en bild som specifikt ska vara news headline bild (visas då automatiskt i nyhetsöversikt & detaljvy)
 				
 
@@ -80,7 +85,6 @@
 
 	
 	guestbook (functions_guestbook.php):
-		- gör koden i guestbook.php till en standard-funktion
 
 
 	admin:
@@ -106,25 +110,17 @@
 			och försvinner när admin väljer att manuellt ta bort gamla filer.
 			* behöver admin-gränssnitt som visar att X filer, på totalt Y megabyte uppfyller kravet för att raderas
 		- kunna ändra visningsordningen på bilderna genom att dra & släppa dom + ajax save
-		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden (piggy)
-		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments (piggy)
-		- kunna flytta en fil från en kategori till en annan (js function move_selected_file() finns) (piggy)
-		- byta värdena för file types (FILETYPE_WIKI etc) att börja från 1 iställer för från 100
-		- bugg: ajax show info, filesize är orginal upload size innan filen resizades
-		- ta bort logiken som skapar nya kataloger från Files klassen, gör en funktion som visar en setup-guide
-		- öppna "pass thru" fil-länkar i en ny tabb om det går med javascript
+		- kunna lägga till & redigera bildbeskrivning (kort text) och en längre text tillhörande bilden
+		- kunna kommentera bilder, som på bilddagboken. ägare/admin kunna radera komments
+		- kunna flytta en fil från en kategori till en annan (js function move_selected_file() finns)
 	X - gör klart "cut" i bildvisaren (kunna beskära bilder - blized)
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
 		- kunna ge rating på en bild
-		- använd ImageMagick's PHP extension för mer prestanda:
-			http://www.magickwand.org/
-			http://www.magickwand.org/download/php/windows/php-5.2.0/php_magickwand_q16_st.dll
-			http://www.imagemagick.org/discourse-server/viewforum.php?f=10
+		- få drag-drop js att funka, har nåt med absolut/relativ positionering att göra
 
 
 	wiki:
 		- implementera stöd för "talk" page
-		- [[search:url|titel]] taggar funkar inte. firefox genererar nåt fel. kanske ej går att skicka på variabler så!??!!
 		- logga history för wiki file deletes via ajax
 
 
@@ -133,7 +129,6 @@
 
 
 	db drivers:
-		- microsoft sql server 2005 driver
 
 
 	core/lågprio/förändringar under övervägning:
@@ -146,7 +141,6 @@
 	misc/senare:
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
-		- kolla att sample project & alla admin-funktioner funkar med lighttpd+php
 		- konvertera alla scriptfiler osv till utf8-format så åäö funkar i linux fint när man editerar kod :)
 
 		- säkerhets-check:
@@ -166,8 +160,7 @@
 --------------[[projekt todo]]--------------
 	adblock:
 		- konvertera "report site" funktionen till att använda functions_feedback.php
-		- använd en sån där <link> tag för sökmotor som youtube använder, så "add search" dyker upp under search-engine dropdownen i firefox
-			* ta bort sökmotor-länk grejen från wikin
+
 
 	lyrics:
 		- edit_record.php: kunna editera recordInfo
@@ -189,6 +182,11 @@ X = hi prio task
 	- kan nu anmäla användare. anmälningar visas under feedback i admin
 	- mergade admin_moderationqueuecomments.php med admin_moderation.php
 	- pager på feedback listan i admin
+	- file area: buggfix filesize var orginal upload size innan bild resizades
+	- file area: öppnar "pass thru" fil-länkar i en ny tabb med javascript
+	- adblock: använder opensearch <link> tag för sökmotor, baserat på den från youtube
+	- stöd för autogenerera opensearch <link> taggar i createXHTMLHeader()
+
 
 
 2007.06.11:

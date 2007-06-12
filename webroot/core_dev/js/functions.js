@@ -217,7 +217,8 @@ function download_selected_file()
 
 function passthru_selected_file()
 {
-	document.location = _ext_core+'file_pt.php?id='+zoomed_id+_ext_ref;
+	var w = window.open(_ext_core+'file_pt.php?id='+zoomed_id+_ext_ref, '_blank');
+	w.focus();
 }
 
 //used by image zoomer
@@ -287,20 +288,6 @@ function scroll_element_content(n,offs)
 function urlOpen(u)
 {
 	document.location = u;
-}
-
-//Works with Firefox 1.5 (?) and 2.0 (confirmed)
-function installSearchPlugin(u)
-{
-	if (!u) return;
-
-	if ((typeof window.sidebar=='object') && (typeof window.sidebar.AddSearchProvider=='function')) {
-		trace(u);
-		//window.sidebar.addSearchEngine(u+'.src', u+'.png', '', '0');
-		window.sidebar.AddSearchProvider(u);
-	} else {
-		alert("Sorry, you need a Mozilla-based browser to install a search plugin.");
-	}
 }
 
 function in_arr(arr,val)

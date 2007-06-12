@@ -500,8 +500,7 @@ class Files
 		//Resize the image if it is too big, overwrite the uploaded file
 		if (($img_width > $this->image_max_width) || ($img_height > $this->image_max_height))
 		{
-			$resizedFile = $FileData['tmp_name'];
-			$resizedImage = $this->resizeImage($FileData['tmp_name'], $resizedFile, $this->image_max_width, $this->image_max_height);
+			$this->resizeImage($FileData['tmp_name'], $FileData['tmp_name'], $this->image_max_width, $this->image_max_height, $fileId);
 		}
 
 		//create default sized thumbnail
@@ -541,11 +540,13 @@ class Files
 		return Array(ceil($y_ratio * $orig_width), $max_height);
 	}
 
-	function resizeImage($in_filename, $out_filename, $to_width=0, $to_height=0)
+	function resizeImage($in_filename, $out_filename, $to_width = 0, $to_height = 0, $fileId = 0)
 	{
+		global $db;
+
 		if (empty($to_width) && empty($to_height)) return false;
 
-		$data = getimagesize($in_filename);	//todo, kan man använda list() ?
+		$data = getimagesize($in_filename);
 		$orig_width = $data[0];
 		$orig_height = $data[1];
 		$mime_type = $data['mime'];
@@ -582,6 +583,14 @@ class Files
 
 		imagedestroy($image);
 		imagedestroy($image_p);
+		
+		if ($fileId) {
+			//Update fileId entry with the new file size (DONT use when creating thumbnails!)
+			clearstatcache();	//needed to get current filesize()
+			$q = 'UPDATE tblFiles SET fileSize='.filesize($out_filename).' WHERE fileId='.$fileId;
+			$db->update($q);
+		}
+		
 		return true;
 	}
 
