@@ -7,6 +7,7 @@
 	$config['core_root'] = 'E:/devel/webroot/core_dev/';
 	$config['core_web_root'] = '/core_dev/';
 
+	$config['default_title'] = 'Janina Magnusson';
 	$config['web_root'] = '/janina/';
 
 

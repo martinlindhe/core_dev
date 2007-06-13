@@ -5,8 +5,7 @@
 	require('design_head.php');
 
 	wiki('Home');
-	
-	showPolls(POLL_SITE);
+
 ?>
 <br/>
 <a href="dragdrop.php">dragdrop sample</a>

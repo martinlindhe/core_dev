@@ -17,100 +17,6 @@ define('FILETYPE_FILEAREA_UPLOAD',4);	/* File is uploaded to a file area */
 define('FILETYPE_USERFILE',				5);	/* File is uploaded to the user's own file area */
 define('FILETYPE_USERDATA',				6);	/* File is uploaded to a userdata field */
 
-
-	function showImageGadgetXHTML()
-	{
-		global $config, $session;
-?>
-<div id="zoom_image_layer" style="display:none">
-	<center>
-		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/>
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
-
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
-		<input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
-		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
-		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
-		<input type="button" class="button" value="Move image" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
-<? } ?>
-<? if ($config['news']['allow_rating']) { ?>
-		<br/>
-		<div class="image_rate">
-		<?
-			//ratingGadget(RATE_IMAGE, 1)
-			//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
-		?>
-		</div>
-<? } ?>
-	</center>
-</div>
-<?
-	}
-
-	function showAudioGadgetXHTML()
-	{
-		global $session;
-?>
-<div id="zoom_audio_layer" style="display:none">
-	<center>
-		<div id="zoom_audio" style="width: 160px; height: 50px;"></div>
-		<br/>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
-
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move song" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete song" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
-	}
-	
-	function showVideoGadgetXHTML()
-	{
-		global $session;
-?>
-<div id="zoom_video_layer" style="display:none">
-	<center>
-		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
-		<br/>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
-
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move video" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete video" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
-	}
-
-	function showDocumentGadgetXHTML()
-	{
-		global $session;
-?>
-<div id="zoom_file_layer" style="display:none">
-	<center>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move file" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete file" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
-	}
-
 class Files
 {
 	/* Non configurable, shouldnt be needed to be changed */
@@ -182,53 +88,57 @@ class Files
 
 	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
 	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
-	function showFiles($fileType, $categoryId = 0)
+	function showFiles($fileType, $ownerId, $categoryId = 0)
 	{
 		global $session, $db, $config;
 
 		if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
 
-		if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE) {
-			$categoryId = 0;
+		if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE || $fileType == FILETYPE_WIKI) {
 			if (!empty($_GET['file_category_id']) && is_numeric($_GET['file_category_id'])) $categoryId = $_GET['file_category_id'];
 		}
 
 		if (($session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
-			$this->handleUpload($_FILES['file1'], $fileType, $categoryId);
+			$this->handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
 			unset($_FILES['file1']);	//to avoid further processing of this file upload elsewhere
 			if ($fileType == FILETYPE_WIKI) {
-				addRevision(REVISIONS_WIKI, $categoryId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
+				addRevision(REVISIONS_WIKI, $ownerId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
 			}
 		}
+
+		$userid = $session->id;
+		$username = $session->username;
+
+		$action = '';
+		if ($categoryId) $action = '?file_category_id='.$categoryId;
 
 		echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;">';
 		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="/gfx/ajax_loading.gif"/></div>';
 
 		echo '<div class="file_gadget">';
 
-		//menu
 		echo '<div class="file_gadget_header">';
-		$action = '';
+
 		switch ($fileType)
 		{
 			case FILETYPE_USERFILE:
 				if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 					$userid = $_GET['id'];
 					$username = getUserName($userid);
-				} else {
-					$userid = $session->id;
-					$username = $session->username;
 				}
 				echo 'Files:'.$username;
+				echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
+				break;
 
 			case FILETYPE_FILEAREA_UPLOAD:
-				$action = '?file_category_id='.$categoryId;
-				if (!$categoryId) echo ' - Root Level content';
+				if (!$categoryId) echo 'File area - Root Level content';
 				else echo ' - '.getCategoryName(CATEGORY_USERFILE, $categoryId).' content';
 				break;
 
 			case FILETYPE_WIKI:
+				if (!$categoryId) echo 'Wiki files - Root Level content';
 				echo 'Wiki attachments';
+				echo getCategoriesSelect(CATEGORY_WIKIFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
 				break;
 
 			case FILETYPE_BLOG:
@@ -244,24 +154,13 @@ class Files
 		}
 		echo '</div>';
 
-		//Visar kategorier / kataloger
-		if ($fileType==FILETYPE_FILEAREA_UPLOAD || $fileType==FILETYPE_USERFILE) {
-			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
-		}
-
-		//select the files in the current category (or root level for uncategorized files)
-		if ($fileType == FILETYPE_USERFILE) {
-			$q = 'SELECT * FROM tblFiles WHERE ownerId='.$userid.' AND categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
-		} else {
-			$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC';
-		}
-
+		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId.' ORDER BY timeUploaded ASC';
 		$list = $db->getArray($q);
 
-		showImageGadgetXHTML();
-		showAudioGadgetXHTML();
-		showVideoGadgetXHTML();
-		showDocumentGadgetXHTML();
+		$this->showImageGadgetXHTML();
+		$this->showAudioGadgetXHTML();
+		$this->showVideoGadgetXHTML();
+		$this->showDocumentGadgetXHTML();
 
 		echo '<div id="zoom_fileinfo" style="display:none"></div>';
 		echo '<div class="file_gadget_content">';
@@ -294,36 +193,55 @@ class Files
 		}
 		echo '</div>';
 
-		//todo: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
-		if ($this->anon_uploads || 
+		//fixme: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
+		//fixme: stöd anon_uploads ! den ignoreras totalt idag, dvs anon uploads tillåts aldrig
+		if ( 
 				($fileType == FILETYPE_USERFILE && $session->id == $userid) ||
-				($fileType == FILETYPE_NEWS && $session->isAdmin)
+				($fileType == FILETYPE_NEWS && $session->isAdmin) ||
+				($fileType == FILETYPE_WIKI) ||
+				($fileType == FILETYPE_BLOG)
 				)
 		{
-			echo '<div id="file_gadget_upload">';
-			if (!$categoryId) echo '<input type="button" class="button" value="New category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
-			if ($this->apc_uploads) {
-				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.');">';
-				echo '<input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$session->id.'"/>';
-			} else {
-				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
+			$file_upload = true;
+			if ($fileType == FILETYPE_BLOG) {
+				$data = getBlog($ownerId);
+				if ($data['userId'] != $session->id) $file_upload = false;
 			}
-			echo '<input type="file" name="file1"/> ';
-			echo '<input type="submit" class="button" value="Upload"/>';
-			echo '</form>';
-			echo '</div>';
-			if ($this->apc_uploads) {
-				echo '<div id="file_gadget_apc_progress" style="display:none">';
+
+			if ($file_upload) {
+				echo '<div id="file_gadget_upload">';
+				if (($fileType == FILETYPE_USERFILE && !$categoryId && $session->id == $userid) ||
+						($fileType == FILETYPE_WIKI)
+						)
+				{
+					echo '<input type="button" class="button" value="New file category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
+				}
+
+				if ($this->apc_uploads) {
+					echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.');">';
+					echo '<input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$session->id.'"/>';
+				} else {
+					echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
+				}
+				echo '<input type="file" name="file1"/> ';
+				echo '<input type="submit" class="button" value="Upload"/>';
+				echo '</form>';
 				echo '</div>';
+				if ($this->apc_uploads) {
+					echo '<div id="file_gadget_apc_progress" style="display:none">';
+					echo '</div>';
+				}
 			}
 		}
 
-		if ($session->isAdmin || $fileType == FILETYPE_USERFILE) {
-			if (!$categoryId) {
-				echo '<div id="file_gadget_category" style="display: none;">';
-				echo manageCategoriesDialog(CATEGORY_USERFILE);
-				echo '</div>';
-			}
+		if (($fileType == FILETYPE_USERFILE && !$categoryId) ||
+				($fileType == FILETYPE_WIKI)
+				)
+		{
+			echo '<div id="file_gadget_category" style="display: none;">';
+			if ($fileType == FILETYPE_USERFILE) echo manageCategoriesDialog(CATEGORY_USERFILE);
+			if ($fileType == FILETYPE_WIKI) echo manageCategoriesDialog(CATEGORY_WIKIFILE);
+			echo '</div>';
 		}
 
 		echo '</div>';
@@ -399,11 +317,11 @@ class Files
 
 
 	/* Stores uploaded file associated to $session->id */
-	function handleUpload($FileData, $fileType, $categoryId = 0)
+	function handleUpload($FileData, $fileType, $ownerId, $categoryId = 0)
 	{
 		global $db, $session;
 
-		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($categoryId)) return false;
+		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
 		set_time_limit(90);
 
@@ -420,8 +338,8 @@ class Files
 		$enc_mimetype = strip_tags($FileData['type']);
 
 		$filesize = filesize($FileData['tmp_name']);
-		//maybe todo: flytta inserten till handleImageUpload / handleGeneralUpload istället?
-  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$session->id.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+		//fixme: flytta inserten till handleImageUpload / handleGeneralUpload istället. då slipper vi göra en UPDATE vid resizad image upload
+  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
 
   	$fileId = $db->insert($q);
 
@@ -782,43 +700,27 @@ class Files
 		echo file_get_contents($out_filename);
 	}
 
-	function getFiles($ownerId, $fileType = 0)
+	function getFiles($fileType, $ownerId, $categoryId = 0)
 	{
 		global $db;
 
-		if (!is_numeric($ownerId) || !is_numeric($fileType)) return array();
+		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return array();
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
-		$q .= 'WHERE t1.ownerId='.$ownerId;
+		$q .= 'WHERE t1.categoryId='.$categoryId.' AND t1.ownerId='.$ownerId;
 		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
 		$q .= ' ORDER BY t1.timeUploaded ASC';
-
 		return $db->getArray($q);
 	}
 
-	function getFilesByCategory($fileType, $categoryId)
+	function getFileCount($fileType, $ownerId, $categoryId = 0)
 	{
 		global $db;
 
-		if (!is_numeric($fileType) || !is_numeric($categoryId)) return array();
+		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return 0;
 
-		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
-		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
-		$q .= 'WHERE t1.categoryId='.$categoryId;
-		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
-		$q .= ' ORDER BY t1.timeUploaded ASC';
-
-		return $db->getArray($q);
-	}
-
-	function getFileCount($fileType, $categoryId)
-	{
-		global $db;
-
-		if (!is_numeric($fileType) || !is_numeric($categoryId)) return 0;
-
-		$q = 'SELECT COUNT(fileId) FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType;
+		$q = 'SELECT COUNT(fileId) FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId;
 		return $db->getOneItem($q, true);
 	}
 
@@ -852,5 +754,99 @@ class Files
 		}
 
 		return $result;
+	}
+
+
+	function showImageGadgetXHTML()
+	{
+		global $config, $session;
+?>
+<div id="zoom_image_layer" style="display:none">
+	<center>
+		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/>
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+
+<? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
+		<input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
+		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
+		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
+		<input type="button" class="button" value="Move image" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
+<? } ?>
+<? if ($config['news']['allow_rating']) { ?>
+		<br/>
+		<div class="image_rate">
+		<?
+			//ratingGadget(RATE_IMAGE, 1)
+			//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
+		?>
+		</div>
+<? } ?>
+	</center>
+</div>
+<?
+	}
+
+	function showAudioGadgetXHTML()
+	{
+		global $session;
+?>
+<div id="zoom_audio_layer" style="display:none">
+	<center>
+		<div id="zoom_audio" style="width: 160px; height: 50px;"></div>
+		<br/>
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+
+<? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move song" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete song" onclick="delete_selected_file()"/>
+<? } ?>
+	</center>
+</div>
+<?
+	}
+	
+	function showVideoGadgetXHTML()
+	{
+		global $session;
+?>
+<div id="zoom_video_layer" style="display:none">
+	<center>
+		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
+		<br/>
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+
+<? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move video" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete video" onclick="delete_selected_file()"/>
+<? } ?>
+	</center>
+</div>
+<?
+	}
+
+	function showDocumentGadgetXHTML()
+	{
+		global $session;
+?>
+<div id="zoom_file_layer" style="display:none">
+	<center>
+		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+<? if ($session->isAdmin) { ?>
+		<input type="button" class="button" value="Move file" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete file" onclick="delete_selected_file()"/>
+<? } ?>
+	</center>
+</div>
+<?
 	}
 }

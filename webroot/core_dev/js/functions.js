@@ -56,6 +56,7 @@ function hide_element_by_name(n)
 function show_element_by_name(n)
 {
 	var e = document.getElementById(n);
+	if (!e) alert('fixme: element ' + n + ' not found');
 	e.style.display = '';
 }
 

@@ -3,9 +3,9 @@
 		------------------------------------------------------------
 		Written by Martin Lindhe, 2007 <martin_lindhe@yahoo.se>
 
-		core																			tblWiki
-		för history-stöd: atom_revisions.php			tblRevisions
-		för files-stöd: $files objekt							tblFiles
+		core																				tblWiki
+		for history-support: atom_revisions.php			tblRevisions
+		for files-support: $files objekt						tblFiles
 	*/
 
 	require_once('atom_revisions.php');
@@ -17,8 +17,7 @@
 
 	$config['wiki']['allow_edit'] = false;	//false = only allow admins to edit the wiki articles. true = allow all, even anonymous
 
-
-	$config['wiki']['allow_files'] = false;				//			acceptera bara de tabbar som finns i allowed_tabs
+	$config['wiki']['allow_files'] = false;		//only acceptera bara de tabbar som finns i allowed_tabs
 
 	$config['wiki']['allowed_tabs'] =	array('Wiki', 'WikiEdit', 'WikiHistory', 'WikiFiles');
 	$config['wiki']['first_tab'] = 'Wiki';
@@ -107,14 +106,21 @@
 			return true;
 		}
 
-		$menu = array(
+		if (in_array('WikiFiles', $config['wiki']['allowed_tabs'])) {	//Show files tab?
+			$wiki_menu = array(
 			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
 			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => 'Edit',
 			$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName => 'History',
 			$_SERVER['PHP_SELF'].'?WikiFiles:'.$wikiName => 'Files ('.$files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')');
+		} else {
+			$wiki_menu = array(
+			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
+			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => 'Edit',
+			$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName => 'History');
+		}
 
 		echo '<div class="wiki">';
-		createMenu($menu, 'wiki_menu');
+		createMenu($wiki_menu, 'wiki_menu');
 		echo '<div class="wiki_body">';
 
 		/* Display the wiki toolbar for super admins */
@@ -168,17 +174,16 @@
 
 			//List "unused files" for this Wiki when in edit mode
 			if ($config['wiki']['allow_files']) {
-				$filelist = $files->getFilesByCategory(FILETYPE_WIKI, $data['wikiId']);
+				$filelist = $files->getFiles(FILETYPE_WIKI, $data['wikiId']);
 
 				$str = '';
 
 				foreach ($filelist as $row) {
 					$temp = explode('.', $row['fileName']);
-					$last_name = strtolower($temp[1]);
 
 					$showTag = $linkTag = '[[file:'.$row['fileId'].']]';
 
-					if (in_array($last_name, $files->image_types)) {
+					if (in_array($row['fileMime'], $files->image_mime_types)) {
 						$showTag = makeThumbLink($row['fileId'], $showTag);
 					}
 
@@ -193,7 +198,7 @@
 			}
 			echo '</form>';
 		}
-		elseif ($config['wiki']['allow_files'] && $current_tab == 'WikiFiles')
+		elseif ($current_tab == 'WikiFiles')
 		{
 			echo $files->showFiles(FILETYPE_WIKI, $data['wikiId']);
 		}

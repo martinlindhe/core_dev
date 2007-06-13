@@ -1,18 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-	<title>id generator</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<link rel="stylesheet" href="/css/core.css" type="text/css"/>
-	<link rel="stylesheet" href="/css/themes/default.css" type="text/css"/>
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
-	<script type="text/javascript" src="/js/functions.js"></script>
-</head>
-<body>
 <?
-	date_default_timezone_set('Europe/Stockholm');
+	require_once('config.php');
+	
 	require_once('functions_idgen.php');
-
+	
 	$months = array('Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec');
 
 	$_year = $_month = $_day = $_gender = 0;
@@ -28,11 +18,13 @@
 
 		$ctrl = generateLastDigits($_year, $_month, $_day, $_gender);
 	}
+	
+	createXHTMLHeader();
 ?>
 <div id="middle">
 
 	ID generator<br/>
-	Välj datum & kön för att generera checksumma:
+	Välj datum &amp; kön för att generera checksumma:
 
 	<form name="idgen" method="post" action="">
 <?
@@ -66,18 +58,21 @@
 	<br/><br/>
 <?
 
+	$check_id = '800724-0131';	//default sample (randomzied id. aplogize if its a real one)
+
 	if (!empty($_POST['persnr'])) {
-		if (ValidPersNr($_POST['persnr'])) {
-			echo 'Giltigt personnummer!';
+		$check_id = $_POST['persnr'];
+		if (ValidPersNr($check_id)) {
+			echo '<div class="okay">Giltigt personnummer!</div>';
 		} else {
-			echo 'Ogiltigt personnummer';
+			echo '<div class="critical">Ogiltigt personnummer</div>';
 		}
 	}
 ?>
 	<br/><br/>
 	Mata in personnummer för att verifiera om det är korrekt:
 	<form method="post" action="">
-		Personnummer: <input type="text" name="persnr" value="800726-2010" size="12"/><br/>
+		Personnummer: <input type="text" name="persnr" value="<?=$check_id?>" size="12"/><br/>
 		<input type="submit" class="button" value="Kontrollera"/>
 	</form>
 	

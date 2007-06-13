@@ -9,6 +9,7 @@
 	define('CATEGORY_USERFILE',					1);	//normal, public userfile
 	define('CATEGORY_USERFILE_PRIVATE',	2);	//private userfile, only visible for the users friends / invited ppl
 	define('CATEGORY_USERFILE_HIDDEN',	3);	//files here are only visible by the owner
+	define('CATEGORY_WIKIFILE',					4);	//category for wiki file attachments, to allow better organization if needed
 
 	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
 	define('CATEGORY_CONTACT',			11);		//friend relation category, like "Old friends", "Family"
@@ -123,16 +124,14 @@
 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
 				break;
 
-			case CATEGORY_USERDATA:
+			case CATEGORY_NEWS:
 			case CATEGORY_POLL:
+			case CATEGORY_CONTACT:
+			case CATEGORY_USERDATA:
+			case CATEGORY_WIKIFILE:
+			case CATEGORY_LANGUAGE:
 				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
 				if ($_owner) $q .= ' AND ownerId='.$_owner;
-				break;
-
-			case CATEGORY_LANGUAGE:
-			case CATEGORY_CONTACT:
-			case CATEGORY_NEWS:
-				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
 				break;
 
 			default:

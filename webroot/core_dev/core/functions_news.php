@@ -150,7 +150,7 @@
 				$_SERVER['PHP_SELF'].'?News:'.$_id => 'Show news',
 				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id => 'Edit',
 				$_SERVER['PHP_SELF'].'?NewsPolls:'.$_id => 'Polls',
-				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => 'Attachments',
+				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_NEWS, $_id).')',
 				$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id => 'Delete',
 				$_SERVER['PHP_SELF'].'?NewsCategories:'.$_id => 'Categories',
 				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'

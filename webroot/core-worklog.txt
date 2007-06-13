@@ -1,6 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
-
+		- fundera: är det någon filarea-typ som INTE kan ha annvändning av kategorier? stöd för filarea till blogg t.ex
+			så kan man göra ett bildspel av filkategorin i bloggen :)
 
 	forum:
 
@@ -119,6 +120,7 @@
 
 
 	wiki:
+		- bugg: wiki file kategori funkar ej. js dropdown verkar peka rätt men man lämnar ej root-dir
 		- implementera stöd för "talk" page
 		- logga history för wiki file deletes via ajax
 
@@ -174,6 +176,11 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.13:
+	- wiki: halft påbörjat stöd för filkategorier på wiki files
+	- fixade file upload till wiki. ledde till diverse cleanup i file-klassen
+
+
 2007.06.12:
 	- news: snyggat till utseendet på autogenererade nyhets-sammanfattningar
 	- feedback: renamed till atom_feedback.php

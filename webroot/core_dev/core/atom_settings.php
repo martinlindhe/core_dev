@@ -91,7 +91,7 @@
 					$files->deleteFile($row['settingValue']);
 					$row['settingValue'] = 0;
 				} else if ($row['fieldType'] == USERDATA_TYPE_IMAGE && isset($_FILES['userdata_'.$row['fieldId']])) {
-					$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA);
+					$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], $row['fieldId'], FILETYPE_USERDATA);
 				} else if (isset($_POST['userdata_'.$row['fieldId']])) {
 					$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 				}

@@ -54,7 +54,7 @@ class Session
 	private $default_theme = 'default.css';			//default theme if none is choosen
 	private $allow_themes = false;
 
-	function __construct(array $session_config)
+	function __construct(array $session_config = array(''))
 	{
 		global $db, $config;
 

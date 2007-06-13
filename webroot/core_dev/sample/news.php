@@ -9,5 +9,9 @@
 
 	showNews();
 
+	echo '<br/>';
+
+	showPolls(POLL_SITE);
+
 	require('design_foot.php');
 ?>
