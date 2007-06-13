@@ -1,10 +1,25 @@
 <?
+	/* Returns true if the passed swedish personal number is correct */
+	function ValidPersNr($_persnr, $_gender = 0)//fixme: gender support
+	{
+		$_persnr = str_replace('-', '', $_persnr);
+
+		//year specified in 4 digits
+		if (strlen($_persnr) == 12) $_persnr = substr($_persnr, 2);
+
+		if (strlen($_persnr) != 10) return false;
+
+		$sum = calculateSum($_persnr);
+
+		if (substr($_persnr,-1) == $sum) return true;
+		return false;
+	}
+
 	function calculateSum($_persNr)
 	{
 		$d2 = 2;
 		$sum = 0;
 
-		//klipp ut en siffra i taget...
 		for ($i=0; $i<=8; $i++) {
 			$d1 = intval(substr($_persNr, $i, 1));
 			//echo 'd1 = '.$d1.', d2 = '. $d2. ' ... res1 = '. ($d1 * $d2).'<br/>';
@@ -20,7 +35,7 @@
 			if ($d2 == 2) {
 				$d2 = 1;
 			} else {
-				$d2 = 2; //Växla mellan 212121-212
+				$d2 = 2; //Switch between 212121-212
 			}
 		}
 
@@ -55,77 +70,4 @@
 
 		return $randNums . $randGender . $sum;
 	}
-
-	/*
-    Public Function validateSum(ByVal changeRadios As Boolean) As Boolean
-
-        Dim persNr, y, m, d As String
-        Dim sum, controlCheck, genderCheck As Integer
-
-        If validateInput(False) = False Then
-            lblValid.Text = "Ogiltigt"
-            Return False
-        End If
-
-        If Len(txtControl.Text) <> 4 Then
-            lblValid.Text = "Ogiltigt"
-            Return False
-        End If
-
-        //kontrollera om 4 sista siffrorna är siffror
-        Try
-            Dim tmp As Integer
-            tmp = CInt(txtControl.Text)
-        Catch e As Exception
-            lblValid.Text = "Ogiltigt"
-            Return False
-        End Try
-
-        genderCheck = CInt(Mid(txtControl.Text, 3, 1))
-        controlCheck = CInt(Mid(txtControl.Text, 4, 1))
-
-        If changeRadios Then
-            If genderCheck Mod 2 Then 'man
-                radioWoman.Checked = False
-                radioMan.Checked = True
-            Else 'kvinna
-                radioWoman.Checked = True
-                radioMan.Checked = False
-            End If
-        End If
-
-        y = txtYear.Text
-        m = txtMonth.Text
-        d = txtDay.Text
-        If Len(m) = 1 Then m = "0" & m
-        If Len(d) = 1 Then d = "0" & d
-
-        persNr = Mid(y, 3, 2) & m & d & Mid(txtControl.Text, 1, 3)
-
-        sum = calculateSum(persNr)
-        If controlCheck = sum Then
-
-            If genderCheck Mod 2 Then
-                If radioMan.Checked Then
-                    lblValid.Text = "Giltigt, man"
-                Else
-                    lblValid.Text = "Ogiltigt, fel kön"
-                End If
-            Else
-                If radioWoman.Checked Then
-                    lblValid.Text = "Giltigt, kvinna"
-                Else
-                    lblValid.Text = "Ogiltigt, fel kön"
-                End If
-            End If
-
-        Else
-            lblValid.Text = "Ogiltigt (sista=" & sum & ")"
-        End If
-
-        Return True
-
-    End Function
-	*/
-
 ?>

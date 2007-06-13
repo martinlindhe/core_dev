@@ -152,7 +152,7 @@
 		$mail->CharSet  = 'utf-8';
 
 		$mail->From     = $config['smtp']['sender'];
-		$mail->FromName = 'Agent Interactive';
+		$mail->FromName = $config['smtp']['sender_name'];
 
 		foreach ($mails as $adr) {
 			$mail->AddAddress($adr);
