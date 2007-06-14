@@ -28,6 +28,9 @@
 				"Bad Request. Can't find HTTP_RAW_POST_DATA"
 			this occurs with php 5.2.2, hopefully will not be needed in the future.
 			This works wether always_populate_raw_post_data is on or off
+			
+			fixme2: this was a bug in php 5.2.2. thats supposed to have been fixed in php 5.2.3 (verify!)
+			here is the bug: http://bugs.php.net/bug.php?id=41293
 		*/
 	  $data = file_get_contents('php://input');
 	  $server->handle($data);

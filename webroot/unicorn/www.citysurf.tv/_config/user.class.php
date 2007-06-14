@@ -3,6 +3,7 @@
 	define('VIP_NONE',	1);		//normal user
 	define('VIP_LEVEL1', 2);
 	define('VIP_LEVEL2', 3);
+	define('VIP_ADMIN',	10);	//full admin!
 
 class user {
 	var $sql, $self, $info, $t, $id;

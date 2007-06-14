@@ -55,9 +55,31 @@
 		* tog bort en begränsning i hur många bilder man kunde ladda upp (gammal check-kod från frans låg kvar) (bitte feedback)
 		* kunde ej se sitt eget galleri X (bitte feedback)
 
+		NYA CITYSURF LANSERAT!
+
+2007.06.14 Torsdag:
+	webbgränssnittet:
+		* gömt bort "mms-uppladdning" funktionen tillsvidare
+		* VIP / VIP-D ikoner syns igen på profilöversikt
+		* man kan se sin egen galleri X igen
+		* "skriv inlägg" knapp i forumet visar inte längre saknad bild
+		* olästa brev visas i fet text
+		* tyck till fixad
+		* fixat "ändra typ av relation"
+		* fixat formateringen av mail, radbryten osv
+		* visar indikator på olästa mail i toppmenyn med röd text
+		* -""- gästbok
+		* en mängd småfixar och småpill över hela sajten
+		* fixat så bilduppladdning fungerar direkt från "redigera publika inställningar"-sidan
+		* fixat en mindre bugg med vip-statusuppdateringen
+		* tagit bort all sparning av 4-sista siffrorna i personnummer & tömt databasen på befintlig data
+		* visar ikon i inkorgen som indikerar BESVARAT BREV
 
 
 ***************************************************************************************************
+NU - buggar:
+	- ajax chatten strular. för vipmedlemmar så upprepar sig chatthistoriken hela tidne.
+		för ej vip syns den inte alls
 
 NU: SMS debitering:
 	- kontrollera att IPX mt billing funkar

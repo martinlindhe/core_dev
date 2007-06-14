@@ -119,9 +119,8 @@
 		}
 
 		//Spara alla ändringar förrutom ändrad epost-address.
-		//todo: spara postnummer
 		if (ValidPersNr($persnr)) {
-			$q = 'UPDATE s_user SET '.$newpst1.'u_birth="'.secureINS($_POST['persnr_year']).'-'.secureINS($_POST['persnr_month']).'-'.secureINS($_POST['persnr_day']).'",u_birth_x="'.secureINS($_POST['persnr_check']).'" WHERE id_id='.$l['id_id'];
+			$q = 'UPDATE s_user SET '.$newpst1.'u_birth="'.secureINS($_POST['persnr_year']).'-'.secureINS($_POST['persnr_month']).'-'.secureINS($_POST['persnr_day']).'" WHERE id_id='.$l['id_id'];
 			$sql->queryUpdate($q);
 		}
 
@@ -172,7 +171,7 @@
 	$l = $user->getuserfill($l, ', u_email, u_pstort, u_pstlan, location_id');
 	$l = $user->getuserfillfrominfo($l, ', u_fname, u_sname, u_street, u_pstnr, u_cell');
 	
-	$q = 'SELECT u_birth, u_birth_x FROM s_user WHERE id_id='.$l['id_id'];
+	$q = 'SELECT u_birth FROM s_user WHERE id_id='.$l['id_id'];
 	$birth = $sql->queryLine($q);
 
 	list($persnr_year, $persnr_month, $persnr_day) = explode('-', $birth[0]);
