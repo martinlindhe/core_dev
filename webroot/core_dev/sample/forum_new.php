@@ -19,7 +19,7 @@
 	*/
 
 	require_once('config.php');
-	
+
 	$session->requireLoggedIn();
 
 	$itemId = 0;
@@ -29,13 +29,9 @@
 	if ($itemId) {
 		$item = getForumItem($itemId);
 		$parent = getForumItem($item['parentId']);
-		if (($itemId && !$item) || $item['locked']) {
-			//block attempt to create item with nonexisting parent
-			header('Location: forum.php');
-			die;
-		}
+		if (($itemId && !$item) || $item['locked']) die;	//block attempt to create item with nonexisting parent
 	}
-	
+
 	$quoteId = 0;
 	if (!empty($_GET['q']) && is_numeric($_GET['q'])) $quoteId = $_GET['q'];
 
@@ -50,10 +46,11 @@
 			$writeBody = '[quote name='.$quoteName.']'.$quoteItem['itemBody']."[/quote]\n\n";
 		}
 	}
-	
 
 	if (!empty($_POST['subject']))	$writeSubject = $_POST['subject'];
 	if (!empty($_POST['body']))			$writeBody = $_POST['body'];
+
+	$createdId = 0;
 
 	if (!empty($_POST['subject']) || !empty($_POST['body'])) {
 
@@ -61,7 +58,7 @@
 			if ($_SESSION['isAdmin'] && ($itemId == 0 || $item['parentId'] == 0)) {
 				//Create category or a forum
 				if ($writeSubject) {
-					$itemId = addForumFolder($itemId, $writeSubject, $writeBody);
+					$createdId = addForumFolder($itemId, $writeSubject, $writeBody);
 				} else {
 					$forum_error = 'You must write a topic!';
 				}
@@ -72,7 +69,7 @@
 				} else {
 					$sticky = 0;
 					if ($_SESSION['isAdmin'] && !empty($_POST['sticky'])) $sticky = $_POST['sticky'];
-					$itemId = addForumMessage($itemId, $writeSubject, $writeBody, $sticky);
+					$createdId = addForumMessage($itemId, $writeSubject, $writeBody, $sticky);
 				}
 			}
 		} else {
@@ -94,31 +91,32 @@
 		}*/
 	}
 
+	if ($createdId) {
+		header('Location: forum.php?id='.$createdId);
+		die;	
+	}
+
 	require('design_head.php');
 
-	$hide_body = false;
+	echo createMenu($forum_menu, 'blog_menu');
+
 	$hide_subject = false;
 
-	if ($itemId == 0)
-	{
+	if ($itemId == 0) {
 		//Create top level category (admins only)
-		echo '<a href="forum.php">Forum</a> - Add new category<br><br>';
+		echo '<a href="forum.php">Forum</a> - Add new category<br/><br/>';
 		$title = 'New category';
-		$hide_body = true;
-	} else if (empty($item['parentId']))
-	{
+	} else if (empty($item['parentId'])) {
 		//Create a forum (admins only)
-		echo '<a href="forum.php">Forum</a> - Add new forum<br><br>';
+		echo '<a href="forum.php">Forum</a> - Add new forum<br/><br/>';
 		$title = 'New forum';
-	} else if ($parent['parentId'] == 0)
-	{
+	} else if ($parent['parentId'] == 0) {
 		//Create a discussion thread (everyone)
-		echo getForumFolderDepthHTML($itemId).' - Add new discussion thread<br><br>';
+		echo getForumDepthHTML(FORUM_FOLDER, $itemId).' - Add new discussion thread<br><br>';
 		$title = 'New discussion thread';
-	} else
-	{
+	} else {
 		//Create a post (everyone)
-		echo getForumFolderDepthHTML($itemId).' - Add a response to this post<br><br>';
+		echo getForumDepthHTML(FORUM_FOLDER, $itemId).' - Add a response to this post<br><br>';
 		echo showForumPost($item, '', false);
 		$hide_subject = true;
 		$title = 'New post';
@@ -128,25 +126,29 @@
 
 	echo '<form method="post" name="newpost" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
 	if (!$hide_subject) {
-		if (!$itemId) echo 'Name: &nbsp;';
-		else echo 'Subject: &nbsp;';
+		if (!$itemId) echo 'Name:<br/>';
+		else echo 'Subject:<br/>';
 		echo '<input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
 	}
-	if (!$hide_body) {
-		echo '<br>';
-		echo 'Post:<br>';
-		echo '<textarea cols=80 rows=15 name="body">'.$writeBody.'</textarea><br>';
+
+	$item = getForumItem($itemId);
+
+	if (forumItemIsFolder($item['parentId'])) {
+		echo 'Description:<br/>';
+		echo '<input type="text" name="body" size="60" value="'.$writeBody.'"/><br/><br/>';
+	} else if ($item['parentId']) {
+		echo '<textarea name="body" cols="60" rows="14">'.$writeBody.'</textarea><br/><br/>';
 	}
-	
-	if ($session->isAdmin && $itemId != 0 && empty($parent['parentId'])) {
+
+	if ($session->isAdmin && $itemId && !forumItemIsFolder($itemId)) {
 		//Allow admins to create stickies & announcements
 		echo '<input name="sticky" type="radio" class="radio" value="0" id="r0" checked="checked"/><label for="r0">Create a normal thread</label><br/>';
 		echo '<input name="sticky" type="radio" class="radio" value="1" id="r1"/><label for="r1">Admin only: Make the thread a sticky</label><br/>';
 		echo '<input name="sticky" type="radio" class="radio" value="2" id="r2"/><label for="r2">Admin only: Make the thread an announcement</label><br/>';
 	}
 	
-	echo '<br>';
-	echo '<input type="submit" class="button" value="Lagre"> ';
+	echo '<br/>';
+	echo '<input type="submit" class="button" value="Save"/> ';
 
 /*
 	if (!isSubscribed($itemId, SUBSCRIBE_MAIL)) {
@@ -155,14 +157,13 @@
 		$content .= '<span class="objectCritical">Du har redan en bevakning h&auml;r eller h&ouml;gre upp i diskussionstr&aring;den</span>';
 	}
 */
-	echo '</form><br>';
-
-
-	echo'<a href="javascript:history.go(-1);">Go back</a>';
-
-	require('design_foot.php');
+	echo '</form><br/>';
+	echo '<a href="javascript:history.go(-1);">Go back</a>';
 ?>
 <script type="text/javascript">
 if (document.newpost.subject) document.newpost.subject.focus();
 else if (document.newpost.body) document.newpost.body.focus();
 </script>
+<?
+	require('design_foot.php');
+?>

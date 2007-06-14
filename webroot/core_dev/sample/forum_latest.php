@@ -3,12 +3,14 @@
 
 	require('design_head.php');
 
-	echo 'De fem siste innlegg i debattforumet:<br><br>';
+	echo createMenu($forum_menu, 'blog_menu');
+
+	echo 'The 5 last posts in the forum:<br/><br/>';
 
 	$list = getLastForumPosts(5);
 
 	for ($i=0; $i<count($list); $i++) {
-		echo getForumFolderDepthHTML($list[$i]['itemId']);
+		echo getForumDepthHTML(FORUM_FOLDER, $list[$i]['itemId']);
 		echo showForumPost($list[$i], '#'.($i+1));
 	}
 

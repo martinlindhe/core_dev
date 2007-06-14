@@ -451,6 +451,22 @@ select {
 
 
 
+/* forum css */
+.forum_overview_group {
+	border: 1px solid #aaa;
+	color: #fff;
+	background-color: #4EC04E;
+	padding: 10px;
+	-moz-border-radius-bottomleft:15px;
+	-moz-border-radius-bottomright:15px;
+	-moz-border-radius-topleft:15px;
+	-moz-border-radius-topright:15px;	
+}
+.forum_overview_group a,.forum_overview_group a:visited {
+	color: #fff;
+}
+
+
 /* generic container for text */
 .item {
 	padding: 10px;

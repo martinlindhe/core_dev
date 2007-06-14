@@ -1,4 +1,8 @@
-<?createXHTMLHeader()?>
+<?
+	$meta_search[] = array('url' => '/lyric/opensearch.xml', 'name' => 'lyric search');
+
+	createXHTMLHeader();
+?>
 <div id="left_nav">
 
 <?
@@ -23,7 +27,7 @@
 
 
 <form name="search" method="post" action="search.php">
-	<input type="text" size="18" name="query"/><br/>
+	<input type="text" size="18" name="s"/><br/>
 	<input type="submit" value="Search" class="button"/>
 </form>
 

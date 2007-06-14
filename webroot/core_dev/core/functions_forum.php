@@ -134,14 +134,6 @@
 		return false;
 	}
 
-	function getForumItemParent(&$db, $itemId)
-	{
-		if (!is_numeric($itemId)) return false;
-
-		$sql = 'SELECT parentId FROM tblForums WHERE itemId='.$itemId;
-		return dbOneResultItem($db, $sql);
-	}
-
 	function setForumItemParent($itemId, $parentId)
 	{
 		global $db;
@@ -151,37 +143,6 @@
 		$db->update($q);
 	}
 
-/*
-	//Recursive, returns the nearest folderId above itemId (which is a message)
-	function getForumFolderParent(&$db, $itemId)
-	{
-		if (!is_numeric($itemId)) return false;
-		$parentId = getForumItemParent($db, $itemId);
-		if ($parentId == 0) return $parentId;
-
-		$sql = 'SELECT itemType FROM tblForums WHERE itemId='.$parentId;
-		$itemType = dbOneResultItem($db, $sql);
-
-		if ($itemType == FORUM_FOLDER) return $parentId;
-		return getForumFolderParent($db, $parentId);
-	}
-*/
-
-	//Returns the root message id of $itemId
-/*
-	function getForumMessageRoot(&$db, $itemId)
-	{
-		if (!is_numeric($itemId)) return false;
-		$parentId = getForumItemParent($db, $itemId);
-		if ($parentId == 0) return $itemId;
-
-		$sql = 'SELECT itemType FROM tblForums WHERE itemId='.$parentId;
-		$itemType = dbOneResultItem($db, $sql);
-
-		if ($itemType == FORUM_FOLDER) return $itemId;
-		return getForumMessageRoot($db, $parentId);
-	}
-*/
 	function addForumFolder($parentId, $folderName, $folderDesc = '')
 	{
 		global $db, $session;
@@ -195,169 +156,64 @@
 		return $db->insert($q);
 	}
 
-	function addForumMessage(&$db, $parentId, $subject, $body, $sticky = 0)
+	function addForumMessage($parentId, $subject, $body, $sticky = 0)
 	{
-		global $config;
+		global $db, $session, $config;
 		
-		if (!$_SESSION['loggedIn'] || !is_numeric($parentId) || !is_numeric($sticky)) return false;
+		if (!$session->id || !is_numeric($parentId) || !is_numeric($sticky)) return false;
 
 		$body = strip_tags($body);
-		$subject = dbAddSlashes($db, strip_tags($subject));
+		$subject = $db->escape(strip_tags($subject));
 
 		$body = substr($body, 0, $config['forum']['maxsize_body']);
-		$body = dbAddSlashes($db, $body);
+		$body = $db->escape($body);
 
-		$sql = 'INSERT INTO tblForums SET itemType='.FORUM_MESSAGE.',authorId='.$_SESSION['userId'].',parentId='.$parentId.',itemSubject="'.$subject.'",itemBody="'.$body.'",timeCreated=NOW()';
-		if ($sticky) $sql .= ',sticky='.$sticky;
-		$query = dbQuery($db, $sql);
-		$itemId = $db['insert_id'];
-		
-		/* Check if message contains any objectionable words */
-		/*
-		if (isObjectionable($db, $subject) || isObjectionable($db, $body)) {
-			addToModerationQueue($db, $itemId, MODERATION_OBJECTIONABLE_POST);
-		}*/
+		$q = 'INSERT INTO tblForums SET itemType='.FORUM_MESSAGE.',authorId='.$session->id.',parentId='.$parentId.',itemSubject="'.$subject.'",itemBody="'.$body.'",timeCreated=NOW()';
+		if ($sticky) $q .= ',sticky='.$sticky;
+		$itemId = $db->insert($q);
 
-		if (isSensitive($db, $subject) || isSensitive($db, $body)) {
-			addToModerationQueue($db, $itemId, MODERATION_SENSITIVE_POST);
-		}
+		/* Auto-moderate */
+		if (isObjectionable($subject) || isObjectionable($body)) addToModerationQueue($itemId, MODERATION_OBJECTIONABLE_POST);
+		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue($itemId, MODERATION_SENSITIVE_POST);
 
 		/* Check if there is any users who should be notified about this new message */
-		notifySubscribers($db, $parentId, $itemId, SUBSCRIBE_MAIL);
+		//notifySubscribers($parentId, $itemId, SUBSCRIBE_MAIL);
 		return $itemId;
 	}
 
-	/* Returns the $count last posts by $userId, or all if $count is skipped */
-	function getUserLastForumPosts(&$db, $authorId, $count = '')
-	{
-		if (!is_numeric($authorId)) return false;
-
-		$sql = 'SELECT * FROM tblForums WHERE authorId='.$authorId.' AND itemType='.FORUM_MESSAGE.' ORDER BY timeCreated DESC';
-		if (is_numeric($count)) {
-			$sql .= ' LIMIT 0,'.$count;
-		}
-
-		return dbArray($db, $sql);
-	}
-
-	/* Returns the number of messages that $userId has written in the forums */
-	function getForumPostsCount(&$db, $userId)
-	{
-		if (!is_numeric($userId)) return false;
-
-		$sql = 'SELECT COUNT(itemId) FROM tblForums WHERE authorId='.$userId.' AND itemType='.FORUM_MESSAGE;
-		return dbOneResultItem($db, $sql);
-	}
-
-	/* Returns the timestamp of the newest forum entry inside $itemId, recursive */
-	function getForumNewestItem(&$db, $itemId, $currtop = '')
-	{
-		if (!$currtop) $currtop=0;
-		if (!is_numeric($itemId) || !is_numeric($currtop)) return false;
-
-		$sql = 'SELECT itemId, timeCreated FROM tblForums WHERE parentId='.$itemId;
-		$list = dbArray($db, $sql);
-		for ($i=0; $i<count($list); $i++) {
-			if ($list[$i]['timeCreated'] > $currtop) {
-				$currtop = $list[$i]['timeCreated'];
-			}
-			$currtop = getForumNewestItem($db, $list[$i]['itemId'], $currtop);
-		}
-
-		return $currtop;
-	}
-
-
-	/* Returns a list of all folder paths, ie folder1 - folder_in_folder1 etc... + folderid, used for now in accessgroup admin */
-	function getForumFolderStructure(&$db, $parentId, $arr = '', $pre = '')
-	{
-		if (!is_numeric($parentId)) return false;
-
-		$sql = 'SELECT itemSubject, itemId FROM tblForums WHERE itemType='.FORUM_FOLDER.' AND parentId='.$parentId.' ORDER BY itemSubject';
-		$list = dbArray($db, $sql);
-
-		/* Lägg först till allt på samma nivå */
-		for ($i=0; $i<count($list); $i++) {
-			if ($pre != '') {
-				$arr[] = array('name' => $pre.' - '.$list[$i]['itemSubject'], 'itemId' => $list[$i]['itemId']);
-			} else {
-				$arr[] = array('name' => $list[$i]['itemSubject'], 'itemId' => $list[$i]['itemId']);
-			}
-		}
-
-		/* Sen rekursiva */
-		for ($i=0; $i<count($list); $i++) {
-			if ($pre != '') {
-				$pre = $pre.' - '.$list[$i]['itemSubject'];
-			} else {
-				$pre = $list[$i]['itemSubject'];
-			}
-
-			$arr = getForumFolderStructure($db, $list[$i]['itemId'], $arr, $pre);
-			$pre = '';
-		}
-
-		return $arr;
-	}
-
-	function updateForumReadCounter(&$db, $itemId)
-	{
-		if (!is_numeric($itemId)) return false;
-
-		$sql = 'UPDATE tblForums SET itemRead=itemRead+1 WHERE itemId='.$itemId;
-		dbQuery($db, $sql);
-	}
-
-	function addForumVote(&$db, $itemId, $value)
-	{
-		if (!is_numeric($itemId) || !is_numeric($value)) return false;
-
-		$sql  = 'UPDATE tblForums ';
-		$sql .= 'SET itemVote=itemVote+'.$value.',itemVoteCnt=itemVoteCnt+1 ';
-		$sql .= 'WHERE itemId='.$itemId;
-		dbQuery($db, $sql);
-	}
-
-	function getMostActivePosters(&$db, $limit='')
-	{
-		$sql  = 'SELECT COUNT(t1.authorId) AS cnt, t1.authorId AS userId, t2.userName ';
-		$sql .= 'FROM tblForums AS t1 ';
-		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-		$sql .= 'GROUP BY t1.authorId ';
-		$sql .= 'ORDER BY cnt DESC';
-
-		if (is_numeric($limit)) {
-			$sql .= ' LIMIT 0,'.$limit;
-		}
-
-		return dbArray($db, $sql);
-	}
-
-	/* item is a forum or folder or whatever! */
-	function getForumItemDepthHTML($itemId)
+	function getForumDepthHTML($type, $itemId)
 	{
 		global $db, $config;
-		if (!is_numeric($itemId)) return false;
+		if (!is_numeric($type) || !is_numeric($itemId)) return false;
 
-		if ($itemId != 0) {
-
-			$q = 'SELECT itemSubject,parentId FROM tblForums WHERE itemId='.$itemId;
-			$row = $db->getOneRow($q);
-			$subject = $row['itemSubject'];
-			if ($subject) {
-				if (mb_strlen($subject) > 35) {
-					$subject = mb_substr($subject, 0, 35).'...';
-				}
-				$result = ' - <a href="forum.php?id='.$itemId.'">'.($subject != '' ? $subject : '(No name)').'</a>';
-			} else {
-				$result = '';
-			}
-			$result = getForumItemDepthHTML($row['parentId']).$result;
+		if (!$itemId) {
+			$result = '<a href="forum.php">'.$config['forum']['rootname'].'</a>';
 			return $result;
 		}
 
-		$result = '<a href="forum.php">'.$config['forum']['rootname'].'</a>';
-		return $result;
+		$q = 'SELECT itemSubject,parentId FROM tblForums WHERE itemId='.$itemId;
+		$row = $db->getOneRow($q);
+
+		switch ($type) {
+			case FORUM_MESSAGE:
+				$subject = $row['itemSubject'];
+				if ($subject) {
+					if (mb_strlen($subject) > 35) $subject = mb_substr($subject, 0, 35).'...';
+					$result = ' - <a href="forum.php?id='.$itemId.'">'.($subject != '' ? $subject : '(No name)').'</a>';
+				} else {
+					$result = '';
+				}
+				break;
+
+			case FORUM_FOLDER:
+				$result = '';
+				if ($row['itemSubject']) $result = $config['forum']['path_separator'].'<a href="forum.php?id='.$itemId.'">'.$row['itemSubject'].'</a>';
+				break;
+				
+			default: die('aouuu');
+		}
+
+		return getForumDepthHTML($type, $row['parentId']).$result;
 	}
 
 	/* Returns the $count last posts */
@@ -375,57 +231,6 @@
 		$q .= 'LIMIT 0,'.$count;
 
 		return $db->getArray($q);
-	}
-
-	/* Returns the $count most read posts (on whole forum) */
-	function getForumMostReadMessages(&$db, $count)
-	{
-		if (!is_numeric($count)) return false;
-
-		$sql  = 'SELECT t1.itemId,t1.authorId,t1.itemSubject,t1.itemBody,t1.timeCreated,t2.userName AS authorName ';
-		$sql .= 'FROM tblForums AS t1 ';
-		$sql .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-		$sql .= 'WHERE itemType='.FORUM_MESSAGE.' ';
-		$sql .= 'ORDER BY itemRead DESC ';
-		$sql .= 'LIMIT 0,'.$count;
-
-		return dbArray($db, $sql);
-	}
-
-	/* Returns the $count most read posts in a specific part of forum */
-	function getForumMostReadMessagesHere(&$db, $itemId, $count)
-	{
-		if (!is_numeric($itemId) || !is_numeric($count)) return false;
-
-		$sql  = 'SELECT tblForums.*,tblUsers.userName AS authorName ';
-		$sql .= 'FROM tblForums ';
-		$sql .= 'INNER JOIN tblUsers ON (tblForums.authorId=tblUsers.userId) ';
-		$sql .= 'WHERE tblForums.parentId='.$itemId.' AND tblForums.itemType='.FORUM_MESSAGE.' ';
-		$sql .= 'ORDER BY tblForums.itemRead DESC ';
-		$sql .= 'LIMIT 0,'.$count;
-
-		return dbArray($db, $sql);
-	}
-
-	/* Returnerar TRUE om ett oläst inlägg påträffas */
-	function forumPathContainsUnread(&$db, $itemId)
-	{
-		if (!is_numeric($itemId)) return false;
-
-		$sql = 'SELECT itemId,timeCreated FROM tblForums WHERE parentId='.$itemId;
-		$list = dbArray($db, $sql);
-		for ($i=0; $i<count($list); $i++) {
-
-			if (!isset($_SESSION['forum'.$list[$i]['itemId']])) $_SESSION['forum'.$list[$i]['itemId']]=false;
-
-			if (($list[$i]['timeCreated'] > $_SESSION['prevLoginTime']) && ($_SESSION['forum'.$list[$i]['itemId']] === false)) {
-				return true;
-			}
-			if (forumPathContainsUnread($db, $list[$i]['itemId']) === true) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	function forumLockItem($itemId)
@@ -446,48 +251,20 @@
 		$db->query($q);
 	}
 
-	/* Returns true/false */
-	function forumItemExists(&$db, $itemId)
-	{
-		if (!is_numeric($itemId)) return false;
-
-		$sql = 'SELECT itemId FROM tblForums WHERE itemId='.$itemId;
-		$check = dbQuery($db, $sql);
-		if (dbNumRows($check)) return true;
-		return false;
-	}
-
-
-	/* Returns TRUE if $itemParent is parent to $itemChild */
-	function forumIsItemParent(&$db, $itemParent, $itemChild)
-	{
-		if (!is_numeric($itemParent) || !is_numeric($itemChild)) return false;
-
-		while (1) {
-
-			$sql = 'SELECT parentId FROM tblForums WHERE itemId='.$itemChild;
-			$parentId = dbOneResultItem($db, $sql);
-
-			if ($parentId == $itemParent) return true;
-			if ($parentId == 0) return false;
-
-			$itemChild = $parentId;
-		}
-	}
-
 	/* Sparar ändringar i ett inlägg/folder/whatever */
-	function forumUpdateItem(&$db, $itemId, $subject, $body, $sticky = 0)
+	function forumUpdateItem($itemId, $subject, $body, $sticky = 0)
 	{
+		global $db;
 		if (!is_numeric($itemId) || !is_numeric($sticky)) return false;
-		$subject = dbAddSlashes($db, $subject);
-		$body = dbAddSlashes($db, $body);
+		$subject = $db->escape($subject);
+		$body = $db->escape($body);
 
-		$sql = 'UPDATE tblForums SET itemSubject="'.$subject.'",itemBody="'.$body.'",sticky='.$sticky.' WHERE itemId='.$itemId;
-		dbQuery($db, $sql);
+		$q = 'UPDATE tblForums SET itemSubject="'.$subject.'",itemBody="'.$body.'",sticky='.$sticky.' WHERE itemId='.$itemId;
+		$db->update($q);
 	}
 
 	/* Returns a list of all folder paths, ie folder1 - folder_in_folder1 etc... + folderid, used for now in accessgroup admin */
-	function getForumStructure($parentId=0, $arr='', $pre='')
+	function getForumStructure($parentId = 0, $arr = '', $pre = '')
 	{
 		global $db;
 		if (!is_numeric($parentId)) return false;
@@ -519,58 +296,27 @@
 		return $arr;
 	}
 
-
-	function getForumFolderDepthHTML($itemId)
-	{
-		global $db, $config;
-		if (!is_numeric($itemId)) return false;
-
-		if ($itemId != 0) {
-
-			$result = '';
-
-			$q = 'SELECT itemSubject,parentId FROM tblForums WHERE itemId='.$itemId;
-			$row = $db->getOneRow($q);
-			if ($row['itemSubject']) {
-				$result = $config['forum']['path_separator'].'<a href="forum.php?id='.$itemId.'">'.$row['itemSubject'].'</a>';
-			}
-			$result = getForumFolderDepthHTML($row['parentId']).$result;
-			return $result;
-		}
-		$result = '<a href="forum.php">'.$config['forum']['rootname'].'</a>';
-		return $result;
-	}
-
-	function displayCurrentForumContent(&$db, $itemId)
-	{
-		echo 'displayCurrentForumContent() deprecated ! dont use';
-	}
-
-
 	function displayRootForumContent()
 	{
 		$list = getForumItems();
 
 		if (!count($list)) return;
+
 		
-		$str = '';
+		foreach ($list as $row) {
 
-		for ($i=0; $i<count($list); $i++) {
-
-			$subject = $list[$i]["itemSubject"];
+			$subject = $row["itemSubject"];
 			if (strlen($subject)>35) $subject = substr($subject,0,35).'..';
 
-			if (!$subject) {
-				$subject = '(Inget navn)';
-			}
+			if (!$subject) $subject = '(No name)';
 
-			$str .= '<div class="forum_header"><a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a></div>';
-			$str .= displaySubfolders($list[$i]['itemId']).'<br>';
+			echo '<div class="forum_overview_group">';
+			echo '<a href="forum.php?id='.$row['itemId'].'">'.$subject.'</a><br/><br/>';
+			displaySubfolders($row['itemId']);
+			echo '</div><br/>';	//class="forum_overview_group"
 		}
-
-		return $str;
 	}
-	
+
 	function displaySubfolders($itemId)
 	{
 		global $config;
@@ -580,23 +326,23 @@
 		$data = getForumItem($itemId);
 		$list = getForumItems($itemId);
 
-		$str  = '<table width="100%" cellpadding=0 cellspacing=0 border=1 class="forum_borders">';
-		$str .= '<tr class="forum_subheader">';
-		$str .= '<th width=30></th>';
-		$str .= '<th>&nbsp;Forum</th>';
+		echo '<table width="100%" cellpadding=0 cellspacing=0 border=1 class="forum_borders">';
+		echo '<tr class="forum_subheader">';
+		echo '<th width=30></th>';
+		echo '<th>&nbsp;Forum</th>';
 
 
 		if ($data['parentId'] == 0) {
-			$str .= '<th width=200 align="center">Last thread</th>';
-			$str .= '<th width=70 align="center">Threads</th>';
-			$str .= '<th width=70 align="center">Posts</th>';
+			echo '<th width=200 align="center">Last thread</th>';
+			echo '<th width=70 align="center">Threads</th>';
+			echo '<th width=70 align="center">Posts</th>';
 		} else {
-			$str .= '<th width=200 align="center">Last post</th>';
-			$str .= '<th width=70 align="center">Threads</th>';
-			$str .= '<th width=70 align="center">Posts</th>';
+			echo '<th width=200 align="center">Last post</th>';
+			echo '<th width=70 align="center">Threads</th>';
+			echo '<th width=70 align="center">Posts</th>';
 		}
 
-		$str .= '</tr>';
+		echo '</tr>';
 
 		for ($i=0; $i<count($list); $i++) {
 
@@ -606,34 +352,32 @@
 				$subject = '(Inget navn)';
 			}
 
-			$str .= '<tr class="forum_item">';
-			$str .= '<td align="center"><img src="gfx/icon_folder.png"></td>';
-			$str .= '<td class="forum_item_text">'.
-								'<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br>'.
-								$list[$i]['itemBody'];
-							'</td>';
+			echo '<tr class="forum_item">';
+			echo '<td align="center"><img src="gfx/icon_folder.png"></td>';
+			echo '<td class="forum_item_text">';
+				echo '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br>';
+				echo $list[$i]['itemBody'];
+			echo '</td>';
 
 			$data = getForumThreadContentLastPost($list[$i]['itemId']);
-			$str .= '<td class="forum_item_text" width=200>';
+			echo '<td class="forum_item_text" width=200>';
 			if ($data) {
 				if ($data['itemSubject']) {
-					$str .= '<a href="forum.php?id='.$data['itemId'].'">'.$data['itemSubject'].'</a><br>';
+					echo '<a href="forum.php?id='.$data['itemId'].'">'.$data['itemSubject'].'</a><br>';
 				} else {
-					$str .= '<a href="forum.php?id='.$data['parentId'].'#post'.$data['itemId'].'">'.$data['parentSubject'].'</a><br>';
+					echo '<a href="forum.php?id='.$data['parentId'].'#post'.$data['itemId'].'">'.$data['parentSubject'].'</a><br>';
 				}
-				$str .= $config['forum']['text']['by'].' '.nameLink($data['authorId'], $data['authorName']).'<br>';
-				$str .= $data['timeCreated'];
+				echo $config['forum']['text']['by'].' '.nameLink($data['authorId'], $data['authorName']).'<br>';
+				echo $data['timeCreated'];
 			} else {
-				$str .= 'Never';
+				echo 'Never';
 			}
-			$str .= '</td>';
-			$str .= '<td align="center">'.formatNumber(getForumItemCountFlat($list[$i]['itemId'])).'</td>';
-			$str .= '<td align="center">'.formatNumber(getForumThreadContentCount($list[$i]['itemId'])).'</td>';
-			$str .= '</tr>';
+			echo '</td>';
+			echo '<td align="center">'.formatNumber(getForumItemCountFlat($list[$i]['itemId'])).'</td>';
+			echo '<td align="center">'.formatNumber(getForumThreadContentCount($list[$i]['itemId'])).'</td>';
+			echo '</tr>';
 		}
-		$str .= '</table>';
-
-		return $str;
+		echo '</table>';
 	}
 	
 	/* Returns item data for the last post in any of the threads with parentId=$itemId */
@@ -1053,5 +797,88 @@
 
 		$sql .= 'AND t1.itemDeleted=0 ';
 		return $sql;
+	}
+
+	function deleteForumItem($itemId)
+	{
+		global $db;
+		if (!is_numeric($itemId)) return false;
+
+		$q = 'DELETE FROM tblForums WHERE itemId='.$itemId;
+		$db->delete($q);
+	}
+
+	/* Deletes itemId and everything below it. also deletes associated moderation queue entries */
+	function deleteForumItemRecursive($itemId, $loop = false)
+	{
+		global $db;
+		if (!is_numeric($itemId)) return false;
+
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
+		$arr = $db->getArray($q);
+
+		foreach ($arr as $row) {
+			$q = 'DELETE FROM tblForums WHERE itemId='.$row['itemId'];
+			$db->delete($q);
+
+			//removeFromModerationQueueByItemId($row['itemId'], MODERATION_REPORTED_POST);
+			deleteForumItemRecursive($row['itemId'], true);
+		}
+
+		if ($loop != true) {
+			$q = 'DELETE FROM tblForums WHERE itemId='.$itemId;
+			$db->delete($q);
+
+			//removeFromModerationQueueByItemId($itemId, MODERATION_REPORTED_POST);
+		}
+	}
+
+	function displayForum($_id)
+	{
+		global $session;
+		if (!is_numeric($_id)) return false;
+
+/* 
+		// Starta/avsluta bevakning
+		if ($session->id) {
+			if (isset($_GET['subscribe'])) {
+				addSubscription($_GET['subscribe'], SUBSCRIBE_MAIL);
+			} else if (isset($_GET['unsubscribe'])) {
+				removeSubscription($_GET['unsubscribe'], SUBSCRIBE_MAIL);
+			}
+		}
+
+		if ($config['forum']['allow_votes'] && !empty($_POST['vote']) && !empty($_POST['voteId'])) {
+			addForumVote($_POST['voteId'], $_POST['vote']);
+		}*/
+
+		if (!$_id) {
+			//display root level
+			echo getForumDepthHTML(FORUM_FOLDER, $_id);
+			echo displayRootForumContent();
+
+			if ($session->isAdmin) echo '<a href="forum_new.php?id=0">New root level category</a>';
+			return;
+		}
+
+		$item = getForumItem($_id);
+
+		if (forumItemIsFolder($_id)) {
+			//display content of a folder (parent = root)
+			echo getForumDepthHTML(FORUM_FOLDER, $_id);
+			echo displayForumContentFlat($_id);
+				
+			echo '<a href="forum_new.php?id='.$_id.'">New discussion</a><br/>';
+
+			if ($session->isAdmin) {
+				echo '<a href="forum_edit.php?id='.$_id.'">Edit forum name</a><br/>';
+				echo '<a href="forum_delete.php?id='.$_id.'">Delete forum</a><br/>';
+			}
+		} else {
+			//display flat discussion overview
+			echo getForumDepthHTML(FORUM_ITEM, $_id);
+			echo displayDiscussionContentFlat($_id);
+		}
+
 	}
 ?>

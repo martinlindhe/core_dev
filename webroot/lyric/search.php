@@ -1,8 +1,9 @@
 <?
 	require_once('config.php');
 
-	if (empty($_POST['query'])) die;
-	$query = $_POST['query'];
+	if (!empty($_GET['s'])) $query = $_GET['s'];
+	if (!empty($_POST['s'])) $query = $_POST['s'];
+	if (empty($query)) die;
 
 	$list = searchLyrics($query);
 	if (count($list) == 1) {

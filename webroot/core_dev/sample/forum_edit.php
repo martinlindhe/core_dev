@@ -12,7 +12,7 @@
 		header('Location: '.$config['start_page']);
 		die;
 	}
-	
+
 	$subject = '';
 	$body = '';
 	
@@ -35,27 +35,35 @@
 
 	require('design_head.php');
 
-	$title = getForumFolderDepthHTML($itemId);
-	echo 'Title: '.$title;
+	echo createMenu($forum_menu, 'blog_menu');
+
+	echo 'Title: '.getForumDepthHTML(FORUM_FOLDER, $itemId).'<br/>';
 
 	if (forumItemIsMessage($itemId)) {
-		echo 'Edit post:<br><br>';
+		echo 'Edit post:';
 	} else {
-		echo 'Edit thread:<br><br>';
+		echo 'Edit thread:';
 	}
-	
+
+	echo '<br/><br/>';
 	echo '<form name="change" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
-	//if (forumItemIsDiscussion($itemId)) {
-		echo 'Subjet:<br>';
-		echo '<input name="subject" size=72 value="'.$item['itemSubject'].'"><br><br>';
-	//}
-	echo '<textarea name="body" cols=110 rows=25>'.$item['itemBody'].'</textarea><br><br>';
+
+	echo 'Subject:<br/>';
+	echo '<input name="subject" size="60" value="'.$item['itemSubject'].'"/><br/><br/>';
+
+	if ($item['parentId'] && forumItemIsFolder($itemId)) {
+		echo 'Description:<br/>';
+		echo '<input type="text" name="body" size="60" value="'.$item['itemBody'].'"/><br/><br/>';
+	} else if ($item['parentId']) {
+		echo '<textarea name="body" cols="60" rows="14">'.$item['itemBody'].'</textarea><br/><br/>';
+	}
+
 	if ($session->isAdmin && forumItemIsDiscussion($itemId)) {
 		echo '<input type="checkbox" class="checkbox" value="1" name="sticky"'.($item['sticky']?' checked="checked"':'').'/>';
-		echo ' The thread is a sticky sticky<br><br>';
+		echo ' The thread is a sticky<br/><br/>';
 	}
-	echo '<input type="submit" class="button" value="Save">';
-	echo '</form><br><br>';
+	echo '<input type="submit" class="button" value="Save"/>';
+	echo '</form><br/><br/>';
 	echo '<a href="javascript:history.go(-1);">Return</a>';
 
 	require('design_foot.php');

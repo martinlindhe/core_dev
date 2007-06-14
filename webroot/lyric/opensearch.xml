@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-	<ShortName>Adblock Ruleset Search</ShortName>
-	<Description>Search for adblock rules</Description>
-	<Tags>adblock</Tags>
+	<ShortName>lyric search</ShortName>
+	<Description>Search lyrics</Description>
+	<Tags>lyric</Tags>
 	<Image height="16" width="16" type="image/vnd.microsoft.icon">http://87.227.76.225/favicon.ico</Image>
-	<Url type="text/html" template="http://87.227.76.225/adblock/ruleset.php?s={searchTerms}" />
+	<Url type="text/html" template="http://87.227.76.225/lyric/search.php?s={searchTerms}" />
 	<Query role="example" searchTerms="cat" />
 </OpenSearchDescription>

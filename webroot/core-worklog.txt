@@ -117,6 +117,7 @@
 		- gör klart "resize" i bildvisaren, så man kan skala ner bilden från 100% till 0% typ
 		- kunna ge rating på en bild
 		- få drag-drop js att funka, har nåt med absolut/relativ positionering att göra
+		- bugg: rotera animerad gif resulterar i stillbild. är det en gd2 bugg? går det istället att göra med imagemagick?
 
 
 	wiki:
@@ -176,6 +177,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+220.06.14:
+	- lyric: open search
+	- forum wip
+
+
+
 2007.06.13:
 	- wiki: halft påbörjat stöd för filkategorier på wiki files
 	- fixade file upload till wiki. ledde till diverse cleanup i file-klassen
