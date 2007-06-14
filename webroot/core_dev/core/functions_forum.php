@@ -561,7 +561,7 @@
 
 	//todo: ta en optional parameter $highlight för sökresultat
 	//bugg: $highlight ändrar på enkodade htmltaggar vilket resulterar i massa html-leakage i resultatet
-	function showForumPost($item, $headertext = '', $show_links = true, $highlight = '')
+	function showForumPost($item, $highlight = '')
 	{
 		global $session, $config;
 
@@ -579,44 +579,36 @@
 		}
 
 		echo '<a name="post'.$item['itemId'].'" id="post'.$item['itemId'].'"></a>';
-		echo '<table width="100%" cellpadding=0 cellspacing=0 border=1 class="forum_post_table">';
-		echo '<tr class="forum_post_heading">';
-		echo '<th width="160">'.$item['timeCreated'].'</th>';
-		if ($headertext) echo '<th align="right">'.$headertext.'</th>';
-		else echo '<th></th>';
-		echo '</tr>';
 
-		echo '<tr class="forum_post_item">';
-		echo '<td width=160 valign="top" class="forum_item_text">';
-		echo nameThumbLink($item['authorId'], $item['authorName']).'<br/><br/>';
+		echo '<table width="100%" cellpadding=0 cellspacing=0 border=0 class="forum_post_table">';
 
-		//echo 'Status: '.getUserStatus($item['authorId']).'<br/>';
-		//echo 'Join date: '.getUserCreated($item['authorId']).'<br/>';
-		echo 'Posts: '.getForumPostsCount($item['authorId']);
-
-
-		echo '</td>';
+		echo '<tr class="forum_post_heading forum_post_item">';
 
 		echo '<td valign="top" class="forum_item_text">';
 		if ($subject) echo '<b>'.$subject.'</b><hr/>';
+		echo 'Posted at '.$item['timeCreated'].'<br/>';
 		echo $body;
-
 		$signature = loadUserdataSetting($session->id, $config['settings']['default_signature']);
-
 		if ($signature) echo '<hr/>'.$signature;
-
 		echo '</td>';
+
+		echo '<td width="120" valign="top" class="forum_item_text">';
+		echo nameThumbLink($item['authorId'], $item['authorName']).'<br/><br/>';
+		//echo 'Status: '.getUserStatus($item['authorId']).'<br/>';
+		//echo 'Join date: '.getUserCreated($item['authorId']).'<br/>';
+		echo 'Posts: '.getForumPostsCount($item['authorId']);
+		echo '</td>';
+
 		echo '</tr>';
 
-		if (!$session->id || !$show_links) {
+		if (!$session->id) {
 			echo '</table><br/>';
 			return;
 		}
 
 		echo '<tr class="forum_item">';
-		echo '<td></td>';
 		
-		echo '<td align="right">';
+		echo '<td colspan="2" align="right">';
 		
 		echo '<a href="forum_tipsa.php?id='.$item['itemId'].'">Tell a friend</a> ';
 
@@ -663,12 +655,12 @@
 		echo getForumDepthHTML(FORUM_MESSAGE, $itemId).'<br/><br/>';
 
 		$item = getForumItem($itemId);
-		showForumPost($item, 'First post');
+		showForumPost($item);
 
 		$list = getForumItems($itemId);
 
 		for ($i=0; $i<count($list); $i++) {
-			showForumPost($list[$i], 'Reply #'.($i+1));
+			showForumPost($list[$i]);
 		}
 		echo '</div>';
 	}

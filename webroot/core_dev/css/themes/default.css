@@ -492,18 +492,18 @@ select {
 
 .forum_post_table {
 	border: 1px solid #fff;
+	background-color: #B6D4D4;
+	-moz-border-radius:8px;
 }
 .forum_post_heading {
 	font-size: 12px;
 	font-family: verdana;
 	color: #1F204B;
-	background-color: #B6D4D4;
 }
 .forum_post_item {
 	font-size: 12px;
 	font-family: verdana;
 	color: #1F204B;
-	background-color: #B6D4D4;
 }
 
 
