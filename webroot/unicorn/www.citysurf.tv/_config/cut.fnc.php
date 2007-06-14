@@ -3,11 +3,11 @@ function copyRe($src, $dst, $dst2, $x, $y, $w, $h, $end='', $mime = '', $quality
 	switch($end) {
 		case 'jpg':
 #			$srcIMG = @call_user_func('ImageCreateFromJPEG', $src);
-			$srcIMG = imagecreatefromjpeg($src);
+			$srcIMG = @imagecreatefromjpeg($src);
 			break;
 		case 'jpeg':
 #			$srcIMG = @call_user_func('ImageCreateFromJPEG', $src);
-			$srcIMG = imagecreatefromjpeg($src);
+			$srcIMG = @imagecreatefromjpeg($src);
 			break;
 		case 'png':
 			$srcIMG = @imagecreatefrompng($src);

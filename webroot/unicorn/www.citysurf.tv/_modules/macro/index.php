@@ -1,5 +1,6 @@
 <?
 	set_time_limit(0);
+
 	if($action == 'fixretrieve') {
 		include('fixretrieve.php');
 		exit;
@@ -9,6 +10,7 @@
 	} elseif($action == 'fixdb') {
 		include('fixdb.php');
 		exit;
+/*
 	} elseif($action == 'cs') {
 		include('cs.php');
 		exit;
@@ -27,6 +29,7 @@
 	} elseif($action == 'csrel') {
 		include('cs_rel.php');
 		exit;
+*/
 	} elseif($action == 'fixlevel') {
 		include('fixlevel.php');
 		exit;

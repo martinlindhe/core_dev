@@ -104,8 +104,6 @@
 			spyPostSend($row[0], $title, $msg);
 		}
 		
-		//die;
-		
 		return true;
 	}
 

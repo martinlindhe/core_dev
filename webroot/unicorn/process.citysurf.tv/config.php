@@ -4,7 +4,7 @@
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
-	$config['core_root'] = '/home/martin/www/_process/core_dev/';	//use of absolute path is required for admin pages to function
+	$config['core_root'] = '/home/martin/process.citysurf.tv/core_dev/';	//use of absolute path is required for admin pages to function
 	$config['core_web_root'] = '/core_dev/';
 
 	$config['web_root'] = '/';

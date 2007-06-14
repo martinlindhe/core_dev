@@ -58,10 +58,11 @@
 
 
 ***************************************************************************************************
-	
+
 NU: SMS debitering:
 	- kontrollera att IPX mt billing funkar
 	- kontrollera att intern-mail kvittering skickas korrekt
+	- NVOX koppling med mika
 
 
 
@@ -70,7 +71,6 @@ EFETER RELEASE:
 		- ändrad-epost bekräftelse mail utskick är felaktig, textfältet är "email_update",
 			bugg: länken som skapas är felaktig: http://cs.icn.se/auth.php?update&go=1&i=194712&key=
 		- skapa mailkonto på lokala servern och använd den för inkommande mms-mail check
-		- eventuellt sätta upp APC på dammsugaren (finns inget färdigt paket för ubuntu)
 
 	- poll på inloggad startsida (admingränssnitt finns)
 
@@ -84,10 +84,6 @@ EFETER RELEASE:
 	* räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
 	* när en användares bild blir nekad, ska de få ett privat meddelande-svar med anledning. i obj_photo.php
 
-	* process server:
-		- ip-restrictions för SOAP klienter
-		- i live-miljö kör den enbart bakom ssl (eventuellt lös det med en shared-secret login, typ APOP - går ej idag pga sha1-enkodade passwords
-
 blandat:
 	* mms upload image & video:
 		- hantera "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
@@ -95,13 +91,12 @@ blandat:
 senare, låg prio:
 	- hitta mysql-prestanda-utbildningar
 	- VMX (voicemail) inspelning & uppspelning
-	- shoutbox (megafon-funktion) på startsidan
 
 ***********************************************************************************************************************************
 
 testkonton:
 	tresexti.se:	paradox,martin    	samt   martin666,test1	
-	citysurf.tv:	webmaster_Zeratul, jerry (admin)
+	citysurf.tv:	webmaster_Zeratul, jerry (admin)		/ wemaster_Eva, moreno
 	
 	ipx.com:			lwcg, 3koA4enpE			http://europe.ipx.com/api/services/SmsApi50?wsdl
 	

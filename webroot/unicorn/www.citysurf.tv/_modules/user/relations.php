@@ -52,6 +52,17 @@
 		$view = $_GET['key'];
 	}
 
+	if ($own) {
+		for ($i=1; $i<=200; $i++) {
+			if (isset($_POST['allow_gallx_'.$i])) {
+				setGallXStatus($l['id_id'], $_POST['allow_gallx_'.$i], 1);
+			} else if (isset($_POST['deny_gallx_'.$i])) {
+				setGallXStatus($l['id_id'], $_POST['deny_gallx_'.$i], 0);
+			}
+		}
+	}
+
+
 	$blocked = false;
 	if($own && isset($_GET['blocked'])) {
 		$blocked = true;
@@ -78,10 +89,9 @@
 		$wait = getRelationRequestsFromMe();
 		require("relations_user.php");
 	}
-
+	
 	$page = 'friends';
-	$blocked = $is_blocked;
-	if($blocked) $page = 'blocked';
+	if ($blocked) $page = 'blocked';
 	$menu = array('friends' => array(l('user', 'relations'), 'vänner'), 'blocked' => array(l('user', 'relations').'&amp;blocked', 'ovänner'));
 ?>
 
@@ -89,7 +99,11 @@
 
 <div class="bigHeader"><?=($own?makeMenu($page, $menu):'vänner')?></div>
 <div class="bigBody">
-	<? if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&amp;ord='.$thisord, 'med', STATSTR); ?>
+<?
+	if(!$blocked) dopaging($paging, l('user', 'relations', $s['id_id']).'p=', '&amp;ord='.$thisord, 'med', STATSTR);
+
+	if ($own) echo '<form method="post" action="">';
+?>	
 	<table summary="" cellspacing="0" width="586">
 	<?
 	if(!empty($res) && count($res)) {
@@ -98,14 +112,20 @@
 			foreach($res as $row) {
 				$i++;
 				$gotpic = (@$row['u_picvalid'] == '1')?true:false;
-				echo '
-				<tr'.(($gotpic && $view != $row['main_id'])?' onmouseover="this.className = \'t1\'; dumblemumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 2);" onmouseout="this.className = \'\'; mumbledumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 0, 2);"':' onmouseover="this.className = \'t1\';" onmouseout="this.className = \'\';"').'>
-					<td class="spac pdg"><a name="R'.$row['main_id'].'"></a>'.$user->getstring($row).'</td>
-					<td class="cur spac pdg" onclick="goUser(\''.$row['id_id'].'\');">'.secureOUT($row['rel_id']).'</td>
-					<td class="cur pdg spac cnt">'.((@$row['u_picvalid'] == '1')?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>
-					<td class="cur spac pdg rgt" onclick="goUser(\''.$row['id_id'].'\');">'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date']).')</span>':'<span class="off">'.nicedate($row['lastonl_date']).'</span>').'</td>
-					'.(($own)?'<td class="spac rgt pdg_tt"><a href="'.l('user', 'relations', $s['id_id'], $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a> - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&amp;d='.$row['id_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a></td>':'').'
-				</tr>';
+				echo '<tr'.(($gotpic && $view != $row['main_id'])?' onmouseover="this.className = \'t1\'; dumblemumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 2);" onmouseout="this.className = \'\'; mumbledumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 0, 2);"':' onmouseover="this.className = \'t1\';" onmouseout="this.className = \'\';"').'>';
+					echo '<td class="spac pdg"><a name="R'.$row['main_id'].'"></a>'.$user->getstring($row).'</td>';
+					echo '<td class="cur spac pdg" onclick="goUser(\''.$row['id_id'].'\');">'.secureOUT($row['rel_id']).'</td>';
+					echo '<td class="cur pdg spac cnt">'.((@$row['u_picvalid'] == '1')?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>';
+					echo '<td class="cur spac pdg rgt" onclick="goUser(\''.$row['id_id'].'\');">'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date']).')</span>':'<span class="off">'.nicedate($row['lastonl_date']).'</span>').'</td>';
+					if ($own) {
+						echo '<td class="spac rgt pdg_tt">';
+						echo '<input type="hidden" name="deny_gallx_'.$i.'" value="'.$row['id_id'].'"/>';
+						echo '<input type="checkbox" name="allow_gallx_'.$i.'" value="'.$row['id_id'].'"'.($row['gallx']?' checked="checked"':'').' title="Visa Galleri X för den här personen"> ';
+						echo '<a href="'.l('user', 'relations', $s['id_id'], $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a>';
+						echo ' - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&amp;d='.$row['id_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a>';
+						echo '</td>';
+					}
+				echo '</tr>';
 		
 				if($view == $row['main_id']) {
 					//Visar "Ändra typ av relation"
@@ -137,8 +157,16 @@
 	} else {
 		echo '<tr><td class="spac pdg cnt">Inga '.($blocked?'ovänner':'vänner').'.</td></tr>';
 	}
-	?>
-	</table>
+
+	echo '</table>';
+
+	if ($own) {
+		echo '<input type="submit" value="Spara" class="btn2_min"/>';
+		echo '</form>';
+	}
+
+?>
+
 </div>
 
 <?

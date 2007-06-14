@@ -106,7 +106,7 @@
 			$sql->queryUpdate("UPDATE {$t}usergb SET user_read = '1' WHERE user_id = '".$l['id_id']."' AND user_read = '0'");
 			$user->notifyReset('gb', $l['id_id']);
 			$str = @explode('g:', $_SESSION['data']['cachestr']);
-			if(intval(substr($str[1], 0, 1)) > 0) {
+			if(@intval(substr($str[1], 0, 1)) > 0) {
 				$user->counterSet($l['id_id']);
 				$_SESSION['data']['cachestr'] = $user->cachestr();
 			}

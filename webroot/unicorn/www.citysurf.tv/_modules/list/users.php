@@ -65,10 +65,10 @@
 	<div>
 		<? if(count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0); ?>
 	</div>
-	<table cellspacing="0" summary=""<?=($result['pic'])?'':' width="783"';?>>
+	<table cellspacing="1" summary="">
 <?
 	if(empty($result['res']) || !count($result['res'])) {
-		echo '<tr><td class="spac pdg cnt" width="786">Inga listade.</td></tr>';
+		echo '<tr><td class="spac pdg cnt">Inga listade.</td></tr>';
 	} else {
 		$i = 0;
 		$nl = true;
@@ -77,10 +77,10 @@
 				//if (empty($row['u_alias'])) continue;	//skippa icke-existerande users
 				if($nl) echo (($i)?'</tr>':'').'<tr>';
 				$i++;
-				echo '<td style="padding: 0 0 6px '.((!$nl)?'5':'0').'px;">';
+				echo '<td>';
 				echo $user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 0, array('text' => $row['u_alias'].' '.$sex[$row['u_sex']].$user->doage($row['u_birth'], 0)));
 				echo '</td>';
-				if($i % 16 == 0) $nl = true; else $nl = false;
+				if($i % 11 == 0) $nl = true; else $nl = false;
 			}
 		} else {
 			$i = 0;

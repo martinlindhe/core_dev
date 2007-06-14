@@ -1,5 +1,5 @@
 <?
-
+/*
 function doMail($to, $title, $text)
 {
 	$headers =
@@ -9,22 +9,24 @@ function doMail($to, $title, $text)
 	if (mail($to, $title, $text, $headers)) return true;
 	return false;
 }
-
-	//require_once('class.phpmailer.php');
-	function doMail_phpmailer($to, $subject, $body)		//används inte
+*/
+	require_once('class.phpmailer.php');
+	function doMail($to, $subject, $body)		//används inte
 	{
 		global $config;
+
+		set_time_limit(60*5);
 		
 		$mail = new PHPMailer();
 
 		$mail->IsSMTP();                    	// send via SMTP
 		$mail->Host     = 'mail.unicorn.tv';	// SMTP servers
 		$mail->SMTPAuth = true;								// turn on SMTP authentication
-		$mail->Username = 'martin@unicorn.tv';						// SMTP username
-		$mail->Password = 'martin';						// SMTP password
+		$mail->Username = 'cs@unicorn.tv';						// SMTP username
+		$mail->Password = '1234';						// SMTP password
 		$mail->CharSet  = 'ISO-8859-1';
 
-		$mail->From     = 'info@'.URL;
+		$mail->From     = 'info@unicorn.tv';
 		$mail->FromName = 'citysurf';
 
 		$mail->AddAddress($to);
@@ -35,7 +37,7 @@ function doMail($to, $title, $text)
 		$mail->Body     = $body;
 
 		if (!$mail->Send()) {
-			echo 'Failed to send mail to '.$to.', error:'.$mail->ErrorInfo.'<br/>';
+			//echo 'Failed to send mail to '.$to.', error:'.$mail->ErrorInfo.'<br/>';
 			return false;
 		}
 

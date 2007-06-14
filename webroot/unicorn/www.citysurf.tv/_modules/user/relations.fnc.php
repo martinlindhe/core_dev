@@ -214,11 +214,31 @@
 
 		if (!is_numeric($_id) || !is_numeric($_start) || !is_numeric($_end)) return false;
 
-		$q = "SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.lastlog_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$_id;
+		$q = "SELECT rel.main_id, rel.user_id, rel.rel_id, rel.gallx, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.lastlog_date, u.u_sex, u.u_birth, u.level_id FROM {$t}userrelation rel INNER JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$_id;
 		if ($_ord) $q .= ' ORDER BY '.$_ord;
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
 
 		return $sql->query($q, 0, 1);
+	}
+
+	function setGallXStatus($user_id, $other_id, $status)
+	{
+		global $sql;
+
+		if (!is_numeric($user_id) || !is_numeric($other_id) || !is_numeric($status)) return false;
+
+		$q = 'UPDATE s_userrelation SET gallx='.$status.' WHERE user_id='.$user_id.' AND friend_id='.$other_id;
+		$sql->queryUpdate($q);
+	}
+
+	function getGallXStatus($_id)
+	{
+		global $sql, $l;
+		
+		if (!is_numeric($_id)) return false;
+		
+		$q = 'SELECT gallx FROM s_userrelation WHERE user_id='.$l['id_id'].' AND friend_id='.$_id;
+		return $sql->queryResult($q, 0, 1);
 	}
 
 	function getRelationsCount($_id)

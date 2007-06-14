@@ -1,4 +1,6 @@
 <?
+require_once(dirname(__FILE__).'/../user/spy.fnc.php');
+
 class user_auth {
 
 	var $sql, $t, $user;
@@ -23,7 +25,7 @@ class user_auth {
 		$this->sql->queryInsert("INSERT INTO {$this->t}usersess SET id_id = '".secureINS($result[0])."', sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', sess_id = '".secureINS($this->sql->gc())."', sess_date = NOW(), type_inf = 'i'");
 		$this->sql->queryUpdate("UPDATE {$this->t}user SET lastlog_date = '".$res."', lastonl_date = '".$res."', account_date = '".$res."' WHERE id_id = '".secureINS($result[0])."'");
 		$this->sql->queryUpdate("REPLACE INTO {$this->t}useronline SET account_date = '".$res."', id_id = '".secureINS($result[0])."', u_sex = '".$result[6]."'");
-		$_SESSION['data'] = array('u_pst' => $result[9], 'u_pstlan_id' => $result[8], 'lastlog_date' => $res, 'lastonl_date' => $res, 'u_regdate' => $result[12], 'u_picvalid' => $result[15], 'status_id' => $result[5], 'id_id' => $result[0], 'u_alias' => $result[1], 'u_sex' => $result[6], 'u_picid' => $result[3], 'u_picd' => $result[4], 'u_birth' => $result[7], 'level_id' => $result[2]);
+		$_SESSION['data'] = @array('u_pst' => $result[9], 'u_pstlan_id' => $result[8], 'lastlog_date' => $res, 'lastonl_date' => $res, 'u_regdate' => $result[12], 'u_picvalid' => $result[15], 'status_id' => $result[5], 'id_id' => $result[0], 'u_alias' => $result[1], 'u_sex' => $result[6], 'u_picid' => $result[3], 'u_picd' => $result[4], 'u_birth' => $result[7], 'level_id' => $result[2]);
 		$this->user->counterSet($result[0]);
 		$_SESSION['data']['account_date'] = $res;
 		$_SESSION['data']['cachestr'] = $this->user->cachestr($result[0]);
@@ -49,6 +51,24 @@ class user_auth {
 			if($result[13] === $p) {
 				$this->login_data($result);
 				$this->user->setRelCount($result[0]);
+
+				//kolla om användaren har verifierat sin info
+				$q = 'SELECT verified,timeAsked FROM tblVerifyUsers WHERE user_id='.$result[0];
+				$data = $this->sql->queryLine($q, 0, 1);
+
+				//ask user again after 5 days if they didnt answer
+				if (!$data || (!$data[0] && time() - (3600*24*5) > strtotime($data[1]))) {	
+					$q = 'REPLACE INTO tblVerifyUsers SET user_id='.$result[0].',timeAsked=NOW(),verified=0';
+					$this->sql->queryInsert($q);
+
+					$msg = 'Hej!<br/>'.
+									'Vi ber dig att verifiera att dina personuppgifter och kontaktuppgifter stämmer.<br/>'.
+									'<b><a href="/member/settings/verify/">Klicka här</a></b> för att bekräfta uppgifterna.<br/><br/>'.
+									'Som tack så får du en veckas VIP-Deluxe när du är färdig.';
+
+					spyPostSend($result[0], 'Validering av uppgifter', $msg);
+				}
+
 				if(!empty($_POST['redir'])) {
 					$this->notify_user($result[0], gettxt('moved_login'), $result[1]);
 					echo '<script type="text/javascript">window.setTimeout(\'document.location.href = "'.l('main', 'start').'"\', 6000);</script>';

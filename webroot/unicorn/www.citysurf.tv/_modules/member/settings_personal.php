@@ -277,9 +277,9 @@
 		</tr>
 		<tr>
 			<td colspan="2" class="pdg_t"><b>Kön att slumpa fram:</b><br /><select name="opt_random" class="txt">
-				<option value="F"<?=((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'F') || (!empty($settings['random'][1]) && $settings['random'][1] == 'F'))?' selected':'';?>>Tjejer</option>
-				<option value="M"<?=((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'M') || (!empty($settings['random'][1]) && $settings['random'][1] == 'M'))?' selected':'';?>>Killar</option>
-				<option value="B"<?=(!empty($settings['random'][1]) && $settings['random'][1] == 'B')?' selected':'';?>>Båda könen</option>
+				<option value="F"<?=@((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'F') || (!empty($settings['random'][1]) && $settings['random'][1] == 'F'))?' selected':'';?>>Tjejer</option>
+				<option value="M"<?=@((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'M') || (!empty($settings['random'][1]) && $settings['random'][1] == 'M'))?' selected':'';?>>Killar</option>
+				<option value="B"<?=@(!empty($settings['random'][1]) && $settings['random'][1] == 'B')?' selected':'';?>>Båda könen</option>
 			</select></td>
 		</tr>
 		<?

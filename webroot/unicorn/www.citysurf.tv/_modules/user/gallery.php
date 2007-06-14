@@ -1,5 +1,6 @@
 <?
 	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
+	require_once(dirname(__FILE__).'/../user/relations.fnc.php');
 
 	$isFriends = $user->isFriends($s['id_id']);
 	$allowed = ($own || $isFriends || $isAdmin)?true:false;
@@ -53,7 +54,7 @@
 		die;
 	}
 	*/
-
+	echo '<br class="clr"/>';
 	if ($own) {
 		makeButton(false, 'makeUpload();', 'icon_gallery.png', 'ladda upp ny');
 		makeButton(false, 'makeTiny(\''.l('text', 'mmshelp', '2').'\')', 'icon_gallery.png', 'mms-uppladdning');
@@ -73,7 +74,7 @@
 	makeButton(false, 'document.location=\'#gall\'', 'icon_gallery.png', 'galleri ['.count($gall_res).']');
 	makeButton(false, 'document.location=\'#gallx\'', 'icon_gallery.png', 'galleri X ['.count($gallx_res).']');
 ?>
-<br/><br/><br/>
+<br class="clr"/><br/>
 
 <a name="gall"></a>
 <div class="subHead">galleri</div><br class="clr"/>
@@ -90,12 +91,16 @@
 <a name="gallx"></a>
 <div class="subHead">galleri x</div><br class="clr"/>
 <?
+	if ( ($s['id_id'] != $l['id_id'] && getGallXStatus($s['id_id']) == 0) || !$isAdmin ) {
+		echo 'Denna medlem har inte tillåtit dig att se dennes galleri x-bilder.';
+	} else {
 		$paging = paging(1, 20);
 		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1'");
 		$name = 'galleri x';
 		$all = $allowed;
 		$res = $gallx_res;
 		include('gallerylist.php');
+	}
 
 	require(DESIGN.'foot_user.php');
 ?>

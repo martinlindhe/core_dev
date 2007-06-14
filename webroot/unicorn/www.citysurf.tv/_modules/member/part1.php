@@ -79,32 +79,37 @@
 					$msg[] = 'E-postadressen är upptagen. Redan medlem? Glömt lösenordet? Klicka <a href="'.l('member', 'forgot').'" class="bld">här</a> för att få hjälp!';
 				}
 			}
-			$id_u = $sql->queryInsert("INSERT INTO {$t}user SET
-			u_sex = '$sex',
-			u_email = '".secureINS($_POST['ins_email'])."',
-			u_birth = '".$birth."',
-			u_birth_x = '".secureINS($_POST['i'])."',
-			status_id = 'F',
-			u_regdate = NOW()");
 
-			$sql->queryUpdate("REPLACE INTO {$t}userinfo SET
-			u_tempemail = '',
-			u_fname = '',
-			u_sname = '',
-			u_subscr = '',
-			u_cell = '".@secureINS(@$_POST['ins_cell'])."',
-			u_street = '',
-			fake_try = '".@secureINS($_SESSION['tries'])."',
-			reg_sess = '".secureINS($sql->gc())."',
-			reg_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
-			reg_code = '".$start_code."',
-			id_id = '".secureINS($id_u)."'");
 			$msg = sprintf(gettxt('email_activate'), $start_code, substr(P2B, 0, -1).l('member', 'activate', secureOUT(str_replace('@', '__at__', $_POST['ins_email'])), $start_code));
-			doMail(secureOUT($_POST['ins_email']), 'Din aktiveringskod: '.$start_code, $msg);
-			doMail('member@'.URL, secureOUT($_POST['ins_email']), $msg);
-			$sql->logADD('', $id_u, 'REG1');
-			$url = l('member', 'activate', secureOUT(str_replace('@', '__at__', $_POST['ins_email'])));
-			include('part1b.php');
+		$chk = doMail(secureOUT($_POST['ins_email']), 'Din aktiveringskod: '.$start_code, $msg);
+			if ($chk) {
+				$id_u = $sql->queryInsert("INSERT INTO {$t}user SET
+				u_sex = '$sex',
+				u_email = '".secureINS($_POST['ins_email'])."',
+				u_birth = '".$birth."',
+				u_birth_x = '".secureINS($_POST['i'])."',
+				status_id = 'F',
+				u_regdate = NOW()");
+	
+				$sql->queryUpdate("REPLACE INTO {$t}userinfo SET
+				u_tempemail = '',
+				u_fname = '',
+				u_sname = '',
+				u_subscr = '',
+				u_cell = '".@secureINS(@$_POST['ins_cell'])."',
+				u_street = '',
+				fake_try = '".@secureINS($_SESSION['tries'])."',
+				reg_sess = '".secureINS($sql->gc())."',
+				reg_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
+				reg_code = '".$start_code."',
+				id_id = '".secureINS($id_u)."'");
+
+				$sql->logADD('', $id_u, 'REG1');
+				$url = l('member', 'activate', secureOUT(str_replace('@', '__at__', $_POST['ins_email'])));
+				include('part1b.php');
+			} else {
+				echo 'Problem med mailutskick. Var god försök igen';
+			}
 			exit;
 			//splashACT('Ett mail har skickats med en aktiveringskod för att aktivera ditt konto!<br><br><input type="button" onclick="document.location.href = \''..'\';" class="b" value="aktivera konto!">');
 		}

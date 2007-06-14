@@ -9,25 +9,6 @@
 	define('VIP_LEVEL1',	2);	//Normal VIP
 	define('VIP_LEVEL2',	3);	//VIP delux
 
-	function addVIP($user_id, $vip_level, $days)
-	{
-		global $user_db;
-		
-		if (!is_numeric($user_id) || !is_numeric($vip_level) || !is_numeric($days)) return false;
-
-		$q = 'SELECT userId FROM s_vip WHERE userId='.$user_id.' AND level='.$vip_level;
-		
-		if ($user_db->getOneItem($q)) {
-			$q = 'UPDATE s_vip SET days=days+'.$days.',timeSet=NOW() WHERE userId='.$user_id.' AND level='.$vip_level;
-			$user_db->update($q);
-		} else {
-			$q = 'INSERT INTO s_vip SET userId='.$user_id.',level='.$vip_level.',days='.$days.',timeSet=NOW()';
-			$user_db->insert($q);
-		}
-		$user_db->showProfile();
-	}
-
-
 	$allowed_ip = array(
 		'127.0.0.1',
 		'217.151.193.79',	//Ericsson IPX (ipx-pat.ipx.com)

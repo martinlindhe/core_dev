@@ -241,43 +241,6 @@ class email
 		//echo '<pre>';print_r($header);
 		
 		return $header;
-	}	
-	
-	/*	Identifierar mms koder i formatet:
-			BLOG 12345
-			PRES 12345
-			GALL 12345
-	*/
-	function findMMSCode($text)
-	{
-		global $sql;
-
-		//echo 'looking for mms code: '.$text.'<br>';
-
-		$text = strtoupper(trim(str_replace('  ', ' ', $text)));
-		$text = str_replace('SPAML: ', '', $text);		//remove spam assassin-tagged mail subject
-
-		if (strlen($text) < 5 || strlen($text) > 20) return false;
-
-		$arr = explode(' ', $text);
-		if (count($arr) < 2) return false;
-
-		$mms_code['code'] = $arr[1];
-
-		$blog_aliases = array('BLOG', 'BLOGG');
-		$pres_aliases = array('PRES', 'PRESS', 'PRESENTATION');
-		$gall_aliases = array('GALL', 'GALLERI', 'GALLERY', 'GALERI');
-
-		if (in_array($arr[0], $blog_aliases)) $mms_code['cmd'] = 'BLOG';
-		if (in_array($arr[0], $pres_aliases)) $mms_code['cmd'] = 'PRES';
-		if (in_array($arr[0], $gall_aliases)) $mms_code['cmd'] = 'GALL';
-
-		$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.secureINS($mms_code['code']).'" LIMIT 1';
-		$mms_code['user'] = $sql->queryResult($q);
-		if (!$mms_code['user']) return false;
-		
-		$this->logAct('Identified MMS type '.$mms_code['cmd'].' from user '.$mms_code['user'].'...', true);
-		return $mms_code;
 	}
 
 	/* Takes a raw email (including headers) as parameter, returns all attachments, body & header nicely parsed up
@@ -298,7 +261,7 @@ class email
 		//Parse each header element into an array
 		$result['header'] = $this->parseHeader($header);
 		
-		$result['mms_code'] = $this->findMMSCode($result['header']['Subject']);
+		$result['mms_code'] = findMMSCode($result['header']['Subject']);
 		if (!$result['mms_code']) {
 			$this->logAct(htmlentities($result['header']['From']).': Invalid MMS code (title: '.$result['header']['Subject'].'), skipping mail');
 			return false;
@@ -538,5 +501,42 @@ function make_thumb($src, $dst, $dstWW = 90, $quality = 91)
 	imagedestroy($img_thumb);
 	imagedestroy($im_src);
 	return true;
+}
+
+/*	Identifierar mms koder i formatet:
+		BLOG 12345
+		PRES 12345
+		GALL 12345
+*/
+function findMMSCode($text)
+{
+	global $sql;
+
+	//echo 'looking for mms code: '.$text.'<br>';
+
+	$text = strtoupper(trim(str_replace('  ', ' ', $text)));
+	$text = str_replace('SPAML: ', '', $text);		//remove spam assassin-tagged mail subject
+
+	if (strlen($text) < 5 || strlen($text) > 20) return false;
+
+	$arr = explode(' ', $text);
+	if (count($arr) < 2) return false;
+
+	$mms_code['code'] = $arr[1];
+
+	$blog_aliases = array('BLOG', 'BLOGG');
+	$pres_aliases = array('PRES', 'PRESS', 'PRESENTATION');
+	$gall_aliases = array('GALL', 'GALLERI', 'GALLERY', 'GALERI');
+
+	if (in_array($arr[0], $blog_aliases)) $mms_code['cmd'] = 'BLOG';
+	if (in_array($arr[0], $pres_aliases)) $mms_code['cmd'] = 'PRES';
+	if (in_array($arr[0], $gall_aliases)) $mms_code['cmd'] = 'GALL';
+
+	$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.secureINS($mms_code['code']).'" LIMIT 1';
+	$mms_code['user'] = $sql->queryResult($q);
+	if (!$mms_code['user']) return false;
+	
+	$this->logAct('Identified MMS type '.$mms_code['cmd'].' from user '.$mms_code['user'].'...', true);
+	return $mms_code;
 }
 ?>

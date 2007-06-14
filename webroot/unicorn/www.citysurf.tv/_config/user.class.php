@@ -29,8 +29,7 @@ class user {
 		if ($result[0] >= $_level) return true;
 		return false;
 	}
-	
-	
+
 	function update_retrieve() {
 		$info = $this->cachestr();
 		$_SESSION['data']['cachestr'] = $info;
@@ -413,4 +412,54 @@ class user {
 		$this->sql->queryInsert("INSERT INTO {$this->t}objrel SET obj_date = NOW(), content_type = '$type', object_id = '$obj', owner_id = '$id'");
 	}
 }
+
+//av martin, för å kolla någons vip-level
+function get_vip($_userid) {
+	global $sql;
+	if (!is_numeric($_userid)) return false;
+	$result = $sql->queryResult('SELECT level_id FROM s_user WHERE id_id = '.$_userid.' LIMIT 1');
+	if ($result) return $result;
+	return false;
+}
+
+//av martin. används häråvar
+function addVIP($user_id, $vip_level, $days)
+{
+	global $sql;
+		
+	if (!is_numeric($user_id) || !is_numeric($vip_level) || !is_numeric($days)) return false;
+
+	$q = 'SELECT userId FROM s_vip WHERE userId='.$user_id.' AND level='.$vip_level;
+
+	if ($sql->queryLine($q)) {
+		$q = 'UPDATE s_vip SET days=days+'.$days.',timeSet=NOW() WHERE userId='.$user_id.' AND level='.$vip_level;
+		$sql->queryUpdate($q);
+	} else {
+		$q = 'INSERT INTO s_vip SET userId='.$user_id.',level='.$vip_level.',days='.$days.',timeSet=NOW()';
+		$sql->queryUpdate($q);
+	}
+}
+
+
+	function getCurrentVIPLevel($_id)
+	{
+		global $sql;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT level FROM s_vip WHERE userId='.$_id.' ORDER BY level DESC LIMIT 1';
+		$level = $sql->queryResult($q, 0, 1);
+
+		if (!$level) return 1;		//1=normal user
+		return $level;
+	}
+
+	function getVIPLevels($_id)
+	{
+		global $sql;
+		if (!is_numeric($_id)) return false;
+		
+		$q = 'SELECT * FROM s_vip WHERE userId='.$_id.' ORDER BY level DESC';
+		return $sql->query($q, 0, 1);
+	}
+	
 ?>

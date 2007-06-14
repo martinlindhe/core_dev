@@ -1,4 +1,12 @@
 <?
+/*
+	if ($_SERVER['REMOTE_ADDR'] != '213.80.11.162') {
+		echo 'Citysurf uppdateras!<br/><br/>Under eftermiddagen onsdagen den 13:e juni genomför vi en uppdatering av citysurf.<br/><br/>';
+		echo 'Passa på att njuta av en glass i solen och kika tillbaka om några timmar!<br><br>';
+		die;
+	}
+*/
+
 	if(@$_GET['type'] != 'macro') session_start();
 	include('_config/online.include.php');
 	//	noticeACT('erererrer');

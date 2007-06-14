@@ -1,6 +1,9 @@
 <?
+	die;
+
+
 	/*
-		script för att importera presentationsbilder från gamla citysurf.tv till nya av Frans Rosén & Martin Lindhe, 2007
+		script för att importera userdata & presentationsbilder från gamla citysurf.tv till nya av Frans Rosén & Martin Lindhe, 2007
 	*/
 
 	function getFileLastname($name)
@@ -20,7 +23,8 @@
 	set_time_limit(60*60*2);
 	include("_config/online.include.php");
 
-	$fp = fopen('harem_users.csv', 'r');
+	$file_csv = '/home/martin/csbilder/harem_users.csv';
+	$fp = fopen($file_csv, 'r');
 	if (!$fp) die('cant read file');
 
 	$fcnt = 2;

@@ -66,6 +66,8 @@ h6 { font-size: 10px; margin: 2px 0 5px 0; font-weight: bold; }
 textarea.txt { font-family: Arial; font-size: 11px; overflow: hidden; padding: 2px 0 0 2px; }
 input.txt, input.pass { border: 1px solid #b2b2b2; width: 130px; height: 19px; font-size: 11px; padding: 4px 0 0 3px; }
 input.txt { font-family: Arial; }
+input.txtsmall { border: 1px solid #b2b2b2; height: 19px; font-size: 11px; padding: 4px 0 0 3px; }
+
 input.pass { font-family: Fixedsys, Courier New; font-size: 10px; }
 select { border: 1px solid #b2b2b2; font-family: Arial; height: 24px; font-size: 12px; padding: 2px 0 0 2px; }
 p { margin: 0; padding: 5px 5px 5px 5px; }

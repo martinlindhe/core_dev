@@ -20,6 +20,9 @@
 	} elseif($id == 'vipstatus') {
 		include('settings_vipstatus.php');
 		exit;
+	} elseif($id == 'verify') {
+		include('settings_verify.php');
+		exit;
 	} else {
 		include('settings_profile.php');
 		exit;

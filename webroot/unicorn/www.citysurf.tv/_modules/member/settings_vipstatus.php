@@ -7,33 +7,10 @@
 	require(DESIGN.'head.php');
 	
 	$vip_levels = array(
-		0 => 'Normal användare',
-		1 => 'VIP',
-		2 => 'VIP Delux'
+		1 => 'Normal användare',
+		2 => 'VIP',
+		3 => 'VIP Deluxe'
 	);
-
-	function getCurrentVIPLevel($_id)
-	{
-		global $sql;
-		if (!is_numeric($_id)) return false;
-
-		$q = 'SELECT level FROM s_vip WHERE userId='.$_id.' ORDER BY level DESC LIMIT 1';
-		$level = $sql->queryResult($q, 0, 1);
-
-		if (!$level) return 0;
-		return $level;
-	}
-
-	function getVIPLevels($_id)
-	{
-		global $sql;
-		if (!is_numeric($_id)) return false;
-		
-		$q = 'SELECT * FROM s_vip WHERE userId='.$_id.' ORDER BY level DESC';
-		return $sql->query($q, 0, 1);
-	}
-	
-	
 ?>
 <div id="mainContent">
 

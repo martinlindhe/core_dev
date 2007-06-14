@@ -1,4 +1,6 @@
 <?
+	die;
+
 	/*
 		script för att importera galleribilder från gamla citysurf.tv till nya av Martin Lindhe, 2007
 	*/
@@ -20,8 +22,8 @@
 	set_time_limit(60*60*2);
 	include("_config/online.include.php");
 
-	//$data = file('harem_vipgallery.csv');
-	$fp = fopen('/home/martin/harem_gallery.csv', 'r');
+	$file_csv = '/home/martin/csbilder/harem_gallery.csv';
+	$fp = fopen($file_csv, 'r');
 	if (!$fp) die('cant read file');
 
 
@@ -30,7 +32,7 @@
 	$src_dir = '/home/martin/csbilder/cs_gallery/';
 	$dst_dir = '/home/martin/www/_input/usergallery/';
 
-	$i = 0;
+	$i = $tot_files = 0;
 	$handled = array();
 	$notfound = 0;
 
@@ -144,6 +146,8 @@
 			continue;
 		}
 
+		$tot_files++;
+
 		if (!copy($src_thumb, $dst_thumb)) {
 			echo '<h1>Failed to copy thumb! src '.$src_thumb.', dst '. $dst_thumb.'</h1>';
 			continue;
@@ -151,11 +155,8 @@
 
 		#echo "$main_id | $user_id | $fcnt | $file_name | $pht_cmt<br />";
 
-		//query for "galleri X" pics, status_id = 2 for "galleri X"
-		//$q = "REPLACE INTO s_userphoto SET status_id='2', pht_date='$file_time', main_id='$main_id', hidden_value='', user_id='$user_id', picd='$folder', old_filename='$file_name', pht_cmt='$pht_cmt'";
-		
-		//query for normal "galleri" pics, status_id = 1
-		$q = 'REPLACE INTO s_userphoto SET status_id="1", pht_date="'.$file_time.'", pht_size="'.$file_size.'", main_id="'.$main_id.'", hidden_value="", user_id="'.$user_id.'", picd="'.$folder.'", old_filename="'.$file_name.'", pht_cmt="'.$pht_cmt.'"';
+		//query for normal "galleri" pics, status_id = 1, view_id=1 = granskad & godkänd
+		$q = 'REPLACE INTO s_userphoto SET status_id="1", view_id="1", pht_date="'.$file_time.'", pht_size="'.$file_size.'", main_id="'.$main_id.'", hidden_value="", user_id="'.$user_id.'", picd="'.$folder.'", old_filename="'.$file_name.'", pht_cmt="'.$pht_cmt.'"';
 		$sql->queryInsert($q);
 		echo '.';
 
@@ -163,5 +164,5 @@
 	} while (!feof($fp));
 
 	$time_spent = microtime(true) - $time_start;
-	echo $i.' files imported in '.round($time_spent, 3).' seconds';
+	echo $tot_files.' files imported in '.round($time_spent, 3).' seconds';
 ?>

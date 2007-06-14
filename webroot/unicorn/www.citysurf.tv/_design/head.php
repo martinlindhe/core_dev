@@ -179,13 +179,17 @@ function blockRightClick(event) {
 	$contribute = $sql->queryLine("SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM {$t}contribute c LEFT JOIN {$t}user u ON u.id_id = c.con_user AND u.status_id = '1' WHERE c.con_onday = NOW() AND c.status_id = '1' LIMIT 1", 1);
 	$gotcon = (!empty($contribute) && count($contribute))?true:false;
 ?>
-			<div class="smallHeader">megafonen</div>
+			<div class="smallHeader">se hit!</div>
 			<div class="smallBody">
 				<div class="bld">
-				<?=($contribute?$user->getstring($contribute).secureOUT($contribute['con_msg'], 1):'Visdom finns ej för idag.')?>
+				<?=($contribute?$user->getstring($contribute).secureOUT($contribute['con_msg'], 1):'Om du ser något fel, klicka på "tyck till" uppe i toppmenyn.')?>
 				</div>
-				<br/>Varje dag publicerar CitySurf en ny visdom, skicka in en du också!<br/><br/>
-				<input type="button" class="btn2_sml r" onclick="makeContribution();" value="skriv" /><br class="clr" />
+<?
+$isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
+	if ($isAdmin) {
+		echo '<input type="button" class="btn2_sml r" onclick="makeContribution();" value="skriv" /><br class="clr" />';
+	}
+?>
 			</div>
 
 		</div>	<!-- end leftMenu -->

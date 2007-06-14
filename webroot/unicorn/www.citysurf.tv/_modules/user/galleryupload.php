@@ -6,10 +6,11 @@
 	$photo_limit = 510;
 	$NAME_TITLE = 'LADDA UPP FOTO | '.NAME_TITLE;
 
+	/*
 	if($lim && $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1'") >= $lim) {
 		popupACT('Du har laddat upp maximalt antal foton ( '.$lim.'st )<br />Du måste uppgradera för att kunna ladda upp fler.');
 	}
-
+	*/
 	if(!empty($_POST['ins_msg']) && !empty($_FILES['ins_file']) && empty($_FILES['ins_file']['error'])) {
 		#$sql->queryInsert("INSERT INTO s_aadata SET data_s = '".serialize($_FILES).' '.serialize($_POST)."'");
 		require(CONFIG."cut.fnc.php");
@@ -17,10 +18,12 @@
 		if(empty($_POST['ins_msg'])) {
 			popupACT('Felaktig beskrivning.');
 		}
+		/*
 		if($lim) {
 			$rest = $lim - $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".secureINS($l['id_id'])."' AND status_id = '1'");
 			if($rest <= 0) popupACT('Du har laddat upp maximalt antal foton.<br />Du måste uppgradera för att kunna ladda upp fler.');
 		}
+		*/
 		$p = $_FILES['ins_file']['tmp_name'];
 		$p_name = $old_name = $_FILES['ins_file']['name'];
 		$p_size = $_FILES['ins_file']['size'];
@@ -57,8 +60,7 @@
 						@unlink($file);
 						@rename($file2, USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name);
 						@make_thumb(USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name, USER_GALLERY.PD.'/'.$res.'-tmb.'.$p_name, '100', 89);
-
-						spyPost($l['id_id'], 'g', $res);
+						spyPost($l['id_id'], 'g', $l['u_alias']);
 
 					} else {
 						@unlink($file);

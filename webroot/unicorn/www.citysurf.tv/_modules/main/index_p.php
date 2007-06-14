@@ -6,6 +6,11 @@
 		$login_err = $user_auth->login($_POST['a'], $_POST['p']);
 	}
 
+	if ($l) {
+		header('Location: /main/start/');
+		die;
+	}
+
 	$theme_css = 'jord.css';
 	require_once(DESIGN.'top.php');
 ?>

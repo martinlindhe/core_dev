@@ -2,7 +2,7 @@
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 	echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sv" lang="sv">';
 	
-	if ($l) $theme_css = $user->getinfo($l['id_id'], 'det_tema');
+	if (@$l) $theme_css = $user->getinfo($l['id_id'], 'det_tema');
 	if (empty($theme_css)) $theme_css = 'default.css';
 	$theme_css = secureOUT($theme_css);
 	

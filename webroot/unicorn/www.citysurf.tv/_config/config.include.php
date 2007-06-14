@@ -31,8 +31,8 @@ define('SQL_H', 'pc3.icn.se');
 
 
 define('SMTP_SERVER', 'localhost');
-define('P2B', 'http://cs.icn.se/');
-define('URL', 'cs.icn.se');
+define('P2B', 'http://www.citysurf.tv/');
+define('URL', 'citysurf.tv');
 define('NAME_URL', 'CitySurf');
 define("UO", '30 MINUTES');
 define('ADMIN_NAME', 'CitySurf');

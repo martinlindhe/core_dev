@@ -7,8 +7,17 @@
 		<div class="userName">
 			<?
 				echo $user->getstring($s, '');
+
 				//todo: visa ej ge vip länken för vip-användare?
-				if (!$own) echo ' <b>(<a href="'.l('user', 'givevip', $s['id_id']).'">ge VIP</a>)</b>';
+				$curr_vip = get_vip($s['id_id']);
+					
+				if ($curr_vip == '2') echo ' <img src="_gfx/icon_vip.png">';
+				if ($curr_vip == '3') echo ' <img src="_gfx/icon_vipd.png">';
+				if ($curr_vip == '10') echo ' WEBMASTER';
+
+				if (!$own) {
+					echo ' <b>(<a href="'.l('user', 'givevip', $s['id_id']).'">ge VIP</a>)</b>';
+				}
 			?>
 		</div>
 		<div id="userImage">
