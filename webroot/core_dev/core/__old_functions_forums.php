@@ -53,14 +53,6 @@
 		return dbArray($db, $sql);
 	}
 
-	/* Returns the number of messages that $userId has written in the forums */
-	function getForumPostsCount(&$db, $userId)
-	{
-		if (!is_numeric($userId)) return false;
-
-		$sql = 'SELECT COUNT(itemId) FROM tblForums WHERE authorId='.$userId.' AND itemType='.FORUM_MESSAGE;
-		return dbOneResultItem($db, $sql);
-	}
 
 	/* Returns the timestamp of the newest forum entry inside $itemId, recursive */
 	function getForumNewestItem(&$db, $itemId, $currtop = '')

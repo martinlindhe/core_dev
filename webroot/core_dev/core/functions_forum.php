@@ -9,10 +9,10 @@
 
 	/*
 		functions_forums.php - Funktioner för forum
-		
+
 		//todo: släng bort massa funktioner som inte används
 		//ta bort fileId från tblForums
-		//eventuellt: omprogrammering och använd itemType ordentligt! type skulle kunna vara: category, folder, thread, post, sticky, announcement		
+		//eventuellt: omprogrammering och använd itemType ordentligt! type skulle kunna vara: category, folder, thread, post, sticky, announcement
 	*/
 
 
@@ -32,6 +32,15 @@
 		$q .= 'WHERE t1.itemId='.$itemId;
 
 		return $db->getOneRow($q);
+	}
+
+	function getForumName($itemId)
+	{
+		global $db;
+		if (!is_numeric($itemId)) return false;
+
+		$q  = 'SELECT itemSubject FROM tblForums WHERE itemId='.$itemId;
+		return $db->getOneItem($q);
 	}
 
 	/* Returns all items inside $itemId */
@@ -159,7 +168,7 @@
 	function addForumMessage($parentId, $subject, $body, $sticky = 0)
 	{
 		global $db, $session, $config;
-		
+
 		if (!$session->id || !is_numeric($parentId) || !is_numeric($sticky)) return false;
 
 		$body = strip_tags($body);
@@ -209,7 +218,7 @@
 				$result = '';
 				if ($row['itemSubject']) $result = $config['forum']['path_separator'].'<a href="forum.php?id='.$itemId.'">'.$row['itemSubject'].'</a>';
 				break;
-				
+
 			default: die('aouuu');
 		}
 
@@ -237,7 +246,7 @@
 	{
 		global $db, $session;
 		if (!$session->isAdmin || !is_numeric($itemId)) return false;
-		
+
 		$q = 'UPDATE tblForums SET locked=1 WHERE itemId='.$itemId;
 		$db->query($q);
 	}
@@ -246,7 +255,7 @@
 	{
 		global $db, $session;
 		if (!$session->isAdmin || !is_numeric($itemId)) return false;
-		
+
 		$q = 'UPDATE tblForums SET locked=0 WHERE itemId='.$itemId;
 		$db->query($q);
 	}
@@ -298,6 +307,7 @@
 
 	function displayRootForumContent()
 	{
+		global $config;
 		$list = getForumItems();
 
 		if (!count($list)) return;
@@ -311,71 +321,66 @@
 
 			echo '<div class="forum_overview_group">';
 			echo '<a href="forum.php?id='.$row['itemId'].'">'.$subject.'</a><br/><br/>';
-			displaySubfolders($row['itemId']);
+			$itemId = $row['itemId'];
+
+			$data = getForumItem($itemId);
+			$list = getForumItems($itemId);
+
+			echo '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="forum_overview_table">';
+			echo '<tr>';
+			echo '<th width="40"></th>';	//for icons
+			echo '<th>Forum</th>';
+			echo '<th width="200" align="center">Last post</th>';
+			echo '<th width="70" align="center">Topics</th>';
+			echo '<th width="70" align="center">Posts</th>';
+			echo '</tr>';
+
+			$i = 0;
+			foreach ($list as $row) {
+				$i++;
+
+				$subject = $row["itemSubject"];
+				if (strlen($subject) > 50) $subject = substr($subject, 0, 50).'..';
+				if (!$subject) {
+					$subject = '(Inget navn)';
+				}
+
+				echo '<tr class="forum_overview_item_'.($i%2?'even':'odd').'" >';
+				echo '<td align="center"><img src="'.$config['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/></td>';
+				echo '<td class="forum_item_text">';
+					echo '<a href="forum.php?id='.$row['itemId'].'">'.$subject.'</a><br/>';
+					echo $row['itemBody'];
+				echo '</td>';
+
+				$data = getForumThreadContentLastPost($row['itemId']);
+				echo '<td class="forum_item_text" width=200>';
+				if ($data) {
+					if ($data['itemSubject']) {
+						echo '<a href="forum.php?id='.$data['itemId'].'">'.$data['itemSubject'].'</a><br/>';
+					} else {
+						echo '<a href="forum.php?id='.$data['parentId'].'#post'.$data['itemId'].'">'.$data['parentSubject'].'</a><br/>';
+					}
+					echo 'by '.nameLink($data['authorId'], $data['authorName']).'<br/>';
+					echo $data['timeCreated'];
+				} else {
+					echo 'Never';
+				}
+				echo '</td>';
+				echo '<td align="center">'.formatNumber(getForumItemCountFlat($row['itemId'])).'</td>';
+				echo '<td align="center">'.formatNumber(getForumThreadContentCount($row['itemId'])).'</td>';
+				echo '</tr>';
+			}
+			echo '</table>';
 			echo '</div><br/>';	//class="forum_overview_group"
 		}
 	}
 
-	function displaySubfolders($itemId)
-	{
-		global $config;
-		
-		if (!is_numeric($itemId)) return false;
-
-		$data = getForumItem($itemId);
-		$list = getForumItems($itemId);
-
-		echo '<table width="100%" cellpadding="0" cellspacing="0" border="0">';
-		echo '<tr>';
-		echo '<th width="40"></th>';	//for icons
-		echo '<th>Forum</th>';
-		echo '<th width="200" align="center">Last post</th>';
-		echo '<th width="70" align="center">Topics</th>';
-		echo '<th width="70" align="center">Posts</th>';
-		echo '</tr>';
-
-		for ($i=0; $i<count($list); $i++) {
-
-			$subject = $list[$i]["itemSubject"];
-			if (strlen($subject) > 50) $subject = substr($subject, 0, 50).'..';
-			if (!$subject) {
-				$subject = '(Inget navn)';
-			}
-
-			echo '<tr class="forum_overview_item">';
-			echo '<td align="center"><img src="'.$config['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/></td>';
-			echo '<td class="forum_item_text">';
-				echo '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br/>';
-				echo $list[$i]['itemBody'];
-			echo '</td>';
-
-			$data = getForumThreadContentLastPost($list[$i]['itemId']);
-			echo '<td class="forum_item_text" width=200>';
-			if ($data) {
-				if ($data['itemSubject']) {
-					echo '<a href="forum.php?id='.$data['itemId'].'">'.$data['itemSubject'].'</a><br/>';
-				} else {
-					echo '<a href="forum.php?id='.$data['parentId'].'#post'.$data['itemId'].'">'.$data['parentSubject'].'</a><br/>';
-				}
-				echo $config['forum']['text']['by'].' '.nameLink($data['authorId'], $data['authorName']).'<br/>';
-				echo $data['timeCreated'];
-			} else {
-				echo 'Never';
-			}
-			echo '</td>';
-			echo '<td align="center">'.formatNumber(getForumItemCountFlat($list[$i]['itemId'])).'</td>';
-			echo '<td align="center">'.formatNumber(getForumThreadContentCount($list[$i]['itemId'])).'</td>';
-			echo '</tr>';
-		}
-		echo '</table>';
-	}
-	
 	/* Returns item data for the last post in any of the threads with parentId=$itemId */
 	function getForumThreadContentLastPost($itemId)
 	{
 		global $db;
 		if (!is_numeric($itemId)) return false;
-		
+
 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
 		$list = $db->getArray($q);
 
@@ -392,7 +397,7 @@
 				$newest_id = $data['itemId'];
 			}
 		}
-		
+
 		if ($newest_time) {
 			$data = getForumItem($newest_id);
 			if (!$data['itemSubject']) {
@@ -402,7 +407,7 @@
 			}
 			return $data;
 		}
-		
+
 		return false;
 	}
 
@@ -415,14 +420,14 @@
 		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$itemId;
 		return $db->getOneItem($q);
 	}
-	
+
 	/* Returns the total number of posts contained in all the threads with parentId=$itemId */
 	function getForumThreadContentCount($itemId)
 	{
 		global $db;
 		//fixme: kanske byta namn på funktionen
 		if (!is_numeric($itemId)) return false;
-		
+
 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
 		$list = $db->getArray($q);
 
@@ -435,97 +440,112 @@
 		return $cnt;
 	}
 
+	//Displays the different forums of one root level category + activity details
 	function displayForumContentFlat($itemId)
 	{
 		global $db, $config;
 		if (!is_numeric($itemId)) return false;
 
-		$result = '';
-		
+		echo '<div class="forum_overview_group">';
+
 		$data = getForumItem($itemId);
 		$list = getForumItems($itemId, false);
-		
-		if ($data['parentId'] == 0) {
-			$result .= '<div class="forum_header">'.$data['itemSubject'].'</div>';
-		} else {
-			$result .= '<div class="forum_header">Threads in forum: '.$data['itemSubject'].'</div>';
-		}
 
-		$result .= '<table width="100%" cellpadding=0 cellspacing=0 border=1 class="forum_borders">';
-		$result .= '<tr class="forum_subheader">';
-		$result .= '<th width=30></th>';
+		echo '<div class="forum_header">'.getForumDepthHTML(FORUM_FOLDER, $itemId).'</div>';
+		/*
 		if ($data['parentId'] == 0) {
-			$result .= '<th>&nbsp;Forum</th>';			
-			$result .= '<th width=200 align="center">Last thread</th>';
-			$result .= '<th width=70 align="center">Threads</th>';	
+			echo '<div class="forum_header">'.$data['itemSubject'].'</div>';
 		} else {
-			$result .= '<th>&nbsp;Thread</th>';
-			$result .= '<th width=200 align="center">Last post</th>';
-			$result .= '<th width=70 align="center">Replies</th>';
+			echo '<div class="forum_header">Topics under: '.$data['itemSubject'].'</div>';
 		}
-		$result .= '<th width=70 align="center">Views</th>';
-		$result .= '</tr>';
-		
-		for ($i=0; $i<count($list); $i++) {
-			$result .= '<tr class="forum_item">';
+		*/
+		echo '<br/>';
 
-			$result .= '<td align="center">';
-			if ($list[$i]['locked']) {
-				$result .= '<img src="icons/forum_lock.png"><br/>';
+		echo '<table width="100%" cellpadding=0 cellspacing=0 border=0 class="forum_overview_table">';
+		echo '<tr class="forum_subheader">';
+		echo '<th width=30></th>';
+		if ($data['parentId'] == 0) {
+			echo '<th>&nbsp;Forum</th>';
+			echo '<th width=200 align="center">Last topic</th>';
+			echo '<th width=70 align="center">Topics</th>';
+		} else {
+			echo '<th>&nbsp;Topic</th>';
+			echo '<th width=200 align="center">Last post</th>';
+			echo '<th width=70 align="center">Replies</th>';
+		}
+		echo '<th width=70 align="center">Views</th>';
+		echo '</tr>';
+
+		$i = 0;
+		foreach ($list as $row) {
+			$i++;
+			echo '<tr class="forum_overview_item_'.($i%2?'even':'odd').'" >';
+
+			echo '<td align="center">';
+			if ($row['locked']) {
+				echo '<img src="icons/forum_lock.png"><br/>';
 			}
-			if ($list[$i]['sticky'] == 1) {
-				$result .= '<img src="icons/forum_sticky.gif">';
-			} else if ($list[$i]['sticky'] == 2) {
-				$result .= '<img src="icons/forum_announcement.png">';
+			if ($row['sticky'] == 1) {
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_sticky.png" alt="Sticky"/>';
+			} else if ($row['sticky'] == 2) {
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_announcement.png" alt="Announcement"/>';
 			} else if ($data['parentId'] == 0) {
-				$result .= '<img src="gfx/icon_folder.png">';
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/>';
 			} else {
-				$result .= '<img src="gfx/icon_message.png">';
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_message.png" alt="Message"/>';
 			}
-			$result .= '</td>';
+			echo '</td>';
 
-			$result .= '<td class="forum_item_text">';
-				if ($list[$i]['sticky'] == 1) $result .= '<b>Sticky: </b>';
-				if ($list[$i]['sticky'] == 2) $result .= '<b>Announcement: </b>';
-				$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$list[$i]['itemSubject'].'</a><br/>';
-				$result .= $list[$i]['timeCreated'].'<br/>';
-				$result .= 'by '.nameLink($list[$i]['authorId'], $list[$i]['authorName']);
-			$result .= '</td>';
+			echo '<td class="forum_item_text">';
+				if ($row['sticky'] == 1) echo '<b>Sticky: </b>';
+				if ($row['sticky'] == 2) echo '<b>Announcement: </b>';
+				echo '<a href="forum.php?id='.$row['itemId'].'">'.$row['itemSubject'].'</a><br/>';
+				echo $row['timeCreated'].'<br/>';
+				echo 'by '.nameLink($row['authorId'], $row['authorName']);
+			echo '</td>';
 
-			$lastreply = getForumLastReply($list[$i]['itemId']);
-			$result .= '<td class="forum_item_text">';
+			$lastreply = getForumLastReply($row['itemId']);
+			echo '<td class="forum_item_text">';
 			if ($lastreply) {
 				if ($data['parentId'] == 0) {
-					$result .= '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
+					echo '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
 					$subject = $lastreply['itemSubject'];
 					if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
-					$result .= '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br/>';
+					echo '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br/>';
 				} else {
 					//visa rubriken från parent-inlägg:
-					$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'#post'.$lastreply['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
-					$subject = $list[$i]['itemSubject'];
+					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastreply['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
+					$subject = $row['itemSubject'];
 					if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
-					$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br/>';
+					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br/>';
 				}
-				$result .= $lastreply['timeCreated'].'<br/>by '.nameLink($lastreply['userId'], $lastreply['userName']);
+				echo $lastreply['timeCreated'].'<br/>by '.nameLink($lastreply['userId'], $lastreply['userName']);
 			} else {
-				if ($data['parentId']) $result .= '<a href="forum.php?id='.$list[$i]['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
-				$subject = $list[$i]['itemSubject'];
+				if ($data['parentId']) echo '<a href="forum.php?id='.$row['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
+				$subject = $row['itemSubject'];
 				if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
-				$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br/>';
-				$result .= $list[$i]['timeCreated'].'<br/>by '.nameLink($list[$i]['authorId'], $list[$i]['authorName']);
+				echo '<a href="forum.php?id='.$row['itemId'].'">'.$subject.'</a><br/>';
+				echo $row['timeCreated'].'<br/>by '.nameLink($row['authorId'], $row['authorName']);
 			}
-			$result .= '</td>';
+			echo '</td>';
 
-			$result .= '<td align="center">'.formatNumber(getForumMessageCount($list[$i]['itemId'], false)).'</td>';
-			$result .= '<td align="center">'.formatNumber($list[$i]['itemRead']).'</td>';
-			$result .= '</tr>';
+			echo '<td align="center">'.formatNumber(getForumMessageCount($row['itemId'], false)).'</td>';
+			echo '<td align="center">'.formatNumber($row['itemRead']).'</td>';
+			echo '</tr>';
 		}
-		
-		$result .= '</table>';
-		return $result;
+
+		echo '</table>';
+		echo '</div>';
+
+		if ($data['parentId'] == 0) {
+			echo '<br/>';
+			echo '<div class="forum_overview_group">';
+			echo '<b>Active topics</b><br/><br/>';
+			echo 'fixme - list a few of the active topics within the above forums here';
+			echo '</div>';
+		}
 	}
-	
+
 	function getForumLastReply($itemId)
 	{
 		global $db;
@@ -538,13 +558,13 @@
 		$q .= 'ORDER BY t1.timeCreated DESC LIMIT 0,1';
 		return $db->getOneRow($q);
 	}
-	
+
 	//todo: ta en optional parameter $highlight för sökresultat
 	//bugg: $highlight ändrar på enkodade htmltaggar vilket resulterar i massa html-leakage i resultatet
 	function showForumPost($item, $headertext = '', $show_links = true, $highlight = '')
 	{
 		global $session, $config;
-		
+
 		$subject = formatUserInputText($item['itemSubject']);
 		$body = formatUserInputText($item['itemBody']);
 
@@ -554,114 +574,103 @@
 			for ($i=0; $i<count($criterialist); $i++) {
 				$regexp = "(\t | \n | ' ')*".$criterialist[$i]."(\t | \n | ' ')*";
 				$subject = eregi_replace($regexp, $replace, $subject);
-				$body    = eregi_replace($regexp, $replace, $body);
+				$body = eregi_replace($regexp, $replace, $body);
 			}
 		}
 
+		echo '<a name="post'.$item['itemId'].'" id="post'.$item['itemId'].'"></a>';
+		echo '<table width="100%" cellpadding=0 cellspacing=0 border=1 class="forum_post_table">';
+		echo '<tr class="forum_post_heading">';
+		echo '<th width="160">'.$item['timeCreated'].'</th>';
+		if ($headertext) echo '<th align="right">'.$headertext.'</th>';
+		else echo '<th></th>';
+		echo '</tr>';
 
-		$content = '<a name="post'.$item['itemId'].'" id="post'.$item['itemId'].'"></a>';
-		$content .= '<table width="100%" cellpadding=0 cellspacing=0 border=1 class="forum_borders">';
-		$content .= '<tr class="forum_subheader">';
-		$content .= '<th width=160>'.$item['timeCreated'].'</th>';
-		if ($headertext) {
-			$content .= '<th align="right">'.$headertext.'</th>';
-		} else {
-			$content .= '<th></th>';
+		echo '<tr class="forum_post_item">';
+		echo '<td width=160 valign="top" class="forum_item_text">';
+		echo nameThumbLink($item['authorId'], $item['authorName']).'<br/><br/>';
+
+		//echo 'Status: '.getUserStatus($item['authorId']).'<br/>';
+		//echo 'Join date: '.getUserCreated($item['authorId']).'<br/>';
+		echo 'Posts: '.getForumPostsCount($item['authorId']);
+
+
+		echo '</td>';
+
+		echo '<td valign="top" class="forum_item_text">';
+		if ($subject) echo '<b>'.$subject.'</b><hr/>';
+		echo $body;
+
+		$signature = loadUserdataSetting($session->id, $config['settings']['default_signature']);
+
+		if ($signature) echo '<hr/>'.$signature;
+
+		echo '</td>';
+		echo '</tr>';
+
+		if (!$session->id || !$show_links) {
+			echo '</table><br/>';
+			return;
 		}
-		$content .= '</tr>';
 
-		$content .= '<tr class="forum_item">';
-		$content .= '<td width=160 valign="top" class="forum_item_text">';
-			$content .= nameLink($item['authorId'], $item['authorName']).'<br/><br/>';
+		echo '<tr class="forum_item">';
+		echo '<td></td>';
+		
+		echo '<td align="right">';
+		
+		echo '<a href="forum_tipsa.php?id='.$item['itemId'].'">Tell a friend</a> ';
 
-			/*
-			$userpic = getThumbnail($item['authorId'], 'Egen avatar', $config['thumbnail_width'], $config['thumbnail_height'], false);
-			if ($userpic) {
-				$content .= $userpic.'<br/>';
+		if (!$item['locked']) {
+			if (forumItemIsDiscussion($item['itemId'])) {
+				echo '<a href="forum_new.php?id='.$item['itemId'].'&amp;q='.$item['itemId'].'">Reply</a> ';
 			} else {
-				$choosen_avatar = getUserSetting($db, $item['authorId'], 'avatar');
-				if ($choosen_avatar && is_numeric($choosen_avatar)) {
-					$content .= '<img src="avatars/'.$config['avatars'][$choosen_avatar].'" width=80 height=80><br/>';
-				}
+				echo '<a href="forum_new.php?id='.$item['parentId'].'&amp;q='.$item['itemId'].'">Reply</a> ';
 			}
 
-			$content .= 'Status: '.getUserStatus($db, $item['authorId']).'<br/>';
-			//$content .= 'Join date: '.formatDate(getUserCreated($db, $item['authorId'])).'<br/>';
-			$content .= 'Inlegg: '.getForumPostsCount($db, $item['authorId']);
-			*/
-
-		$content .= '</td>';
-
-		$content .= '<td valign="top" class="forum_item_text">';
-			if ($subject) $content .= '<b>'.$subject.'</b><hr>';
-			$content .= $body;
-
-			$signature = loadUserdataSetting($session->id, $config['settings']['default_signature']);
-			
-			if ($signature) $content .= '<hr>'.$signature;
-
-		$content .= '</td>';
-		$content .= '</tr>';
-			
-		$content .= '<tr class="forum_item">';
-		$content .= '<td></td>';
-		$content .= '<td align="right">';
-			if ($session->id && $show_links) {
-				$content .= '<a href="forum_tipsa.php?id='.$item['itemId'].'">Tell a friend</a> ';
-
-				if (!$item['locked']) {
-					if (forumItemIsDiscussion($item['itemId'])) {
-						$content .= '<a href="forum_new.php?id='.$item['itemId'].'&q='.$item['itemId'].'">Reply</a> ';
-					} else {
-						$content .= '<a href="forum_new.php?id='.$item['parentId'].'&q='.$item['itemId'].'">Reply</a> ';
-					}
-
-					if ($item['authorId'] == $session->id || $session->isAdmin) {
-						$content .= '<a href="forum_edit.php?id='.$item['itemId'].'">Edit</a> ';
-					}
-				}
-
-				if ($session->isAdmin) {
-					$content .= '<a href="forum_delete.php?id='.$item['itemId'].'">Remove</a> ';
-				}
-				
-				if ($session->isAdmin && forumItemIsDiscussion($item['itemId'])) {
-					if (!$item['locked']) {
-						$content .= '<a href="forum_lock.php?id='.$item['itemId'].'">L&aring;s</a> ';
-					} else {
-						$content .= '<a href="forum_lock.php?id='.$item['itemId'].'&unlock">L&aring;s upp</a> ';
-					}
-					$content .= '<a href="forum_move.php?id='.$item['itemId'].'">Move</a> ';
-				}
-
-				if ($session->id != $item['authorId']) {
-					$content .= '<a href="forum_report.php?id='.$item['itemId'].'">Report</a> ';
-				}
+			if ($item['authorId'] == $session->id || $session->isAdmin) {
+				echo '<a href="forum_edit.php?id='.$item['itemId'].'">Edit</a> ';
 			}
+		}
 
-		$content .= '</td></tr>';
-		$content .= '</table><br/>';
+		if ($session->isAdmin) {
+			echo '<a href="forum_delete.php?id='.$item['itemId'].'">Remove</a> ';
+		}
 
-		return $content;
+		if ($session->isAdmin && forumItemIsDiscussion($item['itemId'])) {
+			if (!$item['locked']) {
+				echo '<a href="forum_lock.php?id='.$item['itemId'].'">Lock</a> ';
+			} else {
+				echo '<a href="forum_lock.php?id='.$item['itemId'].'&unlock">Unlock</a> ';
+			}
+			echo '<a href="forum_move.php?id='.$item['itemId'].'">Move</a> ';
+		}
+
+		if ($session->id != $item['authorId']) {
+			echo '<a href="forum_report.php?id='.$item['itemId'].'">Report</a> ';
+		}
+
+		echo '</td></tr>';
+		echo '</table><br/>';
 	}
-	
-	
+
+
 	function displayDiscussionContentFlat($itemId)
 	{
 		global $db, $config;
 		if (!is_numeric($itemId)) return false;
-		
-		$content = '';
-		
+
+		echo '<div class="forum_overview_group">';
+		echo getForumDepthHTML(FORUM_MESSAGE, $itemId).'<br/><br/>';
+
 		$item = getForumItem($itemId);
-		$content .= showForumPost($item, 'First post');
+		showForumPost($item, 'First post');
 
 		$list = getForumItems($itemId);
 
 		for ($i=0; $i<count($list); $i++) {
-			$content .= showForumPost($list[$i], 'Svar #'.($i+1));
+			showForumPost($list[$i], 'Reply #'.($i+1));
 		}
-		return $content;
+		echo '</div>';
 	}
 
 	function displayUsersLatestPosts(&$db, $userId, $limit = 5)
@@ -696,9 +705,9 @@
 		} else {
 			$str = 'The user has not written any posts';
 		}
-		
+
 		return $str;
-	}	
+	}
 
 	/* Returns a list of search results with forum items */
 	function getForumSearchResults($criteria, $method, $page, $limit)
@@ -823,12 +832,23 @@
 		}
 	}
 
+	/* Returns the number of messages that $userId has written in the forums */
+	function getForumPostsCount($userId)
+	{
+		global $db;
+		if (!is_numeric($userId)) return false;
+
+		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE authorId='.$userId.' AND itemType='.FORUM_MESSAGE;
+		return $db->getOneItem($q);
+	}
+
+
 	function displayForum($_id)
 	{
 		global $session;
 		if (!is_numeric($_id)) return false;
 
-/* 
+/*
 		// Starta/avsluta bevakning
 		if ($session->id) {
 			if (isset($_GET['subscribe'])) {
@@ -850,13 +870,10 @@
 			return;
 		}
 
-		$item = getForumItem($_id);
-
 		if (forumItemIsFolder($_id)) {
 			//display content of a folder (parent = root)
-			echo getForumDepthHTML(FORUM_FOLDER, $_id);
 			echo displayForumContentFlat($_id);
-				
+
 			echo '<a href="forum_new.php?id='.$_id.'">New discussion</a><br/>';
 
 			if ($session->isAdmin) {
@@ -865,9 +882,7 @@
 			}
 		} else {
 			//display flat discussion overview
-			echo getForumDepthHTML(FORUM_ITEM, $_id);
 			echo displayDiscussionContentFlat($_id);
 		}
-
 	}
 ?>

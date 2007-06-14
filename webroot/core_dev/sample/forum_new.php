@@ -59,6 +59,10 @@
 				//Create category or a forum
 				if ($writeSubject) {
 					$createdId = addForumFolder($itemId, $writeSubject, $writeBody);
+	
+					header('Location: forum.php?id='.$createdId);
+					die;	
+	
 				} else {
 					$forum_error = 'You must write a topic!';
 				}
@@ -70,6 +74,9 @@
 					$sticky = 0;
 					if ($_SESSION['isAdmin'] && !empty($_POST['sticky'])) $sticky = $_POST['sticky'];
 					$createdId = addForumMessage($itemId, $writeSubject, $writeBody, $sticky);
+
+					header('Location: forum.php?id='.$itemId.'#post'.$createdId);
+					die;	
 				}
 			}
 		} else {
@@ -91,62 +98,49 @@
 		}*/
 	}
 
-	if ($createdId) {
-		header('Location: forum.php?id='.$createdId);
-		die;	
-	}
-
 	require('design_head.php');
 
 	echo createMenu($forum_menu, 'blog_menu');
 
 	$hide_subject = false;
 
-	if ($itemId == 0) {
-		//Create top level category (admins only)
-		echo '<a href="forum.php">Forum</a> - Add new category<br/><br/>';
-		$title = 'New category';
-	} else if (empty($item['parentId'])) {
-		//Create a forum (admins only)
-		echo '<a href="forum.php">Forum</a> - Add new forum<br/><br/>';
-		$title = 'New forum';
-	} else if ($parent['parentId'] == 0) {
-		//Create a discussion thread (everyone)
-		echo getForumDepthHTML(FORUM_FOLDER, $itemId).' - Add new discussion thread<br><br>';
-		$title = 'New discussion thread';
-	} else {
-		//Create a post (everyone)
-		echo getForumDepthHTML(FORUM_FOLDER, $itemId).' - Add a response to this post<br><br>';
-		echo showForumPost($item, '', false);
-		$hide_subject = true;
-		$title = 'New post';
-	}
-
 	if (!empty($forum_error)) echo '<div class="critical">'.$forum_error.'</div>';
 
 	echo '<form method="post" name="newpost" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
-	if (!$hide_subject) {
-		if (!$itemId) echo 'Name:<br/>';
-		else echo 'Subject:<br/>';
-		echo '<input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
+
+	if ($itemId == 0) {
+		//Create root level category (admins only)
+		echo 'Forum - Add new root level category<br/><br/>';
+		echo 'Name: <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
+
+	} else if (!$item['parentId']) {
+		//Create a category inside a "root level category" (admins only)
+		echo 'Forum - Add new subcategory (under <b>'.getForumName($itemId).'</b>)<br/><br/>';
+
+		echo 'Subject: <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';		
+		echo 'Description:<br/>';
+		echo '<input type="text" name="body" size="60" value="'.$writeBody.'"/><br/><br/>';		
+	} else if ($parent['parentId'] == 0) {
+		//Create a discussion thread (everyone)
+		echo 'Add new discussion thread under '.getForumDepthHTML(FORUM_FOLDER, $itemId).'<br/><br/>';
+		echo 'Subject: <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
+		echo '<textarea name="body" cols="60" rows="14">'.$writeBody.'</textarea><br/><br/>';
+
+		if ($session->isAdmin) {
+			//Allow admins to create stickies & announcements
+			echo '<input name="sticky" type="radio" class="radio" value="0" id="r0" checked="checked"/><label for="r0">Create a normal thread</label><br/>';
+			echo '<input name="sticky" type="radio" class="radio" value="1" id="r1"/><label for="r1">Admin only: Make the thread a sticky</label><br/>';
+			echo '<input name="sticky" type="radio" class="radio" value="2" id="r2"/><label for="r2">Admin only: Make the thread an announcement</label><br/>';
+		}
+	} else {
+		//Create a post (everyone)
+		echo getForumDepthHTML(FORUM_FOLDER, $itemId).' - Add a response to this post<br/><br/>';
+		echo showForumPost($item, '', false);
+		echo '<textarea name="body" cols="60" rows="14">'.$writeBody.'</textarea><br/><br/>';
 	}
 
 	$item = getForumItem($itemId);
 
-	if (forumItemIsFolder($item['parentId'])) {
-		echo 'Description:<br/>';
-		echo '<input type="text" name="body" size="60" value="'.$writeBody.'"/><br/><br/>';
-	} else if ($item['parentId']) {
-		echo '<textarea name="body" cols="60" rows="14">'.$writeBody.'</textarea><br/><br/>';
-	}
-
-	if ($session->isAdmin && $itemId && !forumItemIsFolder($itemId)) {
-		//Allow admins to create stickies & announcements
-		echo '<input name="sticky" type="radio" class="radio" value="0" id="r0" checked="checked"/><label for="r0">Create a normal thread</label><br/>';
-		echo '<input name="sticky" type="radio" class="radio" value="1" id="r1"/><label for="r1">Admin only: Make the thread a sticky</label><br/>';
-		echo '<input name="sticky" type="radio" class="radio" value="2" id="r2"/><label for="r2">Admin only: Make the thread an announcement</label><br/>';
-	}
-	
 	echo '<br/>';
 	echo '<input type="submit" class="button" value="Save"/> ';
 
