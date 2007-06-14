@@ -52,93 +52,37 @@
 		return $db->getArray($q);
 	}
 
-	function deleteForumItem(&$db, $itemId)
-	{
-		if (!is_numeric($itemId)) return false;
-
-		$sql = 'DELETE FROM tblForums WHERE itemId='.$itemId;
-		dbQuery($db, $sql);
-	}
-
-	/* Deletes itemId and everything below it. also deletes associated moderation queue entries */
-	function deleteForumItemRecursive(&$db, $itemId, $loop = false)
-	{
-		if (!is_numeric($itemId)) return false;
-
-		$sql = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
-		$check = dbQuery($db, $sql);
-		$cnt = dbNumRows($check);
-
-		for ($i=0; $i<$cnt; $i++) {
-			$row = dbFetchArray($check);
-
-			$sql = 'DELETE FROM tblForums WHERE itemId='.$row['itemId'];
-			dbQuery($db, $sql);
-
-			removeFromModerationQueueByItemId($db, $row['itemId'], MODERATION_REPORTED_POST);
-			deleteForumItemRecursive($db, $row['itemId'], true);
-		}
-
-		if ($loop != true) {
-			$sql = 'DELETE FROM tblForums WHERE itemId='.$itemId;
-			dbQuery($db, $sql);
-
-			removeFromModerationQueueByItemId($db, $itemId, MODERATION_REPORTED_POST);
-		}
-	}
-
-
 	/* Return the number of messages inside $itemId, recursive (default) */
-	function getForumMessageCount(&$db, $itemId, $recursive = true, $mecnt = 0)
+	function getForumMessageCount($itemId, $recursive = true, $mecnt = 0)	//fixme: skicka med itemType param & rename function
 	{
+		global $db;
 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
 
-		$sql = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND itemType='.FORUM_MESSAGE;
-		$check = dbQuery($db, $sql);
-		$cnt = dbNumRows($check);
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND itemType='.FORUM_MESSAGE;
+		$arr = $db->getArray($q);
 
-		for ($i=0; $i<$cnt; $i++) {
-			$row = dbFetchArray($check);
+		foreach ($arr as $row) {
 			$mecnt++;
 			if ($recursive === true) {
-				$mecnt = getForumMessageCount($db, $row['itemId'], $recursive, $mecnt);
+				$mecnt = getForumMessageCount($row['itemId'], $recursive, $mecnt);
 			}
 		}
 		return $mecnt;
 	}
 
-	/* Returns the number of folders inside $itemId, recursive */
-	function getForumFolderCount(&$db, $itemId, $mecnt = 0)
-	{
-		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
-
-		$sql = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND itemType='.FORUM_FOLDER;
-
-		$check = dbQuery($db, $sql);
-		$cnt = dbNumRows($check);
-
-		for ($i=0; $i<$cnt; $i++) {
-			$row = dbFetchArray($check);
-			$mecnt++;
-			$mecnt = getForumFolderCount($db, $row['itemId'], $mecnt);
-		}
-		return $mecnt;
-	}
-
 	/* Return the number of items (folders & messages & discussions) inside $itemId, recursive */
-	function getForumItemCount(&$db, $itemId, $mecnt = 0)
+	function getForumItemCount($itemId, $mecnt = 0)
 	{
+		global $db;
 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
 
-		$sql = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
 
-		$check = dbQuery($db, $sql);
-		$cnt = dbNumRows($check);
+		$arr = $db->getArray($q);
 
-		for ($i=0; $i<$cnt; $i++) {
-			$row = dbFetchArray($check);
+		foreach ($arr as $row) {
 			$mecnt++;
-			$mecnt = getForumItemCount($db, $row['itemId'], $mecnt);
+			$mecnt = getForumItemCount($row['itemId'], $mecnt);
 		}
 		return $mecnt;
 	}
@@ -157,17 +101,17 @@
 		return false;
 	}
 
-	function forumItemIsMessage(&$db, $itemId)
+	/* Returns false if item is a message but parent is a folder (item is a discussion then) */
+	function forumItemIsMessage($itemId)
 	{
-		/* Returns false if item is a message but parent is a folder (item is a discussion then) */
-
+		global $db;
 		if (!is_numeric($itemId)) return false;
 
-		$sql = 'SELECT itemType, parentId FROM tblForums WHERE itemId='.$itemId;
-		$row = dbOneResult($db, $sql);
+		$q = 'SELECT itemType, parentId FROM tblForums WHERE itemId='.$itemId;
+		$row = $db->getOneRow($q);
 
 		if ($row['itemType'] == FORUM_MESSAGE) {
-			if (forumItemIsFolder($db, $row['parentId'])) return false;
+			if (forumItemIsFolder($row['parentId'])) return false;
 			return true;
 		}
 		return false;
@@ -207,7 +151,8 @@
 		$db->update($q);
 	}
 
-	/* Recursive, returns the nearest folderId above itemId (which is a message) */
+/*
+	//Recursive, returns the nearest folderId above itemId (which is a message)
 	function getForumFolderParent(&$db, $itemId)
 	{
 		if (!is_numeric($itemId)) return false;
@@ -220,8 +165,10 @@
 		if ($itemType == FORUM_FOLDER) return $parentId;
 		return getForumFolderParent($db, $parentId);
 	}
+*/
 
-	/* Returns the root message id of $itemId */
+	//Returns the root message id of $itemId
+/*
 	function getForumMessageRoot(&$db, $itemId)
 	{
 		if (!is_numeric($itemId)) return false;
@@ -234,18 +181,18 @@
 		if ($itemType == FORUM_FOLDER) return $itemId;
 		return getForumMessageRoot($db, $parentId);
 	}
-
-	function addForumFolder(&$db, $parentId, $folderName, $folderDesc = '')
+*/
+	function addForumFolder($parentId, $folderName, $folderDesc = '')
 	{
-		if (!$_SESSION['loggedIn'] || !is_numeric($parentId)) return false;
+		global $db, $session;
+		if (!$session->id || !is_numeric($parentId)) return false;
 
 		$folderDesc = strip_tags($folderDesc);
-		$folderName = dbAddSlashes($db, strip_tags($folderName));
-		$folderDesc = dbAddSlashes($db, $folderDesc);
+		$folderName = $db->escape(strip_tags($folderName));
+		$folderDesc = $db->escape($folderDesc);
 
-		$sql = 'INSERT INTO tblForums SET itemType='.FORUM_FOLDER.',authorId='.$_SESSION['userId'].',parentId='.$parentId.',itemSubject="'.$folderName.'",itemBody="'.$folderDesc.'",timeCreated=NOW()';
-		$query = dbQuery($db, $sql);
-		return $db['insert_id'];
+		$q = 'INSERT INTO tblForums SET itemType='.FORUM_FOLDER.',authorId='.$session->id.',parentId='.$parentId.',itemSubject="'.$folderName.'",itemBody="'.$folderDesc.'",timeCreated=NOW()';
+		return $db->insert($q);
 	}
 
 	function addForumMessage(&$db, $parentId, $subject, $body, $sticky = 0)

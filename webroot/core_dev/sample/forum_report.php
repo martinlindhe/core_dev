@@ -1,49 +1,37 @@
 <?
-	include("include_all.php");
+	require_once('config.php');
+	
+	$session->requireLoggedIn();
 
-	if (!$_SESSION['loggedIn'] || empty($_GET['id']) || !is_numeric($_GET['id'])) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
-
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;	//invalid request
 	$itemId = $_GET['id'];
-	$item = getForumItem($db, $itemId);
-	if (!$item) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
+
+	$item = getForumItem($itemId);
+	if (!$item) die;	//object dont exist, invalid request
 
 	/* Lägg till en kommentar till anmälan */
 	if (isset($_POST['motivation'])) {
 
 		/* Rapportera inlägget till abuse */
-		$queueId = addToModerationQueue($db, $itemId, MODERATION_REPORTED_POST);
-		addComment($db, COMMENT_MODERATION_QUEUE, $queueId, $_POST['motivation']);
+		$queueId = addToModerationQueue($itemId, MODERATION_REPORTED_POST);
+		addComment(COMMENT_MODERATION_QUEUE, $queueId, $_POST['motivation']);
 
 		header('Location: forum.php?id='.$item['parentId']);
 		die;
 	}
 
-	include('design_head.php');
-	include('design_forum_head.php');
+	require('design_head.php');
 
-	$content = '';
+	wiki('Forum abuse reporting');
 
-	//echo getInfoField($db, 'anmäl_inlägg').'<br><br>';
+	echo showForumPost($item, '', false).'<br>';
 
-	$content .= showForumPost($db, $item, '', false).'<br>';
+	echo '<form name="abuse" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
+	echo 'Motivate the reason:<br>';
+	echo '<textarea name="motivation" cols="50" rows="5"></textarea><br><br>';
+	echo '<input type="submit" class="button" value="Report">';
+	echo '</form><br><br>';
+	echo '<a href="javascript:history.go(-1);">Return</a>';
 
-	$content .= '<form name="abuse" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
-	$content .= 'Begrunn anmeldelsen:<br>';
-	$content .= '<textarea name="motivation" cols=50 rows=5></textarea><br><br>';
-	$content .= '<input type="submit" class="button" value="'.$config['text']['link_report'].'">';
-	$content .= '</form><br><br>';
-	$content .= '<a href="javascript:history.go(-1);">'.$config['text']['link_return'].'</a>';
-
-	echo '<div id="user_forum_content">';
-	echo MakeBox('<a href="forum.php">Forum</a>|Rapporter innlegg', $content, 500);
-	echo '</div>';
-
-	include('design_forum_foot.php');
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

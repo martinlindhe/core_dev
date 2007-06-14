@@ -30,21 +30,21 @@
 
 	if (!$item) {
 		//display root level
-		$title = getForumFolderDepthHTML($itemId);
-		$body = displayRootForumContent();
+		echo getForumFolderDepthHTML($itemId);
+		echo displayRootForumContent();
 	} else {
 		if (forumItemIsFolder($itemId)) {
 			//display content of a folder (parent = root)
-			$title = getForumFolderDepthHTML($itemId);
-			$body = displayForumContentFlat($itemId);
+			echo getForumFolderDepthHTML($itemId);
+			echo displayForumContentFlat($itemId);
+			
+			echo '<a href="forum_new.php?id='.$itemId.'">New discussion</a>';
 		} else {
 			//display flat discussion overview
-			$title = getForumItemDepthHTML($item['itemId']);
-			$body = displayDiscussionContentFlat($itemId);
+			echo getForumItemDepthHTML($item['itemId']);
+			echo displayDiscussionContentFlat($itemId);
 		}
 	}
-
-	echo $title. $body;
 
 	require('design_foot.php');
 ?>

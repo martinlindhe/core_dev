@@ -99,7 +99,7 @@
 
 	$forum_menu = array(
 		'forum.php' => 'Forum:Overview',
-		'forum_new.php?id=1' => 'New',
+		'forum_new.php?id=0' => 'New',	//fixme: visa för där man är
 		'forum_search.php' => 'Search',
 		'forum_latest.php' => 'Latest'
 	);

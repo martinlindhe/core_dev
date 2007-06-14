@@ -22,15 +22,18 @@
 	
 	$session->requireLoggedIn();
 
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
-	$itemId = $_GET['id'];
+	$itemId = 0;
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $itemId = $_GET['id'];
+	if (!$itemId && !$session->isAdmin) die;	//invalid request
 
-	$item = getForumItem($itemId);
-	$parent = getForumItem($item['parentId']);
-	if (($itemId && !$item) || $item['locked']) {
-		//block attempt to create item with nonexisting parent
-		header('Location: forum.php');
-		die;
+	if ($itemId) {
+		$item = getForumItem($itemId);
+		$parent = getForumItem($item['parentId']);
+		if (($itemId && !$item) || $item['locked']) {
+			//block attempt to create item with nonexisting parent
+			header('Location: forum.php');
+			die;
+		}
 	}
 	
 	$quoteId = 0;
@@ -76,12 +79,11 @@
 			$forum_error = 'The post is too long, the max allowed length are '.$config['forum']['maxsize_body'].' characters, please try to shorten down your text a bit.';
 		}
 
-		if (!isset($forum_error)) {
-			/*
+		/*if (!isset($forum_error)) {
 			if (!empty($_POST['subscribehere'])) {
 				//Slå på bevakning för det nyskapade inlägget/diskussionen
 				addSubscription($itemId, SUBSCRIBE_MAIL);
-			}*/
+			}
 			if ($itemId == 0 || $item['parentId'] == 0) {
 				header('Location: forum.php?id='.$itemId);
 			} else {
@@ -89,62 +91,62 @@
 				header('Location: forum.php?id='.$item['parentId'].'#post'.$itemId);
 			}
 			die;
-		}
+		}*/
 	}
 
 	require('design_head.php');
 
-	$content = '';
-	
 	$hide_body = false;
 	$hide_subject = false;
 
 	if ($itemId == 0)
 	{
 		//Create top level category (admins only)
-		$content .= '<a href="forum.php">Forum</a> - Add new category<br><br>';
+		echo '<a href="forum.php">Forum</a> - Add new category<br><br>';
 		$title = 'New category';
 		$hide_body = true;
-	} else if ($item['parentId'] == 0)
+	} else if (empty($item['parentId']))
 	{
 		//Create a forum (admins only)
-		$content .= '<a href="forum.php">Forum</a> - Add new forum<br><br>';
+		echo '<a href="forum.php">Forum</a> - Add new forum<br><br>';
 		$title = 'New forum';
 	} else if ($parent['parentId'] == 0)
 	{
 		//Create a discussion thread (everyone)
-		$content .= getForumFolderDepthHTML($itemId).' - Add new discussion thread<br><br>';
+		echo getForumFolderDepthHTML($itemId).' - Add new discussion thread<br><br>';
 		$title = 'New discussion thread';
 	} else
 	{
 		//Create a post (everyone)
-		$content .= getForumFolderDepthHTML($itemId).' - Add a response to this post<br><br>';
-		$content .= showForumPost($item, '', false);
+		echo getForumFolderDepthHTML($itemId).' - Add a response to this post<br><br>';
+		echo showForumPost($item, '', false);
 		$hide_subject = true;
 		$title = 'New post';
 	}
 
-	if (!empty($forum_error)) $content .= '<div class="critical">'.$forum_error.'</div>';
+	if (!empty($forum_error)) echo '<div class="critical">'.$forum_error.'</div>';
 
-	$content .= '<form method="post" name="newpost" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
+	echo '<form method="post" name="newpost" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
 	if (!$hide_subject) {
-		$content .= 'Tema: &nbsp;<input type="text" size=60 maxlength=50 name="subject" value="'.$writeSubject.'"><br>';
+		if (!$itemId) echo 'Name: &nbsp;';
+		else echo 'Subject: &nbsp;';
+		echo '<input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
 	}
 	if (!$hide_body) {
-		$content .= '<br>';
-		$content .= 'Innlegg:<br>';
-		$content .= '<textarea cols=80 rows=15 name="body">'.$writeBody.'</textarea><br>';
+		echo '<br>';
+		echo 'Post:<br>';
+		echo '<textarea cols=80 rows=15 name="body">'.$writeBody.'</textarea><br>';
 	}
 	
-	if ($_SESSION['isAdmin'] && $parent['parentId'] == 0) {
+	if ($session->isAdmin && $itemId != 0 && empty($parent['parentId'])) {
 		//Allow admins to create stickies & announcements
-		$content .= '<input name="sticky" type="radio" class="radio" value="0" checked>Create a normal thread tr&aring;d<br>';
-		$content .= '<input name="sticky" type="radio" class="radio" value="1">Make the thread a sticky<br>';
-		$content .= '<input name="sticky" type="radio" class="radio" value="2">Make the thread an announcement<br>';
+		echo '<input name="sticky" type="radio" class="radio" value="0" id="r0" checked="checked"/><label for="r0">Create a normal thread</label><br/>';
+		echo '<input name="sticky" type="radio" class="radio" value="1" id="r1"/><label for="r1">Admin only: Make the thread a sticky</label><br/>';
+		echo '<input name="sticky" type="radio" class="radio" value="2" id="r2"/><label for="r2">Admin only: Make the thread an announcement</label><br/>';
 	}
 	
-	$content .= '<br>';
-	$content .= '<input type="submit" class="button" value="Lagre"> ';
+	echo '<br>';
+	echo '<input type="submit" class="button" value="Lagre"> ';
 
 /*
 	if (!isSubscribed($itemId, SUBSCRIBE_MAIL)) {
@@ -153,12 +155,10 @@
 		$content .= '<span class="objectCritical">Du har redan en bevakning h&auml;r eller h&ouml;gre upp i diskussionstr&aring;den</span>';
 	}
 */
-	$content .= '</form><br>';
+	echo '</form><br>';
 
 
-	$content .= '<a href="javascript:history.go(-1);">Go back</a>';
-
-	echo $title, $content;
+	echo'<a href="javascript:history.go(-1);">Go back</a>';
 
 	require('design_foot.php');
 ?>
