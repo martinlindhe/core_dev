@@ -23,6 +23,8 @@
 	}*/
 
 	require('design_head.php');
+	
+	echo createMenu($forum_menu, 'blog_menu');
 
 	$item = getForumItem($itemId);
 

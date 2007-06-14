@@ -1,18 +1,12 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
-	if (($_SESSION['loggedIn'] === false) || ($_SESSION['isAdmin'] != true)) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
+	$session->requireLoggedIn();
 	
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
-
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;	//invalid request
 	$itemId = $_GET['id'];
-	$item = getForumItem($db, $itemId);
+
+	$item = getForumItem($itemId);
 		
 	if (!$item) {
 		header('Location: '.$config['start_page']);
@@ -20,40 +14,34 @@
 	}
 
 	if (isset($_POST['destId'])) {
-		setForumItemParent($db, $itemId, $_POST['destId']);
+		setForumItemParent($itemId, $_POST['destId']);
 		header('Location: forum.php?id='.$itemId);
 		die;
 	}
 
-	include('design_head.php');
-	include('design_forum_head.php');
-
-	//$content = 'Denna diskussionstr&aring;d kommer att flyttas:<br><br>';
-	$content = 'Denne diskusjonen vil bli flyttet:<br><br>';
-	$content .= showForumPost($db, $item, '', false).'<br>';
-
-	//$content .= 'V&auml;lj vart du vill flytta tr&aring;den:<br>';
-	$content .= 'Hvor vil du flytte tr&aring;den:<br>';
-	$content .= '<form name="change" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
+	require('design_head.php');
 	
-		$content .= '<select name="destId">';
-		//$content .= '<option value="0">Flytta till roten';
-		$list = getForumStructure($db, 0);
+	echo '<h1>Move thread</h1>';
 
-		for ($i=0; $i<count($list); $i++) {
-			$content .= '<option value="'.$list[$i]['itemId'].'">'.$list[$i]['name'];
-		}
-		$content .= '</select>';
+	echo 'This discussion thread will be moved:<br/><br/>';
+	echo showForumPost($item, '', false).'<br/>';
 
-	$content .= '<br><br>';
-	$content .= '<input type="submit" class="button" value="'.$config['text']['link_move'].'">';
-	$content .= '</form><br><br>';
-	$content .= '<a href="javascript:history.go(-1);">'.$config['text']['link_return'].'</a>';	
+	echo 'Where do you want to move the thread?<br/>';
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
 
-	echo '<div id="user_forum_content">';
-	echo MakeBox('<a href="forum.php">Forum</a>|Flytte tr&aring;d', $content, 500);
-	echo '</div>';
+	$list = getForumStructure();
 
-	include('design_forum_foot.php');
-	include('design_foot.php');
+	echo '<select name="destId">';
+	//echo '<option value="0">Flytta till roten';
+	foreach ($list as $row) {
+		echo '<option value="'.$row['itemId'].'">'.$row['name'];
+	}
+	echo '</select>';
+
+	echo '<br/><br/>';
+	echo '<input type="submit" class="button" value="Move"/>';
+	echo '</form><br/><br/>';
+	echo '<a href="javascript:history.go(-1);">Return</a>';	
+
+	require('design_foot.php');
 ?>

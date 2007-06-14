@@ -198,14 +198,14 @@
 		return dbOneResultItem($db, $sql);
 	}
 
-	function setForumItemParent(&$db, $itemId, $parentId)
+	function setForumItemParent($itemId, $parentId)
 	{
+		global $db;
 		if (!is_numeric($itemId) || !is_numeric($parentId)) return false;
 
-		$sql = 'UPDATE tblForums SET parentId='.$parentId.' WHERE itemId='.$itemId;
-		dbQuery($db, $sql);
+		$q = 'UPDATE tblForums SET parentId='.$parentId.' WHERE itemId='.$itemId;
+		$db->update($q);
 	}
-
 
 	/* Recursive, returns the nearest folderId above itemId (which is a message) */
 	function getForumFolderParent(&$db, $itemId)
@@ -414,19 +414,20 @@
 	}
 
 	/* Returns the $count last posts */
-	function getLastForumPosts(&$db, $count)
+	function getLastForumPosts($count)
 	{
+		global $db;
 		if (!is_numeric($count)) return false;
 
-		$sql  = 'SELECT t1.*,t2.userName AS authorName,t3.itemSubject AS parentSubject ';
-		$sql .= 'FROM tblForums AS t1 ';
-		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-		$sql .= 'LEFT OUTER JOIN tblForums AS t3 ON (t1.itemSubject="" AND t1.parentId=t3.itemId) ';
-		$sql .= 'WHERE t1.itemType='.FORUM_MESSAGE.' ';
-		$sql .= 'ORDER BY t1.timeCreated DESC ';
-		$sql .= 'LIMIT 0,'.$count;
+		$q  = 'SELECT t1.*,t2.userName AS authorName,t3.itemSubject AS parentSubject ';
+		$q .= 'FROM tblForums AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+		$q .= 'LEFT OUTER JOIN tblForums AS t3 ON (t1.itemSubject="" AND t1.parentId=t3.itemId) ';
+		$q .= 'WHERE t1.itemType='.FORUM_MESSAGE.' ';
+		$q .= 'ORDER BY t1.timeCreated DESC ';
+		$q .= 'LIMIT 0,'.$count;
 
-		return dbArray($db, $sql);
+		return $db->getArray($q);
 	}
 
 	/* Returns the $count most read posts (on whole forum) */
@@ -480,20 +481,22 @@
 		return false;
 	}
 
-	function forumLockItem(&$db, $itemId)
+	function forumLockItem($itemId)
 	{
-		if (!$_SESSION['isAdmin'] || !is_numeric($itemId)) return false;
+		global $db, $session;
+		if (!$session->isAdmin || !is_numeric($itemId)) return false;
 		
-		$sql = 'UPDATE tblForums SET locked=1 WHERE itemId='.$itemId;
-		dbQuery($db, $sql);
+		$q = 'UPDATE tblForums SET locked=1 WHERE itemId='.$itemId;
+		$db->query($q);
 	}
 
-	function forumUnlockItem(&$db, $itemId)
+	function forumUnlockItem($itemId)
 	{
-		if (!$_SESSION['isAdmin'] || !is_numeric($itemId)) return false;
+		global $db, $session;
+		if (!$session->isAdmin || !is_numeric($itemId)) return false;
 		
-		$sql = 'UPDATE tblForums SET locked=0 WHERE itemId='.$itemId;
-		dbQuery($db, $sql);
+		$q = 'UPDATE tblForums SET locked=0 WHERE itemId='.$itemId;
+		$db->query($q);
 	}
 
 	/* Returns true/false */
@@ -537,16 +540,16 @@
 	}
 
 	/* Returns a list of all folder paths, ie folder1 - folder_in_folder1 etc... + folderid, used for now in accessgroup admin */
-	function getForumStructure(&$db, $parentId=0, $arr='', $pre='')
+	function getForumStructure($parentId=0, $arr='', $pre='')
 	{
-		$parentId = dbAddSlashes($db, $parentId);
+		global $db;
 		if (!is_numeric($parentId)) return false;
 
-		$sql = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId='.$parentId.' ORDER BY itemSubject';
-		$list = dbArray($db, $sql);
+		$q = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId='.$parentId.' ORDER BY itemSubject';
+		$list = $db->getArray($q);
 
 		/* Lägg först till allt på samma nivå */
-		for ($i=0; $i<count($list); $i++) {
+		for ($i=0; $i<count($list); $i++) {	//fixme: foreach
 			if ($pre != '') {
 				$arr[] = array('name' => $pre.' - '.$list[$i]['itemSubject'], 'itemId' => $list[$i]['itemId']);
 			} else {
@@ -555,14 +558,14 @@
 		}
 
 		/* Sen rekursiva */
-		for ($i=0; $i<count($list); $i++) {
+		for ($i=0; $i<count($list); $i++) {	//fixme: foreach
 			if ($pre != '') {
 				$pre = $pre.' - '.$list[$i]['itemSubject'];
 			} else {
 				$pre = $list[$i]['itemSubject'];
 			}
 
-			$arr = getForumStructure($db, $list[$i]['itemId'], $arr, $pre);
+			$arr = getForumStructure($list[$i]['itemId'], $arr, $pre);
 			$pre='';
 		}
 
@@ -802,8 +805,7 @@
 
 			$result .= '<td class="forum_item_text">';
 				if ($list[$i]['sticky'] == 1) $result .= '<b>Sticky: </b>';
-				//if ($list[$i]['sticky'] == 2) $result .= '<b>Announcement: </b>';
-				if ($list[$i]['sticky'] == 2) $result .= '<b>Kunngj&oslash;ring: </b>';
+				if ($list[$i]['sticky'] == 2) $result .= '<b>Announcement: </b>';
 				$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$list[$i]['itemSubject'].'</a><br>';
 				$result .= $list[$i]['timeCreated'].'<br>';
 				$result .= 'by '.nameLink($list[$i]['authorId'], $list[$i]['authorName']);
@@ -830,7 +832,7 @@
 				$subject = $list[$i]['itemSubject'];
 				if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
 				$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br>';
-				$result .= $list[$i]['timeCreated'].'<br>'.$config['forum']['text']['by'].' '.nameLink($list[$i]['authorId'], $list[$i]['authorName']);
+				$result .= $list[$i]['timeCreated'].'<br>by '.nameLink($list[$i]['authorId'], $list[$i]['authorName']);
 			}
 			$result .= '</td>';
 
@@ -924,7 +926,7 @@
 		$content .= '<td></td>';
 		$content .= '<td align="right">';
 			if ($session->id && $show_links) {
-				//$content .= '<a href="forum_tipsa.php?id='.$item['itemId'].'">Tell a friend</a> ';
+				$content .= '<a href="forum_tipsa.php?id='.$item['itemId'].'">Tell a friend</a> ';
 
 				if (!$item['locked']) {
 					if (forumItemIsDiscussion($item['itemId'])) {
@@ -1011,10 +1013,98 @@
 			}
 			$str .= '</table>';
 		} else {
-			//$str = 'Anv&auml;ndaren har inte skrivit n&aring;gra inl&auml;gg';
-			$str = 'Brukeren har ikke skrevet noen innlegg.';
+			$str = 'The user has not written any posts';
 		}
 		
 		return $str;
 	}	
+
+	/* Returns a list of search results with forum items */
+	function getForumSearchResults($criteria, $method, $page, $limit)
+	{
+		global $db;
+		$criteria = $db->escape($criteria);
+		if (!is_numeric($page) || !is_numeric($limit)) return false;
+
+		if (!$criteria || !$method || !$page || !$limit) return false;
+
+		$list = explode(' ', $criteria);
+
+		$q  = 'SELECT t1.*,t2.userName AS authorName FROM tblForums AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+		$q .= 'WHERE ';
+		$q .= getForumSearchQuery($list);
+
+		switch ($method) {
+			case 'mostread': //mest läst
+				$q .= 'ORDER BY t1.itemRead DESC '; break;
+
+			case 'oldfirst': //älst först
+				$q .= 'ORDER BY t1.timeCreated ASC '; break;
+
+			case 'newfirst': default: //nyast först, default
+				$q .= 'ORDER BY t1.timeCreated DESC '; break;
+		}
+
+		$q .= 'LIMIT '.(($page-1) * $limit).','.$limit;
+
+		return $db->getArray($q);
+	}
+
+	function getForumSearchResultsCount($criteria)
+	{
+		global $db;
+		$criteria = $db->escape($criteria);
+		if (!$criteria) return false;
+
+		$list = explode(' ', $criteria);
+
+		$q  = 'SELECT COUNT(t1.itemId) FROM tblForums AS t1 ';
+		$q .= 'WHERE '.getForumSearchQuery($list);
+
+		return $db->getOneItem($q);
+	}
+
+	/* $list är en array med ord att söka på */
+	function getForumSearchQuery($list)
+	{
+		$sql = '';
+		for ($i=0; $i<count($list); $i++) {
+
+			$curr = $list[$i];
+			if (substr($curr,0,1) == '+') {
+				//kräv detta
+
+				$curr = substr($curr,1);
+				if ($i>0) {
+					$sql .= 'AND ';
+				}
+				$sql .= '(t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+
+			} else if (substr($curr,0,1) == '-') {
+				//INTE detta
+
+				if (count($list)==1) { //tillåt inte sökning på allt UTAN ett ord..
+					return;
+				}
+
+				$curr = substr($curr,1);
+				if ($i>0) {
+					$sql .= 'AND ';
+				}
+				$sql .= 'NOT (t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+
+			} else {
+				//frivilligt (typ detta ELLER nåt annat)
+
+				if ($i>0) {
+					$sql .= 'OR ';
+				}
+				$sql .= '(t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+			}
+		}
+
+		$sql .= 'AND t1.itemDeleted=0 ';
+		return $sql;
+	}
 ?>

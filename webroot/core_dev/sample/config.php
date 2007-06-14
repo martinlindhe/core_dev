@@ -97,5 +97,12 @@
 		'users_online.php' => 'Users online'
 	);
 
+	$forum_menu = array(
+		'forum.php' => 'Forum:Overview',
+		'forum_new.php?id=1' => 'New',
+		'forum_search.php' => 'Search',
+		'forum_latest.php' => 'Latest'
+	);
+
 	$session->handleSessionActions();
 ?>

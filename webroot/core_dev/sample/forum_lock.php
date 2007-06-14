@@ -1,18 +1,15 @@
 <?
-	include_once('include_all.php');
-
-	if (!$_SESSION['isAdmin']) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
+	require_once('config.php');
+	
+	$session->requireAdmin();
 
 	$itemId = $_GET['id'];
-	$item = getForumItem($db, $itemId);
+	$item = getForumItem($itemId);
 	if ($item) {
 		if (isset($_GET['unlock'])) {
-			forumUnlockItem($db, $itemId);
+			forumUnlockItem($itemId);
 		} else {
-			forumLockItem($db, $itemId);
+			forumLockItem($itemId);
 		}
 	}
 

@@ -1,5 +1,5 @@
 <?
-	include('include_all.php');
+	require_once('config.php');
 
 	if (isset($_GET['p'])) {
 		$page = $_GET['p'];
@@ -13,127 +13,108 @@
 		$limit = $config['forum']['search_results_per_page'];
 	}
 
-	setUserStatus($db, 'S&ouml;ker efter inl&auml;gg');
-
-	include('design_head.php');
-	include('design_forum_head.php');
+	require('design_head.php');
 	
-	$content = '';
-
 	if (isset($_POST['c']) || isset($_GET['c'])) {
-		if (isset($_POST['c'])) {
-			$orgcrit = $_POST['c'];
-		} else {
-			$orgcrit = $_GET['c'];
-		}
+		if (isset($_POST['c'])) $orgcrit = $_POST['c'];
+		else $orgcrit = $_GET['c'];
 
-		if (isset($_GET['m'])) {
-			$method = $_GET['m'];
-		} else if (isset($_POST['m'])) {
-			$method = $_POST['m'];
-		} else {
-			$method = 'newfirst';
-		}
+		if (isset($_GET['m'])) $method = $_GET['m'];
+		else if (isset($_POST['m'])) $method = $_POST['m'];
+		else $method = 'newfirst';
 
 		$criteria = substr($orgcrit, 0, 30); //chop off too long search queries
 
-		$list = getForumSearchResults($db, $criteria, $method, $page, $limit);
-		$hits = getForumSearchResultsCount($db, $criteria);
+		$list = getForumSearchResults($criteria, $method, $page, $limit);
+		$hits = getForumSearchResultsCount($criteria);
 
-		$content .= 'Viser s&oslash;kerresultat side '.$page.' av '.round(($hits/$limit)+0.49).', '.$limit.' innlegg per side.<br>';
-		$content .= $hits.' treffar p&aring; "'.$criteria.'", ';
+		echo 'Showing search result page '.$page.' of '.round(($hits/$limit)+0.49).', '.$limit.' posts per page.<br>';
+		echo $hits.' hits on "'.$criteria.'", ';
 
 		switch ($method) {
 			case 'oldfirst':
-				$content .= 'eldste innlegg f&oslash;rst.';
+				echo 'oldest first.';
 				break;
 
 			case 'newfirst':
-				$content .= 'nyeste innlegg f&oslash;rst.';
+				echo 'newest first.';
 				break;
 
 			case 'mostread':
 			default:
-				$content .= 'mest lest f&oslash;rst.';
+				echo 'most read first.';
 				break;
 		}
 
-		$content .= '<br><br>';
+		echo '<br/><br/>';
 
 		for ($i=0; $i<count($list); $i++) {
-			//$content .= showForumPost($db, $list[$i], 'S&ouml;kresultat #'.($i+1), false, $criteria).'<br>';
-			$content .= showForumPost($db, $list[$i], 'S&ouml;kresultat #'.($i+1), false).'<br>';
+			//$content .= showForumPost($list[$i], 'S&ouml;kresultat #'.($i+1), false, $criteria).'<br>';
+			echo showForumPost($list[$i], 'Search result #'.($i+1), false).'<br>';
 		}
 
 		$criteria = urlencode($criteria);
 
-		$content .= 'Side: ';
+		echo 'Page: ';
 
 		if ($page > 1) {
-			$content .= '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.($page-1).'&l='.$limit.'&m='.$method.'">&laquo;</a> ';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.($page-1).'&l='.$limit.'&m='.$method.'">&laquo;</a> ';
 		}
 
 		for ($i=1; $i<=round(($hits/$limit)+0.49); $i++) {
-			if ($i == $page) $content .= '<b>';
-			$content .= '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$i.'&l='.$limit.'&m='.$method.'">'.$i.'</a> ';
-			if ($i == $page) $content .= '</b>';
+			if ($i == $page) echo '<b>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$i.'&l='.$limit.'&m='.$method.'">'.$i.'</a> ';
+			if ($i == $page) echo '</b>';
 		}
 
 		if ($page < ($hits/$limit)) {
-			$content .= '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.($page+1).'&l='.$limit.'&m='.$method.'">&raquo;</a>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.($page+1).'&l='.$limit.'&m='.$method.'">&raquo;</a>';
 		}
 
-		$content .= '<br>';
-		$content .= 'Antall per side: ';
+		echo '<br>';
+		echo 'Number on each page: ';
 		for ($i=5; $i<=20; $i+=5) {
-			if ($limit == $i) $content .= '<b>';
-			$content .= '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$page.'&l='.$i.'&m='.$method.'">'.$i.'</a> ';
-			if ($limit == $i) $content .= '</b>';
+			if ($limit == $i) echo '<b>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$page.'&l='.$i.'&m='.$method.'">'.$i.'</a> ';
+			if ($limit == $i) echo '</b>';
 		}
-		$content .= '<br><br>';
+		echo '<br><br>';
 
-		$content .= 'S&oslash;kemetode:<br>';
+		echo 'Search method:<br>';
 
-		if ($method == 'newfirst') $content .= '<b>';
-		$content .= '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$page.'&l='.$limit.'&m=newfirst">Nyeste f&oslash;rst</a><br>';
-		if ($method == 'newfirst') $content .= '</b>';
+		if ($method == 'newfirst') echo '<b>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$page.'&l='.$limit.'&m=newfirst">Newest first</a><br>';
+		if ($method == 'newfirst') echo '</b>';
 
-		if ($method == 'oldfirst') $content .= '<b>';
-		$content .= '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$page.'&l='.$limit.'&m=oldfirst">Eldste f&oslash;rst</a><br>';
-		if ($method == 'oldfirst') $content .= '</b>';
+		if ($method == 'oldfirst') echo '<b>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$page.'&l='.$limit.'&m=oldfirst">Oldest first</a><br>';
+		if ($method == 'oldfirst') echo '</b>';
 
-		if ($method == 'mostread') $content .= '<b>';
-		$content .= '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$page.'&l='.$limit.'&m=mostread">Mest lest f&oslash;rst</a><br>';
-		if ($method == 'mostread') $content .= '</b>';
+		if ($method == 'mostread') echo '<b>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?c='.$criteria.'&p='.$page.'&l='.$limit.'&m=mostread">Most read first</a><br>';
+		if ($method == 'mostread') echo '</b>';
 
-		$content .= '<br>';
-
-
-		$content .= '<a href="'.$_SERVER['PHP_SELF'].'">Nytt s&oslash;k</a><br><br>';
+		echo '<br>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'">New search</a><br/><br/>';
 
 	} else {
 
-		$content .= getInfoField($db, 'hjalp-sok_i_forumet').'<br>';
+		wiki('Forum search').'<br>';
 
-		$content .= '<form name="searchforums" method="post" action="'.$_SERVER['PHP_SELF'].'">';
-		$content .= 'S&oslash;keord: <input type="text" name="c" size=50><br>';
-		$content .= 'Vis resultat: ';
-		$content .= '<input type="radio" class="radio" name="m" value="newfirst" checked>Nyeste f&oslash;rst ';
-		$content .= '<input type="radio" class="radio" name="m" value="oldfirst">Eldste f&oslash;rst ';
-		$content .= '<input type="radio" class="radio" name="m" value="mostread">Mest lest f&oslash;rst ';
-		$content .= '<br><br>';
+		echo '<form name="f_src" method="post" action="'.$_SERVER['PHP_SELF'].'">';
+		echo 'Search phrase: <input type="text" name="c" size="50"/><br/>';
+		echo 'Show result: ';
+		echo '<input type="radio" class="radio" name="m" value="newfirst" checked="checked"/>Newest first ';
+		echo '<input type="radio" class="radio" name="m" value="oldfirst"/>Oldest first ';
+		echo '<input type="radio" class="radio" name="m" value="mostread"/>Most read first ';
+		echo '<br><br>';
 
-		$content .= '<input type="submit" class="button" value="'.$config['text']['link_search'].'">';
-		$content .= '</form>';
+		echo '<input type="submit" class="button" value="Search"/>';
+		echo '</form>';
 	}
 
-		echo '<div id="user_forum_content">';
-		echo MakeBox('<a href="forum.php">Forum</a>|S&oslash;k p&aring; innlegg', $content, 500);
-		echo '</div>';
-
-	include('design_forum_foot.php');
-	include('design_foot.php');
+	require('design_foot.php');
 ?>
 <script type="text/javascript">
-if (document.searchforums) document.searchforums.c.focus();
+if (document.f_src) document.f_src.c.focus();
 </script>

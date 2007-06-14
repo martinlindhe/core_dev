@@ -1,21 +1,19 @@
 <?
-	include("include_all.php");
+	require_once('config.php');
 	
-	if (isset($_GET['id']) && $_SESSION['loggedIn']) {
-		$itemId = $_GET['id'];
-	} else {
-		header('Location: '.$config['start_page']); die;
-	}
+	$session->requireLoggedIn();
+	
+	if (isset($_GET['id'])) $itemId = $_GET['id'];
+	else die;
 
-	include('design_head.php');
-	include('design_forum_head.php');
+	require('design_head.php');
 
 	/* Lägg till en kommentar till anmälan */
 	if (isset($_POST['mail'])) {
 
 		if (ValidEmail($_POST['mail'])) {
 			
-			$item = getForumItem($db, $itemId);
+			$item = getForumItem($itemId);
 			
 			if (isset($_POST['namn']) && $_POST['namn']) {
 				$mail = "Hej ".$_POST["namn"]."!\n\n";
@@ -41,21 +39,17 @@
 				$mail .= $_POST["comment"]."\n\n";
 			}
 			
-			$mail .= "Vänliga hälsningar\n";
-			$mail .= "Reply Solutions.";
-			
 			$subject = "Meddelande från communityt";
-			if (sendMail($_POST['mail'], $subject, $mail, "uReply <info@tack.se>") == true) {
+			//fixme: from mail ska va konfigurerbar blabla
+			if (sendMail($_POST['mail'], $subject, $mail, "xxx <no@mail.com>") == true) {
 
 				echo 'Tipset ivägskickat<br>';
-				echo getInfoField($db, 'hjalp-tipsa_om_inlagg_klar');
 
 			} else {
 				echo 'Problem med utskicket<br>';
-				echo getInfoField($db, 'hjalp-tipsa_om_inlagg_misslyckat');
 			}
 			echo '<br><br>';
-			echo '<a href="forum.php?id='.$itemId.'#'.$itemId.'">'.$config['text']['link_return'].'</a>';
+			echo '<a href="forum.php?id='.$itemId.'#'.$itemId.'">Return</a>';
 			
 		} else {
 			echo 'Ogiltig mailaddress!';
@@ -65,12 +59,12 @@
 
 		echo '<b>Tipsa om inl&auml;gg</b><br>';
 
-		echo getInfoField($db, 'hjalp-tipsa_om_inlagg');
+		wiki('Tell someone about this post');
 		echo '<br><br>';
 		
 		
-		$data = getForumItem($db, $itemId);
-		echo showForumPost($db, $data).'<br>';
+		$data = getForumItem($itemId);
+		echo showForumPost($data).'<br>';
 	
 		echo '<form name="tipsa" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
 		echo 'Din kompis namn: <input name="namn" type="text" maxlength=30 size=20><br>';
@@ -81,9 +75,8 @@
 		echo '<input type="submit" class="button" value="Tipsa">';
 		echo '</form>';
 
-		echo '<a href="forum.php?id='.$itemId.'#'.$itemId.'">'.$config['text']['link_return'].'</a>';
+		echo '<a href="forum.php?id='.$itemId.'#'.$itemId.'">Return</a>';
 	}
 
-	include('design_forum_foot.php');
-	include('design_foot.php');
+	require('design_foot.php');
 ?>

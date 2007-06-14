@@ -18,16 +18,15 @@
 		if _GET['q'] is set, this is the forum post to quote
 	*/
 
-	include('include_all.php');
+	require_once('config.php');
 	
-	if (!$_SESSION['loggedIn'] || !isset($_GET['id']) || !is_numeric($_GET['id'])) {
-		header('Location: forum.php');
-		die;
-	}
+	$session->requireLoggedIn();
 
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$itemId = $_GET['id'];
-	$item = getForumItem($db, $itemId);
-	$parent = getForumItem($db, $item['parentId']);
+
+	$item = getForumItem($itemId);
+	$parent = getForumItem($item['parentId']);
 	if (($itemId && !$item) || $item['locked']) {
 		//block attempt to create item with nonexisting parent
 		header('Location: forum.php');
@@ -42,9 +41,8 @@
 	
 	if ($quoteId) {
 		/* Quote another message */
-		$quoteItem = getForumItem($db, $quoteId);
-		//$quoteName = $quoteItem['authorName'];
-		$quoteName = getUserdataByFieldname($db, $quoteItem['authorId'], 'Nickname');
+		$quoteItem = getForumItem($quoteId);
+		$quoteName = $quoteItem['authorName'];
 		if ($quoteName && trim($quoteItem['itemBody'])) {
 			$writeBody = '[quote name='.$quoteName.']'.$quoteItem['itemBody']."[/quote]\n\n";
 		}
@@ -60,48 +58,41 @@
 			if ($_SESSION['isAdmin'] && ($itemId == 0 || $item['parentId'] == 0)) {
 				//Create category or a forum
 				if ($writeSubject) {
-					$itemId = addForumFolder($db, $itemId, $writeSubject, $writeBody);
+					$itemId = addForumFolder($itemId, $writeSubject, $writeBody);
 				} else {
-					$forum_error = 'Du m&aring;ste ange en rubrik!';
+					$forum_error = 'You must write a topic!';
 				}
 			} else {
 				//Create a thread or a post
 				if ($parent['parentId'] == 0 && !$writeSubject) {
-					$forum_error = 'Du m&aring;ste ange en rubrik!';
+					$forum_error = 'You must write a topic!';
 				} else {
 					$sticky = 0;
 					if ($_SESSION['isAdmin'] && !empty($_POST['sticky'])) $sticky = $_POST['sticky'];
-					$itemId = addForumMessage($db, $itemId, $writeSubject, $writeBody, $sticky);
+					$itemId = addForumMessage($itemId, $writeSubject, $writeBody, $sticky);
 				}
 			}
 		} else {
-			$forum_error = 'Inl&auml;gget &auml;r f&ouml;r l&aring;ngt, den till&aring;tna maxl&auml;ngden &auml;r '.$config['forum']['maxsize_body'].' tecken, var god f&ouml;rs&ouml;k att korta ner texten lite.';
+			$forum_error = 'The post is too long, the max allowed length are '.$config['forum']['maxsize_body'].' characters, please try to shorten down your text a bit.';
 		}
 
 		if (!isset($forum_error)) {
 			/*
 			if (!empty($_POST['subscribehere'])) {
 				//Slå på bevakning för det nyskapade inlägget/diskussionen
-				addSubscription($db, $itemId, SUBSCRIBE_MAIL);
+				addSubscription($itemId, SUBSCRIBE_MAIL);
 			}*/
 			if ($itemId == 0 || $item['parentId'] == 0) {
 				header('Location: forum.php?id='.$itemId);
 			} else {
-				$item = getForumItem($db, $itemId);
+				$item = getForumItem($itemId);
 				header('Location: forum.php?id='.$item['parentId'].'#post'.$itemId);
 			}
 			die;
 		}
 	}
 
-	/*
-	if (userAccess($db, 'forum_global_cant_post')) {
-		echo 'du kan inte skriva inl&auml;gg';
-		die;
-	}*/
-
-	include('design_head.php');
-	include('design_forum_head.php');
+	require('design_head.php');
 
 	$content = '';
 	
@@ -111,29 +102,29 @@
 	if ($itemId == 0)
 	{
 		//Create top level category (admins only)
-		$content .= '<a href="forum.php">Forum</a> - Lage ny kategori<br><br>';
-		$title = 'Ny kategori';
+		$content .= '<a href="forum.php">Forum</a> - Add new category<br><br>';
+		$title = 'New category';
 		$hide_body = true;
 	} else if ($item['parentId'] == 0)
 	{
 		//Create a forum (admins only)
-		$content .= '<a href="forum.php">Forum</a> - Lage nytt forum<br><br>';
-		$title = 'Nytt forum';
+		$content .= '<a href="forum.php">Forum</a> - Add new forum<br><br>';
+		$title = 'New forum';
 	} else if ($parent['parentId'] == 0)
 	{
 		//Create a discussion thread (everyone)
-		$content .= getForumFolderDepthHTML($db, $itemId).' - Lage ny diskusjonstr&aring;d<br><br>';
-		$title = 'Ny diskusjonstr&aring;d';
+		$content .= getForumFolderDepthHTML($itemId).' - Add new discussion thread<br><br>';
+		$title = 'New discussion thread';
 	} else
 	{
 		//Create a post (everyone)
-		$content .= getForumFolderDepthHTML($db, $itemId).' - Skiv et svar til dette innlegget<br><br>';
-		$content .= showForumPost($db, $item, '', false);
+		$content .= getForumFolderDepthHTML($itemId).' - Add a response to this post<br><br>';
+		$content .= showForumPost($item, '', false);
 		$hide_subject = true;
-		$title = 'Nytt innlegg';
+		$title = 'New post';
 	}
 
-	if (!empty($forum_error)) $content .= '<span class="objectCritical">'.$forum_error.'</span><br>';
+	if (!empty($forum_error)) $content .= '<div class="critical">'.$forum_error.'</div>';
 
 	$content .= '<form method="post" name="newpost" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
 	if (!$hide_subject) {
@@ -147,16 +138,16 @@
 	
 	if ($_SESSION['isAdmin'] && $parent['parentId'] == 0) {
 		//Allow admins to create stickies & announcements
-		$content .= '<input name="sticky" type="radio" class="radio" value="0" checked>Laga en vanlig tr&aring;d<br>';
-		$content .= '<input name="sticky" type="radio" class="radio" value="1">Gj&oslash;r tr&aring;den til sticky<br>';
-		$content .= '<input name="sticky" type="radio" class="radio" value="2">Lage tr&aring;den til en kunngj&oslash;ring<br>';
+		$content .= '<input name="sticky" type="radio" class="radio" value="0" checked>Create a normal thread tr&aring;d<br>';
+		$content .= '<input name="sticky" type="radio" class="radio" value="1">Make the thread a sticky<br>';
+		$content .= '<input name="sticky" type="radio" class="radio" value="2">Make the thread an announcement<br>';
 	}
 	
 	$content .= '<br>';
 	$content .= '<input type="submit" class="button" value="Lagre"> ';
 
 /*
-	if (!isSubscribed($db, $itemId, SUBSCRIBE_MAIL)) {
+	if (!isSubscribed($itemId, SUBSCRIBE_MAIL)) {
 		$content .= '<input name="subscribehere" type="checkbox" class="checkbox">Overv&aring;ke tr&aring;d';
 	} else {
 		$content .= '<span class="objectCritical">Du har redan en bevakning h&auml;r eller h&ouml;gre upp i diskussionstr&aring;den</span>';
@@ -165,22 +156,11 @@
 	$content .= '</form><br>';
 
 
-	$nickname = getUserdataByFieldname($db, $_SESSION['userId'], 'Nickname');
-	if (!$nickname) {
-		
-		$content  = 'Du m&aring; fylle ut Nickname i min  profil f&oslash;r du kan skrive i forumet.<br><br>';
-		$content .= '<a href="user_edit.php">Klikk her</a> for &aring; lage et nickname.<br><br>';
-	}
+	$content .= '<a href="javascript:history.go(-1);">Go back</a>';
 
+	echo $title, $content;
 
-	$content .= '<a href="javascript:history.go(-1);">'.$config['text']['link_return'].'</a>';
-
-	echo '<div id="user_forum_content">';
-	echo MakeBox('<a href="forum.php">Forum</a>|'.$title, $content, 500);
-	echo '</div>';
-
-	include('design_forum_foot.php');
-	include('design_foot.php');
+	require('design_foot.php');
 ?>
 <script type="text/javascript">
 if (document.newpost.subject) document.newpost.subject.focus();

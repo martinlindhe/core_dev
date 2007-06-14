@@ -179,6 +179,7 @@ X = hi prio task
 2007.06.13:
 	- wiki: halft påbörjat stöd för filkategorier på wiki files
 	- fixade file upload till wiki. ledde till diverse cleanup i file-klassen
+	- forum wip
 
 
 2007.06.12:
