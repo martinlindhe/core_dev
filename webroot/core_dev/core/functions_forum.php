@@ -302,7 +302,6 @@
 
 		if (!count($list)) return;
 
-		
 		foreach ($list as $row) {
 
 			$subject = $row["itemSubject"];
@@ -326,22 +325,13 @@
 		$data = getForumItem($itemId);
 		$list = getForumItems($itemId);
 
-		echo '<table width="100%" cellpadding=0 cellspacing=0 border=1 class="forum_borders">';
-		echo '<tr class="forum_subheader">';
-		echo '<th width=30></th>';
-		echo '<th>&nbsp;Forum</th>';
-
-
-		if ($data['parentId'] == 0) {
-			echo '<th width=200 align="center">Last thread</th>';
-			echo '<th width=70 align="center">Threads</th>';
-			echo '<th width=70 align="center">Posts</th>';
-		} else {
-			echo '<th width=200 align="center">Last post</th>';
-			echo '<th width=70 align="center">Threads</th>';
-			echo '<th width=70 align="center">Posts</th>';
-		}
-
+		echo '<table width="100%" cellpadding="0" cellspacing="0" border="0">';
+		echo '<tr>';
+		echo '<th width="40"></th>';	//for icons
+		echo '<th>Forum</th>';
+		echo '<th width="200" align="center">Last post</th>';
+		echo '<th width="70" align="center">Topics</th>';
+		echo '<th width="70" align="center">Posts</th>';
 		echo '</tr>';
 
 		for ($i=0; $i<count($list); $i++) {
@@ -352,10 +342,10 @@
 				$subject = '(Inget navn)';
 			}
 
-			echo '<tr class="forum_item">';
-			echo '<td align="center"><img src="gfx/icon_folder.png"></td>';
+			echo '<tr class="forum_overview_item">';
+			echo '<td align="center"><img src="'.$config['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/></td>';
 			echo '<td class="forum_item_text">';
-				echo '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br>';
+				echo '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br/>';
 				echo $list[$i]['itemBody'];
 			echo '</td>';
 
@@ -363,11 +353,11 @@
 			echo '<td class="forum_item_text" width=200>';
 			if ($data) {
 				if ($data['itemSubject']) {
-					echo '<a href="forum.php?id='.$data['itemId'].'">'.$data['itemSubject'].'</a><br>';
+					echo '<a href="forum.php?id='.$data['itemId'].'">'.$data['itemSubject'].'</a><br/>';
 				} else {
-					echo '<a href="forum.php?id='.$data['parentId'].'#post'.$data['itemId'].'">'.$data['parentSubject'].'</a><br>';
+					echo '<a href="forum.php?id='.$data['parentId'].'#post'.$data['itemId'].'">'.$data['parentSubject'].'</a><br/>';
 				}
-				echo $config['forum']['text']['by'].' '.nameLink($data['authorId'], $data['authorName']).'<br>';
+				echo $config['forum']['text']['by'].' '.nameLink($data['authorId'], $data['authorName']).'<br/>';
 				echo $data['timeCreated'];
 			} else {
 				echo 'Never';
@@ -481,7 +471,7 @@
 
 			$result .= '<td align="center">';
 			if ($list[$i]['locked']) {
-				$result .= '<img src="icons/forum_lock.png"><br>';
+				$result .= '<img src="icons/forum_lock.png"><br/>';
 			}
 			if ($list[$i]['sticky'] == 1) {
 				$result .= '<img src="icons/forum_sticky.gif">';
@@ -497,8 +487,8 @@
 			$result .= '<td class="forum_item_text">';
 				if ($list[$i]['sticky'] == 1) $result .= '<b>Sticky: </b>';
 				if ($list[$i]['sticky'] == 2) $result .= '<b>Announcement: </b>';
-				$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$list[$i]['itemSubject'].'</a><br>';
-				$result .= $list[$i]['timeCreated'].'<br>';
+				$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$list[$i]['itemSubject'].'</a><br/>';
+				$result .= $list[$i]['timeCreated'].'<br/>';
 				$result .= 'by '.nameLink($list[$i]['authorId'], $list[$i]['authorName']);
 			$result .= '</td>';
 
@@ -509,21 +499,21 @@
 					$result .= '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
 					$subject = $lastreply['itemSubject'];
 					if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
-					$result .= '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br>';
+					$result .= '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br/>';
 				} else {
 					//visa rubriken från parent-inlägg:
 					$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'#post'.$lastreply['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
 					$subject = $list[$i]['itemSubject'];
 					if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
-					$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br>';
+					$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br/>';
 				}
-				$result .= $lastreply['timeCreated'].'<br>by '.nameLink($lastreply['userId'], $lastreply['userName']);
+				$result .= $lastreply['timeCreated'].'<br/>by '.nameLink($lastreply['userId'], $lastreply['userName']);
 			} else {
 				if ($data['parentId']) $result .= '<a href="forum.php?id='.$list[$i]['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
 				$subject = $list[$i]['itemSubject'];
 				if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
-				$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br>';
-				$result .= $list[$i]['timeCreated'].'<br>by '.nameLink($list[$i]['authorId'], $list[$i]['authorName']);
+				$result .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a><br/>';
+				$result .= $list[$i]['timeCreated'].'<br/>by '.nameLink($list[$i]['authorId'], $list[$i]['authorName']);
 			}
 			$result .= '</td>';
 
@@ -582,21 +572,21 @@
 
 		$content .= '<tr class="forum_item">';
 		$content .= '<td width=160 valign="top" class="forum_item_text">';
-			$content .= nameLink($item['authorId'], $item['authorName']).'<br><br>';
+			$content .= nameLink($item['authorId'], $item['authorName']).'<br/><br/>';
 
 			/*
 			$userpic = getThumbnail($item['authorId'], 'Egen avatar', $config['thumbnail_width'], $config['thumbnail_height'], false);
 			if ($userpic) {
-				$content .= $userpic.'<br>';
+				$content .= $userpic.'<br/>';
 			} else {
 				$choosen_avatar = getUserSetting($db, $item['authorId'], 'avatar');
 				if ($choosen_avatar && is_numeric($choosen_avatar)) {
-					$content .= '<img src="avatars/'.$config['avatars'][$choosen_avatar].'" width=80 height=80><br>';
+					$content .= '<img src="avatars/'.$config['avatars'][$choosen_avatar].'" width=80 height=80><br/>';
 				}
 			}
 
-			$content .= 'Status: '.getUserStatus($db, $item['authorId']).'<br>';
-			//$content .= 'Join date: '.formatDate(getUserCreated($db, $item['authorId'])).'<br>';
+			$content .= 'Status: '.getUserStatus($db, $item['authorId']).'<br/>';
+			//$content .= 'Join date: '.formatDate(getUserCreated($db, $item['authorId'])).'<br/>';
 			$content .= 'Inlegg: '.getForumPostsCount($db, $item['authorId']);
 			*/
 
@@ -650,7 +640,7 @@
 			}
 
 		$content .= '</td></tr>';
-		$content .= '</table><br>';
+		$content .= '</table><br/>';
 
 		return $content;
 	}
@@ -854,7 +844,6 @@
 
 		if (!$_id) {
 			//display root level
-			echo getForumDepthHTML(FORUM_FOLDER, $_id);
 			echo displayRootForumContent();
 
 			if ($session->isAdmin) echo '<a href="forum_new.php?id=0">New root level category</a>';

@@ -457,13 +457,30 @@ select {
 	color: #fff;
 	background-color: #4EC04E;
 	padding: 10px;
-	-moz-border-radius-bottomleft:15px;
-	-moz-border-radius-bottomright:15px;
-	-moz-border-radius-topleft:15px;
-	-moz-border-radius-topright:15px;	
+	-moz-border-radius:8px;
 }
 .forum_overview_group a,.forum_overview_group a:visited {
+	font-weight: bold;
+	text-decoration: none;
 	color: #fff;
+}
+.forum_overview_group a:hover {
+	text-decoration: underline;
+}
+
+.forum_overview_item {
+	font-size: 12px;
+	font-family: verdana;
+	color: #1F204B;
+	background-color: #B6D4D4;
+	border: 1px solid #fff;
+}
+.forum_overview_item:hover {
+	background-color: #E3E49C;
+}
+.forum_overview_item a,.forum_overview_item a:visited {
+	font-weight: bold;
+	color: #1F204B;
 }
 
 
