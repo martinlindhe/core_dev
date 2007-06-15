@@ -68,7 +68,7 @@ function blockRightClick(event) {
 		if ($chk) $menu_gb = ' <span style="color:#ff0000">gästbok '.$chk.'</span>';
 		
 		$chk = getRelationRequestsToMe();
-		if ($chk) $menu_relations = ' <span style="color:#ff0000">relationer '.$chk.'</span>';
+		if ($chk) $menu_relations = ' <span style="color:#ff0000">relationer '.count($chk).'</span>';
 	}
 ?>
 			<li><img align="absmiddle" src="/_gfx/icon_profil.png" alt="" /><a href="/user/view/">min profil</a> &nbsp;</li>
@@ -200,7 +200,14 @@ function blockRightClick(event) {
 			<div class="smallHeader">se hit!</div>
 			<div class="smallBody">
 				<div class="bld">
-				<?=($contribute?$user->getstring($contribute).secureOUT($contribute['con_msg'], 1):'Om du ser något fel, klicka på "tyck till" uppe i toppmenyn.')?>
+				<?
+					if ($contribute) {
+						echo $user->getstring($contribute).'<br/>';
+						echo secureOUT($contribute['con_msg'], 1);
+					} else {
+						echo 'Om du ser något fel, klicka på "tyck till" uppe i toppmenyn.';
+					}
+				?>
 				</div>
 <?
 $isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);

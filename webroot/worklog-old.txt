@@ -562,3 +562,91 @@
 		- fixat så att sidan slutar ladda vid misslyckad databasanslutning
 
 --[[mailat ovanstående]--
+
+2007.06.11 Måndag:
+
+	db-flytt:
+		* mindre fix för galleribilder-thumbnails
+		* gjort & testat script för galleri-x flytt (galleri x bilder är importerade)
+
+	webb-gränssnitt:
+		* visar snabblänkar till galleri & galleri x + antal bilder i varje galleri (från bitte feedback mail)
+
+		* hemlig användare: räknar ej när användaren ser andras sida, galleribilder, visas ej på "senast inloggade"
+		* fixat så räknare för visningar av galleribilder fungerar
+		* fixat listningen av profilbilder på sökreslutatsidan så att alla syns
+		
+		* megafon -> se hit!
+			 visar bara "skriv" knappen för admins
+			 
+		* mer spacing i gallerimenyerna
+		* visar VIP / VIPD / WEBMASTER på en användares profilsida brevid namnet
+
+	ipx:
+		* gått igenom koden ännu mera, kors-checkat med mika & mailat IPX support.
+
+2007.06.12 Tisdag:
+
+	webbgränssnittet:
+		* gjort om "relationer"-sidan så att man kan kan kryssa i en ruta brevid varje vän
+			dessa vänner är de som får se ditt Galleri X
+		* lade till db-kolumnen s_userrelation.gallx. 1=kompisen får se ditt galleri x
+		* implementerat skydd på galleri visningen för de som ej får se galleri X
+		* fixat länkar i bevakningsmail så användarnamn visas på den som laddat upp ny galleribild
+		* bugg: kunde inte logga in om du redan är inloggad. fixade så man skickas till inloggad startsida om man är inloggad & hamnar på utloggad startsida
+
+	server-conf:
+		* mika har pekat om mail.citysurf.tv till mailservern på dammsugaren
+		* mailserver är uppsatt för ingående & utgående mail (mail.citysurf.tv)
+		* massa problem med sendmail krångel :(
+
+
+2007.06.13 Onsdag:
+	server-conf:
+		* url generering i plattformen genererar citysurf.tv-url:er nu
+		* fixade rubriker på rotämnen i forumet
+
+	webbgränssnittet:
+		* validering av data....
+			- man får ett systemmeddelande när man loggar in om man ej validerat sina uppgifter
+			- ny påminnelse var 5:e dag
+			- skapat ny sida för att visa bekräftelse av uppgifter
+			- skapat personnummervalidering
+			- visar "klicka här" i fettext (bitte feedback)
+			- validerar postnummer
+			- gjort script för import av befintlig vip
+
+
+		* tog bort en begränsning i hur många bilder man kunde ladda upp (gammal check-kod från frans låg kvar) (bitte feedback)
+		* kunde ej se sitt eget galleri X (bitte feedback)
+
+		NYA CITYSURF LANSERAT!
+
+2007.06.14 Torsdag:
+	webbgränssnittet:
+		* gömt bort "mms-uppladdning" funktionen tillsvidare
+		* VIP / VIP-D ikoner syns igen på profilöversikt
+		* man kan se sin egen galleri X igen
+		* "skriv inlägg" knapp i forumet visar inte längre saknad bild
+		* olästa brev visas i fet text
+		* tyck till fixad
+		* fixat "ändra typ av relation"
+		* fixat formateringen av mail, radbryten osv
+		* visar indikator på olästa mail i toppmenyn med röd text
+		* -""- gästbok
+		* en mängd småfixar och småpill över hela sajten
+		* fixat så bilduppladdning fungerar direkt från "redigera publika inställningar"-sidan
+		* fixat en mindre bugg med vip-statusuppdateringen
+		* tagit bort all sparning av 4-sista siffrorna i personnummer & tömt databasen på befintlig data
+		* visar ikon i inkorgen som indikerar BESVARAT BREV
+
+2007.06.15 Fredag:
+	webbgränssnittet:
+		* fixat översikt av "senaste bloggarna" på startsidan
+		* stängt av historiken i ajax-chatten, så att det fungerar som det ska
+
+	konfig:
+		* mailservern är igång!
+		* mms@citysurf.tv är uppsatt och fungerar för mms uppladdning
+		* info@citysurf.tv är uppsatt & evalena och bitte har info
+---[[mailat ovanstående]--

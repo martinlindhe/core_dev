@@ -150,7 +150,7 @@
 			$start_code = mt_rand(100000, 9999999);
 			$r = array($start_code, $l['id_id']);
 	
-			$q = 'REPLACE INTO s_userregfast SET activate_code = "'.$start_code.'", u_email="'.secureINS($_POST['ins_email']).'", id_id = '.$l['id_id'];
+			$q = 'REPLACE INTO s_userregfast SET activate_code = "'.$start_code.'", u_email="'.secureINS($_POST['ins_email']).'", id_id = '.$l['id_id'].',timeCreated=NOW()';
 			$sql->queryUpdate($q);
 	
 			$msg = 'Hej!'."\n\n".

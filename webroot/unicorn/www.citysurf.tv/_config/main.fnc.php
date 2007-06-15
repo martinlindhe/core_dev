@@ -212,7 +212,7 @@ function errorTACT($msg, $url, $time) {
 	errorACT($msg, $url, 'main', '', $time);
 }
 function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $topic = '', $tc = 1, $class = '') {
-	eval(GLOBAL_STRING);
+	global $sql, $user, $start, $t, $l;
 
 	if($type == 'main') {
 		$page = 'error.php';

@@ -6,7 +6,7 @@
 	require('functions_mms_fetch.php');
 
 	$email = new email();
-	$email->getMail('cs@inconet.se', '1111'); die;
+	$email->getMail('mms', 'mmsprocess556'); die;
 
 	/*
 	$text = file_get_contents('mms4.txt');

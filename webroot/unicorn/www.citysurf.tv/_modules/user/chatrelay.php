@@ -58,7 +58,10 @@
 		exit;
 	}
 	//$history = (!empty($key))?true:false;
+
 	$history = $user->vip_check(VIP_LEVEL1);
+	$history = false;
+
 	if(!$notall && !$closed && !$blocked) {
 		if($history && $isOk && !$user->getinfo($l['id_id'], 'hidden_chat')) {
 			if($isOk) $his_lim = 6; else $his_lim = 3;

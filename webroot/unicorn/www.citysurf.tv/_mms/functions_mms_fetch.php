@@ -27,7 +27,7 @@ $config['email']['text_allowed_mime_types'] = array('text/plain');
 $config['email']['log_activity'] = true;
 $config['email']['logfile'] = '/home/martin/mms.log';
 
-$config['email']['pop3_server'] = 'mail.inconet.se';		// 'mail.unicorn.tv';
+$config['email']['pop3_server'] = 'mail.citysurf.tv';
 $config['email']['pop3_port']		= 110;
 $config['email']['pop3_timeout'] = 5;
 
@@ -49,7 +49,7 @@ class email
 	}
 
 	/* Writes log entries to log file */
-	function logAct($text, $echo_text = false)
+	function logAct($text, $echo_text = true)
 	{
 		global $config;
 
@@ -381,7 +381,7 @@ class email
 				case 'base64':
 					/* file attachments like images, videos */
 					if (!in_array($attachment_mime, $config['email']['attachments_allowed_mime_types'])) {
-						$this->logAct('Attachment mime type unrecognized: '. $attachment_mime, true);
+						$this->logAct('Attachment mime type unrecognized: '. $attachment_mime);
 						continue;
 					}
 					$this->saveFile($filename, $attachment_mime, base64_decode($attachment['body']), $result['mms_code']);
@@ -412,9 +412,9 @@ class email
 		if (!$this->pop3_STAT()) return;
 
 		if (!$this->unread_mails) {
-			//$this->logAct('no new mail', true);
+			$this->logAct('no new mail');
 		} else {
-			$this->logAct($this->unread_mails.' new mail(s)', true);
+			$this->logAct($this->unread_mails.' new mail(s)');
 		}
 		
 		for ($i=1; $i <= $this->unread_mails; $i++)
@@ -422,7 +422,7 @@ class email
 			$msg_size = $this->pop3_LIST($i);
 			if (!$msg_size) continue;
 
-			$this->logAct('Downloading #'.$i.'... ('.$msg_size.' bytes)', true);
+			$this->logAct('Downloading #'.$i.'... ('.$msg_size.' bytes)');
 
 			$check = $this->pop3_RETR($i);
 			if ($check) $this->pop3_DELE($i);
@@ -457,7 +457,7 @@ class email
 
 				$out_filename = WEBROOT.USER_GALLERY.PD.'/'.$insert_id.'.'.$file_ext;
 				$out_thumbname = WEBROOT.USER_GALLERY.PD.'/'.$insert_id.'-tmb.'.$file_ext;
-				$this->logAct('Writing to file '.$out_filename.' ...', true);
+				$this->logAct('Writing to file '.$out_filename.' ...');
 				file_put_contents($out_filename, $data);
 
 				//skapa thumb
@@ -470,7 +470,7 @@ class email
 				return;
 		}
 
-		$this->logAct('Written '.$filename.' ('.$mime_type.') to disk.', true);
+		$this->logAct('Written '.$filename.' ('.$mime_type.') to disk.');
 
 	}
 }
@@ -510,7 +510,7 @@ function make_thumb($src, $dst, $dstWW = 90, $quality = 91)
 */
 function findMMSCode($text)
 {
-	global $sql;
+	global $sql, $email;
 
 	//echo 'looking for mms code: '.$text.'<br>';
 
@@ -536,7 +536,7 @@ function findMMSCode($text)
 	$mms_code['user'] = $sql->queryResult($q);
 	if (!$mms_code['user']) return false;
 	
-	$this->logAct('Identified MMS type '.$mms_code['cmd'].' from user '.$mms_code['user'].'...', true);
+	$email->logAct('Identified MMS type '.$mms_code['cmd'].' from user '.$mms_code['user'].'...');
 	return $mms_code;
 }
 ?>

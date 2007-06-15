@@ -20,14 +20,14 @@ function doMail($to, $title, $text)
 		$mail = new PHPMailer();
 
 		$mail->IsSMTP();                    	// send via SMTP
-		$mail->Host     = 'mail.unicorn.tv';	// SMTP servers
+		$mail->Host     = 'mail.citysurf.tv';	// SMTP servers
 		$mail->SMTPAuth = true;								// turn on SMTP authentication
-		$mail->Username = 'cs@unicorn.tv';						// SMTP username
-		$mail->Password = '1234';						// SMTP password
+		$mail->Username = 'info';							// SMTP username
+		$mail->Password = 'ucinfo477';				// SMTP password
 		$mail->CharSet  = 'ISO-8859-1';
 
-		$mail->From     = 'info@unicorn.tv';
-		$mail->FromName = 'citysurf';
+		$mail->From     = 'noreply@citysurf.tv';
+		$mail->FromName = 'CitySurf';
 
 		$mail->AddAddress($to);
 

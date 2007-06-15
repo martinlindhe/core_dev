@@ -31,5 +31,10 @@
 
 		$done[$vip['userId']] = true;
 	}
+
+	//droppa alla gamla requests som väntar på godkännande (äldre än 24 timmar)
+	$q = 'DELETE FROM s_userregfast WHERE timeCreated < DATE_SUB(NOW(), INTERVAL 24 HOUR)';
+	$sql->queryUpdate($q);
+
 	die;
 ?> 

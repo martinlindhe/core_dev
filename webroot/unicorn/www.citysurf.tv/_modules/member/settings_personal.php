@@ -10,7 +10,6 @@
 	if (!empty($_POST['do'])) {
 		include(CONFIG.'validate.fnc.php');
 		$newpst = '';
-		$newemail = '';
 		foreach($_POST as $key => $val) {
 			$_POST[$key] = trim($val);
 		}
@@ -52,10 +51,8 @@
 		if(empty($_POST['ins_email']) || !valiField($_POST['ins_email'], 'email')) {
 			errorACT('Felaktig e-postadress.', l('member', 'settings', 'personal'));
 		}
-		if($l['u_email'] != $_POST['ins_email']) {
-			$newemail = true;
-		}
-		$exists = $sql->queryLine("SELECT status_id, id_id FROM {$t}user WHERE u_email = '" . secureINS($_POST['ins_email']) . "' LIMIT 1");
+
+		$exists = $sql->queryLine("SELECT status_id, id_id FROM s_user WHERE u_email = '" . secureINS($_POST['ins_email']) . "' LIMIT 1");
 		if(!empty($exists) && count($exists)) {
 			if($exists[0] == '1' && $exists[1] != $l['id_id']) {
 				errorACT('E-postadressen är upptagen.', l('member', 'settings', 'personal'));
@@ -69,15 +66,15 @@
 		if(!in_array(substr($_POST['ins_cell'], 0, 3), $valid_pre)) {
 			errorACT('Felaktigt mobilnummer.', l('member', 'settings', 'personal'));
 		}
-		if($newemail) {
+
+		//email address was changed
+		if($l['u_email'] != $_POST['ins_email']) {
 			$start_code = mt_rand(100000, 999999);
 			$r = array($start_code, $l['id_id']);
-			//fixme: länken är felaktig
-			$msg = sprintf(gettxt('email_update'), $r[0], P2B.'auth.php?update&go=1&i='.$r[1].'&key=');
-			$newemail = "u_tempemail = '" . secureINS($_POST['ins_email']) . "',";
+			$msg = sprintf(gettxt('email_update'), $r[0], P2B.'mail_confirm.php?update='.$r[0]);
 			doMail($_POST['ins_email'], 'Uppdatera din e-postadress', $msg);
 			$msg = 'Bekräfta dina uppdateringar genom att läsa e-postmeddelandet som skickats ut till <b>'.secureOUT($_POST['ins_email']).'</b>';
-			$sql->queryUpdate("REPLACE INTO {$t}userregfast SET activate_code = '$start_code', id_id = '".$l['id_id']."'");
+			$sql->queryUpdate("REPLACE INTO s_userregfast SET activate_code = '$start_code', u_email='".secureINS($_POST['ins_email'])."',id_id = '".$l['id_id']."',timeCreated=NOW()");
 		}
 		$newcity = '';
 		$reload = false;
@@ -89,8 +86,8 @@
 			}
 		}
 
-		if(strlen($newemail.$newpst1.$newcity)) $ins = $sql->queryUpdate("UPDATE {$t}user SET
-		".substr($newemail.$newpst1.$newcity, 0, -1)."
+		if(strlen($newpst1.$newcity)) $ins = $sql->queryUpdate("UPDATE {$t}user SET
+		".substr($newpst1.$newcity, 0, -1)."
 		WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
 		$ins = $sql->queryUpdate("UPDATE {$t}userinfo SET
 		$newpst2

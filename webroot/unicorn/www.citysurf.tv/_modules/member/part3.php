@@ -198,7 +198,7 @@ function validate(tForm) {
 				</td>
 			</tr>
 			</table>
-	<input type="submit" class="btn2_med r" value="slutför" /><br class="clr" />
+	<input type="submit" class="btn2_min r" value="slutför" /><br class="clr" />
 			</form>
 		</div>
 <?

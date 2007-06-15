@@ -22,19 +22,13 @@ define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
 $NAME_TITLE = NAME_TITLE;
 define('CH', ' SQL_CACHE ');
 
-/*
-define('SQL_U', 'webaccount');
-define('SQL_P', 'df43534gbhDFAJpt455');
-define('SQL_D', 'platform');
-define('SQL_H', 'localhost');
-*/
 define('SQL_U', 'cs_user');
 define('SQL_P', 'cs8x8x9ozoSSpp');
 define('SQL_D', 'cs_platform');
 define('SQL_H', 'pc3.icn.se');
 
 
-define('SMTP_SERVER', 'localhost');
+//define('SMTP_SERVER', 'localhost');
 define('P2B', 'http://www.citysurf.tv/');
 define('URL', 'citysurf.tv');
 define('NAME_URL', 'CitySurf');
@@ -48,7 +42,6 @@ $sex = array('M' => 'm', 'F' => 'k');
 $sex_name = array('M' => 'man', 'F' => 'kvinna');
 define('T', 's_');
 $t = T;
-define('GLOBAL_STRING', 'GLOBAL $sql, $NAME_TITLE, $user, $start, $t, $l;');
 define("STATSTR", "listar <b>%1\$d</b> - <b>%2\$d</b> (totalt: <b>%3\$d</b>)");
 
 

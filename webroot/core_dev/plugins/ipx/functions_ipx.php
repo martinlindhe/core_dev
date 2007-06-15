@@ -128,7 +128,7 @@
 		$params = '';
 		if (!empty($_GET)) $params = $_GET;
 		if (!$params) die('nothing to do');
-
+		
 		//Log the incoming SMS
 		$q = 'INSERT INTO tblIncomingSMS SET params="'.$db->escape(serialize($params)).'",IP='.$session->ip.',timeReceived=NOW()';
 		$db->insert($q);
@@ -165,10 +165,10 @@
 		}
 
 		//identifiera användaren
-		$config['user_db']['host']	= 'localhost';
-		$config['user_db']['username']	= 'root';
-		$config['user_db']['password']	= 'dravelsql';
-		$config['user_db']['database']	= 'platform';
+		$config['user_db']['host']	= 'pc3.icn.se';
+		$config['user_db']['username']	= 'cs_user';
+		$config['user_db']['password']	= 'cs8x8x9ozoSSpp';
+		$config['user_db']['database']	= 'cs_platform';
 		$user_db = new DB_MySQLi($config['user_db']);
 
 		$q = 'SELECT u_alias FROM s_user WHERE id_id='.$in_cmd[2];
@@ -203,7 +203,12 @@
 
 		//2. skicka ett nytt sms till avsändaren, med TARIFF satt samt med messageid från incoming sms satt som "reference id"
 		//	använder samma avsändar-nummer som det inkommande SMS:et skickades till
-		$sms_err = sendSMS($params['OriginatorAddress'], $msg, $params['DestinationAddress'], $tariff, $params['MessageId']);
+
+		//"Testa att sätta referenceID-parametern till messageID:t utan det inledande "1-" delen. Det bör fungera då."
+		$referenceId = $params['MessageId'];
+		if (substr($referenceId, 0, 2) == '1-') $referenceId = substr($referenceId, 2);
+
+		$sms_err = sendSMS($params['OriginatorAddress'], $msg, $params['DestinationAddress'], $tariff, $referenceId);
 		if ($sms_err === true) {
 			addVIP($in_cmd[2], $vip_level, $days);
 			$session->log('Charge to '.$username.' of '.$tariff.' succeeded');

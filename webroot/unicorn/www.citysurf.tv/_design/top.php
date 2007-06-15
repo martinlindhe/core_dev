@@ -5,7 +5,8 @@
 	if (@$l) $theme_css = $user->getinfo($l['id_id'], 'det_tema');
 	if (empty($theme_css)) $theme_css = 'default.css';
 	$theme_css = secureOUT($theme_css);
-	
+
+	if (empty($NAME_TITLE)) $NAME_TITLE = 'CitySurf';
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
