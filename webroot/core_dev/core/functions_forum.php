@@ -461,7 +461,7 @@
 		*/
 		echo '<br/>';
 
-		echo '<table width="100%" cellpadding=0 cellspacing=0 border=0 class="forum_overview_table">';
+		echo '<table width="100%" class="forum_overview_table">';
 		echo '<tr class="forum_subheader">';
 		echo '<th width=30></th>';
 		if ($data['parentId'] == 0) {
@@ -482,9 +482,7 @@
 			echo '<tr class="forum_overview_item_'.($i%2?'even':'odd').'" >';
 
 			echo '<td align="center">';
-			if ($row['locked']) {
-				echo '<img src="icons/forum_lock.png"><br/>';
-			}
+
 			if ($row['sticky'] == 1) {
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_sticky.png" alt="Sticky"/>';
 			} else if ($row['sticky'] == 2) {
@@ -492,7 +490,11 @@
 			} else if ($data['parentId'] == 0) {
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/>';
 			} else {
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_message.png" alt="Message"/>';
+				if ($row['locked']) {
+					echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_locked.png" alt="Locked"/><br/>';
+				} else {
+					echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_topic.png" alt="Message"/>';
+				}
 			}
 			echo '</td>';
 
@@ -508,20 +510,16 @@
 			echo '<td class="forum_item_text">';
 			if ($lastreply) {
 				if ($data['parentId'] == 0) {
-					echo '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
 					$subject = $lastreply['itemSubject'];
 					if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
 					echo '<a href="forum.php?id='.$lastreply['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br/>';
 				} else {
-					//visa rubriken från parent-inlägg:
-					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastreply['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
 					$subject = $row['itemSubject'];
 					if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
 					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastreply['itemId'].'">'.$subject.'</a><br/>';
 				}
 				echo $lastreply['timeCreated'].'<br/>by '.nameLink($lastreply['userId'], $lastreply['userName']);
 			} else {
-				if ($data['parentId']) echo '<a href="forum.php?id='.$row['itemId'].'"><img src="icons/forum_lastpost.png" title="Go to post" width=15 height=15></a> ';
 				$subject = $row['itemSubject'];
 				if (mb_strlen($subject) > 25) $subject = mb_substr($subject, 0, 25).'...';
 				echo '<a href="forum.php?id='.$row['itemId'].'">'.$subject.'</a><br/>';
@@ -580,13 +578,18 @@
 
 		echo '<a name="post'.$item['itemId'].'" id="post'.$item['itemId'].'"></a>';
 
-		echo '<table width="100%" cellpadding=0 cellspacing=0 border=0 class="forum_post_table">';
+		echo '<table width="100%" class="forum_post_table">';
 
 		echo '<tr class="forum_post_heading forum_post_item">';
 
 		echo '<td valign="top" class="forum_item_text">';
 		if ($subject) echo '<b>'.$subject.'</b><hr/>';
-		echo 'Posted at '.$item['timeCreated'].'<br/>';
+		
+		echo '<div class="forum_post_details">';
+		echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/> ';
+		echo 'by '.nameLink($item['authorId'], $item['authorName']).' on '.$item['timeCreated'];
+		echo '</div><br/>';
+
 		echo $body;
 		$signature = loadUserdataSetting($session->id, $config['settings']['default_signature']);
 		if ($signature) echo '<hr/>'.$signature;

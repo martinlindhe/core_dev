@@ -3,7 +3,11 @@
 		- fundera: är det någon filarea-typ som INTE kan ha annvändning av kategorier? stöd för filarea till blogg t.ex
 			så kan man göra ett bildspel av filkategorin i bloggen :)
 
+
 	forum:
+		- använd pager i forum_search.php, och i diskussionstrådlistning & översikt
+		- kontrollera att automoderering & anmälan fungerar
+		- kolla hur det är med bevakningar. kunna få bevakning via instant mess, eller via ett separat meddelandesystem (generellare & långsiktigare lösning)
 
 
 	omröstningar/undersökningar:

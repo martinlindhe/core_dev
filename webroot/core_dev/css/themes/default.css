@@ -470,6 +470,9 @@ select {
 
 .forum_overview_table {
 	border: 1px solid #fff;
+	margin: 0;
+	padding: 6px;
+	border-collapse: collapse;
 }
 
 .forum_overview_item_even,.forum_overview_item_odd {
@@ -483,8 +486,8 @@ select {
 .forum_overview_item:hover {
 	background-color: #E3E49C;
 }
-.forum_overview_item_even a,.forum_overview_item_even a:visited,
-.forum_overview_item_odd a,.forum_overview_item_odd a:visited
+.forum_overview_item_even a:link,.forum_overview_item_even a:visited,
+.forum_overview_item_odd a:link,.forum_overview_item_odd a:visited
 {
 	font-weight: bold;
 	color: #1F204B;
@@ -494,6 +497,8 @@ select {
 	border: 1px solid #fff;
 	background-color: #B6D4D4;
 	-moz-border-radius:8px;
+	margin: 0;
+	padding: 6px;
 }
 .forum_post_heading {
 	font-size: 12px;
@@ -505,7 +510,14 @@ select {
 	font-family: verdana;
 	color: #1F204B;
 }
-
+.forum_post_table a:link, .forum_post_table a:visited
+{
+	color: #1F204B;
+}
+.forum_post_details {
+	font-size: 9px;
+	font-family: verdana;
+}
 
 /* generic container for text */
 .item {
