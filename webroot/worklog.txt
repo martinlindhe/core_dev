@@ -75,6 +75,13 @@
 		* tagit bort all sparning av 4-sista siffrorna i personnummer & tömt databasen på befintlig data
 		* visar ikon i inkorgen som indikerar BESVARAT BREV
 
+2007.06.15 Fredag:
+	webbgränssnittet:
+		* fixat översikt av "senaste bloggarna" på startsidan
+
+	konfig:
+		* mailservern är igång!
+
 
 ***************************************************************************************************
 NU - buggar:

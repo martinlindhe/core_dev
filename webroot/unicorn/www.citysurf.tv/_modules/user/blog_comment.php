@@ -74,7 +74,7 @@ function validateIt(tForm) {
 	return true;
 }
 </script>
-<form name="msg" action="<?=l('user', 'blogcomment', $s['id_id'], $res['main_id'])?>&amp;r=<?=$r?>&amp;a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
+<form name="msg" action="<?=l('user', 'blogcomment', $s['id_id'], $res['main_id'])?>&amp;r=<?=@$r?>&amp;a=<?=$a?>" method="post" onsubmit="if(trim(this.ins_cmt.value).length > 1) { return true; } else { alert('Felaktigt meddelande: Minst 2 tecken!'); this.ins_cmt.select(); return false; }">
 		<div class="smallWholeContent cnti mrg">
 			<div class="smallHeader">bloggkommentar</div>
 			<div class="smallBody pdg_t">

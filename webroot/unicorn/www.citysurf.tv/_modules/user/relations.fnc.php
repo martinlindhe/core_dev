@@ -9,18 +9,13 @@
 	/* Skickar en förfrågan till $_id om att skapa en relation */
 	function sendRelationRequest($_id, $_relation_type)
 	{
-		//todo: ändra $c[0] till snyggare lösning
 		global $sql, $user, $t, $l, $isAdmin;
-
+		
 		if (!is_numeric($_id) || !is_numeric($_relation_type)) return false;
 
-		if ($isAdmin) {
-			//todo: vad är dealen med denna kod??
-			$r = (is_numeric($_POST['ins_rel']))?getset($_POST['ins_rel'], 'r'):$_POST['ins_rel'];
-		} else {
-			$r = getset($_POST['ins_rel'], 'r');
-			if(!$r) return false; //'Relationen finns inte.';
-		}
+		$r = getset($_POST['ins_rel'], 'r');
+		if (!$r) return false; //'Relationen finns inte.';
+
 		$c = $sql->queryResult("SELECT main_id FROM {$t}userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".$_id."' LIMIT 1");
 		if(!empty($c)) {
 			### ÄNDRA!

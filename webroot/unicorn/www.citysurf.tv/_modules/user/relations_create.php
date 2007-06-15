@@ -1,6 +1,4 @@
 <?
-	require_once('relations.fnc.php');
-
 	if($own) popupACT('Du kan inte skapa en relation med dig själv.');
 	#	$user->blocked($s['id_id']);
 	$isFriends = $user->isFriends($s['id_id'], 1);

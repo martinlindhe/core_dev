@@ -10,9 +10,10 @@
 
 				//todo: visa ej ge vip länken för vip-användare?
 				$curr_vip = get_vip($s['id_id']);
+				//echo $curr_vip;
 					
-				if ($curr_vip == '2') echo ' <img src="_gfx/icon_vip.png">';
-				if ($curr_vip == '3') echo ' <img src="_gfx/icon_vipd.png">';
+				if ($curr_vip == '2') echo ' <img src="/_gfx/icon_vip.png">';
+				if ($curr_vip == '3') echo ' <img src="/_gfx/icon_vipd.png">';
 				if ($curr_vip == '10') echo ' WEBMASTER';
 
 				if (!$own) {

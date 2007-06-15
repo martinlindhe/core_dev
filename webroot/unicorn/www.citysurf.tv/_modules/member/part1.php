@@ -87,7 +87,7 @@
 				u_sex = '$sex',
 				u_email = '".secureINS($_POST['ins_email'])."',
 				u_birth = '".$birth."',
-				u_birth_x = '',
+				u_birth_x = '".secureINS($_POST['i'])."',
 				status_id = 'F',
 				u_regdate = NOW()");
 	

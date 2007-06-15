@@ -176,7 +176,7 @@ var actID = '';
 									echo '<option value="'.P2B.USER_GALLERY.$pic[2].'/'.$pic[0].(($pic[3])?'_'.$pic[4]:'').'.'.$pic[5].'">'.secureOUT('#'.$pic[0].' - '.$pic[6]).' '.(($pic[3])?'[privat]':'').'</option>';
 								}
 								?>
-								</select><input type="button" class="b" value="ladda upp ny" onclick="makeUpload('type=pres'); return false;" style="margin-right: 10px;"/>
+								</select><input type="button" class="b" value="ladda upp ny" onclick="makeUpload('do=pres'); return false;" style="margin-right: 10px;"/>
 								
 								<b>Länk till vän med bild:&nbsp;</b><select id="friend_list" name="friend_list" style="margin: 0 5px 0 17px;" onchange="if(TC_initialized) { if(this.value) { TC_Format('InsertImage', this.value); actName = this[this.selectedIndex].innerHTML; actID = this.value + ':::' + actName; window.setTimeout('replaceALIAS(actID)', 200); } else editor.focus(); } this.selectedIndex = 0;">
 								<option value="0">Välj vän</option>

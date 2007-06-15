@@ -1,15 +1,14 @@
 <?
 	if(!empty($_GET['r'])) $r = '1'; else $r = '0';
-	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;
+	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;		//detta är ett _SVAR_ på ett mail
 
-	require('mail.fnc.php');
 	require(CONFIG.'secure.fnc.php');
 
 	$error = false;
 
 	if (!empty($_POST['text_html']) && !empty($_POST['ins_to']))
-	{	
-		if (sendMail($_POST['ins_to'], $_POST['ins_cc'], $_POST['ins_ttl'], $_POST['text_html'], NRMSTR)) {
+	{
+		if (sendMail($_POST['ins_to'], $_POST['ins_cc'], $_POST['ins_ttl'], $_POST['text_html'], NRMSTR, $a)) {
 			popupACT('Meddelande skickat!', '', '', '500');
 		} else {
 			$res = array('sent_ttl' => $_POST['ins_ttl'], 'sent_cmt' => $_POST['text_html'], 'u_alias' => $_POST['ins_to']);
@@ -59,7 +58,11 @@ function cleanField(obj) {
 	obj.value = obj.value.replace(';', '');
 }
 </script>
-<form name="mail_write" action="<?=l('user', 'mailwrite')?>" method="post" onsubmit="if(this.ins_to.value.length > 0) { if(TC_active) TC_VarToHidden(); } else { alert('Felaktigt fält: Till'); return false; }">
+<?
+	$extra = '';
+	if ($a) $extra = '&a='.$a;
+?>
+<form name="mail_write" action="<?=l('user', 'mailwrite', $extra)?>" method="post" onsubmit="if(this.ins_to.value.length > 0) { if(TC_active) TC_VarToHidden(); } else { alert('Felaktigt fält: Till'); return false; }">
 <input type="hidden" name="do" value="1"/>
 <table summary="" cellspacing="0" width="99%" style="" class="cnti">
 <tr>

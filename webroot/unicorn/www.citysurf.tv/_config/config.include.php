@@ -1,4 +1,8 @@
 <?
+	require_once('/home/martin/www/_modules/user/mail.fnc.php');
+	require_once('/home/martin/www/_modules/user/gb.fnc.php');
+	require_once('/home/martin/www/_modules/user/relations.fnc.php');
+
 #local date-settings
 setlocale(LC_TIME, 'sv_SE.ISO-8859-1');
 

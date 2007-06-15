@@ -412,7 +412,7 @@ class email
 		if (!$this->pop3_STAT()) return;
 
 		if (!$this->unread_mails) {
-			$this->logAct('no new mail', true);
+			//$this->logAct('no new mail', true);
 		} else {
 			$this->logAct($this->unread_mails.' new mail(s)', true);
 		}

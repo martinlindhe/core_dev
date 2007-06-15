@@ -3,7 +3,6 @@
 	define('VIP_NONE',	1);		//normal user
 	define('VIP_LEVEL1', 2);
 	define('VIP_LEVEL2', 3);
-	define('VIP_ADMIN',	10);	//full admin!
 
 class user {
 	var $sql, $self, $info, $t, $id;
@@ -271,11 +270,11 @@ class user {
 		if (!empty($arr['account_date'.$suffix])) {
 			$curr_class = ($this->isOnline($arr['account_date'.$suffix])?'on':'off').'_'.$sex_name[$arr['u_sex'.$suffix]];
 		} else {
-			$curr_class = 'off_'.$sex_name[$arr['u_sex'.$suffix]];
+			$curr_class = 'off_'.@$sex_name[$arr['u_sex'.$suffix]];
 		}
-
+		
 		$result .= '<span class="'.$curr_class.'"'.(!isset($extra['noimg'])?' onmouseover="launchHover(event, \''.$arr['id_id'].'\');" onmouseout="clearHover();"':'').'>'.secureOUT($arr['u_alias'.$suffix]);
-		$result .= (empty($extra['nosex'])?' <img alt="'.$sex_name[$arr['u_sex'.$suffix]].'" align="absmiddle" src="/_objects/icon_'.$arr['u_sex'.$suffix].'1.png" />':'');
+		$result .= (empty($extra['nosex'])?' <img alt="'.@$sex_name[$arr['u_sex'.$suffix]].'" align="absmiddle" src="/_objects/icon_'.$arr['u_sex'.$suffix].'1.png" />':'');
 		$result .= (empty($extra['noage'])?$this->doage($arr['u_birth'.$suffix]):'');
 		$result .= (empty($extra['nolink'])?'</a>':'');
 		$result .= '</span>';

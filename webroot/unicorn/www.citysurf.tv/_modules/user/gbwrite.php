@@ -1,5 +1,4 @@
 <?
-	include('gb.fnc.php');
 	if(!empty($_GET['r'])) $r = '1'; else $r = '0';
 	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;
 	if($own) popupACT('Du kan inte skicka till dig själv.');

@@ -1,5 +1,6 @@
 <?
 	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
+	require(CONFIG."cut.fnc.php");
 
 	$length = array('1' => 10, '3' => 10, '5' => 20, '6' => 40, '8' => 80, '10' => 0);
 	$lim = @$length[$l['level_id']];
@@ -13,7 +14,7 @@
 	*/
 	if(!empty($_POST['ins_msg']) && !empty($_FILES['ins_file']) && empty($_FILES['ins_file']['error'])) {
 		#$sql->queryInsert("INSERT INTO s_aadata SET data_s = '".serialize($_FILES).' '.serialize($_POST)."'");
-		require(CONFIG."cut.fnc.php");
+
 		@$_POST['ins_msg'] = @trim($_POST['ins_msg']);
 		if(empty($_POST['ins_msg'])) {
 			popupACT('Felaktig beskrivning.');
@@ -79,25 +80,20 @@
 			$msg = 'Uppladdad.<br/>Filen ligger längst ner i listan!';
 			$name = safeOUT(substr($_POST['ins_msg'], 0, 40));
 			$file = ($prv)?'/'.USER_GALLERY.PD.'/'.$res.'_'.$un.'.'.$p_name:'/'.USER_GALLERY.PD.'/'.$res.'.'.$p_name;
-			$script = "<script type=\"text/javascript\">
-var name = 'NY! ".str_replace('"', '&qout;', '#'.$res.' - '.$name).(($prv)?' [privat]':'')."';
-var file = '".$file."';
-if(window.opener && window.opener.document && window.opener.document.getElementById('photo_list')) {
-	window.opener.addselOption(name, file);
-}
-</script>";
 
+			$script = "<script type=\"text/javascript\">
+			var name = 'NY! ".str_replace('"', '&qout;', '#'.$res.' - '.$name).(($prv)?' [privat]':'')."';
+			var file = '".$file."';
+			if(window.opener && window.opener.document && window.opener.document.getElementById('photo_list')) {
+				window.opener.addselOption(name, file);
+			}
+			</script>";
 			popupACT($msg.$script, '', '', 3000);
 		} else {
 			popupACT('Uppladdad!', '', l('user', 'gallery', $l['id_id'], $res), 1000);
 		}
 	}
 
-    $ua = strtolower($_SERVER['HTTP_USER_AGENT']);
-    if(strpos($ua, 'msie') == true)
-	$ua = 1;
-    else
-	$ua = 0;
 	require(DESIGN.'head_popup.php');
 ?>
 <script type="text/javascript">

@@ -57,7 +57,7 @@
 	echo '<br class="clr"/>';
 	if ($own) {
 		makeButton(false, 'makeUpload();', 'icon_gallery.png', 'ladda upp ny');
-		makeButton(false, 'makeTiny(\''.l('text', 'mmshelp', '2').'\')', 'icon_gallery.png', 'mms-uppladdning');
+		//makeButton(false, 'makeTiny(\''.l('text', 'mmshelp', '2').'\')', 'icon_gallery.png', 'mms-uppladdning');
 	} else {
 		if ($user->vip_check(VIP_LEVEL1)) {
 			if (spyActive($s['id_id'], 'g')) {
@@ -91,7 +91,7 @@
 <a name="gallx"></a>
 <div class="subHead">galleri x</div><br class="clr"/>
 <?
-	if ( ($s['id_id'] != $l['id_id'] && getGallXStatus($s['id_id']) == 0) || !$isAdmin ) {
+	if ( $s['id_id'] != $l['id_id'] && getGallXStatus($s['id_id']) == 0 && !$user->vip_check(10)) {
 		echo 'Denna medlem har inte tillåtit dig att se dennes galleri x-bilder.';
 	} else {
 		$paging = paging(1, 20);

@@ -11,11 +11,13 @@
 		
 		if (count($res)) {
 			echo '<div style="float: left">';
-			echo '<div class="mediumHeader">senast bloggarna</div>';
+			echo '<div class="mediumHeader">senaste bloggarna</div>';
 			echo '<div class="mediumBody">';
 			foreach($res as $row) {
 				$title = $row['blog_title'];
 				if (!$title) $title = 'Ingen rubrik';
+				if (strlen($title) >= 20) $title = substr($title, 0, 20).'[...]';
+
 				echo '<a href="'.l('user','blog',$row['id_id'],$row['main_id']).'">'.$title.'</a> av '.$user->getstring($row, '', array('icons' => 1)).'<br/>';
 			}
 			echo '</div></div>';			
@@ -51,7 +53,7 @@
 		}
 
 		//Listar de senaste galleribilderna
-		$q = "SELECT main_id, user_id, picd, pht_name, pht_cmt FROM {$t}userphoto WHERE status_id = '1' AND hidden_id = '0' AND pht_name != '' ORDER BY main_id DESC LIMIT 12";
+		$q = "SELECT main_id, user_id, picd, pht_name, pht_cmt FROM {$t}userphoto WHERE status_id = '1' AND hidden_id = '0' AND pht_name != '' ORDER BY main_id DESC LIMIT 11";
 		$res = $sql->query($q, 0, 1);
 		if (count($res)) {
 			echo '<div class="bigHeader">senaste galleribilder</div>';

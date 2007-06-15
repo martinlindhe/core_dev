@@ -1,5 +1,4 @@
 <?
-	require('mail.fnc.php');
 	require(CONFIG."secure.fnc.php");
 
 	$page = '';
@@ -32,7 +31,14 @@
 	<div class="bigBody">
 		<h3><?=$titel?></h3>
 
-		<p class="no" id="formatText"><?=formatText($res['sent_cmt'])?></p>
+		<p class="no" id="formatText">
+<?
+		$text = $res['sent_cmt'];
+		//if ($res['sender_id']) $text = strip_tags($text);	//strip tags om avsändaren _INTE_ är system user
+		$text = nl2br($text);
+		echo $text;
+?>
+		</p>
 
 		<div class="r">
 			<input type="button" onclick="if(confirm('Säker ?')) goLoc('<?=l('user', 'mail').'&amp;'.$page.'&amp;del_msg='.$res['main_id']?>');" class="btn2_min" value="radera" />

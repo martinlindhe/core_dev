@@ -98,8 +98,10 @@
 				}
 			}
 			
-			makeButton(false, 'makeForumAns('.$res['main_id'].')', 'icon_forum.png', 'skriv inlägg');
+			//makeButton(false, 'makeForumAns('.$res['main_id'].')', 'icon_forum.png', 'skriv inlägg');
 		?>
+		<input type="button" class="btn2_min" onclick="makeForumAns('<?=$res['main_id']?>')" value="Skriv inlägg"/>
+		
 		<br/><br/><br/>
 
 		<div class="bigHeader"><?=makeMenu($page, $menu)?></div>

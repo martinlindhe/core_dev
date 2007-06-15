@@ -27,7 +27,7 @@
 		$pstnr = str_replace(' ', '', $_POST['ins_pstnr']);
 		if(!is_numeric($pstnr))
 			errorACT('Felaktigt postnummer.', l('member', 'settings', 'personal'));
-		if($l['u_pstnr'] != $pstnr) {
+		if(@$l['u_pstnr'] != $pstnr) {
 			$newpst = true;
 		}
 		$newpst1 = '';
@@ -257,16 +257,16 @@
 
 	<table summary="" cellspacing="0" width="510">
 		<tr>
-			<td style="padding-right: 6px;"><b>Förnamn:</b><br /><input type="text" class="txt" name="ins_fname" value="<?=secureOUT($l['u_fname'])?>" /></td>
-			<td><b>Efternamn:</b><br /><input type="text" class="txt" name="ins_sname" value="<?=secureOUT($l['u_sname'])?>" /></td>
+			<td style="padding-right: 6px;"><b>Förnamn:</b><br /><input type="text" class="txt" name="ins_fname" value="<?=@secureOUT($l['u_fname'])?>" /></td>
+			<td><b>Efternamn:</b><br /><input type="text" class="txt" name="ins_sname" value="<?=@secureOUT($l['u_sname'])?>" /></td>
 		</tr>
 		<tr>
-			<td class="pdg_t"><b>Gatuadress:</b><br /><input type="text" class="txt" name="ins_street" value="<?=secureOUT($l['u_street'])?>" /></td>
-			<td class="pdg_t"><b>Postnummer:</b><br /><input type="text" class="txt" name="ins_pstnr" value="<?=secureOUT($l['u_pstnr'])?>" /></td>
+			<td class="pdg_t"><b>Gatuadress:</b><br /><input type="text" class="txt" name="ins_street" value="<?=@secureOUT($l['u_street'])?>" /></td>
+			<td class="pdg_t"><b>Postnummer:</b><br /><input type="text" class="txt" name="ins_pstnr" value="<?=@secureOUT($l['u_pstnr'])?>" /></td>
 		</tr>
 		<tr>
-			<td class="pdg_t"><b>E-post:</b><br /><input type="text" class="txt" name="ins_email" value="<?=secureOUT($l['u_email'])?>" /></td>
-			<td class="pdg_t"><b>Mobilnummer:</b><br /><input type="text" class="txt" name="ins_cell" value="<?=secureOUT($l['u_cell'])?>" /></td>
+			<td class="pdg_t"><b>E-post:</b><br /><input type="text" class="txt" name="ins_email" value="<?=@secureOUT($l['u_email'])?>" /></td>
+			<td class="pdg_t"><b>Mobilnummer:</b><br /><input type="text" class="txt" name="ins_cell" value="<?=@secureOUT($l['u_cell'])?>" /></td>
 		</tr>
 		<tr>
 			<td class="pdg_t" colspan="2"><br /><b>Om du vill byta lösenord, skriv in ditt nuvarande:</b><br /><input type="password" class="txt" name="ins_opass" value="" /></td>

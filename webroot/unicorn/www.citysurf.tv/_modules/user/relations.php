@@ -1,14 +1,15 @@
 <?
-	require_once('relations.fnc.php');
-
 	if(isset($_GET['create'])) {
 		include('relations_create.php');
 		die;
 	}
-
+	
 	//detta ändrar typ av relations-förfrågan för pågående förfrågningar (t.ex från "Granne" till "Sambo")
-	if(!empty($_POST['ins_rel']) && !$own) {
-		$error = sendRelationRequest($s['id_id'], $_POST['ins_rel']);
+	//eller skickar en ny förfrågan vid ändring av relationstyp
+	if(!empty($_POST['ins_rel'])) {
+		$friend_id = $s['id_id'];
+		if (!empty($_POST['friend_id'])) $friend_id = $_POST['friend_id'];
+		$error = sendRelationRequest($friend_id, $_POST['ins_rel']);
 		if ($error === true) {
 			errorACT('Du har nu ändrat typ av förfrågan.', l('user', 'relations'));
 			die;
@@ -130,14 +131,15 @@
 				if($view == $row['main_id']) {
 					//Visar "Ändra typ av relation"
 					echo '<tr><td colspan="5" class="pdg">';
-					echo '<form name="do" action="'.l('user', 'relations', $row['id_id']).'" method="post">';
+					echo '<form name="do" action="" method="post">';
+					echo '<input type="hidden" name="friend_id" value="'.$row['id_id'].'"/>';
 					echo '<select name="ins_rel" class="txt">';
 					foreach($rel as $r) {
 						$sel = ($r[1] == $row['rel_id'])?' selected':'';
 						echo '<option value="'.$r[0].'"'.$sel.'>'.secureOUT($r[1]).'</option>';
 					}
 					echo '</select>';
-					echo '<input type="submit" class="br" value="spara" style="margin-left: 10px;"></form>';
+					echo '<input type="submit" value="spara" style="margin-left: 10px;"></form>';
 					echo '</td></tr>';
 				} else if($gotpic) {
 					echo '<tr id="m_pic:'.$i.'" style="display: none;"><td colspan="2">'.$user->getphoto($row['id_id'].$row['u_picid'].$row['u_picd'], $row['u_picvalid'], 0, 0, '', ' ').'<span style="display: none;">'.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'</span></td></tr>';

@@ -102,7 +102,7 @@
 		$pstnr = str_replace(' ', '', $_POST['ins_pstnr']);
 		if (!is_numeric($pstnr)) $error .= '<li>Felaktigt postnummer';
 		$newpst1 = $newpst2 = '';
-		if ($l['u_pstnr'] != $pstnr && is_numeric($pstnr)) {
+		if (@$l['u_pstnr'] != $pstnr && is_numeric($pstnr)) {
 			$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM {$t}pst a, {$t}pstlan b WHERE a.st_pst = '".secureINS($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
 			if(!count($pst) || empty($pst)) {
 				$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM {$t}pst a, {$t}pstlan b WHERE a.st_pst LIKE '".substr(secureINS($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
@@ -119,8 +119,9 @@
 		}
 
 		//Spara alla ändringar förrutom ändrad epost-address.
+		//todo: spara postnummer
 		if (ValidPersNr($persnr)) {
-			$q = 'UPDATE s_user SET '.$newpst1.'u_birth="'.secureINS($_POST['persnr_year']).'-'.secureINS($_POST['persnr_month']).'-'.secureINS($_POST['persnr_day']).'" WHERE id_id='.$l['id_id'];
+			$q = 'UPDATE s_user SET '.$newpst1.'u_birth="'.secureINS($_POST['persnr_year']).'-'.secureINS($_POST['persnr_month']).'-'.secureINS($_POST['persnr_day']).'",u_birth_x="" WHERE id_id='.$l['id_id'];
 			$sql->queryUpdate($q);
 		}
 
@@ -171,7 +172,7 @@
 	$l = $user->getuserfill($l, ', u_email, u_pstort, u_pstlan, location_id');
 	$l = $user->getuserfillfrominfo($l, ', u_fname, u_sname, u_street, u_pstnr, u_cell');
 	
-	$q = 'SELECT u_birth FROM s_user WHERE id_id='.$l['id_id'];
+	$q = 'SELECT u_birth, u_birth_x FROM s_user WHERE id_id='.$l['id_id'];
 	$birth = $sql->queryLine($q);
 
 	list($persnr_year, $persnr_month, $persnr_day) = explode('-', $birth[0]);
@@ -202,7 +203,15 @@
 		</tr>
 		
 		<tr>
-			<td class="pdg_t"><b>Personnummer:</b><br />
+			<td class="pdg_t">
+				<p style="color:#ff0000">
+					Obs. sista delen av ditt<br/>
+					personnummer <b>sparas inte</b>!.<br/>
+					Det behövs bara anges för att vi<br/>
+					ska veta din riktiga ålder.
+				</p>
+
+				<b>Personnummer:</b><br />
 				
 <?
 	echo '<select name="persnr_year">';

@@ -35,7 +35,7 @@ function blockRightClick(event) {
 		<div id="top_logo"></div>
 		<div id="top_bg"></div>
 
-		<div id="top_ad"><a href="#"><img src="/_objects/temp_ad.jpg" alt="Ad"  /></a></div>
+		<div id="top_ad"><a href="#"><img src="/_gfx/ban/2_728x90.gif" alt="Ad" /></a></div>
 
 		<div id="top_border"><img src="/_gfx/themes/head_border.png" alt=""/></div>
 
@@ -53,11 +53,29 @@ function blockRightClick(event) {
 		</ul>
 
 		<ul id="menu_user">
+<?
+	$menu_brev = ' brev '.@intval($_SESSION['data']['offsets']['mail_offset']);
+	$menu_gb = ' gästbok '.@intval($_SESSION['data']['offsets']['gb_offset']);
+	$menu_relations = ' relationer '.@intval($_SESSION['data']['offsets']['rel_offset']);
+
+	if (@$l['id_id']) {
+		//kolla om det finns olästa mail
+		$chk = getUnreadMailCount();
+		if ($chk) $menu_brev = ' <span style="color:#ff0000">brev '.$chk.'</span>';
+		
+		//olästa gästboksinlägg?
+		$chk = gbCountUnread();
+		if ($chk) $menu_gb = ' <span style="color:#ff0000">gästbok '.$chk.'</span>';
+		
+		$chk = getRelationRequestsToMe();
+		if ($chk) $menu_relations = ' <span style="color:#ff0000">relationer '.$chk.'</span>';
+	}
+?>
 			<li><img align="absmiddle" src="/_gfx/icon_profil.png" alt="" /><a href="/user/view/">min profil</a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_gb.png" alt="" /><a href="/user/gb/">gästbok <?=@intval($_SESSION['data']['offsets']['gb_offset'])?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_mail.png" alt="" /><a href="/user/mail/">brev <?=@intval($_SESSION['data']['offsets']['mail_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_gb.png" alt="" /><a href="/user/gb/"><?=$menu_gb?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_mail.png" alt="" /><a href="/user/mail/"><?=$menu_brev?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_blog.png" alt="" /><a href="/user/blog/">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_friends.png" alt="" /><a href="/user/relations/">relationer <?=@intval($_SESSION['data']['offsets']['rel_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_friends.png" alt="" /><a href="/user/relations/"><?=$menu_relations?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_gallery.png" alt="" /><a href="/user/gallery/">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/member/settings/">inställningar</a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/main/upgrade/">uppgradera</a> &nbsp;</li>

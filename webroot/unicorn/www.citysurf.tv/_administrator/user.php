@@ -421,7 +421,7 @@ listUserDisabled($list);
 				<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" readonly value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
 				<td class="pdg">'.@$cities[$row[9]].'</td>
 				<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
-				<td class="pdg">'.$levels[$row[2]].'</td>
+				<td class="pdg">'.@$levels[$row[2]].'</td>
 				<td class="pdg">'.($row[8] == '0'?'<b>PENDLAR INTE!!!</b>':'<b class="up">'. $days['days'] .'</b> dag'.(($days['days'] == '1')?'':'ar').', <b class="up">'. $days['hours'] .'</b> timm'.(($days['hours'] == '1')?'e':'ar')).'</td>
 				<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
 			</tr>';
@@ -638,8 +638,8 @@ if(this.value == \'3\' && this_status != \'3\') {
 		</tr>
 	</tbody>
 		<tr>
-			<td><b>Banksaldo:</b><br><input type="text" class="inp_nrm" name="money_count" value="'.secureOUT($row['money_count']).'"></td>
-			<td><b>SMS-saldo:</b><br><input type="text" class="inp_nrm" name="msg_count" value="'.secureOUT($row['msg_count']).'"></td>
+			<td><b>Banksaldo:</b><br><input type="text" class="inp_nrm" name="money_count" value="'.@secureOUT($row['money_count']).'"></td>
+			<td><b>SMS-saldo:</b><br><input type="text" class="inp_nrm" name="msg_count" value="'.@secureOUT($row['msg_count']).'"></td>
 		</tr>
 		<tr>
 			<td><b>Lösenord:</b><br><input type="text" class="inp_nrm" name="pass" value="'.secureOUT($row['u_pass']).'"></td>
