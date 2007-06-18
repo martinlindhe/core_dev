@@ -118,7 +118,7 @@
 			//$url[] = 'online='.$result['online'].'&';
 		}
 	
-		$lim = ($result['pic'])?45:50;
+		$lim = 100;	//limit of results per page
 		$result['paging'] = paging(@$_POST['p'], $lim);
 		if (count($str) > 1) {
 			if($result['online'])
@@ -147,14 +147,20 @@
 			$ord = 'ORDER BY u.u_alias ASC';
 		}
 		//if ($result['ord']) $url[] = 'ord='.secureOUT($result['ord']).'&';
-		$result['paging']['co'] = 200;
+		//$result['paging']['co'] = 200;
+		$result['paging']['co'] = $lim;
 			
 		$q = "SELECT u.* $res $ord";
 		
+		/*
 		if ($_start || $_end) $q .= " LIMIT ".$_start.",".$_end;
-		else $q .= " LIMIT {$result['paging']['slimit']}, {$result['paging']['limit']}";
-
-		//echo $q;
+		else 
+		*/
+		$q .= " LIMIT {$result['paging']['slimit']}, {$result['paging']['limit']}";
+		
+		if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') {
+			//echo $q;
+		}
 			
 		$result['res'] = $sql->query($q, 0, 1);
 

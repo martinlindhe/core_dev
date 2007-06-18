@@ -3,7 +3,7 @@
 		errorACT('Kommer snart!');
 	}
 
-	$sections = array('cookies', 'openhours', 'radio', 'disclaimer', 'about', 'agree', 'contact', 'url', 'mmshelp');
+	$sections = array('cookies', 'radio', 'disclaimer', 'about', 'agree', 'contact', 'url', 'mmshelp');
 	$action_new = $action;
 	if(in_array($action, $sections)) {
 		if($action == 'agree')

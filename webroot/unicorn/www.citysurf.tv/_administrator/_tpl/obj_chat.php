@@ -23,7 +23,7 @@
 ?>
 			<input type="radio" class="inp_chk" name="view" value="0" id="view_0" onclick="document.location.href = '<?=$thispage?>';" checked><label for="view_0" class="txt_bld txt_look">Alla</label> [<?=$cmt_arr?>]
 
-			<form name="upd" method="post" action="./<?=$thispage?>&all=<?=$view_cmt?>">
+			<form name="upd" method="post" action="./<?=$thispage?>&all=<?=@$view_cmt?>">
 			<input type="hidden" name="main_id:all" id="main_id" value="0">
 			<input type="hidden" name="validate" value="1">
 <?

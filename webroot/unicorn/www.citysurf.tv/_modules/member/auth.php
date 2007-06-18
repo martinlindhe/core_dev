@@ -69,11 +69,13 @@ class user_auth {
 					spyPostSend($result[0], 'Validering av uppgifter', $msg);
 				}
 
+				/*
 				if(!empty($_POST['redir'])) {
 					$this->notify_user($result[0], gettxt('moved_login'), $result[1]);
 					echo '<script type="text/javascript">window.setTimeout(\'document.location.href = "'.l('main', 'start').'"\', 6000);</script>';
 					die();
 				}
+				*/
 				if (!$mobile) {
 					reloadACT(l('main', 'start'));
 				} else {

@@ -27,12 +27,6 @@
 	top: 8px;
 	left: 8px;
 }
-#top_logout {
-	position: absolute;
-	top: 107px;
-	left: 965px;
-	z-index: 1;
-}
 
 /* topp-menyn */
 ul#menu_main {

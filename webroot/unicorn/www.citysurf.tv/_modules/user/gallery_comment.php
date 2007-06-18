@@ -5,7 +5,7 @@
 			popupACT('Felaktigt inlägg.');
 		}
 	} else popupACT('Felaktigt inlägg.');
-	if($res['hidden_id'] && !$own && !$allowed) {
+	if($res['hidden_id'] && !getGallXStatus($s['id_id']) && !$user->vip_check(10)) {
 		popupACT('Felaktigt inlägg.');
 	}
 	if($own && !empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;

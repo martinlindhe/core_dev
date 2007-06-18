@@ -1,5 +1,4 @@
 <?
-	if(!empty($_GET['r'])) $r = '1'; else $r = '0';
 	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;		//detta är ett _SVAR_ på ett mail
 
 	require(CONFIG.'secure.fnc.php');
@@ -30,6 +29,7 @@
 			} else $a = false;
 		} else $a = false;
 	}
+
 	if (isset($_GET['r']) && $a) $r = true; else $r = false;
 
 	$NAME_TITLE = 'BREV - SKRIV | '.NAME_TITLE;

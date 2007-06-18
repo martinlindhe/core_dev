@@ -39,8 +39,6 @@ function blockRightClick(event) {
 
 		<div id="top_border"><img src="/_gfx/themes/head_border.png" alt=""/></div>
 
-		<div id="top_logout"><a href="/member/logout"><img src="/_gfx/themes/head_logout.png" alt=""/></a></div>
-
 		<ul id="menu_main">
 			<li><a href="/main/start/">start</a> | </li>
 			<li><a href="/list/users/">leta</a> | </li>
@@ -49,7 +47,8 @@ function blockRightClick(event) {
 			<li><a href="/main/surfcafe/">surfcafé</a> | </li>
 			<!--<li><a href="/text/radio/">webbradio</a> | </li>-->
 			<li><a href="/main/faq/">hjälp &amp; faq</a> | </li>
-			<li><a href="/text/contact/">kontakt</a></li>
+			<li><a href="/text/contact/">kontakt</a> | </li>
+			<li><a href="/member/logout/">logga ut</a></li>
 		</ul>
 
 		<ul id="menu_user">
