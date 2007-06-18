@@ -1,6 +1,22 @@
+2007.06.18 Måndag:
+	webb-gränssnitt:
+		* ändrat logga ut till en textlänk i toppmenyn
+		* ökat max-resultat på sökningar från 50 till 100 per sida
+
+	admin-gränssnittet:
+		* fixat några felmeddelanden som kom upp i admingränssnittet
+		* tagit bort ett 20-tal textfält under "INFO UTÅT - TEXT" som inte användes
+
+
 
 ***************************************************************************************************
-NU: SMS debitering:
+webbgränssnitt:
+	* titel i mail i inkorgen är för lång, klipp den på max X tecken
+	SENARE: användaren "gör just nu" info, t.ex "kollar i pelles galleri"
+	fakta: kunna välja "vikt". bitte skapar en lista med alternativ
+
+
+SMS debitering:
 	- kontrollera att IPX mt billing funkar
 	- kontrollera att intern-mail kvittering skickas korrekt
 	- NVOX koppling med mika
@@ -8,11 +24,6 @@ NU: SMS debitering:
 
 
 	- bugg: ajax chat-historik strular. för vipmedlemmar så upprepar sig chatthistoriken hela tiden. löst genom att stänga av historik
-
-	server conf - dammsugaren:
-		- ändrad-epost bekräftelse mail utskick är felaktig, textfältet är "email_update",
-			bugg: länken som skapas är felaktig: http://cs.icn.se/auth.php?update&go=1&i=194712&key=
-		- skapa mailkonto på lokala servern och använd den för inkommande mms-mail check
 
 	- poll på inloggad startsida (admingränssnitt finns)
 
