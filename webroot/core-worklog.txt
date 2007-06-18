@@ -1,7 +1,5 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- fundera: är det någon filarea-typ som INTE kan ha annvändning av kategorier? stöd för filarea till blogg t.ex
-			så kan man göra ett bildspel av filkategorin i bloggen :)
 
 
 	forum:
@@ -144,7 +142,7 @@
 		- det krävs ett extra sid-reload när man ändrat skin theme
 
 
-	misc/senare:
+	misc/funderingar/senare:
 		- gör ett setup script för att skapa alla tabeller i databasen (och skapa ny databas med?)
 		- ny feature: en personlig timezone visare. så man kan visa lokal tid, plus egna tider (som zonetick)
 		- konvertera alla scriptfiler osv till utf8-format så åäö funkar i linux fint när man editerar kod :)
@@ -159,6 +157,9 @@
 			* kan använda output buffering för att generera hela sidor utifrån xml defineringar av ui:t...
 		- xml definieringar av ui:t. xml fil som beskriver hur varje sida ska se ut (include head + gadget/module + foot ) typ
 		- flytta ut admin-relaterad css i en egen admin.css som bara includas på adminsidor
+
+		- fundera: är det någon filarea-typ som INTE kan ha annvändning av kategorier? stöd för filarea till blogg t.ex
+			så kan man göra ett bildspel av filkategorin i bloggen :)
 
 	plugin/wurfl:
 
@@ -181,7 +182,11 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
-220.06.14:
+2007.06.18
+	- forum wip
+
+
+2007.06.14:
 	- lyric: open search
 	- forum wip
 

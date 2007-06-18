@@ -83,6 +83,7 @@
 
 			$codeblock =
 				'<div class="bb_code">'.
+				'<div class="bb_code_head">code</div>'.
 				'<div class="bb_code_body">'.$codeblock.'</div>'.
 				'</div>';
 

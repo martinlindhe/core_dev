@@ -272,4 +272,40 @@
 		echo 'displayCurrentForumContent() deprecated ! dont use';
 	}
 
+
+	function displayUsersLatestPosts(&$db, $userId, $limit = 5)
+	{
+		$list = getUserLastForumPosts($db, $userId, $limit);
+
+		if (count($list)) {
+
+			$str = '<table width="100%" cellpadding=0 cellspacing=0 border=0>';
+			$str .= '<tr><td>Tr&aring;d</td><td width=70>Tid</td></tr>';
+			for ($i=0; $i<count($list); $i++) {
+				$str .= '<tr>';
+				$subject = $list[$i]['itemSubject'];
+				if (!$subject) {
+					$data = getForumItem($db, $list[$i]['parentId']);
+					$subject = $data['itemSubject'];
+				}
+				if (strlen($subject)>30) $subject = substr($subject,0,30);
+
+				$str .= '<td>';
+					if (forumItemIsMessage($db, $list[$i]['itemId'])) {
+						$str .= '<a href="forum.php?id='.$list[$i]['parentId'].'#post'.$list[$i]['itemId'].'">'.$subject.'</a>';
+					} else {
+						$str .= '<a href="forum.php?id='.$list[$i]['itemId'].'">'.$subject.'</a>';
+					}
+					if (strlen($list[$i]['itemSubject']) > strlen($subject)) $str .= '..';
+				$str .= '</td>';
+				$str .= '<td valign="top">'.$list[$i]['timeCreated'].'</td>';
+				$str .= '</tr>';
+			}
+			$str .= '</table>';
+		} else {
+			$str = 'The user has not written any posts';
+		}
+
+		return $str;
+	}
 ?>

@@ -58,3 +58,62 @@ img {
 .clr {
 	clear: both;
 }
+
+/* [quote] style */
+.bb_quote {
+	padding: 8px;
+}
+.bb_quote_head {
+	font-weight: bold;
+	padding: 0 5px 0 5px;
+	-moz-border-radius: 5px 5px 0 0;
+	color: #FFF;
+	background-color: #004A80;
+	display: inline;
+}
+.bb_quote_body {
+	overflow: auto;
+	max-height: 250px;
+	color: #000;
+	background-color: #ddd;
+	border: 1px solid #888;
+	padding: 4px;
+}
+
+
+/* [code] style */
+.bb_code {
+	padding: 0 8px 0 8px;
+}
+.bb_code_head {
+	font-weight: bold;
+	padding: 0 5px 0 5px;
+	-moz-border-radius: 5px 5px 0 0;
+	color: #FFF;
+	background-color: #9B3333;
+	display: inline;
+}
+.bb_code_body {
+	font-family: monospace, courier new, arial, verdana;
+	font-size: 12px;
+	color: #000;
+	background-color: #ddd;
+	border: 1px solid #888;
+	overflow-x: auto;
+	white-space: pre;
+	padding: 2px;
+}
+
+
+/* [hr] style */
+.bb_hr {
+	color: #000;
+	background-color: #000;
+  border: 0;
+  height: 2px;
+}
+
+/* urlrewritten links */
+.bb_url {
+	text-decoration: none;
+}

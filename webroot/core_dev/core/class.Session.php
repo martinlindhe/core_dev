@@ -51,6 +51,13 @@ class Session
 	public $isSuperAdmin;
 	public $started;		//timestamp of when the session started
 	public $theme = '';			//contains the currently selected theme
+	
+	public $userModes = array(
+		0 => 'Normal user',
+		1 => 'Admin',
+		2 => 'Super admin'
+	);
+	
 	private $default_theme = 'default.css';			//default theme if none is choosen
 	private $allow_themes = false;
 

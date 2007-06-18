@@ -16,6 +16,22 @@
 		return $db->getOneItem($q);
 	}
 
+	/* Looks up a users status by id, returns a text string with the description */
+	function getUserStatus($_id)
+	{
+		global $db, $session;
+
+		if (!is_numeric($_id) || !$_id) return false;
+		if ($_id == $session->id) {
+			$mode = $session->mode;
+		} else {
+			$q = 'SELECT userMode FROM tblUsers WHERE userId='.$_id;
+			$mode = $db->getOneItem($q);
+		}
+		
+		return $session->userModes[$mode];
+	}
+
 	//returns the $_limit last users logged in, ordered by the latest logins first
 	function getUsersLastLoggedIn($_limit = 50)
 	{
