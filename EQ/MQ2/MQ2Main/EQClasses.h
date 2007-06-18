@@ -596,7 +596,8 @@ EQLIB_OBJECT static unsigned char CXWnd::sm_byCurrentAlpha;
 /*0x080*/   BYTE    FadeToAlpha;
 /*0x081*/   BYTE    Unknown0x81[0x3];
 /*0x084*/   LPVOID  DrawTemplate;
-/*0x088*/   BYTE    Unknown0x88[0x10];
+/*0x088*/   BYTE    CloseOnESC;     // close when ESC is pressed
+/*0x089*/   BYTE    Unknown0x89[0xf];
 /*0x098*/   BYTE    Enabled;
 /*0x099*/   BYTE    Unknown0x99[0x3];
 /*0x09c*/   DWORD   HScrollMax;
@@ -705,7 +706,8 @@ EQLIB_OBJECT static bool CSidlScreenWnd::m_useIniFile;
 /*0x080*/   BYTE    FadeToAlpha;
 /*0x081*/   BYTE    Unknown0x81[0x3];
 /*0x084*/   LPVOID  DrawTemplate;
-/*0x088*/   BYTE    Unknown0x88[0x10];
+/*0x088*/   BYTE    CloseOnESC;     // close when ESC is pressed
+/*0x089*/   BYTE    Unknown0x89[0xf];
 /*0x098*/   BYTE    Enabled;
 /*0x099*/   BYTE    Unknown0x99[0x3];
 /*0x09c*/   DWORD   HScrollMax;
@@ -1657,7 +1659,7 @@ EQLIB_OBJECT static unsigned long __cdecl CDisplay::GetUserDefinedColor(int);
 EQLIB_OBJECT static void __cdecl CDisplay::SetUserDefinedColor(int,int,int,int);
 EQLIB_OBJECT struct T3D_POINTLIGHT * CDisplay::CreateLight(unsigned char,float,float,float,float);
 EQLIB_OBJECT struct T3D_tagACTORINSTANCE * CDisplay::CreateActor(char *,float,float,float,float,float,float,bool,bool);
-EQLIB_OBJECT struct T3D_tagACTORINSTANCE * CDisplay::GetClickedActor(unsigned long,unsigned long,bool);
+EQLIB_OBJECT struct T3D_tagACTORINSTANCE * CDisplay::GetClickedActor(unsigned long,unsigned long,unsigned long,void *,void *);
 EQLIB_OBJECT unsigned char CDisplay::GetEnvironment(float,float,float,int *);
 EQLIB_OBJECT unsigned char CDisplay::GetIntensity(unsigned char);
 EQLIB_OBJECT unsigned char CDisplay::LoadBMPFile(void);
@@ -1920,6 +1922,7 @@ EQLIB_OBJECT void CEverQuest::DoMainLoop(struct HWND__ *);
 EQLIB_OBJECT void CEverQuest::DoNewCharacterCreation(void);
 EQLIB_OBJECT void CEverQuest::DoPercentConvert(char *,bool);
 EQLIB_OBJECT void CEverQuest::DoSplit(char *);
+EQLIB_OBJECT void CEverQuest::DoTellWindow(char *,char *,char *,void *,int,bool);
 EQLIB_OBJECT void CEverQuest::doUnInvite(char *);
 EQLIB_OBJECT void CEverQuest::DropHeldItemOnGround(int);
 EQLIB_OBJECT void CEverQuest::DropHeldMoneyOnGround(int);
@@ -7044,6 +7047,12 @@ class CChatService
 public:
 EQLIB_OBJECT int CChatService::GetNumberOfFriends(void);
 EQLIB_OBJECT char * CChatService::GetFriendName(int);
+};
+
+class OtherCharData
+{
+public:
+EQLIB_OBJECT unsigned long OtherCharData::GetAltCurrency(unsigned long,unsigned long b=1);
 };
 
 };

@@ -125,6 +125,7 @@ EQLIB_VAR BOOL gSpewToFile;
 EQLIB_VAR BOOL gbDoAutoRun;
 EQLIB_VAR BOOL gMQPauseOnChat;
 EQLIB_VAR BOOL gKeepKeys;
+EQLIB_VAR BOOL gLClickedObject;
 EQLIB_VAR SWHOFILTER gFilterSWho;
 
 EQLIB_VAR BOOL gbHUDUnderUI;
@@ -349,7 +350,7 @@ EQLIB_VAR EQ_PC **ppPCData;
 #define pPCData (*ppPCData)
 EQLIB_VAR EQ_Character **ppCharData;
 #define pCharData (*ppCharData)
-#define pCharData1 ((EQ_Character1 *)(((char *)(*ppCharData))+0xec70))
+#define pCharData1 ((EQ_Character1 *)&GetCharInfo()->vtable2)
 EQLIB_VAR EQPlayer **ppCharSpawn;
 #define pCharSpawn (*ppCharSpawn)
 EQLIB_VAR EQPlayer **ppActiveMerchant;
@@ -358,6 +359,7 @@ EQLIB_VAR EQPlayerManager **ppSpawnManager;
 #define pSpawnManager (*ppSpawnManager)
 #define pSpawnList (((struct _SPAWNMANAGER *)pSpawnManager)->FirstSpawn)
 #define pChatService ((CChatService*)((PEVERQUEST)pEverQuest)->ChatService)
+#define pOtherCharData ((OtherCharData*)&GetCharInfo()->OtherCharData)
 
 EQLIB_VAR EQPlayer **ppLocalPlayer;
 #define pLocalPlayer (*ppLocalPlayer)
@@ -417,6 +419,10 @@ EQLIB_VAR DWORD *pScreenX;
 #define ScreenX (*pScreenX)
 EQLIB_VAR DWORD *pScreenY;
 #define ScreenY (*pScreenY)
+EQLIB_VAR DWORD *pScreenXMax;
+#define ScreenXMax (*pScreenXMax)
+EQLIB_VAR DWORD *pScreenYMax;
+#define ScreenYMax (*pScreenYMax)
 EQLIB_VAR DWORD *pScreenMode;
 #define ScreenMode (*pScreenMode)
 EQLIB_VAR CHAR  *pMouseLook;
