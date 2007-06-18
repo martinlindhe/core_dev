@@ -41,6 +41,13 @@
 				deleteBlog($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
 				break;
+				
+			case MODERATION_FORUM:
+				deleteForumItem($row['itemId']);
+				removeFromModerationQueue($row['queueId']);
+				break;
+
+			default: die('cant delete unknown type');
 		}
 	}
 
@@ -85,7 +92,7 @@
 			if ($row['autoTriggered']) echo ' (auto-triggered)';
 			echo '</div>';
 			
-			echo 'By '.nameLink($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
+			if (!$row['autoTriggered']) echo 'Reported by '.nameLink($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
 
 			switch ($row['queueType']) {
 				case MODERATION_GUESTBOOK:
@@ -95,6 +102,12 @@
 
 				case MODERATION_BLOG:
 					echo '<a href="'.$project.'blog.php?Blog:'.$row['itemId'].getProjectPath().'" target="_blank">Read the blog</a>';
+					break;
+
+				case MODERATION_FORUM:
+					$item = getForumItem($row['itemId']);
+					showForumPost($item);
+					echo '<a href="'.$project.'forum.php?id='.$item['parentId'].'#post='.$item['itemId'].getProjectPath().'" target="_blank">Read the topic</a>';
 					break;
 			}
 

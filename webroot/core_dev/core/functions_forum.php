@@ -27,7 +27,7 @@
 		$q  = 'SELECT t1.*,t2.userName AS authorName ';
 		$q .= 'FROM tblForums AS t1 ';
 		$q .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-		$q .= 'WHERE t1.itemId='.$itemId;
+		$q .= 'WHERE t1.itemId='.$itemId.' AND t1.deletedBy=0';
 
 		return $db->getOneRow($q);
 	}
@@ -50,7 +50,7 @@
 		$q  = 'SELECT t1.*,t2.userName AS authorName ';
 		$q .= 'FROM tblForums AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-		$q .= 'WHERE t1.parentId='.$itemId.' ';
+		$q .= 'WHERE t1.parentId='.$itemId.' AND t1.deletedBy=0 ';
 		$q .= 'ORDER BY t1.itemType ASC,t1.sticky DESC,';
 		if ($asc_order) $q .= 't1.timeCreated ASC';
 		else $q .= 't1.timeCreated DESC';
@@ -65,7 +65,7 @@
 		global $db;
 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
 
-		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND itemType='.FORUM_MESSAGE;
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND itemType='.FORUM_MESSAGE.' AND deletedBy=0';
 		$arr = $db->getArray($q);
 
 		foreach ($arr as $row) {
@@ -83,7 +83,7 @@
 		global $db;
 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
 
-		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.'AND deletedBy=0';
 
 		$arr = $db->getArray($q);
 
@@ -230,7 +230,7 @@
 		$q .= 'FROM tblForums AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
 		$q .= 'LEFT OUTER JOIN tblForums AS t3 ON (t1.itemSubject="" AND t1.parentId=t3.itemId) ';
-		$q .= 'WHERE t1.itemType='.FORUM_MESSAGE.' ';
+		$q .= 'WHERE t1.itemType='.FORUM_MESSAGE.' AND t1.deletedBy=0 ';
 		$q .= 'ORDER BY t1.timeCreated DESC ';
 		$q .= 'LIMIT 0,'.$count;
 
@@ -274,7 +274,7 @@
 		global $db;
 		if (!is_numeric($parentId)) return false;
 
-		$q = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId='.$parentId.' ORDER BY itemSubject';
+		$q = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId='.$parentId.' AND deletedBy=0 ORDER BY itemSubject';
 		$list = $db->getArray($q);
 
 		/* Lägg först till allt på samma nivå */
@@ -377,14 +377,14 @@
 		global $db;
 		if (!is_numeric($itemId)) return false;
 
-		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';;
 		$list = $db->getArray($q);
 
 		$newest_time = 0;
 
 		for ($i=0; $i<count($list); $i++) {
 			$q =	'SELECT itemId, timeCreated FROM tblForums '.
-						'WHERE parentId='.$list[$i]['itemId'].' '.
+						'WHERE parentId='.$list[$i]['itemId'].' AND deletedBy=0 '.
 						'ORDER BY timeCreated DESC LIMIT 0,1';
 			$data = $db->getOneRow($q);
 
@@ -413,7 +413,7 @@
 		global $db;
 		if (!is_numeric($itemId)) return false;
 
-		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$itemId;
+		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';
 		return $db->getOneItem($q);
 	}
 
@@ -424,12 +424,12 @@
 		global $db;
 		if (!is_numeric($itemId)) return false;
 
-		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';
 		$list = $db->getArray($q);
 
 		$cnt = 0;
 		for ($i=0; $i<count($list); $i++) {
-			$q = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$list[$i]['itemId'];
+			$q = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$list[$i]['itemId'].' AND deletedBy=0';
 			$cnt += $db->getOneItem($q);
 		}
 
@@ -543,7 +543,7 @@
 		//returns last post to the topic $itemId
 		$q  = 'SELECT t1.*,t2.userId,t2.userName FROM tblForums AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-		$q .= 'WHERE t1.parentId='.$itemId.' ';
+		$q .= 'WHERE t1.parentId='.$itemId.' AND t1.deletedBy=0 ';
 		$q .= 'ORDER BY t1.timeCreated DESC LIMIT 1';
 		return $db->getOneRow($q);
 	}
@@ -557,20 +557,6 @@
 		
 		if (!$islocked) $islocked = $item['locked'];
 
-		/*
-		//fixme: ta en optional parameter $highlight för sökresultat
-		//fixme bugg: $highlight ändrar på enkodade htmltaggar vilket resulterar i massa html-leakage i resultatet
-		if ($highlight) {
-			$criterialist = explode(" ", $highlight);
-			$replace = '<span class="forum_search_highlight">\\0</span>';
-			for ($i=0; $i<count($criterialist); $i++) {
-				$regexp = "(\t | \n | ' ')*".$criterialist[$i]."(\t | \n | ' ')*";
-				$subject = eregi_replace($regexp, $replace, $subject);
-				$body = eregi_replace($regexp, $replace, $body);
-			}
-		}
-		*/
-
 		echo '<a name="post'.$item['itemId'].'" id="post'.$item['itemId'].'"></a>';
 
 		echo '<table width="100%" class="forum_post_table">';
@@ -581,7 +567,8 @@
 		if ($subject) echo '<b>'.$subject.'</b><hr/>';
 		
 		echo '<div class="forum_post_details">';
-		echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/> ';
+		echo '<a href="forum.php?id='.$item['parentId'].'#post'.$item['itemId'].'">';
+		echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
 		echo 'by '.nameLink($item['authorId'], $item['authorName']).' on '.$item['timeCreated'];
 		echo '</div><br/>';
 
@@ -681,9 +668,8 @@
 		$list = explode(' ', $criteria);
 
 		$q  = 'SELECT t1.*,t2.userName AS authorName FROM tblForums AS t1 ';
-		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-		$q .= 'WHERE ';
-		$q .= getForumSearchQuery($list);
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+		$q .= 'WHERE t1.deletedBy=0 AND '.getForumSearchQuery($list);
 
 		switch ($method) {
 			case 'mostread': //mest läst
@@ -711,7 +697,7 @@
 		$list = explode(' ', $criteria);
 
 		$q  = 'SELECT COUNT(t1.itemId) FROM tblForums AS t1 ';
-		$q .= 'WHERE '.getForumSearchQuery($list);
+		$q .= 'WHERE t1.deletedBy=0 AND '.getForumSearchQuery($list);
 
 		return $db->getOneItem($q);
 	}
@@ -755,17 +741,20 @@
 			}
 		}
 
-		$sql .= 'AND t1.itemDeleted=0 ';
+		$sql .= 'AND t1.deletedBy=0 ';
 		return $sql;
 	}
 
 	function deleteForumItem($itemId)
 	{
-		global $db;
-		if (!is_numeric($itemId)) return false;
+		global $db, $session;
+		if (!$session->id || !is_numeric($itemId)) return false;
 
-		$q = 'DELETE FROM tblForums WHERE itemId='.$itemId;
-		$db->delete($q);
+		$q = 'UPDATE tblForums SET timeDeleted=NOW(),deletedBy='.$session->id.' WHERE itemId='.$itemId;
+
+		if ($db->delete($q)) {
+			removeFromModerationQueueByType(MODERATION_FORUM, $itemId);
+		}
 	}
 
 	/* Deletes itemId and everything below it. also deletes associated moderation queue entries */
@@ -774,22 +763,22 @@
 		global $db;
 		if (!is_numeric($itemId)) return false;
 
-		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';
 		$arr = $db->getArray($q);
 
 		foreach ($arr as $row) {
 			$q = 'DELETE FROM tblForums WHERE itemId='.$row['itemId'];
-			$db->delete($q);
-
-			removeFromModerationQueueByType(MODERATION_FORUM, $row['itemId']);
-			deleteForumItemRecursive($row['itemId'], true);
+			if ($db->delete($q)) {
+				removeFromModerationQueueByType(MODERATION_FORUM, $row['itemId']);
+				deleteForumItemRecursive($row['itemId'], true);
+			}
 		}
 
 		if ($loop != true) {
 			$q = 'DELETE FROM tblForums WHERE itemId='.$itemId;
-			$db->delete($q);
-
-			removeFromModerationQueueByType(MODERATION_FORUM, $itemId);
+			if ($db->delete($q)) {
+				removeFromModerationQueueByType(MODERATION_FORUM, $itemId);
+			}
 		}
 	}
 
@@ -799,7 +788,7 @@
 		global $db;
 		if (!is_numeric($userId)) return false;
 
-		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE authorId='.$userId.' AND itemType='.FORUM_MESSAGE;
+		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE authorId='.$userId.' AND deletedBy=0 AND itemType='.FORUM_MESSAGE;
 		return $db->getOneItem($q);
 	}
 
