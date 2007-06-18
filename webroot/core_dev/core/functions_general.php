@@ -12,7 +12,8 @@
 		if (!empty($_GET['p']) && is_numeric($_GET['p'])) $pager['page'] = $_GET['p'];
 
 		$pager['tot_pages'] = round($_total_cnt / $_items_per_page+0.4); // round to closest whole number
-		$pager['head'] = 'Page '.$pager['page'].' of '.$pager['tot_pages'].' ('.$_total_cnt.' total)<br/><br/>';
+		if ($pager['tot_pages'] < 1) $pager['tot_pages'] = 1;
+		$pager['head'] = 'Page '.$pager['page'].' of '.$pager['tot_pages'].' (displaying '.$_total_cnt.' items)<br/><br/>';
 
 		$pager['index'] = ($pager['page']-1) * $pager['items_per_page'];
 		$pager['limit'] = ' LIMIT '.$pager['index'].','.$pager['items_per_page'];
