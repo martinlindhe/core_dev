@@ -500,15 +500,13 @@ select {
 	margin: 0;
 	padding: 6px;
 }
-.forum_post_heading {
-	font-size: 12px;
-	font-family: verdana;
-	color: #1F204B;
-}
 .forum_post_item {
 	font-size: 12px;
 	font-family: verdana;
 	color: #1F204B;
+}
+.forum_post_item h1 {
+	margin: 0;
 }
 .forum_post_table a:link, .forum_post_table a:visited
 {
@@ -517,6 +515,7 @@ select {
 .forum_post_details {
 	font-size: 9px;
 	font-family: verdana;
+	color: #666;
 }
 
 /* generic container for text */

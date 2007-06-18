@@ -568,10 +568,10 @@
 
 		echo '<table width="100%" class="forum_post_table">';
 
-		echo '<tr class="forum_post_heading forum_post_item">';
+		echo '<tr class="forum_post_item">';
 
-		echo '<td valign="top" class="forum_item_text">';
-		if ($subject) echo '<b>'.$subject.'</b><hr/>';
+		echo '<td valign="top">';
+		if ($subject) echo '<h1>'.$subject.'</h1><hr/>';
 		
 		echo '<div class="forum_post_details">';
 		echo '<a href="forum.php?id='.$item['parentId'].'#post'.$item['itemId'].'">';
@@ -647,10 +647,11 @@
 		if (!is_numeric($itemId)) return false;
 
 		echo '<div class="forum_overview_group">';
-		echo getForumDepthHTML(FORUM_MESSAGE, $itemId).'<br/><br/>';
 
 		$item = getForumItem($itemId);
-		
+
+		echo getForumDepthHTML(FORUM_MESSAGE, $item['parentId']).'<br/><br/>';
+
 		showForumPost($item);
 
 		$tot_cnt = getForumItemCountFlat($itemId);

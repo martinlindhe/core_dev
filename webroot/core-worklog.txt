@@ -8,7 +8,7 @@
 						eller går det göra ett php script som körs med +x i linux? =)
 					
 		- kolla hur det är med bevakningar. kunna få bevakning via ett separat meddelandesystem (liknande helgon)
-
+		- visa vad som är oläst sen senast
 
 	omröstningar/undersökningar:
 		vi behöver flera typer av omröstningar:
