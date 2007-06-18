@@ -16,6 +16,7 @@ define('FILETYPE_NEWS',						3);	// The file is a news attachment
 define('FILETYPE_FILEAREA_UPLOAD',4);	/* File is uploaded to a file area */
 define('FILETYPE_USERFILE',				5);	/* File is uploaded to the user's own file area */
 define('FILETYPE_USERDATA',				6);	/* File is uploaded to a userdata field */
+define('FILETYPE_FORUM',					7);	/* File is attached to a forum post */
 
 class Files
 {
@@ -278,6 +279,27 @@ class Files
 		}
 		echo '</div>';
 		echo '</div>';
+	}
+	
+	/* shows attachments. used to show files attached to a forum post */
+	function showAttachments($_type, $_owner)
+	{
+		global $config;
+		$list = $this->getFiles($_type,  $_owner);
+
+		if (count($list)) {
+			echo '<hr/>';
+			echo 'Attached files:<br/>';
+			foreach ($list as $row) {
+				$show_text = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
+				echo '<a href="'.$config['core_web_root'].'api/file_pt.php?id='.$row['fileId'].getProjectPath().'" target="_blank">';
+				if (in_array($row['fileMime'], $this->image_mime_types)) {
+					echo makeThumbLink($row['fileId'], $show_text).'</a> ';
+				} else {
+					echo $show_text.'</a><br/>';
+				}
+			}
+		}
 	}
 
 	function deleteFile($_id)
@@ -702,15 +724,21 @@ class Files
 
 	function getFiles($fileType, $ownerId, $categoryId = 0)
 	{
-		global $db;
+		global $db, $session;
 
-		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return array();
+		if (!$session->id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return array();
+		
+		if ($fileType == FILETYPE_FORUM) {
+			$q  = 'SELECT * FROM tblFiles ';
+			$q .= 'WHERE fileType='.$fileType.' AND ownerId='.$ownerId.' AND uploaderId='.$session->id;
 
-		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
-		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
-		$q .= 'WHERE t1.categoryId='.$categoryId.' AND t1.ownerId='.$ownerId;
-		if ($fileType) $q .= ' AND t1.fileType='.$fileType;
-		$q .= ' ORDER BY t1.timeUploaded ASC';
+		} else {
+			$q  = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
+			$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
+			$q .= 'WHERE t1.categoryId='.$categoryId.' AND t1.ownerId='.$ownerId;
+			$q .= ' AND t1.fileType='.$fileType;
+			$q .= ' ORDER BY t1.timeUploaded ASC';
+		}
 		return $db->getArray($q);
 	}
 

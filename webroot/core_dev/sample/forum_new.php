@@ -2,6 +2,8 @@
 	/*
 		forum_new.php - Create new forum threads and posts
 		
+		fixme: are the below documentation still accurate?
+		
 		The script takes one parameter "id", which specifies the parent ID.
 		
 		Parent ID = 0 means: create a top level category (admins only)
@@ -10,9 +12,9 @@
 		Parent ID = thread means: create a post (everyone)
 
 		Vocabulary:
-		category: A top level container, which contains folders
-		forum: A container with parent = a category, which contains threads
-		thread: A whole discussion is refered as a "thread"
+		root level category: A top level container, which contains forums
+		forum: A container inside a root level forum, which contains topics
+		topic: A whole discussion is refered as a "topic"
 		post: A discussion contains one or more posts
 
 		if _GET['q'] is set, this is the forum post to quote
@@ -55,7 +57,7 @@
 	if (!empty($_POST['subject']) || !empty($_POST['body'])) {
 
 		if (strlen($writeBody) <= $config['forum']['maxsize_body']) {
-			if ($_SESSION['isAdmin'] && ($itemId == 0 || $item['parentId'] == 0)) {
+			if ($session->isAdmin && ($itemId == 0 || $item['parentId'] == 0)) {
 				//Create category or a forum
 				if ($writeSubject) {
 					$createdId = addForumFolder($itemId, $writeSubject, $writeBody);
@@ -72,8 +74,14 @@
 					$forum_error = 'You must write a topic!';
 				} else {
 					$sticky = 0;
-					if ($_SESSION['isAdmin'] && !empty($_POST['sticky'])) $sticky = $_POST['sticky'];
+					if ($session->isAdmin && !empty($_POST['sticky'])) $sticky = $_POST['sticky'];
 					$createdId = addForumMessage($itemId, $writeSubject, $writeBody, $sticky);
+					
+					if ($createdId) {
+						//attach all FILETYPE_FORUM ownerId =0 to this id
+						$q = 'UPDATE tblFiles SET ownerId='.$createdId.' WHERE fileType='.FILETYPE_FORUM.' AND ownerId=0 AND uploaderId='.$session->id;
+						$db->update($q);
+					}
 
 					header('Location: forum.php?id='.$itemId.'#post'.$createdId);
 					die;	
@@ -106,8 +114,8 @@
 
 	if (!empty($forum_error)) echo '<div class="critical">'.$forum_error.'</div>';
 
-	echo '<form method="post" name="newpost" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
-
+	echo '<form method="post" name="newpost" enctype="multipart/form-data" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
+	
 	if ($itemId == 0) {
 		//Create root level category (admins only)
 		echo 'Forum - Add new root level category<br/><br/>';
@@ -136,19 +144,34 @@
 		//Create a post (everyone)
 		echo getForumDepthHTML(FORUM_FOLDER, $itemId).' - Add a response to this post<br/><br/>';
 		echo showForumPost($item, '', false);
+
+		//handle file upload
+		if (!empty($_FILES['file1'])) {
+			$files->handleUpload($_FILES['file1'], FILETYPE_FORUM, 0);	
+		}
+		
+		$files->showAttachments(FILETYPE_FORUM, 0);
+
+		echo '<div id="forum_new_attachment">';
+		echo 'Attach a file: ';
+		echo '<input type="file" name="file1"/>';
+		echo '<input type="submit" class="button" value="Upload"/> ';
+		echo '</div>';
+
 		echo '<textarea name="body" cols="60" rows="14">'.$writeBody.'</textarea><br/><br/>';
 	}
 
 	$item = getForumItem($itemId);
 
 	echo '<br/>';
+
 	echo '<input type="submit" class="button" value="Save"/> ';
 
 /*
 	if (!isSubscribed($itemId, SUBSCRIBE_MAIL)) {
-		$content .= '<input name="subscribehere" type="checkbox" class="checkbox">Overv&aring;ke tr&aring;d';
+		$content .= '<input name="subscribehere" type="checkbox" class="checkbox">Subscribe to topic';
 	} else {
-		$content .= '<span class="objectCritical">Du har redan en bevakning h&auml;r eller h&ouml;gre upp i diskussionstr&aring;den</span>';
+		$content .= '<div class="critical">You are already subscribed to this topic</div>';
 	}
 */
 	echo '</form><br/>';

@@ -3,9 +3,13 @@
 
 
 	forum:
+					* för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
+						gör ett sh-script som körs veckovis för detta (för /etc/cron.weekly på linux-db server)
+						eller går det göra ett php script som körs med +x i linux? =)
+					
 		- använd pager i forum_search.php, och i diskussionstrådlistning & översikt
 		- kontrollera att automoderering & anmälan fungerar
-		- kolla hur det är med bevakningar. kunna få bevakning via instant mess, eller via ett separat meddelandesystem (generellare & långsiktigare lösning)
+		- kolla hur det är med bevakningar. kunna få bevakning via ett separat meddelandesystem (liknande helgon)
 
 
 	omröstningar/undersökningar:
@@ -184,6 +188,10 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.06.18
 	- forum wip
+	- forum file attachments
+	- forum_new.php: kan lägga till en fil i taget. fileType=FILE_FORUM, ownerId=0
+	- forum_new.php: om man submittar en fil innan forum-inlägget har skrivits så ska man komma tillbaka till samma add-post dialog
+		så att man kan attacha flera filer innan man fyller i inlägget
 
 
 2007.06.14:

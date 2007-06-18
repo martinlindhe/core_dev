@@ -330,7 +330,7 @@
 			echo '<tr>';
 			echo '<th width="40"></th>';	//for icons
 			echo '<th>Forum</th>';
-			echo '<th width="200" align="center">Last post</th>';
+			echo '<th width="200" align="center">Last topic</th>';
 			echo '<th width="70" align="center">Topics</th>';
 			echo '<th width="70" align="center">Posts</th>';
 			echo '</tr>';
@@ -554,7 +554,7 @@
 
 	function showForumPost($item, $islocked = false)
 	{
-		global $session, $config;
+		global $session, $files, $config;
 
 		$subject = formatUserInputText($item['itemSubject']);
 		$body = formatUserInputText($item['itemBody']);
@@ -591,7 +591,9 @@
 
 		echo $body;
 		$signature = loadUserdataSetting($session->id, $config['settings']['default_signature']);
-		if ($signature) echo '<hr/>'.$signature;
+		if ($signature) echo '<hr/>'.$signature.'<br>';
+
+		$files->showAttachments(FILETYPE_FORUM, $item['itemId']);
 		echo '</td>';
 
 		echo '<td width="120" valign="top" class="forum_item_text">';
@@ -842,8 +844,15 @@
 				echo '<a href="forum_delete.php?id='.$_id.'">Delete forum</a><br/>';
 			}
 		} else {
+			
+			echo '<a href="forum_new.php?id='.$_id.'">Post response</a>';
+			echo '<br/><br/>';
+
 			//display flat discussion overview
 			echo displayDiscussionContentFlat($_id);
+
+			echo '<br/>';
+			echo '<a href="forum_new.php?id='.$_id.'">Post response</a>';
 		}
 	}
 ?>
