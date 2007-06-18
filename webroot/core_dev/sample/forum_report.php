@@ -13,7 +13,7 @@
 	if (isset($_POST['motivation'])) {
 
 		/* Rapportera inlägget till abuse */
-		$queueId = addToModerationQueue($itemId, MODERATION_REPORTED_POST);
+		$queueId = addToModerationQueue(MODERATION_FORUM, $itemId);
 		addComment(COMMENT_MODERATION_QUEUE, $queueId, $_POST['motivation']);
 
 		header('Location: forum.php?id='.$item['parentId']);

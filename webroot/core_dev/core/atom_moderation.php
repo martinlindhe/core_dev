@@ -22,6 +22,7 @@
 	//define('MODERATION_REPORTED_PHOTO',				12);
 
 	define('MODERATION_GUESTBOOK',	11);	//itemId = tblGuestbook.entryId
+	define('MODERATION_FORUM',			12);	//itemId = tblForum.itemId
 	define('MODERATION_BLOG',				13);
 
 
@@ -228,6 +229,16 @@
 
 		$q = 'UPDATE tblModerationQueue SET moderatedBy='.$session->id.',timeModerated=NOW() WHERE queueId='.$queueId;
 		$db->query($q);
+	}
+	
+	//really deletes from moderation queue, used when deleting forum threads
+	function removeFromModerationQueueByType($_type, $itemId)
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($itemId)) return false;
+		
+		$q = 'DELETE FROM tblModerationQueue WHERE  queueType='.$_type.' AND itemId='.$itemId;
+		$db->delete($q);
 	}
 
 ?>

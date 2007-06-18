@@ -5,14 +5,12 @@
 	$config['forum']['allow_votes'] = false;
 	$config['forum']['maxsize_body'] = 5000;	//max number of characters in a forum post
 	$config['forum']['search_results_per_page'] = 5;
+	
+	$config['forum']['moderation'] = false;
 
 
 	/*
 		functions_forums.php - Funktioner för forum
-
-		//todo: släng bort massa funktioner som inte används
-		//ta bort fileId från tblForums
-		//eventuellt: omprogrammering och använd itemType ordentligt! type skulle kunna vara: category, folder, thread, post, sticky, announcement
 	*/
 
 
@@ -129,14 +127,13 @@
 	function forumItemIsDiscussion($itemId)
 	{
 		global $db;
-		/* If the parentId is a folder and itemId is a message, then it is a discussion! */
-
 		if (!is_numeric($itemId)) return false;
 
 		$q = 'SELECT itemType, parentId FROM tblForums WHERE itemId='.$itemId;
 		$row = $db->getOneRow($q);
 
 		if ($row['itemType'] == FORUM_MESSAGE) {
+			/* If the parentId is a folder and itemId is a message, then it is a discussion! */
 			if (forumItemIsFolder($row['parentId'])) return true;
 			return false;
 		}
@@ -168,7 +165,6 @@
 	function addForumMessage($parentId, $subject, $body, $sticky = 0)
 	{
 		global $db, $session, $config;
-
 		if (!$session->id || !is_numeric($parentId) || !is_numeric($sticky)) return false;
 
 		$body = strip_tags($body);
@@ -182,8 +178,7 @@
 		$itemId = $db->insert($q);
 
 		/* Auto-moderate */
-		if (isObjectionable($subject) || isObjectionable($body)) addToModerationQueue($itemId, MODERATION_OBJECTIONABLE_POST);
-		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue($itemId, MODERATION_SENSITIVE_POST);
+		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_FORUM, $itemId, true);
 
 		/* Check if there is any users who should be notified about this new message */
 		//notifySubscribers($parentId, $itemId, SUBSCRIBE_MAIL);
@@ -265,6 +260,7 @@
 	{
 		global $db;
 		if (!is_numeric($itemId) || !is_numeric($sticky)) return false;
+
 		$subject = $db->escape($subject);
 		$body = $db->escape($body);
 
@@ -422,10 +418,10 @@
 	}
 
 	/* Returns the total number of posts contained in all the threads with parentId=$itemId */
+	//fixme: kanske byta namn på funktionen
 	function getForumThreadContentCount($itemId)
 	{
 		global $db;
-		//fixme: kanske byta namn på funktionen
 		if (!is_numeric($itemId)) return false;
 
 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId;
@@ -676,10 +672,11 @@
 	function getForumSearchResults($criteria, $method, $page, $limit)
 	{
 		global $db;
-		$criteria = $db->escape($criteria);
 		if (!is_numeric($page) || !is_numeric($limit)) return false;
 
 		if (!$criteria || !$method || !$page || !$limit) return false;
+
+		$criteria = $db->escape($criteria);
 
 		$list = explode(' ', $criteria);
 
@@ -707,8 +704,9 @@
 	function getForumSearchResultsCount($criteria)
 	{
 		global $db;
-		$criteria = $db->escape($criteria);
 		if (!$criteria) return false;
+
+		$criteria = $db->escape($criteria);
 
 		$list = explode(' ', $criteria);
 
@@ -722,7 +720,7 @@
 	function getForumSearchQuery($list)
 	{
 		$sql = '';
-		for ($i=0; $i<count($list); $i++) {
+		for ($i=0; $i<count($list); $i++) {	//fixme: foreach
 
 			$curr = $list[$i];
 			if (substr($curr,0,1) == '+') {
@@ -783,7 +781,7 @@
 			$q = 'DELETE FROM tblForums WHERE itemId='.$row['itemId'];
 			$db->delete($q);
 
-			//removeFromModerationQueueByItemId($row['itemId'], MODERATION_REPORTED_POST);
+			removeFromModerationQueueByType(MODERATION_FORUM, $row['itemId']);
 			deleteForumItemRecursive($row['itemId'], true);
 		}
 
@@ -791,7 +789,7 @@
 			$q = 'DELETE FROM tblForums WHERE itemId='.$itemId;
 			$db->delete($q);
 
-			//removeFromModerationQueueByItemId($itemId, MODERATION_REPORTED_POST);
+			removeFromModerationQueueByType(MODERATION_FORUM, $itemId);
 		}
 	}
 

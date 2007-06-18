@@ -78,6 +78,7 @@
 			switch ($row['queueType']) {
 				case MODERATION_GUESTBOOK:$title = 'Guestbook entry'; break;
 				case MODERATION_BLOG:			$title = 'Blog'; break;
+				case MODERATION_FORUM:		$title = 'Forum'; break;
 				default: $title = '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 			}
 			echo '<div class="item_head">'.$title;

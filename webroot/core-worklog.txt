@@ -8,7 +8,6 @@
 						eller går det göra ett php script som körs med +x i linux? =)
 					
 		- använd pager i forum_search.php, och i diskussionstrådlistning & översikt
-		- kontrollera att automoderering & anmälan fungerar
 		- kolla hur det är med bevakningar. kunna få bevakning via ett separat meddelandesystem (liknande helgon)
 
 
@@ -192,6 +191,7 @@ X = hi prio task
 	- forum_new.php: kan lägga till en fil i taget. fileType=FILE_FORUM, ownerId=0
 	- forum_new.php: om man submittar en fil innan forum-inlägget har skrivits så ska man komma tillbaka till samma add-post dialog
 		så att man kan attacha flera filer innan man fyller i inlägget
+	- forum automoderering & anmälan fungerar
 
 
 2007.06.14:
