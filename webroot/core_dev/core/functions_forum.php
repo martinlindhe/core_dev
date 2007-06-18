@@ -5,6 +5,8 @@
 	$config['forum']['allow_votes'] = false;
 	$config['forum']['maxsize_body'] = 5000;	//max number of characters in a forum post
 	$config['forum']['search_results_per_page'] = 5;
+	$config['forum']['topics_per_page'] = 20;
+	$config['forum']['posts_per_page'] = 25;
 	
 	$config['forum']['moderation'] = false;
 
@@ -26,7 +28,7 @@
 
 		$q  = 'SELECT t1.*,t2.userName AS authorName ';
 		$q .= 'FROM tblForums AS t1 ';
-		$q .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
 		$q .= 'WHERE t1.itemId='.$itemId.' AND t1.deletedBy=0';
 
 		return $db->getOneRow($q);
@@ -42,7 +44,7 @@
 	}
 
 	/* Returns all items inside $itemId */
-	function getForumItems($itemId = 0, $asc_order = true)
+	function getForumItems($itemId = 0, $asc_order = true, $limit = '')
 	{
 		global $db;
 		if (!is_numeric($itemId) ||!is_bool($asc_order)) return false;
@@ -54,7 +56,7 @@
 		$q .= 'ORDER BY t1.itemType ASC,t1.sticky DESC,';
 		if ($asc_order) $q .= 't1.timeCreated ASC';
 		else $q .= 't1.timeCreated DESC';
-		$q .= ',t1.itemSubject ASC';
+		$q .= ',t1.itemSubject ASC'.$limit;
 
 		return $db->getArray($q);
 	}
@@ -83,7 +85,7 @@
 		global $db;
 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
 
-		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.'AND deletedBy=0';
+		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';
 
 		$arr = $db->getArray($q);
 
@@ -229,7 +231,7 @@
 		$q  = 'SELECT t1.*,t2.userName AS authorName,t3.itemSubject AS parentSubject ';
 		$q .= 'FROM tblForums AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-		$q .= 'LEFT OUTER JOIN tblForums AS t3 ON (t1.itemSubject="" AND t1.parentId=t3.itemId) ';
+		$q .= 'LEFT JOIN tblForums AS t3 ON (t1.itemSubject="" AND t1.parentId=t3.itemId) ';
 		$q .= 'WHERE t1.itemType='.FORUM_MESSAGE.' AND t1.deletedBy=0 ';
 		$q .= 'ORDER BY t1.timeCreated DESC ';
 		$q .= 'LIMIT 0,'.$count;
@@ -445,7 +447,12 @@
 		echo '<div class="forum_overview_group">';
 
 		$data = getForumItem($itemId);
-		$list = getForumItems($itemId, false);
+		$tot_cnt = getForumItemCountFlat($itemId);
+
+		$pager = makePager($tot_cnt, $config['forum']['topics_per_page']);
+		$list = getForumItems($itemId, false, $pager['limit']);
+
+		echo $pager['head'];
 
 		echo '<div class="forum_header">'.getForumDepthHTML(FORUM_FOLDER, $itemId).'</div>';
 		echo '<br/>';
@@ -505,7 +512,7 @@
 					echo '<a href="forum.php?id='.$lastpost['itemId'].'#post'.$lastpost['itemId'].'">'.$subject.'</a><br/>';
 				} else {
 					//This is a post (a reply to a topic)
-					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"><img src="'.$config['core_web_root'].'gfx/icon_forum_post.png"/></a> ';
+					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"><img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
 				}
 				echo 'by '.nameLink($lastpost['userId'], $lastpost['userName']).'<br/>';
 				echo $lastpost['timeCreated'];
@@ -634,7 +641,7 @@
 		echo '</table><br/>';
 	}
 
-	function displayDiscussionContentFlat($itemId)
+	function displayTopicFlat($itemId)
 	{
 		global $db, $config;
 		if (!is_numeric($itemId)) return false;
@@ -642,26 +649,31 @@
 		echo '<div class="forum_overview_group">';
 		echo getForumDepthHTML(FORUM_MESSAGE, $itemId).'<br/><br/>';
 
-		//first post:
 		$item = getForumItem($itemId);
+		
 		showForumPost($item);
 
-		//list replies:
-		$list = getForumItems($itemId);
+		$tot_cnt = getForumItemCountFlat($itemId);
+		$pager = makePager($tot_cnt, $config['forum']['posts_per_page']);
+		
+		$list = getForumItems($itemId, true, $pager['limit']);	//get replies
 
-		for ($i=0; $i<count($list); $i++) {
-			showForumPost($list[$i], $item['locked']);
+		echo $pager['head'];
+
+		if ($list) {
+			foreach ($list as $row) {
+				showForumPost($row, $item['locked']);
+			}
 		}
 		echo '</div>';
 	}
 
 	/* Returns a list of search results with forum items */
-	function getForumSearchResults($criteria, $method, $page, $limit)
+	function getForumSearchResults($criteria, $method, $limit = '')
 	{
 		global $db;
-		if (!is_numeric($page) || !is_numeric($limit)) return false;
 
-		if (!$criteria || !$method || !$page || !$limit) return false;
+		if (!$criteria || !$method) return false;
 
 		$criteria = $db->escape($criteria);
 
@@ -682,7 +694,7 @@
 				$q .= 'ORDER BY t1.timeCreated DESC '; break;
 		}
 
-		$q .= 'LIMIT '.(($page-1) * $limit).','.$limit;
+		$q .= $limit;
 
 		return $db->getArray($q);
 	}
@@ -836,7 +848,7 @@
 			echo '<br/><br/>';
 
 			//display flat discussion overview
-			echo displayDiscussionContentFlat($_id);
+			echo displayTopicFlat($_id);
 
 			echo '<br/>';
 			echo '<a href="forum_new.php?id='.$_id.'">Post response</a>';
