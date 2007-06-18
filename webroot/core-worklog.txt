@@ -1,5 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
+		- varför går reported user till feedback. det borde gå till moderation
+		- möjlighet att adda user från admin_list_users, där user-add INTE checkas mot reserved stopwords!
 
 
 	forum:
