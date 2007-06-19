@@ -57,7 +57,7 @@
 <? }
 
 	if(defined('U_VISIT')) {
-		$res = $db->getArray('SELECT o.visit_date, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd FROM s_uservisit o INNER JOIN s_user u ON u.id_id = o.visitor_id AND u.status_id = "1" WHERE o.user_id = "'.$s['id_id'].'" ORDER BY o.main_id DESC LIMIT "'.(isset($_GET['more'])?'10':'5'));
+		$res = $db->getArray('SELECT o.visit_date, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picvalid, u.u_picid, u.u_picd FROM s_uservisit o INNER JOIN s_user u ON u.id_id = o.visitor_id AND u.status_id = "1" WHERE o.user_id = "'.$s['id_id'].'" ORDER BY o.main_id DESC LIMIT '.(isset($_GET['more'])?'10':'5'));
 		echo '<a name="visit"></a>';
 		if ($own && $user->vip_check(VIP_LEVEL2)) {
 			echo '<div class="smallHeader">besökare (<a href="'.l('user', 'view', $s['id_id']).(!isset($_GET['more'])?'&amp;more#visit">fler':'#visit">färre').'</a>)</div>';

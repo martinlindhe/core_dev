@@ -163,6 +163,7 @@ function stripzero($str) {
 	if(substr($str, 0, 1) == '0') $str = substr($str, 1, 1);
 	return $str;
 }
+/*
 function execSt($end = 0, $notset = 0) {
 	global $start;
 	if(!$end) {
@@ -173,6 +174,7 @@ function execSt($end = 0, $notset = 0) {
 		echo substr((execSt(0, 1) - $start),0,10);
 	}
 }
+*/
 function secureINS($str) {
 	return addslashes($str);
 }

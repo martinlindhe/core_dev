@@ -24,6 +24,7 @@ setlocale(LC_TIME, 'sv_SE.ISO-8859-1');
 //define('CS', '/cs_dev/');
 $config['web_root'] = '/cs_dev/';
 $config['core_root'] = 'D:/devel/webroot/cs_dev/';
+$config['core_web_root'] = '/core_dev/';
 
 
 define('OBJ', $config['web_root'].'_objects/');
@@ -57,7 +58,8 @@ $sex_name = array('M' => 'man', 'F' => 'kvinna');
 define("STATSTR", "listar <b>%1\$d</b> - <b>%2\$d</b> (totalt: <b>%3\$d</b>)");
 
 	require('functions/main.fnc.php');
-	execSt();
+	//execSt();
+	$time_start = microtime(true);
 	
 /*
 define('SQL_U', 'cs_user');
