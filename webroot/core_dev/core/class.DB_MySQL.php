@@ -37,7 +37,7 @@ class DB_MySQL extends DB_Base
 
 		mysql_select_db($this->database, $this->db_handle);
 
-		$this->query('SET NAMES utf8');
+		$this->query('SET NAMES '.$this->charset);
 
 		$this->db_driver = 'DB_MySQL';
 		$this->dialect = 'mysql';
@@ -52,7 +52,7 @@ class DB_MySQL extends DB_Base
 		echo 'Host info: '.mysql_get_host_info($this->db_handle).'<br/>';
 		echo 'Connection character set: '.mysql_client_encoding($this->db_handle).'<br/>';
 		echo 'Last error: '.mysql_error($this->db_handle).'<br/>';
-		echo 'Last errno: '.mysql_errno($this->db_handle).'<br/><br/>';
+		echo 'Last errno: '.mysql_errno($this->db_handle);
 	}
 
 	function escape($q)

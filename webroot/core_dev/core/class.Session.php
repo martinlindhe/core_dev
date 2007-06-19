@@ -185,12 +185,9 @@ class Session
 	function registerUser($username, $password1, $password2, $userMode = 0)
 	{
 		global $db, $config;
-
 		if (!is_numeric($userMode)) return false;
 
-		$username = trim($username);
-		$password1 = $password1;
-		$password2 = $password2;
+		if ($username != trim($username)) return 'Username contains invalid spaces';
 
 		if (($db->escape($username) != $username) || ($db->escape($password1) != $password1)) {
 			//if someone tries to enter ' or " etc as username/password letters
@@ -198,20 +195,16 @@ class Session
 			return 'Username or password contains invalid characters';
 		}
 
-		if ($password1 && $password2 && ($password1 != $password2)) {
-			return 'The passwords doesnt match';
-		}
-
 		if (strlen($username) < 3) return 'Username must be at least 3 characters long';
 		if (strlen($password1) < 4) return 'Password must be at least 4 characters long';
+
+		if ($password1 != $password2) return 'The passwords doesnt match';
 
 		if (isReservedUsername($username)) return 'Username is not allowed';
 
 		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
 		$checkId = $db->getOneItem($q);
-		if ($checkId) {
-			return 'Username already exists';
-		}
+		if ($checkId) return 'Username already exists';
 
 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
 		$newUserId = $db->insert($q);

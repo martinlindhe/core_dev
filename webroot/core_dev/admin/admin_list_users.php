@@ -14,12 +14,22 @@
 	$list = getUsers($mode);
 
 	if ($session->isSuperAdmin && !empty($_POST)) {
-		for ($i=0; $i<count($list); $i++) {
-			if ($_POST['mode_'.$list[$i]['userId']] != $list[$i]['userMode']) {
-				setUserMode($list[$i]['userId'], $_POST['mode_'.$list[$i]['userId']]);
-				$list[$i]['userMode'] = $_POST['mode_'.$list[$i]['userId']];
+		foreach ($list as $row) {
+			$newmode = $_POST['mode_'.$row['userId']];
+			if ($newmode != $row['userMode']) {
+				setUserMode($row['userId'], $newmode);
 			}
 		}
+		
+		if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && !empty($_POST['u_mode'])) {
+			$newUserId = $session->registerUser($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
+			if (!is_numeric($newUserId)) {
+				echo '<div class="critical">'.$newUserId.'</div>';
+			} else {
+				echo '<div class="okay">New user created. Go to user page: '.nameLink($newUserId, $_POST['u_name']).'</div>';
+			}
+		}
+		$list = getUsers($mode);
 	}
 
 	if ($session->isSuperAdmin) echo '<form method="post" action="">';
@@ -49,6 +59,21 @@
 		echo '</td>';
 		echo '</tr>';
 	}
+	echo '<tr>';
+	echo '<td colspan="3">Add user: <input type="text" name="u_name"/> - pwd: <input type="text" name="u_pwd"/></td>';
+	echo '<td>';
+		if ($session->isSuperAdmin) {
+			echo '<select name="u_mode">';
+			echo '<option value="0">&nbsp;</option>';
+			echo '<option value="0">Normal</option>';
+			echo '<option value="1">Admin</option>';
+			echo '<option value="2">Super admin</option>';
+			echo '</select>';
+		} else {
+			echo 'normal user';
+		}
+	echo '</td>';
+	echo '</tr>';
 	echo '</table>';
 
 	if ($session->isSuperAdmin) {

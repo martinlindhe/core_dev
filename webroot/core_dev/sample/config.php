@@ -1,4 +1,5 @@
 <?
+	//apd_set_pprof_trace();
 	$time_start = microtime(true);
 
 	error_reporting(E_ALL);

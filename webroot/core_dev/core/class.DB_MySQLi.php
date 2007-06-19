@@ -33,8 +33,8 @@ class DB_MySQLi extends DB_Base
 			else die;
 		}
 
-		if (!$this->db_handle->set_charset('utf8')) {
-			die('Error loading character set utf8: '.$this->db_handle->error);
+		if (!$this->db_handle->set_charset($this->charset)) {
+			die('Error loading character set '.$this->charset.': '.$this->db_handle->error);
 		}
 
 		$this->db_driver = 'DB_MySQLi';
@@ -50,7 +50,7 @@ class DB_MySQLi extends DB_Base
 		echo 'Host info: '.$this->db_handle->host_info.'<br/>';
 		echo 'Connection character set: '.$this->db_handle->character_set_name().'<br/>';
 		echo 'Last error: '.$this->db_handle->error.'<br/>';
-		echo 'Last errno: '.$this->db_handle->errno.'<br/><br/>';
+		echo 'Last errno: '.$this->db_handle->errno;
 	}
 
 	function escape($q)

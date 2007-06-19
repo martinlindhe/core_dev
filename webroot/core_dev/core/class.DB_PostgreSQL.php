@@ -34,6 +34,8 @@ class DB_PostgreSQL extends DB_Base
 
 			die('<bad>Database connection error.</bad>');
 		}
+		
+		//fixme: set charset if it is not utf8 (will be the default anyways if none is specified)
 
 		$this->db_driver = 'DB_PostgreSQL';
 		$this->dialect = 'pgsql';
@@ -50,7 +52,7 @@ class DB_PostgreSQL extends DB_Base
 		echo 'Server encoding: '.pg_parameter_status($this->db_handle, 'server_encoding').'<br/>';
 		echo 'Client encoding: '.pg_parameter_status($this->db_handle, 'client_encoding').'<br/>';
 		echo 'Last error: '.pg_last_error($this->db_handle).'<br/>';
-		echo 'Last notice: '.pg_last_notice($this->db_handle).'<br/>';
+		echo 'Last notice: '.pg_last_notice($this->db_handle);
 	}
 
 	function escape($q)

@@ -1,9 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
 		- varför går reported user till feedback. det borde gå till moderation
-		- möjlighet att adda user från admin_list_users, där user-add INTE checkas mot reserved stopwords!
-		- db driver: gör "set names utf8" optional, default on, så db driver kan användas omodifierad till cs
-		- db driver: anropa $db->profile() för att sätta $time_start & håll den internt istället för att göra det i config.php
 
 
 	forum:
@@ -188,6 +185,13 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.19
+	- db driver: gjorde "set names utf8" optional, default on, så db driver kan användas omodifierad till cs
+	- admin: kan nu adda user från admin_list_users, där user-add INTE checkas mot reserved stopwords!
+	- LICENCE.BSD added
+
+
+
 2007.06.18
 	- forum wip
 	- forum file attachments

@@ -238,8 +238,7 @@
 		}
 		sendMessage($_id, 'System message', $msg);
 
-		$session->log('Set '.getUserName($_id).' usermode to '.$_mode);
-
+		$session->log('Changed usermode for '.getUserName($_id).' to '.$_mode);
 		return true;
 	}
 
