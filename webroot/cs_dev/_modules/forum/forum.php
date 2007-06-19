@@ -1,8 +1,8 @@
 <?
-	$res = $sql->query("SELECT main_id, main_ttl FROM {$t}ftopic f WHERE f.status_id = '1' ORDER BY f.order_id", 0, 1);
-	$last = $sql->query("SELECT f.main_id, f.topic_id, f.top_id, f.view_id, f.parent_id, CONCAT(SUBSTRING(f.sent_cmt, 1, 50), '...') as sent_cmt, f.sent_date, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, p.sent_ttl as main_ttl FROM ({$t}f f, {$t}f p) RIGHT JOIN {$t}ftopic t ON t.main_id = f.topic_id  AND t.status_id = '1' LEFT JOIN {$t}user u ON u.id_id = f.sender_id AND u.status_id = '1' WHERE f.status_id = '1' AND f.view_id = '1' AND p.main_id = f.top_id AND p.status_id = '1' ORDER BY f.main_id DESC LIMIT 30", 0, 1);
-	$own = $sql->query("SELECT o.main_id, o.top_id, o.sent_ttl, o.sent_date FROM {$t}f o INNER JOIN {$t}f p ON p.main_id = o.top_id AND p.status_id = '1' WHERE o.sender_id = '".secureINS($l['id_id'])."' AND o.status_id = '1' AND o.view_id = '1' ORDER BY o.main_id DESC LIMIT 5");
-	require(DESIGN."head.php");
+	$res = $db->getArray('SELECT main_id, main_ttl FROM s_ftopic f WHERE f.status_id = "1" ORDER BY f.order_id');
+	$last = $db->getArray('SELECT f.main_id, f.topic_id, f.top_id, f.view_id, f.parent_id, CONCAT(SUBSTRING(f.sent_cmt, 1, 50), "...") as sent_cmt, f.sent_date, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, p.sent_ttl as main_ttl FROM (s_f f, s_f p) RIGHT JOIN s_ftopic t ON t.main_id = f.topic_id  AND t.status_id = "1" LEFT JOIN s_user u ON u.id_id = f.sender_id AND u.status_id = "1" WHERE f.status_id = "1" AND f.view_id = "1" AND p.main_id = f.top_id AND p.status_id = "1" ORDER BY f.main_id DESC LIMIT 30');
+	$own = $db->getArray('SELECT o.main_id, o.top_id, o.sent_ttl, o.sent_date FROM s_f o INNER JOIN s_f p ON p.main_id = o.top_id AND p.status_id = "1" WHERE o.sender_id = '.secureINS($l['id_id']).' AND o.status_id = "1" AND o.view_id = "1" ORDER BY o.main_id DESC LIMIT 5');
+	require(DESIGN.'head.php');
 ?>
 
 <script type="text/javascript">
@@ -22,8 +22,8 @@ function openText(id, fid) {
 	$r = 0;
 	$nl = false;
 	foreach($res as $row) {
-		$c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}f WHERE topic_id = '".secureINS($row['main_id'])."' AND parent_id = '0' AND status_id = '1'");
-		$d = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}f WHERE topic_id = '".secureINS($row['main_id'])."' AND parent_id != '0' AND status_id = '1'");
+		$c = $db->getOneItem('SELECT COUNT(*) FROM s_f WHERE topic_id = '.secureINS($row['main_id']).' AND parent_id = "0" AND status_id = "1"');
+		$d = $db->getOneItem('SELECT COUNT(*) FROM s_f WHERE topic_id = '.secureINS($row['main_id']).' AND parent_id != "0" AND status_id = "1"');
 		if($i && $nl) { echo '</tr><tr>'; $nl = false; $i = 0; $r++; }
 		echo '
 			<td>

@@ -1,6 +1,4 @@
 <?
-	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
-
 	if(isset($_GET['write'])) {
 		include('blog_write.php');
 		exit;
@@ -25,18 +23,18 @@
 		exit;
 	}
 	if(!empty($_GET['d'])) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt FROM {$t}userblog WHERE main_id = '".secureINS($_GET['d'])."' LIMIT 1", 1);
+		$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt FROM s_userblog WHERE main_id = '".secureINS($_GET['d'])."' LIMIT 1", 1);
 		if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $l['id_id']) {
 			errorACT('Felaktigt inlägg.', l('user', 'blog', $s['id_id']));
 		} else {
-			$sql->queryUpdate("UPDATE {$t}userblog SET status_id = '2' WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userblog SET status_id = '2' WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			$user->counterDecrease('blog', $l['id_id']);
 			reloadACT(l('user', 'blog', $s['id_id']));
 		}
 	}
 	$paging = paging(@$_GET['p'], 10);
-	$res = $sql->query("SELECT main_id, blog_title, blog_cmts, blog_date, hidden_id, blog_visit FROM {$t}userblog WHERE user_id = '".$s['id_id']."' AND status_id = '1' ORDER BY main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
-	$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userblog WHERE user_id = '".$s['id_id']."' AND status_id = '1'");
+	$res = $db->getArray('SELECT main_id, blog_title, blog_cmts, blog_date, hidden_id, blog_visit FROM s_userblog WHERE user_id = '.$s['id_id'].'" AND status_id = "1" ORDER BY main_id DESC LIMIT '.$paging['slimit'].', '.$paging['limit']);
+	$paging['co'] = $db->getOneItem('SELECT COUNT(*) as count FROM s_userblog WHERE user_id = '.$s['id_id'].' AND status_id = "1"');
 	$page = 'blog';
 
 	require(DESIGN.'head_user.php');

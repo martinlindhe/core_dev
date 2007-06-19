@@ -193,7 +193,7 @@ function blockRightClick(event) {
 				<br/><br/>
 			</div>
 <?
-	$contribute = $sql->queryLine("SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM {$t}contribute c LEFT JOIN {$t}user u ON u.id_id = c.con_user AND u.status_id = '1' WHERE c.con_onday = NOW() AND c.status_id = '1' LIMIT 1", 1);
+	$contribute = $db->getOneRow('SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM s_contribute c LEFT JOIN s_user u ON u.id_id = c.con_user AND u.status_id = "1" WHERE c.con_onday = NOW() AND c.status_id = "1" LIMIT 1');
 	$gotcon = (!empty($contribute) && count($contribute))?true:false;
 ?>
 			<div class="smallHeader">se hit!</div>

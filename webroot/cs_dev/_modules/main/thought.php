@@ -5,7 +5,7 @@
 		if(!empty($_POST['ins_cmt'])) {
 			checkBan(1);
 			if($l) {
-				$ins = $sql->queryInsert("INSERT INTO {$t}thought SET
+				$ins = $sql->queryInsert("INSERT INTO s_thought SET
 				gb_name = '".secureINS($l['u_alias'])."',
 				logged_in = '".secureINS($l['id_id'])."',
 				sess_ip = '".secureINS($_SERVER["REMOTE_ADDR"])."',
@@ -20,11 +20,11 @@
 		} elseif(!empty($_GET['del']) && is_numeric($_GET['del'])) {
 			$do = false;
 			if(!$isAdmin) {
-				$id_id = $sql->queryLine("SELECT status_id, logged_in FROM {$t}thought WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+				$id_id = $sql->queryLine("SELECT status_id, logged_in FROM s_thought WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 				if($id_id[0] == '1' && $id_id[1] == $l['id_id']) $do = true;
 			} else $do = true;
 			if($do) {
-				$sql->queryUpdate("UPDATE {$t}thought SET status_id = '2', view_id = '1' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+				$sql->queryUpdate("UPDATE s_thought SET status_id = '2', view_id = '1' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 			}
 			reloadACT(l('main', 'thought', $paging['p']));
 		}
@@ -39,19 +39,19 @@
 				'LEFT JOIN s_user u2 ON u2.id_id = a.answer_id AND u2.status_id = "1" '.
 				'WHERE u.id_id = a.logged_in AND u.status_id = "1" AND a.status_id = "1"'.
 				'ORDER BY a.gb_date DESC LIMIT '.$paging['slimit'].', '.$paging['limit'];
-		$gb = $sql->query($q, 0, 1);
+		$gb = $db->getArray($q);
 
-		$q = "SELECT COUNT(*) FROM {$t}thought a LEFT JOIN {$t}user u ON u.id_id = a.answer_id AND u.status_id = '1' WHERE a.status_id = '1'";
-		$paging['co'] = $sql->queryResult($q);
+		$q = "SELECT COUNT(*) FROM s_thought a LEFT JOIN s_user u ON u.id_id = a.answer_id AND u.status_id = '1' WHERE a.status_id = '1'";
+		$paging['co'] = $db->getOneItem($q);
 
 	} else {
 		$paging = paging(1, 20);
 		$str = $_POST['s'];
 		if(substr($str, 0, 1) == 't' && is_numeric(substr($str, 1))) {
-			 $gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND a.main_id = '".substr($str, 1)."' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			 $gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM (s_thought a, s_user u) INNER JOIN s_user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND a.main_id = '".substr($str, 1)."' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 			$paging['co'] = count($gb);
 		} else {
-			$gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM ({$t}thought a, {$t}user u) INNER JOIN {$t}user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND (a.gb_name LIKE '%".secureINS($str)."%' OR a.gb_email LIKE '%".secureINS($str)."%' OR a.gb_msg LIKE '%".secureINS($str)."%' OR a.answer_msg LIKE '%".secureINS($str)."%') ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM (s_thought a, s_user u) INNER JOIN s_user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND (a.gb_name LIKE '%".secureINS($str)."%' OR a.gb_email LIKE '%".secureINS($str)."%' OR a.gb_msg LIKE '%".secureINS($str)."%' OR a.answer_msg LIKE '%".secureINS($str)."%') ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 			$paging['co'] = count($gb);
 		}
 	}

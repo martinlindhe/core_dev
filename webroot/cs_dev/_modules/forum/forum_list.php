@@ -2,7 +2,7 @@
 	if(empty($_GET['id']) || !is_numeric($_GET['id'])) {
 		errorACT('Rubriken existerar inte.', l('forum', 'start'));
 	}
-	$r = $sql->queryLine("SELECT main_id, main_ttl, main_cmt, subjects FROM {$t}ftopic f WHERE f.status_id = '1' AND f.main_id = '".@secureINS($_GET['id'])."' LIMIT 1", 1);
+	$r = $db->getOneRow('SELECT main_id, main_ttl, main_cmt, subjects FROM {$t}ftopic f WHERE f.status_id = "1" AND f.main_id = '.@secureINS($_GET['id']).' LIMIT 1');
 	if(empty($r) || !count($r)) {
 		errorACT('Rubriken existerar inte.', l('forum', 'start'));
 	}

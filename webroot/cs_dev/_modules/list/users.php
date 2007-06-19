@@ -1,6 +1,4 @@
 <?
-	require_once('search_users.fnc.php');
-
 	$result = performSearch($id);
 
 	require(DESIGN.'head.php');

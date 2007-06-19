@@ -1,6 +1,5 @@
 <?
 	if($action == 'logout') {
-		include('auth.php');
 		if(!empty($_GET['id']))
 			$user_auth->logout(1);
 		else
@@ -18,16 +17,13 @@
 		include('settings.php');
 		exit;
 	} elseif($action == 'forgot') {
-		include(CONFIG.'validate.fnc.php');
 		include('forgot.php');
 		exit;
 	} elseif($action == 'register') {
-		include(CONFIG.'validate.fnc.php');
 		include('part1.php');
 		exit;
 	} elseif($action == 'activate') {
 		include('auth.php');
-		include(CONFIG.'validate.fnc.php');
 		include("part2.php");
 		exit;
 	} elseif($action == 'update') {

@@ -1,6 +1,4 @@
 <?
-	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
-
 	if(empty($_GET['id']) || !is_numeric($_GET['id'])) {
 		popupACT('Tråden existerar inte.');
 	}

@@ -22,8 +22,9 @@ class user {
 	
 	//kollar ifall aktuell user har tillräckligt med vip
 	function vip_check($_level) {
+		global $db;
 		if (!is_numeric($_level)) return false;
-		$result = $this->sql->queryLine('SELECT level_id FROM s_user WHERE id_id = '.$this->id.' LIMIT 1', 0, 1);
+		$result = $db->getOneItem('SELECT level_id FROM s_user WHERE id_id = '.$this->id.' LIMIT 1');
 		if ($result[0] >= $_level) return true;
 		return false;
 	}
@@ -74,7 +75,8 @@ class user {
 		if($user == $this->id) $this->update_retrieve();
 	}
 	function setRelCount($uid) {
-		$rel_c = $this->sql->queryResult("SELECT COUNT(*) as count FROM s_userrelquest a INNER JOIN s_user u ON u.id_id = a.sender_id AND u.status_id = '1' WHERE a.user_id = '".secureINS($uid)."' AND a.status_id = '0'");
+		global $db;
+		$rel_c = $db->getOneItem('SELECT COUNT(*) FROM s_userrelquest a INNER JOIN s_user u ON u.id_id = a.sender_id AND u.status_id = "1" WHERE a.user_id = '.secureINS($uid).' AND a.status_id = "0"');
 		$id = $this->setinfo($uid, 'rel_count', $rel_c);
 		if($id[0]) $this->setrel($id[1], 'user_retrieve', $uid);
 	}
@@ -86,13 +88,14 @@ class user {
 		$_SESSION['data']['cachestr'] = $this->cachestr();
 	}
 	function fix_img() {
-		$arr = $this->sql->queryLine("SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '".$this->id."' LIMIT 1");
-		if(@$_SESSION['data']['u_picd'] != $arr[0]) @$_SESSION['data']['u_picd'] = $arr[0];
-		if(@$_SESSION['data']['u_picid'] != $arr[1]) @$_SESSION['data']['u_picid'] = $arr[1];
-		if(@$_SESSION['data']['u_picvalid'] != $arr[0]) @$_SESSION['data']['u_picvalid'] = $arr[2];
+		global $db;
+		$arr = $db->getOneRow('SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '.$this->id.' LIMIT 1');
+		if(@$_SESSION['data']['u_picd'] != $arr['u_picd']) @$_SESSION['data']['u_picd'] = $arr['u_picd'];
+		if(@$_SESSION['data']['u_picid'] != $arr['u_picid']) @$_SESSION['data']['u_picid'] = $arr['u_picid'];
+		if(@$_SESSION['data']['u_picvalid'] != $arr['u_picd']) @$_SESSION['data']['u_picvalid'] = $arr['u_picvalid'];
 	}
 	function cachestr($id = '') {
-		global $sex;
+		global $db, $sex;
 		$translater = array('m' => 'm', 'c' => 'c', 'g' => 'g', 'r' => 'v', 's' => 'l');
 		if(empty($id))
 			$id = $this->id;
@@ -101,16 +104,16 @@ class user {
 		foreach($info as $item) {
 			$str .= @($item[0]?$translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
 		}
-		$cha_c = $this->sql->queryResult("SELECT COUNT(DISTINCT(sender_id)) as count FROM s_userchat WHERE user_id = '".secureINS($id)."' AND user_read = '0'");
+		$cha_c = $db->getOneItem('SELECT COUNT(DISTINCT(sender_id)) FROM s_userchat WHERE user_id = "'.secureINS($id).'" AND user_read = "0"');
 		if($cha_c > 0)
-			$cha_id = $this->sql->queryResult("SELECT c.sender_id FROM s_userchat c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = '1' WHERE c.user_id = '".secureINS($id)."' AND c.user_read = '0' ORDER BY c.sent_date ASC LIMIT 1");
+			$cha_id = $db->getOneItem('SELECT c.sender_id FROM s_userchat c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = "1" WHERE c.user_id = "'.secureINS($id).'" AND c.user_read = "0" ORDER BY c.sent_date ASC LIMIT 1');
 		else $cha_id = '';
 		if($cha_id) {
 			$str .= 'c:'.$cha_c.':'.$cha_id;
 		} else {
 			$str .= 'c:0:0';
 		}
-		$rel_onl = $this->sql->query("SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($id)."' AND u.account_date > '".$this->timeout(UO)."' ORDER BY u.u_alias");
+		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = "'.secureINS($id).'" AND u.account_date > "'.$this->timeout(UO).'" ORDER BY u.u_alias');
 		$rel_s = '';
 		foreach($rel_onl as $row) {
 			$rel_s .= $row[0].'|'.rawurlencode($row[1]).'|'.$sex[$row[2]].$this->doage($row[3], 0).'|'.$this->dobirth($row[3]).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
@@ -126,9 +129,10 @@ class user {
 		if(intval($level) >= intval($allowed)) return true; else return false;
 	}
 	function getuser($id, $more = '') {
+		global $db;
 		if(@$_SESSION['c_i'] == $id) return $this->getsessionuser($id);
 		//removed u_picvalid because of a later validation instead of prevalidation.
-		$return = $this->sql->queryLine("SELECT status_id, id_id, u_alias, u_sex, u_picid, u_picd, u_picvalid, u_birth, level_id, account_date, u_pstlan_id, CONCAT(u_pstort, ', ', u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, beta $more FROM s_user WHERE id_id = '".secureINS($id)."' LIMIT 1", 1);
+		$return = $db->getOneRow('SELECT status_id, id_id, u_alias, u_sex, u_picid, u_picd, u_picvalid, u_birth, level_id, account_date, u_pstlan_id, CONCAT(u_pstort, ", ", u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, beta '.$more.' FROM s_user WHERE id_id = '.secureINS($id).' LIMIT 1');
 		return ($return && $return['status_id'] == '1')?$return:false;
 	}
 	function getsessionuser($id) {
@@ -184,7 +188,8 @@ class user {
 		return secureOUT(ucwords(strtolower($str)));
 	}
 	function getcontent($id, $type) {
-		return $this->sql->querybycontent("SELECT o.content_type, o.content, o.main_id FROM s_objrel r LEFT JOIN s_obj o ON o.main_id = r.object_id WHERE r.content_type = '$type' AND r.owner_id = '".secureINS($id)."'");
+		global $db;
+		return $db->getArray('SELECT o.content_type, o.content, o.main_id FROM s_objrel r LEFT JOIN s_obj o ON o.main_id = r.object_id WHERE r.content_type = "'.$type.'" AND r.owner_id = "'.secureINS($id).'"');
 	}
 	//makeover
 	/*function getphoto($line, $valid = false, $small = 0, $admin = false, $string = '', $size = '') {
@@ -411,15 +416,110 @@ class user {
 	function setrel($obj, $type, $id) {
 		$this->sql->queryInsert("INSERT INTO s_objrel SET obj_date = NOW(), content_type = '$type', object_id = '$obj', owner_id = '$id'");
 	}
+	
+	function get_os_($user_agent) {
+		$oses = array (
+		'Windows 3.11' => 'Win16',
+		'Windows 95' => '(Windows 95)|(Win95)|(Windows_95)',
+		'Windows 98' => '(Windows 98)|(Win98)|(Win 9x)',
+		'Windows 2000' => '(Windows NT 5.0)|(Windows 2000)',
+		'Windows XP' => '(Windows NT 5.1)|(Windows XP)',
+		'Windows 2003' => '(Windows NT 5.2)',
+		'Windows NT 4.0' => '(Windows NT 4.0)|(WinNT4.0)|(WinNT)|(Windows NT)|(Windows-NT)',
+		'Windows ME' => 'Windows ME',
+		'Open BSD' => 'OpenBSD',
+		'Sun OS' => 'SunOS',
+		'Linux' => '(Linux)|(X11)',
+		'Macintosh' => '(Mac_PowerPC)|(Macintosh)|(Mac_PPC)',
+		'QNX' => 'QNX',
+		'BeOS' => 'BeOS',
+		'Sony Ericsson' => 'SonyEricsson',
+		'OS/2' => 'OS/2',
+		'Search Bot' => '(nuhk)|(Googlebot)|(Google)|(Yammybot)|(Openbot)|(psbot)|(Slurp/cat)|(msnbot)|(ia_archiver)|(Cerberian Drtrs)',
+		'LG' => 'LG'
+		);
+
+		foreach($oses as $os=>$pattern)
+		{
+			if (eregi($pattern, $user_agent)) return $os;
+		}
+		return 'Unknown';
+	}
+
+	function get_browser_($user_agent) {
+		$browsers = array(
+		'Opera' => 'Opera',
+		'Mozilla Firefox' => '(Firebird)|(Firefox)',
+		'Galeon' => 'Galeon',
+		'Mozilla' => 'Gecko',
+		'MyIE' => 'MyIE',
+		'Lynx' => 'Lynx',
+		'Lotus-Notes' => 'Lotus-Notes',
+		'Netscape' => '(Mozilla/4\.75)|(Netscape6)|(Mozilla/4\.08)|(Mozilla/4\.5)|(Mozilla/4\.6)|(Mozilla/4\.79)',
+		'Konqueror' => 'Konqueror',
+		'Pic Bot' => 'psbot',
+		'Google' => 'Google',
+		'T610' => 'T610',
+		'T630' => 'T630',
+		'K500i' => 'K500i',
+		'K700i' => 'K700i',
+		'K750i' => 'K750i',
+		'P800' => 'P800',
+		'W800i' => 'W800i',
+		'Z1010' => 'Z1010',
+		'Z800' => 'Z800',
+		'U8138' => 'U8138',
+		'Search Bot' => '(nuhk)|(Googlebot)|(Yammybot)|(Openbot)|(Slurp/cat)|(msnbot)|(ia_archiver)|(Cerberian Drtrs)',
+		'Internet Explorer 7' => '(MSIE 7\.[0-9]+)|(MSIE 7)',
+		'Internet Explorer 6' => '(MSIE 6\.[0-9]+)',
+		'Internet Explorer 5' => '(MSIE 5\.[0-9]+)',
+		'Internet Explorer 4' => '(MSIE 4\.[0-9]+)',
+		'Internet Explorer' => 'MSIE'
+		);
+
+		foreach($browsers as $browser=>$pattern)
+		{
+			if (eregi($pattern, $user_agent)) return $browser;
+		}
+		return 'Unknown';
+	}
+
+	function logAdd($category = '', $unique = '', $type = 'START') {
+		global $db;
+		$ret = false;
+		if($type != 'INDEX') {
+			$cookie_id = gc();
+			$db->insert("INSERT INTO s_log SET
+			sess_id = '".secureINS($cookie_id)."',
+			sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
+			category_id = '".((!empty($category))?secureINS($category):'')."',
+			unique_id = '".((!empty($unique))?$unique:'')."',
+			type_inf = '".((empty($type))?'START':$type)."',
+			date_cnt = NOW()");
+			$db->insert("INSERT INTO s_logvisit SET
+			sess_id = '".secureINS($cookie_id)."',
+			sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
+			user_string = '".$this->get_os_($_SERVER['HTTP_USER_AGENT']).' - '.$this->get_browser_($_SERVER['HTTP_USER_AGENT'])."',
+			date_snl = NOW(),
+			date_cnt = NOW()");
+		}
+		if(!empty($_SERVER['HTTP_REFERER'])) {
+			$c = $db->getOneItem("SELECT type_cnt FROM s_logreferer WHERE type_referer = '".secureINS($_SERVER['HTTP_REFERER'])."' LIMIT 1");
+			if($c) {
+				$db->update("UPDATE s_logreferer SET type_cnt = type_cnt + 1 WHERE type_referer = '".secureINS($_SERVER['HTTP_REFERER'])."'");
+			} else {
+				$db->insert("INSERT INTO s_logreferer SET type_cnt = '1', type_referer = '".secureINS($_SERVER['HTTP_REFERER'])."'");
+			}
+		}
+		return $ret;
+	}
 }
 
 //av martin, för å kolla någons vip-level
 function get_vip($_userid) {
-	global $sql;
+	global $db;
 	if (!is_numeric($_userid)) return false;
-	$result = $sql->queryResult('SELECT level_id FROM s_user WHERE id_id = '.$_userid.' LIMIT 1');
-	if ($result) return $result;
-	return false;
+	return $db->getOneItem('SELECT level_id FROM s_user WHERE id_id = '.$_userid.' LIMIT 1');
 }
 
 //av martin. används häråvar

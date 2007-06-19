@@ -1,6 +1,4 @@
 <?
-	include(CONFIG.'secure.fnc.php');
-
 	$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt, hidden_id, blog_visit, blog_cmts FROM {$t}userblog WHERE main_id = '".secureINS($key)."' LIMIT 1", 1);
 	if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $s['id_id'] != $res['user_id']) {
 		errorACT('Felaktigt inlägg.', l('user', 'blog', $s['id_id']));

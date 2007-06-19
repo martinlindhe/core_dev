@@ -1,6 +1,4 @@
 <?
-	require(CONFIG.'cut.fnc.php');
-	require(CONFIG.'secure.fnc.php');
 	$head = $user->getcontent($l['id_id'], 'user_head');
 
 	if(!empty($_POST['do'])) {
@@ -17,8 +15,8 @@
 		else
 			errorTACT('Uppdaterat!', l('member', 'settings'), 1500);
 	}
-	$result = $sql->query("SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1' ORDER BY main_id DESC");
-	$friends = $sql->query("SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM {$t}userrelation rel RIGHT JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($l['id_id'])."' ORDER BY u.u_alias ASC", 0, 1);
+	$result = $db->getArray('SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM s_userphoto WHERE user_id = '.$l['id_id'].' AND status_id = "1" ORDER BY main_id DESC');
+	$friends = $db->getArray('SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM s_userrelation rel RIGHT JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.secureINS($l['id_id']).' ORDER BY u.u_alias ASC');
 	$page = 'settings_profile';
 	$profile = $user->getcontent($l['id_id'], 'user_profile');
 

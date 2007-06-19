@@ -1,5 +1,4 @@
 <?
-	include(CONFIG.'secure.fnc.php');
 	$profile = $user->getcontent($s['id_id'], 'user_profile');
 	$page = 'view';
 	$isFriends = $user->isFriends($s['id_id']);

@@ -9,7 +9,7 @@
 	//Reads post variables and produces result. $_start & $_end is to be used together with page splitting logic
 	function performSearch($id = '', $_start = 0, $_end = 0)
 	{
-		global $sql, $user, $t, $l;
+		global $db, $user, $l;
 
 		$sexs = '';
 		$sexu = '';
@@ -68,7 +68,7 @@
 		$str[] = '+ACTIVE';
 		if (!empty($_POST['ort']) && $result['lan']) {
 			$result['ort'] = $_POST['ort'];
-			$ort_check = $sql->queryResult("SELECT st_lan FROM {$t}pstort WHERE st_ort = '".secureINS($result['ort'])."' LIMIT 1");
+			$ort_check = $sql->queryResult("SELECT st_lan FROM s_pstort WHERE st_ort = '".secureINS($result['ort'])."' LIMIT 1");
 			if (empty($ort_check) || $ort_check != $result['lan']) $result['ort'] = '0';
 		}
 		if (!empty($_POST['l_6']) && is_numeric($_POST['l_6'])) {
@@ -122,14 +122,14 @@
 		$result['paging'] = paging(@$_POST['p'], $lim);
 		if (count($str) > 1) {
 			if($result['online'])
-				$res = "FROM {$t}useronline o INNER JOIN {$t}userlevel l ON l.id_id = o.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."' AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
+				$res = "FROM s_useronline o INNER JOIN s_userlevel l ON l.id_id = o.id_id LEFT JOIN s_user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."' AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
 			else
-				$res = "FROM {$t}userlevel l LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
+				$res = "FROM s_userlevel l LEFT JOIN s_user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
 		} else {
 			if($result['online'])
-				$res = "FROM {$t}useronline o LEFT JOIN {$t}user u ON u.id_id = o.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."'";
+				$res = "FROM s_useronline o LEFT JOIN s_user u ON u.id_id = o.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."'";
 			else
-				$res = "FROM {$t}user u ".implode(' ', $join)." WHERE u.status_id = '1'";
+				$res = "FROM s_user u ".implode(' ', $join)." WHERE u.status_id = '1'";
 		}
 		if ($result['alias']) {
 			$res .= " AND u.u_alias LIKE '%".$result['alias']."%'";
@@ -162,7 +162,7 @@
 			//echo $q;
 		}
 			
-		$result['res'] = $sql->query($q, 0, 1);
+		$result['res'] = $db->getArray($q);
 
 		if (count($res) < $lim) $result['paging']['co'] = (($result['paging']['p']-1) * $lim) + count($res);
 
@@ -186,9 +186,9 @@
 	/* echos out <option> values for all "län" from database, to use with search windows */
 	function optionLan($_selected = 0)
 	{
-		global $sql, $t;
+		global $sql;
 
-		$list = $sql->query("SELECT st_lan FROM {$t}pstlan ORDER BY main_id ASC");
+		$list = $sql->query("SELECT st_lan FROM s_pstlan ORDER BY main_id ASC");
 
 		foreach ($list as $res) {
 			echo '<option value="'.$res[0].'"'.($_selected===$res[0] ? ' selected':'').'>'.secureOUT(ucwords(strtolower($res[0]))).'</option>';
@@ -198,11 +198,11 @@
 	/* echos out <option> values for all "ort" from database, to use with search windows */
 	function optionOrt($_lan, $_selected = 0)
 	{
-		global $sql, $t;
+		global $sql;
 
 		if (!$_lan) return false;
 
-		$list = $sql->query("SELECT st_ort FROM {$t}pstort WHERE st_lan = '".secureINS($_lan)."' ORDER BY st_ort");
+		$list = $sql->query("SELECT st_ort FROM s_pstort WHERE st_lan = '".secureINS($_lan)."' ORDER BY st_ort");
 
 		foreach ($list as $res) {
 			echo '<option value="'.$res[0].'"'.($_selected===$res[0]?' selected':'').'>'.secureOUT(ucwords(strtolower($res[0]))).'</option>';

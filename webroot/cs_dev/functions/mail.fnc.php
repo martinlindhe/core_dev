@@ -12,20 +12,20 @@
 
 	function mailDelete($_id)
 	{
-		global $sql, $t, $l, $user;
+		global $sql, $l, $user;
 
 		if (!is_numeric($_id)) return false;
 
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM {$t}usermail WHERE main_id = '".secureINS($_id)."' LIMIT 1");
+		$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM s_usermail WHERE main_id = '".secureINS($_id)."' LIMIT 1");
 		if (!empty($res) && count($res) && ($res[1] == '1' || $res[5] == '1')) {
 			if ($res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
 				if ($res[2] == $l['id_id'] && $res[1] == '1') {
-					$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
+					$sql->queryUpdate("UPDATE s_usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 					if (!$res[4]) $user->notifyDecrease('mail', $res[2]);
 					$user->counterDecrease('mail', $res[2]);
 				}
 				if ($res[3] == $l['id_id'] && $res[5] == '1') {
-					$sql->queryUpdate("UPDATE {$t}usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
+					$sql->queryUpdate("UPDATE s_usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 				}
 			}
 			return true;
@@ -35,38 +35,37 @@
 	
 	function mailInboxCount()
 	{
-		global $sql, $l, $t;
-
-		return $sql->queryResult("SELECT COUNT(*) as count FROM {$t}usermail WHERE user_id = '".secureINS($l['id_id'])."' AND status_id = '1'");
+		global $db, $l;
+		return $db->getOneItem('SELECT COUNT(*) as count FROM s_usermail WHERE user_id = '.$l['id_id'].'" AND status_id = "1"');
 	}
 	
 	function mailOutboxCount()
 	{
-		global $sql, $l, $t;
+		global $sql, $l;
 
-		return $sql->queryResult("SELECT COUNT(*) as count FROM {$t}usermail WHERE sender_id = '".secureINS($l['id_id'])."' AND sender_status = '1'");
+		return $sql->queryResult("SELECT COUNT(*) as count FROM s_usermail WHERE sender_id = '".secureINS($l['id_id'])."' AND sender_status = '1'");
 	}
 	
 	/* Returns an array with current users inbox content */
 	function mailInboxContent($_start = 0, $_end = 0)
 	{
-		global $sql, $l, $t;
+		global $db, $l;
 		
 		if (!is_numeric($_start) || !is_numeric($_end)) return false;
 
-		$q = 'SELECT m.*, u.* FROM '.$t.'usermail m LEFT JOIN '.$t.'user u ON u.id_id = m.sender_id AND u.status_id = "1" WHERE m.user_id = "'.secureINS($l['id_id']).'" AND m.status_id = "1" ORDER BY m.sent_date DESC';
+		$q = 'SELECT m.*, u.* FROM s_usermail m LEFT JOIN s_user u ON u.id_id = m.sender_id AND u.status_id = "1" WHERE m.user_id = "'.secureINS($l['id_id']).'" AND m.status_id = "1" ORDER BY m.sent_date DESC';
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
 
-		return $sql->query($q, 0, 1);
+		return $db->getArray($q);
 	}
 	
 	function mailOutboxContent($_start = 0, $_end = 0)
 	{
-		global $sql, $l, $t;
+		global $sql, $l;
 
 		if (!is_numeric($_start) || !is_numeric($_end)) return false;
 
-		$q = 'SELECT m.*, u.* FROM '.$t.'usermail m LEFT JOIN '.$t.'user u ON u.id_id = m.user_id AND u.status_id = "1" WHERE m.sender_id = "'.secureINS($l['id_id']).'" AND m.sender_status = "1" ORDER BY m.sent_date DESC';
+		$q = 'SELECT m.*, u.* FROM s_usermail m LEFT JOIN s_user u ON u.id_id = m.user_id AND u.status_id = "1" WHERE m.sender_id = "'.secureINS($l['id_id']).'" AND m.sender_status = "1" ORDER BY m.sent_date DESC';
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
 
 		return $sql->query($q, 0, 1);
@@ -74,12 +73,12 @@
 	
 	function mailDeleteArray($_arr)
 	{
-		global $sql, $user, $isAdmin, $l, $s, $t;
+		global $sql, $user, $isAdmin, $l, $s;
 
 		if (!is_array($_arr) || !count($_arr)) return false;
 		
 		foreach ($_arr as $val) {
-			$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM {$t}usermail WHERE main_id = '".secureINS($val)."' LIMIT 1");
+			$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM s_usermail WHERE main_id = '".secureINS($val)."' LIMIT 1");
 			if (!empty($res) && count($res) && ($res[1] == '1' || $res[5] == '1')) {
 				if ($isAdmin || $res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
 					if($res[2] == $l['id_id']) {
@@ -91,13 +90,13 @@
 							$user->counterDecrease('mail', $l['id_id']);
 						}
 
-						$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
+						$sql->queryUpdate("UPDATE s_usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 					} elseif($res[3] == $l['id_id']) {
-						$sql->queryUpdate("UPDATE {$t}usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
+						$sql->queryUpdate("UPDATE s_usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 					} else {
 						if($res[1] == '1') $user->counterDecrease('mail', $res[2]);
 						if($res[5] == '1') $user->counterDecrease('mail', $res[3]);
-						$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2', sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
+						$sql->queryUpdate("UPDATE s_usermail SET status_id = '2', sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 					}
 					if(!$res[4]) {
 						if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'notifydec';
@@ -112,31 +111,30 @@
 	
 	function getMail($_id)
 	{
-		global $sql, $t;
+		global $sql;
 		if (!is_numeric($_id)) return false;
 
-		return $sql->queryLine("SELECT * FROM {$t}usermail WHERE main_id = ".$_id." LIMIT 1", 1);
+		return $sql->queryLine("SELECT * FROM s_usermail WHERE main_id = ".$_id." LIMIT 1", 1);
 	}
 	
 	function getUnreadMailCount()
 	{
-		global $sql, $user, $l, $t;
+		global $db, $user, $l;
 
 		if (!$l['id_id']) return 0;
 
-		$q = "SELECT COUNT(*) FROM {$t}usermail WHERE user_id = ".$l['id_id']." AND user_read = '0'";
-
-		return $sql->queryResult($q);
+		$q = 'SELECT COUNT(*) FROM s_usermail WHERE user_id = '.$l['id_id'].' AND user_read = "0"';
+		return $db->getOneItem($q);
 	}
 
 	function mailMarkAsRead($_id)
 	{
-		global $sql, $user, $l, $t;
+		global $sql, $user, $l;
 		
 		if (!is_numeric($_id)) return false;
 
 		$user->notifyDecrease('mail', $l['id_id']);
-		$sql->queryUpdate("UPDATE {$t}usermail SET user_read = '1' WHERE main_id = '".$_id."' LIMIT 1");
+		$sql->queryUpdate("UPDATE s_usermail SET user_read = '1' WHERE main_id = '".$_id."' LIMIT 1");
 		
 		return true;
 	}
@@ -144,22 +142,22 @@
 	//todo: flytta denna funktion till user klassen
 	function getUserIdFromAlias($_alias)
 	{
-		global $sql, $t;
+		global $sql;
 
-		return $sql->queryResult("SELECT id_id FROM {$t}user WHERE u_alias = '".secureINS($_alias)."' AND status_id = '1' LIMIT 1");
+		return $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_alias)."' AND status_id = '1' LIMIT 1");
 	}
 	
 	//todo: flytta till user klassen
 	function getUserFriends()
 	{
-		global $sql, $l, $t;
+		global $sql, $l;
 
-		return $sql->query("SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM {$t}userrelation rel RIGHT JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($l['id_id'])."' ORDER BY u.u_alias ASC", 0, 1);
+		return $sql->query("SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM s_userrelation rel RIGHT JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($l['id_id'])."' ORDER BY u.u_alias ASC", 0, 1);
 	}
 
 	function sendMail($_to_name, $_cc_name, $_title, $_text, $allowed_html = '', $is_answer = false)
 	{
-		global $sql, $user, $l, $t, $user;
+		global $sql, $user, $l, $user;
 		
 		$error = '';
 		
@@ -171,14 +169,14 @@
 			$error = 'Du kan inte skicka till dig själv.';
 		}
 		/*if(!$error && !$isAdmin) {
-			$isBlocked = $sql->queryResult("SELECT rel_id FROM {$t}block WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($ins_to)."' LIMIT 1");
+			$isBlocked = $sql->queryResult("SELECT rel_id FROM s_block WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($ins_to)."' LIMIT 1");
 			if($isBlocked) { if($isBlocked == 'u') popupACT('Du har blockerat personen.'); else popupACT('Du är blockerad.'); }
 		}*/
 		if (!$error && !empty($_cc_name)) {
 			$ins_cc = getUserIdFromAlias($_cc_name);
 			if($ins_cc && $ins_cc != $l['id_id'] && $ins_cc != $ins_to) {
 				if (!$user->blocked($ins_cc, 3)) {
-					$res = $sql->queryInsert("INSERT INTO {$t}usermail SET
+					$res = $sql->queryInsert("INSERT INTO s_usermail SET
 					user_id = '".$ins_cc."',
 					sender_id = '".$l['id_id']."',
 					status_id = '1',
@@ -194,7 +192,7 @@
 		}
 		if ($error) return $error;
 		
-		$res = $sql->queryInsert("INSERT INTO {$t}usermail SET
+		$res = $sql->queryInsert("INSERT INTO s_usermail SET
 		user_id = '".$ins_to."',
 		sender_id = '".$l['id_id']."',
 		status_id = '1',

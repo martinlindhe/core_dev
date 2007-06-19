@@ -1,14 +1,12 @@
 <?
-	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
-
 	if(empty($_GET['id']) || !is_numeric($_GET['id'])) {
 		errorACT('Tråden existerar inte', l('forum','list'));
 	}
-	$res = $sql->queryLine("SELECT f.main_id, f.topic_id, f.sent_html, f.top_id, f.subject_id, f.status_id, f.parent_id, f.view_id, f.sender_id, f.sent_cmt, f.sent_ttl, f.sent_date, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.u_picid, u.u_picd, u.u_picvalid, u.level_id FROM {$t}f f LEFT JOIN {$t}user u ON u.id_id = f.sender_id AND u.status_id = '1' WHERE f.parent_id = '0' AND f.main_id = '".secureINS($_GET['id'])."' AND f.status_id = '1' LIMIT 1", 1);
+	$res = $db->getOneRow('SELECT f.main_id, f.topic_id, f.sent_html, f.top_id, f.subject_id, f.status_id, f.parent_id, f.view_id, f.sender_id, f.sent_cmt, f.sent_ttl, f.sent_date, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.u_picid, u.u_picd, u.u_picvalid, u.level_id FROM s_f f LEFT JOIN s_user u ON u.id_id = f.sender_id AND u.status_id = "1" WHERE f.parent_id = "0" AND f.main_id = '.secureINS($_GET['id']).' AND f.status_id = "1" LIMIT 1');
 	if(empty($res) || !count($res) || $_GET['id'] != $res['top_id']) {
 		errorACT('Tråden existerar inte', l('forum'));
 	}
-	$r = $sql->queryLine("SELECT main_id, main_ttl, main_cmt, subjects FROM {$t}ftopic f WHERE f.main_id = '".$res['topic_id']."' AND f.status_id = '1' LIMIT 1", 1);
+	$r = $db->getOneRow('SELECT main_id, main_ttl, main_cmt, subjects FROM s_ftopic f WHERE f.main_id = '.$res['topic_id'].' AND f.status_id = "1" LIMIT 1');
 	if(empty($r) || !count($r)) {
 		errorACT('Rubriken existerar inte', l('forum'));
 	}
@@ -27,11 +25,11 @@
 	}
 
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$check = $sql->queryResult("SELECT main_id FROM {$t}f WHERE parent_id = '".secureINS($_GET['del'])."' AND status_id = '1' LIMIT 1");
+		$check = $sql->queryResult("SELECT main_id FROM s_f WHERE parent_id = '".secureINS($_GET['del'])."' AND status_id = '1' LIMIT 1");
 		if(!$check) {
-			@$sql->queryUpdate("UPDATE {$t}f SET status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' AND sender_id = '".secureINS($l['id_id'])."' LIMIT 1");
+			@$sql->queryUpdate("UPDATE s_f SET status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' AND sender_id = '".secureINS($l['id_id'])."' LIMIT 1");
 		} else {
-			$s = @$sql->queryUpdate("UPDATE {$t}f SET view_id = '2', check_id = '1' WHERE main_id = '".secureINS($_GET['del'])."' AND sender_id = '".secureINS($l['id_id'])."' LIMIT 1");
+			$s = @$sql->queryUpdate("UPDATE s_f SET view_id = '2', check_id = '1' WHERE main_id = '".secureINS($_GET['del'])."' AND sender_id = '".secureINS($l['id_id'])."' LIMIT 1");
 		}
 		reloadACT(l('forum', 'read', $res['main_id']));
 	}
@@ -47,33 +45,33 @@
 
 	if($isAdmin) {
 		if(!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
-			$check = $sql->queryResult("SELECT main_id FROM {$t}f WHERE parent_id = '".secureINS($_GET['delete'])."' LIMIT 1");
+			$check = $sql->queryResult("SELECT main_id FROM s_f WHERE parent_id = '".secureINS($_GET['delete'])."' LIMIT 1");
 			if(!$check) {
-				@$sql->queryUpdate("DELETE FROM {$t}f WHERE main_id = '".secureINS($_GET['delete'])."' LIMIT 1");
+				@$sql->queryUpdate("DELETE FROM s_f WHERE main_id = '".secureINS($_GET['delete'])."' LIMIT 1");
 			} else {
 				errorACT('Det finns foruminlägg i en lägre nivå, ta bort dessa först.', l('forum','read',$res['main_id']));
 			}
 			reloadACT(l('forum', 'read', $res['main_id']));
 		}
 		if(!empty($_GET['hide']) && is_numeric($_GET['hide'])) {
-			@$sql->queryUpdate("UPDATE {$t}f SET view_id = '2', check_id = '1' WHERE main_id = '".secureINS($_GET['hide'])."' LIMIT 1");
+			@$sql->queryUpdate("UPDATE s_f SET view_id = '2', check_id = '1' WHERE main_id = '".secureINS($_GET['hide'])."' LIMIT 1");
 			reloadACT('forum','read',$res['main_id'].'&amp;item='.$item);
 		}
 		if(!empty($_GET['off']) && is_numeric($_GET['off'])) {
-			@$sql->queryUpdate("UPDATE {$t}f SET status_id = '2' WHERE main_id = '".secureINS($_GET['off'])."' LIMIT 1");
+			@$sql->queryUpdate("UPDATE s_f SET status_id = '2' WHERE main_id = '".secureINS($_GET['off'])."' LIMIT 1");
 			reloadACT(l('forum','read',$res['main_id']).'&amp;item='.$item);
 		}
 		if(!empty($_GET['show']) && is_numeric($_GET['show'])) {
-			@$sql->queryUpdate("UPDATE {$t}f SET view_id = '1' WHERE main_id = '".secureINS($_GET['show'])."' LIMIT 1");
+			@$sql->queryUpdate("UPDATE s_f SET view_id = '1' WHERE main_id = '".secureINS($_GET['show'])."' LIMIT 1");
 			reloadACT(l('forum','read',$res['main_id']).'&amp;item='.$item);
 		}
 	}
 	if(!empty($_GET['spy'])) { $user->cleanspy($l['id_id'], $res['main_id'], 'FAN'); }
-	$c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}f WHERE topic_id = '".secureINS($r['main_id'])."' AND parent_id = '0' AND status_id = '1'");
-	$d = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}f WHERE topic_id = '".secureINS($r['main_id'])."' AND parent_id != '0' AND status_id = '1'");
-	$own = $sql->query("SELECT o.main_id, o.top_id, o.sent_ttl, o.sent_date FROM {$t}f o INNER JOIN {$t}f p ON p.main_id = o.top_id AND p.status_id = '1' WHERE o.sender_id = '".secureINS($l['id_id'])."' AND o.status_id = '1' AND o.view_id = '1' ORDER BY o.main_id DESC LIMIT 5");
+	$c = $db->getOneItem('SELECT COUNT(*) as count FROM s_f WHERE topic_id = '.secureINS($r['main_id']).' AND parent_id = "0" AND status_id = "1"');
+	$d = $db->getOneItem('SELECT COUNT(*) as count FROM s_f WHERE topic_id = '.secureINS($r['main_id']).' AND parent_id != "0" AND status_id = "1"');
+	$own = $db->getArray('SELECT o.main_id, o.top_id, o.sent_ttl, o.sent_date FROM s_f o INNER JOIN s_f p ON p.main_id = o.top_id AND p.status_id = "1" WHERE o.sender_id = '.secureINS($l['id_id']).' AND o.status_id = "1" AND o.view_id = "1" ORDER BY o.main_id DESC LIMIT 5');
 
-	$list = $sql->query("SELECT f.view_id, f.main_id, f.sent_html, f.sent_cmt, f.sent_ttl, f.parent_id, f.sent_date, f.status_id, u.level_id, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.u_picid, u.u_picvalid, u.u_picd FROM {$t}f f LEFT JOIN {$t}user u ON u.id_id = f.sender_id AND u.status_id = '1' WHERE f.parent_id = '".$res['top_id']."' AND f.status_id = '1' ORDER BY f.main_id", 0, 1);
+	$list = $db->getArray('SELECT f.view_id, f.main_id, f.sent_html, f.sent_cmt, f.sent_ttl, f.parent_id, f.sent_date, f.status_id, u.level_id, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.u_picid, u.u_picvalid, u.u_picd FROM s_f f LEFT JOIN s_user u ON u.id_id = f.sender_id AND u.status_id = "1" WHERE f.parent_id = '.$res['top_id'].' AND f.status_id = "1" ORDER BY f.main_id');
 	$page = 'read';
 	$menu = array('start' => array(l('forum', 'start'), 'start'), 'list' => array(l('forum', 'list', $r['main_id']), secureOUT($r['main_ttl'])), 'read' => array(l('forum', 'read', $res['top_id']), 'läs tråd'));
 	require(DESIGN."head.php");

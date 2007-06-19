@@ -1,7 +1,4 @@
 <?
-	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
-	require(CONFIG."cut.fnc.php");
-
 	$length = array('1' => 10, '3' => 10, '5' => 20, '6' => 40, '8' => 80, '10' => 0);
 	$lim = @$length[$l['level_id']];
 	$photo_limit = 510;

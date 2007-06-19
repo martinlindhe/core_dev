@@ -6,7 +6,7 @@
 
 	if(!empty($_SESSION['data']['id_id'])) {
 	if($action == 'start') {
-		$sql->logAdd('', '', 'MAIN');
+		$user->logAdd('', '', 'MAIN');
 		require('start.php');
 		exit;
 	} elseif($action == 'thought') {

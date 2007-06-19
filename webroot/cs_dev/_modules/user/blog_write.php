@@ -1,6 +1,4 @@
 <?
-	include(CONFIG.'secure.fnc.php');
-
 	$NAME_TITLE = 'BLOGG - SKRIV | '.NAME_TITLE;
 	$edit = false;
 	$gotone = true;

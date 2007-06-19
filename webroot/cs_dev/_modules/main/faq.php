@@ -1,5 +1,5 @@
 <?
-	$faq = $sql->query("SELECT * FROM {$t}faq WHERE item_type = 'F' ORDER BY order_id", 0, 1);
+	$faq = $db->getArray('SELECT * FROM s_faq WHERE item_type = "F" ORDER BY order_id');
 
 	require(DESIGN.'head.php');
 ?>

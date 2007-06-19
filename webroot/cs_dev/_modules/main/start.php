@@ -4,10 +4,10 @@
 	echo '<div id="mainContent">';
 
 		//Listar de senaste bloggarna
-		$q = "SELECT b.*,u.* FROM {$t}userblog b ".
-				"LEFT JOIN ${t}user u ON (b.user_id=u.id_id) ".
-				"ORDER BY b.blog_date DESC LIMIT 5";
-		$res = $sql->query($q, 0, 1);
+		$q = 'SELECT b.*,u.* FROM s_userblog b '.
+				'LEFT JOIN ${t}user u ON (b.user_id=u.id_id) '.
+				'ORDER BY b.blog_date DESC LIMIT 5';
+		$res = $db->getArray($q);
 		
 		if (count($res)) {
 			echo '<div style="float: left">';
@@ -24,7 +24,7 @@
 		}
 
 		//Listar de senaste blog-kommentarerna
-		$res = $sql->query("SELECT * FROM {$t}userblogcmt WHERE status_id = '1' ORDER BY c_date DESC LIMIT 5", 0, 1);
+		$res = $db->getArray('SELECT * FROM s_userblogcmt WHERE status_id = "1" ORDER BY c_date DESC LIMIT 5');
 		
 		if (count($res)) {
 			echo '<div style="float: right">';
@@ -40,7 +40,7 @@
 		echo '<br class="clr" /><br/>';
 
 		//Listar de senaste inloggade
-		$res = $sql->query("SELECT u.* FROM s_userlogin s INNER JOIN {$t}user u ON u.id_id = s.id_id AND u.status_id = '1' ORDER BY s.main_id DESC LIMIT 11", 0, 1);
+		$res = $db->getArray('SELECT u.* FROM s_userlogin s INNER JOIN s_user u ON u.id_id = s.id_id AND u.status_id = "1" ORDER BY s.main_id DESC LIMIT 11');
 		if (count($res)) {
 			echo '<div style="clear: both">';
 			echo '<div class="bigHeader">senast inloggade</div>';
@@ -53,8 +53,8 @@
 		}
 
 		//Listar de senaste galleribilderna
-		$q = "SELECT main_id, user_id, picd, pht_name, pht_cmt FROM {$t}userphoto WHERE status_id = '1' AND hidden_id = '0' AND pht_name != '' ORDER BY main_id DESC LIMIT 11";
-		$res = $sql->query($q, 0, 1);
+		$q = 'SELECT main_id, user_id, picd, pht_name, pht_cmt FROM s_userphoto WHERE status_id = "1" AND hidden_id = "0" AND pht_name != "" ORDER BY main_id DESC LIMIT 11';
+		$res = $db->getArray($q);
 		if (count($res)) {
 			echo '<div class="bigHeader">senaste galleribilder</div>';
 			echo '<div class="bigBody">';
@@ -67,11 +67,11 @@
 		}
 
 		//Visa den senaste krönikan
-		$res = $sql->query("SELECT * FROM s_editorial WHERE status_id = '1' ORDER BY ad_date DESC LIMIT 1", 0, 1);
+		$res = $db->getOneRow('SELECT * FROM s_editorial WHERE status_id = "1" ORDER BY ad_date DESC LIMIT 1');
 		if(count($res)) {
 			echo '<div class="bigHeader">krönika</div>';
 			echo '<div class="bigBody">';
-			echo nl2br(stripslashes($res[0]['ad_cmt']));
+			echo nl2br(stripslashes($res['ad_cmt']));
 			echo '</div>';
 		}
 

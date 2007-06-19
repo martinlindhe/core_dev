@@ -32,7 +32,7 @@ class user_auth {
 
 	function login($a, $p, $mobile = false)
 	{
-		global $db;
+		global $db, $user;
 		$online = gettxt('stat_online');
 		$online = explode(':', $online);
 		$online = intval($online[0]);
@@ -52,11 +52,11 @@ class user_auth {
 			}
 
 			$this->login_data($result);
-			$this->user->setRelCount($result['id_id']);
+			$user->setRelCount($result['id_id']);
 
 			//kolla om användaren har verifierat sin info
 			$q = 'SELECT verified,timeAsked FROM tblVerifyUsers WHERE user_id='.$result['id_id'];
-			$data = $this->sql->queryLine($q, 0, 1);
+			$data = $db->getOneRow($q);
 				
 			//ask user once
 			if (!$data) {
@@ -103,11 +103,12 @@ class user_auth {
 	}
 
 	function logout($empty = false, $mobile = false) {
+		global $db;
 		if(!empty($_SESSION['data']['id_id'])) {
 			if(!$empty) {
-				$this->sql->queryInsert("INSERT INTO s_usersess SET id_id = '".@secureINS($_SESSION['data']['id_id'])."', sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', sess_id = '".secureINS($this->sql->gc())."', sess_date = NOW(), type_inf = 'o'");
-				$this->sql->queryUpdate("UPDATE s_user SET lastonl_date = account_date, account_date = '".date("Y-m-d H:i:s", strtotime("-1 HOUR"))."' WHERE id_id = '".secureINS($_SESSION['data']['id_id'])."' LIMIT 1");
-				$this->sql->queryUpdate("UPDATE s_useronline SET account_date = '".date("Y-m-d H:i:s", strtotime("-1 HOUR"))."' WHERE id_id = '".secureINS($_SESSION['data']['id_id'])."' LIMIT 1");
+				$db->insert('INSERT INTO s_usersess SET id_id = '.@secureINS($_SESSION['data']['id_id']).', sess_ip = "'.secureINS($_SERVER['REMOTE_ADDR']).'", sess_id = "'.gc().'", sess_date = NOW(), type_inf = "o"');
+				$db->update('UPDATE s_user SET lastonl_date = account_date, account_date = "'.date("Y-m-d H:i:s", strtotime("-1 HOUR")).'" WHERE id_id = '.secureINS($_SESSION['data']['id_id']).' LIMIT 1');
+				$db->update('UPDATE s_useronline SET account_date = "'.date("Y-m-d H:i:s", strtotime("-1 HOUR")).'" WHERE id_id = '.secureINS($_SESSION['data']['id_id']).' LIMIT 1');
 			}
 			$_SESSION['data']['id_id'] = false;
 		}

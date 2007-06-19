@@ -1,7 +1,4 @@
 <?
-	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
-	require_once(dirname(__FILE__).'/../user/relations.fnc.php');
-
 	$isFriends = $user->isFriends($s['id_id']);
 	$allowed = ($own || $isFriends || $isAdmin)?true:false;
 
@@ -27,20 +24,20 @@
 
 	//Markera en bild som raderad
 	if(!empty($_GET['d'])) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, pht_date, pht_cmt FROM {$t}userphoto WHERE main_id = '".secureINS($_GET['d'])."' LIMIT 1", 1);
+		$res = $sql->queryLine("SELECT main_id, status_id, user_id, pht_date, pht_cmt FROM s_userphoto WHERE main_id = '".secureINS($_GET['d'])."' LIMIT 1", 1);
 		if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $l['id_id']) {
 			errorACT('Felaktigt inlägg.', l('user', 'gallery', $s['id_id']));
 		} else {
-			$sql->queryUpdate("UPDATE {$t}userphoto SET status_id = '2' WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userphoto SET status_id = '2' WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			$user->counterDecrease('gal', $l['id_id']);
 			reloadACT(l('user', 'gallery', $s['id_id']));
 		}
 	}
 
 	$paging = paging(@$_GET['p'], 10);
-	$q = "SELECT main_id, pht_cmt, pht_cmts, pht_date, hidden_id FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' ORDER BY main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}";
-	$res = $sql->query($q, 0, 1);
-	$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1'");
+	$q = 'SELECT main_id, pht_cmt, pht_cmts, pht_date, hidden_id FROM s_userphoto WHERE user_id = '.$s['id_id'].' AND status_id = "1" ORDER BY main_id DESC LIMIT '.$paging['slimit'].', '.$paging['limit'];
+	$res = $db->getArray($q);
+	$paging['co'] = $db->getOneItem('SELECT COUNT(*) FROM s_userphoto WHERE user_id = '.$s['id_id'].' AND status_id = "1"');
 
 	$page = 'gallery';
 
@@ -68,8 +65,8 @@
 		}
 	}
 	
-	$gall_res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' ORDER BY main_id DESC", 0, 1);
-	$gallx_res = $sql->query("SELECT * FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1' ORDER BY main_id DESC", 0, 1);
+	$gall_res = $db->getArray('SELECT * FROM s_userphoto WHERE user_id = '.$s['id_id'].' AND status_id = "1" AND hidden_id = "0" ORDER BY main_id DESC');
+	$gallx_res = $db->getArray('SELECT * FROM s_userphoto WHERE user_id = '.$s['id_id'].' AND status_id = "1" AND hidden_id = "1" ORDER BY main_id DESC');
 	
 	makeButton(false, 'document.location=\'#gall\'', 'icon_gallery.png', 'galleri ['.count($gall_res).']');
 	makeButton(false, 'document.location=\'#gallx\'', 'icon_gallery.png', 'galleri X ['.count($gallx_res).']');
@@ -81,7 +78,7 @@
 <?
 /* <script type="text/javascript">var first = '<?=$first?>'; ext = '<?=$ext?>';</script> */
 		$paging = paging(1, 20);
-		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '0' LIMIT 1");
+		$paging['co'] = $db->getOneItem('SELECT COUNT(*) FROM s_userphoto WHERE user_id = '.$s['id_id'].' AND status_id = "1" AND hidden_id = "0"');
 		$name = 'galleri';
 		$all = true;
 		$res = $gall_res;
@@ -95,7 +92,7 @@
 		echo 'Denna medlem har inte tillåtit dig att se dennes galleri x-bilder.';
 	} else {
 		$paging = paging(1, 20);
-		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$s['id_id']."' AND status_id = '1' AND hidden_id = '1'");
+		$paging['co'] = $db->getOneItem('SELECT COUNT(*) FROM s_userphoto WHERE user_id = '.$s['id_id'].' AND status_id = "1" AND hidden_id = "1"');
 		$name = 'galleri x';
 		$all = $allowed;
 		$res = $gallx_res;

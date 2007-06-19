@@ -1,6 +1,4 @@
 <?
-	include(CONFIG.'secure.fnc.php');
-	
 	$q = "SELECT * FROM {$t}userphoto WHERE main_id = '".secureINS($key)."' LIMIT 1";
 	$res = $sql->queryLine($q, 1);
 	if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $s['id_id'] != $res['user_id'] || ($res['hidden_id'] && !$allowed)) {

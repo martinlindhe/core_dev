@@ -23,6 +23,8 @@ webbgränssnitt:
 	fakta: kunna välja "vikt". bitte skapar en lista med alternativ
 	* bugg: radera oläst mail räknar ej ner counter
 	* bugg: om jag låter bitte se mina galleri x, kan hon även se mina!
+	* visa att en användre är blockerad på dess profil (paradise1)
+	* todo: det går inte att blockera användare från admin säger bitte
 
 
 SMS debitering:

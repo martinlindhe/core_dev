@@ -6,6 +6,11 @@
 	require_once('functions/relations.fnc.php');
 	require_once('functions/spy.fnc.php');
 	require_once('functions/auth.php');
+	require_once('functions/secure.fnc.php');
+	require_once('functions/cut.fnc.php');
+	require_once('functions/validate.fnc.php');
+	require_once('functions/search_users.fnc.php');
+
 
 	session_start();
 

@@ -123,15 +123,15 @@ function flash($s) {
 	return urlencode(utf8_encode($s));
 }
 function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC') {
-	global $t, $sql;
+	global $db;
 	if($type == 's') {
-		$result = $sql->queryResult("SELECT text_cmt FROM {$t}textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
+		$result = $sql->queryResult("SELECT text_cmt FROM s_textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
 		if(!$result) return false; else return $result;
 	} elseif($type == 'm') {
-		$result = $sql->query("SELECT main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt'");
+		$result = $db->getArray("SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = '$opt'");
 		if(!$result) return false; else return $result;
 	} elseif($type == 'mo') {
-		$result = $sql->query("SELECT main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt' ORDER BY $order");
+		$result = $sql->query("SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = '$opt' ORDER BY $order");
 		if(!$result) return false; else return $result;
 	}
 }
@@ -209,7 +209,7 @@ function errorTACT($msg, $url, $time) {
 	errorACT($msg, $url, 'main', '', $time);
 }
 function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $topic = '', $tc = 1, $class = '') {
-	global $sql, $user, $start, $t, $l;
+	global $sql, $user, $start, $l;
 
 	if($type == 'main') {
 		$page = 'error.php';
