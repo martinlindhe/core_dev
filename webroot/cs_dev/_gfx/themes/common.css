@@ -105,7 +105,7 @@ ul#menu_user a {
 }
 
 .smallHeader {
-	background: url('/_gfx/themes/header_small.png');
+	background: url('header_small.png');
 	background-repeat: no-repeat;
 	width: 169px;
 	height: 19px;
@@ -131,7 +131,7 @@ ul#menu_user a {
 }
 
 .mediumHeader {
-	background: url('/_gfx/themes/header_medium.png');
+	background: url('header_medium.png');
 	background-repeat: no-repeat;
 	width: 282px;
 	height: 19px;
@@ -151,7 +151,7 @@ ul#menu_user a {
 }
 
 .bigHeader {
-	background: url('/_gfx/themes/header_big.png');
+	background: url('header_big.png');
 	background-repeat: no-repeat;
 	width: 596px;
 	height: 19px;
@@ -193,7 +193,7 @@ ul#menu_user a {
 .btn2_sml {
 	border: 0;
 	padding: 0;
-	background: url('/_gfx/themes/btn2_sml.png');
+	background: url('btn2_sml.png');
 	width: 50px;
 	height: 25px;
 	font-weight: bold;
@@ -205,7 +205,7 @@ ul#menu_user a {
 .btn2_min {
 	border: 0;
 	padding: 0;
-	background: url('/_gfx/themes/btn2_min.png');
+	background: url('btn2_min.png');
 	width: 78px;
 	height: 20px;
 	font-weight: bold;
@@ -276,7 +276,7 @@ A { color: #666; }
 .startPageBody {
 	min-height: 300px;
 	height: auto !important; height: 300px; /* ie6 hack to simulate min-height */
-	background: url('/_gfx/themes/start_gfx.png');
+	background: url('start_gfx.png');
 	background-repeat: no-repeat;
 	background-position: 100% 100%;
 }

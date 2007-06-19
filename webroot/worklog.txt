@@ -22,6 +22,7 @@ webbgränssnitt:
 	SENARE: användaren "gör just nu" info, t.ex "kollar i pelles galleri"
 	fakta: kunna välja "vikt". bitte skapar en lista med alternativ
 	* bugg: radera oläst mail räknar ej ner counter
+	* bugg: om jag låter bitte se mina galleri x, kan hon även se mina!
 
 
 SMS debitering:

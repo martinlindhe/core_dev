@@ -18,11 +18,11 @@
 <meta name="author" content=""/>
 <meta name="robots" content="follow,index"/>
 <meta name="language" content="sv-SE"/>
-<link rel="stylesheet" type="text/css" title="default" media="screen" href="<?=CS?>_objects/_styles/screen.css"/>
-<link rel="stylesheet" type="text/css" href="/_gfx/themes/common.css"/>
-<link rel="stylesheet" type="text/css" href="/_gfx/themes/<?=$theme_css?>"/>
-<link rel="shortcut icon" href="<?=CS?>favicon.ico"/>
-<script type="text/javascript" src="/_objects/main1.js"></script>
-<script type="text/javascript" src="/_objects/swfobject.js"></script>
-<script type="text/javascript" src="/_objects/fol.js"></script>
-<script type="text/javascript" src="/_objects/ajax.js"></script>
+<link rel="stylesheet" type="text/css" title="default" media="screen" href="<?=OBJ?>_styles/screen.css"/>
+<link rel="stylesheet" type="text/css" href="<?=$config['web_root']?>_gfx/themes/common.css"/>
+<link rel="stylesheet" type="text/css" href="<?=$config['web_root']?>_gfx/themes/<?=$theme_css?>"/>
+<link rel="shortcut icon" href="<?=OBJ?>favicon.ico"/>
+<script type="text/javascript" src="<?=OBJ?>main1.js"></script>
+<script type="text/javascript" src="<?=OBJ?>swfobject.js"></script>
+<script type="text/javascript" src="<?=OBJ?>fol.js"></script>
+<script type="text/javascript" src="<?=OBJ?>ajax.js"></script>

@@ -7,8 +7,6 @@
 	}
 */
 
-	session_start();
-
 	require('functions/config.include.php');
 
 

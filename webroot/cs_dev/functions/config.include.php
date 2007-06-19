@@ -7,6 +7,8 @@
 	require_once('functions/spy.fnc.php');
 	require_once('functions/auth.php');
 
+	session_start();
+
 	error_reporting(E_ALL);
 	date_default_timezone_set('Europe/Stockholm');
 
@@ -14,12 +16,16 @@
 setlocale(LC_TIME, 'sv_SE.ISO-8859-1');
 
 #absolute path to www-root
-define('CS', '/');
-define('OBJ', CS.'_objects/');
-define('DESIGN', '_design/');
+//define('CS', '/cs_dev/');
+$config['web_root'] = '/cs_dev/';
+$config['core_root'] = 'D:/devel/webroot/cs_dev/';
+
+
+define('OBJ', $config['web_root'].'_objects/');
+define('DESIGN', $config['core_root'].'_design/');
 define('CONFIG', '_config/');
 define('PD', '02');
-define('UPLA', CS.'_input/');
+define('UPLA', $config['web_root'].'_input/');
 define('UPLL', '.'.UPLA);
 define('UIMG', '150x150');
 define('MAXIMUM_USERS', 750);
@@ -27,7 +33,7 @@ define('MAXIMUM_USERS', 750);
 define('DEFAULT_USER', '48d40b8b5dee4c06cd8864be1b35456d');
 define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
 $NAME_TITLE = NAME_TITLE;
-//define('CH', ' SQL_CACHE ');
+
 
 //define('SMTP_SERVER', 'localhost');
 define('P2B', 'http://www.citysurf.tv/');
@@ -35,10 +41,10 @@ define('URL', 'citysurf.tv');
 define('NAME_URL', 'CitySurf');
 define("UO", '30 MINUTES');
 define('ADMIN_NAME', 'CitySurf');
-define('USER_GALLERY', '_input/usergallery/');
-define('USER_IMG', '_input/images/');
-define('USER_FIMG', 'user/image/');
-define('NEWS', '/_output/news_');
+define('USER_GALLERY', $config['web_root'].'_input/usergallery/');
+define('USER_IMG', $config['web_root'].'_input/images/');
+define('USER_FIMG', $config['web_root'].'user/image/');
+//define('NEWS', '/_output/news_');
 $sex = array('M' => 'm', 'F' => 'k');
 $sex_name = array('M' => 'man', 'F' => 'kvinna');
 //define('T', 's_');
@@ -47,8 +53,6 @@ define("STATSTR", "listar <b>%1\$d</b> - <b>%2\$d</b> (totalt: <b>%3\$d</b>)");
 
 	require('functions/main.fnc.php');
 	execSt();
-	//require('functions/sql.class.php');
-	//$sql = new sql();
 	
 /*
 define('SQL_U', 'cs_user');

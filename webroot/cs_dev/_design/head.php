@@ -35,9 +35,9 @@ function blockRightClick(event) {
 		<div id="top_logo"></div>
 		<div id="top_bg"></div>
 
-		<div id="top_ad"><a href="#"><img src="/_gfx/ban/2_728x90.gif" alt="Ad" /></a></div>
+		<div id="top_ad"><a href="#"><img src="<?=$config['web_root']?>_gfx/ban/2_728x90.gif" alt="Ad" /></a></div>
 
-		<div id="top_border"><img src="/_gfx/themes/head_border.png" alt=""/></div>
+		<div id="top_border"><img src="<?=$config['web_root']?>_gfx/themes/head_border.png" alt=""/></div>
 
 		<ul id="menu_main">
 			<li><a href="/main/start/">start</a> | </li>

@@ -21,7 +21,7 @@
 
 		<center>
 
-		<div style="width: 596px; text-align: left;"><img src="/_gfx/themes/default_logo.png" alt=""/></div>
+		<div style="width: 596px; text-align: left;"><img src="<?=$config['web_root']?>_gfx/themes/default_logo.png" alt=""/></div>
 
 		<div class="bigHeader"></div>
 		<div class="bigBody startPageBody">
@@ -60,7 +60,7 @@
 		echo '<div class="bigHeader">senaste galleribilder</div>';
 		echo '<div class="bigBody"><center>';
 		foreach($res as $row) {
-			echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'].'" style="margin-right: 10px;" onerror="this.style.display = \'none\';" />';
+			echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'].'" style="margin-right: 10px;" onerror="this.style.display = \'none\';" />';
 		}
 		echo '</center></div>';
 	}
