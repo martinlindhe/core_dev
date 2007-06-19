@@ -131,28 +131,25 @@
 			$value = stripslashes($row['fieldDefault']);
 		}
 
-		if ($row['fieldType'] != USERDATA_TYPE_CHECKBOX && $row['fieldType'] != USERDATA_TYPE_SELECT) {
-			$result = stripslashes($row['fieldName']).':<br/>';
-		} else {
-			$result = '';
-		}
-
 		switch ($row['fieldType']) {
 			case USERDATA_TYPE_TEXT:
+				$result = stripslashes($row['fieldName']).': ';
 				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';
 				break;
 
 			case USERDATA_TYPE_TEXTAREA:
+				$result = stripslashes($row['fieldName']).':<br/>';
 				$result .= '<textarea name="userdata_'.$fieldId.'" rows="6" cols="40">'.$value.'</textarea>';
 				break;
 
 			case USERDATA_TYPE_CHECKBOX:
-				$result .= '<input name="userdata_'.$fieldId.'" type="hidden" value="0"/>';
+				$result  = '<input name="userdata_'.$fieldId.'" type="hidden" value="0"/>';
 				$result .= '<input name="userdata_'.$fieldId.'" id="userdata_'.$fieldId.'" type="checkbox" class="checkbox" value="1"'.($value == '1'?' checked="checked"':'').'/>';
 				$result .= ' <label for="userdata_'.$fieldId.'">'.$row['fieldName'].'</label>';
 				break;
 
 			case USERDATA_TYPE_RADIO:
+				$result = stripslashes($row['fieldName']).':<br/>';
 				$options = getCategoriesByOwner(CATEGORY_USERDATA, $fieldId);
 
 				foreach($options as $row) {
@@ -167,6 +164,7 @@
 				break;
 
 			case USERDATA_TYPE_IMAGE:
+				$result = stripslashes($row['fieldName']).':<br/>';
 				if ($value) {
 					$result .= makeThumbLink($value);
 					$result .= '<input name="userdata_'.$fieldId.'_remove" id="userdata_'.$fieldId.'_remove" type="checkbox" class="checkbox"/>';
@@ -177,6 +175,7 @@
 				break;
 
 			case USERDATA_TYPE_DATE:
+				$result = stripslashes($row['fieldName']).':<br/>';
 				if ($value && (strlen($value) == 8)) {
 					$y = substr($value,0,4);
 					$m = substr($value,4,2);
