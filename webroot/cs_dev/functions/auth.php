@@ -34,6 +34,8 @@ class user_auth {
 
 	function login($a, $p, $mobile = false)
 	{
+		echo 'x';
+		die('x');
 		global $db, $user;
 		$online = gettxt('stat_online');
 		$online = explode(':', $online);
@@ -83,7 +85,7 @@ class user_auth {
 			if (!$mobile) {
 				reloadACT(l('main', 'start'));
 			} else {
-				header('Location: index.php');
+				header('Location: '.$config['web_root'].'index.php');
 				die;
 			}
 

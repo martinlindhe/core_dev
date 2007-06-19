@@ -29,6 +29,8 @@ webbgränssnitt:
 	- HÖG PRIO: anmäl användare-funktion:
 		* gör om admingränssnitt att fungera med nuvarande s_vip: "admin ska kunna se översikt på inkommande anmälningar"
 
+	- lägg en ny ruta "DETTA JOBBAR VI PÅ JUST NU" under tyck till
+
 	* titel i mail i inkorgen är för lång, klipp den på max X tecken
 	SENARE: användaren "gör just nu" info, t.ex "kollar i pelles galleri"
 	fakta: kunna välja "vikt". bitte skapar en lista med alternativ

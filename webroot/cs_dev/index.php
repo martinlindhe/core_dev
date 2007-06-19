@@ -7,13 +7,15 @@
 	}
 */
 
-	require('functions/config.include.php');
-
+	require_once('functions/config.include.php');
 
 	$action = (!empty($_GET['action'])?$_GET['action']:false);
 	$id = (!empty($_GET['id'])?$_GET['id']:false);
 	$key = (!empty($_GET['key'])?$_GET['key']:false);
-	$l = $user->auth(@$_SESSION['data']['id_id'], true);
+	$l = $user->auth(@$_SESSION['data']['id_id']);
+	
+	d($l);
+	
 	if(!empty($_GET['type'])) {
 		$type = $_GET['type'];
 		if($type == 'main') {
@@ -30,7 +32,7 @@
 				include('_modules/member/index.php');
 			} else {
 				// heres only logged in user allowed
-				if($type != 'user' && !$l) {
+				if($type != 'user') {
 					loginACT();
 				}
 				if($type == 'user') {
@@ -44,7 +46,7 @@
 				}
 			}
 		}
-		exit;
+		die;
 	}
 	require('_modules/main/index_p.php');
 ?>
