@@ -18,6 +18,9 @@
 
 ***************************************************************************************************
 webbgränssnitt:
+	- HÖG PRIO: anmäl användare-funktion:
+		* gör om admingränssnitt att fungera med nuvarande s_vip: "admin ska kunna se översikt på inkommande anmälningar"
+
 	* titel i mail i inkorgen är för lång, klipp den på max X tecken
 	SENARE: användaren "gör just nu" info, t.ex "kollar i pelles galleri"
 	fakta: kunna välja "vikt". bitte skapar en lista med alternativ
@@ -37,9 +40,6 @@ SMS debitering:
 	- bugg: ajax chat-historik strular. för vipmedlemmar så upprepar sig chatthistoriken hela tiden. löst genom att stänga av historik
 
 	- poll på inloggad startsida (admingränssnitt finns)
-
-	- anmäl användare-funktion:
-		* gör om admingränssnitt att fungera med nuvarande s_vip: "admin ska kunna se översikt på inkommande anmälningar"
 
 	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
 	* bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt

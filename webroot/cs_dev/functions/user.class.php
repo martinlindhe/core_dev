@@ -189,7 +189,8 @@ class user {
 	}
 	function getcontent($id, $type) {
 		global $db;
-		return $db->getArray('SELECT o.content_type, o.content, o.main_id FROM s_objrel r LEFT JOIN s_obj o ON o.main_id = r.object_id WHERE r.content_type = "'.$type.'" AND r.owner_id = "'.secureINS($id).'"');
+		if (!is_numeric($id)) return false;
+		return $db->getArray('SELECT o.content_type, o.content, o.main_id FROM s_objrel r LEFT JOIN s_obj o ON o.main_id = r.object_id WHERE r.content_type = "'.$db->escape($type).'" AND r.owner_id = '.$id);
 	}
 	//makeover
 	/*function getphoto($line, $valid = false, $small = 0, $admin = false, $string = '', $size = '') {
@@ -396,7 +397,8 @@ class user {
 	}
 	function getinfo($id, $opt) {
 		global $db;
-		return $db->getOneItem('SELECT content FROM s_obj WHERE owner_id = "'.$id.'" AND content_type = "'.$opt.'" LIMIT 1');
+		if (!is_numeric($id)) return false;
+		return $db->getOneItem('SELECT content FROM s_obj WHERE owner_id = '.$id.' AND content_type = "'.$opt.'" LIMIT 1');
 	}
 
 	function setinfo($id, $opt, $val) {
@@ -414,7 +416,8 @@ class user {
 	}
 
 	function setrel($obj, $type, $id) {
-		$this->sql->queryInsert("INSERT INTO s_objrel SET obj_date = NOW(), content_type = '$type', object_id = '$obj', owner_id = '$id'");
+		global $db;
+		$db->insert('INSERT INTO s_objrel SET obj_date = NOW(), content_type = "'.$db->escape($type).'", object_id = "'.$db->escape($obj).'", owner_id = '.$id);
 	}
 	
 	function get_os_($user_agent) {
@@ -489,19 +492,19 @@ class user {
 		$ret = false;
 		if($type != 'INDEX') {
 			$cookie_id = gc();
-			$db->insert("INSERT INTO s_log SET
-			sess_id = '".secureINS($cookie_id)."',
-			sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
-			category_id = '".((!empty($category))?secureINS($category):'')."',
-			unique_id = '".((!empty($unique))?$unique:'')."',
-			type_inf = '".((empty($type))?'START':$type)."',
-			date_cnt = NOW()");
-			$db->insert("INSERT INTO s_logvisit SET
-			sess_id = '".secureINS($cookie_id)."',
-			sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
-			user_string = '".$this->get_os_($_SERVER['HTTP_USER_AGENT']).' - '.$this->get_browser_($_SERVER['HTTP_USER_AGENT'])."',
-			date_snl = NOW(),
-			date_cnt = NOW()");
+			$q = 'INSERT INTO s_log SET sess_id = "'.secureINS($cookie_id).'",'.
+						'sess_ip = "'.secureINS($_SERVER['REMOTE_ADDR']).'",'.
+						'category_id = "'.((!empty($category))?secureINS($category):'').'",'.
+						'unique_id = "'.((!empty($unique))?$unique:'').'",'.
+						'type_inf = "'.((empty($type))?'START':$type).'",'.
+						'date_cnt = NOW()';
+			$db->insert($q);
+			
+			$q = 'INSERT INTO s_logvisit SET sess_id = "'.secureINS($cookie_id).'",'.
+						'sess_ip = "'.secureINS($_SERVER['REMOTE_ADDR']).'",'.
+						'user_string = "'.$this->get_os_($_SERVER['HTTP_USER_AGENT']).' - '.$this->get_browser_($_SERVER['HTTP_USER_AGENT']).'",'.
+						'date_snl = NOW(),date_cnt = NOW()';
+			$db->insert($q);
 		}
 		if(!empty($_SERVER['HTTP_REFERER'])) {
 			$c = $db->getOneItem("SELECT type_cnt FROM s_logreferer WHERE type_referer = '".secureINS($_SERVER['HTTP_REFERER'])."' LIMIT 1");

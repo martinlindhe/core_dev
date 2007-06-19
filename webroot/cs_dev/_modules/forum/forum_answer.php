@@ -29,7 +29,7 @@
 			sent_cmt = '".secureINS($_POST['ins_cmt'])."',
 			sent_date = NOW()");
 
-			$q = "SELECT sent_ttl FROM ${t}f WHERE main_id = '".secureINS($parent)."'";
+			$q = "SELECT sent_ttl FROM s_f WHERE main_id = '".secureINS($parent)."'";
 			$res2 = $sql->queryLine($q, 1);
 			spyPost($top, 'f', $res2['sent_ttl']);
 			//spyPost($top, 'f', $ins);

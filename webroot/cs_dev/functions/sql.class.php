@@ -91,19 +91,6 @@ class sql {
 		@mysql_query($query);
 		return(mysql_affected_rows());
 	}
-	function gc($type = 1) {
-		$this->checkconnected();
-		if(!empty($_REQUEST["PHPSESSID"]))
-			$sess5454 = md5($_REQUEST["PHPSESSID"].'SALTHELGVETE');
-		else
-			$sess5454 = md5(microtime() . rand(1, 99999));
-		if(!empty($_COOKIE['SOEBR']))
-			$cookie_id = (is_md5($_COOKIE['SOEBR']))?$_COOKIE['SOEBR']:cookieSET("SOEBR", $sess5454);
-		else
-			$cookie_id = cookieSET("SOEBR", $sess5454);
-		return ($type?$cookie_id:$sess5454);
-	}
-
 
 }
 ?>

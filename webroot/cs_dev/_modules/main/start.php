@@ -5,7 +5,7 @@
 
 		//Listar de senaste bloggarna
 		$q = 'SELECT b.*,u.* FROM s_userblog b '.
-				'LEFT JOIN ${t}user u ON (b.user_id=u.id_id) '.
+				'LEFT JOIN s_user u ON (b.user_id=u.id_id) '.
 				'ORDER BY b.blog_date DESC LIMIT 5';
 		$res = $db->getArray($q);
 		
