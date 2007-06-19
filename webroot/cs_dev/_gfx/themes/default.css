@@ -1,0 +1,20 @@
+/* default tema - gröna färger */
+#top_logo { background: url('default/logo.png'); }
+#top_bg { background: url('default/head_bg.png'); }
+
+ul#menu_main { background-color: #126A02; }
+ul#menu_user { background-color: #D2FABB; }
+
+.smallHeader, .mediumHeader, .bigHeader {
+	background-color: #126A02;
+}
+
+.btnNormal:hover, .btnSelected {
+	background-color: #77FEBB;
+}
+
+.btnNormal, .btn2_min, .btn2_sml { 
+	background-color: #D2FABB;
+}
+
+.subHead { color: #106C01; }
