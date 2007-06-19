@@ -158,7 +158,7 @@ echo '
 	function galleryView($topic, $id) {
 		global $db;
 		$c = $db->getOneItem("SELECT COUNT(*) FROM s_ppicview WHERE sess_ip = '".$db->escape($_SERVER['REMOTE_ADDR'])."' AND unique_id = '".$db->escape($id)."' AND date_snl = NOW() LIMIT 1");
-		$this->sql->logAdd($topic, $id, 'VIEW');
+		$user->logAdd($topic, $id, 'VIEW');
 		if(!$c) {
 			$db->update("UPDATE s_ppic SET p_view = p_view + 1, p_tview = p_tview + 1 WHERE main_id = '".$db->escape($id)."' LIMIT 1");
 			$db->update("UPDATE s_ptopic SET p_views = p_views + 1 WHERE main_id = '".$db->escape($topic)."' LIMIT 1");
@@ -171,36 +171,34 @@ echo '
 		global $db;
 		switch($type) {
 		case 'pic':
-			$row = $this->sql->query("SELECT main_id, id, topic_id, p_view, p_cmt, status_id, statusID FROM s_ppic WHERE main_id = '".$db->escape($id)."' LIMIT 1");
+			$row = $db->getOneRow("SELECT main_id, id, topic_id, p_view, p_cmt, status_id, statusID FROM s_ppic WHERE main_id = '".$db->escape($id)."' LIMIT 1");
 			if($row) {
 				$this->galleryDelete('file', '', $row);
-				#$this->sql->queryUpdate("DELETE FROM s_pcmt WHERE unique_id = '".$db->escape($row[0][0])."'");
-				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '2' WHERE unique_id = '".$db->escape($row[0][0])."'");
-				$this->sql->queryUpdate("DELETE FROM s_ppic WHERE main_id = '".$db->escape($row[0][0])."' LIMIT 1");
+				$db->update("UPDATE s_pcmt SET status_id = '2' WHERE unique_id = '".$db->escape($row[0][0])."'");
+				$db->delete("DELETE FROM s_ppic WHERE main_id = '".$db->escape($row[0][0])."' LIMIT 1");
 				if($row[0][5] == '1')
-					$this->sql->queryUpdate("UPDATE s_ptopic SET p_views = p_views - {$row[0][3]}, p_cmts = p_cmts - {$row[0][4]}, p_pics = p_pics - 1 WHERE main_id = '".$db->escape($row[0][2])."' LIMIT 1");
+					$db->update("UPDATE s_ptopic SET p_views = p_views - {$row[0][3]}, p_cmts = p_cmts - {$row[0][4]}, p_pics = p_pics - 1 WHERE main_id = '".$db->escape($row[0][2])."' LIMIT 1");
 			}
 		break;
 		case 'cmt':
-			$row = $this->sql->query("SELECT main_id, unique_id, topic_id FROM s_pcmt WHERE main_id = '".$db->escape($id)."' LIMIT 1");
+			$row = $db->getOneRow("SELECT main_id, unique_id, topic_id FROM s_pcmt WHERE main_id = '".$db->escape($id)."' LIMIT 1");
 			if($row) {
 				if($array) {
-					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt - 1 WHERE main_id = '".$db->escape($row[0][1])."' LIMIT 1");
+					$db->update("UPDATE s_ppic SET p_cmt = p_cmt - 1 WHERE main_id = '".$db->escape($row[0][1])."' LIMIT 1");
 					if($parentstatus == '1') {
-						$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts - 1 WHERE main_id = '".$db->escape($row[0][2])."' LIMIT 1");
+						$db->update("UPDATE s_ptopic SET p_cmts = p_cmts - 1 WHERE main_id = '".$db->escape($row[0][2])."' LIMIT 1");
 					}
 				}
-				#$this->sql->queryUpdate("DELETE FROM s_pcmt WHERE main_id = '".$db->escape($row[0][0])."'");
-				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '2', view_id = '1' WHERE main_id = '".$db->escape($row[0][0])."'");
+				$db->update("UPDATE s_pcmt SET status_id = '2', view_id = '1' WHERE main_id = '".$db->escape($row[0][0])."'");
 			}
 		break;
 		case 'cmtmv':
-			$row = $this->sql->query("SELECT main_id, unique_id FROM s_pmoviecmt WHERE main_id = '".$db->escape($id)."' LIMIT 1");
+			$row = $db->getOneRow("SELECT main_id, unique_id FROM s_pmoviecmt WHERE main_id = '".$db->escape($id)."' LIMIT 1");
 			if($row) {
 				if($array) {
-					$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt - 1 WHERE m_id = '".$db->escape($row[0][1])."' LIMIT 1");
+					$db->update("UPDATE s_pmovie SET m_cmt = m_cmt - 1 WHERE m_id = '".$db->escape($row[0][1])."' LIMIT 1");
 				}
-				$this->sql->queryUpdate("UPDATE s_pmoviecmt SET status_id = '2', view_id = '1' WHERE main_id = '".$db->escape($row[0][0])."'");
+				$db->update("UPDATE s_pmoviecmt SET status_id = '2', view_id = '1' WHERE main_id = '".$db->escape($row[0][0])."'");
 			}
 		break;
 		case 'file':
@@ -223,21 +221,21 @@ echo '
 		switch($type) {
 		case 'pic':
 			if($status == '1')
-				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics + 1 WHERE main_id = '".$db->escape($topic)."' LIMIT 1");
+				$db->update("UPDATE s_ptopic SET p_pics = p_pics + 1 WHERE main_id = '".$db->escape($topic)."' LIMIT 1");
 		break;
 		}
 	}
 	function galleryUpdate($type, $topic, $status, $oldstatus, $parentstatus = 1) {
-		global $user;
+		global $db, $user;
 		switch($type) {
 		case 'pic':
 
 			if($status == '1' && $oldstatus != '1') {
 // ska visas, adda 1
-				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics + 1, p_views = p_views + {$topic['p_view']}, p_cmts = p_cmts + {$topic['p_cmt']} WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
+				$db->update("UPDATE s_ptopic SET p_pics = p_pics + 1, p_views = p_views + {$topic['p_view']}, p_cmts = p_cmts + {$topic['p_cmt']} WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
 			} elseif($status != '1' && $oldstatus == '1') {
 // ska döljas, della 1
-				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics - 1, p_views = p_views - {$topic['p_view']}, p_cmts = p_cmts - {$topic['p_cmt']} WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
+				$db->update("UPDATE s_ptopic SET p_pics = p_pics - 1, p_views = p_views - {$topic['p_view']}, p_cmts = p_cmts - {$topic['p_cmt']} WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
 			}
 		break;
 		case 'cmt':
@@ -245,26 +243,26 @@ echo '
 				if($status == '1' && $oldstatus != '1') {
 // ska visas, adda 1, fixspy!
 					if(!empty($topic['str_id'])) $user->fixSpy('v', $topic['pic_id'], $topic['topic_id'].'/'.$topic['str_id'].'-thumb.jpg', @$topic['logged_id']);
-					$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts + 1 WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
-					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt + 1 WHERE main_id = '".$db->escape($topic['pic_id'])."' LIMIT 1");
+					$db->update("UPDATE s_ptopic SET p_cmts = p_cmts + 1 WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
+					$db->update("UPDATE s_ppic SET p_cmt = p_cmt + 1 WHERE main_id = '".$db->escape($topic['pic_id'])."' LIMIT 1");
 				} elseif($status != '1' && $oldstatus == '1') {
 // ska döljas, della 1
-					$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts - 1 WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
-					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt - 1 WHERE main_id = '".$db->escape($topic['pic_id'])."' LIMIT 1");
+					$db->update("UPDATE s_ptopic SET p_cmts = p_cmts - 1 WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
+					$$db->update("UPDATE s_ppic SET p_cmt = p_cmt - 1 WHERE main_id = '".$db->escape($topic['pic_id'])."' LIMIT 1");
 				}
-				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '".$db->escape($status)."' WHERE main_id = '".$db->escape($topic['main_id'])."' LIMIT 1");
+				$db->update("UPDATE s_pcmt SET status_id = '".$db->escape($status)."' WHERE main_id = '".$db->escape($topic['main_id'])."' LIMIT 1");
 			}
 		break;
 		case 'cmtmv':
 			if($status == '1' && $oldstatus != '1') {
 // ska visas, adda 1, fixspy!
 				#if(!empty($topic['str_id'])) $user->fixSpy('mv', $topic['pic_id'], $topic['topic_id'].'/'.$topic['str_id'].'-thumb.jpg', @$topic['logged_id']);
-				$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt + 1 WHERE m_id = '".$db->escape($topic['m_id'])."' LIMIT 1");
+				$db->update("UPDATE s_pmovie SET m_cmt = m_cmt + 1 WHERE m_id = '".$db->escape($topic['m_id'])."' LIMIT 1");
 			} elseif($status != '1' && $oldstatus == '1') {
 // ska döljas, della 1
-				$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt - 1 WHERE m_id = '".$db->escape($topic['m_id'])."' LIMIT 1");
+				$db->update("UPDATE s_pmovie SET m_cmt = m_cmt - 1 WHERE m_id = '".$db->escape($topic['m_id'])."' LIMIT 1");
 			}
-			$this->sql->queryUpdate("UPDATE s_pmoviecmt SET status_id = '".$db->escape($status)."' WHERE main_id = '".$db->escape($topic['main_id'])."' LIMIT 1");
+			$db->update("UPDATE s_pmoviecmt SET status_id = '".$db->escape($status)."' WHERE main_id = '".$db->escape($topic['main_id'])."' LIMIT 1");
 		break;
 		case 'file':
 			if($status == '2' && $oldstatus != '2') {
@@ -299,11 +297,11 @@ echo '
 	function galleryFix() {
 		global $db;
 		$topic = array();
-		$return = $this->sql->query("SELECT main_id, topic_id, status_id FROM s_ppic");
+		$return = $db->getArray("SELECT main_id, topic_id, status_id FROM s_ppic");
 		foreach($return as $val) {
-			$c = $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pcmt WHERE unique_id = '{$val[0]}' AND status_id = '1'");
-			$v = $this->sql->queryResult("SELECT COUNT(*) as count FROM s_ppicview WHERE unique_id = '{$val[0]}'");
-			$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = '$c', p_view = '$v' WHERE main_id = '{$val[0]}' LIMIT 1");
+			$c = $db->getOneItem("SELECT COUNT(*) FROM s_pcmt WHERE unique_id = '{$val[0]}' AND status_id = '1'");
+			$v = $db->getOneItem("SELECT COUNT(*) FROM s_ppicview WHERE unique_id = '{$val[0]}'");
+			$db->update("UPDATE s_ppic SET p_cmt = '$c', p_view = '$v' WHERE main_id = '{$val[0]}' LIMIT 1");
 			if($val[2] == '1') {
 				if(!isset($topic[$val[1]]))
 					 $topic[$val[1]] = array($c, $v, 1);
@@ -315,49 +313,49 @@ echo '
 			}
 		}
 		foreach($topic as $key => $val) {
-			$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = '{$val[0]}', p_views = '{$val[1]}', p_pics = '{$val[2]}' WHERE main_id = '".$key."' LIMIT 1");
+			$db->update("UPDATE s_ptopic SET p_cmts = '{$val[0]}', p_views = '{$val[1]}', p_pics = '{$val[2]}' WHERE main_id = '".$key."' LIMIT 1");
 		}
-		$return = $this->sql->query("SELECT m_id FROM s_pmovie");
+		$return = $db->getArray("SELECT m_id FROM s_pmovie");
 		foreach($return as $val) {
-			$c = $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pmoviecmt WHERE unique_id = '{$val[0]}' AND status_id = '1'");
-			$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = '$c' WHERE m_id = '{$val[0]}' LIMIT 1");
+			$c = $db->getOneItem("SELECT COUNT(*) as count FROM s_pmoviecmt WHERE unique_id = '{$val[0]}' AND status_id = '1'");
+			$db->update("UPDATE s_pmovie SET m_cmt = '$c' WHERE m_id = '{$val[0]}' LIMIT 1");
 		}
 	}
 	function galleryRefresh($total = true, $today = false) {
 		global $db;
 		if($total) {
 			$stat = array(0, 0, 0, 0, 0, 0, 0, 0);
-			$stat[0] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_logvisit");
-			$result = $this->sql->query("SELECT main_id, p_pics, p_views, p_cmts, status_id FROM s_ptopic");
+			$stat[0] += $db->getOneItem('SELECT COUNT(*) FROM s_logvisit');
+			$result = $db->getArray("SELECT main_id, p_pics, p_views, p_cmts, status_id FROM s_ptopic");
 			foreach($result as $val) {
-				$pic = $this->sql->query("SELECT id FROM s_ppic WHERE topic_id = '".$val[0]."' AND status_id = '1' ORDER BY p_view DESC LIMIT 1");
-				if(count($pic))
-					$this->sql->queryUpdate("UPDATE s_ptopic SET p_popular = '".$pic[0][0]."' WHERE main_id = '".$val[0]."' LIMIT 1");
+				$pic = $db->getOneItem("SELECT id FROM s_ppic WHERE topic_id = '".$val[0]."' AND status_id = '1' ORDER BY p_view DESC LIMIT 1");
+				if($pic)
+					$db->update("UPDATE s_ptopic SET p_popular = '".$pic[0][0]."' WHERE main_id = '".$val[0]."' LIMIT 1");
 				if($val[4] == '1') {
 					$stat[1] += $val[1];
 					$stat[2] += $val[2];
 					$stat[3] += $val[3];
 				}
 			}
-			#$stat[2] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_ppicview");
+			#$stat[2] += $db->getOneItem("SELECT COUNT(*) as count FROM s_ppicview");
 // fix for cream due to a problem regarding cookies, fixed, but desync on stat.
-			$stat[4] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_usergb WHERE status_id = '1'");
-			$stat[5] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pmovie WHERE status_id = '1'");
-			$stat[6] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pmovievisit");
-			$stat[7] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pmoviecmt m, s_pmovie t WHERE t.m_id = m.unique_id AND t.status_id = '1'");
+			$stat[4] += $db->getOneItem("SELECT COUNT(*) FROM s_usergb WHERE status_id = '1'");
+			$stat[5] += $$db->getOneItem("SELECT COUNT(*) FROM s_pmovie WHERE status_id = '1'");
+			$stat[6] += $db->getOneItem("SELECT COUNT(*) FROM s_pmovievisit");
+			$stat[7] += $db->getOneItem("SELECT COUNT(*) FROM s_pmoviecmt m, s_pmovie t WHERE t.m_id = m.unique_id AND t.status_id = '1'");
 			$stat = implode(':', $stat);
-			$this->sql->queryUpdate("UPDATE s_text SET text_cmt = '$stat' WHERE main_id = 'stat' AND option_id = '1' LIMIT 1");
+			$db->update("UPDATE s_text SET text_cmt = '$stat' WHERE main_id = 'stat' AND option_id = '1' LIMIT 1");
 		}
 		if($today) {
 			$stat = array(0, 0, 0, 0, 0, 0, 0, 0);
-			$stat[0] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = NOW()");
-			$stat[2] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_ppicview WHERE date_snl = NOW()");
-			$stat[3] += $this->sql->queryResult("SELECT COUNT(a.main_id) as count FROM s_pcmt a, s_ppic b WHERE TO_DAYS(a.c_date) = TO_DAYS(CURRENT_DATE) AND a.status_id = '1' AND b.status_id = '1' AND b.main_id = a.unique_id");
-			$stat[4] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_usergb WHERE TO_DAYS(gb_date) = TO_DAYS(CURRENT_DATE) AND status_id = '1'");
-			$stat[6] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pmovievisit WHERE date_snl = NOW()");
-			$stat[7] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pmoviecmt WHERE TO_DAYS(c_date) = TO_DAYS(CURRENT_DATE) AND status_id = '1'");
+			$stat[0] += $db->getOneItem("SELECT COUNT(*) FROM s_logvisit WHERE date_snl = NOW()");
+			$stat[2] += $db->getOneItem("SELECT COUNT(*) FROM s_ppicview WHERE date_snl = NOW()");
+			$stat[3] += $db->getOneItem("SELECT COUNT(a.main_id) FROM s_pcmt a, s_ppic b WHERE TO_DAYS(a.c_date) = TO_DAYS(CURRENT_DATE) AND a.status_id = '1' AND b.status_id = '1' AND b.main_id = a.unique_id");
+			$stat[4] += $db->getOneItem("SELECT COUNT(*) FROM s_usergb WHERE TO_DAYS(gb_date) = TO_DAYS(CURRENT_DATE) AND status_id = '1'");
+			$stat[6] += $db->getOneItem("SELECT COUNT(*) FROM s_pmovievisit WHERE date_snl = NOW()");
+			$stat[7] += $db->getOneItem("SELECT COUNT(*) FROM s_pmoviecmt WHERE TO_DAYS(c_date) = TO_DAYS(CURRENT_DATE) AND status_id = '1'");
 			$stat = implode(':', $stat);
-			$this->sql->queryUpdate("UPDATE s_text SET text_cmt = '$stat' WHERE main_id = 'stat' AND option_id = '0' LIMIT 1");
+			$db->update("UPDATE s_text SET text_cmt = '$stat' WHERE main_id = 'stat' AND option_id = '0' LIMIT 1");
 		}
 
 	}

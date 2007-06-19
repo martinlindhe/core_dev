@@ -21,6 +21,7 @@
 			- innehåller sql profiler
 			- tagit bort ${t} och CH från alla sql-queries
 			- ersatt secureINS() crap med $db->escape()
+			- tagit bort diverse klassers egna $sql pekare
 
 
 ***************************************************************************************************
