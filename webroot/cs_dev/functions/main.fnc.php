@@ -124,14 +124,15 @@ function flash($s) {
 }
 function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC') {
 	global $db;
+	if (!is_numeric($id)) die('wtf');
 	if($type == 's') {
-		$result = $sql->queryResult("SELECT text_cmt FROM s_textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
+		$result = $db->getOneItem('SELECT text_cmt FROM s_textsettings WHERE main_id = '.$id.' AND type_id = "'.$opt.'" LIMIT 1');
 		if(!$result) return false; else return $result;
 	} elseif($type == 'm') {
-		$result = $db->getArray("SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = '$opt'");
+		$result = $db->getArray('SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = "'.$opt.'"');
 		if(!$result) return false; else return $result;
 	} elseif($type == 'mo') {
-		$result = $sql->query("SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = '$opt' ORDER BY $order");
+		$result = $db->getArray('SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = "'.$opt.'" ORDER BY '.$order);
 		if(!$result) return false; else return $result;
 	}
 }
@@ -175,9 +176,7 @@ function execSt($end = 0, $notset = 0) {
 	}
 }
 */
-function secureINS($str) {
-	return addslashes($str);
-}
+
 function secureOUT($str, $nl = false) {
 	return ($nl?nl2br(stripslashes(htmlentities($str))):stripslashes(htmlentities($str)));
 }
@@ -211,7 +210,7 @@ function errorTACT($msg, $url, $time) {
 	errorACT($msg, $url, 'main', '', $time);
 }
 function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $topic = '', $tc = 1, $class = '') {
-	global $sql, $user, $start, $l;
+	global $user, $start, $l;
 
 	if($type == 'main') {
 		$page = 'error.php';
@@ -272,7 +271,7 @@ function doADP($pos, $right = false) {
 }
 function checkBan($splash = 0) {
 	global $db;
-	$check = $db->getOneItem('SELECT COUNT(*) as count FROM s_ban WHERE ban_ip = "'.secureINS($_SERVER['REMOTE_ADDR']).'"');
+	$check = $db->getOneItem('SELECT COUNT(*) as count FROM s_ban WHERE ban_ip = "'.$db->escape($_SERVER['REMOTE_ADDR']).'"');
 	if ($check) {
 		if($splash) errorSPLASHACT("Tyvärr! Du är blockerad.");
 		else errorACT("Tyvärr! Du är blockerad.");

@@ -68,7 +68,7 @@
 		$str[] = '+ACTIVE';
 		if (!empty($_POST['ort']) && $result['lan']) {
 			$result['ort'] = $_POST['ort'];
-			$ort_check = $sql->queryResult("SELECT st_lan FROM s_pstort WHERE st_ort = '".secureINS($result['ort'])."' LIMIT 1");
+			$ort_check = $db->getOneItem('SELECT st_lan FROM s_pstort WHERE st_ort = "'.$db->escape($result['ort']).'" LIMIT 1');
 			if (empty($ort_check) || $ort_check != $result['lan']) $result['ort'] = '0';
 		}
 		if (!empty($_POST['l_6']) && is_numeric($_POST['l_6'])) {
@@ -80,7 +80,7 @@
 		if(!empty($_POST['online'])) $result['online'] = '1';
 		if(!empty($_POST['birth']) && $isG) $result['birth'] = '1';
 		if(!empty($_POST['pic']) || $bpic) $result['pic'] = '1'; else $result['pic'] = '0'; 
-		if(!empty($_POST['alias'])) $result['alias'] = secureINS($_POST['alias']);
+		if(!empty($_POST['alias'])) $result['alias'] = $db->escape($_POST['alias']);
 		if(!empty($_POST['age']) && is_numeric($_POST['age']) && $_POST['age'] > 0 && $_POST['age'] < 10) $result['age'] = $_POST['age'];
 		if ($result['lan']) {
 			$str[] = '+LÄN'.str_replace('-', '', str_replace(' ', '', $result['lan']));
@@ -157,11 +157,7 @@
 		else 
 		*/
 		$q .= " LIMIT {$result['paging']['slimit']}, {$result['paging']['limit']}";
-		
-		if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') {
-			//echo $q;
-		}
-			
+
 		$result['res'] = $db->getArray($q);
 
 		if (count($res) < $lim) $result['paging']['co'] = (($result['paging']['p']-1) * $lim) + count($res);
@@ -186,9 +182,9 @@
 	/* echos out <option> values for all "län" from database, to use with search windows */
 	function optionLan($_selected = 0)
 	{
-		global $sql;
+		global $db;
 
-		$list = $sql->query("SELECT st_lan FROM s_pstlan ORDER BY main_id ASC");
+		$list = $db->getArray('SELECT st_lan FROM s_pstlan ORDER BY main_id ASC');
 
 		foreach ($list as $res) {
 			echo '<option value="'.$res[0].'"'.($_selected===$res[0] ? ' selected':'').'>'.secureOUT(ucwords(strtolower($res[0]))).'</option>';
@@ -198,14 +194,14 @@
 	/* echos out <option> values for all "ort" from database, to use with search windows */
 	function optionOrt($_lan, $_selected = 0)
 	{
-		global $sql;
+		global $db;
 
 		if (!$_lan) return false;
 
-		$list = $sql->query("SELECT st_ort FROM s_pstort WHERE st_lan = '".secureINS($_lan)."' ORDER BY st_ort");
+		$list = $db->getArray('SELECT st_ort FROM s_pstort WHERE st_lan = "'.$db->escape($_lan).'" ORDER BY st_ort');
 
 		foreach ($list as $res) {
-			echo '<option value="'.$res[0].'"'.($_selected===$res[0]?' selected':'').'>'.secureOUT(ucwords(strtolower($res[0]))).'</option>';
+			echo '<option value="'.$res['st_ort'].'"'.($_selected===$res['st_ort']?' selected':'').'>'.secureOUT(ucwords(strtolower($res['st_ort']))).'</option>';
 		}
 	}
 

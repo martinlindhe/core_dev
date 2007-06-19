@@ -3,11 +3,11 @@
 	
 	function abuseReport($_id, $_msg)
 	{
-		global $sql, $l;
+		global $db, $l;
 
 		if (!is_numeric($_id)) return false;
 		
-		$q = 'INSERT INTO s_userabuse SET reporterId='.$l['id_id'].',reportedId='.$_id.',msg="'.secureINS($_msg).'",timeReported=NOW()';
-		$sql->queryInsert($q);
+		$q = 'INSERT INTO s_userabuse SET reporterId='.$l['id_id'].',reportedId='.$_id.',msg="'.$db->escape($_msg).'",timeReported=NOW()';
+		$db->insert($q);
 	}
 ?>

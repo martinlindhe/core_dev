@@ -13,8 +13,8 @@ class user {
 		if ($this->timeout('15 MINUTES') > @$_SESSION['data']['account_date']) {
 			$res = now();
 			$_SESSION['data']['account_date'] = $res;
-			$db->update('UPDATE s_user SET account_date = "'.$res.'" WHERE id_id = "'.secureINS($id).'" LIMIT 1');
-			$db->update('UPDATE s_useronline SET account_date = "'.$res.'" WHERE id_id = "'.secureINS($id).'" LIMIT 1');
+			$db->update('UPDATE s_user SET account_date = "'.$res.'" WHERE id_id = '.$id.' LIMIT 1');
+			$db->update('UPDATE s_useronline SET account_date = "'.$res.'" WHERE id_id = '.$id.' LIMIT 1');
 		}
 		$this->id = $id;
 		return $this->getsessionuser($id);
@@ -76,12 +76,14 @@ class user {
 	}
 	function setRelCount($uid) {
 		global $db;
-		$rel_c = $db->getOneItem('SELECT COUNT(*) FROM s_userrelquest a INNER JOIN s_user u ON u.id_id = a.sender_id AND u.status_id = "1" WHERE a.user_id = '.secureINS($uid).' AND a.status_id = "0"');
+		if (!is_numeric($uid)) return false;
+		$rel_c = $db->getOneItem('SELECT COUNT(*) FROM s_userrelquest a INNER JOIN s_user u ON u.id_id = a.sender_id AND u.status_id = "1" WHERE a.user_id = '.$uid.' AND a.status_id = "0"');
 		$id = $this->setinfo($uid, 'rel_count', $rel_c);
 		if($id[0]) $this->setrel($id[1], 'user_retrieve', $uid);
 	}
 	function get_cache() {
-		$arr = $this->sql->queryLine("SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '".$this->id."' LIMIT 1");
+		global $db;
+		$arr = $db->getOneRow('SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '.$this->id.' LIMIT 1');
 		if(@$_SESSION['data']['u_picd'] != $arr[0]) @$_SESSION['data']['u_picd'] = $arr[0];
 		if(@$_SESSION['data']['u_picid'] != $arr[1]) @$_SESSION['data']['u_picid'] = $arr[1];
 		if(@$_SESSION['data']['u_picvalid'] != $arr[0]) @$_SESSION['data']['u_picvalid'] = $arr[2];
@@ -97,23 +99,25 @@ class user {
 	function cachestr($id = '') {
 		global $db, $sex;
 		$translater = array('m' => 'm', 'c' => 'c', 'g' => 'g', 'r' => 'v', 's' => 'l');
-		if(empty($id))
-			$id = $this->id;
+		if(empty($id)) $id = $this->id;
+		
+		if (!is_numeric($id)) die('urbad');
+		
 		$info = $this->getcontent($id, 'user_retrieve');
 		$str = '';
 		foreach($info as $item) {
 			$str .= @($item[0]?$translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
 		}
-		$cha_c = $db->getOneItem('SELECT COUNT(DISTINCT(sender_id)) FROM s_userchat WHERE user_id = "'.secureINS($id).'" AND user_read = "0"');
+		$cha_c = $db->getOneItem('SELECT COUNT(DISTINCT(sender_id)) FROM s_userchat WHERE user_id = '.$id.' AND user_read = "0"');
 		if($cha_c > 0)
-			$cha_id = $db->getOneItem('SELECT c.sender_id FROM s_userchat c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = "1" WHERE c.user_id = "'.secureINS($id).'" AND c.user_read = "0" ORDER BY c.sent_date ASC LIMIT 1');
+			$cha_id = $db->getOneItem('SELECT c.sender_id FROM s_userchat c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = "1" WHERE c.user_id = '.$id.' AND c.user_read = "0" ORDER BY c.sent_date ASC LIMIT 1');
 		else $cha_id = '';
 		if($cha_id) {
 			$str .= 'c:'.$cha_c.':'.$cha_id;
 		} else {
 			$str .= 'c:0:0';
 		}
-		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = "'.secureINS($id).'" AND u.account_date > "'.$this->timeout(UO).'" ORDER BY u.u_alias');
+		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$id.' AND u.account_date > "'.$this->timeout(UO).'" ORDER BY u.u_alias');
 		$rel_s = '';
 		foreach($rel_onl as $row) {
 			$rel_s .= $row[0].'|'.rawurlencode($row[1]).'|'.$sex[$row[2]].$this->doage($row[3], 0).'|'.$this->dobirth($row[3]).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
@@ -123,35 +127,44 @@ class user {
 		return $str;
 	}
 	function isuser($id, $status = '1') {
-		return ($this->sql->queryResult("SELECT status_id FROM s_user WHERE id_id = '".secureINS($id)."' LIMIT 1") == $status)?true:false;
+		global $db;
+		if (!is_numeric($id)) return false;
+
+		$q = 'SELECT status_id FROM s_user WHERE id_id = '.$id.' LIMIT 1';
+
+		if ($db->getOneItem($q) == $status) return true;
+		return false;
 	}
 	function level($level, $allowed = '10') {
-		if(intval($level) >= intval($allowed)) return true; else return false;
+		if (intval($level) >= intval($allowed)) return true;
+		return false;
 	}
 	function getuser($id, $more = '') {
 		global $db;
+		if (!is_numeric($id)) return false;
 		if(@$_SESSION['c_i'] == $id) return $this->getsessionuser($id);
-		//removed u_picvalid because of a later validation instead of prevalidation.
-		$return = $db->getOneRow('SELECT status_id, id_id, u_alias, u_sex, u_picid, u_picd, u_picvalid, u_birth, level_id, account_date, u_pstlan_id, CONCAT(u_pstort, ", ", u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, beta '.$more.' FROM s_user WHERE id_id = '.secureINS($id).' LIMIT 1');
-		return ($return && $return['status_id'] == '1')?$return:false;
+
+		$return = $db->getOneRow('SELECT status_id, id_id, u_alias, u_sex, u_picid, u_picd, u_picvalid, u_birth, level_id, account_date, u_pstlan_id, CONCAT(u_pstort, ", ", u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, beta '.$more.' FROM s_user WHERE id_id = '.$id.' LIMIT 1');
+		return ($return && $return['status_id'] == '1') ? $return : false;
 	}
 	function getsessionuser($id) {
 		return @$_SESSION['data'];
 	}
 	function getuserfill($arr, $line = '*') {
-		if($line != '*') $line = substr($line, 2);
-		$return = $this->sql->queryLine("SELECT $line FROM s_user WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1", 1);
-		return ($return)?array_merge($arr, $return):$arr;
+		if ($line != '*') $line = substr($line, 2);
+		$return = $db->getOneRow('SELECT '.$line.' FROM s_user WHERE id_id = '.$arr['id_id'].' LIMIT 1');
+		return ($return) ? array_merge($arr, $return) : $arr;
 	}
 	function getuserfillfrominfo($arr, $line = '*') {
 		if($line != '*') $line = substr($line, 2);
-		$return = $this->sql->queryLine("SELECT $line FROM s_userinfo WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1", 1);
+		$return = $db->getOneRow('SELECT '.$line.' FROM s_userinfo WHERE id_id = '.$arr['id_id'].' LIMIT 1');
 		return ($return)?array_merge($arr, $return):$arr;
 	}
 	function info($id, $level = '1') {
+		global $db;
 		switch($level) {
 		case '1':
-			return $this->sql->queryAssoc("SELECT u_email, u_pstnr, u_subscr, u_fname, u_sname, u_street, u_cell FROM s_user WHERE id_id = '".secureINS($id)."' LIMIT 1");
+			return $db->getOneRow('SELECT u_email, u_pstnr, u_subscr, u_fname, u_sname, u_street, u_cell FROM s_user WHERE id_id = '.$id.' LIMIT 1');
 		break;
 		}
 	}
@@ -180,12 +193,11 @@ class user {
 		if($type == 3) return false;
 	}
 	function isFriends($id, $noadmin = 0) {
-		global $isAdmin;
-		if($id == $this->id) return true;
-		if($noadmin)
-			return ($this->sql->queryResult("SELECT rel_id FROM s_userrelation WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($id)."' LIMIT 1"))?true:false;
-		else
-			return ($isAdmin || $this->sql->queryResult("SELECT rel_id FROM s_userrelation WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($id)."' LIMIT 1"))?true:false;
+		global $db;
+		if (!is_numeric($id)) return false;
+		if ($id == $this->id) return true;
+
+		return ($db->getOneItem('SELECT rel_id FROM s_userrelation WHERE user_id = '.$this->id.' AND friend_id = '.$id.' LIMIT 1'))?true:false;
 	}
 	function tagline($str) {
 		return secureOUT(ucwords(strtolower($str)));
@@ -257,8 +269,8 @@ class user {
 			if(empty($arr['account_date']) || !$this->isOnline($arr['account_date'])) {
 				$res = now();
 				$_SESSION['data']['account_date'] = $res;
-				$this->sql->queryUpdate("UPDATE s_user SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
-				$this->sql->queryUpdate("UPDATE s_useronline SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
+				$db->update('UPDATE s_user SET account_date = "'.$res.'" WHERE id_id = '.$arr['id_id'].' LIMIT 1');
+				$db->update('UPDATE s_useronline SET account_date = "'.$res.'" WHERE id_id = '.$arr['id_id'].' LIMIT 1');
 				$arr['account_date'] = $res;
 			}
 		}
@@ -369,32 +381,33 @@ class user {
 	}*/
 	function spy($user, $id, $type, $info = '') {
 /*
-		#if(!@require("./_set/mod_spy.php")) @require("../_set/mod_spy.php");
-		if(file_exists("./_set/mod_spy.php")) @require("./_set/mod_spy.php"); else @require("../_set/mod_spy.php");
 		if(!isset($stop) && empty($stop)) {
 			if($type == 'BCT' || $type == 'PHT' || $type == 'BCA' || $type == 'PHA' || $type == 'COM') $type = 'CMT';
 			if($type == 'MOV') $type = 'GAL';
 			if($type == 'DTH' || $type == 'KTH') $type = 'THO';
-			$this->sql->queryInsert("INSERT INTO s_userspy SET user_id = '".$user."', status_id = '1', spy_date = NOW(), msg_id = '".secureINS($info)."', link_id = '".@$url."', object_id = '$id', type_id = '$type'");
+			$db->insert("INSERT INTO s_userspy SET user_id = '".$user."', status_id = '1', spy_date = NOW(), msg_id = '".$info."', link_id = '".@$url."', object_id = '$id', type_id = '$type'");
 			$c = $this->getinfo($user, 'spy_count');
 			if(!$c) $c = 0;
 			$this->setinfo($user, 'spy_count', ($c+1));
 		}
 */
-			$this->sql->queryInsert("INSERT INTO s_usermail SET
-			user_id = '".$user."',
-			sender_id = 'SYS',
-			status_id = '1',
-			sender_status = '2',
-			user_read = '0',
-			sent_cmt = '".secureINS($id)."',
-			sent_ttl = '".secureINS('test')."',
-			sent_date = NOW()");
-			$this->counterIncrease('mail', $user);
-			$this->notifyIncrease('mail', $user);
+		global $db;
+
+		$db->insert("INSERT INTO s_usermail SET
+		user_id = '".$user."',
+		sender_id = 'SYS',
+		status_id = '1',
+		sender_status = '2',
+		user_read = '0',
+		sent_cmt = '".$db->escape($id)."',
+		sent_ttl = '".$db->escape('test')."',
+		sent_date = NOW()");
+		$this->counterIncrease('mail', $user);
+		$this->notifyIncrease('mail', $user);
 	}
 	function getline($opt, $id) {
-		$res = $this->sql->queryResult("SELECT $opt FROM s_user WHERE id_id = '$id' LIMIT 1");
+		global $db;
+		$res = $db->getOneRow('SELECT '.$opt.' FROM s_user WHERE id_id = '.$id.' LIMIT 1');
 		if(!$res) return false;
 		return $res;
 	}
@@ -406,13 +419,18 @@ class user {
 
 	function setinfo($id, $opt, $val) {
 		global $db;
-		$res = $db->getOneRow('SELECT content, main_id FROM s_obj WHERE owner_id = "'.$id.'" AND content_type = "'.$opt.'" LIMIT 1');
+		if (!is_numeric($id)) return false;
+		
+		$opt = $db->escape($opt);
+		$val = $db->escape($val);
+		
+		$res = $db->getOneRow('SELECT content, main_id FROM s_obj WHERE owner_id = '.$id.' AND content_type = "'.$opt.'" LIMIT 1');
 		if(!$res['main_id']) {
-			$obj = $db->insert('INSERT INTO s_obj SET content = "'.$val.'", content_type = "'.$opt.'", owner_id = "'.$id.'", obj_date = NOW()');
+			$obj = $db->insert('INSERT INTO s_obj SET content = "'.$val.'", content_type = "'.$opt.'", owner_id = '.$id.', obj_date = NOW()');
 			$ret = array('1', $obj);
 		} else {
 			$ret = array('0', $res['main_id']);
-			$q = 'UPDATE s_obj SET content = "'.$val.'", obj_date = NOW() WHERE owner_id = "'.$id.'" AND content_type = "'.$opt.'" LIMIT 1';
+			$q = 'UPDATE s_obj SET content = "'.$val.'", obj_date = NOW() WHERE owner_id = '.$id.' AND content_type = "'.$opt.'" LIMIT 1';
 			$db->update($q);
 		}
 		return $ret;
@@ -495,26 +513,26 @@ class user {
 		$ret = false;
 		if($type != 'INDEX') {
 			$cookie_id = gc();
-			$q = 'INSERT INTO s_log SET sess_id = "'.secureINS($cookie_id).'",'.
-						'sess_ip = "'.secureINS($_SERVER['REMOTE_ADDR']).'",'.
-						'category_id = "'.((!empty($category))?secureINS($category):'').'",'.
-						'unique_id = "'.((!empty($unique))?$unique:'').'",'.
+			$q = 'INSERT INTO s_log SET sess_id = "'.$db->escape($cookie_id).'",'.
+						'sess_ip = "'.$db->escape($_SERVER['REMOTE_ADDR']).'",'.
+						'category_id = "'.$db->escape($category).'",'.
+						'unique_id = "'.$db->escape($unique).'",'.
 						'type_inf = "'.((empty($type))?'START':$type).'",'.
 						'date_cnt = NOW()';
 			$db->insert($q);
 			
-			$q = 'INSERT INTO s_logvisit SET sess_id = "'.secureINS($cookie_id).'",'.
-						'sess_ip = "'.secureINS($_SERVER['REMOTE_ADDR']).'",'.
+			$q = 'INSERT INTO s_logvisit SET sess_id = "'.$db->escape($cookie_id).'",'.
+						'sess_ip = "'.$db->escape($_SERVER['REMOTE_ADDR']).'",'.
 						'user_string = "'.$this->get_os_($_SERVER['HTTP_USER_AGENT']).' - '.$this->get_browser_($_SERVER['HTTP_USER_AGENT']).'",'.
 						'date_snl = NOW(),date_cnt = NOW()';
 			$db->insert($q);
 		}
 		if(!empty($_SERVER['HTTP_REFERER'])) {
-			$c = $db->getOneItem("SELECT type_cnt FROM s_logreferer WHERE type_referer = '".secureINS($_SERVER['HTTP_REFERER'])."' LIMIT 1");
+			$c = $db->getOneItem("SELECT type_cnt FROM s_logreferer WHERE type_referer = '".$db->escape($_SERVER['HTTP_REFERER'])."' LIMIT 1");
 			if($c) {
-				$db->update("UPDATE s_logreferer SET type_cnt = type_cnt + 1 WHERE type_referer = '".secureINS($_SERVER['HTTP_REFERER'])."'");
+				$db->update("UPDATE s_logreferer SET type_cnt = type_cnt + 1 WHERE type_referer = '".$db->escape($_SERVER['HTTP_REFERER'])."'");
 			} else {
-				$db->insert("INSERT INTO s_logreferer SET type_cnt = '1', type_referer = '".secureINS($_SERVER['HTTP_REFERER'])."'");
+				$db->insert("INSERT INTO s_logreferer SET type_cnt = '1', type_referer = '".$db->escape($_SERVER['HTTP_REFERER'])."'");
 			}
 		}
 		return $ret;
@@ -531,29 +549,29 @@ function get_vip($_userid) {
 //av martin. används häråvar
 function addVIP($user_id, $vip_level, $days)
 {
-	global $sql;
+	global $db;
 		
 	if (!is_numeric($user_id) || !is_numeric($vip_level) || !is_numeric($days)) return false;
 
 	$q = 'SELECT userId FROM s_vip WHERE userId='.$user_id.' AND level='.$vip_level;
 
-	if ($sql->queryLine($q)) {
+	if ($db->getOneItem($q)) {
 		$q = 'UPDATE s_vip SET days=days+'.$days.',timeSet=NOW() WHERE userId='.$user_id.' AND level='.$vip_level;
-		$sql->queryUpdate($q);
+		$db->update($q);
 	} else {
 		$q = 'INSERT INTO s_vip SET userId='.$user_id.',level='.$vip_level.',days='.$days.',timeSet=NOW()';
-		$sql->queryUpdate($q);
+		$db->insert($q);
 	}
 }
 
 
 	function getCurrentVIPLevel($_id)
 	{
-		global $sql;
+		global $db;
 		if (!is_numeric($_id)) return false;
 
 		$q = 'SELECT level FROM s_vip WHERE userId='.$_id.' ORDER BY level DESC LIMIT 1';
-		$level = $sql->queryResult($q, 0, 1);
+		$level = $db->getOneItem($q);
 
 		if (!$level) return 1;		//1=normal user
 		return $level;
@@ -561,11 +579,11 @@ function addVIP($user_id, $vip_level, $days)
 
 	function getVIPLevels($_id)
 	{
-		global $sql;
+		global $db;
 		if (!is_numeric($_id)) return false;
 		
 		$q = 'SELECT * FROM s_vip WHERE userId='.$_id.' ORDER BY level DESC';
-		return $sql->query($q, 0, 1);
+		return $db->getArray($q);
 	}
 	
 ?>

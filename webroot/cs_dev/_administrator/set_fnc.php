@@ -14,7 +14,7 @@
 		return (!$id?'<a>':'<a href="user.php?id='.$id.'"'.(!empty($extra['text'])?' title="'.secureOUT($extra['text']).'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>').'<img  alt="'.(!empty($extra['text'])?secureOUT($extra['text']):'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
 	}
 function doLog($string = '', $about = '') {
-	global $t, $sql;
+	global $sql;
 	$sql->queryInsert("INSERT INTO s_admindolog SET owner_id = '".$_SESSION['u_i']."', string_info = '".$string."', about_id = '".$about."'");
 }
 
@@ -94,7 +94,7 @@ global $sql;
 	$sql->queryInsert("INSERT INTO s_aalog SET data_s = '".secureINS($txt)."'");
 }
 function sesslogADD($category = '', $unique = '', $type = 'START') {
-	GLOBAL $cookie_id, $t;
+	global $cookie_id;
 	$ret = false;
 	$sql = @mysql_query("INSERT INTO s_logvisit SET
 		sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
@@ -113,7 +113,7 @@ function sesslogADD($category = '', $unique = '', $type = 'START') {
 	return $ret;
 }
 function newsMailRead($id, $mail = '') {
-	GLOBAL $cookie_id, $t;
+	global $cookie_id;
 	if(!empty($mail))
 		$sql = @mysql_query("INSERT INTO s_sendvisit SET
 		sess_id = '".secureINS($cookie_id)."',
@@ -145,7 +145,7 @@ function sify($str) {
 }
 
 function checkPic($id = '') {
-	GLOBAL $pic_view, $pic_tab, $cookie_id;
+	global $pic_view, $pic_tab, $cookie_id;
 	$sql = @mysql_query("INSERT INTO $pic_view SET
 		sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
 		sess_id = '".secureINS($cookie_id)."',
@@ -171,7 +171,7 @@ function notallowed() {
 }
 
 function getppl() {
-	GLOBAL $v_tab;
+	global $v_tab;
 	$sql = mysql_query("SELECT COUNT(DISTINCT datetime, ip) AS ppl FROM $v_tab");
 	$return = (mysql_num_rows($sql)>0)?mysql_result($sql, 0, 'ppl'):'0';
 	return str_replace(",", ".", number_format($return));
@@ -263,7 +263,7 @@ function getHOST($str) {
 }
 
 function readBUL($id) {
-	GLOBAL $btab;
+	global $btab;
 	$sql = mysql_query("SELECT date FROM $btab WHERE id = '{$_SESSION['id']}' AND subiunique = '$id' ORDER BY date DESC LIMIT 1");
 	if(mysql_num_rows($sql) == '1')
 		mysql_query("UPDATE $btab SET date = NOW() WHERE id = '{$_SESSION['id']}' AND subiunique = '$id'");
@@ -279,12 +279,12 @@ function stripFile($str) {
 }
 
 function updatePic($tid, $id) {
-GLOBAL $pic_tab;
+	global $pic_tab;
 	mysql_query("UPDATE $pic_tab SET p_view = p_view + 1 WHERE topic_id = '".addslashes($tid)."' AND id = '".addslashes($id)."' LIMIT 1");
 }
 
 function picDelete($tid, $id, $type = 'view') {
-GLOBAL $gtable, $ctable;
+	global $gtable, $ctable;
 	if($type == 'view') {
 		mysql_query("UPDATE $gtable SET view = 0 WHERE tid = '".addslashes($tid)."' AND id = '".addslashes($id)."' LIMIT 1");
 		return true;
@@ -295,7 +295,7 @@ GLOBAL $gtable, $ctable;
 }
 
 function sessionDelete($tid, $type = 'view') {
-GLOBAL $gtable, $ctable;
+	global $gtable, $ctable;
 	if($type == 'view') {
 		mysql_query("UPDATE $gtable SET view = 0 WHERE tid = '".addslashes($tid)."'");
 		return true;
@@ -310,7 +310,7 @@ GLOBAL $gtable, $ctable;
 }
 
 function implode_assoc($inner_glue, $outer_glue, $array) {
-       $output = array();
+	$output = array();
 	if(is_array($array) && count($array) > 0) {
 		foreach( $array as $key => $item )
 			$output[] = $key . $inner_glue . trim($item);
@@ -320,7 +320,7 @@ function implode_assoc($inner_glue, $outer_glue, $array) {
 }
 
 function sessionClean($tid) {
-GLOBAL $gtable, $local_imagedir;
+	global $gtable, $local_imagedir;
 	$sdsql = mysql_query("SELECT id, pic, blocked, blockID FROM $gtable WHERE tid = '$tid' ORDER BY id");
 	while($sdrow = mysql_fetch_assoc($sdsql)) {
 		if($sdrow['blocked'] == '0') {

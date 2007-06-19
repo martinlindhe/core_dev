@@ -1,9 +1,7 @@
 <?
 class gallery {
-	var $sql, $topic;
-	function gallery($sql = false) {
-		#if(!$sql) $this->sql = &new sql(); else
-		$this->sql = $sql;
+	var $topic;
+	function gallery() {
 		if(!empty($topic) && is_md5($topic)) $this->topic = $topic;
 	}
 	function loop($v, $topic, $p = 1) {
@@ -66,143 +64,143 @@ echo '
 		if($i != '1') echo "\t\t\t</tr>\n";
 	}
 	function galleryList($type, $topic = '', $slimit = 0, $limit = 0, $city = '') {
-		global $t;
+		global $db;
 		switch($type) {
 		case 'all':
-			return $this->sql->query("SELECT main_id, p_name, p_date, p_dday, p_views, p_cmts, p_pics, p_popular, owner_str, p_city, status_id FROM s_ptopic ORDER BY p_date DESC".(($limit)?" LIMIT $slimit, $limit":''));
+			return $db->getArray("SELECT main_id, p_name, p_date, p_dday, p_views, p_cmts, p_pics, p_popular, owner_str, p_city, status_id FROM s_ptopic ORDER BY p_date DESC".(($limit)?" LIMIT $slimit, $limit":''));
 		break;
 		case 'allcity':
-			return $this->sql->query("SELECT main_id, p_name, p_date, p_dday, p_views, p_cmts, p_pics, p_popular, owner_str, p_city, status_id FROM s_ptopic WHERE p_city = '".$city."' ORDER BY p_date DESC".(($limit)?" LIMIT $slimit, $limit":''));
+			return $db->getArray("SELECT main_id, p_name, p_date, p_dday, p_views, p_cmts, p_pics, p_popular, owner_str, p_city, status_id FROM s_ptopic WHERE p_city = '".$city."' ORDER BY p_date DESC".(($limit)?" LIMIT $slimit, $limit":''));
 		break;
 		case 'count':
-			return $this->sql->queryResult("SELECT COUNT(*) as count FROM s_ptopic WHERE status_id = '1'");
+			return $db->getArray("SELECT COUNT(*) as count FROM s_ptopic WHERE status_id = '1'");
 		break;
 		case 'movie':
-			return $this->sql->query("SELECT m.topic_id, m.m_id, m.m_name, m.m_date, m.m_dday, m.m_file, m.m_view, m.m_owner, m.m_edit, m.m_size, m.m_length, m.m_cmt, t.p_city, t.status_id FROM s_pmovie m INNER JOIN s_ptopic t ON t.main_id = m.topic_id WHERE m.status_id =  '1' ORDER BY t.p_date DESC".(($limit)?" LIMIT $slimit, $limit":''));
+			return $db->getArray("SELECT m.topic_id, m.m_id, m.m_name, m.m_date, m.m_dday, m.m_file, m.m_view, m.m_owner, m.m_edit, m.m_size, m.m_length, m.m_cmt, t.p_city, t.status_id FROM s_pmovie m INNER JOIN s_ptopic t ON t.main_id = m.topic_id WHERE m.status_id =  '1' ORDER BY t.p_date DESC".(($limit)?" LIMIT $slimit, $limit":''));
 		break;
 		case 'moviecity':
-			return $this->sql->query("SELECT m.topic_id, m.m_id, m.m_name, m.m_date, m.m_dday, m.m_file, m.m_view, m.m_owner, m.m_edit, m.m_size, m.m_length, m.m_cmt, t.p_city, t.status_id FROM s_pmovie m INNER JOIN s_ptopic t ON t.main_id = m.topic_id AND t.p_city = '".$city."' WHERE m.status_id =  '1' ORDER BY t.p_date DESC".(($limit)?" LIMIT $slimit, $limit":''));
+			return $db->getArray("SELECT m.topic_id, m.m_id, m.m_name, m.m_date, m.m_dday, m.m_file, m.m_view, m.m_owner, m.m_edit, m.m_size, m.m_length, m.m_cmt, t.p_city, t.status_id FROM s_pmovie m INNER JOIN s_ptopic t ON t.main_id = m.topic_id AND t.p_city = '".$city."' WHERE m.status_id =  '1' ORDER BY t.p_date DESC".(($limit)?" LIMIT $slimit, $limit":''));
 		break;
 		case 'movievip':
-			return $this->sql->query("SELECT m.topic_id, m.m_id, m.m_name, m.m_date, m.m_dday, m.m_file, m.m_view, m.m_owner, m.m_edit, m.m_size, m.m_length, m.m_cmt, t.p_city, t.status_id FROM s_pmovie m INNER JOIN s_ptopic t ON t.main_id = m.topic_id WHERE m.status_id =  '1' ORDER BY t.p_date DESC, m.main_id DESC".(($limit)?" LIMIT $slimit, $limit":''));
+			return $db->getArray("SELECT m.topic_id, m.m_id, m.m_name, m.m_date, m.m_dday, m.m_file, m.m_view, m.m_owner, m.m_edit, m.m_size, m.m_length, m.m_cmt, t.p_city, t.status_id FROM s_pmovie m INNER JOIN s_ptopic t ON t.main_id = m.topic_id WHERE m.status_id =  '1' ORDER BY t.p_date DESC, m.main_id DESC".(($limit)?" LIMIT $slimit, $limit":''));
 		break;
 		case 'piccount':
-			return $this->sql->queryResult("SELECT COUNT(*) as count FROM s_ppic WHERE topic_id = '".secureINS($topic)."' AND status_id = '1'");
+			return $db->getOneItem("SELECT COUNT(*) FROM s_ppic WHERE topic_id = '".$db->escape($topic)."' AND status_id = '1'");
 		break;
 		case 'moviecount':
-			return $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pmovie WHERE status_id = '1'");
+			return $db->getOneItem("SELECT COUNT(*) FROM s_pmovie WHERE status_id = '1'");
 		break;
 		case 'cmtnewcount':
-			return $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pcmt WHERE topic_id = '".secureINS($topic)."' AND status_id = '1'");
+			return $db->getOneItem("SELECT COUNT(*) FROM s_pcmt WHERE topic_id = '".$db->escape($topic)."' AND status_id = '1'");
 		break;
 		case 'cmtnewallcount':
-			return $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pcmt WHERE status_id = '1'");
+			return $db->getOneItem("SELECT COUNT(*) FROM s_pcmt WHERE status_id = '1'");
 		break;
 		case 'cmtnew':
-			return $this->sql->query("SELECT a.main_id, a.unique_id, a.topic_id, a.pic_id, a.c_name, a.c_email, a.c_msg, a.c_date, a.c_html FROM s_pcmt a INNER JOIN s_ppic p ON p.main_id = a.unique_id AND p.status_id = '1' INNER JOIN s_ptopic t ON t.main_id = a.topic_id AND t.status_id = '1' WHERE a.topic_id = '".secureINS($topic)."' AND a.status_id = '1' ORDER BY c_date DESC".(($limit)?" LIMIT $slimit, $limit":''), 0, 1);
+			return $db->getArray("SELECT a.main_id, a.unique_id, a.topic_id, a.pic_id, a.c_name, a.c_email, a.c_msg, a.c_date, a.c_html FROM s_pcmt a INNER JOIN s_ppic p ON p.main_id = a.unique_id AND p.status_id = '1' INNER JOIN s_ptopic t ON t.main_id = a.topic_id AND t.status_id = '1' WHERE a.topic_id = '".$db->escape($topic)."' AND a.status_id = '1' ORDER BY c_date DESC".(($limit)?" LIMIT $slimit, $limit":''), 0, 1);
 		break;
 		case 'cmtnewall':
-			return $this->sql->query("SELECT a.main_id, a.unique_id, a.topic_id, a.pic_id, a.c_name, a.c_email, a.c_msg, a.c_date, a.c_html FROM s_pcmt a INNER JOIN s_ppic p ON p.main_id = a.unique_id AND p.status_id = '1' INNER JOIN s_ptopic t ON t.main_id = a.topic_id AND t.status_id = '1' WHERE a.status_id = '1' ORDER BY c_date DESC".(($limit)?" LIMIT $slimit, $limit":''), 0, 1);
+			return $db->getArray("SELECT a.main_id, a.unique_id, a.topic_id, a.pic_id, a.c_name, a.c_email, a.c_msg, a.c_date, a.c_html FROM s_pcmt a INNER JOIN s_ppic p ON p.main_id = a.unique_id AND p.status_id = '1' INNER JOIN s_ptopic t ON t.main_id = a.topic_id AND t.status_id = '1' WHERE a.status_id = '1' ORDER BY c_date DESC".(($limit)?" LIMIT $slimit, $limit":''), 0, 1);
 		break;
 		case 'cmtcount':
-			return $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pcmt WHERE unique_id = '$topic' AND status_id = '1'");
+			return $db->getOneItem("SELECT COUNT(*) FROM s_pcmt WHERE unique_id = '$topic' AND status_id = '1'");
 		break;
 		case 'cmtmvcount':
-			return $this->sql->queryResult("SELECT COUNT(*) as count FROM s_pmoviecmt WHERE unique_id = '$topic' AND status_id = '1'");
+			return $db->getOneItem("SELECT COUNT(*) FROM s_pmoviecmt WHERE unique_id = '$topic' AND status_id = '1'");
 		break;
 		case 'topic':
-			return $this->sql->query("SELECT main_id, p_name, p_date, p_dday, p_views, p_cmts, p_pics, p_popular, owner_str, p_city, status_id FROM s_ptopic a WHERE a.main_id = '".secureINS($topic)."' AND a.status_id = '1' LIMIT 1");
+			return $db->getArray("SELECT main_id, p_name, p_date, p_dday, p_views, p_cmts, p_pics, p_popular, owner_str, p_city, status_id FROM s_ptopic a WHERE a.main_id = '".$db->escape($topic)."' AND a.status_id = '1' LIMIT 1");
 		break;
 		case 'owner':
-			return $this->sql->query("SELECT o.p_name, o.p_pic, u.id_id, u.u_birth, u.u_alias, u.u_picid, u.u_picvalid, u.u_sex, u.u_picd, u.account_date FROM s_powner_rel r INNER JOIN s_powner o ON o.main_id = r.owner_id LEFT JOIN s_user u ON u.id_id = o.p_user AND u.status_id = '1' WHERE r.topic_id = '".secureINS($topic)."' ORDER BY o.p_name", 0, 1);
+			return $db->getArray("SELECT o.p_name, o.p_pic, u.id_id, u.u_birth, u.u_alias, u.u_picid, u.u_picvalid, u.u_sex, u.u_picd, u.account_date FROM s_powner_rel r INNER JOIN s_powner o ON o.main_id = r.owner_id LEFT JOIN s_user u ON u.id_id = o.p_user AND u.status_id = '1' WHERE r.topic_id = '".$db->escape($topic)."' ORDER BY o.p_name", 0, 1);
 		break;
 		case 'topicvip':
-			return $this->sql->query("SELECT main_id, p_name, p_date, p_dday, p_views, p_cmts, p_pics, p_popular, owner_str, p_city, status_id FROM s_ptopic a WHERE a.main_id = '".secureINS($topic)."' LIMIT 1");
+			return $db->getArray("SELECT main_id, p_name, p_date, p_dday, p_views, p_cmts, p_pics, p_popular, owner_str, p_city, status_id FROM s_ptopic a WHERE a.main_id = '".$db->escape($topic)."' LIMIT 1");
 		break;
 		case 'multi':
-			return $this->sql->query("SELECT main_id, id, p_view, p_cmt FROM s_ppic WHERE topic_id = '".secureINS($topic)."' AND status_id = '1' ORDER BY order_id, main_id".(($limit)?" LIMIT $slimit, $limit":''));
+			return $db->getArray("SELECT main_id, id, p_view, p_cmt FROM s_ppic WHERE topic_id = '".$db->escape($topic)."' AND status_id = '1' ORDER BY order_id, main_id".(($limit)?" LIMIT $slimit, $limit":''));
 		break;
 		case 'single':
-			return $this->sql->queryLine("SELECT a.main_id, a.id, a.p_view, a.p_cmt, a.status_id, a.order_id, b.main_id AS topic_id, b.p_name, b.p_date, b.p_dday, o.p_name, o.p_pic, b.p_views, b.p_cmts, b.p_pics, b.p_city, b.status_id as topic_status, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picid, u.u_picvalid, u.u_picd, u.account_date FROM (s_ppic a, s_ptopic b) LEFT JOIN s_powner o ON a.owner_id = o.main_id LEFT JOIN s_user u ON u.id_id = o.p_user AND u.status_id = '1' WHERE a.main_id = '".secureINS($topic)."' AND a.status_id = '1' AND b.main_id = a.topic_id LIMIT 1", 1);
+			return $db->getOneItem("SELECT a.main_id, a.id, a.p_view, a.p_cmt, a.status_id, a.order_id, b.main_id AS topic_id, b.p_name, b.p_date, b.p_dday, o.p_name, o.p_pic, b.p_views, b.p_cmts, b.p_pics, b.p_city, b.status_id as topic_status, u.id_id, u.u_alias, u.u_sex, u.u_birth, u.u_picid, u.u_picvalid, u.u_picd, u.account_date FROM (s_ppic a, s_ptopic b) LEFT JOIN s_powner o ON a.owner_id = o.main_id LEFT JOIN s_user u ON u.id_id = o.p_user AND u.status_id = '1' WHERE a.main_id = '".$db->escape($topic)."' AND a.status_id = '1' AND b.main_id = a.topic_id LIMIT 1");
 		break;
 		case 'singlevip':
-			return $this->sql->query("SELECT a.main_id, a.id, a.p_view, a.p_cmt, a.status_id, a.order_id, b.main_id AS topic_id, b.p_name, b.p_date, b.p_dday, a.owner_id, o.p_name, o.p_mail, o.p_pic, b.p_views, b.p_cmts, b.p_pics, b.p_city, b.status_id FROM s_ppic a INNER JOIN s_ptopic b ON b.main_id = a.topic_id LEFT JOIN s_powner o ON a.owner_id = o.main_id WHERE a.main_id = '".secureINS($topic)."' AND a.status_id = '1' LIMIT 1");
+			return $db->getArray("SELECT a.main_id, a.id, a.p_view, a.p_cmt, a.status_id, a.order_id, b.main_id AS topic_id, b.p_name, b.p_date, b.p_dday, a.owner_id, o.p_name, o.p_mail, o.p_pic, b.p_views, b.p_cmts, b.p_pics, b.p_city, b.status_id FROM s_ppic a INNER JOIN s_ptopic b ON b.main_id = a.topic_id LEFT JOIN s_powner o ON a.owner_id = o.main_id WHERE a.main_id = '".$db->escape($topic)."' AND a.status_id = '1' LIMIT 1");
 		break;
 		case 'cmt':
-			return $this->sql->query("SELECT a.main_id, a.c_msg, a.c_date, a.c_html, a.logged_in, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date FROM s_pcmt a LEFT JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.unique_id = '".secureINS($topic)."' AND a.status_id = '1' ORDER BY a.main_id DESC".(($limit)?" LIMIT $slimit, $limit":''), 0, 1);
+			return $db->getArray("SELECT a.main_id, a.c_msg, a.c_date, a.c_html, a.logged_in, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date FROM s_pcmt a LEFT JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.unique_id = '".$db->escape($topic)."' AND a.status_id = '1' ORDER BY a.main_id DESC".(($limit)?" LIMIT $slimit, $limit":''), 0, 1);
 		break;
 		case 'cmtmv':
-			return $this->sql->query("SELECT a.main_id, a.c_msg, a.c_date, a.c_html, a.logged_in, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date FROM s_pmoviecmt a INNER JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.unique_id = '".secureINS($topic)."' AND a.status_id = '1' ORDER BY a.main_id DESC".(($limit)?" LIMIT $slimit, $limit":''), 0, 1);
+			return $db->getArray("SELECT a.main_id, a.c_msg, a.c_date, a.c_html, a.logged_in, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date FROM s_pmoviecmt a INNER JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.unique_id = '".$db->escape($topic)."' AND a.status_id = '1' ORDER BY a.main_id DESC".(($limit)?" LIMIT $slimit, $limit":''), 0, 1);
 		break;
 		case 'mostviewed':
-			return $this->sql->query("SELECT main_id, id, p_view, p_cmt FROM s_ppic WHERE status_id = '1' AND p_view >0 AND topic_id = '".secureINS($topic)."' ORDER BY p_view DESC, order_id ASC, main_id ASC LIMIT 4");
+			return $db->getArray("SELECT main_id, id, p_view, p_cmt FROM s_ppic WHERE status_id = '1' AND p_view >0 AND topic_id = '".$db->escape($topic)."' ORDER BY p_view DESC, order_id ASC, main_id ASC LIMIT 4");
 		break;
 		case 'mostcommented':
-			return $this->sql->query("SELECT b.main_id, b.id, b.p_view, b.p_cmt FROM s_pcmt a INNER JOIN s_ppic b ON a.unique_id = b.main_id AND b.status_id = '1' WHERE a.topic_id = '".secureINS($topic)."' AND a.status_id = '1' GROUP BY b.main_id ORDER BY p_cmt DESC LIMIT 4");
+			return $db->getArray("SELECT b.main_id, b.id, b.p_view, b.p_cmt FROM s_pcmt a INNER JOIN s_ppic b ON a.unique_id = b.main_id AND b.status_id = '1' WHERE a.topic_id = '".$db->escape($topic)."' AND a.status_id = '1' GROUP BY b.main_id ORDER BY p_cmt DESC LIMIT 4");
 		break;
 		case 'latestcomment':
-			return $this->sql->query("SELECT a.c_msg, a.pic_id, a.topic_id, a.unique_id, a.logged_in, u.u_alias FROM s_pcmt a INNER JOIN s_ppic b ON b.main_id = a.unique_id AND b.status_id = '1' INNER JOIN s_ptopic c ON c.main_id = a.topic_id AND c.status_id = '1' INNER JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' AND a.p_city = '".CITY."' ORDER BY a.main_id DESC LIMIT 8");
+			return $db->getArray("SELECT a.c_msg, a.pic_id, a.topic_id, a.unique_id, a.logged_in, u.u_alias FROM s_pcmt a INNER JOIN s_ppic b ON b.main_id = a.unique_id AND b.status_id = '1' INNER JOIN s_ptopic c ON c.main_id = a.topic_id AND c.status_id = '1' INNER JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' AND a.p_city = '".CITY."' ORDER BY a.main_id DESC LIMIT 8");
 		break;
 		case 'latestmvcmt':
-			return $this->sql->query("SELECT a.c_msg, a.topic_id, a.unique_id, a.logged_in, u.u_alias, b.m_file FROM s_pmoviecmt a INNER JOIN s_pmovie b ON b.m_id = a.unique_id AND b.status_id = '1' INNER JOIN s_ptopic c ON c.main_id = a.topic_id AND c.status_id = '1' AND c.p_city = '".CITY."' INNER JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' ORDER BY a.main_id DESC LIMIT 4");
+			return $db->getArray("SELECT a.c_msg, a.topic_id, a.unique_id, a.logged_in, u.u_alias, b.m_file FROM s_pmoviecmt a INNER JOIN s_pmovie b ON b.m_id = a.unique_id AND b.status_id = '1' INNER JOIN s_ptopic c ON c.main_id = a.topic_id AND c.status_id = '1' AND c.p_city = '".CITY."' INNER JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.status_id = '1' ORDER BY a.main_id DESC LIMIT 4");
 		break;
 		case 'latestcomment2':
-			return $this->sql->query("SELECT a.c_msg, a.pic_id, a.topic_id, a.unique_id FROM s_pcmt a, s_ppic b, s_ptopic c WHERE a.status_id = '1' AND b.main_id = a.unique_id AND b.topic_id = a.topic_id AND b.status_id = '1' AND c.main_id = a.topic_id AND c.status_id = '1' ORDER BY a.c_date DESC LIMIT 8");
+			return $db->getArray("SELECT a.c_msg, a.pic_id, a.topic_id, a.unique_id FROM s_pcmt a, s_ppic b, s_ptopic c WHERE a.status_id = '1' AND b.main_id = a.unique_id AND b.topic_id = a.topic_id AND b.status_id = '1' AND c.main_id = a.topic_id AND c.status_id = '1' ORDER BY a.c_date DESC LIMIT 8");
 		break;
 		case 'b':
-			return $this->sql->queryResult("SELECT main_id FROM s_ppic WHERE (order_id < '$limit' AND main_id != '$slimit' AND topic_id =  '".secureINS($topic)."' AND status_id = '1') OR (order_id = '$limit' AND main_id < '$slimit' AND topic_id =  '".secureINS($topic)."' AND status_id = '1') ORDER BY order_id DESC, main_id DESC LIMIT 1");
+			return $db->getOneItem("SELECT main_id FROM s_ppic WHERE (order_id < '$limit' AND main_id != '$slimit' AND topic_id =  '".$db->escape($topic)."' AND status_id = '1') OR (order_id = '$limit' AND main_id < '$slimit' AND topic_id = '".$db->escape($topic)."' AND status_id = '1') ORDER BY order_id DESC, main_id DESC LIMIT 1");
 		break;
 		case 'f':
-			return $this->sql->queryResult("SELECT main_id FROM s_ppic WHERE (order_id > '$limit' AND main_id != '$slimit' AND topic_id =  '".secureINS($topic)."' AND status_id = '1') OR (order_id = '$limit' AND main_id > '$slimit' AND topic_id =  '".secureINS($topic)."' AND status_id = '1') ORDER BY order_id, main_id LIMIT 1");
+			return $db->getOneItem("SELECT main_id FROM s_ppic WHERE (order_id > '$limit' AND main_id != '$slimit' AND topic_id =  '".$db->escape($topic)."' AND status_id = '1') OR (order_id = '$limit' AND main_id > '$slimit' AND topic_id = '".$db->escape($topic)."' AND status_id = '1') ORDER BY order_id, main_id LIMIT 1");
 		break;
 		}
 	}
 	function galleryView($topic, $id) {
-		global $t;
-		$c = $this->sql->queryResult("SELECT COUNT(*) as count FROM s_ppicview WHERE sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."' AND unique_id = '".secureINS($id)."' AND date_snl = NOW() LIMIT 1");
+		global $db;
+		$c = $db->getOneItem("SELECT COUNT(*) FROM s_ppicview WHERE sess_ip = '".$db->escape($_SERVER['REMOTE_ADDR'])."' AND unique_id = '".$db->escape($id)."' AND date_snl = NOW() LIMIT 1");
 		$this->sql->logAdd($topic, $id, 'VIEW');
 		if(!$c) {
-			$this->sql->queryUpdate("UPDATE s_ppic SET p_view = p_view + 1, p_tview = p_tview + 1 WHERE main_id = '".secureINS($id)."' LIMIT 1");
-			$this->sql->queryUpdate("UPDATE s_ptopic SET p_views = p_views + 1 WHERE main_id = '".secureINS($topic)."' LIMIT 1");
-			$this->sql->queryInsert("INSERT INTO s_ppicview SET sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', unique_id = '".secureINS($id)."', date_snl = NOW(), date_cnt = NOW()");
+			$db->update("UPDATE s_ppic SET p_view = p_view + 1, p_tview = p_tview + 1 WHERE main_id = '".$db->escape($id)."' LIMIT 1");
+			$db->update("UPDATE s_ptopic SET p_views = p_views + 1 WHERE main_id = '".$db->escape($topic)."' LIMIT 1");
+			$db->insert("INSERT INTO s_ppicview SET sess_ip = '".$db->escape($_SERVER['REMOTE_ADDR'])."', unique_id = '".$db->escape($id)."', date_snl = NOW(), date_cnt = NOW()");
 			return false;
 		} return true;
 	}
 // ta bort all info om en bild, radera bilden, töm cache i topic
 	function galleryDelete($type, $id, $array = false, $parentstatus = 1) {
-		global $t;
+		global $db;
 		switch($type) {
 		case 'pic':
-			$row = $this->sql->query("SELECT main_id, id, topic_id, p_view, p_cmt, status_id, statusID FROM s_ppic WHERE main_id = '".secureINS($id)."' LIMIT 1");
+			$row = $this->sql->query("SELECT main_id, id, topic_id, p_view, p_cmt, status_id, statusID FROM s_ppic WHERE main_id = '".$db->escape($id)."' LIMIT 1");
 			if($row) {
 				$this->galleryDelete('file', '', $row);
-				#$this->sql->queryUpdate("DELETE FROM s_pcmt WHERE unique_id = '".secureINS($row[0][0])."'");
-				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '2' WHERE unique_id = '".secureINS($row[0][0])."'");
-				$this->sql->queryUpdate("DELETE FROM s_ppic WHERE main_id = '".secureINS($row[0][0])."' LIMIT 1");
+				#$this->sql->queryUpdate("DELETE FROM s_pcmt WHERE unique_id = '".$db->escape($row[0][0])."'");
+				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '2' WHERE unique_id = '".$db->escape($row[0][0])."'");
+				$this->sql->queryUpdate("DELETE FROM s_ppic WHERE main_id = '".$db->escape($row[0][0])."' LIMIT 1");
 				if($row[0][5] == '1')
-					$this->sql->queryUpdate("UPDATE s_ptopic SET p_views = p_views - {$row[0][3]}, p_cmts = p_cmts - {$row[0][4]}, p_pics = p_pics - 1 WHERE main_id = '".secureINS($row[0][2])."' LIMIT 1");
+					$this->sql->queryUpdate("UPDATE s_ptopic SET p_views = p_views - {$row[0][3]}, p_cmts = p_cmts - {$row[0][4]}, p_pics = p_pics - 1 WHERE main_id = '".$db->escape($row[0][2])."' LIMIT 1");
 			}
 		break;
 		case 'cmt':
-			$row = $this->sql->query("SELECT main_id, unique_id, topic_id FROM s_pcmt WHERE main_id = '".secureINS($id)."' LIMIT 1");
+			$row = $this->sql->query("SELECT main_id, unique_id, topic_id FROM s_pcmt WHERE main_id = '".$db->escape($id)."' LIMIT 1");
 			if($row) {
 				if($array) {
-					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt - 1 WHERE main_id = '".secureINS($row[0][1])."' LIMIT 1");
+					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt - 1 WHERE main_id = '".$db->escape($row[0][1])."' LIMIT 1");
 					if($parentstatus == '1') {
-						$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts - 1 WHERE main_id = '".secureINS($row[0][2])."' LIMIT 1");
+						$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts - 1 WHERE main_id = '".$db->escape($row[0][2])."' LIMIT 1");
 					}
 				}
-				#$this->sql->queryUpdate("DELETE FROM s_pcmt WHERE main_id = '".secureINS($row[0][0])."'");
-				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '2', view_id = '1' WHERE main_id = '".secureINS($row[0][0])."'");
+				#$this->sql->queryUpdate("DELETE FROM s_pcmt WHERE main_id = '".$db->escape($row[0][0])."'");
+				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '2', view_id = '1' WHERE main_id = '".$db->escape($row[0][0])."'");
 			}
 		break;
 		case 'cmtmv':
-			$row = $this->sql->query("SELECT main_id, unique_id FROM s_pmoviecmt WHERE main_id = '".secureINS($id)."' LIMIT 1");
+			$row = $this->sql->query("SELECT main_id, unique_id FROM s_pmoviecmt WHERE main_id = '".$db->escape($id)."' LIMIT 1");
 			if($row) {
 				if($array) {
-					$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt - 1 WHERE m_id = '".secureINS($row[0][1])."' LIMIT 1");
+					$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt - 1 WHERE m_id = '".$db->escape($row[0][1])."' LIMIT 1");
 				}
-				$this->sql->queryUpdate("UPDATE s_pmoviecmt SET status_id = '2', view_id = '1' WHERE main_id = '".secureINS($row[0][0])."'");
+				$this->sql->queryUpdate("UPDATE s_pmoviecmt SET status_id = '2', view_id = '1' WHERE main_id = '".$db->escape($row[0][0])."'");
 			}
 		break;
 		case 'file':
@@ -221,25 +219,25 @@ echo '
 		}
 	}
 	function galleryAdd($type, $topic, $status) {
-		global $t;
+		global $db;
 		switch($type) {
 		case 'pic':
 			if($status == '1')
-				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics + 1 WHERE main_id = '".secureINS($topic)."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics + 1 WHERE main_id = '".$db->escape($topic)."' LIMIT 1");
 		break;
 		}
 	}
 	function galleryUpdate($type, $topic, $status, $oldstatus, $parentstatus = 1) {
-		global $t, $user;
+		global $user;
 		switch($type) {
 		case 'pic':
 
 			if($status == '1' && $oldstatus != '1') {
 // ska visas, adda 1
-				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics + 1, p_views = p_views + {$topic['p_view']}, p_cmts = p_cmts + {$topic['p_cmt']} WHERE main_id = '".secureINS($topic['topic_id'])."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics + 1, p_views = p_views + {$topic['p_view']}, p_cmts = p_cmts + {$topic['p_cmt']} WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
 			} elseif($status != '1' && $oldstatus == '1') {
 // ska döljas, della 1
-				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics - 1, p_views = p_views - {$topic['p_view']}, p_cmts = p_cmts - {$topic['p_cmt']} WHERE main_id = '".secureINS($topic['topic_id'])."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE s_ptopic SET p_pics = p_pics - 1, p_views = p_views - {$topic['p_view']}, p_cmts = p_cmts - {$topic['p_cmt']} WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
 			}
 		break;
 		case 'cmt':
@@ -247,26 +245,26 @@ echo '
 				if($status == '1' && $oldstatus != '1') {
 // ska visas, adda 1, fixspy!
 					if(!empty($topic['str_id'])) $user->fixSpy('v', $topic['pic_id'], $topic['topic_id'].'/'.$topic['str_id'].'-thumb.jpg', @$topic['logged_id']);
-					$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts + 1 WHERE main_id = '".secureINS($topic['topic_id'])."' LIMIT 1");
-					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt + 1 WHERE main_id = '".secureINS($topic['pic_id'])."' LIMIT 1");
+					$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts + 1 WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
+					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt + 1 WHERE main_id = '".$db->escape($topic['pic_id'])."' LIMIT 1");
 				} elseif($status != '1' && $oldstatus == '1') {
 // ska döljas, della 1
-					$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts - 1 WHERE main_id = '".secureINS($topic['topic_id'])."' LIMIT 1");
-					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt - 1 WHERE main_id = '".secureINS($topic['pic_id'])."' LIMIT 1");
+					$this->sql->queryUpdate("UPDATE s_ptopic SET p_cmts = p_cmts - 1 WHERE main_id = '".$db->escape($topic['topic_id'])."' LIMIT 1");
+					$this->sql->queryUpdate("UPDATE s_ppic SET p_cmt = p_cmt - 1 WHERE main_id = '".$db->escape($topic['pic_id'])."' LIMIT 1");
 				}
-				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '".secureINS($status)."' WHERE main_id = '".secureINS($topic['main_id'])."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE s_pcmt SET status_id = '".$db->escape($status)."' WHERE main_id = '".$db->escape($topic['main_id'])."' LIMIT 1");
 			}
 		break;
 		case 'cmtmv':
 			if($status == '1' && $oldstatus != '1') {
 // ska visas, adda 1, fixspy!
 				#if(!empty($topic['str_id'])) $user->fixSpy('mv', $topic['pic_id'], $topic['topic_id'].'/'.$topic['str_id'].'-thumb.jpg', @$topic['logged_id']);
-				$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt + 1 WHERE m_id = '".secureINS($topic['m_id'])."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt + 1 WHERE m_id = '".$db->escape($topic['m_id'])."' LIMIT 1");
 			} elseif($status != '1' && $oldstatus == '1') {
 // ska döljas, della 1
-				$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt - 1 WHERE m_id = '".secureINS($topic['m_id'])."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE s_pmovie SET m_cmt = m_cmt - 1 WHERE m_id = '".$db->escape($topic['m_id'])."' LIMIT 1");
 			}
-			$this->sql->queryUpdate("UPDATE s_pmoviecmt SET status_id = '".secureINS($status)."' WHERE main_id = '".secureINS($topic['main_id'])."' LIMIT 1");
+			$this->sql->queryUpdate("UPDATE s_pmoviecmt SET status_id = '".$db->escape($status)."' WHERE main_id = '".$db->escape($topic['main_id'])."' LIMIT 1");
 		break;
 		case 'file':
 			if($status == '2' && $oldstatus != '2') {
@@ -299,7 +297,7 @@ echo '
 		}
 	}
 	function galleryFix() {
-		global $t;
+		global $db;
 		$topic = array();
 		$return = $this->sql->query("SELECT main_id, topic_id, status_id FROM s_ppic");
 		foreach($return as $val) {
@@ -326,7 +324,7 @@ echo '
 		}
 	}
 	function galleryRefresh($total = true, $today = false) {
-		global $t;
+		global $db;
 		if($total) {
 			$stat = array(0, 0, 0, 0, 0, 0, 0, 0);
 			$stat[0] += $this->sql->queryResult("SELECT COUNT(*) as count FROM s_logvisit");

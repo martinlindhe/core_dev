@@ -1,6 +1,6 @@
 <?
 class sql {
-	var $result, $connected, $t, $db;
+	var $result, $connected, $db;
 	function sql() {
 		$this->connected = false;
 		$this->t = T;

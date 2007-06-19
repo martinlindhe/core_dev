@@ -17,9 +17,10 @@
 
 	plattformen:
 		* nytt databaslager:
-			- använder mysqli, bättre prestanda
+			- använder mysqli, bättre prestanda!
 			- innehåller sql profiler
 			- tagit bort ${t} och CH från alla sql-queries
+			- ersatt secureINS() crap med $db->escape()
 
 
 ***************************************************************************************************
