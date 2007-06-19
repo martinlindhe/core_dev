@@ -40,12 +40,12 @@
 			$msg[] = 'Du måste skriva en godkänd e-postadress.';
 		}
 		if(empty($error['email'])) {
-			$res = $sql->queryLine("SELECT status_id, id_id, u_email, u_sex, u_alias FROM {$t}user WHERE u_email = '".secureINS(trim($id))."' AND status_id != '2' LIMIT 1");
+			$res = $sql->queryLine("SELECT status_id, id_id, u_email, u_sex, u_alias FROM s_user WHERE u_email = '".secureINS(trim($id))."' AND status_id != '2' LIMIT 1");
 			if(!empty($key) && !is_numeric($key)) {
 				$error['key'] = true;
 				$msg[] = 'Felaktig aktiveringskod.';
 			} elseif($res[0] == 'F') {
-				$res[5] = $sql->queryResult("SELECT reg_code FROM {$t}userinfo WHERE id_id = '".$res[1]."' LIMIT 1");
+				$res[5] = $sql->queryResult("SELECT reg_code FROM s_userinfo WHERE id_id = '".$res[1]."' LIMIT 1");
 				if(empty($key) || !is_numeric($key) || empty($res[5]) || $res[5] != $key) {
 					$error['key'] = true;
 					$msg[] = 'Felaktig aktiveringskod.';

@@ -30,7 +30,7 @@
 	$gotkey = false;
 	$key = '';
 	$get = '';
-	$res = $sql->queryLine("SELECT * FROM {$t}userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1", 1);
+	$res = $sql->queryLine("SELECT * FROM s_userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1", 1);
 	if(!empty($res) && count($res)) {
 		$file = './_input/preimages/'.$l['id_id'].'_'.$res['flow_id'].'-pre.'.$res['img_id'];
 		$file2 = './_input/preimages/'.$l['id_id'].'_'.$res['flow_id'].'.'.$res['img_id'];
@@ -49,7 +49,7 @@
 				if(!$p_info) $error++;
 				if(@$p_info['mime'] && $p_info['mime'] == 'image/bmp') {
 					@unlink($p_name);
-					$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
+					$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
 					errorACT('Bilden du laddat upp är egentligen en .BMP-fil, inte en JPG. Välj en annan eller spara om din bild till .JPG', l('member', 'settings', 'img'));
 				}
 				if($p_info[0] < 75 || $p_info[1] < 100) errorACT('Bilden är för liten. (Minst 75x100)', l('member', 'settings', 'img'));
@@ -65,13 +65,13 @@
 						@unlink($file);
 						@unlink($file2);
 						@unlink($file3);
-						$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
+						$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
 					}
 					$gotpic = true;
 					#set key
 					$key = md5(microtime().'456645645645');
 #sta
-					$sql->queryUpdate("REPLACE INTO {$t}userpicvalid SET img_id = '$p_name', id_id = '".$l['id_id']."', flow_id = '$flow', key_id = '$key', status_id = '3'");
+					$sql->queryUpdate("REPLACE INTO s_userpicvalid SET img_id = '$p_name', id_id = '".$l['id_id']."', flow_id = '$flow', key_id = '$key', status_id = '3'");
 					reloadACT(l('member', 'settings', 'img').'0/&key='.$key);
 				} else {
 					errorACT('Felaktigt format, storlek eller bredd & höjd.', l('member', 'settings', 'img'));
@@ -89,7 +89,7 @@
 		@unlink($file);
 		@unlink($file2);
 		@unlink($file3);
-		$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
+		$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
 		reloadACT(l('member', 'settings', 'img'));
 	} elseif(!empty($_POST['n0']) && $_POST['n0'] == 'd') {
 		if($l['u_picvalid'] == '1') {
@@ -98,12 +98,12 @@
 			$pid = intval($l['u_picid']);
 			$pid++;
 			if(strlen($pid) == '1') $pid = '0'.$pid;
-			$sql->queryUpdate("UPDATE {$t}user SET u_picvalid = '0', u_picid = '$pid' WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_user SET u_picvalid = '0', u_picid = '$pid' WHERE id_id = '".$l['id_id']."' LIMIT 1");
 			$_SESSION['data']['u_picvalid'] = 0;
 			$_SESSION['data']['u_picid'] = $pid;
-			$search = $sql->queryResult("SELECT level_id FROM {$t}userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$search = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
 			$search = str_replace(' VALID', '', $search);
-			$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$search' WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$search' WHERE id_id = '".$l['id_id']."' LIMIT 1");
 		}
 		errorACT('Din bild är raderad.', l('member', 'settings', 'img'));
 	}
@@ -113,16 +113,16 @@
 			$second = true;
 			$key = $_GET['key'];
 		} else {
-			$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
 			errorACT('Filen finns inte, försök igen.', l('member', 'settings', 'img'));
 		}
 	}
 	if(!empty($_GET['get']) && is_numeric($_GET['get'])) {
 		$get = str_replace('#', '', $_GET['get']);
 		if($isG)
-			$pic = $sql->queryLine("SELECT a.main_id, a.id, a.topic_id, b.status_id FROM {$t}ppic a INNER JOIN {$t}ptopic b ON b.main_id = a.topic_id WHERE a.main_id = '".secureINS($get)."' AND a.status_id = '1' LIMIT 1");
+			$pic = $sql->queryLine("SELECT a.main_id, a.id, a.topic_id, b.status_id FROM s_ppic a INNER JOIN s_ptopic b ON b.main_id = a.topic_id WHERE a.main_id = '".secureINS($get)."' AND a.status_id = '1' LIMIT 1");
 		else
-			$pic = $sql->queryLine("SELECT a.main_id, a.id, a.topic_id, b.status_id FROM {$t}ppic a INNER JOIN {$t}ptopic b ON b.main_id = a.topic_id AND b.status_id = '1' WHERE a.main_id = '".secureINS($get)."' AND a.status_id = '1' LIMIT 1");
+			$pic = $sql->queryLine("SELECT a.main_id, a.id, a.topic_id, b.status_id FROM s_ppic a INNER JOIN s_ptopic b ON b.main_id = a.topic_id AND b.status_id = '1' WHERE a.main_id = '".secureINS($get)."' AND a.status_id = '1' LIMIT 1");
 		if(!empty($pic) && count($pic)) {
 			if($pic[3] == '2') {
 				errorACT('Felaktigt bildnummer.', l('member', 'settings', 'img'));
@@ -161,17 +161,17 @@
 		$flow = md5(microtime());
 		if(@$p_info['mime'] && $p_info['mime'] == 'image/bmp') {
 			if(!$intern) @unlink($file);
-			$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
+			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
 			errorACT('Bilden du laddat upp är egentligen en .BMP-fil, inte en JPG. Välj en annan eller spara om din bild till .JPG', l('member', 'settings', 'img'));
 		}
 		if(!copyRe($file, './_input/preimages/'.$l['id_id'].'_'.$flow.'.jpg', './_input/preimages/'.$l['id_id'].'_'.$flow.'_2.jpg', $p['x'], $p['y'], $p['w'], $p['h'], 'jpg', $p_info['mime'])) $error++;
 		if(file_exists('./_input/preimages/'.$l['id_id'].'_'.$flow.'.jpg') && file_exists('./_input/preimages/'.$l['id_id'].'_'.$flow.'_2.jpg')) {
 			if(!$intern) @unlink($file);
-			$sql->queryUpdate("REPLACE INTO {$t}userpicvalid SET img_id = 'jpg', id_id = '".$l['id_id']."', flow_id = '$flow'");
+			$sql->queryUpdate("REPLACE INTO s_userpicvalid SET img_id = 'jpg', id_id = '".$l['id_id']."', flow_id = '$flow'");
 			errorACT('Nu har du beskurit din profilbild. Du får ett meddelande när den har granskats.', l('member', 'settings', 'img'));
 		} else {
 			if(!$intern) @unlink($file);
-			$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
+			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
 			errorACT('Bilden var komprimerad och blev för stor när den skulle behandlas. Försök att minska bildens höjd och bredd eller storlek.', l('member', 'settings', 'img'));
 		}
 	}
@@ -227,7 +227,7 @@ function intern_get(obj) {
 		<?=safeOUT(gettxt('top-settings_img'))?>
 <?
 	$gotnew = false;
-	$waiting = $sql->queryLine("SELECT flow_id, status_id, key_id FROM {$t}userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
+	$waiting = $sql->queryLine("SELECT flow_id, status_id, key_id FROM s_userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
 	if($waiting && $waiting[1] == '1') $gotnew = true;
 	if(intval($l['u_picid']) > 0 || $gotnew) {
 ?>

@@ -19,20 +19,20 @@ $reasons = array(
 			if(strpos($key, 'status_id') !== false) {
 				$kid = explode(':', $key);
 				$kid = $kid[1];
-				$res = $sql->queryLine("SELECT picd, pht_name, pht_cmt, hidden_id, hidden_value, user_id FROM {$t}userphoto WHERE main_id = '".$kid."' LIMIT 1");
+				$res = $sql->queryLine("SELECT picd, pht_name, pht_cmt, hidden_id, hidden_value, user_id FROM s_userphoto WHERE main_id = '".$kid."' LIMIT 1");
 				if(isset($_POST['status_id:' . $kid]) && !empty($res) && count($res)) {
 					if($doall && empty($_POST['status_id:' . $kid])) {
 // alla-knapp
 						if($type == '1') {
 # godkänn blanka
 #echo '<b>god bla</b>';
-							$line = $sql->queryUpdate("UPDATE {$t}userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
+							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
 							addALog(@$_SESSION['u_i'].' godkände '.$res[5].':'.$kid);
 						} elseif($type == '2') {
 # neka blanka
 #echo '<b>neka bla</b>';
 							$un = md5(microtime());
-							$line = $sql->queryUpdate("UPDATE {$t}userphoto SET view_id = '1', status_id = '2' AND hidden_value = '".$un."' WHERE main_id = '".$kid."' LIMIT 1");
+							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1', status_id = '2' AND hidden_value = '".$un."' WHERE main_id = '".$kid."' LIMIT 1");
 							if($res[3])
 								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'_'.$res[4].'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
 							else
@@ -47,13 +47,13 @@ $reasons = array(
 						if($_POST['status_id:' . $kid] == '1') {
 # godkänn specifik
 #echo '<b>god spec</b>';
-							$line = $sql->queryUpdate("UPDATE {$t}userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
+							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
 							addALog(@$_SESSION['u_i'].' godkände '.$res[5].':'.$kid);
 						} elseif($_POST['status_id:' . $kid] == '2') {
 # neka specifik
 #echo '<b>neka spec</b>'.$res[5].'Ditt foto: <b>'.secureOUT($res[2]).'</b> har blivit nekat.';
 							$un = md5(microtime());
-							$line = $sql->queryUpdate("UPDATE {$t}userphoto SET view_id = '1', status_id = '2' AND hidden_value = '".$un."' WHERE main_id = '".$kid."' LIMIT 1");
+							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1', status_id = '2' AND hidden_value = '".$un."' WHERE main_id = '".$kid."' LIMIT 1");
 							if($res[3])
 								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'_'.$res[4].'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
 							else
@@ -72,12 +72,12 @@ $reasons = array(
 		exit;
 	} elseif(!empty($_GET['del'])) {
 		$un = md5(microtime());
-		$res = $sql->queryLine("SELECT picd, hidden_id, hidden_value, pht_name, main_id, pht_cmt, user_id FROM {$t}userphoto WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$res = $sql->queryLine("SELECT picd, hidden_id, hidden_value, pht_name, main_id, pht_cmt, user_id FROM s_userphoto WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		if($res[1])
 			@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$res[4].'_'.$res[2].'.'.$res[3], './user_photo_off342/'.$res[4].'_'.$un.'.jpg');
 		else
 			@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$res[4].'.'.$res[3], './user_photo_off342/'.$res[4].'_'.$un.'.jpg');
-		$sql->queryUpdate("UPDATE {$t}userphoto SET view_id = '1' AND status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$sql->queryUpdate("UPDATE s_userphoto SET view_id = '1' AND status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		#if(!empty($_GET['reason']))
 		#	$user->spy($res[6], 'PIC', 'MSG', array('Ditt foto: <b>'.secureOUT($res[5]).'</b> har nekats'.$reasons[$_GET['reason']]));
 		#else
@@ -91,16 +91,16 @@ $reasons = array(
 		$view_cmt = 1;
 	}
 	$view_arr = array(
-			$sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto a INNER JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1'"),
-			$sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto a INNER JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '1' AND a.status_id = '1'"));
+			$sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1'"),
+			$sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '1' AND a.status_id = '1'"));
 	$paging = paging(@$_GET['p'], 50);
 $id = (!empty($_GET['id'])?$_GET['id']:false);
 	if(!$view_cmt && !$id) {
-		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM {$t}userphoto a INNER JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1' LIMIT {$paging['slimit']}, {$paging['limit']}");
+		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1' LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} elseif(!$id) {
-		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM {$t}userphoto a INNER JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '1' AND a.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
+		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '1' AND a.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} else {
-		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM {$t}userphoto a INNER JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.main_id = '".secureINS($id)."' LIMIT 1");
+		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.main_id = '".secureINS($id)."' LIMIT 1");
 	}
 	require("./_tpl/obj_head.php");
 

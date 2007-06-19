@@ -8,7 +8,7 @@ session_start();
 	$tries = array("0", "1", "2", "B");
 
 	if(!empty($_POST['u']) && !empty($_POST['u'])) {
-		$try = mysql_query("SELECT * FROM {$t}admin WHERE BINARY user_user = '".secureINS($_POST['u'])."' AND user_pass = '".secureINS($_POST['p'])."' AND status_id = '1'");
+		$try = mysql_query("SELECT * FROM s_admin WHERE BINARY user_user = '".secureINS($_POST['u'])."' AND user_pass = '".secureINS($_POST['p'])."' AND status_id = '1'");
 		if (mysql_num_rows($try) == '1') {
 			$row = mysql_fetch_assoc($try);
 
@@ -19,31 +19,31 @@ session_start();
 			$_SESSION['u_p'] = $row['login_page'];
 			$_SESSION['u_l'] = $row['login_good'] + 1;
 			$_SESSION['u_a'] = array($row['city_id'], $row['pos_all']);
-			mysql_query("UPDATE {$t}admin SET login_good = login_good + 1, u_date = NOW() WHERE BINARY user_user = '".secureINS($_POST['u'])."' AND user_pass = '".secureINS($_POST['p'])."'");
-			$try = mysql_query("INSERT INTO {$t}adminlog SET login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', l_type = '0', login_date = NOW(), login_name = '".secureINS($_POST['u'])."'");
+			mysql_query("UPDATE s_admin SET login_good = login_good + 1, u_date = NOW() WHERE BINARY user_user = '".secureINS($_POST['u'])."' AND user_pass = '".secureINS($_POST['p'])."'");
+			$try = mysql_query("INSERT INTO s_adminlog SET login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', l_type = '0', login_date = NOW(), login_name = '".secureINS($_POST['u'])."'");
 			if(!$try) {
-				mysql_query("UPDATE {$t}adminlog SET l_type = '0', login_pass = '', login_date = NOW(), login_name = '".secureINS($_POST['u'])."', login_pass = '' WHERE login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."'");
+				mysql_query("UPDATE s_adminlog SET l_type = '0', login_pass = '', login_date = NOW(), login_name = '".secureINS($_POST['u'])."', login_pass = '' WHERE login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."'");
 			}
 			header("Location: frameset.php");
 			exit;
 		} else {
 			$get_o = 0;
-			$try = mysql_query("INSERT INTO {$t}adminlog SET login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', l_type = '1', login_name = '".secureINS($_POST['u'])."', login_pass = '".secureINS($_POST['p'])."', login_date = NOW()");
+			$try = mysql_query("INSERT INTO s_adminlog SET login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', l_type = '1', login_name = '".secureINS($_POST['u'])."', login_pass = '".secureINS($_POST['p'])."', login_date = NOW()");
 			if(!$try) {
 
-				$get = mysql_result(mysql_query("SELECT l_type FROM {$t}adminlog WHERE login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."'"), 0, 'l_type');
+				$get = mysql_result(mysql_query("SELECT l_type FROM s_adminlog WHERE login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."'"), 0, 'l_type');
 				$user = ($get == '0')?"'".secureINS($_POST['u'])."'":"CONCAT(login_name, ':', '".secureINS($_POST['u'])."')";
 				$pass = ($get == '0')?"'".secureINS($_POST['p'])."'":"CONCAT(login_pass, ':', '".secureINS($_POST['p'])."')";
 
 				$get_o = @array_search($get, $tries);
 				if($get_o == '4') $do = 'B'; else $do = $tries[($get_o + 1)];
-				mysql_query("UPDATE {$t}adminlog SET l_type = '$do', login_name = $user, login_pass = $pass, login_date = NOW() WHERE login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."'");
+				mysql_query("UPDATE s_adminlog SET l_type = '$do', login_name = $user, login_pass = $pass, login_date = NOW() WHERE login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."'");
 			}
 			$msg = 'Fel. Du har '.((count($tries) - 1) - ($get_o + 1)).' försök kvar.';
 		}
 	}
 
-	$check = mysql_query("SELECT * FROM {$t}adminlog WHERE login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."' LIMIT 1");
+	$check = mysql_query("SELECT * FROM s_adminlog WHERE login_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."' LIMIT 1");
 	$check = mysql_fetch_assoc($check);
 	if($check['l_type'] == 'B' && !isset($_GET['o'])) {
 		header("Location: ../");
@@ -51,7 +51,7 @@ session_start();
 	}
 
 	if(!empty($_SESSION['u_i'])) {
-		mysql_query("UPDATE {$t}admin SET u_date = '' WHERE main_id = '".secureINS($_SESSION['u_i'])."'");
+		mysql_query("UPDATE s_admin SET u_date = '' WHERE main_id = '".secureINS($_SESSION['u_i'])."'");
 		$_SESSION['u_i'] = '';
 		$_SESSION['u_u'] = '';
 		$_SESSION['u_n'] = '';

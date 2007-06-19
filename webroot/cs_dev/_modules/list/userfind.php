@@ -11,11 +11,11 @@
 			$type = $src[0];
 			$src = $src[1];
 		}
-		$res = $sql->queryLine("SELECT id_id, u_alias FROM {$t}user WHERE u_alias = '".secureINS($src)."' AND status_id = '1' LIMIT 1");
+		$res = $sql->queryLine("SELECT id_id, u_alias FROM s_user WHERE u_alias = '".secureINS($src)."' AND status_id = '1' LIMIT 1");
 		$exact = false;
 		if(empty($res) || !count($res)) {
 			if(!$exact)
-				$res = $sql->queryLine("SELECT id_id, u_alias FROM {$t}user WHERE u_alias LIKE '%".secureINS($src)."%' AND status_id = '1' LIMIT 1");
+				$res = $sql->queryLine("SELECT id_id, u_alias FROM s_user WHERE u_alias LIKE '%".secureINS($src)."%' AND status_id = '1' LIMIT 1");
 			else errorACT('Felaktig användare.');
 		} else $exact = true;
 
@@ -59,21 +59,21 @@
 			else $sexs = $r;
 		}
 		if($sexs) {
-			$c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userlevel WHERE MATCH(level_id) AGAINST('+VALID +SEX".$sexs."' IN BOOLEAN MODE)");
+			$c = $sql->queryResult("SELECT COUNT(*) as count FROM s_userlevel WHERE MATCH(level_id) AGAINST('+VALID +SEX".$sexs."' IN BOOLEAN MODE)");
 			$c = mt_rand(0, $c);
-			$res = $sql->queryResult("SELECT id_id FROM {$t}userlevel WHERE MATCH(level_id) AGAINST('+VALID +SEX".$sexs."' IN BOOLEAN MODE) LIMIT $c, 1");
+			$res = $sql->queryResult("SELECT id_id FROM s_userlevel WHERE MATCH(level_id) AGAINST('+VALID +SEX".$sexs."' IN BOOLEAN MODE) LIMIT $c, 1");
 		} else {
-			$c = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userlevel WHERE MATCH(level_id) AGAINST('+VALID' IN BOOLEAN MODE)");
+			$c = $sql->queryResult("SELECT COUNT(*) as count FROM s_userlevel WHERE MATCH(level_id) AGAINST('+VALID' IN BOOLEAN MODE)");
 			$c = mt_rand(0, $c);
-			$res = $sql->queryResult("SELECT id_id FROM {$t}userlevel WHERE MATCH(level_id) AGAINST('+VALID' IN BOOLEAN MODE) LIMIT $c, 1");
+			$res = $sql->queryResult("SELECT id_id FROM s_userlevel WHERE MATCH(level_id) AGAINST('+VALID' IN BOOLEAN MODE) LIMIT $c, 1");
 		}
 		if(!empty($res)) {
 			if($res == $l['id_id']) {
-				$res = $sql->queryResult("SELECT id_id FROM {$t}uservalid WHERE id_id != '".$l['id_id']."' AND status_id = '".$sexs."' ORDER BY RAND() LIMIT 1");
+				$res = $sql->queryResult("SELECT id_id FROM s_uservalid WHERE id_id != '".$l['id_id']."' AND status_id = '".$sexs."' ORDER BY RAND() LIMIT 1");
 			}
 			reloadACT(l('user', 'view', $res));
 		} else {
-			$res = $sql->queryResult("SELECT id_id FROM {$t}user WHERE id_id != '".$l['id_id']."' AND status_id = '1' AND u_sex = '".$sexs."' ORDER BY RAND() LIMIT 1");
+			$res = $sql->queryResult("SELECT id_id FROM s_user WHERE id_id != '".$l['id_id']."' AND status_id = '1' AND u_sex = '".$sexs."' ORDER BY RAND() LIMIT 1");
 			reloadACT(l('user', 'view', $res));
 		}
 	} else {

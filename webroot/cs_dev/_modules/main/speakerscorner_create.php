@@ -2,7 +2,7 @@
 	if(!$l) popupACT('Du måste vara inloggad för att skicka in en visdom.');
 	if(!empty($_POST['ins_cmt'])) {
 		if($l['status_id'] == '1') {
-			$sql->queryInsert("INSERT INTO {$t}contribute SET con_msg = '".secureINS($_POST['ins_cmt'])."', con_date = NOW(), status_id = '0', con_user = '".$l['id_id']."'");
+			$sql->queryInsert("INSERT INTO s_contribute SET con_msg = '".secureINS($_POST['ins_cmt'])."', con_date = NOW(), status_id = '0', con_user = '".$l['id_id']."'");
 			popupACT('Visdomen skickad!', '', '', '500');
 		}
 		popupACT('Visdom ej skickad!', '', '500');

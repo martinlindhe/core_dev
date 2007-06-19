@@ -1,6 +1,6 @@
 <?
 	if(!empty($key)) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, hidden_id FROM {$t}userblog WHERE main_id = '".secureINS($key)."' LIMIT 1", 1);
+		$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, hidden_id FROM s_userblog WHERE main_id = '".secureINS($key)."' LIMIT 1", 1);
 		if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $s['id_id']) {
 			popupACT('Felaktigt inlägg.');
 		}
@@ -15,13 +15,13 @@
 	}
 	if($own && !empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;
   if(!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
-  $r = $sql->queryLine("SELECT main_id, status_id, user_id, id_id FROM {$t}userblogcmt WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
+  $r = $sql->queryLine("SELECT main_id, status_id, user_id, id_id FROM s_userblogcmt WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
   if(!empty($r) && count($r) && $r[1] == '1') {
    if($isAdmin || $r[2] == $l['id_id'] || $r[3] == $l['id_id']) {
-    $re = $sql->queryUpdate("UPDATE {$t}userblogcmt SET status_id = '2' WHERE main_id = '".secureINS($r[0])."' LIMIT 1");
+    $re = $sql->queryUpdate("UPDATE s_userblogcmt SET status_id = '2' WHERE main_id = '".secureINS($r[0])."' LIMIT 1");
    }
    if($re) {
-    $sql->queryUpdate("UPDATE {$t}userblog SET blog_cmts = blog_cmts - 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+    $sql->queryUpdate("UPDATE s_userblog SET blog_cmts = blog_cmts - 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
    }
    reloadACT(l('user', 'blog', $s['id_id'], $res['main_id']));
   }
@@ -30,7 +30,7 @@
 	if(!empty($_POST['ins_cmt'])) {
 		if($l['status_id'] == '1') {
 			$prv = (!empty($_POST['ins_priv']) && !$own)?1:0;
-			$r = $sql->queryInsert("INSERT INTO {$t}userblogcmt SET
+			$r = $sql->queryInsert("INSERT INTO s_userblogcmt SET
 			user_id = '".$s['id_id']."',
 			id_id = '".$l['id_id']."',
 			blog_id = '".$res['main_id']."',
@@ -39,10 +39,10 @@
 			".(($isAdmin)?"c_html = '1',":'')."
 			c_msg = '".secureINS($_POST['ins_cmt'])."',
 			c_date = NOW()");
-			$sql->queryResult("UPDATE {$t}userblog SET blog_cmts = blog_cmts + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			$sql->queryResult("UPDATE s_userblog SET blog_cmts = blog_cmts + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			#if(!$own) $user->spy($s['id_id'], $res['main_id'], 'BCT', array($l['u_alias'], $s['id_id'], $res['main_id'], $res['blog_title']));
 			#elseif($a) {
-			#	$id = $sql->queryResult("SELECT b.id_id FROM {$t}userblogcmt b INNER JOIN {$t}user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.main_id = '".secureINS($a)."' AND b.user_id = '".$l['id_id']."' AND b.status_id = '1' LIMIT 1");
+			#	$id = $sql->queryResult("SELECT b.id_id FROM s_userblogcmt b INNER JOIN s_user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.main_id = '".secureINS($a)."' AND b.user_id = '".$l['id_id']."' AND b.status_id = '1' LIMIT 1");
 			#	if($id) {
 			#		$user->spy($id, $res['main_id'], 'BCA', array($l['u_alias'], $l['id_id'], $res['main_id'], $res['blog_title']));
 			#	}
@@ -52,7 +52,7 @@
 	}
 	$alias = '';
 	if($a) {
-		$alias = $sql->queryResult("SELECT u.u_alias FROM {$t}userblogcmt b INNER JOIN {$t}user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.main_id = '".secureINS($a)."' AND b.user_id = '".$l['id_id']."' AND b.status_id = '1' LIMIT 1");
+		$alias = $sql->queryResult("SELECT u.u_alias FROM s_userblogcmt b INNER JOIN s_user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.main_id = '".secureINS($a)."' AND b.user_id = '".$l['id_id']."' AND b.status_id = '1' LIMIT 1");
 	}
 	if($alias) $alias = $alias.': ';
 	require(DESIGN.'head_popup.php');

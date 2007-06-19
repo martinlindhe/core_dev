@@ -61,7 +61,7 @@
 			return 'Lösenordet matchar inte.';
 		}
 
-		$exists = $sql->queryLine("SELECT u_pass FROM {$t}user WHERE id_id = ".$l['id_id']." LIMIT 1");
+		$exists = $sql->queryLine("SELECT u_pass FROM s_user WHERE id_id = ".$l['id_id']." LIMIT 1");
 		if (empty($exists) || !count($exists)) {
 			return 'Felaktigt lösenord.';
 		}
@@ -75,10 +75,10 @@
 		}
 
 		$sql->logADD($l['id_id'], $_old_pwd.'->'.$_new_pwd, 'NEW_PASS');
-		$sql->queryUpdate("UPDATE {$t}user SET u_pass = '".secureINS($_new_pwd)."' WHERE id_id = ".$l['id_id']);
+		$sql->queryUpdate("UPDATE s_user SET u_pass = '".secureINS($_new_pwd)."' WHERE id_id = ".$l['id_id']);
 
 		if ($user->level($l['level_id'], 7)) {
-			$sql->queryUpdate("UPDATE {$t}admin SET user_pass = '".secureINS($_new_pwd)."' WHERE main_id = '".$l['id_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_admin SET user_pass = '".secureINS($_new_pwd)."' WHERE main_id = '".$l['id_id']."' LIMIT 1");
 		}
 		return true;
 	}

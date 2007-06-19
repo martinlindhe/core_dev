@@ -1,9 +1,4 @@
 <?
-	require_once(CONFIG.'secure.fnc.php');
-	require_once(CONFIG.'validate.fnc.php');
-
-	require_once('settings.fnc.php');
-
 	require(DESIGN.'head.php');
 	
 	$q = 'SELECT verified FROM tblVerifyUsers WHERE user_id='.$l['id_id'];
@@ -103,9 +98,9 @@
 		if (!is_numeric($pstnr)) $error .= '<li>Felaktigt postnummer';
 		$newpst1 = $newpst2 = '';
 		if (@$l['u_pstnr'] != $pstnr && is_numeric($pstnr)) {
-			$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM {$t}pst a, {$t}pstlan b WHERE a.st_pst = '".secureINS($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
+			$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst = '".secureINS($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
 			if(!count($pst) || empty($pst)) {
-				$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM {$t}pst a, {$t}pstlan b WHERE a.st_pst LIKE '".substr(secureINS($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
+				$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst LIKE '".substr(secureINS($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
 				if(!count($pst) || empty($pst)) $error .= '<li>Felaktigt postnummer';
 			}
 			$pstort = $pst[1];

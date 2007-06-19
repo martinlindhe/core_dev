@@ -3,14 +3,14 @@
 		popupACT('Tråden existerar inte.');
 	}
 	#$isAdmin = ($l)?$user->level($l['level_id'], 10):false;
-	$r = $sql->queryLine("SELECT main_id, main_ttl, main_cmt, subjects FROM {$t}ftopic f WHERE f.main_id = '".secureINS($_GET['id'])."' AND f.status_id = '1' LIMIT 1", 1);
+	$r = $sql->queryLine("SELECT main_id, main_ttl, main_cmt, subjects FROM s_ftopic f WHERE f.main_id = '".secureINS($_GET['id'])."' AND f.status_id = '1' LIMIT 1", 1);
 	if(empty($r) || !count($r)) {
 		popupACT('Rubriken existerar inte.');
 	}
 
 	if(!empty($_POST['ins_ttl']) && !empty($_POST['ins_cmt'])) {
 		if($l['status_id'] == '1') {
-			$ins = $sql->queryInsert("INSERT INTO {$t}f SET
+			$ins = $sql->queryInsert("INSERT INTO s_f SET
 			topic_id = '{$r['main_id']}',
 			parent_id = '0',
 			sender_id = '".$l['id_id']."',
@@ -21,7 +21,7 @@
 			sent_cmt = '".secureINS($_POST['ins_cmt'])."',
 			change_date = NOW(),
 			sent_date = NOW()");
-			$sql->queryUpdate("UPDATE {$t}f SET top_id = main_id WHERE main_id = '".secureINS($ins)."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_f SET top_id = main_id WHERE main_id = '".secureINS($ins)."' LIMIT 1");
 			$user->counterIncrease('forum', $ins_to);
 			$user->notifyIncrease('forum', $ins_to);
 			popupACT('Tråd skapad!', '', l('forum','read',$ins.'#R'.$ins), '500');

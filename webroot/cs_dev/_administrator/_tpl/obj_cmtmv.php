@@ -23,16 +23,16 @@
 					if($doall) {
 						if(!empty($_POST['status_id:' . $kid])) {
 // alla-knapp, men denna är markerad innan
-							$sql->queryUpdate("UPDATE {$t}pmoviecmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("UPDATE s_pmoviecmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
 							$vimmel->vimmelUpdate('cmtmv', array('main_id' => $kid, 'm_id' => $_POST['m_id:' . $kid]), $_POST['status_id:' . $kid], $_POST['otatus_id:' . $kid], $_POST['mvstatus:' . $kid]);
 						} else {
 // alla-knapp
-							$sql->queryUpdate("UPDATE {$t}pmoviecmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("UPDATE s_pmoviecmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
 							$vimmel->vimmelUpdate('cmtmv', array('main_id' => $kid, 'm_id' => $_POST['m_id:' . $kid]), $_POST['main_id:all'], $_POST['otatus_id:' . $kid], $_POST['mvstatus:' . $kid]);
 						}
 					} else {
 						if($_POST['status_id:'.$kid]) {
-							$sql->queryUpdate("UPDATE {$t}pmoviecmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("UPDATE s_pmoviecmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
 							$vimmel->vimmelUpdate('cmtmv', array('main_id' => $kid, 'm_id' => $_POST['m_id:' . $kid]), $_POST['status_id:' . $kid], $_POST['otatus_id:' . $kid], $_POST['mvstatus:' . $kid]);
 						}
 					}
@@ -50,15 +50,15 @@
 
 
 	$cmt_arr = array(
-"0" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}pmoviecmt WHERE view_id = '0'"), 0, 'count'),
-"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}pmoviecmt"), 0, 'count'));
+"0" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_pmoviecmt WHERE view_id = '0'"), 0, 'count'),
+"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_pmoviecmt"), 0, 'count'));
 
 	if($view_cmt) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, b.topic_id, b.m_file, b.status_id as mvstatus, b.m_id, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM {$t}pmoviecmt a LEFT JOIN {$t}pmovie b ON b.m_id = a.unique_id LEFT JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, b.topic_id, b.m_file, b.status_id as mvstatus, b.m_id, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM s_pmoviecmt a LEFT JOIN s_pmovie b ON b.m_id = a.unique_id LEFT JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} else {
-		$list = $sql->query("SELECT a.*, b.topic_id, b.m_file, b.status_id as mvstatus, b.m_id, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM {$t}pmoviecmt a LEFT JOIN {$t}pmovie b ON b.m_id = a.unique_id LEFT JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.view_id = '0' ORDER BY a.main_id ASC", 0, 1);
-#		$list = $sql->query("SELECT a.*, b.p_pic, b.main_id as picmain_id, b.statusID, b.status_id as mvstatus FROM {$t}pcmt a LEFT JOIN {$t}ppic b ON b.main_id = a.unique_id LEFT JOIN {$t}ptopic c ON c.main_id = a.topic_id WHERE a.view_id = '0' ORDER BY a.main_id DESC", 0, 1);
+		$list = $sql->query("SELECT a.*, b.topic_id, b.m_file, b.status_id as mvstatus, b.m_id, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM s_pmoviecmt a LEFT JOIN s_pmovie b ON b.m_id = a.unique_id LEFT JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.view_id = '0' ORDER BY a.main_id ASC", 0, 1);
+#		$list = $sql->query("SELECT a.*, b.p_pic, b.main_id as picmain_id, b.statusID, b.status_id as mvstatus FROM s_pcmt a LEFT JOIN s_ppic b ON b.main_id = a.unique_id LEFT JOIN s_ptopic c ON c.main_id = a.topic_id WHERE a.view_id = '0' ORDER BY a.main_id DESC", 0, 1);
 	}
 	require("./_tpl/obj_head.php");
 ?>

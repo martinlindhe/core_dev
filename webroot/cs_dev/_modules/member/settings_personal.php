@@ -32,9 +32,9 @@
 		$newpst1 = '';
 		$newpst2 = '';
 		if($newpst) {
-			$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM {$t}pst a, {$t}pstlan b WHERE a.st_pst = '".secureINS($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
+			$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst = '".secureINS($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
 			if(!count($pst) || empty($pst)) {
-				$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM {$t}pst a, {$t}pstlan b WHERE a.st_pst LIKE '".substr(secureINS($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
+				$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst LIKE '".substr(secureINS($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
 				if(!count($pst) || empty($pst)) {
 					errorACT('Felaktigt postnummer.', l('member', 'settings', 'personal'));
 				}
@@ -86,10 +86,10 @@
 			}
 		}
 
-		if(strlen($newpst1.$newcity)) $ins = $sql->queryUpdate("UPDATE {$t}user SET
+		if(strlen($newpst1.$newcity)) $ins = $sql->queryUpdate("UPDATE s_user SET
 		".substr($newpst1.$newcity, 0, -1)."
 		WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
-		$ins = $sql->queryUpdate("UPDATE {$t}userinfo SET
+		$ins = $sql->queryUpdate("UPDATE s_userinfo SET
 		$newpst2
 		u_fname = '".secureINS($_POST['ins_fname'])."',
 		u_sname = '".secureINS($_POST['ins_sname'])."',
@@ -97,7 +97,7 @@
 		u_cell = '".secureINS($_POST['ins_cell'])."'
 		WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
 		if(!$ins) {
-			$sql->queryUpdate("INSERT INTO {$t}userinfo SET
+			$sql->queryUpdate("INSERT INTO s_userinfo SET
 			$newpst2
 			u_fname = '".secureINS($_POST['ins_fname'])."',
 			u_sname = '".secureINS($_POST['ins_sname'])."',
@@ -107,14 +107,14 @@
 		}
 		$ins++;
 		if($newpst) {
-			$string = $sql->queryResult("SELECT level_id FROM {$t}userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
 			$p_lan = str_replace(' ', '', $l['u_pstlan']);
 			$p_ort = str_replace(' ', '', $l['u_pstort']);
 			$string = str_replace(' LÄN'.$p_lan, '', $string);
 			$string = str_replace(' ORT'.$p_ort, '', $string);
 			$string = $string.' LÄN'.str_replace('-', '', str_replace(' ', '', $pstlan));
 			$string = $string.' ORT'.str_replace('-', '', str_replace(' ', '', $pstort));
-			$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$string' WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$l['id_id']."' LIMIT 1");
 		}
 		if(!$ins) {
 			errorTACT('Någonting gick fel.', l('member', 'settings', 'personal'), 1500);

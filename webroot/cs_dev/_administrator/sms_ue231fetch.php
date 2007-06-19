@@ -146,7 +146,7 @@ class email {
 			}
 
 			if(!empty($subj) && count($subj) >= 2) {
-				$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM {$t}user u LEFT JOIN {$t}userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj[0])."' AND u.status_id = '1'");
+				$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM s_user u LEFT JOIN s_userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj[0])."' AND u.status_id = '1'");
 				if(!empty($check) && count($check)) {
 					if($check[1] >= 6) {
 						if($this->user->getinfo($check[0], 'mmsenabled') && strtolower($subj[1]) == strtolower($this->user->getinfo($check[0], 'mmskey'))) {
@@ -162,7 +162,7 @@ class email {
 			} # else wrong format
 			if(!$complete) {
 				if(!empty($subj2) && count($subj2) >= 2) {
-					$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM {$t}user u LEFT JOIN {$t}userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj2[0])."' AND u.status_id = '1'");
+					$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM s_user u LEFT JOIN s_userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj2[0])."' AND u.status_id = '1'");
 					if(!empty($check) && count($check)) {
 						if($check[1] >= 6) {
 							if($this->user->getinfo($check[0], 'mmsenabled') && strtolower($subj2[1]) == strtolower($this->user->getinfo($check[0], 'mmskey'))) {
@@ -179,7 +179,7 @@ class email {
 			}
 			if(!$complete) {
 				if(!empty($subj3) && count($subj3) >= 2) {
-					$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM {$t}user u LEFT JOIN {$t}userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj3[0])."' AND u.status_id = '1'");
+					$check = $this->sql->queryLine("SELECT u.id_id, u.level_id, a.last_date, a.last_times FROM s_user u LEFT JOIN s_userphotomms_limit a ON a.id_id = u.id_id WHERE u.u_alias = '".secureINS($subj3[0])."' AND u.status_id = '1'");
 					if(!empty($check) && count($check)) {
 						if($check[1] >= 6) {
 							if($this->user->getinfo($check[0], 'mmsenabled') && strtolower($subj3[1]) == strtolower($this->user->getinfo($check[0], 'mmskey'))) {
@@ -203,11 +203,11 @@ class email {
 			} else {
 				if(!empty($check[2])) {
 					if($check[2] == date("Y-m-d"))
-						$this->sql->queryUpdate("UPDATE {$t}userphotomms_limit SET last_times = last_times + 1 WHERE id_id = '".$check[0]."' LIMIT 1");
+						$this->sql->queryUpdate("UPDATE s_userphotomms_limit SET last_times = last_times + 1 WHERE id_id = '".$check[0]."' LIMIT 1");
 					else
-						$this->sql->queryUpdate("UPDATE {$t}userphotomms_limit SET last_date = NOW(), last_times = 1 WHERE id_id = '".$check[0]."' LIMIT 1");
+						$this->sql->queryUpdate("UPDATE s_userphotomms_limit SET last_date = NOW(), last_times = 1 WHERE id_id = '".$check[0]."' LIMIT 1");
 				} else {
-					$this->sql->queryInsert("INSERT INTO {$t}userphotomms_limit SET last_date = NOW(), last_times = 1, id_id = '".$check[0]."'");
+					$this->sql->queryInsert("INSERT INTO s_userphotomms_limit SET last_date = NOW(), last_times = 1, id_id = '".$check[0]."'");
 				}
 				$files = array();
 				$total = 0;
@@ -303,7 +303,7 @@ class email {
 					break;
 			}
 			if(!$error) {
-				$id = $this->sql->queryInsert("INSERT INTO {$t}userphotomms SET id_id = '".$f[2]."', recieve_file = '".$file."', recieve_sender = '".secureOUT($f[1])."', recieve_date = NOW()");
+				$id = $this->sql->queryInsert("INSERT INTO s_userphotomms SET id_id = '".$f[2]."', recieve_file = '".$file."', recieve_sender = '".secureOUT($f[1])."', recieve_date = NOW()");
 				$type = $this->user->getinfo($f[2], 'mmstype');
 				$address = ADMIN_UE_DIR.$id.$file;
 
@@ -314,14 +314,14 @@ class email {
 				$priv = intval($this->user->getinfo($f[2], 'mmspriv'));
 				if(!$type || $type == 'B') {
 					$this->user->spy($f[2], 'BLG', 'MSG', array('Du har skickat ett MMS till din blogg!'));
-					$alias = $this->sql->queryResult("SELECT u_alias FROM {$t}user WHERE id_id = '".$f[2]."' LIMIT 1");
-					$ii = $this->sql->queryInsert("INSERT INTO {$t}userblog SET blog_idx = NOW(), user_id = '".$f[2]."', hidden_id = '$priv', blog_cmt = '".'<p align="center"><img src="'.UE_DIR.$id.$file.'" /></p>'."', blog_title = 'MMS: ".@secureINS($f[3])."', blog_date = NOW()");
-					$res = $this->sql->query("SELECT p.user_id FROM {$t}userblogspy p INNER JOIN {$t}user u ON u.id_id = p.user_id AND u.status_id = '1' WHERE p.blogger_id = '".$f[2]."' AND p.status_id = '1'");
+					$alias = $this->sql->queryResult("SELECT u_alias FROM s_user WHERE id_id = '".$f[2]."' LIMIT 1");
+					$ii = $this->sql->queryInsert("INSERT INTO s_userblog SET blog_idx = NOW(), user_id = '".$f[2]."', hidden_id = '$priv', blog_cmt = '".'<p align="center"><img src="'.UE_DIR.$id.$file.'" /></p>'."', blog_title = 'MMS: ".@secureINS($f[3])."', blog_date = NOW()");
+					$res = $this->sql->query("SELECT p.user_id FROM s_userblogspy p INNER JOIN s_user u ON u.id_id = p.user_id AND u.status_id = '1' WHERE p.blogger_id = '".$f[2]."' AND p.status_id = '1'");
 					foreach($res as $row) if($row[0] != $f[2]) $this->user->spy($row[0], $ii, 'BLG', array($alias));
 				} elseif($type == 'P') {
 					$this->user->spy($f[2], 'MSG', 'MSG', array('Du har skickat ett MMS till ditt fotoalbum!'));
 					$tmp = md5(microtime());
-					$ii = $this->sql->queryInsert("INSERT INTO {$t}userphoto SET picd = '".PD."', user_id = '".$f[2]."', pht_date = NOW(), hidden_id = '$priv', hidden_value = '".$tmp."', pht_name = '".substr($file, 1)."', pht_size = '".filesize($address)."', pht_cmt = 'MMS: ".@secureINS($f[3])."'");
+					$ii = $this->sql->queryInsert("INSERT INTO s_userphoto SET picd = '".PD."', user_id = '".$f[2]."', pht_date = NOW(), hidden_id = '$priv', hidden_value = '".$tmp."', pht_name = '".substr($file, 1)."', pht_size = '".filesize($address)."', pht_cmt = 'MMS: ".@secureINS($f[3])."'");
 					if($priv)
 						copy($address, ADMIN_PHOTO_DIR.PD.'/'.$ii.'_'.$tmp.$file);
 					else

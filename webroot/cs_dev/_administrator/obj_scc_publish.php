@@ -15,12 +15,12 @@ session_start();
 	if(empty($_GET['id'])) {
 		$error = 'Inget meddelande valt.';
 	}
-	$res = mysql_query("SELECT a.*, u.u_alias FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user WHERE a.main_id = '".secureINS($_GET['id'])."' LIMIT 1");
+	$res = mysql_query("SELECT a.*, u.u_alias FROM s_contribute a LEFT JOIN s_user u ON u.id_id = a.con_user WHERE a.main_id = '".secureINS($_GET['id'])."' LIMIT 1");
 	if(mysql_num_rows($res) != '1') {
 		$error = 'Meddelandet existerar inte.';
 	}
 	$row = mysql_fetch_array($res);
-	$conts = $sql->query("SELECT con_onday, u_alias, SUBSTRING(con_msg, 1, 20) as con_msg FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE con_onday >= NOW() AND a.status_id = '1'");
+	$conts = $sql->query("SELECT con_onday, u_alias, SUBSTRING(con_msg, 1, 20) as con_msg FROM s_contribute a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE con_onday >= NOW() AND a.status_id = '1'");
 	$arrday = array();
 	for($i = 0; $i < 30; $i++) {
 		$arrday[date("Y-m-d", strtotime('+'.$i.' DAYS'))] = true;
@@ -34,14 +34,14 @@ session_start();
 	if(!empty($_POST['dopost']) && is_numeric($_POST['dopost'])) {
 		$emptied = false;
 			if(@$_POST['oldday'] != $_POST['onday']) {
-				$check = $sql->queryResult("SELECT main_id FROM {$t}contribute WHERE status_id = '1' AND con_onday = '".secureINS($_POST['onday'])."' LIMIT 1");
+				$check = $sql->queryResult("SELECT main_id FROM s_contribute WHERE status_id = '1' AND con_onday = '".secureINS($_POST['onday'])."' LIMIT 1");
 				if($check && $check != $_POST['id']) {
-					$sql->queryUpdate("UPDATE {$t}contribute SET status_id = '0', con_onday = '' WHERE main_id = '".$check."' LIMIT 1");
+					$sql->queryUpdate("UPDATE s_contribute SET status_id = '0', con_onday = '' WHERE main_id = '".$check."' LIMIT 1");
 					$emptied = true;
 				}
 			}
 			//publicera!
-			mysql_query("UPDATE {$t}contribute SET
+			mysql_query("UPDATE s_contribute SET
 			status_id = '1',
 			con_onday = '".secureINS($_POST['onday'])."',
 			con_user = '".secureINS($_POST['id'])."',

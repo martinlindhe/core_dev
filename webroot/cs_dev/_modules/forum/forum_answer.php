@@ -2,12 +2,12 @@
 	if(empty($_GET['id']) || !is_numeric($_GET['id'])) {
 		popupACT('Tråden existerar inte.');
 	}
-	$res = $sql->queryLine("SELECT f.main_id, f.topic_id, f.sent_html, f.top_id, f.subject_id, f.parent_id, f.view_id, f.sender_id, f.sent_ttl, f.sent_cmt, f.sent_date, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.u_picid, u.u_picd, u.u_picvalid, u.level_id FROM {$t}f f LEFT JOIN {$t}user u ON u.id_id = f.sender_id AND u.status_id = '1' WHERE f.main_id = '".secureINS($_GET['id'])."' AND f.status_id = '1' LIMIT 1", 1);
+	$res = $sql->queryLine("SELECT f.main_id, f.topic_id, f.sent_html, f.top_id, f.subject_id, f.parent_id, f.view_id, f.sender_id, f.sent_ttl, f.sent_cmt, f.sent_date, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.u_picid, u.u_picd, u.u_picvalid, u.level_id FROM s_f f LEFT JOIN s_user u ON u.id_id = f.sender_id AND u.status_id = '1' WHERE f.main_id = '".secureINS($_GET['id'])."' AND f.status_id = '1' LIMIT 1", 1);
 	if(!count($res) || $res['view_id'] != '1') {
 		popupACT('Inlägget existerar inte.');
 	}
 	$isAdmin = ($l)?$user->level($l['level_id'], 10):false;
-	$r = $sql->queryLine("SELECT main_id, main_ttl, main_cmt, subjects FROM {$t}ftopic f WHERE f.main_id = '".$res['topic_id']."' AND f.status_id = '1' LIMIT 1", 1);
+	$r = $sql->queryLine("SELECT main_id, main_ttl, main_cmt, subjects FROM s_ftopic f WHERE f.main_id = '".$res['topic_id']."' AND f.status_id = '1' LIMIT 1", 1);
 	if(empty($r) || !count($r)) {
 		popupACT('Rubriken existerar inte.');
 	}
@@ -18,7 +18,7 @@
 			$parent = $res['main_id'];
 			$top = $res['top_id'];
 
-			$ins = $sql->queryInsert("INSERT INTO {$t}f SET
+			$ins = $sql->queryInsert("INSERT INTO s_f SET
 			topic_id = '{$r['main_id']}',
 			parent_id = '".secureINS($top)."',
 			top_id = '".secureINS($top)."',
@@ -34,7 +34,7 @@
 			spyPost($top, 'f', $res2['sent_ttl']);
 			//spyPost($top, 'f', $ins);
 
-			$sql->queryUpdate("UPDATE {$t}f SET change_date = NOW() WHERE main_id = '".secureINS($top)."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_f SET change_date = NOW() WHERE main_id = '".secureINS($top)."' LIMIT 1");
 			$user->counterDecrease('forum', $s['id_id']);
 
 			popupACT('Meddelande skickat!', '', l('forum','read',$res['top_id']).'&item='.$ins.'#R'.$ins, '500');

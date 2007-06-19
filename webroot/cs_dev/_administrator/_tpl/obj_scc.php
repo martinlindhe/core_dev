@@ -10,7 +10,7 @@
 		$city = explode(',', $_SESSION['u_a'][0]);
 	}
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql->queryUpdate("UPDATE {$t}contribute SET status_id = '2', con_onday = '' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$sql->queryUpdate("UPDATE s_contribute SET status_id = '2', con_onday = '' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		header("Location: ".$thispage);
 		exit;
 	}
@@ -27,11 +27,11 @@
 				$kid = explode(":", $key);
 				$kid = $kid[1];
 				if(isset($_POST['status_id:' . $kid])) {
-					mysql_query("UPDATE {$t}thought SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
+					mysql_query("UPDATE s_thought SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
 				}
 			}
 		}
-		if($doall) mysql_query("UPDATE {$t}thought SET status_id = '".secureINS($_POST['main_id:all'])."', view_id = '1' WHERE view_id = '0'");
+		if($doall) mysql_query("UPDATE s_thought SET status_id = '".secureINS($_POST['main_id:all'])."', view_id = '1' WHERE view_id = '0'");
 		header("Location: obj.php?status=4");
 		exit;
 	}
@@ -42,20 +42,20 @@
 	}
 	if($view_gb == 1) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday >= NOW() ORDER BY a.con_onday ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_contribute a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday >= NOW() ORDER BY a.con_onday ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} elseif($view_gb == 2) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday < NOW() ORDER BY a.con_onday DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_contribute a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday < NOW() ORDER BY a.con_onday DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} else { 
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM {$t}contribute a LEFT JOIN {$t}user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '0' ORDER BY a.main_id ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_contribute a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '0' ORDER BY a.main_id ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	}
 #print_r($list);
 #print mysql_error();
 	$view_c = array(
-'0' => $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}contribute WHERE status_id = '0'"),
-'1' => $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}contribute WHERE status_id = '1' AND con_onday >= NOW()"),
-'2' => $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}contribute WHERE status_id = '1' AND con_onday < NOW()"));
+'0' => $sql->queryResult("SELECT COUNT(*) as count FROM s_contribute WHERE status_id = '0'"),
+'1' => $sql->queryResult("SELECT COUNT(*) as count FROM s_contribute WHERE status_id = '1' AND con_onday >= NOW()"),
+'2' => $sql->queryResult("SELECT COUNT(*) as count FROM s_contribute WHERE status_id = '1' AND con_onday < NOW()"));
 
 	require("./_tpl/obj_head.php");
 ?>

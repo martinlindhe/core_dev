@@ -23,16 +23,16 @@
 					if($doall) {
 						if(!empty($_POST['status_id:' . $kid])) {
 // alla-knapp, men denna är markerad innan
-							$sql->queryUpdate("UPDATE {$t}pcmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("UPDATE s_pcmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
 							$vimmel->vimmelUpdate('cmt', array('main_id' => $kid, 'pic_id' => $_POST['pic_id:' . $kid], 'topic_id' => $_POST['topic_id:' . $kid]), $_POST['status_id:' . $kid], $_POST['otatus_id:' . $kid], $_POST['picstatus:' . $kid]);
 						} else {
 // alla-knapp
-							$sql->queryUpdate("UPDATE {$t}pcmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("UPDATE s_pcmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
 							$vimmel->vimmelUpdate('cmt', array('main_id' => $kid, 'pic_id' => $_POST['pic_id:' . $kid], 'topic_id' => $_POST['topic_id:' . $kid]), $_POST['main_id:all'], $_POST['otatus_id:' . $kid], $_POST['picstatus:' . $kid]);
 						}
 					} else {
 						if($_POST['status_id:' . $kid]) {
-							$sql->queryUpdate("UPDATE {$t}pcmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("UPDATE s_pcmt SET view_id = '1' WHERE main_id = '".$kid."' LIMIT 1");
 							$vimmel->vimmelUpdate('cmt', array('main_id' => $kid, 'pic_id' => $_POST['pic_id:' . $kid], 'topic_id' => $_POST['topic_id:' . $kid]), $_POST['status_id:' . $kid], $_POST['otatus_id:' . $kid], $_POST['picstatus:' . $kid]);
 						}
 					}
@@ -50,14 +50,14 @@
 
 
 	$cmt_arr = array(
-"0" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}pcmt WHERE view_id = '0'"), 0, 'count'),
-"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}pcmt"), 0, 'count'));
+"0" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_pcmt WHERE view_id = '0'"), 0, 'count'),
+"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_pcmt"), 0, 'count'));
 
 	if($view_cmt) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, b.p_pic, b.main_id as picmain_id, b.statusID, b.status_id as picstatus, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM {$t}pcmt a LEFT JOIN {$t}ppic b ON b.main_id = a.unique_id LEFT JOIN {$t}ptopic c ON c.main_id = a.topic_id LEFT JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, b.p_pic, b.main_id as picmain_id, b.statusID, b.status_id as picstatus, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM s_pcmt a LEFT JOIN s_ppic b ON b.main_id = a.unique_id LEFT JOIN s_ptopic c ON c.main_id = a.topic_id LEFT JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} else {
-		$list = $sql->query("SELECT a.*, b.p_pic, b.main_id as picmain_id, b.statusID, b.status_id as picstatus, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM {$t}pcmt a LEFT JOIN {$t}ppic b ON b.main_id = a.unique_id LEFT JOIN {$t}ptopic c ON c.main_id = a.topic_id LEFT JOIN {$t}user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.view_id = '0' ORDER BY a.main_id ASC", 0, 1);
+		$list = $sql->query("SELECT a.*, b.p_pic, b.main_id as picmain_id, b.statusID, b.status_id as picstatus, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid FROM s_pcmt a LEFT JOIN s_ppic b ON b.main_id = a.unique_id LEFT JOIN s_ptopic c ON c.main_id = a.topic_id LEFT JOIN s_user u ON u.id_id = a.logged_in AND u.status_id = '1' WHERE a.view_id = '0' ORDER BY a.main_id ASC", 0, 1);
 	}
 	require("./_tpl/obj_head.php");
 ?>

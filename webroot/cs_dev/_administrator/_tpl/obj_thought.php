@@ -10,7 +10,7 @@
 		$city = explode(',', $_SESSION['u_a'][0]);
 	}
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql->queryUpdate("UPDATE {$t}thought SET status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$sql->queryUpdate("UPDATE s_thought SET status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		header("Location: ".$thispage);
 		exit;
 	}
@@ -25,11 +25,11 @@
 				$kid = explode(":", $key);
 				$kid = $kid[1];
 				if(isset($_POST['status_id:' . $kid])) {
-					mysql_query("UPDATE {$t}thought SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
+					mysql_query("UPDATE s_thought SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
 				}
 			}
 		}
-		if($doall) mysql_query("UPDATE {$t}thought SET status_id = '".secureINS($_POST['main_id:all'])."', view_id = '1' WHERE view_id = '0'");
+		if($doall) mysql_query("UPDATE s_thought SET status_id = '".secureINS($_POST['main_id:all'])."', view_id = '1' WHERE view_id = '0'");
 		header("Location: obj.php?status=4");
 		exit;
 	}
@@ -47,23 +47,23 @@
 	if($view_gb) {
 		$paging = paging(@$_GET['p'], 20);
 		if($arr)
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE $arr ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE $arr ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 		else
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} else {
 		if($arr)
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE ($arr) AND a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
+			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE ($arr) AND a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
 		else
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
+			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
 	}
 	if($arr)
 	$view_c = array(
-'0' => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}thought a WHERE ($arr) AND view_id = '0' AND status_id = '0'"),
-'1' => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}thought a WHERE $arr"));
+'0' => $sql->queryResult("SELECT COUNT(*) as count FROM s_thought a WHERE ($arr) AND view_id = '0' AND status_id = '0'"),
+'1' => $sql->queryResult("SELECT COUNT(*) as count FROM s_thought a WHERE $arr"));
 	else
 	$view_c = array(
-'0' => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}thought WHERE view_id = '0' AND status_id = '0'"),
-'1' => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}thought"));
+'0' => $sql->queryResult("SELECT COUNT(*) as count FROM s_thought WHERE view_id = '0' AND status_id = '0'"),
+'1' => $sql->queryResult("SELECT COUNT(*) as count FROM s_thought"));
 
 	require("./_tpl/obj_head.php");
 ?>

@@ -1,5 +1,5 @@
 <?
-	$q = "SELECT * FROM {$t}userphoto WHERE main_id = '".secureINS($key)."' LIMIT 1";
+	$q = "SELECT * FROM s_userphoto WHERE main_id = '".secureINS($key)."' LIMIT 1";
 	$res = $sql->queryLine($q, 1);
 	if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $s['id_id'] != $res['user_id'] || ($res['hidden_id'] && !$allowed)) {
 		errorACT('Felaktigt galleriinlägg.', l('user', 'gallery', $s['id_id']));
@@ -14,13 +14,13 @@
 
 	//radera kommentar
 	if(!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
-		$r = $sql->queryLine("SELECT main_id, status_id, user_id, id_id FROM {$t}userphotocmt WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
+		$r = $sql->queryLine("SELECT main_id, status_id, user_id, id_id FROM s_userphotocmt WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
 		if(!empty($r) && count($r) && $r[1] == '1') {
 			if($isAdmin || $r[2] == $l['id_id'] || $r[3] == $l['id_id']) {
-				$re = $sql->queryUpdate("UPDATE {$t}userphotocmt SET status_id = '2' WHERE main_id = '".secureINS($r[0])."' LIMIT 1");
+				$re = $sql->queryUpdate("UPDATE s_userphotocmt SET status_id = '2' WHERE main_id = '".secureINS($r[0])."' LIMIT 1");
 			}
 			if($re) {
-				$sql->queryUpdate("UPDATE {$t}userphoto SET pht_cmts = pht_cmts - 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+				$sql->queryUpdate("UPDATE s_userphoto SET pht_cmts = pht_cmts - 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			}
 			reloadACT(l('user', 'gallery', $s['id_id'], $res['main_id']));
 		}
@@ -36,8 +36,8 @@
 		}
 
 		if (!$hidden && !$beenhere) {
-			$sql->queryUpdate("UPDATE {$t}userphotovisit SET visit_item = visit_item + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
-			$sql->queryUpdate("UPDATE {$t}userphotovisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND photo_id = '".secureINS($res['main_id'])."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userphotovisit SET visit_item = visit_item + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userphotovisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND photo_id = '".secureINS($res['main_id'])."' LIMIT 1");
 
 			$q = 'UPDATE s_userphoto SET pht_click=pht_click+1 WHERE main_id='.secureINS($key);
 			$sql->queryUpdate($q);
@@ -116,10 +116,10 @@
 <div class="bigBody">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
-	$c_paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphotocmt WHERE photo_id = '".$res['main_id']."' AND status_id = '1'");
+	$c_paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM s_userphotocmt WHERE photo_id = '".$res['main_id']."' AND status_id = '1'");
 
 	$odd = 1;
-	$cmt = $sql->query("SELECT b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.* FROM {$t}userphotocmt b LEFT JOIN {$t}user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.photo_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}", 0, 1);
+	$cmt = $sql->query("SELECT b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.* FROM s_userphotocmt b LEFT JOIN s_user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.photo_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}", 0, 1);
 	if(count($cmt) && !empty($cmt)) {
 		foreach($cmt as $val) {
 			if ($val['private_id'] && (!$own && !$isAdmin)) continue;

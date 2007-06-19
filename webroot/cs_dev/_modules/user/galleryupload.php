@@ -5,7 +5,7 @@
 	$NAME_TITLE = 'LADDA UPP FOTO | '.NAME_TITLE;
 
 	/*
-	if($lim && $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1'") >= $lim) {
+	if($lim && $sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1'") >= $lim) {
 		popupACT('Du har laddat upp maximalt antal foton ( '.$lim.'st )<br />Du måste uppgradera för att kunna ladda upp fler.');
 	}
 	*/
@@ -18,7 +18,7 @@
 		}
 		/*
 		if($lim) {
-			$rest = $lim - $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userphoto WHERE user_id = '".secureINS($l['id_id'])."' AND status_id = '1'");
+			$rest = $lim - $sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto WHERE user_id = '".secureINS($l['id_id'])."' AND status_id = '1'");
 			if($rest <= 0) popupACT('Du har laddat upp maximalt antal foton.<br />Du måste uppgradera för att kunna ladda upp fler.');
 		}
 		*/
@@ -50,9 +50,9 @@
 					$prv = ($isOk && !empty($_POST['ins_priv']))?'1':'0';
 					if($prv) {
 						$un = md5(microtime().'ghrghrhr');
-						$res = $sql->queryInsert("INSERT INTO {$t}userphoto SET user_id = '".secureINS($l['id_id'])."', old_filename='$old_name', status_id = '1', hidden_id = '1', hidden_value = '$un', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
+						$res = $sql->queryInsert("INSERT INTO s_userphoto SET user_id = '".secureINS($l['id_id'])."', old_filename='$old_name', status_id = '1', hidden_id = '1', hidden_value = '$un', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
 					} else {
-						$res = $sql->queryInsert("INSERT INTO {$t}userphoto SET user_id = '".secureINS($l['id_id'])."', old_filename='$old_name',  status_id = '1', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
+						$res = $sql->queryInsert("INSERT INTO s_userphoto SET user_id = '".secureINS($l['id_id'])."', old_filename='$old_name',  status_id = '1', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
 					}
 					if($res) {
 						@unlink($file);

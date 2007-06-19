@@ -51,14 +51,14 @@ session_start();
 		$ban_ip = $_POST['ban'];
 	}
 	if($ban) {
-		mysql_query("INSERT INTO {$t}ban SET ban_ip = '".secureINS($ban_ip)."', ban_date = NOW(), ban_reason = ''");
+		mysql_query("INSERT INTO s_ban SET ban_ip = '".secureINS($ban_ip)."', ban_date = NOW(), ban_reason = ''");
 		header("Location: search.php".((isset($_GET['t']))?'?t':''));
 		exit;
 	}
 	if(!empty($_GET['ban_del']) && is_numeric($_GET['ban_del'])) {
-		$res = mysql_query("SELECT * FROM {$t}ban WHERE main_id = '".secureINS($_GET['ban_del'])."' LIMIT 1");
+		$res = mysql_query("SELECT * FROM s_ban WHERE main_id = '".secureINS($_GET['ban_del'])."' LIMIT 1");
 		if(mysql_num_rows($res) == '1') {
-			mysql_query("DELETE FROM {$t}ban WHERE main_id = '".secureINS($_GET['ban_del'])."'");
+			mysql_query("DELETE FROM s_ban WHERE main_id = '".secureINS($_GET['ban_del'])."'");
 			header("Location: search.php");
 			exit;
 		}
@@ -105,11 +105,11 @@ session_start();
 		$g1 = false;
 		$g2 = false;
 		if(!empty($_GET['s1'])) {
-			$i1 = $sql->queryResult("SELECT id_id FROM {$t}user WHERE u_alias = '".secureINS($_GET['s1'])."' LIMIT 1");
+			$i1 = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_GET['s1'])."' LIMIT 1");
 			if(!empty($i1)) $g1 = true;
 		}
 		if(!empty($_GET['s2'])) {
-			$i2 = $sql->queryResult("SELECT id_id FROM {$t}user WHERE u_alias = '".secureINS($_GET['s2'])."' LIMIT 1");
+			$i2 = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_GET['s2'])."' LIMIT 1");
 			if(!empty($i2)) $g2 = true;
 		}
 		$info = array(
@@ -121,8 +121,8 @@ session_start();
 
 	if($showban) {
 		# IP BAN
-		$b_sql = mysql_query("SELECT * FROM {$t}ban ORDER BY ban_date DESC");
-		$b_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}ban"), 0, 'count');
+		$b_sql = mysql_query("SELECT * FROM s_ban ORDER BY ban_date DESC");
+		$b_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_ban"), 0, 'count');
 	}
 
 

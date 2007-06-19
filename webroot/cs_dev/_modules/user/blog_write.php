@@ -5,7 +5,7 @@
 	$lim = 5;
 
 	if(!empty($_GET['i'])) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt, hidden_id FROM {$t}userblog WHERE main_id = '".secureINS($_GET['i'])."' LIMIT 1", 1);
+		$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt, hidden_id FROM s_userblog WHERE main_id = '".secureINS($_GET['i'])."' LIMIT 1", 1);
 		if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $l['id_id']) {
 			#popupACT('Felaktigt inlägg.');
 			$gotone = false;
@@ -18,10 +18,10 @@
 		$hidden = (!empty($_POST['ins_priv']) && $user->level($l['level_id'], 2))?'1':'0';
 		$_POST['text_html'] = strip_tags($_POST['text_html'], NRMSTR);
 		if($edit) {
-			$sql->queryUpdate("UPDATE {$t}userblog SET blog_cmt = '".@secureINS($_POST['text_html'])."', hidden_id = '$hidden', blog_title = '".@secureINS($_POST['ins_title'])."' WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userblog SET blog_cmt = '".@secureINS($_POST['text_html'])."', hidden_id = '$hidden', blog_title = '".@secureINS($_POST['ins_title'])."' WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			$id = $res['main_id'];
 		} else {
-			$id = $sql->queryInsert("INSERT INTO {$t}userblog SET blog_idx = NOW(), user_id = '".$l['id_id']."', hidden_id = '$hidden', blog_cmt = '".@secureINS($_POST['text_html'])."', blog_title = '".@secureINS($_POST['ins_title'])."', blog_date = NOW()");
+			$id = $sql->queryInsert("INSERT INTO s_userblog SET blog_idx = NOW(), user_id = '".$l['id_id']."', hidden_id = '$hidden', blog_cmt = '".@secureINS($_POST['text_html'])."', blog_title = '".@secureINS($_POST['ins_title'])."', blog_date = NOW()");
 
 			spyPost($l['id_id'], 'b', $id);
 
@@ -41,7 +41,7 @@
 		popupACT('Felaktigt inlägg.');
 	}
 
-	$result = $sql->query("SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1' ORDER BY main_id DESC");
+	$result = $sql->query("SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM s_userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1' ORDER BY main_id DESC");
 	require(DESIGN.'head_popup.php');
 ?>
 

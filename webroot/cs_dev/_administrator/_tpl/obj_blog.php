@@ -7,7 +7,7 @@
 	$thispage = 'obj.php?status=blog';
 
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$res = $sql->queryLine("SELECT user_id FROM {$t}userblog WHERE main_id = '".$_GET['del']."' LIMIT 1");
+		$res = $sql->queryLine("SELECT user_id FROM s_userblog WHERE main_id = '".$_GET['del']."' LIMIT 1");
 		if(!empty($res) && count($res)) {
 			$sql->queryUpdate("UPDATE s_userblog SET status_id = '2' WHERE main_id = '".$_GET['del']."' LIMIT 1");
 		}
@@ -16,10 +16,10 @@
 	}
 
 	require("./_tpl/obj_head.php");
-	$cmt_arr = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}userblog");
+	$cmt_arr = $sql->queryResult("SELECT COUNT(*) as count FROM s_userblog");
 
 	$paging = paging(@$_GET['p'], 20);
-	$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid, u_sex FROM {$t}userblog a LEFT JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+	$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picvalid, u.u_picid, u_sex FROM s_userblog a LEFT JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 ?>
 			<input type="radio" class="inp_chk" name="view" value="0" id="view_0" onclick="document.location.href = '<?=$thispage?>';" checked><label for="view_0" class="txt_bld txt_look">Alla</label> [<?=$cmt_arr?>]
 

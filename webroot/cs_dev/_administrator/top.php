@@ -9,7 +9,7 @@ session_start();
 	}
 	$adm_cnt = gettxt('admcnt');
 	if(!empty($_GET['k']) && !empty($_GET['k1']) && $isCrew) {
-		$sql->queryUpdate("UPDATE {$t}admin SET kick_now = '1' WHERE main_id = '".secureINS($_GET['k'])."' LIMIT 1");
+		$sql->queryUpdate("UPDATE s_admin SET kick_now = '1' WHERE main_id = '".secureINS($_GET['k'])."' LIMIT 1");
 		echo '<script type="text/javascript">alert(\''.secureOUT($_GET['k1']).' kickad.\');</script>';
 	}
 	/*if(!empty($_POST['page']) && array_key_exists($_POST['page'], $t_pages)) {

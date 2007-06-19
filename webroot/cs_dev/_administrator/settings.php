@@ -25,8 +25,8 @@
 		}
 		$list = (!empty($_POST['list']))?'1':'0';
 		if(!empty($_POST['id']) && is_md5($_POST['id'])) {
-			$check = mysql_result(mysql_query("SELECT u_crew FROM {$t}admin WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1"), 0, 'u_crew');
-			$sql->queryUpdate("UPDATE {$t}user SET level_id = '10' WHERE id_id = '".$_POST['id']."' LIMIT 1");
+			$check = mysql_result(mysql_query("SELECT u_crew FROM s_admin WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1"), 0, 'u_crew');
+			$sql->queryUpdate("UPDATE s_user SET level_id = '10' WHERE id_id = '".$_POST['id']."' LIMIT 1");
 			$sql = mysql_query("UPDATE {$tab['admin']} SET
 			user_user = '".secureINS($_POST['s_u'])."',
 			".($isCrew && !$check?"pos_all = '".implode(',', $_POST['pospos'])."',":'')."
@@ -41,10 +41,10 @@
 				}
 			} else $_SESSION['err'] = 'wronguser';
 		} else {
-			$id = $sql->queryLine("SELECT id_id, u_pass FROM {$t}user WHERE u_alias = '".$_POST['s_u']."' AND status_id = '1' LIMIT 1");
+			$id = $sql->queryLine("SELECT id_id, u_pass FROM s_user WHERE u_alias = '".$_POST['s_u']."' AND status_id = '1' LIMIT 1");
 			if(!empty($id) && count($id)) {
-			$sql->queryUpdate("UPDATE {$t}user SET level_id = '10' WHERE id_id = '".$id[0]."' LIMIT 1");
-			$sql = mysql_query("INSERT INTO {$t}admin SET
+			$sql->queryUpdate("UPDATE s_user SET level_id = '10' WHERE id_id = '".$id[0]."' LIMIT 1");
+			$sql = mysql_query("INSERT INTO s_admin SET
 			user_user = '".secureINS($_POST['s_u'])."',
 			user_name = '".secureINS($_POST['s_n'])."',
 			main_id = '".$id[0]."',
@@ -60,14 +60,14 @@
 
 	if(isset($_POST['ins_msg'])) {
 		if(!empty($_POST['id'])) {
-			mysql_query("UPDATE {$t}text SET text_cmt = '".secureINS($_POST['ins_msg'])."', text_date = NOW() WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+			mysql_query("UPDATE s_text SET text_cmt = '".secureINS($_POST['ins_msg'])."', text_date = NOW() WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 		}
 		header("Location: settings.php");
 		exit;
 	}
 
 	if(!empty($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM {$t}text WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_text WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
 		if(mysql_num_rows($sql) == '1') {
 			$change = true;
 			$row = mysql_fetch_assoc($sql);
@@ -76,7 +76,7 @@
 	$u_change = false;
 	$new = false;
 	if(!empty($_GET['c'])) {
-		$c_sql = mysql_query("SELECT * FROM {$t}admin WHERE main_id = '".secureINS($_GET['c'])."' LIMIT 1");
+		$c_sql = mysql_query("SELECT * FROM s_admin WHERE main_id = '".secureINS($_GET['c'])."' LIMIT 1");
 		if(mysql_num_rows($c_sql) > 0) {
 			$c_row = mysql_fetch_assoc($c_sql);
 			if(!$_SESSION['u_c'] && $c_row['u_crew']) {
@@ -90,32 +90,32 @@
 	}
 
 	if(!empty($_GET['b']) && is_md5($_GET['b'])) {
-		mysql_query("UPDATE {$t}admin SET status_id = '2' WHERE main_id = '".secureINS($_GET['b'])."' AND u_crew = '0' LIMIT 1");
+		mysql_query("UPDATE s_admin SET status_id = '2' WHERE main_id = '".secureINS($_GET['b'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 	if(!empty($_GET['b2']) && is_md5($_GET['b2'])) {
-		mysql_query("UPDATE {$t}admin SET status_id = 'Z' WHERE main_id = '".secureINS($_GET['b2'])."' AND u_crew = '0' LIMIT 1");
+		mysql_query("UPDATE s_admin SET status_id = 'Z' WHERE main_id = '".secureINS($_GET['b2'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 	if(!empty($_GET['a']) && is_md5($_GET['a'])) {
-		mysql_query("UPDATE {$t}admin SET status_id = '1' WHERE main_id = '".secureINS($_GET['a'])."' AND u_crew = '0' LIMIT 1");
+		mysql_query("UPDATE s_admin SET status_id = '1' WHERE main_id = '".secureINS($_GET['a'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 	if(!empty($_GET['a2']) && is_md5($_GET['a2'])) {
-		mysql_query("UPDATE {$t}admin SET status_id = 'L' WHERE main_id = '".secureINS($_GET['a2'])."' AND u_crew = '0' LIMIT 1");
+		mysql_query("UPDATE s_admin SET status_id = 'L' WHERE main_id = '".secureINS($_GET['a2'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 	if(!empty($_GET['d']) && is_md5($_GET['d'])) {
-		mysql_query("DELETE FROM {$t}admin WHERE main_id = '".secureINS($_GET['d'])."' AND u_crew = '0' AND (status_id = '0' OR status_id = '2') LIMIT 1");
+		mysql_query("DELETE FROM s_admin WHERE main_id = '".secureINS($_GET['d'])."' AND u_crew = '0' AND (status_id = '0' OR status_id = '2') LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
 
-	$u_sql = mysql_query("SELECT a.*, u.user_user AS owner_u FROM {$t}admin a LEFT JOIN {$t}admin u ON u.main_id = a.u_owner ORDER BY a.u_crew DESC, a.status_id ASC, a.user_name");
+	$u_sql = mysql_query("SELECT a.*, u.user_user AS owner_u FROM s_admin a LEFT JOIN s_admin u ON u.main_id = a.u_owner ORDER BY a.u_crew DESC, a.status_id ASC, a.user_name");
 
 	$u_count = mysql_num_rows($u_sql);
 
@@ -169,7 +169,7 @@
 	}
 
 
-	$sql = mysql_query("SELECT * FROM {$t}text WHERE status_id = '1' ORDER BY main_id");
+	$sql = mysql_query("SELECT * FROM s_text WHERE status_id = '1' ORDER BY main_id");
 
 	require("./_tpl/admin_head.php");
 ?>
@@ -393,7 +393,7 @@ echo '<option value="'.$page.'"'.($sel?' selected':'').'>'.(array_key_exists($pa
 			</table>
 <?
 	if($u_change && ($_SESSION['u_c'] || $c_row['user_user'] == $_SESSION['u_u'])) {
-		$log = mysql_query("SELECT * FROM {$t}adminlog WHERE login_name LIKE '%".secureINS($c_row['user_user'])."%' ORDER BY login_date DESC");
+		$log = mysql_query("SELECT * FROM s_adminlog WHERE login_name LIKE '%".secureINS($c_row['user_user'])."%' ORDER BY login_date DESC");
 ?>
 			<hr /><div class="hr"></div>
 			<table style="margin-bottom: 5px;">

@@ -11,7 +11,7 @@
 	$is_poll = false;
 	$did_poll = false;
 	if(!$error) {
-		$pollid = @$sql->queryResult("SELECT ".CH." main_id FROM {$t}poll WHERE main_id = '".secureINS($_POST['id'])."' AND poll_month = '".date("Y-W")."' AND poll_ans".secureINS($_POST['val'])." != '' LIMIT 1");
+		$pollid = @$sql->queryResult("SELECT main_id FROM s_poll WHERE main_id = '".secureINS($_POST['id'])."' AND poll_month = '".date("Y-W")."' AND poll_ans".secureINS($_POST['val'])." != '' LIMIT 1");
 		if($pollid) {
 			if(!empty($_COOKIE['b']) && $_COOKIE['b'] == $pollid) {
 				$is_poll = true;
@@ -20,7 +20,7 @@
 				$is_poll = true;
 				$ans = $_POST['val'];
 
-			$ins = $sql->queryInsert("INSERT INTO {$t}pollvisit SET
+			$ins = $sql->queryInsert("INSERT INTO s_pollvisit SET
 				sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
 				category_id = '".secureINS($pollid)."',
 				unique_id = '".secureINS($ans)."',
@@ -30,7 +30,7 @@
 					if($ins) {
 						$id = $ins;
 						$sql->logADD($pollid, $ins, 'POLL_VOTE');
-						$sql->queryUpdate("UPDATE {$t}poll SET poll_res$ans = poll_res$ans + 1 WHERE poll_month = '".date("Y-W")."' AND main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+						$sql->queryUpdate("UPDATE s_poll SET poll_res$ans = poll_res$ans + 1 WHERE poll_month = '".date("Y-W")."' AND main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 					} //else $error = 'Du har redan röstat.';
 					cookieSET("b", rawurlencode($pollid), time() + 20 * 24 * 60 * 60);
 				}
