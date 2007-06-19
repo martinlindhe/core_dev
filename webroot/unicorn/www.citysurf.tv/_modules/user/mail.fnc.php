@@ -83,7 +83,14 @@
 			if (!empty($res) && count($res) && ($res[1] == '1' || $res[5] == '1')) {
 				if ($isAdmin || $res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
 					if($res[2] == $l['id_id']) {
-						if($res[1] == '1') $user->counterDecrease('mail', $l['id_id']);
+
+						//if status_id=1
+						
+						if($res[1] == '1') {
+							if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'counterdec';
+							$user->counterDecrease('mail', $l['id_id']);
+						}
+
 						$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 					} elseif($res[3] == $l['id_id']) {
 						$sql->queryUpdate("UPDATE {$t}usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
@@ -92,7 +99,10 @@
 						if($res[5] == '1') $user->counterDecrease('mail', $res[3]);
 						$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2', sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 					}
-					if(!$res[4]) $user->notifyDecrease('mail', $s['id_id']);
+					if(!$res[4]) {
+						if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'notifydec';
+						$user->notifyDecrease('mail', $s['id_id']);
+					}
 				}
 			}
 		}		

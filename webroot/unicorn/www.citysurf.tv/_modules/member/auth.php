@@ -55,9 +55,9 @@ class user_auth {
 				//kolla om användaren har verifierat sin info
 				$q = 'SELECT verified,timeAsked FROM tblVerifyUsers WHERE user_id='.$result[0];
 				$data = $this->sql->queryLine($q, 0, 1);
-
-				//ask user again after 5 days if they didnt answer
-				if (!$data || (!$data[0] && time() - (3600*24*5) > strtotime($data[1]))) {	
+				
+				//ask user once
+				if (!$data) {
 					$q = 'REPLACE INTO tblVerifyUsers SET user_id='.$result[0].',timeAsked=NOW(),verified=0';
 					$this->sql->queryInsert($q);
 

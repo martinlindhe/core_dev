@@ -63,7 +63,7 @@
 	((!empty($r['id_id']))?'<a href="user.php?t&id='.$r['id_id'].'" class="txt_big user">'.secureOUT($r['u_alias']).'</a>':'[raderad]');?>
  - <em>inl&auml;gg skrivet <?=niceDate($r['blog_date'])?></em> (#<?=$r['main_id']?>)</span></td></tr>
 				<tr>
-					<td style="width: 100%;"><?='<table cellspacing="0"><tr><td>'.getadminimg($r['id_id'].$r['u_picid'].$r['u_picd'].$r['u_sex'], $r['u_picvalid']).'</td><td style="padding-left: 5px;"><div style="width: 470px; overflow: hidden;"><b>'.secureOUT($r['blog_title']).'</b><br /><br />'.secureOUT($r['blog_cmt']).'</div></td></tr></table>';?></td>
+					<td style="width: 100%;"><?='<table cellspacing="0"><tr><td>'.getadminimg($r['id_id'].$r['u_picid'].$r['u_picd'].$r['u_sex'], $r['u_picvalid']).'</td><td style="padding-left: 5px;"><div style="width: 470px; overflow: hidden;"><b>'.secureOUT($r['blog_title']).'</b><br /><br />'.formatText($r['blog_cmt']).'</div></td></tr></table>';?></td>
 				</tr>
 				</table>
 				</td>

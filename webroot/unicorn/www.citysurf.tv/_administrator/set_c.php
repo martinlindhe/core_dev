@@ -2,6 +2,7 @@
 	require_once(dirname(__FILE__).'/../_config/config.include.php');
 	require_once(dirname(__FILE__).'/../_config/main.fnc.php');
 	require_once(dirname(__FILE__).'/../_config/sql.class.php');
+	#require_once(dirname(__FILE__).'/../_config/secure.fnc.php');
 	#require("../../_config/set_vimmel.php");
 	require_once(dirname(__FILE__).'/../_config/user.class.php');
 	$isCrew = @$_SESSION['u_c'];

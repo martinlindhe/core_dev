@@ -246,10 +246,10 @@ function selectingAll(selecting) {
 					$id = $item[1];
 					$s1 = $item[4];
 					$stat = $item[2];
-					echo '<td class="pdg"><a href="user.php?t&id='.$item[3].'">'.secureOUT($item[4]).'</a></td>';
+					echo '<td class="pdg"><a href="user.php?t&id='.$item[3].'">'.formatText($item[4]).'</a></td>';
 					if($info[$table][5]) {
 						$s2 = $item[6];
-						echo '<td class="pdg"><a href="user.php?t&id='.$item[5].'">'.secureOUT($item[6]).'</a></td>';
+						echo '<td class="pdg"><a href="user.php?t&id='.$item[5].'">'.formatText($item[6]).'</a></td>';
 						unset($item[5]);
 						unset($item[6]);
 					}
@@ -259,7 +259,7 @@ function selectingAll(selecting) {
 					unset($item[3]);
 					unset($item[4]);
 					if($table == 's_userphoto') {
-						$item[6] = '<img src="../user_photo/'.$item[9].'/'.$id.(($item[6])?'_'.$item[7]:'').'.'.$item[8].'" onerror="this.style.display = \'none\'" /><img src="../user_photo_off342/'.$id.(($stat != '1')?'_'.$item[7]:'').'.'.$item[8].'" onerror="this.style.display = \'none\'" /><img src="../user_photo/'.$item[9].'/'.$id.'.'.$item[8].'" onerror="this.style.display = \'none\'" />';
+						$item[6] = '<img src="/_input/usergallery/'.$item[9].'/'.$id.(($item[6])?'_'.$item[7]:'').'.'.$item[8].'" onerror="this.style.display = \'none\'" /><img src="/_input/usergallery_off342/'.$id.(($stat != '1')?'_'.$item[7]:'').'.'.$item[8].'" onerror="this.style.display = \'none\'" /><img src="/_input/usergallery/'.$item[9].'/'.$id.'.'.$item[8].'" onerror="this.style.display = \'none\'" />';
 						#unset($item[6]);
 						unset($item[7]);
 						unset($item[8]);
@@ -267,7 +267,7 @@ function selectingAll(selecting) {
 					}
 					foreach($item as $key => $column) {
 						foreach($highmatch as $line) $column = highlight($column, $line);
-						if($table == 's_userphoto' && $key == '6') echo '<td class="pdg">'.$column.'</td>'; else echo '<td class="pdg">'.secureOUT($column).'</td>';
+						if($table == 's_userphoto' && $key == '6') echo '<td class="pdg">'.$column.'</td>'; else echo '<td class="pdg">'.formatText($column).'</td>';
 					}
 					if($info[$table][4]) echo '<td class="pdg"><a href="search.php?view=sss&s1='.$s1.'&s2='.$s2.'">VISA</a></td>';
 					echo '<td class="pdg"><a href="'.$info[$table][7].$id.'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>';
@@ -294,10 +294,10 @@ function selectingAll(selecting) {
 					echo '<td class="pdg nobr">'.niceDate($item[0]).'</td>';
 					$s1 = $item[4];
 					$id = $item[1];
-					echo '<td class="pdg"><a href="user.php?t&id='.$item[3].'">'.secureOUT($item[4]).'</a></td>';
+					echo '<td class="pdg"><a href="user.php?t&id='.$item[3].'">'.formatText($item[4]).'</a></td>';
 					if($info[$table][4]) {
 						$s2 = $item[6];
-						echo '<td class="pdg"><a href="user.php?t&id='.$item[5].'">'.secureOUT($item[6]).'</a></td>';
+						echo '<td class="pdg"><a href="user.php?t&id='.$item[5].'">'.formatText($item[6]).'</a></td>';
 						unset($item[5]);
 						unset($item[6]);
 					}
@@ -308,7 +308,7 @@ function selectingAll(selecting) {
 					unset($item[4]);
 					foreach($item as $column) {
 						#foreach($highmatch as $line) $column = highlight($column, $line);
-						echo '<td class="pdg">'.secureOUT($column).'</td>';
+						echo '<td class="pdg">'.formatText($column).'</td>';
 					}
 					echo '<td class="pdg"><a href="search.php?view=sss&s1='.$s1.'&s2='.$s2.'">VISA</a></td>';
 					echo '<td class="pdg"><a href="'.$info[$table][6].$id.'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>';

@@ -7,6 +7,13 @@
 		* fixat några felmeddelanden som kom upp i admingränssnittet
 		* tagit bort ett 20-tal textfält under "INFO UTÅT - TEXT" som inte användes
 
+	övrigt:
+		* satt upp lokal utvecklingsmiljö
+
+
+2007.06.19 Tisdag:
+	webb-gränssnitt:
+		* fixat upprepning av mailutskick för vip-uppgradering
 
 
 ***************************************************************************************************
@@ -14,6 +21,7 @@ webbgränssnitt:
 	* titel i mail i inkorgen är för lång, klipp den på max X tecken
 	SENARE: användaren "gör just nu" info, t.ex "kollar i pelles galleri"
 	fakta: kunna välja "vikt". bitte skapar en lista med alternativ
+	* bugg: radera oläst mail räknar ej ner counter
 
 
 SMS debitering:
