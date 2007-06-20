@@ -39,7 +39,9 @@
 	} else {
 		echo '<div class="critical">Server OS: Unrecognized</div>';
 	}
-	echo ($config['debug']?'<div class="critical">Debug: On - turn off for production use</div>':'<div class="okay">Debug: OFF</div>');
+	echo ($config['debug']?'<div class="critical">Debug is turned on in the core - turn off for production use</div>':'<div class="okay">Debug: OFF</div>');
+	echo (extension_loaded('xdebug')?'<div class="critical">Debug: The xdebug extension is enabled. Please turn it off for production use</div>':'<div class="okay">xdebug is not enabled</div>');
+
 	echo '<br/>';
 
 	/************************************

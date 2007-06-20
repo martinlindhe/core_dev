@@ -1,8 +1,9 @@
 <?
-	//apd_set_pprof_trace();
-	$time_start = microtime(true);
-
+	xdebug_enable();
 	error_reporting(E_ALL);
+	$time_start = microtime(true);
+	$config['debug'] = true;
+
 	date_default_timezone_set('Europe/Stockholm');
 
 	$config['core_root'] = 'E:/devel/webroot/core_dev/';	//use of an absolute path is highly recommended
@@ -28,8 +29,6 @@
 	require_once('atom_polls.php');				//for site polls, note: not nessecary here since this project use news module which force includes it, but included for clarity
 	restore_include_path();
 
-	$config['debug'] = true;
-	
 	$config['plugins'] = array('wurfl');
 	loadPlugins();
 

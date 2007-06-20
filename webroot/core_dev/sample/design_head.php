@@ -34,7 +34,6 @@
 		$menu = array('?login' => 'Log in');
 	}
 	createMenu($menu);
-
 ?>
 </div>
 

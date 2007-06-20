@@ -165,7 +165,7 @@
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id => 'Delete blog'));
 		}
-		if ($session->id != $blog['userId']) {
+		if ($session->id && $session->id != $blog['userId']) {
 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id => 'Report blog'));
 		}
 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
@@ -202,7 +202,7 @@
 				echo 'The blog has been deleted.<br/>';
 			}
 
-		} else if ($current_tab == 'BlogReport') {
+		} else if ($current_tab == 'BlogReport' && $session->id) {
 
 			if (isset($_POST['blog_reportreason'])) {
 				$queueId = addToModerationQueue(MODERATION_BLOG, $_id);
@@ -224,7 +224,7 @@
 
 			showComments(COMMENT_BLOG, $_id);
 
-		} else if ($current_tab == 'BlogFiles') {
+		} else if ($current_tab == 'BlogFiles' && ($session->id == $blog['userId'] || $session->isAdmin)) {
 
 			echo $files->showFiles(FILETYPE_BLOG, $_id);
 

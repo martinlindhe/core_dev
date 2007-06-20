@@ -2,13 +2,6 @@
 	core/gör snart:
 		- varför går reported user till feedback. det borde gå till moderation
 		
-		- kunna exportera omröstnings-resultat till .csv eller annat format
-			excel & spss klarar båda csv med lite våld
-			för spss: http://opl.apa.org/Help/ImportingCSVToSPSS.aspx
-			
-			båda klarar dock .xls
-
-
 	forum:
 					* för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
 						gör ett sh-script som körs veckovis för detta (för /etc/cron.weekly på linux-db server)
@@ -17,11 +10,10 @@
 		- kolla hur det är med bevakningar. kunna få bevakning via ett separat meddelandesystem (liknande helgon)
 		- visa vad som är oläst sen senast
 
-	omröstningar/undersökningar:
-		vi behöver flera typer av omröstningar:
-			1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod	- DONE
-			2) fråga kopplad till ett objekt (t.ex nyhetsartikel)										- DONE
-			3) fler-fråge-formulär med blandade multival och fritext-fält						- 
+	vi behöver flera typer av omröstningar:
+		1) "veckans fråga". en flervalsfråga som publiceras under en tidsperiod						- DONE
+		2) fråga kopplad till ett objekt (t.ex nyhetsartikel)															- DONE
+		3) undersökningar: fler-fråge-formulär med blandade multival och fritext-fält			- 
 
 
 	FAQ-modul:
@@ -191,6 +183,14 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.20
+	- kan nu exportera poll-resultat till csv-format (spss, excel, openoffice calc)
+	- gjort en bild-guide för hur man importerar poll-resultat i spss
+	- add xdebug_is_enabled( ) check to compat check
+	- visar minnesanvändning på sql profilern om man har xdebug extension enabled	
+
+
+
 2007.06.19
 	- db driver: gjorde "set names utf8" optional, default on, så db driver kan användas omodifierad till cs
 	- admin: kan nu adda user från admin_list_users, där user-add INTE checkas mot reserved stopwords!

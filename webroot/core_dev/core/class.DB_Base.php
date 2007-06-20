@@ -3,6 +3,8 @@
 	SQL DB Base class
 
 	Written by Martin Lindhe, 2007
+	
+	The SQL profiler features additional PHP profiling if the xdebug extension is loaded
 
 	todo: method to call stored procedures
 */
@@ -178,8 +180,12 @@ abstract class DB_Base
 	{
 		global $config;
 		if (!$config['debug']) return;
-
-		$total_time = microtime(true) - $pageload_start;
+		
+		if (extension_loaded('xdebug')) {
+			$total_time = xdebug_time_index();
+		} else {
+			$total_time = microtime(true) - $pageload_start;
+		}
 
 		$rand_id = mt_rand(1,5000000);
 
@@ -225,9 +231,15 @@ abstract class DB_Base
 
 		if ($pageload_start) {
 			$php_time = $total_time - $this->connect_time - $sql_time;
-			echo 'Total time spent: '.round($total_time, 3).'s '.' (SQL connect: '.round($this->connect_time, 3).'s, SQL queries: '.round($sql_time, 3).'s, PHP: '.round($php_time, 3).'s)';
+			echo 'Total time spent: '.round($total_time, 3).'s '.' (SQL connect: '.round($this->connect_time, 3).'s, SQL queries: '.round($sql_time, 3).'s, PHP: '.round($php_time, 3).'s)<br/>';
 		} else {
-			echo 'Time spent - SQL: '.round($sql_time, 3);
+			echo 'Time spent - SQL: '.round($sql_time, 3).'<br/>';
+		}
+
+		if (extension_loaded('xdebug')) {
+			//Show script memory usage
+			echo 'Memory usage peaked at '.formatDataSize(xdebug_peak_memory_usage());
+			echo ', currently '.formatDataSize(xdebug_memory_usage());
 		}
 		echo '</div>';
 	}
