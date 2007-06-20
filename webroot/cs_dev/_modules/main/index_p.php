@@ -1,17 +1,9 @@
 <?
-	$login_err = true;
-	if(empty($l) && !empty($_POST['a']) && !empty($_POST['p'])) {
-		checkBan(1);
-		$login_err = $user_auth->login($_POST['a'], $_POST['p']);
-	}
-
-	/*
 	if ($l) {
 		header('Location: /main/start/');
 		die;
-	}*/
+	}
 
-	$theme_css = 'jord.css';
 	require_once(DESIGN.'top.php');
 ?>
 </head>

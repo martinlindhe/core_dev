@@ -12,9 +12,6 @@
 	$action = (!empty($_GET['action'])?$_GET['action']:false);
 	$id = (!empty($_GET['id'])?$_GET['id']:false);
 	$key = (!empty($_GET['key'])?$_GET['key']:false);
-	$l = $user->auth(@$_SESSION['data']['id_id']);
-	
-	d($l);
 	
 	if(!empty($_GET['type'])) {
 		$type = $_GET['type'];

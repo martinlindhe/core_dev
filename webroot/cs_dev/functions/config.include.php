@@ -1,4 +1,6 @@
 <?
+	$time_start = microtime(true);
+
 	require_once('class.DB_MySQLi.php');
 
 	require_once('functions/mail.fnc.php');
@@ -38,9 +40,9 @@ define('UIMG', '150x150');
 define('MAXIMUM_USERS', 750);
 define('DEFAULT_USER', '48d40b8b5dee4c06cd8864be1b35456d');
 
-#standard title of page
-define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
-$NAME_TITLE = NAME_TITLE;
+	#standard title of page
+	define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
+	$NAME_TITLE = NAME_TITLE;
 
 
 //define('SMTP_SERVER', 'localhost');
@@ -58,8 +60,7 @@ $sex_name = array('M' => 'man', 'F' => 'kvinna');
 
 define("STATSTR", "listar <b>%1\$d</b> - <b>%2\$d</b> (totalt: <b>%3\$d</b>)");
 
-	$time_start = microtime(true);
-	
+
 /*
 define('SQL_U', 'cs_user');
 define('SQL_P', 'cs8x8x9ozoSSpp');
@@ -73,9 +74,27 @@ define('SQL_H', 'pc3.icn.se');
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'cs_platform';
 	$config['database']['host']	= 'localhost';
+	$config['database']['charset']	= 'latin1';
 	$db = new DB_MySQLi($config['database']);
 
 	$user = new user();
+
+	$l = $user->auth(@$_SESSION['data']['id_id']);
+
+	$login_err = true;
+	if(!$l && !empty($_POST['a']) && !empty($_POST['p'])) {
+		//handle login
+		checkBan(1);
+		$login_err = $user_auth->login($_POST['a'], $_POST['p']);
+	}
+
+	$theme_css = 'jord.css';
+	if ($l) $theme_css = $user->getinfo($l['id_id'], 'det_tema');
+	if (empty($theme_css)) $theme_css = 'default.css';
+	$theme_css = secureOUT($theme_css);
+
+
+
 
 
 	function makeButton($bool, $js, $img, $text, $number = false)

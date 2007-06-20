@@ -34,8 +34,6 @@ class user_auth {
 
 	function login($a, $p, $mobile = false)
 	{
-		echo 'x';
-		die('x');
 		global $db, $user;
 		$online = gettxt('stat_online');
 		$online = explode(':', $online);
@@ -75,20 +73,12 @@ class user_auth {
 				spyPostSend($result['id_id'], 'Validering av uppgifter', $msg);
 			}
 
-			/*
-			if(!empty($_POST['redir'])) {
-				$this->notify_user($result['id_id'], gettxt('moved_login'), $result[1]);
-				echo '<script type="text/javascript">window.setTimeout(\'document.location.href = "'.l('main', 'start').'"\', 6000);</script>';
-				die();
-			}
-			*/
 			if (!$mobile) {
 				reloadACT(l('main', 'start'));
 			} else {
 				header('Location: '.$config['web_root'].'index.php');
 				die;
 			}
-
 		} elseif($result['status_id'] == '3') {
 			if (!$mobile) {
 				return 'Du är blockerad.';
@@ -110,7 +100,7 @@ class user_auth {
 		global $db;
 		if(!empty($_SESSION['data']['id_id'])) {
 			if(!$empty) {
-				@$db->insert('INSERT INTO s_usersess SET id_id = '.$_SESSION['data']['id_id'].', sess_ip = "'.$db->escpae($_SERVER['REMOTE_ADDR']).'", sess_id = "'.$db->escape(gc()).'", sess_date = NOW(), type_inf = "o"');
+				$db->insert('INSERT INTO s_usersess SET id_id = '.$_SESSION['data']['id_id'].', sess_ip = "'.$db->escape($_SERVER['REMOTE_ADDR']).'", sess_id = "'.$db->escape(gc()).'", sess_date = NOW(), type_inf = "o"');
 				$db->update('UPDATE s_user SET lastonl_date = account_date, account_date = "'.date("Y-m-d H:i:s", strtotime("-1 HOUR")).'" WHERE id_id = '.$_SESSION['data']['id_id'].' LIMIT 1');
 				$db->update('UPDATE s_useronline SET account_date = "'.date("Y-m-d H:i:s", strtotime("-1 HOUR")).'" WHERE id_id = '.$_SESSION['data']['id_id'].' LIMIT 1');
 			}
@@ -125,7 +115,8 @@ class user_auth {
 			else
 				reloadACT(l('main', 'index', '1'));
 		} else {
-			header('Location: index.php'); die;
+			header('Location: '.$config['web_root']);
+			die;
 		}
 	}
 
