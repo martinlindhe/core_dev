@@ -211,12 +211,13 @@
 		$db->ipdate($q);
 	}
 
+	//kollar om aktuell user får se $_id's galleri
 	function getGallXStatus($_id)
 	{
 		global $db, $l;
 		if (!is_numeric($_id)) return false;
 		
-		$q = 'SELECT gallx FROM s_userrelation WHERE user_id='.$l['id_id'].' AND friend_id='.$_id;
+		$q = 'SELECT gallx FROM s_userrelation WHERE user_id='.$_id.' AND friend_id='.$l['id_id'];
 		return $db->getOneItem($q);
 	}
 

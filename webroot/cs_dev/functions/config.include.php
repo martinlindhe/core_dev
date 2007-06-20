@@ -1,6 +1,9 @@
 <?
 	$time_start = microtime(true);
 
+	error_reporting(E_ALL);
+	date_default_timezone_set('Europe/Stockholm');
+
 	require_once('class.DB_MySQLi.php');
 
 	require_once('functions/mail.fnc.php');
@@ -18,8 +21,7 @@
 
 	session_start();
 
-	error_reporting(E_ALL);
-	date_default_timezone_set('Europe/Stockholm');
+
 
 #local date-settings
 setlocale(LC_TIME, 'sv_SE.ISO-8859-1');
@@ -53,7 +55,7 @@ define("UO", '30 MINUTES');
 define('ADMIN_NAME', 'CitySurf');
 define('USER_GALLERY', $config['web_root'].'_input/usergallery/');
 define('USER_IMG', $config['web_root'].'_input/images/');
-define('USER_FIMG', $config['web_root'].'user/image/');
+//define('USER_FIMG', $config['web_root'].'user/image/');
 //define('NEWS', '/_output/news_');
 $sex = array('M' => 'm', 'F' => 'k');
 $sex_name = array('M' => 'man', 'F' => 'kvinna');
@@ -82,62 +84,15 @@ define('SQL_H', 'pc3.icn.se');
 	$l = $user->auth(@$_SESSION['data']['id_id']);
 
 	$login_err = true;
-	if(!$l && !empty($_POST['a']) && !empty($_POST['p'])) {
+	if (!empty($_POST['a']) && !empty($_POST['p'])) {
 		//handle login
 		checkBan(1);
 		$login_err = $user_auth->login($_POST['a'], $_POST['p']);
 	}
 
 	$theme_css = 'jord.css';
-	if ($l) $theme_css = $user->getinfo($l['id_id'], 'det_tema');
+	if ($user->id) $theme_css = $user->getinfo($l['id_id'], 'det_tema');
 	if (empty($theme_css)) $theme_css = 'default.css';
 	$theme_css = secureOUT($theme_css);
-
-
-
-
-
-	function makeButton($bool, $js, $img, $text, $number = false)
-	{
-		echo '<div class="'.($bool?'btnSelected':'btnNormal').'"'.($js?'onclick="'.$js.'"':'').'>';
-		echo '<table summary="" cellpadding="0" cellspacing="0">';
-		echo '<tr>';
-			echo '<td width="3"><img src="/_gfx/themes/btn_c1.png" alt=""/></td>';
-			echo '<td style="background: url(\'/_gfx/themes/btn_head.png\');"></td>';
-			echo '<td width="3"><img src="/_gfx/themes/btn_c2.png" alt=""/></td>';
-		echo '</tr>';
-
-		echo '<tr style="height: 18px">';
-			echo '<td width="3" style="background: url(\'/_gfx/themes/btn_left.png\');"></td>';
-			echo '<td style="padding-left: 19px; padding-right: 4px; padding-top: 1px;">';
-			if ($img) echo '<img src="/_gfx/'.$img.'" style="position: absolute; top: 5px; left: 4px;" alt=""/> ';
-			echo $text;
-			if ($number !== false) echo '&nbsp;&nbsp;'.$number;
-			echo '</td>';
-			echo '<td width="3" style="background: url(\'/_gfx/themes/btn_right.png\');"></td>';
-		echo '</tr>';
-
-		echo '<tr>';
-			echo '<td width="3"><img src="/_gfx/themes/btn_c3.png" alt=""/></td>';
-			echo '<td style="background: url(\'/_gfx/themes/btn_foot.png\');"></td>';
-			echo '<td width="3"><img src="/_gfx/themes/btn_c4.png" alt=""/></td>';
-		echo '</tr>';
-
-		echo '</table>';
-		echo '</div>';
-	}
-	
-	//returnerar random nummer
-	function gc($type = 1) {
-		if(!empty($_REQUEST["PHPSESSID"]))
-			$sess5454 = md5($_REQUEST["PHPSESSID"].'SALTHELGVETE');
-		else
-			$sess5454 = md5(microtime() . rand(1, 99999));
-		if(!empty($_COOKIE['SOEBR']))
-			$cookie_id = (is_md5($_COOKIE['SOEBR']))?$_COOKIE['SOEBR']:cookieSET("SOEBR", $sess5454);
-		else
-			$cookie_id = cookieSET("SOEBR", $sess5454);
-		return ($type?$cookie_id:$sess5454);
-	}
 
 ?>

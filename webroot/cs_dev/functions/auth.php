@@ -1,9 +1,6 @@
 <?
 class user_auth {
 
-	function __construct() {
-	}
-
 	function login_data($result) {
 		global $db, $user;
 		cookieSET("a65", $result['u_alias']);
@@ -74,7 +71,9 @@ class user_auth {
 			}
 
 			if (!$mobile) {
-				reloadACT(l('main', 'start'));
+				//reloadACT(l('main', 'start'));
+				header('Location: /main/start/');
+				
 			} else {
 				header('Location: '.$config['web_root'].'index.php');
 				die;

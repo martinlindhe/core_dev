@@ -24,6 +24,19 @@
 			- tagit bort diverse klassers egna $sql pekare
 
 
+2007.06.20 Onsdag:
+	webb-gränssnittet:
+		* fixat galleri X access check, som var inverterad
+		* diverse småpill
+
+	plattformen:
+		* bråkat med ipx
+
+	mycket av dagen gick åt till möten
+
+
+
+
 ***************************************************************************************************
 webbgränssnitt:
 	- HÖG PRIO: anmäl användare-funktion:

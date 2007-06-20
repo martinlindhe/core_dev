@@ -23,7 +23,6 @@
 ?>
 	<div class="subHead">presentation</div><br class="clr"/>
 <?
-
 	if (!empty($profile['user_pres'][1])) {
 		echo formatText($profile['user_pres'][1], true);
 	} else {

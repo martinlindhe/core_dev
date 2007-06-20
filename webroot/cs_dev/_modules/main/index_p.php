@@ -1,9 +1,4 @@
 <?
-	if ($l) {
-		header('Location: /main/start/');
-		die;
-	}
-
 	require_once(DESIGN.'top.php');
 ?>
 </head>

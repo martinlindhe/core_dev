@@ -46,7 +46,12 @@ class user {
 	}
 	function counterSet($id) {
 		$info = $this->getcontent($id, 'user_head');
-		$_SESSION['data']['offsets'] = array('gb_offset' => intval(@$info['gb_offset'][1]), 'mail_offset' => intval(@$info['mail_offset'][1]), 'forum_offset' => intval(@$info['forum_offset'][1]), 'gal_offset' => intval(@$info['gal_offset'][1]), 'blog_offset' => intval(@$info['blog_offset'][1]), 'blocked_offset' => intval(@$info['blocked_offset'][1]), 'rel_offset' => intval(@$info['rel_offset'][1]));
+		foreach ($info as $row) {
+			if ($row['content_type']) {
+				$_SESSION['data']['offsets'][ $row['content_type'] ] = $row['content'];
+				//$_SESSION['data']['offsets'] = array('gb_offset' => intval(@$info['gb_offset'][1]), 'mail_offset' => intval(@$info['mail_offset'][1]), 'forum_offset' => intval(@$info['forum_offset'][1]), 'gal_offset' => intval(@$info['gal_offset'][1]), 'blog_offset' => intval(@$info['blog_offset'][1]), 'blocked_offset' => intval(@$info['blocked_offset'][1]), 'rel_offset' => intval(@$info['rel_offset'][1]));
+			}
+		}
 	}
 	function counterDecrease($type, $user) {
 		$c = $this->getinfo($user, $type.'_offset');

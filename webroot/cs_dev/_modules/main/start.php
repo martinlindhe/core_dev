@@ -2,7 +2,7 @@
 	include(DESIGN.'head.php');
 
 	echo '<div id="mainContent">';
-
+	
 		//Listar de senaste bloggarna
 		$q = 'SELECT b.*,u.* FROM s_userblog b '.
 				'LEFT JOIN s_user u ON (b.user_id=u.id_id) '.

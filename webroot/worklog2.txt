@@ -1,0 +1,10 @@
+in på galleri så försvinner alla räknare
+gästbok 2 ggr
+min profil 2 ggr
+
+relationer counter är fel
+
+
+/text/contact/		massa fel
+/list/users/			massa fel
+andras profiler		blank sida

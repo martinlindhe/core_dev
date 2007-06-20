@@ -146,9 +146,17 @@
 	{
 		global $sql, $t;
 
-		return $sql->queryResult("SELECT id_id FROM {$t}user WHERE u_alias = '".secureINS($_alias)."' AND status_id = '1' LIMIT 1");
+		return $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_alias)."' AND status_id = '1' LIMIT 1");
 	}
-	
+
+	function getUserName($_id)
+	{
+		global $sql, $t;
+		if (!is_numeric($_id)) return;
+
+		return $sql->queryResult('SELECT u_alias FROM s_user WHERE id_id = '.$_id.' AND status_id = "1" LIMIT 1');
+	}
+
 	//todo: flytta till user klassen
 	function getUserFriends()
 	{

@@ -124,8 +124,8 @@ function flash($s) {
 }
 function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC') {
 	global $db;
-	if (!is_numeric($id)) die('wtf');
 	if($type == 's') {
+		if (!is_numeric($id)) die('wtf '.$id);
 		$result = $db->getOneItem('SELECT text_cmt FROM s_textsettings WHERE main_id = '.$id.' AND type_id = "'.$opt.'" LIMIT 1');
 		if(!$result) return false; else return $result;
 	} elseif($type == 'm') {
@@ -349,4 +349,48 @@ function dopaging($paging, $url, $anchor = '', $width = 'med', $text = '&nbsp;',
 	</tr></table>';
 }
 
+
+
+	function makeButton($bool, $js, $img, $text, $number = false)
+	{
+		echo '<div class="'.($bool?'btnSelected':'btnNormal').'"'.($js?'onclick="'.$js.'"':'').'>';
+		echo '<table summary="" cellpadding="0" cellspacing="0">';
+		echo '<tr>';
+			echo '<td width="3"><img src="/_gfx/themes/btn_c1.png" alt=""/></td>';
+			echo '<td style="background: url(\'/_gfx/themes/btn_head.png\');"></td>';
+			echo '<td width="3"><img src="/_gfx/themes/btn_c2.png" alt=""/></td>';
+		echo '</tr>';
+
+		echo '<tr style="height: 18px">';
+			echo '<td width="3" style="background: url(\'/_gfx/themes/btn_left.png\');"></td>';
+			echo '<td style="padding-left: 19px; padding-right: 4px; padding-top: 1px;">';
+			if ($img) echo '<img src="/_gfx/'.$img.'" style="position: absolute; top: 5px; left: 4px;" alt=""/> ';
+			echo $text;
+			if ($number !== false) echo '&nbsp;&nbsp;'.$number;
+			echo '</td>';
+			echo '<td width="3" style="background: url(\'/_gfx/themes/btn_right.png\');"></td>';
+		echo '</tr>';
+
+		echo '<tr>';
+			echo '<td width="3"><img src="/_gfx/themes/btn_c3.png" alt=""/></td>';
+			echo '<td style="background: url(\'/_gfx/themes/btn_foot.png\');"></td>';
+			echo '<td width="3"><img src="/_gfx/themes/btn_c4.png" alt=""/></td>';
+		echo '</tr>';
+
+		echo '</table>';
+		echo '</div>';
+	}
+	
+	//returnerar random nummer
+	function gc($type = 1) {
+		if(!empty($_REQUEST["PHPSESSID"]))
+			$sess5454 = md5($_REQUEST["PHPSESSID"].'SALTHELGVETE');
+		else
+			$sess5454 = md5(microtime() . rand(1, 99999));
+		if(!empty($_COOKIE['SOEBR']))
+			$cookie_id = (is_md5($_COOKIE['SOEBR']))?$_COOKIE['SOEBR']:cookieSET("SOEBR", $sess5454);
+		else
+			$cookie_id = cookieSET("SOEBR", $sess5454);
+		return ($type?$cookie_id:$sess5454);
+	}
 ?>
