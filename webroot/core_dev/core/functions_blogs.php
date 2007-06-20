@@ -206,7 +206,7 @@
 
 			if (isset($_POST['blog_reportreason'])) {
 				$queueId = addToModerationQueue(MODERATION_BLOG, $_id);
-				addComment(COMMENT_MODERATION_QUEUE, $queueId, $_POST['blog_reportreason']);
+				addComment(COMMENT_MODERATION, $queueId, $_POST['blog_reportreason']);
 
 				echo 'Your report has been recieved<br/>';
 			} else {

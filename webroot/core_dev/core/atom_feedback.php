@@ -2,7 +2,6 @@
 	$config['feedback']['enabled'] = true;
 	
 	define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
-	define('FEEDBACK_ABUSE',	2);	//user submitted "user abuse" about someone
 
 	//subjectId is the userId if its a abuse report
 	function saveFeedback($_type, $_text, $_subject = 0)
@@ -53,31 +52,5 @@
 
 		$q = 'SELECT * FROM tblFeedback WHERE feedbackId='.$_id;
 		return $db->getOneRow($q);
-	}
-
-	function abuseReport($_id)
-	{
-		if (!empty($_POST['report_reason']) || !empty($_POST['report_text'])) {
-			saveFeedback(FEEDBACK_ABUSE, $_POST['report_reason'].': '.$_POST['report_text'], $_id);
-		}
-
-		echo '<h1>Abuse</h1>';
-		echo 'If you want to block this user. Click here - fixme<br/><br/>';
-
-		echo '<h2>Report user form</h2>';
-		echo 'Please choose the reason as to why you wish to report this user:<br/>';
-		echo '<form method="post" action="">';
-		echo 'Reason: ';
-		echo '<select name="report_reason">';
-		echo '<option value=""></option>';
-		echo '<option value="Harassment">Harassment</option>';
-		echo '<option value="Other">Other</option>';
-		echo '</select><br/>';
-
-		echo 'Please describe your reason for the abuse report.<br/>';
-		echo '<textarea name="report_text" rows="6" cols="40"></textarea><br/>';
-
-		echo '<input type="submit" class="button" value="Send report"/>';
-		echo '</form>';
 	}
 ?>

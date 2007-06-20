@@ -1,6 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
-		- varför går reported user till feedback. det borde gå till moderation
+
 		
 	forum:
 					* för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
@@ -187,7 +187,9 @@ X = hi prio task
 	- kan nu exportera poll-resultat till csv-format (spss, excel, openoffice calc)
 	- gjort en bild-guide för hur man importerar poll-resultat i spss
 	- add xdebug_is_enabled( ) check to compat check
-	- visar minnesanvändning på sql profilern om man har xdebug extension enabled	
+	- visar minnesanvändning på sql profilern om man har xdebug extension enabled
+	- ändrade så report user går till moderation istället för feedback
+	- tblModerationQueue -> tblModeration
 
 
 

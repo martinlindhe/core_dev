@@ -12,13 +12,13 @@
 	define('COMMENT_ADBLOCKRULE',		20);
 
 	/* Comment types only meant for the admin's eyes */
-	define('COMMENT_MODERATION_QUEUE',	30);	//owner = tblModerationQueue.queueId
+	define('COMMENT_MODERATION',		30);	//owner = tblModeration.queueId
 
 	function addComment($commentType, $ownerId, $commentText, $privateComment = false)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
+
 		$commentText = $db->escape(htmlspecialchars($commentText));
 
 		if ($privateComment) $private = 1;
@@ -31,8 +31,8 @@
 	function updateComment($commentType, $ownerId, $commentId, $commentText)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
+
 		$commentText = $db->escape(htmlspecialchars($commentText));
 
 		$q  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).' ';
@@ -44,7 +44,6 @@
 	function deleteComment($commentId)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($commentId)) return false;
 
 		$db->query('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentId='.$commentId);
@@ -63,7 +62,6 @@
 	function getComments($commentType, $ownerId, $privateComments = false)
 	{
 		global $db;
-
 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
 
 		$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 ';
@@ -80,7 +78,6 @@
 	function getLastComment($commentType, $ownerId, $privateComments = false)
 	{
 		global $db;
-
 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return false;
 
 		$q  = 'SELECT * FROM tblComments '.
@@ -97,7 +94,6 @@
 	function getCommentsCount($commentType, $ownerId)
 	{
 		global $db;
-
 		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
 
 		$q =	'SELECT COUNT(commentId) FROM tblComments '.
@@ -105,21 +101,18 @@
 		return $db->getOneItem($q);
 	}
 
-	/* Helper function, standard "show comments" to be used by another module
-		Used by these modules: functions_news.php
-	*/
-	function showComments($commentType, $ownerId)
+	/* Helper function, standard "show comments" to be used by other modules */
+	function showComments($_type, $ownerId)
 	{
 		global $session;
-
-		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
+		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
 		if ($session->id && !empty($_POST['cmt'])) {
-			addComment($commentType, $ownerId, $_POST['cmt']);
+			addComment($_type, $ownerId, $_POST['cmt']);
 		}
 
 		/* Visar kommentarer till artikeln */
-		$list = getComments($commentType, $ownerId);
+		$list = getComments($_type, $ownerId);
 
 		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' Comments</div>';
 
@@ -132,7 +125,7 @@
 			echo '<div class="comment_text">'.$row['commentText'].'</div>';
 		}
 
-		if ($session->id) {
+		if ($session->id && $_type != COMMENT_MODERATION) {
 			echo '<form method="post" action="">';
 			echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
 			echo '<input type="submit" class="button" value="Add comment"/>';

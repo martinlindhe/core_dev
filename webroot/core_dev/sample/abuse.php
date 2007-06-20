@@ -7,7 +7,7 @@
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
-	abuseReport($_GET['id']);
+	reportUserDialog($_GET['id']);
 
 	require('design_foot.php');
 ?>

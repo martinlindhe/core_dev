@@ -7,7 +7,7 @@
 
 		this module uses atom_comments.php to store comments to the moderation queue
 
-		requires tblModerationQueue and tblStopwords
+		requires tblModeration and tblStopwords
 
 		Admin: this atom module has two admin pages: "moderation queue" and "edit stopwords"
 	*/
@@ -24,6 +24,7 @@
 	define('MODERATION_GUESTBOOK',	11);	//itemId = tblGuestbook.entryId
 	define('MODERATION_FORUM',			12);	//itemId = tblForum.itemId
 	define('MODERATION_BLOG',				13);
+	define('MODERATION_USER',				14);	//itemId = tblUser.userId
 
 
 	/* Stopwords */
@@ -182,11 +183,11 @@
 		if (!is_numeric($itemId) || !is_numeric($queueType) || !is_bool($auto_triggered)) return false;
 		if ($auto_triggered != '1') $auto_triggered = 0;
 
-		$q = 'SELECT queueId FROM tblModerationQueue WHERE itemId='.$itemId.' AND queueType='.$queueType.' AND autoTriggered='.$auto_triggered;
+		$q = 'SELECT queueId FROM tblModeration WHERE itemId='.$itemId.' AND queueType='.$queueType.' AND autoTriggered='.$auto_triggered;
 		$queueId = $db->getOneItem($q);
 		if ($queueId) return $queueId;
 
-		$q = 'INSERT INTO tblModerationQueue SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+		$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
 
 		return $db->insert($q);
 	}
@@ -195,7 +196,7 @@
 	{
 		global $db;
 
-		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblModerationQueue AS t1 ';
+		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblModeration AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 		$q .= 'WHERE t1.moderatedBy=0 ORDER BY t1.timeCreated ASC'.$_sql_limit;
 
@@ -208,7 +209,7 @@
 
 		if (!is_numeric($queueId)) return false;
 
-		$q = 'SELECT * FROM tblModerationQueue WHERE queueId='.$queueId;
+		$q = 'SELECT * FROM tblModeration WHERE queueId='.$queueId;
 		return $db->getOneRow($q);
 	}
 
@@ -216,7 +217,7 @@
 	{
 		global $db;
 
-		$q = 'SELECT COUNT(queueId) FROM tblModerationQueue';
+		$q = 'SELECT COUNT(queueId) FROM tblModeration WHERE moderatedBy=0';
 		return $db->getOneItem($q);
 	}
 
@@ -227,7 +228,7 @@
 
 		if (!$session->isAdmin || !is_numeric($queueId)) return false;
 
-		$q = 'UPDATE tblModerationQueue SET moderatedBy='.$session->id.',timeModerated=NOW() WHERE queueId='.$queueId;
+		$q = 'UPDATE tblModeration SET moderatedBy='.$session->id.',timeModerated=NOW() WHERE queueId='.$queueId;
 		$db->query($q);
 	}
 	
@@ -237,8 +238,38 @@
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($itemId)) return false;
 		
-		$q = 'DELETE FROM tblModerationQueue WHERE  queueType='.$_type.' AND itemId='.$itemId;
+		$q = 'DELETE FROM tblModeration WHERE  queueType='.$_type.' AND itemId='.$itemId;
 		$db->delete($q);
 	}
 
+	function reportUserDialog($_id)
+	{
+		if (!empty($_POST['report_reason']) || !empty($_POST['report_text'])) {
+
+			$queueId = addToModerationQueue(MODERATION_USER, $_id);
+			addComment(COMMENT_MODERATION, $queueId, $_POST['report_reason'].': '.$_POST['report_text']);
+
+			echo 'Thanks. Your report has been recieved.';
+			return;
+		}
+
+		echo '<h1>Abuse</h1>';
+		echo 'If you want to block this user. Click here - fixme<br/><br/>';
+
+		echo '<h2>Report user form</h2>';
+		echo 'Please choose the reason as to why you wish to report this user:<br/>';
+		echo '<form method="post" action="">';
+		echo 'Reason: ';
+		echo '<select name="report_reason">';
+		echo '<option value=""></option>';
+		echo '<option value="Harassment">Harassment</option>';
+		echo '<option value="Other">Other</option>';
+		echo '</select><br/>';
+
+		echo 'Please describe your reason for the abuse report.<br/>';
+		echo '<textarea name="report_text" rows="6" cols="40"></textarea><br/>';
+
+		echo '<input type="submit" class="button" value="Send report"/>';
+		echo '</form>';
+	}
 ?>

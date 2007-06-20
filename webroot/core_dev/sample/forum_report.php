@@ -14,7 +14,7 @@
 
 		/* Rapportera inlägget till abuse */
 		$queueId = addToModerationQueue(MODERATION_FORUM, $itemId);
-		addComment(COMMENT_MODERATION_QUEUE, $queueId, $_POST['motivation']);
+		addComment(COMMENT_MODERATION, $queueId, $_POST['motivation']);
 
 		header('Location: forum.php?id='.$item['parentId']);
 		die;

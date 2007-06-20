@@ -26,7 +26,7 @@
 
 		if ($_POST['method_'.$row['queueId']] == 'accept') {
 			/* Accepts forum item and removes it from queue */
-			deleteComments(COMMENT_MODERATION_QUEUE, $row['queueId']);
+			deleteComments(COMMENT_MODERATION, $row['queueId']);
 			removeFromModerationQueue($row['queueId']);
 			continue;
 		}
@@ -53,17 +53,7 @@
 
 	if (!empty($_GET['comments'])) {
 
-		$list = getComments(COMMENT_MODERATION_QUEUE, $_GET['comments']);
-		foreach ($list as $row) {
-			echo '<div class="comment">';
-			if ($row['userId'] == 0) {
-				echo 'Anonymous reporter';
-			} else {
-				echo 'Reported by '.nameLink($row['userId'], $row['userName']);
-			}
-			echo ', '.$row['timeCreated'].': <br>';
-			echo $row['commentText'].'</div><br>';
-		}
+		showComments(COMMENT_MODERATION, $_GET['comments']);
 
 		require($project.'design_foot.php');
 		die;
@@ -86,6 +76,7 @@
 				case MODERATION_GUESTBOOK:$title = 'Guestbook entry'; break;
 				case MODERATION_BLOG:			$title = 'Blog'; break;
 				case MODERATION_FORUM:		$title = 'Forum'; break;
+				case MODERATION_USER:		$title = 'Reported user: '.nameLink($row['itemId']); break;
 				default: $title = '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 			}
 			echo '<div class="item_head">'.$title;
@@ -121,7 +112,7 @@
 			echo '</td></tr></table>';
 
 			if (!$row['autoTriggered']) {
-				$mcnt = getCommentsCount(COMMENT_MODERATION_QUEUE, $row['queueId']);
+				$mcnt = getCommentsCount(COMMENT_MODERATION, $row['queueId']);
 				if ($mcnt) {
 					echo '<a href="?comments='.$row['queueId'].getProjectPath().'">Motivations ('.$mcnt.')</a>';
 				} else {
