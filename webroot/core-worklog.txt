@@ -1,6 +1,12 @@
 ----[[platform todo]]----
 	core/gör snart:
 		- varför går reported user till feedback. det borde gå till moderation
+		
+		- kunna exportera omröstnings-resultat till .csv eller annat format
+			excel & spss klarar båda csv med lite våld
+			för spss: http://opl.apa.org/Help/ImportingCSVToSPSS.aspx
+			
+			båda klarar dock .xls
 
 
 	forum:

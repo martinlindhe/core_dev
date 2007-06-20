@@ -193,6 +193,12 @@ function submit_poll(id,opt)
 	show_element_by_name('poll_voted'+id);
 }
 
+function get_poll_csv(id)
+{
+	var w = window.open(_ext_core+'csv_poll.php?id='+id+_ext_ref, '_blank');
+	w.focus();
+}
+
 /* draws a square box on the image, box is resizable to select what area to cut */
 function cut_selected_file()
 {

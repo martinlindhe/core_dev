@@ -150,6 +150,11 @@
 				$result .= $row['categoryName'].' got '.$row['cnt'].' ('.$pct.'%) votes<br/>';
 			}
 		}
+
+		if ($session->isAdmin) {
+			$result .= '<input type="button" class="button" value="Save as .csv" onclick="get_poll_csv('.$_id.')"/>';
+		}
+
 		$result .= '</div>';
 
 		if ($session->id) {

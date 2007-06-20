@@ -16,6 +16,7 @@
 		'faq.php' => 'FAQ',
 		'feedback.php' => 'Feedback',
 		'forum.php' => 'Forum',
+		'blogs.php' => 'Blogs',
 		'users.php' => 'Users');
 	createMenu($menu);
 
