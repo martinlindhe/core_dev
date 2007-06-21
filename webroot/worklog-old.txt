@@ -650,3 +650,52 @@
 		* mms@citysurf.tv är uppsatt och fungerar för mms uppladdning
 		* info@citysurf.tv är uppsatt & evalena och bitte har info
 ---[[mailat ovanstående]--
+
+2007.06.18 Måndag:
+	webb-gränssnitt:
+		* ändrat logga ut till en textlänk i toppmenyn
+		* ökat max-resultat på sökningar från 50 till 100 per sida
+
+	admin-gränssnittet:
+		* fixat några felmeddelanden som kom upp i admingränssnittet
+		* tagit bort ett 20-tal textfält under "INFO UTÅT - TEXT" som inte användes
+
+	övrigt:
+		* satt upp lokal utvecklingsmiljö
+
+
+2007.06.19 Tisdag:
+	webb-gränssnitt:
+		* fixat upprepning av mailutskick för vip-uppgradering
+
+	plattformen:
+		* nytt databaslager:
+			- använder mysqli, bättre prestanda!
+			- innehåller sql profiler
+			- tagit bort ${t} och CH från alla sql-queries
+			- ersatt secureINS() crap med $db->escape()
+			- tagit bort diverse klassers egna $sql pekare
+
+
+2007.06.20 Onsdag:
+	webb-gränssnittet:
+		* fixat galleri X access check, som var inverterad
+		* diverse småpill
+
+	plattformen:
+		* bråkat med ipx
+
+	mycket av dagen gick åt till möten
+
+2007.06.21 Torsdag:
+	server-grejs:
+		* ipx fungerar
+		* debiterings-koppling från nvox är gjord
+		
+	webbservern:
+		* fixat så avsändare & mottagare är ifyllt i mail som besvaras
+		* fixat fel räknare på olästa mail
+		* stängde av utskick av erbjudande om en veckas VIP
+		* användare får internmail vid nekade bilduppladdningar
+		* fixat så "loggsök" i admin funkar igen
+--[mailat ovanstående]--

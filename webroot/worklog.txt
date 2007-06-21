@@ -1,63 +1,19 @@
-2007.06.18 Måndag:
-	webb-gränssnitt:
-		* ändrat logga ut till en textlänk i toppmenyn
-		* ökat max-resultat på sökningar från 50 till 100 per sida
-
-	admin-gränssnittet:
-		* fixat några felmeddelanden som kom upp i admingränssnittet
-		* tagit bort ett 20-tal textfält under "INFO UTÅT - TEXT" som inte användes
-
-	övrigt:
-		* satt upp lokal utvecklingsmiljö
-
-
-2007.06.19 Tisdag:
-	webb-gränssnitt:
-		* fixat upprepning av mailutskick för vip-uppgradering
-
-	plattformen:
-		* nytt databaslager:
-			- använder mysqli, bättre prestanda!
-			- innehåller sql profiler
-			- tagit bort ${t} och CH från alla sql-queries
-			- ersatt secureINS() crap med $db->escape()
-			- tagit bort diverse klassers egna $sql pekare
-
-
-2007.06.20 Onsdag:
-	webb-gränssnittet:
-		* fixat galleri X access check, som var inverterad
-		* diverse småpill
-
-	plattformen:
-		* bråkat med ipx
-
-	mycket av dagen gick åt till möten
-
-
-
 
 ***************************************************************************************************
 webbgränssnitt:
 	- HÖG PRIO: anmäl användare-funktion:
 		* gör om admingränssnitt att fungera med nuvarande s_vip: "admin ska kunna se översikt på inkommande anmälningar"
 
+	* bugg: räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
+
+
 	- lägg en ny ruta "DETTA JOBBAR VI PÅ JUST NU" under tyck till
 
 	* titel i mail i inkorgen är för lång, klipp den på max X tecken
 	SENARE: användaren "gör just nu" info, t.ex "kollar i pelles galleri"
 	fakta: kunna välja "vikt". bitte skapar en lista med alternativ
-	* bugg: radera oläst mail räknar ej ner counter
-	* bugg: om jag låter bitte se mina galleri x, kan hon även se mina!
 	* visa att en användre är blockerad på dess profil (paradise1)
 	* todo: det går inte att blockera användare från admin säger bitte
-
-
-SMS debitering:
-	- kontrollera att IPX mt billing funkar
-	- kontrollera att intern-mail kvittering skickas korrekt
-	- NVOX koppling med mika
-
 
 
 	- bugg: ajax chat-historik strular. för vipmedlemmar så upprepar sig chatthistoriken hela tiden. löst genom att stänga av historik
@@ -68,8 +24,7 @@ SMS debitering:
 	* bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
 	* rating på bilder i galleriet, med atom_rating.php
 	* bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
-	* räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
-	* när en användares bild blir nekad, ska de få ett privat meddelande-svar med anledning. i obj_photo.php
+
 
 blandat:
 	* mms upload image & video:
