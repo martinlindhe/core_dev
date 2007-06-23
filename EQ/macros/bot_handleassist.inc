@@ -53,14 +53,38 @@ Sub Event_HANDLE_Summoned(string Line)
 	/varset timerNuke 5s
 /return
 
+| ENC/74 Wake of Subdual
+#Event HANDLE_MobMezzed "#1# gazes happily into space."
+Sub Event_HANDLE_MobMezzed(string Line, string Name)
+	/if (${Spawn[${Name}].Type.Equal["NPC"]}) {
+		/call DebugMsg ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS MEZZED!!!!
+		/popup ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS MEZZED!
+
+		/if (${Spawn[${Name}].ID} == ${currentSpawn}) {
+			/call DebugMsg ABORTING KILL LOOP cos current target is mezzed
+			/varset AbortLoop 1
+		}
+	}
+/return
+
+| ENC/75  Dyn'leth's Whispers
+#Event HANDLE_MobCharmed "#1# is charmed."
+Sub Event_HANDLE_MobCharmed(string Line, string Name)
+	/if (${Spawn[${Name}].Type.Equal["NPC"]}) {
+		/call DebugMsg ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS CHARMED!!!!
+		/popup ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS CHARMED!
+		/if (${Spawn[${Name}].ID} == ${currentSpawn}) {
+			/call DebugMsg ABORTING KILL LOOP cos current target is charmed
+			/varset AbortLoop 1
+		}
+	}
+/return
 
 #Event HANDLE_MobInterrupted "#1#'s casting is interrupted!"
 Sub Event_HANDLE_MobInterrupted(string Line, string Name)
-
 	/if (${Spawn[${Name}].Type.Equal["NPC"]}) {
-		/echo # ${Name} [${Spawn[npc ${Name}].Class.ShortName}] interrupted
+		/call DebugMsg ${Name} [${Spawn[npc ${Name}].Class.ShortName}] interrupted
 	}
-
 /return
 
 Sub WaitForTargetHP(int pct)
@@ -111,6 +135,8 @@ Sub Init_HandleAssist
 	
 	/declare timerDruidEpic					timer outer 0
 	/declare timerNuke 							timer outer 0
+	
+	/declare currentSpawn					int outer	0
 
 	
 	/squelch /alias /botassist /echo botassist

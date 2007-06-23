@@ -193,6 +193,8 @@ Sub DruidWaitForTargetHP(int ID, int pct)
 Sub HandleAssistCallDruid(int SpawnId)
 
 	/if (!${SpawnId}) /return
+	
+	/varset currentSpawn ${SpawnId}
 
 	| global druid variables:
 	/if (!${Defined[reptileTimer]}) /declare reptileTimer timer outer 0
@@ -431,7 +433,7 @@ Sub DruidRefreshAA_DS
 	/if (!${Me.Buff["Wrath of the Wild"].ID} && !${Raid.Members}) {
 		/call DebugMsg "Buffing self with AA DS"
 		/target myself
-		/casting "Wrath of the Wild" alt
+		/call MQ2Cast "Wrath of the Wild" alt
 		/delay 1s
 	} else {
 		/call FindTank
@@ -440,7 +442,7 @@ Sub DruidRefreshAA_DS
 			/if (${Spawn[id ${tankId}].Distance} < 100) {
 				/call DebugMsg "Buffing ${Spawn[id ${tankId}].Name} with AA DS"
 				/target id ${tankId}
-				/casting "Wrath of the Wild" alt
+				/call MQ2Cast "Wrath of the Wild" alt
 				/delay 1s
 			}
 		}

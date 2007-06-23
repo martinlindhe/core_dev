@@ -3,9 +3,9 @@
 Sub Main
 
 	/squelch /target clear
-	
-	| Drops invis
+
 	/if (${Me.Buff["Shared Camouflage"].ID}) {
+		| Drop invis
 		/notify BuffWindow Buff${Math.Calc[${Me.Buff["Shared Camouflage"].ID}-1].Int} leftmouseup
 		/delay 2s !${Me.Buff["Shared Camouflage"].ID}
 	}
@@ -27,11 +27,27 @@ Sub Main
 		/return
 	}
 
+	/if (${Zone.ShortName.Equal["Direwind"]} && ${SpawnCount[npc Drizzlorn radius 30]}) {
+		/echo Drizzlorn: enter ashengate (Ashengate North)
+		/target npc Drizzlorn
+		/delay 2s ${Target.ID}
+		/say enter ashengate
+		/return
+	}
+
 	/if (${Zone.ShortName.Equal["Direwind"]} && ${SpawnCount[npc Scout Keshik radius 30]}) {
 		/echo Scout Keshik: summon a griffon
 		/target npc Scout Keshik
 		/delay 2s ${Target.ID}
 		/say summon a griffon
+		/return
+	}
+
+	/if (${Zone.ShortName.Equal["Valdeholm"]} && ${SpawnCount[npc Wraithguard Sergeant Thavin radius 30]}) {
+		/echo Wraithguard Sergeant Thavin: fergarin (Frostcrypt raid)
+		/target npc Wraithguard Sergeant Thavin
+		/delay 2s ${Target.ID}
+		/say fergarin
 		/return
 	}
 

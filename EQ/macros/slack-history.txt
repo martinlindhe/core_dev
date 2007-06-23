@@ -1,3 +1,10 @@
+2007.06.19:
+	- bot_handleassist.inc:
+		* abortar kill loop (för druid iaf) om mob blir charmad eller mezzad. känner inte igen alla charm & mez spells (wip)
+
+	- fixat hud för raid & group display
+	- hail.mac: hails för lite nya instancer, ag north & fc raid
+
 2007.05.06:
 	- bot_spells.inc:
 		* PerformHeal() skippar heals på pullers (monk/bard) om dom inte är line of sight
