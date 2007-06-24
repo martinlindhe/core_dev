@@ -89,7 +89,7 @@ class Files
 
 	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
 	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
-	function showFiles($fileType, $ownerId, $categoryId = 0)
+	function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 	{
 		global $session, $db, $config;
 
@@ -114,7 +114,7 @@ class Files
 		if ($categoryId) $action = '?file_category_id='.$categoryId;
 
 		echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;">';
-		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="/gfx/ajax_loading.gif"/></div>';
+		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="'.$config['core_web_root'].'gfx/ajax_loading.gif"/></div>';
 
 		echo '<div class="file_gadget">';
 
@@ -200,7 +200,8 @@ class Files
 				($fileType == FILETYPE_USERFILE && $session->id == $userid) ||
 				($fileType == FILETYPE_NEWS && $session->isAdmin) ||
 				($fileType == FILETYPE_WIKI) ||
-				($fileType == FILETYPE_BLOG)
+				($fileType == FILETYPE_BLOG) ||
+				($fileType == FILETYPE_FILEAREA_UPLOAD)
 				)
 		{
 			$file_upload = true;
@@ -433,7 +434,7 @@ class Files
 	/* Handle image upload, used internally only */
 	function handleImageUpload($fileId, $FileData)
 	{
-		global $db;
+		global $db, $session;
 
 		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
 
@@ -684,6 +685,7 @@ class Files
 		global $session;
 
 		$filename = $this->upload_dir.$_id;
+		if (!file_exists($filename)) die('file not found');
 
 		$temp = getimagesize($filename);
 
@@ -804,7 +806,7 @@ class Files
 		<input type="button" class="button" value="Move image" onclick="move_selected_file()"/>
 		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
 <? } ?>
-<? if ($config['news']['allow_rating']) { ?>
+<? if (!empty($config['news']['allow_rating'])) { ?>
 		<br/>
 		<div class="image_rate">
 		<?

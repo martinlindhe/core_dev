@@ -1,6 +1,14 @@
 ----[[platform todo]]----
 	core/gör snart:
 
+		- geoip auto mapping:
+			gör ett script som tar en full geoip db (en monthly release) och genererar en förenklad mappning såhär:
+			
+				ipstart, ipend, region
+				
+			och region är ett id för en samling länder. t.ex en för hela sydamerika, en för hela europa, en för hela nordamerika osv
+			
+			sen göra en sån ip lookup när användaren loggar in och uppdatera tblUsers med detta
 		
 	forum:
 					* för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)

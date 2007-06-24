@@ -7,7 +7,7 @@
 	$title = $config['default_title'].' - '.getCategoryName(CATEGORY_USERFILE, $_cat);
 	require('design_head.php');
 
-	$files->showThumbnails(FILETYPE_FILEAREA_UPLOAD, $_cat);
+	$files->showThumbnails(FILETYPE_USERFILE, $_cat);
 ?>
 
 <div id="menu">
