@@ -14,7 +14,7 @@ Sub Main
 
 	/for i 1 to ${Raid.Members}
 		/if (!${Spawn[PC ${Raid.Member[${i}].Name}].ID}) {
-			/echo # ${Raid.Member[${i}].Name} [${Raid.Member[${i}].Class.ShortName}] (${SpawnCount[pc ${Raid.Member[${i}].Class.ShortName}]} ${Raid.Member[${i}].Class.Name.Lower}s in zone)
+			/echo # ${Raid.Member[${i}].Name} [${Raid.Member[${i}].Class.ShortName}]
 			/varcalc cnt ${cnt}+1
 		}
 	/next i

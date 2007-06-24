@@ -9,8 +9,4 @@ Sub Main
 		/return
 	}
 
-	|crash:
-	/declare src spawn local ${Spawn[pc]}
-	/echo ${src[next]}
-
 /return
