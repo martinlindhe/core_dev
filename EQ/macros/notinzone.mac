@@ -20,5 +20,4 @@ Sub Main
 	/next i
 
 	/echo # ${cnt} of ${Raid.Members} raid members not in zone
-	/echo --------------------------
 /return
