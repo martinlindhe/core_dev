@@ -406,6 +406,56 @@ todo: visa average resists etc
 		<AlignLeft>true</AlignLeft>
 	</Label>
 
+	<Label item="MQ_HPRegen">
+		<EQType>9999</EQType>
+		<Font>1</Font>
+		<TooltipReference>${Me.HPRegen}</TooltipReference>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>80</X>
+			<Y>2</Y>
+		</Location>
+		<Size>
+			<CX>23</CX>
+			<CY>14</CY>
+		</Size>
+		<EQType>2</EQType>
+		<TextColor>
+			<R>255</R>
+			<G>0</G>
+			<B>0</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+		<AlignLeft>false</AlignLeft>
+	</Label>
+
+	<Label item="MQ_ManaRegen">
+		<EQType>9999</EQType>
+		<Font>1</Font>
+		<TooltipReference>${Me.ManaRegen}</TooltipReference>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>110</X>
+			<Y>2</Y>
+		</Location>
+		<Size>
+			<CX>23</CX>
+			<CY>14</CY>
+		</Size>
+		<EQType>2</EQType>
+		<TextColor>
+			<R>0</R>
+			<G>0</G>
+			<B>255</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+		<AlignLeft>false</AlignLeft>
+	</Label>
+
 <!-- Hit Point Gauge -->
 	<Gauge item="Player_HP">
 		<ScreenID>PlayerHP</ScreenID>
@@ -825,7 +875,30 @@ todo: visa average resists etc
 		<AlignCenter>false</AlignCenter>
 		<AlignRight>false</AlignRight>
 	</Label>
-
+	<Label item="MQ_UnspentAA">
+		<EQType>9999</EQType>
+		<Font>1</Font>
+		<TooltipReference>${Me.AAPoints}</TooltipReference>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>110</X>
+			<Y>62</Y>
+		</Location>
+		<Size>
+			<CX>23</CX>
+			<CY>14</CY>
+		</Size>
+		<EQType>2</EQType>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<NoWrap>true</NoWrap>
+		<AlignCenter>false</AlignCenter>
+		<AlignRight>true</AlignRight>
+		<AlignLeft>false</AlignLeft>
+	</Label>
 
 <!-- Combat Timer -->
 	<Ui2DAnimation item="A_PWCSInCombat">
@@ -1018,6 +1091,7 @@ todo: visa average resists etc
 		</TabTextActiveColor>
 		<Pieces>PlayerName</Pieces>
 		<Pieces>PW_LevelNumber</Pieces>
+		<Pieces>MQ_UnspentAA</Pieces>
 		<Pieces>A_AttackIndicatorAnim</Pieces>
 		<Pieces>Player_HP</Pieces>
 		<Pieces>Self_Gauges</Pieces>
@@ -1039,6 +1113,8 @@ todo: visa average resists etc
 		<Pieces>Player_CombatTimer</Pieces>
 		<Pieces>Player_CombatTimerLabel</Pieces>
 		<Pieces>PW_CombatStateAnim</Pieces>
+		<Pieces>MQ_HPRegen</Pieces>
+		<Pieces>MQ_ManaRegen</Pieces>
 		<Location>
 			<X>0</X>
 			<Y>22</Y>
