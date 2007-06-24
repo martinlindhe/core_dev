@@ -32,7 +32,7 @@
 		<Include>EQUI_PlayerCustomizationWnd.xml</Include>
 		<Include>EQUI_GroupWindow.xml</Include>
 		<Include>EQUI_ItemDisplay.xml</Include>
-		<Include>EQUI_BreathWindow.xml</Include>		
+		<Include>EQUI_BreathWindow.xml</Include>
 		<Include>EQUI_NoteWindow.xml</Include>
 		<Include>EQUI_OptionsWindow.xml</Include>
 		<Include>EQUI_BookWindow.xml</Include>
@@ -141,8 +141,9 @@
 		<Include>EQUI_AuraWnd.xml</Include>
 		<Include>EQUI_GroupMentorWnd.xml</Include>
 		<Include>EQUI_SpellDisplay.xml</Include>
-		<Include>EQUI_RewardSelectionWnd.xml</Include> 
-		<Include>EQUI_NewPointMerchantWnd.xml</Include>		
+		<Include>EQUI_RewardSelectionWnd.xml</Include>
+		<Include>EQUI_NewPointMerchantWnd.xml</Include>
+		<Include>EQUI_HtmlWnd.xml</Include>
 	</Composite>
 
 	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes"/>
