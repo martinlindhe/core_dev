@@ -1,0 +1,16 @@
+| lists the people in current zone who is not in raid
+|
+Sub Main
+
+	/echo # Players in zone who is not in raid:
+	
+	/if (!${Raid.Members}) {
+		/echo Error: You are not in raid.
+		/return
+	}
+
+	|crash:
+	/declare src spawn local ${Spawn[pc]}
+	/echo ${src[next]}
+
+/return

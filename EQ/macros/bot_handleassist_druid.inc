@@ -81,6 +81,12 @@ Sub Event_DEBUFF_DruCold(string Line, string Name)
 	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (COLD)"
 /return
 
+#event DEBUFF_DruidEpic	"#1# is cursed by nature's blight."
+#event DEBUFF_DruidEpic	"#1# is caught in the fury of the seasons."
+Sub Event_DEBUFF_DruidEpic(string line, string name)
+	/call DebugMsg "DEBUFFED: ${name} (DRU EPIC)"
+/return
+
 
 
 Sub DruSnareMob(int SpawnId)
@@ -284,7 +290,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 		}
 
 		/if (DO_EPIC && !${Window[LootWnd].Open} && !${Me.Stunned} && ${Me.Standing} && !${FindItem[EPIC_ITEMNAME].Timer} && ${Target.ID} && (${Target.PctHPs} > 50) && (${Target.PctHPs} < 100) && ${Target.Type.Equal[NPC]} && (${Target.Level} >= 60) && ${Target.LineOfSight} && ${Target.Distance} < 100) {
-			/call DebugMsg "DEBUFF: ${Target.CleanName} (Druid Epic)"
+			/call DebugMsg "Debuffing ${Target.CleanName} (DRU EPIC)"
 			/call MQ2Cast "EPIC_ITEMNAME" item
 		}
 		

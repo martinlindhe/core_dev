@@ -1,0 +1,24 @@
+| lists raid members who is not in zone
+|
+Sub Main
+
+	/echo # Raid members not in zone:
+	
+	/if (!${Raid.Members}) {
+		/echo Error: You are not in raid.
+		/return
+	}
+
+	/declare i int local 0
+	/declare cnt int local 0
+
+	/for i 1 to ${Raid.Members}
+		/if (!${Spawn[PC ${Raid.Member[${i}].Name}].ID}) {
+			/echo # ${Raid.Member[${i}].Name} [${Raid.Member[${i}].Class.ShortName}] (${SpawnCount[pc ${Raid.Member[${i}].Class.ShortName}]} ${Raid.Member[${i}].Class.Name.Lower}s in zone)
+			/varcalc cnt ${cnt}+1
+		}
+	/next i
+
+	/echo # ${cnt} of ${Raid.Members} raid members not in zone
+	/echo --------------------------
+/return

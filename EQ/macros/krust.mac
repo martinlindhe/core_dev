@@ -63,30 +63,6 @@ Sub Event_BuffCheck
 	/echo *Done Checking Buff Durations
 /return
 
-#Event WhoNotInZone        "[MQ2] notinzone"
-Sub Event_WhoNotInZone(string Line)
-	/if (!${Raid.Members}) {
-		/echo /notinzone: You are not in raid.
-		/return
-	}
-	
-	/echo --------------------------
-	/echo # Raid members not in zone:
-	
-	/declare i int local 0
-	/declare cnt int local 0
-
-	/for i 1 to ${Raid.Members}
-		/if (!${Spawn[PC ${Raid.Member[${i}].Name}].ID}) {
-			/echo # ${Raid.Member[${i}].Name} [${Raid.Member[${i}].Class.ShortName}] (${SpawnCount[pc ${Raid.Member[${i}].Class.ShortName}]} ${Raid.Member[${i}].Class.Name.Lower}s in zone)
-			/varcalc cnt ${cnt}+1
-		}
-	/next i
-
-	/echo # ${cnt} of ${Raid.Members} raid members not in zone
-	/echo --------------------------
-/return
-
 Sub Event_UsedOakenGuard
 	/varset oakenGuardReuseTime 15m
 	/echo [${Time}] Oaken Guard used
@@ -202,7 +178,6 @@ Sub Main
 	/squelch /alias /toggledisarm /echo toggledisarm
 	/squelch /alias /toggletaunt /echo toggletaunt
 
-	/squelch /alias /notinzone /echo notinzone
 	/squelch /alias /acceptrez /echo acceptrez
 	/squelch /alias /acceptinvite /echo acceptinvite
 	
