@@ -1,4 +1,6 @@
 <?
+	require_once('atom_subscriptions.php');	//for subscription functionality
+
 	//forum module settings:
 	$config['forum']['rootname'] = 'Forum';
 	$config['forum']['path_separator'] = ' - ';
@@ -183,7 +185,7 @@
 		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_FORUM, $itemId, true);
 
 		/* Check if there is any users who should be notified about this new message */
-		//notifySubscribers($parentId, $itemId, SUBSCRIBE_MAIL);
+		notifySubscribers($parentId, $itemId, SUBSCRIBE_MAIL);
 		return $itemId;
 	}
 
@@ -654,6 +656,12 @@
 
 		showForumPost($item);
 
+		if (!isSubscribed(SUBSCRIPTION_FORUM, $itemId)) {
+			echo '<a href="?id='.$itemId.'&subscribe='.$itemId.'">Subscribe to topic</a><br/>';
+		} else {
+			echo '<a href="?id='.$itemId.'&unsubscribe='.$itemId.'">Unsubscribe to topic</a><br/>';
+		}
+
 		$tot_cnt = getForumItemCountFlat($itemId);
 		$pager = makePager($tot_cnt, $config['forum']['posts_per_page']);
 		
@@ -811,16 +819,13 @@
 		global $session;
 		if (!is_numeric($_id)) return false;
 
-/*
-		// Starta/avsluta bevakning
+		// Start/stop subscription
 		if ($session->id) {
-			if (isset($_GET['subscribe'])) {
-				addSubscription($_GET['subscribe'], SUBSCRIBE_MAIL);
-			} else if (isset($_GET['unsubscribe'])) {
-				removeSubscription($_GET['unsubscribe'], SUBSCRIBE_MAIL);
-			}
+			if (!empty($_GET['subscribe'])) addSubscription(SUBSCRIPTION_FORUM, $_GET['subscribe']);
+			if (!empty($_GET['unsubscribe'])) removeSubscription(SUBSCRIPTION_FORUM, $_GET['unsubscribe']);
 		}
 
+		/*
 		if ($config['forum']['allow_votes'] && !empty($_POST['vote']) && !empty($_POST['voteId'])) {
 			addForumVote($_POST['voteId'], $_POST['vote']);
 		}*/

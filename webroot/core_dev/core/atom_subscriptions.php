@@ -1,38 +1,71 @@
 <?
+
 	/*
-		functions_subscriptions.php - Funktioner för övervakningar
+	tblSubscriptions
+		id				= subscription id
+		type			= subscription type, SUBSCRIPTION_FORUM, SUBSCRIPTION_BLOG
+		ownerId		= owner of the subscription (userId)
+		itemId		= id of the item we are subscribing to (tblForums.forumId perhaps)
 	*/
 
+	define('SUBSCRIPTION_FORUM',			1);
+	define('SUBSCRIPTION_BLOG',				2);	//fixme: implement
 
-	/* Subscription types */
-	define('SUBSCRIBE_MAIL',			1);		// $recipient is a email
-	define('SUBSCRIBE_SMS',				2); 	// $recipient is a cellphone number
-	define('SUBSCRIBE_IM',				3);		// $recipient is the userId to send a Instant Message to
-	define('SUBSCRIBE_TRACKSITE',	10);	// used to store subscriptions for a track site, $recipient is not used
-
-	/* Skapar en subscription av $type, på itemId med mottagare $recipient (userId, email eller mobilnummer) */
-	function addSubscription(&$db, $type, $ownerId, $recipient = '')
+	//Creates a subscription of $type on itemId
+	function addSubscription($type, $itemId)
 	{
-		if (!is_numeric($type) || !is_numeric($ownerId)) return false;
+		global $db, $session;
+		if (!$session->id || !is_numeric($type) || !is_numeric($itemId)) return false;
 		
-		$recipient = dbAddSlashes($db, $recipient);
-
-		$sql = 'INSERT INTO tblSubscriptions SET creatorId='.$_SESSION['userId'].', ownerId='.$ownerId.', subscriptionType='.$type.', recipient="'.$recipient.'", timeCreated=NOW()';
-		dbQuery($db, $sql);
-		return $db['insert_id'];
+		if (isSubscribed($type, $itemId)) return false;
+		$q = 'INSERT INTO tblSubscriptions SET ownerId='.$session->id.', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
+		return $db->insert($q);
 	}
 
-	/* Raderar en subscription */
-	function removeSubscription(&$db, $type, $ownerId, $subscriptionId)
+	//Deletes a subscription
+	function removeSubscription($type, $subscriptionId)
 	{
-		if (!is_numeric($type) || !is_numeric($ownerId) || !is_numeric($subscriptionId)) return false;
+		global $db, $session;
+		if (!$session->id || !is_numeric($type) || !is_numeric($subscriptionId)) return false;
 
-		$sql = 'DELETE FROM tblSubscriptions WHERE subscriptionId='.$subscriptionId.' AND subscriptionType='.$type.' AND ownerId='.$ownerId;
-		dbQuery($db, $sql);
+		$q = 'DELETE FROM tblSubscriptions WHERE itemId='.$subscriptionId.' AND type='.$type.' AND ownerId='.$session->id;
+		$db->delete($q);
 	}
-	
-	/* Raderar alla subscriptions av $type och $ownerId */
-	function removeAllSubscriptions(&$db, $type, $ownerId)
+
+	//Checks if the user is subscribed to this item, returns true/false
+	function isSubscribed($type, $itemId)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($type) || !is_numeric($itemId)) return false;
+
+		$q = 'SELECT id FROM tblSubscriptions WHERE ownerId='.$session->id.' AND type='.$type.' AND itemId='.$itemId;
+		if ($db->getOneItem($q)) return true;
+		return false;
+	}
+
+	//Returns all subscriptions of $type
+	function getSubscriptions($type)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($type)) return false;
+
+		switch ($type) {
+			case SUBSCRIPTION_FORUM:
+				$q = 'SELECT t1.*,t2.itemSubject FROM tblSubscriptions AS t1 ';
+				$q .= 'LEFT JOIN tblForums AS t2 ON (t1.itemId=t2.itemId) ';
+				$q .= 'WHERE t1.type='.$type.' AND t1.ownerId='.$session->id;
+				break;
+			
+			default:
+				$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$session->id;
+				break;
+		}
+		return $db->getArray($q);		
+	}
+
+	/*
+	//Raderar alla subscriptions av $type och $ownerId
+	function removeAllSubscriptions($type, $ownerId)
 	{
 		if (!is_numeric($type) || !is_numeric($ownerId)) return false;
 		
@@ -40,8 +73,8 @@
 		dbQuery($db, $sql);
 	}
 
-	/* Returns all subscribers for $ownerId, only of type $type if specified */
-	function getSubscribers(&$db, $type, $ownerId)
+	//Returns all subscribers for $ownerId, only of type $type if specified
+	function getSubscribers($type, $ownerId)
 	{
 		if (!is_numeric($type) || !is_numeric($ownerId)) return false;
 
@@ -49,8 +82,8 @@
 		return dbArray($db, $sql);
 	}
 	
-	/* Returns an array with all stored settings belonging to this subscription from tblSettings */
-	function getSubscriptionSettings(&$db, $type, $ownerId)
+	//Returns an array with all stored settings belonging to this subscription from tblSettings
+	function getSubscriptionSettings($type, $ownerId)
 	{
 		if (!is_numeric($type) || !is_numeric($ownerId)) return false;
 
@@ -61,8 +94,8 @@
 		return dbArray($db, $sql);
 	}
 
-	/* Returnerar ett row för angiven subscription */
-	function getSubscription(&$db, $type, $subscriptionId)
+	//Returnerar ett row f�r angiven subscription
+	function getSubscription($type, $subscriptionId)
 	{
 		if (!is_numeric($type) || !is_numeric($subscriptionId)) return false;
 		
@@ -71,17 +104,8 @@
 		return dbOneResult($db, $sql);
 	}
 	
-	/* Returnerar alla subscriptions av en viss typ */
-	function getSubscriptions(&$db, $type)
-	{
-		if (!is_numeric($type)) return false;
-		
-		$sql = 'SELECT * FROM tblSubscriptions WHERE subscriptionType='.$type;
-		return dbArray($db, $sql);		
-	}
-	
-	/* Helper function, returns a comma separated text string with mail addresses */
-	function getEmailSubscribers(&$db, $subscriptionId)
+	//Helper function, returns a comma separated text string with mail addresses
+	function getEmailSubscribers($subscriptionId)
 	{
 		if (!is_numeric($subscriptionId)) return false;
 		
@@ -94,7 +118,7 @@
 		return $mails;
 	}
 
-	function addSubscriptionHistory(&$db, $subscriptionId, $time_from, $time_to, $mail_to, $text)
+	function addSubscriptionHistory($subscriptionId, $time_from, $time_to, $mail_to, $text)
 	{
 		if (!is_numeric($subscriptionId) || !is_numeric($time_from) || !is_numeric($time_to)) return false;
 
@@ -108,8 +132,8 @@
 		dbQuery($db, $sql);
 	}
 	
-	/* Returns true if this period has already been covered */
-	function checkSubscriptionHistoryPeriod(&$db, $subscriptionId, $time_from, $time_to)
+	//Returns true if this period has already been covered
+	function checkSubscriptionHistoryPeriod($subscriptionId, $time_from, $time_to)
 	{
 		if (!is_numeric($subscriptionId) || !is_numeric($time_from) || !is_numeric($time_to)) return false;
 		
@@ -124,8 +148,8 @@
 		return false;
 	}
 	
-	/* Returns array of all history entries for specified subscription */
-	function getSubscriptionHistory(&$db, $subscriptionType, $subscriptionId)
+	//Returns array of all history entries for specified subscription
+	function getSubscriptionHistory($subscriptionType, $subscriptionId)
 	{
 		if (!is_numeric($subscriptionType) || !is_numeric($subscriptionId)) return false;
 		
@@ -161,7 +185,7 @@
 		$mail->IsHTML(true);                   					// send as HTML
 
 		//Embed graphics
-		$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'ai_logo', '', 'base64', 'image/png');
+		$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
 
 		$mail->Subject  = $subject;
 		$mail->Body     = $body;
@@ -172,5 +196,5 @@
 		}
 
 		return true;
-	}
+	}*/
 ?>

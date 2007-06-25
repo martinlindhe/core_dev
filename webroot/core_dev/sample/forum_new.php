@@ -54,6 +54,8 @@
 
 	$createdId = 0;
 
+	$forum_error = '';
+
 	if (!empty($_POST['subject']) || !empty($_POST['body'])) {
 
 		if (strlen($writeBody) <= $config['forum']['maxsize_body']) {
@@ -91,10 +93,11 @@
 			$forum_error = 'The post is too long, the max allowed length are '.$config['forum']['maxsize_body'].' characters, please try to shorten down your text a bit.';
 		}
 
-		/*if (!isset($forum_error)) {
+		if (!$forum_error) {
 			if (!empty($_POST['subscribehere'])) {
-				//Slå på bevakning för det nyskapade inlägget/diskussionen
-				addSubscription($itemId, SUBSCRIBE_MAIL);
+				//Start a subscription of the created topic
+				//fixme: make sure we are creating a topic so users cant subscribe to whole forums
+				addSubscription(SUBSCRIPTION_FORUM, $itemId);
 			}
 			if ($itemId == 0 || $item['parentId'] == 0) {
 				header('Location: forum.php?id='.$itemId);
@@ -103,7 +106,7 @@
 				header('Location: forum.php?id='.$item['parentId'].'#post'.$itemId);
 			}
 			die;
-		}*/
+		}
 	}
 
 	require('design_head.php');

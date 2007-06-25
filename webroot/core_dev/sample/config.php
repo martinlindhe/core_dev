@@ -85,6 +85,7 @@
 			'guestbook.php' => 'Guestbook ('.getGuestbookUnreadCount($session->id).')',	//shows number of unread guestbook messages
 			'friends.php' => 'Friends',
 			'settings.php' => 'Settings',
+			'subscriptions.php' => 'Subscriptions',
 			'user_visits.php' => 'Visitors'
 		);
 	}
