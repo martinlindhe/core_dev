@@ -1,5 +1,7 @@
 <?
 
+	//todo: implement forum "bookmarks", personal favorite list using this module
+
 	/*
 	tblSubscriptions
 		id				= subscription id
@@ -55,7 +57,7 @@
 				$q .= 'LEFT JOIN tblForums AS t2 ON (t1.itemId=t2.itemId) ';
 				$q .= 'WHERE t1.type='.$type.' AND t1.ownerId='.$session->id;
 				break;
-			
+
 			default:
 				$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$session->id;
 				break;

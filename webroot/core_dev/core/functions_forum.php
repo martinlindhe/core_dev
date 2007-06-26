@@ -272,36 +272,22 @@
 		$db->update($q);
 	}
 
-	/* Returns a list of all folder paths, ie folder1 - folder_in_folder1 etc... + folderid, used for now in accessgroup admin */
-	function getForumStructure($parentId = 0, $arr = '', $pre = '')
+	function getForumStructure()
 	{
 		global $db;
-		if (!is_numeric($parentId)) return false;
 
-		$q = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId='.$parentId.' AND deletedBy=0 ORDER BY itemSubject';
+		//root level categories
+		$q = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId=0 AND deletedBy=0 ORDER BY itemSubject';
 		$list = $db->getArray($q);
 
-		/* Lägg först till allt på samma nivå */
-		for ($i=0; $i<count($list); $i++) {	//fixme: foreach
-			if ($pre != '') {
-				$arr[] = array('name' => $pre.' - '.$list[$i]['itemSubject'], 'itemId' => $list[$i]['itemId']);
-			} else {
-				$arr[] = array('name' => $list[$i]['itemSubject'], 'itemId' => $list[$i]['itemId']);
+		//forum categories
+		foreach ($list as $row) {
+			$q = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId='.$row['itemId'].' AND deletedBy=0 ORDER BY itemSubject';
+			$sub = $db->getArray($q);
+			foreach ($sub as $subrow) {
+				$arr[] = array('name' => $row['itemSubject'].' - '.$subrow['itemSubject'], 'itemId' => $subrow['itemId']);
 			}
 		}
-
-		/* Sen rekursiva */
-		for ($i=0; $i<count($list); $i++) {	//fixme: foreach
-			if ($pre != '') {
-				$pre = $pre.' - '.$list[$i]['itemSubject'];
-			} else {
-				$pre = $list[$i]['itemSubject'];
-			}
-
-			$arr = getForumStructure($list[$i]['itemId'], $arr, $pre);
-			$pre='';
-		}
-
 		return $arr;
 	}
 
@@ -481,18 +467,19 @@
 
 			echo '<td align="center">';
 
+			if ($row['locked']) {
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_locked.png" alt="Locked"/><br/>';
+			}
 			if ($row['sticky'] == 1) {
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_sticky.png" alt="Sticky"/>';
-			} else if ($row['sticky'] == 2) {
+			}
+
+			if ($row['sticky'] == 2) {
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_announcement.png" alt="Announcement"/>';
 			} else if ($data['parentId'] == 0) {
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/>';
 			} else {
-				if ($row['locked']) {
-					echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_locked.png" alt="Locked"/><br/>';
-				} else {
-					echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_topic.png" alt="Message"/>';
-				}
+				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_topic.png" alt="Message"/>';
 			}
 			echo '</td>';
 
@@ -645,7 +632,7 @@
 
 	function displayTopicFlat($itemId)
 	{
-		global $db, $config;
+		global $db, $session, $config;
 		if (!is_numeric($itemId)) return false;
 
 		echo '<div class="forum_overview_group">';
@@ -656,10 +643,12 @@
 
 		showForumPost($item);
 
-		if (!isSubscribed(SUBSCRIPTION_FORUM, $itemId)) {
-			echo '<a href="?id='.$itemId.'&subscribe='.$itemId.'">Subscribe to topic</a><br/>';
-		} else {
-			echo '<a href="?id='.$itemId.'&unsubscribe='.$itemId.'">Unsubscribe to topic</a><br/>';
+		if ($session->id) {
+			if (!isSubscribed(SUBSCRIPTION_FORUM, $itemId)) {
+				echo '<a href="?id='.$itemId.'&subscribe='.$itemId.'">Subscribe to topic</a><br/><br/>';
+			} else {
+				echo '<a href="?id='.$itemId.'&unsubscribe='.$itemId.'">Unsubscribe to topic</a><br/><br/>';
+			}
 		}
 
 		$tot_cnt = getForumItemCountFlat($itemId);
@@ -842,7 +831,7 @@
 			//display content of a folder (parent = root)
 			echo displayForumContentFlat($_id);
 
-			echo '<a href="forum_new.php?id='.$_id.'">New discussion</a><br/>';
+			echo '<a href="forum_new.php?id='.$_id.'">Create new forum here</a><br/>';
 
 			if ($session->isAdmin) {
 				echo '<a href="forum_edit.php?id='.$_id.'">Edit forum name</a><br/>';

@@ -459,7 +459,7 @@ select {
 	padding: 10px;
 	-moz-border-radius:8px;
 }
-.forum_overview_group a,.forum_overview_group a:visited {
+.forum_overview_group a:link,.forum_overview_group a:visited {
 	font-weight: bold;
 	text-decoration: none;
 	color: #fff;
