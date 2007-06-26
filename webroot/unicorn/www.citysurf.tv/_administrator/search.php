@@ -15,6 +15,7 @@ session_start();
 		header("Location: ./");
 		exit;
 	}
+
 	if(!$isCrew && strpos($_SESSION['u_a'][1], 'stat') === false) errorNEW('Ingen behörighet.');
 	$page = 'SEARCH';
 	$menu = $menu_SEARCH;
@@ -77,9 +78,9 @@ session_start();
 
 	if($search && $view == 's') {
 			if(is_numeric($str)) {
-				$s_sql = mysql_query("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM $log_tab a WHERE a.sess_id = '".secureINS($str)."' ORDER BY a.date_cnt DESC");
+				$s_sql = mysql_query("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM s_log a WHERE a.sess_id = '".secureINS($str)."' ORDER BY a.date_cnt DESC");
 			} else {
-				$s_sql = mysql_query("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM $log_tab a WHERE a.sess_ip = '".secureINS($str)."' ORDER BY a.date_cnt DESC");
+				$s_sql = mysql_query("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM s_log a WHERE a.sess_ip = '".secureINS($str)."' ORDER BY a.date_cnt DESC");
 			}
 	} elseif($view == 'ss') {
 		$info = array(

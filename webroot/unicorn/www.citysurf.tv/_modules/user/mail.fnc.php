@@ -87,7 +87,7 @@
 						//if status_id=1
 						
 						if($res[1] == '1') {
-							if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'counterdec';
+							//if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'counterdec';
 							$user->counterDecrease('mail', $l['id_id']);
 						}
 
@@ -100,7 +100,7 @@
 						$sql->queryUpdate("UPDATE {$t}usermail SET status_id = '2', sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
 					}
 					if(!$res[4]) {
-						if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'notifydec';
+						//if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'notifydec';
 						$user->notifyDecrease('mail', $s['id_id']);
 					}
 				}
@@ -124,8 +124,7 @@
 
 		if (!$l['id_id']) return 0;
 
-		$q = "SELECT COUNT(*) FROM {$t}usermail WHERE user_id = ".$l['id_id']." AND user_read = '0'";
-
+		$q = "SELECT COUNT(*) FROM {$t}usermail WHERE user_id = ".$l['id_id']." AND user_read = '0' AND status_id='1'";
 		return $sql->queryResult($q);
 	}
 
@@ -146,7 +145,7 @@
 	{
 		global $sql, $t;
 
-		return $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_alias)."' AND status_id = '1' LIMIT 1");
+		return $sql->queryResult("SELECT id_id FROM {$t}user WHERE u_alias = '".secureINS($_alias)."' AND status_id = '1' LIMIT 1");
 	}
 
 	function getUserName($_id)

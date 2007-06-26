@@ -52,6 +52,7 @@ class user_auth {
 				$this->login_data($result);
 				$this->user->setRelCount($result[0]);
 
+				/*
 				//kolla om användaren har verifierat sin info
 				$q = 'SELECT verified,timeAsked FROM tblVerifyUsers WHERE user_id='.$result[0];
 				$data = $this->sql->queryLine($q, 0, 1);
@@ -68,6 +69,7 @@ class user_auth {
 
 					spyPostSend($result[0], 'Validering av uppgifter', $msg);
 				}
+				*/
 
 				/*
 				if(!empty($_POST['redir'])) {

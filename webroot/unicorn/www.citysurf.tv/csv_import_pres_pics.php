@@ -81,7 +81,7 @@
 			continue;
 		}
 		
-		if($data[65] == 'True') $data[10] = '3';
+		if($data[65] == 'True') $data[10] = '3';	//gammal webmaster får userlevel 3.. ?
 		$q = "REPLACE INTO s_user SET
 			id_id = '".$uid."',
 			u_alias = '".$data[1]."',

@@ -3,6 +3,9 @@
 		header("Location: ./");
 		exit;
 	}
+
+	require('/home/martin/www/_modules/user/spy.fnc.php');	//för spyPostSend
+
 	$thispage = 'obj.php?status=img';
 function imgOK($id, $picid, $flow) {
 	$picid = intval($picid);
@@ -57,12 +60,15 @@ function imgOK($id, $picid, $flow) {
 							@unlink('../_input/preimages/'.$kid.'_'.$res.'_2.jpg');
 							if(!empty($_POST['reason_id:' . $kid])) {
 								if(!empty($_POST['reasontext_id:' . $kid]) && $_POST['reason_id:' . $kid] == 'X') {
-#									$user->spy($kid, 'ID', 'MSG', array('Din nya profilbild har nekats på grund av: <b>'.$_POST['reasontext_id:' . $kid].'</b> Prova med en ny.'));
-}								else {
-#									$user->spy($kid, 'ID', 'MSG', array('Din nya profilbild har nekats'.$reasons[$_POST['reason_id:' . $kid]].' Prova med en ny.'));
-}
+									$msg = 'Din nya profilbild har nekats på grund av: <b>'.$_POST['reasontext_id:' . $kid].'</b> Prova med en ny.';
+									spyPostSend($kid, 'Nekad profilbild', $msg);
+								}	else {
+									$msg = 'Din nya profilbild har nekats'.$reasons[$_POST['reason_id:' . $kid]].' Prova med en ny.';
+									spyPostSend($kid, 'Nekad profilbild', $msg);
+								}
 							} else {
-#								$user->spy($kid, 'ID', 'MSG', array('Din nya profilbild har nekats. Prova med en ny.'));
+								$msg = 'Din nya profilbild har nekats. Prova med en ny.';
+								spyPostSend($kid, 'Nekad profilbild', $msg);
 							}
 							addALog(@$_SESSION['u_i'].' nekade profilbild '.$kid);
 							$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
@@ -86,13 +92,18 @@ function imgOK($id, $picid, $flow) {
 						} elseif($_POST['status_id:' . $kid] == '2') {
 							@rename('../_input/preimages/'.$kid.'_'.$res.'.jpg', '../user_img_off84/'.$kid.'_'.microtime().'.jpg');
 							@unlink('../_input/preimages/'.$kid.'_'.$res.'_2.jpg');
-#							if(!empty($_POST['reason_id:' . $kid])) {
-#								if(!empty($_POST['reasontext_id:' . $kid]) && $_POST['reason_id:' . $kid] == 'X')
-#									$user->spy($kid, 'ID', 'MSG', array('Din nya profilbild har nekats på grund av: <b>'.$_POST['reasontext_id:' . $kid].'</b> Prova med en ny.'));
-#								else
-#									$user->spy($kid, 'ID', 'MSG', array('Din nya profilbild har nekats'.$reasons[$_POST['reason_id:' . $kid]].' Prova med en ny.'));
-#							} else
-#								$user->spy($kid, 'ID', 'MSG', array('Din nya profilbild har nekats. Prova med en ny.'));
+							if(!empty($_POST['reason_id:' . $kid])) {
+								if(!empty($_POST['reasontext_id:' . $kid]) && $_POST['reason_id:' . $kid] == 'X') {
+									$msg = 'Din nya profilbild har nekats på grund av: <b>'.$_POST['reasontext_id:' . $kid].'</b> Prova med en ny.';
+									spyPostSend($kid, 'Nekad profilbild', $msg);
+								} else {
+									$msg = 'Din nya profilbild har nekats'.$reasons[$_POST['reason_id:' . $kid]].' Prova med en ny.';
+									spyPostSend($kid, 'Nekad profilbild', $msg);
+								}
+							} else {
+								$msg = 'Din nya profilbild har nekats. Prova med en ny.';
+								spyPostSend($kid, 'Nekad profilbild', $msg);
+							}
 							addALog(@$_SESSION['u_i'].' nekade profilbild '.$kid);
 							$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
 							$sql->queryUpdate("UPDATE {$t}user SET u_picdate = '' WHERE id_id = '".$kid."' LIMIT 1");
@@ -112,13 +123,18 @@ function imgOK($id, $picid, $flow) {
 			#$string = str_replace('VALID', '', $string);
 			$sql->queryUpdate("UPDATE {$t}user SET u_picdate = '' WHERE id_id = '".$res[0]."' LIMIT 1");
 			#$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$string' WHERE id_id = '".$res[0]."' LIMIT 1");
-#			if(!empty($_GET['reason'])) {
-#				if(!empty($_GET['reasontext']) && $_GET['reason'] == 'X')
-#					$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats på grund av: <b>'.$_GET['reasontext'].'</b> Prova med en ny.'));
-#				else
-#					$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats'.$reasons[$_GET['reason']].' Prova med en ny.'));
-#			} else
-#				$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats. Prova med en ny.'));
+			if(!empty($_GET['reason'])) {
+				if(!empty($_GET['reasontext']) && $_GET['reason'] == 'X') {
+					$msg = 'Din nya profilbild har nekats på grund av: <b>'.$_GET['reasontext'].'</b> Prova med en ny.';
+					spyPostSend($res[0], 'Nekad profilbild', $msg);
+				} else {
+					$msg = 'Din nya profilbild har nekats'.$reasons[$_GET['reason']].' Prova med en ny.';
+					spyPostSend($res[0], 'Nekad profilbild', $msg);
+				}
+			} else {
+				$msg = 'Din nya profilbild har nekats. Prova med en ny.';
+				spyPostSend($res[0], 'Nekad profilbild', $msg);
+			}
 			$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		}
 		header("Location: ".$thispage);

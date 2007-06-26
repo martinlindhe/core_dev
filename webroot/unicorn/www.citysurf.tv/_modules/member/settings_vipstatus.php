@@ -40,7 +40,7 @@
 	<div class="bigBody">
 <?
 		$list = getVIPLevels($l['id_id']);
-		
+
 		if (!$list) echo 'Inga VIP-nivåer tillgängliga för dig!';
 		
 		foreach ($list as $row) {

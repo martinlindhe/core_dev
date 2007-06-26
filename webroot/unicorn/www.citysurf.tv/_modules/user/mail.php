@@ -51,6 +51,7 @@ echo '<input type="checkbox" onclick="toggle2(this);" class="chk" style="margin-
 <table summary="" cellspacing="0" width="586">
 <?
 if(count($res) && !empty($res)) {
+	
 	foreach($res as $row) {
 		$c = ($page == 'in' && !$row['user_read'])?' bld':'';
 		echo '<tr'.($c?' class="'.$c.'"':'').'>

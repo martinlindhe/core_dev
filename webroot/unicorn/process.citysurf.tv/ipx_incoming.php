@@ -5,20 +5,10 @@
 
 	require_once('config.php');
 
-														//level 1=normal user
-	define('VIP_LEVEL1',	2);	//Normal VIP
-	define('VIP_LEVEL2',	3);	//VIP delux
-
-	$allowed_ip = array(
-		'127.0.0.1',
-		'217.151.193.79',	//Ericsson IPX (ipx-pat.ipx.com)
-		'217.151.193.80'	//Ericsson IPX (ipx-pat.ipx.com)
-	);
 
 	if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ip)) {
 		$session->log('ipx_incoming.php accessed by unlisted IP', LOGLEVEL_ERROR);
-		//fixme: ska stoppa här vid okänt ip, gör det ej nu för debuggande
-		//die('ip not allowed');
+		die('ip not allowed');
 	}
 
 	ipxHandleIncoming();

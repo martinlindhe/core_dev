@@ -116,6 +116,7 @@ class sql {
 			unique_id = '".((!empty($unique))?$unique:'')."',
 			type_inf = '".((empty($type))?'START':$type)."',
 			date_cnt = NOW()");
+			
 			$this->queryInsert("INSERT INTO {$this->t}logvisit SET
 			sess_id = '".secureINS($cookie_id)."',
 			sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',

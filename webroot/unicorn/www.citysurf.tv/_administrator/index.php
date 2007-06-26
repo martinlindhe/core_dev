@@ -3,7 +3,7 @@ session_start();
 	setlocale(LC_TIME, "swedish");
 	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
 	require("./set_onl.php");
-
+	
 	$msg = '';
 	$tries = array("0", "1", "2", "B");
 

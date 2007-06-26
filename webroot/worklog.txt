@@ -1,3 +1,14 @@
+2007.06.25 Måndag
+	* möten & planering för CS & 3g-projektet
+	
+	webbgränssnittet:
+		* exporterat mailaddresser inför mailutskick
+		* felsökt & fixat problem med en användares vip-status
+		* visar åter mms-nyckel under dina inställningar
+
+2007.06.26 Tisdag
+
+
 
 ***************************************************************************************************
 webbgränssnitt:

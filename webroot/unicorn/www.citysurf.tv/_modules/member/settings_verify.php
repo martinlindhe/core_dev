@@ -1,4 +1,6 @@
 <?
+die;
+
 	require_once(CONFIG.'secure.fnc.php');
 	require_once(CONFIG.'validate.fnc.php');
 

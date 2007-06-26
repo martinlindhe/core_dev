@@ -226,14 +226,15 @@
 		$sql->queryUpdate($q);
 	}
 
+	//kollar om aktuell user får se $_id's galleri
 	function getGallXStatus($_id)
 	{
 		global $sql, $l;
-		
 		if (!is_numeric($_id)) return false;
 		
-		$q = 'SELECT gallx FROM s_userrelation WHERE user_id='.$l['id_id'].' AND friend_id='.$_id;
-		return $sql->queryResult($q, 0, 1);
+		$q = 'SELECT gallx FROM s_userrelation WHERE user_id='.$_id.' AND friend_id='.$l['id_id'];
+		$x = $sql->queryResult($q, 0, 1);
+		return $x;
 	}
 
 	function getRelationsCount($_id)

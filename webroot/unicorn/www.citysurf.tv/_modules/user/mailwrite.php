@@ -95,7 +95,18 @@ function cleanField(obj) {
 <tr>
 	<td colspan="3" class="pdg_t" style="height: 90%;">
 <table summary="" cellspacing="0" width="100%" style="height: 100%; display: none;" id="text_c_html" class="wht">
-<tr><td class="pdg"><textarea name="text_html" id="text_html" style="width: 100%; height: 100%; padding: 10px; font-family: Courier New, Courier; font-size: 12px;"><?=(@$res['sent_ttl'])?secureOUT($res['sent_cmt']):(($a)?secureOUT(makeNR($ans['sent_cmt'], getUserIdFromAlias($ans['user_id']), nicedate($ans['sent_date'], 4), getUserIdFromAlias($ans['sender_id']))):'')?></textarea></td></tr>
+<tr><td class="pdg"><textarea name="text_html" id="text_html" style="width: 100%; height: 100%; padding: 10px; font-family: Courier New, Courier; font-size: 12px;">
+<?
+	if (!empty($res['sent_ttl'])) {
+		echo secureOUT($res['sent_cmt']);
+	} else {
+		if ($a) {
+			//print_r($ans);
+			echo secureOUT(makeNR($ans['sent_cmt'], getUserName($ans['sender_id']), nicedate($ans['sent_date'], 4), getUserName($ans['user_id'])));
+		}
+	}
+?>
+</textarea></td></tr>
 </table>
 <table summary="" cellspacing="0" width="100%" style="" class="wht" id="text_c_var">
 <tr><td class="pdg" style="padding-bottom: 0;"><b>Design:&nbsp;</b>

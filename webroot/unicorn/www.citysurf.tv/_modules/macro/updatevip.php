@@ -37,4 +37,4 @@
 	$sql->queryUpdate($q);
 
 	die;
-?> 
+?>

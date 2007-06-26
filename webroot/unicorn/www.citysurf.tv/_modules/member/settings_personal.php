@@ -159,12 +159,10 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
 		*/
-		/*
 		if($isAdmin && @$settings['mmskey'] != @$_POST['ins_mmskey']) {
 			$id = $user->setinfo($l['id_id'], 'mmskey', @$_POST['ins_mmskey']);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
 		}
-		*/
 		$mmskey_error = updateMMSKey();
 		
 		/*
@@ -327,15 +325,9 @@
 			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="ins_mmspriv" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmspriv1"<?=(!empty($settings['mmspriv'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmspriv1"> Ja, gör alla mina MMS privata (<img src="<?=OBJ?>10.gif" alt="" title="Admin" />)</label></td>
 		</tr>
 -->
-<?
-	if($isAdmin) {
-?>
 		<tr>
-			<td class="pdg_t" colspan="2"><b>MMS-nyckel:</b><br /><input type="text" class="txt" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>" /><?=$mmskey_error?></td>
+			<td class="pdg_t" colspan="2"><br/><b>MMS-nyckel:</b><br />(Skriv in en kod, mellan 4-8 tecken, siffror eller bokstäver. Spara koden och använd den när du laddar upp dina MMS.)<br/><input type="text" class="txt" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>" /><?=$mmskey_error?></td>
 		</tr>
-<?
-	}
-?>
 	</table>
 	<br/>
 	* = När du är hemlig användare så visas du inte på andra personers besöksloggar.

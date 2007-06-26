@@ -40,4 +40,13 @@
 	$files = new Files($config['files']);
 
 	$session->handleSessionActions();
+
+
+	$allowed_ip = array(
+		'127.0.0.1',
+		'212.37.28.102',	//NVOX ip
+		'217.151.193.79',	//Ericsson IPX (ipx-pat.ipx.com)
+		'217.151.193.80'	//Ericsson IPX (ipx-pat.ipx.com)
+	);
+
 ?>

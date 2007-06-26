@@ -1,4 +1,6 @@
 <?
+	require('/home/martin/www/_modules/user/spy.fnc.php');	//för spyPostSend
+
 	if(!function_exists('notallowed') || notallowed()) {
 		header("Location: ./");
 		exit;
@@ -37,10 +39,13 @@ $reasons = array(
 								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'_'.$res[4].'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
 							else
 								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
-							#if(!empty($_POST['reason_id:' . $kid]))
-							#	$user->spy($res[5], 'PIC', 'MSG', array('Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats'.$reasons[$_POST['reason_id:' . $kid]]));
-							#else
-							#	$user->spy($res[5], 'PIC', 'MSG', array('Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats.'));
+							if(!empty($_POST['reason_id:' . $kid])) {
+								$msg = 'Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats'.$reasons[$_POST['reason_id:' . $kid]];
+								spyPostSend($res[5], 'Nekad bilduppladdning', $msg);
+							} else {
+								$msg = 'Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats.';
+								spyPostSend($res[5], 'Nekad bilduppladdning', $msg);
+							}
 							addALog(@$_SESSION['u_i'].' nekade '.$res[5].':'.$kid);
 						}
 					} else {
@@ -58,10 +63,15 @@ $reasons = array(
 								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'_'.$res[4].'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
 							else
 								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
-							#if(!empty($_POST['reason_id:' . $kid]))
-							#	$user->spy($res[5], 'PIC', 'MSG', array('Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats'.$reasons[$_POST['reason_id:' . $kid]]));
-							#else
-							#	$user->spy($res[5], 'PIC', 'MSG', array('Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats.'));
+
+							if(!empty($_POST['reason_id:' . $kid])) {
+								$msg = 'Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats'.$reasons[$_POST['reason_id:' . $kid]];
+								spyPostSend($res[5], 'Nekad bilduppladdning', $msg);
+							} else {
+								$msg = 'Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats.';
+								spyPostSend($res[5], 'Nekad bilduppladdning', $msg);
+							}
+
 							addALog(@$_SESSION['u_i'].' nekade '.$res[5].':'.$kid);
 						}
 					}
@@ -78,10 +88,15 @@ $reasons = array(
 		else
 			@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$res[4].'.'.$res[3], './user_photo_off342/'.$res[4].'_'.$un.'.jpg');
 		$sql->queryUpdate("UPDATE {$t}userphoto SET view_id = '1' AND status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
-		#if(!empty($_GET['reason']))
-		#	$user->spy($res[6], 'PIC', 'MSG', array('Ditt foto: <b>'.secureOUT($res[5]).'</b> har nekats'.$reasons[$_GET['reason']]));
-		#else
-		#	$user->spy($res[6], 'PIC', 'MSG', array('Ditt foto: <b>'.secureOUT($res[5]).'</b> har nekats.'));
+
+		if(!empty($_POST['reason_id:' . $kid])) {
+			$msg = 'Ditt foto: <b>'.secureOUT($res[5]).'</b> har nekats'.$reasons[$_GET['reason']];
+			spyPostSend($res[6], 'Nekad bilduppladdning', $msg);
+		} else {
+			$msg = 'Ditt foto: <b>'.secureOUT($res[5]).'</b> har nekats.';
+			spyPostSend($res[6], 'Nekad bilduppladdning', $msg);
+		}
+
 		addALog(@$_SESSION['u_i'].' nekade '.$res[6].':'.$res[4]);
 		header("Location: ".$thispage);
 		exit;

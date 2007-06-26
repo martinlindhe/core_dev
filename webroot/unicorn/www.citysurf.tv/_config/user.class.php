@@ -418,7 +418,7 @@ function get_vip($_userid) {
 	global $sql;
 	if (!is_numeric($_userid)) return false;
 	$result = $sql->queryResult('SELECT level_id FROM s_user WHERE id_id = '.$_userid.' LIMIT 1');
-	if ($result) return $result;
+	if ($result > 1) return $result;
 	return false;
 }
 
