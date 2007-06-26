@@ -174,7 +174,7 @@ function zoomShowFileInfo(txt)
 	show_element_by_name('zoom_fileinfo');
 }
 
-function zoomHideElements()
+function zoom_hide_elements()
 {
 	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
@@ -235,7 +235,7 @@ function delete_selected_file()
 	ajax_delete_file(zoomed_id);
 
 	//Hide selected file
-	zoomHideElements();
+	zoom_hide_elements();
 
 	//remove zoomed_id thumbnail from file gadget
 	hide_element_by_name('file_' + zoomed_id);

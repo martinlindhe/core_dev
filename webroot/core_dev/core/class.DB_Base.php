@@ -324,7 +324,10 @@ abstract class DB_Base
 	{
 		echo '<pre>';
 		if (is_string($v)) echo htmlentities($v);
-		else print_r($v);
+		else {
+			if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
+			else print_r($v);
+		}
 		echo '</pre>';
 	}
 ?>

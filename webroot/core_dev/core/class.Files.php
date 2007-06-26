@@ -5,6 +5,8 @@
 	Uses tblFiles
 
 	Written by Martin Lindhe, 2007
+	
+	Uses php_id3.dll if enabled, to show more details of mp3s in the file module
 */
 
 require_once('atom_categories.php');		//for file categories support
@@ -92,7 +94,6 @@ class Files
 	function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 	{
 		global $session, $db, $config;
-
 		if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
 
 		if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE || $fileType == FILETYPE_WIKI) {
@@ -174,11 +175,11 @@ class Files
 				echo makeThumbLink($row['fileId']);
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $this->audio_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"><center>';
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $this->video_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.htmlspecialchars($row['fileName']).'\');"><center>';
+				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"><center>';
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_video.png" width="32" height="32" alt="Video file"/>';
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $this->document_mime_types)) {
@@ -253,7 +254,6 @@ class Files
 	function showThumbnails($fileType, $categoryId)
 	{
 		global $session, $db;
-
 		if (!is_numeric($fileType)) return false;
 
 		$list = $db->getArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
@@ -286,6 +286,7 @@ class Files
 	function showAttachments($_type, $_owner)
 	{
 		global $config;
+
 		$list = $this->getFiles($_type,  $_owner);
 
 		if (count($list)) {
@@ -343,8 +344,7 @@ class Files
 	function handleUpload($FileData, $fileType, $ownerId, $categoryId = 0)
 	{
 		global $db, $session;
-
-		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
+		if (!$session->id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
 		set_time_limit(90);
 
@@ -363,7 +363,6 @@ class Files
 		$filesize = filesize($FileData['tmp_name']);
 		//fixme: flytta inserten till handleImageUpload / handleGeneralUpload istället. då slipper vi göra en UPDATE vid resizad image upload
   	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
-
   	$fileId = $db->insert($q);
 
 		//Identify and handle various types of files
@@ -484,7 +483,6 @@ class Files
 	function resizeImage($in_filename, $out_filename, $to_width = 0, $to_height = 0, $fileId = 0)
 	{
 		global $db;
-
 		if (empty($to_width) && empty($to_height)) return false;
 
 		$data = getimagesize($in_filename);
@@ -581,7 +579,6 @@ class Files
 	function imageRotate($_id, $_angle)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($_id) || !is_numeric($_angle)) return false;
 
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
@@ -623,7 +620,6 @@ class Files
 	function sendFile($_id, $force_mime = false)
 	{
 		global $db;
-
 		if (!is_numeric($_id)) return false;
 
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
@@ -727,7 +723,6 @@ class Files
 	function getFiles($fileType, $ownerId, $categoryId = 0)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return array();
 		
 		if ($fileType == FILETYPE_FORUM) {
@@ -747,7 +742,6 @@ class Files
 	function getFileCount($fileType, $ownerId, $categoryId = 0)
 	{
 		global $db;
-
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return 0;
 
 		$q = 'SELECT COUNT(fileId) FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId;
@@ -755,11 +749,10 @@ class Files
 	}
 
 	/* Används av ajax filen core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
-	function getFileInfo($_id)
+	function showFileInfo($_id)
 	{
-		if (!is_numeric($_id)) return false;
-
 		global $db, $session;
+		if (!is_numeric($_id)) return false;
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
 					'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
@@ -768,22 +761,28 @@ class Files
 		$file = $db->getOneRow($q);
 		if (!$file) return false;
 
-		$result = 'Name: '.strip_tags($file['fileName']).'<br/>'.
-							'Filesize: '.formatDataSize($file['fileSize']).'<br/>'.
-							'Uploader: '.htmlentities($file['uploaderName']).'<br/>'.
-							'At: '.$file['timeUploaded'].'<br/>';
-		if ($this->count_file_views) $result .= 'Downloaded: '.$file['cnt'].' times<br/>';
+		echo 'Name: '.strip_tags($file['fileName']).'<br/>';
+		echo 'Filesize: '.formatDataSize($file['fileSize']).'<br/>';
+		echo 'Uploader: '.htmlentities($file['uploaderName']).'<br/>';
+		echo 'At: '.$file['timeUploaded'].'<br/>';
+		if ($this->count_file_views) echo 'Downloaded: '.$file['cnt'].' times<br/>';
 		if ($session->isAdmin) {
-			$result .= 'Mime type: '.$file['fileMime'].'<br/>';
+			echo 'Mime type: '.$file['fileMime'].'<br/>';
 		}
 
-		if (in_array($file['fileMime'], $this->image_mime_types)) {
+		if (in_array($file['fileMime'], $this->image_mime_types))
+		{
+			//Show additional information for image files
 			list($img_width, $img_height) = getimagesize($this->upload_dir.$_id);
-
-			$result .= 'Width: '.$img_width.', Height: '.$img_height.'<br/>';
+			echo 'Width: '.$img_width.', Height: '.$img_height.'<br/>';
 		}
-
-		return $result;
+		else if (in_array($file['fileMime'], $this->audio_mime_types) && extension_loaded('id3'))
+		{
+			//Show additional information for audio files
+			echo '<b>Extracted from id3 tag:</b><br/>';
+			$id3 = id3_get_tag($this->upload_dir.$_id, ID3_V2_2);
+			d($id3);
+		}
 	}
 
 
@@ -793,10 +792,11 @@ class Files
 ?>
 <div id="zoom_image_layer" style="display:none">
 	<center>
-		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/>
+		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/>
 		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/><br/>
+
+		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
 
 <? if ($session->isAdmin) { ?>
 		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
@@ -828,13 +828,13 @@ class Files
 	<center>
 		<div id="zoom_audio" style="width: 160px; height: 50px;"></div>
 		<br/>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
 		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move song" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete song" onclick="delete_selected_file()"/>
+		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
 </div>
@@ -847,15 +847,15 @@ class Files
 ?>
 <div id="zoom_video_layer" style="display:none">
 	<center>
-		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
-		<br/>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
 		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/><br/>
+
+		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
 
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move video" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete video" onclick="delete_selected_file()"/>
+		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
 </div>
@@ -868,12 +868,12 @@ class Files
 ?>
 <div id="zoom_file_layer" style="display:none">
 	<center>
-		<input type="button" class="button" value="Close" onclick="zoomHideElements()"/> 
+		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
 		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 <? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move file" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete file" onclick="delete_selected_file()"/>
+		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
+		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
 <? } ?>
 	</center>
 </div>

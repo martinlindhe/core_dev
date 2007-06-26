@@ -241,32 +241,33 @@
 	/* Returns a sting like: 4h10m3s */
 	function shortTimePeriod($seconds)
 	{
+		if (is_float($seconds)) $seconds = round($seconds);
 		$retval='';
 
-		//år
+		//years
 		$a = date('Y', $seconds) - 1970;
 		if ($a==1) $retval=$a.' year, ';
 		else if ($a>0) $retval=$a.' years, ';
 		$seconds -= (((($a*60)*60)*24)*30)*365;
 
-		//månader
+		//months
 		$a=date('n',$seconds)-1;
 		if($a==1) $retval.=$a.' month, ';
 		else if($a>0) $retval.=$a.' months, ';
 		$seconds -= ((($a*60)*60)*24)*30;
 
-		//dagar
+		//days
 		$a=date('j',$seconds)-1;
 		if($a==1) $retval.=$a.' day, ';
 		else if ($a>0) $retval.=$a.' days, ';
 		$seconds -= (($a*60)*60)*24;
 
-		//timmar
+		//hours
 		$a=date('H',$seconds)-1;
 		if ($a>0) $retval.=$a.'h';
 		$seconds -= ($a*60)*60;
 
-		//minuter
+		//minutes
 		$a=date('i',$seconds)-0; //translate from 09 to 9 quickly ;)
 		if ($a>0) $retval.=$a.'m';
 		$seconds -= $a*60;
@@ -280,6 +281,7 @@
 
 		return $retval;
 	}
+
 
 	/* Returns array with parsed up news article texts
 		[head]news article heading[/head]

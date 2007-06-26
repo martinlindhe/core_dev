@@ -196,6 +196,13 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.06.26
+	- lite js/css cleanup
+	- files: stöd för php_id3 extension för att visa file info om mp3-filer
+	- config: bort med date_default_timezone_set(), det ska konfas korrekt i php.ini av den som insallerar php
+	började me 540 rader mp3.php
+
+
 2007.06.25
 	- bevakningar: ny modul atom_subscriptions.php
 	- implementerat slå av/sätt på bevakning i forum

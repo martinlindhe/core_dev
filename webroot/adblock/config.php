@@ -2,7 +2,6 @@
 	$time_start = microtime(true);
 
 	error_reporting(E_ALL);
-	date_default_timezone_set('Europe/Stockholm');
 
 	$config['core_root'] = 'E:/devel/webroot/core_dev/';
 	$config['core_web_root'] = '/core_dev/';

@@ -19,14 +19,18 @@ input:focus {
 }
 
 /* General: <input type="button"> */
-input.button {
+input.button, input.button_bold {
 	border:1px solid #888;
 	background: #fff url('../../gfx/button_shadow.png') repeat-x scroll center bottom;
 	color: #000;
 }
-input.button:focus {
+input.button:focus, input.button_bold:focus {
 	border:1px solid #aaa;
 	background: #fff;
+}
+
+input.button_bold {
+	font-weight: bold
 }
 
 /* General: <input type="checkbox"> */
@@ -41,7 +45,8 @@ select {
 
 /* holder for file gadget, contains all the other parts */
 .file_gadget {
-	width: 630px;
+	min-width: 560px;
+	max-width: 920px;
 	max-height: 700px;
 	overflow-x: hidden;
 	overflow-y: auto;

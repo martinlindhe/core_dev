@@ -4,8 +4,6 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	date_default_timezone_set('Europe/Stockholm');
-
 	$config['core_root'] = 'E:/devel/webroot/core_dev/';	//use of an absolute path is highly recommended
 	$config['core_web_root'] = '/core_dev/';							//the webpath to root level of core files (css, js, gfx directories)
 
