@@ -8,6 +8,9 @@
 
 2007.06.26 Tisdag
 
+	webbgränssnittet:
+		* rensat bort massa gammal grafik som hörde till 360-sajten
+
 
 
 ***************************************************************************************************
