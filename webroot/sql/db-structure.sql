@@ -67,7 +67,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=872 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=878 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(100) character set utf8 NOT NULL,
@@ -426,7 +426,7 @@ CREATE TABLE tblCategories (
   categoryPermissions tinyint(3) unsigned NOT NULL default '0',
   ownerId bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
-) ENGINE=MyISAM AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(3) unsigned NOT NULL default '0',
@@ -479,7 +479,7 @@ CREATE TABLE tblFiles (
   timeUploaded datetime default NULL,
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
-) ENGINE=MyISAM AUTO_INCREMENT=106 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
 CREATE TABLE tblForums (
   itemId bigint(20) unsigned NOT NULL auto_increment,
   itemType tinyint(1) unsigned NOT NULL default '0',
