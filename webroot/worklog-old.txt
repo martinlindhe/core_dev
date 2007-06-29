@@ -699,3 +699,64 @@
 		* användare får internmail vid nekade bilduppladdningar
 		* fixat så "loggsök" i admin funkar igen
 --[mailat ovanstående]--
+
+
+2007.06.25 Måndag
+	* möten & planering för CS & 3g-projektet
+	
+	webbgränssnittet:
+		* exporterat mailaddresser inför mailutskick
+		* felsökt & fixat problem med en användares vip-status
+		* visar åter mms-nyckel under dina inställningar
+
+2007.06.26 Tisdag
+
+	webbgränssnittet:
+		* rensat bort massa gammal grafik som hörde till 360-sajten
+		* kan nu mms-uppladda png bilder
+		* buggfix: kan nu radera gästboksinlägg från användare som har blivit borttagna
+		* mail med långa rubriker kortas nu ner i mail-översikten
+
+2007.06.27 Onsdag:
+
+	mobila gränssnittet:
+		* haft CS-mobil möte & planering (preliminär release 15:e augusti)
+		* tog bort "hem"-ikonen på utloggad startsida
+		* ändrat "DIN MAIL" osv till "MIN MAIL" osv
+		* visar "Uppgifter saknas" på profilöversikt om användaren ej fyllt i användarfakta
+		* visar felmeddelande på "nytt mail" om man ej fyller i meddelandetext
+		* lagt dit en "SVARA" länk på botten av gästbokshistorik-visningen
+		* ändra lösenord-sidan uppsnyggad layout
+		* radat upp inputfält så det ser bättre ut på sök användare-sidan
+		* visar ej andras kompis-listor
+		* kan nu radera mail från mobila gränssnittet
+
+
+2007.06.28 Torsdag:
+
+	mobila gränssnittet:
+		* begränsat sökresultat till max 50 användare
+		* ny design
+
+
+	webbgränssnittet:
+		* manuellt importerat lite profilbilder som inte kom med vid stora importen (gif bilder)
+		* admin gränssnitt för att sköta inskickade abuse-anmälningar
+		* ändrat terminologi "ovänner" till "blockade" på relationssidorna
+
+		
+2007.06.29 Fredag:
+
+	mobila gränssnittet:
+		* filat lite mer på designen
+		* lagt upp text om "surftalk" med auto-ring-nummer-länkar för mobilen
+		* nytt fakta-val "Vikt" visas & går att ändra
+		* fulhack: thumbnails!
+		
+	webbgränssnittet:
+		* hjälp några användare med att fixa profilbilder
+		* implementerat ny fakta-val "Vikt". visas på profil, inställningar->Fakta, matchmaking
+		
+	config:
+		* tunga cron-jobb körs numera 5 på morgonen på citysurf.tv (tidigare var det midnatt)
+--[mailat ovanstående]--

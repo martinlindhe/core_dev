@@ -1,50 +1,51 @@
-2007.06.25 Måndag
-	* möten & planering för CS & 3g-projektet
-	
-	webbgränssnittet:
-		* exporterat mailaddresser inför mailutskick
-		* felsökt & fixat problem med en användares vip-status
-		* visar åter mms-nyckel under dina inställningar
-
-2007.06.26 Tisdag
-
-	webbgränssnittet:
-		* rensat bort massa gammal grafik som hörde till 360-sajten
-
-
 
 ***************************************************************************************************
 webbgränssnitt:
-	- HÖG PRIO: anmäl användare-funktion:
-		* gör om admingränssnitt att fungera med nuvarande s_vip: "admin ska kunna se översikt på inkommande anmälningar"
+		
+	blockera användare:
+		- verifiera att blockera användare funkar
+		- visa att en användre är blockerad på dess profil (paradise1)
+		- det går inte att blockera användare från admin säger bitte
 
-	* bugg: räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
-
-
-	- lägg en ny ruta "DETTA JOBBAR VI PÅ JUST NU" under tyck till
-
-	* titel i mail i inkorgen är för lång, klipp den på max X tecken
-	SENARE: användaren "gör just nu" info, t.ex "kollar i pelles galleri"
-	fakta: kunna välja "vikt". bitte skapar en lista med alternativ
-	* visa att en användre är blockerad på dess profil (paradise1)
-	* todo: det går inte att blockera användare från admin säger bitte
+	sök användare:
+		- visa antal träffar i siffror
+		- visa upp till 200 tjejer/killar på "visa online", "tjejer online", "killar online"
+		- bugg: sök på "VIP" funkar ej (har inaktiverat alternativet för stunden)
 
 
-	- bugg: ajax chat-historik strular. för vipmedlemmar så upprepar sig chatthistoriken hela tiden. löst genom att stänga av historik
+	buggar:
+		- fortfarande en counter bugg på webbsajten. "brev" counter fuckar upp ibland. händer det när någon besöker min profil???
+		- räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
+		- ajax chat-historik strular. för vipmedlemmar så upprepar sig chatthistoriken hela tiden. löst genom att stänga av historik
+		- ajax chatten slutar ibland att fungera efter ett tag
+
 
 	- poll på inloggad startsida (admingränssnitt finns)
 
-	* kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
-	* bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
-	* rating på bilder i galleriet, med atom_rating.php
-	* bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
+mobilgränssnittet:
+	* ej case sensitive user/pwd på mobil login
+	* senare: kunna "komma ihåg" användaren. autologin om en viss cookie finns + mobilens useragent är densamma som senast
+	* bildhantering: aktivera (tillfälligt avstängd på sök användare, min profil, mina inställningar)
+
 
 
 blandat:
 	* mms upload image & video:
 		- hantera "PRES" kommandon (PRES krävs för profilbildupload på mobilen)
+		- galleri-upload räknar inte upp counter
 
 senare, låg prio:
+	- efter semester: användaren "gör just nu" info, t.ex "kollar i pelles galleri"
+
+	- kunna välja en av flera förskapade avatarer/profilbilder om man inte laddar upp egen bild
+	- bildbevakning - meddela bevakare om ny bild i galleri först när den har godkänts av admin (idag meddelas man direkt
+	- rating på bilder i galleriet, med atom_rating.php
+	- bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
+	- vip-funktion: kunna se vem som läst dina bloggar, tittat på dina bilder
+	
+	- bugg i filhantering: uploads med . i filnamnet klipps filändelse ut felaktigt vilket resulterar i att filen ej kan visas
+
+
 	- hitta mysql-prestanda-utbildningar
 	- VMX (voicemail) inspelning & uppspelning
 

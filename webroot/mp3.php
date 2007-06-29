@@ -1,5 +1,17 @@
 <?
-die('fu');
+/*
+size_in_bytes / bitrate = length_in_seconds.
+
+3,882,423 bytes = 31,059,384 bits
+128 kbit/s = 131,072 bits/s
+
+31,059,384 / 131,072 = 237 seconds.
+----
+I don't have the code in front of me, but I wrote a function a while ago to do this. First look for the VBR header, either XING or VBRI. If you find one, iterate through the file, adding up all the bitrates in each frame, and dividing by the number of frames. If you don't find a VBR header, you can simply use the bitrate found in the first frame.
+
+*/
+
+//die('fu');
 
 	/* Returns a sting like: 4h10m3s */
 	function shortTimePeriod($seconds)

@@ -20,6 +20,11 @@
 * Cellphones
 	- Some (older) cellphones have trouble interpreting <form> tags with an empty action="",
 		For example the phone model LG U880 (kianos)
+		
+		Common cellphone resolutions:
+			LG U880: 176 x 220 pixels (probably most common cellphone resolution today)
+			Nokia N95, Nokia N73, Sony Ericsson M600i, Samsung SGH-U600, Samsung SGH-Z720: 240x320 pixels (new cellphones come with this resolution)
+		
 
 
 * Multi-project server space sharing

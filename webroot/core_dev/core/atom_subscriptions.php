@@ -45,6 +45,45 @@
 		return false;
 	}
 
+	
+	//Helper function: calls class.phpmailer.php functions. $mails is a array of recipients
+	function smtp_mass_mail($mails, $subject, $body)
+	{
+		global $config;
+		
+		$mail = new PHPMailer();
+		
+		$mail->IsSMTP();                                // send via SMTP
+		$mail->Host     = $config['smtp']['host']; 			// SMTP servers
+		$mail->SMTPAuth = true;    											// turn on SMTP authentication
+		$mail->Username = $config['smtp']['username'];	// SMTP username
+		$mail->Password = $config['smtp']['password'];	// SMTP password
+		$mail->CharSet  = 'utf-8';
+
+		$mail->From     = $config['smtp']['sender'];
+		$mail->FromName = $config['smtp']['sender_name'];
+
+		foreach ($mails as $adr) {
+			$mail->AddAddress($adr);
+		}
+
+		$mail->IsHTML(true);                   					// send as HTML
+
+		//Embed graphics
+		$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
+
+		$mail->Subject  = $subject;
+		$mail->Body     = $body;
+
+		if (!$mail->Send()) {
+			echo 'Failed to send mail, error:'.$mail->ErrorInfo;
+			return false;
+		}
+
+		return true;
+	}
+
+
 	//Returns all subscriptions of $type
 	function getSubscriptions($type)
 	{
@@ -161,42 +200,4 @@
 		
 		return dbArray($db, $sql);		
 	}
-	
-	
-	//Helper function: calls class.phpmailer.php functions
-	function smtp_auth_send_multiple($mails, $subject, $body)
-	{
-		global $config;
-		
-		$mail = new PHPMailer();
-		
-		$mail->IsSMTP();                                // send via SMTP
-		$mail->Host     = $config['smtp']['host']; 			// SMTP servers
-		$mail->SMTPAuth = true;    											// turn on SMTP authentication
-		$mail->Username = $config['smtp']['username'];	// SMTP username
-		$mail->Password = $config['smtp']['password'];	// SMTP password
-		$mail->CharSet  = 'utf-8';
-
-		$mail->From     = $config['smtp']['sender'];
-		$mail->FromName = $config['smtp']['sender_name'];
-
-		foreach ($mails as $adr) {
-			$mail->AddAddress($adr);
-		}
-
-		$mail->IsHTML(true);                   					// send as HTML
-
-		//Embed graphics
-		$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
-
-		$mail->Subject  = $subject;
-		$mail->Body     = $body;
-
-		if (!$mail->Send()) {
-			echo 'Failed to send mail, error:'.$mail->ErrorInfo;
-			return false;
-		}
-
-		return true;
-	}*/
 ?>

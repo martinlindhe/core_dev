@@ -127,6 +127,7 @@
 		- kunna ge rating på en bild
 		- få drag-drop js att funka, har nåt med absolut/relativ positionering att göra
 		- bugg: rotera animerad gif resulterar i stillbild. är det en gd2 bugg? går det istället att göra med imagemagick?
+		- image slideshow: http://www.flickr.com/photos/lichtfaktor/show/
 
 	geoip auto mapping:
 		- gör ett script som tar en full geoip db (en monthly release) och genererar en förenklad mappning såhär:
