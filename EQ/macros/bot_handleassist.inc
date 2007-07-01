@@ -201,6 +201,9 @@ Sub HandleAssistCall(int SpawnId)
 		| /echo IGNORING ${Spawn[id ${SpawnId}].CleanName} - MOB WHITELISTED
 		/return
 	}
+	
+	| wait until i am done casting before killing next target
+	/delay 4s ${Me.Casting.ID}
 
 	/echo Killing >> ${Spawn[id ${SpawnId}].CleanName} <<
 

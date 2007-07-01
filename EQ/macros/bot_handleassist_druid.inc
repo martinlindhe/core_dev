@@ -301,7 +301,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 			/delay 2s ${Target.ID}==${SpawnId}
 		}
 
-		/if (!${Window[LootWnd].Open} && ${Me.Standing} && !${Me.Stunned} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && ${Zone.ShortName.NotEqual["Valdeholm"]} && ${Zone.ShortName.NotEqual["valdeholm_smallevent"]} && ${Zone.ShortName.NotEqual["valdeholm_raid"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
+		/if (!${Window[LootWnd].Open} && ${Me.Standing} && !${Me.Stunned} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && ${Zone.ShortName.NotEqual["frostcrypt_raid"]} && ${Zone.ShortName.NotEqual["Valdeholm"]} && ${Zone.ShortName.NotEqual["valdeholm_smallevent"]} && ${Zone.ShortName.NotEqual["valdeholm_raid"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
 			/call DebugMsg "Casting nuke clicky"
 			/call MQ2Cast "Everliving Bramble Tunic" item
 		}
