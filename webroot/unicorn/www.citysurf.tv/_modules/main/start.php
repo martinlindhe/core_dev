@@ -1,7 +1,9 @@
 <?
 	include(DESIGN.'head.php');
 
-	echo '<div id="mainContent">';
+	echo '<div id="bigContent">';
+
+	echo '<table cellpadding="0" cellspacing="0" border="0"><tr><td width="602">';
 
 		//Listar de senaste bloggarna
 		$q = "SELECT b.*,u.* FROM {$t}userblog b ".
@@ -14,13 +16,13 @@
 			echo '<div class="mediumHeader">senaste bloggarna</div>';
 			echo '<div class="mediumBody">';
 			foreach($res as $row) {
-				$title = $row['blog_title'];
+				$title = stripslashes($row['blog_title']);
 				if (!$title) $title = 'Ingen rubrik';
 				if (strlen($title) >= 20) $title = substr($title, 0, 20).'[...]';
 
 				echo '<a href="'.l('user','blog',$row['id_id'],$row['main_id']).'">'.$title.'</a> av '.$user->getstring($row, '', array('icons' => 1)).'<br/>';
 			}
-			echo '</div></div>';			
+			echo '</div></div>';
 		}
 
 		//Listar de senaste blog-kommentarerna
@@ -75,6 +77,17 @@
 			echo '</div>';
 		}
 
-	echo '</div>';
+	echo '</td><td width="10">&nbsp;</td><td>';
+?>
+<script type="text/javascript">
+var bnum=new Number(Math.floor(99999999 * Math.random())+1);
+document.write('<SCR'+'IPT LANGUAGE="JavaScript" ');
+document.write('SRC="http://servedby.advertising.com/site=737464/size=160600/bnum='+bnum+'/optn=1"></SCR'+'IPT>');
+</script>
+<?
+	echo '</td></tr></table>';
+
+	echo '</div>';	//id="mainContent"
+
 	require(DESIGN.'foot.php');
 ?>

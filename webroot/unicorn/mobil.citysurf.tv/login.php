@@ -7,15 +7,17 @@
 
 	require('design_head.php');
 
+	echo '<div class="h_login"></div>';
+
 	if (isset($_GET['err'])) echo '<span class="critical">FELAKTIG LOGIN!</span><br/><br/>';
 ?>
 
 	<form method="post" action="login.php">
 		ANVÄNDARNAMN:<br/>
-		<input type="text" name="alias"/><br/>
+		<input type="text" name="alias" size="12"/><br/>
 		<br/>
 		LÖSENORD:<br/>
-		<input type="password" name="pass"/><br/>
+		<input type="password" name="pass" size="12"/><br/>
 		<br/>
 		<input type="submit" value="LOGGA IN"/>
 	</form>

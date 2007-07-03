@@ -27,6 +27,7 @@
 	if (!$_header) $_header = 'Sv: '.$mail['sent_ttl'];
 ?>
 
+	<div class="h_mail"></div>
 	SVARA PÅ MAIL<br/>
 	<br/>
 

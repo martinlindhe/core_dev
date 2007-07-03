@@ -26,6 +26,7 @@ function loadtop() {
 <td style="padding-right: 30px;">
 			<? if($isCrew || strpos($_SESSION['u_a'][1], 'obj_tho') !== false) { ?><input type="radio" class="inp_chk" value="thought" id="view_thought" onclick="document.location.href = 'obj.php?status=' + this.value;"<?=($status == 'thought')?' checked':'';?>><label for="view_thought" class="txt_bld txt_look">TYCK TILL</label><? } ?>
 			<? if($isCrew || strpos($_SESSION['u_a'][1], 'obj_scc') !== false) { ?><input type="radio" class="inp_chk" value="scc" id="view_scc" onclick="document.location.href = 'obj.php?status=' + this.value;"<?=($status == 'scc')?' checked':'';?>><label for="view_scc" class="txt_bld txt_look">VISDOM</label><? } ?>
+			<? if($isCrew || strpos($_SESSION['u_a'][1], 'obj_abuse') !== false) { ?><input type="radio" class="inp_chk" value="abuse" id="view_abuse" onclick="document.location.href = 'obj.php?status=' + this.value;"<?=($status == 'abuse')?' checked':'';?>><label for="view_abuse" class="txt_bld txt_look">ABUSE</label><? } ?>
 </td>
 <td>
 			<? /* if($isCrew || strpos($_SESSION['u_a'][1], 'obj_ue') !== false) { ?><input type="radio" class="inp_chk" value="ue" id="view_ue" onclick="document.location.href = 'obj.php?status=' + this.value;"<?=($status == 'ue')?' checked':'';?>><label for="view_ue" class="txt_bld txt_look">BILDMAIL</label><? } */ ?>

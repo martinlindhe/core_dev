@@ -47,7 +47,7 @@
 		}
 	}
 
-	if ($_id == $l['id_id']) echo 'DINA VÄNNER<br/>';
+	if ($_id == $l['id_id']) echo '<div class="h_friends"></div>';
 	else {
 		echo $user->getstringMobile($_id).' VÄNNER<br/>';
 	}

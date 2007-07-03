@@ -13,7 +13,7 @@
 	
 	$list = gbHistory($l['id_id'], $_id);
 
-	echo 'GÄSTBOK<br/><br/>';
+	echo '<div class="h_gb"></div>';
 	echo 'Historik med '.$user->getstringMobile($_id).'<br/><br/>';
 
 	if (!count($list)) {
@@ -24,8 +24,12 @@
 			echo $user->getstringMobile($row['sender_id']).'<br/>';
 			echo 'skrev '.$row['sent_date'].'<br/>';
 			echo $row['sent_cmt'].'<br/><br/>';
+
+			if ($row['sender_id'] == $_id) $gb_id = $row['main_id'];
 		}
+		
 		echo '</div>';
+		echo '<a href="gb_write.php?id='.$gb_id.'&amp;reply">SVARA</a><br/>';
 	}
 
 	require('design_foot.php');

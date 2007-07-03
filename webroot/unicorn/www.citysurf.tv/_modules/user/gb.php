@@ -46,6 +46,12 @@
 		?><div class="subHead">gästbok</div><br class="clr"/><?
 	}
 
+	if ($l['id_id'] != $s['id_id']) {
+		makeButton(false, 'makeGb(\''.$s['id_id'].'\')',	'icon_gb.png', 'skriv i gästboken');
+	}
+	echo '<br/><br class="clr"/>';
+
+
 	$odd = true;
 	if(!empty($res) && count($res)) {
 		dopaging($paging, l('user', 'gb', $s['id_id']).'p=', '', 'med', ((!$his)?STATSTR:'<a href="'.l('user', 'gb', $s['id_id']).'">tillbaka</a>'));
@@ -89,13 +95,10 @@
 			echo '</td></tr>';
 			echo '<tr><td class="btm rgt pdg">';
 	
-			if ($arr[4]) {//om inlägg ej är raderat..
-
-				if ($arr[2] && $own) echo '<input type="button" class="btn2_min" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gb', $s['id_id']).'del_msg='.$val['main_id'].'\');" value="radera" />';
-				if ($arr[1] && $own || $user->vip_check(VIP_LEVEL1)) echo '<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', ($val['sender_id'] == $s['id_id']?$val['sender_id']:$val['user_id']), ($val['sender_id'] == $s['id_id']?$val['user_id']:$val['sender_id'])).'\');" value="historia" />';
-				echo '<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', $val['id_id']).'\');" value="gästbok " />';
-				if ($arr[0]) echo '<input type="button" class="btn2_min" onclick="makeGb(\''.$val['id_id'].'\''.($arr[5]?', \'&a='.$val['main_id'].'\'':'').');" value="'.$arr[6].'" />';
-			}
+			if ($arr[2] && $own) echo '<input type="button" class="btn2_min" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gb', $s['id_id']).'del_msg='.$val['main_id'].'\');" value="radera" />';
+			if ($arr[1] && $own || $user->vip_check(VIP_LEVEL1)) echo '<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', ($val['sender_id'] == $s['id_id']?$val['sender_id']:$val['user_id']), ($val['sender_id'] == $s['id_id']?$val['user_id']:$val['sender_id'])).'\');" value="historia" />';
+			if ($arr[4]) echo '<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', $val['id_id']).'\');" value="gästbok " />';
+			if ($arr[0]) echo '<input type="button" class="btn2_min" onclick="makeGb(\''.$val['id_id'].'\''.($arr[5]?', \'&a='.$val['main_id'].'\'':'').');" value="'.$arr[6].'" />';
 
 			echo '</td></tr>';
 			echo '</table>';
@@ -105,6 +108,10 @@
 		echo '<table summary="" cellspacing="0" class="msgList">';
 		echo '<tr><td class="cnt">Inga gästboksinlägg.</td></tr>';
 		echo '</table>';
+	}
+	
+	if ($l['id_id'] != $s['id_id']) {
+		makeButton(false, 'makeGb(\''.$s['id_id'].'\')',	'icon_gb.png', 'skriv i gästboken');
 	}
 
 	require(DESIGN.'foot_user.php');

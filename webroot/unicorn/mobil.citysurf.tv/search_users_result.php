@@ -2,7 +2,7 @@
 	require_once('config.php');
 	if (!$l) die;	//user not logged in
 
-	$result = performSearch();
+	$result = performSearch('', 0, 0, 50);
 	if (count($result['res']) == 1) {
 		header('Location: user.php?id='.$result['res'][0]['id_id']);
 		die;

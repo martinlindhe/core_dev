@@ -31,16 +31,20 @@
 			die;
 		}
 	}
-
-
+	
 /*
 	todo: kopiera vald kompis från dropdownlistan till "to_alias" fältet med js
 */
 
+	echo '<div class="h_mail"></div>';
 	echo 'SKRIV NYTT MAIL<br/>';
 	echo '<br/>';
 
-	if ($error) echo $error.'<br/>';
+	if ($_to_alias && ($_header || $_body)) {
+		echo 'Fel: Du måste skriva ett meddelande<br/><br/>';
+	} else {
+		if ($error) echo $error.'<br/>';
+	}
 
 	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 	if ($_to_id) {
@@ -52,7 +56,7 @@
 		if ($list)
 		{
 			echo '<select name="friend_alias">';
-			echo '<option>- Dina vänner -</option>';
+			echo '<option value="">- Mina vänner -</option>';
 			for ($i=0; $i<count($list); $i++) echo '<option value="'.$list[$i]['u_alias'].'">'.$list[$i]['u_alias'].'</option>';
 			echo '</select>';
 		}

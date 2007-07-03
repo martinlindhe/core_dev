@@ -1,19 +1,107 @@
 img { border: 0; }
-html { background-color: #83FA92; text-align: center; }
+html, body { margin: 0; text-align: center; background-color: #F0EED4; }
 a { font-weight: bold; color: #000; }
 .user_online { font-weight: bold; }
 .user_offline { font-weight: normal; }
 
-.main_content {
+.critical {
+	font-weight: bold;
+	color: #ff0000;
 }
+
+#top {
+	background-color: #4EF04E;
+}
+
+#main {
+}
+
 .mid_content {
 	text-align: left;
-	width: 175px;
+	width: 160px;
 	border: 1px #000 solid;
 	margin: auto;
 	padding: 4px;
 }
-.critical {
-	font-weight: bold;
-	color: #ff0000;
+	
+.h_profil {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_profil.png') no-repeat;
+	background-position: 50% 50%
+}
+
+.h_mail {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_mail.png') no-repeat;
+	background-position: 50% 50%
+}
+
+.h_gb {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_gb.png') no-repeat;
+	background-position: 50% 50%
+}
+
+.h_online {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_gb.png') no-repeat;
+	background-position: 50% 50%
+}
+
+.h_friends {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_friends.png') no-repeat;
+	background-position: 50% 50%
+}
+
+.h_search {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_search.png') no-repeat;
+	background-position: 50% 50%
+}
+
+.h_info {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_info.png') no-repeat;
+	background-position: 50% 50%
+}
+
+.h_surftalk {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_surftalk.png') no-repeat;
+	background-position: 50% 50%
+}
+
+
+.h_login {
+	position:relative;
+	top: -3px;
+	width: 100%;
+	height: 23px;
+	background: url('/gfx/r_login.png') no-repeat;
+	background-position: 50% 50%
 }

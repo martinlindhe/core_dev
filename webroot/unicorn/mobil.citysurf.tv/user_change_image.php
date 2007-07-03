@@ -4,7 +4,7 @@
 
 	require('design_head.php');
 ?>
-	ÄNDRA PRESENTATIONSBILD<br/>
+	ÄNDRA BILD<br/>
 	<br/>
 	Du kan ladda upp en ny presentationsbild genom att<br/>
 	skicka ett MMS till mms@citysurf.tv med rubriken "PRES xxx",

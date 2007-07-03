@@ -29,6 +29,7 @@
 	<b>Sexliv:</b><br /><?=makeSelection('sex', $head['det_sex'][1])?><br/>
 	<b>Musiksmak:</b><br /><?=makeSelection('music', $head['det_music'][1])?><br/>
 	<b>Längd:</b><br /><?=makeSelection('length', $head['det_length'][1])?><br/>
+	<b>Vikt:</b><br /><?=makeSelection('weight', $head['det_weight'][1])?><br/>
 	<b>Vill ha:</b><br /><input type="text" class="txt" style="width: 185px;" name="det_wants" value="<?=@secureOUT($head['det_wants'][1])?>"/><br/>
 	<input type="submit" value="Spara"/>
 	</form>

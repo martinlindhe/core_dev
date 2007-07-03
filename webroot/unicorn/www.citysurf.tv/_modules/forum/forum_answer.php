@@ -37,7 +37,7 @@
 			//spyPost($top, 'f', $ins);
 
 			$sql->queryUpdate("UPDATE {$t}f SET change_date = NOW() WHERE main_id = '".secureINS($top)."' LIMIT 1");
-			$user->counterDecrease('forum', $s['id_id']);
+			$user->counterDecrease('forum', @$s['id_id']);
 
 			popupACT('Meddelande skickat!', '', l('forum','read',$res['top_id']).'&item='.$ins.'#R'.$ins, '500');
 		} else popupACT('Meddelande ej sparat!', '', l('forum','read',$res['top_id']), '500');

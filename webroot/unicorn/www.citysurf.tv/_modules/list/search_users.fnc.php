@@ -7,10 +7,10 @@
 	*/
 
 	//Reads post variables and produces result. $_start & $_end is to be used together with page splitting logic
-	function performSearch($id = '', $_start = 0, $_end = 0)
+	function performSearch($id = '', $_start = 0, $_end = 0, $lim = 100)	//limit of results per page
 	{
 		global $sql, $user, $t, $l;
-
+		
 		$sexs = '';
 		$sexu = '';
 
@@ -118,7 +118,6 @@
 			//$url[] = 'online='.$result['online'].'&';
 		}
 	
-		$lim = 100;	//limit of results per page
 		$result['paging'] = paging(@$_POST['p'], $lim);
 		if (count($str) > 1) {
 			if($result['online'])

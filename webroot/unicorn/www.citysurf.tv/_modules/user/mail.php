@@ -54,9 +54,13 @@ if(count($res) && !empty($res)) {
 	
 	foreach($res as $row) {
 		$c = ($page == 'in' && !$row['user_read'])?' bld':'';
+		
+		$title = ($row['sent_ttl']?secureOUT($row['sent_ttl']):'<em>Ingen titel</em>');
+		if (strlen($title) > 30) $title = substr($title, 0, 30).'...';
+
 		echo '<tr'.($c?' class="'.$c.'"':'').'>
 			<td style="width: 10px; padding-right: 10px;"><input type="checkbox" class="chk" name="chg[]" value="'.$row['main_id'].'" /></td>
-			<td class="cur" onclick="goLoc(\''.l('user','mailread', $row['main_id']).'&amp;'.$page.'\');"><div style="overflow: hidden; height: 20px; width: 200px; padding-top: 4px;">'.($row['is_answered']?'<img src="/_gfx/icon_answered.png" align="top" alt="Besvarat brev">':'').'<a href="'.l('user','mailread', $row['main_id']).'&amp;'.$page.'">'.($row['sent_ttl']?secureOUT($row['sent_ttl']):'<em>Ingen titel</em>').'</a>&nbsp;</div></td>
+			<td class="cur" onclick="goLoc(\''.l('user','mailread', $row['main_id']).'&amp;'.$page.'\');"><div style="overflow: hidden; height: 20px; width: 200px; padding-top: 4px;">'.($row['is_answered']?'<img src="/_gfx/icon_answered.png" align="top" alt="Besvarat brev">':'').'<a href="'.l('user','mailread', $row['main_id']).'&amp;'.$page.'">'.$title.'</a>&nbsp;</div></td>
 			<td style="padding-top: 4px;">'.($row['sender_id']?$user->getstring($row):'SYSTEM').'</td>
 			<td class="rgt" style="padding-top: 4px;">'.nicedate($row['sent_date'], 1, 1).'&nbsp;</td>';
 		

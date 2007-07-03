@@ -9,7 +9,7 @@
 	else $_id = $l['id_id'];
 
 	if ($_id == $l['id_id']) {
-		echo 'DIN GÄSTBOK<br/><br/>';
+		echo '<div class="h_gb"></div>';
 	} else {
 		$user_data = $user->getuser($_id);
 		echo $user_data['u_alias'].'s GÄSTBOK<br/><br/>';

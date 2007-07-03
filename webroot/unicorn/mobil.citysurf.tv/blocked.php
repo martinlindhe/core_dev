@@ -8,7 +8,7 @@
 		unblockRelation($_GET['remove']);
 	}
 	
-	echo 'DINA BLOCKERINGAR<br/>';
+	echo 'MINA BLOCKADE<br/>';
 	
 	$tot_cnt = getBlockedRelationsCnt();
 	$pager = makePager($tot_cnt, 5);
@@ -23,7 +23,7 @@
 			echo ' <a href="?remove='.$row['id_id'].'">HÄV BLOCKERING</a><br/>';
 		}
 	} else {
-		echo 'Du har inga blockeringar.<br/>';
+		echo 'Du har inga blockade.<br/>';
 	}
 
 	require('design_foot.php');

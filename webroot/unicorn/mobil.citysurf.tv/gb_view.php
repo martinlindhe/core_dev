@@ -13,7 +13,7 @@
 
 	require('design_head.php');
 	
-	if ($gb['user_id'] == $l['id_id']) echo 'DIN GÄSTBOK<br/><br/>';
+	if ($gb['user_id'] == $l['id_id']) echo '<div class="h_gb"></div>';
 	else {
 		echo $user->getstringMobile($gb['user_id']).'s GÄSTBOK<br/><br/>';
 	}

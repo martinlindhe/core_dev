@@ -84,108 +84,6 @@ function blockRightClick(event) {
 	<div id="contentContainer"><!-- holder for all content except footer -->
 		<div id="leftMenu">
 
-<?
-	if (!empty($own)) {
-		if(@$l['id_id'] == @$s['id_id']) {
-			if(@intval($info['gb_offset'][1]) != @intval($_SESSION['data']['offsets']['gb_offset'])) $_SESSION['data']['offsets']['gb_offset'] = @intval($info['gb_offset'][1]);
-			if(@intval($info['gal_offset'][1]) != @intval($_SESSION['data']['offsets']['gal_offset'])) $_SESSION['data']['offsets']['gal_offset'] = @intval($info['gal_offset'][1]);
-			if(@intval($info['blog_offset'][1]) != @intval($_SESSION['data']['offsets']['blog_offset'])) $_SESSION['data']['offsets']['blog_offset'] = @intval($info['blog_offset'][1]);
-			if(@intval($info['rel_offset'][1]) != @intval($_SESSION['data']['offsets']['rel_offset'])) $_SESSION['data']['offsets']['rel_offset'] = @intval($info['rel_offset'][1]);
-			if(@intval($info['mail_offset'][1]) != @intval($_SESSION['data']['offsets']['mail_offset'])) $_SESSION['data']['offsets']['mail_offset'] = @intval($info['mail_offset'][1]);
-		}
-	}
-	
-	if (!empty($s) && $s['id_id']) {
-		echo '<div class="smallHeader">profil</div>';
-		echo '<div class="smallBody">';
-			echo '• civilstånd: '.(!empty($info['det_civil'][1])?secureOUT($info['det_civil'][1]):@$det_type[$info['det_civil_type'][1]]).'<br />';
-			echo '• attityd: '.@$info['det_attitude'][1].'<br />';
-			echo '• musik: '.@$info['det_music'][1].'<br />';
-			echo '• vill ha: '.@$info['det_wants'][1].'<br />';
-			echo '• alkohol: '.@$info['det_alcohol'][1].'<br />';
-			echo '• tobak: '.@$info['det_tobacco'][1].'<br />';
-			echo '• sexliv: '.@$info['det_sex'][1].'<br />';
-			echo '• barn: '.@$info['det_children'][1].'<br />';
-			echo '• längd: '.@$info['det_length'][1].'<br />';
-		echo '</div><br/>';
-	}
-
-	if (empty($own) && !empty($s) && $s['id_id']) {
-		$txt = array('age' => 'Ålder', 'sex' => 'Sexliv', 'children' => 'Barn', 'music' => 'Musiksmak', 'tobacco' => 'Tobak', 'alcohol' => 'Alkohol', 'wants' => 'Vill ha', 'civil' => 'Civilstatus', 'attitude' => 'Attityd');
-		$myinfo = $user->getcontent($l['id_id'], 'user_head');
-		
-		echo '<div class="smallHeader">matchmaking</div>';
-		echo '<div class="smallBody">';
-			echo '<table summary="" cellspacing="0" id="diverse">';
-			echo '<tr>';
-					echo '<td class="cnt" colspan="3"><div class="usr">jag vs. '.$user->getstring($s, '', array('noage' => 1)).'</div></td>';
-				echo '</tr>';
-				echo '<tr title="'.$txt['age'].'">';
-					echo '<td class="rgt"><div>'.$user->doage($l['u_birth']).' år</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.$user->doage($s['u_birth']).' år</div></td>';
-				echo '</tr>';
-
-				if (@$det_type[$info['det_civil_type'][1]] && @$det_type[$myinfo['det_civil_type'][1]]) {
-					echo '<tr title="'.$txt['civil'].'">';
-					echo '<td class="rgt"><div>'.(!empty($myinfo['det_civil'][1])?secureOUT($myinfo['det_civil'][1]):(@$det_type[$myinfo['det_civil_type'][1]]?@$det_type[$myinfo['det_civil_type'][1]]:'-')).'</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.(!empty($info['det_civil'][1])?secureOUT($info['det_civil'][1]):(@$det_type[$info['det_civil_type'][1]]?@$det_type[$info['det_civil_type'][1]]:'-')).'</div></td>';
-					echo '</tr>';
-				}
-				if (@$info['det_attitude'][1] && @$myinfo['det_attitude'][1]) {
-					echo '<tr title="'.$txt['attitude'].'">';
-					echo '<td class="rgt"><div>'.(@$myinfo['det_attitude'][1]?@$myinfo['det_attitude'][1]:'-').'</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.(@$info['det_attitude'][1]?@$info['det_attitude'][1]:'-').'</div></td>';
-					echo '</tr>';
-				}
-				if (@$info['det_wants'][1] && @$myinfo['det_wants'][1]) {
-					echo '<tr title="'.$txt['wants'].'">';
-					echo '<td class="rgt"><div>'.(@$myinfo['det_wants'][1]?@$myinfo['det_wants'][1]:'-').'</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.(@$info['det_wants'][1]?@$info['det_wants'][1]:'-').'</div></td>';
-					echo '</tr>';
-				}
-				if (@$info['det_alcohol'][1] && @$myinfo['det_alcohol'][1]) {
-					echo '<tr title="'.$txt['alcohol'].'">';
-					echo '<td class="rgt"><div>'.(@$myinfo['det_alcohol'][1]?@$myinfo['det_alcohol'][1]:'-').'</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.(@$info['det_alcohol'][1]?@$info['det_alcohol'][1]:'-').'</div></td>';
-					echo '</tr>';
-				}
-				if (@$myinfo['det_tobacco'][1] && @$info['det_tobacco'][1]) {
-					echo '<tr title="'.$txt['tobacco'].'">';
-					echo '<td class="rgt"><div>'.(@$myinfo['det_tobacco'][1]?@$myinfo['det_tobacco'][1]:'-').'</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.(@$info['det_tobacco'][1]?@$info['det_tobacco'][1]:'-').'</div></td>';
-					echo '</tr>';
-				}
-				if (@$myinfo['det_children'][1] && @$info['det_children'][1]) {
-					echo '<tr title="'.$txt['children'].'">';
-					echo '<td class="rgt"><div>'.(@$myinfo['det_children'][1]?@$myinfo['det_children'][1]:'-').'</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.(@$info['det_children'][1]?@$info['det_children'][1]:'-').'</div></td>';
-					echo '</tr>';
-				}
-				if (@$myinfo['det_music'][1] && @$info['det_music'][1]) {
-					echo '<tr title="'.$txt['music'].'">';
-					echo '<td class="rgt"><div>'.(@$myinfo['det_music'][1]?@$myinfo['det_music'][1]:'-').'</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.(@$info['det_music'][1]?@$info['det_music'][1]:'-').'</div></td>';
-					echo '</tr>';
-				}
-				if (@$info['det_sex'][1] && @$myinfo['det_sex'][1]) {
-					echo '<tr title="'.$txt['sex'].'">';
-					echo '<td class="rgt"><div>'.(@$myinfo['det_sex'][1]?@$myinfo['det_sex'][1]:'-').'</div></td>';
-					echo '<td class="cnt">•</td>';
-					echo '<td class="lft"><div>'.(@$info['det_sex'][1]?@$info['det_sex'][1]:'-').'</div></td>';
-					echo '</tr>';
-				}
-				echo '</table>';
-			echo '</div><br/>';
-	}
-?>
 			<div id="quickchat_indicator" style="display: none;">
 				<div class="smallHeader3">
 					<h4 class="cur">Någon vill prata med dig!</h4>
@@ -201,8 +99,8 @@ function blockRightClick(event) {
 				<div class="bld">
 				<?
 					if ($contribute) {
-						echo $user->getstring($contribute).'<br/>';
-						echo secureOUT($contribute['con_msg'], 1);
+						echo $user->getstring($contribute).'<br/><br/>';
+						echo stripslashes($contribute['con_msg']);
 					} else {
 						echo 'Om du ser något fel, klicka på "tyck till" uppe i toppmenyn.';
 					}
@@ -214,8 +112,57 @@ $isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
 		echo '<input type="button" class="btn2_sml r" onclick="makeContribution();" value="skriv" /><br class="clr" />';
 	}
 ?>
+			</div><br/>
+
+
+
+<?
+	$online = gettxt('stat_online');
+	$online = explode(':', $online);
+?>
+	<div class="smallHeader">inloggade</div>
+	<div class="smallBody">
+
+		<table summary="" cellspacing="0">
+			<tr><td width="80"><a href="<?=l('list', 'users', '1')?>">Online</a></td><td><a href="<?=l('list', 'users', 1)?>"><?=@intval($online[0])?></a></td></tr>
+			<tr><td><a href="<?=l('list', 'users', 'M')?>">Killar</a></td><td><a href="<?=l('list', 'users', 'M')?>"><?=@intval($online[1])?></a></td></tr>
+			<tr><td><a href="<?=l('list', 'users', 'F')?>">Tjejer</a></td><td><a href="<?=l('list', 'users', 'F')?>"><?=@intval($online[2])?></a></td></tr>
+		</table>
+		<br/>
+		<a href="<?=l('list', 'users')?>">Senast inloggade</a><br/>
+		<a href="/list/userfind/1">Slumpa</a><br/>
+		<div onmouseover="checkTime(1);">Snabbsök</div>
+
+		<div id="userfind" style="display: none" onmouseover="checkTime(1);">
+			<form action="/list/userfind" method="post">
+			<input type="text" class="txt" id="userfind_inp" onfocus="checkTime(1);" onblur="checkTime(0);" name="a" value="" />
+			</form>
+		</div>
+	</div><br/>
+<?
+	if ($l && !defined('NO_FOL')) {
+?>
+		<div id="friendsOnline">
+			<div class="smallHeader" onclick="friendsToggle();">
+				vänner online (<span id="friendsOnlineCount">0</span>)
 			</div>
+			<div id="friendsOnlineList" class="smallBody" style="display:none;"></div>
+		</div>
+		<br class="clr"/>
+		<script type="text/javascript">
+		executeTimeout();
+		executeData('<?=@$_SESSION['data']['cachestr']?>');
+		<?= (!empty($_COOKIE['friendsOnline'])?"friendsToggle();":'')?>
+		</script>
+<? }
+?>
 
 		</div>	<!-- end leftMenu -->
-		
-		<div id="mainContent">
+
+<?
+	if (basename($_SERVER['REQUEST_URI']) == 'start') {		//fulhax av martin /hide
+		echo '<div id="bigContent">';
+	} else {
+		echo '<div id="mainContent">';
+	}
+?>

@@ -7,6 +7,10 @@
 	set_time_limit(600);
 	ini_set('default_socket_timeout', '600');	//10 minute timeout for SOAP requests
 
+														//level 1=normal user
+	define('VIP_LEVEL1',	2);	//Normal VIP
+	define('VIP_LEVEL2',	3);	//VIP delux
+
 	$config['sms']['originating_number'] = '72777';
 	$config['sms']['auth_username'] = 'lwcg';
 	$config['sms']['auth_password'] = '3koA4enpE';
@@ -26,7 +30,7 @@
 		try {
 			$q = 'INSERT INTO tblSentSMS SET dest="'.$db->escape($dest_number).'",msg="'.$db->escape($msg).'",timeSent=NOW()';
 			$corrId = $db->insert($q);
-			
+
 			if (!$corrId) die('FAILED TO INSERT tblSentSMS');
 
 			$params = array(
@@ -147,16 +151,16 @@
 		}
 		$vip_codes = array(
 											//days, price i öre, SEK2000 = 20.00 kronor
-			'VIP'			=> array(14, 'SEK2000'),
-			'VIP-2V'	=> array(14, 'SEK2000')/*,
-			'VIP-1M'	=> array(30, 'SEK3000'),
-			'VIP-6M'	=> array(180, 'SEK15000')*/
+			'VIP'			=> array(14, '20'),
+			'VIP-2V'	=> array(14, '20')/*,
+			'VIP-1M'	=> array(30, '30'),
+			'VIP-6M'	=> array(180, '150')*/
 		);
 
 		$vip_delux_codes = array(
-			'VIPD'			=> array(10, 'SEK2000'),
-			'VIDP-10D'	=> array(10, 'SEK2000')/*,
-			'VIPD-1M'		=> array(30, 'SEK5000')*/
+			'VIPD'			=> array(10, '20'),
+			'VIDP-10D'	=> array(10, '20')/*,
+			'VIPD-1M'		=> array(30, '50')*/
 		);
 
 		if (!array_key_exists($in_cmd[1], $vip_codes) && !array_key_exists($in_cmd[1], $vip_delux_codes)) {
@@ -180,25 +184,23 @@
 
 		if (array_key_exists($in_cmd[1], $vip_codes)) {
 			$days = $vip_codes[$in_cmd[1]][0];
-			$tariff = $vip_codes[$in_cmd[1]][1];
+			$price = $vip_codes[$in_cmd[1]][1];
+			$tariff = 'SEK'.$price.'00';	//de två nollorna är för ören
 			$vip_level = VIP_LEVEL1;
-			$msg = 'Du debiteras nu '.$tariff.' för '.$days.' dagar VIP till användare '.$username;
+			$msg = 'Du debiteras nu '.$price.' kr för '.$days.' dagar VIP till användare '.$username;
 			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP';
 
 			$session->log('Attempting to charge '.$username.' for '.$days.' days VIP ('.$tariff.') (cmd: '.$in_cmd[1].')');	
 
 		} else if (array_key_exists($in_cmd[1], $vip_delux_codes)) {
 			$days = $vip_delux_codes[$in_cmd[1]][0];
-			$tariff = $vip_delux_codes[$in_cmd[1]][1];
+			$price = $vip_delux_codes[$in_cmd[1]][1];
+			$tariff = 'SEK'.$price.'00';	//de två nollorna är för ören
 			$vip_level = VIP_LEVEL2;
-			$msg = 'Du debiteras nu '.$tariff.' för '.$days.' dagar VIP DELUX till användare '.$username;
+			$msg = 'Du debiteras nu '.$price.' kr för '.$days.' dagar VIP DELUX till användare '.$username;
 			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP DELUX';
 
 			$session->log('Attempting to charge '.$username.' for '.$days.' days VIP DELUX ('.$tariff.') (cmd: '.$in_cmd[1].')');	
-
-		} else {
-			$session->log('SMS - impossible codepath!!', LOGLEVEL_ERROR);
-			die;
 		}
 
 		//2. skicka ett nytt sms till avsändaren, med TARIFF satt samt med messageid från incoming sms satt som "reference id"
@@ -206,11 +208,12 @@
 
 		//"Testa att sätta referenceID-parametern till messageID:t utan det inledande "1-" delen. Det bör fungera då."
 		$referenceId = $params['MessageId'];
-		if (substr($referenceId, 0, 2) == '1-') $referenceId = substr($referenceId, 2);
+		//if (substr($referenceId, 0, 2) == '1-') $referenceId = substr($referenceId, 2);
 
 		$sms_err = sendSMS($params['OriginatorAddress'], $msg, $params['DestinationAddress'], $tariff, $referenceId);
 		if ($sms_err === true) {
 			addVIP($in_cmd[2], $vip_level, $days);
+			
 			$session->log('Charge to '.$username.' of '.$tariff.' succeeded');
 			
 			//Leave a confirmation message in the users inbox
@@ -224,4 +227,82 @@
 		$session->log('Charge to '.$username.' of '.$tariff.' failed with error '.$sms_err, LOGLEVEL_ERROR);
 	}
 
+	function nvoxHandleIncoming($_user_id, $_days, $_level)
+	{
+		global $db, $session;
+		if (!is_numeric($_user_id) || !is_numeric($_days) || !is_numeric($_level)) return false;
+		if ($_level > 3) return false;
+
+		//identifiera användaren
+		$config['user_db']['host']	= 'pc3.icn.se';
+		$config['user_db']['username']	= 'cs_user';
+		$config['user_db']['password']	= 'cs8x8x9ozoSSpp';
+		$config['user_db']['database']	= 'cs_platform';
+		$user_db = new DB_MySQLi($config['user_db']);
+
+		$q = 'SELECT u_alias FROM s_user WHERE id_id='.$_user_id;
+		$username = $user_db->getOneItem($q);
+		if (!$username) {
+			echo '1';	//error code
+			$session->log('Specified user dont exist: '.$_user_id, LOGLEVEL_WARNING);
+			die;
+		}
+		
+		//Acknowledgment - Tell NVOX that the data was received
+		echo '0';	//ok code
+
+		$internal_msg = 'Ditt konto har uppgraderats med '.$_days.' dagar VIP';
+		if ($_level == 3) $internal_msg .= ' Deluxe';
+
+		addVIP($_user_id, $_level, $_days);
+
+		if ($_level == 3) {
+			$log_msg = 'Gave '.$username.' '.$_days.' days of VIP deluxe from NVOX';
+		} else {
+			$log_msg = 'Gave '.$username.' '.$_days.' days of VIP from NVOX';
+		}
+		$session->log($log_msg);
+			
+		//Leave a confirmation message in the users inbox
+		$internal_title = 'VIP-bekräftelse';
+		$q = 'INSERT INTO s_usermail SET sender_id=0, user_id='.$_user_id.',sent_ttl="'.$internal_title.'",sent_cmt="'.$internal_msg.'",sent_date=NOW()';
+		$user_db->insert($q);
+
+		return true;
+	}
+
+//av martin. används häråvar, mot cs databasen
+function addVIP($user_id, $vip_level, $days)
+{
+	global $session;
+
+	$config['user_db']['host']	= 'pc3.icn.se';
+	$config['user_db']['username']	= 'cs_user';
+	$config['user_db']['password']	= 'cs8x8x9ozoSSpp';
+	$config['user_db']['database']	= 'cs_platform';
+	$user_db = new DB_MySQLi($config['user_db']);
+
+	//$session->log('addVIP user='.$user_id.', level: '.$vip_level.',days: '.$days );
+	
+	if (!is_numeric($user_id) || !is_numeric($vip_level) || !is_numeric($days)) return false;
+
+	$q = 'SELECT userId FROM s_vip WHERE userId='.$user_id.' AND level='.$vip_level;
+
+	if ($user_db->getOneItem($q)) {
+		$q = 'UPDATE s_vip SET days=days+'.$days.',timeSet=NOW() WHERE userId='.$user_id.' AND level='.$vip_level;
+		$user_db->update($q);
+	} else {
+		$q = 'INSERT INTO s_vip SET userId='.$user_id.',level='.$vip_level.',days='.$days.',timeSet=NOW()';
+		$user_db->insert($q);
+	}
+
+	$q = 'SELECT level_id FROM s_user WHERE id_id='.$user_id;
+	$old_level = $user_db->getOneItem($q);
+	//$session->log( 'old: '.$old_level.', new: '.$vip_level );
+	if ($old_level >= $vip_level) return true;
+
+	$q = 'UPDATE s_user SET level_id="'.$vip_level.'" WHERE id_id='.$user_id;
+	$user_db->update($q);
+	//$session->log('updated');
+}
 ?>

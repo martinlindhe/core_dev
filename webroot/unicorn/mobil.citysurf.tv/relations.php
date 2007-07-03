@@ -4,10 +4,10 @@
 
 	require('design_head.php');
 
-	echo 'DINA RELATIONER<br/>';
-	echo '<br/>';
+	echo '<div class="h_friends"></div>';
+
 	echo '<a href="friends.php">VÄNNER</a> ('.relationsOnlineCount().' online)<br/>';
-	echo '<a href="blocked.php">BLOCKERADE</a><br/>';
+	echo '<a href="blocked.php">BLOCKADE</a><br/>';
 
 	require('design_foot.php');
 ?>

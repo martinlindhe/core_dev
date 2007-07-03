@@ -27,8 +27,9 @@
 		die;
 	}
 
-	if (isset($_GET['reply'])) echo 'GÄSTBOK - SKRIV SVAR';
-	else echo 'GÄSTBOK - SKRIV NYTT MEDDELANDE';
+	echo '<div class="h_gb"></div>';
+	if (isset($_GET['reply'])) echo 'SKRIV SVAR';
+	else echo 'SKRIV NYTT MEDDELANDE';
 ?>
 	<br/>
 	<br/>

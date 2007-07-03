@@ -81,7 +81,10 @@
 	$page = 'relations';
 
 	require(DESIGN.'head_user.php');
+?>
+<div class="subHead">relationer</div><br class="clr"/>
 
+<?
 	if ($own && !$blocked) {		
 		//paus är förfrågningar som andra skickat till dig
 		$paus = getRelationRequestsToMe();
@@ -89,14 +92,13 @@
 		//wait är förfrågningar du väntar på svar på
 		$wait = getRelationRequestsFromMe();
 		require("relations_user.php");
+		echo '<br/>';
 	}
 	
 	$page = 'friends';
 	if ($blocked) $page = 'blocked';
-	$menu = array('friends' => array(l('user', 'relations'), 'vänner'), 'blocked' => array(l('user', 'relations').'&amp;blocked', 'ovänner'));
+	$menu = array('friends' => array(l('user', 'relations'), 'vänner'), 'blocked' => array(l('user', 'relations').'&amp;blocked', 'blockade'));
 ?>
-
-<div class="subHead">relationer</div><br class="clr"/>
 
 <div class="bigHeader"><?=($own?makeMenu($page, $menu):'vänner')?></div>
 <div class="bigBody">
@@ -157,7 +159,7 @@
 		}
 		
 	} else {
-		echo '<tr><td class="spac pdg cnt">Inga '.($blocked?'ovänner':'vänner').'.</td></tr>';
+		echo '<tr><td class="spac pdg cnt">Inga '.($blocked?'blockade':'vänner').'.</td></tr>';
 	}
 
 	echo '</table>';

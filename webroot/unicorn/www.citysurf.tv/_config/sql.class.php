@@ -117,6 +117,10 @@ class sql {
 			type_inf = '".((empty($type))?'START':$type)."',
 			date_cnt = NOW()");
 			
+			if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') {
+				//echo 'cookie: '.$cookie_id;
+			}
+			
 			$this->queryInsert("INSERT INTO {$this->t}logvisit SET
 			sess_id = '".secureINS($cookie_id)."',
 			sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',

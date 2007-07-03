@@ -22,7 +22,7 @@
 */
 
 //allowed mail attachment mime types
-$config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'video/3gpp');
+$config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'image/png', 'video/3gpp');
 $config['email']['text_allowed_mime_types'] = array('text/plain');
 $config['email']['log_activity'] = true;
 $config['email']['logfile'] = '/home/martin/mms.log';

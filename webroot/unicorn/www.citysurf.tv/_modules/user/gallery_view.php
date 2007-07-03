@@ -65,13 +65,6 @@
 	<a name="view"></a>
 <?
 	switch ($file_ext) {
-		case 'jpg':
-		case 'jpeg':
-		case 'gif':
-		case 'png':
-			echo '<img onmousedown="blockRightClick(event)" src="/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext.'" class="cnti mrg" alt="" border="0"/>';
-			break;
-		
 		case '3gp':
 			$vid_filename = '/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext;
 			$vid_width = 176;
@@ -88,6 +81,13 @@
 			<embed src="<?=$vid_filename?>" width="<?=$vid_width?>" height="<?=$vid_height?>" autoplay="true" controller="<?=$show_controls?>" bgcolor="<?=$vid_bg_color?>" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/"></embed>
 			</object>		
 		<?
+			break;
+
+		case 'jpg':
+		case 'jpeg':
+		case 'gif':
+		case 'png':
+			echo '<img onmousedown="blockRightClick(event)" src="/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext.'" class="cnti mrg" alt="" border="0"/>';
 			break;
 			
 		default: die('ext '.$file_ext);

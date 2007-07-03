@@ -123,15 +123,15 @@ function flash($s) {
 	return urlencode(utf8_encode($s));
 }
 function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC') {
-	global $t, $sql;
+	global $sql;
 	if($type == 's') {
-		$result = $sql->queryResult("SELECT text_cmt FROM {$t}textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
+		$result = $sql->queryResult("SELECT text_cmt FROM s_textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
 		if(!$result) return false; else return $result;
 	} elseif($type == 'm') {
-		$result = $sql->query("SELECT main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt'");
+		$result = $sql->query("SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = '$opt'");
 		if(!$result) return false; else return $result;
 	} elseif($type == 'mo') {
-		$result = $sql->query("SELECT main_id, text_cmt FROM {$t}textsettings WHERE type_id = '$opt' ORDER BY $order");
+		$result = $sql->query("SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = '$opt'"); // ORDER BY $order");
 		if(!$result) return false; else return $result;
 	}
 }

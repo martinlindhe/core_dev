@@ -2,6 +2,7 @@
 	function makeSelection($name, $sel)
 	{
 		$array = getset('', $name, 'mo', 'text_cmt ASC');
+		if (!$array) return 'val saknas: '.$name;
 
 		$ret = '<select style="width: 185px;" name="det_'.$name.'"><option value="">-- Välj --</option>';
 		foreach($array as $arr) $ret .= '<option value="'.$arr[1].'"'.($sel == $arr[1]?' selected':'').'>'.$arr[1].'</option>';
@@ -47,6 +48,10 @@
 			}
 			if (isset($_POST['det_wants'])) {
 				$id = $user->setinfo($l['id_id'], 'det_wants', secureINS($_POST['det_wants']));
+				if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
+			}
+			if (isset($_POST['det_weight'])) {
+				$id = $user->setinfo($l['id_id'], 'det_weight', secureINS($_POST['det_weight']));
 				if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
 			}
 		}

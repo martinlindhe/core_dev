@@ -99,6 +99,17 @@ ul#menu_user a {
 	min-height: 464px;
 }
 
+/* för startsidan etc, där högermeny saknas */
+#bigContent {
+	overflow: hidden;
+	z-index: 10;
+	float: left;
+	width: 784px;
+	padding-left: 10px;
+	min-height: 464px;
+}
+
+
 #rightMenu {
 	float: left;
 	width: 176px;

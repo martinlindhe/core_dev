@@ -48,6 +48,8 @@ session_start();
 		require("./_tpl/obj_chat.php");
 	} elseif($status == 'blog' && ($isCrew || strpos($_SESSION['u_a'][1], 'obj_blog') !== false)) {
 		require("./_tpl/obj_blog.php");
+	} elseif($status == 'abuse' && ($isCrew || strpos($_SESSION['u_a'][1], 'obj_abuse') !== false)) {
+		require("./_tpl/obj_abuse.php");
 	} else 	require("./_tpl/obj_head.php");
 	} else errorNEW('Ingen behörighet.');
 ?>

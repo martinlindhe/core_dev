@@ -4,9 +4,9 @@
 
 	require('design_head.php');
 
-	echo 'ANVÄNDARE SENAST ONLINE:<br/><br/>';
+	echo '<div class="h_online"></div>';
 
-	$list = getLastUsersOnline(5);
+	$list = getLastUsersOnline(5);	//fixme: seg som fan
 
 	echo '<div class="mid_content">';
 	foreach ($list as $row)

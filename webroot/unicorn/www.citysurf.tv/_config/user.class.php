@@ -186,7 +186,7 @@ class user {
 		return secureOUT(ucwords(strtolower($str)));
 	}
 	function getcontent($id, $type) {
-		return $this->sql->querybycontent("SELECT o.content_type, o.content, o.main_id FROM {$this->t}objrel r LEFT JOIN {$this->t}obj o ON o.main_id = r.object_id WHERE r.content_type = '$type' AND r.owner_id = '".secureINS($id)."'");
+		return $this->sql->querybycontent("SELECT o.content_type, o.content, o.main_id FROM s_objrel r LEFT JOIN s_obj o ON o.main_id = r.object_id WHERE r.content_type = '$type' AND r.owner_id = '".secureINS($id)."'");
 	}
 	//makeover
 	/*function getphoto($line, $valid = false, $small = 0, $admin = false, $string = '', $size = '') {
@@ -255,7 +255,7 @@ class user {
 				$arr['account_date'] = $res;
 			}
 		}
-		if ($arr['id_id'] == 'SYS') {
+		if (@$arr['id_id'] == 'SYS') {
 			return '<span class="bld">SYSTEM</span>';
 		}
 		

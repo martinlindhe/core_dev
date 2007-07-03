@@ -6,11 +6,13 @@
 
 		echo '<a href="login.php">LOGGA IN</a><br/>';
 	} else {
-		echo '<a href="relations.php"><img src="gfx/q_relations.png" alt="Relationer"/></a> ';
-		echo '<a href="users_last_online.php"><img src="gfx/q_lastonline.png" alt="Senast online"/></a><br/>';
+		echo '<a href="relations.php"><img src="gfx/btn_friends.png" alt="Vänner" width="44" height="44"/></a>&nbsp;';
+		echo '<a href="users_last_online.php"><img src="gfx/btn_online.png" alt="Senast online" width="44" height="44"/></a>&nbsp;';
+		echo '<a href="search_users.php"><img src="gfx/btn_search.png" alt="Sök användare" width="44" height="44"/></a><br/>';
 
-		echo '<a href="search_users.php"><img src="gfx/q_search.png" alt="Sök användare"/></a> ';
-		echo '<a href="logout.php"><img src="gfx/q_logout.png" alt="Logga ut"/></a><br/>';
+		echo '<a href="surftalk.php"><img src="gfx/btn_surftalk.png" alt="Surftalk" width="44" height="44"/></a>&nbsp;';
+		echo '<a href="info.php"><img src="gfx/btn_info.png" alt="Info" width="44" height="44"/></a>&nbsp;';
+		echo '<a href="logout.php"><img src="gfx/btn_logout.png" alt="Logga ut" width="44" height="44"/></a><br/>';
 
 		//echo '<a href="gb.php">DIN GÄSTBOK</a> ('.gbCountUnread().' olästa)<br/>';
 		//echo '<a href="mail.php">DIN MAIL</a>('.getUnreadMailCount().' olästa)<br/>';

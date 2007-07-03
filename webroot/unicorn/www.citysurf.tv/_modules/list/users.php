@@ -1,7 +1,7 @@
 <?
 	require_once('search_users.fnc.php');
 
-	$result = performSearch($id);
+	$result = performSearch($id, 0, 0, 200);
 
 	require(DESIGN.'head.php');
 ?>
@@ -36,7 +36,7 @@
 			<td style="padding-right: 30px;">alternativ:<br />
 				<input type="checkbox" class="chk" value="1" name="pic" id="pic1" onclick="this.form.submit();"<?=($result['pic'])?' checked="checked"':'';?>/><label for="pic1"> har bild</label><br />
 				<input type="checkbox" class="chk" value="1" name="online" id="online1" onclick="this.form.submit();"<?=($result['online'])?' checked="checked"':'';?>/><label for="online1"> är online</label><br />
-				<input type="checkbox" class="chk" value="6" name="l_6" id="l_6" onclick="this.form.submit();"<?=($result['level'] == '6')?' checked="checked"':'';?>/><label for="l_6"> VIP</label>
+				<!-- <input type="checkbox" class="chk" value="6" name="l_6" id="l_6" onclick="this.form.submit();"<?=($result['level'] == '6')?' checked="checked"':'';?>/><label for="l_6"> VIP</label> -->
 			</td>
 			<td style="padding-right: 30px;">kön:<br />
 				<input type="radio" class="chk" name="sex" value="0" id="s_0" onclick="this.form.submit();"<?=(!$result['sex'])?' checked="checked"':'';?>/><label for="s_0"> alla</label><br />
@@ -63,7 +63,9 @@
 	</div>
 
 	<div>
-		<? if(count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0); ?>
+		<?
+		echo 'Visar '.count($result['res']).' användare';
+		 if(count($result['res'])) dopaging($result['paging'], 'javascript:changePage(\'', '\');', 'biggest', STATSTR, 0); ?>
 	</div>
 	<table cellspacing="1" summary="">
 <?

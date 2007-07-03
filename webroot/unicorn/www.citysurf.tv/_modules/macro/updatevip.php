@@ -2,14 +2,23 @@
 	/*
 		update_vip.php av Martin Lindhe, 2007.06.04
 		
-		skript som körs regelbundet en gång om dygnet (efter midnatt) och uppdaterar alla användares vip-nivåer
+		skript som körs regelbundet en gång om dygnet (efter midnatt) och uppdaterar alla vanliga användares vip-nivåer
+		
+		ignorerar alla över userlevel 3 (admins,webmasters osv)
 	*/
 
 	$vip_rows = $sql->query('SELECT * FROM s_vip ORDER BY level DESC',0,1);
 	foreach ($vip_rows as $vip) {
 		if (isset($done[$vip['userId']])) continue;
 		if ($vip['level'] > 3) continue;	//level2 = vip, level3=vip delux. resterande är admin, webmaster osv
-
+		
+		
+		$q = 'SELECT level_id FROM s_user WHERE id_id='.$vip['userId'];
+		if ($sql->queryResult($q) > 3) {
+			//echo 'USER '.$vip['userId'].' IS ADMIN!!!skipping!';
+			continue;
+		}
+		
 		echo 'Setting days left for userId '.$vip['userId'].' to '.($vip['days']-1).' (vip level '.$vip['level'].')<br/>';
 		if ($vip['days'] >= 1) {
 			$q = 'UPDATE s_vip SET days='.($vip['days']-1).' WHERE id='.$vip['id'];
