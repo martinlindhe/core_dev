@@ -60,15 +60,11 @@
 	foreach ($list as $row) {
 		echo '<div class="item">';
 		switch ($row['feedbackType']) {
-			case FEEDBACK_ABUSE:
-				echo '<h2>Reported user: '.nameLink($row['subjectId']).'</h2>';
-				break;
-
 			case FEEDBACK_SUBMIT:
 				echo '<h2>General feedback</h2>';
 				break;
 			
-			default: die('aouiu');
+			default: die('EEEP!!! error');
 		}
 		echo 'From '.nameLink($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
 		echo $row['text'].'<br/>';

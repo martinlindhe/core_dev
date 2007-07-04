@@ -8,8 +8,8 @@ body {
 }
 
 #menu {
-	color: #fff;
-	background-color: #000;
+	color: #000;
+	background-color: #D80911;
 	width: 1000px;
 	height: 80px;
 	position: absolute;
@@ -19,7 +19,7 @@ body {
 }
 
 #menu a {
-	color: #fff;
+	color: #000;
 	text-decoration: none;
 }
 

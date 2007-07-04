@@ -3,7 +3,7 @@
 
 	error_reporting(E_ALL);
 
-	$config['core_root'] = '../core_dev/';
+	$config['core_root'] = 'E:/devel/webroot/core_dev/';
 	$config['core_web_root'] = '/core_dev/';
 
 	$config['web_root'] = '/pigskin/';

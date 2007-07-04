@@ -5,7 +5,7 @@
 
 	require('design_head.php');
 
-	$files->showFiles(FILETYPE_FILEAREA_UPLOAD);
+	$files->showFiles(FILETYPE_USERFILE);
 ?>
 
 <br/>
