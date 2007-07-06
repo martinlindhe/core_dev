@@ -1,36 +1,5 @@
-2007.07.02 Måndag:
-	webbgränssnittet:
-		* verifierat "blockera användare" att det visst fungerar korrekt!
-		* eva-lena, lotta, bitte har fått admin status
-		* php varning fix i forumet
-		* flyttat om några av rutorna i vänster- & högerlistorna utifrån vad vi diskuterade på cs möte förra veckan
-		* visar max 200 resultat i sökningar (var tidigare 100)
-		* visar antal träffar i användarsökning i siffror
-		* flyttade "skriv i gästboken" från högersidan till en knapp + popupfönster på gästboksöversikt-sidan
 
-	mobila gränssnittet:
-		* bråkat med eva-lenas mobil. den vill inte visa 3 bilder på bredd hur jag än gör
-		* text overlay på "mail" och "gästbok" ikoner
-		* skapade en "info" sida
-	
-	config:
-		* lagt till så att "fixa counters" scriptet körs varje natt klockan 05:20 (ful-lösning på counter-relaterade buggar)
-
-
-2007.07.03 Tisdag:
-	mobila gränssnittet:
-		* lagt dit lite mer grafik från anneli (info knapp + några till rubriker), jag tror att all grafik är på plats nu
-		* lagt upp nya nummer till surftalk
-
-	webbgränssnittet:
-		* visar ej matchmaking på profil om man ej är inloggad
-		* lagt dit advertising.com banners
-		* fixat så att "ålder" dropdown och "sök" knapp visas på sök användare-sidorna
-
-	script:
-		* vip-updatering script som körs varje natt ignorerar nu admins, så evalena & bitte får behålla admin nu
-
-
+---mailat ovanstående---
 
 ***************************************************************************************************
 webbgränssnitt:
@@ -38,7 +7,6 @@ webbgränssnitt:
 	* "någon vill prata med dig" i toppnav
 
 	buggar:
-		- fortfarande en counter bugg på webbsajten. "brev" counter fuckar upp ibland. händer det när någon besöker min profil???
 		- räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
 		- ajax chat-historik strular. för vipmedlemmar så upprepar sig chatthistoriken hela tiden. löst genom att stänga av historik
 		- ajax chatten slutar ibland att fungera efter ett tag
