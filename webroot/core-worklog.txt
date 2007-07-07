@@ -1,6 +1,10 @@
 ----[[platform todo]]----
 	core/gör snart:
 
+	adblock:
+		- konvertera "report site" funktionen till att använda functions_feedback.php
+		- spara statistik för subscription downloads
+
 
 	forum:
 		- för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
@@ -180,9 +184,6 @@
 
 
 --------------[[projekt todo]]--------------
-	adblock:
-		- konvertera "report site" funktionen till att använda functions_feedback.php
-
 
 	lyrics:
 		- edit_record.php: kunna editera recordInfo
@@ -197,6 +198,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.07.07
+	- adblockrules.org är öppnad
+
+
 2007.06.26
 	- lite js/css cleanup
 	- files: stöd för php_id3 extension för att visa file info om mp3-filer

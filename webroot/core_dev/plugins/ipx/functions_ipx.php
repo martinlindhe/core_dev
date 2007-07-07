@@ -11,9 +11,9 @@
 	define('VIP_LEVEL1',	2);	//Normal VIP
 	define('VIP_LEVEL2',	3);	//VIP delux
 
-	$config['sms']['originating_number'] = '72777';
-	$config['sms']['auth_username'] = 'lwcg';
-	$config['sms']['auth_password'] = '3koA4enpE';
+	$config['sms']['originating_number'] = '123';
+	$config['sms']['auth_username'] = '';
+	$config['sms']['auth_password'] = '';
 
 	//set $tariff & $reference to charge a previous MT-SMS. requires the originating_number to be configured for MT billing
 	function sendSMS($dest_number, $msg, $from_number = '', $tariff = 'SEK0', $reference = '#NULL#')

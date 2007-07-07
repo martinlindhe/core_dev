@@ -301,7 +301,7 @@
 		$hour			= date('H');
 
 		$cache_file = $config['adblock']['cachepath'].'adblockfilters'.$type_ext.'.txt';
-
+		
 		if ($config['debug']) {
 			$str = 'Downloaded ruleset '.$cache_file.' ('.$requestType.')';
 			$session->log($str);
