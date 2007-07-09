@@ -7,13 +7,13 @@
 	echo createMenu($admin_menu, 'blog_menu');
 	echo createMenu($super_admin_menu, 'blog_menu');
 
-	$supported_apache = array('2.2.3', '2.2.4');
+	$supported_apache = array('1.3.37', '2.2.4');
 
 	$supported_php = array('5.2.0', '5.2.99');	//PHP 5.2.x is the current version for target of development
 	$supported_php_gd = array('2.0', '2.0.34');
 	$supported_php_apc = array('3.0.14', '3.0.15');
 
-	$supported_mysql = array('5.0.36', '5.1.17');
+	$supported_mysql = array('4.1.15', '5.1.17');	//afaik no 5.x specific features are used
 
 	/* Returns true if $curr_ver is in the range of $ver_range */
 	function version_compare_array($ver_range, $curr_ver)

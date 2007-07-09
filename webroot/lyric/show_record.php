@@ -65,20 +65,17 @@
 		}
 		else if ($session->id)
 		{
-			if ($i == count($list)-1) {
-				echo '<td bgcolor="#802040">';
-			} else {
-				echo '<td colspan="3" bgcolor="#802040">';
-			}
+			echo '<td colspan="3" bgcolor="#802040">';
+
 			echo '<a href="add_lyric.php?record='.$record_id.'&amp;track='.$track.'">Add lyric</a> | ';
 			echo '<a href="add_cover.php?record='.$record_id.'&amp;track='.$track.'">Add cover</a> | ';
 			echo '<a href="link_with_existing_lyric.php?record='.$record_id.'&amp;track='.$track.'">Link to existing</a>';
 			echo '</td>';
-			if ($i == count($list)-1) {
-				echo '<td colspan="2" align="right">';
-				echo '<a href="remove_track.php?record='.$record_id.'&amp;track='.$track.'">Remove</a>';
-				echo '</td>';
-			}
+			
+			echo '<td colspan="2" align="right">';
+			echo '<a href="remove_track.php?record='.$record_id.'&amp;track='.$track.'">Remove</a>';
+			echo '</td>';
+
 		} else {
 			echo '<td>&nbsp;</td>';
 		}

@@ -22,6 +22,8 @@
 	echo '<table summary="" cellpadding="3" cellspacing="0" border="1" width="100%">';
 	echo '<tr><td class="subtitle">';
 
+	$lyric = nl2br(htmlspecialchars($lyric));
+
 	if (isset($highlight)) {
 		$lyric = str_ireplace($highlight, '<font color="yellow">'.$highlight.'</font>', $lyric);
 		$lyric_name = str_ireplace($highlight, '<font color="yellow">'.$highlight.'</font>', $lyric_name);
@@ -33,7 +35,7 @@
 	if ($session->id) echo '<td width="30" align="right"><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td></tr>';
 	echo '<tr><td colspan="2">';
 
-	echo nl2br(htmlspecialchars($lyric));
+	echo $lyric;
 	echo '</td></tr>';
 	echo '</table>';
 	echo '<br/>';
