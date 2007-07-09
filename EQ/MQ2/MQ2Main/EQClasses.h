@@ -1419,7 +1419,7 @@ EQLIB_OBJECT class CXStr CComboWnd::GetCurChoiceText(void)const;
 EQLIB_OBJECT int CComboWnd::GetCurChoice(void)const;
 EQLIB_OBJECT int CComboWnd::GetItemCount(void);
 EQLIB_OBJECT void CComboWnd::DeleteAll(void);
-EQLIB_OBJECT void CComboWnd::InsertChoice(class CXStr *);
+EQLIB_OBJECT void CComboWnd::InsertChoice(class CXStr *,unsigned long);
 EQLIB_OBJECT void CComboWnd::InsertChoice(char *);
 EQLIB_OBJECT void CComboWnd::SetChoice(int);
 EQLIB_OBJECT void CComboWnd::SetColors(unsigned long,unsigned long,unsigned long);

@@ -1,3 +1,7 @@
+6 July 2007 by ieatacid, rswiders
+- Updated for July 5th patch
+- Some of the text coloring was removed from MQ2ItemDisplay since EQ now colors the item name green or red if you can or can't use the item (EQ also handles this text differently now).
+
 17 June 2007 by ieatacid
 - '/click left <x> <y>' works again.  It's now possible to
   click tradeskill containers and ground spawns.  This only

@@ -5621,6 +5621,12 @@ bool BuffStackTest(PSPELL aSpell, PSPELL bSpell){
     return true;
 } 
 
+float GetMeleeRange(class EQPlayer *a,class EQPlayer *b)
+{
+	//temporary
+	return 14.0f;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Functions that were built into commands and people used DoCommand to execute                  //
 void AttackRanged(EQPlayer *pRangedTarget)

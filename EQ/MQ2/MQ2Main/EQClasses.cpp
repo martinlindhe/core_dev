@@ -116,7 +116,7 @@ class CScreenPieceTemplate *  CSidlManager::FindScreenPieceTemplate(char *str)
 }
 void  CComboWnd::InsertChoice(char *str)
 {
-    InsertChoice(&CXStr(str));
+    InsertChoice(&CXStr(str),0);
 }
 
 int  CListWnd::AddString(char *p1, unsigned long p2, unsigned __int32 p3, class CTextureAnimation const *p4)
@@ -8341,7 +8341,7 @@ FUNCTION_AT_ADDRESS(class CXRect  CComboWnd::GetListRect(void)const ,CComboWnd__
 FUNCTION_AT_ADDRESS(void  CComboWnd::SetColors(unsigned long,unsigned long,unsigned long),CComboWnd__SetColors);
 #endif
 #ifdef CComboWnd__InsertChoice
-FUNCTION_AT_ADDRESS(void  CComboWnd::InsertChoice(class CXStr *),CComboWnd__InsertChoice);
+FUNCTION_AT_ADDRESS(void  CComboWnd::InsertChoice(class CXStr *, unsigned long),CComboWnd__InsertChoice);
 #endif
 #ifdef CComboWnd__SetChoice
 FUNCTION_AT_ADDRESS(void  CComboWnd::SetChoice(int),CComboWnd__SetChoice);
