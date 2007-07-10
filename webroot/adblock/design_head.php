@@ -41,6 +41,8 @@
 	}
 	createMenu($menu);
 ?>
+<br/>
+<a href="http://www.nosoftwarepatents.com/" target="_blank"><img src="gfx/nswpat80x15.gif"></a>
 </div>
 
 <div id="middle">

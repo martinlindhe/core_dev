@@ -2,6 +2,8 @@
 	core/gör snart:
 
 	adblock:
+		- fixa "cant find config path"!!! gör att admin strular + kan inte adda news!!!!
+		- fixa news modulen så den inte kräver tblUserdata, tblPolls om de ej är aktiverade
 		- konvertera "report site" funktionen till att använda functions_feedback.php
 		- spara statistik för subscription downloads
 
