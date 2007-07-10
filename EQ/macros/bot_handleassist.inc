@@ -33,62 +33,62 @@ Sub Event_HANDLE_BotAssist(string Line, int spawnId)
 	}
 /return
 
-#event HANDLE_Summoned	"You have been summoned!"
+#event HANDLE_Summoned "You have been summoned!"
 Sub Event_HANDLE_Summoned(string Line)
 	/if (${Me.Casting.ID}) {
-		/call DebugMsg "# I was summoned! - Ducking spell"
+		/call DebugMsg "I was summoned! - Ducking spell"
 		/keypress d
 		/delay 1
 		/keypress d
 	} else {
 		/if (${Target.Distance} < 1) {
 			|Moves back enough to do melee damage
-			/call DebugMsg "# I was summoned - backing out"
+			/call DebugMsg "I was summoned - backing out"
 			/keypress back hold
 			/timed 1 /keypress back
 		} else {
-			/call DebugMsg "# I was summoned!"
+			/call DebugMsg "I was summoned!"
 		}
 	}
 	/varset timerNuke 5s
 /return
 
 | ENC/74 Wake of Subdual
-#Event HANDLE_MobMezzed "#1# gazes happily into space."
+#event HANDLE_MobMezzed "#1# gazes happily into space."
 Sub Event_HANDLE_MobMezzed(string Line, string Name)
 	/if (${Spawn[${Name}].Type.Equal["NPC"]}) {
-		/call DebugMsg ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS MEZZED!!!!
+		/call DebugMsg "${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS MEZZED!!!!"
 		/popup ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS MEZZED!
 
 		/if (${Spawn[${Name}].ID} == ${currentSpawn}) {
-			/call DebugMsg ABORTING KILL LOOP cos current target is mezzed
+			/call DebugMsg "ABORTING KILL LOOP cos current target is mezzed"
 			/varset AbortLoop 1
 		}
 	}
 /return
 
 | ENC/75  Dyn'leth's Whispers
-#Event HANDLE_MobCharmed "#1# is charmed."
+#event HANDLE_MobCharmed "#1# is charmed."
 Sub Event_HANDLE_MobCharmed(string Line, string Name)
 	/if (${Spawn[${Name}].Type.Equal["NPC"]}) {
-		/call DebugMsg ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS CHARMED!!!!
+		/call DebugMsg "${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS CHARMED!!!!"
 		/popup ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS CHARMED!
 		/if (${Spawn[${Name}].ID} == ${currentSpawn}) {
-			/call DebugMsg ABORTING KILL LOOP cos current target is charmed
+			/call DebugMsg "ABORTING KILL LOOP cos current target is charmed"
 			/varset AbortLoop 1
 		}
 	}
 /return
 
-#Event HANDLE_MobInterrupted "#1#'s casting is interrupted!"
+#event HANDLE_MobInterrupted "#1#'s casting is interrupted!"
 Sub Event_HANDLE_MobInterrupted(string Line, string Name)
 	/if (${Spawn[${Name}].Type.Equal["NPC"]}) {
-		/call DebugMsg ${Name} [${Spawn[npc ${Name}].Class.ShortName}] interrupted
+		/call DebugMsg "${Name} [${Spawn[npc ${Name}].Class.ShortName}] interrupted"
 	}
 /return
 
 Sub WaitForTargetHP(int pct)
-	/call DebugMsg "# Debug: I called WaitForTargetHP but shouldnt use it!"
+	/call DebugMsg "!!!!!!!!!!! Debug: I called WaitForTargetHP but shouldnt use it!"
 
 	:Loop
 	/if (!${Target.ID}) {
@@ -102,17 +102,17 @@ Sub WaitForTargetHP(int pct)
 /return
 
 
-#event DEBUFF_FailedSnare			"Your target is immune to changes in its run speed."
+#event DEBUFF_FailedSnare "Your target is immune to changes in its run speed."
 Sub Event_DEBUFF_FailedSnare(string Line)
 	/varset mobSnareImmune 1
 /return
 
 
-#event DEBUFF_NotTakeHold			"Your spell did not take hold."
+#event DEBUFF_NotTakeHold "Your spell did not take hold."
 Sub Event_DEBUFF_NotTakeHold(string Line)
 	/varset mobNotTakeHold 1
 	/varset AbortLoop 1
-	/call DebugMsg "note: not take hold on ${Target.CleanName}"
+	/call DebugMsg "Not take hold on ${Target.CleanName}"
 /return
 
 Sub Init_HandleAssist
