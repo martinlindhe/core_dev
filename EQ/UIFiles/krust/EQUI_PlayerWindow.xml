@@ -446,9 +446,9 @@ todo: visa average resists etc
 		</Size>
 		<EQType>2</EQType>
 		<TextColor>
-			<R>0</R>
-			<G>0</G>
-			<B>255</B>
+			<R>34</R>
+			<G>141</G>
+			<B>240</B>
 		</TextColor>
 		<NoWrap>true</NoWrap>
 		<AlignCenter>false</AlignCenter>
@@ -566,9 +566,9 @@ todo: visa average resists etc
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
 		<FillTint>
-				<R>0</R>
-				<G>0</G>
-				<B>240</B>
+			<R>34</R>
+			<G>141</G>
+			<B>240</B>
 		</FillTint>
 		<LinesFillTint>
 				<R>0</R>

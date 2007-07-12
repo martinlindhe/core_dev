@@ -798,7 +798,7 @@
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
 		<Style_Checkbox>true</Style_Checkbox>
-		<Text>Pet Window Popup</Text>
+		<Text>Pet Window Auto-Popup</Text>
 		<TextColor>
 			<R>255</R>
 			<G>255</G>
