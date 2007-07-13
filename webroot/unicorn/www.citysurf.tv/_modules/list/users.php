@@ -23,7 +23,25 @@
 		<input type="hidden" name="p" value="0" />
 
 		<table cellspacing="0" class="mrg" summary=""><tr>
-			<td style="padding-right: 30px;">alias:<br /><input type="text" class="txt" style="width: 170px;" name="alias" value="<?=secureOUT($result['alias'])?>" /></td>
+			<td style="padding-right: 30px;">
+				alias:<br />
+				<input type="text" class="txt" style="width: 170px;" name="alias" value="<?=secureOUT($result['alias'])?>" /><br/>
+
+				ålder:<br />
+				<select name="age" class="txt" onchange="this.form.submit();">
+				<option value="0"<?=(!$result['age'])?' selected':'';?>>alla åldrar</option>
+				<option value="1"<?=($result['age'] == '1')?' selected':'';?>>mellan 0-20 år</option>
+				<option value="2"<?=($result['age'] == '2')?' selected':'';?>>mellan 21-25 år</option>
+				<option value="3"<?=($result['age'] == '3')?' selected':'';?>>mellan 26-30 år</option>
+				<option value="4"<?=($result['age'] == '4')?' selected':'';?>>mellan 31-35 år</option>
+				<option value="5"<?=($result['age'] == '5')?' selected':'';?>>mellan 36-40 år</option>
+				<option value="6"<?=($result['age'] == '6')?' selected':'';?>>mellan 41-45 år</option>
+				<option value="7"<?=($result['age'] == '7')?' selected':'';?>>mellan 46-50 år</option>
+				<option value="8"<?=($result['age'] == '8')?' selected':'';?>>mellan 51-55 år</option>
+				<option value="9"<?=($result['age'] == '9')?' selected':'';?>>56 år och äldre</option>
+				</select>
+
+			</td>
 			<td style="padding-right: 30px;">bor i:<br />
 				<select class="txt" name="lan" onchange="this.form.submit();" style="width: 170px;">
 				<option value="0">alla län</option><? optionLan($result['lan']) ?>
@@ -43,22 +61,8 @@
 				<input type="radio" class="chk" name="sex" value="M" id="s_m" onclick="this.form.submit();"<?=($result['sex'] == 'M')?' checked="checked"':'';?>/><label for="s_m"> killar</label><br />
 				<input type="radio" class="chk" name="sex" value="F" id="s_f" onclick="this.form.submit();"<?=($result['sex'] == 'F')?' checked="checked"':'';?>/><label for="s_f"> tjejer</label>
 			</td>
-			<td>ålder:<br />
-				<select name="age" class="txt" onchange="this.form.submit();">
-				<option value="0"<?=(!$result['age'])?' selected':'';?>>alla åldrar</option>
-				<option value="1"<?=($result['age'] == '1')?' selected':'';?>>mellan 0-20 år</option>
-				<option value="2"<?=($result['age'] == '2')?' selected':'';?>>mellan 21-25 år</option>
-				<option value="3"<?=($result['age'] == '3')?' selected':'';?>>mellan 26-30 år</option>
-				<option value="4"<?=($result['age'] == '4')?' selected':'';?>>mellan 31-35 år</option>
-				<option value="5"<?=($result['age'] == '5')?' selected':'';?>>mellan 36-40 år</option>
-				<option value="6"<?=($result['age'] == '6')?' selected':'';?>>mellan 41-45 år</option>
-				<option value="7"<?=($result['age'] == '7')?' selected':'';?>>mellan 46-50 år</option>
-				<option value="8"<?=($result['age'] == '8')?' selected':'';?>>mellan 51-55 år</option>
-				<option value="9"<?=($result['age'] == '9')?' selected':'';?>>56 år och äldre</option>
-				</select>
-			</td>
 		</tr></table>
-		<input type="submit" class="btn2_sml r" value="sök" /><br class="clr" />
+		<input type="submit" class="btn2_sml" value="sök" /><br class="clr" /><br/><br/>
 		</form>
 	</div>
 

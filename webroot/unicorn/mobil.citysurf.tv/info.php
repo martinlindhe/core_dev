@@ -7,7 +7,9 @@
 ?>
 <br/>
 <div class="mid_content">
-info...
+ Har du frågor eller problem med mobila Citysurf. Maila oss under tyck till på www.citysurf.tv<br/>
+ <br/>
+ Eller maila direkt till en webmaster online.
 </div>
 <?
 	require('design_foot.php');

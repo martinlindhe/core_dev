@@ -4,7 +4,10 @@
 
 	if (empty($s['id_id'])) {
 
-		echo '<a href="login.php">LOGGA IN</a><br/>';
+		echo '<a href="login.php">LOGGA IN</a><br/><br/>';
+
+		echo 'Välkommen till första versionen av Citysurf i mobilen. Vi tar gärna emot synpunkter via tyck till på Huvudsajten.<br/>';
+
 	} else {
 		echo '<a href="relations.php"><img src="gfx/btn_friends.png" alt="Vänner" width="44" height="44"/></a>&nbsp;';
 		echo '<a href="users_last_online.php"><img src="gfx/btn_online.png" alt="Senast online" width="44" height="44"/></a>&nbsp;';

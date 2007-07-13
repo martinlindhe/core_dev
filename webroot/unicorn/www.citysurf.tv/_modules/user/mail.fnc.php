@@ -166,26 +166,24 @@
 
 	function sendMail($_to_name, $_cc_name, $_title, $_text, $allowed_html = '', $is_answer = false)
 	{
-		global $sql, $user, $l, $t, $user;
-		
-		$error = '';
+		global $sql, $user, $l, $user;
 		
 		$_text = strip_tags($_text, $allowed_html);
 		$ins_to = getUserIdFromAlias($_to_name);
 		if (!$ins_to) {
-			$error = 'Felaktig mottagare!';
-		} elseif($ins_to == $l['id_id']) {
-			$error = 'Du kan inte skicka till dig själv.';
+			return 'Felaktig mottagare!';
+		} else if($ins_to == $l['id_id']) {
+			return 'Du kan inte skicka till dig själv.';
 		}
-		/*if(!$error && !$isAdmin) {
-			$isBlocked = $sql->queryResult("SELECT rel_id FROM {$t}block WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($ins_to)."' LIMIT 1");
+		/*if(!$isAdmin) {
+			$isBlocked = $sql->queryResult("SELECT rel_id FROM s_block WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($ins_to)."' LIMIT 1");
 			if($isBlocked) { if($isBlocked == 'u') popupACT('Du har blockerat personen.'); else popupACT('Du är blockerad.'); }
 		}*/
-		if (!$error && !empty($_cc_name)) {
+		if (!empty($_cc_name)) {
 			$ins_cc = getUserIdFromAlias($_cc_name);
 			if($ins_cc && $ins_cc != $l['id_id'] && $ins_cc != $ins_to) {
 				if (!$user->blocked($ins_cc, 3)) {
-					$res = $sql->queryInsert("INSERT INTO {$t}usermail SET
+					$res = $sql->queryInsert("INSERT INTO s_usermail SET
 					user_id = '".$ins_cc."',
 					sender_id = '".$l['id_id']."',
 					status_id = '1',
@@ -199,9 +197,8 @@
 				}
 			}
 		}
-		if ($error) return $error;
 		
-		$res = $sql->queryInsert("INSERT INTO {$t}usermail SET
+		$res = $sql->queryInsert("INSERT INTO s_usermail SET
 		user_id = '".$ins_to."',
 		sender_id = '".$l['id_id']."',
 		status_id = '1',

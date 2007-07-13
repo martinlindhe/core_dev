@@ -825,3 +825,58 @@
 		
 	M2W:
 		* försöker sätta upp ordentlig ffserver streaming demo
+
+2007.07.09 Måndag:
+
+	webgränssnittet:
+		* listar ej privata bloggar på startsidan
+		* ändrat VIP: nu kan vip se thumbnails i gallerier åxå (tidigare bara vip delux), kallas "zoom på alla bilder" på vip-listan
+		* ändrat VIP: vanliga VIP användare kan nu skriva privata gästboksinlägg
+
+	streaming trix:
+		* lyckats få in video från mobiltelefonen i linux
+
+2007.07.10 Tisdag:
+	webbgränssnittet:
+		* uppdaterat vip statuslistan
+		* hjälp några användare med att ändra ålder och annat
+		* fixat buggen som gjorde att "någon vill prata med dig" inte gick att få bort pga blockerade users
+		* gjort en ny "nån vill prata med dig" indikator med en animerad gif
+
+	mobila gränssnittet:
+		* lite designpill från evalena
+		* mobil inloggning är nu inte case sensitive, förenklar inloggning från mobiltelefoner
+
+	streaming trix:
+		* lyckats tuna in digital tv in i linux
+
+2007.07.11 Onsdag:
+
+	konfigurering:
+		* fix med mail.citysurf.tv så att det går att skicka utgående mail
+		
+	en massa M2W planering och annat jag inte skrivit ner :P
+
+2007.07.12 Torsdag:
+
+	webbgränssnittet:
+		* admin: tog bort den stressiga login-timern
+		* lagt till ORDENTLIG och TYDLIG och LÄTTHITTAD information om hur man uppgraderar sej själv till vip/vip delux under "inställningar -> VIP"
+		* admin: rensat upp layouten en del så att man ser mer info samtidigt
+		* gjort webmaster_mentori CREW admin förrutom han kan inte se lösenord
+		* gett en massa webmasters access till admin
+		
+	M2W:
+		* trixat med transcoding parametrar för qcif-kvalitet-streaming
+
+2007.07.13 Fredag:
+
+	mobila gränssnittet:
+		* fixade så att "senast användare online" laddas SNABBT!
+
+	config:
+		* pillat med ipcheck verktyget som mika satte upp så kiano & jag får mail åxå
+
+	M2W:
+		* skissat på upplägg
+-----[mailat ovanstående]----

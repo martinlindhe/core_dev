@@ -1,12 +1,13 @@
 
----mailat ovanstående---
 
 ***************************************************************************************************
-webbgränssnitt:
-	* skriv kort dok. som beskriver hur backupskript körs osv
-	* "någon vill prata med dig" i toppnav
+mobilgränssnittet:
+	* -
 
-	buggar:
+webbgränssnitt:
+	* -
+
+webgränssnitt kända buggar:
 		- räknare ska uppdateras i admin-sidor, när admin t.ex tar bort en uppladdad bild så ska räknare minskas
 		- ajax chat-historik strular. för vipmedlemmar så upprepar sig chatthistoriken hela tiden. löst genom att stänga av historik
 		- ajax chatten slutar ibland att fungera efter ett tag
@@ -14,9 +15,7 @@ webbgränssnitt:
 		- blockera användare: efter blockering så finns fortfarande den blockerade användaren på ens kompislista
 		- admin: funktioner som inloggad admin ej har access till ska inte visas, t.ex "blockera användare"
 		- mms-galleri upload ökar inte userns galleri counter
-
-mobilgränssnittet:
-	* ej case sensitive user/pwd på mobil login
+		- skicka mail funkar ej för apple safari användare, nåt javascript problem
 
 
 blandat:
@@ -34,6 +33,8 @@ senare, låg prio:
 	- rating på bilder i galleriet, med atom_rating.php
 	- bloggar. kunna välja "Publicera för alla", visas då på utloggad startsida
 	- vip-funktion: kunna se vem som läst dina bloggar, tittat på dina bilder
+	- automatisk generering av trend statistik
+	- admins ska kunna skriva kommentarer om en användare
 
 	- bugg i filhantering: uploads med . i filnamnet klipps filändelse ut felaktigt vilket resulterar i att filen ej kan visas
 

@@ -94,7 +94,7 @@ isLoaded = true;
 		if(scc_c > 0) { string[string.length] = '<a href="obj.php?t&status=scc" target="<?=FRS?>main" class="wht">VISDOM <span class="txt_look">'+scc_c+'</span></a>'; }
 		if(scg_c > 0) { string[string.length] = '<a href="obj.php?t&status=scc" target="<?=FRS?>main" class="wht">INGEN VISDOM IDAG</a>'; }
 		if(parent.<?=FRS?>head && parent.<?=FRS?>head.isLoaded) {
-			parent.<?=FRS?>head.document.getElementById('top_lnks').innerHTML = string.join('<br />');
+			parent.<?=FRS?>head.document.getElementById('top_lnks').innerHTML = string.join(' | ');
 		}
 
 		top.document.title = title + '<?=$title?>AMS';
@@ -118,22 +118,14 @@ isLoaded = true;
 </script>
 <base target="_parent">
 </head>
-<body onload="getINFO();" style="height: 40px; margin: 0 10px 0 10px; padding: 0; background: #000;">
+<body onload="getINFO();" style="margin: 2px 10px 0 10px; padding: 0; background: #000;">
 <form name="page_edit" action="top.php" method="post" target="<?=FRS?>head">
 	<input type="hidden" name="page" value="<?=$page?>">
 </form>
 <table width="100%">
 <tr>
-	<td style="padding-top: 12px;" class="txt_wht"><a href="javascript:getINFO();" target="_self" id="reloader" onclick="this.blur();" title="Ladda om">LADDA OM</a> | <b><?=strtoupper($_SESSION['u_n'])?></b> - <b><?=$_SESSION['u_l']?></b><?/* | Startsida: <select name="page" title="Startsida" style="margin: 0 0 0 0; padding: 0;" onchange="document.page_edit.page.value = this.value; document.page_edit.submit();">
-<?
-	foreach($pages as $val) {
-		$selected = ($page == $val)?' selected':'';
-		echo '<option value="'.$val.'"'.$selected.'>'.$t_pages[$val].'</option>';
-	}
-?>
-		</select><?*/?>
-	</td>
-	<td style="padding-top: 12px;" class="wht" align="right">ONLINE: <span class="bld" id="onlstr"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?check">LOGGA UT</a></td>
+	<td class="txt_wht"><a href="javascript:getINFO();" target="_self" id="reloader" onclick="this.blur();" title="Ladda om">LADDA OM</a> | <b><?=strtoupper($_SESSION['u_n'])?></b> - <b><?=$_SESSION['u_l']?></b></td>
+	<td class="wht" align="right">ONLINE: <span class="bld" id="onlstr"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?check">LOGGA UT</a></td>
 </tr>
 </table>
 </body>

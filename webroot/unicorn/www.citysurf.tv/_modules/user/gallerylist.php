@@ -3,7 +3,7 @@
 	dopaging($paging, l('user', 'gallery', $s['id_id'], '0').'p=', '', 'med', STATSTR);
 
 
-	$showall = $user->vip_check(VIP_LEVEL2);	//visa alla bilderna istället för klickbara rubriker (VIP Delux enbart)
+	$showall = $user->vip_check(VIP_LEVEL1);	//visa alla bilderna istället för klickbara rubriker (VIP Delux enbart)
 
 	$view = 0;	//aktuelll bild, för showall=true
 	$change = false;//redigera bilden?

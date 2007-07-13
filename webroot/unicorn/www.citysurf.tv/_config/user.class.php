@@ -15,8 +15,8 @@ class user {
 		if ($this->timeout('15 MINUTES') > @$_SESSION['data']['account_date']) {
 			$res = now();
 			$_SESSION['data']['account_date'] = $res;
-			$this->sql->queryUpdate("UPDATE {$this->t}user SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
-			$this->sql->queryUpdate("UPDATE {$this->t}useronline SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
+			$this->sql->queryUpdate("UPDATE s_user SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
+			$this->sql->queryUpdate("UPDATE s_useronline SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
 		}
 		$this->id = $id;
 		return $this->getsessionuser($id);
@@ -34,13 +34,18 @@ class user {
 		$info = $this->cachestr();
 		$_SESSION['data']['cachestr'] = $info;
 	}
+
 	function counterIncrease($type, $user) {
 		$c = $this->getinfo($user, $type.'_offset');
 		if(!$c) $c = 0;
 		$id = $this->setinfo($user, $type.'_offset', ($c+1));
-		if($id[0]) $this->setrel($id[1], 'user_head', $user);
-		@$_SESSION['data']['offsets'][$type.'_offset'] = ($c+1);
+
+		if ($id[0]) {
+			$this->setrel($id[1], 'user_head', $user);
+			@$_SESSION['data']['offsets'][$type.'_offset'] = ($c+1);
+		}
 	}
+
 	function obj_set($type, $rel = '', $user, $val = '') {
 		$id = $this->setinfo($user, $type, $val);
 		if($id[0]) $this->setrel($id[1], $rel, $user);
@@ -76,19 +81,19 @@ class user {
 		if($user == $this->id) $this->update_retrieve();
 	}
 	function setRelCount($uid) {
-		$rel_c = $this->sql->queryResult("SELECT COUNT(*) as count FROM {$this->t}userrelquest a INNER JOIN {$this->t}user u ON u.id_id = a.sender_id AND u.status_id = '1' WHERE a.user_id = '".secureINS($uid)."' AND a.status_id = '0'");
+		$rel_c = $this->sql->queryResult("SELECT COUNT(*) as count FROM s_userrelquest a INNER JOIN s_user u ON u.id_id = a.sender_id AND u.status_id = '1' WHERE a.user_id = '".secureINS($uid)."' AND a.status_id = '0'");
 		$id = $this->setinfo($uid, 'rel_count', $rel_c);
 		if($id[0]) $this->setrel($id[1], 'user_retrieve', $uid);
 	}
 	function get_cache() {
-		$arr = $this->sql->queryLine("SELECT u_picd, u_picid, u_picvalid FROM {$this->t}user WHERE id_id = '".$this->id."' LIMIT 1");
+		$arr = $this->sql->queryLine("SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '".$this->id."' LIMIT 1");
 		if(@$_SESSION['data']['u_picd'] != $arr[0]) @$_SESSION['data']['u_picd'] = $arr[0];
 		if(@$_SESSION['data']['u_picid'] != $arr[1]) @$_SESSION['data']['u_picid'] = $arr[1];
 		if(@$_SESSION['data']['u_picvalid'] != $arr[0]) @$_SESSION['data']['u_picvalid'] = $arr[2];
 		$_SESSION['data']['cachestr'] = $this->cachestr();
 	}
 	function fix_img() {
-		$arr = $this->sql->queryLine("SELECT u_picd, u_picid, u_picvalid FROM {$this->t}user WHERE id_id = '".$this->id."' LIMIT 1");
+		$arr = $this->sql->queryLine("SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '".$this->id."' LIMIT 1");
 		if(@$_SESSION['data']['u_picd'] != $arr[0]) @$_SESSION['data']['u_picd'] = $arr[0];
 		if(@$_SESSION['data']['u_picid'] != $arr[1]) @$_SESSION['data']['u_picid'] = $arr[1];
 		if(@$_SESSION['data']['u_picvalid'] != $arr[0]) @$_SESSION['data']['u_picvalid'] = $arr[2];
@@ -103,16 +108,16 @@ class user {
 		foreach($info as $item) {
 			$str .= @($item[0]?$translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
 		}
-		$cha_c = $this->sql->queryResult("SELECT COUNT(DISTINCT(sender_id)) as count FROM {$this->t}userchat WHERE user_id = '".secureINS($id)."' AND user_read = '0'");
+		$cha_c = $this->sql->queryResult("SELECT COUNT(DISTINCT(sender_id)) as count FROM s_userchat WHERE user_id = '".secureINS($id)."' AND user_read = '0'");
 		if($cha_c > 0)
-			$cha_id = $this->sql->queryResult("SELECT c.sender_id FROM {$this->t}userchat c INNER JOIN {$this->t}user u ON u.id_id = c.sender_id AND u.status_id = '1' WHERE c.user_id = '".secureINS($id)."' AND c.user_read = '0' ORDER BY c.sent_date ASC LIMIT 1");
+			$cha_id = $this->sql->queryResult("SELECT c.sender_id FROM s_userchat c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = '1' WHERE c.user_id = '".secureINS($id)."' AND c.user_read = '0' ORDER BY c.sent_date ASC LIMIT 1");
 		else $cha_id = '';
 		if($cha_id) {
 			$str .= 'c:'.$cha_c.':'.$cha_id;
 		} else {
 			$str .= 'c:0:0';
 		}
-		$rel_onl = $this->sql->query("SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM {$this->t}userrelation rel INNER JOIN {$this->t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($id)."' AND u.account_date > '".$this->timeout(UO)."' ORDER BY u.u_alias");
+		$rel_onl = $this->sql->query("SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($id)."' AND u.account_date > '".$this->timeout(UO)."' ORDER BY u.u_alias");
 		$rel_s = '';
 		foreach($rel_onl as $row) {
 			$rel_s .= $row[0].'|'.rawurlencode($row[1]).'|'.$sex[$row[2]].$this->doage($row[3], 0).'|'.$this->dobirth($row[3]).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
@@ -122,7 +127,7 @@ class user {
 		return $str;
 	}
 	function isuser($id, $status = '1') {
-		return ($this->sql->queryResult("SELECT status_id FROM {$this->t}user WHERE id_id = '".secureINS($id)."' LIMIT 1") == $status)?true:false;
+		return ($this->sql->queryResult("SELECT status_id FROM s_user WHERE id_id = '".secureINS($id)."' LIMIT 1") == $status)?true:false;
 	}
 	function level($level, $allowed = '10') {
 		if(intval($level) >= intval($allowed)) return true; else return false;
@@ -130,7 +135,7 @@ class user {
 	function getuser($id, $more = '') {
 		if(@$_SESSION['c_i'] == $id) return $this->getsessionuser($id);
 		//removed u_picvalid because of a later validation instead of prevalidation.
-		$return = $this->sql->queryLine("SELECT status_id, id_id, u_alias, u_sex, u_picid, u_picd, u_picvalid, u_birth, level_id, account_date, u_pstlan_id, CONCAT(u_pstort, ', ', u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, beta $more FROM {$this->t}user WHERE id_id = '".secureINS($id)."' LIMIT 1", 1);
+		$return = $this->sql->queryLine("SELECT status_id, id_id, u_alias, u_sex, u_picid, u_picd, u_picvalid, u_birth, level_id, account_date, u_pstlan_id, CONCAT(u_pstort, ', ', u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, beta $more FROM s_user WHERE id_id = '".secureINS($id)."' LIMIT 1", 1);
 		return ($return && $return['status_id'] == '1')?$return:false;
 	}
 	function getsessionuser($id) {
@@ -138,23 +143,23 @@ class user {
 	}
 	function getuserfill($arr, $line = '*') {
 		if($line != '*') $line = substr($line, 2);
-		$return = $this->sql->queryLine("SELECT $line FROM {$this->t}user WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1", 1);
+		$return = $this->sql->queryLine("SELECT $line FROM s_user WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1", 1);
 		return ($return)?array_merge($arr, $return):$arr;
 	}
 	function getuserfillfrominfo($arr, $line = '*') {
 		if($line != '*') $line = substr($line, 2);
-		$return = $this->sql->queryLine("SELECT $line FROM {$this->t}userinfo WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1", 1);
+		$return = $this->sql->queryLine("SELECT $line FROM s_userinfo WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1", 1);
 		return ($return)?array_merge($arr, $return):$arr;
 	}
 	function info($id, $level = '1') {
 		switch($level) {
 		case '1':
-			return $this->sql->queryAssoc("SELECT u_email, u_pstnr, u_subscr, u_fname, u_sname, u_street, u_cell FROM {$this->t}user WHERE id_id = '".secureINS($id)."' LIMIT 1");
+			return $this->sql->queryAssoc("SELECT u_email, u_pstnr, u_subscr, u_fname, u_sname, u_street, u_cell FROM s_user WHERE id_id = '".secureINS($id)."' LIMIT 1");
 		break;
 		}
 	}
 	function blocked($uid, $type = 1) {
-		$isBlocked = $this->sql->queryResult("SELECT rel_id FROM {$this->t}userblock WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($uid)."' LIMIT 1");
+		$isBlocked = $this->sql->queryResult("SELECT rel_id FROM s_userblock WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($uid)."' LIMIT 1");
 		if($isBlocked) {
 			if($isBlocked == 'u') {
 				if($type == 1)
@@ -178,9 +183,9 @@ class user {
 		global $isAdmin;
 		if($id == $this->id) return true;
 		if($noadmin)
-			return ($this->sql->queryResult("SELECT rel_id FROM {$this->t}userrelation WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($id)."' LIMIT 1"))?true:false;
+			return ($this->sql->queryResult("SELECT rel_id FROM s_userrelation WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($id)."' LIMIT 1"))?true:false;
 		else
-			return ($isAdmin || $this->sql->queryResult("SELECT rel_id FROM {$this->t}userrelation WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($id)."' LIMIT 1"))?true:false;
+			return ($isAdmin || $this->sql->queryResult("SELECT rel_id FROM s_userrelation WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($id)."' LIMIT 1"))?true:false;
 	}
 	function tagline($str) {
 		return secureOUT(ucwords(strtolower($str)));
@@ -250,8 +255,8 @@ class user {
 			if(empty($arr['account_date']) || !$this->isOnline($arr['account_date'])) {
 				$res = now();
 				$_SESSION['data']['account_date'] = $res;
-				$this->sql->queryUpdate("UPDATE {$this->t}user SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
-				$this->sql->queryUpdate("UPDATE {$this->t}useronline SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE s_user SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
+				$this->sql->queryUpdate("UPDATE s_useronline SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
 				$arr['account_date'] = $res;
 			}
 		}
@@ -368,13 +373,13 @@ class user {
 			if($type == 'BCT' || $type == 'PHT' || $type == 'BCA' || $type == 'PHA' || $type == 'COM') $type = 'CMT';
 			if($type == 'MOV') $type = 'GAL';
 			if($type == 'DTH' || $type == 'KTH') $type = 'THO';
-			$this->sql->queryInsert("INSERT INTO {$this->t}userspy SET user_id = '".$user."', status_id = '1', spy_date = NOW(), msg_id = '".secureINS($info)."', link_id = '".@$url."', object_id = '$id', type_id = '$type'");
+			$this->sql->queryInsert("INSERT INTO s_userspy SET user_id = '".$user."', status_id = '1', spy_date = NOW(), msg_id = '".secureINS($info)."', link_id = '".@$url."', object_id = '$id', type_id = '$type'");
 			$c = $this->getinfo($user, 'spy_count');
 			if(!$c) $c = 0;
 			$this->setinfo($user, 'spy_count', ($c+1));
 		}
 */
-			$this->sql->queryInsert("INSERT INTO {$this->t}usermail SET
+			$this->sql->queryInsert("INSERT INTO s_usermail SET
 			user_id = '".$user."',
 			sender_id = 'SYS',
 			status_id = '1',
@@ -387,29 +392,29 @@ class user {
 			$this->notifyIncrease('mail', $user);
 	}
 	function getline($opt, $id) {
-		$res = $this->sql->queryResult("SELECT $opt FROM {$this->t}user WHERE id_id = '$id' LIMIT 1");
+		$res = $this->sql->queryResult("SELECT $opt FROM s_user WHERE id_id = '$id' LIMIT 1");
 		if(!$res) return false;
 		return $res;
 	}
 	function getinfo($id, $opt) {
-		return $this->sql->queryResult("SELECT content FROM {$this->t}obj WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
+		return $this->sql->queryResult("SELECT content FROM s_obj WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
 	}
 
 	function setinfo($id, $opt, $val) {
-		$res = $this->sql->queryLine("SELECT content, main_id FROM {$this->t}obj WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
+		$res = $this->sql->queryLine("SELECT content, main_id FROM s_obj WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
 		if(!$res[1]) {
-			$obj = $this->sql->queryInsert("INSERT INTO {$this->t}obj SET content = '".$val."', content_type = '$opt', owner_id = '$id', obj_date = NOW()");
+			$obj = $this->sql->queryInsert("INSERT INTO s_obj SET content = '".$val."', content_type = '$opt', owner_id = '$id', obj_date = NOW()");
 			$ret = array('1', $obj);
 		} else {
 			$ret = array('0', $res[1]);
-			$q = "UPDATE {$this->t}obj SET content = '".$val."', obj_date = NOW() WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1";
+			$q = "UPDATE s_obj SET content = '".$val."', obj_date = NOW() WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1";
 			$this->sql->queryUpdate($q);
 		}
 		return $ret;
 	}
 
 	function setrel($obj, $type, $id) {
-		$this->sql->queryInsert("INSERT INTO {$this->t}objrel SET obj_date = NOW(), content_type = '$type', object_id = '$obj', owner_id = '$id'");
+		$this->sql->queryInsert("INSERT INTO s_objrel SET obj_date = NOW(), content_type = '$type', object_id = '$obj', owner_id = '$id'");
 	}
 }
 

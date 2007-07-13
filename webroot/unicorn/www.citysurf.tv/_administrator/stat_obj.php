@@ -23,35 +23,37 @@ ob_start();
 'VISIT' => 'Unika besökare',
 'SPY' => 'Bevakningar',
 'BLOG' => 'Blogg',
-'BLOGCMT' => 'Bloggkommentarer',
+'BLOGCMT' => 'Bloggcmt',
 'BLOGVISIT' => 'Bloggbesök',
 'BLOGSPY' => 'Bevakade bloggar',
 'CHAT' => 'Chat',
-'MOVIE' => 'Filmer',
-'MOVIECMT' => 'Filmkommentarer',
-'MOVIEVISIT' => 'Filmvisn',
+//'MOVIE' => 'Filmer',
+//'MOVIECMT' => 'Filmkommentarer',
+//'MOVIEVISIT' => 'Filmvisn',
 'FORUM' => 'Forum',
 'PHOTO' => 'Foton',
-'PHOTOCMT' => 'Fotokommentarer',
+'PHOTOCMT' => 'Fotocmt',
 'PHOTOVISIT' => 'Fotovisn',
 'GB' => 'Gästbok',
 'LOGIN' => 'Inloggningar',
 'MAIL' => 'Mail',
-'CALENDAR' => 'Partyplanket',
-'RELATION' => 'Relationer',
+//'CALENDAR' => 'Partyplanket',
+//'RELATION' => 'Relationer',
 'THOUGHT' => 'Tyck till',
-'GALLERY' => 'Vimmelbilder',
-'GALLERYCMT' => 'Vimmelkommentarer',
-'GALLERYVIEW' => 'Vimmelvisn',
-'INSMS' => 'Uppgrad. SMS',
-'INTELE' => 'Uppgrad. TEL',
-'SENDVISIT' => 'Mail-läsare',
-'ISGOLD' => 'Antal GULD',
-'ISPIC' => 'Profilbilder',
-'MEMORY' => 'Memory',
-'SNAKE' => 'Snake'
+//'GALLERY' => 'Vimmelbilder',
+//'GALLERYCMT' => 'Vimmelkommentarer',
+//'GALLERYVIEW' => 'Vimmelvisn',
+//'INSMS' => 'Uppgrad. SMS',
+//'INTELE' => 'Uppgrad. TEL',
+//'SENDVISIT' => 'Mail-läsare',
+//'ISGOLD' => 'Antal GULD',
+//'ISPIC' => 'Profilbilder',
+//'MEMORY' => 'Memory',
+//'SNAKE' => 'Snake'
 	);
-$exceptions = array('ISGOLD','ISPIC','INSMS','INTELE','SENDVISIT');
+$exceptions = array(
+		'MOVIE', 'MOVIECMT', 'MOVIEVISIT', 'CALENDAR', 'GALLERY', 'GALLERYCMT', 'GALLERYVIEW', 'RELATION',
+		'ISGOLD','ISPIC','INSMS','INTELE','SENDVISIT');
 	#$sql->query("INSERT INTO s_logobject SET date_cnt = '".date("Y-m-d", strtotime("-".rand(1,4535)." DAYS"))."', data_s = '".serialize(array('GB' => rand(1, 12000), 'CHAT' => rand(44, 645645), 'MAIL' => rand(12, 534)))."'");
 	$res = $sql->query("SELECT date_cnt, data_s FROM {$t}logobject ORDER BY date_cnt DESC");
 	$todaydata = array();
@@ -96,10 +98,12 @@ function loadtop() {
 <input type="submit" class="inp_orgbtn hideme" value="UPPDATERA" onclick="document.location.href = 'update_levels.php?rtu';" style="width: 80px; margin: 11px 0 0 20px;"> Senast uppdaterad: <?=niceDate(gettxt('admin_latestupdate'))?>
 			<table cellspacing="2" style="margin: 5px 0 10px 0;">
 <?
- 	foreach($todaydata as $key => $row) {
+	foreach($todaydata as $key => $row) {
 		echo '<tr class="bg_gray nobr"><td class="pdg">'.specialDate($key).'</td>';
 		foreach($row as $name => $count)
-			echo '<td class="pdg nobr">'.((!empty($names[$name]))?$names[$name]:$name).':<br />'.(in_array($name, $exceptions)?'(T) ':'').'<b>'.$count.'</b></td>';
+			if (!in_array($name, $exceptions)) {
+				echo '<td class="pdg nobr">'.((!empty($names[$name]))?$names[$name]:$name).':<br /><b>'.$count.'</b></td>';
+		}
 	}
 ?>
 			</table>

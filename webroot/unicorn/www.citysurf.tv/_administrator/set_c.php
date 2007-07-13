@@ -41,7 +41,7 @@
 		$menu_NEWS = array('NYHETER' => 'news.php', 'NOTISER' => 'news_notice.php', 'ANNONSER' => 'adver.php', 'UTSKICK' => 'send.php', 'MASSMESS' => 'user_send.php', 'POLL' => 'poll.php', 'EDITORIAL' => 'editorial.php', 'TEXT' => 'text.php');
 	} else {
 		if(!empty($_SESSION['u_a'][1])) {
-		$ua = $sql->queryLine("SELECT city_id, pos_all FROM {$t}admin WHERE main_id = '".$_SESSION['u_i']."' LIMIT 1");
+		$ua = $sql->queryLine("SELECT city_id, pos_all FROM s_admin WHERE main_id = '".@$_SESSION['u_i']."' LIMIT 1");
 		if($ua[1] != $_SESSION['u_a'][1] || $ua[0] != $_SESSION['u_a'][0]) {
 			$_SESSION['u_a'][0] = $ua[0];
 			$_SESSION['u_a'][1] = $ua[1];

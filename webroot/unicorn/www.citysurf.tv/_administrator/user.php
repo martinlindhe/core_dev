@@ -640,17 +640,19 @@ if(this.value == \'3\' && this_status != \'3\') {
 		<tr>
 			<td><b>Banksaldo:</b><br><input type="text" class="inp_nrm" name="money_count" value="'.@secureOUT($row['money_count']).'"></td>
 			<td><b>SMS-saldo:</b><br><input type="text" class="inp_nrm" name="msg_count" value="'.@secureOUT($row['msg_count']).'"></td>
-		</tr>
-		<tr>
-			<td><b>Lösenord:</b><br><input type="text" class="inp_nrm" name="pass" value="'.secureOUT($row['u_pass']).'"></td>
+		</tr>';
+
+echo '<tr>';
+if ($_SESSION['u_u'] != 'webmaster_mentori') echo '<td><b>Lösenord:</b><br><input type="text" class="inp_nrm" name="pass" value="'.secureOUT($row['u_pass']).'"></td>';
+echo '
 			<td align="right"><input type="submit" class="inp_orgbtn" value="Uppdatera"></td>
 		</tr>
 		</table>
 			</td>
 			<td>
 		<table cellspacing="2">
-		<tr class="bg_gray"><td colspan="4" class="pdg bld">40 senaste händelser</td></tr>
-';
+		<tr class="bg_gray"><td colspan="4" class="pdg bld">40 senaste händelser</td></tr>';
+
 	$v_sql = $sql->query("SELECT sess_id, sess_ip, sess_date, type_inf FROM s_usersess WHERE id_id = '".secureINS($row['id_id'])."' ORDER BY main_id DESC LIMIT 40");
 $names = array('i' => 'in', 'o' => 'ut', 'f' => '<b>felaktig</b>');
 	foreach($v_sql as $val) {

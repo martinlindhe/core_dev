@@ -8,7 +8,7 @@
 		//Listar de senaste bloggarna
 		$q = "SELECT b.*,u.* FROM {$t}userblog b ".
 				"LEFT JOIN ${t}user u ON (b.user_id=u.id_id) ".
-				"ORDER BY b.blog_date DESC LIMIT 5";
+				"WHERE hidden_id='0' ORDER BY b.blog_date DESC LIMIT 5";
 		$res = $sql->query($q, 0, 1);
 		
 		if (count($res)) {

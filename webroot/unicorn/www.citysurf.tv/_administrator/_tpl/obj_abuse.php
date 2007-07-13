@@ -7,7 +7,7 @@
 		exit;
 	}
 
-	$q = 'SELECT * FROM s_userabuse';
+	$q = 'SELECT * FROM s_userabuse ORDER BY timeReported DESC';
 	$list = $sql->query($q, 0, 1);
 
 	require("./_tpl/obj_head.php");

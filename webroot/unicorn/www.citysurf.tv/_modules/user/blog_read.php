@@ -22,6 +22,7 @@
 		if($isAdmin && $res['hidden_id']) {
 			$beenhere = true;
 		} else {
+			if ($res['hidden_id']) die;
 			if(!$hidden) {
 				$visit = @$sql->queryUpdate("REPLACE INTO {$t}userblogvisit SET status_id = '1', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', blog_id = '".secureINS($res['main_id'])."'");
 				$beenhere = ($visit != '2')?false:true;

@@ -87,7 +87,8 @@
 		case 'jpeg':
 		case 'gif':
 		case 'png':
-			echo '<img onmousedown="blockRightClick(event)" src="/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext.'" class="cnti mrg" alt="" border="0"/>';
+			//echo '<img onmousedown="blockRightClick(event)" src="/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext.'" class="cnti mrg" alt="" border="0"/>';
+			echo '<img src="/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext.'" class="cnti mrg" alt="" border="0"/>';
 			break;
 			
 		default: die('ext '.$file_ext);

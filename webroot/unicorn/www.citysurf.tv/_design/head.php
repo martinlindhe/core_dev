@@ -85,10 +85,10 @@ function blockRightClick(event) {
 		<div id="leftMenu">
 
 			<div id="quickchat_indicator" style="display: none;">
-				<div class="smallHeader3">
+				<div class="quickchat_blink">
 					<h4 class="cur">Någon vill prata med dig!</h4>
 				</div>
-				<br/><br/>
+				<br/>
 			</div>
 <?
 	$contribute = $sql->queryLine("SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM {$t}contribute c LEFT JOIN {$t}user u ON u.id_id = c.con_user AND u.status_id = '1' WHERE c.con_onday = NOW() AND c.status_id = '1' LIMIT 1", 1);
@@ -160,6 +160,7 @@ $isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
 		</div>	<!-- end leftMenu -->
 
 <?
+//visar bred sida på startsida & sök
 	if (basename($_SERVER['REQUEST_URI']) == 'start') {		//fulhax av martin /hide
 		echo '<div id="bigContent">';
 	} else {
