@@ -9,17 +9,15 @@
 	if (isset($_POST['allowhtml']))		$allowHTML = 1;
 	if (isset($_POST['regrequire']))	$regRequire = 1;
 
-	if (!empty($_GET['remove'])) {
-		if (confirmed('Are you sure you want to delete this userdata field?', 'remove', $_GET['remove'])) {
-			//delete userdata field
-			removeUserdataField($_GET['remove']);
+	if (!empty($_GET['remove']) && confirmed('Are you sure you want to delete this userdata field?', 'remove', $_GET['remove'])) {
+		//delete userdata field
+		removeUserdataField($_GET['remove']);
 
-			require($project.'design_head.php');
-			echo createMenu($admin_menu, 'blog_menu');
-			echo 'Userdata field successfully deleted!<br/><br/>';
-			require($project.'design_foot.php');
-			die;
-		}
+		require($project.'design_head.php');
+		echo createMenu($admin_menu, 'blog_menu');
+		echo 'Userdata field successfully deleted!<br/><br/>';
+		require($project.'design_foot.php');
+		die;
 	}
 
 	require($project.'design_head.php');

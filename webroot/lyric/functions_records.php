@@ -4,21 +4,18 @@
 	function addRecord($band_id, $record_name, $record_info)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($band_id)) return false;
 
 		$record_name = $db->escape(trim($record_name));
 		$record_info = $db->escape(trim($record_info));
 
 		$q = 'INSERT INTO tblRecords SET recordName="'.$record_name.'",bandId='.$band_id.',recordInfo="'.$record_info.'",creatorId='.$session->id.',timeCreated=NOW()';
-
 		return $db->insert($q);
 	}
 
 	function createTracks($record_id, $tracks)
 	{
 		global $db;
-
 		if (!is_numeric($record_id) || !is_numeric($tracks)) return false;
 
 		for ($i=1; $i<=$tracks; $i++)
@@ -30,7 +27,6 @@
 	function getBandIdFromRecordId($record_id)
 	{
 		global $db;
-
 		if (!is_numeric($record_id)) return false;
 
 		return $db->getOneItem('SELECT bandId FROM tblRecords WHERE recordId='.$record_id);
@@ -40,7 +36,6 @@
 	function getRecordName($record_id)
 	{
 		global $db;
-
 		if (!is_numeric($record_id)) return false;
 
 		$name = $db->getOneItem('SELECT recordName FROM tblRecords WHERE recordId='.$record_id);
@@ -52,9 +47,9 @@
 	function getRecordTracks($record_id)
 	{
 		global $db;
-
 		if (!is_numeric($record_id)) return false;
 
+		//fixme: fixa queryn
 		$q  = 'SELECT tblTracks.*, tblLyrics.lyricName, tblLyrics.lyricText, tblLyrics.bandId AS authorId, tblBands.bandName FROM tblTracks ';
 		$q .= 'LEFT OUTER JOIN tblLyrics ON (tblTracks.lyricId=tblLyrics.lyricId) ';
 		$q .= 'LEFT OUTER JOIN tblBands ON (tblTracks.bandId=tblBands.bandId) ';
@@ -64,15 +59,13 @@
 		return $db->getArray($q);
 	}
 
-	function updateRecord($record_id, $record_name)
+	function updateRecord($record_id, $record_name, $record_info)
 	{
 		global $db;
-
 		if (!is_numeric($record_id)) return false;
 
-		$record_name = $db->escape($record_name);
-
-		$db->query('UPDATE tblRecords SET recordName="'.$record_name.'" WHERE recordId='.$record_id);
+		$q = 'UPDATE tblRecords SET recordName="'.$db->escape($record_name).'",recordInfo="'.$db->escape($record_info).'" WHERE recordId='.$record_id;
+		$db->query($q);
 		return true;
 	}
 
@@ -102,7 +95,6 @@
 	function addTrack($record_id)
 	{
 		global $db;
-
 		if (!is_numeric($record_id)) return false;
 
 		$q  = 'SELECT MAX(trackNumber) AS num,bandId FROM tblTracks ';
@@ -125,10 +117,9 @@
 	function getLyricBandName($lyric_id)
 	{
 		global $db;
-
 		if (!is_numeric($lyric_id)) return false;
 
-		$q = 'SELECT bandName FROM tblLyrics ';
+		$q  = 'SELECT bandName FROM tblLyrics ';
 		$q .= 'LEFT OUTER JOIN tblBands ON (tblLyrics.bandId=tblBands.bandId) ';
 		$q .= 'WHERE lyricId='.$lyric_id;
 
@@ -139,7 +130,6 @@
 	function getLyricBandId($lyric_id)
 	{
 		global $db;
-
 		if (!is_numeric($lyric_id)) return false;
 
 		return $db->getOneItem('SELECT bandId FROM tblLyrics WHERE lyricId='.$lyric_id);
@@ -149,7 +139,6 @@
 	function getRecordInfo($record_id)
 	{
 		global $db;
-
 		if (!is_numeric($record_id)) return false;
 
 		$info = $db->getOneItem('SELECT recordInfo FROM tblRecords WHERE recordId='.$record_id);
@@ -160,14 +149,12 @@
 	function getRecordData($record_id)
 	{
 		global $db;
-
 		if (!is_numeric($record_id)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName,t3.bandName FROM tblRecords AS t1 ';
 		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 		$q .= 'INNER JOIN tblBands AS t3 ON (t1.bandId=t3.bandId) ';
 		$q .= 'WHERE t1.recordId='.$record_id;
-
 		return $db->getOneItem($q);
 	}
 

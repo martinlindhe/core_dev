@@ -59,12 +59,12 @@
 
 	$list = getLyricsThatOtherCovers($band_id);
 	if (count($list)) {
-		echo 'The following songs have been covered by other bands:<br/>';
+		echo $band_name.' has been covered by the following artists:<br/>';
 
 		for ($i=0; $i<count($list); $i++) {
-			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.htmlspecialchars($list[$i]['bandName']).'</a> - ';
+			echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.htmlspecialchars($list[$i]['bandName']).'</a> made a cover of ';
 			echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'">'.htmlspecialchars($list[$i]['lyricName']).'</a>';
-			echo ' (On <a href="show_record.php?id='.$list[$i]['recordId'].'">'.htmlspecialchars($list[$i]['recordName']).'</a>, track #'.$list[$i]['trackNumber'].')<br/>';
+			echo ' (on <a href="show_record.php?id='.$list[$i]['recordId'].'">'.htmlspecialchars($list[$i]['recordName']).'</a>, track #'.$list[$i]['trackNumber'].')<br/>';
 		}
 		echo '<br/>';
 	}

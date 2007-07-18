@@ -1,9 +1,8 @@
 <?
-	require_once('config.php');
-
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
-
 	$record_id = $_GET['id'];
+
+	require_once('config.php');
 
 	$band_id = getBandIdFromRecordId($record_id);
 	if ($band_id) {

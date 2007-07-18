@@ -3,7 +3,6 @@
 	<ShortName>lyric search</ShortName>
 	<Description>Search lyrics</Description>
 	<Tags>lyric</Tags>
-	<Image height="16" width="16" type="image/vnd.microsoft.icon">http://87.227.76.225/favicon.ico</Image>
 	<Url type="text/html" template="http://87.227.76.225/lyric/search.php?s={searchTerms}" />
 	<Query role="example" searchTerms="cat" />
 </OpenSearchDescription>

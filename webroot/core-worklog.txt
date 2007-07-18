@@ -186,13 +186,10 @@
 
 
 --------------[[projekt todo]]--------------
+		- fixa så adminpanelen funkar ordentligt (pr ska ej skickas med, och vissa db tabeller ska ej accessas)
 
 	lyrics:
-		- edit_record.php: kunna editera recordInfo
-		- lista låtar som inte finns på nån skiva (admin)
-		- lista låtar som inte tillhör nåt band (t.ex ogiltigt bandId) (admin)
-		- admin: möjlighet att radera ett band
-		- bugg: textsök på svenska tecken funkar ej
+		- småbugg: textsök på svenska tecken. sök på "mänsklig" funkar. sök på "å" listar alla texter i databasen
 
 --[[todo legend]]--
 X = hi prio task
@@ -201,14 +198,20 @@ X = hi prio task
 
 --------------[[changelog]]--------------
 2007.07.07
+2007.07.07
 	- adblockrules.org är öppnad
+
+
+	- lyrics: fixat textsök på svenska tecken
+	- lyrics edit_record.php: kan nu editera recordInfo
+	- lyrics admin kan nu radera band
+	- lyric functions: använder singlequotes i alla queries
 
 
 2007.06.26
 	- lite js/css cleanup
 	- files: stöd för php_id3 extension för att visa file info om mp3-filer
-	- config: bort med date_default_timezone_set(), det ska konfas korrekt i php.ini av den som insallerar php
-	började me 540 rader mp3.php
+	- config: bort med date_default_timezone_set(), det ska konfas korrekt i php.ini av den som installerar php
 
 
 2007.06.25

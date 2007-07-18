@@ -3,8 +3,6 @@
 
 	$session->requireLoggedIn();
 
-	require('design_head.php');
-
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 	$record_id = $_GET['id'];
@@ -12,16 +10,19 @@
 
 	if (isset($_POST['title']))
 	{
-		updateRecord($record_id, $_POST['title']);
-		echo 'Title changed.<br/>';
+		updateRecord($record_id, $_POST['title'], $_POST['info']);
+
+		if (isset($_POST['band']) && $_POST['band'] && is_numeric($_POST['band'])) {
+			if ($band_id != $_POST['band']) {
+				changeRecordOwner($record_id, $_POST['band']);
+			}
+		}
+
+		header('Location: show_record.php?id='.$record_id);
+		die;
 	}
 
-	if (isset($_POST['band']) && $_POST['band'] && is_numeric($_POST['band'])) {
-		if ($band_id != $_POST['band']) {
-			changeRecordOwner($record_id, $_POST['band']);
-			echo 'Band changed.<br/>';
-		}
-	}
+	require('design_head.php');
 
 	$band_name = getBandName($band_id);
 	$record_name = getRecordName($record_id);
@@ -30,7 +31,9 @@
 
 	echo '<form name="editrecord" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$record_id.'">';
 
-	echo '<a href="show_band.php?id='.$band_id.'">'.htmlspecialchars($band_name).' - </a><input type="text" name="title" size="50" value="'.$record_name.'"/><br/>';
+	echo '<a href="show_band.php?id='.$band_id.'">'.htmlspecialchars($band_name).' - </a><input type="text" name="title" size="50" value="'.$record_name.'"/><br/><br/>';
+
+	echo 'Record info:<br/><textarea name="info" cols="40" rows="6">'.getRecordInfo($record_id).'</textarea><br/><br/>';
 
 	echo 'Change band: <select name="band">';
 	$list = getBands();
@@ -40,7 +43,7 @@
 		if ($band_id == $list[$i]['bandId']) echo ' selected="selected"';
 		echo '>'.htmlspecialchars($list[$i]['bandName']).'</option>';
 	}
-	echo '</select><br/>';
+	echo '</select><br/><br/>';
 
 	echo '<input type="submit" class="button" value="Update changes"/>';
 	echo '</form>';
