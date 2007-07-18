@@ -542,7 +542,7 @@ VOID UpdateSpawnCaptions()
 	{
 		if (PSPAWNINFO pSpawn=(PSPAWNINFO)EQP_DistArray[N].VarPtr.Ptr)
 		if (pSpawn!=(PSPAWNINFO)pTarget)
-		if (EQP_DistArray[N].Value.Float<=120.0f && gMQCaptions)
+		if (EQP_DistArray[N].Value.Float<=80.0f && gMQCaptions)
 		{
 			if (SetNameSpriteState(pSpawn,true))
 			{

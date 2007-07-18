@@ -1023,27 +1023,29 @@ typedef struct _SPAWNINFO {
 /*0x0095*/ BYTE     Unknown0x95[0xc];
 /*0x00a1*/ BYTE     FeetWet;
 /*0x00a2*/ BYTE     Unknown0xa2[0x2];
-/*0x00a4*/ CHAR     Name[0x40];            // ie priest_of_discord00
-/*0x00e4*/ CHAR     DisplayedName[0x40];   // ie Priest of Discord
+/*0x00a4*/ CHAR     Name[0x40];             // ie priest_of_discord00
+/*0x00e4*/ CHAR     DisplayedName[0x40];    // ie Priest of Discord
 /*0x0124*/ BYTE     Unknown0x124;
 /*0x0125*/ BYTE     Type;
 /*0x0126*/ BYTE     Unknown0x126[0x2];
 /*0x0128*/ DWORD    **BodyType;
 /*0x012c*/ BYTE     Unknown0x12c[0xc];
-/*0x0138*/ FLOAT    AvatarHeight;          // height of avatar from ground when standing
+/*0x0138*/ FLOAT    AvatarHeight;           // height of avatar from ground when standing
 /*0x013c*/ BYTE     Unknown0x13c[0xc];
 /*0x0148*/ DWORD    SpawnID;
 /*0x014c*/ BYTE     Unknown0x14c[0x4];
-/*0x0150*/ DWORD    IsABoat;               // 1 = a type of boat
-/*0x0154*/ struct   _SPAWNINFO *Mount;     //NULL if no mount present
+/*0x0150*/ DWORD    IsABoat;                // 1 = a type of boat
+/*0x0154*/ struct   _SPAWNINFO *Mount;      //NULL if no mount present
 /*0x0158*/ BYTE     Unknown0x158[0x14];
 /*0x016c*/ DWORD    Buyer;
-/*0x0170*/ DWORD    RespawnTimer;          // TimeStamp of when RespawnWnd will close - 0 when you're alive
+/*0x0170*/ DWORD    RespawnTimer;           // TimeStamp of when RespawnWnd will close - 0 when you're alive
 /*0x0174*/ DWORD    HPMax;
 /*0x0178*/ DWORD    Unknown0x178;
 /*0x017c*/ void     *pCharInfo_vtable2;
 /*0x0180*/ DWORD    MasterID;
-/*0x0184*/ BYTE     Unknown0x184[0x1d];
+/*0x0184*/ BYTE     Unknown0x184[0x18];
+/*0x019c*/ FLOAT    GetMeleeRangeVar1;      // used by GetMeleeRange
+/*0x01a0*/ BYTE     Unknown0x1a0;
 /*0x01a1*/ BYTE     FishingEvent;
 /*0x01a2*/ BYTE     Unknown0x1a2[0x2];
 /*0x01a4*/ DWORD    LastTick;
@@ -1062,9 +1064,9 @@ typedef struct _SPAWNINFO {
 /*0x0229*/ BYTE     Unknown0x229[0xb];
 /*0x0234*/ BYTE     Light;
 /*0x0235*/ BYTE     Unknown0x235[0x3];
-/*0x0238*/ DWORD    SpellETA;              //Calculated TimeStamp when current spell being cast will land. 0 while not casting.
-/*0x023c*/ DWORD    CastingSpellID;        // -1 = not casting a spell
-/*0x0240*/ BYTE     CastingAnimation;      //unsure, FF for not casting, low numbers while casting
+/*0x0238*/ DWORD    SpellETA;               //Calculated TimeStamp when current spell being cast will land. 0 while not casting.
+/*0x023c*/ DWORD    CastingSpellID;         // -1 = not casting a spell
+/*0x0240*/ BYTE     CastingAnimation;       //unsure, FF for not casting, low numbers while casting
 /*0x0241*/ BYTE     Unknown0x241[0x7];
 /*0x0248*/ DWORD    ClickySlotID;
 /*0x024c*/ BYTE     Unknown0x24c[0x10];
@@ -1079,7 +1081,7 @@ typedef struct _SPAWNINFO {
 /*0x0355*/ BYTE     Unknown0x355[0x7];
 /*0x035c*/ CHAR     Title[0x20];
 /*0x037c*/ BYTE     Unknown0x37c[0x90];
-/*0x040c*/ DWORD    InnateETA;             //Calculated TimeStamp when innate skill will be ready (LoH, HT, Bash)
+/*0x040c*/ DWORD    InnateETA;              //Calculated TimeStamp when innate skill will be ready (LoH, HT, Bash)
 /*0x0410*/ DWORD    Anon;
 /*0x0414*/ BYTE     Unknown0x414[0x8];
 /*0x041c*/ DWORD    Trader;
@@ -1130,15 +1132,17 @@ typedef struct _SPAWNINFO {
 /*0x0e7a*/ BYTE     Unknown0xe7a[0x2];
 /*0x0e7c*/ ARGBCOLOR ArmorColor[0x9];
 /*0x0ea0*/ BYTE     Unknown0xea0[0x4];
-/*0x0ea4*/ DWORD    Heritage;              //drakkin only face setting
-/*0x0ea8*/ DWORD    Tattoo;                //drakkin only face setting
-/*0x0eac*/ DWORD    Details;               //drakkin only face setting
+/*0x0ea4*/ DWORD    Heritage;               //drakkin only face setting
+/*0x0ea8*/ DWORD    Tattoo;                 //drakkin only face setting
+/*0x0eac*/ DWORD    Details;                //drakkin only face setting
 /*0x0eb0*/ struct   _EQUIPMENT Equipment;
 /*0x0f1c*/ BYTE     Unknown0xf1c[0x38];
 /*0x0f54*/ VOID     *pcactorex;
 /*0x0f58*/ DWORD    Unknown0xf58;
 /*0x0f5c*/ VOID     *FaceRelatedActorStruct;
-/*0x0f60*/ BYTE     Unknown0xf60[0x74];
+/*0x0f60*/ BYTE     Unknown0xf60[0x30];
+/*0x0f90*/ FLOAT    GetMeleeRangeVar2;      // used by GetMeleeRange
+/*0x0f94*/ BYTE     Unknown0xf94[0x40];
 /*0x0fd4*/ DWORD    Animation;
 /*0x0fd8*/ BYTE     Unknown0xfd8[0xd0];
 /*0x10a8*/ struct   _MODELINFO *Model[0xe]; // this is wrong dkaa 10/21/06

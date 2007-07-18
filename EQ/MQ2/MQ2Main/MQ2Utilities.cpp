@@ -5621,9 +5621,28 @@ bool BuffStackTest(PSPELL aSpell, PSPELL bSpell){
     return true;
 } 
 
-float GetMeleeRange(class EQPlayer *a,class EQPlayer *b)
+float GetMeleeRange(class EQPlayer *pSpawn1,class EQPlayer *pSpawn2)
 {
-	//temporary
+	float f, g, h;
+	if(pSpawn1 && pSpawn2)
+	{
+		f=((PSPAWNINFO)pSpawn1)->GetMeleeRangeVar1 * ((PSPAWNINFO)pSpawn1)->GetMeleeRangeVar2;
+		g=((PSPAWNINFO)pSpawn2)->GetMeleeRangeVar1 * ((PSPAWNINFO)pSpawn2)->GetMeleeRangeVar2;
+
+		h=abs(((PSPAWNINFO)pSpawn1)->AvatarHeight - ((PSPAWNINFO)pSpawn2)->AvatarHeight);
+
+		f=(f+g)*0.75f;
+
+		if(f<14.0f)
+			f=14.0f;
+
+		g=f+2+h;
+
+		if(g>75.0f)
+			return 75.0f;
+		else
+			return g;
+	}
 	return 14.0f;
 }
 
