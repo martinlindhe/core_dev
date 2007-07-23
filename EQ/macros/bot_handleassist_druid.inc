@@ -350,9 +350,9 @@ Sub HandleAssistCallDruid(int SpawnId)
 Sub DruidUpdateBuffs
 
 	| Clear debuffs:
-	/if (${Me.AltAbilityReady["Resplendent Cascade"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID} || ${Me.Buff["Curse of Darkness"].ID} || ${Me.Buff["Flesh Rot"].ID} || ${Me.Buff["Suffocating Mist"].ID} || ${Me.Buff["Tainted Arrow Salvo"].ID} || ${Me.Buff["Depleting Wave"].ID})) {
+	/if (${Me.AltAbilityReady["Radiant Cure"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID} || ${Me.Buff["Curse of Darkness"].ID} || ${Me.Buff["Flesh Rot"].ID} || ${Me.Buff["Suffocating Mist"].ID} || ${Me.Buff["Tainted Arrow Salvo"].ID} || ${Me.Buff["Depleting Wave"].ID})) {
 		/call DebugMsg "Curing debuffs"
-		/casting "Resplendent Cascade" alt
+		/casting "Radiant Cure" alt
 		|3.5 sec cast time
 		/delay 40
 	}
@@ -394,7 +394,7 @@ Sub DruidUpdateBuffs
 		}
 	}
 
-	/if (!${Raid.Members} && !${Spawn[npc radius 60].LineOfSight}) {
+	/if (!${Raid.Members} && !${SpawnCount[npc radius 100]} && !HEAL_ONLY_MODE) {
 		/call RefreshBuff "Brazier of Endless Flame" 20
 		/if (${Macro.Return}) /return
 	}

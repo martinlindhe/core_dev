@@ -44,10 +44,14 @@ Sub Main
 	}
 
 	/if (${Zone.ShortName.Equal["Valdeholm"]} && ${SpawnCount[npc Wraithguard Sergeant Thavin radius 30]}) {
-		/echo Wraithguard Sergeant Thavin: fergarin (Frostcrypt raid)
+		/echo Wraithguard Sergeant Thavin: fergarin (FC1 raid)
 		/target npc Wraithguard Sergeant Thavin
 		/delay 2s ${Target.ID}
 		/say fergarin
+
+		| FC2 instance! fixme: detect what instance we are currently in
+		/delay 2s ${Target.ID}
+		/say haesgrin
 		/return
 	}
 

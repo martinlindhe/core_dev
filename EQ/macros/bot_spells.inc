@@ -136,7 +136,7 @@ Sub HealCallback
 		/interrupt
 		/varset interruptFlag TRUE
 		/echo Player died, cancelling heal.
-	} else /if (${Me.Casting.ID} && ${Target.PctHPs} >= 80) {
+	} else /if (${Me.Casting.ID} && ${Target.PctHPs} >= 80 && ${Target.PctHPs} <= 100) {
 		/interrupt
 		/varset interruptFlag TRUE
 		/echo ${Target.Name} at ${Target.PctHPs}%, cancelling heal.
