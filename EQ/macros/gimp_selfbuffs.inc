@@ -81,7 +81,7 @@ Sub Event_BuffSelf
 		
 		/if (${Me.Book["${buffname}"]}) {
 
-			/if ( (${Me.Buff["${buffname}"].Duration} && (${Me.Buff["${buffname}"].Duration} < 150)) || ${Spell["${buffname}"].Stacks}) {
+			/if (${Spell["${buffname}"].Stacks[20]} {
 
 				/if (!${Me.Gem["${buffname}"]}) {
 					|memorize spell
@@ -103,7 +103,7 @@ Sub Event_BuffSelf
 				|is it a item in my inventory?
 				/if (${FindItem[=${buffname}].ID}) {
 
-					/if (${Spell[${FindItem[=${buffname}].Spell}].Stacks} || (${Me.Buff[${FindItem[=${buffname}].Spell}].Duration} && (${Me.Buff[${FindItem[=${buffname}].Spell}].Duration} < 150)) ) {
+					/if (${Spell[${FindItem[=${buffname}].Spell}].Stacks[20]}) {
 						/echo # Clicking item ${buffname}
 						/target myself
 						/call Cast "${buffname}" item

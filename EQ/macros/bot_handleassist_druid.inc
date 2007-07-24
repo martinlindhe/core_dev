@@ -357,6 +357,9 @@ Sub DruidUpdateBuffs
 		/delay 40
 	}
 
+	| Dont waste time rebuffing if i am healing!
+	/if (HEAL_ONLY_MODE && ${SpawnCount[npc radius 100]}) /return
+
 	| Razorthorn (ragea_raid) trash mobs cast AE that overwrites Mask of the Wild
 	/if (${Zone.ShortName.NotEqual["ragea_raid"]}) {
 		/call RefreshBuff "Mask of the Wild" 30

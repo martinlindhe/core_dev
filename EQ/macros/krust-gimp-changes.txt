@@ -5,6 +5,11 @@ todo:
 	
 	
 ------
+2007.07.23:
+	- gimp_selfbuffs.inc - fixes for Spell.Stacks
+	- gimp_clickies.inc - fixed Eyepatch of Plunder clicky to not get recasted
+
+
 2007.02.07:
 	- EQUI_FriendsWnd.xml:
 		* removed tanks & healers count. use a HUD instead if you want them

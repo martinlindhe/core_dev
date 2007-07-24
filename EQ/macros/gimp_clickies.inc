@@ -887,7 +887,7 @@ Sub BuffedHaste
 	/declare HasteBuff string local
 
 	|clicky buffs:
-	/if (${Me.Buff["Captain Nalots Quickening"].ID})	/varset HasteBuff Captain Nalots Quickening
+	/if (${Me.Buff["Captain Nalot's Quickening"].ID})	/varset HasteBuff Captain Nalot's Quickening
 	/if (${Me.Buff["Miraculous Visions"].ID})					/varset HasteBuff Miraculous Visions
 	/if (${Me.Buff["Marvelous Visions"].ID})					/varset HasteBuff Marvelous Visions
 	/if (${Me.Buff["Twitching Speed"].ID})						/varset HasteBuff Twitching Speed

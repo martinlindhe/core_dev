@@ -34,7 +34,7 @@
 |Eagle Strike - level 20, cap 240
 |Dragon Punch - level 25, cap 240
 |Flying Kick - level 30, cap 240
-#define MONK_KICK	"Flying Kick"
+#define MONK_KICK	"Eagle Strike"
 
 #Event ToggleDisarm				"#*#[MQ2] toggledisarm#*#"
 #Event ToggleTaunt				"#*#[MQ2] toggletaunt#*#"
