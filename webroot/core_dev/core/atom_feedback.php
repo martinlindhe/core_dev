@@ -3,14 +3,18 @@
 	
 	define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
 
+
+	define('FEEDBACK_ADBLOCK_ADS', 20);					//for adblock project "report site" function
+	define('FEEDBACK_ADBLOCK_BROKEN_RULE', 21); //for adblock project "report site" function
+
 	//subjectId is the userId if its a abuse report
-	function saveFeedback($_type, $_text, $_subject = 0)
+	function saveFeedback($_type, $_text, $_text2 = '', $_subject = 0)
 	{
 		global $db, $session;
 		if (!is_numeric($_type) || !is_numeric($_subject)) return false;
 
-		$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',text="'.$db->escape($_text).'",userId='.$session->id.',subjectId='.$_subject.',timeCreated=NOW()';
-		$db->insert($q);
+		$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',text="'.$db->escape($_text).'",text2="'.$db->escape($_text2).'",userId='.$session->id.',subjectId='.$_subject.',timeCreated=NOW()';
+		return $db->insert($q);
 	}
 
 	function getFeedback($_type = 0, $_sql_limit = '')

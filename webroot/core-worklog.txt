@@ -180,15 +180,14 @@
 
 --------------[[projekt todo]]--------------
 	adblock:
-		- fixa så adminpanelen funkar ordentligt (pr ska ej skickas med, och vissa db tabeller ska ej accessas)
-		- fixa "cant find config path"!!! gör att admin strular + kan inte adda news!!!!
-		- konvertera "report site" funktionen till att använda functions_feedback.php
-		- fixa news modulen så den inte kräver tblUserdata, tblPolls om de ej är aktiverade
 		- spara statistik för subscription downloads
+
+		- låg prio: fixa så admin inte accessar db-tabeller som adblock ej använder
 
 
 	lyrics:
-		- småbugg: textsök på svenska tecken. sök på "mänsklig" funkar. sök på "å" listar alla texter i databasen
+		- småbugg: textsök på svenska tecken (unicode problem). sök på "mänsklig" funkar. sök på "å" listar alla texter i databasen
+
 
 --[[todo legend]]--
 X = hi prio task
@@ -198,7 +197,10 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.07.25:
 	- lyrics & adblock: fixed opensearch.xml URI
-
+	- adblock: fixade så adminpanelen funkar ordentligt (pr sattes felaktikgt till "admin")
+	- news: $config['news']['allow_polls'] added
+	- adblock: added tblUserdata to project
+	- adblock: konverterade "report site" funktionen till att använda functions_feedback.php
 
 2007.07.24
 	- lyrics: show_band.php regression fix efter sql cleanup

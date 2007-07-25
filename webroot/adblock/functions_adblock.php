@@ -193,49 +193,6 @@
 
 
 
-	//type being 1=site has ads, 2=site is broken by blocking rules
-	function addProblemSite($url, $type, $comment)
-	{
-		global $db, $session;
-
-		if (!is_numeric($type)) return false;
-
-		$q = 'INSERT INTO tblProblemSites SET url="'.$db->escape($url).'",type='.$type.',comment="'.$db->escape($comment).'",userId='.$session->id.',userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).',timeCreated=NOW()';
-
-		return $db->insert($q);
-	}
-
-	function removeProblemSite($siteId)
-	{
-		global $db, $session;
-
-		if (!$session->id || !is_numeric($siteId)) return false;
-
-		$db->query('UPDATE tblProblemSites SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE siteId='.$siteId);
-	}
-
-	/* Return list of problem sites, oldest first */
-	function getProblemSites()
-	{
-		global $db;
-
-		$q  = 'SELECT t1.*,t2.userName ';
-		$q .= 'FROM tblProblemSites AS t1 ';
-		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
-		$q .= 'WHERE t1.deletedBy=0 ';
-		$q .= 'ORDER BY t1.timeCreated ASC';
-
-		return $db->getArray($q);
-	}
-
-	/* Return number of items in problem site list */
-	function getProblemSiteCount()
-	{
-		global $db;
-
-		return $db->getOneItem('SELECT COUNT(siteId) FROM tblProblemSites WHERE deletedBy=0');
-	}
-
 	/* Returns a list of the last $cnt additions */
 	function getAdblockLatestAdditions($cnt)
 	{

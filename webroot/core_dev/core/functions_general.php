@@ -51,15 +51,17 @@
 	{
 		global $config;
 
+		if ($_amp == 3) return $config['web_root'];
+
 		if (!empty($_GET['pr'])) {
 			$proj_name = basename(strip_tags($_GET['pr']));
-			if ($_amp == 3) return $config['web_root'];
 		} else {
-			if ($_amp == 3) return '';
 			$project_path = dirname($_SERVER['SCRIPT_NAME']);
 			$pos = strrpos($project_path, '/');
 			$proj_name = substr($project_path, $pos+1);
 		}
+		
+		if ($proj_name == 'admin') $proj_name = '';
 
 		if ($proj_name) {
 			switch ($_amp) {

@@ -6,6 +6,7 @@
 
 	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsCategories', 'NewsComment', 'NewsFiles', 'NewsPolls');
 	$config['news']['allow_rating'] = true;	//allow users to rate articles
+	$config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 
 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 	{
@@ -255,8 +256,10 @@
 	
 	function showNewsOverview($row)
 	{
+		global $config;
+
 		echo '<div class="news_item_overview">';
-			
+
 		echo '<h1>'.$row['title'].'</h1>';
 		echo '<div>';
 		echo '<div class="news_item_picl">'.nameThumbLink($row['creatorId'], $row['creatorName']).'</div>';
@@ -272,8 +275,10 @@
 		*/
 		echo '</div><br class="clr"/>';
 		
-		//show news polls
-		showAttachedPolls(POLL_NEWS, $row['newsId']);
-		echo '<br/>';
+		if ($config['news']['allow_polls']) {
+			//show news polls
+			showAttachedPolls(POLL_NEWS, $row['newsId']);
+			echo '<br/>';
+		}
 	}
 ?>

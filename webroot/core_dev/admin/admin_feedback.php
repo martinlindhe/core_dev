@@ -60,14 +60,25 @@
 	foreach ($list as $row) {
 		echo '<div class="item">';
 		switch ($row['feedbackType']) {
+
 			case FEEDBACK_SUBMIT:
 				echo '<h2>General feedback</h2>';
 				break;
-			
+				
+			case FEEDBACK_ADBLOCK_ADS:
+				echo '<h2>Site contains ads</h2>';
+				break;
+
+			case FEEDBACK_ADBLOCK_BROKEN_RULE:
+				echo '<h2>Blocking rules breaks the site</h2>';
+				break;
+
 			default: die('EEEP!!! error');
 		}
 		echo 'From '.nameLink($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
-		echo $row['text'].'<br/>';
+		echo $row['text'].'<br/><br/>';
+		
+		if (!empty($row['text2'])) echo '<div class="item">Comment: '.$row['text2'].'</div><br/>';
 		
 		if ($row['userId']) echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">Reply</a><br/>';
 		echo '<a href="?delete='.$row['feedbackId'].getProjectPath().'">Delete</a><br/>';
