@@ -201,6 +201,7 @@ X = hi prio task
 	- news: $config['news']['allow_polls'] added
 	- adblock: added tblUserdata to project
 	- adblock: konverterade "report site" funktionen till att använda functions_feedback.php
+	- adblock: skapade info@adblockrules.org som kontakt-mail för adblock-projektet
 
 2007.07.24
 	- lyrics: show_band.php regression fix efter sql cleanup
