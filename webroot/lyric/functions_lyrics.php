@@ -147,7 +147,7 @@
 		$q .= 'INNER JOIN tblLyrics AS t2 ON (t1.lyricId=t2.lyricId) ';
 		$q .= 'INNER JOIN tblBands AS t3 ON (t2.bandId=t3.bandId) ';
 		$q .= 'INNER JOIN tblRecords AS t4 ON (t1.recordId=t4.recordId) ';
-		$q .= 'WHERE t1.bandId=".$band_id." AND t1.bandId!=t2.bandId ';
+		$q .= 'WHERE t1.bandId='.$band_id.' AND t1.bandId!=t2.bandId ';
 		$q .= 'GROUP BY t1.lyricId ';
 		$q .= 'ORDER BY t3.bandName ASC,t4.recordName ASC,t1.trackNumber ASC';
 		return $db->getArray($q);
@@ -163,7 +163,7 @@
 		$q .= 'INNER JOIN tblTracks AS t2 ON (t1.lyricId=t2.lyricId) ';
 		$q .= 'INNER JOIN tblBands AS t3 ON (t2.bandId=t3.bandId) ';
 		$q .= 'INNER JOIN tblRecords AS t4 ON (t2.recordId=t4.recordId) ';
-		$q .= 'WHERE t1.bandId=".$band_id." AND t2.bandId != '.$band_id.' ';
+		$q .= 'WHERE t1.bandId='.$band_id.' AND t2.bandId != '.$band_id.' ';
 		$q .= 'ORDER BY t3.bandName ASC,t4.recordName ASC,t2.trackNumber ASC';
 		return $db->getArray($q);
 	}

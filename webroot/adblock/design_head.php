@@ -1,5 +1,5 @@
 <?
-	$meta_search[] = array('url' => '/adblock/opensearch.xml', 'name' => 'Adblock Ruleset Search');
+	$meta_search[] = array('url' => $config['web_root'].'opensearch.xml', 'name' => 'Adblock Ruleset Search');
 
 	createXHTMLHeader()
 ?>
@@ -35,14 +35,14 @@
 	}
 
 	if ($session->id) {
-		$menu = array('?logout' => 'Logout');
+		$menu = array('index.php?logout' => 'Logout');
 	} else {
-		$menu = array('?login' => 'Log in');
+		$menu = array('index.php?login' => 'Log in');
 	}
 	createMenu($menu);
 ?>
 <br/>
-<a href="http://www.nosoftwarepatents.com/" target="_blank"><img src="gfx/nswpat80x15.gif"></a>
+<a href="http://www.nosoftwarepatents.com/" target="_blank"><img src="gfx/nswpat80x15.gif"/></a>
 </div>
 
 <div id="middle">

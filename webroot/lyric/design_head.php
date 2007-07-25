@@ -1,5 +1,5 @@
 <?
-	$meta_search[] = array('url' => '/lyric/opensearch.xml', 'name' => 'lyric search');
+	$meta_search[] = array('url' => $config['web_root'].'opensearch.xml', 'name' => 'lyric search');
 
 	createXHTMLHeader();
 ?>
@@ -18,9 +18,9 @@
 			'add_band.php' => 'Add band',
 			'add_record.php' => 'Add normal record',
 			'add_record_comp.php' => 'Add comp. / split',
-			'?logout' => 'Log out');
+			'index.php?logout' => 'Log out');
 	} else {
-		$menu = array('?login' => 'Log in');
+		$menu = array('index.php?login' => 'Log in');
 	}
 	createMenu($menu);
 ?>

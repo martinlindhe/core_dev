@@ -1,13 +1,6 @@
 ----[[platform todo]]----
 	core/gör snart:
 
-	adblock:
-		- fixa "cant find config path"!!! gör att admin strular + kan inte adda news!!!!
-		- fixa news modulen så den inte kräver tblUserdata, tblPolls om de ej är aktiverade
-		- konvertera "report site" funktionen till att använda functions_feedback.php
-		- spara statistik för subscription downloads
-
-
 	forum:
 		- för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
 			gör ett sh-script som körs veckovis för detta (för /etc/cron.weekly på linux-db server)
@@ -186,7 +179,13 @@
 
 
 --------------[[projekt todo]]--------------
+	adblock:
 		- fixa så adminpanelen funkar ordentligt (pr ska ej skickas med, och vissa db tabeller ska ej accessas)
+		- fixa "cant find config path"!!! gör att admin strular + kan inte adda news!!!!
+		- konvertera "report site" funktionen till att använda functions_feedback.php
+		- fixa news modulen så den inte kräver tblUserdata, tblPolls om de ej är aktiverade
+		- spara statistik för subscription downloads
+
 
 	lyrics:
 		- småbugg: textsök på svenska tecken. sök på "mänsklig" funkar. sök på "å" listar alla texter i databasen
@@ -197,15 +196,23 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
-2007.07.07
-2007.07.07
-	- adblockrules.org är öppnad
+2007.07.25:
+	- lyrics & adblock: fixed opensearch.xml URI
 
 
+2007.07.24
+	- lyrics: show_band.php regression fix efter sql cleanup
+
+
+2007.07.17
 	- lyrics: fixat textsök på svenska tecken
 	- lyrics edit_record.php: kan nu editera recordInfo
 	- lyrics admin kan nu radera band
 	- lyric functions: använder singlequotes i alla queries
+
+
+2007.07.07
+	- adblockrules.org är öppnad
 
 
 2007.06.26
