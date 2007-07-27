@@ -1102,13 +1102,15 @@ bool MQ2SpawnType::GETMEMBER()
 		Dest.Type=pRaceType;
 		return true;
 	case Class:
-		if (GetSpawnType(pSpawn)!=AURA && GetSpawnType(pSpawn)!=BANNER)
+		if (GetSpawnType(pSpawn)!=AURA && GetSpawnType(pSpawn)!=BANNER && GetSpawnType(pSpawn)!=CAMPFIRE)
 			Dest.DWord=pSpawn->Class;
 		else
 			if (GetSpawnType(pSpawn)==AURA)
 				Dest.DWord=0xFF;
-			else
+			else if (GetSpawnType(pSpawn)==BANNER)
 				Dest.DWord=0xFE;
+			else
+				Dest.DWord=0xFD;
 		Dest.Type=pClassType;
 		return true;
 	case Body:
@@ -1224,6 +1226,10 @@ bool MQ2SpawnType::GETMEMBER()
 			return true;
 		case BANNER:
 			Dest.Ptr="Banner";
+			Dest.Type=pStringType;
+			return true;
+		case CAMPFIRE:
+			Dest.Ptr="Campfire";
 			Dest.Type=pStringType;
 			return true;
 		}

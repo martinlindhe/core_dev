@@ -8,8 +8,8 @@ _TEXT   SEGMENT PARA USE32 PUBLIC 'CODE'
 
 
 
-__MemChecker1   proc near               ; CODE XREF: sub_60E2D0+1D9p
-                                        ; sub_63DA40+20bp
+__MemChecker1   proc near               ; CODE XREF: sub_60E5D0+203p
+                                        ; sub_63E0D0+20bp
 
 arg_0           = dword ptr  4
 arg_4           = dword ptr  8
@@ -19,7 +19,7 @@ arg_8           = dword ptr  0Ch
                 or      eax, 0FFFFFFFFh
                 test    ecx, ecx
                 push    esi
-                jz      short loc_63D9FF
+                jz      short loc_63E08F
                 xor     eax, eax
                 mov     al, cl
                 movzx   ecx, ch
@@ -51,16 +51,16 @@ arg_8           = dword ptr  0Ch
                 and     eax, 0FFFFFFh
                 xor     eax, edx
 
-loc_63D9FF:                             ; CODE XREF: __MemChecker1+Aj
+loc_63E08F:                             ; CODE XREF: __MemChecker1+Aj
                 mov     ecx, [esp+4+arg_0]
                 mov     edx, [esp+4+arg_4]
                 lea     esi, [ecx+edx]
                 cmp     ecx, esi
-                jnb     short loc_63DA33
+                jnb     short loc_63E0C3
                 push    edi
                 nop
 
-loc_63DA10:                             ; CODE XREF: __MemChecker1+B0j
+loc_63E0A0:                             ; CODE XREF: __MemChecker1+B0j
                 xor     edx, edx
                 mov     dl, [ecx]
                 xor     edx, eax
@@ -71,10 +71,10 @@ loc_63DA10:                             ; CODE XREF: __MemChecker1+B0j
                 xor     eax, edi
                 inc     ecx
                 cmp     ecx, esi
-                jb      short loc_63DA10
+                jb      short loc_63E0A0
                 pop     edi
 
-loc_63DA33:                             ; CODE XREF: __MemChecker1+8Cj
+loc_63E0C3:                             ; CODE XREF: __MemChecker1+8Cj
                 not     eax
                 pop     esi
                 retn

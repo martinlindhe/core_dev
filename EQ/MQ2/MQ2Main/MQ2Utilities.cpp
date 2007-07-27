@@ -4600,6 +4600,8 @@ PCHAR ParseSearchSpawnArgs(PCHAR szArg, PCHAR szRest, PSEARCHSPAWN pSearchSpawn)
             pSearchSpawn->SpawnType = OBJECT;
         } else if (!stricmp(szArg,"banner")) {
             pSearchSpawn->SpawnType = BANNER;
+        } else if (!stricmp(szArg,"campfire")) {
+            pSearchSpawn->SpawnType = CAMPFIRE;
         } else if (!stricmp(szArg,"any")) {
             pSearchSpawn->SpawnType = NONE;
         } else if (!stricmp(szArg,"next")) {

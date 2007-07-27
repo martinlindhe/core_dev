@@ -256,22 +256,24 @@ VOID HookInlineChecks(BOOL Patch)
     DWORD oldperm, tmp, NewData;
 
     /* add these to eqgame.h */
-// .text:005DE18D                 cmp     dword_97DF28, offset unk_6DB89E
 
-    int cmps[] = {  0x5DE18D+6 };
+// .text:005DE39D 81 3D 28 EF 97 00 0E C0 6D 00  cmp     dword_97EF28, 6DC00Eh
 
-// .text:004C1305 81 F9 9E 6A 81 4B              cmp     ecx, 4B816A9Eh
-// .text:004DA254 81 F9 0A 76 F4 7D              cmp     ecx, 7DF4760Ah
-// .text:004DF15B 3D ED 3C 40 3D                 cmp     eax, 3D403CEDh
-// .text:004E1AEF 81 F9 31 BD 3E CE              cmp     ecx, 0CE3EBD31h
-// .text:004DA844 81 F9 46 28 72 83              cmp     ecx, 83722846h
+    int cmps[] = {  0x5DE39D+6 };
 
 
-    int cmps2[] = {     0x4C1305,
-                        0x4DA254,
-                        0x4DF15B,
-                        0x4E1AEF,
-                        0x4DA844 };
+// .text:004C15F5 81 F9 7E DD 99 6B  cmp     ecx, 6B99DD7Eh  ; bad compare #1
+// .text:004DA594 81 F9 1A F6 AB FF  cmp     ecx, 0FFABF61Ah ; bad compare #2
+// .text:004DF49B 3D 8F 1E 41 ED     cmp     eax, 0ED411E8Fh ; bad compare #3
+// .text:004E1E2F 81 F9 E1 03 AF 2D  cmp     ecx, 2DAF03E1h  ; bad compare #4
+// .text:004DAB84 81 F9 96 65 40 87  cmp     ecx, 87406596h  ; bad compare #5
+
+
+    int cmps2[] = {     0x4C15F5,
+                        0x4DA594,
+                        0x4DF49B,
+                        0x4E1E2F,
+                        0x4DAB84 };
     int len2[] = { 6, 6, 5, 6, 6 };
     char NewData2[20];
     static char OldData2[sizeof(cmps2)/sizeof(cmps2[0])][20];
@@ -279,7 +281,7 @@ VOID HookInlineChecks(BOOL Patch)
 
 	if (Patch)
 	{
-// .text:005DE18D 81 3D 28 DF 97 00 9E B8 6D 00   cmp     dword_97DF28, offset unk_6DB89E
+// .text:005DE39D 81 3D 28 EF 97 00 0E C0 6D 00  cmp     dword_97EF28, 6DC00Eh
 //  change only these bytes         ^^ ^^ ^^ ^^
         NewData = 0x7fffffff;
         for (i=0;i<sizeof(cmps)/sizeof(cmps[0]);i++) {
@@ -299,7 +301,7 @@ VOID HookInlineChecks(BOOL Patch)
         memset(NewData2, 0x90, 20);
         for (i=0;i<sizeof(cmps2)/sizeof(cmps2[0]);i++) {
 #ifdef ISXEQ
-			EzModify(cmps[i],&NewData,len2[i]);
+			EzModify(cmps2[i],NewData2,len2[i]);
 #else
             AddDetour(cmps2[i], NULL, NULL, len2[i]);
             VirtualProtectEx(GetCurrentProcess(), (LPVOID)cmps2[i], len2[i], PAGE_EXECUTE_READWRITE, &oldperm);
