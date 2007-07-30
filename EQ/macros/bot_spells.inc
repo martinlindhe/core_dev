@@ -234,11 +234,11 @@ Sub PerformHeal(int SpawnId, int PctHPs)
 	| Check if player been healed before reaching this code
 	/if (${Target.PctHPs} > ${PctHPs}) /return
 	
-	/if (${Me.AltAbilityReady[DRUID_INSTANTHEAL]} && (${Target.PctHPs} <= 18) && (${Target.Distance} < ${Spell[DRUID_INSTANTHEAL].Range})) {
-		/call DebugMsg "# GoS > ${Target.Name} < at ${Target.PctHPs}%"
+	/if (${Me.AltAbilityReady[DRUID_INSTANTHEAL]} && (${Target.PctHPs} <= 19) && (${Target.Distance} < ${Spell[DRUID_INSTANTHEAL].Range})) {
+		/call DebugMsg "# CoS > ${Target.Name} < at ${Target.PctHPs}%"
 		/casting "DRUID_INSTANTHEAL" alt
 		/delay 1s !${Me.AltAbilityReady[DRUID_INSTANTHEAL]}
-	} else /if (${Me.SpellReady[DRUID_QH2]} && (${Target.PctHPs} <= 32) && (${Target.Distance} < ${Spell[DRUID_QH2].Range})) {
+	} else /if (${Me.SpellReady[DRUID_QH2]} && (${Target.PctHPs} <= 33) && (${Target.Distance} < ${Spell[DRUID_QH2].Range})) {
 		/call DebugMsg "# DRUID_QH2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 		/call BotCast "DRUID_QH2" HealCallback
 	} else /if (!${FindItem["Mask of the Ancients"].Timer}) {

@@ -49,9 +49,9 @@
 #define SNARE_SPELLNAME					"Serpent Vines"
 #define EPIC_ITEMNAME						"Staff of Everliving Brambles"			| "Staff of Living Brambles"
 
-#define DRUID_QH1								"Pure Life Rk. II"
+#define DRUID_QH1								"Pure Life Rk. III"
 #define DRUID_QH2								"Adrenaline Surge Rk. II"						| even faster qheal spell, used if player % is low & spell is ready
-#define DRUID_INSTANTHEAL				"Gathering of Spirits"
+#define DRUID_INSTANTHEAL				"Convergence of Spirits"
 
 |----------------------------------------------
 
@@ -398,12 +398,17 @@ Sub DruidUpdateBuffs
 	}
 
 	/if (!${Raid.Members} && !${SpawnCount[npc radius 100]} && !HEAL_ONLY_MODE) {
+		| Clicky - Shield of Dreams
 		/call RefreshBuff "Brazier of Endless Flame" 20
 		/if (${Macro.Return}) /return
 	}
 
-	| Clickies
+	| Clicky - Reyfin's Random Musings
 	/call RefreshBuff "Earring of Pain Deliverance" 20
+	/if (${Macro.Return}) /return
+
+	| Clicky - Form of Endurance V
+	/call RefreshBuff "Frost-Scarred Giant Hide Bracer" 20
 	/if (${Macro.Return}) /return
 
 	/if (${Raid.Members} < 18) {
