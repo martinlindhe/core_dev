@@ -43,7 +43,7 @@
 #define NUKE_SPELLNAME_COLD			"Rime Crystals Rk. II"
 #define DEBUFF_SPELLNAME_COLD		"Icefall Breath Rk. II"
 
-#define NUKE_SPELLNAME_FIRE			"Equinox Burn Rk. II"
+#define NUKE_SPELLNAME_FIRE			"Equinox Burn Rk. III"
 #define DEBUFF_SPELLNAME_FIRE		"Blistering Sunray Rk. II"
 
 #define SNARE_SPELLNAME					"Serpent Vines"
@@ -375,7 +375,7 @@ Sub DruidUpdateBuffs
 	}
 
 	/if (${Group.Members}) {
-		/call RefreshBuff "Blessing of the Direwild Rk. II" 50
+		/if (!${Raid.Members}) /call RefreshBuff "Blessing of the Direwild Rk. II" 50
 		/if (${Macro.Return}) /return
 		/if (!${Me.Song["Aura of Life Effect"].ID}) {
 			| this is a hack because it seems to fade sometimes when you move or lag
@@ -418,7 +418,7 @@ Sub DruidUpdateBuffs
 	}
 
 	/if (${Zone.ShortName.Equal[ashengate_raid]}) {
-		/call RefreshBuff "Resist Corruption Rk. II"
+		/call RefreshBuff "Resist Corruption Rk. III"
 		/if (${Macro.Return}) /return
 	}
 
