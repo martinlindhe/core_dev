@@ -50,7 +50,7 @@
 #define EPIC_ITEMNAME						"Staff of Everliving Brambles"
 
 #define DRUID_QH1								"Pure Life Rk. III"
-#define DRUID_QH2								"Adrenaline Surge Rk. II"						| even faster qheal spell, used if player % is low & spell is ready
+#define DRUID_QH2								"Adrenaline Surge Rk. III"						| even faster qheal spell, used if player % is low & spell is ready
 #define DRUID_INSTANTHEAL				"Convergence of Spirits"
 
 |----------------------------------------------
