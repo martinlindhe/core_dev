@@ -1,7 +1,7 @@
 <?
 	/* functions_wiki.php
 		------------------------------------------------------------
-		Written by Martin Lindhe, 2007 <martin_lindhe@yahoo.se>
+		Written by Martin Lindhe, 2007 <martin@startwars.org>
 
 		core																				tblWiki
 		for history-support: atom_revisions.php			tblRevisions
@@ -156,10 +156,15 @@
 			$last_edited = 'never';
 			if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' by '.$data['creatorName'];
 
-			echo '<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">'.
-					 '<textarea name="wiki_'.$data['wikiId'].'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
-					 'Last edited '.$last_edited.'<br/>'.
-					 '<input type="submit" class="button" value="Save"/>';
+			echo
+          '<script type="text/javascript">initToolbar("tool__bar","wiki__text",toolbar);</script>'.
+          '<div id="tool_bar">'.
+					'<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">'.
+					'<input type="button" class="button" value="B" style="font-weight: bold"/>'.
+					'<br/>'.
+					'<textarea name="wiki_'.$data['wikiId'].'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
+					'Last edited '.$last_edited.'<br/>'.
+					'<input type="submit" class="button" value="Save"/>';
 
 			if ($session->isAdmin) {
 				if ($data['lockedBy']) {
@@ -197,6 +202,8 @@
 				}
 			}
 			echo '</form>';
+			
+			echo '</div>';	//id="tool_bar"
 		}
 		elseif ($current_tab == 'WikiFiles')
 		{
