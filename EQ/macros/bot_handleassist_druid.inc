@@ -47,7 +47,7 @@
 #define DEBUFF_SPELLNAME_FIRE		"Blistering Sunray Rk. II"
 
 #define SNARE_SPELLNAME					"Serpent Vines"
-#define EPIC_ITEMNAME						"Staff of Everliving Brambles"			| "Staff of Living Brambles"
+#define EPIC_ITEMNAME						"Staff of Everliving Brambles"
 
 #define DRUID_QH1								"Pure Life Rk. III"
 #define DRUID_QH2								"Adrenaline Surge Rk. II"						| even faster qheal spell, used if player % is low & spell is ready
@@ -397,6 +397,11 @@ Sub DruidUpdateBuffs
 		}
 	}
 
+	/if (${Zone.ShortName.Equal["ashengate_raid"]} || ${Zone.ShortName.Equal["frostcrypt_raid"]}) {
+		/call RefreshBuff "Resist Corruption Rk. III"
+		/if (${Macro.Return}) /return
+	}
+
 	/if (!${Raid.Members} && !${SpawnCount[npc radius 100]} && !HEAL_ONLY_MODE) {
 		| Clicky - Shield of Dreams
 		/call RefreshBuff "Brazier of Endless Flame" 20
@@ -411,14 +416,13 @@ Sub DruidUpdateBuffs
 	/call RefreshBuff "Frost-Scarred Giant Hide Bracer" 20
 	/if (${Macro.Return}) /return
 
-	/if (${Raid.Members} < 18) {
-		| fixme: checka om man har prylen i RefreshBuff, script error om man saknar prylen nu
-		| /call RefreshBuff "Orb of Duskmold" 20
-		/if (${Macro.Return}) /return
-	}
+	| Clicky - Geomantra III
+	/call RefreshBuff "Crimson Mask of Triumph" 20
+	/if (${Macro.Return}) /return
 
-	/if (${Zone.ShortName.Equal[ashengate_raid]}) {
-		/call RefreshBuff "Resist Corruption Rk. III"
+	/if (${Raid.Members} < 18) {
+		| Clicky - HP buff (symbol overwrites it)
+		/call RefreshBuff "Orb of Duskmold" 20
 		/if (${Macro.Return}) /return
 	}
 

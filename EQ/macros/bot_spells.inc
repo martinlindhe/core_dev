@@ -165,16 +165,21 @@ Sub RefreshBuff(string Name, int Duration)
 		/if (${Me.CurrentMana} < ${Spell[${Name}].Mana}) /return 0
 		/varset BuffName ${Name}
 	} else {
-		/echo UNKNOWN BUFF! ${Name}
-		/return
+		| Assuming this function is called properly, this should only trigger when you have put a item clicky in the bank
+		| /echo UNKNOWN BUFF! ${Name}
+		/return 0
 	}
 	
 	| Do i have the buff on?
 	/if (${Spell[${BuffName}].Stacks} && (!${Me.Buff[${BuffName}].ID} || ${Me.Buff[${BuffName}].Duration} < ${Duration})) {
-		/call DebugMsg "BUFFING: ${BuffName} (${Me.Buff[${BuffName}].Duration} left)"
 		/if (${FindItem[${Name}].ID}) {
+			/if (${FindItem[${Name}].Spell.Duration}) {
+				/return 1
+			}
+			/call DebugMsg "BUFFING: ${BuffName} (${Me.Buff[${BuffName}].Duration} left)"
 			/call MQ2Cast "${Name}" item
 		} else {
+
 			| target myself för att group buffs ska träffa rätt, bara ifall det behövs (target=PC som ej är i gruppen & spellen är en group spell)
 			/if (${Target.Type.Equal["PC"]} && !${Group.Member[${Target.Name}]} && ${Spell[${BuffName}].AERange}) /target myself
 			| target myself för att single target buff ska träffa rätt
@@ -185,6 +190,7 @@ Sub RefreshBuff(string Name, int Duration)
 				/if (!${Me.Gem[${i}].ID}) /varset freeslot ${i}
 			/next i
 
+			/call DebugMsg "BUFFING: ${BuffName} (${Me.Buff[${BuffName}].Duration} left)"
 			/if (${freeslot}) {
 				/call MQ2Cast "${Name}" gem${freeslot}
 			} else {			

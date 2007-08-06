@@ -19,7 +19,11 @@ Sub Main
 	}
 
 	/call Init_HandleAssist
-	/echo Slack-heal started, MT is ${TankName}
+	/if (${TankName.NotEqual["NULL"]}) {
+		/echo Slack-heal started, MT is ${TankName}. Healing at QHEAL_PERCENT %
+	} else {
+		/echo Slack-heal started, healing group. Healing at QHEAL_PERCENT %
+	}
 
 	:MainLoop
 	/call HandleGroupHeal QHEAL_PERCENT

@@ -1,3 +1,9 @@
+2007.08.06:
+	- bot_spells.inc:
+		* checkar om man har prylen inventory i RefreshBuff, vart script error om man saknade prylen
+		* checkar buff clicky refresh timers
+
+
 2007.06.19:
 	- bot_handleassist.inc:
 		* abortar kill loop (för druid iaf) om mob blir charmad eller mezzad. känner inte igen alla charm & mez spells (wip)
