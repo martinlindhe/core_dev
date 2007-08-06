@@ -301,7 +301,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 			/delay 2s ${Target.ID}==${SpawnId}
 		}
 
-		/if (!${Window[LootWnd].Open} && ${Me.Standing} && !${Me.Stunned} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && ${Zone.ShortName.NotEqual["frostcrypt_raid"]} && ${Zone.ShortName.NotEqual["Valdeholm"]} && ${Zone.ShortName.NotEqual["valdeholm_smallevent"]} && ${Zone.ShortName.NotEqual["valdeholm_raid"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
+		/if (!${Window[LootWnd].Open} && ${Me.Standing} && !${Me.Stunned} && ${Zone.ShortName.NotEqual["Frostcrypt"]} && ${Zone.ShortName.NotEqual["frostcrypt_raid"]} && ${Zone.ShortName.NotEqual["Valdeholm"]} && ${Zone.ShortName.NotEqual["valdeholm_smallevent"]} && ${Zone.ShortName.NotEqual["valdeholm_raid"]} && !${FindItem["Everliving Bramble Tunic"].Timer} && !${FindItem["Everliving Bramble Tunic"].InvSlot.Slot} && ${Spawn[npc id ${SpawnId}].LineOfSight} && (${Spawn[npc id ${SpawnId}].Distance} < 200)) {
 			/call DebugMsg "Casting nuke clicky"
 			/call MQ2Cast "Everliving Bramble Tunic" item
 		}
@@ -314,7 +314,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 
 		/call HandleGroupHeal QHEAL_PERCENT
 
-		/if (!${Window[LootWnd].Open} && ${Me.Standing} && !${FindItem["Bark-Inlaid Leather Tunic"].Timer}) {
+		/if (!${Window[LootWnd].Open} && ${Me.Standing} && !${FindItem["Bark-Inlaid Leather Tunic"].Timer} && !${FindItem["Bark-Inlaid Leather Tunic"].InvSlot.Slot}) {
 			/call FindTank
 			/if (${Macro.Return}) {
 				/target id ${Macro.Return}

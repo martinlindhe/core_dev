@@ -273,6 +273,11 @@ Sub HandleGroupHeal(int PctHPs)
 
 	/if (${Window[LootWnd].Open} || !${Krust.Healer} || ${Me.Casting.ID}) /return
 
+	/if (${Me.PctHPs} <= 10) {
+		/call DebugMsg "# Using heal potion at ${Me.PctHPs}%"
+		/call MQ2Cast "Distillate of Divine Healing X" item
+	}
+
 	/declare i int local 0
 
 	| Heal target if it's a player outside group

@@ -2,7 +2,11 @@
 	- bot_spells.inc:
 		* checkar om man har prylen inventory i RefreshBuff, vart script error om man saknade prylen
 		* checkar buff clicky refresh timers
-
+		* nuke & dot event handlers
+		* auto-klickar heal potion om man är <= 10% hp
+	
+	- bot_handleassist_druid.inc:
+		* klickar inte nuke tunic eller ds-tunic om dom är baggade
 
 2007.06.19:
 	- bot_handleassist.inc:
