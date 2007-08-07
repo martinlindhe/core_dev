@@ -18,19 +18,19 @@ Sub Event_ClickAR(string line, string name, string txt)
 #event NukeDPS "#1# hit #2# for #3# points of non-melee damage."
 Sub Event_NukeDPS(string line, string name, string mob, string value)
 	/if (${Me.Name.Equal[${name}]} && ${Me.Name.NotEqual[${mob}]}) {
-		/echo Nuked > ${mob} < (${value} HP)
+		/call DebugMsg "Nuked > ${mob} < (${value} HP)"
 	}
 /return
 
 | Mobname has taken 123 damage from your Dot Spell Name.
 #event DotDPS "#1# has taken #2# damage from your #3#"
 Sub Event_DotDPS(string line, string name, string value, int spell)
-	/echo DoT > ${name} < (${value} HP)
+	/call DebugMsg "DoT > ${name} < (${value} HP)"
 /return
 
 #event Heal "You have healed #1# for #2# points of damage."
 Sub Event_Heal(string line, string name, int value)
-	/echo Healed > ${name} < (${value} HP)
+	/call DebugMsg "Healed > ${name} < (${value} HP)"
 /return
 
 #event TargetCured "Your target has been cured.#*#"
@@ -45,14 +45,14 @@ Sub Event_TargetCured
 
 #event Silenced "You *CANNOT* cast spells, you have been silenced!"
 Sub Event_Silenced
-	/echo I AM SILENCED, delay 8s
+	/call DebugMsg "I AM SILENCED, delay 8s"
 	/delay 8s
 /return
 
 |Raid: DK Event 2 - Guests
 #event SomeoneVertigo "#1# looks as if they are going to lose their balance!"
 Sub Event_SomeoneVertigo(string Line, string Name)
-	/echo ${Name} needs RGC! (Vertigo)
+	/call DebugMsg "${Name} needs RGC! (Vertigo)"
 	/if (${Zone.ShortName.Equal["theatera_raid"]} && ${Me.Book["Remove Greater Curse"]}) {
 		/target pc ${Name}
 		| delay here so ppl dont get suspicious
@@ -188,7 +188,9 @@ Sub RefreshBuff(string Name, int Duration)
 	/if (${Spell[${BuffName}].Stacks} && (!${Me.Buff[${BuffName}].ID} || ${Me.Buff[${BuffName}].Duration} < ${Duration})) {
 		/if (${FindItem[${Name}].ID}) {
 			| Don't try to click if the clicky has a reuse timer
-			/if (${FindItem[${Name}].Timer}) /return 1
+			/if (${FindItem[${Name}].Timer}) /return 0
+			| Don't stand up to refresh clickies
+			/if (${Me.Sitting} && ${Me.PctMana} < 100) /return 0
 
 			/call DebugMsg "BUFFING: ${BuffName} (${Me.Buff[${BuffName}].Duration} left)"
 			/call MQ2Cast "${Name}" item
@@ -255,17 +257,17 @@ Sub PerformHeal(int SpawnId, int PctHPs)
 	/if (${Target.PctHPs} > ${PctHPs}) /return
 	
 	/if (${Me.AltAbilityReady[DRUID_INSTANTHEAL]} && (${Target.PctHPs} <= 19) && (${Target.Distance} < ${Spell[DRUID_INSTANTHEAL].Range})) {
-		/call DebugMsg "# CoS > ${Target.Name} < at ${Target.PctHPs}%"
+		/call DebugMsg " CoS > ${Target.Name} < at ${Target.PctHPs}%"
 		/casting "DRUID_INSTANTHEAL" alt
 		/delay 1s !${Me.AltAbilityReady[DRUID_INSTANTHEAL]}
 	} else /if (${Me.SpellReady[DRUID_QH2]} && (${Target.PctHPs} <= 33) && (${Target.Distance} < ${Spell[DRUID_QH2].Range})) {
-		/call DebugMsg "# DRUID_QH2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+		/call DebugMsg " DRUID_QH2 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 		/call BotCast "DRUID_QH2" HealCallback
 	} else /if (!${FindItem["Mask of the Ancients"].Timer}) {
-		/call DebugMsg "# CLICK HEAL > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+		/call DebugMsg " CLICK HEAL > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 		/call MQ2Cast "Mask of the Ancients" item
 	} else /if (${Me.SpellReady[DRUID_QH1]} && (${Target.Distance} < ${Spell[DRUID_QH1].Range})) {
-		/call DebugMsg "# DRUID_QH1 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+		/call DebugMsg " DRUID_QH1 > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
 		/call BotCast "DRUID_QH1" HealCallback
 	}
 /return

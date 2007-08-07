@@ -333,11 +333,11 @@ Sub UpdateBuffs
 		/goto :BuffsDone
 	}
 
-	/call DebugMsg "# I miss a buff function for class ${Me.Class.Name}"
+	/call DebugMsg "# ERROR: I miss a buff function for class ${Me.Class.Name}"
 
 	:BuffsDone
 
-	/if (${Me.Standing} && ${wasSitting} && !${Me.Moving}) /sit
+	/if (${Me.Standing} && ${wasSitting} && !${Me.Moving} && ${Me.PctMana} < 100) /sit
 
 /return
 

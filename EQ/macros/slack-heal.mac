@@ -1,6 +1,10 @@
 | druid heal slack
 #define HEAL_ONLY_MODE			1
-#define QHEAL_PERCENT				64
+| #define QHEAL_PERCENT				64
+
+| solteris group:
+#define QHEAL_PERCENT				84
+
 #define CHEAL_PERCENT				85
 #define USE_CH							0
 
