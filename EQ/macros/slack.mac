@@ -67,13 +67,10 @@ Sub Main
 		/if (${Spawn[npc radius ${assistRange}].LineOfSight} && !${Me.Moving} && (${Spawn[id ${MT}].Distance} < ${assistRange})) {
 			/echo # Assisting ${MTName}
 			/assist ${MTName}
-			/delay 5
-			|/delay ${Math.Calc[${Math.Rand[2]}+1].Int}s
+			/delay 4
+			| /delay ${Math.Calc[${Math.Rand[2]}+1].Int}s
 			/if (${Target.ID} && ${Target.Type.Equal[NPC]}) {
 				/call HandleAssistCall ${Target.ID}
-			} else {
-				| /if (${Target.ID}) /squelch /target clear
-				/delay 1s
 			}
 		}
 	}

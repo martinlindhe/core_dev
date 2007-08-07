@@ -1,3 +1,8 @@
+2007.08.07
+	- bot_spells.inc:
+		* fixade så man inte assist healar necros
+
+
 2007.08.06:
 	- bot_spells.inc:
 		* checkar om man har prylen inventory i RefreshBuff, vart script error om man saknade prylen

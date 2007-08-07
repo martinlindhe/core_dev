@@ -14,6 +14,7 @@ Sub Event_ClickAR(string line, string name, string txt)
 	/casting "Divine fetters of ro" item
 /return
 
+| Player1 hit mobname for 123 points of non-melee damage.
 #event NukeDPS "#1# hit #2# for #3# points of non-melee damage."
 Sub Event_NukeDPS(string line, string name, string mob, string value)
 	/if (${Me.Name.Equal[${name}]} && ${Me.Name.NotEqual[${mob}]}) {
@@ -21,8 +22,9 @@ Sub Event_NukeDPS(string line, string name, string mob, string value)
 	}
 /return
 
-#event DotDPS "#*#has taken #1# damage from your #2#"
-Sub Event_DotDPS(string line, string name, int value)
+| Mobname has taken 123 damage from your Dot Spell Name.
+#event DotDPS "#1# has taken #2# damage from your #3#"
+Sub Event_DotDPS(string line, string name, string value, int spell)
 	/echo DoT > ${name} < (${value} HP)
 /return
 
@@ -178,7 +180,7 @@ Sub RefreshBuff(string Name, int Duration)
 		/varset BuffName ${Name}
 	} else {
 		| Assuming this function is called properly, this should only trigger when you have put a item clicky in the bank
-		| /echo UNKNOWN BUFF! ${Name}
+		/echo UNKNOWN BUFF! ${Name}
 		/return 0
 	}
 	
@@ -197,7 +199,7 @@ Sub RefreshBuff(string Name, int Duration)
 			| target myself för att single target buff ska träffa rätt
 			/if (${Spell[${BuffName}].TargetType.Equal["Single"]}) /target myself
 
-			| Hitta en ledig spell-slot
+			| Find a free spell-slot
 			/for i 1 to 9
 				/if (!${Me.Gem[${i}].ID}) /varset freeslot ${i}
 			/next i
@@ -238,7 +240,7 @@ Sub RefreshPetBuff(string SpellName)
 
 Sub PerformHeal(int SpawnId, int PctHPs)
 
-	/if (!${Spawn[id ${SpawnId}].LineOfSight} && (${Spawn[id ${SpawnId}].Class.Name.Equal["Monk"]} || ${Spawn[id ${SpawnId}].Class.Name.Equal["Bard"]})) {
+	/if (!${Spawn[id ${SpawnId}].LineOfSight} && (${Spawn[id ${SpawnId}].Class.ShortName.Equal["MNK"]} || ${Spawn[id ${SpawnId}].Class.ShortName.Equal["BRD"]} || ${Spawn[id ${SpawnId}].Class.ShortName.Equal["NEC"]})) {
 		/echo DEBUG: skipping heal of puller!
 		/return
 	}
