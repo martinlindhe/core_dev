@@ -180,16 +180,16 @@ Sub RefreshBuff(string Name, int Duration)
 		/varset BuffName ${Name}
 	} else {
 		| Assuming this function is called properly, this should only trigger when you have put a item clicky in the bank
-		/echo UNKNOWN BUFF! ${Name}
+		| /echo UNKNOWN BUFF! ${Name}
 		/return 0
 	}
 	
 	| Do i have the buff on?
 	/if (${Spell[${BuffName}].Stacks} && (!${Me.Buff[${BuffName}].ID} || ${Me.Buff[${BuffName}].Duration} < ${Duration})) {
 		/if (${FindItem[${Name}].ID}) {
-			/if (${FindItem[${Name}].Spell.Duration}) {
-				/return 1
-			}
+			| Don't try to click if the clicky has a reuse timer
+			/if (${FindItem[${Name}].Timer}) /return 1
+
 			/call DebugMsg "BUFFING: ${BuffName} (${Me.Buff[${BuffName}].Duration} left)"
 			/call MQ2Cast "${Name}" item
 		} else {
@@ -240,7 +240,7 @@ Sub RefreshPetBuff(string SpellName)
 
 Sub PerformHeal(int SpawnId, int PctHPs)
 
-	/if (!${Spawn[id ${SpawnId}].LineOfSight} && (${Spawn[id ${SpawnId}].Class.ShortName.Equal["MNK"]} || ${Spawn[id ${SpawnId}].Class.ShortName.Equal["BRD"]} || ${Spawn[id ${SpawnId}].Class.ShortName.Equal["NEC"]})) {
+	/if (${Spawn[id ${SpawnId}].Distance} > 40 && (${Spawn[id ${SpawnId}].Class.ShortName.Equal["MNK"]} || ${Spawn[id ${SpawnId}].Class.ShortName.Equal["BRD"]} || ${Spawn[id ${SpawnId}].Class.ShortName.Equal["NEC"]})) {
 		/echo DEBUG: skipping heal of puller!
 		/return
 	}

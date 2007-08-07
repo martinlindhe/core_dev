@@ -1,6 +1,6 @@
 2007.08.07
 	- bot_spells.inc:
-		* fixade så man inte assist healar necros
+		* fixade så man inte assist healar necros, förbättrade "heal puller" logik, så pullers healas bara om dom är nära dig
 
 
 2007.08.06:
