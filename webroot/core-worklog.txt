@@ -1,6 +1,11 @@
 ----[[platform todo]]----
 	core/gör snart:
 
+	js editor:
+		* aktivera för wiki editor & blog editor & news editor
+		* knappar som auto-skapar taggen över markerad text
+		* [h1]titel[/h1] tagg som skapar en helrads-rubrik, se artikel: http://www.linuxjournal.com/article/5780
+
 	forum:
 		- för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
 			gör ett sh-script som körs veckovis för detta (för /etc/cron.weekly på linux-db server)
