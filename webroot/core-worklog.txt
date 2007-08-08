@@ -41,7 +41,7 @@
 		* aktivera för wiki editor (done) & blog editor & news editor
 		* fixme: "text-decoration: underline", "text-decoration: line-through" har ingen effekt på <input type="button">, hur fixa? det funkar i IE6 men ej i firefox
 		* fixme: insert tag [hr] funkar ej med insertTags() javascript-funktionen
-		
+
 
 	forum:
 		- för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
