@@ -355,8 +355,6 @@ class Files
 		global $db, $session;
 		if (!$session->id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
-		set_time_limit(90);
-
 		//ignore empty file uploads
 		if (!$FileData['name']) return;
 
