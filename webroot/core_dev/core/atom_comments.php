@@ -87,6 +87,7 @@
 		$q .= 'WHERE t1.commentType='.$_type.' AND t1.deletedBy=0';
 		$list = $db->getArray($q);
 
+		$result = array();
 		foreach ($list as $row) {
 			if ($_type == COMMENT_IMAGE && $files->getUploader($row['ownerId']) == $ownerId) {
 				$result[] = $row;
