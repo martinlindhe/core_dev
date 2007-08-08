@@ -794,6 +794,14 @@ class Files
 		}
 	}
 
+	function getUploader($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT uploaderId FROM tblFiles WHERE fileId='.$_id;
+		return $db->getOneItem($q);
+	}
 
 	function showImageGadgetXHTML()
 	{

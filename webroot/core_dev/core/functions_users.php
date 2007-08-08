@@ -310,7 +310,7 @@
 
 	function nameLink($id, $name = '')
 	{
-		if (!$id) return 'UNREGISTERED';
+		if (!$id) return 'Guest';
 		if (!$name) $name = getUserName($id);
 		if (!$name) die;
 

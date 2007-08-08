@@ -49,7 +49,6 @@
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($commentId)) return false;
-
 		$db->query('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentId='.$commentId);
 	}
 
@@ -76,6 +75,24 @@
 
 		$q .=	' ORDER BY t1.timeCreated DESC';
 		return $db->getArray($q);
+	}
+
+	function getCommentsByOwner($_type, $ownerId)
+	{
+		global $db, $files;
+		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+
+		$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
+		$q .= 'WHERE t1.commentType='.$_type.' AND t1.deletedBy=0';
+		$list = $db->getArray($q);
+
+		foreach ($list as $row) {
+			if ($_type == COMMENT_IMAGE && $files->getUploader($row['ownerId']) == $ownerId) {
+				$result[] = $row;
+			}
+		}
+		return $result;
 	}
 
 	/* returns the last comment posted for $ownerId object. useful to retrieve COMMENT_FILE_DESC where max 1 comment is posted per object */
@@ -145,4 +162,32 @@
 
 		return count($list);
 	}
+
+	/* Shows all comments to objects of $_type owned by $session->id, typically to be used by site admins */
+	//fixme: currently only used to display image comments
+	function showAllComments($_type)
+	{
+		global $session, $config;
+
+		if (!$session->id || !is_numeric($_type)) return false;
+
+		if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
+			deleteComment($_GET['delete']);
+		}
+
+		$list = getCommentsByOwner($_type, $session->id);
+
+		foreach ($list as $row) {
+			echo '<div class="comment_details">';
+			echo makeThumbLink($row['ownerId']);
+			echo nameLink($row['userId'], $row['userName']).'<br/>';
+			echo $row['timeCreated'];
+			echo '</div>';
+			echo '<div class="comment_text">';
+			echo '<a href="?delete='.$row['commentId'].'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a> ';
+			echo $row['commentText'];
+			echo '</div>';
+		}
+	}
+
 ?>

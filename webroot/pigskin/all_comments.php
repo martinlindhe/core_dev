@@ -6,7 +6,7 @@
 
 	echo '<h1>Visar alla kommentarer, nyast först</h1>';
 
-
+	showAllComments(COMMENT_IMAGE);
 
 	require('design_foot.php');
 ?>
