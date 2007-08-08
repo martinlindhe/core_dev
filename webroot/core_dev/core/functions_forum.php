@@ -450,22 +450,25 @@
 		echo '<th width=30></th>';
 		if ($data['parentId'] == 0) {
 			echo '<th>Forum</th>';
-			echo '<th width=200 align="center">Last topic</th>';
+			echo '<th width=80>Author</th>';
 			echo '<th width=70 align="center">Topics</th>';
+			echo '<th width=70 align="center">Views</th>';
+			echo '<th width=200>Last topic</th>';
 		} else {
 			echo '<th>Topic</th>';
-			echo '<th width=200 align="center">Last post</th>';
+			echo '<th width=80>Author</th>';
 			echo '<th width=70 align="center">Posts</th>';
+			echo '<th width=70 align="center">Views</th>';
+			echo '<th width=200>Last post</th>';
 		}
-		echo '<th width=70 align="center">Views</th>';
 		echo '</tr>';
 
 		$i = 0;
 		foreach ($list as $row) {
 			$i++;
-			echo '<tr class="forum_overview_item_'.($i%2?'even':'odd').'" >';
+			echo '<tr class="forum_overview_item_'.($i%2?'even':'odd').'">';
 
-			echo '<td align="center">';
+			echo '<td align="center">';	//icon
 
 			if ($row['locked']) {
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_locked.png" alt="Locked"/><br/>';
@@ -483,16 +486,22 @@
 			}
 			echo '</td>';
 
-			echo '<td class="forum_item_text">';
+			echo '<td class="forum_item_text">';	//topic/forum
 				if ($row['sticky'] == 1) echo '<b>Sticky: </b>';
 				if ($row['sticky'] == 2) echo '<b>Announcement: </b>';
 				echo '<a href="forum.php?id='.$row['itemId'].'">'.$row['itemSubject'].'</a><br/>';
-				echo 'by '.nameLink($row['authorId'], $row['authorName']);
-				echo ' '.$row['timeCreated'];
+			echo '</td>';
+			
+			echo '<td>';	//author
+				echo nameLink($row['authorId'], $row['authorName']);
+				//echo ' '.$row['timeCreated'];
 			echo '</td>';
 
+			echo '<td align="center">'.formatNumber(getForumMessageCount($row['itemId'], false)).'</td>';
+			echo '<td align="center">'.formatNumber($row['itemRead']).'</td>';
+
 			$lastpost = getForumLastPost($row['itemId']);
-			echo '<td class="forum_item_text">';
+			echo '<td class="forum_item_text">';	//last post/last topic
 			if ($lastpost) {
 				if ($data['parentId'] == 0) {
 					//This is a topic
@@ -514,8 +523,6 @@
 			}
 			echo '</td>';
 
-			echo '<td align="center">'.formatNumber(getForumMessageCount($row['itemId'], false)).'</td>';
-			echo '<td align="center">'.formatNumber($row['itemRead']).'</td>';
 			echo '</tr>';
 		}
 

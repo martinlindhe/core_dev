@@ -4,7 +4,8 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	$config['core_root'] = '/home/martin/dev/webroot/core_dev/';	//use of an absolute path is highly recommended
+	//$config['core_root'] = '/home/martin/dev/webroot/core_dev/';	//use of an absolute path is highly recommended
+	$config['core_root'] = 'E:/devel/webroot/core_dev/';	//use of an absolute path is highly recommended
 	$config['core_web_root'] = '/core_dev/';						//the webpath to root level of core files (css, js, gfx directories)
 
 	$config['web_root'] = '/core_dev/sample/';						//the webpath to the root level of the project
@@ -31,7 +32,8 @@
 	loadPlugins();
 
 	$config['database']['username']	= 'root';
-	$config['database']['password']	= 'dravel';
+	//$config['database']['password']	= 'dravel';
+	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbSample';
 	$db = new DB_MySQLi($config['database']);
 /*

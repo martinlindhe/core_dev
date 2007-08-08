@@ -132,6 +132,7 @@
 
 	kategorier (atom_categories.php):
 		- kunna ladda upp en bild som ska visas som kategori-rubrik istället för texten
+		- kunna ha underkategorier (pigskin)
 
 	
 	guestbook (functions_guestbook.php):

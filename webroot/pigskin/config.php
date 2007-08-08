@@ -31,7 +31,7 @@
 	$config['files']['apc_uploads'] = false;
 	$config['files']['count_file_views'] = true;
 	$config['files']['image_max_width'] = 800;
-	$config['files']['image_max_height'] = 570;
+	$config['files']['image_max_height'] = 600;
 	$config['files']['thumb_default_width'] = 70;
 	$config['files']['thumb_default_height'] = 60;
 	$config['files']['upload_dir'] = 'E:/Devel/webupload/pigskin/';

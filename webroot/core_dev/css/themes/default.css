@@ -481,6 +481,7 @@ select {
 }
 
 .forum_overview_item_even,.forum_overview_item_odd {
+	height: 30px;
 	font-size: 12px;
 	font-family: verdana;
 	color: #1F204B;

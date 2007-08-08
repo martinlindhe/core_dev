@@ -10,6 +10,9 @@
 	$files->showThumbnails(FILETYPE_USERFILE, $_cat);
 ?>
 
+<div id="stingray_logo"></div>
+<div id="corvette_emblem"></div>
+
 <div id="menu">
 	<table width="100%" cellpadding="0" cellspacing="4" border="0">
 		<tr>
@@ -23,15 +26,15 @@
 			</td>
 			<td>
 				Residence: Stockholm, Sweden<br />
-				Hair color: Red<br />
-				Eyes: Blue<br />
-				Height: 5"8.5 / 174 cm<br />
+				Paint color: Lamborghini Red<br />
+				Engine: 350 small block<br />
+				Horsepower: 374 bhp<br />
 			</td>
 			<td>
-				Weight: 132 lb / 60 kg<br />
-				Bust: 36 / 92 cm<br />
-				Bra: 34 B / 75 B<br />
-				Waist: 27.5 / 70 cm<br />
+				Torque: 549 Nm<br />
+				Year: 1974<br />
+				Gearbox: TH400<br />
+				Owner: Thomas Lönn<br />
 			</td>
 			<td>
 				Hips: 35.5 / 90 cm<br />
