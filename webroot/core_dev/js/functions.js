@@ -261,6 +261,10 @@ function loadImage(id, holder)
 	var i = document.createElement('img');
 	i.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
 	e.appendChild(i);
+
+
+	var j = document.getElementById('image_comments_iframe');
+	j.setAttribute('src', _ext_core+'html_imgcomments.php?i='+id+_ext_ref);
 }
 
 

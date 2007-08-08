@@ -263,7 +263,7 @@ class Files
 			echo 'No thumbnails to show!';
 			return;
 		}
-		
+
 		echo '<div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroll_down" onclick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
 		echo '<div id="image_thumbs_scroller">';
@@ -280,22 +280,15 @@ class Files
 		echo '</div>';
 		echo '</div>'; //id="image_thumbs_scroller"
 
-		echo '<div id="image_big_holder">';
-
-		echo '<div id="image_comments_content">';
-		$cmt_cnt = showComments(COMMENT_IMAGE, $list[0]['fileId'], 17);
+		echo '<div id="image_comments">';
+		echo '<iframe id="image_comments_iframe" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="'.$config['core_web_root'].'api/html_imgcomments.php?i='.$list[0]['fileId'].getProjectPath().'"></iframe>';
 		echo '</div>';
+
+		echo '<div id="image_big_holder">';
 
 		echo '<div id="image_big">'.makeImageLink($list[0]['fileId'], $list[0]['fileName']).'</div>';
 
-/*
-		echo '<div id="image_comments" onclick="show_image_comments('.$list[0]['fileId'].')">';
-		echo '<img src="'.$config['core_web_root'].'gfx/icon_comment.png"/> ';
-		echo $cmt_cnt.' comments';
-		echo '</div>';
-*/
 		echo '</div>';	//id="image_big_holder"
-
 	}
 	
 	/* shows attachments. used to show files attached to a forum post */

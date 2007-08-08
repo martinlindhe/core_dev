@@ -7,7 +7,8 @@
 	if ($session->id) {
 		echo '<br/>';
 		echo '<a href="?logout">log out</a> - ';
-		echo '<a href="files.php">files</a><br/>';
+		echo '<a href="files.php">files</a> - ';
+		echo '<a href="all_comments.php">comments</a><br/>';
 	}
 ?>
 </div>

@@ -16,17 +16,19 @@
 	/* Comment types only meant for the admin's eyes */
 	define('COMMENT_MODERATION',		30);	//owner = tblModeration.queueId
 
-	function addComment($commentType, $ownerId, $commentText, $privateComment = false)
+	function addComment($_type, $ownerId, $commentText, $privateComment = false)
 	{
 		global $db, $session;
-		if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
+		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
+
+		if ($_type != COMMENT_IMAGE && !$session->id) return false;
 
 		$commentText = $db->escape(htmlspecialchars($commentText));
 
 		if ($privateComment) $private = 1;
 		else $private = 0;
 
-		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$commentType.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
 		return $db->insert($q);
 	}
 
@@ -105,21 +107,22 @@
 
 	/* Helper function, standard "show comments" to be used by other modules */
 	//col_w sets the column width of the textarea
-	function showComments($_type, $ownerId, $col_w = 30)
+	function showComments($_type, $ownerId, $col_w = 30, $col_h = 6)
 	{
 		global $session;
-		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w)) return false;
+		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w) || !is_numeric($col_h)) return false;
 
-		if ($session->id && !empty($_POST['cmt'])) {
+		if (!empty($_POST['cmt'])) {
 			addComment($_type, $ownerId, $_POST['cmt']);
 		}
 
 		/* Shows all comments for this item */
 		$list = getComments($_type, $ownerId);
 
-		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' Comments</div>';
+		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' comments</div>';
 
 		echo '<div id="comments_holder">';
+		echo '<div id="comments_only">';
 		foreach ($list as $row) {
 			echo '<div class="comment_details">';
 			echo nameLink($row['userId'], $row['userName']).'<br/>';
@@ -127,10 +130,13 @@
 			echo '</div>';
 			echo '<div class="comment_text">'.$row['commentText'].'</div>';
 		}
+		echo '</div>'; //id="comments_only"
 
-		if ($session->id && $_type != COMMENT_MODERATION) {
+		if ( ($session->id && $_type != COMMENT_MODERATION) ||
+				($_type == COMMENT_IMAGE)
+		) {
 			echo '<form method="post" action="">';
-			echo '<textarea name="cmt" cols="'.$col_w.'" rows="6"></textarea><br/>';
+			echo '<textarea name="cmt" cols="'.$col_w.'" rows="'.$col_h.'"></textarea><br/>';
 			echo '<input type="submit" class="button" value="Add comment"/>';
 			echo '</form>';
 		}
