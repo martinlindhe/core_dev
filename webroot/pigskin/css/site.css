@@ -13,7 +13,7 @@ body {
 	width: 1000px;
 	height: 80px;
 	position: absolute;
-	top: 620px;
+	top: 640px;
 	left: 0px;
 	font-family: verdana;
 }
@@ -31,12 +31,12 @@ body {
 	width: 1000px;
 	height: 20px;
 	position: absolute;
-	top: 706px;
+	top: 725px;
 	left: 0px;
 	text-align: center;
 }
 #footer a {
-	color: #000;
+	color: #aaa;
 	text-decoration: none;
 }
 
@@ -44,12 +44,31 @@ body {
 	position: absolute;
 	top: 20px;
 	left: 120px;
-	border: 2px #000 solid;
 }
 
 #image_big {
+	border: 2px #000 solid;
 	min-width: 100px;
 	min-height: 100px;
+}
+
+#image_comments {
+	margin-top: 5px;
+	padding: 5px;
+	float: left;
+	cursor: pointer;
+}
+#image_comments:hover {
+	background-color: #D0E8CE;
+	color: #2222ee;
+}
+
+#image_comments_content {
+	width: 200px;
+	float: left;
+	padding: 5px;
+	border-right: 2px #000 solid;
+	height: 100%;
 }
 
 #image_thumbs_scroller {

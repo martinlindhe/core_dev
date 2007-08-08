@@ -7,6 +7,8 @@
 
 	define('COMMENT_NEWS',					1);
 	define('COMMENT_BLOG',					2);		//anonymous or registered users comments on a blog
+	define('COMMENT_IMAGE',					3);		//anonymous or registered users comments on a image
+
 	define('COMMENT_ADMIN_IP',			10);	//a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 
 	define('COMMENT_ADBLOCKRULE',		20);
@@ -102,16 +104,17 @@
 	}
 
 	/* Helper function, standard "show comments" to be used by other modules */
-	function showComments($_type, $ownerId)
+	//col_w sets the column width of the textarea
+	function showComments($_type, $ownerId, $col_w = 30)
 	{
 		global $session;
-		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w)) return false;
 
 		if ($session->id && !empty($_POST['cmt'])) {
 			addComment($_type, $ownerId, $_POST['cmt']);
 		}
 
-		/* Visar kommentarer till artikeln */
+		/* Shows all comments for this item */
 		$list = getComments($_type, $ownerId);
 
 		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' Comments</div>';
@@ -127,11 +130,13 @@
 
 		if ($session->id && $_type != COMMENT_MODERATION) {
 			echo '<form method="post" action="">';
-			echo '<textarea name="cmt" cols="30" rows="6"></textarea><br/>';
+			echo '<textarea name="cmt" cols="'.$col_w.'" rows="6"></textarea><br/>';
 			echo '<input type="submit" class="button" value="Add comment"/>';
 			echo '</form>';
 		}
 
 		echo '</div>';	//id="comments_holder"
+
+		return count($list);
 	}
 ?>

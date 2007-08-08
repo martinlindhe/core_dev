@@ -16,7 +16,7 @@
 		global $config;
 		if (!is_numeric($_id)) return false;
 
-		return '<img src="'.$config['core_web_root'].'api/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/>';
+		return '<img id="img_'.$_id.'" src="'.$config['core_web_root'].'api/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/>';
 	}
 
 	/* Returns a string like "2 KiB" */

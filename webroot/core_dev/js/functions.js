@@ -347,6 +347,46 @@ function faq_focus(n)
 	}
 }
 
+//used with $files->showThumbnails(). displays comments div and shrinks currently displayed image
+//n=image id currently displayed
+var comments_shown = false;
+var org_w, org_h;
+function show_image_comments(n)
+{
+	e = document.getElementById('img_'+n);
+
+	if (!comments_shown) {
+		show_element_by_name('image_comments_content');
+		comments_shown = true;
+		org_w = e.width;
+		org_h = e.height;
+		//fixme: shrinking image here dont work properly, first time it resizes it gets wrong then it gets correct
+		//e.width *= 0.5;
+		//e.height *= 0.5;
+		return;
+	}
+
+	hide_element_by_name('image_comments_content');
+	comments_shown = false;
+	e.width = org_w;
+	e.height = org_h;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * Format selection
  *
