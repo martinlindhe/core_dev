@@ -1,10 +1,47 @@
+---[[ doc för js-editor features ]]---
+
+	There is a handy js-based toolbar for most edit boxes, exposing many of the bbcodes implemented.
+	Just mark the text you want in bold and hit the bold "B" button to apply the bbcode on the marked text.
+
+	The following bbcodes are currently implemented:
+	
+	[b]bold text[/b]
+	[i]italic text[/i]
+	[u]underlined text[/u]
+	[s]strikethru text[/s]
+
+	[code]program code block[/code]
+	[quote]quoted text[/quote]
+	
+	[h1]headline level 1[/h1]
+	[h2]headline level 2[/h2]
+	[h3]headline level 3[/h3]
+
+	[hr]			creates a full-page break
+
+	This is implemented in formatUserInputText() in functions_textformat.php
+
+	URL and email handling are automatically translated to clickable links.
+
+	Special Wiki-links:
+	
+		Example [[wiki:About]] links to wiki.php?Wiki:About
+		Example 2: [[wiki:About|read about us]] links to wiki.php?Wiki:About but "read about us" is link text
+		Example 3: [[link:page.php|click here]] makes a clickable link
+
+		Note: Wiki-links are currently not exposed by the js-editor toolbar
+
+
+
+
 ----[[platform todo]]----
 	core/gör snart:
 
 	js editor:
-		* aktivera för wiki editor & blog editor & news editor
-		* knappar som auto-skapar taggen över markerad text
-		* [h1]titel[/h1] tagg som skapar en helrads-rubrik, se artikel: http://www.linuxjournal.com/article/5780
+		* aktivera för wiki editor (done) & blog editor & news editor
+		* fixme: "text-decoration: underline", "text-decoration: line-through" har ingen effekt på <input type="button">, hur fixa? det funkar i IE6 men ej i firefox
+		* fixme: insert tag [hr] funkar ej med insertTags() javascript-funktionen
+		
 
 	forum:
 		- för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
@@ -200,6 +237,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.08.08:
+	- js-editor: påbörjat js-editor. skapat knappar som auto-skapar taggen över markerad text
+	- js-editor: [s]strikethru text[/s] tagg added
+	- js-editor: påbörjat dokumentation, inklusive bbcodes
+	- js-editor: [h1], [h2], [h3] taggs added + css added
+
 2007.07.25:
 	- lyrics & adblock: fixed opensearch.xml URI
 	- adblock: fixade så adminpanelen funkar ordentligt (pr sattes felaktikgt till "admin")

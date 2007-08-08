@@ -67,7 +67,23 @@
 		$text = str_ireplace('[u]', '<u>', $text);
 		$text = str_ireplace('[/u]', '</u>', $text);
 
-		$text = str_ireplace("[hr]\n", '<hr/>', $text);	//hack. a better solution would be to trim all whitespace directly following a [hr] tag
+		/* [s]strikethru text[/u] */
+		$text = str_ireplace('[s]', '<del>', $text);
+		$text = str_ireplace('[/s]', '</del>', $text);
+
+		/* [h1]headline level 1[/h1] */
+		$text = str_ireplace('[h1]', '<h1 class="bb_h1">', $text);
+		$text = str_ireplace('[/h1]', '</h1>', $text);
+
+		/* [h2]headline level 2[/h2] */
+		$text = str_ireplace('[h2]', '<h2 class="bb_h2">', $text);
+		$text = str_ireplace('[/h2]', '</h2>', $text);
+
+		/* [h3]headline level 3[/h3] */
+		$text = str_ireplace('[h3]', '<h3 class="bb_h3">', $text);
+		$text = str_ireplace('[/h3]', '</h3>', $text);
+
+		$text = str_ireplace("[hr]\n", '<hr/>', $text);	//fixme: this is a hack. a better solution would be to trim all whitespace directly following a [hr] tag
 		$text = str_ireplace('[hr]', '<hr/>', $text);
 
 		//code block, example: [code]text text[/code]
@@ -106,9 +122,10 @@
 			if ($qpos1 !== false) {
 				$nameblock = substr($quoteblock, $qpos1+strlen('name='), $qpos2-$qpos1-strlen('name='));
 				$quoteblock = substr($quoteblock, $qpos1+strlen('name=')+strlen($nameblock)+strlen(']'));
-				$nameblock = $nameblock.' skrev';
+				if ($nameblock) $nameblock .= ' wrote';
+				else $nameblock = 'Quote';
 			} else {
-				$nameblock = 'Citat';
+				$nameblock = 'Quote';
 				$quoteblock = substr($quoteblock, $qpos2+strlen(']'));
 			}
 

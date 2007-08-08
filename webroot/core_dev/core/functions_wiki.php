@@ -3,9 +3,9 @@
 		------------------------------------------------------------
 		Written by Martin Lindhe, 2007 <martin@startwars.org>
 
-		core																				tblWiki
+		core											tblWiki
 		for history-support: atom_revisions.php			tblRevisions
-		for files-support: $files objekt						tblFiles
+		for files-support: $files objekt				tblFiles
 	*/
 
 	require_once('atom_revisions.php');
@@ -17,12 +17,12 @@
 
 	$config['wiki']['allow_edit'] = false;	//false = only allow admins to edit the wiki articles. true = allow all, even anonymous
 
-	$config['wiki']['allow_files'] = false;		//only acceptera bara de tabbar som finns i allowed_tabs
+	$config['wiki']['allow_files'] = false;		//only accept the tabs specified in allowed_tabs
 
 	$config['wiki']['allowed_tabs'] =	array('Wiki', 'WikiEdit', 'WikiHistory', 'WikiFiles');
 	$config['wiki']['first_tab'] = 'Wiki';
 
-	/* Optimization: Doesnt store identical entries if you hit Save button multiple times */
+	/* Optimization: Doesn't store identical entries if you hit Save button multiple times */
 	function wikiUpdate($wikiName, $_text)
 	{
 		global $db, $session, $config;
@@ -157,12 +157,19 @@
 			if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' by '.$data['creatorName'];
 
 			echo
-          '<script type="text/javascript">initToolbar("tool__bar","wiki__text",toolbar);</script>'.
-          '<div id="tool_bar">'.
 					'<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">'.
-					'<input type="button" class="button" value="B" style="font-weight: bold"/>'.
+					'<input type="button" class="button" value="[h1]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h1]\',\'[/h1]\',\'headline level 1\')"/>'.
+					'<input type="button" class="button" value="[h2]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h2]\',\'[/h2]\',\'headline level 2\')"/>'.
+					'<input type="button" class="button" value="[h3]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h3]\',\'[/h3]\',\'headline level 3\')"/>'.
+					'<input type="button" class="button" value="B" style="font-weight: bold" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[b]\',\'[/b]\',\'bold text\')"/>'.
+					'<input type="button" class="button" value="I" style="font-style: italic" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[i]\',\'[/i]\',\'italic text\')"/>'.
+					'<input type="button" class="button" value="U" style="text-decoration: underline" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[u]\',\'[/u]\',\'underlined text\')"/>'.
+					'<input type="button" class="button" value="S" style="text-decoration: line-through" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[s]\',\'[/s]\',\'strikethru text\')"/>'.
+					'<input type="button" class="button" value="[hr] (broken)" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[hr]\')"/>'.
+					'<input type="button" class="button" value="[code]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[code]\',\'[/code]\',\'code block\')"/>'.
+					'<input type="button" class="button" value="[quote]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[quote name=]\',\'[/quote]\',\'quote\')"/>'.
 					'<br/>'.
-					'<textarea name="wiki_'.$data['wikiId'].'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
+					'<textarea name="wiki_'.$data['wikiId'].'" id="wiki_'.$data['wikiId'].'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
 					'Last edited '.$last_edited.'<br/>'.
 					'<input type="submit" class="button" value="Save"/>';
 
@@ -202,8 +209,6 @@
 				}
 			}
 			echo '</form>';
-			
-			echo '</div>';	//id="tool_bar"
 		}
 		elseif ($current_tab == 'WikiFiles')
 		{
