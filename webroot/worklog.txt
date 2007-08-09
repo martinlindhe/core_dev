@@ -1,3 +1,12 @@
+6-8:e augusti:
+	* har läst manualer, pillat med M2W och en massa annat
+
+Torsdag 9:e augusti:
+	webbgränssnittet:
+		* fixat meddelande-funktionen. javascript-editorn är nu bara aktiverad för IE och Firefox-användare,
+			eftersom Safari-användare och andra har problem med att den inte fungerar
+			för dessa användare visas istället en enklare mail-editor som ska fungera för alla användare
+
 
 
 ***************************************************************************************************
