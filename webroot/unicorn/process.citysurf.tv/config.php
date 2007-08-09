@@ -40,10 +40,6 @@
 
 	$session->handleSessionActions();
 
-	//ipx config
-	$config['sms']['originating_number'] = '72777';
-	$config['sms']['auth_username'] = 'lwcg';
-	$config['sms']['auth_password'] = '3koA4enpE';
 
 	$allowed_ip = array(
 		'127.0.0.1',
