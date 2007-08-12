@@ -375,7 +375,7 @@ Sub DruidUpdateBuffs
 	}
 
 	/if (${Group.Members}) {
-		/if (!${Raid.Members}) /call RefreshBuff "Blessing of the Direwild Rk. II" 50
+		/if (!${Raid.Members}) /call RefreshBuff "Blessing of the Direwild Rk. III" 50
 		/if (${Macro.Return}) /return
 		/if (!${Me.Song["Aura of Life Effect"].ID}) {
 			| this is a hack because it seems to fade sometimes when you move or lag

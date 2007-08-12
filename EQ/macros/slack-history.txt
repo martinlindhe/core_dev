@@ -1,3 +1,7 @@
+todo:
+	kolla om group heal behövs: räkna ut hp average på gruppen och kasta isåfall moonshadow om den e memorerad
+
+
 2007.08.07
 	- bot_spells.inc:
 		* fixade så man inte assist healar necros
