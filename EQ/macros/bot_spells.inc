@@ -296,6 +296,32 @@ Sub HandleGroupHeal(int PctHPs)
 		/return
 	}
 
+	| See if we should cast group heal
+	/if (${Group.Members} && ${Me.SpellReady["Moonshadow"]}) {
+		/declare x int local 0
+		/declare n int local 0
+
+		/for i 0 to 5
+			/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 150) && ${Group.Member[${i}].Type.NotEqual["Corpse"]} && ${Group.Member[${i}].State.NotEqual["DEAD"]}) {
+				/varcalc x ${x}+${Group.Member[${i}].PctHPs}
+				/varcalc n ${n}+1
+
+				| dont do group heal if one need a big heal
+				/if (${Group.Member[${i}].PctHPs} <= ${PctHPs}) {
+					/call PerformHeal ${Group.Member[${i}].ID} ${PctHPs}
+					/return
+				}
+			}
+		/next i
+
+		/varcalc x ${x} / ${n}
+		/if (${n} >=3 && ${x} <= 85) {
+			/call DebugMsg "GROUP HEAL (avg hp ${x} for ${n} players)"
+			/call MQ2Cast "Moonshadow"
+			/return
+		}
+	}
+
 	/for i 0 to 5
 		/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 200) && (${Group.Member[${i}].PctHPs} <= ${PctHPs}) && ${Group.Member[${i}].Type.NotEqual["Corpse"]} && ${Group.Member[${i}].State.NotEqual["DEAD"]} && ${Me.SpellReady[DRUID_QH1]}) {
 			/call PerformHeal ${Group.Member[${i}].ID} ${PctHPs}

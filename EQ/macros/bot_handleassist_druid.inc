@@ -40,7 +40,7 @@
 
 
 | Will use the first one if memorized when script starts, else the other
-#define NUKE_SPELLNAME_COLD			"Rime Crystals Rk. II"
+#define NUKE_SPELLNAME_COLD			"Rime Crystals Rk. III"
 #define DEBUFF_SPELLNAME_COLD		"Icefall Breath Rk. II"
 
 #define NUKE_SPELLNAME_FIRE			"Equinox Burn Rk. III"

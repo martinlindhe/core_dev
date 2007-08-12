@@ -1,5 +1,6 @@
-todo:
-	kolla om group heal behövs: räkna ut hp average på gruppen och kasta isåfall moonshadow om den e memorerad
+2007.08.12
+	- bot_spells.inc:
+		* räknar average hp på gruppen för att avgöra om group heal ska kastas (Moonshadow)
 
 
 2007.08.07
