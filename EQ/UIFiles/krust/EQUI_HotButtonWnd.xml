@@ -1243,8 +1243,8 @@
 			<CX>36</CX>
 			<CY>36</CY>
 		</Size>
-		<Background>A_InvAmmo</Background>
-		<EQType>22</EQType>
+		<Background>A_InvWrist</Background>
+		<EQType>10</EQType>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
@@ -1448,8 +1448,8 @@
 			<CX>36</CX>
 			<CY>36</CY>
 		</Size>
-		<Background>A_InvHead</Background>
-		<EQType>2</EQType>
+		<Background>A_InvAmmo</Background>
+		<EQType>22</EQType>
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
