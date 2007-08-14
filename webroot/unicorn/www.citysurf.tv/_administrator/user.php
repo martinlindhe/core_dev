@@ -26,6 +26,7 @@ $reasons = array(
 'TD' => ' på grund av: <b>Bilden är för mörk.</b>',
 'TL' => ' på grund av: <b>Bilden är för ljus.</b>',
 'NF' => ' på grund av: <b>Ej rakt framifrån.</b>');
+
 	$sql = &new sql();
 	$user = &new user($sql);
 	$change = false;
@@ -48,6 +49,7 @@ $reasons = array(
 				if($res) errorACT('E-postadressen finns redan. ( '.$res.' )', 'user.php?id='.$_POST['id']);
 			}
 			$row = $sql->queryLine("SELECT u.id_id, u.level_enddate, u.level_pending, u.level_id, l.level_id AS search, status_id FROM s_user u LEFT JOIN s_userlevel l ON l.id_id = u.id_id WHERE u.id_id = '".$_POST['id']."'", 1);
+
 			if(!empty($row['search'])) {
 				if(strpos($row['search'], 'LEVEL'.$row['level_id'])) {
 					$row['search'] = str_replace('LEVEL'.$row['level_id'], 'LEVEL'.$_POST['level'], $row['search']);
@@ -166,14 +168,16 @@ $reasons = array(
 		exit;
 	}
 
-	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		$row = $sql->queryLine("SELECT u.*, i.* FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".secureINS($_GET['id'])."' LIMIT 1", 1);
+		if (!$row['id_id']) $row['id_id'] = $_GET['id']; //martin fulhack, id_id är inte alltid satt
 		if(!count($row)) {
 			$change = false;
 		} else {
 			$change = true;
 		}
 	}
+
 	if(!empty($_GET['del_pic'])) {
 		$res = $sql->queryLine("SELECT id_id, u_picd, u_picid FROM s_user WHERE id_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
 		if(!empty($res) && count($res)) {

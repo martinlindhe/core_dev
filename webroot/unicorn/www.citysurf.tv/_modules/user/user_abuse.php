@@ -15,7 +15,7 @@
 <?
 	} else {
 ?>
-	Vill du bara blockera denna användare från din sida, <a href="javascript:makeBlock('<?=$s['id_id']?>');">klicka här</a>.<br/><br/>
+	Vill du bara blockera denna användare från din sida, <b><a href="javascript:makeBlock('<?=$s['id_id']?>');">klicka här</a></b>.<br/><br/>
 	
 	Vill du anmäla användaren, ange orsak i rutan här under.andlar ärendet så snabbt vi kan.<br/>
 	Missbruk kan lea till avstängning av dig själv!

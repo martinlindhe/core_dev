@@ -53,9 +53,10 @@
 	$file_ext = explode('.', $res['old_filename']);
 	$file_ext = stripslashes(strtolower($file_ext[count($file_ext)-1]));
 	if (!$file_ext) $file_ext = $res['pht_name'];
-?>
 
-<div class="subHead">galleri</div><br class="clr"/>
+	if ($res['hidden_id']) echo '<div class="subHead">galleri X</div><br class="clr"/>';
+	else echo '<div class="subHead">galleri</div><br class="clr"/>';
+?>
 
 <? makeButton(false, 'makePhotoComment('.$s['id_id'].','.$res['main_id'].')', 'icon_blog.png', 'skriv kommentar'); ?>
 <br/><br/><br/>
