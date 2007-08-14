@@ -92,6 +92,7 @@ Sub CalcDPS(int value)
 
 	/if (${totDmg} == 0) {
 		/echo [${Time}] Fight started
+		/popup FIGHT STARTED
 		/varset gimp_dps_fightstarted ${Macro.RunTime}
 		/varset gimp_dps_hits 0
 	}

@@ -29,7 +29,7 @@ Sub Main
 
 		/if (${Me.Skill[${skillName}]} >= ${maxSkill}) /goto :NextSpell
 
-		/call GMCheck
+		/call CheckGM
 
 		:PlayerCheck
 		/if (HIDE_FROM_PLAYERS && ${SpawnCount[pc radius 500 notid ${Me.ID}]}) {
@@ -39,7 +39,7 @@ Sub Main
 			/goto :PlayerCheck
 		}
 
-		/call Cast "${Me.Gem[${currentSpell}]}"
+		/call BotCast "${Me.Gem[${currentSpell}]}"
 
 		:CursorCheck
 		/if (${Cursor.ID}) {
