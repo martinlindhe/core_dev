@@ -1,0 +1,19 @@
+#top_logo { background: url('vatten/logo.png'); }
+#top_bg { background: url('vatten/head_bg.png'); }
+
+ul#menu_main { background-color: #034D5A; }
+ul#menu_user { background-color: #ABEEF6; }
+
+.smallHeader, .mediumHeader, .bigHeader {
+	background-color: #034D5A;
+}
+
+.btnNormal:hover, .btnSelected {
+	background-color: #FEF3B5;
+}
+
+.btnNormal, .btn2_min, .btn2_sml { 
+	background-color: #ABEEF6;
+}
+
+.subHead { color: #044C5B; }

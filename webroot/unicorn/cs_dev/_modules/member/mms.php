@@ -1,0 +1,3 @@
+<?
+	errorACT('Kommer snart!');
+?>
