@@ -118,15 +118,17 @@
 		if(!empty($res) && count($res)) {
 			$i = 0;
 			$nl = true;
-			if(isset($_GET['more'])) {
-			foreach($res as $row) {
-				echo '<li>'.$user->getstring($row).'<br /><br />besökte: '.nicedate($row['visit_date']).'</li>';
-				$i++;
-			} } else {
-			foreach($res as $row) {
-				echo '<li>'.$user->getstring($row).'</li>';
-				$i++;
-			} }
+			if (isset($_GET['more'])) {
+				foreach($res as $row) {
+					echo $user->getstring($row).'besökte: '.nicedate($row['visit_date']).'<br/><br/>';
+					$i++;
+				}
+			} else {
+				foreach($res as $row) {
+					echo '<li>'.$user->getstring($row).'</li>';
+					$i++;
+				}
+			}
 		} else {
 			echo '<li>Inga besökare.</li>';
 		}

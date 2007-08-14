@@ -47,7 +47,7 @@
 
 		<select name="lan">
 			<option value="0">Alla län</option>
-			<? optionLan($result['lan']); ?>
+			<? optionLan(@$result['lan']); ?>
 		</select><br/><br/>
 		
 		<input type="submit" value="Sök"/>
