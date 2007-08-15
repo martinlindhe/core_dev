@@ -5,7 +5,7 @@
 	define('VIP_LEVEL2', 3);
 
 class user {
-	var $self, $info, $id;
+	var $self, $info, $id, $isAdmin;
 
 	function __construct() {
 		session_start();
@@ -26,7 +26,11 @@ class user {
 			$this->sql->queryUpdate("UPDATE s_user SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
 			$this->sql->queryUpdate("UPDATE s_useronline SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
 		}
+
 		$this->id = $id;
+		$this->isAdmin = false;
+		if ($_SESSION['data']['level_id'] == 10) $this->isAdmin = true;
+
 		return $this->getsessionuser($id);
 	}
 	

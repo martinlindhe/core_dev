@@ -30,7 +30,7 @@ function openText(id, fid) {
 		echo '
 			<td>
 			<table cellspacing="0" summary="" style="margin-left: '.(($i)?'62px':'0').';">
-			<tr><td><a href="'.l('forum','list',$row['main_id']).'" class="bld"><img width="157" height="74" src="'.OBJ.$row['main_id'].'.jpg" alt="" onerror="this.src = \''.OBJ.'forum_nopic.jpg\';" /></a></td></tr>
+			<tr><td><a href="forum_list.php?id='.$row['main_id'].'" class="bld"><img width="157" height="74" src="'.OBJ.$row['main_id'].'.jpg" alt="" onerror="this.src = \''.OBJ.'forum_nopic.jpg\';" /></a></td></tr>
 			<tr><td><h4>'.secureOUT($row['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg</td></tr>
 			</table>
 			</td>';

@@ -34,4 +34,5 @@ ny katalogstruktur:
 	tog bort s_usersess.sess_id
 	
 todo:
-	fixa sök users, använd min egen paging funktion
+	- fixa sök users, använd min egen paging funktion
+	- fixa forum, använd min egen paging funktion
