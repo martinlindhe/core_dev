@@ -111,32 +111,15 @@
 		echo '</div>';
 	}
 
-
-	//*******************************************
-	//unused/not-yet-cleaned-up functions below:
-	//*******************************************
-/*
-	function createGenerated($img, $txt1 = '', $txt2 = '')
+	function makeMenu($sel, $arr)
 	{
-		$im = imagecreatefromjpeg($img);
-		$white = imagecolorallocate($im, 255, 255, 255);
-		$grey = imagecolorallocate($im, 128, 128, 128);
-		$black = imagecolorallocate($im, 0, 0, 0);
-		$font = '/var/www/_output/foliom.TTF';
-		$img_top = imagecreatefrompng('./_output/bg.png');
-		imagecopyresampled($im, $img_top, 0, 99, 0, 0, 200, 32, 200, 32);
-		imagettftext($im, 10, 0, 5, 111, $white, $font, $txt2);
-		imagettftext($im, 12, 0, 5, 126, $white, $font, $txt1);
-		imagepng($im, './_output/generated/'.md5($img.$txt1.$txt2).'.png');
-		imagedestroy($im);
-	}
-
-	function getGenerated($img, $txt1 = '', $txt2 = '')
-	{
-		if (!file_exists('./_output/generated/'.md5($img.$txt1.$txt2).'.png')) {
-			createGenerated($img, $txt1, $txt2);
+		$i = false;
+		$ret = '';
+		foreach($arr as $key => $val) {
+			if(!$i) $i = true; else $ret .= ' - ';
+			$ret .= '<a class="wht" href="'.$val[0].'">'.(strtolower($key) == strtolower($sel)?'»'.$val[1].'«':$val[1]).'</a>';
 		}
-		return '/_output/generated/'.md5($img.$txt1.$txt2).'.png';
+		return $ret;
 	}
 
 	function nicedate($date, $type = 1)
@@ -182,6 +165,45 @@
 			}
 		}
 		return $return;
+	}
+
+	function stripzero($str)
+	{
+		if(substr($str, 0, 1) == '0') $str = substr($str, 1, 1);
+		return $str;
+	}
+
+
+
+
+
+
+
+	//*******************************************
+	//unused/not-yet-cleaned-up functions below:
+	//*******************************************
+/*
+	function createGenerated($img, $txt1 = '', $txt2 = '')
+	{
+		$im = imagecreatefromjpeg($img);
+		$white = imagecolorallocate($im, 255, 255, 255);
+		$grey = imagecolorallocate($im, 128, 128, 128);
+		$black = imagecolorallocate($im, 0, 0, 0);
+		$font = '/var/www/_output/foliom.TTF';
+		$img_top = imagecreatefrompng('./_output/bg.png');
+		imagecopyresampled($im, $img_top, 0, 99, 0, 0, 200, 32, 200, 32);
+		imagettftext($im, 10, 0, 5, 111, $white, $font, $txt2);
+		imagettftext($im, 12, 0, 5, 126, $white, $font, $txt1);
+		imagepng($im, './_output/generated/'.md5($img.$txt1.$txt2).'.png');
+		imagedestroy($im);
+	}
+
+	function getGenerated($img, $txt1 = '', $txt2 = '')
+	{
+		if (!file_exists('./_output/generated/'.md5($img.$txt1.$txt2).'.png')) {
+			createGenerated($img, $txt1, $txt2);
+		}
+		return '/_output/generated/'.md5($img.$txt1.$txt2).'.png';
 	}
 
 	function array_unshift_ref(& $ioArray, $iValueWrappedInAnArray)
@@ -241,17 +263,6 @@
 		return str_replace(",", "&nbsp;", number_format($str));
 	}
 
-	function makeMenu($sel, $arr)
-	{
-		$i = false;
-		$ret = '';
-		foreach($arr as $key => $val) {
-			if(!$i) $i = true; else $ret .= ' - ';
-			$ret .= '<a class="wht" href="'.$val[0].'">'.(strtolower($key) == strtolower($sel)?'»'.$val[1].'«':$val[1]).'</a>';
-		}
-		return $ret;
-	}
-
 	function flash($s)
 	{
 		return urlencode(utf8_encode($s));
@@ -292,12 +303,6 @@
 	function addzero($str)
 	{
 		if(strlen($str) == '1') $str = '0'.$str;
-		return $str;
-	}
-
-	function stripzero($str)
-	{
-		if(substr($str, 0, 1) == '0') $str = substr($str, 1, 1);
 		return $str;
 	}
 

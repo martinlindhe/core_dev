@@ -42,7 +42,7 @@ function blockRightClick(event) {
 		<ul id="menu_main">
 			<li><a href="<?=$config['start_page']?>">start</a> | </li>
 			<li><a href="list_users.php">leta</a> | </li>
-			<li><a href="/forum/start/">forum</a> | </li>
+			<li><a href="forum.php">forum</a> | </li>
 			<li><a href="/main/thought/">tyck till</a> | </li>
 			<li><a href="/main/surfcafe/">surfcafé</a> | </li>
 			<!--<li><a href="/text/radio/">webbradio</a> | </li>-->
