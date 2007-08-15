@@ -12,7 +12,7 @@
 	$config['web_root'] = '/unicorn/cs_dev/';						//the webpath to the root level of the project
 	$config['default_title'] = 'CitySurf.tv - Nu kör vi!';			//default title for pages if no title is specified for that page
 
-	$config['start_page'] = 'main.php';	//logged in start page
+	$config['start_page'] = 'start.php';	//logged in start page
 
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
