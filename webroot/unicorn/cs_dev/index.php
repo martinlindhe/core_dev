@@ -66,7 +66,7 @@
 		<table cellpadding="0" cellspacing="0" border="0">
 			<tr><td>
 
-				<div style="width: 596px; text-align: left;"><img src="<?=CS?>_gfx/themes/default_logo.png" alt=""/></div>
+				<div style="width: 596px; text-align: left;"><img src="<?=$config['web_root']?>_gfx/themes/default_logo.png" alt=""/></div>
 		
 				<div class="bigHeader"></div>
 				<div class="bigBody startPageBody">

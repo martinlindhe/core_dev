@@ -193,11 +193,11 @@ function intern_get(obj) {
 }
 </script>
 
-<form action="<?=l('member', 'settings', 'img')?>" name="f" method="post">
+<form action="<?=$_SERVER['PHP_SELF']?>" name="f" method="post">
 <input type="hidden" name="n0" value="1" />
 </form>
 
-<form action="<?=l('member', 'settings', 'img')?>" name="intern" method="get">
+<form action="<?=$_SERVER['PHP_SELF']?>" name="intern" method="get">
 <input type="hidden" name="get" value="0" />
 </form>
 
@@ -221,7 +221,7 @@ function intern_get(obj) {
 <?
 	if (!$second) {
 ?>
-	<form action="<?=l('member', 'settings', 'img')?>" method="post" enctype="multipart/form-data" onsubmit="if(alreadyupl == 1) { if(!confirm('Du har redan laddat upp en bild för att använda den som\nprofilbild, men du har inte slutfört beskärningen.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } if(alreadyupl == 2) { if(!confirm('Du har redan laddat upp en bild som väntar på att granskas.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } this.submitbtn.disabled = true;">
+	<form action="<?=$_SERVER['PHP_SELF']?>" method="post" enctype="multipart/form-data" onsubmit="if(alreadyupl == 1) { if(!confirm('Du har redan laddat upp en bild för att använda den som\nprofilbild, men du har inte slutfört beskärningen.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } if(alreadyupl == 2) { if(!confirm('Du har redan laddat upp en bild som väntar på att granskas.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } this.submitbtn.disabled = true;">
 	<input type="hidden" name="dopost" value="1"/>
 		
 		<?=secureOUT(gettxt('top-settings_img'))?>

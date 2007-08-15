@@ -25,7 +25,7 @@
 	require(DESIGN.'head.php');
 ?>
 <script type="text/javascript">var alreadyupl = 0;</script>
-<script type="text/javascript" src="<?=OBJ?>text_control.js"></script>
+<script type="text/javascript" src="<?=$config['web_root']?>js/text_control.js"></script>
 <script type="text/javascript">
 function addselOption(txt, file) {
 	len = document.getElementById('photo_list').options.length;
@@ -89,7 +89,7 @@ var actID = '';
 
 
 	<div class="centerMenuBodyWhite"><div style="padding: 5px;">
-		<form name="pres" action="<?=l('member', 'settings')?>" method="post" onsubmit="if(TC_active) TC_VarToHidden();">
+		<form name="pres" action="<?$_SERVER['PHP_SELF']?>" method="post" onsubmit="if(TC_active) TC_VarToHidden();">
 		<input type="hidden" name="do" value="1" />
 		<?=(!empty($_GET['go']))?'<input type="hidden" name="go" value="1" />':'';?>
 		<input type="submit" value="spara!" class="btn2_sml r" />
@@ -154,19 +154,19 @@ var actID = '';
 							<option value="804040" style="background: #804040;">&nbsp;</option>
 							</select>
 							<div style="margin: 4px 0 0 0;">
-								<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_bold.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('bold');" title="Fet"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-								<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_italic.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('italic');" title="Kursiv"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-								<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_underl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('underline');" title="Understruken"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
+								<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_bold.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('bold');" title="Fet"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+								<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_italic.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('italic');" title="Kursiv"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+								<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_underl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('underline');" title="Understruken"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 									
-								<a class="cur brrd" style="margin-left: 10px; background-image: url('<?=OBJ?>icon_justl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyleft');" title="Vänsterjustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-								<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justc.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifycenter');" title="Centrera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-								<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyright');" title="Högerjustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-								<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justm.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyfull');" title="Marginaljustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
+								<a class="cur brrd" style="margin-left: 10px; background-image: url('<?=$config['web_root']?>_gfx/icon_justl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyleft');" title="Vänsterjustera"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+								<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justc.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifycenter');" title="Centrera"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+								<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyright');" title="Högerjustera"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+								<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justm.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyfull');" title="Marginaljustera"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 									
-								<a class="cur brrd" style="margin-left: 10px; background-image: url('<?=OBJ?>icon_ol.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertorderedlist');" title="Numrerad lista"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-								<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_ul.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertunorderedlist');" title="Punktlista"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
+								<a class="cur brrd" style="margin-left: 10px; background-image: url('<?=$config['web_root']?>_gfx/icon_ol.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertorderedlist');" title="Numrerad lista"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+								<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_ul.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertunorderedlist');" title="Punktlista"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 									
-								<a class="cur brrd" style="margin-left: 10px; background-image: url('<?=OBJ?>icon_remove.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('removeformat');" title="Töm formatering"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+								<a class="cur brrd" style="margin-left: 10px; background-image: url('<?=$config['web_root']?>_gfx/icon_remove.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('removeformat');" title="Töm formatering"><img src="1x1.gif" alt="" width="20" height="20" /></a>
 							</div>
 							<div style="clear: both; margin: 10px 0 0 0;">
 								<b>Foto:&nbsp;</b><select id="photo_list" name="photo_list" style="width: 142px; margin: 0 5px 0 17px;" onchange="if(TC_initialized) { if(this.value) { if(this.options[this.selectedIndex].innerHTML.indexOf('[privat]') == -1 || confirm('Denna bild är markerad som privat! Den kommer att visas för alla som läser om du lägger in den i ditt meddelande.')) { TC_Format('InsertImage', this.value); } else editor.focus(); } } this.selectedIndex = 0;">

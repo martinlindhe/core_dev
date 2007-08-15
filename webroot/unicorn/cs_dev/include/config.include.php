@@ -2,15 +2,17 @@
 #local date-settings
 //setlocale(LC_TIME, 'sv_SE.ISO-8859-1');
 
-#absolute path to www-root
-define('CS', '/unicorn/cs_dev/');
-define('OBJ', CS.'_objects/');
+//define('CS', '/unicorn/cs_dev/');
+//define('OBJ', CS.'_objects/');
+
+define('UPLA', '_input/');
+define('UPLL', '.'.UPLA);
+
+
 define('DESIGN', '_design/');
 
 
 define('PD', '02');
-define('UPLA', CS.'_input/');
-define('UPLL', '.'.UPLA);
 define('UIMG', '150x150');
 define('MAXIMUM_USERS', 750);
 #standard title of page

@@ -2,7 +2,7 @@
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 	echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sv" lang="sv">';
 	
-	if (@$l) $theme_css = $user->getinfo($l['id_id'], 'det_tema');
+	if ($user->id) $theme_css = $user->getinfo($user->id, 'det_tema');
 	if (empty($theme_css)) $theme_css = 'default.css';
 
 	if (empty($NAME_TITLE)) $NAME_TITLE = 'CitySurf';
@@ -17,11 +17,11 @@
 <meta name="author" content=""/>
 <meta name="robots" content="follow,index"/>
 <meta name="language" content="sv-SE"/>
-<link rel="stylesheet" type="text/css" title="default" media="screen" href="<?=CS?>_objects/_styles/screen.css"/>
-<link rel="stylesheet" type="text/css" href="<?=CS?>_gfx/themes/common.css"/>
-<link rel="stylesheet" type="text/css" href="<?=CS?>_gfx/themes/<?=$theme_css?>"/>
-<link rel="shortcut icon" href="<?=CS?>favicon.ico"/>
-<script type="text/javascript" src="<?=CS?>_objects/main1.js"></script>
-<script type="text/javascript" src="<?=CS?>_objects/swfobject.js"></script>
-<script type="text/javascript" src="<?=CS?>_objects/fol.js"></script>
-<script type="text/javascript" src="<?=CS?>_objects/ajax.js"></script>
+<link rel="stylesheet" type="text/css" href="<?=$config['web_root']?>_gfx/themes/screen.css"/>
+<link rel="stylesheet" type="text/css" href="<?=$config['web_root']?>_gfx/themes/common.css"/>
+<link rel="stylesheet" type="text/css" href="<?=$config['web_root']?>_gfx/themes/<?=$theme_css?>"/>
+<link rel="shortcut icon" href="<?=$config['web_root']?>favicon.ico"/>
+<script type="text/javascript" src="<?=$config['web_root']?>js/main1.js"></script>
+<script type="text/javascript" src="<?=$config['web_root']?>js/swfobject.js"></script>
+<script type="text/javascript" src="<?=$config['web_root']?>js/fol.js"></script>
+<script type="text/javascript" src="<?=$config['web_root']?>js/ajax.js"></script>

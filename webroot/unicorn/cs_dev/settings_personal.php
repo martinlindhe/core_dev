@@ -246,7 +246,7 @@
 
 
 	<div class="centerMenuBodyWhite">
-	<form action="<?=l('member', 'settings', 'personal')?>" method="post">
+	<form action="<?=$_SERVER['PHP_SELF']?>" method="post">
 	<input type="hidden" name="do" value="1" />
 	<div style="padding: 5px;">
 

@@ -35,9 +35,9 @@ function blockRightClick(event) {
 		<div id="top_logo"></div>
 		<div id="top_bg"></div>
 
-		<div id="top_ad"><a href="#"><img src="/_gfx/ban/2_728x90.gif" alt="Ad" /></a></div>
+		<div id="top_ad"><a href="#"><img src="<?=$config['web_root']?>_gfx/ban/2_728x90.gif" alt="Ad" /></a></div>
 
-		<div id="top_border"><img src="/_gfx/themes/head_border.png" alt=""/></div>
+		<div id="top_border"><img src="<?=$config['web_root']?>_gfx/themes/head_border.png" alt=""/></div>
 
 		<ul id="menu_main">
 			<li><a href="<?=$config['start_page']?>">start</a> | </li>
@@ -69,14 +69,14 @@ function blockRightClick(event) {
 		if ($chk) $menu_relations = ' <span style="color:#ff0000">relationer '.count($chk).'</span>';
 	}
 ?>
-			<li><img align="absmiddle" src="/_gfx/icon_profil.png" alt="" /><a href="/user/view/">min profil</a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_gb.png" alt="" /><a href="/user/gb/"><?=$menu_gb?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_mail.png" alt="" /><a href="/user/mail/"><?=$menu_brev?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_blog.png" alt="" /><a href="/user/blog/">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_friends.png" alt="" /><a href="/user/relations/"><?=$menu_relations?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_gallery.png" alt="" /><a href="/user/gallery/">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="settings_presentation.php">inställningar</a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="upgrade.php">uppgradera</a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_profil.png" alt="" /><a href="/user/view/">min profil</a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gb.png" alt="" /><a href="/user/gb/"><?=$menu_gb?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_mail.png" alt="" /><a href="/user/mail/"><?=$menu_brev?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_blog.png" alt="" /><a href="/user/blog/">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_friends.png" alt="" /><a href="/user/relations/"><?=$menu_relations?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gallery.png" alt="" /><a href="/user/gallery/">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_settings.png" alt="" /><a href="settings_presentation.php">inställningar</a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_settings.png" alt="" /><a href="upgrade.php">uppgradera</a> &nbsp;</li>
 		</ul>
 	</div>
 
@@ -124,12 +124,12 @@ $isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
 	<div class="smallBody">
 
 		<table summary="" cellspacing="0">
-			<tr><td width="80"><a href="<?=l('list', 'users', '1')?>">Online</a></td><td><a href="<?=l('list', 'users', 1)?>"><?=@intval($online[0])?></a></td></tr>
-			<tr><td><a href="<?=l('list', 'users', 'M')?>">Killar</a></td><td><a href="<?=l('list', 'users', 'M')?>"><?=@intval($online[1])?></a></td></tr>
-			<tr><td><a href="<?=l('list', 'users', 'F')?>">Tjejer</a></td><td><a href="<?=l('list', 'users', 'F')?>"><?=@intval($online[2])?></a></td></tr>
+			<tr><td width="80"><a href="list_users.php?type=1">Online</a></td><td><a href="list_users.php?type=1"><?=@intval($online[0])?></a></td></tr>
+			<tr><td><a href="list_users.php?type=M">Killar</a></td><td><a href="list_users.php?type=M"><?=@intval($online[1])?></a></td></tr>
+			<tr><td><a href="list_users.php?type=F">Tjejer</a></td><td><a href="list_users.php?type=F"><?=@intval($online[2])?></a></td></tr>
 		</table>
 		<br/>
-		<a href="<?=l('list', 'users')?>">Senast inloggade</a><br/>
+		<a href="list_users.php">Senast inloggade</a><br/>
 		<a href="/list/userfind/1">Slumpa</a><br/>
 		<div onmouseover="checkTime(1);">Snabbsök</div>
 

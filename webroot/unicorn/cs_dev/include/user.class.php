@@ -10,8 +10,10 @@ class user {
 	function __construct() {
 		session_start();
 
-		$this->id = $_SESSION['data']['id_id'];
-		if ($_SESSION['data']['level_id'] == 10) $this->isAdmin = true;
+		if (!empty($_SESSION['data'])) {
+			$this->id = $_SESSION['data']['id_id'];
+			if ($_SESSION['data']['level_id'] == 10) $this->isAdmin = true;
+		}
 	}
 
 	//returns true if the user is logged in
@@ -267,7 +269,7 @@ class user {
 		$sex = substr($arr, -1);
 		$arr = substr($arr, -5, -3);//style="width: 225px; height: 300px;"
 		
-		$x = '<a href="'.l('user', 'view', $id).'"'.(!empty($extra['text'])?' title="'.$extra['text'].'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>';
+		$x = '<a href="user.php?id='.$id.'"'.(!empty($extra['text'])?' title="'.$extra['text'].'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>';
 					
 		$x .= '<img  alt="'.(!empty($extra['text'])?$extra['text']:'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
 

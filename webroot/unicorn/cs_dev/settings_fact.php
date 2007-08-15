@@ -29,7 +29,7 @@
 
 
 	<div class="centerMenuBodyWhite">
-		<form name="pres" action="<?=l('member', 'settings', 'fact')?>" method="post" onsubmit="if(TC_active) TC_VarToHidden();">
+		<form name="pres" action="<?=$_SERVER['PHP_SELF']?>" method="post" onsubmit="if(TC_active) TC_VarToHidden();">
 		<input type="hidden" name="do" value="1" />
 
 		<div style="padding: 5px;">

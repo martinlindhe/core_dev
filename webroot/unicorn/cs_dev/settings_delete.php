@@ -44,7 +44,7 @@
 
 
 	<div class="centerMenuBodyWhite">
-	<form action="<?=l('member', 'settings', 'delete')?>" name="d" method="post" onsubmit="return confirm('Säker? Allt information kommer att försvinna!');">
+	<form action="<?=$_SERVER['PHP_SELF']?>" name="d" method="post" onsubmit="return confirm('Säker? Allt information kommer att försvinna!');">
 	<div style="padding: 5px;">
 	<input type="hidden" name="do" value="1" />
 		<table summary="" cellspacing="0">

@@ -83,28 +83,29 @@
 
 	function makeButton($bool, $js, $img, $text, $number = false)
 	{
+		global $config;
 		echo '<div class="'.($bool?'btnSelected':'btnNormal').'"'.($js?'onclick="'.$js.'"':'').'>';
 		echo '<table summary="" cellpadding="0" cellspacing="0">';
 		echo '<tr>';
-			echo '<td width="3"><img src="/_gfx/themes/btn_c1.png" alt=""/></td>';
-			echo '<td style="background: url(\'/_gfx/themes/btn_head.png\');"></td>';
-			echo '<td width="3"><img src="/_gfx/themes/btn_c2.png" alt=""/></td>';
+			echo '<td width="3"><img src="'.$config['web_root'].'_gfx/themes/btn_c1.png" alt=""/></td>';
+			echo '<td style="background: url(\''.$config['web_root'].'_gfx/themes/btn_head.png\');"></td>';
+			echo '<td width="3"><img src="'.$config['web_root'].'_gfx/themes/btn_c2.png" alt=""/></td>';
 		echo '</tr>';
 
 		echo '<tr style="height: 18px">';
-			echo '<td width="3" style="background: url(\'/_gfx/themes/btn_left.png\');"></td>';
+			echo '<td width="3" style="background: url(\''.$config['web_root'].'_gfx/themes/btn_left.png\');"></td>';
 			echo '<td style="padding-left: 19px; padding-right: 4px; padding-top: 1px;">';
-			if ($img) echo '<img src="/_gfx/'.$img.'" style="position: absolute; top: 5px; left: 4px;" alt=""/> ';
+			if ($img) echo '<img src="'.$config['web_root'].'_gfx/'.$img.'" style="position: absolute; top: 5px; left: 4px;" alt=""/> ';
 			echo $text;
 			if ($number !== false) echo '&nbsp;&nbsp;'.$number;
 			echo '</td>';
-			echo '<td width="3" style="background: url(\'/_gfx/themes/btn_right.png\');"></td>';
+			echo '<td width="3" style="background: url(\''.$config['web_root'].'_gfx/themes/btn_right.png\');"></td>';
 		echo '</tr>';
 
 		echo '<tr>';
-			echo '<td width="3"><img src="/_gfx/themes/btn_c3.png" alt=""/></td>';
-			echo '<td style="background: url(\'/_gfx/themes/btn_foot.png\');"></td>';
-			echo '<td width="3"><img src="/_gfx/themes/btn_c4.png" alt=""/></td>';
+			echo '<td width="3"><img src="'.$config['web_root'].'_gfx/themes/btn_c3.png" alt=""/></td>';
+			echo '<td style="background: url(\''.$config['web_root'].'_gfx/themes/btn_foot.png\');"></td>';
+			echo '<td width="3"><img src="'.$config['web_root'].'_gfx/themes/btn_c4.png" alt=""/></td>';
 		echo '</tr>';
 
 		echo '</table>';
