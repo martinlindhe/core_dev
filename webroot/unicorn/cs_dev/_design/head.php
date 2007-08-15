@@ -75,8 +75,8 @@ function blockRightClick(event) {
 			<li><img align="absmiddle" src="/_gfx/icon_blog.png" alt="" /><a href="/user/blog/">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_friends.png" alt="" /><a href="/user/relations/"><?=$menu_relations?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_gallery.png" alt="" /><a href="/user/gallery/">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/member/settings/">inställningar</a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/main/upgrade/">uppgradera</a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="settings_presentation.php">inställningar</a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="upgrade.php">uppgradera</a> &nbsp;</li>
 		</ul>
 	</div>
 

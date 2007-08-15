@@ -41,6 +41,9 @@
 	require_once('include/main.fnc.php');
 	require_once('include/spy.fnc.php');
 	require_once('include/search_users.fnc.php');
+	require_once('include/settings.fnc.php');
+	require_once('include/secure.fnc.php');
+	require_once('include/cut.fnc.php');
 
 	require_once('include/user.class.php');	//user() class
 	require_once('include/auth.class.php');	//auth() class

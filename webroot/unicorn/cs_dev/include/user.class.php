@@ -9,6 +9,9 @@ class user {
 
 	function __construct() {
 		session_start();
+
+		$this->id = $_SESSION['data']['id_id'];
+		if ($_SESSION['data']['level_id'] == 10) $this->isAdmin = true;
 	}
 
 	//returns true if the user is logged in
@@ -433,11 +436,11 @@ function addVIP($user_id, $vip_level, $days)
 
 function getCurrentVIPLevel($_id)
 {
-	global $sql;
+	global $db;
 	if (!is_numeric($_id)) return false;
 
 	$q = 'SELECT level FROM s_vip WHERE userId='.$_id.' ORDER BY level DESC LIMIT 1';
-	$level = $sql->queryResult($q, 0, 1);
+	$level = $db->getOneItem($q);
 
 	if (!$level) return 1;		//1=normal user
 	return $level;
@@ -445,11 +448,11 @@ function getCurrentVIPLevel($_id)
 
 function getVIPLevels($_id)
 {
-	global $sql;
+	global $db;
 	if (!is_numeric($_id)) return false;
 
 	$q = 'SELECT * FROM s_vip WHERE userId='.$_id.' ORDER BY level DESC';
-	return $sql->query($q, 0, 1);
+	return $db->getArray($q);
 }
 	
 ?>
