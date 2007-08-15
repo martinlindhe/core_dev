@@ -50,7 +50,6 @@
 
 	$login_err = true;
 	if(empty($l) && !empty($_POST['a']) && !empty($_POST['p'])) {
-		require_once('/home/martin/www/_modules/member/auth.php');
 		checkBan(1);
 		$login_err = $user_auth->login($_POST['a'], $_POST['p']);
 	}
@@ -91,7 +90,7 @@
 						</td>
 					</tr></table>
 				</div><br/>
-		<?
+<?
 			echo '<div class="bigHeader" style="clear: both">senast inloggade</div>';
 			echo '<div class="bigBody"><center>';
 			$list = getLastLoggedIn(11);
@@ -100,7 +99,6 @@
 			}
 			echo '</center></div><br/>';
 
-
 			echo '<div class="bigHeader">senaste galleribilder</div>';
 			echo '<div class="bigBody"><center>';
 			$list = getLastGalleryUploads(5);
@@ -108,7 +106,7 @@
 				echo '<img alt="'.$db->escape($row['pht_cmt']).'" src="'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'].'" style="margin-right: 10px;" onerror="this.style.display = \'none\';" />';
 			}
 			echo '</center></div>';
-		?>
+?>
 				</center>
 			</div>
 			

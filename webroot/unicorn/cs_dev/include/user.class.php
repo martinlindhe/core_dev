@@ -5,11 +5,11 @@
 	define('VIP_LEVEL2', 3);
 
 class user {
-	var $sql, $self, $info, $t, $id;
-	function __construct($sql = false) {
-		if($sql) $this->sql = $sql;
-		$this->t = T;
+	var $self, $info, $id;
+
+	function __construct() {
 	}
+
 	function auth($id) {
 		if (!is_numeric($id)) return false;
 		if ($this->timeout('15 MINUTES') > @$_SESSION['data']['account_date']) {
@@ -52,6 +52,7 @@ class user {
 	}
 	function counterSet($id) {
 		$info = $this->getcontent($id, 'user_head');
+		//die('fixme getcontent!!');
 		$_SESSION['data']['offsets'] = array('gb_offset' => intval(@$info['gb_offset'][1]), 'mail_offset' => intval(@$info['mail_offset'][1]), 'forum_offset' => intval(@$info['forum_offset'][1]), 'gal_offset' => intval(@$info['gal_offset'][1]), 'blog_offset' => intval(@$info['blog_offset'][1]), 'blocked_offset' => intval(@$info['blocked_offset'][1]), 'rel_offset' => intval(@$info['rel_offset'][1]));
 	}
 	function counterDecrease($type, $user) {
@@ -80,11 +81,18 @@ class user {
 		if($id[0]) $this->setrel($id[1], 'user_retrieve', $user);
 		if($user == $this->id) $this->update_retrieve();
 	}
-	function setRelCount($uid) {
-		$rel_c = $this->sql->queryResult("SELECT COUNT(*) as count FROM s_userrelquest a INNER JOIN s_user u ON u.id_id = a.sender_id AND u.status_id = '1' WHERE a.user_id = '".secureINS($uid)."' AND a.status_id = '0'");
+
+	function setRelCount($uid)
+	{
+		global $db;
+		if (!is_numeric($uid)) return false;
+
+		$q = 'SELECT COUNT(*) FROM s_userrelquest a INNER JOIN s_user u ON u.id_id = a.sender_id AND u.status_id = "1" WHERE a.user_id = '.$uid.' AND a.status_id = "0"';
+		$rel_c = $db->getOneItem($q);
 		$id = $this->setinfo($uid, 'rel_count', $rel_c);
-		if($id[0]) $this->setrel($id[1], 'user_retrieve', $uid);
+		if ($id[0]) $this->setrel($id[1], 'user_retrieve', $uid);
 	}
+
 	function get_cache() {
 		$arr = $this->sql->queryLine("SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '".$this->id."' LIMIT 1");
 		if(@$_SESSION['data']['u_picd'] != $arr[0]) @$_SESSION['data']['u_picd'] = $arr[0];
@@ -98,26 +106,34 @@ class user {
 		if(@$_SESSION['data']['u_picid'] != $arr[1]) @$_SESSION['data']['u_picid'] = $arr[1];
 		if(@$_SESSION['data']['u_picvalid'] != $arr[0]) @$_SESSION['data']['u_picvalid'] = $arr[2];
 	}
-	function cachestr($id = '') {
-		global $sex;
+
+	function cachestr($id = 0)
+	{
+		global $db, $sex;
+		if (!is_numeric($id)) return false;
+
 		$translater = array('m' => 'm', 'c' => 'c', 'g' => 'g', 'r' => 'v', 's' => 'l');
-		if(empty($id))
-			$id = $this->id;
+
+		if (!$id) $id = $this->id;
 		$info = $this->getcontent($id, 'user_retrieve');
+
 		$str = '';
-		foreach($info as $item) {
+		foreach ($info as $item) {
 			$str .= @($item[0]?$translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
 		}
-		$cha_c = $this->sql->queryResult("SELECT COUNT(DISTINCT(sender_id)) as count FROM s_userchat WHERE user_id = '".secureINS($id)."' AND user_read = '0'");
-		if($cha_c > 0)
-			$cha_id = $this->sql->queryResult("SELECT c.sender_id FROM s_userchat c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = '1' WHERE c.user_id = '".secureINS($id)."' AND c.user_read = '0' ORDER BY c.sent_date ASC LIMIT 1");
-		else $cha_id = '';
-		if($cha_id) {
+		$cha_c = $db->getOneItem('SELECT COUNT(DISTINCT(sender_id)) FROM s_userchat WHERE user_id = '.$id.' AND user_read = "0"');
+		if ($cha_c) {
+			$cha_id = $db->getOneItem('SELECT c.sender_id FROM s_userchat AS c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = "1" WHERE c.user_id = '.$id.' AND c.user_read = "0" ORDER BY c.sent_date ASC LIMIT 1');
+		} else {
+			$cha_id = 0;
+		}
+
+		if ($cha_id) {
 			$str .= 'c:'.$cha_c.':'.$cha_id;
 		} else {
 			$str .= 'c:0:0';
 		}
-		$rel_onl = $this->sql->query("SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($id)."' AND u.account_date > '".$this->timeout(UO)."' ORDER BY u.u_alias");
+		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$id.' AND u.account_date > '.$this->timeout(UO).' ORDER BY u.u_alias');
 		$rel_s = '';
 		foreach($rel_onl as $row) {
 			$rel_s .= $row[0].'|'.rawurlencode($row[1]).'|'.$sex[$row[2]].$this->doage($row[3], 0).'|'.$this->dobirth($row[3]).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
@@ -126,6 +142,7 @@ class user {
 		$str .= '#f:'.$rel_s;
 		return $str;
 	}
+
 	function isuser($id, $status = '1') {
 		return ($this->sql->queryResult("SELECT status_id FROM s_user WHERE id_id = '".secureINS($id)."' LIMIT 1") == $status)?true:false;
 	}
@@ -190,8 +207,16 @@ class user {
 	function tagline($str) {
 		return secureOUT(ucwords(strtolower($str)));
 	}
-	function getcontent($id, $type) {
-		return $this->sql->querybycontent("SELECT o.content_type, o.content, o.main_id FROM s_objrel r LEFT JOIN s_obj o ON o.main_id = r.object_id WHERE r.content_type = '$type' AND r.owner_id = '".secureINS($id)."'");
+
+	function getcontent($id, $type)
+	{
+		global $db;
+		if (!is_numeric($id)) return false;
+
+		$q = 'SELECT o.content_type, o.content, o.main_id FROM s_objrel r '.
+				'LEFT JOIN s_obj o ON o.main_id = r.object_id WHERE r.content_type = "'.$db->escape($type).'" AND r.owner_id = '.$id;
+
+		return $db->getArray($q);
 	}
 
 	function timeout($time = '1 HOUR') {
@@ -325,19 +350,29 @@ class user {
 		if(!$res) return false;
 		return $res;
 	}
-	function getinfo($id, $opt) {
-		return $this->sql->queryResult("SELECT content FROM s_obj WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
+
+	function getinfo($id, $opt)
+	{
+		global $db;
+		if (!is_numeric($id) || !is_numeric($opt)) return false;
+
+		return $db->getOneItem('SELECT content FROM s_obj WHERE owner_id = '.$id.' AND content_type = '.$opt.' LIMIT 1');
 	}
 
-	function setinfo($id, $opt, $val) {
-		$res = $this->sql->queryLine("SELECT content, main_id FROM s_obj WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1");
-		if(!$res[1]) {
-			$obj = $this->sql->queryInsert("INSERT INTO s_obj SET content = '".$val."', content_type = '$opt', owner_id = '$id', obj_date = NOW()");
+	function setinfo($id, $opt, $val)
+	{
+		global $db;
+		if (!is_numeric($id) || !is_numeric($opt)) return false;
+
+		$res = $db->getOneRow('SELECT content, main_id FROM s_obj WHERE owner_id = '.$id.' AND content_type = '.$opt.' LIMIT 1');
+		if (!$res['main_id']) {
+			$q = 'INSERT INTO s_obj SET content = "'.$db->escape($val).'", content_type = '.$opt.', owner_id = '.$id.', obj_date = NOW()';
+			$obj = $db->insert($q);
 			$ret = array('1', $obj);
 		} else {
-			$ret = array('0', $res[1]);
-			$q = "UPDATE s_obj SET content = '".$val."', obj_date = NOW() WHERE owner_id = '$id' AND content_type = '$opt' LIMIT 1";
-			$this->sql->queryUpdate($q);
+			$q = 'UPDATE s_obj SET content = "'.$db->escape($val).'", obj_date = NOW() WHERE owner_id = '.$id.' AND content_type = '.$opt.' LIMIT 1';
+			$db->update($q);
+			$ret = array('0', $res['main_id']);
 		}
 		return $ret;
 	}

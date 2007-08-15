@@ -28,3 +28,7 @@ ny katalogstruktur:
 	/cs_dev/scripts_old/	- ph för gamla db-import-script
 	/cs_dev/scripts/		- scripts som används för diverse extern validering, t.ex för att validera giltiga mailaddresser
 	/cs_dev/include/		- cs-specifika includefiler (funktioner)
+
+------------
+
+	tog bort s_usersess.sess_id

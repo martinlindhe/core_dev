@@ -71,6 +71,17 @@
 		return '/'.$type.'/'.$action.($id != ''?'/'.$id.($key != ''?'/'.$key:''):'').'/';
 	}
 
+	function checkBan($splash = 0)
+	{
+		global $db;
+		
+		$q = 'SELECT COUNT(*) FROM s_ban WHERE ban_ip = "'.$db->escape($_SERVER['REMOTE_ADDR']).'"';
+		if ($db->getOneItem($q)) {
+			if($splash) errorSPLASHACT("Tyvärr! Du är blockerad.");
+			else errorACT("Tyvärr! Du är blockerad.");
+		}
+	}
+
 	function makeButton($bool, $js, $img, $text, $number = false)
 	{
 		echo '<div class="'.($bool?'btnSelected':'btnNormal').'"'.($js?'onclick="'.$js.'"':'').'>';
@@ -415,16 +426,6 @@
 			';
 		} else
 			echo '<iframe src="/_amsPOS/import.php?p='.$pos.'" frameborder="0" border="0" width="'.$sizes[$pos][0].'" height="'.$sizes[$pos][1].'"></iframe>';
-	}
-
-	function checkBan($splash = 0)
-	{
-		global $sql;
-		$check = $sql->queryResult("SELECT COUNT(*) as count FROM ".T."ban WHERE ban_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."'");
-		if(!empty($check)) {
-			if($splash) errorSPLASHACT("Tyvärr! Du är blockerad.");
-			else errorACT("Tyvärr! Du är blockerad.");
-		}
 	}
 
 	function cookieSET($id, $val, $expire = '')

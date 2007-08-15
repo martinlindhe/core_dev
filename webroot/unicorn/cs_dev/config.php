@@ -5,11 +5,14 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	$config['core_root'] = '/home/martin/dev/webroot/core_dev/';	//use of an absolute path is highly recommended
+	//$config['core_root'] = '/home/martin/dev/webroot/core_dev/';
+	$config['core_root'] = 'E:/devel/webroot/core_dev/';
 	$config['core_web_root'] = '/core_dev/';						//the webpath to root level of core files (css, js, gfx directories)
 
 	$config['web_root'] = '/unicorn/cs_dev/';						//the webpath to the root level of the project
 	$config['default_title'] = 'CitySurf.tv - Nu kör vi!';			//default title for pages if no title is specified for that page
+
+	$config['start_page'] = 'main.php';	//logged in start page
 
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
@@ -36,7 +39,9 @@
 	require_once('include/gb.fnc.php');
 	require_once('include/relations.fnc.php');
 	require_once('include/main.fnc.php');
+	require_once('include/spy.fnc.php');
 	require_once('include/user.class.php');	//user() class
+	require_once('include/auth.class.php');	//auth() class
 
 	//require_once('include/sql.class.php');	//todo: ta bort
 
@@ -46,7 +51,7 @@
 
 
 	$config['database']['username']	= 'root';
-	$config['database']['password']	= 'dravel';
+	//$config['database']['password']	= 'dravel';
 	$config['database']['database']	= 'cs_dev';
 	$config['database']['host']	= 'localhost';
 	$db = new DB_MySQLi($config['database']);

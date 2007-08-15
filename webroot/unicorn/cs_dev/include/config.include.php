@@ -40,8 +40,10 @@ define('USER_FIMG', 'user/image/');
 define('NEWS', '/_output/news_');
 $sex = array('M' => 'm', 'F' => 'k');
 $sex_name = array('M' => 'man', 'F' => 'kvinna');
-define('T', 's_');
-$t = T;
+
+//define('T', 's_');
+//$t = T;
+
 define("STATSTR", "listar <b>%1\$d</b> - <b>%2\$d</b> (totalt: <b>%3\$d</b>)");
 
 ?>
