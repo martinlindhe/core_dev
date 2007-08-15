@@ -133,6 +133,7 @@
 			<element name="CloseBox" type="ButtonDrawTemplate" />
 			<element name="QMarkBox" type="ButtonDrawTemplate" />
 			<element name="MinimizeBox" type="ButtonDrawTemplate" />
+			<element name="MaximizeBox" type="ButtonDrawTemplate" />			
 			<element name="TileBox" type="ButtonDrawTemplate" />
 			<element name="Border" type="FrameTemplate" />
 			<element name="Titlebar" type="FrameTemplate" />
@@ -381,6 +382,7 @@
 			<superType type="Control" />
 			<element name="Style_Titlebar" type="boolean" />
 			<element name="Style_Closebox" type="boolean" />
+			<element name="Style_Maximizebox" type="boolean" />
 			<element name="Style_Qmarkbox" type="boolean" />
 			<element name="Style_Minimizebox" type="boolean" />
 			<element name="Style_Sizable" type="boolean" />

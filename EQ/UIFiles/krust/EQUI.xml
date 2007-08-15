@@ -144,6 +144,8 @@
 		<Include>EQUI_RewardSelectionWnd.xml</Include>
 		<Include>EQUI_NewPointMerchantWnd.xml</Include>
 		<Include>EQUI_HtmlWnd.xml</Include>
+		<Include>EQUI_TCGWnd.xml</Include>
+		<Include>EQUI_TCGStartupWnd.xml</Include>
 	</Composite>
 
 	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes"/>

@@ -596,6 +596,37 @@
 			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
+	<!-- EQPlayers auto update -->
+	<Button item="OGP_AutoDeclineTCGChallengesButton">
+		<ScreenID>OGP_AutoDeclineTCGChallengesButton</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>200</X>
+			<Y>385</Y>
+		</Location>
+		<Size>
+			<CX>150</CX>
+			<CY>20</CY>
+		</Size>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<Style_Checkbox>true</Style_Checkbox>
+		<Text>Decline LoN Challenges</Text>
+		<TooltipReference>If checked, you will automatically decline all Legends of Norrath challenges.</TooltipReference>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>A_BigBtnNormal</Normal>
+			<Pressed>A_BigBtnPressed</Pressed>
+			<Flyby>A_BigBtnFlyby</Flyby>
+			<Disabled>A_BigBtnDisabled</Disabled>
+			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
 	<!-- Item dropping options -->
 	<Label item="OGP_ItemDroppingLabel">
 		<ScreenID>OGP_ItemDroppingLabel</ScreenID>
@@ -1102,6 +1133,7 @@
 		<Pieces>OGP_CombatMusicCheckbox</Pieces>
 		<Pieces>OGP_LoadSkinButton</Pieces>
 		<Pieces>OGP_EQPlayersAutoUpdateButton</Pieces>
+		<Pieces>OGP_AutoDeclineTCGChallengesButton</Pieces>
 		<Pieces>OGP_SystemInfoButton</Pieces>
 		<Pieces>OGP_LeftClickHelpText</Pieces>
 		<Pieces>OGP_UseTellWindowsCheckbox</Pieces>
