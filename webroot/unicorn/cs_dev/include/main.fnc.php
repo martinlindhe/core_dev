@@ -30,12 +30,11 @@
 		$q = 'SELECT main_id, picd, pht_name, pht_cmt FROM s_userphoto WHERE view_id = "1" AND status_id = "1" AND hidden_id = "0" ORDER BY main_id DESC LIMIT '.$limit;
 		return $db->getArray($q);
 	}
-/*
+
 	function secureOUT($str, $nl = false)
 	{
 		return ($nl?nl2br(stripslashes(htmlentities($str))):stripslashes(htmlentities($str)));
 	}
-*/
 
 	function extOUT($str, $class = '')
 	{

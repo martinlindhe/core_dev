@@ -43,12 +43,16 @@
 	require_once('include/user.class.php');	//user() class
 	require_once('include/auth.class.php');	//auth() class
 
-	//require_once('include/sql.class.php');	//todo: ta bort
-
-	//execSt();
 	$user = new user();
 	//end of cs includes
 
+/*
+define('CH', ' SQL_CACHE ');
+define('SQL_U', 'cs_user');
+define('SQL_P', 'cs8x8x9ozoSSpp');
+define('SQL_D', 'cs_platform');
+define('SQL_H', 'pc3.icn.se');
+*/
 
 	$config['database']['username']	= 'root';
 	//$config['database']['password']	= 'dravel';
@@ -59,15 +63,4 @@
 	$config['files']['upload_dir'] = '/home/martin/dev/webroot/unicorn/cs_dev/uploads/';
 	$config['files']['thumbs_dir'] = '/home/martin/dev/webroot/unicorn/cs_dev/uploads/thumbs/';
 	$files = new Files($config['files']);
-
-/*
-	$config['session']['timeout'] = (60*60)*24*7;		//keep us logged in for 7 days
-	$config['session']['name'] = 'csID';
-	$config['session']['sha1_key'] = 'fgSDFGggrer5t098c6crtshg#djmdjcxXuXzPP)';
-	$config['session']['allow_login'] = true;
-	$config['session']['allow_registration'] = true;
-	$config['session']['allow_themes'] = true;
-	$session = new Session($config['session']);
-*/
-	//$session->handleSessionActions();
 ?>

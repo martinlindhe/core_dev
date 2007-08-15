@@ -1,5 +1,5 @@
 <?
-	include('top.php');
+	require('top.php');
 ?>
 <script type="text/javascript">
 var omoTime;
@@ -44,9 +44,9 @@ function blockRightClick(event) {
 			<li><a href="/list/users/">leta</a> | </li>
 			<li><a href="/forum/start/">forum</a> | </li>
 			<li><a href="/main/thought/">tyck till</a> | </li>
-			<li><a href="/main/surfcafe/">surfcafÈ</a> | </li>
+			<li><a href="/main/surfcafe/">surfcaf√©</a> | </li>
 			<!--<li><a href="/text/radio/">webbradio</a> | </li>-->
-			<li><a href="/main/faq/">hj‰lp &amp; faq</a> | </li>
+			<li><a href="/main/faq/">hj√§lp &amp; faq</a> | </li>
 			<li><a href="/text/contact/">kontakt</a> | </li>
 			<li><a href="/member/logout/">logga ut</a></li>
 		</ul>
@@ -54,17 +54,17 @@ function blockRightClick(event) {
 		<ul id="menu_user">
 <?
 	$menu_brev = ' brev '.@intval($_SESSION['data']['offsets']['mail_offset']);
-	$menu_gb = ' g‰stbok '.@intval($_SESSION['data']['offsets']['gb_offset']);
+	$menu_gb = ' g√§stbok '.@intval($_SESSION['data']['offsets']['gb_offset']);
 	$menu_relations = ' relationer '.@intval($_SESSION['data']['offsets']['rel_offset']);
 
 	if (@$l['id_id']) {
-		//kolla om det finns ol‰sta mail
+		//kolla om det finns ol√§sta mail
 		$chk = getUnreadMailCount();
 		if ($chk) $menu_brev = ' <span style="color:#ff0000">brev '.$chk.'</span>';
 		
-		//ol‰sta g‰stboksinl‰gg?
+		//ol√§sta g√§stboksinl√§gg?
 		$chk = gbCountUnread();
-		if ($chk) $menu_gb = ' <span style="color:#ff0000">g‰stbok '.$chk.'</span>';
+		if ($chk) $menu_gb = ' <span style="color:#ff0000">g√§stbok '.$chk.'</span>';
 		
 		$chk = getRelationRequestsToMe();
 		if ($chk) $menu_relations = ' <span style="color:#ff0000">relationer '.count($chk).'</span>';
@@ -76,7 +76,7 @@ function blockRightClick(event) {
 			<li><img align="absmiddle" src="/_gfx/icon_blog.png" alt="" /><a href="/user/blog/">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_friends.png" alt="" /><a href="/user/relations/"><?=$menu_relations?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_gallery.png" alt="" /><a href="/user/gallery/">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/member/settings/">inst‰llningar</a> &nbsp;</li>
+			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/member/settings/">inst√§llningar</a> &nbsp;</li>
 			<li><img align="absmiddle" src="/_gfx/icon_settings.png" alt="" /><a href="/main/upgrade/">uppgradera</a> &nbsp;</li>
 		</ul>
 	</div>
@@ -86,12 +86,13 @@ function blockRightClick(event) {
 
 			<div id="quickchat_indicator" style="display: none;">
 				<div class="quickchat_blink">
-					<h4 class="cur">NÂgon vill prata med dig!</h4>
+					<h4 class="cur">N√•gon vill prata med dig!</h4>
 				</div>
 				<br/>
 			</div>
 <?
-	$contribute = $sql->queryLine("SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM {$t}contribute c LEFT JOIN {$t}user u ON u.id_id = c.con_user AND u.status_id = '1' WHERE c.con_onday = NOW() AND c.status_id = '1' LIMIT 1", 1);
+	$q = 'SELECT u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, c.con_msg FROM s_contribute c LEFT JOIN s_user u ON u.id_id = c.con_user AND u.status_id = "1" WHERE c.con_onday = NOW() AND c.status_id = "1" LIMIT 1';
+	$contribute = $db->getOneRow($q);
 	$gotcon = (!empty($contribute) && count($contribute))?true:false;
 ?>
 			<div class="smallHeader">se hit!</div>
@@ -102,7 +103,7 @@ function blockRightClick(event) {
 						echo $user->getstring($contribute).'<br/><br/>';
 						echo stripslashes($contribute['con_msg']);
 					} else {
-						echo 'Om du ser nÂgot fel, klicka pÂ "tyck till" uppe i toppmenyn.';
+						echo 'Om du ser n√•got fel, klicka p√• "tyck till" uppe i toppmenyn.';
 					}
 				?>
 				</div>
@@ -131,7 +132,7 @@ $isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
 		<br/>
 		<a href="<?=l('list', 'users')?>">Senast inloggade</a><br/>
 		<a href="/list/userfind/1">Slumpa</a><br/>
-		<div onmouseover="checkTime(1);">Snabbsˆk</div>
+		<div onmouseover="checkTime(1);">Snabbs√∂k</div>
 
 		<div id="userfind" style="display: none" onmouseover="checkTime(1);">
 			<form action="/list/userfind" method="post">
@@ -140,11 +141,11 @@ $isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
 		</div>
 	</div><br/>
 <?
-	if ($l && !defined('NO_FOL')) {
+	if ($user->loggedIn() && !defined('NO_FOL')) {
 ?>
 		<div id="friendsOnline">
 			<div class="smallHeader" onclick="friendsToggle();">
-				v‰nner online (<span id="friendsOnlineCount">0</span>)
+				v√§nner online (<span id="friendsOnlineCount">0</span>)
 			</div>
 			<div id="friendsOnlineList" class="smallBody" style="display:none;"></div>
 		</div>
@@ -160,7 +161,7 @@ $isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
 		</div>	<!-- end leftMenu -->
 
 <?
-//visar bred sida pÂ startsida & sˆk
+//visar bred sida p√• startsida & s√∂k
 	if (basename($_SERVER['REQUEST_URI']) == 'start') {		//fulhax av martin /hide
 		echo '<div id="bigContent">';
 	} else {

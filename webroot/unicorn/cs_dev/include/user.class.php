@@ -10,6 +10,12 @@ class user {
 	function __construct() {
 	}
 
+	//returns true if the user is logged in
+	function loggedIn()
+	{
+		d($_SESSION);
+	}
+
 	function auth($id) {
 		if (!is_numeric($id)) return false;
 		if ($this->timeout('15 MINUTES') > @$_SESSION['data']['account_date']) {
@@ -149,12 +155,20 @@ class user {
 	function level($level, $allowed = '10') {
 		if(intval($level) >= intval($allowed)) return true; else return false;
 	}
-	function getuser($id, $more = '') {
-		if(@$_SESSION['c_i'] == $id) return $this->getsessionuser($id);
-		//removed u_picvalid because of a later validation instead of prevalidation.
-		$return = $this->sql->queryLine("SELECT status_id, id_id, u_alias, u_sex, u_picid, u_picd, u_picvalid, u_birth, level_id, account_date, u_pstlan_id, CONCAT(u_pstort, ', ', u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, beta $more FROM s_user WHERE id_id = '".secureINS($id)."' LIMIT 1", 1);
-		return ($return && $return['status_id'] == '1')?$return:false;
+
+	function getuser($id, $more = '')
+	{
+		global $db;
+		if (!is_numeric($id)) return false;
+
+		if (@$_SESSION['c_i'] == $id) return $this->getsessionuser($id);
+
+		$q = 'SELECT status_id, id_id, u_alias, u_sex, u_picid, u_picd, u_picvalid, u_birth, level_id, account_date, u_pstlan_id, CONCAT(u_pstort, ", ", u_pstlan) as u_pst, lastlog_date, lastonl_date, u_regdate, beta '.$more.' FROM s_user '.
+					'WHERE id_id = '.$id.' LIMIT 1';
+		$return = $db->getOneRow($q);
+		return ($return && $return['status_id'] == '1') ? $return : false;
 	}
+
 	function getsessionuser($id) {
 		return @$_SESSION['data'];
 	}
