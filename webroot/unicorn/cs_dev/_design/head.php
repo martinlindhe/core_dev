@@ -40,7 +40,7 @@ function blockRightClick(event) {
 		<div id="top_border"><img src="/_gfx/themes/head_border.png" alt=""/></div>
 
 		<ul id="menu_main">
-			<li><a href="/main/start/">start</a> | </li>
+			<li><a href="<?=$config['start_page']?>">start</a> | </li>
 			<li><a href="/list/users/">leta</a> | </li>
 			<li><a href="/forum/start/">forum</a> | </li>
 			<li><a href="/main/thought/">tyck till</a> | </li>
@@ -48,7 +48,7 @@ function blockRightClick(event) {
 			<!--<li><a href="/text/radio/">webbradio</a> | </li>-->
 			<li><a href="/main/faq/">hjälp &amp; faq</a> | </li>
 			<li><a href="/text/contact/">kontakt</a> | </li>
-			<li><a href="/member/logout/">logga ut</a></li>
+			<li><a href="logout.php">logga ut</a></li>
 		</ul>
 
 		<ul id="menu_user">

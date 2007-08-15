@@ -111,24 +111,20 @@ class user_auth {
 		}
 	}
 
-	function logout($empty = false, $mobile = false) {
-		if(!empty($_SESSION['data']['id_id'])) {
-			if(!$empty) {
-				$this->sql->queryInsert("INSERT INTO s_usersess SET id_id = '".@secureINS($_SESSION['data']['id_id'])."', sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."', sess_id = '".secureINS($this->sql->gc())."', sess_date = NOW(), type_inf = 'o'");
-				$this->sql->queryUpdate("UPDATE s_user SET lastonl_date = account_date, account_date = '".date("Y-m-d H:i:s", strtotime("-1 HOUR"))."' WHERE id_id = '".secureINS($_SESSION['data']['id_id'])."' LIMIT 1");
-				$this->sql->queryUpdate("UPDATE s_useronline SET account_date = '".date("Y-m-d H:i:s", strtotime("-1 HOUR"))."' WHERE id_id = '".secureINS($_SESSION['data']['id_id'])."' LIMIT 1");
-			}
+	function logout()
+	{
+		global $db;
+
+		if (!empty($_SESSION['data']['id_id'])) {
+			$db->insert('INSERT INTO s_usersess SET id_id = '.$_SESSION['data']['id_id'].', sess_ip = "'.$db->escape($_SERVER['REMOTE_ADDR']).'", sess_date = NOW(), type_inf = "o"');
+			$db->update('UPDATE s_user SET lastonl_date = account_date, account_date = "'.date("Y-m-d H:i:s", strtotime("-1 HOUR")).'" WHERE id_id = '.$_SESSION['data']['id_id'].' LIMIT 1');
+			$db->update('UPDATE s_useronline SET account_date = "'.date("Y-m-d H:i:s", strtotime("-1 HOUR")).'" WHERE id_id = '.$_SESSION['data']['id_id'].' LIMIT 1');
+
 			$_SESSION['data']['id_id'] = false;
 		}
-		unset($_SESSION['data']['id_id']); unset($_SESSION['data']); unset($_SESSION);
-		if (!$mobile) {
-			if(!$empty)
-				reloadACT(l('main', 'index'));
-			else
-				reloadACT(l('main', 'index', '1'));
-		} else {
-			header('Location: index.php'); die;
-		}
+		unset($_SESSION['data']['id_id']);
+		unset($_SESSION['data']);
+		unset($_SESSION);
 	}
 
 }

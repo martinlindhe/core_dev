@@ -1,17 +1,14 @@
 <?
-	if($action == 'logout') {
-		include('auth.php');
-		if(!empty($_GET['id']))
-			$user_auth->logout(1);
-		else
-			$user_auth->logout();
-	} elseif($action == 'login') {
+/*
+	if($action == 'login') {
 		if(!$l && !empty($_POST['a']) && !empty($_POST['p'])) {
 			include('auth.php');
 			checkBan(1);
 			$user_auth->login($_POST['a'], $_POST['p']);
 		} else if($l) reloadACT(l('main', 'start')); else reloadACT(l());
-	} elseif($action == 'settings') {
+	}
+*/
+	if($action == 'settings') {
 		if(!$l) {
 			loginACT();
 		}

@@ -8,17 +8,19 @@ class user {
 	var $self, $info, $id;
 
 	function __construct() {
+		session_start();
 	}
 
 	//returns true if the user is logged in
 	function loggedIn()
 	{
-		d($_SESSION);
+		if ($_SESSION['data']['id_id']) return true;
+		return false;
 	}
 
 	function auth($id) {
 		if (!is_numeric($id)) return false;
-		if ($this->timeout('15 MINUTES') > @$_SESSION['data']['account_date']) {
+		if ($this->timeout('15 MINUTES') > $_SESSION['data']['account_date']) {
 			$res = now();
 			$_SESSION['data']['account_date'] = $res;
 			$this->sql->queryUpdate("UPDATE s_user SET account_date = '".$res."' WHERE id_id = '".secureINS($id)."' LIMIT 1");
