@@ -1,0 +1,64 @@
+aftonbladet webbtv:
+
+ladda först: innehåller namn på default kategorin "senaste.xml"
+http://wwwc.aftonbladet.se/special/webbtv/xml2/default.xml
+
+	<?xml version='1.0' encoding='utf-8'?><root datetime='2007-02-06 15:48:00' name='SENASTE KLIPPEN'
+ 	path='senaste' commercial='yes' desc='empty' xmlfile='senaste.xml' stylecolor='empty'></root>
+---------
+
+http://wwwc.aftonbladet.se/special/webbtv/xml2/senaste.xml
+
+		<?xml version='1.0' encoding='utf-8'?><root datetime='2007-08-15 17:32:00' name='SENASTE KLIPPEN'
+		 contentpath='categories/Nyheter/0708/5288_categories/Nyheter/0708/5287_categories/Nyheter/Vader/0708
+		/5284_categories/Nyheter/0708/5283_categories/Nyheter/Vader/0708/5281_categories/Nyheter/0708/5280_categories
+		/Sport/0708/5279_categories/Nyheter/0708/5278_categories/Nyheter/0708/5275' commercial='yes' desc='empty'
+		 xmlfile='senaste.xml' stylecolor='empty'></root>
+
+-----------
+
+innehåller data som visas i menyn till höger:
+	http://wwwc.aftonbladet.se/special/webbtv/xml2/menu.xml
+
+<?xml version='1.0' encoding='UTF-8'?>
+	<root datetime='2007-08-13 16:10:00' path='menu' name='MENU' xmlfile='menu.xml'>
+	<category id='latest' name='SENASTE KLIPPEN' desc='empty' commercial='yes' xmlfile='senaste.xml'></category>
+	<category id='c1' name='NYHETER' desc='empty' commercial='yes' xmlfile='c1.xml'>
+		<subcategory id='senaste1' name='SENASTE' desc='empty' commercial='yes' xmlfile='senaste1.xml' />
+		<subcategory id='c15' name='VÃ„DER' desc='empty' commercial='yes' xmlfile='c15.xml' />
+	</category>
+	<category id='c2' name='NÃ–JE' desc='empty' commercial='no' xmlfile='c2.xml'>
+		<subcategory id='senaste2' name='SENASTE' desc='empty' commercial='no' xmlfile='senaste2.xml' />
+		<subcategory id='c3' name='MUSIKVIDEOR' desc='empty' commercial='yes' xmlfile='c3.xml' />
+		<subcategory id='c17' name='NÃ–JESSVEPET' desc='empty' commercial='yes' xmlfile='c17.xml' />
+		<subcategory id='c28' name='KLICK!' desc='empty' commercial='yes' xmlfile='c28.xml' />
+		<subcategory id='c29' name='SCHLAGER' desc='empty' commercial='yes' xmlfile='c29.xml' />
+		<subcategory id='c31' name='TV-PRISET' desc='empty' commercial='yes' xmlfile='c31.xml' />
+		<subcategory id='c38' name='LINKIN PARK' desc='empty' commercial='yes' xmlfile='c38.xml' />
+	</category>
+	<category id='c6' name='SPORT' desc='empty' commercial='yes' xmlfile='c6.xml'>
+		<subcategory id='senaste6' name='SENASTE' desc='empty' commercial='yes' xmlfile='senaste6.xml' />
+		<subcategory id='c23' name='ELITSERIEN' desc='empty' commercial='yes' xmlfile='c23.xml' />
+		<subcategory id='c35' name='POKER' desc='empty' commercial='yes' xmlfile='c35.xml' />
+		<subcategory id='c37' name='ALLSVENSKAN' desc='empty' commercial='yes' xmlfile='c37.xml' />
+		<subcategory id='c39' name='NHL' desc='empty' commercial='yes' xmlfile='c39.xml' />
+	</category>
+	<category id='c12' name='LIVSSTIL' desc='empty' commercial='yes' xmlfile='c12.xml'>
+		<subcategory id='senaste12' name='SENASTE' desc='empty' commercial='yes' xmlfile='senaste12.xml' />
+		<subcategory id='c8' name='HÃ„LSA' desc='empty' commercial='yes' xmlfile='c8.xml' />
+		<subcategory id='c10' name='KVINNA' desc='empty' commercial='yes' xmlfile='c10.xml' />
+		<subcategory id='c13' name='BIL' desc='empty' commercial='yes' xmlfile='c13.xml' />
+		<subcategory id='c21' name='FAMILJ' desc='empty' commercial='yes' xmlfile='c21.xml' />
+		<subcategory id='c22' name='MAT & VIN' desc='empty' commercial='yes' xmlfile='c22.xml' />
+		<subcategory id='c25' name='KÃ„RLEK & SEX' desc='empty' commercial='yes' xmlfile='c25.xml' />
+		<subcategory id='c45' name='SOFI' desc='empty' commercial='yes' xmlfile='c45.xml' />
+	</category>
+	<category id='c43' name='MITT KLIPP' desc='empty' commercial='yes' xmlfile='c43.xml'>
+		<subcategory id='senaste43' name='SENASTE' desc='empty' commercial='yes' xmlfile='senaste43.xml' />
+		<subcategory id='c46' name='TALANG-TOPPEN' desc='empty' commercial='yes' xmlfile='c46.xml' />
+	</category>
+	<category id='c44' name='MAT-TINA' desc='empty' commercial='yes' xmlfile='c44.xml'>
+		<subcategory id='senaste44' name='SENASTE' desc='empty' commercial='yes' xmlfile='senaste44.xml' />
+	</category>
+</root>
+	
