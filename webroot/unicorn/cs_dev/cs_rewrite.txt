@@ -36,3 +36,4 @@ ny katalogstruktur:
 todo:
 	- fixa sök users, använd min egen paging funktion
 	- fixa forum, använd min egen paging funktion
+	- fixa tyck till, använd min egen paging funktion
