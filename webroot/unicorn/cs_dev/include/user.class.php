@@ -38,10 +38,13 @@ class user {
 	}
 	
 	//kollar ifall aktuell user har tillräckligt med vip
-	function vip_check($_level) {
+	function vip_check($_level)
+	{
+		global $db;
 		if (!is_numeric($_level)) return false;
-		$result = $this->sql->queryLine('SELECT level_id FROM s_user WHERE id_id = '.$this->id.' LIMIT 1', 0, 1);
-		if ($result[0] >= $_level) return true;
+
+		$result = $db->getOneItem('SELECT level_id FROM s_user WHERE id_id = '.$this->id.' LIMIT 1');
+		if ($result >= $_level) return true;
 		return false;
 	}
 
@@ -181,16 +184,25 @@ class user {
 	function getsessionuser($id) {
 		return @$_SESSION['data'];
 	}
-	function getuserfill($arr, $line = '*') {
+
+	function getuserfill($arr, $line = '*')
+	{
+		global $db;
+
 		if($line != '*') $line = substr($line, 2);
-		$return = $this->sql->queryLine("SELECT $line FROM s_user WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1", 1);
-		return ($return)?array_merge($arr, $return):$arr;
+		$return = $db->getOneRow('SELECT '.$line.' FROM s_user WHERE id_id = '.$arr['id_id'].' LIMIT 1');
+		return ($return) ? array_merge($arr, $return) : $arr;
 	}
-	function getuserfillfrominfo($arr, $line = '*') {
+
+	function getuserfillfrominfo($arr, $line = '*')
+	{
+		global $db;
+
 		if($line != '*') $line = substr($line, 2);
-		$return = $this->sql->queryLine("SELECT $line FROM s_userinfo WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1", 1);
-		return ($return)?array_merge($arr, $return):$arr;
+		$return = $db->getOneRow('SELECT '.$line.' FROM s_userinfo WHERE id_id = '.$arr['id_id'].' LIMIT 1');
+		return ($return) ? array_merge($arr, $return) : $arr;
 	}
+
 	function info($id, $level = '1') {
 		switch($level) {
 		case '1':
@@ -368,10 +380,14 @@ class user {
 		$this->counterIncrease('mail', $user);
 		$this->notifyIncrease('mail', $user);
 	}
-	function getline($opt, $id) {
-		$res = $this->sql->queryResult("SELECT $opt FROM s_user WHERE id_id = '$id' LIMIT 1");
-		if(!$res) return false;
-		return $res;
+
+	function getline($opt, $id)
+	{
+		global $db;
+		if (!is_numeric($id)) return false;
+
+		$q = 'SELECT '.$opt.' FROM s_user WHERE id_id = '.$id.' LIMIT 1';
+		return $db->getOneItem($q);
 	}
 
 	function getinfo($id, $opt)

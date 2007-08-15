@@ -173,8 +173,37 @@
 		return $str;
 	}
 
+	//läser settings
+	function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC')
+	{
+		global $db;
+		if (!is_numeric($id)) return false;
 
+		if($type == 's') {
+			$q = 'SELECT text_cmt FROM s_textsettings WHERE main_id = '.$id.' AND type_id = "'.$db->escape($opt).'" LIMIT 1';
+			return $db->getOneItem($q);
+		}
+		if($type == 'm') {
+			$q = 'SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = "'.$db->escape($opt).'"';
+			return $db->getOneRow($q);
+		}
+		if($type == 'mo') {
+			$q = 'SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = "'.$db->escape($opt).'"';
+			return $db->getOneRow($q);
+		}
+	}
 
+	function date_diff($current, $past)
+	{
+		$seconds = strtotime($current) - strtotime($past);    
+		$min = $seconds/60; 
+		$hours = $min/60; 
+		$days = floor($hours/24); 
+		$hours = floor($hours-($days*24)); 
+		$min = floor($min-($days*60*24)-($hours*60)); 
+		$seconds = floor($seconds-($days*60*60*24)-($hours*60*60)-($min*60)); 
+		return array('days' => $days,'hours' => $hours,'minutes' => $min,'seconds' => $seconds); 
+	}
 
 
 
@@ -268,36 +297,9 @@
 		return urlencode(utf8_encode($s));
 	}
 
-	function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC')
-	{
-		global $sql;
-		if($type == 's') {
-			$result = $sql->queryResult("SELECT text_cmt FROM s_textsettings WHERE main_id = '$id' AND type_id = '$opt' LIMIT 1");
-			if(!$result) return false; else return $result;
-		} elseif($type == 'm') {
-			$result = $sql->query("SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = '$opt'");
-			if(!$result) return false; else return $result;
-		} elseif($type == 'mo') {
-			$result = $sql->query("SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = '$opt'"); // ORDER BY $order");
-			if(!$result) return false; else return $result;
-		}
-	}
-
 	function headline($id = '')
 	{
 		return CS.'_objects/_heads/head_'.$id.'.gif';
-	}
-
-	function date_diff($current,$past)
-	{
-		$seconds = strtotime($current) - strtotime($past);    
-		$min = $seconds/60; 
-		$hours = $min/60; 
-		$days = floor($hours/24); 
-		$hours = floor($hours-($days*24)); 
-		$min = floor($min-($days*60*24)-($hours*60)); 
-		$seconds = floor($seconds-($days*60*60*24)-($hours*60*60)-($min*60)); 
-		return array('days' => $days,'hours' => $hours,'minutes' => $min,'seconds' => $seconds); 
 	}
 
 	function addzero($str)
