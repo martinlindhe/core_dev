@@ -10,7 +10,7 @@
 	//$type = '1' = all, 'F' = female, 'M' = male
 	function performSearch($type = '', $_start = 0, $_end = 0, $lim = 100)	//limit of results per page
 	{
-		global $sql, $user, $l;
+		global $db, $user;
 
 		$sexs = '';
 		$sexu = '';
@@ -30,7 +30,7 @@
 
 		if (!is_numeric($_start) || !is_numeric($_end)) return $result;
 
-		$r = $user->getinfo($l['id_id'], 'random');
+		$r = $user->getinfo($user->id, 'random');
 		$page = 'user';
 
 		$gotage = false;
@@ -69,7 +69,7 @@
 		$str[] = '+ACTIVE';
 		if (!empty($_POST['ort']) && $result['lan']) {
 			$result['ort'] = $_POST['ort'];
-			$ort_check = $sql->queryResult("SELECT st_lan FROM s_pstort WHERE st_ort = '".secureINS($result['ort'])."' LIMIT 1");
+			$ort_check = $sql->queryResult("SELECT st_lan FROM s_pstort WHERE st_ort = '".$db->escape($result['ort'])."' LIMIT 1");
 			if (empty($ort_check) || $ort_check != $result['lan']) $result['ort'] = '0';
 		}
 		if (!empty($_POST['l_6']) && is_numeric($_POST['l_6'])) {
@@ -81,7 +81,7 @@
 		if(!empty($_POST['online'])) $result['online'] = '1';
 		if(!empty($_POST['birth']) && $isG) $result['birth'] = '1';
 		if(!empty($_POST['pic']) || $bpic) $result['pic'] = '1'; else $result['pic'] = '0'; 
-		if(!empty($_POST['alias'])) $result['alias'] = secureINS($_POST['alias']);
+		if(!empty($_POST['alias'])) $result['alias'] = $db->escape($_POST['alias']);
 		if(!empty($_POST['age']) && is_numeric($_POST['age']) && $_POST['age'] > 0 && $_POST['age'] < 10) $result['age'] = $_POST['age'];
 		if ($result['lan']) {
 			$str[] = '+LÄN'.str_replace('-', '', str_replace(' ', '', $result['lan']));
@@ -136,23 +136,14 @@
 		} else {
 			$ord = 'ORDER BY u.u_alias ASC';
 		}
-		//if ($result['ord']) $url[] = 'ord='.secureOUT($result['ord']).'&';
-		//$result['paging']['co'] = 200;
+
 		$result['paging']['co'] = $lim;
 			
 		$q = "SELECT u.* $res $ord";
 		
-		/*
-		if ($_start || $_end) $q .= " LIMIT ".$_start.",".$_end;
-		else 
-		*/
 		$q .= " LIMIT {$result['paging']['slimit']}, {$result['paging']['limit']}";
 		
-		if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') {
-			//echo $q;
-		}
-			
-		$result['res'] = $sql->query($q, 0, 1);
+		$result['res'] = $db->getArray($q);
 
 		if (count($res) < $lim) $result['paging']['co'] = (($result['paging']['p']-1) * $lim) + count($res);
 

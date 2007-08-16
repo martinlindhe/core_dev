@@ -76,8 +76,8 @@
 		
 		$q = 'SELECT COUNT(*) FROM s_ban WHERE ban_ip = "'.$db->escape($_SERVER['REMOTE_ADDR']).'"';
 		if ($db->getOneItem($q)) {
-			if($splash) errorSPLASHACT("Tyvärr! Du är blockerad.");
-			else errorACT("Tyvärr! Du är blockerad.");
+			if($splash) errorSPLASHACT("TyvÃ¤rr! Du Ã¤r blockerad.");
+			else errorACT("TyvÃ¤rr! Du Ã¤r blockerad.");
 		}
 	}
 
@@ -118,7 +118,7 @@
 		$ret = '';
 		foreach($arr as $key => $val) {
 			if(!$i) $i = true; else $ret .= ' - ';
-			$ret .= '<a class="wht" href="'.$val[0].'">'.(strtolower($key) == strtolower($sel)?'»'.$val[1].'«':$val[1]).'</a>';
+			$ret .= '<a class="wht" href="'.$val[0].'">'.(strtolower($key) == strtolower($sel)?'Â»'.$val[1].'Â«':$val[1]).'</a>';
 		}
 		return $ret;
 	}
@@ -130,7 +130,7 @@
 		$return = '';
 		if($type == 1) {
 			if(date("Y-m-d") == $thisday) $return .= '';
-			else if(date("Y-m-d", strtotime("-1 day")) == $thisday) $return .= 'igår';
+			else if(date("Y-m-d", strtotime("-1 day")) == $thisday) $return .= 'igÃ¥r';
 			else if(date("Y-m-d", strtotime("+1 day")) == $thisday) $return .= 'imorgon';
 			else $return .= stripzero(strftime("%d", $str)).strftime(" %b", $str);
 			$y = date('Y', $str);
@@ -138,7 +138,7 @@
 			$return .= ' kl '.date('H:i', $str);
 		} elseif($type == 3) {
 			if(date("Y-m-d") == $thisday) $return .= 'idag';
-			else if(date("Y-m-d", strtotime("-1 day")) == $thisday) $return .= 'igår';
+			else if(date("Y-m-d", strtotime("-1 day")) == $thisday) $return .= 'igÃ¥r';
 			else if(date("Y-m-d", strtotime("+1 day")) == $thisday) $return .= 'imorgon';
 			else $return .= stripzero(strftime("%d", $str)).strftime(" %B", $str);
 			$y = date('Y', $str);
@@ -152,7 +152,7 @@
 			if(date("Y-m-d") == $thisday) {
 				$return .= '';
 			} else if(date("Y-m-d", strtotime("-1 day")) == $thisday) {
-				$return .= 'igår';
+				$return .= 'igÃ¥r';
 			} else if(date("Y-m-d", strtotime("+1 day")) == $thisday) {
 				$return .= 'imorgon';
 			} else {
@@ -174,7 +174,7 @@
 		return $str;
 	}
 
-	//läser settings
+	//lÃ¤ser settings
 	function getset($id, $opt = 'r', $type = 's', $order = 'main_id DESC')
 	{
 		global $db;
@@ -206,7 +206,61 @@
 		return array('days' => $days,'hours' => $hours,'minutes' => $min,'seconds' => $seconds); 
 	}
 
+	function paging($p = '1', $limit = 20)
+	{
+		if(empty($p) || !is_numeric($p)) {
+			$p = 1;
+		}
+		return array('p' => $p, 'limit' => $limit, 'slimit' => ($p - 1) * $limit);
+	}
 
+	function dopaging($paging, $url, $anchor = '', $width = 'med', $text = '&nbsp;', $vice = 1)
+	{
+		$max = 10;
+		$paging['s'] = $paging['slimit'];
+		$pages = ceil($paging['co'] / $paging['limit']);
+		if ($pages > $max) {
+			$paging['slimit'] = $paging['p'] - floor($max / 2);
+			if($paging['slimit'] > ($pages - $max + 1)) {
+				$paging['slimit'] = $pages - $max + 1;
+			}
+		} else {
+			$paging['slimit'] = 1;
+		}
+
+		if ($paging['slimit'] < 1) $paging['slimit'] = 1;
+		$stop = $paging['slimit'] + $max - 1;
+		if ($stop > $pages) $stop = $pages;
+		if (strpos($text, '%') !== false)
+			$text = sprintf($text, (($paging['co'])?$paging['s']+1:0), ($paging['co'] > ($paging['s']+$paging['limit']))?$paging['s']+$paging['limit']:$paging['co'], $paging['co']);
+
+		if ($width == 'med' || $width == 'medmin' || $width == 'big' || $width == 'medbig' || $width == 'biggest')
+			echo '<table cellspacing="0" summary="" style="font-family: Verdana; font-size: 10px; width: '.($width == 'medmin'?'596':($width == 'big'?'596':($width == 'medbig'?'596':($width == 'biggest'?'786':'596')))).'px;"><tr>
+			<td class="pdg" nowrap="nowrap">'.$text.'</td>
+			<td class="pdg" align="right" nowrap="nowrap">'.($paging['p'] > 1?'<a href="'.$url.($paging['p']-1).$anchor.'" class="bld">Â« '.(($vice)?'bakÃ¥t':'framÃ¥t').'</a>':'&nbsp;').'&nbsp;&nbsp;';
+
+		if ($paging['co'] > $paging['limit']) {
+			echo 'sida';
+			if ($paging['slimit'] > 1) {
+				echo ' ...';
+			}
+			if ($stop) {
+				for($i = $paging['slimit']; $i <= $stop; $i++) {
+					if($paging['p'] != $i) {
+						echo ' <a href="'.$url.$i.$anchor.'">'.$i.'</a>';
+					} else {
+						echo ' <b>'.$i.'</b>';
+					}
+				}
+			} else echo '1';
+			if ($pages > $stop) {
+				echo ' ... av '.$pages;
+			}
+		} else echo '&nbsp;';
+
+		if ($width == 'big' || $width == 'medbig' || $width == 'med' || $width == 'medmin' || $width == 'biggest')
+			echo '&nbsp;&nbsp;'.($paging['p'] < $stop?'<a href="'.$url.($paging['p']+1).$anchor.'" class="bld">'.((!$vice)?'bakÃ¥t':'framÃ¥t').' Â»</a>':'&nbsp;').'</td></tr></table>';
+	}
 
 
 	//*******************************************
@@ -269,7 +323,7 @@
 				$first_month = strftime("%B", strtotime($date));
 				$sec_date = stripzero(date("d", strtotime($date.' +1 DAY')));
 				if($sec_date < $first_date) {
-		# månadsskifte
+		# mÃ¥nadsskifte
 					$first_month = stripzero(date("m", strtotime($date)));
 					$sec_month = strftime("%B", strtotime($date.' +1 DAY'));
 					return "$first_date/$first_month & $sec_date $sec_month";
@@ -417,7 +471,7 @@
 
 	function loginACT()
 	{
-		errorACT('Du är inte inloggad! Logga in uppe i menyn eller registrera dig.');
+		errorACT('Du Ã¤r inte inloggad! Logga in uppe i menyn eller registrera dig.');
 	}
 
 	function doADP($pos, $right = false)
@@ -440,62 +494,6 @@
 		if(empty($expire)) $expire = time() + 15 * 365 * 24 * 60 * 60;
 		setcookie($id, $val, $expire, '/');
 		return $val;
-	}
-
-	function paging($p = '1', $limit = 20)
-	{
-		if(empty($p) || !is_numeric($p)) {
-			$p = 1;
-		}
-		return array('p' => $p, 'limit' => $limit, 'slimit' => ($p - 1) * $limit);
-	}
-
-	function dopaging($paging, $url, $anchor = '', $width = 'med', $text = '&nbsp;', $vice = 1)
-	{
-		$max = 10;
-		$paging['s'] = $paging['slimit'];
-		$pages = ceil($paging['co'] / $paging['limit']);
-		if ($pages > $max) {
-			$paging['slimit'] = $paging['p'] - floor($max / 2);
-			if($paging['slimit'] > ($pages - $max + 1)) {
-				$paging['slimit'] = $pages - $max + 1;
-			}
-		} else {
-			$paging['slimit'] = 1;
-		}
-
-		if ($paging['slimit'] < 1) $paging['slimit'] = 1;
-		$stop = $paging['slimit'] + $max - 1;
-		if ($stop > $pages) $stop = $pages;
-		if (strpos($text, '%') !== false)
-			$text = sprintf($text, (($paging['co'])?$paging['s']+1:0), ($paging['co'] > ($paging['s']+$paging['limit']))?$paging['s']+$paging['limit']:$paging['co'], $paging['co']);
-
-		if ($width == 'med' || $width == 'medmin' || $width == 'big' || $width == 'medbig' || $width == 'biggest')
-			echo '<table cellspacing="0" summary="" style="font-family: Verdana; font-size: 10px; width: '.($width == 'medmin'?'596':($width == 'big'?'596':($width == 'medbig'?'596':($width == 'biggest'?'786':'596')))).'px;"><tr>
-			<td class="pdg" nowrap="nowrap">'.$text.'</td>
-			<td class="pdg" align="right" nowrap="nowrap">'.($paging['p'] > 1?'<a href="'.$url.($paging['p']-1).$anchor.'" class="bld">« '.(($vice)?'bakåt':'framåt').'</a>':'&nbsp;').'&nbsp;&nbsp;';
-
-		if ($paging['co'] > $paging['limit']) {
-			echo 'sida';
-			if ($paging['slimit'] > 1) {
-				echo ' ...';
-			}
-			if ($stop) {
-				for($i = $paging['slimit']; $i <= $stop; $i++) {
-					if($paging['p'] != $i) {
-						echo ' <a href="'.$url.$i.$anchor.'">'.$i.'</a>';
-					} else {
-						echo ' <b>'.$i.'</b>';
-					}
-				}
-			} else echo '1';
-			if ($pages > $stop) {
-				echo ' ... av '.$pages;
-			}
-		} else echo '&nbsp;';
-
-		if ($width == 'big' || $width == 'medbig' || $width == 'med' || $width == 'medmin' || $width == 'biggest')
-			echo '&nbsp;&nbsp;'.($paging['p'] < $stop?'<a href="'.$url.($paging['p']+1).$anchor.'" class="bld">'.((!$vice)?'bakåt':'framåt').' »</a>':'&nbsp;').'</td></tr></table>';
 	}
 */
 ?>

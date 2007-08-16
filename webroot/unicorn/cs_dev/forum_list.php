@@ -50,7 +50,12 @@
 
 	$own = $db->getArray('SELECT o.main_id, o.top_id, o.sent_ttl, o.sent_date FROM s_f o INNER JOIN s_f p ON p.main_id = o.top_id AND p.status_id = "1" WHERE o.sender_id = '.$user->id.' AND o.status_id = "1" AND o.view_id = "1" ORDER BY o.main_id DESC LIMIT 5');
 	$page = 'list';
-	$menu = array('start' => array(l('forum', 'start'), 'start'), 'list' => array(l('forum', 'list', $r['main_id']), secureOUT($r['main_ttl'])), 'write' => array('javascript:makeForum('.$r['main_id'].');', 'skriv ny tråd'));
+	$menu = array(
+		'start' => array('forum.php', 'start'),
+		'list' => array('forum_list.php?id='.$r['main_id'], secureOUT($r['main_ttl'])),
+		'write' => array('javascript:makeForum('.$r['main_id'].');', 'skriv ny tråd')
+	);
+
 	require(DESIGN."head.php");
 ?>
 <script type="text/javascript">
@@ -67,7 +72,7 @@ function openText(id) {
 		
 		<table summary="" cellspacing="0" style="margin-bottom: 20px;">
 			<tr>
-				<td style="width: 157px;"><a href="<?=l('forum','list',$r['main_id'])?>" class="bld"><img src="<?=OBJ.$r['main_id']?>.jpg" alt="" onerror="this.src = '<?=OBJ?>forum_nopic.jpg';" width="157" height="74" /></a></td>
+				<td style="width: 157px;"><a href="forum_list.php?id=<?=$r['main_id']?>" class="bld"><img src="<?=$config['web_root'].'_objects/'.$r['main_id']?>.jpg" alt="" onerror="this.src = '<?=$config['web_root']?>_objects/forum_nopic.jpg';" width="157" height="74" /></a></td>
 				<td class="pdg"><?=secureOUT($r['main_cmt'])?></td>
 			</tr>
 			<tr><td><?='<h4>'.secureOUT($r['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg'?></td></tr>

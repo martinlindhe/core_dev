@@ -6,18 +6,17 @@
 	if ($user->id) {
 		if(!empty($_POST['ins_cmt'])) {
 			checkBan(1);
-			if($l) {
-				$ins = $sql->queryInsert("INSERT INTO s_thought SET
-				gb_name = '".secureINS($l['u_alias'])."',
-				logged_in = '".secureINS($l['id_id'])."',
-				sess_ip = '".secureINS($_SERVER["REMOTE_ADDR"])."',
-				sess_id = '".secureINS($sql->gc())."',
-				gb_html = '".((@$isAdmin)?'1':'0')."',
-				gb_msg = '".secureINS($_POST['ins_cmt'])."',
-				gb_date = NOW()");
+			if($user->id) {
+				$q = "INSERT INTO s_thought SET gb_name = '".$db->escape($_SESSION['data']['u_alias'])."',
+				logged_in = '".$db->escape($user->id)."',
+				sess_ip = '".$db->escape($_SERVER["REMOTE_ADDR"])."',
+				gb_html = '".(($user->isAdmin)?'1':'0')."',
+				gb_msg = '".$db->escape($_POST['ins_cmt'])."',
+				gb_date = NOW()";
+				$ins = $db->insert($q);
 			}
 			if($ins) $sql->logADD('', $ins, 'GB_SEND');
-				$msg = "Tack! Meddelandet kommer att publiceras n‰r det granskats!";
+				$msg = "Tack! Meddelandet kommer att publiceras n√§r det granskats!";
 				errorACT($msg, l('main', 'thought'));
 		} elseif(!empty($_GET['del']) && is_numeric($_GET['del'])) {
 			$do = false;
@@ -66,20 +65,20 @@
 	<div class="subHead">tyck till</div><br class="clr"/>
 
 	<?=gettxt('top-thought')?>
-	<form action="<?=l('main', 'thought')?>" method="post">
-	<?=($user->id?'<textarea class="txt" name="ins_cmt" style="width: 400px; height: 80px;"></textarea>':'Du mÂste vara inloggad fˆr att kunna skriva.')?>
+	<form action="<?=$_SERVER['PHP_SELF']?>" method="post">
+	<?=($user->id?'<textarea class="txt" name="ins_cmt" style="width: 400px; height: 80px;"></textarea>':'Du m√•ste vara inloggad f√∂r att kunna skriva.')?>
 	<input type="submit" class="btn2_sml" value="Skicka" />
 	</form>
 
-	<form action="<?=l('main', 'thought')?>" method="post">
+	<form action="<?=$_SERVER['PHP_SELF']?>" method="post">
 	<input class="txt" name="s" value="<?=secureOUT($str)?>" style="width: 150px;" />
-	<input type="submit" class="btn2_sml" value="Sˆk" />
+	<input type="submit" class="btn2_sml" value="S√∂k" />
 	</form>
 	<br/>
 
 	<div class="centerMenuBodyWhite">
 <?
-	dopaging($paging, l('main', 'thought'), '', 'med', STATSTR);
+	dopaging($paging, 'tycktill.php?id=', '', 'med', STATSTR);
 
 	if(count($gb) && !empty($gb)) {
 		$i = 0;
@@ -98,7 +97,7 @@
 			</div>';
 		}
 	} else {
-		echo '<table cellspacing="0" summary="" class="cnt" style="width: 450px;"><tr><td>Inga inl‰gg.</td></tr></table>';
+		echo '<table cellspacing="0" summary="" class="cnt" style="width: 450px;"><tr><td>Inga inl√§gg.</td></tr></table>';
 	}
 	dopaging($paging, l('main', 'thought'), '', 'med');
 ?>

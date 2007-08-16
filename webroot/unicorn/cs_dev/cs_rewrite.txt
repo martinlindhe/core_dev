@@ -30,11 +30,11 @@ ny katalogstruktur:
 	/cs_dev/include/		- cs-specifika includefiler (funktioner)
 
 ------------
-
-	tog bort s_usersess.sess_id
+borttaget db:
+	s_usersess.sess_id
+	s_thought.sess_id
+	
 	
 todo:
-	- fixa sök users, använd min egen paging funktion
-	- fixa forum, använd min egen paging funktion
-	- fixa tyck till, använd min egen paging funktion
+	- fixa tyck till: servern hänger sej när man skickar in fråga
 	- ta bort l() funktionen - url rewrite crap

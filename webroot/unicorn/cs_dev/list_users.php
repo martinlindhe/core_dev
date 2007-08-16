@@ -14,14 +14,14 @@
 	<div class="subHead">leta</div><br class="clr"/>
 <?
 	makeButton(!$type, "document.location='list_users.php'", 'icon_profile.png', 'senast inloggade');
-	makeButton($type=='1', 'goLoc(\''.l('list', 'users', '1').'\')', 'icon_profile.png', 'visa online');
-	makeButton($type=='F', 'goLoc(\''.l('list', 'users', 'F').'\')', 'icon_profile.png', 'tjejer online');
-	makeButton($type=='M', 'goLoc(\''.l('list', 'users', 'M').'\')', 'icon_profile.png', 'killar online');
+	makeButton($type=='1', "document.location='list_users.php?type=1'", 'icon_profile.png', 'visa online');
+	makeButton($type=='F', "document.location='list_users.php?type=F'", 'icon_profile.png', 'tjejer online');
+	makeButton($type=='M', "document.location='list_users.php?type=M'", 'icon_profile.png', 'killar online');
 ?>
 <br/><br/><br/>
 
 	<div class="centerMenuBodyWide">
-		<form name="search" action="<?=l('list', 'users', '2')?>" method="post">
+		<form name="search" action="<?=$_SERVER['PHP_SELF']?>?type=2" method="post">
 		<input type="hidden" name="do" value="1" />
 		<input type="hidden" name="p" value="0" />
 

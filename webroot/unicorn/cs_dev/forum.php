@@ -30,14 +30,14 @@ function openText(id, fid) {
 		echo '
 			<td>
 			<table cellspacing="0" summary="" style="margin-left: '.(($i)?'62px':'0').';">
-			<tr><td><a href="forum_list.php?id='.$row['main_id'].'" class="bld"><img width="157" height="74" src="'.OBJ.$row['main_id'].'.jpg" alt="" onerror="this.src = \''.OBJ.'forum_nopic.jpg\';" /></a></td></tr>
+			<tr><td><a href="forum_list.php?id='.$row['main_id'].'" class="bld"><img width="157" height="74" src="'.$config['web_root'].'_objects/'.$row['main_id'].'.jpg" alt="" onerror="this.src = \''.$config['web_root'].'_objects/forum_nopic.jpg\';" /></a></td></tr>
 			<tr><td><h4>'.secureOUT($row['main_ttl']).'</h4><b>'.$c.'</b> tråd'.(($c != '1')?'ar':'').'<br /><b>'.($d+$c).'</b> inlägg</td></tr>
 			</table>
 			</td>';
 		if(++$i % 3 == 0) $nl = true;
 	}
 	$page = 'start';
-	$menu = array('start' => array(l('forum', 'start'), 'start'));
+	$menu = array('start' => array('forum.php', 'start'));
 ?>
 		</tr>
 		</table>
@@ -50,7 +50,13 @@ if(count($last)) {
 	foreach($last as $row) {
 ?>
 <tr>
-	<td class="cur pdg" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');"><div style="width: 100%; height: 14px; overflow: hidden;"><a href="<?=l('forum','read', $row['top_id']).'&amp;item='.$row['main_id'].'#R'.$row['main_id']?>" class="up"><?=secureOUT($row['sent_cmt'])?></a>&nbsp;</div></td>
+	<td class="cur pdg" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');">
+		<div style="width: 100%; height: 14px; overflow: hidden;">
+			<a href="forum_read.php?id=<?=$row['top_id']?>&amp;item=<?=$row['main_id'].'#R'.$row['main_id']?>" class="up">
+				<?=secureOUT($row['sent_cmt'])?>
+			</a>&nbsp;
+		</div>
+	</td>
 	<td class="cur pdg" onclick="openText('<?=$row['top_id']?>', '');"><div style="width: 100%; height: 14px; overflow: hidden;"><a href="<?=l('forum','read', $row['top_id'])?>" class="bld"><?=secureOUT($row['main_ttl'])?></a>&nbsp;</div></td>
 	<td class="mid nobr"><?=$user->getstring($row)?></td>
 	<td class="cur pdg rgt nobr" onclick="openText('<?=$row['top_id']?>', '<?=$row['main_id']?>');"><?=nicedate($row['sent_date'], 1, 1)?></td>
