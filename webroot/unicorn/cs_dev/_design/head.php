@@ -74,7 +74,7 @@ function blockRightClick(event) {
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_mail.png" alt="" /><a href="user_mail.php"><?=$menu_brev?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_blog.png" alt="" /><a href="user_blog.php">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_friends.png" alt="" /><a href="user_relations.php"><?=$menu_relations?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gallery.png" alt="" /><a href="/user/gallery/">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gallery.png" alt="" /><a href="user_gallery.php">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_settings.png" alt="" /><a href="settings_presentation.php">inställningar</a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_settings.png" alt="" /><a href="upgrade.php">uppgradera</a> &nbsp;</li>
 		</ul>
