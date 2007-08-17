@@ -1,16 +1,22 @@
 <?
-	function cache_read($url)
+	//todo: sortera playlist efter tid innan den skrivs till disk
+	//todo: konvertera kategori NÖJE till Nöje. problem med unicode konvertering med ucfirst()
+
+
+	//ttl = time to live, in minutes (default 240 minute = 4 hour)
+	function cache_read($url, $ttl = 240)
 	{
 		$cache_name = 'cache/'.basename($url);
+		
+		//echo 'cache diff: '.(time() - filemtime($cache_name)).'<br>';
+		//echo 'ttl*60: '.($ttl*60).'<br/>';
+		if (file_exists($cache_name) && ((time() - filemtime($cache_name)) < ($ttl*60))) {
 
-		if (file_exists($cache_name)) {
-
-			$diff = time() - filectime($cache_name);
-			echo 'using '.$diff.' seconds old cache<br/>';
+			//echo 'using cached '.$url.'<br/>';
 			return file_get_contents($cache_name);
 
 		} else {
-			echo 'reading new '.$url.'<br/><br/>';
+			//echo 'reading new '.$url.'<br/><br/>';
 			$data = file_get_contents($url);
 			file_put_contents($cache_name, $data);
 			return $data;
@@ -47,6 +53,8 @@
 		if (count($attrs)) {
 			foreach ($attrs as $k => $v) {
 				//echo '<font color="#009900">'.$k.'</font>=<font color="#990000">'.$v.'</font><br/>';
+				
+				if ($name == 'ROOT' && $k == 'DATETIME') $items[$ptr]['time'] = strtotime($v);		//2007-08-15 17:32:00
 				if ($name == 'CONTENT' && $k == 'NAME') $items[$ptr]['category'] = $v;		//kateoginamn, "Nyheter"
 				if ($name == 'CONTENT' && $k == 'IMAGE') $items[$ptr]['image'] = $v;
 				if ($name == 'CONTENT' && $k == 'HEAD') $items[$ptr]['head'] = $v;
@@ -64,38 +72,67 @@
 	{
 		//echo 'NEWS_endE('.$parser.','.$name.')<br/>';
 	}
+	
+	function niceTime($timestamp)
+	{
+		if (!is_numeric($timestamp) || !$timestamp) return 'BAD TIME';
+
+		$datestamp	= mktime (0,0,0,date('m',$timestamp), date('d',$timestamp), date('Y',$timestamp));
+		$yesterday	= mktime (0,0,0,date('m') ,date('d')-1,  date('Y'));
+		$tomorrow		= mktime (0,0,0,date('m') ,date('d')+1,  date('Y'));
+
+		$timediff = time() - $timestamp;
+
+		if (date('Y-m-d', $timestamp) == date('Y-m-d')) {
+			//Today 18:13
+			$result = date('H:i',$timestamp);
+		} else if ($datestamp == $yesterday) {
+			//Yesterday 18:13
+			$result = 'Igår '.date(' H:i',$timestamp);
+		} else if ($datestamp == $tomorrow) {
+			//Tomorrow 18:13
+			$result = 'Imorgon '.date(' H:i',$timestamp);
+		} else {
+			//2007-04-14 13:22
+			$result = date('Y-m-d H:i', $timestamp);
+		}
+
+		return $result;
+	}
 
 	//generates a VLC-compilant XSPF playlist
 	function generate_xspf_playlist($items)
 	{
+		//echo '<pre>'; print_r($items);
+
 		$fp = fopen('cache/ab.xspf', 'w');
 		
-		fwrite($fp, '<?xml version="1.0" encoding="UTF-8"?>');
-		fwrite($fp, '<playlist version="0" xmlns="http://xspf.org/ns/0/">');
-			fwrite($fp, '<trackList>');
+		fwrite($fp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		fwrite($fp, "<playlist version=\"0\" xmlns=\"http://xspf.org/ns/0/\">\n");
+			fwrite($fp, "\t<trackList>\n");
 
 			foreach ($items as $row) {
-				fwrite($fp, '<track>');
-				fwrite($fp, '<location>'.$row['wmp'].'</location>');
-				fwrite($fp, '<duration>'.($row['duration']*1000).'</duration>');	//in milliseconds
-				fwrite($fp, '<title><![CDATA['.$row['desc'].']]></title>');
-				fwrite($fp, '</track>');
+				fwrite($fp, "\t\t<track>\n");
+				fwrite($fp, "\t\t\t<location>".$row['wmp']."</location>\n");
+				fwrite($fp, "\t\t\t<duration>".($row['duration']*1000)."</duration>\n");	//in milliseconds
+				
+				$title = niceTime($row['time']).' ['.$row['category'].'] '.$row['head'].' - '.$row['desc'];
+				fwrite($fp, "\t\t\t<title><![CDATA[".$title."]]></title>\n");
+				fwrite($fp, "\t\t</track>\n");
 			}
 
-			fwrite($fp, '</trackList>');
-		fwrite($fp, '</playlist>');
+			fwrite($fp, "\t</trackList>\n");
+		fwrite($fp, "</playlist>\n");
 
 		fclose($fp);
 	}
-
-
 
 	$name = 'http://wwwc.aftonbladet.se/special/webbtv/xml2/senaste.xml';
 	$news = array();
 	$items = array();
 	$ptr = 0;// $items array pointer
 
-	$data = cache_read($name);
+	$data = cache_read($name, 5);
 
 	//parse senaste.xml for individual news items
 	$xml_parser = xml_parser_create();
@@ -126,4 +163,6 @@
 	}
 	
 	generate_xspf_playlist($items);
+	
+	echo 'done.';
 ?>
