@@ -3,7 +3,7 @@
 
 	$page = 'settings_delete';
 	if (!empty($_POST['css_theme'])) {
-		$user->setinfo($l['id_id'], 'det_tema', $_POST['css_theme']);
+		$user->setinfo($user->id, 'det_tema', $_POST['css_theme']);
 	}
 
 	require(DESIGN.'head.php');

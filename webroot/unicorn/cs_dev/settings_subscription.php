@@ -47,10 +47,9 @@
 	foreach ($spy_forum as $row)
 	{
 		echo '<tr><td>';
-		echo 'Forum - <a href="'.l('forum', 'read', $row['object_id']).'">'.$row['title'].'</a></td><td width="100">';
-		makeButton(false, 'goLoc(\''.l('forum', 'read', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
+		echo 'Forum - <a href="forum_read.php?id='.$row['object_id'].'">'.$row['title'].'</a></td><td width="100">';
+		makeButton(false, 'goLoc(\'forum_read.php?id='.$row['object_id'].'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
 		echo '</td></tr>';
-		
 	}
 	if ($spy_forum) echo '</table></div></div><br/>';
 
@@ -61,8 +60,8 @@
 	foreach ($spy_blog as $row)
 	{
 		echo '<tr><td>';
-		echo 'Blogg - <a href="'.l('user', 'blog', $row['object_id']).'">'.$row['title'].'</a></td><td width="100">';
-		makeButton(false, 'goLoc(\''.l('user', 'blog', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
+		echo 'Blogg - <a href="user_blog.php?id='.$row['object_id'].'">'.$row['title'].'</a></td><td width="100">';
+		makeButton(false, 'goLoc(\'user_blog.php?id='.$row['object_id'].'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
 		echo '</td></tr>';
 	}
 	if ($spy_blog) echo '</table></div></div><br/>';
@@ -74,8 +73,8 @@
 	foreach ($spy_gal as $row)
 	{
 		echo '<tr><td>';
-		echo 'Gallieri - <a href="'.l('user', 'gallery', $row['object_id']).'">'.$row['title'].'</a></td><td width="100">';
-		makeButton(false, 'goLoc(\''.l('user', 'gallery', $row['object_id']).'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
+		echo 'Gallieri - <a href="user_gallery.php?id='.$row['object_id'].'">'.$row['title'].'</a></td><td width="100">';
+		makeButton(false, 'goLoc(\'user_gallery.php?id='.$row['object_id'].'&unsubscribe'.'\')', 'icon_delete.png', 'radera');
 		echo '</td></tr>';
 	}
 	if ($spy_gal) echo '</table></div></div>';

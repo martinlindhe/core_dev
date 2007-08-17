@@ -306,9 +306,9 @@
 		*/
 
 			if ($user->vip_check(VIP_LEVEL2))
-				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"'.(!$isOk?' disabled':'').(!empty($settings['hidden_login'][1])?' checked':'').'/><label for="opt_hidden1"> Hemlig användare (VIP-Delux) *</label></td></tr>';
+				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"'.(!empty($settings['hidden_login'][1])?' checked':'').'/><label for="opt_hidden1"> Hemlig användare (VIP-Delux) *</label></td></tr>';
 			if ($user->vip_check(VIP_LEVEL1))
-				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"'.(!$isOk?' disabled':'').(!empty($settings['send_spec'][1]) && $isOk?' checked':'').'/><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (VIP)</label></td></tr>';
+				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"'.(!empty($settings['send_spec'][1]) && $isOk?' checked':'').'/><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (VIP)</label></td></tr>';
 		?>
 
 		<tr>

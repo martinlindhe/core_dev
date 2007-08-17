@@ -10,8 +10,9 @@
 	*/
 	function spyGetList()
 	{
-		global $sql, $l;
-		return $sql->query("
+		global $db, $user;
+		
+		$q = "
 		SELECT s.main_id, s.type_id, s.object_id,
 			IF(s.type_id = 'f', f.sent_ttl,
 			IF(s.type_id = 'b', b.u_alias,
@@ -20,8 +21,10 @@
 			LEFT JOIN s_f f ON s.type_id = 'f' AND f.main_id = s.object_id
 			LEFT JOIN s_user b ON s.type_id = 'b' AND b.id_id = s.object_id
 			LEFT JOIN s_user g ON s.type_id = 'g' AND g.id_id = s.object_id
-		WHERE s.user_id = '".$l['id_id']."'
-		ORDER BY s.type_id", 0, 1);
+		WHERE s.user_id = '".$user->id."'
+		ORDER BY s.type_id";
+		
+		return $db->getArray($q);
 	}
 
 	/*

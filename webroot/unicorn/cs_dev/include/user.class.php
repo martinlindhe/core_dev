@@ -292,7 +292,7 @@ class user {
 
 	function getstring($arr, $suffix = '', $extra = '')
 	{
-		global $db, $sex_name;
+		global $db, $config, $sex_name;
 		if (!is_array($arr) && is_numeric($arr)) {
 			$arr = $this->getuser($arr);
 		}
@@ -322,7 +322,7 @@ class user {
 		}
 		
 		$result .= '<span class="'.$curr_class.'"'.(!isset($extra['noimg'])?' onmouseover="launchHover(event, \''.$arr['id_id'].'\');" onmouseout="clearHover();"':'').'>'.secureOUT($arr['u_alias'.$suffix]);
-		$result .= (empty($extra['nosex'])?' <img alt="'.@$sex_name[$arr['u_sex'.$suffix]].'" align="absmiddle" src="/_objects/icon_'.$arr['u_sex'.$suffix].'1.png" />':'');
+		$result .= (empty($extra['nosex'])?' <img alt="'.@$sex_name[$arr['u_sex'.$suffix]].'" align="absmiddle" src="'.$config['web_root'].'_gfx/icon_'.$arr['u_sex'.$suffix].'1.png" />':'');
 		$result .= (empty($extra['noage'])?$this->doage($arr['u_birth'.$suffix]):'');
 		$result .= (empty($extra['nolink'])?'</a>':'');
 		$result .= '</span>';
