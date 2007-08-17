@@ -8,10 +8,12 @@
 	// function to list msg from a userid
 	function gbList($user_id, $_start = 0, $_end = 0)
 	{
-		global $sql;
-		$q = "SELECT gb.*, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM s_usergb gb LEFT JOIN s_user u ON u.id_id = gb.sender_id AND u.status_id = '1' WHERE gb.user_id = '".secureINS($user_id)."' AND gb.status_id = '1' ORDER BY gb.main_id DESC";
+		global $db;
+		if (!is_numeric($user_id)) return false;
+
+		$q = "SELECT gb.*, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM s_usergb gb LEFT JOIN s_user u ON u.id_id = gb.sender_id AND u.status_id = '1' WHERE gb.user_id = ".$user_id." AND gb.status_id = '1' ORDER BY gb.main_id DESC";
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
-		return $sql->query($q, 0, 1);
+		return $db->getArray($q);
 	}
 
 	// to return a specific guestbook entry by its id. will return false if the user or the message is deleted.
@@ -33,8 +35,11 @@
 	// count active msg from a user.
 	function gbCountMsgByUserId($user_id)
 	{
-		global $sql;
-		return $sql->queryResult("SELECT COUNT(*) as count FROM s_usergb gb WHERE gb.user_id = '".secureINS($user_id)."' AND gb.status_id = '1'");
+		global $db;
+		if (!is_numeric($user_id)) return false;
+
+		$q = 'SELECT COUNT(*) FROM s_usergb gb WHERE gb.user_id = '.$user_id.' AND gb.status_id = "1"';
+		return $db->getOneItem($q);
 	}
 
 	//returns the number of unread messages for active user
@@ -63,21 +68,23 @@
 	//private = 0 eller 1, om det är ett privat gästboksinlägg
 	function gbWrite($msg, $user_id, $is_answer = 0, $private = 0)
 	{
-		global $sql, $user;
-		$res = $sql->queryInsert("INSERT INTO s_usergb SET
-		user_id = '".$user_id."',
-		sender_id = '".$l['id_id']."',
-		private_id = '$private',
-		status_id = '1',
-		user_read = '0',
-		sent_cmt = '".secureINS($msg)."',
-		sent_html = '0',
-		sent_date = NOW()");
-		$or = array($user_id, $l['id_id']);
+		global $db, $user;
+		if (!is_numeric($user_id) || !is_numeric($is_answer) || !is_numeric($private)) return false;
+
+		$q = "INSERT INTO s_usergb SET user_id = '".$user_id."',
+		sender_id = '".$user->id."', private_id = '".$private."',
+		status_id = '1', user_read = '0', sent_cmt = '".$db->escape($msg)."',
+		sent_html = '0', sent_date = NOW()";
+		echo $q;
+		die;
+
+		$res = $db->insert($q);
+
+		$or = array($user_id, $user->id);
 		sort($or);
-		$sql->queryInsert("INSERT INTO s_usergbhistory SET users_id = '".implode('-', $or)."', msg_id = '$res'");
+		$db->insert("INSERT INTO s_usergbhistory SET users_id = '".implode('-', $or)."', msg_id = '".$res."'");
 		if($is_answer) {
-			$sql->queryUpdate("UPDATE s_usergb SET is_answered = '1' WHERE main_id = '".secureINS($is_answer)."' AND sender_id = '".$user_id."' AND user_id = '".$l['id_id']."' LIMIT 1");
+			$db->update("UPDATE s_usergb SET is_answered = '1' WHERE main_id = '".$db->escape($is_answer)."' AND sender_id = '".$user_id."' AND user_id = '".$user->id."' LIMIT 1");
 		}
 		$user->counterIncrease('gb', $user_id);
 		$user->notifyIncrease('gb', $user_id);
@@ -100,14 +107,15 @@
 	}
 
 	// marks the user's msgs to read.
-	function gbMarkUnread() {
-		global $user, $sql;
-		if(!$user->getinfo($l['id_id'], 'always_unread')) {
-			$sql->queryUpdate("UPDATE s_usergb SET user_read = '1' WHERE user_id = '".$l['id_id']."' AND user_read = '0'");
-			$user->notifyReset('gb', $l['id_id']);
+	function gbMarkUnread()
+	{
+		global $user, $db;
+		if(!$user->getinfo($user->id, 'always_unread')) {
+			$db->update("UPDATE s_usergb SET user_read = '1' WHERE user_id = '".$user->id."' AND user_read = '0'");
+			$user->notifyReset('gb', $user->id);
 			$str = @explode('g:', $_SESSION['data']['cachestr']);
 			if(@intval(substr($str[1], 0, 1)) > 0) {
-				$user->counterSet($l['id_id']);
+				$user->counterSet($user->id);
 				$_SESSION['data']['cachestr'] = $user->cachestr();
 			}
 		}

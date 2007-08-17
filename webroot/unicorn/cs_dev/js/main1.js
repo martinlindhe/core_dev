@@ -25,7 +25,7 @@ function makeGb(id, more, w) {
 	if(!more) more = '';
 	if(!w) w = '200';
 	h = 280;
-	ref = window.open('/user/gbwrite/' + id + '/' + more, 'GB_' + id, 'left='+((screen.availWidth - w)/2)+',top='+((screen.availHeight - h)/2)+', resizable=0, status=no, width=' + w + ', height='+h);
+	ref = window.open('user_gbwrite.php?id=' + id + more, 'GB_' + id, 'left='+((screen.availWidth - w)/2)+',top='+((screen.availHeight - h)/2)+', resizable=0, status=no, width=' + w + ', height='+h);
 	ref.focus();
 }
 function makePop(url, name, w, h, c, extra, opt) {

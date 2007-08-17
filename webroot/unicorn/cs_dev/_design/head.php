@@ -70,7 +70,7 @@ function blockRightClick(event) {
 	}
 ?>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_profil.png" alt="" /><a href="user_view.php">min profil</a> &nbsp;</li>
-			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gb.png" alt="" /><a href="/user/gb/"><?=$menu_gb?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gb.png" alt="" /><a href="user_gb.php"><?=$menu_gb?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_mail.png" alt="" /><a href="/user/mail/"><?=$menu_brev?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_blog.png" alt="" /><a href="/user/blog/">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_friends.png" alt="" /><a href="/user/relations/"><?=$menu_relations?></a> &nbsp;</li>

@@ -51,10 +51,10 @@
 
 <? if ($user->id != $id) { ?>
 	<div id="userMenu">
-		<? makeButton($action=='view',		'goLoc(\''.l('user', 'view', $id).'\')',		'icon_profile.png',	'profil'); ?>
-		<? makeButton($action=='gb',			'goLoc(\''.l('user', 'gb', $id).'\')',			'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>
-		<? makeButton($action=='blog',		'goLoc(\''.l('user', 'blog', $id).'\')',		'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
-		<? makeButton($action=='gallery',	'goLoc(\''.l('user', 'gallery', $id).'\')',	'icon_gallery.png',	'galleri', @intval($info['gal_offset'][1]) ); ?>
+		<? makeButton($action=='view',		'goLoc(\'user_view.php?id='.$id.'\')',		'icon_profile.png',	'profil'); ?>
+		<? makeButton($action=='gb',			'goLoc(\'user_gb.php?id='.$id.'\')',			'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>
+		<? makeButton($action=='blog',		'goLoc(\'user_blog.php?id='.$id.'\')',		'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
+		<? makeButton($action=='gallery',	'goLoc(\'user_gallery.php?id='.$id.'\')',	'icon_gallery.png',	'galleri', @intval($info['gal_offset'][1]) ); ?>
 
 		<? makeButton(false,	'makeChat(\''.$id.'\')',			'icon_qchat.png',	'chatta'); ?>
 		<? makeButton(false,	'makeMail(\''.$id.'\')',			'icon_mail_new.png',	'maila'); ?>
@@ -63,7 +63,7 @@
 				makeButton(false,	'makeRelation(\''.$id.'\')',	'icon_friends.png',	'bli vän');
 			}
 		?>
-		<? makeButton(false,	'goLoc(\''.l('user', 'abuse', $id).'\')',	'icon_abuse.png',	'abuse'); ?>
+		<? makeButton(false,	'goLoc(\'user_abuse.php?id='.$id.'\')',	'icon_abuse.png',	'abuse'); ?>
 	</div>
 	<br class="clr" />
 <? } ?>
