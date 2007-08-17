@@ -36,5 +36,5 @@ borttaget db:
 	
 	
 todo:
-	- fixa tyck till: servern hänger sej när man skickar in fråga
-	- ta bort l() funktionen - url rewrite crap
+	- svara på brev funkar ej
+	- vidarebefodra brev funkar ej

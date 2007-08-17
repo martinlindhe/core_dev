@@ -303,6 +303,13 @@
 		errorACT($msg, 1, 'popup', '', 5000, $cnt);
 	}
 
+	function reloadACT($url)
+	{
+		header('Location: '.$url);
+		die;
+	}
+
+
 	//*******************************************
 	//unused/not-yet-cleaned-up functions below:
 	//*******************************************
@@ -431,12 +438,6 @@
 			return true;
 		else
 			return false;
-	}
-
-	function reloadACT($url)
-	{
-		header('Location: '.$url);
-		exit;
 	}
 
 	function splashIACT($msg, $topic, $tc = 1, $class = '')

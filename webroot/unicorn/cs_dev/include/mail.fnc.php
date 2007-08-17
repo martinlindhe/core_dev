@@ -12,20 +12,20 @@
 
 	function mailDelete($_id)
 	{
-		global $sql, $user;
-
+		global $db, $user;
 		if (!is_numeric($_id)) return false;
 
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM s_usermail WHERE main_id = '".secureINS($_id)."' LIMIT 1");
-		if (!empty($res) && count($res) && ($res[1] == '1' || $res[5] == '1')) {
-			if ($res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
-				if ($res[2] == $l['id_id'] && $res[1] == '1') {
-					$sql->queryUpdate("UPDATE s_usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-					if (!$res[4]) $user->notifyDecrease('mail', $res[2]);
-					$user->counterDecrease('mail', $res[2]);
+		$q = 'SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM s_usermail WHERE main_id = '.$_id.' LIMIT 1';
+		$res = $db->getOneRow($q);
+		if (!empty($res) && count($res) && ($res['status_id'] == '1' || $res['sender_status'] == '1')) {
+			if ($res['user_id'] == $user->id || $res['sender_id'] == $user->id) {
+				if ($res['user_id'] == $user->id && $res['status_id'] == '1') {
+					$db->update('UPDATE s_usermail SET status_id = "2" WHERE main_id = '.$res['main_id'].' LIMIT 1');
+					if (!$res['user_read']) $user->notifyDecrease('mail', $res['user_id']);
+					$user->counterDecrease('mail', $res['user_id']);
 				}
-				if ($res[3] == $l['id_id'] && $res[5] == '1') {
-					$sql->queryUpdate("UPDATE s_usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
+				if ($res['sender_id'] == $user->id && $res['sender_status'] == '1') {
+					$db->update('UPDATE s_usermail SET sender_status = "2" WHERE main_id = '.$res['main_id'].' LIMIT 1');
 				}
 			}
 			return true;
@@ -76,34 +76,30 @@
 	
 	function mailDeleteArray($_arr)
 	{
-		global $sql, $user, $isAdmin, $s;
-
+		global $db, $user;
 		if (!is_array($_arr) || !count($_arr)) return false;
 		
 		foreach ($_arr as $val) {
-			$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM s_usermail WHERE main_id = '".secureINS($val)."' LIMIT 1");
-			if (!empty($res) && count($res) && ($res[1] == '1' || $res[5] == '1')) {
-				if ($isAdmin || $res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
-					if($res[2] == $l['id_id']) {
+			$q = 'SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM s_usermail WHERE main_id = "'.$db->escape($val).'" LIMIT 1';
+			$res = $db->getOneRow($q);
+			if (!empty($res) && count($res) && ($res['status_id'] == '1' || $res['sender_status'] == '1')) {
+				if ($user->isAdmin || $res['user_id'] == $user->id || $res['sender_id'] == $l['id_id']) {
+					if($res['user_id'] == $user->id) {
 
-						//if status_id=1
-						
-						if($res[1] == '1') {
-							//if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'counterdec';
-							$user->counterDecrease('mail', $l['id_id']);
+						if ($res['status_id'] == '1') {
+							$user->counterDecrease('mail', $user->id);
 						}
 
-						$sql->queryUpdate("UPDATE s_usermail SET status_id = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-					} elseif($res[3] == $l['id_id']) {
-						$sql->queryUpdate("UPDATE s_usermail SET sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
+						$db->update('UPDATE s_usermail SET status_id = "2" WHERE main_id = '.$res['main_id'].' LIMIT 1');
+					} else if ($res['sender_id'] == $user->id) {
+						$db->update('UPDATE s_usermail SET sender_status = "2" WHERE main_id = '.$res['main_id'].' LIMIT 1');
 					} else {
-						if($res[1] == '1') $user->counterDecrease('mail', $res[2]);
-						if($res[5] == '1') $user->counterDecrease('mail', $res[3]);
-						$sql->queryUpdate("UPDATE s_usermail SET status_id = '2', sender_status = '2' WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
+						if($res['status_id'] == '1') $user->counterDecrease('mail', $res['user_id']);
+						if($res['sender_status'] == '1') $user->counterDecrease('mail', $res['sender_id']);
+						$db->update('UPDATE s_usermail SET status_id = "2", sender_status = "2" WHERE main_id = '.$res['main_id'].' LIMIT 1');
 					}
-					if(!$res[4]) {
-						//if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') echo 'notifydec';
-						$user->notifyDecrease('mail', $s['id_id']);
+					if (!$res['user_read']) {
+						//$user->notifyDecrease('mail', $s['id_id']);
 					}
 				}
 			}
@@ -114,10 +110,10 @@
 	
 	function getMail($_id)
 	{
-		global $sql;
+		global $db;
 		if (!is_numeric($_id)) return false;
 
-		return $sql->queryLine("SELECT * FROM s_usermail WHERE main_id = ".$_id." LIMIT 1", 1);
+		return $db->getOneRow('SELECT * FROM s_usermail WHERE main_id = '.$_id.' LIMIT 1');
 	}
 	
 	function getUnreadMailCount()
@@ -132,12 +128,12 @@
 
 	function mailMarkAsRead($_id)
 	{
-		global $sql, $user;
+		global $db, $user;
 		
 		if (!is_numeric($_id)) return false;
 
-		$user->notifyDecrease('mail', $l['id_id']);
-		$sql->queryUpdate("UPDATE s_usermail SET user_read = '1' WHERE main_id = '".$_id."' LIMIT 1");
+		$user->notifyDecrease('mail', $user->id);
+		$db->update('UPDATE s_usermail SET user_read = "1" WHERE main_id = '.$_id.' LIMIT 1');
 		
 		return true;
 	}
