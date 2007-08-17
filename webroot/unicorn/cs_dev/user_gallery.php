@@ -60,13 +60,13 @@
 	echo '<br class="clr"/>';
 	if ($user->id == $id) {
 		makeButton(false, 'makeUpload();', 'icon_gallery.png', 'ladda upp ny');
-		makeButton(false, 'makeTiny(\''.l('text', 'mmshelp', '2').'\')', 'icon_gallery.png', 'mms-uppladdning');
+		makeButton(false, 'makeTiny(\'text_tiny.php?v=mmshelp\')', 'icon_gallery.png', 'mms-uppladdning');
 	} else {
 		if ($user->vip_check(VIP_LEVEL1)) {
 			if (spyActive($id, 'g')) {
-				makeButton(false, 'goLoc(\''.l('user', 'gallery', $id).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta spana');
+				makeButton(false, 'goLoc(\'user_gallery.php?id='.$id.'&unsubscribe\')', 'icon_settings.png', 'sluta spana');
 			} else {
-				makeButton(false, 'goLoc(\''.l('user', 'gallery', $id).'&subscribe'.'\')', 'icon_settings.png', 'spana');
+				makeButton(false, 'goLoc(\'user_gallery.php?id='.$id.'&subscribe\')', 'icon_settings.png', 'spana');
 			}
 		}
 	}
@@ -82,7 +82,6 @@
 <a name="gall"></a>
 <div class="subHead">galleri</div><br class="clr"/>
 <?
-/* <script type="text/javascript">var first = '<?=$first?>'; ext = '<?=$ext?>';</script> */
 		$paging = paging(1, 20);
 		$paging['co'] = $db->getOneItem("SELECT COUNT(*) FROM s_userphoto WHERE user_id = '".$id."' AND status_id = '1' AND hidden_id = '0' LIMIT 1");
 		$name = 'galleri';

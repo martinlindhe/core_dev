@@ -298,7 +298,10 @@
 		die;
 	}
 
-
+	function popupLACT($msg, $cnt = false)
+	{
+		errorACT($msg, 1, 'popup', '', 5000, $cnt);
+	}
 
 	//*******************************************
 	//unused/not-yet-cleaned-up functions below:
@@ -451,10 +454,6 @@
 		errorACT($msg, $url, 'main', '', $time);
 	}
 
-	function popupLACT($msg, $cnt = false)
-	{
-		errorACT($msg, 1, 'popup', '', 5000, $cnt);
-	}
 
 	function bigpopupACT($msg)
 	{
