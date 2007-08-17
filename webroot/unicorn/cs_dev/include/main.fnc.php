@@ -274,7 +274,7 @@
 
 		if($type == 'main') {
 			$page = 'error.php';
-			if(!$l) $page = 'error_splash.php';
+			if(!$user->id) $page = 'error_splash.php';
 			
 			if(!empty($url) && substr($url, 0, 1) != '1') {
 				require(dirname(__FILE__).'/../_design/'.$page);

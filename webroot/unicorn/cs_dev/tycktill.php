@@ -4,23 +4,22 @@
 	$str = '';
 	$page = 'start';
 	if ($user->id) {
-		if(!empty($_POST['ins_cmt'])) {
+		if (!empty($_POST['ins_cmt'])) {
 			checkBan(1);
-			if($user->id) {
-				$q = "INSERT INTO s_thought SET gb_name = '".$db->escape($_SESSION['data']['u_alias'])."',
-				logged_in = '".$db->escape($user->id)."',
-				sess_ip = '".$db->escape($_SERVER["REMOTE_ADDR"])."',
-				gb_html = '".(($user->isAdmin)?'1':'0')."',
-				gb_msg = '".$db->escape($_POST['ins_cmt'])."',
-				gb_date = NOW()";
-				$ins = $db->insert($q);
-			}
-			if($ins) $sql->logADD('', $ins, 'GB_SEND');
-				$msg = "Tack! Meddelandet kommer att publiceras när det granskats!";
-				errorACT($msg, l('main', 'thought'));
-		} elseif(!empty($_GET['del']) && is_numeric($_GET['del'])) {
+			$q = "INSERT INTO s_thought SET gb_name = '".$db->escape($_SESSION['data']['u_alias'])."',
+			logged_in = '".$db->escape($user->id)."',
+			sess_ip = '".$db->escape($_SERVER["REMOTE_ADDR"])."',
+			gb_html = '".(($user->isAdmin)?'1':'0')."',
+			gb_msg = '".$db->escape($_POST['ins_cmt'])."',
+			gb_date = NOW()";
+
+			$ins = $db->insert($q);
+			if ($ins) $sql->logADD('', $ins, 'GB_SEND');
+			$msg = "Tack! Meddelandet kommer att publiceras när det granskats!";
+			errorACT($msg, 'tycktill.php');
+		} else if (!empty($_GET['del']) && is_numeric($_GET['del'])) {
 			$do = false;
-			if(!$isAdmin) {
+			if(!$user->isAdmin) {
 				$id_id = $sql->queryLine("SELECT status_id, logged_in FROM s_thought WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 				if($id_id[0] == '1' && $id_id[1] == $l['id_id']) $do = true;
 			} else $do = true;
@@ -52,7 +51,8 @@
 			 $gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM (s_thought a, s_user u) INNER JOIN s_user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND a.main_id = '".substr($str, 1)."' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 			$paging['co'] = count($gb);
 		} else {
-			$gb = $sql->query("SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM (s_thought a, s_user u) INNER JOIN s_user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND (a.gb_name LIKE '%".secureINS($str)."%' OR a.gb_email LIKE '%".secureINS($str)."%' OR a.gb_msg LIKE '%".secureINS($str)."%' OR a.answer_msg LIKE '%".secureINS($str)."%') ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$q = "SELECT a.gb_msg, a.gb_date, a.gb_html, a.answer_msg, a.answer_date, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.id_id, u.u_sex, u.u_birth, u.level_id, u.account_date, u2.u_alias as u_alias2, u2.u_picid as u_picid2, u2.u_picd as u_picd2, u2.u_picvalid as u_picvalid2, u2.id_id as id_id2, u2.u_sex as u_sex2, u2.u_birth as u_birth2, u2.level_id as level_id2, u2.account_date as account_date2 FROM (s_thought a, s_user u) INNER JOIN s_user u2 ON u2.id_id = a.answer_id AND u2.status_id = '1'  WHERE u.id_id = a.logged_in AND u.status_id = '1' AND a.status_id = '1' AND (a.gb_name LIKE '%".$db->escape($str)."%' OR a.gb_email LIKE '%".$db->escape($str)."%' OR a.gb_msg LIKE '%".$db->escape($str)."%' OR a.answer_msg LIKE '%".$db->escape($str)."%') ORDER BY a.main_id DESC LIMIT ".$paging['slimit'].", ".$paging['limit'];
+			$gb = $db->getArray($q);
 			$paging['co'] = count($gb);
 		}
 	}
