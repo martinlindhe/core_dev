@@ -120,11 +120,13 @@ class user {
 		if(@$_SESSION['data']['u_picvalid'] != $arr[0]) @$_SESSION['data']['u_picvalid'] = $arr[2];
 		$_SESSION['data']['cachestr'] = $this->cachestr();
 	}
-	function fix_img() {
-		$arr = $this->sql->queryLine("SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '".$this->id."' LIMIT 1");
-		if(@$_SESSION['data']['u_picd'] != $arr[0]) @$_SESSION['data']['u_picd'] = $arr[0];
-		if(@$_SESSION['data']['u_picid'] != $arr[1]) @$_SESSION['data']['u_picid'] = $arr[1];
-		if(@$_SESSION['data']['u_picvalid'] != $arr[0]) @$_SESSION['data']['u_picvalid'] = $arr[2];
+	function fix_img()
+	{
+		global $db;
+		$arr = $db->getOneRow("SELECT u_picd, u_picid, u_picvalid FROM s_user WHERE id_id = '".$this->id."' LIMIT 1");
+		if(@$_SESSION['data']['u_picd'] != $arr['u_picd']) @$_SESSION['data']['u_picd'] = $arr['u_picd'];
+		if(@$_SESSION['data']['u_picid'] != $arr['u_picid']) @$_SESSION['data']['u_picid'] = $arr['u_picid'];
+		if(@$_SESSION['data']['u_picvalid'] != $arr['u_picvalid']) @$_SESSION['data']['u_picvalid'] = $arr['u_picvalid'];
 	}
 
 	function cachestr($id = 0)
@@ -427,10 +429,12 @@ class user {
 
 
 //av martin, för å kolla någons vip-level
-function get_vip($_userid) {
-	global $sql;
+function get_vip($_userid)
+{
+	global $db;
 	if (!is_numeric($_userid)) return false;
-	$result = $sql->queryResult('SELECT level_id FROM s_user WHERE id_id = '.$_userid.' LIMIT 1');
+
+	$result = $db->getOneItem('SELECT level_id FROM s_user WHERE id_id = '.$_userid.' LIMIT 1');
 	if ($result > 1) return $result;
 	return false;
 }

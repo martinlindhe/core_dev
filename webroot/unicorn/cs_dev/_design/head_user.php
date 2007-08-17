@@ -1,23 +1,23 @@
 <?
-	$info = $user->getcontent($s['id_id'], 'user_head');
+	$info = $user->getcontent($id, 'user_head');
 	require('head.php');
 ?>
 
 	<div id="userInfo" style="clear:both;">
 		<div class="userName">
 			<?
-				echo $user->getstring($s, '');
+				echo $user->getstring($id, '');
 
-				//todo: visa ej ge vip länken för vip-användare?
-				$curr_vip = get_vip($s['id_id']);
+				//todo: visa ej ge vip lÃ¤nken fÃ¶r vip-anvÃ¤ndare?
+				$curr_vip = get_vip($id);
 				//echo $curr_vip;
 					
 				if ($curr_vip == '2') echo ' <img src="/_gfx/icon_vip.png">';
 				if ($curr_vip == '3') echo ' <img src="/_gfx/icon_vipd.png">';
 				if ($curr_vip == '10') echo ' WEBMASTER';
 
-				if (!$own) {
-					echo ' <b>(<a href="'.l('user', 'givevip', $s['id_id']).'">ge VIP</a>)</b>';
+				if ($id != $user->id) {
+					echo ' <b>(<a href="'.l('user', 'givevip', $id).'">ge VIP</a>)</b>';
 				}
 			?>
 		</div>
@@ -28,7 +28,7 @@
 
 		<div id="userDetail">
 			<b>inloggningar:</b> <?=@intval($info['login_offset'][1])?><br/>
-			<b>besökare:</b> <?=@intval($info['visit_cnt'][1])?><br/>
+			<b>besÃ¶kare:</b> <?=@intval($info['visit_cnt'][1])?><br/>
 			<?=(($user->isonline($s['account_date']))?'<span class="on">online sedan '.nicedate($s['lastlog_date'], 2).'</span>':'<span class="off">offline sedan '.nicedate($s['lastonl_date'], 2).'</span>')?><br/>
 
 			<? 
@@ -49,19 +49,19 @@
 
 <? if (!$own) { ?>
 	<div id="userMenu">
-		<? makeButton($action=='view',		'goLoc(\''.l('user', 'view', $s['id_id']).'\')',		'icon_profile.png',	'profil'); ?>
-		<? makeButton($action=='gb',			'goLoc(\''.l('user', 'gb', $s['id_id']).'\')',			'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>
-		<? makeButton($action=='blog',		'goLoc(\''.l('user', 'blog', $s['id_id']).'\')',		'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
-		<? makeButton($action=='gallery',	'goLoc(\''.l('user', 'gallery', $s['id_id']).'\')',	'icon_gallery.png',	'galleri', @intval($info['gal_offset'][1]) ); ?>
+		<? makeButton($action=='view',		'goLoc(\''.l('user', 'view', $id).'\')',		'icon_profile.png',	'profil'); ?>
+		<? makeButton($action=='gb',			'goLoc(\''.l('user', 'gb', $id).'\')',			'icon_gb.png',			'gÃ¤stbok', @intval($info['gb_offset'][1]) ); ?>
+		<? makeButton($action=='blog',		'goLoc(\''.l('user', 'blog', $id).'\')',		'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
+		<? makeButton($action=='gallery',	'goLoc(\''.l('user', 'gallery', $id).'\')',	'icon_gallery.png',	'galleri', @intval($info['gal_offset'][1]) ); ?>
 
-		<? makeButton(false,	'makeChat(\''.$s['id_id'].'\')',			'icon_qchat.png',	'chatta'); ?>
-		<? makeButton(false,	'makeMail(\''.$s['id_id'].'\')',			'icon_mail_new.png',	'maila'); ?>
+		<? makeButton(false,	'makeChat(\''.$id.'\')',			'icon_qchat.png',	'chatta'); ?>
+		<? makeButton(false,	'makeMail(\''.$id.'\')',			'icon_mail_new.png',	'maila'); ?>
 		<?
-			if (!$user->isFriends($s['id_id'], 1)) {
-				makeButton(false,	'makeRelation(\''.$s['id_id'].'\')',	'icon_friends.png',	'bli vän');
+			if (!$user->isFriends($id, 1)) {
+				makeButton(false,	'makeRelation(\''.$id.'\')',	'icon_friends.png',	'bli vÃ¤n');
 			}
 		?>
-		<? makeButton(false,	'goLoc(\''.l('user', 'abuse', $s['id_id']).'\')',	'icon_abuse.png',	'abuse'); ?>
+		<? makeButton(false,	'goLoc(\''.l('user', 'abuse', $id).'\')',	'icon_abuse.png',	'abuse'); ?>
 	</div>
 	<br class="clr" />
 <? } ?>

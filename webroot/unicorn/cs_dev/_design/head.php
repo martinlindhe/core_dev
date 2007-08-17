@@ -69,7 +69,7 @@ function blockRightClick(event) {
 		if ($chk) $menu_relations = ' <span style="color:#ff0000">relationer '.count($chk).'</span>';
 	}
 ?>
-			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_profil.png" alt="" /><a href="/user/view/">min profil</a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_profil.png" alt="" /><a href="user_view.php">min profil</a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gb.png" alt="" /><a href="/user/gb/"><?=$menu_gb?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_mail.png" alt="" /><a href="/user/mail/"><?=$menu_brev?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_blog.png" alt="" /><a href="/user/blog/">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
