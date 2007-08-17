@@ -97,9 +97,8 @@ function makeForumAns(id) {
 	ref = window.open('forum_answer.php?id=' + id, '', 'left='+((screen.availWidth - 610)/2)+',top='+((screen.availHeight - 265)/2)+', resizable=0, status=no, width=610 height=265');
 	ref.focus();
 }
-function makeBlog(uid, id) { 
-	if(!id) id = '';
-	win = window.open('/user/blog/' + uid + '/0/write=1&i=' + id, '', 'left='+((screen.availWidth - 570)/2)+',top='+((screen.availHeight - 650)/2)+', resizable=0, scrollbars=0, status=no, width=570, height=650, location=yes');
+function makeBlog() { 
+	win = window.open('user_blog_write.php', '', 'left='+((screen.availWidth - 570)/2)+',top='+((screen.availHeight - 650)/2)+', resizable=0, scrollbars=0, status=no, width=570, height=650, location=yes');
 	win.focus();
 }
 function makeBlogComment(uid, id) {

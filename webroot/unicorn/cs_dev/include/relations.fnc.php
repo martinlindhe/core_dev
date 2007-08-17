@@ -197,23 +197,22 @@
 
 	function getBlockedRelations($_limit = '')
 	{
-		global $sql;
+		global $db, $user;
 
-		$q = "SELECT b.main_id, b.friend_id, b.activated_date, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM s_userblock b INNER JOIN s_user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = ".$l['id_id']." AND rel_id = 'u'".$_limit;
-		return $sql->query($q, 0, 1);
+		$q = "SELECT b.main_id, b.friend_id, b.activated_date, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM s_userblock b INNER JOIN s_user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = ".$user->id." AND rel_id = 'u'".$_limit;
+		return $db->getArray($q);
 	}
 
 	function getRelations($_id, $_ord = '', $_start = 0, $_end = 0)
 	{
-		global $sql;
-
+		global $db;
 		if (!is_numeric($_id) || !is_numeric($_start) || !is_numeric($_end)) return false;
 
-		$q = "SELECT rel.main_id, rel.user_id, rel.rel_id, rel.gallx, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.lastlog_date, u.u_sex, u.u_birth, u.level_id FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$_id;
+		$q = 'SELECT rel.main_id, rel.user_id, rel.rel_id, rel.gallx, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.lastlog_date, u.u_sex, u.u_birth, u.level_id FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$_id;
 		if ($_ord) $q .= ' ORDER BY '.$_ord;
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
 
-		return $sql->query($q, 0, 1);
+		return $db->getArray($q);
 	}
 
 	function setGallXStatus($user_id, $other_id, $status)
@@ -239,31 +238,28 @@
 
 	function getRelationsCount($_id)
 	{
-		global $sql;
-
+		global $db;
 		if (!is_numeric($_id)) return false;
 
-		return $sql->queryResult("SELECT COUNT(*) as count FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$_id);
+		$q = 'SELECT COUNT(*) FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$_id;
+		return $db->getOneItem($q);
 	}
 
 	//returnerar lista med förfrågningar som andra skickat till dig
 	function getRelationRequestsToMe()
 	{
-		global $sql;
-		
-		//if (!$sql) return array();
-		
-		return $sql->query("SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM s_userrelquest q INNER JOIN s_user u ON u.id_id = q.sender_id AND u.status_id = '1' WHERE q.user_id = ".$l['id_id']." AND q.status_id = '0' ORDER BY q.main_id DESC", 0, 1);
+		global $db, $user;
+
+		$q = 'SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM s_userrelquest q INNER JOIN s_user u ON u.id_id = q.sender_id AND u.status_id = "1" WHERE q.user_id = '.$user->id.' AND q.status_id = "0" ORDER BY q.main_id DESC';
+		return $db->getArray($q);
 	}
 
 	function getRelationRequestsFromMe()
 	{
-		global $sql;
-		
-		//if (!$sql) return array();
+		global $db, $user;
 
-		$q = "SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM s_userrelquest q INNER JOIN s_user u ON u.id_id = q.user_id AND u.status_id = '1' WHERE q.sender_id = ".$l['id_id']." AND q.status_id = '0' ORDER BY q.main_id DESC";
-		return $sql->query($q, 0, 1);
+		$q = 'SELECT q.main_id, q.sent_cmt, q.sent_date, u.id_id, u.u_alias, u.account_date, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth, u.level_id FROM s_userrelquest q INNER JOIN s_user u ON u.id_id = q.user_id AND u.status_id = "1" WHERE q.sender_id = '.$user->id.' AND q.status_id = "0" ORDER BY q.main_id DESC';
+		return $db->getArray($q);
 	}
 
 	//Returns a number indicating how many of your friends are currently online

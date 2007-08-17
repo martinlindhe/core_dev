@@ -1,6 +1,7 @@
 <?
-	$s = $l;
-	$own = true;
+	require_once('config.php');
+	
+	$id = $user->id;
 	$page = 'in';
 
 	if(isset($_GET['out'])) $page = 'out';
@@ -36,8 +37,8 @@
 ?>
 
 	<div class="subHead">brev</div><br class="clr"/>
-	<? makeButton(!isset($_GET['out']), 	'goLoc(\''.l('user', 'mail').'\')',	'icon_mail.png', 'inkorg'); ?>
-	<? makeButton(isset($_GET['out']), 	'goLoc(\''.l('user', 'mail').'&amp;out\')',	'icon_mail.png', 'utkorg'); ?>
+	<? makeButton(!isset($_GET['out']), 	'goLoc(\'user_mail.php\')',	'icon_mail.png', 'inkorg'); ?>
+	<? makeButton(isset($_GET['out']), 	'goLoc(\'user_mail.php?out\')',	'icon_mail.png', 'utkorg'); ?>
 	<br/><br/><br/>
 
 	<div class="centerMenuBodyWhite">
