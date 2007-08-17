@@ -38,9 +38,10 @@ borttaget db:
 todo:
 	- svara på brev funkar ej
 	- vidarebefodra brev funkar ej
-	- ajax callback som uppdaterar siffror
+	- ajax callback som uppdaterar siffror & vänner online
 	- fixa chatten
 	- matchmaking funkar inte (?)
 	- fakta visas ej
 	- filuppladdning
 	- spara tema funkar inte
+	- "villkor" och "cookies" länkar i botten e fel

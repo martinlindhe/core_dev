@@ -2,7 +2,8 @@
 
 <div id="foot" style="clear: both">
 	<p class="no l">CitySurf.tv © 2007. All rights reserved.</p>
-	<a href="/text/agree/" class="down">villkor</a> | <a href="/text/cookies/" class="down">cookies</a>
+	<a href="/text/agree/" class="down">villkor</a> | <a href="/text/cookies/" class="down">cookies</a><br/>
+	<? @$db->showProfile($time_start) ?>
 </div>
 
 </body>

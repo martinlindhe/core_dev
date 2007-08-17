@@ -262,7 +262,7 @@ class user {
 		$q = 'SELECT o.content_type, o.content, o.main_id FROM s_objrel r '.
 				'LEFT JOIN s_obj o ON o.main_id = r.object_id WHERE r.content_type = "'.$db->escape($type).'" AND r.owner_id = '.$id;
 
-		return $db->getArray($q);
+		return $db->getMappedArray($q);
 	}
 
 	function timeout($time = '1 HOUR') {

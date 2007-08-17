@@ -1,5 +1,6 @@
 <?
 	//cs_dev config
+	$time_start = microtime(true);
 
 	error_reporting(E_ALL);
 	$time_start = microtime(true);
@@ -17,6 +18,7 @@
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Files.php');
+	require_once('functions_textformat.php');
 
 /*
 	//require_once('class.Session.php');

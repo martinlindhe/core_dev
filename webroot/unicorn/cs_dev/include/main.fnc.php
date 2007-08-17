@@ -185,12 +185,12 @@
 			return $db->getOneItem($q);
 		}
 		if($type == 'm') {
-			$q = 'SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = "'.$db->escape($opt).'"';
+			$q = 'SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = "'.$db->escape($opt).'" LIMIT 1';
 			return $db->getOneRow($q);
 		}
 		if($type == 'mo') {
 			$q = 'SELECT main_id, text_cmt FROM s_textsettings WHERE type_id = "'.$db->escape($opt).'"';
-			return $db->getOneRow($q);
+			return $db->getArray($q);
 		}
 	}
 
@@ -309,6 +309,10 @@
 		die;
 	}
 
+	function errorTACT($msg, $url, $time)
+	{
+		errorACT($msg, $url, 'main', '', $time);
+	}
 
 	//*******************************************
 	//unused/not-yet-cleaned-up functions below:
@@ -449,12 +453,6 @@
 	{
 		errorACT($msg, '', 'main', '', 5000, $topic, $tc, $class);
 	}
-
-	function errorTACT($msg, $url, $time)
-	{
-		errorACT($msg, $url, 'main', '', $time);
-	}
-
 
 	function bigpopupACT($msg)
 	{
