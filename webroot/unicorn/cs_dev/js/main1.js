@@ -57,17 +57,11 @@ function makeTiny(url) {
 
 function makeMail(id) {
 	if(!id) id = '';
-	window.open('/user/mailwrite/' + id, '', 'width=650, height=560, scrollbars=0, resizable=1, status=no, location=0');
+	window.open('user_mailwrite.php?id=' + id, '', 'width=650, height=560, scrollbars=0, resizable=1, status=no, location=0');
 }
 function makeChat(id) {
-	//ref = (window.opener)?window.opener.parent.comhead:parent.window.comhead;
-	//if(ref.popupArr['C_' + id] == null || ref.popupArr['C_' + id].closed) {
-		//ref.popupArr['C_' + id] = 
-		win = window.open('/user/chat/' + id, 'C_' + id, 'left='+((screen.availWidth - 535)/2)+',top='+((screen.availHeight - 465)/2)+', resizable=0, status=no, width=570, height=470, location=yes');
-		//ref.popupArr['C_' + id].focus();
-		win.focus();
-	//} else
-	//	ref.popupArr['C_' + id].focus();
+	win = window.open('user_chat.php?id=' + id, 'C_' + id, 'left='+((screen.availWidth - 535)/2)+',top='+((screen.availHeight - 465)/2)+', resizable=0, status=no, width=570, height=470, location=yes');
+	win.focus();
 }
 function makeText(url, type) {
 	if(!type)

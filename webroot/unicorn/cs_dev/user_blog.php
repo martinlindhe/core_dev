@@ -37,8 +37,8 @@
 	$q = "SELECT main_id, blog_title, blog_cmts, blog_date, hidden_id, blog_visit FROM s_userblog WHERE user_id = ".$id." AND status_id = '1' ORDER BY main_id DESC LIMIT ".$paging['slimit'].", ".$paging['limit'];
 	$res = $db->getArray($q);
 	$paging['co'] = $db->getOneItem("SELECT COUNT(*) FROM s_userblog WHERE user_id = ".$id." AND status_id = '1'");
-	$page = 'blog';
 
+	$action = 'blog';
 	require(DESIGN.'head_user.php');
 ?>
 <div class="subHead">blogg</div><br class="clr"/>
@@ -46,10 +46,10 @@
 			if ($user->id == $id) {
 				makeButton(false,	'makeBlog()',	'icon_blog.png',	'skriv nytt');
 			} else {
-				if (spyActive($s['id_id'], 'b')) {
-					makeButton(false, 'goLoc(\''.l('user', 'blog', $id).'&unsubscribe'.'\')', 'icon_settings.png', 'sluta spana');
+				if (spyActive($id, 'b')) {
+					makeButton(false, 'goLoc(\'user_blog.php?id='.$id.'&amp;unsubscribe\')', 'icon_settings.png', 'sluta spana');
 				} else {
-					makeButton(false, 'goLoc(\''.l('user', 'blog', $id).'&subscribe'.'\')', 'icon_settings.png', 'spana');
+					makeButton(false, 'goLoc(\'user_blog.php?id='.$id.'&amp;subscribe\')', 'icon_settings.png', 'spana');
 				}
 			}
 ?>

@@ -38,7 +38,7 @@
 				if ($s['u_pstlan_id']) {
 					echo '<table summary="" border=0><tr>';
 					echo '<td><br/><br/><br/><br/><br/><br/><br/>'.str_replace(', ', '<br />', $user->tagline($s['u_pst'])).'</td>';
-					echo '<td><img alt="'.$user->tagline($s['u_pst']).'" src="'.OBJ.'loc1_'.$s['u_pstlan_id'].'.gif" /></td>';
+					echo '<td><img alt="'.$user->tagline($s['u_pst']).'" src="'.$config['web_root'].'_gfx/loc1_'.$s['u_pstlan_id'].'.gif" /></td>';
 					echo '</tr></table>';
 				}
 			}

@@ -214,19 +214,24 @@ class user {
 		break;
 		}
 	}
-	function blocked($uid, $type = 1) {
-		$isBlocked = $this->sql->queryResult("SELECT rel_id FROM s_userblock WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($uid)."' LIMIT 1");
-		if($isBlocked) {
-			if($isBlocked == 'u') {
+	function blocked($uid, $type = 1)
+	{
+		global $db;
+		if (!is_numeric($uid)) return false;
+
+		$q = 'SELECT rel_id FROM s_userblock WHERE user_id = '.$this->id.' AND friend_id = '.$uid.' LIMIT 1';
+		$isBlocked = $db->getOneItem($q);
+		if ($isBlocked) {
+			if ($isBlocked == 'u') {
 				if($type == 1)
-					errorACT('Du har blockerat personen.', l('user', 'view', $this->id));
+					errorACT('Du har blockerat personen.', 'user_view.php?id='.$this->id);
 				elseif($type == 2)
 					popupACT('Du har blockerat personen.');
 				elseif($type == 3)
 					return true;
 			} else {
 				if($type == 1)
-					errorACT('Du är blockerad.', l('user', 'view', $this->id)); 
+					errorACT('Du är blockerad.', 'user_view.php?id='.$this->id);
 				elseif($type == 2)
 					popupACT('Du är blockerad.');
 				elseif($type == 3)

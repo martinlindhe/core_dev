@@ -30,12 +30,11 @@
 	*/
 	function spyDelete($_id, $_type)
 	{
-		global $sql, $l;
+		global $db, $user;
 		if (!is_numeric($_id)) return false;
-		$_type = addslashes($_type);
 
-		$q = "DELETE FROM s_userspycheck WHERE object_id = '".$_id."' AND type_id = '".$_type."' AND user_id = '".$l['id_id']."' LIMIT 1";
-		if ($sql->queryUpdate($q)) return true;
+		$q = 'DELETE FROM s_userspycheck WHERE object_id = '.$_id.' AND type_id = "'.$db->escape($_type).'" AND user_id = '.$user->id.' LIMIT 1';
+		if ($db->delete($q)) return true;
 		return false;
 	}
 
@@ -46,16 +45,15 @@
 	*/
 	function spyAdd($_id, $_type)
 	{
-		global $sql, $l;
-
+		global $db, $user;
 		if (!is_numeric($_id)) return false;
-		$_type = addslashes($_type);
 
 		//kollar ifall bevakning redan finns
-		$q = "SELECT COUNT(*) FROM s_userspycheck WHERE object_id = '".$_id."' AND user_id = '".$l['id_id']."' AND type_id = '".$_type."'";
-		if ($sql->queryResult($q)) return false;
+		$q = 'SELECT COUNT(*) FROM s_userspycheck WHERE object_id = '.$_id.' AND user_id = '.$user->id.' AND type_id = "'.$db->escape($_type).'"';
+		if ($db->getOneItem($q)) return false;
 
-		return $sql->queryInsert("INSERT INTO s_userspycheck SET object_id = '".$_id."', user_id = '".$l['id_id']."', type_id = '".$_type."'");
+		$q = 'INSERT INTO s_userspycheck SET object_id = '.$_id.', user_id = '.$user->id.', type_id = "'.$db->escape($_type).'"';
+		return $db->insert($q);
 	}
 
 	/*
@@ -63,13 +61,11 @@
 	*/
 	function spyActive($_id, $_type)
 	{
-		global $sql, $l;
-
+		global $db, $user;
 		if (!is_numeric($_id)) return false;
-		$_type = addslashes($_type);
 
-		$q = "SELECT COUNT(*) FROM s_userspycheck WHERE object_id=".$_id." AND type_id='".$_type."' AND user_id='".$l['id_id']."'";
-		if ($sql->queryResult($q)) return true;
+		$q = 'SELECT COUNT(*) FROM s_userspycheck WHERE object_id='.$_id.' AND type_id="'.$db->escape($_type).'" AND user_id='.$user->id;
+		if ($db->getOneItem($q)) return true;
 		return false;
 	}
 

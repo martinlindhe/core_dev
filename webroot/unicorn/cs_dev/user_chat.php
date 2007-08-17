@@ -1,23 +1,38 @@
 <?
-	if($own) popupACT('Du kan inte skicka till dig själv.');
-	$user->blocked($s['id_id']);
+	require_once('config.php');
+
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('ingen mottagare');
+	$id = $_GET['id'];
+
+	if ($user->id == $id) popupACT('Du kan inte skicka till dig själv.');
+	$user->blocked($id);
 	
-	$isFriends = $user->isFriends($s['id_id']);
+	$s = $user->getuser($id);
+	
+	$isFriends = $user->isFriends($id);
 	$closed = false; //Default
 	
 	if(!$isFriends) {
-		$onlL = $user->getinfo($l['id_id'], 'private_chat');
-		$onlS = $user->getinfo($s['id_id'], 'private_chat');
-		if($onlL) { $closed = true; $n = 'Otillgänglig'; } elseif($onlS) { $closed = true; $n = 'Otillgänglig'; }
+		$onlL = $user->getinfo($user->id, 'private_chat');
+		$onlS = $user->getinfo($id, 'private_chat');
+		if($onlL) {
+			$closed = true;
+			$n = 'Otillgänglig';
+		} else if ($onlS) {
+			$closed = true;
+			$n = 'Otillgänglig';
+		}
 	}
-	$NAME_TITLE = secureOUT($s['u_alias']).' | privatchat';
+
+	$NAME_TITLE = secureOUT($_SESSION['data']['u_alias']).' | privatchat';
+
 	require(DESIGN.'head_popup.php');
 ?>
 <script type="text/javascript">
 <?
 if(!$closed)
 echo '
-var id = \''.$s['id_id'].'\';
+var id = \''.$id.'\';
 var usr = \''.($s['u_alias']).'\';
 var you = \''.($l['u_alias']).'\';
 ';
@@ -39,11 +54,11 @@ var you = \''.($l['u_alias']).'\';
 		<table summary="" cellspacing="0" style="width: 510px;">
 		<tr>
 				<td style="padding: 6px 6px 0 6px;">
-					<iframe name="msgs" src="<?=l('user', 'chatwin', $s['id_id'])?>" frameborder="no" scrolling="auto" style="width:100%; height:270px;"></iframe>
+					<iframe name="msgs" src="<?=l('user', 'chatwin', $id)?>" frameborder="no" scrolling="auto" style="width:100%; height:270px;"></iframe>
 				</td>
 				<td class="rgt">
 					<?=(!$closed)?$user->getstring($s, '', array('nolink'=>1)):$n.' användare';?><br/><br/>
-					<?=(!$closed)?$user->getimg($s['id_id'].$s['u_picid'].$s['u_picd'].$s['u_sex'], 1, array('toparent' => 1)):'';?>
+					<?=(!$closed)?$user->getimg($id.$s['u_picid'].$s['u_picd'].$s['u_sex'], 1, array('toparent' => 1)):'';?>
 				</td>
 			</tr>
 			<tr>

@@ -13,7 +13,7 @@
 	}
 
 	if(!empty($key) && is_numeric($key)) {
-		//hanterar även ändring av beskrivning
+		//hanterar Ã¤ven Ã¤ndring av beskrivning
 		include('gallery_view.php');
 		exit;
 	}
@@ -31,7 +31,7 @@
 	if(!empty($_GET['d'])) {
 		$res = $sql->queryLine("SELECT main_id, status_id, user_id, pht_date, pht_cmt FROM s_userphoto WHERE main_id = '".secureINS($_GET['d'])."' LIMIT 1", 1);
 		if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $l['id_id']) {
-			errorACT('Felaktigt inlägg.', l('user', 'gallery', $id));
+			errorACT('Felaktigt inlÃ¤gg.', l('user', 'gallery', $id));
 		} else {
 			$sql->queryUpdate("UPDATE s_userphoto SET status_id = '2' WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			$user->counterDecrease('gal', $l['id_id']);
@@ -45,14 +45,13 @@
 	$q = 'SELECT COUNT(*) FROM s_userphoto WHERE user_id = "'.$id.'" AND status_id = "1"';
 	$paging['co'] = $db->getOneItem($q);
 
-	$page = 'gallery';
-
+	$action = 'gallery';
 	require(DESIGN.'head_user.php');
 
 	/*
 	if (!$user->vip_check(VIP_LEVEL1)) {
-		echo 'Du måste vara VIP för att kunna se andras galleribilder.<br/><br/>';
-		echo '<a href="/main/upgrade/">Klicka här</a> för mer information.';
+		echo 'Du mÃ¥ste vara VIP fÃ¶r att kunna se andras galleribilder.<br/><br/>';
+		echo '<a href="/main/upgrade/">Klicka hÃ¤r</a> fÃ¶r mer information.';
 		require(DESIGN.'foot_user.php');
 		die;
 	}
@@ -94,7 +93,7 @@
 <div class="subHead">galleri x</div><br class="clr"/>
 <?
 	if ($user->id != $id && !getGallXStatus($id) && !$user->vip_check(10)) {
-		echo 'Denna medlem har inte tillåtit dig att se dennes galleri x-bilder.';
+		echo 'Denna medlem har inte tillÃ¥tit dig att se dennes galleri x-bilder.';
 	} else {
 		$paging = paging(1, 20);
 		$paging['co'] = $db->getOneItem("SELECT COUNT(*) FROM s_userphoto WHERE user_id = '".$id."' AND status_id = '1' AND hidden_id = '1'");

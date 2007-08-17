@@ -1,7 +1,10 @@
 <?
-	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;		//detta ‰r ett _SVAR_ pÂ ett mail
+	require_once('config.php');
 
-	require(CONFIG.'secure.fnc.php');
+	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('ingen mottagare');
+	$id = $_GET['id'];
+
+	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;		//detta √§r ett _SVAR_ p√• ett mail
 
 	$error = false;
 
@@ -45,8 +48,8 @@
 	
 	$js_editor = false;
 	$user_agent = $_SERVER['HTTP_USER_AGENT'];
-	if (strpos($user_agent, 'Firefox') !== FALSE) $js_editor = true; //aktiverad fˆr Firefox
-	if (strpos($user_agent, 'MSIE') !== FALSE) $js_editor = true;		//aktiverad fˆr IE
+	if (strpos($user_agent, 'Firefox') !== FALSE) $js_editor = true; //aktiverad f√∂r Firefox
+	if (strpos($user_agent, 'MSIE') !== FALSE) $js_editor = true;		//aktiverad f√∂r IE
 
 	//if ($_SERVER['REMOTE_ADDR'] == '213.80.11.162') $js_editor = false;
 
@@ -78,22 +81,22 @@ function cleanField(obj) {
 	if ($a) $extra = '&a='.$a;
 
 if ($js_editor) { ?>
-	<form name="mail_write" action="<?=l('user', 'mailwrite', $extra)?>" method="post" onsubmit="if(this.ins_to.value.length > 0) { if(TC_active) TC_VarToHidden(); } else { alert('Felaktigt f‰lt: Till'); return false; }">
+	<form name="mail_write" action="<?=l('user', 'mailwrite', $extra)?>" method="post" onsubmit="if(this.ins_to.value.length > 0) { if(TC_active) TC_VarToHidden(); } else { alert('Felaktigt f√§lt: Till'); return false; }">
 <? } else { ?>
 	<form name="mail_write" action="<?=l('user', 'mailwrite', $extra)?>" method="post"">
 <? } ?>
 <input type="hidden" name="do" value="1"/>
 <table summary="" cellspacing="0" width="99%" style="" class="cnti">
 <tr>
-	<td class="pdg bld">FrÂn:</td>
-	<td class="pdg" style="padding-left: 0; width: 100%;"><span class="nrm"><?=secureOUT($l['u_alias'])?></span></td>
+	<td class="pdg bld">Fr√•n:</td>
+	<td class="pdg" style="padding-left: 0; width: 100%;"><span class="nrm"><?=secureOUT($_SESSION['data']['u_alias'])?></span></td>
 	<td class="pdg bld rgt nobr"><?=(@$res['sent_date'])?nicedate($res['sent_date']):nicedate(date("Y-m-d"), 5);?></td>
 </tr>
 <tr>
 	<td class="pdg bld" style="padding-top: 9px;">Till:</td>
 	<td colspan="2" class="pdg_t" style="padding-left: 0;"><input type="text" class="txt" onkeyup="cleanField(this);" onchange="cleanField(this);" onkeydown="cleanField(this);" name="ins_to" style="width: 154px;" value="<?=($s)?((!$r)?@secureOUT($s['u_alias']):''):((!$r)?@secureOUT($res['u_alias']):'');?>"/>
 	<select style="margin-left: 10px;" onchange="fillField(this.value, this.form.ins_to);">
-	<option value="0">v‰lj v‰n</option>
+	<option value="0">v√§lj v√§n</option>
 	<?=$fri?>
 	</select>
 	</td>
@@ -102,7 +105,7 @@ if ($js_editor) { ?>
 	<td class="pdg bld" style="padding-top: 9px;">Kopia:</td>
 	<td colspan="2" class="pdg_t" style="padding-left: 0;"><input type="text" class="txt" onkeyup="cleanField(this);" onchange="cleanField(this);" onkeydown="cleanField(this);" name="ins_cc" style="width: 154px;" value=""/>
 	<select style="margin-left: 10px;" onchange="fillField(this.value, this.form.ins_cc);">
-	<option value="0">v‰lj v‰n</option>
+	<option value="0">v√§lj v√§n</option>
 	<?=$fri?>
 	</select>
 	</td>
@@ -163,7 +166,7 @@ if ($js_editor) { ?>
 	<option value="7">7</option>
 	</select>
 	<select style="width: 100px;" onchange="if(this.value) { TC_Format('ForeColor', this.value); this.selectedIndex = 0; }">
-	<option value="0">Textf‰rg</option>
+	<option value="0">Textf√§rg</option>
 	<option value="FF8080" style="background: #FF8080;">&nbsp;</option>
 	<option value="FFFF80" style="background: #FFFF80;">&nbsp;</option>
 	<option value="80FF80" style="background: #80FF80;">&nbsp;</option>
@@ -183,7 +186,7 @@ if ($js_editor) { ?>
 	<option value="804040" style="background: #804040;">&nbsp;</option>
 	</select>
 	<select style="width: 100px;" onchange="if(this.value) { TC_Format('BackColor', this.value); this.selectedIndex = 0; }">
-	<option value="0">Bakgrundsf‰rg</option>
+	<option value="0">Bakgrundsf√§rg</option>
 	<option value="FF8080" style="background: #FF8080;">&nbsp;</option>
 	<option value="FFFF80" style="background: #FFFF80;">&nbsp;</option>
 	<option value="80FF80" style="background: #80FF80;">&nbsp;</option>
@@ -218,19 +221,19 @@ if ($js_editor) { ?>
 	.brrd img { border: 1px solid #927750; }
 	</style>
 	
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_bold.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('bold');" title="Fet"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_italic.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('italic');" title="Kursiv"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_underl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('underline');" title="Understruken"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyleft');" title="V‰nsterjustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justc.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifycenter');" title="Centrera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyright');" title="Hˆgerjustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_justm.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyfull');" title="Marginaljustera"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_ol.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertorderedlist');" title="Numrerad lista"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_ul.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertunorderedlist');" title="Punktlista"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_out.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('outdent');" title="Minska indrag"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_in.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('indent');" title="÷ka indrag"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_hr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('inserthorizontalrule');" title="Horisontell linje"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=OBJ?>icon_remove.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('removeformat');" title="Tˆm formatering"><img src="<?=OBJ?>1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_bold.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('bold');" title="Fet"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_italic.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('italic');" title="Kursiv"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_underl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('underline');" title="Understruken"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justl.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyleft');" title="V√§nsterjustera"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justc.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifycenter');" title="Centrera"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyright');" title="H√∂gerjustera"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justm.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyfull');" title="Marginaljustera"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_ol.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertorderedlist');" title="Numrerad lista"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_ul.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertunorderedlist');" title="Punktlista"><img src="<1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_out.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('outdent');" title="Minska indrag"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_in.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('indent');" title="√ñka indrag"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_hr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('inserthorizontalrule');" title="Horisontell linje"><img src="1x1.gif" alt="" width="20" height="20" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_remove.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('removeformat');" title="T√∂m formatering"><img src="1x1.gif" alt="" width="20" height="20" /></a>
 	</div>
 	</td></tr>
 	<tr><td class="pdg" colspan="3"><div style="height: 100%; background: #FFF; border: 1px solid #999;"><iframe id="text_var" name="text_var" border="0" frameborder="0" width="100%" height="250"></iframe>

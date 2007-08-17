@@ -1,22 +1,12 @@
 aftonbladet webbtv:
 
-ladda först: innehåller namn på default kategorin "senaste.xml"
-http://wwwc.aftonbladet.se/special/webbtv/xml2/default.xml
+http://wwwc.aftonbladet.se/atv2/popup.html
 
-	<?xml version='1.0' encoding='utf-8'?><root datetime='2007-02-06 15:48:00' name='SENASTE KLIPPEN'
- 	path='senaste' commercial='yes' desc='empty' xmlfile='senaste.xml' stylecolor='empty'></root>
----------
+direktlänk till en nyhet:
+http://wwwc.aftonbladet.se/atv2/popup.html?id=categories/Nyheter/0707/4766
 
-http://wwwc.aftonbladet.se/special/webbtv/xml2/senaste.xml
-
-		<?xml version='1.0' encoding='utf-8'?><root datetime='2007-08-15 17:32:00' name='SENASTE KLIPPEN'
-		 contentpath='categories/Nyheter/0708/5288_categories/Nyheter/0708/5287_categories/Nyheter/Vader/0708
-		/5284_categories/Nyheter/0708/5283_categories/Nyheter/Vader/0708/5281_categories/Nyheter/0708/5280_categories
-		/Sport/0708/5279_categories/Nyheter/0708/5278_categories/Nyheter/0708/5275' commercial='yes' desc='empty'
-		 xmlfile='senaste.xml' stylecolor='empty'></root>
-
------------
-
+-----
+1. läs in menu.xml
 innehåller data som visas i menyn till höger:
 	http://wwwc.aftonbladet.se/special/webbtv/xml2/menu.xml
 
@@ -62,3 +52,35 @@ innehåller data som visas i menyn till höger:
 	</category>
 </root>
 	
+-----
+2. läser in default.xml som specar vilken kategori som ska läsas in
+http://wwwc.aftonbladet.se/special/webbtv/xml2/default.xml
+
+	<?xml version='1.0' encoding='utf-8'?>
+	<root datetime='2007-02-06 15:48:00' name='SENASTE KLIPPEN' path='senaste'
+		commercial='yes' desc='empty' xmlfile='senaste.xml' stylecolor='empty'>
+	</root>
+---------
+3. ladda in specad kategori från default.xml = senaste.xml
+http://wwwc.aftonbladet.se/special/webbtv/xml2/senaste.xml
+
+	<?xml version='1.0' encoding='utf-8'?>
+	<root datetime='2007-08-15 17:32:00' name='SENASTE KLIPPEN'
+		contentpath='categories/Nyheter/0708/5288_categories/Nyheter/0708/5287_categories/Nyheter/Vader/0708/5284_categories/Nyheter/0708/5283_categories/Nyheter/Vader/0708/5281_categories/Nyheter/0708/5280_categories/Sport/0708/5279_categories/Nyheter/0708/5278_categories/Nyheter/0708/5275' commercial='yes' desc='empty' xmlfile='senaste.xml' stylecolor='empty'>
+	</root>
+
+-----------
+
+
+på nåt sätt får man fram:
+http://wwwc.aftonbladet.se/special/webbtv/xml2/categories/Nyheter/0708/5288.xml
+
+<?xml version='1.0' encoding='utf-8'?>
+<root datetime='2007-08-15 17:32:00' path='menu_c1' xmlfile='c1.xml'>
+<content id='5288' commercial='yes' compath='Nyheter' name='Nyheter'
+	head='Asiater blir bestulna oftare Ã¤n andra' desc='Ficktjuvarna vÃ¤ljer sina offer efter nationalitet.'
+	image='Nyheter/0708/p1ny070815VBFICKTJUVSPREFERENSFM.jpg' anim='empty' duration='101' sort='empty'
+	locked='no' geo='empty'
+	wmp='mms://qstream-wm.qbrick.com/00862/aftonbladet1/Nyheter/0708/m0ny070815VBFICKTJUVSPREFERENSFM.wmv'
+	qt='rtsp://qstream-qt.qbrick.com/00862/aftonbladet1/Nyheter/0708/m0ny070815VBFICKTJUVSPREFERENSFM.mp4' flv='empty' />
+</root>
