@@ -30,7 +30,7 @@ session_start();
 		exit;
 	}
 
-	$sql = mysql_query("SELECT a.main_id, a.id, a.topic_id, a.order_id, a.status_id, a.statusID, b.p_name, a.p_view, a.p_cmt, a.p_pic, b.main_id AS mid, b.status_id AS topicstatus_id, b.p_date, b.p_dday, b.owner_id, c.p_text AS wm FROM ({$t}ppic a, {$t}ptopic b) LEFT JOIN {$t}powner c ON a.owner_id = c.main_id WHERE a.main_id = '".secureINS($_GET['id'])."' AND b.main_id = a.topic_id");
+	$sql = mysql_query("SELECT a.main_id, a.id, a.topic_id, a.order_id, a.status_id, a.statusID, b.p_name, a.p_view, a.p_cmt, a.p_pic, b.main_id AS mid, b.status_id AS topicstatus_id, b.p_date, b.p_dday, b.owner_id, c.p_text AS wm FROM (s_ppic a, s_ptopic b) LEFT JOIN s_powner c ON a.owner_id = c.main_id WHERE a.main_id = '".secureINS($_GET['id'])."' AND b.main_id = a.topic_id");
 
 	if(!mysql_num_rows($sql)) {
 		$msg = 'Felaktigt bildnummer.';

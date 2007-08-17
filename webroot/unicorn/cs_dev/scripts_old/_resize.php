@@ -1,7 +1,7 @@
 <?
 require("_config/online.include.php");
 	$photo_limit = 510;
-	$get=$sql->query("SELECT user_id,picd,old_filename FROM {$t}userphoto");
+	$get=$sql->query("SELECT user_id,picd,old_filename FROM s_userphoto");
 		require(CONFIG."cut.fnc.php");
 		$p = $_FILES['ins_file']['tmp_name'];
 		$p_name = $_FILES['ins_file']['name'];
@@ -31,9 +31,9 @@ require("_config/online.include.php");
 					$prv = ($isOk && !empty($_POST['ins_priv']))?'1':'0';
 					if($prv) {
 						$un = md5(microtime().'ghrghrhr');
-						$res = $sql->queryInsert("INSERT INTO {$t}userphoto SET user_id = '".secureINS($l['id_id'])."', status_id = '1', hidden_id = '1', hidden_value = '$un', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
+						$res = $sql->queryInsert("INSERT INTO s_userphoto SET user_id = '".secureINS($l['id_id'])."', status_id = '1', hidden_id = '1', hidden_value = '$un', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
 					} else {
-						$res = $sql->queryInsert("INSERT INTO {$t}userphoto SET user_id = '".secureINS($l['id_id'])."', status_id = '1', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
+						$res = $sql->queryInsert("INSERT INTO s_userphoto SET user_id = '".secureINS($l['id_id'])."', status_id = '1', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
 					}
 					if($res) {
 						@unlink($file);

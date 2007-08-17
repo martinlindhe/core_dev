@@ -1,14 +1,14 @@
 <?
 	$view = false;
-	$list = $sql->query("SELECT ".CH." main_id, ad_title FROM {$t}editorial WHERE status_id = '1' ORDER BY ad_date DESC", 0, 1);
+	$list = $sql->query("SELECT main_id, ad_title FROM s_editorial WHERE status_id = '1' ORDER BY ad_date DESC", 0, 1);
 	if(!empty($id)) {
-		$inf = $sql->queryLine("SELECT ".CH." ad_title, ad_cmt, ad_date FROM {$t}editorial WHERE status_id = '1' AND main_id = '".secureINS($id)."' LIMIT 1", 1);
+		$inf = $sql->queryLine("SELECT ad_title, ad_cmt, ad_date FROM s_editorial WHERE status_id = '1' AND main_id = '".secureINS($id)."' LIMIT 1", 1);
 		if(!empty($inf) && count($inf)) {
 			$view = true;
 		}
 	}
 	if(!$view) {
-		$inf = $sql->queryLine("SELECT ".CH." ad_title, ad_cmt, ad_date FROM {$t}editorial WHERE status_id = '1' ORDER BY ad_date DESC LIMIT 1", 1);
+		$inf = $sql->queryLine("SELECT ad_title, ad_cmt, ad_date FROM s_editorial WHERE status_id = '1' ORDER BY ad_date DESC LIMIT 1", 1);
 	}
 	require(DESIGN.'head.php');
 ?>

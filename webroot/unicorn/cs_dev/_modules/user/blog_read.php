@@ -1,18 +1,18 @@
 <?
 	include(CONFIG.'secure.fnc.php');
 
-	$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt, hidden_id, blog_visit, blog_cmts FROM {$t}userblog WHERE main_id = '".secureINS($key)."' LIMIT 1", 1);
+	$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt, hidden_id, blog_visit, blog_cmts FROM s_userblog WHERE main_id = '".secureINS($key)."' LIMIT 1", 1);
 	if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $s['id_id'] != $res['user_id']) {
 		errorACT('Felaktigt inlägg.', l('user', 'blog', $s['id_id']));
 	}
 	if(!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
-		$r = $sql->queryLine("SELECT main_id, status_id, user_id, id_id FROM {$t}userblogcmt WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
+		$r = $sql->queryLine("SELECT main_id, status_id, user_id, id_id FROM s_userblogcmt WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
 		if(!empty($r) && count($r) && $r[1] == '1') {
 			if($isAdmin || $r[2] == $l['id_id'] || $r[3] == $l['id_id']) {
-				$re = $sql->queryUpdate("UPDATE {$t}userblogcmt SET status_id = '2' WHERE main_id = '".secureINS($r[0])."' LIMIT 1");
+				$re = $sql->queryUpdate("UPDATE s_userblogcmt SET status_id = '2' WHERE main_id = '".secureINS($r[0])."' LIMIT 1");
 			}
 			if($re) {
-				$sql->queryUpdate("UPDATE {$t}userblog SET blog_cmts = blog_cmts - 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+				$sql->queryUpdate("UPDATE s_userblog SET blog_cmts = blog_cmts - 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			}
 			reloadACT(l('user', 'blog', $s['id_id'], $res['main_id']));
 		}
@@ -24,19 +24,19 @@
 		} else {
 			if ($res['hidden_id']) die;
 			if(!$hidden) {
-				$visit = @$sql->queryUpdate("REPLACE INTO {$t}userblogvisit SET status_id = '1', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', blog_id = '".secureINS($res['main_id'])."'");
+				$visit = @$sql->queryUpdate("REPLACE INTO s_userblogvisit SET status_id = '1', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', blog_id = '".secureINS($res['main_id'])."'");
 				$beenhere = ($visit != '2')?false:true;
 			} else {
-				$visit = @$sql->queryUpdate("REPLACE INTO {$t}userblogvisit SET status_id = '2', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', blog_id = '".secureINS($res['main_id'])."'");
+				$visit = @$sql->queryUpdate("REPLACE INTO s_userblogvisit SET status_id = '2', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', blog_id = '".secureINS($res['main_id'])."'");
 				$beenhere = ($visit != '2')?false:true;
 			}
 		}
 		if(!$beenhere) {
-			$sql->queryUpdate("UPDATE {$t}userblog SET blog_visit = blog_visit + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userblog SET blog_visit = blog_visit + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			if(!$hidden) {
-				$sql->queryUpdate("UPDATE {$t}userblogvisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND blog_id = '".secureINS($res['main_id'])."' LIMIT 1");
+				$sql->queryUpdate("UPDATE s_userblogvisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND blog_id = '".secureINS($res['main_id'])."' LIMIT 1");
 			} else {
-				$sql->queryUpdate("UPDATE {$t}userblogvisit SET status_id = '2', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND blog_id = '".secureINS($res['main_id'])."' LIMIT 1");
+				$sql->queryUpdate("UPDATE s_userblogvisit SET status_id = '2', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND blog_id = '".secureINS($res['main_id'])."' LIMIT 1");
 			}
 		}
 	}
@@ -68,10 +68,10 @@
 <div class="bigBody">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
-	$c_paging['co'] = $sql->queryResult("SELECT ".CH." COUNT(*) as count FROM {$t}userblogcmt WHERE blog_id = '".$res['main_id']."' AND status_id = '1'");
+	$c_paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM s_userblogcmt WHERE blog_id = '".$res['main_id']."' AND status_id = '1'");
 
 	$odd = 1;
-	$cmt = $sql->query("SELECT ".CH." b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.id_id, u.u_alias, u.u_sex, u.level_id, u.u_birth, u.u_picd, u.u_picid, u.u_picvalid, u.account_date FROM {$t}userblogcmt b LEFT JOIN {$t}user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.blog_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}", 0, 1);
+	$cmt = $sql->query("SELECT b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.id_id, u.u_alias, u.u_sex, u.level_id, u.u_birth, u.u_picd, u.u_picid, u.u_picvalid, u.account_date FROM s_userblogcmt b LEFT JOIN s_user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.blog_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}", 0, 1);
 	if(count($cmt) && !empty($cmt)) {
 		foreach($cmt as $val) {
 			if ($val['private_id'] && (!$own && !$isAdmin)) continue;

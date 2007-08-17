@@ -24,9 +24,9 @@ session_start();
 
 	if(!empty($_POST['ins_msg'])) {
 		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			mysql_query("UPDATE {$t}changes SET chg_text = '".secureINS($_POST['ins_msg'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+			mysql_query("UPDATE s_changes SET chg_text = '".secureINS($_POST['ins_msg'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 		} else {
-			mysql_query("INSERT INTO {$t}changes SET chg_date = NOW(), chg_text = '".secureINS($_POST['ins_msg'])."', chg_all = '".(!$isCrew?'1':(@$_POST['all']?'1':'0'))."', c_type = 'c', user_id = '".secureINS($_SESSION['u_i'])."'");
+			mysql_query("INSERT INTO s_changes SET chg_date = NOW(), chg_text = '".secureINS($_POST['ins_msg'])."', chg_all = '".(!$isCrew?'1':(@$_POST['all']?'1':'0'))."', c_type = 'c', user_id = '".secureINS($_SESSION['u_i'])."'");
 		}
 		if($isCrew && !empty($_POST['mailit']) && !empty($_POST['mailto'])) {
 doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(stripslashes($_POST['ins_msg'])), 1);
@@ -37,16 +37,16 @@ doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(str
 
 	if(!empty($_POST['dotodo'])) {
 		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			mysql_query("UPDATE {$t}changes SET chg_text = '".secureINS($_POST['t'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+			mysql_query("UPDATE s_changes SET chg_text = '".secureINS($_POST['t'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 		} else {
-			mysql_query("INSERT INTO {$t}changes SET chg_date = NOW(), chg_text = '".secureINS($_POST['t'])."', c_type = 't'");
+			mysql_query("INSERT INTO s_changes SET chg_date = NOW(), chg_text = '".secureINS($_POST['t'])."', c_type = 't'");
 		}
 		header("Location: changes.php");
 		exit;
 	}
 
 	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM {$t}changes WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_changes WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
 		if(mysql_num_rows($sql) == '1') {
 			$change = true;
 			$row = mysql_fetch_assoc($sql);
@@ -54,7 +54,7 @@ doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(str
 	}
 
 	if(!empty($_GET['t']) && is_numeric($_GET['t'])) {
-		$sql = mysql_query("SELECT * FROM {$t}changes WHERE main_id = '".secureINS($_GET['t'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_changes WHERE main_id = '".secureINS($_GET['t'])."' LIMIT 1");
 		if(mysql_num_rows($sql) == '1') {
 			$t_change = true;
 			$t_row = mysql_fetch_assoc($sql);
@@ -62,30 +62,30 @@ doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(str
 	}
 
 	if(!empty($_GET['t_done']) && is_numeric($_GET['t_done'])) {
-		$sql = mysql_query("SELECT * FROM {$t}changes WHERE main_id = '".secureINS($_GET['t_done'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_changes WHERE main_id = '".secureINS($_GET['t_done'])."' LIMIT 1");
 		if(mysql_num_rows($sql) == '1') {
-			mysql_query("UPDATE {$t}changes SET c_done = '1', chg_date = NOW() WHERE main_id = '".secureINS($_GET['t_done'])."' LIMIT 1");
+			mysql_query("UPDATE s_changes SET c_done = '1', chg_date = NOW() WHERE main_id = '".secureINS($_GET['t_done'])."' LIMIT 1");
 			header("Location: changes.php");
 			exit;
 		}
 	}
 
 	if(!empty($_GET['t_del']) && is_numeric($_GET['t_del'])) {
-		$sql = mysql_query("SELECT * FROM {$t}changes WHERE main_id = '".secureINS($_GET['t_del'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_changes WHERE main_id = '".secureINS($_GET['t_del'])."' LIMIT 1");
 		if(mysql_num_rows($sql) == '1') {
-			mysql_query("DELETE FROM {$t}changes WHERE main_id = '".secureINS($_GET['t_del'])."' LIMIT 1");
+			mysql_query("DELETE FROM s_changes WHERE main_id = '".secureINS($_GET['t_del'])."' LIMIT 1");
 			header("Location: changes.php");
 			exit;
 		}
 	}
 	if($isCrew) {
-		$sql = mysql_query("SELECT a.*, b.user_name FROM {$t}changes a LEFT JOIN {$t}admin b ON a.user_id = b.main_id WHERE c_type = 'c' ORDER BY chg_date DESC");
-		$t_sql = mysql_query("SELECT * FROM {$t}changes WHERE c_type = 't' ORDER BY c_done ASC, chg_date DESC");
-		$t_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}changes WHERE c_type = 't' AND c_done = '0'"), 0, 'count');
+		$sql = mysql_query("SELECT a.*, b.user_name FROM s_changes a LEFT JOIN s_admin b ON a.user_id = b.main_id WHERE c_type = 'c' ORDER BY chg_date DESC");
+		$t_sql = mysql_query("SELECT * FROM s_changes WHERE c_type = 't' ORDER BY c_done ASC, chg_date DESC");
+		$t_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_changes WHERE c_type = 't' AND c_done = '0'"), 0, 'count');
 	} else {
-		$sql = mysql_query("SELECT a.*, b.user_name FROM {$t}changes a LEFT JOIN {$t}admin b ON a.user_id = b.main_id WHERE c_type = 'c' AND chg_all = '1' ORDER BY chg_date DESC");
-		$t_sql = mysql_query("SELECT * FROM {$t}changes WHERE c_type = 't' AND chg_all = '1' ORDER BY c_done ASC, chg_date DESC");
-		$t_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}changes WHERE c_type = 't' AND c_done = '0' AND chg_all = '1'"), 0, 'count');
+		$sql = mysql_query("SELECT a.*, b.user_name FROM s_changes a LEFT JOIN s_admin b ON a.user_id = b.main_id WHERE c_type = 'c' AND chg_all = '1' ORDER BY chg_date DESC");
+		$t_sql = mysql_query("SELECT * FROM s_changes WHERE c_type = 't' AND chg_all = '1' ORDER BY c_done ASC, chg_date DESC");
+		$t_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_changes WHERE c_type = 't' AND c_done = '0' AND chg_all = '1'"), 0, 'count');
 	}
 
 	require("./_tpl/admin_head.php");

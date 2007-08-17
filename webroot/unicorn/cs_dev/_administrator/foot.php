@@ -11,7 +11,7 @@ session_start();
 		exit;
 	}
 
-	$page = mysql_query("SELECT login_page FROM {$t}admin WHERE main_id = '".secureINS($_SESSION['u_i'])."' LIMIT 1");
+	$page = mysql_query("SELECT login_page FROM s_admin WHERE main_id = '".secureINS($_SESSION['u_i'])."' LIMIT 1");
 	if(mysql_num_rows($page) > 0) {
 		$page = mysql_result($page, 0, 'login_page');
 	} else $page = 'gb';

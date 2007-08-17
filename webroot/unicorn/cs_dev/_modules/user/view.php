@@ -6,10 +6,10 @@
 	if(!$own) {
 		$hidden = $user->getinfo($l['id_id'], 'hidden_login');
 		if (!$hidden && $isOk) {
-			$visit = @$sql->queryUpdate("REPLACE INTO {$t}uservisit SET visitor_id = '".secureINS($l['id_id'])."', user_id = '".secureINS($s['id_id'])."', status_id = '2', visit_date = NOW()");
+			$visit = @$sql->queryUpdate("REPLACE INTO s_uservisit SET visitor_id = '".secureINS($l['id_id'])."', user_id = '".secureINS($s['id_id'])."', status_id = '2', visit_date = NOW()");
 			$beenhere = ($visit != '2')?false:true;
 		} else if (!$hidden) {
-			$visit = @$sql->queryUpdate("REPLACE INTO {$t}uservisit SET visitor_id = '".secureINS($l['id_id'])."', user_id = '".secureINS($s['id_id'])."', status_id = '1', visit_date = NOW()");
+			$visit = @$sql->queryUpdate("REPLACE INTO s_uservisit SET visitor_id = '".secureINS($l['id_id'])."', user_id = '".secureINS($s['id_id'])."', status_id = '1', visit_date = NOW()");
 			$beenhere = ($visit != '2')?false:true;
 		}
 		if (!$hidden && !$beenhere) {

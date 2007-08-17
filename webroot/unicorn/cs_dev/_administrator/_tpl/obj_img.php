@@ -38,23 +38,23 @@ function imgOK($id, $picid, $flow) {
 			if(strpos($key, 'status_id') !== false) {
 				$kid = explode(':', $key);
 				$kid = $kid[1];
-				$res = $sql->queryResult("SELECT flow_id FROM {$t}userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
+				$res = $sql->queryResult("SELECT flow_id FROM s_userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
 				if(!empty($res) && isset($_POST['status_id:' . $kid])) {
 					if($doall && empty($_POST['status_id:' . $kid])) {
 // alla-knapp
 						if($type == '1') {
 							if(!empty($res) && file_exists('../_input/preimages/'.$kid.'_'.$res.'.jpg')) {
-								$line = $sql->queryResult("SELECT u_picid FROM {$t}user WHERE id_id = '".$kid."' LIMIT 1");
+								$line = $sql->queryResult("SELECT u_picid FROM s_user WHERE id_id = '".$kid."' LIMIT 1");
 								$picid = imgOK($kid, $line, $res);
-								$sql->queryUpdate("UPDATE {$t}user SET u_picdate = NOW(), u_picd = '".PD."', u_picvalid = '1', u_picid = '$picid' WHERE id_id = '".$kid."' LIMIT 1");
-								$string = $sql->queryResult("SELECT level_id FROM {$t}userlevel WHERE id_id = '".$kid."' LIMIT 1");
+								$sql->queryUpdate("UPDATE s_user SET u_picdate = NOW(), u_picd = '".PD."', u_picvalid = '1', u_picid = '$picid' WHERE id_id = '".$kid."' LIMIT 1");
+								$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$kid."' LIMIT 1");
 								$string = str_replace('VALID', '', $string);
 								$string = $string.' VALID';
-								$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$string' WHERE id_id = '".$kid."' LIMIT 1");
+								$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$kid."' LIMIT 1");
 							}
 							addALog(@$_SESSION['u_i'].' godkände profilbild '.$kid);
 #							$user->spy($kid, 'ID', 'MSG', array('Din profilbild har godkänts!'));
-							$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
 						} elseif($type == '2') {
 							@rename('../_input/preimages/'.$kid.'_'.$res.'.jpg', '../user_img_off84/'.$kid.'_'.microtime().'.jpg');
 							@unlink('../_input/preimages/'.$kid.'_'.$res.'_2.jpg');
@@ -71,24 +71,24 @@ function imgOK($id, $picid, $flow) {
 								spyPostSend($kid, 'Nekad profilbild', $msg);
 							}
 							addALog(@$_SESSION['u_i'].' nekade profilbild '.$kid);
-							$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
-							$sql->queryUpdate("UPDATE {$t}user SET u_picdate = '' WHERE id_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("UPDATE s_user SET u_picdate = '' WHERE id_id = '".$kid."' LIMIT 1");
 						}
 					} else {
 						if($_POST['status_id:' . $kid] == '1') {
 							if(!empty($res) && file_exists('../_input/preimages/'.$kid.'_'.$res.'.jpg')) {
-								$line = $sql->queryResult("SELECT u_picid FROM {$t}user WHERE id_id = '".$kid."' LIMIT 1");
+								$line = $sql->queryResult("SELECT u_picid FROM s_user WHERE id_id = '".$kid."' LIMIT 1");
 								$picid = imgOK($kid, $line, $res);
-								$sql->queryUpdate("UPDATE {$t}user SET u_picdate = NOW(), u_picd = '".PD."', u_picvalid = '1', u_picid = '$picid' WHERE id_id = '".$kid."' LIMIT 1");
-								$string = $sql->queryResult("SELECT level_id FROM {$t}userlevel WHERE id_id = '".$kid."' LIMIT 1");
+								$sql->queryUpdate("UPDATE s_user SET u_picdate = NOW(), u_picd = '".PD."', u_picvalid = '1', u_picid = '$picid' WHERE id_id = '".$kid."' LIMIT 1");
+								$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$kid."' LIMIT 1");
 								$string = str_replace(' VALID', '', $string);
 								$string = $string.' VALID';
-								$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$string' WHERE id_id = '".$kid."' LIMIT 1");
+								$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$kid."' LIMIT 1");
 							}
 
 							addALog(@$_SESSION['u_i'].' godkände profilbild '.$kid);
 #							$user->spy($kid, 'ID', 'MSG', array('Din profilbild har godkänts!'));
-							$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
 						} elseif($_POST['status_id:' . $kid] == '2') {
 							@rename('../_input/preimages/'.$kid.'_'.$res.'.jpg', '../user_img_off84/'.$kid.'_'.microtime().'.jpg');
 							@unlink('../_input/preimages/'.$kid.'_'.$res.'_2.jpg');
@@ -105,8 +105,8 @@ function imgOK($id, $picid, $flow) {
 								spyPostSend($kid, 'Nekad profilbild', $msg);
 							}
 							addALog(@$_SESSION['u_i'].' nekade profilbild '.$kid);
-							$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
-							$sql->queryUpdate("UPDATE {$t}user SET u_picdate = '' WHERE id_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$kid."' LIMIT 1");
+							$sql->queryUpdate("UPDATE s_user SET u_picdate = '' WHERE id_id = '".$kid."' LIMIT 1");
 						}
 					}
 				}
@@ -115,14 +115,14 @@ function imgOK($id, $picid, $flow) {
 		header('Location: '.$thispage);
 		exit;
 	} elseif(!empty($_GET['del'])) {
-		$res = $sql->queryLine("SELECT id_id, flow_id FROM {$t}userpicvalid WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$res = $sql->queryLine("SELECT id_id, flow_id FROM s_userpicvalid WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		if(!empty($res) && count($res)) {
 			@rename('../_input/preimages/'.$res[0].'_'.$res[1].'.jpg', '../user_img_off84/'.$res[0].'_'.md5(microtime()).'.jpg');
 			@unlink('../_input/preimages/'.$res[0].'_'.$res[1].'_2.jpg');
-			#$string = $sql->queryResult("SELECT level_id FROM {$t}userlevel WHERE id_id = '".$res[0]."' LIMIT 1");
+			#$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$res[0]."' LIMIT 1");
 			#$string = str_replace('VALID', '', $string);
-			$sql->queryUpdate("UPDATE {$t}user SET u_picdate = '' WHERE id_id = '".$res[0]."' LIMIT 1");
-			#$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$string' WHERE id_id = '".$res[0]."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_user SET u_picdate = '' WHERE id_id = '".$res[0]."' LIMIT 1");
+			#$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$res[0]."' LIMIT 1");
 			if(!empty($_GET['reason'])) {
 				if(!empty($_GET['reasontext']) && $_GET['reason'] == 'X') {
 					$msg = 'Din nya profilbild har nekats på grund av: <b>'.$_GET['reasontext'].'</b> Prova med en ny.';
@@ -135,18 +135,18 @@ function imgOK($id, $picid, $flow) {
 				$msg = 'Din nya profilbild har nekats. Prova med en ny.';
 				spyPostSend($res[0], 'Nekad profilbild', $msg);
 			}
-			$sql->queryUpdate("DELETE FROM {$t}userpicvalid WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
+			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		}
 		header("Location: ".$thispage);
 		exit;
 	}
 	$all = (!empty($_GET['all'])?'1':'0');
 	require("./_tpl/obj_head.php");
-	$count = array($sql->queryResult("SELECT COUNT(*) as count FROM {$t}userpicvalid a INNER JOIN {$t}user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'"));
+	$count = array($sql->queryResult("SELECT COUNT(*) as count FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'"));
 	if($all)
-		$list = $sql->query("SELECT u.id_id, u.u_picd, u.u_alias, u.level_id, u.u_sex, u.u_birth, u.u_picid FROM {$t}user u WHERE u.status_id = '1' AND u.u_picvalid = '1' ORDER BY u.u_picdate DESC LIMIT 48");
+		$list = $sql->query("SELECT u.id_id, u.u_picd, u.u_alias, u.level_id, u.u_sex, u.u_birth, u.u_picid FROM s_user u WHERE u.status_id = '1' AND u.u_picvalid = '1' ORDER BY u.u_picdate DESC LIMIT 48");
 	else
-		$list = $sql->query("SELECT a.id_id, a.flow_id, u.u_alias, u.level_id, u.u_sex, u.u_birth FROM {$t}userpicvalid a INNER JOIN {$t}user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'");
+		$list = $sql->query("SELECT a.id_id, a.flow_id, u.u_alias, u.level_id, u.u_sex, u.u_birth FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'");
 ?>
 <script type="text/javascript">
 function denyAns(val, id, extra) {

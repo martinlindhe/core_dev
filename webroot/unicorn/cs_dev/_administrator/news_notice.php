@@ -24,7 +24,7 @@ session_start();
 	if(!empty($_POST['donews']) && !empty($_POST['ins_cmt'])) {
 		$status = (!empty($_POST['status_id']) && is_numeric($_POST['status_id']))?$_POST['status_id']:'0';
 		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			mysql_query("UPDATE {$t}newsnotice SET
+			mysql_query("UPDATE s_newsnotice SET
 			ad_cmt = '".secureINS($_POST['ins_cmt'])."',
 			status_id = '$status',
 			city_id = '".secureINS($_POST['ins_city'])."',
@@ -33,7 +33,7 @@ session_start();
 			$d_id = $_POST['id'];
 
 		} else {
-			mysql_query("INSERT INTO {$t}newsnotice SET
+			mysql_query("INSERT INTO s_newsnotice SET
 			ad_cmt = '".secureINS($_POST['ins_cmt'])."',
 			city_id = '".secureINS($_POST['ins_city'])."',
 			ad_date = NOW(),
@@ -50,7 +50,7 @@ session_start();
 				$kid = explode(":", $key);
 				$kid = $kid[1];
 				if(isset($_POST['status_id:' . $kid])) {
-					mysql_query("UPDATE {$t}newsnotice SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
+					mysql_query("UPDATE s_newsnotice SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
 				}
 			}
 		}
@@ -59,10 +59,10 @@ session_start();
 	}
 	$change = false;
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql = mysql_query("SELECT * FROM {$t}newsnotice WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_newsnotice WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		if(mysql_num_rows($sql) > 0) {
 			$row = mysql_fetch_assoc($sql);
-			mysql_query("DELETE FROM {$t}newsnotice WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+			mysql_query("DELETE FROM s_newsnotice WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 			
 		}
 		header("Location: news_notice.php?status=$status_id");
@@ -70,7 +70,7 @@ session_start();
 	}
 
 	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM {$t}newsnotice WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_newsnotice WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
 		if(mysql_num_rows($sql) != '1') {
 			$change = false;
 		} else {
@@ -80,13 +80,13 @@ session_start();
 	}
 
 			$view_arr = array(
-				"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}newsnotice WHERE status_id = '1'"), 0, 'count'),
-				"2" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}newsnotice WHERE status_id = '2'"), 0, 'count'));
+				"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_newsnotice WHERE status_id = '1'"), 0, 'count'),
+				"2" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_newsnotice WHERE status_id = '2'"), 0, 'count'));
 
 	if($status_id != '2') {
-		$news = mysql_query("SELECT * FROM {$t}newsnotice WHERE status_id = '$status_id' ORDER BY city_id ASC, ad_date DESC");
+		$news = mysql_query("SELECT * FROM s_newsnotice WHERE status_id = '$status_id' ORDER BY city_id ASC, ad_date DESC");
 	} else {
-		$news = mysql_query("SELECT * FROM {$t}newsnotice WHERE status_id = '2' ORDER BY ad_date DESC");
+		$news = mysql_query("SELECT * FROM s_newsnotice WHERE status_id = '2' ORDER BY ad_date DESC");
 	}
 
 	require("./_tpl/admin_head.php");

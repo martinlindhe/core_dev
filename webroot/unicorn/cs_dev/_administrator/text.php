@@ -22,14 +22,14 @@ ob_start();
 
 	if(isset($_POST['ins_msg'])) {
 		if(!empty($_POST['id'])) {
-			mysql_query("UPDATE {$t}text SET text_cmt = '".secureINS($_POST['ins_msg'])."', text_date = NOW() WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+			mysql_query("UPDATE s_text SET text_cmt = '".secureINS($_POST['ins_msg'])."', text_date = NOW() WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 		}
 		header("Location: text.php");
 		exit;
 	}
 
 	if(!empty($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM {$t}text WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_text WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
 		if(mysql_num_rows($sql) == '1') {
 			$change = true;
 			$row = mysql_fetch_assoc($sql);
@@ -86,7 +86,7 @@ ob_start();
 	}
 
 
-	$sql = mysql_query("SELECT * FROM {$t}text WHERE status_id = '1' ORDER BY main_id");
+	$sql = mysql_query("SELECT * FROM s_text WHERE status_id = '1' ORDER BY main_id");
 
 	require("./_tpl/admin_head.php");
 ?>

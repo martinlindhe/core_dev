@@ -52,17 +52,17 @@ ob_start();
 
 	if(!empty($_POST['do'])) {
 		if(!empty($_POST['id']) && !empty($_POST['ins_filter'])) {
-			@mysql_query("UPDATE {$t}logfilter SET unique_id = '".secureINS($_POST['ins_filter'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+			@mysql_query("UPDATE s_logfilter SET unique_id = '".secureINS($_POST['ins_filter'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 		} elseif(!empty($_POST['ins_filter'])) {
-			@mysql_query("INSERT INTO {$t}logfilter SET unique_id = '".secureINS($_POST['ins_filter'])."', status_id = '1'");
+			@mysql_query("INSERT INTO s_logfilter SET unique_id = '".secureINS($_POST['ins_filter'])."', status_id = '1'");
 		}
-		mysql_query("UPDATE {$t}logfilter SET status_id = '0'");
+		mysql_query("UPDATE s_logfilter SET status_id = '0'");
 		foreach($_POST as $key => $val) {
 			if(strpos($key, 'ch:') !== false) {
 				$kid = explode(":", $key);
 				$kid = $kid[1];
 				if(isset($_POST['ch:' . $kid])) {
-					mysql_query("UPDATE {$t}logfilter SET status_id = '1' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
+					mysql_query("UPDATE s_logfilter SET status_id = '1' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
 				}
 			}
 		}
@@ -70,22 +70,22 @@ ob_start();
 		exit;
 	}
 	if(!empty($_GET['filter_id']) && is_numeric($_GET['filter_id'])) {
-		$sql = mysql_query("SELECT * FROM {$t}logfilter WHERE main_id = '".secureINS($_GET['filter_id'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_logfilter WHERE main_id = '".secureINS($_GET['filter_id'])."' LIMIT 1");
 		if(mysql_num_rows($sql)) {
 			$change = true;
 			$row = mysql_fetch_assoc($sql);
 		}
 	}
 	if(!empty($_GET['filter_del']) && is_numeric($_GET['filter_del'])) {
-		$sql = mysql_query("SELECT * FROM {$t}logfilter WHERE main_id = '".secureINS($_GET['filter_del'])."' LIMIT 1");
+		$sql = mysql_query("SELECT * FROM s_logfilter WHERE main_id = '".secureINS($_GET['filter_del'])."' LIMIT 1");
 		if(mysql_num_rows($sql)) {
-			@mysql_query("DELETE FROM {$t}logfilter WHERE main_id = '".secureINS($_GET['filter_del'])."' LIMIT 1");
+			@mysql_query("DELETE FROM s_logfilter WHERE main_id = '".secureINS($_GET['filter_del'])."' LIMIT 1");
 		}
 		header("Location: stat.php");
 		exit;
 	}
 
-	$filter = mysql_query("SELECT * FROM {$t}logfilter");
+	$filter = mysql_query("SELECT * FROM s_logfilter");
 	$do_filter = array();
 	$use_filter = '';
 	if(mysql_num_rows($filter)) {
@@ -99,17 +99,17 @@ ob_start();
 		if($i) $use_filter .= implode(" AND ", $do_filter).' AND';
 	}
 
-	$try = mysql_query("SELECT type_referer, type_cnt FROM {$t}logreferer WHERE $use_filter type_referer != ''
+	$try = mysql_query("SELECT type_referer, type_cnt FROM s_logreferer WHERE $use_filter type_referer != ''
 GROUP BY type_referer HAVING(type_cnt > 1)
 ORDER BY type_cnt DESC");
 
 
 	$sqlt = array(
-'today' => "SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = CURDATE()",
-'yester' => "SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)",
-'month' => "SELECT COUNT(*) as count FROM {$t}logvisit WHERE MONTH(date_snl) = MONTH(CURDATE())",
-'total' => "SELECT COUNT(*) as count FROM {$t}logvisit",
-'spec' => "SELECT COUNT(*) as count FROM {$t}logvisit WHERE MONTH(date_snl) = '$sel_month' AND YEAR(date_snl) = '$sel_year'",
+'today' => "SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = CURDATE()",
+'yester' => "SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)",
+'month' => "SELECT COUNT(*) as count FROM s_logvisit WHERE MONTH(date_snl) = MONTH(CURDATE())",
+'total' => "SELECT COUNT(*) as count FROM s_logvisit",
+'spec' => "SELECT COUNT(*) as count FROM s_logvisit WHERE MONTH(date_snl) = '$sel_month' AND YEAR(date_snl) = '$sel_year'",
 );
 
 	$today_tot = mysql_result(mysql_query($sqlt['today']), 0, 'count');
@@ -132,7 +132,7 @@ ORDER BY type_cnt DESC");
 			<tr><td colspan="2"><b>Just nu</b></td></tr>
 			<tr>
 				<td>Aktiva besökare sedan 8 minuter:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$online = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM {$t}log WHERE date_cnt > DATE_SUB(NOW(), INTERVAL 8 MINUTE)"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$online = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_log WHERE date_cnt > DATE_SUB(NOW(), INTERVAL 8 MINUTE)"), 0, 'count')?></td>
 			</tr>
 			<tr><td colspan="2"><br><b>Idag</b></td></tr>
 			<tr>
@@ -141,7 +141,7 @@ ORDER BY type_cnt DESC");
 			</tr>
 			<tr>
 				<td>Unika IP:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$today_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM {$t}logvisit WHERE date_snl = NOW()"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$today_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit WHERE date_snl = NOW()"), 0, 'count')?></td>
 			</tr>
 			<tr>
 				<td>Antal unika IP per timme i snitt:</td>
@@ -154,11 +154,11 @@ ORDER BY type_cnt DESC");
 			<tr><td colspan="2"><br><b>Igår</b></td></tr>
 			<tr>
 				<td>Dygnsunika besökare:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$yester_v = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$yester_v = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"), 0, 'count')?></td>
 			</tr>
 			<tr>
 				<td>Unika IP:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$yester_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM {$t}logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$yester_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"), 0, 'count')?></td>
 			</tr>
 			<tr>
 				<td>Antal unika IP per timme i snitt:</td>
@@ -167,11 +167,11 @@ ORDER BY type_cnt DESC");
 			<tr><td colspan="2"><br><b>Totalt</b></td></tr>
 			<tr>
 				<td>Dygnsunika besökare:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$total_v = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$total_v = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit"), 0, 'count')?></td>
 			</tr>
 			<tr>
 				<td>Unika IP:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$total_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM {$t}logvisit"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$total_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit"), 0, 'count')?></td>
 			</tr>
 			<tr>
 				<td>Antal unika IP per dag i snitt:<br>Start: <?=niceDate($start_date)?></td>
@@ -186,7 +186,7 @@ ORDER BY type_cnt DESC");
 				<td height="20" colspan="2"><b>Besökarinfo</b></td>
 			</tr>
 <?
-	$sql = mysql_query("SELECT user_string, COUNT(user_string) as count FROM {$t}logvisit WHERE user_string != '' GROUP BY user_string ORDER BY `count` DESC");
+	$sql = mysql_query("SELECT user_string, COUNT(user_string) as count FROM s_logvisit WHERE user_string != '' GROUP BY user_string ORDER BY `count` DESC");
 	while($r = mysql_fetch_assoc($sql)) {
 		echo '<tr><td><span class="txt_chead txt_bld">'.$r['count'].'</span>st:&nbsp;</td><td>'.secureOUT($r['user_string']).'</td></tr>';
 	}
@@ -215,13 +215,13 @@ ORDER BY type_cnt DESC");
 	for($i = 0; $i <= 23; $i++) {
 		$c = mysql_query("SELECT type_cnt FROM $stat_tab WHERE date_cnt = CURDATE() AND type_inf = '$i'");
 		if(!mysql_num_rows($c) || $this_hour == $i) {
-			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = CURDATE() AND HOUR(date_cnt) = $i"), 0, 'count');
+			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = CURDATE() AND HOUR(date_cnt) = $i"), 0, 'count');
 			$t = mysql_query("INSERT INTO $stat_tab SET date_cnt = CURDATE(), type_inf = '$i', type_cnt = '$single'");
 		} elseif($this_hour == $i) {
-			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = CURDATE() AND HOUR(date_cnt) = $i"), 0, 'count');
+			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = CURDATE() AND HOUR(date_cnt) = $i"), 0, 'count');
 			$t = mysql_query("UPDATE $stat_tab SET type_cnt = '$single' WHERE date_cnt = CURDATE() AND type_inf = '$i'");
 		} elseif($i < $this_hour && !mysql_result($c, 0, 'type_cnt')) {
-			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = CURDATE() AND HOUR(date_cnt) = $i"), 0, 'count');
+			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = CURDATE() AND HOUR(date_cnt) = $i"), 0, 'count');
 			$t = mysql_query("UPDATE $stat_tab SET type_cnt = '$single' WHERE date_cnt = CURDATE() AND type_inf = '$i'");
 		} else {
 			$single = mysql_result($c, 0, 'type_cnt');
@@ -241,10 +241,10 @@ ORDER BY type_cnt DESC");
 	for($i = 0; $i <= 23; $i++) {
 		$c = mysql_query("SELECT type_cnt FROM $stat_tab WHERE date_cnt = DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND type_inf = '$i'");
 		if(!mysql_num_rows($c)) {
-			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND HOUR(date_cnt) = $i"), 0, 'count');
+			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND HOUR(date_cnt) = $i"), 0, 'count');
 			$t = mysql_query("INSERT INTO $stat_tab SET date_cnt = DATE_ADD(CURDATE(), INTERVAL -1 DAY), type_inf = '$i', type_cnt = '$single'");
 		} elseif(!mysql_result($c, 0, 'type_cnt')) {
-			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND HOUR(date_cnt) = $i"), 0, 'count');
+			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND HOUR(date_cnt) = $i"), 0, 'count');
 			$t = mysql_query("UPDATE $stat_tab SET type_cnt = '$single' WHERE date_cnt = DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND type_inf = '$i'");
 		} else {
 			$single = mysql_result($c, 0, 'type_cnt');
@@ -262,11 +262,11 @@ ORDER BY type_cnt DESC");
 	#$tot = mysql_result(mysql_query($sqlt['total']), 0, 'count');
 	$tot = 600;
 	for($i = 0; $i <= 23; $i++) {
-#		$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE HOUR(date_cnt) = $i"), 0, 'count');
-#		$unique = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM {$t}logvisit WHERE HOUR(date_cnt) = $i"), 0, 'count');
+#		$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE HOUR(date_cnt) = $i"), 0, 'count');
+#		$unique = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit WHERE HOUR(date_cnt) = $i"), 0, 'count');
 		$c = mysql_query("SELECT type_cnt FROM $stat_tab WHERE type_inf = '$i'");
 		if(!mysql_num_rows($c)) {
-			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE HOUR(date_cnt) = $i"), 0, 'count');
+			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE HOUR(date_cnt) = $i"), 0, 'count');
 		} else {
 			$single = 0;
 			while($rr = mysql_fetch_row($c)) {
@@ -297,8 +297,8 @@ ORDER BY type_cnt DESC");
 	$days = array();
 	for($i = 0; $i <= 31; $i++) {
 		if(checkdate($sel_month, $i, $year)) {
-			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}logvisit WHERE date_snl = '$sel_year-$sel_month-$i'"), 0, 'count');
-			$unique = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM {$t}logvisit WHERE date_snl = '$sel_year-$sel_month-$i'"), 0, 'count');
+			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = '$sel_year-$sel_month-$i'"), 0, 'count');
+			$unique = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit WHERE date_snl = '$sel_year-$sel_month-$i'"), 0, 'count');
 			if($tot) {
 				$u_proc = round(($unique / $tot)*300);
 				$proc = round((($single-$unique) / $tot)*300);

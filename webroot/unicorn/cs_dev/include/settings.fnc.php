@@ -11,7 +11,7 @@
 
 	function storeFacts()
 	{
-		global $user, $l;
+		global $user;
 
 		if($l['status_id'] == '1') {
 			if (isset($_POST['det_civil'])) {
@@ -60,13 +60,13 @@
 	//Byter lösenord. returnerar sträng med felkod vid failure eller boolean TRUE vid success.
 	function setNewPassword($_old_pwd, $_new_pwd, $_new_pwd_confirm)
 	{
-		global $sql, $user, $t, $l;
+		global $sql, $user;
 
 		if (empty($_new_pwd) || empty($_new_pwd_confirm) || ($_new_pwd != $_new_pwd_confirm)) {
 			return 'Lösenordet matchar inte.';
 		}
 
-		$exists = $sql->queryLine("SELECT u_pass FROM {$t}user WHERE id_id = ".$l['id_id']." LIMIT 1");
+		$exists = $sql->queryLine("SELECT u_pass FROM s_user WHERE id_id = ".$l['id_id']." LIMIT 1");
 		if (empty($exists) || !count($exists)) {
 			return 'Felaktigt lösenord.';
 		}
@@ -80,10 +80,10 @@
 		}
 
 		$sql->logADD($l['id_id'], $_old_pwd.'->'.$_new_pwd, 'NEW_PASS');
-		$sql->queryUpdate("UPDATE {$t}user SET u_pass = '".secureINS($_new_pwd)."' WHERE id_id = ".$l['id_id']);
+		$sql->queryUpdate("UPDATE s_user SET u_pass = '".secureINS($_new_pwd)."' WHERE id_id = ".$l['id_id']);
 
 		if ($user->level($l['level_id'], 7)) {
-			$sql->queryUpdate("UPDATE {$t}admin SET user_pass = '".secureINS($_new_pwd)."' WHERE main_id = '".$l['id_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_admin SET user_pass = '".secureINS($_new_pwd)."' WHERE main_id = '".$l['id_id']."' LIMIT 1");
 		}
 		return true;
 	}
@@ -91,7 +91,7 @@
 	/* Updates mms key */
 	function updateMMSKey()
 	{
-		global $sql, $user, $l, $t;
+		global $sql, $user;
 
 		if (!$l['id_id'] || empty($_POST['ins_mmskey'])) return;
 		

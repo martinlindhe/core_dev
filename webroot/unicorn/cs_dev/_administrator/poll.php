@@ -17,7 +17,7 @@ ob_start();
 	$menu = $menu_NEWS;
 	$page = 'POLL'; 
 	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM {$t}poll WHERE main_id = '{$_GET['id']}'");
+		$sql = mysql_query("SELECT * FROM s_poll WHERE main_id = '{$_GET['id']}'");
 		if(mysql_num_rows($sql) == '1') {
 			$c_row = mysql_fetch_assoc($sql);
 			$change = true;
@@ -25,34 +25,34 @@ ob_start();
 	}
 	if(!empty($_GET['deny']) && is_numeric($_GET['deny'])) {
 		$editr = mysql_num_rows(mysql_query("SELECT main_id FROM {$tab['pollv']} WHERE main_id = '{$_GET['deny']}' AND is_enabled = '1'"));
-		$pollr = mysql_num_rows(mysql_query("SELECT main_id FROM {$t}poll WHERE main_id = '{$_GET['view']}' AND poll_ans".secureINS($_GET['answer'])." != ''"));
+		$pollr = mysql_num_rows(mysql_query("SELECT main_id FROM s_poll WHERE main_id = '{$_GET['view']}' AND poll_ans".secureINS($_GET['answer'])." != ''"));
 		if($editr == '1' && $pollr == '1') {
-			mysql_query("UPDATE {$t}pollvisit SET is_enabled = '0' WHERE main_id = '{$_GET['deny']}' AND is_enabled = '1'");
-			mysql_query("UPDATE {$t}poll SET poll_res{$_GET['answer']} = poll_res{$_GET['answer']} - 1 WHERE main_id = '{$_GET['view']}' LIMIT 1");
+			mysql_query("UPDATE s_pollvisit SET is_enabled = '0' WHERE main_id = '{$_GET['deny']}' AND is_enabled = '1'");
+			mysql_query("UPDATE s_poll SET poll_res{$_GET['answer']} = poll_res{$_GET['answer']} - 1 WHERE main_id = '{$_GET['view']}' LIMIT 1");
 			header("Location: poll.php?view=".$_GET['view'].'&answer='.$_GET['answer']);
 			exit;
 		}
 	}
 	if(!empty($_GET['acc']) && is_numeric($_GET['acc'])) {
-		$editr = mysql_num_rows(mysql_query("SELECT main_id FROM {$t}pollvisit WHERE main_id = '{$_GET['acc']}' AND is_enabled = '0'"));
-		$pollr = mysql_num_rows(mysql_query("SELECT main_id FROM {$t}poll WHERE main_id = '{$_GET['view']}' AND poll_ans".secureINS($_GET['answer'])." != ''"));
+		$editr = mysql_num_rows(mysql_query("SELECT main_id FROM s_pollvisit WHERE main_id = '{$_GET['acc']}' AND is_enabled = '0'"));
+		$pollr = mysql_num_rows(mysql_query("SELECT main_id FROM s_poll WHERE main_id = '{$_GET['view']}' AND poll_ans".secureINS($_GET['answer'])." != ''"));
 		if($editr == '1' && $pollr == '1') {
-			mysql_query("UPDATE {$t}pollvisit SET is_enabled = '1' WHERE main_id = '{$_GET['acc']}' AND is_enabled = '0'");
-			mysql_query("UPDATE {$t}poll SET poll_res{$_GET['answer']} = poll_res{$_GET['answer']} + 1 WHERE main_id = '{$_GET['view']}' LIMIT 1");
+			mysql_query("UPDATE s_pollvisit SET is_enabled = '1' WHERE main_id = '{$_GET['acc']}' AND is_enabled = '0'");
+			mysql_query("UPDATE s_poll SET poll_res{$_GET['answer']} = poll_res{$_GET['answer']} + 1 WHERE main_id = '{$_GET['view']}' LIMIT 1");
 			header("Location: poll.php?view=".$_GET['view'].'&answer='.$_GET['answer']);
 			exit;
 		}
 	}
 	if(!empty($_POST['dopost']) && !empty($_POST['ins_quest'])) {
 		if(!empty($_POST['id'])) {
-			$csql = mysql_query("SELECT main_id FROM {$t}poll WHERE main_id = '{$_POST['id']}'");
+			$csql = mysql_query("SELECT main_id FROM s_poll WHERE main_id = '{$_POST['id']}'");
 			if(mysql_num_rows($csql) == '1') {
-				$csql = mysql_query("SELECT main_id FROM {$t}poll WHERE poll_month = '".secureINS($_POST['ins_start'])."' AND main_id != '{$_POST['id']}'");
+				$csql = mysql_query("SELECT main_id FROM s_poll WHERE poll_month = '".secureINS($_POST['ins_start'])."' AND main_id != '{$_POST['id']}'");
 				if(mysql_num_rows($csql) > 0) {
 					header("Location: poll.php?taken=1");
 					exit;
 				} else {
-					mysql_query("UPDATE {$t}poll SET
+					mysql_query("UPDATE s_poll SET
 						poll_quest = '{$_POST['ins_quest']}',
 						poll_text = '{$_POST['ins_text']}',
 						poll_month = '{$_POST['ins_month']}',
@@ -70,12 +70,12 @@ ob_start();
 			header("Location: poll.php?error=1");
 			exit;
 		} else {
-			$csql = mysql_query("SELECT main_id FROM {$t}poll WHERE poll_month = '".secureINS($_POST['ins_month'])."'");
+			$csql = mysql_query("SELECT main_id FROM s_poll WHERE poll_month = '".secureINS($_POST['ins_month'])."'");
 			if(mysql_num_rows($csql) > 0) {
 				header("Location: poll.php?taken=1");
 				exit;
 			} else {
-				$sql = mysql_query("INSERT INTO {$t}poll SET
+				$sql = mysql_query("INSERT INTO s_poll SET
 					poll_quest = '{$_POST['ins_quest']}',
 					poll_month = '{$_POST['ins_month']}',
 					poll_ans1 = '{$_POST['ins_ans1']}',
@@ -101,16 +101,16 @@ ob_start();
 		print '<script type="text/javascript">alert(\'Felaktigt val.\'); history.go(-1);</script>';
 		exit;
 	} elseif(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql = mysql_query("SELECT main_id FROM {$t}poll WHERE main_id = '{$_GET['del']}' LIMIT 1");
+		$sql = mysql_query("SELECT main_id FROM s_poll WHERE main_id = '{$_GET['del']}' LIMIT 1");
 		if(mysql_num_rows($sql) == '1') {
-			mysql_query("DELETE FROM {$t}poll WHERE main_id = '{$_GET['del']}' LIMIT 1");
-			mysql_query("DELETE FROM {$t}pollvisit WHERE category_id = '{$_GET['del']}'");
+			mysql_query("DELETE FROM s_poll WHERE main_id = '{$_GET['del']}' LIMIT 1");
+			mysql_query("DELETE FROM s_pollvisit WHERE category_id = '{$_GET['del']}'");
 			header("Location: poll.php");
 			exit;
 		}
 	}
 
-	$sql = mysql_query("SELECT * FROM {$t}poll ORDER BY poll_month DESC");
+	$sql = mysql_query("SELECT * FROM s_poll ORDER BY poll_month DESC");
 
 
 	require("./_tpl/admin_head.php");
@@ -214,7 +214,7 @@ function loadtop() {
 <?
 		$active = false;
 		$is_poll = false;
-		$pollsql = @mysql_query("SELECT * FROM {$t}poll WHERE poll_month = '".date("Y-m-00")."' LIMIT 1");
+		$pollsql = @mysql_query("SELECT * FROM s_poll WHERE poll_month = '".date("Y-m-00")."' LIMIT 1");
 		if(mysql_num_rows($pollsql) > 0) {
 			$is_poll = true;
 		}
@@ -244,7 +244,7 @@ function loadtop() {
 			</tr>
 <?
 					if(!empty($_GET['view']) && $_GET['view'] == $poll['main_id'] && !empty($_GET['answer']) && $_GET['answer'] == $ans) {
-						$iql = mysql_query("SELECT main_id, sess_ip, date_cnt, is_enabled FROM {$t}pollvisit WHERE category_id = '{$poll['main_id']}' AND unique_id = '$ans' ORDER BY is_enabled, date_cnt DESC");
+						$iql = mysql_query("SELECT main_id, sess_ip, date_cnt, is_enabled FROM s_pollvisit WHERE category_id = '{$poll['main_id']}' AND unique_id = '$ans' ORDER BY is_enabled, date_cnt DESC");
 						if(mysql_num_rows($iql) > 0) {
 						print '<tr><td><table cellspacing="0" style="margin-top: 5px;">';
 						while($irow = mysql_fetch_assoc($iql)) {
@@ -266,7 +266,7 @@ function loadtop() {
 
 	if(!empty($_GET['view']) && $active != $_GET['view']) {
 		$is_poll = false;
-		$pollsql = @mysql_query("SELECT * FROM {$t}poll WHERE main_id = '{$_GET['view']}' LIMIT 1");
+		$pollsql = @mysql_query("SELECT * FROM s_poll WHERE main_id = '{$_GET['view']}' LIMIT 1");
 		if(mysql_num_rows($pollsql) > 0) {
 			$is_poll = true;
 			echo '<hr /><div class="hr"></div>';
@@ -299,7 +299,7 @@ function loadtop() {
 			</tr>
 <?
 						if(!empty($_GET['view']) && $_GET['view'] == $poll['main_id'] && !empty($_GET['answer']) && $_GET['answer'] == $ans) {
-							$iql = mysql_query("SELECT main_id, sess_ip, date_cnt, is_enabled FROM {$t}pollvisit WHERE category_id = '{$poll['main_id']}' AND unique_id = '$ans' ORDER BY is_enabled, date_cnt DESC");
+							$iql = mysql_query("SELECT main_id, sess_ip, date_cnt, is_enabled FROM s_pollvisit WHERE category_id = '{$poll['main_id']}' AND unique_id = '$ans' ORDER BY is_enabled, date_cnt DESC");
 							if(mysql_num_rows($iql) > 0) {
 							print '<tr><td><table cellspacing="0" style="margin-top: 5px;">';
 							while($irow = mysql_fetch_assoc($iql)) {

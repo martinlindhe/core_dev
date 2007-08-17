@@ -15,7 +15,7 @@
 	}
 function doLog($string = '', $about = '') {
 	global $t, $sql;
-	$sql->queryInsert("INSERT INTO {$t}admindolog SET owner_id = '".$_SESSION['u_i']."', string_info = '".$string."', about_id = '".$about."'");
+	$sql->queryInsert("INSERT INTO s_admindolog SET owner_id = '".$_SESSION['u_i']."', string_info = '".$string."', about_id = '".$about."'");
 }
 
 function errorNEW($msg, $mv = '', $ttl = 'ERROR') {
@@ -96,14 +96,14 @@ global $sql;
 function sesslogADD($category = '', $unique = '', $type = 'START') {
 	GLOBAL $cookie_id, $t;
 	$ret = false;
-	$sql = @mysql_query("INSERT INTO {$t}logvisit SET
+	$sql = @mysql_query("INSERT INTO s_logvisit SET
 		sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
 		sess_id = '".secureINS($cookie_id)."',
 		user_agent = '".secureINS($_SERVER['HTTP_USER_AGENT'])."',
 		user_string = '".secureINS(get_os_($_SERVER['HTTP_USER_AGENT']).' - '.get_browser_($_SERVER['HTTP_USER_AGENT']))."',
 		date_snl = NOW(),
 		date_cnt = NOW()");
-	mysql_query("INSERT INTO {$t}log SET
+	mysql_query("INSERT INTO s_log SET
 	sess_id = '".secureINS($cookie_id)."',
 	sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
 	category_id = '".((!empty($category))?secureINS($category):'')."',
@@ -115,7 +115,7 @@ function sesslogADD($category = '', $unique = '', $type = 'START') {
 function newsMailRead($id, $mail = '') {
 	GLOBAL $cookie_id, $t;
 	if(!empty($mail))
-		$sql = @mysql_query("INSERT INTO {$t}sendvisit SET
+		$sql = @mysql_query("INSERT INTO s_sendvisit SET
 		sess_id = '".secureINS($cookie_id)."',
 		sess_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
 		category_id = '".((!empty($id))?secureINS($id):'')."',
@@ -165,7 +165,7 @@ function notallowed() {
 	global $t;
 	if(!isset($_SESSION['u_i']) || !is_numeric($_SESSION['u_i']))
 		return true;
-	if(!mysql_num_rows(mysql_query("SELECT main_id FROM {$t}admin WHERE main_id = '".secureINS($_SESSION['u_i'])."' AND status_id = '1' LIMIT 1")))
+	if(!mysql_num_rows(mysql_query("SELECT main_id FROM s_admin WHERE main_id = '".secureINS($_SESSION['u_i'])."' AND status_id = '1' LIMIT 1")))
 		return true;
 	return false;
 }

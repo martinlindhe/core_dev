@@ -9,7 +9,7 @@
 			$msg[] = 'Felaktigt användarnamn.';
 		} else $alias = $_POST['ins_alias'];
 		if(empty($error['alias'])) {
-			$exists = $sql->queryLine("SELECT status_id FROM {$t}user WHERE u_alias = '".secureINS($alias)."' LIMIT 1");
+			$exists = $sql->queryLine("SELECT status_id FROM s_user WHERE u_alias = '".secureINS($alias)."' LIMIT 1");
 			if(!empty($exists) && count($exists)) {
 				if($exists[0] == '1' || $exists[0] == '3' || $exists[0] == 'F') {
 					$error['alias'] = true;
@@ -43,9 +43,9 @@
 		}
 
 		if(empty($error) && !count($error)) {
-			$pst = $sql->queryLine("SELECT st_pst, st_lan, st_ort FROM {$t}pst WHERE st_pst = '".secureINS($_POST['ins_pstnr'])."' LIMIT 1");
+			$pst = $sql->queryLine("SELECT st_pst, st_lan, st_ort FROM s_pst WHERE st_pst = '".secureINS($_POST['ins_pstnr'])."' LIMIT 1");
 			if(!count($pst)) {
-				$pst = $sql->queryLine("SELECT st_pst, st_lan, st_ort FROM {$t}pst WHERE st_pst LIKE '".substr(secureINS($_POST['ins_pstnr']), 0, -1)."%' LIMIT 1");
+				$pst = $sql->queryLine("SELECT st_pst, st_lan, st_ort FROM s_pst WHERE st_pst LIKE '".substr(secureINS($_POST['ins_pstnr']), 0, -1)."%' LIMIT 1");
 				if(!count($pst)) {
 					$error['pstnr'] = true;
 					$msg[] = 'Felaktigt postnummer.';
@@ -76,8 +76,8 @@
 	} else $sex_c = $sex;
 
 	if($complete) {
-		$pstlan = $sql->queryResult("SELECT main_id FROM {$t}pstlan WHERE st_lan = '".secureINS($pst_lan)."' LIMIT 1");
-		$sql->queryUpdate("UPDATE {$t}user SET
+		$pstlan = $sql->queryResult("SELECT main_id FROM s_pstlan WHERE st_lan = '".secureINS($pst_lan)."' LIMIT 1");
+		$sql->queryUpdate("UPDATE s_user SET
 		u_sex = '$sex_c',
 		level_id = '1',
 		u_alias = '".secureINS($alias)."',
@@ -92,7 +92,7 @@
 		status_id = '1',
 		u_regdate = NOW() WHERE id_id = '".secureINS($id_u)."' LIMIT 1");
 
-		$sql->queryUpdate("UPDATE {$t}userinfo SET
+		$sql->queryUpdate("UPDATE s_userinfo SET
 		u_fname = '".secureINS($_POST['ins_fname'])."',
 		u_sname = '".secureINS($_POST['ins_sname'])."',
 		u_pstnr = '".secureINS($pst)."',
@@ -102,12 +102,12 @@
 		reg_code = ''
 		WHERE id_id = '".secureINS($id_u)."' LIMIT 1");
 
-		$birth = $sql->queryResult("SELECT u_birth FROM {$t}user WHERE id_id = '".$id_u."' LIMIT 1");
+		$birth = $sql->queryResult("SELECT u_birth FROM s_user WHERE id_id = '".$id_u."' LIMIT 1");
 			
-		$sql->queryInsert("INSERT INTO {$t}userbirth SET
+		$sql->queryInsert("INSERT INTO s_userbirth SET
 		id_id = '".$id_u."',
 		level_id = '$birth'");
-		$sql->queryInsert("INSERT INTO {$t}userlevel SET
+		$sql->queryInsert("INSERT INTO s_userlevel SET
 		id_id = '".$id_u."',
 		level_id = ' ACTIVE SEX$sex LEVEL1 ORT".str_replace('-', '', str_replace(' ', '', $pst_ort))." LÄN".str_replace('-', '', str_replace(' ', '', $pst_lan))."'");
 		$sql->logADD($alias, $id_u, 'REG_DONE');

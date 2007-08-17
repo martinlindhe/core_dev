@@ -15,7 +15,7 @@ session_start();
 	$user = &new user($sql);
 #require("./sms_ue231fetch.php");
 	$cha_id = '';
-	$cha_c = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sender_id)) as count FROM {$t}adminchat WHERE user_id = '".secureINS($_SESSION['u_i'])."' AND user_read = '0'"), 0, 'count');
+	$cha_c = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sender_id)) as count FROM s_adminchat WHERE user_id = '".secureINS($_SESSION['u_i'])."' AND user_read = '0'"), 0, 'count');
 	if(!$isCrew && !empty($_SESSION['u_a'][0])) {
 		$city = explode(',', $_SESSION['u_a'][0]);
 	}
@@ -26,23 +26,23 @@ session_start();
 		}
 		$arr = implode(' OR ', $arr);
 	} else $arr = false;
-	$gb_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_tho') !== false)?mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}thought a WHERE ".($arr?'('.$arr.') AND ':'')." view_id = '0' AND status_id = '0'"), 0, 'count'):0;
+	$gb_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_tho') !== false)?mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_thought a WHERE ".($arr?'('.$arr.') AND ':'')." view_id = '0' AND status_id = '0'"), 0, 'count'):0;
 	$pic_c = 0;
-	$pht_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_pho') !== false)?mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}userphoto a INNER JOIN {$t}user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1'"), 0, 'count'):0;
+	$pht_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_pho') !== false)?mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1'"), 0, 'count'):0;
 	$mv_c = 0;
-	$uph_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_pimg') !== false)?mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}userpicvalid a INNER JOIN {$t}user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'"), 0, 'count'):0;
-	$scc_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_scc') !== false)?mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}contribute a WHERE a.status_id = '0'"), 0, 'count'):0;
-	$scg_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_scc') !== false)?(mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}contribute a WHERE a.status_id = '1' AND a.con_onday = NOW()"), 0, 'count')?'0':'1'):0;
-	$kick = $sql->queryResult("SELECT kick_now FROM {$t}admin WHERE main_id = '".secureINS($_SESSION['u_i'])."'");
+	$uph_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_pimg') !== false)?mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'"), 0, 'count'):0;
+	$scc_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_scc') !== false)?mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_contribute a WHERE a.status_id = '0'"), 0, 'count'):0;
+	$scg_c = ($isCrew || strpos($_SESSION['u_a'][1], 'obj_scc') !== false)?(mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_contribute a WHERE a.status_id = '1' AND a.con_onday = NOW()"), 0, 'count')?'0':'1'):0;
+	$kick = $sql->queryResult("SELECT kick_now FROM s_admin WHERE main_id = '".secureINS($_SESSION['u_i'])."'");
 	if($kick) {
-		mysql_query("UPDATE {$t}admin SET kick_now = '0', u_date = '".timeout('10 MINUTES')."' WHERE main_id = '".secureINS($_SESSION['u_i'])."'");
+		mysql_query("UPDATE s_admin SET kick_now = '0', u_date = '".timeout('10 MINUTES')."' WHERE main_id = '".secureINS($_SESSION['u_i'])."'");
 		$_SESSION['u_i'] = 0;
 		$_SESSION['c_i'] = 0;
 		die('.');
 	} else
-		mysql_query("UPDATE {$t}admin SET u_date = NOW() WHERE main_id = '".secureINS($_SESSION['u_i'])."'");
+		mysql_query("UPDATE s_admin SET u_date = NOW() WHERE main_id = '".secureINS($_SESSION['u_i'])."'");
 
-	$s = mysql_query("SELECT user_name, main_id FROM {$t}admin WHERE u_date > '".timeout()."' ORDER BY user_name");
+	$s = mysql_query("SELECT user_name, main_id FROM s_admin WHERE u_date > '".timeout()."' ORDER BY user_name");
 	$o = array();
 	while($r = mysql_fetch_row($s)) {
 		if($r[1] == $_SESSION['u_i']) {
@@ -56,7 +56,7 @@ session_start();
 
 	if($cha_c > 0) {
 		$c_str[] = 'c'.$cha_c;
-		$cha_id = mysql_result(mysql_query("SELECT sender_id FROM {$t}adminchat WHERE user_id = '".secureINS($_SESSION['u_i'])."' AND user_read = '0' ORDER BY sent_date ASC LIMIT 1"), 0, 'sender_id');
+		$cha_id = mysql_result(mysql_query("SELECT sender_id FROM s_adminchat WHERE user_id = '".secureINS($_SESSION['u_i'])."' AND user_read = '0' ORDER BY sent_date ASC LIMIT 1"), 0, 'sender_id');
 	}
 	if($gb_c > 0) {
 		$c_str[] = 'tt'.$gb_c;

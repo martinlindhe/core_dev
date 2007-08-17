@@ -28,7 +28,7 @@ session_start();
 
 		$status = (!empty($_POST['status_id']) && is_numeric($_POST['status_id']))?$_POST['status_id']:'0';
 		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			$sql->queryUpdate("UPDATE {$t}news SET
+			$sql->queryUpdate("UPDATE s_news SET
 			ad_img = '".secureINS($_POST['ins_info'])."',
 			ad_name = '".secureINS($_POST['ins_head'])."',
 			status_id = '$status',
@@ -42,7 +42,7 @@ session_start();
 			WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 			$d_id = $_POST['id'];
 		} else {
-			$d_id = $sql->queryInsert("INSERT INTO {$t}news SET
+			$d_id = $sql->queryInsert("INSERT INTO s_news SET
 			ad_img = '".secureINS($_POST['ins_info'])."',
 			ad_url = '".secureINS($_POST['ins_url'])."',
 			ad_name = '".secureINS($_POST['ins_head'])."',
@@ -79,9 +79,9 @@ session_start();
 								$swf = str_replace('[h]', $swf_h, $swf);
 								$swf_f = secureINS($n_id.'_'.$unique.'.'.$p_name);
 								$swf = str_replace('[f]', ADMIN_NEWS.$swf_f, $swf);
-								$sql->queryUpdate("UPDATE {$t}news SET ad_img = '".$swf."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
+								$sql->queryUpdate("UPDATE s_news SET ad_img = '".$swf."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
 							} else {
-								$sql->queryUpdate("UPDATE {$t}news SET ad_img = '".secureINS($n_id.'_'.$unique.'.'.$p_name)."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
+								$sql->queryUpdate("UPDATE s_news SET ad_img = '".secureINS($n_id.'_'.$unique.'.'.$p_name)."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
 							}
 						} else {
 							$msg = 'Felaktigt format, storlek eller bredd & höjd.';
@@ -103,11 +103,11 @@ if(!empty($_POST['SPY'])) {
 	$sql = &new sql();
 	$user = &new user($sql);
 	foreach($_POST['ins_city'] as $city) {
-		$res = mysql_query("SELECT id_id FROM {$t}user WHERE status_id = '1' AND city_id = '".$city."'");
+		$res = mysql_query("SELECT id_id FROM s_user WHERE status_id = '1' AND city_id = '".$city."'");
 		while($row = mysql_fetch_row($res)) {
 			$user->spy($row[0], 'NEWS', 'NEW', array($city));
 		}
-		$res = mysql_query("SELECT id_id FROM {$t}user WHERE status_id = '1' AND level_id = '10'");
+		$res = mysql_query("SELECT id_id FROM s_user WHERE status_id = '1' AND level_id = '10'");
 		while($row = mysql_fetch_row($res)) {
 			$user->spy($row[0], 'NEWS', 'NEW', array($city));
 		}
@@ -129,7 +129,7 @@ if(!empty($_POST['SPY'])) {
 				$kid = explode(":", $key);
 				$kid = $kid[1];
 				if(isset($_POST['status_id:' . $kid])) {
-					$sql->queryUpdate("UPDATE {$t}news SET status_id = '".secureINS($_POST['status_id:' . $kid])."', ad_pos = '".secureINS($_POST['order_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
+					$sql->queryUpdate("UPDATE s_news SET status_id = '".secureINS($_POST['status_id:' . $kid])."', ad_pos = '".secureINS($_POST['order_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
 				}
 			}
 		}
@@ -138,10 +138,10 @@ if(!empty($_POST['SPY'])) {
 	}
 	$change = false;
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$row = $sql->query("SELECT ad_img FROM {$t}news WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$row = $sql->query("SELECT ad_img FROM s_news WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		if(count($row) > 0) {
 			@unlink(ADMIN_NEWS_DIR.$row[0][0]);
-			$sql->queryUpdate("DELETE FROM {$t}news WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+			$sql->queryUpdate("DELETE FROM s_news WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 			
 		}
 		header("Location: news.php?status=$status_id");
@@ -149,17 +149,17 @@ if(!empty($_POST['SPY'])) {
 	}
 
 	if(!empty($_GET['del_pic']) && is_numeric($_GET['del_pic'])) {
-		$row = $sql->queryResult("SELECT ad_img FROM {$t}news WHERE main_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
+		$row = $sql->queryResult("SELECT ad_img FROM s_news WHERE main_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
 		if(!empty($row)) {
 			@unlink(ADMIN_NEWS_DIR.$row);
-			$sql->queryUpdate("UPDATE {$t}news SET ad_img = '' WHERE main_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_news SET ad_img = '' WHERE main_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
 		}
 		header("Location: news.php?status=$status_id");
 		exit;
 	}
 
 	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
-		$row = $sql->queryLine("SELECT * FROM {$t}news WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1", 1);
+		$row = $sql->queryLine("SELECT * FROM s_news WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1", 1);
 		if(!count($row)) {
 			$change = false;
 		} else {
@@ -168,19 +168,19 @@ if(!empty($_POST['SPY'])) {
 	}
 
 			$view_arr = array(
-				"1" => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}news WHERE ad_start < NOW() AND ad_stop > NOW() AND status_id = '1'"),
-				"2" => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}news WHERE status_id = '2'"),
-				"3" => $sql->queryResult("SELECT COUNT(*) as count FROM {$t}news WHERE (ad_start > NOW() OR ad_stop < NOW()) AND status_id = '1'"));
+				"1" => $sql->queryResult("SELECT COUNT(*) as count FROM s_news WHERE ad_start < NOW() AND ad_stop > NOW() AND status_id = '1'"),
+				"2" => $sql->queryResult("SELECT COUNT(*) as count FROM s_news WHERE status_id = '2'"),
+				"3" => $sql->queryResult("SELECT COUNT(*) as count FROM s_news WHERE (ad_start > NOW() OR ad_stop < NOW()) AND status_id = '1'"));
 
 	if($status_id == '2') {
-		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_level, city_id FROM {$t}news WHERE status_id = '2' ORDER BY ad_level ASC, ad_start ASC");
+		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_level, city_id FROM s_news WHERE status_id = '2' ORDER BY ad_level ASC, ad_start ASC");
 	} elseif($status_id == '3') {
-		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_level, city_id FROM {$t}news WHERE (ad_start > NOW() OR ad_stop < NOW()) AND status_id = '1' ORDER BY ad_level ASC, ad_pos ASC");
+		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_level, city_id FROM s_news WHERE (ad_start > NOW() OR ad_stop < NOW()) AND status_id = '1' ORDER BY ad_level ASC, ad_pos ASC");
 	} else {
-		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_level, city_id FROM {$t}news WHERE status_id = '1' ORDER BY ad_level ASC, ad_pos ASC");
+		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_level, city_id FROM s_news WHERE status_id = '1' ORDER BY ad_level ASC, ad_pos ASC");
 	}
 
-#	$list = $sql->query("SELECT main_id, p_date, p_dday, p_name FROM {$t}ptopic WHERE status_id = '1' ORDER BY p_date DESC", 0, 1);
+#	$list = $sql->query("SELECT main_id, p_date, p_dday, p_name FROM s_ptopic WHERE status_id = '1' ORDER BY p_date DESC", 0, 1);
 	require("./_tpl/admin_head.php");
 ?>
 	<script type="text/javascript" src="flashcreate.js"></script>

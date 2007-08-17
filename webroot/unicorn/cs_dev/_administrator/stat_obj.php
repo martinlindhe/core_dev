@@ -55,7 +55,7 @@ $exceptions = array(
 		'MOVIE', 'MOVIECMT', 'MOVIEVISIT', 'CALENDAR', 'GALLERY', 'GALLERYCMT', 'GALLERYVIEW', 'RELATION',
 		'ISGOLD','ISPIC','INSMS','INTELE','SENDVISIT');
 	#$sql->query("INSERT INTO s_logobject SET date_cnt = '".date("Y-m-d", strtotime("-".rand(1,4535)." DAYS"))."', data_s = '".serialize(array('GB' => rand(1, 12000), 'CHAT' => rand(44, 645645), 'MAIL' => rand(12, 534)))."'");
-	$res = $sql->query("SELECT date_cnt, data_s FROM {$t}logobject ORDER BY date_cnt DESC");
+	$res = $sql->query("SELECT date_cnt, data_s FROM s_logobject ORDER BY date_cnt DESC");
 	$todaydata = array();
 	$lastday = false;
 	for($i = count($res)-1; $i >= 0; $i--) {

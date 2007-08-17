@@ -16,7 +16,7 @@
 				$msg[] = 'Du måste skriva en godkänd e-postadress.';
 			}
 			if(empty($error['email'])) {
-				$res = $sql->queryLine("SELECT status_id, id_id FROM {$t}user WHERE u_email = '".secureINS(trim($_POST['ins_email']))."' AND status_id != '2' LIMIT 1");
+				$res = $sql->queryLine("SELECT status_id, id_id FROM s_user WHERE u_email = '".secureINS(trim($_POST['ins_email']))."' AND status_id != '2' LIMIT 1");
 				if($res[0] == '1' || $res[0] == '3') {
 					$error['email'] = true;
 					$msg[] = 'E-postadressen är upptagen. Redan medlem? Glömt lösenordet? Klicka <a href="'.l('member', 'forgot').'" class="bld">här</a> för att få hjälp!';
@@ -73,7 +73,7 @@
 			$start_code = mt_rand(100000, 999999);
 			if(!empty($res) && count($res)) {
 				if($res[0] == '2') {
-					$sql->queryUpdate("UPDATE {$t}user SET status_id = '2' WHERE id_id = '".$res[1]."' LIMIT 1");
+					$sql->queryUpdate("UPDATE s_user SET status_id = '2' WHERE id_id = '".$res[1]."' LIMIT 1");
 				} else {
 					$error['email'] = true;
 					$msg[] = 'E-postadressen är upptagen. Redan medlem? Glömt lösenordet? Klicka <a href="'.l('member', 'forgot').'" class="bld">här</a> för att få hjälp!';
@@ -83,7 +83,7 @@
 			$msg = sprintf(gettxt('email_activate'), $start_code, substr(P2B, 0, -1).l('member', 'activate', secureOUT(str_replace('@', '__at__', $_POST['ins_email'])), $start_code));
 		$chk = doMail(secureOUT($_POST['ins_email']), 'Din aktiveringskod: '.$start_code, $msg);
 			if ($chk) {
-				$id_u = $sql->queryInsert("INSERT INTO {$t}user SET
+				$id_u = $sql->queryInsert("INSERT INTO s_user SET
 				u_sex = '$sex',
 				u_email = '".secureINS($_POST['ins_email'])."',
 				u_birth = '".$birth."',
@@ -91,7 +91,7 @@
 				status_id = 'F',
 				u_regdate = NOW()");
 	
-				$sql->queryUpdate("REPLACE INTO {$t}userinfo SET
+				$sql->queryUpdate("REPLACE INTO s_userinfo SET
 				u_tempemail = '',
 				u_fname = '',
 				u_sname = '',

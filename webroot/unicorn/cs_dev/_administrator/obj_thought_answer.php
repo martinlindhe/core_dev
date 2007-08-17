@@ -19,7 +19,7 @@ error_reporting(E_ALL);
 	if(empty($_GET['id'])) {
 		$error = 'Inget meddelande valt.';
 	}
-	$sql = mysql_query("SELECT a.*, u.u_alias, d.u_alias as admin_alias FROM {$t}thought a LEFT JOIN {$t}user u ON a.logged_in = u.id_id LEFT JOIN {$t}user d ON a.answer_id = d.id_id WHERE a.main_id = '".secureINS($_GET['id'])."' LIMIT 1");
+	$sql = mysql_query("SELECT a.*, u.u_alias, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE a.main_id = '".secureINS($_GET['id'])."' LIMIT 1");
 	if(mysql_num_rows($sql) != '1') {
 		$error = 'Meddelandet existerar inte.';
 	}
@@ -29,7 +29,7 @@ error_reporting(E_ALL);
 			if(!empty($_POST['strlen']) && $_POST['strlen'] > 0) {
 			//			p_city = '".secureINS($_POST['city'])."',	
 			}
-			mysql_query("UPDATE {$t}thought SET
+			mysql_query("UPDATE s_thought SET
 			status_id = '1',
 			view_id = '1',
 			logged_in = '".secureINS($_POST['id'])."',

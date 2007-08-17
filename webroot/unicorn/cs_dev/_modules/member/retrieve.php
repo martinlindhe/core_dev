@@ -15,9 +15,9 @@
 		$i++;
 	}
 	$str = str_replace('chat_count', '0', $str);
-	$cha_c = $sql->queryResult("SELECT COUNT(DISTINCT(sender_id)) as count FROM {$t}userchat WHERE user_id = '".secureINS($l['id_id'])."' AND user_read = '0'");
+	$cha_c = $sql->queryResult("SELECT COUNT(DISTINCT(sender_id)) as count FROM s_userchat WHERE user_id = '".secureINS($l['id_id'])."' AND user_read = '0'");
 	if($cha_c > 0)
-		$cha_id = $sql->queryResult("SELECT c.sender_id FROM {$t}userchat c INNER JOIN {$t}user u ON u.id_id = c.sender_id AND u.status_id = '1' WHERE c.user_id = '".secureINS($l['id_id'])."' AND c.user_read = '0' ORDER BY c.sent_date ASC LIMIT 1");
+		$cha_id = $sql->queryResult("SELECT c.sender_id FROM s_userchat c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = '1' WHERE c.user_id = '".secureINS($l['id_id'])."' AND c.user_read = '0' ORDER BY c.sent_date ASC LIMIT 1");
 	else $cha_id = '';
 	if($cha_id) {
 		$str .= 'chat_count:'.$cha_c.':'.$cha_id;

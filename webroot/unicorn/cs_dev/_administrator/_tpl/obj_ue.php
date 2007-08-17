@@ -38,10 +38,10 @@
 					if($thisstatus == '2' && $ostatus != '2') {
 						$unique = md5(microtime().mt_rand(1, 23244));
 						@rename('.'.UE_DIR.$kid.$_POST['file_id:' . $kid], '.'.UE_DIR.$kid.'-'.$unique.$_POST['file_id:' . $kid]);
-						$sql->queryUpdate("UPDATE {$t}userphotomms SET blocked_id = '".$unique."' WHERE main_id = '".$kid."' LIMIT 1");
+						$sql->queryUpdate("UPDATE s_userphotomms SET blocked_id = '".$unique."' WHERE main_id = '".$kid."' LIMIT 1");
 					} elseif($ostatus == '2' && $thisstatus != '2') {
 						@rename('.'.UE_DIR.$kid.'-'.$oblock.$_POST['file_id:' . $kid], '.'.UE_DIR.$kid.$_POST['file_id:' . $kid]);
-						$sql->queryUpdate("UPDATE {$t}userphotomms SET blocked_id = '' WHERE main_id = '".$kid."' LIMIT 1");
+						$sql->queryUpdate("UPDATE s_userphotomms SET blocked_id = '' WHERE main_id = '".$kid."' LIMIT 1");
 					}
 				}
 			}
@@ -50,29 +50,29 @@
 		exit;
 	} elseif(!empty($_GET['del'])) {
 		if($view_full == '2') {
-			$res = $sql->queryLine("SELECT main_id, recieve_file, blocked_id FROM {$t}userphotomms WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+			$res = $sql->queryLine("SELECT main_id, recieve_file, blocked_id FROM s_userphotomms WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 			if(!empty($res) && count($res)) {
 				@unlink(ADMIN_UE_DIR.$res[0].'-'.$res[2].$res[1]);
-				$sql->queryUpdate("DELETE FROM {$t}userphotomms WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+				$sql->queryUpdate("DELETE FROM s_userphotomms WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 			}
 		} else
-			$sql->queryUpdate("UPDATE {$t}userphotomms SET view_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userphotomms SET view_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		header("Location: ".$thispage);
 		exit;
 	}
 	require("sms_ue231fetch.php");
 	$full_arr = array(
-"0" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}userphotomms a INNER JOIN {$t}user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.view_id = '0'"), 0, 'count'),
-"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}userphotomms a INNER JOIN {$t}user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.view_id = '1'"), 0, 'count'),
-"2" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM {$t}userphotomms a INNER JOIN {$t}user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.view_id = '2'"), 0, 'count'));
+"0" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_userphotomms a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.view_id = '0'"), 0, 'count'),
+"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_userphotomms a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.view_id = '1'"), 0, 'count'),
+"2" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_userphotomms a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.view_id = '2'"), 0, 'count'));
 
 	if($view_full == '1') {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.u_alias FROM {$t}userphotomms a INNER JOIN {$t}user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.view_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $sql->query("SELECT a.*, u.u_alias FROM s_userphotomms a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.view_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
 	} elseif($view_full == '2') {
-		$list = $sql->query("SELECT a.*, u.u_alias FROM {$t}userphotomms a INNER JOIN {$t}user u ON u.id_id = a.id_id WHERE a.view_id = '2' ORDER BY a.main_id DESC", 0, 1);
+		$list = $sql->query("SELECT a.*, u.u_alias FROM s_userphotomms a INNER JOIN s_user u ON u.id_id = a.id_id WHERE a.view_id = '2' ORDER BY a.main_id DESC", 0, 1);
 	} else {
-		$list = $sql->query("SELECT a.*, u.u_alias FROM {$t}userphotomms a INNER JOIN {$t}user u ON u.id_id = a.id_id WHERE a.view_id = '0' ORDER BY a.main_id DESC", 0, 1);
+		$list = $sql->query("SELECT a.*, u.u_alias FROM s_userphotomms a INNER JOIN s_user u ON u.id_id = a.id_id WHERE a.view_id = '0' ORDER BY a.main_id DESC", 0, 1);
 	}
 	require("./_tpl/obj_head.php");
 ?>

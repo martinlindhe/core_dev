@@ -37,7 +37,7 @@
 			$bpic = 3;
 		}
 	}
-	$lan_sql = $sql->query("SELECT st_lan FROM {$t}pstlan ORDER BY main_id ASC");
+	$lan_sql = $sql->query("SELECT st_lan FROM s_pstlan ORDER BY main_id ASC");
 	if(!empty($_POST['do'])) $do = '1';
 	if($do) {
 		$url[] = 'do=1&';
@@ -52,12 +52,12 @@
 		}
 		$str[] = '+ACTIVE';
 		if($thislan) {
-			$ort_sql = $sql->query("SELECT st_ort FROM {$t}pstort WHERE st_lan = '".secureINS($thislan)."' ORDER BY st_ort");
+			$ort_sql = $sql->query("SELECT st_ort FROM s_pstort WHERE st_lan = '".secureINS($thislan)."' ORDER BY st_ort");
 			if(!count($ort_sql)) { $thislan = '0'; }
 		}
 		if(!empty($_POST['ort']) && $thislan) {
 			$thisort = $_POST['ort'];
-			$ort_check = $sql->queryResult("SELECT st_lan FROM {$t}pstort WHERE st_ort = '".secureINS($thisort)."' LIMIT 1");
+			$ort_check = $sql->queryResult("SELECT st_lan FROM s_pstort WHERE st_ort = '".secureINS($thisort)."' LIMIT 1");
 			if(empty($ort_check) || $ort_check != $thislan) $thisort = '0';
 		}
 		if(!empty($_POST['l']) && is_numeric($_POST['l'])) {
@@ -104,7 +104,7 @@
 		}
 		$join = array();
 		if($thisonline) {
-			#$join[] = "INNER JOIN {$t}useronline o ON o.id_id = l.id_id AND o.account_date > '".$user->timeout(UO)."'";
+			#$join[] = "INNER JOIN s_useronline o ON o.id_id = l.id_id AND o.account_date > '".$user->timeout(UO)."'";
 			$url[] = 'online='.$thisonline.'&';
 		}
 
@@ -115,42 +115,42 @@
 			if($age[0] != 'X') {
 				if($age[1] == 'X') {
 					$gotage = true;
-					#$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id))-1,'%Y') + 0) >= ".($age[0]);
+					#$join[] = " INNER JOIN s_userbirth b ON b.id_id = u.id_id AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id))-1,'%Y') + 0) >= ".($age[0]);
 					if($thisonline)
-						$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0]);
+						$join[] = " INNER JOIN s_userbirth b ON b.id_id = u.id_id AND (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0]);
 				} else {
 					$gotage = true;
-					#$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id))-1,'%Y') + 0) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1]);
+					#$join[] = " INNER JOIN s_userbirth b ON b.id_id = u.id_id AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id))-1,'%Y') + 0) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1]);
 					if($thisonline)
-						$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1]);
-					#$join[] = " INNER JOIN {$t}userbirth b ON b.id_id = u.id_id AND b.level_id >= '1980-05-08' AND b.level_id <= '1988-05-08'";
+						$join[] = " INNER JOIN s_userbirth b ON b.id_id = u.id_id AND (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1]);
+					#$join[] = " INNER JOIN s_userbirth b ON b.id_id = u.id_id AND b.level_id >= '1980-05-08' AND b.level_id <= '1988-05-08'";
 				}
 			}
 		}
 
 		if($thisbirth) {
 			#if(!$thisonline)
-			$join[] = " INNER JOIN {$t}userbirth b2 ON b2.id_id = u.id_id AND b2.level_id LIKE '%-".date("m-d")."'";
+			$join[] = " INNER JOIN s_userbirth b2 ON b2.id_id = u.id_id AND b2.level_id LIKE '%-".date("m-d")."'";
 		}
 */
 			/*else if($thisage && $age[0] != 'X') {
 				if($age[1] != 'X')
-					$res = "FROM {$t}userbirth b INNER JOIN {$t}userlevel l ON l.id_id = b.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1])." AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
+					$res = "FROM s_userbirth b INNER JOIN s_userlevel l ON l.id_id = b.id_id LEFT JOIN s_user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND (DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) - TO_DAYS(b.level_id)),'%Y') + 0) <= ".($age[1])." AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
 				else
-					$res = "FROM {$t}userbirth b INNER JOIN {$t}userlevel l ON l.id_id = b.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
+					$res = "FROM s_userbirth b INNER JOIN s_userlevel l ON l.id_id = b.id_id LEFT JOIN s_user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE (YEAR(NOW()) - YEAR(b.level_id)) >= ".($age[0])." AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
 			}*/ 
 		$lim = ($thispic)?45:50;
 		$paging = paging(@$_POST['p'], $lim);
 		if(count($str) > 1) {
 			if($thisonline)
-				$res = "FROM {$t}useronline o INNER JOIN {$t}userlevel l ON l.id_id = o.id_id LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."' AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
+				$res = "FROM s_useronline o INNER JOIN s_userlevel l ON l.id_id = o.id_id LEFT JOIN s_user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."' AND MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
 			else
-				$res = "FROM {$t}userlevel l LEFT JOIN {$t}user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
+				$res = "FROM s_userlevel l LEFT JOIN s_user u ON u.id_id = l.id_id ".implode(' ', $join)." WHERE MATCH(l.level_id) AGAINST ('".implode(" ", $str)."' IN BOOLEAN MODE)";
 		} else {
 			if($thisonline)
-				$res = "FROM {$t}useronline o LEFT JOIN {$t}user u ON u.id_id = o.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."'";
+				$res = "FROM s_useronline o LEFT JOIN s_user u ON u.id_id = o.id_id ".implode(' ', $join)." WHERE o.account_date > '".$user->timeout(UO)."'";
 			else
-				$res = "FROM {$t}user u ".implode(' ', $join)." WHERE u.status_id = '1'";
+				$res = "FROM s_user u ".implode(' ', $join)." WHERE u.status_id = '1'";
 		}
 		if($thisalias) {
 			$res .= " AND u.u_alias LIKE '%".$thisalias."%'";

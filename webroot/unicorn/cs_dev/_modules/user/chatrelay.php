@@ -27,7 +27,7 @@
 	$own = (!$closed && $s['id_id'] == $l['id_id'])?true:false;
 	if($own) die('.');
 	if(!$closed && $l['level_id'] != '10') {
-		$isBlocked = $sql->queryResult("SELECT rel_id FROM {$t}userblock WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($s['id_id'])."' LIMIT 1");
+		$isBlocked = $sql->queryResult("SELECT rel_id FROM s_userblock WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".secureINS($s['id_id'])."' LIMIT 1");
 		if($isBlocked) { 
 			$blocked = true;
 		}
@@ -44,7 +44,7 @@
 	if(!$notall && !$blocked && !$closed && !empty($_POST['msg'])) {
 		$str = str_replace('%2b', '+', $_POST['msg']);
 		$str = substr($str, 0, 250);
-		@$sql->queryInsert("INSERT INTO {$t}userchat SET
+		@$sql->queryInsert("INSERT INTO s_userchat SET
 		sender_id = '".secureINS($l['id_id'])."',
 		user_id = '".secureINS($s['id_id'])."',
 		sent_cmt = '".secureINS($str)."',
@@ -65,13 +65,13 @@
 	if(!$notall && !$closed && !$blocked) {
 		if($history && $isOk && !$user->getinfo($l['id_id'], 'hidden_chat')) {
 			if($isOk) $his_lim = 6; else $his_lim = 3;
-			$his = $sql->query("SELECT c.user_id, u.u_alias, c.sent_date, c.sent_cmt, c.sender_id FROM {$t}userchat c LEFT JOIN {$t}user u ON u.id_id = c.sender_id WHERE (c.user_id = '".secureINS($l['id_id'])."' AND c.sender_id = '".secureINS($s['id_id'])."' AND c.user_read = '1') OR (c.sender_id = '".secureINS($l['id_id'])."' AND c.user_id = '".secureINS($s['id_id'])."') ORDER BY c.main_id DESC LIMIT $his_lim");
+			$his = $sql->query("SELECT c.user_id, u.u_alias, c.sent_date, c.sent_cmt, c.sender_id FROM s_userchat c LEFT JOIN s_user u ON u.id_id = c.sender_id WHERE (c.user_id = '".secureINS($l['id_id'])."' AND c.sender_id = '".secureINS($s['id_id'])."' AND c.user_read = '1') OR (c.sender_id = '".secureINS($l['id_id'])."' AND c.user_id = '".secureINS($s['id_id'])."') ORDER BY c.main_id DESC LIMIT $his_lim");
 		} else
 			$history = false;
-		$res = $sql->query("SELECT c.user_id, u.u_alias, c.sent_date, c.sent_cmt, c.sender_id FROM {$t}userchat c LEFT JOIN {$t}user u ON u.id_id = c.sender_id WHERE c.user_id = '".secureINS($l['id_id'])."' AND c.sender_id = '".secureINS($s['id_id'])."' AND c.user_read = '0' ORDER BY c.main_id ASC");
+		$res = $sql->query("SELECT c.user_id, u.u_alias, c.sent_date, c.sent_cmt, c.sender_id FROM s_userchat c LEFT JOIN s_user u ON u.id_id = c.sender_id WHERE c.user_id = '".secureINS($l['id_id'])."' AND c.sender_id = '".secureINS($s['id_id'])."' AND c.user_read = '0' ORDER BY c.main_id ASC");
 	} else {
 		$history = false;
-		$res = $sql->query("SELECT c.user_id, CONCAT('Otillgänglig användare', ''), c.sent_date, c.sent_cmt, c.sender_id FROM {$t}userchat c WHERE c.user_id = '".secureINS($l['id_id'])."' AND c.sender_id = '".secureINS($id)."' AND c.user_read = '0' ORDER BY c.main_id ASC");
+		$res = $sql->query("SELECT c.user_id, CONCAT('Otillgänglig användare', ''), c.sent_date, c.sent_cmt, c.sender_id FROM s_userchat c WHERE c.user_id = '".secureINS($l['id_id'])."' AND c.sender_id = '".secureINS($id)."' AND c.user_read = '0' ORDER BY c.main_id ASC");
 	}
 	$guid = md5($s['id_id']);#substr($s['id_id'], 0, 16).'.'.substr($s['id_id'], 16, 4).'-'.substr($s['id_id'], 20, 8).'.'.substr($s['id_id'], 28, 4);
 	if($history) {
@@ -93,6 +93,6 @@
 		echo $guid.'0'.$len.rawurlencode($row[1]).$dlen.$row[2].rawurlencode(secureOUT($row[3]));
 	}
 	if(!empty($res) && count($res)) {
-		$sql->queryUpdate("UPDATE {$t}userchat SET user_read = '1' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($id)."' AND user_read = '0'");
+		$sql->queryUpdate("UPDATE s_userchat SET user_read = '1' WHERE user_id = '".secureINS($l['id_id'])."' AND sender_id = '".secureINS($id)."' AND user_read = '0'");
 	} elseif($closed) die(','); elseif($blocked) die(':'); elseif($notall) die(';'.$all);
 ?> 

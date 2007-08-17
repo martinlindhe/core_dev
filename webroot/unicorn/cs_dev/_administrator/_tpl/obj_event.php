@@ -17,7 +17,7 @@
 		$id = $_GET['id'];
 	} elseif(!empty($_GET['del'])) {
 		#$sql->queryUpdate("DELETE FROM {$tab['news']}event WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
-		$sql->queryUpdate("DELETE FROM {$t}competitionvisit WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$sql->queryUpdate("DELETE FROM s_competitionvisit WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		@header("Location: ".$thispage.'&id='.$id);
 		exit;
 	}
@@ -28,8 +28,8 @@
 
 
 	} else {
-		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$t}competitionvisit");
-		$list = $sql->query("SELECT a.*, u.u_alias, u.id_id FROM {$t}competitionvisit a LEFT JOIN {$t}user u ON u.id_id = a.logged_in ORDER BY a.is_correct DESC, a.answer DESC", 0, 1);
+		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM s_competitionvisit");
+		$list = $sql->query("SELECT a.*, u.u_alias, u.id_id FROM s_competitionvisit a LEFT JOIN s_user u ON u.id_id = a.logged_in ORDER BY a.is_correct DESC, a.answer DESC", 0, 1);
 		#		$paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM {$tab['news']}event");
 		#		$list = $sql->query("SELECT a.main_id, a.e_name, a.e_cell, a.e_user, a.e_email, a.e_date, u.u_alias, n.ad_name FROM {$tab['news']}event a LEFT JOIN {$tab['user']} u ON u.id_id = a.e_user AND u.status_id = '1' LEFT JOIN {$tab['news']} n ON n.main_id = a.e_id ORDER BY a.main_id DESC", 0, 1);
 	}

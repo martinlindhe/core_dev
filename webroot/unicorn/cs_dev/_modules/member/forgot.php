@@ -10,21 +10,21 @@
 			$msg[] = 'Felaktigt alias eller e-post.';
 		}
 		if(empty($error['a'])) {
-			$res = $sql->queryLine("SELECT status_id, u_alias, u_pass, u_email, id_id FROM {$t}user WHERE u_alias = '".secureINS($_POST['a'])."' LIMIT 1");
+			$res = $sql->queryLine("SELECT status_id, u_alias, u_pass, u_email, id_id FROM s_user WHERE u_alias = '".secureINS($_POST['a'])."' LIMIT 1");
 			if(!empty($res[0]) && ($res[0] == '1' || $res[0] == '3')) {
 				$msg = sprintf(gettxt('email_forgot'), $res[1], $res[2]);
 				$complete = doMail($res[3], 'Ditt alias: '.$res[1], $msg);
 			} elseif($res[0] == 'F') {
-				$start_code = $sql->queryResult("SELECT activate_code FROM {$t}userregfast WHERE id_id = '".$res[4]."' LIMIT 1");
+				$start_code = $sql->queryResult("SELECT activate_code FROM s_userregfast WHERE id_id = '".$res[4]."' LIMIT 1");
 				$msg = sprintf(gettxt('email_activate'), $start_code, substr(P2B, 0, -1).l('member', 'activate', secureOUT($res[3]), $start_code));
 				$complete = doMail(secureOUT($res[3]), 'Din aktiveringskod: '.$start_code, $msg);
 			} else {
-				$res = $sql->queryLine("SELECT id_id, u_alias, level_id, u_pass, status_id, u_email FROM {$t}user WHERE u_email = '".secureINS($_POST['a'])."' LIMIT 1");
+				$res = $sql->queryLine("SELECT id_id, u_alias, level_id, u_pass, status_id, u_email FROM s_user WHERE u_email = '".secureINS($_POST['a'])."' LIMIT 1");
 				if(!empty($res) && count($res) && !empty($res[4]) && $res[4] == '1') {
 					$msg = sprintf(gettxt('email_forgot'), $res[1], $res[3]);
 					$complete = doMail($res[5], 'Ditt alias: '.$res[1], $msg);
 				} elseif($res[4] == 'F') {
-					$start_code = $sql->queryResult("SELECT activate_code FROM {$t}userregfast WHERE id_id = '".$res[0]."' LIMIT 1");
+					$start_code = $sql->queryResult("SELECT activate_code FROM s_userregfast WHERE id_id = '".$res[0]."' LIMIT 1");
 					$msg = sprintf(gettxt('email_activate'), $start_code, substr(P2B, 0, -1).l('member', 'activate', secureOUT($res[5]), $start_code));
 					$complete = doMail(secureOUT($res[5]), 'Din aktiveringskod: '.$start_code, $msg);
 				} else {

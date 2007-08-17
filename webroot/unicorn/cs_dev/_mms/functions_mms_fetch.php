@@ -452,7 +452,7 @@ class email
 
 				$pht_cmt = 'MMS - '.strip_tags($filename);
 
-				$q = "INSERT INTO {$t}userphoto SET picd = '".PD."', old_filename = '$filename', user_id = ".$mms_code['user'].", pht_date = NOW(), status_id='1', hidden_id = '$priv', pht_name = '".$file_ext."', pht_size = '".$filesize."', pht_cmt = '$pht_cmt'";
+				$q = "INSERT INTO s_userphoto SET picd = '".PD."', old_filename = '$filename', user_id = ".$mms_code['user'].", pht_date = NOW(), status_id='1', hidden_id = '$priv', pht_name = '".$file_ext."', pht_size = '".$filesize."', pht_cmt = '$pht_cmt'";
 				$insert_id = $sql->queryInsert($q);
 
 				$out_filename = WEBROOT.USER_GALLERY.PD.'/'.$insert_id.'.'.$file_ext;

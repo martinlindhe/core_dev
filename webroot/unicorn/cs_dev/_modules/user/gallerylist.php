@@ -59,7 +59,7 @@
 
 			}
 			/*
-			$res_cmts=$sql->query("SELECT p.main_id, p.user_id, p.c_msg, p.c_date, p.status_id, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.u_birth, u.u_sex, u.account_date, u.level_id FROM {$t}userphotocmt p LEFT JOIN {$t}user u ON p.user_id = u.id_id AND u.status_id = '1' WHERE p.photo_id = '".$_GET['key']."' ORDER BY main_id DESC", 0, 1);
+			$res_cmts=$sql->query("SELECT p.main_id, p.user_id, p.c_msg, p.c_date, p.status_id, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.u_birth, u.u_sex, u.account_date, u.level_id FROM s_userphotocmt p LEFT JOIN s_user u ON p.user_id = u.id_id AND u.status_id = '1' WHERE p.photo_id = '".$_GET['key']."' ORDER BY main_id DESC", 0, 1);
 			foreach($res_cmts as $line) {
 				echo '<tr><td class="spac pdg"><div style="width: 100%; overflow: hidden;">'.$line['u_alias'].'<br />'.$line['u_picd'].'<br />'.$line['u_birth'].'<br />'.$line['u_sex'].'<br />'.$line['c_msg'].'</div></td></tr>';
 			}*/

@@ -35,12 +35,12 @@
 		if(isset($_POST['det']) && @$head['det_civil_type'][1] != $_POST['det']) {
 			$id = $user->setinfo($l['id_id'], 'det_civil_type', @$_POST['det']);
 			if($id[0]) $user->setrel($id[1], 'user_head', $l['id_id']);
-			$string = $sql->queryResult("SELECT level_id FROM {$t}userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
 			if(!empty($head['det_civil_type'][1])) {
 				$string = str_replace(' SINGLE'.((@$head['det_civil_type'][1] == 's')?'YES':'NO'), '', $string);
 			}
 			$string = $string.' SINGLE'.(($_POST['det'] == 's')?'YES':'NO');
-			$sql->queryUpdate("UPDATE {$t}userlevel SET level_id = '$string' WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$l['id_id']."' LIMIT 1");
 		}
 		if(isset($_POST['det_music']) && @$head['det_music'][1] != $_POST['det_music']) {
 			$id = $user->setinfo($l['id_id'], 'det_music', @$_POST['det_music']);
@@ -65,8 +65,8 @@
 		else
 			errorTACT('Uppdaterat!', l('member', 'settings', 'profile'), 1500);
 	}
-	$result = $sql->query("SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM {$t}userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1' ORDER BY main_id DESC");
-	$friends = $sql->query("SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM {$t}userrelation rel RIGHT JOIN {$t}user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($l['id_id'])."' ORDER BY u.u_alias ASC", 0, 1);
+	$result = $sql->query("SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM s_userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1' ORDER BY main_id DESC");
+	$friends = $sql->query("SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM s_userrelation rel RIGHT JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = '".secureINS($l['id_id'])."' ORDER BY u.u_alias ASC", 0, 1);
 	$page = 'settings_profile';
 	$profile = $user->getcontent($l['id_id'], 'user_profile');
 
