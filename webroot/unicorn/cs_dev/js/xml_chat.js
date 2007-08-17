@@ -94,16 +94,16 @@ function processGet() {
 }
 function getMSG() {	
 	if(start)
-		DoCallback('/user/relay/' + id + '/1/', 1);
+		DoCallback('user_chatrelay.php?id=' + id + '&start', 1);
 	else
-		DoCallback('/user/relay/' + id, 1);
+		DoCallback('user_chatrelay.php?id=' + id, 1);
 	start = false;
 }
 function doMSG() {
 	today = new Date();
 	if(trim(document.getElementById("msgTextbox").value).length > 0) {
 		var msg = document.getElementById("msgTextbox").value.substr(0, 250);
-		DoCallback('/user/relay/' + id, 0, 'msg=' + escape(msg.replace(/\+/gi, "%2b")));
+		DoCallback('user_chatrelay.php?id=' + id, 0, 'msg=' + escape(msg.replace(/\+/gi, "%2b")));
 		sendMSG(htmle(msg), 'kl '+addZero(today.getHours())+':'+addZero(today.getMinutes()), you, 0);
 	}
 	document.getElementById("msgTextbox").value = '';

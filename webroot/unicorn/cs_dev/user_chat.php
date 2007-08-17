@@ -15,7 +15,7 @@
 	if(!$isFriends) {
 		$onlL = $user->getinfo($user->id, 'private_chat');
 		$onlS = $user->getinfo($id, 'private_chat');
-		if($onlL) {
+		if ($onlL) {
 			$closed = true;
 			$n = 'Otillgänglig';
 		} else if ($onlS) {
@@ -34,17 +34,17 @@ if(!$closed)
 echo '
 var id = \''.$id.'\';
 var usr = \''.($s['u_alias']).'\';
-var you = \''.($l['u_alias']).'\';
+var you = \''.($_SESSION['data']['u_alias']).'\';
 ';
 else
 echo '
 var id = \''.$id.'\';
 var usr = \''.($n.' användare').'\';
-var you = \''.($l['u_alias']).'\';
+var you = \''.($_SESSION['data']['u_alias']).'\';
 ';
 ?>
 </script>
-<script type="text/javascript" src="<?=OBJ?>xml_chat.js"></script>
+<script type="text/javascript" src="<?=$config['web_root']?>js/xml_chat.js"></script>
 <script type="text/javascript">document.onkeydown = ActivateByKey;</script>
 
 <div class="boxMid1">
@@ -54,7 +54,7 @@ var you = \''.($l['u_alias']).'\';
 		<table summary="" cellspacing="0" style="width: 510px;">
 		<tr>
 				<td style="padding: 6px 6px 0 6px;">
-					<iframe name="msgs" src="<?=l('user', 'chatwin', $id)?>" frameborder="no" scrolling="auto" style="width:100%; height:270px;"></iframe>
+					<iframe name="msgs" src="user_chatwin.php?id=<?=$id?>" frameborder="no" scrolling="auto" style="width:100%; height:270px;"></iframe>
 				</td>
 				<td class="rgt">
 					<?=(!$closed)?$user->getstring($s, '', array('nolink'=>1)):$n.' användare';?><br/><br/>
