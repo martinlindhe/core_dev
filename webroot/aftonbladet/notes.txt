@@ -70,10 +70,20 @@ http://wwwc.aftonbladet.se/special/webbtv/xml2/senaste.xml
 	</root>
 
 -----------
+4. splitta contentpath i senaste.xml vid _ tecknet och få relativa URL:
+		categories/Nyheter/0708/5288
+		categories/Nyheter/0708/5287
+		categories/Nyheter/Vader/0708/5284
+		categories/Nyheter/0708/5283
+		categories/Nyheter/Vader/0708/5281
+		categories/Nyheter/0708/5280
+		categories/Sport/0708/5279
+		categories/Nyheter/0708/5278
+		categories/Nyheter/0708/5275
 
-
-på nåt sätt får man fram:
-http://wwwc.aftonbladet.se/special/webbtv/xml2/categories/Nyheter/0708/5288.xml
+omvandla dessa till denna form av URL:
+	http://wwwc.aftonbladet.se/special/webbtv/xml2/categories/Nyheter/0708/5288.xml
+------
 
 <?xml version='1.0' encoding='utf-8'?>
 <root datetime='2007-08-15 17:32:00' path='menu_c1' xmlfile='c1.xml'>
