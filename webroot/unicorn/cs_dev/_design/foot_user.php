@@ -3,6 +3,7 @@
 <div id="rightMenu">
 	
 <?
+	/*
 	if (!empty($own)) {
 		if(@$l['id_id'] == @$s['id_id']) {
 			if(@intval($info['gb_offset'][1]) != @intval($_SESSION['data']['offsets']['gb_offset'])) $_SESSION['data']['offsets']['gb_offset'] = @intval($info['gb_offset'][1]);
@@ -11,21 +12,21 @@
 			if(@intval($info['rel_offset'][1]) != @intval($_SESSION['data']['offsets']['rel_offset'])) $_SESSION['data']['offsets']['rel_offset'] = @intval($info['rel_offset'][1]);
 			if(@intval($info['mail_offset'][1]) != @intval($_SESSION['data']['offsets']['mail_offset'])) $_SESSION['data']['offsets']['mail_offset'] = @intval($info['mail_offset'][1]);
 		}
-	}
+	}*/
 	
 	if (!empty($id)) {
 		echo '<div class="smallHeader">profil</div>';
 		echo '<div class="smallBody">';
-			echo '• civilstånd: '.(!empty($info['det_civil'][1])?secureOUT($info['det_civil'][1]):@$det_type[$info['det_civil_type'][1]]).'<br />';
-			echo '• attityd: '.@$info['det_attitude'][1].'<br />';
-			echo '• musik: '.@$info['det_music'][1].'<br />';
-			echo '• vill ha: '.@$info['det_wants'][1].'<br />';
-			echo '• alkohol: '.@$info['det_alcohol'][1].'<br />';
-			echo '• tobak: '.@$info['det_tobacco'][1].'<br />';
-			echo '• sexliv: '.@$info['det_sex'][1].'<br />';
-			echo '• barn: '.@$info['det_children'][1].'<br />';
-			echo '• längd: '.@$info['det_length'][1].'<br />';
-			echo '• vikt: '.@$info['det_weight'][1].'<br />';
+			echo '• civilstånd: '.@$info['det_civil'].'<br />';
+			echo '• attityd: '.@$info['det_attitude'].'<br />';
+			echo '• musik: '.@$info['det_music'].'<br />';
+			echo '• vill ha: '.@$info['det_wants'].'<br />';
+			echo '• alkohol: '.@$info['det_alcohol'].'<br />';
+			echo '• tobak: '.@$info['det_tobacco'].'<br />';
+			echo '• sexliv: '.@$info['det_sex'].'<br />';
+			echo '• barn: '.@$info['det_children'].'<br />';
+			echo '• längd: '.@$info['det_length'].'<br />';
+			echo '• vikt: '.@$info['det_weight'].'<br />';
 		echo '</div><br/>';
 	}
 
@@ -45,60 +46,60 @@
 				echo '<td class="lft"><div>'.$user->doage($s['u_birth']).' år</div></td>';
 			echo '</tr>';
 
-			if (@$det_type[$info['det_civil_type'][1]] && @$det_type[$myinfo['det_civil_type'][1]]) {
+			if (@$det_type[$info['det_civil_type']] && @$det_type[$myinfo['det_civil_type']]) {
 				echo '<tr title="'.$txt['civil'].'">';
-				echo '<td class="rgt"><div>'.(!empty($myinfo['det_civil'][1])?secureOUT($myinfo['det_civil'][1]):(@$det_type[$myinfo['det_civil_type'][1]]?@$det_type[$myinfo['det_civil_type'][1]]:'-')).'</div></td>';
+				echo '<td class="rgt"><div>'.(!empty($myinfo['det_civil'])?secureOUT($myinfo['det_civil']):(@$det_type[$myinfo['det_civil_type']]?@$det_type[$myinfo['det_civil_type']]:'-')).'</div></td>';
 				echo '<td class="cnt">•</td>';
-				echo '<td class="lft"><div>'.(!empty($info['det_civil'][1])?secureOUT($info['det_civil'][1]):(@$det_type[$info['det_civil_type'][1]]?@$det_type[$info['det_civil_type'][1]]:'-')).'</div></td>';
+				echo '<td class="lft"><div>'.(!empty($info['det_civil'])?secureOUT($info['det_civil']):(@$det_type[$info['det_civil_type']]?@$det_type[$info['det_civil_type']]:'-')).'</div></td>';
 				echo '</tr>';
 			}
-			if (@$info['det_attitude'][1] && @$myinfo['det_attitude'][1]) {
+			if (@$info['det_attitude'] && @$myinfo['det_attitude']) {
 				echo '<tr title="'.$txt['attitude'].'">';
-				echo '<td class="rgt"><div>'.(@$myinfo['det_attitude'][1]?@$myinfo['det_attitude'][1]:'-').'</div></td>';
+				echo '<td class="rgt"><div>'.(@$myinfo['det_attitude']?@$myinfo['det_attitude']:'-').'</div></td>';
 				echo '<td class="cnt">•</td>';
-				echo '<td class="lft"><div>'.(@$info['det_attitude'][1]?@$info['det_attitude'][1]:'-').'</div></td>';
+				echo '<td class="lft"><div>'.(@$info['det_attitude']?@$info['det_attitude']:'-').'</div></td>';
 				echo '</tr>';
 			}
-			if (@$info['det_wants'][1] && @$myinfo['det_wants'][1]) {
+			if (@$info['det_wants'] && @$myinfo['det_wants']) {
 				echo '<tr title="'.$txt['wants'].'">';
-				echo '<td class="rgt"><div>'.(@$myinfo['det_wants'][1]?@$myinfo['det_wants'][1]:'-').'</div></td>';
+				echo '<td class="rgt"><div>'.(@$myinfo['det_wants']?@$myinfo['det_wants']:'-').'</div></td>';
 				echo '<td class="cnt">•</td>';
-				echo '<td class="lft"><div>'.(@$info['det_wants'][1]?@$info['det_wants'][1]:'-').'</div></td>';
+				echo '<td class="lft"><div>'.(@$info['det_wants']?@$info['det_wants']:'-').'</div></td>';
 				echo '</tr>';
 			}
-			if (@$info['det_alcohol'][1] && @$myinfo['det_alcohol'][1]) {
+			if (@$info['det_alcohol'] && @$myinfo['det_alcohol']) {
 				echo '<tr title="'.$txt['alcohol'].'">';
-				echo '<td class="rgt"><div>'.(@$myinfo['det_alcohol'][1]?@$myinfo['det_alcohol'][1]:'-').'</div></td>';
+				echo '<td class="rgt"><div>'.(@$myinfo['det_alcohol']?@$myinfo['det_alcohol']:'-').'</div></td>';
 				echo '<td class="cnt">•</td>';
-				echo '<td class="lft"><div>'.(@$info['det_alcohol'][1]?@$info['det_alcohol'][1]:'-').'</div></td>';
+				echo '<td class="lft"><div>'.(@$info['det_alcohol']?@$info['det_alcohol']:'-').'</div></td>';
 				echo '</tr>';
 			}
-			if (@$myinfo['det_tobacco'][1] && @$info['det_tobacco'][1]) {
+			if (@$myinfo['det_tobacco'] && @$info['det_tobacco']) {
 				echo '<tr title="'.$txt['tobacco'].'">';
-				echo '<td class="rgt"><div>'.(@$myinfo['det_tobacco'][1]?@$myinfo['det_tobacco'][1]:'-').'</div></td>';
+				echo '<td class="rgt"><div>'.(@$myinfo['det_tobacco']?@$myinfo['det_tobacco']:'-').'</div></td>';
 				echo '<td class="cnt">•</td>';
-				echo '<td class="lft"><div>'.(@$info['det_tobacco'][1]?@$info['det_tobacco'][1]:'-').'</div></td>';
+				echo '<td class="lft"><div>'.(@$info['det_tobacco']?@$info['det_tobacco']:'-').'</div></td>';
 				echo '</tr>';
 			}
-			if (@$myinfo['det_children'][1] && @$info['det_children'][1]) {
+			if (@$myinfo['det_children'] && @$info['det_children']) {
 				echo '<tr title="'.$txt['children'].'">';
-				echo '<td class="rgt"><div>'.(@$myinfo['det_children'][1]?@$myinfo['det_children'][1]:'-').'</div></td>';
+				echo '<td class="rgt"><div>'.(@$myinfo['det_children']?@$myinfo['det_children']:'-').'</div></td>';
 				echo '<td class="cnt">•</td>';
-				echo '<td class="lft"><div>'.(@$info['det_children'][1]?@$info['det_children'][1]:'-').'</div></td>';
+				echo '<td class="lft"><div>'.(@$info['det_children']?@$info['det_children']:'-').'</div></td>';
 				echo '</tr>';
 			}
-			if (@$myinfo['det_music'][1] && @$info['det_music'][1]) {
+			if (@$myinfo['det_music'] && @$info['det_music']) {
 				echo '<tr title="'.$txt['music'].'">';
-				echo '<td class="rgt"><div>'.(@$myinfo['det_music'][1]?@$myinfo['det_music'][1]:'-').'</div></td>';
+				echo '<td class="rgt"><div>'.(@$myinfo['det_music']?@$myinfo['det_music']:'-').'</div></td>';
 				echo '<td class="cnt">•</td>';
-				echo '<td class="lft"><div>'.(@$info['det_music'][1]?@$info['det_music'][1]:'-').'</div></td>';
+				echo '<td class="lft"><div>'.(@$info['det_music']?@$info['det_music']:'-').'</div></td>';
 				echo '</tr>';
 			}
-			if (@$info['det_sex'][1] && @$myinfo['det_sex'][1]) {
+			if (@$info['det_sex'] && @$myinfo['det_sex']) {
 				echo '<tr title="'.$txt['sex'].'">';
-				echo '<td class="rgt"><div>'.(@$myinfo['det_sex'][1]?@$myinfo['det_sex'][1]:'-').'</div></td>';
+				echo '<td class="rgt"><div>'.(@$myinfo['det_sex']?@$myinfo['det_sex']:'-').'</div></td>';
 				echo '<td class="cnt">•</td>';
-				echo '<td class="lft"><div>'.(@$info['det_sex'][1]?@$info['det_sex'][1]:'-').'</div></td>';
+				echo '<td class="lft"><div>'.(@$info['det_sex']?@$info['det_sex']:'-').'</div></td>';
 				echo '</tr>';
 			}
 			echo '</table>';

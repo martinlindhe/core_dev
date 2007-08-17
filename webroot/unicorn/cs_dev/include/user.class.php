@@ -413,15 +413,15 @@ class user {
 	function setinfo($id, $opt, $val)
 	{
 		global $db;
-		if (!is_numeric($id) || !is_numeric($opt)) return false;
+		if (!is_numeric($id)) return false;
 
-		$res = $db->getOneRow('SELECT content, main_id FROM s_obj WHERE owner_id = '.$id.' AND content_type = '.$opt.' LIMIT 1');
+		$res = $db->getOneRow('SELECT content, main_id FROM s_obj WHERE owner_id = '.$id.' AND content_type = "'.$db->escape($opt).'" LIMIT 1');
 		if (!$res['main_id']) {
-			$q = 'INSERT INTO s_obj SET content = "'.$db->escape($val).'", content_type = '.$opt.', owner_id = '.$id.', obj_date = NOW()';
+			$q = 'INSERT INTO s_obj SET content = "'.$db->escape($val).'", content_type = "'.$db->escape($opt).'", owner_id = '.$id.', obj_date = NOW()';
 			$obj = $db->insert($q);
 			$ret = array('1', $obj);
 		} else {
-			$q = 'UPDATE s_obj SET content = "'.$db->escape($val).'", obj_date = NOW() WHERE owner_id = '.$id.' AND content_type = '.$opt.' LIMIT 1';
+			$q = 'UPDATE s_obj SET content = "'.$db->escape($val).'", obj_date = NOW() WHERE owner_id = '.$id.' AND content_type = "'.$db->escape($opt).'" LIMIT 1';
 			$db->update($q);
 			$ret = array('0', $res['main_id']);
 		}
