@@ -75,7 +75,7 @@ function makeContribution() {
 	win.focus();
 }
 function makeRelation(id) { 
-	ref = window.open('/user/relations/' + id + '/0/create', '',  'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, status=no, width=' + 200 + ', height='+280);
+	ref = window.open('user_relations_create.php?id=' + id, '',  'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, status=no, width=' + 200 + ', height='+280);
 	ref.focus();
 }
 function makeUpload(doit) { 

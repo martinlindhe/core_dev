@@ -63,7 +63,7 @@
 				makeButton(false,	'makeRelation(\''.$id.'\')',	'icon_friends.png',	'bli vän');
 			}
 		?>
-		<? makeButton(false,	'goLoc(\'user_abuse.php?id='.$id.'\')',	'icon_abuse.png',	'abuse'); ?>
+		<? makeButton($action=='abuse',	'goLoc(\'user_abuse.php?id='.$id.'\')',	'icon_abuse.png',	'abuse'); ?>
 	</div>
 	<br class="clr" />
 <? } ?>
