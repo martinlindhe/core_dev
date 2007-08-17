@@ -263,6 +263,43 @@
 	}
 
 
+	function popupACT($msg, $url = '', $parent = '', $time = 5000)
+	{
+		errorACT($msg, $url, 'popup', $parent, $time);
+	}
+
+	function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $topic = '', $tc = 1, $class = '')
+	{
+		global $db, $config, $user, $start;
+
+		if($type == 'main') {
+			$page = 'error.php';
+			if(!$l) $page = 'error_splash.php';
+			
+			if(!empty($url) && substr($url, 0, 1) != '1') {
+				require(dirname(__FILE__).'/../_design/'.$page);
+				require(dirname(__FILE__).'/../_design/mv.php');
+			} elseif(substr($url, 0, 1) == '1') {
+				$url = substr($url, 1);
+				require(dirname(__FILE__).'/../_design/'.$page);
+			} else {
+				require(dirname(__FILE__).'/../_design/'.$page);
+			}
+		} elseif($type == 'popup') {
+			require(dirname(__FILE__).'/../_design/error_popup.php');
+		} elseif($type == 'popupbig') {
+			require(dirname(__FILE__).'/../_design/error_popupbig.php');
+		} elseif($type == 'splash') {
+			require(dirname(__FILE__).'/../_design/error_splash.php');
+			if(!empty($url)) {
+				require(dirname(__FILE__).'/../_design/mv.php');
+			}
+		}
+		die;
+	}
+
+
+
 	//*******************************************
 	//unused/not-yet-cleaned-up functions below:
 	//*******************************************
@@ -414,36 +451,6 @@
 		errorACT($msg, $url, 'main', '', $time);
 	}
 
-	function errorACT($msg, $url = '', $type = 'main', $parent = '', $time = 5000, $topic = '', $tc = 1, $class = '')
-	{
-		global $sql, $user, $start, $t, $l;
-
-		if($type == 'main') {
-			$page = 'error.php';
-			if(!$l) $page = 'error_splash.php';
-			
-			if(!empty($url) && substr($url, 0, 1) != '1') {
-				require(dirname(__FILE__).'/../_design/'.$page);
-				require(dirname(__FILE__).'/../_design/mv.php');
-			} elseif(substr($url, 0, 1) == '1') {
-				$url = substr($url, 1);
-				require(dirname(__FILE__).'/../_design/'.$page);
-			} else {
-				require(dirname(__FILE__).'/../_design/'.$page);
-			}
-		} elseif($type == 'popup') {
-			require(dirname(__FILE__).'/../_design/error_popup.php');
-		} elseif($type == 'popupbig') {
-			require(dirname(__FILE__).'/../_design/error_popupbig.php');
-		} elseif($type == 'splash') {
-			require(dirname(__FILE__).'/../_design/error_splash.php');
-			if(!empty($url)) {
-				require(dirname(__FILE__).'/../_design/mv.php');
-			}
-		}
-		die;
-	}
-
 	function popupLACT($msg, $cnt = false)
 	{
 		errorACT($msg, 1, 'popup', '', 5000, $cnt);
@@ -452,11 +459,6 @@
 	function bigpopupACT($msg)
 	{
 		errorACT($msg, '', 'popupbig', '', 0, '', 1, 'wht');
-	}
-
-	function popupACT($msg, $url = '', $parent = '', $time = 5000)
-	{
-		errorACT($msg, $url, 'popup', $parent, $time);
 	}
 
 	function splashLACT($msg, $url = '', $cnt = '')

@@ -281,8 +281,9 @@ class user {
 		return $arr['u_alias'].', '.$sex_name[$arr['u_sex']].' '.$this->doage($arr['u_birth']).'år';
 	}
 
-	function getstring($arr, $suffix = '', $extra = '') {
-		global $sex_name;
+	function getstring($arr, $suffix = '', $extra = '')
+	{
+		global $db, $sex_name;
 		if (!is_array($arr) && is_numeric($arr)) {
 			$arr = $this->getuser($arr);
 		}
@@ -290,8 +291,8 @@ class user {
 			if(empty($arr['account_date']) || !$this->isOnline($arr['account_date'])) {
 				$res = now();
 				$_SESSION['data']['account_date'] = $res;
-				$this->sql->queryUpdate("UPDATE s_user SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
-				$this->sql->queryUpdate("UPDATE s_useronline SET account_date = '$res' WHERE id_id = '".secureINS($arr['id_id'])."' LIMIT 1");
+				$db->update("UPDATE s_user SET account_date = '$res' WHERE id_id = '".$db->escape($arr['id_id'])."' LIMIT 1");
+				$db->update("UPDATE s_useronline SET account_date = '$res' WHERE id_id = '".$db->escape($arr['id_id'])."' LIMIT 1");
 				$arr['account_date'] = $res;
 			}
 		}

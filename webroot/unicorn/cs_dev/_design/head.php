@@ -130,11 +130,11 @@ $isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
 		</table>
 		<br/>
 		<a href="list_users.php">Senast inloggade</a><br/>
-		<a href="/list/userfind/1">Slumpa</a><br/>
+		<a href="userfind.php?id=1">Slumpa</a><br/>
 		<div onmouseover="checkTime(1);">Snabbsök</div>
 
 		<div id="userfind" style="display: none" onmouseover="checkTime(1);">
-			<form action="/list/userfind" method="post">
+			<form action="userfind.php" method="post">
 			<input type="text" class="txt" id="userfind_inp" onfocus="checkTime(1);" onblur="checkTime(0);" name="a" value="" />
 			</form>
 		</div>

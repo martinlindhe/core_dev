@@ -90,11 +90,11 @@ function makeUpload(doit) {
 	win.focus();
 }
 function makeForum(id) {
-	ref = window.open('/forum/write/' + id, '', 'left='+((screen.availWidth - 610)/2)+',top='+((screen.availHeight - 265)/2)+', resizable=0, status=no, width=610, height=265');
+	ref = window.open('forum_write.php?id=' + id, '', 'left='+((screen.availWidth - 610)/2)+',top='+((screen.availHeight - 265)/2)+', resizable=0, status=no, width=610, height=265');
 	ref.focus();
 }
 function makeForumAns(id) {
-	ref = window.open('/forum/answer/' + id, '', 'left='+((screen.availWidth - 610)/2)+',top='+((screen.availHeight - 265)/2)+', resizable=0, status=no, width=610 height=265');
+	ref = window.open('forum_answer.php?id=' + id, '', 'left='+((screen.availWidth - 610)/2)+',top='+((screen.availHeight - 265)/2)+', resizable=0, status=no, width=610 height=265');
 	ref.focus();
 }
 function makeBlog(uid, id) { 
