@@ -1,5 +1,4 @@
 <?
-	//include(CONFIG.'secure.fnc.php');
 	require_once('config.php');
 
 	$id = $user->id;
@@ -32,8 +31,8 @@
 	<div class="subHead">presentation</div><br class="clr"/>
 <?
 
-	if (!empty($profile['user_pres'][1])) {
-		echo formatText($profile['user_pres'][1], true);
+	if (!empty($profile['user_pres'])) {
+		echo formatText($profile['user_pres'], true);
 	} else {
 		echo 'Användaren har inte skrivit någon presentation.';
 	}
