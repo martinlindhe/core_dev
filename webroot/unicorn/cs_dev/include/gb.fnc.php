@@ -71,23 +71,21 @@
 		global $db, $user;
 		if (!is_numeric($user_id) || !is_numeric($is_answer) || !is_numeric($private)) return false;
 
-		$q = "INSERT INTO s_usergb SET user_id = '".$user_id."',
-		sender_id = '".$user->id."', private_id = '".$private."',
-		status_id = '1', user_read = '0', sent_cmt = '".$db->escape($msg)."',
-		sent_html = '0', sent_date = NOW()";
-		echo $q;
-		die;
-
+		$q = 'INSERT INTO s_usergb SET user_id = '.$user_id.', sender_id = '.$user->id.', private_id = "'.$private.'", status_id = "1", user_read = "0", sent_cmt = "'.$db->escape($msg).'", sent_html = "0", deleted_id = 0, sent_date = NOW()';
 		$res = $db->insert($q);
 
 		$or = array($user_id, $user->id);
 		sort($or);
+
 		$db->insert("INSERT INTO s_usergbhistory SET users_id = '".implode('-', $or)."', msg_id = '".$res."'");
-		if($is_answer) {
+
+		if ($is_answer) {
 			$db->update("UPDATE s_usergb SET is_answered = '1' WHERE main_id = '".$db->escape($is_answer)."' AND sender_id = '".$user_id."' AND user_id = '".$user->id."' LIMIT 1");
 		}
+
 		$user->counterIncrease('gb', $user_id);
 		$user->notifyIncrease('gb', $user_id);
+
 		return true;
 	}
 

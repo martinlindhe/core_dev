@@ -17,10 +17,9 @@
 			if ($user->vip_check(VIP_LEVEL1) && !empty($_POST['ins_priv'])) $prv = 1;
 			gbWrite($_POST['ins_cmt'], $id, $a, $prv);
 			if(!empty($_GET['main'])) {
-				reloadACT(l('user', 'gb', $id));
+				reloadACT('user_gb.php?id='.$id);
 			} else {
-				if($r) popupACT('Meddelande skickat!', '', l('user', 'gb', $id), '500');
-				else popupACT('Meddelande skickat!', '', '', '500');
+				popupACT('Meddelande skickat!', '', 'user_gb.php?id='.$id, '500');
 			}
 		}
 		popupACT('Meddelande ej skickat!', '', '500');
