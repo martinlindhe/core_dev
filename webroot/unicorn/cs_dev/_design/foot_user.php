@@ -40,7 +40,7 @@
 				echo '<td class="cnt" colspan="3"><div class="usr">jag vs. '.$user->getstring($s, '', array('noage' => 1)).'</div></td>';
 			echo '</tr>';
 			echo '<tr title="'.$txt['age'].'">';
-				echo '<td class="rgt"><div>'.$user->doage($l['u_birth']).' år</div></td>';
+				echo '<td class="rgt"><div>'.$user->doage($_SESSION['data']['u_birth']).' år</div></td>';
 				echo '<td class="cnt">•</td>';
 				echo '<td class="lft"><div>'.$user->doage($s['u_birth']).' år</div></td>';
 			echo '</tr>';

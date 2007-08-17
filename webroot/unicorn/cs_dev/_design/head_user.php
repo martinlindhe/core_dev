@@ -1,5 +1,7 @@
 <?
 	$info = $user->getcontent($id, 'user_head');
+	$s = $user->getuser($id);
+
 	require('head.php');
 ?>
 
@@ -47,7 +49,7 @@
 	</div><!-- userInfo -->
 	<br class="clr"/>
 
-<? if (!$own) { ?>
+<? if ($user->id != $id) { ?>
 	<div id="userMenu">
 		<? makeButton($action=='view',		'goLoc(\''.l('user', 'view', $id).'\')',		'icon_profile.png',	'profil'); ?>
 		<? makeButton($action=='gb',			'goLoc(\''.l('user', 'gb', $id).'\')',			'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>

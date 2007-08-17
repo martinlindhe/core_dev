@@ -235,14 +235,16 @@ class user {
 		}
 		if($type == 3) return false;
 	}
-	function isFriends($id, $noadmin = 0) {
-		global $isAdmin;
+
+	function isFriends($id)
+	{
+		global $db, $user;
 		if($id == $this->id) return true;
-		if($noadmin)
-			return ($this->sql->queryResult("SELECT rel_id FROM s_userrelation WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($id)."' LIMIT 1"))?true:false;
-		else
-			return ($isAdmin || $this->sql->queryResult("SELECT rel_id FROM s_userrelation WHERE user_id = '".secureINS($this->id)."' AND friend_id = '".secureINS($id)."' LIMIT 1"))?true:false;
+
+		$q = "SELECT rel_id FROM s_userrelation WHERE user_id = '".$this->id."' AND friend_id = '".$db->escape($id)."' LIMIT 1";
+		return $db->getOneItem($q);
 	}
+
 	function tagline($str) {
 		return secureOUT(ucwords(strtolower($str)));
 	}
@@ -306,7 +308,7 @@ class user {
 			return '<span class="bld">[BORTTAGEN]</span>'; //($this->isOnline($arr['account_date'])
 		}
 
-		$result  = (empty($extra['nolink'])?'<a href="'.l('user', 'view', $arr['id_id'.$suffix]).'">':'');
+		$result  = (empty($extra['nolink'])?'<a href="'.'user_view.php?id='.$arr['id_id'.$suffix].'">':'');
 		
 		if (!empty($arr['account_date'.$suffix])) {
 			$curr_class = ($this->isOnline($arr['account_date'.$suffix])?'on':'off').'_'.$sex_name[$arr['u_sex'.$suffix]];
