@@ -1,7 +1,6 @@
 <?
 	//todo: sortera playlist efter tid innan den skrivs till disk
-	//todo: konvertera kategori NÖJE till Nöje. problem med unicode konvertering med ucfirst()
-
+	//todo: konvertera kategori NÃ–JE till NÃ¶je. problem med unicode konvertering med ucfirst()
 
 	//ttl = time to live, in minutes (default 240 minute = 4 hour)
 	function cache_read($url, $ttl = 240)
@@ -88,7 +87,7 @@
 			$result = date('H:i',$timestamp);
 		} else if ($datestamp == $yesterday) {
 			//Yesterday 18:13
-			$result = 'Igår '.date(' H:i',$timestamp);
+			$result = 'IgÃ¥r '.date(' H:i',$timestamp);
 		} else if ($datestamp == $tomorrow) {
 			//Tomorrow 18:13
 			$result = 'Imorgon '.date(' H:i',$timestamp);
@@ -127,6 +126,8 @@
 		fclose($fp);
 	}
 
+	setlocale(LC_TIME, 'sv_SE.UTF8');
+
 	$name = 'http://wwwc.aftonbladet.se/special/webbtv/xml2/senaste.xml';
 	$news = array();
 	$items = array();
@@ -149,7 +150,7 @@
 	//fetch each individual news item
 	foreach ($news as $row) {
 		$url = 'http://wwwc.aftonbladet.se/special/webbtv/xml2/'.$row.'.xml';
-		$data = cache_read($url);
+		$data = cache_read($url, 120);	//tvÃ¥ timmars cache
 
 		$xml_parser = xml_parser_create();
 		xml_set_element_handler($xml_parser, "NEWS_startE", "NEWS_endE");
