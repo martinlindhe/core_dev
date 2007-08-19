@@ -72,8 +72,8 @@ class user {
 	}
 	function counterSet($id) {
 		$info = $this->getcontent($id, 'user_head');
-		//die('fixme getcontent!!');
-		$_SESSION['data']['offsets'] = array('gb_offset' => intval(@$info['gb_offset'][1]), 'mail_offset' => intval(@$info['mail_offset'][1]), 'forum_offset' => intval(@$info['forum_offset'][1]), 'gal_offset' => intval(@$info['gal_offset'][1]), 'blog_offset' => intval(@$info['blog_offset'][1]), 'blocked_offset' => intval(@$info['blocked_offset'][1]), 'rel_offset' => intval(@$info['rel_offset'][1]));
+		$_SESSION['data']['offsets'] = $info;
+		//$_SESSION['data']['offsets'] = array('gb_offset' => intval($info['gb_offset']), 'mail_offset' => intval($info['mail_offset']]), 'forum_offset' => intval($info['forum_offset']), 'gal_offset' => intval($info['gal_offset']), 'blog_offset' => intval($info['blog_offset']), 'blocked_offset' => intval($info['blocked_offset']), 'rel_offset' => intval($info['rel_offset']));
 	}
 	function counterDecrease($type, $user) {
 		$c = $this->getinfo($user, $type.'_offset');
@@ -155,7 +155,7 @@ class user {
 		} else {
 			$str .= 'c:0:0';
 		}
-		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$id.' AND u.account_date > '.$this->timeout(UO).' ORDER BY u.u_alias');
+		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$id.' AND u.account_date > "'.$this->timeout(UO).'" ORDER BY u.u_alias');
 		$rel_s = '';
 		foreach($rel_onl as $row) {
 			$rel_s .= $row[0].'|'.rawurlencode($row[1]).'|'.$sex[$row[2]].$this->doage($row[3], 0).'|'.$this->dobirth($row[3]).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
@@ -405,9 +405,9 @@ class user {
 	function getinfo($id, $opt)
 	{
 		global $db;
-		if (!is_numeric($id) || !is_numeric($opt)) return false;
+		if (!is_numeric($id)) return false;
 
-		return $db->getOneItem('SELECT content FROM s_obj WHERE owner_id = '.$id.' AND content_type = '.$opt.' LIMIT 1');
+		return $db->getOneItem('SELECT content FROM s_obj WHERE owner_id = '.$id.' AND content_type = "'.$db->escape($opt).'" LIMIT 1');
 	}
 
 	function setinfo($id, $opt, $val)

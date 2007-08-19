@@ -25,7 +25,7 @@
 <?
 	if (!empty($_POST['css_theme'])) {
 		echo 'Ditt val av tema är sparat!';
-		echo '</div>';
+		echo '</div></div>';
 		include(DESIGN.'foot.php');
 		die;
 	}

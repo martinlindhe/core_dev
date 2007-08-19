@@ -1,25 +1,23 @@
 <?
 	require_once('config.php');
 
-	$head = $user->getcontent($user->id, 'user_head');
-
 	if(!empty($_POST['do'])) {
 		if($_SESSION['data']['status_id'] == '1' && isset($_POST['text_html'])) {
 			if(substr($_POST['text_html'], 0, 6) == '&nbsp;') $_POST['text_html'] = substr($_POST['text_html'], 6);
 			if(substr($_POST['text_html'], 0, 1) == ' ') $_POST['text_html'] = substr($_POST['text_html'], 1);
 			$_POST['text_html'] = strip_tags($_POST['text_html'], NRMSTR);
-			$id = $user->setinfo($l['id_id'], 'user_pres', @$_POST['text_html']);
+			$id = $user->setinfo($user->id, 'user_pres', $_POST['text_html']);
 			if($id[0]) $user->setrel($id[1], 'user_profile', $l['id_id']);
 		}
 
 		if(!empty($_POST['go']))
-			reloadACT(l('user', 'view'));
+			reloadACT('user_view.php');
 		else
-			errorTACT('Uppdaterat!', l('member', 'settings'), 1500);
+			errorTACT('Uppdaterat!', $_SERVER['PHP_SELF'], 1500);
 	}
 	$result = $db->getArray('SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM s_userphoto WHERE user_id = '.$user->id.' AND status_id = "1" ORDER BY main_id DESC');
 	$friends = $db->getArray('SELECT rel.main_id, rel.user_id, rel.rel_id, u.id_id, u.u_alias, u.u_picvalid, u.u_picid, u.u_picd, u.status_id, u.lastonl_date, u.u_sex, u.u_birth FROM s_userrelation rel RIGHT JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$user->id.' ORDER BY u.u_alias ASC');
-	$page = 'settings_profile';
+
 	$profile = $user->getcontent($user->id, 'user_profile');
 
 	require(DESIGN.'head.php');
@@ -97,7 +95,7 @@ var actID = '';
 			<tr>
 				<td class="pdg" colspan="2">
 					<table summary="" cellspacing="0" width="100%" style="display: none;" id="text_c_html">
-						<tr><td><textarea name="text_html" id="text_html" style="width: 550px; height: 317px; padding: 10px; font-family: Courier New, Courier; font-size: 12px;"> <?=@secureFormat($profile['user_pres'][1])?></textarea></td></tr>
+						<tr><td><textarea name="text_html" id="text_html" style="width: 550px; height: 317px; padding: 10px; font-family: Courier New, Courier; font-size: 12px;"> <?=secureFormat($profile['user_pres'])?></textarea></td></tr>
 					</table>
 					<table summary="" cellspacing="0" width="100%" class="mrg_t" id="text_c_var">
 						<tr><td style="padding: 0 0 5px 0;">
@@ -173,7 +171,7 @@ var actID = '';
 								<option value="0">Välj bild från fotoalbum</option>
 								<?
 								foreach($result as $pic) {
-									echo '<option value="'.P2B.USER_GALLERY.$pic[2].'/'.$pic[0].(($pic[3])?'_'.$pic[4]:'').'.'.$pic[5].'">'.secureOUT('#'.$pic[0].' - '.$pic[6]).' '.(($pic[3])?'[privat]':'').'</option>';
+									echo '<option value="'.P2B.USER_GALLERY.$pic['picd'].'/'.$pic['main_id'].(($pic['hidden_id'])?'_'.$pic['hidden_value']:'').'.'.$pic['pht_name'].'">'.secureOUT('#'.$pic['main_id'].' - '.$pic['pht_cmt']).' '.(($pic['hidden_id'])?'[privat]':'').'</option>';
 								}
 								?>
 								</select><input type="button" class="b" value="ladda upp ny" onclick="makeUpload('do=pres'); return false;" style="margin-right: 10px;"/>

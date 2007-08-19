@@ -1,10 +1,10 @@
 <?
-	if(!$l) die('NAK');
-	#$l['id_id'] = '857a398e20e4182211b8f0d1f3fe902f';
+	require_once('config.php');
+
 	header('Cache-Control: no-cache');
 	header('Pragma: no-cache');
 	$user->update_retrieve();
-	echo @$_SESSION['data']['cachestr'];
+	echo $_SESSION['data']['cachestr'];
 	exit;
 /*
 	$gb_c = intval($user->getinfo($l['id_id'], 'gb_count'));

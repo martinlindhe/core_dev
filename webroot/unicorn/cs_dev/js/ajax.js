@@ -19,7 +19,7 @@ function toggle_element_by_name(n)
 	e.style.display = (e.style.display?'':'none');
 }
 
-var interval, friendsC = 0, url = '/member/retrieveajax/', xmlObj = false, isDone = true;
+var interval, friendsC = 0, url = 'ajax_fetch.php', xmlObj = false, isDone = true;
 try {
 	xmlObj = new ActiveXObject("Msxml2.XMLHTTP");
 } catch (E) {

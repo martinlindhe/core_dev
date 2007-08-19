@@ -268,8 +268,7 @@
 
 		$timeout = date("Y-m-d H:i:s", strtotime('-30 MINUTES'));
 		
-		//$q = "SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' WHERE rel.user_id = ".$l['id_id']." AND u.account_date > '".$timeout."'";
-		
+	
 		$q = "SELECT COUNT(rel.friend_id) FROM s_userrelation rel ".
 				"INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' ".
 				"WHERE rel.user_id = 1 AND u.account_date > '".$timeout."'";

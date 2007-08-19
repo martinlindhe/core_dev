@@ -12,18 +12,6 @@
 		errorACT('Felaktig sida.');
 	}
 
-/*	if(empty($id)) {
-		if($v == 1)
-			errorIACT(extOUT(gettxt($text)), $action, $v);
-		else
-			errorIACT(extOUT(gettxt($text)), $action, $v);
-	} else if($id == 1)
-		splashLACT(extOUT(gettxt($text), ''));
-	else if($id == 2)
-		popupLACT(extOUT(gettxt($text), ''));
-	else if($id == 3)
-*/
 	require(DESIGN.'top.php');
-	//echo (extOUT(gettxt($text)));
 	popupLACT(extOUT(gettxt($text), ''));
 ?>

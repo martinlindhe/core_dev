@@ -73,7 +73,7 @@
 					<td onclick="'.$url.'" class="cur pdg spac">'.$row['blog_cmts'].' kommentarer</td>
 					<td onclick="'.$url.'" class="cur pdg spac">'.$row['blog_visit'].' läsare</td>
 					<td onclick="'.$url.'" class="cur pdg spac rgt nobr">'.nicedate($row['blog_date']).'</td>';
-				if ($own) {
+				if ($user->id == $id) {
 					echo '<td width="150">';
 					makeButton(false, 'makeBlog(\''.$s['id_id'].'\',\''.$row['main_id'].'\')', 'icon_blog.png', 'ändra');
 					makeButton(false, 'if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'blog', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\')', 'icon_delete.png', 'radera');
