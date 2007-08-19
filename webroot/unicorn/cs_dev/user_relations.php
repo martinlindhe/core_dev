@@ -25,13 +25,12 @@
 	{
 		$d = !empty($_POST['d']) ? $_POST['d'] : $_GET['d'];
 
-		if (removeRelation($d) === true) reloadACT(l('user', 'relations'));
+		removeRelation($d);
 	}
 	else if(!empty($_GET['a']))
 	{
 		$error = acceptRelationRequest($_GET['a']);
-		if ($error === true) reloadACT(l('user', 'relations'));
-		errorACT($error, l('user', 'relations'));
+		if ($error != true) errorACT($error, 'user_relations.php');
 	}
 
 	//Detta är möjligheter att välja hur kompislistan ska sorteras. Funktionen exponeras för stunden inte på citysurf
@@ -83,8 +82,8 @@
 		$res = getRelations($id, $ord, $paging['slimit'], $paging['limit']);
 	}
 	$is_blocked = $blocked;
-	$page = 'relations';
 
+	$action = 'relations';
 	require(DESIGN.'head_user.php');
 ?>
 <div class="subHead">relationer</div><br class="clr"/>
@@ -125,15 +124,15 @@
 				$gotpic = (@$row['u_picvalid'] == '1')?true:false;
 				echo '<tr'.(($gotpic && $view != $row['main_id'])?' onmouseover="this.className = \'t1\'; dumblemumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 2);" onmouseout="this.className = \'\'; mumbledumble(\''.$row['id_id'].$row['u_picid'].$row['u_picd'].$i.'\', 0, 2);"':' onmouseover="this.className = \'t1\';" onmouseout="this.className = \'\';"').'>';
 					echo '<td class="spac pdg"><a name="R'.$row['main_id'].'"></a>'.$user->getstring($row).'</td>';
-					echo '<td class="cur spac pdg" onclick="goUser(\''.$row['id_id'].'\');">'.secureOUT($row['rel_id']).'</td>';
+					echo '<td class="cur spac pdg">'.secureOUT($row['rel_id']).'</td>';
 					echo '<td class="cur pdg spac cnt">'.((@$row['u_picvalid'] == '1')?'<img src="./_img/icon_gotpic.gif" alt="har bild" style="margin-top: 2px;" />':'&nbsp;').'</td>';
-					echo '<td class="cur spac pdg rgt" onclick="goUser(\''.$row['id_id'].'\');">'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date']).')</span>':'<span class="off">'.nicedate($row['lastonl_date']).'</span>').'</td>';
-					if ($own) {
+					echo '<td class="cur spac pdg rgt">'.(($user->isonline($row['account_date']))?'<span class="on">online ('.nicedate($row['lastlog_date']).')</span>':'<span class="off">'.nicedate($row['lastonl_date']).'</span>').'</td>';
+					if ($user->id == $id) {
 						echo '<td class="spac rgt pdg_tt">';
 						echo '<input type="hidden" name="deny_gallx_'.$i.'" value="'.$row['id_id'].'"/>';
 						echo '<input type="checkbox" name="allow_gallx_'.$i.'" value="'.$row['id_id'].'"'.($row['gallx']?' checked="checked"':'').' title="Visa Galleri X för den här personen"> ';
-						echo '<a href="'.l('user', 'relations', $id, $row['main_id']).'#R'.$row['main_id'].'"><img src="'.OBJ.'icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a>';
-						echo ' - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'relations', $row['id_id'], '0').'&amp;d='.$row['id_id'].'\');"><img src="'.OBJ.'icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a>';
+						echo '<a href="user_relations.php?id='.$id.'&x='.$row['main_id'].'#R'.$row['main_id'].'"><img src="'.$config['web_root'].'_gfx/icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a>';
+						echo ' - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\'user_relations.php?id='.$row['id_id'].'&amp;d='.$row['id_id'].'\');"><img src="'.$config['web_root'].'_gfx/icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a>';
 						echo '</td>';
 					}
 				echo '</tr>';

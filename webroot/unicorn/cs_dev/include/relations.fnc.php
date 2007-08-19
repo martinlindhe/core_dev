@@ -68,10 +68,10 @@
 	/* Returns 1 if user1 has user2 on his friend list */
 	function areTheyFriends($_id1, $_id2)
 	{
-		global $sql;
+		global $db;
 		if (!is_numeric($_id1) || !is_numeric($_id2)) return false;
 
-		return $sql->queryResult("SELECT COUNT(*) as count FROM s_userrelation WHERE user_id = ".$_id1." AND friend_id = ".$_id2." LIMIT 1");
+		return $db->getOneItem("SELECT COUNT(*) FROM s_userrelation WHERE user_id = ".$_id1." AND friend_id = ".$_id2." LIMIT 1");
 	}
 	
 	/* Accepterar relation-request $_id */
@@ -119,16 +119,16 @@
 	/* Removes a relation, or a pending relation request from user $_user_id */
 	function removeRelation($_user_id)
 	{
-		global $sql, $user;
+		global $db, $user;
 
 		if (!is_numeric($_user_id)) return false;
 
-		$sql->queryUpdate("UPDATE s_userrelquest SET status_id = 'D' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id);
-		$sql->queryUpdate("UPDATE s_userrelquest SET status_id = 'D' WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id']);
-		$sql->queryUpdate("DELETE FROM s_userrelation WHERE user_id = ".$l['id_id']." AND friend_id = ".$_user_id);
-		$sql->queryUpdate("DELETE FROM s_userrelation WHERE user_id = ".$_user_id." AND friend_id = ".$l['id_id']);
+		$db->update("UPDATE s_userrelquest SET status_id = 'D' WHERE user_id = ".$user->id." AND sender_id = ".$_user_id);
+		$db->update("UPDATE s_userrelquest SET status_id = 'D' WHERE user_id = ".$_user_id." AND sender_id = ".$user->id);
+		$db->delete("DELETE FROM s_userrelation WHERE user_id = ".$user->id." AND friend_id = ".$_user_id);
+		$db->delete("DELETE FROM s_userrelation WHERE user_id = ".$_user_id." AND friend_id = ".$user->id);
 
-		$isFriends = areTheyFriends($l['id_id'], $_user_id);
+		$isFriends = areTheyFriends($user->id, $_user_id);
 		if ($isFriends) {
 			//Ta bort relation
 			#sysMSG($s['id_id'], 'Relation', 'Your relation with '.$s->alias.' has ended!');
@@ -137,21 +137,21 @@
 			#$user->setRelCount($l['id_id']);
 			#$user->get_cache();
 			$user->counterDecrease('rel', $_user_id);
-			$user->counterDecrease('rel', $l['id_id']);
+			$user->counterDecrease('rel', $user->id);
 
 			return true;
 		} else {
 			//Ta bort väntande relationsförfrågan
-			$q = "SELECT main_id FROM s_userrelquest WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id." LIMIT 1";
-			$c = $sql->queryResult($q);
-			if (!empty($c) && count($c)) {
-				$sql->queryUpdate("UPDATE s_userrelquest SET status_id = '2' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_user_id.' AND main_id = '.$c);
+			$q = "SELECT main_id FROM s_userrelquest WHERE user_id = ".$user->id." AND sender_id = ".$_user_id." LIMIT 1";
+			$c = $db->getOneItem($q);
+			if ($c) {
+				$db->update("UPDATE s_userrelquest SET status_id = '2' WHERE user_id = ".$user->id." AND sender_id = ".$_user_id.' AND main_id = '.$c);
 				#if(mysql_affected_rows()) sysMSG($s['id_id'], 'Relation', 'Your relation with '.$s->alias.' is denied!');
-				$user->notifyDecrease('rel', $l['id_id']);
+				$user->notifyDecrease('rel', $user->id);
 			} else {
-				$c = $sql->queryResult("SELECT main_id FROM s_userrelquest WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id']." AND status_id = '0' LIMIT 1");
-				if (!empty($c) && count($c)) {
-					$sql->queryUpdate("UPDATE s_userrelquest SET status_id = '2' WHERE user_id = ".$_user_id." AND sender_id = ".$l['id_id'].' AND main_id = '.$c);
+				$c = $db->getOneItem("SELECT main_id FROM s_userrelquest WHERE user_id = ".$_user_id." AND sender_id = ".$user->id." AND status_id = '0' LIMIT 1");
+				if ($c) {
+					$db->update("UPDATE s_userrelquest SET status_id = '2' WHERE user_id = ".$_user_id." AND sender_id = ".$user->id.' AND main_id = '.$c);
 					$user->notifyDecrease('rel', $_user_id);
 				}
 			}

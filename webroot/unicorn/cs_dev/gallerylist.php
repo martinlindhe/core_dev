@@ -3,9 +3,9 @@
 	dopaging($paging, l('user', 'gallery', $s['id_id'], '0').'p=', '', 'med', STATSTR);
 
 
-	$showall = $user->vip_check(VIP_LEVEL1);	//visa alla bilderna ist‰llet fˆr klickbara rubriker (VIP Delux enbart)
+	$showall = $user->vip_check(VIP_LEVEL1);	//visa alla bilderna ist√§llet f√∂r klickbara rubriker (VIP Delux enbart)
 
-	$view = 0;	//aktuelll bild, fˆr showall=true
+	$view = 0;	//aktuelll bild, f√∂r showall=true
 	$change = false;//redigera bilden?
 
 	echo '<table summary="" cellspacing="0" width="100%">';
@@ -29,18 +29,18 @@
 				<td class="cur'.$cls.' pdg" onclick="'.$url.'">'.secureOUT($row['pht_click']).' visningar</td>
 				<td class="cur'.$cls.' pdg rgt nobr" onclick="'.$url.'">'.nicedate($row['pht_date'], 2).'</td>';
 
-				if ($own) {
+				if ($user->id == $id) {
 					echo '<td class="'.$cls.' rgt pdg_tt nobr" width="150">';
-					makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id'], $row['main_id']).'c=1#view'.$row['main_id'].'\')', 'icon_gallery.png', '‰ndra');
-					makeButton(false, 'if(confirm(\'S‰ker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\');', 'icon_delete.png', 'radera');
+					makeButton(false, 'goLoc(\''.l('user', 'gallery', $s['id_id'], $row['main_id']).'c=1#view'.$row['main_id'].'\')', 'icon_gallery.png', '√§ndra');
+					makeButton(false, 'if(confirm(\'S√§ker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], '0').'&amp;d='.$row['main_id'].'\');', 'icon_delete.png', 'radera');
 					echo '</td>';
 				}
 
 				echo '</tr>';
-				if ($own && $change && $change == $row['main_id'] && $l) {
+				if ($user->id == $id && $change && $change == $row['main_id']) {
 					echo '<tr>';
 					echo '<td colspan="8" class="pdg wht com_bg">';
-					echo '<form name="do" action="'.l('user', 'gallery').'" method="post"><input type="hidden" name="c_id" value="'.$row['main_id'].'"><input type="text" class="txt" name="ins_cmt" onfocus="this.select();" value="'.secureOUT($row['pht_cmt']).'" maxlength="40" style="width: 205px; margin-right: 10px;"><input type="checkbox" class="chk" id="ins_priv" name="ins_priv" value="1"'.(($row['hidden_id'])?' checked':'').'><label for="ins_priv"> Privat foto [endast fˆr v‰nner]</label> <input type="submit" class="br" value="spara" style="margin-left: 10px;"></form>';
+					echo '<form name="do" action="'.l('user', 'gallery').'" method="post"><input type="hidden" name="c_id" value="'.$row['main_id'].'"><input type="text" class="txt" name="ins_cmt" onfocus="this.select();" value="'.secureOUT($row['pht_cmt']).'" maxlength="40" style="width: 205px; margin-right: 10px;"><input type="checkbox" class="chk" id="ins_priv" name="ins_priv" value="1"'.(($row['hidden_id'])?' checked':'').'><label for="ins_priv"> Privat foto [endast f√∂r v√§nner]</label> <input type="submit" class="br" value="spara" style="margin-left: 10px;"></form>';
 					echo '</td></tr>';
 				}
 				if ($showall || $view == $row['main_id']) {

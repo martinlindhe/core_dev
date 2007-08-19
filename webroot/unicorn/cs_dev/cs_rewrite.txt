@@ -40,3 +40,5 @@ todo:
 	- vidarebefodra brev funkar ej
 	- fixa chatten
 	- filuppladdning
+	- ändra relationstyp funkar ej
+	
