@@ -69,7 +69,8 @@
 				$title = $row['blog_title'] ? secureOUT($row['blog_title']) : '<i>ingen rubrik</i>';
 				
 				echo '<tr>
-					<td onclick="'.$url.'" class="cur pdg spac"><div style="width: 100%; height: 16px;"><a name="R'.$row['main_id'].'" href="'.l('user', 'blog', $s['id_id'], $row['main_id']).'" class="bld">'.$title.' </a>'.(($row['hidden_id'])?'[privat]':'').'&nbsp;</div></td>
+					<td onclick="'.$url.'" class="cur pdg spac"><div style="width: 100%; height: 16px;">
+					<a name="R'.$row['main_id'].'" href="user_blog_read.php?id='.$s['id_id'].'&amp;n='.$row['main_id'].'" class="bld">'.$title.' </a>'.(($row['hidden_id'])?'[privat]':'').'&nbsp;</div></td>
 					<td onclick="'.$url.'" class="cur pdg spac">'.$row['blog_cmts'].' kommentarer</td>
 					<td onclick="'.$url.'" class="cur pdg spac">'.$row['blog_visit'].' läsare</td>
 					<td onclick="'.$url.'" class="cur pdg spac rgt nobr">'.nicedate($row['blog_date']).'</td>';

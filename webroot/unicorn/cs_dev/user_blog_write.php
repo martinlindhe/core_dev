@@ -20,21 +20,19 @@
 		$hidden = (!empty($_POST['ins_priv']) && $user->level($l['level_id'], 2))?'1':'0';
 		$_POST['text_html'] = strip_tags($_POST['text_html'], NRMSTR);
 		if($edit) {
-			$sql->queryUpdate("UPDATE s_userblog SET blog_cmt = '".@secureINS($_POST['text_html'])."', hidden_id = '$hidden', blog_title = '".@secureINS($_POST['ins_title'])."' WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			$db->update("UPDATE s_userblog SET blog_cmt = '".$db->escape($_POST['text_html'])."', hidden_id = '$hidden', blog_title = '".$db->escape($_POST['ins_title'])."' WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			$id = $res['main_id'];
 		} else {
-			$id = $sql->queryInsert("INSERT INTO s_userblog SET blog_idx = NOW(), user_id = '".$l['id_id']."', hidden_id = '$hidden', blog_cmt = '".@secureINS($_POST['text_html'])."', blog_title = '".@secureINS($_POST['ins_title'])."', blog_date = NOW()");
+			$id = $db->insert("INSERT INTO s_userblog SET blog_idx = NOW(), user_id = '".$user->id."', hidden_id = '$hidden', blog_cmt = '".$db->escape($_POST['text_html'])."', blog_title = '".$db->escape($_POST['ins_title'])."', blog_date = NOW()");
 
-			spyPost($l['id_id'], 'b', $id);
+			spyPost($user->id, 'b', $id);
 
-			$user->counterIncrease('blog', $l['id_id']);
+			$user->counterIncrease('blog', $user->id);
 		}
 		if(isset($_GET['m']))
 			popupACT('Publicerad!', '', '1000', 'user_blog.php?'.mt_rand(1000, 9999).'#R'.$id);
-		elseif(isset($_GET['d']))
-			popupACT('Publicerad!', '', '1000', 'user_blog.php?date='.secureOUT($_GET['d']).'&amp;'.mt_rand(1000, 9999).'&amp;#R'.$id);
 		else
-			popupACT('Publicerad!', '', l('user', 'blog', $l['id_id'], $id), 1000);
+			popupACT('Publicerad!', '', 'user_blog_read.php?id='.$user->id.'&n='.$id, 1000);
 	}
 
 	if($edit) {
@@ -45,6 +43,7 @@
 
 	$q = "SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM s_userphoto WHERE user_id = '".$user->id."' AND status_id = '1' ORDER BY main_id DESC";
 	$result = $db->getArray($q);
+	
 	require(DESIGN.'head_popup.php');
 ?>
 
@@ -196,7 +195,7 @@ function omo(obj, border) {
 <option value="0">Välj bild från fotoalbum</option>
 <?
 	foreach($result as $pic) {
-		echo '<option value="'.P2B.USER_GALLERY.$pic[2].'/'.$pic[0].(($pic[3])?'_'.$pic[4]:'').'.'.$pic[5].'">'.secureOUT('#'.$pic[0].' - '.$pic[6]).' '.(($pic[3])?'[privat]':'').'</option>';
+		echo '<option value="'.P2B.USER_GALLERY.$pic['picd'].'/'.$pic['main_id'].(($pic['hidden_id'])?'_'.$pic['hidden_value']:'').'.'.$pic['pht_name'].'">'.secureOUT('#'.$pic['main_id'].' - '.$pic['pht_cmt']).' '.(($pic['hidden_id'])?'[privat]':'').'</option>';	
 	}
 ?>
 </select><input type="button" class="btn2_min" value="ladda upp ny" onclick="makeUpload('<?=$user->id?>&amp;do=blog'); return false;"/>

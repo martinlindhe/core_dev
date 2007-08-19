@@ -97,7 +97,7 @@ function makeBlog() {
 }
 function makeBlogComment(uid, id) {
 	if(!id) id = '';
-	ref = window.open('/user/blogcomment/' + uid + '/' + id + '/', '',  'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, status=no, width=' + 200 + ', height='+280);
+	ref = window.open('user_blog_comment.php?id=' + uid + '&n=' + id, '',  'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, status=no, width=' + 200 + ', height='+280);
 	ref.focus();
 }
 function makePhotoComment(uid, id) {
