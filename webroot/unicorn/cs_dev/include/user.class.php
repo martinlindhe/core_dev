@@ -19,7 +19,7 @@ class user {
 	//returns true if the user is logged in
 	function loggedIn()
 	{
-		if ($_SESSION['data']['id_id']) return true;
+		if (@$_SESSION['data']['id_id']) return true;
 		return false;
 	}
 

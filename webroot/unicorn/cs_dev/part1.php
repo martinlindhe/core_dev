@@ -1,4 +1,8 @@
 <?
+	require_once('config.php');
+
+	if ($user->id) reloadACT('start.php');
+
 	$topic = 'register';
 		$complete = false;
 		$error = array();
@@ -9,52 +13,52 @@
 			$gotvalid = true;
 			if(empty($_POST['ins_agree'])) {
 				$error['agree'] = true;
-				$msg[] = 'Du måste godkänna användarvillkoren.';
+				$msg[] = 'Du mÃ¥ste godkÃ¤nna anvÃ¤ndarvillkoren.';
 			}
 			if(empty($_POST['ins_email']) || !valiField($_POST['ins_email'], 'email')) {
 				$error['email'] = true;
-				$msg[] = 'Du måste skriva en godkänd e-postadress.';
+				$msg[] = 'Du mÃ¥ste skriva en godkÃ¤nd e-postadress.';
 			}
 			if(empty($error['email'])) {
-				$res = $sql->queryLine("SELECT status_id, id_id FROM s_user WHERE u_email = '".secureINS(trim($_POST['ins_email']))."' AND status_id != '2' LIMIT 1");
-				if($res[0] == '1' || $res[0] == '3') {
+				$res = $db->getOneRow("SELECT status_id, id_id FROM s_user WHERE u_email = '".$db->escape(trim($_POST['ins_email']))."' AND status_id != '2' LIMIT 1");
+				if($res['status_id'] == '1' || $res['status_id'] == '3') {
 					$error['email'] = true;
-					$msg[] = 'E-postadressen är upptagen. Redan medlem? Glömt lösenordet? Klicka <a href="'.l('member', 'forgot').'" class="bld">här</a> för att få hjälp!';
-				} elseif($res[0] == 'F') {
+					$msg[] = 'E-postadressen Ã¤r upptagen. Redan medlem? GlÃ¶mt lÃ¶senordet? Klicka <a href="'.l('member', 'forgot').'" class="bld">hÃ¤r</a> fÃ¶r att fÃ¥ hjÃ¤lp!';
+				} elseif($res['status_id'] == 'F') {
 					$error['email'] = true;
-					$msg[] = 'E-postadressen väntar på aktivering. Har du fått ett e-post med en aktiveringskod? Klicka <a href="'.l('member', 'activate').'" class="bld">här</a> för att slutföra din registrering!';
+					$msg[] = 'E-postadressen vÃ¤ntar pÃ¥ aktivering. Har du fÃ¥tt ett e-post med en aktiveringskod? Klicka <a href="'.l('member', 'activate').'" class="bld">hÃ¤r</a> fÃ¶r att slutfÃ¶ra din registrering!';
 				}
 			}
 			if(!empty($_POST['ins_cell']) && (!is_numeric($_POST['ins_cell']) || !valiField($_POST['ins_cell'], 'cell'))) {
 				$error['cell'] = true;
-				$msg[] = 'Du måste skriva ett godkänt mobilnummer.';
+				$msg[] = 'Du mÃ¥ste skriva ett godkÃ¤nt mobilnummer.';
 			}
 			$fake_cell = array('0701234567', '0731234567', '0731111111', '0732222222');
 			$valid_pre = array('070', '073', '076', '010');
 			if(!empty($_POST['ins_cell']) && (!@$error['cell'] && in_array($_POST['ins_cell'], $fake_cell))) {
 				$error['cell'] = true;
-				$msg[] = 'Du måste skriva ett godkänt mobilnummer. (Kom igen, bättre kan du!)';
+				$msg[] = 'Du mÃ¥ste skriva ett godkÃ¤nt mobilnummer. (Kom igen, bÃ¤ttre kan du!)';
 			}
 			if(!empty($_POST['ins_cell']) && (!@$error['cell'] && !in_array(substr($_POST['ins_cell'], 0, 3), $valid_pre))) {
 				$error['cell'] = true;
-				$msg[] = 'Du måste skriva ett godkänt mobilnummer.';
+				$msg[] = 'Du mÃ¥ste skriva ett godkÃ¤nt mobilnummer.';
 			}
 			if(empty($_POST['Y']) || empty($_POST['m']) || empty($_POST['d']) || !is_numeric($_POST['Y'].$_POST['m'].$_POST['d'].$_POST['i'])) {
 				$error['pnr'] = true;
-				$msg[] = 'Du måste skriva ett godkänt personnummer.';
+				$msg[] = 'Du mÃ¥ste skriva ett godkÃ¤nt personnummer.';
 			}
 			if(empty($error['pnr'])) {
 				if(!valiDate($_POST['Y'], $_POST['m'], $_POST['d'])) {
 					$error['pnr'] = true;
-					$msg[] = 'Du måste skriva ett godkänt personnummer.';
+					$msg[] = 'Du mÃ¥ste skriva ett godkÃ¤nt personnummer.';
 				} elseif($user->doage($_POST['Y'].'-'.$_POST['m'].'-'.$_POST['d']) <= 17) {
 					$_SESSION['tries']++;
 					$error['pnr'] = true;
-					$msg[] = 'Du måste vara 18 år för att kunna registera dig.';
+					$msg[] = 'Du mÃ¥ste vara 18 Ã¥r fÃ¶r att kunna registera dig.';
 				} elseif(!valiPnr(substr($_POST['Y'], -2).$_POST['m'].$_POST['d'].'-'.$_POST['i'])) {
 					$_SESSION['tries']++;
 					$error['pnr'] = true;
-					$msg[] = 'Du måste skriva ett godkänt personnummer.';
+					$msg[] = 'Du mÃ¥ste skriva ett godkÃ¤nt personnummer.';
 				} else {
 					$birth = $_POST['Y'].'-'.$_POST['m'].'-'.$_POST['d'];
 					$sex = valiSex(substr($_POST['Y'], -2).$_POST['m'].$_POST['d'].'-'.$_POST['i']);
@@ -69,49 +73,49 @@
 			}
 		}
 		if($complete) {
-			#$id_u = md5(substr($_POST['Y'], -2).$_POST['m'].$_POST['d'].'-'.$_POST['i'].'SALTHELVEETE'.microtime());
 			$start_code = mt_rand(100000, 999999);
 			if(!empty($res) && count($res)) {
 				if($res[0] == '2') {
 					$sql->queryUpdate("UPDATE s_user SET status_id = '2' WHERE id_id = '".$res[1]."' LIMIT 1");
 				} else {
 					$error['email'] = true;
-					$msg[] = 'E-postadressen är upptagen. Redan medlem? Glömt lösenordet? Klicka <a href="'.l('member', 'forgot').'" class="bld">här</a> för att få hjälp!';
+					$msg[] = 'E-postadressen Ã¤r upptagen. Redan medlem? GlÃ¶mt lÃ¶senordet? Klicka <a href="'.l('member', 'forgot').'" class="bld">hÃ¤r</a> fÃ¶r att fÃ¥ hjÃ¤lp!';
 				}
 			}
 
 			$msg = sprintf(gettxt('email_activate'), $start_code, substr(P2B, 0, -1).l('member', 'activate', secureOUT(str_replace('@', '__at__', $_POST['ins_email'])), $start_code));
 		$chk = doMail(secureOUT($_POST['ins_email']), 'Din aktiveringskod: '.$start_code, $msg);
 			if ($chk) {
-				$id_u = $sql->queryInsert("INSERT INTO s_user SET
+				$id_u = $db->insert("INSERT INTO s_user SET
 				u_sex = '$sex',
-				u_email = '".secureINS($_POST['ins_email'])."',
+				u_email = '".$db->escape($_POST['ins_email'])."',
 				u_birth = '".$birth."',
-				u_birth_x = '".secureINS($_POST['i'])."',
+				u_birth_x = '".$db->escape($_POST['i'])."',
 				status_id = 'F',
 				u_regdate = NOW()");
 	
-				$sql->queryUpdate("REPLACE INTO s_userinfo SET
+				$db->update("REPLACE INTO s_userinfo SET
 				u_tempemail = '',
 				u_fname = '',
 				u_sname = '',
 				u_subscr = '',
-				u_cell = '".@secureINS(@$_POST['ins_cell'])."',
+				u_cell = '".$db->escape(@$_POST['ins_cell'])."',
 				u_street = '',
-				fake_try = '".@secureINS($_SESSION['tries'])."',
-				reg_sess = '".secureINS($sql->gc())."',
-				reg_ip = '".secureINS($_SERVER['REMOTE_ADDR'])."',
+				fake_try = '".$db->escape(@$_SESSION['tries'])."',
+				reg_ip = '".$db->escape($_SERVER['REMOTE_ADDR'])."',
 				reg_code = '".$start_code."',
-				id_id = '".secureINS($id_u)."'");
+				id_id = '".$db->escape($id_u)."'");
 
-				$sql->logADD('', $id_u, 'REG1');
+				//reg_sess = '".secureINS($sql->gc())."',
+
+				//$sql->logADD('', $id_u, 'REG1');
 				$url = l('member', 'activate', secureOUT(str_replace('@', '__at__', $_POST['ins_email'])));
 				include('part1b.php');
 			} else {
-				echo 'Problem med mailutskick. Var god försök igen';
+				echo 'Problem med mailutskick. Var god fÃ¶rsÃ¶k igen';
 			}
 			exit;
-			//splashACT('Ett mail har skickats med en aktiveringskod för att aktivera ditt konto!<br><br><input type="button" onclick="document.location.href = \''..'\';" class="b" value="aktivera konto!">');
+			//splashACT('Ett mail har skickats med en aktiveringskod fÃ¶r att aktivera ditt konto!<br><br><input type="button" onclick="document.location.href = \''..'\';" class="b" value="aktivera konto!">');
 		}
 
 		include(DESIGN.'head.php');
@@ -179,7 +183,7 @@ document.onkeydown = changeselected;
 </script>
 		<div class="bigHeader">registrering</div>
 			<div class="bigBody">
-	<form name="r" method="post" action="<?=l('member', 'register')?>">
+	<form name="r" method="post" action="<?=$_SERVER['PHP_SELF']?>">
 	<input type="hidden" name="do" value="1" />
 	<table cellspacing="0" width="510" class="mrg" style="margin-bottom: 15px;">
 			<tr>
@@ -193,7 +197,7 @@ document.onkeydown = changeselected;
 		<td><span class="bld<?=(isset($error['email']))?' red':'';?>">e-post</span><br />&nbsp;<br /><input type="text" class="txt" name="ins_email" value="<?=(!empty($_POST['ins_email']))?secureOUT($_POST['ins_email']):'';?>" /><script type="text/javascript"><?=(empty($_POST) || !count($_POST))?'document.r.ins_email.focus();':'';?></script></td>
 		<td><span class="bld<?=(isset($error['cell']))?' red':'';?>">mobilnummer</span> (0701234567)<br /><input type="text" class="txt" name="ins_cell" value="<?=(!empty($_POST['ins_cell']))?secureOUT($_POST['ins_cell']):'';?>" /></td>
 		<td><span class="bld<?=(isset($error['pnr']))?' red':'';?>">personnummer</span><br />&nbsp;<br /><nobr>
-<select class="txt" name="Y" title="år" style="width: 60px; margin-bottom: 1px;" onfocus="gotFocus = '1';" onblur="gotFocus = '0'; gotLet1 = '';">
+<select class="txt" name="Y" title="Ã¥r" style="width: 60px; margin-bottom: 1px;" onfocus="gotFocus = '1';" onblur="gotFocus = '0'; gotLet1 = '';">
 <option value="-">-</option>
 <?
 	if(!empty($_POST['Y']) && is_numeric($_POST['Y'])) $sel = $_POST['Y']; else $sel = false;
@@ -202,7 +206,7 @@ document.onkeydown = changeselected;
 echo '<option value="'.$i.'"'.$selected.'>'.$i.'</option>';
 	}
 ?></select>
-<select name="m" title="månad" class="txt" style="width: 40px; margin-bottom: 1px;" onfocus="gotFocus = '2';" onblur="gotFocus = '0'; gotLet2 = '';">
+<select name="m" title="mÃ¥nad" class="txt" style="width: 40px; margin-bottom: 1px;" onfocus="gotFocus = '2';" onblur="gotFocus = '0'; gotLet2 = '';">
 <option value="-">-</option>
 <?
 	if(!empty($_POST['m']) && is_numeric($_POST['m'])) $sel = $_POST['m']; else $sel = false;
@@ -228,7 +232,7 @@ echo '<option value="'.$i.'"'.$selected.'>'.$i.'</option>';
 </nobr></td>
 	</tr>
 	<tr>
-		<td colspan="3"><input type="checkbox" class="chk" name="ins_agree" id="agree"<?=(!empty($_POST['ins_agree'])?' checked':'')?>><label for="agree"> Jag accepterar <a href="<?=l('text', 'agree', '1')?>" onclick="makeText('<?=l('text', 'agree', '3')?>', 'big'); return false;" target="_blank"><u>användarvillkoren</u></a></label></td>
+		<td colspan="3"><input type="checkbox" class="chk" name="ins_agree" id="agree"<?=(!empty($_POST['ins_agree'])?' checked':'')?>><label for="agree"> Jag accepterar <a href="<?=l('text', 'agree', '1')?>" onclick="makeText('<?=l('text', 'agree', '3')?>', 'big'); return false;" target="_blank"><u>anvÃ¤ndarvillkoren</u></a></label></td>
 	</tr>
 	<tr>
 		<td colspan="3"><br />
@@ -236,7 +240,7 @@ echo '<option value="'.$i.'"'.$selected.'>'.$i.'</option>';
 		</td>
 	</tr>
 	</table>
-	<input type="submit" class="btn2_min r" value="nästa!" /><br class="clr" />
+	<input type="submit" class="btn2_min r" value="nÃ¤sta!" /><br class="clr" />
 	</form>
 			</div>
 <?

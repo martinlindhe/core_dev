@@ -37,13 +37,12 @@ borttaget db:
 	
 	
 todo:
-	- relations_user.php: gör om innehållet till funktioner, placera i relations.fnc.php
-
-	- ny user
-	- glömt pwd
-	- fixa script som körs regelbundet
+	- ny user är inte fungerande
+	- fixa mms-fetch scriptet som körs regelbundet
 
 	- fixa chatten
 	- filuppladdning
 	- admin-sidorna
+
+	ta bort s_userinfo.reg_sess (gc nonsens)
 

@@ -47,6 +47,7 @@
 	require_once('include/secure.fnc.php');
 	require_once('include/cut.fnc.php');
 	require_once('include/abuse.fnc.php');
+	require_once('include/validate.fnc.php');
 
 	require_once('include/user.class.php');	//user() class
 	require_once('include/auth.class.php');	//auth() class

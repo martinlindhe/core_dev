@@ -7,35 +7,37 @@
 		ignorerar alla över userlevel 3 (admins,webmasters osv)
 	*/
 
-	$vip_rows = $sql->query('SELECT * FROM s_vip ORDER BY level DESC',0,1);
+	require_once('../config.php');
+
+	$vip_rows = $db->getArray('SELECT * FROM s_vip ORDER BY level DESC');
 	foreach ($vip_rows as $vip) {
 		if (isset($done[$vip['userId']])) continue;
 		if ($vip['level'] > 3) continue;	//level2 = vip, level3=vip delux. resterande är admin, webmaster osv
 		
 		
 		$q = 'SELECT level_id FROM s_user WHERE id_id='.$vip['userId'];
-		if ($sql->queryResult($q) > 3) {
+		if ($db->getOneItem($q) > 3) {
 			//echo 'USER '.$vip['userId'].' IS ADMIN!!!skipping!';
 			continue;
 		}
-		
+
 		echo 'Setting days left for userId '.$vip['userId'].' to '.($vip['days']-1).' (vip level '.$vip['level'].')<br/>';
 		if ($vip['days'] >= 1) {
 			$q = 'UPDATE s_vip SET days='.($vip['days']-1).' WHERE id='.$vip['id'];
-			$sql->queryUpdate($q);
+			$db->update($q);
 			$curr_viplevel = $vip['level'];
 		} else {
 			$q = 'DELETE FROM s_vip WHERE id='.$vip['id'];
-			$sql->queryUpdate($q);
+			$db->delete($q);
 			
 			$q = 'SELECT * FROM s_vip WHERE userId='.$vip['userId'].' ORDER BY level DESC LIMIT 1';
-			$new_rows = $sql->query($q, 0, 1);
-			if ($new_rows) $curr_viplevel = $new_rows[0]['level'];
+			$new_rows = $db->getOneRow($q);
+			if ($new_rows) $curr_viplevel = $new_rows['level'];
 			else $curr_viplevel = '1'; //denote to normal user level
 		}
 
 		$q = 'UPDATE s_user SET level_id="'.$curr_viplevel.'" WHERE id_id='.$vip['userId'];
-		$sql->queryUpdate($q);
+		$db->update($q);
 		echo 'user level sat to '.$curr_viplevel.'<br/>';
 
 		$done[$vip['userId']] = true;
@@ -43,7 +45,7 @@
 
 	//droppa alla gamla requests som väntar på godkännande (äldre än 24 timmar)
 	$q = 'DELETE FROM s_userregfast WHERE timeCreated < DATE_SUB(NOW(), INTERVAL 24 HOUR)';
-	$sql->queryUpdate($q);
+	$db->delete($q);
 
 	die;
 ?>

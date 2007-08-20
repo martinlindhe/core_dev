@@ -9,45 +9,6 @@
 
 	require_once('config.php');
 
-/*
-	$action = (!empty($_GET['action'])?$_GET['action']:false);
-	$id = (!empty($_GET['id'])?$_GET['id']:false);
-	$key = (!empty($_GET['key'])?$_GET['key']:false);
-	$l = $user->auth(@$_SESSION['data']['id_id'], true);
-	if(!empty($_GET['type'])) {
-		$type = $_GET['type'];
-		if($type == 'main') {
-			include('_modules/main/index.php');
-		} elseif($type == 'text') {
-			include('_modules/text/index.php');
-		} elseif($type == 'macro') {
-			include('_modules/macro/index.php');
-		} else {
-			$isAdmin = (@$_SESSION['data']['level_id'] == '10'?true:false);
-			$isOk = true;
-			// here's user dependent pages
-			if($type == 'member') {
-				include('_modules/member/index.php');
-			} else {
-				// heres only logged in user allowed
-				if($type != 'user' && !$l) {
-					loginACT();
-				}
-				if($type == 'user') {
-					include('_modules/user/index.php');
-				} else if($type == 'list') {
-					include('_modules/list/index.php');
-				} else if($type == 'forum') {
-					include('_modules/forum/index.php');
-				} else if($type == 'thought') {
-					include('_modules/thought.php');
-				}
-			}
-		}
-		exit;
-	}
-*/
-
 	$login_err = true;
 	if(empty($l) && !empty($_POST['a']) && !empty($_POST['p'])) {
 		checkBan(1);
@@ -82,8 +43,8 @@
 								</table>
 		
 								<script type="text/javascript">if(document.l.a.value.length > 0) document.l.p.focus(); else document.l.a.focus();</script>
-								<input type="button" onclick="goLoc('/member/register/');" class="btn2_min" value="bli medlem" style="margin-top: 3px;"/>
-								<input type="button" onclick="goLoc('/member/forgot/');" class="btn2_min" value="glömt lösen" style="margin-top: 3px;"/>
+								<input type="button" onclick="goLoc('part1.php');" class="btn2_min" value="bli medlem" style="margin-top: 3px;"/>
+								<input type="button" onclick="goLoc('forgot.php');" class="btn2_min" value="glömt lösen" style="margin-top: 3px;"/>
 								<input type="submit" class="btn2_min" value="logga in"/>
 							</form>
 							<br/>
