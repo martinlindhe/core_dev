@@ -37,7 +37,12 @@ borttaget db:
 	
 	
 todo:
+	- ändra relationstyp på en väntande relation funkar, men lägger dessutom till vän-request till mig själv
+	- ny user
+	- glömt pwd
+	- fixa script som körs regelbundet
+
 	- fixa chatten
 	- filuppladdning
-	- ändra relationstyp funkar ej
 	- admin-sidorna
+

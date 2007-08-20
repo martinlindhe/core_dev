@@ -32,7 +32,7 @@
 
 			$res = $db->insert($q);
 			$user->setRelCount($_id);
-			$user->setRelCount($l['id_id']);
+			$user->setRelCount($user->id);
 			return 'Nu har du skickat en förfrågan.';
 		} else {
 			$c = $db->getOneItem("SELECT COUNT(*) FROM s_userrelquest WHERE user_id = ".$user->id." AND sender_id = ".$_id." AND status_id = '0'");
@@ -219,12 +219,11 @@
 
 	function setGallXStatus($user_id, $other_id, $status)
 	{
-		global $sql;
-
+		global $db;
 		if (!is_numeric($user_id) || !is_numeric($other_id) || !is_numeric($status)) return false;
 
 		$q = 'UPDATE s_userrelation SET gallx='.$status.' WHERE user_id='.$user_id.' AND friend_id='.$other_id;
-		$sql->queryUpdate($q);
+		$db->update($q);
 	}
 
 	//kollar om aktuell user får se $_id's galleri
