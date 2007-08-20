@@ -1,34 +1,31 @@
 <?
-	require_once(dirname(__FILE__).'/../user/spy.fnc.php');
-	require(CONFIG."cut.fnc.php");
+	require_once('config.php');
 
 	$length = array('1' => 10, '3' => 10, '5' => 20, '6' => 40, '8' => 80, '10' => 0);
-	$lim = @$length[$l['level_id']];
+	$lim = $length[$_SESSION['data']['level_id']];
 	$photo_limit = 510;
 	$NAME_TITLE = 'LADDA UPP FOTO | '.NAME_TITLE;
 
 	/*
 	if($lim && $sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1'") >= $lim) {
-		popupACT('Du har laddat upp maximalt antal foton ( '.$lim.'st )<br />Du måste uppgradera för att kunna ladda upp fler.');
+		popupACT('Du har laddat upp maximalt antal foton ( '.$lim.'st )<br />Du mÃ¥ste uppgradera fÃ¶r att kunna ladda upp fler.');
 	}
 	*/
-	if(!empty($_POST['ins_msg']) && !empty($_FILES['ins_file']) && empty($_FILES['ins_file']['error'])) {
-		#$sql->queryInsert("INSERT INTO s_aadata SET data_s = '".serialize($_FILES).' '.serialize($_POST)."'");
+	if (!empty($_POST['ins_msg']) && !empty($_FILES['ins_file']) && empty($_FILES['ins_file']['error'])) {
 
-		@$_POST['ins_msg'] = @trim($_POST['ins_msg']);
-		if(empty($_POST['ins_msg'])) {
-			popupACT('Felaktig beskrivning.');
-		}
+		$_POST['ins_msg'] = trim($_POST['ins_msg']);
+		if (empty($_POST['ins_msg'])) popupACT('Felaktig beskrivning.');
+
 		/*
 		if($lim) {
 			$rest = $lim - $sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto WHERE user_id = '".secureINS($l['id_id'])."' AND status_id = '1'");
-			if($rest <= 0) popupACT('Du har laddat upp maximalt antal foton.<br />Du måste uppgradera för att kunna ladda upp fler.');
+			if($rest <= 0) popupACT('Du har laddat upp maximalt antal foton.<br />Du mÃ¥ste uppgradera fÃ¶r att kunna ladda upp fler.');
 		}
 		*/
 		$p = $_FILES['ins_file']['tmp_name'];
 		$p_name = $old_name = $_FILES['ins_file']['name'];
 		$p_size = $_FILES['ins_file']['size'];
-		if(verify_uploaded_file($p_name, $p_size)) {
+		if (verify_uploaded_file($p_name, $p_size)) {
 
 			$p_name = explode('.', $p_name);
 			$p_name = strtolower($p_name[count($p_name)-1]);
@@ -37,9 +34,9 @@
 			$u2 = md5(microtime().'skitjgaa').'.';
 			$file = USER_GALLERY.'/'.$unique.$p_name;
 			$file2 = USER_GALLERY.'/'.$u2.$p_name;
-			if(!move_uploaded_file($p, $file)) $error++;
+			if (!move_uploaded_file($p, $file)) $error++;
 			# doResize
-			if(!$error) {
+			if (!$error) {
 				#kolla sajsen
 				$done = false;
 				$p_s = getimagesize($file);
@@ -53,11 +50,11 @@
 					$prv = ($isOk && !empty($_POST['ins_priv']))?'1':'0';
 					if($prv) {
 						$un = md5(microtime().'ghrghrhr');
-						$res = $sql->queryInsert("INSERT INTO s_userphoto SET user_id = '".secureINS($l['id_id'])."', old_filename='$old_name', status_id = '1', hidden_id = '1', hidden_value = '$un', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
+						$res = $db->insert('INSERT INTO s_userphoto SET user_id = '.$user->id.', old_filename="'.$db->escape($old_name).'", status_id = "1", hidden_id = "1", hidden_value = "'.$db->escape($un).'", pht_name = "'.$db->escape($p_name).'", pht_size = '.filesize($file2).', pht_cmt = "'.$db->escape(substr($_POST['ins_msg'], 0, 40)).'", picd = "'.PD.'", pht_rate = "0", pht_date = NOW()');
 					} else {
-						$res = $sql->queryInsert("INSERT INTO s_userphoto SET user_id = '".secureINS($l['id_id'])."', old_filename='$old_name',  status_id = '1', pht_name = '$p_name', pht_size = '".filesize($file2)."', pht_cmt = '".secureINS(substr($_POST['ins_msg'], 0, 40))."', picd = '".PD."', pht_rate = '0', pht_date = NOW()");
+						$res = $db->insert('INSERT INTO s_userphoto SET user_id = '.$user->id.', old_filename="'.$db->escape($old_name).'", status_id = "1", pht_name = "'.$db->escape($p_name).'", pht_size = '.filesize($file2).', pht_cmt = "'.$db->escape(substr($_POST['ins_msg'], 0, 40)).'", picd = "'.PD.'", pht_rate = "0", pht_date = NOW()');
 					}
-					if($res) {
+					if ($res) {
 						@unlink($file);
 						@rename($file2, USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name);
 						@make_thumb(USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name, USER_GALLERY.PD.'/'.$res.'-tmb.'.$p_name, '100', 89);
@@ -66,18 +63,18 @@
 					} else {
 						@unlink($file);
 						@unlink($file2);
-						popupACT('Felaktigt format, storlek eller bredd & höjd.', l('user', 'gallery', $l['id_id'], '0').'&upload=1');
+						popupACT('Felaktigt format, storlek eller bredd & hÃ¶jd.', '', 'user_gallery.php?id='.$user->id, 1000);
 					}
 				}
 			} else {
-				popupACT('Felaktigt format, storlek eller bredd & höjd.', l('user', 'gallery', $l['id_id'], '0').'&upload=1');
+				popupACT('Felaktigt format, storlek eller bredd & hÃ¶jd.', '', 'user_gallery.php?id='.$user->id, 1000);
 			}
 		} else {
-			popupACT('Fotot är alldeles för stort (Max 1.2 MB per foto). Du måste ändra storleken på bilden för att kunna ladda upp.', l('user', 'gallery', $l['id_id'], '0').'&upload=1');
+			popupACT('Fotot Ã¤r alldeles fÃ¶r stort (Max 1.2 MB per foto). Du mÃ¥ste Ã¤ndra storleken pÃ¥ bilden fÃ¶r att kunna ladda upp.', '', 'user_gallery.php?id='.$user->id, 1000);
 		}
 		$user->counterIncrease('gal', $l['id_id']);
 		if(!empty($_GET['do'])) {
-			$msg = 'Uppladdad.<br/>Filen ligger längst ner i listan!';
+			$msg = 'Uppladdad.<br/>Filen ligger lÃ¤ngst ner i listan!';
 			$name = safeOUT(substr($_POST['ins_msg'], 0, 40));
 			$file = ($prv)?'/'.USER_GALLERY.PD.'/'.$res.'_'.$un.'.'.$p_name:'/'.USER_GALLERY.PD.'/'.$res.'.'.$p_name;
 
@@ -90,7 +87,7 @@
 			</script>";
 			popupACT($msg.$script, '', '', 3000);
 		} else {
-			popupACT('Uppladdad!', '', l('user', 'gallery', $l['id_id'], $res), 1000);
+			popupACT('Uppladdad!', '', 'gallery_view.php?Ã¬d='.$user->id.'&n='.$res, 1000);
 		}
 	}
 
@@ -105,13 +102,13 @@
 document.onkeydown = ActivateByKey;
 var allowedext = Array("jpg", "jpeg", "gif", "png");
 var error = false;
-var error_image = '<?=P2B.OBJ?>1x1.gif';
+var error_image = '1x1.gif';
 var oldval = '';
 function checkSize(s_obj) {
 	if(s_obj.src != error_image) {
 
 		if(s_obj.width > <?=$photo_limit?>) {
-			document.getElementById('ins_chk').innerHTML = '<b class="red">Fotot kommer att förminskas.</b><br /><br />';
+			document.getElementById('ins_chk').innerHTML = '<b class="red">Fotot kommer att fÃ¶rminskas.</b><br /><br />';
 		} else {
 			document.getElementById('ins_chk').innerHTML = '';
 		}
@@ -121,11 +118,11 @@ function checkSize(s_obj) {
 
 function validateUpl(tForm) {
 	if(tForm.ins_file.value.length <= 0) {
-		alert('Felaktigt fält: Sökväg');
+		alert('Felaktigt fÃ¤lt: SÃ¶kvÃ¤g');
 		return false;
 	}
 	if(tForm.ins_msg.value.length <= 0) {
-		alert('Felaktigt fält: Beskrivning');
+		alert('Felaktigt fÃ¤lt: Beskrivning');
 		tForm.ins_msg.focus();
 		return false;
 	}
@@ -136,15 +133,15 @@ function validateUpl(tForm) {
 
 </script>
 <body style="border: 6px solid #FFF;">
-<form name="msg" action="<?=l('user', 'galleryupload')?><?=(!empty($_GET['do']))?'&do='.secureOUT($_GET['do']):'';?>" method="post" enctype="multipart/form-data" onsubmit="if(validateUpl(this)) { return true; } else return false;">
+<form name="msg" action="<?=$_SERVER['PHP_SELF']?><?=(!empty($_GET['do']))?'&do='.secureOUT($_GET['do']):'';?>" method="post" enctype="multipart/form-data" onsubmit="if(validateUpl(this)) { return true; } else return false;">
 		<div class="smallWholeContent cnti mrg">
 			<div class="smallHeader">ladda upp till galleri</div>
 			<div class="smallBody pdg_t">
-				bläddra till fil:<br />
+				blÃ¤ddra till fil:<br />
 				<input type="file" name="ins_file" style="width: 160px; height: 22px; line-height: 14px;" class="txt" accept="image/jpeg, image/gif, image/png, image/pjpeg"/><br />
 				beskrivning:<br />
 				<input type="text" name="ins_msg" style="width: 160px;" class="txt"/>
-				<input type="checkbox" class="chk" name="ins_priv" id="ins_priv"<? if (!empty($_GET['priv'])) echo ' checked="checked"'; ?> value="1"/><label for="ins_priv"> Galleri X (för vänner)</label>
+				<input type="checkbox" class="chk" name="ins_priv" id="ins_priv"<? if (!empty($_GET['priv'])) echo ' checked="checked"'; ?> value="1"/><label for="ins_priv"> Galleri X (fÃ¶r vÃ¤nner)</label>
 				<input type="submit" class="btn2_sml r" name="sub" value="skicka!" /><br class="clr"/>
 			</div>
 		</div>

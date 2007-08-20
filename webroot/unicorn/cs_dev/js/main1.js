@@ -80,7 +80,7 @@ function makeRelation(id) {
 }
 function makeUpload(doit) { 
 	if(!doit) doit = '';
-	win = window.open('/user/galleryupload/&' + doit, 'upload', 'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, scrollbars=0, status=no, width=200, height=280, location=yes');
+	win = window.open('galleryupload.php' + doit, 'upload', 'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, scrollbars=0, status=no, width=200, height=280, location=yes');
 	win.focus();
 }
 function makeForum(id) {
