@@ -430,8 +430,10 @@ class user {
 		return $ret;
 	}
 
-	function setrel($obj, $type, $id) {
-		$this->sql->queryInsert("INSERT INTO s_objrel SET obj_date = NOW(), content_type = '$type', object_id = '$obj', owner_id = '$id'");
+	function setrel($obj, $type, $id)
+	{
+		global $db;
+		$db->insert('INSERT INTO s_objrel SET obj_date = NOW(), content_type = "'.$db->escape($type).'", object_id = "'.$db->escape($obj).'", owner_id = "'.$db->escape($id).'"');
 	}
 }
 

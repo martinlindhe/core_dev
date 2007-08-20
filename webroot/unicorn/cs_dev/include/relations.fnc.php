@@ -40,12 +40,8 @@
 
 			$c = $db->getOneItem("SELECT COUNT(*) FROM s_userrelquest WHERE user_id = ".$_id." AND sender_id = ".$user->id." AND status_id = '0'");
 			if ($c > 0) {
-				$q = "UPDATE s_userrelquest SET
-				sent_cmt = '".$db->escape($r)."',
-				status_id = '0',
-				sent_date = NOW()
-				WHERE user_id = ".$_id." AND sender_id = ".$user->id." AND status_id = '0'";
-				
+				$q = 'UPDATE s_userrelquest SET sent_cmt = "'.$db->escape($r).'", status_id = "0", sent_date = NOW() '.
+					'WHERE user_id = '.$_id.' AND sender_id = '.$user->id.' AND status_id = "0"';
 				$db->update($q);
 				$user->setRelCount($_id);
 				$user->setRelCount($user->id);

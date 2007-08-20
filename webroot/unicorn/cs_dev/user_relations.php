@@ -11,13 +11,15 @@
 	
 	//detta ändrar typ av relations-förfrågan för pågående förfrågningar (t.ex från "Granne" till "Sambo")
 	//eller skickar en ny förfrågan vid ändring av relationstyp
-	if (!empty($_POST['ins_rel'])) {
-		$friend_id = $id;
-		if (!empty($_POST['friend_id'])) $friend_id = $_POST['friend_id'];
-		$error = sendRelationRequest($friend_id, $_POST['ins_rel']);
+
+	//userid of existing friend to change relation type for
+	$change_id = 0;
+	if (!empty($_GET['chg']) && is_numeric($_GET['chg']) && $user->id == $id) $change_id = $_GET['chg'];
+
+	if (!empty($_POST['ins_rel']) && $change_id) {
+		$error = sendRelationRequest($change_id, $_POST['ins_rel']);
 		if ($error === true) {
 			errorACT('Du har nu ändrat typ av förfrågan.', 'user_relations.php');
-			die;
 		}
 	}
 
@@ -52,10 +54,6 @@
 		$page = 'alpha';
 		$ord = 'u.u_alias ASC';
 	}
-
-	//id of existing relation to change
-	$change_id = 0;
-	if (!empty($_GET['chg']) && is_numeric($_GET['chg']) && $user->id == $id) $change_id = $_GET['chg'];
 
 	//ge eller ta bort kompisars möjlighet att se Galleri X
 	if ($user->id == $id) {
@@ -113,7 +111,7 @@
 <?
 	if (!$blocked) dopaging($paging, 'user_relations.php?p=', '&amp;ord='.$thisord, 'med', STATSTR);
 
-	if ($user->id == $id) echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
+	if ($user->id == $id && !$change_id) echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 ?>	
 	<table summary="" cellspacing="0" width="586">
 	<?
@@ -132,19 +130,18 @@
 						echo '<td class="spac rgt pdg_tt">';
 						echo '<input type="hidden" name="deny_gallx_'.$i.'" value="'.$row['id_id'].'"/>';
 						echo '<input type="checkbox" name="allow_gallx_'.$i.'" value="'.$row['id_id'].'"'.($row['gallx']?' checked="checked"':'').' title="Visa Galleri X för den här personen"> ';
-						echo '<a href="user_relations.php?id='.$id.'&chg='.$row['main_id'].'#R'.$row['main_id'].'"><img src="'.$config['web_root'].'_gfx/icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a>';
+						echo '<a href="user_relations.php?id='.$id.'&chg='.$row['id_id'].'#R'.$row['main_id'].'"><img src="'.$config['web_root'].'_gfx/icon_change.gif" alt="" title="Ändra" style="margin-bottom: -4px;" /></a>';
 						echo ' - <a class="cur" onclick="if(confirm(\'Säker ?\')) goLoc(\'user_relations.php?id='.$row['id_id'].'&amp;d='.$row['id_id'].'\');"><img src="'.$config['web_root'].'_gfx/icon_del.gif" alt="" title="Radera" style="margin-bottom: -4px;" /></a>';
 						echo '</td>';
 					}
 				echo '</tr>';
 		
-				if ($change_id == $row['main_id']) {
+				if ($change_id == $row['id_id']) {
 					$rel = getset(0, 'r', 'm');
 
 					//Visar "Ändra typ av relation"
 					echo '<tr><td colspan="5" class="pdg">';
-					echo '<form name="do" action="" method="post">';
-					echo '<input type="hidden" name="friend_id" value="'.$row['id_id'].'"/>';
+						echo '<form name="do" action="'.$_SERVER['PHP_SELF'].'?id='.$id.'&chg='.$row['id_id'].'" method="post">';
 					echo '<select name="ins_rel" class="txt">';
 					foreach ($rel as $r) {
 						$sel = ($r['text_cmt'] == $row['rel_id'])?' selected':'';
@@ -174,7 +171,7 @@
 
 	echo '</table>';
 
-	if ($user->id == $id) {
+	if ($user->id == $id && !$change_id) {
 		echo '<input type="submit" value="Spara" class="btn2_min"/>';
 		echo '</form>';
 	}

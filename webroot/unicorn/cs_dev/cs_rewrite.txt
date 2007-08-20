@@ -37,7 +37,8 @@ borttaget db:
 	
 	
 todo:
-	- ändra relationstyp på en väntande relation funkar, men lägger dessutom till vän-request till mig själv
+	- relations_user.php: gör om innehållet till funktioner, placera i relations.fnc.php
+
 	- ny user
 	- glömt pwd
 	- fixa script som körs regelbundet
