@@ -14,12 +14,12 @@
 				$curr_vip = get_vip($id);
 				//echo $curr_vip;
 					
-				if ($curr_vip == '2') echo ' <img src="/_gfx/icon_vip.png">';
-				if ($curr_vip == '3') echo ' <img src="/_gfx/icon_vipd.png">';
+				if ($curr_vip == '2') echo ' <img src="'.$config['web_root'].'_gfx/icon_vip.png">';
+				if ($curr_vip == '3') echo ' <img src="'.$config['web_root'].'_gfx/icon_vipd.png">';
 				if ($curr_vip == '10') echo ' WEBMASTER';
 
 				if ($id != $user->id) {
-					echo ' <b>(<a href="'.l('user', 'givevip', $id).'">ge VIP</a>)</b>';
+					echo ' <b>(<a href="user_givevip.php?id='.$id.'">ge VIP</a>)</b>';
 				}
 			?>
 		</div>
@@ -52,12 +52,12 @@
 <? if ($user->id != $id) { ?>
 	<div id="userMenu">
 		<? makeButton($action=='view',		'goLoc(\'user_view.php?id='.$id.'\')',		'icon_profile.png',	'profil'); ?>
-		<? makeButton($action=='gb',			'goLoc(\'user_gb.php?id='.$id.'\')',			'icon_gb.png',			'gästbok', @intval($info['gb_offset'][1]) ); ?>
-		<? makeButton($action=='blog',		'goLoc(\'user_blog.php?id='.$id.'\')',		'icon_blog.png',		'blogg', @intval($info['blog_offset'][1]) ); ?>
-		<? makeButton($action=='gallery',	'goLoc(\'user_gallery.php?id='.$id.'\')',	'icon_gallery.png',	'galleri', @intval($info['gal_offset'][1]) ); ?>
+		<? makeButton($action=='gb',		'goLoc(\'user_gb.php?id='.$id.'\')',		'icon_gb.png',		'gästbok', $info['gb_offset'] ); ?>
+		<? makeButton($action=='blog',		'goLoc(\'user_blog.php?id='.$id.'\')',		'icon_blog.png',	'blogg', $info['blog_offset'] ); ?>
+		<? makeButton($action=='gallery',	'goLoc(\'user_gallery.php?id='.$id.'\')',	'icon_gallery.png',	'galleri', $info['gal_offset'] ); ?>
 
 		<? makeButton(false,	'makeChat(\''.$id.'\')',			'icon_qchat.png',	'chatta'); ?>
-		<? makeButton(false,	'makeMail(\''.$id.'\')',			'icon_mail_new.png',	'maila'); ?>
+		<? makeButton(false,	'makeMail(\''.$id.'\')',			'icon_mail_new.png','maila'); ?>
 		<?
 			if (!$user->isFriends($id, 1)) {
 				makeButton(false,	'makeRelation(\''.$id.'\')',	'icon_friends.png',	'bli vän');
