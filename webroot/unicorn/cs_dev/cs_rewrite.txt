@@ -37,9 +37,7 @@ borttaget db:
 	
 	
 todo:
-	- svara på brev funkar ej
-	- vidarebefodra brev funkar ej
 	- fixa chatten
 	- filuppladdning
 	- ändra relationstyp funkar ej
-	
+	- admin-sidorna

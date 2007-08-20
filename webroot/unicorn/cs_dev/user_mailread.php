@@ -48,7 +48,8 @@
 
 		<div class="r">
 			<input type="button" onclick="if(confirm('Säker ?')) goLoc('user_mail.php?del_msg=<?=$res['main_id'].'&'.$page?>');" class="btn2_min" value="radera" />
-			<input type="button" onclick="makeMail('<?='&amp;a='.$res['main_id'].'&amp;r'?>');" class="btn2_min" value="skicka vidare" />&nbsp;<?=($own_u && $res_u)?'<input type="button" onclick="makeMail(\''.$res_u['id_id'].'/&amp;a='.$res['main_id'].'\');" class="btn2_min" value="svara" />':'';?>
+			<input type="button" onclick="makeMail('<?=$res_u['id_id'].'&amp;a='.$res['main_id'].'&amp;r'?>');" class="btn2_min" value="skicka vidare" />&nbsp;
+			<? if ($own_u && $res_u) echo '<input type="button" onclick="makeMail(\''.$res_u['id_id'].'&amp;a='.$res['main_id'].'\');" class="btn2_min" value="svara" />'; ?>
 		</div>
 		<br class="clr"/>
 	</div>

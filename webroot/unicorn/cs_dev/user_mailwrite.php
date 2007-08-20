@@ -4,7 +4,7 @@
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('ingen mottagare');
 	$id = $_GET['id'];
 
-	if(!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;		//detta är ett _SVAR_ på ett mail
+	if (!empty($_GET['a'])) $a = intval($_GET['a']); else $a = 0;		//detta är ett _SVAR_ på ett mail
 
 	$error = false;
 
@@ -27,7 +27,7 @@
 		$ans = getMail($a);
 
 		if(!empty($ans) && count($ans)) {
-			if($ans['user_id'] == $l['id_id'] && $ans['status_id'] == '1' || $ans['sender_id'] == $l['id_id'] && $ans['sender_status'] == '1') {
+			if ($ans['user_id'] == $user->id && $ans['status_id'] == '1' || $ans['sender_id'] == $user->id && $ans['sender_status'] == '1') {
 
 			} else $a = false;
 		} else $a = false;
@@ -60,7 +60,7 @@
 	}
 ?>
 	
-<script type="text/javascript" src="<?=OBJ?>text_control.js"></script>
+<script type="text/javascript" src="<?=$config['web_root']?>js/text_control.js"></script>
 <script type="text/javascript">
 function addselOption(txt, file) {
 	len = document.getElementById('photo_list').options.length;
@@ -81,9 +81,9 @@ function cleanField(obj) {
 	if ($a) $extra = '&a='.$a;
 
 if ($js_editor) { ?>
-	<form name="mail_write" action="<?=l('user', 'mailwrite', $extra)?>" method="post" onsubmit="if(this.ins_to.value.length > 0) { if(TC_active) TC_VarToHidden(); } else { alert('Felaktigt fält: Till'); return false; }">
+	<form name="mail_write" action="<?=$_SERVER['PHP_SELF'].'?id='.$id.$extra?>" method="post" onsubmit="if(this.ins_to.value.length > 0) { if(TC_active) TC_VarToHidden(); } else { alert('Felaktigt fält: Till'); return false; }">
 <? } else { ?>
-	<form name="mail_write" action="<?=l('user', 'mailwrite', $extra)?>" method="post"">
+	<form name="mail_write" action="<?=$_SERVER['PHP_SELF'].'?id='.$id.$extra?>" method="post"">
 <? } ?>
 <input type="hidden" name="do" value="1"/>
 <table summary="" cellspacing="0" width="99%" style="" class="cnti">

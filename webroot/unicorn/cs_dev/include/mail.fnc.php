@@ -140,17 +140,17 @@
 	//todo: flytta denna funktion till user klassen
 	function getUserIdFromAlias($_alias)
 	{
-		global $sql;
+		global $db;
 
-		return $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_alias)."' AND status_id = '1' LIMIT 1");
+		return $db->getOneItem('SELECT id_id FROM s_user WHERE u_alias = "'.$db->escape($_alias).'" AND status_id = "1" LIMIT 1');
 	}
 
 	function getUserName($_id)
 	{
-		global $sql;
+		global $db;
 		if (!is_numeric($_id)) return;
 
-		return $sql->queryResult('SELECT u_alias FROM s_user WHERE id_id = '.$_id.' AND status_id = "1" LIMIT 1');
+		return $db->getOneItem('SELECT u_alias FROM s_user WHERE id_id = '.$_id.' AND status_id = "1" LIMIT 1');
 	}
 
 	//todo: flytta till user klassen
@@ -167,13 +167,13 @@
 
 	function sendMail($_to_name, $_cc_name, $_title, $_text, $allowed_html = '', $is_answer = false)
 	{
-		global $sql, $user;
+		global $db, $user;
 		
 		$_text = strip_tags($_text, $allowed_html);
 		$ins_to = getUserIdFromAlias($_to_name);
 		if (!$ins_to) {
 			return 'Felaktig mottagare!';
-		} else if($ins_to == $l['id_id']) {
+		} else if ($ins_to == $user->id) {
 			return 'Du kan inte skicka till dig själv.';
 		}
 		/*if(!$isAdmin) {
@@ -184,29 +184,29 @@
 			$ins_cc = getUserIdFromAlias($_cc_name);
 			if($ins_cc && $ins_cc != $l['id_id'] && $ins_cc != $ins_to) {
 				if (!$user->blocked($ins_cc, 3)) {
-					$res = $sql->queryInsert("INSERT INTO s_usermail SET
+					$res = $db->insert("INSERT INTO s_usermail SET
 					user_id = '".$ins_cc."',
-					sender_id = '".$l['id_id']."',
+					sender_id = '".$user->id."',
 					status_id = '1',
 					sender_status = '1',
 					user_read = '0',
-					sent_cmt = '".secureINS($_text)."',
-					sent_ttl = '".secureINS($_title)."',
+					sent_cmt = '".$db->escape($_text)."',
+					sent_ttl = '".$db->escape($_title)."',
 					sent_date = NOW()");
 					$user->counterIncrease('mail', $ins_cc);
 					$user->notifyIncrease('mail', $ins_cc);
 				}
 			}
 		}
-		
-		$res = $sql->queryInsert("INSERT INTO s_usermail SET
+
+		$res = $db->insert("INSERT INTO s_usermail SET
 		user_id = '".$ins_to."',
-		sender_id = '".$l['id_id']."',
+		sender_id = '".$user->id."',
 		status_id = '1',
 		sender_status = '1',
 		user_read = '0',
-		sent_cmt = '".secureINS($_text)."',
-		sent_ttl = '".secureINS($_title)."',
+		sent_cmt = '".$db->escape($_text)."',
+		sent_ttl = '".$db->escape($_title)."',
 		sent_date = NOW()");
 
 		$user->counterIncrease('mail', $ins_to);
@@ -215,8 +215,8 @@
 		if ($is_answer) {
 			//uppdatera befintligt mail med info om att det är besvarat
 			
-			$q = 'UPDATE s_usermail SET is_answered="1" WHERE user_id="'.$l['id_id'].'" AND main_id="'.$is_answer.'"';
-			$sql->queryInsert($q);
+			$q = 'UPDATE s_usermail SET is_answered="1" WHERE user_id='.$user->id.' AND main_id="'.$is_answer.'"';
+			$db->update($q);
 		}
 
 		return true;
