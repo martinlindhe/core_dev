@@ -24,32 +24,31 @@
 			reloadACT('user_blog_read.php?id='.$res['user_id'].'&n='.$res['main_id']);
 		}
 	}
-	if(!$own) {
-		$hidden = $user->getinfo($l['id_id'], 'hidden_bview');
-		if($isAdmin && $res['hidden_id']) {
+	if (!$own) {
+		$hidden = $user->getinfo($user->id, 'hidden_bview');
+		if($user->isAdmin && $res['hidden_id']) {
 			$beenhere = true;
 		} else {
 			if ($res['hidden_id']) die;
 			if(!$hidden) {
-				$visit = @$sql->queryUpdate("REPLACE INTO s_userblogvisit SET status_id = '1', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', blog_id = '".secureINS($res['main_id'])."'");
-				$beenhere = ($visit != '2')?false:true;
+				$visit = $db->replace("REPLACE INTO s_userblogvisit SET status_id = '1', visit_date = NOW(), visitor_id = '".$user->id."', blog_id = '".$res['main_id']."'");
+				$beenhere = ($visit != '2') ? false : true;
 			} else {
-				$visit = @$sql->queryUpdate("REPLACE INTO s_userblogvisit SET status_id = '2', visit_date = NOW(), visitor_id = '".secureINS($l['id_id'])."', blog_id = '".secureINS($res['main_id'])."'");
-				$beenhere = ($visit != '2')?false:true;
+				$visit = $db>replace("REPLACE INTO s_userblogvisit SET status_id = '2', visit_date = NOW(), visitor_id = '".$user->id."', blog_id = '".$res['main_id']."'");
+				$beenhere = ($visit != '2') ? false : true;
 			}
 		}
-		if(!$beenhere) {
-			$sql->queryUpdate("UPDATE s_userblog SET blog_visit = blog_visit + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+		if (!$beenhere) {
+			$db->update("UPDATE s_userblog SET blog_visit = blog_visit + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
 			if(!$hidden) {
-				$sql->queryUpdate("UPDATE s_userblogvisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND blog_id = '".secureINS($res['main_id'])."' LIMIT 1");
+				$db->update("UPDATE s_userblogvisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".$user->id."' AND blog_id = '".$res['main_id']."' LIMIT 1");
 			} else {
-				$sql->queryUpdate("UPDATE s_userblogvisit SET status_id = '2', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND blog_id = '".secureINS($res['main_id'])."' LIMIT 1");
+				$db->update("UPDATE s_userblogvisit SET status_id = '2', visit_date = NOW() WHERE visitor_id = '".$user->id."' AND blog_id = '".$res['main_id']."' LIMIT 1");
 			}
 		}
 	}
 
-	$page = 'blog';
-
+	$action = 'blog';
 	require(DESIGN.'head_user.php');
 ?>
 

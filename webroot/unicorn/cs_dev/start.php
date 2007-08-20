@@ -22,7 +22,7 @@
 				if (!$title) $title = 'Ingen rubrik';
 				if (strlen($title) >= 20) $title = substr($title, 0, 20).'[...]';
 
-				echo '<a href="'.l('user','blog',$row['id_id'],$row['main_id']).'">'.$title.'</a> av '.$user->getstring($row, '', array('icons' => 1)).'<br/>';
+				echo '<a href="user_blog_read.php?id='.$row['id_id'].'&amp;n='.$row['main_id'].'">'.$title.'</a> av '.$user->getstring($row, '', array('icons' => 1)).'<br/>';
 			}
 			echo '</div></div>';
 		}
@@ -37,7 +37,7 @@
 			foreach($res as $row) {
 				$msg = $row['c_msg'];
 				if (strlen($msg) >= 14) $msg = substr($msg, 0, 12).'[...]';
-				echo '<a href="'.l('user','blog',$row['user_id'],$row['blog_id']).'">'.$msg.'</a> av '.$user->getstring($row['id_id'], '', array('icons' => 1)).'<br/>';
+				echo '<a href="user_blog_read.php?id='.$row['user_id'].'&amp;n='.$row['blog_id'].'">'.$msg.'</a> av '.$user->getstring($row['id_id'], '', array('icons' => 1)).'<br/>';
 			}
 			echo '</div></div>';
 		}

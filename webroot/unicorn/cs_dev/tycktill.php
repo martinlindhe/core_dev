@@ -11,22 +11,24 @@
 			sess_ip = '".$db->escape($_SERVER["REMOTE_ADDR"])."',
 			gb_html = '".(($user->isAdmin)?'1':'0')."',
 			gb_msg = '".$db->escape($_POST['ins_cmt'])."',
+			answer_msg = '',
+			answer_id = 0,
+			admin_tips = '',
 			gb_date = NOW()";
 
 			$ins = $db->insert($q);
-			if ($ins) $sql->logADD('', $ins, 'GB_SEND');
 			$msg = "Tack! Meddelandet kommer att publiceras när det granskats!";
 			errorACT($msg, 'tycktill.php');
 		} else if (!empty($_GET['del']) && is_numeric($_GET['del'])) {
 			$do = false;
 			if(!$user->isAdmin) {
-				$id_id = $sql->queryLine("SELECT status_id, logged_in FROM s_thought WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
-				if($id_id[0] == '1' && $id_id[1] == $l['id_id']) $do = true;
+				$id_id = $db->getOneRow("SELECT status_id, logged_in FROM s_thought WHERE main_id = '".$_GET['del']."' LIMIT 1");
+				if($id_id['status_id'] == '1' && $id_id['logged_in'] == $l['id_id']) $do = true;
 			} else $do = true;
 			if($do) {
-				$sql->queryUpdate("UPDATE s_thought SET status_id = '2', view_id = '1' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+				$db->update("UPDATE s_thought SET status_id = '2', view_id = '1' WHERE main_id = '".$_GET['del']."' LIMIT 1");
 			}
-			reloadACT(l('main', 'thought', $paging['p']));
+			reloadACT('tycktill.php');
 		}
 	}
 

@@ -16,7 +16,7 @@
 		if ($error == true) popupACT('Du har nu skickat en förfrågan.');
 	}
 
-	$rel = getset('', 'r', 'mo', 'text_cmt ASC');
+	$rel = getset(0, 'r', 'mo', 'text_cmt ASC');
 
 	require(DESIGN.'head_popup.php');
 ?>
@@ -25,12 +25,12 @@
 	<div class="smallHeader">bli vän</div>
 	<div class="smallBody">
 
-		<form name="msg" action="<?=$_SERVER['PHP_SELF'].'?id='.$s['id_id']?>" method="post">
+		<form name="msg" action="<?=$_SERVER['PHP_SELF'].'?id='.$id?>" method="post">
 		bli vän med:<br />
 		<?=$user->getstring($s, '', array('nolink' => true))?><br /><br />
 		<b>relationstyp:</b><br />
 		<select name="ins_rel" class="txt">
-		<? foreach ($rel as $row) echo '<option value="'.$row[0].'">'.secureOUT($row[1]).'</option>'; ?>
+		<? foreach ($rel as $row) echo '<option value="'.$row['main_id'].'">'.secureOUT($row['text_cmt']).'</option>'; ?>
 		</select><br/>
 		<input type="submit" class="btn2_sml r" value="spara!" style="margin-top: 5px;" /><br class="clr" />
 		</form>

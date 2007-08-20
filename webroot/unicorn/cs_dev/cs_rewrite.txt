@@ -33,6 +33,7 @@ ny katalogstruktur:
 borttaget db:
 	s_usersess.sess_id
 	s_thought.sess_id
+	s_contribute.city_id
 	
 	
 todo:

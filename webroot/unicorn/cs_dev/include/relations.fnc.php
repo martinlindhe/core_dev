@@ -9,57 +9,59 @@
 	/* Skickar en förfrågan till $_id om att skapa en relation */
 	function sendRelationRequest($_id, $_relation_type)
 	{
-		global $sql, $user;
-		
+		global $db, $user;
 		if (!is_numeric($_id) || !is_numeric($_relation_type)) return false;
 
 		$r = getset($_POST['ins_rel'], 'r');
 		if (!$r) return false; //'Relationen finns inte.';
 
-		$c = $sql->queryResult("SELECT main_id FROM s_userrelation WHERE user_id = '".secureINS($l['id_id'])."' AND friend_id = '".$_id."' LIMIT 1");
-		if(!empty($c)) {
+		$c = $db->getOneItem("SELECT main_id FROM s_userrelation WHERE user_id = '".$user->id."' AND friend_id = '".$_id."' LIMIT 1");
+		if ($c) {
 			### ÄNDRA!
-			$sql->queryUpdate("UPDATE s_userrelquest SET status_id = '2' WHERE user_id = ".$l['id_id']." AND sender_id = ".$_id);
-			$sql->queryUpdate("UPDATE s_userrelquest SET status_id = '2' WHERE user_id = ".$_id." AND sender_id = ".$l['id_id']);
-			$sql->queryUpdate("DELETE FROM s_userrelation WHERE user_id = ".$l['id_id']." AND friend_id = ".$_id);
-			$sql->queryUpdate("DELETE FROM s_userrelation WHERE user_id = ".$_id." AND friend_id = ".$l['id_id']);
-			$res = $sql->queryInsert("INSERT s_userrelquest SET
-				sent_cmt = '".secureINS($r)."',
+			$db->update("UPDATE s_userrelquest SET status_id = '2' WHERE user_id = ".$user->id." AND sender_id = ".$_id);
+			$db->update("UPDATE s_userrelquest SET status_id = '2' WHERE user_id = ".$_id." AND sender_id = ".$user->id);
+			$db->delete("DELETE FROM s_userrelation WHERE user_id = ".$user->id." AND friend_id = ".$_id);
+			$db->delete("DELETE FROM s_userrelation WHERE user_id = ".$_id." AND friend_id = ".$user->id);
+			
+			$q = "INSERT s_userrelquest SET
+				sent_cmt = '".$db->escape($r)."',
 				status_id = '0',
 				sent_date = NOW(),
 				user_id = ".$_id.",
-				sender_id = ".$l['id_id']);
+				sender_id = ".$user->id;
+
+			$res = $db->insert($q);
 			$user->setRelCount($_id);
 			$user->setRelCount($l['id_id']);
 			return 'Nu har du skickat en förfrågan.';
 		} else {
-			$c = $sql->queryResult("SELECT COUNT(*) as count FROM s_userrelquest WHERE user_id = ".$l['id_id']." AND sender_id = ".$_id." AND status_id = '0'");
+			$c = $db->getOneItem("SELECT COUNT(*) FROM s_userrelquest WHERE user_id = ".$user->id." AND sender_id = ".$_id." AND status_id = '0'");
 			if($c > 0) return false; //popupACT('Du har redan blivit tillfrågad.');
 
-			$c = $sql->queryResult("SELECT COUNT(*) as count FROM s_userrelquest WHERE user_id = ".$_id." AND sender_id = ".$l['id_id']." AND status_id = '0'");
-			if($c > 0) {
+			$c = $db->getOneItem("SELECT COUNT(*) FROM s_userrelquest WHERE user_id = ".$_id." AND sender_id = ".$user->id." AND status_id = '0'");
+			if ($c > 0) {
 				$q = "UPDATE s_userrelquest SET
-				sent_cmt = '".secureINS($r)."',
+				sent_cmt = '".$db->escape($r)."',
 				status_id = '0',
 				sent_date = NOW()
-				WHERE user_id = ".$_id." AND sender_id = ".$l['id_id']." AND status_id = '0'";
+				WHERE user_id = ".$_id." AND sender_id = ".$user->id." AND status_id = '0'";
 				
-				$sql->queryUpdate($q);
+				$db->update($q);
 				$user->setRelCount($_id);
-				$user->setRelCount($l['id_id']);
+				$user->setRelCount($user->id);
 				return true; //'Nu har du skickat en förfrågan.';
 			} else {
 				$q = "INSERT INTO s_userrelquest SET
 				user_id = ".$_id.",
-				sender_id = ".$l['id_id'].",
-				sent_cmt = '".secureINS($r)."',
+				sender_id = ".$user->id.",
+				sent_cmt = '".$db->escape($r)."',
 				status_id = '0',
 				deleted_id = 0,
 				sent_date = NOW()";
-				
-				$sql->queryInsert($q);
+
+				$db->insert($q);
 				$user->setRelCount($_id);
-				$user->setRelCount($l['id_id']);
+				$user->setRelCount($user->id);
 				return true; //'Nu har du skickat en förfrågan.';
 			}
 		}

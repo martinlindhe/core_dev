@@ -71,7 +71,7 @@ function makeText(url, type) {
 	win.focus();
 }
 function makeContribution() { 
-	win = window.open('/main/speakerscorner/create/', '', 'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, scrollbars=0, status=no, width=200, height=280, location=yes');
+	win = window.open('se_hit_create.php', '', 'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, scrollbars=0, status=no, width=200, height=280, location=yes');
 	win.focus();
 }
 function makeRelation(id) { 
