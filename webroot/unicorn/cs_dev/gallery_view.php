@@ -1,52 +1,61 @@
 <?
-	include(CONFIG.'secure.fnc.php');
-	
-	$q = "SELECT * FROM s_userphoto WHERE main_id = '".secureINS($key)."' LIMIT 1";
-	$res = $sql->queryLine($q, 1);
-	if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $s['id_id'] != $res['user_id'] || ($res['hidden_id'] && !$allowed)) {
-		errorACT('Felaktigt galleriinlägg.', l('user', 'gallery', $s['id_id']));
+	require_once('config.php');
+
+	$id = $user->id;
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $id = $_GET['id'];
+
+	if (empty($_GET['n']) || !is_numeric($_GET['n'])) die('no img id');
+	$key = $_GET['n'];	//image id to display
+
+	$isFriends = $user->isFriends($id);
+	$allowed = ($user->id == $id || $isFriends || $user->isAdmin) ? true : false;
+
+	$q = 'SELECT * FROM s_userphoto WHERE main_id = '.$key.' LIMIT 1';
+	$res = $db->getOneRow($q);
+	if (!$res || empty($res['status_id']) || $res['status_id'] != '1' || $id != $res['user_id'] || ($res['hidden_id'] && !$allowed)) {
+		errorACT('Felaktigt galleriinlÃ¤gg.', l('user', 'gallery', $s['id_id']));
 	}
 	
-	if (!empty($_POST['chg_pic_desc']) && $res['user_id'] == $l['id_id']) {
-		$q = 'UPDATE s_userphoto SET pht_cmt="'.secureINS($_POST['chg_pic_desc']).'" WHERE main_id = "'.secureINS($key).'"';
-		$sql->queryUpdate($q);
+	if (!empty($_POST['chg_pic_desc']) && $res['user_id'] == $user->id) {
+		$q = 'UPDATE s_userphoto SET pht_cmt="'.$db->escape($_POST['chg_pic_desc']).'" WHERE main_id = '.$key;
+		$db->update($q);
 		$res['pht_cmt'] = $_POST['chg_pic_desc'];
-		reloadACT(l('user', 'gallery', $res['user_id']));
+		reloadACT('user_gallery.php?id='.$res['user_id']);
 	}
 
 	//radera kommentar
-	if(!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
-		$r = $sql->queryLine("SELECT main_id, status_id, user_id, id_id FROM s_userphotocmt WHERE main_id = '".secureINS($_GET['del_msg'])."' LIMIT 1");
-		if(!empty($r) && count($r) && $r[1] == '1') {
-			if($isAdmin || $r[2] == $l['id_id'] || $r[3] == $l['id_id']) {
-				$re = $sql->queryUpdate("UPDATE s_userphotocmt SET status_id = '2' WHERE main_id = '".secureINS($r[0])."' LIMIT 1");
+	if (!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
+		$r = $db->getOneRow('SELECT main_id, status_id, user_id, id_id FROM s_userphotocmt WHERE main_id = '.$_GET['del_msg'].' LIMIT 1');
+		if ($r && $r['status_id'] == '1') {
+			if ($user->isAdmin || $r['user_id'] == $user->id || $r['id_id'] == $user->id) {
+				$re = $db->update('UPDATE s_userphotocmt SET status_id = "2" WHERE main_id = '.$r['main_id'].' LIMIT 1');
 			}
-			if($re) {
-				$sql->queryUpdate("UPDATE s_userphoto SET pht_cmts = pht_cmts - 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			if ($re) {
+				$db->update('UPDATE s_userphoto SET pht_cmts = pht_cmts - 1 WHERE main_id = '.$res['main_id'].' LIMIT 1');
 			}
-			reloadACT(l('user', 'gallery', $s['id_id'], $res['main_id']));
+			reloadACT('gallery_view.php?id='.$id.'&n='.$res['main_id']);
 		}
 	}
 	
-	//räkna visning av bilden
-	if (!$own) {
-		$hidden = $user->getinfo($l['id_id'], 'hidden_login');
+	//rÃ¤kna visning av bilden
+	if ($user->id != $res['user_id']) {
+		$hidden = $user->getinfo($user->id, 'hidden_login');
 		if (!$hidden) {
-			$q = 'REPLACE INTO s_userphotovisit SET status_id = "1", visit_date=NOW(), visitor_id = "'.secureINS($l['id_id']).'", visitor_obj = "'.secureINS($res['main_id']).'"';
-			$visit = $sql->queryUpdate($q);
+			$q = 'REPLACE INTO s_userphotovisit SET status_id = "1", visit_date=NOW(), visitor_id = '.$user->id.', visitor_obj = "'.$res['main_id'].'"';
+			$visit = $db->replace($q);
 			$beenhere = ($visit != '2')?false:true;
 		}
 
 		if (!$hidden && !$beenhere) {
-			$sql->queryUpdate("UPDATE s_userphotovisit SET visit_item = visit_item + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
-			$sql->queryUpdate("UPDATE s_userphotovisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = '".secureINS($l['id_id'])."' AND photo_id = '".secureINS($res['main_id'])."' LIMIT 1");
+			$db->update("UPDATE s_userphotovisit SET visit_item = visit_item + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			$db->update("UPDATE s_userphotovisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = ".$user->id." AND photo_id = '".$res['main_id']."' LIMIT 1");
 
-			$q = 'UPDATE s_userphoto SET pht_click=pht_click+1 WHERE main_id='.secureINS($key);
-			$sql->queryUpdate($q);
+			$q = 'UPDATE s_userphoto SET pht_click=pht_click+1 WHERE main_id='.$key;
+			$db->update($q);
 		}
 	}
 
-	$page = 'gallery';
+	$action = 'gallery';
 
 	require(DESIGN.'head_user.php');
 
@@ -101,7 +110,7 @@
 		<form name="gal_change" method="post" action="">
 			<table><tr>
 				<td>
-					Ändra bildbeskrivningen:
+					Ã„ndra bildbeskrivningen:
 					<input type="text" name="chg_pic_desc" value="<?=secureOUT($res['pht_cmt'])?>"/>
 				</td>
 				<td width="66">
@@ -120,24 +129,24 @@
 <div class="bigBody">
 <?
 	$c_paging = paging(@$_GET['p'], 20);
-	$c_paging['co'] = $sql->queryResult("SELECT COUNT(*) as count FROM s_userphotocmt WHERE photo_id = '".$res['main_id']."' AND status_id = '1'");
+	$c_paging['co'] = $db->getOneItem('SELECT COUNT(*) FROM s_userphotocmt WHERE photo_id = '.$res['main_id'].' AND status_id = "1"');
 
 	$odd = 1;
-	$cmt = $sql->query("SELECT b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.* FROM s_userphotocmt b LEFT JOIN s_user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.photo_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}", 0, 1);
-	if(count($cmt) && !empty($cmt)) {
+	$cmt = $db->getArray("SELECT b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.* FROM s_userphotocmt b LEFT JOIN s_user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.photo_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}");
+	if (count($cmt) && !empty($cmt)) {
 		foreach($cmt as $val) {
 			if ($val['private_id'] && (!$own && !$isAdmin)) continue;
-			$msg_own = ($val['id_id'] == $l['id_id'] || $own || $isAdmin)?true:false;
+			$msg_own = ($val['id_id'] == $user->id || $own || $user->isAdmin) ? true : false;
 			$odd = !$odd;
 			echo '
 				<table summary="" cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
-				<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).($val['private_id']?' <b>[privat inlägg]</b>':'').'</h5><div class="r"></div><br class="clr" />
+				<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).($val['private_id']?' <b>[privat inlÃ¤gg]</b>':'').'</h5><div class="r"></div><br class="clr" />
 				'.secureOUT($val['c_msg']).'
 				</td>';
 		
 			if ($msg_own) {
 				echo '<td class="pdg" width="66"><br/>';
-				makeButton(false, 'if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gallery', $s['id_id'], $res['main_id']).'del_msg='.$val['main_id'].'\');', 'icon_delete.png', 'radera');
+				makeButton(false, 'if(confirm(\'SÃ¤ker ?\')) goLoc(\'gallery_view.php?id='.$id.'&n='.$res['main_id'].'&del_msg='.$val['main_id'].'\');', 'icon_delete.png', 'radera');
 				echo '</td>';
 			}
 		

@@ -6,8 +6,8 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	//$config['core_root'] = '/home/martin/dev/webroot/core_dev/';
-	$config['core_root'] = 'E:/devel/webroot/core_dev/';
+	$config['core_root'] = '/home/martin/dev/webroot/core_dev/';
+	//$config['core_root'] = 'E:/devel/webroot/core_dev/';
 	$config['core_web_root'] = '/core_dev/';						//the webpath to root level of core files (css, js, gfx directories)
 
 	$config['web_root'] = '/unicorn/cs_dev/';						//the webpath to the root level of the project
@@ -63,7 +63,7 @@ define('SQL_H', 'pc3.icn.se');
 */
 
 	$config['database']['username']	= 'root';
-	//$config['database']['password']	= 'dravel';
+	$config['database']['password']	= 'dravel';
 	$config['database']['database']	= 'cs_dev';
 	$config['database']['host']	= 'localhost';
 	$db = new DB_MySQLi($config['database']);

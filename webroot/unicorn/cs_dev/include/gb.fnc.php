@@ -45,9 +45,9 @@
 	//returns the number of unread messages for active user
 	function gbCountUnread()
 	{
-		global $sql;
+		global $db, $user;
 
-		return $sql->queryResult("SELECT COUNT(*) as count FROM s_usergb gb WHERE gb.user_id = ".$l['id_id']." AND gb.user_read = '0'");
+		return $db->getOneItem('SELECT COUNT(*) FROM s_usergb WHERE user_id = '.$user->id.' AND user_read = "0"');
 	}
 
 	// returns all msg sent between two users. NEW! separator is inserted because the id's are numeric. for example: before a history between userid 11 and userid 232 would have the users_id = 11232. but that is also the historycode for user 1 and user 1232.

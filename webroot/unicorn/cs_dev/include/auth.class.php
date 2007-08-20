@@ -19,11 +19,11 @@ class user_auth {
 		$db->update('UPDATE s_user SET lastlog_date = "'.$res.'", lastonl_date = "'.$res.'", account_date = "'.$res.'" WHERE id_id = "'.$db->escape($result['id_id']).'"');
 		$db->replace('REPLACE INTO s_useronline SET account_date = "'.$res.'", id_id = "'.$db->escape($result['id_id']).'", u_sex = "'.$result['u_sex'].'"');
 
-		$user->counterSet($result['id_id']);
-
 		$_SESSION['data'] = $result;
 		$_SESSION['data']['account_date'] = $res;
 		$_SESSION['data']['cachestr'] = $user->cachestr($result['id_id']);
+
+		$user->counterSet($result['id_id']);
 	}
 
 	function notify_user($id, $msg, $alias = '') {

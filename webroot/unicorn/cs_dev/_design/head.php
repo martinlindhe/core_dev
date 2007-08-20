@@ -30,6 +30,7 @@ function blockRightClick(event) {
 </head>
 
 <body>
+
 	<div id="hoverCraft" style="position: absolute; z-index: 10; display: none; top: 0px; left: 0px;"></div>
 	<div id="top">
 		<div id="top_logo"></div>
@@ -52,11 +53,12 @@ function blockRightClick(event) {
 
 		<ul id="menu_user">
 <?
-	$menu_brev = ' brev '.@intval($_SESSION['data']['offsets']['mail_offset']);
-	$menu_gb = ' gästbok '.@intval($_SESSION['data']['offsets']['gb_offset']);
-	$menu_relations = ' relationer '.@intval($_SESSION['data']['offsets']['rel_offset']);
 
-	if (@$l['id_id']) {
+	$menu_brev = ' brev '.$_SESSION['data']['offsets']['mail_offset'];
+	$menu_gb = ' gästbok '.$_SESSION['data']['offsets']['gb_offset'];
+	$menu_relations = ' relationer '.$_SESSION['data']['offsets']['rel_offset'];
+
+	if ($user->id) {
 		//kolla om det finns olästa mail
 		$chk = getUnreadMailCount();
 		if ($chk) $menu_brev = ' <span style="color:#ff0000">brev '.$chk.'</span>';
@@ -72,9 +74,9 @@ function blockRightClick(event) {
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_profil.png" alt="" /><a href="user_view.php">min profil</a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gb.png" alt="" /><a href="user_gb.php"><?=$menu_gb?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_mail.png" alt="" /><a href="user_mail.php"><?=$menu_brev?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_blog.png" alt="" /><a href="user_blog.php">blogg <?=@intval($_SESSION['data']['offsets']['blog_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_blog.png" alt="" /><a href="user_blog.php">blogg <?=$_SESSION['data']['offsets']['blog_offset']?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_friends.png" alt="" /><a href="user_relations.php"><?=$menu_relations?></a> &nbsp;</li>
-			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gallery.png" alt="" /><a href="user_gallery.php">galleri <?=@intval($_SESSION['data']['offsets']['gal_offset'])?></a> &nbsp;</li>
+			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_gallery.png" alt="" /><a href="user_gallery.php">galleri <?=$_SESSION['data']['offsets']['gal_offset']?></a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_settings.png" alt="" /><a href="settings_presentation.php">inställningar</a> &nbsp;</li>
 			<li><img align="absmiddle" src="<?=$config['web_root']?>_gfx/icon_settings.png" alt="" /><a href="upgrade.php">uppgradera</a> &nbsp;</li>
 		</ul>

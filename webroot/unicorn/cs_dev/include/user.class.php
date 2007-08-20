@@ -70,11 +70,13 @@ class user {
 		$id = $this->setinfo($user, $type, $val);
 		if($id[0]) $this->setrel($id[1], $rel, $user);
 	}
-	function counterSet($id) {
+
+	function counterSet($id)
+	{
 		$info = $this->getcontent($id, 'user_head');
 		$_SESSION['data']['offsets'] = $info;
-		//$_SESSION['data']['offsets'] = array('gb_offset' => intval($info['gb_offset']), 'mail_offset' => intval($info['mail_offset']]), 'forum_offset' => intval($info['forum_offset']), 'gal_offset' => intval($info['gal_offset']), 'blog_offset' => intval($info['blog_offset']), 'blocked_offset' => intval($info['blocked_offset']), 'rel_offset' => intval($info['rel_offset']));
 	}
+
 	function counterDecrease($type, $user) {
 		$c = $this->getinfo($user, $type.'_offset');
 		if(!$c || $c <= 0) $c = 1;

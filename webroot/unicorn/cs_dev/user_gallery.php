@@ -12,12 +12,6 @@
 		exit;
 	}
 
-	if(!empty($key) && is_numeric($key)) {
-		//hanterar även ändring av beskrivning
-		include('gallery_view.php');
-		exit;
-	}
-
 	/* bevakningar */
 	if ($id && isset($_GET['subscribe'])) {
 		spyAdd($id, 'g');
@@ -28,14 +22,14 @@
 	}
 
 	//Markera en bild som raderad
-	if(!empty($_GET['d'])) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, pht_date, pht_cmt FROM s_userphoto WHERE main_id = '".secureINS($_GET['d'])."' LIMIT 1", 1);
-		if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $l['id_id']) {
-			errorACT('Felaktigt inlägg.', l('user', 'gallery', $id));
+	if (!empty($_GET['d']) && is_numeric($_GET['d'])) {
+		$res = $db->getOneRow('SELECT main_id, status_id, user_id, pht_date, pht_cmt FROM s_userphoto WHERE main_id = '.$_GET['d'].' LIMIT 1');
+		if (!$res || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $user->id) {
+			errorACT('Felaktigt inlägg.', 'user_gallery.php?id='.$id);
 		} else {
-			$sql->queryUpdate("UPDATE s_userphoto SET status_id = '2' WHERE main_id = '".$res['main_id']."' LIMIT 1");
-			$user->counterDecrease('gal', $l['id_id']);
-			reloadACT(l('user', 'gallery', $id));
+			$db->update('UPDATE s_userphoto SET status_id = "2" WHERE main_id = '.$res['main_id'].' LIMIT 1');
+			$user->counterDecrease('gal', $user->id);
+			reloadACT('user_gallery.php?id='.$id);
 		}
 	}
 
@@ -82,7 +76,7 @@
 <div class="subHead">galleri</div><br class="clr"/>
 <?
 		$paging = paging(1, 20);
-		$paging['co'] = $db->getOneItem("SELECT COUNT(*) FROM s_userphoto WHERE user_id = '".$id."' AND status_id = '1' AND hidden_id = '0' LIMIT 1");
+		$paging['co'] = $db->getOneItem('SELECT COUNT(*) FROM s_userphoto WHERE user_id = '.$id.' AND status_id = "1" AND hidden_id = "0" LIMIT 1');
 		$name = 'galleri';
 		$all = true;
 		$res = $gall_res;
@@ -96,7 +90,7 @@
 		echo 'Denna medlem har inte tillåtit dig att se dennes galleri x-bilder.';
 	} else {
 		$paging = paging(1, 20);
-		$paging['co'] = $db->getOneItem("SELECT COUNT(*) FROM s_userphoto WHERE user_id = '".$id."' AND status_id = '1' AND hidden_id = '1'");
+		$paging['co'] = $db->getOneItem('SELECT COUNT(*) FROM s_userphoto WHERE user_id = '.$id.' AND status_id = "1" AND hidden_id = "1"');
 		$name = 'galleri x';
 		$all = $allowed;
 		$res = $gallx_res;

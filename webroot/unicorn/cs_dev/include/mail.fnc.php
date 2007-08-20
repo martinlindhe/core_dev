@@ -118,12 +118,11 @@
 	
 	function getUnreadMailCount()
 	{
-		global $sql, $user;
+		global $db, $user;
+		if (!$user->id) return 0;
 
-		if (!$l['id_id']) return 0;
-
-		$q = "SELECT COUNT(*) FROM s_usermail WHERE user_id = ".$l['id_id']." AND user_read = '0' AND status_id='1'";
-		return $sql->queryResult($q);
+		$q = 'SELECT COUNT(*) FROM s_usermail WHERE user_id = '.$user->id.' AND user_read = "0" AND status_id="1"';
+		return $db->getOneItem($q);
 	}
 
 	function mailMarkAsRead($_id)
