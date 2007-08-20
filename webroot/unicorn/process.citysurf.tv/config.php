@@ -27,25 +27,27 @@
 	$config['database']['database']	= 'dbProcess';
 	$db = new DB_MySQLi($config['database']);
 
+	$config['user_db']['host']	= 'pc3.icn.se';
+	$config['user_db']['username']	= 'cs_user';
+	$config['user_db']['password']	= 'cs8x8x9ozoSSpp';
+	$config['user_db']['database']	= 'cs_platform';
+
 	$config['session']['timeout'] = (60*60)*24*7;	//7 days
 	$config['session']['name'] = 'procId';
 	$config['session']['sha1_key'] = 'x8xijemjshjkljhkjhs88t68kioxkijhkjsh';
 	$config['session']['allow_registration'] = false;
 	$session = new Session($config['session']);
 
-	$config['files']['apc_uploads'] = false;
-	$config['files']['upload_dir'] = 'D:/devel/webupload/process/';
-	$config['files']['thumbs_dir'] = 'D:/devel/webupload/process/thumbs/';
-	$files = new Files($config['files']);
-
 	$session->handleSessionActions();
-
 
 	$allowed_ip = array(
 		'127.0.0.1',
+		'213.80.11.162',	//unicorn kontoret
 		'212.37.28.102',	//NVOX ip
 		'217.151.193.79',	//Ericsson IPX (ipx-pat.ipx.com)
 		'217.151.193.80'	//Ericsson IPX (ipx-pat.ipx.com)
 	);
 
+	$config['sms']['auth_username'] = 'lwcg';
+	$config['sms']['auth_password'] = '3koA4enpE';
 ?>

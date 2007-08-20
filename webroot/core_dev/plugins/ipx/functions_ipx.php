@@ -126,7 +126,7 @@
 
 	function ipxHandleIncoming()
 	{
-		global $db, $session;
+		global $db, $session, $config;
 
 		//All incoming data is set as GET parameters
 		$params = '';
@@ -169,10 +169,6 @@
 		}
 
 		//identifiera användaren
-		$config['user_db']['host']	= 'pc3.icn.se';
-		$config['user_db']['username']	= 'cs_user';
-		$config['user_db']['password']	= 'cs8x8x9ozoSSpp';
-		$config['user_db']['database']	= 'cs_platform';
 		$user_db = new DB_MySQLi($config['user_db']);
 
 		$q = 'SELECT u_alias FROM s_user WHERE id_id='.$in_cmd[2];
@@ -229,15 +225,11 @@
 
 	function nvoxHandleIncoming($_user_id, $_days, $_level)
 	{
-		global $db, $session;
+		global $db, $session, $config;
 		if (!is_numeric($_user_id) || !is_numeric($_days) || !is_numeric($_level)) return false;
 		if ($_level > 3) return false;
 
 		//identifiera användaren
-		$config['user_db']['host']	= 'pc3.icn.se';
-		$config['user_db']['username']	= 'cs_user';
-		$config['user_db']['password']	= 'cs8x8x9ozoSSpp';
-		$config['user_db']['database']	= 'cs_platform';
 		$user_db = new DB_MySQLi($config['user_db']);
 
 		$q = 'SELECT u_alias FROM s_user WHERE id_id='.$_user_id;
@@ -274,12 +266,8 @@
 //av martin. används häråvar, mot cs databasen
 function addVIP($user_id, $vip_level, $days)
 {
-	global $session;
+	global $session, $config;
 
-	$config['user_db']['host']	= 'pc3.icn.se';
-	$config['user_db']['username']	= 'cs_user';
-	$config['user_db']['password']	= 'cs8x8x9ozoSSpp';
-	$config['user_db']['database']	= 'cs_platform';
 	$user_db = new DB_MySQLi($config['user_db']);
 
 	//$session->log('addVIP user='.$user_id.', level: '.$vip_level.',days: '.$days );
