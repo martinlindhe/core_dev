@@ -75,42 +75,37 @@
 	/* Accepterar relation-request $_id */
 	function acceptRelationRequest($_id)
 	{
-		global $sql, $user;
+		global $db, $user;
 		
 		if (!is_numeric($_id)) return false;
 
-		$q = "SELECT sent_cmt, sender_id FROM s_userrelquest WHERE user_id = ".$l['id_id']." AND main_id = ".$_id." AND status_id = '0' LIMIT 1";
-		$c = $sql->query($q, 0, 1);
-		if(empty($c) || !count($c)) return 'Det finns ingen förfrågan.';
+		$q = "SELECT sent_cmt, sender_id FROM s_userrelquest WHERE user_id = ".$user->id." AND main_id = ".$_id." AND status_id = '0' LIMIT 1";
+		$c = $db->getOneRow($q);
+		if (!$c) return 'Det finns ingen förfrågan.';
 		
-		$isFriends = areTheyFriends($l['id_id'], $c[0]['sender_id']);
+		$isFriends = areTheyFriends($user->id, $c['sender_id']);
 		if ($isFriends) {
 			return 'Ni har redan en relation.';
 		}
 				
 		$q = "INSERT INTO s_userrelation SET
-		user_id = ".$l['id_id'].",
-		friend_id = ".$c[0]['sender_id'].",
-		rel_id = '".secureINS($c[0]['sent_cmt'])."',
+		user_id = ".$user->id.",
+		friend_id = ".$c['sender_id'].",
+		rel_id = '".$db->escape($c['sent_cmt'])."',
 		activated_date = NOW()";
-		$sql->queryInsert($q);
+		$db->insert($q);
 
 		$q = "INSERT INTO s_userrelation SET
-		user_id = ".$c[0]['sender_id'].",
-		friend_id = ".$l['id_id'].",
-		rel_id = '".secureINS($c[0]['sent_cmt'])."',
+		user_id = ".$c['sender_id'].",
+		friend_id = ".$user->id.",
+		rel_id = '".$db->escape($c['sent_cmt'])."',
 		activated_date = NOW()";
-		$sql->queryInsert($q);
+		$db->insert($q);
 
-		$check = $sql->queryUpdate("UPDATE s_userrelquest SET status_id = '1' WHERE user_id = ".$l['id_id']." AND sender_id = ".$c[0]['sender_id']." AND status_id = '0' LIMIT 1");
-		#if($check) sysMSG($u->id, 'Relation', 'Your relation with '.$s->alias.' is accepted!');
-		#$user->spy($s['id_id'], $l['id_id'], 'MSG', array('Din relation med <b>'.$l['u_alias'].'</b> har accepterats.'));
-		#$user->setRelCount($s['id_id']);
-		#$user->setRelCount($l['id_id']);
-		#$user->get_cache();
-		$user->notifyDecrease('rel', $l['id_id']);
-		$user->counterIncrease('rel', $l['id_id']);
-		$user->counterIncrease('rel', $c[0]['sender_id']);
+		$check = $db->update("UPDATE s_userrelquest SET status_id = '1' WHERE user_id = ".$user->id." AND sender_id = ".$c['sender_id']." AND status_id = '0' LIMIT 1");
+		$user->notifyDecrease('rel', $user->id);
+		$user->counterIncrease('rel', $user->id);
+		$user->counterIncrease('rel', $c['sender_id']);
 		return true;
 	}
 

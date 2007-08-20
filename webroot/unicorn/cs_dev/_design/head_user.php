@@ -52,9 +52,9 @@
 <? if ($user->id != $id) { ?>
 	<div id="userMenu">
 		<? makeButton($action=='view',		'goLoc(\'user_view.php?id='.$id.'\')',		'icon_profile.png',	'profil'); ?>
-		<? makeButton($action=='gb',		'goLoc(\'user_gb.php?id='.$id.'\')',		'icon_gb.png',		'gästbok', $info['gb_offset'] ); ?>
-		<? makeButton($action=='blog',		'goLoc(\'user_blog.php?id='.$id.'\')',		'icon_blog.png',	'blogg', $info['blog_offset'] ); ?>
-		<? makeButton($action=='gallery',	'goLoc(\'user_gallery.php?id='.$id.'\')',	'icon_gallery.png',	'galleri', $info['gal_offset'] ); ?>
+		<? makeButton($action=='gb',		'goLoc(\'user_gb.php?id='.$id.'\')',		'icon_gb.png',		'gästbok', @$info['gb_offset'] ); ?>
+		<? makeButton($action=='blog',		'goLoc(\'user_blog.php?id='.$id.'\')',		'icon_blog.png',	'blogg', @$info['blog_offset'] ); ?>
+		<? makeButton($action=='gallery',	'goLoc(\'user_gallery.php?id='.$id.'\')',	'icon_gallery.png',	'galleri', @$info['gal_offset'] ); ?>
 
 		<? makeButton(false,	'makeChat(\''.$id.'\')',			'icon_qchat.png',	'chatta'); ?>
 		<? makeButton(false,	'makeMail(\''.$id.'\')',			'icon_mail_new.png','maila'); ?>
