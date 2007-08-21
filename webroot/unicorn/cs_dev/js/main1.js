@@ -109,7 +109,7 @@ function trim(str) {
 	return str.replace(/^\s*|\s*$/g,"");
 }
 function makeBlock(id) {
-	ref = window.open('/user/block/' + id + '/', '',  'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, status=no, width=' + 200 + ', height='+280);
+	ref = window.open('user_block.php?id=' + id, '',  'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, status=no, width=' + 200 + ', height='+280);
 	ref.focus();
 }
 <!-- function makeMail() { alert('Kommer alldeles snart!'); } //-->

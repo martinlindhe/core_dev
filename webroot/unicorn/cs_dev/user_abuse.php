@@ -20,9 +20,9 @@
 <?
 	} else {
 ?>
-	Vill du bara blockera denna användare från din sida, <b><a href="javascript:makeBlock('<?=$s['id_id']?>');">klicka här</a></b>.<br/><br/>
+	Vill du bara <b>blockera</b> denna användare från din sida, <b><a href="javascript:makeBlock('<?=$id?>');">klicka här</a></b>.<br/><br/>
 	
-	Vill du anmäla användaren, ange orsak i rutan här under.andlar ärendet så snabbt vi kan.<br/>
+	Vill du anmäla användaren, ange orsak i rutan här under. Vi behandlar ärendet så snabbt vi kan.<br/>
 	Missbruk kan lea till avstängning av dig själv!
 
 	<form method="post" action="">

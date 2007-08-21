@@ -8,7 +8,7 @@
 		<div class="smallHeader">meddelande</div>
 		<div class="smallBody">
 			<?=$msg?><br/>
-			<input type="submit" onclick="self.close();" class="btn2_sml r" value="stäng!" /><br class="clr"/>
+			<input type="submit" onclick="self.close();" class="btn2_sml r" value="stÃ¤ng!" /><br class="clr"/>
 		</div>
 	</div>
 <?

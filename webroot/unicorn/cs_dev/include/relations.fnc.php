@@ -158,12 +158,11 @@
 
 	function blockRelation($_id)
 	{
-		global $sql;
-
+		global $db, $user;
 		if (!is_numeric($_id)) return false;
-		
-		$sql->queryInsert("INSERT INTO s_userblock SET rel_id = 'u', user_id = ".$l['id_id'].", friend_id = ".$_id.", activated_date = NOW()");
-		$sql->queryInsert("INSERT INTO s_userblock SET rel_id = 'f', user_id = ".$_id.", friend_id = ".$l['id_id'].", activated_date = NOW()");
+
+		$db->insert("INSERT INTO s_userblock SET rel_id = 'u', user_id = ".$user->id.", friend_id = ".$_id.", activated_date = NOW()");
+		$db->insert("INSERT INTO s_userblock SET rel_id = 'f', user_id = ".$_id.", friend_id = ".$user->id.", activated_date = NOW()");
 		return true;
 	}
 
