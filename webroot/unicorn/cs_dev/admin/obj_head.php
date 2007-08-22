@@ -1,5 +1,5 @@
 <?
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 ?>
 	<script type="text/javascript" src="fnc_adm.js"></script>
 	<script type="text/javascript">

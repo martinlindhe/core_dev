@@ -1,14 +1,10 @@
 <?
-session_start();
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
+	require_once('find_config.php');
+	
+	//denna funktion kräver s_send tabellen som saknas i databasen...
 
 	if(!$isCrew && strpos($_SESSION['u_a'][1], 'news_send') === false) errorNEW('Ingen behörighet.');
+
 	$page = 'UTSKICK';
 	$menu = $menu_NEWS;
 	$change = false;
@@ -20,17 +16,17 @@ session_start();
 	if(!empty($_GET['archive'])) $archive = true;
 	if(!empty($_GET['onl_archive'])) $onl_archive = true;
 
-	if(!empty($_POST['ins_txt'])) {
+	if (!empty($_POST['ins_txt'])) {
 		$send = '';
-		if(!empty($_POST['id'])) {
+		if (!empty($_POST['id'])) {
 			mysql_query("UPDATE s_send SET n_cmt = '".secureINS($_POST['ins_txt'])."', n_week = '".secureINS($_POST['ins_week'])."', n_date = NOW() WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
 		} else {
 			$unique = md5(microtime());
-			mysql_query("INSERT INTO s_send SET unique_id = '$unique', n_cmt = '".secureINS($_POST['ins_txt'])."', n_week = '".secureINS($_POST['ins_week'])."', n_date = NOW()");
-			if(mysql_insert_id()) $send = '?show='.mysql_insert_id();
+			$chk = $db->insert("INSERT INTO s_send SET unique_id = '$unique', n_cmt = '".$db->escape($_POST['ins_txt'])."', n_week = '".$db->escape($_POST['ins_week'])."', n_date = NOW()");
+			if ($chk) $send = '?show='.$chk;
 		}
 		header("Location: send.php".$send);
-		exit;
+		die;
 	}
 
 	if(!empty($_GET['id'])) {
@@ -54,9 +50,9 @@ session_start();
 		}
 	}
 
-	$list = mysql_query("SELECT a.main_id, a.unique_id, a.n_week, a.n_cmt, a.tview_cnt, COUNT(b.unique_id) as view_cnt FROM s_send a LEFT JOIN s_sendvisit b ON b.category_id = a.unique_id AND b.unique_id != '' AND b.site_visit = '1' GROUP BY a.main_id ORDER BY a.n_week DESC, a.n_date DESC");
+	$list = $db->getArray("SELECT a.main_id, a.unique_id, a.n_week, a.n_cmt, a.tview_cnt, COUNT(b.unique_id) as view_cnt FROM s_send a LEFT JOIN s_sendvisit b ON b.category_id = a.unique_id AND b.unique_id != '' AND b.site_visit = '1' GROUP BY a.main_id ORDER BY a.n_week DESC, a.n_date DESC");
 
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 ?>
 <script type="text/javascript" src="fnc_adm.js"></script>
 <script type="text/javascript" src="fnc_txt.js"></script>
@@ -108,8 +104,8 @@ function loadtop() {
 			</table>
 			<table width="100%" cellspacing="0">
 <?
-	while($r = mysql_fetch_assoc($list)) {
-		$del = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_senddelete WHERE category_id = '".secureINS($r['unique_id'])."'"), 0, 'count');
+	foreach ($list as $r) {
+		$del = $db->getOneItem("SELECT COUNT(*) FROM s_senddelete WHERE category_id = '".secureINS($r['unique_id'])."'");
 		echo '<tr><td>'.substr($r['unique_id'], 0, 5).' <a href="send.php?show='.$r['main_id'].'">VECKA '.$r['n_week'].' - '.secureOUT($r['n_cmt']).'</a> [LÄST:'.(($r['tview_cnt'])?'<a href="send_extract.php?id='.$r['unique_id'].'">'.$r['tview_cnt'].'</a>':'<b>0</b>').'] [BESÖKT:'.(($r['view_cnt'])?'<a href="send_extract.php?r=1&id='.$r['unique_id'].'">'.$r['view_cnt'].'</a>':'<b>0</b>').'] [X:'.(($del)?'<a href="send_extract.php?d=1&id='.$r['unique_id'].'">'.$del.'</a>':'<b>0</b>').']</td><td align="right"><a href="send.php?id='.$r['main_id'].'">ÄNDRA</a> | <a href="send.php?del='.$r['main_id'].'" onclick="return (confirm(\'Säker ?\'))?true:false;">RADERA</a></td></tr>';
 		echo '<tr><td><td></tr>';
 	}
