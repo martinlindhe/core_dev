@@ -1,16 +1,7 @@
 <?
-session_start();
-#ob_start();
- #   ob_implicit_flush(0);
-  #  ob_start('ob_gzhandler');
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	require("../_config/validate.fnc.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
+	require_once('find_config.php');
+
+	//require("../_config/validate.fnc.php");
 
 	$limit = 10;
 	$ip_limit = 20;
@@ -88,7 +79,7 @@ doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(str
 		$t_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_changes WHERE c_type = 't' AND c_done = '0' AND chg_all = '1'"), 0, 'count');
 	}
 
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 ?>
 <script type="text/javascript" src="fnc_txt.js"></script>
 <script type="text/JavaScript">

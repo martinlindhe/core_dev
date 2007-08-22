@@ -1,10 +1,4 @@
 <?
-	require_once(dirname(__FILE__).'/../_config/config.include.php');
-	require_once(dirname(__FILE__).'/../_config/main.fnc.php');
-	require_once(dirname(__FILE__).'/../_config/sql.class.php');
-	#require_once(dirname(__FILE__).'/../_config/secure.fnc.php');
-	#require("../../_config/set_vimmel.php");
-	require_once(dirname(__FILE__).'/../_config/user.class.php');
 	$isCrew = @$_SESSION['u_c'];
 	$t_pages = array('news' => 'Nyheter', 'gb' => 'Gästbok', 'extra' => 'Extra', 'send' => 'Register', 'stat' => 'Statistik', 'pics' => 'Vimmel', 'settings' => 'Inställningar', 'changes' => 'Ändringar');
 	$in_dir = '../_postloadinside1594/';
@@ -15,27 +9,21 @@
 	$levels = array('10' => 'ADMIN');
 	define("ADMIN_PHOTO_DIR", '../'.USER_GALLERY);
 	define('ADMIN_NEWS', '..'.NEWS);
-	/*define("ADMIN_IMAGE_DIR", ND.'gallery/');
-	define("ADMIN_USER_DIR", '.'.USER_DIR);
-	define("ADMIN_OWNER_DIR", '.'.OWNER_DIR);
-	define("ADMIN_NEWS_DIR", ND.'_img_news/');
-	define("ADMIN_AD_DIR", ND.'_img_ad/');
-	define("ADMIN_UE_DIR", '.'.UE_DIR);*/
+
 	define('ADMIN_EMAIL', 'frans@styleform.se');
 	define('ADMIN_FROM_EMAIL', 'frans@styleform.se');
 	$t = 's_';
 
 	define('AOP', '../_output/');
 	define('OP', '_output/');
-	#$upl_full = explode('x', IMAGE_FULL);
-	#$upl_thumb = explode('x', IMAGE_THUMB);
+
 	$menu_USER = array('USER' => 'user.php', 'MASSMESS' => 'user_send.php');
 	$menu_OBJECT = array('OBJEKT' => 'obj.php');
 	$menu_SEARCH = array('SÖK' => 'search.php');
 	$menu_ADMIN = array('ADMIN' => 'settings.php');
 	$menu_STAT = array('STATISTIK' => 'stat.php', 'TREND' => 'stat_obj.php');
 	$menu_VIMMEL = array('VIMMEL/FILM' => 'pics.php');
-	$sql = &new sql();
+
 	if($isCrew) {
 		$menu_LOG = array('LOGG' => 'changes.php?t', 'ANVÄNDARE' => 'settings.php');
 		$menu_NEWS = array('NYHETER' => 'news.php', 'NOTISER' => 'news_notice.php', 'ANNONSER' => 'adver.php', 'UTSKICK' => 'send.php', 'MASSMESS' => 'user_send.php', 'POLL' => 'poll.php', 'EDITORIAL' => 'editorial.php', 'TEXT' => 'text.php');

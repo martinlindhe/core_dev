@@ -1,15 +1,5 @@
 <?
-session_start();
-#ob_start();
-#    ob_implicit_flush(0);
-#    ob_start('ob_gzhandler');
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
+	require_once('find_config.php');
 
 	$page = mysql_query("SELECT login_page FROM s_admin WHERE main_id = '".secureINS($_SESSION['u_i'])."' LIMIT 1");
 	if(mysql_num_rows($page) > 0) {

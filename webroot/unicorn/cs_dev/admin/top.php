@@ -1,12 +1,6 @@
 <?
-session_start();
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
+	require_once('find_config.php');
+
 	$adm_cnt = gettxt('admcnt');
 	if(!empty($_GET['k']) && !empty($_GET['k1']) && $isCrew) {
 		$sql->queryUpdate("UPDATE s_admin SET kick_now = '1' WHERE main_id = '".secureINS($_GET['k'])."' LIMIT 1");

@@ -174,4 +174,5 @@ function verify_uploaded_file($str, $size) {
     
 	return true;
 }
+
 ?>

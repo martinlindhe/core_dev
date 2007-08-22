@@ -1,12 +1,6 @@
 <?
 	require_once('find_config.php');
 
-	if (!$user->isAdmin) die('bye');
-
-	require_once('set_c.php');
-	require_once('set_fnc.php');
-
-
 	if (!empty($_GET['id'])) $page = $_GET['id']; else $page = 'changes.php';
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
