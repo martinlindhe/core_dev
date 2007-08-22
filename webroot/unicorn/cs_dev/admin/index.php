@@ -1,14 +1,13 @@
 <?
-session_start();
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
+	require_once('find_config.php');
 
-	if(!empty($_GET['id'])) $page = $_GET['id']; else $page = 'changes.php';
+	if (!$user->isAdmin) die('bye');
+
+	require_once('set_c.php');
+	require_once('set_fnc.php');
+
+
+	if (!empty($_GET['id'])) $page = $_GET['id']; else $page = 'changes.php';
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>

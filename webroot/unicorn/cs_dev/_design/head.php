@@ -48,6 +48,9 @@ function blockRightClick(event) {
 			<li><a href="surfcafe.php">surfcafé</a> | </li>
 			<li><a href="faq.php">hjälp &amp; faq</a> | </li>
 			<li><a href="contact.php">kontakt</a> | </li>
+<?
+			if ($user->isAdmin) echo '<li><a href="admin/index.php">ADMIN</a> | </li>';
+?>
 			<li><a href="logout.php">logga ut</a></li>
 		</ul>
 
