@@ -1,8 +1,6 @@
 <?
 	require_once('find_config.php');
 
-	//require("../_config/validate.fnc.php");
-
 	$limit = 10;
 	$ip_limit = 20;
 	$page = 'LOGG';

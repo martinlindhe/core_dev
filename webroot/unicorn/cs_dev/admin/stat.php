@@ -1,20 +1,9 @@
 <?
-session_start();
-ob_start();
-    ob_implicit_flush(0);
-    ob_start('ob_gzhandler');
+	require_once('find_config.php');
 
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
-	if(!$isCrew && strpos($_SESSION['u_a'][1], 'stat') === false) errorNEW('Ingen behörighet.');
+	if (!$isCrew && strpos($_SESSION['u_a'][1], 'stat') === false) errorNEW('Ingen behÃ¶righet.');
 	$page = 'STATISTIK';
 	$menu = $menu_STAT;
-	$start = execSt();
 	$start_date = gettxt('start_date');
 	$today_date = date("Y-m-d");
 	$total_days = date_diff($today_date, $start_date);
@@ -85,37 +74,44 @@ ob_start();
 		exit;
 	}
 
-	$filter = mysql_query("SELECT * FROM s_logfilter");
+	$filter = $db->getArray('SELECT * FROM s_logfilter');
 	$do_filter = array();
 	$use_filter = '';
-	if(mysql_num_rows($filter)) {
-		$i = 0;
-		while($f = mysql_fetch_assoc($filter)) {
-			if($f['status_id']) {
-				$do_filter[] = "type_referer NOT LIKE '%".$f['unique_id']."%'";
-				$i++;
-			}
-		}
-		if($i) $use_filter .= implode(" AND ", $do_filter).' AND';
-	}
 
-	$try = mysql_query("SELECT type_referer, type_cnt FROM s_logreferer WHERE $use_filter type_referer != ''
+	$i = 0;
+	foreach ($filter as $f) {
+		if($f['status_id']) {
+			$do_filter[] = "type_referer NOT LIKE '%".$f['unique_id']."%'";
+			$i++;
+		}
+	}
+	if($i) $use_filter .= implode(" AND ", $do_filter).' AND';
+
+
+	$try = $db->getArray("SELECT type_referer, type_cnt FROM s_logreferer WHERE $use_filter type_referer != ''
 GROUP BY type_referer HAVING(type_cnt > 1)
 ORDER BY type_cnt DESC");
 
 
 	$sqlt = array(
-'today' => "SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = CURDATE()",
-'yester' => "SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)",
-'month' => "SELECT COUNT(*) as count FROM s_logvisit WHERE MONTH(date_snl) = MONTH(CURDATE())",
-'total' => "SELECT COUNT(*) as count FROM s_logvisit",
-'spec' => "SELECT COUNT(*) as count FROM s_logvisit WHERE MONTH(date_snl) = '$sel_month' AND YEAR(date_snl) = '$sel_year'",
+'today' => "SELECT COUNT(*) FROM s_logvisit WHERE date_snl = CURDATE()",
+'yester' => "SELECT COUNT(*) FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)",
+'month' => "SELECT COUNT(*) FROM s_logvisit WHERE MONTH(date_snl) = MONTH(CURDATE())",
+'total' => "SELECT COUNT(*) FROM s_logvisit",
+'spec' => "SELECT COUNT(*) FROM s_logvisit WHERE MONTH(date_snl) = '$sel_month' AND YEAR(date_snl) = '$sel_year'",
 );
 
-	$today_tot = mysql_result(mysql_query($sqlt['today']), 0, 'count');
+	$today_tot = $db->getOneItem($sqlt['today']);
 
 	$hours = date("H") + 1;
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
+	
+	$online = $db->getOneItem("SELECT COUNT(DISTINCT(sess_ip)) FROM s_log WHERE date_cnt > DATE_SUB(NOW(), INTERVAL 8 MINUTE)");
+	$today_ip = $db->getOneItem("SELECT COUNT(DISTINCT(sess_ip)) FROM s_logvisit WHERE date_snl = NOW()");
+	$yester_v = $db->getOneItem("SELECT COUNT(*) FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)");
+	$yester_ip = $db->getOneItem("SELECT COUNT(DISTINCT(sess_ip)) FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)");
+	$total_v = $db->getOneItem("SELECT COUNT(*) FROM s_logvisit");
+	$total_ip = $db->getOneItem("SELECT COUNT(DISTINCT(sess_ip)) FROM s_logvisit");
 ?>
 <script type="text/javascript" src="fnc_adm.js"></script>
 <script type="text/javascript" src="fnc_txt.js"></script>
@@ -125,40 +121,40 @@ ORDER BY type_cnt DESC");
 		<td width="25%" style="padding: 0 10px 0 0">
 			<table width="100%">
 			<tr>
-				<td height="25"><b>Primärstatistik</b></td>
+				<td height="25"><b>PrimÃ¤rstatistik</b></td>
 			</tr>
 			</table>
 			<table cellspacing="0" width="100%">
 			<tr><td colspan="2"><b>Just nu</b></td></tr>
 			<tr>
-				<td>Aktiva besökare sedan 8 minuter:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$online = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_log WHERE date_cnt > DATE_SUB(NOW(), INTERVAL 8 MINUTE)"), 0, 'count')?></td>
+				<td>Aktiva besÃ¶kare sedan 8 minuter:</td>
+				<td align="right" class="txt_chead txt_bld"><?=$online?></td>
 			</tr>
 			<tr><td colspan="2"><br><b>Idag</b></td></tr>
 			<tr>
-				<td>Dygnsunika besökare:</td>
+				<td>Dygnsunika besÃ¶kare:</td>
 				<td align="right" class="txt_chead txt_bld"><?=$today_tot?></td>
 			</tr>
 			<tr>
 				<td>Unika IP:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$today_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit WHERE date_snl = NOW()"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$today_ip?></td>
 			</tr>
 			<tr>
 				<td>Antal unika IP per timme i snitt:</td>
 				<td align="right" class="txt_chead txt_bld"><?=round($today_ip / $hours, 2)?></td>
 			</tr>
 			<tr>
-				<td>Prognos för dygnsunika besökare:</td>
+				<td>Prognos fÃ¶r dygnsunika besÃ¶kare:</td>
 				<td align="right" class="txt_chead txt_bld"><?=round(($today_tot / $total_min) * $total_all)?></td>
 			</tr>
-			<tr><td colspan="2"><br><b>Igår</b></td></tr>
+			<tr><td colspan="2"><br><b>IgÃ¥r</b></td></tr>
 			<tr>
-				<td>Dygnsunika besökare:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$yester_v = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"), 0, 'count')?></td>
+				<td>Dygnsunika besÃ¶kare:</td>
+				<td align="right" class="txt_chead txt_bld"><?=$yester_v?></td>
 			</tr>
 			<tr>
 				<td>Unika IP:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$yester_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$yester_ip?></td>
 			</tr>
 			<tr>
 				<td>Antal unika IP per timme i snitt:</td>
@@ -166,12 +162,12 @@ ORDER BY type_cnt DESC");
 			</tr>
 			<tr><td colspan="2"><br><b>Totalt</b></td></tr>
 			<tr>
-				<td>Dygnsunika besökare:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$total_v = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit"), 0, 'count')?></td>
+				<td>Dygnsunika besÃ¶kare:</td>
+				<td align="right" class="txt_chead txt_bld"><?=$total_v?></td>
 			</tr>
 			<tr>
 				<td>Unika IP:</td>
-				<td align="right" class="txt_chead txt_bld"><?=$total_ip = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit"), 0, 'count')?></td>
+				<td align="right" class="txt_chead txt_bld"><?=$total_ip?></td>
 			</tr>
 			<tr>
 				<td>Antal unika IP per dag i snitt:<br>Start: <?=niceDate($start_date)?></td>
@@ -183,11 +179,11 @@ ORDER BY type_cnt DESC");
 			<hr /><div class="hr"></div>
 			<table width="100%" style="margin-bottom: 5px;">
 			<tr>
-				<td height="20" colspan="2"><b>Besökarinfo</b></td>
+				<td height="20" colspan="2"><b>BesÃ¶karinfo</b></td>
 			</tr>
 <?
-	$sql = mysql_query("SELECT user_string, COUNT(user_string) as count FROM s_logvisit WHERE user_string != '' GROUP BY user_string ORDER BY `count` DESC");
-	while($r = mysql_fetch_assoc($sql)) {
+	$sql = $db->getArray("SELECT user_string, COUNT(user_string) as count FROM s_logvisit WHERE user_string != '' GROUP BY user_string ORDER BY `count` DESC");
+	foreach ($sql as $r) {
 		echo '<tr><td><span class="txt_chead txt_bld">'.$r['count'].'</span>st:&nbsp;</td><td>'.secureOUT($r['user_string']).'</td></tr>';
 	}
 ?>
@@ -232,7 +228,7 @@ ORDER BY type_cnt DESC");
 ?>
 			</tr>
 			</table>
-			<b>Igår</b>
+			<b>IgÃ¥r</b>
 			<table cellspacing="2" style="margin-bottom: 20px;">
 			<tr>
 <?
@@ -280,25 +276,25 @@ ORDER BY type_cnt DESC");
 			</tr>
 			</table>
 			</center>
-			<!-- <img src="_img/rlrb.gif" height="8" width="7"> = Skillnaden mellan unika IP och antal besökare.<br><b>1000</b> = Totalantal för hela stapeln. -->
+			<!-- <img src="_img/rlrb.gif" height="8" width="7"> = Skillnaden mellan unika IP och antal besÃ¶kare.<br><b>1000</b> = Totalantal fÃ¶r hela stapeln. -->
 
 <?
 	} else {
 ?>
-			<!-- <br>Start<br><input type="text" class="txt" value="ÅÅMMDD"> -->
+			<!-- <br>Start<br><input type="text" class="txt" value="Ã…Ã…MMDD"> -->
 			<center>
 <br>
-			<div style="float: left;"><a href="stat.php?view=1&date=<?=$prev?>">Föregående månad</a></div><div style="float: right;"><a href="stat.php?view=1&date=<?=$next?>">Nästa månad</a></div><b><?=ucfirst(strftime("%B", strtotime($sel_year.'-'.$sel_month.'-01')))?></b>
+			<div style="float: left;"><a href="stat.php?view=1&date=<?=$prev?>">FÃ¶regÃ¥ende mÃ¥nad</a></div><div style="float: right;"><a href="stat.php?view=1&date=<?=$next?>">NÃ¤sta mÃ¥nad</a></div><b><?=ucfirst(strftime("%B", strtotime($sel_year.'-'.$sel_month.'-01')))?></b>
 			<table cellspacing="2" width="100%" style="margin: 25px 0 10px 0;">
 			<tr>
 <?
-	$tot = mysql_result(mysql_query($sqlt['spec']), 0, 'count');
+	$tot = $db->getOneItem($sqlt['spec']);
 	$cor = 0;
 	$days = array();
 	for($i = 0; $i <= 31; $i++) {
 		if(checkdate($sel_month, $i, $year)) {
-			$single = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_logvisit WHERE date_snl = '$sel_year-$sel_month-$i'"), 0, 'count');
-			$unique = mysql_result(mysql_query("SELECT COUNT(DISTINCT(sess_ip)) as count FROM s_logvisit WHERE date_snl = '$sel_year-$sel_month-$i'"), 0, 'count');
+			$single = $db->getOneItem("SELECT COUNT(*) FROM s_logvisit WHERE date_snl = '$sel_year-$sel_month-$i'");
+			$unique = $db->getOneItem("SELECT COUNT(DISTINCT(sess_ip)) FROM s_logvisit WHERE date_snl = '$sel_year-$sel_month-$i'");
 			if($tot) {
 				$u_proc = round(($unique / $tot)*300);
 				$proc = round((($single-$unique) / $tot)*300);
@@ -316,8 +312,8 @@ ORDER BY type_cnt DESC");
 			</tr>
 			</table>
 			</center>
-			<span class="txt_chead bld"><?=($cor)?round($tot/$cor, 2):0;?></span> per dag i snitt för <b><?=ucfirst(strftime("%B", strtotime($sel_year.'-'.$sel_month.'-01')))?></b>.
-			<br><img src="_img/rlrb.gif" height="8" width="7"> = Skillnaden mellan unika IP och antal besökare.<br><b>1000</b> = Totalantal för hela stapeln.
+			<span class="txt_chead bld"><?=($cor)?round($tot/$cor, 2):0;?></span> per dag i snitt fÃ¶r <b><?=ucfirst(strftime("%B", strtotime($sel_year.'-'.$sel_month.'-01')))?></b>.
+			<br><img src="_img/rlrb.gif" height="8" width="7"> = Skillnaden mellan unika IP och antal besÃ¶kare.<br><b>1000</b> = Totalantal fÃ¶r hela stapeln.
 			<br><br><br><b>Tabellstatistik</b>
 			<table cellspacing="0" style="margin-top: 5px;">
 <?
@@ -337,27 +333,26 @@ ORDER BY type_cnt DESC");
 <?=($change)?'<input type="hidden" name="id" value="'.$row['main_id'].'">':'';?>
 			<table width="100%">
 			<tr>
-				<td colspan="2" height="45"><b>Filter för referenser</b><br><input type="text" name="ins_filter" class="inp_nrm" value="<?=($change)?secureOUT($row['unique_id']):'';?>" /></td>
+				<td colspan="2" height="45"><b>Filter fÃ¶r referenser</b><br><input type="text" name="ins_filter" class="inp_nrm" value="<?=($change)?secureOUT($row['unique_id']):'';?>" /></td>
 			</tr>
 <?
 	$i = 0;
-	if(mysql_num_rows($filter)) mysql_data_seek($filter, 0);
-	while($f = mysql_fetch_assoc($filter)) {
+	foreach ($filter as $f) {
 		if($f['status_id']) $i++;
-		echo '<tr><td><input type="checkbox" class="chk" name="ch:'.$f['main_id'].'" id="ch'.$f['main_id'].'"'.(($f['status_id'])?' checked':'').'> <label for="ch'.$f['main_id'].'">'.$f['unique_id'].'</label></td><td align="right"><a href="stat.php?filter_id='.$f['main_id'].'">ÄNDRA</a> | <a href="stat.php?filter_del='.$f['main_id'].'">RADERA</a></td></tr>';
+		echo '<tr><td><input type="checkbox" class="chk" name="ch:'.$f['main_id'].'" id="ch'.$f['main_id'].'"'.(($f['status_id'])?' checked':'').'> <label for="ch'.$f['main_id'].'">'.$f['unique_id'].'</label></td><td align="right"><a href="stat.php?filter_id='.$f['main_id'].'">Ã„NDRA</a> | <a href="stat.php?filter_del='.$f['main_id'].'">RADERA</a></td></tr>';
 	}
 ?>
 			<tr><td colspan="2" align="right"><input type="submit" value="Uppdatera" class="inp_realbtn" style="width: 70px; margin: 4px 0 0 0;"></td></tr>
 			<tr><td colspan="2"><hr /><div class="hr"></div></td></tr>
 			<tr>
-				<td colspan="2" height="25"><b>Referenser</b> [<a href="javascript:popup('help.php?id=referer', 'help', 316, 355);">Hjälp</a>]</td>
+				<td colspan="2" height="25"><b>Referenser</b> [<a href="javascript:popup('help.php?id=referer', 'help', 316, 355);">HjÃ¤lp</a>]</td>
 			</tr>
-			<tr><td colspan="2" height="25">Det finns <span class="txt_chead txt_bld"><?=mysql_num_rows($try)?></span> olika referens<?=((mysql_num_rows($try) != '1')?'er':'')?> efter <span class="txt_chead txt_bld"><?=$i?></span> aktiv<?=($i != '1')?'a':'';?> filter.</td></tr>
+			<tr><td colspan="2" height="25">Det finns <span class="txt_chead txt_bld"><?=count($try)?></span> olika referens<?=((count($try) != '1')?'er':'')?> efter <span class="txt_chead txt_bld"><?=$i?></span> aktiv<?=($i != '1')?'a':'';?> filter.</td></tr>
 			</table>
 			</form>
 			<table width="100%" cellspacing="0" style="margin-bottom: 10px;">
 <?
-	while($r = mysql_fetch_assoc($try)) {
+	foreach ($try as $r) {
 		echo '<tr><td><span class="txt_chead txt_bld">'.$r['type_cnt'].'</span>st:&nbsp;</td><td><input type="text" readonly onfocus="this.select();" style="height: 11px; width: 250px; padding: 0; line-height: 11px;" value="'.secureOUT($r['type_referer']).'"></td></tr>';
 	}
 ?>
@@ -367,6 +362,3 @@ ORDER BY type_cnt DESC");
 	</table>
 </body>
 </html>
-<?
-	require("./_tpl/cnt_f.php");
-?>

@@ -1,14 +1,8 @@
 <?
-	session_start();
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
-	if(!$isCrew) { errorNEW('Ingen behörighet.'); }
-	$page = 'ANVÄNDARE';
+	require_once('find_config.php');
+	if(!$isCrew) { errorNEW('Ingen behÃ¶righet.'); }
+
+	$page = 'ANVÃ„NDARE';
 	$menu = $menu_LOG;
 	$array = array('Oregistrerad', 'Standard', 'Brons', 'Silver', 'Guld');
 	$limit = 10;
@@ -52,7 +46,7 @@
 			".($isCrew?"pos_all = '".@implode(',', @$_POST['pospos'])."',":'')."
 			".(($list)?"status_id = 'L',":"status_id = '1',")."
 			u_owner = '".secureINS($_SESSION['u_i'])."'");
-			} else errorNEW('Användaren finns inte som medlem på communityn.', 'settings.php');
+			} else errorNEW('AnvÃ¤ndaren finns inte som medlem pÃ¥ communityn.', 'settings.php');
 		}
 		header("Location: settings.php");
 		exit;
@@ -67,11 +61,7 @@
 	}
 
 	if(!empty($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM s_text WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
-		if(mysql_num_rows($sql) == '1') {
-			$change = true;
-			$row = mysql_fetch_assoc($sql);
-		}
+		$row = $db->getOneRow("SELECT * FROM s_text WHERE main_id = '".$db->escape($_GET['id'])."' LIMIT 1");
 	}
 	$u_change = false;
 	$new = false;
@@ -115,9 +105,7 @@
 		exit;
 	}
 
-	$u_sql = mysql_query("SELECT a.*, u.user_user AS owner_u FROM s_admin a LEFT JOIN s_admin u ON u.main_id = a.u_owner ORDER BY a.u_crew DESC, a.status_id ASC, a.user_name");
-
-	$u_count = mysql_num_rows($u_sql);
+	$u_sql = $db->getArray("SELECT a.*, u.user_user AS owner_u FROM s_admin a LEFT JOIN s_admin u ON u.main_id = a.u_owner ORDER BY a.u_crew DESC, a.status_id ASC, a.user_name");
 
 	$texts = array(
 'about' => 'OM KLUBBEN',
@@ -126,8 +114,8 @@
 'advertise' => 'ANNONSERA',
 'cookies' => 'COOKIES',
 'disclaimer' => 'DISCLAIMER',
-'register-part0' => 'Text innan användarvillkoren',
-'register-accept' => 'Användarvillkor',
+'register-part0' => 'Text innan anvÃ¤ndarvillkoren',
+'register-accept' => 'AnvÃ¤ndarvillkor',
 'register-part1' => 'Text innan registering steg 1',
 'register-part2' => 'Text innan registering steg 2',
 'register-part3' => 'Text innan registering steg 3',
@@ -136,45 +124,41 @@
 'url' => NAME_URL
 );
 	$faqr = false;
-	if(!empty($_GET['faq']) && is_numeric($_GET['faq'])) {
-		$sql = mysql_query("SELECT * FROM s_faq WHERE main_id = '".secureINS($_GET['faq'])."' LIMIT 1");
-		if(mysql_num_rows($sql) == '1') {
-			$faqr = mysql_fetch_assoc($sql);
-		}
+	if (!empty($_GET['faq']) && is_numeric($_GET['faq'])) {
+		$faqr = $db->getOneRow("SELECT * FROM s_faq WHERE main_id = '".$db->escape($_GET['faq'])."' LIMIT 1");
 	}
-	if(!empty($_POST['inp_q']) || !empty($_POST['Finp_q'])) {
-		if($_POST['type'] == 'F') {
-			if(!empty($_POST['Fid']) && is_numeric($_POST['Fid'])) {
-				mysql_query("UPDATE s_faq SET item_a = '".secureINS($_POST['Finp_a'])."', item_type = 'F', item_q = '".secureINS($_POST['Finp_q'])."', order_id = '".secureINS($_POST['Forder'])."' WHERE main_id = '".secureINS($_POST['Fid'])."' LIMIT 1");
+	if (!empty($_POST['inp_q']) || !empty($_POST['Finp_q'])) {
+		if ($_POST['type'] == 'F') {
+			if (!empty($_POST['Fid']) && is_numeric($_POST['Fid'])) {
+				$db->update("UPDATE s_faq SET item_a = '".$db->escape($_POST['Finp_a'])."', item_type = 'F', item_q = '".$db->escape($_POST['Finp_q'])."', order_id = '".$db->escape($_POST['Forder'])."' WHERE main_id = '".$db->escape($_POST['Fid'])."' LIMIT 1");
 			} else {
-				mysql_query("INSERT INTO s_faq SET item_a = '".secureINS($_POST['Finp_a'])."', item_type = 'F', item_q = '".secureINS($_POST['Finp_q'])."', order_id = '".secureINS($_POST['Forder'])."'");
+				$db->insert("INSERT INTO s_faq SET item_a = '".$db->escape($_POST['Finp_a'])."', item_type = 'F', item_q = '".$db->escape($_POST['Finp_q'])."', order_id = '".$db->escape($_POST['Forder'])."'");
 			}
 		} else {
-			if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-				mysql_query("UPDATE s_faq SET item_q = '".secureINS($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".secureINS($_POST['order'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+			if (!empty($_POST['id']) && is_numeric($_POST['id'])) {
+				$db->update("UPDATE s_faq SET item_q = '".$db->escape($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".$db->escape($_POST['order'])."' WHERE main_id = '".$db->escape($_POST['id'])."' LIMIT 1");
 			} else {
-				mysql_query("INSERT INTO s_faq SET item_q = '".secureINS($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".secureINS($_POST['order'])."'");
+				$db->insert("INSERT INTO s_faq SET item_q = '".$db->escape($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".$db->escape($_POST['order'])."'");
 			}
 		}
 		header("Location: settings.php#FAQ");
-		exit;
+		die;
 	}
-	if(!empty($_GET['faqdel']) && is_numeric($_GET['faqdel'])) {
-		$sql = mysql_query("SELECT * FROM s_faq WHERE main_id = '".secureINS($_GET['faqdel'])."' LIMIT 1");
-		if(mysql_num_rows($sql) == '1') {
-			mysql_query("DELETE FROM s_faq WHERE main_id = '".secureINS($_GET['faqdel'])."' LIMIT 1");
+	if (!empty($_GET['faqdel']) && is_numeric($_GET['faqdel'])) {
+		$check = $db->getOneRow("SELECT * FROM s_faq WHERE main_id = '".$db->escape($_GET['faqdel'])."' LIMIT 1");
+		if (!empty($check)) {
+			$db->delete("DELETE FROM s_faq WHERE main_id = '".$db->escape($_GET['faqdel'])."' LIMIT 1");
 			header("Location: settings.php#FAQ");
-			exit;
+			die;
 		}
 	}
 
+	$sql = $db->getArray("SELECT * FROM s_text WHERE status_id = '1' ORDER BY main_id");
 
-	$sql = mysql_query("SELECT * FROM s_text WHERE status_id = '1' ORDER BY main_id");
-
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 ?>
 <script type="text/javascript" src="fnc_txt.js"></script>
-<script type="text/JavaScript">
+<script type="text/javascript">
 function changeByKey(e) {
 	if(!e) var e=window.event;
 	if(e.ctrlKey && e['keyCode'] == 13) document.change.submit();
@@ -190,7 +174,7 @@ function checkthesame(obj) {
 }
 <?
 	if(!empty($_SESSION['err'])) {
-		$err = str_replace("wronguser", "Felaktigt fält: Alias", $_SESSION['err']);
+		$err = str_replace("wronguser", "Felaktigt fÃ¤lt: Alias", $_SESSION['err']);
 		echo '
 alert("'.$err.'");
 document.location.href = \'settings.php\';
@@ -201,7 +185,7 @@ document.location.href = \'settings.php\';
 var ptimes = 0;
 function checkPhoto() {
 	if(ptimes < 1) {
-		if(confirm("För att lägga in en bild, skriv in filnamnet som står med blå text i EXTRA, mellan [bild] och [/bild]\n\nVill du göra den till en länk, skriv då [bild=http://www.adress.com] istället för [bild]")) {
+		if(confirm("FÃ¶r att lÃ¤gga in en bild, skriv in filnamnet som stÃ¥r med blÃ¥ text i EXTRA, mellan [bild] och [/bild]\n\nVill du gÃ¶ra den till en lÃ¤nk, skriv dÃ¥ [bild=http://www.adress.com] istÃ¤llet fÃ¶r [bild]")) {
 			ptimes++;
 			return true;
 		}
@@ -223,15 +207,13 @@ function loadtop() {
 			<b>Texter</b><br>
 			<table width="100%" cellspacing="0" style="margin-top: 5px;">
 			<?=(!empty($row['main_id']))?'
-			<tr><td style="padding: 0 0 20px 0;"><b>'.safeOUT($row['main_id']).'</b><br><textarea name="ins_msg" class="inp_nrm" style="width: 100%; height: 120px;">'.secureOUT($row['text_cmt']).'</textarea><br>
+			<tr><td style="padding: 0 0 20px 0;"><b>'.secureOUT($row['main_id']).'</b><br><textarea name="ins_msg" class="inp_nrm" style="width: 100%; height: 120px;">'.secureOUT($row['text_cmt']).'</textarea><br>
 <input type="submit" value="Uppdatera" class="inp_realbtn" style="float: right; margin: 4px 0 0 0;">
 </td></tr>':'';?>
 <?
-	while($row = mysql_fetch_assoc($sql)) {
+	foreach ($sql as $row) {
 		if($row['main_id'] != 'admcnt') {
-/*<br><?=(!empty($colours[$row['main_id']]))?'<span style="color: '.$colours[$row['main_id']].';">'.safeOUT($row['text_cmt']).'</span>':(($row['auto_line'])?doURL(doMailto(safeOUT($row['text_cmt']))):stripslashes(doURL(doMailto($row['text_cmt']))));?>*/
 ?>
-
 			<tr><td><a href="settings.php?id=<?=$row['main_id']?>"><?=(!empty($texts[$row['main_id']]))?'<span class="bld">'.$row['main_id'].' ('.$texts[$row['main_id']].')</span>':'<span class="bld">'.$row['main_id'].'</span>';?></a> - <em><?=niceDate($row['text_date'])?></em></td></tr>
 <?
 		}
@@ -255,9 +237,9 @@ function loadtop() {
 	<tr><td colspan="2">
 	<?=($faqr)?'<input type="hidden" name="Fid" value="'.$faqr['main_id'].'" />':'';?>
 	<input type="hidden" name="dofaq" value="1" />
-	Fråga:<br /><input type="text" name="Finp_q" class="txt" style="width: 378px;" value="<?=@safeOUT($faqr['item_q'])?>" /></td></tr>
-	<tr><td colspan="2">Svar:<br /><textarea name="Finp_a" class="inp_nrm" style="height: 110px;"><?=@safeOUT($faqr['item_a'])?></textarea></td></tr>
-	<tr><td>Sorteringsnummer:<br /><input type="text" name="Forder" class="txt" value="<?=@safeOUT($faqr['order_id'])?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
+	FrÃ¥ga:<br /><input type="text" name="Finp_q" class="txt" style="width: 378px;" value="<?=secureOUT($faqr['item_q'])?>" /></td></tr>
+	<tr><td colspan="2">Svar:<br /><textarea name="Finp_a" class="inp_nrm" style="height: 110px;"><?=secureOUT($faqr['item_a'])?></textarea></td></tr>
+	<tr><td>Sorteringsnummer:<br /><input type="text" name="Forder" class="txt" value="<?=secureOUT($faqr['order_id'])?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
 	<tr><td colspan="2" style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>
 	</table>
 </td></tr>
@@ -271,20 +253,19 @@ function loadtop() {
 	<form action="settings.php" method="post">
 	<?=($faqr)?'<input type="hidden" name="id" value="'.$faqr['main_id'].'" />':'';?>
 	<input type="hidden" name="dofaq" value="1" />
-	Namn:<br /><input type="text" name="inp_q" class="txt" style="width: 378px;" value="<?=@safeOUT($faqr['item_q'])?>" /></td></tr>
-	<tr><td colspan="2">Värden:<br />
+	Namn:<br /><input type="text" name="inp_q" class="txt" style="width: 378px;" value="<?=secureOUT($faqr['item_q'])?>" /></td></tr>
+	<tr><td colspan="2">VÃ¤rden:<br />
 <?
 	if($faqr) {
-		$arr = @unserialize($faqr['item_a']);
-
+		$arr = unserialize($faqr['item_a']);
 	}
 
 	for($i = 0; $i <= 4; $i++) {
-echo '<b>'.$array[$i].'</b>: <input type="text" class="inp_nrm" style="width: 50px;" name="item_a[]" value="'.@secureOUT(@$arr[$i]).'" /><br />';
+		echo '<b>'.$array[$i].'</b>: <input type="text" class="inp_nrm" style="width: 50px;" name="item_a[]" value="'.secureOUT(@$arr[$i]).'" /><br />';
 	}
 ?>
 	</td></tr>
-	<tr><td>Sorteringsnummer:<br /><input type="text" name="order" class="txt" value="<?=@safeOUT($faqr['order_id'])?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
+	<tr><td>Sorteringsnummer:<br /><input type="text" name="order" class="txt" value="<?=secureOUT($faqr['order_id'])?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
 	<tr><td colspan="2" style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>
 	</table>
 </td></tr>
@@ -295,48 +276,45 @@ echo '<b>'.$array[$i].'</b>: <input type="text" class="inp_nrm" style="width: 50
 </form>
 <table width="100%" style="margin: 20px 0 20px 0;">
 <?
-	$faq = mysql_query("SELECT * FROM s_faq ORDER BY item_type, order_id, main_id");
+	$faq = $db->getArray("SELECT * FROM s_faq ORDER BY item_type, order_id, main_id");
 	$ot = false;
 	$types = array('F' => 'FAQ', 'U' => 'Uppgradera');
-	while($faqr = mysql_fetch_assoc($faq)) {
+	foreach ($faq as $faqr) {
 		if($ot != $faqr['item_type']) {
-echo '<tr><td><br /><hr /><div class="hr"></div><br /><br /><b>'.$types[$faqr['item_type']].'</b></td></tr>';
+			echo '<tr><td><br /><hr /><div class="hr"></div><br /><br /><b>'.$types[$faqr['item_type']].'</b></td></tr>';
 		}
-if($faqr['item_type'] == 'F')
-echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.safeOUT($faqr['item_q']).'</b> - <a href="settings.php?faq='.$faqr['main_id'].'#FAQ">ÄNDRA</a> | <a href="settings.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.safeOUT($faqr['item_a']).'</td></tr>';
-else
-echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.safeOUT($faqr['item_q']).'</b> - <a href="settings.php?faq='.$faqr['main_id'].'#FAQ">ÄNDRA</a> | <a href="settings.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.@safeOUT(implode(' : ', @unserialize($faqr['item_a']))).'</td></tr>';
+		if($faqr['item_type'] == 'F')
+			echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.secureOUT($faqr['item_q']).'</b> - <a href="settings.php?faq='.$faqr['main_id'].'#FAQ">Ã„NDRA</a> | <a href="settings.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.secureOUT($faqr['item_a']).'</td></tr>';
+		else
+			echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.secureOUT($faqr['item_q']).'</b> - <a href="settings.php?faq='.$faqr['main_id'].'#FAQ">Ã„NDRA</a> | <a href="settings.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.secureOUT(implode(' : ', @unserialize($faqr['item_a']))).'</td></tr>';
 		$ot = $faqr['item_type'];
 	}
 ?>
 </table>
 
 
-
-
-
 		</td>
 		<td width="50%" style="padding: 0 10px 0 10px; background: url('_img/brd_h.gif'); background-repeat: repeat-y;">
 			<table width="100%">
 			<tr>
-				<td height="25" colspan="3"><b><?=($u_change)?'Ändra a':'A';?>nvändare</b> [<a href="settings.php?n=1">Ny användare</a>]</td>
+				<td height="25" colspan="3"><b><?=($u_change)?'Ã„ndra a':'A';?>nvÃ¤ndare</b> [<a href="settings.php?n=1">Ny anvÃ¤ndare</a>]</td>
 			</tr>
 <?
 	if($new || $u_change) {
 ?>
 			<tr>
 				<td colspan="3" style="height: 0%; padding: 5px 0 10px 0;">
-			<form action="settings.php" method="post" enctype="application/x-www-form-urlencoded">
+			<form action="<?=$_SERVER['PHP_SELF']?>" method="post" enctype="application/x-www-form-urlencoded">
 			<input type="hidden" name="do" value="1">
 <?=($u_change)?'<input type="hidden" name="id" value="'.secureOUT($c_row['main_id']).'">':'';?>
 			Namn:<br>
 			<input type="text" name="s_n" class="inp_adm" value="<?=($u_change)?$c_row['user_name']:'';?>">
-			<br>Alias på communityn:<br>
+			<br>Alias pÃ¥ communityn:<br>
 			<input type="text" name="s_u" class="inp_adm" value="<?=($u_change)?$c_row['user_user']:'';?>">
 <?
 	if(!$u_change || ($u_change && !$c_row['u_crew'])) {
 ?>
-			<br />Användarnivå:<br>
+			<br />AnvÃ¤ndarnivÃ¥:<br>
 			<input type="radio" class="inp_chk" name="list" value="0" id="list_0"<?=($u_change && $c_row['status_id'] == '1')?' checked':' checked';?>><label for="list_0" class="txt_bld txt_look"><?=$title?>AMS</label><br>
 <?
 	}
@@ -345,7 +323,7 @@ echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.safeOUT($faqr['item_q']).'</b> 
 	if($isCrew && (!$u_change || !$c_row['u_crew'])) {
 		$pages = getEnumOptions($t.'admin', 'pos_all');
 ?>
-			Tillgång:<br>
+			TillgÃ¥ng:<br>
 			<select name="pospos[]" multiple=true style="height: 75px; width: 220px;" class="inp_nrm">
 <?
 	foreach($pages as $page) {
@@ -354,7 +332,6 @@ echo '<option value="'.$page.'"'.($sel?' selected':'').'>'.(array_key_exists($pa
 	}
 ?>
 			</select>
-
 <?
 	}
 ?>
@@ -366,12 +343,12 @@ echo '<option value="'.$page.'"'.($sel?' selected':'').'>'.(array_key_exists($pa
 <?
 	}
 ?>
-			<tr><td height="25" colspan="3">Det finns <span class="txt_chead txt_bld"><?=$u_count?></span> användare.</td></tr>
+			<tr><td height="25" colspan="3">Det finns <span class="txt_chead txt_bld"><?=count($u_sql)?></span> anvÃ¤ndare.</td></tr>
 <?
-	if(mysql_num_rows($u_sql) > 0) {
-		echo '			<tr><td style="padding: 0 0 10px 0;">';
+	if (count($u_sql)) {
+		echo '<tr><td style="padding: 0 0 10px 0;">';
 		$ostat = '';
-		while($row = mysql_fetch_assoc($u_sql)) {
+		foreach ($u_sql as $row) {
 			if($row['user_user'] == 'demo2') continue;
 			$stat = $row['status_id'];
 			if($row['status_id'] == 'Z') $stat = 'L';
@@ -382,9 +359,16 @@ echo '<option value="'.$page.'"'.($sel?' selected':'').'>'.(array_key_exists($pa
 			$onl = (strtotime($row['u_date']) > strtotime(timeout()))?true:false;
 ?>
 			<tr> 
-				<td><?=($row['status_id'] == '2' || $row['status_id'] == 'Z')?'[<b>BLOCKAD</b>] ':'';?><?=(!$_SESSION['u_c'] && $row['u_crew'])?'<b>'.secureOUT($row['user_user']).'</b>':'<a href="settings.php?c='.secureOUT($row['main_id']).'">'.secureOUT($row['user_user']).'</a>';?><?=($row['u_crew'])?' [<b>CREW</b>]':(($row['status_id'] == 'L')?' [<b>LISTAN</b>]':'');?></td>
+				<td>
+					<?=($row['status_id'] == '2' || $row['status_id'] == 'Z')?'[<b>BLOCKAD</b>] ':'';?>
+					<?=($row['u_crew'])?'<b>'.secureOUT($row['user_user']).'</b>':'<a href="settings.php?c='.secureOUT($row['main_id']).'">'.secureOUT($row['user_user']).'</a>';?>
+					<?=($row['u_crew'])?' [<b>CREW</b>]':(($row['status_id'] == 'L')?' [<b>LISTAN</b>]':'');?>
+				</td>
 				<td><?=($onl)?'<b class="txt_chead" title="Online">'.secureOUT($row['user_name']).'</b>':'<span title="Offline">'.secureOUT($row['user_name']).'</span>';?></td>
-				<td align="right" style="padding-right: 10px;"><?=(!empty($row['owner_u']))?'['.$row['owner_u'].']':'';?><?=(!$row['u_crew'])?' <a href="settings.php?'.(($row['status_id'] == '1' || $row['status_id'] == 'L')?(($row['status_id'] == 'L')?'b2':'b').'='.$row['main_id'].'"'.(($row['main_id'] == $_SESSION['u_i'])?' onclick="return (confirm(\'Du vill blockera dig själv!\n\nDu kommer att loggas ut direkt och kommer INTE att kunna logga in igen.\n\nSäker ?\'))?true:false;"':'').'>BLOCKERA':(($row['status_id'] == 'Z')?'a2':'a').'='.$row['main_id'].'">TILLÅT</a> | <a href="settings.php?d='.$row['main_id'].'" onclick="return (confirm(\'Säker ?\'))?true:false;">RADERA').'</a>':'';?></td>
+				<td align="right" style="padding-right: 10px;">
+					<?=(!empty($row['owner_u']))?'['.$row['owner_u'].']':'';?>
+					<?=(!$row['u_crew'])?' <a href="settings.php?'.(($row['status_id'] == '1' || $row['status_id'] == 'L')?(($row['status_id'] == 'L')?'b2':'b').'='.$row['main_id'].'"'.(($row['main_id'] == $user->id)?' onclick="return (confirm(\'Du vill blockera dig sjÃ¤lv!\n\nDu kommer att loggas ut direkt och kommer INTE att kunna logga in igen.\n\nSÃ¤ker ?\'))?true:false;"':'').'>BLOCKERA':(($row['status_id'] == 'Z')?'a2':'a').'='.$row['main_id'].'">TILLÃ…T</a> | <a href="settings.php?d='.$row['main_id'].'" onclick="return (confirm(\'SÃ¤ker ?\'))?true:false;">RADERA').'</a>':'';?>
+				</td>
 			</tr>
 <?
 		}
@@ -393,17 +377,21 @@ echo '<option value="'.$page.'"'.($sel?' selected':'').'>'.(array_key_exists($pa
 			</table>
 <?
 	if($u_change && ($_SESSION['u_c'] || $c_row['user_user'] == $_SESSION['u_u'])) {
-		$log = mysql_query("SELECT * FROM s_adminlog WHERE login_name LIKE '%".secureINS($c_row['user_user'])."%' ORDER BY login_date DESC");
+		$log = $db->getArray("SELECT * FROM s_adminlog WHERE login_name LIKE '%".$db->escape($c_row['user_user'])."%' ORDER BY login_date DESC");
 ?>
 			<hr /><div class="hr"></div>
 			<table style="margin-bottom: 5px;">
 			<tr>
-				<td height="25" colspan="3" class="bld">Inloggningar för <b><?=$c_row['user_user']?></b></td>
+				<td height="25" colspan="3" class="bld">Inloggningar fÃ¶r <b><?=$c_row['user_user']?></b></td>
 			</tr>
 <?
-	if(mysql_num_rows($log) > 0) { while($row = mysql_fetch_assoc($log)) {
-		echo '<tr><td style="padding-right: 20px;"><b>'.secureOUT($row['login_name']).'</b>'.((!empty($row['login_pass']))?' med <b>'.secureOUT($row['login_pass']).'</b>':'').'</td><td style="padding-right: 20px;"><a href="gb.php?t&s='.$row['login_ip'].'">'.$row['login_ip'].'</a> | <a href="http://ripe.net/whois?form_type=simple&full_query_string=&searchtext='.$row['login_ip'].'" target="_blank">INFO</a></td><td>'.niceDate($row['login_date']).'</td></tr>';
-	} } else echo '<tr><td class="cnt">'.secureOUT($c_row['user_user']).' har aldrig loggat in.</td></tr>';
+	if (count($log)) {
+		foreach ($log as $row) {
+			echo '<tr><td style="padding-right: 20px;"><b>'.secureOUT($row['login_name']).'</b>'.((!empty($row['login_pass']))?' med <b>'.secureOUT($row['login_pass']).'</b>':'').'</td><td style="padding-right: 20px;"><a href="gb.php?t&s='.$row['login_ip'].'">'.$row['login_ip'].'</a> | <a href="http://ripe.net/whois?form_type=simple&full_query_string=&searchtext='.$row['login_ip'].'" target="_blank">INFO</a></td><td>'.niceDate($row['login_date']).'</td></tr>';
+		}
+	} else {
+		echo '<tr><td class="cnt">'.secureOUT($c_row['user_user']).' har aldrig loggat in.</td></tr>';
+	}
 ?>
 			</table>
 <?

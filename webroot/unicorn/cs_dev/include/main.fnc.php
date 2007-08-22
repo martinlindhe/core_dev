@@ -342,6 +342,12 @@
 		}
 	}
 
+	function addzero($str)
+	{
+		if(strlen($str) == '1') $str = '0'.$str;
+		return $str;
+	}
+
 
 
 	//*******************************************
@@ -409,12 +415,6 @@
 	function headline($id = '')
 	{
 		return CS.'_objects/_heads/head_'.$id.'.gif';
-	}
-
-	function addzero($str)
-	{
-		if(strlen($str) == '1') $str = '0'.$str;
-		return $str;
 	}
 
 	function execSt($end = 0, $notset = 0)
