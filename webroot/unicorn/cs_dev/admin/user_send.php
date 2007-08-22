@@ -1,22 +1,11 @@
 <?
-session_start();
-ob_start();
-    ob_implicit_flush(0);
-    ob_start('ob_gzhandler');
-	ini_set("max_execution_time", 0);
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	require("./lib_dir.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
-	if(!$isCrew) errorNEW('Ingen behˆrighet.');
+	require_once('find_config.php');
+
+	//require("./lib_dir.php");
+	if(!$isCrew) errorNEW('Ingen beh√∂righet.');
+
 	$page = 'MASSMESS';
 	$menu = $menu_NEWS;
-	$sql = &new sql();
-	$user = &new user($sql);
 
 	$check = 0;
 	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
@@ -28,8 +17,9 @@ ob_start();
 	}
 	$imgdir = './nyheter';
 	$u_list = gettxt('admin_sendlist');
+	$f_list = array();
+
 	if($u_list) {
-		$f_list = array();
 		$u_list = explode("\n", $u_list);
 		foreach($u_list as $val) {
 			$u_id = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".trim($val)."' AND status_id = '1' LIMIT 1");
@@ -72,7 +62,7 @@ $to_sex_str = array(
 	'F' => "u.u_sex = 'F'");
 
 	if(!empty($_POST['dosend'])) {
-# frÂn
+# fr√•n
 		$msg = '';
 		$from = '';
 		if(!empty($_POST['from'])) {
@@ -80,11 +70,11 @@ $to_sex_str = array(
 				$from = $_POST['from'];
 			} else {
 				$from = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_POST['from'])."' AND status_id = '1' LIMIT 1");
-				if(!$from) errorNEW('Felaktig avs‰ndare.', 'user_send.php');
+				if(!$from) errorNEW('Felaktig avs√§ndare.', 'user_send.php');
 			}
 		} else $msg = '-A';
 		$msg_str = array();
-# nivÂ
+# niv√•
 		if(!empty($_POST['to']) && is_md5($_POST['to'])) {
 			$msg_str[] = "u.id_id = '".$_POST['to']."'";
 		} elseif(!empty($_POST['to']) && array_key_exists($_POST['to'], $to_type_str)) {
@@ -92,7 +82,7 @@ $to_sex_str = array(
 				$msg_str[] = $to_type_str[$_POST['to']];
 			}
 		}
-# kˆn
+# k√∂n
 		if(!empty($_POST['sex']) && array_key_exists($_POST['sex'], $to_sex_str)) {
 			if(!empty($to_sex_str[$_POST['sex']])) {
 				$msg_str[] = $to_sex_str[$_POST['sex']];
@@ -101,11 +91,11 @@ $to_sex_str = array(
 		if(!empty($_POST['ins_city']) && array_key_exists($_POST['ins_city'], $cities)) {
 			$msg_str[] = "u.city_id = '".$_POST['ins_city']."'";
 		}
-# Âlder
+# √•lder
 		if(!empty($_POST['birth']) && is_numeric($_POST['birth'])) {
 			$msg_str[] = "YEAR(u_birth) = '".$_POST['birth']."'";
 		}
-# klar, l‰gg in vanlig aktiv-check!
+# klar, l√§gg in vanlig aktiv-check!
 		$msg_str[] = "u.status_id = '1'";
 
 		if(count($msg_str)) {
@@ -168,15 +158,15 @@ $to_sex_str = array(
 			}
 			$_SESSION['temp_msg'] = '';
 			unset($_SESSION['temp_msg']);
-			errorNEW('Meddelandet ‰r skickat till <b>'.count($c).'</b>!', 'user_send.php', 'SKICKAT');
-			#errorNEW('Meddelandet ‰r skickat till <b>'.count($c).'</b>st!');
+			errorNEW('Meddelandet √§r skickat till <b>'.count($c).'</b>!', 'user_send.php', 'SKICKAT');
+			#errorNEW('Meddelandet √§r skickat till <b>'.count($c).'</b>st!');
 		}
 	}
 
 	$error = false;
 #	$list = $sql->query("SELECT a.*, u.u_alias FROM {$tab['admin_send']} a LEFT JOIN {$tab['user']} u ON a.sender_id != 'SYS' AND a.sender_id = u.id_id ORDER BY a.sent_date DESC");
 
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 ?>
 <script type="text/javascript" src="fnc_adm.js"></script>
 <script type="text/javascript" src="fnc_txt.js"></script>
@@ -219,7 +209,7 @@ function fixSpec(t) {
 			<input type="hidden" name="dosend" value="1">
 			<table cellspacing="0" width="100%">
 			<tr>
-				<td><b>FrÂn (<a href="settings.php?t&id=admin_sendlist">L‰gg till anv‰ndare</a>):</b><br>
+				<td><b>Fr√•n (<a href="settings.php?t&id=admin_sendlist">L√§gg till anv√§ndare</a>):</b><br>
 <!--
 <?
 	$i = 0;
@@ -233,27 +223,30 @@ echo '<input type="radio" name="from" id="u_'.$key.'" value="'.$key.'"'.$checked
 				</td>
 			</tr>
 			<tr>
-				<td class="nobr"><b>Till nivÂ/eller user:</b><br>
+				<td class="nobr"><b>Till niv√•/eller user:</b><br>
 <?
 	$i = 0;
-	foreach($f_list as $key => $val) {
-	if(!$check && !$i) $checked = ' checked'; else $checked = '';
-	$i++;
-echo '<input type="radio" name="to" id="ul_'.$key.'" value="'.$key.'"'.$checked.'><label for="ul_'.$key.'">'.$val.'</label>';
+	foreach ($f_list as $key => $val) {
+		if (!$check && !$i) $checked = ' checked';
+		else $checked = '';
+		$i++;
+		echo '<input type="radio" name="to" id="ul_'.$key.'" value="'.$key.'"'.$checked.'><label for="ul_'.$key.'">'.$val.'</label>';
 	}
-	foreach($to_type as $key => $val) echo '<input name="to" value="'.$key.'" type="radio" id="s'.$key.'"><label for="s'.$key.'">'.$val.'</label>';
+	foreach ($to_type as $key => $val) {
+		echo '<input name="to" value="'.$key.'" type="radio" id="s'.$key.'"><label for="s'.$key.'">'.$val.'</label>';
+	}
 ?>
 				</td>
 			</tr>
 			<tr>
-				<td class="nobr"><b>Till kˆn:</b><br>
+				<td class="nobr"><b>Till k√∂n:</b><br>
 <input name="sex" value="0" type="radio" id="sex0" checked><label for="sex0">Alla</label>
 <input name="sex" value="M" type="radio" id="sexM"><label for="sexM">Killar</label>
 <input name="sex" value="F" type="radio" id="sexF"><label for="sexF">Tjejer</label>
 				</td>
 			</tr>
 			<tr>
-				<td><b>Till Âlder:</b><br>
+				<td><b>Till √•lder:</b><br>
 <input name="birth" value="" type="text" class="txt">
 				</td>
 			</tr>
@@ -271,7 +264,7 @@ echo '<input type="radio" name="to" id="ul_'.$key.'" value="'.$key.'"'.$checked.
 				<td><span id="spanen"></span>
 <textarea name="ins_cmt" id="ins_cmt" class="inp_nrm" style="width: 100%; height: 150px;"><?=(!empty($_SESSION['temp_msg']))?secureOUT($_SESSION['temp_msg']):'';?></textarea><script type="text/javascript">document.msg_w.ins_cmt.focus();</script><br>
 <select name="img" onchange="fixVal(((this.value == '0')?0:'.<?=$imgdir?>/' + this.value));">
-<option value="0">V‰lj en bild ifrÂn <?=$imgdir?>/</option>
+<option value="0">V√§lj en bild ifr√•n <?=$imgdir?>/</option>
 <?
 	foreach($dir['files'] as $val) {
 		$val = substr(strrchr($val, "/"), 1);
@@ -282,7 +275,7 @@ echo '<input type="radio" name="to" id="ul_'.$key.'" value="'.$key.'"'.$checked.
 				</td>
 			</tr>
 			<tr>
-				<td><b>L‰nk (om bild anv‰nds):</b><br>
+				<td><b>L√§nk (om bild anv√§nds):</b><br>
 <input name="link" value="" type="text" class="txt">
 				</td>
 			</tr>
@@ -302,7 +295,7 @@ echo '<input type="radio" name="to" id="ul_'.$key.'" value="'.$key.'"'.$checked.
 		while($row = mysql_fetch_assoc($list)) {
 			$bg = ($bg)?0:1;
 echo '<tr>
-	<td class="r5"><a href="aMsgInfo.php?id='.$row['main_id'].'" class="nrm">'.(($row['sent_type'] == 'msg')?'Mail':'GB-inl‰gg').' frÂn <b>'.(($row['sender_id'] == 'SYS')?'SYSTEM':$row['u_alias']).'</b> till <b>'.$to_name[$row['user_id']].'</b></a></td>
+	<td class="r5"><a href="aMsgInfo.php?id='.$row['main_id'].'" class="nrm">'.(($row['sent_type'] == 'msg')?'Mail':'GB-inl√§gg').' fr√•n <b>'.(($row['sender_id'] == 'SYS')?'SYSTEM':$row['u_alias']).'</b> till <b>'.$to_name[$row['user_id']].'</b></a></td>
 	<td class="l5" align="right">'.doDate($row['sent_date']).'</td>
 	<td class="l5" align="right"><a href="aMsgInfo.php?del='.$row['main_id'].'">radera</a></td>
 </tr>';
@@ -310,7 +303,7 @@ echo '<tr>
 echo '
 <tr>
 	<td colspan="3" style="padding: 10px 5px 10px 5px; border: 1px solid #000; border-width: 1px 0 1px 0;">
-'.((!empty($row['sent_ttl']) && $row['sent_ttl'] != '1')?'‰mne: <b>'.stripslashes($row['sent_ttl']).'</b><br><br>':'').'
+'.((!empty($row['sent_ttl']) && $row['sent_ttl'] != '1')?'√§mne: <b>'.stripslashes($row['sent_ttl']).'</b><br><br>':'').'
 '.(($row['send_img'])?'<img src=".'.$imgdir.'/'.stripslashes($row['sent_cmt']).'">':stripslashes($row['sent_cmt'])).'
 	</td>
 </tr>
