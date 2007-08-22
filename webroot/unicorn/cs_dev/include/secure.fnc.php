@@ -1,5 +1,6 @@
 <?
 define("NRMSTR", '<strong><b><blockquote><font><p><br><hr><a><img><span><li><ol><ul><u><em><strike><b>');
+define("ADMNRMSTR", '<strong><b><blockquote><font><p><br><hr><a><img><li><ol><ul><u><em><strike><b>');
 function makeNR($str, $alias, $date, $to) {
 	return "<br><br>>Från: ".$alias."<br>>Till: ".$to."<br>>Skickat: ".$date."<br>>".str_replace("<BR>", "<BR>>", trim($str));
 }

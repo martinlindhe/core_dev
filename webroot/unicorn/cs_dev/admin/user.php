@@ -1,38 +1,25 @@
 <?
-session_start();
-#ob_start();
-#    ob_implicit_flush(0);
-#    ob_start('ob_gzhandler');
-	ini_set("max_execution_time", 0);
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	require("../_config/validate.fnc.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
-	if(!$isCrew) errorNEW('Ingen behörighet.');
-$reasons = array(
-'A' => '.',
-'G' => ' på grund av: <b>Solglasögon.</b>',
-'S' => ' på grund av: <b>Oskärpa i bild.</b>',
-'M' => ' på grund av: <b>Flera i personer i bild.</b>',
-'R' => ' på grund av: <b>Reklambudskap i bild.</b>',
-'F' => ' på grund av: <b>Felaktig bild.</b>',
-'AB' => ' på grund av: <b>Stötande och/eller olämpligt material.</b>',
-'TS' => ' på grund av: <b>För litet ansikte.</b>',
-'TSB' => ' på grund av: <b>För litet ansikte, beskär annorlunda.</b>',
-'TD' => ' på grund av: <b>Bilden är för mörk.</b>',
-'TL' => ' på grund av: <b>Bilden är för ljus.</b>',
-'NF' => ' på grund av: <b>Ej rakt framifrån.</b>');
+	require_once('find_config.php');
 
-	$sql = &new sql();
-	$user = &new user($sql);
+	if(!$isCrew) errorNEW('Ingen behÃ¶righet.');
+	$reasons = array(
+		'A' => '.',
+		'G' => ' pÃ¥ grund av: <b>SolglasÃ¶gon.</b>',
+		'S' => ' pÃ¥ grund av: <b>OskÃ¤rpa i bild.</b>',
+		'M' => ' pÃ¥ grund av: <b>Flera i personer i bild.</b>',
+		'R' => ' pÃ¥ grund av: <b>Reklambudskap i bild.</b>',
+		'F' => ' pÃ¥ grund av: <b>Felaktig bild.</b>',
+		'AB' => ' pÃ¥ grund av: <b>StÃ¶tande och/eller olÃ¤mpligt material.</b>',
+		'TS' => ' pÃ¥ grund av: <b>FÃ¶r litet ansikte.</b>',
+		'TSB' => ' pÃ¥ grund av: <b>FÃ¶r litet ansikte, beskÃ¤r annorlunda.</b>',
+		'TD' => ' pÃ¥ grund av: <b>Bilden Ã¤r fÃ¶r mÃ¶rk.</b>',
+		'TL' => ' pÃ¥ grund av: <b>Bilden Ã¤r fÃ¶r ljus.</b>',
+		'NF' => ' pÃ¥ grund av: <b>Ej rakt framifrÃ¥n.</b>');
+
 	$change = false;
 	$types = array('jpeg', 'swf', 'event');
 	$status_id = 0;
-	if(isset($_GET['status']) && is_numeric($_GET['status'])) {
+	if (isset($_GET['status']) && is_numeric($_GET['status'])) {
 		$status_id = $_GET['status'];
 	} elseif(!empty($_GET['status']) && $_GET['status'] == 'N') $status_id = 'N';
 	elseif($change) $status_id = $row['status_id'];
@@ -103,7 +90,7 @@ $reasons = array(
 				if($_POST['domail'] == 'blocked') {
 					require("../_tpl/email_block.php");
 					$msg = sprintf($msg, $_POST['alias'], $_POST['block_reason'], $_POST['block_disc']);
-					$titl = 'Din profil är blockerad!';
+					$titl = 'Din profil Ã¤r blockerad!';
 					$type = 'BLOCKERAD';
 					$sql->queryUpdate("UPDATE s_user SET
 					lastlog_date = NOW()
@@ -111,8 +98,8 @@ $reasons = array(
  				} elseif($_POST['domail'] == 'unblocked') {
 					require("../_tpl/email_unblock.php");
 					$msg = sprintf($msg, $_POST['alias'], $_POST['unblock_reason']);
-					$titl = 'Din profil är öppnad igen!';
-					$type = 'ÖPPNAD';
+					$titl = 'Din profil Ã¤r Ã¶ppnad igen!';
+					$type = 'Ã–PPNAD';
 				}
 				doMail($_POST['email'], $titl.' (mottagare: '.$_POST['email'].')', $msg);
 				doMail($member_email, $type.': '.$_POST['email'], $msg);
@@ -170,7 +157,7 @@ $reasons = array(
 
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		$row = $sql->queryLine("SELECT u.*, i.* FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".secureINS($_GET['id'])."' LIMIT 1", 1);
-		if (!$row['id_id']) $row['id_id'] = $_GET['id']; //martin fulhack, id_id är inte alltid satt
+		if (!$row['id_id']) $row['id_id'] = $_GET['id']; //martin fulhack, id_id Ã¤r inte alltid satt
 		if(!count($row)) {
 			$change = false;
 		} else {
@@ -189,7 +176,7 @@ $reasons = array(
 		$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$res[0]."' LIMIT 1");
 		if(!empty($_GET['reason'])) {
 			if(!empty($_GET['reasontext']) && $_GET['reason'] == 'X')
-				$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats på grund av: <b>'.$_GET['reasontext'].'</b> Prova med en ny.'));
+				$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats pÃ¥ grund av: <b>'.$_GET['reasontext'].'</b> Prova med en ny.'));
 			else
 				$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats'.$reasons[$_GET['reason']].' Prova med en ny.'));
 		} else
@@ -207,38 +194,38 @@ $reasons = array(
 	$list = array();
 	if(!$change) {
 		if(!$status_id) {
-			$list = $sql->query("SELECT a.id_id, i.reg_code, a.u_email, a.u_birth, a.u_regdate, i.u_cell FROM s_user a LEFT JOIN s_userinfo i ON i.id_id = a.id_id WHERE a.status_id = 'F' ORDER BY a.u_regdate DESC");
-		} elseif($status_id == 'N') {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND view_id = '0' ORDER BY u_regdate DESC");
-		} elseif($status_id == '2') {
+			$list = $db->getArray("SELECT a.id_id, i.reg_code, a.u_email, a.u_birth, a.u_regdate, i.u_cell FROM s_user a LEFT JOIN s_userinfo i ON i.id_id = a.id_id WHERE a.status_id = 'F' ORDER BY a.u_regdate DESC");
+		} else if ($status_id == 'N') {
+			$list = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND view_id = '0' ORDER BY u_regdate DESC");
+		} else if ($status_id == '2') {
 			$sex = false;
 			if(!empty($_GET['sex'])) {
 				$sex = $_GET['sex'];
-				$pics = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, u_picd, u_sex FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND u_picvalid = '1' AND u_sex = '$sex' ORDER BY u_regdate DESC");
+				$pics = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, u_picd, u_sex FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND u_picvalid = '1' AND u_sex = '$sex' ORDER BY u_regdate DESC");
 			} else
-				$pics = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, u_picd, u_sex FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND u_picvalid = '1' ORDER BY u_regdate DESC");
-		} elseif($status_id == '3') {
+				$pics = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, u_picd, u_sex FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND u_picvalid = '1' ORDER BY u_regdate DESC");
+		} else if ($status_id == '3') {
 			$sort = '';
-			if(!empty($_GET['sort'])) $sort = $_GET['sort'];
-			if(!empty($_POST['sort'])) $sort = $_POST['sort'];
+			if (!empty($_GET['sort'])) $sort = $_GET['sort'];
+			if (!empty($_POST['sort'])) $sort = $_POST['sort'];
 			$type = 'date';
-			if(!empty($_GET['sorttype'])) $type = $_GET['sorttype'];
-			if(!empty($_POST['sorttype'])) $type = $_POST['sorttype'];
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, location_id, lastlog_date, lastonl_date, account_date FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND account_date > '".$user->timeout('30 MINUTES')."' ORDER BY ".(!$sort?'u_regdate DESC':($type == 'date'?'location_id '.$sort.', u_alias ASC':'lastlog_date '.$sort)));
-		} elseif($status_id == '5') {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, lastlog_date, u_regdate FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '2' ORDER BY lastlog_date DESC");
-		} elseif($status_id == '10') {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, level_enddate, level_pending, location_id FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND (level_pending = '1' OR level_pending = '0' AND level_id > 1) ORDER BY level_enddate ASC");
-		} elseif($status_id == '6') {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '3' ORDER BY lastlog_date DESC");
-		} elseif($status_id == '4') {
+			if (!empty($_GET['sorttype'])) $type = $_GET['sorttype'];
+			if (!empty($_POST['sorttype'])) $type = $_POST['sorttype'];
+			$list = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, location_id, lastlog_date, lastonl_date, account_date FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND account_date > '".$user->timeout('30 MINUTES')."' ORDER BY ".(!$sort?'u_regdate DESC':($type == 'date'?'location_id '.$sort.', u_alias ASC':'lastlog_date '.$sort)));
+		} else if ($status_id == '5') {
+			$list = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid, lastlog_date, u_regdate FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '2' ORDER BY lastlog_date DESC");
+		} else if ($status_id == '10') {
+			$list = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, level_enddate, level_pending, location_id FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '1' AND (level_pending = '1' OR level_pending = '0' AND level_id > 1) ORDER BY level_enddate ASC");
+		} else if ($status_id == '6') {
+			$list = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname, u_picvalid, u_picid FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE status_id = '3' ORDER BY lastlog_date DESC");
+		} else if ($status_id == '4') {
 			$list = false;
 			$pics = false;
 		} else {
-			$list = $sql->query("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE view_id = '1' AND status_id = '1' ORDER BY u_regdate DESC");
+			$list = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE view_id = '1' AND status_id = '1' ORDER BY u_regdate DESC");
 		}
 	} else $list = '';
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 ?>
 	<script type="text/javascript" src="fnc_adm.js"></script>
 	<script type="text/javascript">
@@ -280,7 +267,7 @@ function CSV() {
 			<input type="radio" class="inp_chk" value="5" id="view_5" onclick="document.location.href = 'user.php?status=' + this.value;"<?=($status_id == '5')?' checked':'';?>><label for="view_5" class="txt_bld txt_look">RADERADE</label>
 			<input type="radio" class="inp_chk" value="10" id="view_10" onclick="document.location.href = 'user.php?status=' + this.value;"<?=($status_id == '10')?' checked':'';?>><label for="view_10" class="txt_bld txt_look">UPPGRADERADE</label>
 			<input type="radio" class="inp_chk" value="4" id="view_4" onclick="document.location.href = 'user.php?status=' + this.value;"<?=($status_id == '4')?' checked':'';?>><label for="view_4" class="txt_bld txt_look">STATS</label>
-			<br>Visar information från användare: <input type="text" name="a" value="" class="inp_nrm"> <input type="submit" class="inp_orgbtn" value="UPPDATERA" style="width: 70px; margin: 11px 20px 0 10px;"> | <select name="csv_level" id="csv_level" class="inp_nrm">
+			<br>Visar information frÃ¥n anvÃ¤ndare: <input type="text" name="a" value="" class="inp_nrm"> <input type="submit" class="inp_orgbtn" value="UPPDATERA" style="width: 70px; margin: 11px 20px 0 10px;"> | <select name="csv_level" id="csv_level" class="inp_nrm">
 <option value="0">Alla</option>
 <option value="99">MEDLEMSLISTA</option>
 <option value="2">MED profilbild</option>
@@ -296,8 +283,8 @@ function CSV() {
 <option value="100">Alla ADMIN</option>
 <option value="4">Alla tjejer</option>
 <option value="6">Alla killar</option>
-</select> Lösenord: <input type="password" name="csv_pass" id="csv_pass" value="" style="width: 90px;" class="inp_nrm"> <input type="radio" name="csv_type" value="skv" checked id="csv_type1"><label for="csv_type1">SKV</label><input type="radio" id="csv_type2" name="csv_type" value="txt"><label for="csv_type2">TXT</label>
-<a href="../STAEDA.EXE"><img src="./styleform.gif" alt="STÄDA" style="margin: 0 4px -10px 0;" />STÄDA</a><input type="button" class="inp_orgbtn" style="width: 140px; margin-left: 10px;" value="HÄMTA LISTA" onclick="if(document.getElementById('csv_pass').value.length > 0) CSV();" style="width: 70px; margin: 11px 0 0 20px;">
+</select> LÃ¶senord: <input type="password" name="csv_pass" id="csv_pass" value="" style="width: 90px;" class="inp_nrm"> <input type="radio" name="csv_type" value="skv" checked id="csv_type1"><label for="csv_type1">SKV</label><input type="radio" id="csv_type2" name="csv_type" value="txt"><label for="csv_type2">TXT</label>
+<a href="../STAEDA.EXE"><img src="./styleform.gif" alt="STÃ„DA" style="margin: 0 4px -10px 0;" />STÃ„DA</a><input type="button" class="inp_orgbtn" style="width: 140px; margin-left: 10px;" value="HÃ„MTA LISTA" onclick="if(document.getElementById('csv_pass').value.length > 0) CSV();" style="width: 70px; margin: 11px 0 0 20px;">
 </nobr>
 			</form>
 <form action="user.php?sort=<?=@$sort?>&sorttype=<?=@$type?>" method="post" name="u_f">
@@ -336,7 +323,7 @@ foreach($cities as $key => $val) {
 			}
 		}
 ?>
-			<tr><td colspan="8"><br><br><br><br><b><?=$val?></b> - Antal i ålder:<br><? 	for($t = 2000; $t >= 1930; $t--) { $t1 = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND YEAR(u_birth) = '$t' AND location_id = '".$key."'"); if($t1) echo $t.': <a href="user.php?status=4&show='.$t.'"><b class="txt_chead">'.$t1.'</b></a><br> ';
+			<tr><td colspan="8"><br><br><br><br><b><?=$val?></b> - Antal i Ã¥lder:<br><? 	for($t = 2000; $t >= 1930; $t--) { $t1 = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND YEAR(u_birth) = '$t' AND location_id = '".$key."'"); if($t1) echo $t.': <a href="user.php?status=4&show='.$t.'"><b class="txt_chead">'.$t1.'</b></a><br> ';
 	if(!empty($_GET['show']) && $_GET['show'] == $t) {
 listUserDisabled($list);
 	}
@@ -374,22 +361,30 @@ listUserDisabled($list);
 			}
 		}
 ?>
-			<tr><td colspan="8"><br><br><br><br><b>TOTALT</b> - Antal i ålder:<br><? 	for($t = 2000; $t >= 1930; $t--) { $t1 = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND YEAR(u_birth) = '$t'"); if($t1) echo $t.': <a href="user.php?status=4&show='.$t.'"><b class="txt_chead">'.$t1.'</b></a><br> ';
-	if(!empty($_GET['show']) && $_GET['show'] == $t) {
-listUserDisabled($list);
+			<tr><td colspan="8"><br><br><br><br><b>TOTALT</b> - Antal i Ã¥lder:<br>
+<?
+	for ($t = 2000; $t >= 1930; $t--) {
+		$t1 = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND YEAR(u_birth) = '$t'");
+		if ($t1) echo $t.': <a href="user.php?status=4&show='.$t.'"><b class="txt_chead">'.$t1.'</b></a><br> ';
+		if (!empty($_GET['show']) && $_GET['show'] == $t) {
+			listUserDisabled($list);
+		}
 	}
-} ?></tr>
-			<tr><td colspan="8"><b>TOTALT</b> - Antal tjejer: <a href="user.php?status=4&show=F"><b class="txt_chead"><?=$female = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND u_sex = 'F'")?></b></a>.
+?>
+			</tr>
+			<tr><td colspan="8"><b>TOTALT</b> - Antal tjejer: <a href="user.php?status=4&show=F"><b class="txt_chead">
+<?=$female = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1' AND u_sex = 'F'")?></b></a>.
 <?
 	if(!empty($_GET['show']) && $_GET['show'] == 'F') {
-listUserDisabled($list);
+		listUserDisabled($list);
 	}
 ?>
 			</td></tr>
-			<tr><td colspan="8"><b>TOTALT</b> - Antal killar: <a href="user.php?status=4&show=M"><b class="txt_chead"><?=$sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1'") - $female?></b></a>.
+			<tr><td colspan="8"><b>TOTALT</b> - Antal killar: <a href="user.php?status=4&show=M"><b class="txt_chead">
+<?=$sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE status_id = '1'") - $female?></b></a>.
 <?
 	if(!empty($_GET['show']) && $_GET['show'] == 'M') {
-listUserDisabled($list);
+		listUserDisabled($list);
 	}
 ?>
 <br>&nbsp;</td></tr>
@@ -397,13 +392,6 @@ listUserDisabled($list);
 			<tr><td colspan="8"><b>TOTALT</b> - Antal utan profilbild: <b class="txt_chead"><?=$total-$without?></b></a>.
 			<tr><td colspan="8"><b>TOTALT</b> - Totalt: <b class="txt_chead"><?=$total?></b></a>.
 <?
-
-
-
-
-
-
-
 	} else {
 ?>
 			<tr><td colspan="8"><br>Antal listade: <b class="txt_chead"><?=($list)?@count($list):@count(@$pics);?></b>.<br>&nbsp;</td></tr>
@@ -413,83 +401,82 @@ listUserDisabled($list);
 	$nl = true;
 	$ol = 0;
 	$old = '';
-	if(!empty($list) && count($list) && $status_id != '4') {
-	if($status_id) {
-		if($status_id == '10') {
-		echo '<tr><th>Status</th><th>Stad</th><th>Alias</th><th>Nivå</th><th>Längd</th></tr>';
-		foreach($list as $row) {
-			@$days = @date_diff($row[7].' 23:59:00', date("Y-m-d H:i"));
-#name="status_id:'.$row[0].'"
-			echo '<input type="hidden" id="status_id:'.$row[0].'" value="'.$row[1].'">';
-			echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
-				<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" readonly value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
-				<td class="pdg">'.@$cities[$row[9]].'</td>
-				<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
-				<td class="pdg">'.@$levels[$row[2]].'</td>
-				<td class="pdg">'.($row[8] == '0'?'<b>PENDLAR INTE!!!</b>':'<b class="up">'. $days['days'] .'</b> dag'.(($days['days'] == '1')?'':'ar').', <b class="up">'. $days['hours'] .'</b> timm'.(($days['hours'] == '1')?'e':'ar')).'</td>
-				<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
-			</tr>';
-		}
-		} elseif($status_id == '5') {
-		echo '<tr><th>Status</th><th>Alias</th><th>Reggade</th><th>Avreggad</th><th>E-post</th><th>Namn</th></tr>';
-		foreach($list as $row) {
-			echo '<input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="'.$row[1].'">';
-			echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
-				<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="level_id:'.$row[0].'" value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
-				<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
-				<td class="pdg nobr">'.niceDate($row[10]).'</td>
-				<td class="pdg nobr">'.niceDate($row[9]).'</td>
-				<td class="pdg">'.secureOUT($row[4]).'</td>
-				<td class="pdg">'.secureOUT($row[5].' '.$row[6]).'</td>
-				<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
-			</tr>';
-		}
-		} elseif($status_id == '3') {
-		echo '<tr><th><a href="user.php?status=3&sort='.($sort == 'ASC'?'DESC':'ASC').'">Stad</a></th><th>Alias</th><th><a href="user.php?status=3&sorttype=login&sort='.($sort == 'ASC'?'DESC':'ASC').'">Inloggningslängd</a></th></tr>';
-		foreach($list as $row) {
-			@$days = @date_diff($row[12], $row[11]);
-			#echo '<input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="'.$row[1].'">';
-			echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
-				<td class="pdg">'.@$cities[$row[9]].'</td>
-				<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
-				<td class="pdg">'.($row[12] != $row[11]?'<b class="up">'. $days['days'] .'</b> dag'.(($days['days'] == '1')?'':'ar').', <b class="up">'. $days['hours'] .'</b> timm'.(($days['hours'] == '1')?'e':'ar').', <b class="up">'. $days['minutes'] .'</b> minut'.(($days['minutes'] == '1')?'':'er'):'<em>loggade in för mindre än 6 min sen.</em>').'</td>
-			</tr>';
-		}
+if (!empty($list) && count($list) && $status_id != '4') {
+	if ($status_id) {
+		if ($status_id == '10') {
+			echo '<tr><th>Status</th><th>Stad</th><th>Alias</th><th>NivÃ¥</th><th>LÃ¤ngd</th></tr>';
+			foreach ($list as $row) {
+				@$days = @date_diff($row[7].' 23:59:00', date("Y-m-d H:i"));
+				#name="status_id:'.$row[0].'"
+				echo '<input type="hidden" id="status_id:'.$row[0].'" value="'.$row[1].'">';
+				echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
+					<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" readonly value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
+					<td class="pdg">'.@$cities[$row[9]].'</td>
+					<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
+					<td class="pdg">'.@$levels[$row[2]].'</td>
+					<td class="pdg">'.($row[8] == '0'?'<b>PENDLAR INTE!!!</b>':'<b class="up">'. $days['days'] .'</b> dag'.(($days['days'] == '1')?'':'ar').', <b class="up">'. $days['hours'] .'</b> timm'.(($days['hours'] == '1')?'e':'ar')).'</td>
+					<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
+					</tr>';
+			}
+		} else if ($status_id == '5') {
+			echo '<tr><th>Status</th><th>Alias</th><th>Reggade</th><th>Avreggad</th><th>E-post</th><th>Namn</th></tr>';
+			foreach($list as $row) {
+				echo '<input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="'.$row[1].'">';
+				echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
+					<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="level_id:'.$row[0].'" value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
+					<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
+					<td class="pdg nobr">'.niceDate($row[10]).'</td>
+					<td class="pdg nobr">'.niceDate($row[9]).'</td>
+					<td class="pdg">'.secureOUT($row[4]).'</td>
+					<td class="pdg">'.secureOUT($row[5].' '.$row[6]).'</td>
+					<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
+				</tr>';
+			}
+		} else if ($status_id == '3') {
+			echo '<tr><th><a href="user.php?status=3&sort='.($sort == 'ASC'?'DESC':'ASC').'">Stad</a></th><th>Alias</th><th><a href="user.php?status=3&sorttype=login&sort='.($sort == 'ASC'?'DESC':'ASC').'">InloggningslÃ¤ngd</a></th></tr>';
+			foreach($list as $row) {
+				@$days = @date_diff($row[12], $row[11]);
+				#echo '<input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="'.$row[1].'">';
+				echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
+					<td class="pdg">'.@$cities[$row[9]].'</td>
+					<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
+					<td class="pdg">'.($row[12] != $row[11]?'<b class="up">'. $days['days'] .'</b> dag'.(($days['days'] == '1')?'':'ar').', <b class="up">'. $days['hours'] .'</b> timm'.(($days['hours'] == '1')?'e':'ar').', <b class="up">'. $days['minutes'] .'</b> minut'.(($days['minutes'] == '1')?'':'er'):'<em>loggade in fÃ¶r mindre Ã¤n 6 min sen.</em>').'</td>
+				</tr>';
+			}
 		} else {
-		echo '<tr><th>Status</th><th>Alias</th><th>E-post</th><th>Namn</th></tr>';
-		foreach($list as $row) {
-			echo '<input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="'.$row[1].'">';
-			echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
-				<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="level_id:'.$row[0].'" value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
-				<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
-				<td class="pdg">'.secureOUT($row[4]).'</td>
-				<td class="pdg">'.secureOUT($row[5].' '.$row[6]).'</td>
-				<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
-			</tr>';
-		}
+			echo '<tr><th>Status</th><th>Alias</th><th>E-post</th><th>Namn</th></tr>';
+			foreach($list as $row) {
+				echo '<input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="'.$row[1].'">';
+				echo '<tr class="'.(($row[1] == '2')?'bg_gray':'bg_gray').'">
+					<td style="width: 60px; padding: 2px 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[1] == '1')?'green':'none_1').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[1] == '2')?'red':'none_2').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="level_id:'.$row[0].'" value="'.$row[2].'" style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" maxlength="5" class="inp_nrm"></td>
+					<td class="pdg" style="width: 350px;"><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>
+					<td class="pdg">'.secureOUT($row[4]).'</td>
+					<td class="pdg">'.secureOUT($row[5].' '.$row[6]).'</td>
+					<td class="pdg nobr" align="right"><a href="user.php?id='.$row[0].'">VISA</a> | <a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
+					</tr>';
+			}
 		}
 	} else {
-		echo '<tr><th>E-post</th><th>Aktiveringskod</th><th>Mobilnummer</th><th>Födelsedatum</th><th>Datum</th></tr>';
+		echo '<tr><th>E-post</th><th>Aktiveringskod</th><th>Mobilnummer</th><th>FÃ¶delsedatum</th><th>Datum</th></tr>';
 		foreach($list as $row) {
-		echo '<tr class="bg_gray"><input type="hidden" class="inp_nrm" name="status:'.$row[0].'" value="'.secureOUT($row[0]).'" />
-			<td class="pdg" style="width: 150px;"><input style="width: 200px;" type="text" class="inp_nrm" name="email:'.$row[0].'" value="'.secureOUT($row[2]).'" /></b></td>
-			<td class="pdg"><input style="width: 70px;" type="text" class="inp_nrm" name="code:'.$row[0].'" value="'.secureOUT($row[1]).'" /></td>
-			<td class="pdg">'.secureOUT($row[5]).'</td>
-			<td class="pdg">'.secureOUT($row[3]).'</td>
-			<td class="pdg nobr">'.niceDate($row[4]).'</td>
-			<td class="pdg"><input type="checkbox" name="sendemail:'.$row[0].'" value="1" /></td>
-			<td class="pdg nobr" align="right"><a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
-		</tr>';
+			echo '<tr class="bg_gray"><input type="hidden" class="inp_nrm" name="status:'.$row[0].'" value="'.secureOUT($row[0]).'" />
+				<td class="pdg" style="width: 150px;"><input style="width: 200px;" type="text" class="inp_nrm" name="email:'.$row[0].'" value="'.secureOUT($row[2]).'" /></b></td>
+				<td class="pdg"><input style="width: 70px;" type="text" class="inp_nrm" name="code:'.$row[0].'" value="'.secureOUT($row[1]).'" /></td>
+				<td class="pdg">'.secureOUT($row[5]).'</td>
+				<td class="pdg">'.secureOUT($row[3]).'</td>
+				<td class="pdg nobr">'.niceDate($row[4]).'</td>
+				<td class="pdg"><input type="checkbox" name="sendemail:'.$row[0].'" value="1" /></td>
+				<td class="pdg nobr" align="right"><a href="user.php?del='.$row[0].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
+			</tr>';
 		}
-	} } else {
-?>
-<?
-		if(!empty($pics)) {
+	}
+} else {
+	if (!empty($pics)) {
 ?>
 <script type="text/javascript">
 function denyAns(val, id, extra) {
 	if(!extra) extra = '';
-	if(confirm('Säker ?'))
+	if(confirm('SÃ¤ker ?'))
 		document.location.href = 'user.php?status=2&del_pic=' + id + '&reason=' + val + '&reasontext=' + extra;
 }
 </script>
@@ -508,15 +495,15 @@ function denyAns(val, id, extra) {
 				echo '<td class="pdg cnt"><a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'\';">NEKA DIREKT</a><br />
 <div id="reason_reason:'.$row[0].'" style="display: none;">
 <input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="R" id="reason_id:'.$row[0].':R"><label for="reason_id:'.$row[0].':R">Reklam</label>
-<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="AB" id="reason_id:'.$row[0].':AB"><label for="reason_id:'.$row[0].':AB">Stötande</label><br />
-<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="TSB" id="reason_id:'.$row[0].':TSB"><label for="reason_id:'.$row[0].':TSB">Litet ansikte, beskär</label><br />
-<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="NF" id="reason_id:'.$row[0].':NF"><label for="reason_id:'.$row[0].':NF">Ej rakt framifrån</label><br />
-<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="S" id="reason_id:'.$row[0].':S"><label for="reason_id:'.$row[0].':S">Oskärpa</label>
+<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="AB" id="reason_id:'.$row[0].':AB"><label for="reason_id:'.$row[0].':AB">StÃ¶tande</label><br />
+<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="TSB" id="reason_id:'.$row[0].':TSB"><label for="reason_id:'.$row[0].':TSB">Litet ansikte, beskÃ¤r</label><br />
+<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="NF" id="reason_id:'.$row[0].':NF"><label for="reason_id:'.$row[0].':NF">Ej rakt framifrÃ¥n</label><br />
+<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="S" id="reason_id:'.$row[0].':S"><label for="reason_id:'.$row[0].':S">OskÃ¤rpa</label>
 <input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="M" id="reason_id:'.$row[0].':M"><label for="reason_id:'.$row[0].':M">Flera i bild</label><br />
-<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="TD" id="reason_id:'.$row[0].':TD"><label for="reason_id:'.$row[0].':TD">Mörk</label>
+<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="TD" id="reason_id:'.$row[0].':TD"><label for="reason_id:'.$row[0].':TD">MÃ¶rk</label>
 <input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="TL" id="reason_id:'.$row[0].':TL"><label for="reason_id:'.$row[0].':TL">Ljus</label><br />
 <input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="F" id="reason_id:'.$row[0].':F"><label for="reason_id:'.$row[0].':F">Fel</label>
-<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="G" id="reason_id:'.$row[0].':G"><label for="reason_id:'.$row[0].':G">Solglasögon</label><br />
+<input type="radio" name="reason_id:'.$row[0].'" onclick="denyAns(this.value, \''.$row[0].'\');" value="G" id="reason_id:'.$row[0].':G"><label for="reason_id:'.$row[0].':G">SolglasÃ¶gon</label><br />
 <input type="radio" name="reason_id:'.$row[0].'" onclick="if(this.checked) { document.getElementById(\'reasontext_id:'.$row[0].'\').style.display = \'\'; document.getElementById(\'retb_id:'.$row[0].'\').style.display = \'\'; }" onchange="if(!this.checked) { document.getElementById(\'reasontext_id:'.$row[0].'\').style.display = \'none\'; document.getElementById(\'retb_id:'.$row[0].'\').style.display = \'none\'; }" value="X" id="reason_id:'.$row[0].':X"><label for="reason_id:'.$row[0].':X">Valfri</label><br />
 <input type="text" name="reasontext_id:'.$row[0].'" id="reasontext_id:'.$row[0].'" style="width: 100px; display: none;" value="" class="inp_nrm"><br />
 <input type="button" class="inp_orgbtn" id="retb_id:'.$row[0].'" style="margin: 0;" style="display: none;" value="skicka valfri" onclick="denyAns(\'X\', \''.$row[0].'\', document.getElementById(\'reasontext_id:'.$row[0].'\').value);" />
@@ -541,7 +528,7 @@ echo '
 <script type="text/javascript">
 function denyAns(val, id, extra) {
 	if(!extra) extra = \'\';
-	if(confirm(\'Säker ?\'))
+	if(confirm(\'SÃ¤ker ?\'))
 		document.location.href = \'user.php?id=\' + id + \'&del_pic=\' + id + \'&reason=\' + val + \'&reasontext=\' + extra;
 }
 </script>
@@ -551,15 +538,15 @@ function denyAns(val, id, extra) {
 			<td style="padding-bottom: 5px;"><a href="/user/view/'.$row['id_id'].'" target="_blank" onclick="if(parent.window.opener) parent.window.opener.focus();">Visa profil</a><br /><br /><b>Alternativ:</b><br><a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row['id_id'].'\').style.display = \'\';">NEKA</a><br>
 <div id="reason_reason:'.$row['id_id'].'" style="display: none;">
 <input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="R" id="reason_id:'.$row['id_id'].':R"><label for="reason_id:'.$row['id_id'].':R">Reklam</label>
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="AB" id="reason_id:'.$row['id_id'].':AB"><label for="reason_id:'.$row['id_id'].':AB">Stötande</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TSB" id="reason_id:'.$row['id_id'].':TSB"><label for="reason_id:'.$row['id_id'].':TSB">Litet ansikte, beskär</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="NF" id="reason_id:'.$row['id_id'].':NF"><label for="reason_id:'.$row['id_id'].':NF">Ej rakt framifrån</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="S" id="reason_id:'.$row['id_id'].':S"><label for="reason_id:'.$row['id_id'].':S">Oskärpa</label>
+<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="AB" id="reason_id:'.$row['id_id'].':AB"><label for="reason_id:'.$row['id_id'].':AB">StÃ¶tande</label><br />
+<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TSB" id="reason_id:'.$row['id_id'].':TSB"><label for="reason_id:'.$row['id_id'].':TSB">Litet ansikte, beskÃ¤r</label><br />
+<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="NF" id="reason_id:'.$row['id_id'].':NF"><label for="reason_id:'.$row['id_id'].':NF">Ej rakt framifrÃ¥n</label><br />
+<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="S" id="reason_id:'.$row['id_id'].':S"><label for="reason_id:'.$row['id_id'].':S">OskÃ¤rpa</label>
 <input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="M" id="reason_id:'.$row['id_id'].':M"><label for="reason_id:'.$row['id_id'].':M">Flera i bild</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TD" id="reason_id:'.$row['id_id'].':TD"><label for="reason_id:'.$row['id_id'].':TD">Mörk</label>
+<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TD" id="reason_id:'.$row['id_id'].':TD"><label for="reason_id:'.$row['id_id'].':TD">MÃ¶rk</label>
 <input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TL" id="reason_id:'.$row['id_id'].':TL"><label for="reason_id:'.$row['id_id'].':TL">Ljus</label><br />
 <input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="F" id="reason_id:'.$row['id_id'].':F"><label for="reason_id:'.$row['id_id'].':F">Fel</label>
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="G" id="reason_id:'.$row['id_id'].':G"><label for="reason_id:'.$row['id_id'].':G">Solglasögon</label><br />
+<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="G" id="reason_id:'.$row['id_id'].':G"><label for="reason_id:'.$row['id_id'].':G">SolglasÃ¶gon</label><br />
 <input type="radio" name="reason_id:'.$row['id_id'].'" onclick="if(this.checked) { document.getElementById(\'reasontext_id:'.$row['id_id'].'\').style.display = \'\'; document.getElementById(\'retb_id:'.$row['id_id'].'\').style.display = \'\'; }" onchange="if(!this.checked) { document.getElementById(\'reasontext_id:'.$row['id_id'].'\').style.display = \'none\'; document.getElementById(\'retb_id:'.$row['id_id'].'\').style.display = \'none\'; }" value="X" id="reason_id:'.$row['id_id'].':X"><label for="reason_id:'.$row['id_id'].':X">Valfri</label><br />
 <input type="text" name="reasontext_id:'.$row['id_id'].'" id="reasontext_id:'.$row['id_id'].'" style="width: 100px; display: none;" value="" class="inp_nrm"><br />
 <input type="button" class="inp_orgbtn" id="retb_id:'.$row['id_id'].'" style="margin: 0;" style="display: none;" value="skicka valfri" onclick="denyAns(\'X\', \''.$row['id_id'].'\', document.getElementById(\'reasontext_id:'.$row['id_id'].'\').value);" />
@@ -571,7 +558,7 @@ function denyAns(val, id, extra) {
 			<td><b>E-post:</b><br><input type="text" class="inp_nrm" name="email" value="'.secureOUT($row['u_email']).'"></td>
 		</tr>
 		<tr>
-			<td><b>Förnamn:</b><br><input type="text" class="inp_nrm" name="fname" value="'.secureOUT($row['u_fname']).'"></td>
+			<td><b>FÃ¶rnamn:</b><br><input type="text" class="inp_nrm" name="fname" value="'.secureOUT($row['u_fname']).'"></td>
 			<td><b>Efternamn:</b><br><input type="text" class="inp_nrm" name="sname" value="'.secureOUT($row['u_sname']).'"></td>
 		</tr>
 		<tr>
@@ -583,16 +570,16 @@ function denyAns(val, id, extra) {
 			<td><b>Mobil:</b><br><input type="text" class="inp_nrm" name="cell" value="'.secureOUT($row['u_cell']).'"></td>
 		</tr>
 		<tr>
-			<td><b>Kön:</b><br><input type="text" class="inp_nrm" name="sex" value="'.secureOUT($row['u_sex']).'"></td>
-			<td><b>Ålder:</b><br><input type="text" class="inp_nrm" name="birth" value="'.secureOUT($row['u_birth']).'"></td>
+			<td><b>KÃ¶n:</b><br><input type="text" class="inp_nrm" name="sex" value="'.secureOUT($row['u_sex']).'"></td>
+			<td><b>Ã…lder:</b><br><input type="text" class="inp_nrm" name="birth" value="'.secureOUT($row['u_birth']).'"></td>
 		</tr>
 		<tr>
-			<td><b>Nivå:</b><br><input type="text" class="inp_nrm" name="level" value="'.secureOUT($row['level_id']).'"></td>
-			<td><b>Nivå innan:</b><br><input type="text" class="inp_nrm" name="oldlevel" value="'.secureOUT($row['level_oldlevel']).'"></td>
+			<td><b>NivÃ¥:</b><br><input type="text" class="inp_nrm" name="level" value="'.secureOUT($row['level_id']).'"></td>
+			<td><b>NivÃ¥ innan:</b><br><input type="text" class="inp_nrm" name="oldlevel" value="'.secureOUT($row['level_oldlevel']).'"></td>
 		</tr>
 		<tr>
-			<td><b>Nivå pendlar:</b><br><input type="text" class="inp_nrm" name="pending" value="'.secureOUT($row['level_pending']).'"></td>
-			<td><b>Nivå slut:</b><br><input type="text" class="inp_nrm" name="enddate" value="'.secureOUT($row['level_enddate']).'"></td>
+			<td><b>NivÃ¥ pendlar:</b><br><input type="text" class="inp_nrm" name="pending" value="'.secureOUT($row['level_pending']).'"></td>
+			<td><b>NivÃ¥ slut:</b><br><input type="text" class="inp_nrm" name="enddate" value="'.secureOUT($row['level_enddate']).'"></td>
 		</tr>
 		<tr>
 			<td colspan="2"><b>Betatestare:</b><br><input type="text" class="inp_nrm" name="beta" value="'.secureOUT($row['beta']).'"></td>
@@ -623,7 +610,7 @@ if(this.value == \'3\' && this_status != \'3\') {
 			getInfo(\'block\');
 	}
 } else if(this.value == \'1\' && this_status == \'3\') {
-	if(confirm(\'Vill du skicka ut ett e-postmeddelande till:\n'.$row['u_email'].'\nom öppningen?\')) {
+	if(confirm(\'Vill du skicka ut ett e-postmeddelande till:\n'.$row['u_email'].'\nom Ã¶ppningen?\')) {
 			getInfo(\'unblock\');
 	}
 } else { getInfo(\'block\', \'none\'); getInfo(\'unblock\', \'none\'); }" value="'.secureOUT($row['status_id']).'"></td>
@@ -638,7 +625,7 @@ if(this.value == \'3\' && this_status != \'3\') {
 	</tbody>
 	<tbody id="unblock_info" style="display: none;">
 		<tr>
-			<td colspan="2"><b>Anledning till öppnande:</b><br>MALLAR: Inga.<br><textarea name="unblock_reason" id="unblock_reason"  class="inp_nrm"></textarea></td>
+			<td colspan="2"><b>Anledning till Ã¶ppnande:</b><br>MALLAR: Inga.<br><textarea name="unblock_reason" id="unblock_reason"  class="inp_nrm"></textarea></td>
 		</tr>
 	</tbody>
 		<tr>
@@ -647,7 +634,7 @@ if(this.value == \'3\' && this_status != \'3\') {
 		</tr>';
 
 echo '<tr>';
-if ($_SESSION['u_u'] != 'webmaster_mentori') echo '<td><b>Lösenord:</b><br><input type="text" class="inp_nrm" name="pass" value="'.secureOUT($row['u_pass']).'"></td>';
+if ($_SESSION['u_u'] != 'webmaster_mentori') echo '<td><b>LÃ¶senord:</b><br><input type="text" class="inp_nrm" name="pass" value="'.secureOUT($row['u_pass']).'"></td>';
 echo '
 			<td align="right"><input type="submit" class="inp_orgbtn" value="Uppdatera"></td>
 		</tr>
@@ -655,7 +642,7 @@ echo '
 			</td>
 			<td>
 		<table cellspacing="2">
-		<tr class="bg_gray"><td colspan="4" class="pdg bld">40 senaste händelser</td></tr>';
+		<tr class="bg_gray"><td colspan="4" class="pdg bld">40 senaste hÃ¤ndelser</td></tr>';
 
 	$v_sql = $sql->query("SELECT sess_id, sess_ip, sess_date, type_inf FROM s_usersess WHERE id_id = '".secureINS($row['id_id'])."' ORDER BY main_id DESC LIMIT 40");
 $names = array('i' => 'in', 'o' => 'ut', 'f' => '<b>felaktig</b>');

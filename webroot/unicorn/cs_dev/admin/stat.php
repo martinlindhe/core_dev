@@ -59,19 +59,13 @@
 		exit;
 	}
 	if(!empty($_GET['filter_id']) && is_numeric($_GET['filter_id'])) {
-		$sql = mysql_query("SELECT * FROM s_logfilter WHERE main_id = '".secureINS($_GET['filter_id'])."' LIMIT 1");
-		if(mysql_num_rows($sql)) {
-			$change = true;
-			$row = mysql_fetch_assoc($sql);
-		}
+		$row = $db->getOneRow("SELECT * FROM s_logfilter WHERE main_id = '".$db->escape($_GET['filter_id'])."' LIMIT 1");
+		$change = true;
 	}
 	if(!empty($_GET['filter_del']) && is_numeric($_GET['filter_del'])) {
-		$sql = mysql_query("SELECT * FROM s_logfilter WHERE main_id = '".secureINS($_GET['filter_del'])."' LIMIT 1");
-		if(mysql_num_rows($sql)) {
-			@mysql_query("DELETE FROM s_logfilter WHERE main_id = '".secureINS($_GET['filter_del'])."' LIMIT 1");
-		}
+		$db->delete("DELETE FROM s_logfilter WHERE main_id = '".$db->escape($_GET['filter_del'])."' LIMIT 1");
 		header("Location: stat.php");
-		exit;
+		die;
 	}
 
 	$filter = $db->getArray('SELECT * FROM s_logfilter');
@@ -328,7 +322,7 @@ ORDER BY type_cnt DESC");
 ?>
 		</td>
 		<td width="26%" style="padding: 0 10px 0 10px; background: url('_img/brd_h.gif'); background-repeat: repeat-y;">
-			<form action="stat.php" method="post">
+			<form action="<?=$_SERVER['PHP_SELF']?>" method="post">
 			<input type="hidden" name="do" value="1">
 <?=($change)?'<input type="hidden" name="id" value="'.$row['main_id'].'">':'';?>
 			<table width="100%">

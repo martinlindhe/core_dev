@@ -8,4 +8,5 @@
 
 	require_once('set_c.php');
 	require_once('set_fnc.php');
+	require_once('set_formatadm.php');
 ?>

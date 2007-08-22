@@ -1,22 +1,11 @@
 <?
-session_start();
-#ob_start();
-#    ob_implicit_flush(0);
-#    ob_start('ob_gzhandler');
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
+	require_once('find_config.php');
+
+	if (!$isCrew && strpos($_SESSION['u_a'][1], 'stat') === false) errorNEW('Ingen behÃ¶righet.');
 
 	$limit = 20;
 	$ip_limit = 20;
-	require("./set_formatadm.php");
-	require("./set_onl.php");
-	$sql = &new sql();
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
 
-	if(!$isCrew && strpos($_SESSION['u_a'][1], 'stat') === false) errorNEW('Ingen behörighet.');
 	$page = 'SEARCH';
 	$menu = $menu_SEARCH;
 
@@ -51,18 +40,15 @@ session_start();
 		$ban = true;
 		$ban_ip = $_POST['ban'];
 	}
-	if($ban) {
-		mysql_query("INSERT INTO s_ban SET ban_ip = '".secureINS($ban_ip)."', ban_date = NOW(), ban_reason = ''");
+	if ($ban) {
+		$db->insert("INSERT INTO s_ban SET ban_ip = '".$db->escape($ban_ip)."', ban_date = NOW(), ban_reason = ''");
 		header("Location: search.php".((isset($_GET['t']))?'?t':''));
-		exit;
+		die;
 	}
 	if(!empty($_GET['ban_del']) && is_numeric($_GET['ban_del'])) {
-		$res = mysql_query("SELECT * FROM s_ban WHERE main_id = '".secureINS($_GET['ban_del'])."' LIMIT 1");
-		if(mysql_num_rows($res) == '1') {
-			mysql_query("DELETE FROM s_ban WHERE main_id = '".secureINS($_GET['ban_del'])."'");
-			header("Location: search.php");
-			exit;
-		}
+		$db->delete("DELETE FROM s_ban WHERE main_id = '".$db->escape($_GET['ban_del'])."'");
+		header("Location: search.php");
+		die;
 	}
 
 	if(!empty($_GET['p']) && is_numeric($_GET['p']) && $_GET['p'] > 1) {
@@ -77,23 +63,23 @@ session_start();
 
 
 	if($search && $view == 's') {
-			if(is_numeric($str)) {
-				$s_sql = mysql_query("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM s_log a WHERE a.sess_id = '".secureINS($str)."' ORDER BY a.date_cnt DESC");
+			if (is_numeric($str)) {
+				$s_sql = $db->getArray("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM s_log a WHERE a.sess_id = '".$db->escape($str)."' ORDER BY a.date_cnt DESC");
 			} else {
-				$s_sql = mysql_query("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM s_log a WHERE a.sess_ip = '".secureINS($str)."' ORDER BY a.date_cnt DESC");
+				$s_sql = $db->getArray("SELECT a.date_cnt, SUBSTRING(a.sess_id, 1, 5) as sess_id, a.sess_ip, a.type_inf, a.unique_id, a.category_id FROM s_log a WHERE a.sess_ip = '".$db->escape($str)."' ORDER BY a.date_cnt DESC");
 			}
 	} elseif($view == 'ss') {
 		$info = array(
-'s_user' => array('Användardata', 'a.id_id', array('a.u_alias', 'a.u_email'), "a.u_regdate, a.id_id, a.status_id, u.id_id, a.u_alias, a.u_birth, a.u_email", 0, '', 'a.id_id DESC', 'user.php?del='),
-'s_user_info' => array('Användarinfo', 'a.id_id', array('u.u_alias', 'a.u_fname', 'a.u_sname', 'a.u_street', 'a.u_cell'), "u.u_regdate, a.id_id, u.status_id, u.id_id, u.u_alias, a.u_fname, a.u_sname, a.u_street, a.u_cell", 0, '', 'a.id_id DESC', 'user.php?del='),
+'s_user' => array('AnvÃ¤ndardata', 'a.id_id', array('a.u_alias', 'a.u_email'), "a.u_regdate, a.id_id, a.status_id, u.id_id, a.u_alias, a.u_birth, a.u_email", 0, '', 'a.id_id DESC', 'user.php?del='),
+'s_user_info' => array('AnvÃ¤ndarinfo', 'a.id_id', array('u.u_alias', 'a.u_fname', 'a.u_sname', 'a.u_street', 'a.u_cell'), "u.u_regdate, a.id_id, u.status_id, u.id_id, u.u_alias, a.u_fname, a.u_sname, a.u_street, a.u_cell", 0, '', 'a.id_id DESC', 'user.php?del='),
 's_userblog' => array('Blogg', 'a.user_id', array('u.u_alias', 'a.blog_cmt', 'a.blog_title'), "a.blog_date, a.main_id, a.status_id, u.id_id, u.u_alias, a.blog_cmt, a.blog_title", 0, '', 'a.main_id DESC', 'obj.php?t&status=blog&del='),
 's_userblogcmt' => array('Bloggkommentarer', 'a.user_id', array('u.u_alias', 'a.c_msg'), "a.c_date, a.main_id, a.status_id, u.id_id, u.u_alias, a.c_msg", 0, '', 'a.main_id DESC', 'obj.php?t&status=blogcmt&del='),
 's_userchat' => array('Chat', 'a.sender_id', array('u.u_alias', 'u2.u_alias', 'a.sent_cmt'), "a.sent_date, a.main_id, 1, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.sent_cmt", 1, 'a.user_id', 'a.main_id DESC', 'obj.php?t&status=chat&del='),
 's_djthought' => array('Diskutera (DJ/Karaoke)', 'a.logged_in', array('u.u_alias', 'u2.u_alias', 'a.gb_msg', 'a.answer_msg'), "a.gb_date, a.main_id, a.status_id, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.gb_msg, a.answer_msg", 1, 'a.answer_id', 'a.main_id DESC', 'obj.php?t&status=thought&del='),
-'s_usergb' => array('Gästbok', 'a.sender_id', array('u.u_alias', 'u2.u_alias', 'a.sent_cmt'), "a.sent_date, a.main_id, a.status_id, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.sent_cmt", 1, 'a.user_id', 'a.main_id DESC', 'obj.php?t&status=gb&del='),
+'s_usergb' => array('GÃ¤stbok', 'a.sender_id', array('u.u_alias', 'u2.u_alias', 'a.sent_cmt'), "a.sent_date, a.main_id, a.status_id, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.sent_cmt", 1, 'a.user_id', 'a.main_id DESC', 'obj.php?t&status=gb&del='),
 's_pmoviecmt' => array('Filmkommentarer', 'logged_in', array('u.u_alias', 'a.c_msg'), "a.c_date, a.main_id, a.status_id, u.id_id, u.u_alias, a.c_msg", 0, '', 'a.main_id DESC', 'obj.php?t&status=mvcmt&del='),
 's_f' => array('Forum', 'a.sender_id', array('u.u_alias', 'a.sent_cmt', 'a.sent_ttl'), "a.sent_date, a.main_id, a.status_id, u.id_id, u.u_alias, a.sent_cmt", 0, '', 'a.main_id DESC', 'obj.php?t&status=forum&del='),
-'s_userphoto' => array('Foton (Namn på foton)', 'a.user_id', array('u.u_alias', 'a.pht_cmt'), "a.pht_date, a.main_id, a.status_id, u.id_id, u.u_alias, a.pht_cmt", 0, '', 'a.main_id DESC', 'obj.php?t&status=photo&del='),
+'s_userphoto' => array('Foton (Namn pÃ¥ foton)', 'a.user_id', array('u.u_alias', 'a.pht_cmt'), "a.pht_date, a.main_id, a.status_id, u.id_id, u.u_alias, a.pht_cmt", 0, '', 'a.main_id DESC', 'obj.php?t&status=photo&del='),
 's_userphotocmt' => array('Fotokommentarer', 'a.user_id', array('u.u_alias', 'a.c_msg'), "a.c_date, a.main_id, u.id_id, a.status_id, u.u_alias, a.c_msg", 0, '', 'a.main_id DESC', 'obj.php?t&status=blogcmt&del='),
 's_usermail' => array('Mail', 'a.sender_id', array('u.u_alias', 'u2.u_alias', 'a.sent_cmt', 'a.sent_ttl'), "a.sent_date, a.main_id, a.status_id, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.sent_cmt", 1, 'a.user_id', 'a.main_id DESC', 'obj.php?t&status=mail&del='),
 's_obj' => array('Objekttabellen (Pres, Post-it osv)', 'a.owner_id', array('u.u_alias', 'a.content', 'a.content_type'), "a.obj_date, a.main_id, 1, u.id_id, u.u_alias, a.content_type, a.content", 0, '', 'a.main_id DESC', 'obj.php?t&status=obj&del='),
@@ -102,32 +88,31 @@ session_start();
 's_pcmt' => array('Vimmelkommentarer', 'a.logged_in', array('u.u_alias', 'a.c_msg'), "a.c_date, a.main_id, a.status_id, u.id_id, u.u_alias, a.c_msg, a.unique_id", 0, '', 'a.main_id DESC', 'obj.php?t&status=cmt?del=')
 		);
 
-	} elseif($search && $view == 'sss') {
+	} else if ($search && $view == 'sss') {
 		$g1 = false;
 		$g2 = false;
-		if(!empty($_GET['s1'])) {
-			$i1 = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_GET['s1'])."' LIMIT 1");
+		if (!empty($_GET['s1'])) {
+			$i1 = $db->getOneItem("SELECT id_id FROM s_user WHERE u_alias = '".$db->escape($_GET['s1'])."' LIMIT 1");
 			if(!empty($i1)) $g1 = true;
 		}
-		if(!empty($_GET['s2'])) {
-			$i2 = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_GET['s2'])."' LIMIT 1");
+		if (!empty($_GET['s2'])) {
+			$i2 = $db->getOneItem("SELECT id_id FROM s_user WHERE u_alias = '".$db->escape($_GET['s2'])."' LIMIT 1");
 			if(!empty($i2)) $g2 = true;
 		}
 		$info = array(
 's_userchat' => array('Chat', 'a.sender_id', 'a.user_id', array('a.sender_id', 'a.user_id'), "a.sent_date, a.main_id, 1, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.sent_cmt", 'a.main_id DESC', 'obj.php?t&status=chat&del='),
-'s_usergb' => array('Gästbok', 'a.sender_id', 'a.user_id', array('a.sender_id', 'a.user_id'), "a.sent_date, a.main_id, a.status_id, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.sent_cmt", 'a.main_id DESC', 'obj.php?t&status=gb&del='),
+'s_usergb' => array('GÃ¤stbok', 'a.sender_id', 'a.user_id', array('a.sender_id', 'a.user_id'), "a.sent_date, a.main_id, a.status_id, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.sent_cmt", 'a.main_id DESC', 'obj.php?t&status=gb&del='),
 's_usermail' => array('Mail', 'a.sender_id', 'a.user_id', array('a.sender_id', 'a.user_id'), "a.sent_date, a.main_id, a.status_id, u.id_id, u.u_alias, u2.id_id, u2.u_alias, a.sent_cmt", 'a.main_id DESC', 'obj.php?t&status=mail&del=')
 		);
 	}
 
-	if($showban) {
+	if ($showban) {
 		# IP BAN
-		$b_sql = mysql_query("SELECT * FROM s_ban ORDER BY ban_date DESC");
-		$b_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_ban"), 0, 'count');
+		$b_sql = $db->getArray("SELECT * FROM s_ban ORDER BY ban_date DESC");
 	}
 
 
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 
 ?>
 <script type="text/javascript" src="fnc_adm.js"></script>
@@ -154,30 +139,30 @@ function selectingAll(selecting) {
 			<table width="100%">
 			<tr>
 				<td height="35">
-<? if($isCrew || strpos($_SESSION['u_a'][1], 'search_ss') !== false) { ?><input type="radio" class="inp_chk" value="ss" id="view_ss" onclick="document.location.href = 'search.php?view=' + this.value;"<?=($view == 'ss')?' checked':'';?>><label for="view_ss" class="txt_bld txt_look">Supersök</label><? } ?>
-<? if($isCrew || strpos($_SESSION['u_a'][1], 'search_sss') !== false) { ?><input type="radio" class="inp_chk" value="sss" id="view_sss" onclick="document.location.href = 'search.php?view=' + this.value;"<?=($view == 'sss')?' checked':'';?>><label for="view_sss" class="txt_bld txt_look">"Kalas"-sök</label><? } ?>
-<? if($isCrew || strpos($_SESSION['u_a'][1], 'search_s') !== false) { ?><input type="radio" class="inp_chk" value="s" id="view_s" onclick="document.location.href = 'search.php?s=<?=@secureOUT($str)?>&view=' + this.value;"<?=($view == 's')?' checked':'';?>><label for="view_s" class="txt_bld txt_look">Loggsök</label><? } ?>
+<? if($isCrew || strpos($_SESSION['u_a'][1], 'search_ss') !== false) { ?><input type="radio" class="inp_chk" value="ss" id="view_ss" onclick="document.location.href = 'search.php?view=' + this.value;"<?=($view == 'ss')?' checked':'';?>><label for="view_ss" class="txt_bld txt_look">SupersÃ¶k</label><? } ?>
+<? if($isCrew || strpos($_SESSION['u_a'][1], 'search_sss') !== false) { ?><input type="radio" class="inp_chk" value="sss" id="view_sss" onclick="document.location.href = 'search.php?view=' + this.value;"<?=($view == 'sss')?' checked':'';?>><label for="view_sss" class="txt_bld txt_look">"Kalas"-sÃ¶k</label><? } ?>
+<? if($isCrew || strpos($_SESSION['u_a'][1], 'search_s') !== false) { ?><input type="radio" class="inp_chk" value="s" id="view_s" onclick="document.location.href = 'search.php?s=<?=@secureOUT($str)?>&view=' + this.value;"<?=($view == 's')?' checked':'';?>><label for="view_s" class="txt_bld txt_look">LoggsÃ¶k</label><? } ?>
 <hr /><div class="hr"></div>
 <?
 	if($view == 's') {
 ?>
 			<form name="search" method="get" action="./search.php">
 			<input type="hidden" name="view" value="<?=$view?>">
-	<b>Loggsök</b> (IP eller COOKIE)<br><input type="text" name="s" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($str):'';?>" onfocus="this.select();" />
+	<b>LoggsÃ¶k</b> (IP eller COOKIE)<br><input type="text" name="s" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($str):'';?>" onfocus="this.select();" />
 			</form>
 <?
 	} elseif($view == 'ss') {
 ?>
 			<form name="search" method="post" action="./search.php?view=<?=$view?>">
-	<b>Supersök</b> ( % som wildcard)<br>
+	<b>SupersÃ¶k</b> ( % som wildcard)<br>
 	<table cellspacing="0">
 	<tr>
-		<td style="padding-right: 10px;"><input type="text" name="s" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($_POST['s']):'';?>" onfocus="this.select();" /><br />Tänk på att tar du fler ord så spelar ordningen roll.<br /><b>frans%test</b> är inte samma som <b>test%frans</b>.
+		<td style="padding-right: 10px;"><input type="text" name="s" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($_POST['s']):'';?>" onfocus="this.select();" /><br />TÃ¤nk pÃ¥ att tar du fler ord sÃ¥ spelar ordningen roll.<br /><b>frans%test</b> Ã¤r inte samma som <b>test%frans</b>.
 <?
-	if($search) {
-		echo '<br /><br />Genvägar:';
-		foreach($_POST['search_in'] as $table)
-		echo '<br /><a href="#'.$table.'">'.$info[$table][0]."</a>\n";
+	if ($search) {
+		echo '<br /><br />GenvÃ¤gar:';
+		foreach ($_POST['search_in'] as $table)
+			echo '<br /><a href="#'.$table.'">'.$info[$table][0]."</a>\n";
 	}
 ?>
 
@@ -190,7 +175,7 @@ function selectingAll(selecting) {
 	}
 ?>
 </select><br /><a href="javascript:void(0);" onclick="selectingAll(document.getElementById('search_in'))">markera alla</a>
-<input type="submit" value="sök" class="inp_orgbtn" style="margin: 0 0 0 107px;" />
+<input type="submit" value="sÃ¶k" class="inp_orgbtn" style="margin: 0 0 0 107px;" />
 		</td>
 	</tr>
 	</table>
@@ -200,15 +185,15 @@ function selectingAll(selecting) {
 ?>
 			<form name="search" method="get" action="./search.php">
 	<input type="hidden" name="view" value="<?=$view?>" />
-	<b>"Kalas"-sök</b><br>
+	<b>"Kalas"-sÃ¶k</b><br>
 	<table cellspacing="0">
 	<tr>
-		<td>Användare 1:<br /><input type="text" name="s1" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($_GET['s1']):'';?>" onfocus="this.select();" /><br />Användare 2:<br /><input type="text" name="s2" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($_GET['s2']):'';?>" onfocus="this.select();" /><br /><br /><input type="submit" value="sök" class="inp_orgbtn" style="width: 50px; margin: 0 0 0 250px;" /></td>
+		<td>AnvÃ¤ndare 1:<br /><input type="text" name="s1" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($_GET['s1']):'';?>" onfocus="this.select();" /><br />AnvÃ¤ndare 2:<br /><input type="text" name="s2" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($_GET['s2']):'';?>" onfocus="this.select();" /><br /><br /><input type="submit" value="sÃ¶k" class="inp_orgbtn" style="width: 50px; margin: 0 0 0 250px;" /></td>
 	</tr>
 	</table>
 <?
 	if($search) {
-		echo 'Genvägar:';
+		echo 'GenvÃ¤gar:';
 		foreach($info as $table => $descr)
 		echo '<br /><a href="#'.$table.'">'.$info[$table][0]."</a>\n";
 	}
@@ -221,7 +206,7 @@ function selectingAll(selecting) {
 	if($search) {
 		if($view == 's') {
 			echo '<table cellspacing="2" style="margin-top: 10px;">';
-			while($row = mysql_fetch_assoc($s_sql)) {
+			foreach ($s_sql as $row) {
 				echo '<tr class="bg_gray"><td class="pdg nobr">'.implode('</td><td class="pdg">', $row).'</td></tr>';
 			}
 		} elseif($view == 'ss') {
@@ -271,12 +256,12 @@ function selectingAll(selecting) {
 						if($table == 's_userphoto' && $key == '6') echo '<td class="pdg">'.$column.'</td>'; else echo '<td class="pdg">'.formatText($column).'</td>';
 					}
 					if($info[$table][4]) echo '<td class="pdg"><a href="search.php?view=sss&s1='.$s1.'&s2='.$s2.'">VISA</a></td>';
-					echo '<td class="pdg"><a href="'.$info[$table][7].$id.'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>';
+					echo '<td class="pdg"><a href="'.$info[$table][7].$id.'" onclick="return confirm(\'SÃ¤ker ?\');">RADERA</a></td>';
 					echo '</tr>';
 				}
 				echo '</table>';
 			}
-			} else if(!empty($_POST['s'])) echo 'Ingen sökning gjordes, för få tecken (Min 3).';
+			} else if(!empty($_POST['s'])) echo 'Ingen sÃ¶kning gjordes, fÃ¶r fÃ¥ tecken (Min 3).';
 			#echo '</pre>';
 		} elseif($view == 'sss') {
 			if($g1 || $g2) {
@@ -312,12 +297,12 @@ function selectingAll(selecting) {
 						echo '<td class="pdg">'.formatText($column).'</td>';
 					}
 					echo '<td class="pdg"><a href="search.php?view=sss&s1='.$s1.'&s2='.$s2.'">VISA</a></td>';
-					echo '<td class="pdg"><a href="'.$info[$table][6].$id.'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>';
+					echo '<td class="pdg"><a href="'.$info[$table][6].$id.'" onclick="return confirm(\'SÃ¤ker ?\');">RADERA</a></td>';
 					echo '</tr>';
 				}
 				echo '</table>';
 			}
-			} else if(!$g1 && !$g2) echo 'Ingen sökning gjordes.';
+			} else if(!$g1 && !$g2) echo 'Ingen sÃ¶kning gjordes.';
 		}
 	}
 ?>
@@ -345,14 +330,14 @@ function selectingAll(selecting) {
 			<tr>
 				<td height="35"><b>Blockeringar</b><br><input type="text" name="ban" class="inp_nrm" value="1.1.1.1" onfocus="if(this.value == '1.1.1.1') { this.value = ''; } else { this.select(); }" onblur="if(this.value == '') { this.value = '1.1.1.1'; }" /></td>
 			</tr>
-			<tr><td height="25">Det finns <span class="txt_chead txt_bld"><?=$b_count?></span> IP blockad<?=(($b_count != '1')?'e':'')?>.</td></tr>
+			<tr><td height="25">Det finns <span class="txt_chead txt_bld"><?=count($b_sql)?></span> IP blockad<?=((count($b_sql) != '1')?'e':'')?>.</td></tr>
 <?
-	if(mysql_num_rows($b_sql) > 0) {
-		print '			<tr><td style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>';
-		while($row = mysql_fetch_assoc($b_sql)) {
+	if (count($b_sql)) {
+		echo '<tr><td style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>';
+		foreach ($b_sql as $row) {
 ?>
 			<tr> 
-				<td style="padding-bottom: 3px;"><a href="search.php?s=<?=secureOUT($row['ban_ip'])?>"><span class="txt_big"><?=secureOUT($row['ban_ip'])?></span></a> - <em>blockad <?=niceDate($row['ban_date'])?></em> <span class="txt_smin">(tills vidare)</span> - <a href="search.php?ban_del=<?=$row['main_id']?>">TILLÅT</a></td>
+				<td style="padding-bottom: 3px;"><a href="search.php?s=<?=secureOUT($row['ban_ip'])?>"><span class="txt_big"><?=secureOUT($row['ban_ip'])?></span></a> - <em>blockad <?=niceDate($row['ban_date'])?></em> <span class="txt_smin">(tills vidare)</span> - <a href="search.php?ban_del=<?=$row['main_id']?>">TILLÃ…T</a></td>
 			</tr>
 <?
 		}
