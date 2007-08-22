@@ -48,7 +48,7 @@
 
 		if (!$hidden && !$beenhere) {
 			$db->update("UPDATE s_userphotovisit SET visit_item = visit_item + 1 WHERE main_id = '".$res['main_id']."' LIMIT 1");
-			$db->update("UPDATE s_userphotovisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = ".$user->id." AND photo_id = '".$res['main_id']."' LIMIT 1");
+			$db->update("UPDATE s_userphotovisit SET status_id = '1', visit_date = NOW() WHERE visitor_id = ".$user->id." AND main_id = '".$res['main_id']."' LIMIT 1");
 
 			$q = 'UPDATE s_userphoto SET pht_click=pht_click+1 WHERE main_id='.$key;
 			$db->update($q);
@@ -135,7 +135,7 @@
 	$cmt = $db->getArray("SELECT b.main_id, b.c_msg, b.c_date, b.c_html, b.private_id, u.* FROM s_userphotocmt b LEFT JOIN s_user u ON u.id_id = b.id_id AND u.status_id = '1' WHERE b.photo_id = '".$res['main_id']."' AND b.status_id = '1' ORDER BY b.main_id DESC LIMIT {$c_paging['slimit']}, {$c_paging['limit']}");
 	if (count($cmt) && !empty($cmt)) {
 		foreach($cmt as $val) {
-			if ($val['private_id'] && (!$own && !$isAdmin)) continue;
+			if ($val['private_id'] && ($user->id != $id && !$user->isAdmin)) continue;
 			$msg_own = ($val['id_id'] == $user->id || $own || $user->isAdmin) ? true : false;
 			$odd = !$odd;
 			echo '

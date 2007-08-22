@@ -169,22 +169,21 @@
 	//id = user-id att sluta blockera
 	function unblockRelation($_id)
 	{
-		global $sql;
+		global $db, $user;
 		if (!is_numeric($_id)) return false;
 
-		$sql->queryUpdate("DELETE FROM s_userblock WHERE user_id = ".$l['id_id']." AND friend_id = ".$_id." AND rel_id = 'u' LIMIT 1");
-		$sql->queryUpdate("DELETE FROM s_userblock WHERE friend_id = ".$l['id_id']." AND user_id = ".$_id." AND rel_id = 'f' LIMIT 1");
-
+		$db->delete("DELETE FROM s_userblock WHERE user_id = ".$user->id." AND friend_id = ".$_id." AND rel_id = 'u' LIMIT 1");
+		$db->delete("DELETE FROM s_userblock WHERE friend_id = ".$user->id." AND user_id = ".$_id." AND rel_id = 'f' LIMIT 1");
 		return true;
 	}
 
 	/* for pager */
 	function getBlockedRelationsCnt()
 	{
-		global $sql;
+		global $db;
 
 		$q = "SELECT COUNT(*) FROM s_userblock b INNER JOIN s_user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = ".$l['id_id']." AND rel_id = 'u'";
-		return $sql->queryResult($q, 0, 1);
+		return $db->getOneItem($q);
 	}
 
 	function getBlockedRelations($_limit = '')
@@ -255,7 +254,7 @@
 	//Returns a number indicating how many of your friends are currently online
 	function relationsOnlineCount()
 	{
-		global $sql;
+		global $db;
 
 		$timeout = date("Y-m-d H:i:s", strtotime('-30 MINUTES'));
 		
@@ -264,20 +263,20 @@
 				"INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = '1' ".
 				"WHERE rel.user_id = 1 AND u.account_date > '".$timeout."'";
 
-		return $sql->queryResult($q);
+		return $db->getOneItem($q);
 	}
 	
 	//Returns the X last users online
 	//todo: move to user class file
 	function getLastUsersOnline($_cnt = 5)
 	{
-		global $sql;
+		global $db;
 		if (!is_numeric($_cnt)) return false;
 
 		$q =	'SELECT *,(SELECT sess_date FROM s_usersess WHERE id_id=t1.id_id ORDER BY sess_date DESC LIMIT 1) AS sess_date '.
 					'FROM s_user AS t1 ORDER BY sess_date DESC LIMIT 0,'.$_cnt;
 
-		return $sql->query($q, 0, 1);
+		return $db->getArray($q);
 	}
 
 ?>

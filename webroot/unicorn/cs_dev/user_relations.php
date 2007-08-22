@@ -4,7 +4,7 @@
 	$id = $user->id;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $id = $_GET['id'];
 
-	if(isset($_GET['create'])) {
+	if (isset($_GET['create'])) {
 		require('user_relations_create.php');
 		die;
 	}
@@ -70,7 +70,7 @@
 	$blocked = false;
 	if ($user->id == $id && isset($_GET['blocked'])) {
 		$blocked = true;
-		if(isset($_GET['del'])) {
+		if (isset($_GET['del'])) {
 			unblockRelation($_GET['del']);
 			errorACT('Nu har du slutat att blockera personen.', 'user_relations.php?blocked');
 		}
@@ -111,7 +111,7 @@
 <?
 	if (!$blocked) dopaging($paging, 'user_relations.php?p=', '&amp;ord='.$thisord, 'med', STATSTR);
 
-	if ($user->id == $id && !$change_id) echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
+	if ($user->id == $id && !$change_id && !$blocked) echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 ?>	
 	<table summary="" cellspacing="0" width="586">
 	<?
@@ -160,7 +160,7 @@
 				<tr>
 					<td class="spac pdg">'.$user->getstring($row, '', array('nolink' => 1)).'</td>
 					<td class="spac pdg rgt">'.nicedate($row['activated_date']).'</td>
-					<td class="spac pdg rgt"><a class="cur" onclick="return confirm(\'Säker ?\')" href="'.l('user', 'relations').'&amp;blocked&amp;del='.$row['id_id'].'"><img src="'.OBJ.'icon_del.gif" title="Avblockera" style="margin-bottom: -4px;" /></a></td>
+					<td class="spac pdg rgt"><a class="cur" onclick="return confirm(\'Säker ?\')" href="user_relations.php?blocked&del='.$row['id_id'].'"><img src="'.$config['web_root'].'_gfx/icon_del.gif" title="Avblockera" style="margin-bottom: -4px;" /></a></td>
 				</tr>';
 		  }
 		}
@@ -171,7 +171,7 @@
 
 	echo '</table>';
 
-	if ($user->id == $id && !$change_id) {
+	if ($user->id == $id && !$change_id && !$blocked) {
 		echo '<input type="submit" value="Spara" class="btn2_min"/>';
 		echo '</form>';
 	}
