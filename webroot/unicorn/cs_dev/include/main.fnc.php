@@ -314,6 +314,36 @@
 		errorACT($msg, $url, 'main', '', $time);
 	}
 
+	//specialDate används bara i admin
+	function specialDate($date, $dday = 0, $type = 1)
+	{
+		if($type) {
+			if($dday) {
+				$first_date = stripzero(date("d", strtotime($date)));
+				$first_month = strftime("%B", strtotime($date));
+				$sec_date = stripzero(date("d", strtotime($date.' +1 DAY')));
+				if($sec_date < $first_date) {
+		# månadsskifte
+					$first_month = stripzero(date("m", strtotime($date)));
+					$sec_month = strftime("%B", strtotime($date.' +1 DAY'));
+					return "$first_date/$first_month & $sec_date $sec_month";
+				} else {
+					return "$first_date & $sec_date $first_month";
+				}
+			} else {
+				if(date("Y", strtotime($date)) == date("Y")) {
+					return stripzero(date("d", strtotime($date))).' '.strftime("%B", strtotime($date));
+				} else {
+					return stripzero(date("d", strtotime($date))).' '.strftime("%B", strtotime($date)).' '.date("Y", strtotime($date));
+				}
+			}
+		} else {
+			return strftime("%A", strtotime($date)).' '.stripzero(date("d", strtotime($date))).' '.strftime("%B", strtotime($date));
+		}
+	}
+
+
+
 	//*******************************************
 	//unused/not-yet-cleaned-up functions below:
 	//*******************************************
@@ -364,33 +394,6 @@
 		} else
 			$limit = 60;
 		return $limit;
-	}
-
-	function specialDate($date, $dday = 0, $type = 1)
-	{
-		if($type) {
-			if($dday) {
-				$first_date = stripzero(date("d", strtotime($date)));
-				$first_month = strftime("%B", strtotime($date));
-				$sec_date = stripzero(date("d", strtotime($date.' +1 DAY')));
-				if($sec_date < $first_date) {
-		# månadsskifte
-					$first_month = stripzero(date("m", strtotime($date)));
-					$sec_month = strftime("%B", strtotime($date.' +1 DAY'));
-					return "$first_date/$first_month & $sec_date $sec_month";
-				} else {
-					return "$first_date & $sec_date $first_month";
-				}
-			} else {
-				if(date("Y", strtotime($date)) == date("Y")) {
-					return stripzero(date("d", strtotime($date))).' '.strftime("%B", strtotime($date));
-				} else {
-					return stripzero(date("d", strtotime($date))).' '.strftime("%B", strtotime($date)).' '.date("Y", strtotime($date));
-				}
-			}
-		} else {
-			return strftime("%A", strtotime($date)).' '.stripzero(date("d", strtotime($date))).' '.strftime("%B", strtotime($date));
-		}
 	}
 
 	function doInt($str)

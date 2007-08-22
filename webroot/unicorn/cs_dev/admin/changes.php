@@ -69,14 +69,15 @@ doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(str
 			exit;
 		}
 	}
-	if($isCrew) {
-		$sql = mysql_query("SELECT a.*, b.user_name FROM s_changes a LEFT JOIN s_admin b ON a.user_id = b.main_id WHERE c_type = 'c' ORDER BY chg_date DESC");
-		$t_sql = mysql_query("SELECT * FROM s_changes WHERE c_type = 't' ORDER BY c_done ASC, chg_date DESC");
-		$t_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_changes WHERE c_type = 't' AND c_done = '0'"), 0, 'count');
+
+	if ($isCrew) {
+		$sql = $db->getArray("SELECT a.*, b.user_name FROM s_changes a LEFT JOIN s_admin b ON a.user_id = b.main_id WHERE c_type = 'c' ORDER BY chg_date DESC");
+		$t_sql = $db->getArray("SELECT * FROM s_changes WHERE c_type = 't' ORDER BY c_done ASC, chg_date DESC");
+		$t_count = $db->getOneItem("SELECT COUNT(*) FROM s_changes WHERE c_type = 't' AND c_done = '0'");
 	} else {
-		$sql = mysql_query("SELECT a.*, b.user_name FROM s_changes a LEFT JOIN s_admin b ON a.user_id = b.main_id WHERE c_type = 'c' AND chg_all = '1' ORDER BY chg_date DESC");
-		$t_sql = mysql_query("SELECT * FROM s_changes WHERE c_type = 't' AND chg_all = '1' ORDER BY c_done ASC, chg_date DESC");
-		$t_count = mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_changes WHERE c_type = 't' AND c_done = '0' AND chg_all = '1'"), 0, 'count');
+		$sql = $db->getArray("SELECT a.*, b.user_name FROM s_changes a LEFT JOIN s_admin b ON a.user_id = b.main_id WHERE c_type = 'c' AND chg_all = '1' ORDER BY chg_date DESC");
+		$t_sql = $db->getArray("SELECT * FROM s_changes WHERE c_type = 't' AND chg_all = '1' ORDER BY c_done ASC, chg_date DESC");
+		$t_count = $db->getOneItem("SELECT COUNT(*) FROM s_changes WHERE c_type = 't' AND c_done = '0' AND chg_all = '1'");
 	}
 
 	require('admin_head.php');
@@ -102,12 +103,12 @@ function loadtop() {
 			<form name="change" action="changes.php" method="post">
 <?=($change)?'<input type="hidden" name="id" value="'.$row['main_id'].'">':'';?>
 			<table width="500">
-			<tr><td style="padding: 0 0 10px 0;" align="right"><textarea name="ins_msg" class="inp_nrm" style="width: 100%; height: 70px;"><?=($change)?secureOUT($row['chg_text']):'';?></textarea><br><div style="float: left;"><?=($isCrew?'<input type="checkbox" id="mailit" value="1" name="mailit" onclick="document.getElementById(\'mailinf\').style.display = (this.checked?\'\':\'none\');"><label for="mailit">Maila detta</label><span id="mailinf" style="display: none;"> till: <input type="text" class="inp_nrm" name="mailto" style="width: 280px;" value="'.ADMIN_EMAIL.'"></span>':'')?></div><?=($isCrew?'<input type="checkbox" name="all"'.($change && $row['chg_all']?' checked':'').' value="1" id="all"><label for="all" class="bld">För alla</label> ':'')?><input type="submit" value="Skicka" class="inp_realbtn" style="margin: 4px 0 0 0;"></td></tr>
+			<tr><td style="padding: 0 0 10px 0;" align="right"><textarea name="ins_msg" class="inp_nrm" style="width: 100%; height: 70px;"><?=($change)?secureOUT($row['chg_text']):'';?></textarea><br><div style="float: left;"><?=($isCrew?'<input type="checkbox" id="mailit" value="1" name="mailit" onclick="document.getElementById(\'mailinf\').style.display = (this.checked?\'\':\'none\');"><label for="mailit">Maila detta</label><span id="mailinf" style="display: none;"> till: <input type="text" class="inp_nrm" name="mailto" style="width: 280px;" value="'.ADMIN_EMAIL.'"></span>':'')?></div><?=($isCrew?'<input type="checkbox" name="all"'.($change && $row['chg_all']?' checked':'').' value="1" id="all"><label for="all" class="bld">FÃ¶r alla</label> ':'')?><input type="submit" value="Skicka" class="inp_realbtn" style="margin: 4px 0 0 0;"></td></tr>
 <?
-	while($row = mysql_fetch_assoc($sql)) {
+	foreach ($sql as $row) {
 ?>
 
-			<tr><td class="pdg_btn"><div style="width: 500px; overflow: hidden;"><?=(!empty($colours[$row['user_id']]))?'<span class="txt_bld" style="color: '.$colours[$row['user_id']].';">'.$row['user_name'].'</span>':'<span class="txt_bld">'.((!$row['user_name'])?'SYSTEM':$row['user_name']).'</span>';?> - <?=($row['chg_all']?'<b>FÖR ALLA</b> - ':' (DOLD) - ')?><a href="changes.php?id=<?=$row['main_id']?>"><span class="txt_bld"><?=strtolower(specialDate($row['chg_date']).' '.date("H:i", strtotime($row['chg_date'])))?></span></a><br /><?=(!empty($colours[$row['user_id']]))?'<span style="color: '.$colours[$row['user_id']].';">'.safeOUT($row['chg_text']).'</span>':safeOUT($row['chg_text']);?><br><a href="changes.php?t_del=<?=$row['main_id']?>" onclick="return (confirm('Säker ?'))?true:false;" style="float: right;">Radera</a></div></td></tr>
+			<tr><td class="pdg_btn"><div style="width: 500px; overflow: hidden;"><?=(!empty($colours[$row['user_id']]))?'<span class="txt_bld" style="color: '.$colours[$row['user_id']].';">'.$row['user_name'].'</span>':'<span class="txt_bld">'.((!$row['user_name'])?'SYSTEM':$row['user_name']).'</span>';?> - <?=($row['chg_all']?'<b>FÃ–R ALLA</b> - ':' (DOLD) - ')?><a href="changes.php?id=<?=$row['main_id']?>"><span class="txt_bld"><?=strtolower(specialDate($row['chg_date']).' '.date("H:i", strtotime($row['chg_date'])))?></span></a><br /><?=(!empty($colours[$row['user_id']]))?'<span style="color: '.$colours[$row['user_id']].';">'.safeOUT($row['chg_text']).'</span>':secureOUT($row['chg_text']);?><br><a href="changes.php?t_del=<?=$row['main_id']?>" onclick="return (confirm('SÃ¤ker ?'))?true:false;" style="float: right;">Radera</a></div></td></tr>
 <?
 	}
 ?>
@@ -123,16 +124,16 @@ function loadtop() {
 <?=($t_change)?'<input type="hidden" name="id" value="'.$t_row['main_id'].'">':'';?>
 			<table width="100%">
 			<tr>
-				<td height="35"><b>Att göra</b> - (DOLD)<br><input type="text" name="t" class="inp_nrm" value="<?=($t_change)?secureOUT($t_row['chg_text']):'';?>" /></td>
+				<td height="35"><b>Att gÃ¶ra</b> - (DOLD)<br><input type="text" name="t" class="inp_nrm" value="<?=($t_change)?secureOUT($t_row['chg_text']):'';?>" /></td>
 			</tr>
-			<tr><td height="25">Det finns <span class="txt_chead txt_bld"><?=$t_count?></span> sak<?=(($t_count != '1')?'er':'')?> att göra.</td></tr>
+			<tr><td height="25">Det finns <span class="txt_chead txt_bld"><?=$t_count?></span> sak<?=(($t_count != '1')?'er':'')?> att gÃ¶ra.</td></tr>
 <?
-	if(mysql_num_rows($t_sql) > 0) {
-		print '			<tr><td style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>';
-		while($row = mysql_fetch_assoc($t_sql)) {
+	if (count($t_sql)) {
+		echo '<tr><td style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>';
+		foreach ($t_sql as $row) {
 ?>
 			<tr> 
-				<td style="padding-bottom: 3px;"><br><?=($row['c_done'])?'<span class=" txt_bld">'.secureOUT($row['chg_text']).'</span> - <em>färdig '.niceDate($row['chg_date']).'</em> - <a href="changes.php?t_del='.$row['main_id'].'">RADERA</a>':'<a href="changes.php?t='.secureOUT($row['main_id']).'"><span>'.secureOUT($row['chg_text']).'</span></a> - <em>adderad '.niceDate($row['chg_date']).'</em> - <a href="changes.php?t_done='.$row['main_id'].'">FÄRDIG</a>';?></td>
+				<td style="padding-bottom: 3px;"><br><?=($row['c_done'])?'<span class=" txt_bld">'.secureOUT($row['chg_text']).'</span> - <em>fÃ¤rdig '.niceDate($row['chg_date']).'</em> - <a href="changes.php?t_del='.$row['main_id'].'">RADERA</a>':'<a href="changes.php?t='.secureOUT($row['main_id']).'"><span>'.secureOUT($row['chg_text']).'</span></a> - <em>adderad '.niceDate($row['chg_date']).'</em> - <a href="changes.php?t_done='.$row['main_id'].'">FÃ„RDIG</a>';?></td>
 			</tr>
 <?
 		}

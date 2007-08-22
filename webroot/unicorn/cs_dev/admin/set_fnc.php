@@ -45,16 +45,19 @@
 		return $x; 
 	}
 
-	function getEnumOptions($table, $field) {
+	function getEnumOptions($table, $field)
+	{
+		global $db;
 		$finalResult = array();
 
 		if (strlen(trim($table)) < 1) return false;
-		$query  = "show columns from $table";
-		$result = mysql_query($query);
-		while ($row = mysql_fetch_array($result)){
+		$q  = 'SHOW COLUMNS FROM '.$table;
+		$list = $db->getArray($q);
+
+		foreach ($list as $row) {
 			if ($field != $row["Field"]) continue;
 			//check if enum type
-			if(ereg('enum.(.*).', $row['Type'], $match) || ereg('set.(.*).', $row['Type'], $match)) {
+			if (ereg('enum.(.*).', $row['Type'], $match) || ereg('set.(.*).', $row['Type'], $match)) {
 				$opts = explode(',', $match[1]);
 				foreach ($opts as $item)
 					$finalResult[] = substr($item, 1, strlen($item)-2);
@@ -74,8 +77,8 @@
 
 		$str = preg_replace("/\[bild=(h?t?t?p?:?\/?\/?)(.*)\](\#?[0-9]{1,8}).([a-zA-Z]{2,6})\[\/bild]/", '<a href="\\1\\2" target="_blank"><img src="'.$extra_dir.'\\3.\\4"></a>', $str);
 		$str = preg_replace("/\[bild\](\#?[0-9]{1,8}).([a-zA-Z]{2,6})\[\/bild]/", '<img src="'.$extra_dir.'\\1.\\2">', $str);
-		#	$str = preg_replace("/\<länk=(h?t?t?p?:?\/?\/?)(.*)\>(\#?[0-9]{1,8}).([a-zA-Z]{2,6})\<\/länk\>/is", '<a href="\\1" target="_blank"><img src="'.$extra_dir.'\\3.\\4"></a>', $str);
-		#	$str = preg_replace("/\<länk>(\#?[0-9]{1,8}).([a-zA-Z]{2,6})\<\/länk>/is", '<img src="'.$extra_dir.'\\1.\\2">', $str);
+		#	$str = preg_replace("/\<lÃ¤nk=(h?t?t?p?:?\/?\/?)(.*)\>(\#?[0-9]{1,8}).([a-zA-Z]{2,6})\<\/lÃ¤nk\>/is", '<a href="\\1" target="_blank"><img src="'.$extra_dir.'\\3.\\4"></a>', $str);
+		#	$str = preg_replace("/\<lÃ¤nk>(\#?[0-9]{1,8}).([a-zA-Z]{2,6})\<\/lÃ¤nk>/is", '<img src="'.$extra_dir.'\\1.\\2">', $str);
 		return $str;
 	}
 
@@ -202,13 +205,13 @@
 
 	function doDate($str) {
 		if (date("Y-m-d", strtotime($str)) == date("Y-m-d")) return 'idag';
-		if (date("Y-m-d", strtotime($str)) == date("Y-m-d", strtotime("-1 day"))) return 'igår';
+		if (date("Y-m-d", strtotime($str)) == date("Y-m-d", strtotime("-1 day"))) return 'igÃ¥r';
 		return strftime("%A", strtotime($str));
 	}
 
 	function dooDate($str) {
 		if (date("Y-m-d", strtotime($str)) == date("Y-m-d")) return 'Idag';
-		if (date("Y-m-d", strtotime($str)) == date("Y-m-d", strtotime("-1 day"))) return 'Igår';
+		if (date("Y-m-d", strtotime($str)) == date("Y-m-d", strtotime("-1 day"))) return 'IgÃ¥r';
 		return ucfirst(date("Y-m-d", strtotime($str)));
 	}
 
@@ -478,7 +481,7 @@
 			$text = sprintf($text, (($paging['co'])?$paging['s']+1:0), ($paging['co'] > ($paging['s']+$paging['limit']))?$paging['s']+$paging['limit']:$paging['co'], $paging['co']);
 
 		if($width == 'med' || $width == 'medmin' || $width == 'big' || $width == 'medbig' || $width == 'biggest') echo $text;
-		echo ($paging['p'] > 1?'<a href="'.$url.($paging['p']-1).$anchor.'">« '.(($vice)?'bakåt':'framåt').'</a>':'&nbsp;').'&nbsp;&nbsp;';
+		echo ($paging['p'] > 1?'<a href="'.$url.($paging['p']-1).$anchor.'">Â« '.(($vice)?'bakÃ¥t':'framÃ¥t').'</a>':'&nbsp;').'&nbsp;&nbsp;';
 
 		if($paging['co'] > $paging['limit']) {
 			echo 'sida';
@@ -497,6 +500,6 @@
 			}
 		} else echo ' ';
 
-		if($width == 'big' || $width == 'medbig' || $width == 'med' || $width == 'medmin' || $width == 'biggest') echo '&nbsp;&nbsp;'.($paging['p'] < $stop?'<a href="'.$url.($paging['p']+1).$anchor.'">'.((!$vice)?'bakåt':'framåt').' »</a>':'&nbsp;');
+		if($width == 'big' || $width == 'medbig' || $width == 'med' || $width == 'medmin' || $width == 'biggest') echo '&nbsp;&nbsp;'.($paging['p'] < $stop?'<a href="'.$url.($paging['p']+1).$anchor.'">'.((!$vice)?'bakÃ¥t':'framÃ¥t').' Â»</a>':'&nbsp;');
 	}
 ?>

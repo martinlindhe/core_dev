@@ -1,19 +1,14 @@
 <?
 	require_once('find_config.php');
 
-	$page = mysql_query("SELECT login_page FROM s_admin WHERE main_id = '".secureINS($_SESSION['u_i'])."' LIMIT 1");
-	if(mysql_num_rows($page) > 0) {
-		$page = mysql_result($page, 0, 'login_page');
-	} else $page = 'gb';
-
+	$page = 'gb';
 
 	$pages = getEnumOptions($t.'admin', 'login_page');
-
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><?=$title?>AMS</title>
 	<link rel="stylesheet" href="default_adm.css" type="text/css">
 <script type="text/javaScript" src="fnc_adm.js"></script>
@@ -114,7 +109,7 @@ isLoaded = true;
 </form>
 <table width="100%">
 <tr>
-	<td class="txt_wht"><a href="javascript:getINFO();" target="_self" id="reloader" onclick="this.blur();" title="Ladda om">LADDA OM</a> | <b><?=strtoupper($_SESSION['u_n'])?></b> - <b><?=$_SESSION['u_l']?></b></td>
+	<td class="txt_wht"><a href="javascript:getINFO();" target="_self" id="reloader" onclick="this.blur();" title="Ladda om">LADDA OM</a> | <b><?=strtoupper($_SESSION['data']['u_alias'])?></b> - <b><?=$_SESSION['data']['level_id']?></b></td>
 	<td class="wht" align="right">ONLINE: <span class="bld" id="onlstr"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?check">LOGGA UT</a></td>
 </tr>
 </table>

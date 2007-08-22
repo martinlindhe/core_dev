@@ -8,7 +8,7 @@ function addText(nmb) {
 	var msg = document.change.ins_msg;
 	theSelection = false;
 
-	// Om någonting är markerat, lägg taggar runt om
+	// Om nÃ¥gonting Ã¤r markerat, lÃ¤gg taggar runt om
 
 	if (window.getSelection) {
 		theSelection = window.getSelection();
@@ -23,7 +23,7 @@ function addText(nmb) {
 	} else if(msg.selectionEnd && (msg.selectionEnd - msg.selectionStart > 0)) {
 		mozWrap(msg, prjtags[nmb], prjtags[nmb+1]);
 	} else {
-	// Lägg in båda i slutet
+	// LÃ¤gg in bÃ¥da i slutet
 		msg.value += prjtags[nmb] + prjtags[nmb+1];
 		msg.blur();
 		return;

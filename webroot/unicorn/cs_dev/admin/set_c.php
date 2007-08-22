@@ -1,11 +1,10 @@
 <?
-	$isCrew = @$_SESSION['u_c'];
-	$t_pages = array('news' => 'Nyheter', 'gb' => 'Gästbok', 'extra' => 'Extra', 'send' => 'Register', 'stat' => 'Statistik', 'pics' => 'Vimmel', 'settings' => 'Inställningar', 'changes' => 'Ändringar');
+	$t_pages = array('news' => 'Nyheter', 'gb' => 'GÃ¤stbok', 'extra' => 'Extra', 'send' => 'Register', 'stat' => 'Statistik', 'pics' => 'Vimmel', 'settings' => 'InstÃ¤llningar', 'changes' => 'Ã„ndringar');
 	$in_dir = '../_postloadinside1594/';
 	define("FRS", 'amsCS');
 	$title = 'CS';
-	$anv_txt = array('obj_tho' => 'TYCK TILL', 'obj_pcm' => 'VIMMELKOMMENTARER', 'obj_mcm' => 'FILMKOMMENTARER', 'obj_party' => 'PARTYPLANKET (på sidan)', 'obj_full' => 'HÖGUPPLÖST', 'obj_ue' => 'BILDMAIL', 'obj_pimg' => 'PROFILBILDER', 'obj_event' => 'EVENT', 'obj_sms' => 'SMS', 'obj_tele' => 'TELE', 'obj_pho' => 'FOTOALBUM', 'obj_gb' => 'USER-GB', 'obj_mail' => 'USER-MAIL', 'obj_chat' => 'USER-CHAT', 'obj_blog' => 'USER-BLOG', 'poll' => 'POLL', 'news_notice' => 'NOTISER', 'news_send' => 'NYHETER', 'pics' => 'GALLERI', 'search_s' => 'SÖK', 'search_ss' => 'LOGGSÖK', 'search_sss' => 'SUPERSÖK', 'stat' => 'STATISTIK', 'log' => 'LOGG');
-	$cities = array('100' => 'SWEDEN');//, '110' => 'SUNDSVALL', '120' => 'VÄSTERÅS', '170' => '');
+	$anv_txt = array('obj_tho' => 'TYCK TILL', 'obj_pcm' => 'VIMMELKOMMENTARER', 'obj_mcm' => 'FILMKOMMENTARER', 'obj_party' => 'PARTYPLANKET (pÃ¥ sidan)', 'obj_full' => 'HÃ–GUPPLÃ–ST', 'obj_ue' => 'BILDMAIL', 'obj_pimg' => 'PROFILBILDER', 'obj_event' => 'EVENT', 'obj_sms' => 'SMS', 'obj_tele' => 'TELE', 'obj_pho' => 'FOTOALBUM', 'obj_gb' => 'USER-GB', 'obj_mail' => 'USER-MAIL', 'obj_chat' => 'USER-CHAT', 'obj_blog' => 'USER-BLOG', 'poll' => 'POLL', 'news_notice' => 'NOTISER', 'news_send' => 'NYHETER', 'pics' => 'GALLERI', 'search_s' => 'SÃ–K', 'search_ss' => 'LOGGSÃ–K', 'search_sss' => 'SUPERSÃ–K', 'stat' => 'STATISTIK', 'log' => 'LOGG');
+	$cities = array('100' => 'SWEDEN');//, '110' => 'SUNDSVALL', '120' => 'VÃ„STERÃ…S', '170' => '');
 	$levels = array('10' => 'ADMIN');
 	define("ADMIN_PHOTO_DIR", '../'.USER_GALLERY);
 	define('ADMIN_NEWS', '..'.NEWS);
@@ -19,13 +18,13 @@
 
 	$menu_USER = array('USER' => 'user.php', 'MASSMESS' => 'user_send.php');
 	$menu_OBJECT = array('OBJEKT' => 'obj.php');
-	$menu_SEARCH = array('SÖK' => 'search.php');
+	$menu_SEARCH = array('SÃ–K' => 'search.php');
 	$menu_ADMIN = array('ADMIN' => 'settings.php');
 	$menu_STAT = array('STATISTIK' => 'stat.php', 'TREND' => 'stat_obj.php');
 	$menu_VIMMEL = array('VIMMEL/FILM' => 'pics.php');
 
 	if($isCrew) {
-		$menu_LOG = array('LOGG' => 'changes.php?t', 'ANVÄNDARE' => 'settings.php');
+		$menu_LOG = array('LOGG' => 'changes.php?t', 'ANVÃ„NDARE' => 'settings.php');
 		$menu_NEWS = array('NYHETER' => 'news.php', 'NOTISER' => 'news_notice.php', 'ANNONSER' => 'adver.php', 'UTSKICK' => 'send.php', 'MASSMESS' => 'user_send.php', 'POLL' => 'poll.php', 'EDITORIAL' => 'editorial.php', 'TEXT' => 'text.php');
 	} else {
 		if(!empty($_SESSION['u_a'][1])) {

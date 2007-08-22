@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><?=$title?>AMS</title>
 	<link rel="stylesheet" href="default_adm.css" type="text/css">
 	<meta http-equiv="imagetoolbar" content="no">

@@ -2,7 +2,7 @@
 	require_once('find_config.php');
 
 	$adm_cnt = gettxt('admcnt');
-	if(!empty($_GET['k']) && !empty($_GET['k1']) && $isCrew) {
+	if (!empty($_GET['k']) && !empty($_GET['k1']) && $isCrew) {
 		$sql->queryUpdate("UPDATE s_admin SET kick_now = '1' WHERE main_id = '".secureINS($_GET['k'])."' LIMIT 1");
 		echo '<script type="text/javascript">alert(\''.secureOUT($_GET['k1']).' kickad.\');</script>';
 	}
@@ -10,7 +10,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><?=$title?> admin</title>
 	<link rel="stylesheet" href="default_adm.css" type="text/css">
 <script type="text/javaScript" src="fnc_adm.js"></script>
@@ -112,13 +112,13 @@ function getname(str) {
 <table cellspacing="0" cellpadding="0">
 <tr>
 <?
-	if($isCrew || !empty($_SESSION['u_a'][1])) {
-		if($isCrew || strpos($_SESSION['u_a'][1], 'obj') !== false) echo '<td><a href="obj.php" target="'.FRS.'main" onclick="show_active(this.id)" id="obj">OBJEKT IN</a></td>';
-		if($isCrew || (strpos($_SESSION['u_a'][1], 'news') !== false && !empty($menu_S))) echo '<td class="menu"><a href="'.($isCrew?'news.php':$menu_S).'" target="'.FRS.'main" onclick="show_active(this.id)" id="news">INFO UTÅT</a></td>';
-		if($isCrew || strpos($_SESSION['u_a'][1], 'user') !== false) echo '<td><a href="user.php" target="'.FRS.'main" onclick="show_active(this.id)" id="user">USER</a></td>';
-		if($isCrew || strpos($_SESSION['u_a'][1], 'search') !== false) echo '<td><a href="search.php" target="'.FRS.'main" onclick="show_active(this.id)" id="search">SÖK</a></td>';
-		if($isCrew || strpos($_SESSION['u_a'][1], 'stat') !== false) echo '<td><a href="stat.php" target="'.FRS.'main" onclick="show_active(this.id)" id="stat">STATISTIK</a></td>';
-		if($isCrew || strpos($_SESSION['u_a'][1], 'log') !== false) echo '<td><a href="changes.php" target="'.FRS.'main" onclick="show_active(this.id)" id="log">LOGG</a></td>';
+	if ($isCrew || !empty($_SESSION['u_a'][1])) {
+		if ($isCrew || strpos($_SESSION['u_a'][1], 'obj') !== false) echo '<td><a href="obj.php" target="'.FRS.'main" onclick="show_active(this.id)" id="obj">OBJEKT IN</a></td>';
+		if ($isCrew || (strpos($_SESSION['u_a'][1], 'news') !== false && !empty($menu_S))) echo '<td class="menu"><a href="'.($isCrew?'news.php':$menu_S).'" target="'.FRS.'main" onclick="show_active(this.id)" id="news">INFO UTÃ…T</a></td>';
+		if ($isCrew || strpos($_SESSION['u_a'][1], 'user') !== false) echo '<td><a href="user.php" target="'.FRS.'main" onclick="show_active(this.id)" id="user">USER</a></td>';
+		if ($isCrew || strpos($_SESSION['u_a'][1], 'search') !== false) echo '<td><a href="search.php" target="'.FRS.'main" onclick="show_active(this.id)" id="search">SÃ–K</a></td>';
+		if ($isCrew || strpos($_SESSION['u_a'][1], 'stat') !== false) echo '<td><a href="stat.php" target="'.FRS.'main" onclick="show_active(this.id)" id="stat">STATISTIK</a></td>';
+		if ($isCrew || strpos($_SESSION['u_a'][1], 'log') !== false) echo '<td><a href="changes.php" target="'.FRS.'main" onclick="show_active(this.id)" id="log">LOGG</a></td>';
 	}
 ?>
 </tr>
