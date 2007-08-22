@@ -1,18 +1,7 @@
 <?
-session_start();
-#ob_start();
-#    ob_implicit_flush(0);
-#    ob_start('ob_gzhandler');
-	ini_set("max_execution_time", 0);
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	require("./set_tmb.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
-	if(!$isCrew && strpos($_SESSION['u_a'][1], 'news_notice') === false) errorNEW('Ingen behörighet.');
+	require_once('find_config.php');
+
+	if(!$isCrew && strpos($_SESSION['u_a'][1], 'news_notice') === false) errorNEW('Ingen behÃ¶righet.');
 	$page = 'NOTISER';
 	$menu = $menu_NEWS;
 	$change = false;
@@ -24,24 +13,22 @@ session_start();
 	if(!empty($_POST['donews']) && !empty($_POST['ins_cmt'])) {
 		$status = (!empty($_POST['status_id']) && is_numeric($_POST['status_id']))?$_POST['status_id']:'0';
 		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			mysql_query("UPDATE s_newsnotice SET
-			ad_cmt = '".secureINS($_POST['ins_cmt'])."',
+			$db->update("UPDATE s_newsnotice SET
+			ad_cmt = '".$db->escape($_POST['ins_cmt'])."',
 			status_id = '$status',
-			city_id = '".secureINS($_POST['ins_city'])."',
-			ad_date = '".secureINS($_POST['ins_date'])."'
-			WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+			city_id = '".$db->escape($_POST['ins_city'])."',
+			ad_date = '".$db->escape($_POST['ins_date'])."'
+			WHERE main_id = '".$db->escape($_POST['id'])."' LIMIT 1");
 			$d_id = $_POST['id'];
-
 		} else {
-			mysql_query("INSERT INTO s_newsnotice SET
-			ad_cmt = '".secureINS($_POST['ins_cmt'])."',
-			city_id = '".secureINS($_POST['ins_city'])."',
+			$d_id = $db->insert("INSERT INTO s_newsnotice SET
+			ad_cmt = '".$db->escape($_POST['ins_cmt'])."',
+			city_id = '".$db->escape($_POST['ins_city'])."',
 			ad_date = NOW(),
-			status_id = '$status'");
-			$d_id = mysql_insert_id();
+			status_id = '".$status."'");
 		}
-		header("Location: news_notice.php?status=$status");
-		exit;
+		header('Location: news_notice.php?status='.$status);
+		die;
 	}
 
 	if(!empty($_POST['doupd'])) {
@@ -50,7 +37,7 @@ session_start();
 				$kid = explode(":", $key);
 				$kid = $kid[1];
 				if(isset($_POST['status_id:' . $kid])) {
-					mysql_query("UPDATE s_newsnotice SET status_id = '".secureINS($_POST['status_id:' . $kid])."' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
+					mysql_query("UPDATE s_newsnotice SET status_id = '".$db->escape($_POST['status_id:' . $kid])."' WHERE main_id = '".$db->escape($kid)."' LIMIT 1");
 				}
 			}
 		}
@@ -59,37 +46,28 @@ session_start();
 	}
 	$change = false;
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql = mysql_query("SELECT * FROM s_newsnotice WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
-		if(mysql_num_rows($sql) > 0) {
-			$row = mysql_fetch_assoc($sql);
-			mysql_query("DELETE FROM s_newsnotice WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
-			
-		}
-		header("Location: news_notice.php?status=$status_id");
-		exit;
+		$db->delete("DELETE FROM s_newsnotice WHERE main_id = '".$db->escape($_GET['del'])."' LIMIT 1");
+		header('Location: news_notice.php?status='.$status_id);
+		die;
 	}
 
 	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM s_newsnotice WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
-		if(mysql_num_rows($sql) != '1') {
-			$change = false;
-		} else {
-			$row = mysql_fetch_assoc($sql);
-			$change = true;
-		}
+		$row = $db->getOneRow("SELECT * FROM s_newsnotice WHERE main_id = '".$db->escape($_GET['id'])."' LIMIT 1");
+		$change = true;
 	}
 
-			$view_arr = array(
-				"1" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_newsnotice WHERE status_id = '1'"), 0, 'count'),
-				"2" => mysql_result(mysql_query("SELECT COUNT(*) as count FROM s_newsnotice WHERE status_id = '2'"), 0, 'count'));
+	$view_arr = array(
+		"1" => $db->getOneItem("SELECT COUNT(*) FROM s_newsnotice WHERE status_id = '1'"),
+		"2" => $db->getOneItem("SELECT COUNT(*) FROM s_newsnotice WHERE status_id = '2'")
+	);
 
-	if($status_id != '2') {
-		$news = mysql_query("SELECT * FROM s_newsnotice WHERE status_id = '$status_id' ORDER BY city_id ASC, ad_date DESC");
+	if ($status_id != '2') {
+		$news = $db->getArray("SELECT * FROM s_newsnotice WHERE status_id = '$status_id' ORDER BY city_id ASC, ad_date DESC");
 	} else {
-		$news = mysql_query("SELECT * FROM s_newsnotice WHERE status_id = '2' ORDER BY ad_date DESC");
+		$news = $db->getArray("SELECT * FROM s_newsnotice WHERE status_id = '2' ORDER BY ad_date DESC");
 	}
 
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 ?>
 	<script type="text/javascript" src="fnc_adm.js"></script>
 	<table height="100%">
@@ -137,10 +115,10 @@ Stad<br /><select name="ins_city" size="1" class="inp_nrm" style="width: 180px;"
 	$nl = true;
 	$ol = 0;
 	$old = '';
-	while($row = mysql_fetch_assoc($news)) {
+	foreach ($news as $row) {
 		echo '<tr><td style="padding: 5px 4px 10px 1px;"><hr /><div class="hr"></div></td></tr><tr><td style="padding: 5px 1px 5px 1px;">';
 		echo '<input type="hidden" name="status_id:'.$row['main_id'].'" id="status_id:'.$row['main_id'].'" value="'.$row['status_id'].'">';
-		echo '<img src="./_img/status_'.(($row['status_id'] == '1')?'green':'none').'.gif" style="margin: 2px 1px 0 0;" id="1:'.$row['main_id'].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row['status_id'] == '2')?'red':'none').'.gif" style="margin: 2px 0 0 1px;" id="2:'.$row['main_id'].'" onclick="changeStatus(\'status\', this.id);"> | <a href="news_notice.php?id='.$row['main_id'].'&status='.$status_id.'">ÄNDRA</a> | <a href="news_notice.php?del='.$row['main_id'].'" onclick="if(confirm(\'Säker ?\')) { return true; } else { return false; }">RADERA</a><br>';
+		echo '<img src="./_img/status_'.(($row['status_id'] == '1')?'green':'none').'.gif" style="margin: 2px 1px 0 0;" id="1:'.$row['main_id'].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row['status_id'] == '2')?'red':'none').'.gif" style="margin: 2px 0 0 1px;" id="2:'.$row['main_id'].'" onclick="changeStatus(\'status\', this.id);"> | <a href="news_notice.php?id='.$row['main_id'].'&status='.$status_id.'">Ã„NDRA</a> | <a href="news_notice.php?del='.$row['main_id'].'" onclick="if(confirm(\'SÃ¤ker ?\')) { return true; } else { return false; }">RADERA</a><br>';
 		echo 'Publicerad: <b>'.niceDate($row['ad_date']).'</b> - '.$cities[$row['city_id']];
 		echo ($row['ad_cmt'])?'<p>'.nl2br(stripslashes($row['ad_cmt'])).'</p>':'';
 		echo '</td></tr>';

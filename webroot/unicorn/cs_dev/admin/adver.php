@@ -1,21 +1,9 @@
 <?
-session_start();
-ob_start();
-    ob_implicit_flush(0);
-    ob_start('ob_gzhandler');
-	ini_set("max_execution_time", 0);
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	require("./set_tmb.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
-	if(!$isCrew) errorNEW('Ingen behörighet.');
+	require_once('find_config.php');
+
+	if(!$isCrew) errorNEW('Ingen behÃ¶righet.');
 	$page = 'ANNONSER';
 	$menu = $menu_NEWS;
-	$sql = &new sql();
 	$change = false;
 	$types = array('pic', 'swf', 'event');
 
@@ -97,7 +85,7 @@ ob_start();
 								$sql->queryUpdate("UPDATE s_ad SET ad_img = '".secureINS($d_id.'_'.$unique.'.'.$p_name)."' WHERE main_id = '".secureINS($d_id)."' LIMIT 1");
 							}
 						} else {
-							$msg = 'Felaktigt format, storlek eller bredd & höjd.';
+							$msg = 'Felaktigt format, storlek eller bredd & hÃ¶jd.';
 							$js_mv = 'adver.php';
 							require("./_tpl/notice_admin.php");
 							exit;
@@ -166,18 +154,19 @@ ob_start();
 		}
 	}
 
-			$view_arr = array(
-				"1" => $sql->queryResult("SELECT COUNT(*) as count FROM s_ad WHERE ad_start < NOW() AND ad_stop > NOW() AND status_id = '1'"),
-				"2" => $sql->queryResult("SELECT COUNT(*) as count FROM s_ad WHERE status_id = '2'"));
+	$view_arr = array(
+		"1" => $db->getOneItem("SELECT COUNT(*) FROM s_ad WHERE ad_start < NOW() AND ad_stop > NOW() AND status_id = '1'"),
+		"2" => $db->getOneItem("SELECT COUNT(*) FROM s_ad WHERE status_id = '2'")
+	);
 
 	if($status_id != '2') {
-		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_order, ad_show, ad_click, ad_tclick, city_id FROM s_ad WHERE status_id = '1' ORDER BY ad_pos ASC, ad_order ASC");
+		$lpsdl = $db->getArray("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_order, ad_show, ad_click, ad_tclick, city_id FROM s_ad WHERE status_id = '1' ORDER BY ad_pos ASC, ad_order ASC");
 	} else {
-		$lpsdl = $sql->query("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_order, ad_show, ad_click, ad_tclick, city_id FROM s_ad WHERE status_id = '2' ORDER BY ad_start ASC");
+		$lpsdl = $db->getArray("SELECT ad_img, ad_url, ad_type, main_id, ad_name, ad_start, ad_stop, status_id, ad_pos, ad_order, ad_show, ad_click, ad_tclick, city_id FROM s_ad WHERE status_id = '2' ORDER BY ad_start ASC");
 	}
 
 #	$listmv = mysql_query("SELECT a.m_id, b.p_date, b.p_dday, b.p_name FROM {$tab['movie']} a, $topic_tab b WHERE a.status_id = '1' AND a.topic_id = b.main_id AND b.status_id = '1' ORDER BY b.p_date DESC");
-	require("./_tpl/admin_head.php");
+	require('admin_head.php');
 ?>
 	<script type="text/javascript" src="fnc_adm.js"></script>
 	<script type="text/javascript" src="flashcreate.js"></script>
@@ -252,9 +241,9 @@ Stad<br /><select name="ins_city[]" size="6" multiple=1 class="inp_nrm" style="h
 </td>
 			</tr>
 			<tr>
-				<td colspan="2" style="padding: 5px 0 0 0;">Målfönster:<br><select name="ins_target" style="width: 127px;">
-<option value="_blank"<?=($change && $row['ad_target'] == '_blank')?' selected':'';?>>NYTT FÖNSTER</option>
-<option value="commain"<?=($change && $row['ad_target'] == 'commain')?' selected':'';?>>HUVUDFÖNSTER</option>
+				<td colspan="2" style="padding: 5px 0 0 0;">MÃ¥lfÃ¶nster:<br><select name="ins_target" style="width: 127px;">
+<option value="_blank"<?=($change && $row['ad_target'] == '_blank')?' selected':'';?>>NYTT FÃ–NSTER</option>
+<option value="commain"<?=($change && $row['ad_target'] == 'commain')?' selected':'';?>>HUVUDFÃ–NSTER</option>
 				</select></td>
 			</tr>
 			<tr>
@@ -264,20 +253,20 @@ Stad<br /><select name="ins_city[]" size="6" multiple=1 class="inp_nrm" style="h
 				<td colspan="2" style="padding: 5px 0 0 0;">Stopp:<br><input type="text" class="inp_nrm" style="width: 110px;" onfocus="this.select();" name="ins_stop" value="<?=($change)?plainDate($row['ad_stop'], 0):plainDate(date("Y-m-d H:i:s", strtotime('+7 DAYS')), 0);?>"><!-- - <a href="#">Start + 1 vecka</a>--></td>
 			</tr>
 			<tr>
-				<td colspan="2" style="padding: 5px 0 0 0;">Max antal visningar (0 = obegränsat):<br><input type="text" class="inp_nrm" style="width: 110px;" onfocus="this.select();" name="ins_showlimit" value="<?=($change)?$row['ad_showlimit']:'0';?>"></td>
+				<td colspan="2" style="padding: 5px 0 0 0;">Max antal visningar (0 = obegrÃ¤nsat):<br><input type="text" class="inp_nrm" style="width: 110px;" onfocus="this.select();" name="ins_showlimit" value="<?=($change)?$row['ad_showlimit']:'0';?>"></td>
 			</tr>
 			<tr>
-				<td colspan="2" style="padding: 5px 0 0 0;">Max antal klick (0 = obegränsat):<br><input type="text" class="inp_nrm" style="width: 110px;" onfocus="this.select();" name="ins_clicklimit" value="<?=($change)?$row['ad_clicklimit']:'0';?>"></td>
+				<td colspan="2" style="padding: 5px 0 0 0;">Max antal klick (0 = obegrÃ¤nsat):<br><input type="text" class="inp_nrm" style="width: 110px;" onfocus="this.select();" name="ins_clicklimit" value="<?=($change)?$row['ad_clicklimit']:'0';?>"></td>
 			</tr>
 <?=($change && $row['ad_type'] != 'pic')?'
 			<tr>
-				<td colspan="2"><label>För att logga statistik för objektet, använd denna länk innuti objektet, och skriv slutdestination för länken i fältet <b>Länk</b> här under.</label><p>'.HOST.'click.php?id='.$row['main_id'].'</p></td>
+				<td colspan="2"><label>FÃ¶r att logga statistik fÃ¶r objektet, anvÃ¤nd denna lÃ¤nk innuti objektet, och skriv slutdestination fÃ¶r lÃ¤nken i fÃ¤ltet <b>LÃ¤nk</b> hÃ¤r under.</label><p>'.HOST.'click.php?id='.$row['main_id'].'</p></td>
 			</tr>':'';?></td>
 			<tr>
-				<td colspan="2" style="padding-top: 5px;">Länk<br>
+				<td colspan="2" style="padding-top: 5px;">LÃ¤nk<br>
 <input type="text" name="ins_url" id="ins_url" class="inp_nrm" style="width: 270px; margin-bottom: 4px;" value="<?=($change)?secureOUT($row['ad_url']):'';?>"><br>
 <select style="width: 100%;" name="ins_lnk" onchange="if(this.value.length > 0) document.getElementById('ins_url').value = this.value;">
-	<option value="">välj</option>
+	<option value="">vÃ¤lj</option>
 <?
 /*
 	echo '<optgroup label="Vimmel">';
@@ -308,13 +297,13 @@ Stad<br /><select name="ins_city[]" size="6" multiple=1 class="inp_nrm" style="h
 	$i = 1;
 ?>
 			<tr>
-				<td><?=($change && !empty($row['ad_img']))?'Skriv över aktuell fil':'Ladda upp fil';?><br><div style="float: left; margin-top: 1px; height: 22px; width: 24px;"><img src="./_img/status_none.gif" id="photopre<?=$i?>" onmouseoout="showSml(this)" onerror="showError(this);" name="photopre<?=$i?>" style="height: 22px; width: 24px;" alt=""></div><input type="file" name="file:<?=$i?>" id="photo<?=$i?>" class="inp_nrm" size="26" style="width: 180px;" dir="rtl" onchange="showPre(this.value, 'photopre<?=$i?>');" onclick="showPre(this.value, 'photopre<?=$i?>');"></td>
+				<td><?=($change && !empty($row['ad_img']))?'Skriv Ã¶ver aktuell fil':'Ladda upp fil';?><br><div style="float: left; margin-top: 1px; height: 22px; width: 24px;"><img src="./_img/status_none.gif" id="photopre<?=$i?>" onmouseoout="showSml(this)" onerror="showError(this);" name="photopre<?=$i?>" style="height: 22px; width: 24px;" alt=""></div><input type="file" name="file:<?=$i?>" id="photo<?=$i?>" class="inp_nrm" size="26" style="width: 180px;" dir="rtl" onchange="showPre(this.value, 'photopre<?=$i?>');" onclick="showPre(this.value, 'photopre<?=$i?>');"></td>
 			</tr>
 			<tr>
-				<td colspan="2" style="padding: 5px 0 0 0;">Data: (Lämna ifred om du inte vet vad du gör)<br><textarea name="ins_cmt" wrap="off" class="inp_nrm" tabindex="2" style="width: 400px; overflow: scroll; height: <?=($change && $row['ad_type'] != 'pic')?'130':'60';?>px;"><?=($change)?secureOUT($row['ad_img']):'';?></textarea></td>
+				<td colspan="2" style="padding: 5px 0 0 0;">Data: (LÃ¤mna ifred om du inte vet vad du gÃ¶r)<br><textarea name="ins_cmt" wrap="off" class="inp_nrm" tabindex="2" style="width: 400px; overflow: scroll; height: <?=($change && $row['ad_type'] != 'pic')?'130':'60';?>px;"><?=($change)?secureOUT($row['ad_img']):'';?></textarea></td>
 			</tr>
 			<tr id="swf_size"<?=($change && $row['ad_type'] == 'swf')?'':' style="display: none;"';?>>
-				<td colspan="2" style="padding: 5px 0 0 0;"><b>Ange ny storlek</b> (Fungerar bara och måste anges om du laddar upp en ny fil)<br>Bredd i pixlar:<br><input type="text" class="inp_nrm" style="width: 100px;" onfocus="this.select();" name="ins_nW"><br>Höjd i pixlar:<br><input type="text" class="inp_nrm" style="width: 100px;" onfocus="this.select();" name="ins_nH"></td>
+				<td colspan="2" style="padding: 5px 0 0 0;"><b>Ange ny storlek</b> (Fungerar bara och mÃ¥ste anges om du laddar upp en ny fil)<br>Bredd i pixlar:<br><input type="text" class="inp_nrm" style="width: 100px;" onfocus="this.select();" name="ins_nW"><br>HÃ¶jd i pixlar:<br><input type="text" class="inp_nrm" style="width: 100px;" onfocus="this.select();" name="ins_nH"></td>
 			</tr>
 			<tr>
 				<td colspan="2"><select name="code" value="1" class="inp_nrm" id="inp_c" onchange="checkIf(this.value);">
@@ -339,7 +328,7 @@ Stad<br /><select name="ins_city[]" size="6" multiple=1 class="inp_nrm" style="h
 	$ol = 0;
 	$old = '';
 	$matches = array('./', '<input type="image"', '<form', '</form', '[BILD]', '[FREDAG]', '[FREDAG-DATUM]');
-	foreach($lpsdl as $row) {
+	foreach ($lpsdl as $row) {
 		if(!empty($row[0])) $gotpic = true; else $gotpic = false;
 		#$row[0] = str_replace("[CELL]", $s->info[3], $row[0]);
 		echo '<input type="hidden" name="status_id:'.$row[3].'" id="status_id:'.$row[3].'" value="'.$row[7].'">';
@@ -347,9 +336,9 @@ Stad<br /><select name="ins_city[]" size="6" multiple=1 class="inp_nrm" style="h
 			<td style="width: 80px; padding: 0 0 0 4px;" class="nobr"><img src="./_img/status_'.(($row[7] == '1')?'green':'none').'.gif" style="margin: 4px 1px 0 0;" id="1:'.$row[3].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[7] == '2')?'red':'none').'.gif" style="margin: 4px 0 0 1px;" id="2:'.$row[3].'" onclick="changeStatus(\'status\', this.id);"> <input type="text" name="order_id:'.$row[3].'" value="'.$row[8].':'.$row[9].'" disabled style="width: 24px; padding: 0; margin-bottom: 4px; line-height: 9px; height: 11px; size: 10px;" onfocus="this.select();" class="inp_nrm"></td>
 			<td class="cur nobr" onclick="document.location.href = \'adver.php?status='.$status_id.'&id='.$row[3].'\';"'.(($gotpic)?' onmouseover="document.getElementById(\'tr:'.$row[3].'\').style.display = \'\';" onmouseout="document.getElementById(\'tr:'.$row[3].'\').style.display = \'none\';"':'').' style="width: 350px; padding: 4px;">'.$row[13].' <b>'.$row[4].'</b> (#'.$row[3].')</td>
 			<td class="cur" onclick="document.location.href = \'adver.php?status='.$status_id.'&id='.$row[3].'\';" style="padding: 4px;">'.$row[2].'</td>
-			<td class="cur nobr" onclick="document.location.href = \'adver.php?status='.$status_id.'&id='.$row[3].'\';" style="padding: 4px;">[ '.$row[10].' visningar | '.$row[11].' ('.$row[12].') besök ]</td>
+			<td class="cur nobr" onclick="document.location.href = \'adver.php?status='.$status_id.'&id='.$row[3].'\';" style="padding: 4px;">[ '.$row[10].' visningar | '.$row[11].' ('.$row[12].') besÃ¶k ]</td>
 			<td class="cur nobr" onclick="document.location.href = \'adver.php?status='.$status_id.'&id='.$row[3].'\';" style="padding: 4px;">'.((strtotime($row[5]) <= time() && strtotime($row[6]) >= time())?plainDate($row[5], 0).' '.plainDate($row[6], 0):'<strike>'.plainDate($row[5], 0).' '.plainDate($row[6], 0).'</strike>').'</td>
-			<td class="cur nobr" style="padding: 4px;" align="right"><a href="adver.php?status='.$status_id.'&id='.$row[3].'">ÄNDRA</a> | <a href="adver.php?del='.$row[3].'" onclick="return confirm(\'Säker ?\');">RADERA</a></td>
+			<td class="cur nobr" style="padding: 4px;" align="right"><a href="adver.php?status='.$status_id.'&id='.$row[3].'">Ã„NDRA</a> | <a href="adver.php?del='.$row[3].'" onclick="return confirm(\'SÃ¤ker ?\');">RADERA</a></td>
 		</tr>';
 		if($gotpic) echo '<tr id="tr:'.$row[3].'" style="display: none;"><td colspan="6">'.(($row[2] == 'swf' || $row[2] == 'event')?stripslashes($row[0]):'<img src="'.AD_DIR.$row[0].'">').'</td></tr>';
 	}
