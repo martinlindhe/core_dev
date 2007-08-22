@@ -1,18 +1,15 @@
 <?
-	if(!function_exists('notallowed') || notallowed()) {
-		header("Location: ./");
-		exit;
-	}
 	$thispage = 'obj.php?status=thought';
 	$view_gb = 0;
 	$city = array();
+
 	if(!$isCrew && !empty($_SESSION['u_a'][0])) {
 		$city = explode(',', $_SESSION['u_a'][0]);
 	}
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
 		$sql->queryUpdate("UPDATE s_thought SET status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		header("Location: ".$thispage);
-		exit;
+		die;
 	}
 
 	if(!empty($_POST['validate'])) {
@@ -47,25 +44,28 @@
 	if($view_gb) {
 		$paging = paging(@$_GET['p'], 20);
 		if($arr)
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE $arr ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE $arr ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
 		else
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+			$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} else {
 		if($arr)
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE ($arr) AND a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
+			$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE ($arr) AND a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC");
 		else
-			$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC", 0, 1);
+			$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u.u_sex, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE a.view_id = '0' AND a.status_id = '0' ORDER BY a.main_id ASC");
 	}
-	if($arr)
-	$view_c = array(
-'0' => $sql->queryResult("SELECT COUNT(*) as count FROM s_thought a WHERE ($arr) AND view_id = '0' AND status_id = '0'"),
-'1' => $sql->queryResult("SELECT COUNT(*) as count FROM s_thought a WHERE $arr"));
-	else
-	$view_c = array(
-'0' => $sql->queryResult("SELECT COUNT(*) as count FROM s_thought WHERE view_id = '0' AND status_id = '0'"),
-'1' => $sql->queryResult("SELECT COUNT(*) as count FROM s_thought"));
+	if($arr) {
+		$view_c = array(
+			'0' => $db->getOneItem("SELECT COUNT(*) FROM s_thought a WHERE ($arr) AND view_id = '0' AND status_id = '0'"),
+			'1' => $db->getOneItem("SELECT COUNT(*) FROM s_thought a WHERE $arr")
+		);
+	} else {
+		$view_c = array(
+			'0' => $db->getOneItem("SELECT COUNT(*) FROM s_thought WHERE view_id = '0' AND status_id = '0'"),
+			'1' => $db->getOneItem("SELECT COUNT(*) FROM s_thought")
+		);
+	}
 
-	require("./_tpl/obj_head.php");
+	require('obj_head.php');
 ?>
 <? if(!empty($city) && count($city)) foreach($city as $v) echo $cities[$v].' '; echo '<br />'; ?>
 			<input type="radio" class="inp_chk" name="view" value="0" id="view_0" onclick="document.location.href = '<?=$thispage?>';"<?=(!$view_gb)?' checked':'';?>><label for="view_0" class="txt_bld txt_look">Ogranskade</label> [<?=$view_c[0]?>]
@@ -92,10 +92,10 @@
 $pm1 = $paging['p'] - 1;
 $pp1 = $paging['p'] + 1;
 		if($paging['slimit'] > 1) {
-			echo '<a href="'.$thispage.'&all='.$view_gb.'&p='.$pm1.'" class="txt_look txt_bld">framåt</a>&nbsp;';
+			echo '<a href="'.$thispage.'&all='.$view_gb.'&p='.$pm1.'" class="txt_look txt_bld">framÃ¥t</a>&nbsp;';
 		}
 		if( $view_c[$view_gb] > $paging['slimit'] + $paging['limit']) {
-			echo '<a href="'.$thispage.'&all='.$view_gb.'&p='.$pp1.'" class="txt_look txt_bld">bakåt</a>&nbsp;';
+			echo '<a href="'.$thispage.'&all='.$view_gb.'&p='.$pp1.'" class="txt_look txt_bld">bakÃ¥t</a>&nbsp;';
 		}
 ?>
 						</td>
@@ -110,7 +110,7 @@ $pp1 = $paging['p'] + 1;
 	echo '			<table style="width: 500px;">';
 	foreach($list as $row) {
 		$row['gb_msg'] = trim($row['gb_msg']);
-		$row['answer_msg'] = safeOUT($row['answer_msg']);
+		$row['answer_msg'] = secureOUT($row['answer_msg']);
 		$class = ($row['status_id'] == '2')?'bg_blk':'';
 		$txt = ($row['status_id'] == '2')?' wht':'';
 ?>
@@ -136,7 +136,7 @@ $pp1 = $paging['p'] + 1;
 					<td style="width: 100%;"><div style="width: 450px; overflow: hidden;">
 <?=($row['gb_html'])?stripslashes($row['gb_msg']):secureOUT($row['gb_msg']);?><br>
 <?	if(!empty($row['answer_msg'])) { ?>
-<br><span class="txt_other"><?=$row['answer_msg']?><br><span class="txt_bld"><?=$row['admin_alias']?></span> - <em>inlägg besvarat <?=niceDate($row['answer_date'])?></em></span>
+<br><span class="txt_other"><?=$row['answer_msg']?><br><span class="txt_bld"><?=$row['admin_alias']?></span> - <em>inlÃ¤gg besvarat <?=niceDate($row['answer_date'])?></em></span>
 <?
 	} elseif($row['gb_html']) echo '<br><b>ADMIN</b>'; else echo '<br><b>OBESVARAT</b>';
 ?>
@@ -147,7 +147,7 @@ $pp1 = $paging['p'] + 1;
 			</tr>
 			<tr class="<?=$class.$txt?>">
 				<td style="padding: 8px 0 0 0;" class="nobr">
-				<div style="float: right;"><input type="hidden" name="status_id:<?=$row['main_id']?>" id="status_id:<?=$row['main_id']?>" value="<?=$row['status_id']?>"><a href="<?=$thispage?>&del=<?=$row['main_id']?>" onclick="return confirm('Säker ?');">RADERA</a> | <a href="javascript:openWin('obj_thought_answer.php?id=<?=$row['main_id']?>');">ÄNDRA/SVARA</a></div>
+				<div style="float: right;"><input type="hidden" name="status_id:<?=$row['main_id']?>" id="status_id:<?=$row['main_id']?>" value="<?=$row['status_id']?>"><a href="<?=$thispage?>&del=<?=$row['main_id']?>" onclick="return confirm('SÃ¤ker ?');">RADERA</a> | <a href="javascript:openWin('obj_thought_answer.php?id=<?=$row['main_id']?>');">Ã„NDRA/SVARA</a></div>
 				<a href="search.php?s=<?=secureOUT($row['sess_id'])?>"><?=substr(secureOUT($row['sess_id']), 0, 5)?></a> | <a href="search.php?s=<?=secureOUT($row['sess_ip'])?>"><?=secureOUT($row['sess_ip'])?></a>
 				</td>
 			</tr>
@@ -166,10 +166,10 @@ echo '			</table>';
 				<td align="right" height="20" valign="center">
 <?
 		if($paging['slimit'] > 1) {
-			echo '<a href="'.$thispage.'&all='.$view_gb.'&p='.$pm1.'" class="txt_look txt_bld">framåt</a>&nbsp;';
+			echo '<a href="'.$thispage.'&all='.$view_gb.'&p='.$pm1.'" class="txt_look txt_bld">framÃ¥t</a>&nbsp;';
 		}
 		if($view_c[$view_gb] > $paging['slimit'] + $paging['limit']) {
-			echo '<a href="'.$thispage.'&all='.$view_gb.'&p='.$pp1.'" class="txt_look txt_bld">bakåt</a>&nbsp;';
+			echo '<a href="'.$thispage.'&all='.$view_gb.'&p='.$pp1.'" class="txt_look txt_bld">bakÃ¥t</a>&nbsp;';
 		}
 ?>
 				</td>

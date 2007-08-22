@@ -1,15 +1,11 @@
 <?
-	require('/home/martin/www/_modules/user/spy.fnc.php');	//fˆr spyPostSend
-
-	if(!function_exists('notallowed') || notallowed()) {
-		header("Location: ./");
-		exit;
-	}
 	$thispage = 'obj.php?status=photo';
-$reasons = array(
-'A' => '.',
-'R' => ' pÂ grund av: <b>Reklambudskap i bild.</b>',
-'AB' => ' pÂ grund av: <b>Stˆtande och/eller ol‰mpligt material.</b>');
+
+	$reasons = array(
+		'A' => '.',
+		'R' => ' p√• grund av: <b>Reklambudskap i bild.</b>',
+		'AB' => ' p√• grund av: <b>St√∂tande och/eller ol√§mpligt material.</b>'
+	);
 
 	if(!empty($_POST['validate'])) {
 		$doall = false;
@@ -26,10 +22,10 @@ $reasons = array(
 					if($doall && empty($_POST['status_id:' . $kid])) {
 // alla-knapp
 						if($type == '1') {
-# godk‰nn blanka
+# godk√§nn blanka
 #echo '<b>god bla</b>';
 							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
-							addALog(@$_SESSION['u_i'].' godk‰nde '.$res[5].':'.$kid);
+							addALog(@$_SESSION['u_i'].' godk√§nde '.$res[5].':'.$kid);
 						} elseif($type == '2') {
 # neka blanka
 #echo '<b>neka bla</b>';
@@ -50,10 +46,10 @@ $reasons = array(
 						}
 					} else {
 						if($_POST['status_id:' . $kid] == '1') {
-# godk‰nn specifik
+# godk√§nn specifik
 #echo '<b>god spec</b>';
 							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
-							addALog(@$_SESSION['u_i'].' godk‰nde '.$res[5].':'.$kid);
+							addALog(@$_SESSION['u_i'].' godk√§nde '.$res[5].':'.$kid);
 						} elseif($_POST['status_id:' . $kid] == '2') {
 # neka specifik
 #echo '<b>neka spec</b>'.$res[5].'Ditt foto: <b>'.secureOUT($res[2]).'</b> har blivit nekat.';
@@ -106,18 +102,20 @@ $reasons = array(
 		$view_cmt = 1;
 	}
 	$view_arr = array(
-			$sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1'"),
-			$sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '1' AND a.status_id = '1'"));
+		$db->getOneItem("SELECT COUNT(*) FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1'"),
+		$db->getOneItem("SELECT COUNT(*) FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '1' AND a.status_id = '1'")
+	);
+
 	$paging = paging(@$_GET['p'], 50);
 $id = (!empty($_GET['id'])?$_GET['id']:false);
 	if(!$view_cmt && !$id) {
-		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1' LIMIT {$paging['slimit']}, {$paging['limit']}");
+		$list = $db->getArray("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '0' AND a.status_id = '1' LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} elseif(!$id) {
-		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '1' AND a.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
+		$list = $db->getArray("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.view_id = '1' AND a.status_id = '1' ORDER BY a.main_id DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} else {
-		$list = $sql->query("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.main_id = '".secureINS($id)."' LIMIT 1");
+		$list = $db->getArray("SELECT a.main_id, a.view_id, a.picd, a.pht_name, a.hidden_id, a.hidden_value, a.pht_cmt, u.u_alias, u.id_id, u.level_id, u.u_sex, u.u_birth, a.status_id FROM s_userphoto a INNER JOIN s_user u ON u.id_id = a.user_id AND u.status_id = '1' WHERE a.main_id = '".$db->escape($id)."' LIMIT 1");
 	}
-	require("./_tpl/obj_head.php");
+	require('obj_head.php');
 
 ?>
 			<input type="radio" class="inp_chk" name="view" value="0" id="view_0" onclick="document.location.href = '<?=$thispage?>';"<?=(!$view_cmt)?' checked':'';?>><label for="view_0" class="txt_bld txt_look">Icke granskade</label> [<?=$view_arr[0]?>]
@@ -128,8 +126,8 @@ $id = (!empty($_GET['id'])?$_GET['id']:false);
 
 			<input type="submit" class="inp_realbtn" value="Uppdatera" style="width: 70px; margin: 5px 2px 10px 0;">
 			<input type="button" class="inp_realbtn" value="Neka blanka" style="width: 85px; margin: 5px 2px 10px 0;" onclick="document.getElementById('main_id').value = '2'; this.form.submit();">
-			<input type="button" class="inp_realbtn" value="Godk‰nn blanka" style="width: 100px; margin: 5px 2px 10px 0;" onclick="document.getElementById('main_id').value = '1'; this.form.submit();">
-<br /><input type="text" class="inp_nrm" style="width: 80px; margin-right: 5px;" id="id_id"><input type="button" class="inp_realbtn" style="margin: 0;" onclick="document.location.href = '<?=$thispage?>&id=' + document.getElementById('id_id').value.replace('#', '');" value="H‰mta foto" />
+			<input type="button" class="inp_realbtn" value="Godk√§nn blanka" style="width: 100px; margin: 5px 2px 10px 0;" onclick="document.getElementById('main_id').value = '1'; this.form.submit();">
+<br /><input type="text" class="inp_nrm" style="width: 80px; margin-right: 5px;" id="id_id"><input type="button" class="inp_realbtn" style="margin: 0;" onclick="document.location.href = '<?=$thispage?>&id=' + document.getElementById('id_id').value.replace('#', '');" value="H√§mta foto" />
 		<br><br>
 			<hr /><div class="hr"></div>
 <?
@@ -143,10 +141,10 @@ $id = (!empty($_GET['id'])?$_GET['id']:false);
 	$pm1 = $paging['p'] - 1;
 	$pp1 = $paging['p'] + 1;
 		if($paging['p'] > 1) {
-			echo '<a href="'.$thispage.'&all='.$view_cmt.'&p='.$pm1.'" class="txt_look txt_bld">framÂt</a>&nbsp;';
+			echo '<a href="'.$thispage.'&all='.$view_cmt.'&p='.$pm1.'" class="txt_look txt_bld">fram√•t</a>&nbsp;';
 		}
 		if($view_arr[$view_cmt] > $paging['slimit'] + $paging['limit']) {
-			echo '<a href="'.$thispage.'&all='.$view_cmt.'&p='.$pp1.'" class="txt_look txt_bld">bakÂt</a>&nbsp;';
+			echo '<a href="'.$thispage.'&all='.$view_cmt.'&p='.$pp1.'" class="txt_look txt_bld">bak√•t</a>&nbsp;';
 		}
 ?>
 						</td>
@@ -156,7 +154,7 @@ $id = (!empty($_GET['id'])?$_GET['id']:false);
 ?>
 <script type="text/javascript">
 function denyAns(val, id) {
-	if(confirm('S‰ker ?'))
+	if(confirm('S√§ker ?'))
 		document.location.href = '<?=$thispage?>&del=' + id + '&reason=' + val;
 }
 </script>
@@ -164,21 +162,21 @@ function denyAns(val, id) {
 <?
 	if(count($list) && !empty($list)) {
 		echo '<table cellspacing="2">';
-	#	echo '<tr><th>Bild</th><th>Anv‰ndare</th><th>Mobilnummer</th><th>Bildnummer</th><th>H‰mtningskod</th><th>Antal h‰mtningar</th><th>Datum</th></tr>';
+	#	echo '<tr><th>Bild</th><th>Anv√§ndare</th><th>Mobilnummer</th><th>Bildnummer</th><th>H√§mtningskod</th><th>Antal h√§mtningar</th><th>Datum</th></tr>';
 		$nl = true;
 		$i = 0;
 if(!$view_cmt) {
 		foreach($list as $row) {
 			$i++;
 			echo '<tr><td class="pdg cnt"><input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="0"><img src="./_img/status_none.gif" style="margin: 0 1px -1px 2px;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_none.gif" style="margin: 0 0 -1px 1px;" id="2:'.$row[0].'" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'none\'; changeStatus(\'status\', this.id);"> | 
-<a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'none\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'\';" onclick="return confirm(\'S‰ker ?\');">NEKA DIREKT</a>
+<a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'none\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'\';" onclick="return confirm(\'S√§ker ?\');">NEKA DIREKT</a>
 <div id="re_re:'.$row[0].'" style="display: none;">
 <input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="R" id="re_id:'.$row[0].':R"><label for="re_id:'.$row[0].':R">Reklam</label>
-<input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="AB" id="re_id:'.$row[0].':AB"><label for="re_id:'.$row[0].':AB">Stˆtande</label>
+<input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="AB" id="re_id:'.$row[0].':AB"><label for="re_id:'.$row[0].':AB">St√∂tande</label>
 </div>
 <div id="reason_reason:'.$row[0].'" style="display: none;">
 <input type="radio" name="reason_id:'.$row[0].'" value="R" id="reason_id:'.$row[0].':R"><label for="reason_id:'.$row[0].':R">Reklam</label>
-<input type="radio" name="reason_id:'.$row[0].'" value="AB" id="reason_id:'.$row[0].':AB"><label for="reason_id:'.$row[0].':AB">Stˆtande</label>
+<input type="radio" name="reason_id:'.$row[0].'" value="AB" id="reason_id:'.$row[0].':AB"><label for="reason_id:'.$row[0].':AB">St√∂tande</label>
 </div>
 <br><img style="margin-top: 3px;" src="'.ADMIN_PHOTO_DIR.$row[2].'/'.$row[0].(($row[4])?'_'.$row[5]:'').'.'.$row[3].'" /><br>'.secureOUT($row[6]).'<br><a href="user.php?t&id='.$row[8].'"><b>'.secureOUT($row[7]).'</b></a></td></tr>';
 			echo '<tr><td><hr /><div class="hr"></div></td></tr>';
@@ -187,14 +185,14 @@ if(!$view_cmt) {
 		foreach($list as $row) {
 			$i++;
 			echo '<tr><td class="pdg cnt"><input type="hidden" name="status_id:'.$row[0].'" value="'.$row[12].'"><img src="./_img/status_'.(($row[12] == '1')?'green':'none').'.gif" style="margin: 0 1px -1px 2px;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[12] == '2')?'red':'none').'.gif" style="margin: 0 0 -1px 1px;" id="2:'.$row[0].'" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'none\'; changeStatus(\'status\', this.id);"> | 
-<a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'none\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'\';" onclick="return confirm(\'S‰ker ?\');">NEKA DIREKT</a>
+<a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'none\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'\';" onclick="return confirm(\'S√§ker ?\');">NEKA DIREKT</a>
 <div id="re_re:'.$row[0].'" style="display: none;">
 <input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="R" id="re_id:'.$row[0].':R"><label for="re_id:'.$row[0].':R">Reklam</label>
-<input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="AB" id="re_id:'.$row[0].':AB"><label for="re_id:'.$row[0].':AB">Stˆtande</label>
+<input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="AB" id="re_id:'.$row[0].':AB"><label for="re_id:'.$row[0].':AB">St√∂tande</label>
 </div>
 <div id="reason_reason:'.$row[0].'" style="display: none;">
 <input type="radio" name="reason_id:'.$row[0].'" value="R" id="reason_id:'.$row[0].':R"><label for="reason_id:'.$row[0].':R">Reklam</label>
-<input type="radio" name="reason_id:'.$row[0].'" value="AB" id="reason_id:'.$row[0].':AB"><label for="reason_id:'.$row[0].':AB">Stˆtande</label>
+<input type="radio" name="reason_id:'.$row[0].'" value="AB" id="reason_id:'.$row[0].':AB"><label for="reason_id:'.$row[0].':AB">St√∂tande</label>
 </div>
 <br><img style="margin-top: 3px;" src="'.ADMIN_PHOTO_DIR.$row[2].'/'.$row[0].(($row[4])?'_'.$row[5]:'').'.'.$row[3].'" /><br>'.secureOUT($row[6]).'<br><a href="user.php?t&id='.$row[8].'"><b>'.secureOUT($row[7]).'</b></a></td></tr>';
 			echo '<tr><td><hr /><div class="hr"></div></td></tr>';
@@ -212,10 +210,10 @@ if(!$view_cmt) {
 	$pm1 = $paging['p'] - 1;
 	$pp1 = $paging['p'] + 1;
 		if($paging['p'] > 1) {
-			echo '<a href="'.$thispage.'&all='.$view_cmt.'&p='.$pm1.'" class="txt_look txt_bld">framÂt</a>&nbsp;';
+			echo '<a href="'.$thispage.'&all='.$view_cmt.'&p='.$pm1.'" class="txt_look txt_bld">fram√•t</a>&nbsp;';
 		}
 		if($view_arr[$view_cmt] > $paging['slimit'] + $paging['limit']) {
-			echo '<a href="'.$thispage.'&all='.$view_cmt.'&p='.$pp1.'" class="txt_look txt_bld">bakÂt</a>&nbsp;';
+			echo '<a href="'.$thispage.'&all='.$view_cmt.'&p='.$pp1.'" class="txt_look txt_bld">bak√•t</a>&nbsp;';
 		}
 ?>
 						</td>
@@ -226,7 +224,7 @@ if(!$view_cmt) {
 			<hr /><div class="hr"></div>
 			<input type="submit" class="inp_realbtn" value="Uppdatera" style="width: 70px; margin: 5px 2px 10px 0;">
 			<input type="button" class="inp_realbtn" value="Neka blanka" style="width: 85px; margin: 5px 2px 10px 0;" onclick="document.getElementById('main_id').value = '2'; this.form.submit();">
-			<input type="button" class="inp_realbtn" value="Godk‰nn blanka" style="width: 100px; margin: 5px 2px 10px 0;" onclick="document.getElementById('main_id').value = '1'; this.form.submit();">
+			<input type="button" class="inp_realbtn" value="Godk√§nn blanka" style="width: 100px; margin: 5px 2px 10px 0;" onclick="document.getElementById('main_id').value = '1'; this.form.submit();">
 
 			</form>
 		</td>

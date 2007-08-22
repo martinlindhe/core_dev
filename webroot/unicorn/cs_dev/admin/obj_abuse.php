@@ -2,17 +2,17 @@
 	$thispage = 'obj.php?status=abuse';
 
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql->queryUpdate("DELETE FROM s_userabuse WHERE id = '".secureINS($_GET['del'])."'");
-		header("Location: ".$thispage);
-		exit;
+		$db->delete("DELETE FROM s_userabuse WHERE id = '".$db->escape($_GET['del'])."'");
+		header('Location: '.$thispage);
+		die;
 	}
 
 	$q = 'SELECT * FROM s_userabuse ORDER BY timeReported DESC';
-	$list = $sql->query($q, 0, 1);
+	$list = $db->getArray($q);
 
-	require("./_tpl/obj_head.php");
+	require('obj_head.php');
 	
-	echo 'Listar '.count($list).' anmälningar:<br/><br/>';
+	echo 'Listar '.count($list).' anmÃ¤lningar:<br/><br/>';
 ?>
 	<form name="upd" method="post" action="./<?=$thispage?>">
 		<input type="hidden" name="main_id:all" id="main_id" value="0">
@@ -31,15 +31,15 @@
 			if (!$reporter) $reporter['u_alias'] = '[borttagen]';
 			if (!$reported) $reported['u_alias'] = '[borttagen]';
 			
-			echo 'Användare '.$reporter['u_alias'].' rapporterar <a href="user.php?t&id='.$row['reportedId'].'">'.$reported['u_alias'].'</a>: '.niceDate($row['timeReported']).'<br/>';
+			echo 'AnvÃ¤ndare '.$reporter['u_alias'].' rapporterar <a href="user.php?t&id='.$row['reportedId'].'">'.$reported['u_alias'].'</a>: '.niceDate($row['timeReported']).'<br/>';
 			echo $row['msg'].'<br/>';
 ?>
 			</td></tr>
 			<tr class="bg_blk wht"> 
 				<td style="padding: 8px 0 0 0;" class="nobr">
 				<div style="float: right;">
-					<a href="<?=$thispage?>&del=<?=$row['id']?>" onclick="return confirm('Säker ?');">RADERA</a>
-					<!-- | <a href="javascript:openWin('obj_thought_answer.php?id=<?=$row['main_id']?>');">ÄNDRA/SVARA</a> -->
+					<a href="<?=$thispage?>&del=<?=$row['id']?>" onclick="return confirm('SÃ¤ker ?');">RADERA</a>
+					<!-- | <a href="javascript:openWin('obj_thought_answer.php?id=<?=$row['main_id']?>');">Ã„NDRA/SVARA</a> -->
 				</div>
 				</td>
 			</tr>

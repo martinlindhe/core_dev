@@ -3,11 +3,9 @@
 
 	if (!$isCrew && strpos($_SESSION['u_a'][1], 'obj') === false) errorNEW('Ingen behörighet.');
 
-	//require("./set_formatadm.php");
-	
 	$page = 'OBJEKT';
 	$menu = $menu_OBJECT;
-	$status = (!empty($_GET['status']))?$_GET['status']:'';
+	$status = (!empty($_GET['status'])) ? $_GET['status'] : '';
 
 	if ($status == 'thought' && ($isCrew || strpos($_SESSION['u_a'][1], 'obj_tho') !== false)) 			require("obj_thought.php");
 	else if ($status == 'cmt' && ($isCrew || strpos($_SESSION['u_a'][1], 'obj_pcm') !== false)) 		require("obj_cmt.php");
@@ -26,7 +24,6 @@
 	else if ($status == 'blog' && ($isCrew || strpos($_SESSION['u_a'][1], 'obj_blog') !== false)) 	require("obj_blog.php");
 	else if ($status == 'abuse' && ($isCrew || strpos($_SESSION['u_a'][1], 'obj_abuse') !== false)) require("obj_abuse.php");
 	else require("obj_head.php");
-
 ?>
 		</td>
 	</tr>

@@ -1,14 +1,8 @@
 <?
 	require('admin_head.php');
 ?>
-	<script type="text/javascript" src="fnc_adm.js"></script>
-	<script type="text/javascript">
-function loadtop() {
-	if(parent.<?=FRS?>head)
-	parent.<?=FRS?>head.show_active('obj');
-}
-<?=(isset($_GET['t']))?'loadtop();':'';?>
-	</script>
+<script type="text/javascript" src="fnc_adm.js"></script>
+
 	<table height="100%">
 <?makeMenuAdmin($page, $menu);?>
 	<tr>
@@ -37,5 +31,6 @@ function loadtop() {
 </td>
 </tr>
 </table>
-			<hr /><div class="hr"></div>
-			<br>
+
+<hr /><div class="hr"></div>
+<br>

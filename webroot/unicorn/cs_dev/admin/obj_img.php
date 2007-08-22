@@ -1,11 +1,4 @@
 <?
-	if(!function_exists('notallowed') || notallowed()) {
-		header("Location: ./");
-		exit;
-	}
-
-	require('/home/martin/www/_modules/user/spy.fnc.php');	//för spyPostSend
-
 	$thispage = 'obj.php?status=img';
 function imgOK($id, $picid, $flow) {
 	$picid = intval($picid);
@@ -113,7 +106,7 @@ function imgOK($id, $picid, $flow) {
 			}
 		}
 		header('Location: '.$thispage);
-		exit;
+		die;
 	} elseif(!empty($_GET['del'])) {
 		$res = $sql->queryLine("SELECT id_id, flow_id FROM s_userpicvalid WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		if(!empty($res) && count($res)) {
@@ -138,15 +131,19 @@ function imgOK($id, $picid, $flow) {
 			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
 		}
 		header("Location: ".$thispage);
-		exit;
+		die;
 	}
 	$all = (!empty($_GET['all'])?'1':'0');
-	require("./_tpl/obj_head.php");
-	$count = array($sql->queryResult("SELECT COUNT(*) as count FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'"));
+	require('obj_head.php');
+
+	$count = array(
+		$db->getOneItem("SELECT COUNT(*) FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'")
+	);
+
 	if($all)
-		$list = $sql->query("SELECT u.id_id, u.u_picd, u.u_alias, u.level_id, u.u_sex, u.u_birth, u.u_picid FROM s_user u WHERE u.status_id = '1' AND u.u_picvalid = '1' ORDER BY u.u_picdate DESC LIMIT 48");
+		$list = $db->getArray("SELECT u.id_id, u.u_picd, u.u_alias, u.level_id, u.u_sex, u.u_birth, u.u_picid FROM s_user u WHERE u.status_id = '1' AND u.u_picvalid = '1' ORDER BY u.u_picdate DESC LIMIT 48");
 	else
-		$list = $sql->query("SELECT a.id_id, a.flow_id, u.u_alias, u.level_id, u.u_sex, u.u_birth FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'");
+		$list = $db->getArray("SELECT a.id_id, a.flow_id, u.u_alias, u.level_id, u.u_sex, u.u_birth FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'");
 ?>
 <script type="text/javascript">
 function denyAns(val, id, extra) {

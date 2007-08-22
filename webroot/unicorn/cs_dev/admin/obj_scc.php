@@ -1,8 +1,6 @@
 <?
-	if(!function_exists('notallowed') || notallowed()) {
-		header("Location: ./");
-		exit;
-	}
+	//visdom. fixme - byt namn på filen...
+
 	$thispage = 'obj.php?status=scc';
 	$view_gb = 0;
 	$city = array();
@@ -42,22 +40,22 @@
 	}
 	if($view_gb == 1) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday >= NOW() ORDER BY a.con_onday ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday >= NOW() ORDER BY a.con_onday ASC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} elseif($view_gb == 2) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday < NOW() ORDER BY a.con_onday DESC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday < NOW() ORDER BY a.con_onday DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} else { 
 		$paging = paging(@$_GET['p'], 20);
-		$list = $sql->query("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '0' ORDER BY a.main_id ASC LIMIT {$paging['slimit']}, {$paging['limit']}", 0, 1);
+		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '0' ORDER BY a.main_id ASC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	}
-#print_r($list);
-#print mysql_error();
-	$view_c = array(
-'0' => $sql->queryResult("SELECT COUNT(*) as count FROM s_s_ WHERE status_id = '0'"),
-'1' => $sql->queryResult("SELECT COUNT(*) as count FROM s_s_ WHERE status_id = '1' AND con_onday >= NOW()"),
-'2' => $sql->queryResult("SELECT COUNT(*) as count FROM s_s_ WHERE status_id = '1' AND con_onday < NOW()"));
 
-	require("./_tpl/obj_head.php");
+	$view_c = array(
+		'0' => $db->getOneItem("SELECT COUNT(*) FROM s_s_ WHERE status_id = '0'"),
+		'1' => $db->getOneItem("SELECT COUNT(*) FROM s_s_ WHERE status_id = '1' AND con_onday >= NOW()"),
+		'2' => $db->getOneItem("SELECT COUNT(*) FROM s_s_ WHERE status_id = '1' AND con_onday < NOW()")
+	);
+
+	require('obj_head.php');
 ?>
 			<input type="radio" class="inp_chk" name="view" value="0" id="view_0" onclick="document.location.href = '<?=$thispage?>';"<?=(!$view_gb)?' checked':'';?>><label for="view_0" class="txt_bld txt_look">Ogranskade</label> [<?=$view_c[0]?>]
 			<input type="radio" class="inp_chk" name="view" value="1" id="view_1" onclick="document.location.href = '<?=$thispage?>&all=1';"<?=($view_gb == 1)?' checked':'';?>><label for="view_1" class="txt_bld txt_look">Kommer att publiceras</label> [<?=$view_c[1]?>]
