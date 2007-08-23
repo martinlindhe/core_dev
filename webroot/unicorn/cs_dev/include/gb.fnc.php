@@ -19,15 +19,14 @@
 	// to return a specific guestbook entry by its id. will return false if the user or the message is deleted.
 	function gbGetById($msg_id)
 	{
-		global $sql;
-
+		global $db, $user;
 		if (!is_numeric($msg_id)) return false;
 
 		$q = "SELECT gb.*, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM s_usergb gb LEFT JOIN s_user u ON u.id_id = gb.sender_id AND u.status_id = '1' WHERE gb.main_id = ".$msg_id." AND gb.status_id = '1'";
-		$result = $sql->queryLine($q, 1);
+		$result = $db->getOneRow($q);
 
 		//dont return private messages to other ppl
-		if ($result['private_id'] && ($l['id_id'] != $result['user_id'])) return false;
+		if ($result['private_id'] && ($user->id != $result['user_id'])) return false;
 
 		return $result;
 	}
@@ -54,13 +53,16 @@
 	// therefore the users_id will now be 11-232.
 	function gbHistory($first_user, $second_user, $_start = 0, $_end = 0)
 	{
-		global $sql;
+		global $db;
 
 		$or = array($first_user, $second_user);
 		sort($or);
-		$q = "SELECT gb.*, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM s_usergbhistory h INNER JOIN s_usergb gb ON gb.main_id = h.msg_id AND gb.status_id = '1' LEFT JOIN s_user u ON u.id_id = gb.sender_id AND u.status_id = '1' WHERE h.users_id = '".implode('-', $or)."' ORDER BY h.msg_id DESC";
+		$q = 'SELECT gb.*, u.id_id, u.u_alias, u.u_picid, u.u_picd, u.u_picvalid, u.account_date, u.status_id, u.u_sex, u.u_birth, u.level_id FROM s_usergbhistory h '.
+				'INNER JOIN s_usergb gb ON gb.main_id = h.msg_id AND gb.status_id = "1" '.
+				'LEFT JOIN s_user u ON u.id_id = gb.sender_id AND u.status_id = "1" '.
+				'WHERE h.users_id = "'.implode('-', $or).'" ORDER BY h.msg_id DESC';
 		if ($_start || $_end) $q .= ' LIMIT '.$_start.','.$_end;
-		return $sql->query($q, 0, 1);
+		return $db->getArray($q);
 	}
 
 	// insert new guestbook-msg
@@ -91,15 +93,15 @@
 
 	// returns true is msg is deleted.
 	function gbDelete($msg_id) {
-		global $sql, $user;
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, sender_id, user_read FROM s_usergb WHERE main_id = '".secureINS($msg_id)."' LIMIT 1");
-		if(!empty($res) && count($res) && $res[1] == '1') {
-			if($res[2] == $l['id_id'] || $res[3] == $l['id_id']) {
-				$sql->queryUpdate("UPDATE s_usergb SET status_id = '2', deleted_id = '".secureINS($l['id_id'])."', deleted_date = NOW() WHERE main_id = '".secureINS($res[0])."' LIMIT 1");
-				if(!$res[4]) $user->notifyDecrease('gb', $res[2]);
-				$user->counterDecrease('gb', $res[2]);
-				return true;
-			}
+		global $db, $user;
+		if (!is_numeric($msg_id)) return false;
+
+		$res = $db->getOneRow("SELECT main_id, status_id, user_id, sender_id, user_read FROM s_usergb WHERE main_id = '".$msg_id."' LIMIT 1");
+		if (!empty($res) && $res['status_id'] == '1' && ($res['user_id'] == $user->id || $res['sender_id'] == $user->id)) {
+			$db->update("UPDATE s_usergb SET status_id = '2', deleted_id = '".$user->id."', deleted_date = NOW() WHERE main_id = '".$res['main_id']."' LIMIT 1");
+			if (!$res['user_read']) $user->notifyDecrease('gb', $res['user_id']);
+			$user->counterDecrease('gb', $res['user_id']);
+			return true;
 		}
 		return false;
 	}
@@ -107,7 +109,7 @@
 	// marks the user's msgs to read.
 	function gbMarkUnread()
 	{
-		global $user, $db;
+		global $db, $user;
 		if(!$user->getinfo($user->id, 'always_unread')) {
 			$db->update("UPDATE s_usergb SET user_read = '1' WHERE user_id = '".$user->id."' AND user_read = '0'");
 			$user->notifyReset('gb', $user->id);
@@ -119,14 +121,13 @@
 		}
 	}
 	
-	//marks one guestbook message as read
+	// marks one guestbook message as read
 	function gbMarkAsRead($_id)
 	{
-		global $sql;
-
+		global $db, $user;
 		if (!is_numeric($_id)) return false;
 
-		$sql->queryUpdate("UPDATE s_usergb SET user_read = '1' WHERE user_id = '".$l['id_id']."' AND main_id = ".$_id);
+		$db->update("UPDATE s_usergb SET user_read = '1' WHERE user_id = '".$user->id."' AND main_id = ".$_id);
 	}
 	
 ?>

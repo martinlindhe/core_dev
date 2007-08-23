@@ -7,23 +7,24 @@
 	$his = false;
 	$allowed = true;
 
-	if(!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
-		if(gbDelete($_GET['del_msg'])) {
-			reloadACT(l('user', 'gb', $s['id_id']));
-			exit;
+	if (!empty($_GET['del_msg']) && is_numeric($_GET['del_msg'])) {
+		if (gbDelete($_GET['del_msg'])) {
+			header('Location: '.$_SERVER['PHP_SELF'].'?id='.$id);
+			die;
 		}
-	} else if(!empty($_GET['key']) && is_numeric($_GET['key'])) {
+	}
+
+	if (!empty($_GET['key']) && is_numeric($_GET['key'])) {
+		//visa historik mellan userid 'id' och userid 'key'
 		$his = true;
-		if($isOk) {
+		if ($id != $user->id && !$user->isAdmin) {
+			//tillåt bara admins se historik mellan två olika användare
+			die('inte ok');
+		} else {
 			$limit = 50;
 			$c_his = $_GET['key'];
-			$id1 = $s['id_id'];
+			$id1 = $id;
 			$id2 = $_GET['key'];
-		} else {
-			$limit = 10;
-			$c_his = $l['id_id'];
-			$id1 = $s['id_id'];
-			$id2 = $l['id_id'];
 		}
 		$paging = paging(1, $limit);
 		$paging['co'] = 1;
@@ -59,8 +60,7 @@
 	if(!empty($res) && count($res)) {
 		dopaging($paging, l('user', 'gb', $s['id_id']).'p=', '', 'med', ((!$his)?STATSTR:'<a href="'.l('user', 'gb', $s['id_id']).'">tillbaka</a>'));
 	
-		foreach($res as $val) {
-			//if(($own || $his && $c_his == $l['id_id']) && $allowed && $deadline > $val['sent_date']) { echo '<table summary="" cellspacing="0" style="width: 658px;"><tr><td class="pdg cnt spac">Meddelandena skrivna tidigare än <b>'.doDate($deadline, 1, 1).'</b> är nedstängda.<br>Du kan välja att uppgradera ditt medlemskap om du vill läsa äldre inlägg.</td></tr></table>'; break; }
+		foreach ($res as $val) {
 			$prv = ($val['private_id'])?1:0;
 			$show_answer = (!$val['is_answered'])?false:true;
 			if($user->id.$user->id == $val['user_id'].$val['sender_id']) {
@@ -98,8 +98,10 @@
 			echo '</td></tr>';
 			echo '<tr><td class="btm rgt pdg">';
 	
-			if ($arr[2] && $user->id == $id) echo '<input type="button" class="btn2_min" onclick="if(confirm(\'Säker ?\')) goLoc(\''.l('user', 'gb', $s['id_id']).'del_msg='.$val['main_id'].'\');" value="radera" />';
-			if ($arr[1] && $user->id == $id || $user->vip_check(VIP_LEVEL1)) echo '<input type="button" class="btn2_min" onclick="goLoc(\''.l('user', 'gb', ($val['sender_id'] == $s['id_id']?$val['sender_id']:$val['user_id']), ($val['sender_id'] == $s['id_id']?$val['user_id']:$val['sender_id'])).'\');" value="historia" />';
+			if ($arr[2] && $user->id == $id) echo '<input type="button" class="btn2_min" onclick="if(confirm(\'Säker ?\')) goLoc(\'user_gb.php?id='.$id.'&del_msg='.$val['main_id'].'\');" value="radera" />';
+			if ($arr[1] && $user->id == $id || $user->vip_check(VIP_LEVEL1)) {
+				echo '<input type="button" class="btn2_min" onclick="goLoc(\'user_gb.php?id='.$id.'&key='.($val['sender_id'] == $id? $val['user_id'] : $val['sender_id']).'\');" value="historia" />';
+			}
 			if ($arr[4]) echo '<input type="button" class="btn2_min" onclick="goLoc(\'user_gb.php?id='.$val['id_id'].'\');" value="gästbok " />';
 			if ($arr[0]) echo '<input type="button" class="btn2_min" onclick="makeGb(\''.$val['id_id'].'\''.($arr[5]?', \'&a='.$val['main_id'].'\'':'').');" value="'.$arr[6].'" />';
 
