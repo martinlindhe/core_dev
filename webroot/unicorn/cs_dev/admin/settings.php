@@ -1,6 +1,6 @@
 <?
 	require_once('find_config.php');
-	if(!$isCrew) { errorNEW('Ingen behörighet.'); }
+	if (!$isCrew) { errorNEW('Ingen behörighet.'); }
 
 	$page = 'ANVÄNDARE';
 	$menu = $menu_LOG;
@@ -52,17 +52,6 @@
 		exit;
 	}
 
-	if(isset($_POST['ins_msg'])) {
-		if(!empty($_POST['id'])) {
-			mysql_query("UPDATE s_text SET text_cmt = '".secureINS($_POST['ins_msg'])."', text_date = NOW() WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
-		}
-		header("Location: settings.php");
-		exit;
-	}
-
-	if(!empty($_GET['id'])) {
-		$row = $db->getOneRow("SELECT * FROM s_text WHERE main_id = '".$db->escape($_GET['id'])."' LIMIT 1");
-	}
 	$u_change = false;
 	$new = false;
 	if(!empty($_GET['c'])) {
@@ -106,54 +95,6 @@
 	}
 
 	$u_sql = $db->getArray("SELECT a.*, u.user_user AS owner_u FROM s_admin a LEFT JOIN s_admin u ON u.main_id = a.u_owner ORDER BY a.u_crew DESC, a.status_id ASC, a.user_name");
-
-	$texts = array(
-'about' => 'OM KLUBBEN',
-'thought' => 'TYCKA',
-'contact' => 'KONTAKT',
-'advertise' => 'ANNONSERA',
-'cookies' => 'COOKIES',
-'disclaimer' => 'DISCLAIMER',
-'register-part0' => 'Text innan användarvillkoren',
-'register-accept' => 'Användarvillkor',
-'register-part1' => 'Text innan registering steg 1',
-'register-part2' => 'Text innan registering steg 2',
-'register-part3' => 'Text innan registering steg 3',
-'disclaimer' => 'DISCLAIMER',
-'disclaimer' => 'DISCLAIMER',
-'url' => NAME_URL
-);
-	$faqr = false;
-	if (!empty($_GET['faq']) && is_numeric($_GET['faq'])) {
-		$faqr = $db->getOneRow("SELECT * FROM s_faq WHERE main_id = '".$db->escape($_GET['faq'])."' LIMIT 1");
-	}
-	if (!empty($_POST['inp_q']) || !empty($_POST['Finp_q'])) {
-		if ($_POST['type'] == 'F') {
-			if (!empty($_POST['Fid']) && is_numeric($_POST['Fid'])) {
-				$db->update("UPDATE s_faq SET item_a = '".$db->escape($_POST['Finp_a'])."', item_type = 'F', item_q = '".$db->escape($_POST['Finp_q'])."', order_id = '".$db->escape($_POST['Forder'])."' WHERE main_id = '".$db->escape($_POST['Fid'])."' LIMIT 1");
-			} else {
-				$db->insert("INSERT INTO s_faq SET item_a = '".$db->escape($_POST['Finp_a'])."', item_type = 'F', item_q = '".$db->escape($_POST['Finp_q'])."', order_id = '".$db->escape($_POST['Forder'])."'");
-			}
-		} else {
-			if (!empty($_POST['id']) && is_numeric($_POST['id'])) {
-				$db->update("UPDATE s_faq SET item_q = '".$db->escape($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".$db->escape($_POST['order'])."' WHERE main_id = '".$db->escape($_POST['id'])."' LIMIT 1");
-			} else {
-				$db->insert("INSERT INTO s_faq SET item_q = '".$db->escape($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".$db->escape($_POST['order'])."'");
-			}
-		}
-		header("Location: settings.php#FAQ");
-		die;
-	}
-	if (!empty($_GET['faqdel']) && is_numeric($_GET['faqdel'])) {
-		$check = $db->getOneRow("SELECT * FROM s_faq WHERE main_id = '".$db->escape($_GET['faqdel'])."' LIMIT 1");
-		if (!empty($check)) {
-			$db->delete("DELETE FROM s_faq WHERE main_id = '".$db->escape($_GET['faqdel'])."' LIMIT 1");
-			header("Location: settings.php#FAQ");
-			die;
-		}
-	}
-
-	$sql = $db->getArray("SELECT * FROM s_text WHERE status_id = '1' ORDER BY main_id");
 
 	require('admin_head.php');
 ?>
@@ -200,101 +141,8 @@ function loadtop() {
 	<table width="100%" height="100%">
 <?makeMenuAdmin($page, $menu);?>
 	<tr>
-		<td width="50%" style="padding: 0 10px 0 0">
-			<form name="change" action="settings.php" method="post">
-<?=($change)?'<input type="hidden" name="id" value="'.$row['main_id'].'">':'';?>
-			<b>Texter</b><br>
-			<table width="100%" cellspacing="0" style="margin-top: 5px;">
-			<?=(!empty($row['main_id']))?'
-			<tr><td style="padding: 0 0 20px 0;"><b>'.secureOUT($row['main_id']).'</b><br><textarea name="ins_msg" class="inp_nrm" style="width: 100%; height: 120px;">'.secureOUT($row['text_cmt']).'</textarea><br>
-<input type="submit" value="Uppdatera" class="inp_realbtn" style="float: right; margin: 4px 0 0 0;">
-</td></tr>':'';?>
-<?
-	foreach ($sql as $row) {
-		if($row['main_id'] != 'admcnt') {
-?>
-			<tr><td><a href="settings.php?id=<?=$row['main_id']?>"><?=(!empty($texts[$row['main_id']]))?'<span class="bld">'.$row['main_id'].' ('.$texts[$row['main_id']].')</span>':'<span class="bld">'.$row['main_id'].'</span>';?></a> - <em><?=niceDate($row['text_date'])?></em></td></tr>
-<?
-		}
-	}
-?>
-			</table>
-			</form>
-<a name="FAQ"></a>
-<hr /><div class="hr"></div><br /><br /><a href="settings.php?<?=microtime()?>#FAQ" class="no_lnk"><b>FAQ och UPPGRADERA</b></a> - <a href="?rand=<?=microtime()?>#FAQ">NY</a>
-<form action="settings.php" method="post">
-<table width="100%">
-<tr><td>
-	<input type="radio"<?=(@$faqr['item_type'] == 'F')?' checked':'';?> class="inp_chk" name="type" value="F" onclick="if(this.checked) { document.getElementById('tF').style.display = ''; document.getElementById('tU').style.display = 'none'; }" id="iF"><label for="iF"> FAQ</label>
-	<input type="radio"<?=(@$faqr['item_type'] == 'U')?' checked':'';?> class="inp_chk" name="type" value="U" onclick="if(this.checked) { document.getElementById('tU').style.display = ''; document.getElementById('tF').style.display = 'none'; }" id="iU"><label for="iU"> Uppgradera</label>
-</td></tr>
-<?
-	if(!@$faqr || @$faqr['item_type'] != 'U') {
-?>
-<tr id="tF"<?=(@$faqr['item_type'] == 'F')?'':' style="display: none;"';?>><td>
-	<table width="100%">
-	<tr><td colspan="2">
-	<?=($faqr)?'<input type="hidden" name="Fid" value="'.$faqr['main_id'].'" />':'';?>
-	<input type="hidden" name="dofaq" value="1" />
-	Fråga:<br /><input type="text" name="Finp_q" class="txt" style="width: 378px;" value="<?=secureOUT($faqr['item_q'])?>" /></td></tr>
-	<tr><td colspan="2">Svar:<br /><textarea name="Finp_a" class="inp_nrm" style="height: 110px;"><?=secureOUT($faqr['item_a'])?></textarea></td></tr>
-	<tr><td>Sorteringsnummer:<br /><input type="text" name="Forder" class="txt" value="<?=secureOUT($faqr['order_id'])?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
-	<tr><td colspan="2" style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>
-	</table>
-</td></tr>
-<?
-	}
-	if(!@$faqr || @$faqr['item_type'] != 'F') {
-?>
-<tr id="tU"<?=(@$faqr['item_type'] == 'U')?'':' style="display: none;"';?>><td>
-	<table width="100%">
-	<tr><td colspan="2">
-	<form action="settings.php" method="post">
-	<?=($faqr)?'<input type="hidden" name="id" value="'.$faqr['main_id'].'" />':'';?>
-	<input type="hidden" name="dofaq" value="1" />
-	Namn:<br /><input type="text" name="inp_q" class="txt" style="width: 378px;" value="<?=secureOUT($faqr['item_q'])?>" /></td></tr>
-	<tr><td colspan="2">Värden:<br />
-<?
-	if($faqr) {
-		$arr = unserialize($faqr['item_a']);
-	}
-
-	for($i = 0; $i <= 4; $i++) {
-		echo '<b>'.$array[$i].'</b>: <input type="text" class="inp_nrm" style="width: 50px;" name="item_a[]" value="'.secureOUT(@$arr[$i]).'" /><br />';
-	}
-?>
-	</td></tr>
-	<tr><td>Sorteringsnummer:<br /><input type="text" name="order" class="txt" value="<?=secureOUT($faqr['order_id'])?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
-	<tr><td colspan="2" style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>
-	</table>
-</td></tr>
-<?
-	}
-?>
-</table>
-</form>
-<table width="100%" style="margin: 20px 0 20px 0;">
-<?
-	$faq = $db->getArray("SELECT * FROM s_faq ORDER BY item_type, order_id, main_id");
-	$ot = false;
-	$types = array('F' => 'FAQ', 'U' => 'Uppgradera');
-	foreach ($faq as $faqr) {
-		if($ot != $faqr['item_type']) {
-			echo '<tr><td><br /><hr /><div class="hr"></div><br /><br /><b>'.$types[$faqr['item_type']].'</b></td></tr>';
-		}
-		if($faqr['item_type'] == 'F')
-			echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.secureOUT($faqr['item_q']).'</b> - <a href="settings.php?faq='.$faqr['main_id'].'#FAQ">ÄNDRA</a> | <a href="settings.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.secureOUT($faqr['item_a']).'</td></tr>';
-		else
-			echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.secureOUT($faqr['item_q']).'</b> - <a href="settings.php?faq='.$faqr['main_id'].'#FAQ">ÄNDRA</a> | <a href="settings.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.secureOUT(implode(' : ', @unserialize($faqr['item_a']))).'</td></tr>';
-		$ot = $faqr['item_type'];
-	}
-?>
-</table>
-
-
-		</td>
-		<td width="50%" style="padding: 0 10px 0 10px; background: url('_img/brd_h.gif'); background-repeat: repeat-y;">
-			<table width="100%">
+		<td>
+			<table width="400">
 			<tr>
 				<td height="25" colspan="3"><b><?=($u_change)?'Ändra a':'A';?>nvändare</b> [<a href="settings.php?n=1">Ny användare</a>]</td>
 			</tr>
@@ -399,5 +247,4 @@ echo '<option value="'.$page.'"'.($sel?' selected':'').'>'.(array_key_exists($pa
 		</td>
 	</tr>
 	</table>
-</body>
-</html>
+<? require('admin_foot.php'); ?>

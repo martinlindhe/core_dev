@@ -42,22 +42,20 @@
 'url' => NAME_URL
 );
 	$faqr = false;
-	if(!empty($_GET['faq']) && is_numeric($_GET['faq'])) {
-		$sql = mysql_query("SELECT * FROM s_faq WHERE main_id = '".secureINS($_GET['faq'])."' LIMIT 1");
-		if(mysql_num_rows($sql) == '1') {
-			$faqr = mysql_fetch_assoc($sql);
-		}
+	if (!empty($_GET['faq']) && is_numeric($_GET['faq'])) {
+		$faqr = $db->getOneRow("SELECT * FROM s_faq WHERE main_id = '".$_GET['faq']."' LIMIT 1");
 	}
-	if(!empty($_POST['inp_q']) || !empty($_POST['Finp_q'])) {
+
+	if (!empty($_POST['inp_q']) || !empty($_POST['Finp_q'])) {
 		if($_POST['type'] == 'F') {
-			if(!empty($_POST['Fid']) && is_numeric($_POST['Fid'])) {
-				mysql_query("UPDATE s_faq SET item_a = '".secureINS($_POST['Finp_a'])."', item_type = 'F', item_q = '".secureINS($_POST['Finp_q'])."', order_id = '".secureINS($_POST['Forder'])."' WHERE main_id = '".secureINS($_POST['Fid'])."' LIMIT 1");
+			if (!empty($_POST['Fid']) && is_numeric($_POST['Fid'])) {
+				$db->update("UPDATE s_faq SET item_a = '".$db->escape($_POST['Finp_a'])."', item_type = 'F', item_q = '".$db->escape($_POST['Finp_q'])."', order_id = '".$db->escape($_POST['Forder'])."' WHERE main_id = '".$db->escape($_POST['Fid'])."' LIMIT 1");
 			} else {
 				$db->insert("INSERT INTO s_faq SET item_a = '".$db->escape($_POST['Finp_a'])."', item_type = 'F', item_q = '".$db->escape($_POST['Finp_q'])."', order_id = '".$db->escape($_POST['Forder'])."'");
 			}
 		} else {
 			if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-				mysql_query("UPDATE s_faq SET item_q = '".secureINS($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".secureINS($_POST['order'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+				$db->update("UPDATE s_faq SET item_q = '".$db->escape($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".$db->escape($_POST['order'])."' WHERE main_id = '".$db->escape($_POST['id'])."' LIMIT 1");
 			} else {
 				$db->insert("INSERT INTO s_faq SET item_q = '".$db->escape($_POST['inp_q'])."', item_type = 'U', item_a = '".serialize($_POST['item_a'])."', order_id = '".$db->escape($_POST['order'])."'");
 			}
@@ -65,13 +63,9 @@
 		header("Location: text.php#FAQ");
 		die;
 	}
-	if(!empty($_GET['faqdel']) && is_numeric($_GET['faqdel'])) {
-		$sql = mysql_query("SELECT * FROM s_faq WHERE main_id = '".secureINS($_GET['faqdel'])."' LIMIT 1");
-		if(mysql_num_rows($sql) == '1') {
-			mysql_query("DELETE FROM s_faq WHERE main_id = '".secureINS($_GET['faqdel'])."' LIMIT 1");
-			header("Location: text.php#FAQ");
-			exit;
-		}
+	if (!empty($_GET['faqdel']) && is_numeric($_GET['faqdel'])) {		$db->delete("DELETE FROM s_faq WHERE main_id = '".$db->escape($_GET['faqdel'])."' LIMIT 1");
+		header("Location: text.php#FAQ");
+		die;
 	}
 
 
@@ -158,47 +152,47 @@ function loadtop() {
 <form action="text.php" method="post">
 <table width="100%">
 <tr><td>
-	<input type="radio"<?=(@$faqr['item_type'] == 'F')?' checked':'';?> class="inp_chk" name="type" value="F" onclick="if(this.checked) { document.getElementById('tF').style.display = ''; document.getElementById('tU').style.display = 'none'; }" id="iF"><label for="iF"> FAQ</label>
-	<input type="radio"<?=(@$faqr['item_type'] == 'U')?' checked':'';?> class="inp_chk" name="type" value="U" onclick="if(this.checked) { document.getElementById('tU').style.display = ''; document.getElementById('tF').style.display = 'none'; }" id="iU"><label for="iU"> Uppgradera</label>
+	<input type="radio"<?=($faqr['item_type'] == 'F')?' checked':'';?> class="inp_chk" name="type" value="F" onclick="if(this.checked) { document.getElementById('tF').style.display = ''; document.getElementById('tU').style.display = 'none'; }" id="iF"><label for="iF"> FAQ</label>
+	<input type="radio"<?=($faqr['item_type'] == 'U')?' checked':'';?> class="inp_chk" name="type" value="U" onclick="if(this.checked) { document.getElementById('tU').style.display = ''; document.getElementById('tF').style.display = 'none'; }" id="iU"><label for="iU"> Uppgradera</label>
 </td></tr>
 <?
-	if(!@$faqr || @$faqr['item_type'] != 'U') {
+	if(!$faqr || $faqr['item_type'] != 'U') {
 ?>
-<tr id="tF"<?=(@$faqr['item_type'] == 'F')?'':' style="display: none;"';?>><td>
+<tr id="tF"<?=($faqr['item_type'] == 'F')?'':' style="display: none;"';?>><td>
 	<table width="100%">
 	<tr><td colspan="2">
 	<?=($faqr)?'<input type="hidden" name="Fid" value="'.$faqr['main_id'].'" />':'';?>
 	<input type="hidden" name="dofaq" value="1" />
-	Fråga:<br /><input type="text" name="Finp_q" class="txt" style="width: 378px;" value="<?=@safeOUT($faqr['item_q'], 0)?>" /></td></tr>
-	<tr><td colspan="2">Svar:<br /><textarea name="Finp_a" class="inp_nrm" style="height: 110px;"><?=@safeOUT($faqr['item_a'], 0)?></textarea></td></tr>
-	<tr><td>Sorteringsnummer:<br /><input type="text" name="Forder" class="txt" value="<?=@safeOUT($faqr['order_id'], 0)?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
+	Fråga:<br /><input type="text" name="Finp_q" class="txt" style="width: 378px;" value="<?=secureOUT($faqr['item_q'], 0)?>" /></td></tr>
+	<tr><td colspan="2">Svar:<br /><textarea name="Finp_a" class="inp_nrm" style="height: 110px;"><?=secureOUT($faqr['item_a'], 0)?></textarea></td></tr>
+	<tr><td>Sorteringsnummer:<br /><input type="text" name="Forder" class="txt" value="<?=secureOUT($faqr['order_id'], 0)?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
 	<tr><td colspan="2" style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>
 	</table>
 </td></tr>
 <?
 	}
-	if(!@$faqr || @$faqr['item_type'] != 'F') {
+	if(!$faqr || $faqr['item_type'] != 'F') {
 ?>
-<tr id="tU"<?=(@$faqr['item_type'] == 'U')?'':' style="display: none;"';?>><td>
+<tr id="tU"<?=($faqr['item_type'] == 'U')?'':' style="display: none;"';?>><td>
 	<table width="100%">
 	<tr><td colspan="2">
 	<form action="text.php" method="post">
 	<?=($faqr)?'<input type="hidden" name="id" value="'.$faqr['main_id'].'" />':'';?>
 	<input type="hidden" name="dofaq" value="1" />
-	Namn:<br /><input type="text" name="inp_q" class="txt" style="width: 378px;" value="<?=@safeOUT($faqr['item_q'], 0)?>" /></td></tr>
+	Namn:<br /><input type="text" name="inp_q" class="txt" style="width: 378px;" value="<?=secureOUT($faqr['item_q'], 0)?>" /></td></tr>
 	<tr><td colspan="2">Värden:<br />
 <?
 	if($faqr) {
-		$arr = @unserialize($faqr['item_a']);
+		$arr = unserialize($faqr['item_a']);
 
 	}
 
 	for($i = 0; $i <= 4; $i++) {
-echo '<b>'.$array[$i].'</b>: <input type="text" class="inp_nrm" style="width: 50px;" name="item_a[]" value="'.@secureOUT(@$arr[$i]).'" /><br />';
+		echo '<b>'.$array[$i].'</b>: <input type="text" class="inp_nrm" style="width: 50px;" name="item_a[]" value="'.secureOUT(@$arr[$i]).'" /><br />';
 	}
 ?>
 	</td></tr>
-	<tr><td>Sorteringsnummer:<br /><input type="text" name="order" class="txt" value="<?=@safeOUT($faqr['order_id'], 0)?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
+	<tr><td>Sorteringsnummer:<br /><input type="text" name="order" class="txt" value="<?=secureOUT($faqr['order_id'], 0)?>" /></td><td align="right"><br /><br /><input type="submit" value="Spara" class="btn" /></td></tr>
 	<tr><td colspan="2" style="padding: 0 0 10px 0;"><hr /><div class="hr"></div></td></tr>
 	</table>
 </td></tr>
@@ -209,17 +203,17 @@ echo '<b>'.$array[$i].'</b>: <input type="text" class="inp_nrm" style="width: 50
 </form>
 <table width="100%" style="margin: 20px 0 20px 0;">
 <?
-	$faq = mysql_query("SELECT * FROM s_faq ORDER BY item_type, order_id, main_id");
+	$faq = $db->getArray("SELECT * FROM s_faq ORDER BY item_type, order_id, main_id");
 	$ot = false;
 	$types = array('F' => 'FAQ', 'U' => 'Uppgradera');
-	while($faqr = mysql_fetch_assoc($faq)) {
+	foreach ($faq as $faqr) {
 		if($ot != $faqr['item_type']) {
-echo '<tr><td><br /><hr /><div class="hr"></div><br /><br /><b>'.$types[$faqr['item_type']].'</b></td></tr>';
+			echo '<tr><td><br /><hr /><div class="hr"></div><br /><br /><b>'.$types[$faqr['item_type']].'</b></td></tr>';
 		}
-if($faqr['item_type'] == 'F')
-echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.safeOUT($faqr['item_q']).'</b> - <a href="text.php?faq='.$faqr['main_id'].'#FAQ">ÄNDRA</a> | <a href="text.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.safeOUT($faqr['item_a']).'</td></tr>';
-else
-echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.safeOUT($faqr['item_q']).'</b> - <a href="text.php?faq='.$faqr['main_id'].'#FAQ">ÄNDRA</a> | <a href="text.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.@safeOUT(implode(' : ', @unserialize($faqr['item_a']))).'</td></tr>';
+		if($faqr['item_type'] == 'F')
+			echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.secureOUT($faqr['item_q']).'</b> - <a href="text.php?faq='.$faqr['main_id'].'#FAQ">ÄNDRA</a> | <a href="text.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.secureOUT($faqr['item_a']).'</td></tr>';
+		else
+			echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.secureOUT($faqr['item_q']).'</b> - <a href="text.php?faq='.$faqr['main_id'].'#FAQ">ÄNDRA</a> | <a href="text.php?faqdel='.$faqr['main_id'].'">RADERA</a><br />'.secureOUT(implode(' : ', unserialize($faqr['item_a']))).'</td></tr>';
 		$ot = $faqr['item_type'];
 	}
 ?>
@@ -227,5 +221,5 @@ echo '<tr><td><br />'.$faqr['order_id'].' - <b>'.safeOUT($faqr['item_q']).'</b> 
 		</td>
 	</tr>
 	</table>
-</body>
-</html>
+
+<? require('admin_foot.php'); ?>
