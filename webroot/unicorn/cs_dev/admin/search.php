@@ -158,7 +158,7 @@ function selectingAll(selecting) {
 	<tr>
 		<td style="padding-right: 10px;"><input type="text" name="s" style="width: 300px;" class="inp_nrm" value="<?=($search)?secureOUT($_POST['s']):'';?>" onfocus="this.select();" /><br />Tänk på att tar du fler ord så spelar ordningen roll.<br /><b>frans%test</b> är inte samma som <b>test%frans</b>.
 <?
-	if ($search) {
+	if ($search && !empty($_POST['search_in'])) {
 		echo '<br /><br />Genvägar:';
 		foreach ($_POST['search_in'] as $table)
 			echo '<br /><a href="#'.$table.'">'.$info[$table][0]."</a>\n";
@@ -222,10 +222,10 @@ function selectingAll(selecting) {
 				echo '<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><a name="'.$table.'"></a><b>'.$info[$table][0]."</b> (<a href=\"#top\">till toppen</a>)\n";
 				echo '<table cellspacing="2" width="900">';
 				if($table == 's_userphoto')
-					$query = $sql->query("SELECT {$info[$table][3]}, hidden_id, hidden_value, pht_name, picd FROM $table a LEFT JOIN s_user u ON u.id_id = {$info[$table][1]}".(($info[$table][4])?" LEFT JOIN s_user u2 ON u2.id_id = {$info[$table][5]}":'')." WHERE ".$construct." ORDER BY ".$info[$table][6]);
+					$list = $db->getArray("SELECT {$info[$table][3]}, hidden_id, hidden_value, pht_name, picd FROM $table a LEFT JOIN s_user u ON u.id_id = {$info[$table][1]}".(($info[$table][4])?" LEFT JOIN s_user u2 ON u2.id_id = {$info[$table][5]}":'')." WHERE ".$construct." ORDER BY ".$info[$table][6]);
 				else
-					$query = $sql->query("SELECT {$info[$table][3]} FROM $table a LEFT JOIN s_user u ON u.id_id = {$info[$table][1]}".(($info[$table][4])?" LEFT JOIN s_user u2 ON u2.id_id = {$info[$table][5]}":'')." WHERE ".$construct." ORDER BY ".$info[$table][6]);
-				foreach($query as $item) {
+					$list = $db->getArray("SELECT {$info[$table][3]} FROM $table a LEFT JOIN s_user u ON u.id_id = {$info[$table][1]}".(($info[$table][4])?" LEFT JOIN s_user u2 ON u2.id_id = {$info[$table][5]}":'')." WHERE ".$construct." ORDER BY ".$info[$table][6]);
+				foreach ($list as $item) {
 					echo '<tr class="'.(($item[2] != '1')?'wht bg_blk':'bg_gray').'">';
 					echo '<td class="pdg nobr">'.niceDate($item[0]).'</td>';
 					$id = $item[1];
@@ -273,8 +273,10 @@ function selectingAll(selecting) {
 				$construct = implode(' OR ', $construct);
 				echo '<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><a name="'.$table.'"></a><b>'.$info[$table][0]."</b> (<a href=\"#top\">till toppen</a>)\n";
 				echo '<table cellspacing="2" width="900">';
-				$query = $sql->query("SELECT {$info[$table][4]} FROM $table a LEFT JOIN s_user u ON u.id_id = {$info[$table][1]} LEFT JOIN s_user u2 ON u2.id_id = {$info[$table][2]} WHERE ".$construct." ORDER BY ".$info[$table][5]);
-				foreach($query as $item) {
+
+				$q = 'SELECT '.$info[$table][4].' FROM '.$table.' a LEFT JOIN s_user u ON u.id_id = '.$info[$table][1].' LEFT JOIN s_user u2 ON u2.id_id = '.$info[$table][2].' WHERE "'.$construct.'" ORDER BY '.$info[$table][5];
+				$list = $db->getArray($q);
+				foreach ($list as $item) {
 					echo '<tr class="'.(($item[2] != '1')?'wht bg_blk':'bg_gray').'">';
 					echo '<td class="pdg nobr">'.niceDate($item[0]).'</td>';
 					$s1 = $item[4];
