@@ -97,5 +97,4 @@ function loadtop() {
 		</td>
 	</tr>
 	</table>
-</body>
-</html>
+<? require('admin_foot.php'); ?>

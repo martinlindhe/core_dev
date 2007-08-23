@@ -39,19 +39,19 @@
 	$prev = date("Ym", strtotime($sel_year.'-'.$sel_month.'-01 -1 MONTH'));
 	$next = date("Ym", strtotime($sel_year.'-'.$sel_month.'-01 +1 MONTH'));
 
-	if(!empty($_POST['do'])) {
-		if(!empty($_POST['id']) && !empty($_POST['ins_filter'])) {
-			@mysql_query("UPDATE s_logfilter SET unique_id = '".secureINS($_POST['ins_filter'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
-		} elseif(!empty($_POST['ins_filter'])) {
-			@mysql_query("INSERT INTO s_logfilter SET unique_id = '".secureINS($_POST['ins_filter'])."', status_id = '1'");
+	if (!empty($_POST['do'])) {
+		if (!empty($_POST['id']) && !empty($_POST['ins_filter'])) {
+			$db->update("UPDATE s_logfilter SET unique_id = '".$db->escape($_POST['ins_filter'])."' WHERE main_id = '".$db->escape($_POST['id'])."' LIMIT 1");
+		} else if (!empty($_POST['ins_filter'])) {
+			$db->insert("INSERT INTO s_logfilter SET unique_id = '".$db->escape($_POST['ins_filter'])."', status_id = '1'");
 		}
-		mysql_query("UPDATE s_logfilter SET status_id = '0'");
+		$db->update("UPDATE s_logfilter SET status_id = '0'");
 		foreach($_POST as $key => $val) {
 			if(strpos($key, 'ch:') !== false) {
 				$kid = explode(":", $key);
 				$kid = $kid[1];
 				if(isset($_POST['ch:' . $kid])) {
-					mysql_query("UPDATE s_logfilter SET status_id = '1' WHERE main_id = '".secureINS($kid)."' LIMIT 1");
+					$db->update("UPDATE s_logfilter SET status_id = '1' WHERE main_id = '".$db->escape($kid)."' LIMIT 1");
 				}
 			}
 		}
@@ -79,21 +79,19 @@
 			$i++;
 		}
 	}
-	if($i) $use_filter .= implode(" AND ", $do_filter).' AND';
+	if ($i) $use_filter .= implode(" AND ", $do_filter).' AND';
 
 
 	$try = $db->getArray("SELECT type_referer, type_cnt FROM s_logreferer WHERE $use_filter type_referer != ''
-GROUP BY type_referer HAVING(type_cnt > 1)
-ORDER BY type_cnt DESC");
-
+		GROUP BY type_referer HAVING(type_cnt > 1) ORDER BY type_cnt DESC");
 
 	$sqlt = array(
-'today' => "SELECT COUNT(*) FROM s_logvisit WHERE date_snl = CURDATE()",
-'yester' => "SELECT COUNT(*) FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)",
-'month' => "SELECT COUNT(*) FROM s_logvisit WHERE MONTH(date_snl) = MONTH(CURDATE())",
-'total' => "SELECT COUNT(*) FROM s_logvisit",
-'spec' => "SELECT COUNT(*) FROM s_logvisit WHERE MONTH(date_snl) = '$sel_month' AND YEAR(date_snl) = '$sel_year'",
-);
+		'today' => "SELECT COUNT(*) FROM s_logvisit WHERE date_snl = CURDATE()",
+		'yester' => "SELECT COUNT(*) FROM s_logvisit WHERE date_snl = DATE_ADD(CURDATE(), INTERVAL -1 DAY)",
+		'month' => "SELECT COUNT(*) FROM s_logvisit WHERE MONTH(date_snl) = MONTH(CURDATE())",
+		'total' => "SELECT COUNT(*) FROM s_logvisit",
+		'spec' => "SELECT COUNT(*) FROM s_logvisit WHERE MONTH(date_snl) = '$sel_month' AND YEAR(date_snl) = '$sel_year'",
+	);
 
 	$today_tot = $db->getOneItem($sqlt['today']);
 
@@ -352,5 +350,4 @@ ORDER BY type_cnt DESC");
 		</td>
 	</tr>
 	</table>
-</body>
-</html>
+<? require('admin_foot.php'); ?>
