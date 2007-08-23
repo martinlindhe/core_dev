@@ -3,6 +3,7 @@
 
 	$_SESSION['data'] = $user->getuserfill($_SESSION['data'], ', u_email, u_pstort, u_pstlan, location_id');
 	$_SESSION['data'] = $user->getuserfillfrominfo($_SESSION['data'], ', u_fname, u_sname, u_street, u_pstnr, u_cell');
+	
 	$settings = $user->getcontent($user->id, 'user_settings');
 
 	$mmskey_error = '';
@@ -15,42 +16,43 @@
 
 		if (empty($_POST['ins_fname']))		errorACT('Felaktigt förnamn.', $_SERVER['PHP_SELF']);
 		if (empty($_POST['ins_sname']))		errorACT('Felaktigt efternamn.', $_SERVER['PHP_SELF']);
-		if (empty($_POST['ins_street']))		errorACT('Felaktig gatuadress.',  $_SERVER['PHP_SELF']);
+		if (empty($_POST['ins_street']))	errorACT('Felaktig gatuadress.',  $_SERVER['PHP_SELF']);
 		if (empty($_POST['ins_pstnr']))		errorACT('Felaktigt postnummer.',  $_SERVER['PHP_SELF']);
-		if (empty($_POST['ins_cell']))			errorACT('Felaktigt mobilnummer.',  $_SERVER['PHP_SELF']);
+		if (empty($_POST['ins_cell']))		errorACT('Felaktigt mobilnummer.',  $_SERVER['PHP_SELF']);
+
 		$pstnr = str_replace(' ', '', $_POST['ins_pstnr']);
 		if (!is_numeric($pstnr)) errorACT('Felaktigt postnummer.',  $_SERVER['PHP_SELF']);
 
-		if(@$l['u_pstnr'] != $pstnr) {
+		if(@$_SESSION['data']['u_pstnr'] != $pstnr) {
 			$newpst = true;
 		}
 		$newpst1 = '';
 		$newpst2 = '';
 		if($newpst) {
-			$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst = '".$db->escape($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
-			if(!count($pst) || empty($pst)) {
-				$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst LIKE '".substr($db->escape($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
-				if(!count($pst) || empty($pst)) {
-					errorACT('Felaktigt postnummer.', l('member', 'settings', 'personal'));
+			$pst = $db->getOneRow("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst = '".$db->escape($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
+			if (empty($pst)) {
+				$pst = $db->getOneRow("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst LIKE '".substr($db->escape($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
+				if (empty($pst)) {
+					errorACT('Felaktigt postnummer.', $_SERVER['PHP_SELF']);
 				}
 			}
-			$pstort = $pst[1];
-			$pstlan = $pst[2];
-			$pstlan_id = $pst[3];
-			$pstnr = $pst[0];
+			$pstort = $pst['st_ort'];
+			$pstlan = $pst['st_lan'];
+			$pstlan_id = $pst['main_id'];
+			$pstnr = $pst['st_pst'];
 			$_SESSION['data']['u_pst'] = $pstort.', '.$pstlan;
 			$_SESSION['data']['u_pstlan_id'] = $pstlan_id;
 			$newpst1 = "u_pstort = '" . $db->escape($pstort) . "', u_pstlan = '" . $db->escape($pstlan) . "', u_pstlan_id = '" . $db->escape($pstlan_id) . "',";
 			$newpst2 = "u_pstnr = '" . $db->escape($pstnr) . "',";
 		}
-		if(empty($_POST['ins_email']) || !valiField($_POST['ins_email'], 'email')) {
-			errorACT('Felaktig e-postadress.', l('member', 'settings', 'personal'));
+		if (empty($_POST['ins_email']) || !valiField($_POST['ins_email'], 'email')) {
+			errorACT('Felaktig e-postadress.', $_SERVER['PHP_SELF']);
 		}
 
-		$exists = $sql->queryLine("SELECT status_id, id_id FROM s_user WHERE u_email = '" . $db->escape($_POST['ins_email']) . "' LIMIT 1");
-		if(!empty($exists) && count($exists)) {
-			if($exists[0] == '1' && $exists[1] != $user->id) {
-				errorACT('E-postadressen är upptagen.', l('member', 'settings', 'personal'));
+		$exists = $db->getOneRow("SELECT status_id, id_id FROM s_user WHERE u_email = '" . $db->escape($_POST['ins_email']) . "' LIMIT 1");
+		if (!empty($exists)) {
+			if ($exists['status_id'] == '1' && $exists['id_id'] != $user->id) {
+				errorACT('E-postadressen är upptagen.', $_SERVER['PHP_SELF']);
 			}
 		}
 		$fake_cell = array('0701234567', '0731234567', '0731111111', '0732222222');
@@ -59,17 +61,17 @@
 			errorACT('Felaktigt mobilnummer. (Kom igen, bättre kan du!)', l('member', 'settings', 'personal'));
 		}
 		if(!in_array(substr($_POST['ins_cell'], 0, 3), $valid_pre)) {
-			errorACT('Felaktigt mobilnummer.', l('member', 'settings', 'personal'));
+			errorACT('Felaktigt mobilnummer.', $_SERVER['PHP_SELF']);
 		}
 
 		//email address was changed
-		if($l['u_email'] != $_POST['ins_email']) {
+		if ($_SESSION['data']['u_email'] != $_POST['ins_email']) {
 			$start_code = mt_rand(100000, 999999);
 			$r = array($start_code, $user->id);
 			$msg = sprintf(gettxt('email_update'), $r[0], P2B.'mail_confirm.php?update='.$r[0]);
 			doMail($_POST['ins_email'], 'Uppdatera din e-postadress', $msg);
 			$msg = 'Bekräfta dina uppdateringar genom att läsa e-postmeddelandet som skickats ut till <b>'.secureOUT($_POST['ins_email']).'</b>';
-			$sql->queryUpdate("REPLACE INTO s_userregfast SET activate_code = '$start_code', u_email='".$db->escape($_POST['ins_email'])."',id_id = '".$user->id."',timeCreated=NOW()");
+			$db->replace("REPLACE INTO s_userregfast SET activate_code = '$start_code', u_email='".$db->escape($_POST['ins_email'])."',id_id = '".$user->id."',timeCreated=NOW()");
 		}
 		$newcity = '';
 		$reload = false;
@@ -77,42 +79,42 @@
 		if (!empty($_POST['ins_opass']) && !empty($_POST['ins_npass']) && !empty($_POST['ins_npass2'])) {
 			$error = setNewPassword($_POST['ins_opass'], $_POST['ins_npass'], $_POST['ins_npass2']);
 			if ($error !== true) {
-				 errorACT($error, l('member', 'settings', 'personal'));
+				 errorACT($error, $_SERVER['PHP_SELF']);
 			}
 		}
 
-		if(strlen($newpst1.$newcity)) $ins = $sql->queryUpdate("UPDATE s_user SET
-		".substr($newpst1.$newcity, 0, -1)."
-		WHERE id_id = '".secureINS($user->id)."' LIMIT 1");
-		$ins = $sql->queryUpdate("UPDATE s_userinfo SET
-		$newpst2
-		u_fname = '".$db->escape($_POST['ins_fname'])."',
-		u_sname = '".$db->escape($_POST['ins_sname'])."',
-		u_street = '".$db->escape($_POST['ins_street'])."',
-		u_cell = '".$db->escape($_POST['ins_cell'])."'
-		WHERE id_id = '".$db->escape($user->id)."' LIMIT 1");
-		if(!$ins) {
-			$sql->queryUpdate("INSERT INTO s_userinfo SET
-			$newpst2
-			u_fname = '".$db->escape($_POST['ins_fname'])."',
-			u_sname = '".$db->escape($_POST['ins_sname'])."',
-			u_street = '".$db->escape($_POST['ins_street'])."',
-			u_cell = '".$db->escape($_POST['ins_cell'])."',
-			id_id = '".$db->escape($user->id)."'");
+		if (strlen($newpst1.$newcity)) {
+			$q = "UPDATE s_user SET ".substr($newpst1.$newcity, 0, -1)." WHERE id_id = '".$db->escape($user->id)."' LIMIT 1";
+			$ins = $db->update($q);
 		}
+
+		$q = 'SELECT id_id FROM s_userinfo WHERE id_id='.$user->id;
+		if (!$db->getOneItem($q)) {
+
+			$q = 'INSERT INTO s_userinfo SET '.$newpst2.' '.
+					'u_fname = "'.$db->escape($_POST['ins_fname']).'", u_sname = "'.$db->escape($_POST['ins_sname']).'", u_street = "'.$db->escape($_POST['ins_street']).'",'.
+					'u_cell = "'.$db->escape($_POST['ins_cell']).'", id_id = '.$user->id;
+			$db->insert($q);
+		} else {
+			$q = 'UPDATE s_userinfo SET '.$newpst2.' u_fname = "'.$db->escape($_POST['ins_fname']).'", '.
+					'u_sname = "'.$db->escape($_POST['ins_sname']).'", u_street = "'.$db->escape($_POST['ins_street']).'", '.
+					'u_cell = "'.$db->escape($_POST['ins_cell']).'" WHERE id_id = '.$user->id.' LIMIT 1';
+			$ins = $db->update($q);
+		}
+		
 		$ins++;
-		if($newpst) {
-			$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$user->id."' LIMIT 1");
-			$p_lan = str_replace(' ', '', $l['u_pstlan']);
-			$p_ort = str_replace(' ', '', $l['u_pstort']);
+		if ($newpst) {
+			$string = $db->getOneItem("SELECT level_id FROM s_userlevel WHERE id_id = '".$user->id."' LIMIT 1");
+			$p_lan = str_replace(' ', '', $_SESSION['data']['u_pstlan']);
+			$p_ort = str_replace(' ', '', $_SESSION['data']['u_pstort']);
 			$string = str_replace(' LÄN'.$p_lan, '', $string);
 			$string = str_replace(' ORT'.$p_ort, '', $string);
 			$string = $string.' LÄN'.str_replace('-', '', str_replace(' ', '', $pstlan));
 			$string = $string.' ORT'.str_replace('-', '', str_replace(' ', '', $pstort));
-			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$user->id."' LIMIT 1");
+			$db->update("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$user->id."' LIMIT 1");
 		}
 		if(!$ins) {
-			errorTACT('Någonting gick fel.', l('member', 'settings', 'personal'), 1500);
+			errorACT('Någonting gick fel.', $_SERVER['PHP_SELF']);
 		}
 		/*
 		if(@$settings['private_chat'] != @$_POST['opt_chat'] || (@$settings['private_chat'] && !$isOk)) {
@@ -154,9 +156,9 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		*/
-		if($isAdmin && @$settings['mmskey'] != @$_POST['ins_mmskey']) {
+		if ($user->isAdmin && @$settings['mmskey'] != @$_POST['ins_mmskey']) {
 			$id = $user->setinfo($user->id, 'mmskey', @$_POST['ins_mmskey']);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
+			if ($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		$mmskey_error = updateMMSKey();
 		
@@ -210,7 +212,7 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if(@$settings['random'] != @$_POST['opt_random']) {
-			$r = (!empty($_POST['opt_random']))?'0':$sexs[$l['u_sex']];
+			$r = (!empty($_POST['opt_random']))?'0':$sexs[$_SESSION['data']['u_sex']];
 			if(!$r) {
 				if($_POST['opt_random'] == 'M') $r = 'M';
 				elseif($_POST['opt_random'] == 'F') $r = 'F';
@@ -220,7 +222,7 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 
-		if(!empty($msg)) errorACT($msg); else errorTACT('Uppdaterat!', l('member', 'settings', 'personal'), 1000);
+		if (!empty($msg)) errorACT($msg); else errorACT('Uppdaterat!', $_SERVER['PHP_SELF']);
 	}
 	$page = 'settings';
 	include(DESIGN.'head.php');
@@ -247,16 +249,16 @@
 
 	<table summary="" cellspacing="0" width="510">
 		<tr>
-			<td style="padding-right: 6px;"><b>Förnamn:</b><br /><input type="text" class="txt" name="ins_fname" value="<?=@secureOUT($l['u_fname'])?>" /></td>
-			<td><b>Efternamn:</b><br /><input type="text" class="txt" name="ins_sname" value="<?=@secureOUT($l['u_sname'])?>" /></td>
+			<td style="padding-right: 6px;"><b>Förnamn:</b><br /><input type="text" class="txt" name="ins_fname" value="<?=@secureOUT($_SESSION['data']['u_fname'])?>" /></td>
+			<td><b>Efternamn:</b><br /><input type="text" class="txt" name="ins_sname" value="<?=@secureOUT($_SESSION['data']['u_sname'])?>" /></td>
 		</tr>
 		<tr>
-			<td class="pdg_t"><b>Gatuadress:</b><br /><input type="text" class="txt" name="ins_street" value="<?=@secureOUT($l['u_street'])?>" /></td>
-			<td class="pdg_t"><b>Postnummer:</b><br /><input type="text" class="txt" name="ins_pstnr" value="<?=@secureOUT($l['u_pstnr'])?>" /></td>
+			<td class="pdg_t"><b>Gatuadress:</b><br /><input type="text" class="txt" name="ins_street" value="<?=@secureOUT($_SESSION['data']['u_street'])?>" /></td>
+			<td class="pdg_t"><b>Postnummer:</b><br /><input type="text" class="txt" name="ins_pstnr" value="<?=@secureOUT($_SESSION['data']['u_pstnr'])?>" /></td>
 		</tr>
 		<tr>
-			<td class="pdg_t"><b>E-post:</b><br /><input type="text" class="txt" name="ins_email" value="<?=@secureOUT($l['u_email'])?>" /></td>
-			<td class="pdg_t"><b>Mobilnummer:</b><br /><input type="text" class="txt" name="ins_cell" value="<?=@secureOUT($l['u_cell'])?>" /></td>
+			<td class="pdg_t"><b>E-post:</b><br /><input type="text" class="txt" name="ins_email" value="<?=@secureOUT($_SESSION['data']['u_email'])?>" /></td>
+			<td class="pdg_t"><b>Mobilnummer:</b><br /><input type="text" class="txt" name="ins_cell" value="<?=@secureOUT($_SESSION['data']['u_cell'])?>" /></td>
 		</tr>
 		<tr>
 			<td class="pdg_t" colspan="2"><br /><b>Om du vill byta lösenord, skriv in ditt nuvarande:</b><br /><input type="password" class="txt" name="ins_opass" value="" /></td>
@@ -267,8 +269,8 @@
 		</tr>
 		<tr>
 			<td colspan="2" class="pdg_t"><b>Kön att slumpa fram:</b><br /><select name="opt_random" class="txt">
-				<option value="F"<?=@((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'F') || (!empty($settings['random'][1]) && $settings['random'][1] == 'F'))?' selected':'';?>>Tjejer</option>
-				<option value="M"<?=@((empty($settings['random'][1]) && $sexs[$l['u_sex']] == 'M') || (!empty($settings['random'][1]) && $settings['random'][1] == 'M'))?' selected':'';?>>Killar</option>
+				<option value="F"<?=@((empty($settings['random'][1]) && $sexs[$_SESSION['data']['u_sex']] == 'F') || (!empty($settings['random'][1]) && $settings['random'][1] == 'F'))?' selected':'';?>>Tjejer</option>
+				<option value="M"<?=@((empty($settings['random'][1]) && $sexs[$_SESSION['data']['u_sex']] == 'M') || (!empty($settings['random'][1]) && $settings['random'][1] == 'M'))?' selected':'';?>>Killar</option>
 				<option value="B"<?=@(!empty($settings['random'][1]) && $settings['random'][1] == 'B')?' selected':'';?>>Båda könen</option>
 			</select></td>
 		</tr>

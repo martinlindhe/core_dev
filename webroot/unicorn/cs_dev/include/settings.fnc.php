@@ -95,18 +95,16 @@
 	/* Updates mms key */
 	function updateMMSKey()
 	{
-		global $sql, $user;
+		global $db, $user;
+		if (!$user->id || empty($_POST['ins_mmskey'])) return false;
 
-		if (!$user->id || empty($_POST['ins_mmskey'])) return;
-		
 		$blocked_keys = array(123, 321, 1234, 12345, 1111, 4321, 54321);
-		
+
 		//if non-allowed code, return error
 		if (in_array($_POST['ins_mmskey'], $blocked_keys)) return 'Otillåten MMS-nyckel';
-		
-		$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.secureINS($_POST['ins_mmskey']).'" AND owner_id != '.$user->id.' LIMIT 1';
-		$check = $sql->queryResult($q);
-		if ($check) return 'MMS nyckel upptagen!';
+
+		$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.$db->escape($_POST['ins_mmskey']).'" AND owner_id != '.$user->id.' LIMIT 1';
+		if ($db->getOneItem($q)) return 'MMS nyckel upptagen!';
 			
 		$id = $user->setinfo($user->id, 'mmskey', $_POST['ins_mmskey']);
 		if ($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
