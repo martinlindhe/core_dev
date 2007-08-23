@@ -1,8 +1,6 @@
 <?
 	require('admin_head.php');
 ?>
-<script type="text/javascript" src="fnc_adm.js"></script>
-
 	<table height="100%">
 <?makeMenuAdmin($page, $menu);?>
 	<tr>

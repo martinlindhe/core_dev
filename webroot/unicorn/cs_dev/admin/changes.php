@@ -12,34 +12,32 @@
 	$colours = array("1" => "#CC0000", "2" => "#336699");
 
 	if(!empty($_POST['ins_msg'])) {
-		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			mysql_query("UPDATE s_changes SET chg_text = '".secureINS($_POST['ins_msg'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+		if (!empty($_POST['id']) && is_numeric($_POST['id'])) {
+			$db->update("UPDATE s_changes SET chg_text = '".$db->escape($_POST['ins_msg'])."' WHERE main_id = '".$db->escape($_POST['id'])."' LIMIT 1");
 		} else {
-			mysql_query("INSERT INTO s_changes SET chg_date = NOW(), chg_text = '".secureINS($_POST['ins_msg'])."', chg_all = '".(!$isCrew?'1':(@$_POST['all']?'1':'0'))."', c_type = 'c', user_id = '".secureINS($_SESSION['u_i'])."'");
+			$db->insert("INSERT INTO s_changes SET chg_date = NOW(), chg_text = '".$db->escape($_POST['ins_msg'])."', chg_all = '".(!$isCrew?'1':(@$_POST['all']?'1':'0'))."', c_type = 'c', user_id = '".$db->insert($user->id)."'");
 		}
-		if($isCrew && !empty($_POST['mailit']) && !empty($_POST['mailto'])) {
-doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(stripslashes($_POST['ins_msg'])), 1);
+		if ($isCrew && !empty($_POST['mailit']) && !empty($_POST['mailto'])) {
+			doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(stripslashes($_POST['ins_msg'])), 1);
 		}
-		header("Location: changes.php");
-		exit;
+		header('Location: '.$_SERVER['PHP_SELF']);
+		die;
 	}
 
-	if(!empty($_POST['dotodo'])) {
-		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			mysql_query("UPDATE s_changes SET chg_text = '".secureINS($_POST['t'])."' WHERE main_id = '".secureINS($_POST['id'])."' LIMIT 1");
+	//add / edit a todo item
+	if (!empty($_POST['dotodo'])) {
+		if (!empty($_POST['id']) && is_numeric($_POST['id'])) {
+			$db->update("UPDATE s_changes SET chg_text = '".$db->escape($_POST['t'])."' WHERE main_id = '".$_POST['id']."' LIMIT 1");
 		} else {
-			mysql_query("INSERT INTO s_changes SET chg_date = NOW(), chg_text = '".secureINS($_POST['t'])."', c_type = 't'");
+			$db->insert("INSERT INTO s_changes SET chg_date = NOW(), chg_text = '".$db->escape($_POST['t'])."', c_type = 't'");
 		}
-		header("Location: changes.php");
-		exit;
+		header('Location: '.$_SERVER['PHP_SELF']);
+		die;
 	}
 
-	if(!empty($_GET['id']) && is_numeric($_GET['id'])) {
-		$sql = mysql_query("SELECT * FROM s_changes WHERE main_id = '".secureINS($_GET['id'])."' LIMIT 1");
-		if(mysql_num_rows($sql) == '1') {
-			$change = true;
-			$row = mysql_fetch_assoc($sql);
-		}
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+		$change = true;
+		$row = $db->getOneRow("SELECT * FROM s_changes WHERE main_id = '".$_GET['id']."' LIMIT 1");
 	}
 
 	if(!empty($_GET['t']) && is_numeric($_GET['t'])) {
@@ -50,22 +48,17 @@ doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(str
 		}
 	}
 
-	if(!empty($_GET['t_done']) && is_numeric($_GET['t_done'])) {
-		$sql = mysql_query("SELECT * FROM s_changes WHERE main_id = '".secureINS($_GET['t_done'])."' LIMIT 1");
-		if(mysql_num_rows($sql) == '1') {
-			mysql_query("UPDATE s_changes SET c_done = '1', chg_date = NOW() WHERE main_id = '".secureINS($_GET['t_done'])."' LIMIT 1");
-			header("Location: changes.php");
-			exit;
-		}
+	//markera ett todo-item som färdigt
+	if (!empty($_GET['t_done']) && is_numeric($_GET['t_done'])) {
+		$db->update("UPDATE s_changes SET c_done = '1', chg_date = NOW() WHERE main_id = '".$db->escape($_GET['t_done'])."' LIMIT 1");
+		header('Location: '.$_SERVER['PHP_SELF']);
+		die;
 	}
 
 	if(!empty($_GET['t_del']) && is_numeric($_GET['t_del'])) {
-		$sql = mysql_query("SELECT * FROM s_changes WHERE main_id = '".secureINS($_GET['t_del'])."' LIMIT 1");
-		if(mysql_num_rows($sql) == '1') {
-			mysql_query("DELETE FROM s_changes WHERE main_id = '".secureINS($_GET['t_del'])."' LIMIT 1");
-			header("Location: changes.php");
-			exit;
-		}
+		$db->delete("DELETE FROM s_changes WHERE main_id = '".$_GET['t_del']."' LIMIT 1");
+		header('Location: '.$_SERVER['PHP_SELF']);
+		die;
 	}
 
 	if ($isCrew) {
@@ -80,8 +73,7 @@ doMail($_POST['mailto'], substr(strip_tags($_POST['ins_msg']), 0, 30), nl2br(str
 
 	require('admin_head.php');
 ?>
-<script type="text/javascript" src="fnc_txt.js"></script>
-<script type="text/JavaScript">
+<script type="text/javascript">
 function changeByKey(e) {
 	if(!e) var e=window.event;
 	if(e.ctrlKey && e['keyCode'] == 13) document.change.submit();
@@ -98,7 +90,7 @@ function loadtop() {
 	<?makeMenuAdmin($page, $menu);?>
 	<tr>
 		<td width="50%" style="padding: 0 10px 0 0">
-			<form name="change" action="changes.php" method="post">
+			<form name="change" action="<?=$_SERVER['PHP_SELF']?>" method="post">
 <?=($change)?'<input type="hidden" name="id" value="'.$row['main_id'].'">':'';?>
 			<table width="500">
 			<tr><td style="padding: 0 0 10px 0;" align="right"><textarea name="ins_msg" class="inp_nrm" style="width: 100%; height: 70px;"><?=($change)?secureOUT($row['chg_text']):'';?></textarea><br><div style="float: left;"><?=($isCrew?'<input type="checkbox" id="mailit" value="1" name="mailit" onclick="document.getElementById(\'mailinf\').style.display = (this.checked?\'\':\'none\');"><label for="mailit">Maila detta</label><span id="mailinf" style="display: none;"> till: <input type="text" class="inp_nrm" name="mailto" style="width: 280px;" value="'.ADMIN_EMAIL.'"></span>':'')?></div><?=($isCrew?'<input type="checkbox" name="all"'.($change && $row['chg_all']?' checked':'').' value="1" id="all"><label for="all" class="bld">För alla</label> ':'')?><input type="submit" value="Skicka" class="inp_realbtn" style="margin: 4px 0 0 0;"></td></tr>
@@ -106,7 +98,7 @@ function loadtop() {
 	foreach ($sql as $row) {
 ?>
 
-			<tr><td class="pdg_btn"><div style="width: 500px; overflow: hidden;"><?=(!empty($colours[$row['user_id']]))?'<span class="txt_bld" style="color: '.$colours[$row['user_id']].';">'.$row['user_name'].'</span>':'<span class="txt_bld">'.((!$row['user_name'])?'SYSTEM':$row['user_name']).'</span>';?> - <?=($row['chg_all']?'<b>FÖR ALLA</b> - ':' (DOLD) - ')?><a href="changes.php?id=<?=$row['main_id']?>"><span class="txt_bld"><?=strtolower(specialDate($row['chg_date']).' '.date("H:i", strtotime($row['chg_date'])))?></span></a><br /><?=(!empty($colours[$row['user_id']]))?'<span style="color: '.$colours[$row['user_id']].';">'.safeOUT($row['chg_text']).'</span>':secureOUT($row['chg_text']);?><br><a href="changes.php?t_del=<?=$row['main_id']?>" onclick="return (confirm('Säker ?'))?true:false;" style="float: right;">Radera</a></div></td></tr>
+			<tr><td class="pdg_btn"><div style="width: 500px; overflow: hidden;"><?=(!empty($colours[$row['user_id']]))?'<span class="txt_bld" style="color: '.$colours[$row['user_id']].';">'.$row['user_name'].'</span>':'<span class="txt_bld">'.((!$row['user_name'])?'SYSTEM':$row['user_name']).'</span>';?> - <?=($row['chg_all']?'<b>FÖR ALLA</b> - ':' (DOLD) - ')?><a href="<?=$_SERVER['PHP_SELF']?>?id=<?=$row['main_id']?>"><span class="txt_bld"><?=strtolower(specialDate($row['chg_date']).' '.date("H:i", strtotime($row['chg_date'])))?></span></a><br /><?=(!empty($colours[$row['user_id']]))?'<span style="color: '.$colours[$row['user_id']].';">'.safeOUT($row['chg_text']).'</span>':secureOUT($row['chg_text']);?><br><a href="<?=$_SERVER['PHP_SELF']?>?t_del=<?=$row['main_id']?>" onclick="return (confirm('Säker ?'))?true:false;" style="float: right;">Radera</a></div></td></tr>
 <?
 	}
 ?>
@@ -117,7 +109,7 @@ function loadtop() {
 	if($isCrew) {
 ?>
 		<td width="50%" style="padding: 0 10px 0 10px; background: url('_img/brd_h.gif'); background-repeat: repeat-y;">
-			<form name="todo" method="post" action="./changes.php">
+			<form name="todo" method="post" action="<?=$_SERVER['PHP_SELF']?>">
 			<input type="hidden" name="dotodo" value="1">
 <?=($t_change)?'<input type="hidden" name="id" value="'.$t_row['main_id'].'">':'';?>
 			<table width="100%">
@@ -131,7 +123,7 @@ function loadtop() {
 		foreach ($t_sql as $row) {
 ?>
 			<tr> 
-				<td style="padding-bottom: 3px;"><br><?=($row['c_done'])?'<span class=" txt_bld">'.secureOUT($row['chg_text']).'</span> - <em>färdig '.niceDate($row['chg_date']).'</em> - <a href="changes.php?t_del='.$row['main_id'].'">RADERA</a>':'<a href="changes.php?t='.secureOUT($row['main_id']).'"><span>'.secureOUT($row['chg_text']).'</span></a> - <em>adderad '.niceDate($row['chg_date']).'</em> - <a href="changes.php?t_done='.$row['main_id'].'">FÄRDIG</a>';?></td>
+				<td style="padding-bottom: 3px;"><br><?=($row['c_done'])?'<span class=" txt_bld">'.secureOUT($row['chg_text']).'</span> - <em>färdig '.niceDate($row['chg_date']).'</em> - <a href="'.$_SERVER['PHP_SELF'].'?t_del='.$row['main_id'].'">RADERA</a>':'<a href="'.$_SERVER['PHP_SELF'].'?t='.secureOUT($row['main_id']).'"><span>'.secureOUT($row['chg_text']).'</span></a> - <em>adderad '.niceDate($row['chg_date']).'</em> - <a href="'.$_SERVER['PHP_SELF'].'?t_done='.$row['main_id'].'">FÄRDIG</a>';?></td>
 			</tr>
 <?
 		}
@@ -144,5 +136,4 @@ function loadtop() {
 ?>
 	</tr>
 	</table>
-</body>
-</html>
+<? require('admin_foot.php'); ?>

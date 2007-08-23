@@ -250,8 +250,7 @@
 	} else $list = '';
 	require('admin_head.php');
 ?>
-	<script type="text/javascript" src="fnc_adm.js"></script>
-	<script type="text/javascript">
+<script type="text/javascript">
 var allowedext = Array("jpg", "jpeg", "gif", "png");
 function showError(obj) { obj.src = './_img/status_none.gif'; }
 function loadtop() {
@@ -267,7 +266,8 @@ function CSV() {
 	document.csv.submit();
 }
 <?=(isset($_GET['t']))?'loadtop();':'';?>
-	</script>
+</script>
+
 <form name="csv" action="user_extract.php" method="post">
 <input type="hidden" name="pass" value="0">
 <input type="hidden" name="level" value="0">

@@ -93,7 +93,7 @@ error_reporting(E_ALL);
 	require("./_tpl/admin_head.php");
 ?>
 <script type="text/javascript" src="fnc_adm.js"></script>
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 function compareText(v) {
 	c = document.getElementById('notes_compare');
 	h = document.getElementById('notes_head');

@@ -71,7 +71,6 @@
 
 	require('admin_head.php');
 ?>
-	<script type="text/javascript" src="fnc_adm.js"></script>
 	<table height="100%">
 	<tr><td colspan="2" height="25" class="nobr"><?makeMenuAdmin($page, $menu, 0);?></td></tr>
 	<tr>

@@ -115,8 +115,7 @@
 	require('admin_head.php');
 
 ?>
-<script type="text/javascript" src="fnc_adm.js"></script>
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 function loadtop() {
 	if(parent.<?=FRS?>head)
 	parent.<?=FRS?>head.show_active('search');

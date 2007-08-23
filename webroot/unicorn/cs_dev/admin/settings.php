@@ -157,7 +157,6 @@
 
 	require('admin_head.php');
 ?>
-<script type="text/javascript" src="fnc_txt.js"></script>
 <script type="text/javascript">
 function changeByKey(e) {
 	if(!e) var e=window.event;

@@ -4,6 +4,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><?=$title?>AMS</title>
 	<link rel="stylesheet" href="default_adm.css" type="text/css">
+	<script type="text/javascript" src="fnc_txt.js"></script>
+	<script type="text/javascript" src="fnc_adm.js"></script>
+	<script type="text/javascript" src="flashcreate.js"></script>
+	<script type="text/javascript" src="../js/ajax.js"></script>
 	<meta http-equiv="imagetoolbar" content="no">
 	<script type="text/javascript">
 function hide(obj) {

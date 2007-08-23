@@ -168,8 +168,6 @@
 #	$listmv = mysql_query("SELECT a.m_id, b.p_date, b.p_dday, b.p_name FROM {$tab['movie']} a, $topic_tab b WHERE a.status_id = '1' AND a.topic_id = b.main_id AND b.status_id = '1' ORDER BY b.p_date DESC");
 	require('admin_head.php');
 ?>
-	<script type="text/javascript" src="fnc_adm.js"></script>
-	<script type="text/javascript" src="flashcreate.js"></script>
 	<script type="text/javascript">
 var allowedext = Array("jpg", "jpeg", "gif", "png");
 function showError(obj) { obj.src = './_img/status_none.gif'; }

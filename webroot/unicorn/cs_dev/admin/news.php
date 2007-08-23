@@ -164,8 +164,6 @@ if(!empty($_POST['SPY'])) {
 #	$list = $sql->query("SELECT main_id, p_date, p_dday, p_name FROM s_ptopic WHERE status_id = '1' ORDER BY p_date DESC", 0, 1);
 	require('admin_head.php');
 ?>
-	<script type="text/javascript" src="flashcreate.js"></script>
-	<script type="text/javascript" src="fnc_adm.js"></script>
 	<script type="text/javascript">
 var allowedext = Array("jpg", "jpeg", "gif", "png");
 function showError(obj) { obj.src = './_img/status_none.gif'; }

@@ -107,8 +107,6 @@ ORDER BY type_cnt DESC");
 	$total_v = $db->getOneItem("SELECT COUNT(*) FROM s_logvisit");
 	$total_ip = $db->getOneItem("SELECT COUNT(DISTINCT(sess_ip)) FROM s_logvisit");
 ?>
-<script type="text/javascript" src="fnc_adm.js"></script>
-<script type="text/javascript" src="fnc_txt.js"></script>
 	<table width="100%" height="100%">
 	<tr><td height="25" colspan="3" class="nobr"><?makeMenuAdmin($page, $menu, 0);?></td></tr>
 	<tr>

@@ -168,8 +168,6 @@ $to_sex_str = array(
 
 	require('admin_head.php');
 ?>
-<script type="text/javascript" src="fnc_adm.js"></script>
-<script type="text/javascript" src="fnc_txt.js"></script>
 <script type="text/javascript">
 function loadtop() {
 	if(parent.head)

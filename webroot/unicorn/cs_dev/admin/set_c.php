@@ -1,6 +1,6 @@
 <?
 	$t_pages = array('news' => 'Nyheter', 'gb' => 'Gästbok', 'extra' => 'Extra', 'send' => 'Register', 'stat' => 'Statistik', 'pics' => 'Vimmel', 'settings' => 'Inställningar', 'changes' => 'Ändringar');
-	$in_dir = '../_postloadinside1594/';
+	//$in_dir = '../_postloadinside1594/';
 	define("FRS", 'amsCS');
 	$title = 'CS';
 	$anv_txt = array('obj_tho' => 'TYCK TILL', 'obj_pcm' => 'VIMMELKOMMENTARER', 'obj_mcm' => 'FILMKOMMENTARER', 'obj_party' => 'PARTYPLANKET (på sidan)', 'obj_full' => 'HÖGUPPLÖST', 'obj_ue' => 'BILDMAIL', 'obj_pimg' => 'PROFILBILDER', 'obj_event' => 'EVENT', 'obj_sms' => 'SMS', 'obj_tele' => 'TELE', 'obj_pho' => 'FOTOALBUM', 'obj_gb' => 'USER-GB', 'obj_mail' => 'USER-MAIL', 'obj_chat' => 'USER-CHAT', 'obj_blog' => 'USER-BLOG', 'poll' => 'POLL', 'news_notice' => 'NOTISER', 'news_send' => 'NYHETER', 'pics' => 'GALLERI', 'search_s' => 'SÖK', 'search_ss' => 'LOGGSÖK', 'search_sss' => 'SUPERSÖK', 'stat' => 'STATISTIK', 'log' => 'LOGG');
@@ -9,9 +9,8 @@
 	define("ADMIN_PHOTO_DIR", '../'.USER_GALLERY);
 	define('ADMIN_NEWS', '..'.NEWS);
 
-	define('ADMIN_EMAIL', 'frans@styleform.se');
-	define('ADMIN_FROM_EMAIL', 'frans@styleform.se');
-	$t = 's_';
+	define('ADMIN_EMAIL', 'martin@unicorn.tv');
+	define('ADMIN_FROM_EMAIL', 'martin@unicorn.tv');
 
 	define('AOP', '../_output/');
 	define('OP', '_output/');
@@ -27,21 +26,22 @@
 		$menu_LOG = array('LOGG' => 'changes.php?t', 'ANVÄNDARE' => 'settings.php');
 		$menu_NEWS = array('NYHETER' => 'news.php', 'NOTISER' => 'news_notice.php', 'ANNONSER' => 'adver.php', 'UTSKICK' => 'send.php', 'MASSMESS' => 'user_send.php', 'POLL' => 'poll.php', 'EDITORIAL' => 'editorial.php', 'TEXT' => 'text.php');
 	} else {
-		if(!empty($_SESSION['u_a'][1])) {
-		$ua = $sql->queryLine("SELECT city_id, pos_all FROM s_admin WHERE main_id = '".@$_SESSION['u_i']."' LIMIT 1");
-		if($ua[1] != $_SESSION['u_a'][1] || $ua[0] != $_SESSION['u_a'][0]) {
-			$_SESSION['u_a'][0] = $ua[0];
-			$_SESSION['u_a'][1] = $ua[1];
-		}
-		$menu_LOG = array('LOGG' => 'changes.php?t');
-		$arr = array();
-		$keys = explode(',', @$_SESSION['u_a'][1]);
-		foreach($keys as $val) {
-			if(strpos($val, 'news_') !== false) {
-				$val = explode('_', $val);
-				$arr[$val[1]] = 1;
+		die('fixme - webmaster admin pages!');
+		if (!empty($_SESSION['u_a'][1])) {
+			$ua = $sql->queryLine("SELECT city_id, pos_all FROM s_admin WHERE main_id = '".@$_SESSION['u_i']."' LIMIT 1");
+			if($ua[1] != $_SESSION['u_a'][1] || $ua[0] != $_SESSION['u_a'][0]) {
+				$_SESSION['u_a'][0] = $ua[0];
+				$_SESSION['u_a'][1] = $ua[1];
 			}
-		}
+			$menu_LOG = array('LOGG' => 'changes.php?t');
+			$arr = array();
+			$keys = explode(',', @$_SESSION['u_a'][1]);
+			foreach($keys as $val) {
+				if(strpos($val, 'news_') !== false) {
+					$val = explode('_', $val);
+					$arr[$val[1]] = 1;
+				}
+			}
 		$menu_NEWS = array();
 		if(@$arr['news']) { $menu_NEWS['NYHETER'] = 'news.php'; $menu_S = 'news.php'; }
 		if(@$arr['notice']) { $menu_NEWS['NOTISER'] = 'news_notice.php'; if(empty($menu_S)) $menu_S = 'news_notice.php'; }

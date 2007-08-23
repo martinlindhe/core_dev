@@ -1,9 +1,5 @@
 <?
 	require_once('find_config.php');
-
-	$page = 'gb';
-
-	$pages = getEnumOptions($t.'admin', 'login_page');
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -11,8 +7,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><?=$title?>AMS</title>
 	<link rel="stylesheet" href="default_adm.css" type="text/css">
-<script type="text/javaScript" src="fnc_adm.js"></script>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript" src="fnc_adm.js"></script>
+<script type="text/javascript">
 isLoaded = true;
 	var xmlGet = false;
 
@@ -104,13 +100,10 @@ isLoaded = true;
 <base target="_parent">
 </head>
 <body onload="getINFO();" style="margin: 2px 10px 0 10px; padding: 0; background: #000;">
-<form name="page_edit" action="top.php" method="post" target="<?=FRS?>head">
-	<input type="hidden" name="page" value="<?=$page?>">
-</form>
 <table width="100%">
 <tr>
 	<td class="txt_wht"><a href="javascript:getINFO();" target="_self" id="reloader" onclick="this.blur();" title="Ladda om">LADDA OM</a> | <b><?=strtoupper($_SESSION['data']['u_alias'])?></b> - <b><?=$_SESSION['data']['level_id']?></b></td>
-	<td class="wht" align="right">ONLINE: <span class="bld" id="onlstr"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./?check">LOGGA UT</a></td>
+	<td class="wht" align="right">ONLINE: <span class="bld" id="onlstr"></span></td>
 </tr>
 </table>
 </body>

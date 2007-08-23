@@ -5,7 +5,7 @@
 	<title><?=(!empty($ttl))?$ttl.' | ':'';?><?=@$title?>AMS</title>
 	<link rel="stylesheet" href="default_adm.css" type="text/css">
 	<meta http-equiv="imagetoolbar" content="no">
-	<script language="JavaScript" type="text/javascript" src="fnc_adm.js"></script>
+	<script type="text/javascript" src="fnc_adm.js"></script>
 </head>
 <body class="bg_fade" style="width: 100%; margin: 0; padding: 0;">
 			<center>

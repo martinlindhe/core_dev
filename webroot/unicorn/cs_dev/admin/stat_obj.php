@@ -67,14 +67,13 @@
 	* { font-size: 8px;}
 }
 </style>
-	<script type="text/javascript" src="fnc_adm.js"></script>
-	<script type="text/javascript">
+<script type="text/javascript">
 function loadtop() {
 	if(parent.<?=FRS?>head)
 	parent.<?=FRS?>head.show_active('stat');
 }
 <?=(isset($_GET['t']))?'loadtop();':'';?>
-	</script>
+</script>
 <form name="csv" action="user_extract.php" method="post">
 <input type="hidden" name="pass" value="0">
 <input type="hidden" name="level" value="0">

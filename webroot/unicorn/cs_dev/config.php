@@ -34,8 +34,36 @@
 */
 	restore_include_path();
 
-	//cs includes
-	require_once('include/config.include.php');	//todo: ta bort denna fil
+	//##################
+	//cs includes start
+	//##################
+define('UPLA', '_input/');
+define('UPLL', '.'.UPLA);
+
+define('DESIGN', '_design/');
+
+define('PD', '02');
+define('UIMG', '150x150');
+define('MAXIMUM_USERS', 750);
+#standard title of page
+define('DEFAULT_USER', '48d40b8b5dee4c06cd8864be1b35456d');
+define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
+$NAME_TITLE = NAME_TITLE;
+
+//define('SMTP_SERVER', 'localhost');
+define('P2B', 'http://www.citysurf.tv/');
+define('URL', 'citysurf.tv');
+define('NAME_URL', 'CitySurf');
+define("UO", '30 MINUTES');
+define('ADMIN_NAME', 'CitySurf');
+define('USER_GALLERY', '_input/usergallery/');
+define('USER_IMG', '_input/images/');
+define('USER_FIMG', 'user/image/');
+define('NEWS', '/_output/news_');
+$sex = array('M' => 'm', 'F' => 'k');
+$sex_name = array('M' => 'man', 'F' => 'kvinna');
+
+define("STATSTR", "listar <b>%1\$d</b> - <b>%2\$d</b> (totalt: <b>%3\$d</b>)");
 
 	require_once('include/mail.fnc.php');
 	require_once('include/gb.fnc.php');
@@ -53,8 +81,10 @@
 	require_once('include/auth.class.php');	//auth() class
 
 	$user = new user();
+	//######################
 	//end of cs includes
-
+	//######################
+	
 /*
 define('CH', ' SQL_CACHE ');
 define('SQL_U', 'cs_user');
