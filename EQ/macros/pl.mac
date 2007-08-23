@@ -27,8 +27,8 @@
 
 | druid fast heal:
 | Nature's Touch is the lowest heal spell that procs Abdurant Healing
-#define FAST_HEAL "Chloroblast"
-| #define FAST_HEAL "Nature's Touch"
+| #define FAST_HEAL "Chloroblast"
+#define FAST_HEAL "Nature's Touch"
 | #define FAST_HEAL "Ancient: Chlorobon"
 | #define FAST_HEAL "Pure Life Rk. II"
 #define HEAL_PCT		80

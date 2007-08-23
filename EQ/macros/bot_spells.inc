@@ -314,9 +314,12 @@ Sub HandleGroupHeal(int PctHPs)
 			}
 		/next i
 
+		/declare grphealpct int local 85
+		/if (${Me.PctMana} >= 90) /varset grphealpct 92
+
 		/varcalc x ${x} / ${n}
-		/if (${n} >=3 && ${x} <= 85) {
-			/call DebugMsg "GROUP HEAL (avg hp ${x} for ${n} players)"
+		/if (${n} >=3 && ${x} <= ${grphealpct}) {
+			/call DebugMsg "GROUP HEAL (avg hp ${x}% for ${n} players)"
 			/call MQ2Cast "Moonshadow"
 			/return
 		}
