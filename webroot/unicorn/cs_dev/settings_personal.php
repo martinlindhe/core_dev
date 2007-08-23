@@ -12,28 +12,24 @@
 		foreach($_POST as $key => $val) {
 			$_POST[$key] = trim($val);
 		}
-		if(empty($_POST['ins_fname']))
-			errorACT('Felaktigt förnamn.', l('member', 'settings', 'personal'));
-		if(empty($_POST['ins_sname']))
-			errorACT('Felaktigt efternamn.', l('member', 'settings', 'personal'));
-		if(empty($_POST['ins_street']))
-			errorACT('Felaktig gatuadress.', l('member', 'settings', 'personal'));
-		if(empty($_POST['ins_pstnr']))
-			errorACT('Felaktigt postnummer.', l('member', 'settings', 'personal'));
-		if(empty($_POST['ins_cell']))
-			errorACT('Felaktigt mobilnummer.', l('member', 'settings', 'personal'));
+
+		if (empty($_POST['ins_fname']))		errorACT('Felaktigt förnamn.', $_SERVER['PHP_SELF']);
+		if (empty($_POST['ins_sname']))		errorACT('Felaktigt efternamn.', $_SERVER['PHP_SELF']);
+		if (empty($_POST['ins_street']))		errorACT('Felaktig gatuadress.',  $_SERVER['PHP_SELF']);
+		if (empty($_POST['ins_pstnr']))		errorACT('Felaktigt postnummer.',  $_SERVER['PHP_SELF']);
+		if (empty($_POST['ins_cell']))			errorACT('Felaktigt mobilnummer.',  $_SERVER['PHP_SELF']);
 		$pstnr = str_replace(' ', '', $_POST['ins_pstnr']);
-		if(!is_numeric($pstnr))
-			errorACT('Felaktigt postnummer.', l('member', 'settings', 'personal'));
+		if (!is_numeric($pstnr)) errorACT('Felaktigt postnummer.',  $_SERVER['PHP_SELF']);
+
 		if(@$l['u_pstnr'] != $pstnr) {
 			$newpst = true;
 		}
 		$newpst1 = '';
 		$newpst2 = '';
 		if($newpst) {
-			$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst = '".secureINS($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
+			$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst = '".$db->escape($pstnr)."' AND b.st_lan = a.st_lan LIMIT 1");
 			if(!count($pst) || empty($pst)) {
-				$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst LIKE '".substr(secureINS($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
+				$pst = $sql->queryLine("SELECT a.st_pst, a.st_ort, a.st_lan, b.main_id FROM s_pst a, s_pstlan b WHERE a.st_pst LIKE '".substr($db->escape($pstnr), 0, -1)."%' AND b.st_lan = a.st_lan LIMIT 1");
 				if(!count($pst) || empty($pst)) {
 					errorACT('Felaktigt postnummer.', l('member', 'settings', 'personal'));
 				}
@@ -44,16 +40,16 @@
 			$pstnr = $pst[0];
 			$_SESSION['data']['u_pst'] = $pstort.', '.$pstlan;
 			$_SESSION['data']['u_pstlan_id'] = $pstlan_id;
-			$newpst1 = "u_pstort = '" . secureINS($pstort) . "', u_pstlan = '" . secureINS($pstlan) . "', u_pstlan_id = '" . secureINS($pstlan_id) . "',";
-			$newpst2 = "u_pstnr = '" . secureINS($pstnr) . "',";
+			$newpst1 = "u_pstort = '" . $db->escape($pstort) . "', u_pstlan = '" . $db->escape($pstlan) . "', u_pstlan_id = '" . $db->escape($pstlan_id) . "',";
+			$newpst2 = "u_pstnr = '" . $db->escape($pstnr) . "',";
 		}
 		if(empty($_POST['ins_email']) || !valiField($_POST['ins_email'], 'email')) {
 			errorACT('Felaktig e-postadress.', l('member', 'settings', 'personal'));
 		}
 
-		$exists = $sql->queryLine("SELECT status_id, id_id FROM s_user WHERE u_email = '" . secureINS($_POST['ins_email']) . "' LIMIT 1");
+		$exists = $sql->queryLine("SELECT status_id, id_id FROM s_user WHERE u_email = '" . $db->escape($_POST['ins_email']) . "' LIMIT 1");
 		if(!empty($exists) && count($exists)) {
-			if($exists[0] == '1' && $exists[1] != $l['id_id']) {
+			if($exists[0] == '1' && $exists[1] != $user->id) {
 				errorACT('E-postadressen är upptagen.', l('member', 'settings', 'personal'));
 			}
 		}
@@ -69,11 +65,11 @@
 		//email address was changed
 		if($l['u_email'] != $_POST['ins_email']) {
 			$start_code = mt_rand(100000, 999999);
-			$r = array($start_code, $l['id_id']);
+			$r = array($start_code, $user->id);
 			$msg = sprintf(gettxt('email_update'), $r[0], P2B.'mail_confirm.php?update='.$r[0]);
 			doMail($_POST['ins_email'], 'Uppdatera din e-postadress', $msg);
 			$msg = 'Bekräfta dina uppdateringar genom att läsa e-postmeddelandet som skickats ut till <b>'.secureOUT($_POST['ins_email']).'</b>';
-			$sql->queryUpdate("REPLACE INTO s_userregfast SET activate_code = '$start_code', u_email='".secureINS($_POST['ins_email'])."',id_id = '".$l['id_id']."',timeCreated=NOW()");
+			$sql->queryUpdate("REPLACE INTO s_userregfast SET activate_code = '$start_code', u_email='".$db->escape($_POST['ins_email'])."',id_id = '".$user->id."',timeCreated=NOW()");
 		}
 		$newcity = '';
 		$reload = false;
@@ -87,33 +83,33 @@
 
 		if(strlen($newpst1.$newcity)) $ins = $sql->queryUpdate("UPDATE s_user SET
 		".substr($newpst1.$newcity, 0, -1)."
-		WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
+		WHERE id_id = '".secureINS($user->id)."' LIMIT 1");
 		$ins = $sql->queryUpdate("UPDATE s_userinfo SET
 		$newpst2
-		u_fname = '".secureINS($_POST['ins_fname'])."',
-		u_sname = '".secureINS($_POST['ins_sname'])."',
-		u_street = '".secureINS($_POST['ins_street'])."',
-		u_cell = '".secureINS($_POST['ins_cell'])."'
-		WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
+		u_fname = '".$db->escape($_POST['ins_fname'])."',
+		u_sname = '".$db->escape($_POST['ins_sname'])."',
+		u_street = '".$db->escape($_POST['ins_street'])."',
+		u_cell = '".$db->escape($_POST['ins_cell'])."'
+		WHERE id_id = '".$db->escape($user->id)."' LIMIT 1");
 		if(!$ins) {
 			$sql->queryUpdate("INSERT INTO s_userinfo SET
 			$newpst2
-			u_fname = '".secureINS($_POST['ins_fname'])."',
-			u_sname = '".secureINS($_POST['ins_sname'])."',
-			u_street = '".secureINS($_POST['ins_street'])."',
-			u_cell = '".secureINS($_POST['ins_cell'])."',
-			id_id = '".secureINS($l['id_id'])."'");
+			u_fname = '".$db->escape($_POST['ins_fname'])."',
+			u_sname = '".$db->escape($_POST['ins_sname'])."',
+			u_street = '".$db->escape($_POST['ins_street'])."',
+			u_cell = '".$db->escape($_POST['ins_cell'])."',
+			id_id = '".$db->escape($user->id)."'");
 		}
 		$ins++;
 		if($newpst) {
-			$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$user->id."' LIMIT 1");
 			$p_lan = str_replace(' ', '', $l['u_pstlan']);
 			$p_ort = str_replace(' ', '', $l['u_pstort']);
 			$string = str_replace(' LÄN'.$p_lan, '', $string);
 			$string = str_replace(' ORT'.$p_ort, '', $string);
 			$string = $string.' LÄN'.str_replace('-', '', str_replace(' ', '', $pstlan));
 			$string = $string.' ORT'.str_replace('-', '', str_replace(' ', '', $pstort));
-			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$user->id."' LIMIT 1");
 		}
 		if(!$ins) {
 			errorTACT('Någonting gick fel.', l('member', 'settings', 'personal'), 1500);
@@ -121,97 +117,97 @@
 		/*
 		if(@$settings['private_chat'] != @$_POST['opt_chat'] || (@$settings['private_chat'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_chat']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'private_chat', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'private_chat', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		*/
 		/*
 		if(@$settings['hidden_view'] != @$_POST['opt_view'] || (@$settings['hidden_view'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_view']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_view', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'hidden_view', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if(@$settings['hidden_bview'] != @$_POST['opt_bview'] || (@$settings['hidden_bview'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_bview']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_bview', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'hidden_bview', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if(@$settings['hidden_pview'] != @$_POST['opt_pview'] || (@$settings['hidden_pview'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_pview']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_pview', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'hidden_pview', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		*/
 		/*
 		if($isAdmin && @$settings['mmsenabled'] != @$_POST['opt_mmsenabled']) {
-			$id = $user->setinfo($l['id_id'], 'mmsenabled', @$_POST['opt_mmsenabled']);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'mmsenabled', @$_POST['opt_mmsenabled']);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if($isAdmin && @$settings['mmstype'] != @$_POST['opt_mmstype']) {
 			$hidden = (!empty($_POST['opt_mmstype']) && $_POST['opt_mmstype'] == 'B')?'B':'P';
-			$id = $user->setinfo($l['id_id'], 'mmstype', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'mmstype', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if($isAdmin && @$settings['mmspriv'] != @$_POST['ins_mmspriv']) {
 			$hidden = (!empty($_POST['ins_mmspriv']))?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'mmspriv', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'mmspriv', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		*/
 		if($isAdmin && @$settings['mmskey'] != @$_POST['ins_mmskey']) {
-			$id = $user->setinfo($l['id_id'], 'mmskey', @$_POST['ins_mmskey']);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'mmskey', @$_POST['ins_mmskey']);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		$mmskey_error = updateMMSKey();
 		
 		/*
 		if(@$settings['hidden_slogin'] != @$_POST['opt_shidden']) {
 			$hidden = (!empty($_POST['opt_shidden']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_slogin', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'hidden_slogin', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if(@$settings['zoom_auto'] != @$_POST['opt_zoom']) {
 			$hidden = (!empty($_POST['opt_zoom']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'zoom_auto', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'zoom_auto', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		*/
 		if(@$settings['hidden_login'] != @$_POST['opt_hidden']) {
 			$hidden = (!empty($_POST['opt_hidden']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_login', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'hidden_login', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 			$_SESSION['c_h'] = $hidden;
 			if($hidden) $_SESSION['c_d'] = 0;
 		}
 		/*
 		if($hidlog != @$_POST['opt_hidlog'] || ($hidlog && !$isOk)) {
 			$hidden = (!empty($_POST['opt_hidlog']) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidlog', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_profile', $l['id_id']);
+			$id = $user->setinfo($user->id, 'hidlog', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_profile', $user->id);
 		}
 		if(isset($_POST['opt_hidchat']))
 			$hidchat = 0;
 		else $hidchat = 1;
 		if(@$settings['hidden_chat'] != @$hidchat || (@$settings['hidden_chat'] && !$isOk)) {
 			$hidden = (!empty($hidchat) && $isOk)?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'hidden_chat', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'hidden_chat', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		*/
 		if(@$settings['send_spec'] != @$_POST['opt_spec'] || (@$settings['send_spec'] && !$isOk)) {
 			$hidden = (!empty($_POST['opt_spec']))?'1':'0';
-			$id = $user->setinfo($l['id_id'], 'send_spec', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'send_spec', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if(isset($_POST['opt_cell']) && !isset($settings['send_cell']) || @$settings['send_cell'] != @$_POST['opt_cell'] || !isset($settings['send_cell']) && !isset($_POST['opt_cell'])) {
 			$hidden = (!empty($_POST['opt_cell']))?'0':'1';
-			$id = $user->setinfo($l['id_id'], 'send_cell', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'send_cell', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if(isset($_POST['opt_email']) && !isset($settings['send_email']) || @$settings['send_email'] != @$_POST['opt_email'] || !isset($settings['send_email']) && !isset($_POST['opt_email'])) {
 			$hidden = (!empty($_POST['opt_email']))?'0':'1';
-			$id = $user->setinfo($l['id_id'], 'send_email', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'send_email', $hidden);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		if(@$settings['random'] != @$_POST['opt_random']) {
 			$r = (!empty($_POST['opt_random']))?'0':$sexs[$l['u_sex']];
@@ -220,8 +216,8 @@
 				elseif($_POST['opt_random'] == 'F') $r = 'F';
 				else $r = 'B';
 			}
-			$id = $user->setinfo($l['id_id'], 'random', $r);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $l['id_id']);
+			$id = $user->setinfo($user->id, 'random', $r);
+			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 
 		if(!empty($msg)) errorACT($msg); else errorTACT('Uppdaterat!', l('member', 'settings', 'personal'), 1000);
