@@ -13,8 +13,8 @@
 	}
 
 	function errorNEW($msg, $mv = '', $ttl = 'ERROR') {
-		require("./_tpl/notice_apopup.php");
-		exit;
+		require('notice_apopup.php');
+		die;
 	}
 
 	function makeMenuAdmin($sel, $arr, $print = true) {

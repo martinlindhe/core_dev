@@ -35,63 +35,58 @@
 				}
 			} else $_SESSION['err'] = 'wronguser';
 		} else {
-			$id = $sql->queryLine("SELECT id_id, u_pass FROM s_user WHERE u_alias = '".$_POST['s_u']."' AND status_id = '1' LIMIT 1");
-			if(!empty($id) && count($id)) {
-			$sql->queryUpdate("UPDATE s_user SET level_id = '10' WHERE id_id = '".$id[0]."' LIMIT 1");
-			$sql = mysql_query("INSERT INTO s_admin SET
-			user_user = '".secureINS($_POST['s_u'])."',
-			user_name = '".secureINS($_POST['s_n'])."',
-			main_id = '".$id[0]."',
-			user_pass = '".$id[1]."',
-			".($isCrew?"pos_all = '".@implode(',', @$_POST['pospos'])."',":'')."
-			".(($list)?"status_id = 'L',":"status_id = '1',")."
-			u_owner = '".secureINS($_SESSION['u_i'])."'");
-			} else errorNEW('Användaren finns inte som medlem på communityn.', 'settings.php');
+			$id = $db->getOneRow("SELECT id_id, u_pass FROM s_user WHERE u_alias = '".$db->escape($_POST['s_u'])."' AND status_id = '1' LIMIT 1");
+			if (!empty($id)) {
+				$db->update("UPDATE s_user SET level_id = '10' WHERE id_id = '".$id['id_id']."' LIMIT 1");
+				$db->insert("INSERT INTO s_admin SET
+					user_user = '".$db->escape($_POST['s_u'])."',
+					user_name = '".$db->escape($_POST['s_n'])."',
+					main_id = '".$id['id_id']."',
+					user_pass = '".$id['u_pass']."',
+					".($isCrew?"pos_all = '".@implode(',', @$_POST['pospos'])."',":'')."
+					".(($list)?"status_id = 'L',":"status_id = '1',")."
+					u_owner = '".$user->id."'");
+			} else {
+				errorNEW('Användaren finns inte som medlem på communityn.', 'settings.php');
+			}
 		}
 		header("Location: settings.php");
-		exit;
+		die;
 	}
 
 	$u_change = false;
 	$new = false;
-	if(!empty($_GET['c'])) {
-		$c_sql = mysql_query("SELECT * FROM s_admin WHERE main_id = '".secureINS($_GET['c'])."' LIMIT 1");
-		if(mysql_num_rows($c_sql) > 0) {
-			$c_row = mysql_fetch_assoc($c_sql);
-			if(!$_SESSION['u_c'] && $c_row['u_crew']) {
-				$u_change = false;
-			} else {
-				$u_change = true;
-			}
-		}
+	if (!empty($_GET['c']) && is_numeric($_GET['c'])) {
+			$c_row = $db->getOneRow("SELECT * FROM s_admin WHERE main_id = '".$_GET['c']."' LIMIT 1");
+			$u_change = true;
 	} elseif(!empty($_GET['n'])) {
 		$new = true;
 	}
 
-	if(!empty($_GET['b']) && is_md5($_GET['b'])) {
-		mysql_query("UPDATE s_admin SET status_id = '2' WHERE main_id = '".secureINS($_GET['b'])."' AND u_crew = '0' LIMIT 1");
+	if(!empty($_GET['b']) && is_numeric($_GET['b'])) {
+		$db->update("UPDATE s_admin SET status_id = '2' WHERE main_id = '".$db->escape($_GET['b'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
-		exit;
+		die;
 	}
 	if(!empty($_GET['b2']) && is_md5($_GET['b2'])) {
 		mysql_query("UPDATE s_admin SET status_id = 'Z' WHERE main_id = '".secureINS($_GET['b2'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
-	if(!empty($_GET['a']) && is_md5($_GET['a'])) {
-		mysql_query("UPDATE s_admin SET status_id = '1' WHERE main_id = '".secureINS($_GET['a'])."' AND u_crew = '0' LIMIT 1");
+	if (!empty($_GET['a']) && is_numeric($_GET['a'])) {
+		$db->update("UPDATE s_admin SET status_id = '1' WHERE main_id = '".$db->escape($_GET['a'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
-		exit;
+		die;
 	}
 	if(!empty($_GET['a2']) && is_md5($_GET['a2'])) {
 		mysql_query("UPDATE s_admin SET status_id = 'L' WHERE main_id = '".secureINS($_GET['a2'])."' AND u_crew = '0' LIMIT 1");
 		header("Location: settings.php");
 		exit;
 	}
-	if(!empty($_GET['d']) && is_md5($_GET['d'])) {
-		mysql_query("DELETE FROM s_admin WHERE main_id = '".secureINS($_GET['d'])."' AND u_crew = '0' AND (status_id = '0' OR status_id = '2') LIMIT 1");
+	if (!empty($_GET['d']) && is_numeric($_GET['d'])) {
+		$db->delete("DELETE FROM s_admin WHERE main_id = '".$db->escape($_GET['d'])."' AND u_crew = '0' AND (status_id = '0' OR status_id = '2') LIMIT 1");
 		header("Location: settings.php");
-		exit;
+		die;
 	}
 
 	$u_sql = $db->getArray("SELECT a.*, u.user_user AS owner_u FROM s_admin a LEFT JOIN s_admin u ON u.main_id = a.u_owner ORDER BY a.u_crew DESC, a.status_id ASC, a.user_name");
@@ -168,7 +163,7 @@ function loadtop() {
 ?>
 <?
 	if($isCrew && (!$u_change || !$c_row['u_crew'])) {
-		$pages = getEnumOptions($t.'admin', 'pos_all');
+		$pages = getEnumOptions('s_admin', 'pos_all');
 ?>
 			Tillgång:<br>
 			<select name="pospos[]" multiple=true style="height: 75px; width: 220px;" class="inp_nrm">
@@ -223,7 +218,7 @@ echo '<option value="'.$page.'"'.($sel?' selected':'').'>'.(array_key_exists($pa
 ?>
 			</table>
 <?
-	if($u_change && ($_SESSION['u_c'] || $c_row['user_user'] == $_SESSION['u_u'])) {
+	if ($u_change || (!empty($c_row) && $c_row['user_user'] == $_SESSION['data']['u_alias'])) {
 		$log = $db->getArray("SELECT * FROM s_adminlog WHERE login_name LIKE '%".$db->escape($c_row['user_user'])."%' ORDER BY login_date DESC");
 ?>
 			<hr /><div class="hr"></div>
