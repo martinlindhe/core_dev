@@ -8,7 +8,6 @@
 	$mmskey_error = '';
 
 	if (!empty($_POST['do'])) {
-		include(CONFIG.'validate.fnc.php');
 		$newpst = '';
 		foreach($_POST as $key => $val) {
 			$_POST[$key] = trim($val);

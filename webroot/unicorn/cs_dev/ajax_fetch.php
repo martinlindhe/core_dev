@@ -5,7 +5,7 @@
 	header('Pragma: no-cache');
 	$user->update_retrieve();
 	echo $_SESSION['data']['cachestr'];
-	exit;
+	die;
 /*
 	$gb_c = intval($user->getinfo($l['id_id'], 'gb_count'));
 	$mail_c = intval($user->getinfo($l['id_id'], 'mail_count'));

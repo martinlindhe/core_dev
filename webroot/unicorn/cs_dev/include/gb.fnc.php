@@ -1,7 +1,7 @@
 <?
 	/*
 	gb.fnc.php - Functions for handling guestbooks
-	Orginally written by Frans Rosén
+	Orginally written by Frans RosÃ©n
 	
 	*/
 
@@ -66,8 +66,8 @@
 	}
 
 	// insert new guestbook-msg
-	//is_answer = id på gästboksinlägget som detta är ett svar till
-	//private = 0 eller 1, om det är ett privat gästboksinlägg
+	//is_answer = id pÃ¥ gÃ¤stboksinlÃ¤gget som detta Ã¤r ett svar till
+	//private = 0 eller 1, om det Ã¤r ett privat gÃ¤stboksinlÃ¤gg
 	function gbWrite($msg, $user_id, $is_answer = 0, $private = 0)
 	{
 		global $db, $user;

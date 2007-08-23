@@ -109,10 +109,16 @@ function executeFriendsOnline(text) {
 			ret += '<li>';
 			ret += '<table width="100%" cellpadding="0" cellspacing="0"><tr><td>';
 			ret += '<span onmouseover="launchHover(event, \'' + text[i][0] + '\');" onmouseout="clearHover();">';
-			ret += '<a href="/user/view/' + text[i][0] + '">' + unescape(text[i][1]) + ' <b>' + text[i][2] + '</b></a>';
+			ret += '<a href="user_view.php?id=' + text[i][0] + '">' + unescape(text[i][1]) + ' ';
+			if (text[i][2] == 'm') {
+				ret += '<img src="_gfx/icon_M1.png" align="absmiddle">';
+			} else {
+				ret += '<img src="_gfx/icon_F1.png" align="absmiddle">';
+			}
+			ret += '<b>' + text[i][3] + '</b></a>';
 			ret += '</span></td><td width="36">';
-			ret += '<img align="absmiddle" onclick="makeGb(\'' + text[i][0] + '\')" title="Skriv i gästboken" alt="Skriv i gästboken" src="/_gfx/icon_gb.png" />';
-			ret += '<img align="absmiddle" onclick="makeChat(\'' + text[i][0] + '\')" title="Chatta" alt="Chatta" src="/_gfx/icon_qchat.png" />';
+			ret += '<img align="absmiddle" onclick="makeGb(\'' + text[i][0] + '\')" title="Skriv i gÃ¤stboken" alt="Skriv i gÃ¤stboken" src="_gfx/icon_gb.png" />';
+			ret += '<img align="absmiddle" onclick="makeChat(\'' + text[i][0] + '\')" title="Chatta" alt="Chatta" src="_gfx/icon_qchat.png" />';
 			ret += '</td></tr></table>';
 			ret += '</li>';
 		}

@@ -50,9 +50,15 @@ class user {
 		return false;
 	}
 
+	//anropas av ajax_fetch.php
 	function update_retrieve() {
-		$info = $this->cachestr();
-		$_SESSION['data']['cachestr'] = $info;
+		global $db, $user;
+		if (!$user->id) return false;
+
+		$q = 'UPDATE s_user SET lastonl_date=NOW() WHERE id_id='.$user->id;
+		$db->update($q);
+
+		$_SESSION['data']['cachestr'] = $this->cachestr();
 	}
 
 	function counterIncrease($type, $user) {
@@ -143,26 +149,26 @@ class user {
 
 		$str = '';
 		foreach ($info as $item) {
-			$str .= @($item[0]?$translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
+			$str .= ($item[0] ? $translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
 		}
+
+		//finns det olästa chattmeddelanden?
 		$cha_c = $db->getOneItem('SELECT COUNT(DISTINCT(sender_id)) FROM s_userchat WHERE user_id = '.$id.' AND user_read = "0"');
 		if ($cha_c) {
 			$cha_id = $db->getOneItem('SELECT c.sender_id FROM s_userchat AS c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = "1" WHERE c.user_id = '.$id.' AND c.user_read = "0" ORDER BY c.sent_date ASC LIMIT 1');
-		} else {
-			$cha_id = 0;
-		}
-
-		if ($cha_id) {
 			$str .= 'c:'.$cha_c.':'.$cha_id;
 		} else {
 			$str .= 'c:0:0';
 		}
-		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$id.' AND u.account_date > "'.$this->timeout(UO).'" ORDER BY u.u_alias');
+
+		//är nåra polare online?
+		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$id.' AND u.lastonl_date > "'.$this->timeout(UO).'" ORDER BY u.u_alias');
 		$rel_s = '';
 		foreach($rel_onl as $row) {
-			$rel_s .= $row[0].'|'.rawurlencode($row[1]).'|'.$sex[$row[2]].$this->doage($row[3], 0).'|'.$this->dobirth($row[3]).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
+//			$rel_s .= $row['friend_id'].'|'.rawurlencode($row['u_alias']).'|'.$sex[$row['u_sex']].$this->doage($row['u_birth'], 0).'|'.$this->dobirth($row['u_birth']).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
+			$rel_s .= $row['friend_id'].'|'.rawurlencode($row['u_alias']).'|'.$sex[$row['u_sex']].'|'.$this->doage($row['u_birth'], 0).';'; //$row[6].$len.rawurlencode($row[1]).$sex[$row[2]].$user->doage($row[3], 0).$user->dobirth($row[3]).';';
 		}
-		if(empty($rel_s)) $rel_s = ';';
+		if (empty($rel_s)) $rel_s = ';';
 		$str .= '#f:'.$rel_s;
 		return $str;
 	}

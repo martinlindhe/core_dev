@@ -84,7 +84,10 @@ var actID = '';
 	<? makeButton(false, "document.location='settings_delete.php'", 'icon_settings.png', 'radera konto'); ?>
 	<? makeButton(false, "document.location='settings_vipstatus.php'", 'icon_settings.png', 'VIP'); ?>
 	<br class="clr"/>
-
+<?
+	$pres_text = '';
+	if (!empty($profile['user_pres'])) $pres_text = $profile['user_pres'];
+?>
 
 	<div class="centerMenuBodyWhite"><div style="padding: 5px;">
 		<form name="pres" action="<?$_SERVER['PHP_SELF']?>" method="post" onsubmit="if(TC_active) TC_VarToHidden();">
@@ -95,7 +98,7 @@ var actID = '';
 			<tr>
 				<td class="pdg" colspan="2">
 					<table summary="" cellspacing="0" width="100%" style="display: none;" id="text_c_html">
-						<tr><td><textarea name="text_html" id="text_html" style="width: 550px; height: 317px; padding: 10px; font-family: Courier New, Courier; font-size: 12px;"> <?=secureFormat($profile['user_pres'])?></textarea></td></tr>
+						<tr><td><textarea name="text_html" id="text_html" style="width: 550px; height: 317px; padding: 10px; font-family: Courier New, Courier; font-size: 12px;"> <?=secureFormat($pres_text)?></textarea></td></tr>
 					</table>
 					<table summary="" cellspacing="0" width="100%" class="mrg_t" id="text_c_var">
 						<tr><td style="padding: 0 0 5px 0;">

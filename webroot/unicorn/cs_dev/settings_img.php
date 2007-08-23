@@ -85,39 +85,39 @@
 			errorACT('Bilden är för stor. Max 1.5 MB. Pröva med en mindre eller ändra storleken.', l('member', 'settings', 'img'));
 		}
 	}
-	if(isset($_GET['del_key']) && $gotkey) {
+	if (isset($_GET['del_key']) && $gotkey) {
 		@unlink($file);
 		@unlink($file2);
 		@unlink($file3);
-		$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
-		reloadACT(l('member', 'settings', 'img'));
+		$db->delete("DELETE FROM s_userpicvalid WHERE id_id = '".$user->id."' LIMIT 1");
+		reloadACT($_SERVER['PHP_SELF']);
 	} elseif(!empty($_POST['n0']) && $_POST['n0'] == 'd') {
-		if($l['u_picvalid'] == '1') {
-			@unlink(USER_IMG.$l['u_picd'].'/'.$l['id_id'].$l['u_picid'].'.jpg');
-			@unlink(USER_IMG.$l['u_picd'].'/'.$l['id_id'].$l['u_picid'].'_2.jpg');
-			$pid = intval($l['u_picid']);
+		if ($_SESSION['data']['u_picvalid'] == '1') {
+			@unlink(USER_IMG.$_SESSION['data']['u_picd'].'/'.$user->id.$_SESSION['data']['u_picid'].'.jpg');
+			@unlink(USER_IMG.$_SESSION['data']['u_picd'].'/'.$user->id.$_SESSION['data']['u_picid'].'_2.jpg');
+			$pid = intval($_SESSION['data']['u_picid']);
 			$pid++;
-			if(strlen($pid) == '1') $pid = '0'.$pid;
-			$sql->queryUpdate("UPDATE s_user SET u_picvalid = '0', u_picid = '$pid' WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			if (strlen($pid) == '1') $pid = '0'.$pid;
+			$db->update('UPDATE s_user SET u_picvalid = "0", u_picid = "'.$pid.'" WHERE id_id = '.$user->id.' LIMIT 1');
 			$_SESSION['data']['u_picvalid'] = 0;
 			$_SESSION['data']['u_picid'] = $pid;
-			$search = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$search = $db->getOneItem('SELECT level_id FROM s_userlevel WHERE id_id = '.$user->id.' LIMIT 1');
 			$search = str_replace(' VALID', '', $search);
-			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$search' WHERE id_id = '".$l['id_id']."' LIMIT 1");
+			$db->update('UPDATE s_userlevel SET level_id = "'.$search.'" WHERE id_id = '.$user->id.' LIMIT 1');
 		}
-		errorACT('Din bild är raderad.', l('member', 'settings', 'img'));
+		errorACT('Din bild är raderad.', $_SERVER['PHP_SELF']);
 	}
-	if(!empty($_GET['key']) && is_md5($_GET['key']) && $gotkey) {
+	if (!empty($_GET['key']) && is_md5($_GET['key']) && $gotkey) {
 		if(file_exists($file)) {
 			$img = '/member/preimage/?'.mt_rand();
 			$second = true;
 			$key = $_GET['key'];
 		} else {
-			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
-			errorACT('Filen finns inte, försök igen.', l('member', 'settings', 'img'));
+			$db->delete('DELETE FROM s_userpicvalid WHERE id_id = '.$user->id.' LIMIT 1');
+			errorACT('Filen finns inte, försök igen.', $_SERVER['PHP_SELF']);
 		}
 	}
-	if(!empty($_GET['get']) && is_numeric($_GET['get'])) {
+	if (!empty($_GET['get']) && is_numeric($_GET['get'])) {
 		$get = str_replace('#', '', $_GET['get']);
 		if($isG)
 			$pic = $sql->queryLine("SELECT a.main_id, a.id, a.topic_id, b.status_id FROM s_ppic a INNER JOIN s_ptopic b ON b.main_id = a.topic_id WHERE a.main_id = '".secureINS($get)."' AND a.status_id = '1' LIMIT 1");
@@ -125,7 +125,7 @@
 			$pic = $sql->queryLine("SELECT a.main_id, a.id, a.topic_id, b.status_id FROM s_ppic a INNER JOIN s_ptopic b ON b.main_id = a.topic_id AND b.status_id = '1' WHERE a.main_id = '".secureINS($get)."' AND a.status_id = '1' LIMIT 1");
 		if(!empty($pic) && count($pic)) {
 			if($pic[3] == '2') {
-				errorACT('Felaktigt bildnummer.', l('member', 'settings', 'img'));
+				errorACT('Felaktigt bildnummer.', $_SERVER['PHP_SELF']);
 			}
 			if($pic[3] == '0' && !$isG)
 				errorACT('Bilden är en VIP-bild och du har inte GULD.', l('member', 'settings', 'img'));
@@ -138,7 +138,7 @@
 			} else $second = true;
 			$intern = true;
 		} else {
-			errorACT('Felaktigt bildnummer.', l('member', 'settings', 'img'));
+			errorACT('Felaktigt bildnummer.', $_SERVER['PHP_SELF']);
 		}
 	}
 	if(!empty($_POST['docut']) && $second && 
@@ -153,7 +153,7 @@
 		$p_info = getimagesize($file);
 		$p1 = $p_info[0] / $_POST['ActImageW'];
 		$p = array();
-#if($l['u_alias'] == 'frans') die(print_r($p_info));
+
 		$p['w'] = ceil($p1 * $_POST['UserImageW']);
 		$p['h'] = ceil($p1 * $_POST['UserImageH']);
 		$p['x'] = ceil($p1 * $_POST['UserImageX']);
@@ -162,7 +162,7 @@
 		if(@$p_info['mime'] && $p_info['mime'] == 'image/bmp') {
 			if(!$intern) @unlink($file);
 			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
-			errorACT('Bilden du laddat upp är egentligen en .BMP-fil, inte en JPG. Välj en annan eller spara om din bild till .JPG', l('member', 'settings', 'img'));
+			errorACT('Bilden du laddat upp är egentligen en .BMP-fil, inte en JPG. Välj en annan eller spara om din bild till .JPG', $_SERVER['PHP_SELF']);
 		}
 		if(!copyRe($file, './_input/preimages/'.$l['id_id'].'_'.$flow.'.jpg', './_input/preimages/'.$l['id_id'].'_'.$flow.'_2.jpg', $p['x'], $p['y'], $p['w'], $p['h'], 'jpg', $p_info['mime'])) $error++;
 		if(file_exists('./_input/preimages/'.$l['id_id'].'_'.$flow.'.jpg') && file_exists('./_input/preimages/'.$l['id_id'].'_'.$flow.'_2.jpg')) {
@@ -172,12 +172,11 @@
 		} else {
 			if(!$intern) @unlink($file);
 			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
-			errorACT('Bilden var komprimerad och blev för stor när den skulle behandlas. Försök att minska bildens höjd och bredd eller storlek.', l('member', 'settings', 'img'));
+			errorACT('Bilden var komprimerad och blev för stor när den skulle behandlas. Försök att minska bildens höjd och bredd eller storlek.', $_SERVER['PHP_SELF']);
 		}
 	}
 	$page = 'settings_img';
 
-	//$html4_head = true;
 	require(DESIGN.'head.php');
 ?>
 
@@ -223,9 +222,9 @@ function intern_get(obj) {
 ?>
 	<form action="<?=$_SERVER['PHP_SELF']?>" method="post" enctype="multipart/form-data" onsubmit="if(alreadyupl == 1) { if(!confirm('Du har redan laddat upp en bild för att använda den som\nprofilbild, men du har inte slutfört beskärningen.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } if(alreadyupl == 2) { if(!confirm('Du har redan laddat upp en bild som väntar på att granskas.\nDen bilden kommer att raderas om du väljer att fortsätta.\n\nVill du fortsätta?')) return false; } this.submitbtn.disabled = true;">
 	<input type="hidden" name="dopost" value="1"/>
-		
-		<?=secureOUT(gettxt('top-settings_img'))?>
 <?
+	echo gettxt('top-settings_img').'<br/><br/>';
+
 	$gotnew = false;
 	$waiting = $db->getOneRow('SELECT flow_id, status_id, key_id FROM s_userpicvalid WHERE id_id = '.$user->id.' LIMIT 1');
 	if($waiting && $waiting[1] == '1') $gotnew = true;
