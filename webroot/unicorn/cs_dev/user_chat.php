@@ -58,7 +58,7 @@ var you = \''.($_SESSION['data']['u_alias']).'\';
 				</td>
 				<td class="rgt">
 					<?=(!$closed)?$user->getstring($s, '', array('nolink'=>1)):$n.' användare';?><br/><br/>
-					<?=(!$closed)?$user->getimg($id.$s['u_picid'].$s['u_picd'].$s['u_sex'], 1, array('toparent' => 1)):'';?>
+					<?=(!$closed)?$user->getimg($id, 1, '', 1):'';?>
 				</td>
 			</tr>
 			<tr>

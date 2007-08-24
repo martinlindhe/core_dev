@@ -93,7 +93,7 @@
 			$odd = !$odd;
 	
 			echo '<table summary="" cellspacing="0" class="msgList'.($odd?'':' msgListEven').'">';
-			echo '<tr><td class="pdg msgListImage" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.((!$his)?'#'.$offset--.'&nbsp;':'').' '.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['sent_date']).'</h5><div class="r">'.((!$val['user_read'])?' <b>(oläst inlägg)</b>':((!$show_answer)?' [obesvarat inlägg]':'')).(($prv)?' <span class="off"'.(($isAdmin && !$arr[3])?'':'').'>[privat inlägg]</span>':'').'</div><br class="clr" />';
+			echo '<tr><td class="pdg msgListImage" rowspan="2">'.$user->getimg($val['id_id']).'</td><td class="pdg"><h5 class="l">'.((!$his)?'#'.$offset--.'&nbsp;':'').' '.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['sent_date']).'</h5><div class="r">'.((!$val['user_read'])?' <b>(oläst inlägg)</b>':((!$show_answer)?' [obesvarat inlägg]':'')).(($prv)?' <span class="off"'.(($isAdmin && !$arr[3])?'':'').'>[privat inlägg]</span>':'').'</div><br class="clr" />';
 			echo (($arr[3])?(($val['sent_html'])?(safeOUT($val['sent_cmt'])):secureOUT($val['sent_cmt'], 1)):'<span class="em"'.(($isAdmin)?' id="msg:'.$val['main_id'].'"':'').'>Privat inlägg</span>');
 			echo '</td></tr>';
 			echo '<tr><td class="btm rgt pdg">';

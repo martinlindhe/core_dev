@@ -1,10 +1,23 @@
 <?
-	function getadminimg($arr, $valid = 1, $big = 0, $extra = '') {
-		$id = substr($arr, 0, -5);
-		$pd = substr($arr, -3, -1);
-		$sex = substr($arr, -1);
-		$arr = substr($arr, -5, -3);//style="width: 225px; height: 300px;"
-		return (!$id?'<a>':'<a href="user.php?id='.$id.'"'.(!empty($extra['text'])?' title="'.secureOUT($extra['text']).'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>').'<img  alt="'.(!empty($extra['text'])?secureOUT($extra['text']):'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
+	//identisk med $user->getimg() förrutom user.php vs user_view.php
+	function getadminimg($user_id, $big = 0, $text = '', $parent = false)
+	{
+		global $db, $config;
+		
+		$q = 'SELECT u_picid, u_picd, u_sex, u_picvalid FROM s_user WHERE id_id='.$user_id;
+		$data = $db->getOneRow($q);
+
+		$t = '<a href="user.php?id='.$user_id.'">';
+
+		$target = '';
+		if ($parent) $target = ' target="_parent"';
+
+		if (!$data['u_picid'] || !$data['u_picvalid']) $t .= '<img src="'.$config['web_root'].'_gfx/u_noimg'.$data['u_sex'].(!$big?'_2':'').'.gif" ';
+		else $t .= '<img src="http://citysurf.tv/'.UPLA.'images/'.$data['u_picd'].'/'.$user_id.$data['u_picid'].'.jpg" alt="'.secureOUT($text).'" ';
+
+		$t .= ($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' '.$parent.'/></a>';
+	
+		return $t;
 	}
 
 	function doLog($string = '', $about = '') {

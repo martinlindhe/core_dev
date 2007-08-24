@@ -132,7 +132,7 @@ $pp1 = $paging['p'] + 1;
 				<td>
 				<table cellspacing="0">
 				<tr>
-<?=(!empty($row['logged_in']))?'					<td style="width: 57px; padding-right: 10px;">'.getadminimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td>':'';?>
+<?=(!empty($row['logged_in']))?'					<td style="width: 57px; padding-right: 10px;">'.getadminimg($row['id_id']).'</td>':'';?>
 					<td style="width: 100%;"><div style="width: 450px; overflow: hidden;">
 <?=($row['gb_html'])?stripslashes($row['gb_msg']):secureOUT($row['gb_msg']);?><br>
 <?	if(!empty($row['answer_msg'])) { ?>

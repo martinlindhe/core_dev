@@ -19,7 +19,6 @@
 		echo '</table>';
 	}
 
-
 	$reasons = array(
 		'A' => '.',
 		'G' => ' på grund av: <b>Solglasögon.</b>',
@@ -32,7 +31,8 @@
 		'TSB' => ' på grund av: <b>För litet ansikte, beskär annorlunda.</b>',
 		'TD' => ' på grund av: <b>Bilden är för mörk.</b>',
 		'TL' => ' på grund av: <b>Bilden är för ljus.</b>',
-		'NF' => ' på grund av: <b>Ej rakt framifrån.</b>');
+		'NF' => ' på grund av: <b>Ej rakt framifrån.</b>'
+	);
 
 	$change = false;
 	$types = array('jpeg', 'swf', 'event');
@@ -40,70 +40,73 @@
 	if (isset($_GET['status']) && is_numeric($_GET['status'])) {
 		$status_id = $_GET['status'];
 	} elseif(!empty($_GET['status']) && $_GET['status'] == 'N') $status_id = 'N';
-	elseif($change) $status_id = $row['status_id'];
 
 
-	if(!empty($_POST['doupd'])) {
-		if(!empty($_POST['id']) && is_numeric($_POST['id'])) {
-			if($_POST['alias'] != $_POST['oldalias']) {
-				$res = $sql->queryLine("SELECT status_id, u_alias FROM s_user WHERE u_alias = '".secureINS($_POST['alias'])."' LIMIT 1");
-				if(!empty($res) && count($res)) if($res[0] == '1' || $res[0] == '3' || $res[0] == 'F') errorACT('Aliaset finns redan. ( '.$res[1].' )', 'user.php?id='.$_POST['id']);
+	//spara ändringar på användarprofil
+	if (!empty($_POST['doupd'])) {
+		if (!empty($_POST['id']) && is_numeric($_POST['id'])) {
+			if ($_POST['alias'] != $_POST['oldalias']) {
+				$res = $db->getOneRow("SELECT status_id, u_alias FROM s_user WHERE u_alias = '".$db->escape($_POST['alias'])."' LIMIT 1");
+				if (!empty($res)) {
+					if ($res['status_id'] == '1' || $res['status_id'] == '3' || $res['status_id'] == 'F') errorACT('Aliaset finns redan. ( '.$res['u_alias'].' )', 'user.php?id='.$_POST['id']);
+				}
 			}
-			if($_POST['email'] != $_POST['oldemail']) {
-				$res = $sql->queryResult("SELECT u_alias FROM s_user WHERE u_email = '".secureINS($_POST['email'])."' AND status_id = '1' LIMIT 1");
-				if($res) errorACT('E-postadressen finns redan. ( '.$res.' )', 'user.php?id='.$_POST['id']);
+			if ($_POST['email'] != $_POST['oldemail']) {
+				$res = $db->getOneItem("SELECT u_alias FROM s_user WHERE u_email = '".$db->escape($_POST['email'])."' AND status_id = '1' LIMIT 1");
+				if ($res) errorNEW('E-postadressen finns redan. (Används av '.$res.' )', 'user.php?id='.$_POST['id']);
 			}
-			$row = $sql->queryLine("SELECT u.id_id, u.level_enddate, u.level_pending, u.level_id, l.level_id AS search, status_id FROM s_user u LEFT JOIN s_userlevel l ON l.id_id = u.id_id WHERE u.id_id = '".$_POST['id']."'", 1);
+			$row = $db->getOneRow("SELECT u.id_id, u.level_enddate, u.level_pending, u.level_id, l.level_id AS search, status_id FROM s_user u LEFT JOIN s_userlevel l ON l.id_id = u.id_id WHERE u.id_id = '".$_POST['id']."'");
 
-			if(!empty($row['search'])) {
-				if(strpos($row['search'], 'LEVEL'.$row['level_id'])) {
+			if (!empty($row['search'])) {
+				if (strpos($row['search'], 'LEVEL'.$row['level_id'])) {
 					$row['search'] = str_replace('LEVEL'.$row['level_id'], 'LEVEL'.$_POST['level'], $row['search']);
 				}
-				if(strpos($row['search'], 'SEXM')) {
+				if (strpos($row['search'], 'SEXM')) {
 					$row['search'] = str_replace('SEXM', 'SEX'.($_POST['sex'] == 'M'?'M':'F'), $row['search']);
 				}
-				if(strpos($row['search'], 'SEXF')) {
+				if (strpos($row['search'], 'SEXF')) {
 					$row['search'] = str_replace('SEXF', 'SEX'.($_POST['sex'] == 'M'?'M':'F'), $row['search']);
 				}
 			}
-			$sql->queryUpdate("UPDATE s_userlevel SET level_id = '{$row['search']}' WHERE id_id = '".$row['id_id']."' LIMIT 1");
-			if(!empty($row['status_id']) && $row['status_id'] != $_POST['status']) {
-				if($row['status_id'] == '1' && ($_POST['status'] == '2' || $_POST['status'] == '3')) {
-					$res = $sql->queryResult("SELECT l.level_id FROM s_userlevel l WHERE l.id_id = '".$_POST['id']."' LIMIT 1");
-					if(!empty($res)) $sql->queryUpdate("REPLACE INTO s_userlevel_off SET id_id = '".$_POST['id']."', level_id = '".secureINS($res)."'");
-					$sql->queryUpdate("DELETE FROM s_userlevel WHERE id_id = '".$_POST['id']."' LIMIT 1");
-				} elseif(($row['status_id'] == '2' || $row['status_id'] == '3') && $_POST['status'] == '1') {
-					$res = $sql->queryResult("SELECT l.level_id FROM s_userlevel_off l WHERE l.id_id = '".$_POST['id']."' LIMIT 1");
-					if(!empty($res)) $sql->queryUpdate("REPLACE INTO s_userlevel SET id_id = '".$_POST['id']."', level_id = '".secureINS($res)."'");
-					$sql->queryUpdate("DELETE FROM s_userlevel_off WHERE id_id = '".$_POST['id']."' LIMIT 1");					
+			$db->update("UPDATE s_userlevel SET level_id = '{$row['search']}' WHERE id_id = '".$row['id_id']."' LIMIT 1");
+			if (!empty($row['status_id']) && $row['status_id'] != $_POST['status']) {
+				if ($row['status_id'] == '1' && ($_POST['status'] == '2' || $_POST['status'] == '3')) {
+					$res = $db->getOneItem("SELECT level_id FROM s_userlevel WHERE id_id = '".$_POST['id']."' LIMIT 1");
+					if ($res) $db->replace("REPLACE INTO s_userlevel_off SET id_id = '".$_POST['id']."', level_id = '".$res."'");
+					$db->delete("DELETE FROM s_userlevel WHERE id_id = '".$_POST['id']."' LIMIT 1");
+				} elseif (($row['status_id'] == '2' || $row['status_id'] == '3') && $_POST['status'] == '1') {
+					$res = $db->getOneItem("SELECT level_id FROM s_userlevel_off WHERE id_id = '".$_POST['id']."' LIMIT 1");
+					if ($res) $db->replace("REPLACE INTO s_userlevel SET id_id = '".$_POST['id']."', level_id = '".$res."'");
+					$db->delete("DELETE FROM s_userlevel_off WHERE id_id = '".$_POST['id']."' LIMIT 1");					
 				}
 			}
-			$sql->queryUpdate("UPDATE s_user SET
-				u_alias = '".secureINS($_POST['alias'])."',
-				u_email = '".secureINS($_POST['email'])."',
-				location_id = '".secureINS($_POST['city'])."',
-				level_id = '".secureINS($_POST['level'])."',
-				level_enddate = '".secureINS($_POST['enddate'])."',
-				level_pending = '".secureINS($_POST['pending'])."',
-				level_oldlevel = '".secureINS($_POST['oldlevel'])."',
-				status_id = '".secureINS($_POST['status'])."',
-				u_picdate = '".secureINS($_POST['picdate'])."',
-				u_pass = '".secureINS($_POST['pass'])."',
-				u_pstort = '".secureINS($_POST['pstort'])."',
-				u_sex = '".secureINS($_POST['sex'])."',
-				u_birth = '".secureINS($_POST['birth'])."'
-			WHERE id_id = '".secureINS($_POST['id'])."' LIMIT 1");
-			$sql->queryUpdate("UPDATE s_userinfo SET
-				u_fname = '".secureINS($_POST['fname'])."',
-				u_sname = '".secureINS($_POST['sname'])."',
-				u_street = '".secureINS($_POST['street'])."',
-				u_pstnr = '".secureINS($_POST['pstnr'])."',
-				beta = '".secureINS($_POST['beta'])."',
-				msg_count = '".secureINS($_POST['msg_count'])."',
-				money_count = '".secureINS($_POST['money_count'])."',
-				u_cell = '".secureINS($_POST['cell'])."'
-			WHERE id_id = '".secureINS($_POST['id'])."' LIMIT 1");
-			if(!empty($_POST['domail'])) {
+			$db->update("UPDATE s_user SET
+				u_alias = '".$db->escape($_POST['alias'])."',
+				u_email = '".$db->escape($_POST['email'])."',
+				location_id = '".$db->escape($_POST['city'])."',
+				level_id = '".$db->escape($_POST['level'])."',
+				level_enddate = '".$db->escape($_POST['enddate'])."',
+				level_pending = '".$db->escape($_POST['pending'])."',
+				level_oldlevel = '".$db->escape($_POST['oldlevel'])."',
+				status_id = '".$db->escape($_POST['status'])."',
+				u_picdate = '".$db->escape($_POST['picdate'])."',
+				u_pass = '".$db->escape($_POST['pass'])."',
+				u_pstort = '".$db->escape($_POST['pstort'])."',
+				u_sex = '".$db->escape($_POST['sex'])."',
+				u_birth = '".$db->escape($_POST['birth'])."'
+				WHERE id_id = '".$db->escape($_POST['id'])."' LIMIT 1");
+			$db->update("UPDATE s_userinfo SET
+				u_fname = '".$db->escape($_POST['fname'])."',
+				u_sname = '".$db->escape($_POST['sname'])."',
+				u_street = '".$db->escape($_POST['street'])."',
+				u_pstnr = '".$db->escape($_POST['pstnr'])."',
+				beta = '".$db->escape($_POST['beta'])."',
+				msg_count = '".$db->escape($_POST['msg_count'])."',
+				money_count = '".$db->escape($_POST['money_count'])."',
+				u_cell = '".$db->escape($_POST['cell'])."'
+				WHERE id_id = '".$db->escape($_POST['id'])."' LIMIT 1");
+
+			if (!empty($_POST['domail'])) {
 				require("../_set/set_mail.php");
 				if($_POST['domail'] == 'blocked') {
 					require("../_tpl/email_block.php");
@@ -122,94 +125,100 @@
 				doMail($_POST['email'], $titl.' (mottagare: '.$_POST['email'].')', $msg);
 				doMail($member_email, $type.': '.$_POST['email'], $msg);
 			}
-			header("Location: user.php?id={$_POST['id']}");
-			exit;
-		} elseif(!empty($_POST['a'])) {
-			$res = $sql->queryResult("SELECT id_id FROM s_user WHERE u_alias = '".secureINS($_POST['a'])."' LIMIT 1");
-			if($res) header("Location: user.php?id=".$res);
+			header('Location: user.php?id='.$_POST['id']);
+			die;
+		} else if (!empty($_POST['a'])) {
+			//visar info om en enskild användare
+			$res = $db->getOneItem("SELECT id_id FROM s_user WHERE u_alias = '".$db->escape($_POST['a'])."' LIMIT 1");
+			if ($res) header('Location: user.php?id='.$res);
 		} else {
-			foreach($_POST as $key => $val) {
-				if(strpos($key, 'status_id') !== false) {
-					$kid = explode(":", $key);
-					$kid = $kid[1];
-					if(isset($_POST['status_id:' . $kid])) {
-						$sql->queryUpdate("UPDATE s_user SET status_id = '".secureINS($_POST['status_id:' . $kid])."', level_id = '".secureINS($_POST['level_id:' . $kid])."', view_id = '1' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
+			//åter-skapa aktiveringskod-mail och skicka ut
+			foreach ($_POST as $key => $val) {
+				if (strpos($key, 'status_id') === false) continue;
+				$kid = explode(":", $key);
+				$kid = $kid[1];
+				if(isset($_POST['status_id:' . $kid])) {
+					$sql->queryUpdate("UPDATE s_user SET status_id = '".secureINS($_POST['status_id:' . $kid])."', level_id = '".secureINS($_POST['level_id:' . $kid])."', view_id = '1' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
+				}
+			}
+			foreach ($_POST as $key => $val) {
+				if (strpos($key, 'status:') === false) continue;
+				$kid = explode(":", $key);
+				$kid = $kid[1];
+				if (isset($_POST['code:' . $kid]) && !empty($_POST['code:' . $kid])) {
+					$db->update("UPDATE s_userinfo SET reg_code = '".$db->escape($_POST['code:' . $kid])."' WHERE id_id = '".$db->escape($kid)."' LIMIT 1");
+				}
+				if(isset($_POST['email:' . $kid]) && !empty($_POST['email:' . $kid])) {
+					$got = $db->getOneItem("SELECT COUNT(*) FROM s_user WHERE u_email = '".$db->escape($_POST['email:' . $kid])."' WHERE status_id = '1' LIMIT 1");
+					if (!$got) $db->update("UPDATE s_user SET u_email = '".$db->escape($_POST['email:' . $kid])."' WHERE id_id = '".$db->escape($kid)."' LIMIT 1");
+				}
+				if (isset($_POST['sendemail:' . $kid]) && !empty($_POST['sendemail:' . $kid])) {
+					$inf = $db->getOneRow("SELECT i.reg_code, u.u_email FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".$kid."' LIMIT 1");
+					if (!empty($inf) && count($inf)) {
+						$msg = sprintf(gettxt('email_activate'), $inf['reg_code'], substr(P2B, 0, -1).l('member', 'activate', secureOUT(str_replace('@', '__at__', $inf['u_email'])), $inf['reg_code']));
+						doMail(secureOUT($inf['u_email']), 'Din aktiveringskod: '.$inf['reg_code'], $msg);
+						doMail('member@'.URL, secureOUT($inf['u_email']), $msg);
 					}
 				}
 			}
-			foreach($_POST as $key => $val) {
-				if(strpos($key, 'status:') !== false) {
-					$kid = explode(":", $key);
-					$kid = $kid[1];
-					if(isset($_POST['code:' . $kid]) && !empty($_POST['code:' . $kid])) {
-						$sql->queryUpdate("UPDATE s_userinfo SET reg_code = '".secureINS($_POST['code:' . $kid])."' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
-					}
-					if(isset($_POST['email:' . $kid]) && !empty($_POST['email:' . $kid])) {
-						$got = $sql->queryResult("SELECT COUNT(*) as count FROM s_user WHERE u_email = '".secureINS($_POST['email:' . $kid])."' WHERE status_id = '1' LIMIT 1");
-						if(!$got) $sql->queryUpdate("UPDATE s_user SET u_email = '".secureINS($_POST['email:' . $kid])."' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
-					}
-					if(isset($_POST['sendemail:' . $kid]) && !empty($_POST['sendemail:' . $kid])) {
-						$inf = $sql->queryLine("SELECT i.reg_code, u.u_email FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".$kid."' LIMIT 1");
-						if(!empty($inf) && count($inf)) {
-							$msg = sprintf(gettxt('email_activate'), $inf[0], substr(P2B, 0, -1).l('member', 'activate', secureOUT(str_replace('@', '__at__', $inf[1])), $inf[0]));
-							doMail(secureOUT($inf[1]), 'Din aktiveringskod: '.$inf[0], $msg);
-							doMail('member@'.URL, secureOUT($inf[1]), $msg);
-						}
-					}
-				}
-			}
-			header("Location: user.php?status={$_POST['status']}&sort=".@$_GET['sort'].'&sorttype='.@$_GET['sorttype']);
-			exit;
+			header('Location: user.php?status='.$_POST['status'].'&sort='.@$_GET['sort'].'&sorttype='.@$_GET['sorttype']);
+			die;
 		}
 	}
 
-	$change = false;
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$row = $sql->queryResult("SELECT status_id FROM s_user WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$row = $db->getOneItem("SELECT status_id FROM s_user WHERE id_id = '".$_GET['del']."' LIMIT 1");
 		if($row == 'F' || $row == '2') {
-			$sql->queryUpdate("DELETE FROM s_user WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");	
-		} else $sql->query("UPDATE s_user SET status_id = '2' WHERE id_id = '".secureINS($_GET['del'])."' LIMIT 1");
-		header("Location: user.php?status=$status_id");
-		exit;
+			$db->delete("DELETE FROM s_user WHERE id_id = '".$_GET['del']."' LIMIT 1");	
+		} else {
+			$db->update("UPDATE s_user SET status_id = '2' WHERE id_id = '".$_GET['del']."' LIMIT 1");
+		}
+		header('Location: user.php?status='.$status_id);
+		die;
 	}
 
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		$row = $db->getOneRow("SELECT u.*, i.* FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE u.id_id = '".$db->escape($_GET['id'])."' LIMIT 1", 1);
 		if (!$row['id_id']) $row['id_id'] = $_GET['id']; //martin fulhack, id_id är inte alltid satt
-		if (!count($row)) {
+		if (empty($row)) {
 			$change = false;
 		} else {
 			$change = true;
 		}
 	}
 
-	if(!empty($_GET['del_pic'])) {
-		$res = $sql->queryLine("SELECT id_id, u_picd, u_picid FROM s_user WHERE id_id = '".secureINS($_GET['del_pic'])."' LIMIT 1");
-		if(!empty($res) && count($res)) {
-			@rename('../user_img/'.$res[1].'/'.$res[0].$res[2].'.jpg', '../user_img_off/'.$res[0].'_'.md5(microtime()).'.jpg');
-			@unlink('../user_img/'.$res[1].'/'.$res[0].$res[2].'_2.jpg');
+	//neka presentationsbild
+	if (!empty($_GET['del_pic']) && is_numeric($_GET['del_pic'])) {
+		$res = $db->getOneRow("SELECT id_id, u_picd, u_picid FROM s_user WHERE id_id = '".$_GET['del_pic']."' LIMIT 1");
+		if (!empty($res)) {
+			@rename('../user_img/'.$res['u_picd'].'/'.$res['id_id'].$res['u_picid'].'.jpg', '../user_img_off/'.$res['id_id'].'_'.md5(microtime()).'.jpg');
+			@unlink('../user_img/'.$res['u_picd'].'/'.$res['id_id'].$res['u_picid'].'_2.jpg');
 		}
-		$string = $sql->queryResult("SELECT level_id FROM s_userlevel WHERE id_id = '".$res[0]."' LIMIT 1");
+		$string = $db->getOneItem("SELECT level_id FROM s_userlevel WHERE id_id = '".$res['id_id']."' LIMIT 1");
 		$string = str_replace('VALID', '', $string);
-		$sql->queryUpdate("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$res[0]."' LIMIT 1");
-		if(!empty($_GET['reason'])) {
-			if(!empty($_GET['reasontext']) && $_GET['reason'] == 'X')
-				$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats på grund av: <b>'.$_GET['reasontext'].'</b> Prova med en ny.'));
-			else
-				$user->spy($res[0], 'ID', 'MSG', array('Din nya profilbild har nekats'.$reasons[$_GET['reason']].' Prova med en ny.'));
-		} else
-			$user->spy($res[0], 'ID', 'MSG', array('Din profilbild har nekats. Prova igen'));
-		$sql->queryUpdate("UPDATE s_user SET u_picvalid = '0', u_picdate = '' WHERE id_id = '".secureINS($res[0])."' LIMIT 1");
-		if($change)
-			header("Location: user.php?id=".$row['id_id']);
-		else
-			header("Location: user.php?status=2");
-		exit;
+		$db->update("UPDATE s_userlevel SET level_id = '$string' WHERE id_id = '".$res['id_id']."' LIMIT 1");
+		if (!empty($_GET['reason'])) {
+			if (!empty($_GET['reasontext']) && $_GET['reason'] == 'X') {
+				$user->spy($res['id_id'], 'ID', 'MSG', array('Din nya profilbild har nekats på grund av: <b>'.$_GET['reasontext'].'</b> Prova med en ny.'));
+			} else {
+				$user->spy($res['id_id'], 'ID', 'MSG', array('Din nya profilbild har nekats'.$reasons[$_GET['reason']].' Prova med en ny.'));
+			}
+		} else {
+			$user->spy($res['id_id'], 'ID', 'MSG', array('Din profilbild har nekats. Prova igen'));
+		}
+		$db->update("UPDATE s_user SET u_picvalid = '0', u_picdate = '' WHERE id_id = '".$res['id_id']."' LIMIT 1");
+		if ($change) {
+			header('Location: user.php?id='.$row['id_id']);
+		} else {
+			header('Location: user.php?status=2');
+		}
+		die;
 	}
 	$page = 'USER';
 	$menu = $menu_USER;
 	$pics = array();
 	$list = array();
+
 	if (!$change) {
 		if (!$status_id) {
 			//nya användare.
@@ -247,7 +256,9 @@
 			echo 'xx8';
 			$list = $db->getArray("SELECT u.id_id, status_id, level_id, u_alias, u_email, u_fname, u_sname FROM s_user u LEFT JOIN s_userinfo i ON i.id_id = u.id_id WHERE view_id = '1' AND status_id = '1' ORDER BY u_regdate DESC");
 		}
-	} else $list = '';
+	} else {
+		echo 'no chng';
+	}
 	require('admin_head.php');
 ?>
 <script type="text/javascript">
@@ -309,14 +320,15 @@ function CSV() {
 </select> Lösenord: <input type="password" name="csv_pass" id="csv_pass" value="" style="width: 90px;" class="inp_nrm"> <input type="radio" name="csv_type" value="skv" checked id="csv_type1"><label for="csv_type1">SKV</label><input type="radio" id="csv_type2" name="csv_type" value="txt"><label for="csv_type2">TXT</label>
 <input type="button" class="inp_orgbtn" style="width: 140px; margin-left: 10px;" value="HÄMTA LISTA" onclick="if(document.getElementById('csv_pass').value.length > 0) CSV();" style="width: 70px; margin: 11px 0 0 20px;">
 </nobr>
-			</form>
+</form>
+
 <form action="user.php?sort=<?=@$sort?>&sorttype=<?=@$type?>" method="post" name="u_f">
-			<input type="hidden" name="doupd" value="1">
-			<input type="hidden" name="status" value="<?=$status_id?>">
-<input type="submit" class="inp_orgbtn" value="UPPDATERA" style="width: 70px; margin: 11px 0 0 20px;">
-			<table cellspacing="2" style="margin: 5px 0 10px 0;">
+	<input type="hidden" name="doupd" value="1">
+	<input type="hidden" name="status" value="<?=$status_id?>">
+	<input type="submit" class="inp_orgbtn" value="UPPDATERA" style="width: 70px; margin: 11px 0 0 20px;">
+		<table cellspacing="2" style="margin: 5px 0 10px 0;">
 <?
-	if($status_id == '4') {
+	if ($status_id == '4') {
 
 		foreach ($cities as $key => $val) {
 			$total = $db->getOneItem("SELECT COUNT(*) FROM s_user WHERE status_id = '1' AND location_id = '".$key."'");
@@ -500,7 +512,8 @@ if ($status_id != '4') {
 			}
 		}
 	}
-	if (!$status_id) {
+	if (!$status_id && !$change) {
+
 		//visar Nya användare
 		$list = $db->getArray("SELECT a.id_id, i.reg_code, a.u_email, a.u_birth, a.u_regdate, i.u_cell FROM s_user a LEFT JOIN s_userinfo i ON i.id_id = a.id_id WHERE a.status_id = 'F' ORDER BY a.u_regdate DESC");
 		echo '<tr><th>E-post</th><th>Aktiveringskod</th><th>Mobilnummer</th><th>Födelsedatum</th><th>Datum</th></tr>';
@@ -515,8 +528,150 @@ if ($status_id != '4') {
 				<td class="pdg nobr" align="right"><a href="user.php?del='.$row['id_id'].'&status='.$status_id.'" onclick="return confirm(\'Proceed ?\');">DELETE</a></td>
 			</tr>';
 		}
-	}
+	} else if ($change) {
+		//redigera en användare
+
+		echo '<tr><td>';
+		echo '<table cellspacing="0"><tr><td style="padding-right: 20px;">';
+		echo '<input type="hidden" name="id" value="'.$row['id_id'].'">';
+		echo '<input type="hidden" name="oldalias" value="'.secureOUT($row['u_alias']).'">';
+		echo '<input type="hidden" name="oldemail" value="'.secureOUT($row['u_email']).'">';
+		echo '<input type="hidden" name="domail" value="">';
+		echo '<script type="text/javascript">
+					function denyAns(val, id, extra) {
+						if(!extra) extra = \'\';
+						if(confirm(\'Säker ?\'))
+						document.location.href = \'user.php?id=\' + id + \'&del_pic=\' + id + \'&reason=\' + val + \'&reasontext=\' + extra;
+					}
+					</script>';
+		echo '<table cellspacing="0"><tr>';
+		echo '<td>'.getadminimg($row['id_id'], 1).'</td>';
+
+		echo '<td style="padding-bottom: 5px;"><a href="../user_view.php?id='.$row['id_id'].'" target="_blank" onclick="if(parent.window.opener) parent.window.opener.focus();">Visa profil</a><br/><br/>';
+		echo '<b>Alternativ:</b><br><a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row['id_id'].'\').style.display = \'\';">NEKA</a><br/>';
+		echo '<div id="reason_reason:'.$row['id_id'].'" style="display: none;">';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="R" id="reason_id:'.$row['id_id'].':R"><label for="reason_id:'.$row['id_id'].':R">Reklam</label>';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="AB" id="reason_id:'.$row['id_id'].':AB"><label for="reason_id:'.$row['id_id'].':AB">Stötande</label><br />';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TSB" id="reason_id:'.$row['id_id'].':TSB"><label for="reason_id:'.$row['id_id'].':TSB">Litet ansikte, beskär</label><br />';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="NF" id="reason_id:'.$row['id_id'].':NF"><label for="reason_id:'.$row['id_id'].':NF">Ej rakt framifrån</label><br />';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="S" id="reason_id:'.$row['id_id'].':S"><label for="reason_id:'.$row['id_id'].':S">Oskärpa</label>';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="M" id="reason_id:'.$row['id_id'].':M"><label for="reason_id:'.$row['id_id'].':M">Flera i bild</label><br />';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TD" id="reason_id:'.$row['id_id'].':TD"><label for="reason_id:'.$row['id_id'].':TD">Mörk</label>';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TL" id="reason_id:'.$row['id_id'].':TL"><label for="reason_id:'.$row['id_id'].':TL">Ljus</label><br />';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="F" id="reason_id:'.$row['id_id'].':F"><label for="reason_id:'.$row['id_id'].':F">Fel</label>';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="G" id="reason_id:'.$row['id_id'].':G"><label for="reason_id:'.$row['id_id'].':G">Solglasögon</label><br />';
+		echo '<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="if(this.checked) { document.getElementById(\'reasontext_id:'.$row['id_id'].'\').style.display = \'\'; document.getElementById(\'retb_id:'.$row['id_id'].'\').style.display = \'\'; }" onchange="if(!this.checked) { document.getElementById(\'reasontext_id:'.$row['id_id'].'\').style.display = \'none\'; document.getElementById(\'retb_id:'.$row['id_id'].'\').style.display = \'none\'; }" value="X" id="reason_id:'.$row['id_id'].':X"><label for="reason_id:'.$row['id_id'].':X">Valfri</label><br />';
+		echo '<input type="text" name="reasontext_id:'.$row['id_id'].'" id="reasontext_id:'.$row['id_id'].'" style="width: 100px; display: none;" value="" class="inp_nrm"><br />';
+		echo '<input type="button" class="inp_orgbtn" id="retb_id:'.$row['id_id'].'" style="margin: 0;" style="display: none;" value="skicka valfri" onclick="denyAns(\'X\', \''.$row['id_id'].'\', document.getElementById(\'reasontext_id:'.$row['id_id'].'\').value);" />';
+		echo '</div>';
+		echo '<br>1: STANDARD<br>3: BRONS<br>5: SILVER<br>6: GULD<br>7: STAFF<br>10: ADMIN</td></tr>';
+
+		echo '<tr>';
+			echo '<td><b>Alias:</b><br><input type="text" class="inp_nrm" name="alias" value="'.secureOUT($row['u_alias']).'"></td>';
+			echo '<td><b>E-post:</b><br><input type="text" class="inp_nrm" name="email" value="'.secureOUT($row['u_email']).'"></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td><b>Förnamn:</b><br><input type="text" class="inp_nrm" name="fname" value="'.secureOUT($row['u_fname']).'"></td>';
+			echo '<td><b>Efternamn:</b><br><input type="text" class="inp_nrm" name="sname" value="'.secureOUT($row['u_sname']).'"></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td><b>Gatuadress:</b><br><input type="text" class="inp_nrm" name="street" value="'.secureOUT($row['u_street']).'"></td>';
+			echo '<td><b>Postnummer:</b><br><input type="text" class="inp_nrm" name="pstnr" value="'.secureOUT($row['u_pstnr']).'"></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td><b>Postort:</b><br><input type="text" class="inp_nrm" name="pstort" value="'.secureOUT($row['u_pstort']).'"></td>';
+			echo '<td><b>Mobil:</b><br><input type="text" class="inp_nrm" name="cell" value="'.secureOUT($row['u_cell']).'"></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td><b>Kön:</b><br><input type="text" class="inp_nrm" name="sex" value="'.secureOUT($row['u_sex']).'"></td>';
+			echo '<td><b>Ålder:</b><br><input type="text" class="inp_nrm" name="birth" value="'.secureOUT($row['u_birth']).'"></td>';
+		echo '</tr>';		echo '<tr>';
+			echo '<td><b>Nivå:</b><br><input type="text" class="inp_nrm" name="level" value="'.secureOUT($row['level_id']).'"></td>';
+			echo '<td><b>Nivå innan:</b><br><input type="text" class="inp_nrm" name="oldlevel" value="'.secureOUT($row['level_oldlevel']).'"></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td><b>Nivå pendlar:</b><br><input type="text" class="inp_nrm" name="pending" value="'.secureOUT($row['level_pending']).'"></td>';
+			echo '<td><b>Nivå slut:</b><br><input type="text" class="inp_nrm" name="enddate" value="'.secureOUT($row['level_enddate']).'"></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td colspan="2"><b>Betatestare:</b><br><input type="text" class="inp_nrm" name="beta" value="'.secureOUT($row['beta']).'"></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td><b>Profilbildsdatum:</b><br><input type="text" class="inp_nrm" name="picdate" value="'.secureOUT($row['u_picdate']).'"></td>';
+			echo '<td><b>Stadskod: <label title="'; foreach($cities as $key => $val) { echo $key.' = '.$val."\n"; } echo '">?</label></b><br><input type="text" class="inp_nrm" name="city" value="'.secureOUT($row['location_id']).'"></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td colspan="2"><b>Status:</b> (F = registrerad, 1 = aktiverad, 2 = raderad, 3 = blockerad)<br>';
+
+			echo '<script type="text/javascript">
+						var this_status = \''.$row['status_id'].'\';						function getInfo(type, toggle) {
+							if(!toggle) toggle = \'\';
+							if(toggle == \'\') document.u_f.domail.value = type + \'ed\'; else document.u_f.domail.value = \'\';
+							document.getElementById(type + \'_info\').style.display = toggle;
+							//document.u_f.submit();
+						}
+						var r1a = \''.str_replace("\r\n", '\n', gettxt('email-1a')).'\';
+						var r2a = \''.str_replace("\r\n", '\n', gettxt('email-2a')).'\';
+						var r2b = \''.str_replace("\r\n", '\n', gettxt('email-2b')).'\';
+						function insertInfo(id, type) {
+							document.getElementById(type).value = eval(\'r\' + id);
+						}						</script>';
+
+			echo '<input type="text" class="inp_nrm" name="status" maxlength="1" onchange="
+						if(this.value == \'3\' && this_status != \'3\') {
+							if(confirm(\'Vill du skicka ut ett e-postmeddelande till:\n'.$row['u_email'].'\nom blockeringen?\')) {
+									getInfo(\'block\');
+							}
+						} else if(this.value == \'1\' && this_status == \'3\') {
+							if(confirm(\'Vill du skicka ut ett e-postmeddelande till:\n'.$row['u_email'].'\nom öppningen?\')) {
+									getInfo(\'unblock\');
+							}
+						} else { getInfo(\'block\', \'none\'); getInfo(\'unblock\', \'none\'); }" value="'.secureOUT($row['status_id']).'">';
+				echo '</td></tr>';
+			echo '<tbody id="block_info" style="display: none;">';
+		echo '<tr>';
+			echo '<td colspan="2"><b>Anledning till blockering:</b><br>MALLAR: <a href="javascript:void(0);" onclick="insertInfo(\'1a\', \'block_reason\');">1A</a><br><textarea name="block_reason" id="block_reason" class="inp_nrm">'.gettxt('email-1a').'</textarea></td>';
+		echo '</tr>';
+		echo '<tr>';
+			echo '<td colspan="2"><b>Disclaimer:</b><br>MALLAR: <a href="javascript:void(0);" onclick="insertInfo(\'2a\', \'block_disc\');">2A</a> - <a href="javascript:void(0);" onclick="insertInfo(\'2b\', \'block_disc\');">2B</a><br><textarea name="block_disc" id="block_disc" class="inp_nrm">'.gettxt('email-2a').'</textarea></td>';
+		echo '</tr>';
+	echo '</tbody>';
+	echo '<tbody id="unblock_info" style="display: none;">';
+		echo '<tr>';
+			echo '<td colspan="2"><b>Anledning till öppnande:</b><br>MALLAR: Inga.<br><textarea name="unblock_reason" id="unblock_reason"  class="inp_nrm"></textarea></td>';
+		echo '</tr>';
+	echo '</tbody>';
+		echo '<tr>';
+			echo '<td><b>Banksaldo:</b><br><input type="text" class="inp_nrm" name="money_count" value="'.@secureOUT($row['money_count']).'"></td>';
+			echo '<td><b>SMS-saldo:</b><br><input type="text" class="inp_nrm" name="msg_count" value="'.@secureOUT($row['msg_count']).'"></td>';
+		echo '</tr>';
+
+		echo '<tr>';
+		if ($_SESSION['data']['u_alias'] != 'webmaster_mentori') echo '<td><b>Lösenord:</b><br><input type="text" class="inp_nrm" name="pass" value="'.secureOUT($row['u_pass']).'"></td>';
+		echo '<td align="right"><input type="submit" class="inp_orgbtn" value="Uppdatera"></td>';
+		echo '</tr>';
+		echo '</table>';
+			echo '</td>';
+			echo '<td>';
+		echo '<table cellspacing="2">';
+		echo '<tr class="bg_gray"><td colspan="4" class="pdg bld">40 senaste händelser</td></tr>';
+
+		$v_sql = $db->getArray("SELECT sess_id, sess_ip, sess_date, type_inf FROM s_usersess WHERE id_id = '".$db->escape($row['id_id'])."' ORDER BY main_id DESC LIMIT 40");
+		$names = array('i' => 'in', 'o' => 'ut', 'f' => '<b>felaktig</b>');
+		foreach ($v_sql as $val) {
+			echo '<tr class="bg_gray">';
+			echo '<td class="pdg nobr">'.niceDate($val['sess_date']).'</td>';
+			echo '<td class="pdg"><a href="search.php?t&view=s&s='.$val['sess_id'].'">'.substr($val['sess_id'], 0, 5).'</a></td>';
+			echo '<td class="pdg"><a href="search.php?t&view=s&s='.$val['sess_ip'].'">'.$val['sess_ip'].'</a></td>';
+			echo '<td class="pdg">'.$names[$val['type_inf']].'</td>';
+			echo '</tr>';
+		}
+		echo '</table></td></tr>';
+
+	} //end if "redigera profil"
+
 } else {
+
 	if (!empty($pics)) {
 ?>
 <script type="text/javascript">
@@ -554,158 +709,11 @@ function denyAns(val, id, extra) {
 <input type="text" name="reasontext_id:'.$row[0].'" id="reasontext_id:'.$row[0].'" style="width: 100px; display: none;" value="" class="inp_nrm"><br />
 <input type="button" class="inp_orgbtn" id="retb_id:'.$row[0].'" style="margin: 0;" style="display: none;" value="skicka valfri" onclick="denyAns(\'X\', \''.$row[0].'\', document.getElementById(\'reasontext_id:'.$row[0].'\').value);" />
 </div>
-'.getadminimg($row[0].$row[8].$row[9].$row[10], $row[7], 1).'<br><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>';
+'.getadminimg($row[0], 1).'<br><a href="user.php?id='.$row[0].'"><b>'.secureOUT($row[3]).'</b></a></td>';
 			}
 			echo '</tr>';
 		} else {
-			if(!$change) echo '<tr><td class="pdg"><em>LISTAR INGET.</em></td></tr>';
-			else {
-
-echo '	
-		<tr>
-			<td>
-		<table cellspacing="0">
-		<tr>
-			<td style="padding-right: 20px;">		
-<input type="hidden" name="id" value="'.$row['id_id'].'">
-<input type="hidden" name="oldalias" value="'.secureOUT($row['u_alias']).'">
-<input type="hidden" name="oldemail" value="'.secureOUT($row['u_email']).'">
-<input type="hidden" name="domail" value="">
-<script type="text/javascript">
-function denyAns(val, id, extra) {
-	if(!extra) extra = \'\';
-	if(confirm(\'Säker ?\'))
-		document.location.href = \'user.php?id=\' + id + \'&del_pic=\' + id + \'&reason=\' + val + \'&reasontext=\' + extra;
-}
-</script>
-		<table cellspacing="0">
-		<tr>
-			<td>'.getadminimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 1).'</td>
-			<td style="padding-bottom: 5px;"><a href="/user/view/'.$row['id_id'].'" target="_blank" onclick="if(parent.window.opener) parent.window.opener.focus();">Visa profil</a><br /><br /><b>Alternativ:</b><br><a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row['id_id'].'\').style.display = \'\';">NEKA</a><br>
-<div id="reason_reason:'.$row['id_id'].'" style="display: none;">
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="R" id="reason_id:'.$row['id_id'].':R"><label for="reason_id:'.$row['id_id'].':R">Reklam</label>
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="AB" id="reason_id:'.$row['id_id'].':AB"><label for="reason_id:'.$row['id_id'].':AB">Stötande</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TSB" id="reason_id:'.$row['id_id'].':TSB"><label for="reason_id:'.$row['id_id'].':TSB">Litet ansikte, beskär</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="NF" id="reason_id:'.$row['id_id'].':NF"><label for="reason_id:'.$row['id_id'].':NF">Ej rakt framifrån</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="S" id="reason_id:'.$row['id_id'].':S"><label for="reason_id:'.$row['id_id'].':S">Oskärpa</label>
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="M" id="reason_id:'.$row['id_id'].':M"><label for="reason_id:'.$row['id_id'].':M">Flera i bild</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TD" id="reason_id:'.$row['id_id'].':TD"><label for="reason_id:'.$row['id_id'].':TD">Mörk</label>
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="TL" id="reason_id:'.$row['id_id'].':TL"><label for="reason_id:'.$row['id_id'].':TL">Ljus</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="F" id="reason_id:'.$row['id_id'].':F"><label for="reason_id:'.$row['id_id'].':F">Fel</label>
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="denyAns(this.value, \''.$row['id_id'].'\');" value="G" id="reason_id:'.$row['id_id'].':G"><label for="reason_id:'.$row['id_id'].':G">Solglasögon</label><br />
-<input type="radio" name="reason_id:'.$row['id_id'].'" onclick="if(this.checked) { document.getElementById(\'reasontext_id:'.$row['id_id'].'\').style.display = \'\'; document.getElementById(\'retb_id:'.$row['id_id'].'\').style.display = \'\'; }" onchange="if(!this.checked) { document.getElementById(\'reasontext_id:'.$row['id_id'].'\').style.display = \'none\'; document.getElementById(\'retb_id:'.$row['id_id'].'\').style.display = \'none\'; }" value="X" id="reason_id:'.$row['id_id'].':X"><label for="reason_id:'.$row['id_id'].':X">Valfri</label><br />
-<input type="text" name="reasontext_id:'.$row['id_id'].'" id="reasontext_id:'.$row['id_id'].'" style="width: 100px; display: none;" value="" class="inp_nrm"><br />
-<input type="button" class="inp_orgbtn" id="retb_id:'.$row['id_id'].'" style="margin: 0;" style="display: none;" value="skicka valfri" onclick="denyAns(\'X\', \''.$row['id_id'].'\', document.getElementById(\'reasontext_id:'.$row['id_id'].'\').value);" />
-</div>
-<br>1: STANDARD<br>3: BRONS<br>5: SILVER<br>6: GULD<br>7: STAFF<br>10: ADMIN</td>
-		</tr>
-		<tr>
-			<td><b>Alias:</b><br><input type="text" class="inp_nrm" name="alias" value="'.secureOUT($row['u_alias']).'"></td>
-			<td><b>E-post:</b><br><input type="text" class="inp_nrm" name="email" value="'.secureOUT($row['u_email']).'"></td>
-		</tr>
-		<tr>
-			<td><b>Förnamn:</b><br><input type="text" class="inp_nrm" name="fname" value="'.secureOUT($row['u_fname']).'"></td>
-			<td><b>Efternamn:</b><br><input type="text" class="inp_nrm" name="sname" value="'.secureOUT($row['u_sname']).'"></td>
-		</tr>
-		<tr>
-			<td><b>Gatuadress:</b><br><input type="text" class="inp_nrm" name="street" value="'.secureOUT($row['u_street']).'"></td>
-			<td><b>Postnummer:</b><br><input type="text" class="inp_nrm" name="pstnr" value="'.secureOUT($row['u_pstnr']).'"></td>
-		</tr>
-		<tr>
-			<td><b>Postort:</b><br><input type="text" class="inp_nrm" name="pstort" value="'.secureOUT($row['u_pstort']).'"></td>
-			<td><b>Mobil:</b><br><input type="text" class="inp_nrm" name="cell" value="'.secureOUT($row['u_cell']).'"></td>
-		</tr>
-		<tr>
-			<td><b>Kön:</b><br><input type="text" class="inp_nrm" name="sex" value="'.secureOUT($row['u_sex']).'"></td>
-			<td><b>Ålder:</b><br><input type="text" class="inp_nrm" name="birth" value="'.secureOUT($row['u_birth']).'"></td>
-		</tr>
-		<tr>
-			<td><b>Nivå:</b><br><input type="text" class="inp_nrm" name="level" value="'.secureOUT($row['level_id']).'"></td>
-			<td><b>Nivå innan:</b><br><input type="text" class="inp_nrm" name="oldlevel" value="'.secureOUT($row['level_oldlevel']).'"></td>
-		</tr>
-		<tr>
-			<td><b>Nivå pendlar:</b><br><input type="text" class="inp_nrm" name="pending" value="'.secureOUT($row['level_pending']).'"></td>
-			<td><b>Nivå slut:</b><br><input type="text" class="inp_nrm" name="enddate" value="'.secureOUT($row['level_enddate']).'"></td>
-		</tr>
-		<tr>
-			<td colspan="2"><b>Betatestare:</b><br><input type="text" class="inp_nrm" name="beta" value="'.secureOUT($row['beta']).'"></td>
-		</tr>
-		<tr>
-			<td><b>Profilbildsdatum:</b><br><input type="text" class="inp_nrm" name="picdate" value="'.secureOUT($row['u_picdate']).'"></td>
-			<td><b>Stadskod: <label title="'; foreach($cities as $key => $val) { echo $key.' = '.$val."\n"; } echo '">?</label></b><br><input type="text" class="inp_nrm" name="city" value="'.secureOUT($row['location_id']).'"></td>
-		</tr>
-		<tr>
-			<td colspan="2"><b>Status:</b> (F = registrerad, 1 = aktiverad, 2 = raderad, 3 = blockerad)<br>
-<script type="text/javascript">var this_status = \''.$row['status_id'].'\';
-function getInfo(type, toggle) {
-	if(!toggle) toggle = \'\';
-	if(toggle == \'\') document.u_f.domail.value = type + \'ed\'; else document.u_f.domail.value = \'\';
-	document.getElementById(type + \'_info\').style.display = toggle;
-	//document.u_f.submit();
-}
-var r1a = \''.str_replace("\r\n", '\n', gettxt('email-1a')).'\';
-var r2a = \''.str_replace("\r\n", '\n', gettxt('email-2a')).'\';
-var r2b = \''.str_replace("\r\n", '\n', gettxt('email-2b')).'\';
-function insertInfo(id, type) {
-	document.getElementById(type).value = eval(\'r\' + id);
-}
-</script>
-<input type="text" class="inp_nrm" name="status" maxlength="1" onchange="
-if(this.value == \'3\' && this_status != \'3\') {
-	if(confirm(\'Vill du skicka ut ett e-postmeddelande till:\n'.$row['u_email'].'\nom blockeringen?\')) {
-			getInfo(\'block\');
-	}
-} else if(this.value == \'1\' && this_status == \'3\') {
-	if(confirm(\'Vill du skicka ut ett e-postmeddelande till:\n'.$row['u_email'].'\nom öppningen?\')) {
-			getInfo(\'unblock\');
-	}
-} else { getInfo(\'block\', \'none\'); getInfo(\'unblock\', \'none\'); }" value="'.secureOUT($row['status_id']).'"></td>
-		</tr>
-	<tbody id="block_info" style="display: none;">
-		<tr>
-			<td colspan="2"><b>Anledning till blockering:</b><br>MALLAR: <a href="javascript:void(0);" onclick="insertInfo(\'1a\', \'block_reason\');">1A</a><br><textarea name="block_reason" id="block_reason" class="inp_nrm">'.gettxt('email-1a').'</textarea></td>
-		</tr>
-		<tr>
-			<td colspan="2"><b>Disclaimer:</b><br>MALLAR: <a href="javascript:void(0);" onclick="insertInfo(\'2a\', \'block_disc\');">2A</a> - <a href="javascript:void(0);" onclick="insertInfo(\'2b\', \'block_disc\');">2B</a><br><textarea name="block_disc" id="block_disc" class="inp_nrm">'.gettxt('email-2a').'</textarea></td>
-		</tr>
-	</tbody>
-	<tbody id="unblock_info" style="display: none;">
-		<tr>
-			<td colspan="2"><b>Anledning till öppnande:</b><br>MALLAR: Inga.<br><textarea name="unblock_reason" id="unblock_reason"  class="inp_nrm"></textarea></td>
-		</tr>
-	</tbody>
-		<tr>
-			<td><b>Banksaldo:</b><br><input type="text" class="inp_nrm" name="money_count" value="'.@secureOUT($row['money_count']).'"></td>
-			<td><b>SMS-saldo:</b><br><input type="text" class="inp_nrm" name="msg_count" value="'.@secureOUT($row['msg_count']).'"></td>
-		</tr>';
-
-echo '<tr>';
-if ($_SESSION['u_u'] != 'webmaster_mentori') echo '<td><b>Lösenord:</b><br><input type="text" class="inp_nrm" name="pass" value="'.secureOUT($row['u_pass']).'"></td>';
-echo '
-			<td align="right"><input type="submit" class="inp_orgbtn" value="Uppdatera"></td>
-		</tr>
-		</table>
-			</td>
-			<td>
-		<table cellspacing="2">
-		<tr class="bg_gray"><td colspan="4" class="pdg bld">40 senaste händelser</td></tr>';
-
-	$v_sql = $sql->query("SELECT sess_id, sess_ip, sess_date, type_inf FROM s_usersess WHERE id_id = '".secureINS($row['id_id'])."' ORDER BY main_id DESC LIMIT 40");
-$names = array('i' => 'in', 'o' => 'ut', 'f' => '<b>felaktig</b>');
-	foreach($v_sql as $val) {
-echo '<tr class="bg_gray">
-		<td class="pdg nobr">'.niceDate($val[2]).'</td>
-		<td class="pdg"><a href="search.php?t&view=s&s='.$val[0].'">'.substr($val[0], 0, 5).'</a></td>
-		<td class="pdg"><a href="search.php?t&view=s&s='.$val[1].'">'.$val[1].'</a></td>
-		<td class="pdg">'.$names[$val[3]].'</td>
-</tr>';
-	}
-echo '
-		</table>
-		</td>
-	</tr>';
-
-			}
+			if (!$change) echo '<tr><td class="pdg"><em>LISTAR INGET.</em></td></tr>';
 		}
 	}
 ?>
@@ -714,5 +722,4 @@ echo '
 		</td>
 	</tr>
 	</table>
-</body>
-</html>
+<? require('admin_foot.php'); ?>

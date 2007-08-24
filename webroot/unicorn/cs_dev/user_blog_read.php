@@ -85,7 +85,7 @@
 			$odd = !$odd;
 			echo
 				'<table summary="" cellspacing="0" style="width: 100%;'.($odd?'':' background: #ecf1ea;').'">
-				<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id'].$val['u_picid'].$val['u_picd'].$val['u_sex'], $val['u_picvalid']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).($val['private_id']?' <b>[privat inlägg]</b>':'').'</h5><div class="r"></div><br class="clr" />
+				<tr><td class="pdg" style="width: 55px;" rowspan="2">'.$user->getimg($val['id_id']).'</td><td class="pdg"><h5 class="l">'.$user->getstring($val, '', array('noimg' => 1)).' - '.nicedate($val['c_date']).($val['private_id']?' <b>[privat inlägg]</b>':'').'</h5><div class="r"></div><br class="clr" />
 				'.secureOUT($val['c_msg']).'
 				</td>';
 				if ($msg_own) {

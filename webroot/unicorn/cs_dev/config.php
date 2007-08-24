@@ -38,7 +38,7 @@
 	//cs includes start
 	//##################
 define('UPLA', '_input/');
-define('UPLL', '.'.UPLA);
+//define('UPLL', '.'.UPLA);
 
 define('DESIGN', '_design/');
 

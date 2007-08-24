@@ -280,17 +280,24 @@ class user {
 		if($date > $this->timeout(UO)) return true; else return false;
 	}
 
-	function getimg($arr, $valid = 1, $big = 0, $extra = '') {
-		$id = substr($arr, 0, -5);
-		$pd = substr($arr, -3, -1);
-		$sex = substr($arr, -1);
-		$arr = substr($arr, -5, -3);//style="width: 225px; height: 300px;"
+	function getimg($user_id, $big = 0, $text = '', $parent = false)
+	{
+		global $db, $config;
 		
-		$x = '<a href="user.php?id='.$id.'"'.(!empty($extra['text'])?' title="'.$extra['text'].'"':'').(!empty($extra['toparent'])?' target="_blank" onclick="if(window.opener) { window.opener.location.href = this.href; window.opener.focus(); return false; }"':'').'>';
-					
-		$x .= '<img  alt="'.(!empty($extra['text'])?$extra['text']:'').'" src="'.($valid?UPLA.'images/'.$pd.'/'.$id.$arr.(!$big?'_2':'').'.jpg':'/_objects/u_noimg'.$sex.(!$big?'_2':'').'.gif').'" '.($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' /></a>';
+		$q = 'SELECT u_picid, u_picd, u_sex, u_picvalid FROM s_user WHERE id_id='.$user_id;
+		$data = $db->getOneRow($q);
 
-		return $x;
+		$t = '<a href="user_view.php?id='.$user_id.'">';
+
+		$target = '';
+		if ($parent) $target = ' target="_parent"';
+
+		if (!$data['u_picid'] || !$data['u_picvalid']) $t .= '<img src="'.$config['web_root'].'_gfx/u_noimg'.$data['u_sex'].(!$big?'_2':'').'.gif" ';
+		else $t .= '<img src="http://citysurf.tv/'.UPLA.'images/'.$data['u_picd'].'/'.$user_id.$data['u_picid'].'.jpg" alt="'.secureOUT($text).'" ';
+
+		$t .= ($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' '.$parent.'/></a>';
+
+		return $t;
 	}
 
 	function getministring($arr) {
@@ -388,14 +395,16 @@ class user {
 	}
 
 	function spy($user, $id, $type, $info = '') {
-		$this->sql->queryInsert("INSERT INTO s_usermail SET
-		user_id = '".$user."',
+		global $db;
+
+		$db->insert("INSERT INTO s_usermail SET
+		user_id = '".$db->escape($user)."',
 		sender_id = 'SYS',
 		status_id = '1',
 		sender_status = '2',
 		user_read = '0',
-		sent_cmt = '".secureINS($id)."',
-		sent_ttl = '".secureINS('test')."',
+		sent_cmt = '".$db->escape($id)."',
+		sent_ttl = '".$db->escape('test')."',
 		sent_date = NOW()");
 		$this->counterIncrease('mail', $user);
 		$this->notifyIncrease('mail', $user);

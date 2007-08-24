@@ -120,7 +120,7 @@
 		echo '
 			<table summary="" cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">
 			'.($i && $row['sent_ttl']?'<tr><td colspan="2" style="padding-bottom: 0;" class="em pdg">Svar på <b>'.secureOUT($row['sent_ttl']).'</b></td></tr>':(!$i?'<tr><td colspan="2" style="padding-bottom: 0;" class="pdg"><h3>'.secureOUT($row['sent_ttl']).'</h3></td></tr>':'')).'
-			<tr><td class="pdg" style="width: 55px;" rowspan="2"><a name="R'.$row['main_id'].'"></a>'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td>
+			<tr><td class="pdg" style="width: 55px;" rowspan="2"><a name="R'.$row['main_id'].'"></a>'.$user->getimg($row['id_id']).'</td>
 			<td class="pdg" style="width: 544px; padding-left: 0;"><h5 class="l">'.$user->getstring($row, '', array('noimg' => 1)).' - '.nicedate($row['sent_date']).'</h5><br class="clr" />
 			'.($row['status_id'] != '1'?'<em>Meddelande raderat</em>':secureOUT($row['sent_cmt'], 1)).'
 			</td></tr>

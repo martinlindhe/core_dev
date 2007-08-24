@@ -24,7 +24,7 @@
 			?>
 		</div>
 		<div id="userImage">
-			<?=$user->getimg($s['id_id'].$s['u_picid'].$s['u_picd'].$s['u_sex'], $s['u_picvalid'], 1)?>
+			<?=$user->getimg($s['id_id'], 1)?>
 			<br class="clr"/>
 		</div>
 

@@ -92,8 +92,8 @@
 			<div class="pdg'.($i%2?' msgListEven':'').'">
 				<div class="pdg">
 				<table cellspacing="0" summary="" class="cnti lft" style="margin-top: 5px; width: 450px;">
-				<tr><td style="width: 50px; padding: 0 5px 10px 0;">'.$user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid']).'</td><td style="padding-bottom: 10px;"><div style="width: 440px; overflow: hidden;"><h5>'.$user->getstring($row).' - '.nicedate($row['gb_date']).'</h5><span class="">'.secureOUT($row['gb_msg'], 1).'</span></div></td></tr>
-				'.(!empty($row['answer_msg'])?'<tr><td style="width: 50px; padding: 0 5px 10px 0;">'.$user->getimg($row['id_id2'].$row['u_picid2'].$row['u_picd2'].$row['u_sex2'], $row['u_picvalid2']).'</td><td style="padding-bottom: 10px;"><div style="width: 440px; overflow: hidden;"><h5>'.$user->getstring($row, '2').' - '.nicedate($row['answer_date']).'</h5><span class="">'.secureOUT($row['answer_msg'], 1).'</span></div></td></tr>':'').'
+				<tr><td style="width: 50px; padding: 0 5px 10px 0;">'.$user->getimg($row['id_id']).'</td><td style="padding-bottom: 10px;"><div style="width: 440px; overflow: hidden;"><h5>'.$user->getstring($row).' - '.nicedate($row['gb_date']).'</h5><span class="">'.secureOUT($row['gb_msg'], 1).'</span></div></td></tr>
+				'.(!empty($row['answer_msg'])?'<tr><td style="width: 50px; padding: 0 5px 10px 0;">'.$user->getimg($row['id_id2']).'</td><td style="padding-bottom: 10px;"><div style="width: 440px; overflow: hidden;"><h5>'.$user->getstring($row, '2').' - '.nicedate($row['answer_date']).'</h5><span class="">'.secureOUT($row['answer_msg'], 1).'</span></div></td></tr>':'').'
 				</table>
 				</div>
 			</div>';

@@ -50,7 +50,7 @@
 			echo '<div class="bigHeader">senast inloggade</div>';
 			echo '<div class="bigBody">';
 			foreach($res as $row) {
-				echo $user->getimg($row['id_id'].$row['u_picid'].$row['u_picd'].$row['u_sex'], $row['u_picvalid'], 0, array('text' => $user->getministring($row)));
+				echo $user->getimg($row['id_id'], 0, $user->getministring($row));
 			}
 			echo '</div>';
 			echo '</div><br/>';

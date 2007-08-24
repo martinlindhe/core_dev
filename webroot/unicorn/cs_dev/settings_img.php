@@ -232,7 +232,7 @@ function intern_get(obj) {
 ?>
 	<table summary="" cellspacing="0" width="100%">
 	<tr>
-		<td width="50%"><?=(intval($_SESSION['data']['u_picid']) > 0)?'<b>Aktuell profilbild</b><br/>'.$user->getimg($user->id.$_SESSION['data']['u_picid'].$_SESSION['data']['u_picd'].$_SESSION['data']['u_sex'], $_SESSION['data']['u_picvalid'], 1).'<br /><input type="button" style="margin-bottom: 3px;" onclick="if(confirm(\''.((@$length[$l['level_id']])?'Du kommer inte att kunna ladda upp en ny bild på '.$length[$l['level_id']].' dagar.\n\n':'').'Säker ?\')) reForm(\'d\');" class="btn2_min" value="radera bild"/><br/><br/>':'&nbsp;';?></td>
+		<td width="50%"><?=(intval($_SESSION['data']['u_picid']) > 0)?'<b>Aktuell profilbild</b><br/>'.$user->getimg($user->id, 1).'<br /><input type="button" style="margin-bottom: 3px;" onclick="if(confirm(\''.((@$length[$l['level_id']])?'Du kommer inte att kunna ladda upp en ny bild på '.$length[$l['level_id']].' dagar.\n\n':'').'Säker ?\')) reForm(\'d\');" class="btn2_min" value="radera bild"/><br/><br/>':'&nbsp;';?></td>
 		<?
 			if ($gotnew) {
 				echo '<td style="background: url(\'./_img/topic_loading1.gif\'); background-repeat: no-repeat; background-position: 0 14px;"><b>Väntar på att granskas</b><script type="text/javascript">alreadyupl = 2;</script><br/><img width="150" height="150" alt="" src="'.l('member', 'preimage').'?'.mt_rand(1000, 9999).'" /><!-- <input type="button" class="b" style="margin-bottom: 3px;" onclick="if(confirm(\'Säker ?\')) reForm(\'w\');" value="missnöjd?">--></td>';
