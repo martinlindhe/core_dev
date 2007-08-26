@@ -315,7 +315,7 @@ Sub HandleGroupHeal(int PctHPs)
 		/next i
 
 		/declare grphealpct int local 85
-		/if (${Me.PctMana} >= 90) /varset grphealpct 92
+		/if (${Me.PctMana} >= 90) /varset grphealpct 90
 
 		/varcalc x ${x} / ${n}
 		/if (${n} >=3 && ${x} <= ${grphealpct}) {

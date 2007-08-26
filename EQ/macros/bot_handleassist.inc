@@ -203,7 +203,7 @@ Sub HandleAssistCall(int SpawnId)
 	}
 	
 	| wait until i am done casting before killing next target
-	/delay 4s ${Me.Casting.ID}
+	/delay 4s !${Me.Casting.ID}
 
 	/echo Killing >> ${Spawn[id ${SpawnId}].CleanName} <<
 
