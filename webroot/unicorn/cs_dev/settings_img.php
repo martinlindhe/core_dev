@@ -109,7 +109,7 @@
 	}
 	if (!empty($_GET['key']) && $gotkey) {
 		if(file_exists($file)) {
-			$img = $config['web_root'].'_input/preimage/?'.mt_rand();
+			$img = $config['web_root'].'preimage.php?'.mt_rand();
 			$second = true;
 			$key = $_GET['key'];
 		} else {
@@ -161,17 +161,17 @@
 		$flow = md5(microtime());
 		if(@$p_info['mime'] && $p_info['mime'] == 'image/bmp') {
 			if(!$intern) @unlink($file);
-			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
+			$db->delete("DELETE FROM s_userpicvalid WHERE id_id = '".$user->id."' LIMIT 1");
 			errorACT('Bilden du laddat upp är egentligen en .BMP-fil, inte en JPG. Välj en annan eller spara om din bild till .JPG', $_SERVER['PHP_SELF']);
 		}
-		if(!copyRe($file, './_input/preimages/'.$l['id_id'].'_'.$flow.'.jpg', './_input/preimages/'.$l['id_id'].'_'.$flow.'_2.jpg', $p['x'], $p['y'], $p['w'], $p['h'], 'jpg', $p_info['mime'])) $error++;
-		if(file_exists('./_input/preimages/'.$l['id_id'].'_'.$flow.'.jpg') && file_exists('./_input/preimages/'.$l['id_id'].'_'.$flow.'_2.jpg')) {
+		if(!copyRe($file, './_input/preimages/'.$user->id.'_'.$flow.'.jpg', './_input/preimages/'.$user->id.'_'.$flow.'_2.jpg', $p['x'], $p['y'], $p['w'], $p['h'], 'jpg', $p_info['mime'])) $error++;
+		if (file_exists('./_input/preimages/'.$user->id.'_'.$flow.'.jpg') && file_exists('./_input/preimages/'.$user->id.'_'.$flow.'_2.jpg')) {
 			if(!$intern) @unlink($file);
-			$sql->queryUpdate("REPLACE INTO s_userpicvalid SET img_id = 'jpg', id_id = '".$l['id_id']."', flow_id = '$flow'");
+			$db->replace("REPLACE INTO s_userpicvalid SET img_id = 'jpg', id_id = '".$user->id."', flow_id = '$flow'");
 			errorACT('Nu har du beskurit din profilbild. Du får ett meddelande när den har granskats.', l('member', 'settings', 'img'));
 		} else {
 			if(!$intern) @unlink($file);
-			$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
+			$db->delete("DELETE FROM s_userpicvalid WHERE id_id = '".$user->id."' LIMIT 1");
 			errorACT('Bilden var komprimerad och blev för stor när den skulle behandlas. Försök att minska bildens höjd och bredd eller storlek.', $_SERVER['PHP_SELF']);
 		}
 	}
@@ -235,7 +235,7 @@ function intern_get(obj) {
 		<td width="50%"><?=(intval($_SESSION['data']['u_picid']) > 0)?'<b>Aktuell profilbild</b><br/>'.$user->getimg($user->id, 1).'<br /><input type="button" style="margin-bottom: 3px;" onclick="if(confirm(\''.((@$length[$l['level_id']])?'Du kommer inte att kunna ladda upp en ny bild på '.$length[$l['level_id']].' dagar.\n\n':'').'Säker ?\')) reForm(\'d\');" class="btn2_min" value="radera bild"/><br/><br/>':'&nbsp;';?></td>
 		<?
 			if ($gotnew) {
-				echo '<td style="background: url(\'./_img/topic_loading1.gif\'); background-repeat: no-repeat; background-position: 0 14px;"><b>Väntar på att granskas</b><script type="text/javascript">alreadyupl = 2;</script><br/><img width="150" height="150" alt="" src="'.l('member', 'preimage').'?'.mt_rand(1000, 9999).'" /><!-- <input type="button" class="b" style="margin-bottom: 3px;" onclick="if(confirm(\'Säker ?\')) reForm(\'w\');" value="missnöjd?">--></td>';
+				echo '<td style="background: url(\'./_img/topic_loading1.gif\'); background-repeat: no-repeat; background-position: 0 14px;"><b>Väntar på att granskas</b><script type="text/javascript">alreadyupl = 2;</script><br/><img width="150" height="150" alt="" src="preimage.php?'.mt_rand(1000, 9999).'" /><!-- <input type="button" class="b" style="margin-bottom: 3px;" onclick="if(confirm(\'Säker ?\')) reForm(\'w\');" value="missnöjd?">--></td>';
 			} else {
 				echo '<td>&nbsp;</td>';
 			}
