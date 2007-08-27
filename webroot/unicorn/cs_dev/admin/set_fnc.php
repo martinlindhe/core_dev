@@ -13,7 +13,7 @@
 		if ($parent) $target = ' target="_parent"';
 
 		if (!$data['u_picid'] || !$data['u_picvalid']) $t .= '<img src="'.$config['web_root'].'_gfx/u_noimg'.$data['u_sex'].(!$big?'_2':'').'.gif" ';
-		else $t .= '<img src="http://citysurf.tv/'.UPLA.'images/'.$data['u_picd'].'/'.$user_id.$data['u_picid'].'.jpg" alt="'.secureOUT($text).'" ';
+		else $t .= '<img src="'.$config['web_root'].UPLA.'images/'.$data['u_picd'].'/'.$user_id.$data['u_picid'].'.jpg" alt="'.secureOUT($text).'" ';
 
 		$t .= ($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' '.$parent.'/></a>';
 	

@@ -52,14 +52,11 @@ function replaceALIAS(id) {
 	alias = alias[0];
 	n_id = id.split('/');
 	n_id = n_id[n_id.length-1];
-	//n_id = n_id.substr(0, 32);
 	n_id = n_id.split('.');
 	n_id = n_id[0];
 	TC_VarToHidden();
-  _d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace('<img src="' + id + '">', '<a href="<?=P2B?>user/view/' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
-  _d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace('<IMG src="' + id + '">', '<a href="<?=P2B?>user/view/' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
-	//_d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace(str2, '<a href="./user.php?id=' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
-	//_d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace(/_blank/gi, 'commain');
+  _d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace('<img src="' + id + '">', '<a href="<?=$config['web_root']?>user_view.php?id=' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
+  _d.getElementById(TC_name + '_html').value = _d.getElementById(TC_name + '_html').value.replace('<IMG src="' + id + '">', '<a href="<?=$config['web_root']?>user_view.php?id=' + n_id + '" title="' + alias + '"><img alt="' + alias + '" src="' + id + '" alt="" /></a>');
 	TC_HiddenToVar();
 }
 
@@ -184,7 +181,7 @@ var actID = '';
 								<?
 								foreach($friends as $friend) {
 									if($friend['u_picvalid'] == '1') {
-										$pic = P2B.USER_FIMG.$friend['id_id'].'.jpg';
+										$pic = $config['web_root'].USER_FIMG.$friend['id_id'].'.jpg';
 										echo '<option value="'.$pic.'">'.secureOUT($friend['u_alias'].' '.$sex[$friend['u_sex']].$user->doage($friend['u_birth'], 0)).'</option>';
 									}
 								}

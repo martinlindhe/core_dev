@@ -63,8 +63,8 @@
 			echo '<div class="bigHeader">senaste galleribilder</div>';
 			echo '<div class="bigBody">';
 			foreach($res as $row) {
-				echo '<a href="'.l('user','gallery',$row['user_id'],$row['main_id']).'">';
-				echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'].'" style="margin-right: 10px;" />';
+				echo '<a href="gallery_view.php?id='.$row['user_id'].'&n='.$row['main_id'].'">';
+				echo '<img alt="'.secureOUT($row['pht_cmt']).'" src="'.$config['web_root'].USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'].'" style="margin-right: 10px;" />';
 				echo '</a>';
 			}
 			echo '</div><br/>';

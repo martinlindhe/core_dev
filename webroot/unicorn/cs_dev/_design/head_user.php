@@ -10,7 +10,7 @@
 			<?
 				echo $user->getstring($id, '');
 
-				//todo: visa ej ge vip länken för vip-användare?
+				//todo: visa ej ge vip länken fö0r vip-användare?
 				$curr_vip = get_vip($id);
 				//echo $curr_vip;
 					

@@ -1,5 +1,7 @@
 <?
 	require_once('config.php');
+	
+	$user->requireLoggedIn();
 
 	$id = $user->id;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $id = $_GET['id'];
@@ -76,7 +78,7 @@
 <?
 	switch ($file_ext) {
 		case '3gp':
-			$vid_filename = '/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext;
+			$vid_filename = $config['web_root'].'_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext;
 			$vid_width = 176;
 			$vid_height = 144;
 			$vid_bg_color = '#000000';
@@ -98,7 +100,7 @@
 		case 'gif':
 		case 'png':
 			//echo '<img onmousedown="blockRightClick(event)" src="/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext.'" class="cnti mrg" alt="" border="0"/>';
-			echo '<img src="/_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext.'" class="cnti mrg" alt="" border="0"/>';
+			echo '<img src="'.$config['web_root'].'_input/usergallery/'.$res['picd'].'/'.$res['main_id'].($res['hidden_id']?'_'.$res['hidden_value']:'').'.'.$file_ext.'" class="cnti mrg" alt="" border="0"/>';
 			break;
 			
 		default: die('ext '.$file_ext);
@@ -136,7 +138,7 @@
 	if (count($cmt) && !empty($cmt)) {
 		foreach($cmt as $val) {
 			if ($val['private_id'] && ($user->id != $id && !$user->isAdmin)) continue;
-			$msg_own = ($val['id_id'] == $user->id || $own || $user->isAdmin) ? true : false;
+			$msg_own = ($val['id_id'] == $user->id || $user->isAdmin) ? true : false;
 			$odd = !$odd;
 			echo '
 				<table summary="" cellspacing="0" style="width: 594px;'.($odd?'':' background: #ecf1ea;').'">

@@ -29,8 +29,8 @@
 			<?
 				if(count($faq) && !empty($faq)) {
 					foreach($faq as $row) {
-					echo '<tr><td class="pdg_nt bld up" style="padding-top: 10px; width: 20px;"><a name="F'.$row['main_id'].'"></a>Q</td><td class="pdg_nt bld up" style="padding-top: 10px;">'.extOUT($row['item_q']).'</td></tr>';
-					echo '<tr><td class="pdg spac_b" style="width: 20px;">A</td><td class="pdg spac_b" style="padding-bottom: 12px;">'.extOUT($row['item_a']).'</td></tr>';
+					echo '<tr><td class="pdg_nt bld up" style="padding-top: 10px; width: 20px;"><a name="F'.$row['main_id'].'"></a>Q</td><td class="pdg_nt bld up" style="padding-top: 10px;">'.($row['item_q']).'</td></tr>';
+					echo '<tr><td class="pdg spac_b" style="width: 20px;">A</td><td class="pdg spac_b" style="padding-bottom: 12px;">'.($row['item_a']).'</td></tr>';
 					}
 				}
 			?>

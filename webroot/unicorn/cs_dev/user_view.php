@@ -1,6 +1,8 @@
 <?
 	require_once('config.php');
 
+	$user->requireLoggedIn();
+
 	$id = $user->id;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $id = $_GET['id'];
 

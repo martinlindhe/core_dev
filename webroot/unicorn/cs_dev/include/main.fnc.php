@@ -33,7 +33,7 @@
 
 	function secureOUT($str, $nl = false)
 	{
-		return ($nl?nl2br(stripslashes(htmlentities($str))):stripslashes(htmlentities($str)));
+		return ($nl ? nl2br(stripslashes(htmlentities($str, ENT_QUOTES, 'UTF-8'))) : stripslashes(htmlentities($str, ENT_QUOTES, 'UTF-8')));
 	}
 
 	function extOUT($str, $class = '')
@@ -265,6 +265,7 @@
 
 	function popupACT($msg, $url = '', $parent = '', $time = 5000)
 	{
+		die('popupACT debug lalala');
 		errorACT($msg, $url, 'popup', $parent, $time);
 	}
 

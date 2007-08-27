@@ -2,12 +2,11 @@
 define("NRMSTR", '<strong><b><blockquote><font><p><br><hr><a><img><span><li><ol><ul><u><em><strike><b>');
 define("ADMNRMSTR", '<strong><b><blockquote><font><p><br><hr><a><img><li><ol><ul><u><em><strike><b>');
 function makeNR($str, $alias, $date, $to) {
-	return "<br><br>>Från: ".$alias."<br>>Till: ".$to."<br>>Skickat: ".$date."<br>>".str_replace("<BR>", "<BR>>", trim($str));
+	return "<br><br>>FrÃ¥n: ".$alias."<br>>Till: ".$to."<br>>Skickat: ".$date."<br>>".str_replace("<BR>", "<BR>>", trim($str));
 }
 function formatText($str, $isVip = true) {
 	if($isVip) {
 		
-		//martin kommenterade ut detta 2007-04-26 för den strippade bort all html från presentationera & ja begriper inte alla regexp för å kunna fixa det...
 		$arr = array('&lt;', '&gt;');
 		$rep = array('&amp;#60;', '&amp;#62;');
 		$str = str_replace($arr, $rep, $str);
@@ -36,6 +35,34 @@ function formatText($str, $isVip = true) {
 	} else {
 		$str = nl2br(secureOUT($str));
 	}
+
+	//fulhack av martin fÃ¶r att ordna till hÃ¥rdkodade kompislÃ¤nkar, suck
+	//Ã¤ndrar frÃ¥n href="http://www.citysurf.tv/user/view/9028">
+	//till href="user_view.php?id=9028">
+
+	do {
+		$oldstr = $str;
+
+		$pos1 = strpos($str, 'href="http://www.citysurf.tv/user/view/');
+		if ($pos1 !== false) {
+			$pos2 = strpos($str, '">', $pos1);
+			if ($pos2 !== false) {
+			
+				$x1 = substr($str, 0, $pos1);
+				$mid = substr($str, $pos1, $pos2-$pos1);
+				
+				//echo $mid;
+				$pos3 = strrpos($mid, '/');
+				$id = substr($mid, $pos3+1);
+				//echo ' id = '.$id;
+				
+				$x2 = substr($str, $pos2);
+
+				$str = $x1.'href="user_view.php?id='.$id.$x2;
+			}
+		}
+
+	} while ($oldstr != $str);	
 
 	return $str;
 }

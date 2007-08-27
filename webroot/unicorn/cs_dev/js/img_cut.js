@@ -6,7 +6,7 @@ var init_h = 150;
 var prevent = false;
 
 function checkSize(obj) {
-	if(obj.src.indexOf('/_objects/1x1.gif') == -1) {
+	if(obj.src.indexOf('1x1.gif') == -1) {
 		if(obj.width > 900) {
 			document.getElementById('theImage').style.width = '900px';
 			document.getElementById('theImage').width = '900';
@@ -37,7 +37,7 @@ function checkSize(obj) {
 }
 
 function checkSrc(obj) {
-	if(obj.src.indexOf('/_objects/1x1.gif') == -1) initiate(); else shutdown();
+	if(obj.src.indexOf('1x1.gif') == -1) initiate(); else shutdown();
 }
 
 function validateUpl(tForm) {
@@ -77,7 +77,7 @@ function scriptError(obj) {
 	return;
 }
 function hideAll(obj) {
-	obj.src = '/_objects/1x1.gif';
+	obj.src = '1x1.gif';
 	obj.style.display = 'none';
 }
 function showPre(val) {

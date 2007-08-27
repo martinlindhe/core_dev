@@ -10,10 +10,20 @@ class user {
 	function __construct() {
 		session_start();
 
-		if (!empty($_SESSION['data'])) {
+		if (!empty($_SESSION['data']) && !empty($_SESSION['data']['id_id'])) {
 			$this->id = $_SESSION['data']['id_id'];
 			if ($_SESSION['data']['level_id'] == 10) $this->isAdmin = true;
 		}
+	}
+
+	/* Locks unregistered users out from certain pages */
+	function requireLoggedIn()
+	{
+		global $config;
+		if ($this->id) return;
+
+		header('Location: '.$config['web_root'].'index.php');
+		die;
 	}
 
 	//returns true if the user is logged in
@@ -39,7 +49,7 @@ class user {
 		return $this->getsessionuser($id);
 	}
 	
-	//kollar ifall aktuell user har tillr‰ckligt med vip
+	//kollar ifall aktuell user har tillr√§ckligt med vip
 	function vip_check($_level)
 	{
 		global $db;
@@ -146,13 +156,14 @@ class user {
 
 		if (!$id) $id = $this->id;
 		$info = $this->getcontent($id, 'user_retrieve');
-
+		
 		$str = '';
 		foreach ($info as $item) {
-			$str .= ($item[0] ? $translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
+			//fixme: detta funkar nog inte som det ska
+			$str .= @($item[0] ? $translater[substr($item[0], 0, 1)].':'.$item[1].'#':'');
 		}
 
-		//finns det ol‰sta chattmeddelanden?
+		//finns det ol√§sta chattmeddelanden?
 		$cha_c = $db->getOneItem('SELECT COUNT(DISTINCT(sender_id)) FROM s_userchat WHERE user_id = '.$id.' AND user_read = "0"');
 		if ($cha_c) {
 			$cha_id = $db->getOneItem('SELECT c.sender_id FROM s_userchat AS c INNER JOIN s_user u ON u.id_id = c.sender_id AND u.status_id = "1" WHERE c.user_id = '.$id.' AND c.user_read = "0" ORDER BY c.sent_date ASC LIMIT 1');
@@ -161,7 +172,7 @@ class user {
 			$str .= 'c:0:0';
 		}
 
-		//‰r nÂra polare online?
+		//√§r n√•ra polare online?
 		$rel_onl = $db->getArray('SELECT rel.friend_id, u.u_alias, u.u_sex, u.u_birth, u.level_id  FROM s_userrelation rel INNER JOIN s_user u ON u.id_id = rel.friend_id AND u.status_id = "1" WHERE rel.user_id = '.$id.' AND u.lastonl_date > "'.$this->timeout(UO).'" ORDER BY u.u_alias');
 		$rel_s = '';
 		foreach($rel_onl as $row) {
@@ -239,9 +250,9 @@ class user {
 					return true;
 			} else {
 				if($type == 1)
-					errorACT('Du ‰r blockerad.', 'user_view.php?id='.$this->id);
+					errorACT('Du √§r blockerad.', 'user_view.php?id='.$this->id);
 				elseif($type == 2)
-					popupACT('Du ‰r blockerad.');
+					popupACT('Du √§r blockerad.');
 				elseif($type == 3)
 					return true;
 			}
@@ -291,9 +302,10 @@ class user {
 
 		$target = '';
 		if ($parent) $target = ' target="_parent"';
-
-		if (!$data['u_picid'] || !$data['u_picvalid']) $t .= '<img src="'.$config['web_root'].'_gfx/u_noimg'.$data['u_sex'].(!$big?'_2':'').'.gif" ';
-		else $t .= '<img src="http://citysurf.tv/'.UPLA.'images/'.$data['u_picd'].'/'.$user_id.$data['u_picid'].'.jpg" alt="'.secureOUT($text).'" ';
+		
+		if (!$data) $t .= '<img src="'.$config['web_root'].'_gfx/u_noimgM'.(!$big?'_2':'').'.gif" ';
+		else if (!$data['u_picid'] || !$data['u_picvalid']) $t .= '<img src="'.$config['web_root'].'_gfx/u_noimg'.$data['u_sex'].(!$big?'_2':'').'.gif" ';
+		else $t .= '<img src="'.$config['web_root'].UPLA.'images/'.$data['u_picd'].'/'.$user_id.$data['u_picid'].'.jpg" alt="'.secureOUT($text).'" ';
 
 		$t .= ($big?'class="bbrd" style="width: 150px; height: 150px;"':'class="brd" style="width: 50px; height: 50px;"').' '.$parent.'/></a>';
 
@@ -302,7 +314,7 @@ class user {
 
 	function getministring($arr) {
 		global $sex_name;
-		return $arr['u_alias'].', '.$sex_name[$arr['u_sex']].' '.$this->doage($arr['u_birth']).'Âr';
+		return $arr['u_alias'].', '.$sex_name[$arr['u_sex']].' '.$this->doage($arr['u_birth']).'√•r';
 	}
 
 	function getstring($arr, $suffix = '', $extra = '')
@@ -352,7 +364,7 @@ class user {
 		$own = ($user_id == $this->id?true:false);
 		
 		$user = $this->getuser($user_id);
-		if (!$user) return 'ANVƒNDAREN BORTTAGEN';
+		if (!$user) return 'ANV√ÑNDAREN BORTTAGEN';
 
 		$online = $this->isOnline($user['lastonl_date']);
 		
@@ -454,7 +466,7 @@ class user {
 
 
 
-//av martin, fˆr Â kolla nÂgons vip-level
+//av martin, f√∂r √• kolla n√•gons vip-level
 function get_vip($_userid)
 {
 	global $db;
@@ -465,7 +477,7 @@ function get_vip($_userid)
 	return false;
 }
 
-//av martin. anv‰nds h‰rÂvar
+//av martin. anv√§nds h√§r√•var
 function addVIP($user_id, $vip_level, $days)
 {
 	global $sql;

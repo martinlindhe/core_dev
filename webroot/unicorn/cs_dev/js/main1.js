@@ -115,7 +115,7 @@ function makeBlock(id) {
 <!-- function makeMail() { alert('Kommer alldeles snart!'); } //-->
 function makeSms() { alert('Kommer alldeles snart!'); }
 function goLoc(url) { document.location.href = url; return true; }
-function goUser(id) { document.location.href = '/user/view/' + id; return true; }
+function goUser(id) { document.location.href = 'user_view.php?id=' + id; return true; }
 function postData(action, arr) {
 	dcm = document.getElementById('pd');
 	dcm.innerHTML = '<form name="pdForm" action="' + action + '" method="post">';
@@ -132,7 +132,7 @@ function setTitle(str) {
 <!-- Forum functions //-->
 function printtoggle(){
 	if(document.getElementById) {
-		document.write('&nbsp;<a href="javascript:toggleAll();" class="wht">visa/göm alla</a> - ');
+		document.write('&nbsp;<a href="javascript:toggleAll();" class="wht">visa/gÃ¶m alla</a> - ');
 	}
 }
 

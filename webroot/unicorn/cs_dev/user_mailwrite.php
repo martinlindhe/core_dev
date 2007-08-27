@@ -90,7 +90,7 @@ if ($js_editor) { ?>
 <tr>
 	<td class="pdg bld">Från:</td>
 	<td class="pdg" style="padding-left: 0; width: 100%;"><span class="nrm"><?=secureOUT($_SESSION['data']['u_alias'])?></span></td>
-	<td class="pdg bld rgt nobr"><?=(@$res['sent_date'])?nicedate($res['sent_date']):nicedate(date("Y-m-d"), 5);?></td>
+	<td class="pdg bld rgt nobr"><?=(!empty($res['sent_date']))?nicedate($res['sent_date']):nicedate(date("Y-m-d"), 5);?></td>
 </tr>
 <tr>
 	<td class="pdg bld" style="padding-top: 9px;">Till:</td>
@@ -229,7 +229,7 @@ if ($js_editor) { ?>
 	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyright');" title="Högerjustera"><img src="1x1.gif" alt="" width="20" height="20" /></a>
 	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_justm.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('justifyfull');" title="Marginaljustera"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_ol.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertorderedlist');" title="Numrerad lista"><img src="1x1.gif" alt="" width="20" height="20" /></a>
-	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_ul.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertunorderedlist');" title="Punktlista"><img src="<1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
+	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_ul.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('insertunorderedlist');" title="Punktlista"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_out.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('outdent');" title="Minska indrag"><img src="1x1.gif" alt="" width="20" height="20" /></a>
 	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_in.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('indent');" title="Öka indrag"><img src="1x1.gif" alt="" width="20" height="20" style="margin-right: 10px;" /></a>
 	<a class="cur brrd" style="background-image: url('<?=$config['web_root']?>_gfx/icon_hr.gif');" onmouseover="omo(this, 1);" onmouseout="omo(this); omd(this, '');" onmousedown="omd(this, '#c2b091');" onmouseup="omd(this, '');" onclick="javascript:TC_Format('inserthorizontalrule');" title="Horisontell linje"><img src="1x1.gif" alt="" width="20" height="20" /></a>

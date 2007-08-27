@@ -11,7 +11,8 @@
 	$config['core_web_root'] = '/core_dev/';						//the webpath to root level of core files (css, js, gfx directories)
 
 	$config['web_root'] = '/unicorn/cs_dev/';						//the webpath to the root level of the project
-	$config['default_title'] = 'CitySurf.tv - Nu kÃ¶r vi!';			//default title for pages if no title is specified for that page
+	//$config['web_root'] = 'http://citysurf.tv/';						//the webpath to the root level of the project
+	$config['default_title'] = 'CitySurf.tv - Nu kör vi!';			//default title for pages if no title is specified for that page
 
 	$config['start_page'] = 'start.php';	//logged in start page
 
@@ -46,11 +47,11 @@ define('PD', '02');
 define('UIMG', '150x150');
 define('MAXIMUM_USERS', 750);
 #standard title of page
-define('DEFAULT_USER', '48d40b8b5dee4c06cd8864be1b35456d');
-define('NAME_TITLE', 'CitySurf.tv - Nu kÃ¶r vi!');
-$NAME_TITLE = NAME_TITLE;
+//define('DEFAULT_USER', '48d40b8b5dee4c06cd8864be1b35456d');
+//define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
+//$NAME_TITLE = NAME_TITLE;
 
-//define('SMTP_SERVER', 'localhost');
+//todo: ta bort P2B använd $config['web_root'] istället
 define('P2B', 'http://www.citysurf.tv/');
 define('URL', 'citysurf.tv');
 define('NAME_URL', 'CitySurf');
@@ -102,4 +103,5 @@ define('SQL_H', 'pc3.icn.se');
 	$config['files']['upload_dir'] = '/home/martin/dev/webroot/unicorn/cs_dev/uploads/';
 	$config['files']['thumbs_dir'] = '/home/martin/dev/webroot/unicorn/cs_dev/uploads/thumbs/';
 	$files = new Files($config['files']);
+
 ?>

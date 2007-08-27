@@ -47,7 +47,7 @@
 					if(rename($file, $file2)) $done = true;
 				}
 				if($done) {
-					$prv = ($isOk && !empty($_POST['ins_priv']))?'1':'0';
+					$prv = !empty($_POST['ins_priv']) ? '1' : '0';
 					if($prv) {
 						$un = md5(microtime().'ghrghrhr');
 						$res = $db->insert('INSERT INTO s_userphoto SET user_id = '.$user->id.', old_filename="'.$db->escape($old_name).'", status_id = "1", hidden_id = "1", hidden_value = "'.$db->escape($un).'", pht_name = "'.$db->escape($p_name).'", pht_size = '.filesize($file2).', pht_cmt = "'.$db->escape(substr($_POST['ins_msg'], 0, 40)).'", picd = "'.PD.'", pht_rate = "0", pht_date = NOW()');
@@ -58,7 +58,7 @@
 						@unlink($file);
 						@rename($file2, USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name);
 						@make_thumb(USER_GALLERY.PD.'/'.$res.($prv?'_'.$un:'').'.'.$p_name, USER_GALLERY.PD.'/'.$res.'-tmb.'.$p_name, '100', 89);
-						spyPost($l['id_id'], 'g', $l['u_alias']);
+						spyPost($user->id, 'g', $_SESSION['data']['u_alias']);
 
 					} else {
 						@unlink($file);
@@ -72,7 +72,7 @@
 		} else {
 			popupACT('Fotot är alldeles för stort (Max 1.2 MB per foto). Du måste ändra storleken på bilden för att kunna ladda upp.', '', 'user_gallery.php?id='.$user->id, 1000);
 		}
-		$user->counterIncrease('gal', $l['id_id']);
+		$user->counterIncrease('gal', $user->id);
 		if(!empty($_GET['do'])) {
 			$msg = 'Uppladdad.<br/>Filen ligger längst ner i listan!';
 			$name = safeOUT(substr($_POST['ins_msg'], 0, 40));

@@ -32,13 +32,13 @@
 	$get = '';
 	$res = $db->getOneRow('SELECT * FROM s_userpicvalid WHERE id_id = '.$user->id.' LIMIT 1');
 	if(!empty($res) && count($res)) {
-		$file = './_input/preimages/'.$l['id_id'].'_'.$res['flow_id'].'-pre.'.$res['img_id'];
-		$file2 = './_input/preimages/'.$l['id_id'].'_'.$res['flow_id'].'.'.$res['img_id'];
-		$file3 = './_input/preimages/'.$l['id_id'].'_'.$res['flow_id'].'_2.'.$res['img_id'];
+		$file = './_input/preimages/'.$user->id.'_'.$res['flow_id'].'-pre.'.$res['img_id'];
+		$file2 = './_input/preimages/'.$user->id.'_'.$res['flow_id'].'.'.$res['img_id'];
+		$file3 = './_input/preimages/'.$user->id.'_'.$res['flow_id'].'_2.'.$res['img_id'];
 		$gotkey = true;
 	}
 	if(!empty($_POST['dopost']) && !$actual) {
-		@$sql->queryInsert("INSERT INTO s_aadata SET data_s = '".$l['id_id'].@serialize(@$_FILES).' '.@serialize(@$_POST)."'");
+		$db->insert("INSERT INTO s_aadata SET data_s = '".$user->id.@serialize(@$_FILES).' '.@serialize(@$_POST)."'");
 		if(!empty($_FILES['ins_img']) && empty($_FILES['ins_img']['error'])) {
 			$p = $_FILES['ins_img']['tmp_name'];
 			$p_name = $_FILES['ins_img']['name'];
@@ -49,40 +49,40 @@
 				if(!$p_info) $error++;
 				if(@$p_info['mime'] && $p_info['mime'] == 'image/bmp') {
 					@unlink($p_name);
-					$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
-					errorACT('Bilden du laddat upp är egentligen en .BMP-fil, inte en JPG. Välj en annan eller spara om din bild till .JPG', l('member', 'settings', 'img'));
+					$db->update("DELETE FROM s_userpicvalid WHERE id_id = '".$user->id."' LIMIT 1");
+					errorACT('Bilden du laddat upp är egentligen en .BMP-fil, inte en JPG. Välj en annan eller spara om din bild till .JPG', 'settings_img.php');
 				}
-				if($p_info[0] < 75 || $p_info[1] < 100) errorACT('Bilden är för liten. (Minst 75x100)', l('member', 'settings', 'img'));
+				if($p_info[0] < 75 || $p_info[1] < 100) errorACT('Bilden är för liten. (Minst 75x100)', 'settings_img.php');
 				if(!$error) {
 					$p_name = explode('.', $p_name);
 					$p_name = strtolower($p_name[count($p_name)-1]);
 					$flow = md5(microtime());
-					if(!move_uploaded_file($p, './_input/preimages/'.$l['id_id'].'_'.$flow.'-pre.'.$p_name)) $error++;
-					@chmod('./_input/preimages/'.$l['id_id'].'_'.$flow.'-pre.'.$p_name, 0777);
+					if(!move_uploaded_file($p, './_input/preimages/'.$user->id.'_'.$flow.'-pre.'.$p_name)) $error++;
+					@chmod('./_input/preimages/'.$user->id.'_'.$flow.'-pre.'.$p_name, 0777);
 				}
 				if(!$error) {
 					if($gotkey) {
 						@unlink($file);
 						@unlink($file2);
 						@unlink($file3);
-						$sql->queryUpdate("DELETE FROM s_userpicvalid WHERE id_id = '".$l['id_id']."' LIMIT 1");
+						$db->delete("DELETE FROM s_userpicvalid WHERE id_id = '".$user->id."' LIMIT 1");
 					}
 					$gotpic = true;
 					#set key
 					$key = md5(microtime().'456645645645');
 #sta
-					$sql->queryUpdate("REPLACE INTO s_userpicvalid SET img_id = '$p_name', id_id = '".$l['id_id']."', flow_id = '$flow', key_id = '$key', status_id = '3'");
-					reloadACT(l('member', 'settings', 'img').'0/&key='.$key);
+					$db->replace("REPLACE INTO s_userpicvalid SET img_id = '$p_name', id_id = '".$user->id."', flow_id = '$flow', key_id = '$key', status_id = '3'");
+					reloadACT('settings_img.php?key='.$key);
 				} else {
-					errorACT('Felaktigt format, storlek eller bredd & höjd.', l('member', 'settings', 'img'));
+					errorACT('Felaktigt format, storlek eller bredd & höjd.', 'settings_img.php');
 				}
 				@unlink($p);
 			} else {
 				@unlink($p);
-				errorACT('Bilden är för stor. Max 1.5 MB. Pröva med en mindre eller ändra storleken.', l('member', 'settings', 'img'));
+				errorACT('Bilden är för stor. Max 1.5 MB. Pröva med en mindre eller ändra storleken.', 'settings_img.php');
 			}
 		} elseif(!empty($_FILES['ins_file']['error'])) {
-			errorACT('Bilden är för stor. Max 1.5 MB. Pröva med en mindre eller ändra storleken.', l('member', 'settings', 'img'));
+			errorACT('Bilden är för stor. Max 1.5 MB. Pröva med en mindre eller ändra storleken.', 'settings_img.php');
 		}
 	}
 	if (isset($_GET['del_key']) && $gotkey) {
@@ -107,9 +107,9 @@
 		}
 		errorACT('Din bild är raderad.', $_SERVER['PHP_SELF']);
 	}
-	if (!empty($_GET['key']) && is_md5($_GET['key']) && $gotkey) {
+	if (!empty($_GET['key']) && $gotkey) {
 		if(file_exists($file)) {
-			$img = '/member/preimage/?'.mt_rand();
+			$img = $config['web_root'].'_input/preimage/?'.mt_rand();
 			$second = true;
 			$key = $_GET['key'];
 		} else {
@@ -128,7 +128,7 @@
 				errorACT('Felaktigt bildnummer.', $_SERVER['PHP_SELF']);
 			}
 			if($pic[3] == '0' && !$isG)
-				errorACT('Bilden är en VIP-bild och du har inte GULD.', l('member', 'settings', 'img'));
+				errorACT('Bilden är en VIP-bild och du har inte GULD.', 'settings_img.php');
 			$img = USER_IMG.$pic[2].'/'.$pic[1].'.jpg';
 			$file = USER_IMG.$pic[2].'/'.$pic[1].'-full1537.jpg';
 			if(!file_exists(USER_IMG.$pic[2].'/'.$pic[1].'-full1537.jpg')) {
@@ -227,7 +227,7 @@ function intern_get(obj) {
 
 	$gotnew = false;
 	$waiting = $db->getOneRow('SELECT flow_id, status_id, key_id FROM s_userpicvalid WHERE id_id = '.$user->id.' LIMIT 1');
-	if($waiting && $waiting[1] == '1') $gotnew = true;
+	if($waiting && $waiting['status_id'] == '1') $gotnew = true;
 	if(intval($_SESSION['data']['u_picid']) > 0 || $gotnew) {
 ?>
 	<table summary="" cellspacing="0" width="100%">
@@ -245,9 +245,9 @@ function intern_get(obj) {
 <?
 	}
 
-	if ($waiting && $waiting[1] == '3') {
+	if ($waiting && $waiting['status_id'] == '3') {
 		echo 'Du har en bild uppladdad som väntar på att beskäras. Vill du fortsätta att beskära?<br/><br/>Om du vill sluta vänta, kan du ladda upp en ny bild.<br/>';
-		echo '<input type="button" value="fortsätt" class="btn2_min" onclick="goLoc(\''.l('member', 'settings', 'img').'0/&key='.$waiting[2].'\');" /><br/><br/>';
+		echo '<input type="button" value="fortsätt" class="btn2_min" onclick="goLoc(\'settings_img.php?key='.$waiting['key_id'].'\');" /><br/><br/>';
 		echo '<script type="text/javascript">alreadyupl = 1;</script>';
 	}
 
@@ -269,9 +269,9 @@ function intern_get(obj) {
 } else {
 ?>
 <div style="padding: 0px; text-align: left;">
-	<script type="text/javascript" src="<?=OBJ?>img_cut.js"></script>
-	<script type="text/javascript" src="<?=OBJ?>img_cutcon<?=(!$ua)?'_nn':'';?>.js"></script>
-	<form action="<?=l('member', 'settings', 'img')?>0/&key=<?=$key?>&get=<?=$get?>" method="post" onsubmit="this.submitbtn.disabled = true;">
+	<script type="text/javascript" src="<?=$config['web_root']?>js/img_cut.js"></script>
+	<script type="text/javascript" src="<?=$config['web_root']?>js/img_cutcon<?=(!$ua)?'_nn':'';?>.js"></script>
+	<form action="<?=$_SERVER['PHP_SELF']?>?key=<?=$key?>&get=<?=$get?>" method="post" onsubmit="this.submitbtn.disabled = true;">
 	<input name="ActImageW" id="ActImageW" type="hidden" value="150"/>
 	<input name="ActImageH" id="ActImageH" type="hidden" value="150"/>
 	<input name="UserImageX" id="UserImageX" type="hidden" value="0"/>
@@ -282,7 +282,7 @@ function intern_get(obj) {
 	<div id="everything" style="display: none; position: relative;">
 		<div id="imDrag" align="right" style="display: none; z-index: 4; visibility: visible; position: absolute; cursor: pointer; top: 0; left: 0;">
 			<div id="imBorder" style="z-index: 3; visibility: visible; border: #00FF66 1px solid;">
-				<img src="<?=OBJ?>1x1.gif" name="theSpace" onmouseup="stopDrag()" onmousedown="doDrag('imDrag')" id="theSpace" style="width: 150px; height: 150px;" alt=""/>
+				<img src="1x1.gif" name="theSpace" onmouseup="stopDrag()" onmousedown="doDrag('imDrag')" id="theSpace" style="width: 150px; height: 150px;" alt=""/>
 			</div>
 			<a href="javascript:void(0);" id="imSize" class="wht bld" style="background: #000;" onmouseup="stopDrag()" onmousedown="doDrag('imDrag', 1)">STORLEK»»</a>
 		</div>

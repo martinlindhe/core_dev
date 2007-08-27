@@ -13,10 +13,9 @@
 		if ($all) {
 			foreach($res as $row) {
 				if(!$row['hidden_id'])
-					$file = '/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'];
+					$file = $config['web_root'].USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'];
 				else
-					//$file = '/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'_'.$row['hidden_value'].'.'.$row['pht_name'];
-					$file = '/'.USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'];
+					$file =  $config['web_root'].USER_GALLERY.$row['picd'].'/'.$row['main_id'].'-tmb.'.$row['pht_name'];
 				$ti++;
 				$cls = ($showall)?'':' spac';
 				echo '
@@ -44,7 +43,7 @@
 				if ($showall || $view == $row['main_id']) {
 					echo '<tr>';
 						echo '<td colspan="6" style="padding-bottom: 6px;">';
-						echo '<div class="cnt" style="width: 586px; overflow: hidden;"><a href="'.l('user','gallery',$s['id_id'],$row['main_id']).'"><img src="'.$file.'" alt="" onload="if(this.width > 510) this.width = 510;" /></a></div>';
+						echo '<div class="cnt" style="width: 586px; overflow: hidden;"><a href="gallery_view.php?id='.$s['id_id'].'&n='.$row['main_id'].'"><img src="'.$file.'" alt="" onload="if(this.width > 510) this.width = 510;" /></a></div>';
 						echo '</td>';
 					echo '</tr>';
 					echo '<tr>';

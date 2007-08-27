@@ -132,10 +132,10 @@ function outputMSG(xmlGet) {
 		if(gotFocus) document.getElementById('msgTextbox').focus();
 	} else if(xmlGet && xmlGet.responseText) {
 			if(xmlGet.responseText == '.') { logout();
-		} else	if(xmlGet.responseText == ',') { turnoff(); alert('Privatchat-fönstret har inaktiverats eftersom användaren är raderad och inga meddelanden finns kvar.');
-		} else	if(xmlGet.responseText == ':') { turnoff(); alert('Privatchat-fönstret har inaktiverats eftersom någon av er har blockerat den andra. Meddelandena som redan skickats har nu visats.');
-		} else	if(xmlGet.responseText == ';1') { turnoff(); alert('Privatchat-fönstret har inaktiverats eftersom du har valt att bara chatta med dina vänner.');
-		} else	if(xmlGet.responseText == ';2') { turnoff(); alert('Privatchat-fönstret har inaktiverats eftersom personen har valt att bara chatta med sina vänner.'); }
+		} else	if(xmlGet.responseText == ',') { turnoff(); alert('Privatchat-fÃ¶nstret har inaktiverats eftersom anvÃ¤ndaren Ã¤r raderad och inga meddelanden finns kvar.');
+		} else	if(xmlGet.responseText == ':') { turnoff(); alert('Privatchat-fÃ¶nstret har inaktiverats eftersom nÃ¥gon av er har blockerat den andra. Meddelandena som redan skickats har nu visats.');
+		} else	if(xmlGet.responseText == ';1') { turnoff(); alert('Privatchat-fÃ¶nstret har inaktiverats eftersom du har valt att bara chatta med dina vÃ¤nner.');
+		} else	if(xmlGet.responseText == ';2') { turnoff(); alert('Privatchat-fÃ¶nstret har inaktiverats eftersom personen har valt att bara chatta med sina vÃ¤nner.'); }
 	}
 }
 function sendMSG(msg, datetime, alias, history) {

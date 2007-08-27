@@ -6,7 +6,7 @@
 	<div id="headContent">
 		<img alt="" src="<?=CS?>_objects/top_logo.jpg" style="position: absolute; top: 6px; left: 5px;" />
 		<ul id="menu">
-		<li><a href="<?=defined('ABORT_LNK')?ABORT_LNK:l('main', 'start')?>" onclick="return confirm('Säker ?');">avbryt</a></li>
+		<li><a href="<?=defined('ABORT_LNK')?ABORT_LNK:l('main', 'start')?>" onclick="return confirm('SÃ¤ker ?');">avbryt</a></li>
 		</ul>
 	</div>
 	<div id="contentContainer">
