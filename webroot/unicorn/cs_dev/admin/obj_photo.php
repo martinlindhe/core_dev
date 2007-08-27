@@ -17,58 +17,58 @@
 			if(strpos($key, 'status_id') !== false) {
 				$kid = explode(':', $key);
 				$kid = $kid[1];
-				$res = $sql->queryLine("SELECT picd, pht_name, pht_cmt, hidden_id, hidden_value, user_id FROM s_userphoto WHERE main_id = '".$kid."' LIMIT 1");
+				$res = $db->getOneRow("SELECT picd, pht_name, pht_cmt, hidden_id, hidden_value, user_id FROM s_userphoto WHERE main_id = '".$kid."' LIMIT 1");
 				if(isset($_POST['status_id:' . $kid]) && !empty($res) && count($res)) {
 					if($doall && empty($_POST['status_id:' . $kid])) {
 // alla-knapp
 						if($type == '1') {
 # godkänn blanka
 #echo '<b>god bla</b>';
-							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
-							addALog(@$_SESSION['u_i'].' godkände '.$res[5].':'.$kid);
+							$line = $db->update("UPDATE s_userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
+							addALog($_SESSION['data']['u_alias'].' godkände '.$res['user_id'].':'.$kid);
 						} elseif($type == '2') {
 # neka blanka
 #echo '<b>neka bla</b>';
 							$un = md5(microtime());
-							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1', status_id = '2' AND hidden_value = '".$un."' WHERE main_id = '".$kid."' LIMIT 1");
-							if($res[3])
-								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'_'.$res[4].'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
+							$line = $db->update("UPDATE s_userphoto SET view_id = '1', status_id = '2' AND hidden_value = '".$un."' WHERE main_id = '".$kid."' LIMIT 1");
+							if ($res['hidden_id'])
+								@rename(ADMIN_PHOTO_DIR.$res['picd'].'/'.$kid.'_'.$res['hidden_value'].'.'.$res['pht_name'], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
 							else
-								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
+								@rename(ADMIN_PHOTO_DIR.$res['picd'].'/'.$kid.'.'.$res['pht_name'], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
 							if(!empty($_POST['reason_id:' . $kid])) {
-								$msg = 'Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats'.$reasons[$_POST['reason_id:' . $kid]];
-								spyPostSend($res[5], 'Nekad bilduppladdning', $msg);
+								$msg = 'Ditt foto: <b>'.secureOUT($res['pht_cmt']).'</b> har nekats'.$reasons[$_POST['reason_id:' . $kid]];
+								spyPostSend($res['user_id'], 'Nekad bilduppladdning', $msg);
 							} else {
-								$msg = 'Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats.';
-								spyPostSend($res[5], 'Nekad bilduppladdning', $msg);
+								$msg = 'Ditt foto: <b>'.secureOUT($res['pht_cmt']).'</b> har nekats.';
+								spyPostSend($res['user_id'], 'Nekad bilduppladdning', $msg);
 							}
-							addALog(@$_SESSION['u_i'].' nekade '.$res[5].':'.$kid);
+							addALog($_SESSION['data']['u_alias'].' nekade '.$res['user_id'].':'.$kid);
 						}
 					} else {
 						if($_POST['status_id:' . $kid] == '1') {
 # godkänn specifik
 #echo '<b>god spec</b>';
-							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
-							addALog(@$_SESSION['u_i'].' godkände '.$res[5].':'.$kid);
+							$line = $db->update("UPDATE s_userphoto SET view_id = '1' WHERE main_id = '".$kid."' AND view_id = '0' LIMIT 1");
+							addALog($_SESSION['data']['u_alias'].' godkände '.$res['user_id'].':'.$kid);
 						} elseif($_POST['status_id:' . $kid] == '2') {
 # neka specifik
 #echo '<b>neka spec</b>'.$res[5].'Ditt foto: <b>'.secureOUT($res[2]).'</b> har blivit nekat.';
 							$un = md5(microtime());
-							$line = $sql->queryUpdate("UPDATE s_userphoto SET view_id = '1', status_id = '2' AND hidden_value = '".$un."' WHERE main_id = '".$kid."' LIMIT 1");
-							if($res[3])
-								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'_'.$res[4].'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
+							$line = $db->update("UPDATE s_userphoto SET view_id = '1', status_id = '2' AND hidden_value = '".$un."' WHERE main_id = '".$kid."' LIMIT 1");
+							if($res['hidden_id'])
+								@rename(ADMIN_PHOTO_DIR.$res['picd'].'/'.$kid.'_'.$res['hidden_value'].'.'.$res['pht_name'], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
 							else
-								@rename(ADMIN_PHOTO_DIR.$res[0].'/'.$kid.'.'.$res[1], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
+								@rename(ADMIN_PHOTO_DIR.$res['picd'].'/'.$kid.'.'.$res['pht_name'], './user_photo_off342/'.$kid.'_'.$un.'.jpg');
 
 							if(!empty($_POST['reason_id:' . $kid])) {
-								$msg = 'Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats'.$reasons[$_POST['reason_id:' . $kid]];
-								spyPostSend($res[5], 'Nekad bilduppladdning', $msg);
+								$msg = 'Ditt foto: <b>'.secureOUT($res['pht_cmt']).'</b> har nekats'.$reasons[$_POST['reason_id:' . $kid]];
+								spyPostSend($res['user_id'], 'Nekad bilduppladdning', $msg);
 							} else {
-								$msg = 'Ditt foto: <b>'.secureOUT($res[2]).'</b> har nekats.';
-								spyPostSend($res[5], 'Nekad bilduppladdning', $msg);
+								$msg = 'Ditt foto: <b>'.secureOUT($res['pht_cmt']).'</b> har nekats.';
+								spyPostSend($res['user_id'], 'Nekad bilduppladdning', $msg);
 							}
 
-							addALog(@$_SESSION['u_i'].' nekade '.$res[5].':'.$kid);
+							addALog($_SESSION['data']['u_alias'].' nekade '.$res['user_id'].':'.$kid);
 						}
 					}
 				}
@@ -93,7 +93,7 @@
 			spyPostSend($res[6], 'Nekad bilduppladdning', $msg);
 		}
 
-		addALog(@$_SESSION['u_i'].' nekade '.$res[6].':'.$res[4]);
+		addALog($_SESSION['data']['u_alias'].' nekade '.$res[6].':'.$res[4]);
 		header("Location: ".$thispage);
 		exit;
 	}
@@ -168,33 +168,33 @@ function denyAns(val, id) {
 if(!$view_cmt) {
 		foreach($list as $row) {
 			$i++;
-			echo '<tr><td class="pdg cnt"><input type="hidden" name="status_id:'.$row[0].'" id="status_id:'.$row[0].'" value="0"><img src="./_img/status_none.gif" style="margin: 0 1px -1px 2px;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_none.gif" style="margin: 0 0 -1px 1px;" id="2:'.$row[0].'" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'none\'; changeStatus(\'status\', this.id);"> | 
-<a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'none\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'\';" onclick="return confirm(\'Säker ?\');">NEKA DIREKT</a>
-<div id="re_re:'.$row[0].'" style="display: none;">
-<input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="R" id="re_id:'.$row[0].':R"><label for="re_id:'.$row[0].':R">Reklam</label>
-<input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="AB" id="re_id:'.$row[0].':AB"><label for="re_id:'.$row[0].':AB">Stötande</label>
+			echo '<tr><td class="pdg cnt"><input type="hidden" name="status_id:'.$row['main_id'].'" id="status_id:'.$row['main_id'].'" value="0"><img src="./_img/status_none.gif" style="margin: 0 1px -1px 2px;" id="1:'.$row['main_id'].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_none.gif" style="margin: 0 0 -1px 1px;" id="2:'.$row['main_id'].'" onclick="document.getElementById(\'reason_reason:'.$row['main_id'].'\').style.display = \'\'; document.getElementById(\'re_re:'.$row['main_id'].'\').style.display = \'none\'; changeStatus(\'status\', this.id);"> | 
+<a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row['main_id'].'\').style.display = \'none\'; document.getElementById(\'re_re:'.$row['main_id'].'\').style.display = \'\';" onclick="return confirm(\'Säker ?\');">NEKA DIREKT</a>
+<div id="re_re:'.$row['main_id'].'" style="display: none;">
+<input type="radio" onclick="denyAns(this.value, \''.$row['main_id'].'\');" value="R" id="re_id:'.$row['main_id'].':R"><label for="re_id:'.$row['main_id'].':R">Reklam</label>
+<input type="radio" onclick="denyAns(this.value, \''.$row['main_id'].'\');" value="AB" id="re_id:'.$row['main_id'].':AB"><label for="re_id:'.$row['main_id'].':AB">Stötande</label>
 </div>
-<div id="reason_reason:'.$row[0].'" style="display: none;">
-<input type="radio" name="reason_id:'.$row[0].'" value="R" id="reason_id:'.$row[0].':R"><label for="reason_id:'.$row[0].':R">Reklam</label>
-<input type="radio" name="reason_id:'.$row[0].'" value="AB" id="reason_id:'.$row[0].':AB"><label for="reason_id:'.$row[0].':AB">Stötande</label>
+<div id="reason_reason:'.$row['main_id'].'" style="display: none;">
+<input type="radio" name="reason_id:'.$row['main_id'].'" value="R" id="reason_id:'.$row['main_id'].':R"><label for="reason_id:'.$row['main_id'].':R">Reklam</label>
+<input type="radio" name="reason_id:'.$row['main_id'].'" value="AB" id="reason_id:'.$row['main_id'].':AB"><label for="reason_id:'.$row['main_id'].':AB">Stötande</label>
 </div>
-<br><img style="margin-top: 3px;" src="'.ADMIN_PHOTO_DIR.$row[2].'/'.$row[0].(($row[4])?'_'.$row[5]:'').'.'.$row[3].'" /><br>'.secureOUT($row[6]).'<br><a href="user.php?t&id='.$row[8].'"><b>'.secureOUT($row[7]).'</b></a></td></tr>';
+<br><img style="margin-top: 3px;" src="'.ADMIN_PHOTO_DIR.$row['picd'].'/'.$row['main_id'].(($row['hidden_id'])?'_'.$row['hidden_value']:'').'.'.$row['pht_name'].'" /><br>'.secureOUT($row['pht_cmt']).'<br><a href="user.php?t&id='.$row['id_id'].'"><b>'.secureOUT($row['u_alias']).'</b></a></td></tr>';
 			echo '<tr><td><hr /><div class="hr"></div></td></tr>';
 		}
 } else {
 		foreach($list as $row) {
 			$i++;
-			echo '<tr><td class="pdg cnt"><input type="hidden" name="status_id:'.$row[0].'" value="'.$row[12].'"><img src="./_img/status_'.(($row[12] == '1')?'green':'none').'.gif" style="margin: 0 1px -1px 2px;" id="1:'.$row[0].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[12] == '2')?'red':'none').'.gif" style="margin: 0 0 -1px 1px;" id="2:'.$row[0].'" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'none\'; changeStatus(\'status\', this.id);"> | 
-<a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row[0].'\').style.display = \'none\'; document.getElementById(\'re_re:'.$row[0].'\').style.display = \'\';" onclick="return confirm(\'Säker ?\');">NEKA DIREKT</a>
-<div id="re_re:'.$row[0].'" style="display: none;">
-<input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="R" id="re_id:'.$row[0].':R"><label for="re_id:'.$row[0].':R">Reklam</label>
-<input type="radio" onclick="denyAns(this.value, \''.$row[0].'\');" value="AB" id="re_id:'.$row[0].':AB"><label for="re_id:'.$row[0].':AB">Stötande</label>
+			echo '<tr><td class="pdg cnt"><input type="hidden" name="status_id:'.$row['main_id'].'" value="'.$row[12].'"><img src="./_img/status_'.(($row[12] == '1')?'green':'none').'.gif" style="margin: 0 1px -1px 2px;" id="1:'.$row['main_id'].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_'.(($row[12] == '2')?'red':'none').'.gif" style="margin: 0 0 -1px 1px;" id="2:'.$row['main_id'].'" onclick="document.getElementById(\'reason_reason:'.$row['main_id'].'\').style.display = \'\'; document.getElementById(\'re_re:'.$row['main_id'].'\').style.display = \'none\'; changeStatus(\'status\', this.id);"> | 
+<a href="javascript:void(0);" onclick="document.getElementById(\'reason_reason:'.$row['main_id'].'\').style.display = \'none\'; document.getElementById(\'re_re:'.$row['main_id'].'\').style.display = \'\';" onclick="return confirm(\'Säker ?\');">NEKA DIREKT</a>
+<div id="re_re:'.$row['main_id'].'" style="display: none;">
+<input type="radio" onclick="denyAns(this.value, \''.$row['main_id'].'\');" value="R" id="re_id:'.$row['main_id'].':R"><label for="re_id:'.$row['main_id'].':R">Reklam</label>
+<input type="radio" onclick="denyAns(this.value, \''.$row['main_id'].'\');" value="AB" id="re_id:'.$row['main_id'].':AB"><label for="re_id:'.$row['main_id'].':AB">Stötande</label>
 </div>
-<div id="reason_reason:'.$row[0].'" style="display: none;">
-<input type="radio" name="reason_id:'.$row[0].'" value="R" id="reason_id:'.$row[0].':R"><label for="reason_id:'.$row[0].':R">Reklam</label>
-<input type="radio" name="reason_id:'.$row[0].'" value="AB" id="reason_id:'.$row[0].':AB"><label for="reason_id:'.$row[0].':AB">Stötande</label>
+<div id="reason_reason:'.$row['main_id'].'" style="display: none;">
+<input type="radio" name="reason_id:'.$row['main_id'].'" value="R" id="reason_id:'.$row['main_id'].':R"><label for="reason_id:'.$row['main_id'].':R">Reklam</label>
+<input type="radio" name="reason_id:'.$row['main_id'].'" value="AB" id="reason_id:'.$row['main_id'].':AB"><label for="reason_id:'.$row['main_id'].':AB">Stötande</label>
 </div>
-<br><img style="margin-top: 3px;" src="'.ADMIN_PHOTO_DIR.$row[2].'/'.$row[0].(($row[4])?'_'.$row[5]:'').'.'.$row[3].'" /><br>'.secureOUT($row[6]).'<br><a href="user.php?t&id='.$row[8].'"><b>'.secureOUT($row[7]).'</b></a></td></tr>';
+<br><img style="margin-top: 3px;" src="'.ADMIN_PHOTO_DIR.$row['picd'].'/'.$row['main_id'].(($row['hidden_id'])?'_'.$row['hidden_value']:'').'.'.$row['pht_name'].'" /><br>'.secureOUT($row['pht_cmt']).'<br><a href="user.php?t&id='.$row['id_id'].'"><b>'.secureOUT($row['u_alias']).'</b></a></td></tr>';
 			echo '<tr><td><hr /><div class="hr"></div></td></tr>';
 		}
 }

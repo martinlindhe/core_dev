@@ -168,7 +168,7 @@
 		if (file_exists('./_input/preimages/'.$user->id.'_'.$flow.'.jpg') && file_exists('./_input/preimages/'.$user->id.'_'.$flow.'_2.jpg')) {
 			if(!$intern) @unlink($file);
 			$db->replace("REPLACE INTO s_userpicvalid SET img_id = 'jpg', id_id = '".$user->id."', flow_id = '$flow'");
-			errorACT('Nu har du beskurit din profilbild. Du får ett meddelande när den har granskats.', l('member', 'settings', 'img'));
+			errorACT('Nu har du beskurit din profilbild. Du får ett meddelande när den har granskats.', $_SERVER['PHP_SELF']);
 		} else {
 			if(!$intern) @unlink($file);
 			$db->delete("DELETE FROM s_userpicvalid WHERE id_id = '".$user->id."' LIMIT 1");

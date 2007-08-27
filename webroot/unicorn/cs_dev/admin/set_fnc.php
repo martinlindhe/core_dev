@@ -104,8 +104,8 @@
 	}
 
 	function addALog($txt) {
-		global $sql;
-		$sql->queryInsert("INSERT INTO s_aalog SET data_s = '".secureINS($txt)."'");
+		global $db;
+		$db->insert("INSERT INTO s_aalog SET data_s = '".$db->escape($txt)."'");
 	}
 
 	function sesslogADD($category = '', $unique = '', $type = 'START') {

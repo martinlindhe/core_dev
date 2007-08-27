@@ -112,15 +112,15 @@
 	*/
 	function spyPostSend($_user, $_title, $_msg)
 	{
-		global $sql, $user;
-		$sql->queryInsert("INSERT INTO s_usermail SET
-		user_id = '".$_user."',
+		global $db, $user;
+		$db->insert("INSERT INTO s_usermail SET
+		user_id = '".$db->escape($_user)."',
 		sender_id = '0',
 		status_id = '1',
 		sender_status = '2',
 		user_read = '0',
-		sent_cmt = '".secureINS($_msg)."',
-		sent_ttl = '".secureINS($_title)."',
+		sent_cmt = '".$db->escape($_msg)."',
+		sent_ttl = '".$db->escape($_title)."',
 		sent_date = NOW()");
 		$user->counterIncrease('mail', $_user);
 		$user->notifyIncrease('mail', $_user);
