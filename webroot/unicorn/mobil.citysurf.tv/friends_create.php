@@ -3,16 +3,16 @@
 	$_id = $_GET['id'];
 
 	require_once('config.php');
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 	
 	if (!empty($_POST['ins_rel'])) {
-		//Registrera relations-förfrågan
+		//Registrera relations-fÃ¶rfrÃ¥gan
 		$check = sendRelationRequest($_id, $_POST['ins_rel']);
 		if ($check === true) {
-			echo 'Du har nu skickat en förfrågan.<br/><br/>';
-			echo '<a href="friends.php">MINA VÄNNER</a>';
+			echo 'Du har nu skickat en fÃ¶rfrÃ¥gan.<br/><br/>';
+			echo '<a href="friends.php">MINA VÃ„NNER</a>';
 			require('design_foot.php');
 			die;
 		}

@@ -1,7 +1,6 @@
 <?
 	require_once('config.php');
-
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 
@@ -16,7 +15,7 @@
 		$tmp = $user->getuser($_to_id);
 		$_to_alias = $tmp['u_alias'];
 	} else {
-		//bara "skriv nytt mail", lÂt anv‰ndaren fylla i mottagare
+		//bara "skriv nytt mail", l√•t anv√§ndaren fylla i mottagare
 	}
 	if (!empty($_POST['header'])) $_header = $_POST['header'];
 	if (!empty($_POST['body'])) $_body = $_POST['body'];
@@ -24,16 +23,14 @@
 	if (!empty($_POST['friend_alias'])) $_to_alias = $_POST['friend_alias'];
 
 	if ($_to_alias && $_header && $_body) {
-		$error = sendMail($_to_alias, '', $_header, $_body);
-		if ($error === true) {
-			echo 'Ditt mail har skickats!<br/>';
-			require('design_foot.php');
-			die;
-		}
+		sendMail($_to_alias, '', $_header, $_body);
+		echo 'Ditt mail har skickats!<br/>';
+		require('design_foot.php');
+		die;
 	}
 	
 /*
-	todo: kopiera vald kompis frÂn dropdownlistan till "to_alias" f‰ltet med js
+	todo: kopiera vald kompis fr√•n dropdownlistan till "to_alias" f√§ltet med js
 */
 
 	echo '<div class="h_mail"></div>';
@@ -41,23 +38,23 @@
 	echo '<br/>';
 
 	if ($_to_alias && ($_header || $_body)) {
-		echo 'Fel: Du mÂste skriva ett meddelande<br/><br/>';
+		echo 'Fel: Du m√•ste skriva ett meddelande<br/><br/>';
 	} else {
 		if ($error) echo $error.'<br/>';
 	}
 
-	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$_to_id.'">';
 	if ($_to_id) {
 		echo 'Till: '.$user->getstringMobile($_to_id);
 	} else {
 		echo 'Till: <input name="to_alias" type="text" size="8" value="'.$_to_alias.'"/> ';
-		$list = getRelations($l['id_id']);
+		$list = getRelations($user->id);
 	
 		if ($list)
 		{
 			echo '<select name="friend_alias">';
-			echo '<option value="">- Mina v‰nner -</option>';
-			for ($i=0; $i<count($list); $i++) echo '<option value="'.$list[$i]['u_alias'].'">'.$list[$i]['u_alias'].'</option>';
+			echo '<option value="">- Mina v√§nner -</option>';
+			foreach ($list as $row) echo '<option value="'.$row['u_alias'].'">'.$row['u_alias'].'</option>';
 			echo '</select>';
 		}
 	}

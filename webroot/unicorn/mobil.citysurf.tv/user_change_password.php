@@ -1,6 +1,6 @@
 <?
 	require_once('config.php');
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 
@@ -8,27 +8,27 @@
 	if (!empty($_POST['ins_opass']) && !empty($_POST['ins_npass']) && !empty($_POST['ins_npass2'])) {
 		$error = setNewPassword($_POST['ins_opass'], $_POST['ins_npass'], $_POST['ins_npass2']);
 		if ($error === true) {
-			echo 'Lösenordet har ändrats!';
+			echo 'LÃ¶senordet har Ã¤ndrats!';
 			require('design_foot.php');
 			die;
 		}
 	}
 ?>
 
-	ÄNDRA LÖSENORD<br/>
+	Ã„NDRA LÃ–SENORD<br/>
 	<br/>
 <?
 	if ($error) echo 'Fel: '.$error.'<br/><br/>';
 ?>
 
 	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
-		Gammalt lösenord:<br/>
+		Gammalt lÃ¶senord:<br/>
 		<input name="ins_opass" type="password"/><br/>
 
-		Nytt lösenord:<br/>
+		Nytt lÃ¶senord:<br/>
 		<input name="ins_npass" type="password"/><br/>
 
-		Bekräfta lösenord:<br/>
+		BekrÃ¤fta lÃ¶senord:<br/>
 		<input name="ins_npass2" type="password"/><br/>
 		<br/>
 		<input type="submit" value="Spara"/>

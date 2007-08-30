@@ -7,7 +7,7 @@
 <head>
 <title>CitySurf mobil</title>
 <link rel="stylesheet" href="css/mobile.css" type="text/css"/>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 
@@ -15,10 +15,10 @@
 
 <a href="index.php"><img src="gfx/logo_256.png" alt="citysurf.tv"/></a><br/>
 <?
-	if (!empty($s['id_id'])) {
+	if ($user->id) {
 		echo '<a href="user.php"><img src="gfx/btn_profile.png" alt="Profil" width="44" height="44"/></a> ';
 		echo '<a href="mail.php"><img src="btn.php?mail" alt="Mail" width="44" height="44"/></a> ';
-		echo '<a href="gb.php"><img src="btn.php?gb" alt="Gästbok" width="44" height="44"/></a><br/>';
+		echo '<a href="gb.php"><img src="btn.php?gb" alt="GÃ¤stbok" width="44" height="44"/></a><br/>';
 	}
 
 	if (basename($_SERVER['SCRIPT_NAME']) != 'index.php') {

@@ -2,8 +2,7 @@
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 	require_once('config.php');
-
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	$mail = getMail($_GET['id']);
 	if (!$mail) die;
@@ -22,7 +21,7 @@
 	}
 
 	echo 'Rubrik: '.($mail['sent_ttl']?$mail['sent_ttl']:'(ingen rubrik)').'<br/>';
-	echo 'Avsändare: '.$user->getstringMobile($mail['sender_id']).'<br/>';
+	echo 'AvsÃ¤ndare: '.$user->getstringMobile($mail['sender_id']).'<br/>';
 	echo 'Skrivet: '.$mail['sent_date'].'<br/><br/>';
 
 	$body = strip_tags($mail['sent_cmt'], '<BR>');

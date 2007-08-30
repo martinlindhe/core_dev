@@ -1,20 +1,20 @@
 <?
 	require_once('config.php');
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 ?>
 
 	GALLERI - bild1<br/>
-	Uppladdad av test123, igår 14:30<br/>
+	Uppladdad av test123, igÃ¥r 14:30<br/>
 	<br/>
 	(bild1)<br/>
 	<br/>
 	2 kommentarer:<br/>
-	test456, igår 14:33 säger:<br/>
+	test456, igÃ¥r 14:33 sÃ¤ger:<br/>
 	snygg bild<br/>
 	<br/>
-	test789, idag 19:40 säger:<br/>
+	test789, idag 19:40 sÃ¤ger:<br/>
 	nice!<br/>
 	<br/>
 	<a href="gallery_comment.php">SKRIV KOMMENTAR</a>

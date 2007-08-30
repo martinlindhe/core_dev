@@ -1,12 +1,12 @@
 <?
 	require_once('config.php');
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 
 /*
-	todo: thumbs ska vara mindre än de thumbs som är på webb-versionen idag
-	todo: de inzoomade bilderna ska vara mindre än de på webb-versionen idag. skala ner dom till max 200 px bredd eller nåt
+	todo: thumbs ska vara mindre Ã¤n de thumbs som Ã¤r pÃ¥ webb-versionen idag
+	todo: de inzoomade bilderna ska vara mindre Ã¤n de pÃ¥ webb-versionen idag. skala ner dom till max 200 px bredd eller nÃ¥t
 	
 */
 ?>

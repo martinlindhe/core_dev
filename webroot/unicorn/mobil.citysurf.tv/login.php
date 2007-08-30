@@ -2,7 +2,7 @@
 	require_once('config.php');
 
 	if (!empty($_POST['alias']) && !empty($_POST['pass'])) {
-		$user_auth->login($_POST['alias'], $_POST['pass'], true);
+		$user_auth->login($_POST['alias'], $_POST['pass']);
 	}
 
 	require('design_head.php');
@@ -13,10 +13,10 @@
 ?>
 
 	<form method="post" action="login.php">
-		ANVÄNDARNAMN:<br/>
+		ANVÃ„NDARNAMN:<br/>
 		<input type="text" name="alias" size="12"/><br/>
 		<br/>
-		LÖSENORD:<br/>
+		LÃ–SENORD:<br/>
 		<input type="password" name="pass" size="12"/><br/>
 		<br/>
 		<input type="submit" value="LOGGA IN"/>

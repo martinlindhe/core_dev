@@ -1,7 +1,6 @@
 <?
 	require_once('config.php');
-
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 ?>
@@ -18,13 +17,13 @@
 
 	echo '<div class="mid_content">';
 	foreach($list as $row) {
-		echo ($row['user_read']?'<img src="gfx/icon_mail_opened.png" alt="Läst" title="Läst" width="16" height="16"/> ':'<img src="gfx/icon_mail_unread.png" alt="Oläst" title="Oläst" width="16" height="16"/> ');
+		echo ($row['user_read']?'<img src="gfx/icon_mail_opened.png" alt="LÃ¤st" title="LÃ¤st" width="16" height="16"/> ':'<img src="gfx/icon_mail_unread.png" alt="OlÃ¤st" title="OlÃ¤st" width="16" height="16"/> ');
 
 		$rubrik = $row['sent_ttl'];
 		if (!$rubrik) $rubrik = '(ingen rubrik)';
 		if (strlen($rubrik) > 20) $rubrik = substr($rubrik, 0, 18).'...';
 		echo '<a href="mail_read.php?id='.$row['main_id'].'">'.$rubrik.'</a><br/>';
-		echo 'från '.$user->getstringMobile($row['sender_id']).' ';
+		echo 'frÃ¥n '.$user->getstringMobile($row['sender_id']).' ';
 		//echo nicedate($row['sent_date']);
 		echo '<br/>';
 	}

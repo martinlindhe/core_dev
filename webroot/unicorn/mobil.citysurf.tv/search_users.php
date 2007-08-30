@@ -1,6 +1,6 @@
 <?
 	require_once('config.php');
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 ?>
@@ -11,7 +11,7 @@
 	<form method="post" action="search_users_result.php">
 		<table width="100%">
 			<tr>
-				<td>Kön:</td>
+				<td>KÃ¶n:</td>
 				<td>
 					<input type="hidden" name="sex" value="0"/>
 					<input type="radio" name="sex" id="sexM" value="M"/><label for="sexM">Killar</label>
@@ -27,30 +27,30 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Ålder:</td>
+			<td>Ã…lder:</td>
 			<td>
 				<select name="age">
-					<option value="0">alla åldrar</option>
-					<option value="1">mellan 0-20 år</option>
-					<option value="2">mellan 21-25 år</option>
-					<option value="3">mellan 26-30 år</option>
-					<option value="4">mellan 31-35 år</option>
-					<option value="5">mellan 36-40 år</option>
-					<option value="6">mellan 41-45 år</option>
-					<option value="7">mellan 46-50 år</option>
-					<option value="8">mellan 51-55 år</option>
-					<option value="9">56 år och äldre</option>			
+					<option value="0">alla Ã¥ldrar</option>
+					<option value="1">mellan 0-20 Ã¥r</option>
+					<option value="2">mellan 21-25 Ã¥r</option>
+					<option value="3">mellan 26-30 Ã¥r</option>
+					<option value="4">mellan 31-35 Ã¥r</option>
+					<option value="5">mellan 36-40 Ã¥r</option>
+					<option value="6">mellan 41-45 Ã¥r</option>
+					<option value="7">mellan 46-50 Ã¥r</option>
+					<option value="8">mellan 51-55 Ã¥r</option>
+					<option value="9">56 Ã¥r och Ã¤ldre</option>			
 				</select>
 			</td>
 		</tr>
 	</table>
 
 		<select name="lan">
-			<option value="0">Alla län</option>
+			<option value="0">Alla lÃ¤n</option>
 			<? optionLan(@$result['lan']); ?>
 		</select><br/><br/>
 		
-		<input type="submit" value="Sök"/>
+		<input type="submit" value="SÃ¶k"/>
 	</form>
 </div>
 

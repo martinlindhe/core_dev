@@ -1,12 +1,12 @@
 <?
 	require_once('config.php');
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 ?>
 
 	GALLERI - kommentera bild1<br/>
-	Uppladdad av test123, igår 14:30<br/>
+	Uppladdad av test123, igÃ¥r 14:30<br/>
 	<br/>
 
 	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">

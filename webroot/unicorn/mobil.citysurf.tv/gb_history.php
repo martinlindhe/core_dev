@@ -1,17 +1,16 @@
 <?
 	//todo: paging
 
-	//id = userId på den andra personen vi vill se historik med
+	//id = userId pÃ¥ den andra personen vi vill se historik med
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$_id = $_GET['id'];
 
 	require_once('config.php');
-
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 	
-	$list = gbHistory($l['id_id'], $_id);
+	$list = gbHistory($user->id, $_id);
 
 	echo '<div class="h_gb"></div>';
 	echo 'Historik med '.$user->getstringMobile($_id).'<br/><br/>';

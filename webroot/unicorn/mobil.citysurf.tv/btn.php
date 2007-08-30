@@ -2,8 +2,7 @@
 	if (!isset($_GET['mail']) && !isset($_GET['gb'])) die;
 
 	require_once('config.php');
-
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	$red = false;
 

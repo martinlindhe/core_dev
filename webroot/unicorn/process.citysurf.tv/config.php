@@ -43,11 +43,13 @@
 	$allowed_ip = array(
 		'127.0.0.1',
 		'213.80.11.162',	//unicorn kontoret
-		'212.37.28.102',	//NVOX ip
+		'212.37.28.102',	//NVOX gamla ip
+		'213.115.96.248',	//NVOX nya ip
 		'217.151.193.79',	//Ericsson IPX (ipx-pat.ipx.com)
 		'217.151.193.80'	//Ericsson IPX (ipx-pat.ipx.com)
 	);
 
+	$config['sms']['originating_number'] = '72777';
 	$config['sms']['auth_username'] = 'lwcg';
 	$config['sms']['auth_password'] = '3koA4enpE';
 ?>

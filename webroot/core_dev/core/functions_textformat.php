@@ -348,7 +348,8 @@
 	echo ValidEmail('<gupp@kep.com').'<br/>'; //deny
 	echo ValidEmail('rl@123.22.11.92').'<br/>'; //deny
 */
-	define('REGEXP_VALID_EMAIL', '/^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$/');
+
+	define('REGEXP_VALID_EMAIL', '/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9._-]+)+$/');
 	function ValidEmail($email)
 	{
 		if (preg_match(REGEXP_VALID_EMAIL, $email)) return true;

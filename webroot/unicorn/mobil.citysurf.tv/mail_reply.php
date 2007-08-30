@@ -1,9 +1,9 @@
 <?
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+	$_id = $_GET['id'];
 
 	require_once('config.php');
-
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	$_to_alias = $_header = $_body = $error = '';
 
@@ -12,14 +12,12 @@
 	if (!empty($_POST['body'])) $_body = $_POST['body'];
 
 	if ($_to_alias && $_header && $_body) {
-		$error = sendMail($_to_alias, '', $_header, $_body);
-		if ($error === true) {
-			header('Location: mail.php');
-			die;
-		}
+		sendMail($_to_alias, '', $_header, $_body);
+		header('Location: mail.php');
+		die;
 	}
 
-	$mail = getMail($_GET['id']);
+	$mail = getMail($_id);
 	if (!$mail) die;
 
 	require('design_head.php');
@@ -28,10 +26,10 @@
 ?>
 
 	<div class="h_mail"></div>
-	SVARA PÅ MAIL<br/>
+	SVARA PÃ… MAIL<br/>
 	<br/>
 
-	<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
+	<form method="post" action="<?=$_SERVER['PHP_SELF'].'?id='.$_id?>">
 		<input type="hidden" name="to_alias" value="<?=$to_alias?>"/>
 		Till: <?=$user->getstringMobile($mail['sender_id'])?><br/>
 		Rubrik: <input type="text" name="header" value="<?=$_header?>"/><br/>

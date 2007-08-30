@@ -1,4 +1,5 @@
 <?
+	die;
 	require_once('config.php');
 	
 	echo '<pre>';

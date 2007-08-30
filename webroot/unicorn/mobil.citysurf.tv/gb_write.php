@@ -1,6 +1,6 @@
 <?
 	/*
-		todo: kanske 2 separata filer för write & reply?
+		todo: kanske 2 separata filer fÃ¶r write & reply?
 	*/
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
@@ -11,9 +11,8 @@
 	else $_write_to_user_id = $_GET['id'];
 
 	require_once('config.php');
-
-	if (!$l) die;	//user not logged in
-
+	$user->requireLoggedIn();
+	
 	require('design_head.php');
 
 	$gb = gbGetById($_reply_to_msg_id);
@@ -22,7 +21,7 @@
 	if (!empty($_POST['msg'])) {
 		//send guestbook message
 		gbWrite($_POST['msg'], $_write_to_user_id, $_reply_to_msg_id);
-		echo 'Gästboksinlägg till '.$user->getstringMobile($_write_to_user_id).' skickat!<br/>';
+		echo 'GÃ¤stboksinlÃ¤gg till '.$user->getstringMobile($_write_to_user_id).' skickat!<br/>';
 		require('design_foot.php');
 		die;
 	}

@@ -3,8 +3,8 @@
 	//reads the 'p' get parameter for current page
 	//example: $pager = makePager(102, 25);		will create a pager for total of 102 items with 25 items per page
 	
-	//$pager['limit'] är för-genererad LIMIT sql för att använda tillsammans med query som hämtar en del av en lista
-	//  alternativt kan $pager['index'] och $pager['items_per_page'] användas för samma syfte
+	//$pager['limit'] Ã¤r fÃ¶r-genererad LIMIT sql fÃ¶r att anvÃ¤nda tillsammans med query som hÃ¤mtar en del av en lista
+	//  alternativt kan $pager['index'] och $pager['items_per_page'] anvÃ¤ndas fÃ¶r samma syfte
 	function makePager($_total_cnt, $_items_per_page, $_add_value = '')
 	{
 		$pager['page'] = 1;

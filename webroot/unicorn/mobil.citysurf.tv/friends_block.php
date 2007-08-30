@@ -3,13 +3,13 @@
 	$_id = $_GET['id'];
 	
 	require_once('config.php');
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 
 	blockRelation($_id);
 
-	echo 'DU HAR NU BLOCKERAT ANVÄNDAREN<br/>';
+	echo 'DU HAR NU BLOCKERAT ANVÃ„NDAREN<br/>';
 	echo '<a href="index.php">TILLBAKA</a>';
 
 	require('design_foot.php');

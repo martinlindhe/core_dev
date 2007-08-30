@@ -1,6 +1,6 @@
 <?
 	require_once('config.php');
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 
 	require('design_head.php');
 	
@@ -20,7 +20,7 @@
 		foreach($list as $row)
 		{
 			echo $user->getstringMobile($row['id_id']);
-			echo ' <a href="?remove='.$row['id_id'].'">HÄV BLOCKERING</a><br/>';
+			echo ' <a href="?remove='.$row['id_id'].'">HÃ„V BLOCKERING</a><br/>';
 		}
 	} else {
 		echo 'Du har inga blockade.<br/>';

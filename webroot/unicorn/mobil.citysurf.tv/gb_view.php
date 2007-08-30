@@ -3,31 +3,30 @@
 	$_id = $_GET['id'];
 
 	require_once('config.php');
-
-	if (!$l) die;	//user not logged in
+	$user->requireLoggedIn();
 	
 	$gb = gbGetById($_id);
 	if (!$gb) die;
 	
-	if ($gb['user_id'] == $l['id_id']) gbMarkAsRead($_id);
+	if ($gb['user_id'] == $user->id) gbMarkAsRead($_id);
 
 	require('design_head.php');
 	
-	if ($gb['user_id'] == $l['id_id']) echo '<div class="h_gb"></div>';
+	if ($gb['user_id'] == $user->id) echo '<div class="h_gb"></div>';
 	else {
-		echo $user->getstringMobile($gb['user_id']).'s GÄSTBOK<br/><br/>';
+		echo $user->getstringMobile($gb['user_id']).'s GÃ„STBOK<br/><br/>';
 	}
 	
-	if ($gb['user_id'] == $l['id_id']) echo ($gb['user_read']?'Läst':'Oläst').' inlägg:<br/>';
+	if ($gb['user_id'] == $user->id) echo ($gb['user_read']?'LÃ¤st':'OlÃ¤st').' inlÃ¤gg:<br/>';
 
-	echo 'Avsändare: '.$user->getstringMobile($gb['sender_id']).'<br/>';
+	echo 'AvsÃ¤ndare: '.$user->getstringMobile($gb['sender_id']).'<br/>';
 	echo 'Skickat: '.$gb['sent_date'].'<br/><br/>';
 
 	echo '<div class="mid_content">';
 	echo $gb['sent_cmt'];
 	echo '</div>';
 
-	if ($gb['user_id'] == $l['id_id']) {
+	if ($gb['user_id'] == $user->id) {
 		echo '<a href="gb_write.php?id='.$gb['main_id'].'&amp;reply">SVARA</a><br/>';
 		echo '<a href="gb_history.php?id='.$gb['sender_id'].'">SE HISTORIK</a><br/>';
 	}

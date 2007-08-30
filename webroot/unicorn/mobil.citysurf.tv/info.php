@@ -7,7 +7,7 @@
 ?>
 <br/>
 <div class="mid_content">
- Har du frågor eller problem med mobila Citysurf. Maila oss under tyck till på www.citysurf.tv<br/>
+ Har du frÃ¥gor eller problem med mobila Citysurf. Maila oss under tyck till pÃ¥ www.citysurf.tv<br/>
  <br/>
  Eller maila direkt till en webmaster online.
 </div>
