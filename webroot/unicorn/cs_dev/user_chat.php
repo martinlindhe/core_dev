@@ -1,8 +1,11 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('ingen mottagare');
 	$id = $_GET['id'];
+
+	if (amIBlocked($id)) errorACT('Användaren har blockerat dig.');
 
 	if ($user->id == $id) popupACT('Du kan inte skicka till dig själv.');
 	$user->blocked($id);
@@ -26,6 +29,7 @@
 
 	$NAME_TITLE = secureOUT($_SESSION['data']['u_alias']).' | privatchat';
 
+	//$charset = 'ISO-8859-1';
 	require(DESIGN.'head_popup.php');
 ?>
 <script type="text/javascript">

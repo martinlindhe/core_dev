@@ -1,15 +1,4 @@
 <?
-/*
-function doMail($to, $title, $text)
-{
-	$headers =
-		'From: City Surf <martin@cs.icn.se>' . "\r\n" .
-		'Content-Type: text/plain; charset=ISO-8859-1';
-
-	if (mail($to, $title, $text, $headers)) return true;
-	return false;
-}
-*/
 	require_once('class.phpmailer.php');
 	function doMail($to, $subject, $body)		//används inte
 	{

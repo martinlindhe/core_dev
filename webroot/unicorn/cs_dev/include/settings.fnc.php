@@ -64,18 +64,18 @@
 	//Byter lösenord. returnerar sträng med felkod vid failure eller boolean TRUE vid success.
 	function setNewPassword($_old_pwd, $_new_pwd, $_new_pwd_confirm)
 	{
-		global $sql, $user;
+		global $db, $user;
 
 		if (empty($_new_pwd) || empty($_new_pwd_confirm) || ($_new_pwd != $_new_pwd_confirm)) {
 			return 'Lösenordet matchar inte.';
 		}
 
-		$exists = $sql->queryLine("SELECT u_pass FROM s_user WHERE id_id = ".$user->id." LIMIT 1");
-		if (empty($exists) || !count($exists)) {
+		$exists = $db->getOneItem("SELECT u_pass FROM s_user WHERE id_id = ".$user->id." LIMIT 1");
+		if (empty($exists)) {
 			return 'Felaktigt lösenord.';
 		}
 
-		if ($exists[0] != $_old_pwd) {
+		if ($exists != $_old_pwd) {
 			return 'Felaktigt lösenord.';
 		}
 
@@ -83,11 +83,11 @@
 			return 'Felaktigt lösenord. Minst 5, max 15 tecken.';
 		}
 
-		$sql->logADD($user->id, $_old_pwd.'->'.$_new_pwd, 'NEW_PASS');
-		$sql->queryUpdate("UPDATE s_user SET u_pass = '".secureINS($_new_pwd)."' WHERE id_id = ".$user->id);
+		//$db->logADD($user->id, $_old_pwd.'->'.$_new_pwd, 'NEW_PASS');
+		$db->update("UPDATE s_user SET u_pass = '".$db->escape($_new_pwd)."' WHERE id_id = ".$user->id);
 
-		if ($user->level($l['level_id'], 7)) {
-			$sql->queryUpdate("UPDATE s_admin SET user_pass = '".secureINS($_new_pwd)."' WHERE main_id = '".$user->id."' LIMIT 1");
+		if ($user->level($_SESSION['data']['level_id'], 7)) {
+			$db->update("UPDATE s_admin SET user_pass = '".$db->escape($_new_pwd)."' WHERE main_id = '".$user->id."' LIMIT 1");
 		}
 		return true;
 	}

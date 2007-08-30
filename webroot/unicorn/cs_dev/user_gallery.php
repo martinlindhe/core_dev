@@ -1,8 +1,11 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	$id = $user->id;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $id = $_GET['id'];
+
+	if (amIBlocked($id)) errorACT('Användaren har blockerat dig.');
 
 	$isFriends = $user->isFriends($id);
 	$allowed = ($user->id == $id || $isFriends || $user->isAdmin) ? true : false;

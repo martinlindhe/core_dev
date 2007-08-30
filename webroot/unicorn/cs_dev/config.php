@@ -1,4 +1,13 @@
 <?
+/*
+	if ($_SERVER['REMOTE_ADDR'] != '213.80.11.162') {
+		echo '<h1>Citysurf uppdateras!</h1>';
+		echo 'Under dagen måndagen den 27:e augusti genomför vi underhåll av citysurf.<br/><br/>';
+		echo 'Vi räknar med att vara tillbaka inom en timme eller två<br/><br/>';
+		die;
+	}
+	*/
+
 	//cs_dev config
 	$time_start = microtime(true);
 
@@ -6,16 +15,16 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	$config['core_root'] = '/home/martin/dev/webroot/core_dev/';
-	//$config['core_root'] = 'E:/devel/webroot/core_dev/';
+	$config['core_root'] = '/home/martin/www/core_dev/';
+	//$config['core_root'] = '/home/martin/dev/webroot/core_dev/';
 	$config['core_web_root'] = '/core_dev/';						//the webpath to root level of core files (css, js, gfx directories)
 
-	$config['web_root'] = '/unicorn/cs_dev/';						//the webpath to the root level of the project
+	$config['web_root'] = '/';								//the webpath to the root level of the project
 	//$config['web_root'] = 'http://citysurf.tv/';						//the webpath to the root level of the project
 	$config['default_title'] = 'CitySurf.tv - Nu kör vi!';			//default title for pages if no title is specified for that page
 
 	$config['start_page'] = 'start.php';	//logged in start page
-
+	
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Files.php');
@@ -39,27 +48,22 @@
 	//cs includes start
 	//##################
 define('UPLA', '_input/');
-//define('UPLL', '.'.UPLA);
 
 define('DESIGN', '_design/');
 
 define('PD', '02');
 define('UIMG', '150x150');
 define('MAXIMUM_USERS', 750);
-#standard title of page
-//define('DEFAULT_USER', '48d40b8b5dee4c06cd8864be1b35456d');
-//define('NAME_TITLE', 'CitySurf.tv - Nu kör vi!');
-//$NAME_TITLE = NAME_TITLE;
 
 //todo: ta bort P2B använd $config['web_root'] istället
-define('P2B', 'http://www.citysurf.tv/');
+define('P2B', 'http://citysurf.tv/');
 define('URL', 'citysurf.tv');
 define('NAME_URL', 'CitySurf');
 define("UO", '30 MINUTES');
 define('ADMIN_NAME', 'CitySurf');
 define('USER_GALLERY', '_input/usergallery/');
 define('USER_IMG', '_input/images/');
-define('USER_FIMG', 'user/image/');
+define('USER_FIMG', '_input/images/02/');
 define('NEWS', '/_output/news_');
 $sex = array('M' => 'm', 'F' => 'k');
 $sex_name = array('M' => 'man', 'F' => 'kvinna');
@@ -86,18 +90,16 @@ define("STATSTR", "listar <b>%1\$d</b> - <b>%2\$d</b> (totalt: <b>%3\$d</b>)");
 	//end of cs includes
 	//######################
 	
+	$config['database']['username']	= 'cs_user';
+	$config['database']['password']	= 'cs8x8x9ozoSSpp';
+	$config['database']['database']	= 'cs_platform';
+	$config['database']['host']	= 'pc3.icn.se';
 /*
-define('CH', ' SQL_CACHE ');
-define('SQL_U', 'cs_user');
-define('SQL_P', 'cs8x8x9ozoSSpp');
-define('SQL_D', 'cs_platform');
-define('SQL_H', 'pc3.icn.se');
-*/
-
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= 'dravel';
 	$config['database']['database']	= 'cs_dev';
 	$config['database']['host']	= 'localhost';
+*/
 	$db = new DB_MySQLi($config['database']);
 
 	$config['files']['upload_dir'] = '/home/martin/dev/webroot/unicorn/cs_dev/uploads/';

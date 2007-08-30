@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
-	ini_set('report_memleaks', 0);
 	ini_set('memory_limit', '260M');
 
 	$page = 'img';

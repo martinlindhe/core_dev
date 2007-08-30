@@ -1,8 +1,11 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	$id = $user->id;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $id = $_GET['id'];
+
+	if (amIBlocked($id)) errorACT('Användaren har blockerat dig.');
 
 	$his = false;
 	$allowed = true;
@@ -58,7 +61,7 @@
 
 	$odd = true;
 	if(!empty($res) && count($res)) {
-		dopaging($paging, l('user', 'gb', $s['id_id']).'p=', '', 'med', ((!$his)?STATSTR:'<a href="'.l('user', 'gb', $s['id_id']).'">tillbaka</a>'));
+		dopaging($paging, 'user_gb.php?id='.$s['id_id'].'&p=', '', 'med', ((!$his)?STATSTR:'<a href="user_gb.php?id='.$s['id_id'].'">tillbaka</a>'));
 	
 		foreach ($res as $val) {
 			$prv = ($val['private_id'])?1:0;
@@ -108,7 +111,7 @@
 			echo '</td></tr>';
 			echo '</table>';
 		}
-		dopaging($paging, l('user', 'gb', $s['id_id']).'p=', '', 'med');
+		dopaging($paging, 'user_gb.php?id='.$s['id_id'].'&p=', '', 'med');
 	} else {
 		echo '<table summary="" cellspacing="0" class="msgList">';
 		echo '<tr><td class="cnt">Inga gästboksinlägg.</td></tr>';

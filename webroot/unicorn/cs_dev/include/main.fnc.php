@@ -265,7 +265,6 @@
 
 	function popupACT($msg, $url = '', $parent = '', $time = 5000)
 	{
-		die('popupACT debug lalala');
 		errorACT($msg, $url, 'popup', $parent, $time);
 	}
 
@@ -349,6 +348,61 @@
 		return $str;
 	}
 
+	function get_os_($user_agent)
+	{
+		$oses = array (
+			'Windows 3.11' => 'Win16',
+			'Windows 95' => '(Windows 95)|(Win95)|(Windows_95)',
+			'Windows 98' => '(Windows 98)|(Win98)|(Win 9x)',
+			'Windows 2000' => '(Windows NT 5.0)|(Windows 2000)',
+			'Windows XP' => '(Windows NT 5.1)|(Windows XP)',
+			'Windows 2003' => '(Windows NT 5.2)',
+			'Windows NT 4.0' => '(Windows NT 4.0)|(WinNT4.0)|(WinNT)|(Windows NT)|(Windows-NT)',
+			'Windows ME' => 'Windows ME',
+			'Open BSD'=>'OpenBSD',
+			'Sun OS'=>'SunOS',
+			'Linux'=>'(Linux)|(X11)',
+			'Macintosh'=>'(Mac_PowerPC)|(Macintosh)|(Mac_PPC)',
+			'QNX'=>'QNX',
+			'BeOS'=>'BeOS',
+			'OS/2'=>'OS/2',
+			'Search Bot'=>'(nuhk)|(Googlebot)|(Yammybot)|(Openbot)|(psbot)|(Slurp/cat)|(msnbot)|(ia_archiver)|(Cerberian Drtrs)'
+		);
+
+		foreach($oses as $os=>$pattern)
+		{
+			if (eregi($pattern, $user_agent)) return $os;
+		}
+		return 'Unknown';
+	}
+
+	function get_browser_($user_agent)
+	{
+		$browsers = array(
+			'Opera' => 'Opera',
+			'Mozilla Firefox'=> '(Firebird)|(Firefox)',
+			'Galeon' => 'Galeon',
+			'Mozilla'=>'Gecko',
+			'MyIE'=>'MyIE',
+			'Lynx' => 'Lynx',
+			'Lotus-Notes' => 'Lotus-Notes',
+			'Netscape' => '(Mozilla/4\.75)|(Netscape6)|(Mozilla/4\.08)|(Mozilla/4\.5)|(Mozilla/4\.6)|(Mozilla/4\.79)',
+			'Konqueror'=>'Konqueror',
+			'Pic Bot'=>'psbot',
+			'Search Bot' => '(nuhk)|(Googlebot)|(Yammybot)|(Openbot)|(Slurp/cat)|(msnbot)|(ia_archiver)|(Cerberian Drtrs)',
+			'Internet Explorer 7' => '(MSIE 7\.[0-9]+)|(MSIE 7)',
+			'Internet Explorer 6' => '(MSIE 6\.[0-9]+)',
+			'Internet Explorer 5' => '(MSIE 5\.[0-9]+)',
+			'Internet Explorer 4' => '(MSIE 4\.[0-9]+)',
+			'Internet Explorer' => 'MSIE'
+		);
+
+		foreach($browsers as $browser=>$pattern)
+		{
+			if (eregi($pattern, $user_agent)) return $browser;
+		}
+		return 'Unknown';
+	}
 
 
 	//*******************************************

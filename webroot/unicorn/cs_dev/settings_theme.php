@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if (!empty($_POST['css_theme'])) {
 		$user->setinfo($user->id, 'det_tema', $_POST['css_theme']);

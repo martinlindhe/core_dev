@@ -1,10 +1,11 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	$length = array('1' => 10, '3' => 10, '5' => 20, '6' => 40, '8' => 80, '10' => 0);
 	$lim = $length[$_SESSION['data']['level_id']];
 	$photo_limit = 510;
-	$NAME_TITLE = 'LADDA UPP FOTO | '.NAME_TITLE;
+	$NAME_TITLE = 'LADDA UPP FOTO';
 
 	/*
 	if($lim && $sql->queryResult("SELECT COUNT(*) as count FROM s_userphoto WHERE user_id = '".$l['id_id']."' AND status_id = '1'") >= $lim) {
@@ -75,7 +76,7 @@
 		$user->counterIncrease('gal', $user->id);
 		if(!empty($_GET['do'])) {
 			$msg = 'Uppladdad.<br/>Filen ligger längst ner i listan!';
-			$name = safeOUT(substr($_POST['ins_msg'], 0, 40));
+			$name = secureOUT(substr($_POST['ins_msg'], 0, 40));
 			$file = ($prv)?'/'.USER_GALLERY.PD.'/'.$res.'_'.$un.'.'.$p_name:'/'.USER_GALLERY.PD.'/'.$res.'.'.$p_name;
 
 			$script = "<script type=\"text/javascript\">
@@ -133,7 +134,7 @@ function validateUpl(tForm) {
 
 </script>
 <body style="border: 6px solid #FFF;">
-<form name="msg" action="<?=$_SERVER['PHP_SELF']?><?=(!empty($_GET['do']))?'&do='.secureOUT($_GET['do']):'';?>" method="post" enctype="multipart/form-data" onsubmit="if(validateUpl(this)) { return true; } else return false;">
+<form name="msg" action="<?=$_SERVER['PHP_SELF']?><?=(!empty($_GET['do']))?'?do='.secureOUT($_GET['do']):'';?>" method="post" enctype="multipart/form-data" onsubmit="if(validateUpl(this)) { return true; } else return false;">
 		<div class="smallWholeContent cnti mrg">
 			<div class="smallHeader">ladda upp till galleri</div>
 			<div class="smallBody pdg_t">

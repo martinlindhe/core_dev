@@ -16,6 +16,8 @@ class user_auth {
 		}
 
 		$db->insert('INSERT INTO s_usersess SET id_id = "'.$db->escape($result['id_id']).'", sess_ip = "'.$db->escape($_SERVER['REMOTE_ADDR']).'", sess_date = NOW(), type_inf = "i"');
+		$db->insert("INSERT INTO s_logvisit SET sess_ip = '".$db->escape($_SERVER['REMOTE_ADDR'])."', user_string = '".$db->escape(get_os_($_SERVER['HTTP_USER_AGENT']).' - '.get_browser_($_SERVER['HTTP_USER_AGENT']))."', date_snl = NOW(), date_cnt = NOW()");
+
 		$db->update('UPDATE s_user SET lastlog_date = "'.$res.'", lastonl_date = "'.$res.'", account_date = "'.$res.'" WHERE id_id = "'.$db->escape($result['id_id']).'"');
 		$db->replace('REPLACE INTO s_useronline SET account_date = "'.$res.'", id_id = "'.$db->escape($result['id_id']).'", u_sex = "'.$result['u_sex'].'"');
 
@@ -26,10 +28,13 @@ class user_auth {
 		$user->counterSet($result['id_id']);
 	}
 
-	function notify_user($id, $msg, $alias = '') {
-		if(DEFAULT_USER == $id) return;
+	function notify_user($id, $msg, $alias = '')
+	{
+		global $db;
+
+		if (DEFAULT_USER == $id) return;
 		$msg = sprintf($msg, $alias);
-		$this->sql->queryInsert("INSERT INTO s_userchat SET user_id = '".$id."', sender_id = '".DEFAULT_USER."', sent_cmt = '".secureINS($msg)."', sent_date = NOW()");
+		$db->insert("INSERT INTO s_userchat SET user_id = '".$id."', sender_id = '".DEFAULT_USER."', sent_cmt = '".$db->escape($msg)."', sent_date = NOW()");
 	}
 
 	function login($a, $p, $mobile = false)

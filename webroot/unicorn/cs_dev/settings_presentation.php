@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if(!empty($_POST['do'])) {
 		if($_SESSION['data']['status_id'] == '1' && isset($_POST['text_html'])) {

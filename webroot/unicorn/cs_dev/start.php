@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	require(DESIGN.'head.php');
 
@@ -80,6 +81,17 @@
 		}
 
 	echo '</td><td width="10">&nbsp;</td><td>';
+	
+	$val = mt_rand(1, 2);
+	if ($val == 1) {
+		//förortish-banner
+?>
+<div id="flash_ad"></div>
+<script type="text/javascript">
+show_swf("_gfx/ban/forortish.swf", 'flash_ad', 170, 350);
+</script>
+<?
+	} else {
 ?>
 <script type="text/javascript">
 var bnum=new Number(Math.floor(99999999 * Math.random())+1);
@@ -87,6 +99,8 @@ document.write('<SCR'+'IPT LANGUAGE="JavaScript" ');
 document.write('SRC="http://servedby.advertising.com/site=737464/size=160600/bnum='+bnum+'/optn=1"></SCR'+'IPT>');
 </script>
 <?
+	}
+
 	echo '</td></tr></table>';
 
 	echo '</div>';	//id="mainContent"

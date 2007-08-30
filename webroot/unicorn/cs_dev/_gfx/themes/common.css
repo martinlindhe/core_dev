@@ -132,7 +132,7 @@ ul#menu_user a {
 }
 
 .smallHeader {
-	background: url('/unicorn/cs_dev/_gfx/themes/header_small.png');
+	background: url('header_small.png');
 	background-repeat: no-repeat;
 	width: 169px;
 	height: 19px;
@@ -158,7 +158,7 @@ ul#menu_user a {
 }
 
 .mediumHeader {
-	background: url('/unicorn/cs_dev/_gfx/themes/header_medium.png');
+	background: url('header_medium.png');
 	background-repeat: no-repeat;
 	width: 282px;
 	height: 19px;
@@ -178,7 +178,7 @@ ul#menu_user a {
 }
 
 .bigHeader {
-	background: url('/unicorn/cs_dev/_gfx/themes/header_big.png');
+	background: url('header_big.png');
 	background-repeat: no-repeat;
 	width: 596px;
 	height: 19px;

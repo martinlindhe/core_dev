@@ -1,27 +1,28 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
-	if(!empty($_POST['do']) && $l['status_id'] == '1') {
+	if(!empty($_POST['do']) && $_SESSION['data']['status_id'] == '1') {
 		if(!empty($_POST['CCC'])) {
 			if(@$_POST['CCC'] != @$_POST['CC']) {
-				errorACT('Lösenorden matchar inte.', l('member', 'settings', 'delete'));
+				errorACT('Lösenorden matchar inte.', $_SERVER['PHP_SELF']);
 			}
-			$exists = $sql->queryResult("SELECT u_pass FROM s_user WHERE id_id = '" . secureINS($l['id_id']) . "' LIMIT 1");
+			$exists = $db->getOneItem("SELECT u_pass FROM s_user WHERE id_id = '" .$user->id."' LIMIT 1");
 			if(!empty($exists)) {
 				if($exists != $_POST['CCC']) {
-					errorACT('Felaktigt lösenord.', l('member', 'settings', 'delete'));
+					errorACT('Felaktigt lösenord.', $_SERVER['PHP_SELF']);
 				}
 			} else {
-				errorACT('Felaktigt lösenord.', l('member', 'settings', 'delete'));
+				errorACT('Felaktigt lösenord.', $_SERVER['PHP_SELF']);
 			}
-			$sql->logADD($l['id_id'], $l['u_alias'], 'REG_DEL');
-			$res = $sql->queryResult("SELECT l.level_id FROM s_userlevel l WHERE l.id_id = '".$l['id_id']."' LIMIT 1");
-			if(!empty($res)) $sql->queryUpdate("REPLACE INTO s_userlevel_off SET id_id = '".$l['id_id']."', level_id = '".secureINS($res)."'");
-			$sql->queryUpdate("DELETE FROM s_userlevel WHERE id_id = '".$l['id_id']."' LIMIT 1");
-			$sql->queryUpdate("UPDATE s_user SET status_id = '2', u_picid = '0', u_picvalid = '0', account_date = '0000-00-00 00:00:00', lastonl_date = '0000-00-00 00:00:00' WHERE id_id = '".secureINS($l['id_id'])."' LIMIT 1");
-			reloadACT(l('member', 'logout', '1'));
+			//$db->logADD($user->id, $_SESSION['data']['u_alias'], 'REG_DEL');
+			$res = $db->getOneItem("SELECT level_id FROM s_userlevel WHERE id_id = '".$user->id."' LIMIT 1");
+			if (!empty($res)) $db->replace("REPLACE INTO s_userlevel_off SET id_id = '".$user->id."', level_id = '".$db->escape($res)."'");
+			$db->delete("DELETE FROM s_userlevel WHERE id_id = '".$user->id."' LIMIT 1");
+			$db->update("UPDATE s_user SET status_id = '2', u_picid = '0', u_picvalid = '0', account_date = '0000-00-00 00:00:00', lastonl_date = '0000-00-00 00:00:00' WHERE id_id = '".$user->id."' LIMIT 1");
+			reloadACT('logout.php');
 		} else {
-			errorACT('Felaktigt lösenord.', l('member', 'settings', 'delete'));
+			errorACT('Felaktigt lösenord.', $_SERVER['PHP_SELF']);
 		}
 	}
 

@@ -8,13 +8,13 @@ function formatText($str, $isVip = true) {
 	if($isVip) {
 		
 		$arr = array('&lt;', '&gt;');
-		$rep = array('&amp;#60;', '&amp;#62;');
-		$str = str_replace($arr, $rep, $str);
+		//$rep = array('&amp;#60;', '&amp;#62;');
+		//$str = str_replace($arr, $rep, $str);
 		$str = preg_replace("#javascript\:#is", "java script:", $str);
 		$str = preg_replace("#vbscript\:#is", "vb script:", $str);
 		$str = str_replace("`", "`", $str);
 		$str = preg_replace("#moz\-binding:#is", "moz binding:", $str);
-		$str = html_entity_decode($str);
+
 		$str = preg_replace('#(&\#*\w+)[\x00-\x20]+;#U',"$1;",$str);
 		#$str = preg_replace('#(&\#x*)([0-9A-F]+);*#iu',"$1$2;",$str);
 		$str = preg_replace('#(<[^>]+[\s\r\n\"\'])(on|xmlns)[^>]*>#iU',"$1>",$str);
@@ -43,7 +43,7 @@ function formatText($str, $isVip = true) {
 	do {
 		$oldstr = $str;
 
-		$pos1 = strpos($str, 'href="http://www.citysurf.tv/user/view/');
+		$pos1 = strpos($str, '<a href="http://www.citysurf.tv/user/view/');
 		if ($pos1 !== false) {
 			$pos2 = strpos($str, '">', $pos1);
 			if ($pos2 !== false) {
@@ -56,9 +56,9 @@ function formatText($str, $isVip = true) {
 				$id = substr($mid, $pos3+1);
 				//echo ' id = '.$id;
 				
-				$x2 = substr($str, $pos2);
+				$x2 = substr($str, $pos2+2);
 
-				$str = $x1.'href="user_view.php?id='.$id.$x2;
+				$str = $x1.'<a href="user_view.php?id='.$id.'"><img src="thumb.php?id='.$id.'"></a>'.$x2;
 			}
 		}
 

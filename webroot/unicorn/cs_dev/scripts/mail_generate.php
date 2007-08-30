@@ -1,11 +1,9 @@
 <?
-die;
 	set_time_limit(900*3);
 
-	include("_config/online.include.php");
-	require("_config/class.phpmailer.php");
+	require('../config.php');
 
-//Helper function: calls class.phpmailer.php functions. $mails is a array of recipients
+	//Helper function: calls class.phpmailer.php functions. $mails is a array of recipients
 	function smtp_mass_mail($mails, $subject, $body)
 	{
 		$mail = new PHPMailer();
@@ -18,13 +16,14 @@ die;
 		//$mail->CharSet  = 'utf-8';
 
 		$mail->From     = 'noreply@citysurf.tv';
-		$mail->FromName = 'CitySurf';
+		//$mail->FromName = 'CitySurf';
+		$mail->FromName = 'Förortish Filmfestival';
 
 		$mail->IsHTML(true);   // send HTML mail
 
 		//Embed graphics
-		$mail->AddEmbeddedImage('/home/martin/www/utskick1/utskick_head.jpg', 'head', '', 'base64', 'image/jpeg');
-		$mail->AddEmbeddedImage('/home/martin/www/utskick1/utskick_1.jpg', 'pic_1', '', 'base64', 'image/jpeg');
+		$mail->AddEmbeddedImage('utskick4_forortish/forortish.jpg', 'bild', '', 'base64', 'image/jpeg');
+		//$mail->AddEmbeddedImage('utskick1/utskick_1.jpg', 'pic_1', '', 'base64', 'image/jpeg');
 
 		$mail->Subject  = $subject;
 		$mail->Body     = $body;
@@ -43,29 +42,51 @@ die;
 		
 		return true;
 	}
-
-	$q = 'select t1.u_email,t1.id_id,t2.verified from s_user as t1 left join tblVerifyUsers as t2 on (t1.id_id=t2.user_id) where t2.verified!=1 or t2.verified is null';
-	$list = $sql->query($q);
-	
 	$to = array();
-	
-	$i = 0;
 
+
+	//välj alla som inte är verified
+/*
+	$q = 'select t1.u_email,t1.id_id,t2.verified from s_user as t1 left join tblVerifyUsers as t2 on (t1.id_id=t2.user_id) where t2.verified!=1 or t2.verified is null';
+	$list = $db->getArray($q);
+*/
+
+	//välj alla användare på sajten
+	$q = 'SELECT DISTINCT(u_email), id_id,lastonl_date FROM s_user ORDER BY lastonl_date DESC';
+	$list = $db->getArray($q);
+	
+	echo 'Beginning sending mail to '.count($list).' ...<br/>';
+
+	$bad = 0;
 	foreach($list as $row) {
-		if ($row[2] === '0') continue;
 		
-		$to[] = strtolower($row[0]);
+		if (!ValidEmail(trim($row['u_email']))) {
+			echo 'Invalid email for <a href="/user_view.php?id='.$row['id_id'].'">'.$row['id_id'].'</a>, last online '.$row['lastonl_date'].' - '.$row['u_email'].'<br/>';
+			$bad++;
+
+			$delete_date = mktime(0, 0, 0, 1, 1, 2007);
+			if (strtotime($row['lastonl_date']) < $delete_date) {
+				echo 'Deleting inactive and invalid user!<br/>';
+				$q = 'DELETE FROM s_user WHERE id_id='.$row['id_id'];
+				$db->delete($q);
+			}
+
+		} else {
+			$to[] = strtolower(trim($row['u_email']));
+		}
 	}
 
-	$to[] = 'martin_lindhe@yahoo.se';
+	echo 'Found '.$bad.' invalid emails<br/>';
 
-	//echo '<pre>'; print_r($to); die;
-	//$to = array('martin@unicorn.tv', 'martin_lindhe@yahoo.se');
-	
-	$subject = 'Välkommen till nya CitySurf!';
-	
-	$body = file_get_contents('/home/martin/www/utskick1/body.html');
-	
-	smtp_mass_mail($to, $subject, $body);
+//	$to[] = 'martin@unicorn.tv';
+//	$to[] = 'kiano@unicorn.tv';
 
+//	d($to); die;
+	die;
+	
+	$subject = 'Förortish Filmfestival';
+	
+	$body = file_get_contents('utskick4_forortish/body.html');
+	
+	//smtp_mass_mail($to, $subject, $body);
 ?>

@@ -1,9 +1,12 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id']) || empty($_GET['n']) || !is_numeric($_GET['n'])) die;
 	$id = $_GET['id'];	//user-id
 	$n = $_GET['n'];	//blog-id
+
+	if (amIBlocked($id)) errorACT('Användaren har blockerat dig.');
 
 	$res = $db->getOneRow('SELECT main_id, status_id, user_id, blog_title, blog_date, hidden_id FROM s_userblog WHERE main_id = '.$n.' LIMIT 1');
 	if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1') {
@@ -56,7 +59,7 @@
 	if($alias) $alias = $alias.': ';
 	require(DESIGN.'head_popup.php');
 ?>
-<script type="text/javascript" src="<?=OBJ?>text_control.js"></script>
+<script type="text/javascript" src="<?=$config['web_root']?>js/text_control.js"></script>
 <script type="text/javascript">
 window.onload = TC_Init;
 function addselOption(txt, file) {

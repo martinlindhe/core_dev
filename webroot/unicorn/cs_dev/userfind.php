@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if(!empty($_POST['a'])) {
 		$src = $_POST['a'];

@@ -1,12 +1,4 @@
 <?
-/*
-	if ($_SERVER['REMOTE_ADDR'] != '213.80.11.162') {
-		echo 'Citysurf uppdateras!<br/><br/>Under eftermiddagen onsdagen den 13:e juni genomför vi en uppdatering av citysurf.<br/><br/>';
-		echo 'Passa på att njuta av en glass i solen och kika tillbaka om några timmar!<br><br>';
-		die;
-	}
-*/
-
 	require_once('config.php');
 
 	$login_err = true;

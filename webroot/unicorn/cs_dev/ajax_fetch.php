@@ -1,10 +1,11 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	header('Cache-Control: no-cache');
 	header('Pragma: no-cache');
 	$user->update_retrieve();
-	echo $_SESSION['data']['cachestr'];
+	echo @$_SESSION['data']['cachestr'];
 	die;
 /*
 	$gb_c = intval($user->getinfo($l['id_id'], 'gb_count'));

@@ -1,11 +1,14 @@
 <?
 	/*
-		tar emot text frÃ¥n quickchat-funktionen och sparar ner i databasen + gÃ¶r nÃ¥t mer crap
+		tar emot text från quickchat-funktionen och sparar ner i databasen + gör nåt mer crap
 	*/
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 	$id = $_GET['id'];
+
+	if (amIBlocked($id)) errorACT('Användaren har blockerat dig.');
 
 	$s = $user->getuser($id);
 
@@ -36,10 +39,15 @@
 	header('Cache-Control: no-cache');
 	header('Pragma: no-cache');
 
+	//header('Content-Type: text/html; charset=ISO-8859-1');
+
+
 	//spara skickat meddelande
 	if (!$notall && !$blocked && !$closed && !empty($_POST['msg'])) {
-		$str = str_replace('%2b', '+', $_POST['msg']);
-		$str = substr($str, 0, 250);
+		echo $_POST['msg'];
+		$str = $_POST['msg'];
+		//$str = str_replace('%2b', '+', $_POST['msg']);
+		//$str = substr($str, 0, 250);
 		$q = "INSERT INTO s_userchat SET
 		sender_id = '".$user->id."',
 		user_id = '".$id."',
@@ -70,14 +78,16 @@
 				'WHERE c.user_id = '.$user->id.' AND c.sender_id = '.$id.' AND c.user_read = "0" '.
 				'ORDER BY c.main_id ASC';
 		$res = $db->getArray($q);
+
 	} else {
 		$history = false;
-		$q = 'SELECT c.user_id, CONCAT("OtillgÃ¤nglig anvÃ¤ndare", "") AS u_alias, c.sent_date, c.sent_cmt, c.sender_id FROM s_userchat c '.
+		$q = 'SELECT c.user_id, CONCAT("Otillgänglig användare", "") AS u_alias, c.sent_date, c.sent_cmt, c.sender_id FROM s_userchat c '.
 				'WHERE c.user_id = '.$user->id.' AND c.sender_id = '.$id.' AND c.user_read = "0" '.
 				'ORDER BY c.main_id ASC';
 		$res = $db->getArray($q);
 	}
 	$guid = md5($id);#substr($id, 0, 16).'.'.substr($id, 16, 4).'-'.substr($id, 20, 8).'.'.substr($id, 28, 4);
+
 	if ($history) {
 		for ($i = count($his)-1; $i >= 0; $i--) {
 			$len = strlen(rawurlencode($his[$i]['u_alias']));
@@ -96,6 +106,7 @@
 		if (strlen($dlen) == '1') $dlen = '0'.$dlen;
 		echo $guid.'0'.$len.rawurlencode($row['u_alias']).$dlen.$row['sent_date'].rawurlencode(secureOUT($row['sent_cmt']));
 	}
+
 	if (!empty($res)) {
 		$db->update("UPDATE s_userchat SET user_read = '1' WHERE user_id = '".$user->id."' AND sender_id = '".$id."' AND user_read = '0'");
 	} else if ($closed) {

@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	$_SESSION['data'] = $user->getuserfill($_SESSION['data'], ', u_email, u_pstort, u_pstlan, location_id');
 	$_SESSION['data'] = $user->getuserfillfrominfo($_SESSION['data'], ', u_fname, u_sname, u_street, u_pstnr, u_cell');
@@ -174,12 +175,12 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		*/
-		if(@$settings['hidden_login'] != @$_POST['opt_hidden']) {
-			$hidden = (!empty($_POST['opt_hidden']) && $isOk)?'1':'0';
+		if (@$settings['hidden_login'] != @$_POST['opt_hidden']) {
+			$hidden = (!empty($_POST['opt_hidden']))?'1':'0';
 			$id = $user->setinfo($user->id, 'hidden_login', $hidden);
-			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
+			if ($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 			$_SESSION['c_h'] = $hidden;
-			if($hidden) $_SESSION['c_d'] = 0;
+			if ($hidden) $_SESSION['c_d'] = 0;
 		}
 		/*
 		if($hidlog != @$_POST['opt_hidlog'] || ($hidlog && !$isOk)) {
@@ -196,7 +197,7 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 		*/
-		if(@$settings['send_spec'] != @$_POST['opt_spec'] || (@$settings['send_spec'] && !$isOk)) {
+		if(@$settings['send_spec'] != @$_POST['opt_spec'] || (@$settings['send_spec'])) {
 			$hidden = (!empty($_POST['opt_spec']))?'1':'0';
 			$id = $user->setinfo($user->id, 'send_spec', $hidden);
 			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
@@ -222,7 +223,11 @@
 			if($id[0]) $user->setrel($id[1], 'user_settings', $user->id);
 		}
 
-		if (!empty($msg)) errorACT($msg); else errorACT('Uppdaterat!', $_SERVER['PHP_SELF']);
+		if (!empty($msg)) {
+			errorACT($msg);
+		} else {
+			errorACT('Uppdaterat!', $_SERVER['PHP_SELF']);
+		}
 	}
 	$page = 'settings';
 	include(DESIGN.'head.php');
@@ -269,61 +274,61 @@
 		</tr>
 		<tr>
 			<td colspan="2" class="pdg_t"><b>Kön att slumpa fram:</b><br /><select name="opt_random" class="txt">
-				<option value="F"<?=@((empty($settings['random'][1]) && $sexs[$_SESSION['data']['u_sex']] == 'F') || (!empty($settings['random'][1]) && $settings['random'][1] == 'F'))?' selected':'';?>>Tjejer</option>
-				<option value="M"<?=@((empty($settings['random'][1]) && $sexs[$_SESSION['data']['u_sex']] == 'M') || (!empty($settings['random'][1]) && $settings['random'][1] == 'M'))?' selected':'';?>>Killar</option>
-				<option value="B"<?=@(!empty($settings['random'][1]) && $settings['random'][1] == 'B')?' selected':'';?>>Båda könen</option>
+				<option value="F"<?=@((empty($settings['random']) && $sexs[$_SESSION['data']['u_sex']] == 'F') || (!empty($settings['random']) && $settings['random'] == 'F'))?' selected':'';?>>Tjejer</option>
+				<option value="M"<?=@((empty($settings['random']) && $sexs[$_SESSION['data']['u_sex']] == 'M') || (!empty($settings['random']) && $settings['random'] == 'M'))?' selected':'';?>>Killar</option>
+				<option value="B"<?=@(!empty($settings['random']) && $settings['random'] == 'B')?' selected':'';?>>Båda könen</option>
 			</select></td>
 		</tr>
 		<?
 		/*
 		<tr>
-			<td class="pdg_t" colspan="2" style="padding-top: 12px;"><input type="checkbox" class="chk" name="opt_chat" value="1" id="opt_chat1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['private_chat'][1]))?' checked':'';?> /><label for="opt_chat1"> Använd privatchat endast med mina vänner (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+			<td class="pdg_t" colspan="2" style="padding-top: 12px;"><input type="checkbox" class="chk" name="opt_chat" value="1" id="opt_chat1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['private_chat']))?' checked':'';?> /><label for="opt_chat1"> Använd privatchat endast med mina vänner (<img src="6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_view" value="1" id="opt_view1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_view'][1]))?' checked':'';?> /><label for="opt_view1"> Dölj mig i besökslogg (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_view" value="1" id="opt_view1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_view']))?' checked':'';?> /><label for="opt_view1"> Dölj mig i besökslogg (<img src="6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_bview" value="1" id="opt_bview1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_bview'][1]))?' checked':'';?> /><label for="opt_bview1"> Dölj mig i bloggar (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_bview" value="1" id="opt_bview1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_bview']))?' checked':'';?> /><label for="opt_bview1"> Dölj mig i bloggar (<img src="6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_pview" value="1" id="opt_pview1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_pview'][1]))?' checked':'';?> /><label for="opt_pview1"> Dölj mig i fotoalbum (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_pview" value="1" id="opt_pview1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_pview']))?' checked':'';?> /><label for="opt_pview1"> Dölj mig i fotoalbum (<img src="6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_shidden" value="1" id="opt_shidden1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_slogin'][1]))?' checked':'';?> /><label for="opt_shidden1"> Dölj mig i "senaste inloggade" (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_shidden" value="1" id="opt_shidden1"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_slogin']))?' checked':'';?> /><label for="opt_shidden1"> Dölj mig i "senaste inloggade" (<img src="6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidlog" value="1" id="opt_hidlog"<?=(!$isOk)?' disabled':'';?><?=(!empty($hidlog))?' checked':'';?> /><label for="opt_hidlog"> Dold inloggningshistorik (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidlog" value="1" id="opt_hidlog"<?=(!$isOk)?' disabled':'';?><?=(!empty($hidlog))?' checked':'';?> /><label for="opt_hidlog"> Dold inloggningshistorik (<img src="6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidchat" value="0" id="opt_hidchat"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_chat'][1]))?'':(($isOk)?' checked':'');?> /><label for="opt_hidchat"> Visa historik i privatchat (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidchat" value="0" id="opt_hidchat"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['hidden_chat']))?'':(($isOk)?' checked':'');?> /><label for="opt_hidchat"> Visa historik i privatchat (<img src="6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_zoom" value="1" id="opt_zoom"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['zoom_auto'][1]))?' checked':'';?> /><label for="opt_zoom"> Gå till zoomverktyget automatiskt i vimmel (<img src="<?=OBJ?>6.gif" alt="" title="Guld" />)</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_zoom" value="1" id="opt_zoom"<?=(!$isOk)?' disabled':'';?><?=(!empty($settings['zoom_auto']))?' checked':'';?> /><label for="opt_zoom"> Gå till zoomverktyget automatiskt i vimmel (<img src="6.gif" alt="" title="Guld" />)</label></td>
 		</tr>
 		*/
 
 			if ($user->vip_check(VIP_LEVEL2))
-				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"'.(!empty($settings['hidden_login'][1])?' checked':'').'/><label for="opt_hidden1"> Hemlig användare (VIP-Delux) *</label></td></tr>';
+				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_hidden" value="1" id="opt_hidden1"'.(!empty($settings['hidden_login'])?' checked':'').'/><label for="opt_hidden1"> Hemlig användare (VIP-Delux) *</label></td></tr>';
 			if ($user->vip_check(VIP_LEVEL1))
-				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"'.(!empty($settings['send_spec'][1]) && $isOk?' checked':'').'/><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (VIP)</label></td></tr>';
+				echo '<tr><td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_spec" value="1" id="opt_spec1"'.(!empty($settings['send_spec']) ?' checked':'').'/><label for="opt_spec1"> Ja, jag vill ha VIP-inbjudningar (VIP)</label></td></tr>';
 		?>
 
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_cell" value="1" id="opt_cell1"<?=(empty($settings['send_cell'][1]))?' checked':'';?> /><label for="opt_cell1"> Ja, jag vill ha erbjudanden via SMS</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_cell" value="1" id="opt_cell1"<?=(empty($settings['send_cell']))?' checked':'';?> /><label for="opt_cell1"> Ja, jag vill ha erbjudanden via SMS</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_email" value="1" id="opt_email1"<?=(empty($settings['send_email'][1]))?' checked':'';?> /><label for="opt_email1"> Ja, jag vill ha erbjudanden via e-post</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="opt_email" value="1" id="opt_email1"<?=(empty($settings['send_email']))?' checked':'';?> /><label for="opt_email1"> Ja, jag vill ha erbjudanden via e-post</label></td>
 		</tr>
 <!--
 		<tr>
-			<td class="pdg_t" style="padding-top: 24px;" colspan="2"><input type="checkbox" class="chk" name="opt_mmsenabled" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmsenabled1"<?=(!empty($settings['mmsenabled'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmsenabled1"> Ja, jag vill skicka MMS från mobil till <select name="opt_mmstype" class="txt" style="width: 100px;"<?=(!$isAdmin)?' disabled':'';?>><option value="B"<?=((empty($settings['mmstype'][1]) || $settings['mmstype'][1] == 'B') && $isAdmin)?' selected':'';?>>min blogg</option><option value="P"<?=((!empty($settings['mmstype'][1]) && $settings['mmstype'][1] == 'P') && $isAdmin)?' selected':'';?>>mitt fotoalbum</option></select> (<img src="<?=OBJ?>10.gif" alt="" title="Admin" />)</label></td>
+			<td class="pdg_t" style="padding-top: 24px;" colspan="2"><input type="checkbox" class="chk" name="opt_mmsenabled" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmsenabled1"<?=(!empty($settings['mmsenabled']) && $isAdmin)?' checked':'';?> /><label for="opt_mmsenabled1"> Ja, jag vill skicka MMS från mobil till <select name="opt_mmstype" class="txt" style="width: 100px;"<?=(!$isAdmin)?' disabled':'';?>><option value="B"<?=((empty($settings['mmstype']) || $settings['mmstype'] == 'B') && $isAdmin)?' selected':'';?>>min blogg</option><option value="P"<?=((!empty($settings['mmstype']) && $settings['mmstype'] == 'P') && $isAdmin)?' selected':'';?>>mitt fotoalbum</option></select> (<img src="10.gif" alt="" title="Admin" />)</label></td>
 		</tr>
 		<tr>
-			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="ins_mmspriv" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmspriv1"<?=(!empty($settings['mmspriv'][1]) && $isAdmin)?' checked':'';?> /><label for="opt_mmspriv1"> Ja, gör alla mina MMS privata (<img src="<?=OBJ?>10.gif" alt="" title="Admin" />)</label></td>
+			<td class="pdg_t" colspan="2"><input type="checkbox" class="chk" name="ins_mmspriv" value="1"<?=(!$isAdmin)?' disabled':'';?> id="opt_mmspriv1"<?=(!empty($settings['mmspriv']) && $isAdmin)?' checked':'';?> /><label for="opt_mmspriv1"> Ja, gör alla mina MMS privata (<img src="10.gif" alt="" title="Admin" />)</label></td>
 		</tr>
 -->
 		<tr>
-			<td class="pdg_t" colspan="2"><br/><b>MMS-nyckel:</b><br />(Skriv in en kod, mellan 4-8 tecken, siffror eller bokstäver. Spara koden och använd den när du laddar upp dina MMS.)<br/><input type="text" class="txt" name="ins_mmskey" value="<?=@secureOUT(@$settings['mmskey'][1])?>" /><?=$mmskey_error?></td>
+			<td class="pdg_t" colspan="2"><br/><b>MMS-nyckel:</b><br />(Skriv in en kod, mellan 4-8 tecken, siffror eller bokstäver. Spara koden och använd den när du laddar upp dina MMS.)<br/><input type="text" class="txt" name="ins_mmskey" value="<?=secureOUT(@$settings['mmskey'])?>" /><?=$mmskey_error?></td>
 		</tr>
 	</table>
 	<br/>

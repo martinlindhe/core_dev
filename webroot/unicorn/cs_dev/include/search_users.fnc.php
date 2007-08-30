@@ -69,7 +69,7 @@
 		$str[] = '+ACTIVE';
 		if (!empty($_POST['ort']) && $result['lan']) {
 			$result['ort'] = $_POST['ort'];
-			$ort_check = $sql->queryResult("SELECT st_lan FROM s_pstort WHERE st_ort = '".$db->escape($result['ort'])."' LIMIT 1");
+			$ort_check = $db->getOneItem("SELECT st_lan FROM s_pstort WHERE st_ort = '".$db->escape($result['ort'])."' LIMIT 1");
 			if (empty($ort_check) || $ort_check != $result['lan']) $result['ort'] = '0';
 		}
 		if (!empty($_POST['l_6']) && is_numeric($_POST['l_6'])) {
@@ -179,14 +179,14 @@
 	/* echos out <option> values for all "ort" from database, to use with search windows */
 	function optionOrt($_lan, $_selected = 0)
 	{
-		global $sql;
+		global $db;
 
 		if (!$_lan) return false;
 
-		$list = $sql->query("SELECT st_ort FROM s_pstort WHERE st_lan = '".secureINS($_lan)."' ORDER BY st_ort");
+		$list = $db->getArray("SELECT st_ort FROM s_pstort WHERE st_lan = '".$db->escape($_lan)."' ORDER BY st_ort");
 
 		foreach ($list as $res) {
-			echo '<option value="'.$res[0].'"'.($_selected===$res[0]?' selected':'').'>'.secureOUT(ucwords(strtolower($res[0]))).'</option>';
+			echo '<option value="'.$res['st_ort'].'"'.($_selected===$res['st_ort']?' selected':'').'>'.secureOUT(ucwords(strtolower($res['st_ort']))).'</option>';
 		}
 	}
 

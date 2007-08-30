@@ -4,7 +4,7 @@ function launchHover(e, id) {
 	if(!e) e = window.event;
 	ob = document.getElementById('hoverCraft');
 	ob.style.display = '';
-	str = '<img src="/user/image/' + id + '.jpg" class="bbrd" />';
+	str = '<img src="thumb.php?id=' + id + '" class="bbrd" />';
 	if(oldstr != str) ob.innerHTML = str;
 	oldstr = str;
 	oXY = [0, 0];
@@ -80,7 +80,7 @@ function makeRelation(id) {
 }
 function makeUpload(doit) { 
 	if(!doit) doit = '';
-	win = window.open('galleryupload.php' + doit, 'upload', 'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, scrollbars=0, status=no, width=200, height=280, location=yes');
+	win = window.open('galleryupload.php?' + doit, 'upload', 'left='+((screen.availWidth - 200)/2)+',top='+((screen.availHeight - 280)/2)+', resizable=0, scrollbars=0, status=no, width=200, height=280, location=yes');
 	win.focus();
 }
 function makeForum(id) {
@@ -91,8 +91,8 @@ function makeForumAns(id) {
 	ref = window.open('forum_answer.php?id=' + id, '', 'left='+((screen.availWidth - 610)/2)+',top='+((screen.availHeight - 265)/2)+', resizable=0, status=no, width=610 height=265');
 	ref.focus();
 }
-function makeBlog() { 
-	win = window.open('user_blog_write.php', '', 'left='+((screen.availWidth - 570)/2)+',top='+((screen.availHeight - 650)/2)+', resizable=0, scrollbars=0, status=no, width=570, height=650, location=yes');
+function makeBlog(id) { 
+	win = window.open('user_blog_write.php?id=' + id, '', 'left='+((screen.availWidth - 570)/2)+',top='+((screen.availHeight - 650)/2)+', resizable=0, scrollbars=0, status=no, width=570, height=650, location=yes');
 	win.focus();
 }
 function makeBlogComment(uid, id) {
@@ -236,3 +236,11 @@ function changePage(p) {
 	document.search.submit();
 }
 
+function show_swf(file, dst_div, w, h)
+{
+	var fo = new FlashObject(file, 'animationName', w, h, '8', '#FFFFFF');
+	fo.addParam('allowScriptAccess', 'sameDomain');
+	fo.addParam('quality', 'high');
+	fo.addParam('scale', 'noscale');
+	fo.write(dst_div);
+}

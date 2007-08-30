@@ -1,9 +1,12 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('ingen mottagare');
 	$id = $_GET['id'];
 	if ($user->id == $id) popupACT('Du kan inte skicka till dig själv.');
+
+	if (amIBlocked($id)) errorACT('Användaren har blockerat dig.');
 
 	$s = $user->getuser($id);
 

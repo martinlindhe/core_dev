@@ -43,6 +43,7 @@ function textFocus() {
 }
 blink = null;
 var gotmsgs = true;
+
 function taskBlink() {
 	if(document.title == usr + ' | privatchat')
 		document.title = '### ' + usr + ' | privatchat';
@@ -101,9 +102,9 @@ function getMSG() {
 }
 function doMSG() {
 	today = new Date();
-	if(trim(document.getElementById("msgTextbox").value).length > 0) {
+	if (trim(document.getElementById("msgTextbox").value).length > 0) {
 		var msg = document.getElementById("msgTextbox").value.substr(0, 250);
-		DoCallback('user_chatrelay.php?id=' + id, 0, 'msg=' + escape(msg.replace(/\+/gi, "%2b")));
+		DoCallback('user_chatrelay.php?id=' + id, 0, 'msg=' + msg);
 		sendMSG(htmle(msg), 'kl '+addZero(today.getHours())+':'+addZero(today.getMinutes()), you, 0);
 	}
 	document.getElementById("msgTextbox").value = '';

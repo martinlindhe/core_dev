@@ -1,11 +1,14 @@
 <?
 	//popup-fönster
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('ingen mottagare');
 	$id = $_GET['id'];
 
 	if ($user->id == $id) popupACT('Du kan inte skapa en relation med dig själv.');
+
+	if (amIBlocked($id)) errorACT('Användaren har blockerat dig.');
 
 	$isFriends = $user->isFriends($id, 1);
 	if ($isFriends) popupACT('Ni har redan en aktiv relation.');

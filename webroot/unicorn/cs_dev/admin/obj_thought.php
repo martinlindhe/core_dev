@@ -1,4 +1,6 @@
 <?
+	//detta är TYCK TILL!
+
 	$thispage = 'obj.php?status=thought';
 	$view_gb = 0;
 	$city = array();
@@ -7,7 +9,7 @@
 		$city = explode(',', $_SESSION['u_a'][0]);
 	}
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql->queryUpdate("UPDATE s_thought SET status_id = '2' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$db->update("UPDATE s_thought SET status_id = '2' WHERE main_id = '".$_GET['del']."' LIMIT 1");
 		header("Location: ".$thispage);
 		die;
 	}

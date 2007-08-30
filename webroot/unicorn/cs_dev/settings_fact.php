@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	$head = $user->getcontent($user->id, 'user_head');
 

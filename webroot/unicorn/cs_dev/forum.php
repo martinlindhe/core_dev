@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	$res = $db->getArray('SELECT main_id, main_ttl FROM s_ftopic f WHERE f.status_id = "1" ORDER BY f.order_id');
 	$last = $db->getArray('SELECT f.main_id, f.topic_id, f.top_id, f.view_id, f.parent_id, CONCAT(SUBSTRING(f.sent_cmt, 1, 50), "...") AS sent_cmt, f.sent_date, u.id_id, u.u_alias, u.account_date, u.u_sex, u.u_birth, u.level_id, p.sent_ttl AS main_ttl FROM (s_f f, s_f p) RIGHT JOIN s_ftopic t ON t.main_id = f.topic_id AND t.status_id = "1" LEFT JOIN s_user u ON u.id_id = f.sender_id AND u.status_id = "1" WHERE f.status_id = "1" AND f.view_id = "1" AND p.main_id = f.top_id AND p.status_id = "1" ORDER BY f.main_id DESC LIMIT 30');

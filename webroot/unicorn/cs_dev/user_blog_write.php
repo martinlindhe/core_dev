@@ -1,23 +1,22 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
-	$NAME_TITLE = 'BLOGG - SKRIV | '.NAME_TITLE;
+	$NAME_TITLE = 'BLOGG - SKRIV';
 	$edit = false;
-	$gotone = true;
 	$lim = 5;
 
-	if(!empty($_GET['i'])) {
-		$res = $sql->queryLine("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt, hidden_id FROM s_userblog WHERE main_id = '".secureINS($_GET['i'])."' LIMIT 1", 1);
-		if(empty($res) || !count($res) || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $l['id_id']) {
-			#popupACT('Felaktigt inlägg.');
-			$gotone = false;
+	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+		//får användaren redigera denna blog, e det hans egen?
+		$res = $db->getOneRow("SELECT main_id, status_id, user_id, blog_title, blog_date, blog_cmt, hidden_id FROM s_userblog WHERE main_id = '".$_GET['id']."' LIMIT 1");
+		if (empty($res) || empty($res['status_id']) || $res['status_id'] != '1' || $res['user_id'] != $user->id) {
+			popupACT('Felaktigt inlägg.');
 		} else $edit = true;
 	}
 
-	if(!empty($_POST['do']) && !empty($_POST['text_html'])) {
+	if (!empty($_POST['do']) && !empty($_POST['text_html'])) {
 
-
-		$hidden = (!empty($_POST['ins_priv']) && $user->level($l['level_id'], 2))?'1':'0';
+		$hidden = (!empty($_POST['ins_priv']) && $user->level($_SESSION['data']['level_id'], 2))?'1':'0';
 		$_POST['text_html'] = strip_tags($_POST['text_html'], NRMSTR);
 		if($edit) {
 			$db->update("UPDATE s_userblog SET blog_cmt = '".$db->escape($_POST['text_html'])."', hidden_id = '$hidden', blog_title = '".$db->escape($_POST['ins_title'])."' WHERE main_id = '".$res['main_id']."' LIMIT 1");
@@ -33,12 +32,6 @@
 			popupACT('Publicerad!', '', '1000', 'user_blog.php?'.mt_rand(1000, 9999).'#R'.$id);
 		else
 			popupACT('Publicerad!', '', 'user_blog_read.php?id='.$user->id.'&n='.$id, 1000);
-	}
-
-	if($edit) {
-#		$linked = $sql->query("SELECT photo_id FROM {$tab['bloglink']} WHERE diary_id = '".$res['main_id']."' ORDER BY main_id ASC LIMIT $lim");
-	} elseif(!$gotone) {
-		popupACT('Felaktigt inlägg.');
 	}
 
 	$q = "SELECT main_id, status_id, picd, hidden_id, hidden_value, pht_name, pht_cmt FROM s_userphoto WHERE user_id = '".$user->id."' AND status_id = '1' ORDER BY main_id DESC";
@@ -66,7 +59,7 @@ function validateIt(tForm) {
 }
 </script>
 
-<form name="blog_write" action="<?=$_SERVER['PHP_SELF']?>" method="post" onsubmit="return validateIt(this);">
+<form name="blog_write" action="<?=$_SERVER['PHP_SELF']?><?=(!empty($_GET['id']) ? '?id='.$_GET['id'] : '')?>" method="post" onsubmit="return validateIt(this);">
 <input type="hidden" name="do" value="1"/>
 
 <div class="boxMid4" style="margin: 15px 15px 0 15px;">
@@ -198,7 +191,7 @@ function omo(obj, border) {
 		echo '<option value="'.P2B.USER_GALLERY.$pic['picd'].'/'.$pic['main_id'].(($pic['hidden_id'])?'_'.$pic['hidden_value']:'').'.'.$pic['pht_name'].'">'.secureOUT('#'.$pic['main_id'].' - '.$pic['pht_cmt']).' '.(($pic['hidden_id'])?'[privat]':'').'</option>';	
 	}
 ?>
-</select><input type="button" class="btn2_min" value="ladda upp ny" onclick="makeUpload('<?=$user->id?>&amp;do=blog'); return false;"/>
+</select><input type="button" class="btn2_min" value="ladda upp ny" onclick="makeUpload('do=blog'); return false;"/>
 </blockquote>
 </td></tr>
 <tr><td colspan="2" style="border: 1px solid #999; height: 300px; background: #FFF;"><iframe id="text_var" style="cursor: text" name="text_var" border="0" frameborder="0" width="100%" height="300"></iframe></td></tr>

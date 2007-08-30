@@ -1,5 +1,5 @@
 <?
-	//visdom. fixme - byt namn på filen...
+	//detta är DAGENS VISDOM. fixme - byt namn på filen...
 
 	$thispage = 'obj.php?status=scc';
 	$view_gb = 0;
@@ -8,9 +8,9 @@
 		$city = explode(',', $_SESSION['u_a'][0]);
 	}
 	if(!empty($_GET['del']) && is_numeric($_GET['del'])) {
-		$sql->queryUpdate("UPDATE s_s_ SET status_id = '2', con_onday = '' WHERE main_id = '".secureINS($_GET['del'])."' LIMIT 1");
+		$db->update("UPDATE s_contribute SET status_id = '2', con_onday = '' WHERE main_id = '".$db->escape($_GET['del'])."' LIMIT 1");
 		header("Location: ".$thispage);
-		exit;
+		die;
 	}
 
 /*
@@ -40,19 +40,19 @@
 	}
 	if($view_gb == 1) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday >= NOW() ORDER BY a.con_onday ASC LIMIT {$paging['slimit']}, {$paging['limit']}");
+		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_contribute a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday >= NOW() ORDER BY a.con_onday ASC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} elseif($view_gb == 2) {
 		$paging = paging(@$_GET['p'], 20);
-		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday < NOW() ORDER BY a.con_onday DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
+		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_contribute a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '1' AND a.con_onday < NOW() ORDER BY a.con_onday DESC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	} else { 
 		$paging = paging(@$_GET['p'], 20);
-		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_s_ a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '0' ORDER BY a.main_id ASC LIMIT {$paging['slimit']}, {$paging['limit']}");
+		$list = $db->getArray("SELECT a.*, u.id_id, u.u_alias, u.u_picd, u.u_picid, u.u_picvalid, u_sex FROM s_contribute a LEFT JOIN s_user u ON u.id_id = a.con_user AND u.status_id = '1' WHERE a.status_id = '0' ORDER BY a.main_id ASC LIMIT {$paging['slimit']}, {$paging['limit']}");
 	}
 
 	$view_c = array(
-		'0' => $db->getOneItem("SELECT COUNT(*) FROM s_s_ WHERE status_id = '0'"),
-		'1' => $db->getOneItem("SELECT COUNT(*) FROM s_s_ WHERE status_id = '1' AND con_onday >= NOW()"),
-		'2' => $db->getOneItem("SELECT COUNT(*) FROM s_s_ WHERE status_id = '1' AND con_onday < NOW()")
+		'0' => $db->getOneItem("SELECT COUNT(*) FROM s_contribute WHERE status_id = '0'"),
+		'1' => $db->getOneItem("SELECT COUNT(*) FROM s_contribute WHERE status_id = '1' AND con_onday >= NOW()"),
+		'2' => $db->getOneItem("SELECT COUNT(*) FROM s_contribute WHERE status_id = '1' AND con_onday < NOW()")
 	);
 
 	require('obj_head.php');
@@ -154,5 +154,4 @@ echo '			</table>';
 		</td>
 	</tr>
 	</table>
-</body>
-</html>
+<? require('admin_foot.php'); ?>

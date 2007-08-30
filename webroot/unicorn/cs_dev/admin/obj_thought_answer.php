@@ -1,47 +1,32 @@
 <?
-session_start();
-	setlocale(LC_TIME, "swedish");
-	setlocale(LC_ALL, 'sv_SE.ISO_8859-1');
-	require("./set_onl.php");
-	if(notallowed()) {
-		header("Location: ./");
-		exit;
-	}
+	require_once('find_config.php');
 
 	$limit = 10;
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 
 	$edit = true;
 
 	if(empty($_GET['id'])) {
 		$error = 'Inget meddelande valt.';
 	}
-	$sql = mysql_query("SELECT a.*, u.u_alias, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE a.main_id = '".secureINS($_GET['id'])."' LIMIT 1");
-	if(mysql_num_rows($sql) != '1') {
-		$error = 'Meddelandet existerar inte.';
-	}
-	$row = mysql_fetch_array($sql);
+	$row = $db->getOneRow("SELECT a.*, u.u_alias, d.u_alias as admin_alias FROM s_thought a LEFT JOIN s_user u ON a.logged_in = u.id_id LEFT JOIN s_user d ON a.answer_id = d.id_id WHERE a.main_id = '".$db->escape($_GET['id'])."' LIMIT 1");
 
 	if(!empty($_POST['dopost']) && is_numeric($_POST['dopost'])) {
 			if(!empty($_POST['strlen']) && $_POST['strlen'] > 0) {
 			//			p_city = '".secureINS($_POST['city'])."',	
 			}
-			mysql_query("UPDATE s_thought SET
+			$db->update("UPDATE s_thought SET
 			status_id = '1',
 			view_id = '1',
-			logged_in = '".secureINS($_POST['id'])."',
-			gb_name = '".secureINS($_POST['name'])."',
-			gb_email = '".secureINS($_POST['email'])."',
+			logged_in = '".$db->escape($_POST['id'])."',
+			gb_name = '".$db->escape($_POST['name'])."',
+			gb_email = '".$db->escape($_POST['email'])."',
 			".((empty($row['answer_id']))?"
 			answer_date = NOW(),
-			answer_id = '".@secureINS($_SESSION['u_i'])."',
+			answer_id = '".$db->escape($user->id)."',
 			":"")."
-			answer_msg = '".@secureINS($_POST['ans'])."',
-			".((empty($_POST['strlen']) || $_POST['strlen'] < 0)?"answer_id = '".secureINS($_SESSION['u_i'])."',":"")."
-			gb_msg = '".secureINS($_POST['msg'])."' WHERE main_id = '".secureINS($row['main_id'])."'");
+			answer_msg = '".@$db->escape($_POST['ans'])."',
+			".((empty($_POST['strlen']) || $_POST['strlen'] < 0)?"answer_id = '".$db->escape($user->id)."',":"")."
+			gb_msg = '".$db->escape($_POST['msg'])."' WHERE main_id = '".$db->escape($row['main_id'])."'");
 			$edit = false;
 			/*if(!empty($_POST['SPY']) && @is_md5($_POST['id'])) {
 				$sql = new sql();
@@ -56,7 +41,7 @@ error_reporting(E_ALL);
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>SVARA | <?=$title?>AMS</title>
 	<link rel="stylesheet" href="default_adm.css" type="text/css">
 </head>

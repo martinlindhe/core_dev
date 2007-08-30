@@ -1,5 +1,5 @@
 <?
-	require_once('/home/martin/mobil.citysurf.tv/config.php');
+	require_once('../config.php');
 
 	echo '<pre>';
 	

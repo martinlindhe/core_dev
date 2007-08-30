@@ -316,14 +316,6 @@ function selectingAll(selecting) {
 
 
 
-
-
-
-
-
-
-
-
 		<!-- BANNADE IP -->
 		<td width="25%" style="padding-left: 10px; background: url('_img/brd_h.gif'); background-repeat: repeat-y;">
 			<form name="ban" method="post" action="./search.php" onsubmit="if(this.ban.value == '1.1.1.1' || this.ban.value == '') { alert('Skriv in ett IP.'); return false; } else { return true; }">
@@ -349,5 +341,4 @@ function selectingAll(selecting) {
 		</td>
 	</tr>
 	</table>
-</body>
-</html>
+<? require('admin_foot.php'); ?>

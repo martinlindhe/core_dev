@@ -434,7 +434,7 @@ class email
 
 	function saveFile($filename, $mime_type, $data, $mms_code)
 	{
-		global $config, $sql, $t;
+		global $config, $db;
 		
 		if ($mime_type == 'image/jpeg') {
 			$filename = str_ireplace('.jpeg', '.jpg', $filename);
@@ -453,7 +453,7 @@ class email
 				$pht_cmt = 'MMS - '.strip_tags($filename);
 
 				$q = "INSERT INTO s_userphoto SET picd = '".PD."', old_filename = '$filename', user_id = ".$mms_code['user'].", pht_date = NOW(), status_id='1', hidden_id = '$priv', pht_name = '".$file_ext."', pht_size = '".$filesize."', pht_cmt = '$pht_cmt'";
-				$insert_id = $sql->queryInsert($q);
+				$insert_id = $db->insert($q);
 
 				$out_filename = WEBROOT.USER_GALLERY.PD.'/'.$insert_id.'.'.$file_ext;
 				$out_thumbname = WEBROOT.USER_GALLERY.PD.'/'.$insert_id.'-tmb.'.$file_ext;
@@ -461,7 +461,7 @@ class email
 				file_put_contents($out_filename, $data);
 
 				//skapa thumb
-				make_thumb($out_filename, $out_thumbname, 100, 89);
+				mms_make_thumb($out_filename, $out_thumbname, 100, 89);
 				break;
 
 			default:
@@ -475,7 +475,7 @@ class email
 	}
 }
 
-function make_thumb($src, $dst, $dstWW = 90, $quality = 91)
+function mms_make_thumb($src, $dst, $dstWW = 90, $quality = 91)
 {
 	if (!file_exists($src) || (is_dir($dst) && $dst != '')) return false;
 
@@ -510,7 +510,7 @@ function make_thumb($src, $dst, $dstWW = 90, $quality = 91)
 */
 function findMMSCode($text)
 {
-	global $sql, $email;
+	global $db, $email;
 
 	//echo 'looking for mms code: '.$text.'<br>';
 
@@ -532,10 +532,10 @@ function findMMSCode($text)
 	if (in_array($arr[0], $pres_aliases)) $mms_code['cmd'] = 'PRES';
 	if (in_array($arr[0], $gall_aliases)) $mms_code['cmd'] = 'GALL';
 
-	$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.secureINS($mms_code['code']).'" LIMIT 1';
-	$mms_code['user'] = $sql->queryResult($q);
+	$q = 'SELECT owner_id FROM s_obj WHERE content_type="mmskey" AND content="'.$db->escape($mms_code['code']).'" LIMIT 1';
+	$mms_code['user'] = $db->getOneItem($q);
 	if (!$mms_code['user']) return false;
-	
+
 	$email->logAct('Identified MMS type '.$mms_code['cmd'].' from user '.$mms_code['user'].'...');
 	return $mms_code;
 }

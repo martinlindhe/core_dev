@@ -143,7 +143,7 @@ function imgOK($id, $picid, $flow) {
 	if($all)
 		$list = $db->getArray("SELECT u.id_id, u.u_picd, u.u_alias, u.level_id, u.u_sex, u.u_birth, u.u_picid FROM s_user u WHERE u.status_id = '1' AND u.u_picvalid = '1' ORDER BY u.u_picdate DESC LIMIT 48");
 	else
-		$list = $db->getArray("SELECT a.id_id, a.flow_id AS u_picd, u.u_alias, u.level_id, u.u_sex, u.u_birth FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'");
+		$list = $db->getArray("SELECT a.id_id, a.flow_id AS u_picd, u.u_alias, u.level_id, u.u_sex, u.u_birth, u.u_picid FROM s_userpicvalid a INNER JOIN s_user u ON u.id_id = a.id_id AND u.status_id = '1' WHERE a.status_id = '1'");
 ?>
 <script type="text/javascript">
 function denyAns(val, id, extra) {
@@ -182,9 +182,9 @@ function denyAns(val, id, extra) {
 			$i++;
 			echo '<td class="pdg cnt">';
 	if($all) {
-echo '<a href="user.php?id='.$row['id_id'].'"><img style="margin-top: 3px;" src="../_input/images/'.$row[1].'/'.$row['id_id'].$row[6].'.jpg" /></a><br><a href="user.php?id='.$row['id_id'].'"><b>'.secureOUT($row[2]).'</b></a></td>';
+		echo '<a href="user.php?id='.$row['id_id'].'"><img style="margin-top: 3px;" src="../_input/images/'.$row['u_picd'].'/'.$row['id_id'].$row['u_picid'].'.jpg" /></a><br><a href="user.php?id='.$row['id_id'].'"><b>'.secureOUT($row['u_alias']).'</b></a></td>';
 	} else {
-echo '
+		echo '
 <input type="hidden" name="status_id:'.$row['id_id'].'" id="status_id:'.$row['id_id'].'" value="0"><img src="./_img/status_none.gif" style="margin: 0 1px -1px 2px;" id="1:'.$row['id_id'].'" onclick="changeStatus(\'status\', this.id);"><img src="./_img/status_none.gif" style="margin: 0 0 -1px 1px;" id="2:'.$row['id_id'].'" onclick="document.getElementById(\'re_re:'.$row['id_id'].'\').style.display = \'none\';  document.getElementById(\'reason_reason:'.$row['id_id'].'\').style.display = \'\'; changeStatus(\'status\', this.id);"> | <a href="javascript:void(0);" onclick="document.getElementById(\'re_re:'.$row['id_id'].'\').style.display = \'\';  document.getElementById(\'reason_reason:'.$row['id_id'].'\').style.display = \'none\';">NEKA DIREKT</a>
 <br>
 <div id="reason_reason:'.$row['id_id'].'" style="display: none;">

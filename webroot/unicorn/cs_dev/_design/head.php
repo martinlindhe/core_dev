@@ -36,7 +36,11 @@ function blockRightClick(event) {
 		<div id="top_logo"></div>
 		<div id="top_bg"></div>
 
-		<div id="top_ad"><a href="#"><img src="<?=$config['web_root']?>_gfx/ban/2_728x90.gif" alt="Ad" /></a></div>
+		<div id="top_ad">
+<?
+		echo '<img src="'.$config['web_root'].'_gfx/ban/2_728x90.gif" alt="Ad" />';
+?>
+		</div>
 
 		<div id="top_border"><img src="<?=$config['web_root']?>_gfx/themes/head_border.png" alt=""/></div>
 

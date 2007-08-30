@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('ingen mottagare');
 	$id = $_GET['id'];
@@ -35,7 +36,7 @@
 
 	if (isset($_GET['r']) && $a) $r = true; else $r = false;
 
-	$NAME_TITLE = 'BREV - SKRIV | '.NAME_TITLE;
+	$NAME_TITLE = 'BREV - SKRIV';
 	$friends = getUserFriends();
 	$fri = '';
 	foreach($friends as $friend) {
@@ -89,7 +90,7 @@ if ($js_editor) { ?>
 <table summary="" cellspacing="0" width="99%" style="" class="cnti">
 <tr>
 	<td class="pdg bld">Från:</td>
-	<td class="pdg" style="padding-left: 0; width: 100%;"><span class="nrm"><?=secureOUT($_SESSION['data']['u_alias'])?></span></td>
+	<td class="pdg" style="padding-left: 0; width: 100%;"><span class="nrm"><?=secureOUT(@$_SESSION['data']['u_alias'])?></span></td>
 	<td class="pdg bld rgt nobr"><?=(!empty($res['sent_date']))?nicedate($res['sent_date']):nicedate(date("Y-m-d"), 5);?></td>
 </tr>
 <tr>

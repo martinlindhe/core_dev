@@ -83,7 +83,7 @@
 			$q = 'SELECT main_id, status_id, user_id, sender_id, user_read, sender_status FROM s_usermail WHERE main_id = "'.$db->escape($val).'" LIMIT 1';
 			$res = $db->getOneRow($q);
 			if (!empty($res) && count($res) && ($res['status_id'] == '1' || $res['sender_status'] == '1')) {
-				if ($user->isAdmin || $res['user_id'] == $user->id || $res['sender_id'] == $l['id_id']) {
+				if ($user->isAdmin || $res['user_id'] == $user->id || $res['sender_id'] == $user->id) {
 					if($res['user_id'] == $user->id) {
 
 						if ($res['status_id'] == '1') {

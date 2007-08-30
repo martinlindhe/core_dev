@@ -3,6 +3,7 @@
 	$id = $_GET['id'];
 
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	$r = $db->getOneRow('SELECT main_id, main_ttl, main_cmt, subjects FROM s_ftopic f WHERE f.status_id = "1" AND f.main_id = '.$id.' LIMIT 1');
 	if(empty($r) || !count($r)) {

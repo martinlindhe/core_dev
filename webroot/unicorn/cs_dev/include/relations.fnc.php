@@ -62,7 +62,7 @@
 			}
 		}
 	}
-	
+
 	/* Returns 1 if user1 has user2 on his friend list */
 	function areTheyFriends($_id1, $_id2)
 	{
@@ -156,6 +156,16 @@
 		}
 	}
 
+	//has userId blocked me?
+	function amIBlocked($id)
+	{
+		global $db, $user;
+		if ($id == $user->id) return false;
+
+		$q = "SELECT main_id FROM s_userblock WHERE user_id = '".$db->escape($id)."' AND friend_id = '".$user->id."' LIMIT 1";
+		return $db->getOneItem($q);
+	}
+
 	function blockRelation($_id)
 	{
 		global $db, $user;
@@ -180,9 +190,9 @@
 	/* for pager */
 	function getBlockedRelationsCnt()
 	{
-		global $db;
+		global $db, $user;
 
-		$q = "SELECT COUNT(*) FROM s_userblock b INNER JOIN s_user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = ".$l['id_id']." AND rel_id = 'u'";
+		$q = "SELECT COUNT(*) FROM s_userblock b INNER JOIN s_user u ON b.friend_id = u.id_id AND u.status_id = '1' WHERE b.user_id = ".$user->id." AND rel_id = 'u'";
 		return $db->getOneItem($q);
 	}
 

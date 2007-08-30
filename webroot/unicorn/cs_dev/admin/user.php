@@ -2,6 +2,15 @@
 	require_once('find_config.php');
 
 	if(!$isCrew) errorNEW('Ingen behörighet.');
+	
+	if (!empty($_POST['a'])) {
+		//visar info om en enskild användare
+		$res = $db->getOneItem("SELECT id_id FROM s_user WHERE u_alias = '".$db->escape($_POST['a'])."' LIMIT 1");
+		if ($res) {
+			header('Location: user.php?id='.$res);
+			die;
+		}
+	}
 
 	function listUserDisabled($list) {
 		global $status_id;
@@ -127,18 +136,14 @@
 			}
 			header('Location: user.php?id='.$_POST['id']);
 			die;
-		} else if (!empty($_POST['a'])) {
-			//visar info om en enskild användare
-			$res = $db->getOneItem("SELECT id_id FROM s_user WHERE u_alias = '".$db->escape($_POST['a'])."' LIMIT 1");
-			if ($res) header('Location: user.php?id='.$res);
 		} else {
 			//åter-skapa aktiveringskod-mail och skicka ut
 			foreach ($_POST as $key => $val) {
 				if (strpos($key, 'status_id') === false) continue;
 				$kid = explode(":", $key);
 				$kid = $kid[1];
-				if(isset($_POST['status_id:' . $kid])) {
-					$sql->queryUpdate("UPDATE s_user SET status_id = '".secureINS($_POST['status_id:' . $kid])."', level_id = '".secureINS($_POST['level_id:' . $kid])."', view_id = '1' WHERE id_id = '".secureINS($kid)."' LIMIT 1");
+				if (isset($_POST['status_id:' . $kid])) {
+					$db->update("UPDATE s_user SET status_id = '".$db->escape($_POST['status_id:' . $kid])."', level_id = '".$db->escape($_POST['level_id:' . $kid])."', view_id = '1' WHERE id_id = '".$db->escape($kid)."' LIMIT 1");
 				}
 			}
 			foreach ($_POST as $key => $val) {
@@ -288,7 +293,11 @@ function CSV() {
 <?makeMenuAdmin($page, $menu);?>
 	<tr>
 		<td width="100%" style="padding: 0 10px 0 0;">
-			<form action="user.php" method="post">
+			<form action="?=$_SERVER['PHP_SELF']?>" method="post">
+			<br>Visa användare: <input type="text" name="a" value="" class="inp_nrm"> <input type="submit" class="inp_orgbtn" value="UPPDATERA" style="width: 70px; margin: 11px 20px 0 10px;">
+			</form>
+		
+			<form action="<?=$_SERVER['PHP_SELF']?>" method="post">
 			<input type="hidden" name="doupd" value="1">
 			<input type="hidden" name="status" value="<?=$status_id?>">
 <nobr>
@@ -301,7 +310,8 @@ function CSV() {
 			<input type="radio" class="inp_chk" value="5" id="view_5" onclick="document.location.href = 'user.php?status=' + this.value;"<?=($status_id == '5')?' checked':'';?>><label for="view_5" class="txt_bld txt_look">RADERADE</label>
 			<input type="radio" class="inp_chk" value="10" id="view_10" onclick="document.location.href = 'user.php?status=' + this.value;"<?=($status_id == '10')?' checked':'';?>><label for="view_10" class="txt_bld txt_look">UPPGRADERADE</label>
 			<input type="radio" class="inp_chk" value="4" id="view_4" onclick="document.location.href = 'user.php?status=' + this.value;"<?=($status_id == '4')?' checked':'';?>><label for="view_4" class="txt_bld txt_look">STATS</label>
-			<br>Visar information från användare: <input type="text" name="a" value="" class="inp_nrm"> <input type="submit" class="inp_orgbtn" value="UPPDATERA" style="width: 70px; margin: 11px 20px 0 10px;"> | <select name="csv_level" id="csv_level" class="inp_nrm">
+			<br/>
+			<select name="csv_level" id="csv_level" class="inp_nrm">
 <option value="0">Alla</option>
 <option value="99">MEDLEMSLISTA</option>
 <option value="2">MED profilbild</option>
@@ -564,7 +574,7 @@ if ($status_id != '4') {
 		echo '<input type="text" name="reasontext_id:'.$row['id_id'].'" id="reasontext_id:'.$row['id_id'].'" style="width: 100px; display: none;" value="" class="inp_nrm"><br />';
 		echo '<input type="button" class="inp_orgbtn" id="retb_id:'.$row['id_id'].'" style="margin: 0;" style="display: none;" value="skicka valfri" onclick="denyAns(\'X\', \''.$row['id_id'].'\', document.getElementById(\'reasontext_id:'.$row['id_id'].'\').value);" />';
 		echo '</div>';
-		echo '<br>1: STANDARD<br>3: BRONS<br>5: SILVER<br>6: GULD<br>7: STAFF<br>10: ADMIN</td></tr>';
+		echo '<br>1: STANDARD<br>2: VIP<br>3: VIP DELUX<br>10: ADMIN</td></tr>';
 
 		echo '<tr>';
 			echo '<td><b>Alias:</b><br><input type="text" class="inp_nrm" name="alias" value="'.secureOUT($row['u_alias']).'"></td>';

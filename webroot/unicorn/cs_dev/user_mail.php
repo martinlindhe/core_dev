@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 	
 	$id = $user->id;
 
@@ -35,7 +36,7 @@
 	<br/><br/><br/>
 
 	<div class="centerMenuBodyWhite">
-<?dopaging($paging, l('user', 'mail', $s['id_id']).'&amp;'.$page.'&amp;p=', '', 'big', STATSTR);?>
+<?dopaging($paging, 'user_mail.php?'.$page.'&amp;p=', '', 'big', STATSTR);?>
 <form name="m" action="<?=$_SERVER['PHP_SELF'].'?'.$page?>" method="post">
 <?
 if(count($res) && !empty($res)) {

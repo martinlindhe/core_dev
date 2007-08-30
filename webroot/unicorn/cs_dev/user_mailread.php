@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$user->requireLoggedIn();
 
 	$page = 'in';
 	if (isset($_GET['out'])) $page = 'out';

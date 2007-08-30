@@ -6,22 +6,23 @@
 	$id = $user->id;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $id = $_GET['id'];
 
+	if (amIBlocked($id)) errorACT('Användaren har blockerat dig.');
+
 	$profile = $user->getcontent($id, 'user_profile');
 	$page = 'view';
 	$isFriends = $user->isFriends($id);
+
 	if ($id != $user->id) {
 		$hidden = $user->getinfo($user->id, 'hidden_login');
 		if (!$hidden) {
 			$visit = $db->replace("REPLACE INTO s_uservisit SET visitor_id = '".$user->id."', user_id = '".$id."', status_id = '2', visit_date = NOW()");
 			$beenhere = ($visit != '2') ? false : true;
-		} else {
-			$visit = $db->replace("REPLACE INTO s_uservisit SET visitor_id = '".$user->id."', user_id = '".$id."', status_id = '1', visit_date = NOW()");
-			$beenhere = ($visit != '2') ? false : true;
-		}
-		if (!$hidden && !$beenhere) {
-			$c = $user->getinfo($id, 'visit_cnt');
-			$tmp = $user->setinfo($id, 'visit_cnt', ($c+1));
-			if($tmp[0]) $user->setrel($tmp[1], 'user_head', $id);
+
+			if (!$beenhere) {
+				$c = $user->getinfo($id, 'visit_cnt');
+				$tmp = $user->setinfo($id, 'visit_cnt', ($c+1));
+				if($tmp[0]) $user->setrel($tmp[1], 'user_head', $id);
+			}
 		}
 	} else {
 		$user->fix_img();
