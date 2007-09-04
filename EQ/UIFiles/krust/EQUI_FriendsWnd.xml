@@ -388,52 +388,6 @@
 		<AlignRight>false</AlignRight>
 	</Label>
 
-	<Label item="HUD_TimeToFMLabel">
-		<Font>3</Font>
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>185</X>
-			<Y>14</Y>
-		</Location>
-		<Size>
-			<CX>50</CX>
-			<CY>14</CY>
-		</Size>
-		<Text>FM in</Text>
-		<TextColor>
-			<R>255</R>
-			<G>255</G>
-			<B>255</B>
-		</TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-	<Label item="HUD_TimeToFM">
-		<Font>3</Font>
-		<EQType>9999</EQType>  
-		<TooltipReference>${Math.Calc[(${Me.MaxMana}-${Me.CurrentMana})/(${Me.ManaRegen}|1)/10].Int}m${Math.Calc[(${Me.MaxMana}-${Me.CurrentMana})/(${Me.ManaRegen}|1)%10*6].Int}s</TooltipReference>  
-		<RelativePosition>true</RelativePosition>
-		<Location>
-			<X>219</X>
-			<Y>14</Y>
-		</Location>
-		<Size>
-			<CX>100</CX>
-			<CY>14</CY>
-		</Size>
-		<Text></Text>
-    <TextColor>
-      <R>125</R>
-      <G>184</G>
-      <B>235</B>
-    </TextColor>
-		<NoWrap>true</NoWrap>
-		<AlignLeft>true</AlignLeft>
-		<AlignCenter>false</AlignCenter>
-		<AlignRight>false</AlignRight>
-	</Label>
-
 	<Label item="HUD_BuffSlotsLabel">
 		<Font>3</Font>
 		<RelativePosition>true</RelativePosition>
@@ -512,8 +466,6 @@
 
 		<Pieces>HUD_MALabel</Pieces>
 		<Pieces>HUD_MA</Pieces>
-		<Pieces>HUD_TimeToFMLabel</Pieces>
-		<Pieces>HUD_TimeToFM</Pieces>
 		<Pieces>HUD_BuffSlotsLabel</Pieces>
 		<Pieces>HUD_BuffSlots</Pieces>
 
