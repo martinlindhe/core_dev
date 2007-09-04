@@ -60,10 +60,9 @@ Sub Event_HANDLE_MobMezzed(string Line, string Name)
 		/call DebugMsg "${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS MEZZED!!!!"
 		/popup ${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS MEZZED!
 
-		/if (${Spawn[${Name}].ID} == ${currentSpawn}) {
-			/call DebugMsg "ABORTING KILL LOOP cos current target is mezzed"
-			/varset AbortLoop 1
-		}
+		| för att undvika olyckliga mezbreaks
+		/call DebugMsg "MEZ: ABORTING KILL LOOP"
+		/varset AbortLoop 1
 	}
 /return
 
@@ -291,10 +290,9 @@ Sub FindTank
 
 Sub UpdateBuffs
 
-	/call CheckNeutralZone
+	/call CheckDontBuffZone
 	/if (${Macro.Return}) /return
 	/if (${Me.Moving} || ${Me.Invis} || ${Me.State.Equal["HOVER"]}) /return
-
 	/declare wasSitting int local 0
 	/if (${Me.Sitting}) /varset wasSitting 1
 	
@@ -346,4 +344,7 @@ Sub CheckNeutralZone
 	/if (${Zone.Name.Equal["The Plane of Knowledge"]} || ${Zone.Name.Equal["The Plane of Tranquility"]} || ${Zone.Name.Equal["The Nexus"]} || ${Zone.Name.Equal["The Bazaar"]} || ${Zone.Name.Equal["Guild Lobby"]} || ${Zone.Name.Equal["Guild Hall"]}) /return 1
 /return 0
 
-
+| same as CheckNeutralZone, except GH & GL is ok since buff counters dont go down there, this is to avoid forgotten afk macro to spam surrounding with refreshing buffs
+Sub CheckDontBuffZone
+	/if (${Zone.Name.Equal["The Plane of Knowledge"]} || ${Zone.Name.Equal["The Plane of Tranquility"]} || ${Zone.Name.Equal["The Nexus"]} || ${Zone.Name.Equal["The Bazaar"]}) /return 1
+/return 0

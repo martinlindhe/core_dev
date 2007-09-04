@@ -28,7 +28,8 @@
 | druid fast heal:
 | Nature's Touch is the lowest heal spell that procs Abdurant Healing
 | #define FAST_HEAL "Chloroblast"
-#define FAST_HEAL "Nature's Touch"
+| #define FAST_HEAL "Nature's Touch"
+#define FAST_HEAL "Sylvan Infusion"
 | #define FAST_HEAL "Ancient: Chlorobon"
 | #define FAST_HEAL "Pure Life Rk. II"
 #define HEAL_PCT		80
@@ -82,28 +83,28 @@ Sub Main
 	
 	| refresh buffs
 
-	/if (!${Spawn[npc radius 60].LineOfSight}) /call RefreshBuff "Viridicoat Rk. II" 50
-	/if (!${Spawn[npc radius 60].LineOfSight}) /call RefreshBuff "Mask of the Wild" 50
-	/if (!${Spawn[npc radius 60].LineOfSight}) /call RefreshBuff "Direwild Skin Rk. II" 50
-	/if (!${Spawn[npc radius 60].LineOfSight}) /call RefreshBuff "Orb of Duskmold" 10
+	/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Viridicoat Rk. II" 50
+	/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Mask of the Wild" 50
+	/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Direwild Skin Rk. II" 50
+	/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Orb of Duskmold" 10
 
 		/if (SIT_AGGRO && !${Group.Members}) {
-			/if (!${Spawn[npc radius 60].LineOfSight}) /call RefreshBuff "Viridifloral Shield Rk. II" 50
-			/if (!${Spawn[npc radius 60].LineOfSight}) /call RefreshBuff "Totem of the Stonemight" 50
-			/call RefreshBuff "Velium Coldain Insignia Ring" 50
+			/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Viridifloral Shield Rk. II" 50
+			/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Totem of the Stonemight" 50
+			/call RefreshBuff "Coldain Hero's Insignia Ring" 50
 
-			/if (!${Spawn[npc radius 60].LineOfSight}) /call RefreshBuff "Oaken Vigor" 50
-			/if (!${Spawn[npc radius 60].LineOfSight} && !${Me.Song["Aura of Life Effect"].ID}) /call RefreshBuff "Aura of Life" 0
+			/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Oaken Vigor" 50
+			/if (!${SpawnCount[npc radius 60]} && !${Me.Song["Aura of Life Effect"].ID}) /call RefreshBuff "Aura of Life" 0
 		}
 		
 		/if (${Group.Members} && !${Raid.Members}) {
-			/if (!${Me.Song["Aura of Life Effect"].ID}) /call RefreshBuff "Aura of Life" 0
-			/call RefreshBuff "Legacy of Viridiflora Rk. II" 50
-			/call RefreshBuff "Blessing of Oak" 50
+			/if (!${SpawnCount[npc radius 60]} && !${Me.Song["Aura of Life Effect"].ID}) /call RefreshBuff "Aura of Life" 0
+			/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Legacy of Viridiflora Rk. II" 50
+			/if (!${SpawnCount[npc radius 60]}) /call RefreshBuff "Blessing of Oak" 50
 		}
 
 		| todo: implement this into RefreshBuff function
-		/if (!${Spawn[npc radius 60].LineOfSight} && ${Me.AltAbilityReady["Wrath of the Wild"]} && !${Me.Buff["Wrath of the Wild"].ID} && !${Me.Moving}) {
+		/if (!${SpawnCount[npc radius 60]} && ${Me.AltAbilityReady["Wrath of the Wild"]} && !${Me.Buff["Wrath of the Wild"].ID} && !${Me.Moving}) {
 			/call DebugMsg "Buffing self with AA DS"
 			/target myself
 			/aa act Wrath of the Wild
@@ -113,7 +114,7 @@ Sub Main
 		/target pc ${MTName}
 	}
 	
-	/if (!${Spawn[npc radius 60].LineOfSight} && ${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID} && (${Me.PctHPs} >= 80) && (${Me.PctMana} < MED_PCT)) {
+	/if (!${SpawnCount[npc radius 60]} && ${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID} && (${Me.PctHPs} >= 80) && (${Me.PctMana} < MED_PCT)) {
 		/delay 2s
 		/if (${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID}) /sit
 	}

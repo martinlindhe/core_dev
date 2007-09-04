@@ -45,6 +45,8 @@
 
 #define NUKE_SPELLNAME_FIRE			"Equinox Burn Rk. III"
 #define DEBUFF_SPELLNAME_FIRE		"Blistering Sunray Rk. II"
+#define DEBUFF_SPELLNAME_FIRE_2	"Hand of Ro"
+#define NUKE_DOT_SPELLNAME_FIRE_3	"Nature's Blazing Wrath"
 
 #define SNARE_SPELLNAME					"Serpent Vines"
 #define EPIC_ITEMNAME						"Staff of Everliving Brambles"
@@ -71,7 +73,13 @@ Sub Event_DEBUFF_DruNaturesSerenity(string Line, string Name)
 Sub Event_DEBUFF_DruImmolationOfSun(string Line, string Name)
 	| DRU/67: Immolation of the Sun
 	| DRU/71: Blistering Sunray
-	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (FIRE, AC)"
+	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (DoT: FIRE, AC)"
+/return
+
+#event DEBUFF_DruHoR "#1# is immolated by blazing flames."
+Sub Event_DEBUFF_DruHoR(string Line, string Name)
+	| DRU/61: Hand of Ro
+	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (HoR: FIRE, ATK, AC)"
 /return
 
 #event DEBUFF_DruCold "#1#s body is covered in a film of ice."
@@ -216,7 +224,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 	} else /if (${Me.Gem[NUKE_SPELLNAME_FIRE]}) {
 		/varset nukeName NUKE_SPELLNAME_FIRE
 	} else {
-		/echo NO NUKE MEMORIZED!
+		/echo FATAL: NO NUKE MEMORIZED!
 		/endmacro
 	}
 	
@@ -224,8 +232,12 @@ Sub HandleAssistCallDruid(int SpawnId)
 		/varset debuffName DEBUFF_SPELLNAME_COLD
 	} else /if (${Me.Gem[DEBUFF_SPELLNAME_FIRE]}) {
 		/varset debuffName DEBUFF_SPELLNAME_FIRE
+	} else /if (${Me.Gem[DEBUFF_SPELLNAME_FIRE_2]}) {
+		/varset debuffName DEBUFF_SPELLNAME_FIRE_2
+	} else /if (${Me.Gem[NUKE_DOT_SPELLNAME_FIRE_3]}) {
+		/varset debuffName NUKE_DOT_SPELLNAME_FIRE_3
 	} else {
-		/echo NO DEBUFF MEMORIZED!
+		/echo FATAL: NO DEBUFF MEMORIZED!
 		/endmacro
 	}
 
@@ -358,7 +370,7 @@ Sub DruidUpdateBuffs
 	}
 
 	| Dont waste time rebuffing if i am healing!
-	/if (HEAL_ONLY_MODE && ${SpawnCount[npc radius 100]}) /return
+	/if (HEAL_ONLY_MODE && ${SpawnCount[npc radius 100]} && ${Zone.Name.NotEqual["Guild Lobby"]} && ${Zone.Name.NotEqual["Guild Hall"]}) /return
 
 	| Razorthorn (ragea_raid) trash mobs cast AE that overwrites Mask of the Wild
 	/if (${Zone.ShortName.NotEqual["ragea_raid"]}) {
@@ -445,6 +457,9 @@ Sub DruidUpdateBuffs
 Sub DruidRefreshAA_DS
 
 	/if (!${Me.AltAbilityReady["Wrath of the Wild"]} || ${Me.Moving} || ${Me.Sitting} || ${Me.Casting.ID} || ${Target.ID} || ${Window[LootWnd].Open}) /return
+
+	| only cast when we are possibly in a fight (npc's near)
+	/if (${Raid.Members} && !${SpawnCount[npc radius 100]}) /return
 
 	/declare tankId int local 0
 

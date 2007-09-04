@@ -49,6 +49,13 @@ Sub Event_Silenced
 	/delay 8s
 /return
 
+#event CannotSeeTarget "You cannot see your target."
+Sub Event_CannotSeeTarget
+	| To avoid easily detected rapid item clicky triggering
+	/call DebugMsg "NO LoS, delay 1s"
+	/delay 1s
+/return
+
 |Raid: DK Event 2 - Guests
 #event SomeoneVertigo "#1# looks as if they are going to lose their balance!"
 Sub Event_SomeoneVertigo(string Line, string Name)
@@ -150,7 +157,7 @@ Sub HealCallback
 		/interrupt
 		/varset interruptFlag TRUE
 		/echo Player died, cancelling heal.
-	} else /if (${Me.Casting.ID} && ${Target.PctHPs} >= 80 && ${Target.PctHPs} <= 100) {
+	} else /if (!${Raid.Members} && ${Me.Casting.ID} && ${Target.PctHPs} >= 80 && ${Target.PctHPs} <= 100) {
 		/interrupt
 		/varset interruptFlag TRUE
 		/echo ${Target.Name} at ${Target.PctHPs}%, cancelling heal.
@@ -302,26 +309,31 @@ Sub HandleGroupHeal(int PctHPs)
 		/declare n int local 0
 
 		/for i 0 to 5
-			/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 150) && ${Group.Member[${i}].Type.NotEqual["Corpse"]} && ${Group.Member[${i}].State.NotEqual["DEAD"]}) {
-				/varcalc x ${x}+${Group.Member[${i}].PctHPs}
-				/varcalc n ${n}+1
+			/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 150) && ${Group.Member[${i}].Type.NotEqual["Corpse"]} && ${Group.Member[${i}].State.NotEqual["DEAD"]} && ${Group.Member[${i}].Class.Name.NotEqual["Warrior"]}) {
+				/if (${Group.Member[${i}].PctHPs} <= 98) {
+					| only count non-100% ppl, to avoid logic from deciding a group heal would be best to cast on a single-damaged player in group
+					/varcalc x ${x}+${Group.Member[${i}].PctHPs}
+					/varcalc n ${n}+1
 
-				| dont do group heal if one need a big heal
-				/if (${Group.Member[${i}].PctHPs} <= ${PctHPs}) {
-					/call PerformHeal ${Group.Member[${i}].ID} ${PctHPs}
-					/return
+					| dont do group heal if one need a big heal
+					/if (${Group.Member[${i}].PctHPs} <= ${PctHPs}) {
+						/call PerformHeal ${Group.Member[${i}].ID} ${PctHPs}
+						/return
+					}
 				}
 			}
 		/next i
 
-		/declare grphealpct int local 85
-		/if (${Me.PctMana} >= 90) /varset grphealpct 90
+		/declare grphealpct int local 84
+		/if (${Me.PctMana} >= 90) /varset grphealpct 88
 
-		/varcalc x ${x} / ${n}
-		/if (${n} >=3 && ${x} <= ${grphealpct}) {
-			/call DebugMsg "GROUP HEAL (avg hp ${x}% for ${n} players)"
-			/call MQ2Cast "Moonshadow"
-			/return
+		/if (${n}) {
+			/varcalc x ${x} / ${n}
+			/if (${n} >=3 && ${x} <= ${grphealpct}) {
+				/call DebugMsg "GROUP HEAL (avg hp ${x}% for ${n} players)"
+				/call MQ2Cast "Moonshadow"
+				/return
+			}
 		}
 	}
 
