@@ -1,6 +1,8 @@
 /*
 todo: uppdatera class-check vid varje puls eller nåt?
 
+todo: wishka kan bara kastas av en shaman i gruppen, så visa bara den som missing om vi har en shm i gruppen
+todo: visa inte SUMMER som missing buff om COLD resist redan är cappat, vilket det e för mej
 */
 
 #include "../MQ2Plugin.h"
