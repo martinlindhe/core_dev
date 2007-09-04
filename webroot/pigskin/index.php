@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 
-	$_cat = 1;
+	$_cat = 4;
 	if (!empty($_GET['c']) && is_numeric($_GET['c'])) $_cat = $_GET['c'];
 
 	$title = $config['default_title'].' - '.getCategoryName(CATEGORY_USERFILE, $_cat);
@@ -19,6 +19,7 @@
 		<tr>
 			<td width="120">&nbsp;</td>
 			<td width="250">
+				<span style="font-size:16px">Select category:</span><br/>
 				<b>
 <?
 	$list = getCategories(CATEGORY_USERFILE);
@@ -26,8 +27,6 @@
 	foreach ($list as $row) {
 		echo '<a href="?c='.$row['categoryId'].'">'.$row['categoryName'].'</a><br/>';
 	}
-//				<a href="./?c=1">Renovations begun 2006</a><br />
-//				<a href="./?c=2">Renovations begun 2007</a><br />
 ?>
 				</b>
 			</td>

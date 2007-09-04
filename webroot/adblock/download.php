@@ -1,5 +1,14 @@
 <?
 	require_once('config.php');
+	$allowed = array('unsorted', 'ads', 'trackers', 'counters', 'all');
+	if (empty($_GET['type']) || !in_array($_GET['type'], $allowed)) die;
+
+	header('Location: http://adblockrules.org/download.php?type='.$_GET['type']);
+	$session->log('Redirected request to adblockrules.org for '.$_GET['type']);
+	die;
+
+
+	//---- real code start here:
 
 	//this function may end the script execution if user is served with a download
 	handleAdblockDownloadRequest();

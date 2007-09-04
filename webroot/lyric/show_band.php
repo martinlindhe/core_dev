@@ -76,7 +76,7 @@
 		echo '<select name="url" onchange="location.href=form.url.options[form.url.selectedIndex].value">';
 		for ($i=0; $i<count($list); $i++)
 		{
-			echo '<option value="show_lyric.php?id='.$list[$i]['lyricId'].'">'.htmlspecialchars($list[$i]['lyricName']).'</option>';
+			echo '<option value="show_lyric.php?id='.$list[$i]['lyricId'].'">'.stripslashes(htmlspecialchars($list[$i]['lyricName'])).'</option>';
 		}
 		echo '</select> ';
 		echo '<input type="submit" value="Go" class="button" onclick="location.href=form.url.options[form.url.selectedIndex].value; return false;"/>';

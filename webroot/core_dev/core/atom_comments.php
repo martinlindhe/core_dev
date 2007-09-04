@@ -77,6 +77,7 @@
 		return $db->getArray($q);
 	}
 
+	/* Returns all comments to all objects owned by $ownerId, newest first */
 	function getCommentsByOwner($_type, $ownerId)
 	{
 		global $db, $files;
@@ -84,7 +85,7 @@
 
 		$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
-		$q .= 'WHERE t1.commentType='.$_type.' AND t1.deletedBy=0';
+		$q .= 'WHERE t1.commentType='.$_type.' AND t1.deletedBy=0 ORDER BY t1.timeCreated DESC';
 		$list = $db->getArray($q);
 
 		$result = array();

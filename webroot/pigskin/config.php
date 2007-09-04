@@ -35,8 +35,8 @@
 	$config['files']['image_max_height'] = 600;
 	$config['files']['thumb_default_width'] = 70;
 	$config['files']['thumb_default_height'] = 60;
-	$config['files']['upload_dir'] = 'E:/Devel/webupload/pigskin/';
-	$config['files']['thumbs_dir'] = 'E:/Devel/webupload/pigskin/thumbs/';
+	$config['files']['upload_dir'] = '/hsphere/local/home/martinlindhe/corvette74.se/upload/';
+	$config['files']['thumbs_dir'] = '/hsphere/local/home/martinlindhe/corvette74.se/upload/thumbs/';
 	$files = new Files($config['files']);
 
 	$session->handleSessionActions();

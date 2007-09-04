@@ -87,10 +87,10 @@
 			$result = date('H:i',$timestamp);
 		} else if ($datestamp == $yesterday) {
 			//Yesterday 18:13
-			$result = 'Igår '.date(' H:i',$timestamp);
+			$result = 'Igår '.date('H:i',$timestamp);
 		} else if ($datestamp == $tomorrow) {
 			//Tomorrow 18:13
-			$result = 'Imorgon '.date(' H:i',$timestamp);
+			$result = 'Imorgon '.date('H:i',$timestamp);
 		} else {
 			//2007-04-14 13:22
 			$result = date('Y-m-d H:i', $timestamp);
