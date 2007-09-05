@@ -37,7 +37,7 @@ CREATE TABLE tblComments (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (commentId)
-) ENGINE=MyISAM AUTO_INCREMENT=438 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=439 DEFAULT CHARSET=utf8;
 CREATE TABLE tblFeedback (
   feedbackId int(10) unsigned NOT NULL auto_increment,
   feedbackType tinyint(3) unsigned NOT NULL default '0',
@@ -69,7 +69,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=1007 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNews (
   newsId int(10) unsigned NOT NULL auto_increment,
   title varchar(200) default NULL,
@@ -357,7 +357,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -366,7 +366,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
 CREATE TABLE tblLyrics (
   lyricId bigint(20) unsigned NOT NULL auto_increment,
   lyricName varchar(200) character set utf8 NOT NULL,
@@ -375,7 +375,7 @@ CREATE TABLE tblLyrics (
   creatorId bigint(20) unsigned NOT NULL default '0',
   timeCreated datetime NOT NULL,
   PRIMARY KEY  (lyricId)
-) ENGINE=MyISAM AUTO_INCREMENT=4955 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=4985 DEFAULT CHARSET=latin1;
 CREATE TABLE tblNewAdditions (
   ID bigint(20) unsigned NOT NULL default '0',
   `type` tinyint(3) unsigned NOT NULL default '0',

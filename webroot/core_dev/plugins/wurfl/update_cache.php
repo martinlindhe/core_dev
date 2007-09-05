@@ -57,36 +57,56 @@ die;
  *
  */
 
+
+/*
+This code is modified by Martin Lindhe, based on code from wurfl_php_tools_21beta2.zip from the wurfl team,
+so the orginal copyright above remains.
+*/
 set_time_limit(600);
 
-$start = microtime(true); 
+$page_start = microtime(true); 
 
 require_once('wurfl_config.php');
 require_once('wurfl_parser.php');
 define('FORCED_UPDATE', true);
 
-$load_parser = microtime(true); 
+$config['wurfl']['url'] = 'http://wurfl.sourceforge.net/wurfl.xml';
+$config['wurfl']['xmlfile'] = WURFL_FILE;	//todo: get rid of WURFL_FILE
 
-echo 'Forced cache update started<br/>';
-if (WURFL_USE_CACHE === true) {
-	parse();
-	if ( WURFL_USE_MULTICACHE === true ) {
-		echo 'Updating multicache dir<br/>';
-		touch(MULTICACHE_TOUCH);
-		if ( is_dir(MULTICACHE_DIR) )
-			rename(substr(MULTICACHE_DIR, 0, -1), substr(MULTICACHE_DIR, 0, -1).'.'.time());
-		rename(substr(MULTICACHE_TMP_DIR, 0, -1), substr(MULTICACHE_DIR, 0, -1));
-		unlink(MULTICACHE_TOUCH);
-	}
-	echo 'Done updating cache<br/>';
-} else {
-	echo 'Why update cache if WURFL_URE_CACHE is not set to true?<br/>';
+
+$download_start = microtime(true);
+if (!file_exists($config['wurfl']['xmlfile']) || isset($_GET['forcedl'])) {
+	echo 'Downloading '.$config['wurfl']['url'].' ...<br/>';
+	$xml = file_get_contents($config['wurfl']['url']);
+
+	file_put_contents($config['wurfl']['xmlfile'], $xml);
+	echo 'Stored local copy to '.$config['wurfl']['xmlfile'].'<br/>';
 }
+$download_end = microtime(true);
 
-$parse = microtime(true);
 
-echo 'Parser load time: '.($load_parser-$start).'<br/>';
-echo 'Parsing time: '.($parse-$load_parser).'<br/>';
-echo 'Total: '.($parse-$start).'<br/>';
+$parse_start = microtime(true);
+parse();
+$parse_end = microtime(true);
+echo 'Done updating cache<br/>';
 
+
+$page_end = microtime(true);
+
+$download_time = $download_end - $download_start;
+$parse_time = $parse_end - $parse_start;
+$page_time = $page_end - $page_start;
+
+$other_time = $page_time - $download_time - $parse_time;
+
+echo '<hr/>';
+echo '<h1>Stats</h1>';
+echo 'Download time: '.round($download_time, 3).' sec<br/>';
+
+echo 'Parse time: '.round($parse_time, 3).' sec<br/>';
+echo 'Other time: '.round($other_time, 3).' sec<br/>';
+echo 'Total: '.round($page_time, 3).' sec<br/>';
+
+echo '<br/>';
+echo '<a href="?forcedl">Click here</a> to force a new download of '.$config['wurfl']['url'];
 ?>

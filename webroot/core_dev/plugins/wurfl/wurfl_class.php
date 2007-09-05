@@ -209,31 +209,6 @@ class wurfl_class {
 		}
 		if ( in_array($_id, $this->_wurfl_agents) ) {
 			$this->_toLog('_GetDeviceCapabilitiesFromId', 'I have it in wurfl_agents cache, done', LOG_INFO);
-			// If the device for this id does not exist, and we use multicache,
-			// attempt to load the cache entry that matches the current id.
-			if ( ! isset( $this->_wurfl['devices'][$_id] ) && WURFL_USE_MULTICACHE ) {
-				for ($i=0;$i<3;$i++) {
-					if ( is_file(MULTICACHE_TOUCH) )
-						sleep(5);
-					else
-						break;
-				}
-				if ( $i>=3 ) {
-					$this->_toLog('_GetDeviceCapabilitiesFromId', "CACHE CORRUPTED! ".MULTICACHE_TOUCH." on my way", LOG_WARNING);
-					die("Updating cache stuck");
-				}
-				$fname = MULTICACHE_DIR . "/" . urlencode( $_id ) . MULTICACHE_SUFFIX;
-				$genericfname = MULTICACHE_DIR . "/generic" . MULTICACHE_SUFFIX;
-				if ( !is_file($fname) && is_file($genericfname) ) {
-					$this->_toLog('_GetDeviceCapabilitiesFromId', "the id $_id is not present in Multicache files, using the generic: CACHE CORRUPTED!", LOG_WARNING);
-					$fname = $genericfname;
-				} else if ( !is_file($fname) && !is_file($genericfname) ) {
-					$this->_toLog('_GetDeviceCapabilitiesFromId', "the id $_id is not present in Multicache files, nor the generic: CACHE CORRUPTED!", LOG_ERR);
-					die("the id $_id is not present in Multicache");
-				}
-				@include( $fname );
-				$this->_wurfl['devices'][$_id] = $_cached_devices[$_id];
-			}
 			return $this->_wurfl['devices'][$_id];
 		}
 		$this->_toLog('_GetDeviceCapabilitiesFromId', "the id $_id is not present in wurfl_agents", LOG_ERR);
@@ -296,43 +271,20 @@ class wurfl_class {
 			$this->browser_is_wap=false;
 			return false;
 		}
-		if ( WURFL_USE_CACHE === true ) {
-			$this->_ReadFastAgentToId($_user_agent);
-			// if I find the device in my cache I'm done
-			if ( $this->browser_is_wap === true ) {
-				$this->_toLog('GetDeviceCapabilitiesFromAgent', 'Device found in local cache, the id is '.$this->id, LOG_INFO);
-				if ( count($this->capabilities) == 0 )
-					$this->_GetFullCapabilities($this->id);
-				else
-					$this->_toLog('GetDeviceCapabilitiesFromAgent', 'capabilities found in cache', LOG_INFO);
-				return true;
-			} else if ( count($this->_wurfl) == 0 ) {
-				$this->_toLog('GetDeviceCapabilitiesFromAgent', 'cache enabled, WURFL is not loaded, now loading', LOG_INFO);
-				if ( $this->_cacheIsValid() ) {
-					$this->_toLog('GetDeviceCapabilitiesFromAgent', 'loading WURFL from cache', LOG_INFO);
-					list($cache_stat, $this->_wurfl, $this->_wurfl_agents) = load_cache();
-				} else {
-					$this->_toLog('GetDeviceCapabilitiesFromAgent', 'loading WURFL from XML', LOG_INFO);
-					$xml_info = parse();
-					$cache_stat = $xml_info[0];
-					$this->_wurfl = $xml_info[1];
-					$this->_wurfl_agents = $xml_info[2];
-				}
-			}
-		} else if ( WURFL_AUTOLOAD === false ) {
-			// if not using cache and for some reason AUTOLOAD is off, I need to load it
-			if ( count($this->_wurfl) == 0 ) {
-				$this->_toLog('GetDeviceCapabilitiesFromAgent', 'WURFL is not loaded, now loading', LOG_INFO);
-				$xml_info = parse();
-				$cache_stat = $xml_info[0];
-				$this->_wurfl = $xml_info[1];
-				$this->_wurfl_agents = $xml_info[2];
-			}
-		} else {
-				// If I'm here it means cache is disabled and autoload is on
-				global $wurfl, $wurfl_agents;
-				$this->_wurfl = $wurfl;
-				$this->_wurfl_agents = $wurfl_agents;
+
+		$this->_ReadFastAgentToId($_user_agent);
+		// if I find the device in my cache I'm done
+		if ( $this->browser_is_wap === true ) {
+			$this->_toLog('GetDeviceCapabilitiesFromAgent', 'Device found in local cache, the id is '.$this->id, LOG_INFO);
+			if ( count($this->capabilities) == 0 )
+				$this->_GetFullCapabilities($this->id);
+			else
+				$this->_toLog('GetDeviceCapabilitiesFromAgent', 'capabilities found in cache', LOG_INFO);
+			return true;
+		} else if ( count($this->_wurfl) == 0 ) {
+			$this->_toLog('GetDeviceCapabilitiesFromAgent', 'cache enabled, WURFL is not loaded, now loading', LOG_INFO);
+			$this->_toLog('GetDeviceCapabilitiesFromAgent', 'loading WURFL from cache', LOG_INFO);
+			list($cache_stat, $this->_wurfl, $this->_wurfl_agents) = load_cache();
 		}
 		
 		$_ua = $_user_agent;
@@ -367,9 +319,7 @@ class wurfl_class {
 					$this->model = $this->capabilities['product_info']['model_name'];
 					reset($this->_wurfl_agents);
 					reset($_wurfl_user_agents);
-					if ( WURFL_USE_CACHE ) {
-						$this->_WriteFastAgentToId();
-					}
+					$this->_WriteFastAgentToId();
 					return true;
 				}
 			} 
@@ -426,9 +376,7 @@ class wurfl_class {
 			$this->id = 'generic';
 			return true;
 		}
-		if ( WURFL_USE_CACHE ) {
-			$this->_WriteFastAgentToId($_user_agent);
-		}
+		$this->_WriteFastAgentToId($_user_agent);
 		// FullCapabilities defines $this->capabilities
 		$this->_GetFullCapabilities($this->id);
 		return true;
@@ -543,10 +491,6 @@ class wurfl_class {
 	 *
 	 */
 	function _ReadFastAgentToId($_ua) {
-		// check cache validity
-		if ( !$this->_cacheIsValid() ) {
-			return false;
-		}
 		// Load cache file
 		if ( is_file(WURFL_AGENT2ID_FILE) || is_link(WURFL_AGENT2ID_FILE) ) {
 			include(WURFL_AGENT2ID_FILE);
@@ -569,40 +513,6 @@ class wurfl_class {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Check filemtimes to see if the cache should be updated
-	 *
-	 * @access private
-	 *
-	 */
-	function _cacheIsValid() {
-
-		return true; //function disabled.
-		/*
-		// First of all check configuration. If autoupdate is set to false always
-		// return true, otherwise check
-		if ( WURFL_CACHE_AUTOUPDATE === false )
-			return true;
-
-		// WURFL hasn't been loaded into memory, I'll do it now
-		$wurfl_stat = filemtime(WURFL_FILE);
-		if ( defined('WURFL_PATCH_FILE') && file_exists(WURFL_PATCH_FILE) ) {
-			$patch_stat = filemtime(WURFL_PATCH_FILE);
-			if ( $patch_stat > $wurfl_stat ) {
-				// if the patch file is newer than the WURFL I set wurfl_stat to that time
-				$wurfl_stat = $patch_stat;
-			}
-		}
-		$cache_stat = stat_cache();
-		if ( $wurfl_stat <= $cache_stat ) {
-			return true;
-		} else {
-			$this->_toLog('_cacheIsValid', 'cache file is outdated', LOG_INFO);
-			return false;
-		}
-		*/
 	}
 
 	/**

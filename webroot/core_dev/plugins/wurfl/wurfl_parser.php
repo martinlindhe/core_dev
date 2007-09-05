@@ -265,7 +265,7 @@ function load_cache() {
 	$cache_stat = 0;
 	$wurfl = $wurfl_agents = array();
 
-	if ( WURFL_USE_CACHE && file_exists(CACHE_FILE) ) {
+	if ( file_exists(CACHE_FILE) ) {
 		include(CACHE_FILE);
 	}
 	return Array($cache_stat, $wurfl, $wurfl_agents);
@@ -273,7 +273,7 @@ function load_cache() {
 
 function stat_cache() {
 	$cache_stat = 0;
-	if ( WURFL_USE_CACHE && file_exists(CACHE_FILE) ) {
+	if ( file_exists(CACHE_FILE) ) {
 		$cache_stat = filemtime(CACHE_FILE);
 	}
 	return $cache_stat;
@@ -289,7 +289,7 @@ function parse() {
 	xml_set_character_data_handler($xml_parser, "characterData"); 
 	if ( !file_exists(WURFL_FILE) ) {
 		wurfl_log('parse', WURFL_FILE." does not exist");
-		die(WURFL_FILE." does not exist");
+		die(WURFL_FILE." does not exist1");
 	}
 	if (!($fp = fopen(WURFL_FILE, "r"))) {
 		wurfl_log('parse', "could not open XML input");
@@ -352,129 +352,60 @@ function parse() {
 
 	reset($wurfl);
 	reset($wurfl_agents);
-	if ( WURFL_USE_CACHE ) {
-		if ( defined("WURFL_AGENT2ID_FILE") && file_exists(WURFL_AGENT2ID_FILE) && !is_writeable(WURFL_AGENT2ID_FILE) ) {
-			wurfl_log('parse', "ERROR: Unable to remove ".WURFL_AGENT2ID_FILE);
-			//die ('Unable to remove '.WURFL_AGENT2ID_FILE);
-			return;
-		}
-		if ( isset($wurfl_stat) ) {
-			$cache_stat = $wurfl_stat;
-		} else {
-			$cache_stat = $wurfl_stat = filemtime(WURFL_FILE);
-			if ( defined('WURFL_PATCH_FILE') && file_exists(WURFL_PATCH_FILE) ) {
-				$patch_stat = filemtime(WURFL_PATCH_FILE);
-				if ( $patch_stat > $wurfl_stat ) {
-					// if the patch file is newer than the WURFL I set wurfl_stat to that time
-					$wurfl_stat = $patch_stat;
-				}
-			}
-		}
-		if ( WURFL_USE_MULTICACHE ) {
-			// If using Multicache remove old cache files
-			$wurfl_temp_devices = $wurfl['devices'];
-			$wurfl['devices'] = array();
-			//Attempt to remove all existing multicache files
-			if ( defined("MULTICACHE_DIR") && is_dir(MULTICACHE_DIR) && !is_writeable(MULTICACHE_DIR) ) {
-				wurfl_log('parse', "ERROR: Unable to remove files from".MULTICACHE_DIR);
-				return;
-			}
-			// Get all the agent file names in the multicache directory. Use
-			// glob if available
-			if ( function_exists( 'glob' ) ) {
-				$filelist = glob( MULTICACHE_DIR . "/*" . MULTICACHE_SUFFIX );
-			} else {
-				if ( $dh = @opendir( MULTICACHE_DIR ) ) {
-					$filelist = array();
-					while (false !== ($file = @readdir($dh))) {
-						$filename = MULTICACHE_DIR . "/$file";
-						if ( is_file( $filename ) ) {
-							$filelist[] = $filename;
-						}
-					}
-					@closedir( $dh );
-				}
-			}
-			foreach ( $filelist as $filename ) {
-				@unlink( $filename );
-			}
-		}
-		$php_version = PHP_VERSION;
-		list($php_main_version, $php_subversion, $php_subsubversion) = explode('.', $php_version);
-		$fp_cache= fopen(CACHE_FILE, "w");
-		fwrite($fp_cache, "<?php\n");
-		// it seems until PHP 4.3.2 var_export had a problem with apostrophes in array keys
-		if ( ($php_main_version == 4 && $php_subversion > 2 && $php_subsubversion > 2) || $php_main_version > 4 ) {
-			if ( !WURFL_USE_MULTICACHE ) {
-				$wurfl_to_file = var_export($wurfl, true);
-			}
-			$wurfl_agents_to_file = var_export($wurfl_agents, true);
-			$cache_stat_to_file = var_export($cache_stat, true);
-			fwrite($fp_cache, "\$cache_stat=$cache_stat_to_file;\n");
-			if ( !WURFL_USE_MULTICACHE ) {
-				fwrite($fp_cache, "\$wurfl=$wurfl_to_file;\n");
-			}
-			fwrite($fp_cache, "\$wurfl_agents=$wurfl_agents_to_file;\n");
-		} else {
-			if ( !WURFL_USE_MULTICACHE ) {
-				$wurfl_to_file = urlencode(serialize($wurfl));
-			}
-			$wurfl_agents_to_file = urlencode(serialize($wurfl_agents));
-			$cache_stat_to_file = urlencode(serialize($cache_stat));
-			fwrite($fp_cache, "\$cache_stat=unserialize(urldecode(\"". $cache_stat_to_file ."\"));\n");
-			if ( !WURFL_USE_MULTICACHE ) {
-				fwrite($fp_cache, "\$wurfl=unserialize(urldecode(\"". $wurfl_to_file ."\"));\n");
-			}
-			fwrite($fp_cache, "\$wurfl_agents=unserialize(urldecode(\"". $wurfl_agents_to_file ."\"));\n");
-		}
-		fwrite($fp_cache, "?>\n");
-		fclose($fp_cache);
-		if ( defined("WURFL_AGENT2ID_FILE") && file_exists(WURFL_AGENT2ID_FILE) ) {
-			@unlink(WURFL_AGENT2ID_FILE);
-		}
-		if ( WURFL_USE_MULTICACHE ) {
-			// Return the capabilities to the wurfl structure
-			$wurfl['devices'] = &$wurfl_temp_devices;
-			// Write multicache files
-			if ( FORCED_UPDATE === true )
-				$path = MULTICACHE_TMP_DIR;
-			else
-				$path = MULTICACHE_DIR;
-			if ( !is_dir($path) )
-				@mkdir($path);
-			foreach ( $wurfl_temp_devices as $id => $capabilities ) {
-				$fname = urlencode( $id );
-				$varname = addcslashes( $id, "'\\" );
 
-				$fp_cache = fopen( $path . "/$fname" . MULTICACHE_SUFFIX, 'w' );
-
-				fwrite($fp_cache, "<?php\n");
-                                if ( ($php_main_version == 4 && $php_subversion > 2) || $php_main_version > 4 ) {
-					$wurfl_to_file = var_export($capabilities, true);
-					fwrite($fp_cache, "\$_cached_devices['$varname']=$wurfl_to_file;\n");
-				} else {
-					$wurfl_to_file = urlencode(serialize($capabilities));
-					fwrite($fp_cache, "\$_cached_devices['$varname']=unserialize(urldecode(\"". $wurfl_to_file ."\"));\n");
-				}
-				fwrite($fp_cache, "?>\n");
-				fclose($fp_cache);
-			}
-		}
-		// It's probably not really worth encoding cache.php if you're using Multicache
-		if ( 0 && function_exists('mmcache_encode') ) {
-			$empty= '';
-			set_time_limit(60);
-			$to_file = mmcache_encode(CACHE_FILE, $empty);
-			$to_file = '<?php if (!is_callable("mmcache_load") && !@dl((PHP_OS=="WINNT"||PHP_OS=="WIN32")?"TurckLoader.dll":"TurckLoader.so")) { die("This PHP script has been encoded with Turck MMcache, to run it you must install <a href=\"http://turck-mmcache.sourceforge.net/\">Turck MMCache or Turck Loader</a>");} return mmcache_load(\''.$to_file."');?>\n";
-			$fp_cache= fopen(CACHE_FILE, "wb");
-			fwrite($fp_cache, $to_file);
-			fclose($fp_cache);
-		}
-		//echo "cache written";
-	} else {
-		// not using WURFL cache
-		$cache_stat = 0;
+	if ( defined("WURFL_AGENT2ID_FILE") && file_exists(WURFL_AGENT2ID_FILE) && !is_writeable(WURFL_AGENT2ID_FILE) ) {
+		wurfl_log('parse', "ERROR: Unable to remove ".WURFL_AGENT2ID_FILE);
+		//die ('Unable to remove '.WURFL_AGENT2ID_FILE);
+		return;
 	}
+	if ( isset($wurfl_stat) ) {
+		$cache_stat = $wurfl_stat;
+	} else {
+		$cache_stat = $wurfl_stat = filemtime(WURFL_FILE);
+		if ( defined('WURFL_PATCH_FILE') && file_exists(WURFL_PATCH_FILE) ) {
+			$patch_stat = filemtime(WURFL_PATCH_FILE);
+			if ( $patch_stat > $wurfl_stat ) {
+				// if the patch file is newer than the WURFL I set wurfl_stat to that time
+				$wurfl_stat = $patch_stat;
+			}
+		}
+	}
+	$php_version = PHP_VERSION;
+	list($php_main_version, $php_subversion, $php_subsubversion) = explode('.', $php_version);
+	$fp_cache= fopen(CACHE_FILE, "w");
+	fwrite($fp_cache, "<?php\n");
+	// it seems until PHP 4.3.2 var_export had a problem with apostrophes in array keys
+	if ( ($php_main_version == 4 && $php_subversion > 2 && $php_subsubversion > 2) || $php_main_version > 4 ) {
+		$wurfl_to_file = var_export($wurfl, true);
+		$wurfl_agents_to_file = var_export($wurfl_agents, true);
+		$cache_stat_to_file = var_export($cache_stat, true);
+		fwrite($fp_cache, "\$cache_stat=$cache_stat_to_file;\n");
+		fwrite($fp_cache, "\$wurfl=$wurfl_to_file;\n");
+		fwrite($fp_cache, "\$wurfl_agents=$wurfl_agents_to_file;\n");
+	} else {
+		$wurfl_to_file = urlencode(serialize($wurfl));
+		$wurfl_agents_to_file = urlencode(serialize($wurfl_agents));
+		$cache_stat_to_file = urlencode(serialize($cache_stat));
+		fwrite($fp_cache, "\$cache_stat=unserialize(urldecode(\"". $cache_stat_to_file ."\"));\n");
+		fwrite($fp_cache, "\$wurfl=unserialize(urldecode(\"". $wurfl_to_file ."\"));\n");
+		fwrite($fp_cache, "\$wurfl_agents=unserialize(urldecode(\"". $wurfl_agents_to_file ."\"));\n");
+	}
+	fwrite($fp_cache, "?>\n");
+	fclose($fp_cache);
+	if ( defined("WURFL_AGENT2ID_FILE") && file_exists(WURFL_AGENT2ID_FILE) ) {
+		@unlink(WURFL_AGENT2ID_FILE);
+	}
+	// It's probably not really worth encoding cache.php if you're using Multicache
+	if ( 0 && function_exists('mmcache_encode') ) {
+		$empty= '';
+		set_time_limit(60);
+		$to_file = mmcache_encode(CACHE_FILE, $empty);
+		$to_file = '<?php if (!is_callable("mmcache_load") && !@dl((PHP_OS=="WINNT"||PHP_OS=="WIN32")?"TurckLoader.dll":"TurckLoader.so")) { die("This PHP script has been encoded with Turck MMcache, to run it you must install <a href=\"http://turck-mmcache.sourceforge.net/\">Turck MMCache or Turck Loader</a>");} return mmcache_load(\''.$to_file."');?>\n";
+		$fp_cache= fopen(CACHE_FILE, "wb");
+		fwrite($fp_cache, $to_file);
+		fclose($fp_cache);
+	}
+	//echo "cache written";
 
 	return Array($cache_stat, $wurfl, $wurfl_agents);
 
@@ -493,11 +424,6 @@ function wurfl_log($func, $msg, $logtype=3) {
 	}
 }
 
-if ( !file_exists(WURFL_FILE) ) {
-	wurfl_log('main', WURFL_FILE." does not exist");
-	die(WURFL_FILE." does not exist");
-}
-
 if ( WURFL_AUTOLOAD === true ) {
 	$wurfl_stat = filemtime(WURFL_FILE);
 	$cache_stat = stat_cache();
@@ -506,7 +432,7 @@ if ( WURFL_AUTOLOAD === true ) {
 	} else {
 		$patch_stat = $wurfl_stat;
 	}
-	if (WURFL_USE_CACHE && $wurfl_stat <= $cache_stat && $patch_stat <= $cache_stat) {
+	if ($wurfl_stat <= $cache_stat && $patch_stat <= $cache_stat) {
 		// cache file is updated
 
 		list($cache_stat, $wurfl, $wurfl_agents) = load_cache();

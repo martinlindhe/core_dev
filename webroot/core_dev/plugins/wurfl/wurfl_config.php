@@ -42,9 +42,6 @@
  * WURFL_FILE		string, Full path and filename of wurfl.xml
  * WURFL_PARSER_FILE	string, Full path and filename of wurfl_parser.php
  * WURFL_CLASS_FILE	string, Full path and filename of wurfl_class.php
- * WURFL_USE_CACHE	boolean, true if I want to use a cache file
- * WURFL_USE_MULTICACHE	boolean, true if you want to use Multicache files
- *				instead of a single BIG cache file
  * MULTICACHE_DIR	string, used only if you enabled Multicache, defines where
  *				the cache files will be stored. WARNING: while cache.php will grow
  *				in size but remain a single file, here the files will grow in
@@ -80,41 +77,13 @@
  *
  */
 
-// Single define to be checked when starting the parser and/or the class
-define("WURFL_CONFIG", true);
-
 // Where all data is stored (wurfl.xml, cache file, logs, etc)
 define("DATADIR", './data/');
 
 require_once('wurfl_class.php');
 
-// Set this true if you want to use cache. Strongly suggested
-define ("WURFL_USE_CACHE", true);
-
-// Set this true if you want to avoid using cache.php file, and
-// generate a single file for each device user agent and use that as a cache
-// NOTICE: using Multicache will still generate cache.php and agent2id.php,
-//  but will not dump the entire XML as PHP into cache.php. As a result
-//  cache.php will be MUCH smaller and load WAY faster; as a drawback you will
-//  have many more I/O accesses to the single tiny files.
-define ("WURFL_USE_MULTICACHE", false);
-
 // Path and name of the cache file
 define ("CACHE_FILE", DATADIR."cache.php");
-
-// Set path of the Multicache directory where all the little caches will be
-// stored. Should be a directory that contains *only* these files, so that its
-// content can be safely cleaned when a new cache is created.
-// If not using Multicache, this parameter will not be used.
-define ("MULTICACHE_DIR", DATADIR."multicache/");
-
-// Temporary directory for manual updates.
-define ("MULTICACHE_TMP_DIR", DATADIR."multicache_tmp/");
-// This file is created and removed when manually updating multicache files
-define ("MULTICACHE_TOUCH", DATADIR."multicache.lockfile");
-
-// File suffix for Multicache files
-define ("MULTICACHE_SUFFIX",".php");
 
 // Autoload set to false, I will load it when needed
 define ("WURFL_AUTOLOAD", false);

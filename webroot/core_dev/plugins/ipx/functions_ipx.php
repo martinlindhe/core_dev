@@ -186,8 +186,7 @@
 			$msg = 'Du debiteras nu '.$price.' kr för '.$days.' dagar VIP till användare '.$username;
 			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP';
 
-			$session->log('Attempting to charge '.$username.' for '.$days.' days VIP ('.$tariff.') (cmd: '.$in_cmd[1].')');	
-
+			$log1 = 'Attempting to charge '.$username.' for '.$days.' days VIP ('.$tariff.') (cmd: '.$in_cmd[1].')';
 		} else if (array_key_exists($in_cmd[1], $vip_delux_codes)) {
 			$days = $vip_delux_codes[$in_cmd[1]][0];
 			$price = $vip_delux_codes[$in_cmd[1]][1];
@@ -196,8 +195,9 @@
 			$msg = 'Du debiteras nu '.$price.' kr för '.$days.' dagar VIP DELUX till användare '.$username;
 			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP DELUX';
 
-			$session->log('Attempting to charge '.$username.' for '.$days.' days VIP DELUX ('.$tariff.') (cmd: '.$in_cmd[1].')');	
+			$log1 = 'Attempting to charge '.$username.' for '.$days.' days VIP DELUX ('.$tariff.') (cmd: '.$in_cmd[1].')';
 		}
+		$session->log($log1);
 
 		//2. skicka ett nytt sms till avsändaren, med TARIFF satt samt med messageid från incoming sms satt som "reference id"
 		//	använder samma avsändar-nummer som det inkommande SMS:et skickades till
@@ -208,21 +208,31 @@
 
 		$sms_err = sendSMS($params['OriginatorAddress'], $msg, $params['DestinationAddress'], $tariff, $referenceId);
 		if ($sms_err === true) {
+			$log2 = 'Charge to '.$username.' of '.$tariff.' succeeded';
+
 			addVIP($in_cmd[2], $vip_level, $days);
-			
-			$session->log('Charge to '.$username.' of '.$tariff.' succeeded');
-			
+
 			//Leave a confirmation message in the users inbox
+			//fixme: move this sql query out of the general ipx implementation
 			$internal_title = 'VIP-bekräftelse';
 			$q = 'INSERT INTO s_usermail SET sender_id=0, user_id='.$in_cmd[2].',sent_ttl="'.$internal_title.'",sent_cmt="'.$internal_msg.'",sent_date=NOW()';
 			$user_db->insert($q);
+		} else {
+			$log2 = 'Charge to '.$username.' of '.$tariff.' failed with error '.$sms_err, LOGLEVEL_ERROR;
+		}
+		$session->log($log2);
 
+		//maila $log1 + $log2 nånstans
+		//fixme: gör dest-mail konfigurerbar
+		mail('martin@unicorn.tv', 'IPX billing report', $log1 + "\n\n" + $log2);
+
+		if ($sms_err === true) {
 			return true;
 		}
-
-		$session->log('Charge to '.$username.' of '.$tariff.' failed with error '.$sms_err, LOGLEVEL_ERROR);
+		return false;
 	}
 
+	//fixme: move out of this file
 	function nvoxHandleIncoming($_user_id, $_days, $_level)
 	{
 		global $db, $session, $config;
@@ -264,6 +274,7 @@
 	}
 
 //av martin. används häråvar, mot cs databasen
+//fixme: move out of this file
 function addVIP($user_id, $vip_level, $days)
 {
 	global $session, $config;
