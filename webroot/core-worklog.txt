@@ -248,6 +248,8 @@ X = hi prio task
 	- wurfl: added link to force new download of wurfl.xml from the browser
 	- wurfl: removed option WURFL_USE_MULTICACHE, made it forced disabled. removed all code related to multicache feature
 	- wurfl: removed unused WURFL_CONFIG, MULTICACHE_DIR, MULTICACHE_TMP_DIR, MULTICACHE_TOUCH, MULTICACHE_SUFFIX
+	- js/flash_obj.js renamed & replaced by swfobject.js 1.5 from http://blog.deconcept.com/swfobject/
+
 
 2007.08.08:
 	- js-editor: påbörjat js-editor. skapat knappar som auto-skapar taggen över markerad text
