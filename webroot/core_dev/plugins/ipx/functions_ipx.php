@@ -11,6 +11,7 @@
 	define('VIP_LEVEL1',	2);	//Normal VIP
 	define('VIP_LEVEL2',	3);	//VIP delux
 
+	//todo: rename to $config['ipx']
 	$config['sms']['originating_number'] = '123';
 	$config['sms']['auth_username'] = '';
 	$config['sms']['auth_password'] = '';
@@ -124,6 +125,7 @@
 		}
 	}
 
+	//fixme: move all/most of this function out of here!	
 	function ipxHandleIncoming()
 	{
 		global $db, $session, $config;
@@ -137,67 +139,12 @@
 		$q = 'INSERT INTO tblIncomingSMS SET params="'.$db->escape(serialize($params)).'",IP='.$session->ip.',timeReceived=NOW()';
 		$db->insert($q);
 
-		//Acknowledgment - Tell IPX that the SMS was received
+		//Acknowledgment - Tell IPX that the SMS was received so they drop the connection
 		header('HTTP/1.1 200 OK');
 		header('Content-Type: text/plain');
 		echo '<DeliveryResponse ack="true"/>';
 
-		//1. parse sms, format "POG vipnivå userid"
-		$in_cmd = explode(' ', strtoupper($params['Message']));
-
-		if (empty($in_cmd[0]) || empty($in_cmd[1]) || empty($in_cmd[2]) || !is_numeric($in_cmd[2])) {
-			$session->log('Invalid SMS cmd: '.$params['Message'], LOGLEVEL_WARNING);
-			die;
-		}
-		$vip_codes = array(
-											//days, price i öre, SEK2000 = 20.00 kronor
-			'VIP'			=> array(14, '20'),
-			'VIP-2V'	=> array(14, '20')/*,
-			'VIP-1M'	=> array(30, '30'),
-			'VIP-6M'	=> array(180, '150')*/
-		);
-
-		$vip_delux_codes = array(
-			'VIPD'			=> array(10, '20'),
-			'VIDP-10D'	=> array(10, '20')/*,
-			'VIPD-1M'		=> array(30, '50')*/
-		);
-
-		if (!array_key_exists($in_cmd[1], $vip_codes) && !array_key_exists($in_cmd[1], $vip_delux_codes)) {
-			$session->log('Unknown incoming SMS code "'.$in_cmd[1].'" ('.$params['Message'].')', LOGLEVEL_WARNING);
-			die;
-		}
-
-		//identifiera användaren
-		$user_db = new DB_MySQLi($config['user_db']);
-
-		$q = 'SELECT u_alias FROM s_user WHERE id_id='.$in_cmd[2];
-		$username = $user_db->getOneItem($q);
-		if (!$username) {
-			$session->log('Specified user dont exist: '.$in_cmd[2], LOGLEVEL_WARNING);
-			die;
-		}
-
-		if (array_key_exists($in_cmd[1], $vip_codes)) {
-			$days = $vip_codes[$in_cmd[1]][0];
-			$price = $vip_codes[$in_cmd[1]][1];
-			$tariff = 'SEK'.$price.'00';	//de två nollorna är för ören
-			$vip_level = VIP_LEVEL1;
-			$msg = 'Du debiteras nu '.$price.' kr för '.$days.' dagar VIP till användare '.$username;
-			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP';
-
-			$log1 = 'Attempting to charge '.$username.' for '.$days.' days VIP ('.$tariff.') (cmd: '.$in_cmd[1].')';
-		} else if (array_key_exists($in_cmd[1], $vip_delux_codes)) {
-			$days = $vip_delux_codes[$in_cmd[1]][0];
-			$price = $vip_delux_codes[$in_cmd[1]][1];
-			$tariff = 'SEK'.$price.'00';	//de två nollorna är för ören
-			$vip_level = VIP_LEVEL2;
-			$msg = 'Du debiteras nu '.$price.' kr för '.$days.' dagar VIP DELUX till användare '.$username;
-			$internal_msg = 'Ditt konto har uppgraderats med '.$days.' dagar VIP DELUX';
-
-			$log1 = 'Attempting to charge '.$username.' for '.$days.' days VIP DELUX ('.$tariff.') (cmd: '.$in_cmd[1].')';
-		}
-		$session->log($log1);
+		$ipx = prepareIPX_MT_bill_CS($params['Message']);	//todo: could be a class... :O
 
 		//2. skicka ett nytt sms till avsändaren, med TARIFF satt samt med messageid från incoming sms satt som "reference id"
 		//	använder samma avsändar-nummer som det inkommande SMS:et skickades till
@@ -206,11 +153,12 @@
 		$referenceId = $params['MessageId'];
 		//if (substr($referenceId, 0, 2) == '1-') $referenceId = substr($referenceId, 2);
 
-		$sms_err = sendSMS($params['OriginatorAddress'], $msg, $params['DestinationAddress'], $tariff, $referenceId);
+		$sms_err = sendSMS($params['OriginatorAddress'], $ipx['msg'], $params['DestinationAddress'], $ipx['tariff'], $referenceId);
 		if ($sms_err === true) {
-			$log2 = 'Charge to '.$username.' of '.$tariff.' succeeded';
+			$l = 'Charge to '.$ipx['username'].' of '.$ipx['tariff'].' succeeded';
 
-			addVIP($in_cmd[2], $vip_level, $days);
+			//fixme: move this function call out of here
+			addVIP($in_cmd[2], $ipx['vip_level'], $ipx['days']);
 
 			//Leave a confirmation message in the users inbox
 			//fixme: move this sql query out of the general ipx implementation
@@ -218,13 +166,12 @@
 			$q = 'INSERT INTO s_usermail SET sender_id=0, user_id='.$in_cmd[2].',sent_ttl="'.$internal_title.'",sent_cmt="'.$internal_msg.'",sent_date=NOW()';
 			$user_db->insert($q);
 		} else {
-			$log2 = 'Charge to '.$username.' of '.$tariff.' failed with error '.$sms_err, LOGLEVEL_ERROR;
+			$l = 'Charge to '.$username.' of '.$tariff.' failed with error '.$sms_err, LOGLEVEL_ERROR;
 		}
-		$session->log($log2);
+		$session->log($l);
 
-		//maila $log1 + $log2 nånstans
 		//fixme: gör dest-mail konfigurerbar
-		mail('martin@unicorn.tv', 'IPX billing report', $log1 + "\n\n" + $log2);
+		mail('martin@unicorn.tv', 'IPX billing report', $l);
 
 		if ($sms_err === true) {
 			return true;
@@ -232,76 +179,4 @@
 		return false;
 	}
 
-	//fixme: move out of this file
-	function nvoxHandleIncoming($_user_id, $_days, $_level)
-	{
-		global $db, $session, $config;
-		if (!is_numeric($_user_id) || !is_numeric($_days) || !is_numeric($_level)) return false;
-		if ($_level > 3) return false;
-
-		//identifiera användaren
-		$user_db = new DB_MySQLi($config['user_db']);
-
-		$q = 'SELECT u_alias FROM s_user WHERE id_id='.$_user_id;
-		$username = $user_db->getOneItem($q);
-		if (!$username) {
-			echo '1';	//error code
-			$session->log('Specified user dont exist: '.$_user_id, LOGLEVEL_WARNING);
-			die;
-		}
-		
-		//Acknowledgment - Tell NVOX that the data was received
-		echo '0';	//ok code
-
-		$internal_msg = 'Ditt konto har uppgraderats med '.$_days.' dagar VIP';
-		if ($_level == 3) $internal_msg .= ' Deluxe';
-
-		addVIP($_user_id, $_level, $_days);
-
-		if ($_level == 3) {
-			$log_msg = 'Gave '.$username.' '.$_days.' days of VIP deluxe from NVOX';
-		} else {
-			$log_msg = 'Gave '.$username.' '.$_days.' days of VIP from NVOX';
-		}
-		$session->log($log_msg);
-			
-		//Leave a confirmation message in the users inbox
-		$internal_title = 'VIP-bekräftelse';
-		$q = 'INSERT INTO s_usermail SET sender_id=0, user_id='.$_user_id.',sent_ttl="'.$internal_title.'",sent_cmt="'.$internal_msg.'",sent_date=NOW()';
-		$user_db->insert($q);
-
-		return true;
-	}
-
-//av martin. används häråvar, mot cs databasen
-//fixme: move out of this file
-function addVIP($user_id, $vip_level, $days)
-{
-	global $session, $config;
-
-	$user_db = new DB_MySQLi($config['user_db']);
-
-	//$session->log('addVIP user='.$user_id.', level: '.$vip_level.',days: '.$days );
-	
-	if (!is_numeric($user_id) || !is_numeric($vip_level) || !is_numeric($days)) return false;
-
-	$q = 'SELECT userId FROM s_vip WHERE userId='.$user_id.' AND level='.$vip_level;
-
-	if ($user_db->getOneItem($q)) {
-		$q = 'UPDATE s_vip SET days=days+'.$days.',timeSet=NOW() WHERE userId='.$user_id.' AND level='.$vip_level;
-		$user_db->update($q);
-	} else {
-		$q = 'INSERT INTO s_vip SET userId='.$user_id.',level='.$vip_level.',days='.$days.',timeSet=NOW()';
-		$user_db->insert($q);
-	}
-
-	$q = 'SELECT level_id FROM s_user WHERE id_id='.$user_id;
-	$old_level = $user_db->getOneItem($q);
-	//$session->log( 'old: '.$old_level.', new: '.$vip_level );
-	if ($old_level >= $vip_level) return true;
-
-	$q = 'UPDATE s_user SET level_id="'.$vip_level.'" WHERE id_id='.$user_id;
-	$user_db->update($q);
-	//$session->log('updated');
-}
 ?>
