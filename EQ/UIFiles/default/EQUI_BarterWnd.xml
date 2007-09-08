@@ -170,7 +170,7 @@
 		<LeftAnchorToLeft>false</LeftAnchorToLeft>
 		<RightAnchorToLeft>false</RightAnchorToLeft>
 		<Style_Transparent>false</Style_Transparent>
-		<TooltipReference>Click this button to Refresh you Inventory List below.</TooltipReference>
+		<TooltipReference>Click this button to Refresh your Inventory List below.</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
 		<Text>Refresh</Text>
 		<TextColor>

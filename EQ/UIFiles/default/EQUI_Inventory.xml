@@ -2858,7 +2858,7 @@
 		<RightAnchorOffset>124</RightAnchorOffset>
 		<BottomAnchorOffset>4</BottomAnchorOffset>
 		<Style_Transparent>false</Style_Transparent>
-		<TooltipReference>Click to create hard currency (items) of type highlighted.</TooltipReference>
+		<TooltipReference>Click to create hard currency (items) of the highlighted type.</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
 		<Text>Create</Text>
 		<TextColor>
@@ -2888,7 +2888,7 @@
 		<RightAnchorOffset>139</RightAnchorOffset>
 		<BottomAnchorOffset>4</BottomAnchorOffset>
 		<Style_Transparent>false</Style_Transparent>
-		<TooltipReference>Click here reclaim points from items of highlighted type.</TooltipReference>
+		<TooltipReference>Click here to reclaim points from items of the highlighted type.</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
 		<Text>Reclaim</Text>
 		<TextColor>

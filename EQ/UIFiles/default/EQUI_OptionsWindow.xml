@@ -1404,7 +1404,7 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<Text>Video Modes</Text>
+		<Text>Fullscreen Video Modes</Text>
 		<TooltipReference>Select your screen's resolution, color, and refresh rate settings.</TooltipReference>
 		<TextColor>
 			<R>255</R>

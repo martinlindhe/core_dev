@@ -834,7 +834,7 @@
 			<CY>24</CY>
 		</Size>
 		<Style_Transparent>false</Style_Transparent>
-		<TooltipReference>Resets filters to there default setting</TooltipReference>
+		<TooltipReference>Resets filters to their default setting</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
 		<!--<RadioGroup/>-->
 		<Text>Reset</Text>

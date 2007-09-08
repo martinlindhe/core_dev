@@ -73,7 +73,7 @@
     <RightAnchorToLeft>false</RightAnchorToLeft>
     <Style_Transparent>false</Style_Transparent>
     <Style_Checkbox>false</Style_Checkbox>
-    <TooltipReference>Click this button to Refresh you Inventory List below.</TooltipReference>
+    <TooltipReference>Click this button to Refresh your Inventory List below.</TooltipReference>
     <Text>Refresh</Text>
     <TextColor>
       <R>255</R>

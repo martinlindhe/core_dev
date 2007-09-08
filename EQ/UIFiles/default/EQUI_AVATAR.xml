@@ -1,0 +1,36 @@
+<?xml version = "1.0"?>
+<!-- Monolithic Parameter File -->
+<!-- The composite section must come first and be followed by the schema -->
+
+<XML ID = "EQInterfaceDefinitionLanguage">
+    <Composite>
+	<Include>EQUI.xml</Include>
+        <Include>EQUI_AVA_SpellEffectsWnd.xml</Include>
+        <Include>EQUI_AVA_EmitterDataWnd.xml</Include>
+        <Include>EQUI_AVA_ViewModPC.xml</Include>
+        <Include>EQUI_AVA_AvatarWindow.xml</Include>
+        <Include>EQUI_AVA_MoveObjWnd.xml</Include>
+        <Include>EQUI_AVA_ChangeFormWnd.xml</Include>
+        <Include>EQUI_AVA_ObjectPlacementWnd.xml</Include>
+        <Include>EQUI_AVA_SwitchPlacementWnd.xml</Include>
+        <Include>EQUI_AVA_SwitchCombosWnd.xml</Include>
+        <Include>EQUI_GUIDE_PetitionQWnd.xml</Include>
+        <Include>EQUI_GUIDE_SoulmarkWnd.xml</Include>
+        <Include>EQUI_AVA_LightPlacementWnd.xml</Include>
+        <Include>EQUI_AVA_SoundPlacementWnd.xml</Include>
+        <Include>EQUI_AVA_TemplateWnd.xml</Include>
+        <Include>EQUI_AVA_PathingWnd.xml</Include>
+        <Include>EQUI_AVA_ItemSearchWnd.xml</Include>
+        <Include>EQUI_AVA_PropertyExplorerWnd.xml</Include>
+        <Include>EQUI_AVA_EnvEmitterPlacementWnd.xml</Include>
+	<Include>EQUI_AVA_ActorParticlePlacement.xml</Include>
+	<Include>EQUI_AVA_ParticlePointPlacement.xml</Include>
+	<Include>EQUI_AVA_NPCTinting.xml</Include>
+	<Include>EQUI_AVA_ItemTinting.xml</Include>
+	<Include>EQUI_AVA_SplineCamWnd.xml</Include>
+	<Include>EQUI_GUIDE_ZoneWnd.xml</Include>
+	<Include>EQUI_AVA_NPCTuneWnd.xml</Include>
+	<Include>EQUI_AVA_QAMarkerWnd.xml</Include>
+    </Composite>
+    <Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
+</XML>
