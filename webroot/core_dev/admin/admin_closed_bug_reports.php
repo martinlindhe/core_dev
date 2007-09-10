@@ -1,13 +1,8 @@
 <?
-	include_once('include_all.php');
+	require_once('find_config.php');
+	$session->requireAdmin();
 
-	if (!$_SESSION['isSuperAdmin']) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
-
-	include('design_head.php');
-	include('design_user_head.php');
+	require($project.'design_head.php');
 
 	$content = '<b>Administration screen - Closed bug reports</b><br>';
 	$content .= '<b>OBSERVE: THESE BUG REPORTS ARE CLOSED!</b><br><br>';
@@ -30,6 +25,5 @@
 		echo MakeBox('<a href="admin.php">Administrationsgr&auml;nssnitt</a>|Closed bug reports', $content);
 		echo '</div>';
 
-	include('design_admin_foot.php');
-	include('design_foot.php');
+	require($project.'design_foot.php');
 ?>

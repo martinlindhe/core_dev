@@ -1,10 +1,6 @@
 <?
-	include_once('include_all.php');
-
-	if (!$_SESSION['isSuperAdmin'] || empty($_POST['pr'])) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
+	require_once('find_config.php');
+	$session->requireAdmin();
 
 	$pr = $_POST['pr'];
 	$prData = getTodoItem($db, $pr);
@@ -13,8 +9,7 @@
 		die;
 	}
 
-	include('design_head.php');
-	include('design_user_head.php');
+	require($project.'design_head.php');
 
 	$content = 'PR '.$pr.' not found.<br><br>';
 	$content .= '<a href="admin_current_work.php">Go back to current work</a><br>';
@@ -23,6 +18,5 @@
 		echo MakeBox('<a href="admin.php">Administrationsgr&auml;nssnitt</a>|Lookup PR', $content);
 		echo '</div>';
 
-	include('design_admin_foot.php');
-	include('design_foot.php');
+	require($project.'design_foot.php');
 ?>
