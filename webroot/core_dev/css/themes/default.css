@@ -160,7 +160,6 @@ select {
 }
 
 
-
 /* wiki style */
 .wiki {
 	font-size: 14px;
@@ -215,17 +214,14 @@ select {
 }
 
 
-
 /* used to make lists */
 ._row_container {
 	color: #595930;
 	background-color: #E1E2B9;
-
 }
 
 ._row_container:hover {
 	background-color: #AAC8E4;
-
 }
 
 ._row_col1 {
@@ -438,7 +434,6 @@ select {
 	border-top: 1px #888 solid;
 	padding-top: 10px;
 	max-width: 550px;
-
 }
 .news_item_overview h1 {
 	margin: 0;
@@ -493,8 +488,7 @@ select {
 	background-color: #E3E49C;
 }
 .forum_overview_item_even a:link,.forum_overview_item_even a:visited,
-.forum_overview_item_odd a:link,.forum_overview_item_odd a:visited
-{
+.forum_overview_item_odd a:link,.forum_overview_item_odd a:visited {
 	font-weight: bold;
 	color: #1F204B;
 }
@@ -514,8 +508,7 @@ select {
 .forum_post_item h1 {
 	margin: 0;
 }
-.forum_post_table a:link, .forum_post_table a:visited
-{
+.forum_post_table a:link, .forum_post_table a:visited {
 	color: #1F204B;
 }
 .forum_post_details {

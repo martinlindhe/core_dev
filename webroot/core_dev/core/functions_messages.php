@@ -126,6 +126,7 @@
 			return false;
 		}
 		
+		//fixme: denna kod kräver os3grid.js, som inte inkluderas här. använd en mindre grid-class
 		echo '<div id="grid"></div>';
 
 		echo '<script type="text/javascript">';
