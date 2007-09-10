@@ -146,6 +146,7 @@
 		<Include>EQUI_HtmlWnd.xml</Include>
 		<Include>EQUI_TCGWnd.xml</Include>
 		<Include>EQUI_TCGStartupWnd.xml</Include>
+		<Include>EQUI_ClaimWnd.xml</Include>
 	</Composite>
 
 	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes"/>
