@@ -1,6 +1,7 @@
 ----[[platform todo]]----
 	core/gör snart:
-		* fixa till admin todo lists
+		* fixa till admin todo lists. gör generell todo list? porta från cms...
+
 
 	js editor:
 		* aktivera för wiki editor (done) & blog editor & news editor

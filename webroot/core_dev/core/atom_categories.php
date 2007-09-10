@@ -10,6 +10,7 @@
 	define('CATEGORY_USERFILE_PRIVATE',	2);	//private userfile, only visible for the users friends / invited ppl
 	define('CATEGORY_USERFILE_HIDDEN',	3);	//files here are only visible by the owner
 	define('CATEGORY_WIKIFILE',					4);	//category for wiki file attachments, to allow better organization if needed
+	define('CATEGORY_TODOLIST',					5);	//todo list categories
 
 	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
 	define('CATEGORY_CONTACT',			11);		//friend relation category, like "Old friends", "Family"
@@ -91,14 +92,14 @@
 		return $db->getArray($q);
 	}
 
-	function getCategories($_type, $_owner = 0)
+	function getCategories($_type, $_owner = false)
 	{
 		global $db;
 
 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' ';
-		if ($_owner) $q .= 'AND ownerId='.$_owner.' ';
+		if ($_owner !== false) $q .= 'AND ownerId='.$_owner.' ';
 		$q .= 'ORDER BY categoryName ASC';
 
 		return $db->getArray($q);

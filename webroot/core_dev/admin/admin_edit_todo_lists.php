@@ -1,21 +1,18 @@
 <?
-	include_once('include_all.php');
-
-	if (!$_SESSION['isSuperAdmin']) {
-		header('Location: '.$config['start_page']);
-		die;
-	}
+	require_once('find_config.php');
+	$session->requireSuperAdmin();
 
 	if (!empty($_POST['cat_name'])) {
 		$parentId = 0;
 		if (!empty($_GET['parent'])) $parentId = $_GET['parent'];
 		addTodoCategory($db, $_POST['cat_name'], $parentId);
 	}
-	
-	include('design_head.php');
-	include('design_user_head.php');
 
-	$content = '<b>admin - edit todo categories</b><br><br>';
+	require($project.'design_head.php');
+
+	echo createMenu($admin_menu, 'blog_menu');
+
+	echo 'Admin edit todo lists<br/><br/>';
 
 	if (!empty($_GET['delete'])) {
 
@@ -75,10 +72,7 @@
 		$content .= '<a href="admin_current_work.php">Back to current work</a>';
 	}
 
-		echo '<div id="user_admin_content">';
-		echo MakeBox('<a href="admin.php">Administrationsgr&auml;nssnitt</a>|Edit todo lists', $content);
-		echo '</div>';
+	echo $content;
 
-	include('design_admin_foot.php');
-	include('design_foot.php');
+	require($project.'design_foot.php');
 ?>
