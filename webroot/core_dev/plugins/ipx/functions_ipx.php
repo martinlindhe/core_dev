@@ -128,7 +128,7 @@
 	//fixme: move all/most of this function out of here!	
 	function ipxHandleIncoming()
 	{
-		global $db, $session, $config;
+		global $db, $user_db, $session, $config;
 
 		//All incoming data is set as GET parameters
 		$params = '';
@@ -156,22 +156,23 @@
 		$sms_err = sendSMS($params['OriginatorAddress'], $ipx['msg'], $params['DestinationAddress'], $ipx['tariff'], $referenceId);
 		if ($sms_err === true) {
 			$l = 'Charge to '.$ipx['username'].' of '.$ipx['tariff'].' succeeded';
+			$session->log($l);
 
 			//fixme: move this function call out of here
-			addVIP($in_cmd[2], $ipx['vip_level'], $ipx['days']);
+			addVIP($ipx['user_id'], $ipx['vip_level'], $ipx['days']);
 
 			//Leave a confirmation message in the users inbox
 			//fixme: move this sql query out of the general ipx implementation
 			$internal_title = 'VIP-bekräftelse';
-			$q = 'INSERT INTO s_usermail SET sender_id=0, user_id='.$in_cmd[2].',sent_ttl="'.$internal_title.'",sent_cmt="'.$internal_msg.'",sent_date=NOW()';
+			$q = 'INSERT INTO s_usermail SET sender_id=0, user_id='.$ipx['user_id'].',sent_ttl="'.$internal_title.'",sent_cmt="'.$ipx['internal_msg'].'",sent_date=NOW()';
 			$user_db->insert($q);
 		} else {
-			$l = 'Charge to '.$username.' of '.$tariff.' failed with error '.$sms_err, LOGLEVEL_ERROR;
+			$l = 'Charge to '.$ipx['username'].' of '.$ipx['tariff'].' failed with error '.$sms_err;
+			$session->log($l, LOGLEVEL_ERROR);
 		}
-		$session->log($l);
 
 		//fixme: gör dest-mail konfigurerbar
-		mail('martin@unicorn.tv', 'IPX billing report', $l);
+		mail('martin@unicorn.tv', '[IPX] billing report', $l);
 
 		if ($sms_err === true) {
 			return true;
