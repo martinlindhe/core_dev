@@ -6,11 +6,5 @@
 
 	wiki('Home');
 
-?>
-<br/>
-<a href="dragdrop.php">dragdrop sample</a>
-
-
-<?
 	require('design_foot.php');
 ?>

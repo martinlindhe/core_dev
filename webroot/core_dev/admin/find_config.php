@@ -23,6 +23,7 @@
 		$config['core_web_root'].'admin/admin_feedback.php'.getProjectPath(0) => 'Feedback',	//todo: hide if feedback-module is disabled
 		$config['core_web_root'].'admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
 		$config['core_web_root'].'admin/admin_events.php'.getProjectPath(0) => 'Event log',
+		$config['core_web_root'].'admin/admin_todo_lists.php'.getProjectPath(0) => 'Todo lists',
 		$config['core_web_root'].'admin/admin_userdata.php'.getProjectPath(0) => 'Userdata',			//kanske super-admin?
 		$config['core_web_root'].'admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',		//superadmin?
 		$config['core_web_root'].'admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups'	//superadmin?
