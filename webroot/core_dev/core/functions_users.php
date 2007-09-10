@@ -144,6 +144,16 @@
 		return $db->getArray($q);
 	}
 
+	/* Admin function used by admin_todo_lists.php */
+	function getAdmins()
+	{
+		global $db;
+		
+		$q = 'SELECT * FROM tblUsers WHERE userMode=2';
+		return $db->getArray($q);
+	}
+
+
 
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

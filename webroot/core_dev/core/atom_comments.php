@@ -8,7 +8,7 @@
 	define('COMMENT_NEWS',					1);
 	define('COMMENT_BLOG',					2);		//anonymous or registered users comments on a blog
 	define('COMMENT_IMAGE',					3);		//anonymous or registered users comments on a image
-	define('COMMENT_TODO_LIST',			4);		//todo list item (used by admins)
+	define('COMMENT_TODOLIST',			4);		//todolist item comments
 
 	define('COMMENT_ADMIN_IP',			10);	//a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 

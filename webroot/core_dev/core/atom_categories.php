@@ -131,6 +131,7 @@
 			case CATEGORY_USERDATA:
 			case CATEGORY_WIKIFILE:
 			case CATEGORY_LANGUAGE:
+			case CATEGORY_TODOLIST:
 				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
 				if ($_owner) $q .= ' AND ownerId='.$_owner;
 				break;

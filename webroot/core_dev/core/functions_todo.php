@@ -13,12 +13,13 @@
 
 
 	/* Ignoring CLOSED items */
-	function getTodoItems(&$db, $categoryId)
+	function getTodoItems($categoryId)
 	{
+		global $db;
 		if (!is_numeric($categoryId)) return false;
 		
-		$sql = 'SELECT * FROM tblTodoLists WHERE categoryId='.$categoryId.' AND itemStatus!='.TODO_ITEM_CLOSED;
-		return dbArray($db, $sql);
+		$q = 'SELECT * FROM tblTodoLists WHERE categoryId='.$categoryId.' AND itemStatus!='.TODO_ITEM_CLOSED;
+		return $db->getArray($q);
 	}
 	
 	/* Only returns CLOSED items */
@@ -30,14 +31,13 @@
 		return dbArray($db, $sql);
 	}
 
-	function addTodoItem(&$db, $categoryId, $userId, $desc, $details, $category)
+	function addTodoItem($categoryId, $desc, $details, $category)
 	{
-		if (!is_numeric($categoryId) || !is_numeric($userId) || !is_numeric($category)) return false;
-		$desc = dbAddSlashes($db, $desc);
-		$details = dbAddSlashes($db, $details);
+		global $db, $session;
+		if (!$session->id || !is_numeric($categoryId) || !is_numeric($category)) return false;
 
-		$sql = 'INSERT INTO tblTodoLists SET categoryId='.$categoryId.',itemCreator='.$userId.',itemDesc="'.$desc.'",itemDetails="'.$details.'",itemCategory='.$category.',timestamp='.time();
-		dbQuery($db, $sql);
+		$q = 'INSERT INTO tblTodoLists SET categoryId='.$categoryId.',itemCreator='.$session->id.',itemDesc="'.$db->escape($desc).'",itemDetails="'.$db->escape($details).'",itemCategory='.$category.',timeCreated=NOW()';
+		$db->insert($q);
 	}
 
 	/* Delete all todo items in a whole category */
@@ -50,19 +50,19 @@
 		return true;
 	}
 
-	function getTodoItem(&$db, $itemId)
+	function getTodoItem($itemId)
 	{
-		if (substr(strtoupper($itemId), 0, 2) == 'PR') {
-			$itemId = substr($itemId, 2);
-		}
+		global $db;
+
+		if (substr(strtoupper($itemId), 0, 2) == 'PR') $itemId = substr($itemId, 2);
 
 		if (!is_numeric($itemId)) return false;
 
-		$sql  = 'SELECT tblTodoLists.*,tblUsers.userName FROM tblTodoLists ';
-		$sql .= 'LEFT OUTER JOIN tblUsers ON (tblTodoLists.itemCreator = tblUsers.userId) ';
-		$sql .= 'WHERE itemId='.$itemId;
+		$q  = 'SELECT tblTodoLists.*,tblUsers.userName FROM tblTodoLists ';
+		$q .= 'LEFT JOIN tblUsers ON (tblTodoLists.itemCreator = tblUsers.userId) ';
+		$q .= 'WHERE itemId='.$itemId;
 
-		return dbOneResult($db, $sql);
+		return $db->getOneRow($q);
 	}
 
 	/* Move $itemId to category $categoryId */
@@ -74,44 +74,20 @@
 		dbQuery($db, $sql);
 	}
 
-	function setTodoItemStatus(&$db, $itemId, $status)
+	function setTodoItemStatus($itemId, $status)
 	{
+		global $db;
 		if (!is_numeric($itemId) || !is_numeric($status)) return false;
-		
-		dbQuery($db, 'UPDATE tblTodoLists SET itemStatus='.$status.' WHERE itemId='.$itemId);
+
+		$db->update('UPDATE tblTodoLists SET itemStatus='.$status.' WHERE itemId='.$itemId);
 	}
 
-	function addTodoItemComment(&$db, $userId, $itemId, $comment)
+	function assignTodoItem($itemId, $assignedId)
 	{
-		if (!is_numeric($userId) || !is_numeric($itemId)) return false;
-		$comment = dbAddSlashes($db, $comment);
-
-		$sql = 'INSERT INTO tblTodoListComments SET userId='.$userId.',itemId='.$itemId.',itemComment="'.$comment.'",timestamp='.time();
-		dbQuery($db, $sql);
-	}
-	
-	function getTodoItemComments(&$db, $itemId, $order = 'asc')
-	{
-		if (!is_numeric($itemId)) return false;
-		
-		$sql  = 'SELECT tblTodoListComments.*, tblUsers.userName FROM tblTodoListComments ';
-		$sql .= 'LEFT OUTER JOIN tblUsers ON (tblTodoListComments.userId = tblUsers.userId) ';
-		$sql .= 'WHERE itemId='.$itemId;
-
-		if ($order == 'desc') {
-			$sql .= ' ORDER BY timestamp DESC';
-		} else {
-			$sql .= ' ORDER BY timestamp ASC';
-		}
-
-		return dbArray($db, $sql);
-	}
-
-	function assignTodoItem(&$db, $itemId, $assignedId)
-	{
+		global $db;
 		if (!is_numeric($itemId) || !is_numeric($assignedId)) return false;
 		
-		dbQuery($db, 'UPDATE tblTodoLists SET assignedTo='.$assignedId.', itemStatus='.TODO_ITEM_ASSIGNED.' WHERE itemId='.$itemId);
+		$db->update('UPDATE tblTodoLists SET assignedTo='.$assignedId.', itemStatus='.TODO_ITEM_ASSIGNED.' WHERE itemId='.$itemId);
 	}
 	
 	function unassignTodoItem(&$db, $itemId)
@@ -173,13 +149,15 @@
 		return dbOneResultItem($db, $sql);
 	}
 
-	function getClosedTodoCategoryItems(&$db, $categoryId)
+	function getClosedTodoCategoryItems($categoryId)
 	{
+		global $db;
 		if (!is_numeric($categoryId)) return false;
 		
-		$sql = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE categoryId='.$categoryId.' AND itemStatus='.TODO_ITEM_CLOSED;
-		return dbOneResultItem($db, $sql);
+		$q = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE categoryId='.$categoryId.' AND itemStatus='.TODO_ITEM_CLOSED;
+		return $db->getOneItem($q);
 	}
+
 
 	function addBugReport(&$db, $desc)
 	{
@@ -255,65 +233,6 @@
 		if (!is_numeric($bugId) || !is_numeric($reason)) return false;
 		
 		dbQuery($db, 'UPDATE tblBugReports SET bugClosed=1, bugClosedReason='.$reason.' WHERE bugId='.$bugId);
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	/* kategorier sparade i databasen */
-	function addTodoCategory(&$db, $categoryName, $parentId)
-	{
-		if (!is_numeric($parentId)) return false;
-
-		$categoryName = dbAddSlashes($db, $categoryName);
-		$sql = 'INSERT INTO tblTodoListCategories SET categoryName="'.$categoryName.'", parentId='.$parentId.', creatorId='.$_SESSION['userId'].', createdTime='.time();
-		dbQuery($db, $sql);
-	}
-
-	function getTodoCategories(&$db, $parentId)
-	{
-		if (!is_numeric($parentId)) return false;
-
-		$sql = 'SELECT * FROM tblTodoListCategories WHERE parentId='.$parentId.' ORDER BY categoryName ASC';
-		return dbArray($db, $sql);
-	}
-
-	function getTodoCategoryCount(&$db, $parentId = 0)
-	{
-		if (!is_numeric($parentId)) return false;
-
-		$sql = 'SELECT COUNT(categoryId) FROM tblTodoListCategories WHERE parentId='.$parentId;
-		return dbOneResultItem($db, $sql);
-	}
-
-	function deleteTodoCategory(&$db, $categoryId)
-	{
-		if (!is_numeric($categoryId)) return false;
-		
-		$sql = 'DELETE FROM tblTodoListCategories WHERE categoryId='.$categoryId;
-		dbQuery($db, $sql);
-
-		return true;
-	}
-	
-	function getTodoCategoryName(&$db, $categoryId)
-	{
-		if (!is_numeric($categoryId)) return false;
-		
-		$sql  = 'SELECT t1.categoryName, t2.categoryName AS parentName FROM tblTodoListCategories AS t1 ';
-		$sql .= 'LEFT OUTER JOIN tblTodoListCategories AS t2 ON (t1.parentId=t2.categoryId) ';
-		$sql .= 'WHERE t1.categoryId='.$categoryId;
-
-		$data = dbOneResult($db, $sql);
-		if ($data['parentName']) {		
-			return $data['parentName'].' - '.$data['categoryName'];
-		} else {
-			return $data['categoryName'];
-		}
 	}
 
 ?>
