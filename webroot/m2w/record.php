@@ -1,7 +1,7 @@
 <?
 	require_once('config.php');
 
-	echo file_get_contents('vxml_head.xml');
+	require_once('vxml_head.php');
 
 /*
 	record.php - implements video/audio recording, preview, store and play-on-demand
@@ -34,7 +34,7 @@
 	<form id="frmRecord">
 		<pse_record name="record_temp" maxtime="30s" dtmfterm="false">
 			<!-- actual recording starts as soon as this audio prompt has finished playing -->
-			<pse_audio src="media://examples/record/beep"/><!-- fixme: längre beep ljud -->
+			<pse_audio src="media://examples/record/beep" repeat="LOOP" timeout="4000"/><!-- plays beep for 4 seconds -->
 			<pse_video src="media://m2w/frmRecord" repeat="LOOP"/>
 		</pse_record>
 		<block>
@@ -60,6 +60,7 @@
 	</menu>
 
 	<form id="frmReview">
+		<!-- fixme: börjar spelas innnan man får video feedback, hör ljud lite tidigt. går det få in en fördröjning här? -->
 		<block>
 			<pse_audio expr="record_var"/>
 			<pse_video expr="record_var"/>
@@ -87,5 +88,5 @@
 		</block>
 	</form>
 <?
-	echo file_get_contents('vxml_foot.xml');
+	require_once('vxml_foot.php');
 ?>
