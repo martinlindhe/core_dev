@@ -11,6 +11,8 @@
 	<property name="termchar" value="#"/>
 
 	<var name="record_var"/>
+	<var name="upload_path" expr="'media://m2w/rec/up_'"/>
+	<? setSID(); ?>
 
   <!-- main menu -->
 	<menu id="mnuMain">
@@ -70,7 +72,8 @@
 
 	<form id="frmStore">
 		<block>
-			<pse_submit src="record_var" dest="media://m2w/recordedContent"/>
+			<!-- fixme: variabel destination, inte dest="media://m2w/recordedContent"-->
+			<pse_submit src="record_var" destexpr="upload_path + session_id"/>
 		</block>
 
 		<!-- show "msg has been stored" for 5 sec then go back to main menu -->

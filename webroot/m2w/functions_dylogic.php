@@ -30,4 +30,12 @@
 			$db->insert($q);
 		}
 	}
+
+	//outputs a session ID value to the VoiceXML script. used to associate uploads with this user
+	function setSID()
+	{
+		$n = mt_rand(1000000,9999999);
+		echo '<var name="session_id" expr="'.$n.'"/>';
+	}
+
 ?>
