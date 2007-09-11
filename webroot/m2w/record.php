@@ -10,16 +10,9 @@
 
 	<var name="record_var"/>
 
-	<form id="jingle">
-		<block>
-			<!-- this audio will loop over all the following menus -->
-		  <pse_audio src="media://m2w/jingle" repeat="LOOP"/>
-		  <goto next="#mnuMain"/>
-		 </block>
-	</form>
-
   <!-- main menu -->
 	<menu id="mnuMain">
+		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
 	  <pse_video src="media://m2w/mnuMain" repeat="LOOP"/>
 		
 		<choice dtmf="1" next="#frmRecord"></choice>		<!-- go to menu to record a video -->
@@ -29,8 +22,9 @@
 
 	<!-- fixme: implementera -->
 	<menu id="mnuPlayback">
-	  <pse_video src="media://m2w/mnuPlayback1" repeat="LOOP"/>
-		
+		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
+	  <pse_video src="media://m2w/mnuPlayback1" repeat="LOOP"/>	<!-- fixme: bild saknas -->
+
 		<choice dtmf="0" next="#mnuMain"></choice>
 	</menu>
 
@@ -38,7 +32,7 @@
 	<form id="frmRecord">
 		<pse_record name="record_temp" maxtime="30s" dtmfterm="false">
 			<!-- actual recording starts as soon as this audio prompt has finished playing -->
-			<pse_audio src="media://examples/record/beep"/>
+			<pse_audio src="media://examples/record/beep"/><!-- fixme: längre beep ljud -->
 			<pse_video src="media://m2w/frmRecord" repeat="LOOP"/>
 		</pse_record>
 		<block>
@@ -54,16 +48,16 @@
 
 
 	<menu id="mnuPreviewRecording">
-		<pse_audio src="media://examples/silence" repeat="LOOP"/>
-		<pse_video src="media://m2w/mnuPreviewRecording" repeat="LOOP"/>	<!-- fixme: annan bild -->
+		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
+		<pse_video src="media://m2w/mnuPreviewRecording" repeat="LOOP"/>
 
-		<choice dtmf="1" next="#review"></choice>			<!-- review the newly recorded video -->
+		<choice dtmf="1" next="#frmReview"></choice>	<!-- review the newly recorded video -->
 		<choice dtmf="2" next="#frmRecord"></choice>	<!-- go back and do a new recoding -->
-		<choice dtmf="3" next="#store"></choice>			<!-- store the recording -->
+		<choice dtmf="3" next="#frmStore"></choice>		<!-- store the recording -->
 		<choice dtmf="0" next="#mnuMain"></choice>		<!-- go back to main menu -->
 	</menu>
 
-	<form id="review">
+	<form id="frmReview">
 		<block>
 			<pse_audio expr="record_var"/>
 			<pse_video expr="record_var"/>
@@ -71,7 +65,7 @@
 		</block>
 	</form>
 
-	<form id="store">
+	<form id="frmStore">
 		<block>
 			<pse_submit src="record_var" dest="media://examples/recordedContent"/>
 		</block>
@@ -79,7 +73,7 @@
 		<!-- show "msg has been stored" for 5 sec then go back to main menu -->
 		<block>
 			<pse_audio src="media://examples/silence" repeat="LOOP"/>
-			<pse_video src="media://examples/record/rec_store" timeout="5000"/>
+			<pse_video src="media://m2w/frmStore" timeout="5000"/>
 			<goto next="#mnuMain"/>
 		</block>
 	</form>
