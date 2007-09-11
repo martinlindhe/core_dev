@@ -1,4 +1,6 @@
 <?
+	require_once('config.php');
+
 	echo file_get_contents('vxml_head.xml');
 
 /*
@@ -67,7 +69,7 @@
 
 	<form id="frmStore">
 		<block>
-			<pse_submit src="record_var" dest="media://examples/recordedContent"/>
+			<pse_submit src="record_var" dest="media://m2w/recordedContent"/>
 		</block>
 
 		<!-- show "msg has been stored" for 5 sec then go back to main menu -->
