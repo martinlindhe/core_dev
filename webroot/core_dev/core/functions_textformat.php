@@ -253,6 +253,19 @@
 		return $ret;
 	}
 
+	/* returns a duration, how long ago was this time? */
+	function ago($sql_time)
+	{
+		$old_time = strtotime($sql_time);
+		$curr_time = time();
+
+		if ($curr_time > $old_time) {
+			return shortTimePeriod($curr_time - $old_time).' ago';
+		} else {
+			return shortTimePeriod($old_time - $curr_time).' in the future';
+		}
+	}
+
 
 	/* Returns a sting like: 4h10m3s */
 	function shortTimePeriod($seconds)

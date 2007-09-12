@@ -57,11 +57,12 @@
 				//	$param = fileId
 				//	$param2 = destination format (by extension)
 				//fixme: kolla om dest format finns i $dst_audio
+				if (!is_numeric($param)) die;
 
 				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$db->escape($param.'_'.$param2).'",createdBy='.$session->id.',timeCreated=NOW()';
 				$db->insert($q);
 
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType=0,orderCompleted=0,orderParams="'.$db->escape($param2).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',resourceId='.$param.',orderCompleted=0,orderParams="'.$db->escape($param2).'"';
 				$db->insert($q);
 				break;
 
@@ -80,6 +81,16 @@
 		return $db->getArray($q);
 	}
 
+	/* Returns the oldest work orders still active for processing */
+	function getProcessQueue($_limit = 10)
+	{
+		global $db;
+		if (!is_numeric($_limit)) return false;
+
+		$q = 'SELECT * FROM tblProcessQueue WHERE orderCompleted=0 ORDER BY timeCreated ASC';
+		if ($_limit) $q .= ' LIMIT '.$_limit;
+		return $db->getArray($q);
+	}
 
 
 
@@ -89,8 +100,7 @@
 
 
 
-
-
+///// CODE BELOW NOT CLEANED UP!!!!11
 
 
 
@@ -115,17 +125,6 @@
 
 		$session->log('#'.$order_id.': Added work order: '.$WORK_OPRDER_TYPES[$_type]);
 		return $order_id;
-	}
-
-	/* Returns the oldest 10 work orders still active for processing */
-	function getWorkOrders($_limit = 10)
-	{
-		global $db;
-		if (!is_numeric($_limit)) return false;
-
-		$q = 'SELECT * FROM tblProcessQueue WHERE orderCompleted=0 ORDER BY timeCreated ASC';
-		if ($_limit) $q .= ' LIMIT '.$_limit;
-		return $db->getArray($q);
 	}
 
 	function getWorkOrderStatus($_id)

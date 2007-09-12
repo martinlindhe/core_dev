@@ -119,6 +119,12 @@ abstract class DB_Base
 		echo '</div><br/>';
 
 		echo '<div class="item">';
+		echo '<h2>DB host features</h2>';
+		$db_time = $this->getOneItem('SELECT NOW()');
+		echo 'DB time: '.$db_time.' (webserver time: '.now().')<br/>';
+		echo '</div><br/>';
+
+		echo '<div class="item">';
 		echo '<h2>DB driver specific settings</h2>';
 		$this->showDriverStatus();
 		echo '</div><br/>';

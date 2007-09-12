@@ -4,7 +4,7 @@
 	if (!empty($_FILES['file2'])) {
 		$fileId = processEvent(PROCESSUPLOAD_FORM, $_FILES['file2']);
 		if ($fileId) {
-			header('Location: process_file.php?id='.$fileId);
+			header('Location: http_enqueue.php?id='.$fileId);
 			die;
 		}
 	}

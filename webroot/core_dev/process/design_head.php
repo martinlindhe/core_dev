@@ -25,7 +25,7 @@
 
 	if ($session->id) {
 		$menu = array(
-			'add_order_http.php' => 'Add order',
+			'http_upload.php' => 'Upload file',
 			'?logout' => 'Logout');
 	} else {
 		$menu = array('?login' => 'Log in');

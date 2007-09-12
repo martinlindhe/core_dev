@@ -206,6 +206,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.09.13:
+	- core_dev/process alot of work
+	- admin_db_info.php: added infobox "db host features", showing db host time, vs webserver time
+
 2007.09.12:
 	- core_dev/errordoc/ created. added 403.php and 404.php error handlers, optional
 	- core_dev/process/ created. new "process server" project

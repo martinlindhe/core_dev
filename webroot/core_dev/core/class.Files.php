@@ -593,6 +593,13 @@ class Files
 		return $new;
 	}
 
+	/* returns sha1 checksum of file $_id. forces checksum generation if missing */
+	function sha1($_id)
+	{
+		$sums = $this->checksums($_id);
+		return $sums['sha1'];
+	}
+
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
 	function setCachedHeaders()
 	{
@@ -803,7 +810,7 @@ class Files
 		echo 'Name: '.strip_tags($file['fileName']).'<br/>';
 		echo 'Filesize: '.formatDataSize($file['fileSize']).'<br/>';
 		echo 'Uploader: '.htmlentities($file['uploaderName']).'<br/>';
-		echo 'At: '.$file['timeUploaded'].'<br/>';
+		echo 'At: '.$file['timeUploaded'].' ('.ago($file['timeUploaded']).')<br/>';
 		if ($this->count_file_views) echo 'Downloaded: '.$file['cnt'].' times<br/>';
 		if ($session->isAdmin) {
 			echo 'Mime type: '.$file['fileMime'].'<br/>';
@@ -827,6 +834,7 @@ class Files
 		$arr = $this->checksums($_id);
 		echo '<h3>Checksums</h3>';
 		echo '<pre>';
+		echo 'generated: '.$arr['timeCreated']."\n";
 		echo 'sha1: '.$arr['sha1']."\n";
 		echo 'md5: '.$arr['md5']."\n";
 		echo 'crc32: '.$arr['crc32']."\n";
