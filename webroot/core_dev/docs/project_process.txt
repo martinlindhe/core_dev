@@ -20,4 +20,4 @@ implemented features:
 	* none yet. fixme - update!
 
 
-tightly tied to the dbSample db structure
+tightly tied to the dbSample db structure, especially tblProcessQueue
