@@ -3,13 +3,13 @@
 
 	require('design_head.php');
 
-	wiki('ProcessShowQueue');
+	wiki('ProcessShowEvents');
 
-	$list = getWorkOrders(50);
+	$list = getEvents(50);
 	if (!empty($list)) {
 		d($list);
 	} else {
-		echo 'Queue is empty';
+		echo 'Event log is empty';
 	}
 
 	require('design_foot.php');

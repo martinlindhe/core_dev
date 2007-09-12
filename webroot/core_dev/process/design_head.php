@@ -12,7 +12,9 @@
 <?
 	$menu = array(
 		'index.php' => 'Home',
-		'show_queue.php' => 'Show work queue');
+		'show_queue.php' => 'Show work queue',
+		'show_events.php' => 'Show event log'
+	);
 	createMenu($menu);
 
 	if ($session->isAdmin) {

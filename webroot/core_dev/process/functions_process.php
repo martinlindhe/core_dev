@@ -1,7 +1,7 @@
 <?
 	/*
 		IMPORTANT: for this to work, the sql user need to have LOCK & UNLOCK privilegies
-
+		
 		for image conversions I am using: ImageMagick-6.3.4-0-Q16-windows-dll.exe
 				in ubuntu: sudo apt-get install imagemagick  (v6.2.4 in ubuntu 7.4)
 
@@ -18,26 +18,95 @@
 			soap.wsdl_cache_ttl=172800
 	*/
 
-	define('ORDER_RESIZE_IMG',		1);		//orderParams håller önskad bredd & höjd som serialized array.. ?
-	define('ORDER_CONVERT_IMG',		2);		//orderParams håller mimetype på önskad output type. t.ex "image/jpeg" eller "image/png"
-	define('ORDER_CONVERT_VIDEO',	3);		//orderParams håller mimetype på önskad output type. NOT YET IMPLEMENTED
+	/*
+		NOTE: we exploit the tblFiles.categoryId to store the type of upload PROCESSUPLOAD_*
+			this is hardcoded here, no sophisticated dynamic solution should be needed
 
+		these are "event classes"
+	*/
+	define('PROCESSUPLOAD_FORM',	1);	//Upload thru HTTP POST form
+	define('PROCESSUPLOAD_SOAP',	2);	//fixme: use
+	define('PROCESSUPLOAD_GET',	3);	//fixme: use
+	define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
+	define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
+	define('PROCESSQUEUE_IMAGE_RECODE', 12);	//fixme: use
+
+	//event types
+	define('EVENT_PROCESS',	1);	//event from the process server
+
+	function processEvent($_type, $param, $param2 = '')
+	{
+		global $db, $session, $files;
+		if (!is_numeric($_type)) return false;
+
+		switch ($_type) {
+			case PROCESSUPLOAD_FORM:
+				//handle HTTP post file upload
+				//	$param is the $_FILES[idx] array
+
+				$newFileId = $files->handleUpload($param, FILETYPE_PROCESS, $session->id, PROCESSUPLOAD_FORM);
+
+				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$newFileId.'",createdBy='.$session->id.',timeCreated=NOW()';
+				$db->insert($q);
+
+				$files->checksums($newFileId);	//force generation of file checksums
+				return $newFileId;
+
+			case PROCESSQUEUE_AUDIO_RECODE:
+				//enque file for recoding.
+				//	$param = fileId
+				//	$param2 = destination format (by extension)
+				//fixme: kolla om dest format finns i $dst_audio
+
+				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$db->escape($param.'_'.$param2).'",createdBy='.$session->id.',timeCreated=NOW()';
+				$db->insert($q);
+
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType=0,orderCompleted=0,orderParams="'.$db->escape($param2).'"';
+				$db->insert($q);
+				break;
+
+			default: die('processEvent unknown type');
+		}
+
+		return true;
+	}
+
+	function getEvents()
+	{
+		global $db;
+
+		$q = 'SELECT * FROM tblEvents ORDER BY timeCreated DESC';
+
+		return $db->getArray($q);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 	$WORK_OPRDER_TYPES = array(
 		ORDER_RESIZE_IMG => 'IMAGE RESIZE',
 		ORDER_CONVERT_IMG => 'IMAGE CONVERT',
 		ORDER_CONVERT_VIDEO => 'VIDEO CONVERT'
 	);
+*/
 
+	//adds a item on the "todo" queue of the process server
 	function addWorkOrder($_type, $_params)
 	{
 		global $db, $session, $WORK_OPRDER_TYPES;
-
-		if (!is_numeric($_type)) return false;
-
-		if (!$session->id) {
-			$session->log('Un-authenticated user attempted to add work order');
-			return false;
-		}
+		if (!$session->id || !is_numeric($_type)) return false;
 
 		$_params = $db->escape(serialize($_params));
 
@@ -52,17 +121,16 @@
 	function getWorkOrders($_limit = 10)
 	{
 		global $db;
-
 		if (!is_numeric($_limit)) return false;
 
-		$q = 'SELECT * FROM tblProcessQueue WHERE orderCompleted=0 ORDER BY timeCreated ASC LIMIT '.$_limit;
+		$q = 'SELECT * FROM tblProcessQueue WHERE orderCompleted=0 ORDER BY timeCreated ASC';
+		if ($_limit) $q .= ' LIMIT '.$_limit;
 		return $db->getArray($q);
 	}
 
 	function getWorkOrderStatus($_id)
 	{
 		global $db;
-
 		if (!is_numeric($_id)) return false;
 
 		$q = 'SELECT orderCompleted FROM tblProcessQueue WHERE entryId='.$_id;

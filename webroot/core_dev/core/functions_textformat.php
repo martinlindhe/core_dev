@@ -156,7 +156,6 @@
 				list($link['coded'], $link['title']) = explode('|', $wiki_command);
 			} else {
 				$link['coded'] = $wiki_command;
-				$link['title'] = 'title';
 			}
 
 			$arr = explode(':', $link['coded']);
@@ -172,7 +171,7 @@
 
 			switch ($link['cmd']) {
 				case 'wiki':
-					if ($link['title']) {
+					if (!empty($link['title'])) {
 						//[[wiki:About|read about us]] format
 						$result = '<a href="wiki.php?Wiki:'.$link['param'].'">'.$link['title'].'</a>';
 					} else {

@@ -322,12 +322,14 @@ abstract class DB_Base
 	/* debug function! do not use */
 	function d($v)
 	{
-		echo '<pre>';
 		if (is_string($v)) echo htmlentities($v);
 		else {
 			if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
-			else print_r($v);
+			else {
+				echo '<pre>';
+				print_r($v);
+				echo '</pre>';
+			}
 		}
-		echo '</pre>';
 	}
 ?>

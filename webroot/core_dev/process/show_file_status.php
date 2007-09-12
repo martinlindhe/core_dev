@@ -1,0 +1,9 @@
+<?
+	require_once('config.php');
+
+	require('design_head.php');
+
+	wiki('ProcessShowfileStatus');
+
+	require('design_foot.php');
+?>

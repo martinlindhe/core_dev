@@ -20,6 +20,7 @@ define('FILETYPE_FILEAREA_UPLOAD',4);	/* File is uploaded to a file area */
 define('FILETYPE_USERFILE',				5);	/* File is uploaded to the user's own file area */
 define('FILETYPE_USERDATA',				6);	/* File is uploaded to a userdata field */
 define('FILETYPE_FORUM',					7);	/* File is attached to a forum post */
+define('FILETYPE_PROCESS',				8);	/* File uploaded to be processed */
 
 class Files
 {
@@ -369,7 +370,7 @@ class Files
 
 		$filesize = filesize($FileData['tmp_name']);
 		//fixme: flytta inserten till handleImageUpload / handleGeneralUpload istället. då slipper vi göra en UPDATE vid resizad image upload
-  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'", ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
   	$fileId = $db->insert($q);
 
 		//Identify and handle various types of files
@@ -568,6 +569,30 @@ class Files
 		return true;
 	}
 
+	/* fetches or calculates checksums for the file in tblChecksums */
+	function checksums($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
+		if (!$data) die;
+
+		$q = 'SELECT * FROM tblChecksums WHERE fileId='.$_id;
+		$cached = $db->getOneRow($q);
+		if ($cached) return $cached;
+
+		$new['sha1'] = $db->escape(hash_file('sha1', $this->upload_dir.$_id));	//40-character hex string
+		$new['md5'] = $db->escape(hash_file('md5', $this->upload_dir.$_id));		//32-character hex string
+		//fixme: den korrekta crc32 summan generas inte.. orkar inte felsöka
+		$new['crc32'] = $db->escape(hash_file('crc32', $this->upload_dir.$_id));	//8-character hex string
+
+		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", crc32="'.$new['crc32'].'", timeCreated=NOW()';
+		$db->insert($q);
+
+		return $new;
+	}
+
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
 	function setCachedHeaders()
 	{
@@ -755,17 +780,24 @@ class Files
 		return $db->getOneItem($q, true);
 	}
 
-	/* Används av ajax filen core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
-	function showFileInfo($_id)
+	function getFileInfo($_id)
 	{
-		global $db, $session;
+		global $db;
 		if (!is_numeric($_id)) return false;
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
 					'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
 					'WHERE t1.fileId='.$_id;
 
-		$file = $db->getOneRow($q);
+		return $db->getOneRow($q);
+	}
+
+	/* Används av ajax filen core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
+	function showFileInfo($_id)
+	{
+		global $session;
+
+		$file = $this->getFileInfo($_id);
 		if (!$file) return false;
 
 		echo 'Name: '.strip_tags($file['fileName']).'<br/>';
@@ -786,10 +818,20 @@ class Files
 		else if (in_array($file['fileMime'], $this->audio_mime_types) && extension_loaded('id3'))
 		{
 			//Show additional information for audio files
-			echo '<b>Extracted from id3 tag:</b><br/>';
-			$id3 = id3_get_tag($this->upload_dir.$_id, ID3_V2_2);
+			echo '<h3>id3 tag</h3>';
+			$id3 = @id3_get_tag($this->upload_dir.$_id, ID3_V2_2);	//note: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this
 			d($id3);
 		}
+
+		//display checksums, if any
+		$arr = $this->checksums($_id);
+		echo '<h3>Checksums</h3>';
+		echo '<pre>';
+		echo 'sha1: '.$arr['sha1']."\n";
+		echo 'md5: '.$arr['md5']."\n";
+		echo 'crc32: '.$arr['crc32']."\n";
+		echo 'size: '.$file['fileSize'].' bytes';
+		echo '</pre>';
 	}
 
 	function getUploader($_id)
