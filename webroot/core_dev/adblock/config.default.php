@@ -6,7 +6,7 @@
 	$config['core_root'] = 'E:/devel/webroot/core_dev/';
 	$config['core_web_root'] = '/core_dev/';
 
-	$config['web_root'] = '/adblock/';	//path on web server, to use to address paths for css & js includes
+	$config['web_root'] = '/core_dev/adblock/';	//path on web server, to use to address paths for css & js includes
 	$config['default_title'] = 'Adblock Filterset Database';
 
 	set_include_path($config['core_root'].'core/');

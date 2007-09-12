@@ -208,7 +208,8 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.09.12:
 	- core_dev/errordoc/ created. added 403.php and 404.php error handlers, optional
-
+	- core_dev/process/ created. new "process server" project
+	- core_dev/adblock/ moved into core_dev, as it serves as another sample site
 
 2007.09.05:
 	- wurfl: removed option WURFL_USE_CACHE, made it forced enabled

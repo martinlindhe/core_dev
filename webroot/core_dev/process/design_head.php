@@ -1,23 +1,18 @@
 <?createXHTMLHeader();?>
 <div id="header">
 	<div id="header-logo">
-		<img src="<?=$config['web_root']?>gfx/logo.png" alt="Sample Site"/>
+		process site
 	</div>
 	<div id="header-items">
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:About">About</a>
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:Help">Help</a>
+		<a href="<?=$config['web_root']?>wiki.php?Wiki:AboutProcess">About</a>
+		<a href="<?=$config['web_root']?>wiki.php?Wiki:HelpProcess">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
 <?
 	$menu = array(
 		'index.php' => 'Home',
-		'news.php' => 'News',
-		'faq.php' => 'FAQ',
-		'feedback.php' => 'Feedback',
-		'forum.php' => 'Forum',
-		'blogs.php' => 'Blogs',
-		'users.php' => 'Users');
+		'show_queue.php' => 'Show work queue');
 	createMenu($menu);
 
 	if ($session->isAdmin) {
@@ -28,7 +23,7 @@
 
 	if ($session->id) {
 		$menu = array(
-			'user.php' => 'My profile',
+			'add_order_http.php' => 'Add order',
 			'?logout' => 'Logout');
 	} else {
 		$menu = array('?login' => 'Log in');

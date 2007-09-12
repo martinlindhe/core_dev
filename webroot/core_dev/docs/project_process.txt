@@ -1,0 +1,23 @@
+process server project, based on core_dev project
+
+it is a server accessible over the http protocol capable of remote enqueueing of tasks such as:
+
+	* order server to download a remote file and perform a recoding of it
+	* uses ffmpeg-svn for video & audio recoding
+	* uses imagemagick for image recoding
+
+
+
+
+planned features:
+	* ip-based access restriction
+	* soap based api
+	* show queue of work tasks
+
+
+
+implemented features:
+	* none yet. fixme - update!
+
+
+tightly tied to the dbSample db structure
