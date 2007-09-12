@@ -7,6 +7,8 @@
 	Written by Martin Lindhe, 2007
 	
 	Uses php_id3.dll if enabled, to show more details of mp3s in the file module
+
+	//todo: rename tblFiles.timeUploaded to tblFiles.timeCreated
 */
 
 require_once('atom_comments.php');			//for image comments support
@@ -21,6 +23,7 @@ define('FILETYPE_USERFILE',				5);	/* File is uploaded to the user's own file ar
 define('FILETYPE_USERDATA',				6);	/* File is uploaded to a userdata field */
 define('FILETYPE_FORUM',					7);	/* File is attached to a forum post */
 define('FILETYPE_PROCESS',				8);	/* File uploaded to be processed */
+define('FILETYPE_PROCESS_CLONE',	9);	/* a clone entry for a process file. */
 
 class Files
 {
@@ -48,8 +51,8 @@ class Files
 		'application/pdf');		//Adobe .pdf file
 
 	/* User configurable settings */
-	private $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
-	private $thumbs_dir = 'e:/devel/webupload/default/thumbs/';		//	'/tmp/';
+	public $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
+	public $thumbs_dir = 'e:/devel/webupload/default/thumbs/';		//	'/tmp/';
 
 	private $image_max_width			= 1100;	//bigger images will be resized to this size
 	private $image_max_height			= 900;
@@ -598,6 +601,19 @@ class Files
 	{
 		$sums = $this->checksums($_id);
 		return $sums['sha1'];
+	}
+
+	/* used for file processing. generates a new file entry referencing to entry $_id. returns new id */
+	function cloneEntry($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$file = $this->getFileInfo($_id);
+		if (!$file) return false;
+
+		$q = 'INSERT INTO tblFiles SET ownerId='.$_id.',fileType='.FILETYPE_PROCESS_CLONE.',timeUploaded=NOW()';
+		return $db->insert($q);
 	}
 
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5

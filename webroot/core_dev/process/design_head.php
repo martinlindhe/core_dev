@@ -19,7 +19,9 @@
 
 	if ($session->isAdmin) {
 		$menu = array(
-			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
+			'process_queue.php' => 'FORCE process',
+			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
+		);
 		createMenu($menu);
 	}
 

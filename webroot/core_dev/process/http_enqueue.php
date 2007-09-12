@@ -17,7 +17,7 @@
 		require('design_foot.php');
 		die;
 	}
-	
+
 	$dst_audio = array(
 		'ogg' => 'OGG audio',
 		'wma' => 'WMA audio',
@@ -32,7 +32,6 @@
 
 	if (in_array($data['fileMime'], $files->audio_mime_types)) {
 		echo '<h1>convert audio</h1>';
-		echo 'Input format: xxx<br/>';
 
 		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$fileId.'">';
 		echo 'Select output format: ';

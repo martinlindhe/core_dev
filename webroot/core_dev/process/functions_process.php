@@ -18,6 +18,14 @@
 			soap.wsdl_cache_ttl=172800
 	*/
 
+
+	//how many enqued items to process at max each time the process_queue.php script is called
+	//WARNING: keep this a low number unless you are sure what the consequences are (between 5 and 10 is fine)
+	$config['process']['process_limit'] = 5;
+
+
+
+
 	/*
 		NOTE: we exploit the tblFiles.categoryId to store the type of upload PROCESSUPLOAD_*
 			this is hardcoded here, no sophisticated dynamic solution should be needed

@@ -12,7 +12,7 @@
 
 			switch ($row['orderType']) {
 				case PROCESSQUEUE_AUDIO_RECODE:
-					echo 'Audio recode<br/>';
+					echo 'Audio recode to <b>"'.$row['orderParams'].'"</b><br/>';
 					break;
 					
 				default:
