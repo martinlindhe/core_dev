@@ -101,9 +101,6 @@
 		- kunna ha underkategorier (pigskin)
 
 	
-	guestbook (functions_guestbook.php):
-
-
 	admin:
 		- moderation:
 			* kunna knyta admin-kommentarer till enskild användare
@@ -153,9 +150,6 @@
 
 	ratings (atom_ratings.php):
 		- gör om ratingGadget() till ajax-gadget (krävs för att implementera image rating snyggt)
-
-
-	db drivers:
 
 
 	core/lågprio/förändringar under övervägning:

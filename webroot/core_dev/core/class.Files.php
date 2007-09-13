@@ -34,7 +34,8 @@ class Files
 	public $image_mime_types = array(
 		'image/jpeg',
 		'image/png',
-		'image/gif');
+		'image/gif'
+	);
 
 	public $audio_mime_types	= array(
 		'audio/x-mpeg',	'audio/mpeg',		//.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'
@@ -46,12 +47,14 @@ class Files
 		'video/mpeg',			//.mpg file
 		'video/avi',			//.avi file
 		'video/x-ms-wmv',	//Microsoft .wmv file
-		'video/3gpp');		//.3gp video file
+		'video/3gpp'			//.3gp video file
+	);
 
 	public $document_mime_types = array(
 		'text/plain',					//normal text file
 		'application/msword',	//Microsoft .doc file
-		'application/pdf');		//Adobe .pdf file
+		'application/pdf'			//Adobe .pdf file
+	);
 
 	/* User configurable settings */
 	public $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';

@@ -11,6 +11,8 @@
 		$added = processEvent(PROCESSQUEUE_AUDIO_RECODE, $fileId, $_POST['dst_audio_fmt']);
 	} else if (!empty($_POST['dst_image_fmt'])) {
 		$added = processEvent(PROCESSQUEUE_IMAGE_RECODE, $fileId, $_POST['dst_image_fmt']);
+	} else if (!empty($_POST['dst_video_fmt'])) {
+		$added = processEvent(PROCESSQUEUE_VIDEO_RECODE, $fileId, $_POST['dst_video_fmt']);
 	}
 
 	if ($added) {
@@ -34,7 +36,12 @@
 		'image/gif' => 'GIF image'
 	);
 
-
+	$dst_video = array(
+		'video/mpeg'			=>	'.mpg file',
+		'video/avi'				=>	'.avi xvid file',
+		'video/x-ms-wmv'	=>	'.wmv Windows Media Video',
+		'video/3gpp'			=>	'.3gp video file'
+	);
 	wiki('ProcessFile');
 
 	$files->showFileInfo($fileId);
@@ -73,6 +80,22 @@
 
 		echo 'Image view:<br/>';
 		echo makeThumbLink($fileId);
+
+	} else if (in_array($data['fileMime'], $files->video_mime_types)) {
+
+		echo '<h1>convert video</h1>';
+
+		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$fileId.'">';
+		echo 'Select output format: ';
+
+		echo '<select name="dst_video_fmt">';
+		foreach ($dst_video as $key => $val) {
+			echo '<option value="'.$key.'">'.$val.'</option>';
+		}
+		echo '</select>';
+
+		echo '<input type="submit" value="Continue"/>';
+		echo '</form><br/>';
 
 	} else {
 		echo 'Dont know how to handle mimetype: '.$data['fileMime'];
