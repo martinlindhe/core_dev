@@ -1,6 +1,8 @@
 ----[[platform todo]]----
 	process:
 		- ta bort uppladdade filer
+		- använd mencoder för audio med
+		- video kommandon för konvertering till .3gp och till .wmv
 
 	core/gör snart:
 		* fixa till admin todo lists. gör generell todo list? porta från cms...

@@ -90,14 +90,14 @@
 						//default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
 						$dst_file = 'tmpfile.avi';
 						$dst_mime = 'video/avi';
-						$c = 'e:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -ovc lavc -oac lavc -ffourcc DX50 -lavcopts acodec=libmp3lame:abitrate=128:vcodec=msmpeg4';
+						$c = 'e:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
 						break;
 
 					case 'video/mpeg':
 						//mpeg2 video, should be playable anywhere
 						$dst_file = 'tmpfile.mpg';
 						$dst_mime = 'video/mpeg';
-						$c = 'e:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -ovc lavc -oac lavc -lavcopts acodec=libmp3lame:abitrate=128:vcodec=mpeg2video';
+						$c = 'e:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
 						break;
 
 					default:
@@ -154,7 +154,7 @@
 		}
 
 		//marks queue item as completed
-		$q = 'UPDATE tblProcessQueue SET orderCompleted=1,timeExec='.$exec_time.' WHERE entryId='.$job['entryId'];
+		$q = 'UPDATE tblProcessQueue SET orderCompleted=1,timeCompleted=NOW(),timeExec="'.$exec_time.'" WHERE entryId='.$job['entryId'];
 		$db->update($q);
 	}
 
