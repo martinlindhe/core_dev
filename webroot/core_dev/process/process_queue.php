@@ -1,6 +1,6 @@
 <?
 	//this script is intended to be called regularry. every 30-60 seconds or so
-	set_time_limit(60);
+	set_time_limit(60*10);	//10 minute max, for long video recodings
 
 	require_once('config.php');
 
@@ -13,10 +13,17 @@
 			case PROCESSQUEUE_AUDIO_RECODE:
 				//Recodes source audio file into orderParams destination format
 
+				$dst_audio_ok = array('ogg', 'wma', 'mp3');	//fixme: config item or $files->var
+				if (!in_array($job['orderParams'], $dst_audio_ok)) {
+					echo 'error: invalid mime type<br/>';
+					$session->log('Process queue error - audio conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
+					break;
+				}
+
 				$file = $files->getFileInfo($job['fileId']);
 				if (!$file) {
 					echo 'Error: no fileentry existed for fileId '.$job['fileId'];
-					continue;
+					break;
 				}
 
 				//fixme: kolla om filen finns på disk innan vi fortsätter
@@ -47,10 +54,10 @@
 						die('unknown destination audio format: '.$job['orderParams']);
 				}
 
-				$exec_start = microtime(true);
-				exec($c);
-				$exec_end = microtime(true);
-				echo 'Execution time: '.shortTimePeriod($exec_end - $exec_start).'<br/>';
+				echo 'Executing: '.$c.'<br/>';
+				$exec_time = exectime($c);
+
+				echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 
 				if (!file_exists($dst_file)) {
 					echo '<b>FAILED - dst file '.$dst_file.' dont exist!<br/>';
@@ -68,12 +75,59 @@
 				break;
 
 			case PROCESSQUEUE_VIDEO_RECODE:
-				echo 'VIDEO RECODE! todo - implement<br/>';
-				die;
+				echo 'VIDEO RECODE<br/>';
+				$file = $files->getFileInfo($job['fileId']);
+				if (!$file) {
+					echo 'Error: no fileentry existed for fileId '.$job['fileId'];
+					break;
+				}
+
+				//fixme: kolla om filen finns på disk innan vi fortsätter
+				echo 'Recoding source video of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
+
+				switch ($job['orderParams']) {
+					case 'video/avi':
+						//default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
+						$dst_file = 'tmpfile.avi';
+						$dst_mime = 'video/avi';
+						$c = 'e:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -ovc lavc -oac lavc -ffourcc DX50 -lavcopts acodec=libmp3lame:abitrate=128:vcodec=msmpeg4';
+						break;
+
+					case 'video/mpeg':
+						//mpeg2 video, should be playable anywhere
+						$dst_file = 'tmpfile.mpg';
+						$dst_mime = 'video/mpeg';
+						$c = 'e:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -ovc lavc -oac lavc -lavcopts acodec=libmp3lame:abitrate=128:vcodec=mpeg2video';
+						break;
+
+					default:
+						die('unknown destination video format: '.$job['orderParams']);
+				}
+
+				echo 'Executing: '.$c.'<br/>';
+				$exec_time = exectime($c);
+				echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
+				//todo: store execution time
+
+				if (!file_exists($dst_file)) {
+					echo '<b>FAILED - dst file '.$dst_file.' dont exist!<br/>';
+					continue;
+				}
+
+				//skapa nytt tblFiles entry. länka det till orginal-filen
+				$newId = $files->cloneEntry($job['fileId']);
+
+				//renama $dst_file till fileId för nya file entry
+				rename($dst_file, $files->upload_dir.$newId);
+
+				//update cloned entry with new file size and such
+				$files->updateClone($newId, $dst_mime);
+				break;
 
 			case PROCESSQUEUE_IMAGE_RECODE:
 				echo 'IMAGE RECODE<br/>';
 				if (!in_array($job['orderParams'], $files->image_mime_types)) {
+					echo 'error: invalid mime type<br/>';
 					$session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
 					break;
 				}
@@ -81,8 +135,8 @@
 
 				$exec_start = microtime(true);
 				$check = $files->convertImage($files->upload_dir.$job['fileId'], $files->upload_dir.$newId, $job['orderParams']);
-				$exec_end = microtime(true);
-				echo 'Execution time: '.shortTimePeriod($exec_end - $exec_start).'<br/>';
+				$exec_time = microtime(true) - $exec_start;
+				echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 
 				if (!$check) {
 					$session->log('#'.$job['entryId'].': IMAGE CONVERT failed! format='.$job['orderParams'], LOGLEVEL_ERROR);
@@ -100,7 +154,7 @@
 		}
 
 		//marks queue item as completed
-		$q = 'UPDATE tblProcessQueue SET orderCompleted=1 WHERE entryId='.$job['entryId'];
+		$q = 'UPDATE tblProcessQueue SET orderCompleted=1,timeExec='.$exec_time.' WHERE entryId='.$job['entryId'];
 		$db->update($q);
 	}
 

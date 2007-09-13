@@ -1,4 +1,7 @@
 ----[[platform todo]]----
+	process:
+		- ta bort uppladdade filer
+
 	core/gör snart:
 		* fixa till admin todo lists. gör generell todo list? porta från cms...
 
@@ -203,6 +206,7 @@ X = hi prio task
 2007.09.14:
 	- process: uploading files, enquing & processing of uploaded files works
 	- process: image format conversion (gif,jpg,png) & audio (wma,mp3,ogg) conversion added
+	- process: basic video recoding added
 
 2007.09.13:
 	- core_dev/process alot of work

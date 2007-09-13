@@ -294,4 +294,14 @@
 			require_once($config['core_root'].'plugins/'.$plugin.'/plugin.php');
 		}
 	}
+
+
+	/* Executes $c and returns the time it took */
+	function exectime($c)
+	{
+		$exec_start = microtime(true);
+		exec($c);
+		return microtime(true) - $exec_start;
+	}
+
 ?>

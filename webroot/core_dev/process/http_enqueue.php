@@ -37,9 +37,9 @@
 	);
 
 	$dst_video = array(
-		'video/mpeg'			=>	'.mpg file',
-		'video/avi'				=>	'.avi xvid file',
-		'video/x-ms-wmv'	=>	'.wmv Windows Media Video',
+		'video/mpeg'			=>	'MPEG-2 video',
+		'video/avi'				=>	'DivX 3 video',
+		'video/x-ms-wmv'	=>	'Windows Media Video',
 		'video/3gpp'			=>	'.3gp video file'
 	);
 	wiki('ProcessFile');
