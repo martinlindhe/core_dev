@@ -12,6 +12,7 @@
 <?
 	$menu = array(
 		'index.php' => 'Home',
+		'show_files.php' => 'Show uploaded files',
 		'show_queue.php' => 'Show work queue',
 		'show_events.php' => 'Show event log'
 	);

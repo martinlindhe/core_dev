@@ -19,14 +19,14 @@
 					die('unknown processqueue type: '.$row['orderType']);
 			}
 
-			echo '<a href="show_file_status.php?id='.$row['resourceId'].'"><img src="'.$config['core_web_root'].'gfx/ajax_loading.gif"> Show file status</a>';
+			echo '<a href="show_file_status.php?id='.$row['fileId'].'"><img src="'.$config['core_web_root'].'gfx/ajax_loading.gif"> Show file status</a>';
 			echo $row['timeCreated'].' added by '.nameLink($row['ownerId']).'<br/><br/>';
 
-			$file = $files->getFileInfo($row['resourceId']);
+			$file = $files->getFileInfo($row['fileId']);
 			echo 'fileName: '.$file['fileName'].'<br/>';
 			echo 'fileMime: '.$file['fileMime'].'<br/>';
 			echo 'fileSize: '.$file['fileSize'].'<br/>';
-			echo 'sha1: '.$files->sha1($row['resourceId']);
+			echo 'sha1: '.$files->sha1($row['fileId']);
 
 			echo '</div>';
 		}

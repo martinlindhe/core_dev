@@ -37,7 +37,10 @@ class Files
 		'image/gif');
 
 	public $audio_mime_types	= array(
-		'audio/mpeg', 'audio/x-mpeg');	//.mp3 file
+		'audio/x-mpeg',	'audio/mpeg',		//.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'
+		'audio/x-ms-wma',								//.wma file. FF2 & IE7 sends this
+		'application/x-ogg'							//.ogg file		- FIXME: IE7 sends mime header 'application/octet-stream' for .ogg
+	);
 
 	public $video_mime_types = array(
 		'video/mpeg',			//.mpg file
@@ -93,6 +96,32 @@ class Files
 		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
 	}
+
+	//Returnerar alla filer som är uppladdade av typen $fileType
+	function getFileList($fileType, $ownerId = 0)
+	{
+		global $db;
+		if (!is_numeric($fileType) || !is_numeric($ownerId)) return false;
+
+		$q = 'SELECT * FROM tblFiles WHERE fileType='.$fileType;
+		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+		$q .= ' ORDER BY timeUploaded ASC';
+		return $db->getArray($q);
+	}
+
+	/* Returns all cloned files based on this file */
+	function getClonesList($fileId)
+	{
+		global $db;
+		if (!is_numeric($fileId)) return false;
+
+		$q = 'SELECT * FROM tblFiles WHERE fileType='.FILETYPE_PROCESS_CLONE.' AND fileId='.$fileId;
+		$q .= ' ORDER BY timeUploaded ASC';
+		return $db->getArray($q);
+	}
+
+
+
 
 	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
 	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
@@ -589,6 +618,7 @@ class Files
 		$new['md5'] = $db->escape(hash_file('md5', $this->upload_dir.$_id));		//32-character hex string
 		//fixme: den korrekta crc32 summan generas inte.. orkar inte felsöka
 		$new['crc32'] = $db->escape(hash_file('crc32', $this->upload_dir.$_id));	//8-character hex string
+		$new['timeCreated'] = now();
 
 		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", crc32="'.$new['crc32'].'", timeCreated=NOW()';
 		$db->insert($q);
@@ -612,7 +642,7 @@ class Files
 		$file = $this->getFileInfo($_id);
 		if (!$file) return false;
 
-		$q = 'INSERT INTO tblFiles SET ownerId='.$_id.',fileType='.FILETYPE_PROCESS_CLONE.',timeUploaded=NOW()';
+		$q = 'INSERT INTO tblFiles SET ownerId='.$_id.',fileType='.FILETYPE_PROCESS_CLONE.',uploaderId='.$file['uploaderId'].',timeUploaded=NOW()';
 		return $db->insert($q);
 	}
 

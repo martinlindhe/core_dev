@@ -37,7 +37,7 @@
 	define('PROCESSUPLOAD_GET',	3);	//fixme: use
 	define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
 	define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
-	define('PROCESSQUEUE_IMAGE_RECODE', 12);	//fixme: use
+	define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding to another image format
 
 	//event types
 	define('EVENT_PROCESS',	1);	//event from the process server
@@ -61,6 +61,8 @@
 				return $newFileId;
 
 			case PROCESSQUEUE_AUDIO_RECODE:
+			case PROCESSQUEUE_IMAGE_RECODE:
+			case PROCESSQUEUE_VIDEO_RECODE:
 				//enque file for recoding.
 				//	$param = fileId
 				//	$param2 = destination format (by extension)
@@ -70,7 +72,7 @@
 				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$db->escape($param.'_'.$param2).'",createdBy='.$session->id.',timeCreated=NOW()';
 				$db->insert($q);
 
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',resourceId='.$param.',orderCompleted=0,orderParams="'.$db->escape($param2).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',fileId='.$param.',orderCompleted=0,orderParams="'.$db->escape($param2).'"';
 				$db->insert($q);
 				break;
 
@@ -100,8 +102,43 @@
 		return $db->getArray($q);
 	}
 
+	/* Returns a list of currently enqueued actions to do for fileId $_id */
+	function getQueuedEvents($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
 
+		$q = 'SELECT * FROM tblProcessQueue WHERE fileId='.$_id.' AND orderCompleted=0 ORDER BY timeCreated ASC';
+		return $db->getArray($q);
+	}
 
+	/* displays the enqueued actions in the process queue for the fileId $_id */
+	function showFileQueueStatus($_id)
+	{
+		global $db, $files;
+		if (!is_numeric($_id)) return false;
+
+		$data = $files->getFileInfo($_id);
+		if (!$data) {
+			echo '<h1>File dont exist</h1>';
+			return;
+		}
+
+		$list = getQueuedEvents($_id);
+
+		if (!empty($list)) {
+			echo '<h1>'.count($list).' queued actions</h1>';
+			foreach ($list as $row) {
+				echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.nameLink($row['ownerId']);
+				echo ' type='.$row['orderType'].', params='.$row['orderParams'];
+				echo '</h3>';			
+			}
+		} else {
+			echo '<h1>No queued action</h1>';
+		}
+
+		$files->showFileInfo($_id);
+	}
 
 
 

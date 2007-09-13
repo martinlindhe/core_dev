@@ -13,9 +13,9 @@
 			case PROCESSQUEUE_AUDIO_RECODE:
 				//Recodes source audio file into orderParams destination format
 
-				$file = $files->getFileInfo($job['resourceId']);
+				$file = $files->getFileInfo($job['fileId']);
 				if (!$file) {
-					echo 'Error: no fileentry existed for resourceId '.$job['resourceId'];
+					echo 'Error: no fileentry existed for fileId '.$job['fileId'];
 					continue;
 				}
 
@@ -29,16 +29,19 @@
 
 						//så istället tvingas vi göra det i 2 steg:
 						$dst_file = 'tmpfile.ogg';
-						$c = 'ffmpeg -i "'.$files->upload_dir.$job['resourceId'].'" '.$dst_file;
+						$dst_mime = 'application/x-ogg';
+						$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
 						break;
 					case 'wma':
 						$dst_file = 'tmpfile.wma';
-						$c = 'ffmpeg -i "'.$files->upload_dir.$job['resourceId'].'" '.$dst_file;
+						$dst_mime = 'audio/x-ms-wma';
+						$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
 						break;
 					case 'mp3':
 						//fixme: source & destination should not be able to be the same!
 						$dst_file = 'tmpfile.mp3';
-						$c = 'ffmpeg -i "'.$files->upload_dir.$job['resourceId'].'" '.$dst_file;
+						$dst_mime = 'audio/x-mpeg';
+						$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
 						break;
 					default:
 						die('unknown destination audio format: '.$job['orderParams']);
@@ -55,16 +58,27 @@
 				}
 
 				//skapa nytt tblFiles entry. länka det till orginal-filen
-				$newId = $files->cloneEntry($job['resourceId']);
+				$newId = $files->cloneEntry($job['fileId']);
 
 				//renama $dst_file till fileId för nya file entry
 				rename($dst_file, $files->upload_dir.$newId);
 
+				$size = filesize($files->upload_dir.$newId);
+				$q = 'UPDATE tblFiles SET fileMime="'.$dst_mime.'",fileSize='.$size.' WHERE fileId='.$newId.' AND fileType='.FILETYPE_PROCESS_CLONE;
+				$db->update($q);
 				break;
+
+			case PROCESSQUEUE_VIDEO_RECODE:
+				echo 'IMAGE RECODE! todo - implement<br/>';
+				die;
+
+			case PROCESSQUEUE_IMAGE_RECODE:
+				echo 'IMAGE RECODE! todo - implement<br/>';
+				die;
 
 			default:
 				echo 'unknown ordertype: '.$job['orderType'].'<br/>';
-				continue;
+				die;
 		}
 
 		//marks queue item as completed

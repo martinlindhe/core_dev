@@ -10,27 +10,13 @@
 
 	wiki('ProcessShowfileStatus');
 
-	$files->showFileInfo($fileId);
+	showFileQueueStatus($fileId);
 
-	$data = $files->getFileInfo($fileId);
+	echo '<h1>Conversions based on this file</h1>';
+	$list = $files->getClonesList($fileId);
+	d($list);
 
-	if (in_array($data['fileMime'], $files->audio_mime_types)) {
-		echo '<h1>convert audio</h1>';
-		echo 'Input format: xxx<br/>';
+	echo '<a href="http_enqueue.php?id='.$fileId.'">Convert media</a>';
 
-		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$fileId.'">';
-		echo 'Select output format: ';
-
-		echo '<select name="dst_audio_fmt">';
-		foreach ($dst_audio as $key => $val) {
-			echo '<option value="'.$key.'">'.$val.'</option>';
-		}
-		echo '</select>';
-
-		echo '<input type="submit" value="Continue"/>';
-		echo '</form>';
-	} else {
-		echo 'Dont know how to handle mimetype: '.$data['fileMime'];
-	}
 	require('design_foot.php');
 ?>
