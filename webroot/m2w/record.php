@@ -18,7 +18,7 @@
 	<menu id="mnuMain">
 		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
 	  <pse_video src="media://m2w/mnuMain" repeat="LOOP"/>
-		
+
 		<choice dtmf="1" next="#frmRecord"></choice>		<!-- go to menu to record a video -->
 		<choice dtmf="2" next="#mnuPlayback"></choice>	<!-- go to menu to playback stored videos -->
 		<choice dtmf="0" next="#quit"></choice>					<!-- hangup -->
@@ -72,7 +72,7 @@
 
 	<form id="frmStore">
 		<block>
-			<!-- fixme: variabel destination, inte dest="media://m2w/recordedContent"-->
+			<!-- fixme: filen skapas men status blir "OFFLINE" - "Internal error (unspecified error)", samma med dest="media://m2w/recordedContent"-->
 			<pse_submit src="record_var" destexpr="upload_path + session_id"/>
 		</block>
 
