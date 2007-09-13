@@ -29,9 +29,9 @@
 	);
 
 	$dst_image = array(
-		'png' => 'PNG image',
-		'jpg' => 'jpeg image',
-		'gif' => 'GIF image'
+		'image/png' => 'PNG image',
+		'image/jpeg' => 'JPEG image',
+		'image/gif' => 'GIF image'
 	);
 
 
@@ -69,7 +69,10 @@
 		echo '</select>';
 
 		echo '<input type="submit" value="Continue"/>';
-		echo '</form>';
+		echo '</form><br/>';
+
+		echo 'Image view:<br/>';
+		echo makeThumbLink($fileId);
 
 	} else {
 		echo 'Dont know how to handle mimetype: '.$data['fileMime'];

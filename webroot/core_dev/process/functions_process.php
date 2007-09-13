@@ -37,7 +37,7 @@
 	define('PROCESSUPLOAD_GET',	3);	//fixme: use
 	define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
 	define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
-	define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding to another image format
+	define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding/converting to another image format
 
 	//event types
 	define('EVENT_PROCESS',	1);	//event from the process server
@@ -236,20 +236,6 @@
 						continue;
 					}
 					$session->log('#'.$work['entryId'].': IMAGE RESIZE performed successfully');
-					break;
-
-				case ORDER_CONVERT_IMG:
-					echo 'Performing task: Image convert<br/>';
-					echo ' &nbsp; params: format='.$params['format'].'<br/>';
-
-					//2. Perform convert
-					$check = $files->convertImage($src_temp_file, $dst_temp_file, $params['format']);
-					if (!$check) {
-						$session->log('#'.$work['entryId'].': IMAGE CONVERT failed! format='.$params['format'], LOGLEVEL_ERROR);
-						echo 'Error: Image convert failed!<br/>';
-						continue;
-					}
-					$session->log('#'.$work['entryId'].': IMAGE CONVERT performed successfully');
 					break;
 
 				default:

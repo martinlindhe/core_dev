@@ -15,6 +15,14 @@
 					echo 'Audio recode to <b>"'.$row['orderParams'].'"</b><br/>';
 					break;
 					
+				case PROCESSQUEUE_IMAGE_RECODE:
+					echo 'Image recode to <b>"'.$row['orderParams'].'"</b><br/>';
+					break;
+
+				case PROCESSQUEUE_VIDEO_RECODE:
+					echo 'Video recode to <b>"'.$row['orderParams'].'"</b><br/>';
+					break;
+
 				default:
 					die('unknown processqueue type: '.$row['orderType']);
 			}

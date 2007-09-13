@@ -63,18 +63,36 @@
 				//renama $dst_file till fileId för nya file entry
 				rename($dst_file, $files->upload_dir.$newId);
 
-				$size = filesize($files->upload_dir.$newId);
-				$q = 'UPDATE tblFiles SET fileMime="'.$dst_mime.'",fileSize='.$size.' WHERE fileId='.$newId.' AND fileType='.FILETYPE_PROCESS_CLONE;
-				$db->update($q);
+				//update cloned entry with new file size and such
+				$files->updateClone($newId, $dst_mime);
 				break;
 
 			case PROCESSQUEUE_VIDEO_RECODE:
-				echo 'IMAGE RECODE! todo - implement<br/>';
+				echo 'VIDEO RECODE! todo - implement<br/>';
 				die;
 
 			case PROCESSQUEUE_IMAGE_RECODE:
-				echo 'IMAGE RECODE! todo - implement<br/>';
-				die;
+				echo 'IMAGE RECODE<br/>';
+				if (!in_array($job['orderParams'], $files->image_mime_types)) {
+					$session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
+					break;
+				}
+				$newId = $files->cloneEntry($job['fileId']);
+
+				$exec_start = microtime(true);
+				$check = $files->convertImage($files->upload_dir.$job['fileId'], $files->upload_dir.$newId, $job['orderParams']);
+				$exec_end = microtime(true);
+				echo 'Execution time: '.shortTimePeriod($exec_end - $exec_start).'<br/>';
+
+				if (!$check) {
+					$session->log('#'.$job['entryId'].': IMAGE CONVERT failed! format='.$job['orderParams'], LOGLEVEL_ERROR);
+					echo 'Error: Image convert failed!<br/>';
+					die;
+				}
+
+				//update cloned entry with new file size and such
+				$files->updateClone($newId, $job['orderParams']);
+				break;
 
 			default:
 				echo 'unknown ordertype: '.$job['orderType'].'<br/>';

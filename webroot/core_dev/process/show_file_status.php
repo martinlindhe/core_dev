@@ -12,9 +12,18 @@
 
 	showFileQueueStatus($fileId);
 
-	echo '<h1>Conversions based on this file</h1>';
+	$file = $files->getFileInfo($fileId);
+	if ($file['fileType'] == FILETYPE_PROCESS_CLONE) {
+		echo 'This file is a clone of the orginal file <a href="'.$_SERVER['PHP_SELF'].'?id='.$file['ownerId'].'">'.$file['ownerId'].'</a><br/>';
+	}
+
 	$list = $files->getClonesList($fileId);
-	d($list);
+	//d($list);
+	if ($list) echo '<h1>Conversions based on this file</h1>';
+	foreach ($list as $row) {
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['fileId'].'">'.$row['fileId'].'</a> '.formatDataSize($row['fileSize']).' '.$row['fileMime'].'<br/>';
+	}
+	echo '<br/>';
 
 	echo '<a href="http_enqueue.php?id='.$fileId.'">Convert media</a>';
 

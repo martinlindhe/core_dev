@@ -71,7 +71,7 @@ class Files
 		- BMP images gets converted to JPG
 		- SVG images gets converted to PNG
 
-		Used regularry with ImageMagick-6.3.4-4-Q16-windows-static.exe
+		Currently using ImageMagick-6.3.5-8-Q16-windows-static.exe
 
 		 ImageMagick is a open source and multi platform image converter
 		 http://www.imagemagick.org/download/
@@ -115,7 +115,7 @@ class Files
 		global $db;
 		if (!is_numeric($fileId)) return false;
 
-		$q = 'SELECT * FROM tblFiles WHERE fileType='.FILETYPE_PROCESS_CLONE.' AND fileId='.$fileId;
+		$q = 'SELECT * FROM tblFiles WHERE fileType='.FILETYPE_PROCESS_CLONE.' AND ownerId='.$fileId;
 		$q .= ' ORDER BY timeUploaded ASC';
 		return $db->getArray($q);
 	}
@@ -564,7 +564,7 @@ class Files
 		imagedestroy($image_p);
 		
 		if ($fileId) {
-			//Update fileId entry with the new file size (DONT use when creating thumbnails!)
+			//Update fileId entry with the new file size (DONT use when creating thumbnails or cloning files!)
 			clearstatcache();	//needed to get current filesize()
 			$q = 'UPDATE tblFiles SET fileSize='.filesize($out_filename).' WHERE fileId='.$fileId;
 			$db->update($q);
@@ -578,22 +578,24 @@ class Files
 	{
 		switch ($dst_mime_type)
 		{
+			//fixme: paths bara nödvändiga tills ja rebootat windows & path enviroment syns för apache
 			case 'image/jpeg':
-				$c = 'convert -quality '.$this->image_jpeg_quality.' '.$src_file.' JPG:'.$dst_file;
+				$c = 'E:/devel/imagemagick/convert.exe -quality '.$this->image_jpeg_quality.' '.$src_file.' JPG:'.$dst_file;
 				break;
 
 			case 'image/png':
-				$c = 'convert '.$src_file.' PNG:'.$dst_file;
+				$c = 'E:/devel/imagemagick/convert.exe '.$src_file.' PNG:'.$dst_file;
 				break;
 
 			case 'image/gif':
-				$c = 'convert '.$src_file.' GIF:'.$dst_file;
+				$c = 'E:/devel/imagemagick/convert.exe '.$src_file.' GIF:'.$dst_file;
 				break;
 
 			default:
-				echo 'Unknown mime type for convertImage: '.$dst_mime_type.'<br/>';
+				echo 'convertImage(): Unknown destination mimetype "'.$dst_mime_type.'"<br/>';
 				return false;
 		}
+		echo 'Executing: '.$c.'<br/>';
 		exec($c);
 
 		if (!file_exists($dst_file)) return false;
@@ -613,6 +615,10 @@ class Files
 		$q = 'SELECT * FROM tblChecksums WHERE fileId='.$_id;
 		$cached = $db->getOneRow($q);
 		if ($cached) return $cached;
+
+		if (!file_exists($this->upload_dir.$_id)) {
+			die('tried to generate checksums of nonexisting file '.$this->upload_dir.$_id);
+		}
 
 		$new['sha1'] = $db->escape(hash_file('sha1', $this->upload_dir.$_id));	//40-character hex string
 		$new['md5'] = $db->escape(hash_file('md5', $this->upload_dir.$_id));		//32-character hex string
@@ -644,6 +650,17 @@ class Files
 
 		$q = 'INSERT INTO tblFiles SET ownerId='.$_id.',fileType='.FILETYPE_PROCESS_CLONE.',uploaderId='.$file['uploaderId'].',timeUploaded=NOW()';
 		return $db->insert($q);
+	}
+
+	/* Updates info of a file clone. set current mime type & file size & calculate checksums */
+	function updateClone($_id, $mimeType)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$size = filesize($this->upload_dir.$_id);
+		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mimeType).'",fileSize='.$size.' WHERE fileId='.$_id.' AND fileType='.FILETYPE_PROCESS_CLONE;
+		return $db->update($q);
 	}
 
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
@@ -867,6 +884,7 @@ class Files
 			//Show additional information for image files
 			list($img_width, $img_height) = getimagesize($this->upload_dir.$_id);
 			echo 'Width: '.$img_width.', Height: '.$img_height.'<br/>';
+			echo makeThumbLink($_id);
 		}
 		else if (in_array($file['fileMime'], $this->audio_mime_types) && extension_loaded('id3'))
 		{
