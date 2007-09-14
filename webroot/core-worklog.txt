@@ -5,6 +5,7 @@
 		- video kommandon för konvertering till .3gp och till .wmv
 		- känn av video upplösning, codec & audio info. visa i $files->showFileInfo
 		- kunna enqueue video resize. välj stereo/mono, fps
+		- ev. använd php_fileinfo ext för file magic istället för "file" kommando, http://se.php.net/fileinfo, http://pecl4win.php.net/ext.php/
 
 	core/gör snart:
 		* fixa till admin todo lists. gör generell todo list? porta från cms...
@@ -209,6 +210,9 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.09.15:
 	- process: added queue url for downloading, so you can add a link to media resource (video, torrent, youtube link) that is later processed
+	- files class: reworked file upload code. now uses "file" magic command to get a mimetype, ignoring client-supplied mimetypes.
+		this makes mimetype field in tblFiles much more reliable
+	- core gfx: new gfx for arrows up,down,left,right + grayed
 
 2007.09.14:
 	- process: uploading files, enquing & processing of uploaded files works

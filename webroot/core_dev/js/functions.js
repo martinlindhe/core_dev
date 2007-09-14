@@ -296,6 +296,14 @@ function scroll_element_content(n,offs)
 	}
 }
 
+//expands size of <input type="text" id="n">
+function expand_input(e)
+{
+	var x=document.getElementById(e);
+	if (x.size < 120) x.size += 20;
+	//fixme: set focus to start of inputted text after resizing
+}
+
 function urlOpen(u)
 {
 	document.location = u;

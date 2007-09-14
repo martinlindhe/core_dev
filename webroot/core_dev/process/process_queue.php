@@ -160,12 +160,11 @@
 				$data = file_get_contents($job['orderParams']);
 				
 				//echo $data;
-	
-				$fileMime = 'xxx';	//fixme! parse server headers from the HTTP GET
-				echo 'Using mimetype '.$fileMime.'<br/>';
-				
+
 				$exec_time = microtime(true) - $time_start;
-				$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, $session->id, $fileName, $fileMime, $data);
+				$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, $session->id, $fileName, $data);
+
+				//todo: process html document for media links if it is a html document
 				break;
 
 			default:

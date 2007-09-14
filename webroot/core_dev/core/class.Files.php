@@ -149,7 +149,36 @@ class Files
 		return $db->getArray($q);
 	}
 
+	/* Performs mimetype lookup using "file" tool */
+	function lookupMimeType($fileName)
+	{
+		//IMPORTANT todo: validate $fileName
 
+		//todo: bort me hårdkodad url
+		$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi '.$fileName;
+		//echo 'Executing: '.$c.'<br/>';
+		$result = exec($c);
+		//echo 'result: '.$result.'<br/>';
+		return $result;
+	}
+
+	/* Looks up mimeType of file $fileId and updates database accordingly */
+	//also updates filesize
+	function setMimeType($fileId)
+	{
+		global $db;
+		if (!is_numeric($fileId)) return false;
+
+		$size = filesize($this->upload_dir.$fileId);
+		if (!is_numeric($size) || !$size) {
+			echo 'setMimeType(): file dont exist ';
+			return false;
+		}
+		$mime = $this->lookupMimeType($this->upload_dir.$fileId);
+
+		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime).'",fileSize='.$size.' WHERE fileId='.$fileId;
+		return $db->update($q);
+	}
 
 
 	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
@@ -426,7 +455,7 @@ class Files
 			return false;
 		}
 
-		$fileId = $this->addFileEntry($fileType, $categoryId, $ownerId, $FileData['name'], $FileData['type']);
+		$fileId = $this->addFileEntry($fileType, $categoryId, $ownerId, $FileData['name']);
 
 		//Identify and handle various types of files
 		if (in_array($FileData['type'], $this->image_mime_types)) {
@@ -437,27 +466,36 @@ class Files
 			$this->handleGeneralUpload($fileId, $FileData);
 		}
 
+		$this->setMimeType($fileId);
+		$this->checksums($fileId);	//force calculation of checksums
+
 		return $fileId;
 	}
 
-	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $fileMime, $content = '')
+	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
 	{
 		global $db, $session;
 		if (!is_numeric($fileType) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
-		$fileSize = filesize($fileName);
+		$fileSize = 0;
+		$fileMime = '';
 		$fileName = basename(strip_tags($fileName));
-		$fileMime = strip_tags($fileMime);
 
-  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",fileMime="'.$db->escape($fileMime).'", ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
 		$newFileId = $db->insert($q);
 
 		if ($content) {
-			echo 'writing data to '.$this->upload_dir.$newFileId;
+			//echo 'addFileEntry(): Writing file to '.$this->upload_dir.$newFileId;
 			file_put_contents($this->upload_dir.$newFileId, $content);
-			$fileSize = filesize($this->upload_dir.$newFileId);
+			clearstatcache();	//needed to get current filesize()
 		}
-		$q = 'UPDATE tblFiles SET fileSize='.$fileSize.' WHERE fileId='.$newFileId;
+
+		if (file_exists($this->upload_dir.$newFileId)) {
+			$fileSize = filesize($this->upload_dir.$newFileId);
+			$fileMime = $this->lookupMimeType($this->upload_dir.$newFileId);
+		}
+
+		$q = 'UPDATE tblFiles SET fileSize='.$fileSize.',fileMime="'.$db->escape($fileMime).'" WHERE fileId='.$newFileId;
 		$db->update($q);
 
 
@@ -918,7 +956,7 @@ class Files
 		if (!$file) return false;
 
 		echo 'Name: '.strip_tags($file['fileName']).'<br/>';
-		echo 'Filesize: '.formatDataSize($file['fileSize']).'<br/>';
+		echo 'Filesize: '.formatDataSize($file['fileSize']).' ('.$file['fileSize'].' bytes)<br/>';
 		echo 'Uploader: '.htmlentities($file['uploaderName']).'<br/>';
 		echo 'At: '.$file['timeUploaded'].' ('.ago($file['timeUploaded']).')<br/>';
 		if ($this->count_file_views) echo 'Downloaded: '.$file['cnt'].' times<br/>';
@@ -949,7 +987,6 @@ class Files
 		echo 'sha1: '.$arr['sha1']."\n";
 		echo 'md5: '.$arr['md5']."\n";
 		echo 'crc32: '.$arr['crc32']."\n";
-		echo 'size: '.$file['fileSize'].' bytes';
 		echo '</pre>';
 	}
 

@@ -18,7 +18,6 @@
 	}
 
 	$list = $files->getClonesList($fileId);
-	//d($list);
 	if ($list) echo '<h1>Conversions based on this file</h1>';
 	foreach ($list as $row) {
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['fileId'].'">'.$row['fileId'].'</a> '.formatDataSize($row['fileSize']).' '.$row['fileMime'].'<br/>';
