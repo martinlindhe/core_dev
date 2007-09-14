@@ -162,7 +162,7 @@
 				//echo $data;
 
 				$exec_time = microtime(true) - $time_start;
-				$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, $session->id, $fileName, $data);
+				$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName, $data);
 
 				//todo: process html document for media links if it is a html document
 				break;

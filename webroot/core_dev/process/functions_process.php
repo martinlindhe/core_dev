@@ -57,7 +57,7 @@
 				//	$param is the $_FILES[idx] array
 
 				$exec_start = microtime(true);	//dont count the actual upload time, just the process time
-				$newFileId = $files->handleUpload($param, FILETYPE_PROCESS, $session->id, PROCESSUPLOAD_FORM);
+				$newFileId = $files->handleUpload($param, FILETYPE_PROCESS, 0, PROCESSUPLOAD_FORM);
 
 				/*
 				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$newFileId.'",createdBy='.$session->id.',timeCreated=NOW()';
@@ -165,6 +165,34 @@
 		} else {
 			echo '<h1>No queued action</h1>';
 		}
+		
+		echo 'Process log:<br/>';
+		$q = 'SELECT * FROM tblProcessQueue WHERE fileId='.$_id;
+		$list = $db->getArray($q);
+		echo '<table border="1">';
+		echo '<tr>';
+		echo '<th>Added</th>';
+		echo '<th>Completed</th>';
+		echo '<th>Exec time</th>';
+		echo '<th>Type</th>';
+		echo '<th>Created by</th>';
+		echo '</tr>';
+		foreach ($list as $row) {
+			echo '<tr>';
+			echo '<td>'.$row['timeCreated'].'</td>';
+			if ($row['orderCompleted']) {
+				echo '<td>'.$row['timeCompleted'].'</td>';
+				echo '<td>'.$row['timeExec'].'</td>';
+			} else {
+				echo '<td>not done</td>';
+				echo '<td>?</td>';
+			}
+			echo '<td>'.$row['orderType'].'</td>';
+			echo '<td>'.nameLink($row['creatorId']).'</td>';
+			//echo $row['orderParams'];
+			echo '</tr>';
+		}
+		echo '</table>';
 
 		$files->showFileInfo($_id);
 	}
