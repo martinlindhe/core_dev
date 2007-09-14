@@ -41,6 +41,8 @@
 
 	define('PROCESSFETCH_FORM',					20);	//Ask the server to download remote media. Parameter is URL
 
+	define('PROCESSPARSE_AND_FETCH',		21);	//Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
+
 	//event types
 	define('EVENT_PROCESS',	1);	//event from the process server
 
@@ -65,7 +67,7 @@
 				$files->checksums($newFileId);	//force generation of file checksums
 
 				$exec_time = microtime(true) - $exec_start;
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',fileId='.$newFileId.',orderCompleted=1,orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId='.$newFileId.',orderCompleted=1,orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
 				$db->insert($q);
 
 				return $newFileId;
@@ -84,7 +86,7 @@
 				$db->insert($q);
 				*/
 
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',fileId='.$param.',orderCompleted=0,orderParams="'.$db->escape($param2).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId='.$param.',orderCompleted=0,orderParams="'.$db->escape($param2).'"';
 				$db->insert($q);
 				break;
 
@@ -93,9 +95,15 @@
 				//	$param = url
 				// downloads media files, torrents & youtube links
 
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',fileId=0,orderCompleted=0,orderParams="'.$db->escape($param).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId=0,orderCompleted=0,orderParams="'.$db->escape($param).'"';
 				$db->insert($q);
 				break;
+
+			case PROCESSPARSE_AND_FETCH:
+				//parse this resource for further media resources and fetches them
+				// $param = fileId
+				// use to process a uploaded .torrent file & download it's content
+				// or to process a webpage and extract video files from it (including youtube) and download them to the server
 
 			default: die('processEvent unknown type');
 		}
@@ -150,7 +158,7 @@
 		if (!empty($list)) {
 			echo '<h1>'.count($list).' queued actions</h1>';
 			foreach ($list as $row) {
-				echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.nameLink($row['ownerId']);
+				echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.nameLink($row['creatorId']);
 				echo ' type='.$row['orderType'].', params='.$row['orderParams'];
 				echo '</h3>';			
 			}
@@ -186,7 +194,7 @@
 
 		$_params = $db->escape(serialize($_params));
 
-		$q = 'INSERT INTO tblProcessQueue SET orderType='.$_type.', orderParams="'.$_params.'", ownerId='.$session->id.', timeCreated=NOW()';
+		$q = 'INSERT INTO tblProcessQueue SET orderType='.$_type.', orderParams="'.$_params.'", creatorId='.$session->id.', timeCreated=NOW()';
 		$order_id = $db->insert($q);
 
 		$session->log('#'.$order_id.': Added work order: '.$WORK_OPRDER_TYPES[$_type]);

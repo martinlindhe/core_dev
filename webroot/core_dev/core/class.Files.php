@@ -26,10 +26,11 @@ define('FILETYPE_PROCESS',				8);	/* File uploaded to be processed */
 define('FILETYPE_PROCESS_CLONE',	9);	/* a clone entry for a process file. */
 
 //for future use:
-define('MEDIATYPE_IMAGE',			1);
-define('MEDIATYPE_VIDEO',			2);
-define('MEDIATYPE_AUDIO',			3);
-define('MEDIATYPE_DOCUMENT',	4);
+define('MEDIATYPE_IMAGE',				1);
+define('MEDIATYPE_VIDEO',				2);
+define('MEDIATYPE_AUDIO',				3);
+define('MEDIATYPE_DOCUMENT',		4);
+define('MEDIATYPE_WEBRESOURCE',	5);	//webresources might / will contain other files. those files will refer to this file as their owner
 
 class Files
 {
@@ -79,7 +80,10 @@ class Files
 
 		'txt' => array(MEDIATYPE_DOCUMENT, 'text/plain', 'Text Document'),
 		'doc' => array(MEDIATYPE_DOCUMENT, 'application/msword', 'Word Document'),
-		'pdf' => array(MEDIATYPE_DOCUMENT, 'application/pdf', 'PDF Document')
+		'pdf' => array(MEDIATYPE_DOCUMENT, 'application/pdf', 'PDF Document'),
+
+		'html'		=> array(MEDIATYPE_WEBRESOURCE,	'text/html', 'HTML Page'),
+		'torrent'	=> array(MEDIATYPE_WEBRESOURCE,	'application/x-bittorrent', 'BitTorrent File')
 	);
 
 	/* User configurable settings */

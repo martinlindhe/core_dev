@@ -13,6 +13,8 @@
 		$added = processEvent(PROCESSQUEUE_IMAGE_RECODE, $fileId, $_POST['dst_image_fmt']);
 	} else if (!empty($_POST['dst_video_fmt'])) {
 		$added = processEvent(PROCESSQUEUE_VIDEO_RECODE, $fileId, $_POST['dst_video_fmt']);
+	} else if (isset($_GET['process'])) {
+		$added = processEvent(PROCESSPARSE_AND_FETCH, $fileId);
 	}
 
 	if ($added) {
@@ -41,6 +43,12 @@
 		'video/avi'				=>	'DivX 3 video',
 		'video/x-ms-wmv'	=>	'Windows Media Video',
 		'video/3gpp'			=>	'.3gp video file'
+	);
+
+	//mime types to process a second time, to extract new media resources from (torrents, embedded video url's in html etc)
+	$dst_2ndpass = array(
+		'application/x-bittorrent'	=>	'BitTorrent file',
+		'text/html'									=>	'HTML page'
 	);
 	wiki('ProcessFile');
 
@@ -97,8 +105,18 @@
 		echo '<input type="submit" value="Continue"/>';
 		echo '</form><br/>';
 
+	} if ($data['fileMime'] == 'application/x-bittorrent') {
+		//bittorrent download!
+		echo '<h1>bittorent download</h1>';
+
+		//todo: only allow this once. if torrent file already has been downloaded show its content instead
+		echo 'Download and store the content of this torrent file?<br/><br/>';
+		echo '<a href="?id='.$fileId.'&process">Yes</a><br/><br/>';
+
+		echo '<a href="">No</a>';
 	} else {
 		echo 'Dont know how to handle mimetype: '.$data['fileMime'];
+
 	}
 
 	require('design_foot.php');

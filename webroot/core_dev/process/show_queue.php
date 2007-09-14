@@ -34,7 +34,7 @@
 			if ($row['fileId']) {
 				echo '<a href="show_file_status.php?id='.$row['fileId'].'"><img src="'.$config['core_web_root'].'gfx/ajax_loading.gif"> Show file status</a>';
 			}
-			echo $row['timeCreated'].' added by '.nameLink($row['ownerId']).'<br/><br/>';
+			echo $row['timeCreated'].' added by '.nameLink($row['creatorId']).'<br/><br/>';
 
 			$file = $files->getFileInfo($row['fileId']);
 			if ($file) {
