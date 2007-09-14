@@ -134,7 +134,7 @@
 		$params = '';
 		if (!empty($_GET)) $params = $_GET;
 		if (!$params) die('nothing to do');
-		
+
 		//Log the incoming SMS
 		$q = 'INSERT INTO tblIncomingSMS SET params="'.$db->escape(serialize($params)).'",IP='.$session->ip.',timeReceived=NOW()';
 		$db->insert($q);
