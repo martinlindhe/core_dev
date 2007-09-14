@@ -384,6 +384,15 @@ function show_image_comments(n)
 	e.height = org_h;
 }
 
+//shows fileId i in a new window, displayed as a image
+function popup_imgview(i,w,h)
+{
+	if(!w)w=300;
+	if(!h)h=200;
+	p = window.open(_ext_core+'popup_imgview.php?id='+i+_ext_ref, 'name', 'width='+w+',height='+h);
+	if (window.focus) p.focus();
+}
+
 
 
 

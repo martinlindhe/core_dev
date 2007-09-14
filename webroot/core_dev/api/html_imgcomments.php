@@ -1,7 +1,7 @@
 <?
-	require_once('find_config.php');
-
 	if (empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
+
+	require_once('find_config.php');
 
 	createXHTMLHeader();
 ?>

@@ -8,7 +8,13 @@
 		global $files, $config;
 		if (!is_numeric($_id)) return false;
 
-		return '<img src="'.$config['core_web_root'].'api/file.php?id='.$_id.'&amp;w='.$files->thumb_default_width.'&amp;h='.$files->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
+		$str = '';
+
+		$str .= '<a href="#" onclick="popup_imgview('.$_id.')">';
+		$str .= '<img src="'.$config['core_web_root'].'api/file.php?id='.$_id.'&amp;w='.$files->thumb_default_width.'&amp;h='.$files->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
+		$str .= '</a>';
+
+		return $str;
 	}
 
 	function makeImageLink($_id, $_title = '')

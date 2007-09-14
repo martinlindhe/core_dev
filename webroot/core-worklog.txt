@@ -213,6 +213,7 @@ X = hi prio task
 	- files class: reworked file upload code. now uses "file" magic command to get a mimetype, ignoring client-supplied mimetypes.
 		this makes mimetype field in tblFiles much more reliable
 	- core gfx: new gfx for arrows up,down,left,right + grayed
+	- core js: added popup_imgview() function + corresponding api/popup_imgview.php for detached image viewer & "manipulator"
 
 2007.09.14:
 	- process: uploading files, enquing & processing of uploaded files works
