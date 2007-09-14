@@ -3,6 +3,8 @@
 		- ta bort uppladdade filer
 		- använd mencoder för audio med
 		- video kommandon för konvertering till .3gp och till .wmv
+		- känn av video upplösning, codec & audio info. visa i $files->showFileInfo
+		- kunna enqueue video resize. välj stereo/mono, fps
 
 	core/gör snart:
 		* fixa till admin todo lists. gör generell todo list? porta från cms...
@@ -205,6 +207,9 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.09.15:
+	- process: added queue url for downloading, so you can add a link to media resource (video, torrent, youtube link) that is later processed
+
 2007.09.14:
 	- process: uploading files, enquing & processing of uploaded files works
 	- process: image format conversion (gif,jpg,png) & audio (wma,mp3,ogg) conversion added

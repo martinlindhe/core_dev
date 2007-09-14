@@ -29,6 +29,7 @@
 	if ($session->id) {
 		$menu = array(
 			'http_upload.php' => 'Upload file',
+			'http_download.php' => 'Request a fetch',
 			'?logout' => 'Logout');
 	} else {
 		$menu = array('?login' => 'Log in');

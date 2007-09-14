@@ -148,6 +148,26 @@
 				$files->updateClone($newId, $job['orderParams']);
 				break;
 
+			case PROCESSFETCH_FORM:
+				echo 'FETCH RESOURCE FROM URL:<br/>';
+				echo $job['orderParams'].'<br/>';
+
+				$fileName = basename($job['orderParams']); //extract filename part of url
+				echo 'Using filename '.$fileName.'<br/>';
+				
+				$exec_start = microtime(true); //count download time
+				//fixme: isURL() check
+				$data = file_get_contents($job['orderParams']);
+				
+				//echo $data;
+	
+				$fileMime = 'xxx';	//fixme! parse server headers from the HTTP GET
+				echo 'Using mimetype '.$fileMime.'<br/>';
+				
+				$exec_time = microtime(true) - $time_start;
+				$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, $session->id, $fileName, $fileMime, $data);
+				break;
+
 			default:
 				echo 'unknown ordertype: '.$job['orderType'].'<br/>';
 				die;
@@ -157,5 +177,7 @@
 		$q = 'UPDATE tblProcessQueue SET orderCompleted=1,timeCompleted=NOW(),timeExec="'.$exec_time.'" WHERE entryId='.$job['entryId'];
 		$db->update($q);
 	}
+	
+	//include('design_head.php'); $db->showProfile();
 
 ?>

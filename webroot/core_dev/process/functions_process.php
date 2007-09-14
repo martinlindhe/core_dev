@@ -34,10 +34,12 @@
 	*/
 	define('PROCESSUPLOAD_FORM',	1);	//Upload thru HTTP POST form
 	define('PROCESSUPLOAD_SOAP',	2);	//fixme: use
-	define('PROCESSUPLOAD_GET',	3);	//fixme: use
+	define('PROCESSUPLOAD_GET',		3);	//fixme: use
 	define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
 	define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
 	define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding/converting to another image format
+
+	define('PROCESSFETCH_FORM',					20);	//Ask the server to download remote media. Parameter is URL
 
 	//event types
 	define('EVENT_PROCESS',	1);	//event from the process server
@@ -49,15 +51,23 @@
 
 		switch ($_type) {
 			case PROCESSUPLOAD_FORM:
-				//handle HTTP post file upload
+				//handle HTTP post file upload. is not enqueued
 				//	$param is the $_FILES[idx] array
 
+				$exec_start = microtime(true);	//dont count the actual upload time, just the process time
 				$newFileId = $files->handleUpload($param, FILETYPE_PROCESS, $session->id, PROCESSUPLOAD_FORM);
 
+				/*
 				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$newFileId.'",createdBy='.$session->id.',timeCreated=NOW()';
 				$db->insert($q);
+				*/
 
 				$files->checksums($newFileId);	//force generation of file checksums
+
+				$exec_time = microtime(true) - $exec_start;
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',fileId='.$newFileId.',orderCompleted=1,orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
+				$db->insert($q);
+
 				return $newFileId;
 
 			case PROCESSQUEUE_AUDIO_RECODE:
@@ -69,10 +79,21 @@
 				//fixme: kolla om dest format finns i $dst_audio
 				if (!is_numeric($param)) die;
 
+				/*
 				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$db->escape($param.'_'.$param2).'",createdBy='.$session->id.',timeCreated=NOW()';
 				$db->insert($q);
+				*/
 
 				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',fileId='.$param.',orderCompleted=0,orderParams="'.$db->escape($param2).'"';
+				$db->insert($q);
+				break;
+
+			case PROCESSFETCH_FORM:
+				//enqueue url for download and processing
+				//	$param = url
+				// downloads media files, torrents & youtube links
+
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),ownerId='.$session->id.',orderType='.$_type.',fileId=0,orderCompleted=0,orderParams="'.$db->escape($param).'"';
 				$db->insert($q);
 				break;
 

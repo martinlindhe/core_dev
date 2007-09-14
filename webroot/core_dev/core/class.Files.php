@@ -25,6 +25,12 @@ define('FILETYPE_FORUM',					7);	/* File is attached to a forum post */
 define('FILETYPE_PROCESS',				8);	/* File uploaded to be processed */
 define('FILETYPE_PROCESS_CLONE',	9);	/* a clone entry for a process file. */
 
+//for future use:
+define('MEDIATYPE_IMAGE',			1);
+define('MEDIATYPE_VIDEO',			2);
+define('MEDIATYPE_AUDIO',			3);
+define('MEDIATYPE_DOCUMENT',	4);
+
 class Files
 {
 	/* Non configurable, shouldnt be needed to be changed */
@@ -54,6 +60,26 @@ class Files
 		'text/plain',					//normal text file
 		'application/msword',	//Microsoft .doc file
 		'application/pdf'			//Adobe .pdf file
+	);
+
+	//file extension to mimetype & media type mapping. WIP! not used yet. should replace the above mimetypestuff eventually
+	public $media_types = array(
+		'png' => array(MEDIATYPE_IMAGE, 'image/png', 'PNG Image'),
+		'jpg' => array(MEDIATYPE_IMAGE, 'image/jpeg', 'JPEG Image'),
+		'gif' => array(MEDIATYPE_IMAGE, 'image/gif', 'GIF Image'),
+
+		'wmv' => array(MEDIATYPE_VIDEO, 'video/x-ms-wmv', 'Windows Media Video'),
+		'avi' => array(MEDIATYPE_VIDEO, 'video/avi', 'DivX 3 Video'),
+		'mpg' => array(MEDIATYPE_VIDEO, 'video/mpeg', 'MPEG-2 Video'),
+		'3gp' => array(MEDIATYPE_VIDEO, 'video/3gpp', '3GP Video (cellphones)'),
+
+		'wma' => array(MEDIATYPE_AUDIO, 'audio/x-ms-wma', 'Windows Media Audio'),
+		'mp3' => array(MEDIATYPE_AUDIO, 'audio/x-mpeg', 'MP3 Audio'),
+		'ogg' => array(MEDIATYPE_AUDIO, 'application/x-ogg', 'OGG Audio'),
+
+		'txt' => array(MEDIATYPE_DOCUMENT, 'text/plain', 'Text Document'),
+		'doc' => array(MEDIATYPE_DOCUMENT, 'application/msword', 'Word Document'),
+		'pdf' => array(MEDIATYPE_DOCUMENT, 'application/pdf', 'PDF Document')
 	);
 
 	/* User configurable settings */
@@ -400,13 +426,7 @@ class Files
 			return false;
 		}
 
-		$enc_filename = basename(strip_tags($FileData['name']));
-		$enc_mimetype = strip_tags($FileData['type']);
-
-		$filesize = filesize($FileData['tmp_name']);
-		//fixme: flytta inserten till handleImageUpload / handleGeneralUpload istället. då slipper vi göra en UPDATE vid resizad image upload
-  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($enc_filename).'",fileSize='.$filesize.',fileMime="'.$db->escape($enc_mimetype).'", ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
-  	$fileId = $db->insert($q);
+		$fileId = $this->addFileEntry($fileType, $categoryId, $ownerId, $FileData['name'], $FileData['type']);
 
 		//Identify and handle various types of files
 		if (in_array($FileData['type'], $this->image_mime_types)) {
@@ -418,6 +438,30 @@ class Files
 		}
 
 		return $fileId;
+	}
+
+	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $fileMime, $content = '')
+	{
+		global $db, $session;
+		if (!is_numeric($fileType) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
+
+		$fileSize = filesize($fileName);
+		$fileName = basename(strip_tags($fileName));
+		$fileMime = strip_tags($fileMime);
+
+  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",fileMime="'.$db->escape($fileMime).'", ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+		$newFileId = $db->insert($q);
+
+		if ($content) {
+			echo 'writing data to '.$this->upload_dir.$newFileId;
+			file_put_contents($this->upload_dir.$newFileId, $content);
+			$fileSize = filesize($this->upload_dir.$newFileId);
+		}
+		$q = 'UPDATE tblFiles SET fileSize='.$fileSize.' WHERE fileId='.$newFileId;
+		$db->update($q);
+
+
+  	return $newFileId;
 	}
 
 	function handleGeneralUpload($fileId, $FileData)
@@ -856,7 +900,7 @@ class Files
 	function getFileInfo($_id)
 	{
 		global $db;
-		if (!is_numeric($_id)) return false;
+		if (!is_numeric($_id) || !$_id) return false;
 
 		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
 					'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
