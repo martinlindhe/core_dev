@@ -84,6 +84,41 @@ function empty_element(e)
 	while (e.hasChildNodes()) e.removeChild(e.firstChild);
 }
 
+//checks if image n has been loaded, waits until it is done otherwise
+function image_loaded(n)
+{
+	var e = document.getElementById(n);
+
+	trace('image_loaded('+n+') w:'+e.width+',h:'+e.height);
+
+	//IE. fixme:untested
+	if (!e.complete) {
+		return false;
+	}
+
+	//Firefox
+	if (typeof e.naturalWidth != "undefined" && e.naturalWidth == 0) {
+		return false;
+	}
+
+	return true;
+}
+
+//resizes current window to the same size as image n
+function resize_wnd_to_img(n)
+{
+	var e = document.getElementById(n);
+	trace('resize_wnd_to_img('+n+') w:'+e.width+',h:'+e.height);
+	var NS = (navigator.appName=="Netscape")?true:false; 
+
+	iWidth = (NS)?window.innerWidth:document.body.clientWidth;
+	iHeight = (NS)?window.innerHeight:document.body.clientHeight;
+	iWidth = e.width - iWidth;
+	iHeight = e.height - iHeight;
+	window.resizeBy(iWidth, iHeight);
+	self.focus();
+}
+
 
 var zoomed_id = 0;
 //closeup view of image file

@@ -3,7 +3,6 @@
 	html_imageview.php - popupwindow that displays a image resource
 
 	todo:
-		* auto-resize window on load complete for proper image size
 		* display ajax loading wheel in place of image
 		* hover mouse over image to highlight controls: cut, resize, rotate, convert, etc
 */
@@ -14,5 +13,8 @@
 
 	createXHTMLHeader();
 
-	echo '<img src="'.$config['core_web_root'].'api/file.php?id='.$fileId.getProjectPath().'"/>';
+	echo '<img id="popup_img" src="'.$config['core_web_root'].'api/file.php?id='.$fileId.getProjectPath().'"/>';
 ?>
+<script type="text/javascript">
+if (image_loaded('popup_img')) resize_wnd_to_img('popup_img');
+</script>

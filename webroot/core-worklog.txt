@@ -210,6 +210,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.09.16:
+	- imgview popup: auto-resizes window on load complete for proper image size
+
+
 2007.09.15:
 	- process: added queue url for downloading, so you can add a link to media resource (video, torrent, youtube link) that is later processed
 	- files class: reworked file upload code. now uses "file" magic command to get a mimetype, ignoring client-supplied mimetypes.
