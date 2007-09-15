@@ -31,9 +31,6 @@
 
 				switch ($job['orderParams']) {
 					case 'ogg':
-						//detta borde funka, men det gör det inte. funkar om outifle har extension .ogg. -acodec ogg/vorbis ignoreras
-						//$c = 'ffmpeg -i "'.$files->upload_dir.$job['resourceId'].'" outfile  -acodec ogg';
-
 						//så istället tvingas vi göra det i 2 steg:
 						$dst_file = 'tmpfile.ogg';
 						$dst_mime = 'application/x-ogg';
@@ -49,6 +46,10 @@
 						$dst_file = 'tmpfile.mp3';
 						$dst_mime = 'audio/x-mpeg';
 						$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
+
+						//mencoder kan bara konvertera _till_ mp3?
+						//$c = 'mencoder '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -oac mp3lame';
+						//$c = 'mencoder '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -oac lavc -lavopts acodec=libmp3lame';
 						break;
 					default:
 						die('unknown destination audio format: '.$job['orderParams']);
@@ -68,6 +69,7 @@
 				$newId = $files->cloneEntry($job['fileId']);
 
 				//renama $dst_file till fileId för nya file entry
+				//fixme: behöver inget rename-steg. kan göra det i ett steg!
 				rename($dst_file, $files->upload_dir.$newId);
 
 				//update cloned entry with new file size and such
@@ -85,19 +87,31 @@
 				//fixme: kolla om filen finns på disk innan vi fortsätter
 				echo 'Recoding source video of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
 
+				//skapa nytt tblFiles entry. länka det till orginal-filen
+				$newId = $files->cloneEntry($job['fileId']);
+
 				switch ($job['orderParams']) {
 					case 'video/avi':
 						//default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
-						$dst_file = 'tmpfile.avi';
 						$dst_mime = 'video/avi';
-						$c = 'e:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
+						$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
 						break;
 
 					case 'video/mpeg':
 						//mpeg2 video, should be playable anywhere
-						$dst_file = 'tmpfile.mpg';
 						$dst_mime = 'video/mpeg';
-						$c = 'e:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
+						$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
+						break;
+
+					case 'video/x-ms-wmv':
+						//Windows Media Video, version 2 (AKA WMV8)
+						$dst_mime = 'video/x-ms-wmv';
+						$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=wmv2';
+						break;
+
+					case 'video/flash':
+						$dst_mime = 'video/flash';
+						$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=flv';
 						break;
 
 					default:
@@ -109,16 +123,10 @@
 				echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 				//todo: store execution time
 
-				if (!file_exists($dst_file)) {
-					echo '<b>FAILED - dst file '.$dst_file.' dont exist!<br/>';
+				if (!file_exists($files->upload_dir.$newId)) {
+					echo '<b>FAILED - dst file '.$files->upload_dir.$newId.' dont exist!<br/>';
 					continue;
 				}
-
-				//skapa nytt tblFiles entry. länka det till orginal-filen
-				$newId = $files->cloneEntry($job['fileId']);
-
-				//renama $dst_file till fileId för nya file entry
-				rename($dst_file, $files->upload_dir.$newId);
 
 				//update cloned entry with new file size and such
 				$files->updateClone($newId, $dst_mime);

@@ -121,12 +121,15 @@
 	}
 
 	/* Returns the oldest work orders still active for processing */
-	function getProcessQueue($_limit = 10)
+	function getProcessQueue($_limit = 10, $completed = false)
 	{
 		global $db;
-		if (!is_numeric($_limit)) return false;
+		if (!is_numeric($_limit) || !is_bool($completed)) return false;
 
-		$q = 'SELECT * FROM tblProcessQueue WHERE orderCompleted=0 ORDER BY timeCreated ASC';
+		if ($completed) $cnd = 'orderCompleted=1';
+		else $cnd = 'orderCompleted=0';
+		
+		$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated DESC';
 		if ($_limit) $q .= ' LIMIT '.$_limit;
 		return $db->getArray($q);
 	}

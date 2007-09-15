@@ -42,6 +42,7 @@
 		'video/mpeg'			=>	'MPEG-2 video',
 		'video/avi'				=>	'DivX 3 video',
 		'video/x-ms-wmv'	=>	'Windows Media Video',
+		'video/flash'			=>	'Flash Video',
 		'video/3gpp'			=>	'.3gp video file'
 	);
 

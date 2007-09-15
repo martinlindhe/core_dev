@@ -5,7 +5,7 @@
 
 	wiki('ProcessShowQueue');
 
-	$list = getProcessQueue(50);
+	$list = getProcessQueue(50, isset($_GET['completed']));
 	if (!empty($list)) {
 		foreach ($list as $row) {
 			echo '<div class="item">';
@@ -38,16 +38,27 @@
 
 			$file = $files->getFileInfo($row['fileId']);
 			if ($file) {
-				echo 'fileName: '.$file['fileName'].'<br/>';
-				echo 'fileMime: '.$file['fileMime'].'<br/>';
-				echo 'fileSize: '.$file['fileSize'].'<br/>';
-				echo 'sha1: '.$files->sha1($row['fileId']);
+				echo '<b>Source file:</b><br/>';
+				echo $file['fileName'].' ('.$file['fileMime'].')<br/>';
+				echo 'size: '.$file['fileSize'].'<br/>';
+				echo 'sha1: '.$files->sha1($row['fileId']).'<br/>';
+			}
+
+			if ($row['orderCompleted']) {
+				echo '<b>Order completed</b><br/>';
+				echo 'Exec time: '.$row['timeExec'].'<br/>';
 			}
 
 			echo '</div>';
 		}
 	} else {
-		echo 'Queue is empty';
+		echo 'Queue is empty.<br/>';
+	}
+
+	if (!isset($_GET['completed'])) {
+		echo '<a href="?completed">Show completed queue items</a>';
+	} else {
+		echo '<a href="?">Show pending queue items</a>';
 	}
 
 	require('design_foot.php');
