@@ -1,4 +1,6 @@
 <?
+	set_time_limit(60*10);	//10 minute max, for big uploads
+
 	require_once('config.php');
 
 	require('design_head.php');

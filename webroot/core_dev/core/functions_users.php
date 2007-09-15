@@ -2,6 +2,8 @@
 	require_once('atom_settings.php');
 	require_once('atom_feedback.php');	//for user abuse reporting feature
 
+	require_once('functions_messages.php');	//for sendMessage()
+
 	$config['user']['log_visitors'] = true;	//log each visit on users personal page from another user
 
 	/* Looks up a username by id */

@@ -1,7 +1,7 @@
 <?
 	/*
 		IMPORTANT: for this to work, the sql user need to have LOCK & UNLOCK privilegies
-		
+
 		for image conversions I am using: ImageMagick-6.3.4-0-Q16-windows-dll.exe
 				in ubuntu: sudo apt-get install imagemagick  (v6.2.4 in ubuntu 7.4)
 
@@ -40,8 +40,9 @@
 	define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding/converting to another image format
 
 	define('PROCESSFETCH_FORM',					20);	//Ask the server to download remote media. Parameter is URL
-
 	define('PROCESSPARSE_AND_FETCH',		21);	//Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
+
+	define('PROCESSMONITOR_SERVER',			30);	//Monitors server uptime
 
 	//event types
 	define('EVENT_PROCESS',	1);	//event from the process server
@@ -99,6 +100,13 @@
 				$db->insert($q);
 				break;
 
+			case PROCESSMONITOR_SERVER:
+				//enqueues a server to be monitored
+				// $param = serialized params
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId=0,orderCompleted=0,orderParams="'.$db->escape($param).'"';
+				$db->insert($q);
+				break;
+
 			case PROCESSPARSE_AND_FETCH:
 				//parse this resource for further media resources and fetches them
 				// $param = fileId
@@ -128,7 +136,7 @@
 
 		if ($completed) $cnd = 'orderCompleted=1';
 		else $cnd = 'orderCompleted=0';
-		
+
 		$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated DESC';
 		if ($_limit) $q .= ' LIMIT '.$_limit;
 		return $db->getArray($q);
@@ -163,12 +171,12 @@
 			foreach ($list as $row) {
 				echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.nameLink($row['creatorId']);
 				echo ' type='.$row['orderType'].', params='.$row['orderParams'];
-				echo '</h3>';			
+				echo '</h3>';
 			}
 		} else {
 			echo '<h1>No queued action</h1>';
 		}
-		
+
 		echo 'Process log:<br/>';
 		$q = 'SELECT * FROM tblProcessQueue WHERE fileId='.$_id;
 		$list = $db->getArray($q);
@@ -200,6 +208,233 @@
 		$files->showFileInfo($_id);
 	}
 
+	function processQueue()
+	{
+		global $config;
+
+		$list = getProcessQueue($config['process']['process_limit']);
+
+		foreach ($list as $job) {
+			d($job);
+			switch ($job['orderType'])
+			{
+				case PROCESSQUEUE_AUDIO_RECODE:
+					//Recodes source audio file into orderParams destination format
+
+					$dst_audio_ok = array('ogg', 'wma', 'mp3');	//fixme: config item or $files->var
+					if (!in_array($job['orderParams'], $dst_audio_ok)) {
+						echo 'error: invalid mime type<br/>';
+						$session->log('Process queue error - audio conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
+						break;
+					}
+
+					$file = $files->getFileInfo($job['fileId']);
+					if (!$file) {
+						echo 'Error: no fileentry existed for fileId '.$job['fileId'];
+						break;
+					}
+
+					//fixme: kolla om filen finns på disk innan vi fortsätter
+					echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
+
+					switch ($job['orderParams']) {
+						case 'ogg':
+							//så istället tvingas vi göra det i 2 steg:
+							$dst_file = 'tmpfile.ogg';
+							$dst_mime = 'application/x-ogg';
+							$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
+							break;
+						case 'wma':
+							$dst_file = 'tmpfile.wma';
+							$dst_mime = 'audio/x-ms-wma';
+							$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
+							break;
+						case 'mp3':
+							//fixme: source & destination should not be able to be the same!
+							$dst_file = 'tmpfile.mp3';
+							$dst_mime = 'audio/x-mpeg';
+							$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
+
+							//mencoder kan bara konvertera _till_ mp3?
+							//$c = 'mencoder '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -oac mp3lame';
+							//$c = 'mencoder '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -oac lavc -lavopts acodec=libmp3lame';
+							break;
+						default:
+							die('unknown destination audio format: '.$job['orderParams']);
+					}
+
+					echo 'Executing: '.$c.'<br/>';
+					$exec_time = exectime($c);
+
+					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
+
+					if (!file_exists($dst_file)) {
+						echo '<b>FAILED - dst file '.$dst_file.' dont exist!<br/>';
+						continue;
+					}
+
+					//skapa nytt tblFiles entry. länka det till orginal-filen
+					$newId = $files->cloneEntry($job['fileId']);
+
+					//renama $dst_file till fileId för nya file entry
+					//fixme: behöver inget rename-steg. kan göra det i ett steg!
+					rename($dst_file, $files->upload_dir.$newId);
+
+					//update cloned entry with new file size and such
+					$files->updateClone($newId, $dst_mime);
+					markQueueCompleted($job['entryId'], $exec_time);
+					break;
+
+				case PROCESSQUEUE_VIDEO_RECODE:
+					echo 'VIDEO RECODE<br/>';
+					$file = $files->getFileInfo($job['fileId']);
+					if (!$file) {
+						echo 'Error: no fileentry existed for fileId '.$job['fileId'];
+						break;
+					}
+
+					//fixme: kolla om filen finns på disk innan vi fortsätter
+					echo 'Recoding source video of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
+
+					//skapa nytt tblFiles entry. länka det till orginal-filen
+					$newId = $files->cloneEntry($job['fileId']);
+
+					switch ($job['orderParams']) {
+						case 'video/avi':
+							//default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
+							$dst_mime = 'video/avi';
+							$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
+							break;
+
+						case 'video/mpeg':
+							//mpeg2 video, should be playable anywhere
+							$dst_mime = 'video/mpeg';
+							$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
+							break;
+
+						case 'video/x-ms-wmv':
+							//Windows Media Video, version 2 (AKA WMV8)
+							$dst_mime = 'video/x-ms-wmv';
+							$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=wmv2';
+							break;
+
+						case 'video/flash':
+							$dst_mime = 'video/flash';
+							$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=flv';
+							break;
+
+						default:
+							die('unknown destination video format: '.$job['orderParams']);
+					}
+
+					echo 'Executing: '.$c.'<br/>';
+					$exec_time = exectime($c);
+					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
+					//todo: store execution time
+
+					if (!file_exists($files->upload_dir.$newId)) {
+						echo '<b>FAILED - dst file '.$files->upload_dir.$newId.' dont exist!<br/>';
+						continue;
+					}
+
+					//update cloned entry with new file size and such
+					$files->updateClone($newId, $dst_mime);
+					markQueueCompleted($job['entryId'], $exec_time);
+					break;
+
+				case PROCESSQUEUE_IMAGE_RECODE:
+					echo 'IMAGE RECODE<br/>';
+					if (!in_array($job['orderParams'], $files->image_mime_types)) {
+						echo 'error: invalid mime type<br/>';
+						$session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
+						break;
+					}
+					$newId = $files->cloneEntry($job['fileId']);
+
+					$exec_start = microtime(true);
+					$check = $files->convertImage($files->upload_dir.$job['fileId'], $files->upload_dir.$newId, $job['orderParams']);
+					$exec_time = microtime(true) - $exec_start;
+					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
+
+					if (!$check) {
+						$session->log('#'.$job['entryId'].': IMAGE CONVERT failed! format='.$job['orderParams'], LOGLEVEL_ERROR);
+						echo 'Error: Image convert failed!<br/>';
+						die;
+					}
+
+					//update cloned entry with new file size and such
+					$files->updateClone($newId, $job['orderParams']);
+					markQueueCompleted($job['entryId'], $exec_time);
+					break;
+
+				case PROCESSFETCH_FORM:
+					echo 'FETCH RESOURCE FROM URL: '.$job['orderParams'].'<br/>';
+
+					$fileName = basename($job['orderParams']); //extract filename part of url
+
+					$exec_start = microtime(true); //count download time
+					//fixme: isURL() check
+					$data = file_get_contents($job['orderParams']);
+
+					//echo $data;
+
+					$exec_time = microtime(true) - $time_start;
+					$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName, $data);
+
+					//todo: process html document for media links if it is a html document
+
+					markQueueCompleted($job['entryId'], $exec_time);
+					break;
+
+				case PROCESSMONITOR_SERVER:
+					echo 'MONITOR SERVER<br/>';
+					$d = unserialize($job['orderParams']);
+					switch ($d['type']) {
+						case 'ping':
+							echo 'Pinging '.$d['adr'].' ... TODO<br/>';
+							break;
+						default:
+							die('unknown server type '.$d['type']);
+					}
+					break;
+
+				default:
+					echo 'unknown ordertype: '.$job['orderType'].'<br/>';
+					die;
+			}
+
+		}
+	}
+
+	function markQueueCompleted($entryId, $exec_time)
+	{
+		global $db;
+		if (!is_numeric($entryId) || !is_float($exec_time)) return false;
+
+		$q = 'UPDATE tblProcessQueue SET orderCompleted=1,timeCompleted=NOW(),timeExec="'.$exec_time.'" WHERE entryId='.$entryId;
+		$db->update($q);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -218,6 +453,7 @@
 */
 
 	//adds a item on the "todo" queue of the process server
+/*
 	function addWorkOrder($_type, $_params)
 	{
 		global $db, $session, $WORK_OPRDER_TYPES;
@@ -322,4 +558,5 @@
 		//Release table lock
 		$db->query('UNLOCK TABLES');
 	}
+*/
 ?>
