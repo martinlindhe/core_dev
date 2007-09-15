@@ -180,6 +180,10 @@ class Files
 		}
 		$mime = $this->lookupMimeType($this->upload_dir.$fileId);
 
+		//parse result such as: text/plain; charset=us-ascii
+		$arr = explode(';', $mime);
+		$mime = $arr[0];
+
 		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime).'",fileSize='.$size.' WHERE fileId='.$fileId;
 		return $db->update($q);
 	}
@@ -964,9 +968,7 @@ class Files
 		echo 'Uploader: '.htmlentities($file['uploaderName']).'<br/>';
 		echo 'At: '.$file['timeUploaded'].' ('.ago($file['timeUploaded']).')<br/>';
 		if ($this->count_file_views) echo 'Downloaded: '.$file['cnt'].' times<br/>';
-		if ($session->isAdmin) {
-			echo 'Mime type: '.$file['fileMime'].'<br/>';
-		}
+		echo 'Mime type: '.$file['fileMime'].'<br/>';
 
 		if (in_array($file['fileMime'], $this->image_mime_types))
 		{

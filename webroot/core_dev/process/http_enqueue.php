@@ -105,7 +105,7 @@
 		echo '<input type="submit" value="Continue"/>';
 		echo '</form><br/>';
 
-	} if ($data['fileMime'] == 'application/x-bittorrent') {
+	} else if ($data['fileMime'] == 'application/x-bittorrent') {
 		//bittorrent download!
 		echo '<h1>bittorent download</h1>';
 
@@ -114,6 +114,15 @@
 		echo '<a href="?id='.$fileId.'&process">Yes</a><br/><br/>';
 
 		echo '<a href="">No</a>';
+	} else if ($data['fileMime'] == 'text/html') {
+		//extract video links from the html
+		echo '<h1>extract videos from html</h1>';
+		
+		echo 'todo: show found video links from html and allow user to choose which ones to queue for download';
+		
+		$arr = extract_filenames(file_get_contents($files->upload_dir.$fileId));
+		d($arr);
+
 	} else {
 		echo 'Dont know how to handle mimetype: '.$data['fileMime'];
 

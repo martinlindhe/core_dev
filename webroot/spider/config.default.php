@@ -15,9 +15,8 @@
 	require_once('class.Files.php');
 	require_once('functions_wiki.php');
 	require_once('functions_news.php');
-	restore_include_path();
-
 	require_once('functions_spider.php');
+	restore_include_path();
 
 	$config['debug'] = true;
 

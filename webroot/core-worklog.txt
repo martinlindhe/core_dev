@@ -6,6 +6,8 @@
 		- känn av video upplösning, codec & audio info. visa i $files->showFileInfo
 		- kunna enqueue video resize. välj stereo/mono, fps
 		- ev. använd php_fileinfo ext för file magic istället för "file" kommando, http://se.php.net/fileinfo, http://pecl4win.php.net/ext.php/
+		- anropa extern "torrent download" service som kör ett script för att hantera filer & uppdatera status när den e klar
+		- scanna filer med ClamAV
 
 	core/gör snart:
 		* fixa till admin todo lists. gör generell todo list? porta från cms...

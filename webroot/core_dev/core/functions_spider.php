@@ -79,19 +79,17 @@
 				if ($param_pos2 !== false) {
 					//Det finns ytterligare parametrar efter denna
 					$param_value = substr($str, $param_pos1+1, $param_pos2-$param_pos1-1);
-					$arr[$param_name] = $param_value;
 					$str = trim(substr($str, $param_pos2+1));
 
-					//echo 'nonquoted: '.$param_name.' = '.$param_value.'<br>';
 					//echo 'resterande: '.$str.'<br>';
 				} else {
 					//Detta är sista parametern
 					$param_value = substr($str, $param_pos1+1);
-					$arr[$param_name] = $param_value;
-					//echo 'noquoted: '.$param_name.' = '.$param_value.'<br>';
 
 					$str = '';
 				}
+				//echo 'nonquoted: '.$param_name.' = '.$param_value.'<br>';
+				$arr[$param_name] = $param_value;
 			}
 		} while ($str);
 
@@ -154,7 +152,6 @@
 
 		$files_found = array();
 
-		//Upprepar "  " -> " " tills strängen inte ändras
 		do {
 			$org_data = $data;
 			$data = str_replace("  ", " ", $data);
@@ -162,7 +159,6 @@
 
 		//Parsa taggar, identifiera relevanta taggar
 
-		//echo '<pre>';
 		do {
 			$pos1 = strpos($data, '<');					//Find first opening bracket
 			$pos2 = strpos($data, '>', $pos1);	//Find first closing bracket occuring after $pos1

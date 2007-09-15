@@ -149,11 +149,9 @@
 				break;
 
 			case PROCESSFETCH_FORM:
-				echo 'FETCH RESOURCE FROM URL:<br/>';
-				echo $job['orderParams'].'<br/>';
+				echo 'FETCH RESOURCE FROM URL: '.$job['orderParams'].'<br/>';
 
 				$fileName = basename($job['orderParams']); //extract filename part of url
-				echo 'Using filename '.$fileName.'<br/>';
 				
 				$exec_start = microtime(true); //count download time
 				//fixme: isURL() check
