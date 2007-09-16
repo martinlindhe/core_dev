@@ -1,3 +1,11 @@
+2007.09.09
+	- bot_handleassist.inc:
+		* reagerar på BARD mezz nu med
+	- krust.dll:
+		* visar inte SUMMER som missing buff om cold resist >= 615, min resist cap (todo: läs resist cap dynamiskt)
+	- mq2hud.ini:
+		* la till kod för att visa de mod2 effekter som ej är maxade
+
 2007.08.12
 	- bot_spells.inc:
 		* räknar average hp på gruppen för att avgöra om group heal ska kastas (Moonshadow)

@@ -172,6 +172,9 @@ Sub HealCallback
 | Returns 1 if buff was refreshed, else returns 0
 Sub RefreshBuff(string Name, int Duration)
 
+	| dont cast buffs if i am naked
+	/if (!${InvSlot[chest].Item.ID}) /return 0
+
 	/declare BuffName string local
 	/declare i int local 0
 	/declare freeslot int local 0
@@ -309,7 +312,7 @@ Sub HandleGroupHeal(int PctHPs)
 		/declare n int local 0
 
 		/for i 0 to 5
-			/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 150) && ${Group.Member[${i}].Type.NotEqual["Corpse"]} && ${Group.Member[${i}].State.NotEqual["DEAD"]} && ${Group.Member[${i}].Class.Name.NotEqual["Warrior"]}) {
+			/if (${Group.Member[${i}].ID} && (${Group.Member[${i}].Distance} < 150) && ${Group.Member[${i}].Type.NotEqual["Corpse"]} && ${Group.Member[${i}].State.NotEqual["DEAD"]} && ${Group.Member[${i}].Class.Name.NotEqual["Warrior"]} && ${Group.Member[${i}].Class.Name.NotEqual["Shadow Knight"]} && ${Group.Member[${i}].Class.Name.NotEqual["Paladin"]}) {
 				/if (${Group.Member[${i}].PctHPs} <= 98) {
 					| only count non-100% ppl, to avoid logic from deciding a group heal would be best to cast on a single-damaged player in group
 					/varcalc x ${x}+${Group.Member[${i}].PctHPs}

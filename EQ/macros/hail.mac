@@ -15,7 +15,7 @@ Sub Main
 		/target npc Zhubis the Griffin Tamer
 		/delay 2s ${Target.ID}
 		/say enter ashengate
-		/return
+		/goto :Hailed
 	}
 
 	/if (${Zone.ShortName.Equal["Direwind"]} && ${SpawnCount[npc Jenray radius 30]}) {
@@ -24,7 +24,7 @@ Sub Main
 		/target npc Jenray
 		/delay 2s ${Target.ID}
 		/say enter ashengate
-		/return
+		/goto :Hailed
 	}
 
 	/if (${Zone.ShortName.Equal["Direwind"]} && ${SpawnCount[npc Drizzlorn radius 30]}) {
@@ -32,7 +32,7 @@ Sub Main
 		/target npc Drizzlorn
 		/delay 2s ${Target.ID}
 		/say enter ashengate
-		/return
+		/goto :Hailed
 	}
 
 	/if (${Zone.ShortName.Equal["Direwind"]} && ${SpawnCount[npc Scout Keshik radius 30]}) {
@@ -40,7 +40,7 @@ Sub Main
 		/target npc Scout Keshik
 		/delay 2s ${Target.ID}
 		/say summon a griffon
-		/return
+		/goto :Hailed
 	}
 
 	/if (${Zone.ShortName.Equal["Valdeholm"]} && ${SpawnCount[npc Wraithguard Sergeant Thavin radius 30]}) {
@@ -52,7 +52,7 @@ Sub Main
 		| FC2 instance! fixme: detect what instance we are currently in
 		/delay 2s ${Target.ID}
 		/say haesgrin
-		/return
+		/goto :Hailed
 	}
 
 	| katta - Solteris access group instances
@@ -61,8 +61,13 @@ Sub Main
 		/target npc Tactician Sodut
 		/delay 2s ${Target.ID}
 		/say finished
-		/return
+		/goto :Hailed
 	}
 
 	/echo Didn't see anyone to hail that i recognize
+	/return
+
+:Hailed
+	/echo Found someone to hail, so waiting 5 seconds
+	/delay 5s
 /return

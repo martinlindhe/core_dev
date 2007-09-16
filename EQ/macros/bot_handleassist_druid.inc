@@ -36,7 +36,7 @@
 #define SNARE_PERCENT				99
 #define DEBUFF_PERCENT			97
 #define STARTNUKE_PERCENT		95
-#define LOM_PERCENT					30					| mana % limit, dont nuke below this limit
+#define LOM_PERCENT					10					| mana % limit, dont nuke below this limit
 
 
 | Will use the first one if memorized when script starts, else the other

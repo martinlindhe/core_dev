@@ -55,6 +55,10 @@ Sub Event_HANDLE_Summoned(string Line)
 
 | ENC/74 Wake of Subdual
 #event HANDLE_MobMezzed "#1# gazes happily into space."
+
+| BRD/74 Queen Eletyl's Screech
+#event HANDLE_MobMezzed "#1# falls unconscious."
+
 Sub Event_HANDLE_MobMezzed(string Line, string Name)
 	/if (${Spawn[${Name}].Type.Equal["NPC"]}) {
 		/call DebugMsg "${Name} [${Spawn[npc ${Name}].Class.ShortName}] IS MEZZED!!!!"
