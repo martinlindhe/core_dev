@@ -1,0 +1,711 @@
+<?xml version = "1.0"?>
+<XML ID = "EQInterfaceDefinitionLanguage">
+   <Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
+
+   <Button item = "DPS_ON">
+       <ScreenID>DPSButtonON</ScreenID>
+       <Font>1</Font>
+       <RelativePosition>true</RelativePosition>
+       <Location>
+         <X>10</X>
+         <Y>5</Y>
+       </Location>
+       <Size>
+         <CX>40</CX>
+         <CY>20</CY>
+       </Size>
+       <Style_Transparent>false</Style_Transparent>
+       <!--<TooltipReference/>-->
+       <Style_Checkbox>false</Style_Checkbox>
+       <!--<RadioGroup/>-->
+       <Text>ON</Text>
+       <TextColor>
+         <R>255</R>
+         <G>255</G>
+         <B>255</B>
+       </TextColor>
+      <ButtonDrawTemplate>
+         <Normal>A_BtnNormal</Normal>
+         <Pressed>A_BtnPressed</Pressed>
+         <Flyby>A_BtnFlyby</Flyby>
+         <Disabled>A_BtnDisabled</Disabled>
+         <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+      </ButtonDrawTemplate>
+   </Button>
+
+   <Button item = "DPS_OFF">
+       <ScreenID>DPSButtonOFF</ScreenID>
+       <Font>1</Font>
+       <RelativePosition>true</RelativePosition>
+       <Location>
+         <X>55</X>
+         <Y>5</Y>
+       </Location>
+       <Size>
+         <CX>40</CX>
+         <CY>20</CY>
+       </Size>
+       <Style_Transparent>false</Style_Transparent>
+       <!--<TooltipReference/>-->
+       <Style_Checkbox>false</Style_Checkbox>
+       <!--<RadioGroup/>-->
+       <Text>OFF</Text>
+       <TextColor>
+         <R>255</R>
+         <G>255</G>
+         <B>255</B>
+       </TextColor>
+      <ButtonDrawTemplate>
+         <Normal>A_BtnNormal</Normal>
+         <Pressed>A_BtnPressed</Pressed>
+         <Flyby>A_BtnFlyby</Flyby>
+         <Disabled>A_BtnDisabled</Disabled>
+         <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+      </ButtonDrawTemplate>
+   </Button>
+
+   <Button item = "DPS_RESET">
+       <ScreenID>DPSButtonRESET</ScreenID>
+       <Font>1</Font>
+       <RelativePosition>true</RelativePosition>
+       <Location>
+         <X>100</X>
+         <Y>5</Y>
+       </Location>
+       <Size>
+         <CX>55</CX>
+         <CY>20</CY>
+       </Size>
+       <Style_Transparent>false</Style_Transparent>
+       <!--<TooltipReference/>-->
+       <Style_Checkbox>false</Style_Checkbox>
+       <!--<RadioGroup/>-->
+       <Text>Reset</Text>
+       <TextColor>
+         <R>255</R>
+         <G>255</G>
+         <B>255</B>
+       </TextColor>
+      <ButtonDrawTemplate>
+         <Normal>A_BtnNormal</Normal>
+         <Pressed>A_BtnPressed</Pressed>
+         <Flyby>A_BtnFlyby</Flyby>
+         <Disabled>A_BtnDisabled</Disabled>
+         <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+      </ButtonDrawTemplate>
+   </Button>
+
+   <Button item = "DPS_CloseButton">
+      <ScreenID>CloseButton</ScreenID>
+      <!--<Font>3</Font>-->
+      <RelativePosition>true</RelativePosition>
+      <AutoStretch>false</AutoStretch>
+          <Location>
+            <X>160</X>
+            <Y>5</Y>
+          </Location>
+          <Size>
+            <CX>50</CX>
+            <CY>20</CY>
+          </Size>
+      <!--<ToolDPSReference/>-->
+      <Style_Checkbox>false</Style_Checkbox>
+      <Text>Close</Text>
+      <TextColor>
+            <R>255</R>
+            <G>255</G>
+            <B>255</B>
+      </TextColor>
+      <ButtonDrawTemplate>
+         <Normal>A_BtnNormal</Normal>
+         <Pressed>A_BtnPressed</Pressed>
+         <Flyby>A_BtnFlyby</Flyby>
+         <Disabled>A_BtnDisabled</Disabled>
+         <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+      </ButtonDrawTemplate>
+   </Button>
+
+   <!-- Label Version -->
+   <Label item="DPS_CHA">
+     <ScreenID>CHALabel</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps.Version}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>215</X>
+     <Y>5</Y>
+    </Location>
+    <Size>
+     <CX>100</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label Player dps -->
+   <Label item="DPS_PLAYERDPSLabel">
+     <ScreenID>DPS_DPSPlayerLabel</ScreenID>
+     <!-- <Font>3</Font> -->
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>255</X>
+     <Y>20</Y>
+    </Location>
+    <Size>
+     <CX>100</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>Char</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   
+   <!-- Label Player dps -->
+   <Label item="DPS_PLAYERDPS">
+     <ScreenID>DPS_DPSPlayer</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps.Me}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>255</X>
+     <Y>34</Y>
+    </Location>
+    <Size>
+     <CX>100</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label Pet dps -->
+   <Label item="DPS_PETDPSLabel">
+     <ScreenID>DPS_DPSPetLabel</ScreenID>
+     <!-- <Font>3</Font> -->
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>255</X>
+     <Y>55</Y>
+    </Location>
+    <Size>
+     <CX>100</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>Pet</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   
+   <!-- Label Pet dps -->
+   <Label item="DPS_PETDPS">
+     <ScreenID>DPS_DPSPet</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps.MyPet}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>255</X>
+     <Y>69</Y>
+    </Location>
+    <Size>
+     <CX>100</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label 1, name -->
+   <Label item="DPSLabelDPS1">
+     <ScreenID>LabelDPSDPS1</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[0].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>10</X>
+     <Y>30</Y>
+    </Location>
+    <Size>
+     <CX>85</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   <!-- Label 1, dps-->
+   <Label item="DPSLabelNAME1">
+     <ScreenID>LabelDPSDPS1</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps.Dps[0]}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>100</X>
+     <Y>30</Y>
+    </Location>
+    <Size>
+     <CX>150</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label 2, name -->
+   <Label item="DPSLabelDPS2">
+     <ScreenID>LabelDPSDPS2</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[1].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>10</X>
+     <Y>44</Y>
+    </Location>
+    <Size>
+     <CX>85</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   <!-- Label 2, dps-->
+   <Label item="DPSLabelNAME2">
+     <ScreenID>LabelDPSDPS2</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[1].Dps}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>100</X>
+     <Y>44</Y>
+    </Location>
+    <Size>
+     <CX>150</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label 3, name -->
+   <Label item="DPSLabelDPS3">
+     <ScreenID>LabelDPSDPS3</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[2].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>10</X>
+     <Y>58</Y>
+    </Location>
+    <Size>
+     <CX>85</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   <!-- Label 3, dps-->
+   <Label item="DPSLabelNAME3">
+     <ScreenID>LabelDPSDPS3</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[2].Dps}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>100</X>
+     <Y>58</Y>
+    </Location>
+    <Size>
+     <CX>150</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label 4, name -->
+   <Label item="DPSLabelDPS4">
+     <ScreenID>LabelDPSDPS4</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[3].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>10</X>
+     <Y>72</Y>
+    </Location>
+    <Size>
+     <CX>85</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   <!-- Label 4, dps-->
+   <Label item="DPSLabelNAME4">
+     <ScreenID>LabelDPSDPS4</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[3].Dps}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>100</X>
+     <Y>72</Y>
+    </Location>
+    <Size>
+     <CX>150</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label 5, name -->
+   <Label item="DPSLabelDPS5">
+     <ScreenID>LabelDPSDPS5</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[4].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>130</X>
+     <Y>30</Y>
+    </Location>
+    <Size>
+     <CX>85</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   <!-- Label 5, dps-->
+   <Label item="DPSLabelNAME5">
+     <ScreenID>LabelDPSDPS5</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[4].Dps}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>220</X>
+     <Y>30</Y>
+    </Location>
+    <Size>
+     <CX>150</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label 6, name -->
+   <Label item="DPSLabelDPS6">
+     <ScreenID>LabelDPSDPS6</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[5].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>130</X>
+     <Y>44</Y>
+    </Location>
+    <Size>
+     <CX>85</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   <!-- Label 6, dps-->
+   <Label item="DPSLabelNAME6">
+     <ScreenID>LabelDPSDPS6</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[5].Dps}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>220</X>
+     <Y>44</Y>
+    </Location>
+    <Size>
+     <CX>150</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label 7, name -->
+   <Label item="DPSLabelDPS7">
+     <ScreenID>LabelDPSDPS7</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[6].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>130</X>
+     <Y>58</Y>
+    </Location>
+    <Size>
+     <CX>85</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   <!-- Label 7, dps-->
+   <Label item="DPSLabelNAME7">
+     <ScreenID>LabelDPSDPS7</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[6].Dps}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>220</X>
+     <Y>58</Y>
+    </Location>
+    <Size>
+     <CX>150</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <!-- Label 8, name -->
+   <Label item="DPSLabelDPS8">
+     <ScreenID>LabelDPSDPS8</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[7].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>130</X>
+     <Y>72</Y>
+    </Location>
+    <Size>
+     <CX>85</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+   <!-- Label 8, dps-->
+   <Label item="DPSLabelNAME8">
+     <ScreenID>LabelDPSDPS8</ScreenID>
+     <!-- <Font>3</Font> -->
+     <EQType>9999</EQType>
+           <TooltipReference>${Dps[7].Name}</TooltipReference>
+     <RelativePosition>true</RelativePosition>
+    <Location>
+     <X>220</X>
+     <Y>72</Y>
+    </Location>
+    <Size>
+     <CX>150</CX>
+     <CY>14</CY>
+    </Size>
+     <Text>100</Text>
+    <TextColor>
+     <R>255</R>
+     <G>255</G>
+     <B>255</B>
+    </TextColor>
+     <NoWrap>true</NoWrap>
+     <AlignCenter>false</AlignCenter>
+     <AlignRight>false</AlignRight>
+   </Label>
+
+   <Screen item = "DpsWindow">
+      <!--<ScreenID/>-->
+      <RelativePosition>false</RelativePosition>
+      <Location>
+         <X>280</X>
+         <Y>0</Y>
+      </Location>
+      <Size>
+         <CX>280</CX>
+         <CY>130</CY>
+      </Size>
+      <Text>DPS Window</Text>
+      <Style_VScroll>false</Style_VScroll>
+      <Style_HScroll>false</Style_HScroll>
+      <Style_Transparent>false</Style_Transparent>
+      <!--<ToolDPSReference/>-->
+      <DrawTemplate>WDT_Def</DrawTemplate>
+      <Style_Titlebar>true</Style_Titlebar>
+      <Style_Closebox>true</Style_Closebox>
+      <Style_Minimizebox>true</Style_Minimizebox>
+      <Style_Border>true</Style_Border>
+      <Style_Sizable>true</Style_Sizable>
+      <Pieces>DPS_CloseButton</Pieces>
+      <Pieces>DPS_ON</Pieces>
+      <Pieces>DPS_OFF</Pieces>
+      <Pieces>DPS_RESET</Pieces>
+      <Pieces>DPS_CHA</Pieces>
+      <Pieces>DPS_PLAYERDPS</Pieces>
+      <Pieces>DPS_PLAYERDPSLabel</Pieces>
+      <Pieces>DPS_PETDPS</Pieces>
+      <Pieces>DPS_PETDPSLabel</Pieces>
+      <Pieces>DPSLabelDPS1</Pieces>
+      <Pieces>DPSLabelNAME1</Pieces>
+      <Pieces>DPSLabelDPS2</Pieces>
+      <Pieces>DPSLabelNAME2</Pieces>
+      <Pieces>DPSLabelDPS3</Pieces>
+      <Pieces>DPSLabelNAME3</Pieces>
+      <Pieces>DPSLabelDPS4</Pieces>
+      <Pieces>DPSLabelNAME4</Pieces>
+      <Pieces>DPSLabelDPS5</Pieces>
+      <Pieces>DPSLabelNAME5</Pieces>
+      <Pieces>DPSLabelDPS6</Pieces>
+      <Pieces>DPSLabelNAME6</Pieces>
+      <Pieces>DPSLabelDPS7</Pieces>
+      <Pieces>DPSLabelNAME7</Pieces>
+      <Pieces>DPSLabelDPS8</Pieces>
+      <Pieces>DPSLabelNAME8</Pieces>
+   </Screen>
+
+</XML>

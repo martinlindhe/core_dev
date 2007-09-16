@@ -1557,28 +1557,6 @@
     <Button>BDT_Combo</Button>
     <Style_Border>true</Style_Border>
   </Combobox>
-  <Page item ="AtlasPage">
-    <ScreenID>AtlasPage</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <DrawTemplate>WDT_Def</DrawTemplate>
-    <TabText>Atlas</TabText>
-    <TabTextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TabTextColor>
-    <TabTextActiveColor>
-      <R>255</R>
-      <G>255</G>
-      <B>0</B>
-    </TabTextActiveColor>
-    <Style_Sizable>true</Style_Sizable>
-    <Pieces>Screen:MVW_AtlasRenderArea</Pieces>
-    <Pieces>MVW_AtlasDirCombobox</Pieces>
-  </Page>
 
   <!-- Bags Page -->
   <InvSlot item = "IW_Inv23">
@@ -3209,7 +3187,6 @@
     <TabBorderTemplate>FT_DefTabBorder</TabBorderTemplate>
     <PageBorderTemplate>FT_DefPageBorder</PageBorderTemplate>
     <Pages>Page:MapPage</Pages >
-    <Pages>Page:AtlasPage</Pages >
     <Pages>Page:IW_BagsPage</Pages >
   </TabBox>
 
@@ -3223,7 +3200,6 @@
     <Size>
       <CX>340</CX>
       <CY>238</CY>
-      <!-- Was 416  -->
     </Size>
     <NoWrap>false</NoWrap>
     <Style_VScroll>false</Style_VScroll>
