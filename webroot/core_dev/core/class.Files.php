@@ -159,13 +159,27 @@ class Files
 		//IMPORTANT todo: validate $fileName
 
 		//todo: bort me hårdkodad url
-		$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi '.$fileName;
-		//echo 'Executing: '.$c.'<br/>';
+		$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m E:\devel\magic '.$fileName;
+		echo 'Executing: '.$c.'<br/>';
 		$result = exec($c);
-		//echo 'result: '.$result.'<br/>';
+		echo 'result: '.$result.'<br/>';
 		return $result;
 	}
 
+	/*
+	function lookupMimeType($fileName)
+	{
+		//libmagic automatically appends the .mime to the end of the filename, so PHP incorrectly reports the path it was looking for. 
+		$finfo = new finfo(FILEINFO_MIME, "E:/Devel/magic");
+		if (!$finfo) {
+			echo 'Failed to init finfo';
+			return false;
+		}
+
+		echo 'mime of '.$fileName;
+		echo $finfo->file($fileName);
+		return 'xx';
+	}*/
 
 	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
 	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
@@ -475,13 +489,7 @@ class Files
 			clearstatcache();	//needed to get current filesize()
 		}
 
-		if (file_exists($this->upload_dir.$newFileId)) {
-			$fileSize = filesize($this->upload_dir.$newFileId);
-			$fileMime = $this->lookupMimeType($this->upload_dir.$newFileId);
-
-			$q = 'UPDATE tblFiles SET fileSize='.$fileSize.',fileMime="'.$db->escape($fileMime).'" WHERE fileId='.$newFileId;
-			$db->update($q);
-		}
+		$this->updateFile($newFileId);
 
   	return $newFileId;
 	}
@@ -696,6 +704,10 @@ class Files
 		$new['md5'] = $db->escape(hash_file('md5', $this->upload_dir.$_id));		//32-character hex string
 		$new['timeCreated'] = now();
 		$exec_time = microtime(true) - $exec_start;
+		$new['timeExec'] = $exec_time;
+
+		$q = 'DELETE FROM tblChecksums WHERE fileId='.$_id;
+		$db->delete($q);
 
 		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", timeExec="'.$exec_time.'", timeCreated=NOW()';
 		$db->insert($q);
@@ -730,6 +742,10 @@ class Files
 		if (!is_numeric($_id)) return false;
 
 		$size = filesize($this->upload_dir.$_id);
+
+		//force calculation of checksums
+		$this->checksums($_id, true);
+
 		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mimeType).'",fileSize='.$size.' WHERE fileId='.$_id.' AND fileType='.FILETYPE_PROCESS_CLONE;
 		return $db->update($q);
 	}
@@ -739,6 +755,8 @@ class Files
 	{
 		global $db;
 		if (!is_numeric($_id)) return false;
+
+		if (!file_exists($this->upload_dir.$_id)) return false;
 
 		$size = filesize($this->upload_dir.$_id);
 

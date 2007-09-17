@@ -1,7 +1,41 @@
 ----[[platform todo]]----
 	process:
-		- använd wget för att ladda ner remote files (file_get_contents tar uppp skitmycke minne)
-		- ta bort uppladdade filer
+
+		- mime id major problem:
+			Amazon_1080.wmv, mime=application/octet-stream uploaded 2007-09-17 20:19:36 by martin
+			Coral_Reef_Adventure_1080.wmv, mime=application/octet-stream uploaded 2007-09-17 20:29:04 by martin
+			Discoverers_1080.wmv, mime=application/octet-stream uploaded 2007-09-17 20:29:26 by martin
+			T2_1080.wmv, mime=application/octet-stream uploaded 2007-09-17 20:29:47 by martin
+			contemptous_nagel.mp3, mime=application/octet-stream uploaded 2007-09-17 20:30:22 by martin
+			07-Bizzy Bone-Be Careful.wma, mime=application/octet-stream uploaded 2007-09-17 20:31:27 by martin
+			06 too drunk to fuck.m4a, mime=audio/mp4 uploaded 2007-09-17 20:31:45 by martin
+			05 - Precis som Romeo.ogg, mime=application/ogg uploaded 2007-09-17 20:32:05 by martin			
+			S07E07 - King-Size Homer.avi, mime=video/x-msvideo uploaded 2007-09-17 20:33:48 by martin
+			South Park - 706 - Lil' Crime Stoppers.mpg, mime=video/mpeg uploaded 2007-09-17 20:35:44 by martin
+			foodz.JPG, mime=image/jpeg uploaded 2007-09-17 20:37:27 by martin
+			oh_snap_anim.gif, mime=image/gif uploaded 2007-09-17 20:37:38 by martin
+			start wars av johanna.png, mime=image/png uploaded 2007-09-17 20:38:00 by martin
+			IP-adressansökan.doc, mime=application/msword uploaded 2007-09-17 20:39:33 by martin
+			Periodic Table Of Elements With Descriptions.pdf, mime=application/pdf uploaded 2007-09-17 20:40:32 by martin
+			sample text.txt, mime=text/plain uploaded 2007-09-17 20:41:34 by martin
+
+			audio:
+			.ogg and .m4a works
+			.mp3 dont work!			finns regler i magic.mime ..!!!??!
+			.wma dont work!		application/octet-stream
+
+			video:
+				all ok! IMPORTNAT .avi changed!
+
+			images:
+				all ok!
+
+			documents:
+				all ok!
+
+
+
+
 		- ev. använd mencoder för audio med (den kan läsa massa audio men bara skriva till mp3 ?)
 		- video kommandon för konvertering till .3gp
 		- känn av video upplösning, codec & audio info. visa i $files->showFileInfo
@@ -197,8 +231,6 @@
 	adblock:
 		- spara statistik för subscription downloads
 
-		- låg prio: fixa så admin inte accessar db-tabeller som adblock ej använder
-
 
 	lyrics:
 		- småbugg: textsök på svenska tecken (unicode problem). sök på "mänsklig" funkar. sök på "å" listar alla texter i databasen
@@ -213,6 +245,7 @@ X = hi prio task
 2007.09.17:
 	- process: removed crc32 checksums
 	- process: using wget to for remote fetches
+
 
 2007.09.16:
 	- imgview popup: auto-resizes window on load complete for proper image size
