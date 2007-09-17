@@ -210,7 +210,7 @@
 
 	function processQueue()
 	{
-		global $config;
+		global $config, $files;
 
 		$list = getProcessQueue($config['process']['process_limit']);
 
@@ -368,22 +368,25 @@
 					break;
 
 				case PROCESSFETCH_FORM:
-					echo 'FETCH RESOURCE FROM URL: '.$job['orderParams'].'<br/>';
+					echo 'FETCH CONTENT FROM '.$job['orderParams'].'<br/>';
 
-					$fileName = basename($job['orderParams']); //extract filename part of url
+					$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
 
-					$exec_start = microtime(true); //count download time
+					//$exec_start = microtime(true); //count download time
+					//$data = file_get_contents($job['orderParams']);
+
+					$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
+
 					//fixme: isURL() check
-					$data = file_get_contents($job['orderParams']);
-
-					//echo $data;
-
-					$exec_time = microtime(true) - $time_start;
-					$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName, $data);
+					$c = 'wget '.$job['orderParams'].' -O '.$files->upload_dir.$newFileId;
+					echo 'Executing: '.$c.'<br/>';
+					$exec_time = exectime($c);
+					//$exec_time = microtime(true) - $time_start;
 
 					//todo: process html document for media links if it is a html document
 
 					markQueueCompleted($job['entryId'], $exec_time);
+					$files->updateFile($newFileId);
 					break;
 
 				case PROCESSMONITOR_SERVER:
@@ -414,149 +417,4 @@
 		$q = 'UPDATE tblProcessQueue SET orderCompleted=1,timeCompleted=NOW(),timeExec="'.$exec_time.'" WHERE entryId='.$entryId;
 		$db->update($q);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-///// CODE BELOW NOT CLEANED UP!!!!11
-
-
-
-/*
-	$WORK_OPRDER_TYPES = array(
-		ORDER_RESIZE_IMG => 'IMAGE RESIZE',
-		ORDER_CONVERT_IMG => 'IMAGE CONVERT',
-		ORDER_CONVERT_VIDEO => 'VIDEO CONVERT'
-	);
-*/
-
-	//adds a item on the "todo" queue of the process server
-/*
-	function addWorkOrder($_type, $_params)
-	{
-		global $db, $session, $WORK_OPRDER_TYPES;
-		if (!$session->id || !is_numeric($_type)) return false;
-
-		$_params = $db->escape(serialize($_params));
-
-		$q = 'INSERT INTO tblProcessQueue SET orderType='.$_type.', orderParams="'.$_params.'", creatorId='.$session->id.', timeCreated=NOW()';
-		$order_id = $db->insert($q);
-
-		$session->log('#'.$order_id.': Added work order: '.$WORK_OPRDER_TYPES[$_type]);
-		return $order_id;
-	}
-
-	function getWorkOrderStatus($_id)
-	{
-		global $db;
-		if (!is_numeric($_id)) return false;
-
-		$q = 'SELECT orderCompleted FROM tblProcessQueue WHERE entryId='.$_id;
-		return $db->getOneItem($q);
-	}
-
-	function performWorkOrders($_limit = 10)
-	{
-		global $db, $session, $files;
-
-		$ini_check = ini_get('allow_url_fopen');
-		if ($ini_check != 1) die('FATAL: allow_url_fopen disabled!');
-
-		//Aquire table lock
-		$db->query('LOCK TABLES tblProcessQueue WRITE, tblLogs WRITE');
-
-		$work_list = getWorkOrders($_limit);
-
-		if (!$work_list) {
-			//Release table lock
-			$db->query('UNLOCK TABLES');
-			echo 'Nothing to do!';
-			return false;
-		}
-
-		$session->log('WORK ORDER QUEUE - Processing '.count($work_list).' work orders');
-
-		$src_temp_file = 'D:/work_temp.dat';
-		$dst_temp_file = 'D:/work_temp2.dat';
-
-		if (file_exists($src_temp_file)) unlink($src_temp_file);
-		if (file_exists($dst_temp_file)) unlink($dst_temp_file);
-
-		foreach ($work_list as $work)
-		{
-			$params = unserialize($work['orderParams']);
-
-			//1. Läs in src
-			echo 'Reading src from '.$params['src'].' ...<br/>';
-			$src_data = file_get_contents($params['src']);
-			if (!$src_data) {
-				$session->log('#'.$work['entryId'].': Failed to fetch src file: '.$params['src'], LOGLEVEL_ERROR);
-				echo 'Error: Failed to fetch src file!<br/>';
-				continue;
-			}
-			file_put_contents($src_temp_file, $src_data);
-
-			switch ($work['orderType'])
-			{
-				case ORDER_RESIZE_IMG:
-					echo 'Performing task: Image resize<br/>';
-					echo ' &nbsp; params: width='.$params['width'].', height='.$params['height'].'<br/>';
-
-					//2. Perform resize
-					$check = $files->resizeImage($src_temp_file, $dst_temp_file, $params['width'], $params['height']);
-					if (!$check) {
-						$session->log('#'.$work['entryId'].': IMAGE RESIZE failed! w='.$params['width'].', h='.$params['height'], LOGLEVEL_ERROR);
-						echo 'Error: Image resize failed!<br/>';
-						continue;
-					}
-					$session->log('#'.$work['entryId'].': IMAGE RESIZE performed successfully');
-					break;
-
-				default:
-					echo 'UNKNOWN WORK ORDER TYPE: '.$work['orderType'].'<br/>';
-					continue;
-			}
-
-			//3. Write result to destination file
-			echo 'Writing result to dst '.$params['dst'].' ...<br/>';
-			copy($dst_temp_file, $params['dst']);
-
-			//4. Markera utförd order
-			$q = 'UPDATE tblProcessQueue SET orderCompleted=1 WHERE entryId='.$work['entryId'];
-			$db->query($q);
-
-			unlink($src_temp_file);
-			unlink($dst_temp_file);
-
-			echo '<br/>';
-		}
-
-		$session->log('WORK ORDER QUEUE - Completed');
-
-		//Release table lock
-		$db->query('UNLOCK TABLES');
-	}
-*/
 ?>

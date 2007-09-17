@@ -166,28 +166,6 @@ class Files
 		return $result;
 	}
 
-	/* Looks up mimeType of file $fileId and updates database accordingly */
-	//also updates filesize
-	function setMimeType($fileId)
-	{
-		global $db;
-		if (!is_numeric($fileId)) return false;
-
-		$size = filesize($this->upload_dir.$fileId);
-		if (!is_numeric($size) || !$size) {
-			echo 'setMimeType(): file dont exist ';
-			return false;
-		}
-		$mime = $this->lookupMimeType($this->upload_dir.$fileId);
-
-		//parse result such as: text/plain; charset=us-ascii
-		$arr = explode(';', $mime);
-		$mime = $arr[0];
-
-		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime).'",fileSize='.$size.' WHERE fileId='.$fileId;
-		return $db->update($q);
-	}
-
 
 	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
 	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
@@ -474,8 +452,7 @@ class Files
 			$this->handleGeneralUpload($fileId, $FileData);
 		}
 
-		$this->setMimeType($fileId);
-		$this->checksums($fileId);	//force calculation of checksums
+		$this->updateFile($fileId);	//force update of filesize, mimetype & checksum
 
 		return $fileId;
 	}
@@ -501,11 +478,10 @@ class Files
 		if (file_exists($this->upload_dir.$newFileId)) {
 			$fileSize = filesize($this->upload_dir.$newFileId);
 			$fileMime = $this->lookupMimeType($this->upload_dir.$newFileId);
+
+			$q = 'UPDATE tblFiles SET fileSize='.$fileSize.',fileMime="'.$db->escape($fileMime).'" WHERE fileId='.$newFileId;
+			$db->update($q);
 		}
-
-		$q = 'UPDATE tblFiles SET fileSize='.$fileSize.',fileMime="'.$db->escape($fileMime).'" WHERE fileId='.$newFileId;
-		$db->update($q);
-
 
   	return $newFileId;
 	}
@@ -697,7 +673,7 @@ class Files
 	}
 
 	/* fetches or calculates checksums for the file in tblChecksums */
-	function checksums($_id)
+	function checksums($_id, $force = false)
 	{
 		global $db;
 		if (!is_numeric($_id)) return false;
@@ -705,21 +681,23 @@ class Files
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
 
-		$q = 'SELECT * FROM tblChecksums WHERE fileId='.$_id;
-		$cached = $db->getOneRow($q);
-		if ($cached) return $cached;
+		if (!$force) {
+			$q = 'SELECT * FROM tblChecksums WHERE fileId='.$_id;
+			$cached = $db->getOneRow($q);
+			if ($cached) return $cached;
+		}
 
 		if (!file_exists($this->upload_dir.$_id)) {
 			die('tried to generate checksums of nonexisting file '.$this->upload_dir.$_id);
 		}
 
+		$exec_start = microtime(true);
 		$new['sha1'] = $db->escape(hash_file('sha1', $this->upload_dir.$_id));	//40-character hex string
 		$new['md5'] = $db->escape(hash_file('md5', $this->upload_dir.$_id));		//32-character hex string
-		//fixme: den korrekta crc32 summan generas inte.. orkar inte felsöka
-		$new['crc32'] = $db->escape(hash_file('crc32', $this->upload_dir.$_id));	//8-character hex string
 		$new['timeCreated'] = now();
+		$exec_time = microtime(true) - $exec_start;
 
-		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", crc32="'.$new['crc32'].'", timeCreated=NOW()';
+		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", timeExec="'.$exec_time.'", timeCreated=NOW()';
 		$db->insert($q);
 
 		return $new;
@@ -754,6 +732,32 @@ class Files
 		$size = filesize($this->upload_dir.$_id);
 		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mimeType).'",fileSize='.$size.' WHERE fileId='.$_id.' AND fileType='.FILETYPE_PROCESS_CLONE;
 		return $db->update($q);
+	}
+
+	/* Forces recalculation of filesize, mimetype and checksums */
+	function updateFile($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$size = filesize($this->upload_dir.$_id);
+
+		if (!is_numeric($size) || !$size) {
+			echo 'setMimeType(): file dont exist ';
+			return false;
+		}
+		$mime = $this->lookupMimeType($this->upload_dir.$_id);
+
+		//force calculation of checksums
+		$this->checksums($_id, true);
+
+		//parse result such as: text/plain; charset=us-ascii
+		$arr = explode(';', $mime);
+		$mime = $arr[0];
+
+		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime).'",fileSize='.$size.' WHERE fileId='.$_id;
+		return $db->update($q);
+
 	}
 
 	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
@@ -989,11 +993,10 @@ class Files
 		$arr = $this->checksums($_id);
 		echo '<h3>Checksums</h3>';
 		echo '<pre>';
-		echo 'generated: '.$arr['timeCreated']."\n";
 		echo 'sha1: '.$arr['sha1']."\n";
-		echo 'md5: '.$arr['md5']."\n";
-		echo 'crc32: '.$arr['crc32']."\n";
+		echo 'md5:  '.$arr['md5']."\n";
 		echo '</pre>';
+		echo 'Generated at '.$arr['timeCreated'].' in '.$arr['timeExec'].' sec<br/>';
 	}
 
 	function getUploader($_id)

@@ -357,7 +357,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL,
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId mediumint(8) unsigned NOT NULL auto_increment,
   entryText text character set utf8 NOT NULL,
@@ -366,7 +366,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=93 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=94 DEFAULT CHARSET=latin1;
 CREATE TABLE tblLyrics (
   lyricId bigint(20) unsigned NOT NULL auto_increment,
   lyricName varchar(200) character set utf8 NOT NULL,
@@ -441,6 +441,15 @@ CREATE TABLE tblCategories (
   ownerId bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (categoryId)
 ) ENGINE=MyISAM AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
+CREATE TABLE tblChecksums (
+  entryId bigint(20) unsigned NOT NULL auto_increment,
+  fileId int(11) unsigned default NULL,
+  sha1 varchar(40) default NULL,
+  md5 varchar(32) default NULL,
+  timeCreated datetime default NULL,
+  timeExec float default NULL,
+  PRIMARY KEY  (entryId)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 CREATE TABLE tblComments (
   commentId bigint(20) unsigned NOT NULL auto_increment,
   commentType tinyint(3) unsigned NOT NULL default '0',
@@ -463,6 +472,15 @@ CREATE TABLE tblContacts (
   timeCreated datetime default NULL,
   PRIMARY KEY  (contactId)
 ) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+CREATE TABLE tblEvents (
+  eventId bigint(20) unsigned NOT NULL auto_increment,
+  eventType tinyint(4) unsigned default NULL,
+  eventClass tinyint(3) unsigned default NULL,
+  param text,
+  timeCreated datetime default NULL,
+  createdBy int(11) unsigned default NULL,
+  PRIMARY KEY  (eventId)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE tblFAQ (
   faqId int(10) unsigned NOT NULL auto_increment,
   question text,
@@ -494,7 +512,7 @@ CREATE TABLE tblFiles (
   timeUploaded datetime default NULL,
   cnt int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (fileId)
-) ENGINE=MyISAM AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=246 DEFAULT CHARSET=utf8;
 CREATE TABLE tblForums (
   itemId bigint(20) unsigned NOT NULL auto_increment,
   itemType tinyint(1) unsigned NOT NULL default '0',
@@ -539,7 +557,7 @@ CREATE TABLE tblLogins (
   IP int(10) unsigned NOT NULL default '0',
   userAgent text,
   PRIMARY KEY  (mainId)
-) ENGINE=MyISAM AUTO_INCREMENT=143 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=146 DEFAULT CHARSET=utf8;
 CREATE TABLE tblLogs (
   entryId int(10) unsigned NOT NULL auto_increment,
   entryText text,
@@ -548,7 +566,7 @@ CREATE TABLE tblLogs (
   userId smallint(5) unsigned NOT NULL default '0',
   userIP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (entryId)
-) ENGINE=MyISAM AUTO_INCREMENT=257 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=272 DEFAULT CHARSET=utf8;
 CREATE TABLE tblMessages (
   msgId bigint(20) unsigned NOT NULL auto_increment,
   ownerId int(10) unsigned NOT NULL default '0',
@@ -608,6 +626,18 @@ CREATE TABLE tblPolls (
   timeDeleted datetime default NULL,
   PRIMARY KEY  (pollId)
 ) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+CREATE TABLE tblProcessQueue (
+  entryId bigint(20) unsigned NOT NULL auto_increment,
+  fileId bigint(20) unsigned default NULL,
+  timeCreated datetime default NULL,
+  creatorId int(10) unsigned default NULL,
+  orderType tinyint(3) unsigned NOT NULL,
+  orderCompleted tinyint(1) unsigned NOT NULL default '0',
+  orderParams text,
+  timeExec float unsigned default NULL,
+  timeCompleted datetime default NULL,
+  PRIMARY KEY  (entryId)
+) ENGINE=MyISAM AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
 CREATE TABLE tblRatings (
   rateId bigint(20) unsigned NOT NULL auto_increment,
   `type` tinyint(3) unsigned NOT NULL default '0',
@@ -626,7 +656,7 @@ CREATE TABLE tblRevisions (
   timeCreated datetime default NULL,
   categoryId tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (indexId)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 CREATE TABLE tblSettings (
   settingId bigint(20) unsigned NOT NULL auto_increment,
   ownerId smallint(5) unsigned NOT NULL default '0',
@@ -709,6 +739,6 @@ CREATE TABLE tblWiki (
   timeLocked datetime default NULL,
   hasFiles tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (wikiId)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 DELIMITER ;;
 DELIMITER ;

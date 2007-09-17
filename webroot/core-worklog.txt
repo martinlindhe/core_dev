@@ -1,7 +1,8 @@
 ----[[platform todo]]----
 	process:
+		- använd wget för att ladda ner remote files (file_get_contents tar uppp skitmycke minne)
 		- ta bort uppladdade filer
-		- använd mencoder för audio med (den kan läsa massa audio men bara skriva till mp3 ?)
+		- ev. använd mencoder för audio med (den kan läsa massa audio men bara skriva till mp3 ?)
 		- video kommandon för konvertering till .3gp
 		- känn av video upplösning, codec & audio info. visa i $files->showFileInfo
 		- kunna enqueue video resize. välj stereo/mono, fps
@@ -21,8 +22,7 @@
 
 	forum:
 		- för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
-			gör ett sh-script som körs veckovis för detta (för /etc/cron.weekly på linux-db server)
-			eller går det göra ett php script som körs med +x i linux? =)
+			gör ett script som körs veckovis för detta
 
 
 	bevakningar/forum:
@@ -210,9 +210,14 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.09.17:
+	- process: removed crc32 checksums
+	- process: using wget to for remote fetches
+
 2007.09.16:
 	- imgview popup: auto-resizes window on load complete for proper image size
 	- process: added video conversion to vmw & flv
+	- process: added initial "server uptime monitoring" code
 
 
 2007.09.15:

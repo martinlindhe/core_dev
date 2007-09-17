@@ -17,7 +17,9 @@
 		'feedback.php' => 'Feedback',
 		'forum.php' => 'Forum',
 		'blogs.php' => 'Blogs',
-		'users.php' => 'Users');
+		'users.php' => 'Users',
+		$config['core_web_root'].'process/' => 'PROCESS SERVER',
+	);
 	createMenu($menu);
 
 	if ($session->isAdmin) {

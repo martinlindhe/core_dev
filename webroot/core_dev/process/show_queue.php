@@ -27,6 +27,11 @@
 					echo 'Fetch remote media from <b>'.$row['orderParams'].'</b><br/>';
 					break;
 
+				case PROCESSMONITOR_SERVER:
+					$d = unserialize($row['orderParams']);
+					echo 'Monitor remote server <b>'.$d['adr'].'</b> for '.$d['type'].' uptime<br/>';
+					break;
+
 				default:
 					die('unknown processqueue type: '.$row['orderType']);
 			}
