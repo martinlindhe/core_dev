@@ -1,5 +1,5 @@
 <?
-	//Optional. makes debugging easier as XML is shown in Firefox/IE
+	//Optional content type. makes debugging easier as XML is shown in Firefox/IE
 	header('Content-type: text/xml');
 
 	echo "﻿<?xml version=\"1.0\" encoding=\"UTF-8\"?>";

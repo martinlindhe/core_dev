@@ -1,4 +1,5 @@
-<?
+<?php
+
 	require_once('config.php');
 
 	require_once('vxml_head.php');
@@ -7,6 +8,12 @@
 	2part.php - prata 2part-chat
 */
 ?>
+
+	<!-- catches disconnects so we can update "users online" table -->
+	<catch event="connection.disconnect.hangup">
+		<goto expr="'./hangup.php?id=' + connection.psems.callID"/>
+	</catch>
+
 	<script>
 		var localCall = "call://" + connection.psems.callID;
 	</script>
@@ -18,6 +25,7 @@
 
 		<choice dtmf="1" next="#mnuChatRoom"></choice>	<!-- see if anyone is available for chat -->
 		<choice dtmf="0" next="#quit"></choice>					<!-- hangup -->
+
 	</menu>
 
 	<!-- tell the user if anyone else is on the line -->

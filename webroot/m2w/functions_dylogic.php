@@ -24,19 +24,19 @@
 
 		//todo: kom ihåg att detta skrivits till databasen så att det inte skrivs igen vid senare sidanrop
 
-		//debug: this is a full insert of all parameters, just for debugging
-		$q = 'INSERT INTO tblCallDetails SET timeCreated=NOW(), params="'.$db->escape(serialize($_GET)).'"';
-		$db->insert($q);
+		//this is a full insert of all parameters, for debugging
+		$q = 'INSERT INTO tblCallDetails SET timeCreated=NOW(), service='.$_service.', callID="'.$db->escape($_GET['callID']).'", params="'.$db->escape(serialize($_GET)).'"';
+		$entryId = $db->insert($q);
 
 		//Store a entry
 		if ($_GET['callDirection'] == 'INBOUND') {
-			$q = 'INSERT INTO tblCurrentCalls SET timeCreated=NOW(), service='.$_service.', '.
+			$q = 'INSERT INTO tblCurrentCalls SET entryId='.$entryId.', timeCreated=NOW(), service='.$_service.', '.
 				'callID="'.$db->escape($_GET['callID']).'", stack="'.$db->escape($_GET['stack']).'", callType="'.$db->escape($_GET['callType']).'", '.
-				'callerID="'.$db->escape($_GET['callerID']).'", callerAlias="'.$db->escape($_GET['callerAlias']).'", callerIP="'.$db->escape($_GET['callerIP']).'", '.
-				'calledID="'.$db->escape($_GET['calledID']).'", calledAlias="'.$db->escape($_GET['calledAlias']).'", calledIP="'.$db->escape($_GET['calledIP']).'"';
+				'callerAlias="'.$db->escape($_GET['callerAlias']).'", callerID="'.$db->escape($_GET['callerID']).'", callerIP="'.$db->escape($_GET['callerIP']).'", '.
+				'calledAlias="'.$db->escape($_GET['calledAlias']).'", calledID="'.$db->escape($_GET['calledID']).'", calledIP="'.$db->escape($_GET['calledIP']).'"';
 
 			$db->insert($q);
-			error_log($q);
+			//error_log($q);
 		}
 	}
 
