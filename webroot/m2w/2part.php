@@ -25,24 +25,23 @@
 		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
 	  <pse_video src="media://m2w/mnuChatRoom" repeat="LOOP"/>
 
-		<choice dtmf="1" next="#tunnel"></choice>				<!-- route call to another user (if possible) -->
-		<choice dtmf="3" next="#mirror"></choice>				<!-- test call routing. mirror myself -->
-		<choice dtmf="0" next="#mnuMain"></choice>			<!-- go to main menu -->
+		<choice dtmf="1" next="#mnuPersistentFeed"></choice>	<!-- test call routing. show video from persistent call -->
+		<choice dtmf="3" next="#mirror"></choice>							<!-- test call routing. mirror myself -->
+		<choice dtmf="0" next="#mnuMain"></choice>						<!-- go to main menu -->
 
+	</menu>
+
+	<!-- show persistent video feed -->
+	<menu id="mnuPersistentFeed">
+		<pse_audio src="call://callMartin"/>
+		<pse_video src="call://callMartin"/>
+		<choice dtmf="0" next="#mnuChatRoom"></choice>	<!-- stop -->
 	</menu>
 
 	<!-- see myself -->
 	<menu id="mirror">
 		<pse_audio expr="localCall"/>
 		<pse_video expr="localCall"/>
-		<choice dtmf="0" next="#mnuChatRoom"></choice>	<!-- stop -->
-	</menu>
-
-
-	<!-- connect to other user: todo WIP -->
-	<menu id="tunnel">
-		<pse_audio src="call://callId"/>
-		<pse_video src="call://callId"/>
 		<choice dtmf="0" next="#mnuChatRoom"></choice>	<!-- stop -->
 	</menu>
 

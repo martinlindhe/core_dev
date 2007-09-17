@@ -15,6 +15,6 @@
 	$config['database']['password']	= 'dravel';
 	$config['database']['database']	= 'dbM2W';
 	$db = new DB_MySQLi($config['database']);
-	
-	storeCDR();
+
+	storeCallDetails(M2W_CHATROOM);
 ?>
