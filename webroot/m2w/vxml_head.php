@@ -8,3 +8,12 @@
 <!DOCTYPE vxml PUBLIC "-//W3C//DTD VOICEXML 2.0//EN" "http://www.w3.org/TR/voicexml20/vxml.dtd">
 
 <vxml version="2.0" xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<!-- document scope variables -->
+	<var name="callLocal" expr="'call://' + connection.psems.callID"/>
+	<var name="URLhangup" expr="'./hangup.php?id=' + connection.psems.callID"/>
+
+	<!-- catches CLIENT disconnects so we can update "users online" table -->
+	<catch event="connection.disconnect.hangup">
+		<goto expr="URLhangup"/>
+	</catch>

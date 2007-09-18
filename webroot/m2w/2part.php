@@ -3,27 +3,21 @@
 
 	require_once('vxml_head.php');
 
+	if (isset($_GET['init'])) {
+		registerCallStart(M2W_CHATROOM);
+	}
+
 /*
 	2part.php - prata 2part-chat
 */
 ?>
-
-	<!-- catches CLIENT disconnects so we can update "users online" table -->
-	<catch event="connection.disconnect.hangup">
-		<goto expr="'./hangup.php?id=' + connection.psems.callID"/>
-	</catch>
-
-	<script>
-		var localCall = "call://" + connection.psems.callID;
-	</script>
-
   <!-- main menu -->
 	<menu id="mnuMain">
 		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
 	  <pse_video src="media://m2w/mnuMain1to1" repeat="LOOP"/>
 
 		<choice dtmf="1" next="#mnuChatRoom"></choice>	<!-- see if anyone is available for chat -->
-		<choice dtmf="0" next="#quit"></choice>					<!-- hangup -->
+		<choice dtmf="0" expr="URLhangup"></choice>			<!-- hangup -->
 	</menu>
 
 	<!-- tell the user if anyone else is on the line -->
@@ -45,17 +39,11 @@
 
 	<!-- see myself -->
 	<menu id="mirror">
-		<pse_audio expr="localCall"/>
-		<pse_video expr="localCall"/>
+		<pse_audio expr="callLocal"/>
+		<pse_video expr="callLocal"/>
 		<choice dtmf="0" next="#mnuChatRoom"></choice>	<!-- stop -->
 	</menu>
 
-  <!-- Quit block -->
-	<form id="quit">
-		<block>
-			<goto expr="'./hangup.php?id=' + connection.psems.callID"/>
-		</block>
-	</form>
 <?
 	require_once('vxml_foot.php');
 ?>

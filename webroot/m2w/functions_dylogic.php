@@ -2,6 +2,12 @@
 	/* Defines different M2W-services */
 	define('M2W_CHATROOM',	5);
 
+	function registerCallStart($_service)
+	{
+		unset($_SESSION['stored_call']);
+		storeCallDetails($_service);
+	}
+
 	/* Called once at the beginning of a handled call. Stores call details */
 	function storeCallDetails($_service)
 	{
@@ -48,6 +54,7 @@
 	//	"id"	Set by PSE-MS as a unique call ID
 	function terminateCall($callID)
 	{
+		global $db;
 		//maybe todo: store what type of hangup occured. did client chose to "hang up" in menus or did he just terminate the call? is this relevant..?
 
 		$q = 'UPDATE tblCallDetails SET timeHangup=NOW() WHERE callID="'.$db->escape($_GET['id']).'"';

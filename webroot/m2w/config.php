@@ -20,6 +20,4 @@
 	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
 	$config['session']['name'] = 'm2wID';
 	$session = new Session($config['session']);
-
-	storeCallDetails(M2W_CHATROOM);
 ?>

@@ -10,6 +10,7 @@
 	require_once('vxml_head.php');
 ?>
 
+  <!-- Quit block -->
 	<form id="quit">
 		<block>
 			<exit/>
