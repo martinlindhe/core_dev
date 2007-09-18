@@ -14,6 +14,7 @@
 	<var name="URLmain"				expr="'./main.php'"/>
 	<var name="URLhangup"			expr="'./hangup.php?id=' + connection.psems.callID"/>
 	<var name="URLvideochat"	expr="'./videochat.php'"/>
+	<var name="service"				expr="'<?=$config['vxml']['service']?>'"/>	<!-- ID of service currently used -->
 
 	<!-- catches CLIENT disconnects so we can update "users online" table -->
 	<catch event="connection.disconnect.hangup">

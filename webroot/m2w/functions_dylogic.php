@@ -2,10 +2,12 @@
 	/* Defines different M2W-services */
 	define('M2W_CHATROOM',	5);
 
-	function registerCallStart($_service)
+	function registerCallStart()
 	{
+		global $config;
+
 		unset($_SESSION['stored_call']);
-		storeCallDetails($_service);
+		storeCallDetails($config['vxml']['service']);
 	}
 
 	/* Called once at the beginning of a handled call. Stores call details */
@@ -62,6 +64,15 @@
 
 		$q = 'DELETE FROM tblCurrentCalls WHERE callID="'.$db->escape($_GET['id']).'"';
 		$db->delete($q);
+	}
+
+	/* Returns the number of active calls on current service */
+	function getActiveCalls()
+	{
+		global $db, $config;
+	
+		$q = 'SELECT COUNT(entryId) FROM tblCurrentCalls WHERE service='.$config['vxml']['service'];
+		return $db->getOneItem($q);	
 	}
 
 	//outputs a session ID value to the VoiceXML script. used to associate uploads with this user

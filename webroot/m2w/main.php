@@ -17,7 +17,7 @@
 
 	//Use http://192.168.0.210/m2w/main.php?init from PSE-MS "Call Control"
 	if (isset($_GET['init'])) {
-		registerCallStart(M2W_CHATROOM);
+		registerCallStart();
 	}
 ?>
 
