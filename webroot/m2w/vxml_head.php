@@ -13,19 +13,20 @@
 	<property name="termchar" value="#"/>
 
 	<!-- document scope variables -->
-	<var name="service"					expr="'<?=$config['vxml']['service']?>'"/>	<!-- ID of service currently used -->
-	<var name="callLocal"				expr="'call://' + connection.psems.callID"/>
-	<var name="callPersistent"	expr="'call://callMartin'"/>
-	<var name="URLmain"					expr="'./main.php'"/>
-	<var name="URLdebug"				expr="'./debug.php'"/>
-	<var name="URLvideochat"		expr="'./videochat.php'"/>
-	<var name="URLhangup"				expr="'./hangup.php?id=' + connection.psems.callID"/>
-	<var name="URLusersOnline"	expr="'./users_online.php'"/>
+	<var name="service"						expr="'<?=$config['vxml']['service']?>'"/>	<!-- ID of service currently used -->
+	<var name="callLocal"					expr="'call://' + connection.psems.callID"/>
+	<var name="callPersistent"		expr="'call://callMartin'"/>
+	<var name="URLmain"						expr="'./main.php'"/>
+	<var name="URLdebug"					expr="'./debug.php'"/>
+	<var name="URLvideochat"			expr="'./videochat.php'"/>
+	<var name="URLpresentations"	expr="'./presentations.php'"/>
+	<var name="URLhangup"					expr="'./hangup.php?id=' + connection.psems.callID"/>
+	<var name="URLusersOnline"		expr="'./users_online.php'"/>
 
-	<var name="has_pres"				expr="'<?=$_SESSION['stored_pres']?>'"/>		<!-- has the user left a presentation? -->
+	<var name="has_pres"					expr="'<?=$_SESSION['stored_pres']?>'"/>		<!-- has the user left a presentation? -->
 
-	<var name="upload_path"			expr="'media://m2w/rec/up_<?=$_SESSION['user_id']?>'"/>		<!-- url to this user's presentation video -->
-	<var name="record_var"/>		<!-- temp var to hold recorded presentation -->
+	<var name="upload_path"				expr="'media://m2w/rec/up_<?=$_SESSION['user_id']?>'"/>		<!-- url to this user's presentation video -->
+	<var name="record_var"/>			<!-- temp var to hold recorded presentation -->
 
 	<!-- catches CLIENT disconnects so we can update "users online" table -->
 	<catch event="connection.disconnect.hangup">

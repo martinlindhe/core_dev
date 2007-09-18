@@ -32,7 +32,7 @@
 		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
 	  <pse_video src="media://m2w/mnuChatRoom" repeat="LOOP"/>
 
-		<choice dtmf="1" next="#xxx"></choice>								<!-- see available presentations: TODO -->
+		<choice dtmf="1" next="URLpresentations"></choice>		<!-- see available presentations -->
 		<choice dtmf="2" expr="URLusersOnline"></choice>			<!-- see how many are online -->
 		<choice dtmf="3" next="#mnuShowMyPres"></choice>			<!-- see my current presentation -->
 		<choice dtmf="4" next="#frmRecord"></choice>					<!-- record a new presentation -->
