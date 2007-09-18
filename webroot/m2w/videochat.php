@@ -11,8 +11,7 @@
 	sen meny:
 	1. välj "se tillgängliga presentationer"
 	2. se hur många som är online på linjen
-	3. martin live feed
-	4. mirror video
+	3. ändra min presentation
 
 */
 ?>
@@ -22,9 +21,7 @@
 		<block>
 			<if cond="(has_pres == 0)">
 				<goto next="#infoRecordStarting"/>
-			</if>
-
-			<if cond="(has_pres == 1)">
+			<else/>
 				<goto next="#mnuChatRoom"/>
 			</if>
 		</block>
@@ -37,7 +34,8 @@
 
 		<choice dtmf="1" next="#xxx"></choice>								<!-- see available presentations: TODO -->
 		<choice dtmf="2" expr="URLusersOnline"></choice>			<!-- see how many are online -->
-		<choice dtmf="3" expr="#xxx"></choice>								<!-- modify my existing presentation: TODO -->
+		<choice dtmf="3" next="#mnuShowMyPres"></choice>			<!-- see my current presentation -->
+		<choice dtmf="4" next="#frmRecord"></choice>					<!-- record a new presentation -->
 
 		<choice dtmf="0" expr="URLmain"></choice>							<!-- go to main menu -->
 	</menu>
@@ -100,6 +98,14 @@
 			<goto next="#mnuChatRoom"/>
 		</block>
 	</form>
+
+	<!-- shows my current presentation video. press 0 to go back -->
+	<menu id="mnuShowMyPres">
+		<pse_audio expr="upload_path" repeat="LOOP"/>
+		<pse_video expr="upload_path" repeat="LOOP"/>
+
+		<choice dtmf="0" next="#mnuChatRoom"></choice>		<!-- go back -->
+	</menu>
 
 <?
 	require_once('vxml_foot.php');
