@@ -9,6 +9,9 @@
 
 <vxml version="2.0" xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+	<!-- global behaviour. # will stop on-going recording -->
+	<property name="termchar" value="#"/>
+
 	<!-- document scope variables -->
 	<var name="service"					expr="'<?=$config['vxml']['service']?>'"/>	<!-- ID of service currently used -->
 	<var name="callLocal"				expr="'call://' + connection.psems.callID"/>
@@ -17,7 +20,10 @@
 	<var name="URLhangup"				expr="'./hangup.php?id=' + connection.psems.callID"/>
 	<var name="URLusersOnline"	expr="'./users_online.php'"/>
 
-	<var name="has_pres" expr="'0'"/>		<!-- has the user left a presentation ? fixme: read this from db on call start -->
+	<var name="has_pres"				expr="'<?=$_SESSION['stored_pres']?>'"/>		<!-- has the user left a presentation? -->
+
+	<var name="upload_path"			expr="'media://m2w/rec/up_<?=$_SESSION['user_id']?>'"/>		<!-- url to this user's presentation video -->
+	<var name="record_var"/>		<!-- temp var to hold recorded presentation -->
 
 	<!-- catches CLIENT disconnects so we can update "users online" table -->
 	<catch event="connection.disconnect.hangup">

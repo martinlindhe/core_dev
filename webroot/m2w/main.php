@@ -13,12 +13,12 @@
 
 	require_once('config.php');
 
-	require_once('vxml_head.php');
-
 	//Use http://192.168.0.210/m2w/main.php?init from PSE-MS "Call Control"
 	if (isset($_GET['init'])) {
 		registerCallStart();
 	}
+
+	require_once('vxml_head.php');
 ?>
 
   <!-- main menu -->

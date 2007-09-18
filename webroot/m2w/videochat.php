@@ -16,12 +16,6 @@
 
 */
 ?>
-	<!-- global behaviour. # will stop on-going recording -->
-	<property name="termchar" value="#"/>
-
-	<var name="record_var"/>
-	<var name="upload_path" expr="'media://m2w/rec/up_'"/>
-	<? setSID(); ?>
 
 	<!-- if we made a presentation recording, jump to mnuChatRoom. else let user make presentation -->
 	<form id="checkForPresentation">
@@ -110,8 +104,8 @@
 
 	<form id="frmStore">
 		<block>
-			<!-- fixme: filen skapas men status blir "OFFLINE" - "Internal error (unspecified error)", samma med dest="media://m2w/recordedContent"-->
-			<pse_submit src="record_var" destexpr="upload_path + session_id"/>
+			<!-- fixme: filen skapas men status blir ibland "OFFLINE" - "Internal error (unspecified error)", samma med dest="media://m2w/recordedContent"-->
+			<pse_submit src="record_var" destexpr="upload_path" notifyUrl="http://192.168.0.210/m2w/pres_stored.php?id=<?=$_SESSION['user_id']?>"/>
 
 			<assign name="has_pres" expr="'1'"/>
 
@@ -122,16 +116,6 @@
 			<goto next="#mnuChatRoom"/>
 		</block>
 	</form>
-
-
-
-
-
-
-
-
-
-
 
 <?
 	require_once('vxml_foot.php');

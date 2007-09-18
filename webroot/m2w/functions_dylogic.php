@@ -4,10 +4,26 @@
 
 	function registerCallStart()
 	{
-		global $config;
+		global $db, $config;
 
 		unset($_SESSION['stored_call']);
 		storeCallDetails($config['vxml']['service']);
+
+		$_SESSION['stored_pres'] = 0;
+
+		//load stored settings & update call history
+		$q = 'SELECT * FROM tblCallerSettings WHERE callerID="'.$db->escape($_GET['callerID']).'"';
+		$data = $db->getOneRow($q);
+		if (!$data) {
+			$q = 'INSERT INTO tblCallerSettings SET callerID="'.$db->escape($_GET['callerID']).'", callCnt=1, timeFirstCall=NOW(), timeLastCall=NOW()';
+			$userId = $db->insert($q);
+		} else {
+			$userId = $data['userId'];
+			$q = 'UPDATE tblCallerSettings SET callCnt=callCnt+1, timeLastCall=NOW() WHERE userId='.$userId;
+			$db->update($q);
+			if ($data['storedPres']) $_SESSION['stored_pres'] = 1;
+		}
+		$_SESSION['user_id'] = $userId;
 	}
 
 	/* Called once at the beginning of a handled call. Stores call details */
@@ -75,13 +91,6 @@
 		$n = $db->getOneItem($q);	
 		if ($n > 3) return 'Many';
 		return $n;
-	}
-
-	//outputs a session ID value to the VoiceXML script. used to associate uploads with this user
-	function setSID()
-	{
-		$n = mt_rand(1000000,9999999);
-		echo '<var name="session_id" expr="'.$n.'"/>';
 	}
 
 ?>
