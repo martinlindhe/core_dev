@@ -7,6 +7,8 @@
 	{
 		global $db;
 		if (!is_numeric($_service)) return false;
+		
+		if (!empty($_SESSION['stored_call'])) return true;	//call details is already stored
 
 		//Note: PHP translates "vendorIdentifier.productID" into "vendorIdentifier_productID"
 
@@ -22,22 +24,37 @@
 			!isset($_GET['redirectingNumber']) || !isset($_GET['callType'])
 		) return false;
 
-		//todo: kom ihåg att detta skrivits till databasen så att det inte skrivs igen vid senare sidanrop
-
 		//this is a full insert of all parameters, for debugging
 		$q = 'INSERT INTO tblCallDetails SET timeCreated=NOW(), service='.$_service.', callID="'.$db->escape($_GET['callID']).'", params="'.$db->escape(serialize($_GET)).'"';
 		$entryId = $db->insert($q);
 
 		//Store a entry
 		if ($_GET['callDirection'] == 'INBOUND') {
+
+			//kom ihåg att detta skrivits till databasen så att det inte skrivs igen vid senare sidanrop
+			$_SESSION['stored_call'] = true;
+
 			$q = 'INSERT INTO tblCurrentCalls SET entryId='.$entryId.', timeCreated=NOW(), service='.$_service.', '.
 				'callID="'.$db->escape($_GET['callID']).'", stack="'.$db->escape($_GET['stack']).'", callType="'.$db->escape($_GET['callType']).'", '.
 				'callerAlias="'.$db->escape($_GET['callerAlias']).'", callerID="'.$db->escape($_GET['callerID']).'", callerIP="'.$db->escape($_GET['callerIP']).'", '.
 				'calledAlias="'.$db->escape($_GET['calledAlias']).'", calledID="'.$db->escape($_GET['calledID']).'", calledIP="'.$db->escape($_GET['calledIP']).'"';
 
 			$db->insert($q);
-			//error_log($q);
+			error_log('inserted callSTART data');
 		}
+	}
+
+	//Logs the termination of a call
+	//	"id"	Set by PSE-MS as a unique call ID
+	function terminateCall($callID)
+	{
+		//maybe todo: store what type of hangup occured. did client chose to "hang up" in menus or did he just terminate the call? is this relevant..?
+
+		$q = 'UPDATE tblCallDetails SET timeHangup=NOW() WHERE callID="'.$db->escape($_GET['id']).'"';
+		$db->update($q);
+
+		$q = 'DELETE FROM tblCurrentCalls WHERE callID="'.$db->escape($_GET['id']).'"';
+		$db->delete($q);
 	}
 
 	//outputs a session ID value to the VoiceXML script. used to associate uploads with this user

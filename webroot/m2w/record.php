@@ -50,7 +50,6 @@
 		</block>
 	</form>
 
-
 	<menu id="mnuPreviewRecording">
 		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
 		<pse_video src="media://m2w/mnuPreviewRecording" repeat="LOOP"/>

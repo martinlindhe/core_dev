@@ -1,5 +1,4 @@
-<?php
-
+<?
 	require_once('config.php');
 
 	require_once('vxml_head.php');
@@ -9,7 +8,7 @@
 */
 ?>
 
-	<!-- catches disconnects so we can update "users online" table -->
+	<!-- catches CLIENT disconnects so we can update "users online" table -->
 	<catch event="connection.disconnect.hangup">
 		<goto expr="'./hangup.php?id=' + connection.psems.callID"/>
 	</catch>
@@ -25,7 +24,6 @@
 
 		<choice dtmf="1" next="#mnuChatRoom"></choice>	<!-- see if anyone is available for chat -->
 		<choice dtmf="0" next="#quit"></choice>					<!-- hangup -->
-
 	</menu>
 
 	<!-- tell the user if anyone else is on the line -->
@@ -36,7 +34,6 @@
 		<choice dtmf="1" next="#mnuPersistentFeed"></choice>	<!-- test call routing. show video from persistent call -->
 		<choice dtmf="3" next="#mirror"></choice>							<!-- test call routing. mirror myself -->
 		<choice dtmf="0" next="#mnuMain"></choice>						<!-- go to main menu -->
-
 	</menu>
 
 	<!-- show persistent video feed -->
@@ -56,7 +53,7 @@
   <!-- Quit block -->
 	<form id="quit">
 		<block>
-		  <exit/>
+			<goto expr="'./hangup.php?id=' + connection.psems.callID"/>
 		</block>
 	</form>
 <?

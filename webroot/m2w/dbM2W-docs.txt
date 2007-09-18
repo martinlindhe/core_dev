@@ -1,0 +1,25 @@
+tblCallDetails - stores 1 entry for every call started
+	entryId			- internal unique ID for this call
+	service			- type of service the user called to
+	callID			- PSE-MS unique ID for this call
+	timeCreated - when the call started
+	timeHangup	- when the call ended
+	params			- serialized array of all PSE-MS parameters
+
+
+tblCurrentCalls - stores 1 entry for each currently connected call
+	entryId			- refers to tblCallDetails.entryId
+	service			- type of service the user called to
+	timeCreated	- when the call started
+
+	PSE-MS variables:
+	callID			- PSE-MS unique ID for this call (DL-RP-7555_20070917131808109654)
+	stack				- type of stack (SIP)
+	callType		- type of call (AUDIO, VIDEO)
+	callerAlias	- sip:martin@192.168.0.210
+	callerID		- sip:martin@192.168.0.210
+	callerIP		- 192.168.0.210
+
+	calledAlias	- sip:444@192.168.0.201
+	calledID		- sip:444@192.168.0.201
+	calledIP		- 192.168.0.201
