@@ -17,6 +17,8 @@
 	<var name="URLhangup"				expr="'./hangup.php?id=' + connection.psems.callID"/>
 	<var name="URLusersOnline"	expr="'./users_online.php'"/>
 
+	<var name="has_pres" expr="'0'"/>		<!-- has the user left a presentation ? fixme: read this from db on call start -->
+
 	<!-- catches CLIENT disconnects so we can update "users online" table -->
 	<catch event="connection.disconnect.hangup">
 		<goto expr="URLhangup"/>

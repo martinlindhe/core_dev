@@ -72,7 +72,9 @@
 		global $db, $config;
 	
 		$q = 'SELECT COUNT(entryId) FROM tblCurrentCalls WHERE service='.$config['vxml']['service'];
-		return $db->getOneItem($q);	
+		$n = $db->getOneItem($q);	
+		if ($n > 3) return 'Many';
+		return $n;
 	}
 
 	//outputs a session ID value to the VoiceXML script. used to associate uploads with this user

@@ -16,6 +16,25 @@
 
 */
 ?>
+	<!-- global behaviour. # will stop on-going recording -->
+	<property name="termchar" value="#"/>
+
+	<var name="record_var"/>
+	<var name="upload_path" expr="'media://m2w/rec/up_'"/>
+	<? setSID(); ?>
+
+	<!-- if we made a presentation recording, jump to mnuChatRoom. else let user make presentation -->
+	<form id="checkForPresentation">
+		<block>
+			<if cond="(has_pres == 0)">
+				<goto next="#infoRecordStarting"/>
+			</if>
+
+			<if cond="(has_pres == 1)">
+				<goto next="#mnuChatRoom"/>
+			</if>
+		</block>
+	</form>
 
 	<!-- tell the user if anyone else is on the line -->
 	<menu id="mnuChatRoom">
@@ -26,6 +45,7 @@
 		<choice dtmf="2" expr="URLusersOnline"></choice>			<!-- see how many are online -->
 		<choice dtmf="3" next="#mnuPersistentFeed"></choice>	<!-- test call routing. show video from persistent call -->
 		<choice dtmf="4" next="#mirror"></choice>							<!-- test call routing. mirror myself -->
+		<!-- todo: choice 5 = record new presentation -->
 		<choice dtmf="0" expr="URLmain"></choice>							<!-- go to main menu -->
 	</menu>
 
@@ -42,6 +62,76 @@
 		<pse_video expr="callLocal"/>
 		<choice dtmf="0" next="#mnuChatRoom"></choice>	<!-- stop -->
 	</menu>
+
+
+	<!-- tells the user "please leave presentation" then jumps to frmRecord -->
+	<form id="infoRecordStarting">
+		<block>
+			<pse_video src="media://m2w/infoRecordStarting" timeout="4000"/>
+			<goto next="#frmRecord"/>
+		</block>
+	</form>
+
+	<!-- record section -->
+	<form id="frmRecord">
+		<pse_record name="record_temp" maxtime="30s" dtmfterm="false">
+			<!-- actual recording starts as soon as this video prompt is displayed -->
+			<pse_audio src="media://examples/record/beep" repeat="LOOP" timeout="4000"/><!-- plays beep for 4 seconds -->
+			<pse_video src="media://m2w/frmRecord" repeat="LOOP"/>
+		</pse_record>
+		<block>
+			<!-- the scope of record_temp variable is limited to this <form> tag -->
+			<!-- we store it in global variable record_var for later use -->
+			<assign name="record_var" expr="record_temp"/>
+		</block>
+
+		<block>
+			<goto next="#mnuPreviewRecording"/>
+		</block>
+	</form>
+
+	<menu id="mnuPreviewRecording">
+		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
+		<pse_video src="media://m2w/mnuPreviewRecording" repeat="LOOP"/>
+
+		<choice dtmf="1" next="#frmReview"></choice>	<!-- review the newly recorded video -->
+		<choice dtmf="2" next="#frmRecord"></choice>	<!-- go back and do a new recoding -->
+		<choice dtmf="3" next="#frmStore"></choice>		<!-- store the recording -->
+		<choice dtmf="0" next="#mnuMain"></choice>		<!-- go back to main menu -->
+	</menu>
+
+	<form id="frmReview">
+		<block>
+			<pse_audio expr="record_var"/>
+			<pse_video expr="record_var"/>
+			<goto next="#mnuPreviewRecording"/>
+		</block>
+	</form>
+
+	<form id="frmStore">
+		<block>
+			<!-- fixme: filen skapas men status blir "OFFLINE" - "Internal error (unspecified error)", samma med dest="media://m2w/recordedContent"-->
+			<pse_submit src="record_var" destexpr="upload_path + session_id"/>
+
+			<assign name="has_pres" expr="'1'"/>
+
+			<!-- show "msg has been stored" for 5 sec then go back to main menu -->
+			<pse_audio src="media://examples/silence"/>
+			<pse_video src="media://m2w/frmStore" timeout="4000"/>
+
+			<goto next="#mnuChatRoom"/>
+		</block>
+	</form>
+
+
+
+
+
+
+
+
+
+
 
 <?
 	require_once('vxml_foot.php');

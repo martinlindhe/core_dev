@@ -8,7 +8,7 @@
 	functions_dylogic.php - various functions
 
 	hangup.php - to terminate the call
-	videochat.php - for video chat features	
+	videochat.php - for video chat features
 */
 
 	require_once('config.php');
