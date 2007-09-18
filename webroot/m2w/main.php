@@ -24,9 +24,10 @@
   <!-- main menu -->
 	<menu id="mnuMain">
 		<pse_audio src="media://m2w/jingle" repeat="LOOP"/>
-	  <pse_video src="media://m2w/mnuMain1to1" repeat="LOOP"/>
+	  <pse_video src="media://m2w/mnuMain" repeat="LOOP"/>
 
 		<choice dtmf="1" expr="URLvideochat"></choice>	<!-- see if anyone is available for chat -->
+		<choice dtmf="3" expr="URLdebug"></choice>			<!-- debug menu -->
 		<choice dtmf="0" expr="URLhangup"></choice>			<!-- hangup -->
 	</menu>
 

@@ -15,7 +15,9 @@
 	<!-- document scope variables -->
 	<var name="service"					expr="'<?=$config['vxml']['service']?>'"/>	<!-- ID of service currently used -->
 	<var name="callLocal"				expr="'call://' + connection.psems.callID"/>
+	<var name="callPersistent"	expr="'call://callMartin'"/>
 	<var name="URLmain"					expr="'./main.php'"/>
+	<var name="URLdebug"				expr="'./debug.php'"/>
 	<var name="URLvideochat"		expr="'./videochat.php'"/>
 	<var name="URLhangup"				expr="'./hangup.php?id=' + connection.psems.callID"/>
 	<var name="URLusersOnline"	expr="'./users_online.php'"/>
