@@ -46,7 +46,7 @@
 				'calledAlias="'.$db->escape($_GET['calledAlias']).'", calledID="'.$db->escape($_GET['calledID']).'", calledIP="'.$db->escape($_GET['calledIP']).'"';
 
 			$db->insert($q);
-			error_log('inserted callSTART data');
+			//error_log('inserted callSTART data');
 		}
 	}
 
