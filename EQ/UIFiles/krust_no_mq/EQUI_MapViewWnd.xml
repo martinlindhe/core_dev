@@ -1,18 +1,51 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<!-- - - - - - - - - - - - - - - -->
-<!--                             -->
-<!-- EQ UI MODIFICATION BY AHTI  -->
-<!--                             -->
-<!-- - - - - - - - - - - - - - - -->
 <XML ID="EQInterfaceDefinitionLanguage">
   <Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />
-  <Ui2DAnimation item="A_ZoomInButtonNormal">
+  <!-- Elements for main Map page -->
+  <!-- Image for an EQ map, move to EQUI_Animations at some point -->
+  <TextureInfo item="border.tga">
+    <Size>
+      <CX>256</CX>
+      <CY>256</CY>
+    </Size>
+  </TextureInfo>
+  <TextureInfo item="button_light.tga">
+    <Size>
+      <CX>256</CX>
+      <CY>256</CY>
+    </Size>
+  </TextureInfo>
+  <TextureInfo item="button_light_flyover.tga">
+		<Size>
+			<CX>256</CX>
+			<CY>256</CY>
+		</Size>
+	</TextureInfo>
+  <TextureInfo item="button_dark.tga">
+    <Size>
+      <CX>256</CX>
+      <CY>256</CY>
+    </Size>
+  </TextureInfo>
+  <TextureInfo item="button_dark_flyover.tga">
+    <Size>
+      <CX>256</CX>
+      <CY>256</CY>
+    </Size>
+  </TextureInfo>
+  <TextureInfo item="Myxiplx_window_pieces.tga">
+    <Size>
+      <CX>256</CX>
+      <CY>256</CY>
+    </Size>
+  </TextureInfo>
+  <Ui2DAnimation item="Myx_A_CenterButtonNormal">
     <Cycle>false</Cycle>
     <Frames>
-      <Texture>window_pieces04.tga</Texture>
+      <Texture>Myxiplx_window_pieces.tga</Texture>
       <Location>
         <X>0</X>
-        <Y>122</Y>
+        <Y>0</Y>
       </Location>
       <Size>
         <CX>22</CX>
@@ -24,13 +57,13 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Ui2DAnimation item="A_ZoomInButtonFlyby">
+  <Ui2DAnimation item="Myx_A_CenterButtonNormalFlyby">
     <Cycle>false</Cycle>
     <Frames>
-      <Texture>window_pieces04.tga</Texture>
+      <Texture>Myxiplx_window_pieces.tga</Texture>
       <Location>
         <X>22</X>
-        <Y>122</Y>
+        <Y>0</Y>
       </Location>
       <Size>
         <CX>22</CX>
@@ -42,13 +75,13 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Ui2DAnimation item="A_ZoomInButtonPressed">
+  <Ui2DAnimation item="Myx_A_CenterButtonPressed">
     <Cycle>false</Cycle>
     <Frames>
-      <Texture>window_pieces04.tga</Texture>
+      <Texture>Myxiplx_window_pieces.tga</Texture>
       <Location>
         <X>44</X>
-        <Y>122</Y>
+        <Y>0</Y>
       </Location>
       <Size>
         <CX>22</CX>
@@ -60,13 +93,13 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Ui2DAnimation item="A_ZoomInButtonPressedFlyby">
+  <Ui2DAnimation item="Myx_A_CenterButtonPressedFlyby">
     <Cycle>false</Cycle>
     <Frames>
-      <Texture>window_pieces04.tga</Texture>
+      <Texture>Myxiplx_window_pieces.tga</Texture>
       <Location>
         <X>66</X>
-        <Y>122</Y>
+        <Y>0</Y>
       </Location>
       <Size>
         <CX>22</CX>
@@ -78,47 +111,17 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Button item="MVW_ZoomInButton">
-    <ScreenID>MVW_ZoomInButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>258</X>
-      <Y>1</Y>
-    </Location>
-    <Size>
-      <CX>15</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>false</Style_Checkbox>
-    <Text />
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <ButtonDrawTemplate>
-      <Normal>A_ZoomInButtonNormal</Normal>
-      <Pressed>A_ZoomInButtonPressed</Pressed>
-      <Flyby>A_ZoomInButtonFlyby</Flyby>
-      <Disabled>A_ZoomInButtonNormal</Disabled>
-      <PressedFlyby>A_ZoomInButtonPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-    <TooltipReference>Zoom In. (Or use Mouse Wheel)</TooltipReference>
-  </Button>
-  <Ui2DAnimation item="A_PanUpButtonNormal">
+  <Ui2DAnimation item="A_MapPiece01">
     <Cycle>false</Cycle>
     <Frames>
-      <Texture>window_pieces04.tga</Texture>
+      <Texture>border.tga</Texture>
       <Location>
         <X>0</X>
-        <Y>166</Y>
+        <Y>0</Y>
       </Location>
       <Size>
-        <CX>22</CX>
-        <CY>22</CY>
+        <CX>256</CX>
+        <CY>189</CY>
       </Size>
       <Hotspot>
         <X>0</X>
@@ -126,17 +129,17 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanUpButtonFlyby">
+  <Ui2DAnimation item="Myx_Map_A_MapPiece_Light">
     <Cycle>false</Cycle>
     <Frames>
-      <Texture>window_pieces04.tga</Texture>
+      <Texture>button_light.tga</Texture>
       <Location>
-        <X>22</X>
-        <Y>166</Y>
+        <X>0</X>
+        <Y>0</Y>
       </Location>
       <Size>
-        <CX>22</CX>
-        <CY>22</CY>
+        <CX>249</CX>
+        <CY>198</CY>
       </Size>
       <Hotspot>
         <X>0</X>
@@ -144,17 +147,17 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanUpButtonPressed">
+  <Ui2DAnimation item="Myx_Map_A_MapPiece_Light_Flyover">
     <Cycle>false</Cycle>
     <Frames>
-      <Texture>window_pieces04.tga</Texture>
+      <Texture>button_light_flyover.tga</Texture>
       <Location>
-        <X>44</X>
-        <Y>166</Y>
+        <X>0</X>
+        <Y>0</Y>
       </Location>
       <Size>
-        <CX>22</CX>
-        <CY>22</CY>
+        <CX>249</CX>
+        <CY>198</CY>
       </Size>
       <Hotspot>
         <X>0</X>
@@ -162,17 +165,35 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanUpButtonPressedFlyby">
+  <Ui2DAnimation item="Myx_Map_A_MapPiece_Dark">
+		<Cycle>false</Cycle>
+		<Frames>
+			<Texture>button_dark.tga</Texture>
+			<Location>
+				<X>0</X>
+				<Y>0</Y>
+			</Location>
+			<Size>
+				<CX>249</CX>
+				<CY>198</CY>
+			</Size>
+			<Hotspot>
+				<X>0</X>
+				<Y>0</Y>
+			</Hotspot>
+		</Frames>
+	</Ui2DAnimation>
+  <Ui2DAnimation item="Myx_Map_A_MapPiece_Dark_Flyover">
     <Cycle>false</Cycle>
     <Frames>
-      <Texture>window_pieces04.tga</Texture>
+      <Texture>button_dark_flyover.tga</Texture>
       <Location>
-        <X>66</X>
-        <Y>166</Y>
+        <X>0</X>
+        <Y>0</Y>
       </Location>
       <Size>
-        <CX>22</CX>
-        <CY>22</CY>
+        <CX>249</CX>
+        <CY>198</CY>
       </Size>
       <Hotspot>
         <X>0</X>
@@ -180,529 +201,6 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Button item="MVW_PanUpButton">
-    <ScreenID>MVW_PanUpButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>274</X>
-      <Y>1</Y>
-    </Location>
-    <Size>
-      <CX>15</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>false</Style_Checkbox>
-    <ButtonDrawTemplate>
-      <Normal>A_PanUpButtonNormal</Normal>
-      <Pressed>A_PanUpButtonPressed</Pressed>
-      <Flyby>A_PanUpButtonFlyby</Flyby>
-      <Disabled>A_PanUpButtonNormal</Disabled>
-      <PressedFlyby>A_PanUpButtonPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
-  <Ui2DAnimation item="A_ZoomOutButtonNormal">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>0</X>
-        <Y>144</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_ZoomOutButtonFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>22</X>
-        <Y>144</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_ZoomOutButtonPressed">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>44</X>
-        <Y>144</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_ZoomOutButtonPressedFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>66</X>
-        <Y>144</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Button item="MVW_ZoomOutButton">
-    <ScreenID>MVW_ZoomOutButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>290</X>
-      <Y>1</Y>
-    </Location>
-    <Size>
-      <CX>15</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>false</Style_Checkbox>
-    <Text />
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <ButtonDrawTemplate>
-      <Normal>A_ZoomOutButtonNormal</Normal>
-      <Pressed>A_ZoomOutButtonPressed</Pressed>
-      <Flyby>A_ZoomOutButtonFlyby</Flyby>
-      <Disabled>A_ZoomOutButtonNormal</Disabled>
-      <PressedFlyby>A_ZoomOutButtonPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-    <TooltipReference>Zoom Out. (Or use Mouse Wheel)</TooltipReference>
-  </Button>
-  <Ui2DAnimation item="A_PanLeftButtonNormal">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>0</X>
-        <Y>232</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanLeftButtonFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>22</X>
-        <Y>232</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanLeftButtonPressed">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>44</X>
-        <Y>232</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanLeftButtonPressedFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>66</X>
-        <Y>232</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Button item="MVW_PanLeftButton">
-    <ScreenID>MVW_PanLeftButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>258</X>
-      <Y>17</Y>
-    </Location>
-    <Size>
-      <CX>15</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>false</Style_Checkbox>
-    <ButtonDrawTemplate>
-      <Normal>A_PanLeftButtonNormal</Normal>
-      <Pressed>A_PanLeftButtonPressed</Pressed>
-      <Flyby>A_PanLeftButtonFlyby</Flyby>
-      <Disabled>A_PanLeftButtonNormal</Disabled>
-      <PressedFlyby>A_PanLeftButtonPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
-  <Button item="MVW_PanResetButton">
-    <ScreenID>MVW_PanResetButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>274</X>
-      <Y>17</Y>
-    </Location>
-    <Size>
-      <CX>15</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>false</Style_Checkbox>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <ButtonDrawTemplate>
-      <Normal>A_BtnNormal</Normal>
-      <Pressed>A_BtnPressed</Pressed>
-      <Flyby>A_BtnFlyby</Flyby>
-      <Disabled>A_BtnDisabled</Disabled>
-      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
-  <Ui2DAnimation item="A_PanRightButtonNormal">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>0</X>
-        <Y>210</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanRightButtonFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>22</X>
-        <Y>210</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanRightButtonPressed">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>44</X>
-        <Y>210</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanRightButtonPressedFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>66</X>
-        <Y>210</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Button item="MVW_PanRightButton">
-    <ScreenID>MVW_PanRightButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>290</X>
-      <Y>17</Y>
-    </Location>
-    <Size>
-      <CX>15</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>false</Style_Checkbox>
-    <ButtonDrawTemplate>
-      <Normal>A_PanRightButtonNormal</Normal>
-      <Pressed>A_PanRightButtonPressed</Pressed>
-      <Flyby>A_PanRightButtonFlyby</Flyby>
-      <Disabled>A_PanRightButtonNormal</Disabled>
-      <PressedFlyby>A_PanRightButtonPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
-  <Ui2DAnimation item="A_ShowGroupButtonNormal">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces02.tga</Texture>
-      <Location>
-        <X>182</X>
-        <Y>120</Y>
-      </Location>
-      <Size>
-        <CX>26</CX>
-        <CY>26</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_ShowGroupButtonFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces02.tga</Texture>
-      <Location>
-        <X>182</X>
-        <Y>146</Y>
-      </Location>
-      <Size>
-        <CX>26</CX>
-        <CY>26</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_ShowGroupButtonPressed">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces02.tga</Texture>
-      <Location>
-        <X>182</X>
-        <Y>172</Y>
-      </Location>
-      <Size>
-        <CX>26</CX>
-        <CY>26</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_ShowGroupButtonPressedFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces02.tga</Texture>
-      <Location>
-        <X>182</X>
-        <Y>198</Y>
-      </Location>
-      <Size>
-        <CX>26</CX>
-        <CY>26</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Button item="MVW_ShowGroupButton">
-    <ScreenID>MVW_ShowGroupButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>258</X>
-      <Y>33</Y>
-    </Location>
-    <Size>
-      <CX>15</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>true</Style_Checkbox>
-    <ButtonDrawTemplate>
-      <Normal>A_ShowGroupButtonNormal</Normal>
-      <Pressed>A_ShowGroupButtonPressed</Pressed>
-      <Flyby>A_ShowGroupButtonFlyby</Flyby>
-      <Disabled>A_ShowGroupButtonNormal</Disabled>
-      <PressedFlyby>A_ShowGroupButtonPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
-  <Ui2DAnimation item="A_PanDownButtonNormal">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>0</X>
-        <Y>188</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanDownButtonFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>22</X>
-        <Y>188</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanDownButtonPressed">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>44</X>
-        <Y>188</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_PanDownButtonPressedFlyby">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>window_pieces04.tga</Texture>
-      <Location>
-        <X>66</X>
-        <Y>188</Y>
-      </Location>
-      <Size>
-        <CX>22</CX>
-        <CY>22</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Button item="MVW_PanDownButton">
-    <ScreenID>MVW_PanDownButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>274</X>
-      <Y>33</Y>
-    </Location>
-    <Size>
-      <CX>15</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>false</Style_Checkbox>
-    <ButtonDrawTemplate>
-      <Normal>A_PanDownButtonNormal</Normal>
-      <Pressed>A_PanDownButtonPressed</Pressed>
-      <Flyby>A_PanDownButtonFlyby</Flyby>
-      <Disabled>A_PanDownButtonNormal</Disabled>
-      <PressedFlyby>A_PanDownButtonPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
   <Ui2DAnimation item="A_ToolbarButtonNormal">
     <Cycle>false</Cycle>
     <Frames>
@@ -775,17 +273,570 @@
       </Hotspot>
     </Frames>
   </Ui2DAnimation>
-  <Button item="MVW_ToolbarButton">
-    <ScreenID>MVW_ToolbarButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
+  <Ui2DAnimation item="A_ZoomInButtonNormal">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>0</X>
+        <Y>122</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_ZoomInButtonFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>22</X>
+        <Y>122</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_ZoomInButtonPressed">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>44</X>
+        <Y>122</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_ZoomInButtonPressedFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>66</X>
+        <Y>122</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_ZoomOutButtonNormal">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>0</X>
+        <Y>144</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_ZoomOutButtonFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>22</X>
+        <Y>144</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_ZoomOutButtonPressed">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>44</X>
+        <Y>144</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_ZoomOutButtonPressedFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>66</X>
+        <Y>144</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanUpButtonNormal">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>0</X>
+        <Y>166</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanUpButtonFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>22</X>
+        <Y>166</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanUpButtonPressed">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>44</X>
+        <Y>166</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanUpButtonPressedFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>66</X>
+        <Y>166</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanDownButtonNormal">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>0</X>
+        <Y>188</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanDownButtonFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>22</X>
+        <Y>188</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanDownButtonPressed">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>44</X>
+        <Y>188</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanDownButtonPressedFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>66</X>
+        <Y>188</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanRightButtonNormal">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>0</X>
+        <Y>210</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanRightButtonFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>22</X>
+        <Y>210</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanRightButtonPressed">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>44</X>
+        <Y>210</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanRightButtonPressedFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>66</X>
+        <Y>210</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanLeftButtonNormal">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>0</X>
+        <Y>232</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanLeftButtonFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>22</X>
+        <Y>232</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanLeftButtonPressed">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>44</X>
+        <Y>232</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <Ui2DAnimation item="A_PanLeftButtonPressedFlyby">
+    <Cycle>false</Cycle>
+    <Frames>
+      <Texture>window_pieces04.tga</Texture>
+      <Location>
+        <X>66</X>
+        <Y>232</Y>
+      </Location>
+      <Size>
+        <CX>22</CX>
+        <CY>22</CY>
+      </Size>
+      <Hotspot>
+        <X>0</X>
+        <Y>0</Y>
+      </Hotspot>
+    </Frames>
+  </Ui2DAnimation>
+  <!-- Map Name -->
+  <Label item="MVW_ChooseMapLabel">
+    <ScreenID>MVW_ChooseMapLabel</ScreenID>
+    <Text>Current Map:</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
     <Location>
-      <X>290</X>
-      <Y>33</Y>
+      <X>38</X>
+      <Y>350</Y>
     </Location>
     <Size>
-      <CX>15</CX>
-      <CY>15</CY>
+      <CX>84</CX>
+      <CY>20</CY>
     </Size>
+    <AlignCenter>false</AlignCenter>
+  </Label>
+  <Combobox item="MVW_ChooseMapCombobox">
+    <ScreenID>MVW_ChooseMapCombobox</ScreenID>
+    <DrawTemplate>WDT_Inner</DrawTemplate>
+    <Location>
+      <X>270</X>
+      <Y>134</Y>
+    </Location>
+    <Size>
+      <CX>200</CX>
+      <CY>20</CY>
+    </Size>
+    <ListHeight>200</ListHeight>
+    <Button>BDT_Combo</Button>
+    <Style_Border>true</Style_Border>
+  </Combobox>
+  <!-- Panning -->
+  <Button item="MVW_PanLeftButton">
+    <ScreenID>MVW_PanLeftButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>-50</X>
+      <Y>24</Y>
+    </Location>
+    <Size>
+      <CX>22</CX>
+      <CY>22</CY>
+    </Size>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <ButtonDrawTemplate>
+      <Normal>A_PanLeftButtonNormal</Normal>
+      <Pressed>A_PanLeftButtonPressed</Pressed>
+      <Flyby>A_PanLeftButtonFlyby</Flyby>
+      <Disabled>A_PanLeftButtonNormal</Disabled>
+      <PressedFlyby>A_PanLeftButtonPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <Button item="MVW_PanRightButton">
+    <ScreenID>MVW_PanRightButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>-50</X>
+      <Y>24</Y>
+    </Location>
+    <Size>
+      <CX>22</CX>
+      <CY>20</CY>
+    </Size>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <ButtonDrawTemplate>
+      <Normal>A_PanRightButtonNormal</Normal>
+      <Pressed>A_PanRightButtonPressed</Pressed>
+      <Flyby>A_PanRightButtonFlyby</Flyby>
+      <Disabled>A_PanRightButtonNormal</Disabled>
+      <PressedFlyby>A_PanRightButtonPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <Button item="MVW_PanUpButton">
+    <ScreenID>MVW_PanUpButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>-50</X>
+      <Y>2</Y>
+    </Location>
+    <Size>
+      <CX>22</CX>
+      <CY>22</CY>
+    </Size>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <ButtonDrawTemplate>
+      <Normal>A_PanUpButtonNormal</Normal>
+      <Pressed>A_PanUpButtonPressed</Pressed>
+      <Flyby>A_PanUpButtonFlyby</Flyby>
+      <Disabled>A_PanUpButtonNormal</Disabled>
+      <PressedFlyby>A_PanUpButtonPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <Button item="MVW_PanDownButton">
+    <ScreenID>MVW_PanDownButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>-50</X>
+      <Y>46</Y>
+    </Location>
+    <Size>
+      <CX>22</CX>
+      <CY>22</CY>
+    </Size>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <ButtonDrawTemplate>
+      <Normal>A_PanDownButtonNormal</Normal>
+      <Pressed>A_PanDownButtonPressed</Pressed>
+      <Flyby>A_PanDownButtonFlyby</Flyby>
+      <Disabled>A_PanDownButtonNormal</Disabled>
+      <PressedFlyby>A_PanDownButtonPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <Button item="MVW_PanResetButton">
+    <ScreenID>MVW_PanResetButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>302</X>
+      <Y>166</Y>
+    </Location>
+    <Size>
+      <CX>19</CX>
+      <CY>19</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
     <Style_Checkbox>false</Style_Checkbox>
     <TextColor>
@@ -793,6 +844,164 @@
       <G>255</G>
       <B>255</B>
     </TextColor>
+	  <Font>2</Font>
+    <TooltipReference>Re-center view on player</TooltipReference>
+    <ButtonDrawTemplate>
+      <Normal>Myx_A_CenterButtonNormal</Normal>
+      <Pressed>Myx_A_CenterButtonPressed</Pressed>
+      <Flyby>Myx_A_CenterButtonNormalFlyby</Flyby>
+      <Disabled>Myx_A_CenterButtonNormal</Disabled>
+      <PressedFlyby>Myx_A_CenterButtonPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <!-- Zooming -->
+  <Button item="MVW_ZoomInButton">
+    <ScreenID>MVW_ZoomInButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>246</Y>
+    </Location>
+    <Size>
+      <CX>22</CX>
+      <CY>22</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <Text />
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+      <Normal>A_ZoomInButtonNormal</Normal>
+      <Pressed>A_ZoomInButtonPressed</Pressed>
+      <Flyby>A_ZoomInButtonFlyby</Flyby>
+      <Disabled>A_ZoomInButtonNormal</Disabled>
+      <PressedFlyby>A_ZoomInButtonPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+    <TooltipReference>Zoom In. (Or use Mouse Wheel)</TooltipReference>
+  </Button>
+  <Button item="MVW_ZoomOutButton">
+    <ScreenID>MVW_ZoomOutButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>268</Y>
+    </Location>
+    <Size>
+      <CX>22</CX>
+      <CY>22</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <Text />
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+      <Normal>A_ZoomOutButtonNormal</Normal>
+      <Pressed>A_ZoomOutButtonPressed</Pressed>
+      <Flyby>A_ZoomOutButtonFlyby</Flyby>
+      <Disabled>A_ZoomOutButtonNormal</Disabled>
+      <PressedFlyby>A_ZoomOutButtonPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+    <TooltipReference>Zoom Out. (Or use Mouse Wheel)</TooltipReference>
+  </Button>
+  <!-- Actual Map -->
+  <Screen item="MVW_MapRenderArea">
+    <ScreenID>MVW_MapRenderArea</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>4</X>
+      <Y>4</Y>
+    </Location>
+    <Size>
+      <CX>249</CX>
+      <CY>186</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>true</Style_Transparent>
+  </Screen>
+  <!-- Map background - just used as a border now -->
+  <StaticAnimation item="MVW_MapPiece1">
+    <ScreenID>MapPiece1</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>2</X>
+      <Y>2</Y>
+    </Location>
+    <Size>
+      <CX>256</CX>
+      <CY>189</CY>
+    </Size>
+    <Animation>A_MapPiece01</Animation>
+  </StaticAnimation>
+  <!-- Background button (acts as both background and toggle button -->
+	<Button item="Myx_Map_ChangeBackgroundButton">
+		<ScreenID>Myx_Map_ChangeBackgroundButton</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>5</X>
+			<Y>5</Y>
+		</Location>
+		<Size>
+			<CX>249</CX>
+			<CY>198</CY>
+		</Size>
+		<Style_Transparent>false</Style_Transparent>
+		<Style_Checkbox>true</Style_Checkbox>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>Myx_Map_A_MapPiece_Light</Normal>
+			<Pressed>Myx_Map_A_MapPiece_Dark</Pressed>
+			<Flyby>Myx_Map_A_MapPiece_Light_Flyover</Flyby>
+			<Disabled>Myx_Map_A_MapPiece_Light</Disabled>
+			<PressedFlyby>Myx_Map_A_MapPiece_Dark_Flyover</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
+
+	
+	<Button item="MVW_ToolbarButton">
+    <ScreenID>MVW_ToolbarButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>166</Y>
+    </Location>
+    <Size>
+      <CX>19</CX>
+      <CY>19</CY>
+    </Size>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <!-- <Text>Edit</Text>-->
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <!--
+	  <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+	  -->
     <ButtonDrawTemplate>
       <Normal>A_ToolbarButtonNormal</Normal>
       <Pressed>A_ToolbarButtonPressed</Pressed>
@@ -802,55 +1011,130 @@
     </ButtonDrawTemplate>
     <TooltipReference>Pop up the Toolbar Window.</TooltipReference>
   </Button>
-  <Label item="MVW_LayersLabel">
-    <ScreenID>MVW_LayersLabel</ScreenID>
+  <!-- Height Filter -->
+  <Button item="MVW_ZFilterButton">
+    <ScreenID>MVW_ZFilterButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>263</X>
+      <Y>31</Y>
+    </Location>
+    <Size>
+      <CX>60</CX>
+      <CY>17</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <Text>Height</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+    <TooltipReference>Toggle filtering map lines based on your position and the high and low values.</TooltipReference>
     <Font>1</Font>
-    <Text>Layers:</Text>
+  </Button>
+  <Label item="MVW_MinZLabel">
+    <ScreenID>MVW_MinZLabel</ScreenID>
+    <Font>1</Font>
+    <Text>L:</Text>
     <TextColor>
       <R>255</R>
       <G>255</G>
       <B>255</B>
     </TextColor>
     <Size>
-      <CX>47</CX>
-      <CY>11</CY>
+      <CX>15</CX>
+      <CY>15</CY>
     </Size>
-    <AlignCenter>true</AlignCenter>
+    <AlignCenter>False</AlignCenter>
     <Location>
-      <X>258</X>
+      <X>260</X>
+      <Y>52</Y>
+    </Location>
+  </Label>
+  <Label item="MVW_MaxZLabel">
+    <ScreenID>MVW_MaxZLabel</ScreenID>
+    <Font>1</Font>
+    <Text>H:</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Size>
+      <CX>15</CX>
+      <CY>15</CY>
+    </Size>
+    <AlignCenter>False</AlignCenter>
+    <Location>
+      <X>293</X>
+      <Y>52</Y>
+    </Location>
+  </Label>
+  <Editbox item="MVW_MinZEditBox">
+    <ScreenID>MVW_MinZEditBox</ScreenID>
+    <DrawTemplate>WDT_Inner</DrawTemplate>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>268</X>
       <Y>50</Y>
     </Location>
-  </Label>
-  <Label item="MVW_LayerVisibleLabel">
-    <ScreenID>MVW_LayerVisibleLabel</ScreenID>
-    <Font>1</Font>
-    <Text>Visible</Text>
+    <Size>
+      <CX>22</CX>
+      <CY>15</CY>
+    </Size>
+	  <Font>1</Font>
+	  <Style_Border>true</Style_Border>
     <TextColor>
       <R>255</R>
       <G>255</G>
       <B>255</B>
     </TextColor>
-    <Size>
-      <CX>47</CX>
-      <CY>11</CY>
-    </Size>
-    <AlignCenter>true</AlignCenter>
+    <TooltipReference>How much below your current position to draw map lines.</TooltipReference>
+  </Editbox>
+  <Editbox item="MVW_MaxZEditBox">
+    <ScreenID>MVW_MaxZEditBox</ScreenID>
+    <DrawTemplate>WDT_Inner</DrawTemplate>
+    <RelativePosition>true</RelativePosition>
     <Location>
-      <X>258</X>
-      <Y>61</Y>
+      <X>303</X>
+      <Y>50</Y>
     </Location>
-  </Label>
+    <Size>
+      <CX>22</CX>
+      <CY>15</CY>
+    </Size>
+	  <Font>1</Font>
+	  <Style_Border>true</Style_Border>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <TooltipReference>How much above your current position to draw map lines.</TooltipReference>
+  </Editbox>
+  <!-- Layer 0 - base -->
   <Button item="MVW_Layer0Button">
     <ScreenID>MVW_Layer0Button</ScreenID>
     <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
-    <Location>
+	  <Font>1</Font>
+	  <Location>
       <X>263</X>
       <Y>72</Y>
     </Location>
     <Size>
-      <CX>38</CX>
-      <CY>15</CY>
+      <CX>60</CX>
+      <CY>17</CY>
     </Size>
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
@@ -870,77 +1154,16 @@
       <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
     </ButtonDrawTemplate>
   </Button>
-  <Button item="MVW_Layer1Button">
-    <ScreenID>MVW_Layer1Button</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
-    <Location>
-      <X>263</X>
-      <Y>87</Y>
-    </Location>
-    <Size>
-      <CX>12</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>true</Style_Checkbox>
-    <Text>1</Text>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <ButtonDrawTemplate>
-      <Normal>A_BtnNormal</Normal>
-      <Pressed>A_BtnPressed</Pressed>
-      <Flyby>A_BtnFlyby</Flyby>
-      <Disabled>A_BtnDisabled</Disabled>
-      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
-  <Button item="MVW_Layer2Button">
-    <ScreenID>MVW_Layer2Button</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
-    <Location>
-      <X>276</X>
-      <Y>87</Y>
-    </Location>
-    <Size>
-      <CX>12</CX>
-      <CY>15</CY>
-    </Size>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>true</Style_Checkbox>
-    <Text>2</Text>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <ButtonDrawTemplate>
-      <Normal>A_BtnNormal</Normal>
-      <Pressed>A_BtnPressed</Pressed>
-      <Flyby>A_BtnFlyby</Flyby>
-      <Disabled>A_BtnDisabled</Disabled>
-      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
   <Button item="MVW_Layer3Button">
     <ScreenID>MVW_Layer3Button</ScreenID>
     <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
     <Location>
-      <X>289</X>
-      <Y>87</Y>
+      <X>305</X>
+      <Y>90</Y>
     </Location>
     <Size>
-      <CX>12</CX>
-      <CY>15</CY>
+      <CX>18</CX>
+      <CY>17</CY>
     </Size>
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
@@ -952,6 +1175,37 @@
       <G>255</G>
       <B>255</B>
     </TextColor>
+	  <Font>1</Font>
+	  <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <Button item="MVW_Layer2Button">
+    <ScreenID>MVW_Layer2Button</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>284</X>
+      <Y>90</Y>
+    </Location>
+    <Size>
+      <CX>18</CX>
+      <CY>17</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <Text>2</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+	</TextColor>
+		<Font>1</Font>
     <ButtonDrawTemplate>
       <Normal>A_BtnNormal</Normal>
       <Pressed>A_BtnPressed</Pressed>
@@ -960,42 +1214,117 @@
       <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
     </ButtonDrawTemplate>
   </Button>
-  <Label item="MVW_LayerActiveLabel">
-    <ScreenID>MVW_LayerActiveLabel</ScreenID>
-    <Font>1</Font>
-    <Text>Active</Text>
+  <Button item="MVW_Layer1Button">
+    <ScreenID>MVW_Layer1Button</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>263</X>
+      <Y>90</Y>
+    </Location>
+    <Size>
+      <CX>17</CX>
+      <CY>17</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <Text>1</Text>
+	  <Font>1</Font>
+	  <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <!-- Show Labels -->
+  <Button item="MVW_LabelsToggleButton">
+    <ScreenID>MVW_LabelsToggleButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>263</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>60</CX>
+      <CY>17</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <Text>Labels</Text>
+    <TooltipReference>Toggle displaying of labels on and off.</TooltipReference>
     <TextColor>
       <R>255</R>
       <G>255</G>
       <B>255</B>
     </TextColor>
-    <Size>
-      <CX>47</CX>
-      <CY>11</CY>
-    </Size>
-    <AlignCenter>true</AlignCenter>
-    <Location>
-      <X>258</X>
-      <Y>104</Y>
-    </Location>
-  </Label>
-  <Button item="MVW_Layer1ActiveButton">
-    <ScreenID>MVW_Layer1ActiveButton</ScreenID>
+	  <Font>1</Font>
+	  <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <!-- Show Group -->
+  <Button item="MVW_ShowGroupButton">
+    <ScreenID>MVW_ShowGroupButton</ScreenID>
     <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
     <Location>
       <X>263</X>
-      <Y>115</Y>
+      <Y>114</Y>
     </Location>
     <Size>
-      <CX>12</CX>
-      <CY>15</CY>
+      <CX>60</CX>
+      <CY>17</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <Text>Group</Text>
+    <TooltipReference>Toggle display of group members in the current zone.</TooltipReference>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+	  <Font>1</Font>
+	  <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+  <!-- Unused Active Layer buttons -->
+  <Button item="MVW_Layer3ActiveButton">
+    <ScreenID>MVW_Layer3ActiveButton</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>44</X>
+      <Y>-200</Y>
+    </Location>
+    <Size>
+      <CX>16</CX>
+      <CY>20</CY>
     </Size>
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
     <Style_Checkbox>false</Style_Checkbox>
-    <Text>1</Text>
+    <Text>3</Text>
     <TextColor>
       <R>255</R>
       <G>255</G>
@@ -1013,14 +1342,13 @@
   <Button item="MVW_Layer2ActiveButton">
     <ScreenID>MVW_Layer2ActiveButton</ScreenID>
     <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
     <Location>
-      <X>276</X>
-      <Y>115</Y>
+      <X>26</X>
+      <Y>-200</Y>
     </Location>
     <Size>
-      <CX>12</CX>
-      <CY>15</CY>
+      <CX>16</CX>
+      <CY>20</CY>
     </Size>
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
@@ -1041,23 +1369,22 @@
     </ButtonDrawTemplate>
     <RadioGroup>MVW_ActiveLayer</RadioGroup>
   </Button>
-  <Button item="MVW_Layer3ActiveButton">
-    <ScreenID>MVW_Layer3ActiveButton</ScreenID>
+  <Button item="MVW_Layer1ActiveButton">
+    <ScreenID>MVW_Layer1ActiveButton</ScreenID>
     <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
     <Location>
-      <X>289</X>
-      <Y>115</Y>
+      <X>8</X>
+      <Y>-200</Y>
     </Location>
     <Size>
-      <CX>12</CX>
-      <CY>15</CY>
+      <CX>16</CX>
+      <CY>20</CY>
     </Size>
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
     <Style_Checkbox>false</Style_Checkbox>
-    <Text>3</Text>
+    <Text>1</Text>
     <TextColor>
       <R>255</R>
       <G>255</G>
@@ -1072,160 +1399,55 @@
     </ButtonDrawTemplate>
     <RadioGroup>MVW_ActiveLayer</RadioGroup>
   </Button>
-  <Button item="MVW_LabelsToggleButton">
-    <ScreenID>MVW_LabelsToggleButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
+  <Label item="MVW_LayerActiveLabel">
+    <ScreenID>MVW_LayerActiveLabel</ScreenID>
     <Font>1</Font>
+    <Text>Active</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Size>
+      <CX>52</CX>
+      <CY>15</CY>
+    </Size>
+    <AlignCenter>true</AlignCenter>
     <Location>
-      <X>263</X>
+      <X>10</X>
+      <Y>186</Y>
+    </Location>
+  </Label>
+  <Label item="MVW_LayerVisibleLabel">
+    <ScreenID>MVW_LayerVisibleLabel</ScreenID>
+    <Font>1</Font>
+    <Text>Visible</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Size>
+      <CX>51</CX>
+      <CY>15</CY>
+    </Size>
+    <AlignCenter>true</AlignCenter>
+    <Location>
+      <X>9</X>
       <Y>132</Y>
     </Location>
-    <Size>
-      <CX>38</CX>
-      <CY>16</CY>
-    </Size>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>true</Style_Checkbox>
-    <Text>Labels</Text>
-    <TooltipReference>Toggle displaying of labels on and off.</TooltipReference>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <ButtonDrawTemplate>
-      <Normal>A_BtnNormal</Normal>
-      <Pressed>A_BtnPressed</Pressed>
-      <Flyby>A_BtnFlyby</Flyby>
-      <Disabled>A_BtnDisabled</Disabled>
-      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-  </Button>
-  <Button item="MVW_ZFilterButton">
-    <ScreenID>MVW_ZFilterButton</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Font>1</Font>
-    <Location>
-      <X>263</X>
-      <Y>150</Y>
-    </Location>
-    <Size>
-      <CX>38</CX>
-      <CY>29</CY>
-    </Size>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>false</Style_Transparent>
-    <Style_Checkbox>true</Style_Checkbox>
-    <Text>Height Filter</Text>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <ButtonDrawTemplate>
-      <Normal>A_BtnNormal</Normal>
-      <Pressed>A_BtnPressed</Pressed>
-      <Flyby>A_BtnFlyby</Flyby>
-      <Disabled>A_BtnDisabled</Disabled>
-      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
-    </ButtonDrawTemplate>
-    <TooltipReference>Toggle filtering map lines based on your position and the high and low values.</TooltipReference>
-    <Font>3</Font>
-  </Button>
-  <Label item="MVW_MaxZLabel">
-    <ScreenID>MVW_MaxZLabel</ScreenID>
-    <Font>1</Font>
-    <Text>High:</Text>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <Size>
-      <CX>47</CX>
-      <CY>11</CY>
-    </Size>
-    <AlignCenter>False</AlignCenter>
-    <Location>
-      <X>258</X>
-      <Y>179</Y>
-    </Location>
   </Label>
-  <Editbox item="MVW_MaxZEditBox">
-    <ScreenID>MVW_MaxZEditBox</ScreenID>
-    <DrawTemplate>WDT_Inner</DrawTemplate>
-    <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
-    <Location>
-      <X>258</X>
-      <Y>190</Y>
-    </Location>
-    <Size>
-      <CX>47</CX>
-      <CY>17</CY>
-    </Size>
-    <Style_Border>true</Style_Border>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <TooltipReference>How much above your current position to draw map lines.</TooltipReference>
-  </Editbox>
-  <Label item="MVW_MinZLabel">
-    <ScreenID>MVW_MinZLabel</ScreenID>
-    <Font>1</Font>
-    <Text>Low:</Text>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <Size>
-      <CX>47</CX>
-      <CY>11</CY>
-    </Size>
-    <AlignCenter>False</AlignCenter>
-    <Location>
-      <X>258</X>
-      <Y>207</Y>
-    </Location>
-  </Label>
-  <Editbox item="MVW_MinZEditBox">
-    <ScreenID>MVW_MinZEditBox</ScreenID>
-    <DrawTemplate>WDT_Inner</DrawTemplate>
-    <RelativePosition>true</RelativePosition>
-    <Font>2</Font>
-    <Location>
-      <X>258</X>
-      <Y>218</Y>
-    </Location>
-    <Size>
-      <CX>47</CX>
-      <CY>17</CY>
-    </Size>
-    <Style_Border>true</Style_Border>
-    <TextColor>
-      <R>255</R>
-      <G>255</G>
-      <B>255</B>
-    </TextColor>
-    <TooltipReference>How much below your current position to draw map lines.</TooltipReference>
-  </Editbox>
+  <!-- Load current zone -->
   <Button item="MVW_LoadCurrent">
     <ScreenID>MVW_LoadCurrent</ScreenID>
     <RelativePosition>true</RelativePosition>
-    <Font>1</Font>
     <Location>
       <X>263</X>
-      <Y>237</Y>
+      <Y>140</Y>
     </Location>
     <Size>
-      <CX>38</CX>
-      <CY>15</CY>
+      <CX>60</CX>
+      <CY>17</CY>
     </Size>
     <Style_Transparent>false</Style_Transparent>
     <Style_Checkbox>false</Style_Checkbox>
@@ -1235,7 +1457,8 @@
       <G>255</G>
       <B>255</B>
     </TextColor>
-    <ButtonDrawTemplate>
+	  <Font>1</Font>
+	  <ButtonDrawTemplate>
       <Normal>A_BtnNormal</Normal>
       <Pressed>A_BtnPressed</Pressed>
       <Flyby>A_BtnFlyby</Flyby>
@@ -1244,322 +1467,1730 @@
     </ButtonDrawTemplate>
     <TooltipReference>Reset map to current zone.</TooltipReference>
   </Button>
-  <Label item="MVW_ChooseMapLabel">
-    <ScreenID>MVW_ChooseMapLabel</ScreenID>
-    <Text>Current Map:</Text>
-    <TextColor>
+
+
+  <!-- Map page -->
+  <Page item ="MapPage">
+    <ScreenID>MapPage</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <DrawTemplate>WDT_Def</DrawTemplate>
+    <TabText>Player</TabText>
+    <TabTextColor>
       <R>255</R>
       <G>255</G>
       <B>255</B>
-    </TextColor>
-    <Location>
-      <X>38</X>
-      <Y>408</Y>
-    </Location>
-    <Size>
-      <CX>84</CX>
-      <CY>20</CY>
-    </Size>
-    <AlignCenter>false</AlignCenter>
-  </Label>
-  <Combobox item="MVW_ChooseMapCombobox">
-    <ScreenID>MVW_ChooseMapCombobox</ScreenID>
+    </TabTextColor>
+    <TabTextActiveColor>
+      <R>255</R>
+      <G>255</G>
+      <B>0</B>
+    </TabTextActiveColor>
+    <Style_Sizable>true</Style_Sizable>
+	  <Pieces>MVW_MapPiece1</Pieces>
+	  <Pieces>Myx_Map_ChangeBackgroundButton</Pieces>
+	  <Pieces>Screen:MVW_MapRenderArea</Pieces>
+	  <!--
+    Only using a single map graphic instead of the 4 corners (they're fixed size anyway, don't really understand why they did that...
+    <Pieces>MVW_MapPiece2</Pieces>
+    <Pieces>MVW_MapPiece3</Pieces>
+    <Pieces>MVW_MapPiece4</Pieces>
+    -->
+	  <Pieces>MVW_PanLeftButton</Pieces>
+	  <Pieces>MVW_PanRightButton</Pieces>
+	  <Pieces>MVW_PanUpButton</Pieces>
+	  <Pieces>MVW_PanDownButton</Pieces>
+	  <Pieces>MVW_ZoomInButton</Pieces>
+	  <Pieces>MVW_ZoomOutButton</Pieces>
+	  <Pieces>MVW_ToolbarButton</Pieces>
+	  <Pieces>MVW_MinZLabel</Pieces>
+	  <Pieces>MVW_MaxZLabel</Pieces>
+	  <Pieces>MVW_MinZEditBox</Pieces>
+	  <Pieces>MVW_MaxZEditBox</Pieces>
+	  <!--<Pieces>MVW_LayersLabel</Pieces>-->
+	  <Pieces>MVW_Layer1Button</Pieces>
+	  <Pieces>MVW_Layer2Button</Pieces>
+	  <Pieces>MVW_Layer3Button</Pieces>
+	  <!--<Pieces>MVW_LayerVisibleLabel</Pieces>-->
+	  <!--<Pieces>MVW_LayerActiveLabel</Pieces>-->
+	  <Pieces>MVW_Layer1ActiveButton</Pieces>
+	  <Pieces>MVW_Layer2ActiveButton</Pieces>
+	  <Pieces>MVW_Layer3ActiveButton</Pieces>
+	  <Pieces>MVW_ZFilterButton</Pieces>
+	  <Pieces>MVW_PanResetButton</Pieces>
+	  <Pieces>MVW_LabelsToggleButton</Pieces>
+	  <Pieces>MVW_Layer0Button</Pieces>
+	  <Pieces>MVW_LoadCurrent</Pieces>
+	  <Pieces>MVW_ShowGroupButton</Pieces>
+  </Page>
+
+
+
+  <!-- Atlas Page -->
+  <Screen item="MVW_AtlasRenderArea">
+    <ScreenID>MVW_AtlasRenderArea</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <AutoStretch>true</AutoStretch>
+    <TopAnchorToTop>true</TopAnchorToTop>
+    <TopAnchorOffset>27</TopAnchorOffset>
+    <BottomAnchorToTop>false</BottomAnchorToTop>
+    <LeftAnchorToLeft>true</LeftAnchorToLeft>
+    <RightAnchorToLeft>false</RightAnchorToLeft>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>true</Style_Transparent>
+  </Screen>
+  <Combobox item = "MVW_AtlasDirCombobox">
+    <ScreenID>MVW_AtlasDirCombobox</ScreenID>
     <DrawTemplate>WDT_Inner</DrawTemplate>
     <Location>
-      <X>112</X>
-      <Y>406</Y>
+      <X>0</X>
+      <Y>0</Y>
     </Location>
     <Size>
-      <CX>200</CX>
-      <CY>20</CY>
+      <CX>150</CX>
+      <CY>24</CY>
     </Size>
-    <ListHeight>200</ListHeight>
+    <ListHeight>60</ListHeight>
     <Button>BDT_Combo</Button>
     <Style_Border>true</Style_Border>
   </Combobox>
-  <!-- Image for an EQ map, move to EQUI_Animations at some point -->
-  <TextureInfo item="mapbg.tga">
-    <Size>
-      <CX>256</CX>
-      <CY>256</CY>
-    </Size>
-  </TextureInfo>
-  <TextureInfo item="cart02.tga">
-    <Size>
-      <CX>256</CX>
-      <CY>256</CY>
-    </Size>
-  </TextureInfo>
-  <TextureInfo item="cart03.tga">
-    <Size>
-      <CX>256</CX>
-      <CY>256</CY>
-    </Size>
-  </TextureInfo>
-  <TextureInfo item="cart04.tga">
-    <Size>
-      <CX>256</CX>
-      <CY>256</CY>
-    </Size>
-  </TextureInfo>
-  <Ui2DAnimation item="A_MapPiece01">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>mapbg.tga</Texture>
-      <Location>
-        <X>0</X>
-        <Y>0</Y>
-      </Location>
-      <Size>
-        <CX>256</CX>
-        <CY>256</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_MapPiece02">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>cart02.tga</Texture>
-      <Location>
-        <X>0</X>
-        <Y>0</Y>
-      </Location>
-      <Size>
-        <CX>256</CX>
-        <CY>255</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_MapPiece03">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>cart03.tga</Texture>
-      <Location>
-        <X>0</X>
-        <Y>0</Y>
-      </Location>
-      <Size>
-        <CX>255</CX>
-        <CY>144</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Ui2DAnimation item="A_MapPiece04">
-    <Cycle>false</Cycle>
-    <Frames>
-      <Texture>cart04.tga</Texture>
-      <Location>
-        <X>0</X>
-        <Y>0</Y>
-      </Location>
-      <Size>
-        <CX>256</CX>
-        <CY>144</CY>
-      </Size>
-      <Hotspot>
-        <X>0</X>
-        <Y>0</Y>
-      </Hotspot>
-    </Frames>
-  </Ui2DAnimation>
-  <Screen item="MVW_MapRenderArea">
-    <ScreenID>MVW_MapRenderArea</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>1</X>
-      <Y>1</Y>
-    </Location>
-    <Size>
-      <CX>254</CX>
-      <CY>254</CY>
-    </Size>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>true</Style_Transparent>
-  </Screen>
-  <StaticAnimation item="MVW_MapPiece1">
-    <ScreenID>MapPiece1</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>256</CX>
-      <CY>256</CY>
-    </Size>
-    <Animation>A_MapPiece01</Animation>
-  </StaticAnimation>
-  <StaticAnimation item="MVW_MapPiece2">
-    <ScreenID>MapPiece2</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>0</CX>
-      <CY>0</CY>
-    </Size>
-    <Animation>A_MapPiece02</Animation>
-  </StaticAnimation>
-  <StaticAnimation item="MVW_MapPiece3">
-    <ScreenID>MapPiece3</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>0</CX>
-      <CY>0</CY>
-    </Size>
-    <Animation>A_MapPiece03</Animation>
-  </StaticAnimation>
-  <StaticAnimation item="MVW_MapPiece4">
-    <ScreenID>MapPiece4</ScreenID>
-    <RelativePosition>true</RelativePosition>
-    <Location>
-      <X>0</X>
-      <Y>0</Y>
-    </Location>
-    <Size>
-      <CX>0</CX>
-      <CY>0</CY>
-    </Size>
-    <Animation>A_MapPiece04</Animation>
-  </StaticAnimation>
-  
-  	<Page item ="MapPage">
-		<ScreenID>MapPage</ScreenID>
-		<RelativePosition>true</RelativePosition>
-		<Style_VScroll>false</Style_VScroll>
-		<Style_HScroll>false</Style_HScroll>
-		<Style_Transparent>false</Style_Transparent>
-		<DrawTemplate>WDT_Def</DrawTemplate>
-		<TabText>Player</TabText>
-		<TabTextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>255</B>
-		</TabTextColor>
-		<TabTextActiveColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
-		</TabTextActiveColor>
-		<Style_Sizable>true</Style_Sizable>
-		<Pieces>Screen:MVW_MapRenderArea</Pieces>
-		<Pieces>MVW_MapPiece1</Pieces>
-		<Pieces>MVW_MapPiece2</Pieces>
-		<Pieces>MVW_MapPiece3</Pieces>
-		<Pieces>MVW_MapPiece4</Pieces>
-		<Pieces>MVW_PanLeftButton</Pieces>
-		<Pieces>MVW_PanRightButton</Pieces>
-		<Pieces>MVW_PanUpButton</Pieces>
-		<Pieces>MVW_PanDownButton</Pieces>
-		<Pieces>MVW_ZoomInButton</Pieces>
-		<Pieces>MVW_ZoomOutButton</Pieces>
-		<Pieces>MVW_ToolbarButton</Pieces>
-		<Pieces>MVW_MinZLabel</Pieces>
-		<Pieces>MVW_MaxZLabel</Pieces>
-		<Pieces>MVW_MinZEditBox</Pieces>
-		<Pieces>MVW_MaxZEditBox</Pieces>
-		<Pieces>MVW_LayersLabel</Pieces>
-		<Pieces>MVW_Layer1Button</Pieces>
-		<Pieces>MVW_Layer2Button</Pieces>
-		<Pieces>MVW_Layer3Button</Pieces>
-		<Pieces>MVW_LayerVisibleLabel</Pieces>
-		<Pieces>MVW_LayerActiveLabel</Pieces>
-		<Pieces>MVW_Layer1ActiveButton</Pieces>
-		<Pieces>MVW_Layer2ActiveButton</Pieces>
-		<Pieces>MVW_Layer3ActiveButton</Pieces>
-		<Pieces>MVW_ZFilterButton</Pieces>
-		<Pieces>MVW_PanResetButton</Pieces>
-		<Pieces>MVW_LabelsToggleButton</Pieces>
-		<Pieces>MVW_Layer0Button</Pieces>
-		<Pieces>MVW_LoadCurrent</Pieces>    
-		<Pieces>MVW_ShowGroupButton</Pieces>  
-	</Page>
-		
-  <Screen item="MVW_AtlasRenderArea">
-    <ScreenID>MVW_AtlasRenderArea</ScreenID>
-	<RelativePosition>true</RelativePosition>
-	<AutoStretch>true</AutoStretch>
-	<TopAnchorToTop>true</TopAnchorToTop>
-	<TopAnchorOffset>30</TopAnchorOffset>
-	<BottomAnchorToTop>false</BottomAnchorToTop>
-	<LeftAnchorToLeft>true</LeftAnchorToLeft>
-	<RightAnchorToLeft>false</RightAnchorToLeft>
-    <Style_VScroll>false</Style_VScroll>
-    <Style_HScroll>false</Style_HScroll>
-    <Style_Transparent>true</Style_Transparent>
-  </Screen>
-  
-  	<Combobox item = "MVW_AtlasDirCombobox">
-		<ScreenID>MVW_AtlasDirCombobox</ScreenID>
-		<DrawTemplate>WDT_Inner</DrawTemplate>
-		<Location>
-			<X>0</X>
-			<Y>0</Y>
-		</Location>
-		<Size>
-			<CX>150</CX>
-			<CY>24</CY>
-		</Size>
-		<ListHeight>60</ListHeight>
-		<Button>BDT_Combo</Button>
-		<Style_Border>true</Style_Border>
-	</Combobox>
-	
-	<Page item ="AtlasPage">
-		<ScreenID>AtlasPage</ScreenID>
-		<RelativePosition>true</RelativePosition>
-		<Style_VScroll>false</Style_VScroll>
-		<Style_HScroll>false</Style_HScroll>
-		<Style_Transparent>false</Style_Transparent>
-		<DrawTemplate>WDT_Def</DrawTemplate>
-		<TabText>Atlas</TabText>
-		<TabTextColor>
-				<R>255</R>
-				<G>255</G>
-				<B>255</B>
-		</TabTextColor>
-		<TabTextActiveColor>
-				<R>255</R>
-				<G>255</G>
-				<B>0</B>
-		</TabTextActiveColor>
-		<Style_Sizable>true</Style_Sizable>		
-			<Pieces>Screen:MVW_AtlasRenderArea</Pieces>		
-			<Pieces>MVW_AtlasDirCombobox</Pieces>			
-	</Page>
 
-	<TabBox item ="MVW_Subwindows">
-		<ScreenID>MVW_Subwindows</ScreenID>
-		<RelativePosition>true</RelativePosition>
-		<AutoStretch>true</AutoStretch>
-		<TopAnchorToTop>true</TopAnchorToTop>
-		<BottomAnchorToTop>false</BottomAnchorToTop>
-		<LeftAnchorToLeft>true</LeftAnchorToLeft>
-		<RightAnchorToLeft>false</RightAnchorToLeft>
-		<TabBorderTemplate>FT_DefTabBorder</TabBorderTemplate>
-		<PageBorderTemplate>FT_DefPageBorder</PageBorderTemplate>
-			<Pages>Page:MapPage</Pages >
-			<Pages>Page:AtlasPage</Pages >
-	</TabBox>
+  <!-- Bags Page -->
+  <InvSlot item = "IW_Inv23">
+    <ScreenID>InvSlot23</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>3</X>
+      <Y>10</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>23</EQType>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+  </InvSlot>
+  <InvSlot item = "IW_Inv24">
+    <ScreenID>InvSlot24</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>3</X>
+      <Y>35</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>24</EQType>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+  </InvSlot>
+  <InvSlot item = "IW_Inv25">
+    <ScreenID>InvSlot25</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>3</X>
+      <Y>60</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>25</EQType>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+  </InvSlot>
+  <InvSlot item = "IW_Inv26">
+    <ScreenID>InvSlot25</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>3</X>
+      <Y>85</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>26</EQType>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+  </InvSlot>
+  <InvSlot item = "IW_Inv27">
+    <ScreenID>InvSlot27</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>3</X>
+      <Y>110</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>27</EQType>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+  </InvSlot>
+  <InvSlot item = "IW_Inv28">
+    <ScreenID>InvSlot28</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>3</X>
+      <Y>135</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>28</EQType>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+  </InvSlot>
+  <InvSlot item = "IW_Inv29">
+    <ScreenID>InvSlot29</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>3</X>
+      <Y>160</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>29</EQType>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+  </InvSlot>
+  <InvSlot item = "IW_Inv30">
+    <ScreenID>InvSlot30</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>3</X>
+      <Y>185</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>30</EQType>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+  </InvSlot>
+
+  <!-- Bag Contents -->
+  <InvSlot item="IW_Bag1_Slot1">
+    <ScreenID>IW_Bag1_Slot1</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>26</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>262</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot2">
+    <ScreenID>IW_Bag1_Slot2</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>56</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>263</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot3">
+    <ScreenID>IW_Bag1_Slot3</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>86</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>264</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot4">
+    <ScreenID>IW_Bag1_Slot4</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>116</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>265</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot5">
+    <ScreenID>IW_Bag1_Slot5</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>146</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>266</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot6">
+    <ScreenID>IW_Bag1_Slot6</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>176</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>267</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot7">
+    <ScreenID>IW_Bag1_Slot7</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>268</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot8">
+    <ScreenID>IW_Bag1_Slot8</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>236</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>269</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot9">
+    <ScreenID>IW_Bag1_Slot9</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>270</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag1_Slot10">
+    <ScreenID>IW_Bag1_Slot10</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>296</X>
+      <Y>5</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>271</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot1">
+    <ScreenID>IW_Bag2_Slot1</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>26</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>272</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot2">
+    <ScreenID>IW_Bag2_Slot2</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>56</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>273</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot3">
+    <ScreenID>IW_Bag2_Slot3</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>86</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>274</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot4">
+    <ScreenID>IW_Bag2_Slot4</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>116</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>275</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot5">
+    <ScreenID>IW_Bag2_Slot5</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>146</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>276</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot6">
+    <ScreenID>IW_Bag2_Slot6</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>176</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>277</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot7">
+    <ScreenID>IW_Bag2_Slot7</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>278</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot8">
+    <ScreenID>IW_Bag2_Slot8</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>236</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>279</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot9">
+    <ScreenID>IW_Bag2_Slot9</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>280</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag2_Slot10">
+    <ScreenID>IW_Bag2_Slot10</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>296</X>
+      <Y>30</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>281</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot1">
+    <ScreenID>IW_Bag3_Slot1</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>26</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>282</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot2">
+    <ScreenID>IW_Bag3_Slot2</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>56</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>283</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot3">
+    <ScreenID>IW_Bag3_Slot3</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>86</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>284</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot4">
+    <ScreenID>IW_Bag3_Slot4</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>116</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>285</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot5">
+    <ScreenID>IW_Bag3_Slot5</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>146</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>286</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot6">
+    <ScreenID>IW_Bag3_Slot6</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>176</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>287</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot7">
+    <ScreenID>IW_Bag3_Slot7</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>288</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot8">
+    <ScreenID>IW_Bag3_Slot8</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>236</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>289</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot9">
+    <ScreenID>IW_Bag3_Slot9</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>290</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag3_Slot10">
+    <ScreenID>IW_Bag3_Slot10</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>296</X>
+      <Y>55</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>291</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot1">
+    <ScreenID>IW_Bag4_Slot1</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>26</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>292</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot2">
+    <ScreenID>IW_Bag4_Slot2</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>56</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>293</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot3">
+    <ScreenID>IW_Bag4_Slot3</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>86</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>294</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot4">
+    <ScreenID>IW_Bag4_Slot4</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>116</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>295</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot5">
+    <ScreenID>IW_Bag4_Slot5</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>146</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>296</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot6">
+    <ScreenID>IW_Bag4_Slot6</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>176</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>297</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot7">
+    <ScreenID>IW_Bag4_Slot7</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>298</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot8">
+    <ScreenID>IW_Bag4_Slot8</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>236</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>299</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot9">
+    <ScreenID>IW_Bag4_Slot9</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>300</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag4_Slot10">
+    <ScreenID>IW_Bag4_Slot10</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>296</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>301</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot1">
+    <ScreenID>IW_Bag5_Slot1</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>26</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>302</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot2">
+    <ScreenID>IW_Bag5_Slot2</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>56</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>303</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot3">
+    <ScreenID>IW_Bag5_Slot3</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>86</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>304</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot4">
+    <ScreenID>IW_Bag5_Slot4</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>116</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>305</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot5">
+    <ScreenID>IW_Bag5_Slot5</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>146</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>306</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot6">
+    <ScreenID>IW_Bag5_Slot6</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>176</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>307</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot7">
+    <ScreenID>IW_Bag5_Slot7</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>308</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot8">
+    <ScreenID>IW_Bag5_Slot8</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>236</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>309</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot9">
+    <ScreenID>IW_Bag5_Slot9</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>310</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag5_Slot10">
+    <ScreenID>IW_Bag5_Slot10</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>296</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>311</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot1">
+    <ScreenID>IW_Bag6_Slot1</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>26</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>312</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot2">
+    <ScreenID>IW_Bag6_Slot2</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>56</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>313</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot3">
+    <ScreenID>IW_Bag6_Slot3</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>86</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>314</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot4">
+    <ScreenID>IW_Bag6_Slot4</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>116</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>315</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot5">
+    <ScreenID>IW_Bag6_Slot5</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>146</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>316</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot6">
+    <ScreenID>IW_Bag6_Slot6</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>176</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>317</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot7">
+    <ScreenID>IW_Bag6_Slot7</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>318</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot8">
+    <ScreenID>IW_Bag6_Slot8</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>236</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>319</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot9">
+    <ScreenID>IW_Bag6_Slot9</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>320</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag6_Slot10">
+    <ScreenID>IW_Bag6_Slot10</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>296</X>
+      <Y>130</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>321</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot1">
+    <ScreenID>IW_Bag7_Slot1</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>26</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>322</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot2">
+    <ScreenID>IW_Bag7_Slot2</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>56</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>323</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot3">
+    <ScreenID>IW_Bag7_Slot3</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>86</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>324</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot4">
+    <ScreenID>IW_Bag7_Slot4</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>116</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>325</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot5">
+    <ScreenID>IW_Bag7_Slot5</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>146</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>326</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot6">
+    <ScreenID>IW_Bag7_Slot6</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>176</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>327</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot7">
+    <ScreenID>IW_Bag7_Slot7</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>328</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot8">
+    <ScreenID>IW_Bag7_Slot8</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>236</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>329</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot9">
+    <ScreenID>IW_Bag7_Slot9</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>330</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag7_Slot10">
+    <ScreenID>IW_Bag7_Slot10</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>296</X>
+      <Y>155</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>331</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot1">
+    <ScreenID>IW_Bag8_Slot1</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>26</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>332</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot2">
+    <ScreenID>IW_Bag8_Slot2</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>56</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>333</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot3">
+    <ScreenID>IW_Bag8_Slot3</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>86</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>334</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot4">
+    <ScreenID>IW_Bag8_Slot4</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>116</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>335</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot5">
+    <ScreenID>IW_Bag8_Slot5</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>146</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>336</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot6">
+    <ScreenID>IW_Bag8_Slot6</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>176</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>337</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot7">
+    <ScreenID>IW_Bag8_Slot7</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>206</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>338</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot8">
+    <ScreenID>IW_Bag8_Slot8</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>236</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>339</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot9">
+    <ScreenID>IW_Bag8_Slot9</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>266</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>340</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+  <InvSlot item="IW_Bag8_Slot10">
+    <ScreenID>IW_Bag8_Slot10</ScreenID>
+    <!--<Font>3</Font>-->
+    <RelativePosition>true</RelativePosition>
+    <Location>
+      <X>296</X>
+      <Y>180</Y>
+    </Location>
+    <Size>
+      <CX>25</CX>
+      <CY>25</CY>
+    </Size>
+    <Background>A_RecessedBox</Background>
+    <EQType>341</EQType>
+    <ItemOffsetX>2</ItemOffsetX>
+    <ItemOffsetY>2</ItemOffsetY>
+  </InvSlot>
+
+  <Page item="IW_BagsPage">
+    <ScreenID>IW_BagsPage</ScreenID>
+    <RelativePosition>True</RelativePosition>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>true</Style_Transparent>
+    <TooltipReference>Expanded Bags: watch out for bags with less than 10 slots!</TooltipReference>
+    <DrawTemplate>WDT_Def</DrawTemplate>
+    <TabText>Bags</TabText>
+    <TabTextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TabTextColor>
+    <TabTextActiveColor>
+      <R>255</R>
+      <G>255</G>
+      <B>0</B>
+    </TabTextActiveColor>
+    <Pieces>IW_Bag1_Slot1</Pieces>
+    <Pieces>IW_Bag1_Slot2</Pieces>
+    <Pieces>IW_Bag1_Slot3</Pieces>
+    <Pieces>IW_Bag1_Slot4</Pieces>
+    <Pieces>IW_Bag1_Slot5</Pieces>
+    <Pieces>IW_Bag1_Slot6</Pieces>
+    <Pieces>IW_Bag1_Slot7</Pieces>
+    <Pieces>IW_Bag1_Slot8</Pieces>
+    <Pieces>IW_Bag1_Slot9</Pieces>
+    <Pieces>IW_Bag1_Slot10</Pieces>
+    <Pieces>IW_Bag2_Slot1</Pieces>
+    <Pieces>IW_Bag2_Slot2</Pieces>
+    <Pieces>IW_Bag2_Slot3</Pieces>
+    <Pieces>IW_Bag2_Slot4</Pieces>
+    <Pieces>IW_Bag2_Slot5</Pieces>
+    <Pieces>IW_Bag2_Slot6</Pieces>
+    <Pieces>IW_Bag2_Slot7</Pieces>
+    <Pieces>IW_Bag2_Slot8</Pieces>
+    <Pieces>IW_Bag2_Slot9</Pieces>
+    <Pieces>IW_Bag2_Slot10</Pieces>
+    <Pieces>IW_Bag3_Slot1</Pieces>
+    <Pieces>IW_Bag3_Slot2</Pieces>
+    <Pieces>IW_Bag3_Slot3</Pieces>
+    <Pieces>IW_Bag3_Slot4</Pieces>
+    <Pieces>IW_Bag3_Slot5</Pieces>
+    <Pieces>IW_Bag3_Slot6</Pieces>
+    <Pieces>IW_Bag3_Slot7</Pieces>
+    <Pieces>IW_Bag3_Slot8</Pieces>
+    <Pieces>IW_Bag3_Slot9</Pieces>
+    <Pieces>IW_Bag3_Slot10</Pieces>
+    <Pieces>IW_Bag4_Slot1</Pieces>
+    <Pieces>IW_Bag4_Slot2</Pieces>
+    <Pieces>IW_Bag4_Slot3</Pieces>
+    <Pieces>IW_Bag4_Slot4</Pieces>
+    <Pieces>IW_Bag4_Slot5</Pieces>
+    <Pieces>IW_Bag4_Slot6</Pieces>
+    <Pieces>IW_Bag4_Slot7</Pieces>
+    <Pieces>IW_Bag4_Slot8</Pieces>
+    <Pieces>IW_Bag4_Slot9</Pieces>
+    <Pieces>IW_Bag4_Slot10</Pieces>
+    <Pieces>IW_Bag5_Slot1</Pieces>
+    <Pieces>IW_Bag5_Slot2</Pieces>
+    <Pieces>IW_Bag5_Slot3</Pieces>
+    <Pieces>IW_Bag5_Slot4</Pieces>
+    <Pieces>IW_Bag5_Slot5</Pieces>
+    <Pieces>IW_Bag5_Slot6</Pieces>
+    <Pieces>IW_Bag5_Slot7</Pieces>
+    <Pieces>IW_Bag5_Slot8</Pieces>
+    <Pieces>IW_Bag5_Slot9</Pieces>
+    <Pieces>IW_Bag5_Slot10</Pieces>
+    <Pieces>IW_Bag6_Slot1</Pieces>
+    <Pieces>IW_Bag6_Slot2</Pieces>
+    <Pieces>IW_Bag6_Slot3</Pieces>
+    <Pieces>IW_Bag6_Slot4</Pieces>
+    <Pieces>IW_Bag6_Slot5</Pieces>
+    <Pieces>IW_Bag6_Slot6</Pieces>
+    <Pieces>IW_Bag6_Slot7</Pieces>
+    <Pieces>IW_Bag6_Slot8</Pieces>
+    <Pieces>IW_Bag6_Slot9</Pieces>
+    <Pieces>IW_Bag6_Slot10</Pieces>
+    <Pieces>IW_Bag7_Slot1</Pieces>
+    <Pieces>IW_Bag7_Slot2</Pieces>
+    <Pieces>IW_Bag7_Slot3</Pieces>
+    <Pieces>IW_Bag7_Slot4</Pieces>
+    <Pieces>IW_Bag7_Slot5</Pieces>
+    <Pieces>IW_Bag7_Slot6</Pieces>
+    <Pieces>IW_Bag7_Slot7</Pieces>
+    <Pieces>IW_Bag7_Slot8</Pieces>
+    <Pieces>IW_Bag7_Slot9</Pieces>
+    <Pieces>IW_Bag7_Slot10</Pieces>
+    <Pieces>IW_Bag8_Slot1</Pieces>
+    <Pieces>IW_Bag8_Slot2</Pieces>
+    <Pieces>IW_Bag8_Slot3</Pieces>
+    <Pieces>IW_Bag8_Slot4</Pieces>
+    <Pieces>IW_Bag8_Slot5</Pieces>
+    <Pieces>IW_Bag8_Slot6</Pieces>
+    <Pieces>IW_Bag8_Slot7</Pieces>
+    <Pieces>IW_Bag8_Slot8</Pieces>
+    <Pieces>IW_Bag8_Slot9</Pieces>
+    <Pieces>IW_Bag8_Slot10</Pieces>
+    <Pieces>IW_Inv23</Pieces>
+    <Pieces>IW_Inv24</Pieces>
+    <Pieces>IW_Inv25</Pieces>
+    <Pieces>IW_Inv26</Pieces>
+    <Pieces>IW_Inv27</Pieces>
+    <Pieces>IW_Inv28</Pieces>
+    <Pieces>IW_Inv29</Pieces>
+    <Pieces>IW_Inv30</Pieces>
+    <Location>
+      <X>0</X>
+      <Y>22</Y>
+    </Location>
+    <Size>
+      <CX>326</CX>
+      <CY>246</CY>
+    </Size>
+  </Page>
+
+  <!-- Tab control -->
+  <TabBox item ="MVW_Subwindows">
+    <ScreenID>MVW_Subwindows</ScreenID>
+    <RelativePosition>true</RelativePosition>
+    <AutoStretch>true</AutoStretch>
+    <TopAnchorToTop>true</TopAnchorToTop>
+    <BottomAnchorToTop>false</BottomAnchorToTop>
+    <LeftAnchorToLeft>true</LeftAnchorToLeft>
+    <RightAnchorToLeft>false</RightAnchorToLeft>
+    <TabBorderTemplate>FT_DefTabBorder</TabBorderTemplate>
+    <PageBorderTemplate>FT_DefPageBorder</PageBorderTemplate>
+    <Pages>Page:MapPage</Pages >
+    <Pages>Page:IW_BagsPage</Pages >
+  </TabBox>
+
+  <!-- Main window -->
   <Screen item="MapViewWnd">
     <RelativePosition>false</RelativePosition>
     <Location>
@@ -1567,21 +3198,22 @@
       <Y>80</Y>
     </Location>
     <Size>
-      <CX>323</CX>
-      <CY>304</CY>
+      <CX>340</CX>
+      <CY>238</CY>
     </Size>
     <NoWrap>false</NoWrap>
     <Style_VScroll>false</Style_VScroll>
     <Style_HScroll>false</Style_HScroll>
     <Style_Transparent>false</Style_Transparent>
     <TooltipReference>Map Viewer</TooltipReference>
-    <DrawTemplate>WDT_Rounded</DrawTemplate>
-    <Style_Titlebar>true</Style_Titlebar>
-    <Style_Closebox>true</Style_Closebox>
-    <Style_Minimizebox>true</Style_Minimizebox>
+    <DrawTemplate>WDT_Inner</DrawTemplate>
+    <Style_Titlebar>false</Style_Titlebar>
+    <Style_Closebox>false</Style_Closebox>
+    <Style_Minimizebox>false</Style_Minimizebox>
     <Style_Border>true</Style_Border>
     <Style_Sizable>false</Style_Sizable>
     <Text>Map</Text>
+    <!-- Loose 22 pixels vertically for tabs, plus 8 pixels horizontally -->
     <Pieces>MVW_Subwindows</Pieces>
-  </Screen>
+   </Screen>
 </XML>
