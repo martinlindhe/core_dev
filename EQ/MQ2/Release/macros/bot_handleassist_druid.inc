@@ -35,7 +35,11 @@
 | Percent levels
 #define SNARE_PERCENT				99
 #define DEBUFF_PERCENT			97
-#define STARTNUKE_PERCENT		95
+| 95% is perfect for raids & lv75 groups
+| #define STARTNUKE_PERCENT		95
+
+#define STARTNUKE_PERCENT		45
+
 #define LOM_PERCENT					10					| mana % limit, dont nuke below this limit
 
 
