@@ -12,8 +12,6 @@
 
 	define('COMMENT_ADMIN_IP',			10);	//a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 
-	define('COMMENT_ADBLOCKRULE',		20);
-
 	/* Comment types only meant for the admin's eyes */
 	define('COMMENT_MODERATION',		30);	//owner = tblModeration.queueId
 

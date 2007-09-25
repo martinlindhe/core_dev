@@ -3,10 +3,6 @@
 	
 	define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
 
-
-	define('FEEDBACK_ADBLOCK_ADS', 20);					//for adblock project "report site" function
-	define('FEEDBACK_ADBLOCK_BROKEN_RULE', 21); //for adblock project "report site" function
-
 	//subjectId is the userId if its a abuse report
 	function saveFeedback($_type, $_text, $_text2 = '', $_subject = 0)
 	{
