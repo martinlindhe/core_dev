@@ -25,7 +25,7 @@ class DB_MySQLi extends DB_Base
 		if (!$this->port) $this->port = 3306;	//MySQL default port
 		if (!$this->username) $this->username = 'root';
 
-		$this->db_handle = @ new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
+		$this->db_handle = new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
 		if (mysqli_connect_errno()) {
 			$this->db_handle = false;

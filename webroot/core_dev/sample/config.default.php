@@ -33,7 +33,6 @@
 	//loadPlugins();
 
 	$config['database']['username']	= 'root';
-	//$config['database']['password']	= 'dravel';
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbSample';
 	$db = new DB_MySQLi($config['database']);

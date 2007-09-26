@@ -27,7 +27,7 @@ class DB_MySQL extends DB_Base
 		if (!$this->port) $this->port = 3306;	//MySQL default port
 		if (!$this->username) $this->username = 'root';
 
-		$this->db_handle = @ mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
+		$this->db_handle = mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
 
 		if (!$this->db_handle) {
 			$this->db_handle = false;
