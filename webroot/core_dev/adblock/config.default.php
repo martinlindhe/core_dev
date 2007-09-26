@@ -21,9 +21,8 @@
 
 	//types specific for this project
 	define('COMMENT_ADBLOCKRULE',		20);
-
-	define('FEEDBACK_ADBLOCK_ADS', 20);					//for adblock project "report site" function
-	define('FEEDBACK_ADBLOCK_BROKEN_RULE', 21); //for adblock project "report site" function
+	define('FEEDBACK_ADBLOCK_ADS', 20);
+	define('FEEDBACK_ADBLOCK_BROKEN_RULE', 21);
 
 
 	$config['debug'] = true;

@@ -7,9 +7,9 @@
 	echo createMenu($admin_menu, 'blog_menu');
 	echo createMenu($super_admin_menu, 'blog_menu');
 
-	$supported_apache = array('1.3.37', '2.2.4');
+	$supported_apache = array('1.3.37', '2.2.99');	//Apache 2.2.x is the current stable branch
 
-	$supported_php = array('5.2.0', '5.2.99');	//PHP 5.2.x is the current version for target of development
+	$supported_php = array('5.2.0', '5.2.99');	//PHP 5.2.x is the current stable branch
 	$supported_php_gd = array('2.0', '2.0.34');
 	$supported_php_apc = array('3.0.14', '3.0.15');
 
@@ -76,15 +76,19 @@
 	echo '<h2>PHP</h2>';
 
 	$current_php = phpversion();
+	$current_php_gd = false;
 
-	$x = gd_info();
-	$current_php_gd = $x['GD Version'];
-	//GD version string looks like this:
-	//	Windows: "bundled (2.0.34 compatible)"
-	//	Linux: "2.0 or higher"
-	$current_php_gd = str_replace('bundled (', '', $current_php_gd);
-	$current_php_gd = str_replace(' compatible)', '', $current_php_gd);
-	$current_php_gd = str_replace(' or higher', '', $current_php_gd);
+	if (function_exists("gd_info")) {
+		$x = gd_info();
+		$current_php_gd = $x['GD Version'];
+		//GD version string looks like this:
+		//	Windows: "bundled (2.0.34 compatible)"
+		//	Linux: "2.0 or higher"
+		$current_php_gd = str_replace('bundled (', '', $current_php_gd);
+		$current_php_gd = str_replace(' compatible)', '', $current_php_gd);
+		$current_php_gd = str_replace(' or higher', '', $current_php_gd);
+	}
+
 	$current_php_apc = phpversion('apc');
 
 	echo version_compare_array($supported_php, $current_php);

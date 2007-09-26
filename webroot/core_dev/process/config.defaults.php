@@ -25,12 +25,6 @@
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbSample';
 	$db = new DB_MySQLi($config['database']);
-/*
-	$config['database']['username']	= 'postgres';
-	$config['database']['password']	= 'test';
-	$config['database']['database']	= 'dbSample';
-	$db = new DB_PostgreSQL($config['database']);
-*/
 
 	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
 	$config['session']['name'] = 'coreID';

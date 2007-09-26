@@ -202,9 +202,14 @@ class Session
 
 		if (isReservedUsername($username)) return 'Username is not allowed';
 
-		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
-		$checkId = $db->getOneItem($q);
-		if ($checkId) return 'Username already exists';
+		if (getUsersCnt()) {
+			$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
+			$checkId = $db->getOneItem($q);
+			if ($checkId) return 'Username already exists';
+		} else {
+			//No users exists, give this user superadmin status
+			$userMode = 2;
+		}
 
 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
 		$newUserId = $db->insert($q);
@@ -278,11 +283,17 @@ class Session
 	}
 
 	/*Shows a login form with tabs for Register & Forgot password functions */
-	//the handling of the result variables are in the __construct function above
+	//the handling of the result variables are called by $session->handleSessionActions() from config.php 
 	function showLoginForm()
 	{
 		global $config;
 		echo '<div class="login_box">';
+
+		$allow_superadmin_reg = false;
+		if (!getUsersCnt()) {
+			echo 'No users registered!';
+			$allow_superadmin_reg = true;
+		}
 
 		echo '<div id="login_form_layer">';
 		if (!$this->allow_login) {
@@ -300,16 +311,19 @@ class Session
 		echo '</table>';
 		echo '<br/>';
 		echo '<input type="submit" class="button" value="Log in"/>';
-		if ($this->allow_login && $this->allow_registration) {
+		if (($this->allow_login && $this->allow_registration) || $allow_superadmin_reg) {
 			echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');"/>';
 			echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
 		}
 		echo '</form>';
 		echo '</div>';
 
-		if ($this->allow_login && $this->allow_registration) {
+		if (($this->allow_login && $this->allow_registration) || $allow_superadmin_reg) {
 			echo '<div id="login_register_layer" style="display: none;">';
 				echo '<b>Register new account</b><br/><br/>';
+				if ($allow_superadmin_reg) {
+					echo '<div class="critical">The account you create now will be the super administrator account.</div>';
+				}
 
 				echo '<form method="post" action="">';
 				echo '<table cellpadding="2">';

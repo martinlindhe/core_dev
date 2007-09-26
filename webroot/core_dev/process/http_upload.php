@@ -11,7 +11,6 @@
 			echo '<div class="okay">Your file has been uploaded successfully!</div><br/>';
 			echo '<a href="http_enqueue.php?id='.$fileId.'">Click here</a> to perform further actions on this file.';
 			require('design_foot.php');
-			xdebug_break();
 			die;
 		} else {
 			echo 'file upload handling failed';

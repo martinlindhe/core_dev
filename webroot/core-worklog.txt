@@ -251,6 +251,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.09.26:
+	- class.Session: added code to help set up the first super admin account on a empty database
+
+
 2007.09.17:
 	- process: removed crc32 checksums
 	- process: using wget to for remote fetches

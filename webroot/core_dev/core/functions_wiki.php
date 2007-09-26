@@ -58,6 +58,15 @@
 	{
 		global $db, $files, $config;
 
+		if (empty($data['msg'])) {
+			echo '<div class="wiki">';
+			echo '<div class="wiki_body">';
+			echo 'The wiki "'.$wikiName.'" does not yet exist!<br/>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName.'">Create it</a>';
+			echo '</div>';
+			echo '</div>';
+		}
+
 		$text = stripslashes($data['msg']);
 
 		$text = formatUserInputText($text, !$config['wiki']['allow_html']);
@@ -94,7 +103,12 @@
 
 		$data = $db->getOneRow($q);
 
-		$text = stripslashes($data['msg']);
+		if (!empty($data['msg'])) {
+			$text = stripslashes($data['msg']);
+		} else {
+			//This wiki doesnt yet exist
+			$text = '';
+		}
 
 		if (!$session->isAdmin && !$config['wiki']['allow_edit']) {
 			/* Only display the text for normal visitors */
