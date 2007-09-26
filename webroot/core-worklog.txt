@@ -1,3 +1,12 @@
+att göra-hi prio:
+	1) återställ raiden
+	2) sätt upp lyrics på startwars.org
+	3) versionera mer viktiga filer
+	4) synka adblockrules.org med vad som finns i svn + core_dev
+	5) fixa adblockrules.org auto-submissions (logga IP från anonymous comment poster)
+	6) hur använder man apache2:s egna mime magic file för att identifiera filtyper för process-server?
+			nåt med MIMEMagicFile i httpd.conf
+
 ----[[platform todo]]----
 	process:
 
