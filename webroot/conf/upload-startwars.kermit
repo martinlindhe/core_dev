@@ -1,0 +1,16 @@
+#!/usr/bin/kermit +
+set background on
+if < \v(argc) 3 exit 1 Usage: \%0 remote-directory file1 file2
+ftp open domain.com /user:xx /password:xx
+if fail exit 1 Connection failed
+if not \v(ftp_loggedin) exit 1 Login failed
+ftp cd \%1
+if fail exit 1 ftp cd \%1: \v(ftp_message)
+lcd /home/martin/dev/
+ftp put /delete \%2
+if fail exit 1 ftp put \%2: \v(ftp_message)
+if defined \%3 ftp put /delete \%3
+if fail exit 1 ftp put \%3: \v(ftp_message)
+
+ftp bye
+exit
