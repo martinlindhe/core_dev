@@ -1,7 +1,7 @@
 <?createXHTMLHeader();?>
 <div id="header">
 	<div id="header-logo">
-		process site
+		webgame
 	</div>
 	<div id="header-items">
 		<a href="<?=$config['web_root']?>wiki.php?Wiki:About">About</a>

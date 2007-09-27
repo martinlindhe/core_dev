@@ -76,6 +76,7 @@ class Session
 		if (isset($session_config['error_page'])) $this->error_page = $session_config['error_page'];
 		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
 
+		ini_set('session.gc_maxlifetime', $session_config['timeout']);
 		session_name($this->session_name);
 		session_start();
 
