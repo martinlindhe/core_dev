@@ -8,6 +8,12 @@
 	#include bot_handleassist_mage.inc
 }
 
+
+/if (${Me.Class.Name.Equal[Cleric]} {
+	#include bot_handleassist_cleric.inc
+}
+
+
 #include bot_spells.inc
 
 
@@ -185,6 +191,7 @@ Sub Event_HANDLE_MOB_GATING(string line, string Name)
 /return
 
 #event HANDLE_MOB_HEALING "#1# begins to cast a spell. <Complete Healing>"
+#event HANDLE_MOB_HEALING "#1# begins to cast a spell. <Complete Heal>"
 Sub Event_HANDLE_MOB_HEALING(string Line, string Name)
 
 	/if (${Spawn[${Name}].Type.Equal["NPC"]}) {

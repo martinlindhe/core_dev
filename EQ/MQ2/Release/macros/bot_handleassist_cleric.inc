@@ -2,14 +2,14 @@
 |Cleric bot code
 |----------------------------------------------
 |Configuration:
-#define CHEAL_SPELLNAME		"Complete Healing"
+#define CHEAL_SPELLNAME		"Complete Heal"
 #define QHEAL_SPELLNAME		"Pious Remedy"
 #define YAULP_SPELLNAME		"Yaulp VII"
 #define NUKE_SPELLNAME		"Reproach"
 
 |% of when to start CH & quick heals
-#define CHEAL_PERCENT		55
-#define QHEAL_PERCENT		30
+#define CHEAL_PERCENT		94
+#define QHEAL_PERCENT		60
 
 |rss: ch 86, qh 60
 
@@ -19,7 +19,10 @@
 |unrest: ch 55, quick 35
 
 |Turn this to 0 to stop nuking too
-#define DO_NUKE				1
+#define DO_NUKE				0
+
+| cast yaulp?
+#define DO_YAULP			0
 
 |fixme: cleric kasta reverse DS kod
 #define DO_REVERSEDS		0
@@ -52,10 +55,10 @@ Sub DoYaulp
 		/return
 	}
 
-	/if (!${Me.Buff["YAULP_SPELLNAME"].ID}) {
+	/if (DO_YAULP && !${Me.Buff["YAULP_SPELLNAME"].ID}) {
 		/call WaitForSpellReady "YAULP_SPELLNAME"
 		|/i msg IRC_CHANNEL YAULP: YAULP_SPELLNAME
-		/call Cast "YAULP_SPELLNAME"
+		/call MQ2Cast "YAULP_SPELLNAME"
 	}
 /return
 
@@ -73,7 +76,7 @@ Sub HandleAssistCallCleric(int SpawnId)
 	/call FindTank
 	/varset tankId ${Macro.Return}
 	/if (${tankId} == 0) {
-		/i msg IRC_CHANNEL # ERRROR !!! No tank found!!!!!!!!!!!!!!!
+		/call DebugMsg "ERRROR !!! No tank found!!!!!!!!!!!!!!!"
 		/return
 	}
 
@@ -81,7 +84,7 @@ Sub HandleAssistCallCleric(int SpawnId)
 
 	/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME"
 
-	/i msg IRC_CHANNEL # Starting healing of ${tankName} (${Me.PctMana}m)
+	/call DebugMsg "Starting healing of ${tankName} (${Me.PctMana}m)"
 	/target id ${tankId}
 	
 	
@@ -97,22 +100,22 @@ Sub HandleAssistCallCleric(int SpawnId)
 			/goto :Done
 		}
 		/if (${Zone.ID} != ${zoneId}) {
-			/i msg IRC_CHANNEL # Stopping loop, zoned
+			/call DebugMsg "Stopping loop, zoned"
 			/return
 		}
 		/if ((${Spawn[id ${tankId} pc].PctHPs} <= CHEAL_PERCENT) && (${Spawn[id ${tankId} pc].Distance} < 100)) {
 			/if (${Spawn[id ${tankId} pc].PctHPs} > QHEAL_PERCENT) {
 				/target pc ${tankName}
 				/call WaitForSpellReady "CHEAL_SPELLNAME"
-				/i msg IRC_CHANNEL # CH > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)
-				/call Cast "CHEAL_SPELLNAME"
+				/call DebugMsg "CH > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+				/call MQ2Cast "CHEAL_SPELLNAME"
 				|fixme: loop while its being casted check target hp
 				|--- call Cast returns after spell is casted done
 			} else  {
 				/target pc ${tankName}
 				/call WaitForSpellReady "QHEAL_SPELLNAME"
-				/i msg IRC_CHANNEL # PR > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)
-				/call Cast "QHEAL_SPELLNAME"
+				/call DebugMsg "PR > ${Target.Name} < at ${Target.PctHPs}% (${Me.PctMana}m)"
+				/call MQ2Cast "QHEAL_SPELLNAME"
 			}
 		}
 		/if (${Spawn[id ${tankId} pc].PctHPs} > 95) {
@@ -129,27 +132,27 @@ Sub HandleAssistCallCleric(int SpawnId)
 
 		/if (!${Spawn[npc id ${SpawnId}].ID}) {
 			/call HandleGroupHeal QHEAL_PERCENT "QHEAL_SPELLNAME"
-			/i msg IRC_CHANNEL # Ending (mob dead) (${Me.PctMana}m)
+			/call DebugMsg "Ending (mob dead) (${Me.PctMana}m)"
 			/goto :Done
 		}
 
 		/if (${Me.TargetOfTarget.ID} && ${Me.TargetOfTarget.Type.NotEqual[Corpse]}) {
 
 			/if (DO_NUKE && (${Me.PctMana} >= 70) && (${Spawn[id ${tankId} pc].PctHPs} >= CHEAL_PERCENT) && (${Me.TargetOfTarget.PctHPs} <= 75)) {
-				|/i msg IRC_CHANNEL # Start attempt nuke.
+				| /call DebugMsg "Start attempt nuke."
 				/target npc id ${Me.TargetOfTarget.ID}
 				/delay 20
 
 				/if (${Target.Type.NotEqual[NPC]}) {
-					/i msg IRC_CHANNEL # Aborting nuking on ${Target.Name}, not a npc!
+					/call DebugMsg "Aborting nuking on ${Target.Name}, not a npc!"
 					/goto :ClericLoop
 				}
 
 				/if (${Target.ID} && (${Target.PctHPs} > 10) && ${Me.SpellReady["NUKE_SPELLNAME"]}) {
-					|/i msg IRC_CHANNEL Spell rdy.
+					| /call DebugMsg "Spell rdy."
 					/if (${Target.LineOfSight} && (${Target.Distance} < ${Me.Gem[${Me.Gem["NUKE_SPELLNAME"]}].Range})) {
-						/i msg IRC_CHANNEL # Nuking ${Target.CleanName} at ${Target.PctHPs}% (${Me.PctMana}m)
-						/call Cast "NUKE_SPELLNAME"
+						/call DebugMsg "Nuking ${Target.CleanName} at ${Target.PctHPs}% (${Me.PctMana}m)"
+						/call MQ2Cast "NUKE_SPELLNAME"
 						/target pc ${tankName}
 					}
 				}

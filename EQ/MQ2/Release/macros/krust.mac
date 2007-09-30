@@ -90,7 +90,7 @@ Sub DoRegularUpdates
 	}
 
 	|Opens up friend window, since the macro uses a modified feedback xml file to display data
-	/if (!${Window[FriendsWindow].Open}) /nomodkey /keypress alt+f
+	| /if (!${Window[FriendsWindow].Open}) /nomodkey /keypress alt+f
 	/varset UpdateTimer 3s
 /return
 

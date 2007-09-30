@@ -1,3 +1,5 @@
+#include gimp_dps.inc
+
 | druid normal slack
 #define HEAL_ONLY_MODE			0
 #define QHEAL_PERCENT				46
@@ -18,6 +20,8 @@ Sub Main
 		/echo Delegate MA not available, target MT and rerun
 		/endmacro
 	}
+
+	/call Init_DPS
 
 	/declare MT int local 0
 	/declare MTName string local

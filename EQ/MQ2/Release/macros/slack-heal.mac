@@ -1,6 +1,8 @@
+#include gimp_dps.inc
+
 | druid heal slack
 #define HEAL_ONLY_MODE			1
-#define QHEAL_PERCENT				64
+#define QHEAL_PERCENT				44
 
 | solteris group:
 | #define QHEAL_PERCENT				84
@@ -16,6 +18,8 @@ Sub Main
 	/declare AbortLoop				int outer 0
 
 	/varset TankName ${Target.Name}
+
+	/call Init_DPS
 
 	/if (!${Krust.Healer}) {
 		/echo Current class is not a healer class, ending macro
