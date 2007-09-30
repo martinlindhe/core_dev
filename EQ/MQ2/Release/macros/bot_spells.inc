@@ -14,24 +14,6 @@ Sub Event_ClickAR(string line, string name, string txt)
 	/casting "Divine fetters of ro" item
 /return
 
-| Player1 hit mobname for 123 points of non-melee damage.
-#event NukeDPS "#1# hit #2# for #3# points of non-melee damage."
-Sub Event_NukeDPS(string line, string name, string mob, string value)
-	/if (${Me.Name.Equal[${name}]} && ${Me.Name.NotEqual[${mob}]}) {
-		/call DebugMsg "Nuked > ${mob} < (${value} HP)"
-	}
-/return
-
-| Mobname has taken 123 damage from your Dot Spell Name.
-#event DotDPS "#1# has taken #2# damage from your #3#"
-Sub Event_DotDPS(string line, string name, string value, int spell)
-	/call DebugMsg "DoT > ${name} < (${value} HP)"
-/return
-
-#event Heal "You have healed #1# for #2# points of damage."
-Sub Event_Heal(string line, string name, int value)
-	/call DebugMsg "Healed > ${name} < (${value} HP)"
-/return
 
 #event TargetCured "Your target has been cured.#*#"
 Sub Event_TargetCured

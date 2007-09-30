@@ -1,4 +1,4 @@
-#include gimp_dps.inc
+#include bot_dps.inc
 
 | druid heal slack
 #define HEAL_ONLY_MODE			1
