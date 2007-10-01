@@ -89,7 +89,13 @@ Sub Event_DEBUFF_DruHoR(string Line, string Name)
 Sub Event_DEBUFF_DruCold(string Line, string Name)
 	| DRU/67: Glacier Breath
 	| DRU/72: Icefall Breath
-	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (COLD)"
+	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (IB: AC, +Nuke))"
+/return
+
+#event DEBUFF_DruHoarFrost "#1# is outlined in white ice."
+Sub Event_DEBUFF_DruHoarFrost(string Line, string Name)
+	| DRU/74: Hoar Frost
+	/if (${Me.Class.Name.Equal[Druid]}) /call DebugMsg "DEBUFFED: ${Target.CleanName} (HoarFrost: ATK, AC)"
 /return
 
 #event DEBUFF_DruidEpic	"#1# is cursed by nature's blight."

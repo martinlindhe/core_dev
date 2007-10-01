@@ -1,3 +1,8 @@
+2007.10.01
+	- bot_handleassist_druid.inc:
+		* recognizes Hoar Frost debuff
+
+
 2007.09.09
 	- bot_handleassist.inc:
 		* reagerar på BARD mezz nu med
