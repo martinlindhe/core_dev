@@ -182,7 +182,7 @@ class DB_MySQLi extends DB_Base
 		$data = array();
 
 		while ($row = $result->fetch_row()) {
-			$data[] = $row[0];
+			$data[] = $row;
 		}
 
 		$result->free();

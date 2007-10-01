@@ -270,6 +270,7 @@
 		if ($lastchanged < time()-($config['adblock']['cacheage']))
 		{
 			$list = getAdblockRules($types);
+			die('FIXME- kan inte imploda här längre lalalala');
 			$text = "[Adblock]\n".implode("\n", $list);
 			file_put_contents($cache_file, $text);
 		}
