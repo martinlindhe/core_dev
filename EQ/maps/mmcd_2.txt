@@ -1,4 +1,6 @@
-P -507.0000, -109.0000, 1.0000,  0, 0, 240,  3,  Scion_Brutish_Converter_(miniboss)
-P -621.0000, 384.0000, 50.0000,  0, 0, 240,  3,  boss_(Numleou_the_Learned)
-P -611.0000, 534.0000, 41.0000,  0, 0, 240,  3,  hostage_(Elaykari_the_Explorer)
-P 158.0000, 625.0000, 3.0000,  255, 0, 255,  3,  To_Lesser_Faydark
+P -500, 150, 0, 240, 240, 240, 3, The_Asylum_of_Invoked_Stone
+P -500, 200, 0, 240, 240, 240, 3, mmcd
+P 158, 625, 3, 255, 0, 255, 3, Zone
+P -621, 384, 50, 0, 0, 240, 3, boss
+P -611, 534, 41, 0, 0, 240, 3, hostage
+P -507, -109, 1, 0, 0, 127, 2, named
