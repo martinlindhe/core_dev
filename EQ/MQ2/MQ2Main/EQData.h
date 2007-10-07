@@ -424,7 +424,7 @@ typedef struct _ITEMSPELLS {
 /*0x64*/
 } ITEMSPELLS, *PITEMSPELLS; 
 
-// size is 0x4f0 07-05-2007
+// size is 0x4f4 10-04-2007
 typedef struct _ITEMINFO {
 /*0x000*/ CHAR   Name[ITEM_NAME_LEN];
 /*0x040*/ CHAR   LoreName[LORE_NAME_LEN];
@@ -560,8 +560,8 @@ typedef struct _ITEMINFO {
 /*0x4e0*/ DWORD  Purity;
 /*0x4e4*/ BYTE   Unknown0x4e4[0x4];
 /*0x4e8*/ BYTE   QuestItem;
-/*0x4e9*/ BYTE   Unknown0x4e9[0x7];
-/*0x4f0*/
+/*0x4e9*/ BYTE   Unknown0x4e9[0xb];
+/*0x4f4*/ 
 } ITEMINFO, *PITEMINFO;
 
 // actual size 0xd8 07-25-2007
@@ -1008,6 +1008,37 @@ typedef struct _EQUIPMENT {
    };
 } EQUIPMENT, *PEQUIPMENT;
 
+// 9-13-07 - ieatacid
+typedef struct _FELLOWSHIPMEMBER {
+/*0x00*/  DWORD  Unknown0x0;
+/*0x04*/  CHAR   Name[0x40];
+/*0x44*/  DWORD  ZoneID;
+/*0x48*/  DWORD  Level;
+/*0x4c*/  DWORD  Class;
+/*0x50*/  DWORD  LastOn;    // GetFastTime() timestamp
+/*0x54*/
+} FELLOWSHIPMEMBER, *PFELLOWSHIPMEMBER;
+
+// 9-13-07 - ieatacid
+typedef struct _FELLOWSHIPINFO {
+/*0x000*/  DWORD  Unknown0x0;        // always 1?
+/*0x004*/  DWORD  FellowshipID;      // ?
+/*0x008*/  CHAR   Leader[0x40];
+/*0x048*/  CHAR   MotD[0x400];
+/*0x448*/  DWORD  Members;
+/*0x44c*/  struct _FELLOWSHIPMEMBER  FellowshipMember[0x9];
+/*0x740*/  DWORD  Unknown0x740;      // timestamp for something
+/*0x744*/  FLOAT  CampfireY;
+/*0x748*/  FLOAT  CampfireX;
+/*0x74c*/  FLOAT  CampfireZ;
+/*0x750*/  DWORD  CampfireZoneID;    // zone ID where campfire is
+/*0x754*/  DWORD  CampfireTimestamp; // CampfireTimestamp-GetFastTime()=time left on campfire
+/*0x758*/  DWORD  Unknown0x7a0;      // some kind of ID - same as Unknown0x4
+/*0x75c*/  DWORD  Unknown0x7a4;      // campfire type?
+/*0x760*/  DWORD  Campfire;          // do we have a campfire up?
+/*0x764*/
+} FELLOWSHIPINFO, *PFELLOWSHIPINFO;
+
 // actual size: 0x1a8c 07-05-2007
 typedef struct _SPAWNINFO {
 /*0x0000*/ void     *vtable;
@@ -1161,7 +1192,9 @@ typedef struct _SPAWNINFO {
 /*0x10e0*/ DWORD    HideCorpse;
 /*0x10e4*/ BYTE     Unknown0x10e4[0x40];
 /*0x1124*/ BYTE     InvitedToGroup;
-/*0x1125*/ BYTE     Unknown0x1125[0x93f];
+/*0x1125*/ BYTE     Unknown0x1125[0x187];
+/*0x12ac*/ struct   _FELLOWSHIPINFO Fellowship;        // size 0x764
+/*0x1a10*/ BYTE     Unknown0x1a10[0x54];
 /*0x1a64*/ void     *vtable2;
 /*0x1a68*/ DWORD    Unknown0x1a68;
 /*0x1a6c*/ struct   _SPAWNINFO *pSpawn;
@@ -1337,8 +1370,6 @@ typedef struct _WORLDDATA {
 /*0x01C*/ PZONELIST ZoneArray[MAX_ZONES];
 } WORLDDATA, *PWORLDDATA;
 
-// 5-15-2003    Amadeus (discovered by Lax)
-// Actual Size 0x240, old
 typedef struct _ZONEINFO {
 /*0x000*/   CHAR    CharacterName[0x40];
 /*0x040*/   CHAR    ShortName[0x20];
@@ -1346,27 +1377,27 @@ typedef struct _ZONEINFO {
 /*0x0c0*/   CHAR    LongName[0x80];
 /*0x140*/   CHAR    Unknown0x140[0x96];  // <-- this isnt part of zone name, see CEverQuest__CEverQuest
 /*0x1d6*/   BYTE    ZoneType; // (usually FF)
-/*0x1d7*/	ARGBCOLOR FogRed;
-/*0x1db*/	ARGBCOLOR FogGreen;
-/*0x1df*/	ARGBCOLOR FogBlue;
+/*0x1d7*/   ARGBCOLOR FogRed;
+/*0x1db*/   ARGBCOLOR FogGreen;
+/*0x1df*/   ARGBCOLOR FogBlue;
 /*0x1e3*/   BYTE    Unknown0x1e3;
-/*0x1e4*/   BYTE	  Unknown0x1e4[0x10];
+/*0x1e4*/   BYTE    Unknown0x1e4[0x10];
 /*0x1f4*/   BYTE    Unknown0x1f4[0x10];
 /*0x204*/   FLOAT   ZoneGravity;
 /*0x208*/   BYTE    Unknown0x208;
 /*0x209*/   BYTE    Unknown0x209[0x3];
 /*0x20c*/   BYTE    Unknown0x20c[0x2e];
-/*0x23a*/	BYTE	  SkyType;	
-/*0x23b*/	BYTE	  Unknown0x23b[0xd];
+/*0x23a*/   BYTE    SkyType;   
+/*0x23b*/   BYTE    Unknown0x23b[0xd];
 /*0x248*/   FLOAT   ZoneExpModifier;    //This has been nerfed ..now reads 1.0 for all zones
-/*0x24c*/   FLOAT   Unknown0x24c[0x3];
-/*0x258*/   FLOAT   Ceiling;
-/*0x25c*/   FLOAT   Floor; 
-/*0x260*/   FLOAT   MinClip; 
-/*0x264*/   FLOAT   MaxClip; 
-/*0x268*/   BYTE    Unknown0x268[0x18];
-/*0x280*/   BYTE    Unknown0x280[0x20];
-/*0x2a0*/
+/*0x24c*/   FLOAT   Unknown0x24c[0x10];
+/*0x25c*/   FLOAT   Ceiling;
+/*0x260*/   FLOAT   Floor;
+/*0x264*/   FLOAT   MinClip;
+/*0x268*/   FLOAT   MaxClip;
+/*0x26c*/   BYTE    Unknown0x26c[0x18];
+/*0x284*/   BYTE    Unknown0x284[0x20];
+/*0x2a4*/
 } ZONEINFO, *PZONEINFO;
 
 #define   TOTAL_SPELL_COUNT				0x3e80      // # of spells allocated in memory (07/05/2007)
@@ -1506,7 +1537,7 @@ typedef struct _GUILDMEMBER {
 /*0x00c*/ BYTE    Unknown0xc[0x4];
 /*0x010*/ CHAR    Name[0x40];
 /*0x050*/ DWORD   Level;
-/*0x054*/ DWORD   Unknown0x54;
+/*0x054*/ DWORD   Flags; //1=banker, 2=alt
 /*0x058*/ DWORD   Class;
 /*0x05c*/ DWORD   Rank; //0=member 1=officer 2=leader
 /*0x060*/ DWORD   LastSeen; //last seen timestamp

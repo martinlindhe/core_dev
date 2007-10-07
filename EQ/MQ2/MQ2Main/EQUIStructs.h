@@ -426,10 +426,11 @@ typedef struct _CSIDLWND {
 /*0x16c*/   DWORD   Unknown0x16c;
 /*0x170*/   DWORD   Unknown0x170;// CTextureAnimation
 /*0x174*/   DWORD   Unknown0x174;// CTextureAnimation
-/*0x178*/   LPVOID  ContextMenu; // CTextureAnimation
-/*0x17c*/   DWORD   Unknown0x17c;// CTextureAnimation
+/*0x178*/   BYTE    Unknown0x178[0x4];
+/*0x17c*/   LPVOID  ContextMenu; // CTextureAnimation
 /*0x180*/   DWORD   Unknown0x180;// CTextureAnimation
-/*0x184*/
+/*0x184*/   DWORD   Unknown0x184;// CTextureAnimation
+/*0x188*/
 } CSIDLWND, *PCSIDLWND;
 
 // size 0x26c  02-13-2007
@@ -859,22 +860,21 @@ typedef struct _EQMAPWINDOW {
 // Spell Window
 typedef struct _EQCASTSPELLWINDOW {
 /*0x000*/ struct _CSIDLWND Wnd;
-/*0x160*/ BYTE Unknown0x148[0x0c];
-/*0x16c*/  struct _EQCASTSPELLGEM   *SpellSlots[0x9];
-/*0x190*/  BYTE    Unknown0x190[0x30];
+/*0x188*/ BYTE Unknown0x148[0x0c];
+/*0x194*/  struct _EQCASTSPELLGEM   *SpellSlots[0x9];
+/*0x1xx*/  BYTE    Unknown0x190[0x30];
 /*0x1c0*/
 } EQCASTSPELLWINDOW, *PEQCASTSPELLWINDOW;
 
-// dkaa 02-14-07
 // Individual Gems 
 typedef struct _EQCASTSPELLGEM { 
 /*0x000*/ struct	_CSIDLWND Wnd; 
-/*0x160*/ BYTE		Unknown0x160[0x08]; 
-/*0x168*/ BYTE		Unknown0x168[0x20]; 
-/*0x188*/ BYTE		Unknown0x188[0x4]; 
-/*0x18c*/ DWORD		spellicon;//if this is equal to FFFFFFFF there is no spell memmed in this slot... 
-/*0x190*/ DWORD		spellstate;// 1 = cast in progress or refreshtime not met 2 means we ducked or aborted cast, 0 means its ok to cast 
-/*0x194*/ BYTE          Unknown0x194[0x18];
+/*0x188*/ BYTE		Unknown0x188[0x04]; 
+/*0x18c*/ BYTE		Unknown0x18c[0x20]; 
+/*0x1ac*/ BYTE		Unknown0x1ac[0x4]; 
+/*0x1b0*/ DWORD		spellicon;//if this is equal to FFFFFFFF there is no spell memmed in this slot... 
+/*0x1b4*/ DWORD		spellstate;// 1 = cast in progress or refreshtime not met 2 means we ducked or aborted cast, 0 means its ok to cast 
+/*0x1b8*/ BYTE          Unknown0x194[0x18];
 /*0x1ac*/ 
 } EQCASTSPELLGEM, *PEQCASTSPELLGEM;
 #define Fly					 0
@@ -961,11 +961,12 @@ typedef struct _CTEXTENTRYWND {
 /*0x140*/
 } CTEXTENTRYWND, *PCTEXTENTRYWND;
 
+// size 0x1b4 10/04/07 dkaa
 typedef struct _CPLAYERWND {
-/*0x000*/ struct _CXWND Wnd;
-/*0x138*/ BYTE   Unknown[0x64];
-/*0x19c*/ DWORD  CombatState; // 1=debuffed, 2=combat cooldown, 3=stand, 4=sit
-/*0x*/ 
+/*0x000*/ struct _CSIDLWND Wnd;
+/*0x188*/ BYTE   Unknown[0x28];
+/*0x1b0*/ DWORD  CombatState; // 1=debuffed, 2=combat cooldown, 3=stand, 4=sit
+/*0x1b4*/ 
 } CPLAYERWND, *PCPLAYERWND;
 
 };

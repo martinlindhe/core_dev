@@ -1,3 +1,7 @@
+2007.10.02
+	- bot_handleassist_druid.inc:
+		* auto cures Echo of Tashan
+
 2007.10.01
 	- bot_handleassist_druid.inc:
 		* recognizes Hoar Frost debuff

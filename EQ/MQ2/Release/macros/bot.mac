@@ -8,6 +8,14 @@
 |* trigga event på "you have joined the group", "XXX have joined the group", "xxx have left the group"
 |  vid dessa event, uppdatera globala booleans ${HaveDruid} ${HaveCleric} etc
 
+#Event ChangedGroup "You have joined the group."
+#Event ChangedGroup "You have been removed from the group."
+#Event ChangedGroup "Your raid was disbanded."
+Sub Event_ChangedGroup(string Line)
+	| to avoid heal click on laggy group member hp-bar refresh
+	/echo Grp status changed. 2s delay
+	/delay 2s
+/return
 
 
 

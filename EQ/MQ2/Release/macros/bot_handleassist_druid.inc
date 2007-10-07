@@ -371,7 +371,7 @@ Sub HandleAssistCallDruid(int SpawnId)
 Sub DruidUpdateBuffs
 
 	| Clear debuffs:
-	/if (${Me.AltAbilityReady["Radiant Cure"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID} || ${Me.Buff["Curse of Darkness"].ID} || ${Me.Buff["Flesh Rot"].ID} || ${Me.Buff["Suffocating Mist"].ID} || ${Me.Buff["Tainted Arrow Salvo"].ID} || ${Me.Buff["Depleting Wave"].ID})) {
+	/if (${Me.AltAbilityReady["Radiant Cure"]} && (${Me.Buff["Malo"].ID} || ${Me.Buff["Wind of Tashanian"].ID} || ${Me.Buff["Echo of Tashan"].ID} || ${Me.Buff["Poxed Web"].ID} || ${Me.Buff["Malis Rk. III"].ID} || ${Me.Buff["Curse of Darkness"].ID} || ${Me.Buff["Flesh Rot"].ID} || ${Me.Buff["Suffocating Mist"].ID} || ${Me.Buff["Tainted Arrow Salvo"].ID} || ${Me.Buff["Depleting Wave"].ID})) {
 		/call DebugMsg "Curing debuffs"
 		/casting "Radiant Cure" alt
 		|3.5 sec cast time
