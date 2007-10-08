@@ -356,6 +356,11 @@ Sub HandleAssistCallDruid(int SpawnId)
 				/if (${Me.Standing} && !${Me.Moving} && !${Me.Casting.ID}) /sit
 			}
 		}
+		
+		| FC 2 - Cryptguard event
+		/if (${Me.Buff["Torrent of Magic"].ID} || ${Me.Buff["Torrent of Flame"].ID} || ${Me.Buff["Torrent of Venom"].ID} || ${Me.Buff["Torrent of Frost"].ID} || ${Me.Buff["Torrent of Contagion"].ID}) {
+			/if (${Me.SpellReady["Chant of the Napaea Rk. III"]}) /call MQ2Cast "Chant of the Napaea Rk. III"
+		}
 
 	/goto :DruidLoop
 
@@ -387,8 +392,11 @@ Sub DruidUpdateBuffs
 		/if (${Macro.Return}) /return
 	}
 
-	/call RefreshBuff "Viridicoat Rk. II" 30
-	/if (${Macro.Return}) /return
+	| no ds in solteris, for event 2
+	/if (${Zone.ShortName.NotEqual["solteris_raid"]}) {
+		/call RefreshBuff "Viridicoat Rk. II" 30
+		/if (${Macro.Return}) /return
+	}
 
 	/if (${Me.SpellReady["Second Life Rk. II"]}) {
 		/call RefreshBuff "Second Life Rk. II" 20
@@ -398,14 +406,6 @@ Sub DruidUpdateBuffs
 	/if (${Group.Members}) {
 		/if (!${Raid.Members}) /call RefreshBuff "Blessing of the Direwild Rk. III" 50
 		/if (${Macro.Return}) /return
-		/if (!${Me.Song["Aura of Life Effect"].ID}) {
-			| this is a hack because it seems to fade sometimes when you move or lag
-			/delay 5
-			/if (!${Me.Song["Aura of Life Effect"].ID}) {
-				/call RefreshBuff "Aura of Life" 0
-				/if (${Macro.Return}) /return
-			}
-		}
 		/if (!${Raid.Members} && !HEAL_ONLY_MODE) {
 			/if (${Me.Gem["Legacy of Viridiflora Rk. II"]}) {
 				/call RefreshBuff "Legacy of Viridiflora Rk. II" 50
@@ -415,6 +415,15 @@ Sub DruidUpdateBuffs
 				/call RefreshBuff "Blessing of Oak" 50
 				/if (${Macro.Return}) /return
 			}
+		}
+	}
+
+	/if (!${Me.Song["Aura of Life Effect"].ID} && (${Group.Members} || ${Raid.Members})) {
+		| this is a hack because it seems to fade sometimes when you move or lag
+		/delay 5
+		/if (!${Me.Song["Aura of Life Effect"].ID}) {
+			/call RefreshBuff "Aura of Life" 0
+			/if (${Macro.Return}) /return
 		}
 	}
 

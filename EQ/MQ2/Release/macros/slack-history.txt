@@ -1,3 +1,8 @@
+2007.10.09
+	- druid:
+		* changed casting logic for Aura of Life. now its cast if you're in raid OR in group, rather than being in "raid AND grouped" or "grouped"
+		* made druid ds selfbuff not refresh while in solteris_raid
+
 2007.10.02
 	- bot_handleassist_druid.inc:
 		* auto cures Echo of Tashan
