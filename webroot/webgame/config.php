@@ -18,12 +18,12 @@
 
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
-	$config['database']['database']	= 'dbWebgame';
+	$config['database']['database']	= 'dbSample';	//using sample db while being actively developed
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
 	$config['session']['name'] = 'coreID';
-	$config['session']['sha1_key'] = 'dskasdf8g8gfffSDFAASG4ttsdvfjv7y7vhfheEE#z<<<xsdfF';
+	$config['session']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
 	$config['session']['allow_login'] = true;
 	$config['session']['allow_registration'] = true;
 	$config['session']['allow_themes'] = true;

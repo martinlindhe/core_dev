@@ -56,13 +56,15 @@
 	/* formats text for wiki output */
 	function wikiFormat($wikiName, $data)
 	{
-		global $db, $files, $config;
+		global $db, $files, $config, $session;
 
 		if (empty($data['msg'])) {
 			echo '<div class="wiki">';
 			echo '<div class="wiki_body">';
 			echo 'The wiki "'.$wikiName.'" does not yet exist!<br/>';
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName.'">Create it</a>';
+			if ($session->id) {
+				echo '<a href="'.$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName.'">Create it</a>';
+			}
 			echo '</div>';
 			echo '</div>';
 		}

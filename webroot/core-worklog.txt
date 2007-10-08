@@ -1,6 +1,5 @@
 att göra-hi prio:
 	1) återställ raiden
-	2) versionera eq maps
 	3) sätt upp lyrics på startwars.org
 	4) versionera mer viktiga filer
 	5) synka adblockrules.org med vad som finns i svn + core_dev

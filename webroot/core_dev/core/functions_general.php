@@ -216,7 +216,7 @@
 		global $config, $session, $title, $meta_rss, $meta_js, $meta_search;
 
 		if (!$title) $title = $config['default_title'];
-		
+
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
 		echo '<head>';
@@ -224,7 +224,7 @@
 			echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/core.css" type="text/css"/>';
 			//echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/os3grid.css" type="text/css"/>';
-			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/themes/'.$session->theme.'" type="text/css"/>';
+			if (!empty($session)) echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/themes/'.$session->theme.'" type="text/css"/>';
 			echo '<link rel="stylesheet" href="'.$config['web_root'].'css/site.css" type="text/css"/>';
 
 			if ($meta_rss) {
