@@ -1448,7 +1448,7 @@
       <ScreenID>Dur0Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[1].ID},${Me.Buff[1].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[1].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[1].ID},${Me.Buff[1].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[1].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>10</Y>
@@ -1471,7 +1471,7 @@
       <ScreenID>Dur1Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[2].ID},${Me.Buff[2].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[2].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[2].ID},${Me.Buff[2].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[2].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>31</Y>
@@ -1494,7 +1494,7 @@
       <ScreenID>Dur2Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[3].ID},${Me.Buff[3].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[3].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[3].ID},${Me.Buff[3].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[3].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>52</Y>
@@ -1517,7 +1517,7 @@
       <ScreenID>Dur3Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[4].ID},${Me.Buff[4].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[4].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[4].ID},${Me.Buff[4].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[4].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>73</Y>
@@ -1540,7 +1540,7 @@
       <ScreenID>Dur4Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[5].ID},${Me.Buff[5].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[5].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[5].ID},${Me.Buff[5].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[5].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>94</Y>
@@ -1563,7 +1563,7 @@
       <ScreenID>Dur5Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[6].ID},${Me.Buff[6].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[6].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[6].ID},${Me.Buff[6].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[6].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>115</Y>
@@ -1586,7 +1586,7 @@
       <ScreenID>Dur6Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[7].ID},${Me.Buff[7].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[7].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[7].ID},${Me.Buff[7].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[7].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>136</Y>
@@ -1609,7 +1609,7 @@
       <ScreenID>Dur7Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[8].ID},${Me.Buff[8].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[8].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[8].ID},${Me.Buff[8].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[8].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>157</Y>
@@ -1632,7 +1632,7 @@
       <ScreenID>Dur8Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[9].ID},${Me.Buff[9].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[9].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[9].ID},${Me.Buff[9].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[9].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>178</Y>
@@ -1655,7 +1655,7 @@
       <ScreenID>Dur9Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[10].ID},${Me.Buff[10].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[10].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[10].ID},${Me.Buff[10].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[10].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>199</Y>
@@ -1678,7 +1678,7 @@
       <ScreenID>Dur10Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[11].ID},${Me.Buff[11].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[11].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[11].ID},${Me.Buff[11].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[11].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>220</Y>
@@ -1701,7 +1701,7 @@
       <ScreenID>Dur11Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[12].ID},${Me.Buff[12].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[12].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[12].ID},${Me.Buff[12].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[12].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>241</Y>
@@ -1724,7 +1724,7 @@
       <ScreenID>Dur12Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[13].ID},${Me.Buff[13].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[13].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[13].ID},${Me.Buff[13].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[13].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>262</Y>
@@ -1747,7 +1747,7 @@
       <ScreenID>Dur13Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[14].ID},${Me.Buff[14].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[14].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[14].ID},${Me.Buff[14].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[14].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>283</Y>
@@ -1770,7 +1770,7 @@
       <ScreenID>Dur14Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[15].ID},${Me.Buff[15].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[15].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[15].ID},${Me.Buff[15].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[15].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>304</Y>
@@ -1793,7 +1793,7 @@
       <ScreenID>Dur15Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[16].ID},${Me.Buff[16].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[16].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[16].ID},${Me.Buff[16].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[16].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>325</Y>
@@ -1816,7 +1816,7 @@
       <ScreenID>Dur16Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[17].ID},${Me.Buff[17].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[17].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[17].ID},${Me.Buff[17].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[17].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>346</Y>
@@ -1839,7 +1839,7 @@
       <ScreenID>Dur17Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[18].ID},${Me.Buff[18].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[18].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[18].ID},${Me.Buff[18].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[18].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>367</Y>
@@ -1862,7 +1862,7 @@
       <ScreenID>Dur18Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[19].ID},${Me.Buff[19].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[19].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[19].ID},${Me.Buff[19].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[19].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>388</Y>
@@ -1885,7 +1885,7 @@
       <ScreenID>Dur19Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[20].ID},${Me.Buff[20].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[20].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[20].ID},${Me.Buff[20].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[20].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>409</Y>
@@ -1908,7 +1908,7 @@
       <ScreenID>Dur20Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[21].ID},${Me.Buff[21].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[21].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[21].ID},${Me.Buff[21].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[21].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>430</Y>
@@ -1931,7 +1931,7 @@
       <ScreenID>Dur21Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[22].ID},${Me.Buff[22].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[22].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[22].ID},${Me.Buff[22].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[22].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>451</Y>
@@ -1954,7 +1954,7 @@
       <ScreenID>Dur22Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[23].ID},${Me.Buff[23].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[23].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[23].ID},${Me.Buff[23].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[23].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>472</Y>
@@ -1977,7 +1977,7 @@
       <ScreenID>Dur23Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[24].ID},${Me.Buff[24].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[24].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[24].ID},${Me.Buff[24].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[24].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>493</Y>
@@ -2000,7 +2000,7 @@
       <ScreenID>Dur24Label</ScreenID>
       <EQType>9999</EQType>
       <Font>1</Font>
-      <TooltipReference>${If[${Me.Buff[25].ID},${Me.Buff[25].Duration.Time} ${Ini[krust.ini, DebuffNotes,${Me.Buff[25].Name}, ]},]}</TooltipReference>
+      <TooltipReference>${If[${Me.Buff[25].ID},${Me.Buff[25].Duration.Time} ${Ini[debuffnotes.ini, DebuffNotes,${Me.Buff[25].Name}, ]},]}</TooltipReference>
       <Location>
          <X>22</X>
          <Y>514</Y>

@@ -565,13 +565,43 @@
 			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
+	<!-- Layout Copy. -->
+	<Button item="OGP_LayoutCopyButton">
+		<ScreenID>OGP_LayoutCopyButton</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>200</X>
+			<Y>365</Y>
+		</Location>
+		<Size>
+			<CX>150</CX>
+			<CY>20</CY>
+		</Size>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<Text>Copy Layout</Text>
+		<TooltipReference>Copy a window layout from any stored layout over the current layout.</TooltipReference>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>A_BigBtnNormal</Normal>
+			<Pressed>A_BigBtnPressed</Pressed>
+			<Flyby>A_BigBtnFlyby</Flyby>
+			<Disabled>A_BigBtnDisabled</Disabled>
+			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
 	<!-- EQPlayers auto update -->
 	<Button item="OGP_EQPlayersAutoUpdateButton">
 		<ScreenID>OGP_EQPlayersAutoUpdateButton</ScreenID>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>200</X>
-			<Y>365</Y>
+			<Y>385</Y>
 		</Location>
 		<Size>
 			<CX>150</CX>
@@ -596,13 +626,13 @@
 			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
 		</ButtonDrawTemplate>
 	</Button>
-	<!-- EQPlayers auto update -->
+	<!-- EQPlayers auto decline TCG challenges -->
 	<Button item="OGP_AutoDeclineTCGChallengesButton">
 		<ScreenID>OGP_AutoDeclineTCGChallengesButton</ScreenID>
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>200</X>
-			<Y>385</Y>
+			<Y>405</Y>
 		</Location>
 		<Size>
 			<CX>150</CX>
@@ -1132,6 +1162,7 @@
 		<Pieces>OGP_EnvSoundsCheckbox</Pieces>
 		<Pieces>OGP_CombatMusicCheckbox</Pieces>
 		<Pieces>OGP_LoadSkinButton</Pieces>
+		<Pieces>OGP_LayoutCopyButton</Pieces>
 		<Pieces>OGP_EQPlayersAutoUpdateButton</Pieces>
 		<Pieces>OGP_AutoDeclineTCGChallengesButton</Pieces>
 		<Pieces>OGP_SystemInfoButton</Pieces>
@@ -1404,8 +1435,68 @@
 		<Style_VScroll>false</Style_VScroll>
 		<Style_HScroll>false</Style_HScroll>
 		<Style_Transparent>false</Style_Transparent>
-		<Text>Fullscreen Video Modes</Text>
+		<Text>Video Modes</Text>
 		<TooltipReference>Select your screen's resolution, color, and refresh rate settings.</TooltipReference>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>A_BigBtnNormal</Normal>
+			<Pressed>A_BigBtnPressed</Pressed>
+			<Flyby>A_BigBtnFlyby</Flyby>
+			<Disabled>A_BigBtnDisabled</Disabled>
+			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
+	<!-- Allow window resizing -->
+	<Button item="ODP_AllowWindowResizingCheckbox">
+		<ScreenID>ODP_AllowWindowResizingCheckbox</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>10</X>
+			<Y>144</Y>
+		</Location>
+		<Size>
+			<CX>150</CX>
+			<CY>20</CY>
+		</Size>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<Style_Checkbox>true</Style_Checkbox>
+		<Text>Allow window resizing</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<ButtonDrawTemplate>
+			<Normal>A_BigBtnNormal</Normal>
+			<Pressed>A_BigBtnPressed</Pressed>
+			<Flyby>A_BigBtnFlyby</Flyby>
+			<Disabled>A_BigBtnDisabled</Disabled>
+			<PressedFlyby>A_BigBtnPressedFlyby</PressedFlyby>
+		</ButtonDrawTemplate>
+	</Button>
+	<!-- Always on top -->
+	<Button item="ODP_AlwaysOnTopCheckbox">
+		<ScreenID>ODP_AlwaysOnTopCheckbox</ScreenID>
+		<RelativePosition>true</RelativePosition>
+		<Location>
+			<X>10</X>
+			<Y>164</Y>
+		</Location>
+		<Size>
+			<CX>150</CX>
+			<CY>20</CY>
+		</Size>
+		<Style_VScroll>false</Style_VScroll>
+		<Style_HScroll>false</Style_HScroll>
+		<Style_Transparent>false</Style_Transparent>
+		<Style_Checkbox>true</Style_Checkbox>
+		<Text>Overlap Windows Taskbar</Text>
 		<TextColor>
 			<R>255</R>
 			<G>255</G>
@@ -1425,7 +1516,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>145</Y>
+			<Y>185</Y>
 		</Location>
 		<Size>
 			<CX>150</CX>
@@ -1446,7 +1537,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>165</Y>
+			<Y>205</Y>
 		</Location>
 		<Size>
 			<CX>100</CX>
@@ -1459,7 +1550,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>110</X>
-			<Y>165</Y>
+			<Y>205</Y>
 		</Location>
 		<Size>
 			<CX>50</CX>
@@ -1481,7 +1572,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>185</Y>
+			<Y>225</Y>
 		</Location>
 		<Size>
 			<CX>150</CX>
@@ -1502,7 +1593,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>205</Y>
+			<Y>245</Y>
 		</Location>
 		<Size>
 			<CX>100</CX>
@@ -1515,7 +1606,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>110</X>
-			<Y>205</Y>
+			<Y>245</Y>
 		</Location>
 		<Size>
 			<CX>50</CX>
@@ -1537,7 +1628,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>225</Y>
+			<Y>265</Y>
 		</Location>
 		<Size>
 			<CX>150</CX>
@@ -1558,7 +1649,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>245</Y>
+			<Y>285</Y>
 		</Location>
 		<Size>
 			<CX>100</CX>
@@ -1571,7 +1662,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>110</X>
-			<Y>245</Y>
+			<Y>285</Y>
 		</Location>
 		<Size>
 			<CX>50</CX>
@@ -1593,7 +1684,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>265</Y>
+			<Y>305</Y>
 		</Location>
 		<Size>
 			<CX>150</CX>
@@ -1614,7 +1705,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>305</Y>
+			<Y>345</Y>
 		</Location>
 		<Size>
 			<CX>150</CX>
@@ -1635,7 +1726,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>285</Y>
+			<Y>325</Y>
 		</Location>
 		<Size>
 			<CX>100</CX>
@@ -1648,7 +1739,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>110</X>
-			<Y>285</Y>
+			<Y>325</Y>
 		</Location>
 		<Size>
 			<CX>50</CX>
@@ -1670,7 +1761,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>325</Y>
+			<Y>365</Y>
 		</Location>
 		<Size>
 			<CX>100</CX>
@@ -1683,7 +1774,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>110</X>
-			<Y>325</Y>
+			<Y>365</Y>
 		</Location>
 		<Size>
 			<CX>50</CX>
@@ -1705,7 +1796,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>345</Y>
+			<Y>385</Y>
 		</Location>
 		<Size>
 			<CX>150</CX>
@@ -1726,7 +1817,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>10</X>
-			<Y>365</Y>
+			<Y>405</Y>
 		</Location>
 		<Size>
 			<CX>100</CX>
@@ -1739,7 +1830,7 @@
 		<RelativePosition>true</RelativePosition>
 		<Location>
 			<X>110</X>
-			<Y>365</Y>
+			<Y>405</Y>
 		</Location>
 		<Size>
 			<CX>70</CX>
@@ -2650,6 +2741,8 @@
 		<Pieces>ODP_ClipPlaneSlider</Pieces>
 		<Pieces>ODP_ClipPlaneValueLabel</Pieces>
 		<Pieces>ODP_VideoModesButton</Pieces>
+		<Pieces>ODP_AllowWindowResizingCheckbox</Pieces>
+		<Pieces>ODP_AlwaysOnTopCheckbox</Pieces>		
 		<Pieces>ODP_SetFullscreenButton</Pieces>
 		<Pieces>ODP_SetWindowedButton</Pieces>
 		<Pieces>ODP_FadeDelayLabel</Pieces>

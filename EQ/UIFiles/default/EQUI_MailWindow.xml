@@ -266,7 +266,7 @@
 			<CX>90</CX>
 			<CY>20</CY>
 		</Size>
-		<TooltipReference>Report innapropriate messages.</TooltipReference>
+		<TooltipReference>Report inappropriate messages.</TooltipReference>
 		<Style_Checkbox>false</Style_Checkbox>
 		<Text>Report</Text>
 		<TextColor>

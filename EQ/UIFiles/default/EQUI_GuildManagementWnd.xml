@@ -1638,7 +1638,7 @@
 		<RightAnchorToLeft>true</RightAnchorToLeft>
 		<Style_Transparent>false</Style_Transparent>
 		<Style_Checkbox>false</Style_Checkbox>
-		<TooltipReference>Remove the active banner from the world.</TooltipReference>
+		<TooltipReference>Edit the Guild Banner settings.</TooltipReference>
 		<Text>Edit Settings</Text>
 		<TextColor>
 			<R>255</R>
