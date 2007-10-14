@@ -1,3 +1,7 @@
+2007.10.14:
+	- druid:
+		* added DRUID_GROUPHEAL	define, defined "Lunarlight Rk. II"
+
 2007.10.09
 	- druid:
 		* changed casting logic for Aura of Life. now its cast if you're in raid OR in group, rather than being in "raid AND grouped" or "grouped"

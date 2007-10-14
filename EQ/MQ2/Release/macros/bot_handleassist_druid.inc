@@ -58,6 +58,8 @@
 #define DRUID_QH2								"Adrenaline Surge Rk. III"						| even faster qheal spell, used if player % is low & spell is ready
 #define DRUID_INSTANTHEAL				"Convergence of Spirits"
 
+#define DRUID_GROUPHEAL					"Lunarlight Rk. II"
+
 |----------------------------------------------
 
 #event DEBUFF_DruSerpentVines "#1# is ensnared in the embrace of earth."

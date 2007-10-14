@@ -289,7 +289,7 @@ Sub HandleGroupHeal(int PctHPs)
 	}
 
 	| See if we should cast group heal
-	/if (${Group.Members} && ${Me.SpellReady["Moonshadow"]}) {
+	/if (${Group.Members} && ${Me.SpellReady[DRUID_GROUPHEAL]}) {
 		/declare x int local 0
 		/declare n int local 0
 
@@ -316,7 +316,7 @@ Sub HandleGroupHeal(int PctHPs)
 			/varcalc x ${x} / ${n}
 			/if (${n} >=3 && ${x} <= ${grphealpct}) {
 				/call DebugMsg "GROUP HEAL (avg hp ${x}% for ${n} players)"
-				/call MQ2Cast "Moonshadow"
+				/call MQ2Cast "DRUID_GROUPHEAL"
 				/return
 			}
 		}
