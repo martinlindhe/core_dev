@@ -361,398 +361,398 @@ Sub DoClickies
 /return
 
 Sub FindManaregenClicky
-	/declare item string local
+	/declare tmpitem string local
 	|+2 mana per tick
-	/if (${FindItem[=Earring of Spirited Mind].InvSlot})			 /varset item Earring of Spirited Mind
-	/if (${FindItem[=Moonshadow Cloak].InvSlot}) 					/varset item Moonshadow Cloak
-	/if (${FindItem[=Talisman of the Burrower].InvSlot}) 			/varset item Talisman of the Burrower
-	/if (${FindItem[=Twilight Shroud].InvSlot}) 					/varset item Twilight Shroud
-	/if (${FindItem[=Phylactery].InvSlot}) 							/varset item Phylactery
+	/if (${FindItem[=Earring of Spirited Mind].InvSlot})			 /varset tmpitem Earring of Spirited Mind
+	/if (${FindItem[=Moonshadow Cloak].InvSlot}) 					/varset tmpitem Moonshadow Cloak
+	/if (${FindItem[=Talisman of the Burrower].InvSlot}) 			/varset tmpitem Talisman of the Burrower
+	/if (${FindItem[=Twilight Shroud].InvSlot}) 					/varset tmpitem Twilight Shroud
+	/if (${FindItem[=Phylactery].InvSlot}) 							/varset tmpitem Phylactery
 
 	|+ 5 mana per tick
-	/if (${FindItem[=Glyphed Greaves of Conflict].InvSlot})			/varset item Glyphed Greaves of Conflict
-	/if (${FindItem[=Discordant Leggings of Betrayal].InvSlot})		/varset item Discordant Leggings of Betrayal
-	/if (${FindItem[=Chaos-Imbued Leather Leggings].InvSlot})		/varset item Chaos-Imbued Leather Leggings
-	/if (${FindItem[=Muramite's Shield of Legend].InvSlot})			/varset item Muramite's Shield of Legend
-	/if (${FindItem[=Celestial Cloak].InvSlot})						/varset item Celestial Cloak
-	/if (${FindItem[=Irestone of Sharp Sight].InvSlot})				/varset item Irestone of Sharp Sight
-	/if (${FindItem[=Lightning Blackened Chain Greaves].InvSlot})	/varset item Lightning Blackened Chain Greaves
-	/if (${FindItem[=Shawl of Awakenings].InvSlot})					/varset item Shawl of Awakenings
-	/if (${FindItem[=Aegis of Discordant Matter].InvSlot})			/varset item Aegis of Discordant Matter
-	/if (${FindItem[=Koadic's Robe of Heightened Focus].InvSlot})	/varset item Koadic's Robe of Heightened Focus
+	/if (${FindItem[=Glyphed Greaves of Conflict].InvSlot})			/varset tmpitem Glyphed Greaves of Conflict
+	/if (${FindItem[=Discordant Leggings of Betrayal].InvSlot})		/varset tmpitem Discordant Leggings of Betrayal
+	/if (${FindItem[=Chaos-Imbued Leather Leggings].InvSlot})		/varset tmpitem Chaos-Imbued Leather Leggings
+	/if (${FindItem[=Muramite's Shield of Legend].InvSlot})			/varset tmpitem Muramite's Shield of Legend
+	/if (${FindItem[=Celestial Cloak].InvSlot})						/varset tmpitem Celestial Cloak
+	/if (${FindItem[=Irestone of Sharp Sight].InvSlot})				/varset tmpitem Irestone of Sharp Sight
+	/if (${FindItem[=Lightning Blackened Chain Greaves].InvSlot})	/varset tmpitem Lightning Blackened Chain Greaves
+	/if (${FindItem[=Shawl of Awakenings].InvSlot})					/varset tmpitem Shawl of Awakenings
+	/if (${FindItem[=Aegis of Discordant Matter].InvSlot})			/varset tmpitem Aegis of Discordant Matter
+	/if (${FindItem[=Koadic's Robe of Heightened Focus].InvSlot})	/varset tmpitem Koadic's Robe of Heightened Focus
 
 	|+7 mana per tick
-	/if (${FindItem[=Pendant of Discord].InvSlot})					/varset item Pendant of Discord
-	/if (${FindItem[=Lana's Crystal Shield].InvSlot})				/varset item Lana's Crystal Shield
+	/if (${FindItem[=Pendant of Discord].InvSlot})					/varset tmpitem Pendant of Discord
+	/if (${FindItem[=Lana's Crystal Shield].InvSlot})				/varset tmpitem Lana's Crystal Shield
 	
 	|+8 mana per tick
-	/if (${FindItem[=Earring of Dragonkin].InvSlot})				/varset item Earring of Dragonkin
-	/if (${FindItem[=Gem-Inlaid Ritual Cloak].InvSlot})				/varset item Gem-Inlaid Ritual Cloak
-	/if (${FindItem[=Girdle of Efficiency].InvSlot})				/varset item Girdle of Efficiency
-	/if (${FindItem[=Shadowed Amulet of Anarchy].InvSlot})			/varset item Shadowed Amulet of Anarchy
-	/if (${FindItem[=Shawl of Eternal Forces].InvSlot})				/varset item Shawl of Eternal Forces
-	/if (${FindItem[=Visor of Distorted Vision].InvSlot})			/varset item Visor of Distorted Vision
+	/if (${FindItem[=Earring of Dragonkin].InvSlot})				/varset tmpitem Earring of Dragonkin
+	/if (${FindItem[=Gem-Inlaid Ritual Cloak].InvSlot})				/varset tmpitem Gem-Inlaid Ritual Cloak
+	/if (${FindItem[=Girdle of Efficiency].InvSlot})				/varset tmpitem Girdle of Efficiency
+	/if (${FindItem[=Shadowed Amulet of Anarchy].InvSlot})			/varset tmpitem Shadowed Amulet of Anarchy
+	/if (${FindItem[=Shawl of Eternal Forces].InvSlot})				/varset tmpitem Shawl of Eternal Forces
+	/if (${FindItem[=Visor of Distorted Vision].InvSlot})			/varset tmpitem Visor of Distorted Vision
 
 	|+9 mana per tick
-	/if (${FindItem[=Earring of Pain Deliverance].InvSlot})			/varset item Earring of Pain Deliverance
+	/if (${FindItem[=Earring of Pain Deliverance].InvSlot})			/varset tmpitem Earring of Pain Deliverance
 
 	|+10 mana per tick
-	/if (${FindItem[=Earring of Dragonkin].InvSlot})						/varset item Earring of Dragonkin
-	/if (${FindItem[=Vermilion Orb of Clairvoyance].InvSlot})		/varset item Vermilion Orb of Clairvoyance
-	/if (${FindItem[=Buckler of Unliving].InvSlot})							/varset item Buckler of Unliving
-/return ${item}
+	/if (${FindItem[=Earring of Dragonkin].InvSlot})						/varset tmpitem Earring of Dragonkin
+	/if (${FindItem[=Vermilion Orb of Clairvoyance].InvSlot})		/varset tmpitem Vermilion Orb of Clairvoyance
+	/if (${FindItem[=Buckler of Unliving].InvSlot})							/varset tmpitem Buckler of Unliving
+/return ${tmpitem}
 
 Sub FindManapoolClicky
-	/declare item string local
+	/declare tmpitem string local
 	|+250 mana pool
-	/if (${FindItem[=Crimson Ring of Judgment].InvSlot})			/varset item Crimson Ring of Judgment
-	/if (${FindItem[=Shield of Mental Fortitude].InvSlot})			/varset item Shield of Mental Fortitude
-	/if (${FindItem[=Silver Band of Secrets].InvSlot})				/varset item Silver Band of Secrets
+	/if (${FindItem[=Crimson Ring of Judgment].InvSlot})			/varset tmpitem Crimson Ring of Judgment
+	/if (${FindItem[=Shield of Mental Fortitude].InvSlot})			/varset tmpitem Shield of Mental Fortitude
+	/if (${FindItem[=Silver Band of Secrets].InvSlot})				/varset tmpitem Silver Band of Secrets
 
 	|+400 mana pool
-	/if (${FindItem[=Muramite Signet Orb].InvSlot})					/varset item Muramite Signet Orb
-	/if (${FindItem[=Tentric's Band of Endless Wisdom].InvSlot})	/varset item Tentric's Band of Endless Wisdom
-	/if (${FindItem[=Eye of Dreams].InvSlot})										/varset item Eye of Dreams
-	/if (${FindItem[=Grand Illsalin Robe].InvSlot})						/varset item Grand Illsalin Robe
+	/if (${FindItem[=Muramite Signet Orb].InvSlot})					/varset tmpitem Muramite Signet Orb
+	/if (${FindItem[=Tentric's Band of Endless Wisdom].InvSlot})	/varset tmpitem Tentric's Band of Endless Wisdom
+	/if (${FindItem[=Eye of Dreams].InvSlot})										/varset tmpitem Eye of Dreams
+	/if (${FindItem[=Grand Illsalin Robe].InvSlot})						/varset tmpitem Grand Illsalin Robe
 
 	|+450 mana pool
-	/if (${FindItem[=Xxeric's Matted-Fur Mask].InvSlot})			/varset item Xxeric's Matted-Fur Mask
+	/if (${FindItem[=Xxeric's Matted-Fur Mask].InvSlot})			/varset tmpitem Xxeric's Matted-Fur Mask
 
 	|+500 mana pool "Salik's Expansive Mind"
 	|http://lucy.allakhazam.com/spell.html?id=6369&source=Live
 	|no discovered items yet
-/return ${item}
+/return ${tmpitem}
 
 
 Sub FindHPBuffClicky
-	/declare item string local
+	/declare tmpitem string local
 
 	|+90 hp - Form of Endurance I
-	/if (${FindItem[=Trickster's Chalice].InvSlot})				/varset item Trickster's Chalice
-	/if (${FindItem[=Blood Rage Choker].InvSlot})					/varset item Blood Rage Choker
-	/if (${FindItem[=Supersonic Eargear].InvSlot})				/varset item Supersonic Eargear
+	/if (${FindItem[=Trickster's Chalice].InvSlot})				/varset tmpitem Trickster's Chalice
+	/if (${FindItem[=Blood Rage Choker].InvSlot})					/varset tmpitem Blood Rage Choker
+	/if (${FindItem[=Supersonic Eargear].InvSlot})				/varset tmpitem Supersonic Eargear
 
 	|+180 hp - Form of Endurance
-	/if (${FindItem[=Veil of the Inferno].InvSlot})					/varset item Veil of the Inferno
+	/if (${FindItem[=Veil of the Inferno].InvSlot})					/varset tmpitem Veil of the Inferno
 
 	|+270 hp - Form of Endurance III
-	/if (${FindItem[=Ring of the Beast].InvSlot})						/varset item Ring of the Beast
+	/if (${FindItem[=Ring of the Beast].InvSlot})						/varset tmpitem Ring of the Beast
 
-	/if (${FindItem[=Earring of Frozen Poison].InvSlot})			/varset item Earring of Frozen Poison
-	/if (${FindItem[=Fractured Talon of the Clouded Dragon].InvSlot})		/varset item Fractured Talon of the Clouded Dragon
-	/if (${FindItem[=Pristine Witheran Hide Drum].InvSlot})		/varset item Pristine Witheran Hide Drum
+	/if (${FindItem[=Earring of Frozen Poison].InvSlot})			/varset tmpitem Earring of Frozen Poison
+	/if (${FindItem[=Fractured Talon of the Clouded Dragon].InvSlot})		/varset tmpitem Fractured Talon of the Clouded Dragon
+	/if (${FindItem[=Pristine Witheran Hide Drum].InvSlot})		/varset tmpitem Pristine Witheran Hide Drum
 
-	/if (${FindItem[=Salt-Encrusted Eyepatch].InvSlot})			/varset item Salt-Encrusted Eyepatch
-	/if (${FindItem[=Salty Chatty Eyepatch].InvSlot})				/varset item Salty Chatty Eyepatch
-	/if (${FindItem[=Borilbeard, the Eyepatch].InvSlot})		/varset item Borilbeard, the Eyepatch
+	/if (${FindItem[=Salt-Encrusted Eyepatch].InvSlot})			/varset tmpitem Salt-Encrusted Eyepatch
+	/if (${FindItem[=Salty Chatty Eyepatch].InvSlot})				/varset tmpitem Salty Chatty Eyepatch
+	/if (${FindItem[=Borilbeard, the Eyepatch].InvSlot})		/varset tmpitem Borilbeard, the Eyepatch
 
 	|+360 hp - Form of Endurance IV
-	/if (${FindItem[=Forgotten Artist's Mesh Wristwraps].InvSlot})		/varset item Forgotten Artist's Mesh Wristwraps
-	/if (${FindItem[=Mayong's Sanguine Cloak].InvSlot})		/varset item Mayong's Sanguine Cloak
-/return ${item}
+	/if (${FindItem[=Forgotten Artist's Mesh Wristwraps].InvSlot})		/varset tmpitem Forgotten Artist's Mesh Wristwraps
+	/if (${FindItem[=Mayong's Sanguine Cloak].InvSlot})		/varset tmpitem Mayong's Sanguine Cloak
+/return ${tmpitem}
 
 Sub FindMountClicky
-	/declare item string local
+	/declare tmpitem string local
 	
-	/if (${FindItem[=Collapsable Roboboar].InvSlot})		/varset item Collapsable Roboboar
-	/if (${FindItem[=Giant Red Drum].InvSlot})		/varset item Giant Red Drum
-	/if (${FindItem[=Large Red Drum].InvSlot})		/varset item Large Red Drum
-	/if (${FindItem[=Red Drum].InvSlot})			/varset item Red Drum
-	/if (${FindItem[=Small Red Drum].InvSlot})		/varset item Small Red Drum
-	/if (${FindItem[=Giant Green Drum].InvSlot})	/varset item Giant Green Drum
-	/if (${FindItem[=Large Green Drum].InvSlot})	/varset item Large Green Drum
-	/if (${FindItem[=Green Drum].InvSlot})			/varset item Green Drum
-	/if (${FindItem[=Small Green Drum].InvSlot})	/varset item Small Green Drum
-	/if (${FindItem[=Glowing Black Drum].InvSlot})	/varset item Glowing Black Drum
-	/if (${FindItem[=Giant Black Drum].InvSlot})	/varset item Giant Black Drum
-	/if (${FindItem[=Large Black Drum].InvSlot})	/varset item Large Black Drum
-	/if (${FindItem[=Black Drum].InvSlot})			/varset item Black Drum
-	/if (${FindItem[=Small Black Drum].InvSlot})	/varset item Small Black Drum
-	/if (${FindItem[=Glowing White Drum].InvSlot})	/varset item Glowing White Drum
-	/if (${FindItem[=Giant White Drum].InvSlot})	/varset item Giant White Drum
-	/if (${FindItem[=Large White Drum].InvSlot})	/varset item Large White Drum
-	/if (${FindItem[=White Drum].InvSlot})			/varset item White Drum
-	/if (${FindItem[=Small White Drum].InvSlot})	/varset item Small White Drum
-	/if (${FindItem[=Black Chain Bridle].InvSlot})			/varset item Black Chain Bridle
-	/if (${FindItem[=Black Leather Bridle].InvSlot})		/varset item Black Leather Bridle
-	/if (${FindItem[=Black Ornate Chain Bridle].InvSlot})	/varset item Black Ornate Chain Bridle
-	/if (${FindItem[=Black Rope Bridle].InvSlot})			/varset item Black Rope Bridle
-	/if (${FindItem[=Black Silken Bridle].InvSlot})			/varset item Black Silken Bridle
-	/if (${FindItem[=Brown Chain Bridle].InvSlot})			/varset item Brown Chain Bridle
-	/if (${FindItem[=Brown Leather Bridle].InvSlot})		/varset item Brown Leather Bridle
-	/if (${FindItem[=Brown Ornate Chain Bridle].InvSlot})	/varset item Brown Ornate Chain Bridle
-	/if (${FindItem[=Brown Rope Bridle].InvSlot})			/varset item Brown Rope Bridle
-	/if (${FindItem[=Brown Silken Bridle].InvSlot})			/varset item Brown Silken Bridle
-	/if (${FindItem[=Tan Chain Bridle].InvSlot})			/varset item Tan Chain Bridle
-	/if (${FindItem[=Tan Leather Bridle].InvSlot})			/varset item Tan Leather Bridle
-	/if (${FindItem[=Tan Rope Bridle].InvSlot})				/varset item Tan Rope Bridle
-	/if (${FindItem[=Tan Silken Bridle].InvSlot})			/varset item Tan Silken Bridle
-	/if (${FindItem[=White Chain Bridle].InvSlot})			/varset item  White Chain Bridle
-	/if (${FindItem[=White Leather Bridle].InvSlot})		/varset item  White Leather Bridle
-	/if (${FindItem[=White Ornate Chain Bridle].InvSlot})	/varset item  White Ornate Chain Bridle
-	/if (${FindItem[=White Rope Bridle].InvSlot})			/varset item  White Rope Bridle
-	/if (${FindItem[=White Silken Bridle].InvSlot})			/varset item  White Silken Bridle
-	/if (${FindItem[=Black Chain Bridle and Barding].InvSlot})			/varset item Black Chain Bridle and Barding
-	/if (${FindItem[=Black Leather Bridle and Barding].InvSlot})		/varset item Black Leather Bridle and Barding
-	/if (${FindItem[=Black Ornate Chain Bridle and Barding].InvSlot})	/varset item Black Ornate Chain Bridle and Barding
-	/if (${FindItem[=Black Rope Bridle and Barding].InvSlot})			/varset item Black Rope Bridle and Barding
-	/if (${FindItem[=Black Silken Bridle and Barding].InvSlot})			/varset item Black Silken Bridle and Barding
-	/if (${FindItem[=Brown Chain Bridle and Barding].InvSlot})			/varset item Brown Chain Bridle and Barding
-	/if (${FindItem[=Brown Leather Bridle and Barding].InvSlot})		/varset item Brown Leather Bridle and Barding
-	/if (${FindItem[=Brown Ornate Chain Bridle and Barding].InvSlot})	/varset item Brown Ornate Chain Bridle and Barding
-	/if (${FindItem[=Brown Rope Bridle and Barding].InvSlot})			/varset item Brown Rope Bridle and Barding
-	/if (${FindItem[=Brown Silken Bridle and Barding].InvSlot})			/varset item Brown Silken Bridle and Barding
-	/if (${FindItem[=Tan Chain Bridle and Barding].InvSlot})			/varset item Tan Chain Bridle and Barding
-	/if (${FindItem[=Tan Leather Bridle and Barding].InvSlot})			/varset item Tan Leather Bridle and Barding
-	/if (${FindItem[=Tan Rope Bridle and Barding].InvSlot})				/varset item Tan Rope Bridle and Barding
-	/if (${FindItem[=Tan Silken Bridle and Barding].InvSlot})			/varset item Tan Silken Bridle and Barding
-	/if (${FindItem[=White Chain Bridle and Barding].InvSlot})			/varset item  White Chain Bridle and Barding
-	/if (${FindItem[=White Leather Bridle and Barding].InvSlot})		/varset item  White Leather Bridle and Barding
-	/if (${FindItem[=White Ornate Chain Bridle and Barding].InvSlot})	/varset item  White Ornate Chain Bridle and Barding
-	/if (${FindItem[=White Rope Bridle and Barding].InvSlot})			/varset item  White Rope Bridle and Barding
-	/if (${FindItem[=White Silken Bridle and Barding].InvSlot})			/varset item  White Silken Bridle and Barding
-/return ${item}
+	/if (${FindItem[=Collapsable Roboboar].InvSlot})		/varset tmpitem Collapsable Roboboar
+	/if (${FindItem[=Giant Red Drum].InvSlot})		/varset tmpitem Giant Red Drum
+	/if (${FindItem[=Large Red Drum].InvSlot})		/varset tmpitem Large Red Drum
+	/if (${FindItem[=Red Drum].InvSlot})			/varset tmpitem Red Drum
+	/if (${FindItem[=Small Red Drum].InvSlot})		/varset tmpitem Small Red Drum
+	/if (${FindItem[=Giant Green Drum].InvSlot})	/varset tmpitem Giant Green Drum
+	/if (${FindItem[=Large Green Drum].InvSlot})	/varset tmpitem Large Green Drum
+	/if (${FindItem[=Green Drum].InvSlot})			/varset tmpitem Green Drum
+	/if (${FindItem[=Small Green Drum].InvSlot})	/varset tmpitem Small Green Drum
+	/if (${FindItem[=Glowing Black Drum].InvSlot})	/varset tmpitem Glowing Black Drum
+	/if (${FindItem[=Giant Black Drum].InvSlot})	/varset tmpitem Giant Black Drum
+	/if (${FindItem[=Large Black Drum].InvSlot})	/varset tmpitem Large Black Drum
+	/if (${FindItem[=Black Drum].InvSlot})			/varset tmpitem Black Drum
+	/if (${FindItem[=Small Black Drum].InvSlot})	/varset tmpitem Small Black Drum
+	/if (${FindItem[=Glowing White Drum].InvSlot})	/varset tmpitem Glowing White Drum
+	/if (${FindItem[=Giant White Drum].InvSlot})	/varset tmpitem Giant White Drum
+	/if (${FindItem[=Large White Drum].InvSlot})	/varset tmpitem Large White Drum
+	/if (${FindItem[=White Drum].InvSlot})			/varset tmpitem White Drum
+	/if (${FindItem[=Small White Drum].InvSlot})	/varset tmpitem Small White Drum
+	/if (${FindItem[=Black Chain Bridle].InvSlot})			/varset tmpitem Black Chain Bridle
+	/if (${FindItem[=Black Leather Bridle].InvSlot})		/varset tmpitem Black Leather Bridle
+	/if (${FindItem[=Black Ornate Chain Bridle].InvSlot})	/varset tmpitem Black Ornate Chain Bridle
+	/if (${FindItem[=Black Rope Bridle].InvSlot})			/varset tmpitem Black Rope Bridle
+	/if (${FindItem[=Black Silken Bridle].InvSlot})			/varset tmpitem Black Silken Bridle
+	/if (${FindItem[=Brown Chain Bridle].InvSlot})			/varset tmpitem Brown Chain Bridle
+	/if (${FindItem[=Brown Leather Bridle].InvSlot})		/varset tmpitem Brown Leather Bridle
+	/if (${FindItem[=Brown Ornate Chain Bridle].InvSlot})	/varset tmpitem Brown Ornate Chain Bridle
+	/if (${FindItem[=Brown Rope Bridle].InvSlot})			/varset tmpitem Brown Rope Bridle
+	/if (${FindItem[=Brown Silken Bridle].InvSlot})			/varset tmpitem Brown Silken Bridle
+	/if (${FindItem[=Tan Chain Bridle].InvSlot})			/varset tmpitem Tan Chain Bridle
+	/if (${FindItem[=Tan Leather Bridle].InvSlot})			/varset tmpitem Tan Leather Bridle
+	/if (${FindItem[=Tan Rope Bridle].InvSlot})				/varset tmpitem Tan Rope Bridle
+	/if (${FindItem[=Tan Silken Bridle].InvSlot})			/varset tmpitem Tan Silken Bridle
+	/if (${FindItem[=White Chain Bridle].InvSlot})			/varset tmpitem  White Chain Bridle
+	/if (${FindItem[=White Leather Bridle].InvSlot})		/varset tmpitem  White Leather Bridle
+	/if (${FindItem[=White Ornate Chain Bridle].InvSlot})	/varset tmpitem  White Ornate Chain Bridle
+	/if (${FindItem[=White Rope Bridle].InvSlot})			/varset tmpitem  White Rope Bridle
+	/if (${FindItem[=White Silken Bridle].InvSlot})			/varset tmpitem  White Silken Bridle
+	/if (${FindItem[=Black Chain Bridle and Barding].InvSlot})			/varset tmpitem Black Chain Bridle and Barding
+	/if (${FindItem[=Black Leather Bridle and Barding].InvSlot})		/varset tmpitem Black Leather Bridle and Barding
+	/if (${FindItem[=Black Ornate Chain Bridle and Barding].InvSlot})	/varset tmpitem Black Ornate Chain Bridle and Barding
+	/if (${FindItem[=Black Rope Bridle and Barding].InvSlot})			/varset tmpitem Black Rope Bridle and Barding
+	/if (${FindItem[=Black Silken Bridle and Barding].InvSlot})			/varset tmpitem Black Silken Bridle and Barding
+	/if (${FindItem[=Brown Chain Bridle and Barding].InvSlot})			/varset tmpitem Brown Chain Bridle and Barding
+	/if (${FindItem[=Brown Leather Bridle and Barding].InvSlot})		/varset tmpitem Brown Leather Bridle and Barding
+	/if (${FindItem[=Brown Ornate Chain Bridle and Barding].InvSlot})	/varset tmpitem Brown Ornate Chain Bridle and Barding
+	/if (${FindItem[=Brown Rope Bridle and Barding].InvSlot})			/varset tmpitem Brown Rope Bridle and Barding
+	/if (${FindItem[=Brown Silken Bridle and Barding].InvSlot})			/varset tmpitem Brown Silken Bridle and Barding
+	/if (${FindItem[=Tan Chain Bridle and Barding].InvSlot})			/varset tmpitem Tan Chain Bridle and Barding
+	/if (${FindItem[=Tan Leather Bridle and Barding].InvSlot})			/varset tmpitem Tan Leather Bridle and Barding
+	/if (${FindItem[=Tan Rope Bridle and Barding].InvSlot})				/varset tmpitem Tan Rope Bridle and Barding
+	/if (${FindItem[=Tan Silken Bridle and Barding].InvSlot})			/varset tmpitem Tan Silken Bridle and Barding
+	/if (${FindItem[=White Chain Bridle and Barding].InvSlot})			/varset tmpitem  White Chain Bridle and Barding
+	/if (${FindItem[=White Leather Bridle and Barding].InvSlot})		/varset tmpitem  White Leather Bridle and Barding
+	/if (${FindItem[=White Ornate Chain Bridle and Barding].InvSlot})	/varset tmpitem  White Ornate Chain Bridle and Barding
+	/if (${FindItem[=White Rope Bridle and Barding].InvSlot})			/varset tmpitem  White Rope Bridle and Barding
+	/if (${FindItem[=White Silken Bridle and Barding].InvSlot})			/varset tmpitem  White Silken Bridle and Barding
+/return ${tmpitem}
 
 Sub FindSummonPullItem
-	/declare item string local
-	/if (${FindItem[=A Dusty Soriz Worker Pouch].InvSlot})	/varset item A Dusty Soriz Worker Pouch
-	/if (${FindItem[=Bloody Ancille's Pouch].InvSlot})		/varset item Bloody Ancille's Pouch
-	/if (${FindItem[=Ton Po's Mystical Pouch].InvSlot})		/varset item Ton Po's Mystical Pouch
-/return ${item}
+	/declare tmpitem string local
+	/if (${FindItem[=A Dusty Soriz Worker Pouch].InvSlot})	/varset tmpitem A Dusty Soriz Worker Pouch
+	/if (${FindItem[=Bloody Ancille's Pouch].InvSlot})		/varset tmpitem Bloody Ancille's Pouch
+	/if (${FindItem[=Ton Po's Mystical Pouch].InvSlot})		/varset tmpitem Ton Po's Mystical Pouch
+/return ${tmpitem}
 
 
 Sub FindShrinkClicky
-	/declare item string local
-	/if (${FindItem[=Ant's Potion].InvSlot})				/varset item Ant's Potion
-	/if (${FindItem[=5 Dose Ant's Potion].InvSlot})			/varset item 5 Dose Ant's Potion
-	/if (${FindItem[=10 Dose Ant's Potion].InvSlot})		/varset item 10 Dose Ant's Potion
-	/if (${FindItem[=Anizok's Minimizing Device].InvSlot})	/varset item Anizok's Minimizing Device
-	/if (${FindItem[=Bestial Sandals].InvSlot})				/varset item Bestial Sandals
-	/if (${FindItem[=Cobalt Bracer].InvSlot})				/varset item Cobalt Bracer
-	/if (${FindItem[=Wand of Imperceptibility].InvSlot})	/varset item Wand of Imperceptibility
-	/if (${FindItem[=Bracelet of the Shadow Hive].InvSlot})	/varset item Bracelet of the Shadow Hive
-	/if (${FindItem[=Earring of Diminutiveness].InvSlot})	/varset item Earring of Diminutiveness
+	/declare tmpitem string local
+	/if (${FindItem[=Ant's Potion].InvSlot})				/varset tmpitem Ant's Potion
+	/if (${FindItem[=5 Dose Ant's Potion].InvSlot})			/varset tmpitem 5 Dose Ant's Potion
+	/if (${FindItem[=10 Dose Ant's Potion].InvSlot})		/varset tmpitem 10 Dose Ant's Potion
+	/if (${FindItem[=Anizok's Minimizing Device].InvSlot})	/varset tmpitem Anizok's Minimizing Device
+	/if (${FindItem[=Bestial Sandals].InvSlot})				/varset tmpitem Bestial Sandals
+	/if (${FindItem[=Cobalt Bracer].InvSlot})				/varset tmpitem Cobalt Bracer
+	/if (${FindItem[=Wand of Imperceptibility].InvSlot})	/varset tmpitem Wand of Imperceptibility
+	/if (${FindItem[=Bracelet of the Shadow Hive].InvSlot})	/varset tmpitem Bracelet of the Shadow Hive
+	/if (${FindItem[=Earring of Diminutiveness].InvSlot})	/varset tmpitem Earring of Diminutiveness
 	/if (${item.Equal[NULL]}) /echo WARNING: Couldn't find a shrink clicky in inventory
-/return ${item}
+/return ${tmpitem}
 
 Sub FindAttackClicky1
-	/declare item string local
+	/declare tmpitem string local
 	|Find Slot 1 +ATK clicky
 
 	|+10 atk
-	/if (${FindItem[=Golden Star Slippers].InvSlot})					/varset item Golden Star Slippers
-	/if (${FindItem[=Grand Master's Slippers].InvSlot})					/varset item Grand Master's Slippers
-	/if (${FindItem[=Silver Moon Slippers].InvSlot})					/varset item Silver Moon Slippers
-	/if (${FindItem[=White Lotus Slippers].InvSlot})					/varset item White Lotus Slippers
-	/if (${FindItem[=Faded Skull Medallion].InvSlot}) 					/varset item Faded Skull Medallion
-	/if (${FindItem[=Berserkers Ring].InvSlot})							/varset item Berserkers Ring
-	/if (${FindItem[=Reaper's Ring].InvSlot})				 			/varset item Reaper's Ring
-	/if (${FindItem[=Shrunken Goblin Skull Earring].InvSlot}) 			/varset item Shrunken Goblin Skull Earring
-	/if (${FindItem[=Spaulders of Battle Rage].InvSlot})				/varset item Spaulders of Battle Rage
-	/if (${FindItem[=Sword of Pain].InvSlot}) 							/varset item Sword of Pain
+	/if (${FindItem[=Golden Star Slippers].InvSlot})					/varset tmpitem Golden Star Slippers
+	/if (${FindItem[=Grand Master's Slippers].InvSlot})					/varset tmpitem Grand Master's Slippers
+	/if (${FindItem[=Silver Moon Slippers].InvSlot})					/varset tmpitem Silver Moon Slippers
+	/if (${FindItem[=White Lotus Slippers].InvSlot})					/varset tmpitem White Lotus Slippers
+	/if (${FindItem[=Faded Skull Medallion].InvSlot}) 					/varset tmpitem Faded Skull Medallion
+	/if (${FindItem[=Berserkers Ring].InvSlot})							/varset tmpitem Berserkers Ring
+	/if (${FindItem[=Reaper's Ring].InvSlot})				 			/varset tmpitem Reaper's Ring
+	/if (${FindItem[=Shrunken Goblin Skull Earring].InvSlot}) 			/varset tmpitem Shrunken Goblin Skull Earring
+	/if (${FindItem[=Spaulders of Battle Rage].InvSlot})				/varset tmpitem Spaulders of Battle Rage
+	/if (${FindItem[=Sword of Pain].InvSlot}) 							/varset tmpitem Sword of Pain
 
 	|+20 atk
-	/if (${FindItem[=Jagged Sword of the Dragon Slayer].InvSlot}) 		/varset item Jagged Sword of the Dragon Slayer
-	/if (${FindItem[=Totem of Elitist Rites].InvSlot}) 					/varset item Totem of Elitist Rites
-	/if (${FindItem[=Crimson Bauble of Rites].InvSlot})					/varset item Crimson Bauble of Rites
-	/if (${FindItem[=Fabled Shrunken Goblin Skull Earring].InvSlot})	/varset item Fabled Shrunken Goblin Skull Earring
-/return ${item}
+	/if (${FindItem[=Jagged Sword of the Dragon Slayer].InvSlot}) 		/varset tmpitem Jagged Sword of the Dragon Slayer
+	/if (${FindItem[=Totem of Elitist Rites].InvSlot}) 					/varset tmpitem Totem of Elitist Rites
+	/if (${FindItem[=Crimson Bauble of Rites].InvSlot})					/varset tmpitem Crimson Bauble of Rites
+	/if (${FindItem[=Fabled Shrunken Goblin Skull Earring].InvSlot})	/varset tmpitem Fabled Shrunken Goblin Skull Earring
+/return ${tmpitem}
 
 Sub FindAttackClicky3
-	/declare item string local
+	/declare tmpitem string local
 	|Find Slot 3 +ATK clicky
 
 	|+10 atk
-	/if (${FindItem[=Fearsome Shield].InvSlot})						/varset item Fearsome Shield
-	/if (${FindItem[=Pauldrons of Ferocity].InvSlot})			/varset item Pauldrons of Ferocity
-/return ${item}
+	/if (${FindItem[=Fearsome Shield].InvSlot})						/varset tmpitem Fearsome Shield
+	/if (${FindItem[=Pauldrons of Ferocity].InvSlot})			/varset tmpitem Pauldrons of Ferocity
+/return ${tmpitem}
 
 Sub FindAttackClicky5
-	/declare item string local
+	/declare tmpitem string local
 	|Find Slot 5 +ATK clicky
 
 	|+5 atk
-	/if (${FindItem[=Rluas's Chromatic Ring].InvSlot})			/varset item Rluas's Chromatic Ring
-	/if (${FindItem[=Fitz's Chromatic Earring].InvSlot})		/varset item Fitz's Chromatic Earring
-	/if (${FindItem[=Sarthis's Chromatic Hoop].InvSlot})		/varset item Sarthis's Chromatic Hoop
+	/if (${FindItem[=Rluas's Chromatic Ring].InvSlot})			/varset tmpitem Rluas's Chromatic Ring
+	/if (${FindItem[=Fitz's Chromatic Earring].InvSlot})		/varset tmpitem Fitz's Chromatic Earring
+	/if (${FindItem[=Sarthis's Chromatic Hoop].InvSlot})		/varset tmpitem Sarthis's Chromatic Hoop
 
 	|+10 atk
-	/if (${FindItem[=Ring of Dain Frostreaver IV].InvSlot})		/varset item Ring of Dain Frostreaver IV
+	/if (${FindItem[=Ring of Dain Frostreaver IV].InvSlot})		/varset tmpitem Ring of Dain Frostreaver IV
 
 	|+25 atk
-	/if (${FindItem[=Irestone Band of Rage].InvSlot})			/varset item Irestone Band of Rage
-	/if (${FindItem[=Serrated Dart of Energy].InvSlot})			/varset item Serrated Dart of Energy
+	/if (${FindItem[=Irestone Band of Rage].InvSlot})			/varset tmpitem Irestone Band of Rage
+	/if (${FindItem[=Serrated Dart of Energy].InvSlot})			/varset tmpitem Serrated Dart of Energy
 
 	|+40 atk
-	/if (${FindItem[=Veil of Intense Evolution].InvSlot})		/varset item Veil of Intense Evolution
-/return ${item}
+	/if (${FindItem[=Veil of Intense Evolution].InvSlot})		/varset tmpitem Veil of Intense Evolution
+/return ${tmpitem}
 
 Sub FindDSClicky2
-	/declare item string local
+	/declare tmpitem string local
 	|Slot 2 DS buffs
 
 	|+4 DS
-	/if (${FindItem[=Runed Scout's Breastplate].InvSlot})			/varset item Runed Scout's Breastplate
-	/if (${FindItem[=Forest Stalker's Breastplate].InvSlot})	/varset item Forest Stalker's Breastplate
-	/if (${FindItem[=Golden Leaf Breastplate].InvSlot})				/varset item Golden Leaf Breastplate
+	/if (${FindItem[=Runed Scout's Breastplate].InvSlot})			/varset tmpitem Runed Scout's Breastplate
+	/if (${FindItem[=Forest Stalker's Breastplate].InvSlot})	/varset tmpitem Forest Stalker's Breastplate
+	/if (${FindItem[=Golden Leaf Breastplate].InvSlot})				/varset tmpitem Golden Leaf Breastplate
 
 	|+5 DS
-	/if (${FindItem[=Sarthis's Chromatic Hoop].InvSlot})			/varset item Sarthis's Chromatic Hoop
-	/if (${FindItem[=Fitz's Chromatic Earring].InvSlot})			/varset item Fitz's Chromatic Earring
-	/if (${FindItem[=Rluas's Chromatic Ring].InvSlot})				/varset item Rluas's Chromatic Ring
-	/if (${FindItem[=Crown of the Tempest Guard].InvSlot})		/varset item Crown of the Tempest Guard
-	/if (${FindItem[=Gauntlets of Dark Embers].InvSlot})			/varset item Gauntlets of Dark Embers
-	/if (${FindItem[=Leggings of the Fiery Star].InvSlot})		/varset item Leggings of the Fiery Star
-	/if (${FindItem[=Chestplate of Fiery Might].InvSlot})			/varset item Chestplate of Fiery Might
-	/if (${FindItem[=Leggings of Fiery Might].InvSlot})				/varset item Leggings of Fiery Might
+	/if (${FindItem[=Sarthis's Chromatic Hoop].InvSlot})			/varset tmpitem Sarthis's Chromatic Hoop
+	/if (${FindItem[=Fitz's Chromatic Earring].InvSlot})			/varset tmpitem Fitz's Chromatic Earring
+	/if (${FindItem[=Rluas's Chromatic Ring].InvSlot})				/varset tmpitem Rluas's Chromatic Ring
+	/if (${FindItem[=Crown of the Tempest Guard].InvSlot})		/varset tmpitem Crown of the Tempest Guard
+	/if (${FindItem[=Gauntlets of Dark Embers].InvSlot})			/varset tmpitem Gauntlets of Dark Embers
+	/if (${FindItem[=Leggings of the Fiery Star].InvSlot})		/varset tmpitem Leggings of the Fiery Star
+	/if (${FindItem[=Chestplate of Fiery Might].InvSlot})			/varset tmpitem Chestplate of Fiery Might
+	/if (${FindItem[=Leggings of Fiery Might].InvSlot})				/varset tmpitem Leggings of Fiery Might
 
 	|+8 DS
-	/if (${FindItem[=Velium Coldain Insignia Ring].InvSlot})	/varset item Velium Coldain Insignia Ring
-	/if (${FindItem[=Coldain Hero's Insignia Ring].InvSlot})	/varset item Coldain Hero's Insignia Ring
+	/if (${FindItem[=Velium Coldain Insignia Ring].InvSlot})	/varset tmpitem Velium Coldain Insignia Ring
+	/if (${FindItem[=Coldain Hero's Insignia Ring].InvSlot})	/varset tmpitem Coldain Hero's Insignia Ring
 
 	|+10 DS
-	/if (${FindItem[=Ring of Dain Frostreaver IV].InvSlot})		/varset item Ring of Dain Frostreaver IV
+	/if (${FindItem[=Ring of Dain Frostreaver IV].InvSlot})		/varset tmpitem Ring of Dain Frostreaver IV
 	
 	|+18 DS
-	/if (${FindItem[=Veil of Flames].InvSlot})								/varset item Veil of Flames
-	/if (${FindItem[=Lute of the Mischiefmaker].InvSlot})			/varset item Lute of the Mischiefmaker
+	/if (${FindItem[=Veil of Flames].InvSlot})								/varset tmpitem Veil of Flames
+	/if (${FindItem[=Lute of the Mischiefmaker].InvSlot})			/varset tmpitem Lute of the Mischiefmaker
 	
 	|+20 DS
-	/if (${FindItem[=Cloak of Retribution].InvSlot})					/varset item Cloak of Retribution
+	/if (${FindItem[=Cloak of Retribution].InvSlot})					/varset tmpitem Cloak of Retribution
 	
 	|+25 DS
-	/if (${FindItem[=Mask of Lament].InvSlot})								/varset item Mask of Lament
-/return ${item}
+	/if (${FindItem[=Mask of Lament].InvSlot})								/varset tmpitem Mask of Lament
+/return ${tmpitem}
 
 
 Sub FindDSClicky4
-	/declare item string local
+	/declare tmpitem string local
 	|Slot 4 DS buffs
 
 	|+4 DS
-	/if (${FindItem[=Cloak of Thorns].InvSlot})								/varset item Cloak of Thorns
-	/if (${FindItem[=Crystallized Serpent Eye].InvSlot})			/varset item Crystallized Serpent Eye
-	/if (${FindItem[=Orb of Captured Sunlight].InvSlot})			/varset item Orb of Captured Sunlight
+	/if (${FindItem[=Cloak of Thorns].InvSlot})								/varset tmpitem Cloak of Thorns
+	/if (${FindItem[=Crystallized Serpent Eye].InvSlot})			/varset tmpitem Crystallized Serpent Eye
+	/if (${FindItem[=Orb of Captured Sunlight].InvSlot})			/varset tmpitem Orb of Captured Sunlight
 	|Ring of Thunderous Spirits	is this type aswell but just 2 charges
 
 	|+6 DS
-	/if (${FindItem[=Bone Chill Shield].InvSlot})							/varset item Bone Chill Shield
-	/if (${FindItem[=Cloak of Icy Shadows].InvSlot})					/varset item Cloak of Icy Shadows
-	/if (${FindItem[=Mantle of the Accused].InvSlot})					/varset item Mantle of the Accused
+	/if (${FindItem[=Bone Chill Shield].InvSlot})							/varset tmpitem Bone Chill Shield
+	/if (${FindItem[=Cloak of Icy Shadows].InvSlot})					/varset tmpitem Cloak of Icy Shadows
+	/if (${FindItem[=Mantle of the Accused].InvSlot})					/varset tmpitem Mantle of the Accused
 
 	|+10 DS
-	/if (${FindItem[=Puresteel Mantle].InvSlot})							/varset item Puresteel Mantle
+	/if (${FindItem[=Puresteel Mantle].InvSlot})							/varset tmpitem Puresteel Mantle
 
 	|+15 DS
-	/if (${FindItem[=Girdle of Intense Durability].InvSlot})	/varset item Girdle of Intense Durability
+	/if (${FindItem[=Girdle of Intense Durability].InvSlot})	/varset tmpitem Girdle of Intense Durability
 
 	|+21 DS
-	/if (${FindItem[=Cerulean Painted Veil].InvSlot})					/varset item Cerulean Painted Veil
+	/if (${FindItem[=Cerulean Painted Veil].InvSlot})					/varset tmpitem Cerulean Painted Veil
 
 	|+24 DS
-	/if (${FindItem[=Pauldron of Dark Auspices].InvSlot})			/varset item Pauldron of Dark Auspices
+	/if (${FindItem[=Pauldron of Dark Auspices].InvSlot})			/varset tmpitem Pauldron of Dark Auspices
 
 	|+27 DS
-	/if (${FindItem[=Stormeye Band].InvSlot})									/varset item Stormeye Band
-/return ${item}
+	/if (${FindItem[=Stormeye Band].InvSlot})									/varset tmpitem Stormeye Band
+/return ${tmpitem}
 
 Sub FindResistClicky
-	/declare item string local
+	/declare tmpitem string local
 	|Slot 1 resist buffs
 	
 	|+10 all resists "Soul Energy"
-	/if (${FindItem[=Ring of Resistance].InvSlot})						/varset item Ring of Resistance
-	/if (${FindItem[=Eriak's Ring of Guile].InvSlot})					/varset item Eriak's Ring of Guile
-	/if (${FindItem[=Hoop of Fighting Focus].InvSlot})					/varset item Hoop of Fighting Focus
-	/if (${FindItem[=Bladesoul's Spiritual Armguards].InvSlot})			/varset item Bladesoul's Spiritual Armguards
-	/if (${FindItem[=Bladesoul's Spiritual Diadem].InvSlot})			/varset item Bladesoul's Spiritual Diadem
+	/if (${FindItem[=Ring of Resistance].InvSlot})						/varset tmpitem Ring of Resistance
+	/if (${FindItem[=Eriak's Ring of Guile].InvSlot})					/varset tmpitem Eriak's Ring of Guile
+	/if (${FindItem[=Hoop of Fighting Focus].InvSlot})					/varset tmpitem Hoop of Fighting Focus
+	/if (${FindItem[=Bladesoul's Spiritual Armguards].InvSlot})			/varset tmpitem Bladesoul's Spiritual Armguards
+	/if (${FindItem[=Bladesoul's Spiritual Diadem].InvSlot})			/varset tmpitem Bladesoul's Spiritual Diadem
 	
 	|+15 all resists "Eternal Ward"
-	/if (${FindItem[=Prismatic Ring of Resistance].InvSlot})			/varset item Prismatic Ring of Resistance
-	/if (${FindItem[=Lavender Cloak of Destruction].InvSlot})			/varset item Lavender Cloak of Destruction
+	/if (${FindItem[=Prismatic Ring of Resistance].InvSlot})			/varset tmpitem Prismatic Ring of Resistance
+	/if (${FindItem[=Lavender Cloak of Destruction].InvSlot})			/varset tmpitem Lavender Cloak of Destruction
 
 	|+20 all resists "Chaotic Ward"
-	/if (${FindItem[=Necklace of the Steadfast Spirit].InvSlot})		/varset item Necklace of the Steadfast Spirit
+	/if (${FindItem[=Necklace of the Steadfast Spirit].InvSlot})		/varset tmpitem Necklace of the Steadfast Spirit
 	
 	|+30 all resists "Unliving Ward"
-	/if (${FindItem[=Ali-Ani, the Eyes of Mayong].InvSlot})						/varset item Ali-Ani, the Eyes of Mayong
-	/if (${FindItem[=Doomstone Band of Seeing].InvSlot})						/varset item Doomstone Band of Seeing
+	/if (${FindItem[=Ali-Ani, the Eyes of Mayong].InvSlot})						/varset tmpitem Ali-Ani, the Eyes of Mayong
+	/if (${FindItem[=Doomstone Band of Seeing].InvSlot})						/varset tmpitem Doomstone Band of Seeing
 	
 
 	|below buff effects should stack with above if neither or one has Screech effect, see lucy blabla
 	|but putting in same function for now until someone explains how they stack to me
 
 	|+10 all resists "Form of Protection I"
-	/if (${FindItem[=Dark Void Shoulders].InvSlot})									/varset item Dark Void Shoulders
+	/if (${FindItem[=Dark Void Shoulders].InvSlot})									/varset tmpitem Dark Void Shoulders
 
 	|+20 all resists "Form of Protection"
-	/if (${FindItem[=Black Web Mantle].InvSlot})										/varset item Black Web Mantle
-	/if (${FindItem[=Earring of Celestial Energy].InvSlot})					/varset item Earring of Celestial Energy
-	/if (${FindItem[=Light Amphibian Hide Slippers].InvSlot})				/varset item Light Amphibian Hide Slippers
+	/if (${FindItem[=Black Web Mantle].InvSlot})										/varset tmpitem Black Web Mantle
+	/if (${FindItem[=Earring of Celestial Energy].InvSlot})					/varset tmpitem Earring of Celestial Energy
+	/if (${FindItem[=Light Amphibian Hide Slippers].InvSlot})				/varset tmpitem Light Amphibian Hide Slippers
 
 	|+30 all resists "Form of Protection III"
-	/if (${FindItem[=Tainted Undershore Rock].InvSlot})							/varset item Tainted Undershore Rock
+	/if (${FindItem[=Tainted Undershore Rock].InvSlot})							/varset tmpitem Tainted Undershore Rock
 
 	|+40 all resists "Form of Protection IV"
-	/if (${FindItem[=Wristguards of the Vampire Hunter].InvSlot})		/varset item Wristguards of the Vampire Hunter
+	/if (${FindItem[=Wristguards of the Vampire Hunter].InvSlot})		/varset tmpitem Wristguards of the Vampire Hunter
 
 	|+50 all resists "Aura of Pure Arcanum"
-	/if (${FindItem[=Ancient Werewolf Skull].InvSlot})							/varset item Ancient Werewolf Skull
-	/if (${FindItem[=Skull of the Den Lord].InvSlot})								/varset item Skull of the Den Lord
-	/if (${FindItem[=Doomstone Band of Seeing].InvSlot})						/varset item The Skull of Den Lord Rakban
-/return ${item}
+	/if (${FindItem[=Ancient Werewolf Skull].InvSlot})							/varset tmpitem Ancient Werewolf Skull
+	/if (${FindItem[=Skull of the Den Lord].InvSlot})								/varset tmpitem Skull of the Den Lord
+	/if (${FindItem[=Doomstone Band of Seeing].InvSlot})						/varset tmpitem The Skull of Den Lord Rakban
+/return ${tmpitem}
 
 Sub FindHasteClicky
-	/declare item string local
+	/declare tmpitem string local
 	|Slot 1 haste clickies:
 
 	|20% haste
-	/if (${FindItem[=Eyepatch of Plunder].InvSlot})							/varset item Eyepatch of Plunder
+	/if (${FindItem[=Eyepatch of Plunder].InvSlot})							/varset tmpitem Eyepatch of Plunder
 
 	|Slot 3 haste clickies:
 	|30% haste
-	/if (${FindItem[=Belt of Marvelous Visions].InvSlot})				/varset item Belt of Marvelous Visions
-	/if (${FindItem[=Stanos' Wicked Gauntlets].InvSlot})				/varset item Stanos' Wicked Gauntlets
-	/if (${FindItem[=Jymall's Gloves of Frenzy].InvSlot})				/varset item Jymall's Gloves of Frenzy
-	/if (${FindItem[=Kizrak's Gauntlets of Battle].InvSlot})		/varset item Kizrak's Gauntlets of Battle
+	/if (${FindItem[=Belt of Marvelous Visions].InvSlot})				/varset tmpitem Belt of Marvelous Visions
+	/if (${FindItem[=Stanos' Wicked Gauntlets].InvSlot})				/varset tmpitem Stanos' Wicked Gauntlets
+	/if (${FindItem[=Jymall's Gloves of Frenzy].InvSlot})				/varset tmpitem Jymall's Gloves of Frenzy
+	/if (${FindItem[=Kizrak's Gauntlets of Battle].InvSlot})		/varset tmpitem Kizrak's Gauntlets of Battle
 
 	|50% haste
-	/if (${FindItem[=Lizardscale Plated Girdle].InvSlot})				/varset item Lizardscale Plated Girdle
-/return ${item}
+	/if (${FindItem[=Lizardscale Plated Girdle].InvSlot})				/varset tmpitem Lizardscale Plated Girdle
+/return ${tmpitem}
 
 Sub FindOverHasteClicky
-	/declare item string local
+	/declare tmpitem string local
 	|Slot 1 overhaste clickies:
 	|5% overhaste "Primal Guard"
-	/if (${FindItem[=Prism of Dark Hues].InvSlot})					/varset item Prism of Dark Hues
-	/if (${FindItem[=Silver Hoop of Speed].InvSlot})				/varset item Silver Hoop of Speed
+	/if (${FindItem[=Prism of Dark Hues].InvSlot})					/varset tmpitem Prism of Dark Hues
+	/if (${FindItem[=Silver Hoop of Speed].InvSlot})				/varset tmpitem Silver Hoop of Speed
 
 	|8% overhaste "Taelosian Guard"
-	/if (${FindItem[=Ilsin's Cloak].InvSlot})								/varset item Ilsin's Cloak
-	/if (${FindItem[=Ring of Organic Darkness].InvSlot})		/varset item Ring of Organic Darkness
+	/if (${FindItem[=Ilsin's Cloak].InvSlot})								/varset tmpitem Ilsin's Cloak
+	/if (${FindItem[=Ring of Organic Darkness].InvSlot})		/varset tmpitem Ring of Organic Darkness
 	
 	|10% overhaste "Ancient Power"
-	/if (${FindItem[=Symbol of the Overlord].InvSlot})			/varset item Symbol of the Overlord
-/return ${item}
+	/if (${FindItem[=Symbol of the Overlord].InvSlot})			/varset tmpitem Symbol of the Overlord
+/return ${tmpitem}
 
 Sub FindACClicky
-	/declare item string local
+	/declare tmpitem string local
 
 	|+27 AC "Form of Defense I"
-	/if (${FindItem[=Bony Dark Web Ring].InvSlot})						/varset item Bony Dark Web Ring
-	/if (${FindItem[=Shroud of the Fallen Defender].InvSlot})	/varset item Shroud of the Fallen Defender
+	/if (${FindItem[=Bony Dark Web Ring].InvSlot})						/varset tmpitem Bony Dark Web Ring
+	/if (${FindItem[=Shroud of the Fallen Defender].InvSlot})	/varset tmpitem Shroud of the Fallen Defender
 
 	|+54 AC "Form of Defense"
-	/if (${FindItem[=Band of Primordial Energy].InvSlot})				/varset item Band of Primordial Energy
-	/if (${FindItem[=Executioner's Cincture].InvSlot})					/varset item Executioner's Cincture
+	/if (${FindItem[=Band of Primordial Energy].InvSlot})				/varset tmpitem Band of Primordial Energy
+	/if (${FindItem[=Executioner's Cincture].InvSlot})					/varset tmpitem Executioner's Cincture
 	
 	|+81 AC "Form of Defense III"
-	/if (${FindItem[=Hanvar's Hoop].InvSlot})										/varset item Hanvar's Hoop
-	/if (${FindItem[=Skull of Vishimtar].InvSlot})							/varset item Skull of Vishimtar
+	/if (${FindItem[=Hanvar's Hoop].InvSlot})										/varset tmpitem Hanvar's Hoop
+	/if (${FindItem[=Skull of Vishimtar].InvSlot})							/varset tmpitem Skull of Vishimtar
 	
 	|+108 AC "Form of Defense IV"
-	/if (${FindItem[=Wristplates of the Fallen Saint].InvSlot})		/varset item Wristplates of the Fallen Saint
-/return ${item}
+	/if (${FindItem[=Wristplates of the Fallen Saint].InvSlot})		/varset tmpitem Wristplates of the Fallen Saint
+/return ${tmpitem}
 
 
 #Event ClickMount				"[MQ2] clickmount"
