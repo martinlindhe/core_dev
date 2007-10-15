@@ -3,11 +3,20 @@ todo UI:
 * add timer to rez window: 5 minutes left till it expires thingy
 * buffwindow: show buff number 1-20
 * target window: make hp % bar wider
+* buffreq add: new format in the ini ss=Steeloak Skin:Blessing of Steeloak
+	then if u get buffrequest from a group member, cast the group version spell
 
 ----
 
-* buffreq add: new format in the ini ss=Steeloak Skin:Blessing of Steeloak
-	then if u get buffrequest from a group member, cast the group version spell
+2007.10.14 by gimp
+	ui:
+		* changed name of ini for [DebuffNotes] to debuffnotes.ini
+		* added debuffnotes show for short-duration buffs
+
+
+
+
+
 
 Changes 2006.09.30: By Harden
    Macro:

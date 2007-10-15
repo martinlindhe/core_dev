@@ -359,11 +359,6 @@ Sub HandleAssistCallDruid(int SpawnId)
 			}
 		}
 		
-		| FC 2 - Cryptguard event
-		/if (${Me.Buff["Torrent of Magic"].ID} || ${Me.Buff["Torrent of Flame"].ID} || ${Me.Buff["Torrent of Venom"].ID} || ${Me.Buff["Torrent of Frost"].ID} || ${Me.Buff["Torrent of Contagion"].ID}) {
-			/if (${Me.SpellReady["Chant of the Napaea Rk. III"]}) /call MQ2Cast "Chant of the Napaea Rk. III"
-		}
-
 	/goto :DruidLoop
 
 	:DruidDone

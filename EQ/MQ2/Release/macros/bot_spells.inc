@@ -84,7 +84,7 @@ Sub BotCast(string spellName, string mySub)
 	/if (${Corpse.Open}) /notify LootWnd DoneButton leftmouseup
 
 	:wait_for_stop
-	/if (${Me.Casting.ID}) /goto :wait_for_stop
+	/if (${Me.Casting.ID} || ${Me.Moving}) /goto :wait_for_stop
 		
 	:cast_spell
 	/if (${Me.AltAbility[${spellName}].ID}) {
@@ -93,7 +93,6 @@ Sub BotCast(string spellName, string mySub)
 		|/if (${spellType.Find[gem]}) /varset spellType ${defaultGem}
 	}
 
-	| /echo spell: ${spellName} type: ${spellType}
 	/casting "${spellName}" ${spellType}
 
 	:cast_spell_pending
