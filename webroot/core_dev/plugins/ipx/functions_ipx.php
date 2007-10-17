@@ -172,7 +172,7 @@
 		}
 
 		//fixme: gör dest-mail konfigurerbar
-		mail('martin@unicorn.tv', '[IPX] billing report', $l);
+		mail('ipxlog@unicorn.tv', '[IPX] billing report', $l);
 
 		if ($sms_err === true) {
 			return true;
