@@ -1,5 +1,5 @@
 <?
-	/* atom_moderation.php - Funktioner för moderering
+	/* atom_moderation.php - Functions for moderation
 
 		Objectionable: Unallowed in public forums (discussion groups, guestbooks, diaries), configurable
 		Sensitive: Words that should trigger moderator notification upon certain posts, but is not blocked
@@ -26,6 +26,7 @@
 	define('MODERATION_BLOG',				13);
 	define('MODERATION_USER',				14);	//itemId = tblUser.userId
 
+	//Moderation queue type 1-49 is reserverd for core_dev use. Please use >= 50 for your own extensions
 
 	/* Stopwords */
 	define('STOPWORD_OBJECTIONABLE',			1);	//this type of words are forbidden to post
@@ -33,13 +34,13 @@
 	define('STOPWORD_RESERVED_USERNAME',	3);	//reserved usernames
 
 
-	/* kontrollerar om ordet/orden i $text är stötante */
+	/* checks if the word(s) in $text are objectionable */
 	function isObjectionable($text)
 	{
 		return checkStopword($text, STOPWORD_OBJECTIONABLE);
 	}
 
-	/* kontrollerar om ordet/orden i $text är känsligt */
+	/* checks if the word(s) in  $text are sensitive */
 	function isSensitive($text)
 	{
 		return checkStopword($text, STOPWORD_SENSITIVE);
@@ -90,7 +91,7 @@
 		return false;
 	}
 
-	/* kontrollerar om ordet i $text är ett reserverat användarnamn */
+	/* checks if the word in $text is a reserved username */
 	//todo: integrate this with checkStopword() somehow
 	function isReservedUsername($text)
 	{
@@ -126,7 +127,7 @@
 	}
 
 
-	/* Returnerar alla $type words eller alla */
+	/* Returns all stopwords, optionally selected by $type*/
 	function getStopwords($type = '')
 	{
 		global $db;
