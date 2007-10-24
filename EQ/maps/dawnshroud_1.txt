@@ -1,3 +1,0 @@
-P -2085.0000, 0.0000, 86.0010,  0, 240, 0,  3,  Succor_point
-P 996.0000, -325.0000, 119.4072,  0, 240, 0,  3,  Druid_landing
-P 2342.8528, -1406.5983, -21.0405,  0, 0, 0,  2,  Sambata_Tribal_Leader_Garn_(kill_to_reset_spawn)

@@ -1,3 +1,0 @@
-P 5144.7295, -2246.4993, 297.8719,  0, 0, 0,  2,  a_rotting_skeleton_(Medallion_of_Obulus)
-P -9049.1230, -978.6885, 1099.9574,  0, 0, 0,  2,  Brother_Balatin
-P -9565.0000, -2806.0000, 1046.9806,  0, 0, 0,  2,  Succor_point

@@ -1,6 +1,0 @@
-P -87, 117, 0, 255, 255, 255, 2, Advisor
-P 109, 318, 0, 255, 255, 255, 2, Butler_Syncall
-P 92, 339, 0, 255, 255, 255, 2, Maid_Issis
-P 12, 151, 0, 255, 255, 255, 2, Mynthi_Davissi
-P -22, 131, 0, 255, 255, 255, 2, Princess_Cherista
-P -74, 6, 0, 255, 255, 255, 2, Cloaked_Dhampyre

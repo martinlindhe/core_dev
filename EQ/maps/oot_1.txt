@@ -1,4 +1,0 @@
-P 1001.4369, 2944.7219, 50.3788,  0, 0, 0,  2,  Named:_Allizewsaur_(phylacety)
-P 5958.9023, -1967.1510, 16.0619,  0, 0, 0,  1,  cyclops_island
-P 9201.5332, -262.2436, 0.0323,  0, 0, 0,  3,  Translocator_Narrik
-P 8006.3911, -1006.4675, 2.1091,  0, 0, 0,  2,  ancient_cyclops_spawn_point

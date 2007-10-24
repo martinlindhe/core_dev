@@ -1,4 +1,0 @@
-Sub Main
-	/declare str "mob name with , comma"
-	/echo ${Ini["bot_ignoremobs.ini","testzone",${str.Replace[",","_"]}, 0]}
-/return

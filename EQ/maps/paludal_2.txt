@@ -1,3 +1,0 @@
-P 332.0000, -1578.0000, 123.7963,  0, 0, 0,  3,  zum_Leerschatten_Moor
-P 274.0000, 3916.0000, 192.0010,  0, 0, 0,  3,  zum_Schattenweber_Dickicht
-P -1073.0000, 2120.0000, -319.9990,  0, 0, 0,  3,  nach_Schattenhafen

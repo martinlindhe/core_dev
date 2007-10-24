@@ -1,2 +1,0 @@
-P -1519.4227, -645.0760, 44.9443,  240, 0, 0,  3,  Named_Pathmaker_-_PH/Mover
-P -2133.5161, 227.5709, 98.1550,  240, 0, 0,  3,  Named_-_Discordling_Hollower_-_PH_/_Warrior

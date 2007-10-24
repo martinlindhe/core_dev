@@ -1,6 +1,0 @@
-P 191, -2184, -9, 0, 0, 240, 3, Broodlands
-P 338, -2385, 6, 127, 127, 127, 1, Altar
-P 739, -2875, 38, 240, 0, 0, 1, Tirranun
-P 99, 382, 15, 0, 0, 240, 3, to_Lavaspinner's_Lair
-P 178, -2129, -11, 0, 0, 240, 3, Broodlands
-P 1017, -535, -15, 0, 0, 240, 3, to_Lavaspinner's_Lair

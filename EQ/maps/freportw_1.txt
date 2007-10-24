@@ -1,4 +1,0 @@
-P -187.7451, 607.1661, -27.4002,  0, 0, 0,  2,  Ginehl_Wiquar_(ec_ldon)
-P 695.6884, 278.0856, -26.6154,  0, 0, 0,  2,  Pincia_Brownloe_(baking)
-P 497.5643, 204.5982, -13.7425,  0, 0, 0,  2,  Pandos_Flintside
-P -532.8351, 266.5234, -27.3047,  0, 0, 0,  2,  Ping_Fuzzlecutter

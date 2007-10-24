@@ -1,3 +1,0 @@
-P 86.2894, -1138.8340, -116.0179,  240, 0, 0,  3,  Signet_dropper_-_Insidious_Dragorn_and_a_noc_as_PH
-P 51.0070, -1326.3136, -116.4828,  240, 0, 0,  3,  Master_of_the_Watch
-P 55.3652, -1245.5273, -116.9573,  240, 0, 0,  3,  Elite_Pixxt_K`illiga
