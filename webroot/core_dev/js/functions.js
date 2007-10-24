@@ -538,3 +538,13 @@ function insertTags(edid,tagOpen, tagClose, sampleText) {
     txtarea.caretPos = document.selection.createRange().duplicate();
   }
 }
+
+//sets element name "n" to the html content of "txt"
+function set_div_content(n, txt)
+{
+	var e = document.getElementById(n);
+	empty_element(e);
+
+	e.innerHTML = txt;
+	show_element_by_name(n);
+}

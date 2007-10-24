@@ -122,19 +122,24 @@ class Session
 			$this->logIn($_POST['register_usr'], $_POST['register_pwd']);
 		}
 
-		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
+		//Shows login form if 'login' variable is set
 		if (!$this->id && isset($_GET['login']))
+		{
+			$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
+			require('design_head.php');	//fixme: hur kan jag slippa detta
+			$this->showLoginForm();
+			require('design_foot.php');
+			die;
+		}
+
+		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
+		if (!$this->id)
 		{
 			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']) && $this->logIn($_POST['login_usr'], $_POST['login_pwd']))
 			{
 				header('Location: '.$config['web_root'].$this->start_page);
 				die;
 			}
-			$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
-			require('design_head.php');	//fixme: hur kan jag slippa detta
-			$this->showLoginForm();
-			require('design_foot.php');
-			die;
 		}
 
 		if (!$this->id) return;

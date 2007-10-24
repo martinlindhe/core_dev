@@ -59,6 +59,10 @@ img {
 	clear: both;
 }
 
+.bld {
+	font-weight: bold;
+}
+
 /* [quote] style */
 .bb_quote {
 	padding: 8px;

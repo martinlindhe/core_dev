@@ -11,6 +11,8 @@
 function AJAX()
 {
 	var _request = false;
+	var _busy = false;
+
 	this.GET = GET;
 	this.GET_raw = GET_raw;
 	this.ResultReady = ResultReady;
@@ -39,8 +41,13 @@ function AJAX()
 		if (!this._request) return false;
 		if (this._request.overrideMimeType) this._request.overrideMimeType('text/xml');
 		if (callback) this._request.onreadystatechange = function() { callback(callbackparam); }
-		this._request.open('GET', url, true);
-		this._request.send(null);
+		try {
+			this._busy = true;
+			this._request.open('GET', url, true);
+			this._request.send(null);
+		} catch (e) {
+			alert('failed to open AJAX call. adblock software might be the cause');
+		}
 	}
 
 	// Performs an GET-request expected to return anything, like raw text or html
@@ -48,13 +55,22 @@ function AJAX()
 	{
 		if (!this._request) return false;
 		if (callback) this._request.onreadystatechange = function() { callback(callbackparam); }
-		this._request.open('GET', url, true);
-		this._request.send(null);
+		try {
+			this._busy = true;
+			this._request.open('GET', url, true);
+			this._request.send(null);
+		} catch (e) {
+			alert('failed to open AJAX call. adblock software might be the cause');
+		}
 	}
+
 	function ResultReady()
 	{
 		if (!this._request || this._request.readyState != 4) return false;
-		if (this._request.status == 200) return true;
+		if (this._request.status == 200) {
+			this._busy = false;
+			return true;
+		}
 
 		return false;
 	}

@@ -253,6 +253,15 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.10.24:
+	- ajax.js added ajaxobj._busy flag, to enable easy reuse of AJAX() objects
+
+2007.10.23:
+	- functions_general.php createXHTMLHeader() now optionally uses $body_onload variable to add javascript-onload code
+	- ajax.js added exception handling if ajax .open call fails. can happen because an adblock/adblock plus rule matches the ajax url
+	- functions.js "set_div_content" helper function added
+
+
 2007.09.27:
 	- class.Session: bugfix, now respects config setting $config['session']['timeout']
 

@@ -209,11 +209,12 @@
 		$title			- <title> of current page. set the default title with $config['session']['default_title']		todo: rename
 		$meta_rss		- array of rss feeds to expose for current page
 		$meta_js		- array of javascripts that needs to be included for current page
+		$body_onload - js function to call on load
 	
 	*/
 	function createXHTMLHeader()
 	{
-		global $config, $session, $title, $meta_rss, $meta_js, $meta_search;
+		global $config, $session, $title, $meta_rss, $meta_js, $meta_search, $body_onload;
 
 		if (!$title) $title = $config['default_title'];
 
@@ -254,7 +255,11 @@
 			}
 
 		echo '</head>';
-		echo '<body>';
+		if ($body_onload) {
+			echo '<body onload="'.$body_onload.'">';
+		} else {
+			echo '<body>';
+		}
 		echo '<script type="text/javascript">';
 		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core_web_root'].'api/";';
 		echo '</script>';
