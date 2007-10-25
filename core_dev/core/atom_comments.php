@@ -9,6 +9,7 @@
 	define('COMMENT_BLOG',					2);		//anonymous or registered users comments on a blog
 	define('COMMENT_IMAGE',					3);		//anonymous or registered users comments on a image
 	define('COMMENT_TODOLIST',			4);		//todolist item comments
+	define('COMMENT_GENERIC',				5);		//generic comment type
 
 	define('COMMENT_ADMIN_IP',			10);	//a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 
@@ -127,11 +128,15 @@
 	//col_w sets the column width of the textarea
 	function showComments($_type, $ownerId, $col_w = 30, $col_h = 6)
 	{
-		global $session;
+		global $session, $config;
 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w) || !is_numeric($col_h)) return false;
 
 		if (!empty($_POST['cmt'])) {
 			addComment($_type, $ownerId, $_POST['cmt']);
+		}
+
+		if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
+			deleteComment($_GET['delete']);
 		}
 
 		/* Shows all comments for this item */
@@ -146,7 +151,9 @@
 			echo nameLink($row['userId'], $row['userName']).'<br/>';
 			echo $row['timeCreated'];
 			echo '</div>';
-			echo '<div class="comment_text">'.$row['commentText'].'</div>';
+			echo '<div class="comment_text">'.$row['commentText'];
+			echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
+			echo '</div>';
 		}
 		echo '</div>'; //id="comments_only"
 
@@ -192,7 +199,7 @@
 			echo $row['timeCreated'];
 			echo '</div>';
 			echo '<div class="comment_text">';
-			echo '<a href="?delete='.$row['commentId'].'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a> ';
+			echo '<a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a> ';
 			echo $row['commentText'];
 			echo '</div>';
 		}
