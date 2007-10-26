@@ -185,7 +185,7 @@
 		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_FORUM, $itemId, true);
 
 		/* Check if there is any users who should be notified about this new message */
-		notifySubscribers($parentId, $itemId, SUBSCRIBE_MAIL);
+		//notifySubscribers($parentId, $itemId, SUBSCRIBE_MAIL);
 		return $itemId;
 	}
 

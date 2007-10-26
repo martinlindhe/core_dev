@@ -6,5 +6,9 @@
 
 	wiki('Home');
 
+	if (!$session->id) {
+		$session->showLoginForm();
+	}
+
 	require('design_foot.php');
 ?>
