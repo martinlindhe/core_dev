@@ -12,5 +12,6 @@
 
 	if (!is_file($project.'config.php')) die('cant find config path');
 
+	$config['no_session'] = true;	//force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
 	require_once($project.'config.php');
 ?>

@@ -112,6 +112,9 @@ class Session
 	{
 		global $db, $config;
 
+		//force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
+		if (!empty($config['no_session'])) return;
+
 		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
 		{
 			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
