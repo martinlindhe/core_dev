@@ -253,8 +253,13 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.11.02:
+	- functions_general.php createXHTMLHeader() now handles $body_onload as a array instead to allow multiple js functions to be called
+
+
 2007.10.24:
 	- ajax.js added ajaxobj._busy flag, to enable easy reuse of AJAX() objects
+
 
 2007.10.23:
 	- functions_general.php createXHTMLHeader() now optionally uses $body_onload variable to add javascript-onload code
@@ -264,6 +269,7 @@ X = hi prio task
 
 2007.09.27:
 	- class.Session: bugfix, now respects config setting $config['session']['timeout']
+
 
 2007.09.26:
 	- class.Session: added code to help set up the first super admin account on a empty database

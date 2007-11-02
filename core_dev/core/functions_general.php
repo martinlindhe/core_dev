@@ -206,11 +206,10 @@
 	/* Creates a complete XHTML header, showing rss feeds if available, etc
 		Uses the following global variables, if they are set:
 
-		$title			- <title> of current page. set the default title with $config['session']['default_title']		todo: rename
-		$meta_rss		- array of rss feeds to expose for current page
-		$meta_js		- array of javascripts that needs to be included for current page
-		$body_onload - js function to call on load
-	
+		$title			- <title> of current page. set the default title with $config['session']['default_title']		FIXME rename
+		$meta_rss[]		- array of rss feeds to expose for current page
+		$meta_js[]		- array of javascript files that needs to be included for current page
+		$body_onload[] - array of js function(s) to call on load
 	*/
 	function createXHTMLHeader()
 	{
@@ -256,7 +255,13 @@
 
 		echo '</head>';
 		if ($body_onload) {
-			echo '<body onload="'.$body_onload.'">';
+
+			echo '<body onload="';
+			foreach ($body_onload as $row) {
+				echo $row;
+			}
+			echo '">';
+
 		} else {
 			echo '<body>';
 		}
