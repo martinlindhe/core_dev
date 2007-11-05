@@ -142,7 +142,7 @@
 		/* Shows all comments for this item */
 		$list = getComments($_type, $ownerId);
 
-		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' comments</div>';
+		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' comment'.(count($list) == 1 ? '':'s').'</div>';
 
 		echo '<div id="comments_holder">';
 		echo '<div id="comments_only">';
