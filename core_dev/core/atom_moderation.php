@@ -25,6 +25,7 @@
 	define('MODERATION_FORUM',			12);	//itemId = tblForum.itemId
 	define('MODERATION_BLOG',				13);
 	define('MODERATION_USER',				14);	//itemId = tblUser.userId
+	define('MODERATION_QUEUE',			15);	//used to put a user in a moderation queue
 
 	//Moderation queue type 1-49 is reserverd for core_dev use. Please use >= 50 for your own extensions
 
