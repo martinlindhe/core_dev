@@ -189,7 +189,11 @@
 		$queueId = $db->getOneItem($q);
 		if ($queueId) return $queueId;
 
-		$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+		if ($session) {		
+			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+		} else {
+			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId=0,autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+		}
 
 		return $db->insert($q);
 	}
