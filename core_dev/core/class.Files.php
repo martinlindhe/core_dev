@@ -8,7 +8,7 @@
 	
 	Uses php_id3.dll if enabled, to show more details of mp3s in the file module
 
-	//todo: rename tblFiles.timeUploaded to tblFiles.timeCreated
+	//TODO rename tblFiles.timeUploaded to tblFiles.timeCreated
 */
 
 require_once('atom_comments.php');			//for image comments support
@@ -24,13 +24,16 @@ define('FILETYPE_USERDATA',				6);	/* File is uploaded to a userdata field */
 define('FILETYPE_FORUM',					7);	/* File is attached to a forum post */
 define('FILETYPE_PROCESS',				8);	/* File uploaded to be processed */
 define('FILETYPE_PROCESS_CLONE',	9);	/* a clone entry for a process file. */
+define('FILETYPE_VIDEOBLOG',			10); /* video clip representing a user submitted blog */
+
+define('FILETYPE_GENERIC',				20); /* generic file type, for application specific file type */
 
 //for future use:
 define('MEDIATYPE_IMAGE',				1);
 define('MEDIATYPE_VIDEO',				2);
 define('MEDIATYPE_AUDIO',				3);
 define('MEDIATYPE_DOCUMENT',		4);
-define('MEDIATYPE_WEBRESOURCE',	5);	//webresources might / will contain other files. those files will refer to this file as their owner
+define('MEDIATYPE_WEBRESOURCE',	5);	//webresources can/will contain other files. those files will refer to this file entry as their owner
 
 class Files
 {
@@ -63,7 +66,7 @@ class Files
 		'application/pdf'			//Adobe .pdf file
 	);
 
-	//file extension to mimetype & media type mapping. WIP! not used yet. should replace the above mimetypestuff eventually
+	//file extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
 	public $media_types = array(
 		'png' => array(MEDIATYPE_IMAGE, 'image/png', 'PNG Image'),
 		'jpg' => array(MEDIATYPE_IMAGE, 'image/jpeg', 'JPEG Image'),
@@ -158,7 +161,7 @@ class Files
 	{
 		//IMPORTANT todo: validate $fileName
 
-		//todo: bort me hårdkodad url
+		//TODO: bort me hårdkodad url
 		$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m E:\devel\magic '.$fileName;
 		echo 'Executing: '.$c.'<br/>';
 		$result = exec($c);
@@ -287,8 +290,8 @@ class Files
 		}
 		echo '</div>';
 
-		//fixme: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
-		//fixme: stöd anon_uploads ! den ignoreras totalt idag, dvs anon uploads tillåts aldrig
+		//FIXME: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
+		//FIXME: stöd anon_uploads ! den ignoreras totalt idag, dvs anon uploads tillåts aldrig
 		if ( 
 				($fileType == FILETYPE_USERFILE && $session->id == $userid) ||
 				($fileType == FILETYPE_NEWS && $session->isAdmin) ||
@@ -480,7 +483,11 @@ class Files
 		$fileMime = '';
 		$fileName = basename(strip_tags($fileName));
 
-  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+		if ($session) {
+	  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+		} else {
+			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+		}
 		$newFileId = $db->insert($q);
 
 		if ($content) {
