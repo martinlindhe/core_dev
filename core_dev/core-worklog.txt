@@ -254,7 +254,7 @@ X = hi prio task
 
 --------------[[changelog]]--------------
 2007.11.08:
-	- atom_moderation.php: getModerationQueueCount() now takes queueType as optional parameter
+	- atom_moderation.php: getModerationQueueCount() & getModerationQueue() now takes queueType as optional parameter
 
 
 2007.11.07:

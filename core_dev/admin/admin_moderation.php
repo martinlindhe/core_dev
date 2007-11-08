@@ -19,7 +19,7 @@
 
 	$changed_list = false;
 	
-	$list = getModerationQueue($pager['limit']);
+	$list = getModerationQueue(0, $pager['limit']);
 	foreach ($list as $row) {
 		if (!isset($_POST['method_'.$row['queueId']])) continue;
 		$changed_list = true;
@@ -59,7 +59,7 @@
 		die;
 	}
 
-	if ($changed_list) $list = getModerationQueue($pager['limit']);
+	if ($changed_list) $list = getModerationQueue(0, $pager['limit']);
 
 	echo $pager['head'];
 
