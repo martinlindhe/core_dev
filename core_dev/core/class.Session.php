@@ -115,8 +115,7 @@ class Session
 		//force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
 		if (!empty($config['no_session'])) return;
 
-		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2']))
-		{
+		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2'])) {
 			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
 			if (!is_numeric($check)) {
 				echo 'Registration failed: '.$check;
@@ -126,8 +125,7 @@ class Session
 		}
 
 		//Shows login form if 'login' variable is set
-		if (!$this->id && isset($_GET['login']))
-		{
+		if (!$this->id && isset($_GET['login'])) {
 			$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
 			require('design_head.php');	//fixme: hur kan jag slippa detta
 			$this->showLoginForm();
@@ -136,19 +134,19 @@ class Session
 		}
 
 		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
-		if (!$this->id)
-		{
-			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']) && $this->logIn($_POST['login_usr'], $_POST['login_pwd']))
-			{
+		if (!$this->id) {
+			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']) && $this->logIn($_POST['login_usr'], $_POST['login_pwd'])) {
 				header('Location: '.$config['web_root'].$this->start_page);
 				die;
 			}
 		}
 
-		if (!$this->id) return;
-
 		//Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
-		if (isset($_GET['logout'])) $this->logOut();
+		if (isset($_GET['logout'])) {
+			$this->logOut();
+			header('Location: '.$config['web_root'].$this->start_page);
+			die;
+		}
 
 		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
