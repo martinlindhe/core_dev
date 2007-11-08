@@ -219,11 +219,14 @@
 		return $db->getOneRow($q);
 	}
 
-	function getModerationQueueCount()
+	function getModerationQueueCount($_type = 0)
 	{
 		global $db;
+		if (!is_numeric($_type)) return false;
 
 		$q = 'SELECT COUNT(queueId) FROM tblModeration WHERE moderatedBy=0';
+		if ($_type) $q .= ' AND queueType='.$_type;
+
 		return $db->getOneItem($q);
 	}
 

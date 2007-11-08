@@ -253,6 +253,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.11.08:
+	- atom_moderation.php: getModerationQueueCount() now takes queueType as optional parameter
+
+
 2007.11.07:
 	- class.Files.php: made $files->addFileEntry() work also when the session handler is not used
 
