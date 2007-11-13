@@ -253,6 +253,10 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.11.13:
+	- class.Session.php: added $session->ua_ie boolean, true if the user is using IE. unfortunately needed for special cases
+
+
 2007.11.08:
 	- atom_moderation.php: getModerationQueueCount() & getModerationQueue() now takes queueType as optional parameter
 
