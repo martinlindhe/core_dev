@@ -32,10 +32,8 @@
 			'http_download.php' => 'Request a fetch',
 			'http_monitor.php' => 'Monitor server',
 			'?logout' => 'Logout');
-	} else {
-		$menu = array('?login' => 'Log in');
+		createMenu($menu);
 	}
-	createMenu($menu);
 ?>
 </div>
 
