@@ -10,6 +10,7 @@
 	define('COMMENT_IMAGE',					3);		//anonymous or registered users comments on a image
 	define('COMMENT_TODOLIST',			4);		//todolist item comments
 	define('COMMENT_GENERIC',				5);		//generic comment type
+	define('COMMENT_PASTEBIN',			6);		//"pastebin" text. anonymous submissions are allowed
 
 	define('COMMENT_ADMIN_IP',			10);	//a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 
@@ -21,7 +22,7 @@
 		global $db, $session;
 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
 
-		if ($_type != COMMENT_IMAGE && !$session->id) return false;
+		if ($_type != COMMENT_IMAGE && $_type != COMMENT_PASTEBIN && !$session->id) return false;
 
 		$commentText = $db->escape(htmlspecialchars($commentText));
 
@@ -152,13 +153,15 @@
 			echo $row['timeCreated'];
 			echo '</div>';
 			echo '<div class="comment_text">'.$row['commentText'];
-			echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
+			if ($session->id) {
+				echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
+			}
 			echo '</div>';
 		}
 		echo '</div>'; //id="comments_only"
 
 		if ( ($session->id && $_type != COMMENT_MODERATION) ||
-				($_type == COMMENT_IMAGE)
+				($_type == COMMENT_IMAGE || $_type == COMMENT_PASTEBIN)
 		) {
 			echo '<form method="post" action="">';
 			echo '<textarea name="cmt" cols="'.$col_w.'" rows="'.$col_h.'"></textarea><br/>';

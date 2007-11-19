@@ -3,7 +3,9 @@
 
 	require('design_head.php');
 
-	echo '<h1>Text dump - TODO</h1>';
+	echo '<h1>Pastebin</h1>';
+
+	showComments(COMMENT_PASTEBIN, 0, 80, 30);
 
 
 	require('design_foot.php');

@@ -11,7 +11,7 @@
 	$menu = array(
 		'index.php' => 'Home',
 		'files.php' => 'File dump',
-		'pastebin.php' => 'Text dump'	//TODO
+		'pastebin.php' => 'Pastebin'
 		
 	);
 	createMenu($menu);
