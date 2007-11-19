@@ -255,7 +255,7 @@ X = hi prio task
 --------------[[changelog]]--------------
 2007.11.19:
 	- class.Session.php: added $session->userdata boolean to configure wether you want to use tblUserdata for registration info or not
-
+	- /core_dev/dump/ new sample added: anonymous file dump & pastebin (WIP)
 
 
 2007.11.13:

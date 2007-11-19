@@ -162,7 +162,9 @@ class Files
 		//IMPORTANT todo: validate $fileName
 
 		//TODO: bort me hårdkodad url
-		$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m E:\devel\magic '.$fileName;
+		//$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m E:\devel\magic '.$fileName;
+		//$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m "C:\Program Files\GnuWin32\share\file\magic" '.$fileName;
+		$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi '.$fileName;
 		echo 'Executing: '.$c.'<br/>';
 		$result = exec($c);
 		echo 'result: '.$result.'<br/>';
@@ -447,7 +449,7 @@ class Files
 	function handleUpload($FileData, $fileType, $ownerId, $categoryId = 0)
 	{
 		global $db, $session;
-		if (!$session->id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
+		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
 		//ignore empty file uploads
 		if (!$FileData['name']) return;
