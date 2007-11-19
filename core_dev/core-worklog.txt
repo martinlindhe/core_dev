@@ -253,6 +253,11 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.11.19:
+	- class.Session.php: added $session->userdata boolean to configure wether you want to use tblUserdata for registration info or not
+
+
+
 2007.11.13:
 	- class.Session.php: added $session->ua_ie boolean, true if the user is using IE. unfortunately needed for special cases
 

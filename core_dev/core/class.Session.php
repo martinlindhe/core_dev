@@ -52,6 +52,8 @@ class Session
 	public $isSuperAdmin;
 	public $started;		//timestamp of when the session started
 	public $theme = '';			//contains the currently selected theme
+
+	public $userdata = true; //shall we use tblUserdata for required userdata fields?
 	
 	public $userModes = array(
 		0 => 'Normal user',
@@ -76,6 +78,7 @@ class Session
 		if (isset($session_config['start_page'])) $this->start_page = $session_config['start_page'];
 		if (isset($session_config['error_page'])) $this->error_page = $session_config['error_page'];
 		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
+		if (isset($session_config['userdata'])) $this->userdata = $session_config['userdata'];
 
 		ini_set('session.gc_maxlifetime', $session_config['timeout']);
 		session_name($this->session_name);
@@ -229,7 +232,9 @@ class Session
 		$this->log('User <b>'.$username.'</b> created');
 
 		//Stores the additional data from the userdata fields that's required at registration
-		handleRequiredUserdataFields($newUserId);
+		if ($this->userdata) {
+			handleRequiredUserdataFields($newUserId);
+		}
 
 		return $newUserId;
 	}
@@ -342,7 +347,9 @@ class Session
 				echo '<tr><td>Username:</td><td><input name="register_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/></td></tr>';
 				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
 				echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
-				showRequiredUserdataFields();
+				if ($this->userdata) {
+					showRequiredUserdataFields();
+				}
 				echo '</table><br/>';
 
 				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
