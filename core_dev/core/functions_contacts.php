@@ -29,11 +29,11 @@
 	/* Adds or updates a user contact (relation with another user) */
 	function setContact($_type, $userId, $otherId, $groupId = 0)
 	{
-		global $db, $session;
+		global $db;
 
 		if ($userId == $otherId || !is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId) || !is_numeric($groupId)) return false;
 
-		if (!haveContact($_type, $session->id, $otherId)) {
+		if (!haveContact($_type, $userId, $otherId)) {
 			/* Create new contact */
 			$q = 'INSERT INTO tblContacts SET userId='.$userId.',contactType='.$_type.',otherUserId='.$otherId.',groupId='.$groupId.',timeCreated=NOW()';
 			$db->insert($q);

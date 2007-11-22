@@ -27,6 +27,7 @@
 	define('MODERATION_USER',				14);	//itemId = tblUser.userId
 	define('MODERATION_QUEUE',			15);	//used to put a user in a moderation queue
 	define('MODERATION_REPORTED_VIDEOPRESENTATION',	16);	//a user can report another user's video presentation. itemId = tblFiles.fileId of video pres
+	define('MODERATION_REPORTED_VIDEOMESSAGE',			17);	//a user can report a private video-message. itemId = tblFiles.fileId of video message
 
 	//Moderation queue type 1-49 is reserverd for core_dev use. Please use >= 50 for your own extensions
 
