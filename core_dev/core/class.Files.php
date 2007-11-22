@@ -1037,6 +1037,15 @@ class Files
 		return $db->getOneItem($q);
 	}
 
+	function getOwner($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT ownerId FROM tblFiles WHERE fileId='.$_id;
+		return $db->getOneItem($q);
+	}
+
 	function showImageGadgetXHTML()
 	{
 		global $config, $session;
