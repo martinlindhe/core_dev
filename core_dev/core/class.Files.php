@@ -25,6 +25,7 @@ define('FILETYPE_FORUM',					7);	/* File is attached to a forum post */
 define('FILETYPE_PROCESS',				8);	/* File uploaded to be processed */
 define('FILETYPE_PROCESS_CLONE',	9);	/* a clone entry for a process file. */
 define('FILETYPE_VIDEOBLOG',			10); /* video clip representing a user submitted blog */
+define('FILETYPE_VIDEOPRES',			11); /* video clip representing a presentation of the user */
 
 define('FILETYPE_GENERIC',				20); /* generic file type, for application specific file type */
 

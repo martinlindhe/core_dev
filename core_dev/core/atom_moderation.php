@@ -26,6 +26,7 @@
 	define('MODERATION_BLOG',				13);
 	define('MODERATION_USER',				14);	//itemId = tblUser.userId
 	define('MODERATION_QUEUE',			15);	//used to put a user in a moderation queue
+	define('MODERATION_REPORTED_VIDEOPRESENTATION',	16);	//a user can report another user's video presentation. itemId = tblFiles.fileId of video pres
 
 	//Moderation queue type 1-49 is reserverd for core_dev use. Please use >= 50 for your own extensions
 
@@ -178,11 +179,12 @@
 	}
 
 	/* Adds the forum item $itemId to the moderation queue tagged with reason $queueType */
-	function addToModerationQueue($queueType, $itemId, $auto_triggered = false)
+	//$triggeredBy is only used if $session is not available
+	function addToModerationQueue($queueType, $itemId, $auto_triggered = false, $triggeredBy = 0)
 	{
 		global $db, $session;
 
-		if (!is_numeric($itemId) || !is_numeric($queueType) || !is_bool($auto_triggered)) return false;
+		if (!is_numeric($itemId) || !is_numeric($queueType) || !is_bool($auto_triggered) || !is_numeric($triggeredBy)) return false;
 		if ($auto_triggered != '1') $auto_triggered = 0;
 
 		$q = 'SELECT queueId FROM tblModeration WHERE itemId='.$itemId.' AND queueType='.$queueType.' AND autoTriggered='.$auto_triggered;
@@ -192,7 +194,7 @@
 		if ($session) {		
 			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session->id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
 		} else {
-			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId=0,autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$triggeredBy.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
 		}
 
 		return $db->insert($q);
