@@ -257,6 +257,8 @@ X = hi prio task
 	- atom_moderation.php: addToModerationQueue() added optional parameter $triggeredBy, only used if core_dev session handling is disabled
   - class.Files.php: $files->getOwner($fileId) added
 	- functions_contacts.php: made setContact() not require $session to function
+	- functions_contacts.php added isBlocked($userId, $otherId) helper function
+
 
 2007.11.19:
 	- class.Session.php: added $session->userdata boolean to configure wether you want to use tblUserdata for registration info or not

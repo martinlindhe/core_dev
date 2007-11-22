@@ -9,17 +9,26 @@
 	function haveContact($_type, $userId, $otherId)
 	{
 		global $db;
-
 		if (!is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId)) return false;
 
 		$q = 'SELECT contactId FROM tblContacts WHERE userId='.$userId.' AND otherUserId='.$otherId.' AND contactType='.$_type;
 		return $db->getOneItem($q);
 	}
 
+	/* returns true if $userId has blocked user $otherId */
+	function isBlocked($userId, $otherId)
+	{
+		global $db;
+		if (!is_numeric($userId) || !is_numeric($otherId)) return false;
+
+		$q = 'SELECT contactId FROM tblContacts WHERE userId='.$userId.' AND otherUserId='.$otherId.' AND contactType='.CONTACT_BLOCKED;
+		if ($db->getOneItem($q)) return true;
+		return false;
+	}
+
 	function removeContact($_type, $otherId)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($_type) || !is_numeric($otherId)) return false;
 
 		$q = 'DELETE FROM tblContacts WHERE userId='.$session->id.' AND otherUserId='.$otherId.' AND contactType='.$_type;
@@ -30,7 +39,6 @@
 	function setContact($_type, $userId, $otherId, $groupId = 0)
 	{
 		global $db;
-
 		if ($userId == $otherId || !is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId) || !is_numeric($groupId)) return false;
 
 		if (!haveContact($_type, $userId, $otherId)) {
@@ -66,7 +74,6 @@
 	function getContactsFlat($_type, $userId)
 	{
 		global $db;
-
 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS contactName,';
@@ -256,7 +263,6 @@
 	function removeSentFriendRequest($otherId)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($otherId)) return false;
 
 		$q  = 'DELETE FROM tblFriendRequests';
@@ -268,7 +274,6 @@
 	function denyFriendRequest($otherId)
 	{
 		global $db, $session, $config;
-
 		if (!$session->id || !is_numeric($otherId)) return false;
 
 		$q  = 'DELETE FROM tblFriendRequests';
@@ -286,7 +291,6 @@
 	function acceptFriendRequest($otherId)
 	{
 		global $db, $session, $config;
-
 		if (!$session->id || !is_numeric($otherId)) return false;
 
 		$q  = 'DELETE FROM tblFriendRequests';
@@ -309,7 +313,6 @@
 	function hasPendingFriendRequest($userId)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($userId)) return false;
 
 		$q  = 'SELECT reqId FROM tblFriendRequests ';
