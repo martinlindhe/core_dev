@@ -4,8 +4,12 @@
 */
 
 	/* draws $str array centered horizontally & vertically, returns image resource */
-	function pngCenterText($str, $template, $gdf = 1, $col = array() )
+	//use $font to specify one of GD's internal fonts, or specify a filename to load a .gdf or .ttf instead
+	function pngCenterText($str, $template, $font = 1, $col = array() )
 	{
+		$ttf_angle = 0;
+		$ttf_size = 12;
+
 		$im = imagecreatefrompng($template);
 
 		if (empty($col)) {
@@ -14,10 +18,27 @@
 			$color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
 		}
 
-		if (!is_numeric($gdf)) {
-			$font = imageloadfont($gdf);
-		} else {
-			$font = $gfd;
+		$ttf = false;
+		if (!is_numeric($font)) {
+			if (substr(strtolower($font), -4) == '.ttf') {
+				$ttf = true;
+
+				$fh = 0;
+				foreach ($str as $txt)
+				{
+					$x = imagettfbbox($ttf_size, $ttf_angle, $font, $txt);
+					$t = $x[1] - $x[7];
+					if ($t > $fh) $fh = $t;
+				}
+
+			} else {
+				//GDF font handling
+				$font = imageloadfont($font);
+			}
+		}
+		
+		if (!$ttf) {
+			$fh = imagefontheight($font);
 		}
 
 		/*
@@ -26,10 +47,23 @@
 		$i = 0;
 		foreach ($str as $txt)
 		{
-			$px = (imagesx($im) / 2) - ((strlen($txt)*imagefontwidth($font)) / 2);
-			$py = (imagesy($im) / 2) - ( ((count($str)/2) - $i) * imagefontheight($font) );
+			if (!$ttf) {
+				$txt = mb_convert_encoding($txt, 'ISO-8859-1', 'auto'); //FIXME required with php 5.2, as imagestring() cant handle utf8
+				$fw = strlen($txt) * imagefontwidth($font);
+			} else {
+				$x = imagettfbbox($ttf_size, $ttf_angle, $font, $txt);
+				$fw = $x[2] - $x[0];	//font width
+			}
 
-			imagestring($im, $font, $px, $py, $txt, $color);
+			$px = (imagesx($im) / 2) - ($fw / 2);
+			$py = (imagesy($im) / 2) - ( ((count($str)/2) - $i) * $fh);
+
+			if (!$ttf) {
+				imagestring($im, $font, $px, $py, $txt, $color);
+			} else {
+				imagettftext($im, $ttf_size, $ttf_angle, $px, $py, $color, $font, $txt);
+			}
+
 			$i++;
 		}
 		return $im;
