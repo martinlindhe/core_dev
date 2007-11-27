@@ -35,6 +35,8 @@ class Session
 	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
 	public $allow_login = true;				//set to false to only let superadmins log in to the site
 	private $allow_registration = true;	//set to false to disallow the possibility to register new users. will be disabled if login is disabled
+	private $reserved_usercheck = true;		//check if username is listed as reserved username, requires tblStopwords
+	private $userdata = true; //shall we use tblUserdata for required userdata fields?
 
 	private $start_page = '';						//redirects user to this page (in $config['web_root'] directory) after successful login
 	private $error_page = 'error.php';	//redirects the user to this page (in $config['web_root'] directory) to show errors
@@ -53,8 +55,6 @@ class Session
 	public $started;		//timestamp of when the session started
 	public $theme = '';			//contains the currently selected theme
 
-	public $userdata = true; //shall we use tblUserdata for required userdata fields?
-	
 	public $userModes = array(
 		0 => 'Normal user',
 		1 => 'Admin',
@@ -79,6 +79,7 @@ class Session
 		if (isset($session_config['error_page'])) $this->error_page = $session_config['error_page'];
 		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
 		if (isset($session_config['userdata'])) $this->userdata = $session_config['userdata'];
+		if (isset($session_config['reserved_usercheck'])) $this->reserved_usercheck = $session_config['reserved_usercheck'];
 
 		ini_set('session.gc_maxlifetime', $session_config['timeout']);
 		session_name($this->session_name);
@@ -215,7 +216,7 @@ class Session
 
 		if ($password1 != $password2) return 'The passwords doesnt match';
 
-		if (isReservedUsername($username)) return 'Username is not allowed';
+		if ($this->reserved_usercheck && isReservedUsername($username)) return 'Username is not allowed';
 
 		if (getUsersCnt()) {
 			$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';

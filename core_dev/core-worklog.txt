@@ -253,6 +253,9 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.11.27:
+	- class.Session.php: added $session->reserved_usercheck bool to define wether new user registrations should be checked against "reserved usernames" list
+
 2007.11.22:
 	- atom_moderation.php: addToModerationQueue() added optional parameter $triggeredBy, only used if core_dev session handling is disabled
   - class.Files.php: $files->getOwner($fileId) added
