@@ -1,5 +1,9 @@
 <?
-	/* debug function! prints out variable $v */
+	/**
+	 * Debug function. Prints out variable $v
+	 * \param $v variable of any type to display
+	 * \return nothing
+   */
 	function d($v)
 	{
 		if (is_string($v)) echo htmlentities($v);

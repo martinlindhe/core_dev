@@ -129,11 +129,11 @@ abstract class DB_Base
 	protected $charset = 'utf8';
 
 	//db variables
-	public $db_handle = false;
-	public $db_driver = '';				//holds the full name of the db driver, example: DB_MySQLi, DB_MySQL
-	public $dialect = '';					//tells what dialect of sql is currently allowed by the db driver, possible values: mysql, pgsql
-	public $server_version = '';	//used for version checking
-	public $client_version = '';	//used for version checking
+	public $db_handle = false;		///<Internal db handle
+	public $db_driver = '';				///<holds the full name of the db driver, example: DB_MySQLi, DB_MySQL
+	public $dialect = '';					///<tells what dialect of sql is currently allowed by the db driver, possible values: mysql, pgsql
+	public $server_version = '';	///<used for version checking
+	public $client_version = '';	///<used for version checking
 
 	//profiling variables
 	protected $connect_time = 0;
