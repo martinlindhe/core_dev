@@ -1,10 +1,17 @@
 <?
-/*
-	functions_image.php - image handling helper functions
-*/
+/**
+ * functions_image.php - image handling helper functions
+ */
 
-	/* draws $str array centered horizontally & vertically, returns image resource */
-	//use $font to specify one of GD's internal fonts, or specify a filename to load a .gdf or .ttf instead
+	/**
+	 * Draws text centered horizontally & vertically
+	 *
+	 * \param $str array of lines of text to print
+	 * \param $template png image to use as template to draw the text upon
+	 * \param $font specify the font to use. numeric 1-5 for gd's internal fonts, or specify a .gdf or .ttf font instead
+	 * \param $col color to draw the font in, array(r,g,b)
+	 * \return image resource
+	 */
 	function pngCenterText($str, $template, $font = 1, $col = array() )
 	{
 		$ttf_angle = 0;
@@ -24,7 +31,7 @@
 				$ttf = true;
 
 				$fh = 0;
-				foreach ($str as $txt)
+				foreach ($str as $txt)	//find highest font height
 				{
 					$x = imagettfbbox($ttf_size, $ttf_angle, $font, $txt);
 					$t = $x[1] - $x[7];
@@ -45,6 +52,7 @@
 			prints the text in $str array centered vertically & horizontally over the image
 		*/
 		$i = 0;
+
 		foreach ($str as $txt)
 		{
 			if (!$ttf) {
@@ -61,7 +69,7 @@
 			if (!$ttf) {
 				imagestring($im, $font, $px, $py, $txt, $color);
 			} else {
-				imagettftext($im, $ttf_size, $ttf_angle, $px, $py, $color, $font, $txt);
+				imagettftext($im, $ttf_size, $ttf_angle, $px, $py + $fh, $color, $font, $txt);
 			}
 
 			$i++;
