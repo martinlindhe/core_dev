@@ -1,0 +1,333 @@
+<html>
+<head>
+<title>session</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L26'>session</a>            26 atom_categories.php 		global $db, $session;
+<a href='../S/26.html#L28'>session</a>            28 atom_categories.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_owner)) return false;
+<a href='../S/26.html#L34'>session</a>            34 atom_categories.php 		if (!$_global) $q .= ' AND creatorId='.$session-&gt;id;
+<a href='../S/26.html#L38'>session</a>            38 atom_categories.php 		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner.',timeCreated=NOW(),creatorId='.$session-&gt;id;
+<a href='../S/26.html#L39'>session</a>            39 atom_categories.php 		if ($session-&gt;isAdmin &amp;&amp; $_global) $q .= ',categoryPermissions=10';
+<a href='../S/26.html#L46'>session</a>            46 atom_categories.php 		global $db, $session;
+<a href='../S/26.html#L47'>session</a>            47 atom_categories.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L55'>session</a>            55 atom_categories.php 		global $db, $session;
+<a href='../S/26.html#L56'>session</a>            56 atom_categories.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L112'>session</a>           112 atom_categories.php 		global $db, $session;
+<a href='../S/26.html#L119'>session</a>           119 atom_categories.php 				if (!$session-&gt;id) return false;
+<a href='../S/26.html#L120'>session</a>           120 atom_categories.php 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session-&gt;id.' OR categoryPermissions=10) AND categoryType BETWEEN 1 AND 3 ORDER BY categoryPermissions DESC';
+<a href='../S/26.html#L124'>session</a>           124 atom_categories.php 				if (!$session-&gt;id) return false;
+<a href='../S/26.html#L125'>session</a>           125 atom_categories.php 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session-&gt;id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
+<a href='../S/26.html#L213'>session</a>           213 atom_categories.php 		global $config, $session;
+<a href='../S/26.html#L215'>session</a>           215 atom_categories.php 		if (!$session-&gt;id) return getCategoriesSelect($_type);
+<a href='../S/26.html#L217'>session</a>           217 atom_categories.php 		if (($session-&gt;isAdmin || $_type==CATEGORY_USERFILE) &amp;&amp; !empty($_POST['new_file_category']))
+<a href='../S/26.html#L282'>session</a>           282 atom_categories.php 		if ($_type != CATEGORY_NEWS &amp;&amp; $_type != CATEGORY_CONTACT &amp;&amp; $session-&gt;isSuperAdmin) {
+<a href='../S/25.html#L22'>session</a>            22 atom_comments.php 		global $db, $session;
+<a href='../S/25.html#L25'>session</a>            25 atom_comments.php 		if ($_type != COMMENT_IMAGE &amp;&amp; $_type != COMMENT_PASTEBIN &amp;&amp; !$session-&gt;id) return false;
+<a href='../S/25.html#L32'>session</a>            32 atom_comments.php 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session-&gt;id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+<a href='../S/25.html#L38'>session</a>            38 atom_comments.php 		global $db, $session;
+<a href='../S/25.html#L39'>session</a>            39 atom_comments.php 		if (!$session-&gt;id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
+<a href='../S/25.html#L44'>session</a>            44 atom_comments.php 		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$session-&gt;id;
+<a href='../S/25.html#L51'>session</a>            51 atom_comments.php 		global $db, $session;
+<a href='../S/25.html#L52'>session</a>            52 atom_comments.php 		if (!$session-&gt;id || !is_numeric($commentId)) return false;
+<a href='../S/25.html#L53'>session</a>            53 atom_comments.php 		$db-&gt;query('UPDATE tblComments SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE commentId='.$commentId);
+<a href='../S/25.html#L59'>session</a>            59 atom_comments.php 		global $db, $session;
+<a href='../S/25.html#L60'>session</a>            60 atom_comments.php 		if (!$session-&gt;id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
+<a href='../S/25.html#L62'>session</a>            62 atom_comments.php 		$q = 'UPDATE tblComments SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
+<a href='../S/25.html#L132'>session</a>           132 atom_comments.php 		global $session, $config;
+<a href='../S/25.html#L156'>session</a>           156 atom_comments.php 			if ($session-&gt;id) {
+<a href='../S/25.html#L163'>session</a>           163 atom_comments.php 		if ( ($session-&gt;id &amp;&amp; $_type != COMMENT_MODERATION) ||
+<a href='../S/25.html#L181'>session</a>           181 atom_comments.php 		global $session, $config;
+<a href='../S/25.html#L183'>session</a>           183 atom_comments.php 		if (!$session-&gt;id || !is_numeric($_type)) return false;
+<a href='../S/25.html#L195'>session</a>           195 atom_comments.php 				$list = getCommentsByOwner($_type, $session-&gt;id);
+<a href='../S/8.html#L9'>session</a>             9 atom_feedback.php 		global $db, $session;
+<a href='../S/8.html#L12'>session</a>            12 atom_feedback.php 		$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',text="'.$db-&gt;escape($_text).'",text2="'.$db-&gt;escape($_text2).'",userId='.$session-&gt;id.',subjectId='.$_subject.',timeCreated=NOW()';
+<a href='../S/8.html#L39'>session</a>            39 atom_feedback.php 		global $db, $session;
+<a href='../S/8.html#L41'>session</a>            41 atom_feedback.php 		if (!$session-&gt;isAdmin || !is_numeric($_id)) return false;
+<a href='../S/8.html#L49'>session</a>            49 atom_feedback.php 		global $db, $session;
+<a href='../S/8.html#L51'>session</a>            51 atom_feedback.php 		if (!$session-&gt;isAdmin || !is_numeric($_id)) return false;
+<a href='../S/10.html#L186'>session</a>           186 atom_moderation.php 		global $db, $session;
+<a href='../S/10.html#L195'>session</a>           195 atom_moderation.php 		if ($session) {
+<a href='../S/10.html#L196'>session</a>           196 atom_moderation.php 			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session-&gt;id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+<a href='../S/10.html#L242'>session</a>           242 atom_moderation.php 		global $db, $session;
+<a href='../S/10.html#L244'>session</a>           244 atom_moderation.php 		if (!$session-&gt;isAdmin || !is_numeric($queueId)) return false;
+<a href='../S/10.html#L246'>session</a>           246 atom_moderation.php 		$q = 'UPDATE tblModeration SET moderatedBy='.$session-&gt;id.',timeModerated=NOW() WHERE queueId='.$queueId;
+<a href='../S/5.html#L12'>session</a>            12 atom_polls.php 		global $db, $session;
+<a href='../S/5.html#L61'>session</a>            61 atom_polls.php 		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session-&gt;id.',timeCreated=NOW()'.$timeStart.$timeEnd;
+<a href='../S/5.html#L107'>session</a>           107 atom_polls.php 		global $session;
+<a href='../S/5.html#L126'>session</a>           126 atom_polls.php 		if ($session-&gt;isAdmin &amp;&amp; $data['timeStart']) $result .= 'Starts: '.$data['timeStart'].', ends '.$data['timeEnd'].'&lt;br/&gt;';
+<a href='../S/5.html#L128'>session</a>           128 atom_polls.php 		if ($session-&gt;id &amp;&amp; $active &amp;&amp; !hasAnsweredPoll($_id)) {
+<a href='../S/5.html#L135'>session</a>           135 atom_polls.php 			if ($session-&gt;id) {
+<a href='../S/5.html#L154'>session</a>           154 atom_polls.php 		if ($session-&gt;isAdmin) {
+<a href='../S/5.html#L160'>session</a>           160 atom_polls.php 		if ($session-&gt;id) {
+<a href='../S/5.html#L351'>session</a>           351 atom_polls.php 		global $db, $session;
+<a href='../S/5.html#L354'>session</a>           354 atom_polls.php 		$check = $db-&gt;getOneItem('SELECT userId FROM tblPollVotes WHERE pollId='.$_id.' AND userId='.$session-&gt;id);
+<a href='../S/5.html#L356'>session</a>           356 atom_polls.php 		$db-&gt;insert('INSERT INTO tblPollVotes SET userId='.$session-&gt;id.',pollId='.$_id.',voteId='.$voteId);
+<a href='../S/5.html#L362'>session</a>           362 atom_polls.php 		global $db, $session;
+<a href='../S/5.html#L365'>session</a>           365 atom_polls.php 		$q = 'SELECT pollId FROM tblPollVotes WHERE userId='.$session-&gt;id.' AND pollId='.$_id;
+<a href='../S/5.html#L384'>session</a>           384 atom_polls.php 		global $db, $session;
+<a href='../S/5.html#L385'>session</a>           385 atom_polls.php 		if (!$session-&gt;isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L387'>session</a>           387 atom_polls.php 		$db-&gt;update('UPDATE tblPolls SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id);
+<a href='../S/5.html#L393'>session</a>           393 atom_polls.php 		global $db, $session;
+<a href='../S/5.html#L394'>session</a>           394 atom_polls.php 		if (!$session-&gt;isAdmin || !is_numeric($_type) || !is_numeric($_owner)) return false;
+<a href='../S/1.html#L18'>session</a>            18 atom_rating.php 		global $db, $session;
+<a href='../S/1.html#L20'>session</a>            20 atom_rating.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id) || !is_numeric($_rating)) return false;
+<a href='../S/1.html#L23'>session</a>            23 atom_rating.php 		$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session-&gt;id;
+<a href='../S/1.html#L27'>session</a>            27 atom_rating.php 		$q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$session-&gt;id.',timeRated=NOW()';
+<a href='../S/1.html#L57'>session</a>            57 atom_rating.php 		global $db, $session;
+<a href='../S/1.html#L61'>session</a>            61 atom_rating.php 		$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session-&gt;id;
+<a href='../S/1.html#L93'>session</a>            93 atom_rating.php 		global $db, $session;
+<a href='../S/1.html#L97'>session</a>            97 atom_rating.php 		if (!$session-&gt;id || isRated($_type, $_id)) return showRating($_type, $_id);
+<a href='../S/33.html#L82'>session</a>            82 atom_settings.php 		global $config, $session, $files;
+<a href='../S/33.html#L84'>session</a>            84 atom_settings.php 		$list = readAllUserdata($session-&gt;id);
+<a href='../S/33.html#L108'>session</a>           108 atom_settings.php 				saveSetting(SETTING_USERDATA, $session-&gt;id, $row['fieldId'], $row['settingValue']);
+<a href='../S/33.html#L111'>session</a>           111 atom_settings.php 					$session-&gt;theme = $row['settingValue'];
+<a href='../S/3.html#L19'>session</a>            19 atom_subscriptions.php 		global $db, $session;
+<a href='../S/3.html#L20'>session</a>            20 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type) || !is_numeric($itemId)) return false;
+<a href='../S/3.html#L23'>session</a>            23 atom_subscriptions.php 		$q = 'INSERT INTO tblSubscriptions SET ownerId='.$session-&gt;id.', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
+<a href='../S/3.html#L30'>session</a>            30 atom_subscriptions.php 		global $db, $session;
+<a href='../S/3.html#L31'>session</a>            31 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type) || !is_numeric($subscriptionId)) return false;
+<a href='../S/3.html#L33'>session</a>            33 atom_subscriptions.php 		$q = 'DELETE FROM tblSubscriptions WHERE itemId='.$subscriptionId.' AND type='.$type.' AND ownerId='.$session-&gt;id;
+<a href='../S/3.html#L40'>session</a>            40 atom_subscriptions.php 		global $db, $session;
+<a href='../S/3.html#L41'>session</a>            41 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type) || !is_numeric($itemId)) return false;
+<a href='../S/3.html#L43'>session</a>            43 atom_subscriptions.php 		$q = 'SELECT id FROM tblSubscriptions WHERE ownerId='.$session-&gt;id.' AND type='.$type.' AND itemId='.$itemId;
+<a href='../S/3.html#L90'>session</a>            90 atom_subscriptions.php 		global $db, $session;
+<a href='../S/3.html#L91'>session</a>            91 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type)) return false;
+<a href='../S/3.html#L97'>session</a>            97 atom_subscriptions.php 				$q .= 'WHERE t1.type='.$type.' AND t1.ownerId='.$session-&gt;id;
+<a href='../S/3.html#L101'>session</a>           101 atom_subscriptions.php 				$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$session-&gt;id;
+<a href='../S/19.html#L338'>session</a>           338 class.DB_Base.php 		global $session, $config;
+<a href='../S/19.html#L340'>session</a>           340 class.DB_Base.php 		if (!$session-&gt;isAdmin) return false;
+<a href='../S/4.html#L121'>session</a>           121 class.Files.php 		global $session;
+<a href='../S/4.html#L195'>session</a>           195 class.Files.php 		global $session, $db, $config;
+<a href='../S/4.html#L202'>session</a>           202 class.Files.php 		if (($session-&gt;id || $this-&gt;anon_uploads) &amp;&amp; !empty($_FILES['file1'])) {
+<a href='../S/4.html#L206'>session</a>           206 class.Files.php 				addRevision(REVISIONS_WIKI, $ownerId, 'File uploaded...', now(), $session-&gt;id, REV_CAT_FILE_UPLOADED);
+<a href='../S/4.html#L210'>session</a>           210 class.Files.php 		$userid = $session-&gt;id;
+<a href='../S/4.html#L211'>session</a>           211 class.Files.php 		$username = $session-&gt;username;
+<a href='../S/4.html#L300'>session</a>           300 class.Files.php 				($fileType == FILETYPE_USERFILE &amp;&amp; $session-&gt;id == $userid) ||
+<a href='../S/4.html#L301'>session</a>           301 class.Files.php 				($fileType == FILETYPE_NEWS &amp;&amp; $session-&gt;isAdmin) ||
+<a href='../S/4.html#L310'>session</a>           310 class.Files.php 				if ($data['userId'] != $session-&gt;id) $file_upload = false;
+<a href='../S/4.html#L315'>session</a>           315 class.Files.php 				if (($fileType == FILETYPE_USERFILE &amp;&amp; !$categoryId &amp;&amp; $session-&gt;id == $userid) ||
+<a href='../S/4.html#L323'>session</a>           323 class.Files.php 					echo '&lt;form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session-&gt;id.');"&gt;';
+<a href='../S/4.html#L324'>session</a>           324 class.Files.php 					echo '&lt;input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$session-&gt;id.'"/&gt;';
+<a href='../S/4.html#L355'>session</a>           355 class.Files.php 		global $config, $session, $db;
+<a href='../S/4.html#L416'>session</a>           416 class.Files.php 		global $db, $session;
+<a href='../S/4.html#L417'>session</a>           417 class.Files.php 		if (!$session-&gt;id || !is_numeric($_id)) return false;
+<a href='../S/4.html#L419'>session</a>           419 class.Files.php 		if ($session-&gt;isAdmin) {
+<a href='../S/4.html#L422'>session</a>           422 class.Files.php 			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id.' AND ownerId='.$session-&gt;id;
+<a href='../S/4.html#L453'>session</a>           453 class.Files.php 		global $db, $session;
+<a href='../S/4.html#L454'>session</a>           454 class.Files.php 		if ((!$session-&gt;id &amp;&amp; !$this-&gt;anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
+<a href='../S/4.html#L460'>session</a>           460 class.Files.php 			$session-&gt;error = 'File upload error';
+<a href='../S/4.html#L461'>session</a>           461 class.Files.php 			$session-&gt;log('Attempt to upload too big file');
+<a href='../S/4.html#L483'>session</a>           483 class.Files.php 		global $db, $session;
+<a href='../S/4.html#L490'>session</a>           490 class.Files.php 		if ($session) {
+<a href='../S/4.html#L491'>session</a>           491 class.Files.php 	  	$q = 'INSERT INTO tblFiles SET fileName="'.$db-&gt;escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session-&gt;id.',uploaderIP='.$session-&gt;ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+<a href='../S/4.html#L510'>session</a>           510 class.Files.php 		global $db, $session;
+<a href='../S/4.html#L518'>session</a>           518 class.Files.php 					$session-&gt;log('Failed to convert bmp to jpeg!');
+<a href='../S/4.html#L538'>session</a>           538 class.Files.php 					$session-&gt;log('Failed to convert svg to png!');
+<a href='../S/4.html#L557'>session</a>           557 class.Files.php 		$session-&gt;log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+<a href='../S/4.html#L564'>session</a>           564 class.Files.php 		global $db, $session;
+<a href='../S/4.html#L581'>session</a>           581 class.Files.php 		$session-&gt;log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+<a href='../S/4.html#L809'>session</a>           809 class.Files.php 		global $db, $session;
+<a href='../S/4.html#L810'>session</a>           810 class.Files.php 		if (!$session-&gt;id || !is_numeric($_id) || !is_numeric($_angle)) return false;
+<a href='../S/4.html#L909'>session</a>           909 class.Files.php 		global $session;
+<a href='../S/4.html#L941'>session</a>           941 class.Files.php 		if (filemtime($out_filename) &lt; $session-&gt;started) {
+<a href='../S/4.html#L953'>session</a>           953 class.Files.php 		global $db, $session;
+<a href='../S/4.html#L954'>session</a>           954 class.Files.php 		if (!$session-&gt;id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return array();
+<a href='../S/4.html#L958'>session</a>           958 class.Files.php 			$q .= 'WHERE fileType='.$fileType.' AND ownerId='.$ownerId.' AND uploaderId='.$session-&gt;id;
+<a href='../S/4.html#L994'>session</a>           994 class.Files.php 		global $session;
+<a href='../S/4.html#L1051'>session</a>          1051 class.Files.php 		global $config, $session;
+<a href='../S/4.html#L1061'>session</a>          1061 class.Files.php &lt;? if ($session-&gt;isAdmin) { ?&gt;
+<a href='../S/4.html#L1085'>session</a>          1085 class.Files.php 		global $session;
+<a href='../S/4.html#L1095'>session</a>          1095 class.Files.php &lt;? if ($session-&gt;isAdmin) { ?&gt;
+<a href='../S/4.html#L1106'>session</a>          1106 class.Files.php 		global $session;
+<a href='../S/4.html#L1116'>session</a>          1116 class.Files.php &lt;? if ($session-&gt;isAdmin) { ?&gt;
+<a href='../S/4.html#L1127'>session</a>          1127 class.Files.php 		global $session;
+<a href='../S/4.html#L1134'>session</a>          1134 class.Files.php &lt;? if ($session-&gt;isAdmin) { ?&gt;
+<a href='../S/2.html#L138'>session</a>           138 class.Session.php 			$session = &amp;$this;	//Required, else any use of $session in header/footer will be undefined references
+<a href='../S/11.html#L13'>session</a>            13 functions_blogs.php 		global $db, $session, $config;
+<a href='../S/11.html#L15'>session</a>            15 functions_blogs.php 		if (!$session-&gt;id || !is_numeric($categoryId)) return false;
+<a href='../S/11.html#L20'>session</a>            20 functions_blogs.php 		$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session-&gt;id.',blogTitle="'.$title.'",blogBody="'.$body.'",timeCreated=NOW()';
+<a href='../S/11.html#L32'>session</a>            32 functions_blogs.php 		global $db, $session;
+<a href='../S/11.html#L34'>session</a>            34 functions_blogs.php 		if (!$session-&gt;id || !is_numeric($blogId)) return false;
+<a href='../S/11.html#L36'>session</a>            36 functions_blogs.php 		$q = 'UPDATE tblBlogs SET timeDeleted=NOW(),deletedBy='.$session-&gt;id.' WHERE blogId='.$blogId;
+<a href='../S/11.html#L42'>session</a>            42 functions_blogs.php 		global $db, $session, $config;
+<a href='../S/11.html#L44'>session</a>            44 functions_blogs.php 		if (!$session-&gt;id || !is_numeric($blogId) || !is_numeric($categoryId)) return false;
+<a href='../S/11.html#L130'>session</a>           130 functions_blogs.php 		global $session, $files, $config;
+<a href='../S/11.html#L148'>session</a>           148 functions_blogs.php 		if (($session-&gt;id == $blog['userId'] || $session-&gt;isAdmin) &amp;&amp; isset($_POST['blog_cat']) &amp;&amp; isset($_POST['blog_title']) &amp;&amp; isset($_POST['blog_body'])) {
+<a href='../S/11.html#L163'>session</a>           163 functions_blogs.php 		if ($session-&gt;id == $blog['userId'] || $session-&gt;isSuperAdmin) {
+<a href='../S/11.html#L168'>session</a>           168 functions_blogs.php 		if ($session-&gt;id &amp;&amp; $session-&gt;id != $blog['userId']) {
+<a href='../S/11.html#L177'>session</a>           177 functions_blogs.php 		if ($current_tab == 'BlogEdit' &amp;&amp; ($session-&gt;id == $blog['userId'] || $session-&gt;isAdmin) ) {
+<a href='../S/11.html#L198'>session</a>           198 functions_blogs.php 		} else if ($current_tab == 'BlogDelete' &amp;&amp; (($session-&gt;id &amp;&amp; $session-&gt;id == $blog['userId']) || $session-&gt;isAdmin) ) {
+<a href='../S/11.html#L205'>session</a>           205 functions_blogs.php 		} else if ($current_tab == 'BlogReport' &amp;&amp; $session-&gt;id) {
+<a href='../S/11.html#L227'>session</a>           227 functions_blogs.php 		} else if ($current_tab == 'BlogFiles' &amp;&amp; ($session-&gt;id == $blog['userId'] || $session-&gt;isAdmin)) {
+<a href='../S/11.html#L240'>session</a>           240 functions_blogs.php 				if ($session-&gt;id != $blog['userId']) {
+<a href='../S/11.html#L257'>session</a>           257 functions_blogs.php 		global $session;
+<a href='../S/11.html#L263'>session</a>           263 functions_blogs.php 			$userId = $session-&gt;id;
+<a href='../S/30.html#L31'>session</a>            31 functions_contacts.php 		global $db, $session;
+<a href='../S/30.html#L32'>session</a>            32 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L34'>session</a>            34 functions_contacts.php 		$q = 'DELETE FROM tblContacts WHERE userId='.$session-&gt;id.' AND otherUserId='.$otherId.' AND contactType='.$_type;
+<a href='../S/30.html#L91'>session</a>            91 functions_contacts.php 		global $db, $session, $config;
+<a href='../S/30.html#L93'>session</a>            93 functions_contacts.php 		$userId = $session-&gt;id;
+<a href='../S/30.html#L96'>session</a>            96 functions_contacts.php 		if ($session-&gt;id != $userId &amp;&amp; isset($_GET['addfriend'])) {
+<a href='../S/30.html#L118'>session</a>           118 functions_contacts.php 				setContact(CONTACT_FRIEND, $session-&gt;id, $userId);
+<a href='../S/30.html#L122'>session</a>           122 functions_contacts.php 		if ($session-&gt;id != $userId) {
+<a href='../S/30.html#L133'>session</a>           133 functions_contacts.php 				if (!haveContact(CONTACT_FRIEND, $session-&gt;id, $userId)) {
+<a href='../S/30.html#L142'>session</a>           142 functions_contacts.php 		if ($userId == $session-&gt;id) {
+<a href='../S/30.html#L185'>session</a>           185 functions_contacts.php 		if ($session-&gt;id != $userId) {
+<a href='../S/30.html#L209'>session</a>           209 functions_contacts.php 		global $db, $session;
+<a href='../S/30.html#L211'>session</a>           211 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($userId) || !is_numeric($categoryId) || haveContact(CONTACT_FRIEND, $session-&gt;id, $userId)) return false;
+<a href='../S/30.html#L213'>session</a>           213 functions_contacts.php 		$q = 'SELECT COUNT(reqId) FROM tblFriendRequests WHERE senderId='.$session-&gt;id.' AND recieverId='.$userId;
+<a href='../S/30.html#L216'>session</a>           216 functions_contacts.php 		$q = 'INSERT INTO tblFriendRequests SET senderId='.$session-&gt;id.',recieverId='.$userId.',timeCreated=NOW(),categoryId='.$categoryId.',msg="'.$db-&gt;escape($msg).'"';
+<a href='../S/30.html#L224'>session</a>           224 functions_contacts.php 		global $db, $session;
+<a href='../S/30.html#L228'>session</a>           228 functions_contacts.php 		$q .= ' WHERE t1.senderId='.$session-&gt;id;
+<a href='../S/30.html#L237'>session</a>           237 functions_contacts.php 		global $db, $session;
+<a href='../S/30.html#L242'>session</a>           242 functions_contacts.php 		$q .= ' WHERE t1.recieverId='.$session-&gt;id;
+<a href='../S/30.html#L250'>session</a>           250 functions_contacts.php 		global $db, $session;
+<a href='../S/30.html#L252'>session</a>           252 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($requestId)) return false;
+<a href='../S/30.html#L257'>session</a>           257 functions_contacts.php 		$q .= ' AND (t1.senderId='.$session-&gt;id.' OR t1.recieverId='.$session-&gt;id.')';
+<a href='../S/30.html#L265'>session</a>           265 functions_contacts.php 		global $db, $session;
+<a href='../S/30.html#L266'>session</a>           266 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L269'>session</a>           269 functions_contacts.php 		$q .= ' WHERE recieverId='.$otherId.' AND senderId='.$session-&gt;id;
+<a href='../S/30.html#L276'>session</a>           276 functions_contacts.php 		global $db, $session, $config;
+<a href='../S/30.html#L277'>session</a>           277 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L280'>session</a>           280 functions_contacts.php 		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session-&gt;id;
+<a href='../S/30.html#L284'>session</a>           284 functions_contacts.php 		$msg = nameLink($session-&gt;id).' denied your friend request.';
+<a href='../S/30.html#L293'>session</a>           293 functions_contacts.php 		global $db, $session, $config;
+<a href='../S/30.html#L294'>session</a>           294 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L297'>session</a>           297 functions_contacts.php 		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session-&gt;id;
+<a href='../S/30.html#L303'>session</a>           303 functions_contacts.php 		setContact(CONTACT_FRIEND, $session-&gt;id, $otherId);
+<a href='../S/30.html#L304'>session</a>           304 functions_contacts.php 		setContact(CONTACT_FRIEND, $otherId, $session-&gt;id);
+<a href='../S/30.html#L307'>session</a>           307 functions_contacts.php 		$msg = nameLink($session-&gt;id).' accepted your friend request, and has been added to your contact list.';
+<a href='../S/30.html#L315'>session</a>           315 functions_contacts.php 		global $db, $session;
+<a href='../S/30.html#L316'>session</a>           316 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($userId)) return false;
+<a href='../S/30.html#L319'>session</a>           319 functions_contacts.php 		$q .= 'WHERE senderId='.$session-&gt;id.' AND recieverId='.$userId;
+<a href='../S/24.html#L6'>session</a>             6 functions_faq.php 		global $db, $session;
+<a href='../S/24.html#L8'>session</a>             8 functions_faq.php 		if (!$session-&gt;isAdmin) return;
+<a href='../S/24.html#L10'>session</a>            10 functions_faq.php 		$q = 'INSERT INTO tblFAQ SET question="'.$db-&gt;escape($_q).'",answer="'.$db-&gt;escape($_a).'",createdBy='.$session-&gt;id.',timeCreated=NOW()';
+<a href='../S/21.html#L158'>session</a>           158 functions_forum.php 		global $db, $session;
+<a href='../S/21.html#L159'>session</a>           159 functions_forum.php 		if (!$session-&gt;id || !is_numeric($parentId)) return false;
+<a href='../S/21.html#L165'>session</a>           165 functions_forum.php 		$q = 'INSERT INTO tblForums SET itemType='.FORUM_FOLDER.',authorId='.$session-&gt;id.',parentId='.$parentId.',itemSubject="'.$folderName.'",itemBody="'.$folderDesc.'",timeCreated=NOW()';
+<a href='../S/21.html#L171'>session</a>           171 functions_forum.php 		global $db, $session, $config;
+<a href='../S/21.html#L172'>session</a>           172 functions_forum.php 		if (!$session-&gt;id || !is_numeric($parentId) || !is_numeric($sticky)) return false;
+<a href='../S/21.html#L180'>session</a>           180 functions_forum.php 		$q = 'INSERT INTO tblForums SET itemType='.FORUM_MESSAGE.',authorId='.$session-&gt;id.',parentId='.$parentId.',itemSubject="'.$subject.'",itemBody="'.$body.'",timeCreated=NOW()';
+<a href='../S/21.html#L246'>session</a>           246 functions_forum.php 		global $db, $session;
+<a href='../S/21.html#L247'>session</a>           247 functions_forum.php 		if (!$session-&gt;isAdmin || !is_numeric($itemId)) return false;
+<a href='../S/21.html#L255'>session</a>           255 functions_forum.php 		global $db, $session;
+<a href='../S/21.html#L256'>session</a>           256 functions_forum.php 		if (!$session-&gt;isAdmin || !is_numeric($itemId)) return false;
+<a href='../S/21.html#L556'>session</a>           556 functions_forum.php 		global $session, $files, $config;
+<a href='../S/21.html#L579'>session</a>           579 functions_forum.php 		$signature = loadUserdataSetting($session-&gt;id, $config['settings']['default_signature']);
+<a href='../S/21.html#L594'>session</a>           594 functions_forum.php 		if (!$session-&gt;id) {
+<a href='../S/21.html#L609'>session</a>           609 functions_forum.php 			if ($item['authorId'] == $session-&gt;id || $session-&gt;isAdmin) {
+<a href='../S/21.html#L614'>session</a>           614 functions_forum.php 		if (!$islocked &amp;&amp; $session-&gt;isAdmin) {
+<a href='../S/21.html#L622'>session</a>           622 functions_forum.php 			if ($session-&gt;isAdmin) {
+<a href='../S/21.html#L632'>session</a>           632 functions_forum.php 		if ($session-&gt;id != $item['authorId']) {
+<a href='../S/21.html#L642'>session</a>           642 functions_forum.php 		global $db, $session, $config;
+<a href='../S/21.html#L653'>session</a>           653 functions_forum.php 		if ($session-&gt;id) {
+<a href='../S/21.html#L767'>session</a>           767 functions_forum.php 		global $db, $session;
+<a href='../S/21.html#L768'>session</a>           768 functions_forum.php 		if (!$session-&gt;id || !is_numeric($itemId)) return false;
+<a href='../S/21.html#L770'>session</a>           770 functions_forum.php 		$q = 'UPDATE tblForums SET timeDeleted=NOW(),deletedBy='.$session-&gt;id.' WHERE itemId='.$itemId;
+<a href='../S/21.html#L815'>session</a>           815 functions_forum.php 		global $session;
+<a href='../S/21.html#L819'>session</a>           819 functions_forum.php 		if ($session-&gt;id) {
+<a href='../S/21.html#L833'>session</a>           833 functions_forum.php 			if ($session-&gt;isAdmin) echo '&lt;a href="forum_new.php?id=0"&gt;New root level category&lt;/a&gt;';
+<a href='../S/21.html#L843'>session</a>           843 functions_forum.php 			if ($session-&gt;isAdmin) {
+<a href='../S/17.html#L160'>session</a>           160 functions_general.php 		global $config, $db, $session, $time_start;
+<a href='../S/17.html#L229'>session</a>           229 functions_general.php 		global $config, $session, $title, $meta_rss, $meta_js, $meta_search, $body_onload;
+<a href='../S/17.html#L240'>session</a>           240 functions_general.php 			if (!empty($session)) echo '&lt;link rel="stylesheet" href="'.$config['core_web_root'].'css/themes/'.$session-&gt;theme.'" type="text/css"/&gt;';
+<a href='../S/7.html#L6'>session</a>             6 functions_guestbook.php 		global $db, $session;
+<a href='../S/7.html#L8'>session</a>             8 functions_guestbook.php 		if (!$session-&gt;id || !is_numeric($ownerId)) return false;
+<a href='../S/7.html#L20'>session</a>            20 functions_guestbook.php 		$q  = 'SELECT COUNT(*) FROM tblGuestbooks WHERE userId='.$ownerId.' AND authorId='.$session-&gt;id;
+<a href='../S/7.html#L24'>session</a>            24 functions_guestbook.php 		$q = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',authorId='.$session-&gt;id.',subject="'.$subject.'",body="'.$body.'",timeCreated=NOW()';
+<a href='../S/7.html#L117'>session</a>           117 functions_guestbook.php 		global $db, $session;
+<a href='../S/7.html#L119'>session</a>           119 functions_guestbook.php 		if (!$session-&gt;id) return false;
+<a href='../S/7.html#L121'>session</a>           121 functions_guestbook.php 		$q = 'UPDATE tblGuestbooks SET entryRead=1,timeRead=NOW() WHERE entryRead=0 AND userId='.$session-&gt;id;
+<a href='../S/7.html#L127'>session</a>           127 functions_guestbook.php 		global $session;
+<a href='../S/7.html#L128'>session</a>           128 functions_guestbook.php 		if ($session-&gt;isAdmin || $session-&gt;id == $userId) {
+<a href='../S/7.html#L134'>session</a>           134 functions_guestbook.php 		if ($session-&gt;id != $userId &amp;&amp; !empty($_POST['body'])) {
+<a href='../S/7.html#L155'>session</a>           155 functions_guestbook.php 			if ($session-&gt;id == $userId) {
+<a href='../S/7.html#L162'>session</a>           162 functions_guestbook.php 			if ($session-&gt;isAdmin || $session-&gt;id == $userId) {
+<a href='../S/7.html#L168'>session</a>           168 functions_guestbook.php 		if ($session-&gt;id) {
+<a href='../S/7.html#L169'>session</a>           169 functions_guestbook.php 			if ($session-&gt;id != $userId) {
+<a href='../S/16.html#L7'>session</a>             7 functions_messages.php 		global $db, $session;
+<a href='../S/16.html#L11'>session</a>            11 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId='.$session-&gt;id.',toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+<a href='../S/16.html#L15'>session</a>            15 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$session-&gt;id.',fromId='.$session-&gt;id.',toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_OUTBOX;
+<a href='../S/16.html#L23'>session</a>            23 functions_messages.php 		global $db, $session;
+<a href='../S/16.html#L35'>session</a>            35 functions_messages.php 		global $db, $session;
+<a href='../S/16.html#L43'>session</a>            43 functions_messages.php 				$q .= 'WHERE t1.ownerId='.$session-&gt;id.' AND t1.groupId='.$_group.' ';
+<a href='../S/16.html#L51'>session</a>            51 functions_messages.php 				$q .= 'WHERE t1.ownerId='.$session-&gt;id.' AND t1.groupId='.$_group.' ';
+<a href='../S/16.html#L56'>session</a>            56 functions_messages.php 				$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session-&gt;id.' AND groupId='.$_group;
+<a href='../S/16.html#L64'>session</a>            64 functions_messages.php 		global $db, $session;
+<a href='../S/16.html#L67'>session</a>            67 functions_messages.php 		$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session-&gt;id.' AND msgId='.$_id;
+<a href='../S/16.html#L75'>session</a>            75 functions_messages.php 		global $db, $session;
+<a href='../S/16.html#L79'>session</a>            79 functions_messages.php 		$q = 'UPDATE tblMessages SET timeRead=NOW() WHERE ownerId='.$session-&gt;id.' AND toId='.$session-&gt;id.' AND msgId='.$_id;
+<a href='../S/16.html#L85'>session</a>            85 functions_messages.php 		global $db, $session;
+<a href='../S/14.html#L13'>session</a>            13 functions_news.php 		global $db, $session;
+<a href='../S/14.html#L15'>session</a>            15 functions_news.php 		if (!$session-&gt;id || !is_numeric($rss_enabled) || !is_numeric($category_id)) return false;
+<a href='../S/14.html#L23'>session</a>            23 functions_news.php 		$q = 'INSERT INTO tblNews SET title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session-&gt;id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
+<a href='../S/14.html#L31'>session</a>            31 functions_news.php 		global $db, $session;
+<a href='../S/14.html#L33'>session</a>            33 functions_news.php 		if (!$session-&gt;isAdmin || !is_numeric($newsId) || !is_numeric($categoryId) || !is_numeric($rss_enabled)) return false;
+<a href='../S/14.html#L37'>session</a>            37 functions_news.php 		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session-&gt;id.' WHERE newsId='.$newsId;
+<a href='../S/14.html#L45'>session</a>            45 functions_news.php 		global $db, $session;
+<a href='../S/14.html#L46'>session</a>            46 functions_news.php 		if (!$session-&gt;isAdmin || !is_numeric($_id)) return false;
+<a href='../S/14.html#L48'>session</a>            48 functions_news.php 		$db-&gt;query('UPDATE tblNews SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE newsId='.$_id);
+<a href='../S/14.html#L114'>session</a>           114 functions_news.php 		global $db, $session, $files, $config, $project;
+<a href='../S/14.html#L126'>session</a>           126 functions_news.php 		if (!$session-&gt;isAdmin &amp;&amp; !datetime_less($news['timeToPublish'], now())) return false;
+<a href='../S/14.html#L149'>session</a>           149 functions_news.php 		if ($session-&gt;isAdmin) {
+<a href='../S/14.html#L168'>session</a>           168 functions_news.php 		if ($current_tab == 'NewsEdit' &amp;&amp; $session-&gt;isAdmin) {
+<a href='../S/14.html#L192'>session</a>           192 functions_news.php 		} else if ($current_tab == 'NewsPolls' &amp;&amp; $session-&gt;isAdmin) {
+<a href='../S/14.html#L195'>session</a>           195 functions_news.php 		} else if ($current_tab == 'NewsDelete' &amp;&amp; $session-&gt;isAdmin) {
+<a href='../S/14.html#L206'>session</a>           206 functions_news.php 		} else if ($current_tab == 'NewsCategories' &amp;&amp; $session-&gt;isAdmin) {
+<a href='../S/14.html#L210'>session</a>           210 functions_news.php 		} else if ($current_tab == 'NewsFiles' &amp;&amp; $session-&gt;isAdmin) {
+<a href='../S/14.html#L237'>session</a>           237 functions_news.php 		global $db, $session, $config;
+<a href='../S/14.html#L251'>session</a>           251 functions_news.php 		if ($session-&gt;isAdmin) {
+<a href='../S/28.html#L36'>session</a>            36 functions_todo.php 		global $db, $session;
+<a href='../S/28.html#L37'>session</a>            37 functions_todo.php 		if (!$session-&gt;id || !is_numeric($categoryId) || !is_numeric($category)) return false;
+<a href='../S/28.html#L39'>session</a>            39 functions_todo.php 		$q = 'INSERT INTO tblTodoLists SET categoryId='.$categoryId.',itemCreator='.$session-&gt;id.',itemDesc="'.$db-&gt;escape($desc).'",itemDetails="'.$db-&gt;escape($details).'",itemCategory='.$category.',timeCreated=NOW()';
+<a href='../S/27.html#L12'>session</a>            12 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L15'>session</a>            15 functions_users.php 		if ($_id == $session-&gt;id) return $session-&gt;username;
+<a href='../S/27.html#L24'>session</a>            24 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L27'>session</a>            27 functions_users.php 		if ($_id == $session-&gt;id) {
+<a href='../S/27.html#L28'>session</a>            28 functions_users.php 			$mode = $session-&gt;mode;
+<a href='../S/27.html#L34'>session</a>            34 functions_users.php 		return $session-&gt;userModes[$mode];
+<a href='../S/27.html#L40'>session</a>            40 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L51'>session</a>            51 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L53'>session</a>            53 functions_users.php 		$q  = 'SELECT * FROM tblUsers WHERE timeLastActive &gt;= DATE_SUB(NOW(),INTERVAL '.$session-&gt;online_timeout.' SECOND)';
+<a href='../S/27.html#L60'>session</a>            60 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L62'>session</a>            62 functions_users.php 		$q  = 'SELECT COUNT(userId) FROM tblUsers WHERE timeLastActive &gt;= DATE_SUB(NOW(),INTERVAL '.$session-&gt;online_timeout.' SECOND)';
+<a href='../S/27.html#L69'>session</a>            69 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L77'>session</a>            77 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L85'>session</a>            85 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L105'>session</a>           105 functions_users.php 		global $db, $session, $config;
+<a href='../S/27.html#L107'>session</a>           107 functions_users.php 		if ($_userid_name &amp;&amp; isset($_GET[$_userid_name]) &amp;&amp; is_numeric($_GET[$_userid_name]) &amp;&amp; $_GET[$_userid_name] != $session-&gt;id) {
+<a href='../S/27.html#L112'>session</a>           112 functions_users.php 				$q = 'INSERT INTO tblVisits SET ownerId='.$userId.',creatorId='.$session-&gt;id.',timeCreated=NOW()';
+<a href='../S/27.html#L117'>session</a>           117 functions_users.php 			$userId = $session-&gt;id;
+<a href='../S/27.html#L172'>session</a>           172 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L238'>session</a>           238 functions_users.php 		global $db, $session;
+<a href='../S/27.html#L239'>session</a>           239 functions_users.php 		if (!$session-&gt;isSuperAdmin || !is_numeric($_id) || !is_numeric($_mode)) return false;
+<a href='../S/27.html#L244'>session</a>           244 functions_users.php 		if ($_id == $session-&gt;id) return true;
+<a href='../S/27.html#L247'>session</a>           247 functions_users.php 			case 0: $msg = $session-&gt;username.' has reduced your usermode to normal member.'; break;
+<a href='../S/27.html#L248'>session</a>           248 functions_users.php 			case 1: $msg = $session-&gt;username.' has granted you admin rights.'; break;
+<a href='../S/27.html#L249'>session</a>           249 functions_users.php 			case 2: $msg = $session-&gt;username.' has granted you super admin rights.'; break;
+<a href='../S/27.html#L253'>session</a>           253 functions_users.php 		$session-&gt;log('Changed usermode for '.getUserName($_id).' to '.$_mode);
+<a href='../S/27.html#L260'>session</a>           260 functions_users.php 		global $session;
+<a href='../S/27.html#L313'>session</a>           313 functions_users.php 				if ($row['private'] || !$session-&gt;isAdmin) continue;
+<a href='../S/9.html#L28'>session</a>            28 functions_wiki.php 		global $db, $session, $config;
+<a href='../S/9.html#L47'>session</a>            47 functions_wiki.php 			$db-&gt;query('UPDATE tblWiki SET msg="'.$_text.'",timeCreated=NOW(),createdBy='.$session-&gt;id.' WHERE wikiName="'.$wikiName.'"');
+<a href='../S/9.html#L51'>session</a>            51 functions_wiki.php 			$q = 'INSERT INTO tblWiki SET wikiName="'.$wikiName.'",msg="'.$_text.'",createdBy='.$session-&gt;id.',timeCreated=NOW()';
+<a href='../S/9.html#L59'>session</a>            59 functions_wiki.php 		global $db, $files, $config, $session;
+<a href='../S/9.html#L65'>session</a>            65 functions_wiki.php 			if ($session-&gt;id) {
+<a href='../S/9.html#L89'>session</a>            89 functions_wiki.php 		global $db, $files, $session, $config;
+<a href='../S/9.html#L115'>session</a>           115 functions_wiki.php 		if (!$session-&gt;isAdmin &amp;&amp; !$config['wiki']['allow_edit']) {
+<a href='../S/9.html#L143'>session</a>           143 functions_wiki.php 		if ($current_tab == 'WikiEdit' &amp;&amp; ($session-&gt;isAdmin || !$data['lockedBy']))
+<a href='../S/9.html#L154'>session</a>           154 functions_wiki.php 			if ($session-&gt;isAdmin &amp;&amp; isset($_GET['wiki_lock'])) {
+<a href='../S/9.html#L155'>session</a>           155 functions_wiki.php 				$q = 'UPDATE tblWiki SET lockedBy='.$session-&gt;id.',timeLocked=NOW() WHERE wikiId='.$data['wikiId'];
+<a href='../S/9.html#L157'>session</a>           157 functions_wiki.php 				$data['lockedBy'] = $session-&gt;id;
+<a href='../S/9.html#L158'>session</a>           158 functions_wiki.php 				$data['lockerName'] = $session-&gt;username;
+<a href='../S/9.html#L159'>session</a>           159 functions_wiki.php 				addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been locked', now(), $session-&gt;id, REV_CAT_LOCKED);
+<a href='../S/9.html#L162'>session</a>           162 functions_wiki.php 			if ($session-&gt;isAdmin &amp;&amp; isset($_GET['wiki_unlock'])) {
+<a href='../S/9.html#L166'>session</a>           166 functions_wiki.php 				addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been unlocked', now(), $session-&gt;id, REV_CAT_UNLOCKED);
+<a href='../S/9.html#L192'>session</a>           192 functions_wiki.php 			if ($session-&gt;isAdmin) {
+</pre>
+</body>
+</html>

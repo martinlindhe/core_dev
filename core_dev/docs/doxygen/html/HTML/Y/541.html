@@ -1,0 +1,196 @@
+<html>
+<head>
+<title>result</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/25.html#L92'>result</a>             92 atom_comments.php 		$result = array();
+<a href='../S/25.html#L95'>result</a>             95 atom_comments.php 				$result[] = $row;
+<a href='../S/25.html#L98'>result</a>             98 atom_comments.php 		return $result;
+<a href='../S/5.html#L120'>result</a>            120 atom_polls.php 		$result = '&lt;div class="item"&gt;';
+<a href='../S/5.html#L121'>result</a>            121 atom_polls.php 		if ($active) $result .= 'ACTIVE POLL: ';
+<a href='../S/5.html#L122'>result</a>            122 atom_polls.php 		$result .= $data['pollText'].'&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/5.html#L125'>result</a>            125 atom_polls.php 		$result .= '&lt;div id="poll'.$_id.'"&gt;';
+<a href='../S/5.html#L126'>result</a>            126 atom_polls.php 		if ($session-&gt;isAdmin &amp;&amp; $data['timeStart']) $result .= 'Starts: '.$data['timeStart'].', ends '.$data['timeEnd'].'&lt;br/&gt;';
+<a href='../S/5.html#L130'>result</a>            130 atom_polls.php 				$result .= '&lt;span onclick="submit_poll('.$_id.','.$row['categoryId'].')"&gt;';
+<a href='../S/5.html#L131'>result</a>            131 atom_polls.php 				$result .= $row['categoryName'];
+<a href='../S/5.html#L132'>result</a>            132 atom_polls.php 				$result .= '&lt;/span&gt;&lt;br/&gt;';
+<a href='../S/5.html#L137'>result</a>            137 atom_polls.php 					$result .= 'You already voted, showing current standings:&lt;br/&gt;';
+<a href='../S/5.html#L139'>result</a>            139 atom_polls.php 					$result .= 'The poll closed, final result:&lt;br/&gt;';
+<a href='../S/5.html#L150'>result</a>            150 atom_polls.php 				$result .= $row['categoryName'].' got '.$row['cnt'].' ('.$pct.'%) votes&lt;br/&gt;';
+<a href='../S/5.html#L155'>result</a>            155 atom_polls.php 			$result .= '&lt;br/&gt;&lt;input type="button" class="button" value="Save as .csv" onclick="get_poll_csv('.$_id.')"/&gt;';
+<a href='../S/5.html#L158'>result</a>            158 atom_polls.php 		$result .= '&lt;/div&gt;';
+<a href='../S/5.html#L161'>result</a>            161 atom_polls.php 			$result .= '&lt;div id="poll_voted'.$_id.'" style="display:none"&gt;';
+<a href='../S/5.html#L162'>result</a>            162 atom_polls.php 				$result .= 'Your vote has been registered!';
+<a href='../S/5.html#L163'>result</a>            163 atom_polls.php 			$result .= '&lt;/div&gt;';
+<a href='../S/5.html#L166'>result</a>            166 atom_polls.php 		$result .= '&lt;/div&gt;';	//class="item"
+<a href='../S/5.html#L168'>result</a>            168 atom_polls.php 		return $result;
+<a href='../S/1.html#L104'>result</a>            104 atom_rating.php 		$result  = 'Rate this:&lt;br/&gt;';
+<a href='../S/1.html#L105'>result</a>            105 atom_rating.php 		$result .= '&lt;form method="post" action=""&gt;';
+<a href='../S/1.html#L106'>result</a>            106 atom_rating.php 		$result .= '&lt;select name="rate_gadget"&gt;';
+<a href='../S/1.html#L107'>result</a>            107 atom_rating.php 		$result .= '&lt;option value=""&gt;&amp;nbsp;&lt;/option&gt;';
+<a href='../S/1.html#L109'>result</a>            109 atom_rating.php 			$result .= '&lt;option value="'.$i.'"&gt;'.$i.'&lt;/option&gt;';
+<a href='../S/1.html#L111'>result</a>            111 atom_rating.php 		$result .= '&lt;/select&gt;';
+<a href='../S/1.html#L112'>result</a>            112 atom_rating.php 		$result .= ' &lt;input type="submit" class="button" value="Rate"/&gt;';
+<a href='../S/1.html#L113'>result</a>            113 atom_rating.php 		$result .= '&lt;/form&gt;';
+<a href='../S/1.html#L115'>result</a>            115 atom_rating.php 		return $result;
+<a href='../S/1.html#L123'>result</a>            123 atom_rating.php 		$result  = 'Current rating&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/1.html#L127'>result</a>            127 atom_rating.php 				$result .= '&lt;img src="'.$config['core_web_root'].'gfx/icon_star_full.png" alt="star"/&gt;';
+<a href='../S/1.html#L129'>result</a>            129 atom_rating.php 				$result .= '&lt;img src="'.$config['core_web_root'].'gfx/icon_star_empty.png" alt="star"/&gt;';
+<a href='../S/1.html#L132'>result</a>            132 atom_rating.php 		$result .= '&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/1.html#L133'>result</a>            133 atom_rating.php 		$result .= $row['rating'].' / 5 in '.$row['ratingCnt'].($row['ratingCnt']==1?' vote':' votes');
+<a href='../S/1.html#L135'>result</a>            135 atom_rating.php 		return $result;
+<a href='../S/33.html#L46'>result</a>             46 atom_settings.php 		$result = $db-&gt;getOneItem($q);
+<a href='../S/33.html#L48'>result</a>             48 atom_settings.php 		if ($result) return $result;
+<a href='../S/33.html#L63'>result</a>             63 atom_settings.php 		$result = $db-&gt;getOneItem($q);
+<a href='../S/33.html#L65'>result</a>             65 atom_settings.php 		if ($result) return $result;
+<a href='../S/32.html#L67'>result</a>             67 class.DB_MySQLi.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/32.html#L69'>result</a>             69 class.DB_MySQLi.php 		if (!$result) {
+<a href='../S/32.html#L76'>result</a>             76 class.DB_MySQLi.php 		return $result;
+<a href='../S/32.html#L85'>result</a>             85 class.DB_MySQLi.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/32.html#L89'>result</a>             89 class.DB_MySQLi.php 		if ($result) {
+<a href='../S/32.html#L107'>result</a>            107 class.DB_MySQLi.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/32.html#L111'>result</a>            111 class.DB_MySQLi.php 		if ($result) {
+<a href='../S/32.html#L129'>result</a>            129 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L136'>result</a>            136 class.DB_MySQLi.php 		while ($row = $result-&gt;fetch_assoc()) {
+<a href='../S/32.html#L140'>result</a>            140 class.DB_MySQLi.php 		$result-&gt;free();
+<a href='../S/32.html#L153'>result</a>            153 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L160'>result</a>            160 class.DB_MySQLi.php 		while ($row = $result-&gt;fetch_row()) {
+<a href='../S/32.html#L164'>result</a>            164 class.DB_MySQLi.php 		$result-&gt;free();
+<a href='../S/32.html#L177'>result</a>            177 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L184'>result</a>            184 class.DB_MySQLi.php 		while ($row = $result-&gt;fetch_row()) {
+<a href='../S/32.html#L188'>result</a>            188 class.DB_MySQLi.php 		$result-&gt;free();
+<a href='../S/32.html#L201'>result</a>            201 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L206'>result</a>            206 class.DB_MySQLi.php 		if ($result-&gt;num_rows &gt; 1) {
+<a href='../S/32.html#L210'>result</a>            210 class.DB_MySQLi.php 		$data = $result-&gt;fetch_array(MYSQLI_ASSOC);
+<a href='../S/32.html#L211'>result</a>            211 class.DB_MySQLi.php 		$result-&gt;free();
+<a href='../S/32.html#L224'>result</a>            224 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L229'>result</a>            229 class.DB_MySQLi.php 		if ($result-&gt;num_rows &gt; 1) {
+<a href='../S/32.html#L233'>result</a>            233 class.DB_MySQLi.php 		$data = $result-&gt;fetch_row();
+<a href='../S/32.html#L234'>result</a>            234 class.DB_MySQLi.php 		$result-&gt;free();
+<a href='../S/23.html#L69'>result</a>             69 class.DB_MySQL.php 		$result = mysql_query($q, $this-&gt;db_handle);
+<a href='../S/23.html#L71'>result</a>             71 class.DB_MySQL.php 		if (!$result) {
+<a href='../S/23.html#L78'>result</a>             78 class.DB_MySQL.php 		return $result;
+<a href='../S/23.html#L87'>result</a>             87 class.DB_MySQL.php 		$result = mysql_query($q, $this-&gt;db_handle);
+<a href='../S/23.html#L91'>result</a>             91 class.DB_MySQL.php 		if ($result) {
+<a href='../S/23.html#L109'>result</a>            109 class.DB_MySQL.php 		$result = mysql_query($q, $this-&gt;db_handle);
+<a href='../S/23.html#L113'>result</a>            113 class.DB_MySQL.php 		if ($result) {
+<a href='../S/23.html#L131'>result</a>            131 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L138'>result</a>            138 class.DB_MySQL.php 		while ($row = mysql_fetch_assoc($result)) {
+<a href='../S/23.html#L142'>result</a>            142 class.DB_MySQL.php 		mysql_free_result($result);
+<a href='../S/23.html#L155'>result</a>            155 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L162'>result</a>            162 class.DB_MySQL.php 		while ($row = mysql_fetch_row($result)) {
+<a href='../S/23.html#L166'>result</a>            166 class.DB_MySQL.php 		mysql_free_result($result);
+<a href='../S/23.html#L179'>result</a>            179 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L186'>result</a>            186 class.DB_MySQL.php 		while ($row = mysql_fetch_row($result)) {
+<a href='../S/23.html#L190'>result</a>            190 class.DB_MySQL.php 		mysql_free_result($result);
+<a href='../S/23.html#L203'>result</a>            203 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L208'>result</a>            208 class.DB_MySQL.php 		if (mysql_num_rows($result) &gt; 1) {
+<a href='../S/23.html#L212'>result</a>            212 class.DB_MySQL.php 		$data = mysql_fetch_array($result, MYSQL_ASSOC);
+<a href='../S/23.html#L213'>result</a>            213 class.DB_MySQL.php 		mysql_free_result($result);
+<a href='../S/23.html#L226'>result</a>            226 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L231'>result</a>            231 class.DB_MySQL.php 		if (mysql_num_rows($result) &gt; 1) {
+<a href='../S/23.html#L235'>result</a>            235 class.DB_MySQL.php 		$data = mysql_fetch_row($result);
+<a href='../S/23.html#L236'>result</a>            236 class.DB_MySQL.php 		mysql_free_result($result);
+<a href='../S/22.html#L69'>result</a>             69 class.DB_PostgreSQL.php 		$result = pg_query($this-&gt;db_handle, $q);
+<a href='../S/22.html#L71'>result</a>             71 class.DB_PostgreSQL.php 		if (!$result) {
+<a href='../S/22.html#L78'>result</a>             78 class.DB_PostgreSQL.php 		return $result;
+<a href='../S/22.html#L87'>result</a>             87 class.DB_PostgreSQL.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/22.html#L91'>result</a>             91 class.DB_PostgreSQL.php 		if ($result) {
+<a href='../S/22.html#L109'>result</a>            109 class.DB_PostgreSQL.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/22.html#L113'>result</a>            113 class.DB_PostgreSQL.php 		if ($result) {
+<a href='../S/22.html#L131'>result</a>            131 class.DB_PostgreSQL.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/22.html#L138'>result</a>            138 class.DB_PostgreSQL.php 		while ($row = $result-&gt;fetch_assoc()) {
+<a href='../S/22.html#L142'>result</a>            142 class.DB_PostgreSQL.php 		$result-&gt;free();
+<a href='../S/22.html#L155'>result</a>            155 class.DB_PostgreSQL.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/22.html#L162'>result</a>            162 class.DB_PostgreSQL.php 		while ($row = $result-&gt;fetch_row()) {
+<a href='../S/22.html#L166'>result</a>            166 class.DB_PostgreSQL.php 		$result-&gt;free();
+<a href='../S/22.html#L179'>result</a>            179 class.DB_PostgreSQL.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/22.html#L186'>result</a>            186 class.DB_PostgreSQL.php 		while ($row = $result-&gt;fetch_row()) {
+<a href='../S/22.html#L190'>result</a>            190 class.DB_PostgreSQL.php 		$result-&gt;free();
+<a href='../S/22.html#L203'>result</a>            203 class.DB_PostgreSQL.php 		if (!$result = pg_query($this-&gt;db_handle, $q)) {
+<a href='../S/22.html#L208'>result</a>            208 class.DB_PostgreSQL.php 		if ($result-&gt;num_rows &gt; 1) {
+<a href='../S/22.html#L212'>result</a>            212 class.DB_PostgreSQL.php 		$data = $result-&gt;fetch_array(MYSQLI_ASSOC);
+<a href='../S/22.html#L213'>result</a>            213 class.DB_PostgreSQL.php 		$result-&gt;free();
+<a href='../S/22.html#L226'>result</a>            226 class.DB_PostgreSQL.php 		if (!$result = pg_query($this-&gt;db_handle, $q)) {
+<a href='../S/22.html#L231'>result</a>            231 class.DB_PostgreSQL.php 		if (pg_num_rows($result) &gt; 1) {
+<a href='../S/22.html#L235'>result</a>            235 class.DB_PostgreSQL.php 		$data = pg_fetch_row($result);
+<a href='../S/4.html#L171'>result</a>            171 class.Files.php 		$result = exec($c);
+<a href='../S/4.html#L172'>result</a>            172 class.Files.php 		echo 'result: '.$result.'&lt;br/&gt;';
+<a href='../S/4.html#L173'>result</a>            173 class.Files.php 		return $result;
+<a href='../S/21.html#L198'>result</a>            198 functions_forum.php 			$result = '&lt;a href="forum.php"&gt;'.$config['forum']['rootname'].'&lt;/a&gt;';
+<a href='../S/21.html#L199'>result</a>            199 functions_forum.php 			return $result;
+<a href='../S/21.html#L210'>result</a>            210 functions_forum.php 					$result = ' - &lt;a href="forum.php?id='.$itemId.'"&gt;'.($subject != '' ? $subject : '(No name)').'&lt;/a&gt;';
+<a href='../S/21.html#L212'>result</a>            212 functions_forum.php 					$result = '';
+<a href='../S/21.html#L217'>result</a>            217 functions_forum.php 				$result = '';
+<a href='../S/21.html#L218'>result</a>            218 functions_forum.php 				if ($row['itemSubject']) $result = $config['forum']['path_separator'].'&lt;a href="forum.php?id='.$itemId.'"&gt;'.$row['itemSubject'].'&lt;/a&gt;';
+<a href='../S/21.html#L224'>result</a>            224 functions_forum.php 		return getForumDepthHTML($type, $row['parentId']).$result;
+<a href='../S/29.html#L223'>result</a>            223 functions_spider.php 		$result = array();
+<a href='../S/29.html#L232'>result</a>            232 functions_spider.php 					$result[] = $url_arr['scheme'].'://'.$url_arr['host'].$val;
+<a href='../S/29.html#L244'>result</a>            244 functions_spider.php 					$result[] = $url_arr['scheme'].'://'.$url_arr['host'].$val;
+<a href='../S/29.html#L258'>result</a>            258 functions_spider.php 							$result[] = $url_arr['scheme'].'://'.$url_arr['host'].substr($temp, 0, $pos+1).$val;
+<a href='../S/29.html#L275'>result</a>            275 functions_spider.php 					$result[] = $url_arr['scheme'].'://'.$url_arr['host'].$url_arr['path_only'].$val;
+<a href='../S/29.html#L285'>result</a>            285 functions_spider.php 					$result[] = $val;
+<a href='../S/29.html#L292'>result</a>            292 functions_spider.php 		return $result;
+<a href='../S/29.html#L343'>result</a>            343 functions_spider.php 		$result = '';
+<a href='../S/29.html#L345'>result</a>            345 functions_spider.php 			$result .= fgets($fp, 128);
+<a href='../S/29.html#L350'>result</a>            350 functions_spider.php 		$pos = strpos($result, "\r\n\r\n");
+<a href='../S/29.html#L351'>result</a>            351 functions_spider.php 		$header = substr($result, 0, $pos);
+<a href='../S/29.html#L352'>result</a>            352 functions_spider.php 		$body = substr($result, $pos);
+<a href='../S/29.html#L426'>result</a>            426 functions_spider.php 		$result =
+<a href='../S/29.html#L445'>result</a>            445 functions_spider.php 				$result .= "Allow: ".$parsed['dir']."\n";
+<a href='../S/29.html#L451'>result</a>            451 functions_spider.php 		return $result;
+<a href='../S/29.html#L461'>result</a>            461 functions_spider.php 		$result =
+<a href='../S/29.html#L467'>result</a>            467 functions_spider.php 			$result .= "\t&lt;url&gt;\n";
+<a href='../S/29.html#L469'>result</a>            469 functions_spider.php 			$result .= "\t\t&lt;loc&gt;".$arr[$i]."&lt;/loc&gt;\n";									//Required
+<a href='../S/29.html#L474'>result</a>            474 functions_spider.php 			$result .= "\t&lt;/url&gt;\n\n";
+<a href='../S/29.html#L477'>result</a>            477 functions_spider.php   	$result .= '&lt;/urlset&gt;';
+<a href='../S/29.html#L479'>result</a>            479 functions_spider.php   	return $result;
+<a href='../S/6.html#L176'>result</a>            176 functions_textformat.php 			$result = '';
+<a href='../S/6.html#L182'>result</a>            182 functions_textformat.php 						$result = '&lt;a href="wiki.php?Wiki:'.$link['param'].'"&gt;'.$link['title'].'&lt;/a&gt;';
+<a href='../S/6.html#L185'>result</a>            185 functions_textformat.php 						$result = '&lt;a href="wiki.php?Wiki:'.$link['param'].'"&gt;'.$link['param'].'&lt;/a&gt;';
+<a href='../S/6.html#L190'>result</a>            190 functions_textformat.php 					$result = '&lt;a href="'.$link['param'].'"&gt;'.$link['title'].'&lt;/a&gt;';
+<a href='../S/6.html#L194'>result</a>            194 functions_textformat.php 					$result = makeImageLink($link['param']);
+<a href='../S/6.html#L198'>result</a>            198 functions_textformat.php 					$result = poll(POLL_NEWS, $link['param']);
+<a href='../S/6.html#L206'>result</a>            206 functions_textformat.php 			if (!$result) $result = '['.$wiki_command.']';
+<a href='../S/6.html#L208'>result</a>            208 functions_textformat.php 			$text = substr($text, 0, $pos1) .$result. substr($text, $pos2+strlen(']]'));
+<a href='../S/31.html#L136'>result</a>            136 functions_userdata.php 				$result = stripslashes($row['fieldName']).': ';
+<a href='../S/31.html#L137'>result</a>            137 functions_userdata.php 				$result .= '&lt;input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/&gt;';
+<a href='../S/31.html#L141'>result</a>            141 functions_userdata.php 				$result = stripslashes($row['fieldName']).':&lt;br/&gt;';
+<a href='../S/31.html#L142'>result</a>            142 functions_userdata.php 				$result .= '&lt;textarea name="userdata_'.$fieldId.'" rows="6" cols="40"&gt;'.$value.'&lt;/textarea&gt;';
+<a href='../S/31.html#L146'>result</a>            146 functions_userdata.php 				$result  = '&lt;input name="userdata_'.$fieldId.'" type="hidden" value="0"/&gt;';
+<a href='../S/31.html#L147'>result</a>            147 functions_userdata.php 				$result .= '&lt;input name="userdata_'.$fieldId.'" id="userdata_'.$fieldId.'" type="checkbox" class="checkbox" value="1"'.($value == '1'?' checked="checked"':'').'/&gt;';
+<a href='../S/31.html#L148'>result</a>            148 functions_userdata.php 				$result .= ' &lt;label for="userdata_'.$fieldId.'"&gt;'.$row['fieldName'].'&lt;/label&gt;';
+<a href='../S/31.html#L152'>result</a>            152 functions_userdata.php 				$result = stripslashes($row['fieldName']).':&lt;br/&gt;';
+<a href='../S/31.html#L156'>result</a>            156 functions_userdata.php 					$result .= '&lt;input name="userdata_'.$fieldId.'" type="radio" id="lab_'.$row['categoryId'].'" value="'.$row['categoryId'].'"'.($row['categoryId'] == $value?' checked="checked"':'').'/&gt;';
+<a href='../S/31.html#L157'>result</a>            157 functions_userdata.php 					$result .= ' &lt;label for="lab_'.$row['categoryId'].'"&gt;'.$row['categoryName'].'&lt;/label&gt;&lt;br/&gt;';
+<a href='../S/31.html#L162'>result</a>            162 functions_userdata.php 				$result = stripslashes($row['fieldName']).': ';
+<a href='../S/31.html#L163'>result</a>            163 functions_userdata.php 				$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId, 'userdata_'.$fieldId, $value);
+<a href='../S/31.html#L167'>result</a>            167 functions_userdata.php 				$result = stripslashes($row['fieldName']).':&lt;br/&gt;';
+<a href='../S/31.html#L169'>result</a>            169 functions_userdata.php 					$result .= makeThumbLink($value);
+<a href='../S/31.html#L170'>result</a>            170 functions_userdata.php 					$result .= '&lt;input name="userdata_'.$fieldId.'_remove" id="userdata_'.$fieldId.'_remove" type="checkbox" class="checkbox"/&gt;';
+<a href='../S/31.html#L171'>result</a>            171 functions_userdata.php 					$result .= '&lt;label for="userdata_'.$fieldId.'_remove"&gt;Delete image&lt;/label&gt;';
+<a href='../S/31.html#L173'>result</a>            173 functions_userdata.php 					$result .= '&lt;input name="userdata_'.$fieldId.'" type="file"/&gt;';
+<a href='../S/31.html#L178'>result</a>            178 functions_userdata.php 				$result = stripslashes($row['fieldName']).':&lt;br/&gt;';
+<a href='../S/31.html#L189'>result</a>            189 functions_userdata.php 				$result .= '&lt;select name="userdata_'.$fieldId.'_day"&gt;';
+<a href='../S/31.html#L190'>result</a>            190 functions_userdata.php 				$result .= '&lt;option value=""&gt;- Day -';
+<a href='../S/31.html#L195'>result</a>            195 functions_userdata.php 					$result .= '&lt;option value="'.$k.'"'.$selected.'&gt;'.$j;
+<a href='../S/31.html#L197'>result</a>            197 functions_userdata.php 				$result .= '&lt;/select&gt;';
+<a href='../S/31.html#L199'>result</a>            199 functions_userdata.php 				$result .= '&lt;select name="userdata_'.$fieldId.'_month"&gt;';
+<a href='../S/31.html#L200'>result</a>            200 functions_userdata.php 				$result .= '&lt;option value=""&gt;- Month -';
+<a href='../S/31.html#L205'>result</a>            205 functions_userdata.php 					$result .= '&lt;option value="'.$k.'"'.$selected.'&gt;'.$j;
+<a href='../S/31.html#L207'>result</a>            207 functions_userdata.php 				$result .= '&lt;/select&gt;';
+<a href='../S/31.html#L209'>result</a>            209 functions_userdata.php 				$result .= '&lt;select name="userdata_'.$fieldId.'_year"&gt;';
+<a href='../S/31.html#L210'>result</a>            210 functions_userdata.php 				$result .= '&lt;option value=""&gt;- Year -';
+<a href='../S/31.html#L213'>result</a>            213 functions_userdata.php 					$result .= '&lt;option value="'.$j.'"'.$selected.'&gt;'.$j;
+<a href='../S/31.html#L215'>result</a>            215 functions_userdata.php 				$result .= '&lt;/select&gt;';
+<a href='../S/31.html#L218'>result</a>            218 functions_userdata.php 		return $result;
+<a href='../S/31.html#L229'>result</a>            229 functions_userdata.php 			$result  = '&lt;input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/&gt;';
+<a href='../S/31.html#L230'>result</a>            230 functions_userdata.php 			$result .= ' &lt;label for="userdata_'.$row['fieldId'].'"&gt;Has image&lt;/label&gt;';
+<a href='../S/31.html#L232'>result</a>            232 functions_userdata.php 			$result = getUserdataInput($row);
+<a href='../S/31.html#L235'>result</a>            235 functions_userdata.php 		return $result;
+</pre>
+</body>
+</html>

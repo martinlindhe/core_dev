@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>mecnt</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/21.html#L67'>mecnt</a>              67 functions_forum.php 	function getForumMessageCount($itemId, $recursive = true, $mecnt = 0)	//fixme: skicka med itemType param &amp; rename function
+<a href='../S/21.html#L70'>mecnt</a>              70 functions_forum.php 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
+<a href='../S/21.html#L76'>mecnt</a>              76 functions_forum.php 			$mecnt++;
+<a href='../S/21.html#L78'>mecnt</a>              78 functions_forum.php 				$mecnt = getForumMessageCount($row['itemId'], $recursive, $mecnt);
+<a href='../S/21.html#L81'>mecnt</a>              81 functions_forum.php 		return $mecnt;
+<a href='../S/21.html#L85'>mecnt</a>              85 functions_forum.php 	function getForumItemCount($itemId, $mecnt = 0)
+<a href='../S/21.html#L88'>mecnt</a>              88 functions_forum.php 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
+<a href='../S/21.html#L95'>mecnt</a>              95 functions_forum.php 			$mecnt++;
+<a href='../S/21.html#L96'>mecnt</a>              96 functions_forum.php 			$mecnt = getForumItemCount($row['itemId'], $mecnt);
+<a href='../S/21.html#L98'>mecnt</a>              98 functions_forum.php 		return $mecnt;
+</pre>
+</body>
+</html>

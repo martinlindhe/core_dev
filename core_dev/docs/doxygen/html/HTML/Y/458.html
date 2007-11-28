@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>password1</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/2.html#L201'>password1</a>         201 class.Session.php 	function registerUser($username, $password1, $password2, $userMode = 0)
+<a href='../S/2.html#L208'>password1</a>         208 class.Session.php 		if (($db-&gt;escape($username) != $username) || ($db-&gt;escape($password1) != $password1)) {
+<a href='../S/2.html#L215'>password1</a>         215 class.Session.php 		if (strlen($password1) &lt; 4) return 'Password must be at least 4 characters long';
+<a href='../S/2.html#L217'>password1</a>         217 class.Session.php 		if ($password1 != $password2) return 'The passwords doesnt match';
+<a href='../S/2.html#L230'>password1</a>         230 class.Session.php 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this-&gt;sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
+</pre>
+</body>
+</html>

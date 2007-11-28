@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>url</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L146'>url</a>               146 atom_categories.php 	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '', $varName = '', $extra = '')
+<a href='../S/26.html#L190'>url</a>               190 atom_categories.php 			else if ($url) {
+<a href='../S/26.html#L192'>url</a>               192 atom_categories.php 					$content .= ' onclick="location.href=\''.$url.'?'.$varName.'='.$row['categoryId'].$extra.'\'"';
+<a href='../S/26.html#L194'>url</a>               194 atom_categories.php 					$content .= ' onclick="location.href=\''.$url.'='.$row['categoryId'].$extra.'\'"';
+<a href='../S/17.html#L187'>url</a>               187 functions_general.php 			foreach($menu_arr as $url =&gt; $text) {
+<a href='../S/17.html#L191'>url</a>               191 functions_general.php 				if ($cur == $url) echo '&lt;li class="'.$current_class.'"&gt;';
+<a href='../S/17.html#L194'>url</a>               194 functions_general.php 				echo '&lt;a href="'.($url[0] != '/' ? getProjectPath(3) : '').$url.'"&gt;'.$text.'&lt;/a&gt;';
+<a href='../S/29.html#L102'>url</a>               102 functions_spider.php 	function nice_parse_url(&amp;$url)
+<a href='../S/29.html#L104'>url</a>               104 functions_spider.php 		$url = trim($url);
+<a href='../S/29.html#L105'>url</a>               105 functions_spider.php 		$url = str_replace('\"', '', $url);
+<a href='../S/29.html#L107'>url</a>               107 functions_spider.php 		$pos = strpos($url, '://');
+<a href='../S/29.html#L109'>url</a>               109 functions_spider.php 			$url = 'http://'.$url;
+<a href='../S/29.html#L112'>url</a>               112 functions_spider.php 		$arr = parse_url($url);
+<a href='../S/29.html#L114'>url</a>               114 functions_spider.php 			echo 'Scheme undefined!! '.$url.'&lt;br&gt;';
+<a href='../S/29.html#L121'>url</a>               121 functions_spider.php 			$url .= '/';
+<a href='../S/29.html#L122'>url</a>               122 functions_spider.php 			$arr = parse_url($url);
+<a href='../S/29.html#L137'>url</a>               137 functions_spider.php 				echo 'Unsupported scheme: &lt;b&gt;'.$arr['scheme'].'&lt;/b&gt; in URL &lt;b&gt;'.$url.'&lt;/b&gt;&lt;br&gt;';
+<a href='../S/29.html#L219'>url</a>               219 functions_spider.php 	function generate_absolute_urls($list, $url)
+<a href='../S/29.html#L221'>url</a>               221 functions_spider.php 		$url_arr = nice_parse_url($url);
+<a href='../S/29.html#L297'>url</a>               297 functions_spider.php 	function get_http_contents($url, &amp;$errno)
+<a href='../S/29.html#L306'>url</a>               306 functions_spider.php 		$q = 'SELECT body FROM tblSpiderCache WHERE url="'.$db-&gt;escape($url).'" AND timeCreated &gt;= NOW()-'.$config['spider']['cache_age'];
+<a href='../S/29.html#L309'>url</a>               309 functions_spider.php 			echo '&lt;b&gt;Skipping download of '.$url.')&lt;/b&gt; - Using cache&lt;br&gt;';
+<a href='../S/29.html#L313'>url</a>               313 functions_spider.php 		$host = nice_parse_url($url);
+<a href='../S/29.html#L316'>url</a>               316 functions_spider.php 			echo '&lt;b&gt;Skipping download of '.$host['file_ext'].'&lt;/b&gt; (from '.$url.')&lt;br&gt;';
+<a href='../S/29.html#L320'>url</a>               320 functions_spider.php 		echo 'Downloading and parsing '.$url.' ...&lt;br&gt;';
+<a href='../S/29.html#L364'>url</a>               364 functions_spider.php 			die('&lt;b&gt;ERROR! Failed to extract HTTP error number from request for '.$url.'&lt;/b&gt;&lt;br&gt;');
+<a href='../S/29.html#L379'>url</a>               379 functions_spider.php 				echo '&lt;b&gt;302 object moved from '.$url.' to: '.$new_loc.'&lt;/b&gt;&lt;br&gt;';
+<a href='../S/29.html#L380'>url</a>               380 functions_spider.php 				$site['302'][$url] = $new_loc;
+<a href='../S/29.html#L390'>url</a>               390 functions_spider.php 			echo '&lt;b&gt;403 - Forbidden: '.$url.'&lt;/b&gt;&lt;br&gt;';
+<a href='../S/29.html#L391'>url</a>               391 functions_spider.php 			$site['403'][$url] = true;
+<a href='../S/29.html#L398'>url</a>               398 functions_spider.php 			echo '&lt;b&gt;File not found: '.$url.'&lt;/b&gt;&lt;br&gt;';
+<a href='../S/29.html#L399'>url</a>               399 functions_spider.php 			$site['404'][$url] = true;
+<a href='../S/29.html#L405'>url</a>               405 functions_spider.php 			$q = 'DELETE FROM tblSpiderCache WHERE url="'.$db-&gt;escape($url).'"';
+<a href='../S/29.html#L409'>url</a>               409 functions_spider.php 			$q = 'INSERT INTO tblSpiderCache SET url="'.$db-&gt;escape($url).'",header="'.$db-&gt;escape($header).'",body="'.$db-&gt;escape($body).'",sha1="'.sha1($body).'",timeCreated=NOW()';
+</pre>
+</body>
+</html>

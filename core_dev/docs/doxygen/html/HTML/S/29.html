@@ -1,0 +1,511 @@
+<html>
+<head>
+<title>functions_spider.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/functions_spider.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L53'>[^]</a><a href='#L459'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L53' title='Defined at 53.'>parse_html_parameters</a>
+<li><a href='#L102' title='Defined at 102.'>nice_parse_url</a>
+<li><a href='#L146' title='Defined at 146.'>extract_filenames</a>
+<li><a href='#L219' title='Defined at 219.'>generate_absolute_urls</a>
+<li><a href='#L297' title='Defined at 297.'>get_http_contents</a>
+<li><a href='#L422' title='Defined at 422.'>generate_robots_txt</a>
+<li><a href='#L459' title='Defined at 459.'>generate_google_sitemap</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2         <i><font color='green'>/*</font></i>
+<a name='L3'>   3 <i><font color='green'>                functions for implementing a web spider / web crawler</font></i>
+<a name='L4'>   4 <i><font color='green'></font></i>
+<a name='L5'>   5 <i><font color='green'>                crawl_site.php:</font></i>
+<a name='L6'>   6 <i><font color='green'>                todo: allow input of site to crawl from browser</font></i>
+<a name='L7'>   7 <i><font color='green'>                todo: store result of the crawl in database (currently in dump.txt)</font></i>
+<a name='L8'>   8 <i><font color='green'></font></i>
+<a name='L9'>   9 <i><font color='green'>                perform_query_test.php:</font></i>
+<a name='L10'>  10 <i><font color='green'>                        * leta efter keywords som "warning / error" i resultaten</font></i>
+<a name='L11'>  11 <i><font color='green'></font></i>
+<a name='L12'>  12 <i><font color='green'>                todo: förbättra hittandet av parametrar och url, stöd även post-parametrar samt javascript-url</font></i>
+<a name='L13'>  13 <i><font color='green'>                todo: sessioner, eller iaf till en början en möjlighet att attacha en hårdkodad cookie / get-parameter som fejkar session handling</font></i>
+<a name='L14'>  14 <i><font color='green'>                todo/senare: definiera login-url, scriptet klurar ut login-forumuläret å gissar username / password parametrar</font></i>
+<a name='L15'>  15 <i><font color='green'>                        sen med detta automatiskt logga in i systemet med angivet user/pwd och auto-behåll sessionen hela tiden</font></i>
+<a name='L16'>  16 <i><font color='green'></font></i>
+<a name='L17'>  17 <i><font color='green'>                todo: skippa denna typ av url:</font></i>
+<a name='L18'>  18 <i><font color='green'>                                Skipping download of http://www.aftonbladet.se/javascript:logout();) - Using cache</font></i>
+<a name='L19'>  19 <i><font color='green'>                                Skipping download of .loginform.submit(); (from http://www.unicorn.tv/login/javascript:document.loginform.submit();)</font></i>
+<a name='L20'>  20 <i><font color='green'>                                Skipping download of .jsp'); (from http://www.dn.se/javascript:openBildspel('/DNet/road/Classic/article/47/jsp/bildspel.jsp');)</font></i>
+<a name='L21'>  21 <i><font color='green'></font></i>
+<a name='L22'>  22 <i><font color='green'>                todo: parameter parsing funkar ej som den ska:</font></i>
+<a name='L23'>  23 <i><font color='green'>                        http://www.dn.se/DNet/jsp/polopoly.jsp?d=147&amp;a=650638</font></i>
+<a name='L24'>  24 <i><font color='green'>                                =&gt;</font></i>
+<a name='L25'>  25 <i><font color='green'>    [/DNet/jsp/polopoly.jsp] =&gt; Array</font></i>
+<a name='L26'>  26 <i><font color='green'>        (</font></i>
+<a name='L27'>  27 <i><font color='green'>            [a] =&gt; numeric</font></i>
+<a name='L28'>  28 <i><font color='green'>            [d] =&gt; unknown (2836&amp;a)</font></i>
+<a name='L29'>  29 <i><font color='green'>        )</font></i>
+<a name='L30'>  30 <i><font color='green'></font></i>
+<a name='L31'>  31 <i><font color='green'>    [101] =&gt; http://www.dn.se/DNet/jsp/polopoly.jsp?d=1348&amp;a=66290&amp;previousRenderType=3</font></i>
+<a name='L32'>  32 <i><font color='green'>    [86] =&gt; http://www.dn.se/DNet/jsp/polopoly.jsp?d=772&amp;homeView=true</font></i>
+<a name='L33'>  33 <i><font color='green'>    [13] =&gt; http://www.dn.se/DNet/jsp/polopoly.jsp?d=145&amp;a=617242&amp;tab=b&amp;period=bmonth</font></i>
+<a name='L34'>  34 <i><font color='green'></font></i>
+<a name='L35'>  35 <i><font color='green'>                Features:</font></i>
+<a name='L36'>  36 <i><font color='green'>                        Keeps an internal web page cache for faster operation</font></i>
+<a name='L37'>  37 <i><font color='green'></font></i>
+<a name='L38'>  38 <i><font color='green'>                Notice:</font></i>
+<a name='L39'>  39 <i><font color='green'>                        This script may use some RAM. Tweak php.ini and set memory_limit to at least 32M</font></i>
+<a name='L40'>  40 <i><font color='green'>        */</font></i>
+<a name='L41'>  41 
+<a name='L42'>  42         <i><font color='green'>//framtida alternativ: skicka en HEAD request till webbservern och kolla "Content-Type" responsen.</font></i>
+<a name='L43'>  43         <i><font color='green'>//PDF:          Content-Type: application/pdf</font></i>
+<a name='L44'>  44         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['spider']['allowed_extensions'] = <b>array</b>('.html', '.htm', '.asp', '.aspx', '.jsp', '.php', '.php4', '.php5', '.pl');
+<a name='L45'>  45 
+<a name='L46'>  46         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['spider']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.3) Gecko/20070309 Firefox/2.0.0.3';
+<a name='L47'>  47 
+<a name='L48'>  48         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['spider']['cache_age'] = 3600*24;       <i><font color='green'>//24 hour</font></i>
+<a name='L49'>  49 
+<a name='L50'>  50         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['spider']['max_http_requests'] = 50;    <i><font color='green'>//max number of http requests to do during one execution of the script, to avoid server overload</font></i>
+<a name='L51'>  51 
+<a name='L52'>  52         <i><font color='green'>//Tar en sträng med parametrar till en html-tagg, och returnerar en array med dom parsade</font></i>
+<a name='L53'>  53         <b>function</b> <a href='../S/29.html#L176' title='Refered from 176 in functions_spider.php.'>parse_html_parameters</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>)
+<a name='L54'>  54         <font color='blue'>{</font>
+<a name='L55'>  55                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = <b>array</b>();
+<a name='L56'>  56 
+<a name='L57'>  57                 <i><font color='green'>//Normalize parameters</font></i>
+<a name='L58'>  58                 $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a> = <a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>(' =', '=', $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>);
+<a name='L59'>  59                 $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a> = <a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>('= ', '=', $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>);
+<a name='L60'>  60 
+<a name='L61'>  61                 <i><font color='green'>//Parse parameters. todo: gör till en funktion</font></i>
+<a name='L62'>  62                 <b>do</b> <font color='blue'>{</font>
+<a name='L63'>  63                         $<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, '=');
+<a name='L64'>  64                         $<a href='../Y/448.html' title='Multiple used in 3 places.'>param_name</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, 0, $<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a>);
+<a name='L65'>  65 
+<a name='L66'>  66                         <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, $<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a>+1, 1) == '"') <font color='blue'>{</font>
+<a name='L67'>  67                                 <i><font color='green'>//handle "quouted" parameter</font></i>
+<a name='L68'>  68                                 $<a href='../Y/451.html' title='Multiple used in 7 places.'>param_pos2</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, '"', $<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a>+2); <i><font color='green'>//hitta nästföljande ", EFTER det öppnande "</font></i>
+<a name='L69'>  69                                 $<a href='../Y/452.html' title='Multiple used in 5 places.'>param_value</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, $<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a>+2, $<a href='../Y/451.html' title='Multiple used in 7 places.'>param_pos2</a>-$<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a>-2);
+<a name='L70'>  70                                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>[$<a href='../Y/448.html' title='Multiple used in 3 places.'>param_name</a>] = $<a href='../Y/452.html' title='Multiple used in 5 places.'>param_value</a>;
+<a name='L71'>  71 
+<a name='L72'>  72                                 $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a> = <a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>(<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, $<a href='../Y/451.html' title='Multiple used in 7 places.'>param_pos2</a>+1));
+<a name='L73'>  73 
+<a name='L74'>  74                                 <i><font color='green'>//echo 'quoted: '.$param_name.' = '.$param_value.'&lt;br&gt;';</font></i>
+<a name='L75'>  75                                 <i><font color='green'>//echo 'resterande: '.$str.'&lt;br&gt;';</font></i>
+<a name='L76'>  76                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L77'>  77                                 <i><font color='green'>//handle non-quoted parameter</font></i>
+<a name='L78'>  78                                 $<a href='../Y/451.html' title='Multiple used in 7 places.'>param_pos2</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, ' ');
+<a name='L79'>  79                                 <b>if</b> ($<a href='../Y/451.html' title='Multiple used in 7 places.'>param_pos2</a> !== <b>false</b>) <font color='blue'>{</font>
+<a name='L80'>  80                                         <i><font color='green'>//Det finns ytterligare parametrar efter denna</font></i>
+<a name='L81'>  81                                         $<a href='../Y/452.html' title='Multiple used in 5 places.'>param_value</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, $<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a>+1, $<a href='../Y/451.html' title='Multiple used in 7 places.'>param_pos2</a>-$<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a>-1);
+<a name='L82'>  82                                         $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a> = <a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>(<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, $<a href='../Y/451.html' title='Multiple used in 7 places.'>param_pos2</a>+1));
+<a name='L83'>  83 
+<a name='L84'>  84                                         <i><font color='green'>//echo 'resterande: '.$str.'&lt;br&gt;';</font></i>
+<a name='L85'>  85                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L86'>  86                                         <i><font color='green'>//Detta är sista parametern</font></i>
+<a name='L87'>  87                                         $<a href='../Y/452.html' title='Multiple used in 5 places.'>param_value</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, $<a href='../Y/450.html' title='Multiple used in 7 places.'>param_pos1</a>+1);
+<a name='L88'>  88 
+<a name='L89'>  89                                         $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a> = '';
+<a name='L90'>  90                                 <font color='blue'>}</font>
+<a name='L91'>  91                                 <i><font color='green'>//echo 'nonquoted: '.$param_name.' = '.$param_value.'&lt;br&gt;';</font></i>
+<a name='L92'>  92                                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>[$<a href='../Y/448.html' title='Multiple used in 3 places.'>param_name</a>] = $<a href='../Y/452.html' title='Multiple used in 5 places.'>param_value</a>;
+<a name='L93'>  93                         <font color='blue'>}</font>
+<a name='L94'>  94                 <font color='blue'>}</font> <b>while</b> ($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>);
+<a name='L95'>  95 
+<a name='L96'>  96                 <b>return</b> $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>;
+<a name='L97'>  97         <font color='blue'>}</font>
+<a name='L98'>  98 
+<a name='L99'>  99         <i><font color='green'>//Takes a user inputted URL and cleans it up, returning clean url in $url parameter &amp; a parse_url() array</font></i>
+<a name='L100'> 100         <i><font color='green'>//Also adds 'path_only', that returns 'path', but with script/file name removed. /dir/file.php becomes /dir/</font></i>
+<a name='L101'> 101         <i><font color='green'>//Also adds 'file_ext', that returns the file extension if its a filename in the URL</font></i>
+<a name='L102'> 102         <b>function</b> <a href='../R/176.html' title='Multiple refered from 4 places.'>nice_parse_url</a>(&amp;$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>)
+<a name='L103'> 103         <font color='blue'>{</font>
+<a name='L104'> 104                 $<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a> = <a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>);
+<a name='L105'> 105                 $<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a> = <a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>('\"', '', $<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>);
+<a name='L106'> 106 
+<a name='L107'> 107                 $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>, '://');
+<a name='L108'> 108                 <b>if</b> ($<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a> === <b>false</b>) <font color='blue'>{</font>
+<a name='L109'> 109                         $<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a> = 'http://'.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>;
+<a name='L110'> 110                 <font color='blue'>}</font>
+<a name='L111'> 111 
+<a name='L112'> 112                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = <a href='../Y/456.html' title='Multiple used in 3 places.'>parse_url</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>);
+<a name='L113'> 113                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['scheme'])) <font color='blue'>{</font>
+<a name='L114'> 114                         <b>echo</b> 'Scheme undefined!! '.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.'&lt;br&gt;';
+<a name='L115'> 115                         <b>return</b> <b>false</b>;
+<a name='L116'> 116                 <font color='blue'>}</font>
+<a name='L117'> 117 
+<a name='L118'> 118                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['file_ext'] = '';
+<a name='L119'> 119 
+<a name='L120'> 120                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['path'])) <font color='blue'>{</font>
+<a name='L121'> 121                         $<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a> .= '/';
+<a name='L122'> 122                         $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = <a href='../Y/456.html' title='Multiple used in 3 places.'>parse_url</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>);
+<a name='L123'> 123                         $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['path_only'] = '/';
+<a name='L124'> 124                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L125'> 125                         $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a> = <a href='../Y/600.html' title='Multiple used in 3 places.'>strrpos</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['path'], '/');      <i><font color='green'>//last position of a /</font></i>
+<a name='L126'> 126                         $<a href='../Y/191.html' title='Multiple used in 4 places.'>dir</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['path'], 0, $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a>+1);
+<a name='L127'> 127                         $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['path_only'] = $<a href='../Y/191.html' title='Multiple used in 4 places.'>dir</a>;
+<a name='L128'> 128 
+<a name='L129'> 129                         <i><font color='green'>//Find the file extension, if one exists</font></i>
+<a name='L130'> 130                         $<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['path'], $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a>+1);
+<a name='L131'> 131                         $<a href='../Y/485.html' title='Multiple used in 24 places.'>pos2</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>, '.');                 <i><font color='green'>//fixme: är detta korrekt, tänk med en fil med flera punkter i namnet, strrpos() istället?</font></i>
+<a name='L132'> 132                         <b>if</b> ($<a href='../Y/485.html' title='Multiple used in 24 places.'>pos2</a> !== <b>false</b>) $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['file_ext'] = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>, $<a href='../Y/485.html' title='Multiple used in 24 places.'>pos2</a>);
+<a name='L133'> 133                 <font color='blue'>}</font>
+<a name='L134'> 134 
+<a name='L135'> 135                 <b>if</b> ($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['scheme'] != 'http' &amp;&amp; $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['scheme'] != 'https') <font color='blue'>{</font>
+<a name='L136'> 136                         <b>if</b> ($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['scheme'] != 'javascript') <font color='blue'>{</font>
+<a name='L137'> 137                                 <b>echo</b> 'Unsupported scheme: &lt;b&gt;'.$<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['scheme'].'&lt;/b&gt; in URL &lt;b&gt;'.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.'&lt;/b&gt;&lt;br&gt;';
+<a name='L138'> 138                         <font color='blue'>}</font>
+<a name='L139'> 139                         <b>return</b> <b>false</b>;
+<a name='L140'> 140                 <font color='blue'>}</font>
+<a name='L141'> 141 
+<a name='L142'> 142                 <b>return</b> $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>;
+<a name='L143'> 143         <font color='blue'>}</font>
+<a name='L144'> 144 
+<a name='L145'> 145         <i><font color='green'>//Returns an array with all URL's it encounters (as seen in the HTML)</font></i>
+<a name='L146'> 146         <b>function</b> extract_filenames($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>)
+<a name='L147'> 147         <font color='blue'>{</font>
+<a name='L148'> 148                 <i><font color='green'>//Normalisera HTML koden</font></i>
+<a name='L149'> 149                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>("\n", " ", $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>);
+<a name='L150'> 150                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>("\r", " ", $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>);
+<a name='L151'> 151                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>("\t", " ", $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>);
+<a name='L152'> 152 
+<a name='L153'> 153                 $<a href='../Y/246.html' title='Multiple used in 4 places.'>files_found</a> = <b>array</b>();
+<a name='L154'> 154 
+<a name='L155'> 155                 <b>do</b> <font color='blue'>{</font>
+<a name='L156'> 156                         $<a href='../Y/437.html' title='Multiple used in 2 places.'>org_data</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>;
+<a name='L157'> 157                         $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>("  ", " ", $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>);
+<a name='L158'> 158                 <font color='blue'>}</font> <b>while</b> ($<a href='../Y/437.html' title='Multiple used in 2 places.'>org_data</a> != $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>);
+<a name='L159'> 159 
+<a name='L160'> 160                 <i><font color='green'>//Parsa taggar, identifiera relevanta taggar</font></i>
+<a name='L161'> 161 
+<a name='L162'> 162                 <b>do</b> <font color='blue'>{</font>
+<a name='L163'> 163                         $<a href='../Y/484.html' title='Multiple used in 22 places.'>pos1</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>, '&lt;');                                     <i><font color='green'>//Find first opening bracket</font></i>
+<a name='L164'> 164                         $<a href='../Y/485.html' title='Multiple used in 24 places.'>pos2</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>, '&gt;', $<a href='../Y/484.html' title='Multiple used in 22 places.'>pos1</a>);      <i><font color='green'>//Find first closing bracket occuring after $pos1</font></i>
+<a name='L165'> 165 
+<a name='L166'> 166                         <b>if</b> ($<a href='../Y/484.html' title='Multiple used in 22 places.'>pos1</a> === <b>false</b> || $<a href='../Y/485.html' title='Multiple used in 24 places.'>pos2</a> === <b>false</b>) <b>break</b>;
+<a name='L167'> 167 
+<a name='L168'> 168                         $<a href='../Y/613.html' title='Multiple used in 5 places.'>tag</a> = <a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>(<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>, $<a href='../Y/484.html' title='Multiple used in 22 places.'>pos1</a>+1, $<a href='../Y/485.html' title='Multiple used in 24 places.'>pos2</a>-$<a href='../Y/484.html' title='Multiple used in 22 places.'>pos1</a>-1));
+<a name='L169'> 169 
+<a name='L170'> 170                         $<a href='../Y/617.html' title='Multiple used in 4 places.'>tag_pos</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/613.html' title='Multiple used in 5 places.'>tag</a>, ' ');
+<a name='L171'> 171                         <b>if</b> ($<a href='../Y/617.html' title='Multiple used in 4 places.'>tag_pos</a>) <font color='blue'>{</font>
+<a name='L172'> 172                                 $<a href='../Y/614.html' title='Multiple used in 3 places.'>tag_name</a> = <a href='../Y/601.html' title='Multiple used in 4 places.'>strtolower</a>(<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/613.html' title='Multiple used in 5 places.'>tag</a>, 0, $<a href='../Y/617.html' title='Multiple used in 4 places.'>tag_pos</a>));
+<a name='L173'> 173 
+<a name='L174'> 174                                 $<a href='../Y/616.html' title='Multiple used in 3 places.'>tag_params_org</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/613.html' title='Multiple used in 5 places.'>tag</a>, $<a href='../Y/617.html' title='Multiple used in 4 places.'>tag_pos</a>+1);
+<a name='L175'> 175                                 <b>if</b> (<a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/616.html' title='Multiple used in 3 places.'>tag_params_org</a>, 'javascript:') === <b>false</b>) <font color='blue'>{</font>
+<a name='L176'> 176                                         $<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a> = <a href='../S/29.html#L53' title='Defined at 53 in functions_spider.php.'>parse_html_parameters</a>($<a href='../Y/616.html' title='Multiple used in 3 places.'>tag_params_org</a>);
+<a name='L177'> 177                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L178'> 178                                         $<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a> = <b>array</b>();
+<a name='L179'> 179                                 <font color='blue'>}</font>
+<a name='L180'> 180 
+<a name='L181'> 181                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L182'> 182                                 $<a href='../Y/614.html' title='Multiple used in 3 places.'>tag_name</a> = $<a href='../Y/613.html' title='Multiple used in 5 places.'>tag</a>;
+<a name='L183'> 183                                 $<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a> = <b>array</b>();
+<a name='L184'> 184                         <font color='blue'>}</font>
+<a name='L185'> 185 
+<a name='L186'> 186                         <b>switch</b> ($<a href='../Y/614.html' title='Multiple used in 3 places.'>tag_name</a>)
+<a name='L187'> 187                         <font color='blue'>{</font>
+<a name='L188'> 188                                 <b>case</b> 'a':                               <i><font color='green'>//&lt;a href="filename.html"&gt;</font></i>
+<a name='L189'> 189                                 <b>case</b> 'area':            <i><font color='green'>//&lt;area href="blog-rss.php" /&gt;</font></i>
+<a name='L190'> 190                                         <b>if</b> (<b>empty</b>($<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a>['href'])) <b>break</b>;
+<a name='L191'> 191 
+<a name='L192'> 192                                         $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a>['href'], '#');
+<a name='L193'> 193                                         <b>if</b> ($<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a> !== <b>false</b>) $<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a>['href'] = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a>['href'], 0, $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a>);
+<a name='L194'> 194                                         <b>if</b> (!$<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a>['href']) <b>break</b>;
+<a name='L195'> 195 
+<a name='L196'> 196                                         <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a>['href'], 0, 7) == 'mailto:') <b>break</b>;
+<a name='L197'> 197 
+<a name='L198'> 198                                         <b>if</b> (!<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a>['href'], $<a href='../Y/246.html' title='Multiple used in 4 places.'>files_found</a>)) <font color='blue'>{</font>
+<a name='L199'> 199                                                 <i><font color='green'>//echo '* Located new link: '.$tag_params['href'].'&lt;br&gt;';</font></i>
+<a name='L200'> 200                                                 $<a href='../Y/246.html' title='Multiple used in 4 places.'>files_found</a>[] = $<a href='../Y/615.html' title='Multiple used in 10 places.'>tag_params</a>['href'];
+<a name='L201'> 201                                         <font color='blue'>}</font>
+<a name='L202'> 202                                         <b>break</b>;
+<a name='L203'> 203 
+<a name='L204'> 204                                 <b>case</b> 'link':                    <i><font color='green'>//&lt;link href="stylesheet.css" rel="stylesheet" type="text/css"&gt;</font></i>
+<a name='L205'> 205                                         <b>break</b>;
+<a name='L206'> 206 
+<a name='L207'> 207                                 <b>case</b> 'script':          <i><font color='green'>//&lt;script src="/inc/global.js" language="javascript" type="text/javascript"&gt;</font></i>
+<a name='L208'> 208                                         <b>break</b>;
+<a name='L209'> 209                         <font color='blue'>}</font>
+<a name='L210'> 210 
+<a name='L211'> 211                 <font color='blue'>}</font> <b>while</b> ( $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>(<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>, $<a href='../Y/485.html' title='Multiple used in 24 places.'>pos2</a>)) );
+<a name='L212'> 212 
+<a name='L213'> 213                 <b>return</b> $<a href='../Y/246.html' title='Multiple used in 4 places.'>files_found</a>;
+<a name='L214'> 214         <font color='blue'>}</font>
+<a name='L215'> 215 
+<a name='L216'> 216 
+<a name='L217'> 217         <i><font color='green'>//Takes a array of URL's, relative &amp; absolute, applies "$url" basename to the relative ones and returns the array</font></i>
+<a name='L218'> 218         <i><font color='green'>//$url must be a proper URL that has already been processed with nice_parse_url(), we expect it to look like this: http://www.domain.com/</font></i>
+<a name='L219'> 219         <b>function</b> generate_absolute_urls($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>, $<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>)
+<a name='L220'> 220         <font color='blue'>{</font>
+<a name='L221'> 221                 $<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a> = <a href='../S/29.html#L102' title='Defined at 102 in functions_spider.php.'>nice_parse_url</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>);
+<a name='L222'> 222 
+<a name='L223'> 223                 $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> = <b>array</b>();
+<a name='L224'> 224 
+<a name='L225'> 225                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>)
+<a name='L226'> 226                 <font color='blue'>{</font>
+<a name='L227'> 227                         <b>if</b> (<a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, '://') === <b>false</b>)
+<a name='L228'> 228                         <font color='blue'>{</font>
+<a name='L229'> 229                                 <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 0, 1) == '/')
+<a name='L230'> 230                                 <font color='blue'>{</font>
+<a name='L231'> 231                                         <i><font color='green'>//Is relative url starting with a /? Then relative path is from the root</font></i>
+<a name='L232'> 232                                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>[] = $<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['scheme'].'://'.$<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['host'].$<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>;
+<a name='L233'> 233                                 <font color='blue'>}</font>
+<a name='L234'> 234                                 <b>else</b> <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 0, 2) == './')
+<a name='L235'> 235                                 <font color='blue'>{</font>
+<a name='L236'> 236                                         <b>if</b> ($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a> == './') <font color='blue'>{</font>
+<a name='L237'> 237                                                 <i><font color='green'>//This is the full path. Meaning / of current relative path</font></i>
+<a name='L238'> 238                                                 $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a> = '/';
+<a name='L239'> 239                                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L240'> 240                                                 <i><font color='green'>//This is an unusual relative addressing, meaning the file is in the current level</font></i>
+<a name='L241'> 241                                                 $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 2);
+<a name='L242'> 242                                         <font color='blue'>}</font>
+<a name='L243'> 243 
+<a name='L244'> 244                                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>[] = $<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['scheme'].'://'.$<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['host'].$<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>;
+<a name='L245'> 245                                 <font color='blue'>}</font>
+<a name='L246'> 246                                 <b>else</b> <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 0, 3) == '../')
+<a name='L247'> 247                                 <font color='blue'>{</font>
+<a name='L248'> 248                                         <i><font color='green'>//Is relative url starting with a ../? Then relative path is 1 level below $url's level</font></i>
+<a name='L249'> 249                                         <i><font color='green'>//echo '&lt;b&gt;'.$url.'&lt;/b&gt; referrs to '.$val.'&lt;br&gt;&lt;br&gt;';</font></i>
+<a name='L250'> 250 
+<a name='L251'> 251                                         $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 3);         <i><font color='green'>//remove the ../ part</font></i>
+<a name='L252'> 252 
+<a name='L253'> 253                                         $<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a> = $<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['path_only'];
+<a name='L254'> 254                                         <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>, -1) == '/') $<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>, 0, -1);
+<a name='L255'> 255                                         <b>if</b> ($<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>) <font color='blue'>{</font>
+<a name='L256'> 256                                                 $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a> = <a href='../Y/600.html' title='Multiple used in 3 places.'>strrpos</a>($<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>, '/');
+<a name='L257'> 257                                                 <b>if</b> ($<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a> !== <b>false</b>) <font color='blue'>{</font>
+<a name='L258'> 258                                                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>[] = $<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['scheme'].'://'.$<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['host'].<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>, 0, $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a>+1).$<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>;
+<a name='L259'> 259                                                         <i><font color='green'>//echo 'temp became: '.$temp.'&lt;br&gt;';</font></i>
+<a name='L260'> 260                                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L261'> 261                                                         <i><font color='green'>//fixme: tror detta är unreachable code...</font></i>
+<a name='L262'> 262                                                         <b>echo</b> 'ERROR! obscure case! temp='.$<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>.'&lt;br&gt;';
+<a name='L263'> 263                                                 <font color='blue'>}</font>
+<a name='L264'> 264 
+<a name='L265'> 265                                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L266'> 266                                                 <i><font color='green'>//We're at the top level, fixme! is this correct?</font></i>
+<a name='L267'> 267                                                 $<a href='../Y/701.html' title='Multiple used in 2 places.'>xxx</a> = $<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['scheme'].'://'.$<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['host'].$<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>;
+<a name='L268'> 268                                                 <b>echo</b> '&lt;b&gt;TOP LEVEL ../ UNIMPLEMENTED: '.$<a href='../Y/701.html' title='Multiple used in 2 places.'>xxx</a>.'&lt;/b&gt;&lt;br&gt;';
+<a name='L269'> 269                                         <font color='blue'>}</font>
+<a name='L270'> 270 
+<a name='L271'> 271                                 <font color='blue'>}</font>
+<a name='L272'> 272                                 <b>else</b>
+<a name='L273'> 273                                 <font color='blue'>{</font>
+<a name='L274'> 274                                         <i><font color='green'>//This is a normal relative path</font></i>
+<a name='L275'> 275                                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>[] = $<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['scheme'].'://'.$<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['host'].$<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['path_only'].$<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>;
+<a name='L276'> 276                                 <font color='blue'>}</font>
+<a name='L277'> 277 
+<a name='L278'> 278                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L279'> 279                                 $<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a> = <a href='../S/29.html#L102' title='Defined at 102 in functions_spider.php.'>nice_parse_url</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>);
+<a name='L280'> 280 
+<a name='L281'> 281                                 <i><font color='green'>//kolla om det är samma som $url, eller om det är en extern länk</font></i>
+<a name='L282'> 282                                 <i><font color='green'>//todo: ska detta kollas i ett senare steg istället?</font></i>
+<a name='L283'> 283                                 <b>if</b> ($<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>['host'] == $<a href='../Y/665.html' title='Multiple used in 8 places.'>url_arr</a>['host']) <font color='blue'>{</font>
+<a name='L284'> 284                                         <i><font color='green'>//This is a normal absolute path</font></i>
+<a name='L285'> 285                                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>[] = $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>;
+<a name='L286'> 286                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L287'> 287                                         <i><font color='green'>//echo '&lt;b&gt;IGNORING EXTERNAL URL: '.$temp['host'].'&lt;br&gt;&lt;/b&gt;';</font></i>
+<a name='L288'> 288                                 <font color='blue'>}</font>
+<a name='L289'> 289                         <font color='blue'>}</font>
+<a name='L290'> 290                 <font color='blue'>}</font>
+<a name='L291'> 291 
+<a name='L292'> 292                 <b>return</b> $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>;
+<a name='L293'> 293         <font color='blue'>}</font>
+<a name='L294'> 294 
+<a name='L295'> 295         <i><font color='green'>//This function acts like file_get_contents() very much, except that instead of returning FALSE on failure,</font></i>
+<a name='L296'> 296         <i><font color='green'>//it will set $errno to the HTTP error number returned</font></i>
+<a name='L297'> 297         <b>function</b> get_http_contents($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>, &amp;$<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a>)
+<a name='L298'> 298         <font color='blue'>{</font>
+<a name='L299'> 299                 <i><font color='green'>//todo: $site ska nog inte va global, utan en parameter..</font></i>
+<a name='L300'> 300                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/575.html' title='Multiple used in 4 places.'>site</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>, $<a href='../Y/276.html' title='Multiple used in 4 places.'>http_request_counter</a>;
+<a name='L301'> 301 
+<a name='L302'> 302                 $<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> = 0;
+<a name='L303'> 303                 <i><font color='green'>//echo 'get_http_contents('.$url.')&lt;br&gt;';</font></i>
+<a name='L304'> 304 
+<a name='L305'> 305                 <i><font color='green'>//check if cached version is not out of date</font></i>
+<a name='L306'> 306                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT body FROM tblSpiderCache WHERE url="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>).'" AND timeCreated &gt;= NOW()-'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['spider']['cache_age'];
+<a name='L307'> 307                 $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L308'> 308                 <b>if</b> ($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>) <font color='blue'>{</font>
+<a name='L309'> 309                         <b>echo</b> '&lt;b&gt;Skipping download of '.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.')&lt;/b&gt; - Using cache&lt;br&gt;';
+<a name='L310'> 310                         <b>return</b> $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>;
+<a name='L311'> 311                 <font color='blue'>}</font>
+<a name='L312'> 312 
+<a name='L313'> 313                 $<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a> = <a href='../S/29.html#L102' title='Defined at 102 in functions_spider.php.'>nice_parse_url</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>);
+<a name='L314'> 314 
+<a name='L315'> 315                 <b>if</b> (!<b>empty</b>($<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>['file_ext']) &amp;&amp; !<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>['file_ext'], $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['spider']['allowed_extensions'])) <font color='blue'>{</font>
+<a name='L316'> 316                         <b>echo</b> '&lt;b&gt;Skipping download of '.$<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>['file_ext'].'&lt;/b&gt; (from '.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.')&lt;br&gt;';
+<a name='L317'> 317                         <b>return</b> <b>false</b>;
+<a name='L318'> 318                 <font color='blue'>}</font>
+<a name='L319'> 319 
+<a name='L320'> 320                 <b>echo</b> 'Downloading and parsing '.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.' ...&lt;br&gt;';
+<a name='L321'> 321 
+<a name='L322'> 322                 <b>if</b> ($<a href='../Y/276.html' title='Multiple used in 4 places.'>http_request_counter</a> &gt;= $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['spider']['max_http_requests']) <font color='blue'>{</font>
+<a name='L323'> 323                         <b>echo</b> 'Done '.$<a href='../Y/276.html' title='Multiple used in 4 places.'>http_request_counter</a>.' HTTP requests now. Please reload this page to do some more, dont want to overload the target server&lt;br&gt;';
+<a name='L324'> 324                         <b>die</b>;
+<a name='L325'> 325                 <font color='blue'>}</font>
+<a name='L326'> 326 
+<a name='L327'> 327                 <i><font color='green'>//todo: handle unusual ports, https etc (?)</font></i>
+<a name='L328'> 328                 $<a href='../Y/256.html' title='Multiple used in 6 places.'>fp</a> = <a href='../S/29.html#L328' title='Used at 328 in functions_spider.php.'>fsockopen</a>($<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>['host'], 80, $<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a>, $<a href='../Y/209.html' title='Multiple used in 2 places.'>errstr</a>, 30);
+<a name='L329'> 329                 <b>if</b> (!$<a href='../Y/256.html' title='Multiple used in 6 places.'>fp</a>) <font color='blue'>{</font>
+<a name='L330'> 330                         <b>echo</b> "$<a href='../Y/209.html' title='Multiple used in 2 places.'>errstr</a> ($<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a>)&lt;br /&gt;\n";
+<a name='L331'> 331                         <b>return</b> <b>false</b>;
+<a name='L332'> 332                 <font color='blue'>}</font>
+<a name='L333'> 333 
+<a name='L334'> 334                 <i><font color='green'>//fixme: url parametrar ignoreras här ?!?!?!</font></i>
+<a name='L335'> 335                 $<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a> = $<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>['path'];
+<a name='L336'> 336 
+<a name='L337'> 337                 $<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a>  = "GET ".$<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>." HTTP/1.0\r\n";
+<a name='L338'> 338                 $<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a> .= "Host: ".$<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>['host']."\r\n";
+<a name='L339'> 339                 $<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a> .= "User-Agent: ".$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['spider']['user_agent']."\r\n";
+<a name='L340'> 340                 $<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a> .= "Connection: close\r\n\r\n";
+<a name='L341'> 341                 <a href='../S/29.html#L341' title='Used at 341 in functions_spider.php.'>fwrite</a>($<a href='../Y/256.html' title='Multiple used in 6 places.'>fp</a>, $<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a>);
+<a name='L342'> 342 
+<a name='L343'> 343                 $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> = '';
+<a name='L344'> 344                 <b>while</b> (!<a href='../S/29.html#L344' title='Used at 344 in functions_spider.php.'>feof</a>($<a href='../Y/256.html' title='Multiple used in 6 places.'>fp</a>)) <font color='blue'>{</font>
+<a name='L345'> 345                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> .= <a href='../S/29.html#L345' title='Used at 345 in functions_spider.php.'>fgets</a>($<a href='../Y/256.html' title='Multiple used in 6 places.'>fp</a>, 128);
+<a name='L346'> 346                 <font color='blue'>}</font>
+<a name='L347'> 347                 <a href='../S/29.html#L347' title='Used at 347 in functions_spider.php.'>fclose</a>($<a href='../Y/256.html' title='Multiple used in 6 places.'>fp</a>);
+<a name='L348'> 348 
+<a name='L349'> 349                 <i><font color='green'>//Cut off header</font></i>
+<a name='L350'> 350                 $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a> = <a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>, "\r\n\r\n");
+<a name='L351'> 351                 $<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>, 0, $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a>);
+<a name='L352'> 352                 $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>, $<a href='../Y/483.html' title='Multiple used in 17 places.'>pos</a>);
+<a name='L353'> 353 
+<a name='L354'> 354                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = <a href='../Y/215.html' title='Multiple used in 13 places.'>explode</a>("\r\n", $<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a>);
+<a name='L355'> 355 
+<a name='L356'> 356                 <i><font color='green'>//todo: kanske parsa upp header-elementen mer tillgängliga som keys i en array,om vi ska göra mycket med header-datan</font></i>
+<a name='L357'> 357                 <b>foreach</b> ($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> <b>as</b> $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>) <font color='blue'>{</font>
+<a name='L358'> 358                         <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 0, 9) == 'HTTP/1.1 ') $<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> = <a href='../Y/316.html' title='Multiple used in 2 places.'>intval</a>(<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 9));
+<a name='L359'> 359                 <font color='blue'>}</font>
+<a name='L360'> 360 
+<a name='L361'> 361                 <b>if</b> ($<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a> &amp;&amp; $<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> == 0) <font color='blue'>{</font>
+<a name='L362'> 362                         <a href='../S/17.html#L3' title='Defined at 3 in functions_general.php.'>d</a>($<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a>);
+<a name='L363'> 363                         <a href='../S/17.html#L3' title='Defined at 3 in functions_general.php.'>d</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>);
+<a name='L364'> 364                         <b>die</b>('&lt;b&gt;ERROR! Failed to extract HTTP error number from request for '.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.'&lt;/b&gt;&lt;br&gt;');
+<a name='L365'> 365                 <font color='blue'>}</font>
+<a name='L366'> 366 
+<a name='L367'> 367                 <i><font color='green'>//HTTP/1.1 200 OK</font></i>
+<a name='L368'> 368                 <b>if</b> ($<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> == 200) $<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> = 0;
+<a name='L369'> 369 
+<a name='L370'> 370                 <i><font color='green'>//HTTP/1.1 302 Object Moved</font></i>
+<a name='L371'> 371                 <b>if</b> ($<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> == 302)
+<a name='L372'> 372                 <font color='blue'>{</font>
+<a name='L373'> 373                         $<a href='../Y/416.html' title='Multiple used in 5 places.'>new_loc</a> = '';
+<a name='L374'> 374                         <b>foreach</b> ($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> <b>as</b> $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>) <font color='blue'>{</font>
+<a name='L375'> 375                                 <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 0, 10) == 'Location: ') $<a href='../Y/416.html' title='Multiple used in 5 places.'>new_loc</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>, 10);
+<a name='L376'> 376                         <font color='blue'>}</font>
+<a name='L377'> 377 
+<a name='L378'> 378                         <b>if</b> ($<a href='../Y/416.html' title='Multiple used in 5 places.'>new_loc</a>) <font color='blue'>{</font>
+<a name='L379'> 379                                 <b>echo</b> '&lt;b&gt;302 object moved from '.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.' to: '.$<a href='../Y/416.html' title='Multiple used in 5 places.'>new_loc</a>.'&lt;/b&gt;&lt;br&gt;';
+<a name='L380'> 380                                 $<a href='../Y/575.html' title='Multiple used in 4 places.'>site</a>['302'][$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>] = $<a href='../Y/416.html' title='Multiple used in 5 places.'>new_loc</a>;
+<a name='L381'> 381                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L382'> 382                                 <b>echo</b> '&lt;b&gt;ERROR: HTTP header 302 object moved didnt specify a new Location:&lt;/b&gt;&lt;br&gt;';
+<a name='L383'> 383                         <font color='blue'>}</font>
+<a name='L384'> 384                         $<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> = 0;
+<a name='L385'> 385                 <font color='blue'>}</font>
+<a name='L386'> 386 
+<a name='L387'> 387                 <i><font color='green'>//403 - forbidden</font></i>
+<a name='L388'> 388                 <b>if</b> ($<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> == 403)
+<a name='L389'> 389                 <font color='blue'>{</font>
+<a name='L390'> 390                         <b>echo</b> '&lt;b&gt;403 - Forbidden: '.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.'&lt;/b&gt;&lt;br&gt;';
+<a name='L391'> 391                         $<a href='../Y/575.html' title='Multiple used in 4 places.'>site</a>['403'][$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>] = <b>true</b>;
+<a name='L392'> 392                         $<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> = 0;
+<a name='L393'> 393                 <font color='blue'>}</font>
+<a name='L394'> 394 
+<a name='L395'> 395                 <i><font color='green'>//404 - file not found</font></i>
+<a name='L396'> 396                 <b>if</b> ($<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> == 404)
+<a name='L397'> 397                 <font color='blue'>{</font>
+<a name='L398'> 398                         <b>echo</b> '&lt;b&gt;File not found: '.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.'&lt;/b&gt;&lt;br&gt;';
+<a name='L399'> 399                         $<a href='../Y/575.html' title='Multiple used in 4 places.'>site</a>['404'][$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>] = <b>true</b>;
+<a name='L400'> 400                         $<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a> = 0;
+<a name='L401'> 401                 <font color='blue'>}</font>
+<a name='L402'> 402 
+<a name='L403'> 403                 <b>if</b> (!$<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a>) <font color='blue'>{</font>
+<a name='L404'> 404                         <i><font color='green'>//delete old revisions</font></i>
+<a name='L405'> 405                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'DELETE FROM tblSpiderCache WHERE url="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>).'"';
+<a name='L406'> 406                         $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/67.html' title='Multiple defined in 4 places.'>delete</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L407'> 407 
+<a name='L408'> 408                         <i><font color='green'>//store header &amp; body in database</font></i>
+<a name='L409'> 409                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblSpiderCache SET url="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>).'",header="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/269.html' title='Multiple used in 10 places.'>header</a>).'",body="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>).'",sha1="'.<a href='../S/4.html#L730' title='Defined at 730 in class.Files.php.'>sha1</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>).'",timeCreated=NOW()';
+<a name='L410'> 410                         $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L411'> 411                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L412'> 412                         <b>echo</b> 'errno: '.$<a href='../Y/206.html' title='Multiple used in 16 places.'>errno</a>.'&lt;br&gt;';
+<a name='L413'> 413                 <font color='blue'>}</font>
+<a name='L414'> 414 
+<a name='L415'> 415                 $<a href='../Y/276.html' title='Multiple used in 4 places.'>http_request_counter</a>++;
+<a name='L416'> 416                 <i><font color='green'>//echo 'done&lt;br/&gt;';</font></i>
+<a name='L417'> 417 
+<a name='L418'> 418                 <b>return</b> $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>;
+<a name='L419'> 419         <font color='blue'>}</font>
+<a name='L420'> 420 
+<a name='L421'> 421         <i><font color='green'>/* Tar en array med absoluta url:er. Genererar en robots.txt utifrån url:erna */</font></i>
+<a name='L422'> 422         <b>function</b> generate_robots_txt($<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>, $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>)
+<a name='L423'> 423         <font color='blue'>{</font>
+<a name='L424'> 424                 $<a href='../Y/349.html' title='Multiple used in 3 places.'>listed</a> = <b>array</b>();
+<a name='L425'> 425 
+<a name='L426'> 426                 $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> =
+<a name='L427'> 427                         "# http://".$<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>."/robots.txt\n".
+<a name='L428'> 428                         "# Generated by crawler at ".<a href='../Y/169.html' title='Multiple used in 14 places.'>date</a>('Y-m-d H:i')."\n".
+<a name='L429'> 429                         "\n".
+<a name='L430'> 430                         "User-agent: *\n";
+<a name='L431'> 431 
+<a name='L432'> 432                 <b>for</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>=0; $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&lt;<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>); $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++)
+<a name='L433'> 433                 <font color='blue'>{</font>
+<a name='L434'> 434                         $<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a> = <a href='../S/29.html#L102' title='Defined at 102 in functions_spider.php.'>nice_parse_url</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>[$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>]);
+<a name='L435'> 435 
+<a name='L436'> 436                         <b>if</b> ($<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['host'] != $<a href='../Y/271.html' title='Multiple used in 18 places.'>host</a>) <font color='blue'>{</font>
+<a name='L437'> 437                                 <b>echo</b> 'generate_robots_txt() ERROR: IGNORING HOST '.$<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['host']."\n";
+<a name='L438'> 438                                 <b>continue</b>;
+<a name='L439'> 439                         <font color='blue'>}</font>
+<a name='L440'> 440 
+<a name='L441'> 441                         $<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['dir'] = <a href='../Y/192.html' title='Multiple used in 2 places.'>dirname</a>($<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['path']);
+<a name='L442'> 442                         <b>if</b> ($<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['dir'] == '\\') $<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['dir'] = '/';
+<a name='L443'> 443 
+<a name='L444'> 444                         <b>if</b> (!<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['dir'], $<a href='../Y/349.html' title='Multiple used in 3 places.'>listed</a>)) <font color='blue'>{</font>
+<a name='L445'> 445                                 $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> .= "Allow: ".$<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['dir']."\n";
+<a name='L446'> 446 
+<a name='L447'> 447                                 $<a href='../Y/349.html' title='Multiple used in 3 places.'>listed</a>[] = $<a href='../Y/455.html' title='Multiple used in 8 places.'>parsed</a>['dir'];
+<a name='L448'> 448                         <font color='blue'>}</font>
+<a name='L449'> 449                 <font color='blue'>}</font>
+<a name='L450'> 450 
+<a name='L451'> 451                 <b>return</b> $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>;
+<a name='L452'> 452         <font color='blue'>}</font>
+<a name='L453'> 453 
+<a name='L454'> 454         <i><font color='green'>/* Tar en array med absoluta url:er. Genererar en Google XML sitemap utifrån url:erna</font></i>
+<a name='L455'> 455 <i><font color='green'>                Implementering enligt https://www.google.com/webmasters/tools/docs/en/protocol.html</font></i>
+<a name='L456'> 456 <i><font color='green'></font></i>
+<a name='L457'> 457 <i><font color='green'>                OBS: Utgår från att arrayen innehåller en lista med unika url:er för samma domän.</font></i>
+<a name='L458'> 458 <i><font color='green'>        */</font></i>
+<a name='L459'> 459         <b>function</b> generate_google_sitemap($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>)
+<a name='L460'> 460         <font color='blue'>{</font>
+<a name='L461'> 461                 $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> =
+<a name='L462'> 462                         '&lt;?xml version="1.0" encoding="UTF-8"?&gt;'."\n".
+<a name='L463'> 463                         '&lt;urlset xmlns="http://www.google.com/schemas/sitemap/0.84"&gt;'."\n\n";
+<a name='L464'> 464 
+<a name='L465'> 465                 <b>for</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>=0; $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&lt;<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>); $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++)
+<a name='L466'> 466                 <font color='blue'>{</font>
+<a name='L467'> 467                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> .= "\t&lt;url&gt;\n";
+<a name='L468'> 468 
+<a name='L469'> 469                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> .= "\t\t&lt;loc&gt;".$<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>[$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>]."&lt;/loc&gt;\n";                                                                     <i><font color='green'>//Required</font></i>
+<a name='L470'> 470                         <i><font color='green'>//$result .= "\t\t&lt;lastmod&gt;".date('Y-m-d')."&lt;/lastmod&gt;\n";              //Optional</font></i>
+<a name='L471'> 471                         <i><font color='green'>//$result .= "\t\t&lt;changefreq&gt;daily&lt;/changefreq&gt;\n";                                    //Optional</font></i>
+<a name='L472'> 472                         <i><font color='green'>//$result .= "\t\t&lt;priority&gt;0.5&lt;/priority&gt;\n";                                                          //Optional</font></i>
+<a name='L473'> 473 
+<a name='L474'> 474                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> .= "\t&lt;/url&gt;\n\n";
+<a name='L475'> 475                 <font color='blue'>}</font>
+<a name='L476'> 476 
+<a name='L477'> 477         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> .= '&lt;/urlset&gt;';
+<a name='L478'> 478 
+<a name='L479'> 479         <b>return</b> $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>;
+<a name='L480'> 480         <font color='blue'>}</font>
+<a name='L481'> 481 
+<a name='L482'> 482 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L53'>[^]</a><a href='#L459'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

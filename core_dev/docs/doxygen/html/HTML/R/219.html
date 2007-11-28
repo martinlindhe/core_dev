@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>SETTING_USERDATA</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/33.html#L62'>SETTING_USERDATA</a>   62 atom_settings.php 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.SETTING_USERDATA.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L108'>SETTING_USERDATA</a>  108 atom_settings.php 				saveSetting(SETTING_USERDATA, $session-&gt;id, $row['fieldId'], $row['settingValue']);
+<a href='../S/31.html#L257'>SETTING_USERDATA</a>  257 functions_userdata.php 				saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
+<a href='../S/27.html#L181'>SETTING_USERDATA</a>  181 functions_users.php 			$q .= 'LEFT JOIN tblSettings AS n1 ON (t1.userId=n1.ownerId AND n1.settingType='.SETTING_USERDATA.') ';
+</pre>
+</body>
+</html>

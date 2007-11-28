@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>userId</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/11.html#L59'>userId</a>             59 functions_blogs.php 	function getBlogsByCategory($userId, $limit = 0)
+<a href='../S/11.html#L63'>userId</a>             63 functions_blogs.php 		if (!is_numeric($userId) || !is_numeric($limit)) return false;
+<a href='../S/11.html#L67'>userId</a>             67 functions_blogs.php 		$q .= ' WHERE t1.userId='.$userId.' AND t1.deletedBy=0';
+<a href='../S/11.html#L107'>userId</a>            107 functions_blogs.php 	function getBlogsByMonth($userId, $month, $year, $order_desc = true)
+<a href='../S/11.html#L111'>userId</a>            111 functions_blogs.php 		if (!is_numeric($userId) || !is_numeric($year) || !is_numeric($month) || !is_bool($order_desc)) return false;
+<a href='../S/11.html#L117'>userId</a>            117 functions_blogs.php 		$q .= 'WHERE userId='.$userId.' AND deletedBy=0 ';
+<a href='../S/11.html#L260'>userId</a>            260 functions_blogs.php 			$userId = $_GET[$_userid_name];
+<a href='../S/11.html#L261'>userId</a>            261 functions_blogs.php 			echo 'Blogs:'.getUserName($userId).'&lt;br/&gt;';
+<a href='../S/11.html#L263'>userId</a>            263 functions_blogs.php 			$userId = $session-&gt;id;
+<a href='../S/11.html#L267'>userId</a>            267 functions_blogs.php 		$list = getBlogsByCategory($userId);
+<a href='../S/30.html#L9'>userId</a>              9 functions_contacts.php 	function haveContact($_type, $userId, $otherId)
+<a href='../S/30.html#L12'>userId</a>             12 functions_contacts.php 		if (!is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L14'>userId</a>             14 functions_contacts.php 		$q = 'SELECT contactId FROM tblContacts WHERE userId='.$userId.' AND otherUserId='.$otherId.' AND contactType='.$_type;
+<a href='../S/30.html#L19'>userId</a>             19 functions_contacts.php 	function isBlocked($userId, $otherId)
+<a href='../S/30.html#L22'>userId</a>             22 functions_contacts.php 		if (!is_numeric($userId) || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L24'>userId</a>             24 functions_contacts.php 		$q = 'SELECT contactId FROM tblContacts WHERE userId='.$userId.' AND otherUserId='.$otherId.' AND contactType='.CONTACT_BLOCKED;
+<a href='../S/30.html#L39'>userId</a>             39 functions_contacts.php 	function setContact($_type, $userId, $otherId, $groupId = 0)
+<a href='../S/30.html#L42'>userId</a>             42 functions_contacts.php 		if ($userId == $otherId || !is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId) || !is_numeric($groupId)) return false;
+<a href='../S/30.html#L44'>userId</a>             44 functions_contacts.php 		if (!haveContact($_type, $userId, $otherId)) {
+<a href='../S/30.html#L46'>userId</a>             46 functions_contacts.php 			$q = 'INSERT INTO tblContacts SET userId='.$userId.',contactType='.$_type.',otherUserId='.$otherId.',groupId='.$groupId.',timeCreated=NOW()';
+<a href='../S/30.html#L50'>userId</a>             50 functions_contacts.php 			$q = 'UPDATE tblContacts SET groupId='.$groupId.' WHERE userId='.$userId.' AND contactType='.$_type.' AND otherUserId='.$otherId;
+<a href='../S/30.html#L57'>userId</a>             57 functions_contacts.php 	function getContacts($_type, $userId, $groupId = '')
+<a href='../S/30.html#L61'>userId</a>             61 functions_contacts.php 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
+<a href='../S/30.html#L67'>userId</a>             67 functions_contacts.php 		$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
+<a href='../S/30.html#L74'>userId</a>             74 functions_contacts.php 	function getContactsFlat($_type, $userId)
+<a href='../S/30.html#L77'>userId</a>             77 functions_contacts.php 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
+<a href='../S/30.html#L83'>userId</a>             83 functions_contacts.php 		$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
+<a href='../S/30.html#L93'>userId</a>             93 functions_contacts.php 		$userId = $session-&gt;id;
+<a href='../S/30.html#L94'>userId</a>             94 functions_contacts.php 		if (!empty($_GET['id']) &amp;&amp; is_numeric($_GET['id'])) $userId = $_GET['id'];
+<a href='../S/30.html#L96'>userId</a>             96 functions_contacts.php 		if ($session-&gt;id != $userId &amp;&amp; isset($_GET['addfriend'])) {
+<a href='../S/30.html#L101'>userId</a>            101 functions_contacts.php 					addFriendRequest($userId, $_POST['type_id'], $_POST['msg']);
+<a href='../S/30.html#L108'>userId</a>            108 functions_contacts.php 				echo 'So you wish to send a friend request to '.nameLink($userId).'?&lt;br/&gt;';
+<a href='../S/30.html#L118'>userId</a>            118 functions_contacts.php 				setContact(CONTACT_FRIEND, $session-&gt;id, $userId);
+<a href='../S/30.html#L122'>userId</a>            122 functions_contacts.php 		if ($session-&gt;id != $userId) {
+<a href='../S/30.html#L123'>userId</a>            123 functions_contacts.php 			if (isset($_GET['removefriend'])) removeContact(CONTACT_FRIEND, $userId);
+<a href='../S/30.html#L125'>userId</a>            125 functions_contacts.php 			if (hasPendingFriendRequest($userId)) {
+<a href='../S/30.html#L129'>userId</a>            129 functions_contacts.php 				echo 'You can remove your pending relation requests by clicking &lt;a href="'.$_SERVER['PHP_SELF'].'?request_stopwait='.$userId.'"&gt;here&lt;/a&gt;.';
+<a href='../S/30.html#L133'>userId</a>            133 functions_contacts.php 				if (!haveContact(CONTACT_FRIEND, $session-&gt;id, $userId)) {
+<a href='../S/30.html#L134'>userId</a>            134 functions_contacts.php 					echo '&lt;a href="?id='.$userId.'&amp;amp;addfriend"&gt;Become friends&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/30.html#L136'>userId</a>            136 functions_contacts.php 					echo '&lt;a href="?id='.$userId.'&amp;amp;removefriend"&gt;Remove friend contact&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/30.html#L142'>userId</a>            142 functions_contacts.php 		if ($userId == $session-&gt;id) {
+<a href='../S/30.html#L183'>userId</a>            183 functions_contacts.php 		$list = getContactsFlat(CONTACT_FRIEND, $userId);
+<a href='../S/30.html#L185'>userId</a>            185 functions_contacts.php 		if ($session-&gt;id != $userId) {
+<a href='../S/30.html#L186'>userId</a>            186 functions_contacts.php 			echo 'Friends:'.getUserName($userId).'&lt;br/&gt;';
+<a href='../S/30.html#L207'>userId</a>            207 functions_contacts.php 	function addFriendRequest($userId, $categoryId, $msg = '')
+<a href='../S/30.html#L211'>userId</a>            211 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($userId) || !is_numeric($categoryId) || haveContact(CONTACT_FRIEND, $session-&gt;id, $userId)) return false;
+<a href='../S/30.html#L213'>userId</a>            213 functions_contacts.php 		$q = 'SELECT COUNT(reqId) FROM tblFriendRequests WHERE senderId='.$session-&gt;id.' AND recieverId='.$userId;
+<a href='../S/30.html#L216'>userId</a>            216 functions_contacts.php 		$q = 'INSERT INTO tblFriendRequests SET senderId='.$session-&gt;id.',recieverId='.$userId.',timeCreated=NOW(),categoryId='.$categoryId.',msg="'.$db-&gt;escape($msg).'"';
+<a href='../S/30.html#L313'>userId</a>            313 functions_contacts.php 	function hasPendingFriendRequest($userId)
+<a href='../S/30.html#L316'>userId</a>            316 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($userId)) return false;
+<a href='../S/30.html#L319'>userId</a>            319 functions_contacts.php 		$q .= 'WHERE senderId='.$session-&gt;id.' AND recieverId='.$userId;
+<a href='../S/21.html#L803'>userId</a>            803 functions_forum.php 	function getForumPostsCount($userId)
+<a href='../S/21.html#L806'>userId</a>            806 functions_forum.php 		if (!is_numeric($userId)) return false;
+<a href='../S/21.html#L808'>userId</a>            808 functions_forum.php 		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE authorId='.$userId.' AND deletedBy=0 AND itemType='.FORUM_MESSAGE;
+<a href='../S/7.html#L42'>userId</a>             42 functions_guestbook.php 	function getGuestbook($userId, $_limit_sql = '')
+<a href='../S/7.html#L46'>userId</a>             46 functions_guestbook.php 		if (!is_numeric($userId)) return false;
+<a href='../S/7.html#L51'>userId</a>             51 functions_guestbook.php 		$q .= 'WHERE t1.userId='.$userId.' ';
+<a href='../S/7.html#L59'>userId</a>             59 functions_guestbook.php 	function getGuestbookItems($userId, $count = 5)
+<a href='../S/7.html#L63'>userId</a>             63 functions_guestbook.php 		if (!is_numeric($userId) || !is_numeric($count)) return false;
+<a href='../S/7.html#L68'>userId</a>             68 functions_guestbook.php 		$q .= 'WHERE t1.userId='.$userId.' ';
+<a href='../S/7.html#L93'>userId</a>             93 functions_guestbook.php 	function getGuestbookCount($userId)
+<a href='../S/7.html#L97'>userId</a>             97 functions_guestbook.php 		if (!is_numeric($userId)) return false;
+<a href='../S/7.html#L99'>userId</a>             99 functions_guestbook.php 		$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND entryDeleted=0';
+<a href='../S/7.html#L104'>userId</a>            104 functions_guestbook.php 	function getGuestbookUnreadCount($userId)
+<a href='../S/7.html#L108'>userId</a>            108 functions_guestbook.php 		if (!is_numeric($userId)) return false;
+<a href='../S/7.html#L110'>userId</a>            110 functions_guestbook.php 		$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND entryRead=0';
+<a href='../S/7.html#L125'>userId</a>            125 functions_guestbook.php 	function showGuestbook($userId)
+<a href='../S/7.html#L128'>userId</a>            128 functions_guestbook.php 		if ($session-&gt;isAdmin || $session-&gt;id == $userId) {
+<a href='../S/7.html#L134'>userId</a>            134 functions_guestbook.php 		if ($session-&gt;id != $userId &amp;&amp; !empty($_POST['body'])) {
+<a href='../S/7.html#L135'>userId</a>            135 functions_guestbook.php 			addGuestbookEntry($userId, '', $_POST['body']);
+<a href='../S/7.html#L138'>userId</a>            138 functions_guestbook.php 		$tot_cnt = getGuestbookCount($userId);
+<a href='../S/7.html#L139'>userId</a>            139 functions_guestbook.php 		echo 'Guestbook:'.getUserName($userId).' contains '.$tot_cnt.' messages.&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/7.html#L145'>userId</a>            145 functions_guestbook.php 		$list = getGuestbook($userId, $pager['limit']);
+<a href='../S/7.html#L155'>userId</a>            155 functions_guestbook.php 			if ($session-&gt;id == $userId) {
+<a href='../S/7.html#L162'>userId</a>            162 functions_guestbook.php 			if ($session-&gt;isAdmin || $session-&gt;id == $userId) {
+<a href='../S/7.html#L163'>userId</a>            163 functions_guestbook.php 				echo '&lt;a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;amp;remove='.$row['entryId'].'"&gt;Remove&lt;/a&gt;';
+<a href='../S/7.html#L169'>userId</a>            169 functions_guestbook.php 			if ($session-&gt;id != $userId) {
+<a href='../S/7.html#L171'>userId</a>            171 functions_guestbook.php 				echo '&lt;form name="addGuestbook" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$userId.'"&gt;';
+<a href='../S/28.html#L102'>userId</a>            102 functions_todo.php 	function getAssignedTasks(&amp;$db, $userId)
+<a href='../S/28.html#L104'>userId</a>            104 functions_todo.php 		if (!is_numeric($userId)) return false;
+<a href='../S/28.html#L106'>userId</a>            106 functions_todo.php 		$sql = 'SELECT * FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus!='.TODO_ITEM_CLOSED.' ORDER BY timestamp ASC';
+<a href='../S/28.html#L110'>userId</a>            110 functions_todo.php 	function getAssignedTasksCount(&amp;$db, $userId)
+<a href='../S/28.html#L112'>userId</a>            112 functions_todo.php 		if (!is_numeric($userId)) return false;
+<a href='../S/28.html#L114'>userId</a>            114 functions_todo.php 		$sql = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus!='.TODO_ITEM_CLOSED;
+<a href='../S/28.html#L119'>userId</a>            119 functions_todo.php 	function getClosedAssignedTasks(&amp;$db, $userId)
+<a href='../S/28.html#L121'>userId</a>            121 functions_todo.php 		if (!is_numeric($userId)) return false;
+<a href='../S/28.html#L123'>userId</a>            123 functions_todo.php 		$sql = 'SELECT * FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus='.TODO_ITEM_CLOSED.' ORDER BY timestamp ASC';
+<a href='../S/28.html#L127'>userId</a>            127 functions_todo.php 	function getClosedAssignedTasksCount(&amp;$db, $userId)
+<a href='../S/28.html#L129'>userId</a>            129 functions_todo.php 		if (!is_numeric($userId)) return false;
+<a href='../S/28.html#L131'>userId</a>            131 functions_todo.php 		$sql = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus='.TODO_ITEM_CLOSED;
+<a href='../S/28.html#L166'>userId</a>            166 functions_todo.php 		$sql = 'INSERT INTO tblBugReports SET bugDesc="'.$desc.'",bugCreator='.$_SESSION['userId'].',reportMethod=0,timestamp='.time();
+<a href='../S/28.html#L214'>userId</a>            214 functions_todo.php 	function moveBugReport(&amp;$db, $userId, $bugId, $creator, $desc, $details, $timestamp, $category, $categoryId)
+<a href='../S/28.html#L224'>userId</a>            224 functions_todo.php 		$comment = 'Imported by '.getUserName($db, $userId).' from a report by '.getUserName($db, $creator).'.';
+<a href='../S/31.html#L249'>userId</a>            249 functions_userdata.php 	function handleRequiredUserdataFields($userId)
+<a href='../S/31.html#L252'>userId</a>            252 functions_userdata.php 		if (!is_numeric($userId)) return false;
+<a href='../S/31.html#L257'>userId</a>            257 functions_userdata.php 				saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
+<a href='../S/27.html#L108'>userId</a>            108 functions_users.php 			$userId = $_GET[$_userid_name];
+<a href='../S/27.html#L109'>userId</a>            109 functions_users.php 			echo 'User overview:'.getUserName($userId).'&lt;br/&gt;';
+<a href='../S/27.html#L112'>userId</a>            112 functions_users.php 				$q = 'INSERT INTO tblVisits SET ownerId='.$userId.',creatorId='.$session-&gt;id.',timeCreated=NOW()';
+<a href='../S/27.html#L117'>userId</a>            117 functions_users.php 			$userId = $session-&gt;id;
+<a href='../S/15.html#L276'>userId</a>            276 __old_functions_forums.php 	function displayUsersLatestPosts(&amp;$db, $userId, $limit = 5)
+<a href='../S/15.html#L278'>userId</a>            278 __old_functions_forums.php 		$list = getUserLastForumPosts($db, $userId, $limit);
+</pre>
+</body>
+</html>

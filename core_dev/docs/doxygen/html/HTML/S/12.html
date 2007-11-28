@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>atom_revisions.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/atom_revisions.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L9'>[^]</a><a href='#L31'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L9' title='Defined at 9.'>REVISIONS_WIKI</a>
+<li><a href='#L12' title='Defined at 12.'>REV_CAT_TEXT_CHANGED</a>
+<li><a href='#L13' title='Defined at 13.'>REV_CAT_FILE_UPLOADED</a>
+<li><a href='#L14' title='Defined at 14.'>REV_CAT_FILE_DELETED</a>
+<li><a href='#L15' title='Defined at 15.'>REV_CAT_LOCKED</a>
+<li><a href='#L16' title='Defined at 16.'>REV_CAT_UNLOCKED</a>
+<li><a href='#L19' title='Defined at 19.'>addRevision</a>
+<li><a href='#L31' title='Defined at 31.'>showRevisions</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2         <i><font color='green'>/*</font></i>
+<a name='L3'>   3 <i><font color='green'>                atom_revisions.php - set of functions to implement revisioned backups of data, used by various modules</font></i>
+<a name='L4'>   4 <i><font color='green'></font></i>
+<a name='L5'>   5 <i><font color='green'>                By Martin Lindhe, 2007</font></i>
+<a name='L6'>   6 <i><font color='green'>        */</font></i>
+<a name='L7'>   7 
+<a name='L8'>   8         <i><font color='green'>//revision types:</font></i>
+<a name='L9'>   9         <b>define</b>('REVISIONS_WIKI', 1);
+<a name='L10'>  10 
+<a name='L11'>  11         <i><font color='green'>//revision categories:</font></i>
+<a name='L12'>  12         <b>define</b>('REV_CAT_TEXT_CHANGED', 1);
+<a name='L13'>  13         <b>define</b>('REV_CAT_FILE_UPLOADED', 2);
+<a name='L14'>  14         <b>define</b>('REV_CAT_FILE_DELETED', 3);
+<a name='L15'>  15         <b>define</b>('REV_CAT_LOCKED', 4);
+<a name='L16'>  16         <b>define</b>('REV_CAT_UNLOCKED', 5);
+<a name='L17'>  17 
+<a name='L18'>  18         <i><font color='green'>//kanske kunna minska ner antalet parametrar på nåt sätt?</font></i>
+<a name='L19'>  19         <b>function</b> <a href='../R/8.html' title='Multiple refered from 4 places.'>addRevision</a>($<a href='../Y/232.html' title='Multiple used in 9 places.'>fieldType</a>, $<a href='../Y/229.html' title='Multiple used in 28 places.'>fieldId</a>, $<a href='../Y/231.html' title='Multiple used in 2 places.'>fieldText</a>, $<a href='../Y/633.html' title='Multiple used in 8 places.'>timestamp</a>, $<a href='../Y/154.html' title='Multiple used in 3 places.'>creatorId</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a> = 0)
+<a name='L20'>  20         <font color='blue'>{</font>
+<a name='L21'>  21                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L22'>  22 
+<a name='L23'>  23                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/232.html' title='Multiple used in 9 places.'>fieldType</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/229.html' title='Multiple used in 28 places.'>fieldId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/154.html' title='Multiple used in 3 places.'>creatorId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>)) <b>return</b> <b>false</b>;
+<a name='L24'>  24 
+<a name='L25'>  25                 $<a href='../Y/633.html' title='Multiple used in 8 places.'>timestamp</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/633.html' title='Multiple used in 8 places.'>timestamp</a>);           <i><font color='green'>//todo: validate timestamp bättre</font></i>
+<a name='L26'>  26 
+<a name='L27'>  27                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblRevisions SET fieldId='.$<a href='../Y/229.html' title='Multiple used in 28 places.'>fieldId</a>.',fieldType='.$<a href='../Y/232.html' title='Multiple used in 9 places.'>fieldType</a>.',fieldText="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/231.html' title='Multiple used in 2 places.'>fieldText</a>).'",createdBy='.$<a href='../Y/154.html' title='Multiple used in 3 places.'>creatorId</a>.',timeCreated="'.$<a href='../Y/633.html' title='Multiple used in 8 places.'>timestamp</a>.'",categoryId='.$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>;
+<a name='L28'>  28                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L29'>  29         <font color='blue'>}</font>
+<a name='L30'>  30 
+<a name='L31'>  31         <b>function</b> <a href='../S/9.html#L241' title='Refered from 241 in functions_wiki.php.'>showRevisions</a>($<a href='../Y/32.html' title='Multiple used in 4 places.'>articleType</a>, $<a href='../Y/30.html' title='Multiple used in 4 places.'>articleId</a>, $<a href='../Y/31.html' title='Multiple used in 2 places.'>articleName</a>)
+<a name='L32'>  32         <font color='blue'>{</font>
+<a name='L33'>  33                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L34'>  34 
+<a name='L35'>  35                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/32.html' title='Multiple used in 4 places.'>articleType</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/30.html' title='Multiple used in 4 places.'>articleId</a>)) <b>return</b> <b>false</b>;
+<a name='L36'>  36 
+<a name='L37'>  37                 <b>echo</b> 'History of article '.$<a href='../Y/31.html' title='Multiple used in 2 places.'>articleName</a>.'&lt;br/&gt;&lt;br/&gt;';
+<a name='L38'>  38 
+<a name='L39'>  39                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT COUNT(*) FROM tblRevisions WHERE fieldId='.$<a href='../Y/30.html' title='Multiple used in 4 places.'>articleId</a>.' AND fieldType='.$<a href='../Y/32.html' title='Multiple used in 4 places.'>articleType</a>;
+<a name='L40'>  40                 $<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L41'>  41                 $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a> = <a href='../S/17.html#L19' title='Defined at 19 in functions_general.php.'>makePager</a>($<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a>, 5);
+<a name='L42'>  42 
+<a name='L43'>  43                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS creatorName FROM tblRevisions AS t1 ';
+<a name='L44'>  44                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) ';
+<a name='L45'>  45                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.fieldId='.$<a href='../Y/30.html' title='Multiple used in 4 places.'>articleId</a>.' AND t1.fieldType='.$<a href='../Y/32.html' title='Multiple used in 4 places.'>articleType</a>;
+<a name='L46'>  46                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' ORDER BY t1.timeCreated DESC'.$<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a>['limit'];
+<a name='L47'>  47                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L48'>  48 
+<a name='L49'>  49                 <b>echo</b> $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a>['head'];
+<a name='L50'>  50 
+<a name='L51'>  51                 <b>if</b> (!$<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>) <font color='blue'>{</font>
+<a name='L52'>  52                         <b>echo</b> '&lt;b&gt;There is no edit history of this wiki in the database.&lt;/b&gt;&lt;br/&gt;';
+<a name='L53'>  53                         <b>return</b>;
+<a name='L54'>  54                 <font color='blue'>}</font>
+<a name='L55'>  55 
+<a name='L56'>  56                 <b>echo</b> 'Archived versions ('.<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>).' entries):&lt;br/&gt;';
+<a name='L57'>  57                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>)
+<a name='L58'>  58                 <font color='blue'>{</font>
+<a name='L59'>  59                         <b>echo</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['timeCreated'].': ';
+<a name='L60'>  60                         <b>switch</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryId'])
+<a name='L61'>  61                         <font color='blue'>{</font>
+<a name='L62'>  62                                 <b>case</b> <a href='../S/12.html#L15' title='Defined at 15 in atom_revisions.php.'>REV_CAT_LOCKED</a>:
+<a name='L63'>  63                                         <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked"/&gt;';
+<a name='L64'>  64                                         <b>echo</b> ' Locked by '.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['creatorName'].'&lt;br/&gt;';
+<a name='L65'>  65                                         <b>break</b>;
+<a name='L66'>  66 
+<a name='L67'>  67                                 <b>case</b> <a href='../S/12.html#L16' title='Defined at 16 in atom_revisions.php.'>REV_CAT_UNLOCKED</a>:
+<a name='L68'>  68                                         <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/&gt;';
+<a name='L69'>  69                                         <b>echo</b> ' Unlocked by '.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['creatorName'].'&lt;br/&gt;';
+<a name='L70'>  70                                         <b>break</b>;
+<a name='L71'>  71 
+<a name='L72'>  72                                 <b>case</b> <a href='../S/12.html#L13' title='Defined at 13 in atom_revisions.php.'>REV_CAT_FILE_UPLOADED</a>:
+<a name='L73'>  73                                         <b>echo</b> ' File uploaded by '.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['creatorName'].'&lt;br/&gt;';
+<a name='L74'>  74                                         <b>break</b>;
+<a name='L75'>  75 
+<a name='L76'>  76                                 <b>case</b> <a href='../S/12.html#L14' title='Defined at 14 in atom_revisions.php.'>REV_CAT_FILE_DELETED</a>:
+<a name='L77'>  77                                         <b>echo</b> ' File deleted by '.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['creatorName'].'&lt;br/&gt;';
+<a name='L78'>  78                                         <b>break</b>;
+<a name='L79'>  79 
+<a name='L80'>  80                                 <b>case</b> <a href='../S/12.html#L12' title='Defined at 12 in atom_revisions.php.'>REV_CAT_TEXT_CHANGED</a>:
+<a name='L81'>  81                                 <b>default</b>:
+<a name='L82'>  82                                         <b>echo</b> '&lt;a href="#" onclick="return toggle_element_by_name(\'layer_history'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['indexId'].'\')"&gt;';
+<a name='L83'>  83                                         <b>echo</b> 'Text edited by '.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['creatorName']. ' ('.<a href='../Y/597.html' title='Multiple used in 24 places.'>strlen</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fieldText']).' bytes)&lt;/a&gt;&lt;br/&gt;';
+<a name='L84'>  84                                         <b>echo</b> '&lt;div id="layer_history'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['indexId'].'" class="revision_entry" style="display: none;"&gt;';
+<a name='L85'>  85                                         <b>echo</b> <a href='../Y/426.html' title='Multiple used in 7 places.'>nl2br</a>(<a href='../Y/274.html' title='Multiple used in 6 places.'>htmlentities</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fieldText'], <a href='../Y/85.html' title='Multiple used in 3 places.'>ENT_COMPAT</a>, 'UTF-8'));
+<a name='L86'>  86                                         <b>echo</b> '&lt;/div&gt;';
+<a name='L87'>  87                                         <b>break</b>;
+<a name='L88'>  88                         <font color='blue'>}</font>
+<a name='L89'>  89                 <font color='blue'>}</font>
+<a name='L90'>  90         <font color='blue'>}</font>
+<a name='L91'>  91 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L9'>[^]</a><a href='#L31'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

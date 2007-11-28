@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>uploadfile</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/4.html#L552'>uploadfile</a>        552 class.Files.php 		$uploadfile = $this-&gt;upload_dir.$fileId;
+<a href='../S/4.html#L553'>uploadfile</a>        553 class.Files.php 		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) {
+<a href='../S/4.html#L554'>uploadfile</a>        554 class.Files.php 			chmod($uploadfile, 0777);
+<a href='../S/4.html#L557'>uploadfile</a>        557 class.Files.php 		$session-&gt;log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+<a href='../S/4.html#L579'>uploadfile</a>        579 class.Files.php 		$uploadfile = $this-&gt;upload_dir.$fileId;
+<a href='../S/4.html#L580'>uploadfile</a>        580 class.Files.php 		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
+<a href='../S/4.html#L581'>uploadfile</a>        581 class.Files.php 		$session-&gt;log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+</pre>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>new</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/4.html#L714'>new</a>               714 class.Files.php 		$new['sha1'] = $db-&gt;escape(hash_file('sha1', $this-&gt;upload_dir.$_id));	//40-character hex string
+<a href='../S/4.html#L715'>new</a>               715 class.Files.php 		$new['md5'] = $db-&gt;escape(hash_file('md5', $this-&gt;upload_dir.$_id));		//32-character hex string
+<a href='../S/4.html#L716'>new</a>               716 class.Files.php 		$new['timeCreated'] = now();
+<a href='../S/4.html#L718'>new</a>               718 class.Files.php 		$new['timeExec'] = $exec_time;
+<a href='../S/4.html#L723'>new</a>               723 class.Files.php 		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", timeExec="'.$exec_time.'", timeCreated=NOW()';
+<a href='../S/4.html#L726'>new</a>               726 class.Files.php 		return $new;
+<a href='../S/31.html#L75'>new</a>                75 functions_userdata.php 	function setUserdataFieldPriority($fieldId, $old, $new)
+<a href='../S/31.html#L79'>new</a>                79 functions_userdata.php 		if (!is_numeric($fieldId) || !is_numeric($old) || !is_numeric($new)) return false;
+<a href='../S/31.html#L82'>new</a>                82 functions_userdata.php 		$q = 'SELECT fieldId FROM tblUserdata WHERE fieldPriority='.$new;
+<a href='../S/31.html#L85'>new</a>                85 functions_userdata.php 		$db-&gt;query('UPDATE tblUserdata SET fieldPriority='.$new.' WHERE fieldId='.$fieldId);
+</pre>
+</body>
+</html>

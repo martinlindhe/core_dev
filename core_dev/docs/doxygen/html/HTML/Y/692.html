@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>word</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/10.html#L82'>word</a>               82 atom_moderation.php 		foreach ($list as $word) {
+<a href='../S/10.html#L86'>word</a>               86 atom_moderation.php 					if (strtolower($word) == strtolower($stopword['wordText'])) return true;
+<a href='../S/10.html#L89'>word</a>               89 atom_moderation.php 					if (stristr($word, $stopword['wordText'])) return true;
+<a href='../S/10.html#L149'>word</a>              149 atom_moderation.php 	function addStopword($type, $word, $full)
+<a href='../S/10.html#L154'>word</a>              154 atom_moderation.php 		$word = $db-&gt;escape($word);
+<a href='../S/10.html#L156'>word</a>              156 atom_moderation.php 		$id = $db-&gt;getOneItem('SELECT wordId FROM tblStopwords WHERE wordText="'.$word.'" AND wordType='.$type);
+<a href='../S/10.html#L159'>word</a>              159 atom_moderation.php 		return $db-&gt;insert('INSERT INTO tblStopwords SET wordText="'.$word.'",wordType='.$type.',wordMatch='.$full);
+</pre>
+</body>
+</html>

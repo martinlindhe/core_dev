@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>otherId</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/30.html#L9'>otherId</a>             9 functions_contacts.php 	function haveContact($_type, $userId, $otherId)
+<a href='../S/30.html#L12'>otherId</a>            12 functions_contacts.php 		if (!is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L14'>otherId</a>            14 functions_contacts.php 		$q = 'SELECT contactId FROM tblContacts WHERE userId='.$userId.' AND otherUserId='.$otherId.' AND contactType='.$_type;
+<a href='../S/30.html#L19'>otherId</a>            19 functions_contacts.php 	function isBlocked($userId, $otherId)
+<a href='../S/30.html#L22'>otherId</a>            22 functions_contacts.php 		if (!is_numeric($userId) || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L24'>otherId</a>            24 functions_contacts.php 		$q = 'SELECT contactId FROM tblContacts WHERE userId='.$userId.' AND otherUserId='.$otherId.' AND contactType='.CONTACT_BLOCKED;
+<a href='../S/30.html#L29'>otherId</a>            29 functions_contacts.php 	function removeContact($_type, $otherId)
+<a href='../S/30.html#L32'>otherId</a>            32 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L34'>otherId</a>            34 functions_contacts.php 		$q = 'DELETE FROM tblContacts WHERE userId='.$session-&gt;id.' AND otherUserId='.$otherId.' AND contactType='.$_type;
+<a href='../S/30.html#L39'>otherId</a>            39 functions_contacts.php 	function setContact($_type, $userId, $otherId, $groupId = 0)
+<a href='../S/30.html#L42'>otherId</a>            42 functions_contacts.php 		if ($userId == $otherId || !is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId) || !is_numeric($groupId)) return false;
+<a href='../S/30.html#L44'>otherId</a>            44 functions_contacts.php 		if (!haveContact($_type, $userId, $otherId)) {
+<a href='../S/30.html#L46'>otherId</a>            46 functions_contacts.php 			$q = 'INSERT INTO tblContacts SET userId='.$userId.',contactType='.$_type.',otherUserId='.$otherId.',groupId='.$groupId.',timeCreated=NOW()';
+<a href='../S/30.html#L50'>otherId</a>            50 functions_contacts.php 			$q = 'UPDATE tblContacts SET groupId='.$groupId.' WHERE userId='.$userId.' AND contactType='.$_type.' AND otherUserId='.$otherId;
+<a href='../S/30.html#L263'>otherId</a>           263 functions_contacts.php 	function removeSentFriendRequest($otherId)
+<a href='../S/30.html#L266'>otherId</a>           266 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L269'>otherId</a>           269 functions_contacts.php 		$q .= ' WHERE recieverId='.$otherId.' AND senderId='.$session-&gt;id;
+<a href='../S/30.html#L274'>otherId</a>           274 functions_contacts.php 	function denyFriendRequest($otherId)
+<a href='../S/30.html#L277'>otherId</a>           277 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L280'>otherId</a>           280 functions_contacts.php 		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session-&gt;id;
+<a href='../S/30.html#L285'>otherId</a>           285 functions_contacts.php 		systemMessage($otherId, 'Denied friend request', $msg);
+<a href='../S/30.html#L291'>otherId</a>           291 functions_contacts.php 	function acceptFriendRequest($otherId)
+<a href='../S/30.html#L294'>otherId</a>           294 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L297'>otherId</a>           297 functions_contacts.php 		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session-&gt;id;
+<a href='../S/30.html#L303'>otherId</a>           303 functions_contacts.php 		setContact(CONTACT_FRIEND, $session-&gt;id, $otherId);
+<a href='../S/30.html#L304'>otherId</a>           304 functions_contacts.php 		setContact(CONTACT_FRIEND, $otherId, $session-&gt;id);
+<a href='../S/30.html#L308'>otherId</a>           308 functions_contacts.php 		systemMessage($otherId, 'Accepted friend request', $msg);
+</pre>
+</body>
+</html>

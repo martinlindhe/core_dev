@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>sql</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/21.html#L725'>sql</a>               725 functions_forum.php 		$sql = '';
+<a href='../S/21.html#L734'>sql</a>               734 functions_forum.php 					$sql .= 'AND ';
+<a href='../S/21.html#L736'>sql</a>               736 functions_forum.php 				$sql .= '(t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+<a href='../S/21.html#L747'>sql</a>               747 functions_forum.php 					$sql .= 'AND ';
+<a href='../S/21.html#L749'>sql</a>               749 functions_forum.php 				$sql .= 'NOT (t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+<a href='../S/21.html#L755'>sql</a>               755 functions_forum.php 					$sql .= 'OR ';
+<a href='../S/21.html#L757'>sql</a>               757 functions_forum.php 				$sql .= '(t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+<a href='../S/21.html#L761'>sql</a>               761 functions_forum.php 		$sql .= 'AND t1.deletedBy=0 ';
+<a href='../S/21.html#L762'>sql</a>               762 functions_forum.php 		return $sql;
+<a href='../S/28.html#L30'>sql</a>                30 functions_todo.php 		$sql = 'SELECT * FROM tblTodoLists WHERE categoryId='.$categoryId.' AND itemStatus='.TODO_ITEM_CLOSED;
+<a href='../S/28.html#L31'>sql</a>                31 functions_todo.php 		return dbArray($db, $sql);
+<a href='../S/28.html#L48'>sql</a>                48 functions_todo.php 		$sql = 'DELETE FROM tblTodoLists WHERE categoryId='.$categoryId;
+<a href='../S/28.html#L49'>sql</a>                49 functions_todo.php 		dbQuery($db, $sql);
+<a href='../S/28.html#L73'>sql</a>                73 functions_todo.php 		$sql = 'UPDATE tblTodoLists SET categoryId='.$categoryId.' WHERE itemId='.$itemId;
+<a href='../S/28.html#L74'>sql</a>                74 functions_todo.php 		dbQuery($db, $sql);
+<a href='../S/28.html#L97'>sql</a>                97 functions_todo.php 		$sql = 'UPDATE tblTodoLists SET assignedTo=0, itemStatus='.TODO_ITEM_OPEN.' WHERE itemId='.$itemId;
+<a href='../S/28.html#L98'>sql</a>                98 functions_todo.php 		dbQuery($db, $sql);
+<a href='../S/28.html#L106'>sql</a>               106 functions_todo.php 		$sql = 'SELECT * FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus!='.TODO_ITEM_CLOSED.' ORDER BY timestamp ASC';
+<a href='../S/28.html#L107'>sql</a>               107 functions_todo.php 		return dbArray($db, $sql);
+<a href='../S/28.html#L114'>sql</a>               114 functions_todo.php 		$sql = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus!='.TODO_ITEM_CLOSED;
+<a href='../S/28.html#L115'>sql</a>               115 functions_todo.php 		return dbOneResultItem($db, $sql);
+<a href='../S/28.html#L123'>sql</a>               123 functions_todo.php 		$sql = 'SELECT * FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus='.TODO_ITEM_CLOSED.' ORDER BY timestamp ASC';
+<a href='../S/28.html#L124'>sql</a>               124 functions_todo.php 		return dbArray($db, $sql);
+<a href='../S/28.html#L131'>sql</a>               131 functions_todo.php 		$sql = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus='.TODO_ITEM_CLOSED;
+<a href='../S/28.html#L132'>sql</a>               132 functions_todo.php 		return dbOneResultItem($db, $sql);
+<a href='../S/28.html#L141'>sql</a>               141 functions_todo.php 		$sql = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE categoryId='.$categoryId.' AND itemStatus!='.TODO_ITEM_CLOSED;
+<a href='../S/28.html#L142'>sql</a>               142 functions_todo.php 		return dbOneResultItem($db, $sql);
+<a href='../S/28.html#L148'>sql</a>               148 functions_todo.php 		$sql = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE itemStatus!='.TODO_ITEM_CLOSED;
+<a href='../S/28.html#L149'>sql</a>               149 functions_todo.php 		return dbOneResultItem($db, $sql);
+<a href='../S/28.html#L166'>sql</a>               166 functions_todo.php 		$sql = 'INSERT INTO tblBugReports SET bugDesc="'.$desc.'",bugCreator='.$_SESSION['userId'].',reportMethod=0,timestamp='.time();
+<a href='../S/28.html#L167'>sql</a>               167 functions_todo.php 		dbQuery($db, $sql);
+<a href='../S/28.html#L172'>sql</a>               172 functions_todo.php 		$sql  = 'SELECT tblBugReports.*,tblUsers.userName FROM tblBugReports ';
+<a href='../S/28.html#L173'>sql</a>               173 functions_todo.php 		$sql .= 'LEFT OUTER JOIN tblUsers ON (tblBugReports.bugCreator=tblUsers.userId) ';
+<a href='../S/28.html#L174'>sql</a>               174 functions_todo.php 		$sql .= 'WHERE bugClosed=0 ';
+<a href='../S/28.html#L175'>sql</a>               175 functions_todo.php 		$sql .= 'ORDER By tblBugReports.timestamp ASC';
+<a href='../S/28.html#L176'>sql</a>               176 functions_todo.php 		return dbArray($db, $sql);
+<a href='../S/28.html#L181'>sql</a>               181 functions_todo.php 		$sql  = 'SELECT tblBugReports.*,tblUsers.userName FROM tblBugReports ';
+<a href='../S/28.html#L182'>sql</a>               182 functions_todo.php 		$sql .= 'LEFT OUTER JOIN tblUsers ON (tblBugReports.bugCreator=tblUsers.userId) ';
+<a href='../S/28.html#L183'>sql</a>               183 functions_todo.php 		$sql .= 'WHERE bugClosed=1 ';
+<a href='../S/28.html#L184'>sql</a>               184 functions_todo.php 		$sql .= 'ORDER By tblBugReports.timestamp ASC';
+<a href='../S/28.html#L185'>sql</a>               185 functions_todo.php 		return dbArray($db, $sql);
+<a href='../S/28.html#L190'>sql</a>               190 functions_todo.php 		$sql = 'SELECT COUNT(bugId) FROM tblBugReports WHERE bugClosed=1';
+<a href='../S/28.html#L191'>sql</a>               191 functions_todo.php 		return dbOneResultItem($db, $sql);
+<a href='../S/28.html#L197'>sql</a>               197 functions_todo.php 		$sql = 'SELECT COUNT(bugId) FROM tblBugReports WHERE bugClosed=0';
+<a href='../S/28.html#L198'>sql</a>               198 functions_todo.php 		return dbOneResultItem($db, $sql);
+<a href='../S/28.html#L205'>sql</a>               205 functions_todo.php 		$sql  = 'SELECT tblBugReports.*,tblUsers.userName FROM tblBugReports ';
+<a href='../S/28.html#L206'>sql</a>               206 functions_todo.php 		$sql .= 'INNER JOIN tblUsers ON (tblBugReports.bugCreator=tblUsers.userId) ';
+<a href='../S/28.html#L207'>sql</a>               207 functions_todo.php 		$sql .= 'WHERE bugId='.$bugId;
+<a href='../S/28.html#L208'>sql</a>               208 functions_todo.php 		return dbOneResult($db, $sql);
+<a href='../S/28.html#L225'>sql</a>               225 functions_todo.php 		$sql = 'INSERT INTO tblTodoListComments SET itemId='.$itemId.',itemComment="'.$comment.'",timestamp='.time().',userId=0';
+<a href='../S/28.html#L226'>sql</a>               226 functions_todo.php 		dbQuery($db, $sql);
+<a href='../S/15.html#L7'>sql</a>                 7 __old_functions_forums.php 		$sql = 'SELECT parentId FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/15.html#L8'>sql</a>                 8 __old_functions_forums.php 		return dbOneResultItem($db, $sql);
+<a href='../S/15.html#L19'>sql</a>                19 __old_functions_forums.php 		$sql = 'SELECT itemType FROM tblForums WHERE itemId='.$parentId;
+<a href='../S/15.html#L20'>sql</a>                20 __old_functions_forums.php 		$itemType = dbOneResultItem($db, $sql);
+<a href='../S/15.html#L35'>sql</a>                35 __old_functions_forums.php 		$sql = 'SELECT itemType FROM tblForums WHERE itemId='.$parentId;
+<a href='../S/15.html#L36'>sql</a>                36 __old_functions_forums.php 		$itemType = dbOneResultItem($db, $sql);
+<a href='../S/15.html#L48'>sql</a>                48 __old_functions_forums.php 		$sql = 'SELECT * FROM tblForums WHERE authorId='.$authorId.' AND itemType='.FORUM_MESSAGE.' ORDER BY timeCreated DESC';
+<a href='../S/15.html#L50'>sql</a>                50 __old_functions_forums.php 			$sql .= ' LIMIT 0,'.$count;
+<a href='../S/15.html#L53'>sql</a>                53 __old_functions_forums.php 		return dbArray($db, $sql);
+<a href='../S/15.html#L63'>sql</a>                63 __old_functions_forums.php 		$sql = 'SELECT itemId, timeCreated FROM tblForums WHERE parentId='.$itemId;
+<a href='../S/15.html#L64'>sql</a>                64 __old_functions_forums.php 		$list = dbArray($db, $sql);
+<a href='../S/15.html#L81'>sql</a>                81 __old_functions_forums.php 		$sql = 'SELECT itemSubject, itemId FROM tblForums WHERE itemType='.FORUM_FOLDER.' AND parentId='.$parentId.' ORDER BY itemSubject';
+<a href='../S/15.html#L82'>sql</a>                82 __old_functions_forums.php 		$list = dbArray($db, $sql);
+<a href='../S/15.html#L112'>sql</a>               112 __old_functions_forums.php 		$sql = 'UPDATE tblForums SET itemRead=itemRead+1 WHERE itemId='.$itemId;
+<a href='../S/15.html#L113'>sql</a>               113 __old_functions_forums.php 		dbQuery($db, $sql);
+<a href='../S/15.html#L120'>sql</a>               120 __old_functions_forums.php 		$sql  = 'UPDATE tblForums ';
+<a href='../S/15.html#L121'>sql</a>               121 __old_functions_forums.php 		$sql .= 'SET itemVote=itemVote+'.$value.',itemVoteCnt=itemVoteCnt+1 ';
+<a href='../S/15.html#L122'>sql</a>               122 __old_functions_forums.php 		$sql .= 'WHERE itemId='.$itemId;
+<a href='../S/15.html#L123'>sql</a>               123 __old_functions_forums.php 		dbQuery($db, $sql);
+<a href='../S/15.html#L128'>sql</a>               128 __old_functions_forums.php 		$sql  = 'SELECT COUNT(t1.authorId) AS cnt, t1.authorId AS userId, t2.userName ';
+<a href='../S/15.html#L129'>sql</a>               129 __old_functions_forums.php 		$sql .= 'FROM tblForums AS t1 ';
+<a href='../S/15.html#L130'>sql</a>               130 __old_functions_forums.php 		$sql .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a href='../S/15.html#L131'>sql</a>               131 __old_functions_forums.php 		$sql .= 'GROUP BY t1.authorId ';
+<a href='../S/15.html#L132'>sql</a>               132 __old_functions_forums.php 		$sql .= 'ORDER BY cnt DESC';
+<a href='../S/15.html#L135'>sql</a>               135 __old_functions_forums.php 			$sql .= ' LIMIT 0,'.$limit;
+<a href='../S/15.html#L138'>sql</a>               138 __old_functions_forums.php 		return dbArray($db, $sql);
+<a href='../S/15.html#L194'>sql</a>               194 __old_functions_forums.php 		$sql  = 'SELECT t1.itemId,t1.authorId,t1.itemSubject,t1.itemBody,t1.timeCreated,t2.userName AS authorName ';
+<a href='../S/15.html#L195'>sql</a>               195 __old_functions_forums.php 		$sql .= 'FROM tblForums AS t1 ';
+<a href='../S/15.html#L196'>sql</a>               196 __old_functions_forums.php 		$sql .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a href='../S/15.html#L197'>sql</a>               197 __old_functions_forums.php 		$sql .= 'WHERE itemType='.FORUM_MESSAGE.' ';
+<a href='../S/15.html#L198'>sql</a>               198 __old_functions_forums.php 		$sql .= 'ORDER BY itemRead DESC ';
+<a href='../S/15.html#L199'>sql</a>               199 __old_functions_forums.php 		$sql .= 'LIMIT 0,'.$count;
+<a href='../S/15.html#L201'>sql</a>               201 __old_functions_forums.php 		return dbArray($db, $sql);
+<a href='../S/15.html#L209'>sql</a>               209 __old_functions_forums.php 		$sql  = 'SELECT tblForums.*,tblUsers.userName AS authorName ';
+<a href='../S/15.html#L210'>sql</a>               210 __old_functions_forums.php 		$sql .= 'FROM tblForums ';
+<a href='../S/15.html#L211'>sql</a>               211 __old_functions_forums.php 		$sql .= 'INNER JOIN tblUsers ON (tblForums.authorId=tblUsers.userId) ';
+<a href='../S/15.html#L212'>sql</a>               212 __old_functions_forums.php 		$sql .= 'WHERE tblForums.parentId='.$itemId.' AND tblForums.itemType='.FORUM_MESSAGE.' ';
+<a href='../S/15.html#L213'>sql</a>               213 __old_functions_forums.php 		$sql .= 'ORDER BY tblForums.itemRead DESC ';
+<a href='../S/15.html#L214'>sql</a>               214 __old_functions_forums.php 		$sql .= 'LIMIT 0,'.$count;
+<a href='../S/15.html#L216'>sql</a>               216 __old_functions_forums.php 		return dbArray($db, $sql);
+<a href='../S/15.html#L224'>sql</a>               224 __old_functions_forums.php 		$sql = 'SELECT itemId,timeCreated FROM tblForums WHERE parentId='.$itemId;
+<a href='../S/15.html#L225'>sql</a>               225 __old_functions_forums.php 		$list = dbArray($db, $sql);
+<a href='../S/15.html#L246'>sql</a>               246 __old_functions_forums.php 		$sql = 'SELECT itemId FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/15.html#L247'>sql</a>               247 __old_functions_forums.php 		$check = dbQuery($db, $sql);
+<a href='../S/15.html#L260'>sql</a>               260 __old_functions_forums.php 			$sql = 'SELECT parentId FROM tblForums WHERE itemId='.$itemChild;
+<a href='../S/15.html#L261'>sql</a>               261 __old_functions_forums.php 			$parentId = dbOneResultItem($db, $sql);
+</pre>
+</body>
+</html>

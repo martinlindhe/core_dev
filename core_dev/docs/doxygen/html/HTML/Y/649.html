@@ -1,0 +1,14 @@
+<html>
+<head>
+<title>triggeredBy</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/10.html#L184'>triggeredBy</a>       184 atom_moderation.php 	function addToModerationQueue($queueType, $itemId, $auto_triggered = false, $triggeredBy = 0)
+<a href='../S/10.html#L188'>triggeredBy</a>       188 atom_moderation.php 		if (!is_numeric($itemId) || !is_numeric($queueType) || !is_bool($auto_triggered) || !is_numeric($triggeredBy)) return false;
+<a href='../S/10.html#L198'>triggeredBy</a>       198 atom_moderation.php 			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$triggeredBy.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+</pre>
+</body>
+</html>

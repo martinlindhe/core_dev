@@ -1,0 +1,185 @@
+<html>
+<head>
+<title>functions_messages.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/functions_messages.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L2'>[^]</a><a href='#L83'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L2' title='Defined at 2.'>MESSAGE_GROUP_INBOX</a>
+<li><a href='#L3' title='Defined at 3.'>MESSAGE_GROUP_OUTBOX</a>
+<li><a href='#L5' title='Defined at 5.'>sendMessage</a>
+<li><a href='#L21' title='Defined at 21.'>systemMessage</a>
+<li><a href='#L33' title='Defined at 33.'>getMessages</a>
+<li><a href='#L62' title='Defined at 62.'>getMessage</a>
+<li><a href='#L73' title='Defined at 73.'>markMessageAsRead</a>
+<li><a href='#L83' title='Defined at 83.'>showMessages</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2         <b>define</b>('MESSAGE_GROUP_INBOX',           1);
+<a name='L3'>   3         <b>define</b>('MESSAGE_GROUP_OUTBOX',  2);
+<a name='L4'>   4 
+<a name='L5'>   5         <b>function</b> <a href='../S/27.html#L251' title='Refered from 251 in functions_users.php.'>sendMessage</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, $<a href='../Y/126.html' title='Multiple used in 5 places.'>_subj</a>, $<a href='../Y/107.html' title='Multiple used in 5 places.'>_msg</a>)
+<a name='L6'>   6         <font color='blue'>{</font>
+<a name='L7'>   7                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L8'>   8                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L9'>   9 
+<a name='L10'>  10                 <i><font color='green'>//Adds message to recievers inbox</font></i>
+<a name='L11'>  11                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblMessages SET ownerId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.',fromId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',toId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.',subject="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/126.html' title='Multiple used in 5 places.'>_subj</a>).'",body="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/107.html' title='Multiple used in 5 places.'>_msg</a>).'",timeCreated=NOW(),groupId='.<a href='../S/16.html#L2' title='Defined at 2 in functions_messages.php.'>MESSAGE_GROUP_INBOX</a>;
+<a name='L12'>  12                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L13'>  13                 
+<a name='L14'>  14                 <i><font color='green'>//Add message to senders outbox</font></i>
+<a name='L15'>  15                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblMessages SET ownerId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',fromId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',toId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.',subject="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/126.html' title='Multiple used in 5 places.'>_subj</a>).'",body="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/107.html' title='Multiple used in 5 places.'>_msg</a>).'",timeCreated=NOW(),groupId='.<a href='../S/16.html#L3' title='Defined at 3 in functions_messages.php.'>MESSAGE_GROUP_OUTBOX</a>;
+<a name='L16'>  16                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L17'>  17 
+<a name='L18'>  18                 <b>return</b> <b>true</b>;
+<a name='L19'>  19         <font color='blue'>}</font>
+<a name='L20'>  20 
+<a name='L21'>  21         <b>function</b> <a href='../R/243.html' title='Multiple refered from 2 places.'>systemMessage</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, $<a href='../Y/126.html' title='Multiple used in 5 places.'>_subj</a>, $<a href='../Y/107.html' title='Multiple used in 5 places.'>_msg</a>)
+<a name='L22'>  22         <font color='blue'>{</font>
+<a name='L23'>  23                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L24'>  24                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L25'>  25 
+<a name='L26'>  26                 <i><font color='green'>//Adds message to recievers inbox</font></i>
+<a name='L27'>  27                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblMessages SET ownerId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.',fromId=0,toId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.',subject="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/126.html' title='Multiple used in 5 places.'>_subj</a>).'",body="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/107.html' title='Multiple used in 5 places.'>_msg</a>).'",timeCreated=NOW(),groupId='.<a href='../S/16.html#L2' title='Defined at 2 in functions_messages.php.'>MESSAGE_GROUP_INBOX</a>;
+<a name='L28'>  28                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L29'>  29 
+<a name='L30'>  30                 <b>return</b> <b>true</b>;
+<a name='L31'>  31         <font color='blue'>}</font>
+<a name='L32'>  32 
+<a name='L33'>  33         <b>function</b> <a href='../S/16.html#L123' title='Refered from 123 in functions_messages.php.'>getMessages</a>($<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a> = 0)
+<a name='L34'>  34         <font color='blue'>{</font>
+<a name='L35'>  35                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L36'>  36                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>)) <b>return</b> <b>false</b>;
+<a name='L37'>  37 
+<a name='L38'>  38                 <b>switch</b> ($<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>) <font color='blue'>{</font>
+<a name='L39'>  39                         <b>case</b> <a href='../S/16.html#L2' title='Defined at 2 in functions_messages.php.'>MESSAGE_GROUP_INBOX</a>:
+<a name='L40'>  40                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t1.fromId AS otherId, t2.userName AS otherName ';
+<a name='L41'>  41                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'FROM tblMessages AS t1 ';
+<a name='L42'>  42                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT JOIN tblUsers AS t2 ON (t1.fromId=t2.userId) ';
+<a name='L43'>  43                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.ownerId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' AND t1.groupId='.$<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>.' ';
+<a name='L44'>  44                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY timeCreated DESC';
+<a name='L45'>  45                                 <b>break</b>;
+<a name='L46'>  46 
+<a name='L47'>  47                         <b>case</b> <a href='../S/16.html#L3' title='Defined at 3 in functions_messages.php.'>MESSAGE_GROUP_OUTBOX</a>:
+<a name='L48'>  48                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t1.toId AS otherId, t2.userName AS otherName ';
+<a name='L49'>  49                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'FROM tblMessages AS t1 ';
+<a name='L50'>  50                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT JOIN tblUsers AS t2 ON (t1.toId=t2.userId) ';
+<a name='L51'>  51                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.ownerId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' AND t1.groupId='.$<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>.' ';
+<a name='L52'>  52                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY timeCreated DESC';
+<a name='L53'>  53                                 <b>break</b>;
+<a name='L54'>  54                                 
+<a name='L55'>  55                         <b>default</b>:
+<a name='L56'>  56                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblMessages WHERE ownerId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' AND groupId='.$<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>;
+<a name='L57'>  57                 <font color='blue'>}</font>
+<a name='L58'>  58 
+<a name='L59'>  59                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L60'>  60         <font color='blue'>}</font>
+<a name='L61'>  61 
+<a name='L62'>  62         <b>function</b> <a href='../S/16.html#L90' title='Refered from 90 in functions_messages.php.'>getMessage</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L63'>  63         <font color='blue'>{</font>
+<a name='L64'>  64                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L65'>  65                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L66'>  66 
+<a name='L67'>  67                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblMessages WHERE ownerId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' AND msgId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L68'>  68                 $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L69'>  69 
+<a name='L70'>  70                 <b>return</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>;
+<a name='L71'>  71         <font color='blue'>}</font>
+<a name='L72'>  72 
+<a name='L73'>  73         <b>function</b> <a href='../S/16.html#L109' title='Refered from 109 in functions_messages.php.'>markMessageAsRead</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L74'>  74         <font color='blue'>{</font>
+<a name='L75'>  75                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L76'>  76                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L77'>  77                 
+<a name='L78'>  78                 <i><font color='green'>//Marks the message as read if its recipent &amp; owner is current user.</font></i>
+<a name='L79'>  79                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblMessages SET timeRead=NOW() WHERE ownerId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' AND toId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' AND msgId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L80'>  80                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../S/19.html#L46' title='Defined at 46 in class.DB_Base.php.'>update</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L81'>  81         <font color='blue'>}</font>
+<a name='L82'>  82 
+<a name='L83'>  83         <b>function</b> showMessages($<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a> = 0)
+<a name='L84'>  84         <font color='blue'>{</font>
+<a name='L85'>  85                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L86'>  86                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>)) <b>return</b> <b>false</b>;
+<a name='L87'>  87                 
+<a name='L88'>  88                 <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['read']) &amp;&amp; <a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['read'])) <font color='blue'>{</font>
+<a name='L89'>  89                         <i><font color='green'>//Shows one message</font></i>
+<a name='L90'>  90                         $<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a> = <a href='../S/16.html#L62' title='Defined at 62 in functions_messages.php.'>getMessage</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['read']);
+<a name='L91'>  91                         <b>if</b> (!$<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>) <b>return</b> <b>false</b>;
+<a name='L92'>  92 
+<a name='L93'>  93                         <b>echo</b> '&lt;div class="msg"&gt;';
+<a name='L94'>  94                         <b>echo</b> '&lt;div class="msg_head"&gt;';
+<a name='L95'>  95                                 <b>echo</b> ($<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>['subject'] ? $<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>['subject']:'no subject').' at '.$<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>['timeCreated'].'&lt;br/&gt;';
+<a name='L96'>  96                                 <b>if</b> ($<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>['fromId']) <font color='blue'>{</font>
+<a name='L97'>  97                                         <b>echo</b> 'From '.<a href='../S/27.html#L323' title='Defined at 323 in functions_users.php.'>nameLink</a>($<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>['fromId']).'&lt;br/&gt;';
+<a name='L98'>  98                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L99'>  99                                         <b>echo</b> '&lt;b&gt;System message&lt;/b&gt;&lt;br/&gt;';
+<a name='L100'> 100                                 <font color='blue'>}</font>
+<a name='L101'> 101                                 <b>echo</b> 'To '.<a href='../S/27.html#L323' title='Defined at 323 in functions_users.php.'>nameLink</a>($<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>['toId']).'&lt;br/&gt;';
+<a name='L102'> 102                                 <b>echo</b> (!$<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>['timeRead']?'UNREAD':'READ');
+<a name='L103'> 103                         <b>echo</b> '&lt;/div&gt;';
+<a name='L104'> 104                         <b>echo</b> '&lt;div class="msg_body"&gt;';
+<a name='L105'> 105                                 <b>echo</b> <a href='../Y/426.html' title='Multiple used in 7 places.'>nl2br</a>($<a href='../Y/385.html' title='Multiple used in 19 places.'>msg</a>['body']);
+<a name='L106'> 106                         <b>echo</b> '&lt;/div&gt;';
+<a name='L107'> 107                         <b>echo</b> '&lt;/div&gt;';
+<a name='L108'> 108                         
+<a name='L109'> 109                         <a href='../S/16.html#L73' title='Defined at 73 in functions_messages.php.'>markMessageAsRead</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['read']);
+<a name='L110'> 110                         
+<a name='L111'> 111                         <b>return</b> <b>true</b>;
+<a name='L112'> 112                 <font color='blue'>}</font>
+<a name='L113'> 113                 
+<a name='L114'> 114                 <b>if</b> (!$<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a> &amp;&amp; !<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['g']) &amp;&amp; <a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['g'])) $<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a> = $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['g'];
+<a name='L115'> 115                 <b>if</b> (!$<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>) $<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a> = <a href='../S/16.html#L2' title='Defined at 2 in functions_messages.php.'>MESSAGE_GROUP_INBOX</a>;
+<a name='L116'> 116 
+<a name='L117'> 117                 <b>echo</b> 'My messages&lt;br/&gt;&lt;br/&gt;';
+<a name='L118'> 118 
+<a name='L119'> 119                 <b>echo</b> ($<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>==<a href='../S/16.html#L2' title='Defined at 2 in functions_messages.php.'>MESSAGE_GROUP_INBOX</a>?'&lt;b&gt;INBOX&lt;/b&gt;':'&lt;a href="?g='.<a href='../S/16.html#L2' title='Defined at 2 in functions_messages.php.'>MESSAGE_GROUP_INBOX</a>.'"&gt;INBOX&lt;/a&gt;').'&lt;br/&gt;';
+<a name='L120'> 120                 <b>echo</b> ($<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>==<a href='../S/16.html#L3' title='Defined at 3 in functions_messages.php.'>MESSAGE_GROUP_OUTBOX</a>?'&lt;b&gt;OUTBOX&lt;/b&gt;':'&lt;a href="?g='.<a href='../S/16.html#L3' title='Defined at 3 in functions_messages.php.'>MESSAGE_GROUP_OUTBOX</a>.'"&gt;OUTBOX&lt;/a&gt;').'&lt;br/&gt;';
+<a name='L121'> 121                 <b>echo</b> '&lt;br/&gt;';
+<a name='L122'> 122 
+<a name='L123'> 123                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../S/16.html#L33' title='Defined at 33 in functions_messages.php.'>getMessages</a>($<a href='../Y/94.html' title='Multiple used in 13 places.'>_group</a>);
+<a name='L124'> 124                 <b>if</b> (!$<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>) <font color='blue'>{</font>
+<a name='L125'> 125                         <b>echo</b> 'No messages';
+<a name='L126'> 126                         <b>return</b> <b>false</b>;
+<a name='L127'> 127                 <font color='blue'>}</font>
+<a name='L128'> 128                 
+<a name='L129'> 129                 <i><font color='green'>//fixme: denna kod kräver os3grid.js, som inte inkluderas här. använd en mindre grid-class</font></i>
+<a name='L130'> 130                 <b>echo</b> '&lt;div id="grid"&gt;&lt;/div&gt;';
+<a name='L131'> 131 
+<a name='L132'> 132                 <b>echo</b> '&lt;script type="text/javascript"&gt;';
+<a name='L133'> 133                 <b>echo</b> 'function cell_clicked(grid, cell, row_num, col_num, val) {';
+<a name='L134'> 134                         <b>echo</b> 'document.location = "'.$<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?read=" + g_idx[row_num];';
+<a name='L135'> 135                         <b>echo</b> 'return false;';
+<a name='L136'> 136                 <b>echo</b> '}';
+<a name='L137'> 137                 
+<a name='L138'> 138                 <b>echo</b> 'var g = new OS3Grid();';
+<a name='L139'> 139                 <b>echo</b> 'var g_idx = new Array();';
+<a name='L140'> 140                 <b>echo</b> 'g.set_headers("Subject", "Time", "Status");';
+<a name='L141'> 141                 
+<a name='L142'> 142                 $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>=0;
+<a name='L143'> 143                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L144'> 144                         <b>echo</b> 'g_idx['.($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++).'] = '.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['msgId'].';';
+<a name='L145'> 145                         <b>echo</b> 'g.add_row("'.($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['subject']?$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['subject']:'no subject').'","'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['timeCreated'].'","'.(!$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['timeRead']?'UNREAD':'READ').'");';
+<a name='L146'> 146                 <font color='blue'>}</font>
+<a name='L147'> 147                 <b>echo</b> 'g.set_sortable(true);';
+<a name='L148'> 148                 <b>echo</b> 'g.set_highlight(true);';
+<a name='L149'> 149                 <b>echo</b> 'g.set_cell_click(cell_clicked);';
+<a name='L150'> 150                 <b>echo</b> 'g.render("grid");';
+<a name='L151'> 151                 <b>echo</b> '&lt;/script&gt;';
+<a name='L152'> 152                 <b>return</b> <b>true</b>;
+<a name='L153'> 153         <font color='blue'>}</font>
+<a name='L154'> 154 
+<a name='L155'> 155 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L2'>[^]</a><a href='#L83'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>seconds</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/6.html#L277'>seconds</a>           277 functions_textformat.php 	function shortTimePeriod($seconds)
+<a href='../S/6.html#L279'>seconds</a>           279 functions_textformat.php 		if (is_float($seconds)) $seconds = round($seconds);
+<a href='../S/6.html#L283'>seconds</a>           283 functions_textformat.php 		$a = date('Y', $seconds) - 1970;
+<a href='../S/6.html#L286'>seconds</a>           286 functions_textformat.php 		$seconds -= (((($a*60)*60)*24)*30)*365;
+<a href='../S/6.html#L289'>seconds</a>           289 functions_textformat.php 		$a = date('n',$seconds)-1;
+<a href='../S/6.html#L292'>seconds</a>           292 functions_textformat.php 		$seconds -= ((($a*60)*60)*24)*30;
+<a href='../S/6.html#L295'>seconds</a>           295 functions_textformat.php 		$a = date('j',$seconds)-1;
+<a href='../S/6.html#L298'>seconds</a>           298 functions_textformat.php 		$seconds -= (($a*60)*60)*24;
+<a href='../S/6.html#L301'>seconds</a>           301 functions_textformat.php 		$a = date('H',$seconds)-1;
+<a href='../S/6.html#L303'>seconds</a>           303 functions_textformat.php 		$seconds -= ($a*60)*60;
+<a href='../S/6.html#L306'>seconds</a>           306 functions_textformat.php 		$a = date('i',$seconds)-0; //translate from 09 to 9 quickly ;)
+<a href='../S/6.html#L308'>seconds</a>           308 functions_textformat.php 		$seconds -= $a*60;
+<a href='../S/6.html#L311'>seconds</a>           311 functions_textformat.php 		$a = date('s',$seconds)-0;
+</pre>
+</body>
+</html>

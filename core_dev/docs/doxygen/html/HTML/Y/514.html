@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>quoteblock</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/6.html#L124'>quoteblock</a>        124 functions_textformat.php 			$quoteblock = substr($text, $pos1+strlen('[quote'), $pos2-$pos1-strlen('[quote'));
+<a href='../S/6.html#L126'>quoteblock</a>        126 functions_textformat.php 			$qpos1 = stripos($quoteblock, 'name=');
+<a href='../S/6.html#L127'>quoteblock</a>        127 functions_textformat.php 			$qpos2 = strpos($quoteblock, ']');
+<a href='../S/6.html#L129'>quoteblock</a>        129 functions_textformat.php 				$nameblock = substr($quoteblock, $qpos1+strlen('name='), $qpos2-$qpos1-strlen('name='));
+<a href='../S/6.html#L130'>quoteblock</a>        130 functions_textformat.php 				$quoteblock = substr($quoteblock, $qpos1+strlen('name=')+strlen($nameblock)+strlen(']'));
+<a href='../S/6.html#L135'>quoteblock</a>        135 functions_textformat.php 				$quoteblock = substr($quoteblock, $qpos2+strlen(']'));
+<a href='../S/6.html#L138'>quoteblock</a>        138 functions_textformat.php 			$quoteblock =
+<a href='../S/6.html#L141'>quoteblock</a>        141 functions_textformat.php 				'&lt;div class="bb_quote_body"&gt;'.trim($quoteblock).'&lt;/div&gt;'.
+<a href='../S/6.html#L144'>quoteblock</a>        144 functions_textformat.php 			$text = substr($text, 0, $pos1) .$quoteblock. substr($text, $pos2+strlen('[/quote]'));
+</pre>
+</body>
+</html>

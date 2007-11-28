@@ -1,0 +1,335 @@
+<html>
+<head>
+<title>atom_categories.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/atom_categories.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L9'>[^]</a><a href='#L211'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L9' title='Defined at 9.'>CATEGORY_USERFILE</a>
+<li><a href='#L10' title='Defined at 10.'>CATEGORY_USERFILE_PRIVATE</a>
+<li><a href='#L11' title='Defined at 11.'>CATEGORY_USERFILE_HIDDEN</a>
+<li><a href='#L12' title='Defined at 12.'>CATEGORY_WIKIFILE</a>
+<li><a href='#L13' title='Defined at 13.'>CATEGORY_TODOLIST</a>
+<li><a href='#L15' title='Defined at 15.'>CATEGORY_BLOG</a>
+<li><a href='#L16' title='Defined at 16.'>CATEGORY_CONTACT</a>
+<li><a href='#L17' title='Defined at 17.'>CATEGORY_USERDATA</a>
+<li><a href='#L18' title='Defined at 18.'>CATEGORY_POLL</a>
+<li><a href='#L20' title='Defined at 20.'>CATEGORY_NEWS</a>
+<li><a href='#L22' title='Defined at 22.'>CATEGORY_LANGUAGE</a>
+<li><a href='#L24' title='Defined at 24.'>addCategory</a>
+<li><a href='#L44' title='Defined at 44.'>updateCategory</a>
+<li><a href='#L53' title='Defined at 53.'>removeCategory</a>
+<li><a href='#L62' title='Defined at 62.'>getCategory</a>
+<li><a href='#L73' title='Defined at 73.'>getCategoryName</a>
+<li><a href='#L84' title='Defined at 84.'>getCategoriesByOwner</a>
+<li><a href='#L95' title='Defined at 95.'>getCategories</a>
+<li><a href='#L110' title='Defined at 110.'>getGlobalAndUserCategories</a>
+<li><a href='#L146' title='Defined at 146.'>getCategoriesSelect</a>
+<li><a href='#L211' title='Defined at 211.'>manageCategoriesDialog</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2         <i><font color='green'>/*</font></i>
+<a name='L3'>   3 <i><font color='green'>                atom_categories.php - set of functions to implement categories, used by various modules</font></i>
+<a name='L4'>   4 <i><font color='green'></font></i>
+<a name='L5'>   5 <i><font color='green'>                By Martin Lindhe, 2007</font></i>
+<a name='L6'>   6 <i><font color='green'>        */</font></i>
+<a name='L7'>   7 
+<a name='L8'>   8         <i><font color='green'>//System categories. Reserved 1-50. Use a number above 50 for your own category types</font></i>
+<a name='L9'>   9         <b>define</b>('CATEGORY_USERFILE',                                     1);     <i><font color='green'>//normal, public userfile</font></i>
+<a name='L10'>  10         <b>define</b>('CATEGORY_USERFILE_PRIVATE',     2);     <i><font color='green'>//private userfile, only visible for the users friends / invited ppl</font></i>
+<a name='L11'>  11         <b>define</b>('CATEGORY_USERFILE_HIDDEN',      3);     <i><font color='green'>//files here are only visible by the owner</font></i>
+<a name='L12'>  12         <b>define</b>('CATEGORY_WIKIFILE',                                     4);     <i><font color='green'>//category for wiki file attachments, to allow better organization if needed</font></i>
+<a name='L13'>  13         <b>define</b>('CATEGORY_TODOLIST',                                     5);     <i><font color='green'>//todo list categories</font></i>
+<a name='L14'>  14 
+<a name='L15'>  15         <b>define</b>('CATEGORY_BLOG',                                 10);            <i><font color='green'>//normal, personal blog category</font></i>
+<a name='L16'>  16         <b>define</b>('CATEGORY_CONTACT',                      11);            <i><font color='green'>//friend relation category, like "Old friends", "Family"</font></i>
+<a name='L17'>  17         <b>define</b>('CATEGORY_USERDATA',                     12);            <i><font color='green'>//used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId</font></i>
+<a name='L18'>  18         <b>define</b>('CATEGORY_POLL',                                 13);            <i><font color='green'>//used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId</font></i>
+<a name='L19'>  19 
+<a name='L20'>  20         <b>define</b>('CATEGORY_NEWS',                                 20);
+<a name='L21'>  21 
+<a name='L22'>  22         <b>define</b>('CATEGORY_LANGUAGE',                     51);            <i><font color='green'>//represents a language, for multi-language features &amp; used by "lang" project</font></i>
+<a name='L23'>  23 
+<a name='L24'>  24         <b>function</b> <a href='../R/2.html' title='Multiple refered from 2 places.'>addCategory</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/110.html' title='Multiple used in 7 places.'>_name</a>, $<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a> = 0, $<a href='../Y/93.html' title='Multiple used in 3 places.'>_global</a> = <b>false</b>)
+<a name='L25'>  25         <font color='blue'>{</font>
+<a name='L26'>  26                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L27'>  27 
+<a name='L28'>  28                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>)) <b>return</b> <b>false</b>;
+<a name='L29'>  29 
+<a name='L30'>  30                 $<a href='../Y/110.html' title='Multiple used in 7 places.'>_name</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>($<a href='../Y/110.html' title='Multiple used in 7 places.'>_name</a>));
+<a name='L31'>  31                 <b>if</b> (!$<a href='../Y/110.html' title='Multiple used in 7 places.'>_name</a>) <b>return</b> <b>false</b>;
+<a name='L32'>  32 
+<a name='L33'>  33                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.' AND categoryName="'.$<a href='../Y/110.html' title='Multiple used in 7 places.'>_name</a>.'" AND ownerId='.$<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>;
+<a name='L34'>  34                 <b>if</b> (!$<a href='../Y/93.html' title='Multiple used in 3 places.'>_global</a>) $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' AND creatorId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;
+<a name='L35'>  35                 $<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L36'>  36                 <b>if</b> ($<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a>) <b>return</b> <b>false</b>;
+<a name='L37'>  37 
+<a name='L38'>  38                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblCategories SET categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.',categoryName="'.$<a href='../Y/110.html' title='Multiple used in 7 places.'>_name</a>.'",ownerId='.$<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>.',timeCreated=NOW(),creatorId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;
+<a name='L39'>  39                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> &amp;&amp; $<a href='../Y/93.html' title='Multiple used in 3 places.'>_global</a>) $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ',categoryPermissions=10';
+<a name='L40'>  40 
+<a name='L41'>  41                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L42'>  42         <font color='blue'>}</font>
+<a name='L43'>  43 
+<a name='L44'>  44         <b>function</b> <a href='../R/249.html' title='Multiple refered from 2 places.'>updateCategory</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, $<a href='../Y/407.html' title='Multiple used in 13 places.'>name</a>)
+<a name='L45'>  45         <font color='blue'>{</font>
+<a name='L46'>  46                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L47'>  47                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L48'>  48 
+<a name='L49'>  49                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblCategories SET categoryName="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/407.html' title='Multiple used in 13 places.'>name</a>).'" WHERE categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.' AND categoryId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L50'>  50                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L51'>  51         <font color='blue'>}</font>
+<a name='L52'>  52 
+<a name='L53'>  53         <b>function</b> <a href='../S/26.html#L231' title='Refered from 231 in atom_categories.php.'>removeCategory</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L54'>  54         <font color='blue'>{</font>
+<a name='L55'>  55                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L56'>  56                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L57'>  57 
+<a name='L58'>  58                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'DELETE FROM tblCategories WHERE categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.' AND categoryId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L59'>  59                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/67.html' title='Multiple defined in 4 places.'>delete</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L60'>  60         <font color='blue'>}</font>
+<a name='L61'>  61 
+<a name='L62'>  62         <b>function</b> <a href='../S/26.html#L243' title='Refered from 243 in atom_categories.php.'>getCategory</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L63'>  63         <font color='blue'>{</font>
+<a name='L64'>  64                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L65'>  65 
+<a name='L66'>  66                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L67'>  67 
+<a name='L68'>  68                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT * FROM tblCategories WHERE categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.' AND categoryId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L69'>  69 
+<a name='L70'>  70                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L71'>  71         <font color='blue'>}</font>
+<a name='L72'>  72 
+<a name='L73'>  73         <b>function</b> <a href='../R/81.html' title='Multiple refered from 2 places.'>getCategoryName</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L74'>  74         <font color='blue'>{</font>
+<a name='L75'>  75                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L76'>  76 
+<a name='L77'>  77                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L78'>  78 
+<a name='L79'>  79                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT categoryName FROM tblCategories WHERE categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.' AND categoryId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L80'>  80 
+<a name='L81'>  81                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L82'>  82         <font color='blue'>}</font>
+<a name='L83'>  83 
+<a name='L84'>  84         <b>function</b> <a href='../S/31.html#L153' title='Refered from 153 in functions_userdata.php.'>getCategoriesByOwner</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>)
+<a name='L85'>  85         <font color='blue'>{</font>
+<a name='L86'>  86                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L87'>  87 
+<a name='L88'>  88                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>)) <b>return</b> <b>false</b>;
+<a name='L89'>  89 
+<a name='L90'>  90                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT * FROM tblCategories WHERE categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.' AND ownerId='.$<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>;
+<a name='L91'>  91 
+<a name='L92'>  92                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L93'>  93         <font color='blue'>}</font>
+<a name='L94'>  94 
+<a name='L95'>  95         <b>function</b> <a href='../R/77.html' title='Multiple refered from 4 places.'>getCategories</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a> = <b>false</b>)
+<a name='L96'>  96         <font color='blue'>{</font>
+<a name='L97'>  97                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L98'>  98 
+<a name='L99'>  99                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>)) <b>return</b> <b>false</b>;
+<a name='L100'> 100 
+<a name='L101'> 101                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT * FROM tblCategories WHERE categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.' ';
+<a name='L102'> 102                 <b>if</b> ($<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a> !== <b>false</b>) $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'AND ownerId='.$<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>.' ';
+<a name='L103'> 103                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY categoryName ASC';
+<a name='L104'> 104 
+<a name='L105'> 105                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L106'> 106         <font color='blue'>}</font>
+<a name='L107'> 107 
+<a name='L108'> 108         <i><font color='green'>//returns own categories &amp; global categories (categoryPermissions==10)</font></i>
+<a name='L109'> 109         <i><font color='green'>//some category types (like CATEGORY_USERDATA) uses the $_owner parameter, to specify what userdata field this category belongs to</font></i>
+<a name='L110'> 110         <b>function</b> <a href='../S/26.html#L164' title='Refered from 164 in atom_categories.php.'>getGlobalAndUserCategories</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a> = 0)
+<a name='L111'> 111         <font color='blue'>{</font>
+<a name='L112'> 112                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L113'> 113 
+<a name='L114'> 114                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>)) <b>return</b> <b>false</b>;
+<a name='L115'> 115 
+<a name='L116'> 116                 <b>switch</b> ($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>)
+<a name='L117'> 117                 <font color='blue'>{</font>
+<a name='L118'> 118                         <b>case</b> <a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>:
+<a name='L119'> 119                                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <b>return</b> <b>false</b>;
+<a name='L120'> 120                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblCategories WHERE (creatorId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' OR categoryPermissions=10) AND categoryType BETWEEN 1 AND 3 ORDER BY categoryPermissions DESC';
+<a name='L121'> 121                                 <b>break</b>;
+<a name='L122'> 122 
+<a name='L123'> 123                         <b>case</b> <a href='../S/26.html#L15' title='Defined at 15 in atom_categories.php.'>CATEGORY_BLOG</a>:
+<a name='L124'> 124                                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <b>return</b> <b>false</b>;
+<a name='L125'> 125                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblCategories WHERE (creatorId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' OR categoryPermissions=10) AND categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>.' ORDER BY categoryPermissions DESC';
+<a name='L126'> 126                                 <b>break</b>;
+<a name='L127'> 127 
+<a name='L128'> 128                         <b>case</b> <a href='../S/26.html#L20' title='Defined at 20 in atom_categories.php.'>CATEGORY_NEWS</a>:
+<a name='L129'> 129                         <b>case</b> <a href='../S/26.html#L18' title='Defined at 18 in atom_categories.php.'>CATEGORY_POLL</a>:
+<a name='L130'> 130                         <b>case</b> <a href='../S/26.html#L16' title='Defined at 16 in atom_categories.php.'>CATEGORY_CONTACT</a>:
+<a name='L131'> 131                         <b>case</b> <a href='../S/26.html#L17' title='Defined at 17 in atom_categories.php.'>CATEGORY_USERDATA</a>:
+<a name='L132'> 132                         <b>case</b> <a href='../S/26.html#L12' title='Defined at 12 in atom_categories.php.'>CATEGORY_WIKIFILE</a>:
+<a name='L133'> 133                         <b>case</b> <a href='../S/26.html#L22' title='Defined at 22 in atom_categories.php.'>CATEGORY_LANGUAGE</a>:
+<a name='L134'> 134                         <b>case</b> <a href='../S/26.html#L13' title='Defined at 13 in atom_categories.php.'>CATEGORY_TODOLIST</a>:
+<a name='L135'> 135                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblCategories WHERE categoryType='.$<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>;
+<a name='L136'> 136                                 <b>if</b> ($<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>) $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' AND ownerId='.$<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>;
+<a name='L137'> 137                                 <b>break</b>;
+<a name='L138'> 138 
+<a name='L139'> 139                         <b>default</b>:
+<a name='L140'> 140                                 <b>die</b>('bleek');
+<a name='L141'> 141                 <font color='blue'>}</font>
+<a name='L142'> 142 
+<a name='L143'> 143                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L144'> 144         <font color='blue'>}</font>
+<a name='L145'> 145 
+<a name='L146'> 146         <b>function</b> <a href='../R/79.html' title='Multiple refered from 9 places.'>getCategoriesSelect</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a> = 0, $<a href='../Y/556.html' title='Multiple used in 3 places.'>selectName</a> = '', $<a href='../Y/555.html' title='Multiple used in 2 places.'>selectedId</a> = 0, $<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a> = '', $<a href='../Y/680.html' title='Multiple used in 3 places.'>varName</a> = '', $<a href='../Y/218.html' title='Multiple used in 6 places.'>extra</a> = '')
+<a name='L147'> 147         <font color='blue'>{</font>
+<a name='L148'> 148                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L149'> 149 
+<a name='L150'> 150                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>)) <b>return</b> <b>false</b>;
+<a name='L151'> 151 
+<a name='L152'> 152                 <b>if</b> (!$<a href='../Y/556.html' title='Multiple used in 3 places.'>selectName</a>) $<a href='../Y/556.html' title='Multiple used in 3 places.'>selectName</a> = 'default';
+<a name='L153'> 153                 $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> = '&lt;select name="'.<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/556.html' title='Multiple used in 3 places.'>selectName</a>).'"&gt;';
+<a name='L154'> 154 
+<a name='L155'> 155                 <b>if</b> ($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> == <a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>) <font color='blue'>{</font>
+<a name='L156'> 156                         $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;option value="0" onclick="location.href=\'?file_category_id=0\'"&gt;&amp;nbsp;&lt;/option&gt;';
+<a name='L157'> 157                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L158'> 158                         $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;option value="0"&gt;&amp;nbsp;&lt;/option&gt;';
+<a name='L159'> 159                 <font color='blue'>}</font>
+<a name='L160'> 160 
+<a name='L161'> 161                 $<a href='../Y/570.html' title='Multiple used in 4 places.'>shown_global_cats</a> = <b>false</b>;
+<a name='L162'> 162                 $<a href='../Y/571.html' title='Multiple used in 4 places.'>shown_my_cats</a> = <b>false</b>;
+<a name='L163'> 163 
+<a name='L164'> 164                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../S/26.html#L110' title='Defined at 110 in atom_categories.php.'>getGlobalAndUserCategories</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>);
+<a name='L165'> 165 
+<a name='L166'> 166                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>)
+<a name='L167'> 167                 <font color='blue'>{</font>
+<a name='L168'> 168                         <b>if</b> ($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L16' title='Defined at 16 in atom_categories.php.'>CATEGORY_CONTACT</a> &amp;&amp; $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L17' title='Defined at 17 in atom_categories.php.'>CATEGORY_USERDATA</a> &amp;&amp; $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L20' title='Defined at 20 in atom_categories.php.'>CATEGORY_NEWS</a> &amp;&amp; $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L22' title='Defined at 22 in atom_categories.php.'>CATEGORY_LANGUAGE</a> &amp;&amp; !$<a href='../Y/570.html' title='Multiple used in 4 places.'>shown_global_cats</a> &amp;&amp; $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryPermissions']==10) <font color='blue'>{</font>
+<a name='L169'> 169                                 $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;optgroup label="Global categories"&gt;';
+<a name='L170'> 170                                 $<a href='../Y/570.html' title='Multiple used in 4 places.'>shown_global_cats</a> = <b>true</b>;
+<a name='L171'> 171                         <font color='blue'>}</font>
+<a name='L172'> 172                         <b>if</b> ($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L16' title='Defined at 16 in atom_categories.php.'>CATEGORY_CONTACT</a> &amp;&amp; $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L17' title='Defined at 17 in atom_categories.php.'>CATEGORY_USERDATA</a> &amp;&amp; $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L20' title='Defined at 20 in atom_categories.php.'>CATEGORY_NEWS</a> &amp;&amp; $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L22' title='Defined at 22 in atom_categories.php.'>CATEGORY_LANGUAGE</a> &amp;&amp; !$<a href='../Y/571.html' title='Multiple used in 4 places.'>shown_my_cats</a> &amp;&amp; $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryPermissions']!=10) <font color='blue'>{</font>
+<a name='L173'> 173                                 $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;/optgroup&gt;';
+<a name='L174'> 174                                 $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;optgroup label="Your categories"&gt;';
+<a name='L175'> 175                                 $<a href='../Y/571.html' title='Multiple used in 4 places.'>shown_my_cats</a> = <b>true</b>;
+<a name='L176'> 176                         <font color='blue'>}</font>
+<a name='L177'> 177 
+<a name='L178'> 178                         <i><font color='green'>/* If text is formatted like "123|Text" then 123 will be used as value for this option */</font></i>
+<a name='L179'> 179                         $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../Y/215.html' title='Multiple used in 13 places.'>explode</a>('|', $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryName']);
+<a name='L180'> 180                         <b>if</b> (!<b>empty</b>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>[1])) <font color='blue'>{</font>
+<a name='L181'> 181                                 $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>[0];
+<a name='L182'> 182                                 $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>[1];
+<a name='L183'> 183                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L184'> 184                                 $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a> = $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryId'];
+<a name='L185'> 185                                 $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>[0];
+<a name='L186'> 186                         <font color='blue'>}</font>
+<a name='L187'> 187 
+<a name='L188'> 188                         $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;option value="'.$<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>.'"';
+<a name='L189'> 189                         <b>if</b> ($<a href='../Y/555.html' title='Multiple used in 2 places.'>selectedId</a> == $<a href='../Y/676.html' title='Multiple used in 25 places.'>val</a>) $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= ' selected="selected"';
+<a name='L190'> 190                         <b>else</b> <b>if</b> ($<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>) <font color='blue'>{</font>
+<a name='L191'> 191                                 <b>if</b> ($<a href='../Y/680.html' title='Multiple used in 3 places.'>varName</a>) <font color='blue'>{</font>
+<a name='L192'> 192                                         $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= ' onclick="location.href=\''.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.'?'.$<a href='../Y/680.html' title='Multiple used in 3 places.'>varName</a>.'='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryId'].$<a href='../Y/218.html' title='Multiple used in 6 places.'>extra</a>.'\'"';
+<a name='L193'> 193                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L194'> 194                                         $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= ' onclick="location.href=\''.$<a href='../Y/664.html' title='Multiple used in 34 places.'>url</a>.'='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryId'].$<a href='../Y/218.html' title='Multiple used in 6 places.'>extra</a>.'\'"';
+<a name='L195'> 195                                 <font color='blue'>}</font>
+<a name='L196'> 196                         <font color='blue'>}</font>
+<a name='L197'> 197                         $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&gt;'.$<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>;
+<a name='L198'> 198                         <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryType'] == <a href='../S/26.html#L10' title='Defined at 10 in atom_categories.php.'>CATEGORY_USERFILE_PRIVATE</a>) $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= ' (PRIVATE)';
+<a name='L199'> 199                         <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['categoryType'] == <a href='../S/26.html#L11' title='Defined at 11 in atom_categories.php.'>CATEGORY_USERFILE_HIDDEN</a>) $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= ' (HIDDEN)';
+<a name='L200'> 200                         $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;/option&gt;';
+<a name='L201'> 201                 <font color='blue'>}</font>
+<a name='L202'> 202                 <b>if</b> ($<a href='../Y/570.html' title='Multiple used in 4 places.'>shown_global_cats</a> || $<a href='../Y/571.html' title='Multiple used in 4 places.'>shown_my_cats</a>) $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;/optgroup&gt;';
+<a name='L203'> 203 
+<a name='L204'> 204                 $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> .= '&lt;/select&gt;';
+<a name='L205'> 205 
+<a name='L206'> 206                 <b>return</b> $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a>;
+<a name='L207'> 207         <font color='blue'>}</font>
+<a name='L208'> 208 
+<a name='L209'> 209         <i><font color='green'>/* Default "create a new category" dialog, used by "create blog category" and "create category in personal file area"</font></i>
+<a name='L210'> 210 <i><font color='green'>                also allows for managing and deleting categories                                */</font></i>
+<a name='L211'> 211         <b>function</b> <a href='../R/158.html' title='Multiple refered from 3 places.'>manageCategoriesDialog</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>)
+<a name='L212'> 212         <font color='blue'>{</font>
+<a name='L213'> 213                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L214'> 214                 
+<a name='L215'> 215                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <b>return</b> <a href='../S/26.html#L146' title='Defined at 146 in atom_categories.php.'>getCategoriesSelect</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>);
+<a name='L216'> 216 
+<a name='L217'> 217                 <b>if</b> (($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> || $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>==<a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>) &amp;&amp; !<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['new_file_category']))
+<a name='L218'> 218                 <font color='blue'>{</font>
+<a name='L219'> 219                         $<a href='../Y/265.html' title='Multiple used in 3 places.'>global</a> = <b>false</b>;
+<a name='L220'> 220                         <i><font color='green'>//Create new category. Only allow categories inside root level</font></i>
+<a name='L221'> 221 
+<a name='L222'> 222                         $<a href='../Y/62.html' title='Multiple used in 3 places.'>cat_type</a> = $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>;
+<a name='L223'> 223                         <b>if</b> (!<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['new_file_category_type'])) <font color='blue'>{</font>
+<a name='L224'> 224                                 <b>if</b> (<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['new_file_category_type'])) $<a href='../Y/62.html' title='Multiple used in 3 places.'>cat_type</a> = $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['new_file_category_type'];
+<a name='L225'> 225                                 <b>else</b> <b>if</b> ($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['new_file_category_type'] == 'global') $<a href='../Y/265.html' title='Multiple used in 3 places.'>global</a> = <b>true</b>;
+<a name='L226'> 226                         <font color='blue'>}</font>
+<a name='L227'> 227                         <a href='../S/26.html#L24' title='Defined at 24 in atom_categories.php.'>addCategory</a>($<a href='../Y/62.html' title='Multiple used in 3 places.'>cat_type</a>, $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['new_file_category'], 0, $<a href='../Y/265.html' title='Multiple used in 3 places.'>global</a>);
+<a name='L228'> 228                 <font color='blue'>}</font>
+<a name='L229'> 229 
+<a name='L230'> 230                 <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['cat_del_id']) &amp;&amp; <a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['cat_del_id'])) <font color='blue'>{</font>
+<a name='L231'> 231                         <a href='../S/26.html#L53' title='Defined at 53 in atom_categories.php.'>removeCategory</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['cat_del_id']);
+<a name='L232'> 232                         <b>echo</b> 'Category removed!';
+<a name='L233'> 233                         <b>return</b>;
+<a name='L234'> 234                 <font color='blue'>}</font>
+<a name='L235'> 235                 
+<a name='L236'> 236                 $<a href='../Y/198.html' title='Multiple used in 7 places.'>edit_id</a> = 0;
+<a name='L237'> 237                 <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['cat_edit_id']) &amp;&amp; <a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['cat_edit_id'])) $<a href='../Y/198.html' title='Multiple used in 7 places.'>edit_id</a> = $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['cat_edit_id'];
+<a name='L238'> 238 
+<a name='L239'> 239                 <b>if</b> ($<a href='../Y/198.html' title='Multiple used in 7 places.'>edit_id</a> &amp;&amp; !<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['cat_name'])) <font color='blue'>{</font>
+<a name='L240'> 240                         <a href='../S/26.html#L44' title='Defined at 44 in atom_categories.php.'>updateCategory</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/198.html' title='Multiple used in 7 places.'>edit_id</a>, $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['cat_name']);
+<a name='L241'> 241                 <font color='blue'>}</font> <b>else</b> <b>if</b> ($<a href='../Y/198.html' title='Multiple used in 7 places.'>edit_id</a>) <font color='blue'>{</font>
+<a name='L242'> 242                         
+<a name='L243'> 243                         $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../S/26.html#L62' title='Defined at 62 in atom_categories.php.'>getCategory</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/198.html' title='Multiple used in 7 places.'>edit_id</a>);
+<a name='L244'> 244                         <b>if</b> (!$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>) <b>die</b>;
+<a name='L245'> 245 
+<a name='L246'> 246                         <b>echo</b> '&lt;form method="post" action=""&gt;';
+<a name='L247'> 247                         <b>echo</b> '&lt;h2&gt;Edit category&lt;/h2&gt;';
+<a name='L248'> 248                         <b>echo</b> 'Current name: '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['categoryName'].'&lt;br/&gt;';
+<a name='L249'> 249                         <b>echo</b> 'New name: &lt;input type="text" name="cat_name" value="'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['categoryName'].'"/&gt; ';
+<a name='L250'> 250                         <b>echo</b> '&lt;input type="submit" class="button" value="Save"/&gt;';
+<a name='L251'> 251                         <b>echo</b> '&lt;/form&gt;';
+<a name='L252'> 252                         <b>echo</b> '&lt;a href="'.<a href='../S/17.html#L89' title='Defined at 89 in functions_general.php.'>URLadd</a>('cat_del_id', $<a href='../Y/198.html' title='Multiple used in 7 places.'>edit_id</a>).'"&gt;Delete category&lt;/a&gt;';
+<a name='L253'> 253                         <b>return</b>;
+<a name='L254'> 254                 <font color='blue'>}</font>
+<a name='L255'> 255 
+<a name='L256'> 256                 <b>if</b> ($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> == <a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>) <font color='blue'>{</font>
+<a name='L257'> 257                         <b>echo</b> 'Existing categories: '.<a href='../S/26.html#L146' title='Defined at 146 in atom_categories.php.'>getCategoriesSelect</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>).'&lt;br/&gt;';
+<a name='L258'> 258                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L259'> 259                         <b>echo</b> 'Existing categories: '.<a href='../S/26.html#L146' title='Defined at 146 in atom_categories.php.'>getCategoriesSelect</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, 0, '', 0, <a href='../S/17.html#L89' title='Defined at 89 in functions_general.php.'>URLadd</a>('cat_edit_id')).'&lt;br/&gt;';
+<a name='L260'> 260                 <font color='blue'>}</font>
+<a name='L261'> 261 
+<a name='L262'> 262                 <b>echo</b> 'Select one from the dropdown list to edit it.&lt;br/&gt;&lt;br/&gt;';
+<a name='L263'> 263 
+<a name='L264'> 264                 <b>echo</b> '&lt;form name="new_file_category" method="post" action=""&gt;';
+<a name='L265'> 265                 <b>echo</b> 'Create new category:&lt;br/&gt;';
+<a name='L266'> 266                 <b>echo</b> '&lt;input type="text" name="new_file_category"/&gt; ';
+<a name='L267'> 267 
+<a name='L268'> 268                 <b>if</b> ($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> == <a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>) <font color='blue'>{</font>
+<a name='L269'> 269                         <b>echo</b> '&lt;br/&gt;';
+<a name='L270'> 270                         <b>echo</b> '&lt;input type="radio" value="'.<a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>.'" name="new_file_category_type" id="l_normal" checked="checked"/&gt; ';
+<a name='L271'> 271                         <b>echo</b> '&lt;label for="l_normal"&gt;Normal category - everyone can see the content&lt;/label&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L272'> 272                         <b>echo</b> '&lt;input type="radio" value="'.<a href='../S/26.html#L10' title='Defined at 10 in atom_categories.php.'>CATEGORY_USERFILE_PRIVATE</a>.'" name="new_file_category_type" id="l_private"/&gt; ';
+<a name='L273'> 273                         <b>echo</b> '&lt;label for="l_private"&gt;Make this category private (only for your friends)&lt;/label&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L274'> 274 
+<a name='L275'> 275                         <b>echo</b> '&lt;input type="radio" value="'.<a href='../S/26.html#L11' title='Defined at 11 in atom_categories.php.'>CATEGORY_USERFILE_HIDDEN</a>.'" name="new_file_category_type" id="l_hidden"/&gt; ';
+<a name='L276'> 276                         <b>echo</b> '&lt;label for="l_hidden"&gt;Make this category hidden (only for you)&lt;/label&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L277'> 277                 <font color='blue'>}</font> <b>else</b> <b>if</b> ($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> == <a href='../S/26.html#L15' title='Defined at 15 in atom_categories.php.'>CATEGORY_BLOG</a>) <font color='blue'>{</font>
+<a name='L278'> 278                         <b>echo</b> '&lt;br/&gt;';
+<a name='L279'> 279                         <b>echo</b> '&lt;input type="radio" value="'.<a href='../S/26.html#L15' title='Defined at 15 in atom_categories.php.'>CATEGORY_BLOG</a>.'" name="new_file_category_type" id="l_normal" checked="checked"/&gt; ';
+<a name='L280'> 280                         <b>echo</b> '&lt;label for="l_normal"&gt;Your personal blog category&lt;/label&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L281'> 281                 <font color='blue'>}</font>
+<a name='L282'> 282                 <b>if</b> ($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L20' title='Defined at 20 in atom_categories.php.'>CATEGORY_NEWS</a> &amp;&amp; $<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a> != <a href='../S/26.html#L16' title='Defined at 16 in atom_categories.php.'>CATEGORY_CONTACT</a> &amp;&amp; $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/326.html' title='Multiple used in 11 places.'>isSuperAdmin</a>) <font color='blue'>{</font>
+<a name='L283'> 283                         <b>echo</b> '&lt;br/&gt;';
+<a name='L284'> 284                         <b>echo</b> '&lt;input type="radio" value="global" name="new_file_category_type" id="l_global"/&gt; ';
+<a name='L285'> 285                         <b>echo</b> '&lt;label for="l_global" class="okay"&gt;Super admin: Make this category globally available&lt;/label&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L286'> 286                 <font color='blue'>}</font>
+<a name='L287'> 287 
+<a name='L288'> 288                 <b>echo</b> '&lt;input type="submit" class="button" value="Create"/&gt; ';
+<a name='L289'> 289                 <i><font color='green'>//echo '&lt;input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/&gt;';</font></i>
+<a name='L290'> 290                 <b>echo</b> '&lt;/form&gt;';
+<a name='L291'> 291         <font color='blue'>}</font>
+<a name='L292'> 292 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L9'>[^]</a><a href='#L211'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

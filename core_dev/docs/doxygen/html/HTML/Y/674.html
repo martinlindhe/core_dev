@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>username</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/19.html#L125'>username</a>          125 class.DB_Base.php 	protected $username = '';
+<a href='../S/19.html#L155'>username</a>          155 class.DB_Base.php 		if (!empty($settings['username'])) $this-&gt;username = $settings['username'];
+<a href='../S/19.html#L175'>username</a>          175 class.DB_Base.php 		echo 'Login: '.$this-&gt;username.':'.($this-&gt;password ? $this-&gt;password : '(blank)').'&lt;br/&gt;';
+<a href='../S/32.html#L26'>username</a>           26 class.DB_MySQLi.php 		if (!$this-&gt;username) $this-&gt;username = 'root';
+<a href='../S/32.html#L28'>username</a>           28 class.DB_MySQLi.php 		$this-&gt;db_handle = new mysqli($this-&gt;host, $this-&gt;username, $this-&gt;password, $this-&gt;database, $this-&gt;port);
+<a href='../S/23.html#L28'>username</a>           28 class.DB_MySQL.php 		if (!$this-&gt;username) $this-&gt;username = 'root';
+<a href='../S/23.html#L30'>username</a>           30 class.DB_MySQL.php 		$this-&gt;db_handle = mysql_connect($this-&gt;host.':'.$this-&gt;port, $this-&gt;username, $this-&gt;password);
+<a href='../S/22.html#L26'>username</a>           26 class.DB_PostgreSQL.php 		if (!$this-&gt;username) $this-&gt;username = 'postgres';
+<a href='../S/22.html#L28'>username</a>           28 class.DB_PostgreSQL.php 		$str = 'host='.$this-&gt;host.' user='.$this-&gt;username.' password='.$this-&gt;password.' dbname='.$this-&gt;database.' port='.$this-&gt;port;
+<a href='../S/4.html#L211'>username</a>          211 class.Files.php 		$username = $session-&gt;username;
+<a href='../S/4.html#L228'>username</a>          228 class.Files.php 					$username = getUserName($userid);
+<a href='../S/4.html#L230'>username</a>          230 class.Files.php 				echo 'Files:'.$username;
+<a href='../S/2.html#L50'>username</a>           50 class.Session.php 	public $username;
+<a href='../S/2.html#L93'>username</a>           93 class.Session.php 		if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
+<a href='../S/2.html#L105'>username</a>          105 class.Session.php 		$this-&gt;username = &amp;$_SESSION['username'];
+<a href='../S/2.html#L201'>username</a>          201 class.Session.php 	function registerUser($username, $password1, $password2, $userMode = 0)
+<a href='../S/2.html#L206'>username</a>          206 class.Session.php 		if ($username != trim($username)) return 'Username contains invalid spaces';
+<a href='../S/2.html#L208'>username</a>          208 class.Session.php 		if (($db-&gt;escape($username) != $username) || ($db-&gt;escape($password1) != $password1)) {
+<a href='../S/2.html#L214'>username</a>          214 class.Session.php 		if (strlen($username) &lt; 3) return 'Username must be at least 3 characters long';
+<a href='../S/2.html#L219'>username</a>          219 class.Session.php 		if ($this-&gt;reserved_usercheck &amp;&amp; isReservedUsername($username)) return 'Username is not allowed';
+<a href='../S/2.html#L222'>username</a>          222 class.Session.php 			$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
+<a href='../S/2.html#L230'>username</a>          230 class.Session.php 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this-&gt;sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
+<a href='../S/2.html#L233'>username</a>          233 class.Session.php 		$this-&gt;log('User &lt;b&gt;'.$username.'&lt;/b&gt; created');
+<a href='../S/2.html#L243'>username</a>          243 class.Session.php 	function logIn($username, $password)
+<a href='../S/2.html#L247'>username</a>          247 class.Session.php 		$enc_username = $db-&gt;escape($username);
+<a href='../S/2.html#L264'>username</a>          264 class.Session.php 		$this-&gt;username = $data['userName'];
+<a href='../S/2.html#L293'>username</a>          293 class.Session.php 		$this-&gt;username = '';
+<a href='../S/2.html#L388'>username</a>          388 class.Session.php 			echo 'User name: '.$this-&gt;username.'&lt;br/&gt;';
+<a href='../S/27.html#L15'>username</a>           15 functions_users.php 		if ($_id == $session-&gt;id) return $session-&gt;username;
+<a href='../S/27.html#L247'>username</a>          247 functions_users.php 			case 0: $msg = $session-&gt;username.' has reduced your usermode to normal member.'; break;
+<a href='../S/27.html#L248'>username</a>          248 functions_users.php 			case 1: $msg = $session-&gt;username.' has granted you admin rights.'; break;
+<a href='../S/27.html#L249'>username</a>          249 functions_users.php 			case 2: $msg = $session-&gt;username.' has granted you super admin rights.'; break;
+<a href='../S/9.html#L158'>username</a>          158 functions_wiki.php 				$data['lockerName'] = $session-&gt;username;
+</pre>
+</body>
+</html>

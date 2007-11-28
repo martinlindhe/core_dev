@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>news</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/14.html#L123'>news</a>              123 functions_news.php 		$news = getNewsItem($_id);
+<a href='../S/14.html#L124'>news</a>              124 functions_news.php 		if (!$news) return;
+<a href='../S/14.html#L126'>news</a>              126 functions_news.php 		if (!$session-&gt;isAdmin &amp;&amp; !datetime_less($news['timeToPublish'], now())) return false;
+<a href='../S/14.html#L130'>news</a>              130 functions_news.php 		if ($news['rss_enabled']) echo '&lt;div class="news_title_rss"&gt;';
+<a href='../S/14.html#L132'>news</a>              132 functions_news.php 		echo $news['title'].'&lt;/div&gt;';
+<a href='../S/14.html#L134'>news</a>              134 functions_news.php 		if ($news['categoryId']) {
+<a href='../S/14.html#L135'>news</a>              135 functions_news.php 			echo '&lt;a href="news.php?cat='.$news['categoryId'].'"&gt;'.getCategoryName(CATEGORY_NEWS, $news['categoryId']).'&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/14.html#L137'>news</a>              137 functions_news.php 		echo 'By '.nameLink($news['creatorId'], $news['creatorName']);
+<a href='../S/14.html#L138'>news</a>              138 functions_news.php 		if (datetime_less($news['timeToPublish'], now())) {
+<a href='../S/14.html#L139'>news</a>              139 functions_news.php 			echo ', published '.$news['timeToPublish'].'&lt;br/&gt;';
+<a href='../S/14.html#L141'>news</a>              141 functions_news.php 			echo ', &lt;b&gt;will be published '.$news['timeToPublish'].'&lt;/b&gt;&lt;br/&gt;';
+<a href='../S/14.html#L145'>news</a>              145 functions_news.php 		if ($news['editorId']) echo '&lt;i&gt;Updated '.$news['timeEdited'].' by '.$news['editorName'].'&lt;/i&gt;&lt;br/&gt;';
+<a href='../S/14.html#L218'>news</a>              218 functions_news.php 			$art = parseArticle($news['body']);
+</pre>
+</body>
+</html>

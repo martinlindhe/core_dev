@@ -1,0 +1,915 @@
+<html>
+<head>
+<title>functions_forum.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/functions_forum.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L22'>[^]</a><a href='#L813'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L22' title='Defined at 22.'>FORUM_FOLDER</a>
+<li><a href='#L23' title='Defined at 23.'>FORUM_MESSAGE</a>
+<li><a href='#L26' title='Defined at 26.'>getForumItem</a>
+<li><a href='#L39' title='Defined at 39.'>getForumName</a>
+<li><a href='#L49' title='Defined at 49.'>getForumItems</a>
+<li><a href='#L67' title='Defined at 67.'>getForumMessageCount</a>
+<li><a href='#L85' title='Defined at 85.'>getForumItemCount</a>
+<li><a href='#L101' title='Defined at 101.'>forumItemIsFolder</a>
+<li><a href='#L116' title='Defined at 116.'>forumItemIsMessage</a>
+<li><a href='#L131' title='Defined at 131.'>forumItemIsDiscussion</a>
+<li><a href='#L147' title='Defined at 147.'>setForumItemParent</a>
+<li><a href='#L156' title='Defined at 156.'>addForumFolder</a>
+<li><a href='#L169' title='Defined at 169.'>addForumMessage</a>
+<li><a href='#L192' title='Defined at 192.'>getForumDepthHTML</a>
+<li><a href='#L228' title='Defined at 228.'>getLastForumPosts</a>
+<li><a href='#L244' title='Defined at 244.'>forumLockItem</a>
+<li><a href='#L253' title='Defined at 253.'>forumUnlockItem</a>
+<li><a href='#L263' title='Defined at 263.'>forumUpdateItem</a>
+<li><a href='#L275' title='Defined at 275.'>getForumStructure</a>
+<li><a href='#L294' title='Defined at 294.'>displayRootForumContent</a>
+<li><a href='#L365' title='Defined at 365.'>getForumThreadContentLastPost</a>
+<li><a href='#L401' title='Defined at 401.'>getForumItemCountFlat</a>
+<li><a href='#L412' title='Defined at 412.'>getForumThreadContentCount</a>
+<li><a href='#L430' title='Defined at 430.'>displayForumContentFlat</a>
+<li><a href='#L541' title='Defined at 541.'>getForumLastPost</a>
+<li><a href='#L554' title='Defined at 554.'>showForumPost</a>
+<li><a href='#L640' title='Defined at 640.'>displayTopicFlat</a>
+<li><a href='#L677' title='Defined at 677.'>getForumSearchResults</a>
+<li><a href='#L707' title='Defined at 707.'>getForumSearchResultsCount</a>
+<li><a href='#L723' title='Defined at 723.'>getForumSearchQuery</a>
+<li><a href='#L765' title='Defined at 765.'>deleteForumItem</a>
+<li><a href='#L778' title='Defined at 778.'>deleteForumItemRecursive</a>
+<li><a href='#L803' title='Defined at 803.'>getForumPostsCount</a>
+<li><a href='#L813' title='Defined at 813.'>displayForum</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2         <b>require_once</b>('atom_subscriptions.php'); <i><font color='green'>//for subscription functionality</font></i>
+<a name='L3'>   3 
+<a name='L4'>   4         <i><font color='green'>//forum module settings:</font></i>
+<a name='L5'>   5         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['rootname'] = 'Forum';
+<a name='L6'>   6         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['path_separator'] = ' - ';
+<a name='L7'>   7         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['allow_votes'] = <b>false</b>;
+<a name='L8'>   8         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['maxsize_body'] = 5000;        <i><font color='green'>//max number of characters in a forum post</font></i>
+<a name='L9'>   9         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['search_results_per_page'] = 5;
+<a name='L10'>  10         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['topics_per_page'] = 20;
+<a name='L11'>  11         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['posts_per_page'] = 25;
+<a name='L12'>  12         
+<a name='L13'>  13         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['moderation'] = <b>false</b>;
+<a name='L14'>  14 
+<a name='L15'>  15 
+<a name='L16'>  16         <i><font color='green'>/*</font></i>
+<a name='L17'>  17 <i><font color='green'>                functions_forums.php - Funktioner för forum</font></i>
+<a name='L18'>  18 <i><font color='green'>        */</font></i>
+<a name='L19'>  19 
+<a name='L20'>  20 
+<a name='L21'>  21         <i><font color='green'>/* Forum-itemtypes */</font></i>
+<a name='L22'>  22         <b>define</b>('FORUM_FOLDER',                          1);
+<a name='L23'>  23         <b>define</b>('FORUM_MESSAGE',                         2);
+<a name='L24'>  24 
+<a name='L25'>  25 
+<a name='L26'>  26         <b>function</b> <a href='../R/93.html' title='Multiple refered from 6 places.'>getForumItem</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L27'>  27         <font color='blue'>{</font>
+<a name='L28'>  28                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L29'>  29                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L30'>  30 
+<a name='L31'>  31                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS authorName ';
+<a name='L32'>  32                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'FROM tblForums AS t1 ';
+<a name='L33'>  33                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a name='L34'>  34                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND t1.deletedBy=0';
+<a name='L35'>  35 
+<a name='L36'>  36                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L37'>  37         <font color='blue'>}</font>
+<a name='L38'>  38 
+<a name='L39'>  39         <b>function</b> getForumName($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L40'>  40         <font color='blue'>{</font>
+<a name='L41'>  41                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L42'>  42                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L43'>  43 
+<a name='L44'>  44                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT itemSubject FROM tblForums WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L45'>  45                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L46'>  46         <font color='blue'>}</font>
+<a name='L47'>  47 
+<a name='L48'>  48         <i><font color='green'>/* Returns all items inside $itemId */</font></i>
+<a name='L49'>  49         <b>function</b> <a href='../R/97.html' title='Multiple refered from 4 places.'>getForumItems</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a> = 0, $<a href='../Y/33.html' title='Multiple used in 3 places.'>asc_order</a> = <b>true</b>, $<a href='../Y/345.html' title='Multiple used in 16 places.'>limit</a> = '')
+<a name='L50'>  50         <font color='blue'>{</font>
+<a name='L51'>  51                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L52'>  52                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>) ||!<a href='../Y/322.html' title='Multiple used in 6 places.'>is_bool</a>($<a href='../Y/33.html' title='Multiple used in 3 places.'>asc_order</a>)) <b>return</b> <b>false</b>;
+<a name='L53'>  53 
+<a name='L54'>  54                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS authorName ';
+<a name='L55'>  55                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'FROM tblForums AS t1 ';
+<a name='L56'>  56                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a name='L57'>  57                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.parentId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND t1.deletedBy=0 ';
+<a name='L58'>  58                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY t1.itemType ASC,t1.sticky DESC,';
+<a name='L59'>  59                 <b>if</b> ($<a href='../Y/33.html' title='Multiple used in 3 places.'>asc_order</a>) $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 't1.timeCreated ASC';
+<a name='L60'>  60                 <b>else</b> $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 't1.timeCreated DESC';
+<a name='L61'>  61                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ',t1.itemSubject ASC'.$<a href='../Y/345.html' title='Multiple used in 16 places.'>limit</a>;
+<a name='L62'>  62 
+<a name='L63'>  63                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L64'>  64         <font color='blue'>}</font>
+<a name='L65'>  65 
+<a name='L66'>  66         <i><font color='green'>/* Return the number of messages inside $itemId, recursive (default) */</font></i>
+<a name='L67'>  67         <b>function</b> <a href='../R/99.html' title='Multiple refered from 2 places.'>getForumMessageCount</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>, $<a href='../Y/522.html' title='Multiple used in 3 places.'>recursive</a> = <b>true</b>, $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a> = 0)   <i><font color='green'>//fixme: skicka med itemType param &amp; rename function</font></i>
+<a name='L68'>  68         <font color='blue'>{</font>
+<a name='L69'>  69                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L70'>  70                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a>)) <b>return</b> <b>false</b>;
+<a name='L71'>  71 
+<a name='L72'>  72                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemId FROM tblForums WHERE parentId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND itemType='.<a href='../S/21.html#L23' title='Defined at 23 in functions_forum.php.'>FORUM_MESSAGE</a>.' AND deletedBy=0';
+<a name='L73'>  73                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L74'>  74 
+<a name='L75'>  75                 <b>foreach</b> ($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L76'>  76                         $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a>++;
+<a name='L77'>  77                         <b>if</b> ($<a href='../Y/522.html' title='Multiple used in 3 places.'>recursive</a> === <b>true</b>) <font color='blue'>{</font>
+<a name='L78'>  78                                 $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a> = <a href='../S/21.html#L67' title='Defined at 67 in functions_forum.php.'>getForumMessageCount</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'], $<a href='../Y/522.html' title='Multiple used in 3 places.'>recursive</a>, $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a>);
+<a name='L79'>  79                         <font color='blue'>}</font>
+<a name='L80'>  80                 <font color='blue'>}</font>
+<a name='L81'>  81                 <b>return</b> $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a>;
+<a name='L82'>  82         <font color='blue'>}</font>
+<a name='L83'>  83 
+<a name='L84'>  84         <i><font color='green'>/* Return the number of items (folders &amp; messages &amp; discussions) inside $itemId, recursive */</font></i>
+<a name='L85'>  85         <b>function</b> <a href='../S/21.html#L96' title='Refered from 96 in functions_forum.php.'>getForumItemCount</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>, $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a> = 0)
+<a name='L86'>  86         <font color='blue'>{</font>
+<a name='L87'>  87                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L88'>  88                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a>)) <b>return</b> <b>false</b>;
+<a name='L89'>  89 
+<a name='L90'>  90                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemId FROM tblForums WHERE parentId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND deletedBy=0';
+<a name='L91'>  91 
+<a name='L92'>  92                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L93'>  93 
+<a name='L94'>  94                 <b>foreach</b> ($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L95'>  95                         $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a>++;
+<a name='L96'>  96                         $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a> = <a href='../S/21.html#L85' title='Defined at 85 in functions_forum.php.'>getForumItemCount</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'], $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a>);
+<a name='L97'>  97                 <font color='blue'>}</font>
+<a name='L98'>  98                 <b>return</b> $<a href='../Y/365.html' title='Multiple used in 10 places.'>mecnt</a>;
+<a name='L99'>  99         <font color='blue'>}</font>
+<a name='L100'> 100 
+<a name='L101'> 101         <b>function</b> <a href='../R/68.html' title='Multiple refered from 3 places.'>forumItemIsFolder</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L102'> 102         <font color='blue'>{</font>
+<a name='L103'> 103                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L104'> 104                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L105'> 105 
+<a name='L106'> 106                 <b>if</b> ($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a> == 0) <b>return</b> <b>true</b>; <i><font color='green'>//root folder</font></i>
+<a name='L107'> 107 
+<a name='L108'> 108                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemType FROM tblForums WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L109'> 109                 $<a href='../Y/335.html' title='Multiple used in 6 places.'>itemType</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L110'> 110 
+<a name='L111'> 111                 <b>if</b> ($<a href='../Y/335.html' title='Multiple used in 6 places.'>itemType</a> == <a href='../S/21.html#L22' title='Defined at 22 in functions_forum.php.'>FORUM_FOLDER</a>) <b>return</b> <b>true</b>;
+<a name='L112'> 112                 <b>return</b> <b>false</b>;
+<a name='L113'> 113         <font color='blue'>}</font>
+<a name='L114'> 114 
+<a name='L115'> 115         <i><font color='green'>/* Returns false if item is a message but parent is a folder (item is a discussion then) */</font></i>
+<a name='L116'> 116         <b>function</b> <a href='../S/15.html#L294' title='Refered from 294 in __old_functions_forums.php.'>forumItemIsMessage</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L117'> 117         <font color='blue'>{</font>
+<a name='L118'> 118                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L119'> 119                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L120'> 120 
+<a name='L121'> 121                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemType, parentId FROM tblForums WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L122'> 122                 $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L123'> 123 
+<a name='L124'> 124                 <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemType'] == <a href='../S/21.html#L23' title='Defined at 23 in functions_forum.php.'>FORUM_MESSAGE</a>) <font color='blue'>{</font>
+<a name='L125'> 125                         <b>if</b> (<a href='../S/21.html#L101' title='Defined at 101 in functions_forum.php.'>forumItemIsFolder</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['parentId'])) <b>return</b> <b>false</b>;
+<a name='L126'> 126                         <b>return</b> <b>true</b>;
+<a name='L127'> 127                 <font color='blue'>}</font>
+<a name='L128'> 128                 <b>return</b> <b>false</b>;
+<a name='L129'> 129         <font color='blue'>}</font>
+<a name='L130'> 130 
+<a name='L131'> 131         <b>function</b> <a href='../R/67.html' title='Multiple refered from 2 places.'>forumItemIsDiscussion</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L132'> 132         <font color='blue'>{</font>
+<a name='L133'> 133                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L134'> 134                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L135'> 135 
+<a name='L136'> 136                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemType, parentId FROM tblForums WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L137'> 137                 $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L138'> 138 
+<a name='L139'> 139                 <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemType'] == <a href='../S/21.html#L23' title='Defined at 23 in functions_forum.php.'>FORUM_MESSAGE</a>) <font color='blue'>{</font>
+<a name='L140'> 140                         <i><font color='green'>/* If the parentId is a folder and itemId is a message, then it is a discussion! */</font></i>
+<a name='L141'> 141                         <b>if</b> (<a href='../S/21.html#L101' title='Defined at 101 in functions_forum.php.'>forumItemIsFolder</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['parentId'])) <b>return</b> <b>true</b>;
+<a name='L142'> 142                         <b>return</b> <b>false</b>;
+<a name='L143'> 143                 <font color='blue'>}</font>
+<a name='L144'> 144                 <b>return</b> <b>false</b>;
+<a name='L145'> 145         <font color='blue'>}</font>
+<a name='L146'> 146 
+<a name='L147'> 147         <b>function</b> setForumItemParent($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>, $<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>)
+<a name='L148'> 148         <font color='blue'>{</font>
+<a name='L149'> 149                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L150'> 150                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>)) <b>return</b> <b>false</b>;
+<a name='L151'> 151 
+<a name='L152'> 152                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblForums SET parentId='.$<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>.' WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L153'> 153                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../S/19.html#L46' title='Defined at 46 in class.DB_Base.php.'>update</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L154'> 154         <font color='blue'>}</font>
+<a name='L155'> 155 
+<a name='L156'> 156         <b>function</b> addForumFolder($<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>, $<a href='../Y/252.html' title='Multiple used in 3 places.'>folderName</a>, $<a href='../Y/251.html' title='Multiple used in 4 places.'>folderDesc</a> = '')
+<a name='L157'> 157         <font color='blue'>{</font>
+<a name='L158'> 158                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L159'> 159                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>)) <b>return</b> <b>false</b>;
+<a name='L160'> 160 
+<a name='L161'> 161                 $<a href='../Y/251.html' title='Multiple used in 4 places.'>folderDesc</a> = <a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/251.html' title='Multiple used in 4 places.'>folderDesc</a>);
+<a name='L162'> 162                 $<a href='../Y/252.html' title='Multiple used in 3 places.'>folderName</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/252.html' title='Multiple used in 3 places.'>folderName</a>));
+<a name='L163'> 163                 $<a href='../Y/251.html' title='Multiple used in 4 places.'>folderDesc</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/251.html' title='Multiple used in 4 places.'>folderDesc</a>);
+<a name='L164'> 164 
+<a name='L165'> 165                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblForums SET itemType='.<a href='../S/21.html#L22' title='Defined at 22 in functions_forum.php.'>FORUM_FOLDER</a>.',authorId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',parentId='.$<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>.',itemSubject="'.$<a href='../Y/252.html' title='Multiple used in 3 places.'>folderName</a>.'",itemBody="'.$<a href='../Y/251.html' title='Multiple used in 4 places.'>folderDesc</a>.'",timeCreated=NOW()';
+<a name='L166'> 166                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L167'> 167         <font color='blue'>}</font>
+<a name='L168'> 168 
+<a name='L169'> 169         <b>function</b> addForumMessage($<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>, $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>, $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>, $<a href='../Y/588.html' title='Multiple used in 6 places.'>sticky</a> = 0)
+<a name='L170'> 170         <font color='blue'>{</font>
+<a name='L171'> 171                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L172'> 172                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/588.html' title='Multiple used in 6 places.'>sticky</a>)) <b>return</b> <b>false</b>;
+<a name='L173'> 173 
+<a name='L174'> 174                 $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a> = <a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>);
+<a name='L175'> 175                 $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>));
+<a name='L176'> 176 
+<a name='L177'> 177                 $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>, 0, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['maxsize_body']);
+<a name='L178'> 178                 $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>);
+<a name='L179'> 179 
+<a name='L180'> 180                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblForums SET itemType='.<a href='../S/21.html#L23' title='Defined at 23 in functions_forum.php.'>FORUM_MESSAGE</a>.',authorId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',parentId='.$<a href='../Y/454.html' title='Multiple used in 25 places.'>parentId</a>.',itemSubject="'.$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>.'",itemBody="'.$<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>.'",timeCreated=NOW()';
+<a name='L181'> 181                 <b>if</b> ($<a href='../Y/588.html' title='Multiple used in 6 places.'>sticky</a>) $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ',sticky='.$<a href='../Y/588.html' title='Multiple used in 6 places.'>sticky</a>;
+<a name='L182'> 182                 $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L183'> 183 
+<a name='L184'> 184                 <i><font color='green'>/* Auto-moderate */</font></i>
+<a name='L185'> 185                 <b>if</b> (<a href='../S/10.html#L47' title='Defined at 47 in atom_moderation.php.'>isSensitive</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) || <a href='../S/10.html#L47' title='Defined at 47 in atom_moderation.php.'>isSensitive</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>)) <a href='../S/10.html#L184' title='Defined at 184 in atom_moderation.php.'>addToModerationQueue</a>(<a href='../S/10.html#L25' title='Defined at 25 in atom_moderation.php.'>MODERATION_FORUM</a>, $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>, <b>true</b>);
+<a name='L186'> 186 
+<a name='L187'> 187                 <i><font color='green'>/* Check if there is any users who should be notified about this new message */</font></i>
+<a name='L188'> 188                 <i><font color='green'>//notifySubscribers($parentId, $itemId, SUBSCRIBE_MAIL);</font></i>
+<a name='L189'> 189                 <b>return</b> $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L190'> 190         <font color='blue'>}</font>
+<a name='L191'> 191 
+<a name='L192'> 192         <b>function</b> <a href='../R/90.html' title='Multiple refered from 3 places.'>getForumDepthHTML</a>($<a href='../Y/655.html' title='Multiple used in 26 places.'>type</a>, $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L193'> 193         <font color='blue'>{</font>
+<a name='L194'> 194                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L195'> 195                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/655.html' title='Multiple used in 26 places.'>type</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L196'> 196 
+<a name='L197'> 197                 <b>if</b> (!$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>) <font color='blue'>{</font>
+<a name='L198'> 198                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> = '&lt;a href="forum.php"&gt;'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['rootname'].'&lt;/a&gt;';
+<a name='L199'> 199                         <b>return</b> $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>;
+<a name='L200'> 200                 <font color='blue'>}</font>
+<a name='L201'> 201 
+<a name='L202'> 202                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemSubject,parentId FROM tblForums WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L203'> 203                 $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L204'> 204 
+<a name='L205'> 205                 <b>switch</b> ($<a href='../Y/655.html' title='Multiple used in 26 places.'>type</a>) <font color='blue'>{</font>
+<a name='L206'> 206                         <b>case</b> <a href='../S/21.html#L23' title='Defined at 23 in functions_forum.php.'>FORUM_MESSAGE</a>:
+<a name='L207'> 207                                 $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemSubject'];
+<a name='L208'> 208                                 <b>if</b> ($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) <font color='blue'>{</font>
+<a name='L209'> 209                                         <b>if</b> (<a href='../Y/363.html' title='Multiple used in 2 places.'>mb_strlen</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) &gt; 35) $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = <a href='../Y/364.html' title='Multiple used in 2 places.'>mb_substr</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>, 0, 35).'...';
+<a name='L210'> 210                                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> = ' - &lt;a href="forum.php?id='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.'"&gt;'.($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> != '' ? $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> : '(No name)').'&lt;/a&gt;';
+<a name='L211'> 211                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L212'> 212                                         $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> = '';
+<a name='L213'> 213                                 <font color='blue'>}</font>
+<a name='L214'> 214                                 <b>break</b>;
+<a name='L215'> 215 
+<a name='L216'> 216                         <b>case</b> <a href='../S/21.html#L22' title='Defined at 22 in functions_forum.php.'>FORUM_FOLDER</a>:
+<a name='L217'> 217                                 $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> = '';
+<a name='L218'> 218                                 <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemSubject']) $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['path_separator'].'&lt;a href="forum.php?id='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.'"&gt;'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemSubject'].'&lt;/a&gt;';
+<a name='L219'> 219                                 <b>break</b>;
+<a name='L220'> 220 
+<a name='L221'> 221                         <b>default</b>: <b>die</b>('aouuu');
+<a name='L222'> 222                 <font color='blue'>}</font>
+<a name='L223'> 223 
+<a name='L224'> 224                 <b>return</b> <a href='../S/21.html#L192' title='Defined at 192 in functions_forum.php.'>getForumDepthHTML</a>($<a href='../Y/655.html' title='Multiple used in 26 places.'>type</a>, $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['parentId']).$<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>;
+<a name='L225'> 225         <font color='blue'>}</font>
+<a name='L226'> 226 
+<a name='L227'> 227         <i><font color='green'>/* Returns the $count last posts */</font></i>
+<a name='L228'> 228         <b>function</b> getLastForumPosts($<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>)
+<a name='L229'> 229         <font color='blue'>{</font>
+<a name='L230'> 230                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L231'> 231                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>)) <b>return</b> <b>false</b>;
+<a name='L232'> 232 
+<a name='L233'> 233                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS authorName,t3.itemSubject AS parentSubject ';
+<a name='L234'> 234                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'FROM tblForums AS t1 ';
+<a name='L235'> 235                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a name='L236'> 236                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT JOIN tblForums AS t3 ON (t1.itemSubject="" AND t1.parentId=t3.itemId) ';
+<a name='L237'> 237                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.itemType='.<a href='../S/21.html#L23' title='Defined at 23 in functions_forum.php.'>FORUM_MESSAGE</a>.' AND t1.deletedBy=0 ';
+<a name='L238'> 238                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY t1.timeCreated DESC ';
+<a name='L239'> 239                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LIMIT 0,'.$<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>;
+<a name='L240'> 240 
+<a name='L241'> 241                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L242'> 242         <font color='blue'>}</font>
+<a name='L243'> 243 
+<a name='L244'> 244         <b>function</b> forumLockItem($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L245'> 245         <font color='blue'>{</font>
+<a name='L246'> 246                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L247'> 247                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L248'> 248 
+<a name='L249'> 249                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblForums SET locked=1 WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L250'> 250                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L251'> 251         <font color='blue'>}</font>
+<a name='L252'> 252 
+<a name='L253'> 253         <b>function</b> forumUnlockItem($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L254'> 254         <font color='blue'>{</font>
+<a name='L255'> 255                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L256'> 256                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L257'> 257 
+<a name='L258'> 258                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblForums SET locked=0 WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L259'> 259                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L260'> 260         <font color='blue'>}</font>
+<a name='L261'> 261 
+<a name='L262'> 262         <i><font color='green'>/* Sparar ändringar i ett inlägg/folder/whatever */</font></i>
+<a name='L263'> 263         <b>function</b> forumUpdateItem($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>, $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>, $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>, $<a href='../Y/588.html' title='Multiple used in 6 places.'>sticky</a> = 0)
+<a name='L264'> 264         <font color='blue'>{</font>
+<a name='L265'> 265                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L266'> 266                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/588.html' title='Multiple used in 6 places.'>sticky</a>)) <b>return</b> <b>false</b>;
+<a name='L267'> 267 
+<a name='L268'> 268                 $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>);
+<a name='L269'> 269                 $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>);
+<a name='L270'> 270 
+<a name='L271'> 271                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblForums SET itemSubject="'.$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>.'",itemBody="'.$<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>.'",sticky='.$<a href='../Y/588.html' title='Multiple used in 6 places.'>sticky</a>.' WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L272'> 272                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../S/19.html#L46' title='Defined at 46 in class.DB_Base.php.'>update</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L273'> 273         <font color='blue'>}</font>
+<a name='L274'> 274 
+<a name='L275'> 275         <b>function</b> getForumStructure()
+<a name='L276'> 276         <font color='blue'>{</font>
+<a name='L277'> 277                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L278'> 278 
+<a name='L279'> 279                 <i><font color='green'>//root level categories</font></i>
+<a name='L280'> 280                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId=0 AND deletedBy=0 ORDER BY itemSubject';
+<a name='L281'> 281                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L282'> 282 
+<a name='L283'> 283                 <i><font color='green'>//forum categories</font></i>
+<a name='L284'> 284                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L285'> 285                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemSubject,itemId FROM tblForums WHERE parentId='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'].' AND deletedBy=0 ORDER BY itemSubject';
+<a name='L286'> 286                         $<a href='../Y/604.html' title='Multiple used in 2 places.'>sub</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L287'> 287                         <b>foreach</b> ($<a href='../Y/604.html' title='Multiple used in 2 places.'>sub</a> <b>as</b> $<a href='../Y/606.html' title='Multiple used in 2 places.'>subrow</a>) <font color='blue'>{</font>
+<a name='L288'> 288                                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>[] = <b>array</b>('name' =&gt; $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemSubject'].' - '.$<a href='../Y/606.html' title='Multiple used in 2 places.'>subrow</a>['itemSubject'], 'itemId' =&gt; $<a href='../Y/606.html' title='Multiple used in 2 places.'>subrow</a>['itemId']);
+<a name='L289'> 289                         <font color='blue'>}</font>
+<a name='L290'> 290                 <font color='blue'>}</font>
+<a name='L291'> 291                 <b>return</b> $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>;
+<a name='L292'> 292         <font color='blue'>}</font>
+<a name='L293'> 293 
+<a name='L294'> 294         <b>function</b> <a href='../S/21.html#L831' title='Refered from 831 in functions_forum.php.'>displayRootForumContent</a>()
+<a name='L295'> 295         <font color='blue'>{</font>
+<a name='L296'> 296                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L297'> 297                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../S/21.html#L49' title='Defined at 49 in functions_forum.php.'>getForumItems</a>();
+<a name='L298'> 298 
+<a name='L299'> 299                 <b>if</b> (!<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>)) <b>return</b>;
+<a name='L300'> 300 
+<a name='L301'> 301                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L302'> 302 
+<a name='L303'> 303                         $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>["itemSubject"];
+<a name='L304'> 304                         <b>if</b> (<a href='../Y/597.html' title='Multiple used in 24 places.'>strlen</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>)&gt;35) $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>,0,35).'..';
+<a name='L305'> 305 
+<a name='L306'> 306                         <b>if</b> (!$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = '(No name)';
+<a name='L307'> 307 
+<a name='L308'> 308                         <b>echo</b> '&lt;div class="forum_overview_group"&gt;';
+<a name='L309'> 309                         <b>echo</b> '&lt;a href="forum.php?id='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'].'"&gt;'.$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>.'&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L310'> 310                         $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a> = $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'];
+<a name='L311'> 311 
+<a name='L312'> 312                         $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../S/21.html#L26' title='Defined at 26 in functions_forum.php.'>getForumItem</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>);
+<a name='L313'> 313                         $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../S/21.html#L49' title='Defined at 49 in functions_forum.php.'>getForumItems</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>);
+<a name='L314'> 314 
+<a name='L315'> 315                         <b>echo</b> '&lt;table width="100%" cellpadding="0" cellspacing="0" border="0" class="forum_overview_table"&gt;';
+<a name='L316'> 316                         <b>echo</b> '&lt;tr&gt;';
+<a name='L317'> 317                         <b>echo</b> '&lt;th width="40"&gt;&lt;/th&gt;';    <i><font color='green'>//for icons</font></i>
+<a name='L318'> 318                         <b>echo</b> '&lt;th&gt;Forum&lt;/th&gt;';
+<a name='L319'> 319                         <b>echo</b> '&lt;th width="200" align="center"&gt;Last topic&lt;/th&gt;';
+<a name='L320'> 320                         <b>echo</b> '&lt;th width="70" align="center"&gt;Topics&lt;/th&gt;';
+<a name='L321'> 321                         <b>echo</b> '&lt;th width="70" align="center"&gt;Posts&lt;/th&gt;';
+<a name='L322'> 322                         <b>echo</b> '&lt;/tr&gt;';
+<a name='L323'> 323 
+<a name='L324'> 324                         $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a> = 0;
+<a name='L325'> 325                         <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L326'> 326                                 $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++;
+<a name='L327'> 327 
+<a name='L328'> 328                                 $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>["itemSubject"];
+<a name='L329'> 329                                 <b>if</b> (<a href='../Y/597.html' title='Multiple used in 24 places.'>strlen</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) &gt; 50) $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>, 0, 50).'..';
+<a name='L330'> 330                                 <b>if</b> (!$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) <font color='blue'>{</font>
+<a name='L331'> 331                                         $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = '(Inget navn)';
+<a name='L332'> 332                                 <font color='blue'>}</font>
+<a name='L333'> 333 
+<a name='L334'> 334                                 <b>echo</b> '&lt;tr class="forum_overview_item_'.($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>%2?'even':'odd').'" &gt;';
+<a name='L335'> 335                                 <b>echo</b> '&lt;td align="center"&gt;&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/&gt;&lt;/td&gt;';
+<a name='L336'> 336                                 <b>echo</b> '&lt;td class="forum_item_text"&gt;';
+<a name='L337'> 337                                         <b>echo</b> '&lt;a href="forum.php?id='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'].'"&gt;'.$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>.'&lt;/a&gt;&lt;br/&gt;';
+<a name='L338'> 338                                         <b>echo</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemBody'];
+<a name='L339'> 339                                 <b>echo</b> '&lt;/td&gt;';
+<a name='L340'> 340 
+<a name='L341'> 341                                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../S/21.html#L365' title='Defined at 365 in functions_forum.php.'>getForumThreadContentLastPost</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId']);
+<a name='L342'> 342                                 <b>echo</b> '&lt;td class="forum_item_text" width=200&gt;';
+<a name='L343'> 343                                 <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>) <font color='blue'>{</font>
+<a name='L344'> 344                                         <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['itemSubject']) <font color='blue'>{</font>
+<a name='L345'> 345                                                 <b>echo</b> '&lt;a href="forum.php?id='.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['itemId'].'"&gt;'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['itemSubject'].'&lt;/a&gt;&lt;br/&gt;';
+<a name='L346'> 346                                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L347'> 347                                                 <b>echo</b> '&lt;a href="forum.php?id='.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentId'].'#post'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['itemId'].'"&gt;'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentSubject'].'&lt;/a&gt;&lt;br/&gt;';
+<a name='L348'> 348                                         <font color='blue'>}</font>
+<a name='L349'> 349                                         <b>echo</b> 'by '.<a href='../S/27.html#L323' title='Defined at 323 in functions_users.php.'>nameLink</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['authorId'], $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['authorName']).'&lt;br/&gt;';
+<a name='L350'> 350                                         <b>echo</b> $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['timeCreated'];
+<a name='L351'> 351                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L352'> 352                                         <b>echo</b> 'Never';
+<a name='L353'> 353                                 <font color='blue'>}</font>
+<a name='L354'> 354                                 <b>echo</b> '&lt;/td&gt;';
+<a name='L355'> 355                                 <b>echo</b> '&lt;td align="center"&gt;'.<a href='../S/6.html#L40' title='Defined at 40 in functions_textformat.php.'>formatNumber</a>(<a href='../S/21.html#L401' title='Defined at 401 in functions_forum.php.'>getForumItemCountFlat</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'])).'&lt;/td&gt;';
+<a name='L356'> 356                                 <b>echo</b> '&lt;td align="center"&gt;'.<a href='../S/6.html#L40' title='Defined at 40 in functions_textformat.php.'>formatNumber</a>(<a href='../S/21.html#L412' title='Defined at 412 in functions_forum.php.'>getForumThreadContentCount</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'])).'&lt;/td&gt;';
+<a name='L357'> 357                                 <b>echo</b> '&lt;/tr&gt;';
+<a name='L358'> 358                         <font color='blue'>}</font>
+<a name='L359'> 359                         <b>echo</b> '&lt;/table&gt;';
+<a name='L360'> 360                         <b>echo</b> '&lt;/div&gt;&lt;br/&gt;';     <i><font color='green'>//class="forum_overview_group"</font></i>
+<a name='L361'> 361                 <font color='blue'>}</font>
+<a name='L362'> 362         <font color='blue'>}</font>
+<a name='L363'> 363 
+<a name='L364'> 364         <i><font color='green'>/* Returns item data for the last post in any of the threads with parentId=$itemId */</font></i>
+<a name='L365'> 365         <b>function</b> <a href='../S/21.html#L341' title='Refered from 341 in functions_forum.php.'>getForumThreadContentLastPost</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L366'> 366         <font color='blue'>{</font>
+<a name='L367'> 367                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L368'> 368                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L369'> 369 
+<a name='L370'> 370                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemId FROM tblForums WHERE parentId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND deletedBy=0';;
+<a name='L371'> 371                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L372'> 372 
+<a name='L373'> 373                 $<a href='../Y/411.html' title='Multiple used in 4 places.'>newest_time</a> = 0;
+<a name='L374'> 374 
+<a name='L375'> 375                 <b>for</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>=0; $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&lt;<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>); $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++) <font color='blue'>{</font>
+<a name='L376'> 376                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> =    'SELECT itemId, timeCreated FROM tblForums '.
+<a name='L377'> 377                                                 'WHERE parentId='.$<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>]['itemId'].' AND deletedBy=0 '.
+<a name='L378'> 378                                                 'ORDER BY timeCreated DESC LIMIT 0,1';
+<a name='L379'> 379                         $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L380'> 380 
+<a name='L381'> 381                         <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['timeCreated'] &gt; $<a href='../Y/411.html' title='Multiple used in 4 places.'>newest_time</a>) <font color='blue'>{</font>
+<a name='L382'> 382                                 $<a href='../Y/411.html' title='Multiple used in 4 places.'>newest_time</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['timeCreated'];
+<a name='L383'> 383                                 $<a href='../Y/410.html' title='Multiple used in 2 places.'>newest_id</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['itemId'];
+<a name='L384'> 384                         <font color='blue'>}</font>
+<a name='L385'> 385                 <font color='blue'>}</font>
+<a name='L386'> 386 
+<a name='L387'> 387                 <b>if</b> ($<a href='../Y/411.html' title='Multiple used in 4 places.'>newest_time</a>) <font color='blue'>{</font>
+<a name='L388'> 388                         $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../S/21.html#L26' title='Defined at 26 in functions_forum.php.'>getForumItem</a>($<a href='../Y/410.html' title='Multiple used in 2 places.'>newest_id</a>);
+<a name='L389'> 389                         <b>if</b> (!$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['itemSubject']) <font color='blue'>{</font>
+<a name='L390'> 390                                 <i><font color='green'>//fills in parent's subject if subject is missing</font></i>
+<a name='L391'> 391                                 $<a href='../Y/453.html' title='Multiple used in 2 places.'>parent_data</a> = <a href='../S/21.html#L26' title='Defined at 26 in functions_forum.php.'>getForumItem</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentId']);
+<a name='L392'> 392                                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentSubject'] = $<a href='../Y/453.html' title='Multiple used in 2 places.'>parent_data</a>['itemSubject'];
+<a name='L393'> 393                         <font color='blue'>}</font>
+<a name='L394'> 394                         <b>return</b> $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>;
+<a name='L395'> 395                 <font color='blue'>}</font>
+<a name='L396'> 396 
+<a name='L397'> 397                 <b>return</b> <b>false</b>;
+<a name='L398'> 398         <font color='blue'>}</font>
+<a name='L399'> 399 
+<a name='L400'> 400         <i><font color='green'>/* Returns the number of items with $itemId as parent, non-recursive */</font></i>
+<a name='L401'> 401         <b>function</b> <a href='../R/95.html' title='Multiple refered from 3 places.'>getForumItemCountFlat</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L402'> 402         <font color='blue'>{</font>
+<a name='L403'> 403                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L404'> 404                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L405'> 405 
+<a name='L406'> 406                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND deletedBy=0';
+<a name='L407'> 407                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L408'> 408         <font color='blue'>}</font>
+<a name='L409'> 409 
+<a name='L410'> 410         <i><font color='green'>/* Returns the total number of posts contained in all the threads with parentId=$itemId */</font></i>
+<a name='L411'> 411         <i><font color='green'>//fixme: kanske byta namn på funktionen</font></i>
+<a name='L412'> 412         <b>function</b> <a href='../S/21.html#L356' title='Refered from 356 in functions_forum.php.'>getForumThreadContentCount</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L413'> 413         <font color='blue'>{</font>
+<a name='L414'> 414                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L415'> 415                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L416'> 416 
+<a name='L417'> 417                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemId FROM tblForums WHERE parentId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND deletedBy=0';
+<a name='L418'> 418                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L419'> 419 
+<a name='L420'> 420                 $<a href='../Y/81.html' title='Multiple used in 5 places.'>cnt</a> = 0;
+<a name='L421'> 421                 <b>for</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>=0; $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&lt;<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>); $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++) <font color='blue'>{</font>
+<a name='L422'> 422                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>]['itemId'].' AND deletedBy=0';
+<a name='L423'> 423                         $<a href='../Y/81.html' title='Multiple used in 5 places.'>cnt</a> += $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L424'> 424                 <font color='blue'>}</font>
+<a name='L425'> 425 
+<a name='L426'> 426                 <b>return</b> $<a href='../Y/81.html' title='Multiple used in 5 places.'>cnt</a>;
+<a name='L427'> 427         <font color='blue'>}</font>
+<a name='L428'> 428 
+<a name='L429'> 429         <i><font color='green'>//Displays the different forums of one root level category + activity details</font></i>
+<a name='L430'> 430         <b>function</b> <a href='../S/21.html#L839' title='Refered from 839 in functions_forum.php.'>displayForumContentFlat</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L431'> 431         <font color='blue'>{</font>
+<a name='L432'> 432                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L433'> 433                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L434'> 434 
+<a name='L435'> 435                 <b>echo</b> '&lt;div class="forum_overview_group"&gt;';
+<a name='L436'> 436 
+<a name='L437'> 437                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../S/21.html#L26' title='Defined at 26 in functions_forum.php.'>getForumItem</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>);
+<a name='L438'> 438                 $<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a> = <a href='../S/21.html#L401' title='Defined at 401 in functions_forum.php.'>getForumItemCountFlat</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>);
+<a name='L439'> 439 
+<a name='L440'> 440                 $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a> = <a href='../S/17.html#L19' title='Defined at 19 in functions_general.php.'>makePager</a>($<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['topics_per_page']);
+<a name='L441'> 441                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../S/21.html#L49' title='Defined at 49 in functions_forum.php.'>getForumItems</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>, <b>false</b>, $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a>['limit']);
+<a name='L442'> 442 
+<a name='L443'> 443                 <b>echo</b> $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a>['head'];
+<a name='L444'> 444 
+<a name='L445'> 445                 <b>echo</b> '&lt;div class="forum_header"&gt;'.<a href='../S/21.html#L192' title='Defined at 192 in functions_forum.php.'>getForumDepthHTML</a>(<a href='../S/21.html#L22' title='Defined at 22 in functions_forum.php.'>FORUM_FOLDER</a>, $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>).'&lt;/div&gt;';
+<a name='L446'> 446                 <b>echo</b> '&lt;br/&gt;';
+<a name='L447'> 447 
+<a name='L448'> 448                 <b>echo</b> '&lt;table width="100%" class="forum_overview_table"&gt;';
+<a name='L449'> 449                 <b>echo</b> '&lt;tr class="forum_subheader"&gt;';
+<a name='L450'> 450                 <b>echo</b> '&lt;th width=30&gt;&lt;/th&gt;';
+<a name='L451'> 451                 <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentId'] == 0) <font color='blue'>{</font>
+<a name='L452'> 452                         <b>echo</b> '&lt;th&gt;Forum&lt;/th&gt;';
+<a name='L453'> 453                         <b>echo</b> '&lt;th width=80&gt;Author&lt;/th&gt;';
+<a name='L454'> 454                         <b>echo</b> '&lt;th width=70 align="center"&gt;Topics&lt;/th&gt;';
+<a name='L455'> 455                         <b>echo</b> '&lt;th width=70 align="center"&gt;Views&lt;/th&gt;';
+<a name='L456'> 456                         <b>echo</b> '&lt;th width=200&gt;Last topic&lt;/th&gt;';
+<a name='L457'> 457                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L458'> 458                         <b>echo</b> '&lt;th&gt;Topic&lt;/th&gt;';
+<a name='L459'> 459                         <b>echo</b> '&lt;th width=80&gt;Author&lt;/th&gt;';
+<a name='L460'> 460                         <b>echo</b> '&lt;th width=70 align="center"&gt;Posts&lt;/th&gt;';
+<a name='L461'> 461                         <b>echo</b> '&lt;th width=70 align="center"&gt;Views&lt;/th&gt;';
+<a name='L462'> 462                         <b>echo</b> '&lt;th width=200&gt;Last post&lt;/th&gt;';
+<a name='L463'> 463                 <font color='blue'>}</font>
+<a name='L464'> 464                 <b>echo</b> '&lt;/tr&gt;';
+<a name='L465'> 465 
+<a name='L466'> 466                 $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a> = 0;
+<a name='L467'> 467                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L468'> 468                         $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++;
+<a name='L469'> 469                         <b>echo</b> '&lt;tr class="forum_overview_item_'.($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>%2?'even':'odd').'"&gt;';
+<a name='L470'> 470 
+<a name='L471'> 471                         <b>echo</b> '&lt;td align="center"&gt;';     <i><font color='green'>//icon</font></i>
+<a name='L472'> 472 
+<a name='L473'> 473                         <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['locked']) <font color='blue'>{</font>
+<a name='L474'> 474                                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_locked.png" alt="Locked"/&gt;&lt;br/&gt;';
+<a name='L475'> 475                         <font color='blue'>}</font>
+<a name='L476'> 476                         <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['sticky'] == 1) <font color='blue'>{</font>
+<a name='L477'> 477                                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_forum_sticky.png" alt="Sticky"/&gt;';
+<a name='L478'> 478                         <font color='blue'>}</font>
+<a name='L479'> 479 
+<a name='L480'> 480                         <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['sticky'] == 2) <font color='blue'>{</font>
+<a name='L481'> 481                                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_forum_announcement.png" alt="Announcement"/&gt;';
+<a name='L482'> 482                         <font color='blue'>}</font> <b>else</b> <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentId'] == 0) <font color='blue'>{</font>
+<a name='L483'> 483                                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/&gt;';
+<a name='L484'> 484                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L485'> 485                                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_forum_topic.png" alt="Message"/&gt;';
+<a name='L486'> 486                         <font color='blue'>}</font>
+<a name='L487'> 487                         <b>echo</b> '&lt;/td&gt;';
+<a name='L488'> 488 
+<a name='L489'> 489                         <b>echo</b> '&lt;td class="forum_item_text"&gt;';    <i><font color='green'>//topic/forum</font></i>
+<a name='L490'> 490                                 <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['sticky'] == 1) <b>echo</b> '&lt;b&gt;Sticky: &lt;/b&gt;';
+<a name='L491'> 491                                 <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['sticky'] == 2) <b>echo</b> '&lt;b&gt;Announcement: &lt;/b&gt;';
+<a name='L492'> 492                                 <b>echo</b> '&lt;a href="forum.php?id='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'].'"&gt;'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemSubject'].'&lt;/a&gt;&lt;br/&gt;';
+<a name='L493'> 493                         <b>echo</b> '&lt;/td&gt;';
+<a name='L494'> 494                         
+<a name='L495'> 495                         <b>echo</b> '&lt;td&gt;';    <i><font color='green'>//author</font></i>
+<a name='L496'> 496                                 <b>echo</b> <a href='../S/27.html#L323' title='Defined at 323 in functions_users.php.'>nameLink</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['authorId'], $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['authorName']);
+<a name='L497'> 497                                 <i><font color='green'>//echo ' '.$row['timeCreated'];</font></i>
+<a name='L498'> 498                         <b>echo</b> '&lt;/td&gt;';
+<a name='L499'> 499 
+<a name='L500'> 500                         <b>echo</b> '&lt;td align="center"&gt;'.<a href='../S/6.html#L40' title='Defined at 40 in functions_textformat.php.'>formatNumber</a>(<a href='../S/21.html#L67' title='Defined at 67 in functions_forum.php.'>getForumMessageCount</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'], <b>false</b>)).'&lt;/td&gt;';
+<a name='L501'> 501                         <b>echo</b> '&lt;td align="center"&gt;'.<a href='../S/6.html#L40' title='Defined at 40 in functions_textformat.php.'>formatNumber</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemRead']).'&lt;/td&gt;';
+<a name='L502'> 502 
+<a name='L503'> 503                         $<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a> = <a href='../S/21.html#L541' title='Defined at 541 in functions_forum.php.'>getForumLastPost</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId']);
+<a name='L504'> 504                         <b>echo</b> '&lt;td class="forum_item_text"&gt;';    <i><font color='green'>//last post/last topic</font></i>
+<a name='L505'> 505                         <b>if</b> ($<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a>) <font color='blue'>{</font>
+<a name='L506'> 506                                 <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentId'] == 0) <font color='blue'>{</font>
+<a name='L507'> 507                                         <i><font color='green'>//This is a topic</font></i>
+<a name='L508'> 508                                         $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = $<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a>['itemSubject'];
+<a name='L509'> 509                                         <b>if</b> (<a href='../Y/363.html' title='Multiple used in 2 places.'>mb_strlen</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) &gt; 25) $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = <a href='../Y/364.html' title='Multiple used in 2 places.'>mb_substr</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>, 0, 25).'...';
+<a name='L510'> 510                                         <b>echo</b> '&lt;a href="forum.php?id='.$<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a>['itemId'].'#post'.$<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a>['itemId'].'"&gt;'.$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>.'&lt;/a&gt;&lt;br/&gt;';
+<a name='L511'> 511                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L512'> 512                                         <i><font color='green'>//This is a post (a reply to a topic)</font></i>
+<a name='L513'> 513                                         <b>echo</b> '&lt;a href="forum.php?id='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'].'#post'.$<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a>['itemId'].'"&gt;&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/&gt;&lt;/a&gt; ';
+<a name='L514'> 514                                 <font color='blue'>}</font>
+<a name='L515'> 515                                 <b>echo</b> 'by '.<a href='../S/27.html#L323' title='Defined at 323 in functions_users.php.'>nameLink</a>($<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a>['userId'], $<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a>['userName']).'&lt;br/&gt;';
+<a name='L516'> 516                                 <b>echo</b> $<a href='../Y/343.html' title='Multiple used in 7 places.'>lastpost</a>['timeCreated'];
+<a name='L517'> 517                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L518'> 518                                 <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentId'] == 0) <font color='blue'>{</font>
+<a name='L519'> 519                                         <b>echo</b> 'No topics';
+<a name='L520'> 520                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L521'> 521                                         <b>echo</b> 'No posts';
+<a name='L522'> 522                                 <font color='blue'>}</font>
+<a name='L523'> 523                         <font color='blue'>}</font>
+<a name='L524'> 524                         <b>echo</b> '&lt;/td&gt;';
+<a name='L525'> 525 
+<a name='L526'> 526                         <b>echo</b> '&lt;/tr&gt;';
+<a name='L527'> 527                 <font color='blue'>}</font>
+<a name='L528'> 528 
+<a name='L529'> 529                 <b>echo</b> '&lt;/table&gt;';
+<a name='L530'> 530                 <b>echo</b> '&lt;/div&gt;';
+<a name='L531'> 531 
+<a name='L532'> 532                 <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['parentId'] == 0) <font color='blue'>{</font>
+<a name='L533'> 533                         <b>echo</b> '&lt;br/&gt;';
+<a name='L534'> 534                         <b>echo</b> '&lt;div class="forum_overview_group"&gt;';
+<a name='L535'> 535                         <b>echo</b> '&lt;b&gt;Active topics&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L536'> 536                         <b>echo</b> 'fixme - list a few of the active topics within the above forums here';
+<a name='L537'> 537                         <b>echo</b> '&lt;/div&gt;';
+<a name='L538'> 538                 <font color='blue'>}</font>
+<a name='L539'> 539         <font color='blue'>}</font>
+<a name='L540'> 540 
+<a name='L541'> 541         <b>function</b> <a href='../S/21.html#L503' title='Refered from 503 in functions_forum.php.'>getForumLastPost</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L542'> 542         <font color='blue'>{</font>
+<a name='L543'> 543                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L544'> 544                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L545'> 545 
+<a name='L546'> 546                 <i><font color='green'>//returns last post to the topic $itemId</font></i>
+<a name='L547'> 547                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userId,t2.userName FROM tblForums AS t1 ';
+<a name='L548'> 548                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a name='L549'> 549                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.parentId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND t1.deletedBy=0 ';
+<a name='L550'> 550                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY t1.timeCreated DESC LIMIT 1';
+<a name='L551'> 551                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L552'> 552         <font color='blue'>}</font>
+<a name='L553'> 553 
+<a name='L554'> 554         <b>function</b> <a href='../R/229.html' title='Multiple refered from 2 places.'>showForumPost</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>, $<a href='../Y/327.html' title='Multiple used in 4 places.'>islocked</a> = <b>false</b>)
+<a name='L555'> 555         <font color='blue'>{</font>
+<a name='L556'> 556                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>, $<a href='../Y/245.html' title='Multiple used in 21 places.'>files</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L557'> 557 
+<a name='L558'> 558                 $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = <a href='../S/6.html#L52' title='Defined at 52 in functions_textformat.php.'>formatUserInputText</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemSubject']);
+<a name='L559'> 559                 $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a> = <a href='../S/6.html#L52' title='Defined at 52 in functions_textformat.php.'>formatUserInputText</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemBody']);
+<a name='L560'> 560                 
+<a name='L561'> 561                 <b>if</b> (!$<a href='../Y/327.html' title='Multiple used in 4 places.'>islocked</a>) $<a href='../Y/327.html' title='Multiple used in 4 places.'>islocked</a> = $<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['locked'];
+<a name='L562'> 562 
+<a name='L563'> 563                 <b>echo</b> '&lt;a name="post'.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'" id="post'.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;&lt;/a&gt;';
+<a name='L564'> 564 
+<a name='L565'> 565                 <b>echo</b> '&lt;table width="100%" class="forum_post_table"&gt;';
+<a name='L566'> 566 
+<a name='L567'> 567                 <b>echo</b> '&lt;tr class="forum_post_item"&gt;';
+<a name='L568'> 568 
+<a name='L569'> 569                 <b>echo</b> '&lt;td valign="top"&gt;';
+<a name='L570'> 570                 <b>if</b> ($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) <b>echo</b> '&lt;h1&gt;'.$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>.'&lt;/h1&gt;&lt;hr/&gt;';
+<a name='L571'> 571                 
+<a name='L572'> 572                 <b>echo</b> '&lt;div class="forum_post_details"&gt;';
+<a name='L573'> 573                 <b>echo</b> '&lt;a href="forum.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['parentId'].'#post'.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;';
+<a name='L574'> 574                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/&gt;&lt;/a&gt; ';
+<a name='L575'> 575                 <b>echo</b> 'by '.<a href='../S/27.html#L323' title='Defined at 323 in functions_users.php.'>nameLink</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['authorId'], $<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['authorName']).' on '.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['timeCreated'];
+<a name='L576'> 576                 <b>echo</b> '&lt;/div&gt;&lt;br/&gt;';
+<a name='L577'> 577 
+<a name='L578'> 578                 <b>echo</b> $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>;
+<a name='L579'> 579                 $<a href='../Y/574.html' title='Multiple used in 2 places.'>signature</a> = <a href='../S/33.html#L53' title='Defined at 53 in atom_settings.php.'>loadUserdataSetting</a>($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['settings']['default_signature']);
+<a name='L580'> 580                 <b>if</b> ($<a href='../Y/574.html' title='Multiple used in 2 places.'>signature</a>) <b>echo</b> '&lt;hr/&gt;'.$<a href='../Y/574.html' title='Multiple used in 2 places.'>signature</a>.'&lt;br&gt;';
+<a name='L581'> 581 
+<a name='L582'> 582                 $<a href='../Y/245.html' title='Multiple used in 21 places.'>files</a>-&gt;<a href='../S/4.html#L393' title='Defined at 393 in class.Files.php.'>showAttachments</a>(<a href='../S/4.html#L24' title='Defined at 24 in class.Files.php.'>FILETYPE_FORUM</a>, $<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId']);
+<a name='L583'> 583                 <b>echo</b> '&lt;/td&gt;';
+<a name='L584'> 584 
+<a name='L585'> 585                 <b>echo</b> '&lt;td width="120" valign="top" class="forum_item_text"&gt;';
+<a name='L586'> 586                 <b>echo</b> <a href='../S/27.html#L332' title='Defined at 332 in functions_users.php.'>nameThumbLink</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['authorId'], $<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['authorName']).'&lt;br/&gt;&lt;br/&gt;';
+<a name='L587'> 587                 <b>echo</b> <a href='../S/27.html#L22' title='Defined at 22 in functions_users.php.'>getUserStatus</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['authorId']).'&lt;br/&gt;';
+<a name='L588'> 588                 <i><font color='green'>//echo 'Join date: '.getUserCreated($item['authorId']).'&lt;br/&gt;';</font></i>
+<a name='L589'> 589                 <b>echo</b> 'Posts: '.<a href='../S/21.html#L803' title='Defined at 803 in functions_forum.php.'>getForumPostsCount</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['authorId']);
+<a name='L590'> 590                 <b>echo</b> '&lt;/td&gt;';
+<a name='L591'> 591 
+<a name='L592'> 592                 <b>echo</b> '&lt;/tr&gt;';
+<a name='L593'> 593 
+<a name='L594'> 594                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <font color='blue'>{</font>
+<a name='L595'> 595                         <b>echo</b> '&lt;/table&gt;&lt;br/&gt;';
+<a name='L596'> 596                         <b>return</b>;
+<a name='L597'> 597                 <font color='blue'>}</font>
+<a name='L598'> 598 
+<a name='L599'> 599                 <b>echo</b> '&lt;tr class="forum_item"&gt;';
+<a name='L600'> 600                 <b>echo</b> '&lt;td colspan="2" align="right"&gt;';
+<a name='L601'> 601 
+<a name='L602'> 602                 <b>if</b> (!$<a href='../Y/327.html' title='Multiple used in 4 places.'>islocked</a>) <font color='blue'>{</font>
+<a name='L603'> 603                         <b>if</b> (<a href='../S/21.html#L131' title='Defined at 131 in functions_forum.php.'>forumItemIsDiscussion</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'])) <font color='blue'>{</font>
+<a name='L604'> 604                                 <b>echo</b> '&lt;a href="forum_new.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'&amp;amp;q='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;Quote&lt;/a&gt; ';
+<a name='L605'> 605                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L606'> 606                                 <b>echo</b> '&lt;a href="forum_new.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['parentId'].'&amp;amp;q='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;Quote&lt;/a&gt; ';
+<a name='L607'> 607                         <font color='blue'>}</font>
+<a name='L608'> 608 
+<a name='L609'> 609                         <b>if</b> ($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['authorId'] == $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font>
+<a name='L610'> 610                                 <b>echo</b> '&lt;a href="forum_edit.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;Edit&lt;/a&gt; ';
+<a name='L611'> 611                         <font color='blue'>}</font>
+<a name='L612'> 612                 <font color='blue'>}</font>
+<a name='L613'> 613 
+<a name='L614'> 614                 <b>if</b> (!$<a href='../Y/327.html' title='Multiple used in 4 places.'>islocked</a> &amp;&amp; $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font>
+<a name='L615'> 615                         <b>echo</b> '&lt;a href="forum_delete.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;Remove&lt;/a&gt; ';
+<a name='L616'> 616                 <font color='blue'>}</font>
+<a name='L617'> 617 
+<a name='L618'> 618                 <b>if</b> (<a href='../S/21.html#L131' title='Defined at 131 in functions_forum.php.'>forumItemIsDiscussion</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'])) <font color='blue'>{</font>
+<a name='L619'> 619 
+<a name='L620'> 620                         <b>echo</b> '&lt;a href="forum_tipsa.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;Tell a friend&lt;/a&gt; ';
+<a name='L621'> 621                         
+<a name='L622'> 622                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font>
+<a name='L623'> 623                                 <b>if</b> (!$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['locked']) <font color='blue'>{</font>
+<a name='L624'> 624                                         <b>echo</b> '&lt;a href="forum_lock.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;Lock&lt;/a&gt; ';
+<a name='L625'> 625                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L626'> 626                                         <b>echo</b> '&lt;a href="forum_lock.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'&amp;unlock"&gt;Unlock&lt;/a&gt; ';
+<a name='L627'> 627                                 <font color='blue'>}</font>
+<a name='L628'> 628                                 <b>echo</b> '&lt;a href="forum_move.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;Move&lt;/a&gt; ';
+<a name='L629'> 629                         <font color='blue'>}</font>
+<a name='L630'> 630                 <font color='blue'>}</font>
+<a name='L631'> 631 
+<a name='L632'> 632                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> != $<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['authorId']) <font color='blue'>{</font>
+<a name='L633'> 633                         <b>echo</b> '&lt;a href="forum_report.php?id='.$<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['itemId'].'"&gt;Report&lt;/a&gt; ';
+<a name='L634'> 634                 <font color='blue'>}</font>
+<a name='L635'> 635 
+<a name='L636'> 636                 <b>echo</b> '&lt;/td&gt;&lt;/tr&gt;';
+<a name='L637'> 637                 <b>echo</b> '&lt;/table&gt;&lt;br/&gt;';
+<a name='L638'> 638         <font color='blue'>}</font>
+<a name='L639'> 639 
+<a name='L640'> 640         <b>function</b> <a href='../S/21.html#L853' title='Refered from 853 in functions_forum.php.'>displayTopicFlat</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L641'> 641         <font color='blue'>{</font>
+<a name='L642'> 642                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L643'> 643                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L644'> 644 
+<a name='L645'> 645                 <b>echo</b> '&lt;div class="forum_overview_group"&gt;';
+<a name='L646'> 646 
+<a name='L647'> 647                 $<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a> = <a href='../S/21.html#L26' title='Defined at 26 in functions_forum.php.'>getForumItem</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>);
+<a name='L648'> 648 
+<a name='L649'> 649                 <b>echo</b> <a href='../S/21.html#L192' title='Defined at 192 in functions_forum.php.'>getForumDepthHTML</a>(<a href='../S/21.html#L23' title='Defined at 23 in functions_forum.php.'>FORUM_MESSAGE</a>, $<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['parentId']).'&lt;br/&gt;&lt;br/&gt;';
+<a name='L650'> 650 
+<a name='L651'> 651                 <a href='../S/21.html#L554' title='Defined at 554 in functions_forum.php.'>showForumPost</a>($<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>);
+<a name='L652'> 652 
+<a name='L653'> 653                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <font color='blue'>{</font>
+<a name='L654'> 654                         <b>if</b> (!<a href='../S/3.html#L38' title='Defined at 38 in atom_subscriptions.php.'>isSubscribed</a>(<a href='../S/3.html#L13' title='Defined at 13 in atom_subscriptions.php.'>SUBSCRIPTION_FORUM</a>, $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <font color='blue'>{</font>
+<a name='L655'> 655                                 <b>echo</b> '&lt;a href="?id='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.'&amp;subscribe='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.'"&gt;Subscribe to topic&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L656'> 656                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L657'> 657                                 <b>echo</b> '&lt;a href="?id='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.'&amp;unsubscribe='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.'"&gt;Unsubscribe to topic&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L658'> 658                         <font color='blue'>}</font>
+<a name='L659'> 659                 <font color='blue'>}</font>
+<a name='L660'> 660 
+<a name='L661'> 661                 $<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a> = <a href='../S/21.html#L401' title='Defined at 401 in functions_forum.php.'>getForumItemCountFlat</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>);
+<a name='L662'> 662                 $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a> = <a href='../S/17.html#L19' title='Defined at 19 in functions_general.php.'>makePager</a>($<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['forum']['posts_per_page']);
+<a name='L663'> 663                 
+<a name='L664'> 664                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../S/21.html#L49' title='Defined at 49 in functions_forum.php.'>getForumItems</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>, <b>true</b>, $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a>['limit']);  <i><font color='green'>//get replies</font></i>
+<a name='L665'> 665 
+<a name='L666'> 666                 <b>echo</b> $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a>['head'];
+<a name='L667'> 667 
+<a name='L668'> 668                 <b>if</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>) <font color='blue'>{</font>
+<a name='L669'> 669                         <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L670'> 670                                 <a href='../S/21.html#L554' title='Defined at 554 in functions_forum.php.'>showForumPost</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>, $<a href='../Y/331.html' title='Multiple used in 35 places.'>item</a>['locked']);
+<a name='L671'> 671                         <font color='blue'>}</font>
+<a name='L672'> 672                 <font color='blue'>}</font>
+<a name='L673'> 673                 <b>echo</b> '&lt;/div&gt;';
+<a name='L674'> 674         <font color='blue'>}</font>
+<a name='L675'> 675 
+<a name='L676'> 676         <i><font color='green'>/* Returns a list of search results with forum items */</font></i>
+<a name='L677'> 677         <b>function</b> getForumSearchResults($<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a>, $<a href='../Y/372.html' title='Multiple used in 3 places.'>method</a>, $<a href='../Y/345.html' title='Multiple used in 16 places.'>limit</a> = '')
+<a name='L678'> 678         <font color='blue'>{</font>
+<a name='L679'> 679                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L680'> 680 
+<a name='L681'> 681                 <b>if</b> (!$<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a> || !$<a href='../Y/372.html' title='Multiple used in 3 places.'>method</a>) <b>return</b> <b>false</b>;
+<a name='L682'> 682 
+<a name='L683'> 683                 $<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a>);
+<a name='L684'> 684 
+<a name='L685'> 685                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../Y/215.html' title='Multiple used in 13 places.'>explode</a>(' ', $<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a>);
+<a name='L686'> 686 
+<a name='L687'> 687                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS authorName FROM tblForums AS t1 ';
+<a name='L688'> 688                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a name='L689'> 689                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.deletedBy=0 AND '.<a href='../S/21.html#L723' title='Defined at 723 in functions_forum.php.'>getForumSearchQuery</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>);
+<a name='L690'> 690 
+<a name='L691'> 691                 <b>switch</b> ($<a href='../Y/372.html' title='Multiple used in 3 places.'>method</a>) <font color='blue'>{</font>
+<a name='L692'> 692                         <b>case</b> 'mostread': <i><font color='green'>//mest läst</font></i>
+<a name='L693'> 693                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY t1.itemRead DESC '; <b>break</b>;
+<a name='L694'> 694 
+<a name='L695'> 695                         <b>case</b> 'oldfirst': <i><font color='green'>//älst först</font></i>
+<a name='L696'> 696                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY t1.timeCreated ASC '; <b>break</b>;
+<a name='L697'> 697 
+<a name='L698'> 698                         <b>case</b> 'newfirst': <b>default</b>: <i><font color='green'>//nyast först, default</font></i>
+<a name='L699'> 699                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY t1.timeCreated DESC '; <b>break</b>;
+<a name='L700'> 700                 <font color='blue'>}</font>
+<a name='L701'> 701 
+<a name='L702'> 702                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= $<a href='../Y/345.html' title='Multiple used in 16 places.'>limit</a>;
+<a name='L703'> 703 
+<a name='L704'> 704                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L705'> 705         <font color='blue'>}</font>
+<a name='L706'> 706 
+<a name='L707'> 707         <b>function</b> getForumSearchResultsCount($<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a>)
+<a name='L708'> 708         <font color='blue'>{</font>
+<a name='L709'> 709                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L710'> 710                 <b>if</b> (!$<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a>) <b>return</b> <b>false</b>;
+<a name='L711'> 711 
+<a name='L712'> 712                 $<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a>);
+<a name='L713'> 713 
+<a name='L714'> 714                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../Y/215.html' title='Multiple used in 13 places.'>explode</a>(' ', $<a href='../Y/155.html' title='Multiple used in 14 places.'>criteria</a>);
+<a name='L715'> 715 
+<a name='L716'> 716                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT COUNT(t1.itemId) FROM tblForums AS t1 ';
+<a name='L717'> 717                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.deletedBy=0 AND '.<a href='../S/21.html#L723' title='Defined at 723 in functions_forum.php.'>getForumSearchQuery</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>);
+<a name='L718'> 718 
+<a name='L719'> 719                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L720'> 720         <font color='blue'>}</font>
+<a name='L721'> 721 
+<a name='L722'> 722         <i><font color='green'>/* $list är en array med ord att söka på */</font></i>
+<a name='L723'> 723         <b>function</b> <a href='../R/103.html' title='Multiple refered from 2 places.'>getForumSearchQuery</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>)
+<a name='L724'> 724         <font color='blue'>{</font>
+<a name='L725'> 725                 $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a> = '';
+<a name='L726'> 726                 <b>for</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>=0; $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&lt;<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>); $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++) <font color='blue'>{</font>     <i><font color='green'>//fixme: foreach</font></i>
+<a name='L727'> 727 
+<a name='L728'> 728                         $<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a> = $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>];
+<a name='L729'> 729                         <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>,0,1) == '+') <font color='blue'>{</font>
+<a name='L730'> 730                                 <i><font color='green'>//kräv detta</font></i>
+<a name='L731'> 731 
+<a name='L732'> 732                                 $<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>,1);
+<a name='L733'> 733                                 <b>if</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&gt;0) <font color='blue'>{</font>
+<a name='L734'> 734                                         $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a> .= 'AND ';
+<a name='L735'> 735                                 <font color='blue'>}</font>
+<a name='L736'> 736                                 $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a> .= '(t1.itemSubject LIKE "%'.$<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>.'%" OR t1.itemBody LIKE "%'.$<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>.'%") ';
+<a name='L737'> 737 
+<a name='L738'> 738                         <font color='blue'>}</font> <b>else</b> <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>,0,1) == '-') <font color='blue'>{</font>
+<a name='L739'> 739                                 <i><font color='green'>//INTE detta</font></i>
+<a name='L740'> 740 
+<a name='L741'> 741                                 <b>if</b> (<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>)==1) <font color='blue'>{</font> <i><font color='green'>//tillåt inte sökning på allt UTAN ett ord..</font></i>
+<a name='L742'> 742                                         <b>return</b>;
+<a name='L743'> 743                                 <font color='blue'>}</font>
+<a name='L744'> 744 
+<a name='L745'> 745                                 $<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>,1);
+<a name='L746'> 746                                 <b>if</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&gt;0) <font color='blue'>{</font>
+<a name='L747'> 747                                         $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a> .= 'AND ';
+<a name='L748'> 748                                 <font color='blue'>}</font>
+<a name='L749'> 749                                 $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a> .= 'NOT (t1.itemSubject LIKE "%'.$<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>.'%" OR t1.itemBody LIKE "%'.$<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>.'%") ';
+<a name='L750'> 750 
+<a name='L751'> 751                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L752'> 752                                 <i><font color='green'>//frivilligt (typ detta ELLER nåt annat)</font></i>
+<a name='L753'> 753 
+<a name='L754'> 754                                 <b>if</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&gt;0) <font color='blue'>{</font>
+<a name='L755'> 755                                         $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a> .= 'OR ';
+<a name='L756'> 756                                 <font color='blue'>}</font>
+<a name='L757'> 757                                 $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a> .= '(t1.itemSubject LIKE "%'.$<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>.'%" OR t1.itemBody LIKE "%'.$<a href='../Y/158.html' title='Multiple used in 8 places.'>curr</a>.'%") ';
+<a name='L758'> 758                         <font color='blue'>}</font>
+<a name='L759'> 759                 <font color='blue'>}</font>
+<a name='L760'> 760 
+<a name='L761'> 761                 $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a> .= 'AND t1.deletedBy=0 ';
+<a name='L762'> 762                 <b>return</b> $<a href='../Y/578.html' title='Multiple used in 97 places.'>sql</a>;
+<a name='L763'> 763         <font color='blue'>}</font>
+<a name='L764'> 764 
+<a name='L765'> 765         <b>function</b> deleteForumItem($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)
+<a name='L766'> 766         <font color='blue'>{</font>
+<a name='L767'> 767                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L768'> 768                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L769'> 769 
+<a name='L770'> 770                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblForums SET timeDeleted=NOW(),deletedBy='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L771'> 771 
+<a name='L772'> 772                 <b>if</b> ($<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/67.html' title='Multiple defined in 4 places.'>delete</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>)) <font color='blue'>{</font>
+<a name='L773'> 773                         <a href='../S/10.html#L251' title='Defined at 251 in atom_moderation.php.'>removeFromModerationQueueByType</a>(<a href='../S/10.html#L25' title='Defined at 25 in atom_moderation.php.'>MODERATION_FORUM</a>, $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>);
+<a name='L774'> 774                 <font color='blue'>}</font>
+<a name='L775'> 775         <font color='blue'>}</font>
+<a name='L776'> 776 
+<a name='L777'> 777         <i><font color='green'>/* Deletes itemId and everything below it. also deletes associated moderation queue entries */</font></i>
+<a name='L778'> 778         <b>function</b> <a href='../S/21.html#L790' title='Refered from 790 in functions_forum.php.'>deleteForumItemRecursive</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>, $<a href='../Y/355.html' title='Multiple used in 2 places.'>loop</a> = <b>false</b>)
+<a name='L779'> 779         <font color='blue'>{</font>
+<a name='L780'> 780                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L781'> 781                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>)) <b>return</b> <b>false</b>;
+<a name='L782'> 782 
+<a name='L783'> 783                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT itemId FROM tblForums WHERE parentId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>.' AND deletedBy=0';
+<a name='L784'> 784                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L785'> 785 
+<a name='L786'> 786                 <b>foreach</b> ($<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L787'> 787                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'DELETE FROM tblForums WHERE itemId='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'];
+<a name='L788'> 788                         <b>if</b> ($<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/67.html' title='Multiple defined in 4 places.'>delete</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>)) <font color='blue'>{</font>
+<a name='L789'> 789                                 <a href='../S/10.html#L251' title='Defined at 251 in atom_moderation.php.'>removeFromModerationQueueByType</a>(<a href='../S/10.html#L25' title='Defined at 25 in atom_moderation.php.'>MODERATION_FORUM</a>, $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId']);
+<a name='L790'> 790                                 <a href='../S/21.html#L778' title='Defined at 778 in functions_forum.php.'>deleteForumItemRecursive</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['itemId'], <b>true</b>);
+<a name='L791'> 791                         <font color='blue'>}</font>
+<a name='L792'> 792                 <font color='blue'>}</font>
+<a name='L793'> 793 
+<a name='L794'> 794                 <b>if</b> ($<a href='../Y/355.html' title='Multiple used in 2 places.'>loop</a> != <b>true</b>) <font color='blue'>{</font>
+<a name='L795'> 795                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'DELETE FROM tblForums WHERE itemId='.$<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>;
+<a name='L796'> 796                         <b>if</b> ($<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/67.html' title='Multiple defined in 4 places.'>delete</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>)) <font color='blue'>{</font>
+<a name='L797'> 797                                 <a href='../S/10.html#L251' title='Defined at 251 in atom_moderation.php.'>removeFromModerationQueueByType</a>(<a href='../S/10.html#L25' title='Defined at 25 in atom_moderation.php.'>MODERATION_FORUM</a>, $<a href='../Y/333.html' title='Multiple used in 148 places.'>itemId</a>);
+<a name='L798'> 798                         <font color='blue'>}</font>
+<a name='L799'> 799                 <font color='blue'>}</font>
+<a name='L800'> 800         <font color='blue'>}</font>
+<a name='L801'> 801 
+<a name='L802'> 802         <i><font color='green'>/* Returns the number of messages that $userId has written in the forums */</font></i>
+<a name='L803'> 803         <b>function</b> <a href='../S/21.html#L589' title='Refered from 589 in functions_forum.php.'>getForumPostsCount</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>)
+<a name='L804'> 804         <font color='blue'>{</font>
+<a name='L805'> 805                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L806'> 806                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>)) <b>return</b> <b>false</b>;
+<a name='L807'> 807 
+<a name='L808'> 808                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT COUNT(itemId) FROM tblForums WHERE authorId='.$<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>.' AND deletedBy=0 AND itemType='.<a href='../S/21.html#L23' title='Defined at 23 in functions_forum.php.'>FORUM_MESSAGE</a>;
+<a name='L809'> 809                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L810'> 810         <font color='blue'>}</font>
+<a name='L811'> 811 
+<a name='L812'> 812 
+<a name='L813'> 813         <b>function</b> displayForum($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L814'> 814         <font color='blue'>{</font>
+<a name='L815'> 815                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L816'> 816                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L817'> 817 
+<a name='L818'> 818                 <i><font color='green'>// Start/stop subscription</font></i>
+<a name='L819'> 819                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <font color='blue'>{</font>
+<a name='L820'> 820                         <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['subscribe'])) <a href='../S/3.html#L17' title='Defined at 17 in atom_subscriptions.php.'>addSubscription</a>(<a href='../S/3.html#L13' title='Defined at 13 in atom_subscriptions.php.'>SUBSCRIPTION_FORUM</a>, $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['subscribe']);
+<a name='L821'> 821                         <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['unsubscribe'])) <a href='../S/3.html#L28' title='Defined at 28 in atom_subscriptions.php.'>removeSubscription</a>(<a href='../S/3.html#L13' title='Defined at 13 in atom_subscriptions.php.'>SUBSCRIPTION_FORUM</a>, $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['unsubscribe']);
+<a name='L822'> 822                 <font color='blue'>}</font>
+<a name='L823'> 823 
+<a name='L824'> 824                 <i><font color='green'>/*</font></i>
+<a name='L825'> 825 <i><font color='green'>                if ($config['forum']['allow_votes'] &amp;&amp; !empty($_POST['vote']) &amp;&amp; !empty($_POST['voteId'])) {</font></i>
+<a name='L826'> 826 <i><font color='green'>                        addForumVote($_POST['voteId'], $_POST['vote']);</font></i>
+<a name='L827'> 827 <i><font color='green'>                }*/</font></i>
+<a name='L828'> 828 
+<a name='L829'> 829                 <b>if</b> (!$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>) <font color='blue'>{</font>
+<a name='L830'> 830                         <i><font color='green'>//display root level</font></i>
+<a name='L831'> 831                         <b>echo</b> <a href='../S/21.html#L294' title='Defined at 294 in functions_forum.php.'>displayRootForumContent</a>();
+<a name='L832'> 832 
+<a name='L833'> 833                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <b>echo</b> '&lt;a href="forum_new.php?id=0"&gt;New root level category&lt;/a&gt;';
+<a name='L834'> 834                         <b>return</b>;
+<a name='L835'> 835                 <font color='blue'>}</font>
+<a name='L836'> 836 
+<a name='L837'> 837                 <b>if</b> (<a href='../S/21.html#L101' title='Defined at 101 in functions_forum.php.'>forumItemIsFolder</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <font color='blue'>{</font>
+<a name='L838'> 838                         <i><font color='green'>//display content of a folder (parent = root)</font></i>
+<a name='L839'> 839                         <b>echo</b> <a href='../S/21.html#L430' title='Defined at 430 in functions_forum.php.'>displayForumContentFlat</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L840'> 840 
+<a name='L841'> 841                         <b>echo</b> '&lt;a href="forum_new.php?id='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.'"&gt;Create new forum here&lt;/a&gt;&lt;br/&gt;';
+<a name='L842'> 842 
+<a name='L843'> 843                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font>
+<a name='L844'> 844                                 <b>echo</b> '&lt;a href="forum_edit.php?id='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.'"&gt;Edit forum name&lt;/a&gt;&lt;br/&gt;';
+<a name='L845'> 845                                 <b>echo</b> '&lt;a href="forum_delete.php?id='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.'"&gt;Delete forum&lt;/a&gt;&lt;br/&gt;';
+<a name='L846'> 846                         <font color='blue'>}</font>
+<a name='L847'> 847                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L848'> 848                         
+<a name='L849'> 849                         <b>echo</b> '&lt;a href="forum_new.php?id='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.'"&gt;Post response&lt;/a&gt;';
+<a name='L850'> 850                         <b>echo</b> '&lt;br/&gt;&lt;br/&gt;';
+<a name='L851'> 851 
+<a name='L852'> 852                         <i><font color='green'>//display flat discussion overview</font></i>
+<a name='L853'> 853                         <b>echo</b> <a href='../S/21.html#L640' title='Defined at 640 in functions_forum.php.'>displayTopicFlat</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L854'> 854 
+<a name='L855'> 855                         <b>echo</b> '&lt;br/&gt;';
+<a name='L856'> 856                         <b>echo</b> '&lt;a href="forum_new.php?id='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.'"&gt;Post response&lt;/a&gt;';
+<a name='L857'> 857                 <font color='blue'>}</font>
+<a name='L858'> 858         <font color='blue'>}</font>
+<a name='L859'> 859 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L22'>[^]</a><a href='#L813'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>escape</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L30'>escape</a>             30 atom_categories.php 		$_name = $db-&gt;escape(trim($_name));
+<a href='../S/26.html#L49'>escape</a>             49 atom_categories.php 		$q = 'UPDATE tblCategories SET categoryName="'.$db-&gt;escape($name).'" WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/25.html#L27'>escape</a>             27 atom_comments.php 		$commentText = $db-&gt;escape(htmlspecialchars($commentText));
+<a href='../S/25.html#L41'>escape</a>             41 atom_comments.php 		$commentText = $db-&gt;escape(htmlspecialchars($commentText));
+<a href='../S/8.html#L12'>escape</a>             12 atom_feedback.php 		$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',text="'.$db-&gt;escape($_text).'",text2="'.$db-&gt;escape($_text2).'",userId='.$session-&gt;id.',subjectId='.$_subject.',timeCreated=NOW()';
+<a href='../S/10.html#L73'>escape</a>             73 atom_moderation.php 		$text = $db-&gt;escape(trim($text));
+<a href='../S/10.html#L111'>escape</a>            111 atom_moderation.php 		$text = $db-&gt;escape($text);
+<a href='../S/10.html#L154'>escape</a>            154 atom_moderation.php 		$word = $db-&gt;escape($word);
+<a href='../S/10.html#L178'>escape</a>            178 atom_moderation.php 		$q = 'UPDATE tblStopwords SET wordText="'.$db-&gt;escape($wordText).'", wordMatch='.$full.' WHERE wordId='.$wordId;
+<a href='../S/5.html#L16'>escape</a>             16 atom_polls.php 		$text = $db-&gt;escape(trim($text));
+<a href='../S/5.html#L70'>escape</a>             70 atom_polls.php 		$q = 'UPDATE tblPolls SET pollText="'.$db-&gt;escape($_text).'" WHERE pollType='.$_type.' AND pollId='.$_id;
+<a href='../S/12.html#L25'>escape</a>             25 atom_revisions.php 		$timestamp = $db-&gt;escape($timestamp);		//todo: validate timestamp bättre
+<a href='../S/12.html#L27'>escape</a>             27 atom_revisions.php 		$q = 'INSERT INTO tblRevisions SET fieldId='.$fieldId.',fieldType='.$fieldType.',fieldText="'.$db-&gt;escape($fieldText).'",createdBy='.$creatorId.',timeCreated="'.$timestamp.'",categoryId='.$categoryId;
+<a href='../S/33.html#L21'>escape</a>             21 atom_settings.php 		$settingName = $db-&gt;escape($settingName);
+<a href='../S/33.html#L22'>escape</a>             22 atom_settings.php 		$settingValue = $db-&gt;escape($settingValue);
+<a href='../S/33.html#L42'>escape</a>             42 atom_settings.php 		$settingName = $db-&gt;escape($settingName);
+<a href='../S/33.html#L43'>escape</a>             43 atom_settings.php 		$defaultValue = $db-&gt;escape($defaultValue);
+<a href='../S/33.html#L60'>escape</a>             60 atom_settings.php 		$defaultValue = $db-&gt;escape($defaultValue);
+<a href='../S/4.html#L491'>escape</a>            491 class.Files.php 	  	$q = 'INSERT INTO tblFiles SET fileName="'.$db-&gt;escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session-&gt;id.',uploaderIP='.$session-&gt;ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+<a href='../S/4.html#L493'>escape</a>            493 class.Files.php 			$q = 'INSERT INTO tblFiles SET fileName="'.$db-&gt;escape($fileName).'",ownerId='.$ownerId.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+<a href='../S/4.html#L525'>escape</a>            525 class.Files.php 				$q = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$db-&gt;escape(basename(strip_tags($FileData['name']))).'.jpg",fileSize='.$filesize.' WHERE fileId='.$fileId;
+<a href='../S/4.html#L545'>escape</a>            545 class.Files.php 				$q = 'UPDATE tblFiles SET fileMime="image/png", fileName="'.$db-&gt;escape(basename(strip_tags($FileData['name']))).'.png",fileSize='.$filesize.' WHERE fileId='.$fileId;
+<a href='../S/4.html#L714'>escape</a>            714 class.Files.php 		$new['sha1'] = $db-&gt;escape(hash_file('sha1', $this-&gt;upload_dir.$_id));	//40-character hex string
+<a href='../S/4.html#L715'>escape</a>            715 class.Files.php 		$new['md5'] = $db-&gt;escape(hash_file('md5', $this-&gt;upload_dir.$_id));		//32-character hex string
+<a href='../S/4.html#L760'>escape</a>            760 class.Files.php 		$q = 'UPDATE tblFiles SET fileMime="'.$db-&gt;escape($mimeType).'",fileSize='.$size.' WHERE fileId='.$_id.' AND fileType='.FILETYPE_PROCESS_CLONE;
+<a href='../S/4.html#L787'>escape</a>            787 class.Files.php 		$q = 'UPDATE tblFiles SET fileMime="'.$db-&gt;escape($mime).'",fileSize='.$size.' WHERE fileId='.$_id;
+<a href='../S/2.html#L195'>escape</a>            195 class.Session.php 		$q = 'INSERT INTO tblLogs SET entryText="'.$db-&gt;escape($str).'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$this-&gt;id.',userIP='.$this-&gt;ip;
+<a href='../S/2.html#L208'>escape</a>            208 class.Session.php 		if (($db-&gt;escape($username) != $username) || ($db-&gt;escape($password1) != $password1)) {
+<a href='../S/2.html#L247'>escape</a>            247 class.Session.php 		$enc_username = $db-&gt;escape($username);
+<a href='../S/2.html#L274'>escape</a>            274 class.Session.php 		$db-&gt;insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this-&gt;id.', IP='.$this-&gt;ip.', userAgent="'.$db-&gt;escape($_SERVER['HTTP_USER_AGENT']).'"');
+<a href='../S/11.html#L17'>escape</a>             17 functions_blogs.php 		$title = $db-&gt;escape($title);
+<a href='../S/11.html#L18'>escape</a>             18 functions_blogs.php 		$body = $db-&gt;escape($body);
+<a href='../S/11.html#L46'>escape</a>             46 functions_blogs.php 		$title = $db-&gt;escape($title);
+<a href='../S/11.html#L47'>escape</a>             47 functions_blogs.php 		$body = $db-&gt;escape($body);
+<a href='../S/30.html#L216'>escape</a>            216 functions_contacts.php 		$q = 'INSERT INTO tblFriendRequests SET senderId='.$session-&gt;id.',recieverId='.$userId.',timeCreated=NOW(),categoryId='.$categoryId.',msg="'.$db-&gt;escape($msg).'"';
+<a href='../S/24.html#L10'>escape</a>             10 functions_faq.php 		$q = 'INSERT INTO tblFAQ SET question="'.$db-&gt;escape($_q).'",answer="'.$db-&gt;escape($_a).'",createdBy='.$session-&gt;id.',timeCreated=NOW()';
+<a href='../S/21.html#L162'>escape</a>            162 functions_forum.php 		$folderName = $db-&gt;escape(strip_tags($folderName));
+<a href='../S/21.html#L163'>escape</a>            163 functions_forum.php 		$folderDesc = $db-&gt;escape($folderDesc);
+<a href='../S/21.html#L175'>escape</a>            175 functions_forum.php 		$subject = $db-&gt;escape(strip_tags($subject));
+<a href='../S/21.html#L178'>escape</a>            178 functions_forum.php 		$body = $db-&gt;escape($body);
+<a href='../S/21.html#L268'>escape</a>            268 functions_forum.php 		$subject = $db-&gt;escape($subject);
+<a href='../S/21.html#L269'>escape</a>            269 functions_forum.php 		$body = $db-&gt;escape($body);
+<a href='../S/21.html#L683'>escape</a>            683 functions_forum.php 		$criteria = $db-&gt;escape($criteria);
+<a href='../S/21.html#L712'>escape</a>            712 functions_forum.php 		$criteria = $db-&gt;escape($criteria);
+<a href='../S/7.html#L11'>escape</a>             11 functions_guestbook.php 		$subject = $db-&gt;escape(strip_tags($subject));
+<a href='../S/7.html#L12'>escape</a>             12 functions_guestbook.php 		$body    = $db-&gt;escape(strip_tags($body));
+<a href='../S/16.html#L11'>escape</a>             11 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId='.$session-&gt;id.',toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+<a href='../S/16.html#L15'>escape</a>             15 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$session-&gt;id.',fromId='.$session-&gt;id.',toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_OUTBOX;
+<a href='../S/16.html#L27'>escape</a>             27 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId=0,toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+<a href='../S/14.html#L17'>escape</a>             17 functions_news.php 		$q = 'SELECT newsId FROM tblNews WHERE title="'.$db-&gt;escape($title).'" AND body="'.$db-&gt;escape($body).'"';
+<a href='../S/14.html#L23'>escape</a>             23 functions_news.php 		$q = 'INSERT INTO tblNews SET title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session-&gt;id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
+<a href='../S/14.html#L37'>escape</a>             37 functions_news.php 		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session-&gt;id.' WHERE newsId='.$newsId;
+<a href='../S/29.html#L306'>escape</a>            306 functions_spider.php 		$q = 'SELECT body FROM tblSpiderCache WHERE url="'.$db-&gt;escape($url).'" AND timeCreated &gt;= NOW()-'.$config['spider']['cache_age'];
+<a href='../S/29.html#L405'>escape</a>            405 functions_spider.php 			$q = 'DELETE FROM tblSpiderCache WHERE url="'.$db-&gt;escape($url).'"';
+<a href='../S/29.html#L409'>escape</a>            409 functions_spider.php 			$q = 'INSERT INTO tblSpiderCache SET url="'.$db-&gt;escape($url).'",header="'.$db-&gt;escape($header).'",body="'.$db-&gt;escape($body).'",sha1="'.sha1($body).'",timeCreated=NOW()';
+<a href='../S/28.html#L39'>escape</a>             39 functions_todo.php 		$q = 'INSERT INTO tblTodoLists SET categoryId='.$categoryId.',itemCreator='.$session-&gt;id.',itemDesc="'.$db-&gt;escape($desc).'",itemDetails="'.$db-&gt;escape($details).'",itemCategory='.$category.',timeCreated=NOW()';
+<a href='../S/31.html#L24'>escape</a>             24 functions_userdata.php 		$check = $db-&gt;getOneItem('SELECT fieldId FROM tblUserdata WHERE fieldName="'.$db-&gt;escape($fieldName).'"');
+<a href='../S/31.html#L29'>escape</a>             29 functions_userdata.php 		$q = 'INSERT INTO tblUserdata SET fieldName="'.$db-&gt;escape($fieldName).'",fieldDefault="'.$db-&gt;escape($fieldDefault).'",fieldType='.$fieldType.',allowTags='.$allowTags.',private='.$isPrivate.',fieldPriority='.$prio.',regRequire='.$regRequire;
+<a href='../S/31.html#L41'>escape</a>             41 functions_userdata.php 		$q = 'UPDATE tblUserdata SET fieldName="'.$db-&gt;escape($fieldName).'",fieldDefault="'.$db-&gt;escape($fieldDefault).'",fieldType='.$fieldType.',allowTags='.$allowTags.',private='.$isPrivate.',regRequire='.$regRequire.' WHERE fieldId='.$fieldId;
+<a href='../S/31.html#L93'>escape</a>             93 functions_userdata.php 		$q = 'SELECT fieldId FROM tblUserdata WHERE fieldName="'.$db-&gt;escape($_name).'"';
+<a href='../S/27.html#L176'>escape</a>            176 functions_users.php 		$criteria = $db-&gt;escape($data['c']);
+<a href='../S/27.html#L231'>escape</a>            231 functions_users.php 		$q .= 'WHERE LOWER(userName) LIKE LOWER("'.$db-&gt;escape($phrase).'%")';
+<a href='../S/9.html#L30'>escape</a>             30 functions_wiki.php 		$wikiName = $db-&gt;escape(trim($wikiName));
+<a href='../S/9.html#L39'>escape</a>             39 functions_wiki.php 		$_text = $db-&gt;escape(trim($_text));
+<a href='../S/9.html#L104'>escape</a>            104 functions_wiki.php 				'WHERE t1.wikiName="'.$db-&gt;escape($wikiName).'"';
+</pre>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<html>
+<head>
+<title>functions_guestbook.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/functions_guestbook.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L4'>[^]</a><a href='#L125'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L4' title='Defined at 4.'>addGuestbookEntry</a>
+<li><a href='#L31' title='Defined at 31.'>removeGuestbookEntry</a>
+<li><a href='#L42' title='Defined at 42.'>getGuestbook</a>
+<li><a href='#L59' title='Defined at 59.'>getGuestbookItems</a>
+<li><a href='#L77' title='Defined at 77.'>getGuestbookItem</a>
+<li><a href='#L93' title='Defined at 93.'>getGuestbookCount</a>
+<li><a href='#L104' title='Defined at 104.'>getGuestbookUnreadCount</a>
+<li><a href='#L115' title='Defined at 115.'>markGuestbookRead</a>
+<li><a href='#L125' title='Defined at 125.'>showGuestbook</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2         <b>require_once</b>('atom_moderation.php');    <i><font color='green'>//for moderation functionality</font></i>
+<a name='L3'>   3 
+<a name='L4'>   4         <b>function</b> <a href='../S/7.html#L135' title='Refered from 135 in functions_guestbook.php.'>addGuestbookEntry</a>($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>, $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>, $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>)
+<a name='L5'>   5         <font color='blue'>{</font>
+<a name='L6'>   6                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L7'>   7 
+<a name='L8'>   8                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>)) <b>return</b> <b>false</b>;
+<a name='L9'>   9 
+<a name='L10'>  10                 <i><font color='green'>/* Strip all html */</font></i>
+<a name='L11'>  11                 $<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>));
+<a name='L12'>  12                 $<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>    = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>));
+<a name='L13'>  13 
+<a name='L14'>  14                 <b>if</b> (!$<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>) <b>return</b> <b>false</b>;
+<a name='L15'>  15 
+<a name='L16'>  16                 <i><font color='green'>/*</font></i>
+<a name='L17'>  17 <i><font color='green'>                        spam / repeated message protection</font></i>
+<a name='L18'>  18 <i><font color='green'>                        checks if the user has written a identical message in the last 5 minutes</font></i>
+<a name='L19'>  19 <i><font color='green'>                */</font></i>
+<a name='L20'>  20                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT COUNT(*) FROM tblGuestbooks WHERE userId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>.' AND authorId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;
+<a name='L21'>  21                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' AND subject="'.$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>.'" AND body="'.$<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>.'" AND timeCreated&gt;=DATE_SUB(NOW(),INTERVAL 5 MINUTE)';
+<a name='L22'>  22                 <b>if</b> ($<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>)) <b>return</b> <b>false</b>;
+<a name='L23'>  23 
+<a name='L24'>  24                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblGuestbooks SET userId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>.',authorId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',subject="'.$<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>.'",body="'.$<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>.'",timeCreated=NOW()';
+<a name='L25'>  25                 $<a href='../Y/203.html' title='Multiple used in 8 places.'>entryId</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L26'>  26 
+<a name='L27'>  27                 <i><font color='green'>/* Add entry to moderation queue */</font></i>
+<a name='L28'>  28                 <b>if</b> (<a href='../S/10.html#L47' title='Defined at 47 in atom_moderation.php.'>isSensitive</a>($<a href='../Y/605.html' title='Multiple used in 39 places.'>subject</a>) || <a href='../S/10.html#L47' title='Defined at 47 in atom_moderation.php.'>isSensitive</a>($<a href='../Y/46.html' title='Multiple used in 44 places.'>body</a>)) <a href='../S/10.html#L184' title='Defined at 184 in atom_moderation.php.'>addToModerationQueue</a>(<a href='../S/10.html#L24' title='Defined at 24 in atom_moderation.php.'>MODERATION_GUESTBOOK</a>, $<a href='../Y/203.html' title='Multiple used in 8 places.'>entryId</a>, <b>true</b>);
+<a name='L29'>  29         <font color='blue'>}</font>
+<a name='L30'>  30 
+<a name='L31'>  31         <b>function</b> <a href='../S/7.html#L130' title='Refered from 130 in functions_guestbook.php.'>removeGuestbookEntry</a>($<a href='../Y/203.html' title='Multiple used in 8 places.'>entryId</a>)
+<a name='L32'>  32         <font color='blue'>{</font>
+<a name='L33'>  33                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L34'>  34 
+<a name='L35'>  35                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/203.html' title='Multiple used in 8 places.'>entryId</a>)) <b>return</b> <b>false</b>;
+<a name='L36'>  36 <i><font color='green'>//deletedby, så admin-deletes syns</font></i>
+<a name='L37'>  37                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblGuestbooks SET entryDeleted=1,timeDeleted=NOW() WHERE entryId='.$<a href='../Y/203.html' title='Multiple used in 8 places.'>entryId</a>;
+<a name='L38'>  38                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L39'>  39         <font color='blue'>}</font>
+<a name='L40'>  40 
+<a name='L41'>  41         <i><font color='green'>/* Return $userId's guestbook entries */</font></i>
+<a name='L42'>  42         <b>function</b> <a href='../S/7.html#L145' title='Refered from 145 in functions_guestbook.php.'>getGuestbook</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>, $<a href='../Y/104.html' title='Multiple used in 2 places.'>_limit_sql</a> = '')
+<a name='L43'>  43         <font color='blue'>{</font>
+<a name='L44'>  44                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L45'>  45 
+<a name='L46'>  46                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>)) <b>return</b> <b>false</b>;
+<a name='L47'>  47 
+<a name='L48'>  48                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS authorName ';
+<a name='L49'>  49                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'FROM tblGuestbooks AS t1 ';
+<a name='L50'>  50                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a name='L51'>  51                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.userId='.$<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>.' ';
+<a name='L52'>  52                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'AND t1.entryDeleted=0 ';
+<a name='L53'>  53                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY t1.timeCreated DESC'.$<a href='../Y/104.html' title='Multiple used in 2 places.'>_limit_sql</a>;
+<a name='L54'>  54 
+<a name='L55'>  55                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L56'>  56         <font color='blue'>}</font>
+<a name='L57'>  57 
+<a name='L58'>  58         <i><font color='green'>/* Returns $count last entries from $userId's guestbook */</font></i>
+<a name='L59'>  59         <b>function</b> getGuestbookItems($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>, $<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a> = 5)
+<a name='L60'>  60         <font color='blue'>{</font>
+<a name='L61'>  61                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L62'>  62 
+<a name='L63'>  63                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>)) <b>return</b> <b>false</b>;
+<a name='L64'>  64 
+<a name='L65'>  65                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS authorName ';
+<a name='L66'>  66                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'FROM tblGuestbooks AS t1 ';
+<a name='L67'>  67                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a name='L68'>  68                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.userId='.$<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>.' ';
+<a name='L69'>  69                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'AND t1.entryDeleted=0 ';
+<a name='L70'>  70                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'ORDER BY t1.timeCreated DESC';
+<a name='L71'>  71                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' LIMIT 0,'.$<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>;
+<a name='L72'>  72 
+<a name='L73'>  73                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L74'>  74         <font color='blue'>}</font>
+<a name='L75'>  75 
+<a name='L76'>  76         <i><font color='green'>/* Returns one specific guestbook entry */</font></i>
+<a name='L77'>  77         <b>function</b> getGuestbookItem($<a href='../Y/203.html' title='Multiple used in 8 places.'>entryId</a>)
+<a name='L78'>  78         <font color='blue'>{</font>
+<a name='L79'>  79                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L80'>  80 
+<a name='L81'>  81                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/203.html' title='Multiple used in 8 places.'>entryId</a>)) <b>return</b> <b>false</b>;
+<a name='L82'>  82 
+<a name='L83'>  83                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS authorName,t3.userName FROM tblGuestbooks AS t1 ';
+<a name='L84'>  84                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT OUTER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+<a name='L85'>  85                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
+<a name='L86'>  86                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE entryId='.$<a href='../Y/203.html' title='Multiple used in 8 places.'>entryId</a>;
+<a name='L87'>  87 
+<a name='L88'>  88                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L89'>  89         <font color='blue'>}</font>
+<a name='L90'>  90 
+<a name='L91'>  91 
+<a name='L92'>  92         <i><font color='green'>/* Returns the number of items in the guestbook */</font></i>
+<a name='L93'>  93         <b>function</b> <a href='../S/7.html#L138' title='Refered from 138 in functions_guestbook.php.'>getGuestbookCount</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>)
+<a name='L94'>  94         <font color='blue'>{</font>
+<a name='L95'>  95                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L96'>  96 
+<a name='L97'>  97                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>)) <b>return</b> <b>false</b>;
+<a name='L98'>  98 
+<a name='L99'>  99                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>.' AND entryDeleted=0';
+<a name='L100'> 100                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L101'> 101         <font color='blue'>}</font>
+<a name='L102'> 102 
+<a name='L103'> 103         <i><font color='green'>/* Returns the number of unread items in the guestbook */</font></i>
+<a name='L104'> 104         <b>function</b> getGuestbookUnreadCount($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>)
+<a name='L105'> 105         <font color='blue'>{</font>
+<a name='L106'> 106                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L107'> 107 
+<a name='L108'> 108                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>)) <b>return</b> <b>false</b>;
+<a name='L109'> 109 
+<a name='L110'> 110                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>.' AND entryRead=0';
+<a name='L111'> 111                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L112'> 112         <font color='blue'>}</font>
+<a name='L113'> 113 
+<a name='L114'> 114         <i><font color='green'>/* Markerar alla inlägg i gästboken som lästa */</font></i>
+<a name='L115'> 115         <b>function</b> <a href='../S/7.html#L177' title='Refered from 177 in functions_guestbook.php.'>markGuestbookRead</a>()
+<a name='L116'> 116         <font color='blue'>{</font>
+<a name='L117'> 117                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L118'> 118 
+<a name='L119'> 119                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <b>return</b> <b>false</b>;
+<a name='L120'> 120 
+<a name='L121'> 121                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblGuestbooks SET entryRead=1,timeRead=NOW() WHERE entryRead=0 AND userId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;
+<a name='L122'> 122                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L123'> 123         <font color='blue'>}</font>
+<a name='L124'> 124 
+<a name='L125'> 125         <b>function</b> showGuestbook($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>)
+<a name='L126'> 126         <font color='blue'>{</font>
+<a name='L127'> 127                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L128'> 128                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> || $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> == $<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>) <font color='blue'>{</font>
+<a name='L129'> 129                         <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['remove'])) <font color='blue'>{</font>
+<a name='L130'> 130                                 <a href='../S/7.html#L31' title='Defined at 31 in functions_guestbook.php.'>removeGuestbookEntry</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['remove']);
+<a name='L131'> 131                         <font color='blue'>}</font>
+<a name='L132'> 132                 <font color='blue'>}</font>
+<a name='L133'> 133 
+<a name='L134'> 134                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> != $<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a> &amp;&amp; !<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['body'])) <font color='blue'>{</font>
+<a name='L135'> 135                         <a href='../S/7.html#L4' title='Defined at 4 in functions_guestbook.php.'>addGuestbookEntry</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>, '', $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['body']);
+<a name='L136'> 136                 <font color='blue'>}</font>
+<a name='L137'> 137 
+<a name='L138'> 138                 $<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a> = <a href='../S/7.html#L93' title='Defined at 93 in functions_guestbook.php.'>getGuestbookCount</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>);
+<a name='L139'> 139                 <b>echo</b> 'Guestbook:'.<a href='../S/27.html#L10' title='Defined at 10 in functions_users.php.'>getUserName</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>).' contains '.$<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a>.' messages.&lt;br/&gt;&lt;br/&gt;';
+<a name='L140'> 140 
+<a name='L141'> 141                 $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a> = <a href='../S/17.html#L19' title='Defined at 19 in functions_general.php.'>makePager</a>($<a href='../Y/646.html' title='Multiple used in 9 places.'>tot_cnt</a>, 5);
+<a name='L142'> 142 
+<a name='L143'> 143                 <b>echo</b> $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a>['head'];
+<a name='L144'> 144 
+<a name='L145'> 145                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../S/7.html#L42' title='Defined at 42 in functions_guestbook.php.'>getGuestbook</a>($<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>, $<a href='../Y/447.html' title='Multiple used in 33 places.'>pager</a>['limit']);
+<a name='L146'> 146                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L147'> 147                         <b>echo</b> '&lt;a name="gb'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['entryId'].'"&gt;&lt;/a&gt;';
+<a name='L148'> 148                         <b>echo</b> '&lt;div class="guestbook_entry"&gt;';
+<a name='L149'> 149 
+<a name='L150'> 150                         <b>echo</b> '&lt;div class="guestbook_entry_head"&gt;';
+<a name='L151'> 151                         <b>echo</b> 'From '.<a href='../S/27.html#L323' title='Defined at 323 in functions_users.php.'>nameLink</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['authorId'], $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['authorName']);
+<a name='L152'> 152                         <b>echo</b> ', '.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['timeCreated'];
+<a name='L153'> 153                         <b>echo</b> '&lt;/div&gt;';
+<a name='L154'> 154 
+<a name='L155'> 155                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> == $<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>) <font color='blue'>{</font>
+<a name='L156'> 156                                 <b>if</b> ($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['entryRead'] == 0) <font color='blue'>{</font>
+<a name='L157'> 157                                         <b>echo</b> '&lt;img src="/gfx/icon_mail.png" alt="Unread"&gt;';
+<a name='L158'> 158                                 <font color='blue'>}</font>
+<a name='L159'> 159                         <font color='blue'>}</font>
+<a name='L160'> 160                         <b>echo</b> <a href='../Y/593.html' title='Multiple used in 12 places.'>stripslashes</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['body']).'&lt;br/&gt;';
+<a name='L161'> 161 
+<a name='L162'> 162                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> || $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> == $<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>) <font color='blue'>{</font>
+<a name='L163'> 163                                 <b>echo</b> '&lt;a href="'.$<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?id='.$<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>.'&amp;amp;remove='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['entryId'].'"&gt;Remove&lt;/a&gt;';
+<a name='L164'> 164                         <font color='blue'>}</font>
+<a name='L165'> 165                         <b>echo</b> '&lt;/div&gt;&lt;br/&gt;';
+<a name='L166'> 166                 <font color='blue'>}</font>
+<a name='L167'> 167 
+<a name='L168'> 168                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <font color='blue'>{</font>
+<a name='L169'> 169                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> != $<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>) <font color='blue'>{</font>
+<a name='L170'> 170                                 <b>echo</b> 'New entry:&lt;br/&gt;';
+<a name='L171'> 171                                 <b>echo</b> '&lt;form name="addGuestbook" method="post" action="'.$<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?id='.$<a href='../Y/671.html' title='Multiple used in 102 places.'>userId</a>.'"&gt;';
+<a name='L172'> 172                                 <b>echo</b> '&lt;textarea name="body" cols="40" rows="6"&gt;&lt;/textarea&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L173'> 173                                 <b>echo</b> '&lt;input type="submit" class="button" value="Save"/&gt;';
+<a name='L174'> 174                                 <b>echo</b> '&lt;/form&gt;';
+<a name='L175'> 175                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L176'> 176                                 <i><font color='green'>/* Mark all entries as read */</font></i>
+<a name='L177'> 177                                 <a href='../S/7.html#L115' title='Defined at 115 in functions_guestbook.php.'>markGuestbookRead</a>();
+<a name='L178'> 178                         <font color='blue'>}</font>
+<a name='L179'> 179                 <font color='blue'>}</font>
+<a name='L180'> 180 
+<a name='L181'> 181         <font color='blue'>}</font>
+<a name='L182'> 182 
+<a name='L183'> 183 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L4'>[^]</a><a href='#L125'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

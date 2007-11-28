@@ -1,8 +1,21 @@
 <?
+	/* debug function! prints out variable $v */
+	function d($v)
+	{
+		if (is_string($v)) echo htmlentities($v);
+		else {
+			if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
+			else {
+				echo '<pre>';
+				print_r($v);
+				echo '</pre>';
+			}
+		}
+	}
+
 	//returns a $pager array with some properties filled
 	//reads the 'p' get parameter for current page
 	//example: $pager = makePager(102, 25);		will create a pager for total of 102 items with 25 items per page
-
 	function makePager($_total_cnt, $_items_per_page, $_add_value = '')
 	{
 		global $config;

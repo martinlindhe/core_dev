@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>content</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L153'>content</a>           153 atom_categories.php 		$content = '&lt;select name="'.strip_tags($selectName).'"&gt;';
+<a href='../S/26.html#L156'>content</a>           156 atom_categories.php 			$content .= '&lt;option value="0" onclick="location.href=\'?file_category_id=0\'"&gt;&amp;nbsp;&lt;/option&gt;';
+<a href='../S/26.html#L158'>content</a>           158 atom_categories.php 			$content .= '&lt;option value="0"&gt;&amp;nbsp;&lt;/option&gt;';
+<a href='../S/26.html#L169'>content</a>           169 atom_categories.php 				$content .= '&lt;optgroup label="Global categories"&gt;';
+<a href='../S/26.html#L173'>content</a>           173 atom_categories.php 				$content .= '&lt;/optgroup&gt;';
+<a href='../S/26.html#L174'>content</a>           174 atom_categories.php 				$content .= '&lt;optgroup label="Your categories"&gt;';
+<a href='../S/26.html#L188'>content</a>           188 atom_categories.php 			$content .= '&lt;option value="'.$val.'"';
+<a href='../S/26.html#L189'>content</a>           189 atom_categories.php 			if ($selectedId == $val) $content .= ' selected="selected"';
+<a href='../S/26.html#L192'>content</a>           192 atom_categories.php 					$content .= ' onclick="location.href=\''.$url.'?'.$varName.'='.$row['categoryId'].$extra.'\'"';
+<a href='../S/26.html#L194'>content</a>           194 atom_categories.php 					$content .= ' onclick="location.href=\''.$url.'='.$row['categoryId'].$extra.'\'"';
+<a href='../S/26.html#L197'>content</a>           197 atom_categories.php 			$content .= '&gt;'.$text;
+<a href='../S/26.html#L198'>content</a>           198 atom_categories.php 			if ($row['categoryType'] == CATEGORY_USERFILE_PRIVATE) $content .= ' (PRIVATE)';
+<a href='../S/26.html#L199'>content</a>           199 atom_categories.php 			if ($row['categoryType'] == CATEGORY_USERFILE_HIDDEN) $content .= ' (HIDDEN)';
+<a href='../S/26.html#L200'>content</a>           200 atom_categories.php 			$content .= '&lt;/option&gt;';
+<a href='../S/26.html#L202'>content</a>           202 atom_categories.php 		if ($shown_global_cats || $shown_my_cats) $content .= '&lt;/optgroup&gt;';
+<a href='../S/26.html#L204'>content</a>           204 atom_categories.php 		$content .= '&lt;/select&gt;';
+<a href='../S/26.html#L206'>content</a>           206 atom_categories.php 		return $content;
+<a href='../S/4.html#L481'>content</a>           481 class.Files.php 	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
+<a href='../S/4.html#L497'>content</a>           497 class.Files.php 		if ($content) {
+<a href='../S/4.html#L499'>content</a>           499 class.Files.php 			file_put_contents($this-&gt;upload_dir.$newFileId, $content);
+</pre>
+</body>
+</html>

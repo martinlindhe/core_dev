@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>_SERVER</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/25.html#L32'>_SERVER</a>            32 atom_comments.php 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session-&gt;id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+<a href='../S/25.html#L43'>_SERVER</a>            43 atom_comments.php 		$q  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).' ';
+<a href='../S/19.html#L352'>_SERVER</a>           352 class.DB_Base.php 			echo 'Showing oldest first - [&lt;a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'"&gt;show newest first&lt;/a&gt;]&lt;br/&gt;';
+<a href='../S/19.html#L355'>_SERVER</a>           355 class.DB_Base.php 			echo 'Showing newest first - [&lt;a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'&amp;amp;sort=asc"&gt;show oldest first&lt;/a&gt;]&lt;br/&gt;';
+<a href='../S/19.html#L380'>_SERVER</a>           380 class.DB_Base.php 		echo '&lt;a href="'.$_SERVER['PHP_SELF'].'?events_clearlog'.getProjectPath().'"&gt;Clear log&lt;/a&gt;';
+<a href='../S/2.html#L112'>_SERVER</a>           112 class.Session.php 		if (!$this-&gt;ip) $this-&gt;ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+<a href='../S/2.html#L113'>_SERVER</a>           113 class.Session.php 		if (!$this-&gt;user_agent) $this-&gt;user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
+<a href='../S/2.html#L161'>_SERVER</a>           161 class.Session.php 		if ($this-&gt;check_ip &amp;&amp; $this-&gt;ip &amp;&amp; ($this-&gt;ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+<a href='../S/2.html#L163'>_SERVER</a>           163 class.Session.php 			$this-&gt;log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this-&gt;ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
+<a href='../S/2.html#L175'>_SERVER</a>           175 class.Session.php 		if ($this-&gt;check_useragent &amp;&amp; $this-&gt;user_agent &amp;&amp; ($this-&gt;user_agent != $_SERVER['HTTP_USER_AGENT'])) {
+<a href='../S/2.html#L177'>_SERVER</a>           177 class.Session.php 			$this-&gt;log('Client user agent string changed from "'.$this-&gt;user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
+<a href='../S/2.html#L274'>_SERVER</a>           274 class.Session.php 		$db-&gt;insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this-&gt;id.', IP='.$this-&gt;ip.', userAgent="'.$db-&gt;escape($_SERVER['HTTP_USER_AGENT']).'"');
+<a href='../S/11.html#L162'>_SERVER</a>           162 functions_blogs.php 		$menu = array($_SERVER['PHP_SELF'].'?Blog:'.$_id =&gt; 'Show blog');
+<a href='../S/11.html#L164'>_SERVER</a>           164 functions_blogs.php 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id =&gt; 'Edit blog'));
+<a href='../S/11.html#L165'>_SERVER</a>           165 functions_blogs.php 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id =&gt; 'Attachments ('.$files-&gt;getFileCount(FILETYPE_BLOG, $_id).')'));
+<a href='../S/11.html#L166'>_SERVER</a>           166 functions_blogs.php 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id =&gt; 'Delete blog'));
+<a href='../S/11.html#L169'>_SERVER</a>           169 functions_blogs.php 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id =&gt; 'Report blog'));
+<a href='../S/11.html#L171'>_SERVER</a>           171 functions_blogs.php 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$_id =&gt; 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
+<a href='../S/11.html#L178'>_SERVER</a>           178 functions_blogs.php 			echo '&lt;form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogEdit:'.$_id.'"&gt;';
+<a href='../S/11.html#L216'>_SERVER</a>           216 functions_blogs.php 				echo '&lt;form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogReport:'.$_id.'"&gt;';
+<a href='../S/30.html#L129'>_SERVER</a>           129 functions_contacts.php 				echo 'You can remove your pending relation requests by clicking &lt;a href="'.$_SERVER['PHP_SELF'].'?request_stopwait='.$userId.'"&gt;here&lt;/a&gt;.';
+<a href='../S/17.html#L72'>_SERVER</a>            72 functions_general.php 			$project_path = dirname($_SERVER['SCRIPT_NAME']);
+<a href='../S/17.html#L91'>_SERVER</a>            91 functions_general.php 		$curr_url = 'http://localhost'.$_SERVER['REQUEST_URI'];
+<a href='../S/17.html#L173'>_SERVER</a>           173 functions_general.php 			echo '&lt;a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'&amp;amp;confirmed'.getProjectPath().'"&gt;Yes, I am sure&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/17.html#L184'>_SERVER</a>           184 functions_general.php 		$cur = basename($_SERVER['SCRIPT_NAME']);
+<a href='../S/7.html#L163'>_SERVER</a>           163 functions_guestbook.php 				echo '&lt;a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;amp;remove='.$row['entryId'].'"&gt;Remove&lt;/a&gt;';
+<a href='../S/7.html#L171'>_SERVER</a>           171 functions_guestbook.php 				echo '&lt;form name="addGuestbook" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$userId.'"&gt;';
+<a href='../S/16.html#L134'>_SERVER</a>           134 functions_messages.php 			echo 'document.location = "'.$_SERVER['PHP_SELF'].'?read=" + g_idx[row_num];';
+<a href='../S/14.html#L151'>_SERVER</a>           151 functions_news.php 				$_SERVER['PHP_SELF'].'?News:'.$_id =&gt; 'Show news',
+<a href='../S/14.html#L152'>_SERVER</a>           152 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id =&gt; 'Edit',
+<a href='../S/14.html#L153'>_SERVER</a>           153 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsPolls:'.$_id =&gt; 'Polls',
+<a href='../S/14.html#L154'>_SERVER</a>           154 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id =&gt; 'Attachments ('.$files-&gt;getFileCount(FILETYPE_NEWS, $_id).')',
+<a href='../S/14.html#L155'>_SERVER</a>           155 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id =&gt; 'Delete',
+<a href='../S/14.html#L156'>_SERVER</a>           156 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsCategories:'.$_id =&gt; 'Categories',
+<a href='../S/14.html#L157'>_SERVER</a>           157 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id =&gt; 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
+<a href='../S/14.html#L161'>_SERVER</a>           161 functions_news.php 				$_SERVER['PHP_SELF'].'?News:'.$_id =&gt; 'Show article',
+<a href='../S/14.html#L162'>_SERVER</a>           162 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id =&gt; 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
+<a href='../S/27.html#L277'>_SERVER</a>           277 functions_users.php 			echo '&lt;a href="'.$_SERVER['PHP_SELF'].'"&gt;New search&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/27.html#L296'>_SERVER</a>           296 functions_users.php 			echo '&lt;a href="'.$_SERVER['PHP_SELF'].'"&gt;New search&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/27.html#L302'>_SERVER</a>           302 functions_users.php 				echo '&lt;a href="'.$_SERVER['PHP_SELF'].'?l='.chr($i).'"&gt;'.chr($i).'&lt;/a&gt; ';
+<a href='../S/27.html#L306'>_SERVER</a>           306 functions_users.php 			echo'&lt;form name="src" method="post" action="'.$_SERVER['PHP_SELF'].'"&gt;';
+<a href='../S/9.html#L66'>_SERVER</a>            66 functions_wiki.php 				echo '&lt;a href="'.$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName.'"&gt;Create it&lt;/a&gt;';
+<a href='../S/9.html#L127'>_SERVER</a>           127 functions_wiki.php 			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName =&gt; 'Wiki:'.str_replace('_', ' ', $wikiName),
+<a href='../S/9.html#L128'>_SERVER</a>           128 functions_wiki.php 			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName =&gt; 'Edit',
+<a href='../S/9.html#L129'>_SERVER</a>           129 functions_wiki.php 			$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName =&gt; 'History',
+<a href='../S/9.html#L130'>_SERVER</a>           130 functions_wiki.php 			$_SERVER['PHP_SELF'].'?WikiFiles:'.$wikiName =&gt; 'Files ('.$files-&gt;getFileCount(FILETYPE_WIKI, $data['wikiId']).')');
+<a href='../S/9.html#L133'>_SERVER</a>           133 functions_wiki.php 			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName =&gt; 'Wiki:'.str_replace('_', ' ', $wikiName),
+<a href='../S/9.html#L134'>_SERVER</a>           134 functions_wiki.php 			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName =&gt; 'Edit',
+<a href='../S/9.html#L135'>_SERVER</a>           135 functions_wiki.php 			$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName =&gt; 'History');
+</pre>
+</body>
+</html>

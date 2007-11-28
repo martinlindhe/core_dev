@@ -1,0 +1,489 @@
+<html>
+<head>
+<title>class.Session.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/class.Session.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L21'>[^]</a><a href='#L444'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L21' title='Defined at 21.'>LOGLEVEL_NOTICE</a>
+<li><a href='#L22' title='Defined at 22.'>LOGLEVEL_WARNING</a>
+<li><a href='#L23' title='Defined at 23.'>LOGLEVEL_ERROR</a>
+<li><a href='#L24' title='Defined at 24.'>LOGLEVEL_ALL</a>
+<li><a href='#L26' title='Defined at 26.'>Session</a>
+<li><a href='#L67' title='Defined at 67.'>__construct</a>
+<li><a href='#L120' title='Defined at 120.'>handleSessionActions</a>
+<li><a href='#L189' title='Defined at 189.'>log</a>
+<li><a href='#L201' title='Defined at 201.'>registerUser</a>
+<li><a href='#L243' title='Defined at 243.'>logIn</a>
+<li><a href='#L285' title='Defined at 285.'>logOut</a>
+<li><a href='#L305' title='Defined at 305.'>showLoginForm</a>
+<li><a href='#L381' title='Defined at 381.'>showInfo</a>
+<li><a href='#L411' title='Defined at 411.'>requireLoggedIn</a>
+<li><a href='#L422' title='Defined at 422.'>requireAdmin</a>
+<li><a href='#L433' title='Defined at 433.'>requireSuperAdmin</a>
+<li><a href='#L444' title='Defined at 444.'>requireLocalhost</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2 <i><font color='green'>/*</font></i>
+<a name='L3'>   3 <i><font color='green'>        Session class</font></i>
+<a name='L4'>   4 <i><font color='green'></font></i>
+<a name='L5'>   5 <i><font color='green'>        Written by Martin Lindhe, 2007</font></i>
+<a name='L6'>   6 <i><font color='green'></font></i>
+<a name='L7'>   7 <i><font color='green'>        User setting examples:</font></i>
+<a name='L8'>   8 <i><font color='green'>                $session-&gt;save('variablename', 'some random setting to save');</font></i>
+<a name='L9'>   9 <i><font color='green'>                $kex = $session-&gt;read('variablename');</font></i>
+<a name='L10'>  10 <i><font color='green'>*/</font></i>
+<a name='L11'>  11 
+<a name='L12'>  12 <b>require_once</b>('functions_general.php');
+<a name='L13'>  13 <b>require_once</b>('functions_ip.php');
+<a name='L14'>  14 <b>require_once</b>('functions_textformat.php');
+<a name='L15'>  15 <b>require_once</b>('functions_userdata.php');
+<a name='L16'>  16 <b>require_once</b>('functions_users.php');
+<a name='L17'>  17 
+<a name='L18'>  18 <b>require_once</b>('atom_moderation.php');    <i><font color='green'>//for checking if username is reserved on user registration</font></i>
+<a name='L19'>  19 <b>require_once</b>('atom_settings.php');      <i><font color='green'>//for storing userdata</font></i>
+<a name='L20'>  20 
+<a name='L21'>  21 <b>define</b>('LOGLEVEL_NOTICE', 1);
+<a name='L22'>  22 <b>define</b>('LOGLEVEL_WARNING', 2);
+<a name='L23'>  23 <b>define</b>('LOGLEVEL_ERROR', 3);
+<a name='L24'>  24 <b>define</b>('LOGLEVEL_ALL', 5);
+<a name='L25'>  25 
+<a name='L26'>  26 <b>class</b> Session
+<a name='L27'>  27 <font color='blue'>{</font>
+<a name='L28'>  28         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/561.html' title='Multiple used in 4 places.'>session_name</a> = 'someSID';      <i><font color='green'>//default session name</font></i>
+<a name='L29'>  29         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/631.html' title='Multiple used in 5 places.'>timeout</a> = 86400;                                       <i><font color='green'>//24h - max allowed idle time (in seconds) before session times out and user needs to log in again</font></i>
+<a name='L30'>  30         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/433.html' title='Multiple used in 3 places.'>online_timeout</a> = 1800;          <i><font color='green'>//30m - max idle time before the user is counted as "logged out" in "users online"-lists etc</font></i>
+<a name='L31'>  31         <i><font color='green'>//todo: make online_timeout configurable</font></i>
+<a name='L32'>  32         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/69.html' title='Multiple used in 4 places.'>check_ip</a> = <b>true</b>;                                               <i><font color='green'>//client will be logged out if client ip is changed during the session</font></i>
+<a name='L33'>  33         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/70.html' title='Multiple used in 3 places.'>check_useragent</a> = <b>true</b>;                <i><font color='green'>//keeps track if the client user agent string changes during the session</font></i>
+<a name='L34'>  34 
+<a name='L35'>  35         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/568.html' title='Multiple used in 5 places.'>sha1_key</a> = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';        <i><font color='green'>//used to further encode sha1 passwords, to make rainbow table attacks harder</font></i>
+<a name='L36'>  36         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/13.html' title='Multiple used in 6 places.'>allow_login</a> = <b>true</b>;                             <i><font color='green'>//set to false to only let superadmins log in to the site</font></i>
+<a name='L37'>  37         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/14.html' title='Multiple used in 4 places.'>allow_registration</a> = <b>true</b>;     <i><font color='green'>//set to false to disallow the possibility to register new users. will be disabled if login is disabled</font></i>
+<a name='L38'>  38         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/540.html' title='Multiple used in 3 places.'>reserved_usercheck</a> = <b>true</b>;             <i><font color='green'>//check if username is listed as reserved username, requires tblStopwords</font></i>
+<a name='L39'>  39         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/669.html' title='Multiple used in 4 places.'>userdata</a> = <b>true</b>; <i><font color='green'>//shall we use tblUserdata for required userdata fields?</font></i>
+<a name='L40'>  40 
+<a name='L41'>  41         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/586.html' title='Multiple used in 5 places.'>start_page</a> = '';                                               <i><font color='green'>//redirects user to this page (in $config['web_root'] directory) after successful login</font></i>
+<a name='L42'>  42         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/208.html' title='Multiple used in 6 places.'>error_page</a> = 'error.php';      <i><font color='green'>//redirects the user to this page (in $config['web_root'] directory) to show errors</font></i>
+<a name='L43'>  43 
+<a name='L44'>  44         <i><font color='green'>//Aliases of $_SESSION[] variables</font></i>
+<a name='L45'>  45         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a>;
+<a name='L46'>  46         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a>;
+<a name='L47'>  47         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a>;                     <i><font color='green'>//current user's UserAgent string</font></i>
+<a name='L48'>  48         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/657.html' title='Multiple used in 3 places.'>ua_ie</a>;                                  <i><font color='green'>//boolean true if the user is using internet explorer</font></i>
+<a name='L49'>  49         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;                                                     <i><font color='green'>//current user's user ID</font></i>
+<a name='L50'>  50         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>;
+<a name='L51'>  51         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/378.html' title='Multiple used in 10 places.'>mode</a>;
+<a name='L52'>  52         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/341.html' title='Multiple used in 7 places.'>lastActive</a>;
+<a name='L53'>  53         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>;
+<a name='L54'>  54         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/326.html' title='Multiple used in 11 places.'>isSuperAdmin</a>;
+<a name='L55'>  55         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/584.html' title='Multiple used in 5 places.'>started</a>;                <i><font color='green'>//timestamp of when the session started</font></i>
+<a name='L56'>  56         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/621.html' title='Multiple used in 7 places.'>theme</a> = '';                     <i><font color='green'>//contains the currently selected theme</font></i>
+<a name='L57'>  57 
+<a name='L58'>  58         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/673.html' title='Multiple used in 2 places.'>userModes</a> = <b>array</b>(
+<a name='L59'>  59                 0 =&gt; 'Normal user',
+<a name='L60'>  60                 1 =&gt; 'Admin',
+<a name='L61'>  61                 2 =&gt; 'Super admin'
+<a name='L62'>  62         );
+<a name='L63'>  63         
+<a name='L64'>  64         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/184.html' title='Multiple used in 4 places.'>default_theme</a> = 'default.css';                 <i><font color='green'>//default theme if none is choosen</font></i>
+<a name='L65'>  65         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/17.html' title='Multiple used in 3 places.'>allow_themes</a> = <b>false</b>;
+<a name='L66'>  66 
+<a name='L67'>  67         <b>function</b> __construct(<b>array</b> $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a> = <b>array</b>(''))
+<a name='L68'>  68         <font color='blue'>{</font>
+<a name='L69'>  69                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L70'>  70 
+<a name='L71'>  71                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['name'])) $this-&gt;<a href='../Y/561.html' title='Multiple used in 4 places.'>session_name</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['name'];
+<a name='L72'>  72                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['timeout'])) $this-&gt;<a href='../Y/631.html' title='Multiple used in 5 places.'>timeout</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['timeout'];
+<a name='L73'>  73                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['check_ip'])) $this-&gt;<a href='../Y/69.html' title='Multiple used in 4 places.'>check_ip</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['check_ip'];
+<a name='L74'>  74                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['check_useragent'])) $this-&gt;<a href='../Y/70.html' title='Multiple used in 3 places.'>check_useragent</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['check_useragent'];
+<a name='L75'>  75                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['sha1_key'])) $this-&gt;<a href='../Y/568.html' title='Multiple used in 5 places.'>sha1_key</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['sha1_key'];
+<a name='L76'>  76                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['allow_login'])) $this-&gt;<a href='../Y/13.html' title='Multiple used in 6 places.'>allow_login</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['allow_login'];
+<a name='L77'>  77                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['allow_registration'])) $this-&gt;<a href='../Y/14.html' title='Multiple used in 4 places.'>allow_registration</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['allow_registration'];
+<a name='L78'>  78                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['start_page'])) $this-&gt;<a href='../Y/586.html' title='Multiple used in 5 places.'>start_page</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['start_page'];
+<a name='L79'>  79                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['error_page'])) $this-&gt;<a href='../Y/208.html' title='Multiple used in 6 places.'>error_page</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['error_page'];
+<a name='L80'>  80                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['allow_themes'])) $this-&gt;<a href='../Y/17.html' title='Multiple used in 3 places.'>allow_themes</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['allow_themes'];
+<a name='L81'>  81                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['userdata'])) $this-&gt;<a href='../Y/669.html' title='Multiple used in 4 places.'>userdata</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['userdata'];
+<a name='L82'>  82                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['reserved_usercheck'])) $this-&gt;<a href='../Y/540.html' title='Multiple used in 3 places.'>reserved_usercheck</a> = $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['reserved_usercheck'];
+<a name='L83'>  83 
+<a name='L84'>  84                 <a href='../S/2.html#L84' title='Used at 84 in class.Session.php.'>ini_set</a>('session.gc_maxlifetime', $<a href='../Y/560.html' title='Multiple used in 14 places.'>session_config</a>['timeout']);
+<a name='L85'>  85                 <a href='../Y/561.html' title='Multiple used in 4 places.'>session_name</a>($this-&gt;<a href='../Y/561.html' title='Multiple used in 4 places.'>session_name</a>);
+<a name='L86'>  86                 <a href='../S/2.html#L86' title='Used at 86 in class.Session.php.'>session_start</a>();
+<a name='L87'>  87 
+<a name='L88'>  88                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['started']) || !$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['started']) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['started'] = <a href='../Y/628.html' title='Multiple used in 13 places.'>time</a>();
+<a name='L89'>  89                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['error'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['error'] = '';
+<a name='L90'>  90                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['ip'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['ip'] = 0;
+<a name='L91'>  91                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['user_agent'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['user_agent'] = '';
+<a name='L92'>  92                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['id'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['id'] = 0;
+<a name='L93'>  93                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['username'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['username'] = '';
+<a name='L94'>  94                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['mode'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['mode'] = 0;
+<a name='L95'>  95                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['lastActive'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['lastActive'] = 0;
+<a name='L96'>  96                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['isAdmin'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['isAdmin'] = 0;
+<a name='L97'>  97                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['isSuperAdmin'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['isSuperAdmin'] = 0;
+<a name='L98'>  98                 <b>if</b> (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['theme'])) $<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['theme'] = $this-&gt;<a href='../Y/184.html' title='Multiple used in 4 places.'>default_theme</a>;
+<a name='L99'>  99 
+<a name='L100'> 100                 $this-&gt;<a href='../Y/584.html' title='Multiple used in 5 places.'>started</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['started'];
+<a name='L101'> 101                 $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['error'];
+<a name='L102'> 102                 $this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['ip'];
+<a name='L103'> 103                 $this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['user_agent'];
+<a name='L104'> 104                 $this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['id'];   <i><font color='green'>//if id is set, also means that the user is logged in</font></i>
+<a name='L105'> 105                 $this-&gt;<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['username'];
+<a name='L106'> 106                 $this-&gt;<a href='../Y/378.html' title='Multiple used in 10 places.'>mode</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['mode'];
+<a name='L107'> 107                 $this-&gt;<a href='../Y/341.html' title='Multiple used in 7 places.'>lastActive</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['lastActive'];
+<a name='L108'> 108                 $this-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['isAdmin'];
+<a name='L109'> 109                 $this-&gt;<a href='../Y/326.html' title='Multiple used in 11 places.'>isSuperAdmin</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['isSuperAdmin'];
+<a name='L110'> 110                 $this-&gt;<a href='../Y/621.html' title='Multiple used in 7 places.'>theme</a> = &amp;$<a href='../Y/123.html' title='Multiple used in 25 places.'>_SESSION</a>['theme'];
+<a name='L111'> 111 
+<a name='L112'> 112                 <b>if</b> (!$this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a>) $this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a> = <a href='../S/20.html#L3' title='Defined at 3 in functions_ip.php.'>IPv4_to_GeoIP</a>($<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['REMOTE_ADDR']);
+<a name='L113'> 113                 <b>if</b> (!$this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a>) $this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a> = !<b>empty</b>($<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['HTTP_USER_AGENT'])?$<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['HTTP_USER_AGENT']:'';
+<a name='L114'> 114 
+<a name='L115'> 115                 <i><font color='green'>//FIXME conditionally reuse some functions_browserstats.php features. make user agent parsing optional &amp; disabled by default</font></i>
+<a name='L116'> 116                 $this-&gt;<a href='../Y/657.html' title='Multiple used in 3 places.'>ua_ie</a> = <b>false</b>;
+<a name='L117'> 117                 <b>if</b> (<a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a>, 'MSIE')) $this-&gt;<a href='../Y/657.html' title='Multiple used in 3 places.'>ua_ie</a> = <b>true</b>;     <i><font color='green'>//FIXME this check will handle Opera as a IE browser</font></i>
+<a name='L118'> 118         <font color='blue'>}</font>
+<a name='L119'> 119 
+<a name='L120'> 120         <b>function</b> handleSessionActions()
+<a name='L121'> 121         <font color='blue'>{</font>
+<a name='L122'> 122                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L123'> 123 
+<a name='L124'> 124                 <i><font color='green'>//force session handling to be skipped to disallow automatic requests from keeping a user "logged in"</font></i>
+<a name='L125'> 125                 <b>if</b> (!<b>empty</b>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['no_session'])) <b>return</b>;
+<a name='L126'> 126 
+<a name='L127'> 127                 <b>if</b> (!$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> &amp;&amp; !<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['register_usr']) &amp;&amp; !<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['register_pwd']) &amp;&amp; !<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['register_pwd2'])) <font color='blue'>{</font>
+<a name='L128'> 128                         $<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a> = $this-&gt;<a href='../S/2.html#L201' title='Defined at 201 in class.Session.php.'>registerUser</a>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['register_usr'], $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['register_pwd'], $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['register_pwd2']);
+<a name='L129'> 129                         <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a>)) <font color='blue'>{</font>
+<a name='L130'> 130                                 <b>echo</b> 'Registration failed: '.$<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a>;
+<a name='L131'> 131                                 <b>die</b>;
+<a name='L132'> 132                         <font color='blue'>}</font>
+<a name='L133'> 133                         $this-&gt;<a href='../S/2.html#L243' title='Defined at 243 in class.Session.php.'>logIn</a>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['register_usr'], $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['register_pwd']);
+<a name='L134'> 134                 <font color='blue'>}</font>
+<a name='L135'> 135 
+<a name='L136'> 136                 <i><font color='green'>//Shows login form if 'login' variable is set</font></i>
+<a name='L137'> 137                 <b>if</b> (!$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> &amp;&amp; <a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['login'])) <font color='blue'>{</font>
+<a name='L138'> 138                         $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a> = &amp;$this;      <i><font color='green'>//Required, else any use of $session in header/footer will be undefined references</font></i>
+<a name='L139'> 139                         <b>require</b>('design_head.php');     <i><font color='green'>//fixme: hur kan jag slippa detta</font></i>
+<a name='L140'> 140                         $this-&gt;<a href='../S/2.html#L305' title='Defined at 305 in class.Session.php.'>showLoginForm</a>();
+<a name='L141'> 141                         <b>require</b>('design_foot.php');
+<a name='L142'> 142                         <b>die</b>;
+<a name='L143'> 143                 <font color='blue'>}</font>
+<a name='L144'> 144 
+<a name='L145'> 145                 <i><font color='green'>//Check for login request, POST to any page with 'login_usr' &amp; 'login_pwd' variables set to log in</font></i>
+<a name='L146'> 146                 <b>if</b> (!$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <font color='blue'>{</font>
+<a name='L147'> 147                         <b>if</b> (!<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['login_usr']) &amp;&amp; !<b>empty</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['login_pwd']) &amp;&amp; $this-&gt;<a href='../S/2.html#L243' title='Defined at 243 in class.Session.php.'>logIn</a>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['login_usr'], $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['login_pwd'])) <font color='blue'>{</font>
+<a name='L148'> 148                                 <b>header</b>('Location: '.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['web_root'].$this-&gt;<a href='../Y/586.html' title='Multiple used in 5 places.'>start_page</a>);
+<a name='L149'> 149                                 <b>die</b>;
+<a name='L150'> 150                         <font color='blue'>}</font>
+<a name='L151'> 151                 <font color='blue'>}</font>
+<a name='L152'> 152 
+<a name='L153'> 153                 <i><font color='green'>//Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out</font></i>
+<a name='L154'> 154                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['logout'])) <font color='blue'>{</font>
+<a name='L155'> 155                         $this-&gt;<a href='../S/2.html#L285' title='Defined at 285 in class.Session.php.'>logOut</a>();
+<a name='L156'> 156                         <b>header</b>('Location: '.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['web_root'].$this-&gt;<a href='../Y/586.html' title='Multiple used in 5 places.'>start_page</a>);
+<a name='L157'> 157                         <b>die</b>;
+<a name='L158'> 158                 <font color='blue'>}</font>
+<a name='L159'> 159 
+<a name='L160'> 160                 <i><font color='green'>//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking</font></i>
+<a name='L161'> 161                 <b>if</b> ($this-&gt;<a href='../Y/69.html' title='Multiple used in 4 places.'>check_ip</a> &amp;&amp; $this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a> &amp;&amp; ($this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a> != <a href='../S/20.html#L3' title='Defined at 3 in functions_ip.php.'>IPv4_to_GeoIP</a>($<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['REMOTE_ADDR']))) <font color='blue'>{</font>
+<a name='L162'> 162                         $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'Client IP changed';
+<a name='L163'> 163                         $this-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Client IP changed! Old IP: '.<a href='../S/20.html#L15' title='Defined at 15 in functions_ip.php.'>GeoIP_to_IPv4</a>($this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a>).', current: '.<a href='../S/20.html#L15' title='Defined at 15 in functions_ip.php.'>GeoIP_to_IPv4</a>($<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['REMOTE_ADDR']), <a href='../S/2.html#L23' title='Defined at 23 in class.Session.php.'>LOGLEVEL_ERROR</a>);
+<a name='L164'> 164                         $this-&gt;<a href='../S/2.html#L285' title='Defined at 285 in class.Session.php.'>logOut</a>();
+<a name='L165'> 165                 <font color='blue'>}</font>
+<a name='L166'> 166 
+<a name='L167'> 167                 <i><font color='green'>//Logged in: Check user activity - log out inactive user</font></i>
+<a name='L168'> 168                 <b>if</b> ($this-&gt;<a href='../Y/341.html' title='Multiple used in 7 places.'>lastActive</a> &lt; (<a href='../Y/628.html' title='Multiple used in 13 places.'>time</a>()-$this-&gt;<a href='../Y/631.html' title='Multiple used in 5 places.'>timeout</a>)) <font color='blue'>{</font>
+<a name='L169'> 169                         $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'Inactivity timeout';
+<a name='L170'> 170                         $this-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Session timed out after '.(<a href='../Y/628.html' title='Multiple used in 13 places.'>time</a>()-$this-&gt;<a href='../Y/341.html' title='Multiple used in 7 places.'>lastActive</a>).' (timeout is '.($this-&gt;<a href='../Y/631.html' title='Multiple used in 5 places.'>timeout</a>).')', <a href='../S/2.html#L21' title='Defined at 21 in class.Session.php.'>LOGLEVEL_NOTICE</a>);
+<a name='L171'> 171                         $this-&gt;<a href='../S/2.html#L285' title='Defined at 285 in class.Session.php.'>logOut</a>();
+<a name='L172'> 172                 <font color='blue'>}</font>
+<a name='L173'> 173 
+<a name='L174'> 174                 <i><font color='green'>//Logged in: Check if client user agent string changed, after active check to avoid useragent change log on auto browser upgrade (Firefox)</font></i>
+<a name='L175'> 175                 <b>if</b> ($this-&gt;<a href='../Y/70.html' title='Multiple used in 3 places.'>check_useragent</a> &amp;&amp; $this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a> &amp;&amp; ($this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a> != $<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['HTTP_USER_AGENT'])) <font color='blue'>{</font>
+<a name='L176'> 176                         $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'Client user agent string changed';
+<a name='L177'> 177                         $this-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Client user agent string changed from "'.$this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a>.'" to "'.$<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['HTTP_USER_AGENT'].'"', <a href='../S/2.html#L23' title='Defined at 23 in class.Session.php.'>LOGLEVEL_ERROR</a>);
+<a name='L178'> 178                         $this-&gt;<a href='../S/2.html#L285' title='Defined at 285 in class.Session.php.'>logOut</a>();
+<a name='L179'> 179                 <font color='blue'>}</font>
+<a name='L180'> 180 
+<a name='L181'> 181                 <b>if</b> (!$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <b>return</b>;
+<a name='L182'> 182 
+<a name='L183'> 183                 <i><font color='green'>//Update last active timestamp</font></i>
+<a name='L184'> 184                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>);
+<a name='L185'> 185                 $this-&gt;<a href='../Y/341.html' title='Multiple used in 7 places.'>lastActive</a> = <a href='../Y/628.html' title='Multiple used in 13 places.'>time</a>();
+<a name='L186'> 186         <font color='blue'>}</font>
+<a name='L187'> 187 
+<a name='L188'> 188         <i><font color='green'>/* Writes a log entry to tblLogs */</font></i>
+<a name='L189'> 189         <b>function</b> <a href='../R/147.html' title='Multiple refered from 13 places.'>log</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, $<a href='../Y/204.html' title='Multiple used in 3 places.'>entryLevel</a> = <a href='../S/2.html#L21' title='Defined at 21 in class.Session.php.'>LOGLEVEL_NOTICE</a>)
+<a name='L190'> 190         <font color='blue'>{</font>
+<a name='L191'> 191                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L192'> 192 
+<a name='L193'> 193                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/204.html' title='Multiple used in 3 places.'>entryLevel</a>)) <b>return</b> <b>false</b>;
+<a name='L194'> 194 
+<a name='L195'> 195                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblLogs SET entryText="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>).'",entryLevel='.$<a href='../Y/204.html' title='Multiple used in 3 places.'>entryLevel</a>.',timeCreated=NOW(),userId='.$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',userIP='.$this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a>;
+<a name='L196'> 196                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L197'> 197         <font color='blue'>}</font>
+<a name='L198'> 198 
+<a name='L199'> 199 
+<a name='L200'> 200         <i><font color='green'>//returns the user ID of the newly created user</font></i>
+<a name='L201'> 201         <b>function</b> <a href='../S/2.html#L128' title='Refered from 128 in class.Session.php.'>registerUser</a>($<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>, $<a href='../Y/458.html' title='Multiple used in 5 places.'>password1</a>, $<a href='../Y/459.html' title='Multiple used in 2 places.'>password2</a>, $<a href='../Y/672.html' title='Multiple used in 4 places.'>userMode</a> = 0)
+<a name='L202'> 202         <font color='blue'>{</font>
+<a name='L203'> 203                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L204'> 204                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/672.html' title='Multiple used in 4 places.'>userMode</a>)) <b>return</b> <b>false</b>;
+<a name='L205'> 205 
+<a name='L206'> 206                 <b>if</b> ($<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a> != <a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>($<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>)) <b>return</b> 'Username contains invalid spaces';
+<a name='L207'> 207 
+<a name='L208'> 208                 <b>if</b> (($<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>) != $<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>) || ($<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/458.html' title='Multiple used in 5 places.'>password1</a>) != $<a href='../Y/458.html' title='Multiple used in 5 places.'>password1</a>)) <font color='blue'>{</font>
+<a name='L209'> 209                         <i><font color='green'>//if someone tries to enter ' or " etc as username/password letters</font></i>
+<a name='L210'> 210                         <i><font color='green'>//with this check, we dont need to encode the strings for use in sql query</font></i>
+<a name='L211'> 211                         <b>return</b> 'Username or password contains invalid characters';
+<a name='L212'> 212                 <font color='blue'>}</font>
+<a name='L213'> 213 
+<a name='L214'> 214                 <b>if</b> (<a href='../Y/597.html' title='Multiple used in 24 places.'>strlen</a>($<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>) &lt; 3) <b>return</b> 'Username must be at least 3 characters long';
+<a name='L215'> 215                 <b>if</b> (<a href='../Y/597.html' title='Multiple used in 24 places.'>strlen</a>($<a href='../Y/458.html' title='Multiple used in 5 places.'>password1</a>) &lt; 4) <b>return</b> 'Password must be at least 4 characters long';
+<a name='L216'> 216 
+<a name='L217'> 217                 <b>if</b> ($<a href='../Y/458.html' title='Multiple used in 5 places.'>password1</a> != $<a href='../Y/459.html' title='Multiple used in 2 places.'>password2</a>) <b>return</b> 'The passwords doesnt match';
+<a name='L218'> 218 
+<a name='L219'> 219                 <b>if</b> ($this-&gt;<a href='../Y/540.html' title='Multiple used in 3 places.'>reserved_usercheck</a> &amp;&amp; <a href='../S/10.html#L99' title='Defined at 99 in atom_moderation.php.'>isReservedUsername</a>($<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>)) <b>return</b> 'Username is not allowed';
+<a name='L220'> 220 
+<a name='L221'> 221                 <b>if</b> (<a href='../S/27.html#L67' title='Defined at 67 in functions_users.php.'>getUsersCnt</a>()) <font color='blue'>{</font>
+<a name='L222'> 222                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT userId FROM tblUsers WHERE userName="'.$<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>.'"';
+<a name='L223'> 223                         $<a href='../Y/68.html' title='Multiple used in 2 places.'>checkId</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L224'> 224                         <b>if</b> ($<a href='../Y/68.html' title='Multiple used in 2 places.'>checkId</a>) <b>return</b> 'Username already exists';
+<a name='L225'> 225                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L226'> 226                         <i><font color='green'>//No users exists, give this user superadmin status</font></i>
+<a name='L227'> 227                         $<a href='../Y/672.html' title='Multiple used in 4 places.'>userMode</a> = 2;
+<a name='L228'> 228                 <font color='blue'>}</font>
+<a name='L229'> 229 
+<a name='L230'> 230                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblUsers SET userName="'.$<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>.'",userPass="'.<a href='../S/4.html#L730' title='Defined at 730 in class.Files.php.'>sha1</a>( <a href='../S/4.html#L730' title='Defined at 730 in class.Files.php.'>sha1</a>($this-&gt;<a href='../Y/568.html' title='Multiple used in 5 places.'>sha1_key</a>).<a href='../S/4.html#L730' title='Defined at 730 in class.Files.php.'>sha1</a>($<a href='../Y/458.html' title='Multiple used in 5 places.'>password1</a>) ).'",userMode='.$<a href='../Y/672.html' title='Multiple used in 4 places.'>userMode</a>.',timeCreated=NOW()';
+<a name='L231'> 231                 $<a href='../Y/425.html' title='Multiple used in 3 places.'>newUserId</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L232'> 232 
+<a name='L233'> 233                 $this-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('User &lt;b&gt;'.$<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>.'&lt;/b&gt; created');
+<a name='L234'> 234 
+<a name='L235'> 235                 <i><font color='green'>//Stores the additional data from the userdata fields that's required at registration</font></i>
+<a name='L236'> 236                 <b>if</b> ($this-&gt;<a href='../Y/669.html' title='Multiple used in 4 places.'>userdata</a>) <font color='blue'>{</font>
+<a name='L237'> 237                         <a href='../S/31.html#L249' title='Defined at 249 in functions_userdata.php.'>handleRequiredUserdataFields</a>($<a href='../Y/425.html' title='Multiple used in 3 places.'>newUserId</a>);
+<a name='L238'> 238                 <font color='blue'>}</font>
+<a name='L239'> 239 
+<a name='L240'> 240                 <b>return</b> $<a href='../Y/425.html' title='Multiple used in 3 places.'>newUserId</a>;
+<a name='L241'> 241         <font color='blue'>}</font>
+<a name='L242'> 242 
+<a name='L243'> 243         <b>function</b> <a href='../R/148.html' title='Multiple refered from 2 places.'>logIn</a>($<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>, $<a href='../Y/457.html' title='Multiple used in 8 places.'>password</a>)
+<a name='L244'> 244         <font color='blue'>{</font>
+<a name='L245'> 245                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L246'> 246 
+<a name='L247'> 247                 $<a href='../Y/202.html' title='Multiple used in 3 places.'>enc_username</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>);
+<a name='L248'> 248                 $<a href='../Y/201.html' title='Multiple used in 2 places.'>enc_password</a> = <a href='../S/4.html#L730' title='Defined at 730 in class.Files.php.'>sha1</a>( <a href='../S/4.html#L730' title='Defined at 730 in class.Files.php.'>sha1</a>($this-&gt;<a href='../Y/568.html' title='Multiple used in 5 places.'>sha1_key</a>).<a href='../S/4.html#L730' title='Defined at 730 in class.Files.php.'>sha1</a>($<a href='../Y/457.html' title='Multiple used in 8 places.'>password</a>) );
+<a name='L249'> 249 
+<a name='L250'> 250                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblUsers WHERE userName="'.$<a href='../Y/202.html' title='Multiple used in 3 places.'>enc_username</a>.'" AND userPass="'.$<a href='../Y/201.html' title='Multiple used in 2 places.'>enc_password</a>.'"';
+<a name='L251'> 251                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L252'> 252                 <b>if</b> (!$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>) <font color='blue'>{</font>
+<a name='L253'> 253                         $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'Login failed';
+<a name='L254'> 254                         $this-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Failed login attempt: username '.$<a href='../Y/202.html' title='Multiple used in 3 places.'>enc_username</a>, <a href='../S/2.html#L22' title='Defined at 22 in class.Session.php.'>LOGLEVEL_WARNING</a>);
+<a name='L255'> 255                         <b>return</b> <b>false</b>;
+<a name='L256'> 256                 <font color='blue'>}</font>
+<a name='L257'> 257 
+<a name='L258'> 258                 <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['userMode'] != 2 &amp;&amp; !$this-&gt;<a href='../Y/13.html' title='Multiple used in 6 places.'>allow_login</a>) <font color='blue'>{</font>
+<a name='L259'> 259                         $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'Logins currently not allowed.';
+<a name='L260'> 260                         <b>return</b> <b>false</b>;
+<a name='L261'> 261                 <font color='blue'>}</font>
+<a name='L262'> 262                 
+<a name='L263'> 263                 $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = '';
+<a name='L264'> 264                 $this-&gt;<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['userName'];
+<a name='L265'> 265                 $this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['userId'];
+<a name='L266'> 266                 $this-&gt;<a href='../Y/378.html' title='Multiple used in 10 places.'>mode</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['userMode'];                <i><font color='green'>//0=normal user. 1=admin, 2=super admin</font></i>
+<a name='L267'> 267                 $this-&gt;<a href='../Y/341.html' title='Multiple used in 7 places.'>lastActive</a> = <a href='../Y/628.html' title='Multiple used in 13 places.'>time</a>();
+<a name='L268'> 268 
+<a name='L269'> 269                 <b>if</b> ($this-&gt;<a href='../Y/378.html' title='Multiple used in 10 places.'>mode</a> &gt;= 1) $this-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> = 1;
+<a name='L270'> 270                 <b>if</b> ($this-&gt;<a href='../Y/378.html' title='Multiple used in 10 places.'>mode</a> &gt;= 2) $this-&gt;<a href='../Y/326.html' title='Multiple used in 11 places.'>isSuperAdmin</a> = 1;
+<a name='L271'> 271                 
+<a name='L272'> 272                 <i><font color='green'>//Update last login time</font></i>
+<a name='L273'> 273                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>);
+<a name='L274'> 274                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.', IP='.$this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a>.', userAgent="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['HTTP_USER_AGENT']).'"');
+<a name='L275'> 275 
+<a name='L276'> 276                 <i><font color='green'>/* Read in current users settings */</font></i>
+<a name='L277'> 277                 <b>if</b> ($this-&gt;<a href='../Y/17.html' title='Multiple used in 3 places.'>allow_themes</a>) <font color='blue'>{</font>
+<a name='L278'> 278                         $this-&gt;<a href='../Y/621.html' title='Multiple used in 7 places.'>theme</a> = <a href='../S/33.html#L53' title='Defined at 53 in atom_settings.php.'>loadUserdataSetting</a>($this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>, 'Theme', $this-&gt;<a href='../Y/184.html' title='Multiple used in 4 places.'>default_theme</a>);
+<a name='L279'> 279                 <font color='blue'>}</font>
+<a name='L280'> 280 
+<a name='L281'> 281                 $this-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('User logged in', <a href='../S/2.html#L21' title='Defined at 21 in class.Session.php.'>LOGLEVEL_NOTICE</a>);
+<a name='L282'> 282                 <b>return</b> <b>true</b>;
+<a name='L283'> 283         <font color='blue'>}</font>
+<a name='L284'> 284 
+<a name='L285'> 285         <b>function</b> <a href='../R/153.html' title='Multiple refered from 4 places.'>logOut</a>()
+<a name='L286'> 286         <font color='blue'>{</font>
+<a name='L287'> 287                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L288'> 288 
+<a name='L289'> 289                 $this-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('User logged out', <a href='../S/2.html#L21' title='Defined at 21 in class.Session.php.'>LOGLEVEL_NOTICE</a>);
+<a name='L290'> 290                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>);
+<a name='L291'> 291 
+<a name='L292'> 292                 $this-&gt;<a href='../Y/584.html' title='Multiple used in 5 places.'>started</a> = 0;
+<a name='L293'> 293                 $this-&gt;<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a> = '';
+<a name='L294'> 294                 $this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> = 0;
+<a name='L295'> 295                 $this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a> = 0;
+<a name='L296'> 296                 $this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a> = '';
+<a name='L297'> 297                 $this-&gt;<a href='../Y/378.html' title='Multiple used in 10 places.'>mode</a> = 0;
+<a name='L298'> 298                 $this-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> = 0;
+<a name='L299'> 299                 $this-&gt;<a href='../Y/326.html' title='Multiple used in 11 places.'>isSuperAdmin</a> = 0;
+<a name='L300'> 300                 $this-&gt;<a href='../Y/621.html' title='Multiple used in 7 places.'>theme</a> = $this-&gt;<a href='../Y/184.html' title='Multiple used in 4 places.'>default_theme</a>;
+<a name='L301'> 301         <font color='blue'>}</font>
+<a name='L302'> 302 
+<a name='L303'> 303         <i><font color='green'>/*Shows a login form with tabs for Register &amp; Forgot password functions */</font></i>
+<a name='L304'> 304         <i><font color='green'>//the handling of the result variables are called by $session-&gt;handleSessionActions() from config.php </font></i>
+<a name='L305'> 305         <b>function</b> <a href='../S/2.html#L140' title='Refered from 140 in class.Session.php.'>showLoginForm</a>()
+<a name='L306'> 306         <font color='blue'>{</font>
+<a name='L307'> 307                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L308'> 308                 <b>echo</b> '&lt;div class="login_box"&gt;';
+<a name='L309'> 309 
+<a name='L310'> 310                 $<a href='../Y/15.html' title='Multiple used in 5 places.'>allow_superadmin_reg</a> = <b>false</b>;
+<a name='L311'> 311                 <b>if</b> (!<a href='../S/27.html#L67' title='Defined at 67 in functions_users.php.'>getUsersCnt</a>()) <font color='blue'>{</font>
+<a name='L312'> 312                         <b>echo</b> 'No users registered!';
+<a name='L313'> 313                         $<a href='../Y/15.html' title='Multiple used in 5 places.'>allow_superadmin_reg</a> = <b>true</b>;
+<a name='L314'> 314                 <font color='blue'>}</font>
+<a name='L315'> 315 
+<a name='L316'> 316                 <b>echo</b> '&lt;div id="login_form_layer"&gt;';
+<a name='L317'> 317                 <b>if</b> (!$this-&gt;<a href='../Y/13.html' title='Multiple used in 6 places.'>allow_login</a>) <font color='blue'>{</font>
+<a name='L318'> 318                         <b>echo</b> '&lt;div class="critical"&gt;Logins are currently not allowed.&lt;br/&gt;Please try again later.&lt;/div&gt;';
+<a name='L319'> 319                 <font color='blue'>}</font>
+<a name='L320'> 320                 <b>echo</b> '&lt;form name="login_form" method="post" action=""&gt;';
+<a name='L321'> 321                 <b>if</b> ($this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a>) <font color='blue'>{</font>
+<a name='L322'> 322                         <b>echo</b> '&lt;div class="critical"&gt;&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_warning_big.png" alt="Error"/&gt; '.$this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a>.'&lt;/div&gt;';
+<a name='L323'> 323                         $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = ''; <i><font color='green'>//remove error message once it has been displayed</font></i>
+<a name='L324'> 324                 <font color='blue'>}</font>
+<a name='L325'> 325 
+<a name='L326'> 326                 <b>echo</b> '&lt;table cellpadding="2"&gt;';
+<a name='L327'> 327                 <b>echo</b> '&lt;tr&gt;&lt;td&gt;Username:&lt;/td&gt;&lt;td&gt;&lt;input name="login_usr" type="text"/&gt; &lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_user.png" alt="Username"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+<a name='L328'> 328                 <b>echo</b> '&lt;tr&gt;&lt;td&gt;Password:&lt;/td&gt;&lt;td&gt;&lt;input name="login_pwd" type="password"/&gt; &lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_keys.png" alt="Password"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+<a name='L329'> 329                 <b>echo</b> '&lt;/table&gt;';
+<a name='L330'> 330                 <b>echo</b> '&lt;br/&gt;';
+<a name='L331'> 331                 <b>echo</b> '&lt;input type="submit" class="button" value="Log in"/&gt;';
+<a name='L332'> 332                 <b>if</b> (($this-&gt;<a href='../Y/13.html' title='Multiple used in 6 places.'>allow_login</a> &amp;&amp; $this-&gt;<a href='../Y/14.html' title='Multiple used in 4 places.'>allow_registration</a>) || $<a href='../Y/15.html' title='Multiple used in 5 places.'>allow_superadmin_reg</a>) <font color='blue'>{</font>
+<a name='L333'> 333                         <b>echo</b> '&lt;input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');"/&gt;';
+<a name='L334'> 334                         <b>echo</b> '&lt;input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/&gt;';
+<a name='L335'> 335                 <font color='blue'>}</font>
+<a name='L336'> 336                 <b>echo</b> '&lt;/form&gt;';
+<a name='L337'> 337                 <b>echo</b> '&lt;/div&gt;';
+<a name='L338'> 338 
+<a name='L339'> 339                 <b>if</b> (($this-&gt;<a href='../Y/13.html' title='Multiple used in 6 places.'>allow_login</a> &amp;&amp; $this-&gt;<a href='../Y/14.html' title='Multiple used in 4 places.'>allow_registration</a>) || $<a href='../Y/15.html' title='Multiple used in 5 places.'>allow_superadmin_reg</a>) <font color='blue'>{</font>
+<a name='L340'> 340                         <b>echo</b> '&lt;div id="login_register_layer" style="display: none;"&gt;';
+<a name='L341'> 341                                 <b>echo</b> '&lt;b&gt;Register new account&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;';
+<a name='L342'> 342                                 <b>if</b> ($<a href='../Y/15.html' title='Multiple used in 5 places.'>allow_superadmin_reg</a>) <font color='blue'>{</font>
+<a name='L343'> 343                                         <b>echo</b> '&lt;div class="critical"&gt;The account you create now will be the super administrator account.&lt;/div&gt;';
+<a name='L344'> 344                                 <font color='blue'>}</font>
+<a name='L345'> 345 
+<a name='L346'> 346                                 <b>echo</b> '&lt;form method="post" action=""&gt;';
+<a name='L347'> 347                                 <b>echo</b> '&lt;table cellpadding="2"&gt;';
+<a name='L348'> 348                                 <b>echo</b> '&lt;tr&gt;&lt;td&gt;Username:&lt;/td&gt;&lt;td&gt;&lt;input name="register_usr" type="text"/&gt; &lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_user.png" alt="Username"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+<a name='L349'> 349                                 <b>echo</b> '&lt;tr&gt;&lt;td&gt;Password:&lt;/td&gt;&lt;td&gt;&lt;input name="register_pwd" type="password"/&gt; &lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_keys.png" alt="Password"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+<a name='L350'> 350                                 <b>echo</b> '&lt;tr&gt;&lt;td&gt;Again:&lt;/td&gt;&lt;td&gt;&lt;input name="register_pwd2" type="password"/&gt; &lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_keys.png" alt="Repeat password"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+<a name='L351'> 351                                 <b>if</b> ($this-&gt;<a href='../Y/669.html' title='Multiple used in 4 places.'>userdata</a>) <font color='blue'>{</font>
+<a name='L352'> 352                                         <a href='../S/31.html#L240' title='Defined at 240 in functions_userdata.php.'>showRequiredUserdataFields</a>();
+<a name='L353'> 353                                 <font color='blue'>}</font>
+<a name='L354'> 354                                 <b>echo</b> '&lt;/table&gt;&lt;br/&gt;';
+<a name='L355'> 355 
+<a name='L356'> 356                                 <b>echo</b> '&lt;input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/&gt;';
+<a name='L357'> 357                                 <b>echo</b> '&lt;input type="submit" class="button" value="Register" style="font-weight: bold;"/&gt;';
+<a name='L358'> 358                                 <b>echo</b> '&lt;input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/&gt;';
+<a name='L359'> 359                                 <b>echo</b> '&lt;/form&gt;';
+<a name='L360'> 360                         <b>echo</b> '&lt;/div&gt;';
+<a name='L361'> 361 
+<a name='L362'> 362                         <i><font color='green'>//todo: javascript som validerar input email, visa en "retrieve new password" knapp om emailen är korrekt</font></i>
+<a name='L363'> 363                         <b>echo</b> '&lt;div id="login_forgot_pwd_layer" style="display: none;"&gt;';
+<a name='L364'> 364                                 <b>echo</b> '&lt;form method="post" action=""&gt;';
+<a name='L365'> 365                                 <b>echo</b> 'Enter the e-mail address used when registering your account.&lt;br/&gt;&lt;br/&gt;';
+<a name='L366'> 366                                 <b>echo</b> 'You will recieve an e-mail with a link to follow, where you can set a new password.&lt;br/&gt;&lt;br/&gt;';
+<a name='L367'> 367                                 <b>echo</b> '&lt;table cellpadding="2"&gt;';
+<a name='L368'> 368                                 <b>echo</b> '&lt;tr&gt;&lt;td&gt;E-mail:&lt;/td&gt;&lt;td&gt;&lt;input type="text" size="26"/&gt; &lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_mail.png" alt="E-Mail"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+<a name='L369'> 369                                 <b>echo</b> '&lt;/table&gt;&lt;br/&gt;';
+<a name='L370'> 370 
+<a name='L371'> 371                                 <b>echo</b> '&lt;input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/&gt;';
+<a name='L372'> 372                                 <b>echo</b> '&lt;input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');"/&gt;';
+<a name='L373'> 373                                 <b>echo</b> '&lt;input type="submit" class="button" value="Forgot password" style="font-weight: bold;"/&gt;';
+<a name='L374'> 374                                 <b>echo</b> '&lt;/form&gt;';
+<a name='L375'> 375                         <b>echo</b> '&lt;/div&gt;';
+<a name='L376'> 376                 <font color='blue'>}</font>
+<a name='L377'> 377 
+<a name='L378'> 378                 <b>echo</b> '&lt;/div&gt;';
+<a name='L379'> 379         <font color='blue'>}</font>
+<a name='L380'> 380 
+<a name='L381'> 381         <b>function</b> showInfo()
+<a name='L382'> 382         <font color='blue'>{</font>
+<a name='L383'> 383                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L384'> 384 
+<a name='L385'> 385                 <b>echo</b> '&lt;b&gt;Current session information&lt;/b&gt;&lt;br/&gt;';
+<a name='L386'> 386                 <b>echo</b> 'Logged in: '. ($this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>?'YES':'NO').'&lt;br/&gt;';
+<a name='L387'> 387                 <b>if</b> ($this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <font color='blue'>{</font>
+<a name='L388'> 388                         <b>echo</b> 'User name: '.$this-&gt;<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>.'&lt;br/&gt;';
+<a name='L389'> 389                         <b>echo</b> 'User ID: '.$this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.'&lt;br/&gt;';
+<a name='L390'> 390                 <font color='blue'>}</font>
+<a name='L391'> 391 
+<a name='L392'> 392                 <b>echo</b> 'User mode: ';
+<a name='L393'> 393                 <b>if</b> ($this-&gt;<a href='../Y/326.html' title='Multiple used in 11 places.'>isSuperAdmin</a>) <b>echo</b> 'Super admin&lt;br/&gt;';
+<a name='L394'> 394                 <b>else</b> <b>if</b> ($this-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <b>echo</b> 'Admin&lt;br/&gt;';
+<a name='L395'> 395                 <b>else</b> <b>if</b> ($this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <b>echo</b> 'Normal user&lt;br/&gt;';
+<a name='L396'> 396                 <b>else</b> <b>echo</b> 'Visitor&lt;br/&gt;';
+<a name='L397'> 397 
+<a name='L398'> 398                 <b>echo</b> 'Session name: '.$this-&gt;<a href='../Y/561.html' title='Multiple used in 4 places.'>session_name</a>.'&lt;br/&gt;';
+<a name='L399'> 399                 <b>echo</b> 'Current IP: '.<a href='../S/20.html#L15' title='Defined at 15 in functions_ip.php.'>GeoIP_to_IPv4</a>($this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a>).'&lt;br/&gt;';
+<a name='L400'> 400                 <b>echo</b> 'User Agent: '.$this-&gt;<a href='../Y/668.html' title='Multiple used in 9 places.'>user_agent</a>.'&lt;br/&gt;';
+<a name='L401'> 401                 <b>echo</b> 'Session timeout: '.<a href='../S/6.html#L277' title='Defined at 277 in functions_textformat.php.'>shortTimePeriod</a>($this-&gt;<a href='../Y/631.html' title='Multiple used in 5 places.'>timeout</a>).'&lt;br/&gt;';
+<a name='L402'> 402                 <b>echo</b> 'Check for IP changes: '. ($this-&gt;<a href='../Y/69.html' title='Multiple used in 4 places.'>check_ip</a>?'YES':'NO').'&lt;br/&gt;';
+<a name='L403'> 403                 <b>echo</b> 'Start page: '.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['web_root'].$this-&gt;<a href='../Y/586.html' title='Multiple used in 5 places.'>start_page</a>.'&lt;br/&gt;';
+<a name='L404'> 404                 <b>echo</b> 'Error page: '.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['web_root'].$this-&gt;<a href='../Y/208.html' title='Multiple used in 6 places.'>error_page</a>.'&lt;br/&gt;';
+<a name='L405'> 405                 <b>if</b> ($this-&gt;<a href='../Y/326.html' title='Multiple used in 11 places.'>isSuperAdmin</a>) <font color='blue'>{</font>
+<a name='L406'> 406                         <b>echo</b> 'SHA1 key: '.$this-&gt;<a href='../Y/568.html' title='Multiple used in 5 places.'>sha1_key</a>.'&lt;br/&gt;';
+<a name='L407'> 407                 <font color='blue'>}</font>
+<a name='L408'> 408         <font color='blue'>}</font>
+<a name='L409'> 409 
+<a name='L410'> 410         <i><font color='green'>/* Locks unregistered users out from certain pages */</font></i>
+<a name='L411'> 411         <b>function</b> requireLoggedIn()
+<a name='L412'> 412         <font color='blue'>{</font>
+<a name='L413'> 413                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L414'> 414                 <b>if</b> ($this-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <b>return</b>;
+<a name='L415'> 415 
+<a name='L416'> 416                 $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'The page you requested requires you to be logged in';
+<a name='L417'> 417                 <b>header</b>('Location: '.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['web_root'].$this-&gt;<a href='../Y/208.html' title='Multiple used in 6 places.'>error_page</a>);
+<a name='L418'> 418                 <b>die</b>;
+<a name='L419'> 419         <font color='blue'>}</font>
+<a name='L420'> 420 
+<a name='L421'> 421         <i><font color='green'>/* Locks unregistered users out from certain pages */</font></i>
+<a name='L422'> 422         <b>function</b> requireAdmin()
+<a name='L423'> 423         <font color='blue'>{</font>
+<a name='L424'> 424                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L425'> 425                 <b>if</b> ($this-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <b>return</b>;
+<a name='L426'> 426 
+<a name='L427'> 427                 $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'The page you requested requires admin rights to view';
+<a name='L428'> 428                 <b>header</b>('Location: '.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['web_root'].$this-&gt;<a href='../Y/208.html' title='Multiple used in 6 places.'>error_page</a>);
+<a name='L429'> 429                 <b>die</b>;
+<a name='L430'> 430         <font color='blue'>}</font>
+<a name='L431'> 431 
+<a name='L432'> 432         <i><font color='green'>/* Locks out everyone except for super-admin from certain pages */</font></i>
+<a name='L433'> 433         <b>function</b> requireSuperAdmin()
+<a name='L434'> 434         <font color='blue'>{</font>
+<a name='L435'> 435                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L436'> 436                 <b>if</b> ($this-&gt;<a href='../Y/326.html' title='Multiple used in 11 places.'>isSuperAdmin</a>) <b>return</b>;
+<a name='L437'> 437 
+<a name='L438'> 438                 $this-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'The page you requested requires superadmin rights to view';
+<a name='L439'> 439                 <b>header</b>('Location: '.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['web_root'].$this-&gt;<a href='../Y/208.html' title='Multiple used in 6 places.'>error_page</a>);
+<a name='L440'> 440                 <b>die</b>;
+<a name='L441'> 441         <font color='blue'>}</font>
+<a name='L442'> 442 
+<a name='L443'> 443         <i><font color='green'>/* Locks out everyone not from localhost (for setup scripts) */</font></i>
+<a name='L444'> 444         <b>function</b> requireLocalhost()
+<a name='L445'> 445         <font color='blue'>{</font>
+<a name='L446'> 446                 <b>if</b> (<a href='../S/20.html#L15' title='Defined at 15 in functions_ip.php.'>GeoIP_to_IPv4</a>($this-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a>) == '127.0.0.1') <b>return</b>;
+<a name='L447'> 447                 <b>die</b>;
+<a name='L448'> 448         <font color='blue'>}</font>
+<a name='L449'> 449 <font color='blue'>}</font>
+<a name='L450'> 450 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L21'>[^]</a><a href='#L444'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

@@ -1,0 +1,1220 @@
+<html>
+<head>
+<title>class.Files.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/class.Files.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L17'>[^]</a><a href='#L1125'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L17' title='Defined at 17.'>FILETYPE_WIKI</a>
+<li><a href='#L18' title='Defined at 18.'>FILETYPE_BLOG</a>
+<li><a href='#L19' title='Defined at 19.'>FILETYPE_NEWS</a>
+<li><a href='#L21' title='Defined at 21.'>FILETYPE_FILEAREA_UPLOAD</a>
+<li><a href='#L22' title='Defined at 22.'>FILETYPE_USERFILE</a>
+<li><a href='#L23' title='Defined at 23.'>FILETYPE_USERDATA</a>
+<li><a href='#L24' title='Defined at 24.'>FILETYPE_FORUM</a>
+<li><a href='#L25' title='Defined at 25.'>FILETYPE_PROCESS</a>
+<li><a href='#L26' title='Defined at 26.'>FILETYPE_PROCESS_CLONE</a>
+<li><a href='#L27' title='Defined at 27.'>FILETYPE_VIDEOBLOG</a>
+<li><a href='#L28' title='Defined at 28.'>FILETYPE_VIDEOPRES</a>
+<li><a href='#L29' title='Defined at 29.'>FILETYPE_VIDEOMESSAGE</a>
+<li><a href='#L31' title='Defined at 31.'>FILETYPE_GENERIC</a>
+<li><a href='#L34' title='Defined at 34.'>MEDIATYPE_IMAGE</a>
+<li><a href='#L35' title='Defined at 35.'>MEDIATYPE_VIDEO</a>
+<li><a href='#L36' title='Defined at 36.'>MEDIATYPE_AUDIO</a>
+<li><a href='#L37' title='Defined at 37.'>MEDIATYPE_DOCUMENT</a>
+<li><a href='#L38' title='Defined at 38.'>MEDIATYPE_WEBRESOURCE</a>
+<li><a href='#L40' title='Defined at 40.'>Files</a>
+<li><a href='#L119' title='Defined at 119.'>__construct</a>
+<li><a href='#L139' title='Defined at 139.'>getFileList</a>
+<li><a href='#L151' title='Defined at 151.'>getClonesList</a>
+<li><a href='#L162' title='Defined at 162.'>lookupMimeType</a>
+<li><a href='#L193' title='Defined at 193.'>showFiles</a>
+<li><a href='#L353' title='Defined at 353.'>showThumbnails</a>
+<li><a href='#L393' title='Defined at 393.'>showAttachments</a>
+<li><a href='#L414' title='Defined at 414.'>deleteFile</a>
+<li><a href='#L433' title='Defined at 433.'>clearThumbs</a>
+<li><a href='#L451' title='Defined at 451.'>handleUpload</a>
+<li><a href='#L481' title='Defined at 481.'>addFileEntry</a>
+<li><a href='#L508' title='Defined at 508.'>handleGeneralUpload</a>
+<li><a href='#L562' title='Defined at 562.'>handleImageUpload</a>
+<li><a href='#L585' title='Defined at 585.'>resizeImageCalc</a>
+<li><a href='#L611' title='Defined at 611.'>resizeImage</a>
+<li><a href='#L665' title='Defined at 665.'>convertImage</a>
+<li><a href='#L695' title='Defined at 695.'>checksums</a>
+<li><a href='#L730' title='Defined at 730.'>sha1</a>
+<li><a href='#L737' title='Defined at 737.'>cloneEntry</a>
+<li><a href='#L750' title='Defined at 750.'>updateClone</a>
+<li><a href='#L765' title='Defined at 765.'>updateFile</a>
+<li><a href='#L793' title='Defined at 793.'>setCachedHeaders</a>
+<li><a href='#L800' title='Defined at 800.'>setNoCacheHeaders</a>
+<li><a href='#L807' title='Defined at 807.'>imageRotate</a>
+<li><a href='#L848' title='Defined at 848.'>sendFile</a>
+<li><a href='#L893' title='Defined at 893.'>sendTextfile</a>
+<li><a href='#L907' title='Defined at 907.'>sendImage</a>
+<li><a href='#L951' title='Defined at 951.'>getFiles</a>
+<li><a href='#L970' title='Defined at 970.'>getFileCount</a>
+<li><a href='#L979' title='Defined at 979.'>getFileInfo</a>
+<li><a href='#L992' title='Defined at 992.'>showFileInfo</a>
+<li><a href='#L1031' title='Defined at 1031.'>getUploader</a>
+<li><a href='#L1040' title='Defined at 1040.'>getOwner</a>
+<li><a href='#L1049' title='Defined at 1049.'>showImageGadgetXHTML</a>
+<li><a href='#L1083' title='Defined at 1083.'>showAudioGadgetXHTML</a>
+<li><a href='#L1104' title='Defined at 1104.'>showVideoGadgetXHTML</a>
+<li><a href='#L1125' title='Defined at 1125.'>showDocumentGadgetXHTML</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2 <i><font color='green'>/*</font></i>
+<a name='L3'>   3 <i><font color='green'>        Files class - Handle file upload, image manipulating, file management</font></i>
+<a name='L4'>   4 <i><font color='green'></font></i>
+<a name='L5'>   5 <i><font color='green'>        Uses tblFiles</font></i>
+<a name='L6'>   6 <i><font color='green'></font></i>
+<a name='L7'>   7 <i><font color='green'>        Written by Martin Lindhe, 2007</font></i>
+<a name='L8'>   8 <i><font color='green'>        </font></i>
+<a name='L9'>   9 <i><font color='green'>        Uses php_id3.dll if enabled, to show more details of mp3s in the file module</font></i>
+<a name='L10'>  10 <i><font color='green'></font></i>
+<a name='L11'>  11 <i><font color='green'>        //TODO rename tblFiles.timeUploaded to tblFiles.timeCreated</font></i>
+<a name='L12'>  12 <i><font color='green'>*/</font></i>
+<a name='L13'>  13 
+<a name='L14'>  14 <b>require_once</b>('atom_comments.php');                      <i><font color='green'>//for image comments support</font></i>
+<a name='L15'>  15 <b>require_once</b>('atom_categories.php');            <i><font color='green'>//for file categories support</font></i>
+<a name='L16'>  16 
+<a name='L17'>  17 <b>define</b>('FILETYPE_WIKI',                                         1); <i><font color='green'>// The file is a wiki attachment</font></i>
+<a name='L18'>  18 <b>define</b>('FILETYPE_BLOG',                                         2);     <i><font color='green'>// The file is a blog attachment</font></i>
+<a name='L19'>  19 <b>define</b>('FILETYPE_NEWS',                                         3);     <i><font color='green'>// The file is a news attachment</font></i>
+<a name='L20'>  20 
+<a name='L21'>  21 <b>define</b>('FILETYPE_FILEAREA_UPLOAD',4);   <i><font color='green'>/* File is uploaded to a file area */</font></i>
+<a name='L22'>  22 <b>define</b>('FILETYPE_USERFILE',                             5);     <i><font color='green'>/* File is uploaded to the user's own file area */</font></i>
+<a name='L23'>  23 <b>define</b>('FILETYPE_USERDATA',                             6);     <i><font color='green'>/* File is uploaded to a userdata field */</font></i>
+<a name='L24'>  24 <b>define</b>('FILETYPE_FORUM',                                        7);     <i><font color='green'>/* File is attached to a forum post */</font></i>
+<a name='L25'>  25 <b>define</b>('FILETYPE_PROCESS',                              8);     <i><font color='green'>/* File uploaded to be processed */</font></i>
+<a name='L26'>  26 <b>define</b>('FILETYPE_PROCESS_CLONE',        9);     <i><font color='green'>/* a clone entry for a process file. */</font></i>
+<a name='L27'>  27 <b>define</b>('FILETYPE_VIDEOBLOG',                    10); <i><font color='green'>/* video clip representing a user submitted blog */</font></i>
+<a name='L28'>  28 <b>define</b>('FILETYPE_VIDEOPRES',                    11); <i><font color='green'>/* video clip representing a presentation of the user */</font></i>
+<a name='L29'>  29 <b>define</b>('FILETYPE_VIDEOMESSAGE',         12); <i><font color='green'>/* video clip respresenting a private message */</font></i>
+<a name='L30'>  30 
+<a name='L31'>  31 <b>define</b>('FILETYPE_GENERIC',                              20); <i><font color='green'>/* generic file type, for application specific file type */</font></i>
+<a name='L32'>  32 
+<a name='L33'>  33 <i><font color='green'>//for future use:</font></i>
+<a name='L34'>  34 <b>define</b>('MEDIATYPE_IMAGE',                               1);
+<a name='L35'>  35 <b>define</b>('MEDIATYPE_VIDEO',                               2);
+<a name='L36'>  36 <b>define</b>('MEDIATYPE_AUDIO',                               3);
+<a name='L37'>  37 <b>define</b>('MEDIATYPE_DOCUMENT',            4);
+<a name='L38'>  38 <b>define</b>('MEDIATYPE_WEBRESOURCE', 5);     <i><font color='green'>//webresources can/will contain other files. those files will refer to this file entry as their owner</font></i>
+<a name='L39'>  39 
+<a name='L40'>  40 <b>class</b> Files
+<a name='L41'>  41 <font color='blue'>{</font>
+<a name='L42'>  42         <i><font color='green'>/* Non configurable, shouldnt be needed to be changed */</font></i>
+<a name='L43'>  43         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../S/4.html#L43' title='Used at 43 in class.Files.php.'>htaccess</a> = "Deny from all\nOptions All -Indexes";
+<a name='L44'>  44         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/539.html' title='Multiple used in 2 places.'>resample_resized</a>                       = <b>true</b>; <i><font color='green'>//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails</font></i>
+<a name='L45'>  45 
+<a name='L46'>  46         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a> = <b>array</b>(
+<a name='L47'>  47                 'image/jpeg',
+<a name='L48'>  48                 'image/png',
+<a name='L49'>  49                 'image/gif'
+<a name='L50'>  50         );
+<a name='L51'>  51 
+<a name='L52'>  52         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/35.html' title='Multiple used in 4 places.'>audio_mime_types</a>        = <b>array</b>(
+<a name='L53'>  53                 'audio/x-mpeg', 'audio/mpeg',           <i><font color='green'>//.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'</font></i>
+<a name='L54'>  54                 'audio/x-ms-wma',                                                               <i><font color='green'>//.wma file. FF2 &amp; IE7 sends this</font></i>
+<a name='L55'>  55                 'application/x-ogg'                                                     <i><font color='green'>//.ogg file             - FIXME: IE7 sends mime header 'application/octet-stream' for .ogg</font></i>
+<a name='L56'>  56         );
+<a name='L57'>  57 
+<a name='L58'>  58         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/681.html' title='Multiple used in 2 places.'>video_mime_types</a> = <b>array</b>(
+<a name='L59'>  59                 'video/mpeg',                   <i><font color='green'>//.mpg file</font></i>
+<a name='L60'>  60                 'video/avi',                    <i><font color='green'>//.avi file</font></i>
+<a name='L61'>  61                 'video/x-ms-wmv',       <i><font color='green'>//Microsoft .wmv file</font></i>
+<a name='L62'>  62                 'video/3gpp'                    <i><font color='green'>//.3gp video file</font></i>
+<a name='L63'>  63         );
+<a name='L64'>  64 
+<a name='L65'>  65         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/194.html' title='Multiple used in 2 places.'>document_mime_types</a> = <b>array</b>(
+<a name='L66'>  66                 'text/plain',                                   <i><font color='green'>//normal text file</font></i>
+<a name='L67'>  67                 'application/msword',   <i><font color='green'>//Microsoft .doc file</font></i>
+<a name='L68'>  68                 'application/pdf'                       <i><font color='green'>//Adobe .pdf file</font></i>
+<a name='L69'>  69         );
+<a name='L70'>  70 
+<a name='L71'>  71         <i><font color='green'>//file extension to mimetype &amp; media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually</font></i>
+<a name='L72'>  72         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../S/4.html#L72' title='Used at 72 in class.Files.php.'>media_types</a> = <b>array</b>(
+<a name='L73'>  73                 'png' =&gt; <b>array</b>(<a href='../S/4.html#L34' title='Defined at 34 in class.Files.php.'>MEDIATYPE_IMAGE</a>, 'image/png', 'PNG Image'),
+<a name='L74'>  74                 'jpg' =&gt; <b>array</b>(<a href='../S/4.html#L34' title='Defined at 34 in class.Files.php.'>MEDIATYPE_IMAGE</a>, 'image/jpeg', 'JPEG Image'),
+<a name='L75'>  75                 'gif' =&gt; <b>array</b>(<a href='../S/4.html#L34' title='Defined at 34 in class.Files.php.'>MEDIATYPE_IMAGE</a>, 'image/gif', 'GIF Image'),
+<a name='L76'>  76 
+<a name='L77'>  77                 'wmv' =&gt; <b>array</b>(<a href='../S/4.html#L35' title='Defined at 35 in class.Files.php.'>MEDIATYPE_VIDEO</a>, 'video/x-ms-wmv', 'Windows Media Video'),
+<a name='L78'>  78                 'avi' =&gt; <b>array</b>(<a href='../S/4.html#L35' title='Defined at 35 in class.Files.php.'>MEDIATYPE_VIDEO</a>, 'video/avi', 'DivX 3 Video'),
+<a name='L79'>  79                 'mpg' =&gt; <b>array</b>(<a href='../S/4.html#L35' title='Defined at 35 in class.Files.php.'>MEDIATYPE_VIDEO</a>, 'video/mpeg', 'MPEG-2 Video'),
+<a name='L80'>  80                 '3gp' =&gt; <b>array</b>(<a href='../S/4.html#L35' title='Defined at 35 in class.Files.php.'>MEDIATYPE_VIDEO</a>, 'video/3gpp', '3GP Video (cellphones)'),
+<a name='L81'>  81 
+<a name='L82'>  82                 'wma' =&gt; <b>array</b>(<a href='../S/4.html#L36' title='Defined at 36 in class.Files.php.'>MEDIATYPE_AUDIO</a>, 'audio/x-ms-wma', 'Windows Media Audio'),
+<a name='L83'>  83                 'mp3' =&gt; <b>array</b>(<a href='../S/4.html#L36' title='Defined at 36 in class.Files.php.'>MEDIATYPE_AUDIO</a>, 'audio/x-mpeg', 'MP3 Audio'),
+<a name='L84'>  84                 'ogg' =&gt; <b>array</b>(<a href='../S/4.html#L36' title='Defined at 36 in class.Files.php.'>MEDIATYPE_AUDIO</a>, 'application/x-ogg', 'OGG Audio'),
+<a name='L85'>  85 
+<a name='L86'>  86                 'txt' =&gt; <b>array</b>(<a href='../S/4.html#L37' title='Defined at 37 in class.Files.php.'>MEDIATYPE_DOCUMENT</a>, 'text/plain', 'Text Document'),
+<a name='L87'>  87                 'doc' =&gt; <b>array</b>(<a href='../S/4.html#L37' title='Defined at 37 in class.Files.php.'>MEDIATYPE_DOCUMENT</a>, 'application/msword', 'Word Document'),
+<a name='L88'>  88                 'pdf' =&gt; <b>array</b>(<a href='../S/4.html#L37' title='Defined at 37 in class.Files.php.'>MEDIATYPE_DOCUMENT</a>, 'application/pdf', 'PDF Document'),
+<a name='L89'>  89 
+<a name='L90'>  90                 'html'          =&gt; <b>array</b>(<a href='../S/4.html#L38' title='Defined at 38 in class.Files.php.'>MEDIATYPE_WEBRESOURCE</a>, 'text/html', 'HTML Page'),
+<a name='L91'>  91                 'torrent'       =&gt; <b>array</b>(<a href='../S/4.html#L38' title='Defined at 38 in class.Files.php.'>MEDIATYPE_WEBRESOURCE</a>, 'application/x-bittorrent', 'BitTorrent File')
+<a name='L92'>  92         );
+<a name='L93'>  93 
+<a name='L94'>  94         <i><font color='green'>/* User configurable settings */</font></i>
+<a name='L95'>  95         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a> = 'e:/devel/webupload/default';                                              <i><font color='green'>//      '/tmp/';</font></i>
+<a name='L96'>  96         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/627.html' title='Multiple used in 6 places.'>thumbs_dir</a> = 'e:/devel/webupload/default/thumbs/';              <i><font color='green'>//      '/tmp/';</font></i>
+<a name='L97'>  97 
+<a name='L98'>  98         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/299.html' title='Multiple used in 5 places.'>image_max_width</a>                        = 1100; <i><font color='green'>//bigger images will be resized to this size</font></i>
+<a name='L99'>  99         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/298.html' title='Multiple used in 5 places.'>image_max_height</a>                       = 900;
+<a name='L100'> 100         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/625.html' title='Multiple used in 5 places.'>thumb_default_width</a>             = 80;
+<a name='L101'> 101         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/624.html' title='Multiple used in 7 places.'>thumb_default_height</a>    = 80;
+<a name='L102'> 102         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/296.html' title='Multiple used in 5 places.'>image_jpeg_quality</a>             = 70;           <i><font color='green'>//0-100% quality for recompression of very large uploads (like digital camera pictures)</font></i>
+<a name='L103'> 103 
+<a name='L104'> 104         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/152.html' title='Multiple used in 4 places.'>count_file_views</a>                       = <b>false</b>;        <i><font color='green'>//auto increments the "cnt" in tblFiles in each $files-&gt;sendFile() call</font></i>
+<a name='L105'> 105         <a href='../Y/502.html' title='Multiple used in 30 places.'>public</a> $<a href='../Y/21.html' title='Multiple used in 4 places.'>anon_uploads</a>                                    = <b>false</b>;        <i><font color='green'>//allow unregisterd users to upload files</font></i>
+<a name='L106'> 106         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/23.html' title='Multiple used in 4 places.'>apc_uploads</a>                                    = <b>false</b>;                <i><font color='green'>//enable support for php_apc + php_uploadprogress calls</font></i>
+<a name='L107'> 107 
+<a name='L108'> 108         <i><font color='green'>/* If $image_convert are enabled, it uses ImageMagick to convert the following image formats:</font></i>
+<a name='L109'> 109 <i><font color='green'>                - BMP images gets converted to JPG</font></i>
+<a name='L110'> 110 <i><font color='green'>                - SVG images gets converted to PNG</font></i>
+<a name='L111'> 111 <i><font color='green'></font></i>
+<a name='L112'> 112 <i><font color='green'>                Currently using ImageMagick-6.3.5-8-Q16-windows-static.exe</font></i>
+<a name='L113'> 113 <i><font color='green'></font></i>
+<a name='L114'> 114 <i><font color='green'>                 ImageMagick is a open source and multi platform image converter</font></i>
+<a name='L115'> 115 <i><font color='green'>                 http://www.imagemagick.org/download/</font></i>
+<a name='L116'> 116 <i><font color='green'>        */</font></i>
+<a name='L117'> 117         <a href='../Y/495.html' title='Multiple used in 23 places.'>private</a> $<a href='../Y/284.html' title='Multiple used in 4 places.'>image_convert</a>                          = <b>true</b>;
+<a name='L118'> 118 
+<a name='L119'> 119         <b>function</b> __construct(<b>array</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>)
+<a name='L120'> 120         <font color='blue'>{</font>
+<a name='L121'> 121                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L122'> 122 
+<a name='L123'> 123                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['upload_dir'])) $this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['upload_dir'];
+<a name='L124'> 124                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['thumbs_dir'])) $this-&gt;<a href='../Y/627.html' title='Multiple used in 6 places.'>thumbs_dir</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['thumbs_dir'];
+<a name='L125'> 125 
+<a name='L126'> 126                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['image_max_width'])) $this-&gt;<a href='../Y/299.html' title='Multiple used in 5 places.'>image_max_width</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['image_max_width'];
+<a name='L127'> 127                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['image_max_height'])) $this-&gt;<a href='../Y/298.html' title='Multiple used in 5 places.'>image_max_height</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['image_max_height'];
+<a name='L128'> 128                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['thumb_default_width'])) $this-&gt;<a href='../Y/625.html' title='Multiple used in 5 places.'>thumb_default_width</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['thumb_default_width'];
+<a name='L129'> 129                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['thumb_default_height'])) $this-&gt;<a href='../Y/624.html' title='Multiple used in 7 places.'>thumb_default_height</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['thumb_default_height'];
+<a name='L130'> 130                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['image_jpeg_quality'])) $this-&gt;<a href='../Y/296.html' title='Multiple used in 5 places.'>image_jpeg_quality</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['image_jpeg_quality'];
+<a name='L131'> 131 
+<a name='L132'> 132                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['count_file_views'])) $this-&gt;<a href='../Y/152.html' title='Multiple used in 4 places.'>count_file_views</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['count_file_views'];
+<a name='L133'> 133                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['anon_uploads'])) $this-&gt;<a href='../Y/21.html' title='Multiple used in 4 places.'>anon_uploads</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['anon_uploads'];
+<a name='L134'> 134                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['apc_uploads'])) $this-&gt;<a href='../Y/23.html' title='Multiple used in 4 places.'>apc_uploads</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['apc_uploads'];
+<a name='L135'> 135                 <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['image_convert'])) $this-&gt;<a href='../Y/284.html' title='Multiple used in 4 places.'>image_convert</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['image_convert'];
+<a name='L136'> 136         <font color='blue'>}</font>
+<a name='L137'> 137 
+<a name='L138'> 138         <i><font color='green'>//Returnerar alla filer som är uppladdade av typen $fileType</font></i>
+<a name='L139'> 139         <b>function</b> getFileList($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a> = 0)
+<a name='L140'> 140         <font color='blue'>{</font>
+<a name='L141'> 141                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L142'> 142                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>)) <b>return</b> <b>false</b>;
+<a name='L143'> 143 
+<a name='L144'> 144                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblFiles WHERE fileType='.$<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>;
+<a name='L145'> 145                 <b>if</b> ($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>) $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' AND ownerId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>;
+<a name='L146'> 146                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' ORDER BY timeUploaded ASC';
+<a name='L147'> 147                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L148'> 148         <font color='blue'>}</font>
+<a name='L149'> 149 
+<a name='L150'> 150         <i><font color='green'>/* Returns all cloned files based on this file */</font></i>
+<a name='L151'> 151         <b>function</b> getClonesList($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>)
+<a name='L152'> 152         <font color='blue'>{</font>
+<a name='L153'> 153                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L154'> 154                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>)) <b>return</b> <b>false</b>;
+<a name='L155'> 155 
+<a name='L156'> 156                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblFiles WHERE fileType='.<a href='../S/4.html#L26' title='Defined at 26 in class.Files.php.'>FILETYPE_PROCESS_CLONE</a>.' AND ownerId='.$<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>;
+<a name='L157'> 157                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' ORDER BY timeUploaded ASC';
+<a name='L158'> 158                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L159'> 159         <font color='blue'>}</font>
+<a name='L160'> 160 
+<a name='L161'> 161         <i><font color='green'>/* Performs mimetype lookup using "file" tool */</font></i>
+<a name='L162'> 162         <b>function</b> <a href='../S/4.html#L778' title='Refered from 778 in class.Files.php.'>lookupMimeType</a>($<a href='../Y/243.html' title='Multiple used in 6 places.'>fileName</a>)
+<a name='L163'> 163         <font color='blue'>{</font>
+<a name='L164'> 164                 <i><font color='green'>//IMPORTANT todo: validate $fileName</font></i>
+<a name='L165'> 165 
+<a name='L166'> 166                 <i><font color='green'>//TODO: bort me hårdkodad url</font></i>
+<a name='L167'> 167                 <i><font color='green'>//$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m E:\devel\magic '.$fileName;</font></i>
+<a name='L168'> 168                 <i><font color='green'>//$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m "C:\Program Files\GnuWin32\share\file\magic" '.$fileName;</font></i>
+<a name='L169'> 169                 $<a href='../Y/51.html' title='Multiple used in 12 places.'>c</a> = '"C:\Program Files\GnuWin32\bin\file.exe" -bi '.$<a href='../Y/243.html' title='Multiple used in 6 places.'>fileName</a>;
+<a name='L170'> 170                 <b>echo</b> 'Executing: '.$<a href='../Y/51.html' title='Multiple used in 12 places.'>c</a>.'&lt;br/&gt;';
+<a name='L171'> 171                 $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a> = <a href='../Y/211.html' title='Multiple used in 3 places.'>exec</a>($<a href='../Y/51.html' title='Multiple used in 12 places.'>c</a>);
+<a name='L172'> 172                 <b>echo</b> 'result: '.$<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>.'&lt;br/&gt;';
+<a name='L173'> 173                 <b>return</b> $<a href='../Y/541.html' title='Multiple used in 185 places.'>result</a>;
+<a name='L174'> 174         <font color='blue'>}</font>
+<a name='L175'> 175 
+<a name='L176'> 176         <i><font color='green'>/*</font></i>
+<a name='L177'> 177 <i><font color='green'>        function lookupMimeType($fileName)</font></i>
+<a name='L178'> 178 <i><font color='green'>        {</font></i>
+<a name='L179'> 179 <i><font color='green'>                //libmagic automatically appends the .mime to the end of the filename, so PHP incorrectly reports the path it was looking for. </font></i>
+<a name='L180'> 180 <i><font color='green'>                $finfo = new finfo(FILEINFO_MIME, "E:/Devel/magic");</font></i>
+<a name='L181'> 181 <i><font color='green'>                if (!$finfo) {</font></i>
+<a name='L182'> 182 <i><font color='green'>                        echo 'Failed to init finfo';</font></i>
+<a name='L183'> 183 <i><font color='green'>                        return false;</font></i>
+<a name='L184'> 184 <i><font color='green'>                }</font></i>
+<a name='L185'> 185 <i><font color='green'></font></i>
+<a name='L186'> 186 <i><font color='green'>                echo 'mime of '.$fileName;</font></i>
+<a name='L187'> 187 <i><font color='green'>                echo $finfo-&gt;file($fileName);</font></i>
+<a name='L188'> 188 <i><font color='green'>                return 'xx';</font></i>
+<a name='L189'> 189 <i><font color='green'>        }*/</font></i>
+<a name='L190'> 190 
+<a name='L191'> 191         <i><font color='green'>//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)</font></i>
+<a name='L192'> 192         <i><font color='green'>//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)</font></i>
+<a name='L193'> 193         <b>function</b> <a href='../R/228.html' title='Multiple refered from 3 places.'>showFiles</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a> = 0, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a> = 0)
+<a name='L194'> 194         <font color='blue'>{</font>
+<a name='L195'> 195                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>, $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L196'> 196                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>)) <b>return</b>;
+<a name='L197'> 197 
+<a name='L198'> 198                 <b>if</b> ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L21' title='Defined at 21 in class.Files.php.'>FILETYPE_FILEAREA_UPLOAD</a> || $<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L22' title='Defined at 22 in class.Files.php.'>FILETYPE_USERFILE</a> || $<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>) <font color='blue'>{</font>
+<a name='L199'> 199                         <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['file_category_id']) &amp;&amp; <a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['file_category_id'])) $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a> = $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['file_category_id'];
+<a name='L200'> 200                 <font color='blue'>}</font>
+<a name='L201'> 201 
+<a name='L202'> 202                 <b>if</b> (($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || $this-&gt;<a href='../Y/21.html' title='Multiple used in 4 places.'>anon_uploads</a>) &amp;&amp; !<b>empty</b>($<a href='../Y/89.html' title='Multiple used in 5 places.'>_FILES</a>['file1'])) <font color='blue'>{</font>
+<a name='L203'> 203                         $this-&gt;<a href='../S/4.html#L451' title='Defined at 451 in class.Files.php.'>handleUpload</a>($<a href='../Y/89.html' title='Multiple used in 5 places.'>_FILES</a>['file1'], $<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>);
+<a name='L204'> 204                         <b>unset</b>($<a href='../Y/89.html' title='Multiple used in 5 places.'>_FILES</a>['file1']);        <i><font color='green'>//to avoid further processing of this file upload elsewhere</font></i>
+<a name='L205'> 205                         <b>if</b> ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>) <font color='blue'>{</font>
+<a name='L206'> 206                                 <a href='../S/12.html#L19' title='Defined at 19 in atom_revisions.php.'>addRevision</a>(<a href='../S/12.html#L9' title='Defined at 9 in atom_revisions.php.'>REVISIONS_WIKI</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>, 'File uploaded...', <a href='../S/19.html#L393' title='Defined at 393 in class.DB_Base.php.'>now</a>(), $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>, <a href='../S/12.html#L13' title='Defined at 13 in atom_revisions.php.'>REV_CAT_FILE_UPLOADED</a>);
+<a name='L207'> 207                         <font color='blue'>}</font>
+<a name='L208'> 208                 <font color='blue'>}</font>
+<a name='L209'> 209 
+<a name='L210'> 210                 $<a href='../Y/670.html' title='Multiple used in 5 places.'>userid</a> = $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;
+<a name='L211'> 211                 $<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a> = $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>;
+<a name='L212'> 212 
+<a name='L213'> 213                 $<a href='../Y/4.html' title='Multiple used in 4 places.'>action</a> = '';
+<a name='L214'> 214                 <b>if</b> ($<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>) $<a href='../Y/4.html' title='Multiple used in 4 places.'>action</a> = '?file_category_id='.$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>;
+<a name='L215'> 215 
+<a name='L216'> 216                 <b>echo</b> '&lt;div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;"&gt;';
+<a name='L217'> 217                 <b>echo</b> '&lt;img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/ajax_loading.gif"/&gt;&lt;/div&gt;';
+<a name='L218'> 218 
+<a name='L219'> 219                 <b>echo</b> '&lt;div class="file_gadget"&gt;';
+<a name='L220'> 220 
+<a name='L221'> 221                 <b>echo</b> '&lt;div class="file_gadget_header"&gt;';
+<a name='L222'> 222 
+<a name='L223'> 223                 <b>switch</b> ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>)
+<a name='L224'> 224                 <font color='blue'>{</font>
+<a name='L225'> 225                         <b>case</b> <a href='../S/4.html#L22' title='Defined at 22 in class.Files.php.'>FILETYPE_USERFILE</a>:
+<a name='L226'> 226                                 <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['id']) &amp;&amp; <a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['id'])) <font color='blue'>{</font>
+<a name='L227'> 227                                         $<a href='../Y/670.html' title='Multiple used in 5 places.'>userid</a> = $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['id'];
+<a name='L228'> 228                                         $<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a> = <a href='../S/27.html#L10' title='Defined at 10 in functions_users.php.'>getUserName</a>($<a href='../Y/670.html' title='Multiple used in 5 places.'>userid</a>);
+<a name='L229'> 229                                 <font color='blue'>}</font>
+<a name='L230'> 230                                 <b>echo</b> 'Files:'.$<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>;
+<a name='L231'> 231                                 <b>echo</b> <a href='../S/26.html#L146' title='Defined at 146 in atom_categories.php.'>getCategoriesSelect</a>(<a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>, 0, '', 0, <a href='../S/17.html#L89' title='Defined at 89 in functions_general.php.'>URLadd</a>('file_category_id')).'&lt;br/&gt;';
+<a name='L232'> 232                                 <b>break</b>;
+<a name='L233'> 233 
+<a name='L234'> 234                         <b>case</b> <a href='../S/4.html#L21' title='Defined at 21 in class.Files.php.'>FILETYPE_FILEAREA_UPLOAD</a>:
+<a name='L235'> 235                                 <b>if</b> (!$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>) <b>echo</b> 'File area - Root Level content';
+<a name='L236'> 236                                 <b>else</b> <b>echo</b> ' - '.<a href='../S/26.html#L73' title='Defined at 73 in atom_categories.php.'>getCategoryName</a>(<a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>).' content';
+<a name='L237'> 237                                 <b>break</b>;
+<a name='L238'> 238 
+<a name='L239'> 239                         <b>case</b> <a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>:
+<a name='L240'> 240                                 <b>if</b> (!$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>) <b>echo</b> 'Wiki files - Root Level content';
+<a name='L241'> 241                                 <b>echo</b> 'Wiki attachments';
+<a name='L242'> 242                                 <b>echo</b> <a href='../S/26.html#L146' title='Defined at 146 in atom_categories.php.'>getCategoriesSelect</a>(<a href='../S/26.html#L12' title='Defined at 12 in atom_categories.php.'>CATEGORY_WIKIFILE</a>, 0, '', 0, <a href='../S/17.html#L89' title='Defined at 89 in functions_general.php.'>URLadd</a>('file_category_id')).'&lt;br/&gt;';
+<a name='L243'> 243                                 <b>break</b>;
+<a name='L244'> 244 
+<a name='L245'> 245                         <b>case</b> <a href='../S/4.html#L18' title='Defined at 18 in class.Files.php.'>FILETYPE_BLOG</a>:
+<a name='L246'> 246                                 <b>echo</b> 'Blog attachments';
+<a name='L247'> 247                                 <b>break</b>;
+<a name='L248'> 248 
+<a name='L249'> 249                         <b>case</b> <a href='../S/4.html#L19' title='Defined at 19 in class.Files.php.'>FILETYPE_NEWS</a>:
+<a name='L250'> 250                                 <b>echo</b> 'News article attachments';
+<a name='L251'> 251                                 <b>break</b>;
+<a name='L252'> 252 
+<a name='L253'> 253                         <b>default</b>:
+<a name='L254'> 254                                 <b>die</b>('unknown filetype');
+<a name='L255'> 255                 <font color='blue'>}</font>
+<a name='L256'> 256                 <b>echo</b> '&lt;/div&gt;';
+<a name='L257'> 257 
+<a name='L258'> 258                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblFiles WHERE categoryId='.$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>.' AND fileType='.$<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>.' AND ownerId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>.' ORDER BY timeUploaded ASC';
+<a name='L259'> 259                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L260'> 260 
+<a name='L261'> 261                 $this-&gt;<a href='../S/4.html#L1049' title='Defined at 1049 in class.Files.php.'>showImageGadgetXHTML</a>();
+<a name='L262'> 262                 $this-&gt;<a href='../S/4.html#L1083' title='Defined at 1083 in class.Files.php.'>showAudioGadgetXHTML</a>();
+<a name='L263'> 263                 $this-&gt;<a href='../S/4.html#L1104' title='Defined at 1104 in class.Files.php.'>showVideoGadgetXHTML</a>();
+<a name='L264'> 264                 $this-&gt;<a href='../S/4.html#L1125' title='Defined at 1125 in class.Files.php.'>showDocumentGadgetXHTML</a>();
+<a name='L265'> 265 
+<a name='L266'> 266                 <b>echo</b> '&lt;div id="zoom_fileinfo" style="display:none"&gt;&lt;/div&gt;';
+<a name='L267'> 267                 <b>echo</b> '&lt;div class="file_gadget_content"&gt;';
+<a name='L268'> 268 
+<a name='L269'> 269                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>)
+<a name='L270'> 270                 <font color='blue'>{</font>
+<a name='L271'> 271                         $<a href='../Y/637.html' title='Multiple used in 22 places.'>title</a> = <a href='../Y/275.html' title='Multiple used in 4 places.'>htmlspecialchars</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileName']).' ('.<a href='../S/6.html#L29' title='Defined at 29 in functions_textformat.php.'>formatDataSize</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileSize']).')';
+<a name='L272'> 272                         <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileMime'], $this-&gt;<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a>)) <font color='blue'>{</font>
+<a name='L273'> 273                                 <b>echo</b> '&lt;div class="file_gadget_entry" id="file_'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].'" title="'.$<a href='../Y/637.html' title='Multiple used in 22 places.'>title</a>.'" onclick="zoomImage('.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].');"&gt;&lt;center&gt;';
+<a name='L274'> 274                                 <b>echo</b> <a href='../S/6.html#L6' title='Defined at 6 in functions_textformat.php.'>makeThumbLink</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId']);
+<a name='L275'> 275                                 <b>echo</b> '&lt;/center&gt;&lt;/div&gt;';
+<a name='L276'> 276                         <font color='blue'>}</font> <b>else</b> <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileMime'], $this-&gt;<a href='../Y/35.html' title='Multiple used in 4 places.'>audio_mime_types</a>)) <font color='blue'>{</font>
+<a name='L277'> 277                                 <b>echo</b> '&lt;div class="file_gadget_entry" id="file_'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].'" title="'.$<a href='../Y/637.html' title='Multiple used in 22 places.'>title</a>.'" onclick="zoomAudio('.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].',\''.<a href='../Y/666.html' title='Multiple used in 3 places.'>urlencode</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileName']).'\');"&gt;&lt;center&gt;';
+<a name='L278'> 278                                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/&gt;';
+<a name='L279'> 279                                 <b>echo</b> '&lt;/center&gt;&lt;/div&gt;';
+<a name='L280'> 280                         <font color='blue'>}</font> <b>else</b> <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileMime'], $this-&gt;<a href='../Y/681.html' title='Multiple used in 2 places.'>video_mime_types</a>)) <font color='blue'>{</font>
+<a name='L281'> 281                                 <b>echo</b> '&lt;div class="file_gadget_entry" id="file_'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].'" title="'.$<a href='../Y/637.html' title='Multiple used in 22 places.'>title</a>.'" onclick="zoomVideo('.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].',\''.<a href='../Y/666.html' title='Multiple used in 3 places.'>urlencode</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileName']).'\');"&gt;&lt;center&gt;';
+<a name='L282'> 282                                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_file_video.png" width="32" height="32" alt="Video file"/&gt;';
+<a name='L283'> 283                                 <b>echo</b> '&lt;/center&gt;&lt;/div&gt;';
+<a name='L284'> 284                         <font color='blue'>}</font> <b>else</b> <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileMime'], $this-&gt;<a href='../Y/194.html' title='Multiple used in 2 places.'>document_mime_types</a>)) <font color='blue'>{</font>
+<a name='L285'> 285                                 <b>echo</b> '&lt;div class="file_gadget_entry" id="file_'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].'" title="'.$<a href='../Y/637.html' title='Multiple used in 22 places.'>title</a>.'" onclick="zoomFile('.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].');"&gt;&lt;center&gt;';
+<a name='L286'> 286                                 <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_file_document.png" width="40" height="49" alt="Document"/&gt;';
+<a name='L287'> 287                                 <b>echo</b> '&lt;/center&gt;&lt;/div&gt;';
+<a name='L288'> 288                         <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L289'> 289                                 <b>echo</b> '&lt;div class="file_gadget_entry" id="file_'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].'" title="'.$<a href='../Y/637.html' title='Multiple used in 22 places.'>title</a>.'" onclick="zoomFile('.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].');"&gt;&lt;center&gt;';
+<a name='L290'> 290                                 <b>echo</b> 'General file:&lt;br/&gt;';
+<a name='L291'> 291                                 <b>echo</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileMime'].'&lt;br/&gt;';
+<a name='L292'> 292                                 <b>echo</b> '&lt;/center&gt;&lt;/div&gt;';
+<a name='L293'> 293                         <font color='blue'>}</font>
+<a name='L294'> 294                 <font color='blue'>}</font>
+<a name='L295'> 295                 <b>echo</b> '&lt;/div&gt;';
+<a name='L296'> 296 
+<a name='L297'> 297                 <i><font color='green'>//FIXME: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads</font></i>
+<a name='L298'> 298                 <i><font color='green'>//FIXME: stöd anon_uploads ! den ignoreras totalt idag, dvs anon uploads tillåts aldrig</font></i>
+<a name='L299'> 299                 <b>if</b> ( 
+<a name='L300'> 300                                 ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L22' title='Defined at 22 in class.Files.php.'>FILETYPE_USERFILE</a> &amp;&amp; $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> == $<a href='../Y/670.html' title='Multiple used in 5 places.'>userid</a>) ||
+<a name='L301'> 301                                 ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L19' title='Defined at 19 in class.Files.php.'>FILETYPE_NEWS</a> &amp;&amp; $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) ||
+<a name='L302'> 302                                 ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>) ||
+<a name='L303'> 303                                 ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L18' title='Defined at 18 in class.Files.php.'>FILETYPE_BLOG</a>) ||
+<a name='L304'> 304                                 ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L21' title='Defined at 21 in class.Files.php.'>FILETYPE_FILEAREA_UPLOAD</a>)
+<a name='L305'> 305                                 )
+<a name='L306'> 306                 <font color='blue'>{</font>
+<a name='L307'> 307                         $<a href='../Y/250.html' title='Multiple used in 3 places.'>file_upload</a> = <b>true</b>;
+<a name='L308'> 308                         <b>if</b> ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L18' title='Defined at 18 in class.Files.php.'>FILETYPE_BLOG</a>) <font color='blue'>{</font>
+<a name='L309'> 309                                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../S/11.html#L92' title='Defined at 92 in functions_blogs.php.'>getBlog</a>($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>);
+<a name='L310'> 310                                 <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['userId'] != $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) $<a href='../Y/250.html' title='Multiple used in 3 places.'>file_upload</a> = <b>false</b>;
+<a name='L311'> 311                         <font color='blue'>}</font>
+<a name='L312'> 312 
+<a name='L313'> 313                         <b>if</b> ($<a href='../Y/250.html' title='Multiple used in 3 places.'>file_upload</a>) <font color='blue'>{</font>
+<a name='L314'> 314                                 <b>echo</b> '&lt;div id="file_gadget_upload"&gt;';
+<a name='L315'> 315                                 <b>if</b> (($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L22' title='Defined at 22 in class.Files.php.'>FILETYPE_USERFILE</a> &amp;&amp; !$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a> &amp;&amp; $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> == $<a href='../Y/670.html' title='Multiple used in 5 places.'>userid</a>) ||
+<a name='L316'> 316                                                 ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>)
+<a name='L317'> 317                                                 )
+<a name='L318'> 318                                 <font color='blue'>{</font>
+<a name='L319'> 319                                         <b>echo</b> '&lt;input type="button" class="button" value="New file category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/&gt;&lt;br/&gt;';
+<a name='L320'> 320                                 <font color='blue'>}</font>
+<a name='L321'> 321 
+<a name='L322'> 322                                 <b>if</b> ($this-&gt;<a href='../Y/23.html' title='Multiple used in 4 places.'>apc_uploads</a>) <font color='blue'>{</font>
+<a name='L323'> 323                                         <b>echo</b> '&lt;form name="ajax_file_upload" method="post" action="'.$<a href='../Y/4.html' title='Multiple used in 4 places.'>action</a>.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.');"&gt;';
+<a name='L324'> 324                                         <b>echo</b> '&lt;input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.'"/&gt;';
+<a name='L325'> 325                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L326'> 326                                         <b>echo</b> '&lt;form name="ajax_file_upload" method="post" action="'.$<a href='../Y/4.html' title='Multiple used in 4 places.'>action</a>.'" enctype="multipart/form-data"&gt;';
+<a name='L327'> 327                                 <font color='blue'>}</font>
+<a name='L328'> 328                                 <b>echo</b> '&lt;input type="file" name="file1"/&gt; ';
+<a name='L329'> 329                                 <b>echo</b> '&lt;input type="submit" class="button" value="Upload"/&gt;';
+<a name='L330'> 330                                 <b>echo</b> '&lt;/form&gt;';
+<a name='L331'> 331                                 <b>echo</b> '&lt;/div&gt;';
+<a name='L332'> 332                                 <b>if</b> ($this-&gt;<a href='../Y/23.html' title='Multiple used in 4 places.'>apc_uploads</a>) <font color='blue'>{</font>
+<a name='L333'> 333                                         <b>echo</b> '&lt;div id="file_gadget_apc_progress" style="display:none"&gt;';
+<a name='L334'> 334                                         <b>echo</b> '&lt;/div&gt;';
+<a name='L335'> 335                                 <font color='blue'>}</font>
+<a name='L336'> 336                         <font color='blue'>}</font>
+<a name='L337'> 337                 <font color='blue'>}</font>
+<a name='L338'> 338 
+<a name='L339'> 339                 <b>if</b> (($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L22' title='Defined at 22 in class.Files.php.'>FILETYPE_USERFILE</a> &amp;&amp; !$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>) ||
+<a name='L340'> 340                                 ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>)
+<a name='L341'> 341                                 )
+<a name='L342'> 342                 <font color='blue'>{</font>
+<a name='L343'> 343                         <b>echo</b> '&lt;div id="file_gadget_category" style="display: none;"&gt;';
+<a name='L344'> 344                         <b>if</b> ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L22' title='Defined at 22 in class.Files.php.'>FILETYPE_USERFILE</a>) <b>echo</b> <a href='../S/26.html#L211' title='Defined at 211 in atom_categories.php.'>manageCategoriesDialog</a>(<a href='../S/26.html#L9' title='Defined at 9 in atom_categories.php.'>CATEGORY_USERFILE</a>);
+<a name='L345'> 345                         <b>if</b> ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>) <b>echo</b> <a href='../S/26.html#L211' title='Defined at 211 in atom_categories.php.'>manageCategoriesDialog</a>(<a href='../S/26.html#L12' title='Defined at 12 in atom_categories.php.'>CATEGORY_WIKIFILE</a>);
+<a name='L346'> 346                         <b>echo</b> '&lt;/div&gt;';
+<a name='L347'> 347                 <font color='blue'>}</font>
+<a name='L348'> 348 
+<a name='L349'> 349                 <b>echo</b> '&lt;/div&gt;';
+<a name='L350'> 350         <font color='blue'>}</font>
+<a name='L351'> 351 
+<a name='L352'> 352         <i><font color='green'>/* Visar bara thumbnails. klicka en thumbnail för att visa hela bilden i 'image_big' div:en */</font></i>
+<a name='L353'> 353         <b>function</b> showThumbnails($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>)
+<a name='L354'> 354         <font color='blue'>{</font>
+<a name='L355'> 355                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>, $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L356'> 356                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>)) <b>return</b> <b>false</b>;
+<a name='L357'> 357 
+<a name='L358'> 358                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>('SELECT * FROM tblFiles WHERE categoryId='.$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>.' AND fileType='.$<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>.' ORDER BY timeUploaded ASC');
+<a name='L359'> 359 
+<a name='L360'> 360                 <b>if</b> (!$<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>) <font color='blue'>{</font>
+<a name='L361'> 361                         <b>echo</b> 'No thumbnails to show!';
+<a name='L362'> 362                         <b>return</b>;
+<a name='L363'> 363                 <font color='blue'>}</font>
+<a name='L364'> 364 
+<a name='L365'> 365                 <b>echo</b> '&lt;div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this-&gt;<a href='../Y/624.html' title='Multiple used in 7 places.'>thumb_default_height</a>*3).');"&gt;&lt;/div&gt;';
+<a name='L366'> 366                 <b>echo</b> '&lt;div id="image_thumbs_scroll_down" onclick="scroll_element_content(\'image_thumbs_scroller\', '.($this-&gt;<a href='../Y/624.html' title='Multiple used in 7 places.'>thumb_default_height</a>*3).');"&gt;&lt;/div&gt;';
+<a name='L367'> 367                 <b>echo</b> '&lt;div id="image_thumbs_scroller"&gt;';
+<a name='L368'> 368 
+<a name='L369'> 369                 <i><font color='green'>//show thumbnail of each image</font></i>
+<a name='L370'> 370                 <b>echo</b> '&lt;div class="thumbnails_gadget"&gt;';
+<a name='L371'> 371                 <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L372'> 372                         <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileMime'], $this-&gt;<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a>)) <font color='blue'>{</font>
+<a name='L373'> 373                                 <b>echo</b> '&lt;div class="thumbnails_gadget_entry" id="thumb_'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].'" onclick="loadImage('.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].', \'image_big\');"&gt;&lt;center&gt;';
+<a name='L374'> 374                                 <b>echo</b> <a href='../S/6.html#L6' title='Defined at 6 in functions_textformat.php.'>makeThumbLink</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'], $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileName']);
+<a name='L375'> 375                                 <b>echo</b> '&lt;/center&gt;&lt;/div&gt;';
+<a name='L376'> 376                         <font color='blue'>}</font>
+<a name='L377'> 377                 <font color='blue'>}</font>
+<a name='L378'> 378                 <b>echo</b> '&lt;/div&gt;';
+<a name='L379'> 379                 <b>echo</b> '&lt;/div&gt;'; <i><font color='green'>//id="image_thumbs_scroller"</font></i>
+<a name='L380'> 380 
+<a name='L381'> 381                 <b>echo</b> '&lt;div id="image_comments"&gt;';
+<a name='L382'> 382                 <b>echo</b> '&lt;iframe id="image_comments_iframe" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'api/html_imgcomments.php?i='.$<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[0]['fileId'].<a href='../S/17.html#L63' title='Defined at 63 in functions_general.php.'>getProjectPath</a>().'"&gt;&lt;/iframe&gt;';
+<a name='L383'> 383                 <b>echo</b> '&lt;/div&gt;';
+<a name='L384'> 384 
+<a name='L385'> 385                 <b>echo</b> '&lt;div id="image_big_holder"&gt;';
+<a name='L386'> 386 
+<a name='L387'> 387                 <b>echo</b> '&lt;div id="image_big"&gt;'.<a href='../S/6.html#L20' title='Defined at 20 in functions_textformat.php.'>makeImageLink</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[0]['fileId'], $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[0]['fileName']).'&lt;/div&gt;';
+<a name='L388'> 388 
+<a name='L389'> 389                 <b>echo</b> '&lt;/div&gt;';  <i><font color='green'>//id="image_big_holder"</font></i>
+<a name='L390'> 390         <font color='blue'>}</font>
+<a name='L391'> 391         
+<a name='L392'> 392         <i><font color='green'>/* shows attachments. used to show files attached to a forum post */</font></i>
+<a name='L393'> 393         <b>function</b> <a href='../S/21.html#L582' title='Refered from 582 in functions_forum.php.'>showAttachments</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>, $<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>)
+<a name='L394'> 394         <font color='blue'>{</font>
+<a name='L395'> 395                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L396'> 396 
+<a name='L397'> 397                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = $this-&gt;<a href='../S/4.html#L951' title='Defined at 951 in class.Files.php.'>getFiles</a>($<a href='../Y/133.html' title='Multiple used in 177 places.'>_type</a>,  $<a href='../Y/111.html' title='Multiple used in 26 places.'>_owner</a>);
+<a name='L398'> 398 
+<a name='L399'> 399                 <b>if</b> (<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>)) <font color='blue'>{</font>
+<a name='L400'> 400                         <b>echo</b> '&lt;hr/&gt;';
+<a name='L401'> 401                         <b>echo</b> 'Attached files:&lt;br/&gt;';
+<a name='L402'> 402                         <b>foreach</b> ($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L403'> 403                                 $<a href='../Y/573.html' title='Multiple used in 3 places.'>show_text</a> = $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileName'].' ('.<a href='../S/6.html#L29' title='Defined at 29 in functions_textformat.php.'>formatDataSize</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileSize']).')';
+<a name='L404'> 404                                 <b>echo</b> '&lt;a href="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'api/file_pt.php?id='.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].<a href='../S/17.html#L63' title='Defined at 63 in functions_general.php.'>getProjectPath</a>().'" target="_blank"&gt;';
+<a name='L405'> 405                                 <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileMime'], $this-&gt;<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a>)) <font color='blue'>{</font>
+<a name='L406'> 406                                         <b>echo</b> <a href='../S/6.html#L6' title='Defined at 6 in functions_textformat.php.'>makeThumbLink</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'], $<a href='../Y/573.html' title='Multiple used in 3 places.'>show_text</a>).'&lt;/a&gt; ';
+<a name='L407'> 407                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L408'> 408                                         <b>echo</b> $<a href='../Y/573.html' title='Multiple used in 3 places.'>show_text</a>.'&lt;/a&gt;&lt;br/&gt;';
+<a name='L409'> 409                                 <font color='blue'>}</font>
+<a name='L410'> 410                         <font color='blue'>}</font>
+<a name='L411'> 411                 <font color='blue'>}</font>
+<a name='L412'> 412         <font color='blue'>}</font>
+<a name='L413'> 413 
+<a name='L414'> 414         <b>function</b> <a href='../S/33.html#L92' title='Refered from 92 in atom_settings.php.'>deleteFile</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L415'> 415         <font color='blue'>{</font>
+<a name='L416'> 416                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L417'> 417                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L418'> 418 
+<a name='L419'> 419                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font>
+<a name='L420'> 420                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'DELETE FROM tblFiles WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L421'> 421                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L422'> 422                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'DELETE FROM tblFiles WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.' AND ownerId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;
+<a name='L423'> 423                 <font color='blue'>}</font>
+<a name='L424'> 424 
+<a name='L425'> 425                 <b>if</b> (!$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/67.html' title='Multiple defined in 4 places.'>delete</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>)) <b>return</b> <b>false</b>;
+<a name='L426'> 426 
+<a name='L427'> 427                 <i><font color='green'>//physically remove the file from disk</font></i>
+<a name='L428'> 428                 <a href='../Y/660.html' title='Multiple used in 4 places.'>unlink</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L429'> 429                 $this-&gt;<a href='../S/4.html#L433' title='Defined at 433 in class.Files.php.'>clearThumbs</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L430'> 430         <font color='blue'>}</font>
+<a name='L431'> 431 
+<a name='L432'> 432         <i><font color='green'>/* Deletes all thumbnails for this file ID */</font></i>
+<a name='L433'> 433         <b>function</b> <a href='../R/25.html' title='Multiple refered from 2 places.'>clearThumbs</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L434'> 434         <font color='blue'>{</font>
+<a name='L435'> 435                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L436'> 436 
+<a name='L437'> 437                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L438'> 438 
+<a name='L439'> 439                 $<a href='../Y/191.html' title='Multiple used in 4 places.'>dir</a> = <a href='../S/4.html#L439' title='Used at 439 in class.Files.php.'>scandir</a>($this-&gt;<a href='../Y/627.html' title='Multiple used in 6 places.'>thumbs_dir</a>);
+<a name='L440'> 440                 <b>foreach</b> ($<a href='../Y/191.html' title='Multiple used in 4 places.'>dir</a> <b>as</b> $<a href='../Y/407.html' title='Multiple used in 13 places.'>name</a>)
+<a name='L441'> 441                 <font color='blue'>{</font>
+<a name='L442'> 442                         <b>if</b> (<a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/407.html' title='Multiple used in 13 places.'>name</a>, $<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.'_') !== <b>false</b>) <font color='blue'>{</font>
+<a name='L443'> 443                                 <a href='../Y/660.html' title='Multiple used in 4 places.'>unlink</a>($this-&gt;<a href='../Y/627.html' title='Multiple used in 6 places.'>thumbs_dir</a>.$<a href='../Y/407.html' title='Multiple used in 13 places.'>name</a>);
+<a name='L444'> 444                         <font color='blue'>}</font>
+<a name='L445'> 445                 <font color='blue'>}</font>
+<a name='L446'> 446                 <i><font color='green'>//$session-&gt;log('Thumbs for '.$_id.' deleted');</font></i>
+<a name='L447'> 447         <font color='blue'>}</font>
+<a name='L448'> 448 
+<a name='L449'> 449 
+<a name='L450'> 450         <i><font color='green'>/* Stores uploaded file associated to $session-&gt;id */</font></i>
+<a name='L451'> 451         <b>function</b> <a href='../R/136.html' title='Multiple refered from 2 places.'>handleUpload</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>, $<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a> = 0)
+<a name='L452'> 452         <font color='blue'>{</font>
+<a name='L453'> 453                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L454'> 454                 <b>if</b> ((!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> &amp;&amp; !$this-&gt;<a href='../Y/21.html' title='Multiple used in 4 places.'>anon_uploads</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>)) <b>return</b> <b>false</b>;
+<a name='L455'> 455 
+<a name='L456'> 456                 <i><font color='green'>//ignore empty file uploads</font></i>
+<a name='L457'> 457                 <b>if</b> (!$<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['name']) <b>return</b>;
+<a name='L458'> 458 
+<a name='L459'> 459                 <b>if</b> (!<a href='../S/4.html#L459' title='Used at 459 in class.Files.php.'>is_uploaded_file</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'])) <font color='blue'>{</font>
+<a name='L460'> 460                         $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/207.html' title='Multiple used in 26 places.'>error</a> = 'File upload error';
+<a name='L461'> 461                         $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Attempt to upload too big file');
+<a name='L462'> 462                         <b>return</b> <b>false</b>;
+<a name='L463'> 463                 <font color='blue'>}</font>
+<a name='L464'> 464 
+<a name='L465'> 465                 $<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a> = $this-&gt;<a href='../S/4.html#L481' title='Defined at 481 in class.Files.php.'>addFileEntry</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['name']);
+<a name='L466'> 466 
+<a name='L467'> 467                 <i><font color='green'>//Identify and handle various types of files</font></i>
+<a name='L468'> 468                 <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['type'], $this-&gt;<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a>)) <font color='blue'>{</font>
+<a name='L469'> 469                         $this-&gt;<a href='../S/4.html#L562' title='Defined at 562 in class.Files.php.'>handleImageUpload</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>);
+<a name='L470'> 470                 <font color='blue'>}</font> <b>else</b> <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['type'], $this-&gt;<a href='../Y/35.html' title='Multiple used in 4 places.'>audio_mime_types</a>)) <font color='blue'>{</font>
+<a name='L471'> 471                         $this-&gt;<a href='../S/4.html#L508' title='Defined at 508 in class.Files.php.'>handleGeneralUpload</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>);
+<a name='L472'> 472                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L473'> 473                         $this-&gt;<a href='../S/4.html#L508' title='Defined at 508 in class.Files.php.'>handleGeneralUpload</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>);
+<a name='L474'> 474                 <font color='blue'>}</font>
+<a name='L475'> 475 
+<a name='L476'> 476                 $this-&gt;<a href='../S/4.html#L765' title='Defined at 765 in class.Files.php.'>updateFile</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>);     <i><font color='green'>//force update of filesize, mimetype &amp; checksum</font></i>
+<a name='L477'> 477 
+<a name='L478'> 478                 <b>return</b> $<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>;
+<a name='L479'> 479         <font color='blue'>}</font>
+<a name='L480'> 480 
+<a name='L481'> 481         <b>function</b> <a href='../S/4.html#L465' title='Refered from 465 in class.Files.php.'>addFileEntry</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>, $<a href='../Y/243.html' title='Multiple used in 6 places.'>fileName</a>, $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a> = '')
+<a name='L482'> 482         <font color='blue'>{</font>
+<a name='L483'> 483                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L484'> 484                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>)) <b>return</b> <b>false</b>;
+<a name='L485'> 485 
+<a name='L486'> 486                 $<a href='../S/4.html#L486' title='Used at 486 in class.Files.php.'>fileSize</a> = 0;
+<a name='L487'> 487                 $<a href='../S/4.html#L487' title='Used at 487 in class.Files.php.'>fileMime</a> = '';
+<a name='L488'> 488                 $<a href='../Y/243.html' title='Multiple used in 6 places.'>fileName</a> = <a href='../Y/39.html' title='Multiple used in 9 places.'>basename</a>(<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/243.html' title='Multiple used in 6 places.'>fileName</a>));
+<a name='L489'> 489 
+<a name='L490'> 490                 <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>) <font color='blue'>{</font>
+<a name='L491'> 491                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblFiles SET fileName="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/243.html' title='Multiple used in 6 places.'>fileName</a>).'",ownerId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>.',uploaderId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',uploaderIP='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/317.html' title='Multiple used in 22 places.'>ip</a>.',timeUploaded=NOW(),fileType='.$<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>.',categoryId='.$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>;
+<a name='L492'> 492                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L493'> 493                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblFiles SET fileName="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/243.html' title='Multiple used in 6 places.'>fileName</a>).'",ownerId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>.',categoryId='.$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>;
+<a name='L494'> 494                 <font color='blue'>}</font>
+<a name='L495'> 495                 $<a href='../Y/415.html' title='Multiple used in 4 places.'>newFileId</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L496'> 496 
+<a name='L497'> 497                 <b>if</b> ($<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a>) <font color='blue'>{</font>
+<a name='L498'> 498                         <i><font color='green'>//echo 'addFileEntry(): Writing file to '.$this-&gt;upload_dir.$newFileId;</font></i>
+<a name='L499'> 499                         <a href='../S/4.html#L499' title='Used at 499 in class.Files.php.'>file_put_contents</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/415.html' title='Multiple used in 4 places.'>newFileId</a>, $<a href='../Y/149.html' title='Multiple used in 20 places.'>content</a>);
+<a name='L500'> 500                         <a href='../Y/74.html' title='Multiple used in 2 places.'>clearstatcache</a>();       <i><font color='green'>//needed to get current filesize()</font></i>
+<a name='L501'> 501                 <font color='blue'>}</font>
+<a name='L502'> 502 
+<a name='L503'> 503                 $this-&gt;<a href='../S/4.html#L765' title='Defined at 765 in class.Files.php.'>updateFile</a>($<a href='../Y/415.html' title='Multiple used in 4 places.'>newFileId</a>);
+<a name='L504'> 504 
+<a name='L505'> 505         <b>return</b> $<a href='../Y/415.html' title='Multiple used in 4 places.'>newFileId</a>;
+<a name='L506'> 506         <font color='blue'>}</font>
+<a name='L507'> 507 
+<a name='L508'> 508         <b>function</b> <a href='../R/133.html' title='Multiple refered from 2 places.'>handleGeneralUpload</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>)
+<a name='L509'> 509         <font color='blue'>{</font>
+<a name='L510'> 510                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L511'> 511 
+<a name='L512'> 512                 <b>switch</b> ($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['type']) <font color='blue'>{</font>
+<a name='L513'> 513                         <b>case</b> 'image/bmp':       <i><font color='green'>//IE 7, Firefox 2, Opera 9.2</font></i>
+<a name='L514'> 514                                 <b>if</b> (!$this-&gt;<a href='../Y/284.html' title='Multiple used in 4 places.'>image_convert</a>) <b>break</b>;
+<a name='L515'> 515                                 $<a href='../Y/443.html' title='Multiple used in 6 places.'>out_tempfile</a> = 'c:\core_outfile.jpg';
+<a name='L516'> 516                                 $<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a> = $this-&gt;<a href='../S/4.html#L665' title='Defined at 665 in class.Files.php.'>convertImage</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'], $<a href='../Y/443.html' title='Multiple used in 6 places.'>out_tempfile</a>, 'image/jpeg');
+<a name='L517'> 517                                 <b>if</b> (!$<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a>) <font color='blue'>{</font>
+<a name='L518'> 518                                         $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Failed to convert bmp to jpeg!');
+<a name='L519'> 519                                         <b>break</b>;
+<a name='L520'> 520                                 <font color='blue'>}</font>
+<a name='L521'> 521 
+<a name='L522'> 522                                 <a href='../Y/660.html' title='Multiple used in 4 places.'>unlink</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name']);
+<a name='L523'> 523                                 <a href='../Y/531.html' title='Multiple used in 2 places.'>rename</a>($<a href='../Y/443.html' title='Multiple used in 6 places.'>out_tempfile</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name']);
+<a name='L524'> 524                                 $<a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a> = <a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name']);
+<a name='L525'> 525                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/39.html' title='Multiple used in 9 places.'>basename</a>(<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['name']))).'.jpg",fileSize='.$<a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>.' WHERE fileId='.$<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>;
+<a name='L526'> 526                                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L527'> 527                                 $this-&gt;<a href='../S/4.html#L562' title='Defined at 562 in class.Files.php.'>handleImageUpload</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>);
+<a name='L528'> 528                                 <b>return</b> <b>true</b>;
+<a name='L529'> 529 
+<a name='L530'> 530                         <b>case</b> 'image/svg+xml':   <i><font color='green'>//IE 7, Firefox 2</font></i>
+<a name='L531'> 531                         <b>case</b> 'image/svg-xml':   <i><font color='green'>//Opera 9.2</font></i>
+<a name='L532'> 532                                 <b>if</b> (!$this-&gt;<a href='../Y/284.html' title='Multiple used in 4 places.'>image_convert</a>) <b>break</b>;
+<a name='L533'> 533                                 $<a href='../Y/443.html' title='Multiple used in 6 places.'>out_tempfile</a> = 'c:\core_outfile.png';
+<a name='L534'> 534 
+<a name='L535'> 535                                 $<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a> = $this-&gt;<a href='../S/4.html#L665' title='Defined at 665 in class.Files.php.'>convertImage</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'], $<a href='../Y/443.html' title='Multiple used in 6 places.'>out_tempfile</a>, 'image/png');
+<a name='L536'> 536 
+<a name='L537'> 537                                 <b>if</b> (!$<a href='../Y/67.html' title='Multiple used in 15 places.'>check</a>) <font color='blue'>{</font>
+<a name='L538'> 538                                         $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Failed to convert svg to png!');
+<a name='L539'> 539                                         <b>break</b>;
+<a name='L540'> 540                                 <font color='blue'>}</font>
+<a name='L541'> 541 
+<a name='L542'> 542                                 <a href='../Y/660.html' title='Multiple used in 4 places.'>unlink</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name']);
+<a name='L543'> 543                                 <a href='../Y/531.html' title='Multiple used in 2 places.'>rename</a>($<a href='../Y/443.html' title='Multiple used in 6 places.'>out_tempfile</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name']);
+<a name='L544'> 544                                 $<a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a> = <a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name']);
+<a name='L545'> 545                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblFiles SET fileMime="image/png", fileName="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/39.html' title='Multiple used in 9 places.'>basename</a>(<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['name']))).'.png",fileSize='.$<a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>.' WHERE fileId='.$<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>;
+<a name='L546'> 546                                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L547'> 547                                 $this-&gt;<a href='../S/4.html#L562' title='Defined at 562 in class.Files.php.'>handleImageUpload</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>);
+<a name='L548'> 548                                 <b>break</b>;
+<a name='L549'> 549                 <font color='blue'>}</font>
+<a name='L550'> 550 
+<a name='L551'> 551                 <i><font color='green'>//Move the uploaded file to upload directory</font></i>
+<a name='L552'> 552                 $<a href='../Y/663.html' title='Multiple used in 7 places.'>uploadfile</a> = $this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>;
+<a name='L553'> 553                 <b>if</b> (<a href='../Y/384.html' title='Multiple used in 2 places.'>move_uploaded_file</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'], $<a href='../Y/663.html' title='Multiple used in 7 places.'>uploadfile</a>)) <font color='blue'>{</font>
+<a name='L554'> 554                         <a href='../S/4.html#L554' title='Used at 554 in class.Files.php.'>chmod</a>($<a href='../Y/663.html' title='Multiple used in 7 places.'>uploadfile</a>, 0777);
+<a name='L555'> 555                         <b>return</b> <b>true</b>;
+<a name='L556'> 556                 <font color='blue'>}</font>
+<a name='L557'> 557                 $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Failed to move file from '.$<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'].' to '.$<a href='../Y/663.html' title='Multiple used in 7 places.'>uploadfile</a>);
+<a name='L558'> 558                 <b>return</b> <b>false</b>;
+<a name='L559'> 559         <font color='blue'>}</font>
+<a name='L560'> 560 
+<a name='L561'> 561         <i><font color='green'>/* Handle image upload, used internally only */</font></i>
+<a name='L562'> 562         <b>function</b> <a href='../R/134.html' title='Multiple refered from 3 places.'>handleImageUpload</a>($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>, $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>)
+<a name='L563'> 563         <font color='blue'>{</font>
+<a name='L564'> 564                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L565'> 565 
+<a name='L566'> 566                 <b>list</b>($<a href='../Y/310.html' title='Multiple used in 6 places.'>img_width</a>, $<a href='../Y/309.html' title='Multiple used in 6 places.'>img_height</a>) = <a href='../Y/264.html' title='Multiple used in 5 places.'>getimagesize</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name']);
+<a name='L567'> 567 
+<a name='L568'> 568                 <i><font color='green'>//Resize the image if it is too big, overwrite the uploaded file</font></i>
+<a name='L569'> 569                 <b>if</b> (($<a href='../Y/310.html' title='Multiple used in 6 places.'>img_width</a> &gt; $this-&gt;<a href='../Y/299.html' title='Multiple used in 5 places.'>image_max_width</a>) || ($<a href='../Y/309.html' title='Multiple used in 6 places.'>img_height</a> &gt; $this-&gt;<a href='../Y/298.html' title='Multiple used in 5 places.'>image_max_height</a>))
+<a name='L570'> 570                 <font color='blue'>{</font>
+<a name='L571'> 571                         $this-&gt;<a href='../S/4.html#L611' title='Defined at 611 in class.Files.php.'>resizeImage</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'], $<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'], $this-&gt;<a href='../Y/299.html' title='Multiple used in 5 places.'>image_max_width</a>, $this-&gt;<a href='../Y/298.html' title='Multiple used in 5 places.'>image_max_height</a>, $<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>);
+<a name='L572'> 572                 <font color='blue'>}</font>
+<a name='L573'> 573 
+<a name='L574'> 574                 <i><font color='green'>//create default sized thumbnail</font></i>
+<a name='L575'> 575                 $<a href='../Y/626.html' title='Multiple used in 2 places.'>thumb_filename</a> = $this-&gt;<a href='../Y/627.html' title='Multiple used in 6 places.'>thumbs_dir</a>.$<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>.'_'.$this-&gt;<a href='../Y/625.html' title='Multiple used in 5 places.'>thumb_default_width</a>.'x'.$this-&gt;<a href='../Y/624.html' title='Multiple used in 7 places.'>thumb_default_height</a>;
+<a name='L576'> 576                 $this-&gt;<a href='../S/4.html#L611' title='Defined at 611 in class.Files.php.'>resizeImage</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'], $<a href='../Y/626.html' title='Multiple used in 2 places.'>thumb_filename</a>, $this-&gt;<a href='../Y/625.html' title='Multiple used in 5 places.'>thumb_default_width</a>, $this-&gt;<a href='../Y/624.html' title='Multiple used in 7 places.'>thumb_default_height</a>);
+<a name='L577'> 577 
+<a name='L578'> 578                 <i><font color='green'>//Move the uploaded file to upload directory</font></i>
+<a name='L579'> 579                 $<a href='../Y/663.html' title='Multiple used in 7 places.'>uploadfile</a> = $this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>;
+<a name='L580'> 580                 <b>if</b> (<a href='../Y/384.html' title='Multiple used in 2 places.'>move_uploaded_file</a>($<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'], $<a href='../Y/663.html' title='Multiple used in 7 places.'>uploadfile</a>)) <b>return</b> $<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>;
+<a name='L581'> 581                 $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../S/2.html#L189' title='Defined at 189 in class.Session.php.'>log</a>('Failed to move file from '.$<a href='../Y/88.html' title='Multiple used in 31 places.'>FileData</a>['tmp_name'].' to '.$<a href='../Y/663.html' title='Multiple used in 7 places.'>uploadfile</a>);
+<a name='L582'> 582         <font color='blue'>}</font>
+<a name='L583'> 583 
+<a name='L584'> 584         <i><font color='green'>/* Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio */</font></i>
+<a name='L585'> 585         <b>function</b> <a href='../S/4.html#L623' title='Refered from 623 in class.Files.php.'>resizeImageCalc</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>, $<a href='../Y/648.html' title='Multiple used in 5 places.'>to_width</a>, $<a href='../Y/642.html' title='Multiple used in 5 places.'>to_height</a>)
+<a name='L586'> 586         <font color='blue'>{</font>
+<a name='L587'> 587                 <b>list</b>($<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a>, $<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a>) = <a href='../Y/264.html' title='Multiple used in 5 places.'>getimagesize</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>);
+<a name='L588'> 588 
+<a name='L589'> 589                 $<a href='../Y/361.html' title='Multiple used in 5 places.'>max_width</a> = $this-&gt;<a href='../Y/299.html' title='Multiple used in 5 places.'>image_max_width</a>;
+<a name='L590'> 590                 $<a href='../Y/360.html' title='Multiple used in 6 places.'>max_height</a> = $this-&gt;<a href='../Y/298.html' title='Multiple used in 5 places.'>image_max_height</a>;
+<a name='L591'> 591 
+<a name='L592'> 592                 <b>if</b> ($<a href='../Y/648.html' title='Multiple used in 5 places.'>to_width</a> &amp;&amp; ($<a href='../Y/648.html' title='Multiple used in 5 places.'>to_width</a> &lt; $<a href='../Y/361.html' title='Multiple used in 5 places.'>max_width</a>)) $<a href='../Y/361.html' title='Multiple used in 5 places.'>max_width</a> = $<a href='../Y/648.html' title='Multiple used in 5 places.'>to_width</a>;
+<a name='L593'> 593                 <b>if</b> ($<a href='../Y/642.html' title='Multiple used in 5 places.'>to_height</a> &amp;&amp; ($<a href='../Y/642.html' title='Multiple used in 5 places.'>to_height</a> &lt; $<a href='../Y/360.html' title='Multiple used in 6 places.'>max_height</a>)) $<a href='../Y/360.html' title='Multiple used in 6 places.'>max_height</a> = $<a href='../Y/642.html' title='Multiple used in 5 places.'>to_height</a>;
+<a name='L594'> 594 
+<a name='L595'> 595                 <i><font color='green'>//Proportionally resize the image to the max sizes specified above</font></i>
+<a name='L596'> 596                 $<a href='../Y/700.html' title='Multiple used in 3 places.'>x_ratio</a> = $<a href='../Y/361.html' title='Multiple used in 5 places.'>max_width</a> / $<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a>;
+<a name='L597'> 597                 $<a href='../Y/704.html' title='Multiple used in 2 places.'>y_ratio</a> = $<a href='../Y/360.html' title='Multiple used in 6 places.'>max_height</a> / $<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a>;
+<a name='L598'> 598 
+<a name='L599'> 599                 <b>if</b> (($<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a> &lt;= $<a href='../Y/361.html' title='Multiple used in 5 places.'>max_width</a>) &amp;&amp; ($<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a> &lt;= $<a href='../Y/360.html' title='Multiple used in 6 places.'>max_height</a>))
+<a name='L600'> 600                 <font color='blue'>{</font>
+<a name='L601'> 601                         <b>return</b> <b>Array</b>($<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a>, $<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a>);
+<a name='L602'> 602                 <font color='blue'>}</font>
+<a name='L603'> 603                 <b>elseif</b> (($<a href='../Y/700.html' title='Multiple used in 3 places.'>x_ratio</a> * $<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a>) &lt; $<a href='../Y/360.html' title='Multiple used in 6 places.'>max_height</a>)
+<a name='L604'> 604                 <font color='blue'>{</font>
+<a name='L605'> 605                         <b>return</b> <b>Array</b>($<a href='../Y/361.html' title='Multiple used in 5 places.'>max_width</a>, <a href='../Y/63.html' title='Multiple used in 2 places.'>ceil</a>($<a href='../Y/700.html' title='Multiple used in 3 places.'>x_ratio</a> * $<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a>));
+<a name='L606'> 606                 <font color='blue'>}</font>
+<a name='L607'> 607 
+<a name='L608'> 608                 <b>return</b> <b>Array</b>(<a href='../Y/63.html' title='Multiple used in 2 places.'>ceil</a>($<a href='../Y/704.html' title='Multiple used in 2 places.'>y_ratio</a> * $<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a>), $<a href='../Y/360.html' title='Multiple used in 6 places.'>max_height</a>);
+<a name='L609'> 609         <font color='blue'>}</font>
+<a name='L610'> 610 
+<a name='L611'> 611         <b>function</b> <a href='../R/204.html' title='Multiple refered from 3 places.'>resizeImage</a>($<a href='../Y/312.html' title='Multiple used in 6 places.'>in_filename</a>, $<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>, $<a href='../Y/648.html' title='Multiple used in 5 places.'>to_width</a> = 0, $<a href='../Y/642.html' title='Multiple used in 5 places.'>to_height</a> = 0, $<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a> = 0)
+<a name='L612'> 612         <font color='blue'>{</font>
+<a name='L613'> 613                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L614'> 614                 <b>if</b> (<b>empty</b>($<a href='../Y/648.html' title='Multiple used in 5 places.'>to_width</a>) &amp;&amp; <b>empty</b>($<a href='../Y/642.html' title='Multiple used in 5 places.'>to_height</a>)) <b>return</b> <b>false</b>;
+<a name='L615'> 615 
+<a name='L616'> 616                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = <a href='../Y/264.html' title='Multiple used in 5 places.'>getimagesize</a>($<a href='../Y/312.html' title='Multiple used in 6 places.'>in_filename</a>);
+<a name='L617'> 617                 $<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>[0];
+<a name='L618'> 618                 $<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>[1];
+<a name='L619'> 619                 $<a href='../Y/375.html' title='Multiple used in 7 places.'>mime_type</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['mime'];
+<a name='L620'> 620                 <b>if</b> (!$<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a> || !$<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a>) <b>return</b> <b>false</b>;
+<a name='L621'> 621 
+<a name='L622'> 622                 <i><font color='green'>//Calculate the real width &amp; height to resize too (within $to_width &amp; $to_height), while keeping aspect ratio</font></i>
+<a name='L623'> 623                 <b>list</b>($<a href='../Y/639.html' title='Multiple used in 4 places.'>tn_width</a>, $<a href='../Y/638.html' title='Multiple used in 4 places.'>tn_height</a>) = $this-&gt;<a href='../S/4.html#L585' title='Defined at 585 in class.Files.php.'>resizeImageCalc</a>($<a href='../Y/312.html' title='Multiple used in 6 places.'>in_filename</a>, $<a href='../Y/648.html' title='Multiple used in 5 places.'>to_width</a>, $<a href='../Y/642.html' title='Multiple used in 5 places.'>to_height</a>);
+<a name='L624'> 624 
+<a name='L625'> 625                 <i><font color='green'>//echo 'Resizing from '.$orig_width.'x'.$orig_height.' to '.$tn_width.'x'.$tn_height.'&lt;br/&gt;';</font></i>
+<a name='L626'> 626 
+<a name='L627'> 627                 <b>switch</b> ($<a href='../Y/375.html' title='Multiple used in 7 places.'>mime_type</a>)
+<a name='L628'> 628                 <font color='blue'>{</font>
+<a name='L629'> 629                 <b>case</b> 'image/png':       $<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a> = <a href='../Y/289.html' title='Multiple used in 3 places.'>imagecreatefrompng</a>($<a href='../Y/312.html' title='Multiple used in 6 places.'>in_filename</a>); <b>break</b>;
+<a name='L630'> 630                 <b>case</b> 'image/jpeg': $<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a> = <a href='../Y/288.html' title='Multiple used in 2 places.'>imagecreatefromjpeg</a>($<a href='../Y/312.html' title='Multiple used in 6 places.'>in_filename</a>); <b>break</b>;
+<a name='L631'> 631                 <b>case</b> 'image/gif': $<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a> = <a href='../Y/287.html' title='Multiple used in 2 places.'>imagecreatefromgif</a>($<a href='../Y/312.html' title='Multiple used in 6 places.'>in_filename</a>); <b>break</b>;
+<a name='L632'> 632                 <b>default</b>: <b>die</b>('Unsupported image type '.$<a href='../Y/375.html' title='Multiple used in 7 places.'>mime_type</a>);
+<a name='L633'> 633                 <font color='blue'>}</font>
+<a name='L634'> 634 
+<a name='L635'> 635                 $<a href='../Y/301.html' title='Multiple used in 7 places.'>image_p</a> = <a href='../S/4.html#L635' title='Used at 635 in class.Files.php.'>imagecreatetruecolor</a>($<a href='../Y/639.html' title='Multiple used in 4 places.'>tn_width</a>, $<a href='../Y/638.html' title='Multiple used in 4 places.'>tn_height</a>);
+<a name='L636'> 636 
+<a name='L637'> 637                 <b>if</b> ($this-&gt;<a href='../Y/539.html' title='Multiple used in 2 places.'>resample_resized</a>) <font color='blue'>{</font>
+<a name='L638'> 638                         <a href='../S/4.html#L638' title='Used at 638 in class.Files.php.'>imagecopyresampled</a>($<a href='../Y/301.html' title='Multiple used in 7 places.'>image_p</a>, $<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a>, 0,0,0,0, $<a href='../Y/639.html' title='Multiple used in 4 places.'>tn_width</a>, $<a href='../Y/638.html' title='Multiple used in 4 places.'>tn_height</a>, $<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a>, $<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a>);
+<a name='L639'> 639                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L640'> 640                         <a href='../S/4.html#L640' title='Used at 640 in class.Files.php.'>imagecopyresized</a>($<a href='../Y/301.html' title='Multiple used in 7 places.'>image_p</a>, $<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a>, 0,0,0,0, $<a href='../Y/639.html' title='Multiple used in 4 places.'>tn_width</a>, $<a href='../Y/638.html' title='Multiple used in 4 places.'>tn_height</a>, $<a href='../Y/439.html' title='Multiple used in 9 places.'>orig_width</a>, $<a href='../Y/438.html' title='Multiple used in 10 places.'>orig_height</a>);
+<a name='L641'> 641                 <font color='blue'>}</font>
+<a name='L642'> 642 
+<a name='L643'> 643                 <b>switch</b> ($<a href='../Y/375.html' title='Multiple used in 7 places.'>mime_type</a>)
+<a name='L644'> 644                 <font color='blue'>{</font>
+<a name='L645'> 645                 <b>case</b> 'image/png':       <a href='../Y/302.html' title='Multiple used in 2 places.'>imagepng</a>($<a href='../Y/301.html' title='Multiple used in 7 places.'>image_p</a>, $<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>); <b>break</b>;
+<a name='L646'> 646                 <b>case</b> 'image/jpeg': <a href='../Y/295.html' title='Multiple used in 2 places.'>imagejpeg</a>($<a href='../Y/301.html' title='Multiple used in 7 places.'>image_p</a>, $<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>, $this-&gt;<a href='../Y/296.html' title='Multiple used in 5 places.'>image_jpeg_quality</a>); <b>break</b>;
+<a name='L647'> 647                 <b>case</b> 'image/gif': <a href='../Y/294.html' title='Multiple used in 2 places.'>imagegif</a>($<a href='../Y/301.html' title='Multiple used in 7 places.'>image_p</a>, $<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>); <b>break</b>;
+<a name='L648'> 648                 <b>default</b>: <b>die</b>('Unsupported image type '.$<a href='../Y/375.html' title='Multiple used in 7 places.'>mime_type</a>);
+<a name='L649'> 649                 <font color='blue'>}</font>
+<a name='L650'> 650 
+<a name='L651'> 651                 <a href='../Y/291.html' title='Multiple used in 4 places.'>imagedestroy</a>($<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a>);
+<a name='L652'> 652                 <a href='../Y/291.html' title='Multiple used in 4 places.'>imagedestroy</a>($<a href='../Y/301.html' title='Multiple used in 7 places.'>image_p</a>);
+<a name='L653'> 653                 
+<a name='L654'> 654                 <b>if</b> ($<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>) <font color='blue'>{</font>
+<a name='L655'> 655                         <i><font color='green'>//Update fileId entry with the new file size (DONT use when creating thumbnails or cloning files!)</font></i>
+<a name='L656'> 656                         <a href='../Y/74.html' title='Multiple used in 2 places.'>clearstatcache</a>();       <i><font color='green'>//needed to get current filesize()</font></i>
+<a name='L657'> 657                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblFiles SET fileSize='.<a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>($<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>).' WHERE fileId='.$<a href='../Y/238.html' title='Multiple used in 23 places.'>fileId</a>;
+<a name='L658'> 658                         $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../S/19.html#L46' title='Defined at 46 in class.DB_Base.php.'>update</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L659'> 659                 <font color='blue'>}</font>
+<a name='L660'> 660                 
+<a name='L661'> 661                 <b>return</b> <b>true</b>;
+<a name='L662'> 662         <font color='blue'>}</font>
+<a name='L663'> 663 
+<a name='L664'> 664         <i><font color='green'>/* Uses ImageMagick commandline image converter */</font></i>
+<a name='L665'> 665         <b>function</b> <a href='../R/38.html' title='Multiple refered from 2 places.'>convertImage</a>($<a href='../Y/582.html' title='Multiple used in 4 places.'>src_file</a>, $<a href='../Y/195.html' title='Multiple used in 5 places.'>dst_file</a>, $<a href='../Y/196.html' title='Multiple used in 3 places.'>dst_mime_type</a>)
+<a name='L666'> 666         <font color='blue'>{</font>
+<a name='L667'> 667                 <b>switch</b> ($<a href='../Y/196.html' title='Multiple used in 3 places.'>dst_mime_type</a>)
+<a name='L668'> 668                 <font color='blue'>{</font>
+<a name='L669'> 669                         <i><font color='green'>//fixme: paths bara nödvändiga tills ja rebootat windows &amp; path enviroment syns för apache</font></i>
+<a name='L670'> 670                         <b>case</b> 'image/jpeg':
+<a name='L671'> 671                                 $<a href='../Y/51.html' title='Multiple used in 12 places.'>c</a> = 'E:/devel/imagemagick/convert.exe -quality '.$this-&gt;<a href='../Y/296.html' title='Multiple used in 5 places.'>image_jpeg_quality</a>.' '.$<a href='../Y/582.html' title='Multiple used in 4 places.'>src_file</a>.' JPG:'.$<a href='../Y/195.html' title='Multiple used in 5 places.'>dst_file</a>;
+<a name='L672'> 672                                 <b>break</b>;
+<a name='L673'> 673 
+<a name='L674'> 674                         <b>case</b> 'image/png':
+<a name='L675'> 675                                 $<a href='../Y/51.html' title='Multiple used in 12 places.'>c</a> = 'E:/devel/imagemagick/convert.exe '.$<a href='../Y/582.html' title='Multiple used in 4 places.'>src_file</a>.' PNG:'.$<a href='../Y/195.html' title='Multiple used in 5 places.'>dst_file</a>;
+<a name='L676'> 676                                 <b>break</b>;
+<a name='L677'> 677 
+<a name='L678'> 678                         <b>case</b> 'image/gif':
+<a name='L679'> 679                                 $<a href='../Y/51.html' title='Multiple used in 12 places.'>c</a> = 'E:/devel/imagemagick/convert.exe '.$<a href='../Y/582.html' title='Multiple used in 4 places.'>src_file</a>.' GIF:'.$<a href='../Y/195.html' title='Multiple used in 5 places.'>dst_file</a>;
+<a name='L680'> 680                                 <b>break</b>;
+<a name='L681'> 681 
+<a name='L682'> 682                         <b>default</b>:
+<a name='L683'> 683                                 <b>echo</b> 'convertImage(): Unknown destination mimetype "'.$<a href='../Y/196.html' title='Multiple used in 3 places.'>dst_mime_type</a>.'"&lt;br/&gt;';
+<a name='L684'> 684                                 <b>return</b> <b>false</b>;
+<a name='L685'> 685                 <font color='blue'>}</font>
+<a name='L686'> 686                 <b>echo</b> 'Executing: '.$<a href='../Y/51.html' title='Multiple used in 12 places.'>c</a>.'&lt;br/&gt;';
+<a name='L687'> 687                 <a href='../Y/211.html' title='Multiple used in 3 places.'>exec</a>($<a href='../Y/51.html' title='Multiple used in 12 places.'>c</a>);
+<a name='L688'> 688 
+<a name='L689'> 689                 <b>if</b> (!<a href='../Y/236.html' title='Multiple used in 5 places.'>file_exists</a>($<a href='../Y/195.html' title='Multiple used in 5 places.'>dst_file</a>)) <b>return</b> <b>false</b>;
+<a name='L690'> 690 
+<a name='L691'> 691                 <b>return</b> <b>true</b>;
+<a name='L692'> 692         <font color='blue'>}</font>
+<a name='L693'> 693 
+<a name='L694'> 694         <i><font color='green'>/* fetches or calculates checksums for the file in tblChecksums */</font></i>
+<a name='L695'> 695         <b>function</b> <a href='../R/24.html' title='Multiple refered from 4 places.'>checksums</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, $<a href='../Y/254.html' title='Multiple used in 2 places.'>force</a> = <b>false</b>)
+<a name='L696'> 696         <font color='blue'>{</font>
+<a name='L697'> 697                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L698'> 698                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L699'> 699 
+<a name='L700'> 700                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>('SELECT * FROM tblFiles WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L701'> 701                 <b>if</b> (!$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>) <b>die</b>;
+<a name='L702'> 702 
+<a name='L703'> 703                 <b>if</b> (!$<a href='../Y/254.html' title='Multiple used in 2 places.'>force</a>) <font color='blue'>{</font>
+<a name='L704'> 704                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblChecksums WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L705'> 705                         $<a href='../Y/52.html' title='Multiple used in 2 places.'>cached</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L706'> 706                         <b>if</b> ($<a href='../Y/52.html' title='Multiple used in 2 places.'>cached</a>) <b>return</b> $<a href='../Y/52.html' title='Multiple used in 2 places.'>cached</a>;
+<a name='L707'> 707                 <font color='blue'>}</font>
+<a name='L708'> 708 
+<a name='L709'> 709                 <b>if</b> (!<a href='../Y/236.html' title='Multiple used in 5 places.'>file_exists</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <font color='blue'>{</font>
+<a name='L710'> 710                         <b>die</b>('tried to generate checksums of nonexisting file '.$this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L711'> 711                 <font color='blue'>}</font>
+<a name='L712'> 712 
+<a name='L713'> 713                 $<a href='../Y/212.html' title='Multiple used in 4 places.'>exec_start</a> = <a href='../Y/373.html' title='Multiple used in 34 places.'>microtime</a>(<b>true</b>);
+<a name='L714'> 714                 $<a href='../Y/409.html' title='Multiple used in 10 places.'>new</a>['sha1'] = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/268.html' title='Multiple used in 2 places.'>hash_file</a>('sha1', $this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>));  <i><font color='green'>//40-character hex string</font></i>
+<a name='L715'> 715                 $<a href='../Y/409.html' title='Multiple used in 10 places.'>new</a>['md5'] = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/268.html' title='Multiple used in 2 places.'>hash_file</a>('md5', $this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>));            <i><font color='green'>//32-character hex string</font></i>
+<a name='L716'> 716                 $<a href='../Y/409.html' title='Multiple used in 10 places.'>new</a>['timeCreated'] = <a href='../S/19.html#L393' title='Defined at 393 in class.DB_Base.php.'>now</a>();
+<a name='L717'> 717                 $<a href='../Y/213.html' title='Multiple used in 3 places.'>exec_time</a> = <a href='../Y/373.html' title='Multiple used in 34 places.'>microtime</a>(<b>true</b>) - $<a href='../Y/212.html' title='Multiple used in 4 places.'>exec_start</a>;
+<a name='L718'> 718                 $<a href='../Y/409.html' title='Multiple used in 10 places.'>new</a>['timeExec'] = $<a href='../Y/213.html' title='Multiple used in 3 places.'>exec_time</a>;
+<a name='L719'> 719 
+<a name='L720'> 720                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'DELETE FROM tblChecksums WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L721'> 721                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/67.html' title='Multiple defined in 4 places.'>delete</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L722'> 722 
+<a name='L723'> 723                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblChecksums SET fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.', sha1="'.$<a href='../Y/409.html' title='Multiple used in 10 places.'>new</a>['sha1'].'", md5="'.$<a href='../Y/409.html' title='Multiple used in 10 places.'>new</a>['md5'].'", timeExec="'.$<a href='../Y/213.html' title='Multiple used in 3 places.'>exec_time</a>.'", timeCreated=NOW()';
+<a name='L724'> 724                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L725'> 725 
+<a name='L726'> 726                 <b>return</b> $<a href='../Y/409.html' title='Multiple used in 10 places.'>new</a>;
+<a name='L727'> 727         <font color='blue'>}</font>
+<a name='L728'> 728 
+<a name='L729'> 729         <i><font color='green'>/* returns sha1 checksum of file $_id. forces checksum generation if missing */</font></i>
+<a name='L730'> 730         <b>function</b> <a href='../R/220.html' title='Multiple refered from 3 places.'>sha1</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L731'> 731         <font color='blue'>{</font>
+<a name='L732'> 732                 $<a href='../Y/611.html' title='Multiple used in 2 places.'>sums</a> = $this-&gt;<a href='../S/4.html#L695' title='Defined at 695 in class.Files.php.'>checksums</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L733'> 733                 <b>return</b> $<a href='../Y/611.html' title='Multiple used in 2 places.'>sums</a>['sha1'];
+<a name='L734'> 734         <font color='blue'>}</font>
+<a name='L735'> 735 
+<a name='L736'> 736         <i><font color='green'>/* used for file processing. generates a new file entry referencing to entry $_id. returns new id */</font></i>
+<a name='L737'> 737         <b>function</b> cloneEntry($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L738'> 738         <font color='blue'>{</font>
+<a name='L739'> 739                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L740'> 740                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L741'> 741 
+<a name='L742'> 742                 $<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a> = $this-&gt;<a href='../S/4.html#L979' title='Defined at 979 in class.Files.php.'>getFileInfo</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L743'> 743                 <b>if</b> (!$<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>) <b>return</b> <b>false</b>;
+<a name='L744'> 744 
+<a name='L745'> 745                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblFiles SET ownerId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.',fileType='.<a href='../S/4.html#L26' title='Defined at 26 in class.Files.php.'>FILETYPE_PROCESS_CLONE</a>.',uploaderId='.$<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['uploaderId'].',timeUploaded=NOW()';
+<a name='L746'> 746                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L747'> 747         <font color='blue'>}</font>
+<a name='L748'> 748 
+<a name='L749'> 749         <i><font color='green'>/* Updates info of a file clone. set current mime type &amp; file size &amp; calculate checksums */</font></i>
+<a name='L750'> 750         <b>function</b> updateClone($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, $<a href='../Y/376.html' title='Multiple used in 2 places.'>mimeType</a>)
+<a name='L751'> 751         <font color='blue'>{</font>
+<a name='L752'> 752                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L753'> 753                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L754'> 754 
+<a name='L755'> 755                 $<a href='../Y/576.html' title='Multiple used in 5 places.'>size</a> = <a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L756'> 756 
+<a name='L757'> 757                 <i><font color='green'>//force calculation of checksums</font></i>
+<a name='L758'> 758                 $this-&gt;<a href='../S/4.html#L695' title='Defined at 695 in class.Files.php.'>checksums</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, <b>true</b>);
+<a name='L759'> 759 
+<a name='L760'> 760                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblFiles SET fileMime="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/376.html' title='Multiple used in 2 places.'>mimeType</a>).'",fileSize='.$<a href='../Y/576.html' title='Multiple used in 5 places.'>size</a>.' WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.' AND fileType='.<a href='../S/4.html#L26' title='Defined at 26 in class.Files.php.'>FILETYPE_PROCESS_CLONE</a>;
+<a name='L761'> 761                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../S/19.html#L46' title='Defined at 46 in class.DB_Base.php.'>update</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L762'> 762         <font color='blue'>}</font>
+<a name='L763'> 763 
+<a name='L764'> 764         <i><font color='green'>/* Forces recalculation of filesize, mimetype and checksums */</font></i>
+<a name='L765'> 765         <b>function</b> <a href='../R/250.html' title='Multiple refered from 2 places.'>updateFile</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L766'> 766         <font color='blue'>{</font>
+<a name='L767'> 767                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L768'> 768                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L769'> 769 
+<a name='L770'> 770                 <b>if</b> (!<a href='../Y/236.html' title='Multiple used in 5 places.'>file_exists</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L771'> 771 
+<a name='L772'> 772                 $<a href='../Y/576.html' title='Multiple used in 5 places.'>size</a> = <a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L773'> 773 
+<a name='L774'> 774                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/576.html' title='Multiple used in 5 places.'>size</a>) || !$<a href='../Y/576.html' title='Multiple used in 5 places.'>size</a>) <font color='blue'>{</font>
+<a name='L775'> 775                         <b>echo</b> 'setMimeType(): file dont exist ';
+<a name='L776'> 776                         <b>return</b> <b>false</b>;
+<a name='L777'> 777                 <font color='blue'>}</font>
+<a name='L778'> 778                 $<a href='../Y/374.html' title='Multiple used in 4 places.'>mime</a> = $this-&gt;<a href='../S/4.html#L162' title='Defined at 162 in class.Files.php.'>lookupMimeType</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L779'> 779 
+<a name='L780'> 780                 <i><font color='green'>//force calculation of checksums</font></i>
+<a name='L781'> 781                 $this-&gt;<a href='../S/4.html#L695' title='Defined at 695 in class.Files.php.'>checksums</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, <b>true</b>);
+<a name='L782'> 782 
+<a name='L783'> 783                 <i><font color='green'>//parse result such as: text/plain; charset=us-ascii</font></i>
+<a name='L784'> 784                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = <a href='../Y/215.html' title='Multiple used in 13 places.'>explode</a>(';', $<a href='../Y/374.html' title='Multiple used in 4 places.'>mime</a>);
+<a name='L785'> 785                 $<a href='../Y/374.html' title='Multiple used in 4 places.'>mime</a> = $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>[0];
+<a name='L786'> 786 
+<a name='L787'> 787                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblFiles SET fileMime="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/374.html' title='Multiple used in 4 places.'>mime</a>).'",fileSize='.$<a href='../Y/576.html' title='Multiple used in 5 places.'>size</a>.' WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L788'> 788                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../S/19.html#L46' title='Defined at 46 in class.DB_Base.php.'>update</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L789'> 789 
+<a name='L790'> 790         <font color='blue'>}</font>
+<a name='L791'> 791 
+<a name='L792'> 792         <i><font color='green'>//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5</font></i>
+<a name='L793'> 793         <b>function</b> <a href='../R/216.html' title='Multiple refered from 2 places.'>setCachedHeaders</a>()
+<a name='L794'> 794         <font color='blue'>{</font>
+<a name='L795'> 795                 <b>header</b>('Expires: ' . <a href='../Y/169.html' title='Multiple used in 14 places.'>date</a>("D, j M Y H:i:s", <a href='../Y/628.html' title='Multiple used in 13 places.'>time</a>() + (86400 * 30)) . ' UTC');
+<a name='L796'> 796                 <b>header</b>('Cache-Control: Public');
+<a name='L797'> 797                 <b>header</b>('Pragma: Public');
+<a name='L798'> 798         <font color='blue'>}</font>
+<a name='L799'> 799 
+<a name='L800'> 800         <b>function</b> <a href='../S/4.html#L944' title='Refered from 944 in class.Files.php.'>setNoCacheHeaders</a>()
+<a name='L801'> 801         <font color='blue'>{</font>
+<a name='L802'> 802                 <b>header</b>("Cache-Control: no-cache, must-revalidate"); <i><font color='green'>// HTTP/1.1</font></i>
+<a name='L803'> 803                 <b>header</b>("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); <i><font color='green'>// Date in the past</font></i>
+<a name='L804'> 804         <font color='blue'>}</font>
+<a name='L805'> 805 
+<a name='L806'> 806         <i><font color='green'>/* Performs an image rotation and then pass on the result to the user */</font></i>
+<a name='L807'> 807         <b>function</b> imageRotate($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, $<a href='../Y/20.html' title='Multiple used in 3 places.'>_angle</a>)
+<a name='L808'> 808         <font color='blue'>{</font>
+<a name='L809'> 809                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L810'> 810                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/20.html' title='Multiple used in 3 places.'>_angle</a>)) <b>return</b> <b>false</b>;
+<a name='L811'> 811 
+<a name='L812'> 812                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>('SELECT * FROM tblFiles WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L813'> 813                 <b>if</b> (!$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>) <b>die</b>;
+<a name='L814'> 814 
+<a name='L815'> 815                 <b>if</b> (!<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime'], $this-&gt;<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a>)) <b>return</b> <b>false</b>;
+<a name='L816'> 816 
+<a name='L817'> 817                 <b>header</b>('Content-Type: '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime']);
+<a name='L818'> 818                 <b>header</b>('Content-Disposition: inline; filename="'.<a href='../Y/39.html' title='Multiple used in 9 places.'>basename</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileName']).'"');
+<a name='L819'> 819                 <b>header</b>('Content-Transfer-Encoding: binary');
+<a name='L820'> 820 
+<a name='L821'> 821                 $<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a> = $this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L822'> 822 
+<a name='L823'> 823                 <b>switch</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime'])
+<a name='L824'> 824                 <font color='blue'>{</font>
+<a name='L825'> 825                 <b>case</b> 'image/png':       $<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a> = <a href='../Y/289.html' title='Multiple used in 3 places.'>imagecreatefrompng</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>); <b>break</b>;
+<a name='L826'> 826                 <b>case</b> 'image/jpeg': $<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a> = <a href='../Y/288.html' title='Multiple used in 2 places.'>imagecreatefromjpeg</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>); <b>break</b>;
+<a name='L827'> 827                 <b>case</b> 'image/gif': $<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a> = <a href='../Y/287.html' title='Multiple used in 2 places.'>imagecreatefromgif</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>); <b>break</b>;
+<a name='L828'> 828                 <b>default</b>: <b>die</b>('Unsupported image type '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime']);
+<a name='L829'> 829                 <font color='blue'>}</font>
+<a name='L830'> 830 
+<a name='L831'> 831                 $<a href='../Y/545.html' title='Multiple used in 5 places.'>rotated</a> = <a href='../S/4.html#L831' title='Used at 831 in class.Files.php.'>imagerotate</a>($<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a>, $<a href='../Y/20.html' title='Multiple used in 3 places.'>_angle</a>, 0);
+<a name='L832'> 832 
+<a name='L833'> 833                 <b>switch</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime'])
+<a name='L834'> 834                 <font color='blue'>{</font>
+<a name='L835'> 835                 <b>case</b> 'image/png':       <a href='../Y/302.html' title='Multiple used in 2 places.'>imagepng</a>($<a href='../Y/545.html' title='Multiple used in 5 places.'>rotated</a>, $<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>); <a href='../Y/302.html' title='Multiple used in 2 places.'>imagepng</a>($<a href='../Y/545.html' title='Multiple used in 5 places.'>rotated</a>); <b>break</b>;
+<a name='L836'> 836                 <b>case</b> 'image/jpeg': <a href='../Y/295.html' title='Multiple used in 2 places.'>imagejpeg</a>($<a href='../Y/545.html' title='Multiple used in 5 places.'>rotated</a>, $<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>, $this-&gt;<a href='../Y/296.html' title='Multiple used in 5 places.'>image_jpeg_quality</a>); <a href='../Y/295.html' title='Multiple used in 2 places.'>imagejpeg</a>($<a href='../Y/545.html' title='Multiple used in 5 places.'>rotated</a>); <b>break</b>;
+<a name='L837'> 837                 <b>case</b> 'image/gif': <a href='../Y/294.html' title='Multiple used in 2 places.'>imagegif</a>($<a href='../Y/545.html' title='Multiple used in 5 places.'>rotated</a>, $<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>); <a href='../Y/294.html' title='Multiple used in 2 places.'>imagegif</a>($<a href='../Y/545.html' title='Multiple used in 5 places.'>rotated</a>); <b>break</b>;
+<a name='L838'> 838                 <b>default</b>: <b>die</b>('Unsupported image type '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime']);
+<a name='L839'> 839                 <font color='blue'>}</font>
+<a name='L840'> 840 
+<a name='L841'> 841                 <a href='../Y/291.html' title='Multiple used in 4 places.'>imagedestroy</a>($<a href='../Y/282.html' title='Multiple used in 11 places.'>image</a>);
+<a name='L842'> 842                 <a href='../Y/291.html' title='Multiple used in 4 places.'>imagedestroy</a>($<a href='../Y/545.html' title='Multiple used in 5 places.'>rotated</a>);
+<a name='L843'> 843 
+<a name='L844'> 844                 $this-&gt;<a href='../S/4.html#L433' title='Defined at 433 in class.Files.php.'>clearThumbs</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L845'> 845         <font color='blue'>}</font>
+<a name='L846'> 846 
+<a name='L847'> 847         <i><font color='green'>//takes get parameter 'dl' to send the file as an attachment</font></i>
+<a name='L848'> 848         <b>function</b> sendFile($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, $<a href='../Y/255.html' title='Multiple used in 4 places.'>force_mime</a> = <b>false</b>)
+<a name='L849'> 849         <font color='blue'>{</font>
+<a name='L850'> 850                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L851'> 851                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L852'> 852 
+<a name='L853'> 853                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>('SELECT * FROM tblFiles WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L854'> 854                 <b>if</b> (!$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>) <b>die</b>;
+<a name='L855'> 855 
+<a name='L856'> 856                 <i><font color='green'>/* This sends files without extension etc as plain text if you didnt specify to download them */</font></i>
+<a name='L857'> 857                 <b>if</b> (!$<a href='../Y/255.html' title='Multiple used in 4 places.'>force_mime</a> &amp;&amp; (!<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['dl']) || $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime'] == 'application/octet-stream')) <font color='blue'>{</font>
+<a name='L858'> 858                         <b>header</b>('Content-Type: text/plain');
+<a name='L859'> 859                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L860'> 860                         <b>header</b>('Content-Type: '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime']);
+<a name='L861'> 861                 <font color='blue'>}</font>
+<a name='L862'> 862 
+<a name='L863'> 863                 <b>if</b> (!$<a href='../Y/255.html' title='Multiple used in 4 places.'>force_mime</a> &amp;&amp; <a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['dl'])) <font color='blue'>{</font>
+<a name='L864'> 864                         <i><font color='green'>/* Prompts the user to save the file */</font></i>
+<a name='L865'> 865                         <b>header</b>('Content-Disposition: attachment; filename="'.<a href='../Y/39.html' title='Multiple used in 9 places.'>basename</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileName']).'"');
+<a name='L866'> 866                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L867'> 867                         <i><font color='green'>/* Displays the file in the browser, and assigns a filename for the browser's "save as..." features */</font></i>
+<a name='L868'> 868                         <b>header</b>('Content-Disposition: inline; filename="'.<a href='../Y/39.html' title='Multiple used in 9 places.'>basename</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileName']).'"');
+<a name='L869'> 869                 <font color='blue'>}</font>
+<a name='L870'> 870 
+<a name='L871'> 871                 <b>header</b>('Content-Transfer-Encoding: binary');
+<a name='L872'> 872 
+<a name='L873'> 873                 <i><font color='green'>//Serves the file differently depending on what kind of file it is</font></i>
+<a name='L874'> 874                 <b>if</b> (!$<a href='../Y/255.html' title='Multiple used in 4 places.'>force_mime</a> &amp;&amp; <a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileMime'], $this-&gt;<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a>)) <font color='blue'>{</font>
+<a name='L875'> 875                         <i><font color='green'>//Generate resized image if needed</font></i>
+<a name='L876'> 876                         $this-&gt;<a href='../S/4.html#L907' title='Defined at 907 in class.Files.php.'>sendImage</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L877'> 877                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L878'> 878                         $this-&gt;<a href='../S/4.html#L793' title='Defined at 793 in class.Files.php.'>setCachedHeaders</a>();
+<a name='L879'> 879 
+<a name='L880'> 880                         <i><font color='green'>//Just delivers the file as-is</font></i>
+<a name='L881'> 881                         <b>header</b>('Content-Length: '. $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['fileSize']);
+<a name='L882'> 882                         <b>echo</b> <a href='../Y/237.html' title='Multiple used in 2 places.'>file_get_contents</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L883'> 883                 <font color='blue'>}</font>
+<a name='L884'> 884 
+<a name='L885'> 885                 <i><font color='green'>//Count the file downloads</font></i>
+<a name='L886'> 886                 <b>if</b> ($this-&gt;<a href='../Y/152.html' title='Multiple used in 4 places.'>count_file_views</a>) <font color='blue'>{</font>
+<a name='L887'> 887                         $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L888'> 888                 <font color='blue'>}</font>
+<a name='L889'> 889 
+<a name='L890'> 890                 <b>die</b>;
+<a name='L891'> 891         <font color='blue'>}</font>
+<a name='L892'> 892 
+<a name='L893'> 893         <b>function</b> sendTextfile($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>)
+<a name='L894'> 894         <font color='blue'>{</font>
+<a name='L895'> 895                 <i><font color='green'>//required for IE6:</font></i>
+<a name='L896'> 896                 <b>header</b>('Cache-Control: cache, must-revalidate');
+<a name='L897'> 897 
+<a name='L898'> 898                 <i><font color='green'>//header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($realFileName)) . ' GMT');</font></i>
+<a name='L899'> 899                 <b>header</b>('Content-Length: '.<a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>));
+<a name='L900'> 900                 <b>header</b>('Content-Type: text/plain');
+<a name='L901'> 901                 <b>header</b>('Content-Disposition: attachment; filename="'.<a href='../Y/39.html' title='Multiple used in 9 places.'>basename</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>).'"');
+<a name='L902'> 902 
+<a name='L903'> 903                 <a href='../S/4.html#L903' title='Used at 903 in class.Files.php.'>readfile</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>, 'r');
+<a name='L904'> 904         <font color='blue'>}</font>
+<a name='L905'> 905 
+<a name='L906'> 906         <i><font color='green'>//takes get parameters 'w' and 'h'</font></i>
+<a name='L907'> 907         <b>function</b> <a href='../S/4.html#L876' title='Refered from 876 in class.Files.php.'>sendImage</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L908'> 908         <font color='blue'>{</font>
+<a name='L909'> 909                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L910'> 910 
+<a name='L911'> 911                 $<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a> = $this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L912'> 912                 <b>if</b> (!<a href='../Y/236.html' title='Multiple used in 5 places.'>file_exists</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>)) <b>die</b>('file not found');
+<a name='L913'> 913 
+<a name='L914'> 914                 $<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a> = <a href='../Y/264.html' title='Multiple used in 5 places.'>getimagesize</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>);
+<a name='L915'> 915 
+<a name='L916'> 916                 $<a href='../Y/310.html' title='Multiple used in 6 places.'>img_width</a> = $<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>[0];
+<a name='L917'> 917                 $<a href='../Y/309.html' title='Multiple used in 6 places.'>img_height</a> = $<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>[1];
+<a name='L918'> 918                 $<a href='../Y/375.html' title='Multiple used in 7 places.'>mime_type</a> = $<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a>['mime'];
+<a name='L919'> 919 
+<a name='L920'> 920                 $<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a> = 0;
+<a name='L921'> 921                 <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['w']) &amp;&amp; <a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['w'])) $<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a> = $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['w'];
+<a name='L922'> 922                 <b>if</b> (($<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a> &lt; 10) || ($<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a> &gt; 1500)) $<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a> = 0;
+<a name='L923'> 923 
+<a name='L924'> 924                 $<a href='../Y/270.html' title='Multiple used in 6 places.'>height</a> = 0;
+<a name='L925'> 925                 <b>if</b> (!<b>empty</b>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['h']) &amp;&amp; <a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['h'])) $<a href='../Y/270.html' title='Multiple used in 6 places.'>height</a> = $<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['h'];
+<a name='L926'> 926                 <b>if</b> (($<a href='../Y/270.html' title='Multiple used in 6 places.'>height</a> &lt; 10) || ($<a href='../Y/270.html' title='Multiple used in 6 places.'>height</a> &gt; 1500)) $<a href='../Y/270.html' title='Multiple used in 6 places.'>height</a> = 0;
+<a name='L927'> 927 
+<a name='L928'> 928                 <b>if</b> ($<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a> &amp;&amp; (($<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a> &lt; $<a href='../Y/310.html' title='Multiple used in 6 places.'>img_width</a>) || ($<a href='../Y/270.html' title='Multiple used in 6 places.'>height</a> &lt; $<a href='../Y/309.html' title='Multiple used in 6 places.'>img_height</a>)) )  <font color='blue'>{</font>
+<a name='L929'> 929                         <i><font color='green'>/* Look for cached thumbnail */</font></i>
+<a name='L930'> 930 
+<a name='L931'> 931                         $<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a> = $this-&gt;<a href='../Y/627.html' title='Multiple used in 6 places.'>thumbs_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>.'_'.$<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a>.'x'.$<a href='../Y/270.html' title='Multiple used in 6 places.'>height</a>;
+<a name='L932'> 932 
+<a name='L933'> 933                         <b>if</b> (!<a href='../Y/236.html' title='Multiple used in 5 places.'>file_exists</a>($<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>)) <font color='blue'>{</font>
+<a name='L934'> 934                                 <i><font color='green'>//Thumbnail of this size dont exist, create one</font></i>
+<a name='L935'> 935                                 $this-&gt;<a href='../S/4.html#L611' title='Defined at 611 in class.Files.php.'>resizeImage</a>($<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>, $<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>, $<a href='../Y/685.html' title='Multiple used in 6 places.'>width</a>, $<a href='../Y/270.html' title='Multiple used in 6 places.'>height</a>);
+<a name='L936'> 936                         <font color='blue'>}</font>
+<a name='L937'> 937                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L938'> 938                         $<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a> = $<a href='../Y/242.html' title='Multiple used in 21 places.'>filename</a>;
+<a name='L939'> 939                 <font color='blue'>}</font>
+<a name='L940'> 940 
+<a name='L941'> 941                 <b>if</b> (<a href='../S/4.html#L941' title='Used at 941 in class.Files.php.'>filemtime</a>($<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>) &lt; $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/584.html' title='Multiple used in 5 places.'>started</a>) <font color='blue'>{</font>
+<a name='L942'> 942                         $this-&gt;<a href='../S/4.html#L793' title='Defined at 793 in class.Files.php.'>setCachedHeaders</a>();
+<a name='L943'> 943                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L944'> 944                         $this-&gt;<a href='../S/4.html#L800' title='Defined at 800 in class.Files.php.'>setNoCacheHeaders</a>();
+<a name='L945'> 945                 <font color='blue'>}</font>
+<a name='L946'> 946                 <b>header</b>('Content-Type: '.$<a href='../Y/375.html' title='Multiple used in 7 places.'>mime_type</a>);
+<a name='L947'> 947                 <b>header</b>('Content-Length: '.<a href='../Y/247.html' title='Multiple used in 9 places.'>filesize</a>($<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>));
+<a name='L948'> 948                 <b>echo</b> <a href='../Y/237.html' title='Multiple used in 2 places.'>file_get_contents</a>($<a href='../Y/442.html' title='Multiple used in 12 places.'>out_filename</a>);
+<a name='L949'> 949         <font color='blue'>}</font>
+<a name='L950'> 950 
+<a name='L951'> 951         <b>function</b> <a href='../R/89.html' title='Multiple refered from 2 places.'>getFiles</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a> = 0)
+<a name='L952'> 952         <font color='blue'>{</font>
+<a name='L953'> 953                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L954'> 954                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a> || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>)) <b>return</b> <b>array</b>();
+<a name='L955'> 955                 
+<a name='L956'> 956                 <b>if</b> ($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a> == <a href='../S/4.html#L24' title='Defined at 24 in class.Files.php.'>FILETYPE_FORUM</a>) <font color='blue'>{</font>
+<a name='L957'> 957                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT * FROM tblFiles ';
+<a name='L958'> 958                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE fileType='.$<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>.' AND ownerId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>.' AND uploaderId='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;
+<a name='L959'> 959 
+<a name='L960'> 960                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L961'> 961                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>  = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
+<a name='L962'> 962                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
+<a name='L963'> 963                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= 'WHERE t1.categoryId='.$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>.' AND t1.ownerId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>;
+<a name='L964'> 964                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' AND t1.fileType='.$<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>;
+<a name='L965'> 965                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> .= ' ORDER BY t1.timeUploaded ASC';
+<a name='L966'> 966                 <font color='blue'>}</font>
+<a name='L967'> 967                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L968'> 968         <font color='blue'>}</font>
+<a name='L969'> 969 
+<a name='L970'> 970         <b>function</b> <a href='../R/87.html' title='Multiple refered from 3 places.'>getFileCount</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>, $<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>, $<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a> = 0)
+<a name='L971'> 971         <font color='blue'>{</font>
+<a name='L972'> 972                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L973'> 973                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>) || !<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>)) <b>return</b> 0;
+<a name='L974'> 974 
+<a name='L975'> 975                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT COUNT(fileId) FROM tblFiles WHERE categoryId='.$<a href='../Y/58.html' title='Multiple used in 65 places.'>categoryId</a>.' AND fileType='.$<a href='../Y/249.html' title='Multiple used in 40 places.'>fileType</a>.' AND ownerId='.$<a href='../Y/444.html' title='Multiple used in 78 places.'>ownerId</a>;
+<a name='L976'> 976                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>, <b>true</b>);
+<a name='L977'> 977         <font color='blue'>}</font>
+<a name='L978'> 978 
+<a name='L979'> 979         <b>function</b> <a href='../R/88.html' title='Multiple refered from 2 places.'>getFileInfo</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L980'> 980         <font color='blue'>{</font>
+<a name='L981'> 981                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L982'> 982                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>) || !$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>) <b>return</b> <b>false</b>;
+<a name='L983'> 983 
+<a name='L984'> 984                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
+<a name='L985'> 985                                         'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
+<a name='L986'> 986                                         'WHERE t1.fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L987'> 987 
+<a name='L988'> 988                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L989'> 989         <font color='blue'>}</font>
+<a name='L990'> 990 
+<a name='L991'> 991         <i><font color='green'>/* Används av ajax filen core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/</font></i>
+<a name='L992'> 992         <b>function</b> showFileInfo($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L993'> 993         <font color='blue'>{</font>
+<a name='L994'> 994                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L995'> 995 
+<a name='L996'> 996                 $<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a> = $this-&gt;<a href='../S/4.html#L979' title='Defined at 979 in class.Files.php.'>getFileInfo</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L997'> 997                 <b>if</b> (!$<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>) <b>return</b> <b>false</b>;
+<a name='L998'> 998 
+<a name='L999'> 999                 <b>echo</b> 'Name: '.<a href='../Y/594.html' title='Multiple used in 16 places.'>strip_tags</a>($<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['fileName']).'&lt;br/&gt;';
+<a name='L1000'>1000                 <b>echo</b> 'Filesize: '.<a href='../S/6.html#L29' title='Defined at 29 in functions_textformat.php.'>formatDataSize</a>($<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['fileSize']).' ('.$<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['fileSize'].' bytes)&lt;br/&gt;';
+<a name='L1001'>1001                 <b>echo</b> 'Uploader: '.<a href='../Y/274.html' title='Multiple used in 6 places.'>htmlentities</a>($<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['uploaderName']).'&lt;br/&gt;';
+<a name='L1002'>1002                 <b>echo</b> 'At: '.$<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['timeUploaded'].' ('.<a href='../S/6.html#L263' title='Defined at 263 in functions_textformat.php.'>ago</a>($<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['timeUploaded']).')&lt;br/&gt;';
+<a name='L1003'>1003                 <b>if</b> ($this-&gt;<a href='../Y/152.html' title='Multiple used in 4 places.'>count_file_views</a>) <b>echo</b> 'Downloaded: '.$<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['cnt'].' times&lt;br/&gt;';
+<a name='L1004'>1004                 <b>echo</b> 'Mime type: '.$<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['fileMime'].'&lt;br/&gt;';
+<a name='L1005'>1005 
+<a name='L1006'>1006                 <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['fileMime'], $this-&gt;<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a>))
+<a name='L1007'>1007                 <font color='blue'>{</font>
+<a name='L1008'>1008                         <i><font color='green'>//Show additional information for image files</font></i>
+<a name='L1009'>1009                         <b>list</b>($<a href='../Y/310.html' title='Multiple used in 6 places.'>img_width</a>, $<a href='../Y/309.html' title='Multiple used in 6 places.'>img_height</a>) = <a href='../Y/264.html' title='Multiple used in 5 places.'>getimagesize</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L1010'>1010                         <b>echo</b> 'Width: '.$<a href='../Y/310.html' title='Multiple used in 6 places.'>img_width</a>.', Height: '.$<a href='../Y/309.html' title='Multiple used in 6 places.'>img_height</a>.'&lt;br/&gt;';
+<a name='L1011'>1011                         <b>echo</b> <a href='../S/6.html#L6' title='Defined at 6 in functions_textformat.php.'>makeThumbLink</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L1012'>1012                 <font color='blue'>}</font>
+<a name='L1013'>1013                 <b>else</b> <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/233.html' title='Multiple used in 15 places.'>file</a>['fileMime'], $this-&gt;<a href='../Y/35.html' title='Multiple used in 4 places.'>audio_mime_types</a>) &amp;&amp; <a href='../Y/217.html' title='Multiple used in 4 places.'>extension_loaded</a>('id3'))
+<a name='L1014'>1014                 <font color='blue'>{</font>
+<a name='L1015'>1015                         <i><font color='green'>//Show additional information for audio files</font></i>
+<a name='L1016'>1016                         <b>echo</b> '&lt;h3&gt;id3 tag&lt;/h3&gt;';
+<a name='L1017'>1017                         $<a href='../Y/279.html' title='Multiple used in 2 places.'>id3</a> = @<a href='../S/4.html#L1017' title='Used at 1017 in class.Files.php.'>id3_get_tag</a>($this-&gt;<a href='../Y/662.html' title='Multiple used in 19 places.'>upload_dir</a>.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>, <a href='../S/4.html#L1017' title='Used at 1017 in class.Files.php.'>ID3_V2_2</a>);  <i><font color='green'>//note: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this</font></i>
+<a name='L1018'>1018                         <a href='../S/17.html#L3' title='Defined at 3 in functions_general.php.'>d</a>($<a href='../Y/279.html' title='Multiple used in 2 places.'>id3</a>);
+<a name='L1019'>1019                 <font color='blue'>}</font>
+<a name='L1020'>1020 
+<a name='L1021'>1021                 <i><font color='green'>//display checksums, if any</font></i>
+<a name='L1022'>1022                 $<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a> = $this-&gt;<a href='../S/4.html#L695' title='Defined at 695 in class.Files.php.'>checksums</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>);
+<a name='L1023'>1023                 <b>echo</b> '&lt;h3&gt;Checksums&lt;/h3&gt;';
+<a name='L1024'>1024                 <b>echo</b> '&lt;pre&gt;';
+<a name='L1025'>1025                 <b>echo</b> 'sha1: '.$<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['sha1']."\n";
+<a name='L1026'>1026                 <b>echo</b> 'md5:  '.$<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['md5']."\n";
+<a name='L1027'>1027                 <b>echo</b> '&lt;/pre&gt;';
+<a name='L1028'>1028                 <b>echo</b> 'Generated at '.$<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['timeCreated'].' in '.$<a href='../Y/25.html' title='Multiple used in 61 places.'>arr</a>['timeExec'].' sec&lt;br/&gt;';
+<a name='L1029'>1029         <font color='blue'>}</font>
+<a name='L1030'>1030 
+<a name='L1031'>1031         <b>function</b> <a href='../S/25.html#L94' title='Refered from 94 in atom_comments.php.'>getUploader</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L1032'>1032         <font color='blue'>{</font>
+<a name='L1033'>1033                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L1034'>1034                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L1035'>1035 
+<a name='L1036'>1036                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT uploaderId FROM tblFiles WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L1037'>1037                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L1038'>1038         <font color='blue'>}</font>
+<a name='L1039'>1039 
+<a name='L1040'>1040         <b>function</b> getOwner($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)
+<a name='L1041'>1041         <font color='blue'>{</font>
+<a name='L1042'>1042                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L1043'>1043                 <b>if</b> (!<a href='../Y/324.html' title='Multiple used in 225 places.'>is_numeric</a>($<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>)) <b>return</b> <b>false</b>;
+<a name='L1044'>1044 
+<a name='L1045'>1045                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT ownerId FROM tblFiles WHERE fileId='.$<a href='../Y/97.html' title='Multiple used in 238 places.'>_id</a>;
+<a name='L1046'>1046                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/204.html' title='Multiple defined in 4 places.'>getOneItem</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L1047'>1047         <font color='blue'>}</font>
+<a name='L1048'>1048 
+<a name='L1049'>1049         <b>function</b> <a href='../S/4.html#L261' title='Refered from 261 in class.Files.php.'>showImageGadgetXHTML</a>()
+<a name='L1050'>1050         <font color='blue'>{</font>
+<a name='L1051'>1051                 <b>global</b> $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L1052'>1052 ?&gt;
+<a name='L1053'>1053 <div id="zoom_image_layer" style="display:none">
+<a name='L1054'>1054         <center>
+<a name='L1055'>1055                 <input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/>
+<a name='L1056'>1056                 <input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+<a name='L1057'>1057                 <input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/><br/>
+<a name='L1058'>1058 
+<a name='L1059'>1059                 <img id="zoom_image" src="&lt;?=$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root']?&gt;gfx/ajax_loading.gif" alt="Image"/><br/>
+<a name='L1060'>1060 
+<a name='L1061'>1061 &lt;? <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font> ?&gt;
+<a name='L1062'>1062                 <input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
+<a name='L1063'>1063                 <input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
+<a name='L1064'>1064                 <input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
+<a name='L1065'>1065                 <input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
+<a name='L1066'>1066                 <input type="button" class="button" value="Move image" onclick="move_selected_file()"/>
+<a name='L1067'>1067                 <input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
+<a name='L1068'>1068 &lt;? <font color='blue'>}</font> ?&gt;
+<a name='L1069'>1069 &lt;? <b>if</b> (!<b>empty</b>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['news']['allow_rating'])) <font color='blue'>{</font> ?&gt;
+<a name='L1070'>1070                 <br/>
+<a name='L1071'>1071                 <div class="image_rate">
+<a name='L1072'>1072                 &lt;?
+<a name='L1073'>1073                         <i><font color='green'>//ratingGadget(RATE_IMAGE, 1)</font></i>
+<a name='L1074'>1074                         <i><font color='green'>//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"</font></i>
+<a name='L1075'>1075                 ?&gt;
+<a name='L1076'>1076                 </div>
+<a name='L1077'>1077 &lt;? <font color='blue'>}</font> ?&gt;
+<a name='L1078'>1078         </center>
+<a name='L1079'>1079 </div>
+<a name='L1080'>1080 &lt;?
+<a name='L1081'>1081         <font color='blue'>}</font>
+<a name='L1082'>1082 
+<a name='L1083'>1083         <b>function</b> <a href='../S/4.html#L262' title='Refered from 262 in class.Files.php.'>showAudioGadgetXHTML</a>()
+<a name='L1084'>1084         <font color='blue'>{</font>
+<a name='L1085'>1085                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L1086'>1086 ?&gt;
+<a name='L1087'>1087 <div id="zoom_audio_layer" style="display:none">
+<a name='L1088'>1088         <center>
+<a name='L1089'>1089                 <div id="zoom_audio" style="width: 160px; height: 50px;"></div>
+<a name='L1090'>1090                 <br/>
+<a name='L1091'>1091                 <input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
+<a name='L1092'>1092                 <input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+<a name='L1093'>1093                 <input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+<a name='L1094'>1094 
+<a name='L1095'>1095 &lt;? <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font> ?&gt;
+<a name='L1096'>1096                 <input type="button" class="button" value="Move" onclick="move_selected_file()"/>
+<a name='L1097'>1097                 <input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
+<a name='L1098'>1098 &lt;? <font color='blue'>}</font> ?&gt;
+<a name='L1099'>1099         </center>
+<a name='L1100'>1100 </div>
+<a name='L1101'>1101 &lt;?
+<a name='L1102'>1102         <font color='blue'>}</font>
+<a name='L1103'>1103         
+<a name='L1104'>1104         <b>function</b> <a href='../S/4.html#L263' title='Refered from 263 in class.Files.php.'>showVideoGadgetXHTML</a>()
+<a name='L1105'>1105         <font color='blue'>{</font>
+<a name='L1106'>1106                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L1107'>1107 ?&gt;
+<a name='L1108'>1108 <div id="zoom_video_layer" style="display:none">
+<a name='L1109'>1109         <center>
+<a name='L1110'>1110                 <input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
+<a name='L1111'>1111                 <input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+<a name='L1112'>1112                 <input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/><br/>
+<a name='L1113'>1113 
+<a name='L1114'>1114                 <div id="zoom_video" style="width: 160px; height: 50px;"></div>
+<a name='L1115'>1115 
+<a name='L1116'>1116 &lt;? <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font> ?&gt;
+<a name='L1117'>1117                 <input type="button" class="button" value="Move" onclick="move_selected_file()"/>
+<a name='L1118'>1118                 <input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
+<a name='L1119'>1119 &lt;? <font color='blue'>}</font> ?&gt;
+<a name='L1120'>1120         </center>
+<a name='L1121'>1121 </div>
+<a name='L1122'>1122 &lt;?
+<a name='L1123'>1123         <font color='blue'>}</font>
+<a name='L1124'>1124 
+<a name='L1125'>1125         <b>function</b> <a href='../S/4.html#L264' title='Refered from 264 in class.Files.php.'>showDocumentGadgetXHTML</a>()
+<a name='L1126'>1126         <font color='blue'>{</font>
+<a name='L1127'>1127                 <b>global</b> $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L1128'>1128 ?&gt;
+<a name='L1129'>1129 <div id="zoom_file_layer" style="display:none">
+<a name='L1130'>1130         <center>
+<a name='L1131'>1131                 <input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
+<a name='L1132'>1132                 <input type="button" class="button" value="Download" onclick="download_selected_file()"/>
+<a name='L1133'>1133                 <input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
+<a name='L1134'>1134 &lt;? <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font> ?&gt;
+<a name='L1135'>1135                 <input type="button" class="button" value="Move" onclick="move_selected_file()"/>
+<a name='L1136'>1136                 <input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
+<a name='L1137'>1137 &lt;? <font color='blue'>}</font> ?&gt;
+<a name='L1138'>1138         </center>
+<a name='L1139'>1139 </div>
+<a name='L1140'>1140 &lt;?
+<a name='L1141'>1141         <font color='blue'>}</font>
+<a name='L1142'>1142 <font color='blue'>}</font>
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L17'>[^]</a><a href='#L1125'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

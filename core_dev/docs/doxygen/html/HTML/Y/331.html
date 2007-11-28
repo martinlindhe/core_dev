@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>item</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/21.html#L554'>item</a>              554 functions_forum.php 	function showForumPost($item, $islocked = false)
+<a href='../S/21.html#L558'>item</a>              558 functions_forum.php 		$subject = formatUserInputText($item['itemSubject']);
+<a href='../S/21.html#L559'>item</a>              559 functions_forum.php 		$body = formatUserInputText($item['itemBody']);
+<a href='../S/21.html#L561'>item</a>              561 functions_forum.php 		if (!$islocked) $islocked = $item['locked'];
+<a href='../S/21.html#L563'>item</a>              563 functions_forum.php 		echo '&lt;a name="post'.$item['itemId'].'" id="post'.$item['itemId'].'"&gt;&lt;/a&gt;';
+<a href='../S/21.html#L573'>item</a>              573 functions_forum.php 		echo '&lt;a href="forum.php?id='.$item['parentId'].'#post'.$item['itemId'].'"&gt;';
+<a href='../S/21.html#L575'>item</a>              575 functions_forum.php 		echo 'by '.nameLink($item['authorId'], $item['authorName']).' on '.$item['timeCreated'];
+<a href='../S/21.html#L582'>item</a>              582 functions_forum.php 		$files-&gt;showAttachments(FILETYPE_FORUM, $item['itemId']);
+<a href='../S/21.html#L586'>item</a>              586 functions_forum.php 		echo nameThumbLink($item['authorId'], $item['authorName']).'&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/21.html#L587'>item</a>              587 functions_forum.php 		echo getUserStatus($item['authorId']).'&lt;br/&gt;';
+<a href='../S/21.html#L589'>item</a>              589 functions_forum.php 		echo 'Posts: '.getForumPostsCount($item['authorId']);
+<a href='../S/21.html#L603'>item</a>              603 functions_forum.php 			if (forumItemIsDiscussion($item['itemId'])) {
+<a href='../S/21.html#L604'>item</a>              604 functions_forum.php 				echo '&lt;a href="forum_new.php?id='.$item['itemId'].'&amp;amp;q='.$item['itemId'].'"&gt;Quote&lt;/a&gt; ';
+<a href='../S/21.html#L606'>item</a>              606 functions_forum.php 				echo '&lt;a href="forum_new.php?id='.$item['parentId'].'&amp;amp;q='.$item['itemId'].'"&gt;Quote&lt;/a&gt; ';
+<a href='../S/21.html#L609'>item</a>              609 functions_forum.php 			if ($item['authorId'] == $session-&gt;id || $session-&gt;isAdmin) {
+<a href='../S/21.html#L610'>item</a>              610 functions_forum.php 				echo '&lt;a href="forum_edit.php?id='.$item['itemId'].'"&gt;Edit&lt;/a&gt; ';
+<a href='../S/21.html#L615'>item</a>              615 functions_forum.php 			echo '&lt;a href="forum_delete.php?id='.$item['itemId'].'"&gt;Remove&lt;/a&gt; ';
+<a href='../S/21.html#L618'>item</a>              618 functions_forum.php 		if (forumItemIsDiscussion($item['itemId'])) {
+<a href='../S/21.html#L620'>item</a>              620 functions_forum.php 			echo '&lt;a href="forum_tipsa.php?id='.$item['itemId'].'"&gt;Tell a friend&lt;/a&gt; ';
+<a href='../S/21.html#L623'>item</a>              623 functions_forum.php 				if (!$item['locked']) {
+<a href='../S/21.html#L624'>item</a>              624 functions_forum.php 					echo '&lt;a href="forum_lock.php?id='.$item['itemId'].'"&gt;Lock&lt;/a&gt; ';
+<a href='../S/21.html#L626'>item</a>              626 functions_forum.php 					echo '&lt;a href="forum_lock.php?id='.$item['itemId'].'&amp;unlock"&gt;Unlock&lt;/a&gt; ';
+<a href='../S/21.html#L628'>item</a>              628 functions_forum.php 				echo '&lt;a href="forum_move.php?id='.$item['itemId'].'"&gt;Move&lt;/a&gt; ';
+<a href='../S/21.html#L632'>item</a>              632 functions_forum.php 		if ($session-&gt;id != $item['authorId']) {
+<a href='../S/21.html#L633'>item</a>              633 functions_forum.php 			echo '&lt;a href="forum_report.php?id='.$item['itemId'].'"&gt;Report&lt;/a&gt; ';
+<a href='../S/21.html#L647'>item</a>              647 functions_forum.php 		$item = getForumItem($itemId);
+<a href='../S/21.html#L649'>item</a>              649 functions_forum.php 		echo getForumDepthHTML(FORUM_MESSAGE, $item['parentId']).'&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/21.html#L651'>item</a>              651 functions_forum.php 		showForumPost($item);
+<a href='../S/21.html#L670'>item</a>              670 functions_forum.php 				showForumPost($row, $item['locked']);
+<a href='../S/14.html#L174'>item</a>              174 functions_news.php 			$item = getNewsItem($_id);
+<a href='../S/14.html#L179'>item</a>              179 functions_news.php 			echo 'Title: &lt;input type="text" name="news_title" size="50" value="'.$item['title'].'"/&gt;&lt;br/&gt;';
+<a href='../S/14.html#L181'>item</a>              181 functions_news.php 			echo '&lt;textarea name="news_body" cols="60" rows="16"&gt;'.$item['body'].'&lt;/textarea&gt;&lt;br/&gt;';
+<a href='../S/14.html#L182'>item</a>              182 functions_news.php 			echo '&lt;input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/&gt;';
+<a href='../S/14.html#L186'>item</a>              186 functions_news.php 			echo 'Category: '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/14.html#L188'>item</a>              188 functions_news.php 			echo '&lt;input type="text" name="news_publish" value="'.$item['timeToPublish'].'"/&gt; ';
+</pre>
+</body>
+</html>

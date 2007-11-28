@@ -1,13 +1,11 @@
 <?
-/*
-	SQL DB Base class
-
-	Written by Martin Lindhe, 2007
-	
-	The SQL profiler features additional PHP profiling if the xdebug extension is loaded
-
-	todo: method to call stored procedures
-*/
+/**
+ * SQL DB Base class
+ *
+ * The SQL profiler features additional PHP profiling if the xdebug extension is loaded
+ *
+ * \author Martin Lindhe, 2007
+ */
 
 abstract class DB_Base
 {
@@ -15,45 +13,91 @@ abstract class DB_Base
 	/* PUBLIC INTERFACE EXPOSED BY ALL DB MODULES				*/
 	/****************************************************/
 
-	/* Escapes a string for use in queries */
+	/**
+	 * Escapes a string for use in queries
+	 * \param $q is the query to escape
+	 * \return the escaped string, taking db-connection locale into account
+	 */
 	abstract function escape($q);
 
-	/* Performs a query that don't return anything
-		Example: LOCK TABLES */
+	/**
+	 * Performs a general query. Should only be used with special commands that don't return anything.
+	 * Use the other functions for common SQL operations such as select, insert, update, delete
+	 * Example: LOCK TABLES
+	 * \param $q is the query to execute
+	 * \return the result of the query, if anything
+	 */
 	abstract function query($q);
 
-	/* Performs a query that does a DELETE, returns the number of rows affected
-		Example: DELETE FROM t WHERE id=1 */
+	/**
+	 * Performs a query that does a DELETE
+	 * Example: DELETE FROM t WHERE id=1
+	 * \param $q is the query to execute
+	 * \return the number of rows affected
+	 */
 	abstract function delete($q);
 
-	function update($q) { return $this->delete($q); }	//also returns number of rows affected
+	/**
+	 * Performs a query that does a UPDATE
+	 * Example: UPDATE t SET n=1
+	 * \param $q is the query to execute
+	 * \return the number of rows affected
+	 */
+	function update($q) { return $this->delete($q); }
 
-	/* For INSERTs, returns insert_id (autoincrement primary key of table) */
+	/**
+	 * Performs a query that does a INSERT
+	 * \param $q is the query to execute
+	 * \return insert_id (autoincrement primary key of table)
+	 */
 	abstract function insert($q);
-	
-	function replace($q) { return $this->insert($q); }	//also returns number of rows affected
 
-	/* Returns an array with the results, with columns as array indexes
-		Example: SELECT * FROM t */
+	/**
+	 * Performs a query that does a REPLACE
+	 * \param $q is the query to execute
+	 * \return the number of rows affected
+	 */
+	function replace($q) { return $this->insert($q); }
+
+	/**
+	 * Selects data
+	 * Example: SELECT * FROM t
+	 * \param $q is the query to execute
+	 * \return an array with the results, with columns as array indexes
+	 */
 	abstract function getArray($q);
 
-	/* Returns an array with the results mapped as key => value
-		Example: SHOW VARIABLES LIKE "%cache%" */
+	/**
+	 * Selects data
+	 * Example: SHOW VARIABLES LIKE "%cache%"
+	 * \param $q is the query to execute
+	 * \return an array with the results mapped as key => value
+	 */
 	abstract function getMappedArray($q);
 
-	/* Returns an 1-dimensional array with a numeric index
-		Example: fixme-need sample (no code currently takes advantage of this function)
-	*/
+	/**
+	 * Selects data
+	 * Example: SELECT textRow FROM t
+	 * \param $q is the query to execute
+	 * \return an 1-dimensional array with a numeric index
+	 */
 	abstract function getNumArray($q);
 
-	/* Returns one row-result with columns as array indexes
-		Example: SELECT * FROM t WHERE id=1 (where id is distinct) */
+	/**
+	 * Selects one row of data
+	 * Example: SELECT * FROM t WHERE id=1 (where id is distinct)
+	 * \param $q is the query to execute
+	 * \return one row-result with columns as array indexes
+	 */
 	abstract function getOneRow($q);
 
-	/* Returns one column-result only
-		Example: SELECT a FROM t WHERE id=1 (where id is distinct)
-		Set $num to true if you expect a numeric response (to return 0 on failure rather than boolean false)
-	*/
+	/**
+	 * Selects one column of one row of data
+	 * Example: SELECT a FROM t WHERE id=1 (where id is distinct)
+	 * \param $q is the query to execute
+	 * \param $num set to true if you expect a numeric response (to return 0 on failure rather than boolean false)
+	 * \return one column-result only
+	 */
 	abstract function getOneItem($q, $num = false);
 
 
@@ -62,12 +106,20 @@ abstract class DB_Base
 	/* PRIVATE INTERFACE USED INTERNALLY ONLY						*/
 	/****************************************************/
 
-	/* Creates a database connection */
+	/**
+	 * Creates a database connection
+	 * \return nothing
+	 */
 	abstract function connect();
 
-	/* Shows driver-specific settings + status */
+	/**
+	 * Shows driver-specific settings + status
+	 * \return nothing
+	 */
 	abstract function showDriverStatus();
 
+
+	//db settings
 	protected $host	= '';
 	protected $port	= 0;
 	protected $username = '';
@@ -91,7 +143,11 @@ abstract class DB_Base
 	protected $query_error = array();
 
 
-	/* Constructor */
+	/**
+	 * Constructor. Initializes db driver and connects to the database
+	 * \param $settings is array with DB-specific settings
+	 * \return nothing
+	 */
 	function __construct(array $settings)
 	{
 		if (!empty($settings['host'])) $this->host = $settings['host'];
@@ -104,7 +160,10 @@ abstract class DB_Base
 		$this->connect();
 	}
 
-	/* Shows current settings */
+	/**
+	 * Shows current settings
+	 * \return nothing
+	 */
 	function showConfig()
 	{
 		echo '<div class="item">';
@@ -161,27 +220,47 @@ abstract class DB_Base
 		echo '</div>';
 	}
 
-	/* Stores profiling information about connect time to database */
+	/**
+	 * Stores profiling information about connect time to database
+	 * \param $time_started is the microtime of when the script execution started
+	 * \return nothing
+	 */
 	function profileConnect($time_started)
 	{
 		$this->connect_time = microtime(true) - $time_started;
 	}
 
-	/* Stores profiling information about query execution time */
-	function profileQuery($time_started, $query)
+	/**
+	 * Stores profiling information about query execution time
+	 * \param $time_started is microtime from when the execution of this query begun
+	 * \param $q is the query being profiled
+	 * \return nothing
+	 */
+	function profileQuery($time_started, $q)
 	{
 		$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
-		$this->queries[ $this->queries_cnt ] = $query;
+		$this->queries[ $this->queries_cnt ] = $q;
 		$this->queries_cnt++;
 	}
 
-	function profileError($time_started, $query, $_error)
+	/**
+	 * Stores profiling information about a failed query execution
+	 * \param $time_started is microtime from when the execution of this query begun
+	 * \param $q is the query being profiled
+	 * \param $err is the error message returned by the db driver in use
+	 * \return nothing
+	 */
+	function profileError($time_started, $q, $err)
 	{
-		$this->query_error[ $this->queries_cnt ] = $_error;
-		$this->profileQuery($time_started, $query);
+		$this->query_error[ $this->queries_cnt ] = $err;
+		$this->profileQuery($time_started, $q);
 	}
 
-	/* Shows sql query profiling information */
+	/**
+	 * Shows SQL query profiling information
+	 * \param $pageload_start is the microtime of when the script execution started
+	 * \return nothing
+	 */
 	function showProfile($pageload_start = 0)
 	{
 		global $config;
@@ -250,7 +329,10 @@ abstract class DB_Base
 		echo '</div>';
 	}
 
-	/* Displays all events from the event log */
+	/**
+	 * Displays all events from the event log
+	 * \return nothing
+	 */
 	function showEvents()
 	{
 		global $session, $config;
@@ -299,43 +381,50 @@ abstract class DB_Base
 	}
 }
 
-//General database related functions
 
-	/* Returns current time in MySQL "NOW()" format */
+/*******************************
+* General sql helper functions *
+*******************************/
+
+	/**
+	 * Returns the current time in the same format as the MySQL "NOW()" command
+	 * \return time in MySQL datetime format
+	 */
 	function now()
 	{
 		return strftime('%Y-%m-%d %H:%M:%S');
 	}
 
+	/**
+	 * Returns given UNIX timestamp in MySQL datetime format
+	 * \param $timestamp is a UNIX timestamp
+	 * \return given UNIX timestamp in MySQL datetime format
+	 */
 	function sql_datetime($timestamp)
 	{
 		return date('Y-m-d H:i:s', $timestamp);
 	}
 	
-	//returns true if $d1 is older date than $d2
+	/**
+	 * Returns MySQL datetime in UNIX timestamp format
+	 * \param $datetime is a MySQL datetime
+	 * \return given MySQL datetime in UNIX timestamp format
+	 */
+	function datetime_to_timestamp($datetime)
+	{
+		return strtotime($datetime);
+	}
+
+	/**
+	 * Compares two MySQL datetime timestamps
+	 * \param $d1 is a MySQL datetime
+	 * \param $d2 is a MySQL datetime
+	 * \return true if $d1 is older date than $d2
+	 */
 	function datetime_less($d1, $d2)
 	{
 		if (strtotime($d1) < strtotime($d2)) return true;
 		return false;
 	}
 
-	//returns MySQL datetime in unix timestamp format
-	function datetime_to_timestamp($datetime)
-	{
-		return strtotime($datetime);
-	}
-
-	/* debug function! do not use */
-	function d($v)
-	{
-		if (is_string($v)) echo htmlentities($v);
-		else {
-			if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
-			else {
-				echo '<pre>';
-				print_r($v);
-				echo '</pre>';
-			}
-		}
-	}
 ?>

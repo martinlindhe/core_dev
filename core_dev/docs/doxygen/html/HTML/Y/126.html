@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>_subj</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/16.html#L5'>_subj</a>               5 functions_messages.php 	function sendMessage($_id, $_subj, $_msg)
+<a href='../S/16.html#L11'>_subj</a>              11 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId='.$session-&gt;id.',toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+<a href='../S/16.html#L15'>_subj</a>              15 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$session-&gt;id.',fromId='.$session-&gt;id.',toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_OUTBOX;
+<a href='../S/16.html#L21'>_subj</a>              21 functions_messages.php 	function systemMessage($_id, $_subj, $_msg)
+<a href='../S/16.html#L27'>_subj</a>              27 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId=0,toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+</pre>
+</body>
+</html>

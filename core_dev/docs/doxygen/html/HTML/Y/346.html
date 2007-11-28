@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>link</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/6.html#L160'>link</a>              160 functions_textformat.php 			$link = array();
+<a href='../S/6.html#L162'>link</a>              162 functions_textformat.php 				list($link['coded'], $link['title']) = explode('|', $wiki_command);
+<a href='../S/6.html#L164'>link</a>              164 functions_textformat.php 				$link['coded'] = $wiki_command;
+<a href='../S/6.html#L167'>link</a>              167 functions_textformat.php 			$arr = explode(':', $link['coded']);
+<a href='../S/6.html#L168'>link</a>              168 functions_textformat.php 			$link['cmd'] = $arr[0];
+<a href='../S/6.html#L169'>link</a>              169 functions_textformat.php 			$link['param'] = '';
+<a href='../S/6.html#L171'>link</a>              171 functions_textformat.php 				$link['param'] .= $arr[$i];
+<a href='../S/6.html#L174'>link</a>              174 functions_textformat.php 			if (empty($link['cmd'])) continue;
+<a href='../S/6.html#L178'>link</a>              178 functions_textformat.php 			switch ($link['cmd']) {
+<a href='../S/6.html#L180'>link</a>              180 functions_textformat.php 					if (!empty($link['title'])) {
+<a href='../S/6.html#L182'>link</a>              182 functions_textformat.php 						$result = '&lt;a href="wiki.php?Wiki:'.$link['param'].'"&gt;'.$link['title'].'&lt;/a&gt;';
+<a href='../S/6.html#L185'>link</a>              185 functions_textformat.php 						$result = '&lt;a href="wiki.php?Wiki:'.$link['param'].'"&gt;'.$link['param'].'&lt;/a&gt;';
+<a href='../S/6.html#L190'>link</a>              190 functions_textformat.php 					$result = '&lt;a href="'.$link['param'].'"&gt;'.$link['title'].'&lt;/a&gt;';
+<a href='../S/6.html#L194'>link</a>              194 functions_textformat.php 					$result = makeImageLink($link['param']);
+<a href='../S/6.html#L198'>link</a>              198 functions_textformat.php 					$result = poll(POLL_NEWS, $link['param']);
+<a href='../S/6.html#L202'>link</a>              202 functions_textformat.php 					die('unknown command: '. $link['cmd']);
+</pre>
+</body>
+</html>

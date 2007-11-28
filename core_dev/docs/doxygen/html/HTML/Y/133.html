@@ -1,0 +1,188 @@
+<html>
+<head>
+<title>_type</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L24'>_type</a>              24 atom_categories.php 	function addCategory($_type, $_name, $_owner = 0, $_global = false)
+<a href='../S/26.html#L28'>_type</a>              28 atom_categories.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_owner)) return false;
+<a href='../S/26.html#L33'>_type</a>              33 atom_categories.php 		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND ownerId='.$_owner;
+<a href='../S/26.html#L38'>_type</a>              38 atom_categories.php 		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner.',timeCreated=NOW(),creatorId='.$session-&gt;id;
+<a href='../S/26.html#L44'>_type</a>              44 atom_categories.php 	function updateCategory($_type, $_id, $name)
+<a href='../S/26.html#L47'>_type</a>              47 atom_categories.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L49'>_type</a>              49 atom_categories.php 		$q = 'UPDATE tblCategories SET categoryName="'.$db-&gt;escape($name).'" WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/26.html#L53'>_type</a>              53 atom_categories.php 	function removeCategory($_type, $_id)
+<a href='../S/26.html#L56'>_type</a>              56 atom_categories.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L58'>_type</a>              58 atom_categories.php 		$q = 'DELETE FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/26.html#L62'>_type</a>              62 atom_categories.php 	function getCategory($_type, $_id)
+<a href='../S/26.html#L66'>_type</a>              66 atom_categories.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L68'>_type</a>              68 atom_categories.php 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/26.html#L73'>_type</a>              73 atom_categories.php 	function getCategoryName($_type, $_id)
+<a href='../S/26.html#L77'>_type</a>              77 atom_categories.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L79'>_type</a>              79 atom_categories.php 		$q  = 'SELECT categoryName FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/26.html#L84'>_type</a>              84 atom_categories.php 	function getCategoriesByOwner($_type, $_owner)
+<a href='../S/26.html#L88'>_type</a>              88 atom_categories.php 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+<a href='../S/26.html#L90'>_type</a>              90 atom_categories.php 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND ownerId='.$_owner;
+<a href='../S/26.html#L95'>_type</a>              95 atom_categories.php 	function getCategories($_type, $_owner = false)
+<a href='../S/26.html#L99'>_type</a>              99 atom_categories.php 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+<a href='../S/26.html#L101'>_type</a>             101 atom_categories.php 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' ';
+<a href='../S/26.html#L110'>_type</a>             110 atom_categories.php 	function getGlobalAndUserCategories($_type, $_owner = 0)
+<a href='../S/26.html#L114'>_type</a>             114 atom_categories.php 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+<a href='../S/26.html#L116'>_type</a>             116 atom_categories.php 		switch ($_type)
+<a href='../S/26.html#L125'>_type</a>             125 atom_categories.php 				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session-&gt;id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
+<a href='../S/26.html#L135'>_type</a>             135 atom_categories.php 				$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
+<a href='../S/26.html#L146'>_type</a>             146 atom_categories.php 	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '', $varName = '', $extra = '')
+<a href='../S/26.html#L150'>_type</a>             150 atom_categories.php 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+<a href='../S/26.html#L155'>_type</a>             155 atom_categories.php 		if ($_type == CATEGORY_USERFILE) {
+<a href='../S/26.html#L164'>_type</a>             164 atom_categories.php 		$list = getGlobalAndUserCategories($_type, $_owner);
+<a href='../S/26.html#L168'>_type</a>             168 atom_categories.php 			if ($_type != CATEGORY_CONTACT &amp;&amp; $_type != CATEGORY_USERDATA &amp;&amp; $_type != CATEGORY_NEWS &amp;&amp; $_type != CATEGORY_LANGUAGE &amp;&amp; !$shown_global_cats &amp;&amp; $row['categoryPermissions']==10) {
+<a href='../S/26.html#L172'>_type</a>             172 atom_categories.php 			if ($_type != CATEGORY_CONTACT &amp;&amp; $_type != CATEGORY_USERDATA &amp;&amp; $_type != CATEGORY_NEWS &amp;&amp; $_type != CATEGORY_LANGUAGE &amp;&amp; !$shown_my_cats &amp;&amp; $row['categoryPermissions']!=10) {
+<a href='../S/26.html#L211'>_type</a>             211 atom_categories.php 	function manageCategoriesDialog($_type)
+<a href='../S/26.html#L215'>_type</a>             215 atom_categories.php 		if (!$session-&gt;id) return getCategoriesSelect($_type);
+<a href='../S/26.html#L217'>_type</a>             217 atom_categories.php 		if (($session-&gt;isAdmin || $_type==CATEGORY_USERFILE) &amp;&amp; !empty($_POST['new_file_category']))
+<a href='../S/26.html#L222'>_type</a>             222 atom_categories.php 			$cat_type = $_type;
+<a href='../S/26.html#L231'>_type</a>             231 atom_categories.php 			removeCategory($_type, $_GET['cat_del_id']);
+<a href='../S/26.html#L240'>_type</a>             240 atom_categories.php 			updateCategory($_type, $edit_id, $_POST['cat_name']);
+<a href='../S/26.html#L243'>_type</a>             243 atom_categories.php 			$data = getCategory($_type, $edit_id);
+<a href='../S/26.html#L256'>_type</a>             256 atom_categories.php 		if ($_type == CATEGORY_USERFILE) {
+<a href='../S/26.html#L257'>_type</a>             257 atom_categories.php 			echo 'Existing categories: '.getCategoriesSelect($_type).'&lt;br/&gt;';
+<a href='../S/26.html#L259'>_type</a>             259 atom_categories.php 			echo 'Existing categories: '.getCategoriesSelect($_type, 0, '', 0, URLadd('cat_edit_id')).'&lt;br/&gt;';
+<a href='../S/26.html#L268'>_type</a>             268 atom_categories.php 		if ($_type == CATEGORY_USERFILE) {
+<a href='../S/26.html#L277'>_type</a>             277 atom_categories.php 		} else if ($_type == CATEGORY_BLOG) {
+<a href='../S/26.html#L282'>_type</a>             282 atom_categories.php 		if ($_type != CATEGORY_NEWS &amp;&amp; $_type != CATEGORY_CONTACT &amp;&amp; $session-&gt;isSuperAdmin) {
+<a href='../S/25.html#L20'>_type</a>              20 atom_comments.php 	function addComment($_type, $ownerId, $commentText, $privateComment = false)
+<a href='../S/25.html#L23'>_type</a>              23 atom_comments.php 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
+<a href='../S/25.html#L25'>_type</a>              25 atom_comments.php 		if ($_type != COMMENT_IMAGE &amp;&amp; $_type != COMMENT_PASTEBIN &amp;&amp; !$session-&gt;id) return false;
+<a href='../S/25.html#L32'>_type</a>              32 atom_comments.php 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session-&gt;id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+<a href='../S/25.html#L82'>_type</a>              82 atom_comments.php 	function getCommentsByOwner($_type, $ownerId)
+<a href='../S/25.html#L85'>_type</a>              85 atom_comments.php 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+<a href='../S/25.html#L89'>_type</a>              89 atom_comments.php 		$q .= 'WHERE t1.commentType='.$_type.' AND t1.deletedBy=0 ORDER BY t1.timeCreated DESC';
+<a href='../S/25.html#L94'>_type</a>              94 atom_comments.php 			if ($_type == COMMENT_IMAGE &amp;&amp; $files-&gt;getUploader($row['ownerId']) == $ownerId) {
+<a href='../S/25.html#L130'>_type</a>             130 atom_comments.php 	function showComments($_type, $ownerId, $col_w = 30, $col_h = 6)
+<a href='../S/25.html#L133'>_type</a>             133 atom_comments.php 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w) || !is_numeric($col_h)) return false;
+<a href='../S/25.html#L136'>_type</a>             136 atom_comments.php 			addComment($_type, $ownerId, $_POST['cmt']);
+<a href='../S/25.html#L144'>_type</a>             144 atom_comments.php 		$list = getComments($_type, $ownerId);
+<a href='../S/25.html#L163'>_type</a>             163 atom_comments.php 		if ( ($session-&gt;id &amp;&amp; $_type != COMMENT_MODERATION) ||
+<a href='../S/25.html#L164'>_type</a>             164 atom_comments.php 				($_type == COMMENT_IMAGE || $_type == COMMENT_PASTEBIN)
+<a href='../S/25.html#L179'>_type</a>             179 atom_comments.php 	function showAllComments($_type)
+<a href='../S/25.html#L183'>_type</a>             183 atom_comments.php 		if (!$session-&gt;id || !is_numeric($_type)) return false;
+<a href='../S/25.html#L189'>_type</a>             189 atom_comments.php 		switch ($_type) {
+<a href='../S/25.html#L191'>_type</a>             191 atom_comments.php 				$list = getComments($_type, 0, true);
+<a href='../S/25.html#L195'>_type</a>             195 atom_comments.php 				$list = getCommentsByOwner($_type, $session-&gt;id);
+<a href='../S/8.html#L7'>_type</a>               7 atom_feedback.php 	function saveFeedback($_type, $_text, $_text2 = '', $_subject = 0)
+<a href='../S/8.html#L10'>_type</a>              10 atom_feedback.php 		if (!is_numeric($_type) || !is_numeric($_subject)) return false;
+<a href='../S/8.html#L12'>_type</a>              12 atom_feedback.php 		$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',text="'.$db-&gt;escape($_text).'",text2="'.$db-&gt;escape($_text2).'",userId='.$session-&gt;id.',subjectId='.$_subject.',timeCreated=NOW()';
+<a href='../S/8.html#L16'>_type</a>              16 atom_feedback.php 	function getFeedback($_type = 0, $_sql_limit = '')
+<a href='../S/8.html#L19'>_type</a>              19 atom_feedback.php 		if (!is_numeric($_type)) return false;
+<a href='../S/8.html#L23'>_type</a>              23 atom_feedback.php 		if ($_type) $q .= 'WHERE t1.feedbackType='.$_type;
+<a href='../S/8.html#L27'>_type</a>              27 atom_feedback.php 	function getFeedbackCnt($_type = 0)
+<a href='../S/8.html#L30'>_type</a>              30 atom_feedback.php 		if (!is_numeric($_type)) return false;
+<a href='../S/8.html#L33'>_type</a>              33 atom_feedback.php 		if ($_type) $q .= ' WHERE feedbackType='.$_type;
+<a href='../S/10.html#L52'>_type</a>              52 atom_moderation.php 	function checkStopword($text, $_type)
+<a href='../S/10.html#L56'>_type</a>              56 atom_moderation.php 		if (!is_numeric($_type)) return false;
+<a href='../S/10.html#L79'>_type</a>              79 atom_moderation.php 		$q = 'SELECT wordText,wordMatch FROM tblStopwords WHERE wordType='.$_type;
+<a href='../S/10.html#L204'>_type</a>             204 atom_moderation.php 	function getModerationQueue($_type, $_sql_limit = '')
+<a href='../S/10.html#L207'>_type</a>             207 atom_moderation.php 		if (!is_numeric($_type)) return false;
+<a href='../S/10.html#L212'>_type</a>             212 atom_moderation.php 		if ($_type) $q .= ' AND t1.queueType='.$_type;
+<a href='../S/10.html#L228'>_type</a>             228 atom_moderation.php 	function getModerationQueueCount($_type = 0)
+<a href='../S/10.html#L231'>_type</a>             231 atom_moderation.php 		if (!is_numeric($_type)) return false;
+<a href='../S/10.html#L234'>_type</a>             234 atom_moderation.php 		if ($_type) $q .= ' AND queueType='.$_type;
+<a href='../S/10.html#L251'>_type</a>             251 atom_moderation.php 	function removeFromModerationQueueByType($_type, $itemId)
+<a href='../S/10.html#L254'>_type</a>             254 atom_moderation.php 		if (!is_numeric($_type) || !is_numeric($itemId)) return false;
+<a href='../S/10.html#L256'>_type</a>             256 atom_moderation.php 		$q = 'DELETE FROM tblModeration WHERE  queueType='.$_type.' AND itemId='.$itemId;
+<a href='../S/5.html#L10'>_type</a>              10 atom_polls.php 	function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
+<a href='../S/5.html#L14'>_type</a>              14 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+<a href='../S/5.html#L43'>_type</a>              43 atom_polls.php 				$q = 'SELECT timeEnd FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 ORDER BY timeStart DESC LIMIT 1';
+<a href='../S/5.html#L61'>_type</a>              61 atom_polls.php 		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session-&gt;id.',timeCreated=NOW()'.$timeStart.$timeEnd;
+<a href='../S/5.html#L65'>_type</a>              65 atom_polls.php 	function updatePoll($_type, $_id, $_text)
+<a href='../S/5.html#L68'>_type</a>              68 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L70'>_type</a>              70 atom_polls.php 		$q = 'UPDATE tblPolls SET pollText="'.$db-&gt;escape($_text).'" WHERE pollType='.$_type.' AND pollId='.$_id;
+<a href='../S/5.html#L75'>_type</a>              75 atom_polls.php 	function getPolls($_type, $ownerId = 0)
+<a href='../S/5.html#L78'>_type</a>              78 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+<a href='../S/5.html#L80'>_type</a>              80 atom_polls.php 		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 ORDER BY timeStart ASC,pollText ASC';
+<a href='../S/5.html#L85'>_type</a>              85 atom_polls.php 	function getPoll($_type, $_id)
+<a href='../S/5.html#L88'>_type</a>              88 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L90'>_type</a>              90 atom_polls.php 		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND pollId='.$_id.' AND deletedBy=0';
+<a href='../S/5.html#L95'>_type</a>              95 atom_polls.php 	function getActivePolls($_type, $ownerId = 0)
+<a href='../S/5.html#L98'>_type</a>              98 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+<a href='../S/5.html#L100'>_type</a>             100 atom_polls.php 		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 AND NOW() BETWEEN timeStart AND timeEnd ORDER BY timeStart ASC,pollText ASC';
+<a href='../S/5.html#L105'>_type</a>             105 atom_polls.php 	function poll($_type, $_id)
+<a href='../S/5.html#L109'>_type</a>             109 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L111'>_type</a>             111 atom_polls.php 		$data = getPoll($_type, $_id);
+<a href='../S/5.html#L171'>_type</a>             171 atom_polls.php 	function showPolls($_type)
+<a href='../S/5.html#L174'>_type</a>             174 atom_polls.php 		if (!is_numeric($_type)) return false;
+<a href='../S/5.html#L176'>_type</a>             176 atom_polls.php 		$list = getActivePolls($_type);
+<a href='../S/5.html#L188'>_type</a>             188 atom_polls.php 	function managePolls($_type, $_owner = 0)
+<a href='../S/5.html#L196'>_type</a>             196 atom_polls.php 				updatePoll($_type, $pollId, $_POST['poll_q']);
+<a href='../S/5.html#L207'>_type</a>             207 atom_polls.php 				removePoll($_type, $pollId);
+<a href='../S/5.html#L211'>_type</a>             211 atom_polls.php 			$poll = getPoll($_type, $pollId);
+<a href='../S/5.html#L255'>_type</a>             255 atom_polls.php 			if ($_type == POLL_NEWS) {
+<a href='../S/5.html#L256'>_type</a>             256 atom_polls.php 				$pollId = addPoll($_type, $_owner, $_POST['poll_q']);
+<a href='../S/5.html#L258'>_type</a>             258 atom_polls.php 				$pollId = addPoll($_type, $_owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
+<a href='../S/5.html#L268'>_type</a>             268 atom_polls.php 		switch ($_type) {
+<a href='../S/5.html#L280'>_type</a>             280 atom_polls.php 		$list = getPolls($_type, $_owner);
+<a href='../S/5.html#L285'>_type</a>             285 atom_polls.php 			if ($_type == POLL_SITE) {
+<a href='../S/5.html#L293'>_type</a>             293 atom_polls.php 			if ($_type == POLL_SITE) {
+<a href='../S/5.html#L311'>_type</a>             311 atom_polls.php 			if ($_type == POLL_SITE) {
+<a href='../S/5.html#L324'>_type</a>             324 atom_polls.php 		if ($_type == POLL_SITE) {
+<a href='../S/5.html#L382'>_type</a>             382 atom_polls.php 	function removePoll($_type, $_id)
+<a href='../S/5.html#L385'>_type</a>             385 atom_polls.php 		if (!$session-&gt;isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L387'>_type</a>             387 atom_polls.php 		$db-&gt;update('UPDATE tblPolls SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id);
+<a href='../S/5.html#L391'>_type</a>             391 atom_polls.php 	function showAttachedPolls($_type, $_owner)
+<a href='../S/5.html#L394'>_type</a>             394 atom_polls.php 		if (!$session-&gt;isAdmin || !is_numeric($_type) || !is_numeric($_owner)) return false;
+<a href='../S/5.html#L396'>_type</a>             396 atom_polls.php 		$list = getPolls($_type, $_owner);
+<a href='../S/1.html#L16'>_type</a>              16 atom_rating.php 	function rateItem($_type, $_id, $_rating)	//todo: rename to rateObject()
+<a href='../S/1.html#L20'>_type</a>              20 atom_rating.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id) || !is_numeric($_rating)) return false;
+<a href='../S/1.html#L23'>_type</a>              23 atom_rating.php 		$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session-&gt;id;
+<a href='../S/1.html#L27'>_type</a>              27 atom_rating.php 		$q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$session-&gt;id.',timeRated=NOW()';
+<a href='../S/1.html#L31'>_type</a>              31 atom_rating.php 		$q = 'SELECT AVG(rating) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
+<a href='../S/1.html#L34'>_type</a>              34 atom_rating.php 		$q = 'SELECT COUNT(rateId) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
+<a href='../S/1.html#L37'>_type</a>              37 atom_rating.php 		switch ($_type) {
+<a href='../S/1.html#L55'>_type</a>              55 atom_rating.php 	function isRated($_type, $_id)
+<a href='../S/1.html#L59'>_type</a>              59 atom_rating.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/1.html#L61'>_type</a>              61 atom_rating.php 		$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session-&gt;id;
+<a href='../S/1.html#L68'>_type</a>              68 atom_rating.php 	function getRating($_type, $_id)
+<a href='../S/1.html#L72'>_type</a>              72 atom_rating.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/1.html#L74'>_type</a>              74 atom_rating.php 		switch ($_type) {
+<a href='../S/1.html#L91'>_type</a>              91 atom_rating.php 	function ratingGadget($_type, $_id)
+<a href='../S/1.html#L95'>_type</a>              95 atom_rating.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/1.html#L97'>_type</a>              97 atom_rating.php 		if (!$session-&gt;id || isRated($_type, $_id)) return showRating($_type, $_id);
+<a href='../S/1.html#L100'>_type</a>             100 atom_rating.php 			rateItem($_type, $_id, $_POST['rate_gadget']);
+<a href='../S/1.html#L101'>_type</a>             101 atom_rating.php 			return showRating($_type, $_id);
+<a href='../S/1.html#L118'>_type</a>             118 atom_rating.php 	function showRating($_type, $_id)
+<a href='../S/1.html#L124'>_type</a>             124 atom_rating.php 		$row = getRating($_type, $_id);
+<a href='../S/33.html#L15'>_type</a>              15 atom_settings.php 	function saveSetting($_type, $ownerId, $settingName, $settingValue)
+<a href='../S/33.html#L17'>_type</a>              17 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+<a href='../S/33.html#L24'>_type</a>              24 atom_settings.php 		$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L26'>_type</a>              26 atom_settings.php 			$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L29'>_type</a>              29 atom_settings.php 			$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$_type.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
+<a href='../S/33.html#L36'>_type</a>              36 atom_settings.php 	function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
+<a href='../S/33.html#L38'>_type</a>              38 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+<a href='../S/33.html#L45'>_type</a>              45 atom_settings.php 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L69'>_type</a>              69 atom_settings.php 	function readAllSettings($_type, $ownerId)
+<a href='../S/33.html#L71'>_type</a>              71 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type)) return false;
+<a href='../S/33.html#L75'>_type</a>              75 atom_settings.php 		$q = 'SELECT settingName,settingId,settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' ORDER BY settingName ASC';
+<a href='../S/4.html#L393'>_type</a>             393 class.Files.php 	function showAttachments($_type, $_owner)
+<a href='../S/4.html#L397'>_type</a>             397 class.Files.php 		$list = $this-&gt;getFiles($_type,  $_owner);
+<a href='../S/30.html#L9'>_type</a>               9 functions_contacts.php 	function haveContact($_type, $userId, $otherId)
+<a href='../S/30.html#L12'>_type</a>              12 functions_contacts.php 		if (!is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L14'>_type</a>              14 functions_contacts.php 		$q = 'SELECT contactId FROM tblContacts WHERE userId='.$userId.' AND otherUserId='.$otherId.' AND contactType='.$_type;
+<a href='../S/30.html#L29'>_type</a>              29 functions_contacts.php 	function removeContact($_type, $otherId)
+<a href='../S/30.html#L32'>_type</a>              32 functions_contacts.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($otherId)) return false;
+<a href='../S/30.html#L34'>_type</a>              34 functions_contacts.php 		$q = 'DELETE FROM tblContacts WHERE userId='.$session-&gt;id.' AND otherUserId='.$otherId.' AND contactType='.$_type;
+<a href='../S/30.html#L39'>_type</a>              39 functions_contacts.php 	function setContact($_type, $userId, $otherId, $groupId = 0)
+<a href='../S/30.html#L42'>_type</a>              42 functions_contacts.php 		if ($userId == $otherId || !is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId) || !is_numeric($groupId)) return false;
+<a href='../S/30.html#L44'>_type</a>              44 functions_contacts.php 		if (!haveContact($_type, $userId, $otherId)) {
+<a href='../S/30.html#L46'>_type</a>              46 functions_contacts.php 			$q = 'INSERT INTO tblContacts SET userId='.$userId.',contactType='.$_type.',otherUserId='.$otherId.',groupId='.$groupId.',timeCreated=NOW()';
+<a href='../S/30.html#L50'>_type</a>              50 functions_contacts.php 			$q = 'UPDATE tblContacts SET groupId='.$groupId.' WHERE userId='.$userId.' AND contactType='.$_type.' AND otherUserId='.$otherId;
+<a href='../S/30.html#L57'>_type</a>              57 functions_contacts.php 	function getContacts($_type, $userId, $groupId = '')
+<a href='../S/30.html#L61'>_type</a>              61 functions_contacts.php 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
+<a href='../S/30.html#L67'>_type</a>              67 functions_contacts.php 		$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
+<a href='../S/30.html#L74'>_type</a>              74 functions_contacts.php 	function getContactsFlat($_type, $userId)
+<a href='../S/30.html#L77'>_type</a>              77 functions_contacts.php 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
+<a href='../S/30.html#L83'>_type</a>              83 functions_contacts.php 		$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
+</pre>
+</body>
+</html>

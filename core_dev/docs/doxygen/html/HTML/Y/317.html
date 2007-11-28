@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>ip</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/4.html#L491'>ip</a>                491 class.Files.php 	  	$q = 'INSERT INTO tblFiles SET fileName="'.$db-&gt;escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session-&gt;id.',uploaderIP='.$session-&gt;ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+<a href='../S/2.html#L46'>ip</a>                 46 class.Session.php 	public $ip;
+<a href='../S/2.html#L90'>ip</a>                 90 class.Session.php 		if (!isset($_SESSION['ip'])) $_SESSION['ip'] = 0;
+<a href='../S/2.html#L102'>ip</a>                102 class.Session.php 		$this-&gt;ip = &amp;$_SESSION['ip'];
+<a href='../S/2.html#L112'>ip</a>                112 class.Session.php 		if (!$this-&gt;ip) $this-&gt;ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+<a href='../S/2.html#L161'>ip</a>                161 class.Session.php 		if ($this-&gt;check_ip &amp;&amp; $this-&gt;ip &amp;&amp; ($this-&gt;ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+<a href='../S/2.html#L163'>ip</a>                163 class.Session.php 			$this-&gt;log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this-&gt;ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
+<a href='../S/2.html#L195'>ip</a>                195 class.Session.php 		$q = 'INSERT INTO tblLogs SET entryText="'.$db-&gt;escape($str).'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$this-&gt;id.',userIP='.$this-&gt;ip;
+<a href='../S/2.html#L274'>ip</a>                274 class.Session.php 		$db-&gt;insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this-&gt;id.', IP='.$this-&gt;ip.', userAgent="'.$db-&gt;escape($_SERVER['HTTP_USER_AGENT']).'"');
+<a href='../S/2.html#L295'>ip</a>                295 class.Session.php 		$this-&gt;ip = 0;
+<a href='../S/2.html#L399'>ip</a>                399 class.Session.php 		echo 'Current IP: '.GeoIP_to_IPv4($this-&gt;ip).'&lt;br/&gt;';
+<a href='../S/2.html#L446'>ip</a>                446 class.Session.php 		if (GeoIP_to_IPv4($this-&gt;ip) == '127.0.0.1') return;
+<a href='../S/20.html#L3'>ip</a>                  3 functions_ip.php 	function IPv4_to_GeoIP($ip)
+<a href='../S/20.html#L5'>ip</a>                  5 functions_ip.php 		if (is_numeric($ip)) return $ip;
+<a href='../S/20.html#L7'>ip</a>                  7 functions_ip.php 		$iparr = explode('.', trim($ip));
+<a href='../S/20.html#L15'>ip</a>                 15 functions_ip.php 	function GeoIP_to_IPv4($ip)
+<a href='../S/20.html#L17'>ip</a>                 17 functions_ip.php 		if (!is_numeric($ip)) return 0;
+<a href='../S/20.html#L18'>ip</a>                 18 functions_ip.php 		settype($ip, 'float');
+<a href='../S/20.html#L20'>ip</a>                 20 functions_ip.php 		$w = ($ip / 16777216) % 256;
+<a href='../S/20.html#L21'>ip</a>                 21 functions_ip.php 		$x = ($ip / 65536   ) % 256;
+<a href='../S/20.html#L22'>ip</a>                 22 functions_ip.php 		$y = ($ip / 256     ) % 256;
+<a href='../S/20.html#L23'>ip</a>                 23 functions_ip.php 		$z = ($ip           ) % 256;
+</pre>
+</body>
+</html>

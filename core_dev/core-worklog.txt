@@ -1,3 +1,13 @@
+--- core_dev todo ---
+db-layer:
+	* sqlite driver
+	* MS-SQL driver
+	* verify that pgsql driver is working correctly
+	* method to call stored procedures
+
+
+
+------
 att göra-hi prio:
 	3) sätt upp lyrics på startwars.org
 	5) synka adblockrules.org med vad som finns i svn + core_dev
@@ -45,8 +55,6 @@ att göra-hi prio:
 				all ok!
 
 
-
-
 		- ev. använd mencoder för audio med (den kan läsa massa audio men bara skriva till mp3 ?)
 		- video kommandon för konvertering till .3gp
 		- känn av video upplösning, codec & audio info. visa i $files->showFileInfo
@@ -54,6 +62,7 @@ att göra-hi prio:
 		- ev. använd php_fileinfo ext för file magic istället för "file" kommando, http://se.php.net/fileinfo, http://pecl4win.php.net/ext.php/
 		- anropa extern "torrent download" service som kör ett script för att hantera filer & uppdatera status när den e klar
 		- scanna filer med ClamAV
+
 
 	core/gör snart:
 		* fixa till admin todo lists. gör generell todo list? porta från cms...
@@ -63,7 +72,6 @@ att göra-hi prio:
 		* aktivera för wiki editor (done) & blog editor & news editor
 		* fixme: "text-decoration: underline", "text-decoration: line-through" har ingen effekt på <input type="button">, hur fixa? det funkar i IE6 men ej i firefox
 		* fixme: insert tag [hr] funkar ej med insertTags() javascript-funktionen
-
 
 	forum:
 		- för uppstädning behövs då ett script som emellanåt (över 6 månader gamla?)
@@ -253,6 +261,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.11.28:
+	- class.DB_Base.php: moved d() to functions_general.php
+	- docs/Doxyfile: initial doxygen file for core_dev
+	- class.DB_Base.php: doxygenized
+
+
 2007.11.27:
 	- class.Session.php: added $session->reserved_usercheck bool to define wether new user registrations should be checked against "reserved usernames" list
 

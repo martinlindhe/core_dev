@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>param_pos1</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/29.html#L63'>param_pos1</a>         63 functions_spider.php 			$param_pos1 = strpos($str, '=');
+<a href='../S/29.html#L64'>param_pos1</a>         64 functions_spider.php 			$param_name = substr($str, 0, $param_pos1);
+<a href='../S/29.html#L66'>param_pos1</a>         66 functions_spider.php 			if (substr($str, $param_pos1+1, 1) == '"') {
+<a href='../S/29.html#L68'>param_pos1</a>         68 functions_spider.php 				$param_pos2 = strpos($str, '"', $param_pos1+2); //hitta nästföljande ", EFTER det öppnande "
+<a href='../S/29.html#L69'>param_pos1</a>         69 functions_spider.php 				$param_value = substr($str, $param_pos1+2, $param_pos2-$param_pos1-2);
+<a href='../S/29.html#L81'>param_pos1</a>         81 functions_spider.php 					$param_value = substr($str, $param_pos1+1, $param_pos2-$param_pos1-1);
+<a href='../S/29.html#L87'>param_pos1</a>         87 functions_spider.php 					$param_value = substr($str, $param_pos1+1);
+</pre>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<html>
+<head>
+<title>functions_wiki.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/functions_wiki.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L26'>[^]</a><a href='#L87'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L26' title='Defined at 26.'>wikiUpdate</a>
+<li><a href='#L57' title='Defined at 57.'>wikiFormat</a>
+<li><a href='#L87' title='Defined at 87.'>wiki</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2         <i><font color='green'>/* functions_wiki.php</font></i>
+<a name='L3'>   3 <i><font color='green'>                ------------------------------------------------------------</font></i>
+<a name='L4'>   4 <i><font color='green'>                Written by Martin Lindhe, 2007 &lt;martin@startwars.org&gt;</font></i>
+<a name='L5'>   5 <i><font color='green'></font></i>
+<a name='L6'>   6 <i><font color='green'>                core                                                                                    tblWiki</font></i>
+<a name='L7'>   7 <i><font color='green'>                for history-support: atom_revisions.php                 tblRevisions</font></i>
+<a name='L8'>   8 <i><font color='green'>                for files-support: $files objekt                                tblFiles</font></i>
+<a name='L9'>   9 <i><font color='green'>        */</font></i>
+<a name='L10'>  10 
+<a name='L11'>  11         <b>require_once</b>('atom_revisions.php');
+<a name='L12'>  12 
+<a name='L13'>  13         <i><font color='green'>//wiki module default settings:</font></i>
+<a name='L14'>  14         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['log_history'] = <b>true</b>;
+<a name='L15'>  15         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allow_html'] = <b>false</b>;
+<a name='L16'>  16         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['explain_words'] = <b>false</b>;
+<a name='L17'>  17 
+<a name='L18'>  18         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allow_edit'] = <b>false</b>;  <i><font color='green'>//false = only allow admins to edit the wiki articles. true = allow all, even anonymous</font></i>
+<a name='L19'>  19 
+<a name='L20'>  20         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allow_files'] = <b>false</b>;         <i><font color='green'>//only accept the tabs specified in allowed_tabs</font></i>
+<a name='L21'>  21 
+<a name='L22'>  22         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allowed_tabs'] =       <b>array</b>('Wiki', 'WikiEdit', 'WikiHistory', 'WikiFiles');
+<a name='L23'>  23         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['first_tab'] = 'Wiki';
+<a name='L24'>  24 
+<a name='L25'>  25         <i><font color='green'>/* Optimization: Doesn't store identical entries if you hit Save button multiple times */</font></i>
+<a name='L26'>  26         <b>function</b> <a href='../S/9.html#L148' title='Refered from 148 in functions_wiki.php.'>wikiUpdate</a>($<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>, $<a href='../Y/129.html' title='Multiple used in 9 places.'>_text</a>)
+<a name='L27'>  27         <font color='blue'>{</font>
+<a name='L28'>  28                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L29'>  29 
+<a name='L30'>  30                 $<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>($<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>));
+<a name='L31'>  31                 <b>if</b> (!$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>) <b>return</b> <b>false</b>;
+<a name='L32'>  32 
+<a name='L33'>  33                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblWiki WHERE wikiName="'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>.'"';
+<a name='L34'>  34                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L35'>  35 
+<a name='L36'>  36                 <i><font color='green'>/* Aborts if we are trying to save a exact copy as the last one */</font></i>
+<a name='L37'>  37                 <b>if</b> (!<b>empty</b>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>) &amp;&amp; $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['msg'] == $<a href='../Y/129.html' title='Multiple used in 9 places.'>_text</a>) <b>return</b> <b>false</b>;
+<a name='L38'>  38 
+<a name='L39'>  39                 $<a href='../Y/129.html' title='Multiple used in 9 places.'>_text</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>(<a href='../Y/650.html' title='Multiple used in 20 places.'>trim</a>($<a href='../Y/129.html' title='Multiple used in 9 places.'>_text</a>));
+<a name='L40'>  40 
+<a name='L41'>  41                 <b>if</b> (!<b>empty</b>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>) &amp;&amp; $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'])
+<a name='L42'>  42                 <font color='blue'>{</font>
+<a name='L43'>  43                         <b>if</b> ($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['log_history'])
+<a name='L44'>  44                         <font color='blue'>{</font>
+<a name='L45'>  45                                 <a href='../S/12.html#L19' title='Defined at 19 in atom_revisions.php.'>addRevision</a>(<a href='../S/12.html#L9' title='Defined at 9 in atom_revisions.php.'>REVISIONS_WIKI</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'], $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['msg'], $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['timeCreated'], $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['createdBy'], <a href='../S/12.html#L12' title='Defined at 12 in atom_revisions.php.'>REV_CAT_TEXT_CHANGED</a>);
+<a name='L46'>  46                         <font color='blue'>}</font>
+<a name='L47'>  47                         $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>('UPDATE tblWiki SET msg="'.$<a href='../Y/129.html' title='Multiple used in 9 places.'>_text</a>.'",timeCreated=NOW(),createdBy='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.' WHERE wikiName="'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>.'"');
+<a name='L48'>  48                 <font color='blue'>}</font>
+<a name='L49'>  49                 <b>else</b>
+<a name='L50'>  50                 <font color='blue'>{</font>
+<a name='L51'>  51                         $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblWiki SET wikiName="'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>.'",msg="'.$<a href='../Y/129.html' title='Multiple used in 9 places.'>_text</a>.'",createdBy='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',timeCreated=NOW()';
+<a name='L52'>  52                         $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L53'>  53                 <font color='blue'>}</font>
+<a name='L54'>  54         <font color='blue'>}</font>
+<a name='L55'>  55 
+<a name='L56'>  56         <i><font color='green'>/* formats text for wiki output */</font></i>
+<a name='L57'>  57         <b>function</b> <a href='../R/262.html' title='Multiple refered from 2 places.'>wikiFormat</a>($<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>)
+<a name='L58'>  58         <font color='blue'>{</font>
+<a name='L59'>  59                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/245.html' title='Multiple used in 21 places.'>files</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L60'>  60 
+<a name='L61'>  61                 <b>if</b> (<b>empty</b>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['msg'])) <font color='blue'>{</font>
+<a name='L62'>  62                         <b>echo</b> '&lt;div class="wiki"&gt;';
+<a name='L63'>  63                         <b>echo</b> '&lt;div class="wiki_body"&gt;';
+<a name='L64'>  64                         <b>echo</b> 'The wiki "'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>.'" does not yet exist!&lt;br/&gt;';
+<a name='L65'>  65                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>) <font color='blue'>{</font>
+<a name='L66'>  66                                 <b>echo</b> '&lt;a href="'.$<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?WikiEdit:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>.'"&gt;Create it&lt;/a&gt;';
+<a name='L67'>  67                         <font color='blue'>}</font>
+<a name='L68'>  68                         <b>echo</b> '&lt;/div&gt;';
+<a name='L69'>  69                         <b>echo</b> '&lt;/div&gt;';
+<a name='L70'>  70                 <font color='blue'>}</font>
+<a name='L71'>  71 
+<a name='L72'>  72                 $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a> = <a href='../Y/593.html' title='Multiple used in 12 places.'>stripslashes</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['msg']);
+<a name='L73'>  73 
+<a name='L74'>  74                 $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a> = <a href='../S/6.html#L52' title='Defined at 52 in functions_textformat.php.'>formatUserInputText</a>($<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>, !$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allow_html']);
+<a name='L75'>  75 
+<a name='L76'>  76                 <b>if</b> ($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['explain_words']) <font color='blue'>{</font>
+<a name='L77'>  77                         $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a> = <a href='../S/9.html#L77' title='Used at 77 in functions_wiki.php.'>dictExplainWords</a>($<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>);
+<a name='L78'>  78                 <font color='blue'>}</font>
+<a name='L79'>  79 
+<a name='L80'>  80                 <b>return</b> $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>;
+<a name='L81'>  81         <font color='blue'>}</font>
+<a name='L82'>  82 
+<a name='L83'>  83         <i><font color='green'>/*</font></i>
+<a name='L84'>  84 <i><font color='green'>                Visar en wiki för användaren. Normalt kan vem som helst redigera den samt ladda upp filer till den,</font></i>
+<a name='L85'>  85 <i><font color='green'>                men en admin kan låsa wikin från att bli redigerad av vanliga användare</font></i>
+<a name='L86'>  86 <i><font color='green'>        */</font></i>
+<a name='L87'>  87         <b>function</b> wiki($<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> = '')
+<a name='L88'>  88         <font color='blue'>{</font>
+<a name='L89'>  89                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/245.html' title='Multiple used in 21 places.'>files</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>, $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>;
+<a name='L90'>  90 
+<a name='L91'>  91                 $<a href='../Y/160.html' title='Multiple used in 19 places.'>current_tab</a> = $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['first_tab'];
+<a name='L92'>  92 
+<a name='L93'>  93                 <i><font color='green'>//Looks for formatted wiki section commands, like: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page</font></i>
+<a name='L94'>  94                 $<a href='../Y/79.html' title='Multiple used in 6 places.'>cmd</a> = <a href='../S/17.html#L204' title='Defined at 204 in functions_general.php.'>fetchSpecialParams</a>($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allowed_tabs']);
+<a name='L95'>  95                 <b>if</b> ($<a href='../Y/79.html' title='Multiple used in 6 places.'>cmd</a>) <b>list</b>($<a href='../Y/160.html' title='Multiple used in 19 places.'>current_tab</a>, $<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>) = $<a href='../Y/79.html' title='Multiple used in 6 places.'>cmd</a>;
+<a name='L96'>  96                 <b>if</b> (!$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>) <b>return</b> <b>false</b>;
+<a name='L97'>  97 
+<a name='L98'>  98                 $<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> = <a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>(' ', '_', $<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>);
+<a name='L99'>  99 
+<a name='L100'> 100                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> ='SELECT t1.*,t2.userName AS creatorName, t3.userName AS lockerName '.
+<a name='L101'> 101                                 'FROM tblWiki AS t1 '.
+<a name='L102'> 102                                 'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) '.
+<a name='L103'> 103                                 'LEFT JOIN tblUsers AS t3 ON (t1.lockedBy=t3.userId) '.
+<a name='L104'> 104                                 'WHERE t1.wikiName="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>).'"';
+<a name='L105'> 105 
+<a name='L106'> 106                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a> = $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/205.html' title='Multiple defined in 4 places.'>getOneRow</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L107'> 107 
+<a name='L108'> 108                 <b>if</b> (!<b>empty</b>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['msg'])) <font color='blue'>{</font>
+<a name='L109'> 109                         $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a> = <a href='../Y/593.html' title='Multiple used in 12 places.'>stripslashes</a>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['msg']);
+<a name='L110'> 110                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L111'> 111                         <i><font color='green'>//This wiki doesnt yet exist</font></i>
+<a name='L112'> 112                         $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a> = '';
+<a name='L113'> 113                 <font color='blue'>}</font>
+<a name='L114'> 114 
+<a name='L115'> 115                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> &amp;&amp; !$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allow_edit']) <font color='blue'>{</font>
+<a name='L116'> 116                         <i><font color='green'>/* Only display the text for normal visitors */</font></i>
+<a name='L117'> 117                         <b>echo</b> '&lt;div class="wiki"&gt;';
+<a name='L118'> 118                         <b>echo</b> '&lt;div class="wiki_body"&gt;';
+<a name='L119'> 119                         <b>echo</b> <a href='../S/9.html#L57' title='Defined at 57 in functions_wiki.php.'>wikiFormat</a>($<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>);
+<a name='L120'> 120                         <b>echo</b> '&lt;/div&gt;';
+<a name='L121'> 121                         <b>echo</b> '&lt;/div&gt;';
+<a name='L122'> 122                         <b>return</b> <b>true</b>;
+<a name='L123'> 123                 <font color='blue'>}</font>
+<a name='L124'> 124 
+<a name='L125'> 125                 <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>('WikiFiles', $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allowed_tabs'])) <font color='blue'>{</font>   <i><font color='green'>//Show files tab?</font></i>
+<a name='L126'> 126                         $<a href='../Y/689.html' title='Multiple used in 3 places.'>wiki_menu</a> = <b>array</b>(
+<a name='L127'> 127                         $<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?Wiki:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> =&gt; 'Wiki:'.<a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>('_', ' ', $<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>),
+<a name='L128'> 128                         $<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?WikiEdit:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> =&gt; 'Edit',
+<a name='L129'> 129                         $<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?WikiHistory:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> =&gt; 'History',
+<a name='L130'> 130                         $<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?WikiFiles:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> =&gt; 'Files ('.$<a href='../Y/245.html' title='Multiple used in 21 places.'>files</a>-&gt;<a href='../S/4.html#L970' title='Defined at 970 in class.Files.php.'>getFileCount</a>(<a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId']).')');
+<a name='L131'> 131                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L132'> 132                         $<a href='../Y/689.html' title='Multiple used in 3 places.'>wiki_menu</a> = <b>array</b>(
+<a name='L133'> 133                         $<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?Wiki:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> =&gt; 'Wiki:'.<a href='../Y/599.html' title='Multiple used in 38 places.'>str_replace</a>('_', ' ', $<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>),
+<a name='L134'> 134                         $<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?WikiEdit:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> =&gt; 'Edit',
+<a name='L135'> 135                         $<a href='../Y/122.html' title='Multiple used in 49 places.'>_SERVER</a>['PHP_SELF'].'?WikiHistory:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a> =&gt; 'History');
+<a name='L136'> 136                 <font color='blue'>}</font>
+<a name='L137'> 137 
+<a name='L138'> 138                 <b>echo</b> '&lt;div class="wiki"&gt;';
+<a name='L139'> 139                 <a href='../S/17.html#L182' title='Defined at 182 in functions_general.php.'>createMenu</a>($<a href='../Y/689.html' title='Multiple used in 3 places.'>wiki_menu</a>, 'wiki_menu');
+<a name='L140'> 140                 <b>echo</b> '&lt;div class="wiki_body"&gt;';
+<a name='L141'> 141 
+<a name='L142'> 142                 <i><font color='green'>/* Display the wiki toolbar for super admins */</font></i>
+<a name='L143'> 143                 <b>if</b> ($<a href='../Y/160.html' title='Multiple used in 19 places.'>current_tab</a> == 'WikiEdit' &amp;&amp; ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> || !$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['lockedBy']))
+<a name='L144'> 144                 <font color='blue'>{</font>
+<a name='L145'> 145                         <b>if</b> (<a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['wiki_'.$data['wikiId']]))
+<a name='L146'> 146                         <font color='blue'>{</font>
+<a name='L147'> 147                                 <i><font color='green'>//save changes to database</font></i>
+<a name='L148'> 148                                 <a href='../S/9.html#L26' title='Defined at 26 in functions_wiki.php.'>wikiUpdate</a>($<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>, $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['wiki_'.$data['wikiId']]);
+<a name='L149'> 149                                 $<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a> = $<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['wiki_'.$data['wikiId']];
+<a name='L150'> 150                                 <b>unset</b>($<a href='../Y/114.html' title='Multiple used in 49 places.'>_POST</a>['wiki_'.$data['wikiId']]);
+<a name='L151'> 151                                 <i><font color='green'>//JS_Alert('Changes saved!');</font></i>
+<a name='L152'> 152                         <font color='blue'>}</font>
+<a name='L153'> 153 
+<a name='L154'> 154                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> &amp;&amp; <a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['wiki_lock'])) <font color='blue'>{</font>
+<a name='L155'> 155                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblWiki SET lockedBy='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',timeLocked=NOW() WHERE wikiId='.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'];
+<a name='L156'> 156                                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L157'> 157                                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['lockedBy'] = $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>;
+<a name='L158'> 158                                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['lockerName'] = $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/674.html' title='Multiple used in 33 places.'>username</a>;
+<a name='L159'> 159                                 <a href='../S/12.html#L19' title='Defined at 19 in atom_revisions.php.'>addRevision</a>(<a href='../S/12.html#L9' title='Defined at 9 in atom_revisions.php.'>REVISIONS_WIKI</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'], 'The wiki has been locked', <a href='../S/19.html#L393' title='Defined at 393 in class.DB_Base.php.'>now</a>(), $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>, <a href='../S/12.html#L15' title='Defined at 15 in atom_revisions.php.'>REV_CAT_LOCKED</a>);
+<a name='L160'> 160                         <font color='blue'>}</font>
+<a name='L161'> 161 
+<a name='L162'> 162                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a> &amp;&amp; <a href='../Y/328.html' title='Multiple used in 62 places.'>isset</a>($<a href='../Y/92.html' title='Multiple used in 54 places.'>_GET</a>['wiki_unlock'])) <font color='blue'>{</font>
+<a name='L163'> 163                                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'];
+<a name='L164'> 164                                 $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/305.html' title='Multiple defined in 4 places.'>query</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L165'> 165                                 $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['lockedBy'] = 0;
+<a name='L166'> 166                                 <a href='../S/12.html#L19' title='Defined at 19 in atom_revisions.php.'>addRevision</a>(<a href='../S/12.html#L9' title='Defined at 9 in atom_revisions.php.'>REVISIONS_WIKI</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'], 'The wiki has been unlocked', <a href='../S/19.html#L393' title='Defined at 393 in class.DB_Base.php.'>now</a>(), $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>, <a href='../S/12.html#L16' title='Defined at 16 in atom_revisions.php.'>REV_CAT_UNLOCKED</a>);
+<a name='L167'> 167                         <font color='blue'>}</font>
+<a name='L168'> 168 
+<a name='L169'> 169                         $<a href='../Y/548.html' title='Multiple used in 3 places.'>rows</a> = 6+<a href='../S/9.html#L169' title='Used at 169 in functions_wiki.php.'>substr_count</a>($<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>, "\n");
+<a name='L170'> 170                         <b>if</b> ($<a href='../Y/548.html' title='Multiple used in 3 places.'>rows</a> &gt; 36) $<a href='../Y/548.html' title='Multiple used in 3 places.'>rows</a> = 36;
+<a name='L171'> 171 
+<a name='L172'> 172                         $<a href='../Y/342.html' title='Multiple used in 3 places.'>last_edited</a> = 'never';
+<a name='L173'> 173                         <b>if</b> (!<b>empty</b>($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['timeCreated'])) $<a href='../Y/342.html' title='Multiple used in 3 places.'>last_edited</a> = $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['timeCreated'].' by '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['creatorName'];
+<a name='L174'> 174 
+<a name='L175'> 175                         <b>echo</b>
+<a name='L176'> 176                                         '&lt;form method="post" name="wiki_edit" action="'.<a href='../S/17.html#L89' title='Defined at 89 in functions_general.php.'>URLadd</a>('WikiEdit:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>).'"&gt;'.
+<a name='L177'> 177                                         '&lt;input type="button" class="button" value="[h1]" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[h1]\',\'[/h1]\',\'headline level 1\')"/&gt;'.
+<a name='L178'> 178                                         '&lt;input type="button" class="button" value="[h2]" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[h2]\',\'[/h2]\',\'headline level 2\')"/&gt;'.
+<a name='L179'> 179                                         '&lt;input type="button" class="button" value="[h3]" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[h3]\',\'[/h3]\',\'headline level 3\')"/&gt;'.
+<a name='L180'> 180                                         '&lt;input type="button" class="button" value="B" style="font-weight: bold" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[b]\',\'[/b]\',\'bold text\')"/&gt;'.
+<a name='L181'> 181                                         '&lt;input type="button" class="button" value="I" style="font-style: italic" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[i]\',\'[/i]\',\'italic text\')"/&gt;'.
+<a name='L182'> 182                                         '&lt;input type="button" class="button" value="U" style="text-decoration: underline" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[u]\',\'[/u]\',\'underlined text\')"/&gt;'.
+<a name='L183'> 183                                         '&lt;input type="button" class="button" value="S" style="text-decoration: line-through" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[s]\',\'[/s]\',\'strikethru text\')"/&gt;'.
+<a name='L184'> 184                                         '&lt;input type="button" class="button" value="[hr] (broken)" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[hr]\')"/&gt;'.
+<a name='L185'> 185                                         '&lt;input type="button" class="button" value="[code]" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[code]\',\'[/code]\',\'code block\')"/&gt;'.
+<a name='L186'> 186                                         '&lt;input type="button" class="button" value="[quote]" onclick="insertTags(\'wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'\',\'[quote name=]\',\'[/quote]\',\'quote\')"/&gt;'.
+<a name='L187'> 187                                         '&lt;br/&gt;'.
+<a name='L188'> 188                                         '&lt;textarea name="wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'" id="wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'" cols="70%" rows="'.$<a href='../Y/548.html' title='Multiple used in 3 places.'>rows</a>.'"&gt;'.$<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>.'&lt;/textarea&gt;&lt;br/&gt;'.
+<a name='L189'> 189                                         'Last edited '.$<a href='../Y/342.html' title='Multiple used in 3 places.'>last_edited</a>.'&lt;br/&gt;'.
+<a name='L190'> 190                                         '&lt;input type="submit" class="button" value="Save"/&gt;';
+<a name='L191'> 191 
+<a name='L192'> 192                         <b>if</b> ($<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <font color='blue'>{</font>
+<a name='L193'> 193                                 <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['lockedBy']) <font color='blue'>{</font>
+<a name='L194'> 194                                         <b>echo</b> '&lt;input type="button" class="button" value="Unlock" onclick="location.href=\''.<a href='../S/17.html#L89' title='Defined at 89 in functions_general.php.'>URLadd</a>('WikiEdit:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>, '&amp;amp;wiki_unlock').'\'"/&gt;';
+<a name='L195'> 195                                         <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/&gt;';
+<a name='L196'> 196                                         <b>echo</b> '&lt;b&gt;Locked by '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['lockerName'].' at '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['timeLocked'].'&lt;/b&gt;&lt;br/&gt;';
+<a name='L197'> 197                                 <font color='blue'>}</font> <b>else</b> <font color='blue'>{</font>
+<a name='L198'> 198                                         <b>echo</b> '&lt;input type="button" class="button" value="Lock" onclick="location.href=\''.<a href='../S/17.html#L89' title='Defined at 89 in functions_general.php.'>URLadd</a>('WikiEdit:'.$<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>, '&amp;amp;wiki_lock').'\'"/&gt;';
+<a name='L199'> 199                                         <b>echo</b> '&lt;img src="'.$<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['core_web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/&gt;';
+<a name='L200'> 200                                 <font color='blue'>}</font>
+<a name='L201'> 201                         <font color='blue'>}</font>
+<a name='L202'> 202 
+<a name='L203'> 203                         <i><font color='green'>//List "unused files" for this Wiki when in edit mode</font></i>
+<a name='L204'> 204                         <b>if</b> ($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['allow_files']) <font color='blue'>{</font>
+<a name='L205'> 205                                 $<a href='../Y/239.html' title='Multiple used in 2 places.'>filelist</a> = $<a href='../Y/245.html' title='Multiple used in 21 places.'>files</a>-&gt;<a href='../S/4.html#L951' title='Defined at 951 in class.Files.php.'>getFiles</a>(<a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId']);
+<a name='L206'> 206 
+<a name='L207'> 207                                 $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a> = '';
+<a name='L208'> 208 
+<a name='L209'> 209                                 <b>foreach</b> ($<a href='../Y/239.html' title='Multiple used in 2 places.'>filelist</a> <b>as</b> $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>) <font color='blue'>{</font>
+<a name='L210'> 210                                         $<a href='../Y/618.html' title='Multiple used in 15 places.'>temp</a> = <a href='../Y/215.html' title='Multiple used in 13 places.'>explode</a>('.', $<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileName']);
+<a name='L211'> 211 
+<a name='L212'> 212                                         $<a href='../Y/572.html' title='Multiple used in 3 places.'>showTag</a> = $<a href='../Y/347.html' title='Multiple used in 3 places.'>linkTag</a> = '[[file:'.$<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'].']]';
+<a name='L213'> 213 
+<a name='L214'> 214                                         <b>if</b> (<a href='../Y/311.html' title='Multiple used in 19 places.'>in_array</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileMime'], $<a href='../Y/245.html' title='Multiple used in 21 places.'>files</a>-&gt;<a href='../Y/300.html' title='Multiple used in 9 places.'>image_mime_types</a>)) <font color='blue'>{</font>
+<a name='L215'> 215                                                 $<a href='../Y/572.html' title='Multiple used in 3 places.'>showTag</a> = <a href='../S/6.html#L6' title='Defined at 6 in functions_textformat.php.'>makeThumbLink</a>($<a href='../Y/547.html' title='Multiple used in 248 places.'>row</a>['fileId'], $<a href='../Y/572.html' title='Multiple used in 3 places.'>showTag</a>);
+<a name='L216'> 216                                         <font color='blue'>}</font>
+<a name='L217'> 217 
+<a name='L218'> 218                                         <b>if</b> (<a href='../Y/598.html' title='Multiple used in 26 places.'>strpos</a>($<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>, $<a href='../Y/347.html' title='Multiple used in 3 places.'>linkTag</a>) === <b>false</b>) <font color='blue'>{</font>
+<a name='L219'> 219                                                 $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a> .= '&lt;span onclick="document.wiki_edit.wiki_'.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'].'.value += \' '.$<a href='../Y/347.html' title='Multiple used in 3 places.'>linkTag</a>.'\';"&gt;'.$<a href='../Y/572.html' title='Multiple used in 3 places.'>showTag</a>.'&lt;/span&gt;, ';
+<a name='L220'> 220                                         <font color='blue'>}</font>
+<a name='L221'> 221                                 <font color='blue'>}</font>
+<a name='L222'> 222                                 <b>if</b> (<a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, -2) == ', ') $<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a> = <a href='../Y/609.html' title='Multiple used in 62 places.'>substr</a>($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>, 0, -2);
+<a name='L223'> 223                                 <b>if</b> ($<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>) <font color='blue'>{</font>
+<a name='L224'> 224                                         <b>echo</b> '&lt;b&gt;Unused files:&lt;/b&gt; '.$<a href='../Y/590.html' title='Multiple used in 46 places.'>str</a>;
+<a name='L225'> 225                                 <font color='blue'>}</font>
+<a name='L226'> 226                         <font color='blue'>}</font>
+<a name='L227'> 227                         <b>echo</b> '&lt;/form&gt;';
+<a name='L228'> 228                 <font color='blue'>}</font>
+<a name='L229'> 229                 <b>elseif</b> ($<a href='../Y/160.html' title='Multiple used in 19 places.'>current_tab</a> == 'WikiFiles')
+<a name='L230'> 230                 <font color='blue'>{</font>
+<a name='L231'> 231                         <b>echo</b> $<a href='../Y/245.html' title='Multiple used in 21 places.'>files</a>-&gt;<a href='../S/4.html#L193' title='Defined at 193 in class.Files.php.'>showFiles</a>(<a href='../S/4.html#L17' title='Defined at 17 in class.Files.php.'>FILETYPE_WIKI</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId']);
+<a name='L232'> 232                 <font color='blue'>}</font>
+<a name='L233'> 233                 <b>elseif</b> ($<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['wiki']['log_history'] &amp;&amp; $<a href='../Y/160.html' title='Multiple used in 19 places.'>current_tab</a> == 'WikiHistory')
+<a name='L234'> 234                 <font color='blue'>{</font>
+<a name='L235'> 235                         <b>echo</b> 'Current version:&lt;br/&gt;';
+<a name='L236'> 236                         <b>echo</b> '&lt;b&gt;&lt;a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')"&gt;Written by '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['creatorName'].' at '.$<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['timeCreated'].' ('.<a href='../Y/597.html' title='Multiple used in 24 places.'>strlen</a>($<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>).' bytes)&lt;/a&gt;&lt;/b&gt;&lt;br/&gt;';
+<a name='L237'> 237                         <b>echo</b> '&lt;div id="layer_history_current" class="revision_entry"&gt;';
+<a name='L238'> 238                         <b>echo</b> <a href='../Y/426.html' title='Multiple used in 7 places.'>nl2br</a>(<a href='../Y/274.html' title='Multiple used in 6 places.'>htmlentities</a>($<a href='../Y/620.html' title='Multiple used in 113 places.'>text</a>, <a href='../Y/85.html' title='Multiple used in 3 places.'>ENT_COMPAT</a>, 'UTF-8'));
+<a name='L239'> 239                         <b>echo</b> '&lt;/div&gt;';
+<a name='L240'> 240 
+<a name='L241'> 241                         <a href='../S/12.html#L31' title='Defined at 31 in atom_revisions.php.'>showRevisions</a>(<a href='../S/12.html#L9' title='Defined at 9 in atom_revisions.php.'>REVISIONS_WIKI</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['wikiId'], $<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>);
+<a name='L242'> 242                 <font color='blue'>}</font>
+<a name='L243'> 243                 <b>else</b>
+<a name='L244'> 244                 <font color='blue'>{</font>
+<a name='L245'> 245                         <b>if</b> ($<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>['lockedBy']) <font color='blue'>{</font>
+<a name='L246'> 246                                 <b>echo</b> '&lt;div class="wiki_locked"&gt;LOCKED - This wiki can currently not be edited&lt;/div&gt;';
+<a name='L247'> 247                         <font color='blue'>}</font>
+<a name='L248'> 248                         <b>echo</b> <a href='../S/9.html#L57' title='Defined at 57 in functions_wiki.php.'>wikiFormat</a>($<a href='../Y/690.html' title='Multiple used in 28 places.'>wikiName</a>, $<a href='../Y/167.html' title='Multiple used in 191 places.'>data</a>);
+<a name='L249'> 249                 <font color='blue'>}</font>
+<a name='L250'> 250 
+<a name='L251'> 251                 <b>echo</b>    '&lt;/div&gt;';
+<a name='L252'> 252 
+<a name='L253'> 253                 <b>echo</b> '&lt;/div&gt;';
+<a name='L254'> 254 
+<a name='L255'> 255                 <b>return</b> <b>true</b>;
+<a name='L256'> 256         <font color='blue'>}</font>
+<a name='L257'> 257 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L26'>[^]</a><a href='#L87'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

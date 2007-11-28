@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>ipu</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/20.html#L30'>ipu</a>                30 functions_ip.php 	function IgnoredIPRange($ipu)
+<a href='../S/20.html#L34'>ipu</a>                34 functions_ip.php 		if ($ipu &lt;= 16777215) return true;																//0.0.0.0     - 0.255.255.255
+<a href='../S/20.html#L35'>ipu</a>                35 functions_ip.php 		if (($ipu &gt;= 167772160) &amp;&amp; ($ipu &lt;= 184549375)) return true;			//10.0.0.0    - 10.255.255.255
+<a href='../S/20.html#L36'>ipu</a>                36 functions_ip.php 		if (($ipu &gt;= 2130706433) &amp;&amp; ($ipu &lt;= 2147483647)) return true;		//127.0.0.0   - 127.255.255.255
+<a href='../S/20.html#L37'>ipu</a>                37 functions_ip.php 		if (($ipu &gt;= 2851995648) &amp;&amp; ($ipu &lt;= 2852061183)) return true;		//169.254.0.0 - 169.254.255.255
+<a href='../S/20.html#L38'>ipu</a>                38 functions_ip.php 		if (($ipu &gt;= 2886729728) &amp;&amp; ($ipu &lt;= 2887778303)) return true;		//172.16.0.0  - 172.31.255.255
+<a href='../S/20.html#L39'>ipu</a>                39 functions_ip.php 		if (($ipu &gt;= 3221225984) &amp;&amp; ($ipu &lt;= 3221226239)) return true;		//192.0.2.0   - 192.0.2.255
+<a href='../S/20.html#L40'>ipu</a>                40 functions_ip.php 		if (($ipu &gt;= 3227017984) &amp;&amp; ($ipu &lt;= 3227018239)) return true;		//192.88.99.0 - 192.88.99.255
+<a href='../S/20.html#L41'>ipu</a>                41 functions_ip.php  		if (($ipu &gt;= 3232235521) &amp;&amp; ($ipu &lt;= 3232301055)) return true;		//192.168.0.1 - 192.168.255.255
+<a href='../S/20.html#L42'>ipu</a>                42 functions_ip.php 		if (($ipu &gt;= 3323068416) &amp;&amp; ($ipu &lt;= 3323199487)) return true;		//198.18.0.0  - 198.19.255.255
+<a href='../S/20.html#L43'>ipu</a>                43 functions_ip.php 		if (($ipu &gt;= 3758096384) &amp;&amp; ($ipu &lt;= 4026531839)) return true;		//224.0.0.0   - 239.255.255.255
+<a href='../S/20.html#L44'>ipu</a>                44 functions_ip.php 		if ($ipu &gt;= 4026531840) return true;															//240.0.0.0   - 255.255.255.255
+</pre>
+</body>
+</html>

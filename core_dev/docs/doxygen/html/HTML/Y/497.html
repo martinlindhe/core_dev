@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>privateComments</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/25.html#L66'>privateComments</a>    66 atom_comments.php 	function getComments($commentType, $ownerId, $privateComments = false)
+<a href='../S/25.html#L69'>privateComments</a>    69 atom_comments.php 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
+<a href='../S/25.html#L75'>privateComments</a>    75 atom_comments.php 		if ($privateComments === false) $q .= ' AND t1.commentPrivate=0';
+<a href='../S/25.html#L102'>privateComments</a>   102 atom_comments.php 	function getLastComment($commentType, $ownerId, $privateComments = false)
+<a href='../S/25.html#L105'>privateComments</a>   105 atom_comments.php 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return false;
+<a href='../S/25.html#L110'>privateComments</a>   110 atom_comments.php 		if ($privateComments === false) $q .= ' AND commentPrivate=0';
+</pre>
+</body>
+</html>

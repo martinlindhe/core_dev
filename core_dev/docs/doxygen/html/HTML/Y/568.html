@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>sha1_key</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/2.html#L35'>sha1_key</a>           35 class.Session.php 	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
+<a href='../S/2.html#L75'>sha1_key</a>           75 class.Session.php 		if (isset($session_config['sha1_key'])) $this-&gt;sha1_key = $session_config['sha1_key'];
+<a href='../S/2.html#L230'>sha1_key</a>          230 class.Session.php 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this-&gt;sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
+<a href='../S/2.html#L248'>sha1_key</a>          248 class.Session.php 		$enc_password = sha1( sha1($this-&gt;sha1_key).sha1($password) );
+<a href='../S/2.html#L406'>sha1_key</a>          406 class.Session.php 			echo 'SHA1 key: '.$this-&gt;sha1_key.'&lt;br/&gt;';
+</pre>
+</body>
+</html>

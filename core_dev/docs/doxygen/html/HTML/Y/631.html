@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>timeout</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/2.html#L29'>timeout</a>            29 class.Session.php 	private $timeout = 86400;					//24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+<a href='../S/2.html#L72'>timeout</a>            72 class.Session.php 		if (isset($session_config['timeout'])) $this-&gt;timeout = $session_config['timeout'];
+<a href='../S/2.html#L168'>timeout</a>           168 class.Session.php 		if ($this-&gt;lastActive &lt; (time()-$this-&gt;timeout)) {
+<a href='../S/2.html#L170'>timeout</a>           170 class.Session.php 			$this-&gt;log('Session timed out after '.(time()-$this-&gt;lastActive).' (timeout is '.($this-&gt;timeout).')', LOGLEVEL_NOTICE);
+<a href='../S/2.html#L401'>timeout</a>           401 class.Session.php 		echo 'Session timeout: '.shortTimePeriod($this-&gt;timeout).'&lt;br/&gt;';
+</pre>
+</body>
+</html>

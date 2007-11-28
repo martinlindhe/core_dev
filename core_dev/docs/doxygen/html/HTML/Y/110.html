@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>_name</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L24'>_name</a>              24 atom_categories.php 	function addCategory($_type, $_name, $_owner = 0, $_global = false)
+<a href='../S/26.html#L30'>_name</a>              30 atom_categories.php 		$_name = $db-&gt;escape(trim($_name));
+<a href='../S/26.html#L31'>_name</a>              31 atom_categories.php 		if (!$_name) return false;
+<a href='../S/26.html#L33'>_name</a>              33 atom_categories.php 		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND ownerId='.$_owner;
+<a href='../S/26.html#L38'>_name</a>              38 atom_categories.php 		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner.',timeCreated=NOW(),creatorId='.$session-&gt;id;
+<a href='../S/31.html#L89'>_name</a>              89 functions_userdata.php 	function getUserdataFieldIdByName($_name)
+<a href='../S/31.html#L93'>_name</a>              93 functions_userdata.php 		$q = 'SELECT fieldId FROM tblUserdata WHERE fieldName="'.$db-&gt;escape($_name).'"';
+</pre>
+</body>
+</html>

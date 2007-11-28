@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>lastpost</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/21.html#L503'>lastpost</a>          503 functions_forum.php 			$lastpost = getForumLastPost($row['itemId']);
+<a href='../S/21.html#L505'>lastpost</a>          505 functions_forum.php 			if ($lastpost) {
+<a href='../S/21.html#L508'>lastpost</a>          508 functions_forum.php 					$subject = $lastpost['itemSubject'];
+<a href='../S/21.html#L510'>lastpost</a>          510 functions_forum.php 					echo '&lt;a href="forum.php?id='.$lastpost['itemId'].'#post'.$lastpost['itemId'].'"&gt;'.$subject.'&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/21.html#L513'>lastpost</a>          513 functions_forum.php 					echo '&lt;a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"&gt;&lt;img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/&gt;&lt;/a&gt; ';
+<a href='../S/21.html#L515'>lastpost</a>          515 functions_forum.php 				echo 'by '.nameLink($lastpost['userId'], $lastpost['userName']).'&lt;br/&gt;';
+<a href='../S/21.html#L516'>lastpost</a>          516 functions_forum.php 				echo $lastpost['timeCreated'];
+</pre>
+</body>
+</html>

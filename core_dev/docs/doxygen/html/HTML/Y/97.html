@@ -1,0 +1,249 @@
+<html>
+<head>
+<title>_id</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L44'>_id</a>                44 atom_categories.php 	function updateCategory($_type, $_id, $name)
+<a href='../S/26.html#L47'>_id</a>                47 atom_categories.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L49'>_id</a>                49 atom_categories.php 		$q = 'UPDATE tblCategories SET categoryName="'.$db-&gt;escape($name).'" WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/26.html#L53'>_id</a>                53 atom_categories.php 	function removeCategory($_type, $_id)
+<a href='../S/26.html#L56'>_id</a>                56 atom_categories.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L58'>_id</a>                58 atom_categories.php 		$q = 'DELETE FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/26.html#L62'>_id</a>                62 atom_categories.php 	function getCategory($_type, $_id)
+<a href='../S/26.html#L66'>_id</a>                66 atom_categories.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L68'>_id</a>                68 atom_categories.php 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/26.html#L73'>_id</a>                73 atom_categories.php 	function getCategoryName($_type, $_id)
+<a href='../S/26.html#L77'>_id</a>                77 atom_categories.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/26.html#L79'>_id</a>                79 atom_categories.php 		$q  = 'SELECT categoryName FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+<a href='../S/8.html#L37'>_id</a>                37 atom_feedback.php 	function deleteFeedback($_id)
+<a href='../S/8.html#L41'>_id</a>                41 atom_feedback.php 		if (!$session-&gt;isAdmin || !is_numeric($_id)) return false;
+<a href='../S/8.html#L43'>_id</a>                43 atom_feedback.php 		$q = 'DELETE FROM tblFeedback WHERE feedbackId='.$_id;
+<a href='../S/8.html#L47'>_id</a>                47 atom_feedback.php 	function getFeedbackItem($_id)
+<a href='../S/8.html#L51'>_id</a>                51 atom_feedback.php 		if (!$session-&gt;isAdmin || !is_numeric($_id)) return false;
+<a href='../S/8.html#L53'>_id</a>                53 atom_feedback.php 		$q = 'SELECT * FROM tblFeedback WHERE feedbackId='.$_id;
+<a href='../S/10.html#L260'>_id</a>               260 atom_moderation.php 	function reportUserDialog($_id)
+<a href='../S/10.html#L264'>_id</a>               264 atom_moderation.php 			$queueId = addToModerationQueue(MODERATION_USER, $_id);
+<a href='../S/5.html#L65'>_id</a>                65 atom_polls.php 	function updatePoll($_type, $_id, $_text)
+<a href='../S/5.html#L68'>_id</a>                68 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L70'>_id</a>                70 atom_polls.php 		$q = 'UPDATE tblPolls SET pollText="'.$db-&gt;escape($_text).'" WHERE pollType='.$_type.' AND pollId='.$_id;
+<a href='../S/5.html#L85'>_id</a>                85 atom_polls.php 	function getPoll($_type, $_id)
+<a href='../S/5.html#L88'>_id</a>                88 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L90'>_id</a>                90 atom_polls.php 		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND pollId='.$_id.' AND deletedBy=0';
+<a href='../S/5.html#L105'>_id</a>               105 atom_polls.php 	function poll($_type, $_id)
+<a href='../S/5.html#L109'>_id</a>               109 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L111'>_id</a>               111 atom_polls.php 		$data = getPoll($_type, $_id);
+<a href='../S/5.html#L123'>_id</a>               123 atom_polls.php 		$list = getCategories(CATEGORY_POLL, $_id);
+<a href='../S/5.html#L125'>_id</a>               125 atom_polls.php 		$result .= '&lt;div id="poll'.$_id.'"&gt;';
+<a href='../S/5.html#L128'>_id</a>               128 atom_polls.php 		if ($session-&gt;id &amp;&amp; $active &amp;&amp; !hasAnsweredPoll($_id)) {
+<a href='../S/5.html#L130'>_id</a>               130 atom_polls.php 				$result .= '&lt;span onclick="submit_poll('.$_id.','.$row['categoryId'].')"&gt;';
+<a href='../S/5.html#L143'>_id</a>               143 atom_polls.php 			$votes = getPollStats($_id);
+<a href='../S/5.html#L155'>_id</a>               155 atom_polls.php 			$result .= '&lt;br/&gt;&lt;input type="button" class="button" value="Save as .csv" onclick="get_poll_csv('.$_id.')"/&gt;';
+<a href='../S/5.html#L161'>_id</a>               161 atom_polls.php 			$result .= '&lt;div id="poll_voted'.$_id.'" style="display:none"&gt;';
+<a href='../S/5.html#L349'>_id</a>               349 atom_polls.php 	function addPollVote($_id, $voteId)
+<a href='../S/5.html#L352'>_id</a>               352 atom_polls.php 		if (!is_numeric($_id) || !is_numeric($voteId)) return false;
+<a href='../S/5.html#L354'>_id</a>               354 atom_polls.php 		$check = $db-&gt;getOneItem('SELECT userId FROM tblPollVotes WHERE pollId='.$_id.' AND userId='.$session-&gt;id);
+<a href='../S/5.html#L356'>_id</a>               356 atom_polls.php 		$db-&gt;insert('INSERT INTO tblPollVotes SET userId='.$session-&gt;id.',pollId='.$_id.',voteId='.$voteId);
+<a href='../S/5.html#L360'>_id</a>               360 atom_polls.php 	function hasAnsweredPoll($_id)
+<a href='../S/5.html#L363'>_id</a>               363 atom_polls.php 		if (!is_numeric($_id)) return false;
+<a href='../S/5.html#L365'>_id</a>               365 atom_polls.php 		$q = 'SELECT pollId FROM tblPollVotes WHERE userId='.$session-&gt;id.' AND pollId='.$_id;
+<a href='../S/5.html#L370'>_id</a>               370 atom_polls.php 	function getPollStats($_id)
+<a href='../S/5.html#L373'>_id</a>               373 atom_polls.php 		if (!is_numeric($_id)) return false;
+<a href='../S/5.html#L378'>_id</a>               378 atom_polls.php 		$q .= 'WHERE t1.ownerId='.$_id.' AND t1.categoryType='.CATEGORY_POLL;
+<a href='../S/5.html#L382'>_id</a>               382 atom_polls.php 	function removePoll($_type, $_id)
+<a href='../S/5.html#L385'>_id</a>               385 atom_polls.php 		if (!$session-&gt;isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/5.html#L387'>_id</a>               387 atom_polls.php 		$db-&gt;update('UPDATE tblPolls SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id);
+<a href='../S/1.html#L16'>_id</a>                16 atom_rating.php 	function rateItem($_type, $_id, $_rating)	//todo: rename to rateObject()
+<a href='../S/1.html#L20'>_id</a>                20 atom_rating.php 		if (!$session-&gt;id || !is_numeric($_type) || !is_numeric($_id) || !is_numeric($_rating)) return false;
+<a href='../S/1.html#L23'>_id</a>                23 atom_rating.php 		$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session-&gt;id;
+<a href='../S/1.html#L27'>_id</a>                27 atom_rating.php 		$q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$session-&gt;id.',timeRated=NOW()';
+<a href='../S/1.html#L31'>_id</a>                31 atom_rating.php 		$q = 'SELECT AVG(rating) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
+<a href='../S/1.html#L34'>_id</a>                34 atom_rating.php 		$q = 'SELECT COUNT(rateId) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
+<a href='../S/1.html#L40'>_id</a>                40 atom_rating.php 				$q = 'UPDATE tblBlogs SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE blogId='.$_id;
+<a href='../S/1.html#L46'>_id</a>                46 atom_rating.php 				$q = 'UPDATE tblNews SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE newsId='.$_id;
+<a href='../S/1.html#L55'>_id</a>                55 atom_rating.php 	function isRated($_type, $_id)
+<a href='../S/1.html#L59'>_id</a>                59 atom_rating.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/1.html#L61'>_id</a>                61 atom_rating.php 		$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session-&gt;id;
+<a href='../S/1.html#L68'>_id</a>                68 atom_rating.php 	function getRating($_type, $_id)
+<a href='../S/1.html#L72'>_id</a>                72 atom_rating.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/1.html#L76'>_id</a>                76 atom_rating.php 				$q = 'SELECT rating,ratingCnt FROM tblBlogs WHERE blogId='.$_id;
+<a href='../S/1.html#L80'>_id</a>                80 atom_rating.php 				$q = 'SELECT rating,ratingCnt FROM tblNews WHERE newsId='.$_id;
+<a href='../S/1.html#L91'>_id</a>                91 atom_rating.php 	function ratingGadget($_type, $_id)
+<a href='../S/1.html#L95'>_id</a>                95 atom_rating.php 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+<a href='../S/1.html#L97'>_id</a>                97 atom_rating.php 		if (!$session-&gt;id || isRated($_type, $_id)) return showRating($_type, $_id);
+<a href='../S/1.html#L100'>_id</a>               100 atom_rating.php 			rateItem($_type, $_id, $_POST['rate_gadget']);
+<a href='../S/1.html#L101'>_id</a>               101 atom_rating.php 			return showRating($_type, $_id);
+<a href='../S/1.html#L118'>_id</a>               118 atom_rating.php 	function showRating($_type, $_id)
+<a href='../S/1.html#L124'>_id</a>               124 atom_rating.php 		$row = getRating($_type, $_id);
+<a href='../S/4.html#L414'>_id</a>               414 class.Files.php 	function deleteFile($_id)
+<a href='../S/4.html#L417'>_id</a>               417 class.Files.php 		if (!$session-&gt;id || !is_numeric($_id)) return false;
+<a href='../S/4.html#L420'>_id</a>               420 class.Files.php 			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
+<a href='../S/4.html#L422'>_id</a>               422 class.Files.php 			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id.' AND ownerId='.$session-&gt;id;
+<a href='../S/4.html#L428'>_id</a>               428 class.Files.php 		unlink($this-&gt;upload_dir.$_id);
+<a href='../S/4.html#L429'>_id</a>               429 class.Files.php 		$this-&gt;clearThumbs($_id);
+<a href='../S/4.html#L433'>_id</a>               433 class.Files.php 	function clearThumbs($_id)
+<a href='../S/4.html#L437'>_id</a>               437 class.Files.php 		if (!is_numeric($_id)) return false;
+<a href='../S/4.html#L442'>_id</a>               442 class.Files.php 			if (strpos($name, $_id.'_') !== false) {
+<a href='../S/4.html#L695'>_id</a>               695 class.Files.php 	function checksums($_id, $force = false)
+<a href='../S/4.html#L698'>_id</a>               698 class.Files.php 		if (!is_numeric($_id)) return false;
+<a href='../S/4.html#L700'>_id</a>               700 class.Files.php 		$data = $db-&gt;getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
+<a href='../S/4.html#L704'>_id</a>               704 class.Files.php 			$q = 'SELECT * FROM tblChecksums WHERE fileId='.$_id;
+<a href='../S/4.html#L709'>_id</a>               709 class.Files.php 		if (!file_exists($this-&gt;upload_dir.$_id)) {
+<a href='../S/4.html#L710'>_id</a>               710 class.Files.php 			die('tried to generate checksums of nonexisting file '.$this-&gt;upload_dir.$_id);
+<a href='../S/4.html#L714'>_id</a>               714 class.Files.php 		$new['sha1'] = $db-&gt;escape(hash_file('sha1', $this-&gt;upload_dir.$_id));	//40-character hex string
+<a href='../S/4.html#L715'>_id</a>               715 class.Files.php 		$new['md5'] = $db-&gt;escape(hash_file('md5', $this-&gt;upload_dir.$_id));		//32-character hex string
+<a href='../S/4.html#L720'>_id</a>               720 class.Files.php 		$q = 'DELETE FROM tblChecksums WHERE fileId='.$_id;
+<a href='../S/4.html#L723'>_id</a>               723 class.Files.php 		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", timeExec="'.$exec_time.'", timeCreated=NOW()';
+<a href='../S/4.html#L730'>_id</a>               730 class.Files.php 	function sha1($_id)
+<a href='../S/4.html#L732'>_id</a>               732 class.Files.php 		$sums = $this-&gt;checksums($_id);
+<a href='../S/4.html#L737'>_id</a>               737 class.Files.php 	function cloneEntry($_id)
+<a href='../S/4.html#L740'>_id</a>               740 class.Files.php 		if (!is_numeric($_id)) return false;
+<a href='../S/4.html#L742'>_id</a>               742 class.Files.php 		$file = $this-&gt;getFileInfo($_id);
+<a href='../S/4.html#L745'>_id</a>               745 class.Files.php 		$q = 'INSERT INTO tblFiles SET ownerId='.$_id.',fileType='.FILETYPE_PROCESS_CLONE.',uploaderId='.$file['uploaderId'].',timeUploaded=NOW()';
+<a href='../S/4.html#L750'>_id</a>               750 class.Files.php 	function updateClone($_id, $mimeType)
+<a href='../S/4.html#L753'>_id</a>               753 class.Files.php 		if (!is_numeric($_id)) return false;
+<a href='../S/4.html#L755'>_id</a>               755 class.Files.php 		$size = filesize($this-&gt;upload_dir.$_id);
+<a href='../S/4.html#L758'>_id</a>               758 class.Files.php 		$this-&gt;checksums($_id, true);
+<a href='../S/4.html#L760'>_id</a>               760 class.Files.php 		$q = 'UPDATE tblFiles SET fileMime="'.$db-&gt;escape($mimeType).'",fileSize='.$size.' WHERE fileId='.$_id.' AND fileType='.FILETYPE_PROCESS_CLONE;
+<a href='../S/4.html#L765'>_id</a>               765 class.Files.php 	function updateFile($_id)
+<a href='../S/4.html#L768'>_id</a>               768 class.Files.php 		if (!is_numeric($_id)) return false;
+<a href='../S/4.html#L770'>_id</a>               770 class.Files.php 		if (!file_exists($this-&gt;upload_dir.$_id)) return false;
+<a href='../S/4.html#L772'>_id</a>               772 class.Files.php 		$size = filesize($this-&gt;upload_dir.$_id);
+<a href='../S/4.html#L778'>_id</a>               778 class.Files.php 		$mime = $this-&gt;lookupMimeType($this-&gt;upload_dir.$_id);
+<a href='../S/4.html#L781'>_id</a>               781 class.Files.php 		$this-&gt;checksums($_id, true);
+<a href='../S/4.html#L787'>_id</a>               787 class.Files.php 		$q = 'UPDATE tblFiles SET fileMime="'.$db-&gt;escape($mime).'",fileSize='.$size.' WHERE fileId='.$_id;
+<a href='../S/4.html#L807'>_id</a>               807 class.Files.php 	function imageRotate($_id, $_angle)
+<a href='../S/4.html#L810'>_id</a>               810 class.Files.php 		if (!$session-&gt;id || !is_numeric($_id) || !is_numeric($_angle)) return false;
+<a href='../S/4.html#L812'>_id</a>               812 class.Files.php 		$data = $db-&gt;getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
+<a href='../S/4.html#L821'>_id</a>               821 class.Files.php 		$filename = $this-&gt;upload_dir.$_id;
+<a href='../S/4.html#L844'>_id</a>               844 class.Files.php 		$this-&gt;clearThumbs($_id);
+<a href='../S/4.html#L848'>_id</a>               848 class.Files.php 	function sendFile($_id, $force_mime = false)
+<a href='../S/4.html#L851'>_id</a>               851 class.Files.php 		if (!is_numeric($_id)) return false;
+<a href='../S/4.html#L853'>_id</a>               853 class.Files.php 		$data = $db-&gt;getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
+<a href='../S/4.html#L876'>_id</a>               876 class.Files.php 			$this-&gt;sendImage($_id);
+<a href='../S/4.html#L882'>_id</a>               882 class.Files.php 			echo file_get_contents($this-&gt;upload_dir.$_id);
+<a href='../S/4.html#L887'>_id</a>               887 class.Files.php 			$db-&gt;query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
+<a href='../S/4.html#L907'>_id</a>               907 class.Files.php 	function sendImage($_id)
+<a href='../S/4.html#L911'>_id</a>               911 class.Files.php 		$filename = $this-&gt;upload_dir.$_id;
+<a href='../S/4.html#L931'>_id</a>               931 class.Files.php 			$out_filename = $this-&gt;thumbs_dir.$_id.'_'.$width.'x'.$height;
+<a href='../S/4.html#L979'>_id</a>               979 class.Files.php 	function getFileInfo($_id)
+<a href='../S/4.html#L982'>_id</a>               982 class.Files.php 		if (!is_numeric($_id) || !$_id) return false;
+<a href='../S/4.html#L986'>_id</a>               986 class.Files.php 					'WHERE t1.fileId='.$_id;
+<a href='../S/4.html#L992'>_id</a>               992 class.Files.php 	function showFileInfo($_id)
+<a href='../S/4.html#L996'>_id</a>               996 class.Files.php 		$file = $this-&gt;getFileInfo($_id);
+<a href='../S/4.html#L1009'>_id</a>              1009 class.Files.php 			list($img_width, $img_height) = getimagesize($this-&gt;upload_dir.$_id);
+<a href='../S/4.html#L1011'>_id</a>              1011 class.Files.php 			echo makeThumbLink($_id);
+<a href='../S/4.html#L1017'>_id</a>              1017 class.Files.php 			$id3 = @id3_get_tag($this-&gt;upload_dir.$_id, ID3_V2_2);	//note: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this
+<a href='../S/4.html#L1022'>_id</a>              1022 class.Files.php 		$arr = $this-&gt;checksums($_id);
+<a href='../S/4.html#L1031'>_id</a>              1031 class.Files.php 	function getUploader($_id)
+<a href='../S/4.html#L1034'>_id</a>              1034 class.Files.php 		if (!is_numeric($_id)) return false;
+<a href='../S/4.html#L1036'>_id</a>              1036 class.Files.php 		$q = 'SELECT uploaderId FROM tblFiles WHERE fileId='.$_id;
+<a href='../S/4.html#L1040'>_id</a>              1040 class.Files.php 	function getOwner($_id)
+<a href='../S/4.html#L1043'>_id</a>              1043 class.Files.php 		if (!is_numeric($_id)) return false;
+<a href='../S/4.html#L1045'>_id</a>              1045 class.Files.php 		$q = 'SELECT ownerId FROM tblFiles WHERE fileId='.$_id;
+<a href='../S/11.html#L134'>_id</a>               134 functions_blogs.php 		if ($cmd) list($current_tab, $_id) = $cmd;
+<a href='../S/11.html#L135'>_id</a>               135 functions_blogs.php 		if (empty($_id) || !is_numeric($_id)) return false;
+<a href='../S/11.html#L137'>_id</a>               137 functions_blogs.php 		$blog = getBlog($_id);
+<a href='../S/11.html#L149'>_id</a>               149 functions_blogs.php 			updateBlog($_id, $_POST['blog_cat'], $_POST['blog_title'], $_POST['blog_body']);
+<a href='../S/11.html#L150'>_id</a>               150 functions_blogs.php 			$blog = getBlog($_id);
+<a href='../S/11.html#L162'>_id</a>               162 functions_blogs.php 		$menu = array($_SERVER['PHP_SELF'].'?Blog:'.$_id =&gt; 'Show blog');
+<a href='../S/11.html#L164'>_id</a>               164 functions_blogs.php 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id =&gt; 'Edit blog'));
+<a href='../S/11.html#L165'>_id</a>               165 functions_blogs.php 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id =&gt; 'Attachments ('.$files-&gt;getFileCount(FILETYPE_BLOG, $_id).')'));
+<a href='../S/11.html#L166'>_id</a>               166 functions_blogs.php 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id =&gt; 'Delete blog'));
+<a href='../S/11.html#L169'>_id</a>               169 functions_blogs.php 			$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id =&gt; 'Report blog'));
+<a href='../S/11.html#L171'>_id</a>               171 functions_blogs.php 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$_id =&gt; 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
+<a href='../S/11.html#L178'>_id</a>               178 functions_blogs.php 			echo '&lt;form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogEdit:'.$_id.'"&gt;';
+<a href='../S/11.html#L200'>_id</a>               200 functions_blogs.php 			if (confirmed('Are you sure you want to delete this blog?', 'BlogDelete:'.$_id)) {
+<a href='../S/11.html#L201'>_id</a>               201 functions_blogs.php 				deleteBlog($_id);
+<a href='../S/11.html#L208'>_id</a>               208 functions_blogs.php 				$queueId = addToModerationQueue(MODERATION_BLOG, $_id);
+<a href='../S/11.html#L216'>_id</a>               216 functions_blogs.php 				echo '&lt;form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogReport:'.$_id.'"&gt;';
+<a href='../S/11.html#L225'>_id</a>               225 functions_blogs.php 			showComments(COMMENT_BLOG, $_id);
+<a href='../S/11.html#L229'>_id</a>               229 functions_blogs.php 			echo $files-&gt;showFiles(FILETYPE_BLOG, $_id);
+<a href='../S/11.html#L241'>_id</a>               241 functions_blogs.php 					echo ratingGadget(RATE_BLOG, $_id);
+<a href='../S/11.html#L243'>_id</a>               243 functions_blogs.php 					echo showRating(RATE_BLOG, $_id);
+<a href='../S/21.html#L813'>_id</a>               813 functions_forum.php 	function displayForum($_id)
+<a href='../S/21.html#L816'>_id</a>               816 functions_forum.php 		if (!is_numeric($_id)) return false;
+<a href='../S/21.html#L829'>_id</a>               829 functions_forum.php 		if (!$_id) {
+<a href='../S/21.html#L837'>_id</a>               837 functions_forum.php 		if (forumItemIsFolder($_id)) {
+<a href='../S/21.html#L839'>_id</a>               839 functions_forum.php 			echo displayForumContentFlat($_id);
+<a href='../S/21.html#L841'>_id</a>               841 functions_forum.php 			echo '&lt;a href="forum_new.php?id='.$_id.'"&gt;Create new forum here&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/21.html#L844'>_id</a>               844 functions_forum.php 				echo '&lt;a href="forum_edit.php?id='.$_id.'"&gt;Edit forum name&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/21.html#L845'>_id</a>               845 functions_forum.php 				echo '&lt;a href="forum_delete.php?id='.$_id.'"&gt;Delete forum&lt;/a&gt;&lt;br/&gt;';
+<a href='../S/21.html#L849'>_id</a>               849 functions_forum.php 			echo '&lt;a href="forum_new.php?id='.$_id.'"&gt;Post response&lt;/a&gt;';
+<a href='../S/21.html#L853'>_id</a>               853 functions_forum.php 			echo displayTopicFlat($_id);
+<a href='../S/21.html#L856'>_id</a>               856 functions_forum.php 			echo '&lt;a href="forum_new.php?id='.$_id.'"&gt;Post response&lt;/a&gt;';
+<a href='../S/17.html#L157'>_id</a>               157 functions_general.php 	function confirmed($text, $_var, $_id = 0)
+<a href='../S/17.html#L162'>_id</a>               162 functions_general.php 		if (!$_var || !is_numeric($_id) || isset($_GET['confirmed'])) return true;
+<a href='../S/17.html#L167'>_id</a>               167 functions_general.php 		if ($_id) {
+<a href='../S/17.html#L169'>_id</a>               169 functions_general.php 			echo '&lt;a href="'.URLadd('confirmed&amp;amp;'.$_var, $_id).'"&gt;Yes, I am sure&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/16.html#L5'>_id</a>                 5 functions_messages.php 	function sendMessage($_id, $_subj, $_msg)
+<a href='../S/16.html#L8'>_id</a>                 8 functions_messages.php 		if (!is_numeric($_id)) return false;
+<a href='../S/16.html#L11'>_id</a>                11 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId='.$session-&gt;id.',toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+<a href='../S/16.html#L15'>_id</a>                15 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$session-&gt;id.',fromId='.$session-&gt;id.',toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_OUTBOX;
+<a href='../S/16.html#L21'>_id</a>                21 functions_messages.php 	function systemMessage($_id, $_subj, $_msg)
+<a href='../S/16.html#L24'>_id</a>                24 functions_messages.php 		if (!is_numeric($_id)) return false;
+<a href='../S/16.html#L27'>_id</a>                27 functions_messages.php 		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId=0,toId='.$_id.',subject="'.$db-&gt;escape($_subj).'",body="'.$db-&gt;escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+<a href='../S/16.html#L62'>_id</a>                62 functions_messages.php 	function getMessage($_id)
+<a href='../S/16.html#L65'>_id</a>                65 functions_messages.php 		if (!is_numeric($_id)) return false;
+<a href='../S/16.html#L67'>_id</a>                67 functions_messages.php 		$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session-&gt;id.' AND msgId='.$_id;
+<a href='../S/16.html#L73'>_id</a>                73 functions_messages.php 	function markMessageAsRead($_id)
+<a href='../S/16.html#L76'>_id</a>                76 functions_messages.php 		if (!is_numeric($_id)) return false;
+<a href='../S/16.html#L79'>_id</a>                79 functions_messages.php 		$q = 'UPDATE tblMessages SET timeRead=NOW() WHERE ownerId='.$session-&gt;id.' AND toId='.$session-&gt;id.' AND msgId='.$_id;
+<a href='../S/14.html#L43'>_id</a>                43 functions_news.php 	function removeNews($_id)
+<a href='../S/14.html#L46'>_id</a>                46 functions_news.php 		if (!$session-&gt;isAdmin || !is_numeric($_id)) return false;
+<a href='../S/14.html#L48'>_id</a>                48 functions_news.php 		$db-&gt;query('UPDATE tblNews SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE newsId='.$_id);
+<a href='../S/14.html#L112'>_id</a>               112 functions_news.php 	function showNewsArticle($_id = 0)
+<a href='../S/14.html#L116'>_id</a>               116 functions_news.php 		if (!is_numeric($_id)) return false;
+<a href='../S/14.html#L120'>_id</a>               120 functions_news.php 		if ($cmd) list($current_tab, $_id) = $cmd;
+<a href='../S/14.html#L121'>_id</a>               121 functions_news.php 		if (empty($_id) || !is_numeric($_id)) return false;
+<a href='../S/14.html#L123'>_id</a>               123 functions_news.php 		$news = getNewsItem($_id);
+<a href='../S/14.html#L151'>_id</a>               151 functions_news.php 				$_SERVER['PHP_SELF'].'?News:'.$_id =&gt; 'Show news',
+<a href='../S/14.html#L152'>_id</a>               152 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id =&gt; 'Edit',
+<a href='../S/14.html#L153'>_id</a>               153 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsPolls:'.$_id =&gt; 'Polls',
+<a href='../S/14.html#L154'>_id</a>               154 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id =&gt; 'Attachments ('.$files-&gt;getFileCount(FILETYPE_NEWS, $_id).')',
+<a href='../S/14.html#L155'>_id</a>               155 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id =&gt; 'Delete',
+<a href='../S/14.html#L156'>_id</a>               156 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsCategories:'.$_id =&gt; 'Categories',
+<a href='../S/14.html#L157'>_id</a>               157 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id =&gt; 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
+<a href='../S/14.html#L161'>_id</a>               161 functions_news.php 				$_SERVER['PHP_SELF'].'?News:'.$_id =&gt; 'Show article',
+<a href='../S/14.html#L162'>_id</a>               162 functions_news.php 				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id =&gt; 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
+<a href='../S/14.html#L171'>_id</a>               171 functions_news.php 				updateNews($_id, $_POST['news_cat'], $_POST['news_title'], $_POST['news_body'], $_POST['news_publish'], $_POST['news_rss']);
+<a href='../S/14.html#L174'>_id</a>               174 functions_news.php 			$item = getNewsItem($_id);
+<a href='../S/14.html#L177'>_id</a>               177 functions_news.php 			echo '&lt;form method="post" action="'.'?NewsEdit:'.$_id.getProjectPath().'"&gt;';
+<a href='../S/14.html#L193'>_id</a>               193 functions_news.php 			managePolls(POLL_NEWS, $_id);
+<a href='../S/14.html#L197'>_id</a>               197 functions_news.php 			if (confirmed('Are you sure you wish to delete this news entry?', 'NewsDelete:'.$_id)) {
+<a href='../S/14.html#L198'>_id</a>               198 functions_news.php 				removeNews($_id);
+<a href='../S/14.html#L212'>_id</a>               212 functions_news.php 			echo $files-&gt;showFiles(FILETYPE_NEWS, $_id);
+<a href='../S/14.html#L215'>_id</a>               215 functions_news.php 			showComments(COMMENT_NEWS, $_id);
+<a href='../S/14.html#L225'>_id</a>               225 functions_news.php 				echo ratingGadget(RATE_NEWS, $_id);
+<a href='../S/6.html#L6'>_id</a>                 6 functions_textformat.php 	function makeThumbLink($_id, $_title = '')
+<a href='../S/6.html#L9'>_id</a>                 9 functions_textformat.php 		if (!is_numeric($_id)) return false;
+<a href='../S/6.html#L13'>_id</a>                13 functions_textformat.php 		$str .= '&lt;a href="#" onclick="popup_imgview('.$_id.')"&gt;';
+<a href='../S/6.html#L14'>_id</a>                14 functions_textformat.php 		$str .= '&lt;img src="'.$config['core_web_root'].'api/file.php?id='.$_id.'&amp;amp;w='.$files-&gt;thumb_default_width.'&amp;amp;h='.$files-&gt;thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/&gt;';
+<a href='../S/6.html#L20'>_id</a>                20 functions_textformat.php 	function makeImageLink($_id, $_title = '')
+<a href='../S/6.html#L23'>_id</a>                23 functions_textformat.php 		if (!is_numeric($_id)) return false;
+<a href='../S/6.html#L25'>_id</a>                25 functions_textformat.php 		return '&lt;img id="img_'.$_id.'" src="'.$config['core_web_root'].'api/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/&gt;';
+<a href='../S/31.html#L110'>_id</a>               110 functions_userdata.php 	function getUserdataField($_id)
+<a href='../S/31.html#L114'>_id</a>               114 functions_userdata.php 		if (!is_numeric($_id)) return false;
+<a href='../S/31.html#L116'>_id</a>               116 functions_userdata.php 		$q = 'SELECT * FROM tblUserdata WHERE fieldId='.$_id;
+<a href='../S/27.html#L10'>_id</a>                10 functions_users.php 	function getUserName($_id)
+<a href='../S/27.html#L14'>_id</a>                14 functions_users.php 		if (!is_numeric($_id) || !$_id) return false;
+<a href='../S/27.html#L15'>_id</a>                15 functions_users.php 		if ($_id == $session-&gt;id) return $session-&gt;username;
+<a href='../S/27.html#L17'>_id</a>                17 functions_users.php 		$q = 'SELECT userName FROM tblUsers WHERE userId='.$_id;
+<a href='../S/27.html#L22'>_id</a>                22 functions_users.php 	function getUserStatus($_id)
+<a href='../S/27.html#L26'>_id</a>                26 functions_users.php 		if (!is_numeric($_id) || !$_id) return false;
+<a href='../S/27.html#L27'>_id</a>                27 functions_users.php 		if ($_id == $session-&gt;id) {
+<a href='../S/27.html#L30'>_id</a>                30 functions_users.php 			$q = 'SELECT userMode FROM tblUsers WHERE userId='.$_id;
+<a href='../S/27.html#L91'>_id</a>                91 functions_users.php 	function getUserVisitors($_id)
+<a href='../S/27.html#L95'>_id</a>                95 functions_users.php 		if (!is_numeric($_id)) return false;
+<a href='../S/27.html#L99'>_id</a>                99 functions_users.php 		$q .= 'WHERE ownerId='.$_id.' ORDER BY timeCreated DESC';
+<a href='../S/27.html#L236'>_id</a>               236 functions_users.php 	function setUserMode($_id, $_mode)
+<a href='../S/27.html#L239'>_id</a>               239 functions_users.php 		if (!$session-&gt;isSuperAdmin || !is_numeric($_id) || !is_numeric($_mode)) return false;
+<a href='../S/27.html#L241'>_id</a>               241 functions_users.php 		$q = 'UPDATE tblUsers SET userMode='.$_mode.' WHERE userId='.$_id;
+<a href='../S/27.html#L244'>_id</a>               244 functions_users.php 		if ($_id == $session-&gt;id) return true;
+<a href='../S/27.html#L251'>_id</a>               251 functions_users.php 		sendMessage($_id, 'System message', $msg);
+<a href='../S/27.html#L253'>_id</a>               253 functions_users.php 		$session-&gt;log('Changed usermode for '.getUserName($_id).' to '.$_mode);
+</pre>
+</body>
+</html>

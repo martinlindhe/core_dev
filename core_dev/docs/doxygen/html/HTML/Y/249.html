@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>fileType</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/4.html#L139'>fileType</a>          139 class.Files.php 	function getFileList($fileType, $ownerId = 0)
+<a href='../S/4.html#L142'>fileType</a>          142 class.Files.php 		if (!is_numeric($fileType) || !is_numeric($ownerId)) return false;
+<a href='../S/4.html#L144'>fileType</a>          144 class.Files.php 		$q = 'SELECT * FROM tblFiles WHERE fileType='.$fileType;
+<a href='../S/4.html#L193'>fileType</a>          193 class.Files.php 	function showFiles($fileType, $ownerId = 0, $categoryId = 0)
+<a href='../S/4.html#L196'>fileType</a>          196 class.Files.php 		if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
+<a href='../S/4.html#L198'>fileType</a>          198 class.Files.php 		if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE || $fileType == FILETYPE_WIKI) {
+<a href='../S/4.html#L203'>fileType</a>          203 class.Files.php 			$this-&gt;handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
+<a href='../S/4.html#L205'>fileType</a>          205 class.Files.php 			if ($fileType == FILETYPE_WIKI) {
+<a href='../S/4.html#L223'>fileType</a>          223 class.Files.php 		switch ($fileType)
+<a href='../S/4.html#L258'>fileType</a>          258 class.Files.php 		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId.' ORDER BY timeUploaded ASC';
+<a href='../S/4.html#L300'>fileType</a>          300 class.Files.php 				($fileType == FILETYPE_USERFILE &amp;&amp; $session-&gt;id == $userid) ||
+<a href='../S/4.html#L301'>fileType</a>          301 class.Files.php 				($fileType == FILETYPE_NEWS &amp;&amp; $session-&gt;isAdmin) ||
+<a href='../S/4.html#L302'>fileType</a>          302 class.Files.php 				($fileType == FILETYPE_WIKI) ||
+<a href='../S/4.html#L303'>fileType</a>          303 class.Files.php 				($fileType == FILETYPE_BLOG) ||
+<a href='../S/4.html#L304'>fileType</a>          304 class.Files.php 				($fileType == FILETYPE_FILEAREA_UPLOAD)
+<a href='../S/4.html#L308'>fileType</a>          308 class.Files.php 			if ($fileType == FILETYPE_BLOG) {
+<a href='../S/4.html#L315'>fileType</a>          315 class.Files.php 				if (($fileType == FILETYPE_USERFILE &amp;&amp; !$categoryId &amp;&amp; $session-&gt;id == $userid) ||
+<a href='../S/4.html#L316'>fileType</a>          316 class.Files.php 						($fileType == FILETYPE_WIKI)
+<a href='../S/4.html#L339'>fileType</a>          339 class.Files.php 		if (($fileType == FILETYPE_USERFILE &amp;&amp; !$categoryId) ||
+<a href='../S/4.html#L340'>fileType</a>          340 class.Files.php 				($fileType == FILETYPE_WIKI)
+<a href='../S/4.html#L344'>fileType</a>          344 class.Files.php 			if ($fileType == FILETYPE_USERFILE) echo manageCategoriesDialog(CATEGORY_USERFILE);
+<a href='../S/4.html#L345'>fileType</a>          345 class.Files.php 			if ($fileType == FILETYPE_WIKI) echo manageCategoriesDialog(CATEGORY_WIKIFILE);
+<a href='../S/4.html#L353'>fileType</a>          353 class.Files.php 	function showThumbnails($fileType, $categoryId)
+<a href='../S/4.html#L356'>fileType</a>          356 class.Files.php 		if (!is_numeric($fileType)) return false;
+<a href='../S/4.html#L358'>fileType</a>          358 class.Files.php 		$list = $db-&gt;getArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
+<a href='../S/4.html#L451'>fileType</a>          451 class.Files.php 	function handleUpload($FileData, $fileType, $ownerId, $categoryId = 0)
+<a href='../S/4.html#L454'>fileType</a>          454 class.Files.php 		if ((!$session-&gt;id &amp;&amp; !$this-&gt;anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
+<a href='../S/4.html#L465'>fileType</a>          465 class.Files.php 		$fileId = $this-&gt;addFileEntry($fileType, $categoryId, $ownerId, $FileData['name']);
+<a href='../S/4.html#L481'>fileType</a>          481 class.Files.php 	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
+<a href='../S/4.html#L484'>fileType</a>          484 class.Files.php 		if (!is_numeric($fileType) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
+<a href='../S/4.html#L491'>fileType</a>          491 class.Files.php 	  	$q = 'INSERT INTO tblFiles SET fileName="'.$db-&gt;escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session-&gt;id.',uploaderIP='.$session-&gt;ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+<a href='../S/4.html#L493'>fileType</a>          493 class.Files.php 			$q = 'INSERT INTO tblFiles SET fileName="'.$db-&gt;escape($fileName).'",ownerId='.$ownerId.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+<a href='../S/4.html#L951'>fileType</a>          951 class.Files.php 	function getFiles($fileType, $ownerId, $categoryId = 0)
+<a href='../S/4.html#L954'>fileType</a>          954 class.Files.php 		if (!$session-&gt;id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return array();
+<a href='../S/4.html#L956'>fileType</a>          956 class.Files.php 		if ($fileType == FILETYPE_FORUM) {
+<a href='../S/4.html#L958'>fileType</a>          958 class.Files.php 			$q .= 'WHERE fileType='.$fileType.' AND ownerId='.$ownerId.' AND uploaderId='.$session-&gt;id;
+<a href='../S/4.html#L964'>fileType</a>          964 class.Files.php 			$q .= ' AND t1.fileType='.$fileType;
+<a href='../S/4.html#L970'>fileType</a>          970 class.Files.php 	function getFileCount($fileType, $ownerId, $categoryId = 0)
+<a href='../S/4.html#L973'>fileType</a>          973 class.Files.php 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return 0;
+<a href='../S/4.html#L975'>fileType</a>          975 class.Files.php 		$q = 'SELECT COUNT(fileId) FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId;
+</pre>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>settingValue</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/33.html#L15'>settingValue</a>       15 atom_settings.php 	function saveSetting($_type, $ownerId, $settingName, $settingValue)
+<a href='../S/33.html#L22'>settingValue</a>       22 atom_settings.php 		$settingValue = $db-&gt;escape($settingValue);
+<a href='../S/33.html#L26'>settingValue</a>       26 atom_settings.php 			$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L29'>settingValue</a>       29 atom_settings.php 			$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$_type.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
+</pre>
+</body>
+</html>

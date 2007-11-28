@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>image_p</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/4.html#L635'>image_p</a>           635 class.Files.php 		$image_p = imagecreatetruecolor($tn_width, $tn_height);
+<a href='../S/4.html#L638'>image_p</a>           638 class.Files.php 			imagecopyresampled($image_p, $image, 0,0,0,0, $tn_width, $tn_height, $orig_width, $orig_height);
+<a href='../S/4.html#L640'>image_p</a>           640 class.Files.php 			imagecopyresized($image_p, $image, 0,0,0,0, $tn_width, $tn_height, $orig_width, $orig_height);
+<a href='../S/4.html#L645'>image_p</a>           645 class.Files.php    		case 'image/png':	imagepng($image_p, $out_filename); break;
+<a href='../S/4.html#L646'>image_p</a>           646 class.Files.php    		case 'image/jpeg': imagejpeg($image_p, $out_filename, $this-&gt;image_jpeg_quality); break;
+<a href='../S/4.html#L647'>image_p</a>           647 class.Files.php    		case 'image/gif': imagegif($image_p, $out_filename); break;
+<a href='../S/4.html#L652'>image_p</a>           652 class.Files.php 		imagedestroy($image_p);
+</pre>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>type</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/10.html#L134'>type</a>              134 atom_moderation.php 	function getStopwords($type = '')
+<a href='../S/10.html#L138'>type</a>              138 atom_moderation.php 		if (is_numeric($type)) {
+<a href='../S/10.html#L139'>type</a>              139 atom_moderation.php 			$q = 'SELECT * FROM tblStopwords WHERE wordType='.$type.' ORDER BY wordText ASC';
+<a href='../S/10.html#L149'>type</a>              149 atom_moderation.php 	function addStopword($type, $word, $full)
+<a href='../S/10.html#L153'>type</a>              153 atom_moderation.php 		if (!is_numeric($type) || !is_numeric($full)) return false;
+<a href='../S/10.html#L156'>type</a>              156 atom_moderation.php 		$id = $db-&gt;getOneItem('SELECT wordId FROM tblStopwords WHERE wordText="'.$word.'" AND wordType='.$type);
+<a href='../S/10.html#L159'>type</a>              159 atom_moderation.php 		return $db-&gt;insert('INSERT INTO tblStopwords SET wordText="'.$word.'",wordType='.$type.',wordMatch='.$full);
+<a href='../S/3.html#L17'>type</a>               17 atom_subscriptions.php 	function addSubscription($type, $itemId)
+<a href='../S/3.html#L20'>type</a>               20 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type) || !is_numeric($itemId)) return false;
+<a href='../S/3.html#L22'>type</a>               22 atom_subscriptions.php 		if (isSubscribed($type, $itemId)) return false;
+<a href='../S/3.html#L23'>type</a>               23 atom_subscriptions.php 		$q = 'INSERT INTO tblSubscriptions SET ownerId='.$session-&gt;id.', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
+<a href='../S/3.html#L28'>type</a>               28 atom_subscriptions.php 	function removeSubscription($type, $subscriptionId)
+<a href='../S/3.html#L31'>type</a>               31 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type) || !is_numeric($subscriptionId)) return false;
+<a href='../S/3.html#L33'>type</a>               33 atom_subscriptions.php 		$q = 'DELETE FROM tblSubscriptions WHERE itemId='.$subscriptionId.' AND type='.$type.' AND ownerId='.$session-&gt;id;
+<a href='../S/3.html#L38'>type</a>               38 atom_subscriptions.php 	function isSubscribed($type, $itemId)
+<a href='../S/3.html#L41'>type</a>               41 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type) || !is_numeric($itemId)) return false;
+<a href='../S/3.html#L43'>type</a>               43 atom_subscriptions.php 		$q = 'SELECT id FROM tblSubscriptions WHERE ownerId='.$session-&gt;id.' AND type='.$type.' AND itemId='.$itemId;
+<a href='../S/3.html#L88'>type</a>               88 atom_subscriptions.php 	function getSubscriptions($type)
+<a href='../S/3.html#L91'>type</a>               91 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type)) return false;
+<a href='../S/3.html#L93'>type</a>               93 atom_subscriptions.php 		switch ($type) {
+<a href='../S/3.html#L97'>type</a>               97 atom_subscriptions.php 				$q .= 'WHERE t1.type='.$type.' AND t1.ownerId='.$session-&gt;id;
+<a href='../S/3.html#L101'>type</a>              101 atom_subscriptions.php 				$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$session-&gt;id;
+<a href='../S/21.html#L192'>type</a>              192 functions_forum.php 	function getForumDepthHTML($type, $itemId)
+<a href='../S/21.html#L195'>type</a>              195 functions_forum.php 		if (!is_numeric($type) || !is_numeric($itemId)) return false;
+<a href='../S/21.html#L205'>type</a>              205 functions_forum.php 		switch ($type) {
+<a href='../S/21.html#L224'>type</a>              224 functions_forum.php 		return getForumDepthHTML($type, $row['parentId']).$result;
+</pre>
+</body>
+</html>

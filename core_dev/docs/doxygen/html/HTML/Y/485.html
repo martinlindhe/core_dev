@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>pos2</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/29.html#L131'>pos2</a>              131 functions_spider.php 			$pos2 = strpos($filename, '.');			//fixme: är detta korrekt, tänk med en fil med flera punkter i namnet, strrpos() istället?
+<a href='../S/29.html#L132'>pos2</a>              132 functions_spider.php 			if ($pos2 !== false) $arr['file_ext'] = substr($filename, $pos2);
+<a href='../S/29.html#L164'>pos2</a>              164 functions_spider.php 			$pos2 = strpos($data, '&gt;', $pos1);	//Find first closing bracket occuring after $pos1
+<a href='../S/29.html#L166'>pos2</a>              166 functions_spider.php 			if ($pos1 === false || $pos2 === false) break;
+<a href='../S/29.html#L168'>pos2</a>              168 functions_spider.php 			$tag = trim(substr($data, $pos1+1, $pos2-$pos1-1));
+<a href='../S/29.html#L211'>pos2</a>              211 functions_spider.php 		} while ( $data = trim(substr($data, $pos2)) );
+<a href='../S/6.html#L101'>pos2</a>              101 functions_textformat.php 			$pos2 = stripos($text, '[/code]');
+<a href='../S/6.html#L102'>pos2</a>              102 functions_textformat.php 			if ($pos2 === false) break;
+<a href='../S/6.html#L103'>pos2</a>              103 functions_textformat.php 			$codeblock = trim(substr($text, $pos1+strlen('[code]'), $pos2-$pos1-strlen('[code]')));
+<a href='../S/6.html#L112'>pos2</a>              112 functions_textformat.php 			$text = substr($text, 0, $pos1) . $codeblock . substr($text, $pos2+strlen('[/code]'));
+<a href='../S/6.html#L121'>pos2</a>              121 functions_textformat.php 			$pos2 = stripos($text, '[/quote]');
+<a href='../S/6.html#L122'>pos2</a>              122 functions_textformat.php 			if ($pos2 === false) break;
+<a href='../S/6.html#L124'>pos2</a>              124 functions_textformat.php 			$quoteblock = substr($text, $pos1+strlen('[quote'), $pos2-$pos1-strlen('[quote'));
+<a href='../S/6.html#L144'>pos2</a>              144 functions_textformat.php 			$text = substr($text, 0, $pos1) .$quoteblock. substr($text, $pos2+strlen('[/quote]'));
+<a href='../S/6.html#L155'>pos2</a>              155 functions_textformat.php 			$pos2 = strpos($text, ']]');
+<a href='../S/6.html#L156'>pos2</a>              156 functions_textformat.php 			if ($pos2 === false) break;
+<a href='../S/6.html#L158'>pos2</a>              158 functions_textformat.php 			$wiki_command = substr($text, $pos1+strlen('[['), $pos2-$pos1-strlen(']]'));
+<a href='../S/6.html#L208'>pos2</a>              208 functions_textformat.php 			$text = substr($text, 0, $pos1) .$result. substr($text, $pos2+strlen(']]'));
+<a href='../S/6.html#L329'>pos2</a>              329 functions_textformat.php 		$pos2 = strpos($text, '[/head]');
+<a href='../S/6.html#L330'>pos2</a>              330 functions_textformat.php 		if ($pos1 === false || $pos2 === false) {
+<a href='../S/6.html#L344'>pos2</a>              344 functions_textformat.php 		$art['head'] = substr($text, $pos1+strlen('[head]'), $pos2-$pos1-strlen('[/head]')+1);
+<a href='../S/6.html#L348'>pos2</a>              348 functions_textformat.php 		$pos2 = strpos($text, '[/body]');
+<a href='../S/6.html#L349'>pos2</a>              349 functions_textformat.php 		if ($pos1 === false || $pos2 === false) return $art;
+<a href='../S/6.html#L351'>pos2</a>              351 functions_textformat.php 		$art['body'] = substr($text, $pos1+strlen('[body]'), $pos2-$pos1-strlen('[/body]')+1);
+</pre>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>header</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/29.html#L337'>header</a>            337 functions_spider.php 		$header  = "GET ".$file." HTTP/1.0\r\n";
+<a href='../S/29.html#L338'>header</a>            338 functions_spider.php 		$header .= "Host: ".$host['host']."\r\n";
+<a href='../S/29.html#L339'>header</a>            339 functions_spider.php 		$header .= "User-Agent: ".$config['spider']['user_agent']."\r\n";
+<a href='../S/29.html#L340'>header</a>            340 functions_spider.php 		$header .= "Connection: close\r\n\r\n";
+<a href='../S/29.html#L341'>header</a>            341 functions_spider.php 		fwrite($fp, $header);
+<a href='../S/29.html#L351'>header</a>            351 functions_spider.php 		$header = substr($result, 0, $pos);
+<a href='../S/29.html#L354'>header</a>            354 functions_spider.php 		$arr = explode("\r\n", $header);
+<a href='../S/29.html#L361'>header</a>            361 functions_spider.php 		if ($header &amp;&amp; $errno == 0) {
+<a href='../S/29.html#L362'>header</a>            362 functions_spider.php 			d($header);
+<a href='../S/29.html#L409'>header</a>            409 functions_spider.php 			$q = 'INSERT INTO tblSpiderCache SET url="'.$db-&gt;escape($url).'",header="'.$db-&gt;escape($header).'",body="'.$db-&gt;escape($body).'",sha1="'.sha1($body).'",timeCreated=NOW()';
+</pre>
+</body>
+</html>

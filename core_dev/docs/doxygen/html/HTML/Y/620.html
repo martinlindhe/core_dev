@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>text</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L182'>text</a>              182 atom_categories.php 				$text = $data[1];
+<a href='../S/26.html#L185'>text</a>              185 atom_categories.php 				$text = $data[0];
+<a href='../S/26.html#L197'>text</a>              197 atom_categories.php 			$content .= '&gt;'.$text;
+<a href='../S/10.html#L41'>text</a>               41 atom_moderation.php 	function isObjectionable($text)
+<a href='../S/10.html#L43'>text</a>               43 atom_moderation.php 		return checkStopword($text, STOPWORD_OBJECTIONABLE);
+<a href='../S/10.html#L47'>text</a>               47 atom_moderation.php 	function isSensitive($text)
+<a href='../S/10.html#L49'>text</a>               49 atom_moderation.php 		return checkStopword($text, STOPWORD_SENSITIVE);
+<a href='../S/10.html#L52'>text</a>               52 atom_moderation.php 	function checkStopword($text, $_type)
+<a href='../S/10.html#L59'>text</a>               59 atom_moderation.php 		$text = str_replace("\n", ' ', $text);
+<a href='../S/10.html#L60'>text</a>               60 atom_moderation.php 		$text = str_replace("\r", ' ', $text);
+<a href='../S/10.html#L61'>text</a>               61 atom_moderation.php 		$text = str_replace('.', '', $text);
+<a href='../S/10.html#L62'>text</a>               62 atom_moderation.php 		$text = str_replace(',', '', $text);
+<a href='../S/10.html#L63'>text</a>               63 atom_moderation.php 		$text = str_replace('!', '', $text);
+<a href='../S/10.html#L64'>text</a>               64 atom_moderation.php 		$text = str_replace('?', '', $text);
+<a href='../S/10.html#L65'>text</a>               65 atom_moderation.php 		$text = str_replace('(', '', $text);
+<a href='../S/10.html#L66'>text</a>               66 atom_moderation.php 		$text = str_replace(')', '', $text);
+<a href='../S/10.html#L69'>text</a>               69 atom_moderation.php 			$newtext = str_replace('  ', ' ', $text);
+<a href='../S/10.html#L70'>text</a>               70 atom_moderation.php 			if ($newtext == $text) break;
+<a href='../S/10.html#L71'>text</a>               71 atom_moderation.php 			$text = $newtext;
+<a href='../S/10.html#L73'>text</a>               73 atom_moderation.php 		$text = $db-&gt;escape(trim($text));
+<a href='../S/10.html#L75'>text</a>               75 atom_moderation.php 		$list = explode(' ', $text);
+<a href='../S/10.html#L99'>text</a>               99 atom_moderation.php 	function isReservedUsername($text)
+<a href='../S/10.html#L104'>text</a>              104 atom_moderation.php 		$text = str_replace('.', '', $text);
+<a href='../S/10.html#L105'>text</a>              105 atom_moderation.php 		$text = str_replace(',', '', $text);
+<a href='../S/10.html#L106'>text</a>              106 atom_moderation.php 		$text = str_replace('!', '', $text);
+<a href='../S/10.html#L107'>text</a>              107 atom_moderation.php 		$text = str_replace('?', '', $text);
+<a href='../S/10.html#L108'>text</a>              108 atom_moderation.php 		$text = str_replace('(', '', $text);
+<a href='../S/10.html#L109'>text</a>              109 atom_moderation.php 		$text = str_replace(')', '', $text);
+<a href='../S/10.html#L111'>text</a>              111 atom_moderation.php 		$text = $db-&gt;escape($text);
+<a href='../S/10.html#L118'>text</a>              118 atom_moderation.php 				if (strtolower($text) == strtolower($list[$i]["wordText"])) {
+<a href='../S/10.html#L123'>text</a>              123 atom_moderation.php 				if (stristr($text, $list[$i]["wordText"])) {
+<a href='../S/5.html#L10'>text</a>               10 atom_polls.php 	function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
+<a href='../S/5.html#L16'>text</a>               16 atom_polls.php 		$text = $db-&gt;escape(trim($text));
+<a href='../S/5.html#L61'>text</a>               61 atom_polls.php 		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session-&gt;id.',timeCreated=NOW()'.$timeStart.$timeEnd;
+<a href='../S/17.html#L157'>text</a>              157 functions_general.php 	function confirmed($text, $_var, $_id = 0)
+<a href='../S/17.html#L166'>text</a>              166 functions_general.php 		echo $text.'&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/17.html#L187'>text</a>              187 functions_general.php 			foreach($menu_arr as $url =&gt; $text) {
+<a href='../S/17.html#L194'>text</a>              194 functions_general.php 				echo '&lt;a href="'.($url[0] != '/' ? getProjectPath(3) : '').$url.'"&gt;'.$text.'&lt;/a&gt;';
+<a href='../S/17.html#L287'>text</a>              287 functions_general.php 	function cleanupText($text)
+<a href='../S/17.html#L291'>text</a>              291 functions_general.php 		$text = trim($text);
+<a href='../S/17.html#L294'>text</a>              294 functions_general.php 			$temp = $text;
+<a href='../S/17.html#L295'>text</a>              295 functions_general.php 			$text = str_replace('  ', ' ', $text);
+<a href='../S/17.html#L296'>text</a>              296 functions_general.php 		} while ($text != $temp);
+<a href='../S/17.html#L298'>text</a>              298 functions_general.php 		$text = str_replace('\n', "\n", $text);	//ersätter strängen '\n' mot en linefeed
+<a href='../S/17.html#L299'>text</a>              299 functions_general.php 		$text = str_replace('\r', "\r", $text);	//ersätter strängen '\r' mot en carriage return
+<a href='../S/17.html#L301'>text</a>              301 functions_general.php 		$text = str_replace("\r\n", "\n", $text);
+<a href='../S/17.html#L302'>text</a>              302 functions_general.php 		$text = str_replace(" \n", "\n", $text);
+<a href='../S/17.html#L303'>text</a>              303 functions_general.php 		$text = str_replace("\n ", "\n", $text);
+<a href='../S/17.html#L305'>text</a>              305 functions_general.php 		return $text;
+<a href='../S/6.html#L52'>text</a>               52 functions_textformat.php 	function formatUserInputText($text, $convert_html = true)
+<a href='../S/6.html#L56'>text</a>               56 functions_textformat.php 		$text = trim($text);
+<a href='../S/6.html#L59'>text</a>               59 functions_textformat.php 		if ($convert_html) $text = htmlspecialchars($text);
+<a href='../S/6.html#L62'>text</a>               62 functions_textformat.php 		$text = str_replace("\r\n", "\n", $text);
+<a href='../S/6.html#L65'>text</a>               65 functions_textformat.php 		$text = str_ireplace('[b]', '&lt;b&gt;', $text);
+<a href='../S/6.html#L66'>text</a>               66 functions_textformat.php 		$text = str_ireplace('[/b]', '&lt;/b&gt;', $text);
+<a href='../S/6.html#L69'>text</a>               69 functions_textformat.php 		$text = str_ireplace('[i]', '&lt;i&gt;', $text);
+<a href='../S/6.html#L70'>text</a>               70 functions_textformat.php 		$text = str_ireplace('[/i]', '&lt;/i&gt;', $text);
+<a href='../S/6.html#L73'>text</a>               73 functions_textformat.php 		$text = str_ireplace('[u]', '&lt;u&gt;', $text);
+<a href='../S/6.html#L74'>text</a>               74 functions_textformat.php 		$text = str_ireplace('[/u]', '&lt;/u&gt;', $text);
+<a href='../S/6.html#L77'>text</a>               77 functions_textformat.php 		$text = str_ireplace('[s]', '&lt;del&gt;', $text);
+<a href='../S/6.html#L78'>text</a>               78 functions_textformat.php 		$text = str_ireplace('[/s]', '&lt;/del&gt;', $text);
+<a href='../S/6.html#L81'>text</a>               81 functions_textformat.php 		$text = str_ireplace('[h1]', '&lt;h1 class="bb_h1"&gt;', $text);
+<a href='../S/6.html#L82'>text</a>               82 functions_textformat.php 		$text = str_ireplace('[/h1]', '&lt;/h1&gt;', $text);
+<a href='../S/6.html#L85'>text</a>               85 functions_textformat.php 		$text = str_ireplace('[h2]', '&lt;h2 class="bb_h2"&gt;', $text);
+<a href='../S/6.html#L86'>text</a>               86 functions_textformat.php 		$text = str_ireplace('[/h2]', '&lt;/h2&gt;', $text);
+<a href='../S/6.html#L89'>text</a>               89 functions_textformat.php 		$text = str_ireplace('[h3]', '&lt;h3 class="bb_h3"&gt;', $text);
+<a href='../S/6.html#L90'>text</a>               90 functions_textformat.php 		$text = str_ireplace('[/h3]', '&lt;/h3&gt;', $text);
+<a href='../S/6.html#L92'>text</a>               92 functions_textformat.php 		$text = str_ireplace("[hr]\n", '&lt;hr/&gt;', $text);	//fixme: this is a hack. a better solution would be to trim all whitespace directly following a [hr] tag
+<a href='../S/6.html#L93'>text</a>               93 functions_textformat.php 		$text = str_ireplace('[hr]', '&lt;hr/&gt;', $text);
+<a href='../S/6.html#L96'>text</a>               96 functions_textformat.php 		$text = str_ireplace("[/code]\n", "[/code]", $text);
+<a href='../S/6.html#L98'>text</a>               98 functions_textformat.php 			$pos1 = stripos($text, '[code]');
+<a href='../S/6.html#L101'>text</a>              101 functions_textformat.php 			$pos2 = stripos($text, '[/code]');
+<a href='../S/6.html#L103'>text</a>              103 functions_textformat.php 			$codeblock = trim(substr($text, $pos1+strlen('[code]'), $pos2-$pos1-strlen('[code]')));
+<a href='../S/6.html#L112'>text</a>              112 functions_textformat.php 			$text = substr($text, 0, $pos1) . $codeblock . substr($text, $pos2+strlen('[/code]'));
+<a href='../S/6.html#L118'>text</a>              118 functions_textformat.php 			$pos1 = stripos($text, '[quote');
+<a href='../S/6.html#L121'>text</a>              121 functions_textformat.php 			$pos2 = stripos($text, '[/quote]');
+<a href='../S/6.html#L124'>text</a>              124 functions_textformat.php 			$quoteblock = substr($text, $pos1+strlen('[quote'), $pos2-$pos1-strlen('[quote'));
+<a href='../S/6.html#L144'>text</a>              144 functions_textformat.php 			$text = substr($text, 0, $pos1) .$quoteblock. substr($text, $pos2+strlen('[/quote]'));
+<a href='../S/6.html#L152'>text</a>              152 functions_textformat.php 			$pos1 = strpos($text, '[[');
+<a href='../S/6.html#L155'>text</a>              155 functions_textformat.php 			$pos2 = strpos($text, ']]');
+<a href='../S/6.html#L158'>text</a>              158 functions_textformat.php 			$wiki_command = substr($text, $pos1+strlen('[['), $pos2-$pos1-strlen(']]'));
+<a href='../S/6.html#L208'>text</a>              208 functions_textformat.php 			$text = substr($text, 0, $pos1) .$result. substr($text, $pos2+strlen(']]'));
+<a href='../S/6.html#L214'>text</a>              214 functions_textformat.php 		$text = replaceLinks($text);
+<a href='../S/6.html#L216'>text</a>              216 functions_textformat.php 		$text = nl2br($text);
+<a href='../S/6.html#L217'>text</a>              217 functions_textformat.php 		$text = str_replace('(_br_)', "\n", $text);
+<a href='../S/6.html#L219'>text</a>              219 functions_textformat.php 		return $text;
+<a href='../S/6.html#L223'>text</a>              223 functions_textformat.php 	function replaceLinks($text)
+<a href='../S/6.html#L236'>text</a>              236 functions_textformat.php 		$text = preg_replace_callback($regexp, 'replaceLinks_callback', $text);
+<a href='../S/6.html#L241'>text</a>              241 functions_textformat.php 		$text = preg_replace($regexp, $replacement, $text);
+<a href='../S/6.html#L243'>text</a>              243 functions_textformat.php 		return $text;
+<a href='../S/6.html#L326'>text</a>              326 functions_textformat.php 	function parseArticle($text)
+<a href='../S/6.html#L328'>text</a>              328 functions_textformat.php 		$pos1 = strpos($text, '[head]');
+<a href='../S/6.html#L329'>text</a>              329 functions_textformat.php 		$pos2 = strpos($text, '[/head]');
+<a href='../S/6.html#L333'>text</a>              333 functions_textformat.php 			$text = htmlentities($text);
+<a href='../S/6.html#L334'>text</a>              334 functions_textformat.php 			if (strlen($text) &gt; 30) {
+<a href='../S/6.html#L335'>text</a>              335 functions_textformat.php 				$art['head'] = substr($text, 0, 30).' [...]';
+<a href='../S/6.html#L337'>text</a>              337 functions_textformat.php 				$art['head'] = $text;
+<a href='../S/6.html#L344'>text</a>              344 functions_textformat.php 		$art['head'] = substr($text, $pos1+strlen('[head]'), $pos2-$pos1-strlen('[/head]')+1);
+<a href='../S/6.html#L347'>text</a>              347 functions_textformat.php 		$pos1 = strpos($text, '[body]');
+<a href='../S/6.html#L348'>text</a>              348 functions_textformat.php 		$pos2 = strpos($text, '[/body]');
+<a href='../S/6.html#L351'>text</a>              351 functions_textformat.php 		$art['body'] = substr($text, $pos1+strlen('[body]'), $pos2-$pos1-strlen('[/body]')+1);
+<a href='../S/9.html#L72'>text</a>               72 functions_wiki.php 		$text = stripslashes($data['msg']);
+<a href='../S/9.html#L74'>text</a>               74 functions_wiki.php 		$text = formatUserInputText($text, !$config['wiki']['allow_html']);
+<a href='../S/9.html#L77'>text</a>               77 functions_wiki.php 			$text = dictExplainWords($text);
+<a href='../S/9.html#L80'>text</a>               80 functions_wiki.php 		return $text;
+<a href='../S/9.html#L109'>text</a>              109 functions_wiki.php 			$text = stripslashes($data['msg']);
+<a href='../S/9.html#L112'>text</a>              112 functions_wiki.php 			$text = '';
+<a href='../S/9.html#L149'>text</a>              149 functions_wiki.php 				$text = $_POST['wiki_'.$data['wikiId']];
+<a href='../S/9.html#L169'>text</a>              169 functions_wiki.php 			$rows = 6+substr_count($text, "\n");
+<a href='../S/9.html#L188'>text</a>              188 functions_wiki.php 					'&lt;textarea name="wiki_'.$data['wikiId'].'" id="wiki_'.$data['wikiId'].'" cols="70%" rows="'.$rows.'"&gt;'.$text.'&lt;/textarea&gt;&lt;br/&gt;'.
+<a href='../S/9.html#L218'>text</a>              218 functions_wiki.php 					if (strpos($text, $linkTag) === false) {
+<a href='../S/9.html#L236'>text</a>              236 functions_wiki.php 			echo '&lt;b&gt;&lt;a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')"&gt;Written by '.$data['creatorName'].' at '.$data['timeCreated'].' ('.strlen($text).' bytes)&lt;/a&gt;&lt;/b&gt;&lt;br/&gt;';
+<a href='../S/9.html#L238'>text</a>              238 functions_wiki.php 			echo nl2br(htmlentities($text, ENT_COMPAT, 'UTF-8'));
+</pre>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>full</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/10.html#L149'>full</a>              149 atom_moderation.php 	function addStopword($type, $word, $full)
+<a href='../S/10.html#L153'>full</a>              153 atom_moderation.php 		if (!is_numeric($type) || !is_numeric($full)) return false;
+<a href='../S/10.html#L159'>full</a>              159 atom_moderation.php 		return $db-&gt;insert('INSERT INTO tblStopwords SET wordText="'.$word.'",wordType='.$type.',wordMatch='.$full);
+<a href='../S/10.html#L172'>full</a>              172 atom_moderation.php 	function setStopword($wordId, $wordText, $full)
+<a href='../S/10.html#L176'>full</a>              176 atom_moderation.php 		if (!is_numeric($wordId) || !is_numeric($full)) return false;
+<a href='../S/10.html#L178'>full</a>              178 atom_moderation.php 		$q = 'UPDATE tblStopwords SET wordText="'.$db-&gt;escape($wordText).'", wordMatch='.$full.' WHERE wordId='.$wordId;
+</pre>
+</body>
+</html>

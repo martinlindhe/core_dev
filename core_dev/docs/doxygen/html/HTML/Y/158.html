@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>curr</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/21.html#L728'>curr</a>              728 functions_forum.php 			$curr = $list[$i];
+<a href='../S/21.html#L729'>curr</a>              729 functions_forum.php 			if (substr($curr,0,1) == '+') {
+<a href='../S/21.html#L732'>curr</a>              732 functions_forum.php 				$curr = substr($curr,1);
+<a href='../S/21.html#L736'>curr</a>              736 functions_forum.php 				$sql .= '(t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+<a href='../S/21.html#L738'>curr</a>              738 functions_forum.php 			} else if (substr($curr,0,1) == '-') {
+<a href='../S/21.html#L745'>curr</a>              745 functions_forum.php 				$curr = substr($curr,1);
+<a href='../S/21.html#L749'>curr</a>              749 functions_forum.php 				$sql .= 'NOT (t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+<a href='../S/21.html#L757'>curr</a>              757 functions_forum.php 				$sql .= '(t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
+</pre>
+</body>
+</html>

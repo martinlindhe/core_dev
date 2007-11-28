@@ -1,0 +1,171 @@
+<html>
+<head>
+<title>list</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/26.html#L164'>list</a>              164 atom_categories.php 		$list = getGlobalAndUserCategories($_type, $_owner);
+<a href='../S/26.html#L166'>list</a>              166 atom_categories.php 		foreach ($list as $row)
+<a href='../S/25.html#L90'>list</a>               90 atom_comments.php 		$list = $db-&gt;getArray($q);
+<a href='../S/25.html#L93'>list</a>               93 atom_comments.php 		foreach ($list as $row) {
+<a href='../S/25.html#L144'>list</a>              144 atom_comments.php 		$list = getComments($_type, $ownerId);
+<a href='../S/25.html#L146'>list</a>              146 atom_comments.php 		echo '&lt;div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')"&gt;'.count($list).' comment'.(count($list) == 1 ? '':'s').'&lt;/div&gt;';
+<a href='../S/25.html#L150'>list</a>              150 atom_comments.php 		foreach ($list as $row) {
+<a href='../S/25.html#L174'>list</a>              174 atom_comments.php 		return count($list);
+<a href='../S/25.html#L191'>list</a>              191 atom_comments.php 				$list = getComments($_type, 0, true);
+<a href='../S/25.html#L195'>list</a>              195 atom_comments.php 				$list = getCommentsByOwner($_type, $session-&gt;id);
+<a href='../S/25.html#L198'>list</a>              198 atom_comments.php 		foreach ($list as $row) {
+<a href='../S/10.html#L75'>list</a>               75 atom_moderation.php 		$list = explode(' ', $text);
+<a href='../S/10.html#L76'>list</a>               76 atom_moderation.php 		$list = array_unique($list);
+<a href='../S/10.html#L77'>list</a>               77 atom_moderation.php 		$list = array_values($list);
+<a href='../S/10.html#L82'>list</a>               82 atom_moderation.php 		foreach ($list as $word) {
+<a href='../S/10.html#L114'>list</a>              114 atom_moderation.php 		$list = $db-&gt;getArray($q);
+<a href='../S/10.html#L115'>list</a>              115 atom_moderation.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/10.html#L116'>list</a>              116 atom_moderation.php 			if ($list[$i]["wordMatch"] == 1) {
+<a href='../S/10.html#L118'>list</a>              118 atom_moderation.php 				if (strtolower($text) == strtolower($list[$i]["wordText"])) {
+<a href='../S/10.html#L123'>list</a>              123 atom_moderation.php 				if (stristr($text, $list[$i]["wordText"])) {
+<a href='../S/5.html#L123'>list</a>              123 atom_polls.php 		$list = getCategories(CATEGORY_POLL, $_id);
+<a href='../S/5.html#L129'>list</a>              129 atom_polls.php 			foreach ($list as $row) {
+<a href='../S/5.html#L176'>list</a>              176 atom_polls.php 		$list = getActivePolls($_type);
+<a href='../S/5.html#L178'>list</a>              178 atom_polls.php 		if (!$list) {
+<a href='../S/5.html#L183'>list</a>              183 atom_polls.php 		foreach ($list as $row) {
+<a href='../S/5.html#L198'>list</a>              198 atom_polls.php 				$list = getCategories(CATEGORY_POLL, $pollId);
+<a href='../S/5.html#L199'>list</a>              199 atom_polls.php 				for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/5.html#L201'>list</a>              201 atom_polls.php 						updateCategory(CATEGORY_POLL, $list[$i]['categoryId'], $_POST['poll_a'.$i]);
+<a href='../S/5.html#L239'>list</a>              239 atom_polls.php 				$list = getCategories(CATEGORY_POLL, $pollId);
+<a href='../S/5.html#L240'>list</a>              240 atom_polls.php 				for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/5.html#L241'>list</a>              241 atom_polls.php 					echo 'Answer '.($i+1).': &lt;input type="text" size="30" name="poll_a'.$i.'" value="'.$list[$i]['categoryName'].'"/&gt;&lt;br/&gt;';
+<a href='../S/5.html#L280'>list</a>              280 atom_polls.php 		$list = getPolls($_type, $_owner);
+<a href='../S/5.html#L281'>list</a>              281 atom_polls.php 		if (count($list)) {
+<a href='../S/5.html#L292'>list</a>              292 atom_polls.php 		foreach ($list as $row) {
+<a href='../S/5.html#L317'>list</a>              317 atom_polls.php 		if (count($list)) echo '&lt;/table&gt;';
+<a href='../S/5.html#L335'>list</a>              335 atom_polls.php 			echo '&lt;option value="nextfree"'.(count($list)?' selected="selected"':'').'&gt;next free time&lt;/option&gt;';
+<a href='../S/5.html#L396'>list</a>              396 atom_polls.php 		$list = getPolls($_type, $_owner);
+<a href='../S/5.html#L397'>list</a>              397 atom_polls.php 		if (!$list) return;
+<a href='../S/5.html#L399'>list</a>              399 atom_polls.php 		foreach ($list as $row) {
+<a href='../S/12.html#L47'>list</a>               47 atom_revisions.php 		$list = $db-&gt;getArray($q);
+<a href='../S/12.html#L51'>list</a>               51 atom_revisions.php 		if (!$list) {
+<a href='../S/12.html#L56'>list</a>               56 atom_revisions.php 		echo 'Archived versions ('.count($list).' entries):&lt;br/&gt;';
+<a href='../S/12.html#L57'>list</a>               57 atom_revisions.php 		foreach ($list as $row)
+<a href='../S/33.html#L84'>list</a>               84 atom_settings.php 		$list = readAllUserdata($session-&gt;id);
+<a href='../S/33.html#L85'>list</a>               85 atom_settings.php 		if (!$list) return;
+<a href='../S/33.html#L89'>list</a>               89 atom_settings.php 		foreach($list as $row) {
+<a href='../S/19.html#L358'>list</a>              358 class.DB_Base.php 		$list = $this-&gt;getArray($q);
+<a href='../S/19.html#L359'>list</a>              359 class.DB_Base.php 		echo count($list).' entries in event log.&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/19.html#L361'>list</a>              361 class.DB_Base.php 		foreach ($list as $row)
+<a href='../S/4.html#L259'>list</a>              259 class.Files.php 		$list = $db-&gt;getArray($q);
+<a href='../S/4.html#L269'>list</a>              269 class.Files.php 		foreach ($list as $row)
+<a href='../S/4.html#L358'>list</a>              358 class.Files.php 		$list = $db-&gt;getArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
+<a href='../S/4.html#L360'>list</a>              360 class.Files.php 		if (!$list) {
+<a href='../S/4.html#L371'>list</a>              371 class.Files.php 		foreach ($list as $row) {
+<a href='../S/4.html#L382'>list</a>              382 class.Files.php 		echo '&lt;iframe id="image_comments_iframe" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="'.$config['core_web_root'].'api/html_imgcomments.php?i='.$list[0]['fileId'].getProjectPath().'"&gt;&lt;/iframe&gt;';
+<a href='../S/4.html#L387'>list</a>              387 class.Files.php 		echo '&lt;div id="image_big"&gt;'.makeImageLink($list[0]['fileId'], $list[0]['fileName']).'&lt;/div&gt;';
+<a href='../S/4.html#L397'>list</a>              397 class.Files.php 		$list = $this-&gt;getFiles($_type,  $_owner);
+<a href='../S/4.html#L399'>list</a>              399 class.Files.php 		if (count($list)) {
+<a href='../S/4.html#L402'>list</a>              402 class.Files.php 			foreach ($list as $row) {
+<a href='../S/11.html#L267'>list</a>              267 functions_blogs.php 		$list = getBlogsByCategory($userId);
+<a href='../S/11.html#L270'>list</a>              270 functions_blogs.php 		foreach ($list as $row) {
+<a href='../S/30.html#L155'>list</a>              155 functions_contacts.php 			$list = getSentFriendRequests();
+<a href='../S/30.html#L156'>list</a>              156 functions_contacts.php 			if (count($list)) {
+<a href='../S/30.html#L159'>list</a>              159 functions_contacts.php 				foreach ($list as $row) {
+<a href='../S/30.html#L167'>list</a>              167 functions_contacts.php 			$list = getRecievedFriendRequests();
+<a href='../S/30.html#L168'>list</a>              168 functions_contacts.php 			if (count($list)) {
+<a href='../S/30.html#L170'>list</a>              170 functions_contacts.php 				foreach ($list as $row) {
+<a href='../S/30.html#L183'>list</a>              183 functions_contacts.php 		$list = getContactsFlat(CONTACT_FRIEND, $userId);
+<a href='../S/30.html#L191'>list</a>              191 functions_contacts.php 		if (!count($list)) {
+<a href='../S/30.html#L196'>list</a>              196 functions_contacts.php 		foreach ($list as $row) {
+<a href='../S/24.html#L24'>list</a>               24 functions_faq.php 		$list = getFAQ();
+<a href='../S/24.html#L25'>list</a>               25 functions_faq.php 		if (!$list) return;
+<a href='../S/24.html#L27'>list</a>               27 functions_faq.php 		$active = $list[0]['faqId'];
+<a href='../S/24.html#L30'>list</a>               30 functions_faq.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/24.html#L33'>list</a>               33 functions_faq.php 					echo ($i+1).'. '.$list[$i]['question'];
+<a href='../S/24.html#L35'>list</a>               35 functions_faq.php 				echo '&lt;div class="faq_a" id="faq_'.$i.'" style="'.($list[$i]['faqId']!=$active?'display:none':'').'"&gt;';
+<a href='../S/24.html#L36'>list</a>               36 functions_faq.php 					echo $list[$i]['answer'];
+<a href='../S/21.html#L281'>list</a>              281 functions_forum.php 		$list = $db-&gt;getArray($q);
+<a href='../S/21.html#L284'>list</a>              284 functions_forum.php 		foreach ($list as $row) {
+<a href='../S/21.html#L297'>list</a>              297 functions_forum.php 		$list = getForumItems();
+<a href='../S/21.html#L299'>list</a>              299 functions_forum.php 		if (!count($list)) return;
+<a href='../S/21.html#L301'>list</a>              301 functions_forum.php 		foreach ($list as $row) {
+<a href='../S/21.html#L313'>list</a>              313 functions_forum.php 			$list = getForumItems($itemId);
+<a href='../S/21.html#L325'>list</a>              325 functions_forum.php 			foreach ($list as $row) {
+<a href='../S/21.html#L371'>list</a>              371 functions_forum.php 		$list = $db-&gt;getArray($q);
+<a href='../S/21.html#L375'>list</a>              375 functions_forum.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/21.html#L377'>list</a>              377 functions_forum.php 						'WHERE parentId='.$list[$i]['itemId'].' AND deletedBy=0 '.
+<a href='../S/21.html#L418'>list</a>              418 functions_forum.php 		$list = $db-&gt;getArray($q);
+<a href='../S/21.html#L421'>list</a>              421 functions_forum.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/21.html#L422'>list</a>              422 functions_forum.php 			$q = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$list[$i]['itemId'].' AND deletedBy=0';
+<a href='../S/21.html#L441'>list</a>              441 functions_forum.php 		$list = getForumItems($itemId, false, $pager['limit']);
+<a href='../S/21.html#L467'>list</a>              467 functions_forum.php 		foreach ($list as $row) {
+<a href='../S/21.html#L664'>list</a>              664 functions_forum.php 		$list = getForumItems($itemId, true, $pager['limit']);	//get replies
+<a href='../S/21.html#L668'>list</a>              668 functions_forum.php 		if ($list) {
+<a href='../S/21.html#L669'>list</a>              669 functions_forum.php 			foreach ($list as $row) {
+<a href='../S/21.html#L685'>list</a>              685 functions_forum.php 		$list = explode(' ', $criteria);
+<a href='../S/21.html#L689'>list</a>              689 functions_forum.php 		$q .= 'WHERE t1.deletedBy=0 AND '.getForumSearchQuery($list);
+<a href='../S/21.html#L714'>list</a>              714 functions_forum.php 		$list = explode(' ', $criteria);
+<a href='../S/21.html#L717'>list</a>              717 functions_forum.php 		$q .= 'WHERE t1.deletedBy=0 AND '.getForumSearchQuery($list);
+<a href='../S/21.html#L723'>list</a>              723 functions_forum.php 	function getForumSearchQuery($list)
+<a href='../S/21.html#L726'>list</a>              726 functions_forum.php 		for ($i=0; $i&lt;count($list); $i++) {	//fixme: foreach
+<a href='../S/21.html#L728'>list</a>              728 functions_forum.php 			$curr = $list[$i];
+<a href='../S/21.html#L741'>list</a>              741 functions_forum.php 				if (count($list)==1) { //tillåt inte sökning på allt UTAN ett ord..
+<a href='../S/7.html#L145'>list</a>              145 functions_guestbook.php 		$list = getGuestbook($userId, $pager['limit']);
+<a href='../S/7.html#L146'>list</a>              146 functions_guestbook.php 		foreach ($list as $row) {
+<a href='../S/16.html#L123'>list</a>              123 functions_messages.php 		$list = getMessages($_group);
+<a href='../S/16.html#L124'>list</a>              124 functions_messages.php 		if (!$list) {
+<a href='../S/16.html#L143'>list</a>              143 functions_messages.php 		foreach ($list as $row) {
+<a href='../S/14.html#L246'>list</a>              246 functions_news.php 		$list = getPublishedNews($_cat_id, $limit);
+<a href='../S/14.html#L248'>list</a>              248 functions_news.php 		foreach ($list as $row) {
+<a href='../S/29.html#L219'>list</a>              219 functions_spider.php 	function generate_absolute_urls($list, $url)
+<a href='../S/29.html#L225'>list</a>              225 functions_spider.php 		foreach ($list as $val)
+<a href='../S/31.html#L64'>list</a>               64 functions_userdata.php 		$list = $db-&gt;getArray('SELECT fieldId,fieldPriority FROM tblUserdata ORDER BY fieldPriority ASC');
+<a href='../S/31.html#L66'>list</a>               66 functions_userdata.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/31.html#L67'>list</a>               67 functions_userdata.php 			if ($list[$i]['fieldPriority'] != $i) {
+<a href='../S/31.html#L68'>list</a>               68 functions_userdata.php 				$db-&gt;query('UPDATE tblUserdata SET fieldPriority='.$i.' WHERE fieldId='.$list[$i]['fieldId'] );
+<a href='../S/31.html#L242'>list</a>              242 functions_userdata.php 		$list = getUserdataFields(true);
+<a href='../S/31.html#L243'>list</a>              243 functions_userdata.php 		foreach ($list as $row) {
+<a href='../S/31.html#L254'>list</a>              254 functions_userdata.php 		$list = getUserdataFields(true);
+<a href='../S/31.html#L255'>list</a>              255 functions_userdata.php 		foreach ($list as $row) {
+<a href='../S/27.html#L185'>list</a>              185 functions_users.php 		$list = getUserdataFields();
+<a href='../S/27.html#L190'>list</a>              190 functions_users.php 		foreach ($list as $row) {
+<a href='../S/27.html#L208'>list</a>              208 functions_users.php 		foreach ($list as $row) {
+<a href='../S/27.html#L265'>list</a>              265 functions_users.php 			$list = getUserSearchResult($_POST);
+<a href='../S/27.html#L270'>list</a>              270 functions_users.php 			echo (count($list)!=1?count($list).' hits':'1 hit');
+<a href='../S/27.html#L273'>list</a>              273 functions_users.php 			for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/27.html#L274'>list</a>              274 functions_users.php 				echo nameLink($list[$i]['userId'], $list[$i]['userName']).'&lt;br/&gt;';
+<a href='../S/27.html#L284'>list</a>              284 functions_users.php 			$list = searchUsernameBeginsWith($_GET['l']);
+<a href='../S/27.html#L288'>list</a>              288 functions_users.php 			echo (count($list)!=1?count($list).' hits':'1 hit');
+<a href='../S/27.html#L291'>list</a>              291 functions_users.php 			for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/27.html#L292'>list</a>              292 functions_users.php 				echo nameLink($list[$i]['userId'], $list[$i]['userName']).'&lt;br&gt;';
+<a href='../S/27.html#L311'>list</a>              311 functions_users.php 			$list = getUserdataFields();
+<a href='../S/27.html#L312'>list</a>              312 functions_users.php 			foreach ($list as $row) {
+<a href='../S/15.html#L64'>list</a>               64 __old_functions_forums.php 		$list = dbArray($db, $sql);
+<a href='../S/15.html#L65'>list</a>               65 __old_functions_forums.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/15.html#L66'>list</a>               66 __old_functions_forums.php 			if ($list[$i]['timeCreated'] &gt; $currtop) {
+<a href='../S/15.html#L67'>list</a>               67 __old_functions_forums.php 				$currtop = $list[$i]['timeCreated'];
+<a href='../S/15.html#L69'>list</a>               69 __old_functions_forums.php 			$currtop = getForumNewestItem($db, $list[$i]['itemId'], $currtop);
+<a href='../S/15.html#L82'>list</a>               82 __old_functions_forums.php 		$list = dbArray($db, $sql);
+<a href='../S/15.html#L85'>list</a>               85 __old_functions_forums.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/15.html#L87'>list</a>               87 __old_functions_forums.php 				$arr[] = array('name' =&gt; $pre.' - '.$list[$i]['itemSubject'], 'itemId' =&gt; $list[$i]['itemId']);
+<a href='../S/15.html#L89'>list</a>               89 __old_functions_forums.php 				$arr[] = array('name' =&gt; $list[$i]['itemSubject'], 'itemId' =&gt; $list[$i]['itemId']);
+<a href='../S/15.html#L94'>list</a>               94 __old_functions_forums.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/15.html#L96'>list</a>               96 __old_functions_forums.php 				$pre = $pre.' - '.$list[$i]['itemSubject'];
+<a href='../S/15.html#L98'>list</a>               98 __old_functions_forums.php 				$pre = $list[$i]['itemSubject'];
+<a href='../S/15.html#L101'>list</a>              101 __old_functions_forums.php 			$arr = getForumFolderStructure($db, $list[$i]['itemId'], $arr, $pre);
+<a href='../S/15.html#L225'>list</a>              225 __old_functions_forums.php 		$list = dbArray($db, $sql);
+<a href='../S/15.html#L226'>list</a>              226 __old_functions_forums.php 		for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/15.html#L230'>list</a>              230 __old_functions_forums.php 			if (($list[$i]['timeCreated'] &gt; $_SESSION['prevLoginTime']) &amp;&amp; ($_SESSION['forum'.$list[$i]['itemId']] === false)) {
+<a href='../S/15.html#L233'>list</a>              233 __old_functions_forums.php 			if (forumPathContainsUnread($db, $list[$i]['itemId']) === true) {
+<a href='../S/15.html#L278'>list</a>              278 __old_functions_forums.php 		$list = getUserLastForumPosts($db, $userId, $limit);
+<a href='../S/15.html#L280'>list</a>              280 __old_functions_forums.php 		if (count($list)) {
+<a href='../S/15.html#L284'>list</a>              284 __old_functions_forums.php 			for ($i=0; $i&lt;count($list); $i++) {
+<a href='../S/15.html#L286'>list</a>              286 __old_functions_forums.php 				$subject = $list[$i]['itemSubject'];
+<a href='../S/15.html#L288'>list</a>              288 __old_functions_forums.php 					$data = getForumItem($db, $list[$i]['parentId']);
+<a href='../S/15.html#L294'>list</a>              294 __old_functions_forums.php 					if (forumItemIsMessage($db, $list[$i]['itemId'])) {
+<a href='../S/15.html#L295'>list</a>              295 __old_functions_forums.php 						$str .= '&lt;a href="forum.php?id='.$list[$i]['parentId'].'#post'.$list[$i]['itemId'].'"&gt;'.$subject.'&lt;/a&gt;';
+<a href='../S/15.html#L297'>list</a>              297 __old_functions_forums.php 						$str .= '&lt;a href="forum.php?id='.$list[$i]['itemId'].'"&gt;'.$subject.'&lt;/a&gt;';
+<a href='../S/15.html#L299'>list</a>              299 __old_functions_forums.php 					if (strlen($list[$i]['itemSubject']) &gt; strlen($subject)) $str .= '..';
+<a href='../S/15.html#L301'>list</a>              301 __old_functions_forums.php 				$str .= '&lt;td valign="top"&gt;'.$list[$i]['timeCreated'].'&lt;/td&gt;';
+</pre>
+</body>
+</html>

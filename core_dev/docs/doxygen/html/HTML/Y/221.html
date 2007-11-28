@@ -1,0 +1,14 @@
+<html>
+<head>
+<title>feed</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/17.html#L244'>feed</a>              244 functions_general.php 				foreach ($meta_rss as $feed) {
+<a href='../S/17.html#L245'>feed</a>              245 functions_general.php 					if (!empty($feed['category']) &amp;&amp; is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
+<a href='../S/17.html#L247'>feed</a>              247 functions_general.php 					echo "\t".'&lt;link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core_web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/&gt;'."\n";
+</pre>
+</body>
+</html>

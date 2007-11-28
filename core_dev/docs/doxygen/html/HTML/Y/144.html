@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>commentText</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/25.html#L20'>commentText</a>        20 atom_comments.php 	function addComment($_type, $ownerId, $commentText, $privateComment = false)
+<a href='../S/25.html#L27'>commentText</a>        27 atom_comments.php 		$commentText = $db-&gt;escape(htmlspecialchars($commentText));
+<a href='../S/25.html#L32'>commentText</a>        32 atom_comments.php 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session-&gt;id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+<a href='../S/25.html#L36'>commentText</a>        36 atom_comments.php 	function updateComment($commentType, $ownerId, $commentId, $commentText)
+<a href='../S/25.html#L41'>commentText</a>        41 atom_comments.php 		$commentText = $db-&gt;escape(htmlspecialchars($commentText));
+<a href='../S/25.html#L43'>commentText</a>        43 atom_comments.php 		$q  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).' ';
+</pre>
+</body>
+</html>

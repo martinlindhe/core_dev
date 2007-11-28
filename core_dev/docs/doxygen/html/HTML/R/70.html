@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>FORUM_MESSAGE</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/21.html#L72'>FORUM_MESSAGE</a>      72 functions_forum.php 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND itemType='.FORUM_MESSAGE.' AND deletedBy=0';
+<a href='../S/21.html#L124'>FORUM_MESSAGE</a>     124 functions_forum.php 		if ($row['itemType'] == FORUM_MESSAGE) {
+<a href='../S/21.html#L139'>FORUM_MESSAGE</a>     139 functions_forum.php 		if ($row['itemType'] == FORUM_MESSAGE) {
+<a href='../S/21.html#L180'>FORUM_MESSAGE</a>     180 functions_forum.php 		$q = 'INSERT INTO tblForums SET itemType='.FORUM_MESSAGE.',authorId='.$session-&gt;id.',parentId='.$parentId.',itemSubject="'.$subject.'",itemBody="'.$body.'",timeCreated=NOW()';
+<a href='../S/21.html#L206'>FORUM_MESSAGE</a>     206 functions_forum.php 			case FORUM_MESSAGE:
+<a href='../S/21.html#L237'>FORUM_MESSAGE</a>     237 functions_forum.php 		$q .= 'WHERE t1.itemType='.FORUM_MESSAGE.' AND t1.deletedBy=0 ';
+<a href='../S/21.html#L649'>FORUM_MESSAGE</a>     649 functions_forum.php 		echo getForumDepthHTML(FORUM_MESSAGE, $item['parentId']).'&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/21.html#L808'>FORUM_MESSAGE</a>     808 functions_forum.php 		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE authorId='.$userId.' AND deletedBy=0 AND itemType='.FORUM_MESSAGE;
+<a href='../S/15.html#L48'>FORUM_MESSAGE</a>      48 __old_functions_forums.php 		$sql = 'SELECT * FROM tblForums WHERE authorId='.$authorId.' AND itemType='.FORUM_MESSAGE.' ORDER BY timeCreated DESC';
+<a href='../S/15.html#L197'>FORUM_MESSAGE</a>     197 __old_functions_forums.php 		$sql .= 'WHERE itemType='.FORUM_MESSAGE.' ';
+<a href='../S/15.html#L212'>FORUM_MESSAGE</a>     212 __old_functions_forums.php 		$sql .= 'WHERE tblForums.parentId='.$itemId.' AND tblForums.itemType='.FORUM_MESSAGE.' ';
+</pre>
+</body>
+</html>

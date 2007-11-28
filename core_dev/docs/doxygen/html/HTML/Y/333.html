@@ -1,0 +1,159 @@
+<html>
+<head>
+<title>itemId</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/10.html#L184'>itemId</a>            184 atom_moderation.php 	function addToModerationQueue($queueType, $itemId, $auto_triggered = false, $triggeredBy = 0)
+<a href='../S/10.html#L188'>itemId</a>            188 atom_moderation.php 		if (!is_numeric($itemId) || !is_numeric($queueType) || !is_bool($auto_triggered) || !is_numeric($triggeredBy)) return false;
+<a href='../S/10.html#L191'>itemId</a>            191 atom_moderation.php 		$q = 'SELECT queueId FROM tblModeration WHERE itemId='.$itemId.' AND queueType='.$queueType.' AND autoTriggered='.$auto_triggered;
+<a href='../S/10.html#L196'>itemId</a>            196 atom_moderation.php 			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$session-&gt;id.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+<a href='../S/10.html#L198'>itemId</a>            198 atom_moderation.php 			$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.$triggeredBy.',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+<a href='../S/10.html#L251'>itemId</a>            251 atom_moderation.php 	function removeFromModerationQueueByType($_type, $itemId)
+<a href='../S/10.html#L254'>itemId</a>            254 atom_moderation.php 		if (!is_numeric($_type) || !is_numeric($itemId)) return false;
+<a href='../S/10.html#L256'>itemId</a>            256 atom_moderation.php 		$q = 'DELETE FROM tblModeration WHERE  queueType='.$_type.' AND itemId='.$itemId;
+<a href='../S/3.html#L17'>itemId</a>             17 atom_subscriptions.php 	function addSubscription($type, $itemId)
+<a href='../S/3.html#L20'>itemId</a>             20 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type) || !is_numeric($itemId)) return false;
+<a href='../S/3.html#L22'>itemId</a>             22 atom_subscriptions.php 		if (isSubscribed($type, $itemId)) return false;
+<a href='../S/3.html#L23'>itemId</a>             23 atom_subscriptions.php 		$q = 'INSERT INTO tblSubscriptions SET ownerId='.$session-&gt;id.', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
+<a href='../S/3.html#L38'>itemId</a>             38 atom_subscriptions.php 	function isSubscribed($type, $itemId)
+<a href='../S/3.html#L41'>itemId</a>             41 atom_subscriptions.php 		if (!$session-&gt;id || !is_numeric($type) || !is_numeric($itemId)) return false;
+<a href='../S/3.html#L43'>itemId</a>             43 atom_subscriptions.php 		$q = 'SELECT id FROM tblSubscriptions WHERE ownerId='.$session-&gt;id.' AND type='.$type.' AND itemId='.$itemId;
+<a href='../S/21.html#L26'>itemId</a>             26 functions_forum.php 	function getForumItem($itemId)
+<a href='../S/21.html#L29'>itemId</a>             29 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L34'>itemId</a>             34 functions_forum.php 		$q .= 'WHERE t1.itemId='.$itemId.' AND t1.deletedBy=0';
+<a href='../S/21.html#L39'>itemId</a>             39 functions_forum.php 	function getForumName($itemId)
+<a href='../S/21.html#L42'>itemId</a>             42 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L44'>itemId</a>             44 functions_forum.php 		$q  = 'SELECT itemSubject FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/21.html#L49'>itemId</a>             49 functions_forum.php 	function getForumItems($itemId = 0, $asc_order = true, $limit = '')
+<a href='../S/21.html#L52'>itemId</a>             52 functions_forum.php 		if (!is_numeric($itemId) ||!is_bool($asc_order)) return false;
+<a href='../S/21.html#L57'>itemId</a>             57 functions_forum.php 		$q .= 'WHERE t1.parentId='.$itemId.' AND t1.deletedBy=0 ';
+<a href='../S/21.html#L67'>itemId</a>             67 functions_forum.php 	function getForumMessageCount($itemId, $recursive = true, $mecnt = 0)	//fixme: skicka med itemType param &amp; rename function
+<a href='../S/21.html#L70'>itemId</a>             70 functions_forum.php 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
+<a href='../S/21.html#L72'>itemId</a>             72 functions_forum.php 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND itemType='.FORUM_MESSAGE.' AND deletedBy=0';
+<a href='../S/21.html#L85'>itemId</a>             85 functions_forum.php 	function getForumItemCount($itemId, $mecnt = 0)
+<a href='../S/21.html#L88'>itemId</a>             88 functions_forum.php 		if (!is_numeric($itemId) || !is_numeric($mecnt)) return false;
+<a href='../S/21.html#L90'>itemId</a>             90 functions_forum.php 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';
+<a href='../S/21.html#L101'>itemId</a>            101 functions_forum.php 	function forumItemIsFolder($itemId)
+<a href='../S/21.html#L104'>itemId</a>            104 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L106'>itemId</a>            106 functions_forum.php 		if ($itemId == 0) return true; //root folder
+<a href='../S/21.html#L108'>itemId</a>            108 functions_forum.php 		$q = 'SELECT itemType FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/21.html#L116'>itemId</a>            116 functions_forum.php 	function forumItemIsMessage($itemId)
+<a href='../S/21.html#L119'>itemId</a>            119 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L121'>itemId</a>            121 functions_forum.php 		$q = 'SELECT itemType, parentId FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/21.html#L131'>itemId</a>            131 functions_forum.php 	function forumItemIsDiscussion($itemId)
+<a href='../S/21.html#L134'>itemId</a>            134 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L136'>itemId</a>            136 functions_forum.php 		$q = 'SELECT itemType, parentId FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/21.html#L147'>itemId</a>            147 functions_forum.php 	function setForumItemParent($itemId, $parentId)
+<a href='../S/21.html#L150'>itemId</a>            150 functions_forum.php 		if (!is_numeric($itemId) || !is_numeric($parentId)) return false;
+<a href='../S/21.html#L152'>itemId</a>            152 functions_forum.php 		$q = 'UPDATE tblForums SET parentId='.$parentId.' WHERE itemId='.$itemId;
+<a href='../S/21.html#L182'>itemId</a>            182 functions_forum.php 		$itemId = $db-&gt;insert($q);
+<a href='../S/21.html#L185'>itemId</a>            185 functions_forum.php 		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_FORUM, $itemId, true);
+<a href='../S/21.html#L189'>itemId</a>            189 functions_forum.php 		return $itemId;
+<a href='../S/21.html#L192'>itemId</a>            192 functions_forum.php 	function getForumDepthHTML($type, $itemId)
+<a href='../S/21.html#L195'>itemId</a>            195 functions_forum.php 		if (!is_numeric($type) || !is_numeric($itemId)) return false;
+<a href='../S/21.html#L197'>itemId</a>            197 functions_forum.php 		if (!$itemId) {
+<a href='../S/21.html#L202'>itemId</a>            202 functions_forum.php 		$q = 'SELECT itemSubject,parentId FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/21.html#L210'>itemId</a>            210 functions_forum.php 					$result = ' - &lt;a href="forum.php?id='.$itemId.'"&gt;'.($subject != '' ? $subject : '(No name)').'&lt;/a&gt;';
+<a href='../S/21.html#L218'>itemId</a>            218 functions_forum.php 				if ($row['itemSubject']) $result = $config['forum']['path_separator'].'&lt;a href="forum.php?id='.$itemId.'"&gt;'.$row['itemSubject'].'&lt;/a&gt;';
+<a href='../S/21.html#L244'>itemId</a>            244 functions_forum.php 	function forumLockItem($itemId)
+<a href='../S/21.html#L247'>itemId</a>            247 functions_forum.php 		if (!$session-&gt;isAdmin || !is_numeric($itemId)) return false;
+<a href='../S/21.html#L249'>itemId</a>            249 functions_forum.php 		$q = 'UPDATE tblForums SET locked=1 WHERE itemId='.$itemId;
+<a href='../S/21.html#L253'>itemId</a>            253 functions_forum.php 	function forumUnlockItem($itemId)
+<a href='../S/21.html#L256'>itemId</a>            256 functions_forum.php 		if (!$session-&gt;isAdmin || !is_numeric($itemId)) return false;
+<a href='../S/21.html#L258'>itemId</a>            258 functions_forum.php 		$q = 'UPDATE tblForums SET locked=0 WHERE itemId='.$itemId;
+<a href='../S/21.html#L263'>itemId</a>            263 functions_forum.php 	function forumUpdateItem($itemId, $subject, $body, $sticky = 0)
+<a href='../S/21.html#L266'>itemId</a>            266 functions_forum.php 		if (!is_numeric($itemId) || !is_numeric($sticky)) return false;
+<a href='../S/21.html#L271'>itemId</a>            271 functions_forum.php 		$q = 'UPDATE tblForums SET itemSubject="'.$subject.'",itemBody="'.$body.'",sticky='.$sticky.' WHERE itemId='.$itemId;
+<a href='../S/21.html#L310'>itemId</a>            310 functions_forum.php 			$itemId = $row['itemId'];
+<a href='../S/21.html#L312'>itemId</a>            312 functions_forum.php 			$data = getForumItem($itemId);
+<a href='../S/21.html#L313'>itemId</a>            313 functions_forum.php 			$list = getForumItems($itemId);
+<a href='../S/21.html#L365'>itemId</a>            365 functions_forum.php 	function getForumThreadContentLastPost($itemId)
+<a href='../S/21.html#L368'>itemId</a>            368 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L370'>itemId</a>            370 functions_forum.php 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';;
+<a href='../S/21.html#L401'>itemId</a>            401 functions_forum.php 	function getForumItemCountFlat($itemId)
+<a href='../S/21.html#L404'>itemId</a>            404 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L406'>itemId</a>            406 functions_forum.php 		$q = 'SELECT COUNT(itemId) FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';
+<a href='../S/21.html#L412'>itemId</a>            412 functions_forum.php 	function getForumThreadContentCount($itemId)
+<a href='../S/21.html#L415'>itemId</a>            415 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L417'>itemId</a>            417 functions_forum.php 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';
+<a href='../S/21.html#L430'>itemId</a>            430 functions_forum.php 	function displayForumContentFlat($itemId)
+<a href='../S/21.html#L433'>itemId</a>            433 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L437'>itemId</a>            437 functions_forum.php 		$data = getForumItem($itemId);
+<a href='../S/21.html#L438'>itemId</a>            438 functions_forum.php 		$tot_cnt = getForumItemCountFlat($itemId);
+<a href='../S/21.html#L441'>itemId</a>            441 functions_forum.php 		$list = getForumItems($itemId, false, $pager['limit']);
+<a href='../S/21.html#L445'>itemId</a>            445 functions_forum.php 		echo '&lt;div class="forum_header"&gt;'.getForumDepthHTML(FORUM_FOLDER, $itemId).'&lt;/div&gt;';
+<a href='../S/21.html#L541'>itemId</a>            541 functions_forum.php 	function getForumLastPost($itemId)
+<a href='../S/21.html#L544'>itemId</a>            544 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L549'>itemId</a>            549 functions_forum.php 		$q .= 'WHERE t1.parentId='.$itemId.' AND t1.deletedBy=0 ';
+<a href='../S/21.html#L640'>itemId</a>            640 functions_forum.php 	function displayTopicFlat($itemId)
+<a href='../S/21.html#L643'>itemId</a>            643 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L647'>itemId</a>            647 functions_forum.php 		$item = getForumItem($itemId);
+<a href='../S/21.html#L654'>itemId</a>            654 functions_forum.php 			if (!isSubscribed(SUBSCRIPTION_FORUM, $itemId)) {
+<a href='../S/21.html#L655'>itemId</a>            655 functions_forum.php 				echo '&lt;a href="?id='.$itemId.'&amp;subscribe='.$itemId.'"&gt;Subscribe to topic&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/21.html#L657'>itemId</a>            657 functions_forum.php 				echo '&lt;a href="?id='.$itemId.'&amp;unsubscribe='.$itemId.'"&gt;Unsubscribe to topic&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/21.html#L661'>itemId</a>            661 functions_forum.php 		$tot_cnt = getForumItemCountFlat($itemId);
+<a href='../S/21.html#L664'>itemId</a>            664 functions_forum.php 		$list = getForumItems($itemId, true, $pager['limit']);	//get replies
+<a href='../S/21.html#L765'>itemId</a>            765 functions_forum.php 	function deleteForumItem($itemId)
+<a href='../S/21.html#L768'>itemId</a>            768 functions_forum.php 		if (!$session-&gt;id || !is_numeric($itemId)) return false;
+<a href='../S/21.html#L770'>itemId</a>            770 functions_forum.php 		$q = 'UPDATE tblForums SET timeDeleted=NOW(),deletedBy='.$session-&gt;id.' WHERE itemId='.$itemId;
+<a href='../S/21.html#L773'>itemId</a>            773 functions_forum.php 			removeFromModerationQueueByType(MODERATION_FORUM, $itemId);
+<a href='../S/21.html#L778'>itemId</a>            778 functions_forum.php 	function deleteForumItemRecursive($itemId, $loop = false)
+<a href='../S/21.html#L781'>itemId</a>            781 functions_forum.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/21.html#L783'>itemId</a>            783 functions_forum.php 		$q = 'SELECT itemId FROM tblForums WHERE parentId='.$itemId.' AND deletedBy=0';
+<a href='../S/21.html#L795'>itemId</a>            795 functions_forum.php 			$q = 'DELETE FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/21.html#L797'>itemId</a>            797 functions_forum.php 				removeFromModerationQueueByType(MODERATION_FORUM, $itemId);
+<a href='../S/28.html#L53'>itemId</a>             53 functions_todo.php 	function getTodoItem($itemId)
+<a href='../S/28.html#L57'>itemId</a>             57 functions_todo.php 		if (substr(strtoupper($itemId), 0, 2) == 'PR') $itemId = substr($itemId, 2);
+<a href='../S/28.html#L59'>itemId</a>             59 functions_todo.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/28.html#L63'>itemId</a>             63 functions_todo.php 		$q .= 'WHERE itemId='.$itemId;
+<a href='../S/28.html#L69'>itemId</a>             69 functions_todo.php 	function moveTodoItem(&amp;$db, $itemId, $categoryId)
+<a href='../S/28.html#L71'>itemId</a>             71 functions_todo.php 		if (!is_numeric($itemId) || !is_numeric($categoryId)) return false;
+<a href='../S/28.html#L73'>itemId</a>             73 functions_todo.php 		$sql = 'UPDATE tblTodoLists SET categoryId='.$categoryId.' WHERE itemId='.$itemId;
+<a href='../S/28.html#L77'>itemId</a>             77 functions_todo.php 	function setTodoItemStatus($itemId, $status)
+<a href='../S/28.html#L80'>itemId</a>             80 functions_todo.php 		if (!is_numeric($itemId) || !is_numeric($status)) return false;
+<a href='../S/28.html#L82'>itemId</a>             82 functions_todo.php 		$db-&gt;update('UPDATE tblTodoLists SET itemStatus='.$status.' WHERE itemId='.$itemId);
+<a href='../S/28.html#L85'>itemId</a>             85 functions_todo.php 	function assignTodoItem($itemId, $assignedId)
+<a href='../S/28.html#L88'>itemId</a>             88 functions_todo.php 		if (!is_numeric($itemId) || !is_numeric($assignedId)) return false;
+<a href='../S/28.html#L90'>itemId</a>             90 functions_todo.php 		$db-&gt;update('UPDATE tblTodoLists SET assignedTo='.$assignedId.', itemStatus='.TODO_ITEM_ASSIGNED.' WHERE itemId='.$itemId);
+<a href='../S/28.html#L93'>itemId</a>             93 functions_todo.php 	function unassignTodoItem(&amp;$db, $itemId)
+<a href='../S/28.html#L95'>itemId</a>             95 functions_todo.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/28.html#L97'>itemId</a>             97 functions_todo.php 		$sql = 'UPDATE tblTodoLists SET assignedTo=0, itemStatus='.TODO_ITEM_OPEN.' WHERE itemId='.$itemId;
+<a href='../S/28.html#L221'>itemId</a>            221 functions_todo.php 		$itemId = $db['insert_id'];
+<a href='../S/28.html#L225'>itemId</a>            225 functions_todo.php 		$sql = 'INSERT INTO tblTodoListComments SET itemId='.$itemId.',itemComment="'.$comment.'",timestamp='.time().',userId=0';
+<a href='../S/28.html#L228'>itemId</a>            228 functions_todo.php 		return $itemId;
+<a href='../S/15.html#L3'>itemId</a>              3 __old_functions_forums.php 	function getForumItemParent(&amp;$db, $itemId)
+<a href='../S/15.html#L5'>itemId</a>              5 __old_functions_forums.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/15.html#L7'>itemId</a>              7 __old_functions_forums.php 		$sql = 'SELECT parentId FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/15.html#L13'>itemId</a>             13 __old_functions_forums.php 	function getForumFolderParent(&amp;$db, $itemId)
+<a href='../S/15.html#L15'>itemId</a>             15 __old_functions_forums.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/15.html#L16'>itemId</a>             16 __old_functions_forums.php 		$parentId = getForumItemParent($db, $itemId);
+<a href='../S/15.html#L29'>itemId</a>             29 __old_functions_forums.php 	function getForumMessageRoot(&amp;$db, $itemId)
+<a href='../S/15.html#L31'>itemId</a>             31 __old_functions_forums.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/15.html#L32'>itemId</a>             32 __old_functions_forums.php 		$parentId = getForumItemParent($db, $itemId);
+<a href='../S/15.html#L33'>itemId</a>             33 __old_functions_forums.php 		if ($parentId == 0) return $itemId;
+<a href='../S/15.html#L38'>itemId</a>             38 __old_functions_forums.php 		if ($itemType == FORUM_FOLDER) return $itemId;
+<a href='../S/15.html#L58'>itemId</a>             58 __old_functions_forums.php 	function getForumNewestItem(&amp;$db, $itemId, $currtop = '')
+<a href='../S/15.html#L61'>itemId</a>             61 __old_functions_forums.php 		if (!is_numeric($itemId) || !is_numeric($currtop)) return false;
+<a href='../S/15.html#L63'>itemId</a>             63 __old_functions_forums.php 		$sql = 'SELECT itemId, timeCreated FROM tblForums WHERE parentId='.$itemId;
+<a href='../S/15.html#L108'>itemId</a>            108 __old_functions_forums.php 	function updateForumReadCounter(&amp;$db, $itemId)
+<a href='../S/15.html#L110'>itemId</a>            110 __old_functions_forums.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/15.html#L112'>itemId</a>            112 __old_functions_forums.php 		$sql = 'UPDATE tblForums SET itemRead=itemRead+1 WHERE itemId='.$itemId;
+<a href='../S/15.html#L116'>itemId</a>            116 __old_functions_forums.php 	function addForumVote(&amp;$db, $itemId, $value)
+<a href='../S/15.html#L118'>itemId</a>            118 __old_functions_forums.php 		if (!is_numeric($itemId) || !is_numeric($value)) return false;
+<a href='../S/15.html#L122'>itemId</a>            122 __old_functions_forums.php 		$sql .= 'WHERE itemId='.$itemId;
+<a href='../S/15.html#L205'>itemId</a>            205 __old_functions_forums.php 	function getForumMostReadMessagesHere(&amp;$db, $itemId, $count)
+<a href='../S/15.html#L207'>itemId</a>            207 __old_functions_forums.php 		if (!is_numeric($itemId) || !is_numeric($count)) return false;
+<a href='../S/15.html#L212'>itemId</a>            212 __old_functions_forums.php 		$sql .= 'WHERE tblForums.parentId='.$itemId.' AND tblForums.itemType='.FORUM_MESSAGE.' ';
+<a href='../S/15.html#L220'>itemId</a>            220 __old_functions_forums.php 	function forumPathContainsUnread(&amp;$db, $itemId)
+<a href='../S/15.html#L222'>itemId</a>            222 __old_functions_forums.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/15.html#L224'>itemId</a>            224 __old_functions_forums.php 		$sql = 'SELECT itemId,timeCreated FROM tblForums WHERE parentId='.$itemId;
+<a href='../S/15.html#L242'>itemId</a>            242 __old_functions_forums.php 	function forumItemExists(&amp;$db, $itemId)
+<a href='../S/15.html#L244'>itemId</a>            244 __old_functions_forums.php 		if (!is_numeric($itemId)) return false;
+<a href='../S/15.html#L246'>itemId</a>            246 __old_functions_forums.php 		$sql = 'SELECT itemId FROM tblForums WHERE itemId='.$itemId;
+<a href='../S/15.html#L270'>itemId</a>            270 __old_functions_forums.php 	function displayCurrentForumContent(&amp;$db, $itemId)
+</pre>
+</body>
+</html>

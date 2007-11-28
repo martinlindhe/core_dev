@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>rss_enabled</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/14.html#L11'>rss_enabled</a>        11 functions_news.php 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
+<a href='../S/14.html#L15'>rss_enabled</a>        15 functions_news.php 		if (!$session-&gt;id || !is_numeric($rss_enabled) || !is_numeric($category_id)) return false;
+<a href='../S/14.html#L23'>rss_enabled</a>        23 functions_news.php 		$q = 'INSERT INTO tblNews SET title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session-&gt;id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
+<a href='../S/14.html#L29'>rss_enabled</a>        29 functions_news.php 	function updateNews($newsId, $categoryId, $title, $body, $topublish, $rss_enabled)
+<a href='../S/14.html#L33'>rss_enabled</a>        33 functions_news.php 		if (!$session-&gt;isAdmin || !is_numeric($newsId) || !is_numeric($categoryId) || !is_numeric($rss_enabled)) return false;
+<a href='../S/14.html#L37'>rss_enabled</a>        37 functions_news.php 		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session-&gt;id.' WHERE newsId='.$newsId;
+</pre>
+</body>
+</html>

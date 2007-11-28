@@ -1,0 +1,55 @@
+<html>
+<head>
+<title>body</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/3.html#L50'>body</a>               50 atom_subscriptions.php 	function smtp_mass_mail($mails, $subject, $body)
+<a href='../S/3.html#L76'>body</a>               76 atom_subscriptions.php 		$mail-&gt;Body     = $body;
+<a href='../S/11.html#L11'>body</a>               11 functions_blogs.php 	function addBlog($categoryId, $title, $body)
+<a href='../S/11.html#L18'>body</a>               18 functions_blogs.php 		$body = $db-&gt;escape($body);
+<a href='../S/11.html#L20'>body</a>               20 functions_blogs.php 		$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session-&gt;id.',blogTitle="'.$title.'",blogBody="'.$body.'",timeCreated=NOW()';
+<a href='../S/11.html#L25'>body</a>               25 functions_blogs.php 		if ($config['blog']['moderation'] &amp;&amp; (isSensitive($title) || isSensitive($body))) addToModerationQueue(MODERATION_BLOG, $blogId, true);
+<a href='../S/11.html#L40'>body</a>               40 functions_blogs.php 	function updateBlog($blogId, $categoryId, $title, $body)
+<a href='../S/11.html#L47'>body</a>               47 functions_blogs.php 		$body = $db-&gt;escape($body);
+<a href='../S/11.html#L49'>body</a>               49 functions_blogs.php 		$q = 'UPDATE tblBlogs SET categoryId='.$categoryId.',blogTitle="'.$title.'",blogBody="'.$body.'",timeUpdated=NOW() WHERE blogId='.$blogId;
+<a href='../S/11.html#L54'>body</a>               54 functions_blogs.php 			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_BLOG, $blogId, true);
+<a href='../S/11.html#L185'>body</a>              185 functions_blogs.php 			$body = trim($blog['blogBody']);
+<a href='../S/11.html#L187'>body</a>              187 functions_blogs.php 			$body = str_replace('|', '&amp;#124;', $body);	//	|		vertical bar
+<a href='../S/11.html#L188'>body</a>              188 functions_blogs.php 			$body = $body."\n";	//always start with an empty line when getting focus
+<a href='../S/11.html#L190'>body</a>              190 functions_blogs.php 			echo '&lt;textarea name="blog_body" cols="65" rows="25"&gt;'.$body.'&lt;/textarea&gt;&lt;br/&gt;&lt;br/&gt;';
+<a href='../S/21.html#L169'>body</a>              169 functions_forum.php 	function addForumMessage($parentId, $subject, $body, $sticky = 0)
+<a href='../S/21.html#L174'>body</a>              174 functions_forum.php 		$body = strip_tags($body);
+<a href='../S/21.html#L177'>body</a>              177 functions_forum.php 		$body = substr($body, 0, $config['forum']['maxsize_body']);
+<a href='../S/21.html#L178'>body</a>              178 functions_forum.php 		$body = $db-&gt;escape($body);
+<a href='../S/21.html#L180'>body</a>              180 functions_forum.php 		$q = 'INSERT INTO tblForums SET itemType='.FORUM_MESSAGE.',authorId='.$session-&gt;id.',parentId='.$parentId.',itemSubject="'.$subject.'",itemBody="'.$body.'",timeCreated=NOW()';
+<a href='../S/21.html#L185'>body</a>              185 functions_forum.php 		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_FORUM, $itemId, true);
+<a href='../S/21.html#L263'>body</a>              263 functions_forum.php 	function forumUpdateItem($itemId, $subject, $body, $sticky = 0)
+<a href='../S/21.html#L269'>body</a>              269 functions_forum.php 		$body = $db-&gt;escape($body);
+<a href='../S/21.html#L271'>body</a>              271 functions_forum.php 		$q = 'UPDATE tblForums SET itemSubject="'.$subject.'",itemBody="'.$body.'",sticky='.$sticky.' WHERE itemId='.$itemId;
+<a href='../S/21.html#L559'>body</a>              559 functions_forum.php 		$body = formatUserInputText($item['itemBody']);
+<a href='../S/21.html#L578'>body</a>              578 functions_forum.php 		echo $body;
+<a href='../S/7.html#L4'>body</a>                4 functions_guestbook.php 	function addGuestbookEntry($ownerId, $subject, $body)
+<a href='../S/7.html#L12'>body</a>               12 functions_guestbook.php 		$body    = $db-&gt;escape(strip_tags($body));
+<a href='../S/7.html#L14'>body</a>               14 functions_guestbook.php 		if (!$body) return false;
+<a href='../S/7.html#L21'>body</a>               21 functions_guestbook.php 		$q .= ' AND subject="'.$subject.'" AND body="'.$body.'" AND timeCreated&gt;=DATE_SUB(NOW(),INTERVAL 5 MINUTE)';
+<a href='../S/7.html#L24'>body</a>               24 functions_guestbook.php 		$q = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',authorId='.$session-&gt;id.',subject="'.$subject.'",body="'.$body.'",timeCreated=NOW()';
+<a href='../S/7.html#L28'>body</a>               28 functions_guestbook.php 		if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_GUESTBOOK, $entryId, true);
+<a href='../S/7.html#L134'>body</a>              134 functions_guestbook.php 		if ($session-&gt;id != $userId &amp;&amp; !empty($_POST['body'])) {
+<a href='../S/7.html#L135'>body</a>              135 functions_guestbook.php 			addGuestbookEntry($userId, '', $_POST['body']);
+<a href='../S/14.html#L11'>body</a>               11 functions_news.php 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
+<a href='../S/14.html#L17'>body</a>               17 functions_news.php 		$q = 'SELECT newsId FROM tblNews WHERE title="'.$db-&gt;escape($title).'" AND body="'.$db-&gt;escape($body).'"';
+<a href='../S/14.html#L23'>body</a>               23 functions_news.php 		$q = 'INSERT INTO tblNews SET title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session-&gt;id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
+<a href='../S/14.html#L29'>body</a>               29 functions_news.php 	function updateNews($newsId, $categoryId, $title, $body, $topublish, $rss_enabled)
+<a href='../S/14.html#L37'>body</a>               37 functions_news.php 		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session-&gt;id.' WHERE newsId='.$newsId;
+<a href='../S/29.html#L307'>body</a>              307 functions_spider.php 		$body = $db-&gt;getOneItem($q);
+<a href='../S/29.html#L308'>body</a>              308 functions_spider.php 		if ($body) {
+<a href='../S/29.html#L310'>body</a>              310 functions_spider.php 			return $body;
+<a href='../S/29.html#L352'>body</a>              352 functions_spider.php 		$body = substr($result, $pos);
+<a href='../S/29.html#L409'>body</a>              409 functions_spider.php 			$q = 'INSERT INTO tblSpiderCache SET url="'.$db-&gt;escape($url).'",header="'.$db-&gt;escape($header).'",body="'.$db-&gt;escape($body).'",sha1="'.sha1($body).'",timeCreated=NOW()';
+<a href='../S/29.html#L418'>body</a>              418 functions_spider.php 		return $body;
+</pre>
+</body>
+</html>

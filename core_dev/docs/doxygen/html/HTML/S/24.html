@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>functions_faq.php</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<a name='TOP'><h2><a href='../mains.html'>root</a>/functions_faq.php</h2>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L4'>[^]</a><a href='#L22'>[v]</a>[top]<a href='#BOTTOM'>[bottom]</a><a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+<hr>
+<h2>DEFINITIONS</h2>
+This source file includes following definitions.
+<ol>
+<li><a href='#L4' title='Defined at 4.'>addFAQ</a>
+<li><a href='#L14' title='Defined at 14.'>getFAQ</a>
+<li><a href='#L22' title='Defined at 22.'>showFAQ</a>
+</ol>
+<hr>
+<pre>
+<a name='L1'>   1 &lt;?
+<a name='L2'>   2         $<a href='../Y/146.html' title='Multiple used in 316 places.'>config</a>['faq']['enabled'] = <b>true</b>;
+<a name='L3'>   3 
+<a name='L4'>   4         <b>function</b> addFAQ($<a href='../Y/115.html' title='Multiple used in 2 places.'>_q</a>, $<a href='../Y/2.html' title='Multiple used in 2 places.'>_a</a>)
+<a name='L5'>   5         <font color='blue'>{</font>
+<a name='L6'>   6                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>, $<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>;
+<a name='L7'>   7 
+<a name='L8'>   8                 <b>if</b> (!$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/321.html' title='Multiple used in 53 places.'>isAdmin</a>) <b>return</b>;
+<a name='L9'>   9 
+<a name='L10'>  10                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'INSERT INTO tblFAQ SET question="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/115.html' title='Multiple used in 2 places.'>_q</a>).'",answer="'.$<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/86.html' title='Multiple defined in 4 places.'>escape</a>($<a href='../Y/2.html' title='Multiple used in 2 places.'>_a</a>).'",createdBy='.$<a href='../Y/559.html' title='Multiple used in 322 places.'>session</a>-&gt;<a href='../Y/278.html' title='Multiple used in 189 places.'>id</a>.',timeCreated=NOW()';
+<a name='L11'>  11                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/250.html' title='Multiple defined in 4 places.'>insert</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L12'>  12         <font color='blue'>}</font>
+<a name='L13'>  13 
+<a name='L14'>  14         <b>function</b> <a href='../S/24.html#L24' title='Refered from 24 in functions_faq.php.'>getFAQ</a>()
+<a name='L15'>  15         <font color='blue'>{</font>
+<a name='L16'>  16                 <b>global</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>;
+<a name='L17'>  17 
+<a name='L18'>  18                 $<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a> = 'SELECT * FROM tblFAQ';
+<a name='L19'>  19                 <b>return</b> $<a href='../Y/173.html' title='Multiple used in 576 places.'>db</a>-&gt;<a href='../D/128.html' title='Multiple defined in 4 places.'>getArray</a>($<a href='../Y/505.html' title='Multiple used in 705 places.'>q</a>);
+<a name='L20'>  20         <font color='blue'>}</font>
+<a name='L21'>  21 
+<a name='L22'>  22         <b>function</b> showFAQ()
+<a name='L23'>  23         <font color='blue'>{</font>
+<a name='L24'>  24                 $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a> = <a href='../S/24.html#L14' title='Defined at 14 in functions_faq.php.'>getFAQ</a>();
+<a name='L25'>  25                 <b>if</b> (!$<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>) <b>return</b>;
+<a name='L26'>  26 
+<a name='L27'>  27                 $<a href='../Y/5.html' title='Multiple used in 11 places.'>active</a> = $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[0]['faqId'];
+<a name='L28'>  28 
+<a name='L29'>  29                 <i><font color='green'>//FAQ full Q&amp;A details</font></i>
+<a name='L30'>  30                 <b>for</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>=0; $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>&lt;<a href='../Y/151.html' title='Multiple used in 53 places.'>count</a>($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>); $<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>++) <font color='blue'>{</font>
+<a name='L31'>  31                         <b>echo</b> '&lt;div class="faq_holder"&gt;';
+<a name='L32'>  32                                 <b>echo</b> '&lt;div class="faq_q" onclick="faq_focus('.$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>.')"&gt;';
+<a name='L33'>  33                                         <b>echo</b> ($<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>+1).'. '.$<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>]['question'];
+<a name='L34'>  34                                 <b>echo</b> '&lt;/div&gt;';
+<a name='L35'>  35                                 <b>echo</b> '&lt;div class="faq_a" id="faq_'.$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>.'" style="'.($<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>]['faqId']!=$<a href='../Y/5.html' title='Multiple used in 11 places.'>active</a>?'display:none':'').'"&gt;';
+<a name='L36'>  36                                         <b>echo</b> $<a href='../Y/348.html' title='Multiple used in 160 places.'>list</a>[$<a href='../Y/277.html' title='Multiple used in 92 places.'>i</a>]['answer'];
+<a name='L37'>  37                                 <b>echo</b> '&lt;/div&gt;';
+<a name='L38'>  38                         <b>echo</b> '&lt;/div&gt;';  <i><font color='green'>//class="faq_holder"</font></i>
+<a name='L39'>  39                 <font color='blue'>}</font>
+<a name='L40'>  40 
+<a name='L41'>  41         <font color='blue'>}</font>
+<a name='L42'>  42 ?&gt;
+</pre>
+<hr>
+<a name='BOTTOM'>
+<i><font color='green'>/* [&lt;][&gt;]<a href='#L4'>[^]</a><a href='#L22'>[v]</a><a href='#TOP'>[top]</a>[bottom]<a href='../mains.html'>[index]</a><a href='../help.html'>[help]</a> */</font></i>
+</body>
+</html>

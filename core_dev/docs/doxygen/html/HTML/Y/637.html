@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>title</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/4.html#L271'>title</a>             271 class.Files.php 			$title = htmlspecialchars($row['fileName']).' ('.formatDataSize($row['fileSize']).')';
+<a href='../S/4.html#L273'>title</a>             273 class.Files.php 				echo '&lt;div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].');"&gt;&lt;center&gt;';
+<a href='../S/4.html#L277'>title</a>             277 class.Files.php 				echo '&lt;div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"&gt;&lt;center&gt;';
+<a href='../S/4.html#L281'>title</a>             281 class.Files.php 				echo '&lt;div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"&gt;&lt;center&gt;';
+<a href='../S/4.html#L285'>title</a>             285 class.Files.php 				echo '&lt;div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"&gt;&lt;center&gt;';
+<a href='../S/4.html#L289'>title</a>             289 class.Files.php 				echo '&lt;div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"&gt;&lt;center&gt;';
+<a href='../S/11.html#L11'>title</a>              11 functions_blogs.php 	function addBlog($categoryId, $title, $body)
+<a href='../S/11.html#L17'>title</a>              17 functions_blogs.php 		$title = $db-&gt;escape($title);
+<a href='../S/11.html#L20'>title</a>              20 functions_blogs.php 		$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session-&gt;id.',blogTitle="'.$title.'",blogBody="'.$body.'",timeCreated=NOW()';
+<a href='../S/11.html#L25'>title</a>              25 functions_blogs.php 		if ($config['blog']['moderation'] &amp;&amp; (isSensitive($title) || isSensitive($body))) addToModerationQueue(MODERATION_BLOG, $blogId, true);
+<a href='../S/11.html#L40'>title</a>              40 functions_blogs.php 	function updateBlog($blogId, $categoryId, $title, $body)
+<a href='../S/11.html#L46'>title</a>              46 functions_blogs.php 		$title = $db-&gt;escape($title);
+<a href='../S/11.html#L49'>title</a>              49 functions_blogs.php 		$q = 'UPDATE tblBlogs SET categoryId='.$categoryId.',blogTitle="'.$title.'",blogBody="'.$body.'",timeUpdated=NOW() WHERE blogId='.$blogId;
+<a href='../S/11.html#L54'>title</a>              54 functions_blogs.php 			if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_BLOG, $blogId, true);
+<a href='../S/17.html#L229'>title</a>             229 functions_general.php 		global $config, $session, $title, $meta_rss, $meta_js, $meta_search, $body_onload;
+<a href='../S/17.html#L231'>title</a>             231 functions_general.php 		if (!$title) $title = $config['default_title'];
+<a href='../S/17.html#L236'>title</a>             236 functions_general.php 			echo '&lt;title&gt;'.$title.'&lt;/title&gt;';
+<a href='../S/14.html#L11'>title</a>              11 functions_news.php 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
+<a href='../S/14.html#L17'>title</a>              17 functions_news.php 		$q = 'SELECT newsId FROM tblNews WHERE title="'.$db-&gt;escape($title).'" AND body="'.$db-&gt;escape($body).'"';
+<a href='../S/14.html#L23'>title</a>              23 functions_news.php 		$q = 'INSERT INTO tblNews SET title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session-&gt;id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
+<a href='../S/14.html#L29'>title</a>              29 functions_news.php 	function updateNews($newsId, $categoryId, $title, $body, $topublish, $rss_enabled)
+<a href='../S/14.html#L37'>title</a>              37 functions_news.php 		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session-&gt;id.' WHERE newsId='.$newsId;
+</pre>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>db_handle</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/19.html#L132'>db_handle</a>         132 class.DB_Base.php 	public $db_handle = false;
+<a href='../S/32.html#L14'>db_handle</a>          14 class.DB_MySQLi.php 		if ($this-&gt;db_handle) $this-&gt;db_handle-&gt;close();
+<a href='../S/32.html#L28'>db_handle</a>          28 class.DB_MySQLi.php 		$this-&gt;db_handle = new mysqli($this-&gt;host, $this-&gt;username, $this-&gt;password, $this-&gt;database, $this-&gt;port);
+<a href='../S/32.html#L31'>db_handle</a>          31 class.DB_MySQLi.php 			$this-&gt;db_handle = false;
+<a href='../S/32.html#L36'>db_handle</a>          36 class.DB_MySQLi.php 		if (!$this-&gt;db_handle-&gt;set_charset($this-&gt;charset)) {
+<a href='../S/32.html#L37'>db_handle</a>          37 class.DB_MySQLi.php 			die('Error loading character set '.$this-&gt;charset.': '.$this-&gt;db_handle-&gt;error);
+<a href='../S/32.html#L42'>db_handle</a>          42 class.DB_MySQLi.php 		$this-&gt;server_version = $this-&gt;db_handle-&gt;server_info;
+<a href='../S/32.html#L43'>db_handle</a>          43 class.DB_MySQLi.php 		$this-&gt;client_version = $this-&gt;db_handle-&gt;client_info;
+<a href='../S/32.html#L50'>db_handle</a>          50 class.DB_MySQLi.php 		echo 'Host info: '.$this-&gt;db_handle-&gt;host_info.'&lt;br/&gt;';
+<a href='../S/32.html#L51'>db_handle</a>          51 class.DB_MySQLi.php 		echo 'Connection character set: '.$this-&gt;db_handle-&gt;character_set_name().'&lt;br/&gt;';
+<a href='../S/32.html#L52'>db_handle</a>          52 class.DB_MySQLi.php 		echo 'Last error: '.$this-&gt;db_handle-&gt;error.'&lt;br/&gt;';
+<a href='../S/32.html#L53'>db_handle</a>          53 class.DB_MySQLi.php 		echo 'Last errno: '.$this-&gt;db_handle-&gt;errno;
+<a href='../S/32.html#L58'>db_handle</a>          58 class.DB_MySQLi.php 		return $this-&gt;db_handle-&gt;real_escape_string($q);
+<a href='../S/32.html#L67'>db_handle</a>          67 class.DB_MySQLi.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/32.html#L70'>db_handle</a>          70 class.DB_MySQLi.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = $this-&gt;db_handle-&gt;error;
+<a href='../S/32.html#L85'>db_handle</a>          85 class.DB_MySQLi.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/32.html#L90'>db_handle</a>          90 class.DB_MySQLi.php 			$ret_id = $this-&gt;db_handle-&gt;insert_id;
+<a href='../S/32.html#L92'>db_handle</a>          92 class.DB_MySQLi.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = $this-&gt;db_handle-&gt;error;
+<a href='../S/32.html#L107'>db_handle</a>         107 class.DB_MySQLi.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/32.html#L112'>db_handle</a>         112 class.DB_MySQLi.php 			$affected_rows = $this-&gt;db_handle-&gt;affected_rows;
+<a href='../S/32.html#L114'>db_handle</a>         114 class.DB_MySQLi.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = $this-&gt;db_handle-&gt;error;
+<a href='../S/32.html#L129'>db_handle</a>         129 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L130'>db_handle</a>         130 class.DB_MySQLi.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, $this-&gt;db_handle-&gt;error);
+<a href='../S/32.html#L153'>db_handle</a>         153 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L154'>db_handle</a>         154 class.DB_MySQLi.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, $this-&gt;db_handle-&gt;error);
+<a href='../S/32.html#L177'>db_handle</a>         177 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L178'>db_handle</a>         178 class.DB_MySQLi.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, $this-&gt;db_handle-&gt;error);
+<a href='../S/32.html#L201'>db_handle</a>         201 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L202'>db_handle</a>         202 class.DB_MySQLi.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, $this-&gt;db_handle-&gt;error);
+<a href='../S/32.html#L224'>db_handle</a>         224 class.DB_MySQLi.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/32.html#L225'>db_handle</a>         225 class.DB_MySQLi.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, $this-&gt;db_handle-&gt;error);
+<a href='../S/23.html#L16'>db_handle</a>          16 class.DB_MySQL.php 		if ($this-&gt;db_handle) mysql_close($this-&gt;db_handle);
+<a href='../S/23.html#L30'>db_handle</a>          30 class.DB_MySQL.php 		$this-&gt;db_handle = mysql_connect($this-&gt;host.':'.$this-&gt;port, $this-&gt;username, $this-&gt;password);
+<a href='../S/23.html#L32'>db_handle</a>          32 class.DB_MySQL.php 		if (!$this-&gt;db_handle) {
+<a href='../S/23.html#L33'>db_handle</a>          33 class.DB_MySQL.php 			$this-&gt;db_handle = false;
+<a href='../S/23.html#L38'>db_handle</a>          38 class.DB_MySQL.php 		mysql_select_db($this-&gt;database, $this-&gt;db_handle);
+<a href='../S/23.html#L44'>db_handle</a>          44 class.DB_MySQL.php 		$this-&gt;server_version = mysql_get_server_info($this-&gt;db_handle);
+<a href='../S/23.html#L52'>db_handle</a>          52 class.DB_MySQL.php 		echo 'Host info: '.mysql_get_host_info($this-&gt;db_handle).'&lt;br/&gt;';
+<a href='../S/23.html#L53'>db_handle</a>          53 class.DB_MySQL.php 		echo 'Connection character set: '.mysql_client_encoding($this-&gt;db_handle).'&lt;br/&gt;';
+<a href='../S/23.html#L54'>db_handle</a>          54 class.DB_MySQL.php 		echo 'Last error: '.mysql_error($this-&gt;db_handle).'&lt;br/&gt;';
+<a href='../S/23.html#L55'>db_handle</a>          55 class.DB_MySQL.php 		echo 'Last errno: '.mysql_errno($this-&gt;db_handle);
+<a href='../S/23.html#L60'>db_handle</a>          60 class.DB_MySQL.php 		return mysql_real_escape_string($q, $this-&gt;db_handle);
+<a href='../S/23.html#L69'>db_handle</a>          69 class.DB_MySQL.php 		$result = mysql_query($q, $this-&gt;db_handle);
+<a href='../S/23.html#L72'>db_handle</a>          72 class.DB_MySQL.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = mysql_error($this-&gt;db_handle);
+<a href='../S/23.html#L87'>db_handle</a>          87 class.DB_MySQL.php 		$result = mysql_query($q, $this-&gt;db_handle);
+<a href='../S/23.html#L92'>db_handle</a>          92 class.DB_MySQL.php 			$ret_id = mysql_insert_id($this-&gt;db_handle);
+<a href='../S/23.html#L94'>db_handle</a>          94 class.DB_MySQL.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = mysql_error($this-&gt;db_handle);
+<a href='../S/23.html#L109'>db_handle</a>         109 class.DB_MySQL.php 		$result = mysql_query($q, $this-&gt;db_handle);
+<a href='../S/23.html#L114'>db_handle</a>         114 class.DB_MySQL.php 			$affected_rows = mysql_affected_rows($this-&gt;db_handle);
+<a href='../S/23.html#L116'>db_handle</a>         116 class.DB_MySQL.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = mysql_error($this-&gt;db_handle);
+<a href='../S/23.html#L131'>db_handle</a>         131 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L132'>db_handle</a>         132 class.DB_MySQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, mysql_error($this-&gt;db_handle));
+<a href='../S/23.html#L155'>db_handle</a>         155 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L156'>db_handle</a>         156 class.DB_MySQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, mysql_error($this-&gt;db_handle));
+<a href='../S/23.html#L179'>db_handle</a>         179 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L180'>db_handle</a>         180 class.DB_MySQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, mysql_error($this-&gt;db_handle));
+<a href='../S/23.html#L203'>db_handle</a>         203 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L204'>db_handle</a>         204 class.DB_MySQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, mysql_error($this-&gt;db_handle));
+<a href='../S/23.html#L226'>db_handle</a>         226 class.DB_MySQL.php 		if (!$result = mysql_query($q, $this-&gt;db_handle)) {
+<a href='../S/23.html#L227'>db_handle</a>         227 class.DB_MySQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, mysql_error($this-&gt;db_handle));
+<a href='../S/22.html#L14'>db_handle</a>          14 class.DB_PostgreSQL.php 		if ($this-&gt;db_handle) pg_close($this-&gt;db_handle);
+<a href='../S/22.html#L29'>db_handle</a>          29 class.DB_PostgreSQL.php 		$this-&gt;db_handle = pg_connect($str);
+<a href='../S/22.html#L31'>db_handle</a>          31 class.DB_PostgreSQL.php 		if ($this-&gt;db_handle == false)
+<a href='../S/22.html#L33'>db_handle</a>          33 class.DB_PostgreSQL.php 			$this-&gt;db_handle = false;
+<a href='../S/22.html#L43'>db_handle</a>          43 class.DB_PostgreSQL.php 		$this-&gt;server_version = pg_parameter_status($this-&gt;db_handle, 'server_version');
+<a href='../S/22.html#L44'>db_handle</a>          44 class.DB_PostgreSQL.php 		$info = pg_version($this-&gt;db_handle);
+<a href='../S/22.html#L52'>db_handle</a>          52 class.DB_PostgreSQL.php 		echo 'Server encoding: '.pg_parameter_status($this-&gt;db_handle, 'server_encoding').'&lt;br/&gt;';
+<a href='../S/22.html#L53'>db_handle</a>          53 class.DB_PostgreSQL.php 		echo 'Client encoding: '.pg_parameter_status($this-&gt;db_handle, 'client_encoding').'&lt;br/&gt;';
+<a href='../S/22.html#L54'>db_handle</a>          54 class.DB_PostgreSQL.php 		echo 'Last error: '.pg_last_error($this-&gt;db_handle).'&lt;br/&gt;';
+<a href='../S/22.html#L55'>db_handle</a>          55 class.DB_PostgreSQL.php 		echo 'Last notice: '.pg_last_notice($this-&gt;db_handle);
+<a href='../S/22.html#L60'>db_handle</a>          60 class.DB_PostgreSQL.php 		return pg_escape_string($this-&gt;db_handle, $q);
+<a href='../S/22.html#L69'>db_handle</a>          69 class.DB_PostgreSQL.php 		$result = pg_query($this-&gt;db_handle, $q);
+<a href='../S/22.html#L72'>db_handle</a>          72 class.DB_PostgreSQL.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = pg_last_error($this-&gt;db_handle);
+<a href='../S/22.html#L87'>db_handle</a>          87 class.DB_PostgreSQL.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/22.html#L92'>db_handle</a>          92 class.DB_PostgreSQL.php 			$ret_id = $this-&gt;db_handle-&gt;insert_id;
+<a href='../S/22.html#L94'>db_handle</a>          94 class.DB_PostgreSQL.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = pg_last_error($this-&gt;db_handle);
+<a href='../S/22.html#L109'>db_handle</a>         109 class.DB_PostgreSQL.php 		$result = $this-&gt;db_handle-&gt;query($q);
+<a href='../S/22.html#L114'>db_handle</a>         114 class.DB_PostgreSQL.php 			$affected_rows = $this-&gt;db_handle-&gt;affected_rows;
+<a href='../S/22.html#L116'>db_handle</a>         116 class.DB_PostgreSQL.php 			if ($config['debug']) $this-&gt;query_error[ $this-&gt;queries_cnt ] = pg_last_error($this-&gt;db_handle);
+<a href='../S/22.html#L131'>db_handle</a>         131 class.DB_PostgreSQL.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/22.html#L132'>db_handle</a>         132 class.DB_PostgreSQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, pg_last_error($this-&gt;db_handle));
+<a href='../S/22.html#L155'>db_handle</a>         155 class.DB_PostgreSQL.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/22.html#L156'>db_handle</a>         156 class.DB_PostgreSQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, pg_last_error($this-&gt;db_handle));
+<a href='../S/22.html#L179'>db_handle</a>         179 class.DB_PostgreSQL.php 		if (!$result = $this-&gt;db_handle-&gt;query($q)) {
+<a href='../S/22.html#L180'>db_handle</a>         180 class.DB_PostgreSQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, pg_last_error($this-&gt;db_handle));
+<a href='../S/22.html#L203'>db_handle</a>         203 class.DB_PostgreSQL.php 		if (!$result = pg_query($this-&gt;db_handle, $q)) {
+<a href='../S/22.html#L204'>db_handle</a>         204 class.DB_PostgreSQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, pg_last_error($this-&gt;db_handle));
+<a href='../S/22.html#L226'>db_handle</a>         226 class.DB_PostgreSQL.php 		if (!$result = pg_query($this-&gt;db_handle, $q)) {
+<a href='../S/22.html#L227'>db_handle</a>         227 class.DB_PostgreSQL.php 			if ($config['debug']) $this-&gt;profileError($time_started, $q, pg_last_error($this-&gt;db_handle));
+</pre>
+</body>
+</html>

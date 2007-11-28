@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>ownerId</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/25.html#L20'>ownerId</a>            20 atom_comments.php 	function addComment($_type, $ownerId, $commentText, $privateComment = false)
+<a href='../S/25.html#L23'>ownerId</a>            23 atom_comments.php 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
+<a href='../S/25.html#L32'>ownerId</a>            32 atom_comments.php 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session-&gt;id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+<a href='../S/25.html#L36'>ownerId</a>            36 atom_comments.php 	function updateComment($commentType, $ownerId, $commentId, $commentText)
+<a href='../S/25.html#L39'>ownerId</a>            39 atom_comments.php 		if (!$session-&gt;id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
+<a href='../S/25.html#L44'>ownerId</a>            44 atom_comments.php 		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$session-&gt;id;
+<a href='../S/25.html#L57'>ownerId</a>            57 atom_comments.php 	function deleteComments($commentType, $ownerId)
+<a href='../S/25.html#L60'>ownerId</a>            60 atom_comments.php 		if (!$session-&gt;id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
+<a href='../S/25.html#L62'>ownerId</a>            62 atom_comments.php 		$q = 'UPDATE tblComments SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
+<a href='../S/25.html#L66'>ownerId</a>            66 atom_comments.php 	function getComments($commentType, $ownerId, $privateComments = false)
+<a href='../S/25.html#L69'>ownerId</a>            69 atom_comments.php 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
+<a href='../S/25.html#L73'>ownerId</a>            73 atom_comments.php 		$q .= 'WHERE t1.ownerId='.$ownerId.' AND t1.commentType='.$commentType.' AND t1.deletedBy=0';
+<a href='../S/25.html#L82'>ownerId</a>            82 atom_comments.php 	function getCommentsByOwner($_type, $ownerId)
+<a href='../S/25.html#L85'>ownerId</a>            85 atom_comments.php 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+<a href='../S/25.html#L94'>ownerId</a>            94 atom_comments.php 			if ($_type == COMMENT_IMAGE &amp;&amp; $files-&gt;getUploader($row['ownerId']) == $ownerId) {
+<a href='../S/25.html#L102'>ownerId</a>           102 atom_comments.php 	function getLastComment($commentType, $ownerId, $privateComments = false)
+<a href='../S/25.html#L105'>ownerId</a>           105 atom_comments.php 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return false;
+<a href='../S/25.html#L108'>ownerId</a>           108 atom_comments.php 					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
+<a href='../S/25.html#L118'>ownerId</a>           118 atom_comments.php 	function getCommentsCount($commentType, $ownerId)
+<a href='../S/25.html#L121'>ownerId</a>           121 atom_comments.php 		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
+<a href='../S/25.html#L124'>ownerId</a>           124 atom_comments.php 					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
+<a href='../S/25.html#L130'>ownerId</a>           130 atom_comments.php 	function showComments($_type, $ownerId, $col_w = 30, $col_h = 6)
+<a href='../S/25.html#L133'>ownerId</a>           133 atom_comments.php 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w) || !is_numeric($col_h)) return false;
+<a href='../S/25.html#L136'>ownerId</a>           136 atom_comments.php 			addComment($_type, $ownerId, $_POST['cmt']);
+<a href='../S/25.html#L144'>ownerId</a>           144 atom_comments.php 		$list = getComments($_type, $ownerId);
+<a href='../S/5.html#L10'>ownerId</a>            10 atom_polls.php 	function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
+<a href='../S/5.html#L14'>ownerId</a>            14 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+<a href='../S/5.html#L43'>ownerId</a>            43 atom_polls.php 				$q = 'SELECT timeEnd FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 ORDER BY timeStart DESC LIMIT 1';
+<a href='../S/5.html#L61'>ownerId</a>            61 atom_polls.php 		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session-&gt;id.',timeCreated=NOW()'.$timeStart.$timeEnd;
+<a href='../S/5.html#L75'>ownerId</a>            75 atom_polls.php 	function getPolls($_type, $ownerId = 0)
+<a href='../S/5.html#L78'>ownerId</a>            78 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+<a href='../S/5.html#L80'>ownerId</a>            80 atom_polls.php 		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 ORDER BY timeStart ASC,pollText ASC';
+<a href='../S/5.html#L95'>ownerId</a>            95 atom_polls.php 	function getActivePolls($_type, $ownerId = 0)
+<a href='../S/5.html#L98'>ownerId</a>            98 atom_polls.php 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+<a href='../S/5.html#L100'>ownerId</a>           100 atom_polls.php 		$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 AND NOW() BETWEEN timeStart AND timeEnd ORDER BY timeStart ASC,pollText ASC';
+<a href='../S/33.html#L15'>ownerId</a>            15 atom_settings.php 	function saveSetting($_type, $ownerId, $settingName, $settingValue)
+<a href='../S/33.html#L17'>ownerId</a>            17 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+<a href='../S/33.html#L24'>ownerId</a>            24 atom_settings.php 		$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L26'>ownerId</a>            26 atom_settings.php 			$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L29'>ownerId</a>            29 atom_settings.php 			$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$_type.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
+<a href='../S/33.html#L36'>ownerId</a>            36 atom_settings.php 	function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
+<a href='../S/33.html#L38'>ownerId</a>            38 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+<a href='../S/33.html#L45'>ownerId</a>            45 atom_settings.php 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L53'>ownerId</a>            53 atom_settings.php 	function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
+<a href='../S/33.html#L55'>ownerId</a>            55 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !$settingName) return false;
+<a href='../S/33.html#L62'>ownerId</a>            62 atom_settings.php 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.SETTING_USERDATA.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L69'>ownerId</a>            69 atom_settings.php 	function readAllSettings($_type, $ownerId)
+<a href='../S/33.html#L71'>ownerId</a>            71 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type)) return false;
+<a href='../S/33.html#L75'>ownerId</a>            75 atom_settings.php 		$q = 'SELECT settingName,settingId,settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' ORDER BY settingName ASC';
+<a href='../S/4.html#L139'>ownerId</a>           139 class.Files.php 	function getFileList($fileType, $ownerId = 0)
+<a href='../S/4.html#L142'>ownerId</a>           142 class.Files.php 		if (!is_numeric($fileType) || !is_numeric($ownerId)) return false;
+<a href='../S/4.html#L145'>ownerId</a>           145 class.Files.php 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+<a href='../S/4.html#L193'>ownerId</a>           193 class.Files.php 	function showFiles($fileType, $ownerId = 0, $categoryId = 0)
+<a href='../S/4.html#L203'>ownerId</a>           203 class.Files.php 			$this-&gt;handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
+<a href='../S/4.html#L206'>ownerId</a>           206 class.Files.php 				addRevision(REVISIONS_WIKI, $ownerId, 'File uploaded...', now(), $session-&gt;id, REV_CAT_FILE_UPLOADED);
+<a href='../S/4.html#L258'>ownerId</a>           258 class.Files.php 		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId.' ORDER BY timeUploaded ASC';
+<a href='../S/4.html#L309'>ownerId</a>           309 class.Files.php 				$data = getBlog($ownerId);
+<a href='../S/4.html#L451'>ownerId</a>           451 class.Files.php 	function handleUpload($FileData, $fileType, $ownerId, $categoryId = 0)
+<a href='../S/4.html#L454'>ownerId</a>           454 class.Files.php 		if ((!$session-&gt;id &amp;&amp; !$this-&gt;anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
+<a href='../S/4.html#L465'>ownerId</a>           465 class.Files.php 		$fileId = $this-&gt;addFileEntry($fileType, $categoryId, $ownerId, $FileData['name']);
+<a href='../S/4.html#L481'>ownerId</a>           481 class.Files.php 	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
+<a href='../S/4.html#L484'>ownerId</a>           484 class.Files.php 		if (!is_numeric($fileType) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
+<a href='../S/4.html#L491'>ownerId</a>           491 class.Files.php 	  	$q = 'INSERT INTO tblFiles SET fileName="'.$db-&gt;escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session-&gt;id.',uploaderIP='.$session-&gt;ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+<a href='../S/4.html#L493'>ownerId</a>           493 class.Files.php 			$q = 'INSERT INTO tblFiles SET fileName="'.$db-&gt;escape($fileName).'",ownerId='.$ownerId.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+<a href='../S/4.html#L951'>ownerId</a>           951 class.Files.php 	function getFiles($fileType, $ownerId, $categoryId = 0)
+<a href='../S/4.html#L954'>ownerId</a>           954 class.Files.php 		if (!$session-&gt;id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return array();
+<a href='../S/4.html#L958'>ownerId</a>           958 class.Files.php 			$q .= 'WHERE fileType='.$fileType.' AND ownerId='.$ownerId.' AND uploaderId='.$session-&gt;id;
+<a href='../S/4.html#L963'>ownerId</a>           963 class.Files.php 			$q .= 'WHERE t1.categoryId='.$categoryId.' AND t1.ownerId='.$ownerId;
+<a href='../S/4.html#L970'>ownerId</a>           970 class.Files.php 	function getFileCount($fileType, $ownerId, $categoryId = 0)
+<a href='../S/4.html#L973'>ownerId</a>           973 class.Files.php 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return 0;
+<a href='../S/4.html#L975'>ownerId</a>           975 class.Files.php 		$q = 'SELECT COUNT(fileId) FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId;
+<a href='../S/7.html#L4'>ownerId</a>             4 functions_guestbook.php 	function addGuestbookEntry($ownerId, $subject, $body)
+<a href='../S/7.html#L8'>ownerId</a>             8 functions_guestbook.php 		if (!$session-&gt;id || !is_numeric($ownerId)) return false;
+<a href='../S/7.html#L20'>ownerId</a>            20 functions_guestbook.php 		$q  = 'SELECT COUNT(*) FROM tblGuestbooks WHERE userId='.$ownerId.' AND authorId='.$session-&gt;id;
+<a href='../S/7.html#L24'>ownerId</a>            24 functions_guestbook.php 		$q = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',authorId='.$session-&gt;id.',subject="'.$subject.'",body="'.$body.'",timeCreated=NOW()';
+<a href='../S/31.html#L262'>ownerId</a>           262 functions_userdata.php 	function readAllUserdata($ownerId)
+<a href='../S/31.html#L264'>ownerId</a>           264 functions_userdata.php 		if (!is_numeric($ownerId)) return false;
+<a href='../S/31.html#L269'>ownerId</a>           269 functions_userdata.php 		$q .= 'LEFT JOIN tblSettings AS t2 ON (t1.fieldId=t2.settingName AND t2.ownerId='.$ownerId.') ORDER BY t1.fieldPriority ASC';
+</pre>
+</body>
+</html>

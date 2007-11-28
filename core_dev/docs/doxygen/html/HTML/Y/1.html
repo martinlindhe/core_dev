@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>a</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/6.html#L283'>a</a>                 283 functions_textformat.php 		$a = date('Y', $seconds) - 1970;
+<a href='../S/6.html#L284'>a</a>                 284 functions_textformat.php 		if ($a==1) $retval = $a.' year, ';
+<a href='../S/6.html#L285'>a</a>                 285 functions_textformat.php 		else if ($a&gt;0) $retval = $a.' years, ';
+<a href='../S/6.html#L286'>a</a>                 286 functions_textformat.php 		$seconds -= (((($a*60)*60)*24)*30)*365;
+<a href='../S/6.html#L289'>a</a>                 289 functions_textformat.php 		$a = date('n',$seconds)-1;
+<a href='../S/6.html#L290'>a</a>                 290 functions_textformat.php 		if ($a==1) $retval .= $a.' month, ';
+<a href='../S/6.html#L291'>a</a>                 291 functions_textformat.php 		else if($a&gt;0) $retval .= $a.' months, ';
+<a href='../S/6.html#L292'>a</a>                 292 functions_textformat.php 		$seconds -= ((($a*60)*60)*24)*30;
+<a href='../S/6.html#L295'>a</a>                 295 functions_textformat.php 		$a = date('j',$seconds)-1;
+<a href='../S/6.html#L296'>a</a>                 296 functions_textformat.php 		if ($a==1) $retval .= $a.' day, ';
+<a href='../S/6.html#L297'>a</a>                 297 functions_textformat.php 		else if ($a&gt;0) $retval .= $a.' days, ';
+<a href='../S/6.html#L298'>a</a>                 298 functions_textformat.php 		$seconds -= (($a*60)*60)*24;
+<a href='../S/6.html#L301'>a</a>                 301 functions_textformat.php 		$a = date('H',$seconds)-1;
+<a href='../S/6.html#L302'>a</a>                 302 functions_textformat.php 		if ($a&gt;0) $retval .= $a.'h';
+<a href='../S/6.html#L303'>a</a>                 303 functions_textformat.php 		$seconds -= ($a*60)*60;
+<a href='../S/6.html#L306'>a</a>                 306 functions_textformat.php 		$a = date('i',$seconds)-0; //translate from 09 to 9 quickly ;)
+<a href='../S/6.html#L307'>a</a>                 307 functions_textformat.php 		if ($a&gt;0) $retval .= $a.'m';
+<a href='../S/6.html#L308'>a</a>                 308 functions_textformat.php 		$seconds -= $a*60;
+<a href='../S/6.html#L311'>a</a>                 311 functions_textformat.php 		$a = date('s',$seconds)-0;
+<a href='../S/6.html#L312'>a</a>                 312 functions_textformat.php 		if ($a&gt;0) $retval .= $a.'s';
+</pre>
+</body>
+</html>

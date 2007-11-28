@@ -1,0 +1,14 @@
+<html>
+<head>
+<title>topublish_time</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/14.html#L20'>topublish_time</a>     20 functions_news.php 		$topublish_time = strtotime($topublish);
+<a href='../S/14.html#L21'>topublish_time</a>     21 functions_news.php 		if ($topublish_time &lt; time()) $topublish_time = time();
+<a href='../S/14.html#L23'>topublish_time</a>     23 functions_news.php 		$q = 'INSERT INTO tblNews SET title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session-&gt;id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
+</pre>
+</body>
+</html>

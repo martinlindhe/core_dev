@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>settingName</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/33.html#L15'>settingName</a>        15 atom_settings.php 	function saveSetting($_type, $ownerId, $settingName, $settingValue)
+<a href='../S/33.html#L17'>settingName</a>        17 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+<a href='../S/33.html#L21'>settingName</a>        21 atom_settings.php 		$settingName = $db-&gt;escape($settingName);
+<a href='../S/33.html#L24'>settingName</a>        24 atom_settings.php 		$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L26'>settingName</a>        26 atom_settings.php 			$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L29'>settingName</a>        29 atom_settings.php 			$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$_type.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
+<a href='../S/33.html#L36'>settingName</a>        36 atom_settings.php 	function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
+<a href='../S/33.html#L38'>settingName</a>        38 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+<a href='../S/33.html#L42'>settingName</a>        42 atom_settings.php 		$settingName = $db-&gt;escape($settingName);
+<a href='../S/33.html#L45'>settingName</a>        45 atom_settings.php 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+<a href='../S/33.html#L53'>settingName</a>        53 atom_settings.php 	function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
+<a href='../S/33.html#L55'>settingName</a>        55 atom_settings.php 		if (!is_numeric($ownerId) || !$ownerId || !$settingName) return false;
+<a href='../S/33.html#L59'>settingName</a>        59 atom_settings.php 		$settingName = getUserdataFieldIdByName($settingName);
+<a href='../S/33.html#L62'>settingName</a>        62 atom_settings.php 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.SETTING_USERDATA.' AND settingName="'.$settingName.'"';
+</pre>
+</body>
+</html>

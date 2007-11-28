@@ -1,6 +1,6 @@
 <?
 /*
-	Object oriented interface for PostgreSQL databases using the ???.dll extension
+	Object oriented interface for PostgreSQL databases using the php_pgsql.dll extension
 
 	Written by Martin Lindhe, 2007
 */
@@ -35,7 +35,7 @@ class DB_PostgreSQL extends DB_Base
 			die('<bad>Database connection error.</bad>');
 		}
 		
-		//fixme: set charset if it is not utf8 (will be the default anyways if none is specified)
+		//FIXME: set charset if it is not utf8 (will be the default anyways if none is specified)
 
 		$this->db_driver = 'DB_PostgreSQL';
 		$this->dialect = 'pgsql';
@@ -87,7 +87,7 @@ class DB_PostgreSQL extends DB_Base
 		$result = $this->db_handle->query($q);
 
 		$ret_id = 0;
-die('x');
+
 		if ($result) {
 			$ret_id = $this->db_handle->insert_id;
 		} else {
@@ -107,7 +107,7 @@ die('x');
 		if ($config['debug']) $time_started = microtime(true);
 
 		$result = $this->db_handle->query($q);
-die('x');
+
 		$affected_rows = false;
 
 		if ($result) {
@@ -132,7 +132,7 @@ die('x');
 			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
 			return array();
 		}
-die('x');
+
 		$data = array();
 
 		while ($row = $result->fetch_assoc()) {
@@ -162,7 +162,7 @@ die('x');
 		while ($row = $result->fetch_row()) {
 			$data[ $row[0] ] = $row[1];
 		}
-die('x');
+
 		$result->free();
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
@@ -186,7 +186,7 @@ die('x');
 		while ($row = $result->fetch_row()) {
 			$data[] = $row[0];
 		}
-die('x');
+
 		$result->free();
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
@@ -208,7 +208,6 @@ die('x');
 		if ($result->num_rows > 1) {
 			die('ERROR: query '.$q.' in DB_PostgreSQL::getOneRow() returned more than 1 result!');
 		}
-		die('x');
 
 		$data = $result->fetch_array(MYSQLI_ASSOC);
 		$result->free();

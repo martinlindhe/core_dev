@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>REMOTE_ADDR</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/25.html#L32'>REMOTE_ADDR</a>        32 atom_comments.php 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session-&gt;id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+<a href='../S/25.html#L43'>REMOTE_ADDR</a>        43 atom_comments.php 		$q  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).' ';
+<a href='../S/2.html#L112'>REMOTE_ADDR</a>       112 class.Session.php 		if (!$this-&gt;ip) $this-&gt;ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+<a href='../S/2.html#L161'>REMOTE_ADDR</a>       161 class.Session.php 		if ($this-&gt;check_ip &amp;&amp; $this-&gt;ip &amp;&amp; ($this-&gt;ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+<a href='../S/2.html#L163'>REMOTE_ADDR</a>       163 class.Session.php 			$this-&gt;log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this-&gt;ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
+</pre>
+</body>
+</html>

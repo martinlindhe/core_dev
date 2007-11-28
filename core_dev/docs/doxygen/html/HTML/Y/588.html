@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>sticky</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/21.html#L169'>sticky</a>            169 functions_forum.php 	function addForumMessage($parentId, $subject, $body, $sticky = 0)
+<a href='../S/21.html#L172'>sticky</a>            172 functions_forum.php 		if (!$session-&gt;id || !is_numeric($parentId) || !is_numeric($sticky)) return false;
+<a href='../S/21.html#L181'>sticky</a>            181 functions_forum.php 		if ($sticky) $q .= ',sticky='.$sticky;
+<a href='../S/21.html#L263'>sticky</a>            263 functions_forum.php 	function forumUpdateItem($itemId, $subject, $body, $sticky = 0)
+<a href='../S/21.html#L266'>sticky</a>            266 functions_forum.php 		if (!is_numeric($itemId) || !is_numeric($sticky)) return false;
+<a href='../S/21.html#L271'>sticky</a>            271 functions_forum.php 		$q = 'UPDATE tblForums SET itemSubject="'.$subject.'",itemBody="'.$body.'",sticky='.$sticky.' WHERE itemId='.$itemId;
+</pre>
+</body>
+</html>

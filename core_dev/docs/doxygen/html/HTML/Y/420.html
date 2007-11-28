@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>newsId</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/14.html#L29'>newsId</a>             29 functions_news.php 	function updateNews($newsId, $categoryId, $title, $body, $topublish, $rss_enabled)
+<a href='../S/14.html#L33'>newsId</a>             33 functions_news.php 		if (!$session-&gt;isAdmin || !is_numeric($newsId) || !is_numeric($categoryId) || !is_numeric($rss_enabled)) return false;
+<a href='../S/14.html#L37'>newsId</a>             37 functions_news.php 		$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db-&gt;escape($title).'",body="'.$db-&gt;escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session-&gt;id.' WHERE newsId='.$newsId;
+<a href='../S/14.html#L99'>newsId</a>             99 functions_news.php 	function getNewsItem($newsId)
+<a href='../S/14.html#L103'>newsId</a>            103 functions_news.php 		if (!is_numeric($newsId)) return false;
+<a href='../S/14.html#L108'>newsId</a>            108 functions_news.php 		$q .= 'WHERE t1.newsId='.$newsId.' AND deletedBy=0';
+</pre>
+</body>
+</html>

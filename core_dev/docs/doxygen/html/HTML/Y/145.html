@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>commentType</title>
+<meta name='robots' content='noindex,nofollow'>
+<meta name='generator' content='GLOBAL-4.8.6'>
+</head>
+<body>
+<pre>
+<a href='../S/25.html#L36'>commentType</a>        36 atom_comments.php 	function updateComment($commentType, $ownerId, $commentId, $commentText)
+<a href='../S/25.html#L39'>commentType</a>        39 atom_comments.php 		if (!$session-&gt;id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
+<a href='../S/25.html#L44'>commentType</a>        44 atom_comments.php 		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$session-&gt;id;
+<a href='../S/25.html#L57'>commentType</a>        57 atom_comments.php 	function deleteComments($commentType, $ownerId)
+<a href='../S/25.html#L60'>commentType</a>        60 atom_comments.php 		if (!$session-&gt;id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
+<a href='../S/25.html#L62'>commentType</a>        62 atom_comments.php 		$q = 'UPDATE tblComments SET deletedBy='.$session-&gt;id.',timeDeleted=NOW() WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
+<a href='../S/25.html#L66'>commentType</a>        66 atom_comments.php 	function getComments($commentType, $ownerId, $privateComments = false)
+<a href='../S/25.html#L69'>commentType</a>        69 atom_comments.php 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
+<a href='../S/25.html#L73'>commentType</a>        73 atom_comments.php 		$q .= 'WHERE t1.ownerId='.$ownerId.' AND t1.commentType='.$commentType.' AND t1.deletedBy=0';
+<a href='../S/25.html#L102'>commentType</a>       102 atom_comments.php 	function getLastComment($commentType, $ownerId, $privateComments = false)
+<a href='../S/25.html#L105'>commentType</a>       105 atom_comments.php 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return false;
+<a href='../S/25.html#L108'>commentType</a>       108 atom_comments.php 					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
+<a href='../S/25.html#L118'>commentType</a>       118 atom_comments.php 	function getCommentsCount($commentType, $ownerId)
+<a href='../S/25.html#L121'>commentType</a>       121 atom_comments.php 		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
+<a href='../S/25.html#L124'>commentType</a>       124 atom_comments.php 					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
+</pre>
+</body>
+</html>
