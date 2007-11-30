@@ -16,7 +16,7 @@
 	}
 
 	/* returns true if $userId has blocked user $otherId */
-	function isBlocked($userId, $otherId)
+	function isUserBlocked($userId, $otherId)
 	{
 		global $db;
 		if (!is_numeric($userId) || !is_numeric($otherId)) return false;
@@ -51,7 +51,6 @@
 			$db->query($q);
 		}
 	}
-
 
 	/* Returns one type of contacts for specified userId. Either their friend list or block list */
 	function getContacts($_type, $userId, $groupId = '')
