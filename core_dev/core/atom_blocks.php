@@ -32,6 +32,20 @@
 	}
 
 	/**
+	 * Removes a blocking rule
+	 * \param $_type type of block rule
+	 * \param $rule the actual rule
+	 */
+	function removeBlock($_type, $rule)
+	{
+		global $db;
+		if (!is_numeric($_type) || !trim($rule)) return false;
+
+		$q = 'DELETE FROM tblBlocks WHERE type='.$_type.' AND rule="'.$db->escape($rule).'"';
+		return $db->delete($q);
+	}
+
+	/**
 	 * Returns a array of all blocks of specified type
 	 * \param $_type type of block rule
 	 * \param $rule the actual rule
