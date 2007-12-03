@@ -1,13 +1,13 @@
 <?
-/*
-	Session class
-
-	Written by Martin Lindhe, 2007
-
-	User setting examples:
-		$session->save('variablename', 'some random setting to save');
-		$kex = $session->read('variablename');
-*/
+/**
+ * Session class
+ *
+ * User setting examples:
+ *   $session->save('variablename', 'some random setting to save');
+ *   $kex = $session->read('variablename');
+ *
+ * \author Martin Lindhe, 2007
+ */
 
 require_once('functions_general.php');
 require_once('functions_ip.php');

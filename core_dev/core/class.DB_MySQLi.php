@@ -1,9 +1,9 @@
 <?
-/*
-	Object oriented interface for MySQL databases using the php_mysqli.dll extension
-
-	Written by Martin Lindhe, 2007
-*/
+/**
+ * Object oriented interface for MySQL databases using the php_mysqli.dll extension
+ *
+ * \author Martin Lindhe, 2007
+ */
 
 require_once('class.DB_Base.php');
 

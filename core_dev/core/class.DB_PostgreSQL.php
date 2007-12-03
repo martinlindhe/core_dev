@@ -1,9 +1,9 @@
 <?
-/*
-	Object oriented interface for PostgreSQL databases using the php_pgsql.dll extension
-
-	Written by Martin Lindhe, 2007
-*/
+/**
+ * Object oriented interface for PostgreSQL databases using the php_pgsql.dll extension
+ *
+ * \author Martin Lindhe, 2007
+ */
 
 require_once('class.DB_Base.php');
 
