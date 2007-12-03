@@ -113,14 +113,13 @@
 	/**
 	 *
 	 */
-	function getCategories($_type, $_owner = false)
+	function getCategories($_type, $_owner = 0)
 	{
 		global $db;
-
 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' ';
-		if ($_owner !== false) $q .= 'AND ownerId='.$_owner.' ';
+		if ($_owner) $q .= 'AND ownerId='.$_owner.' ';
 		$q .= 'ORDER BY categoryName ASC';
 
 		return $db->getArray($q);
