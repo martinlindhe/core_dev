@@ -1,9 +1,9 @@
 <?
-	/*
-		atom_revisions.php - set of functions to implement revisioned backups of data, used by various modules
-
-		By Martin Lindhe, 2007
-	*/
+/**
+ * atom_revisions.php - set of functions to implement revisioned backups of data, used by various modules
+ *
+ * \author Martin Lindhe, 2007
+ */
 
 	//revision types:
 	define('REVISIONS_WIKI', 1);
@@ -15,7 +15,9 @@
 	define('REV_CAT_LOCKED', 4);
 	define('REV_CAT_UNLOCKED', 5);
 
-	//kanske kunna minska ner antalet parametrar på nåt sätt?
+	/**
+	 * \todo kanske kunna minska ner antalet parametrar på nåt sätt?
+	 */
 	function addRevision($fieldType, $fieldId, $fieldText, $timestamp, $creatorId, $categoryId = 0)
 	{
 		global $db;
@@ -28,6 +30,9 @@
 		return $db->insert($q);
 	}
 
+	/**
+	 *
+	 */
 	function showRevisions($articleType, $articleId, $articleName)
 	{
 		global $db;

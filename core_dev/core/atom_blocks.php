@@ -59,5 +59,4 @@
 		if ($db->getOneItem($q)) return true;
 		return false;
 	}
-
 ?>

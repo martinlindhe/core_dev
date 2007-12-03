@@ -197,7 +197,14 @@ class Session
 	}
 
 
-	//returns the user ID of the newly created user
+	/**
+	 * Register new user in the database
+	 * \param $username xxx
+	 * \param $password1 xxx
+	 * \param $password2 xxx
+	 * \param $userMode xxx
+	 * \return the user ID of the newly created user
+	 */
 	function registerUser($username, $password1, $password2, $userMode = 0)
 	{
 		global $db, $config;
@@ -300,8 +307,11 @@ class Session
 		$this->theme = $this->default_theme;
 	}
 
-	/*Shows a login form with tabs for Register & Forgot password functions */
-	//the handling of the result variables are called by $session->handleSessionActions() from config.php 
+	/**
+	 * Shows a login form with tabs for Register & Forgot password functions
+	 *
+	 * the handling of the result variables are called by $session->handleSessionActions() from config.php 
+	 */
 	function showLoginForm()
 	{
 		global $config;
@@ -407,7 +417,9 @@ class Session
 		}
 	}
 
-	/* Locks unregistered users out from certain pages */
+	/**
+	 * Locks unregistered users out from certain pages
+	 */
 	function requireLoggedIn()
 	{
 		global $config;
@@ -418,7 +430,9 @@ class Session
 		die;
 	}
 
-	/* Locks unregistered users out from certain pages */
+	/**
+	 * Locks unregistered users out from certain pages
+	 */
 	function requireAdmin()
 	{
 		global $config;
@@ -429,7 +443,9 @@ class Session
 		die;
 	}
 
-	/* Locks out everyone except for super-admin from certain pages */
+	/**
+	 * Locks out everyone except for super-admin from certain pages
+	 */
 	function requireSuperAdmin()
 	{
 		global $config;
@@ -440,7 +456,9 @@ class Session
 		die;
 	}
 
-	/* Locks out everyone not from localhost (for setup scripts) */
+	/**
+	 * Locks out everyone not from localhost (for setup scripts)
+	 */
 	function requireLocalhost()
 	{
 		if (GeoIP_to_IPv4($this->ip) == '127.0.0.1') return;

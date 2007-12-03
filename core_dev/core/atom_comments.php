@@ -1,9 +1,9 @@
 <?
-	/*
-		atom_comments.php - set of functions to implement comments, used by various modules
-
-		By Martin Lindhe, 2007
-	*/
+/**
+ * atom_comments.php - set of functions to implement comments, used by various modules
+ *
+ * \author Martin Lindhe, 2007
+ */
 
 	define('COMMENT_NEWS',					1);
 	define('COMMENT_BLOG',					2);		//anonymous or registered users comments on a blog
@@ -17,6 +17,9 @@
 	/* Comment types only meant for the admin's eyes */
 	define('COMMENT_MODERATION',		30);	//owner = tblModeration.queueId
 
+	/**
+	 *
+	 */
 	function addComment($_type, $ownerId, $commentText, $privateComment = false)
 	{
 		global $db, $session;
@@ -33,6 +36,9 @@
 		return $db->insert($q);
 	}
 
+	/**
+	 *
+	 */
 	function updateComment($commentType, $ownerId, $commentId, $commentText)
 	{
 		global $db, $session;
@@ -46,6 +52,9 @@
 		$db->query($q);
 	}
 
+	/**
+	 *
+	 */
 	function deleteComment($commentId)
 	{
 		global $db, $session;
@@ -53,7 +62,9 @@
 		$db->query('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentId='.$commentId);
 	}
 
-	/* Deletes all comments for this commentType & ownerId. returns the number of rows deleted */
+	/**
+	 * Deletes all comments for this commentType & ownerId. returns the number of rows deleted
+	 */
 	function deleteComments($commentType, $ownerId)
 	{
 		global $db, $session;
@@ -63,6 +74,9 @@
 		return $db->delete($q);
 	}
 
+	/**
+	 *
+	 */
 	function getComments($commentType, $ownerId, $privateComments = false)
 	{
 		global $db;
@@ -78,7 +92,9 @@
 		return $db->getArray($q);
 	}
 
-	/* Returns all comments to all objects owned by $ownerId, newest first */
+	/**
+	 * Returns all comments to all objects owned by $ownerId, newest first
+	 */
 	function getCommentsByOwner($_type, $ownerId)
 	{
 		global $db, $files;
@@ -98,7 +114,10 @@
 		return $result;
 	}
 
-	/* returns the last comment posted for $ownerId object. useful to retrieve COMMENT_FILE_DESC where max 1 comment is posted per object */
+	/**
+	 * Returns the last comment posted for $ownerId object.
+	 * Useful to retrieve COMMENT_FILE_DESC where max 1 comment is posted per object
+	 */
 	function getLastComment($commentType, $ownerId, $privateComments = false)
 	{
 		global $db;
@@ -115,6 +134,9 @@
 		return $db->getOneRow($q);
 	}
 
+	/**
+	 *
+	 */
 	function getCommentsCount($commentType, $ownerId)
 	{
 		global $db;
@@ -125,8 +147,10 @@
 		return $db->getOneItem($q);
 	}
 
-	/* Helper function, standard "show comments" to be used by other modules */
-	//col_w sets the column width of the textarea
+	/**
+	 * Helper function, standard "show comments" to be used by other modules
+	 * col_w sets the column width of the textarea
+	 */
 	function showComments($_type, $ownerId, $col_w = 30, $col_h = 6)
 	{
 		global $session, $config;
@@ -174,8 +198,9 @@
 		return count($list);
 	}
 
-	/* Shows all comments to objects of $_type owned by $session->id, typically to be used by site admins */
-	//fixme: currently only used to display image comments
+	/**
+	 * Shows all comments to objects of $_type owned by $session->id, typically to be used by site admins
+	 */
 	function showAllComments($_type)
 	{
 		global $session, $config;

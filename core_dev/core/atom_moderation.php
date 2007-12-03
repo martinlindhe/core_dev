@@ -1,16 +1,17 @@
 <?
-	/* atom_moderation.php - Functions for moderation
-
-		Objectionable: Unallowed in public forums (discussion groups, guestbooks, diaries), configurable
-		Sensitive: Words that should trigger moderator notification upon certain posts, but is not blocked
-		Reserved usernames: Normal users shouldnt be able to create accounts with names such as admin, information, etc
-
-		this module uses atom_comments.php to store comments to the moderation queue
-
-		requires tblModeration and tblStopwords
-
-		Admin: this atom module has two admin pages: "moderation queue" and "edit stopwords"
-	*/
+/**
+ * atom_moderation.php - Functions for moderation
+ *
+ * Objectionable: Unallowed in public forums (discussion groups, guestbooks, diaries), configurable
+ * Sensitive: Words that should trigger moderator notification upon certain posts, but is not blocked
+ * Reserved usernames: Normal users shouldnt be able to create accounts with names such as admin, information, etc
+ *
+ * This module uses atom_comments.php to store comments to the moderation queue
+ *
+ * Requires tblModeration and tblStopwords
+ *
+ * Admin: this atom module has two admin pages: "moderation queue" and "edit stopwords"
+ */
 
 	$config['moderation']['enabled'] = true;
 
@@ -37,18 +38,25 @@
 	define('STOPWORD_RESERVED_USERNAME',	3);	//reserved usernames
 
 
-	/* checks if the word(s) in $text are objectionable */
+	/**
+	 * Checks if the word(s) in $text are objectionable
+	 */
 	function isObjectionable($text)
 	{
 		return checkStopword($text, STOPWORD_OBJECTIONABLE);
 	}
 
-	/* checks if the word(s) in  $text are sensitive */
+	/**
+	 * Checks if the word(s) in  $text are sensitive
+	 */
 	function isSensitive($text)
 	{
 		return checkStopword($text, STOPWORD_SENSITIVE);
 	}
 
+	/**
+	 *
+	 */
 	function checkStopword($text, $_type)
 	{
 		global $db;
@@ -94,8 +102,10 @@
 		return false;
 	}
 
-	/* checks if the word in $text is a reserved username */
-	//todo: integrate this with checkStopword() somehow
+	/**
+	 * Checks if the word in $text is a reserved username
+	 * \todo integrate this with checkStopword() somehow
+	 */
 	function isReservedUsername($text)
 	{
 		global $db;
@@ -129,8 +139,9 @@
 		return false;
 	}
 
-
-	/* Returns all stopwords, optionally selected by $type*/
+	/**
+	 * Returns all stopwords, optionally selected by $type
+	 */
 	function getStopwords($type = '')
 	{
 		global $db;
@@ -144,8 +155,9 @@
 		return $db->getArray($q);
 	}
 
-
-	/* Adds a stopword of type $type if not already exists, return false on failure */
+	/**
+	 * Adds a stopword of type $type if not already exists, return false on failure
+	 */
 	function addStopword($type, $word, $full)
 	{
 		global $db;
@@ -159,6 +171,9 @@
 		return $db->insert('INSERT INTO tblStopwords SET wordText="'.$word.'",wordType='.$type.',wordMatch='.$full);
 	}
 
+	/**
+	 *
+	 */
 	function removeStopword($wordId)
 	{
 		global $db;
@@ -169,6 +184,9 @@
 		$db->query($q);
 	}
 
+	/**
+	 *
+	 */
 	function setStopword($wordId, $wordText, $full)
 	{
 		global $db;
@@ -179,8 +197,10 @@
 		$db->query($q);
 	}
 
-	/* Adds the forum item $itemId to the moderation queue tagged with reason $queueType */
-	//$triggeredBy is only used if $session is not available
+	/**
+	 * Adds the forum item $itemId to the moderation queue tagged with reason $queueType
+	 * $triggeredBy is only used if $session is not available
+	 */
 	function addToModerationQueue($queueType, $itemId, $auto_triggered = false, $triggeredBy = 0)
 	{
 		global $db, $session;
@@ -201,6 +221,9 @@
 		return $db->insert($q);
 	}
 
+	/**
+	 *
+	 */
 	function getModerationQueue($_type, $_sql_limit = '')
 	{
 		global $db;
@@ -215,6 +238,9 @@
 		return $db->getArray($q);
 	}
 
+	/**
+	 *
+	 */
 	function getModerationQueueItem($queueId)
 	{
 		global $db;
@@ -225,6 +251,9 @@
 		return $db->getOneRow($q);
 	}
 
+	/**
+	 *
+	 */
 	function getModerationQueueCount($_type = 0)
 	{
 		global $db;
@@ -236,7 +265,9 @@
 		return $db->getOneItem($q);
 	}
 
-	/* Removes the specified queue-id from the moderation queue */
+	/**
+	 * Removes the specified queue-id from the moderation queue
+	 */
 	function removeFromModerationQueue($queueId)
 	{
 		global $db, $session;
@@ -247,7 +278,9 @@
 		$db->query($q);
 	}
 	
-	//really deletes from moderation queue, used when deleting forum threads
+	/**
+	 * Really deletes from moderation queue, used when deleting forum threads
+	 */
 	function removeFromModerationQueueByType($_type, $itemId)
 	{
 		global $db;
@@ -257,6 +290,9 @@
 		$db->delete($q);
 	}
 
+	/**
+	 *
+	 */
 	function reportUserDialog($_id)
 	{
 		if (!empty($_POST['report_reason']) || !empty($_POST['report_text'])) {

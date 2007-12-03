@@ -1,17 +1,28 @@
 <?
-	//atom_settings.php - store user/server or other custom types of settings in database
+/**
+ * atom_settings.php - store user/server or other custom types of settings in database
+ *
+ * \author Martin Lindhe, 2007
+ */
 
-	//define('SETTING_SERVER',				1);			//settings associated with the server
 	define('SETTING_USERDATA',			2);			//settings used to store personal userdata
 	define('SETTING_CALLERDATA',		3);			//settings used to store data of a caller
-	//define('SETTING_LANGUAGE',			10);		//används av lang modulen för inställningar för varje språk
-	//define('SETTING_SUBSCRIPTION',	11);		//en inställning till en subscription
+
 
 	$config['settings']['default_email'] = 'E-mail';	//default name of the userdata field used to contain email address
 	$config['settings']['default_theme'] = 'Theme';		//default name of the userdata field used to contain the preferred "Theme"
 	$config['settings']['default_image'] = 'Picture';	//default name of the userdata field used to contain the presentation picture
 	$config['settings']['default_signature'] = 'Signature';	//default name of the userdata field used to contain the forum signature
 
+	/**
+	 * Saves a setting associated with $ownerId
+	 *
+	 * \param $_type type of setting
+	 * \param $ownerId owner of the setting
+	 * \param $settingName name of the setting, text-string
+	 * \param $settingValue value of the setting
+	 * \return true on success
+	 */
 	function saveSetting($_type, $ownerId, $settingName, $settingValue)
 	{
 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
@@ -33,6 +44,15 @@
 		return true;
 	}
 
+	/**
+	 * Loads a setting associated with $ownerId
+	 *
+	 * \param $_type type of setting
+	 * \param $ownerId owner of the setting
+	 * \param $settingName name of the setting, text-string
+	 * \param $defaultValue is the default value to return if no such setting was previously stored
+	 * \return the value of the requested setting
+	 */
 	function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
 	{
 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
@@ -49,7 +69,14 @@
 		return $defaultValue;
 	}
 
-	//looks up setting id from tblUserdata. useful for SETTING_USERDATA
+	/**
+	 * Looks up setting id from tblUserdata. useful for SETTING_USERDATA
+	 *
+	 * \param $ownerId owner of the setting to load
+	 * \param $settingName name of the setting, text-string
+	 * \param $defaultValue is the default value to return if no such setting was previously stored
+	 * \return the value of the requested setting
+	 */
 	function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
 	{
 		if (!is_numeric($ownerId) || !$ownerId || !$settingName) return false;
@@ -66,6 +93,13 @@
 		return $defaultValue;
 	}
 
+	/**
+	 * Returns array of all settings for requested owner
+	 *
+	 * \param $_type type of settings
+	 * \param $ownerId owner of the settings
+	 * \return array of settings
+	 */
 	function readAllSettings($_type, $ownerId)
 	{
 		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type)) return false;
@@ -76,7 +110,11 @@
 		return $db->getArray($q);
 	}
 
-	/* Renders html for editing all tblSettings field for current user */
+	/**
+	 * Renders html for editing all tblSettings field for current user
+	 *
+	 * \return nothing
+	 */
 	function editSettings()
 	{
 		global $config, $session, $files;

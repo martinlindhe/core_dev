@@ -1,12 +1,17 @@
 <?
-	/* atom_polls.php - implements a couple of different types of polling functionality
-		used by "site polls" and "polls attached to news articles"
-		by Martin Lindhe, 2006-2007
-	*/
+/**
+ * atom_polls.php - implements a couple of different types of polling functionality
+ * used by "site polls" and "polls attached to news articles"
+ *
+ * \author Martin Lindhe, 2006-2007
+ */
 
 	define('POLL_SITE',		1);	//"Question of the week"-style polls on the site's front page (for example)
 	define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.newsId
 
+	/**
+	 *
+	 */
 	function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
 	{
 		global $db, $session;
@@ -62,6 +67,9 @@
 		return $db->insert($q);
 	}
 
+	/**
+	 *
+	 */
 	function updatePoll($_type, $_id, $_text)
 	{
 		global $db;
@@ -71,7 +79,9 @@
 		$db->update($q);
 	}
 
-	/* get all polls */
+	/**
+	 * Get all polls
+	 */
 	function getPolls($_type, $ownerId = 0)
 	{
 		global $db;
@@ -81,7 +91,9 @@
 		return $db->getArray($q);
 	}
 
-	/* get one poll */
+	/**
+	 * Get one poll
+	 */
 	function getPoll($_type, $_id)
 	{
 		global $db;
@@ -91,7 +103,9 @@
 		return $db->getOneRow($q);
 	}
 
-	/* Get active polls */
+	/**
+	 * Get active polls
+	 */
 	function getActivePolls($_type, $ownerId = 0)
 	{
 		global $db;
@@ -101,7 +115,9 @@
 		return $db->getArray($q);
 	}
 
-	/* Polling gadget */
+	/**
+	 * Polling gadget
+	 */
 	function poll($_type, $_id)
 	{
 		global $session;
@@ -168,6 +184,9 @@
 		return $result;
 	}
 
+	/**
+	 *
+	 */
 	function showPolls($_type)
 	{
 		global $db;
@@ -185,6 +204,9 @@
 		}
 	}
 
+	/**
+	 *
+	 */
 	function managePolls($_type, $_owner = 0)
 	{
 		if (!is_numeric($_owner)) return false;
@@ -346,6 +368,9 @@
 		echo '</div>';
 	}
 
+	/**
+	 *
+	 */
 	function addPollVote($_id, $voteId)
 	{
 		global $db, $session;
@@ -357,6 +382,9 @@
 		return true;
 	}
 
+	/**
+	 *
+	 */
 	function hasAnsweredPoll($_id)
 	{
 		global $db, $session;
@@ -367,6 +395,9 @@
 		return false;
 	}
 
+	/**
+	 *
+	 */
 	function getPollStats($_id)
 	{
 		global $db;
@@ -379,6 +410,9 @@
 		return $db->getArray($q);
 	}
 
+	/**
+	 *
+	 */
 	function removePoll($_type, $_id)
 	{
 		global $db, $session;
@@ -387,7 +421,9 @@
 		$db->update('UPDATE tblPolls SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id);
 	}
 	
-	//useful to list 1 or more polls attached to news article
+	/**
+	 * Useful to list 1 or more polls attached to news article
+	 */
 	function showAttachedPolls($_type, $_owner)
 	{
 		global $db, $session;

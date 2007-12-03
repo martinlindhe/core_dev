@@ -1,19 +1,26 @@
 <?
-
-	//todo: implement forum "bookmarks", personal favorite list using this module
-
-	/*
-	tblSubscriptions
-		id				= subscription id
-		type			= subscription type, SUBSCRIPTION_FORUM, SUBSCRIPTION_BLOG
-		ownerId		= owner of the subscription (userId)
-		itemId		= id of the item we are subscribing to (tblForums.forumId perhaps)
-	*/
+/**
+ * atom_subscriptions.php
+ *
+ * \todo Implement forum "bookmarks", personal favorite list using this module
+ *
+ * tblSubscriptions
+ *  id				= subscription id
+ *  type			= subscription type, SUBSCRIPTION_FORUM, SUBSCRIPTION_BLOG
+ *  ownerId		= owner of the subscription (userId)
+ *  itemId		= id of the item we are subscribing to (tblForums.forumId perhaps)
+ */
 
 	define('SUBSCRIPTION_FORUM',			1);
 	define('SUBSCRIPTION_BLOG',				2);	//fixme: implement
 
-	//Creates a subscription of $type on itemId
+	/**
+	 * Creates a subscription of $type on itemId
+	 *
+	 * \param $type type of subscription
+	 * \param $itemId id of item to subscribe to
+	 * \return id of created subscription
+	 */
 	function addSubscription($type, $itemId)
 	{
 		global $db, $session;
@@ -24,17 +31,29 @@
 		return $db->insert($q);
 	}
 
-	//Deletes a subscription
+	/**
+	 * Deletes a subscription
+	 *
+	 * \param $type type of subscription
+	 * \param $subscriptionId id to delete
+	 * \return >0 on success
+	 */
 	function removeSubscription($type, $subscriptionId)
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($type) || !is_numeric($subscriptionId)) return false;
 
 		$q = 'DELETE FROM tblSubscriptions WHERE itemId='.$subscriptionId.' AND type='.$type.' AND ownerId='.$session->id;
-		$db->delete($q);
+		return $db->delete($q);
 	}
 
-	//Checks if the user is subscribed to this item, returns true/false
+	/**
+	 * Checks if the user is subscribed to this item
+	 *
+	 * \param $type type of subscription
+	 * \param $itemId id of item to check
+	 * \return true if user is subscribed
+	 */
 	function isSubscribed($type, $itemId)
 	{
 		global $db, $session;
@@ -45,8 +64,15 @@
 		return false;
 	}
 
-	
-	//Helper function: calls class.phpmailer.php functions. $mails is a array of recipients
+	/**
+	 * Helper function: calls class.phpmailer.php functions. $mails is a array of recipients
+	 * 
+	 * \todo Move this function to another file
+	 *
+	 * \param $mails array of destination e-mail addresses
+	 * \param $subject subject of e-mail
+	 * \param $body body of e-mail
+	 */
 	function smtp_mass_mail($mails, $subject, $body)
 	{
 		global $config;
@@ -83,8 +109,12 @@
 		return true;
 	}
 
-
-	//Returns all subscriptions of $type
+	/**
+	 * Returns array of subscriptions
+	 *
+	 * \param $type type of subscription
+	 * \return array of subscriptions
+	 */
 	function getSubscriptions($type)
 	{
 		global $db, $session;

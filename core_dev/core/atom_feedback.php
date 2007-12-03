@@ -1,9 +1,17 @@
 <?
+/**
+ * atom_feedback.php - generic module to get feedback from the user
+ *
+ * \author Martin Lindhe, 2007
+ */
+
 	$config['feedback']['enabled'] = true;
 	
 	define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
 
-	//subjectId is the userId if its a abuse report
+	/**
+	 * subjectId is the userId if its a abuse report
+	 */
 	function saveFeedback($_type, $_text, $_text2 = '', $_subject = 0)
 	{
 		global $db, $session;
@@ -13,6 +21,9 @@
 		return $db->insert($q);
 	}
 
+	/**
+	 *
+	 */
 	function getFeedback($_type = 0, $_sql_limit = '')
 	{
 		global $db;
@@ -24,6 +35,9 @@
 		return $db->getArray($q);
 	}
 
+	/**
+	 *
+	 */
 	function getFeedbackCnt($_type = 0)
 	{
 		global $db;
@@ -34,6 +48,9 @@
 		return $db->getOneItem($q);
 	}
 
+	/**
+	 *
+	 */
 	function deleteFeedback($_id)
 	{
 		global $db, $session;
@@ -44,6 +61,9 @@
 		return $db->delete($q);
 	}
 
+	/**
+	 *
+	 */
 	function getFeedbackItem($_id)
 	{
 		global $db, $session;

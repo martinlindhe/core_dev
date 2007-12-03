@@ -1,9 +1,9 @@
 <?
-	/*
-		atom_categories.php - set of functions to implement categories, used by various modules
-
-		By Martin Lindhe, 2007
-	*/
+/**
+ * atom_categories.php - set of functions to implement categories, used by various modules
+ *
+ * \author Martin Lindhe, 2007
+ */
 
 	//System categories. Reserved 1-50. Use a number above 50 for your own category types
 	define('CATEGORY_USERFILE',					1);	//normal, public userfile
@@ -21,6 +21,9 @@
 
 	define('CATEGORY_LANGUAGE',			51);		//represents a language, for multi-language features & used by "lang" project
 
+	/**
+	 *
+	 */
 	function addCategory($_type, $_name, $_owner = 0, $_global = false)
 	{
 		global $db, $session;
@@ -41,6 +44,9 @@
 		return $db->insert($q);
 	}
 
+	/**
+	 *
+	 */
 	function updateCategory($_type, $_id, $name)
 	{
 		global $db, $session;
@@ -50,6 +56,9 @@
 		$db->query($q);
 	}
 
+	/**
+	 *
+	 */
 	function removeCategory($_type, $_id)
 	{
 		global $db, $session;
@@ -59,6 +68,9 @@
 		return $db->delete($q);
 	}
 
+	/**
+	 *
+	 */
 	function getCategory($_type, $_id)
 	{
 		global $db;
@@ -70,6 +82,9 @@
 		return $db->getOneRow($q);
 	}
 
+	/**
+	 *
+	 */
 	function getCategoryName($_type, $_id)
 	{
 		global $db;
@@ -81,6 +96,9 @@
 		return $db->getOneItem($q);
 	}
 
+	/**
+	 *
+	 */
 	function getCategoriesByOwner($_type, $_owner)
 	{
 		global $db;
@@ -92,6 +110,9 @@
 		return $db->getArray($q);
 	}
 
+	/**
+	 *
+	 */
 	function getCategories($_type, $_owner = false)
 	{
 		global $db;
@@ -105,8 +126,11 @@
 		return $db->getArray($q);
 	}
 
-	//returns own categories & global categories (categoryPermissions==10)
-	//some category types (like CATEGORY_USERDATA) uses the $_owner parameter, to specify what userdata field this category belongs to
+	/**
+	 * Returns own categories & global categories (categoryPermissions==10)
+	 *
+	 * some category types (like CATEGORY_USERDATA) uses the $_owner parameter, to specify what userdata field this category belongs to
+	 */
 	function getGlobalAndUserCategories($_type, $_owner = 0)
 	{
 		global $db, $session;
@@ -143,6 +167,9 @@
 		return $db->getArray($q);
 	}
 
+	/**
+	 *
+	 */
 	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '', $varName = '', $extra = '')
 	{
 		global $config;
@@ -206,8 +233,10 @@
 		return $content;
 	}
 
-	/* Default "create a new category" dialog, used by "create blog category" and "create category in personal file area"
-		also allows for managing and deleting categories				*/
+	/**
+	 * Default "create a new category" dialog, used by "create blog category" and "create category in personal file area"
+	 * also allows for managing and deleting categories
+	 */
 	function manageCategoriesDialog($_type)
 	{
 		global $config, $session;

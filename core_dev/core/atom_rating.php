@@ -1,33 +1,39 @@
 <?
-	/* atom_rating.php - implements general rating functionality, used by various modules
-
-		Currently used by the following modules: News
-
-		By Martin Lindhe, 2006-2007
-	*/
+/**
+ * atom_rating.php - implements general rating functionality, used by various modules
+ *
+ * Currently used by the following modules: News
+ *
+ * \author Martin Lindhe, 2006-2007
+ */
 
 	define('RATE_NEWS',		1);
 	define('RATE_BLOG',		2);
 	define('RATE_IMAGE',	3);	//todo: implement
 
-	/* Lägg ett omdöme + håll reda på att användaren lagt sitt omdöme
-		$_rating är ett heltal mellan 1 till 5, eller 1 till 100 (eller vad nu min & max-värdena är)
-	*/
-	function rateItem($_type, $_id, $_rating)	//todo: rename to rateObject()
+	/**
+	 * Adds a rating + keeps track if the user has already added a rating
+	 *
+	 * \param $_type type of item
+	 * \param $_id id of item to rate
+	 * \param $_rating is a integer between 1-5, or 1-100 (or what the min & max-values are)
+	 * \return nothing
+	 */
+	function rateItem($_type, $_id, $_rating)
 	{
 		global $db, $session;
 
 		if (!$session->id || !is_numeric($_type) || !is_numeric($_id) || !is_numeric($_rating)) return false;
 
-		//1. kolla om användaren redan röstat
+		//1. check if user already voted
 		$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session->id;
 		if ($db->getOneItem($q)) return false;
 
-		//2. spara röstningen
+		//2. save the vote
 		$q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$session->id.',timeRated=NOW()';
 		$db->insert($q);
 
-		//3. räkna ut aktuella medelvärdet av omdömet
+		//3. count current average of the rating
 		$q = 'SELECT AVG(rating) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
 		$avgrating = $db->getOneItem($q);
 
@@ -36,13 +42,13 @@
 
 		switch ($_type) {
 			case RATE_BLOG:
-				//4. uppdatera medelvärdet
+				//4. update average
 				$q = 'UPDATE tblBlogs SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE blogId='.$_id;
 				$db->query($q);
 				break;
 
 			case RATE_NEWS:
-				//4. uppdatera medelvärdet
+				//4. update average
 				$q = 'UPDATE tblNews SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE newsId='.$_id;
 				$db->query($q);
 				break;
@@ -51,7 +57,13 @@
 		}
 	}
 
-	/* Returns true if current user already voted for specified object */
+	/**
+	 * Is specified item rated?
+	 *
+	 * \param $_type type of item
+	 * \param $_id id of item to rate
+	 * \return true if current user already voted for specified object
+	 */
 	function isRated($_type, $_id)
 	{
 		global $db, $session;
@@ -64,7 +76,13 @@
 	}
 
 
-	/* Returnerar omdömet för detta objekt */
+	/**
+	 * Returns average rating for specified item
+	 *
+	 * \param $_type type of item
+	 * \param $_id id of item to rate
+	 * \return average rating for item
+	 */
 	function getRating($_type, $_id)
 	{
 		global $db;
@@ -87,7 +105,13 @@
 		return $db->getOneRow($q);
 	}
 
-	/* Generates a general "rate this"-gadget used by various modules */
+	/**
+	 * Generates a general "rate this"-gadget used by various modules
+	 *
+	 * \param $_type type of item
+	 * \param $_id id of item to rate
+	 * \return html block for self-contained rating gadget
+	 */
 	function ratingGadget($_type, $_id)
 	{
 		global $db, $session;
@@ -115,11 +139,17 @@
 		return $result;
 	}
 
+	/**
+	 * Shows current votes
+	 *
+	 * \param $_type type of item
+	 * \param $_id id of item to rate
+	 * \return html block for self-contained "current votes" gadget
+	 */
 	function showRating($_type, $_id)
 	{
 		global $config;
 
-		//Show current votes
 		$result  = 'Current rating<br/><br/>';
 		$row = getRating($_type, $_id);
 		for ($i=1; $i<=5; $i++) {
