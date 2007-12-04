@@ -9,13 +9,13 @@
 	 * \param $str array of lines of text to print
 	 * \param $template png image to use as template to draw the text upon
 	 * \param $font specify the font to use. numeric 1-5 for gd's internal fonts, or specify a .gdf or .ttf font instead
-	 * \param $col color to draw the font in, array(r,g,b)
+	 * \param $col optional color to draw the font in, array(r,g,b). defaults to black
+	 * \param $ttf_size optional size of ttf font, defaults to 12
 	 * \return image resource
 	 */
-	function pngCenterText($str, $template, $font = 1, $col = array() )
+	function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 12 )
 	{
 		$ttf_angle = 0;
-		$ttf_size = 12;
 
 		$im = imagecreatefrompng($template);
 
