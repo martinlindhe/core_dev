@@ -1,23 +1,21 @@
 --- core_dev todo ---
 db-layer:
-	* sqlite driver
-	* MS-SQL driver
-	* verify that pgsql driver is working correctly
+	* verify that sqlite & pgsql driver is working correctly
+	* basic MS-SQL driver
 	* method to call stored procedures
 
 
 
 ------
 att göra-hi prio:
-	3) sätt upp lyrics på startwars.org
-	5) synka adblockrules.org med vad som finns i svn + core_dev
-	6) fixa adblockrules.org auto-submissions (logga IP från anonymous comment poster)
-	7) hur använder man apache2:s egna mime magic file för att identifiera filtyper för process-server?
+	1) synka adblockrules.org med vad som finns i svn + core_dev
+	2) synka corvette74.se åxå, har för mej ja gjorde nån direkt edit/hack där
+	3) fixa adblockrules.org auto-submissions (logga IP från anonymous comment poster)
+	4) hur använder man apache2:s egna mime magic file för att identifiera filtyper för process-server?
 			nåt med MIMEMagicFile i httpd.conf
-	8) gör en egen wiki, på wiki.startwars.org (skilj på PRIVATE & public wiki entries på nåt sätt)
-	9) återställ process-servern
-	10) kunna hantera torrenter med process-servern
-	11) kunna läsa rss feed med process-servern
+	5) återställ process-servern
+	6) kunna hantera torrenter med process-servern
+	7) kunna läsa rss feed med process-servern
 
 ----[[platform todo]]----
 	process:
@@ -266,6 +264,8 @@ X = hi prio task
 	- core/class.DB_SQLite.php: new file, WIP
 	- Upgraded development environment to PHP 5.2.5
 	- core/class.DB_PostgreSQL.php: some fixes & cleanup, still WIP
+	- core/*: some whitespace cleanup
+
 
 
 2007.11.28:

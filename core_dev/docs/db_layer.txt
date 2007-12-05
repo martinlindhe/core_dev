@@ -5,7 +5,7 @@ In order to make this work, I have chosen to only use the MySQL syntax in all qu
 Each database backend must implement it's own query rewrite engine in order for it
 all to work.
 
-I have tried hard to avoid using MySQL-specific features, but here's a few:
+I have tried hard to avoid using MySQL-specific features, but here's a few that is used:
 
 	* The DATETIME type is used excessively
 	* LIMIT is used somewhere
@@ -14,13 +14,16 @@ I have tried hard to avoid using MySQL-specific features, but here's a few:
 For best result with core_dev, use MySQL 5.0 and PHP 5.2 (recommended 2007-12-05, things might
 change before I notice this readme is outdated).
 
-Currently the following database backends are supported:
 
+Currently the following database backends are supported:
 	* php_mysql.dll - MySQL interface
 	* php_mysqli.dll - Improved MySQL interface (preferred one)
+
+
+These database backends are in W.I.P. status:
 	* php_pgsql.dll - PostgreSQL (not properly tested)
+	* php_sqlite.dll - sqlite driver (not properly tested)
 
-These are planned, or in W.I.P:
 
-	* php_sqlite.dll - sqlite driver
+These are planned:
 	* php_mssql.dll - Microsoft SQL Server (will only focus on version 2005 or newer support)

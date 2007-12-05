@@ -7,6 +7,7 @@
  * IMPORTANT: This has only been tested with SQLite 3.3.17, as shipped with PHP 5.2.5 for Windows
  *
  * \todo THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
+ * \todo REWRITE TO USE object oriented interface. but first: make it work procedural style
  *
  * \author Martin Lindhe, 2007
  */
@@ -36,28 +37,21 @@ class DB_SQLite extends DB_Base
 			die('<bad>Database connection error: '.$err.'.</bad>');
 		}
 		
-		//FIXME: set charset to utf8. is it even needed with sqlite????
+		//FIXME: set charset to utf8. see http://se.php.net/manual/en/function.sqlite-libencoding.php WARNINGS for more details of the problem
 
 		$this->db_driver = 'DB_SQLite';
 		$this->dialect = 'sqlite';
 
-		//FIXME: set proper parameters
-		$this->server_version = '???'; //pg_parameter_status($this->db_handle, 'server_version');
-		//$info = pg_version($this->db_handle);
-		$this->client_version = '???';	//$info['client'];
+		$this->server_version = sqlite_libversion();
+		$this->client_version = sqlite_libversion();
 
 		if ($config['debug']) $this->profileConnect($time_started);
 	}
 
 	function showDriverStatus()
 	{
-		//FIXME implement!
-		/*
-		echo 'Server encoding: '.pg_parameter_status($this->db_handle, 'server_encoding').'<br/>';
-		echo 'Client encoding: '.pg_parameter_status($this->db_handle, 'client_encoding').'<br/>';
-		echo 'Last error: '.pg_last_error($this->db_handle).'<br/>';
-		echo 'Last notice: '.pg_last_notice($this->db_handle);
-		*/
+		echo 'Encoding: '.sqlite_libencoding().'<br/>';
+		echo 'Last error: '.sqlite_last_error($this->db_handle).'<br/>';
 	}
 
 	/**
@@ -131,7 +125,7 @@ class DB_SQLite extends DB_Base
 		$affected_rows = false;
 
 		if ($result) {
-			$affected_rows = $this->db_handle->affected_rows;	//FIXME: how to do this?!?!?!?!
+			$affected_rows = sqlite_changes($this->db_handle);
 		} else {
 			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
 			else die; //if debug is turned off (production) and a query fail, just die silently
@@ -149,18 +143,14 @@ class DB_SQLite extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = sqlite_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
+		if (!$result = sqlite_query($this->db_handle, $q, SQLITE_ASSOC, $err)) {	//FIXME: untested. sqlite_array_query also exists
+			if ($config['debug']) $this->profileError($time_started, $q, $err);
 			return array();
 		}
 
-		$data = array();
-
-		while ($row = $result->fetch_assoc()) {	//FIXME: how wo do this with sqlite?
-			$data[] = $row;
-		}
-
-		$result->free();	//FIXME: how?!?!?
+		$data = sqlite_fetch_array($result); //FIXME: untested
+		
+		//$result->free();	//FIXME: how?!?!?
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
@@ -185,7 +175,7 @@ class DB_SQLite extends DB_Base
 			$data[ $row[0] ] = $row[1];
 		}
 
-		$result->free();	//FIXME: how!!!!
+		//$result->free();	//FIXME: how!!!!
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
@@ -210,7 +200,7 @@ class DB_SQLite extends DB_Base
 			$data[] = $row[0];
 		}
 
-		$result->free();	//FIXME: how!!!
+		//$result->free();	//FIXME: how!!!
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
@@ -229,12 +219,12 @@ class DB_SQLite extends DB_Base
 			return array();
 		}
 
-		if ($result->num_rows > 1) {		//FIXME: how?!?!?!
+		if (sqlite_num_rows($result) > 1) {
 			die('ERROR: query '.$q.' in DB_SQLite::getOneRow() returned more than 1 result!');
 		}
 
 		$data = $result->fetch_array(MYSQLI_ASSOC);		//FIXME: how?!?!?!
-		$result->free();	//FIXME: how?!?!
+		//$result->free();	//FIXME: how?!?!
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
