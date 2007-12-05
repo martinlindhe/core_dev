@@ -261,6 +261,12 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.12.05:
+	- docs/db_layer.txt: minor documentation describing the concept of the db layer
+	- core/class.DB_SQLite.php: new file, WIP
+	- Upgraded development environment to PHP 5.2.5
+	- core/class.DB_PostgreSQL.php: some fixes & cleanup, still WIP
+
 
 2007.11.28:
 	- class.DB_Base.php: moved d() to functions_general.php

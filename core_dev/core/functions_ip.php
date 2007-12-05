@@ -45,5 +45,4 @@
 
 		return false; //IP is not ignored
 	}
-
 ?>

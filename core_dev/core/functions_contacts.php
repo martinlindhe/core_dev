@@ -1,5 +1,7 @@
 <?
-	//functions_contacts.php - implements friend lists. also implements blocked contacts
+/**
+ * functions_contacts.php - implements friend lists. also implements blocked contacts
+ */
 
 	define('CONTACT_FRIEND', 1);
 	define('CONTACT_BLOCKED', 2);
@@ -320,6 +322,4 @@
 		if ($db->getOneItem($q)) return true;
 		return false;
 	}
-
-
 ?>

@@ -234,5 +234,4 @@
 		
 		dbQuery($db, 'UPDATE tblBugReports SET bugClosed=1, bugClosedReason='.$reason.' WHERE bugId='.$bugId);
 	}
-
 ?>

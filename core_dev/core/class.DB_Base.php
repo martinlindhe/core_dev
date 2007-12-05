@@ -426,5 +426,4 @@ abstract class DB_Base
 		if (strtotime($d1) < strtotime($d2)) return true;
 		return false;
 	}
-
 ?>

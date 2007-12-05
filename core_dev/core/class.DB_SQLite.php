@@ -1,8 +1,10 @@
 <?
 /**
- * Object oriented interface for PostgreSQL databases using the php_pgsql.dll extension
+ * Object oriented interface for SQLite databases using the php_sqlite.dll extension
  *
- * This interface translates MySQL syntax into PostgreSQL syntax, see the function translate()
+ * This interface translates MySQL syntax into SQLite syntax, see the function translate()
+ *
+ * IMPORTANT: This has only been tested with SQLite 3.3.17, as shipped with PHP 5.2.5 for Windows
  *
  * \todo THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
  *
@@ -11,11 +13,11 @@
 
 require_once('class.DB_Base.php');
 
-class DB_PostgreSQL extends DB_Base
+class DB_SQLite extends DB_Base
 {
 	function __destruct()
 	{
-		if ($this->db_handle) pg_close($this->db_handle);
+		if ($this->db_handle) sqlite_close($this->db_handle);
 	}
 
 	function connect()
@@ -24,45 +26,45 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		//PostgreSQL defaults
-		if (!$this->host) $this->host = 'localhost';
-		if (!$this->port) $this->port = 5432;	//PostgreSQL default port
-		if (!$this->username) $this->username = 'postgres';
+		//SQLite defaults
+		if (!$this->database) $this->database = 'default';
 
-		$str = 'host='.$this->host.' user='.$this->username.' password='.$this->password.' dbname='.$this->database.' port='.$this->port;
-		$this->db_handle = pg_connect($str);
+		$this->db_handle = sqlite_open($this->database, 0666, $err);
 
 		if (!$this->db_handle) {
 			$this->db_handle = false;
-
-			die('<bad>Database connection error.</bad>');
+			die('<bad>Database connection error: '.$err.'.</bad>');
 		}
 		
-		//FIXME: set charset if it is not utf8 (will be the default anyways if none is specified)
+		//FIXME: set charset to utf8. is it even needed with sqlite????
 
-		$this->db_driver = 'DB_PostgreSQL';
-		$this->dialect = 'pgsql';
+		$this->db_driver = 'DB_SQLite';
+		$this->dialect = 'sqlite';
 
-		$this->server_version = pg_parameter_status($this->db_handle, 'server_version');
-		$info = pg_version($this->db_handle);
-		$this->client_version = $info['client'];
+		//FIXME: set proper parameters
+		$this->server_version = '???'; //pg_parameter_status($this->db_handle, 'server_version');
+		//$info = pg_version($this->db_handle);
+		$this->client_version = '???';	//$info['client'];
 
 		if ($config['debug']) $this->profileConnect($time_started);
 	}
 
 	function showDriverStatus()
 	{
+		//FIXME implement!
+		/*
 		echo 'Server encoding: '.pg_parameter_status($this->db_handle, 'server_encoding').'<br/>';
 		echo 'Client encoding: '.pg_parameter_status($this->db_handle, 'client_encoding').'<br/>';
 		echo 'Last error: '.pg_last_error($this->db_handle).'<br/>';
 		echo 'Last notice: '.pg_last_notice($this->db_handle);
+		*/
 	}
 
 	/**
-	 * Transparently translates MySQL queries to PostgreSQL queries.
+	 * Transparently translates MySQL queries to SQLite queries.
 	 *
 	 * \param $q MySQL query to translate
-	 * \return PostgreSQL version of the query
+	 * \return SQLite version of the query
 	 */
 	private function translate($q)
 	{
@@ -72,7 +74,7 @@ class DB_PostgreSQL extends DB_Base
 
 	function escape($q)
 	{
-		return pg_escape_string($this->db_handle, $q);
+		return sqlite_escape_string($q);
 	}
 
 	function query($q)
@@ -82,10 +84,10 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		$result = pg_query($this->db_handle, $q);
+		$result = sqlite_query($this->db_handle, $q);
 
 		if (!$result) {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
 			else die;	//if debug is turned off (production) and a query fail, just die silently
 		}
 
@@ -101,14 +103,14 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		$result = pg_query($this->db_handle, $q);
+		$result = sqlite_query($this->db_handle, $q);
 
 		$ret_id = 0;
 
 		if ($result) {
-			$ret_id = $this->db_handle->insert_id;	//FIXME: how to return last insert_id for pgsql???
+			$ret_id = $this->db_handle->insert_id;		//FIXME: how to do this for sqlite???
 		} else {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
 			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
@@ -124,14 +126,14 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		$result = pg_query($this->db_handle, $q);
+		$result = sqlite_query($this->db_handle, $q);
 
 		$affected_rows = false;
 
 		if ($result) {
-			$affected_rows = $this->db_handle->affected_rows;	//FIXME: this is not correct!
+			$affected_rows = $this->db_handle->affected_rows;	//FIXME: how to do this?!?!?!?!
 		} else {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
+			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
 			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
@@ -147,18 +149,18 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+		if (!$result = sqlite_query($this->db_handle, $q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return array();
 		}
 
 		$data = array();
 
-		while ($row = $result->fetch_assoc()) {		//FIXME: this is not correct
+		while ($row = $result->fetch_assoc()) {	//FIXME: how wo do this with sqlite?
 			$data[] = $row;
 		}
 
-		$result->free();	//FIXME: how?
+		$result->free();	//FIXME: how?!?!?
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
@@ -172,18 +174,18 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+		if (!$result = sqlite_query($this->db_handle, $q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return array();
 		}
 
 		$data = array();
 
-		while ($row = $result->fetch_row()) {	//FIXME: this is not correct
+		while ($row = $result->fetch_row()) {	//FIXME: how!!!
 			$data[ $row[0] ] = $row[1];
 		}
 
-		$result->free();	//FIXME: how?
+		$result->free();	//FIXME: how!!!!
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
@@ -197,18 +199,18 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+		if (!$result = sqlite_query($this->db_handle, $q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return array();
 		}
 
 		$data = array();
 
-		while ($row = $result->fetch_row()) {		//FIXME: how???
+		while ($row = $result->fetch_row()) {	//FIXME: how!!
 			$data[] = $row[0];
 		}
 
-		$result->free();	//FIXME: how???
+		$result->free();	//FIXME: how!!!
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
@@ -222,17 +224,17 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+		if (!$result = sqlite_query($this->db_handle, $q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return array();
 		}
 
-		if ($result->num_rows > 1) {		//FIXME: how???
-			die('ERROR: query '.$q.' in DB_PostgreSQL::getOneRow() returned more than 1 result!');
+		if ($result->num_rows > 1) {		//FIXME: how?!?!?!
+			die('ERROR: query '.$q.' in DB_SQLite::getOneRow() returned more than 1 result!');
 		}
 
-		$data = $result->fetch_array(MYSQLI_ASSOC);		//FIXME: this is not correct
-		$result->free();		//FIXME: how???
+		$data = $result->fetch_array(MYSQLI_ASSOC);		//FIXME: how?!?!?!
+		$result->free();	//FIXME: how?!?!
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
@@ -246,16 +248,16 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $time_started = microtime(true);
 
-		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+		if (!$result = sqlite_query($this->db_handle, $q)) {
+			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return '';
 		}
 
-		if (pg_num_rows($result) > 1) {
-			die('ERROR: query '.$q.' in DB_PostgreSQL::getOneItem() returned more than 1 result!');
+		if (sqlite_num_rows($result) > 1) {
+			die('ERROR: query '.$q.' in DB_SQLite::getOneItem() returned more than 1 result!');
 		}
 
-		$data = pg_fetch_row($result);
+		$data = pg_fetch_row($result);		//FIXME: sqlite_fetch_row finns inte!
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
@@ -265,5 +267,6 @@ class DB_PostgreSQL extends DB_Base
 		}
 		return $data[0];
 	}
+
 }
 ?>

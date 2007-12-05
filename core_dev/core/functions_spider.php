@@ -478,5 +478,4 @@
 
   	return $result;
 	}
-
 ?>

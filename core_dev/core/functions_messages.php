@@ -151,5 +151,4 @@
 		echo '</script>';
 		return true;
 	}
-
 ?>

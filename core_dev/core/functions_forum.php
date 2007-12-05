@@ -1,4 +1,8 @@
 <?
+/**
+ * functions_forums.php - Forum functions
+ */
+
 	require_once('atom_subscriptions.php');	//for subscription functionality
 
 	//forum module settings:
@@ -9,13 +13,7 @@
 	$config['forum']['search_results_per_page'] = 5;
 	$config['forum']['topics_per_page'] = 20;
 	$config['forum']['posts_per_page'] = 25;
-	
 	$config['forum']['moderation'] = false;
-
-
-	/*
-		functions_forums.php - Funktioner för forum
-	*/
 
 
 	/* Forum-itemtypes */

@@ -201,7 +201,6 @@
 		echo '</ul>';
 	}
 
-
 	/* Looks for formatted wiki section commands, like: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
 		used by functions_wiki.php, functions_blogs.php for special url creation to allow these modules to be embedded in other pages
 	*/
@@ -309,7 +308,6 @@
 		return $text;
 	}
 	
-
 	/* loads all active plugins */
 	function loadPlugins()
 	{
@@ -322,7 +320,6 @@
 		}
 	}
 
-
 	/* Executes $c and returns the time it took */
 	function exectime($c)
 	{
@@ -330,5 +327,4 @@
 		exec($c);
 		return microtime(true) - $exec_start;
 	}
-
 ?>
