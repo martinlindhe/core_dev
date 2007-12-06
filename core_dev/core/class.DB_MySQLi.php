@@ -9,11 +9,21 @@ require_once('class.DB_Base.php');
 
 class DB_MySQLi extends DB_Base
 {
+	/**
+	 * Destructor
+	 *
+	 * /return nothing
+	 */
 	function __destruct()
 	{
 		if ($this->db_handle) $this->db_handle->close();
 	}
 
+	/**
+	 * Opens a connection to MySQL database
+	 *
+	 * /return nothing
+	 */
 	function connect()
 	{
 		global $config;
@@ -45,6 +55,11 @@ class DB_MySQLi extends DB_Base
 		if ($config['debug']) $this->profileConnect($time_started);
 	}
 
+	/**
+	 * Shows MySQLi driver status
+	 *
+	 * /return nothing
+	 */
 	function showDriverStatus()
 	{
 		echo 'Host info: '.$this->db_handle->host_info.'<br/>';
@@ -53,11 +68,23 @@ class DB_MySQLi extends DB_Base
 		echo 'Last errno: '.$this->db_handle->errno;
 	}
 
+	/**
+	 * Escapes the string for use in MySQL queries
+	 *
+	 * \param $q the query to escape
+	 * \return escaped query
+	 */
 	function escape($q)
 	{
 		return $this->db_handle->real_escape_string($q);
 	}
 
+	/**
+	 * Executes a MySQL query
+	 *
+	 * /param $q the query to execute
+	 * /return result
+	 */
 	function query($q)
 	{
 		global $config;
@@ -76,6 +103,12 @@ class DB_MySQLi extends DB_Base
 		return $result;
 	}
 
+	/**
+	 * Helper function for MySQL INSERT queries
+	 *
+	 * /param $q the query to execute
+	 * /return insert_id
+	 */
 	function insert($q)
 	{
 		global $config;
@@ -98,6 +131,12 @@ class DB_MySQLi extends DB_Base
 		return $ret_id;
 	}
 
+	/**
+	 * Helper function for MySQL DELETE queries
+	 *
+	 * /param $q the query to execute
+	 * /return number of rows affected
+	 */
 	function delete($q)
 	{
 		global $config;
@@ -120,6 +159,12 @@ class DB_MySQLi extends DB_Base
 		return $affected_rows;
 	}
 
+	/**
+	 * Helper function for MySQL SELECT queries who returns array of data
+	 *
+	 * /param $q the query to execute
+	 * /return result
+	 */
 	function getArray($q)
 	{
 		global $config;
@@ -144,6 +189,12 @@ class DB_MySQLi extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for MySQL SELECT queries who returns mapped array of data
+	 *
+	 * /param $q the query to execute
+	 * /return result
+	 */
 	function getMappedArray($q)
 	{
 		global $config;
@@ -168,6 +219,12 @@ class DB_MySQLi extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for MySQL SELECT queries who returns array of data with numerical index
+	 *
+	 * /param $q the query to execute
+	 * /return result
+	 */
 	function getNumArray($q)
 	{
 		global $config;
@@ -192,6 +249,12 @@ class DB_MySQLi extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for MySQL SELECT queries who returns one row of data
+	 *
+	 * /param $q the query to execute
+	 * /return result
+	 */
 	function getOneRow($q)
 	{
 		global $config;
@@ -215,6 +278,12 @@ class DB_MySQLi extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for MySQL SELECT queries who returns one entry of data
+	 *
+	 * /param $q the query to execute
+	 * /return result
+	 */
 	function getOneItem($q, $num = false)
 	{
 		global $config;

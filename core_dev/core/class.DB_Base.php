@@ -120,13 +120,12 @@ abstract class DB_Base
 
 
 	//db settings
-	protected $host	= '';
-	protected $port	= 0;
-	protected $username = '';
-	protected $password = '';
-	protected $database = '';
-
-	protected $charset = 'utf8';
+	protected $host	= '';					///<Hostname or numeric IP address of the db server
+	protected $port	= 0;					///<Port number
+	protected $username = '';			///<Username to use to connect to the database
+	protected $password = '';			///<Password to use to connect to the database
+	protected $database = '';			///<Name of the database to connect to
+	protected $charset = 'utf8';	///<Default charset to use. utf8 should be used always
 
 	//db variables
 	public $db_handle = false;		///<Internal db handle
@@ -136,11 +135,11 @@ abstract class DB_Base
 	public $client_version = '';	///<used for version checking
 
 	//profiling variables
-	protected $connect_time = 0;
-	protected $time_spent = array();
-	protected $queries_cnt = 0;
-	protected $queries = array();
-	protected $query_error = array();
+	protected $connect_time = 0;			///<Used internally for the SQL profiler
+	protected $time_spent = array();	///<Used internally for the SQL profiler
+	protected $queries_cnt = 0;				///<Used internally for the SQL profiler
+	protected $queries = array();			///<Used internally for the SQL profiler
+	protected $query_error = array();	///<Used internally for the SQL profiler
 
 
 	/**
