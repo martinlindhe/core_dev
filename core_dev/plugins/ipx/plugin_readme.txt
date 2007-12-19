@@ -1,1 +1,0 @@
-Plugin for Ericsson IPX (Internet Payment eXchange) SOAP API
