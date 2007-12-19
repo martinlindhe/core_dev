@@ -131,12 +131,14 @@
 		global $db, $user_db, $session, $config;
 
 		//All incoming data is set as GET parameters
-		$params = '';
-		if (!empty($_GET)) $params = $_GET;
-		if (!$params) die('nothing to do');
+		$get_params = '';
+		$post_params = '';
+		if (!empty($_GET)) $get_params = $_GET;
+		if (!empty($_POST)) $post_params = $_POST;
+		if (!$get_params && !$post_params) die('nothing to do');
 
 		//Log the incoming SMS
-		$q = 'INSERT INTO tblIncomingSMS SET params="'.$db->escape(serialize($params)).'",IP='.$session->ip.',timeReceived=NOW()';
+		$q = 'INSERT INTO tblIncomingSMS SET get="'.$db->escape(serialize($get_params)).'",post="'.$db->escape(serialize($post_params)).'",IP='.$session->ip.',timeReceived=NOW()';
 		$db->insert($q);
 
 		//Acknowledgment - Tell IPX that the SMS was received so they drop the connection
