@@ -146,6 +146,10 @@
 		header('Content-Type: text/plain');
 		echo '<DeliveryResponse ack="true"/>';
 
+		$params = '';
+		if (!empty($post_params)) $params = $post_params;
+		if (!empty($get_params)) $params = $get_params;
+
 		$ipx = prepareIPX_MT_bill_CS($params['Message']);	//todo: could be a class... :O
 
 		//2. skicka ett nytt sms till avsändaren, med TARIFF satt samt med messageid från incoming sms satt som "reference id"
