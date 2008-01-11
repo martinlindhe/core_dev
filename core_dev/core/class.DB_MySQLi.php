@@ -12,7 +12,7 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Destructor
 	 *
-	 * /return nothing
+	 * \return nothing
 	 */
 	function __destruct()
 	{
@@ -22,7 +22,7 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Opens a connection to MySQL database
 	 *
-	 * /return nothing
+	 * \return nothing
 	 */
 	function connect()
 	{
@@ -58,7 +58,7 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Shows MySQLi driver status
 	 *
-	 * /return nothing
+	 * \return nothing
 	 */
 	function showDriverStatus()
 	{
@@ -82,8 +82,8 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Executes a MySQL query
 	 *
-	 * /param $q the query to execute
-	 * /return result
+	 * \param $q the query to execute
+	 * \return result
 	 */
 	function query($q)
 	{
@@ -106,8 +106,8 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Helper function for MySQL INSERT queries
 	 *
-	 * /param $q the query to execute
-	 * /return insert_id
+	 * \param $q the query to execute
+	 * \return insert_id
 	 */
 	function insert($q)
 	{
@@ -134,8 +134,8 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Helper function for MySQL DELETE queries
 	 *
-	 * /param $q the query to execute
-	 * /return number of rows affected
+	 * \param $q the query to execute
+	 * \return number of rows affected
 	 */
 	function delete($q)
 	{
@@ -162,8 +162,8 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns array of data
 	 *
-	 * /param $q the query to execute
-	 * /return result
+	 * \param $q the query to execute
+	 * \return result
 	 */
 	function getArray($q)
 	{
@@ -192,8 +192,8 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns mapped array of data
 	 *
-	 * /param $q the query to execute
-	 * /return result
+	 * \param $q the query to execute
+	 * \return result
 	 */
 	function getMappedArray($q)
 	{
@@ -222,8 +222,8 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns array of data with numerical index
 	 *
-	 * /param $q the query to execute
-	 * /return result
+	 * \param $q the query to execute
+	 * \return result
 	 */
 	function getNumArray($q)
 	{
@@ -252,8 +252,8 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns one row of data
 	 *
-	 * /param $q the query to execute
-	 * /return result
+	 * \param $q the query to execute
+	 * \return result
 	 */
 	function getOneRow($q)
 	{
@@ -281,8 +281,8 @@ class DB_MySQLi extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns one entry of data
 	 *
-	 * /param $q the query to execute
-	 * /return result
+	 * \param $q the query to execute
+	 * \return result
 	 */
 	function getOneItem($q, $num = false)
 	{
