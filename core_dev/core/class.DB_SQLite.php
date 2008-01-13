@@ -9,18 +9,28 @@
  * \todo THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
  * \todo REWRITE TO USE object oriented interface. but first: make it work procedural style
  *
- * \author Martin Lindhe, 2007
+ * \author Martin Lindhe, 2007-2008
  */
 
 require_once('class.DB_Base.php');
 
 class DB_SQLite extends DB_Base
 {
+	/**
+	 * Destructor
+	 *
+	 * \return nothing
+	 */
 	function __destruct()
 	{
 		if ($this->db_handle) sqlite_close($this->db_handle);
 	}
 
+	/**
+	 * Opens a connection to SQLite database
+	 *
+	 * \return nothing
+	 */
 	function connect()
 	{
 		global $config;
@@ -48,6 +58,11 @@ class DB_SQLite extends DB_Base
 		if ($config['debug']) $this->profileConnect($time_started);
 	}
 
+	/**
+	 * Shows SQLite driver status
+	 *
+	 * \return nothing
+	 */
 	function showDriverStatus()
 	{
 		echo 'Encoding: '.sqlite_libencoding().'<br/>';
@@ -66,11 +81,23 @@ class DB_SQLite extends DB_Base
 		return $q;
 	}
 
+	/**
+	 * Escapes the string for use in SQLite queries
+	 *
+	 * \param $q the query to escape
+	 * \return escaped query
+	 */
 	function escape($q)
 	{
 		return sqlite_escape_string($q);
 	}
 
+	/**
+	 * Executes a SQL query
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function query($q)
 	{
 		global $config;
@@ -90,6 +117,12 @@ class DB_SQLite extends DB_Base
 		return $result;
 	}
 
+	/**
+	 * Helper function for SQL INSERT queries
+	 *
+	 * \param $q the query to execute
+	 * \return insert_id
+	 */
 	function insert($q)
 	{
 		global $config;
@@ -113,6 +146,12 @@ class DB_SQLite extends DB_Base
 		return $ret_id;
 	}
 
+	/**
+	 * Helper function for SQL DELETE queries
+	 *
+	 * \param $q the query to execute
+	 * \return number of rows affected
+	 */
 	function delete($q)
 	{
 		global $config;
@@ -136,6 +175,12 @@ class DB_SQLite extends DB_Base
 		return $affected_rows;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns array of data
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function getArray($q)
 	{
 		global $config;
@@ -157,6 +202,12 @@ class DB_SQLite extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns mapped array of data
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function getMappedArray($q)
 	{
 		global $config;
@@ -182,6 +233,12 @@ class DB_SQLite extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns array of data with numerical index
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function getNumArray($q)
 	{
 		global $config;
@@ -207,6 +264,12 @@ class DB_SQLite extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns one row of data
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function getOneRow($q)
 	{
 		global $config;
@@ -231,6 +294,13 @@ class DB_SQLite extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns one entry of data
+	 *
+	 * \param $q the query to execute
+	 * \param $num if set to true, return "0" instead of false on empty result
+	 * \return result
+	 */
 	function getOneItem($q, $num = false)
 	{
 		global $config;

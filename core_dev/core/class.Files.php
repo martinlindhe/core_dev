@@ -1,15 +1,14 @@
 <?
-/*
-	Files class - Handle file upload, image manipulating, file management
-
-	Uses tblFiles
-
-	Written by Martin Lindhe, 2007
-	
-	Uses php_id3.dll if enabled, to show more details of mp3s in the file module
-
-	//TODO rename tblFiles.timeUploaded to tblFiles.timeCreated
-*/
+/**
+ * Files class - Handle file upload, image manipulating, file management
+ *
+ * Uses tblFiles
+ * Uses php_id3.dll if enabled, to show more details of mp3s in the file module
+ *
+ * \todo rename tblFiles.timeUploaded to tblFiles.timeCreated
+ *
+ * \author Martin Lindhe, 2007-2008
+ */
 
 require_once('atom_comments.php');			//for image comments support
 require_once('atom_categories.php');		//for file categories support
@@ -68,7 +67,7 @@ class Files
 		'application/pdf'			//Adobe .pdf file
 	);
 
-	//file extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
+	///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
 	public $media_types = array(
 		'png' => array(MEDIATYPE_IMAGE, 'image/png', 'PNG Image'),
 		'jpg' => array(MEDIATYPE_IMAGE, 'image/jpeg', 'JPEG Image'),
@@ -116,6 +115,12 @@ class Files
 	*/
 	private $image_convert				= true;
 
+	/**
+	 * Constructor. Initializes class configuration
+	 *
+	 * \param $config array of config options for the Files class
+	 * \return nothing
+	 */
 	function __construct(array $config)
 	{
 		global $session;
@@ -135,7 +140,13 @@ class Files
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
 	}
 
-	//Returnerar alla filer som är uppladdade av typen $fileType
+	/**
+	 * Returns all files uploaded of the type specified
+	 *
+	 * \param $fileType filetype
+	 * \param $ownerId optionally select by owner also
+	 * \return list of files
+	 */
 	function getFileList($fileType, $ownerId = 0)
 	{
 		global $db;
@@ -147,7 +158,12 @@ class Files
 		return $db->getArray($q);
 	}
 
-	/* Returns all cloned files based on this file */
+	/**
+	 * Returns all cloned files based on this file
+	 *
+	 * \param $fileId id of file to get clones for
+	 * \return list of cloned files
+	 */
 	function getClonesList($fileId)
 	{
 		global $db;
@@ -158,7 +174,11 @@ class Files
 		return $db->getArray($q);
 	}
 
-	/* Performs mimetype lookup using "file" tool */
+	/**
+	 * Performs mimetype lookup using "file" tool
+	 *
+	 * \param $fileName name of file to check
+	 */
 	function lookupMimeType($fileName)
 	{
 		//IMPORTANT todo: validate $fileName
@@ -188,8 +208,14 @@ class Files
 		return 'xx';
 	}*/
 
-	//Visar alla filer som är uppladdade i en publik "filarea" (FILETYPE_FILEAREA_UPLOAD)
-	//Eller alla filer som tillhör en wiki (FILETYPE_WIKI)
+	/**
+	 * Shows all files uploaded in a public file area (FILETYPE_FILEAREA_UPLOAD)
+	 * Or all files belonging to a wiki (FILETYPE_WIKI)
+	 *
+	 * \param $fileType type of files to show
+	 * \param $ownerId show files from this owner only
+	 * \param $categoryId show files from this category only
+	 */
 	function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 	{
 		global $session, $db, $config;
@@ -349,7 +375,13 @@ class Files
 		echo '</div>';
 	}
 
-	/* Visar bara thumbnails. klicka en thumbnail för att visa hela bilden i 'image_big' div:en */
+	/**
+	 * Shows tumbnail overview of files
+	 * Click a thumbnail to show the whole image
+	 *
+	 * \param $fileType type of files to show
+	 * \param $categoryId category to display files from
+	 */
 	function showThumbnails($fileType, $categoryId)
 	{
 		global $config, $session, $db;
@@ -389,7 +421,12 @@ class Files
 		echo '</div>';	//id="image_big_holder"
 	}
 	
-	/* shows attachments. used to show files attached to a forum post */
+	/**
+	 * Shows attachments. used to show files attached to a forum post
+	 *
+	 * \param $_type type of file
+	 * \param $_owner owner of the files
+	 */
 	function showAttachments($_type, $_owner)
 	{
 		global $config;
@@ -411,6 +448,12 @@ class Files
 		}
 	}
 
+	/**
+	 * Deletes a file from disk & database
+	 *
+	 * \param $_id fileId to delete
+	 * \return true on success
+	 */
 	function deleteFile($_id)
 	{
 		global $db, $session;
@@ -427,9 +470,15 @@ class Files
 		//physically remove the file from disk
 		unlink($this->upload_dir.$_id);
 		$this->clearThumbs($_id);
+		return true;
 	}
 
-	/* Deletes all thumbnails for this file ID */
+	/**
+	 * Deletes all thumbnails for this file ID
+	 *
+	 * \param $_id file id
+	 * \return true on success
+	 */
 	function clearThumbs($_id)
 	{
 		global $db;
@@ -444,10 +493,19 @@ class Files
 			}
 		}
 		//$session->log('Thumbs for '.$_id.' deleted');
+		return true;
 	}
 
 
-	/* Stores uploaded file associated to $session->id */
+	/**
+	 * Stores uploaded file associated to $session->id
+	 *
+	 * \param $FileData array of php internal file data from file upload
+	 * \param $fileType type of file
+	 * \param $ownerId file owner
+	 * \param $categoryId category where to store the file
+	 * \return fileId of the newly imported file
+	 */
 	function handleUpload($FileData, $fileType, $ownerId, $categoryId = 0)
 	{
 		global $db, $session;
@@ -478,6 +536,16 @@ class Files
 		return $fileId;
 	}
 
+	/**
+	 * Adds a new entry for a new file in the database
+	 *
+	 * \param $fileType
+	 * \param $categoryId
+	 * \param $ownerId
+	 * \param $fileName
+	 * \param $content
+	 * \return fileId from the database entry created, or false on failure
+	 */
 	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
 	{
 		global $db, $session;
@@ -505,6 +573,12 @@ class Files
   	return $newFileId;
 	}
 
+	/**
+	 * File upload handling function. Generates thumbnails for images upon upload etc, handles different media types differently
+	 *
+	 * \param $fileId file id to deal with
+	 * \param $FileData array of php internal file data from file upload
+	 */
 	function handleGeneralUpload($fileId, $FileData)
 	{
 		global $db, $session;
@@ -558,7 +632,12 @@ class Files
 		return false;
 	}
 
-	/* Handle image upload, used internally only */
+	/**
+	 * Handle image upload, used internally only
+	 *
+	 * \param $fileId file id to deal with
+	 * \param $FileData array of php internal file data from file upload
+	 */
 	function handleImageUpload($fileId, $FileData)
 	{
 		global $db, $session;
@@ -581,7 +660,14 @@ class Files
 		$session->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
 	}
 
-	/* Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio */
+	/**
+	 * Utility function, Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio
+	 *
+	 * \param $filename image file to calculate new size for
+	 * \param $to_width
+	 * \param $to_height
+	 * \return new width & height
+	 */
 	function resizeImageCalc($filename, $to_width, $to_height)
 	{
 		list($orig_width, $orig_height) = getimagesize($filename);
@@ -608,6 +694,9 @@ class Files
 		return Array(ceil($y_ratio * $orig_width), $max_height);
 	}
 
+	/**
+	 * Resizes specified image file
+	 */
 	function resizeImage($in_filename, $out_filename, $to_width = 0, $to_height = 0, $fileId = 0)
 	{
 		global $db;
@@ -661,22 +750,28 @@ class Files
 		return true;
 	}
 
-	/* Uses ImageMagick commandline image converter */
+	/**
+	 * Converts a image to specified file type. Currently supports conversions to jpeg, png or gif
+	 * Requires ImageMagick commandline image converter "convert"
+	 *
+	 * \param $src_file
+	 * \param $dst_file
+	 * \param $dst_mime_type
+	 */
 	function convertImage($src_file, $dst_file, $dst_mime_type)
 	{
 		switch ($dst_mime_type)
 		{
-			//fixme: paths bara nödvändiga tills ja rebootat windows & path enviroment syns för apache
 			case 'image/jpeg':
-				$c = 'E:/devel/imagemagick/convert.exe -quality '.$this->image_jpeg_quality.' '.$src_file.' JPG:'.$dst_file;
+				$c = 'convert -quality '.$this->image_jpeg_quality.' '.escapeshellarg($src_file).' JPG:'.escapeshellarg($dst_file);
 				break;
 
 			case 'image/png':
-				$c = 'E:/devel/imagemagick/convert.exe '.$src_file.' PNG:'.$dst_file;
+				$c = 'convert '.escapeshellarg($src_file).' PNG:'.escapeshellarg($dst_file);
 				break;
 
 			case 'image/gif':
-				$c = 'E:/devel/imagemagick/convert.exe '.$src_file.' GIF:'.$dst_file;
+				$c = 'convert '.escapeshellarg($src_file).' GIF:'.escapeshellarg($dst_file);
 				break;
 
 			default:
@@ -687,11 +782,17 @@ class Files
 		exec($c);
 
 		if (!file_exists($dst_file)) return false;
-
 		return true;
 	}
 
-	/* fetches or calculates checksums for the file in tblChecksums */
+	/**
+	 * Returns checksums for specified file.
+	 * If checksums were already generated, it fetches them from tblChecksums
+	 *
+	 * \param $_id fileId to get checksums for
+	 * \param $force if set to true the db cache of checksums is ignored
+	 * \return checksums in array
+	 */
 	function checksums($_id, $force = false)
 	{
 		global $db;
@@ -726,14 +827,24 @@ class Files
 		return $new;
 	}
 
-	/* returns sha1 checksum of file $_id. forces checksum generation if missing */
+	/**
+	 * Returns sha1 checksum of file $_id. forces checksum generation if missing
+	 *
+	 * \param $_id fileId
+	 * \return sha1-sum
+	 */
 	function sha1($_id)
 	{
 		$sums = $this->checksums($_id);
 		return $sums['sha1'];
 	}
 
-	/* used for file processing. generates a new file entry referencing to entry $_id. returns new id */
+	/**
+	 * Used for file processing. generates a new file entry referencing to entry $_id. returns new id
+	 *
+	 * \param $_id fileId
+	 * \return fileId of the clone
+	 */
 	function cloneEntry($_id)
 	{
 		global $db;
@@ -746,7 +857,13 @@ class Files
 		return $db->insert($q);
 	}
 
-	/* Updates info of a file clone. set current mime type & file size & calculate checksums */
+	/**
+	 * Updates info of a file clone. set current mime type & file size & calculate checksums
+	 *
+	 * \param $_id fileId to update
+	 * \param $mimeType set mimetype
+	 * \return numeric value on true, else 0 or false
+	 */
 	function updateClone($_id, $mimeType)
 	{
 		global $db;
@@ -761,7 +878,12 @@ class Files
 		return $db->update($q);
 	}
 
-	/* Forces recalculation of filesize, mimetype and checksums */
+	/**
+	 * Forces recalculation of filesize, mimetype and checksums
+	 *
+	 * \param $_id
+	 * \return numeric value on true, else 0 or false
+	 */
 	function updateFile($_id)
 	{
 		global $db;
@@ -789,7 +911,9 @@ class Files
 
 	}
 
-	//These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
+	/**
+	 * These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
+	 */
 	function setCachedHeaders()
 	{
 		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
@@ -797,13 +921,21 @@ class Files
 		header('Pragma: Public');
 	}
 
+	/**
+	 * Force browser to not cache content
+	 */
 	function setNoCacheHeaders()
 	{
 		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 	}
 
-	/* Performs an image rotation and then pass on the result to the user */
+	/**
+	 * Performs an image rotation and then pass on the result to the user
+	 *
+	 * \param $_id fileId
+	 * \param $_angle how much to rotate the image
+	 */
 	function imageRotate($_id, $_angle)
 	{
 		global $db, $session;
@@ -844,7 +976,12 @@ class Files
 		$this->clearThumbs($_id);
 	}
 
-	//takes get parameter 'dl' to send the file as an attachment
+	/**
+	 * Takes get parameter 'dl' to send the file as an attachment
+	 *
+	 * \param $_id fileId
+	 * \param $force_mime
+	 */
 	function sendFile($_id, $force_mime = false)
 	{
 		global $db;
@@ -890,6 +1027,11 @@ class Files
 		die;
 	}
 
+	/**
+	 * Sends text file to user
+	 *
+	 * \param $filename name of file to send
+	 */
 	function sendTextfile($filename)
 	{
 		//required for IE6:
@@ -903,7 +1045,13 @@ class Files
 		readfile($filename, 'r');
 	}
 
-	//takes get parameters 'w' and 'h'
+	/**
+	 * Send image to user
+	 *
+	 * \param $_id fileId
+	 * \param $_GET['w'] width
+	 * \param $_GET['h'] height
+	 */
 	function sendImage($_id)
 	{
 		global $session;
@@ -948,6 +1096,13 @@ class Files
 		echo file_get_contents($out_filename);
 	}
 
+	/**
+	 * Selects all files for specified type & owner
+	 *
+	 * \param $fileType type of files
+	 * \param $ownerId owner of the files
+	 * \param $categoryId category of the files
+	 */
 	function getFiles($fileType, $ownerId, $categoryId = 0)
 	{
 		global $db, $session;
@@ -967,6 +1122,13 @@ class Files
 		return $db->getArray($q);
 	}
 
+	/**
+	 * Get file count
+	 *
+	 * \param $fileType type of files
+	 * \param $ownerId owner of the files
+	 * \param $categoryId category of the files
+	 */
 	function getFileCount($fileType, $ownerId, $categoryId = 0)
 	{
 		global $db;
@@ -976,6 +1138,11 @@ class Files
 		return $db->getOneItem($q, true);
 	}
 
+	/**
+	 * Retrieves info about the specified file
+	 *
+	 * \param $_id fileId
+	 */
 	function getFileInfo($_id)
 	{
 		global $db;
@@ -988,7 +1155,11 @@ class Files
 		return $db->getOneRow($q);
 	}
 
-	/* Används av ajax filen core/ajax_fileinfo.php för att visa fil-detaljer för den fil som är inzoomad just nu*/
+	/**
+	 * Used by the ajax file core/ajax_fileinfo.php to show file details of currently selected file
+	 *
+	 * \param $_id fileId
+	 */
 	function showFileInfo($_id)
 	{
 		global $session;
@@ -1028,6 +1199,11 @@ class Files
 		echo 'Generated at '.$arr['timeCreated'].' in '.$arr['timeExec'].' sec<br/>';
 	}
 
+	/**
+	 * Returns user who uploaded specified file
+	 *
+	 * \param $_id fileId
+	 */
 	function getUploader($_id)
 	{
 		global $db;
@@ -1037,6 +1213,11 @@ class Files
 		return $db->getOneItem($q);
 	}
 
+	/**
+	 * Returns owner of specified file
+	 *
+	 * \param $_id fileId
+	 */
 	function getOwner($_id)
 	{
 		global $db;
@@ -1046,6 +1227,9 @@ class Files
 		return $db->getOneItem($q);
 	}
 
+	/**
+	 * Generates image gadget
+	 */
 	function showImageGadgetXHTML()
 	{
 		global $config, $session;
@@ -1080,6 +1264,9 @@ class Files
 <?
 	}
 
+	/**
+	 * Generates audio gadget
+	 */
 	function showAudioGadgetXHTML()
 	{
 		global $session;
@@ -1100,7 +1287,10 @@ class Files
 </div>
 <?
 	}
-	
+
+	/**
+	 * Generates video gadget
+	 */
 	function showVideoGadgetXHTML()
 	{
 		global $session;
@@ -1122,6 +1312,9 @@ class Files
 <?
 	}
 
+	/**
+	 * Generates document gadget
+	 */
 	function showDocumentGadgetXHTML()
 	{
 		global $session;

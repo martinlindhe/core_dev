@@ -6,18 +6,28 @@
  *
  * \todo THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
  *
- * \author Martin Lindhe, 2007
+ * \author Martin Lindhe, 2007-2008
  */
 
 require_once('class.DB_Base.php');
 
 class DB_PostgreSQL extends DB_Base
 {
+	/**
+	 * Destructor
+	 *
+	 * \return nothing
+	 */
 	function __destruct()
 	{
 		if ($this->db_handle) pg_close($this->db_handle);
 	}
 
+	/**
+	 * Opens a connection to PostgreSQL database
+	 *
+	 * \return nothing
+	 */
 	function connect()
 	{
 		global $config;
@@ -50,6 +60,11 @@ class DB_PostgreSQL extends DB_Base
 		if ($config['debug']) $this->profileConnect($time_started);
 	}
 
+	/**
+	 * Shows PostgreSQL driver status
+	 *
+	 * \return nothing
+	 */
 	function showDriverStatus()
 	{
 		echo 'Server encoding: '.pg_parameter_status($this->db_handle, 'server_encoding').'<br/>';
@@ -70,11 +85,23 @@ class DB_PostgreSQL extends DB_Base
 		return $q;
 	}
 
+	/**
+	 * Escapes the string for use in PostgreSQL queries
+	 *
+	 * \param $q the query to escape
+	 * \return escaped query
+	 */
 	function escape($q)
 	{
 		return pg_escape_string($this->db_handle, $q);
 	}
 
+	/**
+	 * Executes a SQL query
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function query($q)
 	{
 		global $config;
@@ -94,6 +121,12 @@ class DB_PostgreSQL extends DB_Base
 		return $result;
 	}
 
+	/**
+	 * Helper function for SQL INSERT queries
+	 *
+	 * \param $q the query to execute
+	 * \return insert_id
+	 */
 	function insert($q)
 	{
 		global $config;
@@ -117,6 +150,12 @@ class DB_PostgreSQL extends DB_Base
 		return $ret_id;
 	}
 
+	/**
+	 * Helper function for SQL DELETE queries
+	 *
+	 * \param $q the query to execute
+	 * \return number of rows affected
+	 */
 	function delete($q)
 	{
 		global $config;
@@ -140,6 +179,12 @@ class DB_PostgreSQL extends DB_Base
 		return $affected_rows;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns array of data
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function getArray($q)
 	{
 		global $config;
@@ -165,6 +210,12 @@ class DB_PostgreSQL extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns mapped array of data
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function getMappedArray($q)
 	{
 		global $config;
@@ -190,6 +241,12 @@ class DB_PostgreSQL extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns array of data with numerical index
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function getNumArray($q)
 	{
 		global $config;
@@ -215,6 +272,12 @@ class DB_PostgreSQL extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns one row of data
+	 *
+	 * \param $q the query to execute
+	 * \return result
+	 */
 	function getOneRow($q)
 	{
 		global $config;
@@ -239,6 +302,13 @@ class DB_PostgreSQL extends DB_Base
 		return $data;
 	}
 
+	/**
+	 * Helper function for SQL SELECT queries who returns one entry of data
+	 *
+	 * \param $q the query to execute
+	 * \param $num if set to true, return "0" instead of false on empty result
+	 * \return result
+	 */
 	function getOneItem($q, $num = false)
 	{
 		global $config;

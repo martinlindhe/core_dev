@@ -6,7 +6,7 @@
  *   $session->save('variablename', 'some random setting to save');
  *   $kex = $session->read('variablename');
  *
- * \author Martin Lindhe, 2007
+ * \author Martin Lindhe, 2007-2008
  */
 
 require_once('functions_general.php');
@@ -64,6 +64,11 @@ class Session
 	private $default_theme = 'default.css';			//default theme if none is choosen
 	private $allow_themes = false;
 
+	/**
+	 * Constructor. Initializes the session class
+	 *
+	 * \param $session_config array with session settings
+	 */
 	function __construct(array $session_config = array(''))
 	{
 		global $db, $config;
@@ -117,6 +122,9 @@ class Session
 		if (strpos($this->user_agent, 'MSIE')) $this->ua_ie = true;	//FIXME this check will handle Opera as a IE browser
 	}
 
+	/**
+	 * Handles session actions, such as log in & log out requests, idle timeout check etc
+	 */
 	function handleSessionActions()
 	{
 		global $db, $config;
@@ -196,7 +204,6 @@ class Session
 		return $db->insert($q);
 	}
 
-
 	/**
 	 * Register new user in the database
 	 * \param $username xxx
@@ -247,6 +254,13 @@ class Session
 		return $newUserId;
 	}
 
+	/**
+	 * Handles logins
+	 *
+	 * \param $username
+	 * \param $password
+	 * \return true on success
+	 */
 	function logIn($username, $password)
 	{
 		global $db;
@@ -289,6 +303,9 @@ class Session
 		return true;
 	}
 
+	/**
+	 * Logs out the user
+	 */
 	function logOut()
 	{
 		global $db;
@@ -388,6 +405,9 @@ class Session
 		echo '</div>';
 	}
 
+	/**
+	 * Shows info about the session
+	 */
 	function showInfo()
 	{
 		global $config;

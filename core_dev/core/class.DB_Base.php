@@ -4,7 +4,9 @@
  *
  * The SQL profiler features additional PHP profiling if the xdebug extension is loaded
  *
- * \author Martin Lindhe, 2007
+ * \todo Make a test script to verify each of the database classes returns data as expected
+ *
+ * \author Martin Lindhe, 2007-2008
  */
 
 abstract class DB_Base

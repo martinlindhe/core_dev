@@ -2,7 +2,7 @@
 /**
  * Object oriented interface for MySQL databases using the php_mysqli.dll extension
  *
- * \author Martin Lindhe, 2007
+ * \author Martin Lindhe, 2007-2008
  */
 
 require_once('class.DB_Base.php');
@@ -80,7 +80,7 @@ class DB_MySQLi extends DB_Base
 	}
 
 	/**
-	 * Executes a MySQL query
+	 * Executes a SQL query
 	 *
 	 * \param $q the query to execute
 	 * \return result
@@ -104,7 +104,7 @@ class DB_MySQLi extends DB_Base
 	}
 
 	/**
-	 * Helper function for MySQL INSERT queries
+	 * Helper function for SQL INSERT queries
 	 *
 	 * \param $q the query to execute
 	 * \return insert_id
@@ -132,7 +132,7 @@ class DB_MySQLi extends DB_Base
 	}
 
 	/**
-	 * Helper function for MySQL DELETE queries
+	 * Helper function for SQL DELETE queries
 	 *
 	 * \param $q the query to execute
 	 * \return number of rows affected
@@ -160,7 +160,7 @@ class DB_MySQLi extends DB_Base
 	}
 
 	/**
-	 * Helper function for MySQL SELECT queries who returns array of data
+	 * Helper function for SQL SELECT queries who returns array of data
 	 *
 	 * \param $q the query to execute
 	 * \return result
@@ -190,7 +190,7 @@ class DB_MySQLi extends DB_Base
 	}
 
 	/**
-	 * Helper function for MySQL SELECT queries who returns mapped array of data
+	 * Helper function for SQL SELECT queries who returns mapped array of data
 	 *
 	 * \param $q the query to execute
 	 * \return result
@@ -220,7 +220,7 @@ class DB_MySQLi extends DB_Base
 	}
 
 	/**
-	 * Helper function for MySQL SELECT queries who returns array of data with numerical index
+	 * Helper function for SQL SELECT queries who returns array of data with numerical index
 	 *
 	 * \param $q the query to execute
 	 * \return result
@@ -250,7 +250,7 @@ class DB_MySQLi extends DB_Base
 	}
 
 	/**
-	 * Helper function for MySQL SELECT queries who returns one row of data
+	 * Helper function for SQL SELECT queries who returns one row of data
 	 *
 	 * \param $q the query to execute
 	 * \return result
@@ -279,9 +279,10 @@ class DB_MySQLi extends DB_Base
 	}
 
 	/**
-	 * Helper function for MySQL SELECT queries who returns one entry of data
+	 * Helper function for SQL SELECT queries who returns one entry of data
 	 *
 	 * \param $q the query to execute
+	 * \param $num if set to true, return "0" instead of false on empty result
 	 * \return result
 	 */
 	function getOneItem($q, $num = false)

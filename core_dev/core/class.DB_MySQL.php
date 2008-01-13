@@ -4,7 +4,7 @@
  *
  * When possible, use class.DB_MySQLi.php instead (it is faster)
  *
- * \author Martin Lindhe, 2007
+ * \author Martin Lindhe, 2007-2008
  */
 
 require_once('class.DB_Base.php');
@@ -284,6 +284,7 @@ class DB_MySQL extends DB_Base
 	 * Helper function for MySQL SELECT queries who returns one entry of data
 	 *
 	 * \param $q the query to execute
+	 * \param $num if set to true, return "0" instead of false on empty result
 	 * \return result
 	 */
 	function getOneItem($q, $num = false)
@@ -307,7 +308,7 @@ class DB_MySQL extends DB_Base
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
 		if (!$data) {
-			if ($num) return 0;
+			if ($num) return "0";
 			return false;
 		}
 		return $data[0];
