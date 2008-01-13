@@ -42,33 +42,32 @@ class Files
 	private $htaccess = "Deny from all\nOptions All -Indexes";
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
-	public $image_mime_types = array(
+	public $image_mime_types = array(	///<FIXME remove
 		'image/jpeg',
 		'image/png',
 		'image/gif'
 	);
 
-	public $audio_mime_types	= array(
+	public $audio_mime_types	= array(	///<FIXME remove
 		'audio/x-mpeg',	'audio/mpeg',		//.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'
 		'audio/x-ms-wma',								//.wma file. FF2 & IE7 sends this
 		'application/x-ogg'							//.ogg file		- FIXME: IE7 sends mime header 'application/octet-stream' for .ogg
 	);
 
-	public $video_mime_types = array(
+	public $video_mime_types = array(	///<FIXME remove
 		'video/mpeg',			//.mpg file
 		'video/avi',			//.avi file
 		'video/x-ms-wmv',	//Microsoft .wmv file
 		'video/3gpp'			//.3gp video file
 	);
 
-	public $document_mime_types = array(
+	public $document_mime_types = array(	///<FIXME remove
 		'text/plain',					//normal text file
 		'application/msword',	//Microsoft .doc file
 		'application/pdf'			//Adobe .pdf file
 	);
 
-	///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
-	public $media_types = array(
+	public $media_types = array(	///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
 		'png' => array(MEDIATYPE_IMAGE, 'image/png', 'PNG Image'),
 		'jpg' => array(MEDIATYPE_IMAGE, 'image/jpeg', 'JPEG Image'),
 		'gif' => array(MEDIATYPE_IMAGE, 'image/gif', 'GIF Image'),
@@ -91,18 +90,19 @@ class Files
 	);
 
 	/* User configurable settings */
-	public $upload_dir = 'e:/devel/webupload/default';						//	'/tmp/';
-	public $thumbs_dir = 'e:/devel/webupload/default/thumbs/';		//	'/tmp/';
+	public $upload_dir = '/tmp/webupload';						///<Default upload directory
+	public $thumbs_dir = '/tmp/webupload/thumbs/';		///<Default thumbnail directory
 
-	private $image_max_width			= 1100;	//bigger images will be resized to this size
+	public $thumb_default_width		= 80;				///<Default width of thumbnails
+	public $thumb_default_height	= 80;				///<Default height of thumbnails
+
+	private $image_max_width			= 1100;			///<bigger images will be resized to this size
 	private $image_max_height			= 900;
-	public $thumb_default_width		= 80;
-	public $thumb_default_height	= 80;
-	private $image_jpeg_quality		= 70;		//0-100% quality for recompression of very large uploads (like digital camera pictures)
+	private $image_jpeg_quality		= 70;				///<0-100% quality for recompression of very large uploads (like digital camera pictures)
 
-	private $count_file_views			= false;	//auto increments the "cnt" in tblFiles in each $files->sendFile() call
-	public $anon_uploads					= false;	//allow unregisterd users to upload files
-	private $apc_uploads					= false;		//enable support for php_apc + php_uploadprogress calls
+	public $anon_uploads					= false;		///<allow unregisterd users to upload files
+	private $count_file_views			= false;		///<auto increments the "cnt" in tblFiles in each $files->sendFile() call
+	private $apc_uploads					= false;		///<enable support for php_apc + php_uploadprogress calls
 
 	/* If $image_convert are enabled, it uses ImageMagick to convert the following image formats:
 		- BMP images gets converted to JPG
@@ -696,6 +696,12 @@ class Files
 
 	/**
 	 * Resizes specified image file
+	 *
+	 * \param $in_filename
+	 * \param $out_filename
+	 * \param $to_width
+	 * \param $to_height
+	 * \param $fileId
 	 */
 	function resizeImage($in_filename, $out_filename, $to_width = 0, $to_height = 0, $fileId = 0)
 	{
@@ -1048,9 +1054,11 @@ class Files
 	/**
 	 * Send image to user
 	 *
+	 * Optional parametera:
+	 * $_GET['w'] width
+	 * $_GET['h'] height
+	 *
 	 * \param $_id fileId
-	 * \param $_GET['w'] width
-	 * \param $_GET['h'] height
 	 */
 	function sendImage($_id)
 	{

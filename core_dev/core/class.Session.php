@@ -25,44 +25,44 @@ define('LOGLEVEL_ALL', 5);
 
 class Session
 {
-	private $session_name = 'someSID';	//default session name
-	private $timeout = 86400;					//24h - max allowed idle time (in seconds) before session times out and user needs to log in again
-	public $online_timeout = 1800;		//30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
+	private $session_name = 'someSID';	///< default session name
+	private $timeout = 86400;						///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+	public $online_timeout = 1800;			///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 	//todo: make online_timeout configurable
-	private $check_ip = true;						//client will be logged out if client ip is changed during the session
-	private $check_useragent = true;		//keeps track if the client user agent string changes during the session
+	private $check_ip = true;						///< client will be logged out if client ip is changed during the session
+	private $check_useragent = true;		///< keeps track if the client user agent string changes during the session
 
-	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	//used to further encode sha1 passwords, to make rainbow table attacks harder
-	public $allow_login = true;				//set to false to only let superadmins log in to the site
-	private $allow_registration = true;	//set to false to disallow the possibility to register new users. will be disabled if login is disabled
-	private $reserved_usercheck = true;		//check if username is listed as reserved username, requires tblStopwords
-	private $userdata = true; //shall we use tblUserdata for required userdata fields?
+	private $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	///< used to further encode sha1 passwords, to make rainbow table attacks harder
+	public $allow_login = true;						///< set to false to only let superadmins log in to the site
+	private $allow_registration = true;		///< set to false to disallow the possibility to register new users. will be disabled if login is disabled
+	private $reserved_usercheck = true;		///< check if username is listed as reserved username, requires tblStopwords
+	private $userdata = true; 						///< shall we use tblUserdata for required userdata fields?
 
-	private $start_page = '';						//redirects user to this page (in $config['web_root'] directory) after successful login
-	private $error_page = 'error.php';	//redirects the user to this page (in $config['web_root'] directory) to show errors
+	private $start_page = '';							///< redirects user to this page (in $config['web_root'] directory) after successful login
+	private $error_page = 'error.php';		///< redirects the user to this page (in $config['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
-	public $error;
-	public $ip;
-	public $user_agent;			//current user's UserAgent string
-	public $ua_ie;					//boolean true if the user is using internet explorer
-	public $id;							//current user's user ID
-	public $username;
-	public $mode;
-	public $lastActive;
-	public $isAdmin;
-	public $isSuperAdmin;
-	public $started;		//timestamp of when the session started
-	public $theme = '';			//contains the currently selected theme
+	public $error;					///< last error message
+	public $ip;							///< IP of current user
+	public $user_agent;			///< current user's UserAgent string
+	public $ua_ie;					///< boolean true if the user is using internet explorer
+	public $id;							///< current user's user ID
+	public $username;				///< username of current user
+	public $mode;						///< usermode
+	public $lastActive;			///< last active
+	public $isAdmin;				///< is user admin?
+	public $isSuperAdmin;		///< is user superadmin?
+	public $started;				///< timestamp of when the session started
+	public $theme = '';			///< contains the currently selected theme
 
-	public $userModes = array(
+	public $userModes = array(	///< user modes
 		0 => 'Normal user',
 		1 => 'Admin',
 		2 => 'Super admin'
 	);
 	
-	private $default_theme = 'default.css';			//default theme if none is choosen
-	private $allow_themes = false;
+	private $default_theme = 'default.css';			///< default theme if none is choosen
+	private $allow_themes = false;							///< allow themes?
 
 	/**
 	 * Constructor. Initializes the session class
@@ -193,7 +193,12 @@ class Session
 		$this->lastActive = time();
 	}
 
-	/* Writes a log entry to tblLogs */
+	/**
+	 * Writes a log entry to tblLogs
+	 *
+	 * \param $str text to log
+	 * \param $entryLevel type of log entry
+	 */
 	function log($str, $entryLevel = LOGLEVEL_NOTICE)
 	{
 		global $db;
