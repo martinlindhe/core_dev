@@ -42,32 +42,32 @@ class Files
 	private $htaccess = "Deny from all\nOptions All -Indexes";
 	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
-	public $image_mime_types = array(	///<FIXME remove
+	public $image_mime_types = array(
 		'image/jpeg',
 		'image/png',
 		'image/gif'
-	);
+	); ///<FIXME remove
 
-	public $audio_mime_types	= array(	///<FIXME remove
+	public $audio_mime_types	= array(
 		'audio/x-mpeg',	'audio/mpeg',		//.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'
 		'audio/x-ms-wma',								//.wma file. FF2 & IE7 sends this
 		'application/x-ogg'							//.ogg file		- FIXME: IE7 sends mime header 'application/octet-stream' for .ogg
-	);
+	); ///<FIXME remove
 
-	public $video_mime_types = array(	///<FIXME remove
+	public $video_mime_types = array(
 		'video/mpeg',			//.mpg file
 		'video/avi',			//.avi file
 		'video/x-ms-wmv',	//Microsoft .wmv file
 		'video/3gpp'			//.3gp video file
-	);
+	); ///<FIXME remove
 
-	public $document_mime_types = array(	///<FIXME remove
+	public $document_mime_types = array(
 		'text/plain',					//normal text file
 		'application/msword',	//Microsoft .doc file
 		'application/pdf'			//Adobe .pdf file
-	);
+	); ///<FIXME remove
 
-	public $media_types = array(	///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
+	public $media_types = array(
 		'png' => array(MEDIATYPE_IMAGE, 'image/png', 'PNG Image'),
 		'jpg' => array(MEDIATYPE_IMAGE, 'image/jpeg', 'JPEG Image'),
 		'gif' => array(MEDIATYPE_IMAGE, 'image/gif', 'GIF Image'),
@@ -87,7 +87,7 @@ class Files
 
 		'html'		=> array(MEDIATYPE_WEBRESOURCE,	'text/html', 'HTML Page'),
 		'torrent'	=> array(MEDIATYPE_WEBRESOURCE,	'application/x-bittorrent', 'BitTorrent File')
-	);
+	); ///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
 
 	/* User configurable settings */
 	public $upload_dir = '/tmp/webupload';						///<Default upload directory

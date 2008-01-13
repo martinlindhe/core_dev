@@ -55,11 +55,11 @@ class Session
 	public $started;				///< timestamp of when the session started
 	public $theme = '';			///< contains the currently selected theme
 
-	public $userModes = array(	///< user modes
+	public $userModes = array(
 		0 => 'Normal user',
 		1 => 'Admin',
 		2 => 'Super admin'
-	);
+	); ///< user modes
 	
 	private $default_theme = 'default.css';			///< default theme if none is choosen
 	private $allow_themes = false;							///< allow themes?
