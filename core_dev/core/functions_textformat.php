@@ -1,7 +1,8 @@
 <?
 	//todo: rename config variables
-	$config['url_rewrite_length'] = 50;
-	$config['url_rewrite_redirfile'] = '';
+	$config['url_rewrite_length'] = 45;		//max length of visible url's after rewrite to hyperlinks
+	$config['url_rewrite_trailing'] = 15;	//number of characters to save at the end of the string
+	$config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disable redir feature
 
 	function makeThumbLink($_id, $_title = '')
 	{
