@@ -259,6 +259,9 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.01.14:
+	- core/functions_video.php: new file with video handling helper functions
+
 2007.12.19:
 	- plugins/ipx/* removed. was too specific tied to certain 
 functionality
