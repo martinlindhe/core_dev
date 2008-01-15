@@ -26,7 +26,6 @@
 		if ($session->ua_ie) {	//FIXME: kolla User Agent i denna funktion istället
 			//Detta funkar för IE:
 			$data .= '<object id="VIDEO" width="176" height="144" '.		//qcif
-					//'style="position:absolute; left:0;top:0;" '.
 					'CLASSID="CLSID:6BF52A52-394A-11D3-B153-00C04F79FAA6" '.
 					'type="application/x-oleobject">';
 			$data .=  '<param name="URL" VALUE="'.$url.'">';
@@ -45,4 +44,23 @@
 		return $data;
 	}
 
+	//requires Apple's AC_QuickTime.js from http://developer.apple.com/internet/ieembedprep.html
+	function embedQuickTimeVideo($url)
+	{
+		$width = 176;
+		$height = 144 + 16;	//some extra pixels for media player controller
+
+		$fake_url = 'http://10.10.10.240/xinfo.php';	//FIXME file must exist
+
+		$data  = '<script language="JavaScript" type="text/javascript">';
+		$data .= "QT_WriteOBJECT_XHTML('".$fake_url."', '".$width."', '".$height."', '',
+						'qtsrc', '".$url."',
+						'controller','true',
+						'target','myself',
+						'type','video/quicktime',
+    				'autoplay', 'true');";
+		$data .= '</script>';
+
+		return $data;
+	}
 ?>
