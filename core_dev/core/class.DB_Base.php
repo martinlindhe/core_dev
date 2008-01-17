@@ -1,12 +1,14 @@
 <?
 /**
+ * $Id$
+ *
  * SQL DB Base class
  *
  * The SQL profiler features additional PHP profiling if the xdebug extension is loaded
  *
  * \todo Make a test script to verify each of the database classes returns data as expected
  *
- * \author Martin Lindhe, 2007-2008
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 abstract class DB_Base

@@ -1,12 +1,14 @@
 <?
 /**
+ * $Id$
+ *
  * Object oriented interface for PostgreSQL databases using the php_pgsql.dll extension
  *
  * This interface translates MySQL syntax into PostgreSQL syntax, see the function translate()
  *
  * \todo THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
  *
- * \author Martin Lindhe, 2007-2008
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('class.DB_Base.php');

@@ -1,5 +1,7 @@
 <?
 /**
+ * $Id$
+ *
  * Files class - Handle file upload, image manipulating, file management
  *
  * Uses tblFiles
@@ -7,7 +9,7 @@
  *
  * \todo rename tblFiles.timeUploaded to tblFiles.timeCreated
  *
- * \author Martin Lindhe, 2007-2008
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('atom_comments.php');			//for image comments support

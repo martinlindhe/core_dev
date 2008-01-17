@@ -1,8 +1,10 @@
 <?
 /**
- * atom_settings.php - store user/server or other custom types of settings in database
+ * $Id$
  *
- * \author Martin Lindhe, 2007
+ * Store user/server or other custom types of settings in database
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	define('SETTING_USERDATA',			2);			//settings used to store personal userdata

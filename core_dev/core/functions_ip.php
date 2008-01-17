@@ -1,4 +1,10 @@
 <?
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
+
 	/* Takes a IPv4 address in the form 123.123.123.123 and returns a GeoIP address */
 	function IPv4_to_GeoIP($ip)
 	{

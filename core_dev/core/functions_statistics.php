@@ -1,7 +1,11 @@
 <?
-	/*
-		functions_statistics.php - used by admin module to display statistics
-	*/
+/**
+ * $Id$
+ *
+ * Used by admin module to display statistics
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
 
 	/* Displays stats for each month.
 		Will create tblStatistics entries if any are missing for requested page.

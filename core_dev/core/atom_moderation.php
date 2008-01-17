@@ -1,6 +1,8 @@
 <?
 /**
- * atom_moderation.php - Functions for moderation
+ * $Id$
+ *
+ * Functions for moderation
  *
  * Objectionable: Unallowed in public forums (discussion groups, guestbooks, diaries), configurable
  * Sensitive: Words that should trigger moderator notification upon certain posts, but is not blocked
@@ -11,6 +13,8 @@
  * Requires tblModeration and tblStopwords
  *
  * Admin: this atom module has two admin pages: "moderation queue" and "edit stopwords"
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	$config['moderation']['enabled'] = true;

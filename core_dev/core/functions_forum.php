@@ -1,6 +1,10 @@
 <?
 /**
- * functions_forums.php - Forum functions
+ * $Id$
+ *
+ * Forum functions
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	require_once('atom_subscriptions.php');	//for subscription functionality

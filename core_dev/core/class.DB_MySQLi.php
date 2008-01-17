@@ -1,8 +1,10 @@
 <?
 /**
+ * $Id$
+ *
  * Object oriented interface for MySQL databases using the php_mysqli.dll extension
  *
- * \author Martin Lindhe, 2007-2008
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('class.DB_Base.php');

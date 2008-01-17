@@ -1,4 +1,10 @@
 <?
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
+
 	define('MESSAGE_GROUP_INBOX',		1);
 	define('MESSAGE_GROUP_OUTBOX',	2);
 

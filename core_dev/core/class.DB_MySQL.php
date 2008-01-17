@@ -1,10 +1,12 @@
 <?
 /**
+ * $Id$
+ *
  * Object oriented interface for MySQL databases using the php_mysql.dll extension
  *
  * When possible, use class.DB_MySQLi.php instead (it is faster)
  *
- * \author Martin Lindhe, 2007-2008
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('class.DB_Base.php');

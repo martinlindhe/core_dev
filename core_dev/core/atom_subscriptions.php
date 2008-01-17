@@ -1,6 +1,6 @@
 <?
 /**
- * atom_subscriptions.php
+ * $Id$
  *
  * \todo Implement forum "bookmarks", personal favorite list using this module
  *
@@ -9,6 +9,8 @@
  *  type			= subscription type, SUBSCRIPTION_FORUM, SUBSCRIPTION_BLOG
  *  ownerId		= owner of the subscription (userId)
  *  itemId		= id of the item we are subscribing to (tblForums.forumId perhaps)
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	define('SUBSCRIPTION_FORUM',			1);

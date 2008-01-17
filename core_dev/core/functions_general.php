@@ -1,4 +1,11 @@
 <?
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
+
+
 	/**
 	 * Debug function. Prints out variable $v
 	 * \param $v variable of any type to display

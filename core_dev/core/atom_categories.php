@@ -1,8 +1,10 @@
 <?
 /**
- * atom_categories.php - set of functions to implement categories, used by various modules
+ * $Id$
  *
- * \author Martin Lindhe, 2007
+ * Set of functions to implement categories, used by various modules
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	//System categories. Reserved 1-50. Use a number above 50 for your own category types

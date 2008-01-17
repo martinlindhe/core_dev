@@ -1,4 +1,10 @@
 <?
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
+
 	require_once('atom_moderation.php');		//for automatic moderation of new blogs, and for "report blog" feature
 	require_once('atom_comments.php');			//for comment support for blogs
 	require_once('atom_rating.php');				//for rating support for blogs

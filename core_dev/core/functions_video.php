@@ -1,6 +1,10 @@
 <?
 /**
- * functions_video.php - video handling helper functions
+ * $Id$
+ *
+ * Video handling helper functions
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 
@@ -44,21 +48,31 @@
 		return $data;
 	}
 
-	//requires Apple's AC_QuickTime.js from http://developer.apple.com/internet/ieembedprep.html
-	function embedQuickTimeVideo($url)
+	/**
+	 * Helper function for embedding quicktime video
+	 * Requires Apple's AC_QuickTime.js from http://developer.apple.com/internet/ieembedprep.html
+	 * Parameter docs: http://www.apple.com/quicktime/tutorials/embed2.html
+	 *
+	 * \param $url url to embed
+	 * \param $mute bool. set to true to mute audio
+	 */
+	function embedQuickTimeVideo($url, $mute = false)
 	{
 		$width = 176;
 		$height = 144 + 16;	//some extra pixels for media player controller
 
 		$fake_url = 'http://10.10.10.240/xinfo.php';	//FIXME file must exist
 
-		$data  = '<script language="JavaScript" type="text/javascript">';
-		$data .= "QT_WriteOBJECT_XHTML('".$fake_url."', '".$width."', '".$height."', '',
-						'qtsrc', '".$url."',
-						'controller','true',
-						'target','myself',
-						'type','video/quicktime',
-    				'autoplay', 'true');";
+		$data  = '<script language="javascript" type="text/javascript">';
+		$data .= 'QT_WriteOBJECT_XHTML("'.$fake_url.'", "'.$width.'", "'.$height.'", "", ';
+			$data .= '"qtsrc", "'.$url.'", ';
+			$data .= '"controller", "true", ';
+			$data .= '"target", "myself", ';
+			$data .= '"type", "video/quicktime", ';
+			$data .= '"kioskmode", "true", ';		//hides right-click menu
+			if ($mute) $data .= '"volume", "0", ';
+			$data .= '"autoplay", "true"';
+		$data .= ');';
 		$data .= '</script>';
 
 		return $data;

@@ -1,8 +1,10 @@
 <?
 /**
- * atom_feedback.php - generic module to get feedback from the user
+ * $Id$
  *
- * \author Martin Lindhe, 2007
+ * Generic module to get feedback from the user
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	$config['feedback']['enabled'] = true;

@@ -1,6 +1,10 @@
 <?
 /**
- * functions_image.php - image handling helper functions
+ * $Id$
+ *
+ * Image handling helper functions
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	/**

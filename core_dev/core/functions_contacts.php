@@ -1,6 +1,10 @@
 <?
 /**
- * functions_contacts.php - implements friend lists. also implements blocked contacts
+ * $Id$
+ *
+ * Implements friend lists. also implements blocked contacts
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	define('CONTACT_FRIEND', 1);

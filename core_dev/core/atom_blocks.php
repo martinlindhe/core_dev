@@ -1,10 +1,12 @@
 <?
 /**
- * atom_blocks.php - Implements various types of blocking to the services
+ * $Id$
+ *
+ * Implements various types of blocking to the services
  *
  * The blocking rules are stored as textual strings to allow for great flexibility.
  *
- * \author Martin Lindhe, 2007
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	define('BLOCK_IP',		1);		//block by IP address. should be able to transparently support IPv6

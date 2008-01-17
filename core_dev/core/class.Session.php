@@ -1,12 +1,14 @@
 <?
 /**
+ * $Id$
+ *
  * Session class
  *
  * User setting examples:
  *   $session->save('variablename', 'some random setting to save');
  *   $kex = $session->read('variablename');
  *
- * \author Martin Lindhe, 2007-2008
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('functions_general.php');

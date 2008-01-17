@@ -1,12 +1,13 @@
 <?
-	/* functions_wiki.php
-		------------------------------------------------------------
-		Written by Martin Lindhe, 2007 <martin@startwars.org>
-
-		core											tblWiki
-		for history-support: atom_revisions.php			tblRevisions
-		for files-support: $files objekt				tblFiles
-	*/
+/**
+ * $Id$
+ *	
+ *	core											tblWiki
+ *	for history-support: atom_revisions.php			tblRevisions
+ *	for files-support: $files objekt				tblFiles
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
 
 	require_once('atom_revisions.php');
 

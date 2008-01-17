@@ -1,4 +1,10 @@
 <?
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
+
 	define('TODO_ITEM_OPEN',    0); $todo_item_status[TODO_ITEM_OPEN]     = 'OPEN';
 	define('TODO_ITEM_ASSIGNED',1); $todo_item_status[TODO_ITEM_ASSIGNED] = 'ASSIGNED';
 	define('TODO_ITEM_CLOSED',  2); $todo_item_status[TODO_ITEM_CLOSED]   = 'CLOSED';

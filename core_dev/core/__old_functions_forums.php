@@ -1,4 +1,9 @@
 <?
+	/**
+	 * $Id$
+	 *
+	 * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+	 */
 
 	function getForumItemParent(&$db, $itemId)
 	{

@@ -1,4 +1,10 @@
 <?
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
+
 	require_once('atom_settings.php');
 	require_once('atom_feedback.php');	//for user abuse reporting feature
 

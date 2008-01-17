@@ -1,4 +1,10 @@
 <?
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
+
 	$config['faq']['enabled'] = true;
 
 	function addFAQ($_q, $_a)

@@ -1,5 +1,7 @@
 <?
 /**
+ * $Id$
+ *
  * Object oriented interface for SQLite databases using the php_sqlite.dll extension
  *
  * This interface translates MySQL syntax into SQLite syntax, see the function translate()
@@ -9,7 +11,7 @@
  * \todo THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
  * \todo REWRITE TO USE object oriented interface. but first: make it work procedural style
  *
- * \author Martin Lindhe, 2007-2008
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('class.DB_Base.php');

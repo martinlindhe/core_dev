@@ -259,6 +259,9 @@ X = hi prio task
 * = notes belonging to above topic
 
 --------------[[changelog]]--------------
+2007.01.17:
+	- core/*.php: added "Id" svn keyword & some comment cleanup
+
 2007.01.14:
 	- core/functions_video.php: new file with video handling helper functions
 

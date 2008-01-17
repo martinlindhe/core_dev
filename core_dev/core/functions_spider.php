@@ -1,7 +1,13 @@
 <?
-	/*
-		functions for implementing a web spider / web crawler
+/**
+ * $Id$
+ *
+ * Functions for implementing a web spider / web crawler
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
 
+/*
 		crawl_site.php:
 		todo: allow input of site to crawl from browser
 		todo: store result of the crawl in database (currently in dump.txt)

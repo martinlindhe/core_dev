@@ -1,8 +1,10 @@
 <?
 /**
- * atom_revisions.php - set of functions to implement revisioned backups of data, used by various modules
+ * $Id$
  *
- * \author Martin Lindhe, 2007
+ * Set of functions to implement revisioned backups of data, used by various modules
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	//revision types:

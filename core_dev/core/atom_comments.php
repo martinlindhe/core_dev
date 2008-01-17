@@ -1,8 +1,10 @@
 <?
 /**
- * atom_comments.php - set of functions to implement comments, used by various modules
+ * $Id$
  *
- * \author Martin Lindhe, 2007
+ * Set of functions to implement comments, used by various modules
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	define('COMMENT_NEWS',					1);
