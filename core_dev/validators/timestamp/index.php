@@ -1,16 +1,27 @@
 <?
 /**
- * Convert times of different formats
+ * Convert timestamps to different formats
+ *
+ * \todo Validate that NTP conversion is correct
  */
 
+	require_once('config.php');
+
+	$ts = 1200685768;
+
 	if (!empty($_POST['ts'])) {
-		echo 'RFC 2822: '.date('r', $_POST['ts']).'<br/>';
-		echo 'RFC 8601: '.date('c', $_POST['ts']).'<br/>';
+		$ts = $_POST['ts'];
+
+		echo 'Unix timestamp, RFC 2822: '.date('r', $ts).'<br/>';
+		echo 'Unix timestamp, RFC 8601: '.date('c', $ts).'<br/>';
+
+		echo 'NTP timestamp, RFC 2822: '.date('r', ntptime_to_unixtime($ts) ).'<br/>';
+		echo 'NTP timestamp, RFC 8601: '.date('c', ntptime_to_unixtime($ts) ).'<br/>';
 	}
 
 ?>
 
 <form method="post" action="">
-Unix timestamp: <input type="text" name="ts"/>
+Timestamp: <input type="text" name="ts" value="<?=$ts?>"/>
 <input type="submit" class="button" value="Convert"/>
 </form>
