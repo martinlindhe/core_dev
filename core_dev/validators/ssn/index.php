@@ -1,6 +1,6 @@
 <?
 /**
- * Sample program to expose functions_idgen.php features
+ * Sample program to expose functions_validate_ssn.php features
  *
  * \author Martin Lindhe, 2007-2008
  */

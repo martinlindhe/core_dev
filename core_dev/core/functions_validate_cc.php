@@ -42,7 +42,7 @@
 	 */
 	function CCstripNumber($number)
 	{
-		$number = trim($number);
+		$number = str_replace(' ', '', $number);
 		$number = str_replace('-', '', $number);
 		$number = str_replace('.', '', $number);
 
@@ -60,7 +60,7 @@
 	{
 		$number = CCstripNumber($number);
 		if (!$number) return false;
-		
+
 		$result = '';
 		for ($i=0; $i<strlen($number); $i+=4) {
 			$result .= substr($number, $i, 4).' ';
@@ -75,17 +75,20 @@
 	}
 
 	/**
-	 * Tries to figure out the card type, false on failure/invalid
+	 * Tries to figure out the card type
+	 *
+	 * \param $number credit card number
+	 * \return type of cc number
 	 */
 	function CCgetType($number) {
 
 		$number = CCstripNumber($number);
-		if ($number === false) return false;
+		if ($number === false) return CC_INVALID;
 
 		$len = strlen($number);
-		if ($len < 13) return false;
-		
-		$pref1 = substr($number,0,1);
+		if ($len < 13) return CC_INVALID;
+
+		$pref1 = substr($number, 0, 1);
 		if (($pref1 == 4) && ($len == 13 || $len == 16)) {
 			return CC_VISA;
 		}
@@ -98,38 +101,38 @@
 		if (($pref2 >= 51) && ($pref2 <= 55) && $len == 16) {
 			return CC_MASTERCARD;
 		}
-		
+
 		if ((($pref2 == 34) || ($pref2 == 37)) && $len == 15) {
 			return CC_AMEX;
 		}
-		
+
 		$pref3 = substr($number,0,3);
 		if (((($pref3 >= 300) && ($pref3 <= 305)) || ($pref2 == 36) || ($pref2 = 38)) && $len == 14) {
 			return CC_DINERS;
 		}
-		
+
 		$pref4 = substr($number,0,4);
 		if (($pref4 == 6011) && $len == 16) {
 			return CC_DISCOVER;
 		}
-		
+
 		if ((($pref4 == 2131) || ($pref4 == 1800)) && $len == 15) {
 			return CC_JCB;
 		}
-		
+
 		return CC_INVALID;
 	}
 
-	function CCvalidateMod10($number) {
-		
+	function CCvalidateMod10($number)
+	{
 		$number = CCstripNumber($number);
 		if ($number === false) return false;
 		if (CCgetType($number) == CC_INVALID) return false;
-		
+
 		$tot=0;
 		for ($i = strlen($number)-1; $i>=0; $i--) {
 			$char = substr($number, $i,1);
-			if (!((strlen($number)-$i) % 2)) { //Jämna nummer
+			if (!((strlen($number)-$i) % 2)) { //Even numbers
 				$char *= 2;
 				$d1 = substr($char,0,1);
 				$d2 = substr($char,1,1);
@@ -138,10 +141,8 @@
 				$tot += $char;
 			}
 		}
-			
-		if (substr($tot, -1) == "0") {
-			return true;
-		}
+
+		if (substr($tot, -1) == "0") return true;
 		return false;
 	}
 ?>
