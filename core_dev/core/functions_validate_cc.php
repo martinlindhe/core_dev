@@ -2,11 +2,13 @@
 /**
  * $Id$
  *
+ * Functions for validating credit card numbers
+ *
  * References:
  *	http://en.wikipedia.org/wiki/Credit_card_number
  *	http://www.beachnet.com/~hstiles/cardtype.html
  *	
- * Status: Feature complete. Works with my VISA number, needs real world testing
+ * Status: Feature complete. Works with my VISA number, needs some real world testing
  *
  * Functions:
  *	CCstripNumber: helper function, cleans up user inputted number (complete!)

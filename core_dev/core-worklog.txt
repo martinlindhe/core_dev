@@ -1,18 +1,21 @@
 2007.01.18:
-	core/functions_cc.php: new file for validating credit card numbers
 	validators/: new directory containing some validator scripts (swedish social security number, credit cards and timestamps for now)
-
+	core/functions_validate_cc.php: new file for validating credit card numbers
+	core/functions_validate_ssn.php: new file for validating social security numbers (only swedish ssn's for now)
+	validators/ssn: swedish social security number validator & generator sample script
 
 2007.01.17:
 	- core/*.php: added "Id" svn keyword & some comment cleanup
 	- moved todo list to wiki
 
+
 2007.01.14:
 	- core/functions_video.php: new file with video handling helper functions
 
+
 2007.12.19:
-	- plugins/ipx/* removed. was too specific tied to certain 
-functionality
+	- plugins/ipx/* removed. was too specific tied to certain functionality
+
 
 2007.12.05:
 	- docs/db_layer.txt: minor documentation describing the concept of the db layer
@@ -20,7 +23,6 @@ functionality
 	- Upgraded development environment to PHP 5.2.5
 	- core/class.DB_PostgreSQL.php: some fixes & cleanup, still WIP
 	- core/*: some whitespace cleanup
-
 
 
 2007.11.28:
