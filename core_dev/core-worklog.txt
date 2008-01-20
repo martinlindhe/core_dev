@@ -1,3 +1,7 @@
+2007.01.20:
+	- core/class.Files.php: moved some image functions out to functions_image.php
+
+
 2007.01.18:
 	- validators/: new directory containing some validator scripts (swedish social security number, credit cards and timestamps for now)
 	- core/functions_validate_cc.php: new file for validating credit card numbers
@@ -5,7 +9,7 @@
 	- validators/ssn: swedish social security number validator & generator sample script
 	- validators/cc: credit card number validator
 	- validators/timestamp: unix timestamp validator/converter
-
+	- core/functions_textformat.php: moved time-related functions to functions_time.php
 
 2007.01.17:
 	- core/*.php: added "Id" svn keyword & some comment cleanup

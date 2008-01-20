@@ -14,6 +14,8 @@
 
 require_once('atom_comments.php');			//for image comments support
 require_once('atom_categories.php');		//for file categories support
+require_once('functions_image.php');
+
 
 define('FILETYPE_WIKI',						1); // The file is a wiki attachment
 define('FILETYPE_BLOG',						2);	// The file is a blog attachment
@@ -663,40 +665,6 @@ class Files
 	}
 
 	/**
-	 * Utility function, Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio
-	 *
-	 * \param $filename image file to calculate new size for
-	 * \param $to_width
-	 * \param $to_height
-	 * \return new width & height
-	 */
-	function resizeImageCalc($filename, $to_width, $to_height)
-	{
-		list($orig_width, $orig_height) = getimagesize($filename);
-
-		$max_width = $this->image_max_width;
-		$max_height = $this->image_max_height;
-
-		if ($to_width && ($to_width < $max_width)) $max_width = $to_width;
-		if ($to_height && ($to_height < $max_height)) $max_height = $to_height;
-
-		//Proportionally resize the image to the max sizes specified above
-		$x_ratio = $max_width / $orig_width;
-		$y_ratio = $max_height / $orig_height;
-
-		if (($orig_width <= $max_width) && ($orig_height <= $max_height))
-		{
-			return Array($orig_width, $orig_height);
-		}
-		elseif (($x_ratio * $orig_height) < $max_height)
-		{
-			return Array($max_width, ceil($x_ratio * $orig_height));
-		}
-
-		return Array(ceil($y_ratio * $orig_width), $max_height);
-	}
-
-	/**
 	 * Resizes specified image file
 	 *
 	 * \param $in_filename
@@ -717,7 +685,7 @@ class Files
 		if (!$orig_width || !$orig_height) return false;
 
 		//Calculate the real width & height to resize too (within $to_width & $to_height), while keeping aspect ratio
-		list($tn_width, $tn_height) = $this->resizeImageCalc($in_filename, $to_width, $to_height);
+		list($tn_width, $tn_height) = resizeImageCalc($in_filename, $to_width, $to_height);
 
 		//echo 'Resizing from '.$orig_width.'x'.$orig_height.' to '.$tn_width.'x'.$tn_height.'<br/>';
 

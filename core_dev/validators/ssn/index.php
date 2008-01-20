@@ -89,6 +89,8 @@
 		<label for="chkgender0">Vet ej</label><br/>
 		<input type="submit" class="button" value="Kontrollera"/>
 	</form>
+	<br/><br/><br/>
+
 
 	<form method="post" action="">
 <?
@@ -103,10 +105,10 @@
 
 		$ts = mktime(0, 0, 0, $mn, $dy, $yr);
 
-		echo ((time()-$ts)/31556926).' years';
+		echo ((time()-$ts)/31556926).' years<br/>';
 	}
 ?>
-		Mata in ett datum för att se hur länge sedan det var:
+		Mata in ett datum för att se hur gammal personen är:
 		<input type="text" name="chkdate" value="890218"/>
 		<input type="submit" class="button" value="Kolla"/>
 	</form>

@@ -8,6 +8,40 @@
  */
 
 	/**
+	 * Utility function, Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio
+	 *
+	 * \param $filename image file to calculate new size for
+	 * \param $to_width
+	 * \param $to_height
+	 * \return new width & height
+	 */
+	function resizeImageCalc($filename, $to_width, $to_height)
+	{
+		list($orig_width, $orig_height) = getimagesize($filename);
+
+		$max_width = $this->image_max_width;
+		$max_height = $this->image_max_height;
+
+		if ($to_width && ($to_width < $max_width)) $max_width = $to_width;
+		if ($to_height && ($to_height < $max_height)) $max_height = $to_height;
+
+		//Proportionally resize the image to the max sizes specified above
+		$x_ratio = $max_width / $orig_width;
+		$y_ratio = $max_height / $orig_height;
+
+		if (($orig_width <= $max_width) && ($orig_height <= $max_height))
+		{
+			return Array($orig_width, $orig_height);
+		}
+		elseif (($x_ratio * $orig_height) < $max_height)
+		{
+			return Array($max_width, ceil($x_ratio * $orig_height));
+		}
+
+		return Array(ceil($y_ratio * $orig_width), $max_height);
+	}
+
+	/**
 	 * Draws text centered horizontally & vertically
 	 *
 	 * \param $str array of lines of text to print
