@@ -2,6 +2,7 @@
 	- core/atom_settings.php: deleteSettings(), deleteAllSettings() new functions
 	- core/functions_contacts.php: deleteContacts(), deleteAllContacts() new functions
 	- core/functions_contacts.php: doxygen-ified comments
+	- core/class.Files.php: deleteFileEntry(), deleteFileEntries() added
 
 
 2008.01.20:

@@ -461,21 +461,47 @@ class Files
 	 */
 	function deleteFile($_id)
 	{
-		global $db, $session;
-		if (!$session->id || !is_numeric($_id)) return false;
+		if (!is_numeric($_id)) return false;
 
-		if ($session->isAdmin) {
-			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
-		} else {
-			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id.' AND ownerId='.$session->id;
-		}
-
-		if (!$db->delete($q)) return false;
+		if (!$this->deleteFileEntry($_id)) return false;
 
 		//physically remove the file from disk
 		unlink($this->upload_dir.$_id);
 		$this->clearThumbs($_id);
 		return true;
+	}
+
+	/**
+	 * Deletes a file entry from database
+	 *
+	 * \param $_id fileId to delete
+	 * \return true on success
+	 */
+	function deleteFileEntry($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
+		if ($db->delete($q)) return true;
+		return false;
+	}
+
+	/**
+	 * Deletes all file entries for specified owner
+	 *
+	 * \param $type type of file (0 for all)
+	 * \param $ownerId user Id
+	 * \return number of files deleted
+	 */
+	function deleteFileEntries($_type, $ownerId)
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+
+		$q = 'DELETE FROM tblFiles WHERE ownerId='.$ownerId;
+		if ($_type) $q .= ' AND fileType='.$_type;
+		return $db->delete($q);
 	}
 
 	/**
