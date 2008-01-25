@@ -12,16 +12,31 @@
 
 	$config['contacts']['friend_requests'] = true; //sends a request to another user to become friends,if false, it simply adds other user to your contact list
 
+	/**
+	 * Checks if $userId has a contact of type $_type with $otherId
+	 *
+	 * \param $_type type of contact (friend or blocked)
+	 * \param $userId user id
+	 * \param $otherId user id of other person
+	 * \return true if userId has otherId as contact
+	 */
 	function haveContact($_type, $userId, $otherId)
 	{
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($userId) || !is_numeric($otherId)) return false;
 
 		$q = 'SELECT contactId FROM tblContacts WHERE userId='.$userId.' AND otherUserId='.$otherId.' AND contactType='.$_type;
-		return $db->getOneItem($q);
+		if ($db->getOneItem($q)) return true;
+		return false;
 	}
 
-	/* returns true if $userId has blocked user $otherId */
+	/**
+	 * Checks if userId has blocked $otherId
+	 *
+	 * \param $userId user id
+	 * \param $otherId user id
+	 * \return true if $userId has blocked user $otherId
+	 */
 	function isUserBlocked($userId, $otherId)
 	{
 		global $db;
@@ -32,16 +47,31 @@
 		return false;
 	}
 
-	function removeContact($_type, $otherId)
+	/**
+	 * Deletes a contact entry
+	 *
+	 * \param $_type type of contact (friend, blocked)
+	 * \param $otherId user Id to remove contact entry with (session->id is the affected user)
+	 * \return true on success
+	 */
+	function removeContact($_type, $otherId)	//FIXME rename to deleteContact()
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($_type) || !is_numeric($otherId)) return false;
 
 		$q = 'DELETE FROM tblContacts WHERE userId='.$session->id.' AND otherUserId='.$otherId.' AND contactType='.$_type;
-		$db->query($q);
+		if ($db->delete($q)) return true;
+		return false;
 	}
 
-	/* Adds or updates a user contact (relation with another user) */
+	/**
+	 * Adds or updates a user contact (relation with another user)
+	 *
+	 * \param $_type type of contact (friend, blocked)
+	 * \param $userId user id
+	 * \param $otherId user id
+	 * \param $groupId contact group id
+	 */
 	function setContact($_type, $userId, $otherId, $groupId = 0)
 	{
 		global $db;
@@ -54,17 +84,23 @@
 		} else {
 			/* Change the contact group */
 			$q = 'UPDATE tblContacts SET groupId='.$groupId.' WHERE userId='.$userId.' AND contactType='.$_type.' AND otherUserId='.$otherId;
-			$db->query($q);
+			$db->update($q);
 		}
 	}
 
-	/* Returns one type of contacts for specified userId. Either their friend list or block list */
+	/**
+	 * Returns one type of contacts for specified userId. Either their friend list or block list
+	 *
+	 * \param $_type type of contact (friend, blocked)
+	 * \param $userId user id
+	 * \param $groupId contact group id
+	 */
 	function getContacts($_type, $userId, $groupId = '')
 	{
 		global $db;
-
 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
-		//todo: returnera namn på gruppen som kontakten tillhör "Gammalt ex", "Suparpolare" etc
+		//FIXME returnera namn på gruppen som kontakten tillhör "Gammalt ex", "Suparpolare" etc
+		//FIXME $groupId ignoreras
 
 		$q  = 'SELECT t1.*,t2.userName,t2.timeLastActive ';
 		$q .= 'FROM tblContacts AS t1 ';
@@ -75,7 +111,45 @@
 		return $db->getArray($q);
 	}
 
-	/* Returns an array with $userId's all friends, including usernames & "isOnline" boolean, but no other info */
+	/**
+	 * Deletes all contacts of $_type for specified user
+	 *
+	 * \param $_type type of contacts (friends / blocked users)
+	 * \param $userId user id
+	 * \return number of contacts removed
+	 */
+	function deleteContacts($_type, $userId)
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($userId)) return false;
+
+		$q = 'DELETE FROM tblContacts WHERE userId='.$userId.' AND contactType='.$_type;
+		return $db->delete($q);
+	}
+
+	/**
+	 * Deletes all contacts for specified user
+	 *
+	 * \param $_type type of contacts (friends / blocked users)
+	 * \param $userId user id
+	 * \return number of contacts removed
+	 */
+	function deleteAllContacts($userId)
+	{
+		global $db;
+		if (!is_numeric($userId)) return false;
+
+		$q = 'DELETE FROM tblContacts WHERE userId='.$userId;
+		return $db->delete($q);
+	}
+
+	/**
+	 * Returns an array with $userId's all friends, including usernames & "isOnline" boolean, but no other info
+	 *
+	 * \param $_type type of contacts (friends / blocked users)
+	 * \param $userId user id
+	 * \return array of contacts
+	 */
 	function getContactsFlat($_type, $userId)
 	{
 		global $db;
@@ -91,6 +165,170 @@
 		return $db->getArray($q);
 	}
 
+	/**
+	 * Adds a request-to-become-friends to $userId, from current user, with the optional relation category type
+	 *
+	 * \param $userId user id
+	 * \param $categoryId contact group id
+	 * \param $msg optional relation request message
+	 * \return true on success
+	 */
+	function addFriendRequest($userId, $categoryId, $msg = '')
+	{
+		global $db, $session;
+
+		if (!$session->id || !is_numeric($userId) || !is_numeric($categoryId) || haveContact(CONTACT_FRIEND, $session->id, $userId)) return false;
+
+		$q = 'SELECT COUNT(reqId) FROM tblFriendRequests WHERE senderId='.$session->id.' AND recieverId='.$userId;
+		if ($db->getOneItem($q)) return false;
+
+		$q = 'INSERT INTO tblFriendRequests SET senderId='.$session->id.',recieverId='.$userId.',timeCreated=NOW(),categoryId='.$categoryId.',msg="'.$db->escape($msg).'"';
+		$db->insert($q);
+		return true;
+	}
+
+	/**
+	 * Returns all pending requests sent from current user
+	 *
+	 * \return array of pending requests
+	 */
+	function getSentFriendRequests()
+	{
+		global $db, $session;
+
+		$q  = 'SELECT t1.*,t2.userName AS recieverName FROM tblFriendRequests AS t1';
+		$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.recieverId=t2.userId)';
+		$q .= ' WHERE t1.senderId='.$session->id;
+		$q .= ' ORDER BY t1.timeCreated DESC';
+
+		return $db->getArray($q);
+	}
+
+	/**
+	 * Returns all pending requests sent to $userId
+	 *
+	 * \return array of pending requests
+	 */
+	function getRecievedFriendRequests()
+	{
+		global $db, $session;
+
+		$q  = 'SELECT t1.*,t2.userName AS senderName,t3.categoryName FROM tblFriendRequests AS t1';
+		$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.senderId=t2.userId)';
+		$q .= ' LEFT JOIN tblCategories AS t3 ON (t1.categoryId=t3.categoryId)';
+		$q .= ' WHERE t1.recieverId='.$session->id;
+		$q .= ' ORDER BY t1.timeCreated DESC';
+
+		return $db->getArray($q);
+	}
+
+	/**
+	 * Returns a specific friend request
+	 *
+	 * \param $requestId request Id
+	 * \return data for specified friend request
+	 */
+	function getFriendRequest($requestId)
+	{
+		global $db, $session;
+
+		if (!$session->id || !is_numeric($requestId)) return false;
+
+		$q  = 'SELECT t1.*,t2.userName AS recieverName FROM tblFriendRequests AS t1';
+		$q .= ' INNER JOIN tblUsers AS t2 ON (t1.recieverId=t2.userId)';
+		$q .= ' WHERE t1.reqId='.$requestId;
+		$q .= ' AND (t1.senderId='.$session->id.' OR t1.recieverId='.$session->id.')';
+
+		return $db->getOneRow($q);
+	}
+
+	/**
+	 * Deletes a friend request, only doable for the person who created the request
+	 *
+	 * \param $otherId userid
+	 * \return true on success
+	 */
+	function removeSentFriendRequest($otherId)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($otherId)) return false;
+
+		$q  = 'DELETE FROM tblFriendRequests';
+		$q .= ' WHERE recieverId='.$otherId.' AND senderId='.$session->id;
+		if ($db->delete($q)) return true;
+		return false;
+	}
+
+	/**
+	 * Deletes a friend request, only doable for the person who recieved the request
+	 *
+	 * \param $otherId user id
+	 * \return true on success
+	 */
+	function denyFriendRequest($otherId)
+	{
+		global $db, $session, $config;
+		if (!$session->id || !is_numeric($otherId)) return false;
+
+		$q  = 'DELETE FROM tblFriendRequests';
+		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
+		$db->delete($q);
+
+		//tell the request sender that the request was denied
+		$msg = nameLink($session->id).' denied your friend request.';
+		systemMessage($otherId, 'Denied friend request', $msg);
+
+		return true;
+	}
+
+	/**
+	 * Deletes a friend request & creates a relation, only doable for the person who recieved the request
+	 *
+	 * \param $otherId user id
+	 * \return true on success
+	 */
+	function acceptFriendRequest($otherId)
+	{
+		global $db, $session, $config;
+		if (!$session->id || !is_numeric($otherId)) return false;
+
+		$q  = 'DELETE FROM tblFriendRequests';
+		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
+		$cnt = $db->delete($q);
+		
+		if ($cnt != 1) die('acceptfriendrequest xxkrash');
+
+		//create a friend relation
+		setContact(CONTACT_FRIEND, $session->id, $otherId);
+		setContact(CONTACT_FRIEND, $otherId, $session->id);
+
+		//tell the request sender that the request was accepted
+		$msg = nameLink($session->id).' accepted your friend request, and has been added to your contact list.';
+		systemMessage($otherId, 'Accepted friend request', $msg);
+		return true;
+	}
+
+	/**
+	 * Returns true if current user has a pending friend request with $userId
+	 *
+	 * \param $userId
+	 * \return true or false
+	 */
+	function hasPendingFriendRequest($userId)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($userId)) return false;
+
+		$q  = 'SELECT reqId FROM tblFriendRequests ';
+		$q .= 'WHERE senderId='.$session->id.' AND recieverId='.$userId;
+
+		if ($db->getOneItem($q)) return true;
+		return false;
+	}
+
+	/**
+	 * Displays current user's friend list
+	 */
 	function displayFriendList()
 	{
 		global $db, $session, $config;
@@ -206,124 +444,5 @@
 			echo '<a href="mess_new.php?id='.$row['contactId'].'"><img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="Send a message to '.$row['contactName'].'"/></a>';
 			echo '</div>';
 		}
-	}
-
-	/* Adds a request-to-become-friends to $userId, from current user, with the optional relation category type */
-	function addFriendRequest($userId, $categoryId, $msg = '')
-	{
-		global $db, $session;
-
-		if (!$session->id || !is_numeric($userId) || !is_numeric($categoryId) || haveContact(CONTACT_FRIEND, $session->id, $userId)) return false;
-
-		$q = 'SELECT COUNT(reqId) FROM tblFriendRequests WHERE senderId='.$session->id.' AND recieverId='.$userId;
-		if ($db->getOneItem($q)) return false;
-
-		$q = 'INSERT INTO tblFriendRequests SET senderId='.$session->id.',recieverId='.$userId.',timeCreated=NOW(),categoryId='.$categoryId.',msg="'.$db->escape($msg).'"';
-		$db->insert($q);
-		return true;
-	}
-
-	/* Returns all pending requests sent from current user */
-	function getSentFriendRequests()
-	{
-		global $db, $session;
-
-		$q  = 'SELECT t1.*,t2.userName AS recieverName FROM tblFriendRequests AS t1';
-		$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.recieverId=t2.userId)';
-		$q .= ' WHERE t1.senderId='.$session->id;
-		$q .= ' ORDER BY t1.timeCreated DESC';
-
-		return $db->getArray($q);
-	}
-
-	/* Returns all pending requests sent to $userId */
-	function getRecievedFriendRequests()
-	{
-		global $db, $session;
-
-		$q  = 'SELECT t1.*,t2.userName AS senderName,t3.categoryName FROM tblFriendRequests AS t1';
-		$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.senderId=t2.userId)';
-		$q .= ' LEFT JOIN tblCategories AS t3 ON (t1.categoryId=t3.categoryId)';
-		$q .= ' WHERE t1.recieverId='.$session->id;
-		$q .= ' ORDER BY t1.timeCreated DESC';
-
-		return $db->getArray($q);
-	}
-
-	function getFriendRequest($requestId)
-	{
-		global $db, $session;
-
-		if (!$session->id || !is_numeric($requestId)) return false;
-
-		$q  = 'SELECT t1.*,t2.userName AS recieverName FROM tblFriendRequests AS t1';
-		$q .= ' INNER JOIN tblUsers AS t2 ON (t1.recieverId=t2.userId)';
-		$q .= ' WHERE t1.reqId='.$requestId;
-		$q .= ' AND (t1.senderId='.$session->id.' OR t1.recieverId='.$session->id.')';
-
-		return $db->getOneRow($q);
-	}
-
-	/* Deletes a friend request, only doable for the person who created the request */
-	function removeSentFriendRequest($otherId)
-	{
-		global $db, $session;
-		if (!$session->id || !is_numeric($otherId)) return false;
-
-		$q  = 'DELETE FROM tblFriendRequests';
-		$q .= ' WHERE recieverId='.$otherId.' AND senderId='.$session->id;
-		$db->delete($q);
-	}
-
-	/* Deletes a friend request, only doable for the person who recieved the request */
-	function denyFriendRequest($otherId)
-	{
-		global $db, $session, $config;
-		if (!$session->id || !is_numeric($otherId)) return false;
-
-		$q  = 'DELETE FROM tblFriendRequests';
-		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
-		$db->delete($q);
-
-		//tell the request sender that the request was denied
-		$msg = nameLink($session->id).' denied your friend request.';
-		systemMessage($otherId, 'Denied friend request', $msg);
-
-		return true;
-	}
-
-	/* Deletes a friend request & creates a relation, only doable for the person who recieved the request */
-	function acceptFriendRequest($otherId)
-	{
-		global $db, $session, $config;
-		if (!$session->id || !is_numeric($otherId)) return false;
-
-		$q  = 'DELETE FROM tblFriendRequests';
-		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
-		$cnt = $db->delete($q);
-		
-		if ($cnt != 1) die('acceptfriendrequest xxkrash');
-
-		//create a friend relation
-		setContact(CONTACT_FRIEND, $session->id, $otherId);
-		setContact(CONTACT_FRIEND, $otherId, $session->id);
-
-		//tell the request sender that the request was accepted
-		$msg = nameLink($session->id).' accepted your friend request, and has been added to your contact list.';
-		systemMessage($otherId, 'Accepted friend request', $msg);
-		return true;
-	}
-
-	/* Returns true if current user has a pending friend request with $userId */
-	function hasPendingFriendRequest($userId)
-	{
-		global $db, $session;
-		if (!$session->id || !is_numeric($userId)) return false;
-
-		$q  = 'SELECT reqId FROM tblFriendRequests ';
-		$q .= 'WHERE senderId='.$session->id.' AND recieverId='.$userId;
-
-		if ($db->getOneItem($q)) return true;
-		return false;
 	}
 ?>

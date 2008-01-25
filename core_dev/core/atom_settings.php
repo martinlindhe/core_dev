@@ -115,12 +115,28 @@
 	 * \param $ownerId owner of the settings
 	 * \return number of settings removed
 	 */
-	function removeAllSettings($_type, $ownerId)
+	function deleteSettings($_type, $ownerId)
 	{
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
 		$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type;
+		return $db->delete($q);
+	}
+
+	/**
+	 * Deletes all settings for owner
+	 *
+	 * \param $_type type of settings
+	 * \param $ownerId owner of the settings
+	 * \return number of settings removed
+	 */
+	function deleteAllSettings($ownerId)
+	{
+		global $db;
+		if (!is_numeric($ownerId)) return false;
+
+		$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
 		return $db->delete($q);
 	}
 

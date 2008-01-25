@@ -1,5 +1,8 @@
 2008.01.25:
-	- core/atom_settings.php: removeAllSettings() new function
+	- core/atom_settings.php: deleteSettings(), deleteAllSettings() new functions
+	- core/functions_contacts.php: deleteContacts(), deleteAllContacts() new functions
+	- core/functions_contacts.php: doxygen-ified comments
+
 
 2008.01.20:
 	- core/class.Files.php: moved some image functions out to functions_image.php
@@ -13,6 +16,7 @@
 	- validators/cc: credit card number validator
 	- validators/timestamp: unix timestamp validator/converter
 	- core/functions_textformat.php: moved time-related functions to functions_time.php
+
 
 2008.01.17:
 	- core/*.php: added "Id" svn keyword & some comment cleanup
