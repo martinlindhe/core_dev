@@ -1,8 +1,11 @@
-2007.01.20:
+2008.01.25:
+	- core/atom_settings.php: removeAllSettings() new function
+
+2008.01.20:
 	- core/class.Files.php: moved some image functions out to functions_image.php
 
 
-2007.01.18:
+2008.01.18:
 	- validators/: new directory containing some validator scripts (swedish social security number, credit cards and timestamps for now)
 	- core/functions_validate_cc.php: new file for validating credit card numbers
 	- core/functions_validate_ssn.php: new file for validating social security numbers (only swedish ssn's for now)
@@ -11,12 +14,12 @@
 	- validators/timestamp: unix timestamp validator/converter
 	- core/functions_textformat.php: moved time-related functions to functions_time.php
 
-2007.01.17:
+2008.01.17:
 	- core/*.php: added "Id" svn keyword & some comment cleanup
 	- moved todo list to wiki
 
 
-2007.01.14:
+2008.01.14:
 	- core/functions_video.php: new file with video handling helper functions
 
 

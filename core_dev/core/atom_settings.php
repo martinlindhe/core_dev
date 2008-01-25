@@ -27,9 +27,8 @@
 	 */
 	function saveSetting($_type, $ownerId, $settingName, $settingValue)
 	{
-		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
-
 		global $db;
+		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
 
 		$settingName = $db->escape($settingName);
 		$settingValue = $db->escape($settingValue);
@@ -57,9 +56,8 @@
 	 */
 	function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
 	{
-		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
-
 		global $db;
+		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
 
 		$settingName = $db->escape($settingName);
 		$defaultValue = $db->escape($defaultValue);
@@ -81,9 +79,8 @@
 	 */
 	function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
 	{
-		if (!is_numeric($ownerId) || !$ownerId || !$settingName) return false;
-
 		global $db;
+		if (!is_numeric($ownerId) || !$ownerId || !$settingName) return false;
 
 		$settingName = getUserdataFieldIdByName($settingName);
 		$defaultValue = $db->escape($defaultValue);
@@ -104,12 +101,27 @@
 	 */
 	function readAllSettings($_type, $ownerId)
 	{
-		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type)) return false;
-
 		global $db;
+		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type)) return false;
 
 		$q = 'SELECT settingName,settingId,settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' ORDER BY settingName ASC';
 		return $db->getArray($q);
+	}
+
+	/**
+	 * Deletes all settings for owner, of specified type
+	 *
+	 * \param $_type type of settings
+	 * \param $ownerId owner of the settings
+	 * \return number of settings removed
+	 */
+	function removeAllSettings($_type, $ownerId)
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+
+		$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type;
+		return $db->delete($q);
 	}
 
 	/**
