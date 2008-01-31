@@ -29,32 +29,45 @@
 	$ssn_error[SSN_GENDER_IS_FEMALE] = 'Wrong gender specified, this ssn belongs to a female';
 
 	/**
+	 * Cleans up user-inputted ssn
+	 *
+	 * \param $_ssn ssn to clean up
+	 * \return cleaned up ssn
+	 */
+	function SsnCleanInput($_ssn)
+	{
+		$_ssn = str_replace('-', '', $_ssn);
+		$_ssn = str_replace(' ', '', $_ssn);
+	
+		return $_ssn;
+	}
+
+	/**
 	 * Validates a swedish social security number (personnummer)
 	 *
-	 * \param $_persnr a swedish social security number (personnummer) in the format "YYYYMMDD-XXXX" or "YYMMDD-XXXX"
+	 * \param $_ssn a swedish social security number (personnummer) in the format "YYYYMMDD-XXXX" or "YYMMDD-XXXX"
 	 * \param $_gender 0=unknown, 1=male, 2=female
 	 * \return true if the passed swedish personal number is correct, else a SSN_* error code
 	 */
-	function SsnValidateSwedish($_persnr, $_gender = SSN_GENDER_UNKNOWN)
+	function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
 	{
-		$_persnr = str_replace('-', '', $_persnr);
-		$_persnr = str_replace(' ', '', $_persnr);
+		$_ssn = SsnCleanInput($_ssn);
 
 		//year specified in 4 digits
-		if (strlen($_persnr) == 12) $_persnr = substr($_persnr, 2);
+		if (strlen($_ssn) == 12) $_ssn = substr($_ssn, 2);
 
-		if (strlen($_persnr) != 10) return SSN_INVALID_INPUT;
+		if (strlen($_ssn) != 10) return SSN_INVALID_INPUT;
 
 		//validate if the date existed, for example 19810230 is invalid
-		$yr = substr($_persnr, 0, 2);
+		$yr = substr($_ssn, 0, 2);
 		$yr = ($yr > date('y')) ? '19'.$yr : '20'.$yr;	//years below curryear is considered to be 2000-20xx, otherwise its 1900-19xx
-		$mn = intval(substr($_persnr, 2, 2));
-		$dy = intval(substr($_persnr, 4, 2));
+		$mn = intval(substr($_ssn, 2, 2));
+		$dy = intval(substr($_ssn, 4, 2));
 		if (!checkdate($mn, $dy, $yr)) return SSN_INVALID_DATE;
 
-		if (substr($_persnr, -1) != SsnCalcSumSwedish($_persnr)) return SSN_WRONG_CHECKSUM;
+		if (substr($_ssn, -1) != SsnCalcSumSwedish($_ssn)) return SSN_WRONG_CHECKSUM;
 
-		$ssn_gender = intval(substr($_persnr, 8, 1));
+		$ssn_gender = intval(substr($_ssn, 8, 1));
 		if (($ssn_gender % 2) && $_gender == SSN_GENDER_FEMALE) {
 			//Error: odd (male) ssn found but user thinks its a female ssn
 			return SSN_GENDER_IS_MALE;
@@ -80,16 +93,16 @@
 	 * The resulting products (a two digit product, such as 16, would be converted to 1 + 6) are
 	 * added together. The checksum is 10 minus the ones place digit in this sum.
 	 *
-	 * \param $_persnr a swedish social security number
+	 * \param $_ssn a swedish social security number
 	 * \return the calculated checksum for $_persnr
 	 */
-	function SsnCalcSumSwedish($_persnr)
+	function SsnCalcSumSwedish($_ssn)
 	{
 		$d2 = 2;
 		$sum = 0;
 
 		for ($i=0; $i<=8; $i++) {
-			$d1 = intval(substr($_persnr, $i, 1));
+			$d1 = intval(substr($_ssn, $i, 1));
 			$res = $d1 * $d2;
 
 			if ($res > 9) {
@@ -119,8 +132,8 @@
 	 */
 	function SsnRandomizeSwedish($_year, $_month, $_day, $_gender)
 	{
-    $persNr = substr($_year, -2).$_month.$_day;
-    if (strlen($persNr) != 6) die;
+    $ssn = substr($_year, -2).$_month.$_day;
+    if (strlen($ssn) != 6) die;
 
     //Randomizes the 2 first of the control digits, between 00 and 99
     $randNums = substr('0'.mt_rand(0, 99), -2);
@@ -134,7 +147,7 @@
 			if ($_gender == 1) $randGender++;		//men have odd numbers,add 1
 		}
 
-		$sum = SsnCalcSumSwedish($persNr.$randNums.$randGender);
+		$sum = SsnCalcSumSwedish($ssn.$randNums.$randGender);
 		return $randNums.$randGender.$sum;
 	}
 ?>
