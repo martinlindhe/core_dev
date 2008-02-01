@@ -439,7 +439,7 @@
 		foreach ($list as $row) {
 			echo '<div class="'.($row['isOnline']?'friend_online':'friend_offline').'">';
 
-			echo nameLink($row['contactId'], $row['contactName']);
+			echo nameLink($row['otherUserId'], $row['contactName']);
 
 			echo '<a href="mess_new.php?id='.$row['contactId'].'"><img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="Send a message to '.$row['contactName'].'"/></a>';
 			echo '</div>';

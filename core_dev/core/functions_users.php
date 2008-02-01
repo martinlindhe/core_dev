@@ -161,6 +161,27 @@
 		return $db->getArray($q);
 	}
 
+	/* Returns userId of first match of username contains $phrase */
+	function searchUsernameContains($phrase)
+	{
+		global $db;
+
+		$q  = 'SELECT userId FROM tblUsers ';
+		$q .= 'WHERE LOWER(userName) LIKE LOWER("%'.$db->escape($phrase).'%") LIMIT 1';
+
+		return $db->getOneItem($q);
+	}
+
+	/* Returns a random user id */
+	function getRandomUserId()
+	{
+		global $db;
+
+		$q = 'SELECT userId FROM tblUsers ORDER BY RAND() LIMIT 1';
+		return $db->getOneItem($q);
+	}
+
+
 
 
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -228,7 +249,7 @@
 		return $db->getArray($q);
 	}
 
-	/* Returnerar alla användarnamn som börjar på $phrase */
+	/* Returns all usernames beginning with $phrase */
 	function searchUsernameBeginsWith($phrase)
 	{
 		global $db;

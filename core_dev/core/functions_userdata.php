@@ -15,6 +15,7 @@
 	define('USERDATA_TYPE_TEXTAREA',	5);
 	define('USERDATA_TYPE_IMAGE',			6);
 	define('USERDATA_TYPE_DATE',			7);
+	define('USERDATA_TYPE_EMAIL',			8);	//text string holding a email address
 
 	//userdata module settings:
 	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield

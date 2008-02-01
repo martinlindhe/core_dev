@@ -11,7 +11,7 @@
 	define('SETTING_CALLERDATA',		3);			//settings used to store data of a caller
 
 
-	$config['settings']['default_email'] = 'E-mail';	//default name of the userdata field used to contain email address
+	//TODO remove these and make more userdata field types instead
 	$config['settings']['default_theme'] = 'Theme';		//default name of the userdata field used to contain the preferred "Theme"
 	$config['settings']['default_image'] = 'Picture';	//default name of the userdata field used to contain the presentation picture
 	$config['settings']['default_signature'] = 'Signature';	//default name of the userdata field used to contain the forum signature
@@ -166,7 +166,7 @@
 					$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 				}
 
-				if ($row['fieldName'] == $config['settings']['default_email']) {
+				if ($row['fieldType'] == USERDATA_TYPE_EMAIL) {
 					if (!ValidEmail($row['settingValue'])) {
 						echo '<div class="critical">WARNING: The email entered is not valid!</div>';
 					}

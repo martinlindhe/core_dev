@@ -1,3 +1,21 @@
+<?
+	//handle quick search:
+	if (!empty($_POST['qu'])) {
+		$hit = searchUsernameContains($_POST['qu']);
+		if ($hit) {
+			header('Location: user.php?id='.$hit);
+			die;
+		}
+	}
+
+	//fetch a random user:
+	if (isset($_GET['rand'])) {
+		$rnd = getRandomUserId();
+		header('Location: user.php?id='.$rnd);
+		die;
+	}
+?>
+
 <?createXHTMLHeader();?>
 <div id="header">
 	<div id="header-logo">
@@ -38,6 +56,10 @@
 	}
 	createMenu($menu);
 ?>
+Quick search:<br/>
+<form method="post" action="">
+<input type="text" name="qu" size="8"> <a href="?rand">[R]</a><br/>
+</form>
 </div>
 
 <div id="middle">

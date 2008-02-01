@@ -37,7 +37,7 @@
 	 */
 	function showRevisions($articleType, $articleId, $articleName)
 	{
-		global $db;
+		global $db, $config;
 
 		if (!is_numeric($articleType) || !is_numeric($articleId)) return false;
 

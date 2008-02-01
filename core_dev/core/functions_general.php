@@ -266,7 +266,7 @@
 
 			//echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ajax.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/drag_drop.js"></script>';
+			//echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/drag_drop.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/swfobject.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/functions.js"></script>';
 			//echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/os3grid.js"></script>';

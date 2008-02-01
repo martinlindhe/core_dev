@@ -1,3 +1,13 @@
+2008.02.01:
+	- core/atom_revisions.php: forgot to declare $config
+	- core/functions_wiki.php: also hide files tab if wiki isn't yet created
+	- core/functions_contacts.php: fixed user id link on friend list
+	- core/atom_settings.php, functions_userdata.php, admin_userdata.php:
+		removed $config['settings']['default_email'] and added USERDATA_TYPE_EMAIL field type
+	- core/functions_users.php: searchUsernameContains(), getRandomUserId added
+	- sample/design_head.php: quick user search & show random user added
+
+
 2008.01.25:
 	- core/atom_settings.php: deleteSettings(), deleteAllSettings() new functions
 	- core/functions_contacts.php: deleteContacts(), deleteAllContacts() new functions

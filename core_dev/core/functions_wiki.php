@@ -123,7 +123,7 @@
 			return true;
 		}
 
-		if (in_array('WikiFiles', $config['wiki']['allowed_tabs'])) {	//Show files tab?
+		if (in_array('WikiFiles', $config['wiki']['allowed_tabs']) && $data) {	//Show files tab? also hide files tab if wiki isn't yet created
 			$wiki_menu = array(
 			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
 			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => 'Edit',
