@@ -13,6 +13,7 @@
 	define('COMMENT_TODOLIST',			4);		//todolist item comments
 	define('COMMENT_GENERIC',				5);		//generic comment type
 	define('COMMENT_PASTEBIN',			6);		//"pastebin" text. anonymous submissions are allowed
+	define('COMMENT_SCRIBBLE',			7);		//scribble board
 
 	define('COMMENT_ADMIN_IP',			10);	//a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 
@@ -55,7 +56,9 @@
 	}
 
 	/**
+	 * Marks a comment as deleted
 	 *
+	 * \param $commentId comment to delete
 	 */
 	function deleteComment($commentId)
 	{
@@ -153,7 +156,7 @@
 	 * Helper function, standard "show comments" to be used by other modules
 	 * col_w sets the column width of the textarea
 	 */
-	function showComments($_type, $ownerId, $col_w = 30, $col_h = 6)
+	function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6)
 	{
 		global $session, $config;
 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w) || !is_numeric($col_h)) return false;

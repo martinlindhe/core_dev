@@ -143,15 +143,6 @@ class Session
 			$this->logIn($_POST['register_usr'], $_POST['register_pwd']);
 		}
 
-		//Shows login form if 'login' variable is set
-		if (!$this->id && isset($_GET['login'])) {
-			$session = &$this;	//Required, else any use of $session in header/footer will be undefined references
-			require('design_head.php');	//fixme: hur kan jag slippa detta
-			$this->showLoginForm();
-			require('design_foot.php');
-			die;
-		}
-
 		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
 		if (!$this->id) {
 			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']) && $this->logIn($_POST['login_usr'], $_POST['login_pwd'])) {
@@ -347,13 +338,25 @@ class Session
 			$allow_superadmin_reg = true;
 		}
 
+		$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
+
+		//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
+		if ($forgot_pwd && !$this->id) {
+			if (!empty($_POST['forgot_pwd'])) {
+				echo $_POST['forgot_pwd'];
+			}
+		}
+
+		//FIXME: show appropriate tab on page reload
+
+
 		echo '<div id="login_form_layer">';
 		if (!$this->allow_login) {
 			echo '<div class="critical">Logins are currently not allowed.<br/>Please try again later.</div>';
 		}
 		echo '<form name="login_form" method="post" action="">';
 		if ($this->error) {
-			echo '<div class="critical"><img src="'.$config['core_web_root'].'gfx/icon_warning_big.png" alt="Error"/> '.$this->error.'</div>';
+			echo '<div class="critical">'.$this->error.'</div>';
 			$this->error = ''; //remove error message once it has been displayed
 		}
 
@@ -365,7 +368,9 @@ class Session
 		echo '<input type="submit" class="button" value="Log in"/>';
 		if (($this->allow_login && $this->allow_registration) || $allow_superadmin_reg) {
 			echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');"/>';
-			echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
+			if ($forgot_pwd) {
+				echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
+			}
 		}
 		echo '</form>';
 		echo '</div>';
@@ -389,24 +394,28 @@ class Session
 
 				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
 				echo '<input type="submit" class="button" value="Register" style="font-weight: bold;"/>';
-				echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
+				if ($forgot_pwd) {
+					echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
+				}
 				echo '</form>';
 			echo '</div>';
 
-			//todo: javascript som validerar input email, visa en "retrieve new password" knapp om emailen är korrekt
-			echo '<div id="login_forgot_pwd_layer" style="display: none;">';
-				echo '<form method="post" action="">';
-				echo 'Enter the e-mail address used when registering your account.<br/><br/>';
-				echo 'You will recieve an e-mail with a link to follow, where you can set a new password.<br/><br/>';
-				echo '<table cellpadding="2">';
-				echo '<tr><td>E-mail:</td><td><input type="text" size="26"/> <img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
-				echo '</table><br/>';
+			if ($forgot_pwd) {
+				echo '<div id="login_forgot_pwd_layer" style="display: none;">';
+					echo '<form method="post" action="">';
+					echo 'Enter the e-mail address used when registering your account.<br/><br/>';
+					echo 'You will recieve an e-mail with a link to follow,<br/>';
+					echo 'where you can set a new password.<br/><br/>';
+					echo '<table cellpadding="2">';
+					echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td><input type="text" name="forgot_pwd" size="26"/> <img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
+					echo '</table><br/>';
 
-				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/>';
-				echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');"/>';
-				echo '<input type="submit" class="button" value="Forgot password" style="font-weight: bold;"/>';
-				echo '</form>';
-			echo '</div>';
+					echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/>';
+					echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');"/>';
+					echo '<input type="submit" class="button" value="Forgot password" style="font-weight: bold;"/>';
+					echo '</form>';
+				echo '</div>';
+			}
 		}
 
 		echo '</div>';

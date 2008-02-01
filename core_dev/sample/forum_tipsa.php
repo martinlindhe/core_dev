@@ -1,10 +1,9 @@
 <?
 	require_once('config.php');
-	
 	$session->requireLoggedIn();
 	
-	if (isset($_GET['id'])) $itemId = $_GET['id'];
-	else die;
+	if (!isset($_GET['id']) || !is_numeric($_GET['id'])) die;
+	$itemId = $_GET['id'];
 
 	require('design_head.php');
 

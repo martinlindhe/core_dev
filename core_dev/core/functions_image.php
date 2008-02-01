@@ -19,8 +19,12 @@
 	{
 		list($orig_width, $orig_height) = getimagesize($filename);
 
-		$max_width = $this->image_max_width;
-		$max_height = $this->image_max_height;
+ $image_max_width			= 1100;			///<bigger images will be resized to this size
+	 $image_max_height			= 900;
+
+
+		$max_width = $image_max_width;
+		$max_height = $image_max_height;
 
 		if ($to_width && ($to_width < $max_width)) $max_width = $to_width;
 		if ($to_height && ($to_height < $max_height)) $max_height = $to_height;

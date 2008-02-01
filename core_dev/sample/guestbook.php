@@ -1,6 +1,5 @@
 <?
 	require_once('config.php');
-
 	$session->requireLoggedIn();
 
 	$userId = $session->id;

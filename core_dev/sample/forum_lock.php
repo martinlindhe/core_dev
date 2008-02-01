@@ -1,6 +1,5 @@
 <?
 	require_once('config.php');
-	
 	$session->requireAdmin();
 
 	$itemId = $_GET['id'];

@@ -1,6 +1,5 @@
 <?
 	require_once('config.php');
-
 	$session->requireLoggedIn();
 
 	if (empty($_GET['y']) || !is_numeric($_GET['y']) || empty($_GET['m']) || !is_numeric($_GET['m'])) die;

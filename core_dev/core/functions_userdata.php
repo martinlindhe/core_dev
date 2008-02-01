@@ -46,20 +46,19 @@
 		if (!is_numeric($fieldType) || !is_numeric($allowTags) || !is_numeric($isPrivate) || !is_numeric($regRequire)) return false;
 
 		$q = 'UPDATE tblUserdata SET fieldName="'.$db->escape($fieldName).'",fieldDefault="'.$db->escape($fieldDefault).'",fieldType='.$fieldType.',allowTags='.$allowTags.',private='.$isPrivate.',regRequire='.$regRequire.' WHERE fieldId='.$fieldId;
-		$db->query($q);
+		$db->update($q);
 		return true;
 	}
 
-	/* Tar bort ett userfield */
-	function removeUserdataField($fieldId)
+	/* Removes a userdata field, and all user settings for this field */
+	function removeUserdataField($_id)
 	{
 		global $db;
+		if (!is_numeric($_id)) return false;
 
-		if (!is_numeric($fieldId)) return false;
-
-		$db->query('DELETE FROM tblUserdata WHERE fieldId='.$fieldId);
-		$db->query('DELETE FROM tblCategories WHERE categoryType='.CATEGORY_USERDATA.' AND ownerId='.$fieldId);
-		$db->query('DELETE FROM tblSettings WHERE settingName='.$fieldId);
+		$db->delete('DELETE FROM tblUserdata WHERE fieldId='.$_id);
+		$db->delete('DELETE FROM tblCategories WHERE categoryType='.CATEGORY_USERDATA.' AND ownerId='.$_id);
+		$db->delete('DELETE FROM tblSettings WHERE settingName='.$_id);
 	}
 
 	/* Compacts the userdata field priorities, so the boundary 0-max is used */
@@ -72,7 +71,7 @@
 
 		for ($i=0; $i<count($list); $i++) {
 			if ($list[$i]['fieldPriority'] != $i) {
-				$db->query('UPDATE tblUserdata SET fieldPriority='.$i.' WHERE fieldId='.$list[$i]['fieldId'] );
+				$db->update('UPDATE tblUserdata SET fieldPriority='.$i.' WHERE fieldId='.$list[$i]['fieldId'] );
 			}
 		}
 
@@ -89,8 +88,8 @@
 		$q = 'SELECT fieldId FROM tblUserdata WHERE fieldPriority='.$new;
 		$newfieldId = $db->getOneItem($q);
 
-		$db->query('UPDATE tblUserdata SET fieldPriority='.$new.' WHERE fieldId='.$fieldId);
-		$db->query('UPDATE tblUserdata SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
+		$db->update('UPDATE tblUserdata SET fieldPriority='.$new.' WHERE fieldId='.$fieldId);
+		$db->update('UPDATE tblUserdata SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
 	}
 
 	function getUserdataFieldIdByName($_name)
@@ -98,6 +97,21 @@
 		global $db;
 
 		$q = 'SELECT fieldId FROM tblUserdata WHERE fieldName="'.$db->escape($_name).'"';
+		return $db->getOneItem($q);
+	}
+
+	/**
+	 * Used to retrieve field id for "email" field. Assumes there is just 1 field of this type in the db
+	 *
+	 * \param $_type field type
+	 * \return field id
+	 */
+	function getUserdataFieldIdByType($_type)
+	{
+		global $db;
+		if (!is_numeric($_type)) return false;
+
+		$q = 'SELECT fieldId FROM tblUserdata WHERE fieldType='.$_type.' LIMIT 1';
 		return $db->getOneItem($q);
 	}
 
@@ -113,15 +127,28 @@
 		return $db->getArray($q);
 	}
 
-	/* Returns the settings for one userdata field */
+	/**
+	 * Returns the settings for one userdata field
+	 */
 	function getUserdataField($_id)
 	{
 		global $db;
-
 		if (!is_numeric($_id)) return false;
 
 		$q = 'SELECT * FROM tblUserdata WHERE fieldId='.$_id;
 		return $db->getOneRow($q);
+	}
+
+	/**
+	 * Returns the settings for one userdata field
+	 */
+	function getUserdataFieldName($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT fieldName FROM tblUserdata WHERE fieldId='.$_id;
+		return $db->getOneItem($q);
 	}
 
 	/* Returns a input field from the passed data, used together with getUserdataFieldsHTMLEdit() */
@@ -139,6 +166,11 @@
 		}
 
 		switch ($row['fieldType']) {
+			case USERDATA_TYPE_EMAIL:
+				$result = stripslashes($row['fieldName']).': ';
+				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';
+				break;
+
 			case USERDATA_TYPE_TEXT:
 				$result = stripslashes($row['fieldName']).': ';
 				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';

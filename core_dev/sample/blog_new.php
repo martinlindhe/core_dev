@@ -1,6 +1,5 @@
 <?
 	require_once('config.php');
-
 	$session->requireLoggedIn();
 
 	if (isset($_POST['title']) && isset($_POST['body']) && isset($_POST['catid'])) {

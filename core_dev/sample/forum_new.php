@@ -21,7 +21,6 @@
 	*/
 
 	require_once('config.php');
-
 	$session->requireLoggedIn();
 
 	$itemId = 0;

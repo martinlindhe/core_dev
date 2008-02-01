@@ -14,9 +14,9 @@
 		header('Location: user.php?id='.$rnd);
 		die;
 	}
-?>
 
-<?createXHTMLHeader();?>
+	createXHTMLHeader();
+?>
 <div id="header">
 	<div id="header-logo">
 		<img src="<?=$config['web_root']?>gfx/logo.png" alt="Sample Site"/>
@@ -34,6 +34,7 @@
 		'faq.php' => 'FAQ',
 		'feedback.php' => 'Feedback',
 		'forum.php' => 'Forum',
+		'scribble.php' => 'Scribble',
 		'blogs.php' => 'Blogs',
 		'users.php' => 'Users',
 		$config['core_web_root'].'process/' => 'PROCESS SERVER',
@@ -52,7 +53,7 @@
 			'user.php' => 'My profile',
 			'?logout' => 'Logout');
 	} else {
-		$menu = array('?login' => 'Log in');
+		$menu = array('index.php' => 'Log in');
 	}
 	createMenu($menu);
 ?>

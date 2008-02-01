@@ -4,12 +4,9 @@
 
 	require('design_head.php');
 
-	createMenu($profile_menu, 'blog_menu');
+	echo '<h1>Scribble</h1>';
 
-	wiki('Settings');
-	echo '<br/>';
-
-	editSettings();
+	showComments(COMMENT_SCRIBBLE);
 
 	require('design_foot.php');
 ?>

@@ -1,3 +1,8 @@
+todo:
+	- skapa menyerna i en separat config-fil så guestbook count inte behöver göras på varje page-load
+
+
+
 2008.02.01:
 	- core/atom_revisions.php: forgot to declare $config
 	- core/functions_wiki.php: also hide files tab if wiki isn't yet created
@@ -6,6 +11,10 @@
 		removed $config['settings']['default_email'] and added USERDATA_TYPE_EMAIL field type
 	- core/functions_users.php: searchUsernameContains(), getRandomUserId added
 	- sample/design_head.php: quick user search & show random user added
+	- sample/scribble.php: new feature - scribble board
+
+	- core/functions_userdata.php: getUserdataFieldIdByType() new function
+
 
 
 2008.01.25:

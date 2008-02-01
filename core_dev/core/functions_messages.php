@@ -134,7 +134,7 @@
 		
 		//fixme: denna kod kräver os3grid.js, som inte inkluderas här. använd en mindre grid-class
 		echo '<div id="grid"></div>';
-
+/*
 		echo '<script type="text/javascript">';
 		echo 'function cell_clicked(grid, cell, row_num, col_num, val) {';
 			echo 'document.location = "'.$_SERVER['PHP_SELF'].'?read=" + g_idx[row_num];';
@@ -144,17 +144,20 @@
 		echo 'var g = new OS3Grid();';
 		echo 'var g_idx = new Array();';
 		echo 'g.set_headers("Subject", "Time", "Status");';
-		
+*/		
 		$i=0;
 		foreach ($list as $row) {
-			echo 'g_idx['.($i++).'] = '.$row['msgId'].';';
-			echo 'g.add_row("'.($row['subject']?$row['subject']:'no subject').'","'.$row['timeCreated'].'","'.(!$row['timeRead']?'UNREAD':'READ').'");';
+			//echo 'g_idx['.($i++).'] = '.$row['msgId'].';';
+			//echo 'g.add_row("'.($row['subject']?$row['subject']:'no subject').'","'.$row['timeCreated'].'","'.(!$row['timeRead']?'UNREAD':'READ').'");';
+			echo ($row['subject']?$row['subject']:'no subject').', '.$row['timeCreated'].', '.(!$row['timeRead']?'UNREAD':'READ').'<br/>';
 		}
+/*
 		echo 'g.set_sortable(true);';
 		echo 'g.set_highlight(true);';
 		echo 'g.set_cell_click(cell_clicked);';
 		echo 'g.render("grid");';
 		echo '</script>';
+*/
 		return true;
 	}
 ?>
