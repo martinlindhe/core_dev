@@ -1,3 +1,8 @@
+todo:
+	- update lyrics & process to work with new core_dev changes
+	- fetch db dumps
+
+
 2008.02.04
   - core/class.Auth_Base.php, class.Auth_Standard.php: new class for
     authentication, to simplify integration with external means of
@@ -19,6 +24,7 @@
 	- core/functions_image.php: cleaned up image resize code a bit
 	- core/functions_fileareas.php: moved filearea implementation out of class.Files.php
 	- admin/admin_list_users.php: superadmins can now delete users
+	- lyrics/*: "new" sample project, a lyrics database
 
 
 2008.02.01:
