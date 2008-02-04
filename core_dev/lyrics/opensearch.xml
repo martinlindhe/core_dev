@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+	<ShortName>lyric search</ShortName>
+	<Description>Search lyrics</Description>
+	<Tags>lyric</Tags>
+	<Url type="text/html" template="https://87.227.76.225/lyric/search.php?s={searchTerms}" />
+	<Query role="example" searchTerms="cat" />
+</OpenSearchDescription>
