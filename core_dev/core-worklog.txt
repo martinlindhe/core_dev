@@ -16,6 +16,7 @@
 	- core/class.Files.php: rewrote internal file upload handling to separate files in
 		subdirectories depending on file id, to avoid pitfalls with slow file system
 		and very large directories
+	- core/functions_image.php: cleaned up image resize code a bit
 
 
 2008.02.01:

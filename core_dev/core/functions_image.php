@@ -84,30 +84,20 @@
 	{
 		list($orig_width, $orig_height) = getimagesize($filename);
 
- $image_max_width			= 1100;			///<bigger images will be resized to this size
-	 $image_max_height			= 900;
-
-
-		$max_width = $image_max_width;
-		$max_height = $image_max_height;
-
-		if ($to_width && ($to_width < $max_width)) $max_width = $to_width;
-		if ($to_height && ($to_height < $max_height)) $max_height = $to_height;
-
 		//Proportionally resize the image to the max sizes specified above
-		$x_ratio = $max_width / $orig_width;
-		$y_ratio = $max_height / $orig_height;
+		$x_ratio = $to_width / $orig_width;
+		$y_ratio = $to_height / $orig_height;
 
-		if (($orig_width <= $max_width) && ($orig_height <= $max_height))
+		if (($orig_width <= $to_width) && ($orig_height <= $to_height))
 		{
 			return Array($orig_width, $orig_height);
 		}
-		elseif (($x_ratio * $orig_height) < $max_height)
+		elseif (($x_ratio * $orig_height) < $to_height)
 		{
-			return Array($max_width, ceil($x_ratio * $orig_height));
+			return Array($to_width, ceil($x_ratio * $orig_height));
 		}
 
-		return Array(ceil($y_ratio * $orig_width), $max_height);
+		return Array(ceil($y_ratio * $orig_width), $to_height);
 	}
 
 	/**
