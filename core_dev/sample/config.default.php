@@ -45,11 +45,13 @@
 
 	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
 	$config['session']['name'] = 'coreID';
-	$config['session']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
-	$config['session']['allow_login'] = true;
-	$config['session']['allow_registration'] = true;
 	$config['session']['allow_themes'] = true;
 	$session = new Session($config['session']);
+
+	$config['auth']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
+	$config['auth']['allow_login'] = true;
+	$config['auth']['allow_registration'] = true;
+	$auth = new Auth_Standard($config['auth']);
 
 	$config['files']['apc_uploads'] = false;
 	$config['files']['upload_dir'] = 'E:/devel/webupload/sample/';
@@ -102,6 +104,4 @@
 		'forum_search.php' => 'Search',
 		'forum_latest.php' => 'Latest'
 	);
-
-	$session->handleSessionActions();
 ?>

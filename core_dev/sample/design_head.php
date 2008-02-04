@@ -57,9 +57,10 @@
 	}
 	createMenu($menu);
 ?>
+<br/>
 Quick search:<br/>
 <form method="post" action="">
-<input type="text" name="qu" size="8"> <a href="?rand">[R]</a><br/>
+<input type="text" name="qu" size="12"> <a href="?rand">[R]</a><br/>
 </form>
 </div>
 

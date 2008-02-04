@@ -111,6 +111,8 @@ class Session
 		//FIXME conditionally reuse some functions_browserstats.php features. make user agent parsing optional & disabled by default
 		$this->ua_ie = false;
 		if (strpos($this->user_agent, 'MSIE')) $this->ua_ie = true;	//FIXME this check will handle Opera as a IE browser
+
+		$this->handleSessionEvents();
 	}
 
 	/**
@@ -160,9 +162,9 @@ class Session
 	}
 
 	/**
-	 * Handles session actions, such as log in & log out requests, idle timeout check etc
+	 * Handles session events, such as idle timeout check. called from the constructor
 	 */
-	function handleSessionActions()
+	function handleSessionEvents()
 	{
 		global $db, $config;
 
@@ -173,27 +175,27 @@ class Session
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
 			$this->error = 'Client IP changed';
 			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
-			$this->logOut();
+			$this->endSession();
 		}
 
 		//Logged in: Check user activity - log out inactive user
 		if ($this->lastActive < (time()-$this->timeout)) {
 			$this->error = 'Inactivity timeout';
 			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')', LOGLEVEL_NOTICE);
-			$this->logOut();
+			$this->endSession();
 		}
 
 		//Logged in: Check if client user agent string changed, after active check to avoid useragent change log on auto browser upgrade (Firefox)
 		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
 			$this->error = 'Client user agent string changed';
 			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
-			$this->logOut();
+			$this->endSession();
 		}
 
 		if (!$this->id) return;
 
 		//Update last active timestamp
-		$db->query('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
+		$db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
 		$this->lastActive = time();
 	}
 
@@ -206,7 +208,6 @@ class Session
 	function log($str, $entryLevel = LOGLEVEL_NOTICE)
 	{
 		global $db;
-
 		if (!is_numeric($entryLevel)) return false;
 
 		$q = 'INSERT INTO tblLogs SET entryText="'.$db->escape($str).'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$this->id.',userIP='.$this->ip;
@@ -251,9 +252,29 @@ class Session
 	function startPage()
 	{
 		global $config;
-
 		header('Location: '.$config['web_root'].$this->start_page);
 		die;
+	}
+
+
+	/**
+	 * Redirects user to error page
+	 */
+	function errorPage()
+	{
+		global $config;
+		header('Location: '.$config['web_root'].$this->error_page);
+		die;
+	}
+
+	/**
+	 * Locks registered users out from certain pages, such as registration page
+	 */
+	function requireLoggedOut()
+	{
+		global $config;
+		if (!$this->id) return;
+		$this->startPage();
 	}
 
 	/**
@@ -263,10 +284,8 @@ class Session
 	{
 		global $config;
 		if ($this->id) return;
-
 		$this->error = 'The page you requested requires you to be logged in';
-		header('Location: '.$config['web_root'].$this->error_page);
-		die;
+		$this->erroPage();
 	}
 
 	/**
@@ -276,10 +295,8 @@ class Session
 	{
 		global $config;
 		if ($this->isAdmin) return;
-
 		$this->error = 'The page you requested requires admin rights to view';
-		header('Location: '.$config['web_root'].$this->error_page);
-		die;
+		$this->errorPage();
 	}
 
 	/**
@@ -289,10 +306,8 @@ class Session
 	{
 		global $config;
 		if ($this->isSuperAdmin) return;
-
 		$this->error = 'The page you requested requires superadmin rights to view';
-		header('Location: '.$config['web_root'].$this->error_page);
-		die;
+		$this->errorPage();
 	}
 
 	/**

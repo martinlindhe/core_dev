@@ -90,7 +90,7 @@ class Auth_Standard extends Auth_Base
 		}
 
 		//Update last login time
-		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$session->id);
+		$db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$session->id);
 		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$session->id.', IP='.$session->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
 		$session->startSession($data['userId'], $data['userName'], $data['userMode']);
@@ -104,8 +104,7 @@ class Auth_Standard extends Auth_Base
 	{
 		global $db, $session;
 
-		$db->query('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$session->id);
-
+		$db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$session->id);
 		$session->endSession();
 	}
 
