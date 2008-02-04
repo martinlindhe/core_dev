@@ -8,7 +8,7 @@
 
 	echo 'These people have visited your page:<br/><br/>';
 
-	$list = getUserVisitors($session->id);
+	$list = getVisits(VISIT_USERPAGE, $session->id);
 
 	foreach ($list as $row) {
 		echo Users::link($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';

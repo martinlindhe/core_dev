@@ -7,6 +7,9 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+$config['user']['log_visitors'] = true;	//log each visit on users personal page from another user
+
+
 class Users
 {
 	/**
@@ -261,8 +264,7 @@ class Users
 			echo 'User overview:'.Users::getName($userId).'<br/>';
 
 			if ($config['user']['log_visitors']) {
-				$q = 'INSERT INTO tblVisits SET ownerId='.$userId.',creatorId='.$session->id.',timeCreated=NOW()';
-				$db->insert($q);
+				logVisit(VISIT_USERPAGE, $userId);
 			}
 
 		} else {
