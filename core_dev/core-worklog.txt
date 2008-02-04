@@ -11,6 +11,11 @@
 	- core/class.Files.php: moved some image handling functions to functions_image.php
 	- core/class.Files.php: added imagerotate when php-gd bundled is missing
 		& fixed thumbnail update on image rotate
+	- core/class.Files.php: removed $thumbs_dir variable, now a subdir is autocreated
+		below $upload_dir
+	- core/class.Files.php: rewrote internal file upload handling to separate files in
+		subdirectories depending on file id, to avoid pitfalls with slow file system
+		and very large directories
 
 
 2008.02.01:

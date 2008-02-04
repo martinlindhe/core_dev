@@ -95,10 +95,9 @@ class Files
 	); ///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
 
 	/* User configurable settings */
-	public $upload_dir = '/tmp/webupload/';						///<Default upload directory
-	public $thumbs_dir = '/tmp/webupload/thumbs/';		///<Default thumbnail directory
+	public $upload_dir = '/webupload/';				///<Default upload directory
 
-	public $tmp_dir = '/tmp/';	///<temp directory
+	public $tmp_dir = '/tmp/';								///<temp directory
 
 	public $thumb_default_width		= 80;				///<Default width of thumbnails
 	public $thumb_default_height	= 80;				///<Default height of thumbnails
@@ -110,11 +109,9 @@ class Files
 	private $count_file_views			= false;		///<auto increments the "cnt" in tblFiles in each $files->sendFile() call
 	private $apc_uploads					= false;		///<enable support for php_apc + php_uploadprogress calls
 
-	/* If $image_convert are enabled, it uses ImageMagick to convert the following image formats:
+	/* If $image_convert is enabled, it uses ImageMagick to convert the following image formats:
 		- BMP images gets converted to JPG
 		- SVG images gets converted to PNG
-
-		Currently using ImageMagick-6.3.5-8-Q16-windows-static.exe
 
 		 ImageMagick is a open source and multi platform image converter
 		 http://www.imagemagick.org/download/
@@ -132,7 +129,6 @@ class Files
 		global $session;
 
 		if (isset($config['upload_dir'])) $this->upload_dir = $config['upload_dir'];
-		if (isset($config['thumbs_dir'])) $this->thumbs_dir = $config['thumbs_dir'];
 
 		if (isset($config['image_max_width'])) $this->image_max_width = $config['image_max_width'];
 		if (isset($config['image_max_height'])) $this->image_max_height = $config['image_max_height'];
@@ -465,7 +461,7 @@ class Files
 		if (!$this->deleteFileEntry($_id)) return false;
 
 		//physically remove the file from disk
-		unlink($this->upload_dir.$_id);
+		unlink($this->findUploadPath($_id));
 		$this->clearThumbs($_id);
 		return true;
 	}
@@ -512,20 +508,19 @@ class Files
 	function clearThumbs($_id)
 	{
 		global $db;
-
 		if (!is_numeric($_id)) return false;
 
-		$dir = scandir($this->thumbs_dir);
+		$thumbs_dir = dirname($this->findThumbPath($_id));
+
+		$dir = scandir($thumbs_dir);
 		foreach ($dir as $name)
 		{
 			if (strpos($name, $_id.'_') !== false) {
-				unlink($this->thumbs_dir.$name);
+				unlink($thumbs_dir.'/'.$name);
 			}
 		}
-		//$session->log('Thumbs for '.$_id.' deleted');
 		return true;
 	}
-
 
 	/**
 	 * Stores uploaded file associated to $session->id
@@ -562,7 +557,6 @@ class Files
 		}
 
 		$this->updateFile($fileId);	//force update of filesize, mimetype & checksum
-
 		return $fileId;
 	}
 
@@ -649,17 +643,66 @@ class Files
 				$q = 'UPDATE tblFiles SET fileMime="image/png", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.png",fileSize='.$filesize.' WHERE fileId='.$fileId;
 				$db->query($q);
 				$this->handleImageUpload($fileId, $FileData);
-				break;
+				return true;
 		}
 
+		$this->moveUpload($FileData['tmp_name'], $fileId);
+	}
+
+	/**
+	 * Moves uploaded file to correct directory
+	 */
+	function moveUpload($tmp_name, $fileId)
+	{
+		global $session;
+
 		//Move the uploaded file to upload directory
-		$uploadfile = $this->upload_dir.$fileId;
-		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) {
+		$uploadfile = $this->findUploadPath($fileId);
+		if (move_uploaded_file($tmp_name, $uploadfile)) {
 			chmod($uploadfile, 0777);
 			return true;
 		}
-		$session->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+		$session->log('Failed to move file from '.$tmp_name.' to '.$uploadfile);
 		return false;
+	}
+
+	/**
+	 * Finds out where to store the file in filesystem, creating directories when nessecary
+	 */
+	function findUploadPath($fileId)
+	{
+		for ($i=0; $i<=$fileId; $i+=10000) { ; }
+		$dir = $this->upload_dir.'org/'.($i-10000);
+
+		if (!is_dir($this->upload_dir.'org/')) {
+			mkdir($this->upload_dir.'org/');
+			chmod($this->upload_dir.'org/', 0777);
+		}
+
+		if (!is_dir($dir)) {
+			mkdir($dir);
+			chmod($dir, 0777);
+		}
+
+		return $dir.'/'.$fileId;
+	}
+
+	function findThumbPath($fileId)
+	{
+		for ($i=0; $i<=$fileId; $i+=10000) { ; }
+		$dir = $this->upload_dir.'thumb/'.($i-10000);
+
+		if (!is_dir($this->upload_dir.'thumb/')) {
+			mkdir($this->upload_dir.'thumb/');
+			chmod($this->upload_dir.'thumb/', 0777);
+		}
+
+		if (!is_dir($dir)) {
+			mkdir($dir);
+			chmod($dir, 0777);
+		}
+
+		return $dir.'/'.$fileId;
 	}
 
 	/**
@@ -680,12 +723,7 @@ class Files
 			resizeImage($FileData['tmp_name'], $FileData['tmp_name'], $this->image_max_width, $this->image_max_height, $fileId);
 		}
 
-		//Move the uploaded file to upload directory
-		$uploadfile = $this->upload_dir.$fileId;
-		if (!move_uploaded_file($FileData['tmp_name'], $uploadfile)) {
-			$session->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
-		}
-
+		$this->moveUpload($FileData['tmp_name'], $fileId);
 		$this->makeThumbnail($fileId);
 		return $fileId;
 	}
@@ -698,8 +736,8 @@ class Files
 		if (!is_numeric($fileId)) return false;
 
 		//create default sized thumbnail
-		$thumb_filename = $this->thumbs_dir.$fileId.'_'.$this->thumb_default_width.'x'.$this->thumb_default_height;
-		resizeImage($this->upload_dir.$fileId, $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
+		$thumb_filename = $this->findThumbPath($fileId).'_'.$this->thumb_default_width.'x'.$this->thumb_default_height;
+		resizeImage($this->findUploadPath($fileId), $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
 	}
 
 	/**
@@ -724,13 +762,15 @@ class Files
 			if ($cached) return $cached;
 		}
 
-		if (!file_exists($this->upload_dir.$_id)) {
-			die('tried to generate checksums of nonexisting file '.$this->upload_dir.$_id);
+		$filename = $this->findUploadPath($_id);
+
+		if (!file_exists($filename)) {
+			die('tried to generate checksums of nonexisting file '.$filename);
 		}
 
 		$exec_start = microtime(true);
-		$new['sha1'] = $db->escape(hash_file('sha1', $this->upload_dir.$_id));	//40-character hex string
-		$new['md5'] = $db->escape(hash_file('md5', $this->upload_dir.$_id));		//32-character hex string
+		$new['sha1'] = $db->escape(hash_file('sha1', $filename));	//40-character hex string
+		$new['md5'] = $db->escape(hash_file('md5', $filename));		//32-character hex string
 		$new['timeCreated'] = now();
 		$exec_time = microtime(true) - $exec_start;
 		$new['timeExec'] = $exec_time;
@@ -786,7 +826,7 @@ class Files
 		global $db;
 		if (!is_numeric($_id)) return false;
 
-		$size = filesize($this->upload_dir.$_id);
+		$size = filesize($this->findUploadPath($_id));
 
 		//force calculation of checksums
 		$this->checksums($_id, true);
@@ -806,15 +846,16 @@ class Files
 		global $db;
 		if (!is_numeric($_id)) return false;
 
-		if (!file_exists($this->upload_dir.$_id)) return false;
+		$filename = $this->findUploadPath($_id);
+		if (!file_exists($filename)) return false;
 
-		$size = filesize($this->upload_dir.$_id);
+		$size = filesize($filename);
 
 		if (!is_numeric($size) || !$size) {
 			echo 'setMimeType(): file dont exist ';
 			return false;
 		}
-		$mime = $this->lookupMimeType($this->upload_dir.$_id);
+		$mime = $this->lookupMimeType($filename);
 
 		//force calculation of checksums
 		$this->checksums($_id, true);
@@ -867,7 +908,7 @@ class Files
 		header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
 		header('Content-Transfer-Encoding: binary');
 
-		$filename = $this->upload_dir.$_id;
+		$filename = $this->findUploadPath($_id);
 
 		switch ($data['fileMime'])
 		{
@@ -934,7 +975,7 @@ class Files
 
 			//Just delivers the file as-is
 			header('Content-Length: '. $data['fileSize']);
-			echo file_get_contents($this->upload_dir.$_id);
+			echo file_get_contents($this->findUploadPath($_id));
 		}
 
 		//Count the file downloads
@@ -976,7 +1017,7 @@ class Files
 	{
 		global $session;
 
-		$filename = $this->upload_dir.$_id;
+		$filename = $this->findUploadPath($_id);
 		if (!file_exists($filename)) die('file not found');
 
 		$temp = getimagesize($filename);
@@ -996,7 +1037,7 @@ class Files
 		if ($width && (($width < $img_width) || ($height < $img_height)) )  {
 			/* Look for cached thumbnail */
 
-			$out_filename = $this->thumbs_dir.$_id.'_'.$width.'x'.$height;
+			$out_filename = $this->findThumbPath($_id).'_'.$width.'x'.$height;
 
 			if (!file_exists($out_filename)) {
 				//Thumbnail of this size dont exist, create one
@@ -1097,7 +1138,7 @@ class Files
 		if (in_array($file['fileMime'], $this->image_mime_types))
 		{
 			//Show additional information for image files
-			list($img_width, $img_height) = getimagesize($this->upload_dir.$_id);
+			list($img_width, $img_height) = getimagesize($this->findUploadPath($_id));
 			echo 'Width: '.$img_width.', Height: '.$img_height.'<br/>';
 			echo makeThumbLink($_id);
 		}
@@ -1105,7 +1146,7 @@ class Files
 		{
 			//Show additional information for audio files
 			echo '<h3>id3 tag</h3>';
-			$id3 = @id3_get_tag($this->upload_dir.$_id, ID3_V2_2);	//note: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this
+			$id3 = @id3_get_tag($this->findUploadPath($_id), ID3_V2_2);	//XXX: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this
 			d($id3);
 		}
 
