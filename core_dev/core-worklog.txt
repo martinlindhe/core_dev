@@ -18,6 +18,7 @@
 		and very large directories
 	- core/functions_image.php: cleaned up image resize code a bit
 	- core/functions_fileareas.php: moved filearea implementation out of class.Files.php
+	- admin/admin_list_users.php: superadmins can now delete users
 
 
 2008.02.01:

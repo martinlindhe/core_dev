@@ -26,7 +26,7 @@ class Auth_Standard extends Auth_Base
 	 */
 	function registerUser($username, $password1, $password2, $userMode = 0)
 	{
-		global $db, $config;
+		global $db, $config, $session;
 		if (!is_numeric($userMode)) return false;
 
 		if ($username != trim($username)) return 'Username contains invalid spaces';

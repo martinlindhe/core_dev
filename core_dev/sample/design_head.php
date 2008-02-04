@@ -32,9 +32,8 @@
 		'forum.php' => 'Forum',
 		'scribble.php' => 'Scribble',
 		'blogs.php' => 'Blogs',
-		'users.php' => 'Users',
-		$config['core_web_root'].'process/' => 'PROCESS SERVER',
-		$config['core_web_root'].'wiki/' => 'Wiki'
+		'users.php' => 'Users'
+		//$config['core_web_root'].'process/' => 'PROCESS SERVER'
 	);
 	createMenu($menu);
 

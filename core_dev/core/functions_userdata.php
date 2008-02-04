@@ -292,9 +292,9 @@
 
 		$list = getUserdataFields(true);
 		foreach ($list as $row) {
-			if (!empty($_POST['userdata_'.$row['fieldId']])) {
-				saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
-			}
+			if (empty($_POST['userdata_'.$row['fieldId']])) continue;
+
+			saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
 		}
 	}
 

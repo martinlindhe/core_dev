@@ -6,8 +6,12 @@
 	
 	echo createMenu($admin_menu, 'blog_menu');
 
-	echo '<h2>list users</h2>';
-	echo 'As a super admin, you can upgrade users to other user levels from this page.<br/><br/>';
+	echo '<h2>List users</h2>';
+	echo 'As a super admin, you can upgrade users to other user levels, or remove them from the system from this page.<br/><br/>';
+
+	if ($session->isSuperAdmin && !empty($_GET['del'])) {
+		Users::delete($_GET['del']);
+	}
 
 	$mode = 0;
 	if (!empty($_GET['mode'])) $mode = $_GET['mode'];
@@ -52,7 +56,10 @@
 				echo '<option value="0"'.($user['userMode']==0?' selected="selected"':'').'>Normal</option>';
 				echo '<option value="1"'.($user['userMode']==1?' selected="selected"':'').'>Admin</option>';
 				echo '<option value="2"'.($user['userMode']==2?' selected="selected"':'').'>Super admin</option>';
-				echo '</select>';
+				echo '</select> ';
+
+				if ($session->id != $user['userId']) echo '<a href="?del='.$user['userId'].getProjectPath().'">del</a>';
+
 			} else {
 				echo $user['userMode'];
 			}

@@ -199,6 +199,19 @@ class Users
 		return $db->getArray($q);
 	}
 
+	/**
+	 * Completely deletes this user and all associated data from the database
+	 */
+	function delete($_id)
+	{
+		global $db, $session;
+		if (!$session->isSuperAdmin || !is_numeric($_id)) return false;
+
+		$q = 'DELETE FROM tblUsers WHERE userId='.$_id;
+		$db->delete($q);
+
+		//FIXME delete other traces too
+	}
 
 	/**
 	 * Randomly selects a user's presentation
