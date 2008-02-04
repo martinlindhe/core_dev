@@ -8,6 +8,7 @@
 
 	/**
 	 * Debug function. Prints out variable $v
+	 *
 	 * \param $v variable of any type to display
 	 * \return nothing
    */
@@ -22,6 +23,17 @@
 				echo '</pre>';
 			}
 		}
+	}
+
+	/**
+	 * Helper function to include core function files
+	 *
+	 * \param $file filename to include
+	 */
+	function require_core($file)
+	{
+		global $config;
+		require_once($config['core_root'].'core/'.$file);
 	}
 
 	//returns a $pager array with some properties filled

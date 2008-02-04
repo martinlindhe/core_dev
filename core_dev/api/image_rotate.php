@@ -2,7 +2,6 @@
 /*
 	i - file id
 	a - angle to rotate
-
 */
 
 	require_once('find_config.php');

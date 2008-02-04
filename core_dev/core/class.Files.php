@@ -46,7 +46,6 @@ class Files
 {
 	/* Non configurable, shouldnt be needed to be changed */
 	private $htaccess = "Deny from all\nOptions All -Indexes";
-	private $resample_resized			= true;	//use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 
 	public $image_mime_types = array(
 		'image/jpeg',
@@ -96,15 +95,16 @@ class Files
 	); ///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
 
 	/* User configurable settings */
-	public $upload_dir = '/tmp/webupload';						///<Default upload directory
+	public $upload_dir = '/tmp/webupload/';						///<Default upload directory
 	public $thumbs_dir = '/tmp/webupload/thumbs/';		///<Default thumbnail directory
+
+	public $tmp_dir = '/tmp/';	///<temp directory
 
 	public $thumb_default_width		= 80;				///<Default width of thumbnails
 	public $thumb_default_height	= 80;				///<Default height of thumbnails
 
 	private $image_max_width			= 1100;			///<bigger images will be resized to this size
 	private $image_max_height			= 900;
-	private $image_jpeg_quality		= 70;				///<0-100% quality for recompression of very large uploads (like digital camera pictures)
 
 	public $anon_uploads					= false;		///<allow unregisterd users to upload files
 	private $count_file_views			= false;		///<auto increments the "cnt" in tblFiles in each $files->sendFile() call
@@ -189,13 +189,11 @@ class Files
 	{
 		//IMPORTANT todo: validate $fileName
 
-		//TODO: bort me hårdkodad url
-		//$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m E:\devel\magic '.$fileName;
-		//$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi -m "C:\Program Files\GnuWin32\share\file\magic" '.$fileName;
-		$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi '.$fileName;
-		echo 'Executing: '.$c.'<br/>';
+		//$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi '.$fileName;
+		$c = 'file -bi '.$fileName;
+		//echo 'Executing: '.$c.'<br/>';
 		$result = exec($c);
-		echo 'result: '.$result.'<br/>';
+		//echo 'result: '.$result.'<br/>';
 		return $result;
 	}
 
@@ -618,8 +616,8 @@ class Files
 		switch ($FileData['type']) {
 			case 'image/bmp':	//IE 7, Firefox 2, Opera 9.2
 				if (!$this->image_convert) break;
-				$out_tempfile = 'c:\core_outfile.jpg';
-				$check = $this->convertImage($FileData['tmp_name'], $out_tempfile, 'image/jpeg');
+				$out_tempfile = $this->tmp_dir.'core_outfile.jpg';
+				$check = convertImage($FileData['tmp_name'], $out_tempfile, 'image/jpeg');
 				if (!$check) {
 					$session->log('Failed to convert bmp to jpeg!');
 					break;
@@ -636,9 +634,9 @@ class Files
 			case 'image/svg+xml':	//IE 7, Firefox 2
 			case 'image/svg-xml':	//Opera 9.2
 				if (!$this->image_convert) break;
-				$out_tempfile = 'c:\core_outfile.png';
+				$out_tempfile = $this->tmp_dir.'core_outfile.png';
 
-				$check = $this->convertImage($FileData['tmp_name'], $out_tempfile, 'image/png');
+				$check = convertImage($FileData['tmp_name'], $out_tempfile, 'image/png');
 
 				if (!$check) {
 					$session->log('Failed to convert svg to png!');
@@ -679,114 +677,29 @@ class Files
 		//Resize the image if it is too big, overwrite the uploaded file
 		if (($img_width > $this->image_max_width) || ($img_height > $this->image_max_height))
 		{
-			$this->resizeImage($FileData['tmp_name'], $FileData['tmp_name'], $this->image_max_width, $this->image_max_height, $fileId);
+			resizeImage($FileData['tmp_name'], $FileData['tmp_name'], $this->image_max_width, $this->image_max_height, $fileId);
 		}
-
-		//create default sized thumbnail
-		$thumb_filename = $this->thumbs_dir.$fileId.'_'.$this->thumb_default_width.'x'.$this->thumb_default_height;
-		$this->resizeImage($FileData['tmp_name'], $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
 
 		//Move the uploaded file to upload directory
 		$uploadfile = $this->upload_dir.$fileId;
-		if (move_uploaded_file($FileData['tmp_name'], $uploadfile)) return $fileId;
-		$session->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+		if (!move_uploaded_file($FileData['tmp_name'], $uploadfile)) {
+			$session->log('Failed to move file from '.$FileData['tmp_name'].' to '.$uploadfile);
+		}
+
+		$this->makeThumbnail($fileId);
+		return $fileId;
 	}
 
 	/**
-	 * Resizes specified image file
-	 *
-	 * \param $in_filename
-	 * \param $out_filename
-	 * \param $to_width
-	 * \param $to_height
-	 * \param $fileId
+	 * Generates a thumbnail for given image file
 	 */
-	function resizeImage($in_filename, $out_filename, $to_width = 0, $to_height = 0, $fileId = 0)
+	function makeThumbnail($fileId)
 	{
-		global $db;
-		if (empty($to_width) && empty($to_height)) return false;
+		if (!is_numeric($fileId)) return false;
 
-		$data = getimagesize($in_filename);
-		$orig_width = $data[0];
-		$orig_height = $data[1];
-		$mime_type = $data['mime'];
-		if (!$orig_width || !$orig_height) return false;
-
-		//Calculate the real width & height to resize too (within $to_width & $to_height), while keeping aspect ratio
-		list($tn_width, $tn_height) = resizeImageCalc($in_filename, $to_width, $to_height);
-
-		//echo 'Resizing from '.$orig_width.'x'.$orig_height.' to '.$tn_width.'x'.$tn_height.'<br/>';
-
-		switch ($mime_type)
-		{
-   		case 'image/png':	$image = imagecreatefrompng($in_filename); break;
-   		case 'image/jpeg': $image = imagecreatefromjpeg($in_filename); break;
-   		case 'image/gif': $image = imagecreatefromgif($in_filename); break;
-   		default: die('Unsupported image type '.$mime_type);
-		}
-
-		$image_p = imagecreatetruecolor($tn_width, $tn_height);
-
-		if ($this->resample_resized) {
-			imagecopyresampled($image_p, $image, 0,0,0,0, $tn_width, $tn_height, $orig_width, $orig_height);
-		} else {
-			imagecopyresized($image_p, $image, 0,0,0,0, $tn_width, $tn_height, $orig_width, $orig_height);
-		}
-
-		switch ($mime_type)
-		{
-   		case 'image/png':	imagepng($image_p, $out_filename); break;
-   		case 'image/jpeg': imagejpeg($image_p, $out_filename, $this->image_jpeg_quality); break;
-   		case 'image/gif': imagegif($image_p, $out_filename); break;
-   		default: die('Unsupported image type '.$mime_type);
-		}
-
-		imagedestroy($image);
-		imagedestroy($image_p);
-		
-		if ($fileId) {
-			//Update fileId entry with the new file size (DONT use when creating thumbnails or cloning files!)
-			clearstatcache();	//needed to get current filesize()
-			$q = 'UPDATE tblFiles SET fileSize='.filesize($out_filename).' WHERE fileId='.$fileId;
-			$db->update($q);
-		}
-		
-		return true;
-	}
-
-	/**
-	 * Converts a image to specified file type. Currently supports conversions to jpeg, png or gif
-	 * Requires ImageMagick commandline image converter "convert"
-	 *
-	 * \param $src_file
-	 * \param $dst_file
-	 * \param $dst_mime_type
-	 */
-	function convertImage($src_file, $dst_file, $dst_mime_type)
-	{
-		switch ($dst_mime_type)
-		{
-			case 'image/jpeg':
-				$c = 'convert -quality '.$this->image_jpeg_quality.' '.escapeshellarg($src_file).' JPG:'.escapeshellarg($dst_file);
-				break;
-
-			case 'image/png':
-				$c = 'convert '.escapeshellarg($src_file).' PNG:'.escapeshellarg($dst_file);
-				break;
-
-			case 'image/gif':
-				$c = 'convert '.escapeshellarg($src_file).' GIF:'.escapeshellarg($dst_file);
-				break;
-
-			default:
-				echo 'convertImage(): Unknown destination mimetype "'.$dst_mime_type.'"<br/>';
-				return false;
-		}
-		echo 'Executing: '.$c.'<br/>';
-		exec($c);
-
-		if (!file_exists($dst_file)) return false;
-		return true;
+		//create default sized thumbnail
+		$thumb_filename = $this->thumbs_dir.$fileId.'_'.$this->thumb_default_width.'x'.$this->thumb_default_height;
+		resizeImage($this->upload_dir.$fileId, $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
 	}
 
 	/**
@@ -964,7 +877,7 @@ class Files
    		default: die('Unsupported image type '.$data['fileMime']);
 		}
 
-		$rotated = imagerotate($image, $_angle, 0);
+		$rotated = my_imagerotate($image, $_angle);
 
 		switch ($data['fileMime'])
 		{
@@ -978,6 +891,7 @@ class Files
 		imagedestroy($rotated);
 
 		$this->clearThumbs($_id);
+		$this->makeThumbnail($_id);
 	}
 
 	/**
@@ -1086,7 +1000,7 @@ class Files
 
 			if (!file_exists($out_filename)) {
 				//Thumbnail of this size dont exist, create one
-				$this->resizeImage($filename, $out_filename, $width, $height);
+				resizeImage($filename, $out_filename, $width, $height);
 			}
 		} else {
 			$out_filename = $filename;

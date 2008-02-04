@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	require_core('functions_faq.php');
 	require('design_head.php');
 
 	echo 'Frequently Asked Questions<br/><br/>';

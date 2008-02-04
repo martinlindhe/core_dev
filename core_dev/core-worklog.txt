@@ -1,7 +1,3 @@
-todo:
-	- skapa menyerna i en separat config-fil så guestbook count inte behöver göras på varje page-load
-
-
 2008.02.04
   - core/class.Auth_Base.php, class.Auth_Standard.php: new class for
     authentication, to simplify integration with external means of
@@ -12,6 +8,9 @@ todo:
 	- db: tblVisits.type new column
 	- core/functions_visits.php: new file for general visitor logging of objects
 	- core/functions_faq.php: can now edit & delete faq entries
+	- core/class.Files.php: moved some image handling functions to functions_image.php
+	- core/class.Files.php: added imagerotate when php-gd bundled is missing
+		& fixed thumbnail update on image rotate
 
 
 2008.02.01:

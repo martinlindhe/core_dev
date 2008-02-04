@@ -18,6 +18,8 @@
 			soap.wsdl_cache_ttl=172800
 	*/
 
+	require_once('functions_image.php');
+
 
 	//how many enqued items to process at max each time the process_queue.php script is called
 	//WARNING: keep this a low number unless you are sure what the consequences are (between 5 and 10 is fine)
@@ -352,7 +354,7 @@
 					$newId = $files->cloneEntry($job['fileId']);
 
 					$exec_start = microtime(true);
-					$check = $files->convertImage($files->upload_dir.$job['fileId'], $files->upload_dir.$newId, $job['orderParams']);
+					$check = convertImage($files->upload_dir.$job['fileId'], $files->upload_dir.$newId, $job['orderParams']);
 					$exec_time = microtime(true) - $exec_start;
 					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 
