@@ -53,7 +53,7 @@
 			'user.php' => 'My profile',
 			'?logout' => 'Logout');
 	} else {
-		$menu = array('index.php' => 'Log in');
+		$menu = array('login.php' => 'Log in');
 	}
 	createMenu($menu);
 ?>

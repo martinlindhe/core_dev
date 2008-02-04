@@ -2,6 +2,14 @@ todo:
 	- skapa menyerna i en separat config-fil så guestbook count inte behöver göras på varje page-load
 
 
+2008.02.04
+  - core/class.Auth_Base.php, class.Auth_Standard.php: new class for
+    authentication, to simplify integration with external means of
+    authentication
+  - core/class.Session.php: major refactoring with regards to the new
+    authentication class
+
+
 
 2008.02.01:
 	- core/atom_revisions.php: forgot to declare $config

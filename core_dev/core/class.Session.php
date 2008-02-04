@@ -114,6 +114,52 @@ class Session
 	}
 
 	/**
+	 * Sets up a session. Called from the auth class
+	 *
+	 * \param $_id user id
+	 * \param $_username user name
+	 * \param $_usermode user mode
+	 */
+	function startSession($_id, $_username, $_usermode)
+	{
+		$this->error = '';
+		$this->id = $_id;
+		$this->username = $_username;
+		$this->mode = $_usermode;		//0=normal user. 1=admin, 2=super admin
+		$this->lastActive = time();
+
+		if ($this->mode >= 1) $this->isAdmin = 1;
+		if ($this->mode >= 2) $this->isSuperAdmin = 1;
+
+		/* Read in current users settings */
+		if ($this->allow_themes) {
+			$this->theme = loadUserdataSetting($this->id, 'Theme', $this->default_theme);
+		}
+
+		$this->log('User logged in', LOGLEVEL_NOTICE);
+	}
+
+	/**
+	 * Kills the current session, clearing all session variables
+	 */
+	function endSession()
+	{
+		if (!$this->id) return;
+
+		$this->log('User logged out', LOGLEVEL_NOTICE);
+
+		$this->started = 0;
+		$this->username = '';
+		$this->id = 0;
+		$this->ip = 0;
+		$this->user_agent = '';
+		$this->mode = 0;
+		$this->isAdmin = 0;
+		$this->isSuperAdmin = 0;
+		$this->theme = $this->default_theme;
+	}
+
+	/**
 	 * Handles session actions, such as log in & log out requests, idle timeout check etc
 	 */
 	function handleSessionActions()
@@ -197,6 +243,17 @@ class Session
 		if ($this->isSuperAdmin) {
 			echo 'SHA1 key: '.$this->sha1_key.'<br/>';
 		}
+	}
+
+	/**
+	 * Redirects user to default start page
+	 */
+	function startPage()
+	{
+		global $config;
+
+		header('Location: '.$config['web_root'].$this->start_page);
+		die;
 	}
 
 	/**

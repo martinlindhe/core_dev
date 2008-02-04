@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Standard authentication module. Uses tblUsers
+ * Standard authentication module. Uses core_dev's own tblUsers
  *
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
@@ -11,42 +11,9 @@ require_once('class.Auth_Base.php');
 
 class Auth_Standard extends Auth_Base
 {
-
-
-
-/*
-		if (!$this->id && !empty($_POST['register_usr']) && !empty($_POST['register_pwd']) && !empty($_POST['register_pwd2'])) {
-			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
-			if (!is_numeric($check)) {
-				echo 'Registration failed: '.$check;
-				die;
-			}
-			$this->logIn($_POST['register_usr'], $_POST['register_pwd']);
-		}
-
-		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
-		if (!$this->id) {
-			if (!empty($_POST['login_usr']) && !empty($_POST['login_pwd']) && $this->logIn($_POST['login_usr'], $_POST['login_pwd'])) {
-				header('Location: '.$config['web_root'].$this->start_page);
-				die;
-			}
-		}
-
-		//Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
-		if (isset($_GET['logout'])) {
-			$this->logOut();
-			header('Location: '.$config['web_root'].$this->start_page);
-			die;
-		}
-*/
-
-
-
-
-
-
 	/**
 	 * Register new user in the database
+	 *
 	 * \param $username user name
 	 * \param $password1 password
 	 * \param $password2 password (repeat)
@@ -85,7 +52,7 @@ class Auth_Standard extends Auth_Base
 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
 		$newUserId = $db->insert($q);
 
-		$this->log('User <b>'.$username.'</b> created');
+		$session->log('Registered user <b>'.$username.'</b>');
 
 		//Stores the additional data from the userdata fields that's required at registration
 		if ($this->userdata) {
@@ -104,7 +71,7 @@ class Auth_Standard extends Auth_Base
 	 */
 	function login($username, $password)
 	{
-		global $db;
+		global $db, $session;
 
 		$enc_username = $db->escape($username);
 		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
@@ -112,35 +79,21 @@ class Auth_Standard extends Auth_Base
 		$q = 'SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"';
 		$data = $db->getOneRow($q);
 		if (!$data) {
-			$this->error = 'Login failed';
-			$this->log('Failed login attempt: username '.$enc_username, LOGLEVEL_WARNING);
+			$session->error = 'Login failed';
+			$session->log('Failed login attempt: username '.$enc_username, LOGLEVEL_WARNING);
 			return false;
 		}
 
 		if ($data['userMode'] != 2 && !$this->allow_login) {
-			$this->error = 'Logins currently not allowed.';
+			$session->error = 'Logins currently not allowed.';
 			return false;
 		}
-		
-		$this->error = '';
-		$this->username = $data['userName'];
-		$this->id = $data['userId'];
-		$this->mode = $data['userMode'];		//0=normal user. 1=admin, 2=super admin
-		$this->lastActive = time();
 
-		if ($this->mode >= 1) $this->isAdmin = 1;
-		if ($this->mode >= 2) $this->isSuperAdmin = 1;
-		
 		//Update last login time
-		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
-		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$this->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
+		$db->query('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$session->id);
+		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$session->id.', IP='.$session->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
-		/* Read in current users settings */
-		if ($this->allow_themes) {
-			$this->theme = loadUserdataSetting($this->id, 'Theme', $this->default_theme);
-		}
-
-		$this->log('User logged in', LOGLEVEL_NOTICE);
+		$session->startSession($data['userId'], $data['userName'], $data['userMode']);
 		return true;
 	}
 
@@ -149,30 +102,21 @@ class Auth_Standard extends Auth_Base
 	 */
 	function logout()
 	{
-		global $db;
+		global $db, $session;
 
-		$this->log('User logged out', LOGLEVEL_NOTICE);
-		$db->query('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this->id);
+		$db->query('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$session->id);
 
-		$this->started = 0;
-		$this->username = '';
-		$this->id = 0;
-		$this->ip = 0;
-		$this->user_agent = '';
-		$this->mode = 0;
-		$this->isAdmin = 0;
-		$this->isSuperAdmin = 0;
-		$this->theme = $this->default_theme;
+		$session->endSession();
 	}
 
 	/**
 	 * Shows a login form with tabs for Register & Forgot password functions
 	 *
-	 * the handling of the result variables are called by $session->handleSessionActions() from config.php 
+	 * The handling of the result variables is handled in $this->handleAuthEvents of class.Auth_Base.php
 	 */
 	function showLoginForm()
 	{
-		global $config;
+		global $config, $session;
 		echo '<div class="login_box">';
 
 		$allow_superadmin_reg = false;
@@ -184,7 +128,7 @@ class Auth_Standard extends Auth_Base
 		$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 
 		//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
-		if ($forgot_pwd && !$this->id) {
+		if ($forgot_pwd && !$session->id) {
 			if (!empty($_POST['forgot_pwd'])) {
 				echo $_POST['forgot_pwd'];
 			}
@@ -198,9 +142,9 @@ class Auth_Standard extends Auth_Base
 			echo '<div class="critical">Logins are currently not allowed.<br/>Please try again later.</div>';
 		}
 		echo '<form name="login_form" method="post" action="">';
-		if ($this->error) {
-			echo '<div class="critical">'.$this->error.'</div>';
-			$this->error = ''; //remove error message once it has been displayed
+		if ($session->error) {
+			echo '<div class="critical">'.$session->error.'</div>';
+			$session->error = ''; //remove error message once it has been displayed
 		}
 
 		echo '<table cellpadding="2">';
