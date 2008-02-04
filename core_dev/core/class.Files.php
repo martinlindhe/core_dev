@@ -172,6 +172,7 @@ class Files
 		if (!file_exists($filename)) return false;
 
 		$c = 'file -bi '.$filename;
+		//echo 'Executing: '.$c;
 		return exec($c);
 	}
 
