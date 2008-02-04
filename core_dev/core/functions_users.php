@@ -13,7 +13,7 @@
 	$config['user']['log_visitors'] = true;	//log each visit on users personal page from another user
 
 	/* Looks up a username by id */
-	function getUserName($_id)
+	function getUserName($_id)	//DEPRECATED. User::getName()
 	{
 		global $db, $session;
 
@@ -25,7 +25,7 @@
 	}
 
 	/* Looks up a users status by id, returns a text string with the description */
-	function getUserStatus($_id)
+	function getUserStatus($_id)		//DEPRECATED. User::getMode()
 	{
 		global $db, $session;
 
@@ -41,7 +41,7 @@
 	}
 
 	//returns the $_limit last users logged in, ordered by the latest logins first
-	function getUsersLastLoggedIn($_limit = 50)
+	function getUsersLastLoggedIn($_limit = 50)	//DEPRECATED. User::lastLoggedIn()
 	{
 		global $db, $session;
 		if (!is_numeric($_limit)) return false;
@@ -52,7 +52,7 @@
 	}
 
 	//
-	function getUsersOnline()
+	function getUsersOnline()	//DEPRECATED. User::allOnline()
 	{
 		global $db, $session;
 
@@ -61,7 +61,7 @@
 		return $db->getArray($q);
 	}
 
-	function getUsersOnlineCnt()
+	function getUsersOnlineCnt()	//DEPRECATED. Users::allOnlineCnt
 	{
 		global $db, $session;
 
@@ -70,7 +70,7 @@
 		return $db->getOneItem($q);
 	}
 
-	function getUsersCnt()
+	function getUsersCnt()	//DEPRECATED. Users::Cnt
 	{
 		global $db, $session;
 
@@ -78,7 +78,7 @@
 		return $db->getOneItem($q);
 	}
 
-	function getAdminsCnt()
+	function getAdminsCnt()	//DEPRECATED. Users::AdminCnt
 	{
 		global $db, $session;
 
@@ -86,13 +86,98 @@
 		return $db->getOneItem($q);
 	}
 
-	function getSuperAdminsCnt()
+	function getSuperAdminsCnt()		//DEPRECATED. Users:SuperAdminscnt
 	{
 		global $db, $session;
 
 		$q = 'SELECT COUNT(userId) FROM tblUsers WHERE userMode=2';
 		return $db->getOneItem($q);
 	}
+
+	/* Admin function used by admin_list_users.php */
+	function getUsers($_mode = 0)	//DEPRECARTED. Users::getUsers
+	{
+		global $db;
+
+		if (!is_numeric($_mode)) return false;
+
+		$q = 'SELECT * FROM tblUsers';
+		if ($_mode) $q .= ' WHERE userMode='.$_mode;
+		return $db->getArray($q);
+	}
+
+	/* Admin function used by admin_todo_lists.php */
+	function getAdmins()	//DEPRECATED. Users::getAdmins
+	{
+		global $db;
+		
+		$q = 'SELECT * FROM tblUsers WHERE userMode=2';
+		return $db->getArray($q);
+	}
+
+	/* Returns a random user id */
+	function getRandomUserId()	//DEPRECATED. Users::getRandomUserId
+	{
+		global $db;
+
+		$q = 'SELECT userId FROM tblUsers ORDER BY RAND() LIMIT 1';
+		return $db->getOneItem($q);
+	}
+
+	/* Returns userId of first match of username contains $phrase */
+	function searchUsernameContains($phrase)	//DEPRECATED. Users::searchUsernameContains
+	{
+		global $db;
+
+		$q  = 'SELECT userId FROM tblUsers ';
+		$q .= 'WHERE LOWER(userName) LIKE LOWER("%'.$db->escape($phrase).'%") LIMIT 1';
+
+		return $db->getOneItem($q);
+	}
+
+	function setUserMode($_id, $_mode)	//DEPRECATED. Users::setMode
+	{
+		global $db, $session;
+		if (!$session->isSuperAdmin || !is_numeric($_id) || !is_numeric($_mode)) return false;
+		
+		$q = 'UPDATE tblUsers SET userMode='.$_mode.' WHERE userId='.$_id;
+		$db->update($q);
+
+		if ($_id == $session->id) return true;
+
+		switch ($_mode) {
+			case 0: $msg = $session->username.' has reduced your usermode to normal member.'; break;
+			case 1: $msg = $session->username.' has granted you admin rights.'; break;
+			case 2: $msg = $session->username.' has granted you super admin rights.'; break;
+		}
+		sendMessage($_id, 'System message', $msg);
+
+		$session->log('Changed usermode for '.getUserName($_id).' to '.$_mode);
+		return true;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	function getUserVisitors($_id)
 	{
@@ -140,46 +225,8 @@
 		return $db->getArray($q);
 	}
 
-	/* Admin function used by admin_list_users.php */
-	function getUsers($_mode = 0)
-	{
-		global $db;
 
-		if (!is_numeric($_mode)) return false;
 
-		$q = 'SELECT * FROM tblUsers';
-		if ($_mode) $q .= ' WHERE userMode='.$_mode;
-		return $db->getArray($q);
-	}
-
-	/* Admin function used by admin_todo_lists.php */
-	function getAdmins()
-	{
-		global $db;
-		
-		$q = 'SELECT * FROM tblUsers WHERE userMode=2';
-		return $db->getArray($q);
-	}
-
-	/* Returns userId of first match of username contains $phrase */
-	function searchUsernameContains($phrase)
-	{
-		global $db;
-
-		$q  = 'SELECT userId FROM tblUsers ';
-		$q .= 'WHERE LOWER(userName) LIKE LOWER("%'.$db->escape($phrase).'%") LIMIT 1';
-
-		return $db->getOneItem($q);
-	}
-
-	/* Returns a random user id */
-	function getRandomUserId()
-	{
-		global $db;
-
-		$q = 'SELECT userId FROM tblUsers ORDER BY RAND() LIMIT 1';
-		return $db->getOneItem($q);
-	}
 
 
 
@@ -258,27 +305,6 @@
 		$q .= 'WHERE LOWER(userName) LIKE LOWER("'.$db->escape($phrase).'%")';
 
 		return $db->getArray($q);
-	}
-
-	function setUserMode($_id, $_mode)
-	{
-		global $db, $session;
-		if (!$session->isSuperAdmin || !is_numeric($_id) || !is_numeric($_mode)) return false;
-		
-		$q = 'UPDATE tblUsers SET userMode='.$_mode.' WHERE userId='.$_id;
-		$db->update($q);
-
-		if ($_id == $session->id) return true;
-
-		switch ($_mode) {
-			case 0: $msg = $session->username.' has reduced your usermode to normal member.'; break;
-			case 1: $msg = $session->username.' has granted you admin rights.'; break;
-			case 2: $msg = $session->username.' has granted you super admin rights.'; break;
-		}
-		sendMessage($_id, 'System message', $msg);
-
-		$session->log('Changed usermode for '.getUserName($_id).' to '.$_mode);
-		return true;
 	}
 
 	/* search users gadget */
