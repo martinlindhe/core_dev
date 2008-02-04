@@ -2,7 +2,9 @@
 /**
  * $Id$
  *
- * Session class
+ * Session handling class
+ *
+ * Uses tblLogs to store session events
  *
  * User setting examples:
  *   $session->save('variablename', 'some random setting to save');
@@ -11,13 +13,7 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_general.php');
 require_once('functions_ip.php');
-require_once('functions_textformat.php');
-require_once('functions_userdata.php');
-require_once('functions_users.php');
-
-require_once('atom_moderation.php');	//for checking if username is reserved on user registration
 require_once('atom_settings.php');	//for storing userdata
 
 define('LOGLEVEL_NOTICE', 1);
@@ -63,21 +59,21 @@ class Session
 	/**
 	 * Constructor. Initializes the session class
 	 *
-	 * \param $session_config array with session settings
+	 * \param $session_conf array with session settings
 	 */
-	function __construct(array $session_config = array(''))
+	function __construct(array $session_conf = array())
 	{
 		global $db, $config;
 
-		if (isset($session_config['name'])) $this->session_name = $session_config['name'];
-		if (isset($session_config['timeout'])) $this->timeout = $session_config['timeout'];
-		if (isset($session_config['check_ip'])) $this->check_ip = $session_config['check_ip'];
-		if (isset($session_config['check_useragent'])) $this->check_useragent = $session_config['check_useragent'];
-		if (isset($session_config['start_page'])) $this->start_page = $session_config['start_page'];
-		if (isset($session_config['error_page'])) $this->error_page = $session_config['error_page'];
-		if (isset($session_config['allow_themes'])) $this->allow_themes = $session_config['allow_themes'];
+		if (isset($session_conf['name'])) $this->session_name = $session_conf['name'];
+		if (isset($session_conf['timeout'])) $this->timeout = $session_conf['timeout'];
+		if (isset($session_conf['check_ip'])) $this->check_ip = $session_conf['check_ip'];
+		if (isset($session_conf['check_useragent'])) $this->check_useragent = $session_conf['check_useragent'];
+		if (isset($session_conf['start_page'])) $this->start_page = $session_conf['start_page'];
+		if (isset($session_conf['error_page'])) $this->error_page = $session_conf['error_page'];
+		if (isset($session_conf['allow_themes'])) $this->allow_themes = $session_conf['allow_themes'];
 
-		ini_set('session.gc_maxlifetime', $session_config['timeout']);
+		ini_set('session.gc_maxlifetime', $this->timeout);
 		session_name($this->session_name);
 		session_start();
 
@@ -176,6 +172,7 @@ class Session
 			$this->error = 'Client IP changed';
 			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
 			$this->endSession();
+			$this->errorPage();
 		}
 
 		//Logged in: Check user activity - log out inactive user
@@ -183,6 +180,7 @@ class Session
 			$this->error = 'Inactivity timeout';
 			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')', LOGLEVEL_NOTICE);
 			$this->endSession();
+			$this->errorPage();
 		}
 
 		//Logged in: Check if client user agent string changed, after active check to avoid useragent change log on auto browser upgrade (Firefox)
@@ -190,6 +188,7 @@ class Session
 			$this->error = 'Client user agent string changed';
 			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
 			$this->endSession();
+			$this->errorPage();
 		}
 
 		if (!$this->id) return;
@@ -212,6 +211,24 @@ class Session
 
 		$q = 'INSERT INTO tblLogs SET entryText="'.$db->escape($str).'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$this->id.',userIP='.$this->ip;
 		return $db->insert($q);
+	}
+
+	/**
+	 * Displays session error
+	 */
+	function showError()
+	{
+		global $config;
+
+		if (!$this->error) {
+			echo '<div class="okay">No errors to display</div>';
+			return;
+		}
+
+		echo '<div class="critical">'.$this->error.'</div>';
+
+		$this->error = '';
+
 	}
 
 	/**
@@ -285,7 +302,7 @@ class Session
 		global $config;
 		if ($this->id) return;
 		$this->error = 'The page you requested requires you to be logged in';
-		$this->erroPage();
+		$this->errorPage();
 	}
 
 	/**

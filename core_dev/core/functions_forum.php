@@ -8,6 +8,7 @@
  */
 
 	require_once('atom_subscriptions.php');	//for subscription functionality
+	require_once('functions_users.php');	//for nameLink()
 
 	//forum module settings:
 	$config['forum']['rootname'] = 'Forum';

@@ -18,7 +18,7 @@ abstract class Auth_Base
 	public $reserved_usercheck = true;		///< check if username is listed as reserved username, requires tblStopwords
 	public $userdata = true; 							///< shall we use tblUserdata for required userdata fields?
 
-	function __construct(array $auth_conf = array(''))
+	function __construct(array $auth_conf = array())
 	{
 		global $db;
 

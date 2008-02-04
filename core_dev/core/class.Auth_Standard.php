@@ -9,6 +9,9 @@
 
 require_once('class.Auth_Base.php');
 
+require_once('atom_moderation.php');	//for checking if username is reserved on user registration
+require_once('functions_userdata.php');	//for showRequiredUserdataFields()
+
 class Auth_Standard extends Auth_Base
 {
 	/**
