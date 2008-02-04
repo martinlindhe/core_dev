@@ -5,5 +5,5 @@
 
 	if ((!$session->id && !$files->anon_uploads) || empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
 
-	$files->showFileInfo($_GET['i']);
+	showFileInfo($_GET['i']);
 ?>

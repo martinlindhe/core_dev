@@ -104,35 +104,100 @@
 	 * Converts a image to specified file type. Currently supports conversions to jpeg, png or gif
 	 * Requires ImageMagick commandline image converter "convert" installed
 	 *
-	 * \param $src_file
-	 * \param $dst_file
-	 * \param $dst_mime_type
+	 * \param $in_file input filename
+	 * \param $out_file output filename
+	 * \param $to_mime wanted output format
 	 */
-	function convertImage($src_file, $dst_file, $dst_mime_type)
+	function convertImage($in_file, $out_file, $to_mime)
 	{
-		switch ($dst_mime_type)
+		global $config;
+
+		switch ($to_mime)
 		{
 			case 'image/jpeg':
-				$c = 'convert -quality '.$this->image_jpeg_quality.' '.escapeshellarg($src_file).' JPG:'.escapeshellarg($dst_file);
+				$c = 'convert -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
 				break;
 
 			case 'image/png':
-				$c = 'convert '.escapeshellarg($src_file).' PNG:'.escapeshellarg($dst_file);
+				$c = 'convert '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
 				break;
 
 			case 'image/gif':
-				$c = 'convert '.escapeshellarg($src_file).' GIF:'.escapeshellarg($dst_file);
+				$c = 'convert '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
 				break;
 
 			default:
-				echo 'convertImage(): Unknown destination mimetype "'.$dst_mime_type.'"<br/>';
+				echo 'convertImage(): Unhandled mimetype "'.$to_mime.'"<br/>';
 				return false;
 		}
-		echo 'Executing: '.$c.'<br/>';
+		//echo 'Executing: '.$c.'<br/>';
 		exec($c);
-
 		if (!file_exists($dst_file)) return false;
 		return true;
+	}
+
+	/**
+	 * Rotates a image the specified angle. Uses imagemagick if possible
+	 * The gd function imagerotate() is only available in bundled gd (php windows) - FIXME check if this changes with php6!
+	 *
+	 * So if it isn't availiable we fall back to use imagemagick's "convert" program
+	 */
+	function rotateImage($in_file, $out_file, $_angle)
+	{
+		global $config, $files;
+
+		$mime = $files->lookupMimeType($in_file);
+
+		if ($files->image_convert) {
+			//Rotate with imagemagick
+			switch ($mime)
+			{
+				case 'image/jpeg':
+					$c = 'convert -rotate '.$_angle. ' -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
+					break;
+
+				case 'image/png':
+					$c = 'convert -rotate '.$_angle. ' '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
+					break;
+
+				case 'image/gif':
+					$c = 'convert -rotate '.$_angle. ' '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
+					break;
+
+				default:
+					echo 'rotateImage(): Unhandled mimetype "'.$mime.'"<br/>';
+					return false;
+			}
+			//echo 'Executing: '.$c.'<br/>';
+			exec($c);
+			if (!file_exists($out_file)) return false;
+			return true;
+		}
+
+		if (!function_exists('imagerotate')) {
+			die('CANNOT ROTATE IMAGE. PLEASE INSTALL IMAGEMAGICK OR BUNDLED PHP_GD!');
+		}
+
+		switch ($mime)
+		{
+   		case 'image/png': $im = imagecreatefrompng($in_file); break;
+   		case 'image/gif': $im = imagecreatefromgif($in_file); break;
+			case 'image/jpeg': $im = imagecreatefromjpeg($in_file); break;
+   		default: die('Unsupported image type '.$mime);
+		}
+
+		$rotated = imagerotate($im, $_angle, 0);
+		imagedestroy($im);
+
+		switch ($mime)
+		{
+   		case 'image/png': imagepng($rotated, $filename); break;
+   		case 'image/gif': imagegif($rotated, $filename); break;
+   		case 'image/jpeg': imagejpeg($rotated, $filename, $config['image']['jpeg_quality']); break;
+   		default: die('Unsupported image type '.$mime);
+		}
+
+		imagedestroy($rotated);
 	}
 
 	/**
@@ -207,69 +272,5 @@
 			$i++;
 		}
 		return $im;
-	}
-
-	/**
-	 * the gd function imagerotate() is only available in bundled gd (php windows) - FIXME check if this changes with php6!
-	 * FIXME this wont take negative values for rotate left!
-	 */
-	function my_imagerotate($im, $angle)
-	{
-		if (function_exists("imagerotate")) {
-			return imagerotate($im, $angle, 0);
-		}
-
-		$src_x = imagesx($im);
-		$src_y = imagesy($im);
-		if ($angle == 180) {
-			$dest_x = $src_x;
-			$dest_y = $src_y;
-		}
-		elseif ($src_x <= $src_y) {
-			$dest_x = $src_y;
-			$dest_y = $src_x;
-		}
-		elseif ($src_x >= $src_y) {
-			$dest_x = $src_y;
-			$dest_y = $src_x;
-		}
-
-		$rotate = imagecreatetruecolor($dest_x, $dest_y);
-		imagealphablending($rotate, false);
-
-		switch ($angle) {
-			case -90:
-			case 90:
-				for ($y = 0; $y < ($src_y); $y++) {
-					for ($x = 0; $x < ($src_x); $x++) {
-						$color = imagecolorat($im, $x, $y);
-						imagesetpixel($rotate, $y, $dest_y - $x - 1, $color);
-					}
-				}
-				break;
-
-			case -180:
-			case 180:
-				for ($y = 0; $y < ($src_y); $y++) {
-					for ($x = 0; $x < ($src_x); $x++) {
-						$color = imagecolorat($im, $x, $y);
-						imagesetpixel($rotate, $dest_x - $x - 1, $dest_y - $y - 1, $color);
-					}
-				}
-				break;
-
-			case -270:
-			case 270:
-				for ($y = 0; $y < ($src_y); $y++) {
-					for ($x = 0; $x < ($src_x); $x++) {
-						$color = imagecolorat($im, $x, $y);
-						imagesetpixel($rotate, $dest_x - $y - 1, $x, $color);
-					}
-				}
-				break;
-
-			default: $rotate = $im;
-		}
-		return $rotate;
 	}
 ?>

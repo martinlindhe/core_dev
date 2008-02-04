@@ -101,9 +101,9 @@ class Files
 	private $image_max_height			= 900;
 
 	public $anon_uploads					= false;		///< allow unregisterd users to upload files
-	private $count_file_views			= false;		///< auto increments the "cnt" in tblFiles in each $files->sendFile() call
+	public $count_file_views			= false;		///< FIXME REMOVE! auto increments the "cnt" in tblFiles in each $files->sendFile() call
 	public $apc_uploads					= false;		///< enable support for php_apc + php_uploadprogress calls
-	private $image_convert				= true;			///< use imagemagick to handle exotic image formats
+	public $image_convert				= true;			///< use imagemagick to handle exotic image formats
 
 	/**
 	 * Constructor. Initializes class configuration
@@ -637,26 +637,9 @@ class Files
 
 		$filename = $this->findUploadPath($_id);
 
-		switch ($data['fileMime'])
-		{
-   		case 'image/png':	$image = imagecreatefrompng($filename); break;
-   		case 'image/jpeg': $image = imagecreatefromjpeg($filename); break;
-   		case 'image/gif': $image = imagecreatefromgif($filename); break;
-   		default: die('Unsupported image type '.$data['fileMime']);
-		}
-
-		$rotated = my_imagerotate($image, $_angle);
-
-		switch ($data['fileMime'])
-		{
-   		case 'image/png':	imagepng($rotated, $filename); imagepng($rotated); break;
-   		case 'image/jpeg': imagejpeg($rotated, $filename, $this->image_jpeg_quality); imagejpeg($rotated); break;
-   		case 'image/gif': imagegif($rotated, $filename); imagegif($rotated); break;
-   		default: die('Unsupported image type '.$data['fileMime']);
-		}
-
-		imagedestroy($image);
-		imagedestroy($rotated);
+		rotateImage($filename, $filename, $_angle);
+		$this->setNoCacheHeaders();
+		$this->sendImage($_id);
 
 		$this->clearThumbs($_id);
 		$this->makeThumbnail($_id);

@@ -25,7 +25,7 @@
 		}
 
 		if (($session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
-			$file->handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
+			$files->handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
 			unset($_FILES['file1']);	//to avoid further processing of this file upload elsewhere
 			if ($fileType == FILETYPE_WIKI) {
 				addRevision(REVISIONS_WIKI, $ownerId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
@@ -228,26 +228,26 @@
 	 */
 	function showFileInfo($_id)
 	{
-		global $session;
+		global $session, $files;
 
-		$file = $this->getFileInfo($_id);
+		$file = $files->getFileInfo($_id);
 		if (!$file) return false;
 
 		echo 'Name: '.strip_tags($file['fileName']).'<br/>';
 		echo 'Filesize: '.formatDataSize($file['fileSize']).' ('.$file['fileSize'].' bytes)<br/>';
 		echo 'Uploader: '.htmlentities($file['uploaderName']).'<br/>';
 		echo 'At: '.$file['timeUploaded'].' ('.ago($file['timeUploaded']).')<br/>';
-		if ($this->count_file_views) echo 'Downloaded: '.$file['cnt'].' times<br/>';
+		if ($files->count_file_views) echo 'Downloaded: '.$file['cnt'].' times<br/>';
 		echo 'Mime type: '.$file['fileMime'].'<br/>';
 
-		if (in_array($file['fileMime'], $this->image_mime_types))
+		if (in_array($file['fileMime'], $files->image_mime_types))
 		{
 			//Show additional information for image files
-			list($img_width, $img_height) = getimagesize($this->findUploadPath($_id));
+			list($img_width, $img_height) = getimagesize($files->findUploadPath($_id));
 			echo 'Width: '.$img_width.', Height: '.$img_height.'<br/>';
 			echo makeThumbLink($_id);
 		}
-		else if (in_array($file['fileMime'], $this->audio_mime_types) && extension_loaded('id3'))
+		else if (in_array($file['fileMime'], $files->audio_mime_types) && extension_loaded('id3'))
 		{
 			//Show additional information for audio files
 			echo '<h3>id3 tag</h3>';
@@ -256,7 +256,7 @@
 		}
 
 		//display checksums, if any
-		$arr = $this->checksums($_id);
+		$arr = $files->checksums($_id);
 		echo '<h3>Checksums</h3>';
 		echo '<pre>';
 		echo 'sha1: '.$arr['sha1']."\n";
