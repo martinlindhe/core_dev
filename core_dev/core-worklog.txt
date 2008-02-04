@@ -17,6 +17,7 @@
 		subdirectories depending on file id, to avoid pitfalls with slow file system
 		and very large directories
 	- core/functions_image.php: cleaned up image resize code a bit
+	- core/functions_fileareas.php: moved filearea implementation out of class.Files.php
 
 
 2008.02.01:

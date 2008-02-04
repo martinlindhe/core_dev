@@ -26,6 +26,7 @@
 	require_once('functions_messages.php');
 	require_once('functions_forum.php');
 	require_once('functions_todo.php');
+	require_once('functions_fileareas.php');
 	require_once('atom_polls.php');				//for site polls, note: not nessecary here since this project use news module which force includes it, but included for clarity
 	restore_include_path();
 

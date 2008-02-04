@@ -17,23 +17,21 @@ require_once('atom_categories.php');		//for file categories support
 require_once('functions_image.php');
 require_once('functions_time.php');			//for ago()
 
+define('FILETYPE_WIKI',							1);		// The file is a wiki attachment
+define('FILETYPE_BLOG',							2);		// The file is a blog attachment
+define('FILETYPE_NEWS',							3);		// The file is a news attachment
+define('FILETYPE_FILEAREA_UPLOAD',	4);		// File is uploaded to a file area
+define('FILETYPE_USERFILE',					5);		// File is uploaded to the user's own file area
+define('FILETYPE_USERDATA',					6);		// File is uploaded to a userdata field
+define('FILETYPE_FORUM',						7);		// File is attached to a forum post
+define('FILETYPE_PROCESS',					8);		// File uploaded to be processed
+define('FILETYPE_PROCESS_CLONE',		9);		// a clone entry for a process file.
+define('FILETYPE_VIDEOBLOG',				10);	// video clip representing a user submitted blog
+define('FILETYPE_VIDEOPRES',				11);	// video clip representing a presentation of the user
+define('FILETYPE_VIDEOMESSAGE',			12);	// video clip respresenting a private message
+define('FILETYPE_VIDEOCHATREQUEST',	13);	// video clip representing a live videochat request
 
-define('FILETYPE_WIKI',						1); // The file is a wiki attachment
-define('FILETYPE_BLOG',						2);	// The file is a blog attachment
-define('FILETYPE_NEWS',						3);	// The file is a news attachment
-
-define('FILETYPE_FILEAREA_UPLOAD',4);	/* File is uploaded to a file area */
-define('FILETYPE_USERFILE',				5);	/* File is uploaded to the user's own file area */
-define('FILETYPE_USERDATA',				6);	/* File is uploaded to a userdata field */
-define('FILETYPE_FORUM',					7);	/* File is attached to a forum post */
-define('FILETYPE_PROCESS',				8);	/* File uploaded to be processed */
-define('FILETYPE_PROCESS_CLONE',	9);	/* a clone entry for a process file. */
-define('FILETYPE_VIDEOBLOG',			10); /* video clip representing a user submitted blog */
-define('FILETYPE_VIDEOPRES',			11); /* video clip representing a presentation of the user */
-define('FILETYPE_VIDEOMESSAGE',		12); /* video clip respresenting a private message */
-define('FILETYPE_VIDEOCHATREQUEST',	13);	 /* video clip representing a live videochat request */
-
-define('FILETYPE_GENERIC',				20); /* generic file type, for application specific file type */
+define('FILETYPE_GENERIC',				20); // generic file type, for application specific file type
 
 //for future use:
 define('MEDIATYPE_IMAGE',				1);
@@ -44,9 +42,6 @@ define('MEDIATYPE_WEBRESOURCE',	5);	//webresources can/will contain other files.
 
 class Files
 {
-	/* Non configurable, shouldnt be needed to be changed */
-	private $htaccess = "Deny from all\nOptions All -Indexes";
-
 	public $image_mime_types = array(
 		'image/jpeg',
 		'image/png',
@@ -95,28 +90,20 @@ class Files
 	); ///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
 
 	/* User configurable settings */
-	public $upload_dir = '/webupload/';				///<Default upload directory
+	public $upload_dir = '/webupload/';				///< Default upload directory
 
-	public $tmp_dir = '/tmp/';								///<temp directory
+	public $tmp_dir = '/tmp/';								///< temp directory
 
-	public $thumb_default_width		= 80;				///<Default width of thumbnails
-	public $thumb_default_height	= 80;				///<Default height of thumbnails
+	public $thumb_default_width		= 80;				///< Default width of thumbnails
+	public $thumb_default_height	= 80;				///< Default height of thumbnails
 
-	private $image_max_width			= 1100;			///<bigger images will be resized to this size
+	private $image_max_width			= 1100;			///< bigger images will be resized to this size
 	private $image_max_height			= 900;
 
-	public $anon_uploads					= false;		///<allow unregisterd users to upload files
-	private $count_file_views			= false;		///<auto increments the "cnt" in tblFiles in each $files->sendFile() call
-	private $apc_uploads					= false;		///<enable support for php_apc + php_uploadprogress calls
-
-	/* If $image_convert is enabled, it uses ImageMagick to convert the following image formats:
-		- BMP images gets converted to JPG
-		- SVG images gets converted to PNG
-
-		 ImageMagick is a open source and multi platform image converter
-		 http://www.imagemagick.org/download/
-	*/
-	private $image_convert				= true;
+	public $anon_uploads					= false;		///< allow unregisterd users to upload files
+	private $count_file_views			= false;		///< auto increments the "cnt" in tblFiles in each $files->sendFile() call
+	public $apc_uploads					= false;		///< enable support for php_apc + php_uploadprogress calls
+	private $image_convert				= true;			///< use imagemagick to handle exotic image formats
 
 	/**
 	 * Constructor. Initializes class configuration
@@ -134,7 +121,6 @@ class Files
 		if (isset($config['image_max_height'])) $this->image_max_height = $config['image_max_height'];
 		if (isset($config['thumb_default_width'])) $this->thumb_default_width = $config['thumb_default_width'];
 		if (isset($config['thumb_default_height'])) $this->thumb_default_height = $config['thumb_default_height'];
-		if (isset($config['image_jpeg_quality'])) $this->image_jpeg_quality = $config['image_jpeg_quality'];
 
 		if (isset($config['count_file_views'])) $this->count_file_views = $config['count_file_views'];
 		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
@@ -177,275 +163,16 @@ class Files
 	}
 
 	/**
-	 * Performs mimetype lookup using "file" tool
+	 * Performs mimetype lookup using GNU file utility
 	 *
-	 * \param $fileName name of file to check
+	 * \param $filename name of file to check
 	 */
-	function lookupMimeType($fileName)
+	function lookupMimeType($filename)
 	{
-		//IMPORTANT todo: validate $fileName
+		if (!file_exists($filename)) return false;
 
-		//$c = '"C:\Program Files\GnuWin32\bin\file.exe" -bi '.$fileName;
-		$c = 'file -bi '.$fileName;
-		//echo 'Executing: '.$c.'<br/>';
-		$result = exec($c);
-		//echo 'result: '.$result.'<br/>';
-		return $result;
-	}
-
-	/*
-	function lookupMimeType($fileName)
-	{
-		//libmagic automatically appends the .mime to the end of the filename, so PHP incorrectly reports the path it was looking for. 
-		$finfo = new finfo(FILEINFO_MIME, "E:/Devel/magic");
-		if (!$finfo) {
-			echo 'Failed to init finfo';
-			return false;
-		}
-
-		echo 'mime of '.$fileName;
-		echo $finfo->file($fileName);
-		return 'xx';
-	}*/
-
-	/**
-	 * Shows all files uploaded in a public file area (FILETYPE_FILEAREA_UPLOAD)
-	 * Or all files belonging to a wiki (FILETYPE_WIKI)
-	 *
-	 * \param $fileType type of files to show
-	 * \param $ownerId show files from this owner only
-	 * \param $categoryId show files from this category only
-	 */
-	function showFiles($fileType, $ownerId = 0, $categoryId = 0)
-	{
-		global $session, $db, $config;
-		if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
-
-		if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE || $fileType == FILETYPE_WIKI) {
-			if (!empty($_GET['file_category_id']) && is_numeric($_GET['file_category_id'])) $categoryId = $_GET['file_category_id'];
-		}
-
-		if (($session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
-			$this->handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
-			unset($_FILES['file1']);	//to avoid further processing of this file upload elsewhere
-			if ($fileType == FILETYPE_WIKI) {
-				addRevision(REVISIONS_WIKI, $ownerId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
-			}
-		}
-
-		$userid = $session->id;
-		$username = $session->username;
-
-		$action = '';
-		if ($categoryId) $action = '?file_category_id='.$categoryId;
-
-		echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;">';
-		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="'.$config['core_web_root'].'gfx/ajax_loading.gif"/></div>';
-
-		echo '<div class="file_gadget">';
-
-		echo '<div class="file_gadget_header">';
-
-		switch ($fileType)
-		{
-			case FILETYPE_USERFILE:
-				if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
-					$userid = $_GET['id'];
-					$username = Users::getName($userid);
-				}
-				echo 'Files:'.$username;
-				echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
-				break;
-
-			case FILETYPE_FILEAREA_UPLOAD:
-				if (!$categoryId) echo 'File area - Root Level content';
-				else echo ' - '.getCategoryName(CATEGORY_USERFILE, $categoryId).' content';
-				break;
-
-			case FILETYPE_WIKI:
-				if (!$categoryId) echo 'Wiki files - Root Level content';
-				echo 'Wiki attachments';
-				echo getCategoriesSelect(CATEGORY_WIKIFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
-				break;
-
-			case FILETYPE_BLOG:
-				echo 'Blog attachments';
-				break;
-
-			case FILETYPE_NEWS:
-				echo 'News article attachments';
-				break;
-
-			default:
-				die('unknown filetype');
-		}
-		echo '</div>';
-
-		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId.' ORDER BY timeUploaded ASC';
-		$list = $db->getArray($q);
-
-		$this->showImageGadgetXHTML();
-		$this->showAudioGadgetXHTML();
-		$this->showVideoGadgetXHTML();
-		$this->showDocumentGadgetXHTML();
-
-		echo '<div id="zoom_fileinfo" style="display:none"></div>';
-		echo '<div class="file_gadget_content">';
-
-		foreach ($list as $row)
-		{
-			$title = htmlspecialchars($row['fileName']).' ('.formatDataSize($row['fileSize']).')';
-			if (in_array($row['fileMime'], $this->image_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].');"><center>';
-				echo makeThumbLink($row['fileId']);
-				echo '</center></div>';
-			} else if (in_array($row['fileMime'], $this->audio_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"><center>';
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
-				echo '</center></div>';
-			} else if (in_array($row['fileMime'], $this->video_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"><center>';
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_video.png" width="32" height="32" alt="Video file"/>';
-				echo '</center></div>';
-			} else if (in_array($row['fileMime'], $this->document_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_document.png" width="40" height="49" alt="Document"/>';
-				echo '</center></div>';
-			} else {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
-				echo 'General file:<br/>';
-				echo $row['fileMime'].'<br/>';
-				echo '</center></div>';
-			}
-		}
-		echo '</div>';
-
-		//FIXME: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
-		//FIXME: stöd anon_uploads ! den ignoreras totalt idag, dvs anon uploads tillåts aldrig
-		if ( 
-				($fileType == FILETYPE_USERFILE && $session->id == $userid) ||
-				($fileType == FILETYPE_NEWS && $session->isAdmin) ||
-				($fileType == FILETYPE_WIKI) ||
-				($fileType == FILETYPE_BLOG) ||
-				($fileType == FILETYPE_FILEAREA_UPLOAD)
-				)
-		{
-			$file_upload = true;
-			if ($fileType == FILETYPE_BLOG) {
-				$data = getBlog($ownerId);
-				if ($data['userId'] != $session->id) $file_upload = false;
-			}
-
-			if ($file_upload) {
-				echo '<div id="file_gadget_upload">';
-				if (($fileType == FILETYPE_USERFILE && !$categoryId && $session->id == $userid) ||
-						($fileType == FILETYPE_WIKI)
-						)
-				{
-					echo '<input type="button" class="button" value="New file category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
-				}
-
-				if ($this->apc_uploads) {
-					echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.');">';
-					echo '<input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$session->id.'"/>';
-				} else {
-					echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
-				}
-				echo '<input type="file" name="file1"/> ';
-				echo '<input type="submit" class="button" value="Upload"/>';
-				echo '</form>';
-				echo '</div>';
-				if ($this->apc_uploads) {
-					echo '<div id="file_gadget_apc_progress" style="display:none">';
-					echo '</div>';
-				}
-			}
-		}
-
-		if (($fileType == FILETYPE_USERFILE && !$categoryId) ||
-				($fileType == FILETYPE_WIKI)
-				)
-		{
-			echo '<div id="file_gadget_category" style="display: none;">';
-			if ($fileType == FILETYPE_USERFILE) echo manageCategoriesDialog(CATEGORY_USERFILE);
-			if ($fileType == FILETYPE_WIKI) echo manageCategoriesDialog(CATEGORY_WIKIFILE);
-			echo '</div>';
-		}
-
-		echo '</div>';
-	}
-
-	/**
-	 * Shows tumbnail overview of files
-	 * Click a thumbnail to show the whole image
-	 *
-	 * \param $fileType type of files to show
-	 * \param $categoryId category to display files from
-	 */
-	function showThumbnails($fileType, $categoryId)
-	{
-		global $config, $session, $db;
-		if (!is_numeric($fileType)) return false;
-
-		$list = $db->getArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
-
-		if (!$list) {
-			echo 'No thumbnails to show!';
-			return;
-		}
-
-		echo '<div id="image_thumbs_scroll_up" onclick="scroll_element_content(\'image_thumbs_scroller\', -'.($this->thumb_default_height*3).');"></div>';
-		echo '<div id="image_thumbs_scroll_down" onclick="scroll_element_content(\'image_thumbs_scroller\', '.($this->thumb_default_height*3).');"></div>';
-		echo '<div id="image_thumbs_scroller">';
-
-		//show thumbnail of each image
-		echo '<div class="thumbnails_gadget">';
-		foreach ($list as $row) {
-			if (in_array($row['fileMime'], $this->image_mime_types)) {
-				echo '<div class="thumbnails_gadget_entry" id="thumb_'.$row['fileId'].'" onclick="loadImage('.$row['fileId'].', \'image_big\');"><center>';
-				echo makeThumbLink($row['fileId'], $row['fileName']);
-				echo '</center></div>';
-			}
-		}
-		echo '</div>';
-		echo '</div>'; //id="image_thumbs_scroller"
-
-		echo '<div id="image_comments">';
-		echo '<iframe id="image_comments_iframe" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="'.$config['core_web_root'].'api/html_imgcomments.php?i='.$list[0]['fileId'].getProjectPath().'"></iframe>';
-		echo '</div>';
-
-		echo '<div id="image_big_holder">';
-
-		echo '<div id="image_big">'.makeImageLink($list[0]['fileId'], $list[0]['fileName']).'</div>';
-
-		echo '</div>';	//id="image_big_holder"
-	}
-	
-	/**
-	 * Shows attachments. used to show files attached to a forum post
-	 *
-	 * \param $_type type of file
-	 * \param $_owner owner of the files
-	 */
-	function showAttachments($_type, $_owner)
-	{
-		global $config;
-
-		$list = $this->getFiles($_type,  $_owner);
-
-		if (count($list)) {
-			echo '<hr/>';
-			echo 'Attached files:<br/>';
-			foreach ($list as $row) {
-				$show_text = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
-				echo '<a href="'.$config['core_web_root'].'api/file_pt.php?id='.$row['fileId'].getProjectPath().'" target="_blank">';
-				if (in_array($row['fileMime'], $this->image_mime_types)) {
-					echo makeThumbLink($row['fileId'], $show_text).'</a> ';
-				} else {
-					echo $show_text.'</a><br/>';
-				}
-			}
-		}
+		$c = 'file -bi '.$filename;
+		return exec($c);
 	}
 
 	/**
@@ -1117,47 +844,30 @@ class Files
 	}
 
 	/**
-	 * Used by the ajax file core/ajax_fileinfo.php to show file details of currently selected file
+	 * Shows attachments. used to show files attached to a forum post
 	 *
-	 * \param $_id fileId
+	 * \param $_type type of file
+	 * \param $_owner owner of the files
 	 */
-	function showFileInfo($_id)
+	function showAttachments($_type, $_owner)
 	{
-		global $session;
+		global $config;
 
-		$file = $this->getFileInfo($_id);
-		if (!$file) return false;
+		$list = $this->getFiles($_type, $_owner);
 
-		echo 'Name: '.strip_tags($file['fileName']).'<br/>';
-		echo 'Filesize: '.formatDataSize($file['fileSize']).' ('.$file['fileSize'].' bytes)<br/>';
-		echo 'Uploader: '.htmlentities($file['uploaderName']).'<br/>';
-		echo 'At: '.$file['timeUploaded'].' ('.ago($file['timeUploaded']).')<br/>';
-		if ($this->count_file_views) echo 'Downloaded: '.$file['cnt'].' times<br/>';
-		echo 'Mime type: '.$file['fileMime'].'<br/>';
-
-		if (in_array($file['fileMime'], $this->image_mime_types))
-		{
-			//Show additional information for image files
-			list($img_width, $img_height) = getimagesize($this->findUploadPath($_id));
-			echo 'Width: '.$img_width.', Height: '.$img_height.'<br/>';
-			echo makeThumbLink($_id);
+		if (count($list)) {
+			echo '<hr/>';
+			echo 'Attached files:<br/>';
+			foreach ($list as $row) {
+				$show_text = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
+				echo '<a href="'.$config['core_web_root'].'api/file_pt.php?id='.$row['fileId'].getProjectPath().'" target="_blank">';
+				if (in_array($row['fileMime'], $this->image_mime_types)) {
+					echo makeThumbLink($row['fileId'], $show_text).'</a> ';
+				} else {
+					echo $show_text.'</a><br/>';
+				}
+			}
 		}
-		else if (in_array($file['fileMime'], $this->audio_mime_types) && extension_loaded('id3'))
-		{
-			//Show additional information for audio files
-			echo '<h3>id3 tag</h3>';
-			$id3 = @id3_get_tag($this->findUploadPath($_id), ID3_V2_2);	//XXX: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this
-			d($id3);
-		}
-
-		//display checksums, if any
-		$arr = $this->checksums($_id);
-		echo '<h3>Checksums</h3>';
-		echo '<pre>';
-		echo 'sha1: '.$arr['sha1']."\n";
-		echo 'md5:  '.$arr['md5']."\n";
-		echo '</pre>';
-		echo 'Generated at '.$arr['timeCreated'].' in '.$arr['timeExec'].' sec<br/>';
 	}
 
 	/**
@@ -1188,109 +898,5 @@ class Files
 		return $db->getOneItem($q);
 	}
 
-	/**
-	 * Generates image gadget
-	 */
-	function showImageGadgetXHTML()
-	{
-		global $config, $session;
-?>
-<div id="zoom_image_layer" style="display:none">
-	<center>
-		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/>
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/><br/>
-
-		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
-
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
-		<input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
-		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
-		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
-		<input type="button" class="button" value="Move image" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
-<? } ?>
-<? if (!empty($config['news']['allow_rating'])) { ?>
-		<br/>
-		<div class="image_rate">
-		<?
-			//ratingGadget(RATE_IMAGE, 1)
-			//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
-		?>
-		</div>
-<? } ?>
-	</center>
-</div>
-<?
-	}
-
-	/**
-	 * Generates audio gadget
-	 */
-	function showAudioGadgetXHTML()
-	{
-		global $session;
-?>
-<div id="zoom_audio_layer" style="display:none">
-	<center>
-		<div id="zoom_audio" style="width: 160px; height: 50px;"></div>
-		<br/>
-		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
-
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
-	}
-
-	/**
-	 * Generates video gadget
-	 */
-	function showVideoGadgetXHTML()
-	{
-		global $session;
-?>
-<div id="zoom_video_layer" style="display:none">
-	<center>
-		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/><br/>
-
-		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
-
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
-	}
-
-	/**
-	 * Generates document gadget
-	 */
-	function showDocumentGadgetXHTML()
-	{
-		global $session;
-?>
-<div id="zoom_file_layer" style="display:none">
-	<center>
-		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
-	}
 }
+?>

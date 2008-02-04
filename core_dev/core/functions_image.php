@@ -211,6 +211,7 @@
 
 	/**
 	 * the gd function imagerotate() is only available in bundled gd (php windows) - FIXME check if this changes with php6!
+	 * FIXME this wont take negative values for rotate left!
 	 */
 	function my_imagerotate($im, $angle)
 	{

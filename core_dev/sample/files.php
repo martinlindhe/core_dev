@@ -9,7 +9,7 @@
 	$userId = $session->id;
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) $userId = $_GET['id'];
 	
-	$files->showFiles(FILETYPE_USERFILE, $userId);
+	showFiles(FILETYPE_USERFILE, $userId);
 
 	require('design_foot.php');
 ?>
