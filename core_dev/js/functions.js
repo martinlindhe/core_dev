@@ -379,11 +379,9 @@ function add_node_and_focus(e,t,s) {
 }
 
 /* focuses on the faq item #i */
-function faq_focus(n)
-{
+function faq_focus(n) {
 	e = document.getElementById('faq_'+n);
 	if (!e) return;
-
 	e.style.display = '';	//show
 
 	for (i=0;i<=100;i++) {
@@ -391,6 +389,9 @@ function faq_focus(n)
 		e = document.getElementById('faq_'+i);
 		if (!e) return;
 		e.style.display = 'none';	//hide
+
+		hide_element_by_name('faq_edit_'+i);
+		show_element_by_name('faq_holder_'+i);
 	}
 }
 

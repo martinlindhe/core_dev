@@ -9,6 +9,9 @@ todo:
   - core/class.Session.php: major refactoring with regards to the new
     authentication class
 	- core/class.Users.php: made a class out of functions_users.php
+	- db: tblVisits.type new column
+	- core/functions_visits.php: new file for general visitor logging of objects
+	- core/functions_faq.php: can now edit & delete faq entries
 
 
 2008.02.01:

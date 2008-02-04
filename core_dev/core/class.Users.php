@@ -7,8 +7,9 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-$config['user']['log_visitors'] = true;	//log each visit on users personal page from another user
+require_once('functions_visits.php');
 
+$config['user']['log_visitors'] = true;	
 
 class Users
 {
@@ -285,7 +286,7 @@ class Users
 		echo '<h2>Search for users</h2>';
 
 		if (isset($_POST['c'])) {
-			$list = $this->getSearchResult($_POST);
+			$list = Users::getSearchResult($_POST);
 
 			if (!empty($_POST['c'])) echo 'Search result for "'.$_POST['c'].'", ';
 			else echo 'Custom search result, ';
