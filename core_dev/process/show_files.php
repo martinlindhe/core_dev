@@ -17,7 +17,7 @@
 
 	foreach ($list as $row) {
 		echo '<a href="show_file_status.php?id='.$row['fileId'].'">'.$row['fileName'].'</a>';
-		echo ', mime='.$row['fileMime'].' uploaded '.$row['timeUploaded'].' by '.nameLink($row['uploaderId']).'<br/>';
+		echo ', mime='.$row['fileMime'].' uploaded '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
 	}
 
 	echo '<h1>Clones:</h1>';
@@ -26,7 +26,7 @@
 
 	foreach ($list as $row) {
 		echo '<a href="show_file_status.php?id='.$row['fileId'].'">Orginal file</a>';
-		echo ', mime='.$row['fileMime'].' created '.$row['timeUploaded'].' by '.nameLink($row['uploaderId']).'<br/>';
+		echo ', mime='.$row['fileMime'].' created '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
 	}
 
 

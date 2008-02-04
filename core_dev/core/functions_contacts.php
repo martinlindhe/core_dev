@@ -275,7 +275,7 @@
 		$db->delete($q);
 
 		//tell the request sender that the request was denied
-		$msg = nameLink($session->id).' denied your friend request.';
+		$msg = Users::link($session->id).' denied your friend request.';
 		systemMessage($otherId, 'Denied friend request', $msg);
 
 		return true;
@@ -303,7 +303,7 @@
 		setContact(CONTACT_FRIEND, $otherId, $session->id);
 
 		//tell the request sender that the request was accepted
-		$msg = nameLink($session->id).' accepted your friend request, and has been added to your contact list.';
+		$msg = Users::link($session->id).' accepted your friend request, and has been added to your contact list.';
 		systemMessage($otherId, 'Accepted friend request', $msg);
 		return true;
 	}
@@ -348,7 +348,7 @@
 				}
 				echo '<h1>Send friend request</h1>';
 				echo '<form method="post" action="">';
-				echo 'So you wish to send a friend request to '.nameLink($userId).'?<br/>';
+				echo 'So you wish to send a friend request to '.Users::link($userId).'?<br/>';
 				echo 'First, you need to choose relation type: ';
 				echo getCategoriesSelect(CATEGORY_CONTACT, 0, 'type_id').'<br/>';
 				echo '(Optional) send a message:<br/>';
@@ -401,7 +401,7 @@
 
 				foreach ($list as $row) {
 					echo '<div class="item">';
-					echo nameLink($row['recieverId'], $row['recieverName']).' - ';
+					echo Users::link($row['recieverId'], $row['recieverName']).' - ';
 					echo '<a href="?request_stopwait='.$row['recieverId'].'">Remove</a><br/>';
 					echo '</div><br/>';
 				}
@@ -412,7 +412,7 @@
 				echo 'Your recieved friend requests:<br/>';
 				foreach ($list as $row) {
 					echo '<div class="item">';
-					echo nameLink($row['senderId'], $row['senderName']).' wants to be '.$row['categoryName'].' - Do you ';
+					echo Users::link($row['senderId'], $row['senderName']).' wants to be '.$row['categoryName'].' - Do you ';
 					echo '<a href="?request_accept='.$row['senderId'].'">Accept</a> or ';
 					echo '<a href="?request_deny='.$row['senderId'].'">Deny</a>?<br/>';
 					if ($row['msg']) {
@@ -426,7 +426,7 @@
 		$list = getContactsFlat(CONTACT_FRIEND, $userId);
 
 		if ($session->id != $userId) {
-			echo 'Friends:'.getUserName($userId).'<br/>';
+			echo 'Friends:'.Users::getName($userId).'<br/>';
 		} else {
 			echo 'Your friend list:<br/>';
 		}
@@ -439,7 +439,7 @@
 		foreach ($list as $row) {
 			echo '<div class="'.($row['isOnline']?'friend_online':'friend_offline').'">';
 
-			echo nameLink($row['otherUserId'], $row['contactName']);
+			echo Users::link($row['otherUserId'], $row['contactName']);
 
 			echo '<a href="mess_new.php?id='.$row['contactId'].'"><img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="Send a message to '.$row['contactName'].'"/></a>';
 			echo '</div>';

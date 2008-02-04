@@ -8,7 +8,7 @@ todo:
     authentication
   - core/class.Session.php: major refactoring with regards to the new
     authentication class
-
+	- core/class.Users.php: made a class out of functions_users.php
 
 
 2008.02.01:

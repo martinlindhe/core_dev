@@ -9,7 +9,7 @@
 	
 	$list = getClosedBugReports($db);
 	for ($i=0; $i<count($list); $i++) {
-		$content .= getRelativeTimeLong($list[$i]['timestamp']).', by '.nameLink($list[$i]["bugCreator"], $list[$i]["userName"]);
+		$content .= getRelativeTimeLong($list[$i]['timestamp']).', by '.Users::link($list[$i]['bugCreator'], $list[$i]['userName']);
 
 		$content .= ' via the '.($list[$i]['reportMethod'] ? 'game':'site');
 		$content .= ' (Closed because: <b>'.$close_bug_reason[$list[$i]['bugClosedReason']].'</b>)<br>';

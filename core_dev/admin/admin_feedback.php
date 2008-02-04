@@ -30,7 +30,7 @@
 			die;
 		}
 		
-		echo 'Reply to message from '.nameLink($msg['userId']).':<br/>';
+		echo 'Reply to message from '.Users::link($msg['userId']).':<br/>';
 
 		$text = "In response to:\n".
 						'"'.$msg['text']."\"\n".
@@ -75,7 +75,7 @@
 
 			default: die('EEEP!!! error');
 		}
-		echo 'From '.nameLink($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
+		echo 'From '.Users::link($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
 		echo $row['text'].'<br/><br/>';
 		
 		if (!empty($row['text2'])) echo '<div class="item">Comment: '.$row['text2'].'</div><br/>';

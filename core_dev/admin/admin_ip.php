@@ -20,11 +20,11 @@
 		echo '<h1>'.$ip.' ('.gethostbyaddr($ip).')</h1>';
 		echo '<br/><br/>';
 		
-		$list = getUsersByIP($geoip);
+		$list = Users::byIP($geoip);
 
 		echo 'This IP is associated with '.count($list).' registered users:<br/>';
 		foreach ($list as $row) {
-			echo nameLink($row['userId'], $row['userName']).'<br/>';
+			echo Users::link($row['userId'], $row['userName']).'<br/>';
 		}
 		echo '<hr/>';
 		echo '<a href="http://www.dnsstuff.com/tools/whois.ch?ip='.$ip.'" target="_blank">Perform whois lookup</a><br/>';

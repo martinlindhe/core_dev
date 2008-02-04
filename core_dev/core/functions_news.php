@@ -140,7 +140,7 @@
 		if ($news['categoryId']) {
 			echo '<a href="news.php?cat='.$news['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $news['categoryId']).'</a><br/>';
 		}
-		echo 'By '.nameLink($news['creatorId'], $news['creatorName']);
+		echo 'By '.Users::link($news['creatorId'], $news['creatorName']);
 		if (datetime_less($news['timeToPublish'], now())) {
 			echo ', published '.$news['timeToPublish'].'<br/>';
 		} else {
@@ -268,7 +268,7 @@
 
 		echo '<h1>'.$row['title'].'</h1>';
 		echo '<div>';
-		echo '<div class="news_item_picl">'.nameThumbLink($row['creatorId'], $row['creatorName']).'</div>';
+		echo '<div class="news_item_picl">'.Users::linkThumb($row['creatorId'], $row['creatorName']).'</div>';
 			echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a> '.$row['timeToPublish'].'<br/>';	//fixme: show optional link title instead
 			$art = parseArticle($row['body']);
 			echo $art['head'];

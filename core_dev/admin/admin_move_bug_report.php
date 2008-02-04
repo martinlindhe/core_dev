@@ -26,7 +26,7 @@
 	$content = '<b>Administration screen - Move bug report</b><br><br>';
 
 	$content .= '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$bugId.'">';
-	$content .= getRelativeTimeLong($item['timestamp']).', by '.nameLink($item['bugCreator'], $item['userName']).'<br>';
+	$content .= getRelativeTimeLong($item['timestamp']).', by '.Users::link($item['bugCreator'], $item['userName']).'<br>';
 	$content .= '<input name="timestamp" type="hidden" value="'.$item['timestamp'].'">';
 	$content .= '<input name="creator" type="hidden" value="'.$item['bugCreator'].'">';
 	$content .= 'Description: <input size=40 type="text" name="desc"><br>';

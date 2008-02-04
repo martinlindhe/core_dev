@@ -37,7 +37,7 @@
 		$item['itemStatus'] = TODO_ITEM_ASSIGNED; //update changes
 		$item['assignedTo'] = $_POST['assignto']; //update changes
 			
-		$comment = $session->username.' assigned the task to '.getUserName($_POST['assignto']).'.';
+		$comment = $session->username.' assigned the task to '.Users::getName($_POST['assignto']).'.';
 		addComment(CATEGORY_TODOLIST, $itemId, $comment);
 			
 	} else if (isset($_GET['unassign'])) {
@@ -57,7 +57,7 @@
 	echo '<tr><td colspan=2>'.$item['itemDesc'].'<br><br></td></tr>';
 
 	echo '<tr><td colspan=2 bgcolor=#D0D0D0>'.nl2br($item['itemDetails']).'<br><br></td></tr>';
-	echo '<tr><td width=80>Created:</td><td>'.$item['timeCreated'].', '.'by '.nameLink($item['itemCreator'], $item['userName']);
+	echo '<tr><td width=80>Created:</td><td>'.$item['timeCreated'].', '.'by '.Users::link($item['itemCreator'], $item['userName']);
 	echo '</td></tr>';
 
 	echo '<tr><td>TODO list:</td><td>';
@@ -91,7 +91,7 @@
 				echo 'Nobody, assign to ';
 					
 				echo '<select name="assignto">';
-				$admins = getAdmins();
+				$admins = Users::getAdmins();
 				foreach ($admins as $arow) {
 					echo '<option value="'.$arow['userId'].'"';
 					if ($arow['userId'] == $session->id) echo ' selected';
@@ -103,7 +103,7 @@
 				echo 'Nobody';
 			}
 		} else {
-			echo nameLink($item['assignedTo'], getUserName($item['assignedTo']));
+			echo Users::link($item['assignedTo']);
 			if ($item['assignedTo'] == $session->id) {
 				echo ', <a href="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'&unassign=1">unassign</a>';
 			} else {

@@ -162,7 +162,7 @@
 		echo '<div class="blog_title">'.$blog['blogTitle'].'</div>';
 		if ($blog['categoryName']) echo '(category <b>'.$blog['categoryName'].'</b>)<br/><br/>';
 		else echo ' (no category)<br/><br/>';
-		echo 'Published '. $blog['timeCreated'].' by '.nameLink($blog['userId'], $blog['userName']).'<br/>';
+		echo 'Published '. $blog['timeCreated'].' by '.Users::link($blog['userId'], $blog['userName']).'<br/>';
 		echo '</div>'; //class="blog_head"
 
 		$menu = array($_SERVER['PHP_SELF'].'?Blog:'.$_id => 'Show blog');
@@ -264,7 +264,7 @@
 
 		if ($_userid_name && isset($_GET[$_userid_name]) && is_numeric($_GET[$_userid_name])) {
 			$userId = $_GET[$_userid_name];
-			echo 'Blogs:'.getUserName($userId).'<br/>';
+			echo 'Blogs:'.Users::getName($userId).'<br/>';
 		} else {
 			$userId = $session->id;
 			echo 'Your blogs:<br/>';

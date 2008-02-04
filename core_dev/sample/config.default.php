@@ -13,10 +13,11 @@
 
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
-	//require_once('class.DB_MySQL.php');
-	//require_once('class.DB_PostgreSQL.php');
+	require_once('class.Auth_Standard.php');
+	require_once('class.Users.php');
 	require_once('class.Session.php');
 	require_once('class.Files.php');
+	require_once('functions_general.php');
 	require_once('functions_faq.php');
 	require_once('functions_wiki.php');
 	require_once('functions_news.php');
@@ -67,7 +68,7 @@
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		//Someones profile
 		$param = '?id='.$_GET['id'];
-		$username = getUserName($_GET['id']);
+		$username = Users::getName($_GET['id']);
 		$profile_menu = array(
 			'user.php'.$param => 'Overview:'.$username,
 			'files.php'.$param => 'Files',

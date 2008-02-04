@@ -169,7 +169,7 @@
 		if (!empty($list)) {
 			echo '<h1>'.count($list).' queued actions</h1>';
 			foreach ($list as $row) {
-				echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.nameLink($row['creatorId']);
+				echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.Users::link($row['creatorId']);
 				echo ' type='.$row['orderType'].', params='.$row['orderParams'];
 				echo '</h3>';
 			}
@@ -199,7 +199,7 @@
 				echo '<td>?</td>';
 			}
 			echo '<td>'.$row['orderType'].'</td>';
-			echo '<td>'.nameLink($row['creatorId']).'</td>';
+			echo '<td>'.Users::link($row['creatorId']).'</td>';
 			//echo $row['orderParams'];
 			echo '</tr>';
 		}

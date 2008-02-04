@@ -100,11 +100,11 @@
 			echo '<div class="msg_head">';
 				echo ($msg['subject'] ? $msg['subject']:'no subject').' at '.$msg['timeCreated'].'<br/>';
 				if ($msg['fromId']) {
-					echo 'From '.nameLink($msg['fromId']).'<br/>';
+					echo 'From '.Users::link($msg['fromId']).'<br/>';
 				} else {
 					echo '<b>System message</b><br/>';
 				}
-				echo 'To '.nameLink($msg['toId']).'<br/>';
+				echo 'To '.Users::link($msg['toId']).'<br/>';
 				echo (!$msg['timeRead']?'UNREAD':'READ');
 			echo '</div>';
 			echo '<div class="msg_body">';

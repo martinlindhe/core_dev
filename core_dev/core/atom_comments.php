@@ -178,7 +178,7 @@
 		echo '<div id="comments_only">';
 		foreach ($list as $row) {
 			echo '<div class="comment_details">';
-			echo nameLink($row['userId'], $row['userName']).'<br/>';
+			echo Users::link($row['userId'], $row['userName']).'<br/>';
 			echo $row['timeCreated'];
 			echo '</div>';
 			echo '<div class="comment_text">'.$row['commentText'];
@@ -228,7 +228,7 @@
 		foreach ($list as $row) {
 			echo '<div class="comment_details">';
 			echo makeThumbLink($row['ownerId']);
-			echo nameLink($row['userId'], $row['userName']).'<br/>';
+			echo Users::link($row['userId'], $row['userName']).'<br/>';
 			echo $row['timeCreated'];
 			echo '</div>';
 			echo '<div class="comment_text">';

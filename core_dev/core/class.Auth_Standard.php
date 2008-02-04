@@ -8,6 +8,7 @@
  */
 
 require_once('class.Auth_Base.php');
+require_once('class.Users.php');
 
 require_once('atom_moderation.php');	//for checking if username is reserved on user registration
 require_once('functions_userdata.php');	//for showRequiredUserdataFields()
@@ -43,7 +44,7 @@ class Auth_Standard extends Auth_Base
 
 		if ($this->reserved_usercheck && isReservedUsername($username)) return 'Username is not allowed';
 
-		if (getUsersCnt()) {
+		if (Users::cnt()) {
 			$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
 			$checkId = $db->getOneItem($q);
 			if ($checkId) return 'Username already exists';
@@ -122,7 +123,7 @@ class Auth_Standard extends Auth_Base
 		echo '<div class="login_box">';
 
 		$allow_superadmin_reg = false;
-		if (!getUsersCnt()) {
+		if (!Users::cnt()) {
 			echo 'No users registered!';
 			$allow_superadmin_reg = true;
 		}

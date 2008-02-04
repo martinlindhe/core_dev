@@ -6,9 +6,9 @@
 
 	echo 'Users online (was active in the last '.shortTimePeriod($session->online_timeout).')<br/><br/>';
 
-	$list = getUsersOnline();
+	$list = Users::allOnline();
 	foreach ($list as $row) {
-		echo nameLink($row['userId'], $row['userName']).' at '.$row['timeLastLogin'].'<br/>';
+		echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastLogin'].'<br/>';
 	}
 
 	require('design_foot.php');

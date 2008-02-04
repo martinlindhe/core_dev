@@ -20,7 +20,7 @@
 			die;
 		}
 
-		echo 'Send a private message to '.nameLink($userId).'<br/>';
+		echo 'Send a private message to '.Users::link($userId).'<br/>';
 		echo '<form method="post" action="">';
 		echo 'Subject: <input type="text" name="msg_subj"/><br/>';
 		echo '<textarea name="msg" rows="8" cols="40"></textarea><br/>';

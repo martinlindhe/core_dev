@@ -14,7 +14,7 @@
 	$list = getBugReports($db);
 	for ($i=0; $i<count($list); $i++) {
 		$content .= '<div class="objectCritical">';
-		$content .= getRelativeTimeLong($list[$i]['timestamp']).', by '.nameLink($list[$i]['bugCreator'], $list[$i]['userName']);
+		$content .= getRelativeTimeLong($list[$i]['timestamp']).', by '.Users::link($list[$i]['bugCreator'], $list[$i]['userName']);
 		$content .= ' via the '.($list[$i]['reportMethod'] ? 'game':'site').'<br>';
 		$content .= nl2br($list[$i]['bugDesc']).'<br>';
 		$content .= '<a href="admin_move_bug_report.php?id='.$list[$i]['bugId'].'">&raquo; Move this report into the TODO system</a><br>';

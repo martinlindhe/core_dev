@@ -21,7 +21,7 @@
 	$list = getLatestBlogs(5);
 	for ($i=0; $i<count($list); $i++) {
 		echo '<a href="blog.php?Blog:'.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a> - '.$list[$i]['timeCreated'];
-		echo ' by '.nameLink($list[$i]['userId'], $list[$i]['userName']).'<br/>';
+		echo ' by '.Users::link($list[$i]['userId'], $list[$i]['userName']).'<br/>';
 	}
 
 	require('design_foot.php');

@@ -142,7 +142,7 @@
 		}
 
 		$tot_cnt = getGuestbookCount($userId);
-		echo 'Guestbook:'.getUserName($userId).' contains '.$tot_cnt.' messages.<br/><br/>';
+		echo 'Guestbook:'.Users::getName($userId).' contains '.$tot_cnt.' messages.<br/><br/>';
 
 		$pager = makePager($tot_cnt, 5);
 
@@ -154,7 +154,7 @@
 			echo '<div class="guestbook_entry">';
 
 			echo '<div class="guestbook_entry_head">';
-			echo 'From '.nameLink($row['authorId'], $row['authorName']);
+			echo 'From '.Users::link($row['authorId'], $row['authorName']);
 			echo ', '.$row['timeCreated'];
 			echo '</div>';
 

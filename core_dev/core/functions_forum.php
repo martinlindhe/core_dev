@@ -8,7 +8,7 @@
  */
 
 	require_once('atom_subscriptions.php');	//for subscription functionality
-	require_once('functions_users.php');	//for nameLink()
+	require_once('class.Users.php');	//for Users::link()
 
 	//forum module settings:
 	$config['forum']['rootname'] = 'Forum';
@@ -349,7 +349,7 @@
 					} else {
 						echo '<a href="forum.php?id='.$data['parentId'].'#post'.$data['itemId'].'">'.$data['parentSubject'].'</a><br/>';
 					}
-					echo 'by '.nameLink($data['authorId'], $data['authorName']).'<br/>';
+					echo 'by '.Users::link($data['authorId'], $data['authorName']).'<br/>';
 					echo $data['timeCreated'];
 				} else {
 					echo 'Never';
@@ -496,7 +496,7 @@
 			echo '</td>';
 			
 			echo '<td>';	//author
-				echo nameLink($row['authorId'], $row['authorName']);
+				echo Users::link($row['authorId'], $row['authorName']);
 				//echo ' '.$row['timeCreated'];
 			echo '</td>';
 
@@ -515,7 +515,7 @@
 					//This is a post (a reply to a topic)
 					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"><img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
 				}
-				echo 'by '.nameLink($lastpost['userId'], $lastpost['userName']).'<br/>';
+				echo 'by '.Users::link($lastpost['userId'], $lastpost['userName']).'<br/>';
 				echo $lastpost['timeCreated'];
 			} else {
 				if ($data['parentId'] == 0) {
@@ -575,7 +575,7 @@
 		echo '<div class="forum_post_details">';
 		echo '<a href="forum.php?id='.$item['parentId'].'#post'.$item['itemId'].'">';
 		echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
-		echo 'by '.nameLink($item['authorId'], $item['authorName']).' on '.$item['timeCreated'];
+		echo 'by '.Users::link($item['authorId'], $item['authorName']).' on '.$item['timeCreated'];
 		echo '</div><br/>';
 
 		echo $body;
@@ -586,8 +586,8 @@
 		echo '</td>';
 
 		echo '<td width="120" valign="top" class="forum_item_text">';
-		echo nameThumbLink($item['authorId'], $item['authorName']).'<br/><br/>';
-		echo getUserStatus($item['authorId']).'<br/>';
+		echo Users::linkThumb($item['authorId'], $item['authorName']).'<br/><br/>';
+		echo Users::getMode($item['authorId']).'<br/>';
 		//echo 'Join date: '.getUserCreated($item['authorId']).'<br/>';
 		echo 'Posts: '.getForumPostsCount($item['authorId']);
 		echo '</td>';

@@ -22,7 +22,7 @@
 	$content .= nl2br($item['itemDetails']).'<br><br>';
 	$content .= 'Created: '.getRelativeTimeLong($item['timestamp']).', ';
 	if ($item['userName']) {
-		$content .= 'by '.nameLink($item['itemCreator'], $item['userName']).'<br>';
+		$content .= 'by '.Users::link($item['itemCreator'], $item['userName']).'<br>';
 	} else {
 		$content .= '<b>creator has been deleted.</b><br>';
 	}

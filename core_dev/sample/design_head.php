@@ -1,7 +1,7 @@
 <?
 	//handle quick search:
 	if (!empty($_POST['qu'])) {
-		$hit = searchUsernameContains($_POST['qu']);
+		$hit = Users::searchUsernameContains($_POST['qu']);
 		if ($hit) {
 			header('Location: user.php?id='.$hit);
 			die;
@@ -9,11 +9,7 @@
 	}
 
 	//fetch a random user:
-	if (isset($_GET['rand'])) {
-		$rnd = getRandomUserId();
-		header('Location: user.php?id='.$rnd);
-		die;
-	}
+	if (isset($_GET['rand'])) Users::randomUserPage();
 
 	createXHTMLHeader();
 ?>

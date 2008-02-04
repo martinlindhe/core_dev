@@ -22,7 +22,7 @@
 	$item = getBugReport($db, $bugId);
 	
 	$content .= '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$bugId.'">';
-	$content .= getRelativeTimeLong($item['timestamp']).', by '.nameLink($item["bugCreator"], $item["userName"]).'<br>';
+	$content .= getRelativeTimeLong($item['timestamp']).', by '.Users::link($item['bugCreator'], $item['userName']).'<br>';
 	$content .= 'Details: <br>';
 	$content .= nl2br($item['bugDesc']).'<br>';
 	$content .= 'Close reason: <select name="reason">';

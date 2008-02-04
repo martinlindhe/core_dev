@@ -257,7 +257,7 @@ class Files
 			case FILETYPE_USERFILE:
 				if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 					$userid = $_GET['id'];
-					$username = getUserName($userid);
+					$username = Users::getName($userid);
 				}
 				echo 'Files:'.$username;
 				echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';

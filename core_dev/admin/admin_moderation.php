@@ -76,14 +76,14 @@
 				case MODERATION_GUESTBOOK:$title = 'Guestbook entry'; break;
 				case MODERATION_BLOG:			$title = 'Blog'; break;
 				case MODERATION_FORUM:		$title = 'Forum'; break;
-				case MODERATION_USER:		$title = 'Reported user: '.nameLink($row['itemId']); break;
+				case MODERATION_USER:		$title = 'Reported user: '.Users::link($row['itemId']); break;
 				default: $title = '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 			}
 			echo '<div class="item_head">'.$title;
 			if ($row['autoTriggered']) echo ' (auto-triggered)';
 			echo '</div>';
 			
-			if (!$row['autoTriggered']) echo 'Reported by '.nameLink($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
+			if (!$row['autoTriggered']) echo 'Reported by '.Users::link($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
 
 			switch ($row['queueType']) {
 				case MODERATION_GUESTBOOK:

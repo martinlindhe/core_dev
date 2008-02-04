@@ -227,7 +227,7 @@
 		$itemId = $db['insert_id'];
 		dbQuery($db, 'DELETE FROM tblBugReports WHERE bugId='.$bugId);
 		
-		$comment = 'Imported by '.getUserName($db, $userId).' from a report by '.getUserName($db, $creator).'.';
+		$comment = 'Imported by '.Users::getName($db, $userId).' from a report by '.Users::getName($db, $creator).'.';
 		$sql = 'INSERT INTO tblTodoListComments SET itemId='.$itemId.',itemComment="'.$comment.'",timestamp='.time().',userId=0';
 		dbQuery($db, $sql);
 

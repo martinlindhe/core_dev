@@ -11,13 +11,13 @@
 
 	$mode = 0;
 	if (!empty($_GET['mode'])) $mode = $_GET['mode'];
-	$list = getUsers($mode);
+	$list = Users::getUsers($mode);
 
 	if ($session->isSuperAdmin && !empty($_POST)) {
 		foreach ($list as $row) {
 			$newmode = $_POST['mode_'.$row['userId']];
 			if ($newmode != $row['userMode']) {
-				setUserMode($row['userId'], $newmode);
+				Users::setMode($row['userId'], $newmode);
 			}
 		}
 		
@@ -26,10 +26,10 @@
 			if (!is_numeric($newUserId)) {
 				echo '<div class="critical">'.$newUserId.'</div>';
 			} else {
-				echo '<div class="okay">New user created. Go to user page: '.nameLink($newUserId, $_POST['u_name']).'</div>';
+				echo '<div class="okay">New user created. Go to user page: '.Users::link($newUserId, $_POST['u_name']).'</div>';
 			}
 		}
-		$list = getUsers($mode);
+		$list = Users::getUsers($mode);
 	}
 
 	if ($session->isSuperAdmin) echo '<form method="post" action="">';
@@ -43,7 +43,7 @@
 	foreach ($list as $user)
 	{
 		echo '<tr>';
-		echo '<td>'.nameLink($user['userId'], $user['userName']).'</td>';
+		echo '<td>'.Users::link($user['userId'], $user['userName']).'</td>';
 		echo '<td>'.$user['timeLastActive'].'</td>';
 		echo '<td>'.$user['timeCreated'].'</td>';
 		echo '<td>';

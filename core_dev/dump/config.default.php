@@ -65,7 +65,7 @@
 	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 		//Someones profile
 		$param = '?id='.$_GET['id'];
-		$username = getUserName($_GET['id']);
+		$username = Users::getName($_GET['id']);
 		$profile_menu = array(
 			'user.php'.$param => 'Overview:'.$username,
 			'files.php'.$param => 'Files',

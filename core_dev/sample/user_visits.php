@@ -11,7 +11,7 @@
 	$list = getUserVisitors($session->id);
 
 	foreach ($list as $row) {
-		echo nameLink($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
+		echo Users::link($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
 	}
 
 	require('design_foot.php');
