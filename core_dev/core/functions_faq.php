@@ -97,15 +97,16 @@
 					echo '</form>';
 				echo '</div>';	//id="faq_edit_x"
 			}
-
 		}
 
-		echo '<br/>';
-		echo '<form method="post" action="">';
-		echo 'Add new FAQ: <input type="text" name="faq_q" size="40"/><br/>';
-		echo 'Answer:<br/>';
-		echo '<textarea name="faq_a" rows="8" cols="56"></textarea><br/>';
-		echo '<input type="submit" class="button" value="Add"/>';
-		echo '</form>';
+		if ($session->isAdmin) {
+			echo '<br/>';
+			echo '<form method="post" action="">';
+			echo 'Add new FAQ: <input type="text" name="faq_q" size="40"/><br/>';
+			echo 'Answer:<br/>';
+			echo '<textarea name="faq_a" rows="8" cols="56"></textarea><br/>';
+			echo '<input type="submit" class="button" value="Add"/>';
+			echo '</form>';
+		}
 	}
 ?>

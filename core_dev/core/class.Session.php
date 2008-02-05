@@ -258,9 +258,6 @@ class Session
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
 		echo 'Start page: '.$config['web_root'].$this->start_page.'<br/>';
 		echo 'Error page: '.$config['web_root'].$this->error_page.'<br/>';
-		if ($this->isSuperAdmin) {
-			echo 'SHA1 key: '.$this->sha1_key.'<br/>';
-		}
 	}
 
 	/**

@@ -143,7 +143,6 @@ class Auth_Standard extends Auth_Base
 
 		//FIXME: show appropriate tab on page reload
 
-
 		echo '<div id="login_form_layer">';
 		if (!$this->allow_login) {
 			echo '<div class="critical">Logins are currently not allowed.<br/>Please try again later.</div>';
@@ -178,7 +177,12 @@ class Auth_Standard extends Auth_Base
 
 				echo '<form method="post" action="">';
 				echo '<table cellpadding="2">';
-				echo '<tr><td>Username:</td><td><input name="register_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/></td></tr>';
+				echo '<tr>'.
+								'<td>Username:</td>'.
+								'<td><input name="register_usr" type="text"'.(!empty($_POST['login_usr'])?' value="'.$_POST['login_usr'].'"':'').'/> '.
+									'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/>'.
+								'</td>'.
+							'</tr>';
 				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
 				echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
 				if ($this->userdata) {

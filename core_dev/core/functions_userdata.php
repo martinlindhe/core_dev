@@ -162,6 +162,8 @@
 			$value = stripslashes($row['value']);	//doesnt nessecary exist
 		} else if (!empty($row['settingValue'])) {
 			$value = stripslashes($row['settingValue']);
+		} else if (!empty($_POST['userdata_'.$row['fieldId']])) {
+			$value = strip_tags($_POST['userdata_'.$row['fieldId']]);	//if user previously POST'ed data
 		} else { //for default values in admin display
 			$value = stripslashes($row['fieldDefault']);
 		}

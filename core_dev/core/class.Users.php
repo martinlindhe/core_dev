@@ -65,7 +65,7 @@ class Users
 		}
 		sendMessage($_id, 'System message', $msg);
 
-		$session->log('Changed usermode for '.$this->getName($_id).' to '.$_mode);
+		$session->log('Changed usermode for '.Users::getName($_id).' to '.$_mode);
 		return true;
 	}
 
