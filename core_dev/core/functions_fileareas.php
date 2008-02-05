@@ -280,7 +280,7 @@
 
 		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
 
-<? if ($session->isAdmin) { ?>
+<? if ($session->id) { ?>
 		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
 		<input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
 		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
@@ -317,7 +317,7 @@
 		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
 		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
-<? if ($session->isAdmin) { ?>
+<? if ($session->id) { ?>
 		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
 		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
 <? } ?>
@@ -341,7 +341,7 @@
 
 		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
 
-<? if ($session->isAdmin) { ?>
+<? if ($session->id) { ?>
 		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
 		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
 <? } ?>
