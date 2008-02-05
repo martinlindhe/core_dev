@@ -6,7 +6,8 @@
 		on page reload in auto-generated registration forms
 	- core/class.Auth_Standard.php: shows last entered username on failed
 		registration attempt
-
+	- core/class.Auth_Standard.php: shows previous tab on form submit
+		correctly
 
 
 2008.02.04

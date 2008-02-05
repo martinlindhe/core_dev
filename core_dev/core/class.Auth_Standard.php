@@ -126,6 +126,8 @@ class Auth_Standard extends Auth_Base
 		global $config, $session;
 		echo '<div class="login_box">';
 
+		$tab = 'login';	//default tab show login form
+
 		$allow_superadmin_reg = false;
 		if (!Users::cnt()) {
 			echo 'No users registered!';
@@ -138,20 +140,24 @@ class Auth_Standard extends Auth_Base
 		if ($forgot_pwd && !$session->id) {
 			if (!empty($_POST['forgot_pwd'])) {
 				echo $_POST['forgot_pwd'];
+				$tab = 'forgot_pwd';
 			}
 		}
 
-		//FIXME: show appropriate tab on page reload
+		if (isset($_POST['register_usr'])) {
+			$tab = 'register';
+		}
 
-		echo '<div id="login_form_layer">';
+		if ($session->error) {
+			echo '<div class="critical">'.$session->error.'</div><br/>';
+			$session->error = ''; //remove error message once it has been displayed
+		}
+
+		echo '<div id="login_form_layer"'.($tab!='login'?' style="display: none;"':'').'>';
 		if (!$this->allow_login) {
 			echo '<div class="critical">Logins are currently not allowed.<br/>Please try again later.</div>';
 		}
 		echo '<form name="login_form" method="post" action="">';
-		if ($session->error) {
-			echo '<div class="critical">'.$session->error.'</div>';
-			$session->error = ''; //remove error message once it has been displayed
-		}
 
 		echo '<table cellpadding="2">';
 		echo '<tr><td>Username:</td><td><input name="login_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/></td></tr>';
@@ -169,7 +175,7 @@ class Auth_Standard extends Auth_Base
 		echo '</div>';
 
 		if (($this->allow_login && $this->allow_registration) || $allow_superadmin_reg) {
-			echo '<div id="login_register_layer" style="display: none;">';
+			echo '<div id="login_register_layer"'.($tab!='register'?' style="display: none;"':'').'>';
 				echo '<b>Register new account</b><br/><br/>';
 				if ($allow_superadmin_reg) {
 					echo '<div class="critical">The account you create now will be the super administrator account.</div>';
@@ -199,7 +205,7 @@ class Auth_Standard extends Auth_Base
 			echo '</div>';
 
 			if ($forgot_pwd) {
-				echo '<div id="login_forgot_pwd_layer" style="display: none;">';
+				echo '<div id="login_forgot_pwd_layer"'.($tab!='forgot_pwd'?' style="display: none;"':'').'>';
 					echo '<form method="post" action="">';
 					echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 					echo 'You will recieve an e-mail with a link to follow,<br/>';
