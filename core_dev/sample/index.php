@@ -6,5 +6,8 @@
 
 	wiki('Home');
 
+	$auth->sendActivationMail(1);
+	
+
 	require('design_foot.php');
 ?>

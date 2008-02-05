@@ -70,29 +70,6 @@
 	}
 
 	/**
-	 * Looks up setting id from tblUserdata. useful for SETTING_USERDATA
-	 *
-	 * \param $ownerId owner of the setting to load
-	 * \param $settingName name of the setting, text-string
-	 * \param $defaultValue is the default value to return if no such setting was previously stored
-	 * \return the value of the requested setting
-	 */
-	function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
-	{
-		global $db;
-		if (!is_numeric($ownerId) || !$ownerId || !$settingName) return false;
-
-		$settingName = getUserdataFieldIdByName($settingName);
-		$defaultValue = $db->escape($defaultValue);
-
-		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.SETTING_USERDATA.' AND settingName="'.$settingName.'"';
-		$result = $db->getOneItem($q);
-
-		if ($result) return $result;
-		return $defaultValue;
-	}
-
-	/**
 	 * Returns array of all settings for requested owner
 	 *
 	 * \param $_type type of settings

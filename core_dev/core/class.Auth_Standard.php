@@ -176,33 +176,46 @@ class Auth_Standard extends Auth_Base
 
 		if (($this->allow_login && $this->allow_registration) || $allow_superadmin_reg) {
 			echo '<div id="login_register_layer"'.($tab!='register'?' style="display: none;"':'').'>';
-				echo '<b>Register new account</b><br/><br/>';
-				if ($allow_superadmin_reg) {
-					echo '<div class="critical">The account you create now will be the super administrator account.</div>';
-				}
 
-				echo '<form method="post" action="">';
-				echo '<table cellpadding="2">';
-				echo '<tr>'.
-								'<td>Username:</td>'.
-								'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
-									'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/>'.
-								'</td>'.
-							'</tr>';
-				echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
-				echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
-				if ($this->userdata) {
-					showRequiredUserdataFields();
-				}
-				echo '</table><br/>';
+				if ($this->activation_sent) {
+					echo 'An email with your activation code has been sent.<br/>';
+					echo 'Follow the link in the mail to complete your registration.<br/>';
+					echo 'You can also enter activation code here to finish:<br/>';
 
-				echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
-				echo '<input type="submit" class="button" value="Register" style="font-weight: bold;"/>';
-				if ($forgot_pwd) {
-					echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
-				}
-				echo '</form>';
-			echo '</div>';
+					echo '<form method="post" action="">';
+					echo '<input type="text" size="10"/>';
+					echo '<input type="submit" class="button" value="Complete registration"/>';
+					echo '</form>';
+				} else {
+
+					echo '<b>Register new account</b><br/><br/>';
+					if ($allow_superadmin_reg) {
+						echo '<div class="critical">The account you create now will be the super administrator account.</div>';
+					}
+
+					echo '<form method="post" action="">';
+					echo '<table cellpadding="2">';
+					echo '<tr>'.
+									'<td>Username:</td>'.
+									'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
+										'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/>'.
+									'</td>'.
+								'</tr>';
+					echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
+					echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
+					if ($this->userdata) {
+						showRequiredUserdataFields();
+					}
+					echo '</table><br/>';
+
+					echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
+					echo '<input type="submit" class="button" value="Register" style="font-weight: bold;"/>';
+					if ($forgot_pwd) {
+						echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
+					}
+					echo '</form>';
+				echo '</div>';
+			}
 
 			if ($forgot_pwd) {
 				echo '<div id="login_forgot_pwd_layer"'.($tab!='forgot_pwd'?' style="display: none;"':'').'>';

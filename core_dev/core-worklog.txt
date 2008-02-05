@@ -8,6 +8,9 @@
 		registration attempt
 	- core/class.Auth_Standard.php: shows previous tab on form submit
 		correctly
+	- core/functions_activation.php + tblActivation: basic implementation
+		of activation capabilities. for email/sms/captcha-style activation
+		procedures
 
 
 2008.02.04

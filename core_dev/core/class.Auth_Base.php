@@ -9,6 +9,9 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_activate.php');		//for activation
+require_once('ext/class.phpmailer.php');	//for outgoing mail. FIXME look for bsd-compatible mailer
+
 abstract class Auth_Base
 {
 	public $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	///< used to further encode sha1 passwords, to make rainbow table attacks harder
@@ -18,6 +21,8 @@ abstract class Auth_Base
 	public $reserved_usercheck = true;		///< check if username is listed as reserved username, requires tblStopwords
 	public $userdata = true; 							///< shall we use tblUserdata for required userdata fields?
 	public $mail_activate = false;				///< does account registration require email activation?
+
+	public $activation_sent = false;			///< internal. true if mail activation has been sent
 
 	function __construct(array $auth_conf = array())
 	{
@@ -84,6 +89,47 @@ abstract class Auth_Base
 	function sendActivationMail($_id)
 	{
 		if (!is_numeric($_id)) return false;
+
+		$adr = loadUserdataEmail($_id);
+		if (!$adr) return false;
+
+		$code = mt_rand(10000000, 99999999);
+		$expire_time = (24*60*60);	//24 hours. FIXME gör konfigurerbart, och använd
+
+		$act_id = createActivation(ACTIVATE_EMAIL, $code);
+
+		$mail = new PHPMailer();
+
+		$mail->Mailer = 'smtp';
+		$mail->Host = 'mail.unicorn.tv';	//FIXME gör smtp server konfigurerbar
+		//$mail->Username = 'usr';
+		//$mail->Password = 'pwd';
+
+		$mail->CharSet  = 'utf-8';
+
+		$mail->From     = 'noreply@example.com';
+		$mail->FromName = 'core_dev';
+
+		$mail->IsHTML(false);   // send HTML mail
+
+		$mail->Subject  = "core_dev activation";
+
+		$msg =
+			"Hello. Someone (probably you) registered an account from IP ".$_SERVER['REMOTE_ADDR']."\n".
+			"\n".
+			"Username: ".Users::getName($_id)."\n".
+			"Activation code: ".$code."\n".
+			"\n".
+			"Follow this link to activate your account:\n".
+			"http://priv.localhost/core_dev/sample/activate.php?id=".$act_id."&code=".$code."\n".
+			"\n".
+			"The activation will expire in ".shortTimePeriod($expire_time)."\n";
+
+		$mail->AddAddress($adr);
+		$mail->Body = $msg;
+		if (!$mail->Send()) return false;
+
+		$this->activation_sent = true;
 	}
 
 }

@@ -210,6 +210,7 @@ class Users
 		$q = 'DELETE FROM tblUsers WHERE userId='.$_id;
 		$db->delete($q);
 
+		deleteSettings(SETTING_USERDATA, $_id);
 		//FIXME delete other traces too
 	}
 
@@ -245,7 +246,7 @@ class Users
 	{
 		if (!$id) return 'Guest';
 		if (!$name) $name = Users::getName($id);
-		if (!$name) die;
+		if (!$name) return 'user not found';
 
 		return '<a href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
 	}

@@ -12,12 +12,7 @@
 	if(!empty($_POST['v'])) {
 		$_answer = $_POST['v'];
 
-		//verify the user's input
-		$type = 1;
-		
-		//TODO: verify that timeCreated isnt > 60 minutes
-		$q = 'SELECT COUNT(entryId) FROM tblHumanTest WHERE type='.$type.' AND rnd="'.$db->escape($_rand).'" AND answer="'.$db->escape($_answer).'"';
-		if ($db->getOneItem($q)) {
+		if (verifyActivation(ACTIVATE_CAPTCHA, $_rand, $_answer)) {
 			echo 'passed!';
 		} else {
 			echo 'failed!';
@@ -33,19 +28,15 @@
 		$bg_col = imagecolorallocate($im, 20, 20, 20);
 		$text_col = imagecolorallocate($im, 25, 255, 255);
 
-		$type = 1;		//FIXME not used yet
 		$n1 = rand(1, 9);
 		$n2 = rand(1, 9);
 		$question = 'what is '.$n1.' + '.$n2;
 		$answer = $n1 + $n2;
 
-		if (!is_numeric($type)) die;
-		$q = 'INSERT INTO tblHumanTest SET type='.$type.',rnd="'.$_rand.'",answer="'.$db->escape($answer).'",timeCreated=NOW()';
-		$db->insert($q);
+		createActivation(ACTIVATE_CAPTCHA, $_rand, $answer);
 
 		imagestring($im, 2, 0, 0, $question, $text_col);
 		imagepng($im);
 		imagedestroy($im);
-
 	} 
 ?>

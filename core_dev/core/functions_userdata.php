@@ -22,7 +22,9 @@
 	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 
-	/* Skapar ett nytt userfield, och ger fältet en prioritetsnivå som är ledig */
+	/**
+	 * Creates a new userfield, and gives it a free priority level
+	 */
 	function addUserdataField($fieldName, $fieldType, $fieldDefault, $allowTags, $isPrivate, $regRequire)
 	{
 		global $db;
@@ -39,7 +41,9 @@
 		return true;
 	}
 
-	/* Uppdaterar inställningarna för $fieldId */
+	/**
+	 * Updates a userdata field
+	 */
 	function setUserdataField($fieldId, $fieldName, $fieldType, $fieldDefault, $allowTags, $isPrivate, $regRequire)
 	{
 		global $db;
@@ -51,7 +55,9 @@
 		return true;
 	}
 
-	/* Removes a userdata field, and all user settings for this field */
+	/**
+	 * Removes a userdata field, and all user settings for this field
+	 */
 	function removeUserdataField($_id)
 	{
 		global $db;
@@ -62,8 +68,10 @@
 		$db->delete('DELETE FROM tblSettings WHERE settingName='.$_id);
 	}
 
-	/* Compacts the userdata field priorities, so the boundary 0-max is used */
-	/* Returns the first free priority number */
+	/**
+	 * Compacts the userdata field priorities, so the boundary 0-max is used
+	 * Returns the first free priority number
+	 */
 	function compactUserdataFields()
 	{
 		global $db;
@@ -72,13 +80,16 @@
 
 		for ($i=0; $i<count($list); $i++) {
 			if ($list[$i]['fieldPriority'] != $i) {
-				$db->update('UPDATE tblUserdata SET fieldPriority='.$i.' WHERE fieldId='.$list[$i]['fieldId'] );
+				$db->update('UPDATE tblUserdata SET fieldPriority='.$i.' WHERE fieldId='.$list[$i]['fieldId']);
 			}
 		}
 
 		return $i;
 	}
 
+	/**
+	 *
+	 */
 	function setUserdataFieldPriority($fieldId, $old, $new)
 	{
 		global $db;
@@ -93,6 +104,12 @@
 		$db->update('UPDATE tblUserdata SET fieldPriority='.$old.' WHERE fieldId='.$newfieldId);
 	}
 
+	/**
+	 * Returns userdata fieldId for specified field name
+	 *
+	 * \param $_name field name
+	 * \return field id
+	 */
 	function getUserdataFieldIdByName($_name)
 	{
 		global $db;
@@ -116,7 +133,9 @@
 		return $db->getOneItem($q);
 	}
 
-	/* Returns all userdata fields */
+	/**
+	 * Returns all userdata fields
+	 */
 	function getUserdataFields($_required = false)
 	{
 		global $db;
@@ -152,7 +171,9 @@
 		return $db->getOneItem($q);
 	}
 
-	/* Returns a input field from the passed data, used together with getUserdataFieldsHTMLEdit() */
+	/**
+	 * Returns a input field from the passed data, used together with getUserdataFieldsHTMLEdit()
+	 */
 	function getUserdataInput($row)
 	{
 		global $config;
@@ -260,8 +281,9 @@
 		return $result;
 	}
 
-
-	/* Returns a input field from the passed data, used in search_users.php */
+	/**
+	 * Returns a input field from the passed data, used in search_users.php
+	 */
 	function getUserdataSearch($row)
 	{
 		global $config;
@@ -277,8 +299,9 @@
 		return $result;
 	}
 
-
-	/* Shows all input fields that are required to be filled in by the user at time of registration */
+	/**
+	 * Shows all input fields that are required to be filled in by the user at time of registration
+	 */
 	function showRequiredUserdataFields()
 	{
 		$list = getUserdataFields(true);
@@ -306,8 +329,9 @@
 		return true;
 	}
 
-
-	/* Processes all userdata input from registration and stores the entries */
+	/**
+	 * Processes all userdata input from registration and stores the entries
+	 */
 	function handleRequiredUserdataFields($userId)
 	{
 		global $db;
@@ -321,15 +345,62 @@
 		}
 	}
 
-	function readAllUserdata($ownerId)
+	/**
+	 * Returns all userdata settings for specified user
+	 *
+	 * \param $userId user id
+	 * \return array of settings
+	 */
+	function readAllUserdata($userId)
 	{
-		if (!is_numeric($ownerId)) return false;
+		if (!is_numeric($userId)) return false;
 
 		global $db;
 
 		$q  = 'SELECT t1.*,t2.settingValue FROM tblUserdata AS t1 ';
-		$q .= 'LEFT JOIN tblSettings AS t2 ON (t1.fieldId=t2.settingName AND t2.ownerId='.$ownerId.') ORDER BY t1.fieldPriority ASC';
-
+		$q .= 'LEFT JOIN tblSettings AS t2 ON (t1.fieldId=t2.settingName AND t2.ownerId='.$userId.') ORDER BY t1.fieldPriority ASC';
 		return $db->getArray($q);
 	}
+
+	/**
+	 * Looks up setting id from tblUserdata. useful for SETTING_USERDATA
+	 *
+	 * \param $ownerId owner of the setting to load
+	 * \param $settingName name of the setting, text-string. for userdata it is actually a numeric
+	 * \param $defaultValue is the default value to return if no such setting was previously stored
+	 * \return the value of the requested setting
+	 */
+	function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
+	{
+		global $db;
+		if (!is_numeric($ownerId) || !$ownerId || !$settingName) return false;
+
+		if (!is_numeric($settingName)) {
+			$settingName = getUserdataFieldIdByName($settingName);
+			if (!$settingName) return false;
+		}
+		$defaultValue = $db->escape($defaultValue);
+
+		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.SETTING_USERDATA.' AND settingName="'.$settingName.'"';
+		$result = $db->getOneItem($q);
+
+		if ($result) return $result;
+		return $defaultValue;
+	}
+
+	/**
+	 * Returns entered email address for specified user. Needed functionality for
+	 * email activation code
+	 *
+	 * \param $userId user id
+	 * \return email or false on error
+	 */
+	function loadUserdataEmail($userId)
+	{
+		if (!is_numeric($userId)) return false;
+
+		$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
+		return loadUserdataSetting($userId, $fieldId);
+	}
+
 ?>
