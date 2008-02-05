@@ -6,6 +6,7 @@
  */
 
 	require_once('atom_categories.php');	//for multi-choise userdata types
+	require_once('functions_textformat.php');	//for ValidEmail()
 
 	/* Userdata field types */
 	define('USERDATA_TYPE_TEXT',			1);
@@ -283,6 +284,26 @@
 			echo '<tr><td colspan="2">'.getUserdataInput($row).'</td></tr>';
 		}
 	}
+
+	/**
+	 * Verify userdata field input from registration. Returns error on invalid e-mail
+	 */
+	function verifyRequiredUserdataFields()
+	{
+		global $db;
+
+		$list = getUserdataFields(true);
+		foreach ($list as $row) {
+			if ($row['fieldType'] == USERDATA_TYPE_EMAIL && $row['regRequire'] == 1)
+			{
+				if (empty($_POST['userdata_'.$row['fieldId']])) return false;
+				if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) return false;
+			}
+		}
+
+		return true;
+	}
+
 
 	/* Processes all userdata input from registration and stores the entries */
 	function handleRequiredUserdataFields($userId)

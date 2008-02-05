@@ -44,6 +44,9 @@ class Auth_Standard extends Auth_Base
 
 		if ($this->reserved_usercheck && isReservedUsername($username)) return 'Username is not allowed';
 
+		//Checks if email was required, and if so if it was correctly entered
+		if (!verifyRequiredUserdataFields()) return 'Invalid e-mail entered';
+
 		if (Users::cnt()) {
 			$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
 			$checkId = $db->getOneItem($q);
@@ -93,11 +96,12 @@ class Auth_Standard extends Auth_Base
 			return false;
 		}
 
+		$session->startSession($data['userId'], $data['userName'], $data['userMode']);
+
 		//Update last login time
 		$db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$session->id);
 		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$session->id.', IP='.$session->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
-		$session->startSession($data['userId'], $data['userName'], $data['userMode']);
 		return true;
 	}
 

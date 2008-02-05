@@ -1,6 +1,10 @@
 todo:
 	- update lyrics & process to work with new core_dev changes
-	- fetch db dumps
+
+
+2008.02.05
+	- core/functions_userdata.php, class.Auth_Standard.php: refuses registration
+		if e-mail is required for registration and invalid email is entered
 
 
 2008.02.04

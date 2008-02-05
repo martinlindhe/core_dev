@@ -165,7 +165,7 @@
 			addComment($_type, $ownerId, $_POST['cmt']);
 		}
 
-		if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
+		if ($session->isAdmin && !empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 			deleteComment($_GET['delete']);
 		}
 
@@ -182,7 +182,7 @@
 			echo $row['timeCreated'];
 			echo '</div>';
 			echo '<div class="comment_text">'.$row['commentText'];
-			if ($session->id) {
+			if ($session->isAdmin) {
 				echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
 			}
 			echo '</div>';

@@ -300,19 +300,7 @@
 		return $art;
 	}
 
-	//Denna regexp har jag testat ordentligt den verkar ultimat
 	//http://www.regexlib.com/REDetails.aspx?regexp_id=295:
-/*
-	echo ValidEmail('hej@kex.com').'<br/>'; //ok
-	echo ValidEmail('apa sxev ke@com.com').'<br/>'; //deny
-	echo ValidEmail('kuvös@kom.uk').'<br/>'; //deny
-	echo ValidEmail('kuvös').'<br/>';	 //deny
-	echo ValidEmail('martin.partin@hotmail.se').'<br/>'; //ok
-	echo ValidEmail('gupp_golo@cnn.com').'<br/>'; //ok
-	echo ValidEmail('<gupp@kep.com').'<br/>'; //deny
-	echo ValidEmail('rl@123.22.11.92').'<br/>'; //deny
-*/
-
 	define('REGEXP_VALID_EMAIL', '/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9._-]+)+$/');
 	function ValidEmail($email)
 	{
