@@ -179,7 +179,7 @@ class Auth_Standard extends Auth_Base
 				echo '<table cellpadding="2">';
 				echo '<tr>'.
 								'<td>Username:</td>'.
-								'<td><input name="register_usr" type="text"'.(!empty($_POST['login_usr'])?' value="'.$_POST['login_usr'].'"':'').'/> '.
+								'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
 									'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/>'.
 								'</td>'.
 							'</tr>';

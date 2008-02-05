@@ -2,9 +2,11 @@
 	- core/functions_userdata.php, class.Auth_Standard.php: refuses registration
 		if e-mail is required for registration and invalid email is entered
 	- core/class.Auth_Standard.php: fixed last login time being set at login
-
 	- core/functions_userdata.php: shows user's previously entered text
 		on page reload in auto-generated registration forms
+	- core/class.Auth_Standard.php: shows last entered username on failed
+		registration attempt
+
 
 
 2008.02.04
