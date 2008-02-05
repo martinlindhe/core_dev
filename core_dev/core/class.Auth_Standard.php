@@ -135,8 +135,8 @@ class Auth_Standard extends Auth_Base
 
 		$allow_superadmin_reg = false;
 		if (!Users::cnt()) {
-			echo 'No users registered!';
 			$allow_superadmin_reg = true;
+			$tab = 'register';
 		}
 
 		$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
@@ -196,7 +196,7 @@ class Auth_Standard extends Auth_Base
 
 					echo '<b>Register new account</b><br/><br/>';
 					if ($allow_superadmin_reg) {
-						echo '<div class="critical">The account you create now will be the super administrator account.</div>';
+						echo '<div class="critical">The account you create now will be the super administrator account.</div><br/>';
 					}
 
 					echo '<form method="post" action="">';
@@ -214,7 +214,9 @@ class Auth_Standard extends Auth_Base
 					}
 					echo '</table><br/>';
 
-					echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
+					if (!$allow_superadmin_reg) {
+						echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
+					}
 					echo '<input type="submit" class="button" value="Register" style="font-weight: bold;"/>';
 					if ($forgot_pwd) {
 						echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';

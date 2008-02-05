@@ -97,8 +97,8 @@ class Files
 	public $thumb_default_width		= 80;				///< Default width of thumbnails
 	public $thumb_default_height	= 80;				///< Default height of thumbnails
 
-	private $image_max_width			= 1100;			///< bigger images will be resized to this size
-	private $image_max_height			= 900;
+	private $image_max_width			= 900;			///< bigger images will be resized to this size
+	private $image_max_height			= 800;
 
 	public $anon_uploads					= false;		///< allow unregisterd users to upload files
 	public $count_file_views			= false;		///< FIXME REMOVE! auto increments the "cnt" in tblFiles in each $files->sendFile() call
@@ -116,6 +116,7 @@ class Files
 		global $session;
 
 		if (isset($config['upload_dir'])) $this->upload_dir = $config['upload_dir'];
+		if (isset($config['tmp_dir'])) $this->tmp_dir = $config['tmp_dir'];
 
 		if (isset($config['image_max_width'])) $this->image_max_width = $config['image_max_width'];
 		if (isset($config['image_max_height'])) $this->image_max_height = $config['image_max_height'];
@@ -171,8 +172,7 @@ class Files
 	{
 		if (!file_exists($filename)) return false;
 
-		$c = 'file -bi '.$filename;
-		//echo 'Executing: '.$c;
+		$c = 'file -bi '.escapeshellarg($filename);
 		return exec($c);
 	}
 
@@ -448,7 +448,7 @@ class Files
 		//Resize the image if it is too big, overwrite the uploaded file
 		if (($img_width > $this->image_max_width) || ($img_height > $this->image_max_height))
 		{
-			resizeImage($FileData['tmp_name'], $FileData['tmp_name'], $this->image_max_width, $this->image_max_height, $fileId);
+			resizeImageExact($FileData['tmp_name'], $FileData['tmp_name'], $this->image_max_width, $this->image_max_height, $fileId);
 		}
 
 		$this->moveUpload($FileData['tmp_name'], $fileId);
@@ -465,7 +465,7 @@ class Files
 
 		//create default sized thumbnail
 		$thumb_filename = $this->findThumbPath($fileId).'_'.$this->thumb_default_width.'x'.$this->thumb_default_height;
-		resizeImage($this->findUploadPath($fileId), $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
+		resizeImageExact($this->findUploadPath($fileId), $thumb_filename, $this->thumb_default_width, $this->thumb_default_height);
 	}
 
 	/**
@@ -616,6 +616,30 @@ class Files
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 	}
 
+	function imageResize($_id, $_pct)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($_id) || !is_numeric($_pct)) return false;
+
+		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
+		if (!$data) die;
+
+		if (!in_array($data['fileMime'], $this->image_mime_types)) return false;
+
+		header('Content-Type: '.$data['fileMime']);
+		header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
+		header('Content-Transfer-Encoding: binary');
+
+		$filename = $this->findUploadPath($_id);
+
+		resizeImage($filename, $filename, $_pct);
+		$this->setNoCacheHeaders();
+		$this->sendImage($_id);
+
+		$this->clearThumbs($_id);
+		$this->makeThumbnail($_id);
+	}
+
 	/**
 	 * Performs an image rotation and then pass on the result to the user
 	 *
@@ -752,7 +776,7 @@ class Files
 
 			if (!file_exists($out_filename)) {
 				//Thumbnail of this size dont exist, create one
-				resizeImage($filename, $out_filename, $width, $height);
+				resizeImageExact($filename, $out_filename, $width, $height);
 			}
 		} else {
 			$out_filename = $filename;

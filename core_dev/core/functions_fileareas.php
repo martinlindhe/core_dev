@@ -96,7 +96,7 @@
 			$title = htmlspecialchars($row['fileName']).' ('.formatDataSize($row['fileSize']).')';
 			if (in_array($row['fileMime'], $files->image_mime_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].');"><center>';
-				echo makeThumbLink($row['fileId']);
+				echo showThumb($row['fileId']);
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $files->audio_mime_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"><center>';
@@ -282,7 +282,7 @@
 
 <? if ($session->id) { ?>
 		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
-		<input type="button" class="button" value="Resize" onclick="resize_selected_file()"/>
+		<input type="button" class="button" value="Resize" onclick="resize_selected_file(90)"/>
 		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
 		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
 		<input type="button" class="button" value="Move image" onclick="move_selected_file()"/>

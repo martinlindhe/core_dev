@@ -11,7 +11,7 @@
 	$config['image']['jpeg_quality']			= 70;			///< 0-100% quality for recompression of very large uploads (like digital camera pictures)
 
 	/**
-	 * Resizes specified image file
+	 * Resizes specified image file to specified dimensions
 	 *
 	 * \param $in_filename
 	 * \param $out_filename
@@ -19,7 +19,7 @@
 	 * \param $to_height
 	 * \param $fileId
 	 */
-	function resizeImage($in_filename, $out_filename, $to_width = 0, $to_height = 0, $fileId = 0)
+	function resizeImageExact($in_filename, $out_filename, $to_width = 0, $to_height = 0, $fileId = 0)
 	{
 		global $db, $config;
 		if (empty($to_width) && empty($to_height)) return false;
@@ -101,6 +101,47 @@
 	}
 
 	/**
+	 * Resizes selected image to $pct percent of orginal image dimensions
+	 *
+	 * \param $in_file filename
+	 * \param $out_file filename
+	 * \param $_pct percent to resize, relative to orginal image dimensions
+	 */
+	function resizeImage($in_file, $out_file, $_pct)
+	{
+		global $config, $files;
+		if (!is_numeric($_pct)) return false;
+
+		$mime = $files->lookupMimeType($in_file);
+
+		if (!$files->image_convert) return false;
+
+		//Resize with imagemagick
+		switch ($mime)
+		{
+			case 'image/jpeg':
+				$c = 'convert -resize '.$_pct. '% -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
+				break;
+
+			case 'image/png':
+				$c = 'convert -resize '.$_pct. '% '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
+				break;
+
+			case 'image/gif':
+				$c = 'convert -resize '.$_pct. '% '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
+				break;
+
+			default:
+				echo 'resizeImage(): Unhandled mimetype "'.$mime.'"<br/>';
+				return false;
+		}
+		//echo 'Executing: '.$c.'<br/>';
+		exec($c);
+		if (!file_exists($out_file)) return false;
+		return true;
+	}
+
+	/**
 	 * Converts a image to specified file type. Currently supports conversions to jpeg, png or gif
 	 * Requires ImageMagick commandline image converter "convert" installed
 	 *
@@ -132,19 +173,18 @@
 		}
 		//echo 'Executing: '.$c.'<br/>';
 		exec($c);
-		if (!file_exists($dst_file)) return false;
+		if (!file_exists($out_file)) return false;
 		return true;
 	}
 
 	/**
 	 * Rotates a image the specified angle. Uses imagemagick if possible
-	 * The gd function imagerotate() is only available in bundled gd (php windows) - FIXME check if this changes with php6!
-	 *
-	 * So if it isn't availiable we fall back to use imagemagick's "convert" program
+	 * The gd function imagerotate() is only available in bundled gd (php windows)
 	 */
 	function rotateImage($in_file, $out_file, $_angle)
 	{
 		global $config, $files;
+		if (!is_numeric($_angle)) return false;
 
 		$mime = $files->lookupMimeType($in_file);
 
@@ -210,14 +250,14 @@
 	 * \param $ttf_size optional size of ttf font, defaults to 12
 	 * \return image resource
 	 */
-	function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 12 )
+	function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 12)
 	{
 		$ttf_angle = 0;
 
 		$im = imagecreatefrompng($template);
 
 		if (empty($col)) {
-			$color = imagecolorallocate($im, 0, 0, 0); //default to black
+			$color = imagecolorallocate($im, 0, 0, 0); //defaults to black
 		} else {
 			$color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
 		}
@@ -245,11 +285,9 @@
 			$fh = imagefontheight($font);
 		}
 
-		/*
-			prints the text in $str array centered vertically & horizontally over the image
-		*/
 		$i = 0;
 
+		/* Prints the text in $str array centered vertically & horizontally over the image */
 		foreach ($str as $txt)
 		{
 			if (!$ttf) {

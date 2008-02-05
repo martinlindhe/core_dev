@@ -377,9 +377,8 @@
 
 		if (!is_numeric($settingName)) {
 			$settingName = getUserdataFieldIdByName($settingName);
-			if (!$settingName) return false;
+			if (!$settingName) return $defaultValue;
 		}
-		$defaultValue = $db->escape($defaultValue);
 
 		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.SETTING_USERDATA.' AND settingName="'.$settingName.'"';
 		$result = $db->getOneItem($q);

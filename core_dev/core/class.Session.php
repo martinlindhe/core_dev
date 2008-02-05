@@ -52,7 +52,7 @@ class Session
 		1 => 'Admin',
 		2 => 'Super admin'
 	); ///< user modes
-	
+
 	private $default_theme = 'default.css';			///< default theme if none is choosen
 	private $allow_themes = false;							///< allow themes?
 

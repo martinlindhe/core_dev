@@ -241,9 +241,11 @@ function cut_selected_file()
 }
 
 /* displays a percentage-bar ranging 0-100% and a slider, lets the user move it and see the image resize live in browser. with a save button to commit the resize */
-function resize_selected_file()
+function resize_selected_file(pct)
 {
-	alert('fixme: resize_selected_file() not yet iplemented')
+	var e = document.getElementById('zoom_image');
+	var now = new Date();
+	e.src = _ext_core+'image_resize.php?i=' + zoomed_id + '&p=' + pct + '&' + now.getTime() + _ext_ref;
 }
 
 /* displays dialog for moving selected file to another file area category */

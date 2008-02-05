@@ -1,3 +1,7 @@
+todo:
+	- när en bild krymps vid file-upload,spara alltid orginalet orört
+
+
 2008.02.05
 	- core/functions_userdata.php, class.Auth_Standard.php: refuses registration
 		if e-mail is required for registration and invalid email is entered
@@ -12,6 +16,15 @@
 		of activation capabilities. for email/sms/captcha-style activation
 		procedures
 	- lots of files: implemented account activation through an email link
+
+	- core/class.Auth_Standard.php: clean-up display when creating initial
+		super admin account
+	- core/functions_fileareas.php: fixed so image won't show up in popup
+		aswell, when clicked
+	- core/functions_image.php: added resizeImage() helper function for
+		image resizing with imagemagick
+	- lots of files: basic implementation of file resizing. lacks javascript
+		widget to control it
 
 
 2008.02.04
