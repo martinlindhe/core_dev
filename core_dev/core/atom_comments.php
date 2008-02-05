@@ -182,7 +182,7 @@
 			echo $row['timeCreated'];
 			echo '</div>';
 			echo '<div class="comment_text">'.$row['commentText'];
-			if ($session->isAdmin) {
+			if ($session->isAdmin || $session->id == $row['userId']) {
 				echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
 			}
 			echo '</div>';
