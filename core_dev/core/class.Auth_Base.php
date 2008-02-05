@@ -88,15 +88,14 @@ abstract class Auth_Base
 	 */
 	function sendActivationMail($_id)
 	{
+		global $config;
 		if (!is_numeric($_id)) return false;
 
 		$adr = loadUserdataEmail($_id);
 		if (!$adr) return false;
 
-		$code = mt_rand(10000000, 99999999);
-		$expire_time = (24*60*60);	//24 hours. FIXME gör konfigurerbart, och använd
-
-		$act_id = createActivation(ACTIVATE_EMAIL, $code);
+		$code = generateActivationCode(1000000, 9999999);
+		$act_id = createActivation(ACTIVATE_EMAIL, $code, $_id);
 
 		$mail = new PHPMailer();
 
@@ -121,15 +120,33 @@ abstract class Auth_Base
 			"Activation code: ".$code."\n".
 			"\n".
 			"Follow this link to activate your account:\n".
-			"http://priv.localhost/core_dev/sample/activate.php?id=".$act_id."&code=".$code."\n".
+			"http://priv.localhost/core_dev/sample/activate.php?id=".$_id."&code=".$code."\n".
 			"\n".
-			"The activation will expire in ".shortTimePeriod($expire_time)."\n";
+			"The activation code will expire in ".shortTimePeriod($config['activate']['expire_time_email'])."\n";
 
 		$mail->AddAddress($adr);
 		$mail->Body = $msg;
 		if (!$mail->Send()) return false;
 
 		$this->activation_sent = true;
+	}
+
+	function verifyActivationMail($_id, $_code)
+	{
+		if (!is_numeric($_id) || !is_numeric($_code)) return false;
+
+		if (!verifyActivation(ACTIVATE_EMAIL, $_code, $_id)) {
+			echo 'Activation code is invalid or expired.';
+			return false;
+		}
+
+		Users::activate($_id);
+
+		removeActivation(ACTIVATE_EMAIL, $_code);
+
+		echo 'Your account has been activated<br/>';
+		echo 'You can now proceed to <a href="login.php">log in</a>.';
+		return true;
 	}
 
 }

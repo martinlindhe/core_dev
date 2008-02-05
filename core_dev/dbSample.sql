@@ -1,3 +1,12 @@
+CREATE TABLE `tblActivation` (
+  `entryId` bigint(20) unsigned NOT NULL auto_increment,
+  `userId` bigint(20) unsigned NOT NULL,
+  `type` tinyint(1) unsigned NOT NULL default '0',
+  `rnd` bigint(20) unsigned NOT NULL default '0',
+  `answer` varchar(10) default NULL,
+  `timeCreated` datetime default NULL,
+  PRIMARY KEY  (`entryId`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `tblBlogs` (
   `blogId` int(10) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',
@@ -131,14 +140,6 @@ CREATE TABLE `tblGuestbooks` (
   `timeRead` datetime default NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-CREATE TABLE `tblHumanTest` (
-  `entryId` bigint(20) unsigned NOT NULL auto_increment,
-  `type` tinyint(1) unsigned NOT NULL default '0',
-  `rnd` bigint(20) unsigned NOT NULL default '0',
-  `answer` varchar(10) default NULL,
-  `timeCreated` datetime default NULL,
-  PRIMARY KEY  (`entryId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `tblLogins` (
   `mainId` int(10) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',

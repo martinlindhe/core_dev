@@ -418,5 +418,30 @@ class Users
 		return $db->getArray($q);
 	}
 
+	/**
+	 * Adds a entry in tblSettings marking this user account as activated
+	 *
+	 * \param $_id user id
+	 */
+	function activate($_id)
+	{
+		if (!is_numeric($_id)) return false;
+
+		saveSetting(SETTING_USERDATA, $_id, 'activated', true);
+	}
+
+	/**
+	 * Checks if user is activated, returns true/false
+	 *
+	 * \param $_id user id
+	 */
+	function isActivated($_id)
+	{
+		if (!is_numeric($_id)) return false;
+
+		if (loadSetting(SETTING_USERDATA, $_id, 'activated')) return true;
+		return false;
+	}
+
 }
 ?>

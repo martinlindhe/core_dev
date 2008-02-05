@@ -91,6 +91,11 @@ class Auth_Standard extends Auth_Base
 			return false;
 		}
 
+		if ($this->mail_activate && !Users::isActivated($data['userId'])) {
+			$session->error = 'This account has not yet been activated.';
+			return false;
+		}
+
 		if ($data['userMode'] != 2 && !$this->allow_login) {
 			$session->error = 'Logins currently not allowed.';
 			return false;
@@ -180,12 +185,13 @@ class Auth_Standard extends Auth_Base
 				if ($this->activation_sent) {
 					echo 'An email with your activation code has been sent.<br/>';
 					echo 'Follow the link in the mail to complete your registration.<br/>';
+					/*	//FIXME implement this
 					echo 'You can also enter activation code here to finish:<br/>';
-
 					echo '<form method="post" action="">';
 					echo '<input type="text" size="10"/>';
 					echo '<input type="submit" class="button" value="Complete registration"/>';
 					echo '</form>';
+					*/
 				} else {
 
 					echo '<b>Register new account</b><br/><br/>';

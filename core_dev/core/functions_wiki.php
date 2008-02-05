@@ -230,7 +230,7 @@
 		}
 		elseif ($current_tab == 'WikiFiles')
 		{
-			echo $files->showFiles(FILETYPE_WIKI, $data['wikiId']);
+			echo showFiles(FILETYPE_WIKI, $data['wikiId']);
 		}
 		elseif ($config['wiki']['log_history'] && $current_tab == 'WikiHistory')
 		{

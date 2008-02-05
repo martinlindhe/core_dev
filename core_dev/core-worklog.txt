@@ -11,6 +11,7 @@
 	- core/functions_activation.php + tblActivation: basic implementation
 		of activation capabilities. for email/sms/captcha-style activation
 		procedures
+	- lots of files: implemented account activation through an email link
 
 
 2008.02.04
