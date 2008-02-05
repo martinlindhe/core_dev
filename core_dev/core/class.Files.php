@@ -399,8 +399,8 @@ class Files
 	 */
 	function findUploadPath($fileId)
 	{
-		for ($i=0; $i<=$fileId; $i+=10000) { ; }
-		$dir = $this->upload_dir.'org/'.($i-10000);
+		$subdir = floor($fileId / 10000) * 10000;
+		$dir = $this->upload_dir.'org/'.$subdir;
 
 		if (!is_dir($this->upload_dir.'org/')) {
 			mkdir($this->upload_dir.'org/');
@@ -417,8 +417,8 @@ class Files
 
 	function findThumbPath($fileId)
 	{
-		for ($i=0; $i<=$fileId; $i+=10000) { ; }
-		$dir = $this->upload_dir.'thumb/'.($i-10000);
+		$subdir = floor($fileId / 10000) * 10000;
+		$dir = $this->upload_dir.'thumb/'.$subdir;
 
 		if (!is_dir($this->upload_dir.'thumb/')) {
 			mkdir($this->upload_dir.'thumb/');
