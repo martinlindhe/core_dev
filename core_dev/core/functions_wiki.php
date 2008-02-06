@@ -197,8 +197,10 @@
 					echo '<img src="'.$config['core_web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
 					echo '<b>Locked by '.$data['lockerName'].' at '.$data['timeLocked'].'</b><br/>';
 				} else {
-					echo '<input type="button" class="button" value="Lock" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_lock').'\'"/>';
-					echo '<img src="'.$config['core_web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/>';
+					if ($data) {
+						echo '<input type="button" class="button" value="Lock" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_lock').'\'"/>';
+						echo '<img src="'.$config['core_web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/>';
+					}
 				}
 			}
 
@@ -234,13 +236,17 @@
 		}
 		elseif ($config['wiki']['log_history'] && $current_tab == 'WikiHistory')
 		{
-			echo 'Current version:<br/>';
-			echo '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['creatorName'].' at '.$data['timeCreated'].' ('.strlen($text).' bytes)</a></b><br/>';
-			echo '<div id="layer_history_current" class="revision_entry">';
-			echo nl2br(htmlentities($text, ENT_COMPAT, 'UTF-8'));
-			echo '</div>';
+			if ($data) {
+				echo 'Current version:<br/>';
+				echo '<b><a href="#" onclick="return toggle_element_by_name(\'layer_history_current\')">Written by '.$data['creatorName'].' at '.$data['timeCreated'].' ('.strlen($text).' bytes)</a></b><br/>';
+				echo '<div id="layer_history_current" class="revision_entry">';
+				echo nl2br(htmlentities($text, ENT_COMPAT, 'UTF-8'));
+				echo '</div>';
 
-			showRevisions(REVISIONS_WIKI, $data['wikiId'], $wikiName);
+				showRevisions(REVISIONS_WIKI, $data['wikiId'], $wikiName);
+			} else {
+				echo 'There is no history for this wiki.';
+			}
 		}
 		else
 		{

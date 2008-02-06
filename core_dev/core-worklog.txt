@@ -12,6 +12,8 @@
 	- core/functions_userdata.php: renamed "date field" to "birthdate"
 		and cleaned up the code a bit, not finished
 	- core/atom_polls.php: added "add new answer" on edit polls
+	- core/functions_wiki.php: hides "lock" feature when wiki hasn't been created yet
+	- core/functions_wiki.php: don't try to display empty wiki history
 
 
 2008.02.05
