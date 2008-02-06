@@ -42,7 +42,7 @@
 	imagestring($im, 2, $start_x + 66, $bottom_y + 14, '- logins', $txt_col);
 
 	if ($max_logins) {
-		$scale = ($bottom_y-$top_y) / $max_logins;
+		$scale = (($bottom_y-$top_y) / $max_logins);
 	} else $scale = ($bottom_y-$top_y);
 
 	imagestring($im, 2, 0, 0, 'scale', $txt_col);
@@ -52,6 +52,7 @@
 		imagestring($im, 2, $start_x-12, ($top_y-8) + $y, $label, $txt_col);
 		imageline($im, $start_x, $top_y + $y, $start_x+($month_days*24), $top_y + $y, $grid_col);		//draw horizontal grid
 		$label--;
+		if ($label < 0) break;	//XXX hack, shouldnt happen but it does sometimes, because of $scale is wierd
 	}
 
 	foreach ($list as $row) {
