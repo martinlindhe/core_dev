@@ -8,7 +8,7 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
-	echo 'statistics<br/><br/>';
+	echo '<h1>Statistics</h1>';
 
 	/*for ($m = 1; $m <= date('n'); $m++) {
 		echo 'Month '.$m.' 2007:<br/>';
@@ -16,9 +16,10 @@
 		showStatsMonth(2007, $m);
 	}*/
 	
-	//generateStatsMonth(2007, 4);
-	showStatsMonth(2007, 4);
+	$yr = date('Y');
+	$mn = date('n');
 
+	showStatsMonth($yr, $mn);
 
 	require($project.'design_foot.php');
 ?>

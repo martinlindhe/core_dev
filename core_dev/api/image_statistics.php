@@ -6,8 +6,7 @@
 	$year = $_GET['y'];
 	$month = $_GET['m'];
 
-	header('Content-type: image/png');
-	$im = imagecreate(400, 260);
+	$im = imagecreate(800, 260);
 	$background_color = imagecolorallocate($im, 20, 20, 20);
 
 	$month_start = mktime(0, 0, 0, $month, 1, $year);
@@ -16,42 +15,44 @@
 
 	$q = 'SELECT * FROM tblStatistics WHERE time BETWEEN "'.sql_datetime($month_start).'" AND "'.sql_datetime($month_end).'"';
 	$list = $db->getArray($q);
-	//d($list);
 
-	//Find max numbers
-	/*
+	//Find max number
 	$max_logins = 0;
 	foreach($list as $row) {
 		if ($row['logins'] > $max_logins) $max_logins = $row['logins'];
-	}*/
-
-	//echo 'max logins:'. $max_logins;
-
-	$col = imagecolorallocate($im, 233, 220, 110);
-
-	for ($i=0; $i<24; $i++) {
-		imagestring($im, 2, 0, $i*10, $i, $col);
 	}
 
 	$bottom_y = 242;
-	$start_x = 10;
+	$start_x = 24;
 
-	foreach($list as $row) {
+	$logins_col = imagecolorallocate($im, 44, 255, 110);	//greenish
+	$txt_col = imagecolorallocate($im, 233, 220, 110);	//yellowish
+	$grid_col = imagecolorallocate($im, 40, 40, 40);	//dark gray
+
+	imagestring($im, 2, 0, 0, 'scale: '.$max_logins, $txt_col);	//scale
+
+	imagestring($im, 2, 764, $bottom_y-10, 'day of', $txt_col);
+	imagestring($im, 2, 770, $bottom_y, 'month', $txt_col);
+
+	foreach ($list as $row) {
 		$timestamp = strtotime($row['time']);
 		$day = date('j', $timestamp);
 		$hour = date('G', $timestamp);
+
 		$logins = $row['logins'];
 
-		$x = $start_x+($day*10);
-		$y = ($hour*10);
-		//imageline($im, $x, $y, $x+9, $y, $col);
-		if ($logins) $use_col = imagecolorallocate($im, 233, 220, 110);
-		else $use_col = imagecolorallocate($im, 80, 80, 80);
+		$x = $start_x+(($day-1)*24);
 
-		imagestring($im, 2, $x, $y, $logins, $use_col);
+		if ($hour == 0) {
+			imageline($im, $x, 20, $x, $bottom_y, $grid_col);
+		}
 
-		imagestring($im, 2, $x, $bottom_y, $day, $col);
+		imagesetpixel($im, $x + $hour, $bottom_y - $logins, $logins_col);
+
+		imagestring($im, 2, $x, $bottom_y, $day, $txt_col);
 	}
 
-	imagepng($im); imagedestroy($im);
+	header('Content-type: image/png');
+	imagepng($im);
+	imagedestroy($im);
 ?>

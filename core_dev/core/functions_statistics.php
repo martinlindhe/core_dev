@@ -7,15 +7,17 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	/* Displays stats for each month.
-		Will create tblStatistics entries if any are missing for requested page.
-		Hopefully a cron-script updates this regularry, but otherwise the pages will load a bit slow the first times they are accessed
-	*/
+	/**
+	 * Displays stats for each month.
+	 * Will create tblStatistics entries if any are missing for requested page.
+	 * Hopefully a cron-script updates this regulary, but otherwise the pages will load a bit slow the first times they are accessed
+	 */
 	function showStatsMonth($year, $month)
 	{
 		global $db, $config;
-
 		if (!is_numeric($year) || !is_numeric($month)) return false;
+
+		generateStatsMonth($year, $month);
 
 		echo '<img src="'.$config['core_web_root'].'api/image_statistics.php?y='.$year.'&amp;m='.$month.getProjectPath().'" alt="Stats"/>';
 	}
@@ -23,12 +25,11 @@
 	function generateStatsMonth($year, $month)
 	{
 		global $db;
-
 		if (!is_numeric($year) || !is_numeric($month)) return false;
 
 		$month_start = mktime(0, 0, 0, $month, 1, $year);
 		$month_days  = date('t', $month_start);
-		$month_end   = mktime(23,59,59,$month, $month_days, $year);
+		$month_end   = mktime(23,59,59, $month, $month_days, $year);
 
 		//Remove previous entries, if any
 		$q = 'DELETE FROM tblStatistics WHERE time BETWEEN "'.sql_datetime($month_start).'" AND "'.sql_datetime($month_end).'"';
