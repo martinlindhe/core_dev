@@ -232,7 +232,7 @@
 
 		} else if ($current_tab == 'BlogFiles' && ($session->id == $blog['userId'] || $session->isAdmin)) {
 
-			echo $files->showFiles(FILETYPE_BLOG, $_id);
+			echo showFiles(FILETYPE_BLOG, $_id);
 
 		} else {
 			echo formatUserInputText($blog['blogBody']);
