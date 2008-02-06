@@ -1,5 +1,5 @@
-todo:
-	- när en bild krymps vid file-upload,spara alltid orginalet orört
+ï»¿todo:
+	- nÃ¤r en bild krymps vid file-upload,spara alltid orginalet orÃ¶rt
 
 2008.02.06
 	- core/class.Auth_Standard.php: forgot password feature implemented
@@ -11,6 +11,7 @@ todo:
 	- sample/polls.php: put site polls on it's own page
 	- core/functions_userdata.php: renamed "date field" to "birthdate"
 		and cleaned up the code a bit, not finished
+	- core/atom_polls.php: added "add new answer" on edit polls
 
 
 2008.02.05
@@ -217,59 +218,59 @@ todo:
 
 
 2007.08.08:
-	- js-editor: påbörjat js-editor. skapat knappar som auto-skapar taggen över markerad text
+	- js-editor: pÃ¥bÃ¶rjat js-editor. skapat knappar som auto-skapar taggen Ã¶ver markerad text
 	- js-editor: [s]strikethru text[/s] tagg added
-	- js-editor: påbörjat dokumentation, inklusive bbcodes
+	- js-editor: pÃ¥bÃ¶rjat dokumentation, inklusive bbcodes
 	- js-editor: [h1], [h2], [h3] taggs added + css added
 
 2007.07.25:
 	- lyrics & adblock: fixed opensearch.xml URI
-	- adblock: fixade så adminpanelen funkar ordentligt (pr sattes felaktikgt till "admin")
+	- adblock: fixade sÃ¥ adminpanelen funkar ordentligt (pr sattes felaktikgt till "admin")
 	- news: $config['news']['allow_polls'] added
 	- adblock: added tblUserdata to project
-	- adblock: konverterade "report site" funktionen till att använda functions_feedback.php
-	- adblock: skapade info@adblockrules.org som kontakt-mail för adblock-projektet
+	- adblock: konverterade "report site" funktionen till att anvÃ¤nda functions_feedback.php
+	- adblock: skapade info@adblockrules.org som kontakt-mail fÃ¶r adblock-projektet
 
 2007.07.24
 	- lyrics: show_band.php regression fix efter sql cleanup
 
 
 2007.07.17
-	- lyrics: fixat textsök på svenska tecken
+	- lyrics: fixat textsÃ¶k pÃ¥ svenska tecken
 	- lyrics edit_record.php: kan nu editera recordInfo
 	- lyrics admin kan nu radera band
-	- lyric functions: använder singlequotes i alla queries
+	- lyric functions: anvÃ¤nder singlequotes i alla queries
 
 
 2007.07.07
-	- adblockrules.org är öppnad
+	- adblockrules.org Ã¤r Ã¶ppnad
 
 
 2007.06.26
 	- lite js/css cleanup
-	- files: stöd för php_id3 extension för att visa file info om mp3-filer
+	- files: stÃ¶d fÃ¶r php_id3 extension fÃ¶r att visa file info om mp3-filer
 	- config: bort med date_default_timezone_set(), det ska konfas korrekt i php.ini av den som installerar php
 
 
 2007.06.25
 	- bevakningar: ny modul atom_subscriptions.php
-	- implementerat slå av/sätt på bevakning i forum
-	- gjort en översiktssida "your subscriptions" som listar dina forumbevakningar
+	- implementerat slÃ¥ av/sÃ¤tt pÃ¥ bevakning i forum
+	- gjort en Ã¶versiktssida "your subscriptions" som listar dina forumbevakningar
 
 
 2007.06.20
 	- kan nu exportera poll-resultat till csv-format (spss, excel, openoffice calc)
-	- gjort en bild-guide för hur man importerar poll-resultat i spss
+	- gjort en bild-guide fÃ¶r hur man importerar poll-resultat i spss
 	- add xdebug_is_enabled( ) check to compat check
-	- visar minnesanvändning på sql profilern om man har xdebug extension enabled
-	- ändrade så report user går till moderation istället för feedback
+	- visar minnesanvÃ¤ndning pÃ¥ sql profilern om man har xdebug extension enabled
+	- Ã¤ndrade sÃ¥ report user gÃ¥r till moderation istÃ¤llet fÃ¶r feedback
 	- tblModerationQueue -> tblModeration
 
 
 
 2007.06.19
-	- db driver: gjorde "set names utf8" optional, default on, så db driver kan användas omodifierad till cs
-	- admin: kan nu adda user från admin_list_users, där user-add INTE checkas mot reserved stopwords!
+	- db driver: gjorde "set names utf8" optional, default on, sÃ¥ db driver kan anvÃ¤ndas omodifierad till cs
+	- admin: kan nu adda user frÃ¥n admin_list_users, dÃ¤r user-add INTE checkas mot reserved stopwords!
 	- LICENCE.BSD added
 
 
@@ -277,12 +278,12 @@ todo:
 2007.06.18
 	- forum wip
 	- forum file attachments
-	- forum_new.php: kan lägga till en fil i taget. fileType=FILE_FORUM, ownerId=0
-	- forum_new.php: om man submittar en fil innan forum-inlägget har skrivits så ska man komma tillbaka till samma add-post dialog
-		så att man kan attacha flera filer innan man fyller i inlägget
-	- forum automoderering & anmälan fungerar
+	- forum_new.php: kan lÃ¤gga till en fil i taget. fileType=FILE_FORUM, ownerId=0
+	- forum_new.php: om man submittar en fil innan forum-inlÃ¤gget har skrivits sÃ¥ ska man komma tillbaka till samma add-post dialog
+		sÃ¥ att man kan attacha flera filer innan man fyller i inlÃ¤gget
+	- forum automoderering & anmÃ¤lan fungerar
 	- forum: pager support i forum_search.php
-	- forum: pager i diskussionstrådlistning & översikt
+	- forum: pager i diskussionstrÃ¥dlistning & Ã¶versikt
 
 
 2007.06.14:
@@ -292,156 +293,156 @@ todo:
 
 
 2007.06.13:
-	- wiki: halft påbörjat stöd för filkategorier på wiki files
+	- wiki: halft pÃ¥bÃ¶rjat stÃ¶d fÃ¶r filkategorier pÃ¥ wiki files
 	- fixade file upload till wiki. ledde till diverse cleanup i file-klassen
 	- forum wip
 
 
 2007.06.12:
-	- news: snyggat till utseendet på autogenererade nyhets-sammanfattningar
+	- news: snyggat till utseendet pÃ¥ autogenererade nyhets-sammanfattningar
 	- feedback: renamed till atom_feedback.php
-	- feedback: kan ha flera typer av feedback. ny typ FEEDBACK_ABUSE för user abuse reports
-	- kan nu anmäla användare. anmälningar visas under feedback i admin
+	- feedback: kan ha flera typer av feedback. ny typ FEEDBACK_ABUSE fÃ¶r user abuse reports
+	- kan nu anmÃ¤la anvÃ¤ndare. anmÃ¤lningar visas under feedback i admin
 	- mergade admin_moderationqueuecomments.php med admin_moderation.php
-	- pager på feedback listan i admin
+	- pager pÃ¥ feedback listan i admin
 	- file area: buggfix filesize var orginal upload size innan bild resizades
-	- file area: öppnar "pass thru" fil-länkar i en ny tabb med javascript
-	- adblock: använder opensearch <link> tag för sökmotor, baserat på den från youtube
-	- stöd för autogenerera opensearch <link> taggar i createXHTMLHeader()
-	- forum funktionalitet påbörjad
+	- file area: Ã¶ppnar "pass thru" fil-lÃ¤nkar i en ny tabb med javascript
+	- adblock: anvÃ¤nder opensearch <link> tag fÃ¶r sÃ¶kmotor, baserat pÃ¥ den frÃ¥n youtube
+	- stÃ¶d fÃ¶r autogenerera opensearch <link> taggar i createXHTMLHeader()
+	- forum funktionalitet pÃ¥bÃ¶rjad
 
 
 
 2007.06.11:
 	- polls: gjorde om functions_polls.php till atom_polls.php
-	- atom_comments: kräver inloggad för att kunna skriva kommentarer
+	- atom_comments: krÃ¤ver inloggad fÃ¶r att kunna skriva kommentarer
 	- news: kan koppla en eller flera polls till en nyhetsartikel
 	- polls: kan koppla en eller flera polls till en nyhetsartikel & placera dessa var man vill i artikeln
-	- bugg: kunde rösta när man ej var inloggad. visar nu istället resultat
+	- bugg: kunde rÃ¶sta nÃ¤r man ej var inloggad. visar nu istÃ¤llet resultat
 	- kan se stats under "edit poll"
 
 
 2007.06.10:
-	- news: kan ej visa artiklar som ej än publicerats för icke-admins
-	- news: kan ändra "time for publication" på nyheter
-	- news: admin_news.php ny fil som listar alla ej ännu pulbicerade nyheter & gamla
+	- news: kan ej visa artiklar som ej Ã¤n publicerats fÃ¶r icke-admins
+	- news: kan Ã¤ndra "time for publication" pÃ¥ nyheter
+	- news: admin_news.php ny fil som listar alla ej Ã¤nnu pulbicerade nyheter & gamla
 	- admin port checker added
-	- via admin kunna schemalägga användaromröstningar, start&slut-tid (veckans fråga / dagens fråga)
-	- skapat "site polls" sajtomröstningar. wip
-	- gjort så man kan rösta på polls med ajax
-	- visar "current standings" på site poll när man redan har röstat			
-	- kan bara rösta på active polls
-	- visar om pollen har avslutats eller ej (visar final stats om den är avslutad)
-	- admin_polls visar översikt över aktiva + kommande polls
-	- kan välja starttid för polls "måndagen denna vecka" eller "nästa lediga tid"
-	- site poll: kan redigera frågan & svaren
+	- via admin kunna schemalÃ¤gga anvÃ¤ndaromrÃ¶stningar, start&slut-tid (veckans frÃ¥ga / dagens frÃ¥ga)
+	- skapat "site polls" sajtomrÃ¶stningar. wip
+	- gjort sÃ¥ man kan rÃ¶sta pÃ¥ polls med ajax
+	- visar "current standings" pÃ¥ site poll nÃ¤r man redan har rÃ¶stat			
+	- kan bara rÃ¶sta pÃ¥ active polls
+	- visar om pollen har avslutats eller ej (visar final stats om den Ã¤r avslutad)
+	- admin_polls visar Ã¶versikt Ã¶ver aktiva + kommande polls
+	- kan vÃ¤lja starttid fÃ¶r polls "mÃ¥ndagen denna vecka" eller "nÃ¤sta lediga tid"
+	- site poll: kan redigera frÃ¥gan & svaren
 	- site poll: man kan ta bort polls (markeras som borttagna)
 
 
 2007.06.08:
-	- tog bort "check ip" checkbox på login, går bara sätta via config.php. default = true (anledning: användare begriper inte/skiter i funktionen)
-	- confirmed() småfixar, stöd för wiki-style-länkar
+	- tog bort "check ip" checkbox pÃ¥ login, gÃ¥r bara sÃ¤tta via config.php. default = true (anledning: anvÃ¤ndare begriper inte/skiter i funktionen)
+	- confirmed() smÃ¥fixar, stÃ¶d fÃ¶r wiki-style-lÃ¤nkar
 	- functions_contacts: implementerat friend category och man kan skicka med ett frivilligt meddelande till friend-requesten
 	- skickar priv msg vid accepted eller denied friend request
 	- rename makeNewCategoryDialog() till manageCategoriesDialog()
-	- gjort så att man kan ändra namn och radera kategorier från manageCategoriesDialog()
+	- gjort sÃ¥ att man kan Ã¤ndra namn och radera kategorier frÃ¥n manageCategoriesDialog()
 	- guestbook repeated message spam protection
-	- gjort paging stöd i guestbook
-	- gått igenom core-koden efter en massa "fixme" kommentarer
-	- kan ej längre skapa kategorier i nån annans filarea även om jag är admin
-	- paging support på moderation queue
+	- gjort paging stÃ¶d i guestbook
+	- gÃ¥tt igenom core-koden efter en massa "fixme" kommentarer
+	- kan ej lÃ¤ngre skapa kategorier i nÃ¥n annans filarea Ã¤ven om jag Ã¤r admin
+	- paging support pÃ¥ moderation queue
 	- droppat layout-katalogen, allt e i files-klassen
 
 
 2007.06.03:
-	- categories: buggfix för ej-inloggad användare
+	- categories: buggfix fÃ¶r ej-inloggad anvÃ¤ndare
 	- user search: buggfix & cleanup
 
 
 2007.06.01:
 	- admin list users: visar en snyggare lista
-	- admin: kan göra normal users till admin/super admin + privat msg confirmation ("Martin has granted you administrator rights")
+	- admin: kan gÃ¶ra normal users till admin/super admin + privat msg confirmation ("Martin has granted you administrator rights")
 		genom admin_list_users.php
 
 
 2007.05.31:
 	- plugins: ipx-plugin steg 2/2
-	- db drivers: fixat så att db drivers sätter default värden i respektive connect() funktion istället,
-		så att PostgreSQL-drivern kan använda pgsql default port och desamma för mysql, ifall ingen port är angiven i config.php
-	- admin compat check: förbättrat apache version detection
-	- admin compat check: förbättrat GD version detection
-	- admin compat check: förbättrat OS detection litegrann (identifierar iaf windows & ubuntu linux)
-	- session: buggfix, går nu logga in igen om man blir utloggad pga "client useragent changed"
+	- db drivers: fixat sÃ¥ att db drivers sÃ¤tter default vÃ¤rden i respektive connect() funktion istÃ¤llet,
+		sÃ¥ att PostgreSQL-drivern kan anvÃ¤nda pgsql default port och desamma fÃ¶r mysql, ifall ingen port Ã¤r angiven i config.php
+	- admin compat check: fÃ¶rbÃ¤ttrat apache version detection
+	- admin compat check: fÃ¶rbÃ¤ttrat GD version detection
+	- admin compat check: fÃ¶rbÃ¤ttrat OS detection litegrann (identifierar iaf windows & ubuntu linux)
+	- session: buggfix, gÃ¥r nu logga in igen om man blir utloggad pga "client useragent changed"
 	- db pgsql: visar client & server info & character encoding
-	- admin: visar query ip funktionen för super admins
-	- admin: kan skriva note till ip (tblComments) på admin_ip.php
-	- core: kan nu stänga av moduler feedback, moderation (visar ej då deras admin-sidor), för process-server & framtida customization möjligheter
-	- gjort "the final" databas-konvertering till utf8 för dbSample, dbLyrics
-	- setup: skapat katalog & påbörjat create_config.php, autodetektar vilka db drivers som är konfigurerade på php-servern
-	- session: ändrade $session->home_page till $session->start_page
+	- admin: visar query ip funktionen fÃ¶r super admins
+	- admin: kan skriva note till ip (tblComments) pÃ¥ admin_ip.php
+	- core: kan nu stÃ¤nga av moduler feedback, moderation (visar ej dÃ¥ deras admin-sidor), fÃ¶r process-server & framtida customization mÃ¶jligheter
+	- gjort "the final" databas-konvertering till utf8 fÃ¶r dbSample, dbLyrics
+	- setup: skapat katalog & pÃ¥bÃ¶rjat create_config.php, autodetektar vilka db drivers som Ã¤r konfigurerade pÃ¥ php-servern
+	- session: Ã¤ndrade $session->home_page till $session->start_page
 	- session: skapade $session->error_page, en sida som visar session error
-	- session: buggfix: session timeout dirigerade user till startisda på fel ställe, t.ex /_process/core_dev/admin/index.php
-	- admin phpinfo: hax för att ta bort phpinfo() css så den passar in i designen
+	- session: buggfix: session timeout dirigerade user till startisda pÃ¥ fel stÃ¤lle, t.ex /_process/core_dev/admin/index.php
+	- admin phpinfo: hax fÃ¶r att ta bort phpinfo() css sÃ¥ den passar in i designen
 
 
 2007.05.30:
 	- core: renamed $config['session']['web_root'] to $config['web_root']
 	- core: renamed $config['session']['core_web_root'] to $config['core_web_root']
 	- core: renamed $config['session']['default_title'] to $config['default_title']
-	- core: cleanup för att kunna konfigurera var core-projektets filer finns, bättre struktur & flexibilitet
+	- core: cleanup fÃ¶r att kunna konfigurera var core-projektets filer finns, bÃ¤ttre struktur & flexibilitet
 	- core: katalogstruktur-cleanup:
-		* egen katalog för docs
-		* ny katalog "api" för ajax-script, rss-genererande script, och img-manipulation script
-		* ny katalog "plugins" för plugins
+		* egen katalog fÃ¶r docs
+		* ny katalog "api" fÃ¶r ajax-script, rss-genererande script, och img-manipulation script
+		* ny katalog "plugins" fÃ¶r plugins
 	- plugins: gjort ipx-grejset som ett plugin, steg 1/2
-	- rensat upp db schemat för dbSample
+	- rensat upp db schemat fÃ¶r dbSample
 	- class.DB_PostgreSQL.php, preliminary pg-sql driver for php_pgsql.dll extension, not really working
 
 
 2007.05.28:
-	- plugin: påbörjat ett "plugin" för wurfl, arbetar med att utforma en "plugin-standard"
+	- plugin: pÃ¥bÃ¶rjat ett "plugin" fÃ¶r wurfl, arbetar med att utforma en "plugin-standard"
 	- plugins: loadPlugins() skapad
-	- rating: fixade så rating-modul bara visar current rating om användaren ej är inloggad
+	- rating: fixade sÃ¥ rating-modul bara visar current rating om anvÃ¤ndaren ej Ã¤r inloggad
 	- plugin wurfl: versionerar enskild cache.php, WURFL_USE_MULTICACHE=false (blir bra prestanda tillsammans med APC, och bara 1 fil att versionera)
 	- admin: list users added
 
 
 2007.05.27:
-	- session: tog bort hårdkodade sökvägar /css, /js, /gfx från createXHTMLHeader(), added setting $session->core_web_root
-	- session: setting: allow-login. man kan slå av login för alla utan superadmin
+	- session: tog bort hÃ¥rdkodade sÃ¶kvÃ¤gar /css, /js, /gfx frÃ¥n createXHTMLHeader(), added setting $session->core_web_root
+	- session: setting: allow-login. man kan slÃ¥ av login fÃ¶r alla utan superadmin
 	- messages: la till rubriker
-	- använder os3grid-0.6 från http://sourceforge.net/projects/os3grid/, LGPL. används för att lista privata meddelanden
-	- messages: gjort klart översikten
-	- messages: mottagna brev markeras som lästa av mottagaren (i mottagarens inbox)
+	- anvÃ¤nder os3grid-0.6 frÃ¥n http://sourceforge.net/projects/os3grid/, LGPL. anvÃ¤nds fÃ¶r att lista privata meddelanden
+	- messages: gjort klart Ã¶versikten
+	- messages: mottagna brev markeras som lÃ¤sta av mottagaren (i mottagarens inbox)
 
 
 2007.05.24:
 	- lyric: lite cleanups, inklusive formatering av visad data
-	- lyric: åter-insertade de texter som pajats pga latin1->utf8 konverteringen
-	- lyric: använder faq-modulens javascript på show_record_lyrics.php för bättre översikt
+	- lyric: Ã¥ter-insertade de texter som pajats pga latin1->utf8 konverteringen
+	- lyric: anvÃ¤nder faq-modulens javascript pÃ¥ show_record_lyrics.php fÃ¶r bÃ¤ttre Ã¶versikt
 	- messages: ny modul, kan nu skicka privata meddelanden, saknar design
-	- feedback: admin kan besvara frågan (som ett privat meddelande)
+	- feedback: admin kan besvara frÃ¥gan (som ett privat meddelande)
 
 
 2007.05.23:
-	- db: $db->insert($q) skapad, returnerar insert_id från INSERT-queryn
-	- db: tagit bort $db->insert_id variabeln, använd $db->insert() istället
-	- db: uppdaterat alla INSERT-queries att använda $db->insert() istället för $db->query()
-				och ändrat en del return-codes från true till insert_id
-	- admin: visar vilka användare som e associerade med ett IP på admin_ip.php
-	- faq-modul skapad, med admin-gränssnitt
-	- gjort lite css&js-effekter på faq-listan
-	- feedback-modul skapad, med admin-gränssnitt
+	- db: $db->insert($q) skapad, returnerar insert_id frÃ¥n INSERT-queryn
+	- db: tagit bort $db->insert_id variabeln, anvÃ¤nd $db->insert() istÃ¤llet
+	- db: uppdaterat alla INSERT-queries att anvÃ¤nda $db->insert() istÃ¤llet fÃ¶r $db->query()
+				och Ã¤ndrat en del return-codes frÃ¥n true till insert_id
+	- admin: visar vilka anvÃ¤ndare som e associerade med ett IP pÃ¥ admin_ip.php
+	- faq-modul skapad, med admin-grÃ¤nssnitt
+	- gjort lite css&js-effekter pÃ¥ faq-listan
+	- feedback-modul skapad, med admin-grÃ¤nssnitt
 
 
 2007.05.22:
 	- files: kan se andra personers filareor
 	- visar "last logged in" och "users online" listor
-	- visar andra personers info... fixat så man kan se andras filarea, andras bloggar, osv
+	- visar andra personers info... fixat sÃ¥ man kan se andras filarea, andras bloggar, osv
 	- friend list: html cleanup, visar online/offline status
-	- user: implementerat besöksstatistik på ens profil + visning av den
+	- user: implementerat besÃ¶ksstatistik pÃ¥ ens profil + visning av den
 	- db: snyggare sql profiler output
-	- sök användare implementerat
+	- sÃ¶k anvÃ¤ndare implementerat
 
 
 2007.05.21:
@@ -449,265 +450,265 @@ todo:
 
 
 2007.05.20:
-	- lyric: buggfix för add_lyric_single, visade ej rätt sida när lyric var skapad
-	- lyric edit_lyric.php: BEKRÄFTELSE innan en lyrics raderas!
+	- lyric: buggfix fÃ¶r add_lyric_single, visade ej rÃ¤tt sida nÃ¤r lyric var skapad
+	- lyric edit_lyric.php: BEKRÃ„FTELSE innan en lyrics raderas!
 
 
 2007.05.18:
-	- session: $session->default_title added, default titel för en sida, om ingen specifik titel satts för att overrrida default
+	- session: $session->default_title added, default titel fÃ¶r en sida, om ingen specifik titel satts fÃ¶r att overrrida default
 	- core: gjort en funktion som genererar en hel xhtml-header
-	- session: fixade så sessionen cachar valt theme, men nu krävs logout & login-igen för att valt theme ska börja användas
-	- session: flyttat ut login/logout/register logik från constructorn å lagt i egen funktion, $session->handleSessionActions()
-	- userdata: kan nu ge multichoice-typer data såhär: "123|Click here", där 123 är värdet av valet, och Click here är texten på valet,
+	- session: fixade sÃ¥ sessionen cachar valt theme, men nu krÃ¤vs logout & login-igen fÃ¶r att valt theme ska bÃ¶rja anvÃ¤ndas
+	- session: flyttat ut login/logout/register logik frÃ¥n constructorn Ã¥ lagt i egen funktion, $session->handleSessionActions()
+	- userdata: kan nu ge multichoice-typer data sÃ¥hÃ¤r: "123|Click here", dÃ¤r 123 Ã¤r vÃ¤rdet av valet, och Click here Ã¤r texten pÃ¥ valet,
 			exempel:
 			default.css|Default style
 			blah.css|Another style by kenta
 			hanteras i getCategoriesSelect()
-	- session/userdata: gjort så att man inte behöver logga ut & in igen för att ändring av userdata "Theme" ska läsas in på nytt,
-		genom att göra ett special case i userdata handlingen för ett fält med namnet "Theme" (gör fältnamnet konfigurerbart)
-	- gör även samma typ av special case fast för det fält som innehåller E-mail, för att köra email-validering på input
+	- session/userdata: gjort sÃ¥ att man inte behÃ¶ver logga ut & in igen fÃ¶r att Ã¤ndring av userdata "Theme" ska lÃ¤sas in pÃ¥ nytt,
+		genom att gÃ¶ra ett special case i userdata handlingen fÃ¶r ett fÃ¤lt med namnet "Theme" (gÃ¶r fÃ¤ltnamnet konfigurerbart)
+	- gÃ¶r Ã¤ven samma typ av special case fast fÃ¶r det fÃ¤lt som innehÃ¥ller E-mail, fÃ¶r att kÃ¶ra email-validering pÃ¥ input
 
 
 2007.05.17:
-	- userdata: fixade så kategorier & personliga settings tas bort när admin raderar ett userdata fält
-	- userdata: fixade så checkbox typen funkar
-	- userdata: fixat userdata typen image så den funkar + går att radera uppladdade bilder
-	- core: förberett för skins-support genom att dela /css/functions.css i /css/core.css och /css/themes/default.css
-	- core: lagt dit skins-support. kräver ett userdata fält som heter "Theme" som är en dropdown eller radiobutton med css-filnamn
+	- userdata: fixade sÃ¥ kategorier & personliga settings tas bort nÃ¤r admin raderar ett userdata fÃ¤lt
+	- userdata: fixade sÃ¥ checkbox typen funkar
+	- userdata: fixat userdata typen image sÃ¥ den funkar + gÃ¥r att radera uppladdade bilder
+	- core: fÃ¶rberett fÃ¶r skins-support genom att dela /css/functions.css i /css/core.css och /css/themes/default.css
+	- core: lagt dit skins-support. krÃ¤ver ett userdata fÃ¤lt som heter "Theme" som Ã¤r en dropdown eller radiobutton med css-filnamn
 
 
 2007.05.16:
 	- admin: admin_events sql optimering
 	- db: tblModerationQueue.autoTriggered added
-	- admin moderation: alla anmälningar sparas, men markeras som behandlade
-	- admin moderation: gjort så att REPORTED / TRIGGERED är ett extra värde istället för en typ av modereringsobjekt
-	- db: tblRatings - ny tabell för atom_ratings.php
+	- admin moderation: alla anmÃ¤lningar sparas, men markeras som behandlade
+	- admin moderation: gjort sÃ¥ att REPORTED / TRIGGERED Ã¤r ett extra vÃ¤rde istÃ¤llet fÃ¶r en typ av modereringsobjekt
+	- db: tblRatings - ny tabell fÃ¶r atom_ratings.php
 	- news: implementerat news rating
-	- admin userdata: gick ej radera/ändra userdatafält options från admin
+	- admin userdata: gick ej radera/Ã¤ndra userdatafÃ¤lt options frÃ¥n admin
 	- categories: lite cleanup
-	- visar userdata-fält vid registerrutan
-	- tog bort ajax-delete uservar-funktionen, den fyller inte rätt syfte
+	- visar userdata-fÃ¤lt vid registerrutan
+	- tog bort ajax-delete uservar-funktionen, den fyller inte rÃ¤tt syfte
 	- session: checkar isReservedUsername() check i register-funktionen
-	- news: fixat så delete news fungerar
-	- userdata accessnivåer - gjorde om till en PRIVATE flagga (kan endast ses av användaren & admins), om fältet ej är PRIVATE så kan alla se det
-	- blog: kan ge rating på en blog
+	- news: fixat sÃ¥ delete news fungerar
+	- userdata accessnivÃ¥er - gjorde om till en PRIVATE flagga (kan endast ses av anvÃ¤ndaren & admins), om fÃ¤ltet ej Ã¤r PRIVATE sÃ¥ kan alla se det
+	- blog: kan ge rating pÃ¥ en blog
 	- news: kan flytta en nyhet till en annan kategori genom "edit news"
-	- friends: skickar nu relations-request, och visar pågående och inkommande requests på din vänlista
+	- friends: skickar nu relations-request, och visar pÃ¥gÃ¥ende och inkommande requests pÃ¥ din vÃ¤nlista
 
 
 2007.05.15:
-	- spider: nytt projekt, genomför en automatisk userdata input audit av en webbsajt
+	- spider: nytt projekt, genomfÃ¶r en automatisk userdata input audit av en webbsajt
 
 
 2007.05.13:
-	- friends: använder atom_categories.php för att hålla contact groups (som skapas från admin)
-	- userdata: påbörjat implementation
+	- friends: anvÃ¤nder atom_categories.php fÃ¶r att hÃ¥lla contact groups (som skapas frÃ¥n admin)
+	- userdata: pÃ¥bÃ¶rjat implementation
 	- categories: .ownerId added
-	- userdata: använder tblCategories för att implementera dropdownlistor
+	- userdata: anvÃ¤nder tblCategories fÃ¶r att implementera dropdownlistor
 	- core: getProjectPath() fix-trix
 
 
 2007.05.12:
 	- friends: skapat sida
-	- friends: visa kompislista, bli vänner, ta bort relation implemneterat
+	- friends: visa kompislista, bli vÃ¤nner, ta bort relation implemneterat
 
 
 2007.05.11:
-	- core: kom på ett lite finare sätt att includa core filer
-	- session: login-hantering sköts nu automatiskt av sessionshanteraren.
-	  skicka GET parametern "login" på vilken url som helst för att visa login-dialogen
+	- core: kom pÃ¥ ett lite finare sÃ¤tt att includa core filer
+	- session: login-hantering skÃ¶ts nu automatiskt av sessionshanteraren.
+	  skicka GET parametern "login" pÃ¥ vilken url som helst fÃ¶r att visa login-dialogen
 	- session: gjort om $config['site']['web_root'] till $config['session']['web_root'], och skapat $session->web_root
-	- categories: getCategoriesSelect() kan nu växla mellan kategorier med dropdownlist, används i file area kategorier
+	- categories: getCategoriesSelect() kan nu vÃ¤xla mellan kategorier med dropdownlist, anvÃ¤nds i file area kategorier
 	- comments: gjort defualt css till showComments()
-	- admin: fixade admin länk i left menu när man e på en admin-sida funkade ej
+	- admin: fixade admin lÃ¤nk i left menu nÃ¤r man e pÃ¥ en admin-sida funkade ej
 	- blog: kommentarer visas nu med showComments()
-	- blog: gjort en funktion för att visa översikt av dina egna bloggar
+	- blog: gjort en funktion fÃ¶r att visa Ã¶versikt av dina egna bloggar
 	- files: generell filtyp "dokument", inkluderar .doc .txt och .pdf filer
 	- categories: xhtml fix i autogenererad kod i getCategoriesSelect()
 	- news: kan bifoga filer till nyheter
-	- news: css meny på nyhetsartiklarna (edit, delete, attachments, comment)
-	- news: ändrat så news markeras som deleted men tas ej bort i databasen
-	- news: kan ej längre dubbel-submitta news
-	- news: speciell css för rss-enabled news artikel header .news_title_rss
+	- news: css meny pÃ¥ nyhetsartiklarna (edit, delete, attachments, comment)
+	- news: Ã¤ndrat sÃ¥ news markeras som deleted men tas ej bort i databasen
+	- news: kan ej lÃ¤ngre dubbel-submitta news
+	- news: speciell css fÃ¶r rss-enabled news artikel header .news_title_rss
 	- profil: ny sida
-	- profil: visar "mina filer", "mina bloggar", "inställningar" under personlig sida
-	- gästbok: ny funktion
+	- profil: visar "mina filer", "mina bloggar", "instÃ¤llningar" under personlig sida
+	- gÃ¤stbok: ny funktion
 	- files: gjorde en generell dokument-ikon, skrotade pdf-ikonen
-	- gästbok: auto-moderation trigger på känslig text, admin testat osv
+	- gÃ¤stbok: auto-moderation trigger pÃ¥ kÃ¤nslig text, admin testat osv
 	- admin: gjort en navigationsmeny
 
 
 2007.05.10:
 	- lyrics: visa ej "log in" om man e inloggad
-	- lyrics: cleanupText() uppstädad, den fuckade upp en del unicode-text
+	- lyrics: cleanupText() uppstÃ¤dad, den fuckade upp en del unicode-text
 	- lyrics: import tracklist improvements. hanterar titlar med punkt i, tex "D.O.W.N.". visar inte matches i lower case
-	- lyrics: optimerat sql-queries på några sidor med väldigt mycke onödiga queries
-	- lyrics: tagit bort all modereringslogik. man måste nu vara inloggad för att kunna ändra något
-	- blog: stöd för kommentarer, visningen är inte gjord
-	- blog: stöd för fil-attachments, går ej länka in bilder än direkt i bloggeditorn
-	- core: css fixande, hover funkar igen häråvar, och current page i createMenu() menyer är stylad korrekt nu
-	- categories: gjort en generell funktion för att skapa nya kategorier, den stödjer "new blog category" och "new filearea category"
-	- categories: cleanup & buggfixande, nu funkar globala kategorier som det var tänkt
-	- admin: byggt adminpanel för "manage stopwords"
-	- blog: byggt adminpaneler för "moderation queue"
-	- news: visar edit news länk direkt på nyhetsartikeln för admins
+	- lyrics: optimerat sql-queries pÃ¥ nÃ¥gra sidor med vÃ¤ldigt mycke onÃ¶diga queries
+	- lyrics: tagit bort all modereringslogik. man mÃ¥ste nu vara inloggad fÃ¶r att kunna Ã¤ndra nÃ¥got
+	- blog: stÃ¶d fÃ¶r kommentarer, visningen Ã¤r inte gjord
+	- blog: stÃ¶d fÃ¶r fil-attachments, gÃ¥r ej lÃ¤nka in bilder Ã¤n direkt i bloggeditorn
+	- core: css fixande, hover funkar igen hÃ¤rÃ¥var, och current page i createMenu() menyer Ã¤r stylad korrekt nu
+	- categories: gjort en generell funktion fÃ¶r att skapa nya kategorier, den stÃ¶djer "new blog category" och "new filearea category"
+	- categories: cleanup & buggfixande, nu funkar globala kategorier som det var tÃ¤nkt
+	- admin: byggt adminpanel fÃ¶r "manage stopwords"
+	- blog: byggt adminpaneler fÃ¶r "moderation queue"
+	- news: visar edit news lÃ¤nk direkt pÃ¥ nyhetsartikeln fÃ¶r admins
 
 
 2007.05.09:
-	- blog: byggt om en massa så det funkar snarlikt som en wiki, med en egen meny & går att baka in i en annan sida, wip
-	- wiki: använder createMenu() för att skapa wiki-menyn
-	- blog: markerar bloggar som raderade, tas ej bort från databasen. delete blog inbyggt i showBlog()
-	- zine: tog bort hela zine projektet å integrerade blog-delen i "sample" projektet
+	- blog: byggt om en massa sÃ¥ det funkar snarlikt som en wiki, med en egen meny & gÃ¥r att baka in i en annan sida, wip
+	- wiki: anvÃ¤nder createMenu() fÃ¶r att skapa wiki-menyn
+	- blog: markerar bloggar som raderade, tas ej bort frÃ¥n databasen. delete blog inbyggt i showBlog()
+	- zine: tog bort hela zine projektet Ã¥ integrerade blog-delen i "sample" projektet
 	- atom_moderation.php: ny modul med modereringsfunktioner
 	- blog: "sensitive" automatisk moderering
 	- db: nya tabeller tblModerationQueue, tblStopwords
 
 
 2007.05.07:
-	- files: skapat $files->convertImage() för att gömma undan imagemagick & exponera konverterings-funktionaliteten utanför klassen
-	- admin events: möjlighet att ändra sorteringsordningen på events
-	- files: ökar "maximum execution time" vid file upload, otestad, timade ut för tidigt när jag försökte uploada en större fil från jobbet
-	- files: visar file size på hover på filöversikt i file arean
-	- core: sätter getProjectPath() till en js variabel i början av pageload istället för å passa på den till massa funktioner
+	- files: skapat $files->convertImage() fÃ¶r att gÃ¶mma undan imagemagick & exponera konverterings-funktionaliteten utanfÃ¶r klassen
+	- admin events: mÃ¶jlighet att Ã¤ndra sorteringsordningen pÃ¥ events
+	- files: Ã¶kar "maximum execution time" vid file upload, otestad, timade ut fÃ¶r tidigt nÃ¤r jag fÃ¶rsÃ¶kte uploada en stÃ¶rre fil frÃ¥n jobbet
+	- files: visar file size pÃ¥ hover pÃ¥ filÃ¶versikt i file arean
+	- core: sÃ¤tter getProjectPath() till en js variabel i bÃ¶rjan av pageload istÃ¤llet fÃ¶r Ã¥ passa pÃ¥ den till massa funktioner
 	- lang projekt: portat till nya plattformen
 	- allt: renamade alla main.css till site.css
-	- blogs: skapat generella funktioner för bloggar i core/functions_blogs.php
+	- blogs: skapat generella funktioner fÃ¶r bloggar i core/functions_blogs.php
 	- konverterat zine-projektet till nya plattformen
-	- general: gjort createMenu() som skapar leftmenu på adblock, lyrics, sample. generell funktion för att snabbt skapa menyer
-	- general: gjort linkRSSfeeds() som skapar <link> taggar för aktuell sida för att exponera alla tillgängliga rss feeds
+	- general: gjort createMenu() som skapar leftmenu pÃ¥ adblock, lyrics, sample. generell funktion fÃ¶r att snabbt skapa menyer
+	- general: gjort linkRSSfeeds() som skapar <link> taggar fÃ¶r aktuell sida fÃ¶r att exponera alla tillgÃ¤ngliga rss feeds
 	- core: renamade functions_comments.php, functions_categories.php, functions_revisions.php till "atom_comments.php" etc,
-		eftersom dom inte är fristående "moduler"
-	- categories: check om kategorin redan finns när den skapas, kan ej längre skapa identiska kategorier i news & blogs etc
+		eftersom dom inte Ã¤r fristÃ¥ende "moduler"
+	- categories: check om kategorin redan finns nÃ¤r den skapas, kan ej lÃ¤ngre skapa identiska kategorier i news & blogs etc
 
 
 
 2007.05.05:
-	- files: ny show_image.php som visar enbart bilden, för enkel extern länkning
-	- files: visar bild-bredd & höjd i ajax_fileinfo.php
-	- core: tagit bort de sista for-looparna på arrayer där foreach passade bättre
+	- files: ny show_image.php som visar enbart bilden, fÃ¶r enkel extern lÃ¤nkning
+	- files: visar bild-bredd & hÃ¶jd i ajax_fileinfo.php
+	- core: tagit bort de sista for-looparna pÃ¥ arrayer dÃ¤r foreach passade bÃ¤ttre
 	- admin: visar max upload file size i admin compat check
 	- admin compat check: snyggat upp utseendet lite
 	- admin ip query page skapad
-	- skapade en "sample" katalog, för att bygga en exempel sajt som utnyttjar de olika funktionerna, istället för å mixa med adblock
-	- session: dödar session om client user agent ändras, på samma sätt som IP change
+	- skapade en "sample" katalog, fÃ¶r att bygga en exempel sajt som utnyttjar de olika funktionerna, istÃ¤llet fÃ¶r Ã¥ mixa med adblock
+	- session: dÃ¶dar session om client user agent Ã¤ndras, pÃ¥ samma sÃ¤tt som IP change
 	- adblock: tog bort settings.php
-	- session: skapat tblLogins, som skapar ett entry för varje inloggning. för att kunna visa statistik över detta i admin
+	- session: skapat tblLogins, som skapar ett entry fÃ¶r varje inloggning. fÃ¶r att kunna visa statistik Ã¶ver detta i admin
 
 
 2007.05.03:
 	- session: tydligare felmeddelande vid misslyckad inloggning
-	- admin events: fixade så de olika logg-typerna har olika css, notice, warning & error
+	- admin events: fixade sÃ¥ de olika logg-typerna har olika css, notice, warning & error
 
 
 2007.04.26:
-	- db: fixade så $db->showProfile() exluderar "sql connect time" när den räknar ut "php time"
+	- db: fixade sÃ¥ $db->showProfile() exluderar "sql connect time" nÃ¤r den rÃ¤knar ut "php time"
 	- core: flytta ut db->log() till session->log(), det fixade alla cp problem med login/logout loggande
-	- files: ändrade så att bmp->jpeg konverteraren är imagemagick istället (open source,får användas kommersiellt), nconvert support finns utkommenterat
-	- files: bytte namn på "allowed_image_types" etc. till "image_types" ( == standardbildformat som alla webbläsare förväntas kunna visa
-	- files: lade till stöd för att konvertera svg till png vid file upload
-	- files: fixat stöd för filnamn med flera punkter i filnamnet
-	- core: optimerat lite sql på olika ställen
-  - core: confirmed(), ny funktion som genererar en generell "är du säker på att du vill .... ja/nej" sida, wip...
-  				confirmed() används av adblock/editrule.php, adblock/admin_news_delete.php
+	- files: Ã¤ndrade sÃ¥ att bmp->jpeg konverteraren Ã¤r imagemagick istÃ¤llet (open source,fÃ¥r anvÃ¤ndas kommersiellt), nconvert support finns utkommenterat
+	- files: bytte namn pÃ¥ "allowed_image_types" etc. till "image_types" ( == standardbildformat som alla webblÃ¤sare fÃ¶rvÃ¤ntas kunna visa
+	- files: lade till stÃ¶d fÃ¶r att konvertera svg till png vid file upload
+	- files: fixat stÃ¶d fÃ¶r filnamn med flera punkter i filnamnet
+	- core: optimerat lite sql pÃ¥ olika stÃ¤llen
+  - core: confirmed(), ny funktion som genererar en generell "Ã¤r du sÃ¤ker pÃ¥ att du vill .... ja/nej" sida, wip...
+  				confirmed() anvÃ¤nds av adblock/editrule.php, adblock/admin_news_delete.php
   - admin: la "edit news" koden i en egen fil
 
 
 2007.04.25:
-	- janina: fixade lite småbuggar som gjorde att janina-sidan inte funka längre pga core rewrite
+	- janina: fixade lite smÃ¥buggar som gjorde att janina-sidan inte funka lÃ¤ngre pga core rewrite
 	- lyrics: import_tracks.php: cleanup & gjort den funktionell igen
-	- admin: compat check: identifierar om gd är installerat
+	- admin: compat check: identifierar om gd Ã¤r installerat
 	- files: konverterar automatiskt uppladdade bmp bilder till jpeg
 
 
 2007.04.22:
-	- db: $db->log() för user logged in & user logged out visade inte username i loggen
+	- db: $db->log() fÃ¶r user logged in & user logged out visade inte username i loggen
 	- news: kan tagga upp heading vs body av en nyhetsartiekl med [head]xx[/head] och [body]xx[/body]
 	- news: kan nu visa en enskild nyhet
-	- news: fixade nyhetslänkarna från rss feeden
-	- news: allt är nu på engelska
-	- news admin: visar namn på editor
+	- news: fixade nyhetslÃ¤nkarna frÃ¥n rss feeden
+	- news: allt Ã¤r nu pÃ¥ engelska
+	- news admin: visar namn pÃ¥ editor
 	- news: implementerat kommentarer
-	- news: gjorde en generell comments funktion "showComments()" som listar comments, tog bor koden från functions_news.php showNews()
-	- wiki: code cleanup. tog bort all kod för "Comments". ska inte använda comments på wikis, utan en "talk" page istället
+	- news: gjorde en generell comments funktion "showComments()" som listar comments, tog bor koden frÃ¥n functions_news.php showNews()
+	- wiki: code cleanup. tog bort all kod fÃ¶r "Comments". ska inte anvÃ¤nda comments pÃ¥ wikis, utan en "talk" page istÃ¤llet
 	- news: kan nu skapa nyhetskategorier
 	- db: added tblNews.categoryId
-	- files: plockade ut den interna category koden och hookade upp den med functions_categories.php istället
-	- news: kan välja kategori när man skapar en nyhet
-	- news: kan nu se översikt från bara en nyhetskategori
-	- news: rss feed på alla nyheter + på enskild kategori av nyheter är nu möjlig
-	- adblock: visar rss news feed på startsidan
+	- files: plockade ut den interna category koden och hookade upp den med functions_categories.php istÃ¤llet
+	- news: kan vÃ¤lja kategori nÃ¤r man skapar en nyhet
+	- news: kan nu se Ã¶versikt frÃ¥n bara en nyhetskategori
+	- news: rss feed pÃ¥ alla nyheter + pÃ¥ enskild kategori av nyheter Ã¤r nu mÃ¶jlig
+	- adblock: visar rss news feed pÃ¥ startsidan
 
 
 2007.04.20:
 	- admin: en phpinfo sida
-	- admin: compat check sida. visar överskådligt versioner av php mysql & apache på samma ställe och om dom är "supported"
-	- admin: compat check sidan visar även om vissa php settings är fel
+	- admin: compat check sida. visar Ã¶verskÃ¥dligt versioner av php mysql & apache pÃ¥ samma stÃ¤lle och om dom Ã¤r "supported"
+	- admin: compat check sidan visar Ã¤ven om vissa php settings Ã¤r fel
 	- admin: compat check gjort en bra version compare funktion
 	- admin: compat check visar om php extension gd saknas (fixme detectar inte gd ok..)
 	- admin: compat check visar om php extension apc saknas
-	- admin: skapade sidor för att visa session info & db config
-	- core: gjorde $config['debug'] istället för $db->debug
-	- files: ändrade kategorikoden. nu är det categoryPermissions. en user file-kategori kan antingen vara: normal, private, hidden, global (admin only)
-	- db: exporterade alla mysql databaser, gör en ny db from scratch och importera tillbaka, mysql klagade om db fel å shit
+	- admin: skapade sidor fÃ¶r att visa session info & db config
+	- core: gjorde $config['debug'] istÃ¤llet fÃ¶r $db->debug
+	- files: Ã¤ndrade kategorikoden. nu Ã¤r det categoryPermissions. en user file-kategori kan antingen vara: normal, private, hidden, global (admin only)
+	- db: exporterade alla mysql databaser, gÃ¶r en ny db from scratch och importera tillbaka, mysql klagade om db fel Ã¥ shit
 	- admin: compat check basic os detection, identifierar windows
-	- news: rss html tag måste va i headern, gjorde en lösning med /adblock/news.php och design_head.php, $meta_rss
-	- news: implementerat rss news feed och förberett för stöd för att kunna prenumerera på en särskild kategori
-	- core cleanup: $sql eller $query blev $q för sql query strängar
+	- news: rss html tag mÃ¥ste va i headern, gjorde en lÃ¶sning med /adblock/news.php och design_head.php, $meta_rss
+	- news: implementerat rss news feed och fÃ¶rberett fÃ¶r stÃ¶d fÃ¶r att kunna prenumerera pÃ¥ en sÃ¤rskild kategori
+	- core cleanup: $sql eller $query blev $q fÃ¶r sql query strÃ¤ngar
 	- news: en separat "ny nyhet"-sida
-	- news: fixade så editorId sätts vid ändringar
+	- news: fixade sÃ¥ editorId sÃ¤tts vid Ã¤ndringar
 	- news: visar edited-by namn
 
 
 2007.04.19
 	- files: kan nu "download file" i filvisaren
-	- files: påbörjat hantering av videofiler, behöver en videospelare i flash / silverlight
-	- files: admin ser mer fileinfo än normal user
-	- files: lagt till FILETYPE_USERFILE så man kan ha en "egen" fil-area åxå, och fixat så egen fil-area funkar
-	- files: börjat skriva kod för att hantera flera typer av fil kategorier: normal, privat (för vänner), hemlig, global (super admin), wip
+	- files: pÃ¥bÃ¶rjat hantering av videofiler, behÃ¶ver en videospelare i flash / silverlight
+	- files: admin ser mer fileinfo Ã¤n normal user
+	- files: lagt till FILETYPE_USERFILE sÃ¥ man kan ha en "egen" fil-area Ã¥xÃ¥, och fixat sÃ¥ egen fil-area funkar
+	- files: bÃ¶rjat skriva kod fÃ¶r att hantera flera typer av fil kategorier: normal, privat (fÃ¶r vÃ¤nner), hemlig, global (super admin), wip
 
 
 2007.04.18
-	- adblock: fixade så vänsternavigeringen markerar var man är i navigeringsmenyn
+	- adblock: fixade sÃ¥ vÃ¤nsternavigeringen markerar var man Ã¤r i navigeringsmenyn
 	- core: news modul skapad, news admin modul skapad. tblNews skapad
-	- core wiki: la till inställning för att helt gömma wiki-ramen
-	- core wiki: buggfix - om inte en wiki finns så visades inget alls av wiki();
-	- files: visar nu fil-inforuta för mp3:or med
-	- files: visar nu fil-inforuta för "generella" filer med
-	- core: gjort så att /core/ajax*.php filerna funkar som /core/file.php, de kan ta en project-name parameter för att hitta rätt include
-	- core: gjort ett admin-gränssnitt som delas av alla "projekt", i /admin/
+	- core wiki: la till instÃ¤llning fÃ¶r att helt gÃ¶mma wiki-ramen
+	- core wiki: buggfix - om inte en wiki finns sÃ¥ visades inget alls av wiki();
+	- files: visar nu fil-inforuta fÃ¶r mp3:or med
+	- files: visar nu fil-inforuta fÃ¶r "generella" filer med
+	- core: gjort sÃ¥ att /core/ajax*.php filerna funkar som /core/file.php, de kan ta en project-name parameter fÃ¶r att hitta rÃ¤tt include
+	- core: gjort ett admin-grÃ¤nssnitt som delas av alla "projekt", i /admin/
 	- adblock: flyttade ut admin_events.php till /admin/
 
 
 2007.04.17
-	- adblock: flyttade ut den sista funktionen sendTextFile från functions_files.php och skrotade den filen
-	- adblock/download.php: flyttade över all download logik + ruleset cache koden till handleAdblockDownloadRequest()
-	- core: implementerade $db->getNumArray() för att returnera 1-dimensionella arrayer
+	- adblock: flyttade ut den sista funktionen sendTextFile frÃ¥n functions_files.php och skrotade den filen
+	- adblock/download.php: flyttade Ã¶ver all download logik + ruleset cache koden till handleAdblockDownloadRequest()
+	- core: implementerade $db->getNumArray() fÃ¶r att returnera 1-dimensionella arrayer
 	- core db: tog bort num_rows() funktionerna
-	- session: fixade till editSettings() en del, http post för att spara ändringar funkar nu
-	- core db: auto expanderar sql-profil-loggen ifall något sql error förekom under scriptkörningen
-	- core db: varje db driver sätter nu $db->dialect, för att kunna göra specifika optimeringar för en viss dialekt t.ex mysql, samt erbjuda en fallback för andra databaser
-	- core db: visar query cache config+status för mysqli-extension
+	- session: fixade till editSettings() en del, http post fÃ¶r att spara Ã¤ndringar funkar nu
+	- core db: auto expanderar sql-profil-loggen ifall nÃ¥got sql error fÃ¶rekom under scriptkÃ¶rningen
+	- core db: varje db driver sÃ¤tter nu $db->dialect, fÃ¶r att kunna gÃ¶ra specifika optimeringar fÃ¶r en viss dialekt t.ex mysql, samt erbjuda en fallback fÃ¶r andra databaser
+	- core db: visar query cache config+status fÃ¶r mysqli-extension
 	- wiki: tog bort "hide" funktionen helt
-	- files: gjort funktioner som autogenererar <img> taggar för att visa en bild, och för att visa en thumbnail vid default storlek
-	- core: flyttade alla funktions-include files från /functions/* till /core/*
+	- files: gjort funktioner som autogenererar <img> taggar fÃ¶r att visa en bild, och fÃ¶r att visa en thumbnail vid default storlek
+	- core: flyttade alla funktions-include files frÃ¥n /functions/* till /core/*
 	- adblock: rensade upp gammal config
-	- session: nya funktioner: requireLoggedIn(), requireAdmin(). redirectar användaren till 'session' start_page config direktivet och stoppar scriptet
+	- session: nya funktioner: requireLoggedIn(), requireAdmin(). redirectar anvÃ¤ndaren till 'session' start_page config direktivet och stoppar scriptet
 
 
 2007.04.15
 	- files: kontrollerade alla file.php requests
-	- files: fixade så mp3-spelaren kan avkoda '&amp;' i url:en
-	- files: file upload progress med ajax callback, kräver apc extension (obs funkar ej med uploadprogress), wip
+	- files: fixade sÃ¥ mp3-spelaren kan avkoda '&amp;' i url:en
+	- files: file upload progress med ajax callback, krÃ¤ver apc extension (obs funkar ej med uploadprogress), wip
 
 
 2007.04.14:
-	- wiki edit funkar för ej inloggade
-	- gjort ett script som gör typ detta regelbundet, med AHK:
+	- wiki edit funkar fÃ¶r ej inloggade
+	- gjort ett script som gÃ¶r typ detta regelbundet, med AHK:
 		mysqldump --all-databases --no-data --compact > e:/devel/webroot/sql/db-structure.sql
-	- core: kan nu skapa nya users från login grejen
-	- wiki: implementerat paging för wiki history
-	- core: gjorde en generell URLadd() funktion för att kunna klistra på variabler till aktuell url, tog bort wikiURLadd()
-	- core: flyttat över /ajax/*.php till /core/ajax_*.php
+	- core: kan nu skapa nya users frÃ¥n login grejen
+	- wiki: implementerat paging fÃ¶r wiki history
+	- core: gjorde en generell URLadd() funktion fÃ¶r att kunna klistra pÃ¥ variabler till aktuell url, tog bort wikiURLadd()
+	- core: flyttat Ã¶ver /ajax/*.php till /core/ajax_*.php
 	- files: om file-upload & thumbs ej finns, skapas dessa. wip detta funkar inge bra i linux
 	- files: skapar .htaccess med "deny all" & tom index.html i dessa kataloger automatiskt
 	- files: ny config setting: allow anon uploads, $files->anon_uploads bool
@@ -715,118 +716,118 @@ todo:
 	- konverterade svnhosting koden
 	- konverterade ajax_chat koden!
 	- files: kan nu rotera bilder
-	- files: raderar thumbs när en fil raderas eller när en bild roteras
+	- files: raderar thumbs nÃ¤r en fil raderas eller nÃ¤r en bild roteras
 	- wiki: visar bilder med taggen [[file:5]]
-	- files: sätter nocache headers för filer som ändrats efter att sessionen startades, funkar sådär. ibland cachar browsern iallafall bilderna
-	- wiki: visar history för en vanlig user på låst wiki
+	- files: sÃ¤tter nocache headers fÃ¶r filer som Ã¤ndrats efter att sessionen startades, funkar sÃ¥dÃ¤r. ibland cachar browsern iallafall bilderna
+	- wiki: visar history fÃ¶r en vanlig user pÃ¥ lÃ¥st wiki
 
 
 2007.04.13:
-	- gjort ordentliga .htaccess så man bara stänger av directory listing
+	- gjort ordentliga .htaccess sÃ¥ man bara stÃ¤nger av directory listing
 
 
 2007.04.12:
 	- core: fixade en long-standing bugg i $db->log() kommandot
-	- adblock ruleset.php fixad så den funkar igen, efter otestade ändringar från jobbet
-	- adblock: tömde gfx/ katalogen på allt utom loggan
+	- adblock ruleset.php fixad sÃ¥ den funkar igen, efter otestade Ã¤ndringar frÃ¥n jobbet
+	- adblock: tÃ¶mde gfx/ katalogen pÃ¥ allt utom loggan
 	- core: fixat lite med ajax.js & /ajax/*.php filerna
 	- core: gjort icon_locked & icon_unlocked ikoner
-	- core: db driver buggfixar vid några error-paths vilket gör att alla sql fel nu fångas av profilern
-	- wiki: admins kan nu låsa en wiki, så att inte besökare/normala users kan redigera den
-	- core revisions: ny kolumn för revisions för att markera: TEXT_CHANGED, FILE_UPLOADED, FILE_DELETED, WIKI_LOCKED, WIKI_UNLOCKED
-	- wiki: loggar revisions för wiki lock, wiki unlock, file upload
-	- revisions: tog hela history-koden från wiki till en separat funktion som e _generell_ till functions_revisions.php
-	- revisions: implementerat flera typer av entries i revision-loggen, så nu visas det som revisions när den låses/låses upp, och fil laddas upp
-	- core: löste problemet med addressering till ajax-funktioner i /ajax/ och /core/ genom funktionen getProjectPath()
+	- core: db driver buggfixar vid nÃ¥gra error-paths vilket gÃ¶r att alla sql fel nu fÃ¥ngas av profilern
+	- wiki: admins kan nu lÃ¥sa en wiki, sÃ¥ att inte besÃ¶kare/normala users kan redigera den
+	- core revisions: ny kolumn fÃ¶r revisions fÃ¶r att markera: TEXT_CHANGED, FILE_UPLOADED, FILE_DELETED, WIKI_LOCKED, WIKI_UNLOCKED
+	- wiki: loggar revisions fÃ¶r wiki lock, wiki unlock, file upload
+	- revisions: tog hela history-koden frÃ¥n wiki till en separat funktion som e _generell_ till functions_revisions.php
+	- revisions: implementerat flera typer av entries i revision-loggen, sÃ¥ nu visas det som revisions nÃ¤r den lÃ¥ses/lÃ¥ses upp, och fil laddas upp
+	- core: lÃ¶ste problemet med addressering till ajax-funktioner i /ajax/ och /core/ genom funktionen getProjectPath()
 		som skapar en parameter att skicka med alla genererade url:s mot dessa. getProjectPath() returnerar inget om projektet
-		körs från rotkatalgogen i webbservern (löst i /core/file.php)
+		kÃ¶rs frÃ¥n rotkatalgogen i webbservern (lÃ¶st i /core/file.php)
 	- files: renamade FILETYPE_NORMAL_UPLOAD till FILETYPE_FILEAREA_UPLOAD
 
 
 
 2007.04.11:
-	- adblock: plockade ut paging från ruleset.php till functions_general.php makePager() funktion
+	- adblock: plockade ut paging frÃ¥n ruleset.php till functions_general.php makePager() funktion
 	- adblock: gjorde om ruleset.php, admin_reports.php tabellhack till div & nya css klasser:
 				_row_container, _row_col1, _row_col2, osv..
-				Idén är att ha färdig "standard" css mall för att göra en lista med 2 eller fler kolumner i css
-	- adblock: fixade så report_site.php funkar igen
+				IdÃ©n Ã¤r att ha fÃ¤rdig "standard" css mall fÃ¶r att gÃ¶ra en lista med 2 eller fler kolumner i css
+	- adblock: fixade sÃ¥ report_site.php funkar igen
 	- adblock: bort med js/adblock.js, gjorde en generell "add search engine" js-funktion i /js/functions.js
-	- file browser details: visa vem som laddade upp filen, och när med ett ajax-anrop /ajax/fileinfo.php
+	- file browser details: visa vem som laddade upp filen, och nÃ¤r med ett ajax-anrop /ajax/fileinfo.php
 	- gjorde en ajax-loading animation reusable i /layout/ajax_loading_layer.html
-	- visar thumbnails på oanvända uppladdade bilder i wiki:edit vyn
-	- class.DB_MySQLi & class.DB_MySQL: istället för att returnera tomma arrayer etc vid fel, loggar fel först med db profilern!
-	- wiki kommando: [[link:url|titel]] url-länk, för att stänga av <a> taggen /helt förbjuda html
-	- wiki kommando: [[search:url|titel]] för att känka in quicksearch-moduler i text, wip-javascriptet funkar inte riktigt
+	- visar thumbnails pÃ¥ oanvÃ¤nda uppladdade bilder i wiki:edit vyn
+	- class.DB_MySQLi & class.DB_MySQL: istÃ¤llet fÃ¶r att returnera tomma arrayer etc vid fel, loggar fel fÃ¶rst med db profilern!
+	- wiki kommando: [[link:url|titel]] url-lÃ¤nk, fÃ¶r att stÃ¤nga av <a> taggen /helt fÃ¶rbjuda html
+	- wiki kommando: [[search:url|titel]] fÃ¶r att kÃ¤nka in quicksearch-moduler i text, wip-javascriptet funkar inte riktigt
 
 
 2007.04.10:
-	- wiki: kan nu länka andra wikis i text, med [[wiki:Name|title]]
-	- åter-implementerat stöd för files, genom Files klassen
+	- wiki: kan nu lÃ¤nka andra wikis i text, med [[wiki:Name|title]]
+	- Ã¥ter-implementerat stÃ¶d fÃ¶r files, genom Files klassen
 
 
 2007.04.08:
-	- konverterat allt (?) till att använda nya "functions"
-	- övergått till nya settings funktionerna
-	- tog bort session ID som parameter från alla funktioner, använder $session->id istället
-	- gjorde en sida wiki.php?View:Help, istället för help.php, about.php, contribute.php, subscribe.php
-	- gjorde en generell tblRevisions / functions_revisions.php och använd den istället för tblInfoFieldHistory
+	- konverterat allt (?) till att anvÃ¤nda nya "functions"
+	- Ã¶vergÃ¥tt till nya settings funktionerna
+	- tog bort session ID som parameter frÃ¥n alla funktioner, anvÃ¤nder $session->id istÃ¤llet
+	- gjorde en sida wiki.php?View:Help, istÃ¤llet fÃ¶r help.php, about.php, contribute.php, subscribe.php
+	- gjorde en generell tblRevisions / functions_revisions.php och anvÃ¤nd den istÃ¤llet fÃ¶r tblInfoFieldHistory
 	- wiki: config $config['wiki] ...
 	- wiki: renamade allt "infofield" till wiki
 
 
 2007.04.04:
-	- konverterat det mesta från HTML till XHTML 1.0
+	- konverterat det mesta frÃ¥n HTML till XHTML 1.0
 
 2006.11.27:
-	- fixade så att alla kommentarer visas till en regel, var en bugg i sql-querien pga ändringen till DATETIME
+	- fixade sÃ¥ att alla kommentarer visas till en regel, var en bugg i sql-querien pga Ã¤ndringen till DATETIME
 
 
 2006.11.20:
 	- userId -> smallint i databasen
-	- settings: sparar ändring av email
-	- rensade bort oanvända includes i config.php
-	- fixade firefox search engine så den funkar med ff 2.0 (krävde absolut url i filterset_search.src)
-	- highlightar sökfrasen i matchande träffar i ruleset.php-sökning
+	- settings: sparar Ã¤ndring av email
+	- rensade bort oanvÃ¤nda includes i config.php
+	- fixade firefox search engine sÃ¥ den funkar med ff 2.0 (krÃ¤vde absolut url i filterset_search.src)
+	- highlightar sÃ¶kfrasen i matchande trÃ¤ffar i ruleset.php-sÃ¶kning
 
 2006.11.16:
-	- konverterade includes till att använda samma include_all.php osv som andra projekt, och städade upp config.php,
-		resultat eventuellt marginellt snabbare sidladdning pga färre includes
+	- konverterade includes till att anvÃ¤nda samma include_all.php osv som andra projekt, och stÃ¤dade upp config.php,
+		resultat eventuellt marginellt snabbare sidladdning pga fÃ¤rre includes
 
 2006.11.15:
-	- gjorde om sql-debug footern till en generell funktion för att återanväda i andra projekt
-	- fixade tblUsers, tblComments, tblLogs, tblAdblockRules att använda DATETIME för att fungera med databasförändringar
-	- fixat så felaktiga sql's visar en error ikon i debugloggen
-	- tog bort hostname lookups på admin_reports.php: speedup
+	- gjorde om sql-debug footern till en generell funktion fÃ¶r att Ã¥teranvÃ¤da i andra projekt
+	- fixade tblUsers, tblComments, tblLogs, tblAdblockRules att anvÃ¤nda DATETIME fÃ¶r att fungera med databasfÃ¶rÃ¤ndringar
+	- fixat sÃ¥ felaktiga sql's visar en error ikon i debugloggen
+	- tog bort hostname lookups pÃ¥ admin_reports.php: speedup
 
 2006.11.07:
 	- lade till sql time i layersql (debug)
-	- fixade download.php att inte reagera på alla post-requests (nu går det att spara ändringar i infofields på download.php)
-	- lade till $_SESSION['listlimit'], istället för $config['setting_listlimit'], fixade upp så att inställningen koms ihåg genom sessionen
-	- tog bort url-redirekt funktionen från logout.php, så att man istället hamnar på startsidan vid utloggning
-	- snyggade till css'en för footerns debug sql-view lite
-	- droppade tblBugReports, används ej
-	- fixade ruleset.php html så att formulär inte nestas, så flera formulär på sidan fungerar korrekt (infofield funkar nu där)
-	- design_head.php: flyttade över alla js-funktioner till js/functions.js
+	- fixade download.php att inte reagera pÃ¥ alla post-requests (nu gÃ¥r det att spara Ã¤ndringar i infofields pÃ¥ download.php)
+	- lade till $_SESSION['listlimit'], istÃ¤llet fÃ¶r $config['setting_listlimit'], fixade upp sÃ¥ att instÃ¤llningen koms ihÃ¥g genom sessionen
+	- tog bort url-redirekt funktionen frÃ¥n logout.php, sÃ¥ att man istÃ¤llet hamnar pÃ¥ startsidan vid utloggning
+	- snyggade till css'en fÃ¶r footerns debug sql-view lite
+	- droppade tblBugReports, anvÃ¤nds ej
+	- fixade ruleset.php html sÃ¥ att formulÃ¤r inte nestas, sÃ¥ flera formulÃ¤r pÃ¥ sidan fungerar korrekt (infofield funkar nu dÃ¤r)
+	- design_head.php: flyttade Ã¶ver alla js-funktioner till js/functions.js
 	- tog bort file_show_image.php
 	- design_head.php: tog bort browser width & height detection kod
-	- design_head.php, config.php: tog bort $config['login_encrypted'], och möjlighet att logga in med sha1-kodat password
+	- design_head.php, config.php: tog bort $config['login_encrypted'], och mÃ¶jlighet att logga in med sha1-kodat password
 	- tog bort js/md1.js, js/sha1.js
-	- optimerade functions_infofields.php getInfoField() sql när ett infofield bara ska visas
+	- optimerade functions_infofields.php getInfoField() sql nÃ¤r ett infofield bara ska visas
 
 2006.11.06:
-	- download.php: ändrade till att omgenerera cache i samma filnamn om det är >4h senast modifierad,
-		har ingen nytta av nya filer och sparar ändringar med svn
+	- download.php: Ã¤ndrade till att omgenerera cache i samma filnamn om det Ã¤r >4h senast modifierad,
+		har ingen nytta av nya filer och sparar Ã¤ndringar med svn
 	- nameLink(): det stod "Generated by inget nickname", fixat
 	- tog bort en massa irrelevanta .php-filer
 	- databasen: raderade lokala kopior av tblGeoIP, tblGeoIPCities, tblGeoIPCityNames
-	- infofields kan nu ha enkodade länkar, implementerade med en site-setting $config['infofield']['allow_html']
-	- fixade positionen för inloggrutan som visas i utloggat läge
+	- infofields kan nu ha enkodade lÃ¤nkar, implementerade med en site-setting $config['infofield']['allow_html']
+	- fixade positionen fÃ¶r inloggrutan som visas i utloggat lÃ¤ge
 	- newrule.php: tog bort "make this comment private" som default
 	- contribute.php: flyttade bort add-searchengine funktionen till inc/functions.js (ny fil)
 	- flyttade all js till js/*, all css till css/*
 
 2006.10.09:
-	- download.php: ändrade till att bara generera 2 cache-revisioner per dag
-	- admin_events.php: visar inte location för LAN-ip'n (döljer "LAN, LAN")
-	- errorhelp.php: cleanup + visar förklaring till "session timeout"
-	- locales_*.php: använder locales från ../site_functions
+	- download.php: Ã¤ndrade till att bara generera 2 cache-revisioner per dag
+	- admin_events.php: visar inte location fÃ¶r LAN-ip'n (dÃ¶ljer "LAN, LAN")
+	- errorhelp.php: cleanup + visar fÃ¶rklaring till "session timeout"
+	- locales_*.php: anvÃ¤nder locales frÃ¥n ../site_functions

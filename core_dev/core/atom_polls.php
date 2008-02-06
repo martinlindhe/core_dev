@@ -154,9 +154,9 @@
 
 		if ($session->id && $active && !hasAnsweredPoll($_id)) {
 			foreach ($list as $row) {
-				$result .= '<span onclick="submit_poll('.$_id.','.$row['categoryId'].')">';
+				$result .= '<div class="poll_item" onclick="submit_poll('.$_id.','.$row['categoryId'].')">';
 				$result .= $row['categoryName'];
-				$result .= '</span><br/>';
+				$result .= '</div><br/>';
 			}
 		} else {
 			if ($session->id) {
@@ -236,6 +236,9 @@
 						updateCategory(CATEGORY_POLL, $list[$i]['categoryId'], $_POST['poll_a'.$i]);
 					}
 				}
+				if (!empty($_POST['poll_new_a'])) {
+					addCategory(CATEGORY_POLL, $_POST['poll_new_a'], $pollId);
+				}
 			}
 
 			if (isset($_GET['delete']) && confirmed('Are you sure you want to delete this site poll?', 'delete&amp;id', $pollId)) {
@@ -275,10 +278,11 @@
 				for ($i=0; $i<count($list); $i++) {
 					echo 'Answer '.($i+1).': <input type="text" size="30" name="poll_a'.$i.'" value="'.$list[$i]['categoryName'].'"/><br/>';
 				}
+				echo 'Add new answer: <input type="text" size="30" name="poll_new_a"/><br/>';
 			}
 
 			echo '<input type="submit" class="button" value="Save changes"/>';
-			echo '</form>';
+			echo '</form><br/>';
 
 			echo '<a href="'.URLadd('poll_stats', $pollId).'">Poll stats</a><br/>';
 			echo '<a href="'.URLadd('delete&amp;poll_edit', $pollId).'">Delete poll</a><br/>';
@@ -309,7 +313,7 @@
 				echo '<h1>News polls</h1>';
 				break;
 				
-			default: die('managePolls EEK');
+			default: die('managePolls() EEP');
 		}
 
 		$list = getPolls($_type, $_owner);
@@ -350,6 +354,7 @@
 			echo '</tr>';
 		}
 		if (count($list)) echo '</table>';
+		echo '<br/>';
 
 		echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">Add new poll</h2>';
 		echo '<div id="new_poll_form">';

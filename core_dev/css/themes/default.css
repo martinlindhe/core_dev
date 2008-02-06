@@ -449,6 +449,11 @@ select {
 	margin-bottom: 5px;
 }
 
+.poll_item {
+	background-color: #eee;
+	padding: 5px;
+	cursor: pointer;
+}
 
 
 /* forum css */
