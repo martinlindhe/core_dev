@@ -146,8 +146,11 @@ class Auth_Standard extends Auth_Base
 
 		//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
 		if ($forgot_pwd && !$session->id) {
-			if (!empty($_POST['forgot_pwd'])) {
-				echo $_POST['forgot_pwd'];
+			if (isset($_POST['forgot_pwd'])) {
+				$check = $this->handleForgotPassword($_POST['forgot_pwd']);
+				if (!$check) {
+					$session->error = 'The specified email address does not match any registered user.';
+				}
 				$tab = 'forgot_pwd';
 			}
 		}
@@ -230,6 +233,10 @@ class Auth_Standard extends Auth_Base
 
 			if ($forgot_pwd) {
 				echo '<div id="login_forgot_pwd_layer"'.($tab!='forgot_pwd'?' style="display: none;"':'').'>';
+
+				if ($this->resetpwd_sent) {
+					echo 'A email has been sent to your mail address with instructions how to reclaim your account.';
+				} else {
 					echo '<form method="post" action="">';
 					echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 					echo 'You will recieve an e-mail with a link to follow,<br/>';
@@ -242,6 +249,7 @@ class Auth_Standard extends Auth_Base
 					echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');"/>';
 					echo '<input type="submit" class="button" value="Forgot password" style="font-weight: bold;"/>';
 					echo '</form>';
+				}
 				echo '</div>';
 			}
 		}

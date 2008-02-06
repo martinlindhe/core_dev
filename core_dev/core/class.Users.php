@@ -70,6 +70,29 @@ class Users
 	}
 
 	/**
+	 * Sets a new password for the user
+	 */
+	function setPassword($_id, $_pwd1, $_pwd2)
+	{
+		global $db, $session, $auth;
+		if (!is_numeric($_id)) return false;
+
+		if (strlen($_pwd1) < 4) {
+			$session->error = 'Password must be at least 4 characters long';
+			return false;
+		}
+
+		if ($_pwd1 != $_pwd2) {
+			$session->error = 'The passwords doesnt match';
+			return false;
+		}
+
+		$q = 'UPDATE tblUsers SET userPass="'.sha1( sha1($auth->sha1_key).sha1($_pwd1) ).'" WHERE userId='.$_id;
+		$db->update($q);
+		return true;
+	}
+
+	/**
 	 * Returns the $_limit last users logged in, ordered by the latest logins first
 	 */
 	function lastLoggedIn($_limit = 50)

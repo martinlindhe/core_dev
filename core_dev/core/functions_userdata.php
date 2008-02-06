@@ -402,4 +402,23 @@
 		return loadUserdataSetting($userId, $fieldId);
 	}
 
+	/**
+	 * Used for "forgot my password" feature
+	 *
+	 * \param $email e-mail to look for
+	 * \return userId that has this email, or false
+	 */
+	function findUserByEmail($email)
+	{
+		global $db;
+		$email = trim($email);
+		if (!ValidEmail($email)) return false;
+
+		$email_field = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
+
+		$q = 'SELECT ownerId FROM tblSettings WHERE settingName="'.$db->escape($email_field).'" AND settingValue="'.$db->escape($email).'" AND settingType='.SETTING_USERDATA;
+		$id = $db->getOneItem($q);
+		if ($id) return $id;
+		return false;
+	}
 ?>

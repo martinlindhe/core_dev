@@ -23,6 +23,7 @@ abstract class Auth_Base
 	public $mail_activate = false;				///< does account registration require email activation?
 
 	public $activation_sent = false;			///< internal. true if mail activation has been sent
+	public $resetpwd_sent		= false;			///< internal. true if mail for password reset has been sent
 
 	function __construct(array $auth_conf = array())
 	{
@@ -122,7 +123,7 @@ abstract class Auth_Base
 			"Follow this link to activate your account:\n".
 			"http://priv.localhost/core_dev/sample/activate.php?id=".$_id."&code=".$code."\n".
 			"\n".
-			"The activation code will expire in ".shortTimePeriod($config['activate']['expire_time_email'])."\n";
+			"The link will expire in ".shortTimePeriod($config['activate']['expire_time_email'])."\n";
 
 		$mail->AddAddress($adr);
 		$mail->Body = $msg;
@@ -147,6 +148,90 @@ abstract class Auth_Base
 		echo 'Your account has been activated<br/>';
 		echo 'You can now proceed to <a href="login.php">log in</a>.';
 		return true;
+	}
+
+	/**
+	 * Looks up user supplied email address and generates a mail for them if needd
+	 */
+	function handleForgotPassword($email)
+	{
+		global $config;
+
+		$email = trim($email);
+		if (!ValidEmail($email)) return false;
+
+		$_id = findUserByEmail($email);
+		if (!$_id) return false;
+
+		$code = generateActivationCode(10000000, 99999999);
+		$act_id = createActivation(ACTIVATE_CHANGE_PWD, $code, $_id);
+
+		$mail = new PHPMailer();
+
+		$mail->Mailer = 'smtp';
+		$mail->Host = 'mail.unicorn.tv';	//FIXME gör smtp server konfigurerbar
+		//$mail->Username = 'usr';
+		//$mail->Password = 'pwd';
+
+		$mail->CharSet  = 'utf-8';
+
+		$mail->From     = 'noreply@example.com';
+		$mail->FromName = 'core_dev';
+
+		$mail->IsHTML(false);   // send HTML mail
+
+		$mail->Subject  = "core_dev forgot password";
+
+		$msg =
+			"Hello. Someone (probably you) asked for a password reset procedure from IP ".$_SERVER['REMOTE_ADDR']."\n".
+			"\n".
+			"Follow this link to set a new password:\n".
+			"http://priv.localhost/core_dev/sample/reset_password.php?id=".$_id."&code=".$code."\n".
+			"\n".
+			"The link will expire in ".shortTimePeriod($config['activate']['expire_time_change_pwd'])."\n";
+
+		$mail->AddAddress($email);
+		$mail->Body = $msg;
+		if (!$mail->Send()) return false;
+
+		$this->resetpwd_sent = true;
+		return true;
+	}
+
+	function resetPassword($_id, $_code)
+	{
+		global $session;
+		if (!is_numeric($_id) || !is_numeric($_code)) return false;
+
+		if (!verifyActivation(ACTIVATE_CHANGE_PWD, $_code, $_id)) {
+			echo 'Activation code is invalid or expired.';
+			return false;
+		}
+
+		echo '<h1>Set a new password</h1>';
+
+		if (isset($_POST['reset_pwd1']) && isset($_POST['reset_pwd2'])) {
+			$chk = Users::setPassword($_id, $_POST['reset_pwd1'], $_POST['reset_pwd2']);
+			if ($chk) {
+				echo 'Your password has been changed!';
+				removeActivation(ACTIVATE_CHANGE_PWD, $_code);
+				return true;
+			}
+		}
+
+		echo 'Because we don\'t store the password in clear text it cannot be retrieved.<br/>';
+		echo 'You will therefore need to set a new password for your account.<br/>';
+
+		if ($session->error) {
+			echo '<div class="critical">'.$session->error.'</div><br/>';
+			$session->error = ''; //remove error message once it has been displayed
+		}
+
+		echo '<form method="post" action="">';
+		echo 'New password: <input type="password" name="reset_pwd1" size="12"/><br/>';
+		echo 'Repeat password: <input type="password" name="reset_pwd2" size="12"/><br/>';
+		echo '<input type="submit" class="button" value="Set password"/>';
+		echo '</form>';
 	}
 
 }

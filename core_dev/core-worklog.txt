@@ -1,6 +1,9 @@
 todo:
 	- när en bild krymps vid file-upload,spara alltid orginalet orört
 
+2008.02.06
+	- core/class.Auth_Standard.php: forgot password feature implemented
+
 
 2008.02.05
 	- core/functions_userdata.php, class.Auth_Standard.php: refuses registration
