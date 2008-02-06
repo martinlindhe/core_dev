@@ -142,7 +142,7 @@
 		echo '<option value="'.USERDATA_TYPE_RADIO.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_RADIO)			echo ' selected'; echo '>Radio buttons';
 		echo '<option value="'.USERDATA_TYPE_SELECT.		'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)		echo ' selected'; echo '>Dropdown list';
 		echo '<option value="'.USERDATA_TYPE_IMAGE.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)			echo ' selected'; echo '>Image';
-		echo '<option value="'.USERDATA_TYPE_DATE.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_DATE)			echo ' selected'; echo '>Date field';
+		echo '<option value="'.USERDATA_TYPE_BIRTHDATE.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE)	echo ' selected'; echo '>Birth date';
 		echo '<option value="'.USERDATA_TYPE_EMAIL.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)			echo ' selected'; echo '>E-mail';
 		echo '</select>';
 		echo '<br/>';

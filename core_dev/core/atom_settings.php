@@ -133,12 +133,15 @@
 		echo '<form name="edit_settings_frm" method="post" enctype="multipart/form-data" action="">';
 		foreach($list as $row) {
 			if (!empty($_POST)) {
-				if ($row['fieldType'] == USERDATA_TYPE_IMAGE && !empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {
-					$files->deleteFile($row['settingValue']);
-					$row['settingValue'] = 0;
-				} else if ($row['fieldType'] == USERDATA_TYPE_IMAGE && isset($_FILES['userdata_'.$row['fieldId']])) {
-					//fixme: är det där rätt parameterordning till handleUpload?
-					$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], $row['fieldId'], FILETYPE_USERDATA);
+				if ($row['fieldType'] == USERDATA_TYPE_IMAGE) {
+
+					if (!empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {
+						$files->deleteFile($row['settingValue']);
+						$row['settingValue'] = 0;
+					} else if (isset($_FILES['userdata_'.$row['fieldId']])) {
+						//FIXME: ska det va 'fieldId' som ägare??
+						$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
+					}
 				} else if (isset($_POST['userdata_'.$row['fieldId']])) {
 					$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 				}
@@ -147,6 +150,17 @@
 					if (!ValidEmail($row['settingValue'])) {
 						echo '<div class="critical">WARNING: The email entered is not valid!</div>';
 					}
+				}
+
+				if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE) {
+					d($row['fieldId']);
+
+					$born = mktime(0, 0, 0,
+						$_POST['userdata_'.$row['fieldId'].'_month'],
+						$_POST['userdata_'.$row['fieldId'].'_day'],
+						$_POST['userdata_'.$row['fieldId'].'_year']
+					);
+					$row['settingValue'] = sql_datetime($born);
 				}
 
 				//Stores the setting

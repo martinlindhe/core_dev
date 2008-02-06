@@ -15,7 +15,7 @@
 	define('USERDATA_TYPE_SELECT',		4);
 	define('USERDATA_TYPE_TEXTAREA',	5);
 	define('USERDATA_TYPE_IMAGE',			6);
-	define('USERDATA_TYPE_DATE',			7);
+	define('USERDATA_TYPE_BIRTHDATE',	7);	//date of birth
 	define('USERDATA_TYPE_EMAIL',			8);	//text string holding a email address
 
 	//userdata module settings:
@@ -237,25 +237,21 @@
 				}
 				break;
 
-			case USERDATA_TYPE_DATE:
+			case USERDATA_TYPE_BIRTHDATE:
 				$result = stripslashes($row['fieldName']).':<br/>';
-				if ($value && (strlen($value) == 8)) {
-					$y = substr($value,0,4);
-					$m = substr($value,4,2);
-					$d = substr($value,6,2);
-				} else {
-					$d = '';
-					$m = '';
-					$y = '';
+				$d = $m = $y = '';				
+
+				if ($value) {
+					$born = datetime_to_timestamp($value);
+					$y = date('Y', $born);
+					$m = date('n', $born);
+					$d = date('d', $born);
 				}
 
-				$result .= '<select name="userdata_'.$fieldId.'_day">';
-				$result .= '<option value="">- Day -';
-				for ($j=1; $j<=31; $j++) {
-					$k = $j;
-					if ($j<10) $k = '0'.$k;
-					if ($j == $d) $selected = ' selected'; else $selected = '';
-					$result .= '<option value="'.$k.'"'.$selected.'>'.$j;
+				$result .= '<select name="userdata_'.$fieldId.'_year">';
+				$result .= '<option value="">- Year -';
+				for ($j=date('Y')-100; $j<=date('Y'); $j++) {
+					$result .= '<option value="'.$j.'"'.($j==$y?' selected':'').'>'.$j;
 				}
 				$result .= '</select>';
 
@@ -264,18 +260,19 @@
 				for ($j=1; $j<=12; $j++) {
 					$k = $j;
 					if ($j<10) $k = '0'.$k;
-					if ($j == $m) $selected = ' selected'; else $selected = '';
-					$result .= '<option value="'.$k.'"'.$selected.'>'.$j;
+					$result .= '<option value="'.$k.'"'.($j==$m?' selected':'').'>'.$j;
 				}
 				$result .= '</select>';
 
-				$result .= '<select name="userdata_'.$fieldId.'_year">';
-				$result .= '<option value="">- Year -';
-				for ($j=1980; $j<=date('Y'); $j++) {
-					if ($j == $y) $selected = ' selected'; else $selected = '';
-					$result .= '<option value="'.$j.'"'.$selected.'>'.$j;
+				$result .= '<select name="userdata_'.$fieldId.'_day">';
+				$result .= '<option value="">- Day -';
+				for ($j=1; $j<=31; $j++) {
+					$result .= '<option value="'.($j<10?'0'.$j:$j).'"'.($j==$d?' selected':'').'>'.$j;
 				}
 				$result .= '</select>';
+
+				//FIXME this should only be used if core_dev is configured for swedish ssn validation
+				$result .= '<input type="text" name="userdata_'.$fieldId.'_chk" size="4"/>';
 		}
 
 		return $result;

@@ -9,6 +9,8 @@ todo:
 	- admin/admin_statistics.php & friends: improved stats display
 	- core/atom_polls.php: added "start poll next monday" option
 	- sample/polls.php: put site polls on it's own page
+	- core/functions_userdata.php: renamed "date field" to "birthdate"
+		and cleaned up the code a bit, not finished
 
 
 2008.02.05

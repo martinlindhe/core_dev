@@ -161,9 +161,9 @@
 		} else {
 			if ($session->id) {
 				if ($active) {
-					$result .= 'You already voted, showing current standings:<br/>';
+					$result .= '<br/>You already voted, showing current standings:<br/><br/>';
 				} else {
-					$result .= 'The poll closed, final result:<br/>';
+					$result .= '<br/>The poll closed, final result:<br/><br/>';
 				}
 			}
 
@@ -174,7 +174,7 @@
 			foreach ($votes as $row) {
 				$pct = 0;
 				if ($tot_votes) $pct = (($row['cnt'] / $tot_votes)*100);
-				$result .= $row['categoryName'].' got '.$row['cnt'].' ('.$pct.'%) votes<br/>';
+				$result .= ' &bull; '.$row['categoryName'].' got '.$row['cnt'].' votes ('.$pct.'%)<br/>';
 			}
 		}
 
@@ -196,7 +196,9 @@
 	}
 
 	/**
+	 * Shows active polls of specified type
 	 *
+	 * \param $_type type of poll
 	 */
 	function showPolls($_type)
 	{
