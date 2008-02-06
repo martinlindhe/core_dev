@@ -97,11 +97,11 @@ class Users
 	/**
 	 * Returns number of users online
 	 */
-	function allOnlineCnt()
+	function onlineCnt()
 	{
 		global $db, $session;
 
-		$q  = 'SELECT COUNT(userId) FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
 		return $db->getOneItem($q);
 	}
 
@@ -112,7 +112,7 @@ class Users
 	{
 		global $db;
 
-		$q = 'SELECT COUNT(userId) FROM tblUsers';
+		$q = 'SELECT COUNT(*) FROM tblUsers';
 		return $db->getOneItem($q);
 	}
 
@@ -123,7 +123,7 @@ class Users
 	{
 		global $db;
 
-		$q = 'SELECT COUNT(userId) FROM tblUsers WHERE userMode=1';
+		$q = 'SELECT COUNT(*) FROM tblUsers WHERE userMode=1';
 		return $db->getOneItem($q);
 	}
 
@@ -134,7 +134,7 @@ class Users
 	{
 		global $db;
 
-		$q = 'SELECT COUNT(userId) FROM tblUsers WHERE userMode=2';
+		$q = 'SELECT COUNT(*) FROM tblUsers WHERE userMode=2';
 		return $db->getOneItem($q);
 	}
 

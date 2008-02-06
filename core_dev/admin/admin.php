@@ -20,7 +20,7 @@
 	echo 'Registered users: <a href="admin_list_users.php'.getProjectPath(false).'">'.Users::cnt().'</a><br/>';
 	echo 'Admins: <a href="admin_list_users.php?mode=1'.getProjectPath().'">'.Users::adminCnt().'</a><br/>';
 	echo 'SuperAdmins: <a href="admin_list_users.php?mode=2'.getProjectPath().'">'.Users::superAdminCnt().'</a><br/>';
-	echo 'Users logged in: <a href="/sample/users_online.php">'.Users::allOnlineCnt().'</a><br/>';
+	echo 'Users logged in: <a href="/sample/users_online.php">'.Users::onlineCnt().'</a><br/>';
 
 	require($project.'design_foot.php');
 ?>

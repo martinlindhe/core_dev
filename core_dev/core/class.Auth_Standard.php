@@ -139,7 +139,10 @@ class Auth_Standard extends Auth_Base
 			$tab = 'register';
 		}
 
-		$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
+		$forgot_pwd = false;
+		if ($this->userdata) {
+			$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
+		}
 
 		//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
 		if ($forgot_pwd && !$session->id) {
