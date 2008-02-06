@@ -10,7 +10,8 @@
 	
 	manageCategoriesDialog(CATEGORY_TODOLIST);
 
-	echo '<a href="admin_current_work.php">Back to current work</a>';
+	echo '<br/><br/>';
+	echo '<a href="admin_current_work.php'.getProjectPath(0).'">Back to current work</a>';
 
 	require($project.'design_foot.php');
 ?>

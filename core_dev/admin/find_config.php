@@ -22,14 +22,14 @@
 		$config['core_web_root'].'admin/admin_feedback.php'.getProjectPath(0) => 'Feedback',	//todo: hide if feedback-module is disabled
 		$config['core_web_root'].'admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
 		$config['core_web_root'].'admin/admin_events.php'.getProjectPath(0) => 'Event log',
-		$config['core_web_root'].'admin/admin_todo_lists.php'.getProjectPath(0) => 'Todo lists',
-		$config['core_web_root'].'admin/admin_userdata.php'.getProjectPath(0) => 'Userdata',			//kanske super-admin?
-		$config['core_web_root'].'admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',		//superadmin?
-		$config['core_web_root'].'admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups'	//superadmin?
+		$config['core_web_root'].'admin/admin_todo_lists.php'.getProjectPath(0) => 'Todo lists'
 	);
 
 	$super_admin_menu = array(
 		$config['core_web_root'].'admin/admin_super.php'.getProjectPath(0) => 'SuperAdmin::',
+		$config['core_web_root'].'admin/admin_userdata.php'.getProjectPath(0) => 'Userdata',
+		$config['core_web_root'].'admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',
+		$config['core_web_root'].'admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups',
 		$config['core_web_root'].'admin/admin_add_admin.php'.getProjectPath(0) => 'Add admin',
 		$config['core_web_root'].'admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
 		$config['core_web_root'].'admin/admin_db_info.php'.getProjectPath(0) => '$db',

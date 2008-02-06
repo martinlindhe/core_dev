@@ -1,6 +1,6 @@
 <?
 	require_once('find_config.php');
-	$session->requireAdmin();
+	$session->requireSuperAdmin();
 
 	$allowHTML = 0;
 	$regRequire = 0;

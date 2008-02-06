@@ -1,7 +1,7 @@
 <?
 	require_once('find_config.php');
 
-	$session->requireAdmin();
+	$session->requireSuperAdmin();
 
 	if (!empty($_GET['del'])) removeStopword($_GET['del']);
 	

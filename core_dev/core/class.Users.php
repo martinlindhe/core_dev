@@ -340,7 +340,7 @@ class Users
 			echo '<br/>';
 
 		} else if (isset($_GET['l']) && $_GET['l']) {
-			/* Lista alla användare som börjar på en bokstav */
+			/* List all usernames starting with letter 'l' */
 
 			$list = Users::searchUsernameBeginsWith($_GET['l']);
 
@@ -371,8 +371,12 @@ class Users
 
 			$list = getUserdataFields();
 			foreach ($list as $row) {
-				if ($row['private'] || !$session->isAdmin) continue;
+				if ($row['private']) {
+				 	if (!$session->isAdmin) continue;
+					echo '<div class="critical">';
+				}
 				echo getUserdataSearch($row).'<br/>';
+				if ($row['private']) echo '<br/>This field cannot be searched for by normal users</div>';
 			}
 
 			echo '<input type="submit" class="button" value="Search"/>';

@@ -1,6 +1,6 @@
 <?
 	require_once('find_config.php');
-	$session->requireAdmin();
+	$session->requireSuperAdmin();
 
 	require($project.'design_head.php');
 
