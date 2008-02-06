@@ -11,6 +11,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_core.php');	//for makePager()
+
 abstract class DB_Base
 {
 	/****************************************************/
@@ -339,7 +341,6 @@ abstract class DB_Base
 	function showEvents()
 	{
 		global $session, $config;
-
 		if (!$session->isAdmin) return false;
 
 		if (isset($_GET['events_clearlog'])) {
@@ -347,9 +348,15 @@ abstract class DB_Base
 			$this->query('TRUNCATE tblLogs');
 		}
 
+		$q = 'SELECT COUNT(*) FROM tblLogs WHERE entryLevel <= '.LOGLEVEL_ALL;
+		$cnt = $this->getOneItem($q);
+
+		$pager = makePager($cnt, 15);
+
 		$q  = 'SELECT t1.*,t2.userName FROM tblLogs AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
 		$q .= 'WHERE t1.entryLevel <= '.LOGLEVEL_ALL;
+
 		if (!empty($_GET['sort']) && $_GET['sort']=='asc') {
 			$q .= ' ORDER BY t1.timeCreated ASC,t1.entryId ASC';
 			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">show newest first</a>]<br/>';
@@ -357,9 +364,10 @@ abstract class DB_Base
 			$q .= ' ORDER BY t1.timeCreated DESC,t1.entryId DESC';
 			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'&amp;sort=asc">show oldest first</a>]<br/>';
 		}
+		$q .= $pager['limit'];
 
 		$list = $this->getArray($q);
-		echo count($list).' entries in event log.<br/><br/>';
+		echo $pager['head'];
 
 		foreach ($list as $row)
 		{

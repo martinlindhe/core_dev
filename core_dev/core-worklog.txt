@@ -3,6 +3,7 @@ todo:
 
 2008.02.06
 	- core/class.Auth_Standard.php: forgot password feature implemented
+	- core/class.DB_Base.php: implemented pager in "show events" function
 
 
 2008.02.05
