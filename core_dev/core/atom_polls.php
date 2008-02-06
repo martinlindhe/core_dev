@@ -46,6 +46,15 @@
 				$timeEnd = ',timeEnd=DATE_ADD(timeStart, INTERVAL '.$length.' DAY)';
 				break;
 
+			case 'nextmonday':
+				$dayofweek = date('N');
+				$mon = date('n');
+				$day = date('j');
+				$nextmonday = mktime(6, 0, 0, $mon, $day - $dayofweek + 1 + 7);	//06:00 Monday next week
+				$timeStart = ',timeStart="'.sql_datetime($nextmonday).'"';
+				$timeEnd = ',timeEnd=DATE_ADD(timeStart, INTERVAL '.$length.' DAY)';
+				break;
+
 			case 'nextfree':
 				$q = 'SELECT timeEnd FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 ORDER BY timeStart DESC LIMIT 1';
 				$data = $db->getOneRow($q);
@@ -207,7 +216,7 @@
 	}
 
 	/**
-	 *
+	 * Helper function to manage polls, used by /admin/admin_polls.php
 	 */
 	function managePolls($_type, $_owner = 0)
 	{
@@ -341,7 +350,7 @@
 		if (count($list)) echo '</table>';
 
 		echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">Add new poll</h2>';
-		echo '<div id="new_poll_form">'; // style="display:none">';
+		echo '<div id="new_poll_form">';
 		echo '<form method="post" action="">';
 		echo 'Question: ';
 		echo '<input type="text" name="poll_q" size="30"/><br/>';
@@ -355,7 +364,8 @@
 
 			echo 'Poll start: ';
 			echo '<select name="poll_start">';
-			echo '<option value="thismonday">this weeks monday</option>';
+			echo '<option value="thismonday">monday this week</option>';
+			echo '<option value="nextmonday">monday next week</option>';
 			echo '<option value="nextfree"'.(count($list)?' selected="selected"':'').'>next free time</option>';
 			echo '</select><br/>';
 			echo '<br/>';

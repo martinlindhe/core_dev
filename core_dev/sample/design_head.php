@@ -32,6 +32,7 @@
 		'forum.php' => 'Forum',
 		'scribble.php' => 'Scribble',
 		'blogs.php' => 'Blogs',
+		'polls.php' => 'Polls',
 		'users.php' => 'Users'
 		//$config['core_web_root'].'process/' => 'PROCESS SERVER'
 	);

@@ -7,6 +7,9 @@ todo:
 	- core/class.Users.php: made it possible for admins to search on
 		private userdata fields aswell
 	- admin/admin_statistics.php & friends: improved stats display
+	- core/atom_polls.php: added "start poll next monday" option
+	- sample/polls.php: put site polls on it's own page
+
 
 2008.02.05
 	- core/functions_userdata.php, class.Auth_Standard.php: refuses registration
