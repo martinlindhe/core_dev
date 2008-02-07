@@ -5,34 +5,6 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	/* Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
-			run from the / path it will return nothing, else the directory name of the directory script are run from */
-	function getProjectPath($_amp = 1)
-	{
-		global $config;
-
-		if ($_amp == 3) return $config['web_root'];
-
-		if (!empty($_GET['pr'])) {
-			$proj_name = basename(strip_tags($_GET['pr']));
-		} else {
-			$project_path = dirname($_SERVER['SCRIPT_NAME']);
-			$pos = strrpos($project_path, '/');
-			$proj_name = substr($project_path, $pos+1);
-		}
-		
-		if ($proj_name == 'admin') $proj_name = '';
-
-		if ($proj_name) {
-			switch ($_amp) {
-				case 0: return '?pr='.$proj_name;
-				case 1: return '&amp;pr='.$proj_name;
-				case 2: return '&pr='.$proj_name;
-			}
-		}
-		return '';
-	}
-
 	function URLadd($_key, $_val = '', $_extra = '')
 	{
 		$curr_url = 'http://localhost'.$_SERVER['REQUEST_URI'];
