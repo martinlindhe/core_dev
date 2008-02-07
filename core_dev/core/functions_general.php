@@ -155,7 +155,9 @@
 			echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/core.css" type="text/css"/>';
 			//echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/os3grid.css" type="text/css"/>';
-			if (!empty($session)) echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/themes/'.$session->theme.'" type="text/css"/>';
+			if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
+			else $theme_dir = $config['core_web_root'].'css/themes/';
+			if (!empty($session)) echo '<link rel="stylesheet" href="'.$theme_dir.$session->theme.'" type="text/css"/>';
 			echo '<link rel="stylesheet" href="'.$config['web_root'].'css/site.css" type="text/css"/>';
 
 			if ($meta_rss) {

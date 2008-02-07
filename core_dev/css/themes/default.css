@@ -30,7 +30,7 @@ input.button:focus, input.button_bold:focus {
 }
 
 input.button_bold {
-	font-weight: bold
+	font-weight: bold;
 }
 
 /* General: <input type="checkbox"> */
