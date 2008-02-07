@@ -316,7 +316,7 @@ class Files
 
 		if ($content) {
 			//echo 'addFileEntry(): Writing file to '.$this->upload_dir.$newFileId;
-			file_put_contents($this->upload_dir.$newFileId, $content);
+			file_put_contents($this->findUploadPath($newFileId), $content);
 			clearstatcache();	//needed to get current filesize()
 		}
 
@@ -397,17 +397,17 @@ class Files
 	/**
 	 * Finds out where to store the file in filesystem, creating directories when nessecary
 	 */
-	function findUploadPath($fileId)
+	function findUploadPath($fileId, $mkdir = true)
 	{
 		$subdir = floor($fileId / 10000) * 10000;
 		$dir = $this->upload_dir.'org/'.$subdir;
 
-		if (!is_dir($this->upload_dir.'org/')) {
+		if ($mkdir && !is_dir($this->upload_dir.'org/')) {
 			mkdir($this->upload_dir.'org/');
 			chmod($this->upload_dir.'org/', 0777);
 		}
 
-		if (!is_dir($dir)) {
+		if ($mkdir && !is_dir($dir)) {
 			mkdir($dir);
 			chmod($dir, 0777);
 		}
@@ -574,7 +574,7 @@ class Files
 		global $db;
 		if (!is_numeric($_id)) return false;
 
-		$filename = $this->findUploadPath($_id);
+		$filename = $this->findUploadPath($_id, false);
 		if (!file_exists($filename)) return false;
 
 		$size = filesize($filename);
