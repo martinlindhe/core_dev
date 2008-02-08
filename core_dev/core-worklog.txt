@@ -3,6 +3,11 @@
 
 2008.02.08
 	- core/class.Session.php: added $session->logged_out_start_page
+	- core/atom_settings.php: will no longer store a invalid written
+		email address
+	- core/atom_polls.php: added ability to manually enter poll
+		start & end times
+
 
 2008.02.06
 	- core/class.Auth_Standard.php: forgot password feature implemented

@@ -143,12 +143,10 @@
 						$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
 					}
 				} else if (isset($_POST['userdata_'.$row['fieldId']])) {
-					$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
-				}
-
-				if ($row['fieldType'] == USERDATA_TYPE_EMAIL) {
-					if (!ValidEmail($row['settingValue'])) {
+					if ($row['fieldType'] == USERDATA_TYPE_EMAIL && !ValidEmail($_POST['userdata_'.$row['fieldId']])) {
 						echo '<div class="critical">WARNING: The email entered is not valid!</div>';
+					} else {
+						$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 					}
 				}
 
@@ -164,12 +162,12 @@
 					}
 				}
 
-				//Stores the setting
-				saveSetting(SETTING_USERDATA, $session->id, $row['fieldId'], $row['settingValue']);
-
 				if ($row['fieldName'] == $config['settings']['default_theme']) {
 					$session->theme = $row['settingValue'];
 				}
+
+				//Stores the setting
+				saveSetting(SETTING_USERDATA, $session->id, $row['fieldId'], $row['settingValue']);
 			}
 
 			echo '<div id="edit_setting_div_'.$row['fieldId'].'">';

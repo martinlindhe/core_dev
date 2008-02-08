@@ -13,11 +13,11 @@
 
 	/**
 	 *
+	 * \param $duration_mode "day", "week" or numerical number of days
 	 */
 	function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
 	{
 		global $db, $session;
-
 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
 		$text = $db->escape(trim($text));
@@ -33,7 +33,9 @@
 				
 			case '': break;
 
-			default: die('eep addpoll');
+			default:
+				if (is_numeric($duration_mode)) $length = $duration_mode;
+				else die('eep addpoll');
 		}
 
 		switch ($start_mode) {
@@ -77,6 +79,21 @@
 		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session->id.',timeCreated=NOW()'.$timeStart.$timeEnd;
 		return $db->insert($q);
 	}
+
+	function addPollExactPeriod($_type, $ownerId, $text, $_start, $_end)
+	{
+		global $db, $session;
+		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+
+		$text = $db->escape(trim($text));
+
+		$_start = sql_datetime(strtotime($_start));
+		$_end = sql_datetime(strtotime($_end));
+
+		$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session->id.',timeCreated=NOW(),timeStart="'.$db->escape($_start).'",timeEnd="'.$db->escape($_end).'"';
+		$db->insert($q);
+	}
+
 
 	/**
 	 *
@@ -218,7 +235,7 @@
 	}
 
 	/**
-	 * Helper function to manage polls, used by /admin/admin_polls.php
+	 * Helper function to manage polls, used by admin_polls.php & functions_news.php
 	 */
 	function managePolls($_type, $_owner = 0)
 	{
@@ -294,7 +311,11 @@
 			if ($_type == POLL_NEWS) {
 				$pollId = addPoll($_type, $_owner, $_POST['poll_q']);
 			} else {
-				$pollId = addPoll($_type, $_owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
+				if (!empty($_POST['poll_start_man'])) {
+					$pollId = addPollExactPeriod($_type, $_owner, $_POST['poll_q'], $_POST['poll_start_man'], $_POST['poll_end_man']);
+				} else {
+					$pollId = addPoll($_type, $_owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
+				}
 			}
 
 			for ($i=1; $i<=5; $i++) {
@@ -362,6 +383,7 @@
 		echo 'Question: ';
 		echo '<input type="text" name="poll_q" size="30"/><br/>';
 		if ($_type == POLL_SITE) {
+			echo '<div id="poll_period_selector">';
 			echo 'Duration of the poll: ';
 			echo '<select name="poll_dur">';
 			echo '<option value="day">1 day</option>';
@@ -375,7 +397,14 @@
 			echo '<option value="nextmonday">monday next week</option>';
 			echo '<option value="nextfree"'.(count($list)?' selected="selected"':'').'>next free time</option>';
 			echo '</select><br/>';
-			echo '<br/>';
+			echo '<a href="#" onclick="hide_element_by_name(\'poll_period_selector\');show_element_by_name(\'poll_period_manual\')">Enter dates manually</a>';
+			echo '</div>';
+			echo '<div id="poll_period_manual" style="display: none;">';
+				echo 'Start time: <input type="text" name="poll_start_man"/> (format YYYY-MM-DD HH:MM)<br/>';
+				echo 'End time: <input type="text" name="poll_end_man"/><br/>';
+				echo '<a href="#" onclick="hide_element_by_name(\'poll_period_manual\');show_element_by_name(\'poll_period_selector\')">Use dropdown menus instead</a>';
+			echo '</div>';
+			echo '<br/><br/>';
 		}
 
 		for ($i=1; $i<=5; $i++) {
