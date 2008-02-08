@@ -6,6 +6,7 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 	echo createMenu($super_admin_menu, 'blog_menu');
+	echo createMenu($super_admin_tools_menu, 'blog_menu');
 
 	$supported_apache = array('1.3.37', '2.2.99');	//Apache 2.2.x is the current stable branch
 

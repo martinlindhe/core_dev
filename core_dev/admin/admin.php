@@ -5,7 +5,10 @@
 	require($project.'design_head.php');
 
 	echo createMenu($admin_menu, 'blog_menu');
-	if ($session->isSuperAdmin) echo createMenu($super_admin_menu, 'blog_menu');
+	if ($session->isSuperAdmin) {
+		echo createMenu($super_admin_menu, 'blog_menu');
+		echo createMenu($super_admin_tools_menu, 'blog_menu');
+	}
 
 	echo 'Admin overview<br/><br/>';
 

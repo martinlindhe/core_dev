@@ -110,7 +110,8 @@
 				if ($cur == $url) echo '<li class="'.$current_class.'">';
 				else echo '<li>';
 
-				echo '<a href="'.($url[0] != '/' ? getProjectPath(3) : '').$url.'">'.$text.'</a>';
+				if ($url) echo '<a href="'.($url[0] != '/' ? getProjectPath(3) : '').$url.'">'.$text.'</a>';
+				else echo $text;
 				echo '</li>';
 			}
 		echo '</ul>';

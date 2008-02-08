@@ -30,7 +30,11 @@
 		$config['core_web_root'].'admin/admin_userdata.php'.getProjectPath(0) => 'Userdata',
 		$config['core_web_root'].'admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',
 		$config['core_web_root'].'admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups',
-		$config['core_web_root'].'admin/admin_add_admin.php'.getProjectPath(0) => 'Add admin',
+		$config['core_web_root'].'admin/admin_add_admin.php'.getProjectPath(0) => 'Add admin'
+	);
+
+	$super_admin_tools_menu = array(
+		'' => 'Tools::',
 		$config['core_web_root'].'admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
 		$config['core_web_root'].'admin/admin_db_info.php'.getProjectPath(0) => '$db',
 		$config['core_web_root'].'admin/admin_session_info.php'.getProjectPath(0) => '$session',

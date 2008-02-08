@@ -343,8 +343,7 @@ abstract class DB_Base
 		global $session, $config;
 		if (!$session->isAdmin) return false;
 
-		if (isset($_GET['events_clearlog'])) {
-			//$this->query('DELETE FROM tblLogs WHERE entryLevel <= '.LOGLEVEL_ALL);
+		if ($session->isSuperAdmin && isset($_GET['events_clearlog'])) {
 			$this->query('TRUNCATE tblLogs');
 		}
 
@@ -362,7 +361,7 @@ abstract class DB_Base
 			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">show newest first</a>]<br/>';
 		} else {
 			$q .= ' ORDER BY t1.timeCreated DESC,t1.entryId DESC';
-			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'&amp;sort=asc">show oldest first</a>]<br/>';
+			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].'?sort=asc'.getProjectPath().'">show oldest first</a>]<br/>';
 		}
 		$q .= $pager['limit'];
 
@@ -388,7 +387,7 @@ abstract class DB_Base
 			echo '</i></div><br/>';
 		}
 
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?events_clearlog'.getProjectPath().'">Clear log</a>';
+		if ($session->isSuperAdmin) echo '<a href="'.$_SERVER['PHP_SELF'].'?events_clearlog'.getProjectPath().'">Clear log</a>';
 	}
 }
 

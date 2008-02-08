@@ -6,6 +6,7 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 	echo createMenu($super_admin_menu, 'blog_menu');
+	echo createMenu($super_admin_tools_menu, 'blog_menu');
 
 	ob_start();
 	phpinfo();

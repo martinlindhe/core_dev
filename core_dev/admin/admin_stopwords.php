@@ -1,6 +1,5 @@
 <?
 	require_once('find_config.php');
-
 	$session->requireSuperAdmin();
 
 	if (!empty($_GET['del'])) removeStopword($_GET['del']);
@@ -38,6 +37,8 @@
 	require($project.'design_head.php');
 
 	echo createMenu($admin_menu, 'blog_menu');
+	echo createMenu($super_admin_menu, 'blog_menu');
+	echo createMenu($super_admin_tools_menu, 'blog_menu');
 
 	echo '<form name="update" method="post" action="">';
 

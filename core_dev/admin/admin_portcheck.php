@@ -23,6 +23,7 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 	echo createMenu($super_admin_menu, 'blog_menu');
+	echo createMenu($super_admin_tools_menu, 'blog_menu');
 
 	if ($port) echo '<b>Checking  '.$ip.':'.$port.'</b> ... ('.$timeout.' seconds timeout)<br/>';
 	if ($error) echo $error.'<br/>';
