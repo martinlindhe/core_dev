@@ -24,6 +24,33 @@
 	}
 
 	/**
+	 * Converts a SQL timestamp to a text string representing a "niced" time
+	 *
+	 * \param $sql_time SQL timestamp
+	 * \return text string representing a "niced" time
+	 */
+	function nicedTime($sql_time)
+	{
+// om typ samma dag/2, visa bara klockslag
+// om typ samma månad/2, visa bara datum och månad
+// om typ samma år/2, månad och datum i månad och år 
+// FIXME: bajsbajsbajs! make time really nice!!
+// FIXME: gör månadsnamn svenska
+
+		$old_time = strtotime($sql_time);
+		$curr_time = time();
+		$diff = $curr_time - $old_time;
+//echo 'old:'.$old_time.'<br>curr:'.$curr_time.'<br>';
+		if ($diff < 43200) {
+			return 'kl. '.date("H:i",$old_time);
+		} else if ($diff < 1296000) { // 15 dagar
+			return date("j M",$old_time);
+		} else if ($diff < 15120000) { // 175 dagar
+			return date("j M -y",$old_time);
+		}
+	}
+
+	/**
 	 * Converts a timespan into human-readable text
 	 * 
 	 * \param $seconds number of seconds to present

@@ -60,7 +60,8 @@
 		if (!$session->id || !is_numeric($_type) || !is_numeric($otherId)) return false;
 
 		$q = 'DELETE FROM tblContacts WHERE userId='.$session->id.' AND otherUserId='.$otherId.' AND contactType='.$_type;
-		if ($db->delete($q)) return true;
+		$q2 = 'DELETE FROM tblContacts WHERE userId='.$otherId.' AND otherUserId='.$session->id.' AND contactType='.$_type;
+		if ($db->delete($q) && $db->delete($q2)) return true;
 		return false;
 	}
 
@@ -292,6 +293,10 @@
 		global $db, $session, $config;
 		if (!$session->id || !is_numeric($otherId)) return false;
 
+		$q  = 'SELECT categoryId FROM tblFriendRequests  WHERE ';
+		$q .= 'senderId='.$otherId.' AND recieverId='.$session->id.' LIMIT 1';
+		$category = $db->getOneItem($q);
+
 		$q  = 'DELETE FROM tblFriendRequests';
 		$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
 		$cnt = $db->delete($q);
@@ -299,8 +304,8 @@
 		if ($cnt != 1) die('acceptfriendrequest xxkrash');
 
 		//create a friend relation
-		setContact(CONTACT_FRIEND, $session->id, $otherId);
-		setContact(CONTACT_FRIEND, $otherId, $session->id);
+		setContact(CONTACT_FRIEND, $session->id, $otherId, $category);
+		setContact(CONTACT_FRIEND, $otherId, $session->id, $category);
 
 		//tell the request sender that the request was accepted
 		$msg = Users::link($session->id).' accepted your friend request, and has been added to your contact list.';

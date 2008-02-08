@@ -28,6 +28,20 @@ class Users
 	}
 
 	/**
+	 * Looks up a users latest logintime by id
+	 */
+	function getLogintime($_id)
+	{
+		global $db, $session;
+
+		if (!is_numeric($_id) || !$_id) return false;
+		if ($_id == $session->id) return $session->username;
+
+		$q = 'SELECT timeLastLogin FROM tblUsers WHERE userId='.$_id;
+		return $db->getOneItem($q);
+	}
+
+	/**
 	 * Looks up usermode by id (normal, admin, super admin), returns a text string with the description
 	 */
 	function getMode($_id)
