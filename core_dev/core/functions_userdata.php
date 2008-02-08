@@ -34,7 +34,7 @@
 		$check = $db->getOneItem('SELECT fieldId FROM tblUserdata WHERE fieldName="'.$db->escape($fieldName).'"');
 		if ($check) return false;
 
-		$prio = compactUserdataFields();	//returnerar högsta prioritetstalet
+		$prio = compactUserdataFields();	//returnerar hÃ¶gsta prioritetstalet
 
 		$q = 'INSERT INTO tblUserdata SET fieldName="'.$db->escape($fieldName).'",fieldDefault="'.$db->escape($fieldDefault).'",fieldType='.$fieldType.',allowTags='.$allowTags.',private='.$isPrivate.',fieldPriority='.$prio.',regRequire='.$regRequire;
 		$db->insert($q);
@@ -156,6 +156,17 @@
 		if (!is_numeric($_id)) return false;
 
 		$q = 'SELECT * FROM tblUserdata WHERE fieldId='.$_id;
+		return $db->getOneRow($q);
+	}
+
+	/**
+	 * Returns the settings for one userdata field
+	 */
+	function getUserdataFieldByName($_name)
+	{
+		global $db;
+
+		$q = 'SELECT * FROM tblUserdata WHERE fieldName="'.$db->escape($_name).'"';
 		return $db->getOneRow($q);
 	}
 
@@ -357,6 +368,36 @@
 		$q  = 'SELECT t1.*,t2.settingValue FROM tblUserdata AS t1 ';
 		$q .= 'LEFT JOIN tblSettings AS t2 ON (t1.fieldId=t2.settingName AND t2.ownerId='.$userId.') ORDER BY t1.fieldPriority ASC';
 		return $db->getArray($q);
+	}
+
+	/**
+	 * Helper function to display userdata content
+	 */
+	function showUserdataField($userId, $settingName)
+	{
+		global $db;
+		if (!is_numeric($userId)) return false;
+
+		if (!is_numeric($settingName)) {
+			$userdata = getUserdataFieldByName($settingName);
+			if (!$userdata) return $defaultValue;
+		}
+
+		$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$userId.' AND settingType='.SETTING_USERDATA.' AND settingName="'.$userdata['fieldId'].'"';
+		$result = $db->getOneItem($q);
+
+		switch ($userdata['fieldType']) {
+			case USERDATA_TYPE_RADIO:
+			case USERDATA_TYPE_SELECT:
+				$val = getCategoryName(CATEGORY_USERDATA, $result);
+				break;
+
+			default:
+				$val = $result;
+		}
+
+		return $val;
+
 	}
 
 	/**

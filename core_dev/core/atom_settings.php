@@ -139,7 +139,7 @@
 						$files->deleteFile($row['settingValue']);
 						$row['settingValue'] = 0;
 					} else if (isset($_FILES['userdata_'.$row['fieldId']])) {
-						//FIXME: ska det va 'fieldId' som ägare??
+						//FIXME: ska det va 'fieldId' som Ã¤gare??
 						$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
 					}
 				} else if (isset($_POST['userdata_'.$row['fieldId']])) {

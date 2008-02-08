@@ -7,6 +7,8 @@
 		email address
 	- core/atom_polls.php: added ability to manually enter poll
 		start & end times
+	- core/functions_userdata.php: new function showUserdataField()
+		to help complex display userdata
 
 
 2008.02.06
