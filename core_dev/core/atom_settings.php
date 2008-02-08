@@ -153,14 +153,15 @@
 				}
 
 				if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE) {
-					d($row['fieldId']);
 
-					$born = mktime(0, 0, 0,
-						$_POST['userdata_'.$row['fieldId'].'_month'],
-						$_POST['userdata_'.$row['fieldId'].'_day'],
-						$_POST['userdata_'.$row['fieldId'].'_year']
-					);
-					$row['settingValue'] = sql_datetime($born);
+					if (!empty($_POST['userdata_'.$row['fieldId'].'_year'])) {
+						$born = mktime(0, 0, 0,
+							$_POST['userdata_'.$row['fieldId'].'_month'],
+							$_POST['userdata_'.$row['fieldId'].'_day'],
+							$_POST['userdata_'.$row['fieldId'].'_year']
+						);
+						$row['settingValue'] = sql_datetime($born);
+					}
 				}
 
 				//Stores the setting

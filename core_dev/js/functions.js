@@ -431,6 +431,12 @@ function popup_imgview(i,w,h)
 	if (window.focus) p.focus();
 }
 
+//sets current homepage,works for ie only
+function set_homepage(u)
+{
+	this.style.behavior='url(#default#homepage)';
+	this.setHomePage(u);
+}
 
 
 

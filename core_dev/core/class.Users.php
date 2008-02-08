@@ -234,6 +234,7 @@ class Users
 		$db->delete($q);
 
 		deleteSettings(SETTING_USERDATA, $_id);
+		deleteAllContacts($_id);
 		//FIXME delete other traces too
 	}
 

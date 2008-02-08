@@ -1,6 +1,9 @@
 ﻿todo:
 	- när en bild krymps vid file-upload,spara alltid orginalet orört
 
+2008.02.08
+	- core/class.Session.php: added $session->logged_out_start_page
+
 2008.02.06
 	- core/class.Auth_Standard.php: forgot password feature implemented
 	- core/class.DB_Base.php: implemented pager in "show events" function

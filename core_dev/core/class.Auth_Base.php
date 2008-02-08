@@ -66,7 +66,7 @@ abstract class Auth_Base
 		//Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
 		if (isset($_GET['logout'])) {
 			$this->logout();
-			$session->startPage();
+			$session->loggedOutStartPage();
 		}
 
 		//Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration

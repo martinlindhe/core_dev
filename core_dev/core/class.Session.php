@@ -31,6 +31,7 @@ class Session
 	private $check_useragent = true;		///< keeps track if the client user agent string changes during the session
 
 	private $start_page = '';							///< redirects user to this page (in $config['web_root'] directory) after successful login
+	private $logged_out_start_page = 'index.php';
 	private $error_page = 'error.php';		///< redirects the user to this page (in $config['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
@@ -261,7 +262,7 @@ class Session
 	}
 
 	/**
-	 * Redirects user to default start page
+	 * Redirects user to default start page (logged in)
 	 */
 	function startPage()
 	{
@@ -270,6 +271,15 @@ class Session
 		die;
 	}
 
+	/**
+	 * Redirects user to default start page (logged out)
+	 */
+	function loggedOutStartPage()
+	{
+		global $config;
+		header('Location: '.$config['web_root'].$this->logged_out_start_page);
+		die;
+	}
 
 	/**
 	 * Redirects user to error page
