@@ -426,6 +426,11 @@
 		return $defaultValue;
 	}
 
+	function saveUserdataSetting($ownerId, $settingName, $settingValue)
+	{
+		return saveSetting(SETTING_USERDATA, $ownerId, $settingName, $settingValue);
+	}
+
 	/**
 	 * Returns entered email address for specified user. Needed functionality for
 	 * email activation code

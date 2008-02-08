@@ -192,9 +192,11 @@ class Users
 	 */
 	function getRandomUserId()
 	{
-		global $db;
+		global $db, $session;
 
-		$q = 'SELECT userId FROM tblUsers ORDER BY RAND() LIMIT 1';
+		$q  = 'SELECT userId FROM tblUsers ';
+		if ($session->id) $q .= 'WHERE userId!='.$session->id.' ';
+		$q .= 'ORDER BY RAND() LIMIT 1';
 		return $db->getOneItem($q);
 	}
 
