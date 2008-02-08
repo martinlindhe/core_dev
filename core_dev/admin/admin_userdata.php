@@ -138,14 +138,14 @@
 
 		echo 'Type: ';
 		echo '<select name="fieldtype">';
-		echo '<option value="'.USERDATA_TYPE_TEXT.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXT)			echo ' selected'; echo '>Text';
-		echo '<option value="'.USERDATA_TYPE_TEXTAREA.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXTAREA)	echo ' selected'; echo '>Textarea';
-		echo '<option value="'.USERDATA_TYPE_CHECKBOX.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_CHECKBOX)	echo ' selected'; echo '>Checkbox';
-		echo '<option value="'.USERDATA_TYPE_RADIO.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_RADIO)			echo ' selected'; echo '>Radio buttons';
-		echo '<option value="'.USERDATA_TYPE_SELECT.		'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)		echo ' selected'; echo '>Dropdown list';
-		echo '<option value="'.USERDATA_TYPE_IMAGE.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)			echo ' selected'; echo '>Image';
-		echo '<option value="'.USERDATA_TYPE_BIRTHDATE.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE)	echo ' selected'; echo '>Birth date';
-		echo '<option value="'.USERDATA_TYPE_EMAIL.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)			echo ' selected'; echo '>E-mail';
+		echo '<option value="'.USERDATA_TYPE_TEXT.					'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXT)					echo ' selected'; echo '>Text';
+		echo '<option value="'.USERDATA_TYPE_TEXTAREA.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_TEXTAREA)			echo ' selected'; echo '>Textarea';
+		echo '<option value="'.USERDATA_TYPE_CHECKBOX.			'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_CHECKBOX)			echo ' selected'; echo '>Checkbox';
+		echo '<option value="'.USERDATA_TYPE_RADIO.					'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_RADIO)					echo ' selected'; echo '>Radio buttons';
+		echo '<option value="'.USERDATA_TYPE_SELECT.				'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)				echo ' selected'; echo '>Dropdown list';
+		echo '<option value="'.USERDATA_TYPE_IMAGE.					'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)					echo ' selected'; echo '>Image';
+		echo '<option value="'.USERDATA_TYPE_BIRTHDATE_SWE.	'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)	echo ' selected'; echo '>Birth date (Swedish)';
+		echo '<option value="'.USERDATA_TYPE_EMAIL.					'"'; if (isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)					echo ' selected'; echo '>E-mail';
 		echo '</select>';
 		echo '<br/>';
 

@@ -9,6 +9,8 @@
 		start & end times
 	- core/functions_userdata.php: new function showUserdataField()
 		to help complex display userdata
+	- core/functions_userdata.php: can no longer save invalid
+		swedish ssn
 
 
 2008.02.06

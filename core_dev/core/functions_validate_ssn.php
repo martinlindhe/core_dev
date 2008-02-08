@@ -63,11 +63,19 @@
 		$yr = ($yr > date('y')) ? '19'.$yr : '20'.$yr;	//years below curryear is considered to be 2000-20xx, otherwise its 1900-19xx
 		$mn = intval(substr($_ssn, 2, 2));
 		$dy = intval(substr($_ssn, 4, 2));
-		if (!checkdate($mn, $dy, $yr)) return SSN_INVALID_DATE;
+		return SsnValidateSwedishNum($yr, $mn, $dy, substr($_ssn, -4));
+	}
 
-		if (substr($_ssn, -1) != SsnCalcSumSwedish($_ssn)) return SSN_WRONG_CHECKSUM;
+	function SsnValidateSwedishNum($_yr, $_mn, $_dy, $_last4, $_gender = SSN_GENDER_UNKNOWN)
+	{
+		if (!checkdate($_mn, $_dy, $_yr)) return SSN_INVALID_DATE;
 
-		$ssn_gender = intval(substr($_ssn, 8, 1));
+		if (strlen($_yr) == 4) $_yr = substr($_yr, -2);
+		$ssn = $_yr . (strlen($_mn)==1?'0'.$_mn:$_mn) . (strlen($_dy)==1?'0'.$_dy:$_dy) . $_last4;
+
+		if (substr($_last4, -1) != SsnCalcSumSwedish($ssn)) return SSN_WRONG_CHECKSUM;
+
+		$ssn_gender = intval(substr($ssn, 8, 1));
 		if (($ssn_gender % 2) && $_gender == SSN_GENDER_FEMALE) {
 			//Error: odd (male) ssn found but user thinks its a female ssn
 			return SSN_GENDER_IS_MALE;

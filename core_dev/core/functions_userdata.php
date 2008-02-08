@@ -7,16 +7,17 @@
 
 	require_once('atom_categories.php');	//for multi-choise userdata types
 	require_once('functions_textformat.php');	//for ValidEmail()
+	require_once('functions_validate_ssn.php');	//to validate swedish ssn's
 
 	/* Userdata field types */
-	define('USERDATA_TYPE_TEXT',			1);
-	define('USERDATA_TYPE_CHECKBOX',	2);
-	define('USERDATA_TYPE_RADIO',			3);
-	define('USERDATA_TYPE_SELECT',		4);
-	define('USERDATA_TYPE_TEXTAREA',	5);
-	define('USERDATA_TYPE_IMAGE',			6);
-	define('USERDATA_TYPE_BIRTHDATE',	7);	//date of birth
-	define('USERDATA_TYPE_EMAIL',			8);	//text string holding a email address
+	define('USERDATA_TYPE_TEXT',					1);
+	define('USERDATA_TYPE_CHECKBOX',			2);
+	define('USERDATA_TYPE_RADIO',					3);
+	define('USERDATA_TYPE_SELECT',				4);
+	define('USERDATA_TYPE_TEXTAREA',			5);
+	define('USERDATA_TYPE_IMAGE',					6);
+	define('USERDATA_TYPE_BIRTHDATE_SWE',	7);	//Swedish date of birth, with last-4-digits control check
+	define('USERDATA_TYPE_EMAIL',					8);	//text string holding a email address
 
 	//userdata module settings:
 	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
@@ -248,7 +249,7 @@
 				}
 				break;
 
-			case USERDATA_TYPE_BIRTHDATE:
+			case USERDATA_TYPE_BIRTHDATE_SWE:
 				$result = stripslashes($row['fieldName']).':<br/>';
 				$d = $m = $y = '';				
 
@@ -458,5 +459,85 @@
 		$id = $db->getOneItem($q);
 		if ($id) return $id;
 		return false;
+	}
+
+	/**
+	 * Renders html for editing all tblSettings field for current user
+	 *
+	 * \return nothing
+	 */
+	function editUserdataSettings()
+	{
+		global $config, $session, $files;
+
+		$list = readAllUserdata($session->id);
+		if (!$list) return;
+
+		echo '<div class="settings">';
+		echo '<form name="edit_settings_frm" method="post" enctype="multipart/form-data" action="">';
+		foreach($list as $row) {
+			if (!empty($_POST)) {
+				if ($row['fieldType'] == USERDATA_TYPE_IMAGE) {
+
+					if (!empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {
+						$files->deleteFile($row['settingValue']);
+						$row['settingValue'] = 0;
+					} else if (isset($_FILES['userdata_'.$row['fieldId']])) {
+						//FIXME: ska det va 'fieldId' som ägare??
+						$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
+					}
+				} else if (isset($_POST['userdata_'.$row['fieldId']])) {
+					if ($row['fieldType'] == USERDATA_TYPE_EMAIL && !ValidEmail($_POST['userdata_'.$row['fieldId']])) {
+						echo '<div class="critical">WARNING: The email entered is not valid!</div>';
+					} else {
+						$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+					}
+				}
+
+				if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) {
+
+					if (!empty($_POST['userdata_'.$row['fieldId'].'_year'])) {
+						$born = mktime(0, 0, 0,
+							$_POST['userdata_'.$row['fieldId'].'_month'],
+							$_POST['userdata_'.$row['fieldId'].'_day'],
+							$_POST['userdata_'.$row['fieldId'].'_year']
+						);
+
+						$chk = $_POST['userdata_'.$row['fieldId'].'_chk'];
+
+						if ($check = SsnValidateSwedishNum(
+							$_POST['userdata_'.$row['fieldId'].'_year'],
+							$_POST['userdata_'.$row['fieldId'].'_month'],
+							$_POST['userdata_'.$row['fieldId'].'_day'],
+							$_POST['userdata_'.$row['fieldId'].'_chk']
+							) === true) {
+							$row['settingValue'] = sql_datetime($born);
+							echo 'xxx';
+						} else {
+							echo '<div class="critical">Swedish SSN is not valid!</div>';
+						}
+					}
+				}
+
+				if ($row['fieldName'] == $config['settings']['default_theme']) {
+					$session->theme = $row['settingValue'];
+				}
+
+				//Stores the setting
+				saveSetting(SETTING_USERDATA, $session->id, $row['fieldId'], $row['settingValue']);
+			}
+
+			echo '<div id="edit_setting_div_'.$row['fieldId'].'">';
+
+			if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE && $row['settingValue']) {
+				echo stripslashes($row['fieldName']).': '.date('Y-m-d', strtotime($row['settingValue']));
+			} else {
+				echo getUserdataInput($row);
+			}
+			echo '</div>';
+		}
+		echo '<input type="submit" class="button" value="Save"/>';
+		echo '</form>';
+		echo '</div>';
 	}
 ?>
