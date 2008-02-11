@@ -9,6 +9,8 @@
 		translating core-dev text strings
 	- core/class.Auth_Base.php: cleaned up smtp code for outgoing mail, and
 		made smtp settings configurable
+	- core/functions_time.php: added age() return number of years old since day of birth
+		specified
 
 
 2008.02.08

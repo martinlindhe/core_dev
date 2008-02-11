@@ -24,6 +24,30 @@
 	}
 
 	/**
+	 * Returns the age (in years)
+	 * Does not take into account timezone offset differences
+	 *
+	 * \param $sql_time sql timestamp representing day of birth
+	 * \return number of years old
+	 */
+	function age($sql_time)
+	{
+		if (!$sql_time) return false;
+
+		$n = explode("-", date("Y-m-d"));
+		$b = explode("-", date("Y-m-d", datetime_to_timestamp($sql_time)));
+
+		$age = $n[0] - $b[0];
+
+		if ($n[1] < $b[1]) $age--;
+		else if ($n[1] == $b[1]) {
+			if ($n[2] < $b[2]) $age--;
+		}
+
+		return $age;
+	}
+
+	/**
 	 * Converts a timespan into human-readable text
 	 * 
 	 * \param $seconds number of seconds to present
