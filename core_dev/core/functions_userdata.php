@@ -298,7 +298,7 @@
 
 		if ($row['fieldType'] == USERDATA_TYPE_IMAGE) {
 			$result  = '<input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
-			$result .= ' <label for="userdata_'.$row['fieldId'].'">Has image</label>';
+			$result .= ' <label for="userdata_'.$row['fieldId'].'">'.t('Has image').'</label>';
 		} else {
 			$result = getUserdataInput($row);
 		}

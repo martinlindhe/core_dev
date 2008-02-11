@@ -154,16 +154,16 @@
 		echo '<option value="'.USERDATA_TYPE_CHECKBOX.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_CHECKBOX)?' selected':'').'>Checkbox</option>';
 		echo '<option value="'.USERDATA_TYPE_RADIO.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_RADIO)?' selected':'').'>Radio buttons</option>';
 		echo '<option value="'.USERDATA_TYPE_SELECT.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)?' selected':'').'>Dropdown list</option>';
-		if (!$used_image) {
+		if (!$used_image || (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)) {
 			echo '<option value="'.USERDATA_TYPE_IMAGE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)?' selected':'').'>Image</option>';
 		}
-		if (!$used_theme) {
+		if (!$used_theme || (isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)) {
 			echo '<option value="'.USERDATA_TYPE_THEME.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)?' selected':'').'>Theme</option>';
 		}
-		if (!$used_birthdate_swe) {
+		if (!$used_birthdate_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)) {
 			echo '<option value="'.USERDATA_TYPE_BIRTHDATE_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)?' selected':'').'>Birth date (Swedish)</option>';
 		}
-		if (!$used_email) {
+		if (!$used_email || (isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)) {
 			echo '<option value="'.USERDATA_TYPE_EMAIL.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)?' selected':'').'>E-mail</option>';
 		}
 		echo '</select>';

@@ -35,6 +35,8 @@
 			case ' hits': return ' träffar';
 			case '1 hit': return 'en träff';
 			case 'New search': return 'Ny sökning';
+			case 'Has image': return 'Har bild';
+
 
 			//Abuse report of user
 			case 'Report user': return 'Anmäl användaren';
