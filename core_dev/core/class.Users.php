@@ -8,6 +8,7 @@
  */
 
 require_once('functions_visits.php');
+require_once('functions_locale.php');	//for translations
 
 $config['user']['log_visitors'] = true;	
 
@@ -337,22 +338,20 @@ class Users
 	{
 		global $session;
 
-		echo '<h2>Search for users</h2>';
-
 		if (isset($_POST['c'])) {
 			$list = Users::getSearchResult($_POST);
 
-			if (!empty($_POST['c'])) echo 'Search result for "'.$_POST['c'].'", ';
-			else echo 'Custom search result, ';
+			if (!empty($_POST['c'])) echo t('Search result for').' "'.$_POST['c'].'", ';
+			else echo t('Custom search result').', ';
 
-			echo (count($list)!=1?count($list).' hits':'1 hit');
+			echo (count($list)!=1?count($list).t(' hits'):t('1 hit'));
 			echo '<br/><br/>';
 
 			for ($i=0; $i<count($list); $i++) {
 				echo Users::link($list[$i]['userId'], $list[$i]['userName']).'<br/>';
 			}
 			echo '<br/>';
-			echo '<a href="'.$_SERVER['PHP_SELF'].'">New search</a><br/>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'">'.t('New search').'</a><br/>';
 
 			echo '<br/>';
 
@@ -361,9 +360,9 @@ class Users
 
 			$list = Users::searchUsernameBeginsWith($_GET['l']);
 
-			echo 'Search result for users beginning with "'.$_GET['l'].'", ';
+			echo t('Usernames beginning with').' "'.$_GET['l'].'", ';
 
-			echo (count($list)!=1?count($list).' hits':'1 hit');
+			echo (count($list)!=1?count($list).t(' hits'):t('1 hit'));
 			echo '<br/><br/>';
 
 			for ($i=0; $i<count($list); $i++) {
@@ -371,11 +370,11 @@ class Users
 			}
 
 			echo '<br>';
-			echo '<a href="'.$_SERVER['PHP_SELF'].'">New search</a><br/>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'">'.t('New search').'</a><br/>';
 
 		} else {
 
-			echo 'Sort users beginning with: ';
+			echo t('Show usernames beginning with').': ';
 			for ($i=ord('A'); $i<=ord('Z'); $i++) {
 				echo '<a href="'.$_SERVER['PHP_SELF'].'?l='.chr($i).'">'.chr($i).'</a> ';
 			}
@@ -383,7 +382,7 @@ class Users
 
 			echo'<form name="src" method="post" action="'.$_SERVER['PHP_SELF'].'">';
 
-			echo 'Free-text: ';
+			echo t('Free-text').': ';
 			echo '<input type="text" name="c" maxlength="20" size="20"/><br/>';
 
 			$list = getUserdataFields();
@@ -393,10 +392,10 @@ class Users
 					echo '<div class="critical">';
 				}
 				echo getUserdataSearch($row).'<br/>';
-				if ($row['private']) echo '<br/>This field cannot be searched for by normal users</div>';
+				if ($row['private']) echo '<br/>'.t('This field can only be used in searches by admins').'</div>';
 			}
 
-			echo '<input type="submit" class="button" value="Search"/>';
+			echo '<input type="submit" class="button" value="'.t('Search').'"/>';
 			echo '</form>';
 		}
 		echo '<script type="text/javascript">if (document.src) document.src.c.focus();</script>';

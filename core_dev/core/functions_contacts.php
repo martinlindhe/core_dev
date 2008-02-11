@@ -7,6 +7,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_locale.php');	//for translations
+
 	define('CONTACT_FRIEND', 1);
 	define('CONTACT_BLOCKED', 2);
 
