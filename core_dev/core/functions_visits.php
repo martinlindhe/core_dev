@@ -13,7 +13,7 @@
 		global $db, $session;
 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
-		$q = 'INSERT INTO tblVisits SET ownerId='.$_owner.',creatorId='.$session->id.',timeCreated=NOW()';
+		$q = 'INSERT INTO tblVisits SET type='.$_type.',ownerId='.$_owner.',creatorId='.$session->id.',timeCreated=NOW()';
 		$db->insert($q);
 	}
 
