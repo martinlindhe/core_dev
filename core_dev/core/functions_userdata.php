@@ -290,7 +290,7 @@
 	}
 
 	/**
-	 * Returns a input field from the passed data, used in search_users.php
+	 * Returns a input field from the passed data, used by Users::search()
 	 */
 	function getUserdataSearch($row)
 	{
