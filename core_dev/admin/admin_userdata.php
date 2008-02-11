@@ -81,6 +81,7 @@
 
 	$used_image = false;
 	$used_email = false;
+	$used_theme = false;
 	$used_birthdate_swe = false;
 	$i = 0;
 	echo '<div id="itemholder_1">';
@@ -109,6 +110,7 @@
 		//Allow only 1 field of these types to exist per site
 		if ($row['fieldType'] == USERDATA_TYPE_IMAGE) $used_image = true;
 		if ($row['fieldType'] == USERDATA_TYPE_EMAIL) $used_email = true;
+		if ($row['fieldType'] == USERDATA_TYPE_THEME) $used_theme = true;
 		if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) $used_birthdate_swe = true;
 
 		echo '</div><br/>';
@@ -154,6 +156,9 @@
 		echo '<option value="'.USERDATA_TYPE_SELECT.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)?' selected':'').'>Dropdown list</option>';
 		if (!$used_image) {
 			echo '<option value="'.USERDATA_TYPE_IMAGE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)?' selected':'').'>Image</option>';
+		}
+		if (!$used_theme) {
+			echo '<option value="'.USERDATA_TYPE_THEME.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)?' selected':'').'>Theme</option>';
 		}
 		if (!$used_birthdate_swe) {
 			echo '<option value="'.USERDATA_TYPE_BIRTHDATE_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)?' selected':'').'>Birth date (Swedish)</option>';

@@ -19,6 +19,7 @@
 	define('USERDATA_TYPE_IMAGE',					6);	//Used as presentation picture, can only exist one per site
 	define('USERDATA_TYPE_BIRTHDATE_SWE',	7);	//Swedish date of birth, with last-4-digits control check, can only exist one per site
 	define('USERDATA_TYPE_EMAIL',					8);	//text string holding a email address, can only exist one per site
+	define('USERDATA_TYPE_THEME',					9); //select-dropdown in display. contains user preferred theme (.css file), can only exist one per site
 
 	//userdata module settings:
 	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
@@ -204,10 +205,6 @@
 
 		switch ($row['fieldType']) {
 			case USERDATA_TYPE_EMAIL:
-				$result = stripslashes($row['fieldName']).': ';
-				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';
-				break;
-
 			case USERDATA_TYPE_TEXT:
 				$result = stripslashes($row['fieldName']).': ';
 				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';
@@ -234,6 +231,7 @@
 				}
 				break;
 
+			case USERDATA_TYPE_THEME:
 			case USERDATA_TYPE_SELECT:
 				$result = stripslashes($row['fieldName']).': ';
 				$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId, 'userdata_'.$fieldId, $value);
@@ -535,14 +533,13 @@
 							$_POST['userdata_'.$row['fieldId'].'_chk']
 							) === true) {
 							$row['settingValue'] = sql_datetime($born);
-							echo 'xxx';
 						} else {
 							echo '<div class="critical">Swedish SSN is not valid!</div>';
 						}
 					}
 				}
 
-				if ($row['fieldName'] == $config['settings']['default_theme']) {
+				if ($row['fieldType'] == USERDATA_TYPE_THEME) {
 					$session->theme = $row['settingValue'];
 				}
 

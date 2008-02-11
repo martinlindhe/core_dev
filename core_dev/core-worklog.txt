@@ -11,6 +11,8 @@
 		made smtp settings configurable
 	- core/functions_time.php: added age() return number of years old since day of birth
 		specified
+	- core/functions_userdata.php: removed $config['settings']['default_theme'] & made
+		a new datatype for Theme selection
 
 
 2008.02.08
