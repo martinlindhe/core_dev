@@ -6,6 +6,7 @@
  */
 
 	require_once('atom_moderation.php');	//for moderation functionality
+	require_once('functions_locale.php');	//for translations
 
 	function addGuestbookEntry($ownerId, $subject, $body)
 	{
@@ -142,7 +143,7 @@
 		}
 
 		$tot_cnt = getGuestbookCount($userId);
-		echo 'Guestbook:'.Users::getName($userId).' contains '.$tot_cnt.' messages.<br/><br/>';
+		echo t('Guestbook').':'.Users::getName($userId).' '.t('contains').' '.$tot_cnt.' '.t('messages').'.<br/><br/>';
 
 		$pager = makePager($tot_cnt, 5);
 
@@ -154,7 +155,7 @@
 			echo '<div class="guestbook_entry">';
 
 			echo '<div class="guestbook_entry_head">';
-			echo 'From '.Users::link($row['authorId'], $row['authorName']);
+			echo t('From').' '.Users::link($row['authorId'], $row['authorName']);
 			echo ', '.$row['timeCreated'];
 			echo '</div>';
 
@@ -166,17 +167,17 @@
 			echo stripslashes($row['body']).'<br/>';
 
 			if ($session->isAdmin || $session->id == $userId) {
-				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;remove='.$row['entryId'].'">Remove</a>';
+				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;remove='.$row['entryId'].'">'.t('Remove').'</a>';
 			}
 			echo '</div><br/>';
 		}
 
 		if ($session->id) {
 			if ($session->id != $userId) {
-				echo 'New entry:<br/>';
+				echo t('New entry').':<br/>';
 				echo '<form name="addGuestbook" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$userId.'">';
 				echo '<textarea name="body" cols="40" rows="6"></textarea><br/><br/>';
-				echo '<input type="submit" class="button" value="Save"/>';
+				echo '<input type="submit" class="button" value="'.t('Save').'"/>';
 				echo '</form>';
 			} else {
 				/* Mark all entries as read */

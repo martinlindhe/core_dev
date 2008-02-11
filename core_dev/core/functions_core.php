@@ -7,6 +7,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_locale.php');	//for translations
+
 	/**
 	 * Debug function. Prints out variable $v
 	 *
@@ -67,7 +69,7 @@
 
 		$pager['tot_pages'] = round($_total_cnt / $_items_per_page+0.4); // round to closest whole number
 		if ($pager['tot_pages'] < 1) $pager['tot_pages'] = 1;
-		$pager['head'] = 'Page '.$pager['page'].' of '.$pager['tot_pages'].' (displaying '.$_total_cnt.' items)<br/><br/>';
+		$pager['head'] = t('Page').' '.$pager['page'].' '.t('of').' '.$pager['tot_pages'].' ('.t('displaying').' '.$_total_cnt.' '.t('items').')<br/><br/>';
 
 		$pager['index'] = ($pager['page']-1) * $pager['items_per_page'];
 		$pager['limit'] = ' LIMIT '.$pager['index'].','.$pager['items_per_page'];
@@ -76,7 +78,7 @@
 
 		if ($pager['page'] > 1) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
-			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev.png" alt="Previous" width="11" height="12"/></a>';
+			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev.png" alt="'.t('Previous').'" width="11" height="12"/></a>';
 		//} else {
 		//	$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
 		}
@@ -89,7 +91,7 @@
 
 		if ($pager['page'] < $pager['tot_pages']) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
-			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next.png" alt="Next" width="11" height="12"/></a>';
+			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next.png" alt="'.t('Next').'" width="11" height="12"/></a>';
 		//} else {
 		//	$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
 		}

@@ -20,6 +20,10 @@
 			case 'History': return 'Historik';
 			case 'Files': return 'Filer';
 			case 'Search': return 'Sök';
+			case 'Remove': return 'Radera';
+			case 'From': return 'Från';
+			case 'Next': return 'Nästa';
+			case 'Previous': return 'Föregående';
 
 			//class.Users.php search
 			case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
@@ -41,6 +45,18 @@
 			case 'Harassment': return 'Trakasseri';
 			case 'Other': return 'Annat';
 			case 'Thank you. Your report has been recieved.': return 'Tack för din anmälan.';
+
+			//Guestbook
+			case 'Guestbook': return 'Gästbok';
+			case 'contains': return 'innehåller';
+			case 'messages': return 'meddelanden';
+			case 'New entry': return 'Nytt inlägg';
+
+			//Pager
+			case 'Page': return 'Sida';
+			case 'of': return 'av';
+			case 'displaying': return 'visar';
+			case 'items': return 'objekt';
 
 			case 'Delete image': return 'Radera bilden';
 
