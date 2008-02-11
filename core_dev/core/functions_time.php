@@ -34,18 +34,53 @@
 	{
 		if (!$sql_time) return false;
 
-		$n = explode("-", date("Y-m-d"));
-		$b = explode("-", date("Y-m-d", datetime_to_timestamp($sql_time)));
+		$age = date_diff($sql_time, 'now', 2, true);
+		return $age['years'];
+	}
 
-		$age = $n[0] - $b[0];
+	/**
+	 * Calculates difference between two dates
+	 *
+	 * \param $t1 oldest timestamp (or datetime)
+	 * \param $t2 newer timestamp (or datetime)
+	 * \param $precision how exact? (year,month,day,hour,minute,second)
+	 * \param $arr set to true to return result as a array with precision as index, default is text string
+	 */
+	function date_diff($t1, $t2, $precision = 6, $arr = false)
+	{
+		if (preg_match('/\D/', $t1) && ($t1 = strtotime($t1)) === false) return false;
+		if (preg_match('/\D/', $t2) && ($t2 = strtotime($t2)) === false) return false;
 
-		if ($n[1] < $b[1]) $age--;
-		else if ($n[1] == $b[1]) {
-			if ($n[2] < $b[2]) $age--;
+		if ($t1 > $t2) list($t1, $t2) = array($t2, $t1);
+
+		$diffs = array(
+			'year' => 0, 'month' => 0, 'day' => 0,
+			'hour' => 0, 'minute' => 0, 'second' => 0,
+		);
+
+		foreach (array_keys($diffs) as $interval) {
+			while ($t2 >= ($t3 = strtotime("+1 ${interval}", $t1))) {
+				$t1 = $t3;
+				++$diffs[$interval];
+			}
 		}
 
-		return $age;
+		$stack = array();
+		foreach ($diffs as $interval => $num)
+			$stack[] = array($num, $interval . ($num != 1 ? 's' : ''));
+
+		$ret = array();
+		while (count($ret) < $precision && ($item = array_shift($stack)) !== null) {
+			if ($item[0] > 0) {
+				if (!$arr) $ret[] = "{$item[0]} {$item[1]}";
+				else $ret[ $item[1] ] = $item[0];
+			}
+		}
+
+		if (!$arr) return implode(', ', $ret);
+		return $ret;
 	}
+
 
 	/**
 	 * Converts a timespan into human-readable text
