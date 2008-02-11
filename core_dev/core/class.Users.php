@@ -313,7 +313,7 @@ class Users
 		if (!$name) $name = Users::getName($id);
 		if (!$name) die;
 		
-		$pic_id = loadUserdataSetting($id, $config['settings']['default_image']);
+		$pic_id = loadUserdataImage($id);
 
 		return makeThumbLink($pic_id, $name);
 	}

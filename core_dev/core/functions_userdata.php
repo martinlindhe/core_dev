@@ -297,7 +297,6 @@
 		global $config;
 
 		if ($row['fieldType'] == USERDATA_TYPE_IMAGE) {
-			if ($row['fieldName'] != $config['settings']['default_image']) return '';
 			$result  = '<input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
 			$result .= ' <label for="userdata_'.$row['fieldId'].'">Has image</label>';
 		} else {
