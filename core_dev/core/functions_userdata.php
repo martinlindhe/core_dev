@@ -15,9 +15,9 @@
 	define('USERDATA_TYPE_RADIO',					3);
 	define('USERDATA_TYPE_SELECT',				4);
 	define('USERDATA_TYPE_TEXTAREA',			5);
-	define('USERDATA_TYPE_IMAGE',					6);
-	define('USERDATA_TYPE_BIRTHDATE_SWE',	7);	//Swedish date of birth, with last-4-digits control check
-	define('USERDATA_TYPE_EMAIL',					8);	//text string holding a email address
+	define('USERDATA_TYPE_IMAGE',					6);	//Used as presentation picture, can only exist one per site
+	define('USERDATA_TYPE_BIRTHDATE_SWE',	7);	//Swedish date of birth, with last-4-digits control check, can only exist one per site
+	define('USERDATA_TYPE_EMAIL',					8);	//text string holding a email address, can only exist one per site
 
 	//userdata module settings:
 	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
