@@ -374,7 +374,7 @@
 	/**
 	 * Helper function to display userdata content
 	 */
-	function showUserdataField($userId, $settingName)
+	function showUserdataField($userId, $settingName, $defaultValue = '')
 	{
 		global $db;
 		if (!is_numeric($userId)) return false;
@@ -391,6 +391,10 @@
 			case USERDATA_TYPE_RADIO:
 			case USERDATA_TYPE_SELECT:
 				$val = getCategoryName(CATEGORY_USERDATA, $result);
+				break;
+
+			case USERDATA_TYPE_IMAGE:
+				$val = makeThumbLink($result);
 				break;
 
 			default:

@@ -139,7 +139,7 @@
 		echo 'Field name:';
 		echo '<input type="text" name="fieldname" value="'.$fieldName.'" maxlength="30"/><br/>';
 
-		/* Visa bara alternativet för textfält vid ändring */
+		// Only show the default value option while editing text fields
 		if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
 			echo 'Default value:<br/>';
 			echo '<input type="text" name="fielddefault" value="'.$data['fieldDefault'].'"/><br/>';
@@ -168,7 +168,7 @@
 		echo ' <label for="regrequire">Require at registration</label>';
 		echo '<br/>';
 
-		/* Visa bara alternativet för textfält vid ändring */
+		// Only show the text field options for text fields on edit field, not on create
 		if (!isset($_GET['change']) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
 			echo '<input type="checkbox" name="allowhtml" id="allowhtml" value="1" class="checkbox"'.(!empty($data['allowTags'])?' checked="checked"':'').'/>';
 			echo ' <label for="allowhtml">May contain HTML</label><br/>';
