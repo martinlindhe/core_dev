@@ -4,6 +4,11 @@
 2008.02.11
 	- core/admin_userdata.php: made some userdata field types only
 		usable one time per site (email, swedish ssn, image)
+	- added $config['full_web_root'] to contain full path to webroot including web server address
+	- core/functions_locale.php: created t() function, will be used for
+		translating core-dev text strings
+	- core/class.Auth_Base.php: cleaned up smtp code for outgoing mail, and
+		made smtp settings configurable
 
 
 2008.02.08

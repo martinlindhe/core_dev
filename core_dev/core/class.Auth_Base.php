@@ -10,6 +10,7 @@
  */
 
 require_once('functions_activate.php');		//for activation
+require_once('functions_locale.php');			//for translations
 require_once('ext/class.phpmailer.php');	//for outgoing mail. FIXME look for bsd-compatible mailer
 
 abstract class Auth_Base
@@ -25,6 +26,15 @@ abstract class Auth_Base
 	public $activation_sent = false;			///< internal. true if mail activation has been sent
 	public $resetpwd_sent		= false;			///< internal. true if mail for password reset has been sent
 
+
+	//SMTP out settings
+	public $smtp_host = 'mail.unicorn.tv';
+	public $smtp_username = '';
+	public $smtp_password = '';
+
+	public $mail_from = 'noreply@example.com';
+	public $mail_from_name = 'core_dev';
+
 	function __construct(array $auth_conf = array())
 	{
 		global $db;
@@ -35,6 +45,12 @@ abstract class Auth_Base
 		if (isset($auth_conf['reserved_usercheck'])) $this->reserved_usercheck = $auth_conf['reserved_usercheck'];
 		if (isset($auth_conf['userdata'])) $this->userdata = $auth_conf['userdata'];
 		if (isset($auth_conf['mail_activate'])) $this->mail_activate = $auth_conf['mail_activate'];
+
+		if (isset($auth_conf['smtp_host'])) $this->smtp_host = $auth_conf['smtp_host'];
+		if (isset($auth_conf['smtp_username'])) $this->smtp_username = $auth_conf['smtp_username'];
+		if (isset($auth_conf['smtp_password'])) $this->smtp_password = $auth_conf['smtp_password'];
+		if (isset($auth_conf['mail_from'])) $this->mail_from = $auth_conf['mail_from'];
+		if (isset($auth_conf['mail_from_name'])) $this->mail_from_name = $auth_conf['mail_from_name'];
 
 		$this->handleAuthEvents();
 	}
@@ -84,6 +100,30 @@ abstract class Auth_Base
 		}
 	}
 
+	function SmtpSend($dst_adr, $subj, $msg)
+	{
+		$mail = new PHPMailer();
+
+		$mail->Mailer = 'smtp';
+		$mail->Host = $this->smtp_host;
+		$mail->Username = $this->smtp_username;
+		$mail->Password = $this->smtp_password;
+
+		$mail->CharSet  = 'utf-8';
+
+		$mail->From     = $this->mail_from;
+		$mail->FromName = $this->mail_from_name;
+
+		$mail->IsHTML(false);   // send HTML mail?
+
+		$mail->AddAddress($dst_adr);
+		$mail->Subject  = $subj;
+		$mail->Body = $msg;
+
+		if (!$mail->Send()) return false;
+		return true;
+	}
+
 	/**
 	 * Sends a account activation mail to specified user
 	 */
@@ -92,28 +132,13 @@ abstract class Auth_Base
 		global $config;
 		if (!is_numeric($_id)) return false;
 
-		$adr = loadUserdataEmail($_id);
-		if (!$adr) return false;
+		$email = loadUserdataEmail($_id);
+		if (!$email) return false;
 
 		$code = generateActivationCode(1000000, 9999999);
 		$act_id = createActivation(ACTIVATE_EMAIL, $code, $_id);
 
-		$mail = new PHPMailer();
-
-		$mail->Mailer = 'smtp';
-		$mail->Host = 'mail.unicorn.tv';	//FIXME gör smtp server konfigurerbar
-		//$mail->Username = 'usr';
-		//$mail->Password = 'pwd';
-
-		$mail->CharSet  = 'utf-8';
-
-		$mail->From     = 'noreply@example.com';
-		$mail->FromName = 'core_dev';
-
-		$mail->IsHTML(false);   // send HTML mail
-
-		$mail->Subject  = "core_dev activation";
-
+		$subj = t('Account activation');
 		$msg =
 			"Hello. Someone (probably you) registered an account from IP ".$_SERVER['REMOTE_ADDR']."\n".
 			"\n".
@@ -121,15 +146,14 @@ abstract class Auth_Base
 			"Activation code: ".$code."\n".
 			"\n".
 			"Follow this link to activate your account:\n".
-			"http://priv.localhost/core_dev/sample/activate.php?id=".$_id."&code=".$code."\n".
+			$config['full_web_root']."activate.php?id=".$_id."&code=".$code."\n".
 			"\n".
 			"The link will expire in ".shortTimePeriod($config['activate']['expire_time_email'])."\n";
 
-		$mail->AddAddress($adr);
-		$mail->Body = $msg;
-		if (!$mail->Send()) return false;
+		if (!$this->SmtpSend($email, $subj, $msg)) return false;
 
 		$this->activation_sent = true;
+		return true;
 	}
 
 	function verifyActivationMail($_id, $_code)
@@ -166,33 +190,17 @@ abstract class Auth_Base
 		$code = generateActivationCode(10000000, 99999999);
 		$act_id = createActivation(ACTIVATE_CHANGE_PWD, $code, $_id);
 
-		$mail = new PHPMailer();
-
-		$mail->Mailer = 'smtp';
-		$mail->Host = 'mail.unicorn.tv';	//FIXME gör smtp server konfigurerbar
-		//$mail->Username = 'usr';
-		//$mail->Password = 'pwd';
-
-		$mail->CharSet  = 'utf-8';
-
-		$mail->From     = 'noreply@example.com';
-		$mail->FromName = 'core_dev';
-
-		$mail->IsHTML(false);   // send HTML mail
-
-		$mail->Subject  = "core_dev forgot password";
+		$subj  = t('Forgot password');
 
 		$msg =
 			"Hello. Someone (probably you) asked for a password reset procedure from IP ".$_SERVER['REMOTE_ADDR']."\n".
 			"\n".
 			"Follow this link to set a new password:\n".
-			"http://priv.localhost/core_dev/sample/reset_password.php?id=".$_id."&code=".$code."\n".
+			$config['full_web_root']."reset_password.php?id=".$_id."&code=".$code."\n".
 			"\n".
 			"The link will expire in ".shortTimePeriod($config['activate']['expire_time_change_pwd'])."\n";
 
-		$mail->AddAddress($email);
-		$mail->Body = $msg;
-		if (!$mail->Send()) return false;
+		if (!$this->SmtpSend($email, $subj, $msg)) return false;		
 
 		$this->resetpwd_sent = true;
 		return true;
