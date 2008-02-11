@@ -28,7 +28,7 @@ abstract class Auth_Base
 
 
 	//SMTP out settings
-	public $smtp_host = 'mail.unicorn.tv';
+	public $smtp_host = 'smtp.example.com';
 	public $smtp_username = '';
 	public $smtp_password = '';
 
