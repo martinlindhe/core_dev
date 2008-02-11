@@ -14,6 +14,7 @@
 	- removed $config['settings']['default_theme'] & made
 		a new datatype for Theme selection
 	- removed $config['settings']['default_image'], use Image userdata type instead
+	- fixed search for users who has presentation image
 
 
 2008.02.08
