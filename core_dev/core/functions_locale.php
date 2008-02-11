@@ -32,6 +32,16 @@
 			case '1 hit': return 'en träff';
 			case 'New search': return 'Ny sökning';
 
+			//Abuse report of user
+			case 'Report user': return 'Anmäl användaren';
+			case 'Please choose the reason as to why you wish to report this user': return 'Ange varför du vill anmäla denna användare';
+			case 'Reason': return 'Anledning';
+			case 'Please describe your reason for the abuse report': return 'Var god komplettera anmälan med ytterligare information';
+			case 'Send report': return 'Skicka anmälan';
+			case 'Harassment': return 'Trakasseri';
+			case 'Other': return 'Annat';
+			case 'Thank you. Your report has been recieved.': return 'Tack för din anmälan.';
+
 			case 'Delete image': return 'Radera bilden';
 
 			case 'Forgot password': return 'Glömt lösenord';

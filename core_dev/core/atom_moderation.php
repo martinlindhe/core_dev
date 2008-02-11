@@ -17,14 +17,9 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	$config['moderation']['enabled'] = true;
+require_once('functions_locale.php');	//for translations
 
-	/* Moderation queue entry types */
-	//define('MODERATION_REPORTED_POST',				1);
-	//define('MODERATION_OBJECTIONABLE_POST',		2);
-	//define('MODERATION_SENSITIVE_POST',				3);
-	//define('MODERATION_REPORTED_USER',				10);
-	//define('MODERATION_REPORTED_PHOTO',				12);
+	$config['moderation']['enabled'] = true;
 
 	define('MODERATION_GUESTBOOK',	11);	//itemId = tblGuestbook.entryId
 	define('MODERATION_FORUM',			12);	//itemId = tblForum.itemId
@@ -128,15 +123,11 @@
 		$list = $db->getArray($q);
 		for ($i=0; $i<count($list); $i++) {
 			if ($list[$i]["wordMatch"] == 1) {
-				/* Måste matcha hela ordet */
-				if (strtolower($text) == strtolower($list[$i]["wordText"])) {
-					return true;
-				}
+				// Must match the whole word
+				if (strtolower($text) == strtolower($list[$i]["wordText"])) return true;
 			} else {
-				/* Räcker med att ordet finns med nånstan */
-				if (stristr($text, $list[$i]["wordText"])) {
-					return true;
-				}
+				// Word can be somewhere in the string
+				if (stristr($text, $list[$i]["wordText"])) return true;
 			}
 		}
 
@@ -304,27 +295,24 @@
 			$queueId = addToModerationQueue(MODERATION_USER, $_id);
 			addComment(COMMENT_MODERATION, $queueId, $_POST['report_reason'].': '.$_POST['report_text']);
 
-			echo 'Thanks. Your report has been recieved.';
+			echo t('Thank you. Your report has been recieved.');
 			return;
 		}
 
-		echo '<h1>Abuse</h1>';
-		echo 'If you want to block this user. Click here - fixme<br/><br/>';
-
-		echo '<h2>Report user form</h2>';
-		echo 'Please choose the reason as to why you wish to report this user:<br/>';
+		echo '<h2>'.t('Report user').'</h2>';
+		echo t('Please choose the reason as to why you wish to report this user').':<br/>';
 		echo '<form method="post" action="">';
-		echo 'Reason: ';
+		echo t('Reason').': ';
 		echo '<select name="report_reason">';
 		echo '<option value=""></option>';
-		echo '<option value="Harassment">Harassment</option>';
-		echo '<option value="Other">Other</option>';
+		echo '<option value="Harassment">'.t('Harassment').'</option>';
+		echo '<option value="Other">'.t('Other').'</option>';
 		echo '</select><br/>';
 
-		echo 'Please describe your reason for the abuse report.<br/>';
+		echo t('Please describe your reason for the abuse report').':<br/>';
 		echo '<textarea name="report_text" rows="6" cols="40"></textarea><br/>';
 
-		echo '<input type="submit" class="button" value="Send report"/>';
+		echo '<input type="submit" class="button" value="'.t('Send report').'"/>';
 		echo '</form>';
 	}
 ?>
