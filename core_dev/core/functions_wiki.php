@@ -11,6 +11,7 @@
 
 	require_once('atom_revisions.php');
 	require_once('functions_textformat.php');
+	require_once('functions_locale.php');	//for translations
 
 	//wiki module default settings:
 	$config['wiki']['log_history'] = true;
@@ -126,15 +127,17 @@
 
 		if (in_array('WikiFiles', $config['wiki']['allowed_tabs']) && $data) {	//Show files tab? also hide files tab if wiki isn't yet created
 			$wiki_menu = array(
-			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
-			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => 'Edit',
-			$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName => 'History',
-			$_SERVER['PHP_SELF'].'?WikiFiles:'.$wikiName => 'Files ('.$files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')');
+				$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
+				$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => t('Edit'),
+				$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName => t('History'),
+				$_SERVER['PHP_SELF'].'?WikiFiles:'.$wikiName => t('Files').' ('.$files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')'
+			);
 		} else {
 			$wiki_menu = array(
-			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
-			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => 'Edit',
-			$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName => 'History');
+				$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
+				$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => t('Edit'),
+				$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName => t('History')
+			);
 		}
 
 		echo '<div class="wiki">';
@@ -189,16 +192,16 @@
 					'<br/>'.
 					'<textarea name="wiki_'.$data['wikiId'].'" id="wiki_'.$data['wikiId'].'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
 					'Last edited '.$last_edited.'<br/>'.
-					'<input type="submit" class="button" value="Save"/>';
+					'<input type="submit" class="button" value="'.t('Save').'"/>';
 
 			if ($session->isAdmin) {
 				if ($data['lockedBy']) {
-					echo '<input type="button" class="button" value="Unlock" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_unlock').'\'"/>';
+					echo '<input type="button" class="button" value="'.t('Unlock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_unlock').'\'"/>';
 					echo '<img src="'.$config['core_web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
 					echo '<b>Locked by '.$data['lockerName'].' at '.$data['timeLocked'].'</b><br/>';
 				} else {
 					if ($data) {
-						echo '<input type="button" class="button" value="Lock" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_lock').'\'"/>';
+						echo '<input type="button" class="button" value="'.t('Lock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_lock').'\'"/>';
 						echo '<img src="'.$config['core_web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/>';
 					}
 				}

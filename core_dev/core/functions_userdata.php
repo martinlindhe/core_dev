@@ -8,6 +8,7 @@
 	require_once('atom_categories.php');	//for multi-choise userdata types
 	require_once('functions_textformat.php');	//for ValidEmail()
 	require_once('functions_validate_ssn.php');	//to validate swedish ssn's
+	require_once('functions_locale.php');	//for translations
 
 	/* Userdata field types */
 	define('USERDATA_TYPE_TEXT',					1);
@@ -242,8 +243,8 @@
 				$result = stripslashes($row['fieldName']).':<br/>';
 				if ($value) {
 					$result .= makeThumbLink($value);
-					$result .= '<input name="userdata_'.$fieldId.'_remove" id="userdata_'.$fieldId.'_remove" type="checkbox" class="checkbox"/>';
-					$result .= '<label for="userdata_'.$fieldId.'_remove">Delete image</label>';
+					$result .= '<input name="userdata_'.$fieldId.'_remove" id="userdata_'.$fieldId.'_remove" type="checkbox" class="checkbox"/> ';
+					$result .= '<label for="userdata_'.$fieldId.'_remove">'.t('Delete image').'</label>';
 				} else {
 					$result .= '<input name="userdata_'.$fieldId.'" type="file"/>';
 				}
@@ -558,7 +559,7 @@
 			}
 			echo '</div>';
 		}
-		echo '<input type="submit" class="button" value="Save"/>';
+		echo '<input type="submit" class="button" value="'.t('Save').'"/>';
 		echo '</form>';
 		echo '</div>';
 	}

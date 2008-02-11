@@ -13,6 +13,14 @@
 	function t($s)
 	{
 		switch ($s) {
+			case 'Save': return 'Spara';
+			case 'Lock': return 'Lås';
+			case 'Unlock': return 'Lås upp';
+			case 'Edit': return 'Redigera';
+			case 'History': return 'Historik';
+			case 'Files': return 'Filer';
+			case 'Delete image': return 'Radera bilden';
+
 			case 'Forgot password': return 'Glömt lösenord';
 			case 'Account activation': return 'Aktivera konto';
 			default: return '__('.$s.')__';
