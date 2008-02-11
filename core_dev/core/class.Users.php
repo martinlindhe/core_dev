@@ -34,11 +34,21 @@ class Users
 	function getLogintime($_id)
 	{
 		global $db, $session;
-
 		if (!is_numeric($_id) || !$_id) return false;
-		if ($_id == $session->id) return $session->username;
 
 		$q = 'SELECT timeLastLogin FROM tblUsers WHERE userId='.$_id;
+		return $db->getOneItem($q);
+	}
+
+	/**
+	 * Return the number of logins by user
+	 */
+	function loginCnt($_id)
+	{
+		global $db, $session;
+		if (!is_numeric($_id) || !$_id) return false;
+
+		$q = 'SELECT COUNT(*) FROM tblLogins WHERE userId='.$_id;
 		return $db->getOneItem($q);
 	}
 
