@@ -10,10 +10,14 @@
 	$config['url_rewrite_trailing'] = 15;	//number of characters to save at the end of the string
 	$config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disable redir feature
 
-	function showThumb($_id, $_title = '')
+	function showThumb($_id, $_title = '', $w = 0, $h = 0)
 	{
 		global $files, $config;
-		$str = '<img src="'.$config['core_web_root'].'api/file.php?id='.$_id.'&amp;w='.$files->thumb_default_width.'&amp;h='.$files->thumb_default_height.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
+
+		if (!is_numeric($w) || !$w) $w = $files->thumb_default_width;
+		if (!is_numeric($h) || !$h) $h = $files->thumb_default_height;
+
+		$str = '<img src="'.$config['core_web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
 		return $str;
 	}
 

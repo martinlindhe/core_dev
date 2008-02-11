@@ -451,6 +451,19 @@
 	}
 
 	/**
+	 * Returns fileId of user's image id or false if none is set
+	 *
+	 * \param $userId user id
+	 */
+	function loadUserdataImage($userId)
+	{
+		if (!is_numeric($userId)) return false;
+
+		$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_IMAGE);
+		return loadUserdataSetting($userId, $fieldId);
+	}
+
+	/**
 	 * Used for "forgot my password" feature
 	 *
 	 * \param $email e-mail to look for
