@@ -176,6 +176,8 @@
 
 		echo '<div id="comments_holder">';
 		echo '<div id="comments_only">';
+		$pager = makePager(count($list),15);
+		echo $pager['head'];
 		foreach ($list as $row) {
 			echo '<div class="comment_details">';
 			echo Users::link($row['userId'], $row['userName']).'<br/>';
@@ -187,6 +189,7 @@
 			}
 			echo '</div>';
 		}
+		echo $pager['head'];
 		echo '</div>'; //id="comments_only"
 
 		if ( ($session->id && $_type != COMMENT_MODERATION) ||
