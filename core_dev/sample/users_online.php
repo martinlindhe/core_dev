@@ -8,7 +8,7 @@
 
 	$list = Users::allOnline();
 	foreach ($list as $row) {
-		echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastLogin'].'<br/>';
+		echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastActive'].'<br/>';
 	}
 
 	require('design_foot.php');

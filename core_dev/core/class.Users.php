@@ -138,7 +138,7 @@ class Users
 		global $db, $session;
 
 		$q  = 'SELECT * FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
-		$q .= ' ORDER BY timeLastLogin DESC';
+		$q .= ' ORDER BY timeLastActive DESC';
 		return $db->getArray($q);
 	}
 
