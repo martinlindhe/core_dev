@@ -70,6 +70,18 @@
 			case 'UNREAD': return 'Oläst';
 			case 'READ': return 'Läst';
 
+			//Polls
+			case 'Active poll': return 'Aktuell omröstning';
+			case 'Starts': return 'Börjar';
+			case 'ends': return 'slutar';
+			case 'Save as .csv': return 'Spara som .csv';
+			case 'Your vote has been registered.': return 'Din röst har registrerats';
+			case 'You already voted, showing current standings': return 'Du har redan röstat, visar nuvarande ställningar';
+			case 'The poll closed, final result': return 'Omröstningen har avslutats, slutgiltigt resultat';
+			case 'got': return 'fick';
+			case 'votes': return 'röster';
+			case 'No polls are currently active': return 'Inga omröstningar är aktiva för tillfället';
+
 			case 'Delete image': return 'Radera bilden';
 
 			case 'Forgot password': return 'Glömt lösenord';

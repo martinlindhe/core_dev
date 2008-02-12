@@ -8,8 +8,10 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	define('POLL_SITE',		1);	//"Question of the week"-style polls on the site's front page (for example)
-	define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.newsId
+require_once('functions_locale.php'); //for translations
+
+define('POLL_SITE',		1);	//"Question of the week"-style polls on the site's front page (for example)
+define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.newsId
 
 	/**
 	 *
@@ -162,12 +164,12 @@
 		if (!$data['timeStart']) $active = true;
 
 		$result = '<div class="item">';
-		if ($active) $result .= 'ACTIVE POLL: ';
+		if ($active) $result .= t('Active poll').': ';
 		$result .= $data['pollText'].'<br/><br/>';
 		$list = getCategories(CATEGORY_POLL, $_id);
 
 		$result .= '<div id="poll'.$_id.'">';
-		if ($session->isAdmin && $data['timeStart']) $result .= 'Starts: '.$data['timeStart'].', ends '.$data['timeEnd'].'<br/>';
+		if ($session->isAdmin && $data['timeStart']) $result .= t('Starts').': '.$data['timeStart'].', '.t('ends').' '.$data['timeEnd'].'<br/>';
 
 		if ($session->id && $active && !hasAnsweredPoll($_id)) {
 			foreach ($list as $row) {
@@ -177,10 +179,11 @@
 			}
 		} else {
 			if ($session->id) {
+				$result .= '<br/>';
 				if ($active) {
-					$result .= '<br/>You already voted, showing current standings:<br/><br/>';
+					$result .= t('You already voted, showing current standings').':<br/><br/>';
 				} else {
-					$result .= '<br/>The poll closed, final result:<br/><br/>';
+					$result .= t('The poll closed, final result').':<br/><br/>';
 				}
 			}
 
@@ -191,19 +194,19 @@
 			foreach ($votes as $row) {
 				$pct = 0;
 				if ($tot_votes) $pct = (($row['cnt'] / $tot_votes)*100);
-				$result .= ' &bull; '.$row['categoryName'].' got '.$row['cnt'].' votes ('.$pct.'%)<br/>';
+				$result .= ' &bull; '.$row['categoryName'].' '.t('got').' '.$row['cnt'].' '.t('votes').' ('.$pct.'%)<br/>';
 			}
 		}
 
 		if ($session->isAdmin) {
-			$result .= '<br/><input type="button" class="button" value="Save as .csv" onclick="get_poll_csv('.$_id.')"/>';
+			$result .= '<br/><input type="button" class="button" value="'.t('Save as .csv').'" onclick="get_poll_csv('.$_id.')"/>';
 		}
 
 		$result .= '</div>';
 
 		if ($session->id) {
 			$result .= '<div id="poll_voted'.$_id.'" style="display:none">';
-				$result .= 'Your vote has been registered!';
+				$result .= t('Your vote has been registered.');
 			$result .= '</div>';
 		}
 
@@ -225,7 +228,7 @@
 		$list = getActivePolls($_type);
 
 		if (!$list) {
-			echo 'No polls are currently active';
+			echo t('No polls are currently active');
 			return;
 		}
 
