@@ -82,6 +82,12 @@
 			case 'votes': return 'röster';
 			case 'No polls are currently active': return 'Inga omröstningar är aktiva för tillfället';
 
+			//Settings
+			case 'The email entered is not valid!': return 'E-postaddressen du angav är inte giltig!';
+			case 'The email entered already taken!': return 'E-postaddressen du angav är upptagen!';
+			case 'The Swedish SSN you entered is not valid!': return 'Personnumret du angav är ogiltigt!';
+
+
 			case 'Delete image': return 'Radera bilden';
 
 			case 'Forgot password': return 'Glömt lösenord';

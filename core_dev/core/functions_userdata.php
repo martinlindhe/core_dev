@@ -463,7 +463,7 @@
 	}
 
 	/**
-	 * Used for "forgot my password" feature
+	 * Used for "forgot my password" feature and to verify that email address is not taken when someone sets email
 	 *
 	 * \param $email e-mail to look for
 	 * \return userId that has this email, or false
@@ -509,9 +509,14 @@
 					}
 				} else if (isset($_POST['userdata_'.$row['fieldId']])) {
 					if ($row['fieldType'] == USERDATA_TYPE_EMAIL && !ValidEmail($_POST['userdata_'.$row['fieldId']])) {
-						echo '<div class="critical">WARNING: The email entered is not valid!</div>';
+						echo '<div class="critical">'.t('The email entered is not valid!').'</div>';
 					} else {
-						$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+						$chk = findUserByEmail($_POST['userdata_'.$row['fieldId']]);
+						if ($chk && $chk != $session->id) {
+							echo '<div class="critical">'.t('The email entered already taken!').'</div>';
+						} else {
+							$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+						}
 					}
 				}
 
@@ -534,7 +539,7 @@
 							) === true) {
 							$row['settingValue'] = sql_datetime($born);
 						} else {
-							echo '<div class="critical">Swedish SSN is not valid!</div>';
+							echo '<div class="critical">'.t('The Swedish SSN you entered is not valid!').'</div>';
 						}
 					}
 				}
