@@ -96,6 +96,10 @@
 			case 'The passwords doesnt match': return 'Lösenorden matchar inte';
 			case 'Username is not allowed': return 'Användarnamnet är inte tillåtet';
 			case 'Username already exists': return 'Användarnamnet är upptaget';
+			case 'Your account has been activated.': return 'Ditt konto har aktiverats.';
+			case 'You can now proceed to': return 'Du kan nu fortsätta att';
+			case 'log in': return 'logga in';
+			case 'Activation code is invalid or expired.': return 'Aktiveringskoden är ogiltig eller föråldrad.';
 
 			case 'Delete image': return 'Radera bilden';
 

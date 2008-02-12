@@ -161,7 +161,7 @@ abstract class Auth_Base
 		if (!is_numeric($_id) || !is_numeric($_code)) return false;
 
 		if (!verifyActivation(ACTIVATE_EMAIL, $_code, $_id)) {
-			echo 'Activation code is invalid or expired.';
+			echo t('Activation code is invalid or expired.');
 			return false;
 		}
 
@@ -169,8 +169,8 @@ abstract class Auth_Base
 
 		removeActivation(ACTIVATE_EMAIL, $_code);
 
-		echo 'Your account has been activated<br/>';
-		echo 'You can now proceed to <a href="login.php">log in</a>.';
+		echo t('Your account has been activated.').'<br/>';
+		echo t('You can now proceed to').' <a href="login.php">'.t('log in').'</a>.';
 		return true;
 	}
 
