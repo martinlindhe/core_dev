@@ -89,7 +89,7 @@
 			case 'The Swedish SSN you entered is not valid!': return 'Personnumret du angav är ogiltigt!';
 
 			// Contacts
-			case ' has blocked you and is now on your blocklist.': return ' har blockerat dig och är nu på din lista över blockerade användare.';
+			case ' has blocked you.': return ' har blockerat dig.';
 			case 'User blocking': return 'Användarblockering';
 
 			//Registration

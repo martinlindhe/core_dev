@@ -330,7 +330,7 @@ require_once('functions_locale.php');	//for translations
 		setContact(CONTACT_BLOCKED, $session->id, $otherId);
 
 		//tell the request sender that the request was accepted
-		$msg = Users::link($session->id).t(' has blocked you and is now on your blocklist.');
+		$msg = Users::link($session->id).t(' has blocked you.');
 		systemMessage($otherId, t('User blocking'), $msg);
 		return true;
 	}
