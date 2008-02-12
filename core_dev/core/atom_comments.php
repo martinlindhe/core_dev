@@ -82,7 +82,7 @@
 	/**
 	 *
 	 */
-	function getComments($commentType, $ownerId, $privateComments = false)
+	function getComments($commentType, $ownerId, $privateComments = false, $limit = '')
 	{
 		global $db;
 		if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
@@ -93,7 +93,7 @@
 
 		if ($privateComments === false) $q .= ' AND t1.commentPrivate=0';
 
-		$q .=	' ORDER BY t1.timeCreated DESC';
+		$q .= ' ORDER BY t1.timeCreated DESC '.$limit;
 		return $db->getArray($q);
 	}
 
@@ -142,13 +142,16 @@
 	/**
 	 *
 	 */
-	function getCommentsCount($commentType, $ownerId)
+	function getCommentsCount($commentType, $ownerId, $privateComments = false)
 	{
 		global $db;
 		if (!is_numeric($commentType) || !is_numeric($ownerId)) return false;
 
 		$q =	'SELECT COUNT(commentId) FROM tblComments '.
 					'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND deletedBy=0';
+
+		if ($privateComments === false) $q .= ' AND commentPrivate=0';
+
 		return $db->getOneItem($q);
 	}
 
@@ -169,14 +172,15 @@
 			deleteComment($_GET['delete']);
 		}
 
-		/* Shows all comments for this item */
-		$list = getComments($_type, $ownerId);
+		/* Gets all comments for this item */
+		$cnt = getCommentsCount($_type, $ownerId);
 
-		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' '.(count($list) == 1 ? t('comment'):t('comments')).'</div>';
+		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.$cnt.' '.($cnt == 1 ? t('comment'):t('comments')).'</div>';
 
 		echo '<div id="comments_holder">';
 		echo '<div id="comments_only">';
-		$pager = makePager(count($list),15);
+		$pager = makePager($cnt,15);
+		$list = getComments($_type, $ownerId,false, $pager['limit']);
 		echo $pager['head'];
 		foreach ($list as $row) {
 			echo '<div class="comment_details">';
