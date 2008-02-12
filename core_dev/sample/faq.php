@@ -3,7 +3,7 @@
 	require_core('functions_faq.php');
 	require('design_head.php');
 
-	echo 'Frequently Asked Questions<br/><br/>';
+	echo '<h1>Frequently Asked Questions</h1>';
 
 	showFAQ();
 	echo '<br/>';

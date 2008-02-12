@@ -28,6 +28,7 @@
 	require_once('functions_forum.php');
 	require_once('functions_todo.php');
 	require_once('functions_fileareas.php');
+	require_once('atom_feedback.php');
 	restore_include_path();
 
 	//$config['plugins'] = array('wurfl');

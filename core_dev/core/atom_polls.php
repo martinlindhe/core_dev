@@ -32,6 +32,10 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 			case 'week':
 				$length = 7;
 				break;
+
+			case 'month':
+				$length = 30;
+				break;
 				
 			case '': break;
 

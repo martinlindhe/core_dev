@@ -140,6 +140,30 @@ CREATE TABLE `tblGuestbooks` (
   `timeRead` datetime default NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+CREATE TABLE `tblLocationKommun` (
+  `kommunId` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(50) default NULL,
+  PRIMARY KEY  (`kommunId`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `tblLocationLan` (
+  `lanId` smallint(5) unsigned NOT NULL auto_increment,
+  `name` varchar(30) NOT NULL,
+  PRIMARY KEY  (`lanId`),
+  KEY `st_lan` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+CREATE TABLE `tblLocationOrt` (
+  `ortId` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL default '',
+  `lanId` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`ortId`,`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+CREATE TABLE `tblLocationZip` (
+  `zip` int(5) NOT NULL default '0',
+  `ortId` int(10) unsigned NOT NULL,
+  `lanId` int(10) unsigned NOT NULL,
+  `kommunId` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`zip`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 CREATE TABLE `tblLogins` (
   `mainId` int(10) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',
