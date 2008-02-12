@@ -22,6 +22,7 @@ abstract class Auth_Base
 	public $reserved_usercheck = true;		///< check if username is listed as reserved username, requires tblStopwords
 	public $userdata = true; 							///< shall we use tblUserdata for required userdata fields?
 	public $mail_activate = false;				///< does account registration require email activation?
+	public $mail_error = false;						///< will be set to true if there was problems sending out email
 
 	public $activation_sent = false;			///< internal. true if mail activation has been sent
 	public $resetpwd_sent		= false;			///< internal. true if mail for password reset has been sent
@@ -95,7 +96,7 @@ abstract class Auth_Base
 					$this->login($_POST['register_usr'], $_POST['register_pwd']);
 				}
 			} else {
-				$session->error = 'Registration failed, '.$check;
+				$session->error = t('Registration failed').', '.$check;
 			}
 		}
 	}
@@ -111,16 +112,19 @@ abstract class Auth_Base
 
 		$mail->CharSet  = 'utf-8';
 
-		$mail->From     = $this->mail_from;
+		$mail->From = $this->mail_from;
 		$mail->FromName = $this->mail_from_name;
 
-		$mail->IsHTML(false);   // send HTML mail?
+		$mail->IsHTML(false); // send HTML mail?
 
 		$mail->AddAddress($dst_adr);
-		$mail->Subject  = $subj;
+		$mail->Subject = $subj;
 		$mail->Body = $msg;
 
-		if (!$mail->Send()) return false;
+		if (!$mail->Send()) {
+			$this->mail_error = true;
+			return false;
+		}
 		return true;
 	}
 
@@ -143,8 +147,7 @@ abstract class Auth_Base
 			$pattern = array('/__USERNAME__/', '/__ACTIVATIONCODE__/', '/__FULLWEBROOT__/', '/__USERID__/', '/__EXPIRETIME__/');
 			$replacement = array(Users::getName($_id), $code, $config['full_web_root'], $_id, shortTimePeriod($config['activate']['expire_time_email']));
 			$msg = preg_replace($pattern,$replacement,$config['auth']['mail_activate_msg']);
-		}
-		else {
+		} else {
 			$msg =
 				"Hello. Someone (probably you) registered an account from IP ".$_SERVER['REMOTE_ADDR']."\n".
 				"\n".

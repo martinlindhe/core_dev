@@ -342,7 +342,7 @@
 					$_POST['userdata_'.$row['fieldId'].'_month'],
 					$_POST['userdata_'.$row['fieldId'].'_day'],
 					$_POST['userdata_'.$row['fieldId'].'_chk']
-					) !== true) return t('Invalid ssn');
+					) !== true) return t('The Swedish SSN you entered is not valid!');
 			}
 		}
 
@@ -359,9 +359,22 @@
 
 		$list = getUserdataFields(true);
 		foreach ($list as $row) {
-			if (empty($_POST['userdata_'.$row['fieldId']])) continue;
+			if (empty($_POST['userdata_'.$row['fieldId']]) && $row['fieldType'] != USERDATA_TYPE_BIRTHDATE_SWE) continue;
 
-			saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $_POST['userdata_'.$row['fieldId']]);
+			if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) {
+
+				//ssn was already verified in verifyRequiredUserdataFields()
+				$born = mktime(0, 0, 0,
+					$_POST['userdata_'.$row['fieldId'].'_month'],
+					$_POST['userdata_'.$row['fieldId'].'_day'],
+					$_POST['userdata_'.$row['fieldId'].'_year']
+				);
+				$val = sql_datetime($born);
+			} else {
+				$val = $_POST['userdata_'.$row['fieldId']];
+			}
+
+			saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $val);
 		}
 	}
 

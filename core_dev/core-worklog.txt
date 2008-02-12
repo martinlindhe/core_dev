@@ -4,6 +4,7 @@
 2008.02.12
 	- multiple users can no longer have the same email address
 
+
 2008.02.11
 	- core/admin_userdata.php: made some userdata field types only
 		usable one time per site (email, swedish ssn, image)

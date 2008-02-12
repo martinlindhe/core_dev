@@ -100,6 +100,7 @@
 			case 'You can now proceed to': return 'Du kan nu fortsätta att';
 			case 'log in': return 'logga in';
 			case 'Activation code is invalid or expired.': return 'Aktiveringskoden är ogiltig eller föråldrad.';
+			case 'Registration failed': return 'Registreringen misslyckades';
 
 			case 'Delete image': return 'Radera bilden';
 
@@ -111,7 +112,7 @@
 			case 'comments': return 'kommentarer';
 			case 'Add comment': return 'Klottra!';
 			
-			default: return '__('.$s.')__';
+			default: return 'x__('.$s.')__';
 		}
 	}
 ?>
