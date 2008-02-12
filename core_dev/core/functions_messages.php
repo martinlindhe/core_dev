@@ -102,7 +102,7 @@ require_once('functions_locale.php');	//for translations
 			echo '<div class="msg_head">';
 				echo ($msg['subject'] ? $msg['subject']:t('No subject')).' '.t('at').' '.$msg['timeCreated'].'<br/>';
 				if ($msg['fromId']) {
-					echo t('From').' '.Users::link($msg['fromId']).'<br/>';
+					echo t('From').' '.Users::link($msg['fromId']).' <a href="messages.php?id='.$msg['fromId'].'">Svara</a><br/>';
 				} else {
 					echo '<b>'.t('System message').'</b><br/>';
 				}
