@@ -17,15 +17,15 @@
 		$db->insert($q);
 	}
 
-	function getVisits($_type, $_id)
+	function getVisits($_type, $_id, $_limit = 5)
 	{
 		global $db;
-
-		if (!is_numeric($_type) || !is_numeric($_id)) return false;
+		if (!is_numeric($_type) || !is_numeric($_id) || !is_numeric($_limit)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblVisits AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 		$q .= 'WHERE ownerId='.$_id.' AND type='.$_type.' ORDER BY timeCreated DESC';
+		if ($_limit) $q .= ' LIMIT 0,'.$_limit;
 		return $db->getArray($q);
 	}
 ?>

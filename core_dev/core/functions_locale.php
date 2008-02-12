@@ -22,6 +22,7 @@
 			case 'Search': return 'Sök';
 			case 'Remove': return 'Radera';
 			case 'From': return 'Från';
+			case 'To': return 'Till';
 			case 'Next': return 'Nästa';
 			case 'Previous': return 'Föregående';
 
@@ -36,7 +37,6 @@
 			case '1 hit': return 'en träff';
 			case 'New search': return 'Ny sökning';
 			case 'Has image': return 'Har bild';
-
 
 			//Abuse report of user
 			case 'Report user': return 'Anmäl användaren';
@@ -59,6 +59,16 @@
 			case 'of': return 'av';
 			case 'displaying': return 'visar';
 			case 'items': return 'objekt';
+
+			//Messages
+			case 'at': return 'vid';
+			case 'No subject': return 'Ingen rubrik';
+			case 'System message': return 'Systemmeddelande';
+			case 'No messages': return 'Inga meddelanden';
+			case 'INBOX': return 'Inkorgen';
+			case 'OUTBOX': return 'Utkorgen';
+			case 'UNREAD': return 'Oläst';
+			case 'READ': return 'Läst';
 
 			case 'Delete image': return 'Radera bilden';
 

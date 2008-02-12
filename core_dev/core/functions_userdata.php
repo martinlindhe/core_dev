@@ -392,6 +392,7 @@
 				break;
 
 			case USERDATA_TYPE_IMAGE:
+				if (!$result) return false;
 				$val = makeThumbLink($result);
 				break;
 

@@ -28,6 +28,9 @@
 		echo '</form>';
 		
 	} else {
+		echo '<h1>My messages</h1>';
+		echo '<br/>';
+
 		showMessages();
 	}
 

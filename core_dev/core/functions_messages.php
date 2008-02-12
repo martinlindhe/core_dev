@@ -5,6 +5,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_locale.php');	//for translations
+
 	define('MESSAGE_GROUP_INBOX',		1);
 	define('MESSAGE_GROUP_OUTBOX',	2);
 
@@ -98,13 +100,13 @@
 
 			echo '<div class="msg">';
 			echo '<div class="msg_head">';
-				echo ($msg['subject'] ? $msg['subject']:'no subject').' at '.$msg['timeCreated'].'<br/>';
+				echo ($msg['subject'] ? $msg['subject']:t('No subject')).' '.t('at').' '.$msg['timeCreated'].'<br/>';
 				if ($msg['fromId']) {
-					echo 'From '.Users::link($msg['fromId']).'<br/>';
+					echo t('From').' '.Users::link($msg['fromId']).'<br/>';
 				} else {
-					echo '<b>System message</b><br/>';
+					echo '<b>'.t('System message').'</b><br/>';
 				}
-				echo 'To '.Users::link($msg['toId']).'<br/>';
+				echo t('To').' '.Users::link($msg['toId']).'<br/>';
 				echo (!$msg['timeRead']?'UNREAD':'READ');
 			echo '</div>';
 			echo '<div class="msg_body">';
@@ -120,44 +122,23 @@
 		if (!$_group && !empty($_GET['g']) && is_numeric($_GET['g'])) $_group = $_GET['g'];
 		if (!$_group) $_group = MESSAGE_GROUP_INBOX;
 
-		echo 'My messages<br/><br/>';
-
-		echo ($_group==MESSAGE_GROUP_INBOX?'<b>INBOX</b>':'<a href="?g='.MESSAGE_GROUP_INBOX.'">INBOX</a>').'<br/>';
-		echo ($_group==MESSAGE_GROUP_OUTBOX?'<b>OUTBOX</b>':'<a href="?g='.MESSAGE_GROUP_OUTBOX.'">OUTBOX</a>').'<br/>';
+		echo ($_group==MESSAGE_GROUP_INBOX?'<b>'.t('INBOX').'</b>':'<a href="?g='.MESSAGE_GROUP_INBOX.'">'.t('INBOX').'</a>').'<br/>';
+		echo ($_group==MESSAGE_GROUP_OUTBOX?'<b>'.t('OUTBOX').'</b>':'<a href="?g='.MESSAGE_GROUP_OUTBOX.'">'.t('OUTBOX').'</a>').'<br/>';
 		echo '<br/>';
 
 		$list = getMessages($_group);
 		if (!$list) {
-			echo 'No messages';
+			echo t('No messages');
 			return false;
 		}
-		
-		//fixme: denna kod kräver os3grid.js, som inte inkluderas här. använd en mindre grid-class
-		echo '<div id="grid"></div>';
-/*
-		echo '<script type="text/javascript">';
-		echo 'function cell_clicked(grid, cell, row_num, col_num, val) {';
-			echo 'document.location = "'.$_SERVER['PHP_SELF'].'?read=" + g_idx[row_num];';
-			echo 'return false;';
-		echo '}';
-		
-		echo 'var g = new OS3Grid();';
-		echo 'var g_idx = new Array();';
-		echo 'g.set_headers("Subject", "Time", "Status");';
-*/		
+
 		$i=0;
 		foreach ($list as $row) {
-			//echo 'g_idx['.($i++).'] = '.$row['msgId'].';';
-			//echo 'g.add_row("'.($row['subject']?$row['subject']:'no subject').'","'.$row['timeCreated'].'","'.(!$row['timeRead']?'UNREAD':'READ').'");';
-			echo ($row['subject']?$row['subject']:'no subject').', '.$row['timeCreated'].', '.(!$row['timeRead']?'UNREAD':'READ').'<br/>';
+			echo '<a href= "'.$_SERVER['PHP_SELF'].'?read='.$row['msgId'].'">';
+			echo ($row['subject']?$row['subject']:'no subject').', '.$row['timeCreated'].', '.(!$row['timeRead']?t('UNREAD'):t('READ')).'<br/>';
+			echo '</a>';
 		}
-/*
-		echo 'g.set_sortable(true);';
-		echo 'g.set_highlight(true);';
-		echo 'g.set_cell_click(cell_clicked);';
-		echo 'g.render("grid");';
-		echo '</script>';
-*/
+
 		return true;
 	}
 ?>
