@@ -29,6 +29,18 @@ class Users
 	}
 
 	/**
+	 * Looks up a user id by name
+	 */
+	function getId($_name)
+	{
+		global $db, $session;
+		if ($_name == $session->username) return $session->id;
+
+		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($_name).'"';
+		return $db->getOneItem($q);
+	}
+
+	/**
 	 * Looks up a users latest logintime by id
 	 */
 	function getLogintime($_id)

@@ -21,8 +21,6 @@
 		$ctrl = SsnRandomizeSwedish($_year, $_month, $_day, $_gender);
 	}
 	$generated = $ctrl ? ($_year.$_month.$_day.'-'.$ctrl) : '';
-	
-	createXHTMLHeader();
 ?>
 
 	Välj datum &amp; kön för att generera checksumma:

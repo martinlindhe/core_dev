@@ -326,11 +326,23 @@
 
 		$list = getUserdataFields(true);
 		foreach ($list as $row) {
-			if ($row['fieldType'] == USERDATA_TYPE_EMAIL && $row['regRequire'] == 1)
+			if ($row['regRequire'] != 1) continue;
+
+			if ($row['fieldType'] == USERDATA_TYPE_EMAIL)
 			{
 				if (empty($_POST['userdata_'.$row['fieldId']])) return t('No email entered!');
 				if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered is not valid!');
 				if (findUserByEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered already taken!');
+			}
+
+			if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE)
+			{
+				if ($check = SsnValidateSwedishNum(
+					$_POST['userdata_'.$row['fieldId'].'_year'],
+					$_POST['userdata_'.$row['fieldId'].'_month'],
+					$_POST['userdata_'.$row['fieldId'].'_day'],
+					$_POST['userdata_'.$row['fieldId'].'_chk']
+					) !== true) return t('Invalid ssn');
 			}
 		}
 

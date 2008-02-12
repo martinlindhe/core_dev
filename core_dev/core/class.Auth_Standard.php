@@ -50,9 +50,7 @@ class Auth_Standard extends Auth_Base
 		if ($chk !== true) return $chk;
 
 		if (Users::cnt()) {
-			$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
-			$checkId = $db->getOneItem($q);
-			if ($checkId) return t('Username already exists');
+			if (Users::getId($username)) return t('Username already exists');
 		} else {
 			//No users exists, give this user superadmin status
 			$userMode = 2;
