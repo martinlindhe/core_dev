@@ -524,10 +524,10 @@ class Users
 	 */
 	function isOnline($_id)
 	{
-		global $db;
+		global $db, $session;
 		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT userId FROM tblUsers WHERE userId = '.$_id.' AND timeLastActive>=DATE_SUB(NOW(),INTERVAL 30 MINUTE) LIMIT 1';
+		$q = 'SELECT userId FROM tblUsers WHERE userId = '.$_id.' AND timeLastActive>=DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND) LIMIT 1';
 		if ($db->getOneItem($q)) {
 			return true;
 		}

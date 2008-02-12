@@ -122,7 +122,7 @@
 			case 'comments': return 'kommentarer';
 			case 'Add comment': return 'Klottra!';
 			
-			default: return 'x__('.$s.')__';
+			default: return '__('.$s.')__';
 		}
 	}
 ?>

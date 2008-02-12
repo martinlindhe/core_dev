@@ -155,11 +155,11 @@ require_once('functions_locale.php');	//for translations
 	 */
 	function getContactsFlat($_type, $userId)
 	{
-		global $db;
+		global $db, $session;
 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS contactName,';
-		$q .= '(SELECT timeLastActive>=DATE_SUB(NOW(),INTERVAL 30 MINUTE)) AS isOnline ';
+		$q .= '(SELECT timeLastActive>=DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)) AS isOnline ';
 		$q .= 'FROM tblContacts AS t1 ';
 		$q .= 'LEFT JOIN tblUsers AS t2 ON (t2.userId = t1.otherUserId) ';
 		$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
