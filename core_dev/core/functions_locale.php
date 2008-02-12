@@ -83,10 +83,19 @@
 			case 'No polls are currently active': return 'Inga omröstningar är aktiva för tillfället';
 
 			//Settings
+			case 'No email entered!': return 'Du angav ingen e-postaddress!';
 			case 'The email entered is not valid!': return 'E-postaddressen du angav är inte giltig!';
 			case 'The email entered already taken!': return 'E-postaddressen du angav är upptagen!';
 			case 'The Swedish SSN you entered is not valid!': return 'Personnumret du angav är ogiltigt!';
 
+			//Registration
+			case 'Username contains invalid spaces': return 'Användarnamnet innehåller ogiltiga mellanslag';
+			case 'Username or password contains invalid characters': return 'Användarnamnet eller lösenordet innehåller ogiltiga tecken';
+			case 'Username must be at least 3 characters long': return 'Användarnamnet måste vara åtminstonde 3 tecken långt';
+			case 'Password must be at least 4 characters long': return 'Lösenordet måste vara åtminstonde 4 tecken långt';
+			case 'The passwords doesnt match': return 'Lösenorden matchar inte';
+			case 'Username is not allowed': return 'Användarnamnet är inte tillåtet';
+			case 'Username already exists': return 'Användarnamnet är upptaget';
 
 			case 'Delete image': return 'Radera bilden';
 

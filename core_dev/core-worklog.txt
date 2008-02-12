@@ -1,6 +1,9 @@
 ﻿todo:
 	- när en bild krymps vid file-upload,spara alltid orginalet orört
 
+2008.02.12
+	- multiple users can no longer have the same email address
+
 2008.02.11
 	- core/admin_userdata.php: made some userdata field types only
 		usable one time per site (email, swedish ssn, image)

@@ -318,7 +318,7 @@
 	}
 
 	/**
-	 * Verify userdata field input from registration. Returns error on invalid e-mail
+	 * Verify userdata field input from registration. Returns error on invalid e-mail or if email is in use
 	 */
 	function verifyRequiredUserdataFields()
 	{
@@ -328,8 +328,9 @@
 		foreach ($list as $row) {
 			if ($row['fieldType'] == USERDATA_TYPE_EMAIL && $row['regRequire'] == 1)
 			{
-				if (empty($_POST['userdata_'.$row['fieldId']])) return false;
-				if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) return false;
+				if (empty($_POST['userdata_'.$row['fieldId']])) return t('No email entered!');
+				if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered is not valid!');
+				if (findUserByEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered already taken!');
 			}
 		}
 

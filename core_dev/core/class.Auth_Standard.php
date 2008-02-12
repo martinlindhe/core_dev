@@ -12,6 +12,7 @@ require_once('class.Users.php');
 
 require_once('atom_moderation.php');	//for checking if username is reserved on user registration
 require_once('functions_userdata.php');	//for showRequiredUserdataFields()
+require_once('functions_locale.php'); //for translations
 
 class Auth_Standard extends Auth_Base
 {
@@ -29,28 +30,29 @@ class Auth_Standard extends Auth_Base
 		global $db, $config, $session;
 		if (!is_numeric($userMode)) return false;
 
-		if ($username != trim($username)) return 'Username contains invalid spaces';
+		if ($username != trim($username)) return t('Username contains invalid spaces');
 
 		if (($db->escape($username) != $username) || ($db->escape($password1) != $password1)) {
 			//if someone tries to enter ' or " etc as username/password letters
 			//with this check, we dont need to encode the strings for use in sql query
-			return 'Username or password contains invalid characters';
+			return t('Username or password contains invalid characters');
 		}
 
-		if (strlen($username) < 3) return 'Username must be at least 3 characters long';
-		if (strlen($password1) < 4) return 'Password must be at least 4 characters long';
+		if (strlen($username) < 3) return t('Username must be at least 3 characters long');
+		if (strlen($password1) < 4) return t('Password must be at least 4 characters long');
 
-		if ($password1 != $password2) return 'The passwords doesnt match';
+		if ($password1 != $password2) return t('The passwords doesnt match');
 
-		if ($this->reserved_usercheck && isReservedUsername($username)) return 'Username is not allowed';
+		if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
 
 		//Checks if email was required, and if so if it was correctly entered
-		if (!verifyRequiredUserdataFields()) return 'Invalid e-mail entered';
+		$chk = verifyRequiredUserdataFields();		
+		if ($chk !== true) return $chk;
 
 		if (Users::cnt()) {
 			$q = 'SELECT userId FROM tblUsers WHERE userName="'.$username.'"';
 			$checkId = $db->getOneItem($q);
-			if ($checkId) return 'Username already exists';
+			if ($checkId) return t('Username already exists');
 		} else {
 			//No users exists, give this user superadmin status
 			$userMode = 2;
