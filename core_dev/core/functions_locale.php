@@ -74,6 +74,12 @@
 
 			case 'Forgot password': return 'Glömt lösenord';
 			case 'Account activation': return 'Aktivera konto';
+
+			//Comments
+			case 'comment': return 'kommentar';
+			case 's': return 'er';
+			case 'Add comment': return 'Klottra!';
+			
 			default: return '__('.$s.')__';
 		}
 	}

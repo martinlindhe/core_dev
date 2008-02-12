@@ -172,7 +172,7 @@
 		/* Shows all comments for this item */
 		$list = getComments($_type, $ownerId);
 
-		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' comment'.(count($list) == 1 ? '':'s').'</div>';
+		echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.count($list).' '.t('comment').(count($list) == 1 ? '':t('s')).'</div>';
 
 		echo '<div id="comments_holder">';
 		echo '<div id="comments_only">';
@@ -194,7 +194,7 @@
 		) {
 			echo '<form method="post" action="">';
 			echo '<textarea name="cmt" cols="'.$col_w.'" rows="'.$col_h.'"></textarea><br/>';
-			echo '<input type="submit" class="button" value="Add comment"/>';
+			echo '<input type="submit" class="button" value="'.t('Add comment').'"/>';
 			echo '</form>';
 		}
 
