@@ -89,7 +89,7 @@
 
 			//Comments
 			case 'comment': return 'kommentar';
-			case 's': return 'er';
+			case 'comments': return 'kommentarer';
 			case 'Add comment': return 'Klottra!';
 			
 			default: return '__('.$s.')__';
