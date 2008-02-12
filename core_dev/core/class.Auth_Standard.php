@@ -86,18 +86,18 @@ class Auth_Standard extends Auth_Base
 		$q = 'SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"';
 		$data = $db->getOneRow($q);
 		if (!$data) {
-			$session->error = 'Login failed';
+			$session->error = t('Login failed');
 			$session->log('Failed login attempt: username '.$enc_username, LOGLEVEL_WARNING);
 			return false;
 		}
 
 		if ($this->mail_activate && !Users::isActivated($data['userId'])) {
-			$session->error = 'This account has not yet been activated.';
+			$session->error = t('This account has not yet been activated.');
 			return false;
 		}
 
 		if ($data['userMode'] != 2 && !$this->allow_login) {
-			$session->error = 'Logins currently not allowed.';
+			$session->error = t('Logins currently not allowed.');
 			return false;
 		}
 
@@ -149,7 +149,7 @@ class Auth_Standard extends Auth_Base
 			if (isset($_POST['forgot_pwd'])) {
 				$check = $this->handleForgotPassword($_POST['forgot_pwd']);
 				if (!$check) {
-					$session->error = 'The specified email address does not match any registered user.';
+					$session->error = t('The specified email address does not match any registered user.');
 				}
 				$tab = 'forgot_pwd';
 			}

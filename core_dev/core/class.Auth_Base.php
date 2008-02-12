@@ -202,13 +202,19 @@ abstract class Auth_Base
 
 		$subj  = t('Forgot password');
 
-		$msg =
-			"Hello. Someone (probably you) asked for a password reset procedure from IP ".$_SERVER['REMOTE_ADDR']."\n".
-			"\n".
-			"Follow this link to set a new password:\n".
-			$config['full_web_root']."reset_password.php?id=".$_id."&code=".$code."\n".
-			"\n".
-			"The link will expire in ".shortTimePeriod($config['activate']['expire_time_change_pwd'])."\n";
+		if (isset($config['auth']['mail_password_msg'])) {
+			$pattern = array('/__IP__/', '/__USERNAME__/', '/__ACTIVATIONCODE__/', '/__FULLWEBROOT__/', '/__USERID__/', '/__EXPIRETIME__/');
+			$replacement = array($_SERVER['REMOTE_ADDR'], Users::getName($_id), $code, $config['full_web_root'], $_id, shortTimePeriod($config['activate']['expire_time_email']));
+			$msg = preg_replace($pattern,$replacement,$config['auth']['mail_password_msg']);
+		} else {
+			$msg =
+				"Hello. Someone (probably you) asked for a password reset procedure from IP ".$_SERVER['REMOTE_ADDR']."\n".
+				"\n".
+				"Follow this link to set a new password:\n".
+				$config['full_web_root']."reset_password.php?id=".$_id."&code=".$code."\n".
+				"\n".
+				"The link will expire in ".shortTimePeriod($config['activate']['expire_time_change_pwd'])."\n";
+		}
 
 		if (!$this->SmtpSend($email, $subj, $msg)) return false;		
 

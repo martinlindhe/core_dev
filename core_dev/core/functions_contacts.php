@@ -316,6 +316,26 @@ require_once('functions_locale.php');	//for translations
 	}
 
 	/**
+	 * Adds a block between two users, both users block eachother
+	 *
+	 * \param $otherId user id
+	 * \return true on success
+	 */
+	function addBlock($otherId)
+	{
+		global $db, $session, $config;
+		if (!$session->id || !is_numeric($otherId)) return false;
+
+		//create a friend relation
+		setContact(CONTACT_BLOCKED, $session->id, $otherId);
+
+		//tell the request sender that the request was accepted
+		$msg = Users::link($session->id).t(' has blocked you and is now on your blocklist.');
+		systemMessage($otherId, t('User blocking'), $msg);
+		return true;
+	}
+
+	/**
 	 * Returns true if current user has a pending friend request with $userId
 	 *
 	 * \param $userId

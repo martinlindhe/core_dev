@@ -88,6 +88,10 @@
 			case 'The email entered already taken!': return 'E-postaddressen du angav är upptagen!';
 			case 'The Swedish SSN you entered is not valid!': return 'Personnumret du angav är ogiltigt!';
 
+			// Contacts
+			case ' has blocked you and is now on your blocklist.': return ' har blockerat dig och är nu på din lista över blockerade användare.';
+			case 'User blocking': return 'Användarblockering';
+
 			//Registration
 			case 'Username contains invalid spaces': return 'Användarnamnet innehåller ogiltiga mellanslag';
 			case 'Username or password contains invalid characters': return 'Användarnamnet eller lösenordet innehåller ogiltiga tecken';
@@ -106,6 +110,12 @@
 
 			case 'Forgot password': return 'Glömt lösenord';
 			case 'Account activation': return 'Aktivera konto';
+
+			// Login
+			case 'Login failed': return 'Inloggning misslyckades';
+			case 'This account has not yet been activated.': return 'Kontot har inte aktiverats ännu.';
+			case 'Logins currently not allowed.': return 'Inloggningar är för närvarande inte tillåtna.';
+			case 'The specified email address does not match any registered user.': return 'Ingen användare har en sådan epost-adress.';
 
 			//Comments
 			case 'comment': return 'kommentar';
