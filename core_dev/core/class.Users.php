@@ -517,5 +517,22 @@ class Users
 		return false;
 	}
 
+	/**
+	 * Checks if user is online, returns true/false
+	 *
+	 * \param $_id user id
+	 */
+	function isOnline($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT userId FROM tblUsers WHERE userId = '.$_id.' AND timeLastActive>=DATE_SUB(NOW(),INTERVAL 30 MINUTE) LIMIT 1';
+		if ($db->getOneItem($q)) {
+			return true;
+		}
+		return false;
+	}
+
 }
 ?>
