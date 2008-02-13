@@ -616,7 +616,6 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 			if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE && $row['settingValue']) {
 				echo stripslashes($row['fieldName']).': '.date('Y-m-d', strtotime($row['settingValue']));
 			} else {
-				//$row['settingValue'] = $val;
 				echo getUserdataInput($row);
 			}
 			echo '</div>';

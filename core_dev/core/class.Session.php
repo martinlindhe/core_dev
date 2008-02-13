@@ -309,7 +309,7 @@ class Session
 	{
 		global $config;
 		if ($this->id) return;
-		$this->error = t('The page you requested requires you to be logged in.');
+		if (!$this->error) $this->error = t('The page you requested requires you to be logged in.');
 		$this->errorPage();
 	}
 
@@ -320,7 +320,7 @@ class Session
 	{
 		global $config;
 		if ($this->isAdmin) return;
-		$this->error = t('The page you requested requires admin rights to view.');
+		if (!$this->error) $this->error = t('The page you requested requires admin rights to view.');
 		$this->errorPage();
 	}
 
@@ -331,7 +331,7 @@ class Session
 	{
 		global $config;
 		if ($this->isSuperAdmin) return;
-		$this->error = t('The page you requested requires superadmin rights to view.');
+		if (!$this->error) $this->error = t('The page you requested requires superadmin rights to view.');
 		$this->errorPage();
 	}
 
