@@ -476,6 +476,22 @@
 	}
 
 	/**
+	 * Returns user's stored theme
+	 *
+	 * \param $userId user id
+	 * \return theme
+	 */
+	function loadUserdataTheme($userId, $default)
+	{
+		if (!is_numeric($userId)) return false;
+
+		$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_THEME);
+		$theme = loadUserdataSetting($userId, $fieldId);
+		if ($theme) return $theme;
+		return $default;
+	}
+
+	/**
 	 * Returns fileId of user's image id or false if none is set
 	 *
 	 * \param $userId user id
