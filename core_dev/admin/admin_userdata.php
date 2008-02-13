@@ -83,6 +83,7 @@
 	$used_email = false;
 	$used_theme = false;
 	$used_birthdate_swe = false;
+	$used_location_swe = false;
 	$i = 0;
 	echo '<div id="itemholder_1">';
 	foreach ($list as $row) {
@@ -112,6 +113,7 @@
 		if ($row['fieldType'] == USERDATA_TYPE_EMAIL) $used_email = true;
 		if ($row['fieldType'] == USERDATA_TYPE_THEME) $used_theme = true;
 		if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) $used_birthdate_swe = true;
+		if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE) $used_location_swe = true;
 
 		echo '</div><br/>';
 	}
@@ -157,14 +159,17 @@
 		if (!$used_image || (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)) {
 			echo '<option value="'.USERDATA_TYPE_IMAGE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)?' selected':'').'>Image</option>';
 		}
+		if (!$used_email || (isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)) {
+			echo '<option value="'.USERDATA_TYPE_EMAIL.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)?' selected':'').'>E-mail</option>';
+		}
 		if (!$used_theme || (isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)) {
 			echo '<option value="'.USERDATA_TYPE_THEME.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)?' selected':'').'>Theme</option>';
 		}
 		if (!$used_birthdate_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)) {
 			echo '<option value="'.USERDATA_TYPE_BIRTHDATE_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)?' selected':'').'>Birth date (Swedish)</option>';
 		}
-		if (!$used_email || (isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)) {
-			echo '<option value="'.USERDATA_TYPE_EMAIL.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)?' selected':'').'>E-mail</option>';
+		if (!$used_location_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_LOCATION_SWE)) {
+			echo '<option value="'.USERDATA_TYPE_LOCATION_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_LOCATION_SWE)?' selected':'').'>Location (Sweden)</option>';
 		}
 		echo '</select>';
 		echo '<br/>';
