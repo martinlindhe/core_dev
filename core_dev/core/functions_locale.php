@@ -151,6 +151,10 @@
 			case 'Add news': return 'Skapa nyhet';
 			case 'Manage news': return 'Redigera nyheter';
 
+			//Textformat
+			case 'wrote': return 'skrev';
+			case 'Quote': return 'Citat';
+
 			default: return '__('.$s.')__';
 		}
 	}

@@ -5,6 +5,7 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_textformat.php'); //for formatting messages
 require_once('functions_locale.php');	//for translations
 
 	define('MESSAGE_GROUP_INBOX',		1);
@@ -74,7 +75,7 @@ require_once('functions_locale.php');	//for translations
 
 		$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session->id.' AND msgId='.$_id;
 		$row = $db->getOneRow($q);
-
+		if ($row['ownerId'] != $session->id) return false;
 		return $row;
 	}
 
@@ -102,9 +103,7 @@ require_once('functions_locale.php');	//for translations
 			echo '<div class="msg_head">';
 				echo ($msg['subject'] ? $msg['subject']:t('No subject')).' '.t('at').' '.$msg['timeCreated'].'<br/>';
 				if ($msg['fromId']) {
-					echo t('From').' '.Users::link($msg['fromId']);
-					if ($msg['fromId'] != $session->id) echo ' <a href="messages.php?id='.$msg['fromId'].'">'.t('Reply').'</a>';
-					echo '<br/>';
+					echo t('From').' '.Users::link($msg['fromId']).'<br/>';
 				} else {
 					echo '<b>'.t('System message').'</b><br/>';
 				}
@@ -112,12 +111,16 @@ require_once('functions_locale.php');	//for translations
 				echo (!$msg['timeRead']?t('UNREAD'):t('READ'));
 			echo '</div>';
 			echo '<div class="msg_body">';
-				echo nl2br($msg['body']);
+				echo formatUserInputText($msg['body']);
 			echo '</div>';
 			echo '</div>';
 
 			markMessageAsRead($_GET['read']);
 
+			if ($msg['fromId'] && $msg['fromId'] != $session->id) {
+				echo ' <a href="messages.php?id='.$msg['fromId'].'&amp;r='.$msg['msgId'].'">'.t('Reply').'</a><br/>';
+			}
+			echo '<br/>';
 			echo '<a href="'.$_SERVER['PHP_SELF'].'">'.t('Return to message overview').'</a>';
 
 			return true;

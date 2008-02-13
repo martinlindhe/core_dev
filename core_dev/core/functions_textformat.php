@@ -5,10 +5,12 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	//todo: rename config variables
-	$config['url_rewrite_length'] = 45;		//max length of visible url's after rewrite to hyperlinks
-	$config['url_rewrite_trailing'] = 15;	//number of characters to save at the end of the string
-	$config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disable redir feature
+require_once('functions_locale.php'); //for translations
+
+//todo: rename config variables
+$config['url_rewrite_length'] = 45;		//max length of visible url's after rewrite to hyperlinks
+$config['url_rewrite_trailing'] = 15;	//number of characters to save at the end of the string
+$config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disable redir feature
 
 	function showThumb($_id, $_title = '', $w = 0, $h = 0)
 	{
@@ -143,10 +145,10 @@
 			if ($qpos1 !== false) {
 				$nameblock = substr($quoteblock, $qpos1+strlen('name='), $qpos2-$qpos1-strlen('name='));
 				$quoteblock = substr($quoteblock, $qpos1+strlen('name=')+strlen($nameblock)+strlen(']'));
-				if ($nameblock) $nameblock .= ' wrote';
-				else $nameblock = 'Quote';
+				if ($nameblock) $nameblock .= ' '.t('wrote');
+				else $nameblock = t('Quote');
 			} else {
-				$nameblock = 'Quote';
+				$nameblock = t('Quote');
 				$quoteblock = substr($quoteblock, $qpos2+strlen(']'));
 			}
 
