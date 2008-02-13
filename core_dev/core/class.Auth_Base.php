@@ -220,11 +220,10 @@ The link will expire in __EXPIRETIME__";
 
 		$subj  = t('Forgot password');
 
-		$pattern = array('/__USERNAME__/', '/__IP__/', '/__ACTIVATIONCODE__/', '/__URL__/', '/__EXPIRETIME__/');
+		$pattern = array('/__USERNAME__/', '/__IP__/', '/__URL__/', '/__EXPIRETIME__/');
 		$replacement = array(
 			Users::getName($_id),
 			$_SERVER['REMOTE_ADDR'],
-			$code,
 			$config['full_web_root']."reset_password.php?id=".$_id."&code=".$code,
 			shortTimePeriod($config['activate']['expire_time_email'])
 		);
