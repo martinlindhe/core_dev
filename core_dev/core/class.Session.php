@@ -14,6 +14,7 @@
  */
 
 require_once('functions_ip.php');
+require_once('functions_locale.php');	//for translations
 require_once('atom_settings.php');	//for storing userdata
 
 define('LOGLEVEL_NOTICE', 1);
@@ -170,7 +171,7 @@ class Session
 
 		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
 		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
-			$this->error = 'Client IP changed';
+			$this->error = t('Client IP changed.');
 			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
 			$this->endSession();
 			$this->errorPage();
@@ -178,7 +179,7 @@ class Session
 
 		//Logged in: Check user activity - log out inactive user
 		if ($this->lastActive < (time()-$this->timeout)) {
-			$this->error = 'Inactivity timeout';
+			$this->error = t('Inactivity timeout.');
 			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')', LOGLEVEL_NOTICE);
 			$this->endSession();
 			$this->errorPage();
@@ -186,7 +187,7 @@ class Session
 
 		//Logged in: Check if client user agent string changed, after active check to avoid useragent change log on auto browser upgrade (Firefox)
 		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
-			$this->error = 'Client user agent string changed';
+			$this->error = t('Client user agent string changed.');
 			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
 			$this->endSession();
 			$this->errorPage();
@@ -222,7 +223,7 @@ class Session
 		global $config;
 
 		if (!$this->error) {
-			echo '<div class="okay">No errors to display</div>';
+			echo '<div class="okay">'.t('No errors to display.').'</div>';
 			return;
 		}
 
@@ -308,7 +309,7 @@ class Session
 	{
 		global $config;
 		if ($this->id) return;
-		$this->error = 'The page you requested requires you to be logged in';
+		$this->error = t('The page you requested requires you to be logged in.');
 		$this->errorPage();
 	}
 
@@ -319,7 +320,7 @@ class Session
 	{
 		global $config;
 		if ($this->isAdmin) return;
-		$this->error = 'The page you requested requires admin rights to view';
+		$this->error = t('The page you requested requires admin rights to view.');
 		$this->errorPage();
 	}
 
@@ -330,7 +331,7 @@ class Session
 	{
 		global $config;
 		if ($this->isSuperAdmin) return;
-		$this->error = 'The page you requested requires superadmin rights to view';
+		$this->error = t('The page you requested requires superadmin rights to view.');
 		$this->errorPage();
 	}
 

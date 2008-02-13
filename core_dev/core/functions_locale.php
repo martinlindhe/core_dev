@@ -107,6 +107,16 @@
 			case 'Activation code is invalid or expired.': return 'Aktiveringskoden är ogiltig eller föråldrad.';
 			case 'Registration failed': return 'Registreringen misslyckades';
 
+			//Session errors
+			case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';
+			case 'The page you requested requires admin rights to view.': return 'Sidan du försöker visa kräver admin rättigheter.';
+			case 'The page you requested requires superadmin rights to view.': return 'Sidan du försöker visa kräver superadmin rättigheter.';
+			case 'No errors to display.': return 'Det finns inga felmeddelanden att visa.';
+			case 'Client IP changed.': return 'Klientens IP-nummer har ändrats.';
+			case 'Inactivity timeout.': return 'Du har blivit utloggad på grund av inaktivitet.';
+			case 'Client user agent string changed.': return 'Klientens user agent har ändrats.';
+
+
 			case 'Delete image': return 'Radera bilden';
 
 			case 'Forgot password': return 'Glömt lösenord';
