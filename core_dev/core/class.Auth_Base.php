@@ -36,6 +36,27 @@ abstract class Auth_Base
 	public $mail_from = 'noreply@example.com';
 	public $mail_from_name = 'core_dev';
 
+	public $mail_activate_msg =
+		"Hello. Someone (probably you) registered an account from IP __IP__
+
+Username: __USERNAME__
+Activation code: __CODE__
+
+Follow this link to activate your account:
+__URL__
+
+The link will expire in __EXPIRETIME__";
+
+	public $mail_password_msg =
+		"Hello. Someone (probably you) asked for a password reset procedure from IP __IP__
+
+Registered username: __USERNAME__
+
+Follow this link to set a new password:
+__URL__
+
+The link will expire in __EXPIRETIME__";
+
 	function __construct(array $auth_conf = array())
 	{
 		global $db;
@@ -52,6 +73,9 @@ abstract class Auth_Base
 		if (isset($auth_conf['smtp_password'])) $this->smtp_password = $auth_conf['smtp_password'];
 		if (isset($auth_conf['mail_from'])) $this->mail_from = $auth_conf['mail_from'];
 		if (isset($auth_conf['mail_from_name'])) $this->mail_from_name = $auth_conf['mail_from_name'];
+
+		if (isset($auth_conf['mail_activate_msg'])) $this->mail_activate_msg = $auth_conf['mail_activate_msg'];
+		if (isset($auth_conf['mail_password_msg'])) $this->mail_password_msg = $auth_conf['mail_password_msg'];
 
 		$this->handleAuthEvents();
 	}
@@ -143,22 +167,16 @@ abstract class Auth_Base
 		$act_id = createActivation(ACTIVATE_EMAIL, $code, $_id);
 
 		$subj = t('Account activation');
-		if (isset($config['auth']['mail_activate_msg'])) {
-			$pattern = array('/__USERNAME__/', '/__ACTIVATIONCODE__/', '/__FULLWEBROOT__/', '/__USERID__/', '/__EXPIRETIME__/');
-			$replacement = array(Users::getName($_id), $code, $config['full_web_root'], $_id, shortTimePeriod($config['activate']['expire_time_email']));
-			$msg = preg_replace($pattern,$replacement,$config['auth']['mail_activate_msg']);
-		} else {
-			$msg =
-				"Hello. Someone (probably you) registered an account from IP ".$_SERVER['REMOTE_ADDR']."\n".
-				"\n".
-				"Username: ".Users::getName($_id)."\n".
-				"Activation code: ".$code."\n".
-				"\n".
-				"Follow this link to activate your account:\n".
-				$config['full_web_root']."activate.php?id=".$_id."&code=".$code."\n".
-				"\n".
-				"The link will expire in ".shortTimePeriod($config['activate']['expire_time_email'])."\n";
-		}
+
+		$pattern = array('/__USERNAME__/', '__IP__', '/__CODE__/', '/__URL__/', '/__EXPIRETIME__/');
+		$replacement = array(
+			Users::getName($_id),
+			$_SERVER['REMOTE_ADDR'],
+			$code,
+			$config['full_web_root']."activate.php?id=".$_id."&code=".$code,
+			shortTimePeriod($config['activate']['expire_time_email'])
+		);
+		$msg = preg_replace($pattern,$replacement, $this->mail_activate_msg);
 
 		if (!$this->SmtpSend($email, $subj, $msg)) return false;
 
@@ -202,19 +220,15 @@ abstract class Auth_Base
 
 		$subj  = t('Forgot password');
 
-		if (isset($config['auth']['mail_password_msg'])) {
-			$pattern = array('/__IP__/', '/__USERNAME__/', '/__ACTIVATIONCODE__/', '/__FULLWEBROOT__/', '/__USERID__/', '/__EXPIRETIME__/');
-			$replacement = array($_SERVER['REMOTE_ADDR'], Users::getName($_id), $code, $config['full_web_root'], $_id, shortTimePeriod($config['activate']['expire_time_email']));
-			$msg = preg_replace($pattern,$replacement,$config['auth']['mail_password_msg']);
-		} else {
-			$msg =
-				"Hello. Someone (probably you) asked for a password reset procedure from IP ".$_SERVER['REMOTE_ADDR']."\n".
-				"\n".
-				"Follow this link to set a new password:\n".
-				$config['full_web_root']."reset_password.php?id=".$_id."&code=".$code."\n".
-				"\n".
-				"The link will expire in ".shortTimePeriod($config['activate']['expire_time_change_pwd'])."\n";
-		}
+		$pattern = array('/__USERNAME__/', '/__IP__/', '/__ACTIVATIONCODE__/', '/__URL__/', '/__EXPIRETIME__/');
+		$replacement = array(
+			Users::getName($_id),
+			$_SERVER['REMOTE_ADDR'],
+			$code,
+			$config['full_web_root']."reset_password.php?id=".$_id."&code=".$code,
+			shortTimePeriod($config['activate']['expire_time_email'])
+		);
+		$msg = preg_replace($pattern,$replacement, $this->mail_password_msg);
 
 		if (!$this->SmtpSend($email, $subj, $msg)) return false;		
 
