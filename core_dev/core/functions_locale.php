@@ -103,6 +103,7 @@
 			case 'The email entered already taken!': return 'E-postaddressen du angav är upptagen!';
 			case 'The Swedish SSN you entered is not valid!': return 'Personnumret du angav är ogiltigt!';
 			case 'The Swedish zipcode you entered is not valid!': return 'Postnummret du angav är ogiltigt!';
+			case 'Delete image': return 'Radera bilden';
 
 			// Contacts
 			case ' has blocked you.': return ' har blockerat dig.';
@@ -131,23 +132,23 @@
 			case 'Inactivity timeout.': return 'Du har blivit utloggad på grund av inaktivitet.';
 			case 'Client user agent string changed.': return 'Klientens user agent har ändrats.';
 
-
-			case 'Delete image': return 'Radera bilden';
-
-			case 'Forgot password': return 'Glömt lösenord';
-			case 'Account activation': return 'Aktivera konto';
-
 			// Login
 			case 'Login failed': return 'Inloggning misslyckades';
 			case 'This account has not yet been activated.': return 'Kontot har inte aktiverats ännu.';
 			case 'Logins currently not allowed.': return 'Inloggningar är för närvarande inte tillåtna.';
 			case 'The specified email address does not match any registered user.': return 'Ingen användare har en sådan epost-adress.';
+			case 'Forgot password': return 'Glömt lösenord';
+			case 'Account activation': return 'Aktivera konto';
 
 			//Comments
 			case 'comment': return 'kommentar';
 			case 'comments': return 'kommentarer';
 			case 'Add comment': return 'Klottra!';
-			
+
+			//News
+			case 'Add news': return 'Skapa nyhet';
+			case 'Manage news': return 'Redigera nyheter';
+
 			default: return '__('.$s.')__';
 		}
 	}

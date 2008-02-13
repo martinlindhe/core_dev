@@ -279,7 +279,7 @@
 		
 		[body]news article body[/body]
 	*/
-	function parseArticle($text)
+	function parseArticle($text, $timestamp = '')
 	{
 		$pos1 = strpos($text, '[head]');
 		$pos2 = strpos($text, '[/head]');
@@ -306,6 +306,8 @@
 
 		$art['body'] = substr($text, $pos1+strlen('[body]'), $pos2-$pos1-strlen('[/body]')+1);
 		$art['body'] = formatUserInputText($art['body']);
+
+		$art['time'] = $timestamp;
 
 		return $art;
 	}

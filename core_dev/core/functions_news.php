@@ -5,19 +5,19 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	require_once('atom_comments.php');		//for news comment support
-	require_once('atom_categories.php');	//for news categories support
-	require_once('atom_rating.php');			//for news rating support
-	require_once('atom_polls.php');				//for support of polls attached to news article
+require_once('atom_comments.php');		//for news comment support
+require_once('atom_categories.php');	//for news categories support
+require_once('atom_rating.php');			//for news rating support
+require_once('atom_polls.php');				//for support of polls attached to news article
+require_once('functions_locale.php');	//for translation
 
-	$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsCategories', 'NewsComment', 'NewsFiles', 'NewsPolls');
-	$config['news']['allow_rating'] = true;	//allow users to rate articles
-	$config['news']['allow_polls'] = true;	//allow polls to be attached to articles
+$config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsCategories', 'NewsComment', 'NewsFiles', 'NewsPolls');
+$config['news']['allow_rating'] = true;	//allow users to rate articles
+$config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 
 	function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($rss_enabled) || !is_numeric($category_id)) return false;
 
 		$q = 'SELECT newsId FROM tblNews WHERE title="'.$db->escape($title).'" AND body="'.$db->escape($body).'"';
@@ -35,7 +35,6 @@
 	function updateNews($newsId, $categoryId, $title, $body, $topublish, $rss_enabled)
 	{
 		global $db, $session;
-
 		if (!$session->isAdmin || !is_numeric($newsId) || !is_numeric($categoryId) || !is_numeric($rss_enabled)) return false;
 
 		$topublish = sql_datetime(strtotime($topublish));
@@ -72,7 +71,6 @@
 	function getPublishedNews($_categoryId = 0, $limit = '')
 	{
 		global $db;
-
 		if (!is_numeric($_categoryId)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName, t3.userName AS editorName FROM tblNews AS t1 ';
@@ -89,7 +87,6 @@
 	function getUnpublishedNews($_categoryId = 0)
 	{
 		global $db;
-
 		if (!is_numeric($_categoryId)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName, t3.userName AS editorName FROM tblNews AS t1 ';
@@ -105,7 +102,6 @@
 	function getNewsItem($newsId)
 	{
 		global $db;
-
 		if (!is_numeric($newsId)) return false;
 
 		$q  = 'SELECT t1.*,t2.userName AS creatorName,t3.userName AS editorName FROM tblNews AS t1 ';
@@ -115,10 +111,25 @@
 		return $db->getOneRow($q);
 	}
 
+	/**
+	 * Returns the latest news items
+	 */
+	function getLatestNews()
+	{
+		global $db;
+
+		$q  = 'SELECT t1.*,t2.userName AS creatorName,t3.userName AS editorName FROM tblNews AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+		$q .= 'LEFT OUTER JOIN tblUsers AS t3 ON (t1.editorId=t3.userId) ';
+		$q .= 'WHERE deletedBy=0 ORDER BY timeToPublish DESC LIMIT 1';
+		$row = $db->getOneRow($q);
+
+		return parseArticle($row['body'], $row['timeToPublish']);
+	}
+
 	function showNewsArticle($_id = 0)
 	{
 		global $db, $session, $files, $config, $project;
-
 		if (!is_numeric($_id)) return false;
 
 		//Looks for formatted news section commands, like: News:ID, NewsEdit:ID, NewsDelete:ID, NewsComment:ID, NewsFiles:ID
@@ -238,6 +249,9 @@
 		return true;
 	}
 
+	/**
+	 * Shows a list with the latest news headlines for all categories
+	 */
 	function showNews($limit = 3)
 	{
 		global $db, $session, $config;
@@ -248,15 +262,14 @@
 		$_cat_id = 0;
 		if (!empty($_GET['cat']) && is_numeric($_GET['cat'])) $_cat_id = $_GET['cat'];
 
-		/* visar en lista med de senaste nyheternas headlines, alla kategorier */
 		$list = getPublishedNews($_cat_id, $limit);
 
 		foreach ($list as $row) {
 			showNewsOverview($row);
 		}
 		if ($session->isAdmin) {
-			echo '<a href="'.$config['core_web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">Add news</a><br/>';
-			echo '<a href="'.$config['core_web_root'].'admin/admin_news.php'.getProjectPath(0).'">Manage news</a><br/>';
+			echo '<a href="'.$config['core_web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">'.t('Add news').'</a><br/>';
+			echo '<a href="'.$config['core_web_root'].'admin/admin_news.php'.getProjectPath(0).'">'.t('Manage news').'</a><br/>';
 		}
 	}
 	

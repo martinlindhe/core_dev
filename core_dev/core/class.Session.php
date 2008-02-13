@@ -122,7 +122,6 @@ class Session
 	 */
 	function startSession($_id, $_username, $_usermode)
 	{
-		$this->error = '';
 		$this->id = $_id;
 		$this->username = $_username;
 		$this->mode = $_usermode;		//0=normal user. 1=admin, 2=super admin
