@@ -25,6 +25,7 @@
 			case 'To': return 'Till';
 			case 'Next': return 'Nästa';
 			case 'Previous': return 'Föregående';
+			case 'Reply': return 'Svara';
 
 			//class.Users.php search
 			case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
