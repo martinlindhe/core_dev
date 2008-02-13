@@ -42,5 +42,22 @@ class ZipLocation
 		return $row['ortName'].', '.$row['lanName'];
 	}
 
+	/**
+	 * Returns text name of city for zip code
+	 */
+	function city($zip)
+	{
+		global $db;
+		$zip = trim($zip);
+		if (!is_numeric($zip)) return false;
+
+		$q = 'SELECT t2.name AS ortName FROM tblLocationZip AS t1 '.
+			'LEFT JOIN tblLocationOrt AS t2 ON (t1.ortId=t2.ortId) '.
+			'WHERE t1.zip='.$zip;
+		$row = $db->getOneRow($q);
+		if (!$row) return false;
+
+		return $row['ortName'];
+	}
 }
 ?>
