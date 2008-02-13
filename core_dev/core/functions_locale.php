@@ -12,6 +12,20 @@
 	 */
 	function t($s)
 	{
+		global $config;
+		if (empty($config['language'])) return $s;
+
+		switch ($config['language']) {
+			case 'se': return t_se($s);	//Swedish
+			default: die('Unhandled language: '.$config['language']);
+		}
+	}
+
+	/**
+	 * Translates strings into Swedish
+	 */
+	function t_se($s)
+	{
 		switch ($s) {
 			case 'Save': return 'Spara';
 			case 'Lock': return 'Lås';
