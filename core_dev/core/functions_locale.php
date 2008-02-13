@@ -85,9 +85,10 @@
 
 			//Settings
 			case 'No email entered!': return 'Du angav ingen e-postaddress!';
-			case 'The email entered is not valid!': return 'E-postaddressen du angav är inte giltig!';
+			case 'The email entered is not valid!': return 'E-postaddressen du angav är ogiltig!';
 			case 'The email entered already taken!': return 'E-postaddressen du angav är upptagen!';
 			case 'The Swedish SSN you entered is not valid!': return 'Personnumret du angav är ogiltigt!';
+			case 'The Swedish zipcode you entered is not valid!': return 'Postnummret du angav är ogiltigt!';
 
 			// Contacts
 			case ' has blocked you.': return ' har blockerat dig.';

@@ -2,27 +2,31 @@
 /**
  * $Id$
  *
+ * \todo do a more generic zip-to-location mapper function based on USERDATA_TYPE_LOCATION_SWE code
+ *
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	require_once('atom_categories.php');	//for multi-choise userdata types
-	require_once('functions_textformat.php');	//for ValidEmail()
-	require_once('functions_validate_ssn.php');	//to validate swedish ssn's
-	require_once('functions_locale.php');	//for translations
+require_once('atom_categories.php');	//for multi-choise userdata types
+require_once('functions_textformat.php');	//for ValidEmail()
+require_once('functions_validate_ssn.php');	//to validate swedish ssn's
+require_once('functions_locale.php');	//for translations
+require_once('class.ZipLocation.php');	//for location datatype
 
-	/* Userdata field types */
-	define('USERDATA_TYPE_TEXT',					1);
-	define('USERDATA_TYPE_CHECKBOX',			2);
-	define('USERDATA_TYPE_RADIO',					3);
-	define('USERDATA_TYPE_SELECT',				4);
-	define('USERDATA_TYPE_TEXTAREA',			5);
-	define('USERDATA_TYPE_IMAGE',					6);	//Used as presentation picture, can only exist one per site
-	define('USERDATA_TYPE_BIRTHDATE_SWE',	7);	//Swedish date of birth, with last-4-digits control check, can only exist one per site
-	define('USERDATA_TYPE_EMAIL',					8);	//text string holding a email address, can only exist one per site
-	define('USERDATA_TYPE_THEME',					9); //select-dropdown in display. contains user preferred theme (.css file), can only exist one per site
+/* Userdata field types */
+define('USERDATA_TYPE_TEXT',					1);
+define('USERDATA_TYPE_CHECKBOX',			2);
+define('USERDATA_TYPE_RADIO',					3);
+define('USERDATA_TYPE_SELECT',				4);
+define('USERDATA_TYPE_TEXTAREA',			5);
+define('USERDATA_TYPE_IMAGE',					6);	//UNIQUE: Used as presentation picture
+define('USERDATA_TYPE_BIRTHDATE_SWE',	7);	//UNIQUE: Swedish date of birth, with last-4-digits control check
+define('USERDATA_TYPE_EMAIL',					8);	//UNIQUE: text string holding a email address
+define('USERDATA_TYPE_THEME',					9); //UNIQUE: select-dropdown in display. contains user preferred theme (.css file)
+define('USERDATA_TYPE_LOCATION_SWE',	10);//UNIQUE: location gadget,user inputs zipcode which maps to "län" and "ort" 
 
-	//userdata module settings:
-	$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
+//userdata module settings:
+$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 
 	/**
@@ -186,7 +190,7 @@
 	}
 
 	/**
-	 * Returns a input field from the passed data, used together with getUserdataFieldsHTMLEdit()
+	 * Returns a input field from the passed data, used together with editUserdataSettings()
 	 */
 	function getUserdataInput($row)
 	{
@@ -197,8 +201,6 @@
 			$value = stripslashes($row['value']);	//doesnt nessecary exist
 		} else if (!empty($row['settingValue'])) {
 			$value = stripslashes($row['settingValue']);
-		} else if (!empty($_POST['userdata_'.$row['fieldId']])) {
-			$value = strip_tags($_POST['userdata_'.$row['fieldId']]);	//if user previously POST'ed data
 		} else { //for default values in admin display
 			$value = stripslashes($row['fieldDefault']);
 		}
@@ -284,6 +286,15 @@
 
 				//FIXME this should only be used if core_dev is configured for swedish ssn validation
 				$result .= '<input type="text" name="userdata_'.$fieldId.'_chk" size="4"/>';
+				break;
+
+			case USERDATA_TYPE_LOCATION_SWE:
+				$result = stripslashes($row['fieldName']).': ';
+				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="5" maxlength="5"/>';
+				break;
+
+			default:
+				die('FATAL: unhandled userdata type in getUserdataInput()');
 		}
 
 		return $result;
@@ -386,9 +397,8 @@
 	 */
 	function readAllUserdata($userId)
 	{
-		if (!is_numeric($userId)) return false;
-
 		global $db;
+		if (!is_numeric($userId)) return false;
 
 		$q  = 'SELECT t1.*,t2.settingValue FROM tblUserdata AS t1 ';
 		$q .= 'LEFT JOIN tblSettings AS t2 ON (t1.fieldId=t2.settingName AND t2.ownerId='.$userId.') ORDER BY t1.fieldPriority ASC';
@@ -538,56 +548,63 @@
 
 		echo '<div class="settings">';
 		echo '<form name="edit_settings_frm" method="post" enctype="multipart/form-data" action="">';
-		foreach($list as $row) {
+		foreach ($list as $row) {
+			$val = '';
 			if (!empty($_POST)) {
-				if ($row['fieldType'] == USERDATA_TYPE_IMAGE) {
-
-					if (!empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {
-						$files->deleteFile($row['settingValue']);
-						$row['settingValue'] = 0;
-					} else if (isset($_FILES['userdata_'.$row['fieldId']])) {
-						//FIXME: ska det va 'fieldId' som ägare??
-						$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
-					}
-				} else if (isset($_POST['userdata_'.$row['fieldId']])) {
-					if ($row['fieldType'] == USERDATA_TYPE_EMAIL && !ValidEmail($_POST['userdata_'.$row['fieldId']])) {
-						echo '<div class="critical">'.t('The email entered is not valid!').'</div>';
-					} else {
-						$chk = findUserByEmail($_POST['userdata_'.$row['fieldId']]);
-						if ($chk && $chk != $session->id) {
-							echo '<div class="critical">'.t('The email entered already taken!').'</div>';
-						} else {
-							$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+				switch ($row['fieldType']) {
+					case USERDATA_TYPE_IMAGE:
+						if (!empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {
+							$files->deleteFile($row['settingValue']);
+							$row['settingValue'] = 0;
+						} else if (isset($_FILES['userdata_'.$row['fieldId']])) {
+							$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
 						}
-					}
-				}
+						break;
 
-				if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) {
+					case USERDATA_TYPE_EMAIL:
+						if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) {
+							echo '<div class="critical">'.t('The email entered is not valid!').'</div>';
+						} else {
+							$chk = findUserByEmail($_POST['userdata_'.$row['fieldId']]);
+							if ($chk && $chk != $session->id) {
+								echo '<div class="critical">'.t('The email entered already taken!').'</div>';
+							} else {
+								$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+							}
+						}
+						break;
 
-					if (!empty($_POST['userdata_'.$row['fieldId'].'_year'])) {
+					case USERDATA_TYPE_BIRTHDATE_SWE:
+						if (empty($_POST['userdata_'.$row['fieldId'].'_year'])) break;
 						$born = mktime(0, 0, 0,
 							$_POST['userdata_'.$row['fieldId'].'_month'],
 							$_POST['userdata_'.$row['fieldId'].'_day'],
 							$_POST['userdata_'.$row['fieldId'].'_year']
 						);
-
-						$chk = $_POST['userdata_'.$row['fieldId'].'_chk'];
-
 						if ($check = SsnValidateSwedishNum(
 							$_POST['userdata_'.$row['fieldId'].'_year'],
 							$_POST['userdata_'.$row['fieldId'].'_month'],
 							$_POST['userdata_'.$row['fieldId'].'_day'],
 							$_POST['userdata_'.$row['fieldId'].'_chk']
-							) === true) {
+						) === true) {
 							$row['settingValue'] = sql_datetime($born);
 						} else {
 							echo '<div class="critical">'.t('The Swedish SSN you entered is not valid!').'</div>';
 						}
-					}
-				}
+						break;
 
-				if ($row['fieldType'] == USERDATA_TYPE_THEME) {
-					$session->theme = $row['settingValue'];
+					case USERDATA_TYPE_LOCATION_SWE:
+						if (empty($_POST['userdata_'.$row['fieldId']])) break;
+						if (!ZipLocation::isValid($_POST['userdata_'.$row['fieldId']])) {
+							echo '<div class="critical">'.t('The Swedish zipcode you entered is not valid!').'</div>';
+						} else {
+							$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+						}
+						break;
+
+					default:
+						$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+						break;
 				}
 
 				//Stores the setting
@@ -599,6 +616,7 @@
 			if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE && $row['settingValue']) {
 				echo stripslashes($row['fieldName']).': '.date('Y-m-d', strtotime($row['settingValue']));
 			} else {
+				//$row['settingValue'] = $val;
 				echo getUserdataInput($row);
 			}
 			echo '</div>';
