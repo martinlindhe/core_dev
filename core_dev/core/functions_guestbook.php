@@ -131,7 +131,7 @@
 
 	function showGuestbook($userId)
 	{
-		global $session;
+		global $config, $session;
 		if ($session->isAdmin || $session->id == $userId) {
 			if (!empty($_GET['remove'])) {
 				removeGuestbookEntry($_GET['remove']);
@@ -161,7 +161,7 @@
 
 			if ($session->id == $userId) {
 				if ($row['entryRead'] == 0) {
-					echo '<img src="/gfx/icon_mail.png" alt="Unread">';
+					echo '<img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="'.t('Unread').'">';
 				}
 			}
 			echo stripslashes($row['body']).'<br/>';

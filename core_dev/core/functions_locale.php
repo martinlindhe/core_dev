@@ -68,6 +68,7 @@
 			case 'contains': return 'innehåller';
 			case 'messages': return 'meddelanden';
 			case 'New entry': return 'Nytt inlägg';
+			case 'Unread': return 'Oläst';
 
 			//Pager
 			case 'Page': return 'Sida';
