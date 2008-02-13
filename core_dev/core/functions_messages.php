@@ -102,20 +102,24 @@ require_once('functions_locale.php');	//for translations
 			echo '<div class="msg_head">';
 				echo ($msg['subject'] ? $msg['subject']:t('No subject')).' '.t('at').' '.$msg['timeCreated'].'<br/>';
 				if ($msg['fromId']) {
-					echo t('From').' '.Users::link($msg['fromId']).' <a href="messages.php?id='.$msg['fromId'].'">'.t('Reply').'</a><br/>';
+					echo t('From').' '.Users::link($msg['fromId']);
+					if ($msg['fromId'] != $session->id) echo ' <a href="messages.php?id='.$msg['fromId'].'">'.t('Reply').'</a>';
+					echo '<br/>';
 				} else {
 					echo '<b>'.t('System message').'</b><br/>';
 				}
 				echo t('To').' '.Users::link($msg['toId']).'<br/>';
-				echo (!$msg['timeRead']?'UNREAD':'READ');
+				echo (!$msg['timeRead']?t('UNREAD'):t('READ'));
 			echo '</div>';
 			echo '<div class="msg_body">';
 				echo nl2br($msg['body']);
 			echo '</div>';
 			echo '</div>';
-			
+
 			markMessageAsRead($_GET['read']);
-			
+
+			echo '<a href="'.$_SERVER['PHP_SELF'].'">'.t('Return to message overview').'</a>';
+
 			return true;
 		}
 		

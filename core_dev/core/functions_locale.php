@@ -85,6 +85,7 @@
 			case 'OUTBOX': return 'Utkorgen';
 			case 'UNREAD': return 'Oläst';
 			case 'READ': return 'Läst';
+			case 'Return to message overview': return 'Återgå till meddelande-översikten';
 
 			//Polls
 			case 'Active poll': return 'Aktuell omröstning';
