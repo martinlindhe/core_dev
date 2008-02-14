@@ -338,22 +338,29 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 		$list = getUserdataFields(true);
 		foreach ($list as $row) {
 			if ($row['regRequire'] != 1) continue;
-
-			if ($row['fieldType'] == USERDATA_TYPE_EMAIL)
-			{
-				if (empty($_POST['userdata_'.$row['fieldId']])) return t('No email entered!');
-				if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered is not valid!');
-				if (findUserByEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered already taken!');
+			if (!empty($_POST['userdata_'.$row['fieldId']])) {
+				$_POST['userdata_'.$row['fieldId']] = trim($_POST['userdata_'.$row['fieldId']]);
 			}
 
-			if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE)
-			{
-				if ($check = SsnValidateSwedishNum(
-					$_POST['userdata_'.$row['fieldId'].'_year'],
-					$_POST['userdata_'.$row['fieldId'].'_month'],
-					$_POST['userdata_'.$row['fieldId'].'_day'],
-					$_POST['userdata_'.$row['fieldId'].'_chk']
-					) !== true) return t('The Swedish SSN you entered is not valid!');
+			switch ($row['fieldType']) {
+				case USERDATA_TYPE_EMAIL:
+					if (empty($_POST['userdata_'.$row['fieldId']])) return t('No email entered!');
+					if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered is not valid!');
+					if (findUserByEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered already taken!');
+					break;
+
+				case USERDATA_TYPE_BIRTHDATE_SWE:
+					if ($check = SsnValidateSwedishNum(
+						$_POST['userdata_'.$row['fieldId'].'_year'],
+						$_POST['userdata_'.$row['fieldId'].'_month'],
+						$_POST['userdata_'.$row['fieldId'].'_day'],
+						$_POST['userdata_'.$row['fieldId'].'_chk']
+						) !== true) return t('The Swedish SSN you entered is not valid!');
+					break;
+
+				case USERDATA_TYPE_LOCATION_SWE:
+					if (!ZipLocation::isValid($_POST['userdata_'.$row['fieldId']])) return t('The Swedish zipcode you entered is not valid!');
+					break; 
 			}
 		}
 
@@ -372,18 +379,26 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 		foreach ($list as $row) {
 			if (empty($_POST['userdata_'.$row['fieldId']]) && $row['fieldType'] != USERDATA_TYPE_BIRTHDATE_SWE) continue;
 
-			if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) {
+			switch ($row['fieldType']) {
+				case USERDATA_TYPE_BIRTHDATE_SWE:
+					//ssn was already verified in verifyRequiredUserdataFields()
+					$born = mktime(0, 0, 0,
+						$_POST['userdata_'.$row['fieldId'].'_month'],
+						$_POST['userdata_'.$row['fieldId'].'_day'],
+						$_POST['userdata_'.$row['fieldId'].'_year']
+					);
+					$val = sql_datetime($born);
+					break;
+			
+				case USERDATA_TYPE_LOCATION_SWE:
+					saveSetting(SETTING_USERDATA, $userId, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
+					$val = $_POST['userdata_'.$row['fieldId']];
+					break;
 
-				//ssn was already verified in verifyRequiredUserdataFields()
-				$born = mktime(0, 0, 0,
-					$_POST['userdata_'.$row['fieldId'].'_month'],
-					$_POST['userdata_'.$row['fieldId'].'_day'],
-					$_POST['userdata_'.$row['fieldId'].'_year']
-				);
-				$val = sql_datetime($born);
-			} else {
-				$val = $_POST['userdata_'.$row['fieldId']];
-			}
+				default:
+					$val = $_POST['userdata_'.$row['fieldId']];
+					break;
+			}				
 
 			saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $val);
 		}
@@ -549,7 +564,6 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 		echo '<div class="settings">';
 		echo '<form name="edit_settings_frm" method="post" enctype="multipart/form-data" action="">';
 		foreach ($list as $row) {
-			$val = '';
 			if (!empty($_POST)) {
 				switch ($row['fieldType']) {
 					case USERDATA_TYPE_IMAGE:
@@ -600,11 +614,16 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 							$session->log('User entered invalid swedish zipcode: '.$_POST['userdata_'.$row['fieldId']], LOGLEVEL_WARNING);
 						} else {
 							$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+							saveSetting(SETTING_USERDATA, $session->id, 'city', ZipLocation::cityId($row['settingValue']));
 						}
 						break;
 
 					default:
-						$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+						if (!empty($_POST['userdata_'.$row['fieldId']])) {
+							$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
+						} else {
+							$row['settingValue'] = '';
+						}
 						break;
 				}
 

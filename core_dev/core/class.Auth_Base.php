@@ -168,7 +168,7 @@ The link will expire in __EXPIRETIME__";
 
 		$subj = t('Account activation');
 
-		$pattern = array('/__USERNAME__/', '__IP__', '/__CODE__/', '/__URL__/', '/__EXPIRETIME__/');
+		$pattern = array('/__USERNAME__/', '/__IP__/', '/__CODE__/', '/__URL__/', '/__EXPIRETIME__/');
 		$replacement = array(
 			Users::getName($_id),
 			$_SERVER['REMOTE_ADDR'],
@@ -176,7 +176,7 @@ The link will expire in __EXPIRETIME__";
 			$config['full_web_root']."activate.php?id=".$_id."&code=".$code,
 			shortTimePeriod($config['activate']['expire_time_email'])
 		);
-		$msg = preg_replace($pattern,$replacement, $this->mail_activate_msg);
+		$msg = preg_replace($pattern, $replacement, $this->mail_activate_msg);
 
 		if (!$this->SmtpSend($email, $subj, $msg)) return false;
 

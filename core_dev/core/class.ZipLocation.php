@@ -32,14 +32,14 @@ class ZipLocation
 		$zip = trim($zip);
 		if (!is_numeric($zip)) return false;
 
-		$q = 'SELECT t2.name AS ortName, t3.name AS lanName FROM tblLocationZip AS t1 '.
-			'LEFT JOIN tblLocationOrt AS t2 ON (t1.ortId=t2.ortId) '.
+		$q = 'SELECT t2.name AS cityName, t3.name AS lanName FROM tblLocationZip AS t1 '.
+			'LEFT JOIN tblLocationCity AS t2 ON (t1.cityId=t2.cityId) '.
 			'LEFT JOIN tblLocationLan AS t3 ON (t1.lanId=t3.lanId) '.
 			'WHERE t1.zip='.$zip;
 		$row = $db->getOneRow($q);
 		if (!$row) return false;
 
-		return $row['ortName'].', '.$row['lanName'];
+		return $row['cityName'].', '.$row['lanName'];
 	}
 
 	/**
@@ -51,13 +51,26 @@ class ZipLocation
 		$zip = trim($zip);
 		if (!is_numeric($zip)) return false;
 
-		$q = 'SELECT t2.name AS ortName FROM tblLocationZip AS t1 '.
-			'LEFT JOIN tblLocationOrt AS t2 ON (t1.ortId=t2.ortId) '.
+		$q = 'SELECT t2.name AS cityName FROM tblLocationZip AS t1 '.
+			'LEFT JOIN tblLocationCity AS t2 ON (t1.cityId=t2.cityId) '.
 			'WHERE t1.zip='.$zip;
 		$row = $db->getOneRow($q);
 		if (!$row) return false;
 
-		return $row['ortName'];
+		return $row['cityName'];
+	}
+
+	/**
+	 * Returns city id for zip code
+	 */
+	function cityId($zip)
+	{
+		global $db;
+		$zip = trim($zip);
+		if (!is_numeric($zip)) return false;
+
+		$q = 'SELECT cityId FROM tblLocationZip WHERE zip='.$zip;
+		return $db->getOneItem($q);
 	}
 }
 ?>
