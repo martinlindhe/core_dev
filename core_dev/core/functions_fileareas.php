@@ -83,10 +83,10 @@
 		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId.' ORDER BY timeUploaded ASC';
 		$list = $db->getArray($q);
 
-		showImageGadgetXHTML();
-		showAudioGadgetXHTML();
-		showVideoGadgetXHTML();
-		showDocumentGadgetXHTML();
+		showImageGadgetXHTML($ownerId);
+		showAudioGadgetXHTML($ownerId);
+		showVideoGadgetXHTML($ownerId);
+		showDocumentGadgetXHTML($ownerId);
 
 		echo '<div id="zoom_fileinfo" style="display:none"></div>';
 		echo '<div class="file_gadget_content">';
