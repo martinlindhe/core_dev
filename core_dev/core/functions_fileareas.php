@@ -52,7 +52,7 @@
 					$userid = $_GET['id'];
 					$username = Users::getName($userid);
 				}
-				echo 'Files:'.$username;
+				echo t('Files').':'.$username;
 				echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
 				break;
 
@@ -141,7 +141,7 @@
 						($fileType == FILETYPE_WIKI)
 						)
 				{
-					echo '<input type="button" class="button" value="New file category" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
+					echo '<input type="button" class="button" value="'.t('New file category').'" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 				}
 
 				if ($files->apc_uploads) {
@@ -151,7 +151,7 @@
 					echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
 				}
 				echo '<input type="file" name="file1"/> ';
-				echo '<input type="submit" class="button" value="Upload"/>';
+				echo '<input type="submit" class="button" value="'.t('Upload').'"/>';
 				echo '</form>';
 				echo '</div>';
 				if ($files->apc_uploads) {

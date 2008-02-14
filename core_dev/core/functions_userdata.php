@@ -454,7 +454,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 			case USERDATA_TYPE_IMAGE:
 				if (!$result) return false;
-				$val = makeThumbLink($result);
+				$val = showThumb($result, $settingName, 270, 200);
 				break;
 
 			default:

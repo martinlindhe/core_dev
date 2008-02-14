@@ -160,6 +160,17 @@
 			case 'wrote': return 'skrev';
 			case 'Quote': return 'Citat';
 
+			//Files
+			case 'Files': return 'Filer';
+			case 'New file category': return 'Ny filkategori';
+			case 'Upload': return 'Ladda upp';
+
+			//Categories
+			case 'Global categories': return 'Globala kategorier';
+			case 'Your categories': return 'Dina kategorier';
+			case 'Private': return 'Privat';
+			case 'Hidden': return 'Dold';
+
 			default: return '__('.$s.')__';
 		}
 	}

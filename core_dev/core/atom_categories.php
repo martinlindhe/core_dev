@@ -194,12 +194,12 @@
 		foreach ($list as $row)
 		{
 			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && $row['categoryPermissions']==10) {
-				$content .= '<optgroup label="Global categories">';
+				$content .= '<optgroup label="'.t('Global categories').'">';
 				$shown_global_cats = true;
 			}
 			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_my_cats && $row['categoryPermissions']!=10) {
 				$content .= '</optgroup>';
-				$content .= '<optgroup label="Your categories">';
+				$content .= '<optgroup label="'.t('Your categories').'">';
 				$shown_my_cats = true;
 			}
 
@@ -223,8 +223,8 @@
 				}
 			}
 			$content .= '>'.$text;
-			if ($row['categoryType'] == CATEGORY_USERFILE_PRIVATE) $content .= ' (PRIVATE)';
-			if ($row['categoryType'] == CATEGORY_USERFILE_HIDDEN) $content .= ' (HIDDEN)';
+			if ($row['categoryType'] == CATEGORY_USERFILE_PRIVATE) $content .= ' ('.t('Private').')';
+			if ($row['categoryType'] == CATEGORY_USERFILE_HIDDEN) $content .= ' ('.t('Hidden').')';
 			$content .= '</option>';
 		}
 		if ($shown_global_cats || $shown_my_cats) $content .= '</optgroup>';
