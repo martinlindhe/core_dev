@@ -173,6 +173,7 @@
 			case 'Rotate left': return 'Rotera åt vänster';
 			case 'Rotate right': return 'Rotera åt höger';
 			case 'Move image': return 'Flytta bild';
+			case 'View log': return 'Besökslogg';
 
 			//Categories
 			case 'Global categories': return 'Globala kategorier';

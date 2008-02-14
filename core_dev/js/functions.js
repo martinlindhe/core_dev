@@ -265,6 +265,11 @@ function passthru_selected_file()
 	w.focus();
 }
 
+function viewlog_selected_file()
+{
+	document.location = 'files_viewlog.php?id='+zoomed_id+_ext_ref;
+}
+
 //used by image zoomer
 function delete_selected_file()
 {

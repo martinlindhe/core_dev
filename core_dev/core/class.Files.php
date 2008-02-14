@@ -762,11 +762,18 @@ class Files
 		$mime_type = $temp['mime'];
 
 		$width = 0;
-		if (!empty($_GET['w']) && is_numeric($_GET['w'])) $width = $_GET['w'];
+		$log = true;
+		if (!empty($_GET['w']) && is_numeric($_GET['w'])) {
+			$log = false;
+			$width = $_GET['w'];
+		}
 		if (($width < 10) || ($width > 1500)) $width = 0;
 
 		$height = 0;
-		if (!empty($_GET['h']) && is_numeric($_GET['h'])) $height = $_GET['h'];
+		if (!empty($_GET['h']) && is_numeric($_GET['h'])) {
+			$log = false;
+			$height = $_GET['h'];
+		}
 		if (($height < 10) || ($height > 1500)) $height = 0;
 
 		if ($width && (($width < $img_width) || ($height < $img_height)) )  {
@@ -790,6 +797,10 @@ class Files
 		header('Content-Type: '.$mime_type);
 		header('Content-Length: '.filesize($out_filename));
 		echo file_get_contents($out_filename);
+
+		if ($log) {
+			logVisit(VISIT_FILE, $_id);
+		}
 	}
 
 	/**

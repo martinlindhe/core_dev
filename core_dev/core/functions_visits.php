@@ -6,7 +6,7 @@
  */
 
 	define('VISIT_USERPAGE',	1);
-	define('VISIT_USERIMAGE',	2);
+	define('VISIT_FILE',	2);
 
 	function logVisit($_type, $_owner)
 	{

@@ -277,6 +277,9 @@
 		echo 		'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
 		echo		'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/><br/>';
+		if ($session->id) {
+			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
+		}
 
 		echo 		'<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/><br/>';
 
@@ -361,6 +364,15 @@
 		}
 		echo '</center>';
 		echo '</div>';
+	}
+
+	function showFileViewlog($fileId)
+	{
+		global $session, $files;
+		//FIXME kolla filägaren
+
+		$list = getVisits(VISIT_FILE, $fileId, 0);
+		d($list);
 	}
 
 ?>
