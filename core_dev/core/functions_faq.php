@@ -91,7 +91,7 @@
 						echo ($i+1).'. <input type="text" name="faq_uq" size="40" value="'.$list[$i]['question'].'"/>';
 					echo '</div>';
 					echo '<div class="faq_a">';
-						echo '<textarea rows="14" cols="80" name="faq_ua">'.$list[$i]['answer'].'</textarea><br/><br/>';
+						echo '<textarea rows="14" cols="60" name="faq_ua">'.$list[$i]['answer'].'</textarea><br/><br/>';
 						echo '<input type="submit" class="button" value="Save"/>';
 					echo '</div>';
 					echo '</form>';

@@ -155,7 +155,6 @@
 			echo '<title>'.$title.'</title>';
 			echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/core.css" type="text/css"/>';
-			//echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/os3grid.css" type="text/css"/>';
 			if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
 			else $theme_dir = $config['core_web_root'].'css/themes/';
 			if (!empty($session)) echo '<link rel="stylesheet" href="'.$theme_dir.$session->theme.'" type="text/css"/>';
@@ -180,7 +179,6 @@
 			//echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/drag_drop.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/swfobject.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/functions.js"></script>';
-			//echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/os3grid.js"></script>';
 			if ($meta_js) {
 				foreach ($meta_js as $script) {
 					echo '<script type="text/javascript" src="'.$script.'"></script>';
