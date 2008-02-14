@@ -455,10 +455,10 @@ class Users
 			if (!empty($data['userdata_'.$row['fieldId']])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="'.$row['fieldId'].'" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
-			} else if (!empty($data['search_loc_city'])) {
+			} else if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE && !empty($data['search_loc_city'])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="city" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
-			} else if (!empty($data['search_loc_region'])) {
+			} else if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE && !empty($data['search_loc_region'])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="region" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
 			}
@@ -480,17 +480,25 @@ class Users
 				if ($start > 1) { // n1 is always created!
 					switch ($row['fieldType']) {
 						case USERDATA_TYPE_IMAGE:
-							if (isset($x)) $q .= 'AND ';
-							$q .= '(n'.$start.'.settingValue IS NOT NULL) ';
+							if (!empty($data['userdata_'.$row['fieldId']])) {
+								if (isset($x)) $q .= 'AND ';
+								$q .= '(n'.$start.'.settingValue IS NOT NULL) ';
+								$start++;
+								$x = 1;
+							}
 							break;
 
 						case USERDATA_TYPE_LOCATION_SWE:
 							if (!empty($data['search_loc_city']) && is_numeric($data['search_loc_city'])) {
 								if (isset($x)) $q .= 'AND ';
 								$q .= '(n'.$start.'.settingValue="'.$data['search_loc_city'].'") ';
+								$start++;
+								$x = 1;
 							} else if (!empty($data['search_loc_region']) && is_numeric($data['search_loc_region'])) {
 								if (isset($x)) $q .= 'AND ';
 								$q .= '(n'.$start.'.settingValue="'.$data['search_loc_region'].'") ';
+								$start++;
+								$x = 1;
 							}
 							break;
 
@@ -498,12 +506,12 @@ class Users
 							if (!empty($data['userdata_'.$row['fieldId']])) {
 								if (isset($x)) $q .= 'AND ';
 								$q .= '(n'.$start.'.settingValue="'.$data['userdata_'.$row['fieldId']].'") ';
+								$start++;
+								$x = 1;
 							}
 							break;
 					}
 				}
-				$start++;
-				$x = 1;
 			}
 		}
 
