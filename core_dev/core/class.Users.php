@@ -443,7 +443,6 @@ class Users
 		// $criteria matches what's in all textarea & textfields
 		if ($criteria) {
 			$q .= 'LEFT JOIN tblSettings AS n1 ON (t1.userId=n1.ownerId AND n1.settingType='.SETTING_USERDATA.') ';
-			$q .= 'LEFT JOIN tblUserdata AS t2 ON (n1.settingName=t2.fieldId) ';
 		}
 
 		$list = getUserdataFields();
@@ -452,6 +451,7 @@ class Users
 
 		// Add one INNER JOIN for each parameter we want to search for
 		foreach ($list as $row) {
+			if ($row['private']) continue;
 			if (!empty($data['userdata_'.$row['fieldId']])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="'.$row['fieldId'].'" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
@@ -467,7 +467,7 @@ class Users
 		$q .= 'WHERE ';
 		if ($criteria) { //free-text search
 			$q .= '((n1.settingType='.USERDATA_TYPE_TEXT.' OR n1.settingType='.USERDATA_TYPE_TEXTAREA.') ';
-			$q .= 'AND LOWER(n1.settingValue) LIKE LOWER("%'.$criteria.'%") AND t2.private!=1) ';
+			$q .= 'AND LOWER(n1.settingValue) LIKE LOWER("%'.$criteria.'%")) ';
 			$q .= 'OR LOWER(t1.userName) LIKE LOWER("%'.$criteria.'%") ';
 			$x = 1;
 		}
@@ -476,6 +476,7 @@ class Users
 
 		// Find the userdata fields the user searched for
 		foreach ($list as $row) {
+			if ($row['private']) continue;
 			if (!empty($data['userdata_'.$row['fieldId']]) || (!empty($data['search_loc_region']) || !empty($data['search_loc_city']))) {
 				if ($start > 1) { // n1 is always created!
 					switch ($row['fieldType']) {
