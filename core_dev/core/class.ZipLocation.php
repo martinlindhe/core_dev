@@ -32,14 +32,14 @@ class ZipLocation
 		$zip = trim($zip);
 		if (!is_numeric($zip)) return false;
 
-		$q = 'SELECT t2.name AS cityName, t3.name AS lanName FROM tblLocationZip AS t1 '.
+		$q = 'SELECT t2.name AS cityName, t3.name AS regionName FROM tblLocationZip AS t1 '.
 			'LEFT JOIN tblLocationCity AS t2 ON (t1.cityId=t2.cityId) '.
-			'LEFT JOIN tblLocationLan AS t3 ON (t1.lanId=t3.lanId) '.
+			'LEFT JOIN tblLocationRegion AS t3 ON (t1.regionId=t3.regionId) '.
 			'WHERE t1.zip='.$zip;
 		$row = $db->getOneRow($q);
 		if (!$row) return false;
 
-		return $row['cityName'].', '.$row['lanName'];
+		return $row['cityName'].', '.$row['regionName'];
 	}
 
 	/**
@@ -71,6 +71,56 @@ class ZipLocation
 
 		$q = 'SELECT cityId FROM tblLocationZip WHERE zip='.$zip;
 		return $db->getOneItem($q);
+	}
+
+	/**
+	 * Returns region id for zip code
+	 */
+	function regionId($zip)
+	{
+		global $db;
+		$zip = trim($zip);
+		if (!is_numeric($zip)) return false;
+
+		$q = 'SELECT regionId FROM tblLocationZip WHERE zip='.$zip;
+		return $db->getOneItem($q);
+	}
+
+	/**
+	 * Returns a XHTML block of all possible region selections
+	 */
+	function regionSelect()
+	{
+		global $db;
+
+		$q = 'SELECT * FROM tblLocationRegion ORDER BY name ASC';
+		$list = $db->getArray($q);
+
+		$result = '<select name="x">';
+		foreach ($list as $row) {
+			$result .= '<option value="'.$row['regionId'].'">'.$row['name'].'</option>';
+		}
+		$result .= '</select>';
+		return $result;
+	}
+
+	/**
+	 * Returns a XHTML block of all possible region selections
+	 */
+	function citySelect($regionId)
+	{
+		global $db;
+		if (!is_numeric($regionId)) return false;
+
+		$q = 'SELECT * FROM tblLocationCity WHERE regionId='.$regionId.' ORDER BY name ASC';
+		$list = $db->getArray($q);
+
+		$result = '<select name="y">';
+		foreach ($list as $row) {
+			$result .= '<option value="'.$row['cityId'].'">'.$row['name'].'</option>';
+		}
+		$result .= '</select>';
+		return $result;
 	}
 }
 ?>

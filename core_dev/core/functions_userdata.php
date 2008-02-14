@@ -307,11 +307,20 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 	{
 		global $config;
 
-		if ($row['fieldType'] == USERDATA_TYPE_IMAGE) {
-			$result  = '<input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
-			$result .= ' <label for="userdata_'.$row['fieldId'].'">'.t('Has image').'</label>';
-		} else {
-			$result = getUserdataInput($row);
+		switch ($row['fieldType']) {
+			case USERDATA_TYPE_IMAGE:
+				$result  = '<input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
+				$result .= ' <label for="userdata_'.$row['fieldId'].'">'.t('Has image').'</label>';
+				break;
+
+			case USERDATA_TYPE_LOCATION_SWE:
+				$result = ZipLocation::regionSelect();
+				$result .= ZipLocation::citySelect(1);
+				break;
+
+			default:
+				$result = getUserdataInput($row);
+				break;
 		}
 
 		return $result;
@@ -392,6 +401,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 			
 				case USERDATA_TYPE_LOCATION_SWE:
 					saveSetting(SETTING_USERDATA, $userId, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
+					saveSetting(SETTING_USERDATA, $userId, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
 					$val = $_POST['userdata_'.$row['fieldId']];
 					break;
 
@@ -613,8 +623,9 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 							echo '<div class="critical">'.t('The Swedish zipcode you entered is not valid!').'</div>';
 							$session->log('User entered invalid swedish zipcode: '.$_POST['userdata_'.$row['fieldId']], LOGLEVEL_WARNING);
 						} else {
+							saveSetting(SETTING_USERDATA, $session->id, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
+							saveSetting(SETTING_USERDATA, $session->id, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
 							$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
-							saveSetting(SETTING_USERDATA, $session->id, 'city', ZipLocation::cityId($row['settingValue']));
 						}
 						break;
 
