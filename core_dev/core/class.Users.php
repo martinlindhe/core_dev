@@ -451,7 +451,7 @@ class Users
 
 		// Add one INNER JOIN for each parameter we want to search for
 		foreach ($list as $row) {
-			if ($row['private']) continue;
+			if (!$session->isAdmin && $row['private']) continue;
 			if (!empty($data['userdata_'.$row['fieldId']])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="'.$row['fieldId'].'" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
@@ -476,7 +476,7 @@ class Users
 
 		// Find the userdata fields the user searched for
 		foreach ($list as $row) {
-			if ($row['private']) continue;
+			if (!$session->isAdmin && $row['private']) continue;
 			if (!empty($data['userdata_'.$row['fieldId']]) || (!empty($data['search_loc_region']) || !empty($data['search_loc_city']))) {
 				if ($start > 1) { // n1 is always created!
 					switch ($row['fieldType']) {
