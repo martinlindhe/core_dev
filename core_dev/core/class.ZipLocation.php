@@ -96,7 +96,7 @@ class ZipLocation
 		$q = 'SELECT * FROM tblLocationRegion ORDER BY name ASC';
 		$list = $db->getArray($q);
 
-		$result = '<select name="x">';
+		$result = '<select name="search_loc_region" onchange="ajax_set_search_cities(this.value)">';
 		foreach ($list as $row) {
 			$result .= '<option value="'.$row['regionId'].'">'.$row['name'].'</option>';
 		}
@@ -115,7 +115,7 @@ class ZipLocation
 		$q = 'SELECT * FROM tblLocationCity WHERE regionId='.$regionId.' ORDER BY name ASC';
 		$list = $db->getArray($q);
 
-		$result = '<select name="y">';
+		$result = '<select name="search_loc_city">';
 		foreach ($list as $row) {
 			$result .= '<option value="'.$row['cityId'].'">'.$row['name'].'</option>';
 		}

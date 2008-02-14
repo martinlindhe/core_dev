@@ -106,6 +106,9 @@
 			case 'The Swedish SSN you entered is not valid!': return 'Personnumret du angav är ogiltigt!';
 			case 'The Swedish zipcode you entered is not valid!': return 'Postnummret du angav är ogiltigt!';
 			case 'Delete image': return 'Radera bilden';
+			case 'Year': return 'År';
+			case 'Month': return 'Månad';
+			case 'Day': return 'Dag';
 
 			// Contacts
 			case ' has blocked you.': return ' har blockerat dig.';

@@ -262,14 +262,14 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 				}
 
 				$result .= '<select name="userdata_'.$fieldId.'_year">';
-				$result .= '<option value="">- Year -';
+				$result .= '<option value="">- '.t('Year').' -';
 				for ($j=date('Y')-100; $j<=date('Y'); $j++) {
 					$result .= '<option value="'.$j.'"'.($j==$y?' selected':'').'>'.$j;
 				}
 				$result .= '</select>';
 
 				$result .= '<select name="userdata_'.$fieldId.'_month">';
-				$result .= '<option value="">- Month -';
+				$result .= '<option value="">- '.t('Month').' -';
 				for ($j=1; $j<=12; $j++) {
 					$k = $j;
 					if ($j<10) $k = '0'.$k;
@@ -278,7 +278,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 				$result .= '</select>';
 
 				$result .= '<select name="userdata_'.$fieldId.'_day">';
-				$result .= '<option value="">- Day -';
+				$result .= '<option value="">- '.t('Day').' -';
 				for ($j=1; $j<=31; $j++) {
 					$result .= '<option value="'.($j<10?'0'.$j:$j).'"'.($j==$d?' selected':'').'>'.$j;
 				}
@@ -315,7 +315,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 			case USERDATA_TYPE_LOCATION_SWE:
 				$result = ZipLocation::regionSelect();
-				$result .= ZipLocation::citySelect(1);
+				$result .= '<div id="ajax_cities"></div>';
 				break;
 
 			default:

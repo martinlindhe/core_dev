@@ -158,3 +158,21 @@ function ajax_get_upload_progress_callback()
 
 	upload_progress_request = null;
 }
+
+
+//sets search cities according to region id "id"
+var searchcities_request = null;
+function ajax_set_search_cities(id)
+{
+	searchcities_request = new AJAX();
+	searchcities_request.GET_raw(_ext_core+'ajax_search_cities.php?i='+id+_ext_ref, ajax_set_search_cities_callback);
+}
+
+function ajax_set_search_cities_callback()
+{
+	if (!searchcities_request.ResultReady()) return;
+
+	set_div_content('ajax_cities', searchcities_request._request.responseText);
+
+	searchcities_request = null;
+}
