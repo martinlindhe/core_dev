@@ -267,8 +267,10 @@
 
 	/**
 	 * Generates image gadget
+	 *
+	 * \param $ownerId owner of this image
 	 */
-	function showImageGadgetXHTML()
+	function showImageGadgetXHTML($ownerId)
 	{
 		global $config, $session;
 
@@ -276,14 +278,17 @@
 		echo 	'<center>';
 		echo 		'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
 		echo		'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
-		echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/><br/>';
-		if ($session->id) {
-			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
+		echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
+		if ($session->id == $ownerId) {
+			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
+		} else {
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
 		}
+		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="xxx()"/><br/>';
 
 		echo 		'<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/><br/>';
 
-		if ($session->id) {
+		if ($session->id == $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('Cut').'" onclick="cut_selected_file()"/>';
 			echo	'<input type="button" class="button" value="'.t('Resize').'" onclick="resize_selected_file(90)"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate left').'" onclick="rotate_selected_file(90)"/>';
@@ -306,7 +311,7 @@
 	/**
 	 * Generates audio gadget
 	 */
-	function showAudioGadgetXHTML()
+	function showAudioGadgetXHTML($ownerId)
 	{
 		global $session;
 
@@ -317,10 +322,15 @@
 		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
-		if ($session->id) {
+
+		if ($session->id == $ownerId) {
+			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
 			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
+		} else {
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
 		}
+		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="xxx()"/><br/>';
 		echo	'</center>';
 		echo '</div>';
 	}
@@ -328,7 +338,7 @@
 	/**
 	 * Generates video gadget
 	 */
-	function showVideoGadgetXHTML()
+	function showVideoGadgetXHTML($ownerId)
 	{
 		global $session;
 
@@ -338,10 +348,14 @@
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/><br/>';
 		echo	'<div id="zoom_video" style="width: 160px; height: 50px;"></div>';
-		if ($session->id) {
+		if ($session->id == $ownerId) {
+			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
 			echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
+		} else {
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
 		}
+		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="xxx()"/><br/>';
 		echo '</center>';
 		echo '</div>';
 	}
@@ -349,7 +363,7 @@
 	/**
 	 * Generates document gadget
 	 */
-	function showDocumentGadgetXHTML()
+	function showDocumentGadgetXHTML($ownerId)
 	{
 		global $session;
 
@@ -358,10 +372,14 @@
 		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
-		if ($session->isAdmin) {
+		if ($session->id == $ownerId) {
+			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
 			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
+		} else {
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
 		}
+		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="xxx()"/><br/>';
 		echo '</center>';
 		echo '</div>';
 	}
