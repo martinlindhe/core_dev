@@ -3,7 +3,7 @@
 
 	require_once('find_config.php');
 
-	if ((!$session->id && !$files->anon_uploads) || empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
+	if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
 
 	echo ZipLocation::citySelect($_GET['i']);
 ?>

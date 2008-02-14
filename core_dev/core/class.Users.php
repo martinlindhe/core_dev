@@ -428,6 +428,8 @@ class Users
 	/**
 	 * Used by Users::search()
 	 *
+	 * \todo cannot search on USERDATA_TYPE_BIRTHDATE_SWE
+	 *
 	 * Data is $_POST and can contain irrelevant info!
 	 */
 	function getSearchResult($data)

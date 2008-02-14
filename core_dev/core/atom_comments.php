@@ -193,7 +193,7 @@
 			}
 			echo '</div>';
 		}
-		echo $pager['head'];
+		if ($cnt >= 5) echo $pager['head'];
 		echo '</div>'; //id="comments_only"
 
 		if ( ($session->id && $_type != COMMENT_MODERATION) ||
