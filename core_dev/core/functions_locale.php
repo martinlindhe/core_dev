@@ -41,7 +41,7 @@
 			case 'Previous': return 'Föregående';
 			case 'Reply': return 'Svara';
 
-			//class.Users.php search
+			//Search
 			case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
 			case 'Usernames beginning with': return 'Användarnamn som börjar med';
 			case 'Free-text': return 'Fritext';
@@ -52,6 +52,8 @@
 			case '1 hit': return 'en träff';
 			case 'New search': return 'Ny sökning';
 			case 'Has image': return 'Har bild';
+			case 'Select region': return 'Välj län';
+			case 'Select city': return 'Välj ort';
 
 			//Abuse report of user
 			case 'Report user': return 'Anmäl användaren';

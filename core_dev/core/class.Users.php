@@ -362,7 +362,7 @@ class Users
 
 		if (isset($_POST['c'])) {
 
-		$list = Users::getSearchResult($_POST);
+			$list = Users::getSearchResult($_POST);
 
 			if (!empty($_POST['c'])) echo t('Search result for').' "'.$_POST['c'].'", ';
 			else echo t('Custom search result').', ';
@@ -452,8 +452,14 @@ class Users
 
 		// Add one INNER JOIN for each parameter we want to search for
 		foreach ($list as $row) {
-			if (!empty($data['userdata_'.$row['fieldId'] ])) {
+			if (!empty($data['userdata_'.$row['fieldId']])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="'.$row['fieldId'].'" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
+				$start++;
+			} else if (!empty($data['search_loc_city'])) {
+				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="city" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
+				$start++;
+			} else if (!empty($data['search_loc_region'])) {
+				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="region" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
 			}
 		}
@@ -470,13 +476,30 @@ class Users
 
 		// Find the userdata fields the user searched for
 		foreach ($list as $row) {
-			if (!empty($data['userdata_'.$row['fieldId']])) {
-				if (isset($x)) $q .= 'AND ';
+			if (!empty($data['userdata_'.$row['fieldId']]) || (!empty($data['search_loc_region']) || !empty($data['search_loc_city']))) {
 				if ($start > 1) { // n1 is always created!
-					if ($row['fieldType'] == USERDATA_TYPE_IMAGE) {
-						$q .= '(n'.$start.'.settingValue IS NOT NULL) ';
-					} else {
-						$q .= '(n'.$start.'.settingValue="'.$data['userdata_'.$row['fieldId']].'") ';
+					switch ($row['fieldType']) {
+						case USERDATA_TYPE_IMAGE:
+							if (isset($x)) $q .= 'AND ';
+							$q .= '(n'.$start.'.settingValue IS NOT NULL) ';
+							break;
+
+						case USERDATA_TYPE_LOCATION_SWE:
+							if (!empty($data['search_loc_city']) && is_numeric($data['search_loc_city'])) {
+								if (isset($x)) $q .= 'AND ';
+								$q .= '(n'.$start.'.settingValue="'.$data['search_loc_city'].'") ';
+							} else if (!empty($data['search_loc_region']) && is_numeric($data['search_loc_region'])) {
+								if (isset($x)) $q .= 'AND ';
+								$q .= '(n'.$start.'.settingValue="'.$data['search_loc_region'].'") ';
+							}
+							break;
+
+						default:
+							if (!empty($data['userdata_'.$row['fieldId']])) {
+								if (isset($x)) $q .= 'AND ';
+								$q .= '(n'.$start.'.settingValue="'.$data['userdata_'.$row['fieldId']].'") ';
+							}
+							break;
 					}
 				}
 				$start++;
