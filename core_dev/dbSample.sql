@@ -272,7 +272,8 @@ CREATE TABLE `tblSettings` (
   `settingValue` text,
   `settingType` tinyint(3) unsigned NOT NULL default '0',
   `timeSaved` datetime default NULL,
-  PRIMARY KEY  (`settingId`)
+  PRIMARY KEY  (`settingId`),
+  KEY `ownerId` (`ownerId`,`settingName`,`settingType`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `tblStatistics` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
