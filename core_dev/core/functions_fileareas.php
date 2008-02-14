@@ -271,35 +271,33 @@
 	function showImageGadgetXHTML()
 	{
 		global $config, $session;
-?>
-<div id="zoom_image_layer" style="display:none">
-	<center>
-		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/>
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/><br/>
 
-		<img id="zoom_image" src="<?=$config['core_web_root']?>gfx/ajax_loading.gif" alt="Image"/><br/>
+		echo '<div id="zoom_image_layer" style="display:none">';
+		echo 	'<center>';
+		echo 		'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
+		echo		'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
+		echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/><br/>';
 
-<? if ($session->id) { ?>
-		<input type="button" class="button" value="Cut" onclick="cut_selected_file()"/>
-		<input type="button" class="button" value="Resize" onclick="resize_selected_file(90)"/>
-		<input type="button" class="button" value="Rotate left" onclick="rotate_selected_file(90)"/>
-		<input type="button" class="button" value="Rotate right" onclick="rotate_selected_file(-90)"/>
-		<input type="button" class="button" value="Move image" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete image" onclick="delete_selected_file()"/>
-<? } ?>
-<? if (!empty($config['news']['allow_rating'])) { ?>
-		<br/>
-		<div class="image_rate">
-		<?
-			//ratingGadget(RATE_IMAGE, 1)
-			//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
-		?>
-		</div>
-<? } ?>
-	</center>
-</div>
-<?
+		echo 		'<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/><br/>';
+
+		if ($session->id) {
+			echo	'<input type="button" class="button" value="'.t('Cut').'" onclick="cut_selected_file()"/>';
+			echo	'<input type="button" class="button" value="'.t('Resize').'" onclick="resize_selected_file(90)"/>';
+			echo	'<input type="button" class="button" value="'.t('Rotate left').'" onclick="rotate_selected_file(90)"/>';
+			echo	'<input type="button" class="button" value="'.t('Rotate right').'" onclick="rotate_selected_file(-90)"/>';
+			echo	'<input type="button" class="button" value="'.t('Move image').'" onclick="move_selected_file()"/>';
+			echo	'<input type="button" class="button" value="'.t('Delete image').'" onclick="delete_selected_file()"/>';
+		}
+
+		if (!empty($config['news']['allow_rating'])) {
+			echo '<br/>';
+			echo '<div class="image_rate">';
+				//ratingGadget(RATE_IMAGE, 1)
+				//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
+			echo '</div>';
+		}
+		echo	'</center>';
+		echo '</div>';
 	}
 
 	/**
@@ -308,22 +306,20 @@
 	function showAudioGadgetXHTML()
 	{
 		global $session;
-?>
-<div id="zoom_audio_layer" style="display:none">
-	<center>
-		<div id="zoom_audio" style="width: 160px; height: 50px;"></div>
-		<br/>
-		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
 
-<? if ($session->id) { ?>
-		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
+		echo '<div id="zoom_audio_layer" style="display:none">';
+		echo	'<center>';
+		echo	'<div id="zoom_audio" style="width: 160px; height: 50px;"></div>';
+		echo	'<br/>';
+		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
+		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
+		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
+		if ($session->id) {
+			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
+		}
+		echo	'</center>';
+		echo '</div>';
 	}
 
 	/**
@@ -332,22 +328,19 @@
 	function showVideoGadgetXHTML()
 	{
 		global $session;
-?>
-<div id="zoom_video_layer" style="display:none">
-	<center>
-		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/><br/>
 
-		<div id="zoom_video" style="width: 160px; height: 50px;"></div>
-
-<? if ($session->id) { ?>
-		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
+		echo '<div id="zoom_video_layer" style="display:none">';
+		echo	'<center>';
+		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
+		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
+		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/><br/>';
+		echo	'<div id="zoom_video" style="width: 160px; height: 50px;"></div>';
+		if ($session->id) {
+			echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
+		}
+		echo '</center>';
+		echo '</div>';
 	}
 
 	/**
@@ -356,19 +349,18 @@
 	function showDocumentGadgetXHTML()
 	{
 		global $session;
-?>
-<div id="zoom_file_layer" style="display:none">
-	<center>
-		<input type="button" class="button_bold" value="Close" onclick="zoom_hide_elements()"/> 
-		<input type="button" class="button" value="Download" onclick="download_selected_file()"/>
-		<input type="button" class="button" value="Pass thru" onclick="passthru_selected_file()"/>
-<? if ($session->isAdmin) { ?>
-		<input type="button" class="button" value="Move" onclick="move_selected_file()"/>
-		<input type="button" class="button" value="Delete" onclick="delete_selected_file()"/>
-<? } ?>
-	</center>
-</div>
-<?
+
+		echo '<div id="zoom_file_layer" style="display:none">';
+		echo	'<center>';
+		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
+		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
+		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
+		if ($session->isAdmin) {
+			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
+		}
+		echo '</center>';
+		echo '</div>';
 	}
 
 ?>

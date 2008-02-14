@@ -35,6 +35,7 @@
 			case 'Files': return 'Filer';
 			case 'Search': return 'Sök';
 			case 'Remove': return 'Radera';
+			case 'Delete': return 'Radera';
 			case 'From': return 'Från';
 			case 'To': return 'Till';
 			case 'Next': return 'Nästa';
@@ -164,6 +165,14 @@
 			case 'Files': return 'Filer';
 			case 'New file category': return 'Ny filkategori';
 			case 'Upload': return 'Ladda upp';
+			case 'Close': return 'Stäng';
+			case 'Download': return 'Spara';
+			case 'Pass thru': return 'Visa endast';
+			case 'Cut': return 'Beskär';
+			case 'Resize': return 'Ändra storlek';
+			case 'Rotate left': return 'Rotera åt vänster';
+			case 'Rotate right': return 'Rotera åt höger';
+			case 'Move image': return 'Flytta bild';
 
 			//Categories
 			case 'Global categories': return 'Globala kategorier';
