@@ -282,7 +282,7 @@
 		if ($session->id == $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 		} else {
-			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 
@@ -328,9 +328,9 @@
 			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		} else {
-			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
-		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="xxx()"/><br/>';
+		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 		echo	'</center>';
 		echo '</div>';
 	}
@@ -353,9 +353,9 @@
 			echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		} else {
-			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
-		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="xxx()"/><br/>';
+		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 		echo '</center>';
 		echo '</div>';
 	}
@@ -377,9 +377,9 @@
 			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		} else {
-			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
-		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="xxx()"/><br/>';
+		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 		echo '</center>';
 		echo '</div>';
 	}

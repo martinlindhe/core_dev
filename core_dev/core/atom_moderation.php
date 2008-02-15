@@ -21,6 +21,7 @@ require_once('functions_locale.php');	//for translations
 
 	$config['moderation']['enabled'] = true;
 
+	define('MODERATION_FILE',				10);	//itemId tblFiles.fileId, a user reported a file
 	define('MODERATION_GUESTBOOK',	11);	//itemId = tblGuestbook.entryId
 	define('MODERATION_FORUM',			12);	//itemId = tblForum.itemId
 	define('MODERATION_BLOG',				13);
@@ -288,19 +289,30 @@ require_once('functions_locale.php');	//for translations
 	/**
 	 *
 	 */
-	function reportUserDialog($_id)
+	function reportDialog($_type, $_id)
 	{
 		if (!empty($_POST['report_reason']) || !empty($_POST['report_text'])) {
 
-			$queueId = addToModerationQueue(MODERATION_USER, $_id);
+			$queueId = addToModerationQueue($_type, $_id);
 			addComment(COMMENT_MODERATION, $queueId, $_POST['report_reason'].': '.$_POST['report_text']);
 
 			echo t('Thank you. Your report has been recieved.');
 			return;
 		}
+		switch ($_type) {
+			case MODERATION_USER:
+				echo '<h2>'.t('Report user').'</h2>';
+				echo t('Please choose the reason as to why you wish to report this user').':<br/>';
+				break;
 
-		echo '<h2>'.t('Report user').'</h2>';
-		echo t('Please choose the reason as to why you wish to report this user').':<br/>';
+			case MODERATION_FILE:
+				echo '<h2>'.t('Report file').'</h2>';
+				echo t('Please choose the reason as to why you wish to report this file').':<br/>';
+				break;
+				
+			default: die('reportDialog() unhandled type: '.$_type);
+		}
+
 		echo '<form method="post" action="">';
 		echo t('Reason').': ';
 		echo '<select name="report_reason">';

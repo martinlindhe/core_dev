@@ -57,6 +57,7 @@
 			case 'Select city': return 'Välj ort';
 
 			//Abuse report of user
+			case 'Report': return 'Anmäl';
 			case 'Report user': return 'Anmäl användaren';
 			case 'Please choose the reason as to why you wish to report this user': return 'Ange varför du vill anmäla denna användare';
 			case 'Reason': return 'Anledning';

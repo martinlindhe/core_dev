@@ -9,7 +9,7 @@
 	echo '<h1>Abuse</h1>';
 	echo 'If you want to block this user. Click here - fixme<br/><br/>';
 
-	reportUserDialog($_GET['id']);
+	reportDialog(MODERATION_USER, $_GET['id']);
 
 	require('design_foot.php');
 ?>
