@@ -79,21 +79,41 @@ require_once('functions_locale.php');	//for translations
 		if ($pager['page'] > 1) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
 			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev.png" alt="'.t('Previous').'" width="11" height="12"/></a>';
-		//} else {
-		//	$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev_gray.png" alt="" width="11" height="12"/>';
 		}
 
-		for ($i=1; $i <= $pager['tot_pages']; $i++) {
-			if ($i==$pager['page']) $pager['head'] .= '<b>';
-			$pager['head'] .= ' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> ';
-			if ($i==$pager['page']) $pager['head'] .= '</b>';
+		if ($pager['tot_pages'] <= 10) {
+			for ($i=1; $i <= $pager['tot_pages']; $i++) {
+				$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
+			}
+		} else {
+			//extended pager for lots of pages
+
+			if ($pager['page'] <= 3 || $pager['page'] == $pager['tot_pages']) {
+				for ($i=1; $i <= 3; $i++) {
+					$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
+				}
+				$pager['head'] .= ' ... ';
+			}
+
+			if ($pager['page'] > 3) {
+				$pager['head'] .= ' ... ';
+				for ($i=$pager['page']-2; $i <= $pager['page']+2; $i++) {
+					if ($i > $pager['tot_pages']) break;
+					$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
+				}
+			}
+
+			if ($i < $pager['tot_pages']) {
+				$pager['head'] .= ' ... ';
+				for ($i=$pager['tot_pages']-2; $i <= $pager['tot_pages']; $i++) {
+					$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
+				}
+			}
 		}
 
 		if ($pager['page'] < $pager['tot_pages']) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
 			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next.png" alt="'.t('Next').'" width="11" height="12"/></a>';
-		//} else {
-		//	$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next_gray.png" alt="" width="11" height="12"/>';
 		}
 		
 		$pager['head'] .= '<br/>';
