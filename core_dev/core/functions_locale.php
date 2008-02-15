@@ -74,6 +74,9 @@
 			case 'New entry': return 'Nytt inlägg';
 			case 'Unread': return 'Oläst';
 
+			//Guestbook Conversation
+			case 'Guestbook conversation': return 'Gästbokskonversation';
+
 			//Pager
 			case 'Page': return 'Sida';
 			case 'of': return 'av';

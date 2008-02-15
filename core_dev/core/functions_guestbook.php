@@ -62,6 +62,25 @@
 		return $db->getArray($q);
 	}
 
+	/* Return $userId's guestbook conversation with $otherId, $_limit_sql entries */
+	function getGuestbookConversation($userId, $otherId, $_limit_sql = '')
+	{
+		global $db;
+
+		if (!is_numeric($userId) || !is_numeric($otherId)) return false;
+
+		$q  = 'SELECT t1.*,t2.userName AS authorName, t3.userName AS otherName ';
+		$q .= 'FROM tblGuestbooks AS t1 ';
+		$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
+		$q .= 'INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
+		$q .= 'WHERE (t1.userId='.$userId.' OR t1.authorId = '.$userId.') AND ';
+		$q .= '(t1.userId='.$otherId.' OR t1.authorId = '.$otherId.')';
+		$q .= 'AND t1.entryDeleted=0 ';
+		$q .= 'ORDER BY t1.timeCreated DESC'.$_limit_sql;
+
+		return $db->getArray($q);
+	}
+
 	/* Returns $count last entries from $userId's guestbook */
 	function getGuestbookItems($userId, $count = 5)
 	{
@@ -107,6 +126,18 @@
 		return $db->getOneItem($q);
 	}
 
+	/* Returns the number of items in the guestbook conversation */
+	function getGuestbookConversationCount($userId, $otherId)
+	{
+		global $db;
+
+		if (!is_numeric($userId) || !is_numeric($otherId)) return false;
+
+		$q  = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE (userId='.$userId.' OR authorId='.$userId.') AND ';
+		$q .= '(userId='.$otherId.' OR authorId='.$otherId.') AND entryDeleted=0';
+		return $db->getOneItem($q);
+	}
+
 	/* Returns the number of unread items in the guestbook */
 	function getGuestbookUnreadCount($userId)
 	{
@@ -137,7 +168,6 @@
 				removeGuestbookEntry($_GET['remove']);
 			}
 		}
-
 		if ($session->id != $userId && !empty($_POST['body'])) {
 			addGuestbookEntry($userId, '', $_POST['body']);
 		}
@@ -157,6 +187,9 @@
 			echo '<div class="guestbook_entry_head">';
 			echo t('From').' '.Users::link($row['authorId'], $row['authorName']);
 			echo ', '.$row['timeCreated'];
+			if ($session->id == $row['authorId'] || $session->id == $row['userId']) {
+				echo ' <a href="guestbook_conversation.php?oid='.($row['authorId']==$session->id?$row['userId']:$row['authorId']).'">konversation</a>';
+			}
 			echo '</div>';
 
 			if ($session->id == $userId) {
@@ -186,4 +219,51 @@
 		}
 
 	}
+
+	
+function showGuestbookConversation($userId,$otherId)
+	{
+		global $config, $session;
+		if ($session->isAdmin || $session->id == $userId) {
+			if (!empty($_GET['remove'])) {
+//				removeGuestbookEntry($_GET['remove']);
+			}
+		}
+		if ($session->id != $userId && !empty($_POST['body'])) {
+//			addGuestbookEntry($userId, '', $_POST['body']);
+		}
+
+		$tot_cnt = getGuestbookConversationCount($userId, $otherId);
+		echo t('Guestbook conversation').': '.Users::getName($userId).' - '.Users::getName($otherId).' '.t('contains').' '.$tot_cnt.' '.t('messages').'.<br/><br/>';
+
+		$pager = makePager($tot_cnt, 5);
+
+		echo $pager['head'];
+
+		$list = getGuestbookConversation($userId, $otherId, $pager['limit']);
+		foreach ($list as $row) {
+			echo '<a name="gb'.$row['entryId'].'"></a>';
+			echo '<div class="guestbook_entry">';
+
+			echo '<div class="guestbook_entry_head">';
+			echo t('From').' '.Users::link($row['authorId'], $row['authorName']);
+			echo ', '.$row['timeCreated'];
+			echo '</div>';
+
+			if ($session->id == $userId) {
+				if ($row['entryRead'] == 0) {
+					echo '<img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="'.t('Unread').'">';
+				}
+			}
+			echo stripslashes($row['body']).'<br/>';
+
+			echo '</div><br/>';
+		}
+
+		if ($session->id) {
+				markGuestbookRead();
+		}
+
+	}
+	
 ?>
