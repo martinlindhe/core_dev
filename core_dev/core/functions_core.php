@@ -67,7 +67,7 @@ require_once('functions_locale.php');	//for translations
 		$pager['items_per_page'] = $_items_per_page;
 		if (!empty($_GET['p']) && is_numeric($_GET['p'])) $pager['page'] = $_GET['p'];
 
-		$pager['tot_pages'] = round($_total_cnt / $_items_per_page+0.4); // round to closest whole number
+		$pager['tot_pages'] = floor($_total_cnt / $_items_per_page); // round to closest whole number
 		if ($pager['tot_pages'] < 1) $pager['tot_pages'] = 1;
 		$pager['head'] = t('Page').' '.$pager['page'].' '.t('of').' '.$pager['tot_pages'].' ('.t('displaying').' '.$_total_cnt.' '.t('items').')<br/><br/>';
 
@@ -88,26 +88,27 @@ require_once('functions_locale.php');	//for translations
 		} else {
 			//extended pager for lots of pages
 
-			if ($pager['page'] <= 3 || $pager['page'] == $pager['tot_pages']) {
-				for ($i=1; $i <= 3; $i++) {
-					$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
-				}
+			for ($i=1; $i <= 3; $i++) {
+				$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
+			}
+			if ($pager['page'] > 1) {
 				$pager['head'] .= ' ... ';
 			}
 
-			if ($pager['page'] > 3) {
-				$pager['head'] .= ' ... ';
+			if ($pager['page'] >= 2 && $pager['page'] < $pager['tot_pages']) {
 				for ($i=$pager['page']-2; $i <= $pager['page']+2; $i++) {
-					if ($i > $pager['tot_pages']) break;
+					if ($i > $pager['tot_pages'] || $i == 0 || $i == 1 || $i == 2 || $i == 3
+					 || $i == $pager['tot_pages']-2 || $i == $pager['tot_pages']-1
+					 || $i == $pager['tot_pages']) continue;
 					$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
 				}
 			}
 
-			if ($i < $pager['tot_pages']) {
+			if ($pager['page'] < $pager['tot_pages']) {
 				$pager['head'] .= ' ... ';
-				for ($i=$pager['tot_pages']-2; $i <= $pager['tot_pages']; $i++) {
-					$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
-				}
+			}
+			for ($i=$pager['tot_pages']-2; $i <= $pager['tot_pages']; $i++) {
+				$pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
 			}
 		}
 
