@@ -284,7 +284,7 @@
 		} else {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="xxx()"/>';
 		}
-		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="xxx()"/><br/>';
+		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 
 		echo 		'<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/><br/>';
 

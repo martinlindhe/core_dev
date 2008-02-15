@@ -9,7 +9,7 @@
 
 	define('COMMENT_NEWS',					1);
 	define('COMMENT_BLOG',					2);		//anonymous or registered users comments on a blog
-	define('COMMENT_IMAGE',					3);		//anonymous or registered users comments on a image
+	define('COMMENT_FILE',					3);		//anonymous or registered users comments on a image
 	define('COMMENT_TODOLIST',			4);		//todolist item comments
 	define('COMMENT_GENERIC',				5);		//generic comment type
 	define('COMMENT_PASTEBIN',			6);		//"pastebin" text. anonymous submissions are allowed
@@ -28,7 +28,7 @@
 		global $db, $session;
 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
 
-		if ($_type != COMMENT_IMAGE && $_type != COMMENT_PASTEBIN && !$session->id) return false;
+		if ($_type != COMMENT_FILE && $_type != COMMENT_PASTEBIN && !$session->id) return false;
 
 		$commentText = $db->escape(htmlspecialchars($commentText));
 
@@ -112,7 +112,7 @@
 
 		$result = array();
 		foreach ($list as $row) {
-			if ($_type == COMMENT_IMAGE && $files->getUploader($row['ownerId']) == $ownerId) {
+			if ($_type == COMMENT_FILE && $files->getUploader($row['ownerId']) == $ownerId) {
 				$result[] = $row;
 			}
 		}
@@ -197,7 +197,7 @@
 		echo '</div>'; //id="comments_only"
 
 		if ( ($session->id && $_type != COMMENT_MODERATION) ||
-				($_type == COMMENT_IMAGE || $_type == COMMENT_PASTEBIN)
+				($_type == COMMENT_FILE || $_type == COMMENT_PASTEBIN)
 		) {
 			echo '<form method="post" action="">';
 			echo '<textarea name="cmt" cols="'.$col_w.'" rows="'.$col_h.'"></textarea><br/>';

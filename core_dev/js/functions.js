@@ -270,6 +270,11 @@ function viewlog_selected_file()
 	document.location = 'files_viewlog.php?id='+zoomed_id+_ext_ref;
 }
 
+function comment_selected_file()
+{
+	document.location = 'files_comment.php?id='+zoomed_id+_ext_ref;
+}
+
 //used by image zoomer
 function delete_selected_file()
 {

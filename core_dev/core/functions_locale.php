@@ -151,7 +151,7 @@
 			//Comments
 			case 'comment': return 'kommentar';
 			case 'comments': return 'kommentarer';
-			case 'Add comment': return 'Klottra!';
+			case 'Add comment': return 'Spara';
 
 			//News
 			case 'Add news': return 'Skapa nyhet';

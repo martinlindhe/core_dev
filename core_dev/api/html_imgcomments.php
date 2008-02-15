@@ -8,6 +8,6 @@
 <body style="background-color: #D80911;">
 <?
 	echo '<center>';
-	showComments(COMMENT_IMAGE, $_GET['i'], 20, 3);
+	showComments(COMMENT_FILE, $_GET['i'], 20, 3);
 	echo '</center>';
 ?>
