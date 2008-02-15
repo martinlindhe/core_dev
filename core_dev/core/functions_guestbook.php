@@ -226,11 +226,11 @@ function showGuestbookConversation($userId,$otherId)
 		global $config, $session;
 		if ($session->isAdmin || $session->id == $userId) {
 			if (!empty($_GET['remove'])) {
-//				removeGuestbookEntry($_GET['remove']);
+				removeGuestbookEntry($_GET['remove']);
 			}
 		}
-		if ($session->id != $userId && !empty($_POST['body'])) {
-//			addGuestbookEntry($userId, '', $_POST['body']);
+		if ($session->id != $otherId && !empty($_POST['body'])) {
+			addGuestbookEntry($otherId, '', $_POST['body']);
 		}
 
 		$tot_cnt = getGuestbookConversationCount($userId, $otherId);
@@ -257,11 +257,24 @@ function showGuestbookConversation($userId,$otherId)
 			}
 			echo stripslashes($row['body']).'<br/>';
 
+			if ($session->isAdmin || $session->id == $row['userId']) {
+				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;oid='.$otherId.'&amp;remove='.$row['entryId'].'">'.t('Remove').'</a>';
+			}
+
 			echo '</div><br/>';
 		}
 
 		if ($session->id) {
+			if ($session->id != $otherId) {
+				echo t('New entry').':<br/>';
+				echo '<form name="addGuestbook" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;oid='.$otherId.'">';
+				echo '<textarea name="body" cols="40" rows="6"></textarea><br/><br/>';
+				echo '<input type="submit" class="button" value="'.t('Save').'"/>';
+				echo '</form>';
+			} else {
+				/* Mark all entries as read */
 				markGuestbookRead();
+			}
 		}
 
 	}
