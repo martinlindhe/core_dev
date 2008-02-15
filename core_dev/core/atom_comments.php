@@ -19,6 +19,7 @@
 
 	/* Comment types only meant for the admin's eyes */
 	define('COMMENT_MODERATION',		30);	//owner = tblModeration.queueId
+	define('COMMENT_USER',					31);	//owner = tblUsers.userId, admin comments for a user
 
 	/**
 	 *
