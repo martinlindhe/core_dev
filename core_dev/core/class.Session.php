@@ -143,19 +143,20 @@ class Session
 	 */
 	function endSession()
 	{
-		if (!$this->id) return;
-
-		$this->log('User logged out', LOGLEVEL_NOTICE);
-
 		$this->started = 0;
 		$this->username = '';
-		$this->id = 0;
 		$this->ip = 0;
 		$this->user_agent = '';
 		$this->mode = 0;
 		$this->isAdmin = 0;
 		$this->isSuperAdmin = 0;
 		$this->theme = $this->default_theme;
+
+		if (!$this->id) return;
+
+		$this->id = 0;
+
+		$this->log('User logged out', LOGLEVEL_NOTICE);
 	}
 
 	/**
