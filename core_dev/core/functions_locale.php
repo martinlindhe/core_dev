@@ -41,6 +41,7 @@
 			case 'Next': return 'Nästa';
 			case 'Previous': return 'Föregående';
 			case 'Reply': return 'Svara';
+			case 'Add': return 'Lägg till';
 
 			//Search
 			case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
@@ -185,6 +186,12 @@
 			case 'Your categories': return 'Dina kategorier';
 			case 'Private': return 'Privat';
 			case 'Hidden': return 'Dold';
+
+			//Wiki
+			case 'Unused files': return 'Oanvända filer';
+			case 'by': return 'av';
+			case 'Add new FAQ': return 'Skapa en ny FAQ';
+			case 'Answer': return 'Svar';
 
 			default: return '__('.$s.')__';
 		}

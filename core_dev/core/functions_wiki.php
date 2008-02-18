@@ -175,7 +175,7 @@
 			if ($rows > 36) $rows = 36;
 
 			$last_edited = 'never';
-			if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' by '.$data['creatorName'];
+			if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' '.t('by').' '.$data['creatorName'];
 
 			echo
 					'<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">'.
@@ -186,11 +186,11 @@
 					'<input type="button" class="button" value="I" style="font-style: italic" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[i]\',\'[/i]\',\'italic text\')"/>'.
 					'<input type="button" class="button" value="U" style="text-decoration: underline" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[u]\',\'[/u]\',\'underlined text\')"/>'.
 					'<input type="button" class="button" value="S" style="text-decoration: line-through" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[s]\',\'[/s]\',\'strikethru text\')"/>'.
-					'<input type="button" class="button" value="[hr] (broken)" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[hr]\')"/>'.
+					//'<input type="button" class="button" value="[hr] (broken)" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[hr]\')"/>'.
 					'<input type="button" class="button" value="[code]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[code]\',\'[/code]\',\'code block\')"/>'.
 					'<input type="button" class="button" value="[quote]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[quote name=]\',\'[/quote]\',\'quote\')"/>'.
 					'<br/>'.
-					'<textarea name="wiki_'.$data['wikiId'].'" id="wiki_'.$data['wikiId'].'" cols="70%" rows="'.$rows.'">'.$text.'</textarea><br/>'.
+					'<textarea name="wiki_'.$data['wikiId'].'" id="wiki_'.$data['wikiId'].'" cols="60" rows="'.$rows.'">'.$text.'</textarea><br/>'.
 					'Last edited '.$last_edited.'<br/>'.
 					'<input type="submit" class="button" value="'.t('Save').'"/>';
 
@@ -219,7 +219,7 @@
 					$showTag = $linkTag = '[[file:'.$row['fileId'].']]';
 
 					if (in_array($row['fileMime'], $files->image_mime_types)) {
-						$showTag = makeThumbLink($row['fileId'], $showTag);
+						$showTag = showThumb($row['fileId'], $showTag);
 					}
 
 					if (strpos($text, $linkTag) === false) {
@@ -228,7 +228,7 @@
 				}
 				if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
 				if ($str) {
-					echo '<b>Unused files:</b> '.$str;
+					echo '<b>'.t('Unused files').':</b> '.$str;
 				}
 			}
 			echo '</form>';

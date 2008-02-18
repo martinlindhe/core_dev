@@ -76,8 +76,8 @@
 
 					if ($session->isAdmin) {
 						echo '<br/><br/>';
-						echo '<input type="button" class="button" value="Edit" onclick="faq_focus('.$i.'); hide_element_by_name(\'faq_holder_'.$i.'\'); show_element_by_name(\'faq_edit_'.$i.'\');"/> ';
-						echo '<input type="button" class="button" value="Delete" onclick="document.location=\'?fdel='.$list[$i]['faqId'].'\'"/>';
+						echo '<input type="button" class="button" value="'.t('Edit').'" onclick="faq_focus('.$i.'); hide_element_by_name(\'faq_holder_'.$i.'\'); show_element_by_name(\'faq_edit_'.$i.'\');"/> ';
+						echo '<input type="button" class="button" value="'.t('Delete').'" onclick="document.location=\'?fdel='.$list[$i]['faqId'].'\'"/>';
 					}
 
 				echo '</div>';
@@ -92,7 +92,7 @@
 					echo '</div>';
 					echo '<div class="faq_a">';
 						echo '<textarea rows="14" cols="60" name="faq_ua">'.$list[$i]['answer'].'</textarea><br/><br/>';
-						echo '<input type="submit" class="button" value="Save"/>';
+						echo '<input type="submit" class="button" value="'.t('Save').'"/>';
 					echo '</div>';
 					echo '</form>';
 				echo '</div>';	//id="faq_edit_x"
@@ -102,10 +102,10 @@
 		if ($session->isAdmin) {
 			echo '<br/>';
 			echo '<form method="post" action="">';
-			echo 'Add new FAQ: <input type="text" name="faq_q" size="40"/><br/>';
-			echo 'Answer:<br/>';
+			echo t('Add new FAQ').': <input type="text" name="faq_q" size="40"/><br/>';
+			echo t('Answer').':<br/>';
 			echo '<textarea name="faq_a" rows="8" cols="60"></textarea><br/>';
-			echo '<input type="submit" class="button" value="Add"/>';
+			echo '<input type="submit" class="button" value="'.t('Add').'"/>';
 			echo '</form>';
 		}
 	}
