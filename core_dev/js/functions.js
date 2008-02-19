@@ -119,6 +119,31 @@ function resize_wnd_to_img(n)
 	self.focus();
 }
 
+function pause(ms)
+{
+	var now = new Date();
+	var exitTime = now.getTime() + ms;
+
+	while(true) {
+		now = new Date();
+		if(now.getTime() > exitTime) return;
+	}
+}
+
+
+function onEndCrop1(coords, dimensions) {
+	x1 = coords.x1;
+	y1 = coords.y1;
+	x2 = coords.x2;
+	y2 = coords.y2;
+//alert(x1);
+}
+
+function zoomImageCallback()
+{
+	if (this.curCrop != null) this.curCrop.remove();
+	this.curCrop = new Cropper.Img("zoom_image", {	onEndCrop: onEndCrop1	} );
+}
 
 var zoomed_id = 0;
 //closeup view of image file
@@ -126,6 +151,9 @@ function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
+	Event.observe(e, 'load', zoomImageCallback, false);
+
+	//alert('after load: complete is ' + e.complete);	//FIXME: denna är true direkt efter src ändring!!1?!?!
 	zoomed_id = id;
 
 	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
@@ -216,6 +244,11 @@ function zoom_hide_elements()
 	hide_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
 	hide_element_by_name('zoom_fileinfo');
+
+	var e = document.getElementById('zoom_image');
+	e.setAttribute('src', _ext_core+'gfx/ajax_loading.gif');
+
+	if (this.curCrop != null) this.curCrop.remove();
 }
 
 /* sends a ajax poll submit */

@@ -42,6 +42,7 @@
 			case 'Previous': return 'Föregående';
 			case 'Reply': return 'Svara';
 			case 'Add': return 'Lägg till';
+			case 'Move': return 'Flytta';
 
 			//Search
 			case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';

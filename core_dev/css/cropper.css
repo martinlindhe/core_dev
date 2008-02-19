@@ -1,6 +1,4 @@
 .imgCrop_wrap {
-	/* width: 500px;   @done_in_js */
-	/* height: 375px;  @done_in_js */
 	position: relative;
 	cursor: crosshair;
 }
@@ -28,13 +26,6 @@
 
 .imgCrop_selArea {
 	position: absolute;
-	/* @done_in_js 
-	top: 20px;
-	left: 20px;
-	width: 200px;
-	height: 200px;
-	background: transparent url(castle.jpg) no-repeat  -210px -110px;
-	*/
 	cursor: move;
 	z-index: 2;
 }
@@ -52,7 +43,7 @@
 	position: absolute;
 	width: 100%;
 	height: 1px;
-	background: transparent url(marqueeHoriz.gif) repeat-x 0 0;
+	background: transparent url(../gfx/marqueeHoriz.gif) repeat-x 0 0;
 	z-index: 3;
 }
 
@@ -60,7 +51,7 @@
 	position: absolute;
 	height: 100%;
 	width: 1px;
-	background: transparent url(marqueeVert.gif) repeat-y 0 0;
+	background: transparent url(../gfx/marqueeVert.gif) repeat-y 0 0;
 	z-index: 3;
 }
 
@@ -109,7 +100,6 @@
 .imgCrop_handleN {
 	top: -3px;
 	left: 0;
-	/* margin-left: 49%;    @done_in_js */
 	cursor: n-resize;
 }
 
@@ -122,7 +112,6 @@
 .imgCrop_handleE {
 	top: 0;
 	right: -3px;
-	/* margin-top: 49%;    @done_in_js */
 	cursor: e-resize;
 }
 
@@ -135,7 +124,6 @@
 .imgCrop_handleS {
 	right: 0;
 	bottom: -3px;
-	/* margin-right: 49%; @done_in_js */
 	cursor: s-resize;
 }
 
@@ -148,7 +136,6 @@
 .imgCrop_handleW {
 	top: 0;
 	left: -3px;
-	/* margin-top: 49%;  @done_in_js */
 	cursor: w-resize;
 }
 
@@ -171,8 +158,6 @@
 }
 
 .imgCrop_previewWrap {
-	/* width: 200px;  @done_in_js */
-	/* height: 200px; @done_in_js */
 	overflow: hidden;
 	position: relative;
 }

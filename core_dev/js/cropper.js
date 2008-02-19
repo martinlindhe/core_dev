@@ -359,7 +359,7 @@ Cropper.Img.prototype = {
 					var style 		= document.createElement( 'link' );
 					style.rel 		= 'stylesheet';
 					style.type 		= 'text/css';
-					style.href 		= path + 'cropper.css';
+					style.href 		= path + '../css/cropper.css';
 					style.media 	= 'screen';
 					document.getElementsByTagName( 'head' )[0].appendChild( style );
 				}

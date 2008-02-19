@@ -286,7 +286,9 @@
 		}
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 
-		echo 		'<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/><br/>';
+		echo '<div class="zoom_image_holder">';
+		echo 		'<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
+		echo '</div>';
 
 		if ($session->id == $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('Cut').'" onclick="cut_selected_file()"/>';
