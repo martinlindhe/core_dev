@@ -38,6 +38,8 @@
 		$action = '';
 		if ($categoryId) $action = '?file_category_id='.$categoryId;
 
+		$session->showError();
+
 		echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;">';
 		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="'.$config['core_web_root'].'gfx/ajax_loading.gif"/></div>';
 
