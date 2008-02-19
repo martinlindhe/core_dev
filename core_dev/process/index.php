@@ -7,7 +7,7 @@
 	echo '<br/>';
 
 	if (!$session->id) {
-		$session->showLoginForm();
+		$auth->showLoginForm();
 	}
 
 	/*

@@ -21,7 +21,7 @@
 
 	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
 	echo 'Enter server address:<br/>';
-	echo '<input type="text" name="adr" size="40" id="url"/><img src="'.$config['core_web_root'].'gfx/arrow_next.png" align="absmiddle" onclick="expand_input(\'adr\')"/><br/>';
+	echo '<input type="text" name="adr" size="40" id="adr"/><img src="'.$config['core_web_root'].'gfx/arrow_next.png" align="absmiddle" onclick="expand_input(\'adr\')"/><br/>';
 	echo 'Port: <input type="text" name="port" size="5"/><br/>';
 	echo 'Server type:<br/>';
 	echo '<input type="radio" name="type" value="ping" checked="checked"/>Just track uptime<br/>';

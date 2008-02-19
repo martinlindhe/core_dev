@@ -18,7 +18,7 @@
 			soap.wsdl_cache_ttl=172800
 	*/
 
-	require_once('functions_image.php');
+	require_core('functions_image.php');
 
 
 	//how many enqued items to process at max each time the process_queue.php script is called
