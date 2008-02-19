@@ -56,6 +56,11 @@
 			case 'Has image': return 'Har bild';
 			case 'Select region': return 'Välj län';
 			case 'Select city': return 'Välj ort';
+			case 'Age': return 'Ålder';
+			case 'Select age': return 'Välj ålder';
+			case 'to': return 'till';
+			case 'Below 18': return 'Under 18';
+			case 'Above 65': return 'Över 65';
 
 			//Abuse report of user
 			case 'Report': return 'Anmäl';

@@ -428,8 +428,6 @@ class Users
 	/**
 	 * Used by Users::search()
 	 *
-	 * \todo cannot search on USERDATA_TYPE_BIRTHDATE_SWE
-	 *
 	 * Data is $_POST and can contain irrelevant info!
 	 */
 	function getSearchResult($data)
@@ -503,6 +501,20 @@ class Users
 								$start++;
 								$x = 1;
 							}
+							break;
+
+						case USERDATA_TYPE_BIRTHDATE_SWE:
+							if (empty($data['userdata_'.$row['fieldId']])) break;
+							$rng = explode('_', $data['userdata_'.$row['fieldId']]);
+							if (count($rng) != 2) break;
+							$from = $rng[0];
+							$to = $rng[1];
+							if (!$from) $from = '0000-00-00';
+							if (!$to) $to = '9999-12-31';
+							if (isset($x)) $q .= 'AND ';
+							$q .= '(n'.$start.'.settingValue BETWEEN "'.$db->escape($from).'" AND "'.$db->escape($to).'") ';
+							$start++;
+							$x = 1;
 							break;
 
 						default:

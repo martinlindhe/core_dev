@@ -318,6 +318,42 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 				$result .= '<div id="ajax_cities"></div>';
 				break;
 
+			case USERDATA_TYPE_BIRTHDATE_SWE:
+				$result = t('Age').': ';
+				$result .= '<select name="userdata_'.$row['fieldId'].'">';
+				$result .= '<option>'.t('Select age').'</option>';
+
+				$low_age = 18;
+				$hi_age = 65;
+				$inc = 6;
+
+				$date = new DateTime();
+				$date->modify('-'.$low_age.' years');
+				$from = $date->format('Y-m-d');
+
+				$result .= '<option value="'.$from.'_">'.t('Below '.$low_age).'</option>';
+
+				for ($i = $low_age; $i <= $hi_age; $i += $inc) {
+					$date = new DateTime();
+					$date->modify('-'.$i.' years');
+					$date->modify('-1 days');
+					$to = $date->format('Y-m-d');
+
+					$date->modify('-'.$inc.' years');
+					$date->modify('+1 days');
+					$from = $date->format('Y-m-d');
+
+					$result .= '<option value="'.$from.'_'.$to.'">'.$i.' '.t('to').' '.($i+($inc-1)).'</option>';
+				}
+				$date = new DateTime();
+				$date->modify('-'.($hi_age+1).' years');
+				$date->modify('-1 days');
+				$to = $date->format('Y-m-d');
+
+				$result .= '<option value="_'.$to.'">'.t('Above '.$hi_age).'</option>';
+				$result .= '</select>';
+				break;
+
 			default:
 				$result = getUserdataInput($row);
 				break;
