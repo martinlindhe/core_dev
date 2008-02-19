@@ -35,12 +35,6 @@
 	$config['auth']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
 	$config['auth']['allow_login'] = true;
 	$config['auth']['allow_registration'] = true;
-	$config['auth']['mail_activate'] = true;
-	$config['auth']['smtp_host'] = 'mail.unicorn.tv';
-	$config['auth']['smtp_username'] = 'martin';
-	$config['auth']['smtp_password'] = 'nutana88';
-	$config['auth']['mail_from'] = 'martin@unicorn.tv';
-	$config['auth']['mail_from_name'] = 'PhoneCafe';
 	$auth = new Auth_Standard($config['auth']);
 
 	$config['files']['apc_uploads'] = false;
