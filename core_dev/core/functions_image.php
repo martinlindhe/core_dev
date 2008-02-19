@@ -141,6 +141,42 @@
 		return true;
 	}
 
+	function cropImage($in_file, $out_file, $x1, $y1, $x2, $y2)
+	{
+		global $config, $files;
+		if (!is_numeric($x1) || !is_numeric($y1) || !is_numeric($x2) || !is_numeric($y2)) return false;
+
+		$mime = $files->lookupMimeType($in_file);
+
+		if (!$files->image_convert) return false;
+
+		$crop = ($x2-$x1).'x'.($y2-$y1).'+'.$x1.'+'.$y1;
+
+		//Crop with imagemagick
+		switch ($mime)
+		{
+			case 'image/jpeg':
+				$c = 'convert -crop '.$crop. ' -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
+				break;
+
+			case 'image/png':
+				$c = 'convert -crop '.$crop. ' '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
+				break;
+
+			case 'image/gif':
+				$c = 'convert -crop '.$crop. ' '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
+				break;
+
+			default:
+				echo 'resizeImage(): Unhandled mimetype "'.$mime.'"<br/>';
+				return false;
+		}
+		//echo 'Executing: '.$c.'<br/>';
+		exec($c);
+		if (!file_exists($out_file)) return false;
+		return true;
+	}
+
 	/**
 	 * Converts a image to specified file type. Currently supports conversions to jpeg, png or gif
 	 * Requires ImageMagick commandline image converter "convert" installed

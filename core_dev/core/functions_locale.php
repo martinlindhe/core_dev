@@ -179,13 +179,14 @@
 			case 'Close': return 'Stäng';
 			case 'Download': return 'Spara';
 			case 'Pass thru': return 'Visa endast';
-			case 'Cut': return 'Beskär';
+			case 'Crop': return 'Beskär';
 			case 'Resize': return 'Ändra storlek';
 			case 'Rotate left': return 'Rotera åt vänster';
 			case 'Rotate right': return 'Rotera åt höger';
 			case 'Move image': return 'Flytta bild';
 			case 'View log': return 'Besökslogg';
 			case 'Comments': return 'Kommentarer';
+			case 'Crop selection': return 'Beskär markering';
 
 			//Categories
 			case 'Global categories': return 'Globala kategorier';

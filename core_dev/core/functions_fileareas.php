@@ -287,11 +287,16 @@
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 
 		echo '<div class="zoom_image_holder">';
-		echo 		'<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
+		echo '<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
 		echo '</div>';
 
 		if ($session->id == $ownerId) {
-			echo	'<input type="button" class="button" value="'.t('Cut').'" onclick="cut_selected_file()"/>';
+
+			echo '<div id="cutter_toolbar" style="display:none">';
+			echo '<input type="button" class="button" value="'.t('Crop selection').'" onclick="crop_selection()"/>';
+			echo '</div>';
+
+			echo	'<input type="button" class="button" value="'.t('Crop').'" onclick="crop_selected_file()"/>';
 			echo	'<input type="button" class="button" value="'.t('Resize').'" onclick="resize_selected_file(90)"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate left').'" onclick="rotate_selected_file(90)"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate right').'" onclick="rotate_selected_file(-90)"/>';

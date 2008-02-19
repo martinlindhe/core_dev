@@ -640,6 +640,20 @@ class Files
 		$this->makeThumbnail($_id);
 	}
 
+	function imageCrop($_id, $x1, $y1, $x2, $y2)
+	{
+		global $session;
+		if (!$session->id || !is_numeric($_id) || !is_numeric($x1) || !is_numeric($y1) || !is_numeric($x2) || !is_numeric($y2)) return false;
+
+		$filename = $this->findUploadPath($_id);
+		cropImage($filename, $filename, $x1, $y1, $x2, $y2);
+		$this->setNoCacheHeaders();
+		$this->sendImage($_id);
+
+		$this->clearThumbs($_id);
+		$this->makeThumbnail($_id);
+	}
+
 	/**
 	 * Performs an image rotation and then pass on the result to the user
 	 *

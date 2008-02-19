@@ -130,28 +130,12 @@ function pause(ms)
 	}
 }
 
-
-function onEndCrop1(coords, dimensions) {
-	x1 = coords.x1;
-	y1 = coords.y1;
-	x2 = coords.x2;
-	y2 = coords.y2;
-//alert(x1);
-}
-
-function zoomImageCallback()
-{
-	if (this.curCrop != null) this.curCrop.remove();
-	this.curCrop = new Cropper.Img("zoom_image", {	onEndCrop: onEndCrop1	} );
-}
-
 var zoomed_id = 0;
 //closeup view of image file
 function zoomImage(id)
 {
 	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
-	Event.observe(e, 'load', zoomImageCallback, false);
 
 	//alert('after load: complete is ' + e.complete);	//FIXME: denna är true direkt efter src ändring!!1?!?!
 	zoomed_id = id;
@@ -268,9 +252,26 @@ function get_poll_csv(id)
 }
 
 /* draws a square box on the image, box is resizable to select what area to cut */
-function cut_selected_file()
+function crop_selected_file()
 {
-	alert('fixme: cut_selected_file() not yet iplemented');
+	if (this.curCrop != null) this.curCrop.remove();
+	this.curCrop = new Cropper.Img("zoom_image", {	onEndCrop: onEndCrop1	} );
+	show_element_by_name('cutter_toolbar');
+}
+
+var cut_x1,cut_y1,cut_x2,cut_y2;
+function onEndCrop1(coords, dimensions) {
+	cut_x1 = coords.x1;
+	cut_y1 = coords.y1;
+	cut_x2 = coords.x2;
+	cut_y2 = coords.y2;
+}
+
+function crop_selection()
+{
+	var e = document.getElementById('zoom_image');
+	var now = new Date();
+	e.src = _ext_core+'image_crop.php?i=' + zoomed_id + '&x1=' + cut_x1 + '&y1=' + cut_y1 + '&x2=' + cut_x2 + '&y2=' + cut_y2 + '&' + now.getTime() + _ext_ref;
 }
 
 /* displays a percentage-bar ranging 0-100% and a slider, lets the user move it and see the image resize live in browser. with a save button to commit the resize */
