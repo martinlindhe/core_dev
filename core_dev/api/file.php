@@ -5,5 +5,5 @@
 
 	require_once('find_config.php');
 
-	$files->sendFile($_GET['id']);
+	$files->sendFile($_GET['id'], true);
 ?>

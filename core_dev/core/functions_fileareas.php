@@ -356,7 +356,7 @@
 		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/><br/>';
-		echo	'<div id="zoom_video" style="width: 160px; height: 50px;"></div>';
+		echo	'<div id="zoom_video" style="width: 400px; height: 340px;"></div>';
 		if ($session->id == $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
 			echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';

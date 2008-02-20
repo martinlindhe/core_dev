@@ -701,7 +701,7 @@ class Files
 		if (!$data) die;
 
 		/* This sends files without extension etc as plain text if you didnt specify to download them */
-		if (!$force_mime && (!isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream')) {
+		if ((!$force_mime && !isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream')) {
 			header('Content-Type: text/plain');
 		} else {
 			header('Content-Type: '.$data['fileMime']);
@@ -717,8 +717,8 @@ class Files
 
 		header('Content-Transfer-Encoding: binary');
 
-		//Serves the file differently depending on what kind of file it is
-		if (!$force_mime && in_array($data['fileMime'], $this->image_mime_types)) {
+			//Serves the file differently depending on what kind of file it is
+		if (in_array($data['fileMime'], $this->image_mime_types)) {
 			//Generate resized image if needed
 			$this->sendImage($_id);
 		} else {
