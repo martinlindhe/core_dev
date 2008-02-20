@@ -106,7 +106,13 @@
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $files->video_mime_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"><center>';
+				echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';
+				echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_left.png\')">&nbsp;</td>';
+				echo '<td>';
 				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_video.png" width="32" height="32" alt="Video file"/>';
+				echo '</td>';
+				echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_right.png\')">&nbsp;</td>';
+				echo '</tr></table>';
 				echo '</center></div>';
 			} else if (in_array($row['fileMime'], $files->document_mime_types)) {
 				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
@@ -303,7 +309,7 @@
 			echo	'<input type="button" class="button" value="'.t('Resize').'" onclick="resize_selected_file(90)"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate left').'" onclick="rotate_selected_file(90)"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate right').'" onclick="rotate_selected_file(-90)"/>';
-			echo	'<input type="button" class="button" value="'.t('Move image').'" onclick="move_selected_file()"/>';
+			//echo	'<input type="button" class="button" value="'.t('Move image').'" onclick="move_selected_file()"/>';
 			echo	'<input type="button" class="button" value="'.t('Delete image').'" onclick="delete_selected_file()"/>';
 		}
 
@@ -335,7 +341,7 @@
 
 		if ($session->id == $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
-			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			//echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		} else {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
@@ -361,7 +367,7 @@
 
 		if ($session->id == $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
-			echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			//echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		} else {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
@@ -385,7 +391,7 @@
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 		if ($session->id == $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
-			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			//echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		} else {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
