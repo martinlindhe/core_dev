@@ -170,7 +170,6 @@ function zoomAudio(id, name)
 
 	empty_element_by_name('zoom_audio');
 
-	//requires swfobject.js
 	url = _ext_core+'flash/mp3_player.swf?n='+name+'&s='+_ext_core+urlencode('file.php?id=')+id+urlencode(_ext_ref);
 	trace(url);
 	var fo = new SWFObject(url, 'animationName', '180', '45', '8', '#FFFFFF');
@@ -195,8 +194,7 @@ function zoomVideo(id, name)
 
 	empty_element_by_name('zoom_video');
 
-	//requires swfobject.js
-	params = '&fgcolor=0xFF0000&bgcolor=0x000000&autoload=on&autorewind=on&volume=70';
+	params = '&fgcolor=0xFF0000&bgcolor=0x000000&autoload=on&autorewind=off&volume=70';
 	url = _ext_core+'flash/flv_player.swf?movie='+urlencode('/video/')+id+'.flv'+urlencode(_ext_ref)+params;
 
 	var fo = new SWFObject(url, 'animationName', '400', '340', '8', '#FFFFFF');
