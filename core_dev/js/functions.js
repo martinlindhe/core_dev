@@ -49,6 +49,7 @@ function toggle_element_by_name(n)
 function hide_element_by_name(n)
 {
 	var e = document.getElementById(n);
+	if (!e) alert('fixme: element ' + n + ' not found');
 	e.style.display = 'none';
 }
 
@@ -132,31 +133,30 @@ function pause(ms)
 
 var zoomed_id = 0;
 //closeup view of image file
-function zoomImage(id)
+function zoomImage(id, nfo)
 {
 	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
 
-	//alert('after load: complete is ' + e.complete);	//FIXME: denna är true direkt efter src ändring!!1?!?!
 	zoomed_id = id;
 
-	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id, _ext_ref);
+	if (nfo) ajax_get_fileinfo(id, _ext_ref);
 
+	hide_element_by_name('file_gadget_content');
 	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
-	show_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
+	show_element_by_name('zoom_image_layer');
 }
 
 //show file details of general file
-function zoomFile(id)
+function zoomFile(id, nfo)
 {
 	zoomed_id = id;
 
-	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id, _ext_ref);
+	if (nfo) ajax_get_fileinfo(id, _ext_ref);
 
+	hide_element_by_name('file_gadget_content');
 	hide_element_by_name('zoom_video_layer');
 	hide_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
@@ -164,7 +164,7 @@ function zoomFile(id)
 }
 
 //closeup view of audio file
-function zoomAudio(id, name)
+function zoomAudio(id, name, nfo)
 {
 	zoomed_id = id;
 
@@ -178,17 +178,17 @@ function zoomAudio(id, name)
 	fo.addParam('scale', 'noscale');
 	fo.write('zoom_audio');
 
-	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id);
+	if (nfo) ajax_get_fileinfo(id);
 
+	hide_element_by_name('file_gadget_content');
 	hide_element_by_name('zoom_video_layer');
-	show_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
+	show_element_by_name('zoom_audio_layer');
 }
 
 //closeup view of video file
-function zoomVideo(id, name)
+function zoomVideo(id, name, nfo)
 {
 	zoomed_id = id;
 
@@ -204,13 +204,13 @@ function zoomVideo(id, name)
 	fo.addParam('scale', 'noscale');
 	fo.write('zoom_video');
 
-	//Send AJAX request for info about this file, result will be shown in the div zoom_fileinfo
-	ajax_get_fileinfo(id);
+	if (nfo) ajax_get_fileinfo(id);
 
-	show_element_by_name('zoom_video_layer');
+	hide_element_by_name('file_gadget_content');
 	hide_element_by_name('zoom_audio_layer');
 	hide_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
+	show_element_by_name('zoom_video_layer');
 }
 
 function zoomShowFileInfo(txt)
@@ -230,6 +230,8 @@ function zoom_hide_elements()
 	hide_element_by_name('zoom_file_layer');
 	hide_element_by_name('zoom_fileinfo');
 	hide_cropper();
+
+	show_element_by_name('file_gadget_content');
 
 	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', _ext_core+'gfx/ajax_loading.gif');

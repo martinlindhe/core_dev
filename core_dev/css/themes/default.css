@@ -72,8 +72,8 @@ select {
 }
 
 /* holds all file entries */
-.file_gadget_content {
-
+#file_gadget_content {
+	width: 450px;
 }
 
 .file_gadget_entry {

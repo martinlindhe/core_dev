@@ -91,7 +91,7 @@
 		showDocumentGadgetXHTML($ownerId);
 
 		echo '<div id="zoom_fileinfo" style="display:none"></div>';
-		echo '<div class="file_gadget_content">';
+		echo '<div id="file_gadget_content">';
 
 		foreach ($list as $row)
 		{
@@ -119,7 +119,6 @@
 				echo '</center></div>';
 			}
 		}
-		echo '</div>';
 
 		//FIXME: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
 		//FIXME: stöd anon_uploads ! den ignoreras totalt idag, dvs anon uploads tillåts aldrig
@@ -172,8 +171,9 @@
 			if ($fileType == FILETYPE_WIKI) echo manageCategoriesDialog(CATEGORY_WIKIFILE);
 			echo '</div>';
 		}
+		echo '</div>'; //id="file_gadget_content"
 
-		echo '</div>';
+		echo '</div>'; //class="file_gadget"
 	}
 
 	/**
