@@ -288,14 +288,15 @@
 		}
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 
-		echo '<div class="zoom_image_holder">';
+		echo '<div id="zoom_image_holder">';
 		echo '<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
 		echo '</div>';
 
 		if ($session->id == $ownerId) {
 
-			echo '<div id="cutter_toolbar" style="display:none">';
+			echo '<div id="cropper_toolbar" style="display:none">';
 			echo '<input type="button" class="button" value="'.t('Crop selection').'" onclick="crop_selection()"/>';
+			echo '<input type="button" class="button" value="'.t('Cancel').'" onclick="hide_cropper()"/>';
 			echo '</div>';
 
 			echo	'<input type="button" class="button" value="'.t('Crop').'" onclick="crop_selected_file()"/>';

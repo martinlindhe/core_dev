@@ -229,11 +229,18 @@ function zoom_hide_elements()
 	hide_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
 	hide_element_by_name('zoom_fileinfo');
+	hide_cropper();
 
 	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', _ext_core+'gfx/ajax_loading.gif');
 
 	if (this.curCrop != null) this.curCrop.remove();
+}
+
+function hide_cropper()
+{
+	if (this.curCrop != null) this.curCrop.remove();
+	hide_element_by_name('cropper_toolbar');
 }
 
 /* sends a ajax poll submit */
@@ -257,7 +264,7 @@ function crop_selected_file()
 {
 	if (this.curCrop != null) this.curCrop.remove();
 	this.curCrop = new Cropper.Img("zoom_image", {	onEndCrop: onEndCrop1	} );
-	show_element_by_name('cutter_toolbar');
+	show_element_by_name('cropper_toolbar');
 }
 
 var cut_x1,cut_y1,cut_x2,cut_y2;
@@ -270,6 +277,7 @@ function onEndCrop1(coords, dimensions) {
 
 function crop_selection()
 {
+	hide_cropper();
 	var e = document.getElementById('zoom_image');
 	var now = new Date();
 	e.src = _ext_core+'image_crop.php?i=' + zoomed_id + '&x1=' + cut_x1 + '&y1=' + cut_y1 + '&x2=' + cut_x2 + '&y2=' + cut_y2 + '&' + now.getTime() + _ext_ref;

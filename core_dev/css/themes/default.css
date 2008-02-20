@@ -131,7 +131,7 @@ select {
 	margin: 0;
 	padding: 0;
 }
-.zoom_image_holder {
+#zoom_image_holder {
 	border: 3px solid #000;
 }
 #zoom_image {
