@@ -117,12 +117,14 @@ function hide_cropper()
 function crop_selected_file()
 {
 	if (this.curCrop != null) this.curCrop.remove();
-	this.curCrop = new Cropper.Img("zoom_image", {	onEndCrop: onEndCrop1	} );
+	this.curCrop = new Cropper.Img("zoom_image", { onEndCrop: onEndCrop1 } );
 	show_element_by_name('cropper_toolbar');
+	hide_resizer();
 }
 
 var cut_x1,cut_y1,cut_x2,cut_y2;
-function onEndCrop1(coords, dimensions) {
+function onEndCrop1(coords, dimensions)
+{
 	cut_x1 = coords.x1;
 	cut_y1 = coords.y1;
 	cut_x2 = coords.x2;
@@ -141,6 +143,7 @@ function crop_selection()
 var slide_org_w, slide_org_h, slide_curr_pct;
 function resize_selected_file()
 {
+	hide_cropper();
 	show_element_by_name('slider_toolbar');
 
 	e = document.getElementById('zoom_image');
