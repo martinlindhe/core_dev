@@ -178,10 +178,11 @@
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ajax.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/swfobject.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/functions.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/fileareas.js"></script>';
 
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/prototype.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
-      echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/cropper.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/prototype.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
+      echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/cropper.js"></script>';
 
 			if ($meta_js) {
 				foreach ($meta_js as $script) {
