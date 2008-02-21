@@ -247,6 +247,7 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 	function managePolls($_type, $_owner = 0)
 	{
 		if (!is_numeric($_owner)) return false;
+		$answer_fields = 8;
 
 		if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
 			$pollId = $_GET['poll_edit'];
@@ -325,7 +326,7 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 				}
 			}
 
-			for ($i=1; $i<=5; $i++) {
+			for ($i=1; $i<=$answer_fields; $i++) {
 				if (!empty($_POST['poll_a'.$i])) {
 					addCategory(CATEGORY_POLL, $_POST['poll_a'.$i], $pollId);
 				}
@@ -414,7 +415,7 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 			echo '<br/><br/>';
 		}
 
-		for ($i=1; $i<=5; $i++) {
+		for ($i=1; $i<=$answer_fields; $i++) {
 			echo 'Answer '.$i.': <input type="text" size="30" name="poll_a'.$i.'"/><br/>';
 		}
 

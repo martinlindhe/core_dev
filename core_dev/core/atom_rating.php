@@ -9,9 +9,11 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	define('RATE_NEWS',		1);
-	define('RATE_BLOG',		2);
-	define('RATE_IMAGE',	3);	//todo: implement
+require_once('functions_locale.php');	//for translation
+
+define('RATE_NEWS',		1);
+define('RATE_BLOG',		2);
+define('RATE_IMAGE',	3);	//todo: implement
 
 	/**
 	 * Adds a rating + keeps track if the user has already added a rating
@@ -127,7 +129,7 @@
 			return showRating($_type, $_id);
 		}
 
-		$result  = 'Rate this:<br/>';
+		$result  = t('Rate this').':<br/>';
 		$result .= '<form method="post" action="">';
 		$result .= '<select name="rate_gadget">';
 		$result .= '<option value="">&nbsp;</option>';
@@ -135,7 +137,7 @@
 			$result .= '<option value="'.$i.'">'.$i.'</option>';
 		}
 		$result .= '</select>';
-		$result .= ' <input type="submit" class="button" value="Rate"/>';
+		$result .= ' <input type="submit" class="button" value="'.t('Rate').'"/>';
 		$result .= '</form>';
 
 		return $result;
@@ -152,7 +154,7 @@
 	{
 		global $config;
 
-		$result  = 'Current rating<br/><br/>';
+		$result  = t('Current rating').'<br/><br/>';
 		$row = getRating($_type, $_id);
 		for ($i=1; $i<=5; $i++) {
 			if ($i <= $row['rating']) {
@@ -162,7 +164,7 @@
 			}
 		}
 		$result .= '<br/><br/>';
-		$result .= $row['rating'].' / 5 in '.$row['ratingCnt'].($row['ratingCnt']==1?' vote':' votes');
+		$result .= $row['rating'].' / 5 '.t('in').' '.$row['ratingCnt'].' '.($row['ratingCnt']==1?t('vote'):t('votes'));
 
 		return $result;
 	}

@@ -169,6 +169,25 @@
 			//News
 			case 'Add news': return 'Skapa nyhet';
 			case 'Manage news': return 'Redigera nyheter';
+			case 'Show news': return 'Visa';
+			case 'Polls': return 'Omröstningar';
+			case 'Attachments': return 'Bilagor';
+			case 'Categories': return 'Kategorier';
+			case 'Category': return 'Kategori';
+			case 'Edit news article': return 'Redigera nyhetsartikeln';
+			case 'Title': return 'Titel';
+			case 'Text': return 'Text';
+			case 'Time for publication': return 'Tid för publicering';
+			case 'Save changes': return 'Spara ändringar';
+			case 'Include this news in the RSS feed': return 'Inkludera denna nyhet i RSS-flödet';
+
+			//Ratings
+			case 'Rate this': return 'Ranka detta';
+			case 'Rate': return 'Ranka';
+			case 'Current rating': return 'Aktuell ställning';
+			case 'in': return 'i';
+			case 'vote': return 'röst';
+			case 'votes': return 'röster';
 
 			//Textformat
 			case 'wrote': return 'skrev';

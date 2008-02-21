@@ -166,18 +166,18 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 
 		if ($session->isAdmin) {
 			$menu = array(
-				$_SERVER['PHP_SELF'].'?News:'.$_id => 'Show news',
-				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id => 'Edit',
-				$_SERVER['PHP_SELF'].'?NewsPolls:'.$_id => 'Polls',
-				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_NEWS, $_id).')',
-				$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id => 'Delete',
-				$_SERVER['PHP_SELF'].'?NewsCategories:'.$_id => 'Categories',
-				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
+				$_SERVER['PHP_SELF'].'?News:'.$_id => t('Show news'),
+				$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id => t('Edit'),
+				$_SERVER['PHP_SELF'].'?NewsPolls:'.$_id => t('Polls'),
+				$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => t('Attachments').' ('.$files->getFileCount(FILETYPE_NEWS, $_id).')',
+				$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id => t('Delete'),
+				$_SERVER['PHP_SELF'].'?NewsCategories:'.$_id => t('Categories'),
+				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => t('Comments').' ('.getCommentsCount(COMMENT_NEWS, $_id).')'
 				);
 		} else {
 			$menu = array(
-				$_SERVER['PHP_SELF'].'?News:'.$_id => 'Show article',
-				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_NEWS, $_id).')'
+				$_SERVER['PHP_SELF'].'?News:'.$_id => t('Show article'),
+				$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => t('Comments').' ('.getCommentsCount(COMMENT_NEWS, $_id).')'
 				);
 		}
 
@@ -191,20 +191,20 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 
 			$item = getNewsItem($_id);
 
-			echo '<h1>Edit news article</h1>';
+			echo '<h1>'.t('Edit news article').'</h1>';
 			echo '<form method="post" action="'.'?NewsEdit:'.$_id.getProjectPath().'">';
 			echo '<input type="hidden" name="news_rss" value="0"/>';
-			echo 'Title: <input type="text" name="news_title" size="50" value="'.$item['title'].'"/><br/>';
-			echo 'Text:<br/>';
+			echo t('Title').': <input type="text" name="news_title" size="50" value="'.$item['title'].'"/><br/>';
+			echo t('Text').':<br/>';
 			echo '<textarea name="news_body" cols="60" rows="16">'.$item['body'].'</textarea><br/>';
 			echo '<input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
 			echo ' <label for="rss_check">';
-			echo '<img src="'.$config['core_web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/>';
-			echo ' Include this news in the RSS feed</label><br/><br/>';
-			echo 'Category: '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
-			echo 'Time for publication:<br/>';
+			echo '<img src="'.$config['core_web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
+			echo t('Include this news in the RSS feed').'</label><br/><br/>';
+			echo t('Category').': '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
+			echo t('Time for publication').':<br/>';
 			echo '<input type="text" name="news_publish" value="'.$item['timeToPublish'].'"/> ';
-			echo '<input type="submit" class="button" value="Save changes"/><br/>';
+			echo '<input type="submit" class="button" value="'.t('Save changes').'"/><br/>';
 			echo '</form><br/>';
 
 		} else if ($current_tab == 'NewsPolls' && $session->isAdmin) {
@@ -212,11 +212,11 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 
 		} else if ($current_tab == 'NewsDelete' && $session->isAdmin) {
 
-			if (confirmed('Are you sure you wish to delete this news entry?', 'NewsDelete:'.$_id)) {
+			if (confirmed(t('Are you sure you wish to delete this news entry?'), 'NewsDelete:'.$_id)) {
 				removeNews($_id);
 
 				require_once($project.'design_head.php');
-				echo 'News article successfully deleted!<br/><br/>';
+				echo t('News article successfully deleted!').'<br/><br/>';
 				require_once($project.'design_foot.php');
 				die;
 			}
