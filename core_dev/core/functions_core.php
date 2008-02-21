@@ -67,9 +67,9 @@ require_once('functions_locale.php');	//for translations
 		$pager['items_per_page'] = $_items_per_page;
 		if (!empty($_GET['p']) && is_numeric($_GET['p'])) $pager['page'] = $_GET['p'];
 
-		$pager['tot_pages'] = floor($_total_cnt / $_items_per_page); // round to closest whole number
+		$pager['tot_pages'] = ceil($_total_cnt / $_items_per_page);
 		if ($pager['tot_pages'] < 1) $pager['tot_pages'] = 1;
-		$pager['head'] = t('Page').' '.$pager['page'].' '.t('of').' '.$pager['tot_pages'].' ('.t('displaying').' '.$_total_cnt.' '.t('items').')<br/><br/>';
+		$pager['head'] = t('Page').' '.$pager['page'].' '.t('of').' '.$pager['tot_pages'].' ('.t('displaying').' '.t('total').' '.$_total_cnt.' '.t('items').')<br/><br/>';
 
 		$pager['index'] = ($pager['page']-1) * $pager['items_per_page'];
 		$pager['limit'] = ' LIMIT '.$pager['index'].','.$pager['items_per_page'];

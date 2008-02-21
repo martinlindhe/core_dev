@@ -160,7 +160,7 @@
 	 * Helper function, standard "show comments" to be used by other modules
 	 * col_w sets the column width of the textarea
 	 */
-	function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6)
+	function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15)
 	{
 		global $session, $config;
 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w) || !is_numeric($col_h)) return false;
@@ -180,8 +180,9 @@
 
 		echo '<div id="comments_holder">';
 		echo '<div id="comments_only">';
-		$pager = makePager($cnt,15);
-		$list = getComments($_type, $ownerId,false, $pager['limit']);
+		$pager = makePager($cnt, $limit);
+
+		$list = getComments($_type, $ownerId, false, $pager['limit']);
 		echo $pager['head'];
 		foreach ($list as $row) {
 			echo '<div class="comment_details">';

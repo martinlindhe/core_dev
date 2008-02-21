@@ -46,7 +46,6 @@
 
 		$active = 0;
 
-
 		if ($session->isAdmin) {
 			if (!empty($_POST['faq_q']) && isset($_POST['faq_a'])) {
 				$active = addFAQ($_POST['faq_q'], $_POST['faq_a']);

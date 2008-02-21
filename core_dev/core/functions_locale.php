@@ -90,6 +90,7 @@
 			case 'of': return 'av';
 			case 'displaying': return 'visar';
 			case 'items': return 'objekt';
+			case 'total': return 'totalt';
 
 			//Messages
 			case 'at': return 'vid';

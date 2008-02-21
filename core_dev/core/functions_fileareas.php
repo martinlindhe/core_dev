@@ -59,13 +59,13 @@
 				break;
 
 			case FILETYPE_FILEAREA_UPLOAD:
-				if (!$categoryId) echo 'File area - Root Level content';
-				else echo ' - '.getCategoryName(CATEGORY_USERFILE, $categoryId).' content';
+				if (!$categoryId) echo 'File area - Root Level content<br/>';
+				else echo ' - '.getCategoryName(CATEGORY_USERFILE, $categoryId).' content<br/>';
 				break;
 
 			case FILETYPE_WIKI:
-				if (!$categoryId) echo 'Wiki files - Root Level content';
-				echo 'Wiki attachments';
+				if (!$categoryId) echo 'Wiki files - Root Level content<br/>';
+				echo 'Wiki attachments<br/>';
 				echo getCategoriesSelect(CATEGORY_WIKIFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
 				break;
 
@@ -287,7 +287,7 @@
 		echo 		'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
 		echo		'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
-		if ($session->id == $ownerId) {
+		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 		} else {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
@@ -298,7 +298,7 @@
 		echo '<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
 		echo '</div>';
 
-		if ($session->id == $ownerId) {
+		if ($session->id == $ownerId || $session->isAdmin) {
 
 			echo '<div id="cropper_toolbar" style="display:none">';
 			echo '<input type="button" class="button" value="'.t('Crop selection').'" onclick="crop_selection()"/>';
@@ -339,7 +339,7 @@
 
 		echo	'<div id="zoom_audio" style="width: 180px; height: 45px;"></div>';
 
-		if ($session->id == $ownerId) {
+		if ($session->id == $ownerId  || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 			//echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
@@ -365,7 +365,7 @@
 
 		echo	'<div id="zoom_video" style="width: 400px; height: 340px;"></div>';
 
-		if ($session->id == $ownerId) {
+		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 			//echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
@@ -389,7 +389,7 @@
 		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
-		if ($session->id == $ownerId) {
+		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
 			//echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';

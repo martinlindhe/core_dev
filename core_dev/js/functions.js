@@ -49,7 +49,7 @@ function toggle_element_by_name(n)
 function hide_element_by_name(n)
 {
 	var e = document.getElementById(n);
-	if (!e) alert('fixme: element ' + n + ' not found');
+	if (!e) return false; //alert('fixme: element ' + n + ' not found');
 	e.style.display = 'none';
 }
 
