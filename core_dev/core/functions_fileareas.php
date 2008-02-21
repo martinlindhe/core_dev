@@ -294,6 +294,18 @@
 		}
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 
+		if ($session->id == $ownerId || $session->isAdmin) {
+			echo '<div id="slider_toolbar" style="display:none; clear: both">';
+			echo	'<p align="left">';
+ 			echo	'<div id="resize_slider" style="width:200px;background-color:#aaa;height:5px;margin:10px;">';
+   		echo		'<div id="resize_slider_handle" style="width:5px;height:10px;background-color:#f00;cursor:move;"> </div>';
+			echo	'</div>';
+			echo	'<input type="button" class="button" value="'.t('Save').'" onclick="resize_selection()"/>';
+			echo	'<input type="button" class="button" value="'.t('Cancel').'" onclick="cancel_resizer()"/>';
+			echo	'</p>';
+			echo '</div>';
+		}
+
 		echo '<div id="zoom_image_holder">';
 		echo '<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
 		echo '</div>';
@@ -302,16 +314,6 @@
 			echo '<div id="cropper_toolbar" style="display:none">';
 			echo	'<input type="button" class="button" value="'.t('Crop selection').'" onclick="crop_selection()"/>';
 			echo	'<input type="button" class="button" value="'.t('Cancel').'" onclick="hide_cropper()"/>';
-			echo '</div>';
-
-			echo '<div id="slider_toolbar" style="display:none; clear: both">';
-			echo	'<p align="left">';
- 			echo	'<div id="resize_slider" style="width:200px;background-color:#aaa;height:5px;">';
-   		echo		'<div id="resize_slider_handle" style="width:5px;height:10px;background-color:#f00;cursor:move;"> </div>';
-			echo	'</div>';
-			echo	'<input type="button" class="button" value="'.t('Save').'" onclick="resize_selection()"/>';
-			echo	'<input type="button" class="button" value="'.t('Cancel').'" onclick="cancel_resizer()"/>';
-			echo	'</p>';
 			echo '</div>';
 
 			echo	'<input type="button" class="button" value="'.t('Crop').'" onclick="crop_selected_file()"/>';

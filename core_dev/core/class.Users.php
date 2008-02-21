@@ -452,14 +452,14 @@ class Users
 		// Add one INNER JOIN for each parameter we want to search for
 		foreach ($list as $row) {
 			if (!$session->isAdmin && $row['private']) continue;
-			if (!empty($data['userdata_'.$row['fieldId']])) {
-				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="'.$row['fieldId'].'" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
-				$start++;
-			} else if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE && !empty($data['search_loc_city'])) {
+			if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE && !empty($data['search_loc_city'])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="city" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
 			} else if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE && !empty($data['search_loc_region'])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="region" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
+				$start++;
+			} else if (!empty($data['userdata_'.$row['fieldId']])) {
+				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="'.$row['fieldId'].'" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
 			}
 		}

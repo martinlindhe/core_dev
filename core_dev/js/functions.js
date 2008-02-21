@@ -230,6 +230,7 @@ function zoom_hide_elements()
 	hide_element_by_name('zoom_file_layer');
 	hide_element_by_name('zoom_fileinfo');
 	hide_cropper();
+	hide_resizer();
 
 	show_element_by_name('file_gadget_content');
 

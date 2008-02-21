@@ -321,7 +321,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 			case USERDATA_TYPE_BIRTHDATE_SWE:
 				$result = t('Age').': ';
 				$result .= '<select name="userdata_'.$row['fieldId'].'">';
-				$result .= '<option>'.t('Select age').'</option>';
+				$result .= '<option value="0">'.t('Select age').'</option>';
 
 				$low_age = 18;
 				$hi_age = 65;
