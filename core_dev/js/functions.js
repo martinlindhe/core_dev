@@ -286,11 +286,51 @@ function crop_selection()
 }
 
 /* displays a percentage-bar ranging 0-100% and a slider, lets the user move it and see the image resize live in browser. with a save button to commit the resize */
-function resize_selected_file(pct)
+var slide_org_w, slide_org_h, slide_curr_pct;
+function resize_selected_file()
+{
+	show_element_by_name('slider_toolbar');
+
+	e = document.getElementById('zoom_image');
+	slide_org_w = e.width;
+	slide_org_h = e.height;
+	slide_curr_pct = 100;
+
+	if (this.curSlider != null) this.curSlider = null;
+ 	this.curSlider = new Control.Slider('resize_slider_handle','resize_slider',
+		{
+			range:$R(25,200),
+			onSlide:function(v){
+				e = document.getElementById('zoom_image');
+				e.width = slide_org_w*(v/100);
+			},
+			onChange:function(v){
+				slide_curr_pct = v;
+			},
+			sliderValue:100
+		}
+	);
+}
+
+function resize_selection()
 {
 	var e = document.getElementById('zoom_image');
 	var now = new Date();
-	e.src = _ext_core+'image_resize.php?i=' + zoomed_id + '&p=' + pct + '&' + now.getTime() + _ext_ref;
+	e.src = _ext_core+'image_resize.php?i=' + zoomed_id + '&p=' + Math.round(slide_curr_pct) + '&' + now.getTime() + _ext_ref;
+	hide_resizer();
+}
+
+function cancel_resizer()
+{
+	e = document.getElementById('zoom_image');
+	e.width = slide_org_w;
+	hide_resizer();
+}
+
+function hide_resizer()
+{
+	if (this.curSlider != null) this.curSlider = null;
+	hide_element_by_name('slider_toolbar');
 }
 
 /* displays dialog for moving selected file to another file area category */

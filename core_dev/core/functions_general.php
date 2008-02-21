@@ -180,7 +180,7 @@
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/functions.js"></script>';
 
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/prototype.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/scriptaculous.js?load=builder,effects,dragdrop"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
       echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/cropper.js"></script>';
 
 			if ($meta_js) {

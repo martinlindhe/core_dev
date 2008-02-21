@@ -283,7 +283,7 @@
 		global $config, $session;
 
 		echo '<div id="zoom_image_layer" style="display:none">';
-		echo 	'<center>';
+		//echo 	'<center>';
 		echo 		'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
 		echo		'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
@@ -299,14 +299,23 @@
 		echo '</div>';
 
 		if ($session->id == $ownerId || $session->isAdmin) {
-
 			echo '<div id="cropper_toolbar" style="display:none">';
-			echo '<input type="button" class="button" value="'.t('Crop selection').'" onclick="crop_selection()"/>';
-			echo '<input type="button" class="button" value="'.t('Cancel').'" onclick="hide_cropper()"/>';
+			echo	'<input type="button" class="button" value="'.t('Crop selection').'" onclick="crop_selection()"/>';
+			echo	'<input type="button" class="button" value="'.t('Cancel').'" onclick="hide_cropper()"/>';
+			echo '</div>';
+
+			echo '<div id="slider_toolbar" style="display:none; clear: both">';
+			echo	'<p align="left">';
+ 			echo	'<div id="resize_slider" style="width:200px;background-color:#aaa;height:5px;">';
+   		echo		'<div id="resize_slider_handle" style="width:5px;height:10px;background-color:#f00;cursor:move;"> </div>';
+			echo	'</div>';
+			echo	'<input type="button" class="button" value="'.t('Save').'" onclick="resize_selection()"/>';
+			echo	'<input type="button" class="button" value="'.t('Cancel').'" onclick="cancel_resizer()"/>';
+			echo	'</p>';
 			echo '</div>';
 
 			echo	'<input type="button" class="button" value="'.t('Crop').'" onclick="crop_selected_file()"/>';
-			echo	'<input type="button" class="button" value="'.t('Resize').'" onclick="resize_selected_file(90)"/>';
+			echo	'<input type="button" class="button" value="'.t('Resize').'" onclick="resize_selected_file()"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate left').'" onclick="rotate_selected_file(90)"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate right').'" onclick="rotate_selected_file(-90)"/>';
 			//echo	'<input type="button" class="button" value="'.t('Move image').'" onclick="move_selected_file()"/>';
@@ -320,7 +329,7 @@
 				//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
 			echo '</div>';
 		}
-		echo	'</center>';
+		//echo	'</center>';
 		echo '</div>';
 	}
 
