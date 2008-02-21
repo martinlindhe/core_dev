@@ -64,7 +64,7 @@
 			case 'Below 18': return 'Under 18';
 			case 'Above 65': return 'Över 65';
 
-			//Abuse report of user
+			//Abuse report of user / images
 			case 'Report': return 'Anmäl';
 			case 'Report user': return 'Anmäl användaren';
 			case 'Please choose the reason as to why you wish to report this user': return 'Ange varför du vill anmäla denna användare';
@@ -74,6 +74,8 @@
 			case 'Harassment': return 'Trakasseri';
 			case 'Other': return 'Annat';
 			case 'Thank you. Your report has been recieved.': return 'Tack för din anmälan.';
+			case 'Report file': return 'Anmäl filen';
+			case 'Please choose the reason as to why you wish to report this file': return 'Ange varför du vill anmäla denna fil';
 
 			//Guestbook
 			case 'Guestbook': return 'Gästbok';

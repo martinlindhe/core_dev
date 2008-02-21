@@ -8,6 +8,48 @@
  */
 
 	/**
+	 * Helper function to display a file, depending on file type
+	 */
+	function showFile($fileId, $mime = '', $title = '', $click = true)
+	{
+		global $config, $files;
+		if (!is_numeric($fileId)) return false;
+		if (!$mime) {
+			$data = Files::getFileInfo($fileId);
+			$mime = $data['fileMime'];
+		}
+
+		if (in_array($mime, $files->image_mime_types)) {
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomImage('.$fileId.');"><center>';
+			echo showThumb($fileId);
+			if ($click) echo '</center></div>';
+		} else if (in_array($mime, $files->audio_mime_types)) {
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomAudio('.$fileId.',\''.urlencode($row['fileName']).'\');"><center>';
+			echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
+			if ($click) echo '</center></div>';
+		} else if (in_array($mime, $files->video_mime_types)) {
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomVideo('.$fileId.',\''.urlencode($row['fileName']).'\');"><center>';
+			echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';
+			echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_left.png\')">&nbsp;</td>';
+			echo '<td>';
+			echo '<img src="'.$config['core_web_root'].'gfx/icon_file_video.png" width="32" height="32" alt="Video file"/>';
+			echo '</td>';
+			echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_right.png\')">&nbsp;</td>';
+			echo '</tr></table>';
+			if ($click) echo '</center></div>';
+		} else if (in_array($mime, $files->document_mime_types)) {
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomFile('.$fileId.');"><center>';
+			echo '<img src="'.$config['core_web_root'].'gfx/icon_file_document.png" width="40" height="49" alt="Document"/>';
+			if ($click) echo '</center></div>';
+		} else {
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomFile('.$fileId.');"><center>';
+			echo 'General file:<br/>';
+			echo $mime.'<br/>';
+			if ($click) echo '</center></div>';
+		}
+	}
+
+	/**
 	 * Shows all files uploaded in a public file area (FILETYPE_FILEAREA_UPLOAD)
 	 * Or all files belonging to a wiki (FILETYPE_WIKI)
 	 *
@@ -96,34 +138,7 @@
 		foreach ($list as $row)
 		{
 			$title = htmlspecialchars($row['fileName']).' ('.formatDataSize($row['fileSize']).')';
-			if (in_array($row['fileMime'], $files->image_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomImage('.$row['fileId'].');"><center>';
-				echo showThumb($row['fileId']);
-				echo '</center></div>';
-			} else if (in_array($row['fileMime'], $files->audio_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomAudio('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"><center>';
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
-				echo '</center></div>';
-			} else if (in_array($row['fileMime'], $files->video_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomVideo('.$row['fileId'].',\''.urlencode($row['fileName']).'\');"><center>';
-				echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';
-				echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_left.png\')">&nbsp;</td>';
-				echo '<td>';
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_video.png" width="32" height="32" alt="Video file"/>';
-				echo '</td>';
-				echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_right.png\')">&nbsp;</td>';
-				echo '</tr></table>';
-				echo '</center></div>';
-			} else if (in_array($row['fileMime'], $files->document_mime_types)) {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_file_document.png" width="40" height="49" alt="Document"/>';
-				echo '</center></div>';
-			} else {
-				echo '<div class="file_gadget_entry" id="file_'.$row['fileId'].'" title="'.$title.'" onclick="zoomFile('.$row['fileId'].');"><center>';
-				echo 'General file:<br/>';
-				echo $row['fileMime'].'<br/>';
-				echo '</center></div>';
-			}
+			showFile($row['fileId'], $row['fileMime'], $title);
 		}
 
 		//FIXME: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
@@ -289,7 +304,8 @@
 		echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
-		} else {
+		}
+		if ($session->id != $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
@@ -322,6 +338,8 @@
 			echo	'<input type="button" class="button" value="'.t('Rotate right').'" onclick="rotate_selected_file(-90)"/>';
 			//echo	'<input type="button" class="button" value="'.t('Move image').'" onclick="move_selected_file()"/>';
 			echo	'<input type="button" class="button" value="'.t('Delete image').'" onclick="delete_selected_file()"/>';
+		} else {
+			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
 
 		if (!empty($config['news']['allow_rating'])) {
@@ -354,7 +372,8 @@
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 			//echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
-		} else {
+		}
+		if ($session->id != $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
@@ -380,7 +399,8 @@
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 			//echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
-		} else {
+		}
+		if ($session->id != $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
@@ -404,7 +424,8 @@
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
 			//echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
-		} else {
+		}
+		if ($session->id != $ownerId) {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
 		echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';

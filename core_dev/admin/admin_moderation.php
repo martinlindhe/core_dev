@@ -77,7 +77,7 @@
 				case MODERATION_BLOG:			$title = 'Blog'; break;
 				case MODERATION_FORUM:		$title = 'Forum'; break;
 				case MODERATION_USER:			$title = 'Reported user: '.Users::link($row['itemId']); break;
-				case MODERATION_FILE:			$title = 'Reported file '.showThumb($row['itemId'], '', 270, 200); break;
+				case MODERATION_FILE:			$title = 'Reported file '.showFile($row['itemId'], '', '', false); break;
 
 				default: $title = '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 			}
