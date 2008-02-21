@@ -707,7 +707,7 @@ class Files
 			header('Content-Type: '.$data['fileMime']);
 		}
 
-		if (!$force_mime && isset($_GET['dl'])) {
+		if (isset($_GET['dl'])) {
 			/* Prompts the user to save the file */
 			header('Content-Disposition: attachment; filename="'.basename($data['fileName']).'"');
 		} else {

@@ -188,7 +188,7 @@ function hide_resizer()
 /* displays dialog for moving selected file to another file area category */
 function move_selected_file()
 {
-	alert('fixme: move_selected_file() not yet iplemented')
+	alert('fixme: move_selected_file() not yet iplemented');
 }
 
 function download_selected_file()
