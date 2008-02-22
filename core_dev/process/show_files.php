@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$session->requireLoggedIn();
 
 	require('design_head.php');
 
@@ -25,7 +26,7 @@
 //	d($list);
 
 	foreach ($list as $row) {
-		echo '<a href="show_file_status.php?id='.$row['fileId'].'">Orginal file</a>';
+		echo '<a href="show_file_status.php?id='.$row['fileId'].'">Details</a>';
 		echo ', mime='.$row['fileMime'].' created '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
 	}
 

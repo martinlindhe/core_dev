@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$session->requireLoggedIn();
 
 	require('design_head.php');
 

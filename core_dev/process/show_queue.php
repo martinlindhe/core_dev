@@ -1,5 +1,6 @@
 <?
 	require_once('config.php');
+	$session->requireLoggedIn();
 
 	require('design_head.php');
 
@@ -23,7 +24,7 @@
 					echo 'Video recode to <b>"'.$row['orderParams'].'"</b><br/>';
 					break;
 
-				case PROCESSFETCH_FORM:
+				case PROCESSFETCH:
 					echo 'Fetch remote media from <b>'.$row['orderParams'].'</b><br/>';
 					break;
 

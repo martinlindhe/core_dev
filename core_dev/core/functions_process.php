@@ -1,56 +1,63 @@
 <?
-	/*
-		IMPORTANT: for this to work, the sql user need to have LOCK & UNLOCK privilegies
-
-		for image conversions I am using: ImageMagick-6.3.4-0-Q16-windows-dll.exe
-				in ubuntu: sudo apt-get install imagemagick  (v6.2.4 in ubuntu 7.4)
-
-				uses MySQL table locking to ensure atomic operation
-
-		configuration:
-			this module requires:
-			- php_soap.dll extension (included in windows php dist, disabled by default)
-			- allow_url_fopen = On
-			- always_populate_raw_post_data = On (required by php_soap.dll)
-
-			suggested config:
-			soap.wsdl_cache_enabled=1
-			soap.wsdl_cache_ttl=172800
-	*/
+/**
+ * IMPORTANT: for this to work, the sql user need to have LOCK & UNLOCK privilegies
+ *
+ * mencoder, ffmpeg (recent svn) and imagemagick needs to be available
+ *
+ * uses MySQL table locking to ensure atomic operation
+ *
+ * this module requires:
+ * - php_soap.dll extension (included in windows php dist, disabled by default)
+ * - allow_url_fopen = On
+ * - always_populate_raw_post_data = On (required by php_soap.dll)
+ *
+ * suggested config:
+ * soap.wsdl_cache_enabled=1
+ * soap.wsdl_cache_ttl=172800
+ */
 
 require_once('functions_image.php');
 require_once('functions_fileareas.php');
 
 
-	//how many enqued items to process at max each time the process_queue.php script is called
-	//WARNING: keep this a low number unless you are sure what the consequences are (between 5 and 10 is fine)
-	$config['process']['process_limit'] = 5;
+//how many enqued items to process at max each time the process_queue.php script is called
+//WARNING: keep this a low number unless you are sure what the consequences are (between 5 and 10 is fine)
+$config['process']['process_limit'] = 5;
+
+$config['process']['default']['video'] = 'video/x-flv';		//convert video to flv
+$config['process']['default']['audio'] = 'audio/x-mpeg';	//convert audio to mp3
 
 
+/*
+	NOTE: we exploit the tblFiles.categoryId to store the type of upload PROCESSUPLOAD_*
+		this is hardcoded here, no sophisticated dynamic solution should be needed
+
+	these are "event classes"
+*/
+define('PROCESSUPLOAD_FORM',	1);	//Upload thru HTTP POST form
+define('PROCESSUPLOAD_SOAP',	2);	//fixme: use
+define('PROCESSUPLOAD_GET',		3);	//fixme: use
+define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
+define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
+define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding/converting to another image format
+
+define('PROCESSFETCH',							20);	//Ask the server to download remote media. Parameter is URL
+define('PROCESSPARSE_AND_FETCH',		21);	//Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
+define('PROCESS_CONVERT_TO_DEFAULT',22);	//Convert media to default format
 
 
-	/*
-		NOTE: we exploit the tblFiles.categoryId to store the type of upload PROCESSUPLOAD_*
-			this is hardcoded here, no sophisticated dynamic solution should be needed
+define('PROCESSMONITOR_SERVER',			30);	//Monitors server uptime
 
-		these are "event classes"
-	*/
-	define('PROCESSUPLOAD_FORM',	1);	//Upload thru HTTP POST form
-	define('PROCESSUPLOAD_SOAP',	2);	//fixme: use
-	define('PROCESSUPLOAD_GET',		3);	//fixme: use
-	define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
-	define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
-	define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding/converting to another image format
+//event types
+define('EVENT_PROCESS',	1);	//event from the process server
 
-	define('PROCESSFETCH_FORM',					20);	//Ask the server to download remote media. Parameter is URL
-	define('PROCESSPARSE_AND_FETCH',		21);	//Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
 
-	define('PROCESSMONITOR_SERVER',			30);	//Monitors server uptime
-
-	//event types
-	define('EVENT_PROCESS',	1);	//event from the process server
-
-	function processEvent($_type, $param, $param2 = '')
+	/**
+	 * Adds something to the process queue
+	 *
+	 * \return process event id
+	 */
+	function addProcessEvent($_type, $param, $param2 = '')
 	{
 		global $db, $session, $files;
 		if (!is_numeric($_type)) return false;
@@ -72,9 +79,7 @@ require_once('functions_fileareas.php');
 
 				$exec_time = microtime(true) - $exec_start;
 				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId='.$newFileId.',orderCompleted=1,orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
-				$db->insert($q);
-
-				return $newFileId;
+				return $db->insert($q);
 
 			case PROCESSQUEUE_AUDIO_RECODE:
 			case PROCESSQUEUE_IMAGE_RECODE:
@@ -82,46 +87,48 @@ require_once('functions_fileareas.php');
 				//enque file for recoding.
 				//	$param = fileId
 				//	$param2 = destination format (by extension)
-				//fixme: kolla om dest format finns i $dst_audio
 				if (!is_numeric($param)) die;
-
-				/*
-				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$db->escape($param.'_'.$param2).'",createdBy='.$session->id.',timeCreated=NOW()';
-				$db->insert($q);
-				*/
-
 				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId='.$param.',orderCompleted=0,orderParams="'.$db->escape($param2).'"';
-				$db->insert($q);
-				break;
+				return $db->insert($q);
 
-			case PROCESSFETCH_FORM:
+			case PROCESSFETCH:
 				//enqueue url for download and processing
 				//	$param = url
 				// downloads media files, torrents & youtube links
 
 				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId=0,orderCompleted=0,orderParams="'.$db->escape($param).'"';
-				$db->insert($q);
-				break;
+				return $db->insert($q);
+
+			case PROCESS_CONVERT_TO_DEFAULT:
+				//convert some media to the default media type, can be used to enqueue a conversion of a PROCESSFETCH before the server
+				//has fetched it & cant know the media type
+				//  $param = eventId we refer to. from this we can extract the future fileId to process
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId=0,orderCompleted=0,orderParams="'.$db->escape($param).'"';
+				return $db->insert($q);
 
 			case PROCESSMONITOR_SERVER:
 				//enqueues a server to be monitored
 				// $param = serialized params
 				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId=0,orderCompleted=0,orderParams="'.$db->escape($param).'"';
-				$db->insert($q);
-				break;
+				return $db->insert($q);
 
 			case PROCESSPARSE_AND_FETCH:
 				//parse this resource for further media resources and fetches them
 				// $param = fileId
 				// use to process a uploaded .torrent file & download it's content
 				// or to process a webpage and extract video files from it (including youtube) and download them to the server
+				die('not implemented PROCESSPARSE_AND_FETCH');
+				break;
 
-			default: die('processEvent unknown type');
+			default:
+				die('unknown processqueue type');
+				return false;
 		}
-
-		return true;
 	}
 
+	/**
+	 *
+	 */
 	function getEvents()
 	{
 		global $db;
@@ -131,7 +138,23 @@ require_once('functions_fileareas.php');
 		return $db->getArray($q);
 	}
 
-	/* Returns the oldest work orders still active for processing */
+	/**
+	 * Returns a process queue entry
+	 *
+	 */
+	function getProcessQueueEntry($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT * FROM tblProcessQueue WHERE entryId='.$_id;
+		return $db->getOneRow($q);
+	}
+
+
+	/**
+	 * Returns the oldest work orders still active for processing
+	 */
 	function getProcessQueue($_limit = 10, $completed = false)
 	{
 		global $db;
@@ -140,12 +163,14 @@ require_once('functions_fileareas.php');
 		if ($completed) $cnd = 'orderCompleted=1';
 		else $cnd = 'orderCompleted=0';
 
-		$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated DESC';
+		$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated ASC';
 		if ($_limit) $q .= ' LIMIT '.$_limit;
 		return $db->getArray($q);
 	}
 
-	/* Returns a list of currently enqueued actions to do for fileId $_id */
+	/**
+	 * Returns a list of currently enqueued actions to do for fileId $_id
+	 */
 	function getQueuedEvents($_id)
 	{
 		global $db;
@@ -155,7 +180,9 @@ require_once('functions_fileareas.php');
 		return $db->getArray($q);
 	}
 
-	/* displays the enqueued actions in the process queue for the fileId $_id */
+	/**
+	 * Displays the enqueued actions in the process queue for the fileId $_id
+	 */
 	function showFileQueueStatus($_id)
 	{
 		global $db, $files;
@@ -211,6 +238,9 @@ require_once('functions_fileareas.php');
 		showFileInfo($_id);
 	}
 
+	/**
+	 *
+	 */
 	function processQueue()
 	{
 		global $config, $files;
@@ -278,7 +308,6 @@ require_once('functions_fileareas.php');
 					//fixme: behöver inget rename-steg. kan göra det i ett steg!
 					rename($dst_file, $files->upload_dir.$newId);
 
-					//update cloned entry with new file size and such
 					$files->updateFile($newId);
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
@@ -296,24 +325,32 @@ require_once('functions_fileareas.php');
 					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
 
 					switch ($job['orderParams']) {
+						case 'video/x-flv':
+							//Flash video. Confirmed working
+							$c = 'ffmpeg -i '.$files->findUploadPath($job['fileId']).' -f flv -ar 22050 '.$files->findUploadPath($newId);
+							break;
+
 						case 'video/avi':
 							//default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
 							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
+							die('verify to video/avi');							
 							break;
 
 						case 'video/mpeg':
 							//mpeg2 video, should be playable anywhere
 							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
+							die('verify to video/mpeg');
 							break;
 
 						case 'video/x-ms-wmv':
 							//Windows Media Video, version 2 (AKA WMV8)
 							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=wmv2';
+							die('verify to video/x-ms-wmv');
 							break;
 
-						case 'video/x-flv':
-							//Flash video
-							$c = 'ffmpeg -i '.$files->findUploadPath($job['fileId']).' -f flv -ar 22050 '.$files->findUploadPath($newId);
+						case 'video/3gpp':
+							//3gp video
+							die('add to video/3gpp');
 							break;
 
 						default:
@@ -323,14 +360,12 @@ require_once('functions_fileareas.php');
 					echo 'Executing: '.$c.'<br/>';
 					$exec_time = exectime($c);
 					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
-					//todo: store execution time
 
 					if (!file_exists($files->findUploadPath($newId))) {
 						echo '<b>FAILED - dst file '.$files->findUploadPath($newId).' dont exist!<br/>';
 						continue;
 					}
 
-					//update cloned entry with new file size and such
 					$files->updateFile($newId);
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
@@ -360,7 +395,7 @@ require_once('functions_fileareas.php');
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
 
-				case PROCESSFETCH_FORM:
+				case PROCESSFETCH:
 					echo 'FETCH CONTENT FROM '.$job['orderParams'].'<br/>';
 
 					$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
@@ -378,7 +413,7 @@ require_once('functions_fileareas.php');
 
 					//todo: process html document for media links if it is a html document
 
-					markQueueCompleted($job['entryId'], $exec_time);
+					markQueueCompleted($job['entryId'], $exec_time, $newFileId);
 					$files->updateFile($newFileId);
 					break;
 
@@ -394,6 +429,38 @@ require_once('functions_fileareas.php');
 					}
 					break;
 
+				case PROCESS_CONVERT_TO_DEFAULT:
+					echo 'CONVERT TO DEFAULT<br/>';
+					//$param is entryId of previous proccess queue order, fetch fileId from it
+					$prev_job = getProcessQueueEntry($job['orderParams']);
+
+					$file = $files->getFileInfo($prev_job['fileId']);
+d($file);
+					if (in_array($file['fileMime'], $files->video_mime_types)) {
+
+						$newId = $files->cloneFile($file['fileId'], FILETYPE_CLONE_CONVERTED);
+						$c = 'ffmpeg -i '.$files->findUploadPath($file['fileId']).' -f flv -ar 22050 '.$files->findUploadPath($newId);
+
+						echo 'Executing: '.$c.'<br/>';
+						$exec_time = exectime($c);
+						echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
+
+						if (!file_exists($files->findUploadPath($newId))) {
+							echo '<b>FAILED - dst file '.$files->findUploadPath($newId).' dont exist!<br/>';
+							break;
+						}
+
+						//update cloned entry with new file size and such
+						$files->updateFile($newId);
+						markQueueCompleted($job['entryId'], $exec_time);
+
+					} else if (in_array($file['fileMime'], $files->audio_mime_types)) {
+						die('CONVERT TO MP3!!!!');
+					} else {
+						echo 'CANNOT CONVERT MEDIA!!!';
+					}
+					break;
+
 				default:
 					echo 'unknown ordertype: '.$job['orderType'].'<br/>';
 					die;
@@ -402,12 +469,21 @@ require_once('functions_fileareas.php');
 		}
 	}
 
-	function markQueueCompleted($entryId, $exec_time)
+	/**
+	 * Marks an object in the process queue as completed
+	 *
+	 * \param $entryId entry id
+	 * \param $exec_time time it took to execute this task
+	 * \param $fileId optional, specify if we now refer to a file, used when the process event was to fetch a file
+	 */
+	function markQueueCompleted($entryId, $exec_time, $fileId = 0)
 	{
 		global $db;
 		if (!is_numeric($entryId) || !is_float($exec_time)) return false;
 
-		$q = 'UPDATE tblProcessQueue SET orderCompleted=1,timeCompleted=NOW(),timeExec="'.$exec_time.'" WHERE entryId='.$entryId;
+		$q = 'UPDATE tblProcessQueue SET orderCompleted=1,timeCompleted=NOW(),timeExec="'.$exec_time.'"';
+		if ($fileId) $q .= ',fileId='.$fileId;
+		$q .= ' WHERE entryId='.$entryId;
 		$db->update($q);
 	}
 ?>

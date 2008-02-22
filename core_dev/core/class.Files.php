@@ -62,7 +62,8 @@ class Files
 		'video/avi',			//.avi file
 		'video/x-ms-wmv',	//Microsoft .wmv file
 		'video/3gpp',			//.3gp video file
-		'video/x-flv'			//Flash video
+		'video/x-flv',		//Flash video
+		'video/mp4'				//MPEG-4 video
 	); ///<FIXME remove
 
 	public $document_mime_types = array(
@@ -81,6 +82,7 @@ class Files
 		'mpg' => array(MEDIATYPE_VIDEO, 'video/mpeg', 'MPEG-2 Video'),
 		'3gp' => array(MEDIATYPE_VIDEO, 'video/3gpp', '3GP Video (cellphones)'),
 		'flv' => array(MEDIATYPE_VIDEO, 'video/x-flv', 'Flash Video'),
+		'mp4' => array(MEDIATYPE_VIDEO, 'video/mp4', 'MPEG-4 Video'),
 
 		'wma' => array(MEDIATYPE_AUDIO, 'audio/x-ms-wma', 'Windows Media Audio'),
 		'mp3' => array(MEDIATYPE_AUDIO, 'audio/x-mpeg', 'MP3 Audio'),

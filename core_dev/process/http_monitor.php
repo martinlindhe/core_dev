@@ -1,7 +1,7 @@
 <?
-/*
-	here you ask the server to monitor a remote server
-*/
+/**
+ * Here you ask the server to monitor a remote server
+ */
 
 	require_once('config.php');
 
