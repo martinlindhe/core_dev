@@ -16,9 +16,8 @@
 	require_once('class.Files.php');
 	require_once('functions_general.php');
 	require_once('functions_wiki.php');
-	restore_include_path();
-
 	require_once('functions_process.php');
+	restore_include_path();
 
 	//use same sample db
 	$config['database']['username']	= 'root';

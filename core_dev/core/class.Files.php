@@ -25,13 +25,16 @@ define('FILETYPE_USERFILE',					5);		// File is uploaded to the user's own file 
 define('FILETYPE_USERDATA',					6);		// File is uploaded to a userdata field
 define('FILETYPE_FORUM',						7);		// File is attached to a forum post
 define('FILETYPE_PROCESS',					8);		// File uploaded to be processed
-define('FILETYPE_PROCESS_CLONE',		9);		// a clone entry for a process file.
+
 define('FILETYPE_VIDEOBLOG',				10);	// video clip representing a user submitted blog
 define('FILETYPE_VIDEOPRES',				11);	// video clip representing a presentation of the user
 define('FILETYPE_VIDEOMESSAGE',			12);	// video clip respresenting a private message
 define('FILETYPE_VIDEOCHATREQUEST',	13);	// video clip representing a live videochat request
 
 define('FILETYPE_GENERIC',				20); // generic file type, for application specific file type
+
+//define('FILETYPE_PROCESS_CLONE',		9);		// a clone entry for a process file.
+define('FILETYPE_CLONE_CONVERTED',	30);	//converted from orginal file format (image/video/audio/document)
 
 //for future use:
 define('MEDIATYPE_IMAGE',				1);
@@ -145,22 +148,6 @@ class Files
 
 		$q = 'SELECT * FROM tblFiles WHERE fileType='.$fileType;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-		$q .= ' ORDER BY timeUploaded ASC';
-		return $db->getArray($q);
-	}
-
-	/**
-	 * Returns all cloned files based on this file
-	 *
-	 * \param $fileId id of file to get clones for
-	 * \return list of cloned files
-	 */
-	function getClonesList($fileId)
-	{
-		global $db;
-		if (!is_numeric($fileId)) return false;
-
-		$q = 'SELECT * FROM tblFiles WHERE fileType='.FILETYPE_PROCESS_CLONE.' AND ownerId='.$fileId;
 		$q .= ' ORDER BY timeUploaded ASC';
 		return $db->getArray($q);
 	}
@@ -508,7 +495,7 @@ class Files
 		$q = 'DELETE FROM tblChecksums WHERE fileId='.$_id;
 		$db->delete($q);
 
-		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", timeExec="'.$exec_time.'", timeCreated=NOW()';
+		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", timeExec="'.$new['timeExec'].'", timeCreated=NOW()';
 		$db->insert($q);
 
 		return $new;
@@ -530,39 +517,19 @@ class Files
 	 * Used for file processing. generates a new file entry referencing to entry $_id. returns new id
 	 *
 	 * \param $_id fileId
+	 * \param $_clone_type filetype of clone
 	 * \return fileId of the clone
 	 */
-	function cloneEntry($_id)
+	function cloneFile($_id, $_clone_type)
 	{
 		global $db;
-		if (!is_numeric($_id)) return false;
+		if (!is_numeric($_id) || !is_numeric($_clone_type)) return false;
 
 		$file = $this->getFileInfo($_id);
 		if (!$file) return false;
 
-		$q = 'INSERT INTO tblFiles SET ownerId='.$_id.',fileType='.FILETYPE_PROCESS_CLONE.',uploaderId='.$file['uploaderId'].',timeUploaded=NOW()';
+		$q = 'INSERT INTO tblFiles SET ownerId='.$_id.',fileType='.$_clone_type.',uploaderId='.$file['uploaderId'].',timeUploaded=NOW()';
 		return $db->insert($q);
-	}
-
-	/**
-	 * Updates info of a file clone. set current mime type & file size & calculate checksums
-	 *
-	 * \param $_id fileId to update
-	 * \param $mimeType set mimetype
-	 * \return numeric value on true, else 0 or false
-	 */
-	function updateClone($_id, $mimeType)
-	{
-		global $db;
-		if (!is_numeric($_id)) return false;
-
-		$size = filesize($this->findUploadPath($_id));
-
-		//force calculation of checksums
-		$this->checksums($_id, true);
-
-		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mimeType).'",fileSize='.$size.' WHERE fileId='.$_id.' AND fileType='.FILETYPE_PROCESS_CLONE;
-		return $db->update($q);
 	}
 
 	/**
@@ -596,7 +563,6 @@ class Files
 
 		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime).'",fileSize='.$size.' WHERE fileId='.$_id;
 		return $db->update($q);
-
 	}
 
 	/**

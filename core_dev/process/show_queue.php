@@ -45,7 +45,7 @@
 			if ($file) {
 				echo '<b>Source file:</b><br/>';
 				echo $file['fileName'].' ('.$file['fileMime'].')<br/>';
-				echo 'size: '.$file['fileSize'].'<br/>';
+				echo 'size: '.formatDataSize($file['fileSize']).'<br/>';
 				echo 'sha1: '.$files->sha1($row['fileId']).'<br/>';
 			}
 

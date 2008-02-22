@@ -13,11 +13,11 @@
 	showFileQueueStatus($fileId);
 
 	$file = $files->getFileInfo($fileId);
-	if ($file['fileType'] == FILETYPE_PROCESS_CLONE) {
-		echo 'This file is a clone of the orginal file <a href="'.$_SERVER['PHP_SELF'].'?id='.$file['ownerId'].'">'.$file['ownerId'].'</a><br/>';
+	if ($file['fileType'] == FILETYPE_CLONE_CONVERTED) {
+		echo 'This file is a converted version of the orginal file <a href="'.$_SERVER['PHP_SELF'].'?id='.$file['ownerId'].'">'.$file['ownerId'].'</a><br/>';
 	}
 
-	$list = $files->getClonesList($fileId);
+	$list = $files->getFileList(FILETYPE_CLONE_CONVERTED, $fileId);
 	if ($list) echo '<h1>Conversions based on this file</h1>';
 	foreach ($list as $row) {
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['fileId'].'">'.$row['fileId'].'</a> '.formatDataSize($row['fileSize']).' '.$row['fileMime'].'<br/>';

@@ -18,7 +18,8 @@
 			soap.wsdl_cache_ttl=172800
 	*/
 
-	require_core('functions_image.php');
+require_once('functions_image.php');
+require_once('functions_fileareas.php');
 
 
 	//how many enqued items to process at max each time the process_queue.php script is called
@@ -207,7 +208,7 @@
 		}
 		echo '</table>';
 
-		$files->showFileInfo($_id);
+		showFileInfo($_id);
 	}
 
 	function processQueue()
@@ -240,22 +241,25 @@
 					echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
 
 					switch ($job['orderParams']) {
-						case 'ogg':
+						case 'application/x-ogg':
 							//så istället tvingas vi göra det i 2 steg:
 							$dst_file = 'tmpfile.ogg';
 							$dst_mime = 'application/x-ogg';
-							$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
+							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
 							break;
-						case 'wma':
+
+						case 'audio/x-ms-wma':
 							$dst_file = 'tmpfile.wma';
 							$dst_mime = 'audio/x-ms-wma';
-							$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
+							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
 							break;
-						case 'mp3':
+
+						case 'audio/mpeg':
+						case 'audio/x-mpeg':
 							//fixme: source & destination should not be able to be the same!
 							$dst_file = 'tmpfile.mp3';
 							$dst_mime = 'audio/x-mpeg';
-							$c = 'ffmpeg -i "'.$files->upload_dir.$job['fileId'].'" '.$dst_file;
+							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
 
 							//mencoder kan bara konvertera _till_ mp3?
 							//$c = 'mencoder '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -oac mp3lame';
@@ -283,7 +287,7 @@
 					rename($dst_file, $files->upload_dir.$newId);
 
 					//update cloned entry with new file size and such
-					$files->updateClone($newId, $dst_mime);
+					$files->updateFile($newId, $dst_mime);
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
 
@@ -299,30 +303,30 @@
 					echo 'Recoding source video of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
 
 					//skapa nytt tblFiles entry. länka det till orginal-filen
-					$newId = $files->cloneEntry($job['fileId']);
+					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
 
 					switch ($job['orderParams']) {
 						case 'video/avi':
 							//default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
 							$dst_mime = 'video/avi';
-							$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
+							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
 							break;
 
 						case 'video/mpeg':
 							//mpeg2 video, should be playable anywhere
 							$dst_mime = 'video/mpeg';
-							$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
+							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
 							break;
 
 						case 'video/x-ms-wmv':
 							//Windows Media Video, version 2 (AKA WMV8)
 							$dst_mime = 'video/x-ms-wmv';
-							$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=wmv2';
+							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=wmv2';
 							break;
 
-						case 'video/flash':
-							$dst_mime = 'video/flash';
-							$c = 'E:/devel/mencoder/mencoder.exe '.$files->upload_dir.$job['fileId'].' -o '.$files->upload_dir.$newId.' -ovc lavc -oac mp3lame -lavcopts vcodec=flv';
+						case 'video/x-flv':
+							$dst_mime = 'video/x-flv';
+							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=flv';
 							break;
 
 						default:
@@ -334,13 +338,13 @@
 					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 					//todo: store execution time
 
-					if (!file_exists($files->upload_dir.$newId)) {
-						echo '<b>FAILED - dst file '.$files->upload_dir.$newId.' dont exist!<br/>';
+					if (!file_exists($files->findUploadPath($newId))) {
+						echo '<b>FAILED - dst file '.$files->findUploadPath($newId).' dont exist!<br/>';
 						continue;
 					}
 
 					//update cloned entry with new file size and such
-					$files->updateClone($newId, $dst_mime);
+					$files->updateFile($newId, $dst_mime);
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
 
@@ -351,10 +355,10 @@
 						$session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
 						break;
 					}
-					$newId = $files->cloneEntry($job['fileId']);
+					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
 
 					$exec_start = microtime(true);
-					$check = convertImage($files->upload_dir.$job['fileId'], $files->upload_dir.$newId, $job['orderParams']);
+					$check = convertImage($files->findUploadPath($job['fileId']), $files->findUploadPath($newId), $job['orderParams']);
 					$exec_time = microtime(true) - $exec_start;
 					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 
@@ -365,7 +369,7 @@
 					}
 
 					//update cloned entry with new file size and such
-					$files->updateClone($newId, $job['orderParams']);
+					$files->updateFile($newId, $job['orderParams']);
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
 
@@ -380,7 +384,7 @@
 					$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
 
 					//fixme: isURL() check
-					$c = 'wget '.$job['orderParams'].' -O '.$files->upload_dir.$newFileId;
+					$c = 'wget '.$job['orderParams'].' -O '.$files->findUploadPath($newFileId);
 					echo 'Executing: '.$c.'<br/>';
 					$exec_time = exectime($c);
 					//$exec_time = microtime(true) - $time_start;

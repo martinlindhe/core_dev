@@ -26,23 +26,23 @@
 		die;
 	}
 
-	$dst_audio = array(
-		'ogg' => 'OGG audio',
-		'wma' => 'WMA audio',
-		'mp3' => 'mp3 audio'
+	$dst_audio = array(	//FIXME use class.Files array instead
+		'application/x-ogg' => 'OGG audio',
+		'audio/x-ms-wma' => 'WMA audio',
+		'audio/x-mpeg' => 'mp3 audio'
 	);
 
-	$dst_image = array(
+	$dst_image = array(//FIXME use class.Files array instead
 		'image/png' => 'PNG image',
 		'image/jpeg' => 'JPEG image',
 		'image/gif' => 'GIF image'
 	);
 
-	$dst_video = array(
+	$dst_video = array(//FIXME use class.Files array instead
 		'video/mpeg'			=>	'MPEG-2 video',
 		'video/avi'				=>	'DivX 3 video',
 		'video/x-ms-wmv'	=>	'Windows Media Video',
-		'video/flash'			=>	'Flash Video',
+		'video/x-flv'			=>	'Flash Video',
 		'video/3gpp'			=>	'.3gp video file'
 	);
 
@@ -53,7 +53,7 @@
 	);
 	wiki('ProcessFile');
 
-	$files->showFileInfo($fileId);
+	showFileInfo($fileId);
 
 	$data = $files->getFileInfo($fileId);
 

@@ -20,8 +20,8 @@
 		echo ', mime='.$row['fileMime'].' uploaded '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
 	}
 
-	echo '<h1>Clones:</h1>';
-	$list = $files->getFileList(FILETYPE_PROCESS_CLONE);
+	echo '<h1>Converted files:</h1>';
+	$list = $files->getFileList(FILETYPE_CLONE_CONVERTED);
 //	d($list);
 
 	foreach ($list as $row) {
