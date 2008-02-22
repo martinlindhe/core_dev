@@ -243,7 +243,7 @@ require_once('functions_fileareas.php');
 
 					switch ($job['orderParams']) {
 						case 'application/x-ogg':
-							//FIXME hur anger ja dst-format utan filändelse? tvingas göra det i 2 steg nu
+							//FIXME hur anger ja dst-format utan filÃ¤ndelse? tvingas gÃ¶ra det i 2 steg nu
 							$dst_file = 'tmpfile.ogg';
 							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
 							break;
@@ -274,8 +274,8 @@ require_once('functions_fileareas.php');
 						continue;
 					}
 
-					//renama $dst_file till fileId för nya file entry
-					//fixme: behöver inget rename-steg. kan göra det i ett steg!
+					//renama $dst_file till fileId fÃ¶r nya file entry
+					//fixme: behÃ¶ver inget rename-steg. kan gÃ¶ra det i ett steg!
 					rename($dst_file, $files->upload_dir.$newId);
 
 					//update cloned entry with new file size and such
