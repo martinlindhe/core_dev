@@ -196,7 +196,7 @@ require_once('functions_fileareas.php');
 			echo '<td>'.$row['timeCreated'].'</td>';
 			if ($row['orderCompleted']) {
 				echo '<td>'.$row['timeCompleted'].'</td>';
-				echo '<td>'.$row['timeExec'].'</td>';
+				echo '<td>'.round($row['timeExec'], 3).'s</td>';
 			} else {
 				echo '<td>not done</td>';
 				echo '<td>?</td>';
@@ -224,7 +224,7 @@ require_once('functions_fileareas.php');
 				case PROCESSQUEUE_AUDIO_RECODE:
 					//Recodes source audio file into orderParams destination format
 
-					$dst_audio_ok = array('ogg', 'wma', 'mp3');	//fixme: config item or $files->var
+					$dst_audio_ok = array('ogg', 'wma', 'mp3');	//FIXME: config item or $files->var
 					if (!in_array($job['orderParams'], $dst_audio_ok)) {
 						echo 'error: invalid mime type<br/>';
 						$session->log('Process queue error - audio conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
@@ -237,20 +237,19 @@ require_once('functions_fileareas.php');
 						break;
 					}
 
-					//fixme: kolla om filen finns på disk innan vi fortsätter
+					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
+
 					echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
 
 					switch ($job['orderParams']) {
 						case 'application/x-ogg':
-							//så istället tvingas vi göra det i 2 steg:
+							//FIXME hur anger ja dst-format utan filändelse? tvingas göra det i 2 steg nu
 							$dst_file = 'tmpfile.ogg';
-							$dst_mime = 'application/x-ogg';
 							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
 							break;
 
 						case 'audio/x-ms-wma':
 							$dst_file = 'tmpfile.wma';
-							$dst_mime = 'audio/x-ms-wma';
 							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
 							break;
 
@@ -258,13 +257,9 @@ require_once('functions_fileareas.php');
 						case 'audio/x-mpeg':
 							//fixme: source & destination should not be able to be the same!
 							$dst_file = 'tmpfile.mp3';
-							$dst_mime = 'audio/x-mpeg';
 							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
-
-							//mencoder kan bara konvertera _till_ mp3?
-							//$c = 'mencoder '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -oac mp3lame';
-							//$c = 'mencoder '.$files->upload_dir.$job['fileId'].' -o '.$dst_file.' -oac lavc -lavopts acodec=libmp3lame';
 							break;
+
 						default:
 							die('unknown destination audio format: '.$job['orderParams']);
 					}
@@ -279,15 +274,12 @@ require_once('functions_fileareas.php');
 						continue;
 					}
 
-					//skapa nytt tblFiles entry. länka det till orginal-filen
-					$newId = $files->cloneEntry($job['fileId']);
-
 					//renama $dst_file till fileId för nya file entry
 					//fixme: behöver inget rename-steg. kan göra det i ett steg!
 					rename($dst_file, $files->upload_dir.$newId);
 
 					//update cloned entry with new file size and such
-					$files->updateFile($newId, $dst_mime);
+					$files->updateFile($newId);
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
 
@@ -299,34 +291,29 @@ require_once('functions_fileareas.php');
 						break;
 					}
 
-					//fixme: kolla om filen finns på disk innan vi fortsätter
 					echo 'Recoding source video of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
 
-					//skapa nytt tblFiles entry. länka det till orginal-filen
 					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
 
 					switch ($job['orderParams']) {
 						case 'video/avi':
 							//default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
-							$dst_mime = 'video/avi';
 							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
 							break;
 
 						case 'video/mpeg':
 							//mpeg2 video, should be playable anywhere
-							$dst_mime = 'video/mpeg';
 							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
 							break;
 
 						case 'video/x-ms-wmv':
 							//Windows Media Video, version 2 (AKA WMV8)
-							$dst_mime = 'video/x-ms-wmv';
 							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=wmv2';
 							break;
 
 						case 'video/x-flv':
-							$dst_mime = 'video/x-flv';
-							$c = 'mencoder '.$files->findUploadPath($job['fileId']).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=flv';
+							//Flash video
+							$c = 'ffmpeg -i '.$files->findUploadPath($job['fileId']).' -f flv -ar 22050 '.$files->findUploadPath($newId);
 							break;
 
 						default:
@@ -344,7 +331,7 @@ require_once('functions_fileareas.php');
 					}
 
 					//update cloned entry with new file size and such
-					$files->updateFile($newId, $dst_mime);
+					$files->updateFile($newId);
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
 
