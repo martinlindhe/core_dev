@@ -35,6 +35,7 @@ define('FILETYPE_GENERIC',				20); // generic file type, for application specifi
 
 //define('FILETYPE_PROCESS_CLONE',		9);		// a clone entry for a process file.
 define('FILETYPE_CLONE_CONVERTED',	30);	//converted from orginal file format (image/video/audio/document)
+define('FILETYPE_CLONE_VIDEOTHUMB10',31);	//video thumbnail of video 10% into the clip
 
 //for future use:
 define('MEDIATYPE_IMAGE',				1);

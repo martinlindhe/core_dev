@@ -2,7 +2,7 @@
 /**
  * IMPORTANT: for this to work, the sql user need to have LOCK & UNLOCK privilegies
  *
- * mencoder, ffmpeg (recent svn) and imagemagick needs to be available
+ * mencoder, ffmpeg (recent svn), ffprobe and imagemagick needs to be available
  *
  * uses MySQL table locking to ensure atomic operation
  *
@@ -435,7 +435,7 @@ define('EVENT_PROCESS',	1);	//event from the process server
 					$prev_job = getProcessQueueEntry($job['orderParams']);
 
 					$file = $files->getFileInfo($prev_job['fileId']);
-d($file);
+
 					if (in_array($file['fileMime'], $files->video_mime_types)) {
 
 						$newId = $files->cloneFile($file['fileId'], FILETYPE_CLONE_CONVERTED);
@@ -450,9 +450,10 @@ d($file);
 							break;
 						}
 
-						//update cloned entry with new file size and such
 						$files->updateFile($newId);
 						markQueueCompleted($job['entryId'], $exec_time);
+
+						generateVideoStills($newId);
 
 					} else if (in_array($file['fileMime'], $files->audio_mime_types)) {
 						die('CONVERT TO MP3!!!!');
@@ -485,5 +486,32 @@ d($file);
 		if ($fileId) $q .= ',fileId='.$fileId;
 		$q .= ' WHERE entryId='.$entryId;
 		$db->update($q);
+	}
+
+	/**
+	 * Generates video still images from specified video
+	 */
+	function generateVideoStills($fileId)
+	{
+		global $files;
+		if (!is_numeric($fileId)) return false;
+
+		$c = 'ffprobe -show_files '.$files->findUploadPath($fileId).' 2> /dev/null | grep duration | cut -d= -f2';
+		echo 'Executing: '.$c.'<br/>';
+		$duration = exec($c);
+
+		$pos10 = $duration * 0.10;
+		$pos25 = $duration * 0.25;
+		$pos50 = $duration * 0.50;
+		$pos75 = $duration * 0.75;
+		$pos90 = $duration * 0.90;
+
+		$newId = $files->cloneFile($fileId, FILETYPE_CLONE_VIDEOTHUMB10);
+
+		$c = 'ffmpeg -i '.$files->findUploadPath($fileId).' -ss '.$pos10.' -vframes 1 -f image2 '.$files->findUploadPath($newId).' 2> /dev/null';
+		echo 'Executing: '.$c.'<br/>';
+		exec($c);
+
+		$files->updateFile($newId);
 	}
 ?>
