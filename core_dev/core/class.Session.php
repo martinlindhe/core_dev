@@ -103,7 +103,7 @@ class Session
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
 		$this->theme = &$_SESSION['theme'];
 
-		if (!$this->ip) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
 
 		//FIXME conditionally reuse some functions_browserstats.php features. make user agent parsing optional & disabled by default

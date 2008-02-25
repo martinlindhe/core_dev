@@ -64,7 +64,8 @@ class Files
 		'video/x-ms-wmv',	//Microsoft .wmv file
 		'video/3gpp',			//.3gp video file
 		'video/x-flv',		//Flash video
-		'video/mp4'				//MPEG-4 video
+		'video/mp4',			//MPEG-4 video
+		'application/ogg'	//Ogg video
 	); ///<FIXME remove
 
 	public $document_mime_types = array(
@@ -552,7 +553,7 @@ class Files
 		$size = filesize($filename);
 
 		if (!is_numeric($size) || !$size) {
-			echo 'setMimeType(): file dont exist ';
+			echo "updateFile(): file ".$filename." dont exist\n";
 			return false;
 		}
 		$mime = $this->lookupMimeType($filename);

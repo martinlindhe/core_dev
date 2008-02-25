@@ -236,7 +236,7 @@ define('EVENT_PROCESS',	1);	//event from the process server
 		$list = getProcessQueue($config['process']['process_limit']);
 
 		foreach ($list as $job) {
-			d($job);
+			echo "\n\n-------------\n";
 			switch ($job['orderType'])
 			{
 				case PROCESSQUEUE_AUDIO_RECODE:
@@ -257,7 +257,7 @@ define('EVENT_PROCESS',	1);	//event from the process server
 
 					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
 
-					echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
+					echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format '.$job['orderParams']." ...\n";
 
 					switch ($job['orderParams']) {
 						case 'application/x-ogg':
@@ -282,13 +282,13 @@ define('EVENT_PROCESS',	1);	//event from the process server
 							die('unknown destination audio format: '.$job['orderParams']);
 					}
 
-					echo 'Executing: '.$c.'<br/>';
+					echo 'Executing: '.$c."\n";
 					$exec_time = exectime($c);
 
-					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
+					echo 'Execution time: '.shortTimePeriod($exec_time)."\n";
 
 					if (!file_exists($dst_file)) {
-						echo '<b>FAILED - dst file '.$dst_file.' dont exist!<br/>';
+						echo '<b>FAILED - dst file '.$dst_file." dont exist!\n";
 						continue;
 					}
 
@@ -301,21 +301,21 @@ define('EVENT_PROCESS',	1);	//event from the process server
 					break;
 
 				case PROCESSQUEUE_VIDEO_RECODE:
-					echo 'VIDEO RECODE<br/>';
+					echo "VIDEO RECODE:\n";
 					$file = $files->getFileInfo($job['fileId']);
 					if (!$file) {
-						echo 'Error: no fileentry existed for fileId '.$job['fileId'];
+						echo "Error: no fileentry existed for fileId ".$job['fileId']."\n";
 						break;
 					}
 
-					echo 'Recoding source video of "'.$file['fileName'].'" ('.$file['fileMime'].') to format "'.$job['orderParams'].'" ...<br/>';
+					echo 'Recoding source video of "'.$file['fileName'].'" ('.$file['fileMime'].') to format '.$job['orderParams']." ...\n";
 
 					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
 
 					switch ($job['orderParams']) {
 						case 'video/x-flv':
 							//Flash video. Confirmed working
-							$c = 'ffmpeg -i '.$files->findUploadPath($job['fileId']).' -f flv -ar 22050 '.$files->findUploadPath($newId);
+							$c = 'ffmpeg -i '.$files->findUploadPath($job['fileId']).' -f flv -ac 2 -ar 22050 '.$files->findUploadPath($newId);
 							break;
 
 						case 'video/avi':
@@ -345,19 +345,16 @@ define('EVENT_PROCESS',	1);	//event from the process server
 							die('unknown destination video format: '.$job['orderParams']);
 					}
 
-					echo 'Executing: '.$c.'<br/>';
+					echo "Executing: ".$c."\n";
 					$exec_time = exectime($c);
-					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
+					echo "Execution time: ".shortTimePeriod($exec_time)."\n";
 
-					if (!file_exists($files->findUploadPath($newId))) {
-						echo '<b>FAILED - dst file '.$files->findUploadPath($newId).' dont exist!<br/>';
-						continue;
+					if ($files->updateFile($newId)) {
+						markQueueCompleted($job['entryId'], $exec_time);
+						generateVideoStills($newId);
+					} else {
+						$files->deleteFile($newId);
 					}
-
-					$files->updateFile($newId);
-					markQueueCompleted($job['entryId'], $exec_time);
-
-					generateVideoStills($newId);
 					break;
 
 				case PROCESSQUEUE_IMAGE_RECODE:
@@ -420,7 +417,7 @@ define('EVENT_PROCESS',	1);	//event from the process server
 					break;
 
 				case PROCESS_CONVERT_TO_DEFAULT:
-					echo 'CONVERT TO DEFAULT<br/>';
+					echo "CONVERT TO DEFAULT:\n";
 					//$param is entryId of previous proccess queue order, fetch fileId from it
 					$prev_job = getProcessQueueEntry($job['orderParams']);
 
@@ -429,14 +426,14 @@ define('EVENT_PROCESS',	1);	//event from the process server
 					if (in_array($file['fileMime'], $files->video_mime_types)) {
 
 						$newId = $files->cloneFile($file['fileId'], FILETYPE_CLONE_CONVERTED);
-						$c = 'ffmpeg -i '.$files->findUploadPath($file['fileId']).' -f flv -ar 22050 '.$files->findUploadPath($newId);
+						$c = 'ffmpeg -i '.$files->findUploadPath($file['fileId']).' -f flv -ac 2 -ar 22050 '.$files->findUploadPath($newId);
 
-						echo 'Executing: '.$c.'<br/>';
+						echo "Executing: ".$c."\n";
 						$exec_time = exectime($c);
-						echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
+						echo "Execution time: ".shortTimePeriod($exec_time)."\n";
 
 						if (!file_exists($files->findUploadPath($newId))) {
-							echo '<b>FAILED - dst file '.$files->findUploadPath($newId).' dont exist!<br/>';
+							echo "<b>FAILED - dst file ".$files->findUploadPath($newId)." dont exist!\n";
 							break;
 						}
 
@@ -487,7 +484,7 @@ define('EVENT_PROCESS',	1);	//event from the process server
 		if (!is_numeric($fileId)) return false;
 
 		$c = 'ffprobe -show_files '.$files->findUploadPath($fileId).' 2> /dev/null | grep duration | cut -d= -f2';
-		echo 'Executing: '.$c.'<br/>';
+		echo "Executing: ".$c."\n";
 		$duration = exec($c);
 
 		$pos10 = $duration * 0.10;
@@ -499,7 +496,7 @@ define('EVENT_PROCESS',	1);	//event from the process server
 		$newId = $files->cloneFile($fileId, FILETYPE_CLONE_VIDEOTHUMB10);
 
 		$c = 'ffmpeg -i '.$files->findUploadPath($fileId).' -ss '.$pos10.' -vframes 1 -f image2 '.$files->findUploadPath($newId).' 2> /dev/null';
-		echo 'Executing: '.$c.'<br/>';
+		echo "Executing: ".$c."\n";
 		exec($c);
 
 		$files->updateFile($newId);
