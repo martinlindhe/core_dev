@@ -62,7 +62,8 @@ function zoomVideo(id, name, nfo)
 	empty_element_by_name('zoom_video');
 
 	params = '&fgcolor=0xFF0000&bgcolor=0x000000&autoload=on&autorewind=off&volume=70';
-	url = _ext_core+'flash/flv_player.swf?movie='+urlencode('/video/')+id+'.flv'+urlencode(_ext_ref)+params;
+	//url = _ext_core+'flash/flv_player.swf?movie='+urlencode('/video/')+id+'.flv'+urlencode(_ext_ref)+params;
+	url = _ext_core+'flash/flv_player.swf?movie='+urlencode('/video/')+id+'.flv'+params;
 
 	var fo = new SWFObject(url, 'animationName', '400', '340', '8', '#FFFFFF');
 	fo.addParam('allowScriptAccess', 'sameDomain');

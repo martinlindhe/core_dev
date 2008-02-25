@@ -251,7 +251,7 @@ class Files
 	 * \param $categoryId category where to store the file
 	 * \return fileId of the newly imported file
 	 */
-	function handleUpload($FileData, $fileType, $ownerId, $categoryId = 0)
+	function handleUpload($FileData, $fileType, $ownerId = 0, $categoryId = 0)
 	{
 		global $db, $session;
 		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
@@ -799,8 +799,12 @@ class Files
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return array();
-		
-		if ($fileType == FILETYPE_FORUM) {
+
+		if ($fileType == FILETYPE_CLONE_VIDEOTHUMB10) {
+			$q  = 'SELECT * FROM tblFiles ';
+			$q .= 'WHERE fileType='.$fileType.' AND ownerId='.$ownerId;
+
+		} else if ($fileType == FILETYPE_FORUM) {
 			$q  = 'SELECT * FROM tblFiles ';
 			$q .= 'WHERE fileType='.$fileType.' AND ownerId='.$ownerId.' AND uploaderId='.$session->id;
 

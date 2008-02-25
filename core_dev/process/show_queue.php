@@ -24,7 +24,7 @@
 					echo 'Video recode to <b>"'.$row['orderParams'].'"</b><br/>';
 					break;
 
-				case PROCESSFETCH:
+				case PROCESS_FETCH:
 					echo 'Fetch remote media from <b>'.$row['orderParams'].'</b><br/>';
 					break;
 

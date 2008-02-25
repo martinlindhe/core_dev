@@ -28,20 +28,13 @@ $config['process']['default']['video'] = 'video/x-flv';		//convert video to flv
 $config['process']['default']['audio'] = 'audio/x-mpeg';	//convert audio to mp3
 
 
-/*
-	NOTE: we exploit the tblFiles.categoryId to store the type of upload PROCESSUPLOAD_*
-		this is hardcoded here, no sophisticated dynamic solution should be needed
-
-	these are "event classes"
-*/
-define('PROCESSUPLOAD_FORM',	1);	//Upload thru HTTP POST form
-define('PROCESSUPLOAD_SOAP',	2);	//fixme: use
-define('PROCESSUPLOAD_GET',		3);	//fixme: use
 define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
 define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
 define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding/converting to another image format
 
-define('PROCESSFETCH',							20);	//Ask the server to download remote media. Parameter is URL
+define('PROCESS_UPLOAD',						19);	//HTTP Post upload
+define('PROCESS_FETCH',							20);	//Ask the server to download remote media. Parameter is URL
+
 define('PROCESSPARSE_AND_FETCH',		21);	//Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
 define('PROCESS_CONVERT_TO_DEFAULT',22);	//Convert media to default format
 
@@ -63,17 +56,12 @@ define('EVENT_PROCESS',	1);	//event from the process server
 		if (!is_numeric($_type)) return false;
 
 		switch ($_type) {
-			case PROCESSUPLOAD_FORM:
+			case PROCESS_UPLOAD:
 				//handle HTTP post file upload. is not enqueued
 				//	$param is the $_FILES[idx] array
 
 				$exec_start = microtime(true);	//dont count the actual upload time, just the process time
-				$newFileId = $files->handleUpload($param, FILETYPE_PROCESS, 0, PROCESSUPLOAD_FORM);
-
-				/*
-				$q = 'INSERT INTO tblEvents SET eventType='.EVENT_PROCESS.',eventClass='.$_type.',param="'.$newFileId.'",createdBy='.$session->id.',timeCreated=NOW()';
-				$db->insert($q);
-				*/
+				$newFileId = $files->handleUpload($param, FILETYPE_PROCESS);
 
 				$files->checksums($newFileId);	//force generation of file checksums
 
@@ -91,7 +79,7 @@ define('EVENT_PROCESS',	1);	//event from the process server
 				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId='.$param.',orderCompleted=0,orderParams="'.$db->escape($param2).'"';
 				return $db->insert($q);
 
-			case PROCESSFETCH:
+			case PROCESS_FETCH:
 				//enqueue url for download and processing
 				//	$param = url
 				// downloads media files, torrents & youtube links
@@ -368,6 +356,8 @@ define('EVENT_PROCESS',	1);	//event from the process server
 
 					$files->updateFile($newId);
 					markQueueCompleted($job['entryId'], $exec_time);
+
+					generateVideoStills($newId);
 					break;
 
 				case PROCESSQUEUE_IMAGE_RECODE:
@@ -395,7 +385,7 @@ define('EVENT_PROCESS',	1);	//event from the process server
 					markQueueCompleted($job['entryId'], $exec_time);
 					break;
 
-				case PROCESSFETCH:
+				case PROCESS_FETCH:
 					echo 'FETCH CONTENT FROM '.$job['orderParams'].'<br/>';
 
 					$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database

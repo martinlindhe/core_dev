@@ -10,8 +10,6 @@
 
 	require('design_head.php');
 
-d($event);
-
 	$added = false;
 	if (!empty($_POST['dst_audio_fmt'])) {
 		$added = addProcessEvent(PROCESSQUEUE_AUDIO_RECODE, $fileId, $_POST['dst_audio_fmt']);
@@ -62,7 +60,7 @@ d($event);
 	);
 	wiki('ProcessFile');
 
-	if ($event['orderType'] == PROCESSFETCH) {
+	if ($event['orderType'] == PROCESS_FETCH) {
 		echo '<h1>convert unfetched media</h1>';
 
 		echo 'The following order has not yet been processed and media type cannot be determined.<br/><br/>';

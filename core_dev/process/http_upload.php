@@ -7,7 +7,7 @@
 	require('design_head.php');
 
 	if (!empty($_FILES['file2'])) {
-		$eventId = addProcessEvent(PROCESSUPLOAD_FORM, $_FILES['file2']);
+		$eventId = addProcessEvent(PROCESS_UPLOAD, $_FILES['file2']);
 		if ($eventId) {
 			echo '<div class="okay">Your file has been uploaded successfully!</div><br/>';
 			echo '<a href="http_enqueue.php?id='.$eventId.'">Click here</a> to perform further actions on this file.';

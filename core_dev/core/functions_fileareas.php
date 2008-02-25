@@ -24,15 +24,22 @@
 			echo showThumb($fileId);
 			if ($click) echo '</center></div>';
 		} else if (in_array($mime, $files->audio_mime_types)) {
-			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomAudio('.$fileId.',\''.urlencode($row['fileName']).'\');"><center>';
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomAudio('.$fileId.',\''.urlencode($title).'\');"><center>';
 			echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 			if ($click) echo '</center></div>';
 		} else if (in_array($mime, $files->video_mime_types)) {
-			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomVideo('.$fileId.',\''.urlencode($row['fileName']).'\');"><center>';
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomVideo('.$fileId.',\''.urlencode($title).'\');"><center>';
 			echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';
 			echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_left.png\')">&nbsp;</td>';
 			echo '<td>';
-			echo '<img src="'.$config['core_web_root'].'gfx/icon_file_video.png" width="32" height="32" alt="Video file"/>';
+
+			$vid_thumb = $files->getFiles(FILETYPE_CLONE_VIDEOTHUMB10, $fileId);
+			if ($vid_thumb) {
+				echo showThumb($vid_thumb[0]['fileId'], '', 64, 64);
+			} else {
+				echo '<img src="'.$config['core_web_root'].'gfx/vid_thumb_missing.png" width="64" height="64" alt="Video file"/>';
+			}
+
 			echo '</td>';
 			echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_right.png\')">&nbsp;</td>';
 			echo '</tr></table>';
@@ -119,12 +126,22 @@
 				echo 'News article attachments';
 				break;
 
+			case FILETYPE_PROCESS:
+				echo 'Process server content';
+				break;
+
+			case FILETYPE_CLONE_CONVERTED:
+				echo 'Process server converted files';
+				break;
+
 			default:
 				die('unknown filetype');
 		}
 		echo '</div>';
 
-		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId.' ORDER BY timeUploaded ASC';
+		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType;
+		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+		$q .= ' ORDER BY timeUploaded ASC';
 		$list = $db->getArray($q);
 
 		showImageGadgetXHTML($ownerId);
