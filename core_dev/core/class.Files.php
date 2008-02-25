@@ -61,6 +61,7 @@ class Files
 	public $video_mime_types = array(
 		'video/mpeg',			//.mpg file
 		'video/avi',			//.avi file
+		'video/x-msvideo',	//.avi file
 		'video/x-ms-wmv',	//Microsoft .wmv file
 		'video/3gpp',			//.3gp video file
 		'video/x-flv',		//Flash video

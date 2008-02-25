@@ -41,6 +41,8 @@
 	$config['files']['thumbs_dir'] = 'E:/devel/webupload/sample/thumbs/';
 	$files = new Files($config['files']);
 
+	$config['process']['video_watermark'] = '/home/martin/dev/cs/www.phonecafe.se/gfx/pc_watermark_r.png';
+
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
 ?>
