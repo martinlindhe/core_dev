@@ -3,10 +3,10 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	$config['core_root'] = '/home/martin/dev/cs/www.phonecafe.se/core_dev/';	//use of an absolute path is highly recommended
-	$config['core_web_root'] = '/core_dev/';						//the webpath to root level of core files (css, js, gfx directories)
+	$config['core_root'] = '/home/martin/dev/core_dev/';	//use of an absolute path is highly recommended
+	$config['core_web_root'] = '/';						//the webpath to root level of core files (css, js, gfx directories)
 
-	$config['web_root'] = '/core_dev/process/';						//the webpath to the root level of the project
+	$config['web_root'] = '/process/';						//the webpath to the root level of the project
 	$config['default_title'] = 'process server project';					//default title for pages if no title is specified for that page
 
 	set_include_path($config['core_root'].'core/');
@@ -23,7 +23,7 @@
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= 'dravel';
 	$config['database']['database']	= 'dbSample';
-	$config['database']['host']	= '10.10.10.240';
+	$config['database']['host']	= 'localhost';
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
@@ -37,11 +37,10 @@
 	$auth = new Auth_Standard($config['auth']);
 
 	$config['files']['apc_uploads'] = false;
-	$config['files']['upload_dir'] = 'E:/devel/webupload/sample/';
-	$config['files']['thumbs_dir'] = 'E:/devel/webupload/sample/thumbs/';
+	$config['files']['upload_dir'] = '/home/martin/process-uploads/';
 	$files = new Files($config['files']);
 
-	$config['process']['video_watermark'] = '/home/martin/dev/cs/www.phonecafe.se/gfx/pc_watermark_r.png';
+	$config['process']['video_watermark'] = '';
 
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
