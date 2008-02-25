@@ -89,7 +89,7 @@
 			echo 'Select output format: ';
 
 			echo '<select name="dst_audio_fmt">';
-			foreach ($dst_audio as $key => $val) {
+			foreach ($files->audio_mime_types as $key => $val) {
 				echo '<option value="'.$key.'">'.$val.'</option>';
 			}
 			echo '</select>';
@@ -104,7 +104,7 @@
 			echo 'Select output format: ';
 
 			echo '<select name="dst_image_fmt">';
-			foreach ($dst_image as $key => $val) {
+			foreach ($files->image_mime_types as $key => $val) {
 				echo '<option value="'.$key.'">'.$val.'</option>';
 			}
 			echo '</select>';
@@ -123,7 +123,7 @@
 			echo 'Select output format: ';
 
 			echo '<select name="dst_video_fmt">';
-			foreach ($dst_video as $key => $val) {
+			foreach ($files->video_mime_types as $key => $val) {
 				echo '<option value="'.$key.'">'.$val.'</option>';
 			}
 			echo '</select>';

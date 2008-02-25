@@ -391,10 +391,11 @@ class Files
 	/**
 	 * Finds out where to store the file in filesystem, creating directories when nessecary
 	 */
-	function findUploadPath($fileId, $mkdir = true, $base_dir = 'org/')
+	function findUploadPath($fileId, $mkdir = true, $base_dir = '')
 	{
 		$subdir = floor($fileId / 10000) * 10000;
 
+		if (!$base_dir) $base_dir = 'org/';
 		$dir = $this->upload_dir.$base_dir.$subdir;
 
 		if ($mkdir && !is_dir($this->upload_dir.$base_dir)) {
