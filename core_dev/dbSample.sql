@@ -240,7 +240,7 @@ CREATE TABLE `tblProcessQueue` (
   `timeCreated` datetime default NULL,
   `creatorId` int(10) unsigned default NULL,
   `orderType` tinyint(3) unsigned NOT NULL,
-  `orderCompleted` tinyint(1) unsigned NOT NULL default '0',
+  `orderStatus` tinyint(1) unsigned NOT NULL default '0',
   `orderParams` text,
   `timeExec` float unsigned default NULL,
   `timeCompleted` datetime default NULL,
