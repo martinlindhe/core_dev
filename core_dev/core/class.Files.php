@@ -391,14 +391,15 @@ class Files
 	/**
 	 * Finds out where to store the file in filesystem, creating directories when nessecary
 	 */
-	function findUploadPath($fileId, $mkdir = true)
+	function findUploadPath($fileId, $mkdir = true, $base_dir = 'org/')
 	{
 		$subdir = floor($fileId / 10000) * 10000;
-		$dir = $this->upload_dir.'org/'.$subdir;
 
-		if ($mkdir && !is_dir($this->upload_dir.'org/')) {
-			mkdir($this->upload_dir.'org/');
-			chmod($this->upload_dir.'org/', 0777);
+		$dir = $this->upload_dir.$base_dir.$subdir;
+
+		if ($mkdir && !is_dir($this->upload_dir.$base_dir)) {
+			mkdir($this->upload_dir.$base_dir);
+			chmod($this->upload_dir.$base_dir, 0777);
 		}
 
 		if ($mkdir && !is_dir($dir)) {
@@ -411,20 +412,7 @@ class Files
 
 	function findThumbPath($fileId)
 	{
-		$subdir = floor($fileId / 10000) * 10000;
-		$dir = $this->upload_dir.'thumb/'.$subdir;
-
-		if (!is_dir($this->upload_dir.'thumb/')) {
-			mkdir($this->upload_dir.'thumb/');
-			chmod($this->upload_dir.'thumb/', 0777);
-		}
-
-		if (!is_dir($dir)) {
-			mkdir($dir);
-			chmod($dir, 0777);
-		}
-
-		return $dir.'/'.$fileId;
+		return findUploadPath($fileId, false, 'thumb/');
 	}
 
 	/**
