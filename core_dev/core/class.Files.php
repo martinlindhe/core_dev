@@ -49,7 +49,10 @@ class Files
 	public $image_mime_types = array(
 		'image/jpeg',
 		'image/png',
-		'image/gif'
+		'image/gif',
+		'image/bmp',
+		'image/svg+xml',	//IE 7, Firefox 2
+		'image/svg-xml' 	//Opera 9.2
 	); ///<FIXME remove
 
 	public $audio_mime_types	= array(
@@ -79,6 +82,9 @@ class Files
 		'png' => array(MEDIATYPE_IMAGE, 'image/png', 'PNG Image'),
 		'jpg' => array(MEDIATYPE_IMAGE, 'image/jpeg', 'JPEG Image'),
 		'gif' => array(MEDIATYPE_IMAGE, 'image/gif', 'GIF Image'),
+		'bmp' => array(MEDIATYPE_IMAGE, 'image/bmp', 'BMP Image'),
+		'svg' => array(MEDIATYPE_IMAGE, 'image/svg+xml', 'SVG Image'),	//IE 7, Firefox 2
+		'svg' => array(MEDIATYPE_IMAGE, 'image/svg-xml', 'SVG Image'),	//Opera 9.2
 
 		'wmv' => array(MEDIATYPE_VIDEO, 'video/x-ms-wmv', 'Windows Media Video'),
 		'avi' => array(MEDIATYPE_VIDEO, 'video/avi', 'DivX 3 Video'),
@@ -115,6 +121,12 @@ class Files
 	public $apc_uploads					= false;		///< enable support for php_apc + php_uploadprogress calls
 	public $image_convert				= true;			///< use imagemagick to handle exotic image formats
 
+	public $process_client			= false;		///< set to filename of process server SOAP client script to perform video/audio conversions
+	public $process_callback		= false;		///< script to callback on process server completition (optional)
+
+	public $default_video = 'video/x-flv';	///< FLV = default fileformat to convert video to
+	public $default_audio = 'audio/x-mpeg';	///< MP3 = default fileformat to convert audio to
+
 	/**
 	 * Constructor. Initializes class configuration
 	 *
@@ -137,6 +149,9 @@ class Files
 		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
 		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
+
+		if (isset($config['process_client'])) $this->process_client = $config['process_client'];
+		if (isset($config['process_callback'])) $this->process_callback = $config['process_callback'];
 	}
 
 	/**
@@ -272,10 +287,13 @@ class Files
 		//Identify and handle various types of files
 		if (in_array($FileData['type'], $this->image_mime_types)) {
 			$this->handleImageUpload($fileId, $FileData);
+		} else if (in_array($FileData['type'], $this->video_mime_types)) {
+			$this->handleVideoUpload($fileId, $FileData);
 		} else if (in_array($FileData['type'], $this->audio_mime_types)) {
-			$this->handleGeneralUpload($fileId, $FileData);
+			//FIXME audio conversion with process server
+			$this->moveUpload($FileData['tmp_name'], $fileId);
 		} else {
-			$this->handleGeneralUpload($fileId, $FileData);
+			$this->moveUpload($FileData['tmp_name'], $fileId);
 		}
 
 		$this->updateFile($fileId);	//force update of filesize, mimetype & checksum
@@ -317,58 +335,6 @@ class Files
 		$this->updateFile($newFileId);
 
   	return $newFileId;
-	}
-
-	/**
-	 * File upload handling function. Generates thumbnails for images upon upload etc, handles different media types differently
-	 *
-	 * \param $fileId file id to deal with
-	 * \param $FileData array of php internal file data from file upload
-	 */
-	function handleGeneralUpload($fileId, $FileData)
-	{
-		global $db, $session;
-
-		switch ($FileData['type']) {
-			case 'image/bmp':	//IE 7, Firefox 2, Opera 9.2
-				if (!$this->image_convert) break;
-				$out_tempfile = $this->tmp_dir.'core_outfile.jpg';
-				$check = convertImage($FileData['tmp_name'], $out_tempfile, 'image/jpeg');
-				if (!$check) {
-					$session->log('Failed to convert bmp to jpeg!');
-					break;
-				}
-
-				unlink($FileData['tmp_name']);
-				rename($out_tempfile, $FileData['tmp_name']);
-				$filesize = filesize($FileData['tmp_name']);
-				$q = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.jpg",fileSize='.$filesize.' WHERE fileId='.$fileId;
-				$db->query($q);
-				$this->handleImageUpload($fileId, $FileData);
-				return true;
-
-			case 'image/svg+xml':	//IE 7, Firefox 2
-			case 'image/svg-xml':	//Opera 9.2
-				if (!$this->image_convert) break;
-				$out_tempfile = $this->tmp_dir.'core_outfile.png';
-
-				$check = convertImage($FileData['tmp_name'], $out_tempfile, 'image/png');
-
-				if (!$check) {
-					$session->log('Failed to convert svg to png!');
-					break;
-				}
-
-				unlink($FileData['tmp_name']);
-				rename($out_tempfile, $FileData['tmp_name']);
-				$filesize = filesize($FileData['tmp_name']);
-				$q = 'UPDATE tblFiles SET fileMime="image/png", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.png",fileSize='.$filesize.' WHERE fileId='.$fileId;
-				$db->query($q);
-				$this->handleImageUpload($fileId, $FileData);
-				return true;
-		}
-
-		$this->moveUpload($FileData['tmp_name'], $fileId);
 	}
 
 	/**
@@ -417,6 +383,32 @@ class Files
 	}
 
 	/**
+	 * If server is configured for process server use,
+	 * enqueue the video for conversion, otherwise just store it away
+	 */
+	function handleVideoUpload($fileId, $FileData)
+	{
+		global $db, $config;
+
+		if ($this->default_video && $this->process_client) {
+			if ($FileData['type'] != $this->default_video) {
+
+				include_once($this->process_client);
+				$uri = $config['full_web_root'].$config['core_web_root'].'api/file.php?id='.$fileId;
+				$refId = process_client_fetchAndConvert($uri, $this->process_callback);
+				if (!$refId) {
+					echo 'Failed to add order!';
+				} else {
+					//echo 'Order added successfully. Order ID is '.$refId;
+				}
+			}
+		}
+
+		$this->moveUpload($FileData['tmp_name'], $fileId);
+		return true;
+	}
+
+	/**
 	 * Handle image upload, used internally only
 	 *
 	 * \param $fileId file id to deal with
@@ -425,6 +417,43 @@ class Files
 	function handleImageUpload($fileId, $FileData)
 	{
 		global $db, $session;
+
+		switch ($FileData['type']) {
+			case 'image/bmp':	//IE 7, Firefox 2, Opera 9.2
+				if (!$this->image_convert) break;
+				$out_tempfile = $this->tmp_dir.'core_outfile.jpg';
+				$check = convertImage($FileData['tmp_name'], $out_tempfile, 'image/jpeg');
+				if (!$check) {
+					$session->log('Failed to convert bmp to jpeg!');
+					break;
+				}
+
+				unlink($FileData['tmp_name']);
+				rename($out_tempfile, $FileData['tmp_name']);
+				$filesize = filesize($FileData['tmp_name']);
+				$q = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.jpg",fileSize='.$filesize.' WHERE fileId='.$fileId;
+				$db->query($q);
+				break;
+
+			case 'image/svg+xml':	//IE 7, Firefox 2
+			case 'image/svg-xml':	//Opera 9.2
+				if (!$this->image_convert) break;
+				$out_tempfile = $this->tmp_dir.'core_outfile.png';
+
+				$check = convertImage($FileData['tmp_name'], $out_tempfile, 'image/png');
+
+				if (!$check) {
+					$session->log('Failed to convert svg to png!');
+					break;
+				}
+
+				unlink($FileData['tmp_name']);
+				rename($out_tempfile, $FileData['tmp_name']);
+				$filesize = filesize($FileData['tmp_name']);
+				$q = 'UPDATE tblFiles SET fileMime="image/png", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.png",fileSize='.$filesize.' WHERE fileId='.$fileId;
+				$db->query($q);
+				break;
+		}
 
 		list($img_width, $img_height) = getimagesize($FileData['tmp_name']);
 
@@ -436,7 +465,7 @@ class Files
 
 		$this->moveUpload($FileData['tmp_name'], $fileId);
 		$this->makeThumbnail($fileId);
-		return $fileId;
+		return true;
 	}
 
 	/**

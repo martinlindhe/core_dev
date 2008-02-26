@@ -24,10 +24,6 @@ require_once('functions_fileareas.php');
 //WARNING: keep this a low number unless you are sure what the consequences are
 $config['process']['process_limit'] = 3;
 
-$config['process']['default']['video'] = 'video/x-flv';		//convert video to flv
-$config['process']['default']['audio'] = 'audio/x-mpeg';	//convert audio to mp3
-
-
 define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
 define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
 define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding/converting to another image format
@@ -387,7 +383,7 @@ define('ORDER_FAILED',		3);
 					if (in_array($file['fileMime'], $files->video_mime_types)) {
 
 						$exec_start = microtime(true);
-						if (convertVideo($prev_job['referId'], $config['process']['default']['video']) === false) {
+						if (convertVideo($prev_job['referId'], $files->default_video) === false) {
 							markQueueFailed($job['entryId']);
 						} else {
 							markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
