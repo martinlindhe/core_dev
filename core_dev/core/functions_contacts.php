@@ -321,7 +321,7 @@ require_once('functions_locale.php');	//for translations
 	 * \param $otherId user id
 	 * \return true on success
 	 */
-	function addBlock($otherId)
+	function addContactBlock($otherId)
 	{
 		global $db, $session, $config;
 		if (!$session->id || !is_numeric($otherId)) return false;
