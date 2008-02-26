@@ -72,7 +72,7 @@ define('ORDER_FAILED',		3);
 				$files->checksums($newFileId);	//force generation of file checksums
 
 				$exec_time = microtime(true) - $exec_start;
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId='.$newFileId.',orderStatus='.ORDER_COMPLETED.',orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId='.$newFileId.',orderStatus='.ORDER_COMPLETED.',orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
 				return $db->insert($q);
 
 			case PROCESSQUEUE_AUDIO_RECODE:
@@ -82,7 +82,7 @@ define('ORDER_FAILED',		3);
 				//	$param = fileId
 				//	$param2 = destination format (by extension)
 				if (!is_numeric($param)) die;
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param2).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param2).'"';
 				return $db->insert($q);
 
 			case PROCESS_FETCH:
@@ -90,20 +90,22 @@ define('ORDER_FAILED',		3);
 				//	$param = url
 				// downloads media files, torrents & youtube links
 
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
 				return $db->insert($q);
 
 			case PROCESS_CONVERT_TO_DEFAULT:
+				if (!is_numeric($param)) return false;
 				//convert some media to the default media type, can be used to enqueue a conversion of a PROCESSFETCH before the server
 				//has fetched it & cant know the media type
 				//  $param = eventId we refer to. from this we can extract the future fileId to process
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
+				//	$param2 = callback URL on process completion
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param2).'"';
 				return $db->insert($q);
 
 			case PROCESSMONITOR_SERVER:
 				//enqueues a server to be monitored
 				// $param = serialized params
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',fileId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
 				return $db->insert($q);
 
 			case PROCESSPARSE_AND_FETCH:
@@ -162,14 +164,14 @@ define('ORDER_FAILED',		3);
 	}
 
 	/**
-	 * Returns a list of currently enqueued actions to do for fileId $_id
+	 * Returns a list of currently enqueued actions to do for referId $_id (can be tblFiles.fileId or tblProcessQueue.eventId)
 	 */
 	function getQueuedEvents($_id)
 	{
 		global $db;
 		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT * FROM tblProcessQueue WHERE fileId='.$_id.' AND orderStatus='.ORDER_NEW.' ORDER BY timeCreated ASC';
+		$q = 'SELECT * FROM tblProcessQueue WHERE referId='.$_id.' AND orderStatus='.ORDER_NEW.' ORDER BY timeCreated ASC';
 		return $db->getArray($q);
 	}
 
@@ -201,7 +203,7 @@ define('ORDER_FAILED',		3);
 		}
 
 		echo 'Process log:<br/>';
-		$q = 'SELECT * FROM tblProcessQueue WHERE fileId='.$_id;
+		$q = 'SELECT * FROM tblProcessQueue WHERE referId='.$_id.' AND orderType != '.PROCESS_CONVERT_TO_DEFAULT;
 		$list = $db->getArray($q);
 		echo '<table border="1">';
 		echo '<tr>';
@@ -258,13 +260,13 @@ define('ORDER_FAILED',		3);
 						break;
 					}
 
-					$file = $files->getFileInfo($job['fileId']);
+					$file = $files->getFileInfo($job['referId']);
 					if (!$file) {
-						echo 'Error: no fileentry existed for fileId '.$job['fileId'];
+						echo 'Error: no fileentry existed for fileId '.$job['referId'];
 						break;
 					}
 
-					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
+					$newId = $files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
 
 					echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format '.$job['orderParams']." ...\n";
 
@@ -272,19 +274,19 @@ define('ORDER_FAILED',		3);
 						case 'application/x-ogg':
 							//FIXME hur anger ja dst-format utan filändelse? tvingas göra det i 2 steg nu
 							$dst_file = 'tmpfile.ogg';
-							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
+							$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
 							break;
 
 						case 'audio/x-ms-wma':
 							$dst_file = 'tmpfile.wma';
-							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
+							$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
 							break;
 
 						case 'audio/mpeg':
 						case 'audio/x-mpeg':
 							//fixme: source & destination should not be able to be the same!
 							$dst_file = 'tmpfile.mp3';
-							$c = 'ffmpeg -i "'.$files->findUploadPath($job['fileId']).'" '.$dst_file;
+							$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
 							break;
 
 						default:
@@ -313,7 +315,7 @@ define('ORDER_FAILED',		3);
 					echo "VIDEO RECODE:\n";
 
 					$exec_start = microtime(true);
-					if (convertVideo($job['fileId'], $job['orderParams']) === false) {
+					if (convertVideo($job['referId'], $job['orderParams']) === false) {
 						markQueueFailed($job['entryId']);
 					} else {
 						markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
@@ -327,10 +329,10 @@ define('ORDER_FAILED',		3);
 						$session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
 						break;
 					}
-					$newId = $files->cloneFile($job['fileId'], FILETYPE_CLONE_CONVERTED);
+					$newId = $files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
 
 					$exec_start = microtime(true);
-					$check = convertImage($files->findUploadPath($job['fileId']), $files->findUploadPath($newId), $job['orderParams']);
+					$check = convertImage($files->findUploadPath($job['referId']), $files->findUploadPath($newId), $job['orderParams']);
 					$exec_time = microtime(true) - $exec_start;
 					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 
@@ -377,15 +379,15 @@ define('ORDER_FAILED',		3);
 
 				case PROCESS_CONVERT_TO_DEFAULT:
 					echo "CONVERT TO DEFAULT:\n";
-					//$param is entryId of previous proccess queue order, fetch fileId from it
-					$prev_job = getProcessQueueEntry($job['orderParams']);
+					//referId is entryId of previous proccess queue order
+					$prev_job = getProcessQueueEntry($job['referId']);
 
-					$file = $files->getFileInfo($prev_job['fileId']);
+					$file = $files->getFileInfo($prev_job['referId']);
 
 					if (in_array($file['fileMime'], $files->video_mime_types)) {
 
 						$exec_start = microtime(true);
-						if (convertVideo($prev_job['fileId'], $config['process']['default']['video']) === false) {
+						if (convertVideo($prev_job['referId'], $config['process']['default']['video']) === false) {
 							markQueueFailed($job['entryId']);
 						} else {
 							markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
@@ -474,15 +476,15 @@ define('ORDER_FAILED',		3);
 	 *
 	 * \param $entryId entry id
 	 * \param $exec_time time it took to execute this task
-	 * \param $fileId optional, specify if we now refer to a file, used when the process event was to fetch a file
+	 * \param $referId optional, specify if we now refer to a file, used when the process event was to fetch a file
 	 */
-	function markQueueCompleted($entryId, $exec_time, $fileId = 0)
+	function markQueueCompleted($entryId, $exec_time, $referId = 0)
 	{
 		global $db;
 		if (!is_numeric($entryId) || !is_float($exec_time)) return false;
 
 		$q = 'UPDATE tblProcessQueue SET orderStatus='.ORDER_COMPLETED.',timeCompleted=NOW(),timeExec="'.$exec_time.'"';
-		if ($fileId) $q .= ',fileId='.$fileId;
+		if ($referId) $q .= ',referId='.$referId;
 		$q .= ' WHERE entryId='.$entryId;
 		$db->update($q);
 	}

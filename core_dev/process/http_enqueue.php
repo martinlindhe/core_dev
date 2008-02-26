@@ -6,7 +6,7 @@
 	$eventId = $_GET['id'];
 
 	$event = getProcessQueueEntry($eventId);
-	$fileId = $event['fileId'];
+	$fileId = $event['referId'];
 
 	require('design_head.php');
 

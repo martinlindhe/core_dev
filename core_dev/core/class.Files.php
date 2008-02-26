@@ -413,7 +413,7 @@ class Files
 
 	function findThumbPath($fileId)
 	{
-		return findUploadPath($fileId, false, 'thumb/');
+		return $this->findUploadPath($fileId, false, 'thumb/');
 	}
 
 	/**
