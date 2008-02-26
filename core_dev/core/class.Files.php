@@ -379,7 +379,7 @@ class Files
 
 	function findThumbPath($fileId)
 	{
-		return $this->findUploadPath($fileId, false, 'thumb/');
+		return $this->findUploadPath($fileId, true, 'thumb/');
 	}
 
 	/**
@@ -395,7 +395,7 @@ class Files
 
 				include_once($this->process_client);
 				$uri = $config['full_web_root'].$config['core_web_root'].'api/file.php?id='.$fileId;
-				$refId = process_client_fetchAndConvert($uri, $this->process_callback);
+				$refId = process_client_fetchAndConvert($uri, $this->process_callback.'?id='.$fileId);
 				if (!$refId) {
 					echo 'Failed to add order!';
 				} else {

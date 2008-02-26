@@ -119,7 +119,7 @@ define('ORDER_FAILED',		3);
 	}
 
 	/**
-	 *
+	 * FIXME remove??
 	 */
 	function getEvents()
 	{
@@ -154,7 +154,7 @@ define('ORDER_FAILED',		3);
 		if ($completed) $cnd = 'orderStatus='.ORDER_COMPLETED;
 		else $cnd = 'orderStatus='.ORDER_NEW;
 
-		$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated ASC';
+		$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated ASC, entryId ASC';
 		if ($_limit) $q .= ' LIMIT '.$_limit;
 		return $db->getArray($q);
 	}
@@ -383,10 +383,18 @@ define('ORDER_FAILED',		3);
 					if (in_array($file['fileMime'], $files->video_mime_types)) {
 
 						$exec_start = microtime(true);
-						if (convertVideo($prev_job['referId'], $files->default_video) === false) {
+						$newId = convertVideo($prev_job['referId'], $files->default_video);
+						if ($newId === false) {
 							markQueueFailed($job['entryId']);
 						} else {
 							markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
+
+							if ($job['orderParams']) {
+								//execute callback
+								$uri = $config['full_core_web_root'].'api/file.php?id='.$newId;
+								$data = file_get_contents($job['orderParams'].'&uri='.urlencode($uri));
+								echo "client callback script returned:\n".$data;
+							}
 						}
 
 					} else if (in_array($file['fileMime'], $files->audio_mime_types)) {

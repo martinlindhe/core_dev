@@ -5,8 +5,10 @@
 
 	$config['core_root'] = '/home/martin/dev/core_dev/';	//use of an absolute path is highly recommended
 	$config['core_web_root'] = '/';						//the webpath to root level of core files (css, js, gfx directories)
+	$config['full_core_web_root'] = 'http://localhost'.$config['core_web_root'];
 
 	$config['web_root'] = '/process/';						//the webpath to the root level of the project
+	$config['full_web_root'] = 'http://localhost'.$config['web_root'];
 	$config['default_title'] = 'process server project';					//default title for pages if no title is specified for that page
 
 	set_include_path($config['core_root'].'core/');
