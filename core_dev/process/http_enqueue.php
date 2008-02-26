@@ -33,32 +33,6 @@
 		die;
 	}
 
-	$dst_audio = array(	//FIXME use class.Files array instead
-		'application/x-ogg' => 'Ogg audio',
-		'audio/x-ms-wma' => 'WMA audio',
-		'audio/x-mpeg' => 'mp3 audio'
-	);
-
-	$dst_image = array(//FIXME use class.Files array instead
-		'image/png' => 'PNG image',
-		'image/jpeg' => 'JPEG image',
-		'image/gif' => 'GIF image'
-	);
-
-	$dst_video = array(//FIXME use class.Files array instead
-		'video/x-flv'			=>	'Flash Video',
-		'video/mpeg'			=>	'MPEG-2 video',
-		'video/avi'				=>	'DivX 3 video',
-		'video/x-ms-wmv'	=>	'Windows Media Video',
-		'video/3gpp'			=>	'.3gp video file',
-		'application/ogg'	=>	'Ogg video'
-	);
-
-	//mime types to process a second time, to extract new media resources from (torrents, embedded video url's in html etc)
-	$dst_2ndpass = array(
-		'application/x-bittorrent'	=>	'BitTorrent file',
-		'text/html'									=>	'HTML page'
-	);
 	wiki('ProcessFile');
 
 	if ($event['orderType'] == PROCESS_FETCH) {
