@@ -359,18 +359,18 @@ define('ORDER_FAILED',		3);
 					break;
 
 				case PROCESS_FETCH:
-					echo 'FETCH CONTENT FROM '.$job['orderParams'].'<br/>';
+					echo "FETCH CONTENT FROM ".$job['orderParams']."\n";
 
 					$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
 
 					$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
 
-					//fixme: isURL() check
+					//FIXME: isURL() check
 					$c = 'wget '.$job['orderParams'].' -O '.$files->findUploadPath($newFileId);
-					echo 'Executing: '.$c.'<br/>';
+					echo "Executing: ".$c."\n";
 					$exec_time = exectime($c);
 
-					//todo: process html document for media links if it is a html document
+					//TODO: process html document for media links if it is a html document
 
 					markQueueCompleted($job['entryId'], $exec_time, $newFileId);
 					$files->updateFile($newFileId);
@@ -415,15 +415,15 @@ define('ORDER_FAILED',		3);
 					} else if (in_array($file['fileMime'], $files->audio_mime_types)) {
 						die('CONVERT TO MP3!!!!');
 					} else {
-						echo 'CANNOT CONVERT MEDIA!!!';
+						echo "UNKNOWN MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
+						markQueueFailed($job['entryId']);
 					}
 					break;
 
 				default:
-					echo 'unknown ordertype: '.$job['orderType'].'<br/>';
+					echo "Unknown ordertype: ".$job['orderType']."\n";
 					die;
 			}
-
 		}
 	}
 

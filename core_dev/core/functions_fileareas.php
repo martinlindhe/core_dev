@@ -30,7 +30,9 @@
 		} else if (in_array($mime, $files->video_mime_types)) {
 
 			if ($files->process_client && $mime != $files->default_video) {
+				echo '<div class="file_gadget_entry">';
 				echo 'Video awaiting conversion';
+				echo '</div>';
 			} else {
 				if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomVideo('.$fileId.',\''.urlencode($title).'\');"><center>';
 				echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';

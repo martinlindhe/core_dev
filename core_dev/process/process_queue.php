@@ -6,7 +6,7 @@
 
 	do {
 		processQueue();
-		sleep(1);
+		sleep(10);
 	} while (1);
 
 	//include('design_head.php'); $db->showProfile();

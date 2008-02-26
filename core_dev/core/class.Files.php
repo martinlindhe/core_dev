@@ -390,6 +390,8 @@ class Files
 	{
 		global $db, $config;
 
+		$this->moveUpload($FileData['tmp_name'], $fileId);
+
 		if ($this->default_video && $this->process_client) {
 			if ($FileData['type'] != $this->default_video) {
 
@@ -404,7 +406,6 @@ class Files
 			}
 		}
 
-		$this->moveUpload($FileData['tmp_name'], $fileId);
 		return true;
 	}
 
@@ -689,13 +690,6 @@ class Files
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
 
-		/* This sends files without extension etc as plain text if you didnt specify to download them */
-		if ((!$force_mime && !isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream')) {
-			header('Content-Type: text/plain');
-		} else {
-			header('Content-Type: '.$data['fileMime']);
-		}
-
 		if (isset($_GET['dl'])) {
 			/* Prompts the user to save the file */
 			header('Content-Disposition: attachment; filename="'.basename($data['fileName']).'"');
@@ -713,9 +707,17 @@ class Files
 		} else {
 			$this->setCachedHeaders();
 
+			/* This sends files without extension etc as plain text if you didnt specify to download them */
+			if ((!$force_mime && !isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream')) {
+				header('Content-Type: text/plain');
+			} else {
+				header('Content-Type: '.$data['fileMime']);
+			}
+
 			//Just delivers the file as-is
 			header('Content-Length: '. $data['fileSize']);
-			echo file_get_contents($this->findUploadPath($_id));
+
+			readfile($this->findUploadPath($_id));
 		}
 
 		//Count the file downloads
@@ -741,7 +743,7 @@ class Files
 		header('Content-Type: text/plain');
 		header('Content-Disposition: attachment; filename="'.basename($filename).'"');
 
-		readfile($filename, 'r');
+		readfile($filename);
 	}
 
 	/**
@@ -801,7 +803,8 @@ class Files
 		}
 		header('Content-Type: '.$mime_type);
 		header('Content-Length: '.filesize($out_filename));
-		echo file_get_contents($out_filename);
+
+		readfile($out_filename);
 
 		if ($log) {
 			logVisit(VISIT_FILE, $_id);
