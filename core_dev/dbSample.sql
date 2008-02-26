@@ -236,7 +236,7 @@ CREATE TABLE `tblPolls` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `tblProcessQueue` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
-  `fileId` bigint(20) unsigned default NULL,
+  `referId` bigint(20) unsigned default NULL,
   `timeCreated` datetime default NULL,
   `creatorId` int(10) unsigned default NULL,
   `orderType` tinyint(3) unsigned NOT NULL,
