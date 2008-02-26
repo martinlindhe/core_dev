@@ -4,7 +4,10 @@
 	$config['no_session'] = true;	//force session "last active" update to be skipped
 	require_once('config.php');
 
-	processQueue();
+	do {
+		processQueue();
+		sleep(1);
+	} while (1);
 
 	//include('design_head.php'); $db->showProfile();
 

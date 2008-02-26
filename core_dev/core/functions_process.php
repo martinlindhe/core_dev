@@ -229,12 +229,27 @@ define('ORDER_FAILED',		3);
 		showFileInfo($_id);
 	}
 
+	function getProcessesQueueStatusCnt($_order_status)
+	{
+		global $db;
+		if (!is_numeric($_order_status)) return false;
+
+		$q = 'SELECT COUNT(*) FROM tblProcessQueue WHERE orderStatus='.$_order_status;
+		return $db->getOneItem($q);
+	}
+
 	/**
 	 * Takes some work orders from the process queue and performs them
 	 */
 	function processQueue()
 	{
 		global $config, $files;
+
+		//Only allows a few work orders being executed at once, so we can call this function very often
+		if (getProcessesQueueStatusCnt(ORDER_EXECUTING) > $config['process']['process_limit']) {
+			echo "TOO MUCH ACTIVE WORK, ABORTING\n";
+			return;
+		}
 
 		$list = getProcessQueue($config['process']['process_limit']);
 
@@ -429,7 +444,7 @@ define('ORDER_FAILED',		3);
 			case 'video/x-flv':
 				//Flash video. Confirmed working
 				$c = 'ffmpeg -i '.$files->findUploadPath($fileId).' -f flv -ac 2 -ar 22050 ';
-				if (!empty($config['process']['video_watermark'])) $c .= '-vhook "/usr/lib/vhook/watermark.so -f '.$config['process']['video_watermark'].'" ';
+				if (!empty($config['process']['video_watermark'])) $c .= '-vhook "/usr/lib/vhook/watermark.so -m 1 -f '.$config['process']['video_watermark'].'" ';
 				$c .= $files->findUploadPath($newId);
 				break;
 
