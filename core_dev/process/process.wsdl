@@ -2,71 +2,47 @@
 
 <definitions name="Process"
 	targetNamespace="http://example.org/process.wsdl"
-	xmlns:tns=" http://example.org/process.wsdl"
+	xmlns:tns="http://example.org/process.wsdl"
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns="http://schemas.xmlsoap.org/wsdl/">
 
-<message name="loginRequest">
-	<part name="username" type="xsd:string"/>
-	<part name="password" type="xsd:string"/>
-</message>
-<message name="loginResponse">
-	<part name="Result" type="xsd:boolean"/>
-</message>
+	<message name="fetchAndConvertRequest">
+		<part name="uri" type="xsd:string"/>
+		<part name="callback" type="xsd:string"/>
+	</message>
+	<message name="fetchAndConvertResponse">
+		<part name="Result" type="xsd:integer"/>
+	</message>
 
-<message name="newOrderRequest">
-	<part name="type" type="xsd:integer"/>
-	<part name="params" type="xsd:string"/>
-</message>
-<message name="newOrderResponse">
-	<part name="Result" type="xsd:integer"/>
-</message>
+	<portType name="ProcessPortType">
+		<operation name="fetchAndConvert">
+			<input message="tns:fetchAndConvertRequest"/>
+			<output message="tns:fetchAndConvertResponse"/>
+		</operation>
+	</portType>
 
+	<binding name="ProcessBinding" type="tns:ProcessPortType">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 
-<portType name="ProcessPortType">
-	<operation name="login">
-		<input message="tns:loginRequest"/>
-		<output message="tns:loginResponse"/>
-	</operation>
+		<operation name="fetchAndConvert">
+			<soap:operation soapAction="urn:#fetchAndConvert"/>
+			<input>
+				<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</input>
+			<output>
+				<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</output>
+		</operation>
 
-	<operation name="newOrder">
-		<input message="tns:newOrderRequest"/>
-		<output message="tns:newOrderResponse"/>
-	</operation>
-</portType>
+	</binding>
 
-<binding name="ProcessBinding" type="tns:ProcessPortType">
-	<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-
-	<operation name="login">
-		<soap:operation soapAction="urn:#login"/>
-		<input>
-			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-		</input>
-		<output>
-			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-		</output>
-	</operation>
-
-	<operation name="newOrder">
-		<soap:operation soapAction="urn:#newOrder"/>
-		<input>
-			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-		</input>
-		<output>
-			<soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-		</output>
-	</operation>
-
-</binding>
-
-<service name="ProcessService">
-	<port name="ProcessPort" binding="tns:ProcessBinding">
-		<soap:address location="http://localhost/process/server.php"/>
-	</port>
-</service>
+	<service name="ProcessService">
+		<port name="ProcessPort" binding="tns:ProcessBinding">
+			<soap:address location="http://localhost/core_dev/process/soap_server.php"/>
+		</port>
+	</service>
 
 </definitions>

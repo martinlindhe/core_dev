@@ -80,14 +80,11 @@ class Auth_Standard extends Auth_Base
 	{
 		global $db, $session;
 
-		$enc_username = $db->escape($username);
-		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
+		$data = $this->validLogin($username, $password);
 
-		$q = 'SELECT * FROM tblUsers WHERE userName="'.$enc_username.'" AND userPass="'.$enc_password.'"';
-		$data = $db->getOneRow($q);
 		if (!$data) {
 			$session->error = t('Login failed');
-			$session->log('Failed login attempt: username '.$enc_username, LOGLEVEL_WARNING);
+			$session->log('Failed login attempt: username '.$username, LOGLEVEL_WARNING);
 			return false;
 		}
 
@@ -108,6 +105,23 @@ class Auth_Standard extends Auth_Base
 		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$session->id.', IP='.$session->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
 		return true;
+	}
+
+	/**
+	 * Checks if this is a valid login
+	 *
+	 * \return if valid login, return user data, else false
+	 */
+	function validLogin($username, $password)
+	{
+		global $db;
+
+		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
+
+		$q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$enc_password.'"';
+		$data = $db->getOneRow($q);
+		if (!$data) return false;
+		return $data;
 	}
 
 	/**

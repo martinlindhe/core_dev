@@ -2,19 +2,15 @@
 	ini_set('soap.wsdl_cache_enabled', '0');
 
 	require_once('config.php');
-	$session->requireLoggedIn();
+	//$session->requireLoggedIn();
 
 	$client = new SoapClient("http://localhost/core_dev/process/process.wsdl"); //, array('trace' => 1));
 
 	try {
-		$params = array(
-			'username' => 'martin',
-			'password' => 'nutana',
-			'src' => 'http://localhost/sample.3gp',
-			'callback' => 'http://localhost/process_callback.php?ref=123'	//will tell client app that file "123" finished processing
-		);
+		$uri = 'http://localhost/sample.3gp';
+		$callback = 'http://localhost/process_callback.php?ref=123';	//will tell client app that file "123" finished processing
+		$result = $client->fetchAndConvert($uri, $callback);
 
-		$result = $client->fetchAndConvert(serialize($params));
 		if (!$result) {
 			echo 'Failed to add order!';
 		} else {

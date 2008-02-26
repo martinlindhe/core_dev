@@ -98,7 +98,7 @@ define('ORDER_FAILED',		3);
 				//convert some media to the default media type, can be used to enqueue a conversion of a PROCESSFETCH before the server
 				//has fetched it & cant know the media type
 				//  $param = eventId we refer to. from this we can extract the future fileId to process
-				//	$param2 = callback URL on process completion
+				//	$param2 = callback URL on process completion (optional)
 				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param2).'"';
 				return $db->insert($q);
 

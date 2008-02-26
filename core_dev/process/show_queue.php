@@ -40,6 +40,7 @@
 
 				case PROCESS_CONVERT_TO_DEFAULT:
 					echo 'Convert media to default type for entry #'.$row['referId'].'<br/>';
+					if ($row['orderParams']) echo 'Callback URL: '.$row['orderParams'].'<br/>';
 					break;
 
 				default:
