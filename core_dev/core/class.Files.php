@@ -159,11 +159,11 @@ class Files
 	 *
 	 * \param $fileType filetype
 	 * \param $ownerId optionally select by owner also
-	 * \param $count limit the number of rows returned
-	 * \param $order sort order of results
+	 * \param $order optionally specify sort order
+	 * \param $count optionally specify how many to return
 	 * \return list of files
 	 */
-	function getFileList($fileType, $ownerId = 0, $count = 0, $order = 'ASC')
+	function getFileList($fileType, $ownerId = 0, $order = 'ASC', $count = 0)
 	{
 		global $db;
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($count) || ($order != 'ASC' && $order != 'DESC')) return false;
