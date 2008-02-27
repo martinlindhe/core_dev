@@ -382,7 +382,7 @@ define('ORDER_FAILED',		3);
 				$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
 
 				//FIXME: isURL() check
-				$c = 'wget '.$job['orderParams'].' -O '.$files->findUploadPath($newFileId);
+				$c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$files->findUploadPath($newFileId);
 				echo "Executing: ".$c."\n";
 				$exec_time = exectime($c);
 
