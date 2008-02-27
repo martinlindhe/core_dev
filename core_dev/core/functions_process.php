@@ -530,7 +530,7 @@ define('ORDER_FAILED',		3);
 	function markQueue($entryId, $_status)
 	{
 		global $db;
-		if (!is_numeric($entryId) || !is_numeric($_status) return false;
+		if (!is_numeric($entryId) || !is_numeric($_status)) return false;
 
 		$q = 'UPDATE tblProcessQueue SET orderStatus='.$_status.' WHERE entryId='.$entryId;
 		$db->update($q);
