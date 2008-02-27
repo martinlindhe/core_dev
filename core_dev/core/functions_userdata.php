@@ -24,6 +24,7 @@ define('USERDATA_TYPE_BIRTHDATE_SWE',	7);	//UNIQUE: Swedish date of birth, with 
 define('USERDATA_TYPE_EMAIL',					8);	//UNIQUE: text string holding a email address
 define('USERDATA_TYPE_THEME',					9); //UNIQUE: select-dropdown in display. contains user preferred theme (.css file)
 define('USERDATA_TYPE_LOCATION_SWE',	10);//UNIQUE: location gadget,user inputs zipcode which maps to "län" and "ort" 
+define('USERDATA_TYPE_CELLPHONE_SWE',	11);//UNIQUE: swedish cellphone number (+46-xxx)
 
 //userdata module settings:
 $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
@@ -95,7 +96,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 	}
 
 	/**
-	 *
+	 * Changes the display order of the userdata field
 	 */
 	function setUserdataFieldPriority($fieldId, $old, $new)
 	{
