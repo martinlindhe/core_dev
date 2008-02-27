@@ -84,7 +84,7 @@
 	$used_theme = false;
 	$used_birthdate_swe = false;
 	$used_location_swe = false;
-	$used_cellphone_swe = false;
+	$used_cellphone = false;
 	$i = 0;
 	echo '<div id="itemholder_1">';
 	foreach ($list as $row) {
@@ -115,7 +115,7 @@
 		if ($row['fieldType'] == USERDATA_TYPE_THEME) $used_theme = true;
 		if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) $used_birthdate_swe = true;
 		if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE) $used_location_swe = true;
-		if ($row['fieldType'] == USERDATA_TYPE_CELLPHONE_SWE) $used_cellphone_swe = true;
+		if ($row['fieldType'] == USERDATA_TYPE_CELLPHONE) $used_cellphone = true;
 
 		echo '</div><br/>';
 	}
@@ -173,8 +173,8 @@
 	if (!$used_location_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_LOCATION_SWE)) {
 		echo '<option value="'.USERDATA_TYPE_LOCATION_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_LOCATION_SWE)?' selected':'').'>Location (Sweden)</option>';
 	}
-	if (!$used_cellphone_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE_SWE)) {
-		echo '<option value="'.USERDATA_TYPE_CELLPHONE_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE_SWE)?' selected':'').'>Cellphone (Swedish)</option>';
+	if (!$used_cellphone || (isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE)) {
+		echo '<option value="'.USERDATA_TYPE_CELLPHONE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE)?' selected':'').'>Cellphone</option>';
 	}
 
 	echo '</select>';
