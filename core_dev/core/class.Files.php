@@ -155,20 +155,25 @@ class Files
 	}
 
 	/**
-	 * Returns all files uploaded of the type specified
+	 * Returns files uploaded of the type specified
 	 *
 	 * \param $fileType filetype
 	 * \param $ownerId optionally select by owner also
 	 * \return list of files
 	 */
-	function getFileList($fileType, $ownerId = 0)
+	function getFileList($fileType, $ownerId = 0, $count = 0, $order = 'ASC')
 	{
 		global $db;
-		if (!is_numeric($fileType) || !is_numeric($ownerId)) return false;
+		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($count) || ($order != 'ASC' && $order != 'DESC')) return false;
+
+		$limit = '';
+		if ($count != 0) {
+			$limit = ' LIMIT '.$count;
+		}
 
 		$q = 'SELECT * FROM tblFiles WHERE fileType='.$fileType;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-		$q .= ' ORDER BY timeUploaded ASC';
+		$q .= ' ORDER BY timeUploaded '.$order.$limit;
 		return $db->getArray($q);
 	}
 
