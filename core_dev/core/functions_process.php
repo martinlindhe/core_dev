@@ -143,8 +143,11 @@ define('ORDER_FAILED',		3);
 		if ($_id) {
 			$q = 'SELECT * FROM tblProcessQueue WHERE entryId='.$_id;
 		} else {
+			//XXX: this little delay is needed because huge uploaded files (100mb+)
+			//     is'nt ready for process yet on test box. even after move_uploaded_file().
+			//     hopefully it can be removed later on
 			$q = 'SELECT * FROM tblProcessQueue WHERE orderStatus='.ORDER_NEW;
-			$q .= ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 2 SECOND)';
+			$q .= ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 1 SECOND)';
 			$q .= ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
 		}
 		return $db->getOneRow($q);
@@ -236,6 +239,13 @@ define('ORDER_FAILED',		3);
 		showFileInfo($_id);
 	}
 
+	/**
+	 * Returns the number of items in process queue of specified status
+	 * Particulary useful to see how many orders are currently being processed (ORDER_EXECUTING)
+	 * 
+	 * \param $_order_status status code
+	 * \return number of entries of specified status
+	 */
 	function getProcessesQueueStatusCnt($_order_status)
 	{
 		global $db;
@@ -265,7 +275,7 @@ define('ORDER_FAILED',		3);
 		}
 
 		//mark current job as "IN PROGRESS" so another process won't start on it aswell
-		markQueueExecuting($job['entryId']);
+		markQueue($job['entryId'], ORDER_EXECUTING);
 
 		echo "\n\n-------------\n";
 		switch ($job['orderType'])
@@ -359,7 +369,7 @@ define('ORDER_FAILED',		3);
 
 				$exec_start = microtime(true);
 				if (convertVideo($job['referId'], $job['orderParams']) === false) {
-					markQueueFailed($job['entryId']);
+					markQueue($job['entryId'], ORDER_FAILED);
 				} else {
 					markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
 				}
@@ -392,7 +402,7 @@ define('ORDER_FAILED',		3);
 					$exec_start = microtime(true);
 					$newId = convertVideo($prev_job['referId'], $files->default_video);
 					if ($newId === false) {
-						markQueueFailed($job['entryId']);
+						markQueue($job['entryId'], ORDER_FAILED);
 					} else {
 						markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
 
@@ -407,7 +417,7 @@ define('ORDER_FAILED',		3);
 					die('CONVERT TO MP3!!!!');
 				} else {
 					echo "UNKNOWN MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
-					markQueueFailed($job['entryId']);
+					markQueue($job['entryId'], ORDER_FAILED);
 				}
 				break;
 
@@ -503,7 +513,7 @@ define('ORDER_FAILED',		3);
 	function markQueueCompleted($entryId, $exec_time, $referId = 0)
 	{
 		global $db;
-		if (!is_numeric($entryId) || !is_float($exec_time)) return false;
+		if (!is_numeric($entryId) || !is_float($exec_time) || !is_numeric($referId)) return false;
 
 		$q = 'UPDATE tblProcessQueue SET orderStatus='.ORDER_COMPLETED.',timeCompleted=NOW(),timeExec="'.$exec_time.'"';
 		if ($referId) $q .= ',referId='.$referId;
@@ -512,26 +522,17 @@ define('ORDER_FAILED',		3);
 	}
 
 	/**
-	 * Marks an object in the process queue as being "in progress"
+	 * Marks an object in the process queue with specified status code
+	 *
+	 * \param $entryId entry id
+	 * \param $_status status code
 	 */
-	function markQueueExecuting($entryId)
+	function markQueue($entryId, $_status)
 	{
 		global $db;
-		if (!is_numeric($entryId)) return false;
+		if (!is_numeric($entryId) || !is_numeric($_status) return false;
 
-		$q = 'UPDATE tblProcessQueue SET orderStatus='.ORDER_EXECUTING.' WHERE entryId='.$entryId;
-		$db->update($q);
-	}
-
-	/**
-	 * Marks an object in the process queue as failed
-	 */
-	function markQueueFailed($entryId)
-	{
-		global $db;
-		if (!is_numeric($entryId)) return false;
-
-		$q = 'UPDATE tblProcessQueue SET orderStatus='.ORDER_FAILED.' WHERE entryId='.$entryId;
+		$q = 'UPDATE tblProcessQueue SET orderStatus='.$_status.' WHERE entryId='.$entryId;
 		$db->update($q);
 	}
 
