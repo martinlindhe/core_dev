@@ -133,13 +133,20 @@ define('ORDER_FAILED',		3);
 	/**
 	 * Returns a process queue entry
 	 *
+	 * \param $_id entryId or 0 to return the oldest marked as ORDER_NEW
 	 */
-	function getProcessQueueEntry($_id)
+	function getProcessQueueEntry($_id = 0)
 	{
 		global $db;
 		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT * FROM tblProcessQueue WHERE entryId='.$_id;
+		if ($_id) {
+			$q = 'SELECT * FROM tblProcessQueue WHERE entryId='.$_id;
+		} else {
+			$q = 'SELECT * FROM tblProcessQueue WHERE orderStatus='.ORDER_NEW;
+			$q .= ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 2 SECOND)';
+			$q .= ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
+		}
 		return $db->getOneRow($q);
 	}
 
@@ -251,179 +258,175 @@ define('ORDER_FAILED',		3);
 			return;
 		}
 
-		$list = getProcessQueue($config['process']['process_limit']);
+		$job = getProcessQueueEntry();
+		if (!$job) {
+			echo "NOTHING TO DO\n";
+			return;
+		}
 
-		foreach ($list as $job) {
+		//mark current job as "IN PROGRESS" so another process won't start on it aswell
+		markQueueExecuting($job['entryId']);
 
-			//mark current job as "IN PROGRESS" so another process won't start on it aswell
-			markQueueExecuting($job['entryId']);
-
-			echo "\n\n-------------\n";
-			switch ($job['orderType'])
-			{
-				case PROCESSQUEUE_AUDIO_RECODE:
-					//Recodes source audio file into orderParams destination format
-
-					$dst_audio_ok = array('ogg', 'wma', 'mp3');	//FIXME: config item or $files->var
-					if (!in_array($job['orderParams'], $dst_audio_ok)) {
-						echo 'error: invalid mime type<br/>';
-						$session->log('Process queue error - audio conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
-						break;
-					}
-
-					$file = $files->getFileInfo($job['referId']);
-					if (!$file) {
-						echo 'Error: no fileentry existed for fileId '.$job['referId'];
-						break;
-					}
-
-					$newId = $files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
-
-					echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format '.$job['orderParams']." ...\n";
-
-					switch ($job['orderParams']) {
-						case 'application/x-ogg':
-							//FIXME hur anger ja dst-format utan filändelse? tvingas göra det i 2 steg nu
-							$dst_file = 'tmpfile.ogg';
-							$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
-							break;
-
-						case 'audio/x-ms-wma':
-							$dst_file = 'tmpfile.wma';
-							$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
-							break;
-
-						case 'audio/mpeg':
-						case 'audio/x-mpeg':
-							//fixme: source & destination should not be able to be the same!
-							$dst_file = 'tmpfile.mp3';
-							$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
-							break;
-
-						default:
-							die('unknown destination audio format: '.$job['orderParams']);
-					}
-
-					echo 'Executing: '.$c."\n";
-					$exec_time = exectime($c);
-
-					echo 'Execution time: '.shortTimePeriod($exec_time)."\n";
-
-					if (!file_exists($dst_file)) {
-						echo '<b>FAILED - dst file '.$dst_file." dont exist!\n";
-						continue;
-					}
-
-					//renama $dst_file till fileId för nya file entry
-					//fixme: behöver inget rename-steg. kan göra det i ett steg!
-					rename($dst_file, $files->upload_dir.$newId);
-
-					$files->updateFile($newId);
-					markQueueCompleted($job['entryId'], $exec_time);
+		echo "\n\n-------------\n";
+		switch ($job['orderType'])
+		{
+			case PROCESSQUEUE_IMAGE_RECODE:
+				echo 'IMAGE RECODE<br/>';
+				if (!in_array($job['orderParams'], $files->image_mime_types)) {
+					echo 'error: invalid mime type<br/>';
+					$session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
 					break;
+				}
+				$newId = $files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
 
-				case PROCESSQUEUE_VIDEO_RECODE:
-					echo "VIDEO RECODE:\n";
+				$exec_start = microtime(true);
+				$check = convertImage($files->findUploadPath($job['referId']), $files->findUploadPath($newId), $job['orderParams']);
+				$exec_time = microtime(true) - $exec_start;
+				echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 
+				if (!$check) {
+					$session->log('#'.$job['entryId'].': IMAGE CONVERT failed! format='.$job['orderParams'], LOGLEVEL_ERROR);
+					echo 'Error: Image convert failed!<br/>';
+					die;
+				}
+
+				$files->updateFile($newId, $job['orderParams']);
+				markQueueCompleted($job['entryId'], $exec_time);
+				break;
+
+			case PROCESSQUEUE_AUDIO_RECODE:
+				//Recodes source audio file into orderParams destination format
+
+				$dst_audio_ok = array('ogg', 'wma', 'mp3');	//FIXME: config item or $files->var
+				if (!in_array($job['orderParams'], $dst_audio_ok)) {
+					echo 'error: invalid mime type<br/>';
+					$session->log('Process queue error - audio conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
+					break;
+				}
+
+				$file = $files->getFileInfo($job['referId']);
+				if (!$file) {
+					echo 'Error: no fileentry existed for fileId '.$job['referId'];
+					break;
+				}
+				$newId = $files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
+
+				echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format '.$job['orderParams']." ...\n";
+
+				switch ($job['orderParams']) {
+					case 'application/x-ogg':
+						//FIXME hur anger ja dst-format utan filändelse? tvingas göra det i 2 steg nu
+						$dst_file = 'tmpfile.ogg';
+						$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
+						break;
+
+					case 'audio/x-ms-wma':
+						$dst_file = 'tmpfile.wma';
+						$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
+						break;
+
+					case 'audio/mpeg':
+					case 'audio/x-mpeg':
+						//fixme: source & destination should not be able to be the same!
+						$dst_file = 'tmpfile.mp3';
+						$c = 'ffmpeg -i "'.$files->findUploadPath($job['referId']).'" '.$dst_file;
+						break;
+
+					default:
+						die('unknown destination audio format: '.$job['orderParams']);
+				}
+
+				echo 'Executing: '.$c."\n";
+				$exec_time = exectime($c);
+
+				echo 'Execution time: '.shortTimePeriod($exec_time)."\n";
+
+				if (!file_exists($dst_file)) {
+					echo '<b>FAILED - dst file '.$dst_file." dont exist!\n";
+					continue;
+				}
+
+				//renama $dst_file till fileId för nya file entry
+				//fixme: behöver inget rename-steg. kan göra det i ett steg!
+				rename($dst_file, $files->upload_dir.$newId);
+
+				$files->updateFile($newId);
+				markQueueCompleted($job['entryId'], $exec_time);
+				break;
+
+			case PROCESSQUEUE_VIDEO_RECODE:
+				echo "VIDEO RECODE:\n";
+
+				$exec_start = microtime(true);
+				if (convertVideo($job['referId'], $job['orderParams']) === false) {
+					markQueueFailed($job['entryId']);
+				} else {
+					markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
+				}
+				break;
+
+			case PROCESS_FETCH:
+				echo "FETCH CONTENT FROM ".$job['orderParams']."\n";
+
+				$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
+				$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
+
+				//FIXME: isURL() check
+				$c = 'wget '.$job['orderParams'].' -O '.$files->findUploadPath($newFileId);
+				echo "Executing: ".$c."\n";
+				$exec_time = exectime($c);
+
+				//TODO: process html document for media links if it is a html document
+
+				markQueueCompleted($job['entryId'], $exec_time, $newFileId);
+				$files->updateFile($newFileId);
+				break;
+
+			case PROCESS_CONVERT_TO_DEFAULT:
+				echo "CONVERT TO DEFAULT:\n";
+				//referId is entryId of previous proccess queue order
+				$prev_job = getProcessQueueEntry($job['referId']);
+				$file = $files->getFileInfo($prev_job['referId']);
+
+				if (in_array($file['fileMime'], $files->video_mime_types)) {
 					$exec_start = microtime(true);
-					if (convertVideo($job['referId'], $job['orderParams']) === false) {
+					$newId = convertVideo($prev_job['referId'], $files->default_video);
+					if ($newId === false) {
 						markQueueFailed($job['entryId']);
 					} else {
 						markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
-					}
-					break;
 
-				case PROCESSQUEUE_IMAGE_RECODE:
-					echo 'IMAGE RECODE<br/>';
-					if (!in_array($job['orderParams'], $files->image_mime_types)) {
-						echo 'error: invalid mime type<br/>';
-						$session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
-						break;
-					}
-					$newId = $files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
-
-					$exec_start = microtime(true);
-					$check = convertImage($files->findUploadPath($job['referId']), $files->findUploadPath($newId), $job['orderParams']);
-					$exec_time = microtime(true) - $exec_start;
-					echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
-
-					if (!$check) {
-						$session->log('#'.$job['entryId'].': IMAGE CONVERT failed! format='.$job['orderParams'], LOGLEVEL_ERROR);
-						echo 'Error: Image convert failed!<br/>';
-						die;
-					}
-
-					//update cloned entry with new file size and such
-					$files->updateFile($newId, $job['orderParams']);
-					markQueueCompleted($job['entryId'], $exec_time);
-					break;
-
-				case PROCESS_FETCH:
-					echo "FETCH CONTENT FROM ".$job['orderParams']."\n";
-
-					$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
-
-					$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
-
-					//FIXME: isURL() check
-					$c = 'wget '.$job['orderParams'].' -O '.$files->findUploadPath($newFileId);
-					echo "Executing: ".$c."\n";
-					$exec_time = exectime($c);
-
-					//TODO: process html document for media links if it is a html document
-
-					markQueueCompleted($job['entryId'], $exec_time, $newFileId);
-					$files->updateFile($newFileId);
-					break;
-
-				case PROCESSMONITOR_SERVER:
-					echo 'MONITOR SERVER<br/>';
-					$d = unserialize($job['orderParams']);
-					switch ($d['type']) {
-						case 'ping':
-							echo 'Pinging '.$d['adr'].' ... TODO<br/>';
-							break;
-						default:
-							die('unknown server type '.$d['type']);
-					}
-					break;
-
-				case PROCESS_CONVERT_TO_DEFAULT:
-					echo "CONVERT TO DEFAULT:\n";
-					//referId is entryId of previous proccess queue order
-					$prev_job = getProcessQueueEntry($job['referId']);
-
-					$file = $files->getFileInfo($prev_job['referId']);
-
-					if (in_array($file['fileMime'], $files->video_mime_types)) {
-
-						$exec_start = microtime(true);
-						$newId = convertVideo($prev_job['referId'], $files->default_video);
-						if ($newId === false) {
-							markQueueFailed($job['entryId']);
-						} else {
-							markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
-
-							if ($job['orderParams']) {
-								//execute callback
-								$uri = $config['full_core_web_root'].'api/file.php?id='.$newId;
-								$data = file_get_contents($job['orderParams'].'&uri='.urlencode($uri));
-								echo "client callback script returned:\n".$data;
-							}
+						if ($job['orderParams']) {
+							//execute callback
+							$uri = $config['full_core_web_root'].'api/file.php?id='.$newId;
+							$data = file_get_contents($job['orderParams'].'&uri='.urlencode($uri));
+							echo "client callback script returned:\n".$data;
 						}
-
-					} else if (in_array($file['fileMime'], $files->audio_mime_types)) {
-						die('CONVERT TO MP3!!!!');
-					} else {
-						echo "UNKNOWN MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
-						markQueueFailed($job['entryId']);
 					}
-					break;
+				} else if (in_array($file['fileMime'], $files->audio_mime_types)) {
+					die('CONVERT TO MP3!!!!');
+				} else {
+					echo "UNKNOWN MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
+					markQueueFailed($job['entryId']);
+				}
+				break;
 
-				default:
-					echo "Unknown ordertype: ".$job['orderType']."\n";
-					die;
-			}
+			case PROCESSMONITOR_SERVER:
+				echo "MONITOR SERVER\n";
+				$d = unserialize($job['orderParams']);
+				switch ($d['type']) {
+					case 'ping':
+						echo 'Pinging '.$d['adr'].' ... TODO<br/>';
+						break;
+					default:
+						die('unknown server type '.$d['type']);
+				}
+				break;
+
+			default:
+				echo "Unknown ordertype: ".$job['orderType']."\n";
+				d($job);
+				die;
 		}
 	}
 
