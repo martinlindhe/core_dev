@@ -284,6 +284,8 @@ class Files
 			return false;
 		}
 
+		$FileData['type'] = $this->lookupMimeType($FileData['tmp_name']);	//internal mimetype sucks!
+
 		$fileId = $this->addFileEntry($fileType, $categoryId, $ownerId, $FileData['name']);
 
 		//Identify and handle various types of files
@@ -396,7 +398,6 @@ class Files
 
 		if ($this->default_video && $this->process_client) {
 			if ($FileData['type'] != $this->default_video) {
-
 				include_once($this->process_client);
 				$uri = $config['full_web_root'].$config['core_web_root'].'api/file.php?id='.$fileId;
 				$refId = process_client_fetchAndConvert($uri, $this->process_callback.'?id='.$fileId);
