@@ -29,7 +29,7 @@
 			if ($click) echo '</center></div>';
 		} else if (in_array($mime, $files->video_mime_types)) {
 
-			if ($files->process_client && $mime != $files->default_video) {
+			if ($files->process_callback && $mime != $files->default_video) {
 				echo '<div class="file_gadget_entry">';
 				echo 'Video awaiting conversion';
 				echo '</div>';

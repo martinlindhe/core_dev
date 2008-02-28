@@ -10,7 +10,12 @@
 		if (!is_file($project.'config.php')) $project = '../../';
 	}
 
-	if (!is_file($project.'config.php')) die('cant find config path from '.$_SERVER['SCRIPT_FILENAME']);
+	if (!is_file($project.'config.php')) {
+		if (!is_file($_SERVER['DOCUMENT_ROOT'].'config.php')) {
+			die('cant find config path from '.$_SERVER['SCRIPT_FILENAME']);
+		}
+		$project = $_SERVER['DOCUMENT_ROOT'];
+	}
 
 	$config['no_session'] = true;	//force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
 	require_once($project.'config.php');

@@ -16,6 +16,7 @@ require_once('atom_comments.php');			//for image comments support
 require_once('atom_categories.php');		//for file categories support
 require_once('functions_image.php');
 require_once('functions_time.php');			//for ago()
+require_once('functions_process.php');	//for process_client_fetchAndConvert()
 
 define('FILETYPE_WIKI',							1);		// The file is a wiki attachment
 define('FILETYPE_BLOG',							2);		// The file is a blog attachment
@@ -121,7 +122,6 @@ class Files
 	public $apc_uploads					= false;		///< enable support for php_apc + php_uploadprogress calls
 	public $image_convert				= true;			///< use imagemagick to handle exotic image formats
 
-	public $process_client			= false;		///< set to filename of process server SOAP client script to perform video/audio conversions
 	public $process_callback		= false;		///< script to callback on process server completition (optional)
 
 	public $default_video = 'video/x-flv';	///< FLV = default fileformat to convert video to
@@ -150,7 +150,6 @@ class Files
 		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
 
-		if (isset($config['process_client'])) $this->process_client = $config['process_client'];
 		if (isset($config['process_callback'])) $this->process_callback = $config['process_callback'];
 	}
 
@@ -396,9 +395,9 @@ class Files
 
 		$this->moveUpload($FileData['tmp_name'], $fileId);
 
-		if ($this->default_video && $this->process_client) {
+		if ($this->default_video) {
 			if ($FileData['type'] != $this->default_video) {
-				include_once($this->process_client);
+
 				$uri = $config['full_web_root'].$config['core_web_root'].'api/file.php?id='.$fileId;
 				$refId = process_client_fetchAndConvert($uri, $this->process_callback.'?id='.$fileId);
 				if (!$refId) {
