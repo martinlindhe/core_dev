@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?php
+	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+
+	$loc = 'http://coredev.localhost/process/soap_server.php';
+?>
 
 <definitions name="Process"
 	targetNamespace="http://example.org/process.wsdl"
@@ -41,7 +45,7 @@
 
 	<service name="ProcessService">
 		<port name="ProcessPort" binding="tns:ProcessBinding">
-			<soap:address location="http://coredev.localhost/process/soap_server.php"/>
+			<soap:address location="<?=$loc?>"/>
 		</port>
 	</service>
 
