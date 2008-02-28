@@ -270,7 +270,6 @@ define('ORDER_FAILED',		3);
 
 		$job = getProcessQueueEntry();
 		if (!$job) {
-			echo "NOTHING TO DO\n";
 			return;
 		}
 

@@ -11,6 +11,7 @@
 	do {
 		processQueue();
 		sleep(1);
+		echo '.';
 	} while (1);
 
 ?>
