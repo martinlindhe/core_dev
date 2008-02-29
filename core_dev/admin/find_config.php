@@ -10,7 +10,12 @@
 		if (!is_file($project.'config.php')) $project = '../../';
 	}
 
-	if (!is_file($project.'config.php')) die('cant find config path from '.$_SERVER['SCRIPT_FILENAME']);
+	if (!is_file($project.'config.php')) {
+		if (!is_file($_SERVER['DOCUMENT_ROOT'].'config.php')) {
+			die('cant find config path from '.$_SERVER['SCRIPT_FILENAME']);
+		}
+		$project = $_SERVER['DOCUMENT_ROOT'];
+	}
 
 	require_once($project.'config.php');
 
