@@ -12,14 +12,20 @@ $config['url_rewrite_length'] = 45;		//max length of visible url's after rewrite
 $config['url_rewrite_trailing'] = 15;	//number of characters to save at the end of the string
 $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disable redir feature
 
-	function showThumb($_id, $_title = '', $w = 0, $h = 0)
+	function getThumbUrl($_id, $w = 0, $h = 0)
 	{
 		global $files, $config;
 
 		if (!is_numeric($w) || !$w) $w = $files->thumb_default_width;
 		if (!is_numeric($h) || !$h) $h = $files->thumb_default_height;
 
-		$str = '<img src="'.$config['core_web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h.getProjectPath().'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
+		$str = $config['core_web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h.getProjectPath();
+		return $str;
+	}
+
+	function showThumb($_id, $_title = '', $w = 0, $h = 0)
+	{
+		$str = '<img src="'.getThumbUrl($_id, $w, $h).'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
 		return $str;
 	}
 
