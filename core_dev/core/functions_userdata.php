@@ -209,39 +209,45 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 		switch ($row['fieldType']) {
 			case USERDATA_TYPE_EMAIL:
 			case USERDATA_TYPE_TEXT:
-				$result = stripslashes($row['fieldName']).': ';
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';
+				$result .= '</td>';
 				break;
 
 			case USERDATA_TYPE_TEXTAREA:
-				$result = stripslashes($row['fieldName']).':<br/>';
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 				$result .= '<textarea name="userdata_'.$fieldId.'" rows="6" cols="40">'.$value.'</textarea>';
+				$result .= '</td>';
 				break;
 
 			case USERDATA_TYPE_CHECKBOX:
-				$result  = '<input name="userdata_'.$fieldId.'" type="hidden" value="0"/>';
+				$result = '<td colspan="2">';
+				$result .= '<input name="userdata_'.$fieldId.'" type="hidden" value="0"/>';
 				$result .= '<input name="userdata_'.$fieldId.'" id="userdata_'.$fieldId.'" type="checkbox" class="checkbox" value="1"'.($value == '1'?' checked="checked"':'').'/>';
 				$result .= ' <label for="userdata_'.$fieldId.'">'.$row['fieldName'].'</label>';
+				$result .= '</td>';
 				break;
 
 			case USERDATA_TYPE_RADIO:
-				$result = stripslashes($row['fieldName']).':<br/>';
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 				$options = getCategoriesByOwner(CATEGORY_USERDATA, $fieldId);
 
 				foreach($options as $row) {
 					$result .= '<input name="userdata_'.$fieldId.'" type="radio" id="lab_'.$row['categoryId'].'" value="'.$row['categoryId'].'"'.($row['categoryId'] == $value?' checked="checked"':'').'/>';
 					$result .= ' <label for="lab_'.$row['categoryId'].'">'.$row['categoryName'].'</label><br/>';
 				}
+				$result .= '</td>';
 				break;
 
 			case USERDATA_TYPE_THEME:
 			case USERDATA_TYPE_SELECT:
-				$result = stripslashes($row['fieldName']).': ';
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 				$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId, 'userdata_'.$fieldId, $value);
+				$result .= '</td>';
 				break;
 
 			case USERDATA_TYPE_IMAGE:
-				$result = stripslashes($row['fieldName']).':<br/>';
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 				if ($value) {
 					$result .= makeThumbLink($value);
 					$result .= '<input name="userdata_'.$fieldId.'_remove" id="userdata_'.$fieldId.'_remove" type="checkbox" class="checkbox"/> ';
@@ -249,54 +255,54 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 				} else {
 					$result .= '<input name="userdata_'.$fieldId.'" type="file"/>';
 				}
+				$result .= '</td>';
 				break;
 
 			case USERDATA_TYPE_BIRTHDATE_SWE:
-				$result = stripslashes($row['fieldName']).':<br/>';
-				$d = $m = $y = '';				
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
+				$d = $m = $y = '';
 
 				if ($value) {
-					$born = datetime_to_timestamp($value);
-					$y = date('Y', $born);
-					$m = date('n', $born);
-					$d = date('d', $born);
-				}
+					$result .= date('Y-m-d', strtotime($row['settingValue']));
+				} else {
+					$result .= '<select name="userdata_'.$fieldId.'_year">';
+					$result .= '<option value="">- '.t('Year').' -';
+					for ($j=date('Y')-100; $j<=date('Y'); $j++) {
+						$result .= '<option value="'.$j.'"'.($j==$y?' selected':'').'>'.$j;
+					}
+					$result .= '</select>';
 
-				$result .= '<select name="userdata_'.$fieldId.'_year">';
-				$result .= '<option value="">- '.t('Year').' -';
-				for ($j=date('Y')-100; $j<=date('Y'); $j++) {
-					$result .= '<option value="'.$j.'"'.($j==$y?' selected':'').'>'.$j;
-				}
-				$result .= '</select>';
+					$result .= '<select name="userdata_'.$fieldId.'_month">';
+					$result .= '<option value="">- '.t('Month').' -';
+					for ($j=1; $j<=12; $j++) {
+						$k = $j;
+						if ($j<10) $k = '0'.$k;
+						$result .= '<option value="'.$k.'"'.($j==$m?' selected':'').'>'.$j;
+					}
+					$result .= '</select>';
 
-				$result .= '<select name="userdata_'.$fieldId.'_month">';
-				$result .= '<option value="">- '.t('Month').' -';
-				for ($j=1; $j<=12; $j++) {
-					$k = $j;
-					if ($j<10) $k = '0'.$k;
-					$result .= '<option value="'.$k.'"'.($j==$m?' selected':'').'>'.$j;
-				}
-				$result .= '</select>';
+					$result .= '<select name="userdata_'.$fieldId.'_day">';
+					$result .= '<option value="">- '.t('Day').' -';
+					for ($j=1; $j<=31; $j++) {
+						$result .= '<option value="'.($j<10?'0'.$j:$j).'"'.($j==$d?' selected':'').'>'.$j;
+					}
+					$result .= '</select>';
 
-				$result .= '<select name="userdata_'.$fieldId.'_day">';
-				$result .= '<option value="">- '.t('Day').' -';
-				for ($j=1; $j<=31; $j++) {
-					$result .= '<option value="'.($j<10?'0'.$j:$j).'"'.($j==$d?' selected':'').'>'.$j;
+					$result .= '<input type="text" name="userdata_'.$fieldId.'_chk" size="4"/>';
 				}
-				$result .= '</select>';
-
-				//FIXME this should only be used if core_dev is configured for swedish ssn validation
-				$result .= '<input type="text" name="userdata_'.$fieldId.'_chk" size="4"/>';
+				$result .= '</td>';
 				break;
 
 			case USERDATA_TYPE_LOCATION_SWE:
-				$result = stripslashes($row['fieldName']).': ';
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="5" maxlength="5"/>';
+				$result .= '</td>';
 				break;
 
 			case USERDATA_TYPE_CELLPHONE:
-				$result = stripslashes($row['fieldName']).': ';
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="12" maxlength="12"/>';
+				$result .= '</td>';
 				break;
 
 			default:
@@ -615,6 +621,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 		echo '<div class="settings">';
 		echo '<form name="edit_settings_frm" method="post" enctype="multipart/form-data" action="">';
+		echo '<table>';
 		foreach ($list as $row) {
 			if (!empty($_POST)) {
 				switch ($row['fieldType']) {
@@ -684,15 +691,9 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 				saveSetting(SETTING_USERDATA, $session->id, $row['fieldId'], $row['settingValue']);
 			}
 
-			echo '<div id="edit_setting_div_'.$row['fieldId'].'">';
-
-			if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE && $row['settingValue']) {
-				echo stripslashes($row['fieldName']).': '.date('Y-m-d', strtotime($row['settingValue']));
-			} else {
-				echo getUserdataInput($row);
-			}
-			echo '</div>';
+			echo '<tr>'.getUserdataInput($row).'</tr>';
 		}
+		echo '</table>';
 		echo '<input type="submit" class="button" value="'.t('Save').'"/>';
 		echo '</form>';
 		echo '</div>';

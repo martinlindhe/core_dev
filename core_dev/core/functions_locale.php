@@ -44,6 +44,8 @@
 			case 'Add': return 'Lägg till';
 			case 'Move': return 'Flytta';
 			case 'Cancel': return 'Avbryt';
+			case 'Modify': return 'Ändra';
+			case 'Create': return 'Skapa';
 
 			//Search
 			case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';

@@ -86,10 +86,11 @@
 	$used_location_swe = false;
 	$used_cellphone = false;
 	$i = 0;
-	echo '<div id="itemholder_1">';
-	foreach ($list as $row) {
-		echo '<div id="item_'.++$i.'" class="item">';
 
+	echo '<table>';
+	foreach ($list as $row) {
+
+		echo '<tr class="item"><td>';
 		$prio = $row['fieldPriority'];
 		$prio_up = $prio-1;
 		$prio_dn = $prio+1;
@@ -100,12 +101,13 @@
 			echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="'.$config['core_web_root'].'gfx/arrow_down.png" alt="Move down"/></a>';
 		}
 
-		echo '&nbsp;<a href="?change='.$row['fieldId'].getProjectPath().'">Modify</a><br/>';
-		echo '<a href="?remove='.$row['fieldId'].getProjectPath().'">Remove</a><br/>';
+		echo '&nbsp;<a href="?change='.$row['fieldId'].getProjectPath().'">'.t('Modify').'</a><br/>';
+		echo '<a href="?remove='.$row['fieldId'].getProjectPath().'">'.t('Remove').'</a><br/>';
 
 		if ($row['allowTags']) echo 'May contain HTML<br/>';
 		if ($row['regRequire']) echo 'Require at registration<br/>';
 		if ($row['private']) echo 'Private field<br/>';
+		echo '</td>';
 
 		echo getUserdataInput($row);
 
@@ -117,19 +119,19 @@
 		if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE) $used_location_swe = true;
 		if ($row['fieldType'] == USERDATA_TYPE_CELLPHONE) $used_cellphone = true;
 
-		echo '</div><br/>';
+		echo '</tr>';
 	}
-	echo '</div>';
+	echo '</table>';
 	
 	if (isset($_GET['change'])) {
 		$changeId	 = $_GET['change'];
 		$data = getUserdataField($changeId);
 		$fieldName = stripslashes($data['fieldName']);
 		$header = 'Edit userdata field "'.$fieldName.'"';
-		$submit = 'Update';
+		$submit = t('Update');
 	} else {
 		$header = 'Create a new userdata field';
-		$submit = 'Create';
+		$submit = t('Create');
 		$fieldName = '';
 	}
 
