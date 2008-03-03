@@ -223,6 +223,16 @@
 			case 'Add new FAQ': return 'Skapa en ny FAQ';
 			case 'Answer': return 'Svar';
 
+			//Change password
+			case 'Current password': return 'Nuvarande lösenord';
+			case 'New password': return 'Nytt lösenord';
+			case 'Repeat password': return 'Upprepa';
+			case 'Change password': return 'Ändra lösenordet';
+			case 'Current password is incorrect': return 'Nuvarande lösenord är felaktigt';
+			case 'Your password has been changed successfully!': return 'Ditt lösenord har ändrats!';
+			case 'The passwords doesnt match': return 'Lösenorden matchar inte';
+			case 'Password must be at least 4 characters long': return 'Lösenordet måste vara minst 4 tecken långt';
+
 			default: return '__('.$s.')__';
 		}
 	}

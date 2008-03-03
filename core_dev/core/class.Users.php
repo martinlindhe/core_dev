@@ -115,18 +115,35 @@ class Users
 		if (!is_numeric($_id)) return false;
 
 		if (strlen($_pwd1) < 4) {
-			$session->error = 'Password must be at least 4 characters long';
+			$session->error = t('Password must be at least 4 characters long');
 			return false;
 		}
 
 		if ($_pwd1 != $_pwd2) {
-			$session->error = 'The passwords doesnt match';
+			$session->error = t('The passwords doesnt match');
 			return false;
 		}
 
 		$q = 'UPDATE tblUsers SET userPass="'.sha1( sha1($auth->sha1_key).sha1($_pwd1) ).'" WHERE userId='.$_id;
 		$db->update($q);
 		return true;
+	}
+
+	/**
+	 * Checks if this is a valid login
+	 *
+	 * \return if valid login, return user data, else false
+	 */
+	function validLogin($username, $password)
+	{
+		global $db;
+
+		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
+
+		$q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$enc_password.'"';
+		$data = $db->getOneRow($q);
+		if (!$data) return false;
+		return $data;
 	}
 
 	/**

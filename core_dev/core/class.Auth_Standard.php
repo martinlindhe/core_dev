@@ -80,7 +80,7 @@ class Auth_Standard extends Auth_Base
 	{
 		global $db, $session;
 
-		$data = $this->validLogin($username, $password);
+		$data = Users::validLogin($username, $password);
 
 		if (!$data) {
 			$session->error = t('Login failed');
@@ -105,23 +105,6 @@ class Auth_Standard extends Auth_Base
 		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$session->id.', IP='.$session->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
 		return true;
-	}
-
-	/**
-	 * Checks if this is a valid login
-	 *
-	 * \return if valid login, return user data, else false
-	 */
-	function validLogin($username, $password)
-	{
-		global $db;
-
-		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
-
-		$q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$enc_password.'"';
-		$data = $db->getOneRow($q);
-		if (!$data) return false;
-		return $data;
 	}
 
 	/**
@@ -269,6 +252,40 @@ class Auth_Standard extends Auth_Base
 		}
 
 		echo '</div>';
+	}
+
+	function changePasswordForm()
+	{
+		global $session;
+		if (!$session->id) return false;
+
+		$check = false;
+
+		if (!empty($_POST['oldpwd']) && isset($_POST['pwd1']) && isset($_POST['pwd2'])) {
+			if (Users::validLogin($session->username, $_POST['oldpwd'])) {
+				$check = Users::setPassword($session->id, $_POST['pwd1'], $_POST['pwd2']);
+			} else {
+				$session->error = t('Current password is incorrect');
+			}
+		}
+
+		if ($session->error) {
+			echo '<div class="critical">'.$session->error.'</div><br/>';
+			$session->error = '';
+		}
+
+		if (!$check) {
+			echo '<form method="post" action="">';
+			echo '<table cellpadding="0" cellspacing="0" border="0">';
+			echo '<tr><td>'.t('Current password').':</td><td><input type="password" name="oldpwd"/></td></tr>';
+			echo '<tr><td>'.t('New password').':</td><td><input type="password" name="pwd1"/></td></tr>';
+			echo '<tr><td>'.t('Repeat password').':</td><td><input type="password" name="pwd2"/></td></tr>';
+			echo '<tr><td colspan="2"><input type="submit" class="button" value="'.t('Change password').'"/></td></tr>';
+			echo '</table>';
+			echo '</form>';
+		} else {
+			echo t('Your password has been changed successfully!');
+		}
 	}
 
 }	
