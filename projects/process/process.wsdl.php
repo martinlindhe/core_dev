@@ -1,7 +1,7 @@
 <?php
+	$config['no_session'] = true;	//force session "last active" update to be skipped
+	require_once('config.php');
 	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-	$loc = 'http://coredev.localhost/process/soap_server.php';
 ?>
 
 <definitions name="Process"
@@ -45,7 +45,7 @@
 
 	<service name="ProcessService">
 		<port name="ProcessPort" binding="tns:ProcessBinding">
-			<soap:address location="<?=$loc?>"/>
+			<soap:address location="<?=$config['process']['soap_server']?>"/>
 		</port>
 	</service>
 

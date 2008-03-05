@@ -43,6 +43,7 @@
 	$files = new Files($config['files']);
 
 	$config['process']['video_watermark'] = '';
+	$config['process']['soap_server'] = 'http://process.localhost/soap_server.php';
 
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
