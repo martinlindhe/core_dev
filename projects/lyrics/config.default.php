@@ -11,6 +11,7 @@
 
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
+	require_once('class.Auth_Standard.php');
 	require_once('class.Session.php');
 	require_once('functions_general.php');
 	restore_include_path();
@@ -26,11 +27,14 @@
 	$config['database']['database']	= 'dbLyrics';
 	$db = new DB_MySQLi($config['database']);
 
-	$config['session']['timeout'] = (60*60)*24*7;	//7 days
+	$config['session']['timeout'] = (60*30)-1;		//stay logged in for 30 minutes - FIXME om detta ändras så måste det stämme med js-timeouten (som är 30 min nu med iofs..)
 	$config['session']['name'] = 'hcLyrics';
-	$config['session']['sha1_key'] = 'kekjhbkjsxfgyuejewjkx276786ddjhnhdzzz9716t6z';
-	$config['session']['allow_registration'] = false;
+	$config['session']['error_page'] = 'index.php';
 	$session = new Session($config['session']);
 
-	$session->handleSessionActions();
+	$config['auth']['sha1_key'] = 'kekjhbkjsxfgyuejewjkx276786ddjhnhdzzz9716t6z';
+	$config['auth']['allow_login'] = true;
+	$config['auth']['allow_registration'] = false;
+	$config['auth']['userdata'] = false;
+	$auth = new Auth_Standard($config['auth']);
 ?>

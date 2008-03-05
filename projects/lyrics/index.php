@@ -6,7 +6,7 @@
 	echo '<br/>';
 
 	if (!$session->id) {
-		$session->showLoginForm();
+		$auth->showLoginForm();
 	}
 
 	require('design_foot.php');

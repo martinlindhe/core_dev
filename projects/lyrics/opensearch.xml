@@ -3,6 +3,6 @@
 	<ShortName>lyric search</ShortName>
 	<Description>Search lyrics</Description>
 	<Tags>lyric</Tags>
-	<Url type="text/html" template="https://87.227.76.225/lyric/search.php?s={searchTerms}" />
+	<Url type="text/html" template="https://startwars.org/lyrics/search.php?s={searchTerms}" />
 	<Query role="example" searchTerms="cat" />
 </OpenSearchDescription>
