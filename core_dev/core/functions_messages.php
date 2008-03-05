@@ -129,13 +129,17 @@ require_once('functions_locale.php');	//for translations
 		if (!$_group && !empty($_GET['g']) && is_numeric($_GET['g'])) $_group = $_GET['g'];
 		if (!$_group) $_group = MESSAGE_GROUP_INBOX;
 
-		echo ($_group==MESSAGE_GROUP_INBOX?'<b>'.t('INBOX').'</b>':'<a href="?g='.MESSAGE_GROUP_INBOX.'">'.t('INBOX').'</a>').'<br/>';
+		echo ($_group==MESSAGE_GROUP_INBOX?'<b>'.t('INBOX').'</b>':'<a href="?g='.MESSAGE_GROUP_INBOX.'">'.t('INBOX').'</a>').' | ';
 		echo ($_group==MESSAGE_GROUP_OUTBOX?'<b>'.t('OUTBOX').'</b>':'<a href="?g='.MESSAGE_GROUP_OUTBOX.'">'.t('OUTBOX').'</a>').'<br/>';
 		echo '<br/>';
 
 		$list = getMessages($_group);
 		if (!$list) {
-			echo t('No messages');
+			switch ($_group) {
+				case MESSAGE_GROUP_INBOX: echo t('No messages in inbox'); break;
+				case MESSAGE_GROUP_OUTBOX: echo t('No messages in outbox'); break;
+				default: echo t('No messages'); break;
+			}
 			return false;
 		}
 

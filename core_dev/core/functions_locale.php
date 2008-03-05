@@ -100,9 +100,11 @@
 			case 'at': return 'vid';
 			case 'No subject': return 'Ingen rubrik';
 			case 'System message': return 'Systemmeddelande';
-			case 'No messages': return 'Inga meddelanden';
-			case 'INBOX': return 'Inkorgen';
-			case 'OUTBOX': return 'Utkorgen';
+			case 'No messages': return 'Inga meddelanden.';
+			case 'No messages in inbox': return 'Du har inte fått några mail än.';
+			case 'No messages in outbox': return 'Du har inga skickade mail.';
+			case 'INBOX': return 'Inkorg';
+			case 'OUTBOX': return 'Skickade';
 			case 'UNREAD': return 'Oläst';
 			case 'READ': return 'Läst';
 			case 'Return to message overview': return 'Återgå till meddelande-översikten';
