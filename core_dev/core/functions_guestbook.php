@@ -171,9 +171,22 @@
 		if ($session->id != $userId && !empty($_POST['body'])) {
 			addGuestbookEntry($userId, '', $_POST['body']);
 		}
+		
+		if (!empty($_GET['history']) && is_numeric($_GET['history'])) {
+			showGuestbookConversation($session->id, $_GET['history']);
+			return;
+		}
 
 		$tot_cnt = getGuestbookCount($userId);
-		echo t('Guestbook').':'.Users::getName($userId).' '.t('contains').' '.$tot_cnt.' '.t('messages').'.<br/><br/>';
+		if (!$tot_cnt) {
+			if ($session->id == $userId) {
+				echo t('Your guestbook is empty');
+			} else {
+				echo t('The guestbook is empty');
+			}
+			return;
+		}
+		echo t('The guestbook').' '.t('contains').' '.$tot_cnt.' '.t('messages').'.<br/><br/>';
 
 		$pager = makePager($tot_cnt, 5);
 
@@ -187,9 +200,6 @@
 			echo '<div class="guestbook_entry_head">';
 			echo t('From').' '.Users::link($row['authorId'], $row['authorName']);
 			echo ', '.$row['timeCreated'];
-			if ($session->id == $row['authorId'] || $session->id == $row['userId']) {
-				echo ' <a href="guestbook_conversation.php?oid='.($row['authorId']==$session->id?$row['userId']:$row['authorId']).'">konversation</a>';
-			}
 			echo '</div>';
 
 			if ($session->id == $userId) {
@@ -200,7 +210,15 @@
 			echo stripslashes($row['body']).'<br/>';
 
 			if ($session->isAdmin || $session->id == $userId) {
-				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;remove='.$row['entryId'].'">'.t('Remove').'</a>';
+				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;remove='.$row['entryId'].'">'.t('Remove').'</a> | ';
+			}
+
+			if ($session->id == $row['userId']) {
+				echo '<a href="">'.t('Reply').'</a> | ';
+			}
+
+			if ($session->id == $row['authorId'] || $session->id == $row['userId']) {
+				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;history='.($row['authorId']==$session->id?$row['userId']:$row['authorId']).'">'.t('History').'</a>';
 			}
 			echo '</div><br/>';
 		}
@@ -220,8 +238,7 @@
 
 	}
 
-	
-function showGuestbookConversation($userId,$otherId)
+	function showGuestbookConversation($userId, $otherId)
 	{
 		global $config, $session;
 		if ($session->isAdmin || $session->id == $userId) {

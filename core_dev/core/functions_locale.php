@@ -81,10 +81,13 @@
 
 			//Guestbook
 			case 'Guestbook': return 'Gästbok';
+			case 'The guestbook': return 'Gästboken';
 			case 'contains': return 'innehåller';
 			case 'messages': return 'meddelanden';
 			case 'New entry': return 'Nytt inlägg';
 			case 'Unread': return 'Oläst';
+			case 'Your guestbook is empty': return 'Du har inte fått några inlägg i din gästbok än.';
+			case 'The guestbook is empty': return 'Gästboken är tom.';
 
 			//Guestbook Conversation
 			case 'Guestbook conversation': return 'Gästbokskonversation';
