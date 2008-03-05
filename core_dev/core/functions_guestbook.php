@@ -171,13 +171,15 @@
 		if ($session->id != $userId && !empty($_POST['body'])) {
 			addGuestbookEntry($userId, '', $_POST['body']);
 		}
-		
+
+		$historyId = 0;
 		if (!empty($_GET['history']) && is_numeric($_GET['history'])) {
-			showGuestbookConversation($session->id, $_GET['history']);
-			return;
+			$historyId = $_GET['history'];
+			$tot_cnt = getGuestbookConversationCount($userId, $historyId);
+		} else {
+			$tot_cnt = getGuestbookCount($userId);
 		}
 
-		$tot_cnt = getGuestbookCount($userId);
 		if (!$tot_cnt) {
 			if ($session->id == $userId) {
 				echo t('Your guestbook is empty');
@@ -186,13 +188,20 @@
 			}
 			return;
 		}
-		echo t('The guestbook').' '.t('contains').' '.$tot_cnt.' '.t('messages').'.<br/><br/>';
+
+		if ($historyId) {
+			echo t('Displaying guestbook history between yourself and').' '.Users::getName($historyId).'<br/>';
+			echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$session->id.'">'.t('Return to guestbook overview').'</a><br/><br/>';
+		}
 
 		$pager = makePager($tot_cnt, 5);
 
 		echo $pager['head'];
-
-		$list = getGuestbook($userId, $pager['limit']);
+		if ($historyId) {
+			$list = getGuestbookConversation($userId, $historyId, $pager['limit']);
+		} else {
+			$list = getGuestbook($userId, $pager['limit']);
+		}
 		foreach ($list as $row) {
 			echo '<a name="gb'.$row['entryId'].'"></a>';
 			echo '<div class="guestbook_entry">';
@@ -210,17 +219,27 @@
 			echo stripslashes($row['body']).'<br/>';
 
 			if ($session->isAdmin || $session->id == $userId) {
-				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;remove='.$row['entryId'].'">'.t('Remove').'</a> | ';
+				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;remove='.$row['entryId'].'">'.t('Remove').'</a>';
 			}
 
 			if ($session->id == $row['userId']) {
-				echo '<a href="">'.t('Reply').'</a> | ';
+				echo ' | <a href="#" onclick="show_element_by_name(\'gb_reply_'.$row['entryId'].'\')">'.t('Reply').'</a>';
 			}
 
-			if ($session->id == $row['authorId'] || $session->id == $row['userId']) {
-				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;history='.($row['authorId']==$session->id?$row['userId']:$row['authorId']).'">'.t('History').'</a>';
+			if (!$historyId && ($session->id == $row['authorId'] || $session->id == $row['userId'])) {
+				echo ' | <a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;history='.($row['authorId']==$session->id?$row['userId']:$row['authorId']).'">'.t('History').'</a>';
 			}
 			echo '</div><br/>';
+
+			if ($session->id == $row['userId']) {
+				echo '<div id="gb_reply_'.$row['entryId'].'" style="display:none;">';
+				echo t('Reply to').' '.Users::getName($row['authorId']).':<br/>';
+				echo '<form name="addGuestbook" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$row['authorId'].'">';
+				echo '<textarea name="body" cols="40" rows="6"></textarea><br/>';
+				echo '<input type="submit" class="button" value="'.t('Send reply').'"/>';
+				echo '</form><br/>';
+				echo '</div>';
+			}
 		}
 
 		if ($session->id) {
@@ -238,62 +257,4 @@
 
 	}
 
-	function showGuestbookConversation($userId, $otherId)
-	{
-		global $config, $session;
-		if ($session->isAdmin || $session->id == $userId) {
-			if (!empty($_GET['remove'])) {
-				removeGuestbookEntry($_GET['remove']);
-			}
-		}
-		if ($session->id != $otherId && !empty($_POST['body'])) {
-			addGuestbookEntry($otherId, '', $_POST['body']);
-		}
-
-		$tot_cnt = getGuestbookConversationCount($userId, $otherId);
-		echo t('Guestbook conversation').': '.Users::getName($userId).' - '.Users::getName($otherId).' '.t('contains').' '.$tot_cnt.' '.t('messages').'.<br/><br/>';
-
-		$pager = makePager($tot_cnt, 5);
-
-		echo $pager['head'];
-
-		$list = getGuestbookConversation($userId, $otherId, $pager['limit']);
-		foreach ($list as $row) {
-			echo '<a name="gb'.$row['entryId'].'"></a>';
-			echo '<div class="guestbook_entry">';
-
-			echo '<div class="guestbook_entry_head">';
-			echo t('From').' '.Users::link($row['authorId'], $row['authorName']);
-			echo ', '.$row['timeCreated'];
-			echo '</div>';
-
-			if ($session->id == $userId) {
-				if ($row['entryRead'] == 0) {
-					echo '<img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="'.t('Unread').'">';
-				}
-			}
-			echo stripslashes($row['body']).'<br/>';
-
-			if ($session->isAdmin || $session->id == $row['userId']) {
-				echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;oid='.$otherId.'&amp;remove='.$row['entryId'].'">'.t('Remove').'</a>';
-			}
-
-			echo '</div><br/>';
-		}
-
-		if ($session->id) {
-			if ($session->id != $otherId) {
-				echo t('New entry').':<br/>';
-				echo '<form name="addGuestbook" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;oid='.$otherId.'">';
-				echo '<textarea name="body" cols="40" rows="6"></textarea><br/><br/>';
-				echo '<input type="submit" class="button" value="'.t('Save').'"/>';
-				echo '</form>';
-			} else {
-				/* Mark all entries as read */
-				markGuestbookRead();
-			}
-		}
-
-	}
-	
 ?>

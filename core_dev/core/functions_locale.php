@@ -88,9 +88,10 @@
 			case 'Unread': return 'Oläst';
 			case 'Your guestbook is empty': return 'Du har inte fått några inlägg i din gästbok än.';
 			case 'The guestbook is empty': return 'Gästboken är tom.';
-
-			//Guestbook Conversation
-			case 'Guestbook conversation': return 'Gästbokskonversation';
+			case 'Displaying guestbook history between yourself and': return 'Visar gästbokshistoriken mellan dig själv och';
+			case 'Return to guestbook overview': return 'Återgå till min gästbok';
+			case 'Reply to': return 'Skicka svar till';
+			case 'Send reply': return 'Skicka svar';
 
 			//Pager
 			case 'Page': return 'Sida';
