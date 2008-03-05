@@ -27,15 +27,16 @@ require_once('functions_locale.php');	//for translations
 		return true;
 	}
 
+	/**
+	 * Adds a system message to recievers inbox
+	 */
 	function systemMessage($_id, $_subj, $_msg)
 	{
-		global $db, $session;
+		global $db;
 		if (!is_numeric($_id)) return false;
 
-		//Adds message to recievers inbox
 		$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId=0,toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
 		$db->insert($q);
-
 		return true;
 	}
 
@@ -50,6 +51,7 @@ require_once('functions_locale.php');	//for translations
 				$q .= 'FROM tblMessages AS t1 ';
 				$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.fromId=t2.userId) ';
 				$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
+				$q .= 'AND t1.timeDeleted IS NULL ';
 				$q .= 'ORDER BY timeCreated DESC';
 				break;
 
@@ -58,6 +60,7 @@ require_once('functions_locale.php');	//for translations
 				$q .= 'FROM tblMessages AS t1 ';
 				$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.toId=t2.userId) ';
 				$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
+				$q .= 'AND t1.timeDeleted IS NULL ';
 				$q .= 'ORDER BY timeCreated DESC';
 				break;
 				
@@ -73,25 +76,39 @@ require_once('functions_locale.php');	//for translations
 		global $db, $session;
 		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session->id.' AND msgId='.$_id;
+		$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session->id.' AND msgId='.$_id.' AND timeDeleted IS NULL';
 		$row = $db->getOneRow($q);
 		if ($row['ownerId'] != $session->id) return false;
 		return $row;
 	}
 
-	function markMessageAsRead($_id)
+	/**
+	 * Marks the message as read if its recipent & owner is current user.
+	 */
+	function markMessageRead($_id)
 	{
 		global $db, $session;
 		if (!is_numeric($_id)) return false;
 		
-		//Marks the message as read if its recipent & owner is current user.
 		$q = 'UPDATE tblMessages SET timeRead=NOW() WHERE ownerId='.$session->id.' AND toId='.$session->id.' AND msgId='.$_id;
+		return $db->update($q);
+	}
+
+	/**
+	 * Marks the message as deleted if its owner is current user.
+	 */
+	function markMessageDeleted($_id)
+	{
+		global $db, $session;
+		if (!is_numeric($_id)) return false;
+		
+		$q = 'UPDATE tblMessages SET timeDeleted=NOW() WHERE ownerId='.$session->id.' AND msgId='.$_id;
 		return $db->update($q);
 	}
 
 	function showMessages($_group = 0)
 	{
-		global $db, $session;
+		global $db, $session, $config;
 		if (!is_numeric($_group)) return false;
 		
 		if (!empty($_GET['read']) && is_numeric($_GET['read'])) {
@@ -115,7 +132,7 @@ require_once('functions_locale.php');	//for translations
 			echo '</div>';
 			echo '</div>';
 
-			markMessageAsRead($_GET['read']);
+			markMessageRead($_GET['read']);
 
 			if ($msg['fromId'] && $msg['fromId'] != $session->id) {
 				echo ' <a href="messages.php?id='.$msg['fromId'].'&amp;r='.$msg['msgId'].'">'.t('Reply').'</a><br/>';
@@ -125,7 +142,11 @@ require_once('functions_locale.php');	//for translations
 
 			return true;
 		}
-		
+
+		if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
+			markMessageDeleted($_GET['delete']);
+		}
+
 		if (!$_group && !empty($_GET['g']) && is_numeric($_GET['g'])) $_group = $_GET['g'];
 		if (!$_group) $_group = MESSAGE_GROUP_INBOX;
 
@@ -144,11 +165,22 @@ require_once('functions_locale.php');	//for translations
 		}
 
 		$i=0;
+		echo '<table>';
 		foreach ($list as $row) {
+			echo '<tr>';
+			echo '<td width="200">';
 			echo '<a href= "'.$_SERVER['PHP_SELF'].'?read='.$row['msgId'].'">';
-			echo ($row['subject']?$row['subject']:'no subject').', '.$row['timeCreated'].', '.(!$row['timeRead']?t('UNREAD'):t('READ')).'<br/>';
+			echo ($row['subject']?$row['subject']:'no subject');
 			echo '</a>';
+			echo '</td>';
+
+			echo '<td width="100">'.Users::link($row['otherId'], $row['otherName']).'</td>';
+			echo '<td width="140">'.$row['timeCreated'].'</td>';
+			//(!$row['timeRead']?t('UNREAD'):t('READ')).'<br/>';
+			echo '<td><a href="?g='.$_group.'&amp;delete='.$row['msgId'].'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png" alt="'.t('Delete').'" border="0"/></a></td>';
+			echo '</tr>';
 		}
+		echo '</table>';
 
 		return true;
 	}
