@@ -3,10 +3,10 @@
 
 	error_reporting(E_ALL);
 
-	$config['core_root'] = '../core_dev/';
-	$config['core_web_root'] = '/core_dev/';
+	$config['core_root'] = 'core_dev/';
+	$config['core_web_root'] = '/lyrics/core_dev/';
 
-	$config['web_root'] = '/lyric/';
+	$config['web_root'] = '/lyrics/';
 	$config['default_title'] = 'lyric database';
 
 	set_include_path($config['core_root'].'core/');
@@ -22,9 +22,10 @@
 
 	$config['debug'] = true;
 
-	$config['database']['username']	= 'root';
-	$config['database']['password']	= '';
-	$config['database']['database']	= 'dbLyrics';
+	$config['database']['username']	= 'marti32_lyric';
+	$config['database']['password']	= 'dravel6667';
+	$config['database']['database']	= 'marti32_lyric';
+	$config['database']['host'] = 'mydb5.surf-town.net';
 	$db = new DB_MySQLi($config['database']);
 
 	$config['session']['timeout'] = (60*30)-1;		//stay logged in for 30 minutes - FIXME om detta ändras så måste det stämme med js-timeouten (som är 30 min nu med iofs..)
