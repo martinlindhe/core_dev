@@ -13,10 +13,6 @@
 		Users::delete($_GET['del']);
 	}
 
-	$mode = 0;
-	if (!empty($_GET['mode'])) $mode = $_GET['mode'];
-	$list = Users::getUsers($mode);
-
 	if ($session->isSuperAdmin && !empty($_POST)) {
 		foreach ($list as $row) {
 			$newmode = $_POST['mode_'.$row['userId']];
@@ -33,8 +29,18 @@
 				echo '<div class="okay">New user created. Go to user page: '.Users::link($newUserId, $_POST['u_name']).'</div>';
 			}
 		}
-		$list = Users::getUsers($mode);
 	}
+
+	$mode = 0;
+	if (!empty($_GET['mode'])) $mode = $_GET['mode'];
+
+	$tot_cnt = Users::cnt($mode);
+	$limit = 25;
+	$pager = makePager($tot_cnt, $limit);
+
+	$list = Users::getUsers($mode, $pager['limit']);
+
+	echo $pager['head'];
 
 	if ($session->isSuperAdmin) echo '<form method="post" action="">';
 	echo '<table summary="" border="1">';

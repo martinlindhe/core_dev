@@ -321,18 +321,18 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 		switch ($row['fieldType']) {
 			case USERDATA_TYPE_IMAGE:
-				$result  = '<input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
-				$result .= ' <label for="userdata_'.$row['fieldId'].'">'.t('Has image').'</label>';
+				$result  = '<td colspan="2"><input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
+				$result .= ' <label for="userdata_'.$row['fieldId'].'">'.t('Has image').'</label></td>';
 				break;
 
 			case USERDATA_TYPE_LOCATION_SWE:
-				$result = ZipLocation::regionSelect();
-				$result .= '<div id="ajax_cities"></div>';
+				$result = '<td>'.ZipLocation::regionSelect().'</td>';
+				$result .= '<td><div id="ajax_cities"></div></td>';
 				break;
 
 			case USERDATA_TYPE_BIRTHDATE_SWE:
-				$result = t('Age').': ';
-				$result .= '<select name="userdata_'.$row['fieldId'].'">';
+				$result = '<td>'.t('Age').':</td>';
+				$result .= '<td><select name="userdata_'.$row['fieldId'].'">';
 				$result .= '<option value="0">'.t('Select age').'</option>';
 
 				$low_age = 18;
@@ -363,7 +363,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 				$to = $date->format('Y-m-d');
 
 				$result .= '<option value="_'.$to.'">'.t('Above '.$hi_age).'</option>';
-				$result .= '</select>';
+				$result .= '</select></td>';
 				break;
 
 			default:

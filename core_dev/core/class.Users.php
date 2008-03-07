@@ -186,11 +186,13 @@ class Users
 	/**
 	 * Returns total number of users
 	 */
-	function cnt()
+	function cnt($_mode = 0)
 	{
 		global $db;
+		if (!is_numeric($_mode)) return false;
 
 		$q = 'SELECT COUNT(*) FROM tblUsers';
+		if ($_mode) $q .= ' WHERE userMode='.$_mode;
 		return $db->getOneItem($q);
 	}
 
@@ -219,7 +221,7 @@ class Users
 	/**
 	 * Admin function used by admin_list_users.php
 	 */
-	function getUsers($_mode = 0)
+	function getUsers($_mode = 0, $_limit = '')
 	{
 		global $db;
 
@@ -227,6 +229,7 @@ class Users
 
 		$q = 'SELECT * FROM tblUsers';
 		if ($_mode) $q .= ' WHERE userMode='.$_mode;
+		if ($_limit) $q .= ' '.$_limit;
 		return $db->getArray($q);
 	}
 
@@ -429,14 +432,20 @@ class Users
 		echo '<input type="text" name="c" maxlength="20" size="20"/><br/>';
 
 		$list = getUserdataFields();
+		echo '<table>';
 		foreach ($list as $row) {
+			if ($row['private'] && !$session->isAdmin) continue;
+
+			echo '<tr'.($row['private']?' class="critical"':'').'>';
+			echo getUserdataSearch($row);
+			echo '</tr>';
 			if ($row['private']) {
-			 	if (!$session->isAdmin) continue;
-				echo '<div class="critical">';
+				echo '<tr><td colspan="2">';
+				echo '<div class="critical"> * '.t('This field can only be used in searches by admins').'</div>';
+				echo '</td></tr>';
 			}
-			echo getUserdataSearch($row).'<br/>';
-			if ($row['private']) echo '<br/>'.t('This field can only be used in searches by admins').'</div>';
 		}
+		echo '</table>';
 
 		echo '<input type="submit" class="button" value="'.t('Search').'"/>';
 		echo '</form>';
