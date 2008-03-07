@@ -53,9 +53,10 @@
 		echo '<td>';
 			if ($session->isSuperAdmin) {
 				echo '<select name="mode_'.$user['userId'].'">';
-				echo '<option value="0"'.($user['userMode']==0?' selected="selected"':'').'>Normal</option>';
-				echo '<option value="1"'.($user['userMode']==1?' selected="selected"':'').'>Admin</option>';
-				echo '<option value="2"'.($user['userMode']==2?' selected="selected"':'').'>Super admin</option>';
+				echo '<option value="'.USERLEVEL_NORMAL.'"'.($user['userMode']==USERLEVEL_NORMAL?' selected="selected"':'').'>Normal</option>';
+				echo '<option value="'.USERLEVEL_WEBMASTER.'"'.($user['userMode']==USERLEVEL_WEBMASTER?' selected="selected"':'').'>Webmaster</option>';
+				echo '<option value="'.USERLEVEL_ADMIN.'"'.($user['userMode']==USERLEVEL_ADMIN?' selected="selected"':'').'>Admin</option>';
+				echo '<option value="'.USERLEVEL_SUPERADMIN.'"'.($user['userMode']==USERLEVEL_SUPERADMIN?' selected="selected"':'').'>Super admin</option>';
 				echo '</select> ';
 
 				if ($session->id != $user['userId']) echo '<a href="?del='.$user['userId'].getProjectPath().'">del</a>';
@@ -72,9 +73,10 @@
 		if ($session->isSuperAdmin) {
 			echo '<select name="u_mode">';
 			echo '<option value="0">&nbsp;</option>';
-			echo '<option value="0">Normal</option>';
-			echo '<option value="1">Admin</option>';
-			echo '<option value="2">Super admin</option>';
+			echo '<option value="'.USERLEVEL_NORMAL.'">Normal</option>';
+			echo '<option value="'.USERLEVEL_WEBMASTER.'">Webmaster</option>';
+			echo '<option value="'.USERLEVEL_ADMIN.'">Admin</option>';
+			echo '<option value="'.USERLEVEL_SUPERADMIN.'">Super admin</option>';
 			echo '</select>';
 		} else {
 			echo 'normal user';

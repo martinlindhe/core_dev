@@ -156,6 +156,7 @@
 
 			//Session errors
 			case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';
+			case 'The page you requested requires webmaster rights to view.': return 'Sidan du försöker visa kräver att du är webmaster.';
 			case 'The page you requested requires admin rights to view.': return 'Sidan du försöker visa kräver admin rättigheter.';
 			case 'The page you requested requires superadmin rights to view.': return 'Sidan du försöker visa kräver superadmin rättigheter.';
 			case 'No errors to display.': return 'Det finns inga felmeddelanden att visa.';
@@ -218,6 +219,7 @@
 			case 'View log': return 'Besökslogg';
 			case 'Comments': return 'Kommentarer';
 			case 'Crop selection': return 'Beskär markering';
+			case 'Uploaded file is too big': return 'Den uppladdade filen är för stor';
 
 			//Categories
 			case 'Global categories': return 'Globala kategorier';

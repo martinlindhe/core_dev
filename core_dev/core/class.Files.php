@@ -278,7 +278,7 @@ class Files
 		if (!$FileData['name']) return;
 
 		if (!is_uploaded_file($FileData['tmp_name'])) {
-			$session->error = 'Uploaded file is too large';
+			$session->error = t('Uploaded file is too big');
 			$session->log('Attempt to upload too big file');
 			return false;
 		}

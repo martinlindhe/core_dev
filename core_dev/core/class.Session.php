@@ -17,46 +17,54 @@ require_once('functions_ip.php');
 require_once('functions_locale.php');	//for translations
 require_once('atom_settings.php');	//for storing userdata
 
-define('LOGLEVEL_NOTICE', 1);
-define('LOGLEVEL_WARNING', 2);
-define('LOGLEVEL_ERROR', 3);
-define('LOGLEVEL_ALL', 5);
+define('LOGLEVEL_NOTICE',	1);
+define('LOGLEVEL_WARNING',	2);
+define('LOGLEVEL_ERROR',	3);
+define('LOGLEVEL_ALL',		5);
+
+define('USERLEVEL_NORMAL',		0);
+define('USERLEVEL_WEBMASTER',	1);
+define('USERLEVEL_ADMIN',		2);
+define('USERLEVEL_SUPERADMIN',	3);
 
 class Session
 {
-	private $session_name = 'someSID';	///< default session name
-	private $timeout = 86400;						///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+	private $session_name = 'someSID';		///< default session name
+	private $timeout = 86400;				///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
 	public $online_timeout = 1800;			///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 	//todo: make online_timeout configurable
-	private $check_ip = true;						///< client will be logged out if client ip is changed during the session
+	private $check_ip = true;				///< client will be logged out if client ip is changed during the session
 	private $check_useragent = true;		///< keeps track if the client user agent string changes during the session
 
-	private $start_page = '';							///< redirects user to this page (in $config['web_root'] directory) after successful login
+	private $start_page = '';				///< redirects user to this page (in $config['web_root'] directory) after successful login
 	private $logged_out_start_page = 'index.php';
 	private $error_page = 'error.php';		///< redirects the user to this page (in $config['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
-	public $error;					///< last error message
-	public $ip;							///< IP of current user
+	public $error;				///< last error message
+	public $ip;					///< IP of current user
 	public $user_agent;			///< current user's UserAgent string
-	public $ua_ie;					///< boolean true if the user is using internet explorer
-	public $id;							///< current user's user ID
-	public $username;				///< username of current user
-	public $mode;						///< usermode
+	public $ua_ie;				///< boolean true if the user is using internet explorer
+	public $id;					///< current user's user ID
+	public $username;			///< username of current user
+	public $mode;				///< usermode
 	public $lastActive;			///< last active
-	public $isAdmin;				///< is user admin?
-	public $isSuperAdmin;		///< is user superadmin?
-	public $started;				///< timestamp of when the session started
+	public $started;			///< timestamp of when the session started
 	public $theme = '';			///< contains the currently selected theme
+
+	public $isWebmaster;		///< is user webmaster?
+	public $isAdmin;			///< is user admin?
+	public $isSuperAdmin;		///< is user superadmin?
 
 	public $userModes = array(
 		0 => 'Normal user',
-		1 => 'Admin',
-		2 => 'Super admin'
+		1 => 'Webmaster',
+		2 => 'Admin',
+		3 => 'Super admin'
 	); ///< user modes
 
 	private $default_theme = 'default.css';			///< default theme if none is choosen
-	private $allow_themes = false;							///< allow themes?
+	private $allow_themes = false;					///< allow themes?
 
 	/**
 	 * Constructor. Initializes the session class
@@ -87,6 +95,7 @@ class Session
 		if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
 		if (!isset($_SESSION['mode'])) $_SESSION['mode'] = 0;
 		if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
+		if (!isset($_SESSION['isWebmaster'])) $_SESSION['isWebmaster'] = 0;
 		if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
 		if (!isset($_SESSION['theme'])) $_SESSION['theme'] = $this->default_theme;
@@ -99,6 +108,7 @@ class Session
 		$this->username = &$_SESSION['username'];
 		$this->mode = &$_SESSION['mode'];
 		$this->lastActive = &$_SESSION['lastActive'];
+		$this->isWebmaster = &$_SESSION['isWebmaster'];
 		$this->isAdmin = &$_SESSION['isAdmin'];
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
 		$this->theme = &$_SESSION['theme'];
@@ -127,8 +137,9 @@ class Session
 		$this->mode = $_usermode;		//0=normal user. 1=admin, 2=super admin
 		$this->lastActive = time();
 
-		if ($this->mode >= 1) $this->isAdmin = 1;
-		if ($this->mode >= 2) $this->isSuperAdmin = 1;
+		if ($this->mode >= USERLEVEL_WEBMASTER) $this->isWebmaster = true;
+		if ($this->mode >= USERLEVEL_ADMIN) $this->isAdmin = true;
+		if ($this->mode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
 
 		/* Read in current users settings */
 		if ($this->allow_themes) {
@@ -247,9 +258,10 @@ class Session
 			echo 'User ID: '.$this->id.'<br/>';
 		}
 
-		echo 'User mode: ';
+		echo 'User mode: ';	//FIXME: use $session->userModes
 		if ($this->isSuperAdmin) echo 'Super admin<br/>';
 		else if ($this->isAdmin) echo 'Admin<br/>';
+		else if ($this->isWebmaster) echo 'Webmaster<br/>';
 		else if ($this->id) echo 'Normal user<br/>';
 		else echo 'Visitor<br/>';
 
@@ -313,8 +325,20 @@ class Session
 		$this->errorPage();
 	}
 
+
 	/**
-	 * Locks unregistered users out from certain pages
+	 * Locks normal users out from certain pages
+	 */
+	function requireWebmaster()
+	{
+		global $config;
+		if ($this->isWebmaster) return;
+		if (!$this->error) $this->error = t('The page you requested requires webmaster rights to view.');
+		$this->errorPage();
+	}
+
+	/**
+	 * Locks normal users & webmasters out from certain pages
 	 */
 	function requireAdmin()
 	{
