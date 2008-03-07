@@ -46,6 +46,7 @@
 			case 'Cancel': return 'Avbryt';
 			case 'Modify': return 'Ändra';
 			case 'Create': return 'Skapa';
+			case 'Update': return 'Uppdatera';
 
 			//Search
 			case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
@@ -242,6 +243,22 @@
 			case 'Your password has been changed successfully!': return 'Ditt lösenord har ändrats!';
 			case 'The passwords doesnt match': return 'Lösenorden matchar inte';
 			case 'Password must be at least 4 characters long': return 'Lösenordet måste vara minst 4 tecken långt';
+
+
+			//Userdata admin
+			case 'Edit userdata field': return 'Redigera userdata-fält';
+			case 'Make field private': return 'Gör fältet privat';
+			case 'Current options': return 'Nuvarande alternativ';
+			case 'options': return 'alternativ';
+			case 'Field name': return 'Fältnamn';
+			case 'Private field': return 'Privat fält';
+			case 'Require at registration': return 'Kräv vid registrering';
+			case 'May contain HTML': return 'Får innehålla HTML';
+			case 'Avatar': return 'Avatar';
+			case 'Textarea': return 'Textarea';
+			case 'Checkbox': return 'Kryssruta';
+			case 'Radio buttons': return 'Radioknappar';
+			case 'Dropdown list': return 'Rullgardinslista';
 
 			default: return '__('.$s.')__';
 		}

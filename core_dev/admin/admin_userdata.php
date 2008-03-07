@@ -8,13 +8,13 @@
 	if (isset($_POST['allowhtml']))		$allowHTML = 1;
 	if (isset($_POST['regrequire']))	$regRequire = 1;
 
-	if (!empty($_GET['remove']) && confirmed('Are you sure you want to delete this userdata field?', 'remove', $_GET['remove'])) {
+	if (!empty($_GET['remove']) && confirmed(t('Are you sure you want to delete this userdata field?'), 'remove', $_GET['remove'])) {
 		//delete userdata field
 		removeUserdataField($_GET['remove']);
 
 		require($project.'design_head.php');
 		echo createMenu($admin_menu, 'blog_menu');
-		echo 'Userdata field successfully deleted!<br/><br/>';
+		echo t('Userdata field successfully deleted!').'<br/><br/>';
 		require($project.'design_foot.php');
 		die;
 	}
@@ -33,7 +33,7 @@
 		if (isset($_POST['fielddefault'])) $fieldDefault = $_POST['fielddefault'];
 
 		if (!addUserdataField($_POST['fieldname'], $fieldType, $fieldDefault, $allowHTML, $fieldPrivate, $regRequire)) {
-			echo 'A field with the name '.$_POST['fieldname'].' already exists<br/>';
+			echo t('A field with the name').' '.$_POST['fieldname'].' '.t('already exists.').'<br/>';
 		}
 	}
 
@@ -64,10 +64,10 @@
 
 	/* Add new option to field */
 	if (isset($_GET['change']) && isset($_POST['optionname']) && $_POST['optionname']) {
-		$changeId	 = $_GET['change'];
-		$optionName  = $_POST['optionname'];
+		$changeId = $_GET['change'];
+		$optionName = $_POST['optionname'];
 		if (!addCategory(CATEGORY_USERDATA, $optionName, $changeId)) {
-			echo 'The option already exists<br/>';
+			echo t('The option already exists.').'<br/>';
 		}
 	}
 
@@ -104,9 +104,9 @@
 		echo '&nbsp;<a href="?change='.$row['fieldId'].getProjectPath().'">'.t('Modify').'</a><br/>';
 		echo '<a href="?remove='.$row['fieldId'].getProjectPath().'">'.t('Remove').'</a><br/>';
 
-		if ($row['allowTags']) echo 'May contain HTML<br/>';
-		if ($row['regRequire']) echo 'Require at registration<br/>';
-		if ($row['private']) echo 'Private field<br/>';
+		if ($row['allowTags']) echo t('May contain HTML').'<br/>';
+		if ($row['regRequire']) echo t('Require at registration').'<br/>';
+		if ($row['private']) echo t('Private field').'<br/>';
 		echo '</td>';
 
 		echo getUserdataInput($row);
@@ -127,10 +127,10 @@
 		$changeId	 = $_GET['change'];
 		$data = getUserdataField($changeId);
 		$fieldName = stripslashes($data['fieldName']);
-		$header = 'Edit userdata field "'.$fieldName.'"';
+		$header = t('Edit userdata field').' "'.$fieldName.'"';
 		$submit = t('Update');
 	} else {
-		$header = 'Create a new userdata field';
+		$header = t('Create a new userdata field');
 		$submit = t('Create');
 		$fieldName = '';
 	}
@@ -144,71 +144,73 @@
 	}
 
 	echo '<b>'.$header.'</b><br/>';
-	echo 'Field name:';
+	echo t('Field name').':';
 	echo '<input type="text" name="fieldname" value="'.$fieldName.'" maxlength="30"/><br/>';
 
 	// Only show the default value option while editing text fields
 	if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
-		echo 'Default value:<br/>';
+		echo t('Default value').':<br/>';
 		echo '<input type="text" name="fielddefault" value="'.$data['fieldDefault'].'"/><br/>';
 	}
 
 	echo 'Type: ';
 	echo '<select name="fieldtype">';
-	echo '<option value="'.USERDATA_TYPE_TEXT.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_TEXT)?' selected':'').'>Text</option>';
-	echo '<option value="'.USERDATA_TYPE_TEXTAREA.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_TEXTAREA)?' selected':'').'>Textarea</option>';
-	echo '<option value="'.USERDATA_TYPE_CHECKBOX.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_CHECKBOX)?' selected':'').'>Checkbox</option>';
-	echo '<option value="'.USERDATA_TYPE_RADIO.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_RADIO)?' selected':'').'>Radio buttons</option>';
-	echo '<option value="'.USERDATA_TYPE_SELECT.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)?' selected':'').'>Dropdown list</option>';
+	echo '<option value="'.USERDATA_TYPE_TEXT.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_TEXT)?' selected':'').'>'.t('Text').'</option>';
+	echo '<option value="'.USERDATA_TYPE_TEXTAREA.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_TEXTAREA)?' selected':'').'>'.t('Textarea').'</option>';
+	echo '<option value="'.USERDATA_TYPE_CHECKBOX.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_CHECKBOX)?' selected':'').'>'.t('Checkbox').'</option>';
+	echo '<option value="'.USERDATA_TYPE_RADIO.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_RADIO)?' selected':'').'>'.t('Radio buttons').'</option>';
+	echo '<option value="'.USERDATA_TYPE_SELECT.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_SELECT)?' selected':'').'>'.t('Dropdown list').'</option>';
+	echo '<option value="'.USERDATA_TYPE_AVATAR.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_AVATAR)?' selected':'').'>'.t('Avatar').'</option>';
+
 	if (!$used_image || (isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)) {
-		echo '<option value="'.USERDATA_TYPE_IMAGE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)?' selected':'').'>Image</option>';
+		echo '<option value="'.USERDATA_TYPE_IMAGE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_IMAGE)?' selected':'').'>'.t('Image').'</option>';
 	}
 	if (!$used_email || (isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)) {
-		echo '<option value="'.USERDATA_TYPE_EMAIL.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)?' selected':'').'>E-mail</option>';
+		echo '<option value="'.USERDATA_TYPE_EMAIL.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_EMAIL)?' selected':'').'>'.t('E-mail').'</option>';
 	}
 	if (!$used_theme || (isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)) {
-		echo '<option value="'.USERDATA_TYPE_THEME.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)?' selected':'').'>Theme</option>';
+		echo '<option value="'.USERDATA_TYPE_THEME.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)?' selected':'').'>'.t('Theme').'</option>';
 	}
 	if (!$used_birthdate_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)) {
-		echo '<option value="'.USERDATA_TYPE_BIRTHDATE_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)?' selected':'').'>Birth date (Swedish)</option>';
+		echo '<option value="'.USERDATA_TYPE_BIRTHDATE_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)?' selected':'').'>'.t('Birth date (Swedish)').'</option>';
 	}
 	if (!$used_location_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_LOCATION_SWE)) {
-		echo '<option value="'.USERDATA_TYPE_LOCATION_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_LOCATION_SWE)?' selected':'').'>Location (Sweden)</option>';
+		echo '<option value="'.USERDATA_TYPE_LOCATION_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_LOCATION_SWE)?' selected':'').'>'.t('Location (Sweden)').'</option>';
 	}
 	if (!$used_cellphone || (isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE)) {
-		echo '<option value="'.USERDATA_TYPE_CELLPHONE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE)?' selected':'').'>Cellphone</option>';
+		echo '<option value="'.USERDATA_TYPE_CELLPHONE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE)?' selected':'').'>'.t('Cellphone').'</option>';
 	}
 
 	echo '</select>';
 	echo '<br/>';
 
 	echo '<input type="checkbox" name="regrequire" id="regrequire" value="1" class="checkbox"'.(!empty($data['regRequire'])?' checked="checked"':'').'/>';
-	echo ' <label for="regrequire">Require at registration</label>';
+	echo ' <label for="regrequire">'.t('Require at registration').'</label>';
 	echo '<br/>';
 
 	// Only show the text field options for text fields on edit field, not on create
 	if (!isset($_GET['change']) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
 		echo '<input type="checkbox" name="allowhtml" id="allowhtml" value="1" class="checkbox"'.(!empty($data['allowTags'])?' checked="checked"':'').'/>';
-		echo ' <label for="allowhtml">May contain HTML</label><br/>';
+		echo ' <label for="allowhtml">'.t('May contain HTML').'</label><br/>';
 	}
 
 	echo '<input name="fieldprivate" type="hidden" value="0"/>';
 	echo '<input name="fieldprivate" id="fieldprivate" type="checkbox" class="checkbox" value="1"'.(!empty($data['private'])?' checked="checked"':'').'/>';
-	echo ' <label for="fieldprivate">Make field private</label><br/>';
+	echo ' <label for="fieldprivate">'.t('Make field private').'</label><br/>';
 
-	if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT))) {
+	if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT) || ($data['fieldType'] == USERDATA_TYPE_AVATAR) )) {
 
 		$list = getCategoriesByOwner(CATEGORY_USERDATA, $data['fieldId']);
-		echo 'Current options ('.count($list).' options)<br/>';
+		echo t('Current options').' ('.count($list).' '.t('options').')<br/>';
 
 		foreach($list as $row) {
-			echo '<input type="text" name="change_'.$row['categoryId'].'" value="'.$row['categoryName'].'"/> ';
+			echo '<input type="text" name="change_'.$row['categoryId'].'" value="'.$row['categoryName'].'" size="40"/> ';
 			echo '<input type="checkbox" name="delete_'.$row['categoryId'].'" id="delete_'.$row['categoryId'].'" value="1" class="checkbox"/>';
-			echo '<label for="delete_'.$row['categoryId'].'">Delete</label><br/>';
+			echo '<label for="delete_'.$row['categoryId'].'">'.t('Delete').'</label><br/>';
 		}
 
-		echo 'Add:<br/>';
-		echo '<input type="text" name="optionname"/>';
+		echo t('Add').':<br/>';
+		echo '<input type="text" name="optionname" size="40"/>';
 	}
 
 	echo '<input type="submit" class="button" value="'.$submit.'"/>';

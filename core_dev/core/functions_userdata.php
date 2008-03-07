@@ -14,17 +14,18 @@ require_once('functions_locale.php');	//for translations
 require_once('class.ZipLocation.php');	//for location datatype
 
 /* Userdata field types */
-define('USERDATA_TYPE_TEXT',					1);
+define('USERDATA_TYPE_TEXT',				1);
 define('USERDATA_TYPE_CHECKBOX',			2);
-define('USERDATA_TYPE_RADIO',					3);
+define('USERDATA_TYPE_RADIO',				3);
 define('USERDATA_TYPE_SELECT',				4);
 define('USERDATA_TYPE_TEXTAREA',			5);
-define('USERDATA_TYPE_IMAGE',					6);	//UNIQUE: Used as presentation picture
-define('USERDATA_TYPE_BIRTHDATE_SWE',	7);	//UNIQUE: Swedish date of birth, with last-4-digits control check
-define('USERDATA_TYPE_EMAIL',					8);	//UNIQUE: text string holding a email address
-define('USERDATA_TYPE_THEME',					9); //UNIQUE: select-dropdown in display. contains user preferred theme (.css file)
-define('USERDATA_TYPE_LOCATION_SWE',	10);//UNIQUE: location gadget,user inputs zipcode which maps to "län" and "ort" 
+define('USERDATA_TYPE_IMAGE',				6);	//UNIQUE: Used as presentation picture
+define('USERDATA_TYPE_BIRTHDATE_SWE',		7);	//UNIQUE: Swedish date of birth, with last-4-digits control check
+define('USERDATA_TYPE_EMAIL',				8);	//UNIQUE: text string holding a email address
+define('USERDATA_TYPE_THEME',				9); //UNIQUE: select-dropdown in display. contains user preferred theme (.css file)
+define('USERDATA_TYPE_LOCATION_SWE',		10);//UNIQUE: location gadget,user inputs zipcode which maps to "län" and "ort" 
 define('USERDATA_TYPE_CELLPHONE',			11);//UNIQUE: cellphone number
+define('USERDATA_TYPE_AVATAR',				12);//UNIQUE: avatar is radiobutton list but with images
 
 //userdata module settings:
 $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
@@ -225,6 +226,19 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 				$result .= '<input name="userdata_'.$fieldId.'" type="hidden" value="0"/>';
 				$result .= '<input name="userdata_'.$fieldId.'" id="userdata_'.$fieldId.'" type="checkbox" class="checkbox" value="1"'.($value == '1'?' checked="checked"':'').'/>';
 				$result .= ' <label for="userdata_'.$fieldId.'">'.$row['fieldName'].'</label>';
+				$result .= '</td>';
+				break;
+
+			case USERDATA_TYPE_AVATAR:
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
+				$options = getCategoriesByOwner(CATEGORY_USERDATA, $fieldId);
+
+				foreach($options as $row) {
+					$result .= '<input name="userdata_'.$fieldId.'" type="radio" id="lab_'.$row['categoryId'].'" value="'.$row['categoryId'].'"'.($row['categoryId'] == $value?' checked="checked"':'').'/>';
+					$result .= ' <label for="lab_'.$row['categoryId'].'">';
+					$result .= '<img src="'.$row['categoryName'].'"/>';
+					$result .= '</label><br/>';
+				}
 				$result .= '</td>';
 				break;
 
