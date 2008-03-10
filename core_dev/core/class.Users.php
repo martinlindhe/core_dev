@@ -29,14 +29,14 @@ class Users
 	}
 
 	/**
-	 * Looks up a user id by name
+	 * Looks up a user id by name. Does not take into account deleted users
 	 */
 	function getId($_name)
 	{
 		global $db, $session;
 		if ($_name == $session->username) return $session->id;
 
-		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($_name).'"';
+		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($_name).'" AND timeDeleted IS NULL';
 		return $db->getOneItem($q);
 	}
 
@@ -141,7 +141,7 @@ class Users
 
 		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
 
-		$q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$enc_password.'"';
+		$q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$enc_password.'" AND timeDeleted IS NULL';
 		$data = $db->getOneRow($q);
 		if (!$data) return false;
 		return $data;
@@ -155,7 +155,7 @@ class Users
 		global $db, $session;
 		if (!is_numeric($_limit)) return false;
 
-		$q  = 'SELECT * FROM tblUsers ORDER BY timeLastLogin DESC';
+		$q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL ORDER BY timeLastLogin DESC';
 		$q .= ' LIMIT 0,'.$_limit;
 		return $db->getArray($q);
 	}
@@ -167,7 +167,7 @@ class Users
 	{
 		global $db, $session;
 
-		$q  = 'SELECT * FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+		$q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
 		$q .= ' ORDER BY timeLastActive DESC';
 		return $db->getArray($q);
 	}
@@ -179,12 +179,12 @@ class Users
 	{
 		global $db, $session;
 
-		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
 		return $db->getOneItem($q);
 	}
 
 	/**
-	 * Returns total number of users
+	 * Returns total number of users (excluding deleted ones)
 	 */
 	function cnt($_mode = 0)
 	{
@@ -192,8 +192,17 @@ class Users
 		if (!is_numeric($_mode)) return false;
 
 		$q = 'SELECT COUNT(*) FROM tblUsers';
-		if ($_mode) $q .= ' WHERE userMode='.$_mode;
+		$q .= ' WHERE timeDeleted IS NULL';
+		if ($_mode) $q .= ' AND userMode='.$_mode;
 		return $db->getOneItem($q);
+	}
+
+	/**
+	 * Returns total number of webmasters
+	 */
+	function webmasterCnt()
+	{
+		return Users::cnt(USERLEVEL_WEBMASTER);
 	}
 
 	/**
@@ -201,10 +210,7 @@ class Users
 	 */
 	function adminCnt()
 	{
-		global $db;
-
-		$q = 'SELECT COUNT(*) FROM tblUsers WHERE userMode=1';
-		return $db->getOneItem($q);
+		return Users::cnt(USERLEVEL_ADMIN);
 	}
 
 	/**
@@ -212,10 +218,7 @@ class Users
 	 */
 	function superAdminCnt()
 	{
-		global $db;
-
-		$q = 'SELECT COUNT(*) FROM tblUsers WHERE userMode=2';
-		return $db->getOneItem($q);
+		return Users::cnt(USERLEVEL_SUPERADMIN);
 	}
 
 	/**
@@ -233,18 +236,6 @@ class Users
 		return $db->getArray($q);
 	}
 
-
-	/**
-	 * Admin function used by admin_todo_lists.php
-	 */
-	function getAdmins()
-	{
-		global $db;
-		
-		$q = 'SELECT * FROM tblUsers WHERE userMode=2';	//FIXME. ska denna bara returnera superadmins??
-		return $db->getArray($q);
-	}
-
 	/**
 	 * Returns a random user id
 	 */
@@ -252,9 +243,10 @@ class Users
 	{
 		global $db, $session;
 
-		$q  = 'SELECT userId FROM tblUsers ';
-		if ($session->id) $q .= 'WHERE userId!='.$session->id.' ';
-		$q .= 'ORDER BY RAND() LIMIT 1';
+		$q  = 'SELECT userId FROM tblUsers';
+		$q .= ' WHERE timeDeleted IS NULL';
+		if ($session->id) $q .= ' AND userId!='.$session->id;
+		$q .= ' ORDER BY RAND() LIMIT 1';
 		return $db->getOneItem($q);
 	}
 
@@ -265,8 +257,9 @@ class Users
 	{
 		global $db;
 
-		$q  = 'SELECT userId FROM tblUsers ';
-		$q .= 'WHERE LOWER(userName) LIKE LOWER("%'.$db->escape($phrase).'%") LIMIT 1';
+		$q  = 'SELECT userId FROM tblUsers';
+		$q .= ' WHERE timeDeleted IS NULL';
+		$q .= ' AND LOWER(userName) LIKE LOWER("%'.$db->escape($phrase).'%") LIMIT 1';
 		return $db->getOneItem($q);
 	}
 
@@ -277,8 +270,9 @@ class Users
 	{
 		global $db;
 
-		$q  = 'SELECT userId,userName FROM tblUsers ';
-		$q .= 'WHERE LOWER(userName) LIKE LOWER("'.$db->escape($phrase).'%")';
+		$q  = 'SELECT userId,userName FROM tblUsers';
+		$q .= ' WHERE timeDeleted IS NULL';
+		$q .= ' AND LOWER(userName) LIKE LOWER("'.$db->escape($phrase).'%")';
 		return $db->getArray($q);
 	}
 
@@ -600,7 +594,7 @@ class Users
 		global $db, $session;
 		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT userId FROM tblUsers WHERE userId = '.$_id.' AND timeLastActive>=DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND) LIMIT 1';
+		$q = 'SELECT userId FROM tblUsers WHERE userId = '.$_id.' AND timeDeleted IS NULL AND timeLastActive>=DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND) LIMIT 1';
 		if ($db->getOneItem($q)) {
 			return true;
 		}

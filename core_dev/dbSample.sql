@@ -428,6 +428,7 @@ CREATE TABLE `tblUsers` (
   `timeLastLogin` datetime default NULL,
   `timeLastActive` datetime default NULL,
   `timeLastLogout` datetime default NULL,
+  `timeDeleted` datetime default NULL,
   PRIMARY KEY  (`userId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;

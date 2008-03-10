@@ -70,6 +70,18 @@ class Auth_Standard extends Auth_Base
 	}
 
 	/**
+	 * Marks specified user as "deleted"
+	 */
+	function removeUser($userId)
+	{
+		global $db;
+		if (!is_numeric($userId)) return false;
+
+		$q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId='.$userId;
+		$db->update($q);
+	}
+
+	/**
 	 * Handles logins
 	 *
 	 * \param $username
