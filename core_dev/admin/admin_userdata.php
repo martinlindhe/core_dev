@@ -145,7 +145,7 @@
 
 	echo '<b>'.$header.'</b><br/>';
 	echo t('Field name').':';
-	echo '<input type="text" name="fieldname" value="'.$fieldName.'" maxlength="30"/><br/>';
+	echo '<input type="text" name="fieldname" value="'.$fieldName.'" size="40" maxlength="60"/><br/>';
 
 	// Only show the default value option while editing text fields
 	if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {

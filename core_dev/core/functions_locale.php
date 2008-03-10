@@ -259,6 +259,8 @@
 			case 'Checkbox': return 'Kryssruta';
 			case 'Radio buttons': return 'Radioknappar';
 			case 'Dropdown list': return 'Rullgardinslista';
+			case 'E-mail': return 'E-post';
+			case 'This setting is hidden from other users.': return 'Denna inställning visas inte för andra användare.';
 
 			default: return '__('.$s.')__';
 		}

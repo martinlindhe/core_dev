@@ -407,9 +407,9 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `tblUserdata` (
   `fieldId` int(10) unsigned NOT NULL auto_increment,
-  `fieldName` varchar(200) default NULL,
+  `fieldName` varchar(100) default NULL,
   `fieldType` tinyint(3) unsigned NOT NULL default '0',
-  `fieldDefault` varchar(200) default NULL,
+  `fieldDefault` varchar(100) default NULL,
   `allowTags` tinyint(3) unsigned NOT NULL default '0',
   `private` tinyint(3) unsigned NOT NULL default '0',
   `fieldPriority` tinyint(3) unsigned NOT NULL default '0',

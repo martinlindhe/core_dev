@@ -212,6 +212,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 			case USERDATA_TYPE_TEXT:
 				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 				$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';
+				if ($row['private']) $result .= '<br/>'.t('This setting is hidden from other users.');
 				$result .= '</td>';
 				break;
 
