@@ -497,11 +497,11 @@ class Users
 			}
 		}
 
-		$q .= 'WHERE ';
+		$q .= 'WHERE t1.timeDeleted IS NULL ';
 		if ($criteria) { //free-text search
-			$q .= '((n1.settingType='.USERDATA_TYPE_TEXT.' OR n1.settingType='.USERDATA_TYPE_TEXTAREA.') ';
+			$q .= 'AND (((n1.settingType='.USERDATA_TYPE_TEXT.' OR n1.settingType='.USERDATA_TYPE_TEXTAREA.') ';
 			$q .= 'AND LOWER(n1.settingValue) LIKE LOWER("%'.$criteria.'%")) ';
-			$q .= 'OR LOWER(t1.userName) LIKE LOWER("%'.$criteria.'%") ';
+			$q .= 'OR LOWER(t1.userName) LIKE LOWER("%'.$criteria.'%")) ';
 			$x = 1;
 		}
 
