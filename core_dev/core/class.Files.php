@@ -14,6 +14,7 @@
 
 require_once('atom_comments.php');			//for image comments support
 require_once('atom_categories.php');		//for file categories support
+require_once('atom_subscriptions.php');		//for userfile area subscriptions
 require_once('functions_image.php');
 require_once('functions_time.php');			//for ago()
 require_once('functions_process.php');	//for process_client_fetchAndConvert()
@@ -301,18 +302,18 @@ class Files
 
 		$this->updateFile($fileId);	//force update of filesize, mimetype & checksum
 
-		$subs = getSubscribers(SUBSCRIPTION_FILES,$ownerId);
-		d($subs);
-		if (!empty($subs)) {
-			foreach ($subs as $sub) {
-				$dst_adr = loadUserdataEmail($sub['ownerId']);
-				$subj = t('Updated gallery');
-				$msg = 'Användaren '.Users::getName($ownerId).' har laddat upp nytt innehåll till sitt galleri.';
-				$auth->SmtpSend($dst_adr, $subj, $msg);
-				systemMessage($sub['ownerId'], $subj, $msg);
-			}			
-		}
-		
+		if ($fileType == FILETYPE_USERFILE) {		
+			$subs = getSubscribers(SUBSCRIPTION_FILES, $ownerId);
+			if (!empty($subs)) {
+				foreach ($subs as $sub) {
+					$dst_adr = loadUserdataEmail($sub['ownerId']);
+					$subj = t('Updated gallery');
+					$msg = t('The user').' '.Users::getName($ownerId).' '.t('has uploaded files to their file area.');
+					$auth->SmtpSend($dst_adr, $subj, $msg);
+					systemMessage($sub['ownerId'], $subj, $msg);
+				}			
+			}
+		}			
 
 		return $fileId;
 	}

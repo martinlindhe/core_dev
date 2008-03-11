@@ -263,6 +263,10 @@
 			case 'E-mail': return 'E-post';
 			case 'This setting is hidden from other users.': return 'Denna inställning visas inte för andra användare.';
 
+			//Subscriptions
+			case 'The user': return 'Användaren';
+			case 'has uploaded files to their file area.': return 'har laddat upp nytt innehåll till sitt galleri.';
+
 			default: return '__('.$s.')__';
 		}
 	}
