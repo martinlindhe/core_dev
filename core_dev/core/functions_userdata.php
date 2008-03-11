@@ -616,7 +616,10 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 		$email_field = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 
-		$q = 'SELECT ownerId FROM tblSettings WHERE settingName="'.$db->escape($email_field).'" AND settingValue="'.$db->escape($email).'" AND settingType='.SETTING_USERDATA;
+		$q = 'SELECT t1.ownerId FROM tblSettings AS t1';
+		$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.ownerId=t2.userId) ';
+		$q .= ' WHERE t2.timeDeleted IS NULL';
+		$q .= ' AND t1.settingName="'.$db->escape($email_field).'" AND t1.settingValue="'.$db->escape($email).'" AND t1.settingType='.SETTING_USERDATA;
 		$id = $db->getOneItem($q);
 		if ($id) return $id;
 		return false;
