@@ -137,6 +137,12 @@ select {
 #zoom_image {
 }
 
+#zoom_video {
+	width: 400px;
+	height: 340px;
+}
+
+
 /* for login box gadget */
 .login_box {
 	font-size: 14px;

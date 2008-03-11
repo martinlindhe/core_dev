@@ -417,7 +417,9 @@
 		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 
-		echo	'<div id="zoom_video" style="width: 400px; height: 340px;"></div>';
+		echo	'<div id="zoom_video">';
+		echo	'<a href="http://www.macromedia.com/go/getflashplayer">You need Flash Player</a>.';
+		echo	'</div>';
 
 		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';

@@ -61,15 +61,18 @@ function zoomVideo(id, name, nfo)
 
 	empty_element_by_name('zoom_video');
 
-	params = '&fgcolor=0xFF0000&bgcolor=0x000000&volume=70';
 	//url = _ext_core+'flash/flv_player.swf?movie='+urlencode('/video/')+id+'.flv'+urlencode(_ext_ref)+params;
-	url = _ext_core+'flash/flv_player.swf?movie='+urlencode('/video/')+id+'.flv'+params;
+	url = _ext_core+'flash/mediaplayer.swf';
 
-	var fo = new SWFObject(url, 'animationName', '400', '340', '8', '#FFFFFF');
-	fo.addParam('allowScriptAccess', 'sameDomain');
-	fo.addParam('allowFullScreen', 'true');
-	fo.addParam('quality', 'high');
-	fo.addParam('scale', 'noscale');
+	w = 176;
+	h = 154;
+	var fo = new SWFObject(url, 'mediaplayer', w, h, '8', '#FFFFFF');
+	fo.addParam("allowfullscreen","true");
+	fo.addVariable("width",w);
+	fo.addVariable("height",h);
+	fo.addVariable("file",urlencode('/video/')+id+'.flv');
+	fo.addVariable("autostart", true);
+	//fo.addVariable("image","video.jpg");
 	fo.write('zoom_video');
 
 	if (nfo) ajax_get_fileinfo(id);
