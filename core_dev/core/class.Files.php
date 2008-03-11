@@ -271,7 +271,7 @@ class Files
 	 */
 	function handleUpload($FileData, $fileType, $ownerId = 0, $categoryId = 0)
 	{
-		global $db, $session;
+		global $db, $session, $auth;
 		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
 		//ignore empty file uploads
@@ -300,6 +300,20 @@ class Files
 		}
 
 		$this->updateFile($fileId);	//force update of filesize, mimetype & checksum
+
+		$subs = getSubscribers(SUBSCRIPTION_FILES,$ownerId);
+		d($subs);
+		if (!empty($subs)) {
+			foreach ($subs as $sub) {
+				$dst_adr = loadUserdataEmail($sub['ownerId']);
+				$subj = t('Updated gallery');
+				$msg = 'Användaren '.Users::getName($ownerId).' har laddat upp nytt innehåll till sitt galleri.';
+				$auth->SmtpSend($dst_adr, $subj, $msg);
+				systemMessage($sub['ownerId'], $subj, $msg);
+			}			
+		}
+		
+
 		return $fileId;
 	}
 
@@ -337,7 +351,7 @@ class Files
 
 		$this->updateFile($newFileId);
 
-  	return $newFileId;
+	  	return $newFileId;
 	}
 
 	/**

@@ -15,6 +15,7 @@
 
 	define('SUBSCRIPTION_FORUM',			1);
 	define('SUBSCRIPTION_BLOG',				2);	//fixme: implement
+	define('SUBSCRIPTION_FILES',			3);	//fixme: implement
 
 	/**
 	 * Creates a subscription of $type on itemId
@@ -136,6 +137,23 @@
 		return $db->getArray($q);		
 	}
 
+	/**
+	 * Returns all subscribers for $itemId, only of type $type if specified
+	 *
+	 * \param $type type of subscription
+	 * \param $ownerId owner of subscribable information
+	 * \return array of subscriptions
+	 */
+	function getSubscribers($type, $itemId)
+	{
+		global $db, $session;
+		if (!is_numeric($type) || !is_numeric($itemId)) return false;
+
+		$q = 'SELECT * FROM tblSubscriptions WHERE itemId='.$itemId.' AND type='.$type;
+		return $db->getArray($q);
+	}
+
+
 	/*
 	//Raderar alla subscriptions av $type och $ownerId
 	function removeAllSubscriptions($type, $ownerId)
@@ -146,14 +164,6 @@
 		dbQuery($db, $sql);
 	}
 
-	//Returns all subscribers for $ownerId, only of type $type if specified
-	function getSubscribers($type, $ownerId)
-	{
-		if (!is_numeric($type) || !is_numeric($ownerId)) return false;
-
-		$sql = 'SELECT * FROM tblSubscriptions WHERE ownerId='.$ownerId.' AND subscriptionType='.$type;
-		return dbArray($db, $sql);
-	}
 	
 	//Returns an array with all stored settings belonging to this subscription from tblSettings
 	function getSubscriptionSettings($type, $ownerId)
@@ -168,15 +178,16 @@
 	}
 
 	//Returnerar ett row för angiven subscription
-	function getSubscription($type, $subscriptionId)
+	function getSubscription($type, $ownerId, $itemId)
 	{
-		if (!is_numeric($type) || !is_numeric($subscriptionId)) return false;
+		global $db, $session;
+		if (!is_numeric($type) || !is_numeric($ownerId)) return false;
 		
-		$sql = 'SELECT * FROM tblSubscriptions WHERE subscriptionType='.$type.' AND subscriptionId='.$subscriptionId;
+		$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$ownerId.' AND itemId='.$itemId;
 		
-		return dbOneResult($db, $sql);
+		return $db->getOneRow($q);
 	}
-	
+
 	//Helper function, returns a comma separated text string with mail addresses
 	function getEmailSubscribers($subscriptionId)
 	{

@@ -221,6 +221,7 @@
 			case 'Comments': return 'Kommentarer';
 			case 'Crop selection': return 'Beskär markering';
 			case 'Uploaded file is too big': return 'Den uppladdade filen är för stor';
+			case 'Updated gallery': return 'Uppdaterat galleri';
 
 			//Categories
 			case 'Global categories': return 'Globala kategorier';
