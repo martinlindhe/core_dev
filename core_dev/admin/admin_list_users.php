@@ -10,19 +10,23 @@
 	echo 'As a super admin, you can upgrade users to other user levels, or remove them from the system from this page.<br/><br/>';
 
 	if ($session->isSuperAdmin && !empty($_GET['del'])) {
-		Users::delete($_GET['del']);
+		Users::removeUser($_GET['del']);
 	}
 
+	$mode = 0;
+	if (!empty($_GET['mode'])) $mode = $_GET['mode'];
+
 	if ($session->isSuperAdmin && !empty($_POST)) {
+		$list = Users::getUsers($mode);
 		foreach ($list as $row) {
 			$newmode = $_POST['mode_'.$row['userId']];
 			if ($newmode != $row['userMode']) {
 				Users::setMode($row['userId'], $newmode);
 			}
 		}
-		
-		if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && !empty($_POST['u_mode'])) {
-			$newUserId = $session->registerUser($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
+
+		if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode'])) {
+			$newUserId = $auth->registerUser($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
 			if (!is_numeric($newUserId)) {
 				echo '<div class="critical">'.$newUserId.'</div>';
 			} else {
@@ -30,9 +34,6 @@
 			}
 		}
 	}
-
-	$mode = 0;
-	if (!empty($_GET['mode'])) $mode = $_GET['mode'];
 
 	$tot_cnt = Users::cnt($mode);
 	$limit = 25;
@@ -52,7 +53,7 @@
 	echo '</tr>';
 	foreach ($list as $user)
 	{
-		echo '<tr>';
+		echo '<tr'.($user['timeDeleted']?' class="critical"':'').'>';
 		echo '<td>'.Users::link($user['userId'], $user['userName']).'</td>';
 		echo '<td>'.$user['timeLastActive'].'</td>';
 		echo '<td>'.$user['timeCreated'].'</td>';
@@ -65,7 +66,7 @@
 				echo '<option value="'.USERLEVEL_SUPERADMIN.'"'.($user['userMode']==USERLEVEL_SUPERADMIN?' selected="selected"':'').'>Super admin</option>';
 				echo '</select> ';
 
-				if ($session->id != $user['userId']) echo '<a href="?del='.$user['userId'].getProjectPath().'">del</a>';
+				if ($session->id != $user['userId'] && !$user['timeDeleted']) echo '<a href="?del='.$user['userId'].getProjectPath().'">del</a>';
 
 			} else {
 				echo $user['userMode'];
@@ -78,7 +79,6 @@
 	echo '<td>';
 		if ($session->isSuperAdmin) {
 			echo '<select name="u_mode">';
-			echo '<option value="0">&nbsp;</option>';
 			echo '<option value="'.USERLEVEL_NORMAL.'">Normal</option>';
 			echo '<option value="'.USERLEVEL_WEBMASTER.'">Webmaster</option>';
 			echo '<option value="'.USERLEVEL_ADMIN.'">Admin</option>';

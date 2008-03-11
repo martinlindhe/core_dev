@@ -293,6 +293,18 @@ class Users
 	}
 
 	/**
+	 * Marks specified user as "deleted"
+	 */
+	function removeUser($userId)
+	{
+		global $db;
+		if (!is_numeric($userId)) return false;
+
+		$q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId='.$userId;
+		$db->update($q);
+	}
+
+	/**
 	 * Randomly selects a user's presentation
 	 */
 	function randomUserPage()
@@ -581,6 +593,21 @@ class Users
 		if (!is_numeric($_id)) return false;
 
 		if (loadSetting(SETTING_USERDATA, $_id, 'activated')) return true;
+		return false;
+	}
+
+	/**
+	 * Checks if user exists (and is not deleted), returns true/false
+	 *
+	 * \param $_id user id
+	 */
+	function exists($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT COUNT(*) FROM tblUsers WHERE userId='.$_id.' AND timeDeleted IS NULL';
+		if ($db->getOneItem($q)) return true;
 		return false;
 	}
 

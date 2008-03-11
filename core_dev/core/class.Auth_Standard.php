@@ -22,13 +22,13 @@ class Auth_Standard extends Auth_Base
 	 * \param $username user name
 	 * \param $password1 password
 	 * \param $password2 password (repeat)
-	 * \param $userMode user mode
+	 * \param $_mode user mode
 	 * \return the user ID of the newly created user
 	 */
-	function registerUser($username, $password1, $password2, $userMode = 0)
+	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL)
 	{
 		global $db, $config, $session;
-		if (!is_numeric($userMode)) return false;
+		if (!is_numeric($_mode)) return false;
 
 		if ($username != trim($username)) return t('Username contains invalid spaces');
 
@@ -43,42 +43,32 @@ class Auth_Standard extends Auth_Base
 
 		if ($password1 != $password2) return t('The passwords doesnt match');
 
-		if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
+		if (!$session->isSuperAdmin) {
+			if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
 
-		//Checks if email was required, and if so if it was correctly entered
-		$chk = verifyRequiredUserdataFields();		
-		if ($chk !== true) return $chk;
+			//Checks if email was required, and if so if it was correctly entered
+			$chk = verifyRequiredUserdataFields();		
+			if ($chk !== true) return $chk;
+		}
 
 		if (Users::cnt()) {
 			if (Users::getId($username)) return t('Username already exists');
 		} else {
 			//No users exists, give this user superadmin status
-			$userMode = 2;
+			$_mode = USERLEVEL_SUPERADMIN;
 		}
 
-		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$userMode.',timeCreated=NOW()';
+		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$_mode.',timeCreated=NOW()';
 		$newUserId = $db->insert($q);
 
 		$session->log('Registered user <b>'.$username.'</b>');
 
 		//Stores the additional data from the userdata fields that's required at registration
-		if ($this->userdata) {
+		if (!$session->isSuperAdmin && $this->userdata) {
 			handleRequiredUserdataFields($newUserId);
 		}
 
 		return $newUserId;
-	}
-
-	/**
-	 * Marks specified user as "deleted"
-	 */
-	function removeUser($userId)
-	{
-		global $db;
-		if (!is_numeric($userId)) return false;
-
-		$q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId='.$userId;
-		$db->update($q);
 	}
 
 	/**

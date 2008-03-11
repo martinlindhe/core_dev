@@ -422,7 +422,8 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 					break;
 
 				case USERDATA_TYPE_BIRTHDATE_SWE:
-					if ($check = SsnValidateSwedishNum(
+					if (empty($_POST['userdata_'.$row['fieldId'].'_year']) ||
+						SsnValidateSwedishNum(
 						$_POST['userdata_'.$row['fieldId'].'_year'],
 						$_POST['userdata_'.$row['fieldId'].'_month'],
 						$_POST['userdata_'.$row['fieldId'].'_day'],
