@@ -10,7 +10,7 @@
 require_once('atom_rating.php');	//for file rating
 
 	/**
-	 * Helper function to display a file, depending on file type
+	 * Displays a file, depending on file type
 	 */
 	function showFile($fileId, $mime = '', $title = '', $click = true)
 	{
@@ -148,10 +148,7 @@ require_once('atom_rating.php');	//for file rating
 		}
 		echo '</div>';
 
-		$q = 'SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType;
-		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-		$q .= ' ORDER BY timeUploaded ASC';
-		$list = $db->getArray($q);
+		$list = Files::getFiles($fileType, $ownerId, $categoryId);
 
 		showImageGadgetXHTML($ownerId);
 		showAudioGadgetXHTML($ownerId);
@@ -159,6 +156,8 @@ require_once('atom_rating.php');	//for file rating
 		showDocumentGadgetXHTML($ownerId);
 
 		echo '<div id="zoom_fileinfo" style="display:none"></div>';
+		echo '<div id="filearea_mover" style="display:none"></div>';
+
 		echo '<div id="file_gadget_content">';
 
 		foreach ($list as $row)
@@ -340,7 +339,7 @@ require_once('atom_rating.php');	//for file rating
 			echo '<div id="slider_toolbar" style="display:none; clear: both">';
 			echo	'<p align="left">';
  			echo	'<div id="resize_slider" style="width:200px;background-color:#aaa;height:5px;margin:10px;">';
-   		echo		'<div id="resize_slider_handle" style="width:5px;height:10px;background-color:#f00;cursor:move;"> </div>';
+   		echo		'<div id="resize_slider_handle" style="width:5px;height:10px;background-color:#f00;cursor:movemove;"> </div>';
 			echo	'</div>';
 			echo	'<input type="button" class="button" value="'.t('Save').'" onclick="resize_selection()"/>';
 			echo	'<input type="button" class="button" value="'.t('Cancel').'" onclick="cancel_resizer()"/>';
@@ -362,7 +361,7 @@ require_once('atom_rating.php');	//for file rating
 			echo	'<input type="button" class="button" value="'.t('Resize').'" onclick="resize_selected_file()"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate left').'" onclick="rotate_selected_file(90)"/>';
 			echo	'<input type="button" class="button" value="'.t('Rotate right').'" onclick="rotate_selected_file(-90)"/>';
-			//echo	'<input type="button" class="button" value="'.t('Move image').'" onclick="move_selected_file()"/>';
+			echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo	'<input type="button" class="button" value="'.t('Delete image').'" onclick="delete_selected_file()"/>';
 		} else {
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
@@ -392,7 +391,7 @@ require_once('atom_rating.php');	//for file rating
 
 		if ($session->id == $ownerId  || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
-			//echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		}
 		if ($session->id != $ownerId) {
@@ -421,7 +420,7 @@ require_once('atom_rating.php');	//for file rating
 
 		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
-			//echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		}
 		if ($session->id != $ownerId) {
@@ -446,7 +445,7 @@ require_once('atom_rating.php');	//for file rating
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
-			//echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
+			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 			echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 		}
 		if ($session->id != $ownerId) {

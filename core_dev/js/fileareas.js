@@ -98,6 +98,7 @@ function zoom_hide_elements()
 	hide_element_by_name('zoom_image_layer');
 	hide_element_by_name('zoom_file_layer');
 	hide_element_by_name('zoom_fileinfo');
+	hide_element_by_name('filearea_mover');
 	hide_cropper();
 	hide_resizer();
 
@@ -193,7 +194,7 @@ function hide_resizer()
 /* displays dialog for moving selected file to another file area category */
 function move_selected_file()
 {
-	alert('fixme: move_selected_file() not yet iplemented');
+	show_element_by_name('filearea_mover');
 }
 
 function download_selected_file()
