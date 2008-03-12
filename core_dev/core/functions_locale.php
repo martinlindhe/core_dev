@@ -200,6 +200,7 @@
 			case 'in': return 'i';
 			case 'vote': return 'röst';
 			case 'votes': return 'röster';
+			case 'Not rated yet.': return 'Inga röster ännu.';
 
 			//Textformat
 			case 'wrote': return 'skrev';

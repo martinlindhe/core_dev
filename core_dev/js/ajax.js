@@ -126,6 +126,27 @@ function ajax_get_fileinfo_callback()
 	fileinfo_request = null;
 }
 
+var rategadget_request = null;
+function ajax_get_rategadget(id,type)
+{
+	rategadget_request = new AJAX();
+	rategadget_request.GET_raw(_ext_core+'ajax_rategadget.php?i='+id+'&t='+type+_ext_ref, ajax_get_rategadget_callback);
+
+	setTimeout("show_ajax_anim()", 20);
+}
+
+function ajax_get_rategadget_callback()
+{
+	if (!rategadget_request.ResultReady()) return;
+
+	fill_element_by_name('rate_file', rategadget_request._request.responseText);
+	ajax_anim_abort = true;
+	hide_ajax_anim();
+
+	rategadget_request = null;
+}
+
+
 function submit_apc_upload(id)
 {
 	//submit form

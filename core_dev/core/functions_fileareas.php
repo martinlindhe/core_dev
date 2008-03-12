@@ -22,7 +22,7 @@ require_once('atom_rating.php');	//for file rating
 		}
 
 		if (in_array($mime, $files->image_mime_types)) {
-			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomImage('.$fileId.');"><center>';
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomImage('.$fileId.',0,'.($files->allow_rating?'1':'0').');"><center>';
 			echo showThumb($fileId);
 			if ($click) echo '</center></div>';
 		} else if (in_array($mime, $files->audio_mime_types)) {
@@ -370,8 +370,7 @@ require_once('atom_rating.php');	//for file rating
 
 		if ($files->allow_rating) {
 			echo '<br/>';
-			echo '<div class="image_rate">';
-				//ratingGadget(RATE_FILE, 1);
+			echo '<div id="rate_file">';
 				//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
 			echo '</div>';
 		}

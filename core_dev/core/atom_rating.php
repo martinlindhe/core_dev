@@ -129,7 +129,9 @@ define('RATE_FILE',		3);
 
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-		if (!$session->id || isRated($_type, $_id)) return showRating($_type, $_id);
+		if (!$session->id || isRated($_type, $_id) || 
+			($_type == RATE_FILE && Files::getOwner($_id) == $session->id))
+			return showRating($_type, $_id);
 
 		if (!empty($_POST['rate_gadget'])) {
 			rateItem($_type, $_id, $_POST['rate_gadget']);
@@ -171,7 +173,11 @@ define('RATE_FILE',		3);
 			}
 		}
 		$result .= '<br/><br/>';
-		$result .= $row['rating'].' / 5 '.t('in').' '.$row['ratingCnt'].' '.($row['ratingCnt']==1?t('vote'):t('votes'));
+		if ($row['ratingCnt']) {
+			$result .= $row['rating'].' / 5 '.t('in').' '.$row['ratingCnt'].' '.($row['ratingCnt']==1?t('vote'):t('votes'));
+		} else {
+			$result .= t('Not rated yet.');
+		}
 
 		return $result;
 	}

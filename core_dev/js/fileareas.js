@@ -1,13 +1,14 @@
 var zoomed_id = 0;
 //closeup view of image file
-function zoomImage(id, nfo)
+function zoomImage(id, nfo, rate)
 {
 	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
 
 	zoomed_id = id;
 
-	if (nfo) ajax_get_fileinfo(id, _ext_ref);
+	if (nfo) ajax_get_fileinfo(id);
+	if (rate) ajax_get_rategadget(id,3);//3=rate file
 
 	hide_element_by_name('file_gadget_content');
 	hide_element_by_name('zoom_video_layer');
@@ -21,7 +22,7 @@ function zoomFile(id, nfo)
 {
 	zoomed_id = id;
 
-	if (nfo) ajax_get_fileinfo(id, _ext_ref);
+	if (nfo) ajax_get_fileinfo(id);
 
 	hide_element_by_name('file_gadget_content');
 	hide_element_by_name('zoom_video_layer');
@@ -86,10 +87,7 @@ function zoomVideo(id, name, nfo)
 
 function zoomShowFileInfo(txt)
 {
-	var e = document.getElementById('zoom_fileinfo');
-	empty_element(e);
-
-	e.innerHTML = txt;
+	fill_element_by_name('zoom_fileinfo', txt);
 	show_element_by_name('zoom_fileinfo');
 }
 

@@ -80,6 +80,14 @@ function empty_element_by_name(n)
 		e.removeChild(e.firstChild);
 }
 
+function fill_element_by_name(n,txt)
+{
+	var e = document.getElementById(n);
+	empty_element(e);
+
+	e.innerHTML = txt;
+}
+
 function empty_element(e)
 {
 	while (e.hasChildNodes()) e.removeChild(e.firstChild);
