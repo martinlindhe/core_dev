@@ -7,6 +7,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('atom_rating.php');	//for file rating
+
 	/**
 	 * Helper function to display a file, depending on file type
 	 */
@@ -319,7 +321,7 @@
 	 */
 	function showImageGadgetXHTML($ownerId)
 	{
-		global $config, $session;
+		global $config, $session, $files;
 
 		echo '<div id="zoom_image_layer" style="display:none">';
 		//echo 	'<center>';
@@ -366,10 +368,10 @@
 			echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 		}
 
-		if (!empty($config['news']['allow_rating'])) {
+		if ($files->allow_rating) {
 			echo '<br/>';
 			echo '<div class="image_rate">';
-				//ratingGadget(RATE_IMAGE, 1)
+				//ratingGadget(RATE_FILE, 1);
 				//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
 			echo '</div>';
 		}

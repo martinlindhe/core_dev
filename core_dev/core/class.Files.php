@@ -115,15 +115,17 @@ class Files
 	public $thumb_default_width		= 80;				///< Default width of thumbnails
 	public $thumb_default_height	= 80;				///< Default height of thumbnails
 
-	private $image_max_width			= 900;			///< bigger images will be resized to this size
-	private $image_max_height			= 800;
+	private $image_max_width		= 900;			///< bigger images will be resized to this size
+	private $image_max_height		= 800;
 
-	public $anon_uploads					= false;		///< allow unregisterd users to upload files
-	public $count_file_views			= false;		///< FIXME REMOVE! auto increments the "cnt" in tblFiles in each $files->sendFile() call
-	public $apc_uploads					= false;		///< enable support for php_apc + php_uploadprogress calls
-	public $image_convert				= true;			///< use imagemagick to handle exotic image formats
+	public $anon_uploads			= false;		///< allow unregisterd users to upload files
+	public $count_file_views		= false;		///< FIXME REMOVE! auto increments the "cnt" in tblFiles in each $files->sendFile() call
+	public $apc_uploads				= false;		///< enable support for php_apc + php_uploadprogress calls
+	public $image_convert			= true;			///< use imagemagick to handle exotic image formats
 
 	public $process_callback		= false;		///< script to callback on process server completition (optional)
+
+	public $allow_rating			= true;			///< allow file rating?
 
 	public $default_video = 'video/x-flv';	///< FLV = default fileformat to convert video to
 	public $default_audio = 'audio/x-mpeg';	///< MP3 = default fileformat to convert audio to
@@ -150,6 +152,8 @@ class Files
 		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
 		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
+
+		if (isset($config['allow_rating'])) $this->allow_rating = $config['allow_rating'];
 
 		if (isset($config['process_callback'])) $this->process_callback = $config['process_callback'];
 	}

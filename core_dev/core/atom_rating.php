@@ -13,7 +13,7 @@ require_once('functions_locale.php');	//for translation
 
 define('RATE_NEWS',		1);
 define('RATE_BLOG',		2);
-define('RATE_IMAGE',	3);	//todo: implement
+define('RATE_FILE',		3);
 
 	/**
 	 * Adds a rating + keeps track if the user has already added a rating
@@ -44,16 +44,20 @@ define('RATE_IMAGE',	3);	//todo: implement
 		$q = 'SELECT COUNT(rateId) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
 		$ratingcnt = $db->getOneItem($q);
 
+		//4. update average
 		switch ($_type) {
 			case RATE_BLOG:
-				//4. update average
 				$q = 'UPDATE tblBlogs SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE blogId='.$_id;
 				$db->query($q);
 				break;
 
 			case RATE_NEWS:
-				//4. update average
 				$q = 'UPDATE tblNews SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE newsId='.$_id;
+				$db->query($q);
+				break;
+
+			case RATE_FILE:
+				$q = 'UPDATE tblFiles SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE fileId='.$_id;
 				$db->query($q);
 				break;
 
@@ -79,7 +83,6 @@ define('RATE_IMAGE',	3);	//todo: implement
 		return false;
 	}
 
-
 	/**
 	 * Returns average rating for specified item
 	 *
@@ -100,6 +103,10 @@ define('RATE_IMAGE',	3);	//todo: implement
 
 			case RATE_NEWS:
 				$q = 'SELECT rating,ratingCnt FROM tblNews WHERE newsId='.$_id;
+				break;
+
+			case RATE_FILE:
+				$q = 'SELECT rating,ratingCnt FROM tblFiles WHERE fileId='.$_id;
 				break;
 
 			default:

@@ -130,6 +130,8 @@ CREATE TABLE `tblFiles` (
   `fileType` tinyint(3) unsigned NOT NULL default '0',
   `timeUploaded` datetime default NULL,
   `cnt` int(10) unsigned NOT NULL default '0',
+  `rating` tinyint(3) unsigned NOT NULL,
+  `ratingCnt` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`fileId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
