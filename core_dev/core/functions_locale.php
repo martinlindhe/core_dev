@@ -222,6 +222,7 @@
 			case 'Crop selection': return 'Beskär markering';
 			case 'Uploaded file is too big': return 'Den uppladdade filen är för stor';
 			case 'Updated gallery': return 'Uppdaterat galleri';
+			case 'Video awaiting conversion.': return 'Videon väntar på att konverteras';
 
 			//Categories
 			case 'Global categories': return 'Globala kategorier';

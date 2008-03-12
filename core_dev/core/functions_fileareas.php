@@ -29,15 +29,14 @@
 			if ($click) echo '</center></div>';
 		} else if (in_array($mime, $files->video_mime_types)) {
 
+			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomVideo('.$fileId.',\''.urlencode($title).'\');"><center>';
+			echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';
+			echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_left.png\')">&nbsp;</td>';
+			echo '<td>';
+
 			if ($files->process_callback && $mime != $files->default_video) {
-				echo '<div class="file_gadget_entry">';
-				echo 'Video awaiting conversion';
-				echo '</div>';
+				echo t('Video awaiting conversion.');
 			} else {
-				if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomVideo('.$fileId.',\''.urlencode($title).'\');"><center>';
-				echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';
-				echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_left.png\')">&nbsp;</td>';
-				echo '<td>';
 
 				$vid_thumb = $files->getFiles(FILETYPE_CLONE_VIDEOTHUMB10, $fileId);
 				if ($vid_thumb) {
@@ -45,11 +44,12 @@
 				} else {
 					echo '<img src="'.$config['core_web_root'].'gfx/vid_thumb_missing.png" width="64" height="64" alt="Video file"/>';
 				}
-				echo '</td>';
-				echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_right.png\')">&nbsp;</td>';
-				echo '</tr></table>';
-				if ($click) echo '</center></div>';
 			}
+			echo '</td>';
+			echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_right.png\')">&nbsp;</td>';
+			echo '</tr></table>';
+			if ($click) echo '</center></div>';
+
 
 		} else if (in_array($mime, $files->document_mime_types)) {
 			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomFile('.$fileId.');"><center>';
