@@ -24,25 +24,25 @@ require_once('functions_fileareas.php');
 //WARNING: keep this a low number unless you are sure what the consequences are
 $config['process']['process_limit'] = 3;
 
-define('PROCESSQUEUE_AUDIO_RECODE', 10);	//Enqueue this
-define('PROCESSQUEUE_VIDEO_RECODE', 11);	//fixme: use
-define('PROCESSQUEUE_IMAGE_RECODE', 12);	//Enqueue this file for recoding/converting to another image format
+define('PROCESSQUEUE_AUDIO_RECODE', 10);	///< Enqueue this
+define('PROCESSQUEUE_VIDEO_RECODE', 11);	///< fixme: use
+define('PROCESSQUEUE_IMAGE_RECODE', 12);	///< Enqueue this file for recoding/converting to another image format
 
-define('PROCESS_UPLOAD',						19);	//HTTP Post upload
-define('PROCESS_FETCH',							20);	//Ask the server to download remote media. Parameter is URL
+define('PROCESS_UPLOAD',			19);	///< HTTP Post upload
+define('PROCESS_FETCH',				20);	///< Ask the server to download remote media. Parameter is URL
 
-define('PROCESSPARSE_AND_FETCH',		21);	//Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
-define('PROCESS_CONVERT_TO_DEFAULT',22);	//Convert media to default format
+define('PROCESSPARSE_AND_FETCH',	21);	///< Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
+define('PROCESS_CONVERT_TO_DEFAULT',22);	///< Convert media to default format
 
 
-define('PROCESSMONITOR_SERVER',			30);	//Monitors server uptime
+define('PROCESSMONITOR_SERVER',		30);	///< Monitors server uptime
 
 //event types
-define('EVENT_PROCESS',	1);	//event from the process server
+define('EVENT_PROCESS',	1);	///< event from the process server
 
 
 //process order status modes
-define('ORDER_NEW',				0);
+define('ORDER_NEW',			0);
 define('ORDER_EXECUTING',	1);
 define('ORDER_COMPLETED',	2);
 define('ORDER_FAILED',		3);
@@ -563,7 +563,7 @@ define('ORDER_FAILED',		3);
 	}
 
 	/**
-	 * This is a helper function for a client app to execute process server orders through the SOAP interface
+	 * USed with a client app to execute process server orders through the SOAP interface
 	 */
 	function process_client_fetchAndConvert($uri, $callback = '')
 	{
