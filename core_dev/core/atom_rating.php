@@ -133,23 +133,18 @@ define('RATE_FILE',		3);
 			($_type == RATE_FILE && Files::getOwner($_id) == $session->id))
 			return showRating($_type, $_id);
 
-		/*
-		if (!empty($_POST['rate_gadget'])) {
-			rateItem($_type, $_id, $_POST['rate_gadget']);
-			return showRating($_type, $_id);
-		}
-		*/
-
 		$result = t('Rate this').':<br/>';
 
 		$curr = 80;
 
+		$result .= '<div id="rate_file">';
 		$result .= '<div id="star">';
- 		$result .= '<ul id="star'.$_id.'" class="star" onmousedown="star.update(event,this)" onmousemove="star.cur(event,this)" title="'.t('Rate this').'">';
+ 		$result .= '<ul id="star'.$_id.'" class="star" onmousedown="star.update(event,this,'.$_type.','.$_id.')" onmousemove="star.cur(event,this)" title="'.t('Rate this').'">';
 		$result .= '<li id="starCur'.$_id.'" class="curr" title="'.$curr.'%" style="width: '.($curr-13).'px;"></li>';	//80 = 67px.. ?
 		$result .= '</ul>';
 		$result .= '<div id="starUser'.$_id.'" class="user">'.$curr.'%</div>';
 		$result .= '<br style="clear: both;">';
+		$result .= '</div>';
 		$result .= '</div>';
 
 
@@ -179,18 +174,14 @@ define('RATE_FILE',		3);
 	{
 		global $config;
 
-		$result  = t('Current rating').'<br/><br/>';
 		$row = getRating($_type, $_id);
-		for ($i=1; $i<=5; $i++) {
-			if ($i <= $row['rating']) {
-				$result .= '<img src="'.$config['core_web_root'].'gfx/icon_star_full.png" alt="star"/>';
-			} else {
-				$result .= '<img src="'.$config['core_web_root'].'gfx/icon_star_empty.png" alt="star"/>';
-			}
-		}
-		$result .= '<br/><br/>';
+
+		$result = t('Current rating').'<br/><br/>';
+		//$result .= $row['rating'];
+		//$result .= '<br/><br/>';
+		//FIXME draw cute stars instead
 		if ($row['ratingCnt']) {
-			$result .= $row['rating'].' / 5 '.t('in').' '.$row['ratingCnt'].' '.($row['ratingCnt']==1?t('vote'):t('votes'));
+			$result .= $row['rating'].'% '.t('in').' '.$row['ratingCnt'].' '.($row['ratingCnt']==1?t('vote'):t('votes'));
 		} else {
 			$result .= t('Not rated yet.');
 		}

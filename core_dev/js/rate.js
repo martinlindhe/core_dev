@@ -21,9 +21,10 @@ var star={
 			}
 		};
 	} },
-	'update':function(e,o) { var n=star.num, v=parseInt($('starUser'+n).innerHTML);
+	'update':function(e,o,t,id) { var n=star.num, v=parseInt($('starUser'+n).innerHTML);
 		n=o.id.substr(4); $('starCur'+n).title=v;
-		req=new XMLHttpRequest(); req.open('GET','/AJAX_Star_Vote.php?vote='+(v/100),false); req.send(null);    
+		//req=new XMLHttpRequest(); req.open('GET','/AJAX_Star_Vote.php?vote='+(v/100),false); req.send(null);   
+		ajax_rate(t,id,v); 
 	},
 	'revert':function() { var n=star.num, v=parseInt($('starCur'+n).title);
 		$S('starCur'+n).width=Math.round(v*84/100)+'px';

@@ -146,6 +146,22 @@ function ajax_get_rategadget_callback()
 	rategadget_request = null;
 }
 
+var rate_request = null;
+function ajax_rate(type,id,val)
+{
+	rate_request = new AJAX();
+	rate_request.GET_raw(_ext_core+'ajax_rate.php?i='+id+'&t='+type+'&v='+val+_ext_ref, ajax_rate_callback);
+}
+
+function ajax_rate_callback()
+{
+	if (!rate_request.ResultReady()) return;
+
+	fill_element_by_name('rate_file', rate_request._request.responseText);
+	ajax_anim_abort = true;
+
+	rate_request = null;
+}
 
 function submit_apc_upload(id)
 {
