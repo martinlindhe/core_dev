@@ -165,18 +165,18 @@ class Auth_Standard extends Auth_Base
 
 		echo '<div id="login_form_layer"'.($tab!='login'?' style="display: none;"':'').'>';
 		if (!$this->allow_login) {
-			echo '<div class="critical">Logins are currently not allowed.<br/>Please try again later.</div>';
+			echo '<div class="critical">'.t('Logins are currently not allowed.').'<br/>'.t('Please try again later.').'</div>';
 		}
 		echo '<form name="login_form" method="post" action="">';
 
 		echo '<table cellpadding="2">';
-		echo '<tr><td>Username:</td><td><input name="login_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/></td></tr>';
-		echo '<tr><td>Password:</td><td><input name="login_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
+		echo '<tr><td>'.t('Username').':</td><td><input name="login_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/></td></tr>';
+		echo '<tr><td>'.t('Password').':</td><td><input name="login_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
 		echo '</table>';
 		echo '<br/>';
-		echo '<input type="submit" class="button" value="Log in"/>';
+		echo '<input type="submit" class="button" value="'.t('Log in').'"/>';
 		if (($this->allow_login && $this->allow_registration) || $allow_superadmin_reg) {
-			echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');"/>';
+			echo '<input type="button" class="button" value="'.t('Register').'" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');"/>';
 			if ($forgot_pwd) {
 				echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
 			}
@@ -188,9 +188,9 @@ class Auth_Standard extends Auth_Base
 			echo '<div id="login_register_layer"'.($tab!='register'?' style="display: none;"':'').'>';
 
 				if ($this->activation_sent) {
-					echo 'An email with your activation code has been sent.<br/>';
-					echo 'Follow the link in the mail to complete your registration.<br/>';
-					/*	//FIXME implement this
+					echo t('An email with your activation code has been sent.').'<br/>';
+					echo t('Follow the link in the mail to complete your registration.').'<br/>';
+					/*	//FIXME implement this:
 					echo 'You can also enter activation code here to finish:<br/>';
 					echo '<form method="post" action="">';
 					echo '<input type="text" size="10"/>';
@@ -201,30 +201,30 @@ class Auth_Standard extends Auth_Base
 
 					echo '<b>Register new account</b><br/><br/>';
 					if ($allow_superadmin_reg) {
-						echo '<div class="critical">The account you create now will be the super administrator account.</div><br/>';
+						echo '<div class="critical">'.t('The account you create now will be the super administrator account.').'</div><br/>';
 					}
 
 					echo '<form method="post" action="">';
 					echo '<table cellpadding="2">';
 					echo '<tr>'.
-									'<td>Username:</td>'.
+									'<td>'.t('Username').':</td>'.
 									'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
-										'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="Username"/>'.
+										'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
 									'</td>'.
 								'</tr>';
-					echo '<tr><td>Password:</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Password"/></td></tr>';
-					echo '<tr><td>Again:</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="Repeat password"/></td></tr>';
+					echo '<tr><td>'.t('Password').':</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+					echo '<tr><td>'.t('Again').':</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
 					if ($this->userdata) {
 						showRequiredUserdataFields();
 					}
 					echo '</table><br/>';
 
 					if (!$allow_superadmin_reg) {
-						echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
+						echo '<input type="button" class="button" value="'.t('Log in').'" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
 					}
-					echo '<input type="submit" class="button" value="Register" style="font-weight: bold;"/>';
+					echo '<input type="submit" class="button" value="'.t('Register').'" style="font-weight: bold;"/>';
 					if ($forgot_pwd) {
-						echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
+						echo '<input type="button" class="button" value="'.t('Forgot password').'" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
 					}
 					echo '</form>';
 				echo '</div>';
@@ -234,7 +234,7 @@ class Auth_Standard extends Auth_Base
 				echo '<div id="login_forgot_pwd_layer"'.($tab!='forgot_pwd'?' style="display: none;"':'').'>';
 
 				if ($this->resetpwd_sent) {
-					echo 'A email has been sent to your mail address with instructions how to reclaim your account.';
+					echo t('A email has been sent to your mail address with instructions how to reclaim your account.');
 				} else {
 					echo '<form method="post" action="">';
 					echo 'Enter the e-mail address used when registering your account.<br/><br/>';
@@ -244,9 +244,9 @@ class Auth_Standard extends Auth_Base
 					echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td><input type="text" name="forgot_pwd" size="26"/> <img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
 					echo '</table><br/>';
 
-					echo '<input type="button" class="button" value="Log in" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/>';
-					echo '<input type="button" class="button" value="Register" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');"/>';
-					echo '<input type="submit" class="button" value="Forgot password" style="font-weight: bold;"/>';
+					echo '<input type="button" class="button" value="'.t('Log in').'" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/>';
+					echo '<input type="button" class="button" value="'.t('Register').'" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');"/>';
+					echo '<input type="submit" class="button" value="'.t('Forgot password').'" style="font-weight: bold;"/>';
 					echo '</form>';
 				}
 				echo '</div>';

@@ -135,30 +135,18 @@ define('RATE_FILE',		3);
 
 		$result = t('Rate this').':<br/>';
 
-		$curr = 80;
+		$row = getRating($_type, $_id);
+		$curr = $row['rating'];
 
 		$result .= '<div id="rate_file">';
 		$result .= '<div id="star">';
  		$result .= '<ul id="star'.$_id.'" class="star" onmousedown="star.update(event,this,'.$_type.','.$_id.')" onmousemove="star.cur(event,this)" title="'.t('Rate this').'">';
-		$result .= '<li id="starCur'.$_id.'" class="curr" title="'.$curr.'%" style="width: '.($curr-13).'px;"></li>';	//80 = 67px.. ?
+		$result .= '<li id="starCur'.$_id.'" class="curr" title="'.$curr.'%" style="width: '.($curr).'px;"></li>';	//80 = 67px.. ?
 		$result .= '</ul>';
 		$result .= '<div id="starUser'.$_id.'" class="user">'.$curr.'%</div>';
 		$result .= '<br style="clear: both;">';
 		$result .= '</div>';
 		$result .= '</div>';
-
-
-/*
-		$result .= '<form method="post" action="">';
-		$result .= '<select name="rate_gadget">';
-		$result .= '<option value="">&nbsp;</option>';
-		for ($i=1; $i<=5; $i++) {
-			$result .= '<option value="'.$i.'">'.$i.'</option>';
-		}
-		$result .= '</select>';
-		$result .= ' <input type="submit" class="button" value="'.t('Rate').'"/>';
-		$result .= '</form>';
-*/
 
 		return $result;
 	}

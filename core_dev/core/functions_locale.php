@@ -154,6 +154,9 @@
 			case 'log in': return 'logga in';
 			case 'Activation code is invalid or expired.': return 'Aktiveringskoden är ogiltig eller föråldrad.';
 			case 'Registration failed': return 'Registreringen misslyckades';
+			case 'Username': return 'Användarnamn';
+			case 'Password': return 'Lösenord';
+			case 'Log in': return 'Logga in';
 
 			//Session errors
 			case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';
