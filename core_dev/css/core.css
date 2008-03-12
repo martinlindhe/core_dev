@@ -62,3 +62,9 @@ img {
 .bld {
 	font-weight: bold;
 }
+
+/*for star.js ajax rating*/
+#star ul.star { LIST-STYLE: none; MARGIN: 0; PADDING: 0; WIDTH: 85px; HEIGHT: 20px; TOP: -5px; POSITION: relative; FLOAT: left; BACKGROUND: url('../gfx/rate_stars.gif') repeat-x; CURSOR: pointer; }
+#star li { PADDING: 0; MARGIN: 0; FLOAT: left; DISPLAY: block; WIDTH: 85px; HEIGHT: 20px; TEXT-DECORATION: none; text-indent: -9000px; Z-INDEX: 20; POSITION: absolute; PADDING: 0; }
+#star li.curr { BACKGROUND: url('../gfx/rate_stars.gif') left 25px; FONT-SIZE: 1px; }
+#star div.user { LEFT: 5px; POSITION: relative; FLOAT: left; COLOR: #888; }

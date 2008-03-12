@@ -145,7 +145,7 @@
 	*/
 	function createXHTMLHeader()
 	{
-		global $config, $session, $title, $meta_rss, $meta_js, $meta_search, $body_onload;
+		global $config, $session, $files, $title, $meta_rss, $meta_js, $meta_search, $body_onload;
 
 		if (!$title) $title = $config['default_title'];
 
@@ -155,6 +155,7 @@
 			echo '<title>'.$title.'</title>';
 			echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/core.css" type="text/css"/>';
+
 			if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
 			else $theme_dir = $config['core_web_root'].'css/themes/';
 			if (!empty($session)) echo '<link rel="stylesheet" href="'.$theme_dir.$session->theme.'" type="text/css"/>';
@@ -182,7 +183,10 @@
 
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/prototype.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
-      echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/cropper.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/cropper.js"></script>';
+			if ($files->allow_rating) {
+				echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/rate.js"></script>';
+			}
 
 			if ($meta_js) {
 				foreach ($meta_js as $script) {

@@ -369,10 +369,7 @@ require_once('atom_rating.php');	//for file rating
 		}
 
 		if ($files->allow_rating) {
-			echo '<br/>';
-			echo '<div id="rate_file">';
-				//fixme: to implement image rating here we need to use ajax in the rating gadget, because we need to respect "selected file"
-			echo '</div>';
+			echo '<div id="rate_file"></div>';
 		}
 		//echo	'</center>';
 		echo '</div>';

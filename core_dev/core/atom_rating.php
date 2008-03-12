@@ -125,7 +125,7 @@ define('RATE_FILE',		3);
 	 */
 	function ratingGadget($_type, $_id)
 	{
-		global $db, $session;
+		global $db, $session, $config;
 
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
@@ -133,12 +133,27 @@ define('RATE_FILE',		3);
 			($_type == RATE_FILE && Files::getOwner($_id) == $session->id))
 			return showRating($_type, $_id);
 
+		/*
 		if (!empty($_POST['rate_gadget'])) {
 			rateItem($_type, $_id, $_POST['rate_gadget']);
 			return showRating($_type, $_id);
 		}
+		*/
 
-		$result  = t('Rate this').':<br/>';
+		$result = t('Rate this').':<br/>';
+
+		$curr = 80;
+
+		$result .= '<div id="star">';
+ 		$result .= '<ul id="star'.$_id.'" class="star" onmousedown="star.update(event,this)" onmousemove="star.cur(event,this)" title="'.t('Rate this').'">';
+		$result .= '<li id="starCur'.$_id.'" class="curr" title="'.$curr.'%" style="width: '.($curr-13).'px;"></li>';	//80 = 67px.. ?
+		$result .= '</ul>';
+		$result .= '<div id="starUser'.$_id.'" class="user">'.$curr.'%</div>';
+		$result .= '<br style="clear: both;">';
+		$result .= '</div>';
+
+
+/*
 		$result .= '<form method="post" action="">';
 		$result .= '<select name="rate_gadget">';
 		$result .= '<option value="">&nbsp;</option>';
@@ -148,6 +163,7 @@ define('RATE_FILE',		3);
 		$result .= '</select>';
 		$result .= ' <input type="submit" class="button" value="'.t('Rate').'"/>';
 		$result .= '</form>';
+*/
 
 		return $result;
 	}
