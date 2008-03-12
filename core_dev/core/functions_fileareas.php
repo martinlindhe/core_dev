@@ -338,8 +338,8 @@ require_once('atom_rating.php');	//for file rating
 		if ($session->id == $ownerId || $session->isAdmin) {
 			echo '<div id="slider_toolbar" style="display:none; clear: both">';
 			echo	'<p align="left">';
- 			echo	'<div id="resize_slider" style="width:200px;background-color:#aaa;height:5px;margin:10px;">';
-   		echo		'<div id="resize_slider_handle" style="width:5px;height:10px;background-color:#f00;cursor:movemove;"> </div>';
+			echo	'<div id="resize_slider" style="width:200px;background-color:#aaa;height:5px;margin:10px;">';
+			echo	'<div id="resize_slider_handle" style="width:5px;height:10px;background-color:#f00;cursor:move;"> </div>';
 			echo	'</div>';
 			echo	'<input type="button" class="button" value="'.t('Save').'" onclick="resize_selection()"/>';
 			echo	'<input type="button" class="button" value="'.t('Cancel').'" onclick="cancel_resizer()"/>';
