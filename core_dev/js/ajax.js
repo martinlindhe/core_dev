@@ -64,6 +64,35 @@ function AJAX()
 		}
 	}
 
+	// Performs an POST-request expected to return XML
+	function POST(url, callback, callbackparam, params)
+	{
+		if (!this._request) return false;
+		if (this._request.overrideMimeType) this._request.overrideMimeType('text/xml');
+		if (callback) this._request.onreadystatechange = function() { callback(callbackparam); }
+		try {
+			this._busy = true;
+			this._request.open('POST', url, true);
+			this._request.send(params);
+		} catch (e) {
+			alert('failed to open AJAX call. adblock software might be the cause');
+		}
+	}
+
+	// Performs an POST-request expected to return anything, like raw text or html
+	function POST_raw(url, callback, callbackparam, params)
+	{
+		if (!this._request) return false;
+		if (callback) this._request.onreadystatechange = function() { callback(callbackparam); }
+		try {
+			this._busy = true;
+			this._request.open('POST', url, true);
+			this._request.send(params);
+		} catch (e) {
+			alert('failed to open AJAX call. adblock software might be the cause');
+		}
+	}
+
 	function ResultReady()
 	{
 		if (!this._request || this._request.readyState != 4) return false;
