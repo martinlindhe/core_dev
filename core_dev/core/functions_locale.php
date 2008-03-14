@@ -157,6 +157,10 @@
 			case 'Username': return 'Användarnamn';
 			case 'Password': return 'Lösenord';
 			case 'Log in': return 'Logga in';
+			case 'Register': return 'Registrera konto';
+			case 'Again': return 'Upprepa';
+			case 'The account you create now will be the super administrator account.'; return 'Kontot du skapar nu kommer att bli super admin kontot.';
+			case 'Register new account': return 'Registrera nytt konto';
 
 			//Session errors
 			case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';

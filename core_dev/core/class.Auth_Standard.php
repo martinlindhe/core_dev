@@ -199,7 +199,7 @@ class Auth_Standard extends Auth_Base
 					*/
 				} else {
 
-					echo '<b>Register new account</b><br/><br/>';
+					echo '<b>'.t('Register new account').'</b><br/><br/>';
 					if ($allow_superadmin_reg) {
 						echo '<div class="critical">'.t('The account you create now will be the super administrator account.').'</div><br/>';
 					}
