@@ -1,5 +1,3 @@
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblActivation` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
   `userId` bigint(20) unsigned NOT NULL,
@@ -9,9 +7,6 @@ CREATE TABLE `tblActivation` (
   `timeCreated` datetime default NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblBlogs` (
   `blogId` int(10) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',
@@ -26,9 +21,6 @@ CREATE TABLE `tblBlogs` (
   `ratingCnt` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`blogId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblCategories` (
   `categoryId` bigint(20) unsigned NOT NULL auto_increment,
   `categoryName` varchar(200) default NULL,
@@ -39,9 +31,6 @@ CREATE TABLE `tblCategories` (
   `ownerId` bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (`categoryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblChecksums` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
   `fileId` int(11) unsigned default NULL,
@@ -51,9 +40,6 @@ CREATE TABLE `tblChecksums` (
   `timeExec` float default NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblComments` (
   `commentId` bigint(20) unsigned NOT NULL auto_increment,
   `commentType` tinyint(3) unsigned NOT NULL default '0',
@@ -67,9 +53,6 @@ CREATE TABLE `tblComments` (
   `userIP` bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (`commentId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblContacts` (
   `contactId` int(10) unsigned NOT NULL auto_increment,
   `contactType` tinyint(3) unsigned NOT NULL default '0',
@@ -79,9 +62,6 @@ CREATE TABLE `tblContacts` (
   `timeCreated` datetime default NULL,
   PRIMARY KEY  (`contactId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblEvents` (
   `eventId` bigint(20) unsigned NOT NULL auto_increment,
   `eventType` tinyint(4) unsigned default NULL,
@@ -91,9 +71,6 @@ CREATE TABLE `tblEvents` (
   `createdBy` int(11) unsigned default NULL,
   PRIMARY KEY  (`eventId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblFAQ` (
   `faqId` int(10) unsigned NOT NULL auto_increment,
   `question` text,
@@ -102,9 +79,6 @@ CREATE TABLE `tblFAQ` (
   `timeCreated` datetime default NULL,
   PRIMARY KEY  (`faqId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblFeedback` (
   `feedbackId` int(10) unsigned NOT NULL auto_increment,
   `feedbackType` tinyint(3) unsigned NOT NULL default '0',
@@ -115,9 +89,6 @@ CREATE TABLE `tblFeedback` (
   `subjectId` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`feedbackId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblFiles` (
   `fileId` bigint(20) unsigned NOT NULL auto_increment,
   `fileName` varchar(200) default NULL,
@@ -134,9 +105,6 @@ CREATE TABLE `tblFiles` (
   `ratingCnt` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`fileId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblForums` (
   `itemId` bigint(20) unsigned NOT NULL auto_increment,
   `itemType` tinyint(1) unsigned NOT NULL default '0',
@@ -152,9 +120,6 @@ CREATE TABLE `tblForums` (
   `locked` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`itemId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblFriendRequests` (
   `reqId` int(10) unsigned NOT NULL auto_increment,
   `senderId` int(10) unsigned NOT NULL default '0',
@@ -164,9 +129,6 @@ CREATE TABLE `tblFriendRequests` (
   `msg` text,
   PRIMARY KEY  (`reqId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblGuestbooks` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',
@@ -180,36 +142,24 @@ CREATE TABLE `tblGuestbooks` (
   `timeRead` datetime default NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblLocationCity` (
   `cityId` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(100) NOT NULL default '',
   `regionId` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`cityId`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblLocationRegion` (
   `regionId` smallint(5) unsigned NOT NULL auto_increment,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY  (`regionId`),
   KEY `st_lan` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblLocationZip` (
   `zip` int(5) NOT NULL default '0',
   `cityId` int(10) unsigned NOT NULL,
   `regionId` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`zip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblLogins` (
   `mainId` int(10) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',
@@ -218,9 +168,6 @@ CREATE TABLE `tblLogins` (
   `userAgent` text,
   PRIMARY KEY  (`mainId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblLogs` (
   `entryId` int(10) unsigned NOT NULL auto_increment,
   `entryText` text,
@@ -230,9 +177,6 @@ CREATE TABLE `tblLogs` (
   `userIP` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblMessages` (
   `msgId` bigint(20) unsigned NOT NULL auto_increment,
   `ownerId` int(10) unsigned NOT NULL default '0',
@@ -246,9 +190,6 @@ CREATE TABLE `tblMessages` (
   `groupId` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`msgId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblModeration` (
   `queueId` bigint(20) unsigned NOT NULL auto_increment,
   `queueType` tinyint(3) unsigned NOT NULL default '0',
@@ -260,9 +201,6 @@ CREATE TABLE `tblModeration` (
   `autoTriggered` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`queueId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblNews` (
   `newsId` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(200) default NULL,
@@ -280,18 +218,12 @@ CREATE TABLE `tblNews` (
   `ratingCnt` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`newsId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblPollVotes` (
   `voteId` bigint(20) unsigned NOT NULL auto_increment,
   `pollId` int(10) unsigned NOT NULL default '0',
   `userId` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`voteId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblPolls` (
   `pollId` int(10) unsigned NOT NULL auto_increment,
   `pollType` tinyint(1) unsigned NOT NULL,
@@ -305,9 +237,6 @@ CREATE TABLE `tblPolls` (
   `timeDeleted` datetime default NULL,
   PRIMARY KEY  (`pollId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblProcessQueue` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
   `referId` bigint(20) unsigned default NULL,
@@ -320,9 +249,6 @@ CREATE TABLE `tblProcessQueue` (
   `timeCompleted` datetime default NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblRatings` (
   `rateId` bigint(20) unsigned NOT NULL auto_increment,
   `type` tinyint(3) unsigned NOT NULL default '0',
@@ -332,9 +258,6 @@ CREATE TABLE `tblRatings` (
   `timeRated` datetime default NULL,
   PRIMARY KEY  (`rateId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblRevisions` (
   `indexId` int(10) unsigned NOT NULL auto_increment,
   `fieldId` bigint(20) unsigned NOT NULL default '0',
@@ -345,9 +268,6 @@ CREATE TABLE `tblRevisions` (
   `categoryId` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`indexId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL auto_increment,
   `ownerId` smallint(5) unsigned NOT NULL default '0',
@@ -358,9 +278,6 @@ CREATE TABLE `tblSettings` (
   PRIMARY KEY  (`settingId`),
   KEY `ownerId` (`ownerId`,`settingName`,`settingType`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblStatistics` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
   `time` datetime default NULL,
@@ -368,9 +285,6 @@ CREATE TABLE `tblStatistics` (
   `registrations` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblStopwords` (
   `wordId` smallint(5) unsigned NOT NULL auto_increment,
   `wordText` varchar(200) default NULL,
@@ -378,9 +292,6 @@ CREATE TABLE `tblStopwords` (
   `wordMatch` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`wordId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblSubscriptions` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
   `type` tinyint(1) unsigned default '0',
@@ -389,9 +300,6 @@ CREATE TABLE `tblSubscriptions` (
   `timeCreated` datetime default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblTodoLists` (
   `itemId` bigint(20) unsigned NOT NULL auto_increment,
   `categoryId` tinyint(3) unsigned NOT NULL default '0',
@@ -404,9 +312,6 @@ CREATE TABLE `tblTodoLists` (
   `assignedTo` bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (`itemId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblUserdata` (
   `fieldId` int(10) unsigned NOT NULL auto_increment,
   `fieldName` varchar(100) default NULL,
@@ -418,9 +323,6 @@ CREATE TABLE `tblUserdata` (
   `regRequire` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`fieldId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblUsers` (
   `userId` smallint(5) unsigned NOT NULL auto_increment,
   `userName` varchar(200) default NULL,
@@ -433,9 +335,6 @@ CREATE TABLE `tblUsers` (
   `timeDeleted` datetime default NULL,
   PRIMARY KEY  (`userId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblVisits` (
   `visitId` int(10) unsigned NOT NULL auto_increment,
   `type` tinyint(1) unsigned NOT NULL,
@@ -444,9 +343,6 @@ CREATE TABLE `tblVisits` (
   `timeCreated` datetime default NULL,
   PRIMARY KEY  (`visitId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblWiki` (
   `wikiId` bigint(20) unsigned NOT NULL auto_increment,
   `wikiName` varchar(200) default NULL,
@@ -458,4 +354,3 @@ CREATE TABLE `tblWiki` (
   `hasFiles` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`wikiId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
