@@ -21,6 +21,7 @@
 
 	$admin_menu = array(
 		$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin::',
+		$config['core_web_root'].'admin/admin_users.php'.getProjectPath(0) => 'Users',
 		$config['core_web_root'].'admin/admin_moderation.php'.getProjectPath(0) => 'Moderation',
 		$config['core_web_root'].'admin/admin_news.php'.getProjectPath(0) => 'News',
 		$config['core_web_root'].'admin/admin_polls.php'.getProjectPath(0) => 'Polls',
