@@ -7,6 +7,27 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+$month_swe[1] = 'Januari';
+$month_swe[2] = 'Februari';
+$month_swe[3] = 'Mars';
+$month_swe[4] = 'April';
+$month_swe[5] = 'Maj';
+$month_swe[6] = 'Juni';
+$month_swe[7] = 'Juli';
+$month_swe[8] = 'Augusti';
+$month_swe[9] = 'September';
+$month_swe[10] = 'Oktober';
+$month_swe[11] = 'November';
+$month_swe[12] = 'December';
+
+$weekday_swe[1] = 'Måndag';
+$weekday_swe[2] = 'Tisdag';
+$weekday_swe[3] = 'Onsdag';
+$weekday_swe[4] = 'Torsdag';
+$weekday_swe[5] = 'Fredag';
+$weekday_swe[6] = 'Lördag';
+$weekday_swe[7] = 'Söndag';
+
 	/**
 	 * Translates strings into other languages
 	 */

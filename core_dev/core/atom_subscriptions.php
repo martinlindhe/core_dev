@@ -13,6 +13,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_email.php');
+
 	define('SUBSCRIPTION_FORUM',			1);
 	define('SUBSCRIPTION_BLOG',				2);	//fixme: implement
 	define('SUBSCRIPTION_FILES',			3);	//fixme: implement
@@ -65,51 +67,6 @@
 		$q = 'SELECT id FROM tblSubscriptions WHERE ownerId='.$session->id.' AND type='.$type.' AND itemId='.$itemId;
 		if ($db->getOneItem($q)) return true;
 		return false;
-	}
-
-	/**
-	 * Helper function: calls class.phpmailer.php functions. $mails is a array of recipients
-	 * 
-	 * \todo Move this function to another file
-	 *
-	 * \param $mails array of destination e-mail addresses
-	 * \param $subject subject of e-mail
-	 * \param $body body of e-mail
-	 */
-	function smtp_mass_mail($mails, $subject, $body)
-	{
-		global $config;
-		
-		$mail = new PHPMailer();
-		
-		$mail->IsSMTP();                                // send via SMTP
-		$mail->Host     = $config['smtp']['host']; 			// SMTP servers
-		$mail->SMTPAuth = true;    											// turn on SMTP authentication
-		$mail->Username = $config['smtp']['username'];	// SMTP username
-		$mail->Password = $config['smtp']['password'];	// SMTP password
-		$mail->CharSet  = 'utf-8';
-
-		$mail->From     = $config['smtp']['sender'];
-		$mail->FromName = $config['smtp']['sender_name'];
-
-		foreach ($mails as $adr) {
-			$mail->AddAddress($adr);
-		}
-
-		$mail->IsHTML(true);                   					// send as HTML
-
-		//Embed graphics
-		$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
-
-		$mail->Subject  = $subject;
-		$mail->Body     = $body;
-
-		if (!$mail->Send()) {
-			echo 'Failed to send mail, error:'.$mail->ErrorInfo;
-			return false;
-		}
-
-		return true;
 	}
 
 	/**

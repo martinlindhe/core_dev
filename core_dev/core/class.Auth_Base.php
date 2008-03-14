@@ -125,6 +125,9 @@ The link will expire in __EXPIRETIME__";
 		}
 	}
 
+	/**
+	 * FIXME move this to functions_email.php. remove smtp settings from Auth. use $config['email']
+	 */
 	function SmtpSend($dst_adr, $subj, $msg)
 	{
 		$mail = new PHPMailer();
