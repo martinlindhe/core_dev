@@ -40,6 +40,35 @@ require_once('functions_locale.php');	//for translations
 		return true;
 	}
 
+	/* Returns the number of items in the message search result */
+	function getMessageFreeTextSearchCount($text)
+	{
+		global $db;
+
+		$text = $db->escape($text);
+
+		$q  = 'SELECT count(u1.userName) AS cnt FROM tblMessages t, ';
+		$q .= 'tblUsers u1, tblUsers u2 WHERE t.fromId = u1.userId ';
+		$q .= 'AND t.toId = u2.userId AND (t.body LIKE "%'.$text.'%" OR t.subject LIKE "%'.$text.'%")';
+
+		return $db->getOneItem($q);
+	}
+
+	/* Returns the message search result */
+	function getMessageFreeTextSearch($text, $_limit_sql = '')
+	{
+		global $db;
+
+		$text = $db->escape($text);
+
+		$q  = 'SELECT t.*, u1.userName AS authorName, u2.userName AS userName ';
+		$q .= 'FROM tblMessages t, tblUsers u1, tblUsers u2 WHERE t.fromId = ';
+		$q .= 'u1.userId AND t.toId = u2.userId AND (t.body LIKE "%'.$text.'%" OR t.subject LIKE "%'.$text.'%") ';
+		$q .= 'ORDER BY t.timeCreated DESC'.$_limit_sql;
+
+		return $db->getArray($q);
+	}
+	
 	function getMessages($_group = 0)
 	{
 		global $db, $session;

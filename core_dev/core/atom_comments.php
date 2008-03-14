@@ -21,6 +21,17 @@
 	define('COMMENT_MODERATION',		30);	//owner = tblModeration.queueId
 	define('COMMENT_USER',					31);	//owner = tblUsers.userId, admin comments for a user
 
+	$comment_constants[COMMENT_NEWS]				= 'News';
+	$comment_constants[COMMENT_BLOG]				= 'Blog';
+	$comment_constants[COMMENT_FILE]				= 'File';
+	$comment_constants[COMMENT_TODOLIST]			= 'Todolist';
+	$comment_constants[COMMENT_GENERIC]				= 'Generic';
+	$comment_constants[COMMENT_PASTEBIN]			= 'Pastebin';
+	$comment_constants[COMMENT_SCRIBBLE]			= 'Scribble';
+	$comment_constants[COMMENT_ADMIN_IP]			= 'Admin IP';
+	$comment_constants[COMMENT_MODERATION]			= 'Moderation';
+	$comment_constants[COMMENT_USER]				= 'User';
+
 	/**
 	 *
 	 */
@@ -78,6 +89,34 @@
 
 		$q = 'UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
 		return $db->delete($q);
+	}
+
+	/* Returns the number of items in the comment search result */
+	function getCommentFreeTextSearchCount($text)
+	{
+		global $db;
+
+		$text = $db->escape($text);
+
+		$q  = 'SELECT count(u1.userName) AS authorName FROM tblComments t, ';
+		$q .= 'tblUsers u1 WHERE t.userId = u1.userId AND t.commentText ';
+		$q .= 'LIKE "%'.$text.'%"';
+
+		return $db->getOneItem($q);
+	}
+
+	/* Returns the comment search result */
+	function getCommentFreeTextSearch($text, $_limit_sql = '')
+	{
+		global $db;
+
+		$text = $db->escape($text);
+
+		$q  = 'SELECT t.*, u1.userName AS authorName FROM tblComments t, ';
+		$q .= 'tblUsers u1 WHERE t.userId = u1.userId AND t.commentText ';
+		$q .= 'LIKE "%'.$text.'%" ORDER BY t.timeCreated DESC'.$_limit_sql;
+
+		return $db->getArray($q);
 	}
 
 	/**

@@ -114,6 +114,34 @@
 		return $db->getOneRow($q);
 	}
 
+	/* Returns the number of items in the guestbook search result */
+	function getGuestbookFreeTextSearchCount($text)
+	{
+		global $db;
+
+		$text = $db->escape($text);
+
+		$q  = 'SELECT count(u1.userName) AS cnt FROM tblGuestbooks t, ';
+		$q .= 'tblUsers u1, tblUsers u2 WHERE t.authorId = u1.userId ';
+		$q .= 'AND t.userId = u2.userId AND t.body LIKE "%'.$text.'%"';
+
+		return $db->getOneItem($q);
+	}
+
+	/* Returns the guestbook search result */
+	function getGuestbookFreeTextSearch($text, $_limit_sql = '')
+	{
+		global $db;
+
+		$text = $db->escape($text);
+
+		$q  = 'SELECT t.*, u1.userName AS authorName, u2.userName AS userName ';
+		$q .= 'FROM tblGuestbooks t, tblUsers u1, tblUsers u2 WHERE t.authorId = ';
+		$q .= 'u1.userId AND t.userId = u2.userId AND t.body LIKE "%'.$text.'%" ';
+		$q .= 'ORDER BY t.timeCreated DESC'.$_limit_sql;
+
+		return $db->getArray($q);
+	}
 
 	/* Returns the number of items in the guestbook */
 	function getGuestbookCount($userId)
