@@ -15,6 +15,8 @@ function AJAX()
 
 	this.GET = GET;
 	this.GET_raw = GET_raw;
+	this.POST = POST;
+	this.POST_raw = POST_raw;
 	this.ResultReady = ResultReady;
 	this.EmptyResponse = EmptyResponse;
 
@@ -73,6 +75,7 @@ function AJAX()
 		try {
 			this._busy = true;
 			this._request.open('POST', url, true);
+			this._request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 			this._request.send(params);
 		} catch (e) {
 			alert('failed to open AJAX call. adblock software might be the cause');
@@ -87,6 +90,7 @@ function AJAX()
 		try {
 			this._busy = true;
 			this._request.open('POST', url, true);
+			this._request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 			this._request.send(params);
 		} catch (e) {
 			alert('failed to open AJAX call. adblock software might be the cause');
