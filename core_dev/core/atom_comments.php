@@ -98,8 +98,8 @@
 
 		$text = $db->escape($text);
 
-		$q  = 'SELECT count(u1.userName) AS authorName FROM tblComments t, ';
-		$q .= 'tblUsers u1 WHERE t.userId = u1.userId AND t.commentText ';
+		$q  = 'SELECT count(*) FROM tblComments ';
+		$q .= 'WHERE commentText ';
 		$q .= 'LIKE "%'.$text.'%"';
 
 		return $db->getOneItem($q);

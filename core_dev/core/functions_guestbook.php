@@ -121,9 +121,8 @@
 
 		$text = $db->escape($text);
 
-		$q  = 'SELECT count(u1.userName) AS cnt FROM tblGuestbooks t, ';
-		$q .= 'tblUsers u1, tblUsers u2 WHERE t.authorId = u1.userId ';
-		$q .= 'AND t.userId = u2.userId AND t.body LIKE "%'.$text.'%"';
+		$q  = 'SELECT count(*) FROM tblGuestbooks ';
+		$q .= 'WHERE body LIKE "%'.$text.'%"';
 
 		return $db->getOneItem($q);
 	}

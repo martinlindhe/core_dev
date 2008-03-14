@@ -47,9 +47,8 @@ require_once('functions_locale.php');	//for translations
 
 		$text = $db->escape($text);
 
-		$q  = 'SELECT count(u1.userName) AS cnt FROM tblMessages t, ';
-		$q .= 'tblUsers u1, tblUsers u2 WHERE t.fromId = u1.userId ';
-		$q .= 'AND t.toId = u2.userId AND (t.body LIKE "%'.$text.'%" OR t.subject LIKE "%'.$text.'%")';
+		$q  = 'SELECT count(*) FROM tblMessages ';
+		$q .= 'WHERE (body LIKE "%'.$text.'%" OR subject LIKE "%'.$text.'%")';
 
 		return $db->getOneItem($q);
 	}
