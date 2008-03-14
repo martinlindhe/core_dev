@@ -11,6 +11,8 @@
 	$config['full_web_root'] = 'http://localhost'.$config['web_root'];
 	$config['default_title'] = 'process server project';					//default title for pages if no title is specified for that page
 
+	$config['language'] = 'se';
+
 	set_include_path($config['core_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Auth_Standard.php');
