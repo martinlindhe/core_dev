@@ -63,7 +63,9 @@
 		$mail->IsHTML(true); // send HTML mail?
 
 		//Embed graphics
-		$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
+		if (isset($config['smtp']['mail_footer'])) {
+			$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
+		}
 
 		$mail->AddAddress($dst_adr);
 		$mail->Subject = $subj;
@@ -71,6 +73,55 @@
 
 		if (!$mail->Send()) return false;
 		return true;
+	}
+	
+	function contact_users($message, $subject, $all, $presvid, $logged_in_days, $days, $res) {
+		global $db;
+		
+		if (empty($message) || empty($subject)) return false;
+		
+		if ($all == 1) { // Ignore everything else, just get a list of all users.
+			$users = Users::getUsers();
+			
+			foreach ($users as $row) {
+				$email = loadUserdataEmail($row['userId']);
+				smtp_mail($email, $subject, $message);
+			}
+		}
+		else {
+			foreach ($res as $row) {
+				if (!empty($days)) {
+					if (!is_numeric($days)) return false;
+					$timestamp = strtotime('-'.$days.' day');
+					$logintime = datetime_to_timestamp(Users::getLogintime($row['userId']));
+
+ 					// user logged in before timestamp (so hasnt been logged in the latest $days days)
+ 					if ($logged_in_days == 1 && $logintime < $timestamp) {
+ 						// Then it's wrong, so dont send email
+ 						continue;
+					}
+					else if ($logged_in_days == 0 && $logintime > $timestamp) {
+						continue;
+					}
+					
+				}
+				if (!empty($presvid)) {
+					if ($presvid == 1) {
+						$cId = loadSetting(SETTING_USERDATA, $row['userId'], 'm2w_id');
+						if ($cId) {
+							$vid_pres = $files->getFiles(FILETYPE_VIDEOPRES, $cId);
+							if (!$vid_pres) {
+								continue;
+							}
+						}
+					}
+				}
+				$email = loadUserdataEmail($row['userId']);
+echo $email;
+//				smtp_mail($email, $subject, $message);
+			}
+		}
+
 	}
 
 ?>

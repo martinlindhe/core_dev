@@ -381,6 +381,47 @@ class Users
 	}
 
 	/**
+	 * Contact users gadget
+	 */
+	function contact()
+	{
+		global $session;
+
+		echo'<form name="contact" method="post" action="'.$_SERVER['PHP_SELF'].'?send">';
+
+		echo 'How: <input type="radio" name="how" value="mail"> E-mail | ';
+		echo '<input type="radio" name="how" value="sms"> SMS';
+		echo '<br/><input type="checkbox" name="all" value="1"> Alla';
+
+		$list = getUserdataFields();
+		echo '<table>';
+		foreach ($list as $row) {
+			if ($row['private'] && !$session->isAdmin) continue;
+
+			echo '<tr'.($row['private']?' class="critical"':'').'>';
+			echo getUserdataSearch($row);
+			echo '</tr>';
+			if ($row['private']) {
+				echo '<tr><td colspan="2">';
+				echo '<div class="critical"> * '.t('This field can only be used in searches by admins').'</div>';
+				echo '</td></tr>';
+			}
+		}
+		echo '</table>';
+
+		echo '<br/>Video presentation: <input type="radio" name="presvid" value="1"> Yes | ';
+		echo '<input type="radio" name="presvid" value="0"> No';
+		echo '<br/><input type="radio" name="logged_in_days" value="0"> Not logged in for x days | ';
+		echo '<input type="radio" name="logged_in_days" value="1"> Logged in latest x days';
+		echo '<br/><input type="text" name="days"> x days';
+		echo '<br/><input type="text" name="subject"> Subject';
+		echo '<br/><br/>Message<br/><textarea name="message" cols="50" rows="10"></textarea>';
+
+		echo '<br/><input type="submit" class="button" value="Contact"/>';
+		echo '</form>';
+	}
+
+	/**
 	 * Search users gadget
 	 */
 	function search()
@@ -467,9 +508,12 @@ class Users
 	{
 		global $db, $session;
 		
-		$data['c'] = trim($data['c']);
-		$criteria = substr($data['c'], 0, 30); //only allow up to 30 characters in search free-text
-		$criteria = $db->escape($data['c']);
+		$criteria = 0;
+		if (isset($data['c'])) {
+			$data['c'] = trim($data['c']);
+			$criteria = substr($data['c'], 0, 30); //only allow up to 30 characters in search free-text
+			$criteria = $db->escape($data['c']);
+		}
 
 		$q  = 'SELECT t1.userId,t1.userName FROM tblUsers AS t1 ';
 
@@ -515,8 +559,8 @@ class Users
 					switch ($row['fieldType']) {
 						case USERDATA_TYPE_IMAGE:
 							if (!empty($data['userdata_'.$row['fieldId']])) {
-								if (isset($x)) $q .= 'AND ';
-								$q .= '(n'.$start.'.settingValue IS NOT NULL) ';
+//								if (isset($x)) $q .= 'AND ';
+								$q .= 'AND (n'.$start.'.settingValue IS NOT NULL) ';
 								$start++;
 								$x = 1;
 							}
@@ -524,13 +568,13 @@ class Users
 
 						case USERDATA_TYPE_LOCATION_SWE:
 							if (!empty($data['search_loc_city']) && is_numeric($data['search_loc_city'])) {
-								if (isset($x)) $q .= 'AND ';
-								$q .= '(n'.$start.'.settingValue="'.$data['search_loc_city'].'") ';
+//								if (isset($x)) $q .= 'AND ';
+								$q .= 'AND (n'.$start.'.settingValue="'.$data['search_loc_city'].'") ';
 								$start++;
 								$x = 1;
 							} else if (!empty($data['search_loc_region']) && is_numeric($data['search_loc_region'])) {
-								if (isset($x)) $q .= 'AND ';
-								$q .= '(n'.$start.'.settingValue="'.$data['search_loc_region'].'") ';
+//								if (isset($x)) $q .= 'AND ';
+								$q .= 'AND (n'.$start.'.settingValue="'.$data['search_loc_region'].'") ';
 								$start++;
 								$x = 1;
 							}
@@ -544,16 +588,16 @@ class Users
 							$to = $rng[1];
 							if (!$from) $from = '0000-00-00';
 							if (!$to) $to = '9999-12-31';
-							if (isset($x)) $q .= 'AND ';
-							$q .= '(n'.$start.'.settingValue BETWEEN "'.$db->escape($from).'" AND "'.$db->escape($to).'") ';
+//							if (isset($x)) $q .= 'AND ';
+							$q .= 'AND (n'.$start.'.settingValue BETWEEN "'.$db->escape($from).'" AND "'.$db->escape($to).'") ';
 							$start++;
 							$x = 1;
 							break;
 
 						default:
 							if (!empty($data['userdata_'.$row['fieldId']])) {
-								if (isset($x)) $q .= 'AND ';
-								$q .= '(n'.$start.'.settingValue="'.$data['userdata_'.$row['fieldId']].'") ';
+//								if (isset($x)) $q .= 'AND ';
+								$q .= 'AND (n'.$start.'.settingValue="'.$data['userdata_'.$row['fieldId']].'") ';
 								$start++;
 								$x = 1;
 							}
