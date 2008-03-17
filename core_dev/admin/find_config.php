@@ -37,7 +37,8 @@
 		$config['core_web_root'].'admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',
 		$config['core_web_root'].'admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups',
 		$config['core_web_root'].'admin/admin_add_admin.php'.getProjectPath(0) => 'Add admin',
-		$config['core_web_root'].'admin/admin_content_search.php'.getProjectPath(0) => 'Content Search'
+		$config['core_web_root'].'admin/admin_content_search.php'.getProjectPath(0) => 'Content Search',
+		$config['core_web_root'].'admin/admin_contact_users.php'.getProjectPath(0) => 'Contact users'
 	);
 
 	$super_admin_tools_menu = array(
