@@ -111,7 +111,7 @@ The link will expire in __EXPIRETIME__";
 		}
 
 		//Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
-		if ($this->allow_registration && !$session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
+		if (($this->allow_registration || !Users::cnt()) && !$session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
 			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
 			if (is_numeric($check)) {
 				if ($this->mail_activate) {
