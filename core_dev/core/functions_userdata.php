@@ -396,7 +396,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 	{
 		$list = getUserdataFields(true);
 		foreach ($list as $row) {
-			echo '<tr><td colspan="2">'.getUserdataInput($row).'</td></tr>';
+			echo '<tr>'.getUserdataInput($row).'</tr>';
 		}
 	}
 
