@@ -41,6 +41,37 @@ class Users
 	}
 
 	/**
+	 * Get the number of logins the specified date
+	 */
+	function getLoginCountPerDate($dateStart, $dateStop = '')
+	{
+		global $db;
+		
+		if (empty($dateStop)) {
+			$dateStop = $dateStart;
+		}
+		
+		$q = 'SELECT count(userId) AS cnt, date(timeCreated) AS date FROM tblLogins WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
+		return $db->getArray($q);
+	}
+
+	/**
+	 * Get the number of distinct logins the specified date
+	 */
+	function getDistinctLoginCountPerDate($dateStart, $dateStop = '')
+	{
+		global $db;
+		
+		if (empty($dateStop)) {
+			$dateStop = $dateStart;
+		}
+
+		
+		$q = 'SELECT count(distinct(userId)) AS cnt, date(timeCreated) AS date FROM tblLogins WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
+		return $db->getArray($q);
+	}
+
+	/**
 	 * Looks up a users latest logintime by id
 	 */
 	function getLogintime($_id)

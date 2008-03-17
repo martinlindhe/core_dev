@@ -153,6 +153,19 @@
 		return $db->getOneItem($q);
 	}
 
+	/* Returns the number of items written in guestbooks the specified date interval */
+	function getGuestbookCountPerDate($dateStart, $dateStop = '')
+	{
+		global $db;
+
+		if (empty($dateStop)) {
+			$dateStop = $dateStart;
+		}
+
+		$q = 'SELECT count(entryId) AS cnt, date(timeCreated) AS date FROM tblGuestbooks WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
+		return $db->getArray($q);
+	}
+
 	/* Returns the number of items in the guestbook conversation */
 	function getGuestbookConversationCount($userId, $otherId)
 	{

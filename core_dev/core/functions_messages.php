@@ -67,6 +67,19 @@ require_once('functions_locale.php');	//for translations
 
 		return $db->getArray($q);
 	}
+
+	/* Returns the number of items written in messages the specified date interval */
+	function getMessageCountPerDate($dateStart, $dateStop = '')
+	{
+		global $db;
+
+		if (empty($dateStop)) {
+			$dateStop = $dateStart;
+		}
+
+		$q = 'SELECT floor(count(msgId)/2) AS cnt, date(timeCreated) AS date FROM tblMessages WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
+		return $db->getArray($q);
+	}
 	
 	function getMessages($_group = 0)
 	{
