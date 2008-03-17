@@ -19,10 +19,8 @@
 			'add_record.php' => 'Add normal record',
 			'add_record_comp.php' => 'Add comp. / split',
 			'index.php?logout' => 'Log out');
-	} else {
-		$menu = array('index.php?login' => 'Log in');
+		createMenu($menu);
 	}
-	createMenu($menu);
 ?>
 
 

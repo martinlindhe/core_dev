@@ -1,5 +1,5 @@
 <?
-	if ($session->isAdmin) $db->showProfile($time_start);
+	if ($session->isAdmin || $config['debug']) $db->showProfile($time_start);
 ?>
 </div>
 </body>
