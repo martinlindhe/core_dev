@@ -47,8 +47,10 @@ class Auth_Standard extends Auth_Base
 			if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
 
 			//Checks if email was required, and if so if it was correctly entered
-			$chk = verifyRequiredUserdataFields();		
-			if ($chk !== true) return $chk;
+			if (!empty($config['auth']['userdata'])) {
+				$chk = verifyRequiredUserdataFields();		
+				if ($chk !== true) return $chk;
+			}
 		}
 
 		if (Users::cnt()) {
