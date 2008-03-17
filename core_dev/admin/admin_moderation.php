@@ -47,6 +47,18 @@
 				removeFromModerationQueue($row['queueId']);
 				break;
 
+			case MODERATION_FILE:
+				if (isset($_POST['delete_'.$row['queueId'].'_message'])) {
+					$subject = 'Fil borttagen';
+					$msg  = 'En av dina uppladdade filer har tagits bort.<br/>';
+					$msg .= 'Anledning: '.$_POST['delete_'.$row['queueId'].'_message'];
+					$owner = Files::getOwner($row['itemId']);
+					systemMessage($owner, $subject, $msg);
+				}
+				$files->deleteFile($row['itemId']);
+				removeFromModerationQueue($row['queueId']);
+				break;
+
 			default: die('cant delete unknown type');
 		}
 	}
@@ -109,8 +121,12 @@
 			echo '<label for="accept_'.$row['queueId'].'"> Accept</label>';
 			echo '</td>';
 			echo '<td>';
-			echo '<input type="radio" class="radio" name="method_'.$row['queueId'].'" id="delete_'.$row['queueId'].'" value="delete"/>';
+			echo '<input type="radio" class="radio" name="method_'.$row['queueId'].'" id="delete_'.$row['queueId'].'" value="delete" onClick="getElementById(\'deletediv'.$row['queueId'].'\').style.display=\'block\'"/>';
 			echo '<label for="delete_'.$row['queueId'].'"> Delete</label>';
+			echo '<div id="deletediv'.$row['queueId'].'" style="display:none;">';
+				echo '<input type="radio" class="radio" name="delete_'.$row['queueId'].'_message" value="Reklam"/> Reklam';
+				echo '<br/><input type="radio" class="radio" name="delete_'.$row['queueId'].'_message" value="Stötande"/> Stötande';
+			echo '</div>';
 			echo '</td></tr></table>';
 
 			if (!$row['autoTriggered']) {

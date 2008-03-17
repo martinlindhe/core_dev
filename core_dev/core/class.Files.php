@@ -317,6 +317,7 @@ class Files
 					systemMessage($sub['ownerId'], $subj, $msg);
 				}			
 			}
+			addToModerationQueue(MODERATION_FILE, $fileId);
 		}			
 
 		return $fileId;
