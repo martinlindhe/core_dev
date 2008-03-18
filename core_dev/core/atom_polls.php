@@ -104,12 +104,21 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 	/**
 	 *
 	 */
-	function updatePoll($_type, $_id, $_text)
+	function updatePoll($_type, $_id, $_text, $timestart = '', $timeend = '')
 	{
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-		$q = 'UPDATE tblPolls SET pollText="'.$db->escape($_text).'" WHERE pollType='.$_type.' AND pollId='.$_id;
+		$add_string = '';
+
+		if (!empty($timestart)) {
+			$add_string .= ', timeStart = "'.$timestart.'"';
+		}
+		if (!empty($timeend)) {
+			$add_string .= ', timeEnd = "'.$timeend.'"';
+		}
+
+		$q = 'UPDATE tblPolls SET pollText="'.$db->escape($_text).'"'.$add_string.' WHERE pollType='.$_type.' AND pollId='.$_id;
 		$db->update($q);
 	}
 
@@ -255,6 +264,13 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 			if (!empty($_POST['poll_q'])) {
 				updatePoll($_type, $pollId, $_POST['poll_q']);
 
+				if (!empty($_POST['poll_ts'])) {
+					updatePoll($_type, $pollId, $_POST['poll_q'], $_POST['poll_ts']);
+				}
+				if (!empty($_POST['poll_te'])) {
+					updatePoll($_type, $pollId, $_POST['poll_q'], '', $_POST['poll_te']);
+				}
+
 				$list = getCategories(CATEGORY_POLL, $pollId);
 				for ($i=0; $i<count($list); $i++) {
 					if (!empty($_POST['poll_a'.$i])) {
@@ -294,8 +310,20 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 			echo 'Question: ';
 			echo '<input type="text" name="poll_q" size="30" value="'.$poll['pollText'].'"/><br/>';
 
-			echo 'Poll starts: '.$poll['timeStart'].'<br/>';
-			echo 'Poll ends: '.$poll['timeEnd'].'<br/>';
+			echo 'Poll starts: ';
+			if (datetime_to_timestamp($poll['timeStart']) < time()) {
+				echo $poll['timeStart'].'<br/>';
+			}
+			else {
+				echo '<input type="text" name="poll_ts" size="30" value="'.$poll['timeStart'].'"/><br/>';
+			}
+			echo 'Poll ends: ';
+			if (datetime_to_timestamp($poll['timeEnd']) < time()) {
+				echo $poll['timeEnd'].'<br/>';
+			}
+			else {
+				echo '<input type="text" name="poll_te" size="30" value="'.$poll['timeEnd'].'"/><br/>';
+			}
 			echo '<br/>';
 
 			if ($poll) {
