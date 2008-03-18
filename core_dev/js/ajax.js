@@ -31,7 +31,6 @@ function AJAX()
 			} catch (e) {}
 		}
 	}
-
 	if (!this._request) {
 		alert('Giving up, Cannot create an XMLHTTP instance');
 		return false;
@@ -56,7 +55,9 @@ function AJAX()
 	function GET_raw(url, callback, callbackparam, params)
 	{
 		if (!this._request) return false;
-		if (callback) this._request.onreadystatechange = function() { callback(callbackparam); }
+		if (callback) {
+			this._request.onreadystatechange = function() { callback(callbackparam); }
+		}
 		try {
 			this._busy = true;
 			this._request.open('GET', url, true);
