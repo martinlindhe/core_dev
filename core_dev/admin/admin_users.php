@@ -6,6 +6,10 @@
 
 	echo createMenu($admin_menu, 'blog_menu');
 
+	if ($session->isSuperAdmin && !empty($_GET['del'])) {
+		Users::removeUser($_GET['del']);
+	}
+
 	if (isset($_GET['notactivated'])) {
 		echo '<h1>Not activated users</h1>';
 		
@@ -25,6 +29,8 @@
 		$q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NOT NULL';
 		$list = $db->getArray($q);
 	} else if (isset($_GET['online'])) {
+		echo '<h1>Users online</h1>';
+		echo 'Was active in the last '.shortTimePeriod($session->online_timeout).'<br/><br/>';
 		$list = Users::allOnline();
 	}
 
@@ -40,11 +46,17 @@
 		echo '<tr>';
 		echo '<th>Username</th>';
 		echo '<th>Time created</th>';
+		echo '<th>&nbsp;</th>';
 		echo '</tr>';
 		foreach ($list as $row) {
 			echo '<tr>';
 			echo '<td>'.Users::link($row['userId'], $row['userName']).'</td>';
 			echo '<td>'.$row['timeCreated'].'</td>';
+			
+			echo '<td>';
+			if ($session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) echo '<a href="?del='.$row['userId'].getProjectPath().'">del</a>';
+			else echo '&nbsp;';
+			echo '</td>';
 			echo '</tr>';
 		}
 		echo '</table>';
