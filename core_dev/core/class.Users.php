@@ -41,6 +41,24 @@ class Users
 	}
 
 	/**
+	 * Get a list of all users with birthday at $date
+	 */
+	function getUsersBornAtDate($date)
+	{
+		global $db;
+		
+		$type = getUserdataFieldIdByType(USERDATA_TYPE_BIRTHDATE_SWE);
+
+		$q  = 'SELECT ownerId FROM tblSettings WHERE settingName = '.$type.' AND ';
+		$q .= 'day(settingValue) = day("'.$date.'") AND month(settingValue) = month("'.$date.'")';
+/*
+		$q  = 'SELECT ownerId FROM tblSettings WHERE settingName = '.$type.' AND ';
+		$q .= 'day(settingValue) = day("2008-11-09") AND month(settingValue) = month("2008-11-09")';
+*/
+ 		return $db->getArray($q);
+	}
+
+	/**
 	 * Get the number of logins the specified date
 	 */
 	function getLoginCountPerDate($dateStart, $dateStop = '')
@@ -357,6 +375,20 @@ class Users
 		$q  = 'SELECT DISTINCT t1.userId,';
 		$q .= '(SELECT userName FROM tblUsers WHERE userId=t1.userId) AS userName ';
  		$q .= 'FROM tblLogins AS t1 WHERE t1.IP='.$geoip;
+		return $db->getArray($q);
+	}
+
+	/**
+	 * Admin function used by admin_ip.php to show information about a users IP-addressess
+	 */
+	function getIPByUser($user)
+	{
+		global $db;
+
+		if (!is_numeric($user)) return false;
+
+		$q  = 'SELECT distinct(IP) AS IP, timeCreated AS time FROM tblLogins ';
+		$q .= 'WHERE userId = '.$user.' GROUP BY IP';
 		return $db->getArray($q);
 	}
 

@@ -113,7 +113,13 @@ class Session
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
 		$this->theme = &$_SESSION['theme'];
 
-		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {
+			$ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+			if (isBlocked(BLOCK_IP, $ip)) {
+				die('You have been blocked from this site.');
+			}
+			$this->ip = $ip;
+		}
 		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
 
 		//FIXME conditionally reuse some functions_browserstats.php features. make user agent parsing optional & disabled by default

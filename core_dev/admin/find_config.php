@@ -47,6 +47,7 @@
 		$config['core_web_root'].'admin/admin_session_info.php'.getProjectPath(0) => '$session',
 		$config['core_web_root'].'admin/admin_ip.php'.getProjectPath(0) => 'Query IP',
 		$config['core_web_root'].'admin/admin_portcheck.php'.getProjectPath(0) => 'Portcheck',
-		$config['core_web_root'].'admin/admin_phpinfo.php'.getProjectPath(0) => 'PHP'
+		$config['core_web_root'].'admin/admin_phpinfo.php'.getProjectPath(0) => 'PHP',
+		$config['core_web_root'].'admin/admin_ip_blocks.php'.getProjectPath(0) => 'IP Blocks'
 	);
 ?>

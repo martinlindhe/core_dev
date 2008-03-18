@@ -7,6 +7,17 @@
 	$session->requireAdmin();
 	if (!$ip) $session->requireSuperAdmin();
 
+	if (empty($_GET['user'])) $user = '';
+	else $user = $_GET['user'];
+
+	if (isset($_GET['block'])) $block = 1;
+	else $block = 0;
+
+	$userId = '';
+	if ($user) {
+		$userId = Users::getId($user);
+	}
+
 	require($project.'design_head.php');
 
 	echo createMenu($admin_menu, 'blog_menu');
@@ -17,7 +28,7 @@
 
 	echo '<h2>Query IP information</h2>';
 
-	if ($ip) {
+	if ($ip && !$block) {
 		$geoip = IPv4_to_GeoIP($ip);
 
 		echo '<h1>'.$ip.' ('.gethostbyaddr($ip).')</h1>';
@@ -39,13 +50,35 @@
 		//Admin notes
 		showComments(COMMENT_ADMIN_IP, $geoip);
 
+	} else if ($userId) {
+		$name = Users::getName($userId);
+		echo '<h1>'.$name.'</h1>';
+		echo '<br/><br/>';
+		
+		$ips = Users::getIPByUser($userId);
+
+		echo '<table><tr><td><b>IP</b></td><td><b>Tid</b></td><td>&nbsp;</td></tr>';
+			foreach ($ips as $ip) {
+				echo '<tr>';
+					echo '<td>'.GeoIP_to_IPv4($ip['IP']).'</td>';
+					echo '<td>'.$ip['time'].'</td>';
+					echo '<td><a href="'.$_SERVER['PHP_SELF'].'?block&ip='.GeoIP_to_IPv4($ip['IP']).'">Blockera</a></td>';
+				echo '</tr>';
+			}
+		echo '</table>';
+		
+	} else if ($block) {
+		addBlock(BLOCK_IP, IPv4_to_GeoIP($ip));
+		echo '<h2>IP Blocked</h2>';
 	} else {
 
 		echo 'Your IP is '.$_SERVER['REMOTE_ADDR'].'<br/>';
 		echo '<form method="get" action="'.$_SERVER['PHP_SELF'].'">';
 		if (!empty($_GET['pr'])) echo '<input type="hidden" name="pr" value="'.$_GET['pr'].'"/>';
-		echo '<input type="text" name="ip" value="'.$ip.'"/> ';
-		echo '<input type="submit" class="button" value="query ip"/>';
+		echo '<input type="text" name="ip" value="'.$ip.'"/> Ip';
+		echo '<br/>or';
+		echo '<br/><input type="text" name="user" value="'.$ip.'"/> User';
+		echo '<br/><input type="submit" class="button" value="query"/>';
 		echo '</form>';
 	}
 
