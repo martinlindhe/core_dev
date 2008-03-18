@@ -7,6 +7,14 @@ CREATE TABLE `tblActivation` (
   `timeCreated` datetime default NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `tblBlocks` (
+  `ruleId` int(10) unsigned NOT NULL auto_increment,
+  `type` tinyint(3) unsigned NOT NULL,
+  `rule` text character set utf8,
+  `timeCreated` datetime default NULL,
+  `createdBy` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`ruleId`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 CREATE TABLE `tblBlogs` (
   `blogId` int(10) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',
@@ -27,7 +35,7 @@ CREATE TABLE `tblCategories` (
   `categoryType` tinyint(3) unsigned NOT NULL default '0',
   `timeCreated` datetime default NULL,
   `creatorId` int(10) unsigned NOT NULL default '0',
-  `categoryPermissions` tinyint(3) unsigned NOT NULL default '0',
+  `permissions` tinyint(3) unsigned NOT NULL default '0',
   `ownerId` bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (`categoryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
