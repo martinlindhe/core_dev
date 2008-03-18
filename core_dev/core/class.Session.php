@@ -283,10 +283,14 @@ class Session
 	/**
 	 * Redirects user to default start page (logged in)
 	 */
-	function startPage()
+	function startPage($url = '')
 	{
 		global $config;
-		header('Location: '.$config['web_root'].$this->start_page);
+		if (empty($url)) {
+			header('Location: '.$config['web_root'].$this->start_page);
+		} else {
+			header('Location: '.$url);
+		}
 		die;
 	}
 
@@ -306,7 +310,7 @@ class Session
 	function errorPage()
 	{
 		global $config;
-		header('Location: '.$config['web_root'].$this->error_page);
+		header('Location: '.$config['web_root'].$this->error_page.'?urldata='.urlencode($_SERVER['REQUEST_URI']));
 		die;
 	}
 
