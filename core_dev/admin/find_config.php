@@ -32,17 +32,16 @@
 	);
 
 	$super_admin_menu = array(
-		$config['core_web_root'].'admin/admin_super.php'.getProjectPath(0) => 'SuperAdmin::',
 		$config['core_web_root'].'admin/admin_userdata.php'.getProjectPath(0) => 'Userdata',
+		$config['core_web_root'].'admin/admin_userfiles.php'.getProjectPath(0) => 'Userfiles',
 		$config['core_web_root'].'admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',
-		$config['core_web_root'].'admin/admin_contact_groups.php'.getProjectPath(0) => 'Contact groups',
+		$config['core_web_root'].'admin/admin_contacts.php'.getProjectPath(0) => 'Contacts',
 		$config['core_web_root'].'admin/admin_add_admin.php'.getProjectPath(0) => 'Add admin',
 		$config['core_web_root'].'admin/admin_content_search.php'.getProjectPath(0) => 'Content Search',
 		$config['core_web_root'].'admin/admin_contact_users.php'.getProjectPath(0) => 'Contact users'
 	);
 
 	$super_admin_tools_menu = array(
-		'' => 'Tools::',
 		$config['core_web_root'].'admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
 		$config['core_web_root'].'admin/admin_db_info.php'.getProjectPath(0) => '$db',
 		$config['core_web_root'].'admin/admin_session_info.php'.getProjectPath(0) => '$session',

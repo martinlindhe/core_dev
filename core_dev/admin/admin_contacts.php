@@ -8,7 +8,9 @@
 	echo createMenu($super_admin_menu, 'blog_menu');
 	echo createMenu($super_admin_tools_menu, 'blog_menu');
 
-	echo '<h1>Manage contact groups</h1>';
+	echo '<h1>Manage contacts</h1>';
+
+	echo 'Here you can create/modify the contact types that users can classify their friends in.<br/><br/>';
 	
 	manageCategoriesDialog(CATEGORY_CONTACT);
 
