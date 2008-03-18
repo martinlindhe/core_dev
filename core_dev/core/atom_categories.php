@@ -110,22 +110,45 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 	}
 
 	/**
-	 * Returns the id of the specified category
+	 * Returns the permissions of the specified category
 	 *
 	 * \param $_type type of category
-	 * \param $_name category name
+	 * \param $_id category id
 	 */
-	function getCategoryByName($_type, $_name)
+	function getCategoryPermissions($_type, $_id)
 	{
 		global $db;
-		if (!is_numeric($_type)) return false;
+		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-		$q  = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$db->escape($_name).'"';
+		$q  = 'SELECT permissions FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+
 		return $db->getOneItem($q);
 	}
 
 	/**
+	 * Returns the id of the specified category
 	 *
+	 * \param $_type type of category
+	 * \param $_name category name
+	 * \param $_flags optional matching permissions flags
+	 */
+	function getCategoryByName($_type, $_name, $_flags = 0)
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($_flags)) return false;
+
+		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$db->escape($_name).'"';
+		if ($_flags) $q .= ' AND (permissions & '.$_flags.')';
+		return $db->getOneItem($q);
+	}
+
+	/**
+	 * Returns all categories of specified type belonging to specified owner
+	 *
+	 * \param $_type type of category
+	 * \param $_owner object owning the categories (meaning depends on category type)
+	 *
+	 * \todo merge with getCategories(), add sort order optional parameter
 	 */
 	function getCategoriesByOwner($_type, $_owner)
 	{
@@ -180,12 +203,12 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 		{
 			case CATEGORY_USERFILE:
 				if (!$session->id) return false;
-				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR permissions=10) AND categoryType BETWEEN 1 AND 3 ORDER BY permissions DESC';
+				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
 				break;
 
 			case CATEGORY_BLOG:
 				if (!$session->id) return false;
-				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR permissions=10) AND categoryType='.$_type.' ORDER BY permissions DESC';
+				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
 				break;
 
 			case CATEGORY_NEWS:

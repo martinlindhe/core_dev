@@ -33,6 +33,19 @@ require_once('functions_locale.php');	//for translations
 	}
 
 	/**
+	 * Returns TRUE if you are friend with specified user
+	 */
+	function isFriends($userId)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($userId)) return false;
+
+		$q = 'SELECT contactId FROM tblContacts WHERE contactType='.CONTACT_FRIEND.' AND userId='.$userId.' AND otherUserId='.$session->id;
+		if ($db->getOneItem($q)) return true;
+		return false;
+	}
+
+	/**
 	 * Checks if userId has blocked $otherId
 	 *
 	 * \param $userId user id

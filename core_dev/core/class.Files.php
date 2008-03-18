@@ -307,9 +307,14 @@ class Files
 		$this->updateFile($fileId);	//force update of filesize, mimetype & checksum
 
 		if ($fileType == FILETYPE_USERFILE) {
+			addToModerationQueue(MODERATION_FILE, $fileId);
+
+			//notify subscribers
+			$check = getCategoryPermissions(CATEGORY_USERFILE, $categoryId);
+
 			$subs = getSubscribers(SUBSCRIPTION_FILES, $ownerId);
-			if (!empty($subs)) {
-				foreach ($subs as $sub) {
+			foreach ($subs as $sub) {
+				if (($check & CAT_PERM_PUBLIC) || (($check & CAT_PERM_PRIVATE) && isFriends($sub['ownerId'])) ) {
 					$dst_adr = loadUserdataEmail($sub['ownerId']);
 					$subj = t('Updated gallery');
 					$msg = t('The user').' '.Users::getName($ownerId).' '.t('has uploaded files to their file area.');
@@ -317,7 +322,6 @@ class Files
 					systemMessage($sub['ownerId'], $subj, $msg);
 				}			
 			}
-			addToModerationQueue(MODERATION_FILE, $fileId);
 		}			
 		if ($fileType == FILETYPE_USERDATA) {
 			addToModerationQueue(MODERATION_PRES_IMAGE, $fileId);
