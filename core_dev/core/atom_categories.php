@@ -9,8 +9,6 @@
 
 //tblCategory.categoryType: System categories. Reserved 1-50. Use a number above 50 for your own category types
 define('CATEGORY_USERFILE',			1);		///< normal, public userfile
-//define('CATEGORY_USERFILE_PRIVATE',	2);		///< private userfile, only visible for the users friends / invited ppl
-//define('CATEGORY_USERFILE_HIDDEN',	3);		///< files here are only visible by the owner
 define('CATEGORY_WIKIFILE',			4);		///< category for wiki file attachments, to allow better organization if needed
 define('CATEGORY_TODOLIST',			5);		///< todo list categories
 
@@ -41,7 +39,6 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 	function addCategory($_type, $_name, $_owner = 0, $_flags = 0)
 	{
 		global $db, $session;
-
 		if (!$session->id || !is_numeric($_type) || !is_numeric($_owner) || !is_numeric($_flags)) return false;
 
 		$_name = $db->escape(trim($_name));
@@ -97,16 +94,33 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 	}
 
 	/**
+	 * Returns the name of the specified category
 	 *
+	 * \param $_type type of category
+	 * \param $_id category id
 	 */
 	function getCategoryName($_type, $_id)
 	{
 		global $db;
-
 		if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
 		$q  = 'SELECT categoryName FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
 
+		return $db->getOneItem($q);
+	}
+
+	/**
+	 * Returns the id of the specified category
+	 *
+	 * \param $_type type of category
+	 * \param $_name category name
+	 */
+	function getCategoryByName($_type, $_name)
+	{
+		global $db;
+		if (!is_numeric($_type)) return false;
+
+		$q  = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$db->escape($_name).'"';
 		return $db->getOneItem($q);
 	}
 
@@ -116,7 +130,6 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 	function getCategoriesByOwner($_type, $_owner)
 	{
 		global $db;
-
 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND ownerId='.$_owner;
@@ -140,6 +153,20 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 	}
 
 	/**
+	 * Returns all global categories of specified type
+	 *
+	 * \param $_type type of categories
+	 */
+	function getGlobalCategories($_type)
+	{
+		global $db;
+		if (!is_numeric($_type)) return false;
+
+		$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND (permissions & '.CAT_PERM_GLOBAL.')';
+		return $db->getArray($q);
+	}
+
+	/**
 	 * Returns own categories & global categories (categoryPermissions==10)
 	 *
 	 * some category types (like CATEGORY_USERDATA) uses the $_owner parameter, to specify what userdata field this category belongs to
@@ -147,7 +174,6 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 	function getGlobalAndUserCategories($_type, $_owner = 0)
 	{
 		global $db, $session;
-
 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 		switch ($_type)
@@ -183,13 +209,11 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 	/**
 	 *
 	 */
-	function getCategoriesSelect($_type, $_owner = 0, $selectName = '', $selectedId = 0, $url = '', $varName = '', $extra = '')
+	function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
 	{
 		global $config;
-
 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
-		if (!$selectName) $selectName = 'default';
 		$content = '<select name="'.strip_tags($selectName).'">';
 
 		if ($_type == CATEGORY_USERFILE) {
@@ -255,7 +279,7 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 	function manageCategoriesDialog($_type)
 	{
 		global $config, $session;
-		
+
 		if (!$session->id) return getCategoriesSelect($_type);
 
 		if (($session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category']))
@@ -294,11 +318,7 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 			return;
 		}
 
-		if ($_type == CATEGORY_USERFILE) {
-			echo 'Existing categories: '.getCategoriesSelect($_type).'<br/>';
-		} else {
-			echo 'Existing categories: '.getCategoriesSelect($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
-		}
+		echo 'Existing categories: '.getCategoriesSelect($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
 
 		echo 'Select one from the dropdown list to edit it.<br/><br/>';
 
