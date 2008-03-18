@@ -306,7 +306,7 @@ class Files
 
 		$this->updateFile($fileId);	//force update of filesize, mimetype & checksum
 
-		if ($fileType == FILETYPE_USERFILE) {		
+		if ($fileType == FILETYPE_USERFILE) {
 			$subs = getSubscribers(SUBSCRIPTION_FILES, $ownerId);
 			if (!empty($subs)) {
 				foreach ($subs as $sub) {
@@ -319,7 +319,10 @@ class Files
 			}
 			addToModerationQueue(MODERATION_FILE, $fileId);
 		}			
-
+		if ($fileType == FILETYPE_USERDATA) {
+			addToModerationQueue(MODERATION_PRES_IMAGE, $fileId);
+		}
+		
 		return $fileId;
 	}
 

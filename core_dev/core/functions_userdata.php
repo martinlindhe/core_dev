@@ -518,6 +518,8 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 
 			case USERDATA_TYPE_IMAGE:
 				if (!$result) return false;
+				// TODO: Make this an optional setting
+				if (isInQueue($result, MODERATION_PRES_IMAGE)) return false;
 				$val = showThumb($result, $settingName, 270, 200);
 				break;
 
@@ -597,10 +599,20 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 	 */
 	function loadUserdataImage($userId)
 	{
+		global $db;
+		
 		if (!is_numeric($userId)) return false;
 
 		$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_IMAGE);
-		return loadUserdataSetting($userId, $fieldId);
+
+		$fileId = loadUserdataSetting($userId, $fieldId);
+
+		//TODO: Make this optional, depending on setting
+		// If UserdataImage in moderation queue then dont display it
+		if (!isInQueue($fileId, MODERATION_PRES_IMAGE)) {
+			return $fileId;
+		}
+		return '';
 	}
 
 	/**

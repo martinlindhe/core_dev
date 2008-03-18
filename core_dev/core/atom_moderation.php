@@ -29,6 +29,7 @@ require_once('functions_locale.php');	//for translations
 	define('MODERATION_QUEUE',			15);	//used to put a user in a moderation queue
 	define('MODERATION_REPORTED_VIDEOPRESENTATION',	16);	//a user can report another user's video presentation. itemId = tblFiles.fileId of video pres
 	define('MODERATION_REPORTED_VIDEOMESSAGE',			17);	//a user can report a private video-message. itemId = tblFiles.fileId of video message
+	define('MODERATION_PRES_IMAGE',			18);	//a users presentation image
 
 	//Moderation queue type 1-49 is reserverd for core_dev use. Please use >= 50 for your own extensions
 
@@ -52,6 +53,22 @@ require_once('functions_locale.php');	//for translations
 	function isSensitive($text)
 	{
 		return checkStopword($text, STOPWORD_SENSITIVE);
+	}
+
+	/**
+	 * Checks if the $object is in the queue of $type
+	 */
+	function isInQueue($object, $type)
+	{
+		global $db;
+		
+		if (!is_numeric($object) || !is_numeric($type)) return false;
+		
+		$q = 'SELECT queueId FROM tblModeration WHERE queueType = '.$type.' AND itemId = '.$object.' AND moderatedBy = 0 LIMIT 1';
+		if ($db->getOneItem($q)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

@@ -52,9 +52,29 @@
 					$subject = 'Fil borttagen';
 					$msg  = 'En av dina uppladdade filer har tagits bort.<br/>';
 					$msg .= 'Anledning: '.$_POST['delete_'.$row['queueId'].'_message'];
-					$owner = Files::getOwner($row['itemId']);
+					$owner = Files::getUploader($row['itemId']);
 					systemMessage($owner, $subject, $msg);
 				}
+				$files->deleteFile($row['itemId']);
+				removeFromModerationQueue($row['queueId']);
+				break;
+
+			case MODERATION_PRES_IMAGE:
+//			echo $_POST['delete_'.$row['queueId'].'_message'];
+				$owner = Files::getUploader($row['itemId']);
+				if (isset($_POST['delete_'.$row['queueId'].'_message'])) {
+//echo 'msgmsg';
+					$subject = 'Presentationsbild borttagen';
+					$msg  = 'Din presentationsbild har tagits bort.'."\n";
+					$msg .= 'Anledning: '.$_POST['delete_'.$row['queueId'].'_message'];
+					systemMessage($owner, $subject, $msg);
+				}
+/*
+echo $owner.' AAA ';
+echo loadSetting(SETTING_USERDATA, $owner, getUserdataFieldIdByType(USERDATA_TYPE_IMAGE));
+exit(1);
+*/
+				deleteSetting(SETTING_USERDATA, $owner, getUserdataFieldIdByType(USERDATA_TYPE_IMAGE));
 				$files->deleteFile($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
 				break;
@@ -87,9 +107,10 @@
 			switch ($row['queueType']) {
 				case MODERATION_GUESTBOOK:$title = 'Guestbook entry'; break;
 				case MODERATION_BLOG:			$title = 'Blog'; break;
-				case MODERATION_FORUM:		$title = 'Forum'; break;
+				case MODERATION_FORUM:			$title = 'Forum'; break;
 				case MODERATION_USER:			$title = 'Reported user: '.Users::link($row['itemId']); break;
 				case MODERATION_FILE:			$title = 'Reported file '.showFile($row['itemId'], '', '', false); break;
+				case MODERATION_PRES_IMAGE:		$title = 'Reported presentation image '.showFile($row['itemId'], '', '', false); break;
 
 				default: $title = '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 			}
