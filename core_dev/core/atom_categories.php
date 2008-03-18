@@ -7,41 +7,53 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	//System categories. Reserved 1-50. Use a number above 50 for your own category types
-	define('CATEGORY_USERFILE',					1);	//normal, public userfile
-	define('CATEGORY_USERFILE_PRIVATE',	2);	//private userfile, only visible for the users friends / invited ppl
-	define('CATEGORY_USERFILE_HIDDEN',	3);	//files here are only visible by the owner
-	define('CATEGORY_WIKIFILE',					4);	//category for wiki file attachments, to allow better organization if needed
-	define('CATEGORY_TODOLIST',					5);	//todo list categories
+//tblCategory.categoryType: System categories. Reserved 1-50. Use a number above 50 for your own category types
+define('CATEGORY_USERFILE',			1);		///< normal, public userfile
+//define('CATEGORY_USERFILE_PRIVATE',	2);		///< private userfile, only visible for the users friends / invited ppl
+//define('CATEGORY_USERFILE_HIDDEN',	3);		///< files here are only visible by the owner
+define('CATEGORY_WIKIFILE',			4);		///< category for wiki file attachments, to allow better organization if needed
+define('CATEGORY_TODOLIST',			5);		///< todo list categories
 
-	define('CATEGORY_BLOG', 				10);		//normal, personal blog category
-	define('CATEGORY_CONTACT',			11);		//friend relation category, like "Old friends", "Family"
-	define('CATEGORY_USERDATA',			12);		//used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
-	define('CATEGORY_POLL',					13);		//used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
+define('CATEGORY_BLOG', 			10);	///< normal, personal blog category
+define('CATEGORY_CONTACT',			11);	///< friend relation category, like "Old friends", "Family"
+define('CATEGORY_USERDATA',			12);	///< used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
+define('CATEGORY_POLL',				13);	///< used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
 
-	define('CATEGORY_NEWS',					20);
+define('CATEGORY_NEWS',				20);	///< news categories
+define('CATEGORY_LANGUAGE',			51);	///< represents a language, for multi-language features & used by "lang" project
 
-	define('CATEGORY_LANGUAGE',			51);		//represents a language, for multi-language features & used by "lang" project
+//tblCategory.permissions:
+define('CAT_PERM_PUBLIC',	0x01);	///< public category
+define('CAT_PERM_PRIVATE',	0x02);	///< owner and owner's friends can see the content
+define('CAT_PERM_HIDDEN',	0x04);	///< only owner can see the content
+
+define('CAT_PERM_USER',		0x40);	///< category is created by user
+define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all users
 
 	/**
+	 * Adds a new category
 	 *
+	 * \param $_type type of category
+	 * \param $_name name of category
+	 * \param $_owner object owning category, the meaning depends on $_type
+	 * \param $_flags boolean AND flags (personal/global) & (public/private/hidden)
 	 */
-	function addCategory($_type, $_name, $_owner = 0, $_global = false)
+	function addCategory($_type, $_name, $_owner = 0, $_flags = 0)
 	{
 		global $db, $session;
 
-		if (!$session->id || !is_numeric($_type) || !is_numeric($_owner)) return false;
+		if (!$session->id || !is_numeric($_type) || !is_numeric($_owner) || !is_numeric($_flags)) return false;
 
 		$_name = $db->escape(trim($_name));
 		if (!$_name) return false;
 
 		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND ownerId='.$_owner;
-		if (!$_global) $q .= ' AND creatorId='.$session->id;
+		$q .= ' AND creatorId='.$session->id;
 		$check = $db->getOneItem($q);
 		if ($check) return false;
 
-		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner.',timeCreated=NOW(),creatorId='.$session->id;
-		if ($session->isAdmin && $_global) $q .= ',categoryPermissions=10';
+		$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner;
+		$q .= ',timeCreated=NOW(),creatorId='.$session->id.',permissions='.$_flags;
 
 		return $db->insert($q);
 	}
@@ -142,12 +154,12 @@
 		{
 			case CATEGORY_USERFILE:
 				if (!$session->id) return false;
-				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType BETWEEN 1 AND 3 ORDER BY categoryPermissions DESC';
+				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR permissions=10) AND categoryType BETWEEN 1 AND 3 ORDER BY permissions DESC';
 				break;
 
 			case CATEGORY_BLOG:
 				if (!$session->id) return false;
-				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR categoryPermissions=10) AND categoryType='.$_type.' ORDER BY categoryPermissions DESC';
+				$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR permissions=10) AND categoryType='.$_type.' ORDER BY permissions DESC';
 				break;
 
 			case CATEGORY_NEWS:
@@ -193,11 +205,11 @@
 
 		foreach ($list as $row)
 		{
-			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && $row['categoryPermissions']==10) {
+			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && ($row['permissions']&CAT_PERM_GLOBAL) ) {
 				$content .= '<optgroup label="'.t('Global categories').'">';
 				$shown_global_cats = true;
 			}
-			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_my_cats && $row['categoryPermissions']!=10) {
+			if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_my_cats && ($row['permissions']&CAT_PERM_USER)) {
 				$content .= '</optgroup>';
 				$content .= '<optgroup label="'.t('Your categories').'">';
 				$shown_my_cats = true;
@@ -223,8 +235,8 @@
 				}
 			}
 			$content .= '>'.$text;
-			if ($row['categoryType'] == CATEGORY_USERFILE_PRIVATE) $content .= ' ('.t('Private').')';
-			if ($row['categoryType'] == CATEGORY_USERFILE_HIDDEN) $content .= ' ('.t('Hidden').')';
+			if ($row['permissions'] & CAT_PERM_PRIVATE) $content .= ' ('.t('Private').')';
+			if ($row['permissions'] & CAT_PERM_HIDDEN) $content .= ' ('.t('Hidden').')';
 			$content .= '</option>';
 		}
 		if ($shown_global_cats || $shown_my_cats) $content .= '</optgroup>';
@@ -237,6 +249,8 @@
 	/**
 	 * Default "create a new category" dialog, used by "create blog category" and "create category in personal file area"
 	 * also allows for managing and deleting categories
+	 *
+	 * \param $_type 
 	 */
 	function manageCategoriesDialog($_type)
 	{
@@ -246,15 +260,12 @@
 
 		if (($session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category']))
 		{
-			$global = false;
 			//Create new category. Only allow categories inside root level
-
 			$cat_type = $_type;
-			if (!empty($_POST['new_file_category_type'])) {
-				if (is_numeric($_POST['new_file_category_type'])) $cat_type = $_POST['new_file_category_type'];
-				else if ($_POST['new_file_category_type'] == 'global') $global = true;
-			}
-			addCategory($cat_type, $_POST['new_file_category'], 0, $global);
+			if (!empty($_POST['new_file_category_type']) && is_numeric($_POST['new_file_category_type'])) $cat_type = $_POST['new_file_category_type'];
+
+			$flags = $_POST['new_file_category_scope'] + $_POST['new_file_category_perm'];
+			addCategory($cat_type, $_POST['new_file_category'], 0, $flags);
 		}
 
 		if (!empty($_GET['cat_del_id']) && is_numeric($_GET['cat_del_id'])) {
@@ -294,29 +305,45 @@
 		echo '<form name="new_file_category" method="post" action="">';
 		echo 'Create new category:<br/>';
 		echo '<input type="text" name="new_file_category"/> ';
+		echo '<input type="hidden" value="'.$_type.'" name="new_file_category_type"/>';
 
 		if ($_type == CATEGORY_USERFILE) {
 			echo '<br/>';
-			echo '<input type="radio" value="'.CATEGORY_USERFILE.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
-			echo '<label for="l_normal">Normal category - everyone can see the content</label><br/><br/>';
-			echo '<input type="radio" value="'.CATEGORY_USERFILE_PRIVATE.'" name="new_file_category_type" id="l_private"/> ';
-			echo '<label for="l_private">Make this category private (only for your friends)</label><br/><br/>';
+			echo '<input type="radio" value="'.CAT_PERM_USER.'" name="new_file_category_scope" id="l_normal" checked="checked"/> ';
+			echo '<label for="l_normal">Personal category</label> ';
 
-			echo '<input type="radio" value="'.CATEGORY_USERFILE_HIDDEN.'" name="new_file_category_type" id="l_hidden"/> ';
-			echo '<label for="l_hidden">Make this category hidden (only for you)</label><br/><br/>';
+			echo '<input type="radio" value="'.CAT_PERM_GLOBAL.'" name="new_file_category_scope" id="l_global"/> ';
+			echo '<label for="l_global" class="okay">Super admin: Global category</label><br/><br/>';
+
+
+			echo '<input type="radio" value="'.CAT_PERM_PUBLIC.'" name="new_file_category_perm" id="l_public" checked="checked"/> ';
+			echo '<label for="l_public">Public (visible to all)</label><br/>';
+
+			echo '<input type="radio" value="'.CAT_PERM_PRIVATE.'" name="new_file_category_perm" id="l_private"/> ';
+			echo '<label for="l_private">Make this category private (only for your friends)</label><br/>';
+
+			echo '<input type="radio" value="'.CAT_PERM_HIDDEN.'" name="new_file_category_perm" id="l_hidden"/> ';
+			echo '<label for="l_hidden">Make this category hidden (only for you)</label><br/>';
 		} else if ($_type == CATEGORY_BLOG) {
+			die('FIXME blog cat is broken');
+			/*
 			echo '<br/>';
 			echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
 			echo '<label for="l_normal">Your personal blog category</label><br/><br/>';
-		}
-		if ($_type != CATEGORY_NEWS && $_type != CATEGORY_CONTACT && $session->isSuperAdmin) {
 			echo '<br/>';
 			echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
 			echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
+			*/
+		} else if ($_type != CATEGORY_NEWS && $_type != CATEGORY_CONTACT && $session->isSuperAdmin) {
+			die('FIXME news cat is broken');
+			/*
+			echo '<br/>';
+			echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
+			echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
+			*/
 		}
 
 		echo '<input type="submit" class="button" value="Create"/> ';
-		//echo '<input type="button" class="button" value="Cancel" onclick="show_element_by_name(\'file_gadget_upload\'); hide_element_by_name(\'file_gadget_category\');"/>';
 		echo '</form>';
 	}
 ?>
