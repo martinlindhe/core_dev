@@ -194,7 +194,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 	/**
 	 * Returns a input field from the passed data, used together with editUserdataSettings()
 	 */
-	function getUserdataInput($row)
+	function getUserdataInput($row, $fill = false)
 	{
 		global $config;
 
@@ -203,7 +203,13 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 			$value = stripslashes($row['value']);	//doesnt nessecary exist
 		} else if (!empty($row['settingValue'])) {
 			$value = stripslashes($row['settingValue']);
-		} else { //for default values in admin display
+		} else if ($fill) {
+			//look for post data
+			if (!empty($_POST['userdata_'.$fieldId])) $value = $_POST['userdata_'.$fieldId];
+		}
+
+		if (!isset($value)) {
+			//for default values in admin display
 			$value = stripslashes($row['fieldDefault']);
 		}
 
@@ -396,7 +402,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 	{
 		$list = getUserdataFields(true);
 		foreach ($list as $row) {
-			echo '<tr>'.getUserdataInput($row).'</tr>';
+			echo '<tr>'.getUserdataInput($row, true).'</tr>';
 		}
 	}
 

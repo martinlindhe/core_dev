@@ -258,6 +258,44 @@ class Auth_Standard extends Auth_Base
 		echo '</div>';
 	}
 
+	function showRegisterForm()
+	{
+		global $config, $session;
+		if ($this->mail_error) {
+			echo '<div class="critical">Ett fel uppstod när aktiveringsmail skulle skickas ut!</div><br/>';
+			return false;
+		}
+
+		if ($session->error) {
+			echo '<div class="critical">'.$session->error.'</div><br/>';
+			$session->error = ''; //remove error message once it has been displayed
+		}
+
+		if ($this->activation_sent) {
+			echo 'Ett email med din aktiveringskod har skickats.<br/>';
+			echo 'Följ länken i mailet för att slutföra din registrering.<br/>';
+			return true;
+		}
+
+		echo '<form method="post" action="">';
+		echo '<table cellpadding="2">';
+		echo '<tr>'.
+				'<td>Användarnamn:</td>'.
+				'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
+					'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
+				'</td>'.
+				'</tr>';
+		echo '<tr><td>'.t('Password').':</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+		echo '<tr><td>'.t('Repeat password').':</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
+		if ($this->userdata) {
+			showRequiredUserdataFields();
+		}
+		echo '</table><br/>';
+
+		echo '<input type="submit" class="button" value="'.t('Register').'"/>';
+		echo '</form>';
+	}
+
 	function changePasswordForm()
 	{
 		global $session;
