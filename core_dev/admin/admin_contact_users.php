@@ -20,6 +20,8 @@
 		$days = isset($_POST['days'])?$_POST['days']:'';
 
 		$res = Users::getSearchResult($_POST);
+
+		echo 'Message has been sent to:<br/>';
 		
 		if ($how == 'mail') {
 			contact_users($message, $subject, $all, $presvid, $logged_in_days, $days, $res);
@@ -28,7 +30,7 @@
 			// TODO:
 		}
 		
-		echo 'Message sent';
+//		echo 'Message sent';
 	}
 	
 	echo '<h1>Contact users</h1>';

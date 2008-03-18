@@ -76,7 +76,7 @@
 	}
 	
 	function contact_users($message, $subject, $all, $presvid, $logged_in_days, $days, $res) {
-		global $db;
+		global $db, $files;
 		
 		if (empty($message) || empty($subject)) return false;
 		
@@ -85,6 +85,7 @@
 			
 			foreach ($users as $row) {
 				$email = loadUserdataEmail($row['userId']);
+				echo 'All users.<br/>';
 				smtp_mail($email, $subject, $message);
 			}
 		}
@@ -110,15 +111,18 @@
 						$cId = loadSetting(SETTING_USERDATA, $row['userId'], 'm2w_id');
 						if ($cId) {
 							$vid_pres = $files->getFiles(FILETYPE_VIDEOPRES, $cId);
-							if (!$vid_pres) {
+							if (!is_array($vid_pres)) {
 								continue;
 							}
+						}
+						else {
+							continue;
 						}
 					}
 				}
 				$email = loadUserdataEmail($row['userId']);
-echo $email;
-//				smtp_mail($email, $subject, $message);
+				echo $email.'<br/>';
+				smtp_mail($email, $subject, $message);
 			}
 		}
 

@@ -440,7 +440,9 @@ class Users
 		}
 		echo '</table>';
 
-		echo '<br/>Video presentation: <input type="radio" name="presvid" value="1"> Yes | ';
+		echo '<br/>To use this part you have to choose at least one option above. If you want to find ';
+		echo 'all users with a video presentation, enter 07 in "Mobile" field above.';
+		echo '<br/><br/>Video presentation: <input type="radio" name="presvid" value="1"> Yes | ';
 		echo '<input type="radio" name="presvid" value="0"> No';
 		echo '<br/><input type="radio" name="logged_in_days" value="0"> Not logged in for x days | ';
 		echo '<input type="radio" name="logged_in_days" value="1"> Logged in latest x days';
