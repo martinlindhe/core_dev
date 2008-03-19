@@ -13,6 +13,10 @@
 		global $db, $session;
 		if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
+		//only log the latest entry for each visitor
+		$q = 'DELETE FROM tblVisits WHERE type='.$_type.' AND ownerId='.$_owner.' AND creatorId='.$session->id;
+		$db->delete($q);
+
 		$q = 'INSERT INTO tblVisits SET type='.$_type.',ownerId='.$_owner.',creatorId='.$session->id.',timeCreated=NOW()';
 		$db->insert($q);
 	}
