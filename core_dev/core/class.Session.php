@@ -51,6 +51,7 @@ class Session
 	public $lastActive;			///< last active
 	public $started;			///< timestamp of when the session started
 	public $theme = '';			///< contains the currently selected theme
+	public $referer = '';		///< redirects the user to this page after login
 
 	public $isWebmaster;		///< is user webmaster?
 	public $isAdmin;			///< is user admin?
@@ -99,6 +100,7 @@ class Session
 		if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
 		if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
 		if (!isset($_SESSION['theme'])) $_SESSION['theme'] = $this->default_theme;
+		if (!isset($_SESSION['referer'])) $_SESSION['referer'] = '';
 
 		$this->started = &$_SESSION['started'];
 		$this->error = &$_SESSION['error'];
@@ -112,6 +114,7 @@ class Session
 		$this->isAdmin = &$_SESSION['isAdmin'];
 		$this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
 		$this->theme = &$_SESSION['theme'];
+		$this->referer = &$_SESSION['referer'];
 
 		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {
 			$ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
@@ -310,7 +313,7 @@ class Session
 	function errorPage()
 	{
 		global $config;
-		header('Location: '.$config['web_root'].$this->error_page.'?urldata='.urlencode($_SERVER['REQUEST_URI']));
+		header('Location: '.$config['web_root'].$this->error_page);
 		die;
 	}
 
@@ -332,6 +335,7 @@ class Session
 		global $config;
 		if ($this->id) return;
 		if (!$this->error) $this->error = t('The page you requested requires you to be logged in.');
+		$this->referer = $_SERVER['REQUEST_URI'];
 		$this->errorPage();
 	}
 
