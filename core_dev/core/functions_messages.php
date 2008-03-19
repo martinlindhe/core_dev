@@ -112,6 +112,31 @@ require_once('functions_locale.php');	//for translations
 		return $db->getArray($q);
 	}
 
+	function getMessagesNewItemsCount($userId, $_group = 0)
+	{
+		global $db, $session;
+		if (!is_numeric($_group)) return false;
+
+		switch ($_group) {
+			case MESSAGE_GROUP_INBOX:
+				$q  = 'SELECT count(fromId) FROM tblMessages WHERE ';
+				$q .= 'ownerId='.$userId.' AND groupId='.$_group.' ';
+				$q .= 'AND timeRead IS NULL';
+				break;
+
+			case MESSAGE_GROUP_OUTBOX:
+				$q  = 'SELECT count(fromId) FROM tblMessages WHERE ';
+				$q .= 'ownerId='.$userId.' AND groupId='.$_group.' ';
+				$q .= 'AND timeRead IS NULL';
+				break;
+				
+			default:
+				$q = 'SELECT count(fromId) FROM tblMessages WHERE ownerId='.$session->id.' AND groupId='.$_group.' AND timeRead IS NULL';
+		}
+
+		return $db->getOneItem($q);
+	}
+
 	function getMessage($_id)
 	{
 		global $db, $session;

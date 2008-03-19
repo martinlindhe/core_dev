@@ -99,6 +99,20 @@
 		return $db->getArray($q);
 	}
 
+	/* Returns number of new entries in $userId's guestbook */
+	function getGuestbookNewItemsCount($userId)
+	{
+		global $db;
+
+		if (!is_numeric($userId)) return false;
+
+		$q  = 'SELECT count(entryId) FROM tblGuestbooks WHERE ';
+		$q .= 'userId='.$userId.' AND entryDeleted=0 ';
+		$q .= 'AND entryRead = 0';
+
+		return $db->getOneItem($q);
+	}
+
 	/* Returns one specific guestbook entry */
 	function getGuestbookItem($entryId)
 	{
