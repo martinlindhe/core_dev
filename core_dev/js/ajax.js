@@ -140,6 +140,14 @@ function ajax_delete_file(id)
 	delete_file_request.GET(_ext_core+'ajax_del_file.php?i='+id+_ext_ref, null);
 }
 
+//Sends an AJAX call to move specified file
+var move_file_request = null;
+function ajax_move_file(cat,id)
+{
+	move_file_request = new AJAX();
+	move_file_request.GET(_ext_core+'ajax_move_file.php?i='+id+'&c='+cat+_ext_ref, null);
+}
+
 var fileinfo_request = null;
 function ajax_get_fileinfo(id)
 {

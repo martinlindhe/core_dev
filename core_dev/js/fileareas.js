@@ -245,3 +245,19 @@ function rotate_selected_file(angle)
 	var now = new Date();
 	e.src = _ext_core+'image_rotate.php?i=' + zoomed_id + '&a=' + angle + '&' + now.getTime() + _ext_ref;
 }
+
+function filearea_mover_close()
+{
+	hide_element_by_name('filearea_mover');
+}
+
+function filearea_move_file(cat)
+{
+	ajax_move_file(cat, zoomed_id);
+
+	//Hide selected file
+	zoom_hide_elements();
+
+	//remove zoomed_id thumbnail from file gadget
+	hide_element_by_name('file_' + zoomed_id)
+}

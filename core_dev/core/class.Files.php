@@ -192,6 +192,25 @@ class Files
 	}
 
 	/**
+	 * Moves a file to a different file category
+	 *
+	 * \param $_category category to move to 
+	 * \param $_id fileId to move
+	 * \return true on success
+	 */
+	function moveFile($_category, $_id)
+	{
+		global $db, $session;
+		if (!$session->id || !is_numeric($_category) || !is_numeric($_id)) return false;
+
+		$q = 'UPDATE tblFiles SET categoryId='.$_category.' WHERE fileId='.$_id;
+		if (!$session->isAdmin) $q.= ' AND uploaderId='.$session->id;
+		$db->update($q);
+
+		return true;
+	}
+
+	/**
 	 * Deletes a file from disk & database
 	 *
 	 * \param $_id fileId to delete
