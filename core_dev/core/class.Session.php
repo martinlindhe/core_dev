@@ -16,6 +16,7 @@
 require_once('functions_ip.php');
 require_once('functions_locale.php');	//for translations
 require_once('atom_settings.php');	//for storing userdata
+require_once('atom_blocks.php');	//for isBlocked()
 
 define('LOGLEVEL_NOTICE',	1);
 define('LOGLEVEL_WARNING',	2);
@@ -70,19 +71,19 @@ class Session
 	/**
 	 * Constructor. Initializes the session class
 	 *
-	 * \param $session_conf array with session settings
+	 * \param $conf array with session settings
 	 */
-	function __construct(array $session_conf = array())
+	function __construct(array $conf = array())
 	{
 		global $db, $config;
 
-		if (isset($session_conf['name'])) $this->session_name = $session_conf['name'];
-		if (isset($session_conf['timeout'])) $this->timeout = $session_conf['timeout'];
-		if (isset($session_conf['check_ip'])) $this->check_ip = $session_conf['check_ip'];
-		if (isset($session_conf['check_useragent'])) $this->check_useragent = $session_conf['check_useragent'];
-		if (isset($session_conf['start_page'])) $this->start_page = $session_conf['start_page'];
-		if (isset($session_conf['error_page'])) $this->error_page = $session_conf['error_page'];
-		if (isset($session_conf['allow_themes'])) $this->allow_themes = $session_conf['allow_themes'];
+		if (isset($conf['name'])) $this->session_name = $conf['name'];
+		if (isset($conf['timeout'])) $this->timeout = $conf['timeout'];
+		if (isset($conf['check_ip'])) $this->check_ip = $conf['check_ip'];
+		if (isset($conf['check_useragent'])) $this->check_useragent = $conf['check_useragent'];
+		if (isset($conf['start_page'])) $this->start_page = $conf['start_page'];
+		if (isset($conf['error_page'])) $this->error_page = $conf['error_page'];
+		if (isset($conf['allow_themes'])) $this->allow_themes = $conf['allow_themes'];
 
 		ini_set('session.gc_maxlifetime', $this->timeout);
 		session_name($this->session_name);
@@ -123,7 +124,7 @@ class Session
 			}
 			$this->ip = $ip;
 		}
-		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
+		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
 		//FIXME conditionally reuse some functions_browserstats.php features. make user agent parsing optional & disabled by default
 		$this->ua_ie = false;
@@ -171,6 +172,7 @@ class Session
 		$this->isAdmin = 0;
 		$this->isSuperAdmin = 0;
 		$this->theme = $this->default_theme;
+		$this->referer = '';
 
 		if (!$this->id) return;
 
@@ -286,13 +288,14 @@ class Session
 	/**
 	 * Redirects user to default start page (logged in)
 	 */
-	function startPage($url = '')
+	function startPage()
 	{
 		global $config;
-		if (empty($url)) {
-			header('Location: '.$config['web_root'].$this->start_page);
+
+		if (!empty($this->referer)) {
+			header('Location: '.$this->referer);
 		} else {
-			header('Location: '.$url);
+			header('Location: '.$config['web_root'].$this->start_page);
 		}
 		die;
 	}
