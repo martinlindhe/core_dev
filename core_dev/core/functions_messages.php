@@ -117,22 +117,10 @@ require_once('functions_locale.php');	//for translations
 		global $db, $session;
 		if (!is_numeric($_group)) return false;
 
-		switch ($_group) {
-			case MESSAGE_GROUP_INBOX:
-				$q  = 'SELECT count(fromId) FROM tblMessages WHERE ';
-				$q .= 'ownerId='.$userId.' AND groupId='.$_group.' ';
-				$q .= 'AND timeRead IS NULL';
-				break;
-
-			case MESSAGE_GROUP_OUTBOX:
-				$q  = 'SELECT count(fromId) FROM tblMessages WHERE ';
-				$q .= 'ownerId='.$userId.' AND groupId='.$_group.' ';
-				$q .= 'AND timeRead IS NULL';
-				break;
-				
-			default:
-				$q = 'SELECT count(fromId) FROM tblMessages WHERE ownerId='.$session->id.' AND groupId='.$_group.' AND timeRead IS NULL';
-		}
+		$q  = 'SELECT count(fromId) FROM tblMessages WHERE';
+		$q .= ' ownerId='.$userId;
+		if ($_group) $q .= ' AND groupId='.$_group;
+		$q .= ' AND timeRead IS NULL';
 
 		return $db->getOneItem($q);
 	}
