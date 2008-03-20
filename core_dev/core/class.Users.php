@@ -499,6 +499,10 @@ class Users
 
 			if (!empty($_POST['c'])) echo t('Search result for').' "'.$_POST['c'].'", ';
 			else echo t('Custom search result').', ';
+			
+			if (function_exists('showCustomSearchResult')) { // call project specified search presentation function
+				return showCustomSearchResult($list);
+			}
 
 			echo (count($list)!=1?count($list).t(' hits'):t('1 hit'));
 			echo '<br/><br/>';
@@ -625,7 +629,7 @@ class Users
 						case USERDATA_TYPE_IMAGE:
 							if (!empty($data['userdata_'.$row['fieldId']])) {
 //								if (isset($x)) $q .= 'AND ';
-								$q .= 'AND (n'.$start.'.settingValue IS NOT NULL) ';
+								$q .= 'AND (n'.$start.'.settingValue IS NOT NULL AND n'.$start.'.settingValue != 0) ';
 								$start++;
 								$x = 1;
 							}
