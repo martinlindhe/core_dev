@@ -8,7 +8,7 @@
 	showFAQ();
 	echo '<br/>';
 
-	wiki('Feedback info');
+	wiki('FAQ info');
 
 	require('design_foot.php');
 ?>
