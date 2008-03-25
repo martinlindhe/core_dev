@@ -19,6 +19,7 @@
 	if ($session->isSuperAdmin && !empty($_POST)) {
 		$list = Users::getUsers($mode);
 		foreach ($list as $row) {
+			if (empty($_POST['mode_'.$row['userId']])) continue;
 			$newmode = $_POST['mode_'.$row['userId']];
 			if ($newmode != $row['userMode']) {
 				Users::setMode($row['userId'], $newmode);
