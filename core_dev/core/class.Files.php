@@ -12,38 +12,37 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('atom_comments.php');			//for image comments support
-require_once('atom_categories.php');		//for file categories support
-require_once('atom_subscriptions.php');		//for userfile area subscriptions
+require_once('atom_comments.php');		//for image comments support
+require_once('atom_categories.php');	//for file categories support
+require_once('atom_subscriptions.php');	//for userfile area subscriptions
 require_once('functions_image.php');
-require_once('functions_time.php');			//for ago()
+require_once('functions_time.php');		//for ago()
 require_once('functions_process.php');	//for process_client_fetchAndConvert()
 
-define('FILETYPE_WIKI',							1);		// The file is a wiki attachment
-define('FILETYPE_BLOG',							2);		// The file is a blog attachment
-define('FILETYPE_NEWS',							3);		// The file is a news attachment
-define('FILETYPE_FILEAREA_UPLOAD',	4);		// File is uploaded to a file area
-define('FILETYPE_USERFILE',					5);		// File is uploaded to the user's own file area
-define('FILETYPE_USERDATA',					6);		// File is uploaded to a userdata field
-define('FILETYPE_FORUM',						7);		// File is attached to a forum post
-define('FILETYPE_PROCESS',					8);		// File uploaded to be processed
+define('FILETYPE_WIKI',					1);		// The file is a wiki attachment
+define('FILETYPE_BLOG',					2);		// The file is a blog attachment
+define('FILETYPE_NEWS',					3);		// The file is a news attachment
+define('FILETYPE_FILEAREA_UPLOAD',		4);		// File is uploaded to a file area
+define('FILETYPE_USERFILE',				5);		// File is uploaded to the user's own file area
+define('FILETYPE_USERDATA',				6);		// File is uploaded to a userdata field
+define('FILETYPE_FORUM',				7);		// File is attached to a forum post
+define('FILETYPE_PROCESS',				8);		// File uploaded to be processed
 
-define('FILETYPE_VIDEOBLOG',				10);	// video clip representing a user submitted blog
-define('FILETYPE_VIDEOPRES',				11);	// video clip representing a presentation of the user
+define('FILETYPE_VIDEOBLOG',			10);	// video clip representing a user submitted blog
+define('FILETYPE_VIDEOPRES',			11);	// video clip representing a presentation of the user
 define('FILETYPE_VIDEOMESSAGE',			12);	// video clip respresenting a private message
-define('FILETYPE_VIDEOCHATREQUEST',	13);	// video clip representing a live videochat request
+define('FILETYPE_VIDEOCHATREQUEST',		13);	// video clip representing a live videochat request
 
 define('FILETYPE_GENERIC',				20); // generic file type, for application specific file type
 
-//define('FILETYPE_PROCESS_CLONE',		9);		// a clone entry for a process file.
-define('FILETYPE_CLONE_CONVERTED',	30);	//converted from orginal file format (image/video/audio/document)
-define('FILETYPE_CLONE_VIDEOTHUMB10',31);	//video thumbnail of video 10% into the clip
+define('FILETYPE_CLONE_CONVERTED',		30);	//converted from orginal file format (image/video/audio/document)
+define('FILETYPE_CLONE_VIDEOTHUMB10',	31);	//video thumbnail of video 10% into the clip
 
 //for future use:
-define('MEDIATYPE_IMAGE',				1);
-define('MEDIATYPE_VIDEO',				2);
-define('MEDIATYPE_AUDIO',				3);
-define('MEDIATYPE_DOCUMENT',		4);
+define('MEDIATYPE_IMAGE',		1);
+define('MEDIATYPE_VIDEO',		2);
+define('MEDIATYPE_AUDIO',		3);
+define('MEDIATYPE_DOCUMENT',	4);
 define('MEDIATYPE_WEBRESOURCE',	5);	//webresources can/will contain other files. those files will refer to this file entry as their owner
 
 class Files
@@ -52,9 +51,7 @@ class Files
 		'image/jpeg',
 		'image/png',
 		'image/gif',
-		'image/bmp',
-		'image/svg+xml',	//IE 7, Firefox 2
-		'image/svg-xml' 	//Opera 9.2
+		'image/bmp'
 	); ///<FIXME remove
 
 	public $audio_mime_types	= array(
@@ -85,8 +82,6 @@ class Files
 		'jpg' => array(MEDIATYPE_IMAGE, 'image/jpeg', 'JPEG Image'),
 		'gif' => array(MEDIATYPE_IMAGE, 'image/gif', 'GIF Image'),
 		'bmp' => array(MEDIATYPE_IMAGE, 'image/bmp', 'BMP Image'),
-		'svg' => array(MEDIATYPE_IMAGE, 'image/svg+xml', 'SVG Image'),	//IE 7, Firefox 2
-		'svg' => array(MEDIATYPE_IMAGE, 'image/svg-xml', 'SVG Image'),	//Opera 9.2
 
 		'wmv' => array(MEDIATYPE_VIDEO, 'video/x-ms-wmv', 'Windows Media Video'),
 		'avi' => array(MEDIATYPE_VIDEO, 'video/avi', 'DivX 3 Video'),
@@ -481,25 +476,6 @@ class Files
 				rename($out_tempfile, $FileData['tmp_name']);
 				$filesize = filesize($FileData['tmp_name']);
 				$q = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.jpg",fileSize='.$filesize.' WHERE fileId='.$fileId;
-				$db->query($q);
-				break;
-
-			case 'image/svg+xml':	//IE 7, Firefox 2
-			case 'image/svg-xml':	//Opera 9.2
-				if (!$this->image_convert) break;
-				$out_tempfile = $this->tmp_dir.'core_outfile.png';
-
-				$check = convertImage($FileData['tmp_name'], $out_tempfile, 'image/png');
-
-				if (!$check) {
-					$session->log('Failed to convert svg to png!');
-					break;
-				}
-
-				unlink($FileData['tmp_name']);
-				rename($out_tempfile, $FileData['tmp_name']);
-				$filesize = filesize($FileData['tmp_name']);
-				$q = 'UPDATE tblFiles SET fileMime="image/png", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.png",fileSize='.$filesize.' WHERE fileId='.$fileId;
 				$db->query($q);
 				break;
 		}
