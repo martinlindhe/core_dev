@@ -224,15 +224,7 @@
 		$list = getComments($_type, $ownerId, false, $pager['limit']);
 		echo $pager['head'];
 		foreach ($list as $row) {
-			echo '<div class="comment_details">';
-			echo Users::link($row['userId'], $row['userName']).'<br/>';
-			echo $row['timeCreated'];
-			echo '</div>';
-			echo '<div class="comment_text">'.$row['commentText'];
-			if ($session->isAdmin || $session->id == $row['userId']) {
-				echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
-			}
-			echo '</div>';
+			showComment($row);
 		}
 		if ($cnt >= 5) echo $pager['head'];
 		echo '</div>'; //id="comments_only"
@@ -274,15 +266,22 @@
 		}
 
 		foreach ($list as $row) {
-			echo '<div class="comment_details">';
-			echo makeThumbLink($row['ownerId']);
-			echo Users::link($row['userId'], $row['userName']).'<br/>';
-			echo $row['timeCreated'];
-			echo '</div>';
-			echo '<div class="comment_text">';
-			echo '<a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a> ';
-			echo $row['commentText'];
-			echo '</div>';
+			showComment($row);
 		}
+	}
+
+	function showComment($row)
+	{
+		global $config, $session;
+		echo '<div class="comment_details">';
+		//echo makeThumbLink($row['ownerId']);
+		echo Users::link($row['userId'], $row['userName']).'<br/>';
+		echo $row['timeCreated'];
+		echo '</div>';
+		echo '<div class="comment_text">'.nl2br($row['commentText']);
+		if ($session->isAdmin || $session->id == $row['userId']) {
+			echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
+		}
+		echo '</div>';
 	}
 ?>
