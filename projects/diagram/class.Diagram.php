@@ -7,17 +7,17 @@
 
 class Diagram
 {
-	private $im;		///< gd render target
-	private $width;		///< Width of output image
-	private $height;	///< Height of output image
+	private $im;			///< gd render target
+	private $width = 400;	///< Width of output image
+	private $height = 400;	///< Height of output image
 	private $bg_r = 150, $bg_g = 150, $bg_b = 150;	///< Background color
 	private $txt_r = 233, $txt_g = 220, $txt_b = 110;	///< Text color
 	private $font = 'arial.ttf';	///< fixme make changeable
 	private $ttf_size = 14;			///< fixme make changeable
 	private $txt_col;
 
-	private $vline_min, $vline_max, $vline_step, $vline_text = '';	///< Settings for vertical line of diagram
-	private $hline_min, $hline_max, $hline_step, $hline_text = '';	///< Settings for horizontal line of diagram
+	private $vline_min = 1, $vline_max = 10, $vline_step = 1, $vline_text = '';	///< Settings for vertical line of diagram
+	private $hline_min = 1, $hline_max = 20, $hline_step = 0.5, $hline_text = '';	///< Settings for horizontal line of diagram
 
 
 	function __construct()
@@ -129,6 +129,8 @@ class Diagram
 		$this->ttfHText($hx, $hy, $this->hline_text);
 
 		//Draw vertical scale - TODO
+		for ($i = $this->vline_min; $i < $this->vline_max; $i <+ $this->vline_step) {
+		}
 
 		//Draw horizontal scale1 - TODO
 
@@ -159,3 +161,4 @@ class Diagram
 	}
 
 }
+?>
