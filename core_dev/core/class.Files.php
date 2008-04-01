@@ -880,15 +880,17 @@ class Files
 	 * Get file count
 	 *
 	 * \param $fileType type of files
-	 * \param $ownerId owner of the files
-	 * \param $categoryId category of the files
+	 * \param $ownerId owner of the files (optional)
+	 * \param $categoryId category of the files (optional)
 	 */
-	function getFileCount($fileType, $ownerId, $categoryId = 0)
+	function getFileCount($fileType, $ownerId = 0, $categoryId = 0)
 	{
 		global $db;
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return 0;
 
-		$q = 'SELECT COUNT(fileId) FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' AND ownerId='.$ownerId;
+		$q = 'SELECT COUNT(fileId) FROM tblFiles WHERE fileType='.$fileType;
+		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 		return $db->getOneItem($q, true);
 	}
 
