@@ -844,26 +844,29 @@ class Files
 	 * \param $_limit optional limit the result
 	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
 	 */
-	function getFiles($fileType, $ownerId, $categoryId = 0, $_limit = 0, $_order = 'ASC')
+	function getFiles($fileType, $ownerId = 0, $categoryId = 0, $_limit = 0, $_order = 'ASC')
 	{
 		global $db, $session;
 		if (!$session->id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($_limit)) return array();
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
 
 		if ($fileType == FILETYPE_CLONE_VIDEOTHUMB10) {
-			$q  = 'SELECT * FROM tblFiles ';
-			$q .= 'WHERE fileType='.$fileType.' AND ownerId='.$ownerId;
+			$q  = 'SELECT * FROM tblFiles';
+			$q .= ' WHERE fileType='.$fileType;
+			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
 		} else if ($fileType == FILETYPE_FORUM) {
-			$q  = 'SELECT * FROM tblFiles ';
-			$q .= 'WHERE fileType='.$fileType.' AND ownerId='.$ownerId.' AND uploaderId='.$session->id;
+			$q  = 'SELECT * FROM tblFiles';
+			$q .= ' WHERE fileType='.$fileType.' AND uploaderId='.$session->id;
+			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
 		} else {
 			$q  = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
-			$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) ';
-			$q .= 'WHERE t1.categoryId='.$categoryId.' AND t1.ownerId='.$ownerId;
+			$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId)';
+			$q .= ' WHERE t1.categoryId='.$categoryId;
+			if ($ownerId) $q .= ' AND t1.ownerId='.$ownerId;
 			$q .= ' AND t1.fileType='.$fileType;
 			$q .= ' ORDER BY t1.timeUploaded '.$_order;
 		}
