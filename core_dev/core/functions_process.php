@@ -410,6 +410,10 @@ define('ORDER_FAILED',		3);
 							$uri = $config['full_core_web_root'].'api/file.php?id='.$newId;
 							$data = file_get_contents($job['orderParams'].'&uri='.urlencode($uri));
 							echo "client callback script returned:\n".$data;
+
+							//delete files after callback processing
+							$files->deleteFile($prev_job['referId']);
+							$files->deleteFile($newId);
 						}
 					}
 				} else if (in_array($file['fileMime'], $files->audio_mime_types)) {
