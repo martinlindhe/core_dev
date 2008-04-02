@@ -154,10 +154,7 @@ class Diagram
 
 
 		//Draw horizontal scale1 - TODO
-		$h_steps = 0;
-		for ($i = $this->hline_min; $i <= $this->hline_max; $i += $this->hline_step) {
-			$h_steps++;
-		}
+		$h_steps = 1+($this->hline_max-$this->hline_min)/$this->hline_step;
 
 		$h_width = $this->width - 40*2;	//40 px padding on each side
 		$h_multiplier = $h_width / $h_steps;
@@ -175,12 +172,14 @@ class Diagram
 
 	private function ttfHeight($txt)
 	{
+		if (!$txt) return 0;
 		$tmp = imagettfbbox($this->ttf_size, 0, $this->font, $txt);
 		return $tmp[1] - $tmp[7];	//font height
 	}
 
 	private function ttfWidth($txt)
 	{
+		if (!$txt) return 0;
 		$tmp = imagettfbbox($this->ttf_size, 0, $this->font, $txt);
 		return $tmp[2] - $tmp[0];	//font width
 	}
@@ -188,11 +187,13 @@ class Diagram
 
 	private function ttfVText($x, $y, $txt)
 	{
+		if (!$txt) return;
 		imagettftext($this->im, $this->ttf_size, 90, $x, $y, $this->txt_col, $this->font, $txt);
 	}
 
 	private function ttfHText($x, $y, $txt)
 	{
+		if (!$txt) return;
 		imagettftext($this->im, $this->ttf_size, 0, $x, $y, $this->txt_col, $this->font, $txt);
 	}
 
