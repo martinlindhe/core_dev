@@ -1,7 +1,10 @@
 <?
 /**
+ * $Id$
  *
+ * This file is part of core_dev. For licencing, see docs/LICENCE.BSD
  *
+ * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 
@@ -20,6 +23,7 @@ class Diagram
 	private $vline_min = 1, $vline_max = 10, $vline_step = 1, $vline_text = '';	///< Settings for vertical line of diagram
 	private $hline_min = 1, $hline_max = 20, $hline_step = 0.5, $hline_text = '';	///< Settings for horizontal line of diagram
 
+	private $h_spacing = 40, $v_spacing = 40;	///< ammount of space between border & horizontal line (in pixels)
 
 	function __construct()
 	{
@@ -115,6 +119,11 @@ class Diagram
 	 **** PRIVATE API *************************
 	 *****************************************/
 
+	/**
+	 * Draws the diagram based on the settings given
+	 *
+	 * \todo support built in ugly fonts, see functions_image.php: pngCenterText()
+	 */
 	private function Render()
 	{
 		$this->im = imagecreate($this->width, $this->height);
@@ -127,18 +136,13 @@ class Diagram
 		$v_len = $this->ttfWidth($this->vline_text);
 		$h_len = $this->ttfWidth($this->hline_text);
 
+
+
+
 		//Print vertical text centered to the left
 		$vx = $fh;
 		$vy = ($this->height/2) + $v_len/2;
 		$this->ttfVText($vx, $vy, $this->vline_text);
-
-		//Print horizontal text centered on the bottom
-		$hx = ($this->width/2) - $h_len/2;
-		$hy = $this->height-($fh/2);
-		$this->ttfHText($hx, $hy, $this->hline_text);
-
-
-
 
 		//Draw vertical scale - TODO
 		$v_steps = 0;
@@ -147,54 +151,68 @@ class Diagram
 		}
 
 		//Draw vertical line
-		imageline($this->im, $vx + $fh, 40, $vx + $fh, $this->height-40, $this->line_col);
+		imagefilledrectangle($this->im, $vx + $fh-1, $this->h_spacing, $vx + $fh, $this->height-$this->h_spacing, $this->line_col);
 
 
 
 
 
-		//Draw horizontal scale1 - TODO
+
+
+		//Print horizontal text centered on the bottom
+		$hx = ($this->width/2) - $h_len/2;
+		$hy = $this->height-($fh/2);
+		$this->ttfHText($hx, $hy, $this->hline_text);
+
+		//Draw horizontal scale1 - WIP
 		$h_steps = 1+($this->hline_max-$this->hline_min)/$this->hline_step;
 
-		$h_width = $this->width - 40*2;	//40 px padding on each side
+		$h_width = $this->width - $this->h_spacing*2;	//40 px padding on each side
 		$h_multiplier = $h_width / $h_steps;
 
 		for ($i = 0; $i <= $h_steps; $i++) {
-			imagesetpixel($this->im, 40+($i*$h_multiplier), $this->height-50,$this->txt_col);
+			imagesetpixel($this->im, $this->h_spacing+($i*$h_multiplier), $this->height-50,$this->txt_col);
+			$txt = $this->hline_min+$i;
+			//FIXME: 7 should be width of $txt
+			$this->ttfHText($this->h_spacing+($i*$h_multiplier) - 7, $hy-$fh, $txt, 8);
 		}
 
 		//Draw horizontal line
-		imageline($this->im, 40, $this->height - 40, $this->width-40, $this->height-40, $this->line_col);
+		imagefilledrectangle($this->im, $this->h_spacing, $this->height - $this->v_spacing, $this->width-$this->h_spacing, $this->height-$this->h_spacing+1, $this->line_col);
 
 
 		//Draw diagram content - TODO
 	}
 
-	private function ttfHeight($txt)
+	private function ttfHeight($txt, $size = 0)
 	{
 		if (!$txt) return 0;
-		$tmp = imagettfbbox($this->ttf_size, 0, $this->font, $txt);
+		if (!$size) $size = $this->ttf_size;
+		$tmp = imagettfbbox($size, 0, $this->font, $txt);
 		return $tmp[1] - $tmp[7];	//font height
 	}
 
-	private function ttfWidth($txt)
+	private function ttfWidth($txt, $size = 0)
 	{
 		if (!$txt) return 0;
-		$tmp = imagettfbbox($this->ttf_size, 0, $this->font, $txt);
+		if (!$size) $size = $this->ttf_size;
+		$tmp = imagettfbbox($size, 0, $this->font, $txt);
 		return $tmp[2] - $tmp[0];	//font width
 	}
 
 
-	private function ttfVText($x, $y, $txt)
+	private function ttfVText($x, $y, $txt, $size = 0)
 	{
 		if (!$txt) return;
-		imagettftext($this->im, $this->ttf_size, 90, $x, $y, $this->txt_col, $this->font, $txt);
+		if (!$size) $size = $this->ttf_size;
+		imagettftext($this->im, $size, 90, $x, $y, $this->txt_col, $this->font, $txt);
 	}
 
-	private function ttfHText($x, $y, $txt)
+	private function ttfHText($x, $y, $txt, $size = 0)
 	{
 		if (!$txt) return;
-		imagettftext($this->im, $this->ttf_size, 0, $x, $y, $this->txt_col, $this->font, $txt);
+		if (!$size) $size = $this->ttf_size;
+		imagettftext($this->im, $size, 0, $x, $y, $this->txt_col, $this->font, $txt);
 	}
 
 }

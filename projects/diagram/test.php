@@ -15,6 +15,9 @@ $d->BGCol(200,200,155);
 $d->TextCol(0, 0, 0);
 $d->LineCol(255,255,255);
 
+//$d->AddH(
+
+
 $d->Size(500, 300); //pixels
 $d->Display();
 
