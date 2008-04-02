@@ -13,33 +13,34 @@
 	/**
 	 * Resizes specified image file to specified dimensions
 	 *
-	 * \param $in_filename
-	 * \param $out_filename
-	 * \param $to_width
-	 * \param $to_height
-	 * \param $fileId
+	 * \param $in_file filename of input image
+	 * \param $out_file filename of output image
+	 * \param $to_width if set, resize image to this width
+	 * \param $to_height if set, resize image to this height
+	 * \param $fileId if set, update this tblFiles entry with the new file size
+	 * \return true on success
 	 */
-	function resizeImageExact($in_filename, $out_filename, $to_width = 0, $to_height = 0, $fileId = 0)
+	function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $fileId = 0)
 	{
 		global $db, $config;
 		if (empty($to_width) && empty($to_height)) return false;
 
-		$data = getimagesize($in_filename);
+		$data = getimagesize($in_file);
 		$orig_width = $data[0];
 		$orig_height = $data[1];
 		$mime_type = $data['mime'];
 		if (!$orig_width || !$orig_height) return false;
 
 		//Calculate the real width & height to resize too (within $to_width & $to_height), while keeping aspect ratio
-		list($tn_width, $tn_height) = resizeImageCalc($in_filename, $to_width, $to_height);
+		list($tn_width, $tn_height) = resizeImageCalc($in_file, $to_width, $to_height);
 
 		//echo 'Resizing from '.$orig_width.'x'.$orig_height.' to '.$tn_width.'x'.$tn_height.'<br/>';
 
 		switch ($mime_type)
 		{
-   		case 'image/png':	$image = imagecreatefrompng($in_filename); break;
-   		case 'image/jpeg': $image = imagecreatefromjpeg($in_filename); break;
-   		case 'image/gif': $image = imagecreatefromgif($in_filename); break;
+   		case 'image/png':	$image = imagecreatefrompng($in_file); break;
+   		case 'image/jpeg': $image = imagecreatefromjpeg($in_file); break;
+   		case 'image/gif': $image = imagecreatefromgif($in_file); break;
    		default: die('Unsupported image type '.$mime_type);
 		}
 
@@ -53,9 +54,9 @@
 
 		switch ($mime_type)
 		{
-   		case 'image/png':	imagepng($image_p, $out_filename); break;
-   		case 'image/jpeg': imagejpeg($image_p, $out_filename, $config['image']['jpeg_quality']); break;
-   		case 'image/gif': imagegif($image_p, $out_filename); break;
+   		case 'image/png':	imagepng($image_p, $out_file); break;
+   		case 'image/jpeg': imagejpeg($image_p, $out_file, $config['image']['jpeg_quality']); break;
+   		case 'image/gif': imagegif($image_p, $out_file); break;
    		default: die('Unsupported image type '.$mime_type);
 		}
 
@@ -65,8 +66,9 @@
 		if ($fileId) {
 			//Update fileId entry with the new file size (DONT use when creating thumbnails or cloning files!)
 			clearstatcache();	//needed to get current filesize()
-			$q = 'UPDATE tblFiles SET fileSize='.filesize($out_filename).' WHERE fileId='.$fileId;
+			$q = 'UPDATE tblFiles SET fileSize='.filesize($out_file).' WHERE fileId='.$fileId;
 			$db->update($q);
+			//FIXME: need to update file checksums
 		}
 		
 		return true;
@@ -76,9 +78,9 @@
 	 * Utility function, Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio
 	 *
 	 * \param $filename image file to calculate new size for
-	 * \param $to_width
-	 * \param $to_height
-	 * \return new width & height
+	 * \param $to_width wanted width
+	 * \param $to_height wanted height
+	 * \return new width & height of image, while preserving aspect ratio
 	 */
 	function resizeImageCalc($filename, $to_width, $to_height)
 	{
@@ -103,9 +105,10 @@
 	/**
 	 * Resizes selected image to $pct percent of orginal image dimensions
 	 *
-	 * \param $in_file filename
-	 * \param $out_file filename
+	 * \param $in_file filename of input image
+	 * \param $out_file filename of output image
 	 * \param $_pct percent to resize, relative to orginal image dimensions
+	 * \return true on success
 	 */
 	function resizeImage($in_file, $out_file, $_pct)
 	{
@@ -141,6 +144,17 @@
 		return true;
 	}
 
+	/**
+	 * Crops selected image to the requested dimensions
+	 *
+	 * \param $in_file filename of input image
+	 * \param $in_file filename of output image
+	 * \param $x1 coordinate x1
+	 * \param $y1 coordinate y1
+	 * \param $x2 coordinate x2
+	 * \param $y2 coordinate y2
+	 * \return true on success
+	 */
 	function cropImage($in_file, $out_file, $x1, $y1, $x2, $y2)
 	{
 		global $config, $files;
@@ -184,6 +198,7 @@
 	 * \param $in_file input filename
 	 * \param $out_file output filename
 	 * \param $to_mime wanted output format
+	 * \return true on success
 	 */
 	function convertImage($in_file, $out_file, $to_mime)
 	{
@@ -216,6 +231,10 @@
 	/**
 	 * Rotates a image the specified angle. Uses imagemagick if possible
 	 * The gd function imagerotate() is only available in bundled gd (php windows)
+	 *
+	 * \param $in_file input filename
+	 * \param $out_file output filename
+	 * \param $_angle %angle to rotate. between -360 and 360
 	 */
 	function rotateImage($in_file, $out_file, $_angle)
 	{
