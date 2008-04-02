@@ -39,6 +39,23 @@ CREATE TABLE `tblCategories` (
   `ownerId` bigint(20) unsigned NOT NULL default '0',
   PRIMARY KEY  (`categoryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `tblCcPay` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `clientid` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `passcode` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `date` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `minutes` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `price` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `packagekey` int(10) unsigned NOT NULL,
+  `remoteid` int(10) unsigned NOT NULL,
+  `email` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `card` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `cvv` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `status` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `name` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `cardtype` varchar(45) collate utf8_swedish_ci NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 CREATE TABLE `tblChecksums` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
   `fileId` int(11) unsigned default NULL,

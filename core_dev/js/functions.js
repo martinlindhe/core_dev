@@ -49,7 +49,10 @@ function toggle_element_by_name(n)
 function hide_element_by_name(n)
 {
 	var e = document.getElementById(n);
-	if (!e) return false; //alert('fixme: element ' + n + ' not found');
+	if (!e) {
+		alert('fixme: element ' + n + ' not found');
+		return;
+	}
 	e.style.display = 'none';
 }
 
@@ -57,7 +60,10 @@ function hide_element_by_name(n)
 function show_element_by_name(n)
 {
 	var e = document.getElementById(n);
-	if (!e) alert('fixme: element ' + n + ' not found');
+	if (!e) {
+		alert('fixme: element ' + n + ' not found');
+		return;
+	}
 	e.style.display = '';
 }
 

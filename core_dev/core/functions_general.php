@@ -183,6 +183,7 @@
 
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/prototype.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
+
 			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/cropper.js"></script>';
 			if (!empty($files) && $files->allow_rating) {
 				echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/rate.js"></script>';
