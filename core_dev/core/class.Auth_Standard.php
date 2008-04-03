@@ -74,6 +74,15 @@ class Auth_Standard extends Auth_Base
 		return $newUserId;
 	}
 
+	/**
+	 * Creates a tblUsers entry without username or password
+	 */
+	function reserveUser()
+	{
+		global $db;
+		$q = 'INSERT INTO tblUsers SET userMode=0';
+		return $db->insert($q);
+	}
 
 	/**
 	 * Handles logins
