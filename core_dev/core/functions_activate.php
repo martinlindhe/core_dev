@@ -12,13 +12,14 @@
  */
 
 	define('ACTIVATE_CAPTCHA',		1);
-	define('ACTIVATE_EMAIL',			2);
-	define('ACTIVATE_SMS',				3);
+	define('ACTIVATE_EMAIL',		2);
+	define('ACTIVATE_SMS',			3);
 	define('ACTIVATE_CHANGE_PWD',	4);		//used to allow the user to set a new password from a email link when he forgot password
+	define('ACTIVATE_ACCOUNT',		5);		//used to activate a pre-generated account
 
-	$config['activate']['expire_time_captcha']		= 60*5;				// 5 minutes
-	$config['activate']['expire_time_email']			= (12*60*60); // 12 hours
-	$config['activate']['expire_time_sms']				= (12*60*60); // 12 hours
+	$config['activate']['expire_time_captcha']		= 60*5;			// 5 minutes
+	$config['activate']['expire_time_email']		= (12*60*60); 	// 12 hours
+	$config['activate']['expire_time_sms']			= (12*60*60);	// 12 hours
 	$config['activate']['expire_time_change_pwd']	= (6*60*60); 	// 6 hours
 
 	function generateActivationCode($lo, $hi)
@@ -70,7 +71,12 @@
 	}
 
 	/**
+	 * xxx
+	 *
+	 * \param $_type type
+	 * \param $_rnd xx
 	 * \param $_answer is correct answer to captcha-implementation, or userId for email/sms activation
+	 * \return activationId
 	 */
 	function createActivation($_type, $_rnd, $_answer = '')
 	{
@@ -86,6 +92,7 @@
 			case ACTIVATE_EMAIL:
 			case ACTIVATE_SMS:
 			case ACTIVATE_CHANGE_PWD:
+			case ACTIVATE_ACCOUNT:
 				if (!is_numeric($_answer)) return false;
 				removeActivations($_type, $_answer); 
 				$q .= ',userId='.$_answer;
@@ -112,6 +119,9 @@
 
 	/**
 	 * Removes a single activation code. Call this when activation process has succeeded
+	 *
+	 * \param $_type type
+	 * \param $_rnd xx
 	 */
 	function removeActivation($_type, $_rnd)
 	{

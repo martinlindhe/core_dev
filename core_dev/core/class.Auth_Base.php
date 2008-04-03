@@ -167,7 +167,7 @@ The link will expire in __EXPIRETIME__";
 		if (!$email) return false;
 
 		$code = generateActivationCode(1000000, 9999999);
-		$act_id = createActivation(ACTIVATE_EMAIL, $code, $_id);
+		createActivation(ACTIVATE_EMAIL, $code, $_id);
 
 		$subj = t('Account activation');
 
@@ -219,7 +219,7 @@ The link will expire in __EXPIRETIME__";
 		if (!$_id) return false;
 
 		$code = generateActivationCode(10000000, 99999999);
-		$act_id = createActivation(ACTIVATE_CHANGE_PWD, $code, $_id);
+		createActivation(ACTIVATE_CHANGE_PWD, $code, $_id);
 
 		$subj  = t('Forgot password');
 
