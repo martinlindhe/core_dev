@@ -40,7 +40,6 @@ class Auth_Standard extends Auth_Base
 
 		if (strlen($username) < 3) return t('Username must be at least 3 characters long');
 		if (strlen($password1) < 4) return t('Password must be at least 4 characters long');
-
 		if ($password1 != $password2) return t('The passwords doesnt match');
 
 		if (!$session->isSuperAdmin) {
@@ -63,7 +62,7 @@ class Auth_Standard extends Auth_Base
 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
 		$newUserId = $db->insert($q);
 
-		Users::setPass($newUserId);
+		Users::setPassword($newUserId, $password1);
 
 		$session->log('Registered user <b>'.$username.'</b>');
 
@@ -74,7 +73,6 @@ class Auth_Standard extends Auth_Base
 
 		return $newUserId;
 	}
-
 
 
 	/**
