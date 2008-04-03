@@ -105,7 +105,7 @@ require_once('functions_locale.php');	//for translations
 	}
 
 	/**
-	 * Returns one type of contacts for specified userId. Either their friend list or block list
+	 * Returns one type of contacts for specified userId.
 	 *
 	 * \param $_type type of contact (friend, blocked)
 	 * \param $userId user id
@@ -339,7 +339,7 @@ require_once('functions_locale.php');	//for translations
 		global $db, $session, $config;
 		if (!$session->id || !is_numeric($otherId)) return false;
 
-		//create a friend relation
+		//create a block
 		setContact(CONTACT_BLOCKED, $session->id, $otherId);
 
 		//tell the request sender that the request was accepted
