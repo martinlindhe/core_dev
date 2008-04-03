@@ -174,7 +174,9 @@ class Users
 			return false;
 		}
 
-		$q = 'UPDATE tblUsers SET userPass="'.sha1( sha1($auth->sha1_key).sha1($_pwd1) ).'" WHERE userId='.$_id;
+		$q = 'UPDATE tblUsers SET userPass="'.sha1( $_id.sha1($auth->sha1_key).sha1($_pwd1) ).'" WHERE userId='.$_id;
+		$db->update($q);
+
 		$db->update($q);
 		return true;
 	}
@@ -188,11 +190,14 @@ class Users
 	{
 		global $db;
 
-		$enc_password = sha1( sha1($this->sha1_key).sha1($password) );
+		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($username).'" AND timeDeleted IS NULL';
+		$id = $db->getOneItem($q);
+		if (!$id) return false;
 
-		$q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$enc_password.'" AND timeDeleted IS NULL';
-		$data = $db->getOneRow($q);
-		if (!$data) return false;
+		$enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
+ 		$q = 'SELECT * FROM tblUsers WHERE userId='.$id.' AND userPass="'.$enc_password.'"';
+ 		$data = $db->getOneRow($q);
+
 		return $data;
 	}
 

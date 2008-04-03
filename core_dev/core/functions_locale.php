@@ -297,6 +297,16 @@ $weekday_swe[7] = 'Söndag';
 			case 'The user': return 'Användaren';
 			case 'has uploaded files to their file area.': return 'har laddat upp nytt innehåll till sitt galleri.';
 
+
+			//Reset password
+			case 'Activation code is invalid or expired.': return 'Aktiveringskoden är ogiltig eller för gammal.';
+			case 'Set a new password': return 'Ange ett nytt lösenord';
+			case 'Your password has been changed!': return 'Ditt lösenord har ändrats';
+			case 'Because we don\'t store the password in clear text it cannot be retrieved.': return 'Eftersom vi inter sparar ditt lösenord i ren text kan det inte återställas.';
+			case 'You will therefore need to set a new password for your account.': return 'Därför måste du ange ett nytt lösenord till ditt konto.';
+			case 'Set password': return 'Sätt lösenord';
+			
+
 			default: return '__('.$s.')__';
 		}
 	}

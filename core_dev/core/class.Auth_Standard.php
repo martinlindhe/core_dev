@@ -60,8 +60,10 @@ class Auth_Standard extends Auth_Base
 			$_mode = USERLEVEL_SUPERADMIN;
 		}
 
-		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userPass="'.sha1( sha1($this->sha1_key).sha1($password1) ).'",userMode='.$_mode.',timeCreated=NOW()';
+		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
 		$newUserId = $db->insert($q);
+
+		Users::setPass($newUserId);
 
 		$session->log('Registered user <b>'.$username.'</b>');
 
@@ -72,6 +74,8 @@ class Auth_Standard extends Auth_Base
 
 		return $newUserId;
 	}
+
+
 
 	/**
 	 * Handles logins

@@ -244,23 +244,23 @@ The link will expire in __EXPIRETIME__";
 		if (!is_numeric($_id) || !is_numeric($_code)) return false;
 
 		if (!verifyActivation(ACTIVATE_CHANGE_PWD, $_code, $_id)) {
-			echo 'Activation code is invalid or expired.';
+			echo t('Activation code is invalid or expired.');
 			return false;
 		}
 
-		echo '<h1>Set a new password</h1>';
+		echo '<h1>'.t('Set a new password').'</h1>';
 
 		if (isset($_POST['reset_pwd1']) && isset($_POST['reset_pwd2'])) {
 			$chk = Users::setPassword($_id, $_POST['reset_pwd1'], $_POST['reset_pwd2']);
 			if ($chk) {
-				echo 'Your password has been changed!';
+				echo t('Your password has been changed!');
 				removeActivation(ACTIVATE_CHANGE_PWD, $_code);
 				return true;
 			}
 		}
 
-		echo 'Because we don\'t store the password in clear text it cannot be retrieved.<br/>';
-		echo 'You will therefore need to set a new password for your account.<br/>';
+		echo t('Because we don\'t store the password in clear text it cannot be retrieved.').'<br/>';
+		echo t('You will therefore need to set a new password for your account.').'<br/>';
 
 		if ($session->error) {
 			echo '<div class="critical">'.$session->error.'</div><br/>';
@@ -268,9 +268,9 @@ The link will expire in __EXPIRETIME__";
 		}
 
 		echo '<form method="post" action="">';
-		echo 'New password: <input type="password" name="reset_pwd1" size="12"/><br/>';
-		echo 'Repeat password: <input type="password" name="reset_pwd2" size="12"/><br/>';
-		echo '<input type="submit" class="button" value="Set password"/>';
+		echo t('New password').': <input type="password" name="reset_pwd1" size="12"/><br/>';
+		echo t('Repeat password').': <input type="password" name="reset_pwd2" size="12"/><br/>';
+		echo '<input type="submit" class="button" value="'.t('Set password').'"/>';
 		echo '</form>';
 	}
 
