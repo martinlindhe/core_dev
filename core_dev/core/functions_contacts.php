@@ -128,6 +128,28 @@ require_once('functions_locale.php');	//for translations
 	}
 
 	/**
+	 * Returns one type of contacts for specified userId. Either their friend list or block list
+	 *
+	 * \param $_type type of contact (friend, blocked)
+	 * \param $userId user id
+	 * \param $groupId contact group id
+	 */
+	function getContactsWithMe($_type, $userId, $groupId = '')
+	{
+		global $db;
+		if (!is_numeric($_type) || !is_numeric($userId)) return false;
+		//FIXME returnera namn på gruppen som kontakten tillhör "Gammalt ex", "Suparpolare" etc
+		//FIXME $groupId ignoreras
+
+		$q  = 'SELECT t1.*,t2.userName,t2.timeLastActive ';
+		$q .= 'FROM tblContacts AS t1 ';
+		$q .= 'LEFT JOIN tblUsers AS t2 ON (t2.userId = t1.otherUserId) ';
+		$q .= 'WHERE t1.otherUserId='.$userId.' AND t1.contactType='.$_type.' ';
+		$q .= 'ORDER BY t2.userName ASC';
+
+		return $db->getArray($q);
+	}
+	/**
 	 * Deletes all contacts of $_type for specified user
 	 *
 	 * \param $_type type of contacts (friends / blocked users)

@@ -144,7 +144,7 @@ class Session
 	{
 		$this->id = $_id;
 		$this->username = $_username;
-		$this->mode = $_usermode;		//0=normal user. 1=admin, 2=super admin
+		$this->mode = $_usermode;		//0=normal user. 1=webmaster, 2=admin, 3=super admin
 		$this->lastActive = time();
 
 		if ($this->mode >= USERLEVEL_WEBMASTER) $this->isWebmaster = true;

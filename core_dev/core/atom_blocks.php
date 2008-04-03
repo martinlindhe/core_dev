@@ -48,7 +48,7 @@
 	}
 
 	/**
-	 * Returns a array of all blocks of specified type
+	 * Returns an array of all blocks of specified type
 	 * \param $_type type of block rule
 	 * \param $rule the actual rule
 	 */
