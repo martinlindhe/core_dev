@@ -50,4 +50,8 @@
 		$config['core_web_root'].'admin/admin_phpinfo.php'.getProjectPath(0) => 'PHP',
 		$config['core_web_root'].'admin/admin_ip_blocks.php'.getProjectPath(0) => 'IP Blocks'
 	);
+
+	set_include_path($config['core_root'].'core/');
+	require_once('functions_forum.php');
+	restore_include_path();
 ?>
