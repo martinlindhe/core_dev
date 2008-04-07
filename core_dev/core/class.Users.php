@@ -422,7 +422,7 @@ class Users
 
 		if (!$id) return 'UNREGISTERED';
 		if (!$name) $name = Users::getName($id);
-		if (!$name) die;
+		if (!$name) return 'User deleted';
 		
 		$pic_id = loadUserdataImage($id);
 

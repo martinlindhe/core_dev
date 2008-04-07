@@ -63,7 +63,6 @@
 //			echo $_POST['delete_'.$row['queueId'].'_message'];
 				$owner = Files::getUploader($row['itemId']);
 				if (isset($_POST['delete_'.$row['queueId'].'_message'])) {
-//echo 'msgmsg';
 					$subject = 'Presentationsbild borttagen';
 					$msg  = 'Din presentationsbild har tagits bort.'."\n";
 					$msg .= 'Anledning: '.$_POST['delete_'.$row['queueId'].'_message'];
@@ -105,12 +104,12 @@ exit(1);
 			echo '<div class="item">';
 
 			switch ($row['queueType']) {
-				case MODERATION_GUESTBOOK:$title = 'Guestbook entry'; break;
-				case MODERATION_BLOG:			$title = 'Blog'; break;
-				case MODERATION_FORUM:			$title = 'Forum'; break;
-				case MODERATION_USER:			$title = 'Reported user: '.Users::link($row['itemId']); break;
-				case MODERATION_FILE:			$title = 'Reported file '.showFile($row['itemId'], '', '', false); break;
-				case MODERATION_PRES_IMAGE:		$title = 'Reported presentation image '.showFile($row['itemId'], '', '', false); break;
+				case MODERATION_GUESTBOOK:	$title = 'Guestbook entry'; break;
+				case MODERATION_BLOG:		$title = 'Blog'; break;
+				case MODERATION_FORUM:		$title = 'Forum'; break;
+				case MODERATION_USER:		$title = 'Reported user: '.Users::link($row['itemId']); break;
+				case MODERATION_FILE:		$title = 'Reported file '.showFile($row['itemId'], '', '', false); break;
+				case MODERATION_PRES_IMAGE:	$title = 'Reported presentation image '.showFile($row['itemId'], '', '', false); break;
 
 				default: $title = '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 			}

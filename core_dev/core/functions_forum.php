@@ -580,7 +580,7 @@
 
 		echo $body;
 		$signature = loadUserdataSetting($session->id, $config['settings']['default_signature']);
-		if ($signature) echo '<hr/>'.$signature.'<br>';
+		if ($signature) echo '<hr/>'.$signature.'<br/>';
 
 		$files->showAttachments(FILETYPE_FORUM, $item['itemId']);
 		echo '</td>';
