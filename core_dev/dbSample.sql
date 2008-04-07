@@ -41,19 +41,19 @@ CREATE TABLE `tblCategories` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `tblCcPay` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `clientid` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `passcode` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `date` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `minutes` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `price` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `clientid` varchar(45) character set utf8 NOT NULL default '',
+  `passcode` varchar(45) character set utf8 NOT NULL default '',
+  `date` varchar(45) character set utf8 NOT NULL default '',
+  `minutes` varchar(45) character set utf8 NOT NULL default '',
+  `price` varchar(45) character set utf8 NOT NULL default '',
   `packagekey` int(10) unsigned NOT NULL,
   `remoteid` int(10) unsigned NOT NULL,
-  `email` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `card` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `cvv` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `status` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `name` varchar(45) collate utf8_swedish_ci NOT NULL,
-  `cardtype` varchar(45) collate utf8_swedish_ci NOT NULL,
+  `email` varchar(45) character set utf8 NOT NULL default '',
+  `card` varchar(45) character set utf8 NOT NULL default '',
+  `cvv` varchar(45) character set utf8 NOT NULL default '',
+  `status` varchar(45) character set utf8 NOT NULL default '',
+  `name` varchar(45) character set utf8 NOT NULL default '',
+  `cardtype` varchar(45) character set utf8 NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 CREATE TABLE `tblChecksums` (
