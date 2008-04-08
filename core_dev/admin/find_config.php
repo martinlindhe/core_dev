@@ -27,7 +27,7 @@
 		$config['core_web_root'].'admin/admin_polls.php'.getProjectPath(0) => 'Polls',
 		$config['core_web_root'].'admin/admin_feedback.php'.getProjectPath(0) => 'Feedback',	//todo: hide if feedback-module is disabled
 		$config['core_web_root'].'admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
-		$config['core_web_root'].'admin/admin_events.php'.getProjectPath(0) => 'Event log',
+		$config['core_web_root'].'admin/admin_events.php'.getProjectPath(0) => 'Event log'
 	);
 
 	$super_admin_menu = array(
@@ -37,7 +37,7 @@
 		$config['core_web_root'].'admin/admin_contacts.php'.getProjectPath(0) => 'Contacts',
 		$config['core_web_root'].'admin/admin_add_admin.php'.getProjectPath(0) => 'Add admin',
 		$config['core_web_root'].'admin/admin_content_search.php'.getProjectPath(0) => 'Content Search',
-		$config['core_web_root'].'admin/admin_contact_users.php'.getProjectPath(0) => 'Contact users'
+		$config['core_web_root'].'admin/admin_contact_users.php'.getProjectPath(0) => 'Contact users',
 		$config['core_web_root'].'admin/admin_todo_lists.php'.getProjectPath(0) => 'Todo lists'
 	);
 
