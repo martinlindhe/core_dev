@@ -27,7 +27,7 @@ class Auth_Standard extends Auth_Base
 	 */
 	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL)
 	{
-		global $db, $config, $session, $auth;
+		global $db, $config, $session;
 
 		if (!is_numeric($_mode)) return false;
 
