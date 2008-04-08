@@ -163,10 +163,16 @@ class Users
 	 * \param $_pwd1 password to set
 	 * \param $_pwd2 password to compare with (optional)
 	 */
-	function setPassword($_id, $_pwd1, $_pwd2 = '')
+	function setPassword($_id, $_pwd1, $_pwd2 = '', $key = '')
 	{
 		global $db, $session, $auth;
 		if (!is_numeric($_id)) return false;
+		/* This function is referenced in the Auth-class too, but in that
+		 * context you cant use the $auth-object, since it's itself.
+		 * If $key is empty, the reference wasn't from the Auth-class
+		 * so therefore use the key from the Auth-object instead.
+		 */
+		if (empty($key)) $key = $auth->sha1_key;
 
 		if ($_pwd2) {
 			if (strlen($_pwd1) < 4) {
@@ -179,8 +185,8 @@ class Users
 				return false;
 			}
 		}
-
-		$q = 'UPDATE tblUsers SET userPass="'.sha1( $_id.sha1($auth->sha1_key).sha1($_pwd1) ).'" WHERE userId='.$_id;
+		
+		$q = 'UPDATE tblUsers SET userPass="'.sha1( $_id.sha1($key).sha1($_pwd1) ).'" WHERE userId='.$_id;
 		$db->update($q);
 		return true;
 	}

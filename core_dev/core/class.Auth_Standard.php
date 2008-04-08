@@ -27,7 +27,8 @@ class Auth_Standard extends Auth_Base
 	 */
 	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL)
 	{
-		global $db, $config, $session;
+		global $db, $config, $session, $auth;
+
 		if (!is_numeric($_mode)) return false;
 
 		if ($username != trim($username)) return t('Username contains invalid spaces');
@@ -62,7 +63,7 @@ class Auth_Standard extends Auth_Base
 		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
 		$newUserId = $db->insert($q);
 
-		Users::setPassword($newUserId, $password1);
+		Users::setPassword($newUserId, $password1, $password1, $this->sha1_key);
 
 		$session->log('Registered user <b>'.$username.'</b>');
 
