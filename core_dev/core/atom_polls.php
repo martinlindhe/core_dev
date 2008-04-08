@@ -361,6 +361,44 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 			}
 		}
 
+		echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">Add new poll</h2>';
+		echo '<div id="new_poll_form" style="display: none;">';
+		echo '<form method="post" action="">';
+		echo 'Question: ';
+		echo '<input type="text" name="poll_q" size="30"/><br/>';
+		if ($_type == POLL_SITE) {
+			echo '<div id="poll_period_selector">';
+			echo 'Duration of the poll: ';
+			echo '<select name="poll_dur">';
+			echo '<option value="day">1 day</option>';
+			echo '<option value="week" selected="selected">1 week</option>';
+			echo '<option value="month">1 month</option>';
+			echo '</select><br/>';
+
+			echo 'Poll start: ';
+			echo '<select name="poll_start">';
+			echo '<option value="thismonday">monday this week</option>';
+			echo '<option value="nextmonday">monday next week</option>';
+			echo '<option value="nextfree"'.(count($list)?' selected="selected"':'').'>next free time</option>';
+			echo '</select><br/>';
+			echo '<a href="#" onclick="hide_element_by_name(\'poll_period_selector\');show_element_by_name(\'poll_period_manual\')">Enter dates manually</a>';
+			echo '</div>';
+			echo '<div id="poll_period_manual" style="display: none;">';
+				echo 'Start time: <input type="text" name="poll_start_man"/> (format YYYY-MM-DD HH:MM)<br/>';
+				echo 'End time: <input type="text" name="poll_end_man"/><br/>';
+				echo '<a href="#" onclick="hide_element_by_name(\'poll_period_manual\');show_element_by_name(\'poll_period_selector\')">Use dropdown menus instead</a>';
+			echo '</div>';
+			echo '<br/><br/>';
+		}
+
+		for ($i=1; $i<=$answer_fields; $i++) {
+			echo 'Answer '.$i.': <input type="text" size="30" name="poll_a'.$i.'"/><br/>';
+		}
+
+		echo '<input type="submit" class="button" value="Create"/>';
+		echo '</form>';
+		echo '</div>';
+
 		switch ($_type) {
 			case POLL_SITE:
 				echo '<h1>Site polls</h1>';
@@ -412,44 +450,6 @@ define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.n
 		}
 		if (count($list)) echo '</table>';
 		echo '<br/>';
-
-		echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">Add new poll</h2>';
-		echo '<div id="new_poll_form">';
-		echo '<form method="post" action="">';
-		echo 'Question: ';
-		echo '<input type="text" name="poll_q" size="30"/><br/>';
-		if ($_type == POLL_SITE) {
-			echo '<div id="poll_period_selector">';
-			echo 'Duration of the poll: ';
-			echo '<select name="poll_dur">';
-			echo '<option value="day">1 day</option>';
-			echo '<option value="week" selected="selected">1 week</option>';
-			echo '<option value="month">1 month</option>';
-			echo '</select><br/>';
-
-			echo 'Poll start: ';
-			echo '<select name="poll_start">';
-			echo '<option value="thismonday">monday this week</option>';
-			echo '<option value="nextmonday">monday next week</option>';
-			echo '<option value="nextfree"'.(count($list)?' selected="selected"':'').'>next free time</option>';
-			echo '</select><br/>';
-			echo '<a href="#" onclick="hide_element_by_name(\'poll_period_selector\');show_element_by_name(\'poll_period_manual\')">Enter dates manually</a>';
-			echo '</div>';
-			echo '<div id="poll_period_manual" style="display: none;">';
-				echo 'Start time: <input type="text" name="poll_start_man"/> (format YYYY-MM-DD HH:MM)<br/>';
-				echo 'End time: <input type="text" name="poll_end_man"/><br/>';
-				echo '<a href="#" onclick="hide_element_by_name(\'poll_period_manual\');show_element_by_name(\'poll_period_selector\')">Use dropdown menus instead</a>';
-			echo '</div>';
-			echo '<br/><br/>';
-		}
-
-		for ($i=1; $i<=$answer_fields; $i++) {
-			echo 'Answer '.$i.': <input type="text" size="30" name="poll_a'.$i.'"/><br/>';
-		}
-
-		echo '<input type="submit" class="button" value="Create"/>';
-		echo '</form>';
-		echo '</div>';
 	}
 
 	/**

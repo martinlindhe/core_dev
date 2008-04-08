@@ -10,6 +10,14 @@
 		Users::removeUser($_GET['del']);
 	}
 
+	echo '<h1>User lists</h1>';
+
+	echo '<a href="?notactivated">Not activated</a> | ';
+	echo '<a href="?activated">Activated</a>  | ';
+	echo '<a href="?removed">Removed</a> | ';
+	echo '<a href="?online">Users online</a>';
+
+
 	if (isset($_GET['notactivated'])) {
 		echo '<h1>Not activated users</h1>';
 		
@@ -26,6 +34,8 @@
 		$list = $db->getArray($q);
 
 	} else if (isset($_GET['removed'])) {
+		echo '<h1>Removed users</h1>';
+
 		$q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NOT NULL';
 		$list = $db->getArray($q);
 	} else if (isset($_GET['online'])) {
@@ -34,14 +44,7 @@
 		$list = Users::allOnline();
 	}
 
-	if (!isset($list)) {
-		echo '<h1>User lists</h1>';
-
-		echo '<a href="?notactivated">Not activated</a><br/>';
-		echo '<a href="?activated">Activated</a><br/>';
-		echo '<a href="?removed">Removed</a><br/>';
-		echo '<a href="?online">Users online</a><br/>';
-	} else {
+	if (isset($list)) {
 		echo '<table>';
 		echo '<tr>';
 		echo '<th>Username</th>';
