@@ -125,7 +125,7 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 		$q .= 'WHERE deletedBy=0 ORDER BY timeToPublish DESC LIMIT 1';
 		$row = $db->getOneRow($q);
 
-		return parseArticle($row['body'], $row['timeToPublish']);
+		return parseArticle($row['title'], $row['body'], $row['timeToPublish']);
 	}
 
 	function showNewsArticle($_id = 0)
@@ -233,7 +233,7 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 			showComments(COMMENT_NEWS, $_id);
 		} else {
 
-			$art = parseArticle($news['body']);
+			$art = parseArticle($news['title'], $news['body']);
 			if ($art['head']) echo '<div class="news_head">'.$art['head'].'</div>';
 			echo '<div class="news_body">'.$art['body'].'</div>';
 
@@ -284,13 +284,13 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 		echo '<div>';
 		echo '<div class="news_item_picl">'.Users::linkThumb($row['creatorId'], $row['creatorName']).'</div>';
 			echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a> '.$row['timeToPublish'].'<br/>';	//fixme: show optional link title instead
-			$art = parseArticle($row['body']);
+			$art = parseArticle($row['title'], $row['body']);
 			echo $art['head'];
 		echo '</div>';
 		/*
 		echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a>, published '.$row['timeToPublish'];
 		if ($row['categoryId']) echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $row['categoryId']).'</a>';
-		$art = parseArticle($row['body']);
+		$art = parseArticle($row['title'], $row['body']);
 		echo '<br/>'.$art['head'].'<br/>';
 		*/
 		echo '</div><br class="clr"/>';

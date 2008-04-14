@@ -282,21 +282,31 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 		return $ret;
 	}
 
-	/* Returns array with parsed up news article texts
-		[head]news article heading[/head]
-		
-		[body]news article body[/body]
+	/**
+	 * Returns array with parsed up news article texts
+	 * [head]news article heading[/head]
+	 * [body]news article body[/body]
+	 * If no markup is found in the $text, then $title and $text is used raw
+	 * 
 	*/
-	function parseArticle($text, $timestamp = '')
+	function parseArticle($title, $text, $timestamp = '')
 	{
+		$trim_len = 60;
+		$art['time'] = $timestamp;
+
 		$pos1 = strpos($text, '[head]');
 		$pos2 = strpos($text, '[/head]');
 		if ($pos1 === false || $pos2 === false) {
 			//handle as raw text, no markups found
+			if ($title) {
+				$art['head'] = $title;
+				$art['body'] = $text;
+				return $art;
+			}
 
-			$text = htmlentities($text);
-			if (strlen($text) > 30) {
-				$art['head'] = substr($text, 0, 30).' [...]';
+			$text = htmlentities($text, ENT_COMPAT, "UTF-8");
+			if (mb_strlen($text) > $trim_len) {
+				$art['head'] = mb_substr($text, 0, $trim_len).' [...]';
 			} else {
 				$art['head'] = $text;
 			}
@@ -314,8 +324,6 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 
 		$art['body'] = substr($text, $pos1+strlen('[body]'), $pos2-$pos1-strlen('[/body]')+1);
 		$art['body'] = formatUserInputText($art['body']);
-
-		$art['time'] = $timestamp;
 
 		return $art;
 	}
