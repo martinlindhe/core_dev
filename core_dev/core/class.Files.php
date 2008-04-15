@@ -847,7 +847,7 @@ class Files
 	function getFiles($fileType, $ownerId = 0, $categoryId = 0, $_limit = 0, $_order = 'ASC')
 	{
 		global $db, $session;
-		if (!$session->id || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($_limit)) return array();
+		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($_limit)) return array();
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
 
 		if ($fileType == FILETYPE_CLONE_VIDEOTHUMB10) {
@@ -856,7 +856,7 @@ class Files
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
-		} else if ($fileType == FILETYPE_FORUM) {
+		} else if ($session->id && $fileType == FILETYPE_FORUM) {
 			$q  = 'SELECT * FROM tblFiles';
 			$q .= ' WHERE fileType='.$fileType.' AND uploaderId='.$session->id;
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;

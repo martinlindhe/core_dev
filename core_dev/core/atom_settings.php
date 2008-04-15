@@ -102,9 +102,9 @@
 	/**
 	 * Deletes specified setting for owner, of specified type
 	 *
-	 * \param $_type type of settings
-	 * \param $ownerId owner of the settings
-	 * \param $settingName owner of the settings
+	 * \param $_type type of setting
+	 * \param $ownerId owner of the setting
+	 * \param $settingName name of the setting
 	 * \return number of settings removed
 	 */
 	function deleteSetting($_type, $ownerId, $settingName)
@@ -129,6 +129,23 @@
 		if (!is_numeric($ownerId)) return false;
 
 		$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
+		return $db->delete($q);
+	}
+
+	/**
+	 * Removes all occurances of settings with the specified paramets 
+	 *
+	 * \param $_type type of settings
+	 * \param $settingName name of the setting
+	 * \param $settingValue value of the setting
+	 * \return number of settings removed
+  	 */
+	function deleteSettingByValue($_type, $settingName, $settingValue)
+	{
+		global $db;
+		if (!is_numeric($_type)) return false;
+
+		$q = 'DELETE FROM tblSettings WHERE type='.$_type.' AND settingName="'.$db->escape($settingName).'" AND settingValue="'.$db->escape($settingValue).'"';
 		return $db->delete($q);
 	}
 ?>
