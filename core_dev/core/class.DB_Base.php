@@ -315,7 +315,7 @@ abstract class DB_Base
 			} else {
 				echo $query;
 			}
-			echo '</tr></table>';
+			echo '</td></tr></table>';
 			echo '<hr/>';
 		}
 
