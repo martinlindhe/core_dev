@@ -49,6 +49,15 @@
 	$config['news']['allow_rating'] = false;
 	$config['news']['allow_polls'] = false;
 
+
+
+	/*********************************
+	* settings specific for the adblock-project
+	*********************************/
 	$config['adblock']['cachepath'] = 'cache/';
 	$config['adblock']['cacheage'] = 	1; //3600/4;		//time before disk cache expires, in seconds
+
+	define('COMMENT_ADBLOCKRULE',	20);
+	define('FEEDBACK_ADBLOCK_ADS', 20);
+	define('FEEDBACK_ADBLOCK_BROKEN_RULE', 21);
 ?>
