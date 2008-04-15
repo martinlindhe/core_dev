@@ -36,7 +36,7 @@
 	if ($session->id) {
 		$menu = array('index.php?logout' => 'Logout');
 	} else {
-		$menu = array('index.php?login' => 'Log in');
+		$menu = array('login.php' => 'Log in');
 	}
 	createMenu($menu);
 ?>
