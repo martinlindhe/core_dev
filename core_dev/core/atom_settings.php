@@ -145,7 +145,7 @@
 		global $db;
 		if (!is_numeric($_type)) return false;
 
-		$q = 'DELETE FROM tblSettings WHERE type='.$_type.' AND settingName="'.$db->escape($settingName).'" AND settingValue="'.$db->escape($settingValue).'"';
+		$q = 'DELETE FROM tblSettings WHERE settingType='.$_type.' AND settingName="'.$db->escape($settingName).'" AND settingValue="'.$db->escape($settingValue).'"';
 		return $db->delete($q);
 	}
 ?>
