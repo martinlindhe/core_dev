@@ -25,7 +25,7 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 
 	function showThumb($_id, $_title = '', $w = 0, $h = 0)
 	{
-		$str = '<img src="'.getThumbUrl($_id, $w, $h).'" alt="Thumbnail" title="'.strip_tags($_title).'"/>';
+		$str = '<img src="'.getThumbUrl($_id, $w, $h).'" alt="Thumb" title="'.strip_tags($_title).'"/>';
 		return $str;
 	}
 
