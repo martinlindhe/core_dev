@@ -209,13 +209,14 @@ class Files
 	 * Deletes a file from disk & database
 	 *
 	 * \param $_id fileId to delete
+	 * \param $ownerId optionally specify owner of file
 	 * \return true on success
 	 */
-	function deleteFile($_id)
+	function deleteFile($_id, $ownerId = 0)
 	{
-		if (!is_numeric($_id)) return false;
+		if (!is_numeric($_id) || !is_numeric($ownerId)) return false;
 
-		if (!$this->deleteFileEntry($_id)) return false;
+		if (!$this->deleteFileEntry($_id, $ownerId)) return false;
 
 		//physically remove the file from disk
 		unlink($this->findUploadPath($_id));
@@ -227,14 +228,16 @@ class Files
 	 * Deletes a file entry from database
 	 *
 	 * \param $_id fileId to delete
+	 * \param $ownerId optionally specify owner of file
 	 * \return true on success
 	 */
-	function deleteFileEntry($_id)
+	function deleteFileEntry($_id, $ownerId = 0)
 	{
 		global $db;
-		if (!is_numeric($_id)) return false;
+		if (!is_numeric($_id) || !is_numeric($ownerId)) return false;
 
 		$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
+		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 		if ($db->delete($q)) return true;
 		return false;
 	}
