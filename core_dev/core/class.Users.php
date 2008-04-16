@@ -412,9 +412,9 @@ class Users
 	 */
 	function link($id, $name = '')
 	{
-		if (!$id) return 'Guest';
+		if (!$id) return t('System message');
 		if (!$name) $name = Users::getName($id);
-		if (!$name) return 'user not found';
+		if (!$name) return t('User not found');
 
 		return '<a href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
 	}

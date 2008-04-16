@@ -240,7 +240,7 @@
 			} else {
 				echo t('The guestbook is empty');
 			}
-			return;
+			echo '<br/><br/>';
 		}
 
 		if ($historyId) {
