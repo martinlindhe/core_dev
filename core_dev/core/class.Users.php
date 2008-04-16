@@ -295,7 +295,8 @@ class Users
 		if (!is_numeric($_mode)) return false;
 
 		$q = 'SELECT * FROM tblUsers';
-		if ($_mode) $q .= ' WHERE userMode='.$_mode;
+		$q .= ' WHERE timeDeleted IS NULL';
+		if ($_mode) $q .= ' AND userMode='.$_mode;
 		if ($_limit) $q .= ' '.$_limit;
 		return $db->getArray($q);
 	}
