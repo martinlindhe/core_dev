@@ -209,8 +209,13 @@
 			addComment($_type, $ownerId, $_POST['cmt']);
 		}
 
-		if ($session->isAdmin && !empty($_GET['delete']) && is_numeric($_GET['delete'])) {
-			deleteComment($_GET['delete']);
+		if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
+			//let users delete comments belonging to their files
+			if ($session->isAdmin ||
+				($_type == COMMENT_FILE && Files::getOwner($ownerId) == $session->id)
+			) {				
+				deleteComment($_GET['delete']);	//FIXME: comment typ!
+			}
 		}
 
 		/* Gets all comments for this item */
@@ -280,7 +285,12 @@
 		echo $row['timeCreated'];
 		echo '</div>';
 		echo '<div class="comment_text">'.nl2br($row['commentText']);
-		if ($session->isAdmin || $session->id == $row['userId']) {
+		if ($session->isAdmin ||
+			//allow users to delete their own comments
+			$session->id == $row['userId'] ||
+			//allow users to delete comments on their files
+			($row['commentType'] == COMMENT_FILE && Files::getOwner($row['ownerId']) == $session->id)
+		) {
 			echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
 		}
 		echo '</div>';
