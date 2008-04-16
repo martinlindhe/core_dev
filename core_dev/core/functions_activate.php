@@ -82,18 +82,19 @@
 	}
 
 	/**
-	 * Only checks if the activation code is valid, doesn't require association of activation code & user id
+	 * Checks if the activation code is valid, returns associated user id
 	 *
 	 * \param $_type type
 	 * \param $_code activation code
+	 * \return user id
 	 */
-	function verifyActivationOnly($_type, $_code)
+	function getActivationUserId($_type, $_code)
 	{
 		global $db, $config;
 		if (!is_numeric($_type)) return false;
 
 		//TODO: check expiration time!
-		$q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
+		$q = 'SELECT userId FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
 		return $db->getOneItem($q);
 	}
 
