@@ -284,8 +284,7 @@ require_once('functions_locale.php');	//for translations
 	function removeFromModerationQueue($queueId)
 	{
 		global $db, $session;
-
-		if (!$session->isAdmin || !is_numeric($queueId)) return false;
+		if (!$session->isWebmaster || !is_numeric($queueId)) return false;
 
 		$q = 'UPDATE tblModeration SET moderatedBy='.$session->id.',timeModerated=NOW() WHERE queueId='.$queueId;
 		$db->query($q);
