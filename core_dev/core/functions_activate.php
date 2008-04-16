@@ -35,21 +35,21 @@
 		global $db;
 
 		do {
-			$rnd = mt_rand($lo, $hi);
-			$q = 'SELECT COUNT(*) FROM tblActivation WHERE rnd="'.$rnd.'"';
+			$code = mt_rand($lo, $hi);
+			$q = 'SELECT COUNT(*) FROM tblActivation WHERE rnd="'.$code.'"';
 		} while ($db->getOneItem($q));
 
-		return $rnd;
+		return $code;
 	}
 
 	/**
 	 * Verify if activation code is valid
 	 *
 	 * \param $_type type
-	 * \param $_rnd activation code
+	 * \param $_code activation code
 	 * \param $_answer is string for CAPTCHA's, userId for email/sms activation
 	 */
-	function verifyActivation($_type, $_rnd, $_answer = '')
+	function verifyActivation($_type, $_code, $_answer = '')
 	{
 		global $db, $config;
 		if (!is_numeric($_type)) return false;
@@ -63,7 +63,7 @@
 		}
 
 		//TODO: verify that timeCreated isnt too old, compare with $expired
-		$q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_rnd).'"';
+		$q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
 
 		switch ($_type)
 		{
@@ -85,15 +85,15 @@
 	 * Only checks if the activation code is valid, doesn't require association of activation code & user id
 	 *
 	 * \param $_type type
-	 * \param $_rnd activation code
+	 * \param $_code activation code
 	 */
-	function verifyActivationOnly($_type, $_rnd)
+	function verifyActivationOnly($_type, $_code)
 	{
 		global $db, $config;
 		if (!is_numeric($_type)) return false;
 
 		//TODO: check expiration time!
-		$q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_rnd).'"';
+		$q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
 		return $db->getOneItem($q);
 	}
 
@@ -148,7 +148,7 @@
 	 * Removes a single activation code. Call this when activation process has succeeded
 	 *
 	 * \param $_type type
-	 * \param $_rnd activation code
+	 * \param $_code activation code
 	 */
 	function removeActivation($_type, $_code)
 	{
