@@ -65,7 +65,7 @@
 			echo '<div class="wiki">';
 			echo '<div class="wiki_body">';
 			echo 'The wiki "'.$wikiName.'" does not yet exist!<br/>';
-			if ($session->id) {
+			if ($session->id && $session->isWebmaster) {
 				echo '<a href="'.$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName.'">Create it</a>';
 			}
 			echo '</div>';

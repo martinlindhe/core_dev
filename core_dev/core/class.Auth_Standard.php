@@ -23,9 +23,10 @@ class Auth_Standard extends Auth_Base
 	 * \param $password1 password
 	 * \param $password2 password (repeat)
 	 * \param $_mode user mode
+	 * \param $newUserId supply reserved user id. if not supplied, a new user id will be allocated
 	 * \return the user ID of the newly created user
 	 */
-	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL)
+	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
 	{
 		global $db, $config, $session;
 
@@ -60,8 +61,13 @@ class Auth_Standard extends Auth_Base
 			$_mode = USERLEVEL_SUPERADMIN;
 		}
 
-		$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
-		$newUserId = $db->insert($q);
+		if (!$newUserId) {
+			$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
+			$newUserId = $db->insert($q);
+		} else {
+			$q = 'UPDATE tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW() WHERE userId='.$newUserId;
+			$db->update($q);
+		}
 
 		Users::setPassword($newUserId, $password1, $password1, $this->sha1_key);
 
@@ -270,9 +276,18 @@ class Auth_Standard extends Auth_Base
 		echo '</div>';
 	}
 
-	function showRegisterForm()
+	/**
+	 * Displays a account registration form
+	 *
+	 * \param $preId userId previously created to use, instead of creating a new id (optional)
+	 * \param $act_code activation code supplied to finish account creation
+	 * \return true if registration was successful & activation mail was sent out
+	 */
+	function showRegisterForm($preId = 0, $act_code = 0)
 	{
 		global $config, $session;
+		if (!is_numeric($preId) || !is_numeric($act_code)) return false;
+
 		if ($this->mail_error) {
 			echo '<div class="critical">Ett fel uppstod när aktiveringsmail skulle skickas ut!</div><br/>';
 			return false;
@@ -290,6 +305,9 @@ class Auth_Standard extends Auth_Base
 		}
 
 		echo '<form method="post" action="">';
+		if ($preId) {
+			echo '<input type="hidden" name="preId" value="'.$preId.'"/>';
+		}
 		echo '<table cellpadding="2">';
 		echo '<tr>'.
 				'<td>Användarnamn:</td>'.
@@ -304,8 +322,12 @@ class Auth_Standard extends Auth_Base
 		}
 		echo '</table><br/>';
 
+		if ($act_code) {
+			echo '<input type="hidden" name="c" value="'.$act_code.'"/>';
+		}
 		echo '<input type="submit" class="button" value="'.t('Register').'"/>';
 		echo '</form>';
+		return false;
 	}
 
 	function changePasswordForm()
