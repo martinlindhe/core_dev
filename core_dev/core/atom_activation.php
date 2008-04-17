@@ -4,7 +4,9 @@
  *
  * Code to implement activation procedures
  *
- * \todo cleanup script that deletes all > 30 day old entries from tblActivation
+ * Utility script: cron\cleanup_activations.php
+ * 		This script deletes all > 30 day old entries from tblActivation
+ *
  * \todo cleanup script that deletes un-activated users entirely
  * \todo finish api/human_test.php implementation
  *
