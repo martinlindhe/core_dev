@@ -399,7 +399,7 @@ define('ORDER_FAILED',		3);
 
 				if (in_array($file['fileMime'], $files->video_mime_types)) {
 					$exec_start = microtime(true);
-					$newId = convertVideo($prev_job['referId'], $files->default_video);
+					$newId = convertVideo($prev_job['referId'], $files->default_video, ($job['orderParams'] ? false : true));
 					if ($newId === false) {
 						markQueue($job['entryId'], ORDER_FAILED);
 					} else {
@@ -448,7 +448,7 @@ define('ORDER_FAILED',		3);
 	 *
 	 * \return file id of the newly converted video, or false on error
 	 */
-	function convertVideo($fileId, $mime)
+	function convertVideo($fileId, $mime, $thumbs = true)
 	{
 		global $files, $config;
 		if (!is_numeric($fileId)) return false;
@@ -500,7 +500,9 @@ define('ORDER_FAILED',		3);
 			return false;
 		}
 
-		generateVideoStills($newId);
+		if ($thumbs) {
+			generateVideoThumbs($newId);
+		}
 
 		$files->updateFile($newId);
 		return $newId;
@@ -540,15 +542,15 @@ define('ORDER_FAILED',		3);
 	}
 
 	/**
-	 * Generates video still images from specified video
+	 * Generates image thumbnails from specified video file
 	 */
-	function generateVideoStills($fileId)
+	function generateVideoThumbs($fileId)
 	{
 		global $files;
 		if (!is_numeric($fileId)) return false;
 
 		$c = 'ffprobe -show_files '.$files->findUploadPath($fileId).' 2> /dev/null | grep duration | cut -d= -f2';
-		echo "Executing: ".$c."\n";
+		//echo "Executing: ".$c."\n";
 		$duration = exec($c);
 
 		$pos10 = $duration * 0.10;
@@ -560,14 +562,14 @@ define('ORDER_FAILED',		3);
 		$newId = $files->cloneFile($fileId, FILETYPE_CLONE_VIDEOTHUMB10);
 
 		$c = 'ffmpeg -i '.$files->findUploadPath($fileId).' -ss '.$pos10.' -vframes 1 -f image2 '.$files->findUploadPath($newId).' 2> /dev/null';
-		echo "Executing: ".$c."\n";
+		echo "$ ".$c."\n";
 		exec($c);
 
 		$files->updateFile($newId);
 	}
 
 	/**
-	 * USed with a client app to execute process server orders through the SOAP interface
+	 * Used with a client app to execute process server orders through the SOAP interface
 	 */
 	function process_client_fetchAndConvert($uri, $callback = '')
 	{
