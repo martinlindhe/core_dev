@@ -7,7 +7,6 @@
  * \todo cleanup script that deletes all > 30 day old entries from tblActivation
  * \todo cleanup script that deletes un-activated users entirely
  * \todo finish api/human_test.php implementation
- * \todo rename to atom_activation.php
  *
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */

@@ -9,8 +9,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_activate.php');		//for activation
-require_once('functions_locale.php');			//for translations
+require_once('atom_activation.php');		//for activation
+require_once('functions_locale.php');		//for translations
 require_once('ext/class.phpmailer.php');	//for outgoing mail. FIXME look for bsd-compatible mailer
 
 abstract class Auth_Base
