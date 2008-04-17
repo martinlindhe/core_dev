@@ -5,6 +5,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_defaults.php');
+
 	function URLadd($_key, $_val = '', $_extra = '')
 	{
 		$curr_url = 'http://localhost'.$_SERVER['REQUEST_URI'];
@@ -212,7 +214,7 @@
 		echo '</script>';
 	}
 
-	//used by lyrics project only - maybe remove?
+	//FIXME: used by lyrics project only - maybe remove?
 	function cleanupText($text)
 	{
 		global $db;
