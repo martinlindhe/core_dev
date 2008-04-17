@@ -325,8 +325,9 @@ require_once('atom_rating.php');	//for file rating
 		echo '<div id="zoom_image_layer" style="display:none">';
 		//echo 	'<center>';
 		echo 		'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
-		echo		'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
-		echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
+		//FIXME: make it possible to configure what buttons to hide
+		//echo		'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
+		//echo		'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 		}
@@ -384,8 +385,9 @@ require_once('atom_rating.php');	//for file rating
 		echo '<div id="zoom_audio_layer" style="display:none">';
 		echo	'<center>';
 		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
-		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
-		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
+		//FIXME: make it possible to configure what buttons to hide
+		//echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
+		//echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 
 		echo	'<div id="zoom_audio" style="width: 180px; height: 45px;"></div>';
 
@@ -412,7 +414,8 @@ require_once('atom_rating.php');	//for file rating
 		echo '<div id="zoom_video_layer" style="display:none">';
 		echo	'<center>';
 		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
-		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
+		//FIXME: make it possible to configure what buttons to hide
+		//echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 
 		echo	'<div id="zoom_video">';
 		echo	'<a href="http://www.macromedia.com/go/getflashplayer">You need Flash Player</a>.';
@@ -441,8 +444,9 @@ require_once('atom_rating.php');	//for file rating
 		echo '<div id="zoom_file_layer" style="display:none">';
 		echo	'<center>';
 		echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
-		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
-		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
+		//FIXME: make it possible to configure what buttons to hide
+		//echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
+		//echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 		if ($session->id == $ownerId || $session->isAdmin) {
 			echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
 			echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
