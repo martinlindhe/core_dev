@@ -898,7 +898,7 @@ class Files
 	}
 
 	/**
-	 * Retrieves info about the specified file
+	 * Retrieves detailed info about the specified file
 	 *
 	 * \param $_id fileId
 	 */
@@ -911,6 +911,20 @@ class Files
 					'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
 					'WHERE t1.fileId='.$_id;
 
+		return $db->getOneRow($q);
+	}
+
+	/**
+	 * Retrieves info about the specified file
+	 *
+	 * \param $_id fileId
+	 */
+	function getFile($_id)
+	{
+		global $db;
+		if (!is_numeric($_id) || !$_id) return false;
+
+		$q = 'SELECT * FROM tblFiles WHERE fileId='.$_id;
 		return $db->getOneRow($q);
 	}
 
