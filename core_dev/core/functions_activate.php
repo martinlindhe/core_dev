@@ -4,7 +4,7 @@
  *
  * Code to implement activation procedures
  *
- * \todo cleanup script that deletes > 30 day old entries from tblActivation
+ * \todo cleanup script that deletes all > 30 day old entries from tblActivation
  * \todo cleanup script that deletes un-activated users entirely
  * \todo finish api/human_test.php implementation
  * \todo rename to atom_activation.php
@@ -42,6 +42,18 @@
 		return $code;
 	}
 
+	function getActivationExpireTime($_type)
+	{
+		global $config;
+		switch ($_type)
+		{
+			case ACTIVATE_CAPTCHA:		return $config['activate']['expire_time_captcha'];
+			case ACTIVATE_EMAIL:		return $config['activate']['expire_time_email'];
+			case ACTIVATE_SMS:			return $config['activate']['expire_time_sms'];
+			case ACTIVATE_CHANGE_PWD:	return $config['activate']['expire_time_change_pwd'];
+		}
+	}
+
 	/**
 	 * Verify if activation code is valid
 	 *
@@ -54,16 +66,10 @@
 		global $db, $config;
 		if (!is_numeric($_type)) return false;
 
-		switch ($_type)
-		{
-			case ACTIVATE_CAPTCHA:		$expired = $config['activate']['expire_time_captcha']; break;
-			case ACTIVATE_EMAIL:		$expired = $config['activate']['expire_time_email']; break;
-			case ACTIVATE_SMS:			$expired = $config['activate']['expire_time_sms']; break;
-			case ACTIVATE_CHANGE_PWD:	$expired = $config['activate']['expire_time_change_pwd']; break;
-		}
+		$expired = getActivationExpireTime($_type);
 
-		//TODO: verify that timeCreated isnt too old, compare with $expired
 		$q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
+		$q .= ' AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
 
 		switch ($_type)
 		{
@@ -93,8 +99,10 @@
 		global $db, $config;
 		if (!is_numeric($_type)) return false;
 
-		//TODO: check expiration time!
+		$expired = getActivationExpireTime($_type);
+
 		$q = 'SELECT userId FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
+		$q .= ' AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
 		return $db->getOneItem($q);
 	}
 

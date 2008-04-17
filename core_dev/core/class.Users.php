@@ -411,13 +411,13 @@ class Users
 	/**
 	 * Generates a link to user's page
 	 */
-	function link($id, $name = '')
+	function link($id, $name = '', $class = '')
 	{
 		if (!$id) return t('System message');
 		if (!$name) $name = Users::getName($id);
 		if (!$name) return t('User not found');
 
-		return '<a href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
+		return '<a '.($class?' class="'.$class.'"':'').'href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
 	}
 
 	/**
@@ -515,7 +515,8 @@ class Users
 
 			if (!empty($_POST['c'])) echo t('Search result for').' "'.$_POST['c'].'", ';
 			else echo t('Custom search result').', ';
-			
+
+			//FIXME: rename custom function name, keep default in functions_defaults (?)
 			if (function_exists('showCustomSearchResult')) { // call project specified search presentation function
 				return showCustomSearchResult($list);
 			}
