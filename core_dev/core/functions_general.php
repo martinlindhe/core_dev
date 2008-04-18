@@ -156,18 +156,18 @@ require_once('functions_defaults.php');
 		echo '<head>';
 			echo '<title>'.$title.'</title>';
 			echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
-			echo '<link rel="stylesheet" href="'.$config['core_web_root'].'css/core.css" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$config['core']['web_root'].'css/core.css" type="text/css"/>';
 
 			if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
-			else $theme_dir = $config['core_web_root'].'css/themes/';
+			else $theme_dir = $config['core']['web_root'].'css/themes/';
 			if (!empty($session)) echo '<link rel="stylesheet" href="'.$theme_dir.$session->theme.'" type="text/css"/>';
-			echo '<link rel="stylesheet" href="'.$config['web_root'].'css/site.css" type="text/css"/>';
+			echo '<link rel="stylesheet" href="'.$config['app']['web_root'].'css/site.css" type="text/css"/>';
 
 			if ($meta_rss) {
 				foreach ($meta_rss as $feed) {
 					if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
 					else $extra = getProjectPath(0);
-					echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core_web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
+					echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core']['web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 				}
 			}
 
@@ -178,17 +178,17 @@ require_once('functions_defaults.php');
 			}
 
 			//echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ajax.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/swfobject.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/functions.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/fileareas.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/functions.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/fileareas.js"></script>';
 
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/prototype.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
+			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
 
-			echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/ext/cropper.js"></script>';
+			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
 			if (!empty($files) && $files->allow_rating) {
-				echo '<script type="text/javascript" src="'.$config['core_web_root'].'js/rate.js"></script>';
+				echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
 			}
 
 			if ($meta_js) {
@@ -210,7 +210,7 @@ require_once('functions_defaults.php');
 			echo '<body>';
 		}
 		echo '<script type="text/javascript">';
-		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core_web_root'].'api/";';
+		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core']['web_root'].'api/";';
 		echo '</script>';
 	}
 

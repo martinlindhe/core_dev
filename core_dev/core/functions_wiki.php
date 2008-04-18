@@ -197,12 +197,12 @@
 			if ($session->isAdmin) {
 				if ($data['lockedBy']) {
 					echo '<input type="button" class="button" value="'.t('Unlock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_unlock').'\'"/>';
-					echo '<img src="'.$config['core_web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
+					echo '<img src="'.$config['core']['web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
 					echo '<b>Locked by '.$data['lockerName'].' at '.$data['timeLocked'].'</b><br/>';
 				} else {
 					if ($data) {
 						echo '<input type="button" class="button" value="'.t('Lock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_lock').'\'"/>';
-						echo '<img src="'.$config['core_web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/>';
+						echo '<img src="'.$config['core']['web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked" title="This wiki is currently open for edit by anyone"/>';
 					}
 				}
 			}

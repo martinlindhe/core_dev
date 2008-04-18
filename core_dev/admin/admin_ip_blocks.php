@@ -37,7 +37,7 @@
 		echo '<td>'.$ip.'</td>';
 		echo '<td>'.ago($row['timeCreated']).'</td>';
 		echo '<td>'.Users::getName($row['createdBy']).'</td>';
-		echo '<td><a href="'.$_SERVER['PHP_SELF'].'?remove='.urlencode($row['rule']).'""><img src="'.$config['core_web_root'].'gfx/icon_error.png" alt="Ta bort blockering" title="Ta bort blockering"></a></td>';
+		echo '<td><a href="'.$_SERVER['PHP_SELF'].'?remove='.urlencode($row['rule']).'""><img src="'.$config['core']['web_root'].'gfx/icon_error.png" alt="Ta bort blockering" title="Ta bort blockering"></a></td>';
 		echo '</tr>';
 	}
 	echo '</table>';

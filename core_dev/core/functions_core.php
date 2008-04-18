@@ -36,7 +36,7 @@ require_once('functions_locale.php');	//for translations
 	function require_core($file)
 	{
 		global $config;
-		require_once($config['core_root'].'core/'.$file);
+		require_once($config['core']['fs_root'].'core/'.$file);
 	}
 
 	/* loads all active plugins */
@@ -47,7 +47,7 @@ require_once('functions_locale.php');	//for translations
 		if (empty($config['plugins'])) return;
 
 		foreach ($config['plugins'] as $plugin) {
-			require_once($config['core_root'].'plugins/'.$plugin.'/plugin.php');
+			require_once($config['core']['fs_root'].'plugins/'.$plugin.'/plugin.php');
 		}
 	}
 
@@ -78,7 +78,7 @@ require_once('functions_locale.php');	//for translations
 
 		if ($pager['page'] > 1) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
-			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_prev.png" alt="'.t('Previous').'" width="11" height="12"/></a>';
+			$pager['head'] .= '<img src="'.$config['core']['web_root'].'gfx/arrow_prev.png" alt="'.t('Previous').'" width="11" height="12"/></a>';
 		}
 
 		if ($pager['tot_pages'] <= 10) {
@@ -114,7 +114,7 @@ require_once('functions_locale.php');	//for translations
 
 		if ($pager['page'] < $pager['tot_pages']) {
 			$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
-			$pager['head'] .= '<img src="'.$config['core_web_root'].'gfx/arrow_next.png" alt="'.t('Next').'" width="11" height="12"/></a>';
+			$pager['head'] .= '<img src="'.$config['core']['web_root'].'gfx/arrow_next.png" alt="'.t('Next').'" width="11" height="12"/></a>';
 		}
 		
 		$pager['head'] .= '<br/>';
@@ -128,7 +128,7 @@ require_once('functions_locale.php');	//for translations
 	{
 		global $config;
 
-		if ($_amp == 3) return $config['web_root'];
+		if ($_amp == 3) return $config['app']['web_root'];
 
 		if (!empty($_GET['pr'])) {
 			$proj_name = basename(strip_tags($_GET['pr']));

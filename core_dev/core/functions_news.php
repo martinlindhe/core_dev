@@ -199,7 +199,7 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 			echo '<textarea name="news_body" cols="60" rows="16">'.$item['body'].'</textarea><br/>';
 			echo '<input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
 			echo ' <label for="rss_check">';
-			echo '<img src="'.$config['core_web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
+			echo '<img src="'.$config['core']['web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
 			echo t('Include this news in the RSS feed').'</label><br/><br/>';
 			echo t('Category').': '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
 			echo t('Time for publication').':<br/>';
@@ -269,8 +269,8 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 			showNewsOverview($row);
 		}
 		if ($session->isAdmin) {
-			echo '<a href="'.$config['core_web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">'.t('Add news').'</a><br/>';
-			echo '<a href="'.$config['core_web_root'].'admin/admin_news.php'.getProjectPath(0).'">'.t('Manage news').'</a><br/>';
+			echo '<a href="'.$config['core']['web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">'.t('Add news').'</a><br/>';
+			echo '<a href="'.$config['core']['web_root'].'admin/admin_news.php'.getProjectPath(0).'">'.t('Manage news').'</a><br/>';
 		}
 	}
 	

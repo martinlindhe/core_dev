@@ -267,7 +267,7 @@
 
 			if ($session->id == $userId) {
 				if ($row['entryRead'] == 0) {
-					echo '<img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="'.t('Unread').'">';
+					echo '<img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="'.t('Unread').'">';
 				}
 			}
 			echo stripslashes($row['body']).'<br/>';

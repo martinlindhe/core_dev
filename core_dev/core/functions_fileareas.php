@@ -27,13 +27,13 @@ require_once('atom_rating.php');	//for file rating
 			if ($click) echo '</center></div>';
 		} else if (in_array($mime, $files->audio_mime_types)) {
 			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomAudio('.$fileId.',\''.urlencode($title).'\');"><center>';
-			echo '<img src="'.$config['core_web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
+			echo '<img src="'.$config['core']['web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 			if ($click) echo '</center></div>';
 		} else if (in_array($mime, $files->video_mime_types)) {
 
 			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomVideo('.$fileId.',\''.urlencode($title).'\');"><center>';
 			echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';
-			echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_left.png\')">&nbsp;</td>';
+			echo '<td width="10" style="background: url(\''.$config['core']['web_root'].'gfx/video_left.png\')">&nbsp;</td>';
 			echo '<td>';
 
 			if ($files->process_callback && $mime != $files->default_video) {
@@ -44,18 +44,18 @@ require_once('atom_rating.php');	//for file rating
 				if ($vid_thumb) {
 					echo showThumb($vid_thumb[0]['fileId'], '', 64, 64);
 				} else {
-					echo '<img src="'.$config['core_web_root'].'gfx/vid_thumb_missing.png" width="64" height="64" alt="Video file"/>';
+					echo '<img src="'.$config['core']['web_root'].'gfx/vid_thumb_missing.png" width="64" height="64" alt="Video file"/>';
 				}
 			}
 			echo '</td>';
-			echo '<td width="10" style="background: url(\''.$config['core_web_root'].'gfx/video_right.png\')">&nbsp;</td>';
+			echo '<td width="10" style="background: url(\''.$config['core']['web_root'].'gfx/video_right.png\')">&nbsp;</td>';
 			echo '</tr></table>';
 			if ($click) echo '</center></div>';
 
 
 		} else if (in_array($mime, $files->document_mime_types)) {
 			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomFile('.$fileId.');"><center>';
-			echo '<img src="'.$config['core_web_root'].'gfx/icon_file_document.png" width="40" height="49" alt="Document"/>';
+			echo '<img src="'.$config['core']['web_root'].'gfx/icon_file_document.png" width="40" height="49" alt="Document"/>';
 			if ($click) echo '</center></div>';
 		} else {
 			if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomFile('.$fileId.');"><center>';
@@ -99,7 +99,7 @@ require_once('atom_rating.php');	//for file rating
 		if ($session->error) $session->showError();
 
 		echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;">';
-		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="'.$config['core_web_root'].'gfx/ajax_loading.gif"/></div>';
+		echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="'.$config['core']['web_root'].'gfx/ajax_loading.gif"/></div>';
 
 		echo '<div class="file_gadget">';
 
@@ -258,7 +258,7 @@ require_once('atom_rating.php');	//for file rating
 		echo '</div>'; //id="image_thumbs_scroller"
 
 		echo '<div id="image_comments">';
-		echo '<iframe id="image_comments_iframe" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="'.$config['core_web_root'].'api/html_imgcomments.php?i='.$list[0]['fileId'].getProjectPath().'"></iframe>';
+		echo '<iframe id="image_comments_iframe" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="'.$config['core']['web_root'].'api/html_imgcomments.php?i='.$list[0]['fileId'].getProjectPath().'"></iframe>';
 		echo '</div>';
 
 		echo '<div id="image_big_holder">';
@@ -349,7 +349,7 @@ require_once('atom_rating.php');	//for file rating
 		}
 
 		echo '<div id="zoom_image_holder">';
-		echo '<img id="zoom_image" src="'.$config['core_web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
+		echo '<img id="zoom_image" src="'.$config['core']['web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
 		echo '</div>';
 
 		if ($session->id == $ownerId || $session->isAdmin) {

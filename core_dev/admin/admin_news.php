@@ -18,7 +18,7 @@
 		foreach ($list as $row)
 		{
 			echo '<tr><td>'.$row['timeToPublish'].':</td><td>';
-			echo '<a href="'.$config['web_root'].'news.php?News:'.$row['newsId'].'">'.$row['title'].'</a></td></tr>';
+			echo '<a href="'.$config['app']['web_root'].'news.php?News:'.$row['newsId'].'">'.$row['title'].'</a></td></tr>';
 		}
 		echo '</table>';
 	}
@@ -30,7 +30,7 @@
 		foreach ($list as $row)
 		{
 			echo '<tr><td>'.$row['timeToPublish'].':</td><td>';
-			echo '<a href="'.$config['web_root'].'news.php?News:'.$row['newsId'].'">'.$row['title'].'</a></td></tr>';
+			echo '<a href="'.$config['app']['web_root'].'news.php?News:'.$row['newsId'].'">'.$row['title'].'</a></td></tr>';
 		}
 		echo '</table>';
 	}

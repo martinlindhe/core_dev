@@ -67,12 +67,12 @@
 			switch ($row['categoryId'])
 			{
 				case REV_CAT_LOCKED:
-					echo '<img src="'.$config['core_web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
+					echo '<img src="'.$config['core']['web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
 					echo ' Locked by '.$row['creatorName'].'<br/>';
 					break;
 
 				case REV_CAT_UNLOCKED:
-					echo '<img src="'.$config['core_web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
+					echo '<img src="'.$config['core']['web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
 					echo ' Unlocked by '.$row['creatorName'].'<br/>';
 					break;
 

@@ -231,7 +231,7 @@ require_once('functions_locale.php');	//for translations
 			echo '<td width="100">'.Users::link($row['otherId'], $row['otherName']).'</td>';
 			echo '<td width="140">'.$row['timeCreated'].'</td>';
 			//(!$row['timeRead']?t('UNREAD'):t('READ')).'<br/>';
-			echo '<td><a href="?g='.$_group.'&amp;delete='.$row['msgId'].'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png" alt="'.t('Delete').'" border="0"/></a></td>';
+			echo '<td><a href="?g='.$_group.'&amp;delete='.$row['msgId'].'"><img src="'.$config['core']['web_root'].'gfx/icon_delete.png" alt="'.t('Delete').'" border="0"/></a></td>';
 			echo '</tr>';
 		}
 		echo '</table>';

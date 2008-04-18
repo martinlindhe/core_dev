@@ -190,8 +190,8 @@ class Auth_Standard extends Auth_Base
 		echo '<form name="login_form" method="post" action="">';
 
 		echo '<table cellpadding="2">';
-		echo '<tr><td>'.t('Username').':</td><td><input name="login_usr" type="text"/> <img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/></td></tr>';
-		echo '<tr><td>'.t('Password').':</td><td><input name="login_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+		echo '<tr><td>'.t('Username').':</td><td><input name="login_usr" type="text"/> <img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/></td></tr>';
+		echo '<tr><td>'.t('Password').':</td><td><input name="login_pwd" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
 		echo '</table>';
 		echo '<br/>';
 		echo '<input type="submit" class="button" value="'.t('Log in').'"/>';
@@ -229,11 +229,11 @@ class Auth_Standard extends Auth_Base
 					echo '<tr>'.
 									'<td>'.t('Username').':</td>'.
 									'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
-										'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
+										'<img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
 									'</td>'.
 								'</tr>';
-					echo '<tr><td>'.t('Password').':</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
-					echo '<tr><td>'.t('Again').':</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
+					echo '<tr><td>'.t('Password').':</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+					echo '<tr><td>'.t('Again').':</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
 					if ($this->userdata) {
 						showRequiredUserdataFields();
 					}
@@ -261,7 +261,7 @@ class Auth_Standard extends Auth_Base
 					echo 'You will recieve an e-mail with a link to follow,<br/>';
 					echo 'where you can set a new password.<br/><br/>';
 					echo '<table cellpadding="2">';
-					echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td><input type="text" name="forgot_pwd" size="26"/> <img src="'.$config['core_web_root'].'gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
+					echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td><input type="text" name="forgot_pwd" size="26"/> <img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
 					echo '</table><br/>';
 
 					echo '<input type="button" class="button" value="'.t('Log in').'" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/>';
@@ -312,11 +312,11 @@ class Auth_Standard extends Auth_Base
 		echo '<tr>'.
 				'<td>Användarnamn:</td>'.
 				'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
-					'<img src="'.$config['core_web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
+					'<img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
 				'</td>'.
 				'</tr>';
-		echo '<tr><td>'.t('Password').':</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
-		echo '<tr><td>'.t('Repeat password').':</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core_web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
+		echo '<tr><td>'.t('Password').':</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+		echo '<tr><td>'.t('Repeat password').':</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
 		if ($this->userdata) {
 			showRequiredUserdataFields();
 		}

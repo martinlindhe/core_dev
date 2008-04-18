@@ -304,7 +304,7 @@ abstract class DB_Base
 
 			echo '<table summary=""><tr><td width="40">';
 			if (!empty($this->query_error[$i])) {
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_error.png" alt="SQL Error" title="SQL Error"/>';
+				echo '<img src="'.$config['core']['web_root'].'gfx/icon_error.png" alt="SQL Error" title="SQL Error"/>';
 			} else {
 				echo round($this->time_spent[$i], 3).'s';
 			}
@@ -383,7 +383,7 @@ abstract class DB_Base
 			else echo 'Unregistered';
 			echo '</b> at '.$row['timeCreated'];
 
-			echo ' from <a href="'.$config['core_web_root'].'admin/admin_ip.php?ip='.GeoIP_to_IPv4($row['userIP']).getProjectPath().'">'.GeoIP_to_IPv4($row['userIP']).'</a>';
+			echo ' from <a href="'.$config['core']['web_root'].'admin/admin_ip.php?ip='.GeoIP_to_IPv4($row['userIP']).getProjectPath().'">'.GeoIP_to_IPv4($row['userIP']).'</a>';
 			echo '</i></div><br/>';
 		}
 

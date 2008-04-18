@@ -68,7 +68,7 @@
 			echo '<input type="text" name="change_'.$row['wordId'].'" value="'.$row['wordText'].'" size="16"/>';
 			echo '<input type="checkbox" class="checkbox" name="full_'.$row['wordId'].'" id="full_'.$row['wordId'].'" value="1"'.($row['wordMatch']==1?' checked="checked"':'').'/>';
 			echo '<label for="full_'.$row['wordId'].'">Full</label> ';
-			echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png" alt="Delete"/></a><br/>';
+			echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="'.$config['core']['web_root'].'gfx/icon_delete.png" alt="Delete"/></a><br/>';
 		}
 
 		echo '<br/><br/>Add new word:<br/><input type="text" name="newname_'.$x.'" size="16"/>';

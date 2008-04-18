@@ -53,7 +53,7 @@
 	if ($current_apache == 'Apache') {
 		echo '<div class="okay" onclick="toggle_element_by_name(\'apache_info_noversion\')">';
 		echo ' Version information not available';
-		echo ' <img src="'.$config['core_web_root'].'gfx/icon_info.png">';
+		echo ' <img src="'.$config['core']['web_root'].'gfx/icon_info.png">';
 		echo '</div>';
 		echo '<div id="apache_info_noversion" style="display: none">';
 		echo 'Production servers are sometimes configured not to report version information (ServerTokens Prod), ';

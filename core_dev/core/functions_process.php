@@ -407,7 +407,7 @@ define('ORDER_FAILED',		3);
 
 						if ($job['orderParams']) {
 							//execute callback
-							$uri = $config['full_core_web_root'].'api/file.php?id='.$newId;
+							$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
 							$data = file_get_contents($job['orderParams'].'&uri='.urlencode($uri));
 							echo "client callback script returned:\n".$data;
 

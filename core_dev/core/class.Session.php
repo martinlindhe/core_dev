@@ -37,9 +37,9 @@ class Session
 	private $check_ip = true;				///< client will be logged out if client ip is changed during the session
 	private $check_useragent = true;		///< keeps track if the client user agent string changes during the session
 
-	private $start_page = '';				///< redirects user to this page (in $config['web_root'] directory) after successful login
+	private $start_page = '';				///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
 	private $logged_out_start_page = 'index.php';
-	private $error_page = 'error.php';		///< redirects the user to this page (in $config['web_root'] directory) to show errors
+	private $error_page = 'error.php';		///< redirects the user to this page (in $config['app']['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
 	public $error;				///< last error message
@@ -281,8 +281,8 @@ class Session
 		echo 'User Agent: '.$this->user_agent.'<br/>';
 		echo 'Session timeout: '.shortTimePeriod($this->timeout).'<br/>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
-		echo 'Start page: '.$config['web_root'].$this->start_page.'<br/>';
-		echo 'Error page: '.$config['web_root'].$this->error_page.'<br/>';
+		echo 'Start page: '.$config['app']['web_root'].$this->start_page.'<br/>';
+		echo 'Error page: '.$config['app']['web_root'].$this->error_page.'<br/>';
 	}
 
 	/**
@@ -295,7 +295,7 @@ class Session
 		if (!empty($this->referer)) {
 			header('Location: '.$this->referer);
 		} else {
-			header('Location: '.$config['web_root'].$this->start_page);
+			header('Location: '.$config['app']['web_root'].$this->start_page);
 		}
 		die;
 	}
@@ -306,7 +306,7 @@ class Session
 	function loggedOutStartPage()
 	{
 		global $config;
-		header('Location: '.$config['web_root'].$this->logged_out_start_page);
+		header('Location: '.$config['app']['web_root'].$this->logged_out_start_page);
 		die;
 	}
 
@@ -316,7 +316,7 @@ class Session
 	function errorPage()
 	{
 		global $config;
-		header('Location: '.$config['web_root'].$this->error_page);
+		header('Location: '.$config['app']['web_root'].$this->error_page);
 		die;
 	}
 

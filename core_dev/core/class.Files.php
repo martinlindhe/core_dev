@@ -442,7 +442,7 @@ class Files
 		if ($this->default_video) {
 			if ($FileData['type'] != $this->default_video) {
 
-				$uri = $config['full_web_root'].$config['core_web_root'].'api/file.php?id='.$fileId;
+				$uri = $config['app']['full_url'].$config['core']['web_root'].'api/file.php?id='.$fileId;
 				$refId = process_client_fetchAndConvert($uri, $this->process_callback.'?id='.$fileId);
 				if (!$refId) {
 					echo 'Failed to add order!';
@@ -945,7 +945,7 @@ class Files
 			echo 'Attached files:<br/>';
 			foreach ($list as $row) {
 				$show_text = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
-				echo '<a href="'.$config['core_web_root'].'api/file_pt.php?id='.$row['fileId'].getProjectPath().'" target="_blank">';
+				echo '<a href="'.$config['core']['web_root'].'api/file_pt.php?id='.$row['fileId'].getProjectPath().'" target="_blank">';
 				if (in_array($row['fileMime'], $this->image_mime_types)) {
 					echo makeThumbLink($row['fileId'], $show_text).'</a> ';
 				} else {

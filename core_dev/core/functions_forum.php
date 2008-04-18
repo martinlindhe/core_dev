@@ -335,7 +335,7 @@
 				}
 
 				echo '<tr class="forum_overview_item_'.($i%2?'even':'odd').'" >';
-				echo '<td align="center"><img src="'.$config['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/></td>';
+				echo '<td align="center"><img src="'.$config['core']['web_root'].'gfx/icon_forum_folder.png" alt="Folder"/></td>';
 				echo '<td class="forum_item_text">';
 					echo '<a href="forum.php?id='.$row['itemId'].'">'.$subject.'</a><br/>';
 					echo $row['itemBody'];
@@ -474,18 +474,18 @@
 			echo '<td align="center">';	//icon
 
 			if ($row['locked']) {
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_locked.png" alt="Locked"/><br/>';
+				echo '<img src="'.$config['core']['web_root'].'gfx/icon_locked.png" alt="Locked"/><br/>';
 			}
 			if ($row['sticky'] == 1) {
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_sticky.png" alt="Sticky"/>';
+				echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_sticky.png" alt="Sticky"/>';
 			}
 
 			if ($row['sticky'] == 2) {
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_announcement.png" alt="Announcement"/>';
+				echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_announcement.png" alt="Announcement"/>';
 			} else if ($data['parentId'] == 0) {
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_folder.png" alt="Folder"/>';
+				echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_folder.png" alt="Folder"/>';
 			} else {
-				echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_topic.png" alt="Message"/>';
+				echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_topic.png" alt="Message"/>';
 			}
 			echo '</td>';
 
@@ -513,7 +513,7 @@
 					echo '<a href="forum.php?id='.$lastpost['itemId'].'#post'.$lastpost['itemId'].'">'.$subject.'</a><br/>';
 				} else {
 					//This is a post (a reply to a topic)
-					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"><img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
+					echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"><img src="'.$config['core']['web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
 				}
 				echo 'by '.Users::link($lastpost['userId'], $lastpost['userName']).'<br/>';
 				echo $lastpost['timeCreated'];
@@ -574,7 +574,7 @@
 		
 		echo '<div class="forum_post_details">';
 		echo '<a href="forum.php?id='.$item['parentId'].'#post'.$item['itemId'].'">';
-		echo '<img src="'.$config['core_web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
+		echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
 		echo 'by '.Users::link($item['authorId'], $item['authorName']).' on '.$item['timeCreated'];
 		echo '</div><br/>';
 

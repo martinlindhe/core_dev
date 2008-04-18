@@ -291,7 +291,7 @@
 			//allow users to delete comments on their files
 			($row['commentType'] == COMMENT_FILE && Files::getOwner($row['ownerId']) == $session->id)
 		) {
-			echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core_web_root'].'gfx/icon_delete.png"/></a>';
+			echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core']['web_root'].'gfx/icon_delete.png"/></a>';
 		}
 		echo '</div>';
 	}

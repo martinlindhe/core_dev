@@ -19,7 +19,7 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 		if (!is_numeric($w) || !$w) $w = $files->thumb_default_width;
 		if (!is_numeric($h) || !$h) $h = $files->thumb_default_height;
 
-		$str = $config['core_web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h.getProjectPath();
+		$str = $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h.getProjectPath();
 		return $str;
 	}
 
@@ -45,7 +45,7 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 		global $config;
 		if (!is_numeric($_id)) return false;
 
-		return '<img id="img_'.$_id.'" src="'.$config['core_web_root'].'api/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/>';
+		return '<img id="img_'.$_id.'" src="'.$config['core']['web_root'].'api/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/>';
 	}
 
 	/* Returns a string like "2 KiB" */

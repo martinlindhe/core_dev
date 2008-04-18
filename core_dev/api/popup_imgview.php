@@ -13,7 +13,7 @@
 
 	createXHTMLHeader();
 
-	echo '<img id="popup_img" src="'.$config['core_web_root'].'api/file.php?id='.$fileId.getProjectPath().'"/>';
+	echo '<img id="popup_img" src="'.$config['core']['web_root'].'api/file.php?id='.$fileId.getProjectPath().'"/>';
 ?>
 <script type="text/javascript">
 if (image_loaded('popup_img')) resize_wnd_to_img('popup_img');
