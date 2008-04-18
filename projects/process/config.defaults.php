@@ -3,17 +3,17 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	$config['core_root'] = '/home/martin/dev/core_dev/';	//use of an absolute path is highly recommended
-	$config['core_web_root'] = '/';						//the webpath to root level of core files (css, js, gfx directories)
-	$config['full_core_web_root'] = 'http://localhost'.$config['core_web_root'];
+	$config['core']['fs_root'] = '/home/martin/dev/core_dev/';
+	$config['core']['web_root'] = '/';
+	$config['core']['full_url'] = 'http://localhost'.$config['core']['web_root'];
 
-	$config['web_root'] = '/process/';						//the webpath to the root level of the project
-	$config['full_web_root'] = 'http://localhost'.$config['web_root'];
+	$config['app']['web_root'] = '/process/';
+	$config['app']['full_url'] = 'http://localhost'.$config['app']['web_root'];
 	$config['default_title'] = 'process server project';					//default title for pages if no title is specified for that page
 
 	$config['language'] = 'se';
 
-	set_include_path($config['core_root'].'core/');
+	set_include_path($config['core']['fs_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Auth_Standard.php');
 	require_once('class.Session.php');

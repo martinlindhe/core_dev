@@ -15,7 +15,7 @@ class SOAP_ProcessService
 	}
 }
 
-$server = new SoapServer($config['full_web_root'].'process.wsdl.php'); //, array('trace' => 1));
+$server = new SoapServer($config['app']['full_url'].'process.wsdl.php'); //, array('trace' => 1));
 $server->setClass('SOAP_ProcessService');
 
 $server->handle();

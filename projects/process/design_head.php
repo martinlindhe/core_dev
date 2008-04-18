@@ -4,8 +4,8 @@
 		process site
 	</div>
 	<div id="header-items">
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:AboutProcess">About</a>
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:HelpProcess">Help</a>
+		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:AboutProcess">About</a>
+		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:HelpProcess">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
@@ -21,7 +21,7 @@
 	if ($session->isAdmin) {
 		$menu = array(
 			'process_queue.php' => 'FORCE process',
-			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
+			$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
 		);
 		createMenu($menu);
 	}

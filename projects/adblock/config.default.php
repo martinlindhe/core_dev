@@ -3,13 +3,13 @@
 
 	error_reporting(E_ALL);
 
-	$config['core_root'] = 'H:/devel/webroot/core_dev/';
-	$config['core_web_root'] = '/core_dev/';
+	$config['core']['fs_root'] = 'H:/devel/webroot/core_dev/';
+	$config['core']['web_root'] = '/core_dev/';
 
-	$config['web_root'] = '/adblock/';	//path on web server, to use to address paths for css & js includes
+	$config['app']['web_root'] = '/adblock/';
 	$config['default_title'] = 'Adblock Filterset Database';
 
-	set_include_path($config['core_root'].'core/');
+	set_include_path($config['core']['fs_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Auth_Standard.php');
 	require_once('class.Session.php');

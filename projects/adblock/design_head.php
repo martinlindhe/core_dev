@@ -1,17 +1,17 @@
 <?
-	$meta_search[] = array('url' => $config['web_root'].'opensearch.xml', 'name' => 'Adblock Ruleset Search');
+	$meta_search[] = array('url' => $config['app']['web_root'].'opensearch.xml', 'name' => 'Adblock Ruleset Search');
 
 	createXHTMLHeader();
 ?>
 <div id="left-sep"></div>
 <div id="header">
 	<div id="header-logo">
-		<img src="<?=$config['web_root']?>gfx/logo.png" alt="Filterset Database"/>
+		<img src="<?=$config['app']['web_root']?>gfx/logo.png" alt="Filterset Database"/>
 	</div>
 	<div id="header-items">
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:Contribute">Contribute</a>
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:About">About</a>
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:Help">Help</a>
+		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:Contribute">Contribute</a>
+		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:About">About</a>
+		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:Help">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
@@ -29,7 +29,7 @@
 		$menu = array(
 			'newrule.php' => 'New rule',
 			'ruleset.php' => 'Browse ruleset',
-			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
+			$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
 		createMenu($menu);
 	}
 

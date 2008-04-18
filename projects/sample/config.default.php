@@ -4,14 +4,13 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	//$config['core_root'] = '/home/martin/dev/webroot/core_dev/';	//use of an absolute path is highly recommended
-	$config['core_root'] = 'E:/devel/webroot/core_dev/';	//use of an absolute path is highly recommended
-	$config['core_web_root'] = '/core_dev/';						//the webpath to root level of core files (css, js, gfx directories)
+	$config['core']['fs_root'] = 'E:/devel/webroot/core_dev/';
+	$config['core']['web_root']= '/core_dev/';
 
-	$config['web_root'] = '/core_dev/sample/';						//the webpath to the root level of the project
+	$config['app']['web_root'] = '/core_dev/sample/';
 	$config['default_title'] = 'sample project';					//default title for pages if no title is specified for that page
 
-	set_include_path($config['core_root'].'core/');
+	set_include_path($config['core']['fs_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Auth_Standard.php');
 	require_once('class.Users.php');

@@ -4,17 +4,14 @@
 	$time_start = microtime(true);
 	$config['debug'] = true;
 
-	//$config['core_root'] = '/home/martin/dev/webroot/core_dev/';	//use of an absolute path is highly recommended
-	$config['core_root'] = 'E:/devel/webroot/core_dev/';	//use of an absolute path is highly recommended
-	$config['core_web_root'] = '/core_dev/';						//the webpath to root level of core files (css, js, gfx directories)
+	$config['core']['fs_root'] = 'E:/devel/webroot/core_dev/';
+	$config['core']['web_root'] = '/core_dev/';
 
-	$config['web_root'] = '/core_dev/sample/';						//the webpath to the root level of the project
+	$config['app']['web_root'] = '/projects/sample/';
 	$config['default_title'] = 'sample project';					//default title for pages if no title is specified for that page
 
-	set_include_path($config['core_root'].'core/');
+	set_include_path($config['core']['fs_root'].'core/');
 	require_once('class.DB_MySQLi.php');
-	//require_once('class.DB_MySQL.php');
-	//require_once('class.DB_PostgreSQL.php');
 	require_once('class.Session.php');
 	require_once('class.Files.php');
 	require_once('functions_faq.php');
@@ -29,19 +26,10 @@
 	require_once('atom_polls.php');				//for site polls, note: not nessecary here since this project use news module which force includes it, but included for clarity
 	restore_include_path();
 
-	//$config['plugins'] = array('wurfl');
-	//loadPlugins();
-
 	$config['database']['username']	= 'root';
 	$config['database']['password']	= '';
 	$config['database']['database']	= 'dbSample';
 	$db = new DB_MySQLi($config['database']);
-/*
-	$config['database']['username']	= 'postgres';
-	$config['database']['password']	= 'test';
-	$config['database']['database']	= 'dbSample';
-	$db = new DB_PostgreSQL($config['database']);
-*/
 
 	$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
 	$config['session']['name'] = 'coreID';

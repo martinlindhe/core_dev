@@ -15,11 +15,11 @@
 ?>
 <div id="header">
 	<div id="header-logo">
-		<img src="<?=$config['web_root']?>gfx/logo.png" alt="Sample Site"/>
+		<img src="<?=$config['app']['web_root']?>gfx/logo.png" alt="Sample Site"/>
 	</div>
 	<div id="header-items">
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:About">About</a>
-		<a href="<?=$config['web_root']?>wiki.php?Wiki:Help">Help</a>
+		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:About">About</a>
+		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:Help">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
@@ -34,13 +34,13 @@
 		'blogs.php' => 'Blogs',
 		'polls.php' => 'Polls',
 		'users.php' => 'Users'
-		//$config['core_web_root'].'process/' => 'PROCESS SERVER'
+		//$config['core']['web_root'].'process/' => 'PROCESS SERVER'
 	);
 	createMenu($menu);
 
 	if ($session->isAdmin) {
 		$menu = array(
-			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
+			$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
 		createMenu($menu);
 	}
 

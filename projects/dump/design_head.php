@@ -18,7 +18,7 @@
 
 	if ($session->isAdmin) {
 		$menu = array(
-			$config['core_web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
+			$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
 		createMenu($menu);
 	}
 

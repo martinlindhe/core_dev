@@ -3,13 +3,13 @@
 
 	error_reporting(E_ALL);
 
-	$config['core_root'] = 'core_dev/';
-	$config['core_web_root'] = '/lyrics/core_dev/';
+	$config['core']['fs_root'] = 'core_dev/';
+	$config['core']['web_root'] = '/lyrics/core_dev/';
 
-	$config['web_root'] = '/lyrics/';
+	$config['app']['web_root'] = '/lyrics/';
 	$config['default_title'] = 'lyric database';
 
-	set_include_path($config['core_root'].'core/');
+	set_include_path($config['core']['fs_root'].'core/');
 	require_once('class.DB_MySQLi.php');
 	require_once('class.Auth_Standard.php');
 	require_once('class.Session.php');
