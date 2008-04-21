@@ -115,6 +115,21 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 		$text = str_ireplace("[hr]\n", '<hr/>', $text);	//fixme: this is a hack. a better solution would be to trim all whitespace directly following a [hr] tag
 		$text = str_ireplace('[hr]', '<hr/>', $text);
 
+		//raw block, example: [raw]text text[/raw], interpret as written. FIXME: make possible to disable in config
+		$text = str_ireplace("[/raw]\n", "[/raw]", $text);
+		do {
+			$pos1 = stripos($text, '[raw]');
+			if ($pos1 === false) break;
+
+			$pos2 = stripos($text, '[/raw]');
+			if ($pos2 === false) break;
+			$codeblock = trim(substr($text, $pos1+strlen('[raw]'), $pos2-$pos1-strlen('[raw]')));
+			$codeblock = str_replace("\n", '(_br_)', $codeblock);
+
+			$text = substr($text, 0, $pos1) . $codeblock . substr($text, $pos2+strlen('[/raw]'));
+		} while (1);
+
+
 		//code block, example: [code]text text[/code]
 		$text = str_ireplace("[/code]\n", "[/code]", $text);
 		do {
@@ -191,7 +206,7 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 			$link['cmd'] = $arr[0];
 			$link['param'] = '';
 			for ($i=1; $i<count($arr); $i++) {
-				$link['param'] .= $arr[$i];
+				$link['param'] .= ($i>1?':':'').$arr[$i];
 			}
 
 			if (empty($link['cmd'])) continue;
@@ -234,7 +249,7 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 
 		//todo: add [img]url[/img] tagg för bildlänkning! och checka för intern länkning
 
-		$text = replaceLinks($text);
+		//$text = replaceLinks($text);
 
 		$text = nl2br($text);
 		$text = str_replace('(_br_)', "\n", $text);

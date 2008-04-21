@@ -83,10 +83,13 @@
 		return $text;
 	}
 
-	/*
-		Visar en wiki för användaren. Normalt kan vem som helst redigera den samt ladda upp filer till den,
-		men en admin kan låsa wikin från att bli redigerad av vanliga användare
-	*/
+	/**
+	 * Display / edit wiki gadget
+	 *
+	 * Normally everyone can edit a wiki text and attach files to it (FIXME),
+	 * but you can override defaults with config settings.
+	 * Also, you can lock a specific wiki from editing by normal users.
+	 */
 	function wiki($wikiName = '')
 	{
 		global $db, $files, $session, $config;
@@ -116,7 +119,7 @@
 		}
 
 		if (!$session->isAdmin && !$config['wiki']['allow_edit']) {
-			/* Only display the text for normal visitors */
+			//Only display the text for normal visitors
 			echo '<div class="wiki">';
 			echo '<div class="wiki_body">';
 			echo wikiFormat($wikiName, $data);
@@ -144,7 +147,7 @@
 		createMenu($wiki_menu, 'wiki_menu');
 		echo '<div class="wiki_body">';
 
-		/* Display the wiki toolbar for super admins */
+		//Display the wiki toolbar for super admins
 		if ($current_tab == 'WikiEdit' && ($session->isAdmin || !$data['lockedBy']))
 		{
 			if (isset($_POST['wiki_'.$data['wikiId']]))
