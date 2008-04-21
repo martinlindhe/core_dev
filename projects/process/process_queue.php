@@ -7,6 +7,7 @@
 	set_time_limit(0);	//no time limit
 	$config['no_session'] = true;	//force session "last active" update to be skipped
 	require_once('config.php');
+	$config['debug'] = false;
 
 	do {
 		processQueue();
