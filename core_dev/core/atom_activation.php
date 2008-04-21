@@ -23,6 +23,7 @@
 	$config['activate']['expire_time_email']		= (12*60*60); 	///< 12 hours
 	$config['activate']['expire_time_sms']			= (12*60*60);	///< 12 hours
 	$config['activate']['expire_time_change_pwd']	= (6*60*60); 	///< 6 hours
+	$config['activate']['expire_time_account']		= (24*60*60);	///< 24 hours
 
 	/**
 	 * Returns an unused numeric activation code
@@ -52,6 +53,8 @@
 			case ACTIVATE_EMAIL:		return $config['activate']['expire_time_email'];
 			case ACTIVATE_SMS:			return $config['activate']['expire_time_sms'];
 			case ACTIVATE_CHANGE_PWD:	return $config['activate']['expire_time_change_pwd'];
+			case ACTIVATE_ACCOUNT:		return $config['activate']['expire_time_account'];
+			default: die('UNKNOWN TYPE '.$_type);
 		}
 	}
 
