@@ -19,20 +19,20 @@
  */
 
 	define("CC_INVALID",		0);
-	define("CC_VISA",				1);
-	define("CC_MASTERCARD",	2);
-	define("CC_AMEX",				3);
+	define("CC_VISA",			1);
+	define("CC_MASTERCARD",		2);
+	define("CC_AMEX",			3);
 	define("CC_DINERS",			4);
 	define("CC_DISCOVER",		5);
-	define("CC_JCB",				6);
+	define("CC_JCB",			6);
 
-	$cc_name[CC_INVALID]		= "Invalid";
-	$cc_name[CC_VISA]				= "Visa";
+	$cc_name[CC_INVALID]	= "Invalid";
+	$cc_name[CC_VISA]		= "Visa";
 	$cc_name[CC_MASTERCARD]	= "Mastercard";
-	$cc_name[CC_AMEX]				= "American Express";
-	$cc_name[CC_DINERS]			= "Diners Club / Carte Blanche";
-	$cc_name[CC_DISCOVER]		= "Discover";
-	$cc_name[CC_JCB]				= "JCB";
+	$cc_name[CC_AMEX]		= "American Express";
+	$cc_name[CC_DINERS]		= "Diners Club / Carte Blanche";
+	$cc_name[CC_DISCOVER]	= "Discover";
+	$cc_name[CC_JCB]		= "JCB";
  
 	/**
 	 *  Cleans up a cc number entered by a user
@@ -64,6 +64,29 @@
 		$result = '';
 		for ($i=0; $i<strlen($number); $i+=4) {
 			$result .= substr($number, $i, 4).' ';
+		}
+		return trim($result);
+	}
+
+	/**
+	 * Used to format the card number with spaces between every 4:th digit so it's easier to read
+	 * Masks out the middle part of the number, showing the first 4 and last 4 digits.
+	 *
+	 * \param $number credit card number
+	 * \return formatted credit card number
+	 */
+	function CCmaskNumber($number)
+	{
+		$number = CCstripNumber($number);
+		if (!$number) return false;
+
+		$result = '';
+		for ($i=0; $i<strlen($number); $i+=4) {
+			if ($i==0 || $i+4 == strlen($number)) {
+				$result .= substr($number, $i, 4).' ';
+			} else {
+				$result .= '**** ';
+			}
 		}
 		return trim($result);
 	}
