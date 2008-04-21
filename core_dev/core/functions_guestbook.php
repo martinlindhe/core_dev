@@ -262,7 +262,7 @@
 
 			echo '<div class="guestbook_entry_head">';
 			echo t('From').' '.Users::link($row['authorId'], $row['authorName']);
-			echo ', '.$row['timeCreated'];
+			echo ', '.formatTime($row['timeCreated']);
 			echo '</div>';
 
 			if ($session->id == $userId) {
