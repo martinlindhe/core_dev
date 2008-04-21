@@ -110,14 +110,16 @@ class Auth_Standard extends Auth_Base
 			return false;
 		}
 
-		if ($this->mail_activate && !Users::isActivated($data['userId'])) {
-			$session->error = t('This account has not yet been activated.');
-			return false;
-		}
+		if ($data['userMode'] != USERLEVEL_SUPERADMIN) {
+			if ($this->mail_activate && !Users::isActivated($data['userId'])) {
+				$session->error = t('This account has not yet been activated.');
+				return false;
+			}
 
-		if ($data['userMode'] != 2 && !$this->allow_login) {
-			$session->error = t('Logins currently not allowed.');
-			return false;
+			if (!$this->allow_login) {
+				$session->error = t('Logins currently not allowed.');
+				return false;
+			}
 		}
 
 		$session->startSession($data['userId'], $data['userName'], $data['userMode']);
