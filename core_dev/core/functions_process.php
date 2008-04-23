@@ -375,14 +375,14 @@ define('ORDER_FAILED',		3);
 				break;
 
 			case PROCESS_FETCH:
-				echo "FETCH CONTENT FROM ".$job['orderParams']."\n";
+				echo "FETCH CONTENT\n";
 
 				$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
 				$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
 
 				//FIXME: isURL() check
 				$c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$files->findUploadPath($newFileId);
-				echo "Executing: ".$c."\n";
+				echo "$ ".$c."\n";
 				$exec_time = exectime($c);
 
 				//TODO: process html document for media links if it is a html document
@@ -392,7 +392,7 @@ define('ORDER_FAILED',		3);
 				break;
 
 			case PROCESS_CONVERT_TO_DEFAULT:
-				echo "CONVERT TO DEFAULT:\n";
+				echo "CONVERT TO DEFAULT\n";
 				//referId is entryId of previous proccess queue order
 				$prev_job = getProcessQueueEntry($job['referId']);
 				$file = $files->getFileInfo($prev_job['referId']);
@@ -409,7 +409,10 @@ define('ORDER_FAILED',		3);
 							//execute callback
 							$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
 							$data = file_get_contents($job['orderParams'].'&uri='.urlencode($uri));
-							echo "client callback script returned:\n".$data;
+
+							echo "Performing callback: ".$job['orderParams'].'&uri='.urlencode($uri). "\n\n";
+
+							echo "Client callback script returned:\n".$data;
 
 							//delete files after callback processing
 							$files->deleteFile($prev_job['referId']);
@@ -491,7 +494,7 @@ define('ORDER_FAILED',		3);
 				die('unknown destination video format: '.$mime);
 		}
 
-		echo "Executing: ".$c."\n";
+		echo "$ ".$c."\n";
 		exec($c);
 
 		if (!file_exists($files->findUploadPath($newId)) || !filesize($files->findUploadPath($newId))) {
