@@ -70,10 +70,10 @@
 			}
 			echo '</div>';
 			echo '</div>';
+			return '';
 		}
 
 		$text = stripslashes($data['msg']);
-
 		$text = formatUserInputText($text, !$config['wiki']['allow_html']);
 
 		if ($config['wiki']['explain_words']) {
