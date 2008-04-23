@@ -4,7 +4,6 @@
 		process site
 	</div>
 	<div id="header-items">
-		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:AboutProcess">About</a>
 		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:HelpProcess">Help</a>
 	</div>
 </div>

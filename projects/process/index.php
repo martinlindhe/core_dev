@@ -3,9 +3,6 @@
 
 	require('design_head.php');
 
-	wiki('ProcessHome');
-	echo '<br/>';
-
 	if (!$session->id) {
 		$auth->showLoginForm();
 	}

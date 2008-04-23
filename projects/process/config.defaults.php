@@ -37,7 +37,8 @@
 
 	$config['auth']['sha1_key'] = 'sdcu7cw897cwhwihwiuh#zaixx7wsxh3hdzsddFDF4ex1g';
 	$config['auth']['allow_login'] = true;
-	$config['auth']['allow_registration'] = true;
+	$config['auth']['allow_registration'] = false;
+	$config['auth']['userdata'] = false;
 	$auth = new Auth_Standard($config['auth']);
 
 	$config['files']['apc_uploads'] = false;
