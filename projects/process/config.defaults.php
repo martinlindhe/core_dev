@@ -4,11 +4,11 @@
 	$config['debug'] = true;
 
 	$config['core']['fs_root'] = '/home/martin/dev/core_dev/';
-	$config['core']['web_root'] = '/';
-	$config['core']['full_url'] = 'http://localhost'.$config['core']['web_root'];
+	$config['core']['web_root'] = '/core_dev/';
+	$config['core']['full_url'] = 'http://process1.x'.$config['core']['web_root'];
 
-	$config['app']['web_root'] = '/process/';
-	$config['app']['full_url'] = 'http://localhost'.$config['app']['web_root'];
+	$config['app']['web_root'] = '/';
+	$config['app']['full_url'] = 'http://process1.x'.$config['app']['web_root'];
 	$config['default_title'] = 'process server project';					//default title for pages if no title is specified for that page
 
 	$config['language'] = 'se';
@@ -46,7 +46,7 @@
 	$files = new Files($config['files']);
 
 	$config['process']['video_watermark'] = '';
-	$config['process']['soap_server'] = 'http://process.localhost/soap_server.php';
+	$config['process']['soap_server'] = 'http://process1.x/soap_server.php';
 
 	$config['wiki']['allow_html'] = true;
 	$config['wiki']['allow_files'] = true;
