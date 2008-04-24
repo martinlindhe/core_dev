@@ -77,4 +77,19 @@
 
 		return $data;
 	}
+
+	/**
+	 * Helper function to embed Flash .swf objects
+	 */
+	function embedSwf($url, $w, $h, $div_id = 'swfholder')
+	{
+		$data  = '<script language="javascript" type="text/javascript">';
+    	$data .= 'swfobject.embedSWF("'.$url.'", "'.$div_id.'", "'.$w.'", "'.$h.'", "9.0.0");';
+		$data .= '</script>';
+   		$data .= '<div id="'.$div_id.'">';
+      		$data .= '<p>swf holder</p>';
+    	$data .= '</div>';
+
+		return $data;
+	}
 ?>
