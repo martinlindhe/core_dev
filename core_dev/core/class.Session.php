@@ -169,8 +169,9 @@ class Session
 		$this->ip = 0;
 		$this->user_agent = '';
 		$this->mode = 0;
-		$this->isAdmin = 0;
-		$this->isSuperAdmin = 0;
+		$this->isWebmaster = false;
+		$this->isAdmin = false;
+		$this->isSuperAdmin = false;
 		$this->theme = $this->default_theme;
 		$this->referer = '';
 
