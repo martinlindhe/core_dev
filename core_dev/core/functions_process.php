@@ -147,7 +147,7 @@ define('ORDER_FAILED',		3);
 			//     is'nt ready for process yet on test box. even after move_uploaded_file().
 			//     hopefully it can be removed later on
 			$q = 'SELECT * FROM tblProcessQueue WHERE orderStatus='.ORDER_NEW;
-			$q .= ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 1 SECOND)';
+			$q .= ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 10 SECOND)';
 			$q .= ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
 		}
 		return $db->getOneRow($q);
