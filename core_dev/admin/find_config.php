@@ -9,10 +9,8 @@
 		$project = '../';	//Defaults to a config.php in the directory below this one
 		if (!file_exists($project.'config.php')) $project = '../../';
 	}
-$project = "/home/ml/dev/m2w/operator/";
 
 	if (!file_exists($project.'config.php')) {
-		echo $project.'config.php'."<br>";
 		if (!file_exists($_SERVER['DOCUMENT_ROOT'].'config.php')) {
 			die('cant find config path from '.$_SERVER['SCRIPT_FILENAME']);
 		}
