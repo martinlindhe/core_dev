@@ -119,18 +119,6 @@ define('ORDER_FAILED',		3);
 	}
 
 	/**
-	 * FIXME remove??
-	 */
-	function getEvents()
-	{
-		global $db;
-
-		$q = 'SELECT * FROM tblEvents ORDER BY timeCreated DESC';
-
-		return $db->getArray($q);
-	}
-
-	/**
 	 * Returns a process queue entry
 	 *
 	 * \param $_id entryId or 0 to return the oldest marked as ORDER_NEW
