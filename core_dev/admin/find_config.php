@@ -4,14 +4,16 @@
 		$project_name = preg_replace("/[^\w\.-]+/", '_', $_GET['pr']); //removes dangerous filesystem letters
 		if ($project_name != $_GET['pr']) die;	//invalid chars in path
 		$project = '../../'.$project_name.'/';
-		if (!is_file($project.'config.php')) $project = '../'.$project_name.'/';
+		if (!file_exists($project.'config.php')) $project = '../'.$project_name.'/';
 	} else {
 		$project = '../';	//Defaults to a config.php in the directory below this one
-		if (!is_file($project.'config.php')) $project = '../../';
+		if (!file_exists($project.'config.php')) $project = '../../';
 	}
+$project = "/home/ml/dev/m2w/operator/";
 
-	if (!is_file($project.'config.php')) {
-		if (!is_file($_SERVER['DOCUMENT_ROOT'].'config.php')) {
+	if (!file_exists($project.'config.php')) {
+		echo $project.'config.php'."<br>";
+		if (!file_exists($_SERVER['DOCUMENT_ROOT'].'config.php')) {
 			die('cant find config path from '.$_SERVER['SCRIPT_FILENAME']);
 		}
 		$project = $_SERVER['DOCUMENT_ROOT'];

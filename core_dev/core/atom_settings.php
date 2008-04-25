@@ -7,8 +7,9 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	define('SETTING_USERDATA',			2);			//settings used to store personal userdata
-	define('SETTING_CALLERDATA',		3);			//settings used to store data of a caller
+	define('SETTING_APPDATA',		1);		//setting global to the whole application
+	define('SETTING_USERDATA',		2);		//settings used to store personal userdata
+	define('SETTING_CALLERDATA',	3);		//settings used to store data of a caller
 
 
 	//TODO remove these and make more userdata field types instead
@@ -26,7 +27,8 @@
 	function saveSetting($_type, $ownerId, $settingName, $settingValue)
 	{
 		global $db;
-		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+		if (!is_numeric($ownerId) || !is_numeric($_type) || !$settingName) return false;
+		if ($_type != SETTING_APPDATA && !$ownerId) return false;
 
 		$settingName = $db->escape($settingName);
 		$settingValue = $db->escape($settingValue);
@@ -55,7 +57,8 @@
 	function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
 	{
 		global $db;
-		if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type) || !$settingName) return false;
+		if (!is_numeric($ownerId) || !is_numeric($_type) || !$settingName) return false;
+		if ($_type != SETTING_APPDATA && !$ownerId) return false;
 
 		$settingName = $db->escape($settingName);
 		$defaultValue = $db->escape($defaultValue);
