@@ -20,10 +20,10 @@
 	define('ACTIVATE_ACCOUNT',		5);		//used to activate a pre-generated account
 
 	$config['activate']['expire_time_captcha']		= 60*5;			///< 5 minutes
-	$config['activate']['expire_time_email']		= (12*60*60); 	///< 12 hours
-	$config['activate']['expire_time_sms']			= (12*60*60);	///< 12 hours
-	$config['activate']['expire_time_change_pwd']	= (6*60*60); 	///< 6 hours
-	$config['activate']['expire_time_account']		= (24*60*60);	///< 24 hours
+	$config['activate']['expire_time_email']		= (24*60*60)*30; 	///< 30 days
+	$config['activate']['expire_time_sms']			= (24*60*60)*30;	///< 30 days
+	$config['activate']['expire_time_change_pwd']	= (24*60*60)*30; 	///< 30 days
+	$config['activate']['expire_time_account']		= (24*60*60)*30;	///< 30 days
 
 	/**
 	 * Returns an unused numeric activation code
