@@ -83,12 +83,25 @@
 	 */
 	function embedSwf($url, $w, $h, $div_id = 'swfholder')
 	{
-		$data  = '<script language="javascript" type="text/javascript">';
-    	$data .= 'swfobject.embedSWF("'.$url.'", "'.$div_id.'", "'.$w.'", "'.$h.'", "9.0.0");';
-		$data .= '</script>';
-   		$data .= '<div id="'.$div_id.'">';
+   		$data = '<div id="'.$div_id.'">';
       		$data .= '<p>swf holder</p>';
     	$data .= '</div>';
+
+		$data .= '<script language="javascript" type="text/javascript">';
+
+    	//$data .= 'swfobject.embedSWF("'.$url.'", "'.$div_id.'", "'.$w.'", "'.$h.'", "9.0.0");';	//XXX: requires swfobject 2.0
+
+		//XXX: this is for swfobject 1.5
+		$data .= 'var fo = new SWFObject("'.$url.'", "mediaplayer", '.$w.', '.$h.', "8", "#FFFFFF");';
+		$data .= 'fo.addParam("allowfullscreen","true");';
+		$data .= 'fo.addVariable("width",'.$w.');';
+		$data .= 'fo.addVariable("height",'.$h.');';
+		$data .= 'fo.addVariable("file","'.$url.'");';
+		$data .= 'fo.addVariable("autostart", false);';
+		//$data .= 'fo.addVariable("image","video.jpg");';
+		$data .= 'fo.write("'.$div_id.'");';
+
+		$data .= '</script>';
 
 		return $data;
 	}
