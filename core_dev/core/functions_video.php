@@ -81,8 +81,12 @@
 	/**
 	 * Helper function to embed Flash .swf objects
 	 */
-	function embedSwf($url, $w, $h, $div_id = 'swfholder')
+	function embedSwf($url, $w = 0, $h = 0, $div_id = '')
 	{
+		if (!$div_id) $div_id = 'div_'.mt_rand(1,999999);
+		if (!$w) $w = 176 * 1.5;
+		if (!$h) $h = 144 * 1.5;
+
    		$data = '<div id="'.$div_id.'">';
       		$data .= '<p>swf holder</p>';
     	$data .= '</div>';
