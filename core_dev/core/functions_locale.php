@@ -222,6 +222,7 @@ $weekday_swe[7] = 'Söndag';
 			case 'Save changes': return 'Spara ändringar';
 			case 'Include this news in the RSS feed': return 'Inkludera denna nyhet i RSS-flödet';
 			case 'Show article': return 'Visa artikeln';
+			case 'Updated': return 'Uppdaterad';
 
 			//Ratings
 			case 'Rate this': return 'Ranka detta';
