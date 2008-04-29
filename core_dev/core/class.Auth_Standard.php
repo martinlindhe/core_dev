@@ -11,6 +11,7 @@ require_once('class.Auth_Base.php');
 require_once('class.Users.php');
 
 require_once('atom_moderation.php');	//for checking if username is reserved on user registration
+require_once('atom_events.php');		//for event logging
 require_once('functions_userdata.php');	//for showRequiredUserdataFields()
 require_once('functions_locale.php'); //for translations
 
@@ -128,6 +129,8 @@ class Auth_Standard extends Auth_Base
 		$db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$session->id);
 		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$session->id.', IP='.$session->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
+		addEvent(EVENT_USER_LOGIN, 0, $session->id);
+
 		return true;
 	}
 
@@ -139,6 +142,8 @@ class Auth_Standard extends Auth_Base
 		global $db, $session;
 
 		$db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$session->id);
+		addEvent(EVENT_USER_LOGOUT, 0, $session->id);
+
 		$session->endSession();
 	}
 
