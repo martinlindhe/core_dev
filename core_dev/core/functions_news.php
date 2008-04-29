@@ -160,7 +160,7 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 		}
 		
 		
-		if ($news['editorId']) echo '<i>Updated '.formatTime($news['timeEdited']).' by '.$news['editorName'].'</i><br/>';
+		if ($news['editorId']) echo '<i>'.t('Updated').' '.formatTime($news['timeEdited']).' '.t('by').' '.$news['editorName'].'</i><br/>';
 		echo '</div>'; //class="news_top"
 		echo '<br/>';
 
@@ -282,7 +282,7 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 
 		echo '<h1>'.$row['title'].'</h1>';
 		echo '<div>';
-		echo '<div class="news_item_picl">'.Users::linkThumb($row['creatorId'], $row['creatorName']).'</div>';
+		//echo '<div class="news_item_picl">'.Users::linkThumb($row['creatorId'], $row['creatorName']).'</div>';
 			echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a> '.formatTime($row['timeToPublish']).'<br/>';	//fixme: show optional link title instead
 			$art = parseArticle($row['title'], $row['body']);
 			echo $art['head'];
