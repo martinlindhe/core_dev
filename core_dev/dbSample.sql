@@ -89,13 +89,12 @@ CREATE TABLE `tblContacts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `tblEvents` (
   `eventId` bigint(20) unsigned NOT NULL auto_increment,
-  `eventType` tinyint(4) unsigned default NULL,
-  `eventClass` tinyint(3) unsigned default NULL,
-  `param` text,
+  `type` tinyint(3) unsigned NOT NULL,
+  `category` tinyint(3) unsigned NOT NULL,
+  `ownerId` bigint(20) unsigned NOT NULL,
   `timeCreated` datetime default NULL,
-  `createdBy` int(11) unsigned default NULL,
   PRIMARY KEY  (`eventId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 CREATE TABLE `tblFAQ` (
   `faqId` int(10) unsigned NOT NULL auto_increment,
   `question` text,
