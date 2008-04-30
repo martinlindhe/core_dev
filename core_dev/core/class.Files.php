@@ -234,7 +234,7 @@ class Files
 	 */
 	function deleteFileEntry($_id, $ownerId = 0)
 	{
-		global $db;
+		global $db, $session;
 		if (!is_numeric($_id) || !is_numeric($ownerId)) return false;
 
 		$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
