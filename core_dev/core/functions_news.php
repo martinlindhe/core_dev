@@ -253,7 +253,7 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 	/**
 	 * Shows a list with the latest news headlines for all categories
 	 */
-	function showNews($limit = 3)
+	function showNews($limit = 0)
 	{
 		global $db, $session, $config;
 
