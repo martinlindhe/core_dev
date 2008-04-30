@@ -295,6 +295,11 @@ $weekday_swe[7] = 'Söndag';
 			case 'Dropdown list': return 'Rullgardinslista';
 			case 'E-mail': return 'E-post';
 			case 'This setting is hidden from other users.': return 'Denna inställning visas inte för andra användare.';
+			case 'Create a new userdata field': return 'Skapa ett nytt userdata-fält';
+			case 'Type': return 'Typ';
+			case 'Cellphone': return 'Mobilnummer';
+			case 'Birth date': return 'Födelsedag';
+			case 'Birth date (Swedish)': return 'Personnummer (Svenskt)';
 
 			//Subscriptions
 			case 'The user': return 'Användaren';

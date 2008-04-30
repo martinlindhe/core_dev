@@ -82,6 +82,7 @@
 	$used_image = false;
 	$used_email = false;
 	$used_theme = false;
+	$used_birthdate = false;
 	$used_birthdate_swe = false;
 	$used_location_swe = false;
 	$used_cellphone = false;
@@ -115,6 +116,7 @@
 		if ($row['fieldType'] == USERDATA_TYPE_IMAGE) $used_image = true;
 		if ($row['fieldType'] == USERDATA_TYPE_EMAIL) $used_email = true;
 		if ($row['fieldType'] == USERDATA_TYPE_THEME) $used_theme = true;
+		if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE) $used_birthdate = true;
 		if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) $used_birthdate_swe = true;
 		if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE) $used_location_swe = true;
 		if ($row['fieldType'] == USERDATA_TYPE_CELLPHONE) $used_cellphone = true;
@@ -153,7 +155,7 @@
 		echo '<input type="text" name="fielddefault" value="'.$data['fieldDefault'].'"/><br/>';
 	}
 
-	echo 'Type: ';
+	echo t('Type').': ';
 	echo '<select name="fieldtype">';
 	echo '<option value="'.USERDATA_TYPE_TEXT.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_TEXT)?' selected':'').'>'.t('Text').'</option>';
 	echo '<option value="'.USERDATA_TYPE_TEXTAREA.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_TEXTAREA)?' selected':'').'>'.t('Textarea').'</option>';
@@ -170,6 +172,9 @@
 	}
 	if (!$used_theme || (isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)) {
 		echo '<option value="'.USERDATA_TYPE_THEME.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_THEME)?' selected':'').'>'.t('Theme').'</option>';
+	}
+	if (!$used_birthdate || (isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE)) {
+		echo '<option value="'.USERDATA_TYPE_BIRTHDATE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE)?' selected':'').'>'.t('Birth date').'</option>';
 	}
 	if (!$used_birthdate_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)) {
 		echo '<option value="'.USERDATA_TYPE_BIRTHDATE_SWE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_BIRTHDATE_SWE)?' selected':'').'>'.t('Birth date (Swedish)').'</option>';

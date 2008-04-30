@@ -20,6 +20,7 @@ define('USERDATA_TYPE_RADIO',				3);
 define('USERDATA_TYPE_SELECT',				4);
 define('USERDATA_TYPE_TEXTAREA',			5);
 define('USERDATA_TYPE_IMAGE',				6);	//UNIQUE: Used as presentation picture
+define('USERDATA_TYPE_BIRTHDATE',			13);//UNIQUE: Date of birth
 define('USERDATA_TYPE_BIRTHDATE_SWE',		7);	//UNIQUE: Swedish date of birth, with last-4-digits control check
 define('USERDATA_TYPE_EMAIL',				8);	//UNIQUE: text string holding a email address
 define('USERDATA_TYPE_THEME',				9); //UNIQUE: select-dropdown in display. contains user preferred theme (.css file)
@@ -276,6 +277,40 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 				} else {
 					$result .= '<input name="userdata_'.$fieldId.'" type="file"/>';
 				}
+				$result .= '</td>';
+				break;
+
+			case USERDATA_TYPE_BIRTHDATE:
+				$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
+				$d = $m = $y = '';
+				if ($value) {
+					$y = date('Y', strtotime($row['settingValue']));
+					$m = date('m', strtotime($row['settingValue']));
+					$d = date('d', strtotime($row['settingValue']));
+				}
+
+				$result .= '<select name="userdata_'.$fieldId.'_year">';
+				$result .= '<option value="">- '.t('Year').' -';
+				for ($j=date('Y')-100; $j<=date('Y'); $j++) {
+					$result .= '<option value="'.$j.'"'.($j==$y?' selected':'').'>'.$j;
+				}
+				$result .= '</select>';
+
+				$result .= '<select name="userdata_'.$fieldId.'_month">';
+				$result .= '<option value="">- '.t('Month').' -';
+				for ($j=1; $j<=12; $j++) {
+					$k = $j;
+					if ($j<10) $k = '0'.$k;
+					$result .= '<option value="'.$k.'"'.($j==$m?' selected':'').'>'.$j;
+				}
+				$result .= '</select>';
+
+				$result .= '<select name="userdata_'.$fieldId.'_day">';
+				$result .= '<option value="">- '.t('Day').' -';
+				for ($j=1; $j<=31; $j++) {
+					$result .= '<option value="'.($j<10?'0'.$j:$j).'"'.($j==$d?' selected':'').'>'.$j;
+				}
+				$result .= '</select>';
 				$result .= '</td>';
 				break;
 
@@ -562,7 +597,7 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 		return $defaultValue;
 	}
 
-	function saveUserdataSetting($ownerId, $settingName, $settingValue)
+	function saveUserdataSetting($ownerId, $settingName, $settingValue)	//FIXME: rename to saveUserSetting()
 	{
 		return saveSetting(SETTING_USERDATA, $ownerId, $settingName, $settingValue);
 	}
@@ -682,6 +717,16 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 								$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 							}
 						}
+						break;
+
+					case USERDATA_TYPE_BIRTHDATE:
+						if (empty($_POST['userdata_'.$row['fieldId'].'_year'])) break;
+						$born = mktime(0, 0, 0,
+							$_POST['userdata_'.$row['fieldId'].'_month'],
+							$_POST['userdata_'.$row['fieldId'].'_day'],
+							$_POST['userdata_'.$row['fieldId'].'_year']
+						);
+						$row['settingValue'] = sql_datetime($born);
 						break;
 
 					case USERDATA_TYPE_BIRTHDATE_SWE:
