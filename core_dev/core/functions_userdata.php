@@ -618,6 +618,20 @@ $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
 	}
 
 	/**
+	 * Returns entered birthdate for specified user
+	 *
+	 * \param $userId user id
+	 * \return datetime formatted birthdate, or false on error
+	 */
+	function loadUserdataBirthdate($userId)
+	{
+		if (!is_numeric($userId)) return false;
+
+		$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_BIRTHDATE);
+		return loadUserdataSetting($userId, $fieldId);
+	}
+
+	/**
 	 * Returns user's stored theme
 	 *
 	 * \param $userId user id
