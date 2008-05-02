@@ -62,8 +62,8 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 
 	function formatNumber($number)
 	{
-		$decimal_mark = '.';
-		$thousand_mark = ',';
+		$decimal_mark = ',';
+		$thousand_mark = ' ';
 
 		//Formats integers with grouped thousands, example: 2005 => 2,005
 		if (intval($number) == $number) return number_format($number, 0, $decimal_mark, $thousand_mark);
