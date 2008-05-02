@@ -24,12 +24,12 @@
 	$event_name[EVENT_M2W_CALL_BEGIN] = 'Call begin';
 	$event_name[EVENT_M2W_CALL_END] = 'Call end';
 
-	function addEvent($_type, $_category = 0 , $ownerId = 0)
+	function addEvent($_type, $_category = 0 , $ownerId = 0, $_referer = 0)
 	{
 		global $db;
-		if (!is_numeric($_type) || !is_numeric($_category) || !is_numeric($ownerId)) return false;
+		if (!is_numeric($_type) || !is_numeric($_category) || !is_numeric($ownerId) || !is_numeric($_referer)) return false;
 
-		$q = 'INSERT INTO tblEvents SET type='.$_type.', category='.$_category.', ownerId='.$ownerId.',timeCreated=NOW()';
+		$q = 'INSERT INTO tblEvents SET type='.$_type.', category='.$_category.', ownerId='.$ownerId.',refererId='.$_referer.',timeCreated=NOW()';
 		return $db->insert($q);
 	}
 
