@@ -33,7 +33,7 @@
 		return $db->insert($q);
 	}
 
-	function getEvents($_category = 0, $ownerId = 0)
+	function getEvents($_category = 0, $ownerId = 0, $limit = '')
 	{
 		global $db;
 		if (!is_numeric($_category) || !is_numeric($ownerId)) return false;
@@ -43,8 +43,22 @@
 			$q .= ' WHERE category='.$_category;
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 		}
-		$q .= ' ORDER BY timeCreated DESC';
+		$q .= ' ORDER BY timeCreated DESC'.$limit;
 
 		return $db->getArray($q);
+	}
+
+	function getEventCnt($_category = 0, $ownerId = 0)
+	{
+		global $db;
+		if (!is_numeric($_category) || !is_numeric($ownerId)) return false;
+
+		$q = 'SELECT COUNT(*) FROM tblEvents';
+		if ($_category) {
+			$q .= ' WHERE category='.$_category;
+			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+		}
+
+		return $db->getOneItem($q);
 	}
 ?>
