@@ -154,9 +154,9 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 		}
 		echo 'By '.Users::link($news['creatorId'], $news['creatorName']);
 		if (datetime_less($news['timeToPublish'], now())) {
-			echo ', published '.formatTime($news['timeToPublish']).'<br/>';
+			echo ', '.t('published').' '.formatTime($news['timeToPublish']).'<br/>';
 		} else {
-			echo ', <b>will be published '.formatTime($news['timeToPublish']).'</b><br/>';
+			echo ', <b>'.t('will be published').' '.formatTime($news['timeToPublish']).'</b><br/>';
 		}
 		
 		
