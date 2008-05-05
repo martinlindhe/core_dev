@@ -140,10 +140,9 @@ class Auth_Standard extends Auth_Base
 	function logout()
 	{
 		global $db, $session;
-
 		$db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$session->id);
-		addEvent(EVENT_USER_LOGOUT, 0, $session->id);
 
+		addEvent(EVENT_USER_LOGOUT, 0, $session->id);
 		$session->endSession();
 	}
 
