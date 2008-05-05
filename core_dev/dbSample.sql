@@ -92,6 +92,7 @@ CREATE TABLE `tblEvents` (
   `type` tinyint(3) unsigned NOT NULL,
   `category` tinyint(3) unsigned NOT NULL,
   `ownerId` bigint(20) unsigned NOT NULL,
+  `refererId` bigint(20) unsigned NOT NULL,
   `timeCreated` datetime default NULL,
   PRIMARY KEY  (`eventId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

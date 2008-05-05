@@ -256,7 +256,7 @@
 		}
 		else
 		{
-			if ($data['lockedBy']) {
+			if (!empty($data['lockedBy'])) {
 				echo '<div class="wiki_locked">LOCKED - This wiki can currently not be edited</div>';
 			}
 			echo wikiFormat($wikiName, $data);
