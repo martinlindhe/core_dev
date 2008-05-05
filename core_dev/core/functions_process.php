@@ -567,7 +567,7 @@ define('ORDER_FAILED',		3);
 		global $config;
 		ini_set('soap.wsdl_cache_enabled', '0');
 
-		$client = new SoapClient($config['process']['server_soap']); //, array('trace' => 1));
+		$client = new SoapClient($config['process']['soap_server']); //, array('trace' => 1));
 
 		try {
 			$result = $client->fetchAndConvert($uri, $callback);
