@@ -205,8 +205,9 @@
 		global $session, $config;
 		if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w) || !is_numeric($col_h)) return false;
 
-		if (!empty($_POST['cmt'])) {
-			addComment($_type, $ownerId, $_POST['cmt']);
+		if (!empty($_POST['cmt_'.$_type])) {
+			addComment($_type, $ownerId, $_POST['cmt_'.$_type]);
+			unset($_POST['cmt_'.$_type]);
 		}
 
 		if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
@@ -215,6 +216,7 @@
 				($_type == COMMENT_FILE && Files::getOwner($ownerId) == $session->id)
 			) {				
 				deleteComment($_GET['delete']);	//FIXME: comment typ!
+				unset($_GET['delete']);
 			}
 		}
 
@@ -239,7 +241,7 @@
 				($_type == COMMENT_FILE || $_type == COMMENT_PASTEBIN)
 		) {
 			echo '<form method="post" action="">';
-			echo '<textarea name="cmt" cols="'.$col_w.'" rows="'.$col_h.'"></textarea><br/>';
+			echo '<textarea name="cmt_'.$_type.'" cols="'.$col_w.'" rows="'.$col_h.'"></textarea><br/>';
 			echo '<input type="submit" class="button" value="'.t('Add comment').'"/>';
 			echo '</form>';
 		}
