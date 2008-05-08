@@ -269,12 +269,15 @@
 
 		if ($lastchanged < time()-($config['adblock']['cacheage']))
 		{
+			if (!$lastchanged) $lastchanged = time();
 			$list = getAdblockRules($types);
 
 			$text = "[Adblock]\n".
 					"! Adblock Plus ruleset from http://adblockrules.org\n".
-					"! Last updated ".date("Y-m-d", $lastchanged)."\n".
-					"!\n\n";
+					"! Please contact info@adblockrules.org in case of problems with this ruleset\n".
+					"!\n".
+					"! Last updated ".date("Y-m-d", $lastchanged)."\n\n";
+
 			foreach ($list as $row => $val) {
 				$text .= $val[0]."\n";
 			}
@@ -286,7 +289,7 @@
 			header('Filterset-timestamp: '. $lastchanged);
 		}
 
-		$files->sendFile($cache_file);
+		$files->sendTextfile($cache_file);
 		die;
 	}
 
