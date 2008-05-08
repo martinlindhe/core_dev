@@ -255,7 +255,7 @@
 		}
 
 		$datestr	= date('Ymd');
-		$hour			= date('H');
+		$hour		= date('H');
 
 		$cache_file = $config['adblock']['cachepath'].'adblockfilters'.$type_ext.'.txt';
 		
@@ -271,7 +271,10 @@
 		{
 			$list = getAdblockRules($types);
 
-			$text = "[Adblock]\n";
+			$text = "[Adblock]\n".
+					"! Adblock Plus ruleset from http://adblockrules.org\n".
+					"! Last updated ".date("Y-m-d", $lastchanged)."\n".
+					"!\n\n";
 			foreach ($list as $row => $val) {
 				$text .= $val[0]."\n";
 			}
@@ -283,7 +286,7 @@
 			header('Filterset-timestamp: '. $lastchanged);
 		}
 
-		$files->sendTextfile($cache_file);
+		$files->sendFile($cache_file);
 		die;
 	}
 
