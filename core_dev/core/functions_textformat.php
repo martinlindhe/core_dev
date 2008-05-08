@@ -65,10 +65,10 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 		$decimal_mark = ',';
 		$thousand_mark = ' ';
 
-		//Formats integers with grouped thousands, example: 2005 => 2,005
+		//Formats integers with grouped thousands, example: 2005 => 2 005
 		if (intval($number) == $number) return number_format($number, 0, $decimal_mark, $thousand_mark);
 
-		//Formats floats with 2 decimals and grouped thousands, example: 2005.4791 => 2,005.48
+		//Formats floats with 2 decimals and grouped thousands, example: 2005.4791 => 2 005,48
 		return number_format($number, 2, $decimal_mark, $thousand_mark);
 	}
 
