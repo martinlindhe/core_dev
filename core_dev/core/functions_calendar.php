@@ -57,6 +57,22 @@ function getCalendars($_type, $_owner = 0)
 	return $db->getArray($q);
 }
 
+/**
+ * Returns all calendars active within specified timespan 
+ */
+function getActiveCalendars($_type, $_owner, $ts)
+{
+	global $db;
+	if (!is_numeric($_type) || !is_numeric($_owner) || !is_numeric($ts)) return false;
+
+	$ts = sql_datetime($ts);
+
+	$q = 'SELECT * FROM tblCalendar WHERE type='.$_type;
+	if ($_owner) $q .= ' AND ownerId='.$_owner;
+	$q .= ' AND "'.$ts.'" BETWEEN timeBegin AND timeEnd';
+	return $db->getArray($q);
+}
+
 function getCalendar($_type, $_owner, $_id)
 {
 	global $db;
