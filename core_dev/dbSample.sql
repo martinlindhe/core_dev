@@ -40,6 +40,19 @@ CREATE TABLE `tblBlogs` (
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
+CREATE TABLE `tblCalendar` (
+  `entryId` bigint(20) unsigned NOT NULL auto_increment,
+  `type` tinyint(3) unsigned NOT NULL,
+  `creatorId` bigint(20) unsigned NOT NULL,
+  `ownerId` bigint(20) unsigned NOT NULL,
+  `timeBegin` datetime default NULL,
+  `timeEnd` datetime default NULL,
+  `info` text,
+  PRIMARY KEY  (`entryId`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `tblCategories` (
   `categoryId` bigint(20) unsigned NOT NULL auto_increment,
   `categoryName` varchar(200) default NULL,
