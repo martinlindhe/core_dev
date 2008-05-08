@@ -769,7 +769,14 @@ class Files
 		//header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($realFileName)) . ' GMT');
 		header('Content-Length: '.filesize($filename));
 		header('Content-Type: text/plain');
-		header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+
+		if (isset($_GET['dl'])) {
+			/* Prompts the user to save the file */
+			header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+		} else {
+			/* Displays the file in the browser, and assigns a filename for the browser's "save as..." features */
+			header('Content-Disposition: inline; filename="'.basename($filename).'"');
+		}
 
 		readfile($filename);
 	}
