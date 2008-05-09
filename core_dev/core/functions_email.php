@@ -44,7 +44,7 @@
 		return true;
 	}
 
-	function smtp_mail($dst_adr, $subj, $msg)
+	function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '')
 	{
 		global $config;
 
@@ -65,6 +65,10 @@
 		//Embed graphics
 		if (isset($config['smtp']['mail_footer'])) {
 			$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
+		}
+
+		if ($attach_name && $attach_data) {
+			$mail->AddStringAttachment($attach_data, $attach_name, 'base64', 'application/pdf');
 		}
 
 		$mail->AddAddress($dst_adr);
