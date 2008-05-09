@@ -13,6 +13,9 @@
 		Users::removeUser($_GET['del']);
 	}
 
+	$usermatch = '';
+	if (!empty($_POST['usearch'])) $usermatch = $_POST['usearch'];
+
 	$mode = 0;
 	if (!empty($_GET['mode'])) $mode = $_GET['mode'];
 
@@ -36,11 +39,16 @@
 		}
 	}
 
-	$tot_cnt = Users::cnt($mode);
+	echo '<form method="post">';
+	echo 'Username filter: <input type="text" name="usearch"/> ';
+	echo '<input type="submit" class="button" value="'.t('Search').'"/>';
+	echo '</form><br/>';
+
+	$tot_cnt = Users::cnt($mode, $usermatch);
 	$limit = 25;
 	$pager = makePager($tot_cnt, $limit);
 
-	$list = Users::getUsers($mode, $pager['limit']);
+	$list = Users::getUsers($mode, $pager['limit'], $usermatch);
 
 	echo $pager['head'];
 

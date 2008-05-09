@@ -251,7 +251,7 @@ class Users
 	/**
 	 * Returns total number of users (excluding deleted ones)
 	 */
-	function cnt($_mode = 0)
+	function cnt($_mode = 0, $_namefilter = '')
 	{
 		global $db;
 		if (!is_numeric($_mode)) return false;
@@ -259,6 +259,7 @@ class Users
 		$q = 'SELECT COUNT(*) FROM tblUsers';
 		$q .= ' WHERE timeDeleted IS NULL';
 		if ($_mode) $q .= ' AND userMode='.$_mode;
+		if ($_namefilter) $q .= ' AND userName LIKE "%'.$db->escape($_namefilter).'%"';
 		return $db->getOneItem($q);
 	}
 
@@ -288,8 +289,12 @@ class Users
 
 	/**
 	 * Admin function used by admin_list_users.php
+	 *
+	 * \param $_mode usermode
+	 * \param $_limit sql LIMIT (from makePager)
+	 * \param $_namefilter partial username matching
 	 */
-	function getUsers($_mode = 0, $_limit = '')
+	function getUsers($_mode = 0, $_limit = '', $_namefilter = '')
 	{
 		global $db;
 
@@ -298,6 +303,7 @@ class Users
 		$q = 'SELECT * FROM tblUsers';
 		$q .= ' WHERE timeDeleted IS NULL';
 		if ($_mode) $q .= ' AND userMode='.$_mode;
+		if ($_namefilter) $q .= ' AND userName LIKE "%'.$db->escape($_namefilter).'%"';
 		if ($_limit) $q .= ' '.$_limit;
 		return $db->getArray($q);
 	}
