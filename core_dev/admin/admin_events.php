@@ -1,12 +1,16 @@
 <?php
-	require_once('find_config.php');
-	$session->requireAdmin();
+/**
+ * $Id$
+ */
 
-	require($project.'design_head.php');
+require_once('find_config.php');
+$session->requireAdmin();
 
-	echo createMenu($admin_menu, 'blog_menu');
+require($project.'design_head.php');
 
-	$db->showEvents();
+echo createMenu($admin_menu, 'blog_menu');
 
-	require($project.'design_foot.php');
+$db->showEvents();
+
+require($project.'design_foot.php');
 ?>

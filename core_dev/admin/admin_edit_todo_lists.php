@@ -1,17 +1,21 @@
 <?php
-	require_once('find_config.php');
-	$session->requireSuperAdmin();
+/**
+ * $Id$
+ */
 
-	require($project.'design_head.php');
+require_once('find_config.php');
+$session->requireSuperAdmin();
 
-	echo createMenu($admin_menu, 'blog_menu');
+require($project.'design_head.php');
 
-	echo 'Admin edit todo list categories<br/><br/>';
+echo createMenu($admin_menu, 'blog_menu');
+
+echo 'Admin edit todo list categories<br/><br/>';
 	
-	manageCategoriesDialog(CATEGORY_TODOLIST);
+manageCategoriesDialog(CATEGORY_TODOLIST);
 
-	echo '<br/><br/>';
-	echo '<a href="admin_current_work.php'.getProjectPath(0).'">Back to current work</a>';
+echo '<br/><br/>';
+echo '<a href="admin_current_work.php'.getProjectPath(0).'">Back to current work</a>';
 
-	require($project.'design_foot.php');
+require($project.'design_foot.php');
 ?>

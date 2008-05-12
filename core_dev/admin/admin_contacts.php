@@ -1,18 +1,22 @@
 <?php
-	require_once('find_config.php');
-	$session->requireSuperAdmin();
+/**
+ * $Id$
+ */
 
-	require($project.'design_head.php');
+require_once('find_config.php');
+$session->requireSuperAdmin();
 
-	echo createMenu($admin_menu, 'blog_menu');
-	echo createMenu($super_admin_menu, 'blog_menu');
-	echo createMenu($super_admin_tools_menu, 'blog_menu');
+require($project.'design_head.php');
 
-	echo '<h1>Manage contacts</h1>';
+echo createMenu($admin_menu, 'blog_menu');
+echo createMenu($super_admin_menu, 'blog_menu');
+echo createMenu($super_admin_tools_menu, 'blog_menu');
 
-	echo 'Here you can create/modify the contact types that users can classify their friends in.<br/><br/>';
+echo '<h1>Manage contacts</h1>';
+
+echo 'Here you can create/modify the contact types that users can classify their friends in.<br/><br/>';
 	
-	manageCategoriesDialog(CATEGORY_CONTACT);
+manageCategoriesDialog(CATEGORY_CONTACT);
 
-	require($project.'design_foot.php');
+require($project.'design_foot.php');
 ?>

@@ -1,14 +1,18 @@
 <?php
-	require_once('find_config.php');
-	$session->requireSuperAdmin();
+/**
+ * $Id$
+ */
 
-	require($project.'design_head.php');
+require_once('find_config.php');
+$session->requireSuperAdmin();
 
-	echo createMenu($admin_menu, 'blog_menu');
-	echo createMenu($super_admin_menu, 'blog_menu');
-	echo createMenu($super_admin_tools_menu, 'blog_menu');
+require($project.'design_head.php');
 
-	$db->showConfig();
+echo createMenu($admin_menu, 'blog_menu');
+echo createMenu($super_admin_menu, 'blog_menu');
+echo createMenu($super_admin_tools_menu, 'blog_menu');
 
-	require($project.'design_foot.php');
+$db->showConfig();
+
+require($project.'design_foot.php');
 ?>

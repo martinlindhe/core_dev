@@ -552,10 +552,10 @@ class Users
 			echo '<br/><br/>';
 
 			for ($i=0; $i<count($list); $i++) {
-				echo Users::link($list[$i]['userId'], $list[$i]['userName']).'<br>';
+				echo Users::link($list[$i]['userId'], $list[$i]['userName']).'<br/>';
 			}
 
-			echo '<br>';
+			echo '<br/>';
 			echo '<a href="'.$_SERVER['PHP_SELF'].'">'.t('New search').'</a><br/>';
 			return;
 		}

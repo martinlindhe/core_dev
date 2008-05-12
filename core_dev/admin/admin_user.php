@@ -1,31 +1,35 @@
 <?php
-	require_once('find_config.php');
-	$session->requireAdmin();
+/**
+ * $Id$
+ */
 
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
-	$userId = $_GET['id'];
+require_once('find_config.php');
+$session->requireAdmin();
 
-	if ($session->isSuperAdmin && isset($_GET['delete'])) {
-		Users::removeUser($userId);
-	}
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+$userId = $_GET['id'];
 
-	require($project.'design_head.php');
+if ($session->isSuperAdmin && isset($_GET['delete'])) {
+	Users::removeUser($userId);
+}
 
-	echo createMenu($admin_menu, 'blog_menu');
+require($project.'design_head.php');
 
-	if (!Users::exists($userId)) {
-		echo '<h2>No such user exists</h2>';
-		require($project.'design_foot.php');
-		die;
-	}
+echo createMenu($admin_menu, 'blog_menu');
 
-	echo '<h1>User admin for '.Users::getName($userId).'</h1>';
-
-	if ($session->isSuperAdmin) {
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;delete">Delete user</a><br/><br/>';
-	}
-
-	showComments(COMMENT_USER, $userId);
-
+if (!Users::exists($userId)) {
+	echo '<h2>No such user exists</h2>';
 	require($project.'design_foot.php');
+	die;
+}
+
+echo '<h1>User admin for '.Users::getName($userId).'</h1>';
+
+if ($session->isSuperAdmin) {
+	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;delete">Delete user</a><br/><br/>';
+}
+
+showComments(COMMENT_USER, $userId);
+
+require($project.'design_foot.php');
 ?>

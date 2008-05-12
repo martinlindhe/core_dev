@@ -1,22 +1,25 @@
 <?php
-	require_once('find_config.php');
-	$session->requireAdmin();
+/**
+ * $Id$
+ */
 
-	$pr = $_POST['pr'];
-	$prData = getTodoItem($db, $pr);
-	if ($prData) {
-		header('Location: admin_todo_lists.php?id='.$prData['itemId']);
-		die;
-	}
+die('UNTESTED');
 
-	require($project.'design_head.php');
+require_once('find_config.php');
+$session->requireAdmin();
 
-	$content = 'PR '.$pr.' not found.<br><br>';
-	$content .= '<a href="admin_current_work.php">Go back to current work</a><br>';
+$pr = $_POST['pr'];
+$prData = getTodoItem($pr);
+if ($prData) {
+	header('Location: admin_todo_lists.php?id='.$prData['itemId']);
+	die;
+}
 
-		echo '<div id="user_admin_content">';
-		echo MakeBox('<a href="admin.php">Administrationsgr&auml;nssnitt</a>|Lookup PR', $content);
-		echo '</div>';
+require($project.'design_head.php');
 
-	require($project.'design_foot.php');
+echo '<h1>Lookup PR</h1>';
+echo 'PR '.$pr.' not found.<br/><br/>';
+echo '<a href="admin_current_work.php">Go back to current work</a><br/>';
+
+require($project.'design_foot.php');
 ?>

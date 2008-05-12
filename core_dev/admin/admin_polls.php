@@ -1,12 +1,16 @@
 <?php
-	require_once('find_config.php');
-	$session->requireAdmin();
+/**
+ * $Id$
+ */
 
-	require($project.'design_head.php');
+require_once('find_config.php');
+$session->requireAdmin();
 
-	echo createMenu($admin_menu, 'blog_menu');
+require($project.'design_head.php');
 
-	managePolls(POLL_SITE);
+echo createMenu($admin_menu, 'blog_menu');
 
-	require($project.'design_foot.php');
+managePolls(POLL_SITE);
+
+require($project.'design_foot.php');
 ?>
