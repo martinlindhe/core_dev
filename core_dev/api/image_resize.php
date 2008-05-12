@@ -1,12 +1,15 @@
-<?
-/*
-	i - file id
-	p - percent to resize, relative to orginal image dimensions
-*/
+<?php
 
-	require_once('find_config.php');
+/**
+ * $Id$
+ *
+ * i - file id
+ * p - percent to resize, relative to orginal image dimensions
+ */
 
-	if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i']) || empty($_GET['p']) || !is_numeric($_GET['p'])) die;
+require_once('find_config.php');
 
-	$files->imageResize($_GET['i'], $_GET['p']);
+if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i']) || empty($_GET['p']) || !is_numeric($_GET['p'])) die;
+
+$files->imageResize($_GET['i'], $_GET['p']);
 ?>

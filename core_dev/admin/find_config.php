@@ -1,4 +1,4 @@
-<?
+<?php
 	if (!empty($_GET['pr'])) {
 		if (strpbrk($_GET['pr'], '"\'/\\%&?;:.,')) die;				//checks _pr for " ' \ / % & ? ; : . ,
 		$project_name = preg_replace("/[^\w\.-]+/", '_', $_GET['pr']); //removes dangerous filesystem letters

@@ -1,9 +1,14 @@
-<?
-	/* file.php - takes a file id, returns the file */
+<?php
 
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+/**
+ * $Id$
+ *
+ * Takes a file id, returns the file
+ */
 
-	require_once('find_config.php');
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
-	$files->sendFile($_GET['id'], true);
+require_once('find_config.php');
+
+$files->sendFile($_GET['id'], true);
 ?>

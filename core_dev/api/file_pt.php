@@ -1,9 +1,14 @@
-<?
-	/* file_pt.php - passes thru a file to the client, setting the proper mime type (pdf, wmv, etc inside browser) */
+<?php
 
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+/**
+ * $Id$
+ *
+ * Passes thru a file to the client, setting the proper mime type (pdf, wmv, etc inside browser)
+ */
 
-	require_once('find_config.php');
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
-	$files->sendFile($_GET['id'], true);
+require_once('find_config.php');
+
+$files->sendFile($_GET['id'], true);
 ?>

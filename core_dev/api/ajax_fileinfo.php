@@ -1,9 +1,14 @@
-<?
-	/* ajax_fileinfo.php - returns details about a certain file, in HTML format for inclusion in a div element */
+<?php
 
-	require_once('find_config.php');
+/**
+ * $Id$
+ *
+ * Returns details about a certain file, in HTML format for inclusion in a div element
+ */
 
-	if ((!$session->id && !$files->anon_uploads) || empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
+require_once('find_config.php');
 
-	showFileInfo($_GET['i']);
+if ((!$session->id && !$files->anon_uploads) || empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
+
+showFileInfo($_GET['i']);
 ?>

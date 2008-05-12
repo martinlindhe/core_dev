@@ -1,19 +1,23 @@
-<?
-/*
-	html_imageview.php - popupwindow that displays a image resource
+<?php
 
-	todo:
-		* display ajax loading wheel in place of image
-		* hover mouse over image to highlight controls: cut, resize, rotate, convert, etc
-*/
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
-	$fileId = $_GET['id'];
+/**
+ * $Id$
+ *
+ * Popupwindow that displays a image resource
+ *
+ * todo:
+ * - display ajax loading wheel in place of image
+ * - hover mouse over image to highlight controls: cut, resize, rotate, convert, etc
+ */
 
-	require_once('find_config.php');
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+$fileId = $_GET['id'];
 
-	createXHTMLHeader();
+require_once('find_config.php');
 
-	echo '<img id="popup_img" src="'.$config['core']['web_root'].'api/file.php?id='.$fileId.getProjectPath().'"/>';
+createXHTMLHeader();
+
+echo '<img id="popup_img" src="'.$config['core']['web_root'].'api/file.php?id='.$fileId.getProjectPath().'"/>';
 ?>
 <script type="text/javascript">
 if (image_loaded('popup_img')) resize_wnd_to_img('popup_img');

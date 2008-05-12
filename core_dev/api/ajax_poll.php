@@ -1,14 +1,19 @@
-<?
-	/* ajax_poll.php - submit a vote */
+<?php
 
-	require_once('find_config.php');
+/**
+ * $Id$
+ *
+ * Submit a vote
+ */
 
-	header('Content-type: text/xml');
-	echo '<?xml version="1.0" ?>';
+require_once('find_config.php');
 
-	if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i']) || empty($_GET['o']) || !is_numeric($_GET['o'])) die('<bad/>');
+header('Content-type: text/xml');
+echo '<?xml version="1.0" ?>';
 
-	addPollVote($_GET['i'], $_GET['o']);
+if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i']) || empty($_GET['o']) || !is_numeric($_GET['o'])) die('<bad/>');
 
-	echo '<ok/>';
+addPollVote($_GET['i'], $_GET['o']);
+
+echo '<ok/>';
 ?>

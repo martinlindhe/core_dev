@@ -1,10 +1,15 @@
-<?
-	/* ajax_upload_progress.php - reports back progress of current file upload to browser, using php_apc.dll extension */
+<?php
 
-	if (empty($_GET['s']) || !is_numeric($_GET['s'])) die;
+/**
+ * $Id$
+ *
+ * Reports back progress of current file upload to browser, using php_apc.dll extension
+ */
 
-	require_once('find_config.php');
+if (empty($_GET['s']) || !is_numeric($_GET['s'])) die;
 
-  $status = apc_fetch('upload_'.$_GET['s']);
-  print_r($status);
+require_once('find_config.php');
+
+$status = apc_fetch('upload_'.$_GET['s']);
+print_r($status);
 ?>

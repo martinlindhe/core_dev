@@ -1,4 +1,4 @@
-<?
+<?php
 	//todo: merge admin_closed_bug_reports.php into this file
 
 	require_once('find_config.php');

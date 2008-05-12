@@ -1,4 +1,4 @@
-<?
+<?php
 	//kunna se nyheter som ska publiceras i framtiden
 
 	require_once('find_config.php');

@@ -1,4 +1,4 @@
-<?
+<?php
 	require_once('find_config.php');
 	$session->requireSuperAdmin();
 

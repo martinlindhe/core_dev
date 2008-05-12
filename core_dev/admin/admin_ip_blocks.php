@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * admin_ip_blocks.php - Lists all blocked ips
  *

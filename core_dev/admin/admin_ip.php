@@ -1,4 +1,4 @@
-<?
+<?php
 	//takes an ip address as parameter
 	if (empty($_GET['ip'])) $ip = '';
 	else $ip = $_GET['ip'];
