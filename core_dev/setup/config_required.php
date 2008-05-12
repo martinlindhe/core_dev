@@ -1,10 +1,10 @@
-<?
-	set_include_path('../core/');
-	require_once('class.Session.php');
-	restore_include_path();
+<?php
 
-	$config['debug'] = true;
+set_include_path('../core/');
+require_once('class.Session.php');
+restore_include_path();
 
-	$config['session'] = array();
-	$session = new Session($config['session']);
+$config['debug'] = true;
+$config['session'] = array();
+$session = new Session($config['session']);
 ?>

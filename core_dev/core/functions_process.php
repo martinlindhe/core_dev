@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * IMPORTANT: for this to work, the sql user need to have LOCK & UNLOCK privilegies
  *

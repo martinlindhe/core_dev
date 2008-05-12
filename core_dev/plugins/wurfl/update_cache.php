@@ -1,4 +1,4 @@
-<?
+<?php
 die;
 
 /* ***** BEGIN LICENSE BLOCK *****

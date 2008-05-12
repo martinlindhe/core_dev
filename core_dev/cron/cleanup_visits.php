@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Cleans up old entries in tblVisits
  */

@@ -1,24 +1,25 @@
-<?
-	set_time_limit(600);
+<?php
 
-	require_once('wurfl_config.php');
+set_time_limit(600);
 
-	$start =  microtime(true); 
+require_once('wurfl_config.php');
 
-	$wurflObj = new wurfl_class();
+$start =  microtime(true); 
 
-	$init_class =  microtime(true);
+$wurflObj = new wurfl_class();
 
-	//Testing client agent
-	$wurflObj->GetDeviceCapabilitiesFromAgent($_SERVER['HTTP_USER_AGENT']);
+$init_class =  microtime(true);
 
-	$end =  microtime(true);
+//Testing client agent
+$wurflObj->GetDeviceCapabilitiesFromAgent($_SERVER['HTTP_USER_AGENT']);
 
-	echo 'Time to initialize class: '.round($init_class-$start,6).'<br/>';
-	echo 'Time to find the user agent: '.round($end-$init_class,6).'<br/>';
-	echo 'Total: '.round($end-$start,6).'<br/>';
+$end =  microtime(true);
 
-	echo '<pre>';
-	var_export($wurflObj->capabilities);
-	echo '</pre>';
+echo 'Time to initialize class: '.round($init_class-$start,6).'<br/>';
+echo 'Time to find the user agent: '.round($end-$init_class,6).'<br/>';
+echo 'Total: '.round($end-$start,6).'<br/>';
+
+echo '<pre>';
+var_export($wurflObj->capabilities);
+echo '</pre>';
 ?>

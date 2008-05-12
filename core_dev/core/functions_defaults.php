@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * $Id$
  *
@@ -7,15 +7,15 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-	/**
-	 * Default time format display, YYYY-MM-DD HH:MM:SS
-	 */
-	function formatTime($ts)
-	{
-		if (function_exists('formatTimeOverride')) {
-			return formatTimeOverride($ts);
-		}
-		return $ts;
+/**
+ * Default time format display, YYYY-MM-DD HH:MM:SS
+ */
+function formatTime($ts)
+{
+	if (function_exists('formatTimeOverride')) {
+		return formatTimeOverride($ts);
 	}
+	return $ts;
+}
 
 ?>

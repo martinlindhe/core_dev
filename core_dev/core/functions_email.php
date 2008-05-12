@@ -1,5 +1,9 @@
-<?
-
+<?php
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
 
 	/**
 	 * Helper function: calls class.phpmailer.php functions. $mails is a array of recipients
