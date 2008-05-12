@@ -15,10 +15,10 @@
 		perform_query_test.php:
 			* leta efter keywords som "warning / error" i resultaten
 
-		todo: förbättra hittandet av parametrar och url, stöd även post-parametrar samt javascript-url
-		todo: sessioner, eller iaf till en början en möjlighet att attacha en hårdkodad cookie / get-parameter som fejkar session handling
-		todo/senare: definiera login-url, scriptet klurar ut login-forumuläret å gissar username / password parametrar
-			sen med detta automatiskt logga in i systemet med angivet user/pwd och auto-behåll sessionen hela tiden
+		todo: fÃ¶rbÃ¤ttra hittandet av parametrar och url, stÃ¶d Ã¤ven post-parametrar samt javascript-url
+		todo: sessioner, eller iaf till en bÃ¶rjan en mÃ¶jlighet att attacha en hÃ¥rdkodad cookie / get-parameter som fejkar session handling
+		todo/senare: definiera login-url, scriptet klurar ut login-forumulÃ¤ret Ã¥ gissar username / password parametrar
+			sen med detta automatiskt logga in i systemet med angivet user/pwd och auto-behÃ¥ll sessionen hela tiden
 
 		todo: skippa denna typ av url:
 				Skipping download of http://www.aftonbladet.se/javascript:logout();) - Using cache
@@ -55,7 +55,7 @@ $config['spider']['cache_age'] = 3600*24;	//24 hour
 
 $config['spider']['max_http_requests'] = 50;	//max number of http requests to do during one execution of the script, to avoid server overload
 
-//Tar en sträng med parametrar till en html-tagg, och returnerar en array med dom parsade
+//Tar en strÃ¤ng med parametrar till en html-tagg, och returnerar en array med dom parsade
 function parse_html_parameters($str)
 {
 	$arr = array();
@@ -64,14 +64,14 @@ function parse_html_parameters($str)
 	$str = str_replace(' =', '=', $str);
 	$str = str_replace('= ', '=', $str);
 
-	//Parse parameters. todo: gör till en funktion
+	//Parse parameters. todo: gÃ¶r till en funktion
 	do {
 		$param_pos1 = strpos($str, '=');
 		$param_name = substr($str, 0, $param_pos1);
 
 		if (substr($str, $param_pos1+1, 1) == '"') {
 			//handle "quouted" parameter
-			$param_pos2 = strpos($str, '"', $param_pos1+2); //hitta nästföljande ", EFTER det öppnande "
+			$param_pos2 = strpos($str, '"', $param_pos1+2); //hitta nÃ¤stfÃ¶ljande ", EFTER det Ã¶ppnande "
 			$param_value = substr($str, $param_pos1+2, $param_pos2-$param_pos1-2);
 			$arr[$param_name] = $param_value;
 
@@ -88,7 +88,7 @@ function parse_html_parameters($str)
 				$str = trim(substr($str, $param_pos2+1));
 				//echo 'resterande: '.$str.'<br/>';
 			} else {
-				//Detta är sista parametern
+				//Detta Ã¤r sista parametern
 				$param_value = substr($str, $param_pos1+1);
 				$str = '';
 			}
@@ -132,7 +132,7 @@ function nice_parse_url(&$url)
 
 		//Find the file extension, if one exists
 		$filename = substr($arr['path'], $pos+1);
-		$pos2 = strpos($filename, '.');			//fixme: är detta korrekt, tänk med en fil med flera punkter i namnet, strrpos() istället?
+		$pos2 = strpos($filename, '.');			//fixme: Ã¤r detta korrekt, tÃ¤nk med en fil med flera punkter i namnet, strrpos() istÃ¤llet?
 		if ($pos2 !== false) $arr['file_ext'] = substr($filename, $pos2);
 	}
 
@@ -257,7 +257,7 @@ function generate_absolute_urls($list, $url)
 						$result[] = $url_arr['scheme'].'://'.$url_arr['host'].substr($temp, 0, $pos+1).$val;
 						//echo 'temp became: '.$temp.'<br/>';
 					} else {
-						//fixme: tror detta är unreachable code...
+						//fixme: tror detta Ã¤r unreachable code...
 						echo 'ERROR! obscure case! temp='.$temp.'<br/>';
 					}
 
@@ -274,8 +274,8 @@ function generate_absolute_urls($list, $url)
 			}
 		} else {
 			$temp = nice_parse_url($val);
-			//kolla om det är samma som $url, eller om det är en extern länk
-			//todo: ska detta kollas i ett senare steg istället?
+			//kolla om det Ã¤r samma som $url, eller om det Ã¤r en extern lÃ¤nk
+			//todo: ska detta kollas i ett senare steg istÃ¤llet?
 			if ($temp['host'] == $url_arr['host']) {
 				//This is a normal absolute path
 				$result[] = $val;
@@ -326,7 +326,7 @@ function get_http_contents($url, &$errno)
 		return false;
 	}
 
-	//fixme: url parametrar ignoreras här ?!?!?!
+	//fixme: url parametrar ignoreras hÃ¤r ?!?!?!
 	$file = $host['path'];
 
 	$header  = "GET ".$file." HTTP/1.0\r\n";
@@ -348,7 +348,7 @@ function get_http_contents($url, &$errno)
 
 	$arr = explode("\r\n", $header);
 
-	//todo: kanske parsa upp header-elementen mer tillgängliga som keys i en array,om vi ska göra mycket med header-datan
+	//todo: kanske parsa upp header-elementen mer tillgÃ¤ngliga som keys i en array,om vi ska gÃ¶ra mycket med header-datan
 	foreach ($arr as $val) {
 		if (substr($val, 0, 9) == 'HTTP/1.1 ') $errno = intval(substr($val, 9));
 	}
@@ -413,7 +413,7 @@ function get_http_contents($url, &$errno)
 	return $body;
 }
 
-/* Tar en array med absoluta url:er. Genererar en robots.txt utifrån url:erna */
+/* Tar en array med absoluta url:er. Genererar en robots.txt utifrÃ¥n url:erna */
 function generate_robots_txt($host, $arr)
 {
 	$listed = array();
@@ -446,9 +446,9 @@ function generate_robots_txt($host, $arr)
 	return $result;
 }
 
-/* Tar en array med absoluta url:er. Genererar en Google XML sitemap utifrån url:erna
+/* Tar en array med absoluta url:er. Genererar en Google XML sitemap utifrÃ¥n url:erna
 	Implementering enligt https://www.google.com/webmasters/tools/docs/en/protocol.html
-	OBS: Utgår från att arrayen innehåller en lista med unika url:er för samma domän.
+	OBS: UtgÃ¥r frÃ¥n att arrayen innehÃ¥ller en lista med unika url:er fÃ¶r samma domÃ¤n.
 */
 function generate_google_sitemap($arr)
 {
