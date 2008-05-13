@@ -148,7 +148,7 @@ function iCalEvents($cal, $tz = '')
 }
 
 
-	header('Content-Type: text/plain');
+	header('Content-Type: text/plain; charset="UTF-8"');
 
 	iCalBegin('VCALENDAR', 'Svenska Helgdagar');
 	for ($i = date('Y')-1; $i <= date('Y')+1; $i++)
