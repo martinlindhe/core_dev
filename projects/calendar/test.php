@@ -1,82 +1,154 @@
 <?
+//XXX: move to functions_calendar.php
+//XXX: can you get ical file over webdav (if possible, behind https) into outlook?
 
 /**
- * Genererates Swedish "work free days" for given year
- * Only lists "red days", which is free from work by swedish law
- * Sweden uses the Gregorian calendar
+ * $Id$
+ *
+ *
+ * iCalendar references:
+ * RFC 2445 Internet Calendaring and Scheduling Core Object Specification (iCalendar)
+ * RFC 2446 iCalendar Transport-Independent Interoperability Protocol (iTIP)
+ * RFC 2447 iCalendar Message-Based Interoperability Protocol (iMIP)
+ */
+
+/**
+ * Generates swedish days off (workfree days)
  *
  * Calculations verified 2008.05.13
  *
- * Ignores "Allmänt lediga dagar i Sverige" (påskafton, midsommarafton, julafton, nyårsafton): 
+ * Details (in swedish) here:
  * http://sv.wikipedia.org/wiki/Helgdag#Allm.C3.A4nna_helgdagar_i_Sverige
  */
-function generateHelgdagar($year)
+function skapaLedigaDagar($year)
 {
 	if (!is_numeric($year)) return false;
 
-	//Nyårsdagen (fast): 1:a januari
-	$ts = mktime(0, 0, 0, 1, 1, $year);	//1:a januari
-	$res['nyårsdagen'] = date('Y-m-d', $ts);
+	$res = array();
 
-	//Trettondag jul (fast): 6:e januari
-	$ts = mktime(0, 0, 0, 1, 6, $year);	//6:e januari
-	$res['trettondagen'] = date('Y-m-d', $ts);
+	//Nyårsdagen: 1:a januari
+	$ts = mktime(0, 0, 0, 1, 1, $year);
+	$res[] = array($ts, 'Nyårsdagen');
 
-	//Första maj (fast): 1:a maj
-	$ts = mktime(0, 0, 0, 5, 1, $year);	//1:a maj
-	$res['första_maj'] = date('Y-m-d', $ts);
+	//Trettondag jul: 6:e januari
+	$ts = mktime(0, 0, 0, 1, 6, $year);
+	$res[] = array($ts, 'Trettondag jul');
 
-	//Sveriges nationaldag (fast): 6:e juni
-	$ts = mktime(0, 0, 0, 6, 6, $year);	//6:e juni
-	$res['sveriges_nationaldag'] = date('Y-m-d', $ts);
+	//Första maj: 1:a maj
+	$ts = mktime(0, 0, 0, 5, 1, $year);
+	$res[] = array($ts, 'Första maj');
 
-	//Juldagen (fast): 25:e december
-	$ts = mktime(0, 0, 0, 12, 25, $year);	//25:e dec
-	$res['juldagen'] = date('Y-m-d', $ts);
+	//Sveriges nationaldag: 6:e juni
+	$ts = mktime(0, 0, 0, 6, 6, $year);
+	$res[] = array($ts, 'Sveriges nationaldag');
 
-	//Annandag jul (fast): 26:e december
-	$ts = mktime(0, 0, 0, 12, 26, $year);	//26:e dec
-	$res['annandag_jul'] = date('Y-m-d', $ts);
+	//Julafton: 24:e december
+	$ts = mktime(0, 0, 0, 12, 24, $year);
+	$res[] = array($ts, 'Julafton');
 
-	//Påskdagen (rörlig): söndagen närmast efter den fullmåne som infaller på eller närmast efter den 21 mars
+	//Juldagen: 25:e december
+	$ts = mktime(0, 0, 0, 12, 25, $year);
+	$res[] = array($ts, 'Juldagen');
+
+	//Annandag jul: 26:e december
+	$ts = mktime(0, 0, 0, 12, 26, $year);
+	$res[] = array($ts, 'Annandag jul');
+
+	//Nyårsafton: 31 december
+	$ts = mktime(0, 0, 0, 12, 31, $year);
+	$res[] = array($ts, 'Nyårsafton');
+
 	$easter_ofs = easter_days($year, CAL_GREGORIAN);	//number of days after March 21 on which Easter falls
-	$ts = mktime(0, 0, 0, 3, 21 + $easter_ofs, $year);
-	$res['påskdagen'] = date('Y-m-d', $ts);
 
 	//Långfredagen (rörlig): fredagen närmast före påskdagen
 	$ts = mktime(0, 0, 0, 3, 21 + $easter_ofs - 2, $year);
-	$res['långfredagen'] = date('Y-m-d', $ts);
+	$res[] = array($ts, 'Långfredagen');
+
+	//Påskafton (rörlig): dagen innan påskdagen
+	$ts = mktime(0, 0, 0, 3, 21 + $easter_ofs - 1, $year);
+	$res[] = array($ts, 'Påskafton');
+
+	//Påskdagen (rörlig): söndagen närmast efter den fullmåne som infaller på eller närmast efter den 21 mars
+	$ts = mktime(0, 0, 0, 3, 21 + $easter_ofs, $year);
+	$res[] = array($ts, 'Påskdagen');
 
 	//Annandag påsk (rörlig): dagen efter påskdagen. alltid måndag
 	$ts = mktime(0, 0, 0, 3, 21 + $easter_ofs + 1, $year);
-	$res['annandag_påsk'] = date('Y-m-d', $ts);
+	$res[] = array($ts, 'Annandag påsk');
 
-	//Kristi himmelfärdsdag (rörlig): sjätte torsdagen efter påskdagen (39 dagar efter)
+	//Kristi himmelfärdsdagen (rörlig): sjätte torsdagen efter påskdagen (39 dagar efter)
 	$ts = mktime(0, 0, 0, 3, 21 + $easter_ofs + 39, $year);
-	$res['kristi_himmelfärd'] = date('Y-m-d', $ts);
+	$res[] = array($ts, 'Kristi himmelfärdsdagen');
 
 	//Pingsdagen (rörlig): sjunde söndagen efter påskdagen (49 dagar efter)
 	$ts = mktime(0, 0, 0, 3, 21 + $easter_ofs + 49, $year);
-	$res['pingstdagen'] = date('Y-m-d', $ts);
+	$res[] = array($ts, 'Pingstdagen');
 
 	//Midsommardagen (rörlig): den lördag som infaller under tiden den 20-26 jun
 	$ts = mktime(0, 0, 0, 6, 20, $year);	//20:e juni
 	$dow = date('N', $ts);	//day of week. 1=monday,7=sunday
 	$ts = mktime(0, 0, 0, 6, 20-$dow+6, $year);
-	$res['midsommardagen'] = date('Y-m-d', $ts);
+	$res[] = array($ts, 'Midsommardagen');
+
+	//Midsommarafton (rörlig): dagen innan midsommardagen
+	$ts = mktime(0, 0, 0, 6, 20-$dow+5, $year);
+	$res[] = array($ts, 'Midsommarafton');
 
 	//Alla helgons dag (rörlig): den lördag som infaller under tiden den 31 oktober-6 november
 	$ts = mktime(0, 0, 0, 10, 31, $year);	//31:a okt
 	$dow = date('N', $ts);	//day of week. 1=monday,7=sunday
 	$ts = mktime(0, 0, 0, 10, 31-$dow+6, $year);
-	$res['alla_helgons_dag'] = date('Y-m-d', $ts);
+	$res[] = array($ts, 'Alla helgons dag');
 
 	return $res;
 }
 
-for ($i= 2007; $i <= 2015; $i++) {
-	$x = generateHelgdagar($i);
-	echo $x['pingstdagen']."\n";
+/**
+ * Creates iCalendar object header
+ */
+function iCalBegin($obj)
+{
+	switch ($obj) {
+		case 'VEVENT':
+			echo "BEGIN:VEVENT\n";
+			break;
+
+		case 'VCALENDAR':
+			echo "BEGIN:VCALENDAR\n";
+			echo "PRODID:-//core_dev v1.0/Svenska Helgdagar/NONSGML v1.0//EN\n";	//FIXME: version string
+			echo "VERSION:2.0\n";
+			break;
+	}
 }
+
+function iCalEnd($obj)
+{
+	echo "END:".$obj."\n";
+}
+
+/**
+ * Outputs the content of the calendar as a iCalendar (.ics) file
+ *
+ * http://en.wikipedia.org/wiki/ICalendar
+ */
+function iCalEvents($cal, $tz = '')
+{
+	foreach ($cal as $a) {
+		iCalBegin('VEVENT');
+		echo "DTSTART;TZID=".($tz?$tz:date('e',$a[0])).":".date('Ymd', $a[0])."T000000\n";
+		echo "DTEND;TZID=".($tz?$tz:date('e',$a[0])).":".date('Ymd', $a[0])."T235959\n";
+		//XXX: there is a "DURATION" element to specify "all day event"
+		echo "SUMMARY:".$a[1]."\n";
+		iCalEnd('VEVENT');
+	}
+}
+
+	iCalBegin('VCALENDAR');
+	for ($i = date('Y')-1; $i <= date('Y')+1; $i++)
+	{
+		$cal = skapaLedigaDagar($i);
+		iCalEvents($cal, 'Europe/Stockholm');	//$cal->renderiCal();
+	}
+	iCalEnd('VCALENDAR');
 
 ?>
