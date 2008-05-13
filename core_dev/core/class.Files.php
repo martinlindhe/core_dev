@@ -737,7 +737,7 @@ class Files
 
 			/* This sends files without extension etc as plain text if you didnt specify to download them */
 			if ((!$force_mime && !isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream')) {
-				header('Content-Type: text/plain');
+				header('Content-Type: text/plain; charset="UTF-8"');
 			} else {
 				header('Content-Type: '.$data['fileMime']);
 			}
@@ -768,7 +768,7 @@ class Files
 
 		//header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($realFileName)) . ' GMT');
 		header('Content-Length: '.filesize($filename));
-		header('Content-Type: text/plain');
+		header('Content-Type: text/plain; charset="UTF-8"');
 
 		if (isset($_GET['dl'])) {
 			/* Prompts the user to save the file */
