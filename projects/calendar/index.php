@@ -20,7 +20,7 @@
  * Details (in swedish) here:
  * http://sv.wikipedia.org/wiki/Helgdag#Allm.C3.A4nna_helgdagar_i_Sverige
  */
-function skapaLedigaDagar($year)
+function calDaysOffSwe($year)
 {
 	if (!is_numeric($year)) return false;
 
@@ -104,6 +104,12 @@ function skapaLedigaDagar($year)
 }
 
 /**
+ * iCalendar (.ics) file functions
+ *
+ * http://en.wikipedia.org/wiki/ICalendar
+ */
+
+/**
  * Creates iCalendar object header
  */
 function iCalBegin($obj)
@@ -127,9 +133,7 @@ function iCalEnd($obj)
 }
 
 /**
- * Outputs the content of the calendar as a iCalendar (.ics) file
- *
- * http://en.wikipedia.org/wiki/ICalendar
+ * Outputs the content of the calendar as event objects
  */
 function iCalEvents($cal, $tz = '')
 {
@@ -143,10 +147,15 @@ function iCalEvents($cal, $tz = '')
 	}
 }
 
+
+
+
+
+
 	iCalBegin('VCALENDAR');
 	for ($i = date('Y')-1; $i <= date('Y')+1; $i++)
 	{
-		$cal = skapaLedigaDagar($i);
+		$cal = calDaysOffSwe($i);
 		iCalEvents($cal, 'Europe/Stockholm');	//$cal->renderiCal();
 	}
 	iCalEnd('VCALENDAR');
