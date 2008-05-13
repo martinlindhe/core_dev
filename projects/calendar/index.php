@@ -112,24 +112,24 @@ function calDaysOffSwe($year)
 /**
  * Creates iCalendar object header
  */
-function iCalBegin($obj)
+function iCalBegin($obj, $s)
 {
+	echo "BEGIN:".$obj."\r\n";
+
 	switch ($obj) {
-		case 'VEVENT':
-			echo "BEGIN:VEVENT\n";
+		case 'VCALENDAR':
+			echo "PRODID:-//core_dev v1.0/".$s."/NONSGML v1.0//EN\r\n";	//FIXME: core_dev version string
+			echo "VERSION:2.0\r\n";
 			break;
 
-		case 'VCALENDAR':
-			echo "BEGIN:VCALENDAR\n";
-			echo "PRODID:-//core_dev v1.0/Svenska Helgdagar/NONSGML v1.0//EN\n";	//FIXME: version string
-			echo "VERSION:2.0\n";
+		case 'VEVENT':
 			break;
 	}
 }
 
 function iCalEnd($obj)
 {
-	echo "END:".$obj."\n";
+	echo "END:".$obj."\r\n";
 }
 
 /**
@@ -139,20 +139,18 @@ function iCalEvents($cal, $tz = '')
 {
 	foreach ($cal as $a) {
 		iCalBegin('VEVENT');
-		echo "DTSTART;TZID=".($tz?$tz:date('e',$a[0])).":".date('Ymd', $a[0])."T000000\n";
-		echo "DTEND;TZID=".($tz?$tz:date('e',$a[0])).":".date('Ymd', $a[0])."T235959\n";
+		echo "DTSTART;TZID=".($tz?$tz:date('e',$a[0])).":".date('Ymd', $a[0])."T000000\r\n";
+		echo "DTEND;TZID=".($tz?$tz:date('e',$a[0])).":".date('Ymd', $a[0])."T235959\r\n";
+		echo "SUMMARY:".$a[1]."\r\n";
 		//XXX: there is a "DURATION" element to specify "all day event"
-		echo "SUMMARY:".$a[1]."\n";
 		iCalEnd('VEVENT');
 	}
 }
 
 
+	header('Content-Type: text/plain');
 
-
-
-
-	iCalBegin('VCALENDAR');
+	iCalBegin('VCALENDAR', 'Svenska Helgdagar');
 	for ($i = date('Y')-1; $i <= date('Y')+1; $i++)
 	{
 		$cal = calDaysOffSwe($i);
