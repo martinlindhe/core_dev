@@ -345,6 +345,7 @@ class Users
 		$q  = 'SELECT userId,userName FROM tblUsers';
 		$q .= ' WHERE timeDeleted IS NULL';
 		$q .= ' AND LOWER(userName) LIKE LOWER("'.$db->escape($phrase).'%")';
+		$q .= ' ORDER BY userName ASC';
 		return $db->getArray($q);
 	}
 
