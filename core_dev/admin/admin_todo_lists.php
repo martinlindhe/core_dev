@@ -80,8 +80,8 @@ echo '<td>'.$todo_item_status[ $item['itemStatus'] ].', change to ';
 echo '<select name="changestatus">';
 for ($i=0; $i<count($todo_item_status); $i++) {
 	if ($i != $item['itemStatus']) {
-		if (! (($item['itemStatus'] == TODO_ITEM_ASSIGNED) && ($i == TODO_ITEM_OPEN)) ) {//är den assigned kan man inte välja OPEN
-			if (! (($item['itemStatus'] == TODO_ITEM_CLOSED) && ($i == TODO_ITEM_ASSIGNED)) ) {//är den closed kan man inte välja ASSIGNED
+		if (! (($item['itemStatus'] == TODO_ITEM_ASSIGNED) && ($i == TODO_ITEM_OPEN)) ) {//Ã¤r den assigned kan man inte vÃ¤lja OPEN
+			if (! (($item['itemStatus'] == TODO_ITEM_CLOSED) && ($i == TODO_ITEM_ASSIGNED)) ) {//Ã¤r den closed kan man inte vÃ¤lja ASSIGNED
 				echo '<option value="'.$i.'">'.$todo_item_status[$i];
 			}
 		}

@@ -1,6 +1,6 @@
 "are you a human" implementation:
 ---------------------------------
-todo: flera typer av svar. t'ex "v‰lj vilken av bilderna som ‰r en clown", eller tvÂ/tre-vals radioknapp-svarsalternativ
+todo: flera typer av svar. t'ex "v√§lj vilken av bilderna som √§r en clown", eller tv√•/tre-vals radioknapp-svarsalternativ
 
 
 This is a description of how the "are you human" test that is used in

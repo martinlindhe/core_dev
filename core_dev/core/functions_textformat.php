@@ -247,7 +247,7 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 		} while (1);
 
 
-		//todo: add [img]url[/img] tagg för bildlänkning! och checka för intern länkning
+		//todo: add [img]url[/img] tagg fÃ¶r bildlÃ¤nkning! och checka fÃ¶r intern lÃ¤nkning
 
 		//$text = replaceLinks($text);
 

@@ -61,7 +61,7 @@
 		}
 	}
 
-	/* Sorterar resultat per kategori för snygg visning */
+	/* Sorterar resultat per kategori fÃ¶r snygg visning */
 	function getBlogsByCategory($userId, $limit = 0)
 	{
 		global $db;

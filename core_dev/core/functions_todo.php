@@ -197,7 +197,7 @@
 		return dbOneResultItem($db, $sql);
 	}
 
-	/* Returnerar antal ÖPPNA buggar */
+	/* Returnerar antal Ã–PPNA buggar */
 	function getBugReportsCount(&$db)
 	{
 		$sql = 'SELECT COUNT(bugId) FROM tblBugReports WHERE bugClosed=0';
@@ -214,8 +214,8 @@
 		return dbOneResult($db, $sql);	
 	}
 
-	/* Flyttar buggrapporten från tblBugReports till tblTodoLists */
-	/* Returnerar ID för det nya todo-itemet */
+	/* Flyttar buggrapporten frÃ¥n tblBugReports till tblTodoLists */
+	/* Returnerar ID fÃ¶r det nya todo-itemet */
 	//userId : den som flyttar buggen, creator = den som skapat buggen */
 	function moveBugReport(&$db, $userId, $bugId, $creator, $desc, $details, $timestamp, $category, $categoryId)
 	{

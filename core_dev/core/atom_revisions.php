@@ -18,7 +18,7 @@
 	define('REV_CAT_UNLOCKED', 5);
 
 	/**
-	 * \todo kanske kunna minska ner antalet parametrar på nåt sätt?
+	 * \todo kanske kunna minska ner antalet parametrar pÃ¥ nÃ¥t sÃ¤tt?
 	 */
 	function addRevision($fieldType, $fieldId, $fieldText, $timestamp, $creatorId, $categoryId = 0)
 	{
@@ -26,7 +26,7 @@
 
 		if (!is_numeric($fieldType) || !is_numeric($fieldId) || !is_numeric($creatorId) || !is_numeric($categoryId)) return false;
 
-		$timestamp = $db->escape($timestamp);		//todo: validate timestamp bättre
+		$timestamp = $db->escape($timestamp);		//todo: validate timestamp bÃ¤ttre
 
 		$q = 'INSERT INTO tblRevisions SET fieldId='.$fieldId.',fieldType='.$fieldType.',fieldText="'.$db->escape($fieldText).'",createdBy='.$creatorId.',timeCreated="'.$timestamp.'",categoryId='.$categoryId;
 		return $db->insert($q);

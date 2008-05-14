@@ -40,7 +40,7 @@
 		global $db;
 
 		if (!is_numeric($entryId)) return false;
-//deletedby, sÂ admin-deletes syns
+//deletedby, s√• admin-deletes syns
 		$q = 'UPDATE tblGuestbooks SET entryDeleted=1,timeDeleted=NOW() WHERE entryId='.$entryId;
 		$db->query($q);
 	}
@@ -203,7 +203,7 @@
 		return $db->getOneItem($q);
 	}
 
-	/* Markerar alla inl‰gg i g‰stboken som l‰sta */
+	/* Markerar alla inl√§gg i g√§stboken som l√§sta */
 	function markGuestbookRead()
 	{
 		global $db, $session;

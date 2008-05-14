@@ -115,7 +115,7 @@ require_once('functions_locale.php');	//for translations
 	{
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
-		//FIXME returnera namn på gruppen som kontakten tillhör "Gammalt ex", "Suparpolare" etc
+		//FIXME returnera namn pÃ¥ gruppen som kontakten tillhÃ¶r "Gammalt ex", "Suparpolare" etc
 		//FIXME $groupId ignoreras
 
 		$q  = 'SELECT t1.*,t2.userName,t2.timeLastActive ';
@@ -138,7 +138,7 @@ require_once('functions_locale.php');	//for translations
 	{
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($userId)) return false;
-		//FIXME returnera namn på gruppen som kontakten tillhör "Gammalt ex", "Suparpolare" etc
+		//FIXME returnera namn pÃ¥ gruppen som kontakten tillhÃ¶r "Gammalt ex", "Suparpolare" etc
 		//FIXME $groupId ignoreras
 
 		$q  = 'SELECT t1.*,t2.userName,t2.timeLastActive ';

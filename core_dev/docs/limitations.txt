@@ -1,5 +1,5 @@
 * Wikis
-	- "En_artikel" och "En artikel" måste hanteras som densamma
+	- "En_artikel" och "En artikel" mÃ¥ste hanteras som densamma
 
 
 * Unicode-support

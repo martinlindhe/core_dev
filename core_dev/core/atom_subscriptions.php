@@ -134,7 +134,7 @@ require_once('functions_email.php');
 		return dbArray($db, $sql);
 	}
 
-	//Returnerar ett row för angiven subscription
+	//Returnerar ett row fÃ¶r angiven subscription
 	function getSubscription($type, $ownerId, $itemId)
 	{
 		global $db, $session;

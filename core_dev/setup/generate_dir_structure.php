@@ -1,6 +1,6 @@
 <?php
 
-//fixme: denna kod anropas & används ej ännu av något setup script
+//fixme: denna kod anropas & anvÃ¤nds ej Ã¤nnu av nÃ¥got setup script
 
 if (!is_dir($this->upload_dir)) {
 

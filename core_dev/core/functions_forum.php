@@ -262,7 +262,7 @@
 		$db->query($q);
 	}
 
-	/* Sparar ändringar i ett inlägg/folder/whatever */
+	/* Sparar Ã¤ndringar i ett inlÃ¤gg/folder/whatever */
 	function forumUpdateItem($itemId, $subject, $body, $sticky = 0)
 	{
 		global $db;
@@ -411,7 +411,7 @@
 	}
 
 	/* Returns the total number of posts contained in all the threads with parentId=$itemId */
-	//fixme: kanske byta namn på funktionen
+	//fixme: kanske byta namn pÃ¥ funktionen
 	function getForumThreadContentCount($itemId)
 	{
 		global $db;
@@ -692,13 +692,13 @@
 		$q .= 'WHERE t1.deletedBy=0 AND '.getForumSearchQuery($list);
 
 		switch ($method) {
-			case 'mostread': //mest läst
+			case 'mostread': //mest lÃ¤st
 				$q .= 'ORDER BY t1.itemRead DESC '; break;
 
-			case 'oldfirst': //älst först
+			case 'oldfirst': //Ã¤lst fÃ¶rst
 				$q .= 'ORDER BY t1.timeCreated ASC '; break;
 
-			case 'newfirst': default: //nyast först, default
+			case 'newfirst': default: //nyast fÃ¶rst, default
 				$q .= 'ORDER BY t1.timeCreated DESC '; break;
 		}
 
@@ -722,7 +722,7 @@
 		return $db->getOneItem($q);
 	}
 
-	/* $list är en array med ord att söka på */
+	/* $list Ã¤r en array med ord att sÃ¶ka pÃ¥ */
 	function getForumSearchQuery($list)
 	{
 		$sql = '';
@@ -730,7 +730,7 @@
 
 			$curr = $list[$i];
 			if (substr($curr,0,1) == '+') {
-				//kräv detta
+				//krÃ¤v detta
 
 				$curr = substr($curr,1);
 				if ($i>0) {
@@ -741,7 +741,7 @@
 			} else if (substr($curr,0,1) == '-') {
 				//INTE detta
 
-				if (count($list)==1) { //tillåt inte sökning på allt UTAN ett ord..
+				if (count($list)==1) { //tillÃ¥t inte sÃ¶kning pÃ¥ allt UTAN ett ord..
 					return;
 				}
 
@@ -752,7 +752,7 @@
 				$sql .= 'NOT (t1.itemSubject LIKE "%'.$curr.'%" OR t1.itemBody LIKE "%'.$curr.'%") ';
 
 			} else {
-				//frivilligt (typ detta ELLER nåt annat)
+				//frivilligt (typ detta ELLER nÃ¥t annat)
 
 				if ($i>0) {
 					$sql .= 'OR ';

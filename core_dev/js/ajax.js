@@ -115,12 +115,12 @@ function AJAX()
 		return this._request.responseXML.getElementsByTagName(name).item(0);
 	}
 }
-//todo: i show_ajax_anim kolla om den fortfarande behövs visas!
+//todo: i show_ajax_anim kolla om den fortfarande behÃ¶vs visas!
 var ajax_anim_abort = 0;
 function show_ajax_anim() { if (!ajax_anim_abort) show_element_by_name('ajax_anim'); ajax_anim_abort = 0; }
 function hide_ajax_anim() { hide_element_by_name('ajax_anim'); }
 
-//todo: försök kom på ett mer standardiserat interface till GET-funktionen så att mindre sådan här init&callback kod behövs
+//todo: fÃ¶rsÃ¶k kom pÃ¥ ett mer standardiserat interface till GET-funktionen sÃ¥ att mindre sÃ¥dan hÃ¤r init&callback kod behÃ¶vs
 
 
 //Sends an AJAX call to submit someones vote for a site poll
