@@ -6,10 +6,17 @@
 </head>
 
 <body>
-	Svenska kalendrar i iCalendar-format för användning i Apple iCal eller Mozilla Thunderbird (med Lightning)<br/>
+	Svenska kalendrar i iCalendar-format för användning i <a href="http://www.apple.com/ical">Apple iCal</a> eller <a href="http://www.mozilla.com/thunderbird/">Mozilla Thunderbird</a> (med <a href="http://www.mozilla.org/projects/calendar/lightning/">Lightning</a>).<br/>
 	<br/>
+	Dessa kalendrar genereras automatiskt utifrån aktuellt årtal, och genererar kalendervyer för föregående, aktuellt samt kommande år.<br/>
+	Detta innebär att om du prenumererar på en kalender så kommer den alltid att vara uppdaterad.<br/>
+	<br/>
+
 	<a href="helgdagar.php">Svenska Helgdagar</a><br/>
 	<br/>
 	<a href="loning.php">Månadslön (den vardag som infaller på eller direkt innan den 25:e)</a><br/>
+	<br/>
+	<br/>
+	Kontakt: <a href="mailto:info@startwars.org?subject=Angående dina kalendrar">info@startwars.org</a>
 </body>
 </html>
