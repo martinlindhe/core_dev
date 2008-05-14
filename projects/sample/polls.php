@@ -1,10 +1,11 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	echo '<h1>Site polls</h1>';
+require_once('config.php');
+require('design_head.php');
 
-	showPolls(POLL_SITE);
+echo '<h1>Site polls</h1>';
 
-	require('design_foot.php');
+showPolls(POLL_SITE);
+
+require('design_foot.php');
 ?>

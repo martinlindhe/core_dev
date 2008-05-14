@@ -1,15 +1,16 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	createMenu($user_menu, 'blog_menu');
+require_once('config.php');
+require('design_head.php');
 
-	echo 'Here is the 50 last users logged in<br/><br/>';
+createMenu($user_menu, 'blog_menu');
 
-	$list = Users::lastLoggedIn(50);
-	foreach ($list as $row) {
-		echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastLogin'].'<br/>';
-	}
+echo 'Here is the 50 last users logged in<br/><br/>';
 
-	require('design_foot.php');
+$list = Users::lastLoggedIn(50);
+foreach ($list as $row) {
+	echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastLogin'].'<br/>';
+}
+
+require('design_foot.php');
 ?>

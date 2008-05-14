@@ -1,21 +1,22 @@
-<?
-	require('config.php');
-	require('design_head.php');
+<?php
 
-	echo createMenu($forum_menu, 'blog_menu');
+require('config.php');
+require('design_head.php');
 
-	echo '<div class="forum_overview_group">';
+echo createMenu($forum_menu, 'blog_menu');
 
-	echo 'The 5 last posts in the forum:<br/><br/>';
+echo '<div class="forum_overview_group">';
 
-	$list = getLastForumPosts(5);
+echo 'The 5 last posts in the forum:<br/><br/>';
 
-	for ($i=0; $i<count($list); $i++) {
-		echo getForumDepthHTML(FORUM_FOLDER, $list[$i]['itemId']);
-		echo showForumPost($list[$i], '#'.($i+1));
-	}
+$list = getLastForumPosts(5);
 
-	echo '</div>';
+for ($i=0; $i<count($list); $i++) {
+	echo getForumDepthHTML(FORUM_FOLDER, $list[$i]['itemId']);
+	echo showForumPost($list[$i], '#'.($i+1));
+}
 
-	require('design_foot.php');
+echo '</div>';
+
+require('design_foot.php');
 ?>

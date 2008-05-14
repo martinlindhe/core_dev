@@ -1,15 +1,16 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	createMenu($user_menu, 'blog_menu');
+require_once('config.php');
+require('design_head.php');
 
-	echo 'Users online (was active in the last '.shortTimePeriod($session->online_timeout).')<br/><br/>';
+createMenu($user_menu, 'blog_menu');
 
-	$list = Users::allOnline();
-	foreach ($list as $row) {
-		echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastActive'].'<br/>';
-	}
+echo 'Users online (was active in the last '.shortTimePeriod($session->online_timeout).')<br/><br/>';
 
-	require('design_foot.php');
+$list = Users::allOnline();
+foreach ($list as $row) {
+	echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastActive'].'<br/>';
+}
+
+require('design_foot.php');
 ?>

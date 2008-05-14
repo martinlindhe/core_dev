@@ -1,24 +1,25 @@
-<?
-	require_once('config.php');
+<?php
 
-	if (!empty($_GET['s'])) $query = $_GET['s'];
-	if (!empty($_POST['s'])) $query = $_POST['s'];
-	if (empty($query)) die;
+require_once('config.php');
 
-	$list = searchLyrics($query);
-	if (count($list) == 1) {
-		header('Location: show_lyric.php?id='.$list[0]['lyricId'].'&highlight='.urlencode($query));
-		die;
-	}
+if (!empty($_GET['s'])) $query = $_GET['s'];
+if (!empty($_POST['s'])) $query = $_POST['s'];
+if (empty($query)) die;
 
-	require('design_head.php');
+$list = searchLyrics($query);
+if (count($list) == 1) {
+	header('Location: show_lyric.php?id='.$list[0]['lyricId'].'&highlight='.urlencode($query));
+	die;
+}
 
-	echo 'Search results on "'.$query.'" ('.count($list).' hits):<br/><br/>';
+require('design_head.php');
 
-	for ($i=0; $i<count($list); $i++) {
-		echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.htmlspecialchars($list[$i]['bandName']).'</a> - ';
-		echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'&amp;highlight='.urlencode($query).'">'.htmlspecialchars(stripslashes($list[$i]['lyricName'])).'</a><br/>';
-	}
+echo 'Search results on "'.$query.'" ('.count($list).' hits):<br/><br/>';
 
-	require('design_foot.php');
+for ($i=0; $i<count($list); $i++) {
+	echo '<a href="show_band.php?id='.$list[$i]['bandId'].'">'.htmlspecialchars($list[$i]['bandName']).'</a> - ';
+	echo '<a href="show_lyric.php?id='.$list[$i]['lyricId'].'&amp;highlight='.urlencode($query).'">'.htmlspecialchars(stripslashes($list[$i]['lyricName'])).'</a><br/>';
+}
+
+require('design_foot.php');
 ?>

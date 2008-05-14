@@ -1,15 +1,16 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+$session->requireLoggedIn();
 
-	createMenu($profile_menu, 'blog_menu');
+require('design_head.php');
 
-	wiki('Settings');
-	echo '<br/>';
+createMenu($profile_menu, 'blog_menu');
 
-	editSettings();
+wiki('Settings');
+echo '<br/>';
 
-	require('design_foot.php');
+editSettings();
+
+require('design_foot.php');
 ?>

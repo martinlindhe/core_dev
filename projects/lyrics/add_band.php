@@ -1,35 +1,29 @@
-<?
-	require_once('config.php');
+<?php
 
-	$session->requireLoggedIn();
+require_once('config.php');
 
-	require('design_head.php');
+$session->requireLoggedIn();
 
-	if (!empty($_POST['bandname']) && isset($_POST['bandinfo']))
-	{
-		$band_name = trim($_POST['bandname']);
-		$band_info = $_POST['bandinfo'];
+require('design_head.php');
 
-		$band_id = addBand($band_name);
-		if ($band_id)
-		{
-			if (!updateBandInfo($band_id, $band_info))
-			{
-				echo 'Update of band info failed.<br/>';
-			}
+if (!empty($_POST['bandname']) && isset($_POST['bandinfo'])) {
+	$band_name = trim($_POST['bandname']);
+	$band_info = $_POST['bandinfo'];
 
-			echo '<b>'.$band_name.'</b> added.<br/><br/>';
-
-			echo '<a href="show_band.php?id='.$band_id.'">Click here to go to '.$band_name.' page</a><br/>';
-			echo '<br/><br/>';
-			die;
+	$band_id = addBand($band_name);
+	if ($band_id) {
+		if (!updateBandInfo($band_id, $band_info)) {
+			echo 'Update of band info failed.<br/>';
 		}
-		else
-		{
-			echo 'A band with that name ('.$band_name.') already exists in database, add failed.<br/>';
-		}
+
+		echo '<b>'.$band_name.'</b> added.<br/><br/>';
+		echo '<a href="show_band.php?id='.$band_id.'">Click here to go to '.$band_name.' page</a><br/>';
+		echo '<br/><br/>';
+		die;
+	} else {
+		echo 'A band with that name ('.$band_name.') already exists in database, add failed.<br/>';
 	}
-
+}
 ?>
 
 <form name="addband" method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
@@ -44,6 +38,7 @@
 document.addband.bandname.focus();
 </script>
 
-<?
-	require('design_foot.php');
+<?php
+
+require('design_foot.php');
 ?>

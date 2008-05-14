@@ -1,17 +1,18 @@
-<?
-	//handle quick search:
-	if (!empty($_POST['qu'])) {
-		$hit = Users::searchUsernameContains($_POST['qu']);
-		if ($hit) {
-			header('Location: user.php?id='.$hit);
-			die;
-		}
+<?php
+
+//handle quick search:
+if (!empty($_POST['qu'])) {
+	$hit = Users::searchUsernameContains($_POST['qu']);
+	if ($hit) {
+		header('Location: user.php?id='.$hit);
+		die;
 	}
+}
 
-	//fetch a random user:
-	if (isset($_GET['rand'])) Users::randomUserPage();
+//fetch a random user:
+if (isset($_GET['rand'])) Users::randomUserPage();
 
-	createXHTMLHeader();
+createXHTMLHeader();
 ?>
 <div id="header">
 	<div id="header-logo">
@@ -23,35 +24,36 @@
 	</div>
 </div>
 <div id="leftmenu">
-<?
+<?php
+
+$menu = array(
+	'index.php' => 'Home',
+	'news.php' => 'News',
+	'faq.php' => 'FAQ',
+	'feedback.php' => 'Feedback',
+	'forum.php' => 'Forum',
+	'scribble.php' => 'Scribble',
+	'blogs.php' => 'Blogs',
+	'polls.php' => 'Polls',
+	'users.php' => 'Users'
+	//$config['core']['web_root'].'process/' => 'PROCESS SERVER'
+);
+createMenu($menu);
+
+if ($session->isAdmin) {
 	$menu = array(
-		'index.php' => 'Home',
-		'news.php' => 'News',
-		'faq.php' => 'FAQ',
-		'feedback.php' => 'Feedback',
-		'forum.php' => 'Forum',
-		'scribble.php' => 'Scribble',
-		'blogs.php' => 'Blogs',
-		'polls.php' => 'Polls',
-		'users.php' => 'Users'
-		//$config['core']['web_root'].'process/' => 'PROCESS SERVER'
-	);
+		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
 	createMenu($menu);
+}
 
-	if ($session->isAdmin) {
-		$menu = array(
-			$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
-		createMenu($menu);
-	}
-
-	if ($session->id) {
-		$menu = array(
-			'user.php' => 'My profile',
-			'?logout' => 'Logout');
-	} else {
-		$menu = array('login.php' => 'Log in');
-	}
-	createMenu($menu);
+if ($session->id) {
+	$menu = array(
+		'user.php' => 'My profile',
+		'?logout' => 'Logout');
+} else {
+	$menu = array('login.php' => 'Log in');
+}
+createMenu($menu);
 ?>
 <br/>
 Quick search:<br/>

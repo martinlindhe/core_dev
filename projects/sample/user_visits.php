@@ -1,18 +1,19 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+$session->requireLoggedIn();
 
-	createMenu($profile_menu, 'blog_menu');
+require('design_head.php');
 
-	echo 'These people have visited your page:<br/><br/>';
+createMenu($profile_menu, 'blog_menu');
 
-	$list = getVisits(VISIT_USERPAGE, $session->id);
+echo 'These people have visited your page:<br/><br/>';
 
-	foreach ($list as $row) {
-		echo Users::link($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
-	}
+$list = getVisits(VISIT_USERPAGE, $session->id);
 
-	require('design_foot.php');
+foreach ($list as $row) {
+	echo Users::link($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
+}
+
+require('design_foot.php');
 ?>

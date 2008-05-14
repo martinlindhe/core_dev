@@ -1,27 +1,28 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	if (empty($_GET['y']) || !is_numeric($_GET['y']) || empty($_GET['m']) || !is_numeric($_GET['m'])) die;
+require_once('config.php');
+$session->requireLoggedIn();
 
-	$show = $session->id;
-	if (isset($_GET['id']) && is_numeric($_GET['id'])) $show = $_GET['id'];
+if (empty($_GET['y']) || !is_numeric($_GET['y']) || empty($_GET['m']) || !is_numeric($_GET['m'])) die;
 
-	require('design_head.php');
+$show = $session->id;
+if (isset($_GET['id']) && is_numeric($_GET['id'])) $show = $_GET['id'];
 
-	$show_year = $_GET['y'];
-	$show_month = $_GET['m'];
+require('design_head.php');
 
-	echo 'Archive for '.$show_month.' '.$show_year.'<br/><br/>';
+$show_year = $_GET['y'];
+$show_month = $_GET['m'];
 
-	$list = getBlogsByMonth($show, $show_month, $show_year);
-	foreach($list as $row) {
-		echo $row['timeCreated'].' - <a href="blog.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
-	}
+echo 'Archive for '.$show_month.' '.$show_year.'<br/><br/>';
 
-	if (!count($list)) {
-		echo '<div class="critical">No archive for specified month.</div>';
-	}
+$list = getBlogsByMonth($show, $show_month, $show_year);
+foreach($list as $row) {
+	echo $row['timeCreated'].' - <a href="blog.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
+}
 
-	require('design_foot.php');
+if (!count($list)) {
+	echo '<div class="critical">No archive for specified month.</div>';
+}
+
+require('design_foot.php');
 ?>

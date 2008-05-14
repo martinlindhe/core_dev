@@ -1,11 +1,12 @@
-<?
-	require_once('config.php');
+<?php
 
-	require('design_head.php');
+require_once('config.php');
 
-	if (!$session->id) {
-		$session->showLoginForm();
-	}
+require('design_head.php');
 
-	require('design_foot.php');
+if (!$session->id) {
+	$session->showLoginForm();
+}
+
+require('design_foot.php');
 ?>

@@ -1,10 +1,11 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	createMenu($profile_menu, 'blog_menu');
+require_once('config.php');
+require('design_head.php');
 
-	showUserBlogs('id');	//id is the GET parameter name to pass the userId
+createMenu($profile_menu, 'blog_menu');
 
-	require('design_foot.php');
+showUserBlogs('id');	//id is the GET parameter name to pass the userId
+
+require('design_foot.php');
 ?>

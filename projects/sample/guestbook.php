@@ -1,17 +1,18 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	$userId = $session->id;
-	if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
-		$userId = $_GET['id'];
-	}
+require_once('config.php');
+$session->requireLoggedIn();
 
-	require('design_head.php');
+$userId = $session->id;
+if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+	$userId = $_GET['id'];
+}
 
-	createMenu($profile_menu, 'blog_menu');
+require('design_head.php');
+
+createMenu($profile_menu, 'blog_menu');
 	
-	showGuestbook($userId);
+showGuestbook($userId);
 
-	require('design_foot.php');
+require('design_foot.php');
 ?>

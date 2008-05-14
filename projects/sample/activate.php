@@ -1,10 +1,11 @@
-<?
-	if (empty($_GET['id']) || empty($_GET['code'])) die;
+<?php
 
-	require_once('config.php');
-	require('design_head.php');
+if (empty($_GET['id']) || empty($_GET['code'])) die;
 
-	$auth->verifyActivationMail($_GET['id'], $_GET['code']);
+require_once('config.php');
+require('design_head.php');
 
-	require('design_foot.php');
+$auth->verifyActivationMail($_GET['id'], $_GET['code']);
+
+require('design_foot.php');
 ?>

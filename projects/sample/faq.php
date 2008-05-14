@@ -1,14 +1,15 @@
-<?
-	require_once('config.php');
-	require_core('functions_faq.php');
-	require('design_head.php');
+<?php
 
-	echo '<h1>Frequently Asked Questions</h1>';
+require_once('config.php');
+require_core('functions_faq.php');
+require('design_head.php');
 
-	showFAQ();
-	echo '<br/>';
+echo '<h1>Frequently Asked Questions</h1>';
 
-	wiki('FAQ info');
+showFAQ();
+echo '<br/>';
 
-	require('design_foot.php');
+wiki('FAQ info');
+
+require('design_foot.php');
 ?>

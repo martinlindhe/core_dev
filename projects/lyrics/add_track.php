@@ -1,12 +1,13 @@
-<?
-	require_once('config.php');
+<?php
 
-	$session->requireLoggedIn();
+require_once('config.php');
 
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+$session->requireLoggedIn();
 
-	$record_id = $_GET['id'];
-	addTrack($record_id);
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
-	header('Location: show_record.php?id='.$record_id);
+$record_id = $_GET['id'];
+addTrack($record_id);
+
+header('Location: show_record.php?id='.$record_id);
 ?>

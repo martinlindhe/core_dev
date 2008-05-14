@@ -1,33 +1,34 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	//todo: ability to force recalculation of checksums. verify that the file is on disk
+require_once('config.php');
+$session->requireLoggedIn();
 
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('no id');
-	$fileId = $_GET['id'];
+//TODO: ability to force recalculation of checksums. verify that the file is on disk
 
-	require('design_head.php');
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('no id');
+$fileId = $_GET['id'];
 
-	wiki('ProcessShowfileStatus');
+require('design_head.php');
 
-	showFileQueueStatus($fileId);
+wiki('ProcessShowfileStatus');
 
-	$file = $files->getFileInfo($fileId);
-	if ($file['fileType'] == FILETYPE_CLONE_CONVERTED) {
-		echo 'This file is a converted version of the orginal file <a href="'.$_SERVER['PHP_SELF'].'?id='.$file['ownerId'].'">'.$file['ownerId'].'</a><br/>';
-	}
+showFileQueueStatus($fileId);
 
-	$list = $files->getFileList(FILETYPE_CLONE_CONVERTED, $fileId);
-	if ($list) echo '<h1>Conversions based on this file</h1>';
-	foreach ($list as $row) {
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['fileId'].'">'.$row['fileId'].'</a> '.formatDataSize($row['fileSize']).' '.$row['fileMime'].'<br/>';
-	}
-	echo '<br/>';
+$file = $files->getFileInfo($fileId);
+if ($file['fileType'] == FILETYPE_CLONE_CONVERTED) {
+	echo 'This file is a converted version of the orginal file <a href="'.$_SERVER['PHP_SELF'].'?id='.$file['ownerId'].'">'.$file['ownerId'].'</a><br/>';
+}
+
+$list = $files->getFileList(FILETYPE_CLONE_CONVERTED, $fileId);
+if ($list) echo '<h1>Conversions based on this file</h1>';
+foreach ($list as $row) {
+	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['fileId'].'">'.$row['fileId'].'</a> '.formatDataSize($row['fileSize']).' '.$row['fileMime'].'<br/>';
+}
+echo '<br/>';
 	
-	$files->updateFile($fileId);
+$files->updateFile($fileId);
 
-	echo '<a href="http_enqueue.php?id='.$fileId.'">Create process (media conversion, or further processing)</a>';
+echo '<a href="http_enqueue.php?id='.$fileId.'">Create process (media conversion, or further processing)</a>';
 
-	require('design_foot.php');
+require('design_foot.php');
 ?>

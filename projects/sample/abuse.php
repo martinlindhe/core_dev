@@ -1,15 +1,16 @@
-<?
-	require_once('config.php');
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
-	createMenu($profile_menu, 'blog_menu');
+require('design_head.php');
 
-	echo '<h1>Abuse</h1>';
-	echo 'If you want to block this user. Click here - fixme<br/><br/>';
+createMenu($profile_menu, 'blog_menu');
 
-	reportDialog(MODERATION_USER, $_GET['id']);
+echo '<h1>Abuse</h1>';
+echo 'If you want to block this user. Click here - fixme<br/><br/>';
 
-	require('design_foot.php');
+reportDialog(MODERATION_USER, $_GET['id']);
+
+require('design_foot.php');
 ?>

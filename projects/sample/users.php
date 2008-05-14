@@ -1,8 +1,9 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	createMenu($user_menu, 'blog_menu');
+require_once('config.php');
+require('design_head.php');
 
-	require('design_foot.php');
+createMenu($user_menu, 'blog_menu');
+
+require('design_foot.php');
 ?>

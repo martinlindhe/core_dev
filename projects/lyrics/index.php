@@ -1,13 +1,14 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	echo 'There are '.bandCount().' bands, '.recordCount().' records, '.trackCount().' tracks and '.lyricCount().' lyrics in database.<br/>';
-	echo '<br/>';
+require_once('config.php');
+require('design_head.php');
 
-	if (!$session->id) {
-		$auth->showLoginForm();
-	}
+echo 'There are '.bandCount().' bands, '.recordCount().' records, '.trackCount().' tracks and '.lyricCount().' lyrics in database.<br/>';
+echo '<br/>';
 
-	require('design_foot.php');
+if (!$session->id) {
+	$auth->showLoginForm();
+}
+
+require('design_foot.php');
 ?>

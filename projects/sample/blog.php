@@ -1,10 +1,11 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	createMenu($profile_menu, 'blog_menu');
+require_once('config.php');
+require('design_head.php');
 
-	showBlog();
+createMenu($profile_menu, 'blog_menu');
 
-	require('design_foot.php');
+showBlog();
+
+require('design_foot.php');
 ?>

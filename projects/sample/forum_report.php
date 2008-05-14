@@ -1,36 +1,37 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;	//invalid request
-	$itemId = $_GET['id'];
+require_once('config.php');
+$session->requireLoggedIn();
 
-	$item = getForumItem($itemId);
-	if (!$item) die;	//object dont exist, invalid request
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;	//invalid request
+$itemId = $_GET['id'];
 
-	/* L‰gg till en kommentar till anm‰lan */
-	if (isset($_POST['motivation'])) {
+$item = getForumItem($itemId);
+if (!$item) die;	//object dont exist, invalid request
 
-		/* Rapportera inl‰gget till abuse */
-		$queueId = addToModerationQueue(MODERATION_FORUM, $itemId);
-		addComment(COMMENT_MODERATION, $queueId, $_POST['motivation']);
+/* L√§gg till en kommentar till anm√§lan */
+if (isset($_POST['motivation'])) {
 
-		header('Location: forum.php?id='.$item['parentId']);
-		die;
-	}
+	/* Rapportera inl√§gget till abuse */
+	$queueId = addToModerationQueue(MODERATION_FORUM, $itemId);
+	addComment(COMMENT_MODERATION, $queueId, $_POST['motivation']);
 
-	require('design_head.php');
+	header('Location: forum.php?id='.$item['parentId']);
+	die;
+}
 
-	wiki('Forum abuse reporting');
+require('design_head.php');
 
-	echo showForumPost($item, '', false).'<br>';
+wiki('Forum abuse reporting');
 
-	echo '<form name="abuse" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
-	echo 'Motivate the reason:<br>';
-	echo '<textarea name="motivation" cols="50" rows="5"></textarea><br><br>';
-	echo '<input type="submit" class="button" value="Report">';
-	echo '</form><br><br>';
-	echo '<a href="javascript:history.go(-1);">Return</a>';
+echo showForumPost($item, '', false).'<br>';
 
-	require('design_foot.php');
+echo '<form name="abuse" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
+echo 'Motivate the reason:<br>';
+echo '<textarea name="motivation" cols="50" rows="5"></textarea><br><br>';
+echo '<input type="submit" class="button" value="Report">';
+echo '</form><br><br>';
+echo '<a href="javascript:history.go(-1);">Return</a>';
+
+require('design_foot.php');
 ?>

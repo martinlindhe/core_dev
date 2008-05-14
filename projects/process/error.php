@@ -1,8 +1,9 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	$session->showError();
+require_once('config.php');
+require('design_head.php');
 
-	require('design_foot.php');
+$session->showError();
+
+require('design_foot.php');
 ?>

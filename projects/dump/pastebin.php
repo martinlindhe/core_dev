@@ -1,12 +1,12 @@
-<?
-	require_once('config.php');
+<?php
 
-	require('design_head.php');
+require_once('config.php');
 
-	echo '<h1>Pastebin</h1>';
+require('design_head.php');
 
-	showComments(COMMENT_PASTEBIN, 0, 80, 30);
+echo '<h1>Pastebin</h1>';
 
+showComments(COMMENT_PASTEBIN, 0, 80, 30);
 
-	require('design_foot.php');
+require('design_foot.php');
 ?>

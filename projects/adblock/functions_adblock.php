@@ -167,7 +167,7 @@
 		if ($types_sql) $q .= ' AND ('.$types_sql.')';
 
 		if ($sortByTime) {
-			$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;		//returnerar senaste regeln först
+			$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;		//returnerar senaste regeln fÃ¶rst
 		} else {
 			$q .= ' ORDER BY ruleText ASC'.$_limit_sql;		//returnerar alfabetiskt, a-z
 		}

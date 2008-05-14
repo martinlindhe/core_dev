@@ -1,4 +1,6 @@
-<?createXHTMLHeader();?>
+<?php
+createXHTMLHeader();
+?>
 <div id="header">
 	<div id="header-logo">
 		process site
@@ -8,30 +10,31 @@
 	</div>
 </div>
 <div id="leftmenu">
-<?
+<?php
+
+$menu = array(
+	'index.php' => 'Home',
+	'show_files.php' => 'Show uploaded files',
+	'show_queue.php' => 'Show work queue'
+);
+createMenu($menu);
+
+if ($session->isAdmin) {
 	$menu = array(
-		'index.php' => 'Home',
-		'show_files.php' => 'Show uploaded files',
-		'show_queue.php' => 'Show work queue'
+		'process_queue.php' => 'FORCE process',
+		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
 	);
 	createMenu($menu);
+}
 
-	if ($session->isAdmin) {
-		$menu = array(
-			'process_queue.php' => 'FORCE process',
-			$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
-		);
-		createMenu($menu);
-	}
-
-	if ($session->id) {
-		$menu = array(
-			'http_upload.php' => 'Upload file',
-			'http_download.php' => 'Request a fetch',
-			'http_monitor.php' => 'Monitor server',
-			'?logout' => 'Logout');
-		createMenu($menu);
-	}
+if ($session->id) {
+	$menu = array(
+		'http_upload.php' => 'Upload file',
+		'http_download.php' => 'Request a fetch',
+		'http_monitor.php' => 'Monitor server',
+		'?logout' => 'Logout');
+	createMenu($menu);
+}
 ?>
 </div>
 

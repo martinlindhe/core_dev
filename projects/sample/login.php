@@ -1,10 +1,11 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedOut();
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+$session->requireLoggedOut();
 
-	$auth->showLoginForm();
+require('design_head.php');
 
-	require('design_foot.php');
+$auth->showLoginForm();
+
+require('design_foot.php');
 ?>

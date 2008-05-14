@@ -1,12 +1,13 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+$session->requireLoggedIn();
 
-	createMenu($profile_menu, 'blog_menu');
+require('design_head.php');
 
-	Users::showUser('id');	//id is the GET parameter to pass the user ID to this script, if not specified, current user is shown
+createMenu($profile_menu, 'blog_menu');
 
-	require('design_foot.php');
+Users::showUser('id');	//id is the GET parameter to pass the user ID to this script, if not specified, current user is shown
+
+require('design_foot.php');
 ?>

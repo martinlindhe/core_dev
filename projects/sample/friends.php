@@ -1,12 +1,13 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+$session->requireLoggedIn();
 
-	createMenu($profile_menu, 'blog_menu');
+require('design_head.php');
 
-	displayFriendList();
+createMenu($profile_menu, 'blog_menu');
 
-	require('design_foot.php');
+displayFriendList();
+
+require('design_foot.php');
 ?>

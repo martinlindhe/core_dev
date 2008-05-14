@@ -1,4 +1,4 @@
-<?
+<?php
 ini_set('soap.wsdl_cache_enabled', '0');
 
 $config['no_session'] = true;	//force session "last active" update to be skipped

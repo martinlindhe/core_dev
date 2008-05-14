@@ -1,12 +1,13 @@
-<?
-	require_once('config.php');
-	require('design_head.php');
+<?php
 
-	createMenu($user_menu, 'blog_menu');
+require_once('config.php');
+require('design_head.php');
 
-	echo '<h2>Search for users</h2>';
+createMenu($user_menu, 'blog_menu');
 
-	echo Users::search();
+echo '<h2>Search for users</h2>';
 
-	require('design_foot.php');
+echo Users::search();
+
+require('design_foot.php');
 ?>

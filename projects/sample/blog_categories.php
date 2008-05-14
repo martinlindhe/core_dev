@@ -1,12 +1,13 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+$session->requireLoggedIn();
 
-	echo 'Manage blog categories...<br/><br/>';
+require('design_head.php');
 
-	echo manageCategoriesDialog(CATEGORY_BLOG);
+echo 'Manage blog categories...<br/><br/>';
 
-	require('design_foot.php');
+echo manageCategoriesDialog(CATEGORY_BLOG);
+
+require('design_foot.php');
 ?>
