@@ -5,8 +5,6 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_locale.php'); //for translations
-
 //todo: rename config variables
 $config['url_rewrite_length'] = 45;		//max length of visible url's after rewrite to hyperlinks
 $config['url_rewrite_trailing'] = 15;	//number of characters to save at the end of the string

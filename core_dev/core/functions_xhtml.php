@@ -8,8 +8,6 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_defaults.php');
-
 /**
  * Creates a complete XHTML header, showing rss feeds if available, etc
  * Uses the following global variables, if they are set:
@@ -97,7 +95,7 @@ function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu
 		foreach($menu_arr as $url => $text) {
 
 			//if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<li class="'.$current_class.'">';
-			//fixme: highlitar inte wiki parametrar t.ex "Wiki:Hello", "Blog:243"
+			//FIXME: highlitar inte wiki parametrar t.ex "Wiki:Hello", "Blog:243"
 			if ($cur == $url) echo '<li class="'.$current_class.'">';
 			else echo '<li>';
 
@@ -178,19 +176,35 @@ function makePager($_total_cnt, $_items_per_page, $_add_value = '')
 }
 
 /**
+ * Creates a select-dropdown with numbers
+ */
+function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
+{
+	if (!is_numeric($_min) || !is_numeric($_max) || !is_numeric($_skip)) return;
+
+	$out = '<select name="'.strip_tags($_name).'">';
+	for ($i = $_min; $i <= $_max; $i += $_skip) {
+		$out .= '<option value="'.$i.'">'.$i.'</option>';
+	}
+	$out .= '</select>';
+
+	return $out;
+}
+
+/**
  * Helper function to generate select-dropdown menus out of specified category
  */
 function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
-{
+{	//FIXME: rename function to xhtmlSelectCategories()
 	global $config;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
-	$content = '<select name="'.strip_tags($selectName).'">';
+	$out = '<select name="'.strip_tags($selectName).'">';
 
 	if ($_type == CATEGORY_USERFILE) {
-		$content .= '<option value="0" onclick="location.href=\'?file_category_id=0\'">&nbsp;</option>';
+		$out .= '<option value="0" onclick="location.href=\'?file_category_id=0\'">&nbsp;</option>';
 	} else {
-		$content .= '<option value="0">&nbsp;</option>';
+		$out .= '<option value="0">&nbsp;</option>';
 	}
 
 	$shown_global_cats = false;
@@ -200,12 +214,12 @@ function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $sele
 
 	foreach ($list as $row) {
 		if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && ($row['permissions']&CAT_PERM_GLOBAL) ) {
-			$content .= '<optgroup label="'.t('Global categories').'">';
+			$out .= '<optgroup label="'.t('Global categories').'">';
 			$shown_global_cats = true;
 		}
 		if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_my_cats && ($row['permissions']&CAT_PERM_USER)) {
-			$content .= '</optgroup>';
-			$content .= '<optgroup label="'.t('Your categories').'">';
+			$out .= '</optgroup>';
+			$out .= '<optgroup label="'.t('Your categories').'">';
 			$shown_my_cats = true;
 		}
 
@@ -219,25 +233,25 @@ function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $sele
 			$text = $data[0];
 		}
 
-		$content .= '<option value="'.$val.'"';
-		if ($selectedId == $val) $content .= ' selected="selected"';
+		$out .= '<option value="'.$val.'"';
+		if ($selectedId == $val) $out .= ' selected="selected"';
 		else if ($url) {
 			if ($varName) {
-				$content .= ' onclick="location.href=\''.$url.'?'.$varName.'='.$row['categoryId'].$extra.'\'"';
+				$out .= ' onclick="location.href=\''.$url.'?'.$varName.'='.$row['categoryId'].$extra.'\'"';
 			} else {
-				$content .= ' onclick="location.href=\''.$url.'='.$row['categoryId'].$extra.'\'"';
+				$out .= ' onclick="location.href=\''.$url.'='.$row['categoryId'].$extra.'\'"';
 			}
 		}
-		$content .= '>'.$text;
-		if ($row['permissions'] & CAT_PERM_PRIVATE) $content .= ' ('.t('Private').')';
-		if ($row['permissions'] & CAT_PERM_HIDDEN) $content .= ' ('.t('Hidden').')';
-		$content .= '</option>';
+		$out .= '>'.$text;
+		if ($row['permissions'] & CAT_PERM_PRIVATE) $out .= ' ('.t('Private').')';
+		if ($row['permissions'] & CAT_PERM_HIDDEN) $out .= ' ('.t('Hidden').')';
+		$out .= '</option>';
 	}
-	if ($shown_global_cats || $shown_my_cats) $content .= '</optgroup>';
+	if ($shown_global_cats || $shown_my_cats) $out .= '</optgroup>';
 
-	$content .= '</select>';
+	$out .= '</select>';
 
-	return $content;
+	return $out;
 }
 
 ?>

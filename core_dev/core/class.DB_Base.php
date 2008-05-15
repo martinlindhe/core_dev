@@ -11,8 +11,6 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_core.php');	//for makePager()
-
 abstract class DB_Base
 {
 	/****************************************************/

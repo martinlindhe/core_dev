@@ -9,7 +9,6 @@ require_once('atom_comments.php');		//for news comment support
 require_once('atom_categories.php');	//for news categories support
 require_once('atom_rating.php');			//for news rating support
 require_once('atom_polls.php');				//for support of polls attached to news article
-require_once('functions_locale.php');	//for translation
 require_once('functions_fileareas.php');	//for showFiles()
 
 $config['news']['allowed_tabs'] = array('News', 'NewsEdit', 'NewsDelete', 'NewsCategories', 'NewsComment', 'NewsFiles', 'NewsPolls');

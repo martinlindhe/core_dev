@@ -11,7 +11,6 @@
 
 	require_once('atom_revisions.php');
 	require_once('functions_textformat.php');
-	require_once('functions_locale.php');	//for translations
 
 	//wiki module default settings:
 	$config['wiki']['log_history'] = true;

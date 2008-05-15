@@ -8,8 +8,6 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_locale.php'); //for translations
-
 define('POLL_SITE',		1);	//"Question of the week"-style polls on the site's front page (for example)
 define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.newsId
 

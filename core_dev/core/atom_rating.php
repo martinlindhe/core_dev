@@ -9,8 +9,6 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_locale.php');	//for translation
-
 define('RATE_NEWS',		1);
 define('RATE_BLOG',		2);
 define('RATE_FILE',		3);

@@ -13,7 +13,6 @@ require_once('class.Users.php');
 require_once('atom_moderation.php');	//for checking if username is reserved on user registration
 require_once('atom_events.php');		//for event logging
 require_once('functions_userdata.php');	//for showRequiredUserdataFields()
-require_once('functions_locale.php'); //for translations
 
 class Auth_Standard extends Auth_Base
 {

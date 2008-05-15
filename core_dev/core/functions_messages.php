@@ -6,7 +6,6 @@
  */
 
 require_once('functions_textformat.php'); //for formatting messages
-require_once('functions_locale.php');	//for translations
 
 	define('MESSAGE_GROUP_INBOX',	1);
 	define('MESSAGE_GROUP_OUTBOX',	2);

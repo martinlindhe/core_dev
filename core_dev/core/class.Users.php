@@ -8,7 +8,6 @@
  */
 
 require_once('functions_visits.php');
-require_once('functions_locale.php');	//for translations
 require_once('functions_messages.php');	//for sendMessage()
 
 $config['user']['log_visitors'] = true;	

@@ -6,7 +6,6 @@
  */
 
 	require_once('atom_moderation.php');	//for moderation functionality
-	require_once('functions_locale.php');	//for translations
 
 	function addGuestbookEntry($ownerId, $subject, $body)
 	{

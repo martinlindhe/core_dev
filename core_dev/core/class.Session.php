@@ -14,7 +14,6 @@
  */
 
 require_once('functions_ip.php');
-require_once('functions_locale.php');	//for translations
 require_once('atom_settings.php');	//for storing userdata
 require_once('atom_blocks.php');	//for isBlocked()
 

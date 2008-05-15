@@ -7,8 +7,6 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-require_once('functions_locale.php');	//for translation
-
 ///< Calendar types
 define('CALENDAR_USER',		1);	///< Personal calendar - XXX implement
 define('CALENDAR_SITE',		2);	///< Site wide calendar - XXX implement
