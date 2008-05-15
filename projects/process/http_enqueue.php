@@ -13,15 +13,15 @@ require('design_head.php');
 
 $added = false;
 if (!empty($_POST['dst_audio_fmt'])) {
-	$added = addProcessEvent(PROCESSQUEUE_AUDIO_RECODE, $fileId, $_POST['dst_audio_fmt']);
+	$added = addProcessEvent(PROCESSQUEUE_AUDIO_RECODE, $session->id, $fileId, $_POST['dst_audio_fmt']);
 } else if (!empty($_POST['dst_image_fmt'])) {
-	$added = addProcessEvent(PROCESSQUEUE_IMAGE_RECODE, $fileId, $_POST['dst_image_fmt']);
+	$added = addProcessEvent(PROCESSQUEUE_IMAGE_RECODE, $session->id, $fileId, $_POST['dst_image_fmt']);
 } else if (!empty($_POST['dst_video_fmt'])) {
-	$added = addProcessEvent(PROCESSQUEUE_VIDEO_RECODE, $fileId, $_POST['dst_video_fmt']);
+	$added = addProcessEvent(PROCESSQUEUE_VIDEO_RECODE, $session->id, $fileId, $_POST['dst_video_fmt']);
 } else if (isset($_GET['process'])) {
-	$added = addProcessEvent(PROCESSPARSE_AND_FETCH, $fileId);
+	$added = addProcessEvent(PROCESSPARSE_AND_FETCH, $session->id, $fileId);
 } else if (!empty($_POST['unfetched_process']) && $_POST['unfetched_process'] == 'convert') {
-	$added = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $eventId);
+	$added = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $session->id, $eventId);
 }
 
 if ($added) {

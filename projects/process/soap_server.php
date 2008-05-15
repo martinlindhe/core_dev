@@ -7,14 +7,15 @@ require_once('config.php');
 
 class SOAP_ProcessService
 {
-	function fetchAndConvert($username, $password, $uri, $callback)
+	function fetchAndConvert($username, $password, $uri, $callback, $watermark_uri)
 	{
 		$customerId = getCustomerId($username, $password);
 		if (!$customerId) return false;
 
-		//FIXME: store customerId
-		$id = addProcessEvent(PROCESS_FETCH, $uri);
-		$endId = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $id, $callback);
+		$id = addProcessEvent(PROCESS_FETCH, $customerId, $uri);
+		$params['callback'] = $callback;
+		$params['watermark'] = $watermark_uri;
+		$endId = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $customerId, $id, $params);
 
 		return $endId;
 	}

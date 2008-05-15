@@ -9,7 +9,8 @@ $client = new SoapClient("http://coredev.localhost/process/process.wsdl.php"); /
 try {
 	$uri = 'http://localhost/sample.3gp';
 	$callback = 'http://localhost/process_callback.php?ref=123';	//will tell client app that file "123" finished processing
-	$result = $client->fetchAndConvert('username', 'password', $uri, $callback);
+	$watermark_uri = 'http://localhost/watermark.png';
+	$result = $client->fetchAndConvert('username', 'password', $uri, $callback, $watermark_uri);
 
 	if (!$result) {
 		echo 'Failed to add order!';

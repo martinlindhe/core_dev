@@ -8,7 +8,7 @@ $serv = new SOAP('Process', $config['app']['full_url'].'soap_server.php');
 $serv->message('fetchAndConvert',
 	array(
 	'username' => 'string', 'password' => 'string',
-	'uri' => 'string', 'callback' => 'string',
+	'uri' => 'string', 'callback' => 'string', 'watermark' => 'string',
 	'response' => 'integer')
 );
 $serv->output();

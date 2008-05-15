@@ -47,8 +47,6 @@ $config['files']['apc_uploads'] = false;
 $config['files']['upload_dir'] = '/home/martin/process-uploads/';
 $files = new Files($config['files']);
 
-$config['process']['video_watermark'] = '';
-
 $config['wiki']['allow_html'] = true;
 $config['wiki']['allow_files'] = true;
 ?>
