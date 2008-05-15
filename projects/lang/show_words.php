@@ -1,26 +1,27 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+$session->requireLoggedIn();
 
-	if (empty($_GET['lang']) || !is_numeric($_GET['lang'])) {
-		echo '<h2>Show words</h2>';
-		echo 'Select language first<br/><br/>';
+require('design_head.php');
 
-		$list = getCategories(CATEGORY_LANGUAGE);
-		for ($i=0; $i<count($list); $i++) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?lang='.$list[$i]['categoryId'].'">'.$list[$i]['categoryName'].'</a><br/>';
-		}
-	} else {
-		echo '<h2>Show words</h2>';
+if (empty($_GET['lang']) || !is_numeric($_GET['lang'])) {
+	echo '<h2>Show words</h2>';
+	echo 'Select language first<br/><br/>';
 
-		$list = getWords($_GET['lang']);
-
-		foreach ($list as $row) {
-			echo $row['word'].'<br/>';
-		}
+	$list = getCategories(CATEGORY_LANGUAGE);
+	for ($i=0; $i<count($list); $i++) {
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?lang='.$list[$i]['categoryId'].'">'.$list[$i]['categoryName'].'</a><br/>';
 	}
+} else {
+	echo '<h2>Show words</h2>';
 
-	require('design_foot.php');
+	$list = getWords($_GET['lang']);
+
+	foreach ($list as $row) {
+		echo $row['word'].'<br/>';
+	}
+}
+
+require('design_foot.php');
 ?>

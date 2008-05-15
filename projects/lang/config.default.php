@@ -1,45 +1,46 @@
-<?
-	$time_start = microtime(true);
+<?php
 
-	error_reporting(E_ALL);
+$time_start = microtime(true);
 
-	$config['core']['fs_root'] = '../core_dev/';
-	$config['core']['web_root'] = '/core_dev/';
+error_reporting(E_ALL);
 
-	$config['app']['web_root'] = '/lang/';
-	$config['default_title'] = 'lang project';
+$config['core']['fs_root'] = '../core_dev/';
+$config['core']['web_root'] = '/core_dev/';
 
-	set_include_path($config['core']['fs_root'].'core/');
-	require_once('class.DB_MySQLi.php');
-	require_once('class.Session.php');
-	require_once('class.Files.php');
-	require_once('functions_wiki.php');
-	restore_include_path();
+$config['app']['web_root'] = '/lang/';
+$config['default_title'] = 'lang project';
 
-	require_once('functions_lang.php');
+set_include_path($config['core']['fs_root'].'core/');
+require_once('class.DB_MySQLi.php');
+require_once('class.Session.php');
+require_once('class.Files.php');
+require_once('functions_wiki.php');
+restore_include_path();
 
-	$config['debug'] = true;
+require_once('functions_lang.php');
 
-	$config['database']['username']	= 'root';
-	$config['database']['password']	= '';
-	$config['database']['database']	= 'dbLang';
-	$db = new DB_MySQLi($config['database']);
+$config['debug'] = true;
 
-	$config['session']['timeout'] = (60*60)*24*7;	//7 days
-	$config['session']['name'] = 'langID';
-	$config['session']['sha1_key'] = 'sdalkj8vkjncjksdSdFsdfg70kcvvcvGFzadeg5ae5h';
-	$config['session']['allow_registration'] = true;
-	$config['session']['reserved_usercheck'] = false;
-	$config['session']['userdata'] = false;
-	$session = new Session($config['session']);
+$config['database']['username']	= 'root';
+$config['database']['password']	= '';
+$config['database']['database']	= 'dbLang';
+$db = new DB_MySQLi($config['database']);
 
-	$config['files']['apc_uploads'] = false;
-	$config['files']['upload_dir'] = 'E:/devel/webupload/sample/';
-	$config['files']['thumbs_dir'] = 'E:/devel/webupload/sample/thumbs/';
-	$files = new Files($config['files']);
+$config['session']['timeout'] = (60*60)*24*7;	//7 days
+$config['session']['name'] = 'langID';
+$config['session']['sha1_key'] = 'sdalkj8vkjncjksdSdFsdfg70kcvvcvGFzadeg5ae5h';
+$config['session']['allow_registration'] = true;
+$config['session']['reserved_usercheck'] = false;
+$config['session']['userdata'] = false;
+$session = new Session($config['session']);
 
-	$config['wiki']['allow_html'] = true;
-	$config['wiki']['allow_files'] = true;
+$config['files']['apc_uploads'] = false;
+$config['files']['upload_dir'] = 'E:/devel/webupload/sample/';
+$config['files']['thumbs_dir'] = 'E:/devel/webupload/sample/thumbs/';
+$files = new Files($config['files']);
 
-	$session->handleSessionActions();
+$config['wiki']['allow_html'] = true;
+$config['wiki']['allow_files'] = true;
+
+$session->handleSessionActions();
 ?>

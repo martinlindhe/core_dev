@@ -1,8 +1,10 @@
-<?
+<?php
 /**
- * functions_lang.php - Natural language understanding and self-learning routines
+ * $Id$
  *
- * \author Martin Lindhe, 2006-2007
+ * Natural language understanding and self-learning routines
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 	/**

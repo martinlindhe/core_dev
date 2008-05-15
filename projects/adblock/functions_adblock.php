@@ -1,4 +1,10 @@
-<?
+<?php
+/**
+ * $Id$
+ *
+ * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ */
+
 	function addAdblockRule($ruleText, $ruleType, $sampleUrl)
 	{
 		global $db, $session;

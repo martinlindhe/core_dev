@@ -1,26 +1,26 @@
-<?
-	require_once('config.php');
-	$session->requireLoggedIn();
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+$session->requireLoggedIn();
 
-	$text = '';
-	if (!empty($_POST['text'])) {
-		$text = $_POST['text'];
+require('design_head.php');
 
-		guessLanguage($text);
-	}
+$text = '';
+if (!empty($_POST['text'])) {
+	$text = $_POST['text'];
 
+	guessLanguage($text);
+}
 ?>
-	<h2>Guess language</h2>
+<h2>Guess language</h2>
 
-	Enter some text and see if the program can guess the language that the text were written in.
+Enter some text and see if the program can guess the language that the text were written in.
 
-	<form method="post" action="">
-		<textarea name="text" cols="70" rows="20"></textarea><br/>
-		<input type="submit" class="button" value="Submit"/>
-	</form>
+<form method="post" action="">
+	<textarea name="text" cols="70" rows="20"></textarea><br/>
+	<input type="submit" class="button" value="Submit"/>
+</form>
+<?php
 
-<?
-	require('design_foot.php');
+require('design_foot.php');
 ?>
