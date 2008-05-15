@@ -4,8 +4,7 @@ require_once('config.php');
 $allowed = array('unsorted', 'ads', 'trackers', 'counters', 'all');
 if (!empty($_GET['type']) && !in_array($_GET['type'], $allowed)) die;
 
-//this function may end the script execution if user is served with a download
-handleAdblockDownloadRequest();
+if (handleAdblockDownloadRequest()) die();
 
 require('design_head.php');
 

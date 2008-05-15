@@ -5,6 +5,10 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+define('DOWNLOAD_METHOD_WEBFORM', 'webform');
+define('DOWNLOAD_METHOD_SUBSCRIPTION', 'subscription');
+define('DOWNLOAD_METHOD_RSS', 'rss');		//todo...
+
 function addAdblockRule($ruleText, $ruleType, $sampleUrl)
 {
 	global $db, $session;
@@ -42,7 +46,9 @@ function removeAdblockRule($ruleId)
 	$db->update('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE ownerId='.$ruleId.' AND commentType='.COMMENT_ADBLOCKRULE);
 }
 
-/* Return a row of data about $ruleId */
+/**
+ * Return a row of data about $ruleId
+ */
 function getAdblockRule($ruleId)
 {
 	global $db;
@@ -55,9 +61,11 @@ function getAdblockRule($ruleId)
 	return $db->getOneRow($q);
 }
 
-/* Returns a list of rules from the db. $types looks like this: "1,2,3" */
-// no types = get full list
-//used to generate text files for subscriptions
+/**
+ * Returns a list of rules from the db. $types looks like this: "1,2,3"
+ * no types = get full list
+ * used to generate text files for subscriptions
+ */
 function getAdblockRules($types='', $page=0, $limit=10)
 {
 	global $db;
@@ -79,16 +87,14 @@ function getAdblockRules($types='', $page=0, $limit=10)
 		$limit_sql = ' LIMIT '.$index.','.$limit;
 	}
 
-	if ($types_sql) {//FIXME: make it 1 select
-		$q = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0 AND ('.$types_sql.') ORDER BY ruleText ASC'.$limit_sql;
-	} else {
-		$q = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0 ORDER BY ruleText ASC'.$limit_sql;
-	}
+	$q = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0'.($types_select ? ' AND ('.$types_sql.')':'').' ORDER BY ruleText ASC'.$limit_sql;
 
 	return $db->getNumArray($q);
 }
 
-/* Returns the total number of rules in database */
+/**
+ * Returns the total number of rules in database
+ */
 function getAdblockRulesCount()
 {
 	global $db;
@@ -99,7 +105,6 @@ function getAdblockAllRulesCount()
 {
 	global $db;
 
-	/* Returns array of count by type */
 	$q  = 'SELECT ruleType, COUNT(ruleId) AS cnt FROM tblAdblockRules WHERE deletedBy=0 ';
 	$q .= 'GROUP BY ruleType';
 	$list = $db->getArray($q);
@@ -119,7 +124,9 @@ function getAdblockAllRulesCount()
 	return $data;
 }
 
-/* Return the number of rules added in database the last X days */
+/**
+ * Return the number of rules added in database the last X days
+ */
 function getAdblockNewRuleCount($days)
 {
 	global $db;
@@ -143,14 +150,16 @@ function makeAdblockTypeSQL($types)
 	return trim($types_sql);
 }
 
-/* Returns a list of rules from the db. $types looks like this: "1,2,3" */
-// no types = get full list
-//function searchAdblockRules($searchword, $types='', $page=0, $limit=10, $sortByTime=false)
-//$_limit_sql = SQL code pre-made by makePager() in the form of " LIMIT 0,25" for current page
-function searchAdblockRules($searchword, $types='', $_limit_sql = '', $sortByTime = false)
+/**
+ * Returns a list of rules from the db. $types looks like this: "1,2,3"
+ * no types = get full list
+ *
+ * \param $_limit $pager['limit']
+ */
+function searchAdblockRules($searchword, $types='', $_limit = '', $sortByTime = false)
 {
 	global $db;
-	if ($_limit_sql != $db->escape($_limit_sql)) return false;	//verifies that LIMIT sql dont contain escape characters
+	if ($_limit != $db->escape($_limit)) return false;	//verifies that LIMIT sql dont contain escape characters
 
 	$searchword = $db->escape(strip_tags($searchword));
 	$types_sql = makeAdblockTypeSQL($types);
@@ -159,16 +168,18 @@ function searchAdblockRules($searchword, $types='', $_limit_sql = '', $sortByTim
 	if ($searchword) $q .= ' AND ruleText LIKE "%'.$searchword.'%"';
 	if ($types_sql) $q .= ' AND ('.$types_sql.')';
 
-	if ($sortByTime) {//FIXME shorten code
-		$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;		//returnerar senaste regeln först
+	if ($sortByTime) {
+		$q .= ' ORDER BY timeCreated DESC'.$_limit;		//returns the last rule first
 	} else {
-		$q .= ' ORDER BY ruleText ASC'.$_limit_sql;		//returnerar alfabetiskt, a-z
+		$q .= ' ORDER BY ruleText ASC'.$_limit;		//returns alphabetical, a to z
 	}
 
 	return $db->getArray($q);
 }
 
-//used with adblock ruleset searches
+/**
+ * Used with adblock ruleset searches
+ */
 function searchAdblockRuleCount($searchword, $types='')
 {
 	global $db;
@@ -180,7 +191,9 @@ function searchAdblockRuleCount($searchword, $types='')
 	if ($types_sql) $q .= ' AND ('.$types_sql.')';
 	return $db->getOneItem($q);
 }
-/* Returns a list of the last $cnt additions */
+/**
+ * Returns a list of the last $cnt additions
+ */
 function getAdblockLatestAdditions($cnt)
 {
 	global $db;
@@ -192,16 +205,15 @@ function getAdblockLatestAdditions($cnt)
 	return $db->getArray($q);
 }
 
-define('DOWNLOAD_METHOD_WEBFORM', 'webform');
-define('DOWNLOAD_METHOD_SUBSCRIPTION', 'subscription');
-define('DOWNLOAD_METHOD_RSS', 'rss');		//todo...
-
-/* Handles a download request for the adblock ruleset */
-//Input:
-//POST param: type_0, type_1, type_2, type_3 bool
-//POST param: type string
-//POST param:
-//GET param: type
+/**
+ * Handles a download request for the adblock ruleset
+ * Input:
+ * POST param: type_0, type_1, type_2, type_3 bool
+ * POST param: type string
+ * POST param:
+ * GET param: type
+ * \return true if download request was handled
+ */
 function handleAdblockDownloadRequest()
 {
 	global $session, $files, $config;
@@ -225,7 +237,7 @@ function handleAdblockDownloadRequest()
 		$requestType = DOWNLOAD_METHOD_SUBSCRIPTION;
 	}
 
-	if (!$requestType) return;
+	if (!$requestType) return false;
 
 	$type_ext = '';
 
@@ -269,11 +281,11 @@ function handleAdblockDownloadRequest()
 	}
 
 	if (DOWNLOAD_METHOD_SUBSCRIPTION) {
-		/* Send special headers to the subscriber */
+		//Send special headers to the subscriber
 		header('Filterset-timestamp: '. $lastchanged);
 	}
 
 	$files->sendTextfile($cache_file);
-	die;
+	return true;
 }
 ?>
