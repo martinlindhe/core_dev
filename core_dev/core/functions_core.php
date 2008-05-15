@@ -111,4 +111,45 @@ function getProjectPath($_amp = 1)	//FIXME: get rid of this function
 	return '';
 }
 
+/**
+ * Returns the current time in the same format as the MySQL "NOW()" command
+ * \return time in MySQL datetime format
+ */
+function now()
+{
+	return strftime('%Y-%m-%d %H:%M:%S');
+}
+
+/**
+ * Returns given UNIX timestamp in MySQL datetime format
+ * \param $timestamp is a UNIX timestamp
+ * \return given UNIX timestamp in MySQL datetime format
+ */
+function sql_datetime($timestamp)
+{
+	return date('Y-m-d H:i:s', $timestamp);
+}
+	
+/**
+ * Returns MySQL datetime in UNIX timestamp format
+ * \param $datetime is a MySQL datetime
+ * \return given MySQL datetime in UNIX timestamp format
+ */
+function datetime_to_timestamp($datetime)
+{
+	return strtotime($datetime);
+}
+
+/**
+ * Compares two MySQL datetime timestamps
+ * \param $d1 is a MySQL datetime
+ * \param $d2 is a MySQL datetime
+ * \return true if $d1 is older date than $d2
+ */
+function datetime_less($d1, $d2)
+{
+	if (strtotime($d1) < strtotime($d2)) return true;
+	return false;
+}
+
 ?>
