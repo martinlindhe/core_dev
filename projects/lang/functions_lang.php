@@ -36,6 +36,15 @@
 		return $db->insert($q);
 	}
 
+	function deleteWord($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'DELETE FROM tblWords WHERE id='.$_id;
+		return $db->delete($q);
+	}
+
 	/**
 	 * Returns details of one word
 	 *
@@ -145,6 +154,10 @@
 			$words = explode(' ', $sentences[$i]);
 
 			for ($j=0; $j<count($words); $j++) {
+				if (is_numeric($words[$j])) {
+					echo 'Skipped number '.$words[$j].'<br/>';
+					continue;
+				}
 				$wordId = addWord($langId, $words[$j]);
 				if ($wordId) {
 					echo '<b>'.$words[$j].'</b> added to database<br>';

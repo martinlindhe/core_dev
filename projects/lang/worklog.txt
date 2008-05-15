@@ -1,4 +1,4 @@
-﻿	- spara ord-förekomst i en mening
+﻿	- lagra hur ofta ord förekommer vid import av textstycken. räkna+1 för varje gång man ser ett ord
 
 	tblWordRelations
 		entryId					UNIQUE
@@ -10,13 +10,12 @@
 		wordId					tblWords.id
 		otherId					tblWords.id when needed
 
-
-
-ide:
-	funktion som genererar sånt här utifrån förkortning:
-		FFmpeg = Frightening Fast MultiPurpose EnGine
-
 -----
+2008.05.15:
+	- acronym.php: new file
+	- show_words.php: can now delete words
+	- no longer learns numbers as words
+
 2007.12.03:
 	- show_words.php: made it work again
 	- functions_lang.php: doxygenified comments & translated all comments to english
