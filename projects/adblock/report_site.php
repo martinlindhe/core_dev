@@ -1,30 +1,30 @@
-<?
-	require_once('config.php');
+<?php
 
-	if (!empty($_POST['site'])) {
-		$type = 0;
-		if (!empty($_POST['type'])) $type = $_POST['type'];
-		//$siteId = addProblemSite($_POST['site'], $type, $_POST['comment']);
-		$siteId  = saveFeedback($type, $_POST['site'], $_POST['comment']);
+require_once('config.php');
 
-		require('design_head.php');
-
-		if ($siteId) {
-			echo 'The report for site <b>'.htmlentities($_POST['site'], ENT_QUOTES, 'UTF-8').'</b> has been recieved,<br/>';
-			echo 'we will look into this site as soon as possible!<br/><br/>';
-			echo '<a href="'.$_SERVER['PHP_SELF'].'">Report another site</a><br/>';
-
-		} else {
-			echo '<span class="critical">Error adding problematic site to database!</span>';
-		}
-
-		require('design_foot.php');
-		die;
-	}
+if (!empty($_POST['site'])) {
+	$type = 0;
+	if (!empty($_POST['type'])) $type = $_POST['type'];
+	//$siteId = addProblemSite($_POST['site'], $type, $_POST['comment']);
+	$siteId  = saveFeedback($type, $_POST['site'], $_POST['comment']);
 
 	require('design_head.php');
 
-	wiki('Report_top');
+	if ($siteId) {
+		echo 'The report for site <b>'.htmlentities($_POST['site'], ENT_QUOTES, 'UTF-8').'</b> has been recieved,<br/>';
+		echo 'we will look into this site as soon as possible!<br/><br/>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'">Report another site</a><br/>';
+	} else {
+		echo '<span class="critical">Error adding problematic site to database!</span>';
+	}
+
+	require('design_foot.php');
+	die;
+}
+
+require('design_head.php');
+
+wiki('Report_top');
 ?>
 <br/>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>" name="reportform">
@@ -44,12 +44,14 @@
 </table>
 </form>
 <br/>
-<?
-	wiki('Report_bottom');
+<?php
+
+wiki('Report_bottom');
 ?>
 <script type="text/javascript">
 document.reportform.site.focus();
 </script>
-<?
-	require('design_foot.php');
+<?php
+
+require('design_foot.php');
 ?>

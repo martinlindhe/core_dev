@@ -1,16 +1,17 @@
-<?
-	require_once('config.php');
-	$allowed = array('unsorted', 'ads', 'trackers', 'counters', 'all');
-	if (!empty($_GET['type']) && !in_array($_GET['type'], $allowed)) die;
+<?php
 
-	//this function may end the script execution if user is served with a download
-	handleAdblockDownloadRequest();
+require_once('config.php');
+$allowed = array('unsorted', 'ads', 'trackers', 'counters', 'all');
+if (!empty($_GET['type']) && !in_array($_GET['type'], $allowed)) die;
 
-	require('design_head.php');
+//this function may end the script execution if user is served with a download
+handleAdblockDownloadRequest();
 
-	$rules = getAdblockAllRulesCount();
+require('design_head.php');
 
-	wiki('Download');
+$rules = getAdblockAllRulesCount();
+
+wiki('Download');
 
 ?>
 <script type="text/javascript">
@@ -38,6 +39,7 @@ function checkDLform() {
 	</tr>
 </table>
 </form>
-<?
-	require('design_foot.php');
+<?php
+
+require('design_foot.php');
 ?>

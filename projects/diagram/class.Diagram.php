@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * $Id$
  *
@@ -6,7 +6,6 @@
  *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
-
 
 class Diagram
 {

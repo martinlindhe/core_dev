@@ -1,27 +1,28 @@
-<?
-	require_once('config.php');
+<?php
 
-	//s=search phrase, search the adblock rules
-	$search = '';
-	if (!empty($_GET['s'])) $search = $_GET['s'];
-	if (!empty($_POST['s'])) $search = $_POST['s'];
+require_once('config.php');
 
-	@$types = $_POST['t0'].','.$_POST['t1'].','.$_POST['t2'].','.$_POST['t3'];
+//s=search phrase, search the adblock rules
+$search = '';
+if (!empty($_GET['s'])) $search = $_GET['s'];
+if (!empty($_POST['s'])) $search = $_POST['s'];
 
-	$tot_cnt = searchAdblockRuleCount($search, $types);
-	$pager = makePager($tot_cnt, 25, ($search ? '&amp;s='.$search : '') );
+@$types = $_POST['t0'].','.$_POST['t1'].','.$_POST['t2'].','.$_POST['t3'];
 
-	$list = searchAdblockRules($search, $types, $pager['limit'], !empty($_POST['sortbytime']));
+$tot_cnt = searchAdblockRuleCount($search, $types);
+$pager = makePager($tot_cnt, 25, ($search ? '&amp;s='.$search : '') );
 
-	require('design_head.php');
+$list = searchAdblockRules($search, $types, $pager['limit'], !empty($_POST['sortbytime']));
 
-	wiki('Ruleset');
+require('design_head.php');
 
-	if ($search) {
-		echo 'Search results for: "'.$search.'"<br/><br/>';
-	} else {
-		echo 'Displaying full list of adblock rules<br/><br/>';
-	}
+wiki('Ruleset');
+
+if ($search) {
+	echo 'Search results for: "'.$search.'"<br/><br/>';
+} else {
+	echo 'Displaying full list of adblock rules<br/><br/>';
+}
 ?>
 <form method="post" name="lf" action="<?=$_SERVER['PHP_SELF']?>">
 <table cellpadding="5" cellspacing="0" border="1">
@@ -41,33 +42,33 @@
 </table>
 </form>
 <br/>
-<?
-	echo $pager['head'];
+<?php
 
-	for ($i=0; $i<count($list); $i++)
-	{
-		echo '<div class="_row_container" style="cursor: pointer;" onclick="urlOpen(\'editrule.php?id='.$list[$i]['ruleId'].'\')">';
-		//if ($list[$i]['ruleType'] == 0) $classname='objectCritical';
-		echo '<div class="_row_col1">';
+echo $pager['head'];
 
-		if ($search) {
-			$rule = str_replace($search, '<b>'.$search.'</b>', $list[$i]['ruleText']);
-		} else {
-			$rule = $list[$i]['ruleText'];
-		}
-		echo $rule;
-		echo '</div>';
-		echo '<div class="_row_col2">';
-		switch ($list[$i]['ruleType']) {
-			case 0: echo 'Unknown'; break;
-			case 1: echo 'Advertisment'; break;
-			case 2: echo 'Tracking'; break;
-			case 3: echo 'Counter'; break;
-			default: echo 'INVALID RULE TYPE '.$list[$i]['ruleType'];
-		}
-		echo '</div>'; //_row_col2
-		echo '</div>'; //_row_container
+for ($i=0; $i<count($list); $i++) {
+	echo '<div class="_row_container" style="cursor: pointer;" onclick="urlOpen(\'editrule.php?id='.$list[$i]['ruleId'].'\')">';
+	//if ($list[$i]['ruleType'] == 0) $classname='objectCritical';
+	echo '<div class="_row_col1">';
+
+	if ($search) {
+		$rule = str_replace($search, '<b>'.$search.'</b>', $list[$i]['ruleText']);
+	} else {
+		$rule = $list[$i]['ruleText'];
 	}
+	echo $rule;
+	echo '</div>';
+	echo '<div class="_row_col2">';
+	switch ($list[$i]['ruleType']) {
+		case 0: echo 'Unknown'; break;
+		case 1: echo 'Advertisment'; break;
+		case 2: echo 'Tracking'; break;
+		case 3: echo 'Counter'; break;
+		default: echo 'INVALID RULE TYPE '.$list[$i]['ruleType'];
+	}
+	echo '</div>'; //_row_col2
+	echo '</div>'; //_row_container
+}
 
-	require('design_foot.php');
+require('design_foot.php');
 ?>

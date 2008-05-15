@@ -1,9 +1,9 @@
-<?
-	require_once('config.php');
+<?php
 
-	require('design_head.php');
+require_once('config.php');
+require('design_head.php');
 
-	wiki();
+wiki();
 
-	require('design_foot.php');
+require('design_foot.php');
 ?>

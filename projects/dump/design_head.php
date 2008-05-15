@@ -1,4 +1,5 @@
 <?php
+
 createXHTMLHeader();
 ?>
 <div id="header">

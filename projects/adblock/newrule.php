@@ -1,35 +1,35 @@
-<?
-	require_once('config.php');
+<?php
 
-	$session->requireAdmin();
+require_once('config.php');
 
-	if (!empty($_POST['rule'])) {
-		$ruleId = addAdblockRule($_POST['rule'], $_POST['type'], $_POST['sampleurl']);
+$session->requireAdmin();
 
-		//todo: checkbox "make comment private"
-		require('design_head.php');
-		if (is_numeric($ruleId) && $ruleId) {
-			$session->log('Adblock rule # '.$ruleId.' created');
-			$private = false;
-			if (isset($_POST['commentprivate'])) $private = true;
-			addComment(COMMENT_ADBLOCKRULE, $ruleId, $_POST['comment'], $private);
+if (!empty($_POST['rule'])) {
+	$ruleId = addAdblockRule($_POST['rule'], $_POST['type'], $_POST['sampleurl']);
 
-			echo 'Rule <b>'.$_POST['rule'].'</b> added successfully!<br/><br/>';
-			echo '<a href="editrule.php?id='.$ruleId.'">Edit the new rule</a><br/><br/>';
-
-			//todo: list already existing similar rules
-
-		} else {
-			echo 'Failed to add the rule <b>'.$_POST['rule'].'</b><br/><br/>';
-		}
-		echo '<a href="'.$_SERVER['PHP_SELF'].'">Create another rule</a>';
-		require('design_foot.php');
-		die;
-	}
-
+	//TODO: checkbox "make comment private"
 	require('design_head.php');
+	if (is_numeric($ruleId) && $ruleId) {
+		$session->log('Adblock rule # '.$ruleId.' created');
+		$private = false;
+		if (isset($_POST['commentprivate'])) $private = true;
+		addComment(COMMENT_ADBLOCKRULE, $ruleId, $_POST['comment'], $private);
 
-	wiki('New_rule');
+		echo 'Rule <b>'.$_POST['rule'].'</b> added successfully!<br/><br/>';
+		echo '<a href="editrule.php?id='.$ruleId.'">Edit the new rule</a><br/><br/>';
+
+		//TODO: list already existing similar rules
+	} else {
+		echo 'Failed to add the rule <b>'.$_POST['rule'].'</b><br/><br/>';
+	}
+	echo '<a href="'.$_SERVER['PHP_SELF'].'">Create another rule</a>';
+	require('design_foot.php');
+	die;
+}
+
+require('design_head.php');
+
+wiki('New_rule');
 ?>
 <br/>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>" name="newrule">
@@ -61,6 +61,7 @@
 <script type="text/javascript">
 document.newrule.rule.focus();
 </script>
-<?
-	require('design_foot.php');
+<?php
+
+require('design_foot.php');
 ?>

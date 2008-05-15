@@ -1,4 +1,4 @@
-<?
+<?php
 	//xdebug_enable();
 	error_reporting(E_ALL);
 	$time_start = microtime(true);
