@@ -12,6 +12,8 @@
 	define('EVENT_M2W_CALL_BEGIN',	0x50);
 	define('EVENT_M2W_CALL_END',	0x51);
 	define('EVENT_RECORDED_PRES',	0x52);
+
+	//XXX: implementera dessa:
 	define('EVENT_RECORDED_MSG',	0x53);
 	define('EVENT_RECORDED_BLOG',	0x54);
 	define('EVENT_WARNED',			0x55);
@@ -23,6 +25,7 @@
 
 	$event_name[EVENT_M2W_CALL_BEGIN] = 'Call begin';
 	$event_name[EVENT_M2W_CALL_END] = 'Call end';
+	$event_name[EVENT_RECORDED_PRES] = 'Recorded pres.';
 
 	function addEvent($_type, $_category = 0 , $ownerId = 0, $_referer = 0)
 	{
