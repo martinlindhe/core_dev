@@ -29,6 +29,19 @@ require_once('functions_locale.php');	//for translations
 	}
 
 	/**
+	 * Debug function. Prints $m to Apache log file
+	 */
+	function dp($m)
+	{
+		global $config;
+
+		error_log($m);
+		if (!empty($config['debug'])) {
+			error_log($m, 3, '/var/tmp/core_dev.log');
+		}
+	}
+
+	/**
 	 * Helper function to include core function files
 	 *
 	 * \param $file filename to include
