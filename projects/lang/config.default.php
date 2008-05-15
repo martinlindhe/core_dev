@@ -16,7 +16,7 @@ require_once('class.Auth_Standard.php');
 require_once('class.Users.php');
 require_once('class.Session.php');
 require_once('class.Files.php');
-require_once('functions_general.php');
+require_once('functions_core.php');
 require_once('functions_wiki.php');
 restore_include_path();
 

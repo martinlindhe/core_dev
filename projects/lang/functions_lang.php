@@ -252,4 +252,24 @@
 
 		return $result;
 	}
+
+
+function generateAcronyms($_lang, $_acronym, $_ammount)
+{
+	global $db;
+	if (!is_numeric($_lang) || !is_numeric($_ammount)) return false;
+
+	$out = array();
+	for ($i = 0; $i < $_ammount; $i++) {
+		$curr = '';
+		for ($j=0; $j<strlen($_acronym); $j++) {
+			$c = substr($_acronym, $j, 1);
+			$q = 'SELECT word FROM tblWords WHERE lang='.$_lang.' AND word LIKE "'.$c.'%" ORDER BY RAND() LIMIT 1';
+			$curr .= $db->getOneItem($q).' ';
+		}
+		$out[] = $curr;
+	}
+	return $out;
+}
+
 ?>

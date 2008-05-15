@@ -23,6 +23,7 @@ if ($session->id) {
 		'add_text.php' => 'Add longer text',
 		'show_words.php' => 'Show words',
 		'guess_language.php' => 'Guess language',
+		'acronym.php' => 'Make acronyms',
 		'?logout' => 'Log out'
 	);
 	createMenu($menu);
