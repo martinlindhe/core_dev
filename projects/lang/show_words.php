@@ -14,8 +14,8 @@ if (empty($_GET['lang']) || !is_numeric($_GET['lang'])) {
 	echo 'Select language first<br/><br/>';
 
 	$list = getCategories(CATEGORY_LANGUAGE);
-	for ($i=0; $i<count($list); $i++) {
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?lang='.$list[$i]['categoryId'].'">'.$list[$i]['categoryName'].'</a><br/>';
+	foreach ($list as $row) {
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?lang='.$row['categoryId'].'">'.$row['categoryName'].'</a> ('.getWordCount($row['categoryId']).' words)<br/>';
 	}
 } else {
 	echo '<h2>Show words</h2>';

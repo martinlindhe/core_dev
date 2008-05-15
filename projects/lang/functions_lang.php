@@ -88,8 +88,25 @@
 		if (!is_numeric($langId)) return false;
 
 		$q = 'SELECT id,word FROM tblWords WHERE lang='.$langId;
+		$q .= ' ORDER BY word ASC';
 		return $db->getArray($q);
 	}
+
+	/**
+	 * Returns number of words for this language
+	 *
+	 * \param $langId language to get words for
+	 * \return number
+	 */
+	function getWordCount($langId)
+	{
+		global $db;
+		if (!is_numeric($langId)) return false;
+
+		$q = 'SELECT COUNT(*) FROM tblWords WHERE lang='.$langId;
+		return $db->getOneItem($q);
+	}
+
 
 	/**
 	 * Returns all entries that match this word
@@ -177,8 +194,12 @@
 		if (strpos($word, ';') !== false) return true;
 		if (strpos($word, '[') !== false) return true;
 		if (strpos($word, ']') !== false) return true;
+		if (strpos($word, '"') !== false) return true;
+		if (strpos($word, '$') !== false) return true;
 
 		if (is_numeric(substr($word, 0, 1))) return true;
+		if (is_numeric(substr($word, 1, 1))) return true;
+		if (strlen($word) == 1) return true;
 
 		return false;
 	}
@@ -207,7 +228,7 @@
 				}
 				if (unsureWord($words[$j])) {
 					//FIXME: checkbox & submit to add the rest of the words
-					echo '<div class="critical">Not sure if this is a word, skipping <b></b>'.$words[$j].'</b></div>';
+					echo '<div style="background-color:#FD9534">Not sure if this is a word, skipping <b></b>'.$words[$j].'</b></div>';
 					continue;
 				}
 					
