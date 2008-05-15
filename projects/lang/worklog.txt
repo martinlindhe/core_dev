@@ -12,6 +12,10 @@
 
 
 
+ide:
+	funktion som genererar sånt här utifrån förkortning:
+		FFmpeg = Frightening Fast MultiPurpose EnGine
+
 -----
 2007.12.03:
 	- show_words.php: made it work again
