@@ -137,6 +137,35 @@
 	}
 
 	/**
+	 * Returns false if input is a number or a special character
+	 */
+	function isWord($word)
+	{
+		if (is_numeric($word)) return false;
+		switch ($word) {
+			case '(':
+			case ')':
+			case '':
+			case '#':
+			case '-':
+			case '+':
+			case '*':
+			case '/':
+			case '\\':
+			case '.':
+			case ',':
+			case ':':
+			case ';':
+			case '\'':
+			case '`':
+			case '"':
+				return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Takes a body of text and saves as many observations as possible about the text
 	 *
 	 * \param $langId id of the language of the text
@@ -154,8 +183,8 @@
 			$words = explode(' ', $sentences[$i]);
 
 			for ($j=0; $j<count($words); $j++) {
-				if (is_numeric($words[$j])) {
-					echo 'Skipped number '.$words[$j].'<br/>';
+				if (!isWord($words[$j])) {
+					//echo 'Skipped invalid word '.$words[$j].'<br/>';
 					continue;
 				}
 				$wordId = addWord($langId, $words[$j]);

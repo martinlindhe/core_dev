@@ -1,4 +1,11 @@
-﻿	- lagra hur ofta ord förekommer vid import av textstycken. räkna+1 för varje gång man ser ett ord
+﻿todo:
+	- lagra hur ofta ord förekommer vid import av textstycken. räkna+1 för varje gång man ser ett ord
+
+===== Database layout =====
+	tblWords
+		id					(UNIQUE)
+		lang				tblCategories.id
+		word				tblWords.id
 
 	tblWordRelations
 		entryId					UNIQUE
@@ -15,6 +22,7 @@
 	- acronym.php: new file
 	- show_words.php: can now delete words
 	- no longer learns numbers as words
+
 
 2007.12.03:
 	- show_words.php: made it work again
