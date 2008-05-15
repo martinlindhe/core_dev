@@ -1,0 +1,8 @@
+2008.01.26:
+	* added handling of input numbers in binary form "10010101b" & hex form "0xff000"
+
+2007.12.23:
+	* prints out ascii-values of integers
+
+2007.12.03:
+	* added support for simple base conversion
