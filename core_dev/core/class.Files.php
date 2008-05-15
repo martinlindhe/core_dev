@@ -17,7 +17,6 @@ require_once('atom_categories.php');	//for file categories support
 require_once('atom_subscriptions.php');	//for userfile area subscriptions
 require_once('functions_image.php');
 require_once('functions_time.php');		//for ago()
-require_once('functions_process.php');	//for process_client_fetchAndConvert()
 
 define('FILETYPE_WIKI',					1);		// The file is a wiki attachment
 define('FILETYPE_BLOG',					2);		// The file is a blog attachment
@@ -346,7 +345,7 @@ class Files
 		}
 		
 		return $fileId;
-	}
+	}fetchAndConvert
 
 	/**
 	 * Adds a new entry for a new file in the database
@@ -444,11 +443,14 @@ class Files
 			if ($FileData['type'] != $this->default_video) {
 
 				$uri = $config['app']['full_url'].$config['core']['web_root'].'api/file.php?id='.$fileId;
-				$refId = process_client_fetchAndConvert($uri, $this->process_callback.'?id='.$fileId);
-				if (!$refId) {
-					echo 'Failed to add order!';
-				} else {
-					//echo 'Order added successfully. Order ID is '.$refId;
+
+				$client = new SoapClient($config['process']['soap_server']);
+				try {
+					$refId = $client->fetchAndConvert($config['process']['username'], $config['process']['password'], $uri, $callback);
+					if (!$refId) echo 'Failed to add order!';
+
+				} catch (Exception $e) {
+					echo 'Exception: '.$e.'<br/><br/>';
 				}
 			}
 		}

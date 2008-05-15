@@ -559,26 +559,4 @@ define('ORDER_FAILED',		3);
 		$files->updateFile($newId);
 	}
 
-	/**
-	 * Used with a client app to execute process server orders through the SOAP interface
-	 */
-	function process_client_fetchAndConvert($uri, $callback = '')
-	{
-		global $config;
-		ini_set('soap.wsdl_cache_enabled', '0');
-
-		$client = new SoapClient($config['process']['soap_server']); //, array('trace' => 1));
-
-		try {
-			$result = $client->fetchAndConvert($uri, $callback);
-			return $result;
-
-		} catch (Exception $e) {
-			echo 'Exception: '.$e.'<br/><br/>';
-
-			echo 'Request header: '.htmlspecialchars($client->__getLastRequestHeaders()).'<br/>';
-			echo 'Request: '.htmlspecialchars($client->__getLastRequest()).'<br/>';
-			echo 'Response: '.htmlspecialchars($client->__getLastResponse()).'<br/>';
-		}
-	}
 ?>

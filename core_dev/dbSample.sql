@@ -126,6 +126,17 @@ CREATE TABLE `tblContacts` (
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
+CREATE TABLE `tblCustomers` (
+  `customerId` int(10) unsigned NOT NULL auto_increment,
+  `customerName` varchar(30) default NULL,
+  `customerPass` varchar(70) default NULL,
+  `contactMail` text,
+  `contactDetails` text,
+  PRIMARY KEY  (`customerId`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+SET character_set_client = @saved_cs_client;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `tblEvents` (
   `eventId` bigint(20) unsigned NOT NULL auto_increment,
   `type` tinyint(3) unsigned NOT NULL,
