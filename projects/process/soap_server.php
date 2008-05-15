@@ -7,9 +7,12 @@ require_once('config.php');
 
 class SOAP_ProcessService
 {
-	//FIXME: kräv username & password här vid behov. idag bara m2w som använder detta
-	function fetchAndConvert($uri, $callback)
+	function fetchAndConvert($username, $password, $uri, $callback)
 	{
+		$customerId = getCustomerId($username, $password);
+		if (!$customerId) return false;
+
+		//FIXME: store customerId
 		$id = addProcessEvent(PROCESS_FETCH, $uri);
 		$endId = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $id, $callback);
 
