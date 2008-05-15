@@ -254,4 +254,25 @@ function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $sele
 	return $out;
 }
 
+/**
+ * Helper function to display one of core_dev's default action buttons
+ */
+function coreButton($name, $dst = '')
+{
+	global $config;
+
+	switch ($name) {
+		case 'Edit': $src = ''; break;
+		case 'Delete': $src = 'icon_delete.png'; break;
+
+		default:
+			echo '<h1>ERROR unknown coreButton '.$name.'</h1>';
+			return;
+	}
+
+	if ($dst) echo '<a href="'.$dst.'">';
+	//FIXME: make path configurable, so user can override core_dev icon set
+	echo '<img src="'.$config['core']['web_root'].'gfx/'.$src.'" alt="'.t($name).'" title="'.t($name).'"/>';
+	if ($dst) echo '</a>';
+}
 ?>
