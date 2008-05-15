@@ -52,10 +52,10 @@ define('ORDER_FAILED',		3);
 	 *
 	 * \return process event id
 	 */
-	function addProcessEvent($_type, $param, $param2 = '')
+	function addProcessEvent($_type, $creatorId, $param, $param2 = '')
 	{
 		global $db, $session, $files;
-		if (!is_numeric($_type)) return false;
+		if (!is_numeric($_type) || !is_numeric($creatorId)) return false;
 
 		switch ($_type) {
 			case PROCESS_UPLOAD:
@@ -68,7 +68,7 @@ define('ORDER_FAILED',		3);
 				$files->checksums($newFileId);	//force generation of file checksums
 
 				$exec_time = microtime(true) - $exec_start;
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId='.$newFileId.',orderStatus='.ORDER_COMPLETED.',orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId='.$newFileId.',orderStatus='.ORDER_COMPLETED.',orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
 				return $db->insert($q);
 
 			case PROCESSQUEUE_AUDIO_RECODE:
@@ -78,15 +78,14 @@ define('ORDER_FAILED',		3);
 				//	$param = fileId
 				//	$param2 = destination format (by extension)
 				if (!is_numeric($param)) die;
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param2).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param2).'"';
 				return $db->insert($q);
 
 			case PROCESS_FETCH:
 				//enqueue url for download and processing
 				//	$param = url
 				// downloads media files, torrents & youtube links
-
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
 				return $db->insert($q);
 
 			case PROCESS_CONVERT_TO_DEFAULT:
@@ -94,14 +93,16 @@ define('ORDER_FAILED',		3);
 				//convert some media to the default media type, can be used to enqueue a conversion of a PROCESSFETCH before the server
 				//has fetched it & cant know the media type
 				//  $param = eventId we refer to. from this we can extract the future fileId to process
-				//	$param2 = callback URL on process completion (optional)
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param2).'"';
+				//	$param2 = array of additional parameters:
+				//		'callback' = callback URL on process completion (optional)
+				//		'watermark' = URL for watermark file (optional)
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape(serialize($param2)).'"';
 				return $db->insert($q);
 
 			case PROCESSMONITOR_SERVER:
 				//enqueues a server to be monitored
 				// $param = serialized params
-				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
+				$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
 				return $db->insert($q);
 
 			case PROCESSPARSE_AND_FETCH:
@@ -382,23 +383,29 @@ define('ORDER_FAILED',		3);
 			case PROCESS_CONVERT_TO_DEFAULT:
 				echo "CONVERT TO DEFAULT\n";
 				//referId is entryId of previous proccess queue order
+				$params = unserialize($job['orderParams']);
 				$prev_job = getProcessQueueEntry($job['referId']);
 				$file = $files->getFileInfo($prev_job['referId']);
 
 				if (in_array($file['fileMime'], $files->video_mime_types)) {
 					$exec_start = microtime(true);
-					$newId = convertVideo($prev_job['referId'], $files->default_video, ($job['orderParams'] ? false : true));
+					$newId = convertVideo(
+						$prev_job['referId'],	//what file
+						$files->default_video,	//destination format (flv)
+						(!empty($params['callback']) ? false : true),//no thumbs on callback files
+						(!empty($params['watermark']) ? $params['watermark'] : '')//specify watermark file to use
+					);
 					if ($newId === false) {
 						markQueue($job['entryId'], ORDER_FAILED);
 					} else {
 						markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
 
-						if ($job['orderParams']) {
+						if (!empty($params['callback'])) {
 							//execute callback
 							$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
-							$data = file_get_contents($job['orderParams'].'&uri='.urlencode($uri));
+							$data = file_get_contents($params['callback'].'&uri='.urlencode($uri));
 
-							echo "Performing callback: ".$job['orderParams'].'&uri='.urlencode($uri). "\n\n";
+							echo "Performing callback: ".$params['callback'].'&uri='.urlencode($uri). "\n\n";
 
 							echo "Client callback script returned:\n".$data;
 
@@ -439,7 +446,7 @@ define('ORDER_FAILED',		3);
 	 *
 	 * \return file id of the newly converted video, or false on error
 	 */
-	function convertVideo($fileId, $mime, $thumbs = true)
+	function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
 	{
 		global $files, $config;
 		if (!is_numeric($fileId)) return false;
@@ -451,7 +458,8 @@ define('ORDER_FAILED',		3);
 			case 'video/x-flv':
 				//Flash video. Confirmed working
 				$c = 'ffmpeg -i '.$files->findUploadPath($fileId).' -f flv -ac 2 -ar 22050 ';
-				if (!empty($config['process']['video_watermark'])) $c .= '-vhook "/usr/lib/vhook/watermark.so -m 1 -f '.$config['process']['video_watermark'].'" ';
+				//XXX: Yes, ffmpeg does allow http://-locations for watermark files
+				if ($watermark) $c .= '-vhook "/usr/lib/vhook/watermark.so -m 1 -f '.$watermark.'" ';
 				$c .= $files->findUploadPath($newId);
 				break;
 

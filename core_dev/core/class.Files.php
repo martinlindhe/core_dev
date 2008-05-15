@@ -446,7 +446,7 @@ class Files
 
 				$client = new SoapClient($config['process']['soap_server']);
 				try {
-					$refId = $client->fetchAndConvert($config['process']['username'], $config['process']['password'], $uri, $callback);
+					$refId = $client->fetchAndConvert($config['process']['username'], $config['process']['password'], $uri, '', '');
 					if (!$refId) echo 'Failed to add order!';
 
 				} catch (Exception $e) {
