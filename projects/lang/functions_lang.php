@@ -137,32 +137,50 @@
 	}
 
 	/**
-	 * Returns false if input is a number or a special character
+	 * Returns true if input is a number or a special character
 	 */
-	function isWord($word)
+	function notWord($word)
 	{
-		if (is_numeric($word)) return false;
+		if (is_numeric($word)) return true;
 		switch ($word) {
-			case '(':
-			case ')':
-			case '':
+			case '(':case ')':
+			case '{':case '}':
+			case '[':case ']':
 			case '#':
-			case '-':
-			case '+':
-			case '*':
-			case '/':
+			case '+':case '-':
+			case '*':case '/':
+			case '%':case '&':
 			case '\\':
-			case '.':
-			case ',':
-			case ':':
-			case ';':
+			case '.':case ',':
+			case ':':case ';':
 			case '\'':
 			case '`':
 			case '"':
-				return false;
+			case '½':case '¼':
+			case '€':case '$':case '£':
+			case '@':
+			case '':
+				return true;
 		}
 
-		return true;
+		return false;
+	}
+
+	/**
+	 * Returns true if we need human assistance to decide
+	 */
+	function unsureWord($word)
+	{
+		if (strpos($word, '(') !== false) return true;
+		if (strpos($word, ')') !== false) return true;
+		if (strpos($word, ':') !== false) return true;
+		if (strpos($word, ';') !== false) return true;
+		if (strpos($word, '[') !== false) return true;
+		if (strpos($word, ']') !== false) return true;
+
+		if (is_numeric(substr($word, 0, 1))) return true;
+
+		return false;
 	}
 
 	/**
@@ -183,13 +201,19 @@
 			$words = explode(' ', $sentences[$i]);
 
 			for ($j=0; $j<count($words); $j++) {
-				if (!isWord($words[$j])) {
-					//echo 'Skipped invalid word '.$words[$j].'<br/>';
+				if (notWord($words[$j])) {
+					echo '<div class="critical">Skipped invalid word <b>'.$words[$j].'</b></div>';
 					continue;
 				}
+				if (unsureWord($words[$j])) {
+					//FIXME: checkbox & submit to add the rest of the words
+					echo '<div class="critical">Not sure if this is a word, skipping <b></b>'.$words[$j].'</b></div>';
+					continue;
+				}
+					
 				$wordId = addWord($langId, $words[$j]);
 				if ($wordId) {
-					echo '<b>'.$words[$j].'</b> added to database<br>';
+					echo '<div class="okay"><b>'.$words[$j].'</b> added to database</div>';
 				} else {
 					$wordId = getWordId($langId, $words[$j]);
 				}
