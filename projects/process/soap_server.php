@@ -1,4 +1,5 @@
 <?php
+
 ini_set('soap.wsdl_cache_enabled', '0');
 
 $config['no_session'] = true;	//force session "last active" update to be skipped
@@ -6,6 +7,7 @@ require_once('config.php');
 
 class SOAP_ProcessService
 {
+	//FIXME: kräv username & password här vid behov. idag bara m2w som använder detta
 	function fetchAndConvert($uri, $callback)
 	{
 		$id = addProcessEvent(PROCESS_FETCH, $uri);
