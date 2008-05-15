@@ -345,7 +345,7 @@ class Files
 		}
 		
 		return $fileId;
-	}fetchAndConvert
+	}
 
 	/**
 	 * Adds a new entry for a new file in the database
