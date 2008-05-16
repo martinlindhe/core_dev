@@ -19,7 +19,7 @@ require_once('class.DB_MySQLi.php');
 require_once('class.Auth_Standard.php');
 require_once('class.Session.php');
 require_once('class.Files.php');
-require_once('functions_general.php');
+require_once('functions_core.php');
 require_once('functions_wiki.php');
 require_once('functions_process.php');
 require_once('functions_customers.php');
