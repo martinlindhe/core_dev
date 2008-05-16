@@ -4,4 +4,5 @@ $config['core']['full_url'] = full web path to core_dev		previously called $conf
 
 $config['app']['fs_root'] = fs path to app					previously called $config['app_root']
 $config['app']['web_root'] = web path to app				previously called $config['web_root']
+$config['app']['web_server'] = http://servername.com
 $config['app']['full_url'] = full web path to app			previously called $config['full_url'] or $config['full_web_root']
