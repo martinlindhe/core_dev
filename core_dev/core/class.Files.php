@@ -110,8 +110,8 @@ class Files
 	public $thumb_default_width		= 80;				///< Default width of thumbnails
 	public $thumb_default_height	= 80;				///< Default height of thumbnails
 
-	private $image_max_width		= 900;			///< bigger images will be resized to this size
-	private $image_max_height		= 800;
+	public $image_max_width			= 900;			///< bigger images will be resized to this size
+	public $image_max_height		= 800;
 
 	public $anon_uploads			= false;		///< allow unregisterd users to upload files
 	public $count_file_views		= false;		///< FIXME REMOVE! auto increments the "cnt" in tblFiles in each $files->sendFile() call
@@ -131,7 +131,7 @@ class Files
 	 * \param $config array of config options for the Files class
 	 * \return nothing
 	 */
-	function __construct(array $config)
+	function __construct($config = '')
 	{
 		global $session;
 
