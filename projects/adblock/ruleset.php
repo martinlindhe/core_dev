@@ -46,29 +46,25 @@ if ($search) {
 
 echo $pager['head'];
 
-for ($i=0; $i<count($list); $i++) {
-	echo '<div class="_row_container" style="cursor: pointer;" onclick="urlOpen(\'editrule.php?id='.$list[$i]['ruleId'].'\')">';
-	//if ($list[$i]['ruleType'] == 0) $classname='objectCritical';
-	echo '<div class="_row_col1">';
-
+echo '<table>';
+echo '<tr>';
+echo '<th>Rule</th>';
+echo '<th>Category</th>';
+echo '</tr>';
+$i = 0;
+foreach ($list as $row) {
+	$i++;
+	echo '<tr style="background-color:'.($i%2 ? '#eee' : '#ccc').'">';
 	if ($search) {
-		$rule = str_replace($search, '<b>'.$search.'</b>', $list[$i]['ruleText']);
+		$rule = str_replace($search, '<b>'.$search.'</b>', $row['ruleText']);
 	} else {
-		$rule = $list[$i]['ruleText'];
+		$rule = $row['ruleText'];
 	}
-	echo $rule;
-	echo '</div>';
-	echo '<div class="_row_col2">';
-	switch ($list[$i]['ruleType']) {
-		case 0: echo 'Unknown'; break;
-		case 1: echo 'Advertisment'; break;
-		case 2: echo 'Tracking'; break;
-		case 3: echo 'Counter'; break;
-		default: echo 'INVALID RULE TYPE '.$list[$i]['ruleType'];
-	}
-	echo '</div>'; //_row_col2
-	echo '</div>'; //_row_container
+	echo '<td><a href="editrule.php?id='.$row['ruleId'].'">'.$rule.'</a></td>';
+	echo '<td>'.$ruleset_types[ $row['ruleType'] ].'</td>';
+	echo '</tr>';
 }
+echo '</table>';
 
 require('design_foot.php');
 ?>

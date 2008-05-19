@@ -5,6 +5,15 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+define('COMMENT_ADBLOCKRULE',	20);
+define('FEEDBACK_ADBLOCK_ADS', 20);
+define('FEEDBACK_ADBLOCK_BROKEN_RULE', 21);
+
+$ruleset_types[0] = 'Unknown';
+$ruleset_types[1] = 'Advertisment';
+$ruleset_types[2] = 'Tracking';
+$ruleset_types[3] = 'Counter';
+
 define('DOWNLOAD_METHOD_WEBFORM', 'webform');
 define('DOWNLOAD_METHOD_SUBSCRIPTION', 'subscription');
 define('DOWNLOAD_METHOD_RSS', 'rss');		//todo...
