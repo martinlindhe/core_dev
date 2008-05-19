@@ -9,8 +9,8 @@
 	define('EVENT_USER_LOGIN',			0x01);
 	define('EVENT_USER_LOGOUT',			0x02);
 
-	define('EVENT_M2W_CALL_BEGIN',		0x50);
-	define('EVENT_M2W_CALL_END',		0x51);
+	define('EVENT_CALL_BEGIN',			0x50);
+	define('EVENT_CALL_END',			0x51);
 	define('EVENT_RECORDED_PRES',		0x52);
 	define('EVENT_RECORDED_MSG',		0x53);
 	define('EVENT_RECORDED_CHATREQ',	0x54);
@@ -24,8 +24,8 @@
 	$event_name[EVENT_USER_LOGIN] = 'User login';
 	$event_name[EVENT_USER_LOGOUT] = 'User logout';
 
-	$event_name[EVENT_M2W_CALL_BEGIN] = 'Call begin';
-	$event_name[EVENT_M2W_CALL_END] = 'Call end';
+	$event_name[EVENT_CALL_BEGIN] = 'Call begin';
+	$event_name[EVENT_CALL_END] = 'Call end';
 	$event_name[EVENT_RECORDED_PRES] = 'Recorded pres.';
 	$event_name[EVENT_RECORDED_MSG] = 'Recorded msg.';
 	$event_name[EVENT_RECORDED_CHATREQ] = 'Recorded chatreq.';
