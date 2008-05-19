@@ -7,6 +7,9 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+/**
+ * XXX
+ */
 function getCustomerName($custId)
 {
 	global $db;
@@ -14,6 +17,9 @@ function getCustomerName($custId)
 	return $db->getOneItem('SELECT customerName FROM tblCustomers WHERE customerId='.$custId);
 }
 
+/**
+ * XXX
+ */
 function getCustomerId($custName, $password = '')
 {
 	global $db;
@@ -26,6 +32,9 @@ function getCustomerId($custName, $password = '')
 	return $db->getOneItem($q);
 }
 
+/**
+ * XXX
+ */
 function getCustomers()
 {
 	global $db;

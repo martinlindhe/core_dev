@@ -6,6 +6,9 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+/**
+ * XXX
+ */
 function URLadd($_key, $_val = '', $_extra = '')	//FIXME: is this function even required???
 {
 	$curr_url = 'http://localhost'.$_SERVER['REQUEST_URI'];
@@ -60,20 +63,21 @@ function URLadd($_key, $_val = '', $_extra = '')	//FIXME: is this function even 
 	}
 }
 
-/* Helper function used to create "are you sure?" pages
-	
-	Example use:
-		
-	if (confirmed('Are you sure you want to delete this rule?', 'id', $_GET['id'])) {
-		deleteItem($_GET['id']);
-	}
-		
-	Wiki-style link example use:
-	
-	if (confirmed('Are you sure you want to delete this blog?', 'BlogDelete:'.$_id)) {
-		deleteBlog($_GET['BlogDelete:'.$_id]);
-	}
-*/
+/**
+ * Helper function used to create "are you sure?" pages
+ *
+ * Example use:
+ *	
+ * if (confirmed('Are you sure you want to delete this rule?', 'id', $_GET['id'])) {
+ *		deleteItem($_GET['id']);
+ * }
+ *	
+ * Wiki-style link example use:
+ * 
+ * if (confirmed('Are you sure you want to delete this blog?', 'BlogDelete:'.$_id)) {
+ *		deleteBlog($_GET['BlogDelete:'.$_id]);
+ * }
+ */
 function confirmed($text, $_var, $_id = 0)
 {
 	global $project;	//path to design includes
@@ -124,13 +128,13 @@ function cleanupText($text)
 
 	$text = trim($text);
 
-	do { /* Remove chunks of whitespace */
+	do { //Remove chunks of whitespace
 		$temp = $text;
 		$text = str_replace('  ', ' ', $text);
 	} while ($text != $temp);
 	
-	$text = str_replace('\n', "\n", $text);	//ersätter strängen '\n' mot en linefeed
-	$text = str_replace('\r', "\r", $text);	//ersätter strängen '\r' mot en carriage return
+	$text = str_replace('\n', "\n", $text);
+	$text = str_replace('\r', "\r", $text);
 
 	$text = str_replace("\r\n", "\n", $text);
 	$text = str_replace(" \n", "\n", $text);

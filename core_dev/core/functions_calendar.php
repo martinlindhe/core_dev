@@ -12,6 +12,9 @@ define('CALENDAR_USER',		1);	///< Personal calendar - XXX implement
 define('CALENDAR_SITE',		2);	///< Site wide calendar - XXX implement
 define('CALENDAR_SERVICE',	3);	///< Service wide calendar. tblCalendar.ownerId = service id
 
+/**
+ * XXX
+ */
 function addCalendar($_type, $_owner, $begin, $end, $desc)
 {
 	global $db, $session;
@@ -24,6 +27,9 @@ function addCalendar($_type, $_owner, $begin, $end, $desc)
 	$db->insert($q);
 }
 
+/**
+ * XXX
+ */
 function updateCalendar($_type, $_id, $begin, $end, $desc)
 {
 	global $db, $session;
@@ -36,6 +42,9 @@ function updateCalendar($_type, $_id, $begin, $end, $desc)
 	$db->update($q);
 }
 
+/**
+ * XXX
+ */
 function deleteCalendar($_type, $_id)
 {
 	global $db;
@@ -45,6 +54,9 @@ function deleteCalendar($_type, $_id)
 	$db->delete($q);
 }
 
+/**
+ * XXX
+ */
 function getCalendars($_type, $_owner = 0)
 {
 	global $db;
@@ -71,6 +83,9 @@ function getActiveCalendars($_type, $_owner, $ts)
 	return $db->getArray($q);
 }
 
+/**
+ * XXX
+ */
 function getCalendar($_type, $_owner, $_id)
 {
 	global $db;
@@ -81,6 +96,5 @@ function getCalendar($_type, $_owner, $_id)
 	$q .= ' AND entryId='.$_id;
 	return $db->getOneRow($q);
 }
-
 
 ?>
