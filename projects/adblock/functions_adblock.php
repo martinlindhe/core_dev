@@ -96,7 +96,7 @@ function getAdblockRules($types='', $page=0, $limit=10)
 		$limit_sql = ' LIMIT '.$index.','.$limit;
 	}
 
-	$q = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0'.($types_select ? ' AND ('.$types_sql.')':'').' ORDER BY ruleText ASC'.$limit_sql;
+	$q = 'SELECT ruleText FROM tblAdblockRules WHERE deletedBy=0'.($types_sql ? ' AND ('.$types_sql.')':'').' ORDER BY ruleText ASC'.$limit_sql;
 
 	return $db->getNumArray($q);
 }
