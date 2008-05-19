@@ -14,15 +14,17 @@
 	define('EVENT_RECORDED_PRES',		0x52);
 	define('EVENT_RECORDED_MSG',		0x53);
 	define('EVENT_RECORDED_CHATREQ',	0x54);
+	define('EVENT_PRES_APPROVED',		0x55);	//referer = fileId
+	define('EVENT_PRES_DENIED',			0x56);	//referer = fileId
 
 	//XXX: implement these:
-	define('EVENT_RECORDED_BLOG',		0x55);
-	define('EVENT_WARNED',				0x56);
-	define('EVENT_PRES_APPROVED',		0x57);
-	define('EVENT_PRES_DENIED',			0x58);
+	define('EVENT_RECORDED_BLOG',		0x57);
+	define('EVENT_WARNED',				0x58);	//need to store warn reason
 
 	$event_name[EVENT_USER_LOGIN] = 'User login';
 	$event_name[EVENT_USER_LOGOUT] = 'User logout';
+	$event_name[EVENT_PRES_APPROVED] = 'Approved pres.';
+	$event_name[EVENT_PRES_DENIED] = 'Denied pres.';
 
 	$event_name[EVENT_CALL_BEGIN] = 'Call begin';
 	$event_name[EVENT_CALL_END] = 'Call end';
