@@ -17,9 +17,9 @@ define('EVENT_RECORDED_MSG',		0x53);
 define('EVENT_RECORDED_CHATREQ',	0x54);
 define('EVENT_PRES_APPROVED',		0x55);	//referer = fileId
 define('EVENT_PRES_DENIED',			0x56);	//referer = fileId
+define('EVENT_RECORDED_BLOG',		0x57);	//referer = fileId
 
 //XXX: implement these:
-define('EVENT_RECORDED_BLOG',		0x57);
 define('EVENT_WARNED',				0x58);	//need to store warn reason
 
 $event_name[EVENT_USER_LOGIN] = 'User login';
@@ -32,6 +32,7 @@ $event_name[EVENT_CALL_END] = 'Call end';
 $event_name[EVENT_RECORDED_PRES] = 'Recorded pres.';
 $event_name[EVENT_RECORDED_MSG] = 'Recorded msg.';
 $event_name[EVENT_RECORDED_CHATREQ] = 'Recorded chatreq.';
+$event_name[EVENT_RECORDED_BLOG] = 'Recorded blog';
 
 /**
  * Creates a new event
