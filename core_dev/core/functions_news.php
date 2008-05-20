@@ -49,7 +49,7 @@ function removeNews($_id)
 	global $db, $session;
 	if (!$session->isAdmin || !is_numeric($_id)) return false;
 
-	$db->query('UPDATE tblNews SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE newsId='.$_id);
+	$db->update('UPDATE tblNews SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE newsId='.$_id);
 	return true;
 }
 

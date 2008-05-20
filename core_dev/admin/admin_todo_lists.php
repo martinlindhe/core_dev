@@ -27,10 +27,10 @@ if (isset($_POST['changestatus'])) {
 	setTodoItemStatus($itemId, $_POST['changestatus']);
 
 	if ($_POST['changestatus'] == TODO_ITEM_ASSIGNED) {
-		assignTodoItem($itemId, $_SESSION['userId']);
+		assignTodoItem($itemId, $session->id);
 		$comment ='Status changed from '.$todo_item_status[$item['itemStatus'] ].' to '.$todo_item_status[ $_POST['changestatus']].' by '.$session->username.'.<br/>';
 		$comment.='(Meaning item is now assigned to '.$_SESSION['userName'].').';
-		$item['assignedTo'] = $_SESSION['userId']; //update changes
+		$item['assignedTo'] = $session->id; //update changes
 	} else {
 		$comment='Status changed from '.$todo_item_status[$item['itemStatus'] ].' to '.$todo_item_status[ $_POST['changestatus']].' by '.$session->username.'.';
 	}
@@ -48,7 +48,7 @@ if (isset($_POST['changestatus'])) {
 			
 } else if (isset($_GET['unassign'])) {
 	//Unassign item
-	if ($item['assignedTo'] == $_SESSION['userId']) {
+	if ($item['assignedTo'] == $session->id) {
 		unassignTodoItem($itemId);
 				
 		$comment = $_SESSION['userName'].' unassigned himself from the task.';

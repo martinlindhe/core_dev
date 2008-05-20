@@ -482,7 +482,7 @@ class Files
 				rename($out_tempfile, $FileData['tmp_name']);
 				$filesize = filesize($FileData['tmp_name']);
 				$q = 'UPDATE tblFiles SET fileMime="image/jpeg", fileName="'.$db->escape(basename(strip_tags($FileData['name']))).'.jpg",fileSize='.$filesize.' WHERE fileId='.$fileId;
-				$db->query($q);
+				$db->update($q);
 				break;
 		}
 
@@ -752,7 +752,7 @@ class Files
 
 		//Count the file downloads
 		if ($this->count_file_views) {
-			$db->query('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
+			$db->update('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
 		}
 
 		die;
