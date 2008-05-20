@@ -11,7 +11,7 @@ $session->requireAdmin();
 $bugId = $_GET['id'];
 	
 if (isset($_POST['desc'])) {
-	$pr = moveBugReport($_SESSION['userId'], $bugId, $_POST['creator'], $_POST['desc'], $_POST['details'], $_POST['timestamp'], $_POST['itemCategory'], $_POST['categoryId']);
+	$pr = moveBugReport($bugId, $_POST['creator'], $_POST['desc'], $_POST['details'], $_POST['timestamp'], $_POST['itemCategory'], $_POST['categoryId']);
 
 	include('design_head.php');
 	echo 'The bug report has been successfully moved into the todo list system!<br/>';

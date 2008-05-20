@@ -55,7 +55,9 @@ $config['spider']['cache_age'] = 3600*24;	//24 hour
 
 $config['spider']['max_http_requests'] = 50;	//max number of http requests to do during one execution of the script, to avoid server overload
 
-//Tar en sträng med parametrar till en html-tagg, och returnerar en array med dom parsade
+/**
+ * Tar en sträng med parametrar till en html-tagg, och returnerar en array med dom parsade
+ */
 function parse_html_parameters($str)
 {
 	$arr = array();
@@ -100,9 +102,16 @@ function parse_html_parameters($str)
 	return $arr;
 }
 
-//Takes a user inputted URL and cleans it up, returning clean url in $url parameter & a parse_url() array
-//Also adds 'path_only', that returns 'path', but with script/file name removed. /dir/file.php becomes /dir/
-//Also adds 'file_ext', that returns the file extension if its a filename in the URL
+/**
+ * Takes a user inputted URL and cleans it up, returning
+ * clean url in $url parameter & a parse_url() array
+ *
+ * Also adds 'path_only', that returns 'path', but with
+ *   script/file name removed. /dir/file.php becomes /dir/
+ *
+ * Also adds 'file_ext', that returns the file extension
+ *   if its a filename in the URL
+ */
 function nice_parse_url(&$url)
 {
 	$url = trim($url);
@@ -146,7 +155,9 @@ function nice_parse_url(&$url)
 	return $arr;
 }
 
-//Returns an array with all URL's it encounters (as seen in the HTML)
+/**
+ * Returns an array with all URL's it encounters (as seen in the HTML)
+ */
 function extract_filenames($data)
 {
 	//Normalisera HTML koden
@@ -215,8 +226,13 @@ function extract_filenames($data)
 	return $files_found;
 }
 
-//Takes a array of URL's, relative & absolute, applies "$url" basename to the relative ones and returns the array
-//$url must be a proper URL that has already been processed with nice_parse_url(), we expect it to look like this: http://www.domain.com/
+/**
+ * Takes a array of URL's, relative & absolute, applies "$url"
+ * basename to the relative ones and returns the array
+ *
+ * $url must be a proper URL that has already been processed with
+ * nice_parse_url(), we expect it to look like this: http://www.domain.com/
+ */
 function generate_absolute_urls($list, $url)
 {
 	$url_arr = nice_parse_url($url);
@@ -287,8 +303,11 @@ function generate_absolute_urls($list, $url)
 	return $result;
 }
 
-//This function acts like file_get_contents() very much, except that instead of returning FALSE on failure,
-//it will set $errno to the HTTP error number returned
+/**
+ * This function acts like file_get_contents() very much,
+ * except that instead of returning FALSE on failure,
+ * it will set $errno to the HTTP error number returned
+ */
 function get_http_contents($url, &$errno)
 {
 	//todo: $site ska nog inte va global, utan en parameter..
@@ -413,7 +432,9 @@ function get_http_contents($url, &$errno)
 	return $body;
 }
 
-/* Tar en array med absoluta url:er. Genererar en robots.txt utifrån url:erna */
+/**
+ * Tar en array med absoluta url:er. Genererar en robots.txt utifrån url:erna
+ */
 function generate_robots_txt($host, $arr)
 {
 	$listed = array();
@@ -446,10 +467,11 @@ function generate_robots_txt($host, $arr)
 	return $result;
 }
 
-/* Tar en array med absoluta url:er. Genererar en Google XML sitemap utifrån url:erna
-	Implementering enligt https://www.google.com/webmasters/tools/docs/en/protocol.html
-	OBS: Utgår från att arrayen innehåller en lista med unika url:er för samma domän.
-*/
+/**
+ * Tar en array med absoluta url:er. Genererar en Google XML sitemap utifrån url:erna
+ * Implementering enligt https://www.google.com/webmasters/tools/docs/en/protocol.html
+ * OBS: Utgår från att arrayen innehåller en lista med unika url:er för samma domän.
+ */
 function generate_google_sitemap($arr)
 {
 	$result =

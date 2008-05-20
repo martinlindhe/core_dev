@@ -13,8 +13,8 @@ require($project.'design_head.php');
 echo '<h2>Closed bug reports</h2>';
 echo '<b>OBSERVE: THESE BUG REPORTS ARE CLOSED!</b><br/><br/>';
 	
-$list = getClosedBugReports($db);
-for ($i=0; $i<count($list); $i++) {
+$list = getClosedBugReports();
+for ($i=0; $i<count($list); $i++) {	//FIXME: foreach
 	echo getRelativeTimeLong($list[$i]['timestamp']).', by '.Users::link($list[$i]['bugCreator'], $list[$i]['userName']);
 
 	echo ' via the '.($list[$i]['reportMethod'] ? 'game':'site');

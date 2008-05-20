@@ -17,7 +17,7 @@ echo 'for each task, so other developers can see how things progress.<br/><br/>'
 if (isset($_GET['closed'])) {
 	echo '<b>OBSERVE: THIS IS YOUR CLOSED TASKS!</b><br/><br/>';
 		
-	$list = getClosedAssignedTasks($_SESSION['userId']);
+	$list = getClosedAssignedTasks($session->id);
 	foreach ($list as $row) {
 		echo sprintf('PR%04d: ', $row['itemId']);
 		echo '<a href="admin_todo_lists.php?id='.$row['itemId'].'">'.$row['itemDesc'].'</a> ('.getTodoCategoryName($row['categoryId']).')<br/>';
@@ -28,14 +28,14 @@ if (isset($_GET['closed'])) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'">&raquo; Show your UNCLOSED assigned tasks</a><br/>';
 	echo '<a href="admin_current_work.php">&raquo; Back to current work</a><br/>';
 } else {
-	$list = getAssignedTasks($_SESSION['userId']);
+	$list = getAssignedTasks($session->id);
 	foreach ($list as $row) {
 		echo sprintf('PR%04d: ', $row['itemId']);
 		echo '<a href="admin_todo_lists.php?id='.$row['itemId'].'">'.$row['itemDesc'].'</a> ('. getTodoCategoryName($row['categoryId']).')<br/>';
 	}
 	
 	echo '<br/>';
-	$closedtasks = getClosedAssignedTasksCount($_SESSION['userId']);
+	$closedtasks = getClosedAssignedTasksCount($session->id);
 	echo '<b>You have '.count($list).' assigned tasks</b> (excluding '.$closedtasks.' CLOSED tasks).<br/><br/>';
 	if ($closedtasks) {
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?closed">&raquo; Show your CLOSED assigned tasks</a><br/>';

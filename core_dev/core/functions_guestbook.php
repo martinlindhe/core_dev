@@ -8,7 +8,7 @@
 require_once('atom_moderation.php');	//for moderation functionality
 
 /**
- * 
+ * Adds a new guestbook entry
  */
 function addGuestbookEntry($ownerId, $subject, $body)
 {
@@ -35,6 +35,9 @@ function addGuestbookEntry($ownerId, $subject, $body)
 	if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_GUESTBOOK, $entryId, true);
 }
 
+/**
+ * Marks a guestbook entry as removed
+ */
 function removeGuestbookEntry($entryId)
 {
 	global $db;
