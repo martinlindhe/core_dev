@@ -341,7 +341,7 @@ class Files
 			}
 		}			
 		if ($fileType == FILETYPE_USERDATA) {
-			addToModerationQueue(MODERATION_PRES_IMAGE, $fileId);
+			addToModerationQueue(MODERATION_PRES_IMAGE, $fileId, true);
 		}
 		
 		return $fileId;
