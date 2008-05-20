@@ -994,6 +994,20 @@ class Files
 	}
 
 	/**
+	 * Returns category of specified file
+	 *
+	 * \param $_id fileId
+	 */
+	function getCategory($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$q = 'SELECT categoryId FROM tblFiles WHERE fileId='.$_id;
+		return $db->getOneItem($q);
+	}
+
+	/**
 	 * Returns array with estimated download times for common
 	 * internet connection speeds
 	 */
