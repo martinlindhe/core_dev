@@ -315,7 +315,7 @@ class Users
 		global $db, $session;
 
 		$q  = 'SELECT userId FROM tblUsers';
-		$q .= ' WHERE timeDeleted IS NULL';
+		$q .= ' WHERE userName IS NOT NULL AND timeDeleted IS NULL';
 		if ($session->id) $q .= ' AND userId!='.$session->id;
 		$q .= ' ORDER BY RAND() LIMIT 1';
 		return $db->getOneItem($q);
