@@ -1,8 +1,6 @@
 <?php
 /**
- * This script is intended to be called from the command line and run permanently
- *
- * In addition to this script, another script will be called regularry by crontab that does one iteration of processQueue()
+ * This script is intended to be called from cron every minute
  */
 
 set_time_limit(0);	//no time limit
@@ -10,10 +8,11 @@ $config['no_session'] = true;	//force session "last active" update to be skipped
 require_once('config.php');
 $config['debug'] = false;
 
-do {
+$limit = 5;	//do up to 5 encodings each time the script is run
+
+for ($i = 0; $i < $limit; $i++) {
 	processQueue();
 	sleep(1);
-	echo '.';
-} while (1);
+}
 
 ?>
