@@ -334,7 +334,7 @@
 		foreach ($result as $lang => $cnt) {
 			if (!$lang) echo 'Unknown';
 			else echo getCategoryName(CATEGORY_LANGUAGE, $lang);
-			echo ': '.round(($cnt/$tot)*100, 2).'%<br>';
+			echo ': '.round(($cnt/$tot)*100, 2).'%<br/>';
 		}
 
 		return $result;

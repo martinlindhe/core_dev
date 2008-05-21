@@ -24,13 +24,13 @@ require('design_head.php');
 
 wiki('Forum abuse reporting');
 
-echo showForumPost($item, '', false).'<br>';
+echo showForumPost($item, '', false).'<br/>';
 
 echo '<form name="abuse" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
-echo 'Motivate the reason:<br>';
-echo '<textarea name="motivation" cols="50" rows="5"></textarea><br><br>';
-echo '<input type="submit" class="button" value="Report">';
-echo '</form><br><br>';
+echo 'Motivate the reason:<br/>';
+echo '<textarea name="motivation" cols="50" rows="5"></textarea><br/><br/>';
+echo '<input type="submit" class="button" value="Report"/>';
+echo '</form><br/><br/>';
 echo '<a href="javascript:history.go(-1);">Return</a>';
 
 require('design_foot.php');

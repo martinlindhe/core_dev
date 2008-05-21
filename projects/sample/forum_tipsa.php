@@ -43,12 +43,12 @@ if (isset($_POST['mail'])) {
 		//fixme: from mail ska va konfigurerbar blabla
 		if (sendMail($_POST['mail'], $subject, $mail, "xxx <no@mail.com>") == true) {
 
-			echo 'Tipset ivägskickat<br>';
+			echo 'Tipset ivägskickat<br/>';
 
 		} else {
-			echo 'Problem med utskicket<br>';
+			echo 'Problem med utskicket<br/>';
 		}
-		echo '<br><br>';
+		echo '<br/><br/>';
 		echo '<a href="forum.php?id='.$itemId.'#'.$itemId.'">Return</a>';
 			
 	} else {
@@ -57,21 +57,21 @@ if (isset($_POST['mail'])) {
 
 } else {
 
-	echo '<b>Tipsa om inl&auml;gg</b><br>';
+	echo '<b>Tipsa om inl&auml;gg</b><br/>';
 
 	wiki('Tell someone about this post');
-	echo '<br><br>';
+	echo '<br/><br/>';
 		
 	$data = getForumItem($itemId);
-	echo showForumPost($data).'<br>';
+	echo showForumPost($data).'<br/>';
 	
 	echo '<form name="tipsa" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
-	echo 'Din kompis namn: <input name="namn" type="text" maxlength=30 size=20><br>';
-	echo 'E-post: <input name="mail" type="text" maxlength=50 size=40><br>';
-	echo '<br>';
-	echo 'H&auml;lsning:<br>';
-	echo '<textarea name="comment" cols=40 rows=6></textarea><br>';
-	echo '<input type="submit" class="button" value="Tipsa">';
+	echo 'Din kompis namn: <input name="namn" type="text" maxlength=30 size=20><br/>';
+	echo 'E-post: <input name="mail" type="text" maxlength=50 size=40><br/>';
+	echo '<br/>';
+	echo 'H&auml;lsning:<br/>';
+	echo '<textarea name="comment" cols=40 rows=6></textarea><br/>';
+	echo '<input type="submit" class="button" value="Tipsa"/>';
 	echo '</form>';
 
 	echo '<a href="forum.php?id='.$itemId.'#'.$itemId.'">Return</a>';
