@@ -192,6 +192,62 @@ function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
 }
 
 /**
+ * Creates a select-dropdown from a indexed array
+ */
+function xhtmlSelectArray($_name, $_arr, $_default = 0)
+{
+	$out = '<select name="'.strip_tags($_name).'">';
+	foreach ($_arr as $id => $title) {
+		$out .= '<option value="'.$id.'"'.($_default == $id ? ' selected':'').'>'.$title.'</option>';
+	}
+	$out .= '</select>';
+
+	return $out;
+}
+
+/**
+ * Helper function to create a bunch of checkboxes out of an array
+ */
+function xhtmlCheckboxArray($_arr, $all_checked = false)
+{
+	$out = '';
+	foreach ($_arr as $id => $title) {
+		$out .= '<input type="checkbox" class="checkbox" name="'.$id.'" value="1" id="lab_'.$id.'"'.($all_checked ? ' checked':'').'/>';
+		$out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
+	}
+	return $out;
+}
+
+/**
+ * Helper function to create a bunch of radio buttons out of an array
+ */
+function xhtmlRadioArray($_name, $_arr, $_default = '')
+{
+	$out = '';
+	foreach ($_arr as $id => $title) {
+		$out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.($_default == $id ? ' checked' : '').'/>';
+		$out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
+	}
+	return $out;
+}
+
+/**
+ * Helper function to create a input field
+ */
+function xhtmlInput($_name, $_value = '')
+{
+	return '<input type="text" name="'.$_name.'"'.($_value ? ' value="'.$_value.'"' : '').'/>';
+}
+
+/**
+ * Helper function to create a submit button
+ */
+function xhtmlSubmit($_title)
+{
+	return '<input type="submit" class="button" value="'.$_title.'"/>';
+}
+
+/**
  * Helper function to generate select-dropdown menus out of specified category
  */
 function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
