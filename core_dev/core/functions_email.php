@@ -7,8 +7,8 @@
 
 //defaults, please override:
 $config['smtp']['host'] = 'localhost';
-$config['smtp']['username'] = 'user';
-$config['smtp']['password'] = 'pass';
+$config['smtp']['username'] = '';
+$config['smtp']['password'] = '';
 $config['smtp']['sender'] = 'core_dev@somewhere';
 $config['smtp']['sender_name'] = 'core_dev';
 
