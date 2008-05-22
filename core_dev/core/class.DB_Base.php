@@ -104,6 +104,11 @@ abstract class DB_Base
 	 */
 	abstract function getOneItem($q, $num = false);
 
+	/**
+	 * Lock / unlock db/table helper functions
+	 */
+	abstract function lock($t);
+	abstract function unlock();
 
 
 	/****************************************************/

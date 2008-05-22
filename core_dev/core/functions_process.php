@@ -249,16 +249,20 @@ function getProcessesQueueStatusCnt($_order_status)
  */
 function processQueue()
 {
-	global $config, $files;
+	global $db, $config, $files;
+
+	$db->lock();
 
 	//Only allows a few work orders being executed at once, so we can call this function very often
 	if (getProcessesQueueStatusCnt(ORDER_EXECUTING) > $config['process']['process_limit']) {
+		$db->unlock();
 		echo "TOO MUCH ACTIVE WORK, ABORTING\n";
 		return;
 	}
 
 	$job = getProcessQueueEntry();
 	if (!$job) {
+		$db->unlock();
 		return;
 	}
 
@@ -285,7 +289,7 @@ function processQueue()
 			if (!$check) {
 				$session->log('#'.$job['entryId'].': IMAGE CONVERT failed! format='.$job['orderParams'], LOGLEVEL_ERROR);
 				echo 'Error: Image convert failed!<br/>';
-				die;
+				break;
 			}
 			$files->updateFile($newId, $job['orderParams']);
 			markQueueCompleted($job['entryId'], $exec_time);
@@ -340,11 +344,10 @@ function processQueue()
 
 			if (!file_exists($dst_file)) {
 				echo '<b>FAILED - dst file '.$dst_file." dont exist!\n";
-				continue;
+				break;
 			}
 
-			//renama $dst_file till fileId för nya file entry
-			//fixme: behöver inget rename-steg. kan göra det i ett steg!
+			//FIXME: behöver inget rename-steg. kan skriva till rätt output fil i första steget
 			rename($dst_file, $files->upload_dir.$newId);
 
 			$files->updateFile($newId);
@@ -399,18 +402,18 @@ function processQueue()
 				} else {
 					markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
 
-					if (!empty($params['callback'])) {
-						//execute callback
-						$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
-						$data = file_get_contents($params['callback'].'&uri='.urlencode($uri));
+					if (empty($params['callback'])) break;
 
-						echo "Performing callback: ".$params['callback'].'&uri='.urlencode($uri). "\n\n";
-						echo "Client callback script returned:\n".$data;
+					//execute callback
+					$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
+					$data = file_get_contents($params['callback'].'&uri='.urlencode($uri));
 
-						//delete files after callback processing
-						$files->deleteFile($prev_job['referId']);
-						$files->deleteFile($newId);
-					}
+					echo "Performing callback: ".$params['callback'].'&uri='.urlencode($uri). "\n\n";
+					echo "Client callback script returned:\n".$data;
+
+					//delete files after callback processing
+					$files->deleteFile($prev_job['referId']);
+					$files->deleteFile($newId);
 				}
 			} else if (in_array($file['fileMime'], $files->audio_mime_types)) {
 				die('CONVERT TO MP3!!!!');
@@ -437,6 +440,7 @@ function processQueue()
 			d($job);
 			die;
 	}
+	$db->unlock();
 }
 
 /**

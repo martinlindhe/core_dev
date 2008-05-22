@@ -313,5 +313,22 @@ class DB_MySQLi extends DB_Base
 		}
 		return $data[0];
 	}
+
+	/**
+	 * Lock table from reading
+	 */
+	function lock($t)
+	{
+		$this->query('LOCK TABLES '.$t.' READ');
+	}
+
+	/**
+	 * Unlock tables
+	 */
+	function unlock()
+	{
+		$this->query('UNLOCK TABLES');
+	}
+
 }
 ?>
