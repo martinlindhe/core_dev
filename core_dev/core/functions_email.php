@@ -5,51 +5,21 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+//defaults, please override:
+$config['smtp']['host'] = 'localhost';
+$config['smtp']['username'] = 'user';
+$config['smtp']['password'] = 'pass';
+$config['smtp']['sender'] = 'core_dev@somewhere';
+$config['smtp']['sender_name'] = 'core_dev';
+
 /**
- * Helper function: calls class.phpmailer.php functions. $mails is a array of recipients
+ * Helper function: calls class.phpmailer.php functions
  *
- * \param $mails array of destination e-mail addresses
- * \param $subject subject of e-mail
- * \param $body body of e-mail
- */
-function smtp_mass_mail($mails, $subject, $body)
-{
-	global $config;
-		
-	$mail = new PHPMailer();
-		
-	$mail->IsSMTP();                                // send via SMTP
-	$mail->Host     = $config['smtp']['host']; 			// SMTP servers
-	$mail->SMTPAuth = true;    											// turn on SMTP authentication
-	$mail->Username = $config['smtp']['username'];	// SMTP username
-	$mail->Password = $config['smtp']['password'];	// SMTP password
-	$mail->CharSet  = 'utf-8';
-
-	$mail->From     = $config['smtp']['sender'];
-	$mail->FromName = $config['smtp']['sender_name'];
-
-	foreach ($mails as $adr) {
-		$mail->AddAddress($adr);
-	}
-
-	$mail->IsHTML(true);                   					// send as HTML
-
-	//Embed graphics
-	$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
-
-	$mail->Subject  = $subject;
-	$mail->Body     = $body;
-
-	if (!$mail->Send()) {
-		echo 'Failed to send mail, error:'.$mail->ErrorInfo;
-		return false;
-	}
-
-	return true;
-}
-
-/**
- * XXX
+ * \param $dst_adr single address or array of destination e-mail addresses
+ * \param $subj subject of e-mail
+ * \param $msg body of e-mail
+ * \param $attach_name filename of attachment (optional)
+ * \param $attach_data data of attachment (optional)
  */
 function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '')
 {
@@ -78,7 +48,14 @@ function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '')
 		$mail->AddStringAttachment($attach_data, $attach_name, 'base64', 'application/pdf');
 	}
 
-	$mail->AddAddress($dst_adr);
+	if (is_array($dst_adr)) {
+		foreach ($mails as $adr) {
+			$mail->AddAddress($adr);
+		}
+	} else {
+		$mail->AddAddress($dst_adr);
+	}
+
 	$mail->Subject = $subj;
 	$mail->Body = $msg;
 

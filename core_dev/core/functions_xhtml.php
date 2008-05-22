@@ -107,7 +107,7 @@ function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu
 }
 
 /**
- * Helper function for generating "pagers", splitting up listings of content on several pages
+ * Helper to generate "pagers", splitting up listings of content on several pages
  *
  * Reads the 'p' get parameter for current page
  * Example: $pager = makePager(102, 25);		will create a pager for total of 102 items with 25 items per page
@@ -206,7 +206,7 @@ function xhtmlSelectArray($_name, $_arr, $_default = 0)
 }
 
 /**
- * Helper function to create a bunch of checkboxes out of an array
+ * Helper to create a bunch of checkboxes out of an array
  */
 function xhtmlCheckboxArray($_arr, $all_checked = false)
 {
@@ -219,7 +219,7 @@ function xhtmlCheckboxArray($_arr, $all_checked = false)
 }
 
 /**
- * Helper function to create a bunch of radio buttons out of an array
+ * Helper to create a bunch of radio buttons out of an array
  */
 function xhtmlRadioArray($_name, $_arr, $_default = '')
 {
@@ -232,7 +232,7 @@ function xhtmlRadioArray($_name, $_arr, $_default = '')
 }
 
 /**
- * Helper function to create a input field
+ * Helper to create a input field
  */
 function xhtmlInput($_name, $_value = '')
 {
@@ -240,7 +240,7 @@ function xhtmlInput($_name, $_value = '')
 }
 
 /**
- * Helper function to create a submit button
+ * Helper to create a submit button
  */
 function xhtmlSubmit($_title)
 {
@@ -248,10 +248,10 @@ function xhtmlSubmit($_title)
 }
 
 /**
- * Helper function to generate select-dropdown menus out of specified category
+ * Helper to generate select-dropdown menus out of specified category
  */
 function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
-{	//FIXME: rename function to xhtmlSelectCategories()
+{	//FIXME: rename to xhtmlSelectCategories()
 	global $config;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
@@ -311,7 +311,7 @@ function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $sele
 }
 
 /**
- * Helper function to display one of core_dev's default action buttons
+ * Helper to display one of core_dev's default action buttons
  */
 function coreButton($name, $dst = '')
 {
