@@ -738,7 +738,7 @@ class Files
 			$this->setCachedHeaders();
 
 			/* This sends files without extension etc as plain text if you didnt specify to download them */
-			if ((!$force_mime && !isset($_GET['dl']) || $data['fileMime'] == 'application/octet-stream')) {
+			if ((!$force_mime && !isset($_GET['dl'])) || $data['fileMime'] == 'application/octet-stream') {
 				header('Content-Type: text/plain; charset="UTF-8"');
 			} else {
 				header('Content-Type: '.$data['fileMime']);
@@ -746,7 +746,6 @@ class Files
 
 			//Just delivers the file as-is
 			header('Content-Length: '. $data['fileSize']);
-
 			readfile($this->findUploadPath($_id));
 		}
 
