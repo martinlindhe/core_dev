@@ -579,7 +579,7 @@ class Files
 		global $db;
 		if (!is_numeric($_id) || !is_numeric($_clone_type)) return false;
 
-		$file = $this->getFileInfo($_id);
+		$file = $this->getFile($_id);
 		if (!$file) return false;
 
 		$q = 'INSERT INTO tblFiles SET ownerId='.$_id.',fileType='.$_clone_type.',uploaderId='.$file['uploaderId'].',timeUploaded=NOW()';
