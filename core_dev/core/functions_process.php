@@ -251,7 +251,7 @@ function processQueue()
 {
 	global $db, $config, $files;
 
-	$db->lock();
+	$db->lock('tblProcessQueue');
 
 	//Only allows a few work orders being executed at once, so we can call this function very often
 	if (getProcessesQueueStatusCnt(ORDER_EXECUTING) > $config['process']['process_limit']) {
