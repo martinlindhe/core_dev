@@ -8,7 +8,7 @@ $config['no_session'] = true;	//force session "last active" update to be skipped
 require_once('config.php');
 $config['debug'] = false;
 
-$limit = 5;	//do up to 5 encodings each time the script is run
+$limit = 10;	//do a few encodings each time the script is run
 
 for ($i = 0; $i < $limit; $i++) {
 	processQueue();
