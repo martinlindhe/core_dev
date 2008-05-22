@@ -863,13 +863,14 @@ class Files
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($_limit)) return array();
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
 
-		if ($fileType == FILETYPE_CLONE_VIDEOTHUMB10) {
+		if ($fileType == FILETYPE_CLONE_VIDEOTHUMB10 ||
+			$fileType == FILETYPE_VIDEOBLOG) {
 			$q  = 'SELECT * FROM tblFiles';
 			$q .= ' WHERE fileType='.$fileType;
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
-		} else if ($session->id && $fileType == FILETYPE_FORUM) {
+		} else if ($session && $session->id && $fileType == FILETYPE_FORUM) {
 			$q  = 'SELECT * FROM tblFiles';
 			$q .= ' WHERE fileType='.$fileType.' AND uploaderId='.$session->id;
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
