@@ -833,7 +833,7 @@ class Files
 			$out_filename = $filename;
 		}
 
-		if (filemtime($out_filename) < $session->started) {
+		if ($session && filemtime($out_filename) < $session->started) {
 			$this->setCachedHeaders();
 		} else {
 			$this->setNoCacheHeaders();
