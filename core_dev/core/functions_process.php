@@ -251,18 +251,19 @@ function processQueue()
 {
 	global $db, $config, $files;
 
-	$db->lock('tblProcessQueue');
+	//FIXME: db locking problems
+	//$db->lock('tblProcessQueue');
 
 	//Only allows a few work orders being executed at once, so we can call this function very often
 	if (getProcessesQueueStatusCnt(ORDER_EXECUTING) > $config['process']['process_limit']) {
-		$db->unlock();
+		//$db->unlock();
 		echo "TOO MUCH ACTIVE WORK, ABORTING\n";
 		return;
 	}
 
 	$job = getProcessQueueEntry();
 	if (!$job) {
-		$db->unlock();
+		//$db->unlock();
 		return;
 	}
 
@@ -440,7 +441,7 @@ function processQueue()
 			d($job);
 			die;
 	}
-	$db->unlock();
+	//$db->unlock();
 }
 
 /**
