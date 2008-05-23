@@ -408,7 +408,7 @@ function processQueue()
 					//execute callback
 					$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
 
-					$callback_uri = $params['callback'].(strpos($x, '?') !== false ? '&' : '?').'uri='.urlencode($uri);
+					$callback_uri = $params['callback'].(strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
 
 					$data = file_get_contents($callback_uri);
 
