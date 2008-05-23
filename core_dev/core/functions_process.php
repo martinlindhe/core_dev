@@ -407,9 +407,12 @@ function processQueue()
 
 					//execute callback
 					$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
-					$data = file_get_contents($params['callback'].'&uri='.urlencode($uri));
 
-					echo "Performing callback: ".$params['callback'].'&uri='.urlencode($uri). "\n\n";
+					$callback_uri = $params['callback'].(strpos($x, '?') !== false ? '&' : '?').'uri='.urlencode($uri);
+
+					$data = file_get_contents($callback_uri);
+
+					echo "Performing callback: ".$callback_uri. "\n\n";
 					echo "Client callback script returned:\n".$data;
 
 					//delete files after callback processing
