@@ -812,26 +812,26 @@ class Files
 			$log = false;
 			$width = $_GET['w'];
 		}
-		if (($width < 10) || ($width > 1500)) $width = 0;
+		if ($width < 10 || $width > 1500) $width = 0;
 
 		$height = 0;
 		if (!empty($_GET['h']) && is_numeric($_GET['h'])) {
 			$log = false;
 			$height = $_GET['h'];
 		}
-		if (($height < 10) || ($height > 1500)) $height = 0;
+		if ($height < 10 || $height > 1500) $height = 0;
 
-		if ($width && (($width < $img_width) || ($height < $img_height)) )  {
-			/* Look for cached thumbnail */
-
+		//if ($width && ($width < $img_width || $height < $img_height) ) {
+		if ($width == $img_width || $height == $img_height) {
+			$out_filename = $filename;
+		} else {
+			//Look for cached thumbnail
 			$out_filename = $this->findThumbPath($_id).'_'.$width.'x'.$height;
 
 			if (!file_exists($out_filename)) {
 				//Thumbnail of this size dont exist, create one
 				resizeImageExact($filename, $out_filename, $width, $height);
 			}
-		} else {
-			$out_filename = $filename;
 		}
 
 		if ($session && filemtime($out_filename) < $session->started) {

@@ -16,6 +16,8 @@ function getThumbUrl($_id, $w = 0, $h = 0)
 
 	if (!is_numeric($w) || !$w) $w = $files->thumb_default_width;
 	if (!is_numeric($h) || !$h) $h = $files->thumb_default_height;
+	if (is_float($w)) $w = floor($w);
+	if (is_float($h)) $h = floor($h);
 
 	$str = $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h.getProjectPath();
 	return $str;

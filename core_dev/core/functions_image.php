@@ -88,9 +88,12 @@ function resizeImageCalc($filename, $to_width, $to_height)
 	$x_ratio = $to_width / $orig_width;
 	$y_ratio = $to_height / $orig_height;
 
+	/*
 	if (($orig_width <= $to_width) && ($orig_height <= $to_height)) {
 		return Array($orig_width, $orig_height);
-	} else if (($x_ratio * $orig_height) < $to_height) {
+	}*/
+
+	if (($x_ratio * $orig_height) < $to_height) {
 		return Array($to_width, ceil($x_ratio * $orig_height));
 	}
 
