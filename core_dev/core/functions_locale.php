@@ -301,6 +301,9 @@ function t_se($s)
 		case 'Cellphone': return 'Mobilnummer';
 		case 'Birth date': return 'Födelsedag';
 		case 'Birth date (Swedish)': return 'Personnummer (Svenskt)';
+		case 'Gender': return 'Kön';
+		case 'Are you sure you want to delete this userdata field?': return 'Är du säker på att du vill radera detta userdata-fält?';
+		case 'Userdata field successfully deleted!': return 'Userdata-fältet har raderats!';
 
 		//Subscriptions
 		case 'The user': return 'Användaren';

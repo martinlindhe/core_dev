@@ -19,13 +19,14 @@ define('USERDATA_TYPE_RADIO',				3);
 define('USERDATA_TYPE_SELECT',				4);
 define('USERDATA_TYPE_TEXTAREA',			5);
 define('USERDATA_TYPE_IMAGE',				6);	//UNIQUE: Used as presentation picture
-define('USERDATA_TYPE_BIRTHDATE',			13);//UNIQUE: Date of birth
 define('USERDATA_TYPE_BIRTHDATE_SWE',		7);	//UNIQUE: Swedish date of birth, with last-4-digits control check
 define('USERDATA_TYPE_EMAIL',				8);	//UNIQUE: text string holding a email address
 define('USERDATA_TYPE_THEME',				9); //UNIQUE: select-dropdown in display. contains user preferred theme (.css file)
 define('USERDATA_TYPE_LOCATION_SWE',		10);//UNIQUE: location gadget,user inputs zipcode which maps to "län" and "ort" 
 define('USERDATA_TYPE_CELLPHONE',			11);//UNIQUE: cellphone number
 define('USERDATA_TYPE_AVATAR',				12);//UNIQUE: avatar is radiobutton list but with images
+define('USERDATA_TYPE_BIRTHDATE',			13);//UNIQUE: Date of birth
+define('USERDATA_TYPE_GENDER',				14);//UNIQUE: radiobutton list-selector for gender
 
 //userdata module settings:
 $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
@@ -246,6 +247,7 @@ function getUserdataInput($row, $fill = false)
 			break;
 
 		case USERDATA_TYPE_RADIO:
+		case USERDATA_TYPE_GENDER:
 			$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 			$options = getCategoriesByOwner(CATEGORY_USERDATA, $fieldId);
 

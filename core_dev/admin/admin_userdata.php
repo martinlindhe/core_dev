@@ -90,6 +90,7 @@ $used_birthdate = false;
 $used_birthdate_swe = false;
 $used_location_swe = false;
 $used_cellphone = false;
+$used_gender = false;
 $i = 0;
 
 echo '<table>';
@@ -124,6 +125,7 @@ foreach ($list as $row) {
 	if ($row['fieldType'] == USERDATA_TYPE_BIRTHDATE_SWE) $used_birthdate_swe = true;
 	if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE) $used_location_swe = true;
 	if ($row['fieldType'] == USERDATA_TYPE_CELLPHONE) $used_cellphone = true;
+	if ($row['fieldType'] == USERDATA_TYPE_GENDER) $used_gender = true;
 
 	echo '</tr>';
 }
@@ -189,6 +191,9 @@ if (!$used_location_swe || (isset($data) && $data['fieldType']==USERDATA_TYPE_LO
 if (!$used_cellphone || (isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE)) {
 	echo '<option value="'.USERDATA_TYPE_CELLPHONE.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_CELLPHONE)?' selected':'').'>'.t('Cellphone').'</option>';
 }
+if (!$used_gender || (isset($data) && $data['fieldType']==USERDATA_TYPE_GENDER)) {
+	echo '<option value="'.USERDATA_TYPE_GENDER.'"'.((isset($data) && $data['fieldType']==USERDATA_TYPE_GENDER)?' selected':'').'>'.t('Gender').'</option>';
+}
 
 echo '</select>';
 echo '<br/>';
@@ -207,7 +212,7 @@ echo '<input name="fieldprivate" type="hidden" value="0"/>';
 echo '<input name="fieldprivate" id="fieldprivate" type="checkbox" class="checkbox" value="1"'.(!empty($data['private'])?' checked="checked"':'').'/>';
 echo ' <label for="fieldprivate">'.t('Make field private').'</label><br/>';
 
-if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT) || ($data['fieldType'] == USERDATA_TYPE_AVATAR) )) {
+if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT) || ($data['fieldType'] == USERDATA_TYPE_AVATAR) || ($data['fieldType'] == USERDATA_TYPE_GENDER) )) {
 
 	$list = getCategoriesByOwner(CATEGORY_USERDATA, $data['fieldId']);
 	echo t('Current options').' ('.count($list).' '.t('options').')<br/>';
