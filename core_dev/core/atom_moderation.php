@@ -36,6 +36,18 @@ define('STOPWORD_OBJECTIONABLE',		1);	//this type of words are forbidden to post
 define('STOPWORD_SENSITIVE',			2);	//sensitive words, this type triggers auto-moderation in various modules
 define('STOPWORD_RESERVED_USERNAME',	3);	//reserved usernames
 
+/* lookup table for moderation types */
+$lookup_moderation = array(
+	MODERATION_FILE => 'File',
+	MODERATION_GUESTBOOK => 'Guestbook',
+	MODERATION_FORUM => 'Forum',
+	MODERATION_BLOG => 'Blog',
+	MODERATION_USER => 'User',
+	MODERATION_QUEUE => 'Queue',
+	MODERATION_REPORTED_VIDEOPRESENTATION => 'Videopresentation',
+	MODERATION_REPORTED_VIDEOMESSAGE => 'Videomessage',
+	MODERATION_PRES_IMAGE => 'Presentation Image'
+	);
 
 /**
  * Checks if the word(s) in $text are objectionable
@@ -224,16 +236,52 @@ function addToModerationQueue($queueType, $itemId, $auto_triggered = false, $tri
 /**
  * Get objects in moderation queue
  */
-function getModerationQueue($_type, $_sql_limit = '')
+function getModerationQueue($_type, $_sql_limit = '', $_order = 'ASC')
 {
 	global $db;
-	if (!is_numeric($_type)) return false;
+	if (!is_numeric($_type) && !is_array($_type) && is_string($_order)) return false;
 
 	$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblModeration AS t1 ';
 	$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
 	$q .= 'WHERE t1.moderatedBy=0';
-	if ($_type) $q .= ' AND t1.queueType='.$_type;
-	$q .= ' ORDER BY t1.timeCreated ASC'.$_sql_limit;
+	if (is_numeric($_type) && $_type != 0) $q .= ' AND t1.queueType='.$_type;
+	else if (is_array($_type) && !empty($_type)) {
+		$q .= ' AND (';
+		for ($i = 0; $i < count($_type); $i++) {
+			$q .= 't1.queueType='.$_type[$i];
+			if ($i < count($_type)-1) {
+				$q .= ' OR ';
+			}
+		}
+		$q .= ')';
+	}
+	$q .= ' ORDER BY t1.timeCreated '.$_order.$_sql_limit;
+	return $db->getArray($q);
+}
+
+/**
+ * Get objects in moderated queue
+ */
+function getModeratedQueue($_type, $_sql_limit = '', $_order = 'ASC')
+{
+	global $db;
+	if (!is_numeric($_type) && !is_array($_type) && is_string($_order)) return false;
+
+	$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblModeration AS t1 ';
+	$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.creatorId=t2.userId) ';
+	$q .= 'WHERE t1.moderatedBy!=0';
+	if (is_numeric($_type) && $_type != 0) $q .= ' AND t1.queueType='.$_type;
+	else if (is_array($_type) && !empty($_type)) {
+		$q .= ' AND (';
+		for ($i = 0; $i < count($_type); $i++) {
+			$q .= 't1.queueType='.$_type[$i];
+			if ($i < count($_type)-1) {
+				$q .= ' OR ';
+			}
+		}
+		$q .= ')';
+	}
+	$q .= ' ORDER BY t1.timeCreated '.$_order.$_sql_limit;
 	return $db->getArray($q);
 }
 
@@ -255,10 +303,44 @@ function getModerationQueueItem($queueId)
 function getModerationQueueCount($_type = 0)
 {
 	global $db;
-	if (!is_numeric($_type)) return false;
+	if (!is_array($_type) && !is_numeric($_type)) return false;
 
 	$q = 'SELECT COUNT(queueId) FROM tblModeration WHERE moderatedBy=0';
-	if ($_type) $q .= ' AND queueType='.$_type;
+	if (is_numeric($_type) && $_type != 0) $q .= ' AND queueType='.$_type;
+	else if (is_array($_type) && !empty($_type)) {
+		$q .= ' AND (';
+		for ($i = 0; $i < count($_type); $i++) {
+			$q .= 'queueType='.$_type[$i];
+			if ($i < count($_type)-1) {
+				$q .= ' OR ';
+			}
+		}
+		$q .= ')';
+	}
+
+	return $db->getOneItem($q);
+}
+
+/**
+ * Get number of objects in moderated queue
+ */
+function getModeratedQueueCount($_type = 0)
+{
+	global $db;
+	if (!is_array($_type) && !is_numeric($_type)) return false;
+
+	$q = 'SELECT COUNT(queueId) FROM tblModeration WHERE moderatedBy!=0';
+	if (is_numeric($_type) && $_type != 0) $q .= ' AND queueType='.$_type;
+	else if (is_array($_type) && !empty($_type)) {
+		$q .= ' AND (';
+		for ($i = 0; $i < count($_type); $i++) {
+			$q .= 'queueType='.$_type[$i];
+			if ($i < count($_type)-1) {
+				$q .= ' OR ';
+			}
+		}
+		$q .= ')';
+	}
 
 	return $db->getOneItem($q);
 }
