@@ -46,6 +46,21 @@ function addBlock($_type, $rule)
 }
 
 /**
+ * Removes a blocking rule
+ *
+ * \param $_type type of block rule
+ * \param $rule the actual rule
+ */
+ function removeBlockId($_type, $ruleId)
+{
+	global $db;
+	if (!is_numeric($_type) || !is_numeric($ruleId)) return false;
+
+	$q = 'DELETE FROM tblBlocks WHERE type='.$_type.' AND ruleId='.$ruleId;
+	return $db->delete($q);
+}
+
+/**
  * Returns an array of all blocks of specified type
  *
  * \param $_type type of block rule
