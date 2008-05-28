@@ -112,6 +112,23 @@ function getActivationUserId($_type, $_code)
 }
 
 /**
+ * Get users activation code
+ *
+ * \param $_type type
+ * \param $_id userId
+ * \return user id
+ */
+function getActivationCode($_type, $_id)
+{
+	global $db, $config;
+	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+
+	$q = 'SELECT rnd FROM tblActivation WHERE type='.$_type.' AND userId='.$_id);
+	$q .= ' LIMIT 1';
+	return $db->getOneItem($q);
+}
+
+/**
  * Creates a new activation code
  *
  * \param $_type type

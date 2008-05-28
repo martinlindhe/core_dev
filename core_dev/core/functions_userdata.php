@@ -617,6 +617,21 @@ function loadUserdataEmail($userId)
 }
 
 /**
+ * Returns entered cellphone number for specified user. Needed functionality for
+ * cellphone activation code
+ *
+ * \param $userId user id
+ * \return cellphone number or false on error
+ */
+function loadUserdataCellphone($userId)
+{
+	if (!is_numeric($userId)) return false;
+
+	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE);
+	return loadUserdataSetting($userId, $fieldId);
+}
+
+/**
  * Returns entered birthdate for specified user
  *
  * \param $userId user id

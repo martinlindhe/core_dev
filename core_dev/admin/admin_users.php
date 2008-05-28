@@ -26,7 +26,7 @@ if (isset($_GET['notactivated'])) {
 		
 	$q = 'SELECT t1.* FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
-	$q .= ' WHERE t2.settingValue != "1" OR t2.settingValue IS NULL';
+	$q .= ' WHERE t2.settingValue != "1" OR t2.settingValue IS NULL ORDER BY t1.timeLastActive DESC';
 	$list = $db->getArray($q);
 } else if (isset($_GET['activated'])) {
 	echo '<h1>Activated users</h1>';
@@ -51,13 +51,31 @@ if (isset($list)) {
 	echo '<table>';
 	echo '<tr>';
 	echo '<th>Username</th>';
+	if (getUserdataFieldIdByType(USERDATA_TYPE_EMAIL)) {
+		echo '<th>Email</th>';
+	}
+	if (getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE)) {
+		echo '<th>Mobile</th>';
+	}
 	echo '<th>Time created</th>';
+	if (isset($_GET['notactivated']) && $auth->mail_activate) {
+		echo '<th>Activation code</th>';
+	}
 	echo '<th>&nbsp;</th>';
 	echo '</tr>';
 	foreach ($list as $row) {
 		echo '<tr>';
 		echo '<td>'.Users::link($row['userId'], $row['userName']).'</td>';
+		if (getUserdataFieldIdByType(USERDATA_TYPE_EMAIL)) {
+			echo '<td>'.loadUserdataEmail($row['userId']).'</td>';
+		}
+		if (getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE)) {
+			echo '<td>'.loadUserdataCellphone($row['userId']).'</td>';
+		}
 		echo '<td>'.$row['timeCreated'].'</td>';
+		if (isset($_GET['notactivated']) && $auth->mail_activate) {
+			echo '<td>'.$row['timeCreated'].'</td>';
+		}
 
 		echo '<td>';
 		if ($session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) echo '<a href="?del='.$row['userId'].getProjectPath().'">del</a>';
