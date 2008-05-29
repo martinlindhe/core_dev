@@ -32,13 +32,15 @@ $config['activate']['expire_time_account']		= (24*60*60)*30;	///< 30 days
  * \param $hi upper limit of code
  * \return unused numeric activation code
  */
-function generateActivationCode($lo, $hi)
+function generateActivationCode($lo, $hi, $_type)
 {
 	global $db;
+	
+	$expiry = getActivationExpireTime($_type);
 
 	do {
 		$code = mt_rand($lo, $hi);
-		$q = 'SELECT COUNT(*) FROM tblActivation WHERE rnd="'.$code.'"';
+		$q = 'SELECT COUNT(*) FROM tblActivation WHERE rnd="'.$code.'" AND timeActivated IS NULL AND timeCreated < DATEADD(second, '.$expiry.', NOW())';
 	} while ($db->getOneItem($q));
 	return $code;
 }
@@ -75,7 +77,7 @@ function verifyActivation($_type, $_code, $_answer = '')
 	$expired = getActivationExpireTime($_type);
 
 	$q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
-	$q .= ' AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
+	$q .= ' AND timeActivated IS NULL AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
 
 	switch ($_type) {
 		case ACTIVATE_CAPTCHA:
@@ -107,7 +109,7 @@ function getActivationUserId($_type, $_code)
 	$expired = getActivationExpireTime($_type);
 
 	$q = 'SELECT userId FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
-	$q .= ' AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
+	$q .= ' AND timeActivated IS NULL AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
 	return $db->getOneItem($q);
 }
 
@@ -123,7 +125,7 @@ function getActivationCode($_type, $_id)
 	global $db, $config;
 	if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'SELECT rnd FROM tblActivation WHERE type='.$_type.' AND userId='.$_id;
+	$q = 'SELECT rnd FROM tblActivation WHERE timeActivated IS NULL AND type='.$_type.' AND userId='.$_id;
 	$q .= ' LIMIT 1';
 	return $db->getOneItem($q);
 }
@@ -171,7 +173,7 @@ function removeActivations($_type, $_id)
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'DELETE FROM tblActivation WHERE type='.$_type.' AND userId='.$_id;
+	$q = 'UPDATE tblActivation SET timeActivated = NOW() WHERE type='.$_type.' AND userId='.$_id;
 	$db->delete($q);
 }
 
@@ -186,7 +188,7 @@ function removeActivation($_type, $_code)
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($_code)) return false;
 
-	$q = 'DELETE FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
+	$q = 'UPDATE tblActivation SET timeActivated = NOW() WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
 	$db->delete($q);
 }
 ?>

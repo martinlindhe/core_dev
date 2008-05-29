@@ -26,20 +26,20 @@ if (isset($_GET['notactivated'])) {
 		
 	$q = 'SELECT t1.* FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
-	$q .= ' WHERE t2.settingValue != "1" OR t2.settingValue IS NULL ORDER BY t1.timeLastActive DESC';
+	$q .= ' WHERE t1.timeCreated IS NOT NULL AND (t2.settingValue != "1" OR t2.settingValue IS NULL) ORDER BY t1.timeLastActive DESC';
 	$list = $db->getArray($q);
 } else if (isset($_GET['activated'])) {
 	echo '<h1>Activated users</h1>';
 
 	$q = 'SELECT t1.* FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
-	$q .= ' WHERE t2.settingValue = "1"';
+	$q .= ' WHERE t2.settingValue = "1" ORDER BY t1.timeLastActive DESC';
 	$list = $db->getArray($q);
 
 } else if (isset($_GET['removed'])) {
 	echo '<h1>Removed users</h1>';
 
-	$q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NOT NULL';
+	$q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NOT NULL ORDER BY t1.timeLastActive DESC';
 	$list = $db->getArray($q);
 } else if (isset($_GET['online'])) {
 	echo '<h1>Users online</h1>';
@@ -51,11 +51,18 @@ if (isset($list)) {
 	echo '<table>';
 	echo '<tr>';
 	echo '<th>Username</th>';
-	if (getUserdataFieldIdByType(USERDATA_TYPE_EMAIL)) {
+	$email = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
+	$cell = getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE); // TODO: Make this work
+	$birth = getUserdataFieldIdByType(USERDATA_TYPE_BIRTHDATE); // TODO: Make this work
+
+	if ($email) {
 		echo '<th>Email</th>';
 	}
-	if (getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE)) {
+	if ($cell) {
 		echo '<th>Mobile</th>';
+	}
+	if (isset($_GET['activated']) && $birth) {
+		echo '<th>Birthdate</th>';
 	}
 	echo '<th>Time created</th>';
 	if (isset($_GET['notactivated']) && $auth->mail_activate) {
@@ -66,15 +73,18 @@ if (isset($list)) {
 	foreach ($list as $row) {
 		echo '<tr>';
 		echo '<td>'.Users::link($row['userId'], $row['userName']).'</td>';
-		if (getUserdataFieldIdByType(USERDATA_TYPE_EMAIL)) {
+		if ($email) {
 			echo '<td>'.loadUserdataEmail($row['userId']).'</td>';
 		}
-		if (getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE)) {
+		if ($cell) {
 			echo '<td>'.loadUserdataCellphone($row['userId']).'</td>';
+		}
+		if (isset($_GET['activated']) && $birth) {
+			echo '<td>'.loadUserdataBirthdate($row['userId']).'</td>';
 		}
 		echo '<td>'.$row['timeCreated'].'</td>';
 		if (isset($_GET['notactivated']) && $auth->mail_activate) {
-			echo '<td>'.$row['timeCreated'].'</td>';
+			echo '<td>'.(getActivationCode(ACTIVATE_EMAIL,$row['userId'])?getActivationCode(ACTIVATE_EMAIL,$row['userId']):getActivationCode(ACTIVATE_SMS,$row['userId'])).'</td>';
 		}
 
 		echo '<td>';
