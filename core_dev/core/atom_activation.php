@@ -114,6 +114,24 @@ function getActivationUserId($_type, $_code)
 }
 
 /**
+ * Get users activation date
+ *
+ * \param $_type type
+ * \param $_id userId
+ * \return date
+ */
+function getActivationDate($_type, $_id)
+{
+	global $db, $config;
+	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+
+	$q = 'SELECT timeActivated FROM tblActivation WHERE timeActivated IS NOT NULL AND type='.$_type.' AND userId='.$_id;
+	$q .= ' LIMIT 1';
+	return $db->getOneItem($q);
+}
+
+
+/**
  * Get users activation code
  *
  * \param $_type type

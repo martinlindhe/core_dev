@@ -68,6 +68,9 @@ if (isset($list)) {
 	if (isset($_GET['notactivated']) && $auth->mail_activate) {
 		echo '<th>Activation code</th>';
 	}
+	if (isset($_GET['activated'])) {
+		echo '<th>Activation Date</th>';
+	}
 	echo '<th>&nbsp;</th>';
 	echo '</tr>';
 	foreach ($list as $row) {
@@ -85,6 +88,9 @@ if (isset($list)) {
 		echo '<td>'.$row['timeCreated'].'</td>';
 		if (isset($_GET['notactivated']) && $auth->mail_activate) {
 			echo '<td>'.(getActivationCode(ACTIVATE_EMAIL,$row['userId'])?getActivationCode(ACTIVATE_EMAIL,$row['userId']):getActivationCode(ACTIVATE_SMS,$row['userId'])).'</td>';
+		}
+		if (isset($_GET['activated'])) {
+			echo '<td>'.(getActivationDate(ACTIVATE_EMAIL,$row['userId'])?getActivationDate(ACTIVATE_EMAIL,$row['userId']):getActivationDate(ACTIVATE_SMS,$row['userId'])).'</td>';
 		}
 
 		echo '<td>';
