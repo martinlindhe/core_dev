@@ -18,6 +18,7 @@ echo '<h1>User lists</h1>';
 
 echo '<a href="?notactivated">Not activated</a> | ';
 echo '<a href="?activated">Activated</a>  | ';
+echo '<a href="?blocked">Blocked</a>  | ';
 echo '<a href="?removed">Removed</a> | ';
 echo '<a href="?online">Users online</a>';
 
@@ -45,6 +46,19 @@ if (isset($_GET['notactivated'])) {
 	echo '<h1>Users online</h1>';
 	echo 'Was active in the last '.shortTimePeriod($session->online_timeout).'<br/><br/>';
 	$list = Users::allOnline();
+} else if (isset($_GET['blocked'])) {
+	echo '<h1>Users blocked by admin by userid</h1>';
+	$list = getBlocks(BLOCK_USERID);
+	$list2 = array();
+	foreach($list as $row) {
+		$temp = array(
+						'userId' => $row['rule'],
+						'userName' => $users->getName($row['rule']),
+						'blockDate' => $row['timeCreated'],
+						'blocker' => $row['createdBy']
+						);
+		$list2
+	}
 }
 
 if (isset($list)) {
