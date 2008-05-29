@@ -32,7 +32,7 @@ $config['activate']['expire_time_account']		= (24*60*60)*30;	///< 30 days
  * \param $hi upper limit of code
  * \return unused numeric activation code
  */
-function generateActivationCode($lo, $hi, $_type)
+function generateActivationCode($_type, $lo, $hi)
 {
 	global $db;
 	
@@ -40,7 +40,7 @@ function generateActivationCode($lo, $hi, $_type)
 
 	do {
 		$code = mt_rand($lo, $hi);
-		$q = 'SELECT COUNT(*) FROM tblActivation WHERE rnd="'.$code.'" AND timeActivated IS NULL AND timeCreated < DATEADD(second, '.$expiry.', NOW())';
+		$q = 'SELECT COUNT(*) FROM tblActivation WHERE rnd="'.$code.'" AND timeActivated IS NULL AND timeCreated < NOW() + INTERVAL '.$expiry.' SECOND';
 	} while ($db->getOneItem($q));
 	return $code;
 }
