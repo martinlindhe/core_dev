@@ -69,7 +69,7 @@ echo 'Days: '.xhtmlInput('days').'<br/>';
 echo 'Subject: '.xhtmlInput('subject').'<br/>';
 echo '<br/><br/>';
 echo 'Message:<br/>';
-echo xhtmlTextarea('message', 50, 10).'<br/>';
+echo xhtmlTextarea('message', '', 50, 10).'<br/>';
 echo xhtmlSubmit('Send');
 echo '</form>';
 
