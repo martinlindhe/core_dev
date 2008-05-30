@@ -488,11 +488,11 @@ function handleRequiredUserdataFields($userId)
 
 	$list = getUserdataFields(true);
 	foreach ($list as $row) {
-		if (empty($_POST['userdata_'.$row['fieldId']]) && $row['fieldType'] != USERDATA_TYPE_BIRTHDATE_SWE) continue;
 
 		switch ($row['fieldType']) {
+			case USERDATA_TYPE_BIRTHDATE:
 			case USERDATA_TYPE_BIRTHDATE_SWE:
-				//ssn was already verified in verifyRequiredUserdataFields()
+				//swedish ssn was already verified in verifyRequiredUserdataFields()
 				$born = mktime(0, 0, 0,
 					$_POST['userdata_'.$row['fieldId'].'_month'],
 					$_POST['userdata_'.$row['fieldId'].'_day'],
@@ -508,6 +508,7 @@ function handleRequiredUserdataFields($userId)
 				break;
 
 			default:
+				if (empty($_POST['userdata_'.$row['fieldId']])) continue;
 				$val = $_POST['userdata_'.$row['fieldId']];
 				break;
 		}				

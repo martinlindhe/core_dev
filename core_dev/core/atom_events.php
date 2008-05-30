@@ -20,8 +20,10 @@ define('EVENT_PRES_DENIED',			0x56);	//referer = fileId
 define('EVENT_RECORDED_BLOG',		0x57);	//referer = fileId
 define('EVENT_CALLER_UNREGISTER',	0x58);
 
-//XXX: implement these:
-define('EVENT_WARNED',				0x58);	//need to store warn reason
+define('EVENT_MSG_APPROVED',		0x60);	//referer = fileId
+define('EVENT_MSG_DENIED',			0x61);	//referer = fileId
+define('EVENT_BLOCKED_ANON_CALL',	0x62);	//call was dropped because caller was anonymous
+define('EVENT_BLOCKED_CALLER',		0x63);	//caller is blocked from service
 
 $event_name[EVENT_USER_LOGIN] = 'User login';
 $event_name[EVENT_USER_LOGOUT] = 'User logout';
@@ -35,6 +37,12 @@ $event_name[EVENT_RECORDED_MSG] = 'Recorded msg.';
 $event_name[EVENT_RECORDED_CHATREQ] = 'Recorded chatreq.';
 $event_name[EVENT_RECORDED_BLOG] = 'Recorded blog';
 $event_name[EVENT_CALLER_UNREGISTER] = 'Caller unregistered';
+
+$event_name[EVENT_MSG_APPROVED] = 'Approved msg.';
+$event_name[EVENT_MSG_DENIED] = 'Denied msg.';
+
+$event_name[EVENT_BLOCKED_ANON_CALL] = 'Blocked anon caller';
+$event_name[EVENT_BLOCKED_CALLER] = 'Dropped blocked caller';
 
 /**
  * Creates a new event

@@ -7,6 +7,7 @@ CREATE TABLE `tblActivation` (
   `rnd` bigint(20) unsigned NOT NULL default '0',
   `answer` varchar(10) default NULL,
   `timeCreated` datetime default NULL,
+  `timeActivated` datetime default NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
