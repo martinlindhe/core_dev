@@ -29,8 +29,22 @@ if ($session->isSuperAdmin) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;delete">Delete user</a><br/><br/>';
 }
 
+echo '<h2>Userdata</h2>';
 editUserdataSettings($userId);
 
+echo '<h2>Events</h2>';
+$events = getEvents(0, $userId, ' LIMIT 0,40');
+
+echo '<table>';
+foreach ($events as $row) {
+		echo '<tr>';
+			echo '<td>'.$row['timeCreated'].'</td>';
+			echo '<td>'.$event_name[$row['type']].'</td>';
+		echo '</tr>';
+}
+echo '</table>';
+
+echo '<h2>Comments</h2>';
 showComments(COMMENT_USER, $userId);
 
 require($project.'design_foot.php');
