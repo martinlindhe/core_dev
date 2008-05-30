@@ -260,8 +260,8 @@ function manageCategoriesDialog($_type)
 		echo '<form method="post" action="">';
 		echo '<h2>Edit category</h2>';
 		echo 'Current name: '.$data['categoryName'].'<br/>';
-		echo 'New name: <input type="text" name="cat_name" value="'.$data['categoryName'].'"/> ';
-		echo '<input type="submit" class="button" value="Save"/>';
+		echo 'New name: '.xhtmlInput('cat_name', $data['categoryName']);
+		echo xhtmlButton('Save');
 		echo '</form>';
 		echo '<a href="'.URLadd('cat_del_id', $edit_id).'">Delete category</a>';
 		return;
@@ -273,7 +273,7 @@ function manageCategoriesDialog($_type)
 
 	echo '<form name="new_file_category" method="post" action="">';
 	echo 'Create new category:<br/>';
-	echo '<input type="text" name="new_file_category"/> ';
+	echo xhtmlInput('new_file_category');
 	echo '<input type="hidden" value="'.$_type.'" name="new_file_category_type"/>';
 
 	if ($_type == CATEGORY_USERFILE) {
@@ -311,7 +311,7 @@ function manageCategoriesDialog($_type)
 		*/
 	}
 
-	echo '<input type="submit" class="button" value="Create"/> ';
+	echo xhtmlSubmit('Create');
 	echo '</form>';
 }
 ?>

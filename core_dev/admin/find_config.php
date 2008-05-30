@@ -30,7 +30,6 @@ $super_admin_menu = array(
 	$config['core']['web_root'].'admin/admin_userfiles.php'.getProjectPath(0) => 'Userfiles',
 	$config['core']['web_root'].'admin/admin_stopwords.php'.getProjectPath(0) => 'Stopwords',
 	$config['core']['web_root'].'admin/admin_contacts.php'.getProjectPath(0) => 'Contacts',
-	$config['core']['web_root'].'admin/admin_add_admin.php'.getProjectPath(0) => 'Add admin',
 	$config['core']['web_root'].'admin/admin_content_search.php'.getProjectPath(0) => 'Content Search',
 	$config['core']['web_root'].'admin/admin_contact_users.php'.getProjectPath(0) => 'Contact users',
 	$config['core']['web_root'].'admin/admin_todo_lists.php'.getProjectPath(0) => 'Todo lists'

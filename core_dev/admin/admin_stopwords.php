@@ -75,13 +75,13 @@ for($x=1; $x<=3; $x++) {
 		echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="'.$config['core']['web_root'].'gfx/icon_delete.png" alt="Delete"/></a><br/>';
 	}
 
-	echo '<br/><br/>Add new word:<br/><input type="text" name="newname_'.$x.'" size="16"/>';
+	echo '<br/><br/>Add new word:<br/>'.xhtmlInput('newname_'.$x, '', 16);
 	echo '<input type="checkbox" class="checkbox" value="1" name="newfull_'.$x.'" id="newfull_'.$x.'"/>';
 	echo '<label for="newfull_'.$x.'">Full</label>';
 
 	echo '</div>'; //class="admin_stopword"
 }
-echo '<input type="submit" class="button" value="Update"/>';
+echo xhtmlSubmit('Update');
 echo '</form>';
 
 require($project.'design_foot.php');

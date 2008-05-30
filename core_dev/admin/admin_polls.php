@@ -4,6 +4,8 @@
  */
 
 require_once('find_config.php');
+require_core('atom_polls.php');
+
 $session->requireAdmin();
 
 require($project.'design_head.php');

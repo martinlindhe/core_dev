@@ -234,9 +234,14 @@ function xhtmlRadioArray($_name, $_arr, $_default = '')
 /**
  * Helper to create a input field
  */
-function xhtmlInput($_name, $_value = '')
+function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0)
 {
-	return '<input type="text" name="'.$_name.'"'.($_value ? ' value="'.$_value.'"' : '').'/>';
+	if (!is_numeric($_size) || !is_numeric($_maxlen)) return false;
+	return '<input type="text" name="'.$_name.'"'.
+		($_value ? ' value="'.$_value.'"' : '').
+		($_size ? ' size="'.$_size.'"': '').
+		($_maxlen ? ' maxlength="'.$_maxlen.'"': '').
+		'/>';
 }
 
 /**

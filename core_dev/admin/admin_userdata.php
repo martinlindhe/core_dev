@@ -29,6 +29,13 @@ echo createMenu($admin_menu, 'blog_menu');
 echo createMenu($super_admin_menu, 'blog_menu');
 echo createMenu($super_admin_tools_menu, 'blog_menu');
 
+if (!$auth->userdata) {
+	echo 'Userdata not enabled for this application.';
+
+	require($project.'design_foot.php');
+	die;
+}
+
 //Create new field
 if (isset($_GET['mode']) && ($_GET['mode'] == 'create') && isset($_POST['fieldname']) && $_POST['fieldname']) {
 	$fieldType = $fieldPrivate = $fieldDefault = '';
@@ -153,7 +160,7 @@ if (isset($_GET['change'])) {
 
 echo '<b>'.$header.'</b><br/>';
 echo t('Field name').':';
-echo '<input type="text" name="fieldname" value="'.$fieldName.'" size="40" maxlength="60"/><br/>';
+echo xhtmlInput('fieldname', $fieldName, 40, 60).'<br/>';
 
 // Only show the default value option while editing text fields
 if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
