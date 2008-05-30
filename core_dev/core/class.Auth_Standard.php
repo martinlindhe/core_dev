@@ -121,7 +121,7 @@ class Auth_Standard extends Auth_Base
 				return false;
 			}
 			
-			$blocked = isBlocked(BLOCK_USERID, $id);
+			$blocked = isBlocked(BLOCK_USERID, $data['userId']);
 			if ($blocked) {
 				$session->error = t('Account blocked');
 				$session->log('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
