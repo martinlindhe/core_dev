@@ -120,6 +120,13 @@ class Auth_Standard extends Auth_Base
 				$session->error = t('Logins currently not allowed.');
 				return false;
 			}
+			
+			$blocked = isBlocked(BLOCK_USERID, $id);
+			if ($blocked) {
+				$session->error = t('Account blocked');
+				$session->log('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
+				return false;
+			}
 		}
 
 		$session->startSession($data['userId'], $data['userName'], $data['userMode']);

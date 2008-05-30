@@ -53,12 +53,14 @@ if (isset($_GET['notactivated'])) {
 	foreach($list as $row) {
 		$temp = array(
 						'userId' => $row['rule'],
-						'userName' => $users->getName($row['rule']),
-						'blockDate' => $row['timeCreated'],
-						'blocker' => $row['createdBy']
+						'userName' => Users::getName($row['rule']),
+						'timeCreated' => $row['timeCreated'],
+						'blocker' => $row['createdBy'],
+						'timeDeleted' => NULL
 						);
-		$list2;
+		$list2[] = $temp;
 	}
+	$list = $list2;
 }
 
 if (isset($list)) {
@@ -108,7 +110,8 @@ if (isset($list)) {
 		}
 
 		echo '<td>';
-		if ($session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) echo '<a href="?del='.$row['userId'].getProjectPath().'">del</a>';
+		if (!isset($_GET['blocked']) && $session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) echo '<a href="?del='.$row['userId'].getProjectPath().'">del</a>';
+		else if (isset($_GET['blocked']) && $session->isSuperAdmin) echo '<a href="?del_block='.$row['userId'].getProjectPath().'">del</a>';
 		else echo '&nbsp;';
 		echo '</td>';
 		echo '</tr>';

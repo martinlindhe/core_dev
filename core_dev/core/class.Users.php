@@ -203,7 +203,7 @@ class Users
 		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($username).'" AND timeDeleted IS NULL';
 		$id = $db->getOneItem($q);
 		if (!$id) return false;
-
+		
 		$enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
  		$q = 'SELECT * FROM tblUsers WHERE userId='.$id.' AND userPass="'.$enc_password.'"';
  		$data = $db->getOneRow($q);

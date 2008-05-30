@@ -201,6 +201,7 @@ function t_se($s)
 		case 'The specified email address does not match any registered user.': return 'Ingen användare har en sådan epost-adress.';
 		case 'Forgot password': return 'Glömt lösenord';
 		case 'Account activation': return 'Aktivera konto';
+		case 'Account blocked': return 'Konto blockerat';
 
 		//Comments
 		case 'comment': return 'kommentar';
