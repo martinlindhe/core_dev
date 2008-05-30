@@ -57,7 +57,7 @@ if (isset($_GET['notactivated'])) {
 						'blockDate' => $row['timeCreated'],
 						'blocker' => $row['createdBy']
 						);
-		$list2
+		$list2;
 	}
 }
 
