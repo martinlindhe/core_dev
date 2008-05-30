@@ -11,7 +11,7 @@ if (!file_exists('config.php')) {
 	die();
 }*/
 
-$project = '/home/ml/dev/m2w/operator/';
+$project = '/home/ml/dev/pc/';
 require_once($project.'config.php');
 
 $admin_menu = array(

@@ -186,6 +186,7 @@ function t_se($s)
 		case 'Register new account': return 'Registrera nytt konto';
 		case 'User not found': return 'Användaren finns inte';
 
+
 		//Session errors
 		case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';
 		case 'The page you requested requires webmaster rights to view.': return 'Sidan du försöker visa kräver att du är webmaster.';
@@ -307,6 +308,8 @@ function t_se($s)
 		case 'Gender': return 'Kön';
 		case 'Are you sure you want to delete this userdata field?': return 'Är du säker på att du vill radera detta userdata-fält?';
 		case 'Userdata field successfully deleted!': return 'Userdata-fältet har raderats!';
+		case 'Location (Sweden)': return 'Postnummer (Svenskt)';
+		case 'Default value': return 'Standard-värde';
 
 		//Subscriptions
 		case 'The user': return 'Användaren';

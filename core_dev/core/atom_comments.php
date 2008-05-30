@@ -239,8 +239,8 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 			($_type == COMMENT_FILE || $_type == COMMENT_PASTEBIN)
 	) {
 		echo '<form method="post" action="">';
-		echo '<textarea name="cmt_'.$_type.'" cols="'.$col_w.'" rows="'.$col_h.'"></textarea><br/>';
-		echo '<input type="submit" class="button" value="'.t('Add comment').'"/>';
+		echo xhtmlTextarea('cmt_'.$_type, '', $col_w, $col_h).'<br/>';
+		echo xhtmlSubmit('Add comment');
 		echo '</form>';
 	}
 
@@ -294,7 +294,9 @@ function showComment($row)
 		//allow users to delete comments on their files
 		($row['commentType'] == COMMENT_FILE && Files::getOwner($row['ownerId']) == $session->id)
 	) {
-		echo ' | <a href="'.URLadd('delete', $row['commentId']).'"><img src="'.$config['core']['web_root'].'gfx/icon_delete.png"/></a>';
+		echo ' | ';
+		echo coreButton('Delete', URLadd('delete', $row['commentId']) );
+		
 	}
 	echo '</div>';
 }

@@ -156,6 +156,62 @@ function getActivePolls($_type, $ownerId = 0)
 }
 
 /**
+ * Add poll vote
+ */
+function addPollVote($_id, $voteId)
+{
+	global $db, $session;
+	if (!is_numeric($_id) || !is_numeric($voteId)) return false;
+
+	$q = 'SELECT userId FROM tblPollVotes WHERE pollId='.$_id.' AND userId='.$session->id;
+	if ($db->getOneItem($q)) return false;
+
+	$q = 'INSERT INTO tblPollVotes SET userId='.$session->id.',pollId='.$_id.',voteId='.$voteId;
+	$db->insert($q);
+	return true;
+}
+
+/**
+ * Has current user answered specified poll?
+ */
+function hasAnsweredPoll($_id)
+{
+	global $db, $session;
+	if (!is_numeric($_id) || !$session->id) return false;
+
+	$q = 'SELECT pollId FROM tblPollVotes WHERE userId='.$session->id.' AND pollId='.$_id;
+	if ($db->getOneItem($q)) return true;
+	return false;
+}
+
+/**
+ * Get statistics for specified poll
+ */
+function getPollStats($_id)
+{
+	global $db;
+	if (!is_numeric($_id)) return false;
+
+	$q  = 'SELECT t1.categoryName, ';
+	$q .= '(SELECT COUNT(*) FROM tblPollVotes WHERE voteId=t1.categoryId) AS cnt ';
+	$q .= 'FROM tblCategories AS t1 ';
+	$q .= 'WHERE t1.ownerId='.$_id.' AND t1.categoryType='.CATEGORY_POLL;
+	return $db->getArray($q);
+}
+
+/**
+ * Remove poll
+ */
+function removePoll($_type, $_id)
+{
+	global $db, $session;
+	if (!$session->isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
+
+	$q = 'UPDATE tblPolls SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id;
+	$db->update($q);
+}
+
+/**
  * Polling gadget
  */
 function poll($_type, $_id)
@@ -303,20 +359,20 @@ function managePolls($_type, $_owner = 0)
 
 		echo '<form method="post" action="">';
 		echo 'Question: ';
-		echo '<input type="text" name="poll_q" size="30" value="'.$poll['pollText'].'"/><br/>';
+		echo xhtmlInput('poll_q', $poll['pollText'], 30).'<br/>';
 
 		echo 'Poll starts: ';
 		if (datetime_to_timestamp($poll['timeStart']) < time()) {
 			echo $poll['timeStart'].'<br/>';
 		} else {
-			echo '<input type="text" name="poll_ts" size="30" value="'.$poll['timeStart'].'"/><br/>';
+			echo xhtmlInput('poll_ts', $poll['timeStart'], 30).'<br/>';
 		}
 		echo 'Poll ends: ';
 
 		if (datetime_to_timestamp($poll['timeEnd']) < time()) {
 			echo $poll['timeEnd'].'<br/>';
 		} else {
-			echo '<input type="text" name="poll_te" size="30" value="'.$poll['timeEnd'].'"/><br/>';
+			echo xhtmlInput('poll_te', $poll['timeEnd'], 30).'<br/>';
 		}
 		echo '<br/>';
 
@@ -325,10 +381,10 @@ function managePolls($_type, $_owner = 0)
 			for ($i=0; $i<count($list); $i++) {
 				echo 'Answer '.($i+1).': <input type="text" size="30" name="poll_a'.$i.'" value="'.$list[$i]['categoryName'].'"/><br/>';
 			}
-			echo 'Add new answer: <input type="text" size="30" name="poll_new_a"/><br/>';
+			echo 'Add new answer: '.xhtmlInput('poll_new_a', '', 30).'<br/>';
 		}
 
-		echo '<input type="submit" class="button" value="Save changes"/>';
+		echo xhtmlSubmit('Save changes');
 		echo '</form><br/>';
 
 		echo '<a href="'.URLadd('poll_stats', $pollId).'">Poll stats</a><br/>';
@@ -358,8 +414,7 @@ function managePolls($_type, $_owner = 0)
 	echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">Add new poll</h2>';
 	echo '<div id="new_poll_form" style="display: none;">';
 	echo '<form method="post" action="">';
-	echo 'Question: ';
-	echo '<input type="text" name="poll_q" size="30"/><br/>';
+	echo 'Question: '.xhtmlInput('poll_q', '', 30).'<br/>';
 	if ($_type == POLL_SITE) {
 		echo '<div id="poll_period_selector">';
 		echo 'Duration of the poll: ';
@@ -378,18 +433,18 @@ function managePolls($_type, $_owner = 0)
 		echo '<a href="#" onclick="hide_element_by_name(\'poll_period_selector\');show_element_by_name(\'poll_period_manual\')">Enter dates manually</a>';
 		echo '</div>';
 		echo '<div id="poll_period_manual" style="display: none;">';
-			echo 'Start time: <input type="text" name="poll_start_man"/> (format YYYY-MM-DD HH:MM)<br/>';
-			echo 'End time: <input type="text" name="poll_end_man"/><br/>';
+			echo 'Start time: '.xhtmlInput('poll_start_man').' (format YYYY-MM-DD HH:MM)<br/>';
+			echo 'End time: '.xhtmlInput('poll_end_man').'<br/>';
 			echo '<a href="#" onclick="hide_element_by_name(\'poll_period_manual\');show_element_by_name(\'poll_period_selector\')">Use dropdown menus instead</a>';
 		echo '</div>';
 		echo '<br/><br/>';
 	}
 
 	for ($i=1; $i<=$answer_fields; $i++) {
-		echo 'Answer '.$i.': <input type="text" size="30" name="poll_a'.$i.'"/><br/>';
+		echo t('Answer').' '.$i.': '.xhtmlInput('poll_a'.$i, '', 30).'<br/>';
 	}
 
-	echo '<input type="submit" class="button" value="Create"/>';
+	echo xhtmlSubmit('Create');
 	echo '</form>';
 	echo '</div>';
 
@@ -446,62 +501,6 @@ function managePolls($_type, $_owner = 0)
 	echo '<br/>';
 }
 
-/**
- * Add poll vote
- */
-function addPollVote($_id, $voteId)
-{
-	global $db, $session;
-	if (!is_numeric($_id) || !is_numeric($voteId)) return false;
-
-	$q = 'SELECT userId FROM tblPollVotes WHERE pollId='.$_id.' AND userId='.$session->id;
-	if ($db->getOneItem($q)) return false;
-
-	$q = 'INSERT INTO tblPollVotes SET userId='.$session->id.',pollId='.$_id.',voteId='.$voteId;
-	$db->insert($q);
-	return true;
-}
-
-/**
- * Has current user answered specified poll?
- */
-function hasAnsweredPoll($_id)
-{
-	global $db, $session;
-	if (!is_numeric($_id) || !$session->id) return false;
-
-	$q = 'SELECT pollId FROM tblPollVotes WHERE userId='.$session->id.' AND pollId='.$_id;
-	if ($db->getOneItem($q)) return true;
-	return false;
-}
-
-/**
- * Get statistics for specified poll
- */
-function getPollStats($_id)
-{
-	global $db;
-	if (!is_numeric($_id)) return false;
-
-	$q  = 'SELECT t1.categoryName, ';
-	$q .= '(SELECT COUNT(*) FROM tblPollVotes WHERE voteId=t1.categoryId) AS cnt ';
-	$q .= 'FROM tblCategories AS t1 ';
-	$q .= 'WHERE t1.ownerId='.$_id.' AND t1.categoryType='.CATEGORY_POLL;
-	return $db->getArray($q);
-}
-
-/**
- * Remove poll
- */
-function removePoll($_type, $_id)
-{
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
-
-	$q = 'UPDATE tblPolls SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id;
-	$db->update($q);
-}
-	
 /**
  * Helper function for displaying polls attached to a news article
  */

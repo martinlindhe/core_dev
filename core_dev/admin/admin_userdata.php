@@ -143,10 +143,10 @@ if (isset($_GET['change'])) {
 	$data = getUserdataField($changeId);
 	$fieldName = stripslashes($data['fieldName']);
 	$header = t('Edit userdata field').' "'.$fieldName.'"';
-	$submit = t('Update');
+	$submit = 'Update';
 } else {
 	$header = t('Create a new userdata field');
-	$submit = t('Create');
+	$submit = 'Create';
 	$fieldName = '';
 }
 
@@ -163,9 +163,9 @@ echo t('Field name').':';
 echo xhtmlInput('fieldname', $fieldName, 40, 60).'<br/>';
 
 // Only show the default value option while editing text fields
-if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT) || ($data['fieldType'] == USERDATA_TYPE_TEXTAREA)))  ) {
+if ((!isset($_GET['change']) && isset($data)) || (isset($data) && (($data['fieldType'] == USERDATA_TYPE_TEXT)))  ) {
 	echo t('Default value').':<br/>';
-	echo '<input type="text" name="fielddefault" value="'.$data['fieldDefault'].'"/><br/>';
+	echo xhtmlInput('fielddefault', $data['fieldDefault']).'<br/>';
 }
 
 echo t('Type').': ';
@@ -234,7 +234,7 @@ if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fiel
 	echo '<input type="text" name="optionname" size="40"/>';
 }
 
-echo '<input type="submit" class="button" value="'.$submit.'"/>';
+echo xhtmlSubmit($submit);
 
 echo '</form>';
 echo '</div>';

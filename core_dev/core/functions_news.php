@@ -192,18 +192,18 @@ function showNewsArticle($_id = 0)
 		echo '<h1>'.t('Edit news article').'</h1>';
 		echo '<form method="post" action="'.'?NewsEdit:'.$_id.getProjectPath().'">';
 		echo '<input type="hidden" name="news_rss" value="0"/>';
-		echo t('Title').': <input type="text" name="news_title" size="50" value="'.$item['title'].'"/><br/>';
+		echo t('Title').': '.xhtmlInput('news_title', $item['title'], 50).'<br/>';
 		echo t('Text').':<br/>';
-		echo '<textarea name="news_body" cols="60" rows="16">'.$item['body'].'</textarea><br/>';
+		echo xhtmlTextarea('news_body', $item['body'], 60, 16).'<br/>';
 		echo '<input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
 		echo ' <label for="rss_check">';
 		echo '<img src="'.$config['core']['web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
 		echo t('Include this news in the RSS feed').'</label><br/><br/>';
 		echo t('Category').': '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
-		echo t('Time for publication').':<br/>';
-		echo '<input type="text" name="news_publish" value="'.$item['timeToPublish'].'"/> ';
-		echo '<input type="submit" class="button" value="'.t('Save changes').'"/><br/>';
-		echo '</form><br/>';
+		echo t('Time for publication').': ';
+		echo xhtmlInput('news_publish', $item['timeToPublish']).'<br/>';
+		echo xhtmlSubmit('Save changes');
+		echo '</form>';
 
 	} else if ($current_tab == 'NewsPolls' && $session->isAdmin) {
 		managePolls(POLL_NEWS, $_id);
