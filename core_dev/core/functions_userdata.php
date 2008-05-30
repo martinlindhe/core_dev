@@ -807,7 +807,7 @@ function editUserdataSettings($_userid = '')
 		echo '<tr>'.getUserdataInput($row).'</tr>';
 	}
 	echo '</table>';
-	echo '<input type="submit" class="button" value="'.t('Save').'"/>';
+	echo xhtmlSubmit('Save');
 	echo '</form>';
 	echo '</div>';
 }

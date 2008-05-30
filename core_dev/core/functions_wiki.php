@@ -173,8 +173,9 @@ function wiki($wikiName = '')
 		$last_edited = 'never';
 		if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' '.t('by').' '.$data['creatorName'];
 
+		echo '<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">';
+		
 		echo
-			'<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">'.
 			'<input type="button" class="button" value="[h1]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h1]\',\'[/h1]\',\'headline level 1\')"/>'.
 			'<input type="button" class="button" value="[h2]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h2]\',\'[/h2]\',\'headline level 2\')"/>'.
 			'<input type="button" class="button" value="[h3]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h3]\',\'[/h3]\',\'headline level 3\')"/>'.
@@ -185,10 +186,11 @@ function wiki($wikiName = '')
 			//'<input type="button" class="button" value="[hr] (broken)" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[hr]\')"/>'.
 			'<input type="button" class="button" value="[code]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[code]\',\'[/code]\',\'code block\')"/>'.
 			'<input type="button" class="button" value="[quote]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[quote name=]\',\'[/quote]\',\'quote\')"/>'.
-			'<br/>'.
-			'<textarea name="wiki_'.$data['wikiId'].'" id="wiki_'.$data['wikiId'].'" cols="60" rows="'.$rows.'">'.$text.'</textarea><br/>'.
-			'Last edited '.$last_edited.'<br/>'.
-			'<input type="submit" class="button" value="'.t('Save').'"/>';
+			'<br/>';
+
+		echo '<textarea name="wiki_'.$data['wikiId'].'" id="wiki_'.$data['wikiId'].'" cols="60" rows="'.$rows.'">'.$text.'</textarea><br/>';
+		echo 'Last edited '.$last_edited.'<br/>';
+		echo xhtmlSubmit('Save');
 
 		if ($session->isAdmin) {
 			if ($data['lockedBy']) {
