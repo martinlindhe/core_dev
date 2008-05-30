@@ -3,24 +3,15 @@
  * $Id$
  */
 
-if (!empty($_GET['pr'])) {
-	if (strpbrk($_GET['pr'], '"\'/\\%&?;:.,')) die;				//checks _pr for " ' \ / % & ? ; : . ,
-	$project_name = preg_replace("/[^\w\.-]+/", '_', $_GET['pr']); //removes dangerous filesystem letters
-	if ($project_name != $_GET['pr']) die;	//invalid chars in path
-	$project = '../../'.$project_name.'/';
-	if (!file_exists($project.'config.php')) $project = '../'.$project_name.'/';
-} else {
-	$project = '../';	//Defaults to a config.php in the directory below this one
-	if (!file_exists($project.'config.php')) $project = '../../';
-}
+//konvertera aktuell sökväg till fs
 
-if (!file_exists($project.'config.php')) {
-	if (!file_exists($_SERVER['DOCUMENT_ROOT'].'config.php')) {
-		die('cant find config path from '.$_SERVER['SCRIPT_FILENAME']);
-	}
-	$project = $_SERVER['DOCUMENT_ROOT'];
-}
+/*
+if (!file_exists('config.php')) {
+	echo 'Error: Please create a symlink at '.dirname($_SERVER['SCRIPT_FILENAME']).'/config.php to the correct configuration file';
+	die();
+}*/
 
+$project = '/home/ml/dev/m2w/operator/';
 require_once($project.'config.php');
 
 $admin_menu = array(

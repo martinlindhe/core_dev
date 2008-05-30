@@ -244,7 +244,7 @@ function xhtmlInput($_name, $_value = '')
  */
 function xhtmlSubmit($_title)
 {
-	return '<input type="submit" class="button" value="'.$_title.'"/>';
+	return '<input type="submit" class="button" value="'.t($_title).'"/>';
 }
 
 /**

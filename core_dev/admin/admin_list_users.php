@@ -44,8 +44,8 @@ if ($session->isSuperAdmin && !empty($_POST)) {
 }
 
 echo '<form method="post">';
-echo 'Username filter: <input type="text" name="usearch"/> ';
-echo '<input type="submit" class="button" value="'.t('Search').'"/>';
+echo 'Username filter: '.xhtmlInput('usearch');
+echo xhtmlSubmit('Search');
 echo '</form><br/>';
 
 $tot_cnt = Users::cnt($mode, $usermatch);
@@ -78,7 +78,9 @@ foreach ($list as $user)
 		echo '<option value="'.USERLEVEL_ADMIN.'"'.($user['userMode']==USERLEVEL_ADMIN?' selected="selected"':'').'>Admin</option>';
 		echo '<option value="'.USERLEVEL_SUPERADMIN.'"'.($user['userMode']==USERLEVEL_SUPERADMIN?' selected="selected"':'').'>Super admin</option>';
 		echo '</select> ';
-		if ($session->id != $user['userId'] && !$user['timeDeleted']) echo '<a href="?del='.$user['userId'].getProjectPath().'">del</a>';
+		if ($session->id != $user['userId'] && !$user['timeDeleted']) {
+			coreButton('Delete', '?del='.$user['userId'].getProjectPath());
+		}
 	} else {
 		echo $user['userMode'];
 	}
@@ -86,7 +88,7 @@ foreach ($list as $user)
 	echo '</tr>';
 }
 echo '<tr>';
-echo '<td colspan="3">Add user: <input type="text" name="u_name"/> - pwd: <input type="text" name="u_pwd"/></td>';
+echo '<td colspan="3">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
 echo '<td>';
 if ($session->isSuperAdmin) {
 	echo '<select name="u_mode">';
@@ -103,7 +105,7 @@ echo '</tr>';
 echo '</table>';
 
 if ($session->isSuperAdmin) {
-	echo '<input type="submit" class="button" value="Save changes"/>';
+	echo xhtmlSubmit('Save changes');
 	echo '</form>';
 }
 
