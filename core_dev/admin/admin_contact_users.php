@@ -36,7 +36,6 @@ if (isset($_GET['send'])) {
 	
 echo '<h1>Contact users</h1>';
 
-
 echo'<form name="contact" method="post" action="'.$_SERVER['PHP_SELF'].'?send">';
 
 echo 'How: <input type="radio" name="how" value="mail"> E-mail | ';

@@ -59,11 +59,11 @@ echo '</div><br/>';
 
 echo '<form method="post" action="">';
 echo 'IP: ';
-echo '<input type="text" value="'.$ip.'" name="i"/><br/>';
+echo xhtmlInput('i', $ip).'<br/>';
 echo 'Port: ';
 if ($port == 0) $port = 80; //default port
-echo '<input type="text" value="'.$port.'" name="p" size="5"/><br/>';
-echo '<input type="submit" class="button" value="Check"/>';
+echo xhtmlInput('p', $port, 5).'<br/>';
+echo xhtmlSubmit('Test');
 echo '</form>';
 
 require($project.'design_foot.php');

@@ -68,6 +68,7 @@ function t_se($s)
 		case 'Modify': return 'Ändra';
 		case 'Create': return 'Skapa';
 		case 'Update': return 'Uppdatera';
+		case 'Test': return 'Testa';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';

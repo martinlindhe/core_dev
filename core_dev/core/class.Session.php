@@ -263,10 +263,11 @@ class Session
 		global $config;
 
 		echo '<b>Current session information</b><br/>';
-		echo 'Logged in: '. ($this->id?'YES':'NO').'<br/>';
 		if ($this->id) {
 			echo 'User name: '.$this->username.'<br/>';
 			echo 'User ID: '.$this->id.'<br/>';
+		} else {
+			echo 'Not logged in<br/>';
 		}
 
 		echo 'User mode: ';	//FIXME: use $session->userModes

@@ -59,7 +59,12 @@ if ($ip && !$block) {
 		
 	$ips = Users::getIPByUser($userId);
 
-	echo '<table><tr><td><b>IP</b></td><td><b>Tid</b></td><td>&nbsp;</td></tr>';
+	echo '<table>';
+	echo '<tr>';
+	echo '<th>IP</th>';
+	echo '<th>Tid</th>';
+	echo '<th>&nbsp;</th>';
+	echo '</tr>';
 	foreach ($ips as $ip) {
 		echo '<tr>';
 			echo '<td>'.GeoIP_to_IPv4($ip['IP']).'</td>';
@@ -76,10 +81,10 @@ if ($ip && !$block) {
 	echo 'Your IP is '.$_SERVER['REMOTE_ADDR'].'<br/>';
 	echo '<form method="get" action="'.$_SERVER['PHP_SELF'].'">';
 	if (!empty($_GET['pr'])) echo '<input type="hidden" name="pr" value="'.$_GET['pr'].'"/>';
-	echo '<input type="text" name="ip" value="'.$ip.'"/> Ip';
-	echo '<br/>or';
-	echo '<br/><input type="text" name="user" value="'.$ip.'"/> User';
-	echo '<br/><input type="submit" class="button" value="query"/>';
+	echo 'IP: '.xhtmlInput('ip', $ip).'<br/><br/>';
+	echo 'or<br/>';
+	echo 'User: '.xhtmlInput('user', $ip).'<br/>';
+	echo xhtmlSubmit('Search');
 	echo '</form>';
 }
 
