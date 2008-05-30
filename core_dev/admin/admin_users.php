@@ -70,9 +70,13 @@ if (isset($list)) {
 	echo '<table>';
 	echo '<tr>';
 	echo '<th>Username</th>';
-	$email = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
-	$cell = getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE); // TODO: Make this work
-	$birth = getUserdataFieldIdByType(USERDATA_TYPE_BIRTHDATE); // TODO: Make this work
+	$email = $cell = $birth = false;
+
+	if ($auth->userdata) {
+		$email = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
+		$cell = getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE); // TODO: Make this work
+		$birth = getUserdataFieldIdByType(USERDATA_TYPE_BIRTHDATE); // TODO: Make this work
+	}
 
 	if ($email) {
 		echo '<th>Email</th>';
@@ -92,8 +96,11 @@ if (isset($list)) {
 	}
 	echo '<th>&nbsp;</th>';
 	echo '</tr>';
+	$i = 0;
+
 	foreach ($list as $row) {
-		echo '<tr>';
+		$i ++;
+		echo '<tr'.($i%2 ? ' style="background-color:#ccc"' : '').'>';
 		echo '<td>'.Users::link($row['userId'], $row['userName']).'</td>';
 		if ($email) {
 			echo '<td>'.loadUserdataEmail($row['userId']).'</td>';
@@ -113,8 +120,11 @@ if (isset($list)) {
 		}
 
 		echo '<td>';
-		if (!isset($_GET['blocked']) && $session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) echo '<a href="?del='.$row['userId'].getProjectPath().'">del</a>';
-		else if (isset($_GET['blocked']) && $session->isSuperAdmin) echo '<a href="?del_block='.$row['userId'].getProjectPath().'">del</a>';
+		if (!isset($_GET['blocked']) && $session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) {
+			coreButton('Delete', '?del='.$row['userId'].getProjectPath() );
+		} else if (isset($_GET['blocked']) && $session->isSuperAdmin) {
+			coreButton('Delete', '?del_block='.$row['userId'].getProjectPath() );
+		}
 		else echo '&nbsp;';
 		echo '</td>';
 		echo '</tr>';
