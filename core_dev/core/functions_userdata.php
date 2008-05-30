@@ -711,11 +711,15 @@ function findUserByEmail($email)
  *
  * \return nothing
  */
-function editUserdataSettings()
+function editUserdataSettings($_userid = '')
 {
 	global $config, $session, $files;
+	
+	if (empty($_userid)) {
+		$_userid = $session->id;
+	}
 
-	$list = readAllUserdata($session->id);
+	$list = readAllUserdata($_userid);
 	if (!$list) return;
 
 	echo '<div class="settings">';
@@ -728,7 +732,7 @@ function editUserdataSettings()
 					if (!empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {
 						$files->deleteFile($row['settingValue']);
 						$row['settingValue'] = 0;
-					} else if (isset($_FILES['userdata_'.$row['fieldId']])) {
+					} else if (isset($_FILES['userdata_'.$row['fieldId']])) { // FIXME: Gör så att handleUpload klarar av att ta userId som parameter
 						$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
 					}
 					break;
@@ -738,7 +742,7 @@ function editUserdataSettings()
 						echo '<div class="critical">'.t('The email entered is not valid!').'</div>';
 					} else {
 						$chk = findUserByEmail($_POST['userdata_'.$row['fieldId']]);
-						if ($chk && $chk != $session->id) {
+						if ($chk && $chk != $_userid) {
 							echo '<div class="critical">'.t('The email entered already taken!').'</div>';
 						} else {
 							$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
@@ -781,8 +785,8 @@ function editUserdataSettings()
 						echo '<div class="critical">'.t('The Swedish zipcode you entered is not valid!').'</div>';
 						$session->log('User entered invalid swedish zipcode: '.$_POST['userdata_'.$row['fieldId']], LOGLEVEL_WARNING);
 					} else {
-						saveSetting(SETTING_USERDATA, $session->id, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
-						saveSetting(SETTING_USERDATA, $session->id, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
+						saveSetting(SETTING_USERDATA, $_userid, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
+						saveSetting(SETTING_USERDATA, $_userid, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
 						$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 					}
 					break;
@@ -797,7 +801,7 @@ function editUserdataSettings()
 			}
 
 			//Stores the setting
-			saveSetting(SETTING_USERDATA, $session->id, $row['fieldId'], $row['settingValue']);
+			saveSetting(SETTING_USERDATA, $_userid, $row['fieldId'], $row['settingValue']);
 		}
 
 		echo '<tr>'.getUserdataInput($row).'</tr>';

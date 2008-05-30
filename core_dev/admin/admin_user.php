@@ -29,6 +29,8 @@ if ($session->isSuperAdmin) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;delete">Delete user</a><br/><br/>';
 }
 
+editUserdataSettings($userId);
+
 showComments(COMMENT_USER, $userId);
 
 require($project.'design_foot.php');

@@ -13,6 +13,9 @@ echo createMenu($admin_menu, 'blog_menu');
 if ($session->isSuperAdmin && !empty($_GET['del'])) {
 	Users::removeUser($_GET['del']);
 }
+if ($session->isSuperAdmin && !empty($_GET['del_block'])) {
+	removeBlock(BLOCK_USERID, $_GET['del_block']);
+}
 
 echo '<h1>User lists</h1>';
 
