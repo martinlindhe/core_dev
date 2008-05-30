@@ -31,6 +31,8 @@ $comment_constants[COMMENT_SCRIBBLE]			= 'Scribble';
 $comment_constants[COMMENT_ADMIN_IP]			= 'Admin IP';
 $comment_constants[COMMENT_MODERATION]			= 'Moderation';
 $comment_constants[COMMENT_USER]				= 'User';
+$comment_constants[COMMENT_CUSTOMER]			= 'Customer';
+
 
 /**
  * Add a comment

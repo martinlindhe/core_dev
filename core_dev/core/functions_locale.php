@@ -134,6 +134,7 @@ function t_se($s)
 		case 'UNREAD': return 'Oläst';
 		case 'READ': return 'Läst';
 		case 'Return to message overview': return 'Återgå till meddelande-översikten';
+		case 'Send': return 'Skicka';
 
 		//Polls
 		case 'Active poll': return 'Aktuell omröstning';

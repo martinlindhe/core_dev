@@ -4,6 +4,7 @@
  */
 
 require_once('find_config.php');
+
 $session->requireSuperAdmin();
 
 require($project.'design_head.php');
@@ -23,12 +24,16 @@ echo '<h1>Content search</h1>';
 
 echo '<form action="?" method="get">';
 echo '<input type="hidden" name="search">';
-echo '<input type="text" name="searchtext" value="'.$searchtext.'"> Text';
-echo '<br/><br/><input type="radio" name="searchtype" value="guestbook"> Guestbook ';
-echo '<input type="radio" name="searchtype" value="mail"> Mail ';
-echo '<input type="radio" name="searchtype" value="comment"> Comment';
+echo 'Text: '.xhtmlInput('searchtext', $searchtext).'<br/><br/>';
 
-echo '<br/><br/><input type="submit" value="Search">';
+$types = array(
+	'guestbook' => 'Guestbook',
+	'mail' => 'Mail',
+	'comment' => 'Comment'
+);
+echo xhtmlRadioArray('searchtype', $types, 'guestbook');
+echo '<br/><br/>';
+echo xhtmlSubmit('Search');
 echo '</form>';
 
 if (isset($_GET['search']) && isset($_GET['searchtext']) && isset($_GET['searchtype'])) {
@@ -36,11 +41,11 @@ if (isset($_GET['search']) && isset($_GET['searchtext']) && isset($_GET['searcht
 		$tot_cnt = getGuestbookFreeTextSearchCount($searchtext);
 		$pager = makePager($tot_cnt, 50);
 
-		$results = getGuestbookFreeTextSearch($searchtext,$pager['limit']);
+		$results = getGuestbookFreeTextSearch($searchtext, $pager['limit']);
 		echo $pager['head'];
 
 		echo '<table width="100%">';
-				echo '<tr><td>Time</td><td>Author</td><td>Text</td><td>Reciever</td></tr>';
+			echo '<tr><td>Time</td><td>Author</td><td>Text</td><td>Reciever</td></tr>';
 			foreach ($results as $row) {
 				echo '<tr><td>'.$row['timeCreated'].'</td>';
 				echo '<td>'.$row['authorName'].'</td>';
@@ -56,7 +61,7 @@ if (isset($_GET['search']) && isset($_GET['searchtext']) && isset($_GET['searcht
 		echo $pager['head'];
 
 		echo '<table width="100%">';
-				echo '<tr><td>Time</td><td>Author</td><td>Subject</td><td>Text</td><td>Reciever</td></tr>';
+			echo '<tr><td>Time</td><td>Author</td><td>Subject</td><td>Text</td><td>Reciever</td></tr>';
 			foreach ($results as $row) {
 				echo '<tr><td>'.$row['timeCreated'].'</td>';
 				echo '<td>'.$row['authorName'].'</td>';
@@ -73,12 +78,12 @@ if (isset($_GET['search']) && isset($_GET['searchtext']) && isset($_GET['searcht
 		echo $pager['head'];
 
 		echo '<table width="100%">';
-				echo '<tr><td>Time</td><td>Author</td><td>Comment</td><td>Type</td></tr>';
+			echo '<tr><td>Time</td><td>Author</td><td>Comment</td><td>Type</td></tr>';
 			foreach ($results as $row) {
 				echo '<tr><td>'.$row['timeCreated'].'</td>';
 				echo '<td>'.$row['authorName'].'</td>';
 				echo '<td>'.$row['commentText'].'</td>';
-				echo '<td>'.$comment_constants[$row['commentType'] ].'</td></tr>';
+				echo '<td>'.$comment_constants[ $row['commentType'] ].'</td></tr>';
 			}
 		echo '</table>';
 	}

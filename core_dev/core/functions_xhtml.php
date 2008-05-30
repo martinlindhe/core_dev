@@ -225,7 +225,8 @@ function xhtmlRadioArray($_name, $_arr, $_default = '')
 {
 	$out = '';
 	foreach ($_arr as $id => $title) {
-		$out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.($_default == $id ? ' checked' : '').'/>';
+		$out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.
+			($_default == $id ? ' checked' : '').'/>';
 		$out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
 	}
 	return $out;
@@ -242,6 +243,12 @@ function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0)
 		($_size ? ' size="'.$_size.'"': '').
 		($_maxlen ? ' maxlength="'.$_maxlen.'"': '').
 		'/>';
+}
+
+function xhtmlTextarea($_name, $_width, $_height)
+{
+	if (!is_numeric($_width) || !is_numeric($_height)) return false;
+	return '<textarea name="'.$_name.'" cols="'.$_width.'" rows="'.$_height.'"></textarea>';
 }
 
 /**

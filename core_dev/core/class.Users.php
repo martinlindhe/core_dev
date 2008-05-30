@@ -467,49 +467,6 @@ class Users
 	}
 
 	/**
-	 * Contact users gadget
-	 */
-	function contact()
-	{
-		global $session;
-
-		echo'<form name="contact" method="post" action="'.$_SERVER['PHP_SELF'].'?send">';
-
-		echo 'How: <input type="radio" name="how" value="mail"> E-mail | ';
-		echo '<input type="radio" name="how" value="sms"> SMS';
-		echo '<br/><input type="checkbox" name="all" value="1"> Alla';
-
-		$list = getUserdataFields();
-		echo '<table>';
-		foreach ($list as $row) {
-			if ($row['private'] && !$session->isAdmin) continue;
-
-			echo '<tr'.($row['private']?' class="critical"':'').'>';
-			echo getUserdataSearch($row);
-			echo '</tr>';
-			if ($row['private']) {
-				echo '<tr><td colspan="2">';
-				echo '<div class="critical"> * '.t('This field can only be used in searches by admins').'</div>';
-				echo '</td></tr>';
-			}
-		}
-		echo '</table>';
-
-		echo '<br/>To use this part you have to choose at least one option above. If you want to find ';
-		echo 'all users with a video presentation, enter 07 in "Mobile" field above.';
-		echo '<br/><br/>Video presentation: <input type="radio" name="presvid" value="1"> Yes | ';
-		echo '<input type="radio" name="presvid" value="0"> No';
-		echo '<br/><input type="radio" name="logged_in_days" value="0"> Not logged in for x days | ';
-		echo '<input type="radio" name="logged_in_days" value="1"> Logged in latest x days';
-		echo '<br/><input type="text" name="days"> x days';
-		echo '<br/><input type="text" name="subject"> Subject';
-		echo '<br/><br/>Message<br/><textarea name="message" cols="50" rows="10"></textarea>';
-
-		echo '<br/><input type="submit" class="button" value="Contact"/>';
-		echo '</form>';
-	}
-
-	/**
 	 * Search users gadget
 	 */
 	function search()
