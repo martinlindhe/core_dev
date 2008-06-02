@@ -11,8 +11,9 @@ if (!file_exists('config.php')) {
 	die();
 }*/
 
-$project = '/home/ml/dev/pc/';
+$project = '/home/ljw/svn/cs/www.phonecafe.se/';
 require_once($project.'config.php');
+
 
 $admin_menu = array(
 	$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin::',

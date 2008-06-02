@@ -13,6 +13,10 @@ if ($session->isSuperAdmin && isset($_GET['delete'])) {
 	Users::removeUser($userId);
 }
 
+if ($session->isSuperAdmin && isset($_GET['block'])) {
+	addBlock(BLOCK_USERID, $userId);
+}
+
 require($project.'design_head.php');
 
 echo createMenu($admin_menu, 'blog_menu');
@@ -27,6 +31,7 @@ echo '<h1>User admin for '.Users::getName($userId).'</h1>';
 
 if ($session->isSuperAdmin) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;delete">Delete user</a><br/><br/>';
+	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;block">Block user</a><br/><br/>';
 }
 
 echo '<h2>Userdata</h2>';
