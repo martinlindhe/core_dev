@@ -17,6 +17,8 @@ if ($session->isSuperAdmin && !empty($_GET['del_block'])) {
 	removeBlock(BLOCK_USERID, $_GET['del_block']);
 }
 
+$pager['head'] = '';
+
 echo '<h1>User lists</h1>';
 
 echo '<a href="?notactivated">Not activated</a> | ';
@@ -28,30 +30,65 @@ echo '<a href="?online">Users online</a>';
 if (isset($_GET['notactivated'])) {
 	echo '<h1>Not activated users</h1>';
 		
+	$q = 'SELECT count(t1.userId) FROM tblUsers AS t1';
+	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
+	$q .= ' WHERE t1.timeCreated IS NOT NULL AND (t2.settingValue != "1" OR t2.settingValue IS NULL) ORDER BY t1.timeLastActive DESC';
+	$cnt = $db->getOneItem($q);
+
+	$pager = makePager($cnt, 20);
+
 	$q = 'SELECT t1.* FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
 	$q .= ' WHERE t1.timeCreated IS NOT NULL AND (t2.settingValue != "1" OR t2.settingValue IS NULL) ORDER BY t1.timeLastActive DESC';
+	$q .= $pager['limit'];
 	$list = $db->getArray($q);
+
 } else if (isset($_GET['activated'])) {
 	echo '<h1>Activated users</h1>';
+
+	$q = 'SELECT count(t1.userId) FROM tblUsers AS t1';
+	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
+	$q .= ' WHERE t2.settingValue = "1" ORDER BY t1.timeLastActive DESC';
+	$cnt = $db->getOneItem($q);
+
+	$pager = makePager($cnt, 20);
 
 	$q = 'SELECT t1.* FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
 	$q .= ' WHERE t2.settingValue = "1" ORDER BY t1.timeLastActive DESC';
+	$q .= $pager['limit'];
 	$list = $db->getArray($q);
 
 } else if (isset($_GET['removed'])) {
 	echo '<h1>Removed users</h1>';
 
-	$q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NOT NULL ORDER BY t1.timeLastActive DESC';
+	$q = 'SELECT count(userId) FROM tblUsers WHERE timeDeleted IS NOT NULL ORDER BY timeLastActive DESC';
+	$cnt = $db->getOneItem($q);
+
+	$pager = makePager($cnt, 20);
+
+ 	$q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NOT NULL ORDER BY timeLastActive DESC';
+	$q .= $pager['limit'];
 	$list = $db->getArray($q);
+
 } else if (isset($_GET['online'])) {
 	echo '<h1>Users online</h1>';
 	echo 'Was active in the last '.shortTimePeriod($session->online_timeout).'<br/><br/>';
-	$list = Users::allOnline();
+
+	$cnt = Users::onlineCnt();
+
+	$pager = makePager($cnt, 20);
+
+	$list = Users::allOnline($pager['limit']);
+
 } else if (isset($_GET['blocked'])) {
 	echo '<h1>Users blocked by admin by userid</h1>';
-	$list = getBlocks(BLOCK_USERID);
+
+	$cnt = getBlocksCount(BLOCK_USERID);
+
+	$pager = makePager($cnt, 20);
+
+	$list = getBlocks(BLOCK_USERID, $pager['limit']);
 	$list2 = array();
 	foreach($list as $row) {
 		$temp = array(
@@ -65,6 +102,8 @@ if (isset($_GET['notactivated'])) {
 	}
 	$list = $list2;
 }
+
+echo $pager['head'];
 
 if (isset($list)) {
 	echo '<table>';
@@ -131,6 +170,8 @@ if (isset($list)) {
 	}
 	echo '</table>';
 }
+
+echo $pager['head'];
 
 require($project.'design_foot.php');
 ?>

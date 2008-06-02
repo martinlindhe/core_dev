@@ -227,12 +227,15 @@ class Users
 	/**
 	 * Returns array of all users online
 	 */
-	function allOnline()
+	function allOnline($_limit = '')
 	{
 		global $db, $session;
 
 		$q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
 		$q .= ' ORDER BY timeLastActive DESC';
+		if (!empty($_limit)) {
+			$q .= $_limit;
+		}
 		return $db->getArray($q);
 	}
 

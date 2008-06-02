@@ -65,15 +65,31 @@ function addBlock($_type, $rule)
  * Returns an array of all blocks of specified type
  *
  * \param $_type type of block rule
- * \param $rule the actual rule
  */
-function getBlocks($_type)
+function getBlocks($_type, $_limit = '')
 {
 	global $db;
 	if (!is_numeric($_type)) return false;
 
 	$q = 'SELECT * FROM tblBlocks WHERE type='.$_type;
+	if (!empty($limit)) {
+		$q .= $_limit;
+	}
 	return $db->getArray($q);
+}
+
+/**
+ * Returns count of all blocks of specified type
+ *
+ * \param $_type type of block rule
+ */
+function getBlocksCount($_type)
+{
+	global $db;
+	if (!is_numeric($_type)) return false;
+
+	$q = 'SELECT count(ruleId) FROM tblBlocks WHERE type='.$_type;
+	return $db->getOneItem($q);
 }
 
 /**
