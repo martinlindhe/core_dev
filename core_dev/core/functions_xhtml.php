@@ -245,6 +245,19 @@ function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0)
 		'/>';
 }
 
+/**
+ * Helper to create a password input field
+ */
+function xhtmlInputPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)
+{
+	if (!is_numeric($_size) || !is_numeric($_maxlen)) return false;
+	return '<input type="password" name="'.$_name.'"'.
+		($_value ? ' value="'.$_value.'"' : '').
+		($_size ? ' size="'.$_size.'"': '').
+		($_maxlen ? ' maxlength="'.$_maxlen.'"': '').
+		'/>';
+}
+
 function xhtmlTextarea($_name, $_value = '', $_width = 0, $_height = 0)
 {
 	if (!is_numeric($_width) || !is_numeric($_height)) return false;
