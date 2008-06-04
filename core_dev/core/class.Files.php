@@ -821,8 +821,7 @@ class Files
 		}
 		if ($height < 10 || $height > 1500) $height = 0;
 
-		//if ($width && ($width < $img_width || $height < $img_height) ) {
-		if ($width == $img_width || $height == $img_height) {
+		if (!$width || !$height || $width == $img_width || $height == $img_height) {
 			$out_filename = $filename;
 		} else {
 			//Look for cached thumbnail
