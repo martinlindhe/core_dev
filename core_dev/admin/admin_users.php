@@ -27,19 +27,28 @@ echo '<a href="?blocked">Blocked</a>  | ';
 echo '<a href="?removed">Removed</a> | ';
 echo '<a href="?online">Users online</a>';
 
+$order = '';
+
+if (isset($_GET['order'])) {
+	$order = ' ORDER BY '.$_GET['order'];
+} else {
+	$order = ' ORDER BY ';
+}
+
+
 if (isset($_GET['notactivated'])) {
 	echo '<h1>Not activated users</h1>';
 		
 	$q = 'SELECT count(t1.userId) FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
-	$q .= ' WHERE t1.timeCreated IS NOT NULL AND (t2.settingValue != "1" OR t2.settingValue IS NULL) ORDER BY t1.timeLastActive DESC';
+	$q .= ' WHERE t1.timeCreated IS NOT NULL AND t1.timeDeleted IS NULL AND (t2.settingValue != "1" OR t2.settingValue IS NULL) ORDER BY t1.timeLastActive DESC';
 	$cnt = $db->getOneItem($q);
 
 	$pager = makePager($cnt, 20);
 
 	$q = 'SELECT t1.* FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
-	$q .= ' WHERE t1.timeCreated IS NOT NULL AND (t2.settingValue != "1" OR t2.settingValue IS NULL) ORDER BY t1.timeLastActive DESC';
+	$q .= ' WHERE t1.timeCreated IS NOT NULL AND t1.timeDeleted IS NULL AND (t2.settingValue != "1" OR t2.settingValue IS NULL) ORDER BY t1.timeLastActive DESC';
 	$q .= $pager['limit'];
 	$list = $db->getArray($q);
 
@@ -48,26 +57,26 @@ if (isset($_GET['notactivated'])) {
 
 	$q = 'SELECT count(t1.userId) FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
-	$q .= ' WHERE t2.settingValue = "1" ORDER BY t1.timeLastActive DESC';
+	$q .= ' WHERE t1.timeDeleted IS NULL AND t2.settingValue = "1" ORDER BY t1.timeLastActive DESC';
 	$cnt = $db->getOneItem($q);
 
 	$pager = makePager($cnt, 20);
 
 	$q = 'SELECT t1.* FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
-	$q .= ' WHERE t2.settingValue = "1" ORDER BY t1.timeLastActive DESC';
+	$q .= ' WHERE t1.timeDeleted IS NULL AND t2.settingValue = "1" ORDER BY t1.timeLastActive DESC';
 	$q .= $pager['limit'];
 	$list = $db->getArray($q);
 
 } else if (isset($_GET['removed'])) {
 	echo '<h1>Removed users</h1>';
 
-	$q = 'SELECT count(userId) FROM tblUsers WHERE timeDeleted IS NOT NULL ORDER BY timeLastActive DESC';
+	$q = 'SELECT count(userId) FROM tblUsers AS t1 WHERE timeDeleted IS NOT NULL ORDER BY timeLastActive DESC';
 	$cnt = $db->getOneItem($q);
 
 	$pager = makePager($cnt, 20);
 
- 	$q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NOT NULL ORDER BY timeLastActive DESC';
+ 	$q = 'SELECT * FROM tblUsers AS t1 WHERE timeDeleted IS NOT NULL ORDER BY timeLastActive DESC';
 	$q .= $pager['limit'];
 	$list = $db->getArray($q);
 
@@ -133,6 +142,9 @@ if (isset($list)) {
 	if (isset($_GET['activated'])) {
 		echo '<th>Activation Date</th>';
 	}
+	if (isset($_GET['removed'])) {
+		echo '<th>Time Deleted</th>';
+	}
 	echo '<th>&nbsp;</th>';
 	echo '</tr>';
 	$i = 0;
@@ -156,6 +168,9 @@ if (isset($list)) {
 		}
 		if (isset($_GET['activated'])) {
 			echo '<td>'.(getActivationDate(ACTIVATE_EMAIL,$row['userId'])?getActivationDate(ACTIVATE_EMAIL,$row['userId']):getActivationDate(ACTIVATE_SMS,$row['userId'])).'</td>';
+		}
+		if (isset($_GET['removed'])) {
+			echo '<td>'.$row['timeDeleted'].'</td>';
 		}
 
 		echo '<td>';
