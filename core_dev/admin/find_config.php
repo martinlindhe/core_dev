@@ -11,7 +11,8 @@ if (!file_exists('config.php')) {
 	die();
 }*/
 
-$project = '/home/ljw/svn/cs/www.phonecafe.se/';
+//$project = '/home/ljw/svn/cs/www.phonecafe.se/';
+$project = '/var/www/www.phonecafe.se/';
 require_once($project.'config.php');
 
 
