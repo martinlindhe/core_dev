@@ -29,8 +29,11 @@ if (!empty($_GET['y']) && !empty($_GET['m'])) {
 	echo 'To '.formatTime($edate).'<br/>';
 	echo '<br/>';
 
-	echo 'Total logins: '. getLoginCnt($sdate, $edate, false).'<br/>';
-	echo 'Unique logins: '. getLoginCnt($sdate, $edate, true).'<br/>';
+	$logins_tot = getLoginCnt($sdate, $edate, false);
+	$logins_uniq = getLoginCnt($sdate, $edate, true);
+	echo 'Total logins: '.$logins_tot.'<br/>';
+	echo 'Unique logins: '.$logins_uniq.'<br/>';
+	echo 'Average: '.round($logins_tot / $logins_uniq, 2).' logins per user<br/>';
 
 } else {
 	//list overview of all months from oldest entry in db until today
