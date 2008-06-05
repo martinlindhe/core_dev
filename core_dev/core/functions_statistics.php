@@ -45,8 +45,8 @@ function generateStatsMonth($year, $month)
 			//Count logins
 			$time_start = mktime($h, 0, 0, $month, $day, $year);
 			$time_end   = mktime($h+1, 0, 0, $month, $day, $year);
-			$q = 'SELECT COUNT(*) FROM tblLogins WHERE timeCreated BETWEEN "'.sql_datetime($time_start).'" AND "'.sql_datetime($time_end).'"';
-			$logins = $db->getOneItem($q);
+
+			$logins = getLoginCnt($time_start, $time_end);
 
 			//Count registrations
 			$q = 'SELECT COUNT(*) FROM tblUsers WHERE timeCreated BETWEEN "'.sql_datetime($time_start).'" AND "'.sql_datetime($time_end).'"';
@@ -69,4 +69,19 @@ function getOldestLoginTime()
 	$q = 'SELECT timeCreated FROM tblLogins ORDER BY timeCreated ASC LIMIT 1';
 	return $db->getOneItem($q);
 }
+
+function getLoginCnt($time_start, $time_end, $distinct = false)
+{
+	global $db;
+	if (!is_numeric($time_start) || !is_numeric($time_end)) return false;
+
+	if ($distinct) {
+		$q = 'SELECT COUNT(DISTINCT(userId)) FROM tblLogins';
+	} else {
+		$q = 'SELECT COUNT(userId) FROM tblLogins';
+	}
+	$q .= ' WHERE timeCreated BETWEEN "'.sql_datetime($time_start).'" AND "'.sql_datetime($time_end).'"';
+	return $db->getOneItem($q);
+}
+
 ?>

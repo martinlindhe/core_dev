@@ -9,14 +9,17 @@
  */
 
 /**
- * Default time format display, YYYY-MM-DD HH:MM:SS
+ * Default time format display, handles unix times or SQL DATETIME input formats
  */
 function formatTime($ts)
 {
 	if (function_exists('formatTimeOverride')) {
 		return formatTimeOverride($ts);
 	}
-	return $ts;
+	if (is_numeric($ts)) return date('Y-m-d H:i', $ts);
+
+	$time = strtotime($ts);
+	return date('Y-m-d H:i', $time);	//YYYY-MM-DD HH:MM
 }
 
 ?>

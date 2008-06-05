@@ -70,6 +70,7 @@ function t_se($s)
 		case 'Update': return 'Uppdatera';
 		case 'Test': return 'Testa';
 		case 'Activate': return 'Aktivera';
+		case 'Show': return 'Visa';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
@@ -323,7 +324,11 @@ function t_se($s)
 		case 'Because we don\'t store the password in clear text it cannot be retrieved.': return 'Eftersom vi inter sparar ditt lösenord i ren text kan det inte återställas.';
 		case 'You will therefore need to set a new password for your account.': return 'Därför måste du ange ett nytt lösenord till ditt konto.';
 		case 'Set password': return 'Sätt lösenord';
-		
+
+		//Statistics
+		case 'Statistics': return 'Statistik';
+		case 'Custom report': return 'Anpassad rapport';
+
 		default: return '__('.$s.')__';
 	}
 }
