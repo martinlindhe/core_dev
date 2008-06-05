@@ -52,5 +52,9 @@ echo '</table>';
 echo '<h2>Comments</h2>';
 showComments(COMMENT_USER, $userId);
 
+echo '<h2>userdata settings</h2>';
+$list = readAllSettings(SETTING_USERDATA, $userId);
+d($list);
+
 require($project.'design_foot.php');
 ?>
