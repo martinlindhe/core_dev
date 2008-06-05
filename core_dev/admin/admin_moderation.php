@@ -182,8 +182,8 @@ if (count($list)) {
 			case MODERATION_BLOG:		$title = 'Blog'; break;
 			case MODERATION_FORUM:		$title = 'Forum'; break;
 			case MODERATION_USER:		$title = 'Reported user: '.Users::link($row['itemId']); break;
-			case MODERATION_FILE:		$title = 'Reported file '.showFile($row['itemId'], '', '', false); break;
-			case MODERATION_PRES_IMAGE:	$title = 'Uploaded presentation image '.showFile($row['itemId'], '', '', false); break;
+			case MODERATION_FILE:		$title = 'Reported file '; break;
+			case MODERATION_PRES_IMAGE:	$title = 'Uploaded presentation image'; break;
 
 			default: $title = '<div class="critical">Unknown queueType '.$row['queueType'].', itemId '.$row['itemId'].'</div>';
 		}
@@ -207,6 +207,16 @@ if (count($list)) {
 				$item = getForumItem($row['itemId']);
 				showForumPost($item);
 				echo '<a href="'.$project.'forum.php?id='.$item['parentId'].'#post='.$item['itemId'].getProjectPath().'" target="_blank">Read the topic</a>';
+				break;
+			case MODERATION_FILE:
+				echo '<a href="/core_dev/api/file.php?id='.$row['itemId'].'">';
+				showFile($row['itemId'], '', '', false);
+				echo '</a>';
+				break;
+			case MODERATION_PRES_IMAGE:
+				echo '<a href="/core_dev/api/file.php?id='.$row['itemId'].'">';
+				showFile($row['itemId'], '', '', false);
+				echo '</a>';
 				break;
 		}
 
