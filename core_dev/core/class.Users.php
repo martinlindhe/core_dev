@@ -633,6 +633,7 @@ class Users
 							}
 							break;
 
+						case USERDATA_TYPE_BIRTHDATE:
 						case USERDATA_TYPE_BIRTHDATE_SWE:
 							if (empty($data['userdata_'.$row['fieldId']])) break;
 							$rng = explode('_', $data['userdata_'.$row['fieldId']]);
