@@ -383,6 +383,7 @@ function getUserdataSearch($row)
 			$result .= '<td><div id="ajax_cities"></div></td>';
 			break;
 
+		case USERDATA_TYPE_BIRTHDATE:
 		case USERDATA_TYPE_BIRTHDATE_SWE:
 			$result = '<td>'.t('Age').':</td>';
 			$result .= '<td><select name="userdata_'.$row['fieldId'].'">';
