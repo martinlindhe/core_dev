@@ -578,7 +578,7 @@ function generateVideoThumbs($fileId)
  *
  * XXX: Requires zend framework installed and php.ini paths configured!!!
  */
-function youtubeUpload($username, $password, $devkey, $filename, $filetype, $movie_title, $movie_desc, $keywords, $category_name)
+function youtubeUpload($username, $password, $devkey, $filename, $filetype, $movie_title, $movie_desc, $keywords, $category_name, $coords = '')
 {
 	require_once('Zend/Loader.php'); // the Zend dir must be in your include_path
 	Zend_Loader::loadClass('Zend_Gdata_YouTube');
@@ -628,14 +628,15 @@ function youtubeUpload($username, $password, $devkey, $filename, $filetype, $mov
 	$mediaGroup->keywords = $yt->newMediaKeywords()->setText($keywords);
 	$myVideoEntry->mediaGroup = $mediaGroup;
 
-	// set video location
-	$yt->registerPackage('Zend_Gdata_Geo');
-	$yt->registerPackage('Zend_Gdata_Geo_Extension');
-	$where = $yt->newGeoRssWhere();
-	$position = $yt->newGmlPos('59.21 18.04');	//Stockholm
-	$where->point = $yt->newGmlPoint($position);
-	$myVideoEntry->setWhere($where);
-
+	if ($coords) {
+		// set video location
+		$yt->registerPackage('Zend_Gdata_Geo');
+		$yt->registerPackage('Zend_Gdata_Geo_Extension');
+		$where = $yt->newGeoRssWhere();
+		$position = $yt->newGmlPos($coords);
+		$where->point = $yt->newGmlPoint($position);
+		$myVideoEntry->setWhere($where);
+	}
 
 	// upload URL for the currently authenticated user
 	$uploadUrl = 'http://uploads.gdata.youtube.com/feeds/users/default/uploads';
