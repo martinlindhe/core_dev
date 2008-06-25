@@ -578,7 +578,7 @@ function generateVideoThumbs($fileId)
  *
  * XXX: Requires zend framework installed and php.ini paths configured!!!
  */
-function youtubeUpload($username, $password, $devkey, $filename, $filetype, $movie_title, $movie_desc)
+function youtubeUpload($username, $password, $devkey, $filename, $filetype, $movie_title, $movie_desc, $keywords, $category_name)
 {
 	require_once('Zend/Loader.php'); // the Zend dir must be in your include_path
 	Zend_Loader::loadClass('Zend_Gdata_YouTube');
@@ -619,14 +619,13 @@ function youtubeUpload($username, $password, $devkey, $filename, $filetype, $mov
 	// the category must be a valid YouTube category
 	// optionally set some developer tags (see Searching by Developer Tags for more details)
 	$mediaGroup->category = array(
-		//FIXME: category "Videoblog" leder till error vid upload...
-		$yt->newMediaCategory()->setText('People')->setScheme('http://gdata.youtube.com/schemas/2007/categories.cat')
+		$yt->newMediaCategory()->setText($category_name)->setScheme('http://gdata.youtube.com/schemas/2007/categories.cat')
 		//$yt->newMediaCategory()->setText('mydevelopertag')->setScheme('http://gdata.youtube.com/schemas/2007/developertags.cat'),
 		//$yt->newMediaCategory()->setText('anotherdevelopertag')->setScheme('http://gdata.youtube.com/schemas/2007/developertags.cat')
 	);
 
 	// set keywords, please note that they cannot contain white-space
-	$mediaGroup->keywords = $yt->newMediaKeywords()->setText('videoblogg, mobilblogg, mobil, blogg, sverige, nyheter');
+	$mediaGroup->keywords = $yt->newMediaKeywords()->setText($keywords);
 	$myVideoEntry->mediaGroup = $mediaGroup;
 
 	// set video location
