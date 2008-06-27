@@ -6,10 +6,10 @@ $config['debug'] = true;
 
 $config['core']['fs_root'] = '/home/martin/dev/core_dev/';
 $config['core']['web_root'] = '/core_dev/';
-$config['core']['full_url'] = 'http://process1.x'.$config['core']['web_root'];
+$config['core']['full_url'] = 'http://process.icn.se:2000'.$config['core']['web_root'];
 
 $config['app']['web_root'] = '/';
-$config['app']['full_url'] = 'http://process1.x'.$config['app']['web_root'];
+$config['app']['full_url'] = 'http://process.icn.se:2000'.$config['app']['web_root'];
 $config['default_title'] = 'process server project';					//default title for pages if no title is specified for that page
 
 $config['language'] = 'se';
@@ -25,11 +25,11 @@ require_once('functions_process.php');
 require_once('functions_customers.php');
 restore_include_path();
 
-//use same sample db
-$config['db']['username']	= 'root';
-$config['db']['password']	= '';
-$config['db']['database']	= 'dbSample';
-$config['db']['host']	= 'localhost';
+$config['db']['username']	= 'ml';
+$config['db']['password']	= 'nutana';
+$config['db']['database']	= 'dbProcess';
+$config['db']['host']	= 'process1.x';
+$config['db']['port']	= 44000;
 $db = new DB_MySQLi($config['db']);
 
 $config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days

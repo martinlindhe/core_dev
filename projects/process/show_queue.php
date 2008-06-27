@@ -7,7 +7,14 @@ require('design_head.php');
 
 wiki('ProcessShowQueue');
 
-$list = getProcessQueue(50, isset($_GET['completed']));
+if (isset($_GET['completed'])) {
+	$list = getProcessQueue(0, true);
+} else {
+	$list = getProcessQueue(50);
+}
+
+echo count($list) . ' items';
+
 if (!empty($list)) {
 	foreach ($list as $row) {
 		echo '<div class="item">';
@@ -41,7 +48,11 @@ if (!empty($list)) {
 
 			case PROCESS_CONVERT_TO_DEFAULT:
 				echo 'Convert media to default type for entry #'.$row['referId'].'<br/>';
-				if ($row['orderParams']) echo 'Callback URL: '.$row['orderParams'].'<br/>';
+				if ($row['orderParams']) {
+					$params = unserialize($row['orderParams']);
+					if (!empty($params['callback'])) echo 'Callback: <b>'.$params['callback'].'</b><br/>';
+					if (!empty($params['watermark'])) echo 'Watermark: <b>'.$params['watermark'].'</b><br/>';
+				}
 				break;
 
 			default:
