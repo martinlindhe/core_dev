@@ -414,6 +414,7 @@ function processQueue()
 
 					echo "Performing callback: ".$callback_uri. "\n\n";
 					echo "Client callback script returned:\n".$data;
+					storeCallbackData($job['entryId'], $data);
 
 					//delete files after callback processing
 					$files->deleteFile($prev_job['referId']);
@@ -646,6 +647,15 @@ function youtubeUpload($username, $password, $devkey, $filename, $filetype, $mov
 	} catch (Zend_Gdata_App_Exception $e) {
 		echo $e->getMessage()."\n";
 	}
+}
+
+function storeCallbackData($entryId, $data)
+{
+	global $db;
+	if (!is_numeric($entryId)) return false;
+
+	$q = 'UPDATE tblProcessQueue SET callback_log="'.$db->escape($data).'" WHERE entryId='.$entryId;
+	$db->update($q);
 }
 
 ?>
