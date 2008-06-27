@@ -149,10 +149,10 @@ function getProcessQueue($_limit = 10, $completed = false)
 	global $db;
 	if (!is_numeric($_limit) || !is_bool($completed)) return false;
 
-	if ($completed) $cnd = 'orderStatus='.ORDER_COMPLETED;
-	else $cnd = 'orderStatus='.ORDER_NEW;
+	if ($completed) $cnd = 'orderStatus != '.ORDER_NEW;
+	else $cnd = 'orderStatus = '.ORDER_NEW;
 
-	$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated ASC, entryId ASC';
+	$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated DESC';
 	if ($_limit) $q .= ' LIMIT '.$_limit;
 	return $db->getArray($q);
 }
@@ -254,7 +254,7 @@ function processQueue()
 	//FIXME: db locking problems
 	//$db->lock('tblProcessQueue');
 
-	//Only allows a few work orders being executed at once, so we can call this function very often
+	//Only allows a few work orders being executed at once, so we can do this very often
 	if (getProcessesQueueStatusCnt(ORDER_EXECUTING) > $config['process']['process_limit']) {
 		//$db->unlock();
 		echo "TOO MUCH ACTIVE WORK, ABORTING\n";
