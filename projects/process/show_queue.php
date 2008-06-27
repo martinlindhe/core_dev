@@ -5,8 +5,6 @@ $session->requireLoggedIn();
 
 require('design_head.php');
 
-wiki('ProcessShowQueue');
-
 if (isset($_GET['completed'])) {
 	$list = getProcessQueue(0, true);
 } else {
