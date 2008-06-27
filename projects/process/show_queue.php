@@ -53,6 +53,10 @@ if (!empty($list)) {
 					if (!empty($params['callback'])) echo 'Callback: <b>'.$params['callback'].'</b><br/>';
 					if (!empty($params['watermark'])) echo 'Watermark: <b>'.$params['watermark'].'</b><br/>';
 				}
+				if ($row['callback_log']) {
+					echo 'Callback script returned:<br/>';
+					echo '<b>'.$row['callback_log'].'</b>';
+				}
 				break;
 
 			default:
