@@ -67,7 +67,7 @@ echo '</tr>';
 foreach ($list as $user)
 {
 	echo '<tr'.($user['timeDeleted']?' class="critical"':'').'>';
-	echo '<td>'.Users::link($user['userId'], $user['userName']).'</td>';
+	echo '<td><a href="admin_user.php?id='.$user['userId'].'">'.$user['userName'].'</a></td>';
 	echo '<td>'.$user['timeLastActive'].'</td>';
 	echo '<td>'.$user['timeCreated'].'</td>';
 	echo '<td>';

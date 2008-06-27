@@ -587,14 +587,14 @@ function youtubeUpload($username, $password, $devkey, $filename, $filetype, $mov
 
 	$authenticationURL = 'https://www.google.com/youtube/accounts/ClientLogin';
 	$httpClient = Zend_Gdata_ClientLogin::getHttpClient(
-                                          $username,
-                                          $password,
-                                          $service = 'youtube',
-                                          $client = null,
-                                          $source = 'MartinTestar', // a short string identifying your application
-                                          $loginToken = null,
-                                          $loginCaptcha = null,
-                                          $authenticationURL);
+		$username,
+		$password,
+		$service = 'youtube',
+		$client = null,
+		$source = 'core_dev', // a short string identifying your application
+		$loginToken = null,
+		$loginCaptcha = null,
+		$authenticationURL);
 
 	$httpClient->setHeaders('X-GData-Key', "key=${devkey}");
 	$yt = new Zend_Gdata_YouTube($httpClient);

@@ -71,6 +71,7 @@ function t_se($s)
 		case 'Test': return 'Testa';
 		case 'Activate': return 'Aktivera';
 		case 'Show': return 'Visa';
+		case 'Change': return 'Ändra';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
