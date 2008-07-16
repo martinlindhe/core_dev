@@ -13,7 +13,11 @@ if (!file_exists('config.php')) {
 
 //$project = '/home/ljw/svn/cs/www.phonecafe.se/';
 //$project = '/var/www/www.phonecafe.se/';
+<<<<<<< .mine
+$project = '/home/ljw/svn/cs/www.phonecafe.se/';
+=======
 $project = '/home/ml/dev/sms/';
+>>>>>>> .r3803
 require_once($project.'config.php');
 
 

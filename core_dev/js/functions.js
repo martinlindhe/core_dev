@@ -67,6 +67,26 @@ function show_element_by_name(n)
 	e.style.display = '';
 }
 
+function set_visible_by_name(n)
+{
+	var e = document.getElementById(n);
+	if (!e) {
+		//alert('fixme: element ' + n + ' not found');
+		return;
+	}
+	e.style.visibility="visible";
+}
+
+function set_invisible_by_name(n)
+{
+	var e = document.getElementById(n);
+	if (!e) {
+		//alert('fixme: element ' + n + ' not found');
+		return;
+	}
+	e.style.visibility="hidden";
+}
+
 function add_div(e, idname, style)
 {
 	var c=document.createElement('div');

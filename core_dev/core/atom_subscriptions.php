@@ -18,21 +18,23 @@ require_once('functions_email.php');
 define('SUBSCRIPTION_FORUM',			1);
 define('SUBSCRIPTION_BLOG',				2);	//FIXME: implement
 define('SUBSCRIPTION_FILES',			3);	//FIXME: implement
+define('SUBSCRIPTION_USER_CHATREQ',		4);	//itemid = userid of user who requested chat
 
 /**
  * Creates a subscription of $type on itemId
  *
  * \param $type type of subscription
  * \param $itemId id of item to subscribe to
+ * \param $ownerId id of owner
  * \return id of created subscription
  */
-function addSubscription($type, $itemId)
+function addSubscription($type, $itemId, $ownerId = 0)
 {
 	global $db, $session;
-	if (!$session->id || !is_numeric($type) || !is_numeric($itemId)) return false;
+	if (!$session->id || !is_numeric($type) || !is_numeric($itemId)|| !is_numeric($ownerId)) return false;
 		
-	if (isSubscribed($type, $itemId)) return false;
-	$q = 'INSERT INTO tblSubscriptions SET ownerId='.$session->id.', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
+	if ($ownerId == 0 && isSubscribed($type, $itemId)) return false;
+	$q = 'INSERT INTO tblSubscriptions SET ownerId='.($ownerId==0?$session->id:$ownerId).', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
 	return $db->insert($q);
 }
 
