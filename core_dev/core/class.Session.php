@@ -41,21 +41,22 @@ class Session
 	private $error_page = 'error.php';		///< redirects the user to this page (in $config['app']['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
-	public $error;				///< last error message
-	public $ip;					///< IP of current user
-	public $user_agent;			///< current user's UserAgent string
-	public $ua_ie;				///< boolean true if the user is using internet explorer
-	public $id;					///< current user's user ID
-	public $username;			///< username of current user
-	public $mode;				///< usermode
-	public $lastActive;			///< last active
-	public $started;			///< timestamp of when the session started
-	public $theme = '';			///< contains the currently selected theme
-	public $referer = '';		///< redirects the user to this page after login
+	public $error;					///< last error message
+	public $ip;						///< IP of current user
+	public $user_agent;				///< current user's UserAgent string
+	public $ua_ie;					///< boolean true if the user is using internet explorer
+	public $id;						///< current user's user ID
+	public $username;				///< username of current user
+	public $mode;					///< usermode
+	public $lastActive;				///< last active
+	public $started;				///< timestamp of when the session started
+	public $theme = '';				///< contains the currently selected theme
+	public $referer = '';			///< redirects the user to this page after login
+	public $log_pageviews = false;	///< logs page views to tblPageViews
 
-	public $isWebmaster;		///< is user webmaster?
-	public $isAdmin;			///< is user admin?
-	public $isSuperAdmin;		///< is user superadmin?
+	public $isWebmaster;			///< is user webmaster?
+	public $isAdmin;				///< is user admin?
+	public $isSuperAdmin;			///< is user superadmin?
 
 	public $userModes = array(
 		0 => 'Normal user',
@@ -83,6 +84,7 @@ class Session
 		if (isset($conf['start_page'])) $this->start_page = $conf['start_page'];
 		if (isset($conf['error_page'])) $this->error_page = $conf['error_page'];
 		if (isset($conf['allow_themes'])) $this->allow_themes = $conf['allow_themes'];
+		if (isset($conf['log_pageviews'])) $this->log_pageviews = $conf['log_pageviews'];
 
 		ini_set('session.gc_maxlifetime', $this->timeout);
 		session_name($this->session_name);
@@ -129,7 +131,7 @@ class Session
 		$this->ua_ie = false;
 		if (strpos($this->user_agent, 'MSIE')) $this->ua_ie = true;	//FIXME this check will handle Opera as a IE browser
 
-		$this->logPageview();
+		if ($this->log_pageviews) $this->logPageview();
 
 		$this->handleSessionEvents();
 	}
