@@ -84,7 +84,6 @@ class Session
 		if (isset($conf['start_page'])) $this->start_page = $conf['start_page'];
 		if (isset($conf['error_page'])) $this->error_page = $conf['error_page'];
 		if (isset($conf['allow_themes'])) $this->allow_themes = $conf['allow_themes'];
-		if (isset($conf['log_pageviews'])) $this->log_pageviews = $conf['log_pageviews'];
 
 		ini_set('session.gc_maxlifetime', $this->timeout);
 		session_name($this->session_name);
@@ -131,35 +130,8 @@ class Session
 		$this->ua_ie = false;
 		if (strpos($this->user_agent, 'MSIE')) $this->ua_ie = true;	//FIXME this check will handle Opera as a IE browser
 
-		if ($this->log_pageviews) $this->logPageview();
-
 		$this->handleSessionEvents();
 	}
-
-	/**
-	 * logs pageview
-	 *
-	 * $_ip user ip
-	 * $_sess user session id
-	 * $_request requested url
-	 * $_referer referer url
-	 * $_ua user agent string
-	 */
-	function logPageview()
-	{
-		global $db;
-		
-		$_ip = $this->ip;
-		$_sess = session_id();
-		$_request = isset($_SERVER['REQUEST_URI'])?$db->escape($_SERVER['REQUEST_URI']):'';
-		$_referer = isset($_SERVER['HTTP_REFERER'])?$db->escape($_SERVER['HTTP_REFERER']):'';
-		$_ua = $db->escape($this->user_agent);
-
-		$q = 'INSERT INTO tblPageviews SET timeViewed=now(),IP='.$_ip.',sessID="'.$_sess.'",request="'.$_request.'",referer="'.$_referer.'",user_agent="'.$_ua.'"';
-		return $db->insert($q);
-
-	}
-
 
 	/**
 	 * Sets up a session. Called from the auth class
