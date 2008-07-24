@@ -339,19 +339,6 @@ CREATE TABLE `tblNews` (
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `tblPageviews` (
-  `timeViewed` datetime NOT NULL,
-  `IP` int(11) NOT NULL,
-  `sessID` char(32) NOT NULL,
-  `request` varchar(250) NOT NULL,
-  `referer` varchar(250) NOT NULL,
-  `user_agent` varchar(100) NOT NULL,
-  KEY `ind1` (`timeViewed`,`IP`),
-  KEY `ind2` (`timeViewed`,`sessID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
 CREATE TABLE `tblPhpFreeChat` (
   `server` varchar(32) NOT NULL default '',
   `group` varchar(64) NOT NULL default '',
