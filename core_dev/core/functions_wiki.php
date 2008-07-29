@@ -174,21 +174,23 @@ function wiki($wikiName = '')
 		if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' '.t('by').' '.$data['creatorName'];
 
 		echo '<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">';
-		
+
+		$wikiRandId = 'wiki_'.$data['wikiId'].'_'.rand(0, 9999999);
+
 		echo
-			'<input type="button" class="button" value="[h1]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h1]\',\'[/h1]\',\'headline level 1\')"/>'.
-			'<input type="button" class="button" value="[h2]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h2]\',\'[/h2]\',\'headline level 2\')"/>'.
-			'<input type="button" class="button" value="[h3]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[h3]\',\'[/h3]\',\'headline level 3\')"/>'.
-			'<input type="button" class="button" value="B" style="font-weight: bold" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[b]\',\'[/b]\',\'bold text\')"/>'.
-			'<input type="button" class="button" value="I" style="font-style: italic" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[i]\',\'[/i]\',\'italic text\')"/>'.
-			'<input type="button" class="button" value="U" style="text-decoration: underline" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[u]\',\'[/u]\',\'underlined text\')"/>'.
-			'<input type="button" class="button" value="S" style="text-decoration: line-through" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[s]\',\'[/s]\',\'strikethru text\')"/>'.
-			//'<input type="button" class="button" value="[hr] (broken)" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[hr]\')"/>'.
-			'<input type="button" class="button" value="[code]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[code]\',\'[/code]\',\'code block\')"/>'.
-			'<input type="button" class="button" value="[quote]" onclick="insertTags(\'wiki_'.$data['wikiId'].'\',\'[quote name=]\',\'[/quote]\',\'quote\')"/>'.
+			'<input type="button" class="button" value="[h1]" onclick="insertTags(\''.$wikiRandId.'\',\'[h1]\',\'[/h1]\',\'headline level 1\')"/>'.
+			'<input type="button" class="button" value="[h2]" onclick="insertTags(\''.$wikiRandId.'\',\'[h2]\',\'[/h2]\',\'headline level 2\')"/>'.
+			'<input type="button" class="button" value="[h3]" onclick="insertTags(\''.$wikiRandId.'\',\'[h3]\',\'[/h3]\',\'headline level 3\')"/>'.
+			'<input type="button" class="button" value="B" style="font-weight: bold" onclick="insertTags(\''.$wikiRandId.'\',\'[b]\',\'[/b]\',\'bold text\')"/>'.
+			'<input type="button" class="button" value="I" style="font-style: italic" onclick="insertTags(\''.$wikiRandId.'\',\'[i]\',\'[/i]\',\'italic text\')"/>'.
+			'<input type="button" class="button" value="U" style="text-decoration: underline" onclick="insertTags(\''.$wikiRandId.'\',\'[u]\',\'[/u]\',\'underlined text\')"/>'.
+			'<input type="button" class="button" value="S" style="text-decoration: line-through" onclick="insertTags(\''.$wikiRandId.'\',\'[s]\',\'[/s]\',\'strikethru text\')"/>'.
+			//'<input type="button" class="button" value="[hr] (broken)" onclick="insertTags(\''.$wikiRandId.'\',\'[hr]\')"/>'.
+			'<input type="button" class="button" value="[code]" onclick="insertTags(\''.$wikiRandId.'\',\'[code]\',\'[/code]\',\'code block\')"/>'.
+			'<input type="button" class="button" value="[quote]" onclick="insertTags(\''.$wikiRandId.'\',\'[quote name=]\',\'[/quote]\',\'quote\')"/>'.
 			'<br/>';
 
-		echo '<textarea name="wiki_'.$data['wikiId'].'" id="wiki_'.$data['wikiId'].'" cols="60" rows="'.$rows.'">'.$text.'</textarea><br/>';
+		echo '<textarea name="wiki_'.$data['wikiId'].'" id="'.$wikiRandId.'" cols="60" rows="'.$rows.'">'.$text.'</textarea><br/>';
 		echo 'Last edited '.$last_edited.'<br/>';
 		echo xhtmlSubmit('Save');
 
