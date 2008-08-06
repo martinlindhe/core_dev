@@ -34,7 +34,6 @@ function createXHTMLHeader()
 		echo '<link rel="stylesheet" type="text/css" href="'.$config['app']['web_root'].'css/site.css"/>';
 
 		if ($meta_css) {
-			die('xxx');
 			foreach ($meta_css as $css) {
 				echo '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
 			}

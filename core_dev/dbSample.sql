@@ -87,6 +87,17 @@ CREATE TABLE `tblCcPay` (
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
+CREATE TABLE `tblChat` (
+  `userId` int(11) NOT NULL,
+  `authorId` int(11) NOT NULL,
+  `msg` varchar(255) NOT NULL,
+  `msgDate` datetime NOT NULL,
+  `msgRead` tinyint(1) NOT NULL,
+  KEY `user_and_author_ids` (`authorId`,`userId`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
 CREATE TABLE `tblChecksums` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
   `fileId` int(11) unsigned default NULL,
