@@ -15,11 +15,12 @@
  * $title			- <title> of current page. set the default title with $config['session']['default_title']		FIXME rename
  * $meta_rss[]		- array of rss feeds to expose for current page
  * $meta_js[]		- array of javascript files that needs to be included for current page
- * $body_onload[] - array of js function(s) to call on load
+ * $meta_css[]		- array of css files that needs to be included for current page
+ * $body_onload[]	- array of js function(s) to call on load
  */
 function createXHTMLHeader()
 {
-	global $config, $session, $files, $title, $meta_rss, $meta_js, $meta_search, $body_onload;
+	global $config, $session, $files, $title, $meta_rss, $meta_js, $meta_css, $meta_search, $body_onload;
 
 	if (!$title && !empty($config['default_title'])) $title = $config['default_title'];
 
@@ -28,12 +29,20 @@ function createXHTMLHeader()
 	echo '<head>';
 		echo '<title>'.$title.'</title>';
 		echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
-		echo '<link rel="stylesheet" href="'.$config['core']['web_root'].'css/core.css" type="text/css"/>';
+
+		echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
+		echo '<link rel="stylesheet" type="text/css" href="'.$config['app']['web_root'].'css/site.css"/>';
+
+		if ($meta_css) {
+			die('xxx');
+			foreach ($meta_css as $css) {
+				echo '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
+			}
+		}
 
 		if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
 		else $theme_dir = $config['core']['web_root'].'css/themes/';
-		if (!empty($session)) echo '<link rel="stylesheet" href="'.$theme_dir.$session->theme.'" type="text/css"/>';
-		echo '<link rel="stylesheet" href="'.$config['app']['web_root'].'css/site.css" type="text/css"/>';
+		if (!empty($session)) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$session->theme.'"/>';
 
 		if ($meta_rss) {
 			foreach ($meta_rss as $feed) {
