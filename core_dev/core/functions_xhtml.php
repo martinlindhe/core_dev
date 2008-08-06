@@ -61,6 +61,7 @@ function createXHTMLHeader()
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/functions.js"></script>';
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/fileareas.js"></script>';
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/chat_1on1.js"></script>';
 
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';

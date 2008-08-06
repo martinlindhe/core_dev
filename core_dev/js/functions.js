@@ -98,6 +98,16 @@ function add_div(e, idname, style)
 	return c;
 }
 
+function add_span(e)
+{
+	var c=document.createElement('span');
+
+//	c.setAttribute('id', idname);
+//	c.className = style;
+	e.appendChild(c);
+
+	return c;
+}
 function empty_element_by_name(n)
 {
 	var e=document.getElementById(n);
@@ -331,7 +341,6 @@ function set_div_content(n, txt)
 	e.innerHTML = txt;
 	show_element_by_name(n);
 }
-
 
 
 
