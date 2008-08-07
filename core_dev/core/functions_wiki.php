@@ -170,7 +170,7 @@ function wiki($wikiName = '')
 		$rows = 6+substr_count($text, "\n");
 		if ($rows > 36) $rows = 36;
 
-		$last_edited = 'never';
+		$last_edited = t('never');
 		if (!empty($data['timeCreated'])) $last_edited = $data['timeCreated'].' '.t('by').' '.$data['creatorName'];
 
 		echo '<form method="post" name="wiki_edit" action="'.URLadd('WikiEdit:'.$wikiName).'">';
@@ -191,7 +191,7 @@ function wiki($wikiName = '')
 			'<br/>';
 
 		echo '<textarea name="wiki_'.$data['wikiId'].'" id="'.$wikiRandId.'" cols="60" rows="'.$rows.'">'.$text.'</textarea><br/>';
-		echo 'Last edited '.$last_edited.'<br/>';
+		echo t('Last edited').': '.$last_edited.'<br/>';
 		echo xhtmlSubmit('Save');
 
 		if ($session->isAdmin) {

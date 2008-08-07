@@ -75,9 +75,9 @@ function showFAQ()
 	}
 
 	$list = getFAQ();
-	if (!$list) return;
+	if (!$list && !$session->isAdmin) return;
 
-	if (!$active) $active = $list[0]['faqId'];
+	if (!$active && $list) $active = $list[0]['faqId'];
 
 	//FAQ full Q&A details
 	for ($i=0; $i<count($list); $i++) {

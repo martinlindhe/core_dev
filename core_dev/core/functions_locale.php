@@ -276,6 +276,8 @@ function t_se($s)
 		case 'by': return 'av';
 		case 'Add new FAQ': return 'Skapa en ny FAQ';
 		case 'Answer': return 'Svar';
+		case 'Last edited': return 'Senast redigerad';
+		case 'never': return 'aldrig';
 
 		//Change password
 		case 'Current password': return 'Nuvarande lösenord';

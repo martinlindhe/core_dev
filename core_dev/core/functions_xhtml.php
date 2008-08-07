@@ -27,55 +27,54 @@ function createXHTMLHeader()
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 	echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
 	echo '<head>';
-		echo '<title>'.$title.'</title>';
-		echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
+	echo '<title>'.$title.'</title>';
+	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 
-		echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
-		echo '<link rel="stylesheet" type="text/css" href="'.$config['app']['web_root'].'css/site.css"/>';
+	echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
 
-		if ($meta_css) {
-			foreach ($meta_css as $css) {
-				echo '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
-			}
+	if ($meta_css) {
+		foreach ($meta_css as $css) {
+			echo '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
 		}
+	}
 
-		if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
-		else $theme_dir = $config['core']['web_root'].'css/themes/';
-		if (!empty($session)) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$session->theme.'"/>';
+	if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
+	else $theme_dir = $config['core']['web_root'].'css/themes/';
+	if (!empty($session)) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$session->theme.'"/>';
 
-		if ($meta_rss) {
-			foreach ($meta_rss as $feed) {
-				if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
-				else $extra = getProjectPath(0);
-				echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core']['web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
-			}
+	if ($meta_rss) {
+		foreach ($meta_rss as $feed) {
+			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
+			else $extra = getProjectPath(0);
+			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core']['web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 		}
-		if ($meta_search) {
-			foreach ($meta_search as $search) {
-				echo '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
-			}
+	}
+	if ($meta_search) {
+		foreach ($meta_search as $search) {
+			echo '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
 		}
+	}
 
-		//echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/functions.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/fileareas.js"></script>';
+	//echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
+	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';
+	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
+	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/functions.js"></script>';
+	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/fileareas.js"></script>';
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/chat_1on1.js"></script>';
 
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
+	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
+	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
 
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
-		if (!empty($files) && $files->allow_rating) {
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
-		}
+	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
+	if (!empty($files) && $files->allow_rating) {
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
+	}
 
-		if ($meta_js) {
-			foreach ($meta_js as $script) {
-				echo '<script type="text/javascript" src="'.$script.'"></script>';
-			}
+	if ($meta_js) {
+		foreach ($meta_js as $script) {
+			echo '<script type="text/javascript" src="'.$script.'"></script>';
 		}
+	}
 
 	echo '</head>';
 	if ($body_onload) {
