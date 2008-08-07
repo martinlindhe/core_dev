@@ -60,9 +60,10 @@ function wikiFormat($wikiName, $data)
 	if (empty($data['msg'])) {
 		echo '<div class="wiki">';
 		echo '<div class="wiki_body">';
-		echo 'The wiki "'.$wikiName.'" does not yet exist!<br/>';
+		echo t('The wiki').' "'.$wikiName.'" '.t('does not yet exist').'!<br/>';
 		if ($session->id && $session->isWebmaster) {
-			echo '<a href="'.$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName.'">Create it</a>';
+			coreButton('Create', $_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName);
+			
 		}
 		echo '</div>';
 		echo '</div>';

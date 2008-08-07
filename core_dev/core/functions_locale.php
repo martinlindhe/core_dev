@@ -278,6 +278,8 @@ function t_se($s)
 		case 'Answer': return 'Svar';
 		case 'Last edited': return 'Senast redigerad';
 		case 'never': return 'aldrig';
+		case 'The wiki': return 'Wikin';
+		case 'does not yet exist': return 'existerar ännu inte';
 
 		//Change password
 		case 'Current password': return 'Nuvarande lösenord';

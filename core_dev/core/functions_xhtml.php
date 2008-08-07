@@ -355,6 +355,7 @@ function coreButton($name, $dst = '')
 
 	switch ($name) {
 		case 'Edit': $src = ''; break;
+		case 'Create': $src = ''; break;
 		case 'Delete': $src = 'icon_delete.png'; break;
 
 		default:
