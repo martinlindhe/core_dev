@@ -247,7 +247,7 @@ function formatUserInputText($text, $convert_html = true)
 
 	//TODO: add [img]url[/img] tagg för bildlänkning! och checka för intern länkning
 
-	//$text = replaceLinks($text);
+	$text = replaceEMails($text);
 
 	$text = nl2br($text);
 	$text = str_replace('(_br_)', "\n", $text);
@@ -273,11 +273,7 @@ function replaceLinks($text)
 	$regexp = "/\b((http(s?):\/\/)|(www\.))([\w\.]+)([\#\,\/\~\?\&\=\;\%\(\-\w+\.\:]+)\b/i";
 	$text = preg_replace_callback($regexp, 'replaceLinks_callback', $text);
 
-	//replaces mail addresses with clickable links
-	$regexp = "/([\w\.]+)(@)([\w\.]+)/i";
-	$replacement = '<a href="mailto:\0" class="bb_url">\0</a>';
-	$text = preg_replace($regexp, $replacement, $text);
-
+	$text = replaceEMails($text);
 	return $text;
 }
 
@@ -295,6 +291,18 @@ function replaceLinks_callback($matches)
 	$ret = '<a href="'.$config['url_rewrite_redirfile'].$matches[0].'" class="bb_url" target="_blank">'.$url_text.'</a>';
 
 	return $ret;
+}
+
+/**
+ * replaces mail addresses with clickable links
+ */
+function replaceEMails($text)
+{
+	$regexp = "/([\w\.]+)(@)([\w\.]+)/i";
+	$replacement = '<a href="mailto:\0" class="bb_url">\0</a>';
+	$text = preg_replace($regexp, $replacement, $text);
+
+	return $text;
 }
 
 /**
