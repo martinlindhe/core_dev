@@ -109,6 +109,30 @@ select {
 	width: 98%;
 }
 
+/* div for chat message area */
+#chat_div {
+height: 200px;
+width: 300px;
+border: 1px solid #666;
+background-color: #ccc;
+padding: 8px;
+overflow: auto;
+}
+
+/* div for pop-up chat request */
+#popup_chat {
+	width: 150px;
+	height: 150px;
+	font-size: 12px;
+	background: #dddddd;
+	border: 1px solid #888;
+	text-align: left;
+	position: fixed;
+	left: 150px;
+	top: 150px;
+	visibility: hidden;
+}
+
 /* show thumbnails gadget */
 .thumbnails_gadget {
 	width: 100%;
