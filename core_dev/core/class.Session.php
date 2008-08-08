@@ -245,8 +245,8 @@ class Session
 	{
 		global $config;
 
-		if (!$this->error && $show_no_error) {
-			echo '<div class="okay">'.t('No errors to display.').'</div>';
+		if (!$this->error) {
+			if ($show_no_error) echo '<div class="okay">'.t('No errors to display.').'</div>';
 			return;
 		}
 
