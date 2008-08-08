@@ -4,7 +4,7 @@
  */
 
 
-$project = '../../../';
+$project = '../../';
 
 require_once($project.'config.php');
 
