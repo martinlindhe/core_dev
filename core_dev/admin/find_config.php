@@ -15,6 +15,7 @@ $admin_menu = array(
 	$config['core']['web_root'].'admin/admin_moderation.php'.getProjectPath(0) => 'Moderation',
 	$config['core']['web_root'].'admin/admin_news.php'.getProjectPath(0) => 'News',
 	$config['core']['web_root'].'admin/admin_polls.php'.getProjectPath(0) => 'Polls',
+	$config['core']['web_root'].'admin/admin_fortunes.php'.getProjectPath(0) => 'Fortunes',
 	$config['core']['web_root'].'admin/admin_feedback.php'.getProjectPath(0) => 'Feedback',	//todo: hide if feedback-module is disabled
 	$config['core']['web_root'].'admin/admin_statistics.php'.getProjectPath(0) => 'Stats',
 	$config['core']['web_root'].'admin/admin_events.php'.getProjectPath(0) => 'Event log'
