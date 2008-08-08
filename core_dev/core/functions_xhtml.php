@@ -202,9 +202,9 @@ function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
 /**
  * Creates a select-dropdown from a indexed array
  */
-function xhtmlSelectArray($_name, $_arr, $_default = 0)
+function xhtmlSelectArray($_name, $_arr, $_default = 0, $_onchange = '')
 {
-	$out = '<select name="'.strip_tags($_name).'">';
+	$out = '<select name="'.strip_tags($_name).'"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
 	foreach ($_arr as $id => $title) {
 		$out .= '<option value="'.$id.'"'.($_default == $id ? ' selected':'').'>'.$title.'</option>';
 	}

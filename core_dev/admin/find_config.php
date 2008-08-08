@@ -3,20 +3,8 @@
  * $Id$
  */
 
-//konvertera aktuell sökväg till fs
 
-/*
-if (!file_exists('config.php')) {
-	echo 'Error: Please create a symlink at '.dirname($_SERVER['SCRIPT_FILENAME']).'/config.php to the correct configuration file';
-	die();
-}*/
-
-//$project = '/home/ljw/svn/cs/www.phonecafe.se/';
-//$project = '/var/www/www.phonecafe.se/';
-
-$project = '/home/ljw/svn/cs/www.phonecafe.se/';
-
-//$project = '/home/ml/dev/sms/';
+$project = '../../../';
 
 require_once($project.'config.php');
 
