@@ -241,11 +241,11 @@ class Session
 	/**
 	 * Displays session error
 	 */
-	function showError()
+	function showError($show_no_error = true)
 	{
 		global $config;
 
-		if (!$this->error) {
+		if (!$this->error && $show_no_error) {
 			echo '<div class="okay">'.t('No errors to display.').'</div>';
 			return;
 		}
