@@ -10,6 +10,7 @@
 
 define('POLL_SITE',		1);	//"Question of the week"-style polls on the site's front page (for example)
 define('POLL_NEWS',		2);	//Poll is attached to a news article. ownerId=tblNews.newsId
+define('POLL_FORTUNE',	3);	//this is actually a "fortune of the day" message, without options
 
 /**
  * Add a poll
@@ -146,12 +147,13 @@ function getPoll($_type, $_id)
 /**
  * Get active polls
  */
-function getActivePolls($_type, $ownerId = 0)
+function getActivePolls($_type, $ownerId = 0, $limit = 0)
 {
 	global $db;
-	if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+	if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($limit)) return false;
 
 	$q = 'SELECT * FROM tblPolls WHERE pollType='.$_type.' AND ownerId='.$ownerId.' AND deletedBy=0 AND NOW() BETWEEN timeStart AND timeEnd ORDER BY timeStart ASC,pollText ASC';
+	if ($limit) $q .= ' LIMIT 0,'.$limit;
 	return $db->getArray($q);
 }
 
@@ -355,7 +357,11 @@ function managePolls($_type, $_owner = 0)
 			return;
 		}
 
-		echo '<h1>Edit poll</h1>';
+		if ($_type == POLL_FORTUNE) {
+			echo '<h1>Edit fortune</h1>';
+		} else {
+			echo '<h1>Edit poll</h1>';
+		}
 
 		echo '<form method="post" action="">';
 		echo 'Question: ';
@@ -376,7 +382,7 @@ function managePolls($_type, $_owner = 0)
 		}
 		echo '<br/>';
 
-		if ($poll) {
+		if ($poll && $_type != POLL_FORTUNE) {
 			$list = getCategories(CATEGORY_POLL, $pollId);
 			for ($i=0; $i<count($list); $i++) {
 				echo 'Answer '.($i+1).': <input type="text" size="30" name="poll_a'.$i.'" value="'.$list[$i]['categoryName'].'"/><br/>';
@@ -411,11 +417,17 @@ function managePolls($_type, $_owner = 0)
 		}
 	}
 
-	echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">Add new poll</h2>';
+	if ($_type == POLL_FORTUNE) {
+		$title = 'Add new fortune';
+	} else {
+		$title = 'Add new poll';
+	}
+
+	echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">'.$title.'</h2>';
 	echo '<div id="new_poll_form" style="display: none;">';
 	echo '<form method="post" action="">';
 	echo 'Question: '.xhtmlInput('poll_q', '', 30).'<br/>';
-	if ($_type == POLL_SITE) {
+	if ($_type == POLL_SITE || $_type == POLL_FORTUNE) {
 		echo '<div id="poll_period_selector">';
 		echo 'Duration of the poll: ';
 		echo '<select name="poll_dur">';
@@ -440,8 +452,10 @@ function managePolls($_type, $_owner = 0)
 		echo '<br/><br/>';
 	}
 
-	for ($i=1; $i<=$answer_fields; $i++) {
-		echo t('Answer').' '.$i.': '.xhtmlInput('poll_a'.$i, '', 30).'<br/>';
+	if ($_type != POLL_FORTUNE) {
+		for ($i=1; $i<=$answer_fields; $i++) {
+			echo t('Answer').' '.$i.': '.xhtmlInput('poll_a'.$i, '', 30).'<br/>';
+		}
 	}
 
 	echo xhtmlSubmit('Create');
@@ -455,6 +469,11 @@ function managePolls($_type, $_owner = 0)
 				
 		case POLL_NEWS:
 			echo '<h1>News polls</h1>';
+			break;
+
+
+		case POLL_FORTUNE:
+			echo '<h1>Fortunes</h1>';
 			break;
 				
 		default: die('managePolls() EEP');
