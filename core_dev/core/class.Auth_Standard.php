@@ -102,7 +102,7 @@ class Auth_Standard extends Auth_Base
 	{
 		global $db, $session;
 
-		$data = Users::validLogin($username, $password);
+		$data = $this->validLogin($username, $password);
 
 		if (!$data) {
 			$session->error = t('Login failed');
@@ -150,6 +150,26 @@ class Auth_Standard extends Auth_Base
 
 		addEvent(EVENT_USER_LOGOUT, 0, $session->id);
 		$session->endSession();
+	}
+
+	/**
+	 * Checks if this is a valid login
+	 *
+	 * \return if valid login, return user data, else false
+	 */
+	function validLogin($username, $password)
+	{
+		global $db;
+
+		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($username).'" AND timeDeleted IS NULL';
+		$id = $db->getOneItem($q);
+		if (!$id) return false;
+
+		$enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
+ 		$q = 'SELECT * FROM tblUsers WHERE userId='.$id.' AND userPass="'.$enc_password.'"';
+ 		$data = $db->getOneRow($q);
+
+		return $data;
 	}
 
 	/**

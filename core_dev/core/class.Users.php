@@ -192,26 +192,6 @@ class Users
 	}
 
 	/**
-	 * Checks if this is a valid login
-	 *
-	 * \return if valid login, return user data, else false
-	 */
-	function validLogin($username, $password)
-	{
-		global $db, $auth;
-
-		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($username).'" AND timeDeleted IS NULL';
-		$id = $db->getOneItem($q);
-		if (!$id) return false;
-
-		$enc_password = sha1( $id.sha1($auth->sha1_key).sha1($password) );
- 		$q = 'SELECT * FROM tblUsers WHERE userId='.$id.' AND userPass="'.$enc_password.'"';
- 		$data = $db->getOneRow($q);
-
-		return $data;
-	}
-
-	/**
 	 * Returns the $_limit last users logged in, ordered by the latest logins first
 	 */
 	function lastLoggedIn($_limit = 50)
