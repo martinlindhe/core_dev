@@ -284,6 +284,10 @@ function getUserdataInput($row, $fill = false)
 				$y = date('Y', strtotime($row['settingValue']));
 				$m = date('m', strtotime($row['settingValue']));
 				$d = date('d', strtotime($row['settingValue']));
+			} else if (isset($_POST['userdata_'.$fieldId.'_year'])) {
+				$y = intval($_POST['userdata_'.$fieldId.'_year']);
+				$m = intval($_POST['userdata_'.$fieldId.'_month']);
+				$d = intval($_POST['userdata_'.$fieldId.'_day']);
 			}
 
 			$result .= '<select name="userdata_'.$fieldId.'_year">';
@@ -313,11 +317,18 @@ function getUserdataInput($row, $fill = false)
 
 		case USERDATA_TYPE_BIRTHDATE_SWE:
 			$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
-			$d = $m = $y = '';
+			$d = $m = $y = $chk = '';
 
 			if ($value) {
 				$result .= date('Y-m-d', strtotime($row['settingValue']));
 			} else {
+				if (isset($_POST['userdata_'.$fieldId.'_year'])) {
+					$y = intval($_POST['userdata_'.$fieldId.'_year']);
+					$m = intval($_POST['userdata_'.$fieldId.'_month']);
+					$d = intval($_POST['userdata_'.$fieldId.'_day']);
+					$chk = intval($_POST['userdata_'.$fieldId.'_chk']);
+				}
+				
 				$result .= '<select name="userdata_'.$fieldId.'_year">';
 				$result .= '<option value="">- '.t('Year').' -';
 				for ($j=date('Y')-100; $j<=date('Y'); $j++) {
@@ -341,7 +352,7 @@ function getUserdataInput($row, $fill = false)
 				}
 				$result .= '</select>';
 
-				$result .= '<input type="text" name="userdata_'.$fieldId.'_chk" size="4"/>';
+				$result .= '<input type="text" name="userdata_'.$fieldId.'_chk" value="'.$chk.'" size="4" maxlength="4"/>';
 			}
 			$result .= '</td>';
 			break;

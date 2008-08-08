@@ -192,7 +192,7 @@ function removeActivations($_type, $_id)
 	if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
 	$q = 'UPDATE tblActivation SET timeActivated = NOW() WHERE type='.$_type.' AND userId='.$_id;
-	$db->delete($q);
+	$db->update($q);
 }
 
 /**
@@ -207,6 +207,6 @@ function removeActivation($_type, $_code)
 	if (!is_numeric($_type) || !is_numeric($_code)) return false;
 
 	$q = 'UPDATE tblActivation SET timeActivated = NOW() WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
-	$db->delete($q);
+	$db->update($q);
 }
 ?>

@@ -207,17 +207,26 @@ The link will expire in __EXPIRETIME__";
 	}
 
 	/**
-	 * Looks up user supplied email address and generates a mail for them if needed
+	 * Looks up user supplied email address / alias and generates a mail for them if needed
 	 */
 	function handleForgotPassword($email)
 	{
-		global $config;
+		global $config, $session;
 
 		$email = trim($email);
-		if (!ValidEmail($email)) return false;
-
-		$_id = findUserByEmail($email);
-		if (!$_id) return false;
+		if (strpos($email, '@')) {
+			if (!ValidEmail($email)) return false;
+			$_id = findUserByEmail($email);
+		} else {
+			//find user by alias
+			$_id = Users::getId($email);
+		}
+		if (!$_id) {
+			$session->error = t('Invalid email address or username');
+			return false;
+		}
+		
+		$email = loadUserdataEmail($_id);
 
 		$code = generateActivationCode(ACTIVATE_CHANGE_PWD, 10000000, 99999999);
 		createActivation(ACTIVATE_CHANGE_PWD, $code, $_id);
@@ -231,9 +240,13 @@ The link will expire in __EXPIRETIME__";
 			$config['app']['full_url']."reset_password.php?id=".$_id."&code=".$code,
 			shortTimePeriod($config['activate']['expire_time_email'])
 		);
-		$msg = preg_replace($pattern,$replacement, $this->mail_password_msg);
+		$msg = preg_replace($pattern, $replacement, $this->mail_password_msg);
 
-		if (!$this->SmtpSend($email, $subj, $msg)) return false;		
+		if (!$this->SmtpSend($email, $subj, $msg)) {
+			removeActivation(ACTIVATE_CHANGE_PWD, $code);
+			$session->error = t('Problems sending mail');
+			return false;
+		}
 
 		$this->resetpwd_sent = true;
 		return true;

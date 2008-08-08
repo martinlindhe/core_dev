@@ -72,6 +72,7 @@ function t_se($s)
 		case 'Activate': return 'Aktivera';
 		case 'Show': return 'Visa';
 		case 'Change': return 'Ändra';
+		case 'Continue': return 'Fortsätt';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
@@ -199,6 +200,8 @@ function t_se($s)
 		case 'Client IP changed.': return 'Klientens IP-nummer har ändrats.';
 		case 'Inactivity timeout.': return 'Du har blivit utloggad på grund av inaktivitet.';
 		case 'Client user agent string changed.': return 'Klientens user agent har ändrats.';
+		case 'Invalid email address or username': return 'Felaktigt alias eller e-post';
+		case 'Problems sending mail': return 'Problem att skicka ut mail';
 
 		// Login
 		case 'Login failed': return 'Inloggning misslyckades';
