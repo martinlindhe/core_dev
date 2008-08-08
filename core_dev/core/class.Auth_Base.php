@@ -81,7 +81,7 @@ The link will expire in __EXPIRETIME__";
 
 	abstract function registerUser($username, $password1, $password2, $userMode = 0);
 
-	//FIXME abstract function unregisterUser()
+	//FIXME abstract func. unregisterUser()
 
 	abstract function login($username, $password);
 

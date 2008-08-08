@@ -285,9 +285,9 @@ function getUserdataInput($row, $fill = false)
 				$m = date('m', strtotime($row['settingValue']));
 				$d = date('d', strtotime($row['settingValue']));
 			} else if (isset($_POST['userdata_'.$fieldId.'_year'])) {
-				$y = intval($_POST['userdata_'.$fieldId.'_year']);
-				$m = intval($_POST['userdata_'.$fieldId.'_month']);
-				$d = intval($_POST['userdata_'.$fieldId.'_day']);
+				if (is_numeric($_POST['userdata_'.$fieldId.'_year'])) $y = $_POST['userdata_'.$fieldId.'_year'];
+				if (is_numeric($_POST['userdata_'.$fieldId.'_month'])) $m = $_POST['userdata_'.$fieldId.'_month'];
+				if (is_numeric($_POST['userdata_'.$fieldId.'_day'])) $d = $_POST['userdata_'.$fieldId.'_day'];
 			}
 
 			$result .= '<select name="userdata_'.$fieldId.'_year">';
@@ -323,10 +323,10 @@ function getUserdataInput($row, $fill = false)
 				$result .= date('Y-m-d', strtotime($row['settingValue']));
 			} else {
 				if (isset($_POST['userdata_'.$fieldId.'_year'])) {
-					$y = intval($_POST['userdata_'.$fieldId.'_year']);
-					$m = intval($_POST['userdata_'.$fieldId.'_month']);
-					$d = intval($_POST['userdata_'.$fieldId.'_day']);
-					$chk = intval($_POST['userdata_'.$fieldId.'_chk']);
+					if (is_numeric($_POST['userdata_'.$fieldId.'_year'])) $y = $_POST['userdata_'.$fieldId.'_year'];
+					if (is_numeric($_POST['userdata_'.$fieldId.'_month'])) $m = $_POST['userdata_'.$fieldId.'_month'];
+					if (is_numeric($_POST['userdata_'.$fieldId.'_day'])) $d = $_POST['userdata_'.$fieldId.'_day'];
+					if (is_numeric($_POST['userdata_'.$fieldId.'_chk'])) $chk = $_POST['userdata_'.$fieldId.'_chk'];
 				}
 				
 				$result .= '<select name="userdata_'.$fieldId.'_year">';

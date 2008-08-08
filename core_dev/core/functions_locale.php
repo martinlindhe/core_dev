@@ -211,6 +211,7 @@ function t_se($s)
 		case 'Forgot password': return 'Glömt lösenord';
 		case 'Account activation': return 'Aktivera konto';
 		case 'Account blocked': return 'Konto blockerat';
+		case 'The password is incorrect': return 'Lösenordet är felaktigt';
 
 		//Comments
 		case 'comment': return 'kommentar';
