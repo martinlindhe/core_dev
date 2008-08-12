@@ -21,10 +21,7 @@ function saveFeedback($_type, $_subj, $_body = '', $_subjectId = 0)
 	if (!is_numeric($_type) || !is_numeric($_subjectId)) return false;
 
 	$q = 'SELECT feedbackId FROM tblFeedback WHERE feedbackType='.$_type.' AND subj="'.$db->escape($_subj).'" AND body="'.$db->escape($_body).'" AND userId='.$session->id;
-	if ($db->getOneItem($q)) {
-		echo 'aöready existed';
-		return false;
-	}
+	if ($db->getOneItem($q)) return false;
 
 	$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',subj="'.$db->escape($_subj).'",body="'.$db->escape($_body).'",userId='.$session->id.',subjectId='.$_subjectId.',timeCreated=NOW()';
 	return $db->insert($q);
