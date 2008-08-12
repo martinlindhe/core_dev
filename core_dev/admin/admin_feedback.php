@@ -34,7 +34,7 @@ if (!empty($_GET['reply']) && is_numeric($_GET['reply'])) {
 	echo 'Reply to message from '.Users::link($msg['userId']).':<br/>';
 
 	$text = "In response to:\n".
-			"\"".$msg['text']."\"\n".
+			"\"".$msg['subj']."\"\n".
 			"\n\n\n----------------------\n- Best regards\n- Administrator ".$session->username;
 
 	echo '<form method="post" action="">';
@@ -76,9 +76,9 @@ foreach ($list as $row) {
 		default: die('EEEP!!! error');
 	}
 	echo 'From '.Users::link($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
-	echo $row['text'].'<br/><br/>';
+	echo $row['subj'].'<br/><br/>';
 		
-	if (!empty($row['text2'])) echo '<div class="item">Comment: '.$row['text2'].'</div><br/>';
+	if (!empty($row['body'])) echo '<div class="item">Comment: '.$row['body'].'</div><br/>';
 		
 	if ($row['userId']) echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">Reply</a><br/>';
 	echo '<a href="?delete='.$row['feedbackId'].getProjectPath().'">Delete</a><br/>';

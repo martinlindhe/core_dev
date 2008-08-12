@@ -2,7 +2,8 @@
 /**
  * $Id$
  *
- * Generic module to get feedback from the user
+ * Generic module to have users submit questions / suggestions to the site admins
+ * Admins can then choose to comment on the feedback and have it published on the website.
  *
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
@@ -14,12 +15,12 @@ define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
 /**
  * subjectId is the userId if its a abuse report
  */
-function saveFeedback($_type, $_text, $_text2 = '', $_subject = 0)
+function saveFeedback($_type, $_subj, $_body = '', $_subject = 0)
 {
 	global $db, $session;
 	if (!is_numeric($_type) || !is_numeric($_subject)) return false;
 
-	$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',text="'.$db->escape($_text).'",text2="'.$db->escape($_text2).'",userId='.$session->id.',subjectId='.$_subject.',timeCreated=NOW()';
+	$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',subj="'.$db->escape($_subj).'",body="'.$db->escape($_body).'",userId='.$session->id.',subjectId='.$_subject.',timeCreated=NOW()';
 	return $db->insert($q);
 }
 

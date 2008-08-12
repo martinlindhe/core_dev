@@ -175,11 +175,13 @@ SET character_set_client = utf8;
 CREATE TABLE `tblFeedback` (
   `feedbackId` int(10) unsigned NOT NULL auto_increment,
   `feedbackType` tinyint(3) unsigned NOT NULL default '0',
-  `text` text,
-  `text2` text,
+  `subj` text,
+  `body` text,
   `userId` int(10) unsigned NOT NULL default '0',
   `timeCreated` datetime default NULL,
   `subjectId` int(10) unsigned NOT NULL default '0',
+  `answer` text,
+  `answeredBy` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`feedbackId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
