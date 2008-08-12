@@ -73,6 +73,7 @@ function t_se($s)
 		case 'Show': return 'Visa';
 		case 'Change': return 'Ändra';
 		case 'Continue': return 'Fortsätt';
+		case 'Comment': return 'Kommentar';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';

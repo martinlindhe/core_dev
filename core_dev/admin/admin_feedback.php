@@ -34,14 +34,14 @@ if (!empty($_GET['reply']) && is_numeric($_GET['reply'])) {
 	echo 'Reply to message from '.Users::link($msg['userId']).':<br/>';
 
 	$text = "In response to:\n".
-			"\"".$msg['subj']."\"\n".
+			"\"".$msg['body']."\"\n".
 			"\n\n\n----------------------\n- Best regards\n- Administrator ".$session->username;
 
 	echo '<form method="post" action="">';
-	echo '<textarea name="msg" rows="8" cols="40">'.$text.'</textarea><br/>';
+	echo xhtmlTextarea('msg', $text, 40, 8).'<br/>';
 	echo '<input type="checkbox" name="fb_del" id="fb_del" value="1" checked="checked"/>';
 	echo '<label for="fb_del">Delete from feedback queue</label><br/>';
-	echo '<input type="submit" class="button" value="Send response"/>';
+	echo xhtmlSubmit('Send reply');
 	echo '</form>';
 	require($project.'design_foot.php');
 	die;
@@ -75,13 +75,13 @@ foreach ($list as $row) {
 
 		default: die('EEEP!!! error');
 	}
-	echo 'From '.Users::link($row['userId'], $row['userName']).' at '.$row['timeCreated'].':<br/>';
+	echo t('From').' '.Users::link($row['userId'], $row['userName']).' '.t('at').' '.$row['timeCreated'].':<br/>';
 	echo $row['subj'].'<br/><br/>';
 		
-	if (!empty($row['body'])) echo '<div class="item">Comment: '.$row['body'].'</div><br/>';
+	if (!empty($row['body'])) echo '<div class="item">'.t('Comment').': '.$row['body'].'</div><br/>';
 		
-	if ($row['userId']) echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">Reply</a><br/>';
-	echo '<a href="?delete='.$row['feedbackId'].getProjectPath().'">Delete</a><br/>';
+	if ($row['userId']) echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">'.t('Reply').'</a><br/>';
+	coreButton('Delete', '?delete='.$row['feedbackId'].getProjectPath() );
 	echo '</div><br/>';
 }
 
