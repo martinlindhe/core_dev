@@ -15,12 +15,18 @@ define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
 /**
  * subjectId is the userId if its a abuse report
  */
-function saveFeedback($_type, $_subj, $_body = '', $_subject = 0)
+function saveFeedback($_type, $_subj, $_body = '', $_subjectId = 0)
 {
 	global $db, $session;
-	if (!is_numeric($_type) || !is_numeric($_subject)) return false;
+	if (!is_numeric($_type) || !is_numeric($_subjectId)) return false;
 
-	$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',subj="'.$db->escape($_subj).'",body="'.$db->escape($_body).'",userId='.$session->id.',subjectId='.$_subject.',timeCreated=NOW()';
+	$q = 'SELECT feedbackId FROM tblFeedback WHERE feedbackType='.$_type.' AND subj="'.$db->escape($_subj).'" AND body="'.$db->escape($_body).'" AND userId='.$session->id;
+	if ($db->getOneItem($q)) {
+		echo 'aöready existed';
+		return false;
+	}
+
+	$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',subj="'.$db->escape($_subj).'",body="'.$db->escape($_body).'",userId='.$session->id.',subjectId='.$_subjectId.',timeCreated=NOW()';
 	return $db->insert($q);
 }
 
