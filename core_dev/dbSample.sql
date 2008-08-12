@@ -182,6 +182,7 @@ CREATE TABLE `tblFeedback` (
   `subjectId` int(10) unsigned NOT NULL default '0',
   `answer` text,
   `answeredBy` int(10) unsigned NOT NULL default '0',
+  `timeAnswered` datetime default NULL,
   PRIMARY KEY  (`feedbackId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;

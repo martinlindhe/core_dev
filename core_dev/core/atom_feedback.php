@@ -27,6 +27,15 @@ function saveFeedback($_type, $_subj, $_body = '', $_subjectId = 0)
 	return $db->insert($q);
 }
 
+function answerFeedback($_id, $_answer)
+{
+	global $db, $session;
+	if (!is_numeric($_id) || !$session->id) return false;
+
+	$q = 'UPDATE tblFeedback SET answer="'.$db->escape($_answer).'", answeredBy='.$session->id.',timeAnswered=NOW() WHERE feedbackId='.$_id;
+	return $db->update($q);
+}
+
 /**
  * Returns objects in feedback queue
  */
@@ -35,9 +44,12 @@ function getFeedback($_type = 0, $_sql_limit = '')
 	global $db;
 	if (!is_numeric($_type)) return false;
 
-	$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1 ';
-	$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)'.$_sql_limit;
-	if ($_type) $q .= 'WHERE t1.feedbackType='.$_type;
+	$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
+	$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
+	$q .= ' WHERE t1.answeredBy=0';
+	if ($_type) $q .= ' AND t1.feedbackType='.$_type;
+	$q .= $_sql_limit;
+
 	return $db->getArray($q);
 }
 
@@ -50,7 +62,40 @@ function getFeedbackCnt($_type = 0)
 	if (!is_numeric($_type)) return false;
 
 	$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
-	if ($_type) $q .= ' WHERE feedbackType='.$_type;
+	$q .= ' WHERE answeredBy=0';
+	if ($_type) $q .= ' AND feedbackType='.$_type;
+	return $db->getOneItem($q);
+}
+
+
+/**
+ * Returns answered feedback entries
+ */
+function getAnsweredFeedback($_type = 0, $_sql_limit = '')
+{
+	global $db;
+	if (!is_numeric($_type)) return false;
+
+	$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
+	$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
+	$q .= ' WHERE t1.answeredBy != 0';
+	if ($_type) $q .= ' AND t1.feedbackType='.$_type;
+	$q .= $_sql_limit;
+
+	return $db->getArray($q);
+}
+
+/**
+ * Returns number of answered feedback entries
+ */
+function getAnsweredFeedbackCnt($_type = 0)
+{
+	global $db;
+	if (!is_numeric($_type)) return false;
+
+	$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
+	$q .= ' WHERE answeredBy != 0';
+	if ($_type) $q .= ' AND feedbackType='.$_type;
 	return $db->getOneItem($q);
 }
 
