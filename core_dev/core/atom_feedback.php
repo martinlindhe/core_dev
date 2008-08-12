@@ -99,6 +99,40 @@ function getAnsweredFeedbackCnt($_type = 0)
 	return $db->getOneItem($q);
 }
 
+
+
+
+/**
+ * Returns matches in question or answer text of answered feedback
+ */
+function searchFeedback($_type = 0, $_search, $_sql_limit = '')
+{
+	global $db;
+	if (!is_numeric($_type)) return false;
+
+	$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
+	$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
+	$q .= ' WHERE t1.answeredBy != 0 AND (t1.body LIKE "%'.$db->escape($_search).'%" OR t1.answer LIKE "%'.$db->escape($_search).'%")';
+	if ($_type) $q .= ' AND t1.feedbackType='.$_type;
+	$q .= $_sql_limit;
+
+	return $db->getArray($q);
+}
+
+/**
+ * Returns number of answered feedback entries
+ */
+function searchFeedbackCnt($_type = 0, $_search)
+{
+	global $db;
+	if (!is_numeric($_type)) return false;
+
+	$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
+	$q .= ' WHERE answeredBy != 0 AND (body LIKE "%'.$db->escape($_search).'%" OR answer LIKE "%'.$db->escape($_search).'%")';
+	if ($_type) $q .= ' AND feedbackType='.$_type;
+	return $db->getOneItem($q);
+}
+
 /**
  * Delete specified feedback object
  */
