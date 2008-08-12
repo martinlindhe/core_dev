@@ -39,8 +39,7 @@ if (!empty($_GET['reply']) && is_numeric($_GET['reply'])) {
 
 	echo '<form method="post" action="">';
 	echo xhtmlTextarea('msg', $text, 40, 8).'<br/>';
-	echo '<input type="checkbox" name="fb_del" id="fb_del" value="1" checked="checked"/>';
-	echo '<label for="fb_del">Delete from feedback queue</label><br/>';
+	echo xhtmlCheckbox('fb_del', 'Delete from feedback queue', 1, true);
 	echo xhtmlSubmit('Send reply');
 	echo '</form>';
 	require($project.'design_foot.php');
