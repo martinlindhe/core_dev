@@ -214,6 +214,18 @@ function xhtmlSelectArray($_name, $_arr, $_default = 0, $_onchange = '')
 }
 
 /**
+ * Helper to create a checkbox
+ */
+function xhtmlCheckbox($_name, $_title, $_val = 1, $_checked = false)
+{
+	$out = '<input type="checkbox" class="checkbox" name="'.$_name.'" value="'.$_val.'" id="lab_'.$_name.'"'.($_checked ? ' checked':'').'/>';
+	$out .= '<label for="lab_'.$_name.'"> '.$_title.'</label><br/>';
+
+	return $out;
+}
+
+
+/**
  * Helper to create a bunch of checkboxes out of an array
  */
 function xhtmlCheckboxArray($_arr, $all_checked = false)
