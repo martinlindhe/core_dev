@@ -20,26 +20,40 @@ if (!empty($_GET['reply']) && is_numeric($_GET['reply'])) {
 	$msg = getFeedbackItem($_GET['reply']);
 
 	if (!empty($_POST['msg'])) {
-		//Send response to user as a private message
-		sendMessage($msg['userId'], 'System message', $_POST['msg']);
-		echo 'The response has been sent!<br/>';
-		if (!empty($_POST['fb_del'])) {
-			echo 'Feedback entry deleted.<br/>';
-			deleteFeedback($_GET['reply']);
+		if (isset($_GET['private'])) {
+			//Send response to user as a private message
+			sendMessage($msg['userId'], 'System message', $_POST['msg']);
+
+			if (!empty($_POST['fb_del'])) {
+				deleteFeedback($_GET['reply']);
+				echo 'Feedback entry deleted.<br/>';
+			}
+
+		} else {
+			answerFeedback($_GET['reply'], $_POST['msg']);
 		}
+		echo 'The response has been sent!<br/>';
 		require($project.'design_foot.php');
 		die;
 	}
-		
-	echo 'Reply to message from '.Users::link($msg['userId']).':<br/>';
 
-	$text = "In response to:\n".
-			"\"".$msg['body']."\"\n".
-			"\n\n\n----------------------\n- Best regards\n- Administrator ".$session->username;
+	if (isset($_GET['private'])) {
+		echo 'Send a private reply to message from '.Users::link($msg['userId']).':<br/>';
 
-	echo '<form method="post" action="">';
+		$text = "In response to:\n".
+				"\"".$msg['body']."\"\n".
+				"\n\n\n----------------------\n- Best regards\n- Administrator ".$session->username;
+	} else {
+		echo 'Publish a public reply to message from '.Users::link($msg['userId']).':<br/>';
+		echo '<b>'.$msg['body'].'</b>';
+		$text = '';
+	}
+
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?reply='.$_GET['reply'].'&amp;'.(isset($_GET['private']) ? 'private' : 'public').'">';
 	echo xhtmlTextarea('msg', $text, 40, 8).'<br/>';
-	echo xhtmlCheckbox('fb_del', 'Delete from feedback queue', 1, true);
+	if (isset($_GET['private'])) {
+		echo xhtmlCheckbox('fb_del', 'Delete from feedback queue', 1, true);
+	}
 	echo xhtmlSubmit('Send reply');
 	echo '</form>';
 	require($project.'design_foot.php');
@@ -79,7 +93,10 @@ foreach ($list as $row) {
 		
 	if (!empty($row['body'])) echo '<div class="item">'.t('Comment').': '.$row['body'].'</div><br/>';
 		
-	if ($row['userId']) echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'">'.t('Reply').'</a><br/>';
+	if ($row['userId']) {
+		echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'&amp;public">Public reply</a><br/>';
+		echo '<a href="?reply='.$row['feedbackId'].getProjectPath().'&amp;private">Reply with private message</a><br/>';
+	}
 	coreButton('Delete', '?delete='.$row['feedbackId'].getProjectPath() );
 	echo '</div><br/>';
 }
