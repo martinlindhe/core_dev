@@ -248,6 +248,8 @@ CREATE TABLE `tblGuestbooks` (
   `timeDeleted` datetime default NULL,
   `entryRead` tinyint(3) unsigned NOT NULL default '0',
   `timeRead` datetime default NULL,
+  `answerId` int(11) NOT NULL,
+  `isPrivate` tinyint(1) NOT NULL,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 SET character_set_client = @saved_cs_client;

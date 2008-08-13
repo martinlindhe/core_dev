@@ -322,6 +322,8 @@ function t_se($s)
 		case 'Userdata field successfully deleted!': return 'Userdata-fältet har raderats!';
 		case 'Location (Sweden)': return 'Postnummer (Svenskt)';
 		case 'Default value': return 'Standard-värde';
+		case 'Image': return 'Bild';
+		case 'Theme': return 'Tema';
 
 		//Subscriptions
 		case 'The user': return 'Användaren';
