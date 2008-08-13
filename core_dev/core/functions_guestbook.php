@@ -13,7 +13,7 @@ require_once('atom_moderation.php');	//for moderation functionality
 function addGuestbookEntry($ownerId, $subject, $body, $private = 0)
 {
 	global $db, $session;
-	if (!$session->id || !is_numeric($ownerId)) return false;
+	if (!$session->id || !is_numeric($ownerId) || !is_numeric($private)) return false;
 
 	//Strip all html
 	$subject = $db->escape(strip_tags($subject));
