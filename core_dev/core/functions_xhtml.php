@@ -296,6 +296,35 @@ function xhtmlSubmit($_title)
 }
 
 /**
+ * Helper to create a table out of a named array
+ */
+function xhtmlTable($arr, $heads)
+{
+	$out = '<table>';
+	$out .= '<tr>';
+	foreach ($heads as $t => $x) {
+		$out .= '<th>'.$t.'</th>';
+	}
+	$out .= '</tr>';
+
+	foreach ($arr as $row) {
+		$out .= '<tr>';
+		foreach ($heads as $t => $x) {
+			$out .= '<td>';
+			if ($x == 'userId') {
+				$out .= Users::link($row['userId'], $row['userName']);
+			} else {
+				$out .= $row[ $x ];
+			}
+			$out .= '</td>';
+		}
+		$out .= '</tr>';
+	}
+	$out .= '</table>';
+	return $out;	
+}
+
+/**
  * Helper to generate select-dropdown menus out of specified category
  */
 function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
