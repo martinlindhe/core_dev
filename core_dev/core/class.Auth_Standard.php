@@ -370,7 +370,7 @@ class Auth_Standard extends Auth_Base
 		$check = false;
 
 		if (!empty($_POST['oldpwd']) && isset($_POST['pwd1']) && isset($_POST['pwd2'])) {
-			if (Users::validLogin($session->username, $_POST['oldpwd'])) {
+			if ($this->validLogin($session->username, $_POST['oldpwd'])) {
 				$check = Users::setPassword($session->id, $_POST['pwd1'], $_POST['pwd2']);
 			} else {
 				$session->error = t('Current password is incorrect');
