@@ -611,6 +611,7 @@ function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
  */
 function saveUserdataSetting($ownerId, $settingName, $settingValue)	//FIXME: rename to saveUserSetting()
 {
+	//FIXME borde väl kolla upp id för $settingName fältet?! använder någon kod denna...?
 	return saveSetting(SETTING_USERDATA, $ownerId, $settingName, $settingValue);
 }
 
@@ -882,4 +883,20 @@ function editUserdataCheckbox($name, $field)
 	}
 	return xhtmlCheckbox($field, $name, 1, $curr);
 }
+
+function editUserdataTextarea($name, $field, $width, $height)
+{
+	global $session;
+
+	$fieldId = getUserdataFieldIdByName($name);
+
+	if (isset($_POST[$field])) {
+		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
+		$curr = $_POST[$field];
+	} else {
+		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+	}
+	return xhtmlTextarea($field, $curr, $width, $height);
+}
+
 ?>
