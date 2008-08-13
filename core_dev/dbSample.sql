@@ -316,6 +316,7 @@ CREATE TABLE `tblMessages` (
   `timeRead` datetime default NULL,
   `timeDeleted` datetime default NULL,
   `groupId` int(10) unsigned NOT NULL default '0',
+  `answerId` int(11) NOT NULL,
   PRIMARY KEY  (`msgId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;

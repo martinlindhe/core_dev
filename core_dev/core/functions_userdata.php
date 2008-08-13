@@ -659,6 +659,20 @@ function loadUserdataBirthdate($userId)
 }
 
 /**
+ * Returns entered swedish birthdate for specified user
+ *
+ * \param $userId user id
+ * \return datetime formatted birthdate, or false on error
+ */
+function loadUserdataBirthdateSwe($userId)
+{
+	if (!is_numeric($userId)) return false;
+
+	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_BIRTHDATE_SWE);
+	return loadUserdataSetting($userId, $fieldId);
+}
+
+/**
  * Returns user's stored theme
  *
  * \param $userId user id
