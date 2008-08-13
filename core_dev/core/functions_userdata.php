@@ -823,4 +823,16 @@ function editUserdataSettings($_userid = '')
 	echo '</form>';
 	echo '</div>';
 }
+
+function editUserdataDropdown($name, $field)
+{
+	global $session;
+
+	if (!empty($_POST[$field])) {
+		saveSetting(SETTING_USERDATA, $session->id, $name, $_POST[$field]);
+	}
+
+	$curr = loadSetting(SETTING_USERDATA, $session->id, $name, 0);
+	return getCategoriesSelect(CATEGORY_USERDATA, getUserdataFieldIdByName($name), $field, $curr);
+}
 ?>
