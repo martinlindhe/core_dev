@@ -10,7 +10,7 @@ require_once('atom_moderation.php');	//for moderation functionality
 /**
  * Adds a new guestbook entry
  */
-function addGuestbookEntry($ownerId, $subject, $body)
+function addGuestbookEntry($ownerId, $subject, $body, $private = 0)
 {
 	global $db, $session;
 	if (!$session->id || !is_numeric($ownerId)) return false;
@@ -28,11 +28,27 @@ function addGuestbookEntry($ownerId, $subject, $body)
 	$q .= ' AND subject="'.$subject.'" AND body="'.$body.'" AND timeCreated>=DATE_SUB(NOW(),INTERVAL 5 MINUTE)';
 	if ($db->getOneItem($q)) return false;
 
-	$q = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',authorId='.$session->id.',subject="'.$subject.'",body="'.$body.'",timeCreated=NOW()';
+	$q = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',authorId='.$session->id.',subject="'.$subject.'",body="'.$body.'",timeCreated=NOW(),isPrivate='.$private.'';
 	$entryId = $db->insert($q);
 
 	//Add entry to moderation queue
 	if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_GUESTBOOK, $entryId, true);
+	
+	return $entryId;
+}
+
+/**
+ * Sets the answerId
+ */
+function setGuestbookAnswerId($entryId, $answerId)
+{
+	global $db;
+	
+	if (!is_numeric($entryId) && !is_numeric($answerId)) return false;
+	
+	$q = 'UPDATE tblGuestbooks SET answerId='.$answerId.' WHERE entryId = '.$entryId.' LIMIT 1';
+	return $db->update($q);
+	
 }
 
 /**
