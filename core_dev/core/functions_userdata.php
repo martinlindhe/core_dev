@@ -828,13 +828,15 @@ function editUserdataDropdown($name, $field)
 {
 	global $session;
 
+	$fieldId = getUserdataFieldIdByName($name);
+
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, $session->id, $name, $_POST[$field]);
+		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, $session->id, $name, 0);
+		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, 0);
 	}
-	return getCategoriesSelect(CATEGORY_USERDATA, getUserdataFieldIdByName($name), $field, $curr);
+	return getCategoriesSelect(CATEGORY_USERDATA, $fieldId, $field, $curr);
 }
 
 function editUserdataInput($name, $field)
@@ -850,5 +852,20 @@ function editUserdataInput($name, $field)
 		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
 	}
 	return xhtmlInput($field, $curr);
+}
+
+function editUserdataCheckbox($name, $field)
+{
+	global $session;
+
+	$fieldId = getUserdataFieldIdByName($name);
+
+	if (isset($_POST[$field])) {
+		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
+		$curr = $_POST[$field];
+	} else {
+		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+	}
+	return xhtmlCheckbox($field, $name, 1, $curr);
 }
 ?>
