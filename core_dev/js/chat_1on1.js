@@ -1,5 +1,3 @@
-// NOTE! Requires that global js-var core_uri is set to correct uri-path
-// to core_dev, eg: var core_uri = '/core_dev/'; in project global js-config
 
 var chat_link_chatreq_clicked = 1;
 var chat_link_chatreq = '';
@@ -73,7 +71,7 @@ var chat_request_q = new AJAX();
 function chat()
 {
 	if (!chat_request_q._busy) {
-		chat_request_q.GET_raw(_ext_core+'ajax_chat.php?otherid='+chat_otherId, chat_callback);
+		chat_request_q.GET_raw(_ext_core+'ajax_chat_1on1.php?otherid='+chat_otherId, chat_callback);
 	}
 	setTimeout("chat()", 2 * 1000);	//refresh stats every 2 seconds
 }
@@ -104,7 +102,7 @@ var chat_send_request = new AJAX();
 function chat_send(input)
 {
 	if (!chat_send_request._busy) {
-		chat_send_request.GET_raw(_ext_core+'ajax_chat_send.php?otherid='+chat_otherId+'&msg='+input.value, chat_send_callback);
+		chat_send_request.GET_raw(_ext_core+'ajax_chat_1on1_send.php?otherid='+chat_otherId+'&msg='+input.value, chat_send_callback);
 		span = add_span(document.getElementById('chat_div'));
 		//TODO: Fult fult, borde abstraheras med en datum-tjofräs i javascript
 		var today = new Date();
