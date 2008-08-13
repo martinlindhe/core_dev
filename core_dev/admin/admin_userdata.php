@@ -224,8 +224,10 @@ if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fiel
 	$list = getCategoriesByOwner(CATEGORY_USERDATA, $data['fieldId']);
 	echo t('Current options').' ('.count($list).' '.t('options').')<br/>';
 
+	$i = 0;
 	foreach($list as $row) {
-		echo '<input type="text" name="change_'.$row['categoryId'].'" value="'.$row['categoryName'].'" size="40"/> ';
+		$i++;
+		echo $i.'. <input type="text" name="change_'.$row['categoryId'].'" value="'.$row['categoryName'].'" size="40"/> ';
 		echo '<input type="checkbox" name="delete_'.$row['categoryId'].'" id="delete_'.$row['categoryId'].'" value="1" class="checkbox"/>';
 		echo '<label for="delete_'.$row['categoryId'].'">'.t('Delete').'</label><br/>';
 	}
