@@ -39,6 +39,10 @@ function urlencode(str)	//function borrowed from http://www.albionresearch.com/m
 };
 
 //Toggles element with name "n" between visible and hidden
+//
+//If this function makes an element "hidden" the browser
+//regards it as non-existent and does not regard it as being
+//part of the page-layout
 function toggle_element_by_name(n)
 {
 	var e = document.getElementById(n);
@@ -67,6 +71,8 @@ function show_element_by_name(n)
 	e.style.display = '';
 }
 
+//This function, as opposed to the ones above, has the
+//browser render the content but show / dont show it
 function set_visible_by_name(n)
 {
 	var e = document.getElementById(n);
