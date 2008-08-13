@@ -828,11 +828,27 @@ function editUserdataDropdown($name, $field)
 {
 	global $session;
 
-	if (!empty($_POST[$field])) {
+	if (isset($_POST[$field])) {
 		saveSetting(SETTING_USERDATA, $session->id, $name, $_POST[$field]);
+		$curr = $_POST[$field];
+	} else {
+		$curr = loadSetting(SETTING_USERDATA, $session->id, $name, 0);
 	}
-
-	$curr = loadSetting(SETTING_USERDATA, $session->id, $name, 0);
 	return getCategoriesSelect(CATEGORY_USERDATA, getUserdataFieldIdByName($name), $field, $curr);
+}
+
+function editUserdataInput($name, $field)
+{
+	global $session;
+
+	$fieldId = getUserdataFieldIdByName($name);
+
+	if (isset($_POST[$field])) {
+		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
+		$curr = $_POST[$field];
+	} else {
+		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+	}
+	return xhtmlInput($field, $curr);
 }
 ?>
