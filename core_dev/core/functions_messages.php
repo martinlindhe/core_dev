@@ -87,7 +87,7 @@ function getMessageCountPerDate($dateStart, $dateStop = '')
 /**
  * XXX
  */
-function getMessages($_group = 0)
+function getMessages($_group = 0, $_limit_sql = '')
 {
 	global $db, $session;
 	if (!is_numeric($_group)) return false;
@@ -99,7 +99,7 @@ function getMessages($_group = 0)
 			$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.fromId=t2.userId) ';
 			$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
 			$q .= 'AND t1.timeDeleted IS NULL ';
-			$q .= 'ORDER BY timeCreated DESC';
+			$q .= 'ORDER BY timeCreated DESC '.$_limit_sql;
 			break;
 
 		case MESSAGE_GROUP_OUTBOX:
@@ -108,7 +108,7 @@ function getMessages($_group = 0)
 			$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.toId=t2.userId) ';
 			$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
 			$q .= 'AND t1.timeDeleted IS NULL ';
-			$q .= 'ORDER BY timeCreated DESC';
+			$q .= 'ORDER BY timeCreated DESC'.$_limit_sql;
 			break;
 				
 		default:
@@ -116,6 +116,36 @@ function getMessages($_group = 0)
 	}
 
 	return $db->getArray($q);
+}
+
+/**
+ * XXX
+ */
+function getMessagesCount($_group = 0)
+{
+	global $db, $session;
+	if (!is_numeric($_group)) return false;
+
+	switch ($_group) {
+		case MESSAGE_GROUP_INBOX:
+			$q  = 'SELECT count(t1.fromId) AS cnt ';
+			$q .= 'FROM tblMessages AS t1 ';
+			$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
+			$q .= 'AND t1.timeDeleted IS NULL';
+			break;
+
+		case MESSAGE_GROUP_OUTBOX:
+			$q  = 'SELECT count(t1.toId) AS cnt ';
+			$q .= 'FROM tblMessages AS t1 ';
+			$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
+			$q .= 'AND t1.timeDeleted IS NULL';
+			break;
+				
+		default:
+			$q = 'SELECT count(*) FROM tblMessages WHERE ownerId='.$session->id.' AND groupId='.$_group;
+	}
+
+	return $db->getOneItem($q);
 }
 
 /**
