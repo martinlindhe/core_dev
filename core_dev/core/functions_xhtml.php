@@ -266,6 +266,15 @@ function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0)
 }
 
 /**
+ * Helper to create a file upload field
+ */
+function xhtmlFile($_name)
+{
+	return '<input type="file" name="'.$_name.'"/>';
+}
+
+
+/**
  * Helper to create a password input field
  */
 function xhtmlInputPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)

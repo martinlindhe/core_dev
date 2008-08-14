@@ -510,7 +510,7 @@ function handleRequiredUserdataFields($userId)
 				);
 				$val = sql_datetime($born);
 				break;
-			
+
 			case USERDATA_TYPE_LOCATION_SWE:
 				saveSetting(SETTING_USERDATA, $userId, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
 				saveSetting(SETTING_USERDATA, $userId, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
@@ -898,8 +898,41 @@ function editUserdataTextarea($name, $field, $width, $height)
 	return xhtmlTextarea($field, $curr, $width, $height);
 }
 
+function editUserdataImage($name, $field)
+{
+	global $session, $files;
+
+	$fieldId = getUserdataFieldIdByName($name);
+
+	if (isset($_FILES[$field])) {
+		$curr = $files->handleUpload($_FILES[$field], FILETYPE_USERDATA, $fieldId);
+		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $curr);
+	} else {
+		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+	}
+
+	$out = '';
+	
+	if ($curr) {
+		$out .= '<b>Aktuell profilbild:</b><br/>';
+
+		// TODO: Make this an optional setting
+		if (isInQueue($curr, MODERATION_PRES_IMAGE)) {
+			$out .= '<b>DENNA BILD VÄNTAR PÅ ATT GODKÄNNAS</b><br/>';
+		}
+		$out .= showThumb($curr, $name, 270, 200).'<br/>';
+		$out .= coreButton('Delete').'<br/>';
+	} else {
+		$out .= 'Du har ingen gammal bild<br/>';
+	}
+
+	$out .= xhtmlFile($field);
+
+	return $out;
+}
+
 /**
- * Helper function to return users online based on their gender selection
+ * Helper to return users online based on their gender selection
  * Requires a USERDATA_TYPE_GENDER field to work
  *
  * \param $gender the textual name of the gender to select, same as what you name the field to in admin interface
