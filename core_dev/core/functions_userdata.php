@@ -952,4 +952,30 @@ function getUsersOnlineByGenderCnt($gender)
 
 	return $db->getOneItem($q);
 }
+
+function getRandomUserByGender($gender)
+{
+	global $db, $session;
+
+	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_GENDER);
+
+	$cats = getCategories(CATEGORY_USERDATA, $fieldId);
+
+	$genderId = 0;	
+	foreach ($cats as $row) {
+		if ($row['categoryName'] == $gender) {
+			$genderId = $row['categoryId'];
+			break;
+		}
+	}
+
+	$q  = 'SELECT t1.userId FROM tblUsers AS t1';
+	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingName="'.$fieldId.'" AND t2.settingType='.SETTING_USERDATA.') ';
+	$q .= ' WHERE t1.timeDeleted IS NULL';
+	$q .= ' AND t2.settingValue = "'.$genderId.'"';
+	if ($session->id) $q .= ' AND userId!='.$session->id;
+	$q .= ' ORDER BY RAND() LIMIT 1';
+
+	return $db->getOneItem($q);
+}
 ?>
