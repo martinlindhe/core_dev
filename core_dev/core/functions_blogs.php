@@ -13,7 +13,7 @@ $config['blog']['moderation'] = true;		//enables automatic moderation of new blo
 $config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport', 'BlogComment', 'BlogFiles');
 $config['blog']['allow_rating'] = true;	//allow users to rate blogs
 
-function addBlog($categoryId = 0, $title, $body)
+function addBlog($categoryId, $title, $body)
 {
 	global $db, $session, $config;
 	if (!$session->id || !is_numeric($categoryId)) return false;
