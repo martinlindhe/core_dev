@@ -38,6 +38,11 @@ function urlencode(str)	//function borrowed from http://www.albionresearch.com/m
 	return encoded;
 };
 
+function trim(str)
+{
+	return str.replace(/^\s*|\s*$/g,"");
+}
+
 //Toggles element with name "n" between visible and hidden
 //
 //If this function makes an element "hidden" the browser
