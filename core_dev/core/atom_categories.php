@@ -142,11 +142,9 @@ function getCategoryByName($_type, $_name, $_flags = 0)
  *
  * \param $_type type of category
  * \param $_owner object owning the categories (meaning depends on category type)
- *
- * \todo merge with getCategories(), add sort order optional parameter
  */
 function getCategoriesByOwner($_type, $_owner)
-{
+{	//FIXME merge with getCategories(), add sort order optional parameter
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 

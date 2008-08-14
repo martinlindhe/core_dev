@@ -2,8 +2,6 @@
 /**
  * $Id$
  *
- * \todo do a more generic zip-to-location mapper function based on USERDATA_TYPE_LOCATION_SWE code
- *
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
@@ -546,7 +544,7 @@ function readAllUserdata($userId)
 }
 
 /**
- * Helper function to display userdata content
+ * Helper to display userdata content
  */
 function showUserdataField($userId, $settingName, $defaultValue = '')
 {
@@ -899,4 +897,58 @@ function editUserdataTextarea($name, $field, $width, $height)
 	return xhtmlTextarea($field, $curr, $width, $height);
 }
 
+/**
+ * Helper function to return users online based on their gender selection
+ * Requires a USERDATA_TYPE_GENDER field to work
+ *
+ * \param $gender the textual name of the gender to select, same as what you name the field to in admin interface
+ */
+function getUsersOnlineByGender($gender)
+{
+	global $db, $session;
+
+	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_GENDER);
+
+	$cats = getCategories(CATEGORY_USERDATA, $fieldId);
+
+	$genderId = 0;	
+	foreach ($cats as $row) {
+		if ($row['categoryName'] == $gender) {
+			$genderId = $row['categoryId'];
+			break;
+		}
+	}
+
+	$q  = 'SELECT t1.* FROM tblUsers AS t1';
+	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingName="'.$fieldId.'" AND t2.settingType='.SETTING_USERDATA.') ';
+	$q .= ' WHERE t1.timeDeleted IS NULL AND t1.timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+	$q .= ' AND t2.settingValue = "'.$genderId.'"';
+	$q .= ' ORDER BY t1.timeLastActive DESC';
+
+	return $db->getArray($q);
+}
+
+function getUsersOnlineByGenderCnt($gender)
+{
+	global $db, $session;
+
+	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_GENDER);
+
+	$cats = getCategories(CATEGORY_USERDATA, $fieldId);
+
+	$genderId = 0;	
+	foreach ($cats as $row) {
+		if ($row['categoryName'] == $gender) {
+			$genderId = $row['categoryId'];
+			break;
+		}
+	}
+
+	$q  = 'SELECT COUNT(*) FROM tblUsers AS t1';
+	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingName="'.$fieldId.'" AND t2.settingType='.SETTING_USERDATA.') ';
+	$q .= ' WHERE t1.timeDeleted IS NULL AND t1.timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+	$q .= ' AND t2.settingValue = "'.$genderId.'"';
+
+	return $db->getOneItem($q);
+}
 ?>
