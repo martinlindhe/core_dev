@@ -13,7 +13,7 @@ $config['blog']['moderation'] = true;		//enables automatic moderation of new blo
 $config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport', 'BlogComment', 'BlogFiles');
 $config['blog']['allow_rating'] = true;	//allow users to rate blogs
 
-function addBlog($categoryId, $title, $body)
+function addBlog($categoryId = 0, $title, $body)
 {
 	global $db, $session, $config;
 	if (!$session->id || !is_numeric($categoryId)) return false;
@@ -101,6 +101,34 @@ function getBlog($blogId)
 	$q .= 'INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
 	$q .= 'WHERE t1.blogId='.$blogId.' AND t1.deletedBy=0';
 	return $db->getOneRow($q);
+}
+
+/**
+ * Returns blogs from $userId
+ */
+function getBlogsByUserid($userId, $_limit_sql = '')
+{
+	global $db;
+	if (!is_numeric($userId)) return false;
+
+	$q  = 'SELECT * FROM tblBlogs ';
+	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 ';
+	$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;
+	return $db->getArray($q);
+}
+
+/**
+ * Returns count of blogs from $userId
+ */
+function getBlogsByUseridCount($userId)
+{
+	global $db;
+	if (!is_numeric($userId)) return false;
+
+	$q  = 'SELECT count(blogId) AS cnt FROM tblBlogs ';
+	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 ';
+	$q .= ' ORDER BY timeCreated DESC';
+	return $db->getOneItem($q);
 }
 
 /**
