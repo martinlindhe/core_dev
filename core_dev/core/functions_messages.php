@@ -21,10 +21,25 @@ function sendMessage($_id, $_subj, $_msg)
 		
 	//Add message to senders outbox
 	$q = 'INSERT INTO tblMessages SET ownerId='.$session->id.',fromId='.$session->id.',toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_OUTBOX;
-	$db->insert($q);
+	$id = $db->insert($q);
 
-	return true;
+	return $id;
 }
+
+/**
+ * Sets the answerId
+ */
+function setMessageAnswerId($msgId, $answerId)
+{
+	global $db;
+	
+	if (!is_numeric($msgId) && !is_numeric($answerId)) return false;
+	
+	$q = 'UPDATE tblMessages SET answerId='.$answerId.' WHERE msgId = '.$msgId.' LIMIT 1';
+	return $db->update($q);
+	
+}
+
 
 /**
  * Adds a system message to recievers inbox
