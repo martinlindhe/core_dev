@@ -911,6 +911,12 @@ function editUserdataImage($name, $field)
 		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
 	}
 
+	if (!empty($_GET['delpic']) && $_GET['delpic'] == $curr) {
+		$files->deleteFile($curr);
+		saveSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+		$curr = 0;
+	}
+
 	$out = '';
 	
 	if ($curr) {
@@ -921,11 +927,12 @@ function editUserdataImage($name, $field)
 			$out .= '<b>DENNA BILD VÄNTAR PÅ ATT GODKÄNNAS</b><br/>';
 		}
 		$out .= showThumb($curr, $name, 270, 200).'<br/>';
-		$out .= coreButton('Delete').'<br/>';
+		$out .= '<a href="?delpic='.$curr.'">Radera aktuell bild</a><br/><br/>';
 	} else {
 		$out .= 'Du har ingen gammal bild<br/>';
 	}
 
+	$out .= '<b>Välj bild från datorn:</b><br/>';
 	$out .= xhtmlFile($field);
 
 	return $out;
