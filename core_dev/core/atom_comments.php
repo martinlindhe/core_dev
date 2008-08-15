@@ -126,14 +126,16 @@ function getCommentFreeTextSearch($text, $_limit_sql = '')
 /**
  * Returns comments of specified type and/or owner
  */
-function getComments($commentType, $ownerId, $privateComments = false, $limit = '')
+function getComments($commentType, $ownerId = 0, $privateComments = false, $limit = '')
 {
 	global $db;
 	if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
 
 	$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 ';
 	$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
-	$q .= 'WHERE t1.ownerId='.$ownerId.' AND t1.commentType='.$commentType.' AND t1.deletedBy=0';
+	$q .= 'WHERE ';
+	if ($ownerId) $q .= 't1.ownerId='.$ownerId.' AND ';
+	$q .= 't1.commentType='.$commentType.' AND t1.deletedBy=0';
 
 	if ($privateComments === false) $q .= ' AND t1.commentPrivate=0';
 
