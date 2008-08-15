@@ -142,7 +142,7 @@ function getComments($commentType, $ownerId, $privateComments = false, $limit = 
 }
 
 /**
- * Returns comment of specified type and/or owner
+ * Return comment by commentId
  */
 function getComment($commentId)
 {
