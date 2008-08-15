@@ -142,6 +142,20 @@ function getComments($commentType, $ownerId, $privateComments = false, $limit = 
 }
 
 /**
+ * Returns comment of specified type and/or owner
+ */
+function getComment($commentId)
+{
+	global $db;
+	if (!is_numeric($commentId)) return false;
+
+	$q  = 'SELECT * FROM tblComments ';
+	$q .= 'WHERE commentId='.$commentId.' AND deletedBy=0 LIMIT 1';
+
+	return $db->getOneItem($q);
+}
+
+/**
  * Returns all comments to all objects owned by $ownerId, newest first
  */
 function getCommentsByOwner($_type, $ownerId)

@@ -39,6 +39,16 @@ function deleteBlog($blogId)
 	$db->update($q);
 }
 
+function updateBlogReadCount($blogId)
+{
+	global $db;
+
+	if (!is_numeric($blogId)) return false;
+	
+	$q = 'UPDATE tblBlogs SET readCnt=readCnt+1 WHERE blogId='.$blogId.' LIMIT 1';
+	$db->update($q);
+}
+
 function updateBlog($blogId, $categoryId, $title, $body)
 {
 	global $db, $session, $config;
