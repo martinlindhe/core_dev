@@ -1013,8 +1013,10 @@ class Files
 	}
 
 	/**
-	 * Returns array with estimated download times for common
-	 * internet connection speeds
+	 * Calculates estimated download times for common internet connection speeds
+	 *
+	 * \param $size file size in bytes
+	 * \return array of estimated download times
 	 */
 	function estimateTime($size)
 	{

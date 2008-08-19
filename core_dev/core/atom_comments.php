@@ -15,6 +15,7 @@ define('COMMENT_GENERIC',			5);		//generic comment type
 define('COMMENT_PASTEBIN',			6);		//"pastebin" text. anonymous submissions are allowed
 define('COMMENT_SCRIBBLE',			7);		//scribble board
 define('COMMENT_CUSTOMER',			8);		//customer comments
+define('COMMENT_FILEDESC',			9);		//this is a file description, only one per file can exist
 define('COMMENT_ADMIN_IP',			10);	//a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 
 /* Comment types only meant for the admin's eyes */

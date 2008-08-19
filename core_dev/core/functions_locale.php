@@ -74,6 +74,7 @@ function t_se($s)
 		case 'Change': return 'Ändra';
 		case 'Continue': return 'Fortsätt';
 		case 'Comment': return 'Kommentar';
+		case 'Description': return 'Beskrivning';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
@@ -269,6 +270,7 @@ function t_se($s)
 		case 'Updated gallery': return 'Uppdaterat galleri';
 		case 'Video awaiting conversion.': return 'Videon väntar på att konverteras';
 		case 'Change file category': return 'Ändra filkategori';
+		case 'Upload a file': return 'Ladda upp en fil';
 
 		//Categories
 		case 'Global categories': return 'Globala kategorier';

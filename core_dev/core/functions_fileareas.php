@@ -82,8 +82,11 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 	}
 
 	if (($session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
-		$files->handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
+		$uploadedId = $files->handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
 		unset($_FILES['file1']);	//to avoid further processing of this file upload elsewhere
+		if (!empty($_POST['fdesc'])) {
+			addComment(COMMENT_FILEDESC, $uploadedId, $_POST['fdesc']);
+		}
 		if ($fileType == FILETYPE_WIKI) {
 			addRevision(REVISIONS_WIKI, $ownerId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
 		}
@@ -194,7 +197,10 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 			} else {
 				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
 			}
-			echo '<input type="file" name="file1"/> ';
+			echo t('Upload a file').':<br/>';
+			echo '<input type="file" name="file1"/><br/>';
+			echo t('Description').':<br/>';
+			echo xhtmlTextarea('fdesc', '', 50, 4).'<br/>';
 			echo '<input type="submit" class="button" value="'.t('Upload').'"/>';
 			echo '</form>';
 			echo '</div>';
