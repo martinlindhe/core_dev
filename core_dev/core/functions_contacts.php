@@ -350,7 +350,7 @@ function acceptFriendRequest($otherId)
 	$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
 	$cnt = $db->delete($q);
 		
-	if ($cnt != 1) die('acceptfriendrequest xxkrash');
+	if ($cnt != 1) return false;
 
 	//create a friend relation
 	setContact(CONTACT_FRIEND, $session->id, $otherId, $category);
