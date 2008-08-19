@@ -191,7 +191,6 @@ function t_se($s)
 		case 'Register new account': return 'Registrera nytt konto';
 		case 'User not found': return 'Användaren finns inte';
 
-
 		//Session errors
 		case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';
 		case 'The page you requested requires webmaster rights to view.': return 'Sidan du försöker visa kräver att du är webmaster.';
@@ -269,6 +268,7 @@ function t_se($s)
 		case 'Uploaded file is too big': return 'Den uppladdade filen är för stor';
 		case 'Updated gallery': return 'Uppdaterat galleri';
 		case 'Video awaiting conversion.': return 'Videon väntar på att konverteras';
+		case 'Change file category': return 'Ändra filkategori';
 
 		//Categories
 		case 'Global categories': return 'Globala kategorier';

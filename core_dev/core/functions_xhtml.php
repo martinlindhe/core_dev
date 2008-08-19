@@ -337,14 +337,16 @@ function xhtmlTable($arr, $heads)
  * Helper to generate select-dropdown menus out of specified category
  */
 function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
-{	//FIXME: rename to xhtmlSelectCategories()
-	global $config;
+{	//FIXME: rename to xhtmlSelectCategory()
+	global $config, $files;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 	$out = '<select name="'.strip_tags($selectName).'">';
 
 	if ($_type == CATEGORY_USERFILE) {
-		$out .= '<option value="0" onclick="location.href=\'?file_category_id=0\'">&nbsp;</option>';
+		if ($files->allow_root_level) {
+			$out .= '<option value="0" onclick="location.href=\'?file_category_id=0\'">&nbsp;</option>';
+		}
 	} else {
 		$out .= '<option value="0">&nbsp;</option>';
 	}
