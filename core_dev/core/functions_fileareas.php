@@ -111,8 +111,8 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 				$userid = $_GET['id'];
 				$username = Users::getName($userid);
 			}
-			echo t('Files').':'.$username;
-			echo getCategoriesSelect(CATEGORY_USERFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
+			if ($categoryId) echo '<h2>'.getCategoryName(CATEGORY_USERFILE, $categoryId).'</h2>';
+			echo t('Change file category').': '.getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, URLadd('file_category_id')).'<br/>';
 			break;
 
 		case FILETYPE_FILEAREA_UPLOAD:
@@ -123,7 +123,7 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 		case FILETYPE_WIKI:
 			if (!$categoryId) echo 'Wiki files - Root Level content<br/>';
 			echo 'Wiki attachments<br/>';
-			echo getCategoriesSelect(CATEGORY_WIKIFILE, 0, '', 0, URLadd('file_category_id')).'<br/>';
+			echo getCategoriesSelect(CATEGORY_WIKIFILE, 0, '', $categoryId, URLadd('file_category_id')).'<br/>';
 			break;
 
 		case FILETYPE_BLOG:
@@ -166,14 +166,13 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 
 	//FIXME: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
 	//FIXME: stöd anon_uploads ! den ignoreras totalt idag, dvs anon uploads tillåts aldrig
-	if ( 
-			($fileType == FILETYPE_USERFILE && $session->id == $userid) ||
-			($fileType == FILETYPE_NEWS && $session->isAdmin) ||
-			($fileType == FILETYPE_WIKI) ||
-			($fileType == FILETYPE_BLOG) ||
-			($fileType == FILETYPE_FILEAREA_UPLOAD)
-			)
-	{
+	if (
+		($fileType == FILETYPE_USERFILE && $session->id == $userid) ||
+		($fileType == FILETYPE_NEWS && $session->isAdmin) ||
+		($fileType == FILETYPE_WIKI) ||
+		($fileType == FILETYPE_BLOG) ||
+		($fileType == FILETYPE_FILEAREA_UPLOAD)
+	) {
 		$file_upload = true;
 		if ($fileType == FILETYPE_BLOG) {
 			$data = getBlog($ownerId);
@@ -182,10 +181,10 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 
 		if ($file_upload) {
 			echo '<div id="file_gadget_upload">';
-			if (($fileType == FILETYPE_USERFILE && !$categoryId && $session->id == $userid) ||
-					($fileType == FILETYPE_WIKI)
-					)
-			{
+			if ($files->allow_user_categories && (
+					($fileType == FILETYPE_USERFILE && !$categoryId && $session->id == $userid) ||
+					$fileType == FILETYPE_WIKI
+			) ) {
 				echo '<input type="button" class="button" value="'.t('New file category').'" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 			}
 
@@ -206,10 +205,10 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 		}
 	}
 
-	if (($fileType == FILETYPE_USERFILE && !$categoryId) ||
-			($fileType == FILETYPE_WIKI)
-			)
-	{
+	if ($files->allow_user_categories && (
+		($fileType == FILETYPE_USERFILE && !$categoryId) ||
+		($fileType == FILETYPE_WIKI)
+	) ) {
 		echo '<div id="file_gadget_category" style="display: none;">';
 		if ($fileType == FILETYPE_USERFILE) echo manageCategoriesDialog(CATEGORY_USERFILE);
 		if ($fileType == FILETYPE_WIKI) echo manageCategoriesDialog(CATEGORY_WIKIFILE);

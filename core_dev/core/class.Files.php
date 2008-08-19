@@ -122,6 +122,8 @@ class Files
 
 	public $allow_rating			= true;			///< allow file rating?
 
+	public $allow_user_categories	= true;			///< allow normal users to create own file categories
+
 	public $default_video = 'video/x-flv';	///< FLV = default fileformat to convert video to
 	public $default_audio = 'audio/x-mpeg';	///< MP3 = default fileformat to convert audio to
 
@@ -149,6 +151,7 @@ class Files
 		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
 
 		if (isset($config['allow_rating'])) $this->allow_rating = $config['allow_rating'];
+		if (isset($config['allow_user_categories'])) $this->allow_user_categories = $config['allow_user_categories'];
 
 		if (isset($config['process_callback'])) $this->process_callback = $config['process_callback'];
 	}
