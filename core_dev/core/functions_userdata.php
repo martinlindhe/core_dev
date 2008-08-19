@@ -563,6 +563,7 @@ function showUserdataField($userId, $settingName, $defaultValue = '')
 		case USERDATA_TYPE_RADIO:
 		case USERDATA_TYPE_SELECT:
 		case USERDATA_TYPE_GENDER:
+		case USERDATA_TYPE_THEME:
 			$val = getCategoryName(CATEGORY_USERDATA, $result);
 			break;
 

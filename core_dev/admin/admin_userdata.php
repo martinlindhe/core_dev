@@ -219,7 +219,14 @@ echo '<input name="fieldprivate" type="hidden" value="0"/>';
 echo '<input name="fieldprivate" id="fieldprivate" type="checkbox" class="checkbox" value="1"'.(!empty($data['private'])?' checked="checked"':'').'/>';
 echo ' <label for="fieldprivate">'.t('Make field private').'</label><br/>';
 
-if (isset($data) && (($data['fieldType'] == USERDATA_TYPE_RADIO) || ($data['fieldType'] == USERDATA_TYPE_SELECT) || ($data['fieldType'] == USERDATA_TYPE_AVATAR) || ($data['fieldType'] == USERDATA_TYPE_GENDER) )) {
+if (isset($data) &&
+	(
+		$data['fieldType'] == USERDATA_TYPE_RADIO ||
+		$data['fieldType'] == USERDATA_TYPE_SELECT ||
+		$data['fieldType'] == USERDATA_TYPE_AVATAR ||
+		$data['fieldType'] == USERDATA_TYPE_GENDER ||
+		$data['fieldType'] == USERDATA_TYPE_THEME
+	) ) {
 
 	$list = getCategoriesByOwner(CATEGORY_USERDATA, $data['fieldId']);
 	echo t('Current options').' ('.count($list).' '.t('options').')<br/>';
