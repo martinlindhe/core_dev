@@ -851,7 +851,7 @@ function editUserdataSettings($_userid = '')
 	echo '</div>';
 }
 
-function editUserdataDropdown($name, $field)
+function editUserdataDropdown($name, $field, $default = '')
 {
 	global $session;
 
@@ -864,10 +864,12 @@ function editUserdataDropdown($name, $field)
 		if (getUserdataFieldType($fieldId) == USERDATA_TYPE_THEME) {
 			$session->theme = $curr;
 		}
-
 	} else {
 		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, 0);
 	}
+
+	if (!$curr) $curr = $default;
+
 	return getCategoriesSelect(CATEGORY_USERDATA, $fieldId, $field, $curr);
 }
 

@@ -365,11 +365,12 @@ function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $sele
 			$shown_my_cats = true;
 		}
 
-		//If text is formatted like "123|Text" then 123 will be used as value for this option
+		//If text is formatted like "123|Text" then 123 will be used as value for this option.
+		//This is used by USERDATA_TYPE_THEME
 		$data = explode('|', $row['categoryName']);
 		if (!empty($data[1])) {
-			$val = $data[0];
-			$text = $data[1];
+			$val = trim($data[0]);
+			$text = trim($data[1]);
 		} else {
 			$val = $row['categoryId'];
 			$text = $data[0];
