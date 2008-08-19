@@ -141,7 +141,7 @@ function getContactsCount($_type, $userId, $groupId = '')
 	$q  = 'SELECT count(t1.contactId) as cnt ';
 	$q .= 'FROM tblContacts AS t1 ';
 	$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
-	return $db->getArray($q);
+	return $db->getOneItem($q);
 }
 
 /**
