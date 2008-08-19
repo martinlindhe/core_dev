@@ -187,6 +187,18 @@ function getUserdataFieldName($_id)
 }
 
 /**
+ * Returns the type of userdata field
+ */
+function getUserdataFieldType($_id)
+{
+	global $db;
+	if (!is_numeric($_id)) return false;
+
+	$q = 'SELECT fieldType FROM tblUserdata WHERE fieldId='.$_id;
+	return $db->getOneItem($q);
+}
+
+/**
  * Returns a input field from the passed data, used together with editUserdataSettings()
  */
 function getUserdataInput($row, $fill = false)
@@ -682,7 +694,7 @@ function loadUserdataBirthdateSwe($userId)
 function loadUserdataTheme($userId, $default)
 {
 	if (!is_numeric($userId)) return false;
-
+//FIXME läs rätt tema!
 	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_THEME);
 	$theme = loadUserdataSetting($userId, $fieldId);
 	if ($theme) return $theme;
@@ -848,6 +860,11 @@ function editUserdataDropdown($name, $field)
 	if (isset($_POST[$field])) {
 		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
+
+		if (getUserdataFieldType($fieldId) == USERDATA_TYPE_THEME) {
+			$session->theme = $curr;
+		}
+
 	} else {
 		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, 0);
 	}
