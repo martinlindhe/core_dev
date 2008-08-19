@@ -109,7 +109,7 @@ function setContact($_type, $userId, $otherId, $groupId = 0)
  * \param $userId user id
  * \param $groupId contact group id
  */
-function getContacts($_type, $userId, $groupId = '')
+function getContacts($_type, $userId, $groupId = '', $_limit_sql = '')
 {
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($userId)) return false;
@@ -120,7 +120,27 @@ function getContacts($_type, $userId, $groupId = '')
 	$q .= 'FROM tblContacts AS t1 ';
 	$q .= 'LEFT JOIN tblUsers AS t2 ON (t2.userId = t1.otherUserId) ';
 	$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
-	$q .= 'ORDER BY t2.userName ASC';
+	$q .= 'ORDER BY t2.userName ASC'.$_limit_sql;
+	return $db->getArray($q);
+}
+
+/**
+ * Returns one type of contacts count for specified userId.
+ *
+ * \param $_type type of contact (friend, blocked)
+ * \param $userId user id
+ * \param $groupId contact group id
+ */
+function getContactsCount($_type, $userId, $groupId = '')
+{
+	global $db;
+	if (!is_numeric($_type) || !is_numeric($userId)) return false;
+	//FIXME returnera namn på gruppen som kontakten tillhör "Gammalt ex", "Suparpolare" etc
+	//FIXME $groupId ignoreras
+
+	$q  = 'SELECT count(t1.contactId) as cnt ';
+	$q .= 'FROM tblContacts AS t1 ';
+	$q .= 'WHERE t1.userId='.$userId.' AND t1.contactType='.$_type.' ';
 	return $db->getArray($q);
 }
 
