@@ -239,6 +239,10 @@ if (isset($data) &&
 		echo '<label for="delete_'.$row['categoryId'].'">'.t('Delete').'</label><br/>';
 	}
 
+	if ($data['fieldType'] == USERDATA_TYPE_THEME) {
+		echo '<b>Example theme rule: "default.css | Default theme"</b><br/><br/>';
+	}
+
 	echo t('Add').':<br/>';
 	echo '<input type="text" name="optionname" size="40"/>';
 }
