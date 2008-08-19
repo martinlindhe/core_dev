@@ -694,7 +694,7 @@ function loadUserdataBirthdateSwe($userId)
 function loadUserdataTheme($userId, $default)
 {
 	if (!is_numeric($userId)) return false;
-//FIXME läs rätt tema!
+
 	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_THEME);
 	$theme = loadUserdataSetting($userId, $fieldId);
 	if ($theme) return $theme;
