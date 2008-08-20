@@ -225,6 +225,10 @@ class Files
 		//physically remove the file from disk
 		unlink($this->findUploadPath($_id));
 		$this->clearThumbs($_id);
+
+		//remove file description
+		deleteComments(COMMENT_FILEDESC, $_id);
+
 		return true;
 	}
 
