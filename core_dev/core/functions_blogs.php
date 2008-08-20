@@ -13,15 +13,15 @@ $config['blog']['moderation'] = true;		//enables automatic moderation of new blo
 $config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport', 'BlogComment', 'BlogFiles');
 $config['blog']['allow_rating'] = true;	//allow users to rate blogs
 
-function addBlog($categoryId, $title, $body)
+function addBlog($categoryId, $title, $body, $isPrivate = 0)
 {
 	global $db, $session, $config;
-	if (!$session->id || !is_numeric($categoryId)) return false;
+	if (!$session->id || !is_numeric($categoryId) || !is_numeric($isPrivate)) return false;
 
 	$title = $db->escape($title);
 	$body = $db->escape($body);
 
-	$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id.',blogTitle="'.$title.'",blogBody="'.$body.'",timeCreated=NOW()';
+	$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id.',blogTitle="'.$title.'",blogBody="'.$body.'",timeCreated=NOW(),isPrivate='.$isPrivate;
 	$blogId = $db->insert($q);
 
 	//Add entry to moderation queue
@@ -49,15 +49,15 @@ function updateBlogReadCount($blogId)
 	$db->update($q);
 }
 
-function updateBlog($blogId, $categoryId, $title, $body)
+function updateBlog($blogId, $categoryId, $title, $body, $isPrivate = 0)
 {
 	global $db, $session, $config;
-	if (!$session->id || !is_numeric($blogId) || !is_numeric($categoryId)) return false;
+	if (!$session->id || !is_numeric($blogId) || !is_numeric($categoryId) || !is_numeric($isPrivate)) return false;
 
 	$title = $db->escape($title);
 	$body = $db->escape($body);
 
-	$q = 'UPDATE tblBlogs SET categoryId='.$categoryId.',blogTitle="'.$title.'",blogBody="'.$body.'",timeUpdated=NOW() WHERE blogId='.$blogId;
+	$q = 'UPDATE tblBlogs SET categoryId='.$categoryId.',blogTitle="'.$title.'",blogBody="'.$body.'",timeUpdated=NOW(),isPrivate='.$isPrivate.' WHERE blogId='.$blogId;
 	$db->update($q);
 
 	//Add entry to moderation queue
@@ -118,11 +118,16 @@ function getBlog($blogId)
  */
 function getBlogsByUserid($userId, $_limit_sql = '')
 {
-	global $db;
+	global $db, $session;
 	if (!is_numeric($userId)) return false;
 
+	$isPrivate = 'AND isPrivate=0';
+	if ($session->id == $userId || isFriends($userId)) {
+		$isPrivate = '';
+	}
+
 	$q  = 'SELECT * FROM tblBlogs ';
-	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 ';
+	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 '.$isPrivate;
 	$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;
 	return $db->getArray($q);
 }
@@ -132,11 +137,16 @@ function getBlogsByUserid($userId, $_limit_sql = '')
  */
 function getBlogsByUseridCount($userId)
 {
-	global $db;
+	global $db, $session;
 	if (!is_numeric($userId)) return false;
 
+	$isPrivate = 'AND isPrivate=0';
+	if ($session->id == $userId || isFriends($userId)) {
+		$isPrivate = '';
+	}
+
 	$q  = 'SELECT count(blogId) AS cnt FROM tblBlogs ';
-	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 ';
+	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 '.$isPrivate;
 	$q .= ' ORDER BY timeCreated DESC';
 	return $db->getOneItem($q);
 }
