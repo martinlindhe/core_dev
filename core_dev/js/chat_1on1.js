@@ -43,6 +43,9 @@ function chat_request_callback()
 				results[1]+'\',\'chatwindow'+results[1]+'\',\'status=1\')">Ja</a> / '+
 				'<a href="javascript:return false;" onClick="set_invisible_by_'+
 				'name(\'popup_chat\');chat_link_chatreq_clicked=1;">Nej</a>';
+		if (getElementById('popup_chat').style.display == 'none') {
+			show_element_by_name('popup_chat');
+		}
 		set_div_content('popup_chat', html);
 		set_visible_by_name('popup_chat');
 	} else if (chat_link_chatreq_clicked) {
