@@ -269,7 +269,7 @@ function t_se($s)
 		case 'Uploaded file is too big': return 'Den uppladdade filen är för stor';
 		case 'Updated gallery': return 'Uppdaterat galleri';
 		case 'Video awaiting conversion.': return 'Videon väntar på att konverteras';
-		case 'Change file category': return 'Ändra filkategori';
+		case 'Show file category': return 'Visa filkategori';
 		case 'Upload a file': return 'Ladda upp en fil';
 		case 'Filename': return 'Filnamn';
 		case 'Filesize': return 'Filstorlek';
@@ -279,6 +279,7 @@ function t_se($s)
 		case 'Width': return 'Bredd';
 		case 'Height': return 'Höjd';
 		case 'times': return 'gånger';
+		case 'Move the file to': return 'Flytta filen till';
 
 		//Categories
 		case 'Global categories': return 'Globala kategorier';

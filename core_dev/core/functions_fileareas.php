@@ -115,7 +115,7 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 				$username = Users::getName($userid);
 			}
 			if ($categoryId) echo '<h2>'.getCategoryName(CATEGORY_USERFILE, $categoryId).'</h2>';
-			echo t('Change file category').': '.getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, URLadd('file_category_id')).'<br/>';
+			echo t('Show file category').': '.getCategoriesSelect(CATEGORY_USERFILE, 0, '', $categoryId, URLadd('file_category_id')).'<br/>';
 			break;
 
 		case FILETYPE_FILEAREA_UPLOAD:
@@ -152,13 +152,21 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 
 	$list = Files::getFiles($fileType, $ownerId, $categoryId);
 
+	echo '<div id="filearea_mover" style="display:none">';
+	echo '<form method="post" action=""/>';
+	echo t('Move the file to').': ';
+	echo getCategoriesSelect(CATEGORY_USERFILE, 0, 'filearea_move_to');
+	echo '<input type="button" class="button" value="'.t('Move').'" onclick="filearea_move_file(this.form.filearea_move_to.value)"/>';
+	echo '<input type="button" class="button" value="'.t('Cancel').'" onclick="filearea_mover_close()"/>';
+	echo '</form>';
+	echo '</div>';
+
 	showImageGadgetXHTML($ownerId);
 	showAudioGadgetXHTML($ownerId);
 	showVideoGadgetXHTML($ownerId);
 	showDocumentGadgetXHTML($ownerId);
 
 	echo '<div id="zoom_fileinfo" style="display:none"></div>';
-	echo '<div id="filearea_mover" style="display:none"></div>';
 
 	echo '<div id="file_gadget_content">';
 
