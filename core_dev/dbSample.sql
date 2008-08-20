@@ -37,6 +37,7 @@ CREATE TABLE `tblBlogs` (
   `rating` tinyint(3) unsigned NOT NULL default '0',
   `ratingCnt` int(10) unsigned NOT NULL default '0',
   `readCnt` int(11) NOT NULL default '0',
+  `isPrivate` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`blogId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
