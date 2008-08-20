@@ -271,6 +271,14 @@ function t_se($s)
 		case 'Video awaiting conversion.': return 'Videon väntar på att konverteras';
 		case 'Change file category': return 'Ändra filkategori';
 		case 'Upload a file': return 'Ladda upp en fil';
+		case 'Filename': return 'Filnamn';
+		case 'Filesize': return 'Filstorlek';
+		case 'Uploader': return 'Uppladdad av';
+		case 'Uploaded at': return 'Uppladdad';
+		case 'Downloaded': return 'Nerladdad';
+		case 'Width': return 'Bredd';
+		case 'Height': return 'Höjd';
+		case 'times': return 'gånger';
 
 		//Categories
 		case 'Global categories': return 'Globala kategorier';

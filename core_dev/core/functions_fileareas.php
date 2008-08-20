@@ -22,7 +22,7 @@ function showFile($fileId, $mime = '', $title = '', $click = true)
 	}
 
 	if (in_array($mime, $files->image_mime_types)) {
-		if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomImage('.$fileId.',0,'.($files->allow_rating?'1':'0').');"><center>';
+		if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomImage('.$fileId.',1,'.($files->allow_rating?'1':'0').');"><center>';
 		echo showThumb($fileId);
 		if ($click) echo '</center></div>';
 	} else if (in_array($mime, $files->audio_mime_types)) {
@@ -280,17 +280,27 @@ function showFileInfo($_id)
 	$file = $files->getFileInfo($_id);
 	if (!$file) return false;
 
-	echo 'Name: '.strip_tags($file['fileName']).'<br/>';
-	echo 'Filesize: '.formatDataSize($file['fileSize']).' ('.$file['fileSize'].' bytes)<br/>';
-	echo 'Uploader: '.htmlentities($file['uploaderName']).'<br/>';
-	echo 'At: '.$file['timeUploaded'].' ('.ago($file['timeUploaded']).')<br/>';
-	if ($files->count_file_views) echo 'Downloaded: '.$file['cnt'].' times<br/>';
+	$list = getComments(COMMENT_FILEDESC, $_id);
+	if ($list && $list[0]['commentText']) {
+		echo '<b>'.t('Description').':</b><br/>';
+		echo nl2br(strip_tags($list[0]['commentText'])).'<br/><br/>';
+	} else {
+		echo '<b><i>'.t('No description').'</i></b><br/><br/>';
+	}
+
+	echo t('Uploaded at').': '.formatTime($file['timeUploaded']).' ('.ago($file['timeUploaded']).')<br/>';
+	echo t('Filename').': '.strip_tags($file['fileName']).'<br/>';
+	echo t('Filesize').': '.formatDataSize($file['fileSize']).' ('.$file['fileSize'].' bytes)<br/>';
+	if ($files->count_file_views) echo t('Downloaded').': '.$file['cnt'].' '.t('times').'<br/>';
+
+	if (!$session->isAdmin) return;
+	echo t('Uploader').': '.htmlentities($file['uploaderName']).'<br/>';
 	echo 'Mime type: '.$file['fileMime'].'<br/>';
 
 	if (in_array($file['fileMime'], $files->image_mime_types)) {
 		//Show additional information for image files
 		list($img_width, $img_height) = getimagesize($files->findUploadPath($_id));
-		echo 'Width: '.$img_width.', Height: '.$img_height.'<br/>';
+		echo t('Width').': '.$img_width.', '.t('Height').': '.$img_height.'<br/>';
 		echo makeThumbLink($_id);
 	} else if (in_array($file['fileMime'], $files->audio_mime_types) && extension_loaded('id3')) {
 		//Show additional information for audio files

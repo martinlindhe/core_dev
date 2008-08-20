@@ -162,7 +162,7 @@ function getComment($commentId)
  * Returns all comments to all objects owned by $ownerId, newest first
  */
 function getCommentsByOwner($_type, $ownerId)
-{
+{	//FIXME remove, this is already implemented with getComments()
 	global $db, $files;
 	if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
