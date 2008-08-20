@@ -74,7 +74,12 @@ function removeContact($_type, $otherId)	//FIXME rename to deleteContact()
 
 	$q = 'DELETE FROM tblContacts WHERE userId='.$session->id.' AND otherUserId='.$otherId.' AND contactType='.$_type;
 	$q2 = 'DELETE FROM tblContacts WHERE userId='.$otherId.' AND otherUserId='.$session->id.' AND contactType='.$_type;
-	if ($db->delete($q) && $db->delete($q2)) return true;
+
+	if ($_type == CONTACT_BLOCKED) {
+		if ($db->delete($q)) return true;
+	} else {
+		if ($db->delete($q) && $db->delete($q2)) return true;
+	}
 	return false;
 }
 
