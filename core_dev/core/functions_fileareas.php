@@ -346,6 +346,7 @@ function showImageGadgetXHTML($ownerId)
 	}
 	if ($session->id == $ownerId || $session->isAdmin) {
 		echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
+		echo	'<input type="button" class="button" value="'.t('Edit').'" onclick="edit_selected_file()"/>';
 	}
 	if ($session->id != $ownerId) {
 		echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';

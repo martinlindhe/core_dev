@@ -280,6 +280,7 @@ function t_se($s)
 		case 'Height': return 'Höjd';
 		case 'times': return 'gånger';
 		case 'Move the file to': return 'Flytta filen till';
+		case 'No description': return 'Beskrivning saknas';
 
 		//Categories
 		case 'Global categories': return 'Globala kategorier';

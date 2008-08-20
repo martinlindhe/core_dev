@@ -58,7 +58,7 @@ function addComment($_type, $ownerId, $commentText, $privateComment = false)
  * Update a comment
  */
 function updateComment($commentType, $ownerId, $commentId, $commentText)
-{
+{	//FIXME commentId och ownerId parametrarna borde byta plats
 	global $db, $session;
 	if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
 

@@ -213,6 +213,11 @@ function viewlog_selected_file()
 	document.location = 'files_viewlog.php?id='+zoomed_id+_ext_ref;
 }
 
+function edit_selected_file()
+{
+	document.location = 'files_edit.php?id='+zoomed_id+_ext_ref;
+}
+
 function comment_selected_file()
 {
 	document.location = 'files_comment.php?id='+zoomed_id+_ext_ref;
