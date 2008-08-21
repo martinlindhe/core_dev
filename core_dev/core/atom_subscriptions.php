@@ -42,15 +42,15 @@ function addSubscription($type, $itemId, $ownerId = 0)
  * Deletes a subscription
  *
  * \param $type type of subscription
- * \param $subscriptionId id to delete
+ * \param $itemId id to delete
  * \return >0 on success
  */
-function removeSubscription($type, $subscriptionId)
+function removeSubscription($type, $itemId)
 {
 	global $db, $session;
-	if (!$session->id || !is_numeric($type) || !is_numeric($subscriptionId)) return false;
+	if (!$session->id || !is_numeric($type) || !is_numeric($itemId)) return false;
 
-	$q = 'DELETE FROM tblSubscriptions WHERE itemId='.$subscriptionId.' AND type='.$type.' AND ownerId='.$session->id;
+	$q = 'DELETE FROM tblSubscriptions WHERE itemId='.$itemId.' AND type='.$type.' AND ownerId='.$session->id;
 	return $db->delete($q);
 }
 
