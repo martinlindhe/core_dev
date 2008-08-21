@@ -5,19 +5,17 @@
  * \todo Implement forum "bookmarks", personal favorite list using this module
  *
  * tblSubscriptions
- *  id				= subscription id
- *  type			= subscription type, SUBSCRIPTION_FORUM, SUBSCRIPTION_BLOG
- *  ownerId		= owner of the subscription (userId)
- *  itemId		= id of the item we are subscribing to (tblForums.forumId perhaps)
+ *  id				subscription id
+ *  type			subscription type, SUBSCRIPTION_FORUM, SUBSCRIPTION_BLOG
+ *  ownerId			owner of the subscription (userId)
+ *  itemId			id of the item we are subscribing to (tblForums.forumId, tblUsers.userId etc)
  *
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_email.php');
-
 define('SUBSCRIPTION_FORUM',			1);
-define('SUBSCRIPTION_BLOG',				2);	//FIXME: implement
-define('SUBSCRIPTION_FILES',			3);	//FIXME: implement
+define('SUBSCRIPTION_BLOG',				2);
+define('SUBSCRIPTION_FILES',			3);
 define('SUBSCRIPTION_USER_CHATREQ',		4);	//itemid = userid of user who requested chat
 
 /**
@@ -77,7 +75,7 @@ function isSubscribed($type, $itemId)
  * \param $type type of subscription
  * \return array of subscriptions
  */
-function getSubscriptions($type)
+function getSubscriptions($type)	//FIXME ta userId som parameter
 {
 	global $db, $session;
 	if (!$session->id || !is_numeric($type)) return false;
@@ -111,94 +109,4 @@ function getSubscribers($type, $itemId)
 	$q = 'SELECT * FROM tblSubscriptions WHERE itemId='.$itemId.' AND type='.$type;
 	return $db->getArray($q);
 }
-
-/*
-//Raderar alla subscriptions av $type och $ownerId
-function removeAllSubscriptions($type, $ownerId)
-{
-	if (!is_numeric($type) || !is_numeric($ownerId)) return false;
-
-	$sql = 'DELETE FROM tblSubscriptions WHERE subscriptionType='.$type.' AND ownerId='.$ownerId;
-	dbQuery($db, $sql);
-}
-
-	
-//Returns an array with all stored settings belonging to this subscription from tblSettings
-function getSubscriptionSettings($type, $ownerId)
-{
-	if (!is_numeric($type) || !is_numeric($ownerId)) return false;
-
-	$sql  = 'SELECT t2.settingId,t2.settingName,t2.settingValue FROM tblSubscriptions AS t1 ';
-	$sql .= 'INNER JOIN tblSettings AS t2 ON (t1.subscriptionId=t2.ownerId) ';
-	$sql .= 'WHERE t1.subscriptionId='.$ownerId.' AND t1.subscriptionType='.$type;
-
-	return dbArray($db, $sql);
-}
-
-//Returnerar ett row för angiven subscription
-function getSubscription($type, $ownerId, $itemId)
-{
-	global $db, $session;
-	if (!is_numeric($type) || !is_numeric($ownerId)) return false;
-		
-	$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$ownerId.' AND itemId='.$itemId;
-	return $db->getOneRow($q);
-}
-
-//Helper function, returns a comma separated text string with mail addresses
-function getEmailSubscribers($subscriptionId)
-{
-	if (!is_numeric($subscriptionId)) return false;
-		
-	$list = getSubscribers($db, SUBSCRIBE_MAIL, $subscriptionId);
-	$mails = array();
-	for ($i=0; $i<count($list); $i++) {
-		$mails[] = $list[$i]['recipient'];
-	}
-		
-	return $mails;
-}
-
-function addSubscriptionHistory($subscriptionId, $time_from, $time_to, $mail_to, $text)
-{
-	if (!is_numeric($subscriptionId) || !is_numeric($time_from) || !is_numeric($time_to)) return false;
-
-	$mail_to = dbAddSlashes($db, $mail_to);
-	$text = dbAddSlashes($db, $text);
-
-	$date_from = date('Y-m-d H:i', $time_from); // YYYY-MM-DD HH:SS format (MySQL DATETIME)
-	$date_to   = date('Y-m-d H:i', $time_to);
-
-	$sql = 'INSERT INTO tblSubscriptionsHistory SET subscriptionId='.$subscriptionId.',timeCreated=NOW(),periodStart="'.$date_from.'",periodEnd="'.$date_to.'",recipients="'.$mail_to.'",message="'.$text.'"';
-	dbQuery($db, $sql);
-}
-	
-//Returns true if this period has already been covered
-function checkSubscriptionHistoryPeriod($subscriptionId, $time_from, $time_to)
-{
-	if (!is_numeric($subscriptionId) || !is_numeric($time_from) || !is_numeric($time_to)) return false;
-	
-	$date_from = date('Y-m-d H:i', $time_from); // YYYY-MM-DD HH:SS format (MySQL DATETIME)
-	$date_to   = date('Y-m-d H:i', $time_to);
-
-	$sql = 'SELECT historyId FROM tblSubscriptionsHistory WHERE subscriptionId='.$subscriptionId.' AND periodStart="'.$date_from.'" AND periodEnd="'.$date_to.'"';
-	$check = dbQuery($db, $sql);
-		
-	if (dbNumRows($check)) return true;
-
-	return false;
-}
-	
-//Returns array of all history entries for specified subscription
-function getSubscriptionHistory($subscriptionType, $subscriptionId)
-{
-	if (!is_numeric($subscriptionType) || !is_numeric($subscriptionId)) return false;
-		
-	$sql  = 'SELECT t1.* FROM tblSubscriptionsHistory AS t1 ';
-	$sql .= 'INNER JOIN tblSubscriptions AS t2 ON (t1.subscriptionId=t2.subscriptionId) ';
-	$sql .= 'WHERE t2.subscriptionType='.$subscriptionType.' AND t1.subscriptionId='.$subscriptionId.' ORDER BY t1.timeCreated ASC';
-	
-	return dbArray($db, $sql);		
-}
-*/
 ?>
