@@ -3,6 +3,18 @@
  * $Id$
  */
 
+function searchBands($query)
+{
+	global $db;
+	$query = $db->escape(trim($query));
+	if (!$query) return false;
+
+	$q  = 'SELECT * FROM tblBands ';
+	$q .= 'WHERE LCASE(bandName) LIKE LCASE("%'.$query.'%") OR LCASE(bandInfo) LIKE LCASE("%'.$query.'%") ';
+	$q .= 'ORDER BY bandName ASC';
+	return $db->getArray($q);
+}
+
 function addBand($band_name)
 {
 	global $db, $session;

@@ -3,6 +3,19 @@
  * $Id$
  */
 
+function searchRecords($query)
+{
+	global $db;
+	$query = $db->escape(trim($query));
+	if (!$query) return false;
+
+	$q  = 'SELECT * FROM tblRecords ';
+	$q .= 'WHERE LCASE(recordName) LIKE LCASE("%'.$query.'%") OR LCASE(recordInfo) LIKE LCASE("%'.$query.'%") ';
+	$q .= 'ORDER BY recordName ASC';
+	return $db->getArray($q);
+}
+
+
 function addRecord($band_id, $record_name, $record_info)
 {
 	global $db, $session;

@@ -7,6 +7,7 @@ function searchLyrics($query)
 {
 	global $db;
 	$query = $db->escape(trim($query));
+	if (!$query) return false;
 
 	$q  = 'SELECT t1.*, t2.bandName FROM tblLyrics AS t1 ';
 	$q .= 'LEFT JOIN tblBands AS t2 ON (t1.bandId=t2.bandId) ';
