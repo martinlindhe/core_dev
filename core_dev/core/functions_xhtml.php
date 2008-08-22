@@ -421,4 +421,25 @@ function coreButton($name, $dst = '')
 	echo '<img src="'.$config['core']['web_root'].'gfx/'.$src.'" alt="'.t($name).'" title="'.t($name).'"/>';
 	if ($dst) echo '</a>';
 }
+
+
+/**
+ * Implements a OpenSearch compatible search engine
+ * 
+ */
+function xhtmlOpenSearch($url, $name)
+{
+	echo '<?xml version="1.0" encoding="UTF-8"?>';
+	echo '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">';
+	echo	'<ShortName>'.$name.'</ShortName>';
+	echo	'<Description>'.$name.'</Description>';
+	//FIXME: implement icon support:
+	//echo	'<Image height="16" width="16" type="image/x-icon">http://en.wikipedia.org/favicon.ico</Image>';
+
+	echo	'<Url type="text/html" template="'.$url.'{searchTerms}"/>';
+
+	//FIXME: implement search suggestion support:
+	//echo	'<Url type="application/x-suggestions+json" method="get" template="http://en.wikipedia.org/w/api.php?action=opensearch&amp;search={searchTerms}&amp;namespace=0"/>';
+	echo '</OpenSearchDescription>';
+}
 ?>

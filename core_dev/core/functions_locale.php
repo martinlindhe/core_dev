@@ -37,6 +37,7 @@ function t($s)
 	if (empty($config['language'])) return $s;
 
 	switch ($config['language']) {
+		case 'en': return $s;		//English (System default)
 		case 'se': return t_se($s);	//Swedish
 		default: die('Unhandled language: '.$config['language']);
 	}
