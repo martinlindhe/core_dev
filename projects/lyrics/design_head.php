@@ -23,12 +23,12 @@ if ($session->id) {
 		'index.php?logout' => 'Log out');
 	createMenu($menu);
 }
-?>
 
-<form name="search" method="post" action="search.php">
-	<input type="text" size="18" name="s"/><br/>
-	<input type="submit" value="Search" class="button"/>
-</form>
+echo xhtmlForm('search.php', 'post', 'search');
+echo xhtmlInput('s', '', 16).'<br/>';
+echo xhtmlSubmit('Search');
+echo xhtmlFormClose();
+?>
 
 </div>
 
