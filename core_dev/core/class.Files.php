@@ -896,7 +896,7 @@ class Files
 	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
 	 */
 	function getFiles($fileType = 0, $ownerId = 0, $categoryId = 0, $_limit = 0, $_order = 'ASC')
-	{
+	{	//FIXME: CLEAN UP & SIMPLIFY THIS MESS
 		global $db, $session;
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($_limit)) return array();
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
@@ -1068,5 +1068,29 @@ class Files
 		return $arr;
 	}
 
+	/**
+	 * Returns a list of file entries
+	 *
+	 * \param $fileType type of files (wiki file, user file etc)
+	 * \param $ownerId owner of the files
+	 * \param $categoryId category of the files
+	 * \param $mediaType media type of file (image, audio etc)
+	 * \param $_limit optional limit the result
+	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
+	 */
+	function getFilesByMediaType($fileType = 0, $ownerId = 0, $categoryId = 0, $mediaType = 0, $_limit = 0)
+	{	//FIXME rename to getFiles(), remove old function & clean up parameter usage for getFiles() everywhere
+		global $db;
+		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($mediaType)) return false;
+
+		$q = 'SELECT * FROM tblFiles';
+		$q .= ' WHERE fileType='.$fileType;
+		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+		if ($mediaType) $q .= ' AND mediaType='.$mediaType;
+		if ($_limit) $q .= ' LIMIT 0,'.$_limit;
+
+		return $db->getArray($q);
+	}
 }
 ?>

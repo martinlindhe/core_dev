@@ -25,7 +25,7 @@ function getThumbUrl($_id, $w = 0, $h = 0)
 
 function showThumb($_id, $_title = '', $w = 0, $h = 0)
 {
-	$str = '<img src="'.getThumbUrl($_id, $w, $h).'" alt="Thumb" title="'.strip_tags($_title).'"/>';
+	$str = '<img src="'.getThumbUrl($_id, $w, $h).'" alt="'.strip_tags($_title).'" title="'.strip_tags($_title).'"/>';
 	return $str;
 }
 
