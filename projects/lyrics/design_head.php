@@ -1,7 +1,7 @@
 <?php
 
 $meta_search[] = array('url' => $config['app']['full_url'].'opensearch.php', 'name' => 'lyric search');
-
+$meta_css[] = $config['app']['full_url'].'css/site.css';
 createXHTMLHeader();
 ?>
 <div id="left_nav">
