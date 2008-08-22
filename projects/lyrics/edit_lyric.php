@@ -32,7 +32,7 @@ echo '<form name="editlyric" method="post" action="'.$_SERVER['PHP_SELF'].'?id='
 echo '<a href="show_band.php?id='.getLyricBandId($lyric_id).'">'.$band_name.'</a> - <input type="text" name="title" size="50" value="'.$lyric_name.'"/> ';
 echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$lyric_id.'&amp;delete">Delete</a><br/>';
 echo '<a href="show_lyric.php?id='.$lyric_id.'">Show</a><br/>';
-echo '<textarea name="lyric" rows="37" cols="90">'.$lyric.'</textarea><br/>';
+echo xhtmlTextarea('lyric', $lyric, 90, 37).'<br/>';
 echo '<input type="submit" value="Save changes" class="button"/>';
 echo '</form><br/>';
 

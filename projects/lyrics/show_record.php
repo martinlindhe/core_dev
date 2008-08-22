@@ -14,19 +14,19 @@ if ($band_id) {
 
 $record_name = getRecordName($record_id);
 
-$title = '"'.htmlspecialchars($band_name).' - '.htmlspecialchars($record_name).'" album overview';
+$title = '"'.htmlspecialchars($band_name).' - '.htmlspecialchars($record_name).'" album overview';	//FIXME rename $title => $meta_title
 require('design_head.php');
 
-echo '<table cellpadding="3" cellspacing="0" border="1">';
-echo '<tr><td colspan="3" class="title">';
 if ($band_id) {
 	echo '<a href="show_band.php?id='.$band_id.'">'.htmlspecialchars($band_name).'</a>';
 } else {
 	echo $band_name;
 }
-echo ' - '.$record_name.'</td>';
-if ($session->id) echo '<td align="right"><a href="edit_record.php?id='.$record_id.'">Edit</a></td></tr>';
+echo ' - '.$record_name.'<br/>';
 
+if ($session->id) echo '<a href="edit_record.php?id='.$record_id.'">Edit details</a><br/><br/>';
+
+echo '<table cellpadding="3" cellspacing="0" border="1">';
 $list = getRecordTracks($record_id);
 foreach ($list as $row)
 {
@@ -59,16 +59,14 @@ foreach ($list as $row)
 			echo '<td><a href="edit_lyric.php?id='.$lyric_id.'">Edit</a></td>';
 			echo '<td><a href="clear_track.php?record='.$record_id.'&amp;track='.$track.'">Clear</a></td>';
 		}
-	}
-	else if ($session->id)
-	{
-		echo '<td colspan="3" bgcolor="#802040">';
+	} else if ($session->id) {
+		echo '<td bgcolor="#802040">';
 		echo '<a href="add_lyric.php?record='.$record_id.'&amp;track='.$track.'">Add lyric</a> | ';
 		echo '<a href="add_cover.php?record='.$record_id.'&amp;track='.$track.'">Add cover</a> | ';
 		echo '<a href="link_with_existing_lyric.php?record='.$record_id.'&amp;track='.$track.'">Link to existing</a>';
 		echo '</td>';
-			
-		echo '<td colspan="2" align="right">';
+
+		echo '<td align="right">';
 		echo '<a href="remove_track.php?record='.$record_id.'&amp;track='.$track.'">Remove</a>';
 		echo '</td>';
 	} else {
@@ -77,7 +75,7 @@ foreach ($list as $row)
 	echo '</tr>';
 }
 
-echo '<tr><td colspan="4">';
+echo '<tr><td colspan="3">';
 if ($session->id) {
 	echo '<a href="add_track.php?id='.$record_id.'">Add track</a> | ';
 	echo '<a href="import_tracks.php?id='.$record_id.'">Import tracklist</a> | ';
