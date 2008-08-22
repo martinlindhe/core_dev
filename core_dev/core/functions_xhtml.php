@@ -3,7 +3,7 @@
  * $Id$
  *
  * Helper functions for rapid XHTML generation
- * 
+ *
  * \disclaimer This file is a required component of core_dev
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
@@ -98,7 +98,7 @@ function createXHTMLHeader()
 function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_current')
 {
 	$cur = basename($_SERVER['SCRIPT_NAME']);
-		
+
 	echo '<ul class="'.$class.'">';
 		foreach($menu_arr as $url => $text) {
 
@@ -178,7 +178,7 @@ function makePager($_total_cnt, $_items_per_page, $_add_value = '')
 		$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
 		$pager['head'] .= '<img src="'.$config['core']['web_root'].'gfx/arrow_next.png" alt="'.t('Next').'" width="11" height="12"/></a>';
 	}
-		
+
 	$pager['head'] .= '<br/>';
 	return $pager;
 }
@@ -330,7 +330,7 @@ function xhtmlTable($arr, $heads)
 		$out .= '</tr>';
 	}
 	$out .= '</table>';
-	return $out;	
+	return $out;
 }
 
 /**
@@ -425,21 +425,23 @@ function coreButton($name, $dst = '')
 
 /**
  * Implements a OpenSearch compatible search engine
- * 
+ *
  */
-function xhtmlOpenSearch($url, $name)
+function xhtmlOpenSearch($url, $name, $icon_url = '')
 {
 	echo '<?xml version="1.0" encoding="UTF-8"?>';
 	echo '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">';
-	echo	'<ShortName>'.$name.'</ShortName>';
-	echo	'<Description>'.$name.'</Description>';
-	//FIXME: implement icon support:
-	//echo	'<Image height="16" width="16" type="image/x-icon">http://en.wikipedia.org/favicon.ico</Image>';
+		echo '<ShortName>'.$name.'</ShortName>';
+		echo '<Description>'.$name.'</Description>';
 
-	echo	'<Url type="text/html" template="'.$url.'{searchTerms}"/>';
+		if ($icon_url) {
+			echo '<Image height="16" width="16" type="image/x-icon">'.$icon_url.'</Image>';
+		}
 
-	//FIXME: implement search suggestion support:
-	//echo	'<Url type="application/x-suggestions+json" method="get" template="http://en.wikipedia.org/w/api.php?action=opensearch&amp;search={searchTerms}&amp;namespace=0"/>';
+		echo '<Url type="text/html" template="'.$url.'{searchTerms}"/>';
+
+		//FIXME: implement search suggestion support:
+		//echo	'<Url type="application/x-suggestions+json" method="get" template="http://en.wikipedia.org/w/api.php?action=opensearch&amp;search={searchTerms}&amp;namespace=0"/>';
 	echo '</OpenSearchDescription>';
 }
 ?>
