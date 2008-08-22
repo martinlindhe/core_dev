@@ -865,7 +865,7 @@ class Files
 	 * \param $_limit optional limit the result
 	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
 	 */
-	function getFiles($fileType, $ownerId = 0, $categoryId = 0, $_limit = 0, $_order = 'ASC')
+	function getFiles($fileType = 0, $ownerId = 0, $categoryId = 0, $_limit = 0, $_order = 'ASC')
 	{
 		global $db, $session;
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($_limit)) return array();
@@ -884,13 +884,15 @@ class Files
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
-		} else {
+		} else if ($fileType) {
 			$q  = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 ';
 			$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId)';
 			$q .= ' WHERE t1.categoryId='.$categoryId;
 			if ($ownerId) $q .= ' AND t1.ownerId='.$ownerId;
 			$q .= ' AND t1.fileType='.$fileType;
 			$q .= ' ORDER BY t1.timeUploaded '.$_order;
+		} else {
+			$q = 'SELECT * FROM tblFiles';
 		}
 
 		if ($_limit) $q .= ' LIMIT 0,'.$_limit;
