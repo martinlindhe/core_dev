@@ -1,20 +1,24 @@
 <?php
-
 $time_start = microtime(true);
 
 error_reporting(E_ALL);
 
-$config['core']['fs_root'] = 'core_dev/';
-$config['core']['web_root'] = '/lyrics/core_dev/';
+$config['core']['fs_root'] = '/home/martin/dev/core_dev/';
+$config['core']['web_root'] = '/core_dev/';
+$config['core']['full_url'] = 'http://projects.localhost'.$config['core']['web_root'];
 
 $config['app']['web_root'] = '/lyrics/';
+$config['app']['full_url'] = 'http://projects.localhost'.$config['app']['web_root'];
 $config['default_title'] = 'lyric database';
+
+$config['language'] = 'en';
+
 
 set_include_path($config['core']['fs_root'].'core/');
 require_once('class.DB_MySQLi.php');
 require_once('class.Auth_Standard.php');
 require_once('class.Session.php');
-require_once('functions_general.php');
+require_once('functions_core.php');
 restore_include_path();
 
 require_once('functions_bands.php');
@@ -23,11 +27,10 @@ require_once('functions_lyrics.php');
 
 $config['debug'] = true;
 
-$config['db']['username']	= 'marti32_lyric';
-$config['db']['password']	= 'dravel6667';
-$config['db']['database']	= 'marti32_lyric';
-$config['db']['host'] = 'mydb5.surf-town.net';
-$db = new DB_MySQLi($config['db']);
+$config['database']['username']	= 'root';
+$config['database']['password']	= '';
+$config['database']['database']	= 'marti32_lyric';
+$db = new DB_MySQLi($config['database']);
 
 $config['session']['timeout'] = (60*30)-1;		//stay logged in for 30 minutes - FIXME om detta ändras så måste det stämme med js-timeouten (som är 30 min nu med iofs..)
 $config['session']['name'] = 'hcLyrics';

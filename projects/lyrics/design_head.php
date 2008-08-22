@@ -1,6 +1,6 @@
 <?php
 
-$meta_search[] = array('url' => $config['app']['web_root'].'opensearch.xml', 'name' => 'lyric search');
+$meta_search[] = array('url' => $config['app']['full_url'].'opensearch.php', 'name' => 'lyric search');
 
 createXHTMLHeader();
 ?>
