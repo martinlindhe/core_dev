@@ -33,6 +33,7 @@ $super_admin_menu = array(
 
 $super_admin_tools_menu = array(
 	$config['core']['web_root'].'admin/admin_compat_check.php'.getProjectPath(0) => 'Compat check',
+	$config['core']['web_root'].'admin/admin_filecheck.php'.getProjectPath(0) => 'File check',
 	$config['core']['web_root'].'admin/admin_db_info.php'.getProjectPath(0) => '$db',
 	$config['core']['web_root'].'admin/admin_session_info.php'.getProjectPath(0) => '$session',
 	$config['core']['web_root'].'admin/admin_ip.php'.getProjectPath(0) => 'Query IP',

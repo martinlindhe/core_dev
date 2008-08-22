@@ -308,10 +308,9 @@ class DB_PostgreSQL extends DB_Base
 	 * Helper function for SQL SELECT queries who returns one entry of data
 	 *
 	 * \param $q the query to execute
-	 * \param $num if set to true, return "0" instead of false on empty result
 	 * \return result
 	 */
-	function getOneItem($q, $num = false)
+	function getOneItem($q)
 	{
 		global $config;
 		$q = $this->translate($q);
@@ -331,10 +330,7 @@ class DB_PostgreSQL extends DB_Base
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);
 
-		if (!$data) {
-			if ($num) return 0;
-			return false;
-		}
+		if (!$data) return false;
 		return $data[0];
 	}
 

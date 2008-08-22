@@ -99,10 +99,9 @@ abstract class DB_Base
 	 * Selects one column of one row of data
 	 * Example: SELECT a FROM t WHERE id=1 (where id is distinct)
 	 * \param $q is the query to execute
-	 * \param $num set to true if you expect a numeric response (to return 0 on failure rather than boolean false)
 	 * \return one column-result only
 	 */
-	abstract function getOneItem($q, $num = false);
+	abstract function getOneItem($q);
 
 	/**
 	 * Lock / unlock db/table helper functions
