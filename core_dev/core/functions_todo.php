@@ -25,11 +25,11 @@ function getTodoItems($categoryId)
 {
 	global $db;
 	if (!is_numeric($categoryId)) return false;
-		
+
 	$q = 'SELECT * FROM tblTodoLists WHERE categoryId='.$categoryId.' AND itemStatus!='.TODO_ITEM_CLOSED;
 	return $db->getArray($q);
 }
-	
+
 /**
  * Only returns CLOSED items
  */
@@ -61,7 +61,7 @@ function deleteTodoItems($categoryId)
 {
 	global $db;
 	if (!is_numeric($categoryId)) return false;
-		
+
 	$q = 'DELETE FROM tblTodoLists WHERE categoryId='.$categoryId;
 	$db->delete($q);
 	return true;
@@ -113,18 +113,18 @@ function assignTodoItem($itemId, $assignedId)
 {
 	global $db;
 	if (!is_numeric($itemId) || !is_numeric($assignedId)) return false;
-		
+
 	$db->update('UPDATE tblTodoLists SET assignedTo='.$assignedId.', itemStatus='.TODO_ITEM_ASSIGNED.' WHERE itemId='.$itemId);
 }
 
 /**
  * XXX
- */	
+ */
 function unassignTodoItem($itemId)
 {
 	global $db;
 	if (!is_numeric($itemId)) return false;
-		
+
 	$q = 'UPDATE tblTodoLists SET assignedTo=0, itemStatus='.TODO_ITEM_OPEN.' WHERE itemId='.$itemId;
 	$db->update($q);
 }
@@ -136,7 +136,7 @@ function getAssignedTasks($userId)
 {
 	global $db;
 	if (!is_numeric($userId)) return false;
-		
+
 	$q = 'SELECT * FROM tblTodoLists WHERE assignedTo='.$userId.' AND itemStatus!='.TODO_ITEM_CLOSED.' ORDER BY timestamp ASC';
 	return $db->getArray($q);
 }
@@ -206,7 +206,7 @@ function getClosedTodoCategoryItems($categoryId)
 {
 	global $db;
 	if (!is_numeric($categoryId)) return false;
-		
+
 	$q = 'SELECT COUNT(itemId) FROM tblTodoLists WHERE categoryId='.$categoryId.' AND itemStatus='.TODO_ITEM_CLOSED;
 	return $db->getOneItem($q);
 }
@@ -304,7 +304,7 @@ function moveBugReport($bugId, $creator, $desc, $details, $timestamp, $category,
 	$itemId = $db->insert($q);
 
 	$db->delete('DELETE FROM tblBugReports WHERE bugId='.$bugId);
-		
+
 	$q = 'INSERT INTO tblTodoListComments SET itemId='.$itemId.',itemComment="'.$comment.'",timestamp='.time().',userId=0';
 	$db->insert($q);
 

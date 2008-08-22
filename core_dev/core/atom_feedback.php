@@ -9,7 +9,7 @@
  */
 
 $config['feedback']['enabled'] = true;
-	
+
 define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
 
 /**

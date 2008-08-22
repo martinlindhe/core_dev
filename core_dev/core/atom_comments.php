@@ -229,7 +229,7 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 		//let users delete comments belonging to their files
 		if ($session->isAdmin ||
 			($_type == COMMENT_FILE && Files::getOwner($ownerId) == $session->id)
-		) {				
+		) {
 			deleteComment($_GET['delete']);	//FIXME: comment typ!
 			unset($_GET['delete']);
 		}
@@ -313,7 +313,7 @@ function showComment($row)
 	) {
 		echo ' | ';
 		echo coreButton('Delete', URLadd('delete', $row['commentId']) );
-		
+
 	}
 	echo '</div>';
 }

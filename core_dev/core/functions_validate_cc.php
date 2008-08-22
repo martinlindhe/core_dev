@@ -7,7 +7,7 @@
  * References:
  *	http://en.wikipedia.org/wiki/Credit_card_number
  *	http://www.beachnet.com/~hstiles/cardtype.html
- *	
+ *
  * Status: Feature complete. Works with my VISA number, needs some real world testing
  *
  * Functions:
@@ -33,7 +33,7 @@ $cc_name[CC_AMEX]		= "American Express";
 $cc_name[CC_DINERS]		= "Diners Club / Carte Blanche";
 $cc_name[CC_DISCOVER]	= "Discover";
 $cc_name[CC_JCB]		= "JCB";
- 
+
 /**
  *  Cleans up a cc number entered by a user
  *
@@ -123,7 +123,7 @@ function CCgetType($number)
 		return CC_JCB;
 	}
 
-	$pref2 = substr($number,0,2);		
+	$pref2 = substr($number,0,2);
 	if (($pref2 >= 51) && ($pref2 <= 55) && $len == 16) {
 		return CC_MASTERCARD;
 	}

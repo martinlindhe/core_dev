@@ -48,7 +48,7 @@ class DB_SQLite extends DB_Base
 			$this->db_handle = false;
 			die('<bad>Database connection error: '.$err.'.</bad>');
 		}
-		
+
 		//FIXME: set charset to utf8. see http://se.php.net/manual/en/function.sqlite-libencoding.php WARNINGS for more details of the problem
 
 		$this->db_driver = 'DB_SQLite';
@@ -196,7 +196,7 @@ class DB_SQLite extends DB_Base
 		}
 
 		$data = sqlite_fetch_array($result); //FIXME: untested
-		
+
 		//$result->free();	//FIXME: how?!?!?
 
 		if ($config['debug']) $this->profileQuery($time_started, $q);

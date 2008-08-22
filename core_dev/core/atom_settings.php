@@ -135,7 +135,7 @@ function deleteAllSettings($ownerId)
 }
 
 /**
- * Removes all occurances of settings with the specified paramets 
+ * Removes all occurances of settings with the specified paramets
  *
  * \param $_type type of settings
  * \param $settingName name of the setting

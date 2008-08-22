@@ -310,7 +310,7 @@ function replaceEMails($text)
  * [head]news article heading[/head]
  * [body]news article body[/body]
  * If no markup is found in the $text, then $title and $text is used raw
- * 
+ *
 */
 function parseArticle($title, $text, $timestamp = '')
 {

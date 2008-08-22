@@ -65,7 +65,7 @@ function showFAQ()
 		if (!empty($_POST['faq_q']) && isset($_POST['faq_a'])) {
 			$active = addFAQ($_POST['faq_q'], $_POST['faq_a']);
 		}
-	
+
 		if (isset($_GET['fid']) && is_numeric($_GET['fid']) && isset($_POST['faq_uq']) && isset($_POST['faq_ua'])) {
 			updateFAQ($_GET['fid'], $_POST['faq_uq'], $_POST['faq_ua']);
 			$active = $_GET['fid'];

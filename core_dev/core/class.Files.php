@@ -219,7 +219,7 @@ class Files
 	/**
 	 * Moves a file to a different file category
 	 *
-	 * \param $_category category to move to 
+	 * \param $_category category to move to
 	 * \param $_id fileId to move
 	 * \return true on success
 	 */
@@ -373,13 +373,13 @@ class Files
 					$msg = t('The user').' '.Users::getName($ownerId).' '.t('has uploaded files to their file area.');
 					$auth->SmtpSend($dst_adr, $subj, $msg);
 					systemMessage($sub['ownerId'], $subj, $msg);
-				}			
+				}
 			}
-		}			
+		}
 		if ($fileType == FILETYPE_USERDATA) {
 			addToModerationQueue(MODERATION_PRES_IMAGE, $fileId, true);
 		}
-		
+
 		return $fileId;
 	}
 
@@ -483,7 +483,7 @@ class Files
 				$client = new SoapClient($config['process']['soap_server']);
 				try {
 					$callback_uri = $this->process_callback.(strpos($this->process_callback, '?') !== false ? '&' : '?').'id='.$fileId;
-					
+
 					$refId = $client->fetchAndConvert($config['process']['username'], $config['process']['password'], $uri, $callback_uri, '');
 					if (!$refId) echo 'Failed to add order!';
 

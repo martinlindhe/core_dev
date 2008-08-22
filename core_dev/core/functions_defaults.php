@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * This file contains default formatting functions. They can be overridden by project-specific functions 
+ * This file contains default formatting functions. They can be overridden by project-specific functions
  *
  * \disclaimer This file is a required component of core_dev
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>

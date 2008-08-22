@@ -44,7 +44,7 @@ function updateBlogReadCount($blogId)
 	global $db;
 
 	if (!is_numeric($blogId)) return false;
-	
+
 	$q = 'UPDATE tblBlogs SET readCnt=readCnt+1 WHERE blogId='.$blogId.' LIMIT 1';
 	$db->update($q);
 }

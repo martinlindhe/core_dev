@@ -98,7 +98,7 @@ function getProjectPath($_amp = 1)	//FIXME: get rid of this function
 		$pos = strrpos($project_path, '/');
 		$proj_name = substr($project_path, $pos+1);
 	}
-		
+
 	if ($proj_name == 'admin') $proj_name = '';
 
 	if ($proj_name) {
@@ -129,7 +129,7 @@ function sql_datetime($timestamp)
 {
 	return date('Y-m-d H:i:s', $timestamp);
 }
-	
+
 /**
  * Returns MySQL datetime in UNIX timestamp format
  * \param $datetime is a MySQL datetime

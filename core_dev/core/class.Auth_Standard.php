@@ -49,7 +49,7 @@ class Auth_Standard extends Auth_Base
 
 			//Checks if email was required, and if so if it was correctly entered
 			if ($this->userdata) {
-				$chk = verifyRequiredUserdataFields();		
+				$chk = verifyRequiredUserdataFields();
 				if ($chk !== true) return $chk;
 			}
 		}
@@ -120,7 +120,7 @@ class Auth_Standard extends Auth_Base
 				$session->error = t('Logins currently not allowed.');
 				return false;
 			}
-			
+
 			$blocked = isBlocked(BLOCK_USERID, $data['userId']);
 			if ($blocked) {
 				$session->error = t('Account blocked');
@@ -396,5 +396,5 @@ class Auth_Standard extends Auth_Base
 		}
 	}
 
-}	
+}
 ?>

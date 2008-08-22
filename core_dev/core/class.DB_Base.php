@@ -206,7 +206,7 @@ abstract class DB_Base
 				echo 'Limit: '. formatDataSize($data['query_cache_limit']).' (per query)<br/>';
 				echo 'Min result unit: '. formatDataSize($data['query_cache_min_res_unit']).'<br/>';
 				echo 'Wlock invalidate: '. $data['query_cache_wlock_invalidate'].'<br/><br/>';
-		
+
 				/* Current query cache status */
 				$data = $this->getMappedArray('SHOW STATUS LIKE "%Qcache%"', 'Variable_name', 'Value');
 				echo '<h2>MySQL query cache status</h2>';
@@ -272,7 +272,7 @@ abstract class DB_Base
 	{
 		global $config;
 		if (!$config['debug']) return;
-		
+
 		if (extension_loaded('xdebug')) {
 			$total_time = xdebug_time_index();
 		} else {

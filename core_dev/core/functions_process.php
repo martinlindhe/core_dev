@@ -1,5 +1,7 @@
 <?php
 /**
+ * $Id$
+ *
  * IMPORTANT: for this to work, the sql user need to have LOCK & UNLOCK privilegies
  *
  * mencoder, ffmpeg (recent svn), ffprobe and imagemagick needs to be available
@@ -231,7 +233,7 @@ function showFileQueueStatus($_id)
 /**
  * Returns the number of items in process queue of specified status
  * Particulary useful to see how many orders are currently being processed (ORDER_EXECUTING)
- * 
+ *
  * \param $_order_status status code
  * \return number of entries of specified status
  */
@@ -473,7 +475,7 @@ function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
 		case 'video/avi':
 			//default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
 			$c = 'mencoder '.$files->findUploadPath($fileId).' -o '.$files->findUploadPath($newId).' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
-			die('verify to video/avi');							
+			die('verify to video/avi');
 			break;
 
 		case 'video/mpeg':

@@ -23,7 +23,7 @@ define('SSN_GENDER_MALE', 		1);
 define('SSN_GENDER_FEMALE',		2);
 
 $ssn_error[SSN_INVALID_INPUT] = 'Invalid input';
-$ssn_error[SSN_INVALID_DATE] = 'Invalid date';	
+$ssn_error[SSN_INVALID_DATE] = 'Invalid date';
 $ssn_error[SSN_WRONG_CHECKSUM] = 'Wrong checksum';
 $ssn_error[SSN_GENDER_IS_MALE] = 'Wrong gender specified, this ssn belongs to a male';
 $ssn_error[SSN_GENDER_IS_FEMALE] = 'Wrong gender specified, this ssn belongs to a female';
@@ -38,7 +38,7 @@ function SsnCleanInput($_ssn)
 {
 	$_ssn = str_replace('-', '', $_ssn);
 	$_ssn = str_replace(' ', '', $_ssn);
-	
+
 	return $_ssn;
 }
 

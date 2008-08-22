@@ -224,7 +224,7 @@ function getGlobalAndUserCategories($_type, $_owner = 0)
  * Default "create a new category" dialog, used by "create blog category" and "create category in personal file area"
  * also allows for managing and deleting categories
  *
- * \param $_type 
+ * \param $_type
  */
 function manageCategoriesDialog($_type)
 {
@@ -245,7 +245,7 @@ function manageCategoriesDialog($_type)
 		echo 'Category removed!';
 		return;
 	}
-		
+
 	$edit_id = 0;
 	if (!empty($_GET['cat_edit_id']) && is_numeric($_GET['cat_edit_id'])) $edit_id = $_GET['cat_edit_id'];
 

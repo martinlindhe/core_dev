@@ -33,7 +33,7 @@ function addGuestbookEntry($ownerId, $subject, $body, $private = 0)
 
 	//Add entry to moderation queue
 	if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_GUESTBOOK, $entryId, true);
-	
+
 	return $entryId;
 }
 
@@ -43,12 +43,12 @@ function addGuestbookEntry($ownerId, $subject, $body, $private = 0)
 function setGuestbookAnswerId($entryId, $answerId)
 {
 	global $db;
-	
+
 	if (!is_numeric($entryId) && !is_numeric($answerId)) return false;
-	
+
 	$q = 'UPDATE tblGuestbooks SET answerId='.$answerId.' WHERE entryId = '.$entryId.' LIMIT 1';
 	return $db->update($q);
-	
+
 }
 
 /**

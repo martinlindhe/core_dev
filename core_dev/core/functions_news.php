@@ -139,7 +139,7 @@ function showNewsArticle($_id = 0)
 
 	$news = getNewsItem($_id);
 	if (!$news) return;
-		
+
 	if (!$session->isAdmin && !datetime_less($news['timeToPublish'], now())) return false;
 
 	echo '<div class="news">';
@@ -157,7 +157,7 @@ function showNewsArticle($_id = 0)
 	} else {
 		echo ', <b>'.t('will be published').' '.formatTime($news['timeToPublish']).'</b><br/>';
 	}
-	
+
 	if ($news['editorId']) echo '<i>'.t('Updated').' '.formatTime($news['timeEdited']).' '.t('by').' '.$news['editorName'].'</i><br/>';
 	echo '</div>'; //class="news_top"
 	echo '<br/>';
@@ -271,7 +271,7 @@ function showNews($limit = 0)
 		echo '<a href="'.$config['core']['web_root'].'admin/admin_news.php'.getProjectPath(0).'">'.t('Manage news').'</a><br/>';
 	}
 }
-	
+
 function showNewsOverview($row)
 {
 	global $config;
@@ -292,7 +292,7 @@ function showNewsOverview($row)
 	echo '<br/>'.$art['head'].'<br/>';
 	*/
 	echo '</div><br class="clr"/>';
-		
+
 	if ($config['news']['allow_polls']) {
 		//show news polls
 		showAttachedPolls(POLL_NEWS, $row['newsId']);

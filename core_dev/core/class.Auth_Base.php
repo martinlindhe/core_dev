@@ -225,7 +225,7 @@ The link will expire in __EXPIRETIME__";
 			$session->error = t('Invalid email address or username');
 			return false;
 		}
-		
+
 		$email = loadUserdataEmail($_id);
 
 		$code = generateActivationCode(ACTIVATE_CHANGE_PWD, 10000000, 99999999);

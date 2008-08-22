@@ -83,7 +83,7 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
 
 /**
  * Converts a timespan into human-readable text
- * 
+ *
  * \param $seconds number of seconds to present
  * \return returns a sting like: 4h10m3s
  */

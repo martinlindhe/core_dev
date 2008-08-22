@@ -36,7 +36,7 @@ function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
 		case 'month':
 			$length = 30;
 			break;
-				
+
 		case '': break;
 
 		default:
@@ -220,7 +220,7 @@ function poll($_type, $_id)
 {
 	global $session;
 	if (!is_numeric($_type) || !is_numeric($_id)) return false;
-		
+
 	$data = getPoll($_type, $_id);
 	if (!$data) return false;
 
@@ -339,7 +339,7 @@ function managePolls($_type, $_owner = 0)
 			removePoll($_type, $pollId);
 			return;
 		}
-			
+
 		$poll = getPoll($_type, $pollId);
 
 		if (!empty($_GET['poll_stats'])) {
@@ -466,7 +466,7 @@ function managePolls($_type, $_owner = 0)
 		case POLL_SITE:
 			echo '<h1>Site polls</h1>';
 			break;
-				
+
 		case POLL_NEWS:
 			echo '<h1>News polls</h1>';
 			break;
@@ -475,7 +475,7 @@ function managePolls($_type, $_owner = 0)
 		case POLL_FORTUNE:
 			echo '<h1>Fortunes</h1>';
 			break;
-				
+
 		default: die('managePolls() EEP');
 	}
 

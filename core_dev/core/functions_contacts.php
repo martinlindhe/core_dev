@@ -354,7 +354,7 @@ function acceptFriendRequest($otherId)
 	$q  = 'DELETE FROM tblFriendRequests';
 	$q .= ' WHERE senderId='.$otherId.' AND recieverId='.$session->id;
 	$cnt = $db->delete($q);
-		
+
 	if ($cnt != 1) return false;
 
 	//create a friend relation

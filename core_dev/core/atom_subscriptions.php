@@ -30,7 +30,7 @@ function addSubscription($type, $itemId, $ownerId = 0)
 {
 	global $db, $session;
 	if (!$session->id || !is_numeric($type) || !is_numeric($itemId)|| !is_numeric($ownerId)) return false;
-		
+
 	if ($ownerId == 0 && isSubscribed($type, $itemId)) return false;
 	$q = 'INSERT INTO tblSubscriptions SET ownerId='.($ownerId==0?$session->id:$ownerId).', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
 	return $db->insert($q);
@@ -91,7 +91,7 @@ function getSubscriptions($type)	//FIXME ta userId som parameter
 			$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$session->id;
 			break;
 	}
-	return $db->getArray($q);		
+	return $db->getArray($q);
 }
 
 /**

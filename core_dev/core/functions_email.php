@@ -62,7 +62,7 @@ function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '')
 	if (!$mail->Send()) return false;
 	return true;
 }
-	
+
 /**
  * XXX
  */
@@ -70,10 +70,10 @@ function contact_users($message, $subject, $all, $presvid, $logged_in_days, $day
 {
 	global $db, $files;
 	if (empty($message) || empty($subject)) return false;
-		
+
 	if ($all == 1) { // Ignore everything else, just get a list of all users.
 		$users = Users::getUsers();
-			
+
 		foreach ($users as $row) {
 			$email = loadUserdataEmail($row['userId']);
 			echo 'All users.<br/>';

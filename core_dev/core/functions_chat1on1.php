@@ -7,7 +7,7 @@
 
 /**
  * Function that prints the html for a pop-up 1on1 chat
- * NOTE: Dont use any other code that uses createXHTMLHeader 
+ * NOTE: Dont use any other code that uses createXHTMLHeader
  * on the page that uses this function.
  *
  * \param $otherId user ID of the user the logged in user wants to chat with
@@ -50,7 +50,7 @@ function chat_1on1_XHTML($otherId)
 	echo '<input type="button" name="send" value="Send" onClick="chat_send(document.chat_form.chat_message)"/>';
 
 	echo '</form>';
-	
+
 	echo '</div>';
 
 	echo '</body></html>';

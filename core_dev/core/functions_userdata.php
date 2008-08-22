@@ -20,7 +20,7 @@ define('USERDATA_TYPE_IMAGE',				6);	//UNIQUE: Used as presentation picture
 define('USERDATA_TYPE_BIRTHDATE_SWE',		7);	//UNIQUE: Swedish date of birth, with last-4-digits control check
 define('USERDATA_TYPE_EMAIL',				8);	//UNIQUE: text string holding a email address
 define('USERDATA_TYPE_THEME',				9); //UNIQUE: select-dropdown in display. contains user preferred theme (.css file)
-define('USERDATA_TYPE_LOCATION_SWE',		10);//UNIQUE: location gadget,user inputs zipcode which maps to "län" and "ort" 
+define('USERDATA_TYPE_LOCATION_SWE',		10);//UNIQUE: location gadget,user inputs zipcode which maps to "län" and "ort"
 define('USERDATA_TYPE_CELLPHONE',			11);//UNIQUE: cellphone number
 define('USERDATA_TYPE_AVATAR',				12);//UNIQUE: avatar is radiobutton list but with images
 define('USERDATA_TYPE_BIRTHDATE',			13);//UNIQUE: Date of birth
@@ -338,7 +338,7 @@ function getUserdataInput($row, $fill = false)
 					if (is_numeric($_POST['userdata_'.$fieldId.'_day'])) $d = $_POST['userdata_'.$fieldId.'_day'];
 					if (is_numeric($_POST['userdata_'.$fieldId.'_chk'])) $chk = $_POST['userdata_'.$fieldId.'_chk'];
 				}
-				
+
 				$result .= '<select name="userdata_'.$fieldId.'_year">';
 				$result .= '<option value="">- '.t('Year').' -';
 				for ($j=date('Y')-100; $j<=date('Y'); $j++) {
@@ -493,7 +493,7 @@ function verifyRequiredUserdataFields()
 
 			case USERDATA_TYPE_LOCATION_SWE:
 				if (!ZipLocation::isValid($_POST['userdata_'.$row['fieldId']])) return t('The Swedish zipcode you entered is not valid!');
-				break; 
+				break;
 		}
 	}
 
@@ -533,7 +533,7 @@ function handleRequiredUserdataFields($userId)
 				if (empty($_POST['userdata_'.$row['fieldId']])) continue;
 				$val = $_POST['userdata_'.$row['fieldId']];
 				break;
-		}				
+		}
 
 		saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $val);
 	}
@@ -753,7 +753,7 @@ function findUserByEmail($email)
 function editUserdataSettings($_userid = '')
 {
 	global $config, $session, $files;
-	
+
 	if (empty($_userid)) {
 		$_userid = $session->id;
 	}
@@ -938,7 +938,7 @@ function editUserdataImage($name, $field)
 	}
 
 	$out = '';
-	
+
 	if ($curr) {
 		$out .= '<b>Aktuell profilbild:</b><br/>';
 
@@ -972,7 +972,7 @@ function getUsersOnlineByGender($gender)
 
 	$cats = getCategories(CATEGORY_USERDATA, $fieldId);
 
-	$genderId = 0;	
+	$genderId = 0;
 	foreach ($cats as $row) {
 		if ($row['categoryName'] == $gender) {
 			$genderId = $row['categoryId'];
@@ -997,7 +997,7 @@ function getUsersOnlineByGenderCnt($gender)
 
 	$cats = getCategories(CATEGORY_USERDATA, $fieldId);
 
-	$genderId = 0;	
+	$genderId = 0;
 	foreach ($cats as $row) {
 		if ($row['categoryName'] == $gender) {
 			$genderId = $row['categoryId'];
@@ -1021,7 +1021,7 @@ function getRandomUserByGender($gender)
 
 	$cats = getCategories(CATEGORY_USERDATA, $fieldId);
 
-	$genderId = 0;	
+	$genderId = 0;
 	foreach ($cats as $row) {
 		if ($row['categoryName'] == $gender) {
 			$genderId = $row['categoryId'];

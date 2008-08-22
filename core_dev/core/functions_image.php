@@ -60,7 +60,7 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
 
 	imagedestroy($image);
 	imagedestroy($image_p);
-		
+
 	if ($fileId) {
 		//Update fileId entry with the new file size (DONT use when creating thumbnails or cloning files!)
 		clearstatcache();	//needed to get current filesize()
@@ -68,7 +68,7 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
 		$db->update($q);
 		//FIXME: need to update file checksums
 	}
-		
+
 	return true;
 }
 
@@ -325,7 +325,7 @@ function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 1
 			$font = imageloadfont($font);
 		}
 	}
-		
+
 	if (!$ttf) $fh = imagefontheight($font);
 
 	$i = 0;

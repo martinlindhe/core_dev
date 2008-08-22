@@ -12,7 +12,7 @@
 function URLadd($_key, $_val = '', $_extra = '')	//FIXME: is this function even required???
 {
 	$curr_url = 'http://localhost'.$_SERVER['REQUEST_URI'];
-		
+
 	$arr = parse_url($curr_url);
 
 	$wiki_link = false;
@@ -32,7 +32,7 @@ function URLadd($_key, $_val = '', $_extra = '')	//FIXME: is this function even 
 	$out_args = '';
 
 	for ($i=0; $i<count($args); $i++) {		//fixme: use foreach
-			
+
 		$vals = explode('=', $args[$i]);
 
 		//Skip it here, $keyval will be added later
@@ -67,13 +67,13 @@ function URLadd($_key, $_val = '', $_extra = '')	//FIXME: is this function even 
  * Helper function used to create "are you sure?" pages
  *
  * Example use:
- *	
+ *
  * if (confirmed('Are you sure you want to delete this rule?', 'id', $_GET['id'])) {
  *		deleteItem($_GET['id']);
  * }
- *	
+ *
  * Wiki-style link example use:
- * 
+ *
  * if (confirmed('Are you sure you want to delete this blog?', 'BlogDelete:'.$_id)) {
  *		deleteBlog($_GET['BlogDelete:'.$_id]);
  * }
@@ -132,7 +132,7 @@ function cleanupText($text)
 		$temp = $text;
 		$text = str_replace('  ', ' ', $text);
 	} while ($text != $temp);
-	
+
 	$text = str_replace('\n', "\n", $text);
 	$text = str_replace('\r', "\r", $text);
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * $Id$
- *	
+ *
  *	core											tblWiki
  *	for history-support: atom_revisions.php			tblRevisions
  *	for files-support: $files objekt				tblFiles
@@ -63,7 +63,7 @@ function wikiFormat($wikiName, $data)
 		echo t('The wiki').' "'.$wikiName.'" '.t('does not yet exist').'!<br/>';
 		if ($session->id && $session->isWebmaster) {
 			coreButton('Create', $_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName);
-			
+
 		}
 		echo '</div>';
 		echo '</div>';

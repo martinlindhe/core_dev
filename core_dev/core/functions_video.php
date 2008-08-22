@@ -15,7 +15,7 @@
  *
  * To embed an object in HTML document, the object class ID is required.
  * The class ID for Windows Media Player 7, 9, 10 and 11 is clsid:6BF52A52-394A-11D3-B153-00C04F79FAA6.
- * If you want to embed Windows Media Player 6.4 instead of the latest version, the class ID is clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95.  
+ * If you want to embed Windows Media Player 6.4 instead of the latest version, the class ID is clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95.
  *
  * \param $url video url to embed
  * \return html code

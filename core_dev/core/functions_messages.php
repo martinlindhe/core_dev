@@ -18,7 +18,7 @@ function sendMessage($_id, $_subj, $_msg)
 	//Adds message to recievers inbox
 	$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId='.$session->id.',toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
 	$db->insert($q);
-		
+
 	//Add message to senders outbox
 	$q = 'INSERT INTO tblMessages SET ownerId='.$session->id.',fromId='.$session->id.',toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_OUTBOX;
 	$id = $db->insert($q);
@@ -32,12 +32,12 @@ function sendMessage($_id, $_subj, $_msg)
 function setMessageAnswerId($msgId, $answerId)
 {
 	global $db;
-	
+
 	if (!is_numeric($msgId) && !is_numeric($answerId)) return false;
-	
+
 	$q = 'UPDATE tblMessages SET answerId='.$answerId.' WHERE msgId = '.$msgId.' LIMIT 1';
 	return $db->update($q);
-	
+
 }
 
 
@@ -125,7 +125,7 @@ function getMessages($_group = 0, $_limit_sql = '')
 			$q .= 'AND t1.timeDeleted IS NULL ';
 			$q .= 'ORDER BY timeCreated DESC'.$_limit_sql;
 			break;
-				
+
 		default:
 			$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session->id.' AND groupId='.$_group;
 	}
@@ -155,7 +155,7 @@ function getMessagesCount($_group = 0)
 			$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
 			$q .= 'AND t1.timeDeleted IS NULL';
 			break;
-				
+
 		default:
 			$q = 'SELECT count(*) FROM tblMessages WHERE ownerId='.$session->id.' AND groupId='.$_group;
 	}
@@ -200,7 +200,7 @@ function markMessageRead($_id)
 {
 	global $db, $session;
 	if (!is_numeric($_id)) return false;
-		
+
 	$q = 'UPDATE tblMessages SET timeRead=NOW() WHERE ownerId='.$session->id.' AND toId='.$session->id.' AND msgId='.$_id;
 	return $db->update($q);
 }
@@ -224,7 +224,7 @@ function showMessages($_group = 0)
 {
 	global $db, $session, $config;
 	if (!is_numeric($_group)) return false;
-		
+
 	if (!empty($_GET['read']) && is_numeric($_GET['read'])) {
 		//Shows one message
 		$msg = getMessage($_GET['read']);

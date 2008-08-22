@@ -49,7 +49,7 @@ class DB_PostgreSQL extends DB_Base
 
 			die('<bad>Database connection error.</bad>');
 		}
-		
+
 		//FIXME: set charset if it is not utf8 (will be the default anyways if none is specified)
 
 		$this->db_driver = 'DB_PostgreSQL';

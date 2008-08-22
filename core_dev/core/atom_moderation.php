@@ -71,9 +71,9 @@ function isSensitive($text)
 function isInQueue($object, $type)
 {
 	global $db;
-		
+
 	if (!is_numeric($object) || !is_numeric($type)) return false;
-		
+
 	$q = 'SELECT queueId FROM tblModeration WHERE queueType = '.$type.' AND itemId = '.$object.' AND moderatedBy = 0 LIMIT 1';
 	if ($db->getOneItem($q)) return true;
 	return false;
@@ -364,7 +364,7 @@ function removeFromModerationQueueByType($_type, $itemId)
 {
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($itemId)) return false;
-		
+
 	$q = 'DELETE FROM tblModeration WHERE  queueType='.$_type.' AND itemId='.$itemId;
 	$db->delete($q);
 }
@@ -392,7 +392,7 @@ function reportDialog($_type, $_id)
 			echo '<h2>'.t('Report file').'</h2>';
 			echo t('Please choose the reason as to why you wish to report this file').':<br/>';
 			break;
-				
+
 		default: die('reportDialog() unhandled type: '.$_type);
 	}
 

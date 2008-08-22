@@ -505,7 +505,7 @@ function displayForumContentFlat($itemId)
 			//if ($row['sticky'] == 2) echo '<b>Announcement: </b>';
 			echo '<a href="forum.php?id='.$row['itemId'].'">'.$row['itemSubject'].'</a><br/>';
 		echo '</td>';
-			
+
 		echo '<td>';	//author
 			echo Users::link($row['authorId'], $row['authorName']);
 			//echo ' '.$row['timeCreated'];
@@ -570,7 +570,7 @@ function showForumPost($item, $islocked = false)
 
 	$subject = formatUserInputText($item['itemSubject']);
 	$body = formatUserInputText($item['itemBody']);
-		
+
 	if (!$islocked) $islocked = $item['locked'];
 
 	echo '<a name="post'.$item['itemId'].'" id="post'.$item['itemId'].'"></a>';
@@ -579,7 +579,7 @@ function showForumPost($item, $islocked = false)
 	echo '<tr class="forum_post_item">';
 	echo '<td valign="top">';
 	if ($subject) echo '<h1>'.$subject.'</h1><hr/>';
-		
+
 	echo '<div class="forum_post_details">';
 	echo '<a href="forum.php?id='.$item['parentId'].'#post'.$item['itemId'].'">';
 	echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
@@ -628,7 +628,7 @@ function showForumPost($item, $islocked = false)
 
 	if (forumItemIsDiscussion($item['itemId'])) {
 		echo '<a href="forum_tipsa.php?id='.$item['itemId'].'">Tell a friend</a> ';
-			
+
 		if ($session->isAdmin) {
 			if (!$item['locked']) {
 				echo '<a href="forum_lock.php?id='.$item['itemId'].'">Lock</a> ';
@@ -670,7 +670,7 @@ function displayTopicFlat($itemId)
 
 	$tot_cnt = getForumItemCountFlat($itemId);
 	$pager = makePager($tot_cnt, $config['forum']['posts_per_page']);
-		
+
 	$list = getForumItems($itemId, true, $pager['limit']);	//get replies
 
 	echo $pager['head'];
@@ -898,7 +898,7 @@ function createForumCategory($itemId)
 
 	$writeSubject = '';
 	$writeBody = '';
-		
+
 	if ($quoteId) {
 		/* Quote another message */
 		$quoteItem = getForumItem($quoteId);
@@ -922,10 +922,10 @@ function createForumCategory($itemId)
 				//Create category or a forum
 				if ($writeSubject) {
 					$createdId = addForumFolder($itemId, $writeSubject, $writeBody);
-		
+
 					header('Location: forum.php?id='.$createdId);
-					die;	
-		
+					die;
+
 				} else {
 					$forum_error = 'You must write a topic!';
 				}
@@ -937,7 +937,7 @@ function createForumCategory($itemId)
 					$sticky = 0;
 					if ($session->isAdmin && !empty($_POST['sticky'])) $sticky = $_POST['sticky'];
 					$createdId = addForumMessage($itemId, $writeSubject, $writeBody, $sticky);
-						
+
 					if ($createdId) {
 						//attach all FILETYPE_FORUM ownerId =0 to this id
 						$q = 'UPDATE tblFiles SET ownerId='.$createdId.' WHERE fileType='.FILETYPE_FORUM.' AND ownerId=0 AND uploaderId='.$session->id;
@@ -945,7 +945,7 @@ function createForumCategory($itemId)
 					}
 
 					header('Location: forum.php?id='.$itemId.'#post'.$createdId);
-					die;	
+					die;
 				}
 			}
 		} else {
@@ -973,7 +973,7 @@ function createForumCategory($itemId)
 	if (!empty($forum_error)) echo '<div class="critical">'.$forum_error.'</div>';
 
 	echo '<form method="post" name="newpost" enctype="multipart/form-data" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
-	
+
 	if ($itemId == 0) {
 		//Create root level category (admins only)
 		echo 'Forum - Add new root level category<br/><br/>';
@@ -983,9 +983,9 @@ function createForumCategory($itemId)
 		//Create a category inside a "root level category" (admins only)
 		echo 'Forum - Add new subcategory (under <b>'.getForumName($itemId).'</b>)<br/><br/>';
 
-		echo 'Subject: <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';		
+		echo 'Subject: <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
 		echo 'Description:<br/>';
-		echo '<input type="text" name="body" size="60" value="'.$writeBody.'"/><br/><br/>';		
+		echo '<input type="text" name="body" size="60" value="'.$writeBody.'"/><br/><br/>';
 	} else if ($parent['parentId'] == 0) {
 		//Create a discussion thread (everyone)
 		echo 'Add new discussion thread under '.getForumDepthHTML(FORUM_FOLDER, $itemId).'<br/><br/>';
@@ -1005,9 +1005,9 @@ function createForumCategory($itemId)
 
 		//handle file upload
 		if (!empty($_FILES['file1'])) {
-			$files->handleUpload($_FILES['file1'], FILETYPE_FORUM, 0);	
+			$files->handleUpload($_FILES['file1'], FILETYPE_FORUM, 0);
 		}
-			
+
 		$files->showAttachments(FILETYPE_FORUM, 0);
 
 		echo '<div id="forum_new_attachment">';
@@ -1052,7 +1052,7 @@ function forumEdit($itemId)	//FIXME använd inte header()
 
 	$subject = '';
 	$body = '';
-	
+
 	if (!empty($_POST['subject'])) $subject = $_POST['subject'];
 	if (!empty($_POST['body'])) $body = $_POST['body'];
 
@@ -1061,8 +1061,8 @@ function forumEdit($itemId)	//FIXME använd inte header()
 		if ($session->isAdmin && !empty($_POST['sticky'])) $sticky = 1;
 
 		forumUpdateItem($itemId, $subject, $body, $sticky);
-			
-		if (forumItemIsMessage($itemId)) {		
+
+		if (forumItemIsMessage($itemId)) {
 			header('Location: forum.php?id='.$item['parentId'].'#post'.$itemId);
 		} else {
 			header('Location: forum.php?id='.$itemId);

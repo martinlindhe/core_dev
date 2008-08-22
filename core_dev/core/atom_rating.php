@@ -123,7 +123,7 @@ function ratingGadget($_type, $_id)
 	global $db, $session, $config;
 	if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	if (!$session->id || isRated($_type, $_id) || 
+	if (!$session->id || isRated($_type, $_id) ||
 		($_type == RATE_FILE && Files::getOwner($_id) == $session->id))
 		return showRating($_type, $_id);
 

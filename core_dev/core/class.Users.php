@@ -10,7 +10,7 @@
 require_once('functions_visits.php');
 require_once('functions_messages.php');	//for sendMessage()
 
-$config['user']['log_visitors'] = true;	
+$config['user']['log_visitors'] = true;
 
 class Users
 {
@@ -46,7 +46,7 @@ class Users
 	function getUsersBornAtDate($date)
 	{
 		global $db;
-		
+
 		$type = getUserdataFieldIdByType(USERDATA_TYPE_BIRTHDATE_SWE);
 
 		$q  = 'SELECT ownerId FROM tblSettings WHERE settingName = '.$type.' AND ';
@@ -64,11 +64,11 @@ class Users
 	function getLoginCountPerDate($dateStart, $dateStop = '')
 	{
 		global $db;
-		
+
 		if (empty($dateStop)) {
 			$dateStop = $dateStart;
 		}
-		
+
 		$q = 'SELECT count(userId) AS cnt, date(timeCreated) AS date FROM tblLogins WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
 		return $db->getArray($q);
 	}
@@ -79,12 +79,12 @@ class Users
 	function getDistinctLoginCountPerDate($dateStart, $dateStop = '')
 	{
 		global $db;
-		
+
 		if (empty($dateStop)) {
 			$dateStop = $dateStart;
 		}
 
-		
+
 		$q = 'SELECT count(distinct(userId)) AS cnt, date(timeCreated) AS date FROM tblLogins WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
 		return $db->getArray($q);
 	}
@@ -127,7 +127,7 @@ class Users
 			$q = 'SELECT userMode FROM tblUsers WHERE userId='.$_id;
 			$mode = $db->getOneItem($q);
 		}
-		
+
 		return $session->userModes[$mode];
 	}
 
@@ -138,7 +138,7 @@ class Users
 	{
 		global $db, $session;
 		if (!$session->isSuperAdmin || !is_numeric($_id) || !is_numeric($_mode)) return false;
-		
+
 		$q = 'UPDATE tblUsers SET userMode='.$_mode.' WHERE userId='.$_id;
 		$db->update($q);
 
@@ -185,7 +185,7 @@ class Users
 				return false;
 			}
 		}
-		
+
 		$q = 'UPDATE tblUsers SET userPass="'.sha1( $_id.sha1($key).sha1($_pwd1) ).'" WHERE userId='.$_id;
 		$db->update($q);
 		return true;
@@ -420,7 +420,7 @@ class Users
 		if (!$id) return 'UNREGISTERED';
 		if (!$name) $name = Users::getName($id);
 		if (!$name) return 'User deleted';
-		
+
 		$pic_id = loadUserdataImage($id);
 
 		return makeThumbLink($pic_id, $name);
@@ -540,7 +540,7 @@ class Users
 	function getSearchResult($data)
 	{
 		global $db, $session;
-		
+
 		$criteria = 0;
 		if (isset($data['c'])) {
 			$data['c'] = trim($data['c']);

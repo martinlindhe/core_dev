@@ -35,7 +35,7 @@ $config['activate']['expire_time_account']		= (24*60*60)*30;	///< 30 days
 function generateActivationCode($_type, $lo, $hi)
 {
 	global $db;
-	
+
 	$expiry = getActivationExpireTime($_type);
 
 	do {
@@ -172,7 +172,7 @@ function createActivation($_type, $_code, $_answer = '')
 		case ACTIVATE_CHANGE_PWD:
 		case ACTIVATE_ACCOUNT:
 			if (!is_numeric($_answer)) return false;
-			removeActivations($_type, $_answer); 
+			removeActivations($_type, $_answer);
 			$q .= ',userId='.$_answer;
 			break;
 	}

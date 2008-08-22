@@ -68,7 +68,7 @@ function getCalendars($_type, $_owner = 0)
 }
 
 /**
- * Returns all calendars active within specified timespan 
+ * Returns all calendars active within specified timespan
  */
 function getActiveCalendars($_type, $_owner, $ts)
 {
