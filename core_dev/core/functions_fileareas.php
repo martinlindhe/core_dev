@@ -77,6 +77,8 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 	global $session, $db, $config, $files;
 	if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
 
+	if (!empty($_GET['cat']) && is_numeric($_GET['cat'])) $categoryId = $_GET['cat'];
+
 	if ($fileType == FILETYPE_FILEAREA_UPLOAD || $fileType == FILETYPE_USERFILE || $fileType == FILETYPE_WIKI) {
 		if (!empty($_GET['file_category_id']) && is_numeric($_GET['file_category_id'])) $categoryId = $_GET['file_category_id'];
 	}
@@ -230,6 +232,12 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 	}
 	echo '</div>'; //id="file_gadget_content"
 	echo '</div>'; //class="file_gadget"
+
+	if (!empty($_GET['focus']) && is_numeric($_GET['focus'])) {
+		echo '<script type="text/javascript">';
+		echo 'zoomImage('.$_GET['focus'].',1,'.($files->allow_rating?'1':'0').');';
+		echo '</script>';
+	}
 }
 
 /**
