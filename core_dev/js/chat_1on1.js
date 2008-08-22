@@ -121,7 +121,7 @@ function chat_send(input)
 	} else {
 		return false;
 	}
-	
+
 }
 
 // TODO: Gör så att callback kan ta parametrar, så att callback-funktionen kan avgöra om texten ska visas eller inte.
@@ -136,7 +136,7 @@ function chat_send_callback()
 
 //	if (results == 1) {
 //		span = add_span(document.getElementById('chat_div'), '', '');
-//		span.innerHTML = 
+//		span.innerHTML =
 //	}
 }
 

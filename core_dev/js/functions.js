@@ -165,7 +165,7 @@ function resize_wnd_to_img(n)
 {
 	var e = document.getElementById(n);
 	trace('resize_wnd_to_img('+n+') w:'+e.width+',h:'+e.height);
-	var NS = (navigator.appName=="Netscape")?true:false; 
+	var NS = (navigator.appName=="Netscape")?true:false;
 
 	iWidth = (NS)?window.innerWidth:document.body.clientWidth;
 	iHeight = (NS)?window.innerHeight:document.body.clientHeight;

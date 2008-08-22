@@ -23,8 +23,8 @@ var star={
 	} },
 	'update':function(e,o,t,id) { var n=star.num, v=parseInt($idPtr('starUser'+n).innerHTML);
 		n=o.id.substr(4); $idPtr('starCur'+n).title=v;
-		//req=new XMLHttpRequest(); req.open('GET','/AJAX_Star_Vote.php?vote='+(v/100),false); req.send(null);   
-		ajax_rate(t,id,v); 
+		//req=new XMLHttpRequest(); req.open('GET','/AJAX_Star_Vote.php?vote='+(v/100),false); req.send(null);
+		ajax_rate(t,id,v);
 	},
 	'revert':function() {
 		var e=document.getElementById('starCur'+n);
