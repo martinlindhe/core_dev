@@ -248,8 +248,10 @@ class Files
 
 		if (!$this->deleteFileEntry($_id, $ownerId)) return false;
 
-		//physically remove the file from disk
-		unlink($this->findUploadPath($_id));
+		$filename = $this->findUploadPath($_id);
+		if (!file_exists($filename)) return false;
+
+		unlink($filename);
 		$this->clearThumbs($_id);
 
 		//remove file description
@@ -650,8 +652,8 @@ class Files
 		$this->checksums($_id, true);
 
 		//parse result such as: text/plain; charset=us-ascii
-		$arr = explode(';', $mime);
-		$mime = $arr[0];
+		$arr = explode(';', $mime_type);
+		$mime_type = $arr[0];
 
 		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime_type).'",mediaType='.$media_type.',fileSize='.$size.' WHERE fileId='.$_id;
 		return $db->update($q);
