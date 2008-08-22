@@ -201,6 +201,7 @@ CREATE TABLE `tblFiles` (
   `uploaderIP` bigint(20) unsigned NOT NULL default '0',
   `fileType` tinyint(3) unsigned NOT NULL default '0',
   `timeUploaded` datetime default NULL,
+  `mediaType` tinyint(3) unsigned NOT NULL default '0',
   `cnt` int(10) unsigned NOT NULL default '0',
   `rating` tinyint(3) unsigned NOT NULL,
   `ratingCnt` int(10) unsigned NOT NULL,
