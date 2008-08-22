@@ -152,4 +152,20 @@ function datetime_less($d1, $d2)
 	return false;
 }
 
+/**
+ * Injects Javascript snippet to redirect the user to required destination
+ * This is used mainly to avoid overcomplicated code paths when rendering
+ * webpages & the need to redirect the user after html output already started.
+ *
+ * FIXME: implement one of the following solutions instead
+ * a) implement a proper template engine which could also handle this
+ * b) turn output buffering on in php.ini (not always an option)
+ */
+function goLoc($url)
+{
+	echo '<script type="text/javascript">';
+	echo 'document.location.href = "'.$url.'";';
+	echo '</script>';
+}
+
 ?>
