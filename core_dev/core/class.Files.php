@@ -78,29 +78,35 @@ class Files
 	); ///<FIXME remove
 
 	public $media_types = array(
-		'png' => array(MEDIATYPE_IMAGE, 'image/png', 'PNG Image'),
-		'jpg' => array(MEDIATYPE_IMAGE, 'image/jpeg', 'JPEG Image'),
-		'gif' => array(MEDIATYPE_IMAGE, 'image/gif', 'GIF Image'),
-		'bmp' => array(MEDIATYPE_IMAGE, 'image/bmp', 'BMP Image'),
-
-		'wmv' => array(MEDIATYPE_VIDEO, 'video/x-ms-wmv', 'Windows Media Video'),
-		'avi' => array(MEDIATYPE_VIDEO, 'video/avi', 'DivX 3 Video'),
-		'mpg' => array(MEDIATYPE_VIDEO, 'video/mpeg', 'MPEG-2 Video'),
-		'3gp' => array(MEDIATYPE_VIDEO, 'video/3gpp', '3GP Video (cellphones)'),
-		'flv' => array(MEDIATYPE_VIDEO, 'video/x-flv', 'Flash Video'),
-		'mp4' => array(MEDIATYPE_VIDEO, 'video/mp4', 'MPEG-4 Video'),
-
-		'wma' => array(MEDIATYPE_AUDIO, 'audio/x-ms-wma', 'Windows Media Audio'),
-		'mp3' => array(MEDIATYPE_AUDIO, 'audio/x-mpeg', 'MP3 Audio'),
-		'ogg' => array(MEDIATYPE_AUDIO, 'application/x-ogg', 'OGG Audio'),
-
-		'txt' => array(MEDIATYPE_DOCUMENT, 'text/plain', 'Text Document'),
-		'doc' => array(MEDIATYPE_DOCUMENT, 'application/msword', 'Word Document'),
-		'pdf' => array(MEDIATYPE_DOCUMENT, 'application/pdf', 'PDF Document'),
-
-		'html'		=> array(MEDIATYPE_WEBRESOURCE,	'text/html', 'HTML Page'),
-		'torrent'	=> array(MEDIATYPE_WEBRESOURCE,	'application/x-bittorrent', 'BitTorrent File')
-	); ///<File extension to mimetype & media type mapping. WIP! not used yet. FIXME should replace the above mimetypestuff eventually
+		MEDIATYPE_IMAGE => array(
+			array('image/png', 'PNG Image'),
+			array('image/jpeg', 'JPEG Image'),
+			array('image/gif', 'GIF Image'),
+			array('image/bmp', 'BMP Image'),
+		),
+		MEDIATYPE_VIDEO => array(
+			array('video/x-ms-wmv', 'Windows Media Video'),
+			array('video/avi', 'DivX 3 Video'),
+			array('video/mpeg', 'MPEG-2 Video'),
+			array('video/3gpp', '3GP Video (cellphones)'),
+			array('video/x-flv', 'Flash Video'),
+			array('video/mp4', 'MPEG-4 Video'),
+		),
+		MEDIATYPE_AUDIO => array(
+			array('audio/x-ms-wma', 'Windows Media Audio'),
+			array('audio/x-mpeg', 'MP3 Audio'),
+			array('application/x-ogg', 'OGG Audio'),
+		),
+		MEDIATYPE_DOCUMENT => array(
+			array('text/plain', 'Text Document'),
+			array('application/msword', 'Word Document'),
+			array('application/pdf', 'PDF Document'),
+		),
+		MEDIATYPE_WEBRESOURCE => array(
+			array('text/html', 'HTML Page'),
+			array('application/x-bittorrent', 'BitTorrent File'),
+		)
+	); ///<mimetype to media type mapping table
 
 	/* User configurable settings */
 	public $upload_dir = '/webupload/';				///< Default upload directory
@@ -188,6 +194,26 @@ class Files
 
 		$c = 'file -bi '.escapeshellarg($filename);
 		return exec($c);
+	}
+
+	/**
+	 * Checks what kind of media this is (video, document etc)
+	 *
+	 * \param $filename name of file to check
+	 * \return media type id
+	 */
+	function lookupMediaType($filename)
+	{
+		if (!file_exists($filename)) return false;
+
+		$mime = $this->lookupMimeType($filename);
+
+		foreach ($this->media_types as $type_id => $row) {
+			foreach ($row as $subtype) {
+				if ($subtype[0] == $mime) return $type_id;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -617,7 +643,8 @@ class Files
 			echo "updateFile(): file ".$filename." dont exist\n";
 			return false;
 		}
-		$mime = $this->lookupMimeType($filename);
+		$mime_type = $this->lookupMimeType($filename);
+		$media_type = $this->lookupMediaType($filename);
 
 		//force calculation of checksums
 		$this->checksums($_id, true);
@@ -626,7 +653,7 @@ class Files
 		$arr = explode(';', $mime);
 		$mime = $arr[0];
 
-		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime).'",fileSize='.$size.' WHERE fileId='.$_id;
+		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime_type).'",mediaType='.$media_type.',fileSize='.$size.' WHERE fileId='.$_id;
 		return $db->update($q);
 	}
 

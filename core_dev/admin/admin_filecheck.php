@@ -36,9 +36,15 @@ if (isset($_GET['update'])) {
 				//FIXME option to update file entry
 			}
 
-			$mime = $files->lookupMimeType($filename);
-			if ($mime != $row['fileMime']) {
-				echo '<h2>File '.$row['fileId'].' mime type changed from '.$row['fileMime'].' to '.$mime.'</h2>';
+			$mime_type = $files->lookupMimeType($filename);
+			if ($mime_type != $row['fileMime']) {
+				echo '<h2>File '.$row['fileId'].' mime type changed from '.$row['fileMime'].' to '.$mime_type.'</h2>';
+				//FIXME option to update file entry
+			}
+
+			$media_type = $files->lookupMediaType($filename);
+			if ($media_type != $row['mediaType']) {
+				echo '<h2>File '.$row['fileId'].' media type changed from '.$row['mediaType'].' to '.$media_type.'</h2>';
 				//FIXME option to update file entry
 			}
 
