@@ -275,6 +275,22 @@ function xhtmlFile($_name)
 
 
 /**
+ * Helper to create a <form> open tag
+ */
+function xhtmlForm($action, $method, $name)
+{
+	return '<form action="'.$action.'" method="'.$method.'"'.($name ? ' name="'.$name.'"' : '').'>';
+}
+
+/**
+ * This one is kinda stupid, but added for consistency
+ */
+function xhtmlFormClose()
+{
+	return '</form>';
+}
+
+/**
  * Helper to create a password input field
  */
 function xhtmlInputPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)
