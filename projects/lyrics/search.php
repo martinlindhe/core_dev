@@ -52,7 +52,7 @@ if (strlen($q) > 3 && count($records) == 1) {
 }
 if ($records) {
 	echo '<b>'.count($records).'</b> records found:<br/>';
-	foreach ($bands as $row) {
+	foreach ($records as $row) {
 		echo '<a href="show_record.php?id='.$row['recordId'].'">'.htmlspecialchars($row['recordName']).'</a><br/>';
 	}
 	unset($records);
