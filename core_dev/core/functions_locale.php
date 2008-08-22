@@ -75,6 +75,7 @@ function t_se($s)
 		case 'Continue': return 'Fortsätt';
 		case 'Comment': return 'Kommentar';
 		case 'Description': return 'Beskrivning';
+		case 'Name': return 'Namn';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
