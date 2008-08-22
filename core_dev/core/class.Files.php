@@ -527,9 +527,10 @@ class Files
 	 *
 	 * \param $_id fileId to get checksums for
 	 * \param $force if set to true the db cache of checksums is ignored
+	 * \param $update if set updates database, otherwise just return checksum array
 	 * \return checksums in array
 	 */
-	function checksums($_id, $force = false)
+	function checksums($_id, $force = false, $update = true)
 	{
 		global $db;
 		if (!is_numeric($_id)) return false;
@@ -537,11 +538,9 @@ class Files
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) die;
 
-		if (!$force) {
-			$q = 'SELECT * FROM tblChecksums WHERE fileId='.$_id;
-			$cached = $db->getOneRow($q);
-			if ($cached) return $cached;
-		}
+		$q = 'SELECT * FROM tblChecksums WHERE fileId='.$_id;
+		$cached = $db->getOneRow($q);
+		if (!$force && $cached) return $cached;
 
 		$filename = $this->findUploadPath($_id);
 
@@ -556,11 +555,13 @@ class Files
 		$exec_time = microtime(true) - $exec_start;
 		$new['timeExec'] = $exec_time;
 
-		$q = 'DELETE FROM tblChecksums WHERE fileId='.$_id;
-		$db->delete($q);
+		if ($update) {
+			$q = 'DELETE FROM tblChecksums WHERE fileId='.$_id;
+			$db->delete($q);
 
-		$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", timeExec="'.$new['timeExec'].'", timeCreated=NOW()';
-		$db->insert($q);
+			$q = 'INSERT INTO tblChecksums SET fileId='.$_id.', sha1="'.$new['sha1'].'", md5="'.$new['md5'].'", timeExec="'.$new['timeExec'].'", timeCreated=NOW()';
+			$db->insert($q);
+		}
 
 		return $new;
 	}
