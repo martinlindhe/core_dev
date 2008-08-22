@@ -19,7 +19,10 @@ echo createMenu($super_admin_tools_menu, 'blog_menu');
 
 echo '<h2>File checker utility</h2>';
 
-//FIXME verify that file upload directory exists
+if (!is_dir($files->upload_dir)) {
+	echo 'Fatal error: '.$files->upload_dir.' dont exist. Please adjust config.php for your project.';
+	die;
+}
 
 if (isset($_GET['update'])) {
 	$list = Files::getFiles();
