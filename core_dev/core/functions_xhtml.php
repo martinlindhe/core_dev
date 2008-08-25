@@ -277,7 +277,7 @@ function xhtmlFile($_name)
 /**
  * Helper to create a <form> open tag
  */
-function xhtmlForm($action, $method = 'post', $name = '')
+function xhtmlForm($action = '', $method = 'post', $name = '')
 {
 	return '<form action="'.$action.'" method="'.$method.'"'.($name ? ' name="'.$name.'"' : '').'>';
 }

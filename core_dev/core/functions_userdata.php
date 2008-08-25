@@ -380,7 +380,7 @@ function getUserdataInput($row, $fill = false)
 			break;
 
 		default:
-			die('FATAL: unhandled userdata type in getUserdataInput()');
+			die('FATAL: unhandled userdata type in getUserdataInput(): '.$row['fieldType']);
 	}
 
 	return $result;
