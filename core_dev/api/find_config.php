@@ -23,5 +23,6 @@ if (!is_file($project.'config.php')) {
 }
 
 $config['no_session'] = true;	//force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
+$config['no_redirect'] = true;	//turn off "return to this page after login" for api/* functions
 require_once($project.'config.php');
 ?>

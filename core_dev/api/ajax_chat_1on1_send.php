@@ -5,7 +5,6 @@
  * This script is called by ajax chat to store message
  */
 
-$config['no_session'] = true;	//force session "last active" update to be skipped
 require_once('find_config.php');
 $session->requireLoggedIn();
 

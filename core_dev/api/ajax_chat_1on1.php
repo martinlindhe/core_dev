@@ -5,7 +5,6 @@
  * This script is called regulary. returns new chatmessages if any
  */
 
-$config['no_session'] = true;	//force session "last active" update to be skipped
 require_once('find_config.php');
 
 $session->requireLoggedIn();

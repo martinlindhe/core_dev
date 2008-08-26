@@ -51,7 +51,7 @@ class Session
 	public $lastActive;				///< last active
 	public $started;				///< timestamp of when the session started
 	public $theme = '';				///< contains the currently selected theme
-	public $referer = '';			///< redirects the user to this page after login
+	public $referer = '';			///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
 	public $log_pageviews = false;	///< logs page views to tblPageViews
 
 	public $isWebmaster;			///< is user webmaster?
@@ -340,7 +340,7 @@ class Session
 		global $config;
 		if ($this->id) return;
 		if (!$this->error) $this->error = t('The page you requested requires you to be logged in.');
-		$this->referer = $_SERVER['REQUEST_URI'];
+		if (empty($config['no_redirect'])) $this->referer = $_SERVER['REQUEST_URI'];
 		$this->errorPage();
 	}
 

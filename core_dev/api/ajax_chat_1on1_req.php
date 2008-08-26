@@ -6,7 +6,6 @@
  * It uses atomEvents for handling
  */
 
-$config['no_session'] = true;	//force session "last active" update to be skipped
 require_once('find_config.php');
 $session->requireLoggedIn();
 
