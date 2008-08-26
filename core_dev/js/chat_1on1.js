@@ -4,6 +4,7 @@ var chat_link_chatreq = '';
 var chat_link_chatreq_org = '';
 var chat_link_chatreq_nonew = '';
 var chat_link_chat = '';
+var chat_poll_cnt = 0;
 
 function chat_request_start(link_chatreq, link_chat)
 {
@@ -20,8 +21,9 @@ function chat_request()
 	if (!chat_request_request._busy) {
 		chat_request_request.GET_raw(chat_link_chatreq, chat_request_callback);
 	}
+	if (++chat_poll_cnt >= 100) return;
 
-	setTimeout("chat_request()", 2 * 1000);	//refresh stats every 2 seconds
+	setTimeout("chat_request()", 10 * 1000);	//refresh stats every 10 seconds
 }
 
 function chat_request_callback()
