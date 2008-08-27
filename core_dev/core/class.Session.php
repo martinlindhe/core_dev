@@ -36,9 +36,9 @@ class Session
 	private $check_ip = true;				///< client will be logged out if client ip is changed during the session
 	private $check_useragent = true;		///< keeps track if the client user agent string changes during the session
 
-	private $start_page = 'index.php';		///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
-	private $logged_out_start_page = 'index.php';
-	private $error_page = 'error.php';		///< redirects the user to this page (in $config['app']['web_root'] directory) to show errors
+	public $start_page = 'index.php';		///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
+	public $logged_out_start_page = 'index.php';
+	public $error_page = 'error.php';		///< redirects the user to this page (in $config['app']['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
 	public $error;					///< last error message

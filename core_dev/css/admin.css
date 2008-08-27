@@ -1,0 +1,22 @@
+.admin_menu {
+	font-size: 12px;
+	margin-top: 0;
+	padding-left: 0;
+}
+.admin_menu li {
+	margin-left: 0;
+	margin-right: 4px;
+	display: inline;
+	list-style-type: none;
+	border: 1px #888 solid;
+	background-color: #fff;
+	padding: 4px;
+}
+.admin_menu li a {
+	color: #000;
+	text-decoration: none;
+}
+.admin_menu li:hover {
+	background-color: #eee;
+	border: 1px #000 solid;
+}
