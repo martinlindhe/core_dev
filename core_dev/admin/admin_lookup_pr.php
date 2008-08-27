@@ -15,11 +15,11 @@ if ($prData) {
 	die;
 }
 
-require($project.'design_head.php');
+require('design_admin_head.php');
 
 echo '<h1>Lookup PR</h1>';
 echo 'PR '.$pr.' not found.<br/><br/>';
 echo '<a href="admin_current_work.php">Go back to current work</a><br/>';
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

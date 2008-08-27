@@ -7,7 +7,7 @@ require_once('find_config.php');
 $session->requireSuperAdmin();
 
 if (!empty($_GET['del'])) removeStopword($_GET['del']);
-	
+
 if (count($_POST)) {
 	$list = getStopwords();
 
@@ -17,14 +17,14 @@ if (count($_POST)) {
 		$del = 'del_'.$id;
 		$chg = 'change_'.$id;
 		$full = 0;
-		if (isset($_POST['full_'.$id])) $full = $_POST['full_'.$id];	
+		if (isset($_POST['full_'.$id])) $full = $_POST['full_'.$id];
 
 		//Update has less priority
 		if (($_POST[$chg] != $list[$i]['wordText']) || ($full != $list[$i]['wordMatch'])) {
 			setStopword($id, $_POST[$chg], $full);
 		}
 	}
-		
+
 	for($i=1; $i<4; $i++) {
 		$word = 'newname_'.$i;
 		$full = 0;
@@ -38,11 +38,7 @@ if (count($_POST)) {
 	}
 }
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
-echo createMenu($super_admin_menu, 'blog_menu');
-echo createMenu($super_admin_tools_menu, 'blog_menu');
+require('design_admin_head.php');
 
 echo '<form name="update" method="post" action="">';
 
@@ -66,13 +62,13 @@ for($x=1; $x<=3; $x++) {
 	}
 
 	echo $txt.'<br/>'.$help.'<br/>';
-		
+
 	$list = getStopwords($x);
 	foreach ($list as $row) {
 		echo '<input type="text" name="change_'.$row['wordId'].'" value="'.$row['wordText'].'" size="16"/>';
 		echo '<input type="checkbox" class="checkbox" name="full_'.$row['wordId'].'" id="full_'.$row['wordId'].'" value="1"'.($row['wordMatch']==1?' checked="checked"':'').'/>';
 		echo '<label for="full_'.$row['wordId'].'">Full</label> ';
-		echo '<a href="?del='.$row['wordId'].getProjectPath().'"><img src="'.$config['core']['web_root'].'gfx/icon_delete.png" alt="Delete"/></a><br/>';
+		echo '<a href="?del='.$row['wordId'].'"><img src="'.$config['core']['web_root'].'gfx/icon_delete.png" alt="Delete"/></a><br/>';
 	}
 
 	echo '<br/><br/>Add new word:<br/>'.xhtmlInput('newname_'.$x, '', 16);
@@ -84,5 +80,5 @@ for($x=1; $x<=3; $x++) {
 echo xhtmlSubmit('Update');
 echo '</form>';
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

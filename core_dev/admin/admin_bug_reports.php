@@ -9,13 +9,13 @@ die('UNTESTED');
 require_once('find_config.php');
 $session->requireAdmin();
 
-require($project.'design_head.php');
+require('design_admin_head.php');
 
 echo '<h2>Bug reports</h2>';
 echo 'Here is a list of bug reports/feature requests made by users of the game.<br/>';
 echo 'The sooner these reports are dealt with the better, because users will see<br/>';
 echo 'that their engagement pays off.<br/><br/>';
-	
+
 $list = getBugReports();
 foreach ($list as $row) {
 	echo '<div class="objectCritical">';
@@ -27,7 +27,7 @@ foreach ($list as $row) {
 	echo '</div>';
 	echo '<br/>';
 }
-	
+
 $closedbugs = getClosedBugReportsCount();
 echo count($list).' bugs in list (Excluding '.$closedbugs.' CLOSED bugs).<br/><br/>';
 if ($closedbugs) {
@@ -35,5 +35,5 @@ if ($closedbugs) {
 }
 echo '<a href="admin_current_work.php">&raquo; Back to current work</a><br/>';
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

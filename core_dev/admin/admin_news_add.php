@@ -7,9 +7,7 @@ require_once('find_config.php');
 
 $session->requireAdmin();
 
-include($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
+require('design_admin_head.php');
 
 if (!empty($_POST['title']) && !empty($_POST['body']) && !empty($_POST['publish']) ) {
 	$check = addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss'], $_POST['news_cat']);
@@ -20,13 +18,13 @@ if (!empty($_POST['title']) && !empty($_POST['body']) && !empty($_POST['publish'
 		echo 'There were problems adding news article. Most likley you pressed submit more than once.';
 	}
 
-	include($project.'design_foot.php');
+	require('design_admin_foot.php');
 	die;
 }
 
 echo '<h1>Add news</h1>';
 
-echo '<form name="add_news" method="post" action="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">';
+echo '<form name="add_news" method="post" action="'.$_SERVER['PHP_SELF'].'">';
 echo '<input type="hidden" name="rss" value="0"/>';
 echo 'Title:<br/>';
 echo '<input type="text" name="title" size="50"/><br/>';
@@ -46,5 +44,5 @@ echo '<input type="text" name="publish" value="NOW" onclick="document.forms.add_
 echo '<input type="submit" class="button" value="Store news"/><br/>';
 echo '</form>';
 
-include($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

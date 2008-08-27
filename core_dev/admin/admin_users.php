@@ -6,9 +6,7 @@
 require_once('find_config.php');
 $session->requireAdmin();
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
+require('design_admin_head.php');
 
 if ($session->isSuperAdmin && !empty($_GET['del'])) {
 	Users::removeUser($_GET['del']);
@@ -38,7 +36,7 @@ if (isset($_GET['order'])) {
 
 if (isset($_GET['notactivated'])) {
 	echo '<h1>Not activated users</h1>';
-		
+
 	$q = 'SELECT count(t1.userId) FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingType='.SETTING_USERDATA.' AND t2.settingName = "activated")';
 	$q .= ' WHERE t1.timeCreated IS NOT NULL AND t1.timeDeleted IS NULL AND (t2.settingValue != "1" OR t2.settingValue IS NULL) ORDER BY t1.timeLastActive DESC';
@@ -175,9 +173,9 @@ if (isset($list)) {
 
 		echo '<td>';
 		if (!isset($_GET['blocked']) && $session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) {
-			coreButton('Delete', '?del='.$row['userId'].getProjectPath() );
+			coreButton('Delete', '?del='.$row['userId']);
 		} else if (isset($_GET['blocked']) && $session->isSuperAdmin) {
-			coreButton('Delete', '?del_block='.$row['userId'].getProjectPath() );
+			coreButton('Delete', '?del_block='.$row['userId']);
 		}
 		else echo '&nbsp;';
 		echo '</td>';
@@ -188,5 +186,5 @@ if (isset($list)) {
 
 echo $pager['head'];
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

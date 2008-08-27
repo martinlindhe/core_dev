@@ -7,14 +7,8 @@ require_once('find_config.php');
 
 $session->requireSuperAdmin();
 
-require($project.'design_head.php');
+require('design_admin_head.php');
 
-echo createMenu($admin_menu, 'blog_menu');
-if ($session->isSuperAdmin) {
-	echo createMenu($super_admin_menu, 'blog_menu');
-	echo createMenu($super_admin_tools_menu, 'blog_menu');
-}
-	
 $searchtext = '';
 if (isset($_GET['searchtext'])) {
 	$searchtext = $_GET['searchtext'];
@@ -89,6 +83,6 @@ if (isset($_GET['search']) && isset($_GET['searchtext']) && isset($_GET['searcht
 	}
 }
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 
 ?>

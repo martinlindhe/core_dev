@@ -6,11 +6,7 @@
 require_once('find_config.php');
 $session->requireSuperAdmin();
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
-echo createMenu($super_admin_menu, 'blog_menu');
-echo createMenu($super_admin_tools_menu, 'blog_menu');
+require('design_admin_head.php');
 
 $supported_apache = array('1.3.37', '2.2.99');	//Apache 2.2.x is the current stable branch
 
@@ -24,7 +20,7 @@ $supported_mysql = array('4.1.15', '5.1.17');	//afaik no 5.x specific features a
 function version_compare_array($ver_range, $curr_ver)
 {
 	list($min_ver, $max_ver) = $ver_range;
-		
+
 	//version_compare() returns -1 if the first version is lower than the second, 0 if they are equal, and +1 if the second is lower.
 	if (version_compare($min_ver, $curr_ver, "<=") && version_compare($max_ver, $curr_ver, ">=")) {
 		return '<div class="okay">';
@@ -112,7 +108,7 @@ if ($current_php_apc === false) {
 //Settings checks
 echo 'display_errors = '.ini_get('display_errors').'<br/>';
 if (!$config['debug'] && ini_get('display_errors')) echo '<div class="critical">display_errors are turned ON on a production server!</div>';
-	
+
 echo 'post_max_size = '.ini_get('post_max_size').'<br/>';
 echo 'upload_max_filesize = '.ini_get('upload_max_filesize').'<br/>';
 echo '<br/>';
@@ -125,10 +121,10 @@ if ($db->dialect == 'mysql') {
 
 	echo version_compare_array($supported_mysql, $db->server_version);
 	echo 'MySQL database server version: '.$db->server_version.'</div>';
-		
+
 	echo version_compare_array($supported_mysql, $db->client_version);
 	echo 'MySQL database client version: '.$db->client_version.'</div>';
 }
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

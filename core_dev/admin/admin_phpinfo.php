@@ -6,11 +6,7 @@
 require_once('find_config.php');
 $session->requireSuperAdmin();
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
-echo createMenu($super_admin_menu, 'blog_menu');
-echo createMenu($super_admin_tools_menu, 'blog_menu');
+require('design_admin_head.php');
 
 ob_start();
 phpinfo();
@@ -21,5 +17,5 @@ ob_end_clean();
 $info = preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
 echo $info;
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

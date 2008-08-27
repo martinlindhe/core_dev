@@ -7,13 +7,11 @@ require_once('find_config.php');
 
 $session->requireAdmin();
 
-require($project.'design_head.php');
+require('design_admin_head.php');
 
-echo createMenu($admin_menu, 'blog_menu');
-	
 if (empty($config['moderation']['enabled'])) {
 	echo 'Moderation feature is not enabled';
-	require($project.'design_foot.php');
+	require('design_admin_foot.php');
 	die;
 }
 
@@ -32,7 +30,7 @@ if (isset($_POST['set_moderate'])) {
 		if (isset($_POST['choice_'.$row])) {
 			array_push($_SESSION['admin_mod_choice'],$row);
 		}
-	}	
+	}
 }
 
 if (isset($_POST['set_moderated'])) {
@@ -42,7 +40,7 @@ if (isset($_POST['set_moderated'])) {
 		if (isset($_POST['choice_'.$row])) {
 			array_push($_SESSION['admin_moded_choice'],$row);
 		}
-	}	
+	}
 }
 
 if (isset($_GET['moded'])) {
@@ -83,7 +81,7 @@ if (!isset($_GET['moded'])) {
 				deleteBlog($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
 				break;
-					
+
 			case MODERATION_FORUM:
 				deleteForumItem($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
@@ -127,7 +125,7 @@ if (!isset($_GET['moded'])) {
 
 if (!empty($_GET['comments'])) {
 	showComments(COMMENT_MODERATION, $_GET['comments']);
-	require($project.'design_foot.php');
+	require('design_admin_foot.php');
 	die;
 }
 
@@ -190,23 +188,23 @@ if (count($list)) {
 		echo '<div class="item_head">'.$title;
 		if ($row['autoTriggered']) echo ' (auto-triggered)';
 		echo '</div>';
-			
+
 		if (!$row['autoTriggered']) echo 'Reported by '.Users::link($row['creatorId'], $row['creatorName']).' at '.$row['timeCreated'].'<br/>';
 
 		switch ($row['queueType']) {
 			case MODERATION_GUESTBOOK:
 				$gb = getGuestbookItem($row['itemId']);
-				echo '<a href="'.$project.'guestbook.php?id='.$gb['userId'].getProjectPath().'#gb'.$row['itemId'].'" target="_blank">Read the entry</a>';
+				echo '<a href="'.$project.'guestbook.php?id='.$gb['userId'].'#gb'.$row['itemId'].'" target="_blank">Read the entry</a>';
 				break;
 
 			case MODERATION_BLOG:
-				echo '<a href="'.$project.'blog.php?Blog:'.$row['itemId'].getProjectPath().'" target="_blank">Read the blog</a>';
+				echo '<a href="'.$project.'blog.php?Blog:'.$row['itemId'].'" target="_blank">Read the blog</a>';
 				break;
 
 			case MODERATION_FORUM:
 				$item = getForumItem($row['itemId']);
 				showForumPost($item);
-				echo '<a href="'.$project.'forum.php?id='.$item['parentId'].'#post='.$item['itemId'].getProjectPath().'" target="_blank">Read the topic</a>';
+				echo '<a href="'.$project.'forum.php?id='.$item['parentId'].'#post='.$item['itemId'].'" target="_blank">Read the topic</a>';
 				break;
 			case MODERATION_FILE:
 				echo '<a href="/core_dev/api/file.php?id='.$row['itemId'].'">';
@@ -239,7 +237,7 @@ if (count($list)) {
 		if (!$row['autoTriggered']) {
 			$mcnt = getCommentsCount(COMMENT_MODERATION, $row['queueId']);
 			if ($mcnt) {
-				echo '<a href="?comments='.$row['queueId'].getProjectPath().'">Motivations ('.$mcnt.')</a>';
+				echo '<a href="?comments='.$row['queueId'].'">Motivations ('.$mcnt.')</a>';
 			} else {
 				echo 'Motivations (0)';
 			}
@@ -254,5 +252,5 @@ if (count($list)) {
 	echo 'The moderation queue is empty!<br/>';
 }
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

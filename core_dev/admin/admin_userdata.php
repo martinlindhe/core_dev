@@ -16,23 +16,17 @@ if (!empty($_GET['remove']) && confirmed(t('Are you sure you want to delete this
 	//delete userdata field
 	removeUserdataField($_GET['remove']);
 
-	require($project.'design_head.php');
-	echo createMenu($admin_menu, 'blog_menu');
+	require('design_admin_head.php');
 	echo t('Userdata field successfully deleted!').'<br/><br/>';
-	require($project.'design_foot.php');
+	require('design_admin_foot.php');
 	die;
 }
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
-echo createMenu($super_admin_menu, 'blog_menu');
-echo createMenu($super_admin_tools_menu, 'blog_menu');
+require('design_admin_head.php');
 
 if (!$auth->userdata) {
 	echo 'Userdata not enabled for this application.';
-
-	require($project.'design_foot.php');
+	require('design_admin_foot.php');
 	die;
 }
 
@@ -108,14 +102,14 @@ foreach ($list as $row) {
 	$prio_up = $prio-1;
 	$prio_dn = $prio+1;
 	if ($prio_up >= 0) {
-		echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.getProjectPath().'"><img src="'.$config['core']['web_root'].'gfx/arrow_up.png" alt="Move up"/></a>';
+		echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_up.'"><img src="'.$config['core']['web_root'].'gfx/arrow_up.png" alt="Move up"/></a>';
 	}
 	if ($prio_dn < count($list)) {
-		echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.getProjectPath().'"><img src="'.$config['core']['web_root'].'gfx/arrow_down.png" alt="Move down"/></a>';
+		echo '<a href="?prio='.$row['fieldId'].'&amp;old='.$prio.'&amp;new='.$prio_dn.'"><img src="'.$config['core']['web_root'].'gfx/arrow_down.png" alt="Move down"/></a>';
 	}
 
-	echo '&nbsp;<a href="?change='.$row['fieldId'].getProjectPath().'">'.t('Modify').'</a><br/>';
-	echo '<a href="?remove='.$row['fieldId'].getProjectPath().'">'.t('Remove').'</a><br/>';
+	echo '&nbsp;<a href="?change='.$row['fieldId'].'">'.t('Modify').'</a><br/>';
+	echo '<a href="?remove='.$row['fieldId'].'">'.t('Remove').'</a><br/>';
 
 	if ($row['allowTags']) echo t('May contain HTML').'<br/>';
 	if ($row['regRequire']) echo t('Require at registration').'<br/>';
@@ -137,7 +131,7 @@ foreach ($list as $row) {
 	echo '</tr>';
 }
 echo '</table>';
-	
+
 if (isset($_GET['change'])) {
 	$changeId = $_GET['change'];
 	$data = getUserdataField($changeId);
@@ -153,9 +147,9 @@ if (isset($_GET['change'])) {
 echo '<div class="item">';
 
 if (isset($_GET['change'])) {
-	echo '<form name="admin_userdata" method="post" action="?change='.$_GET['change'].getProjectPath().'">';
+	echo '<form name="admin_userdata" method="post" action="?change='.$_GET['change'].'">';
 } else {
-	echo '<form name="admin_userdata" method="post" action="?mode=create'.getProjectPath().'">';
+	echo '<form name="admin_userdata" method="post" action="?mode=create">';
 }
 
 echo '<b>'.$header.'</b><br/>';
@@ -252,5 +246,5 @@ echo xhtmlSubmit($submit);
 echo '</form>';
 echo '</div>';
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

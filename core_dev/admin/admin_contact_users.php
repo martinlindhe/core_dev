@@ -6,13 +6,7 @@
 require_once('find_config.php');
 $session->requireSuperAdmin();
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
-if ($session->isSuperAdmin) {
-	echo createMenu($super_admin_menu, 'blog_menu');
-	echo createMenu($super_admin_tools_menu, 'blog_menu');
-}
+require('design_admin_head.php');
 
 if (isset($_GET['send'])) {
 	$how = isset($_POST['how'])?$_POST['how']:'';
@@ -26,14 +20,14 @@ if (isset($_GET['send'])) {
 	$res = Users::getSearchResult($_POST);
 
 	echo 'Message has been sent to:<br/>';
-		
+
 	if ($how == 'mail') {
 		contact_users($message, $subject, $all, $presvid, $logged_in_days, $days, $res);
 	} else if ($how == 'sms') {
 		// TODO:
 	}
 }
-	
+
 echo '<h1>Contact users</h1>';
 
 echo'<form name="contact" method="post" action="'.$_SERVER['PHP_SELF'].'?send">';
@@ -73,5 +67,5 @@ echo xhtmlTextarea('message', '', 50, 10).'<br/>';
 echo xhtmlSubmit('Send');
 echo '</form>';
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

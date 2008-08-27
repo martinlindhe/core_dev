@@ -10,11 +10,9 @@ require_core('functions_news.php');
 
 $session->requireAdmin();
 
-include($project.'design_head.php');
+require('design_admin_head.php');
 
-echo createMenu($admin_menu, 'blog_menu');
-
-echo '<h1>Manage news</h1> (<a href="admin_news_add.php'.getProjectPath(0).'">Add news</a>)';
+echo '<h1>Manage news</h1> (<a href="admin_news_add.php">Add news</a>)';
 
 echo '<br/><br/><h2>Unpublished news</h2>';
 $list = getUnpublishedNews();
@@ -40,5 +38,5 @@ if ($list) {
 	echo '</table>';
 }
 
-include($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

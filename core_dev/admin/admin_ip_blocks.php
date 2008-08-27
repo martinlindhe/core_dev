@@ -13,13 +13,7 @@ if (!empty($_GET['remove'])) {
 	removeBlock(BLOCK_IP, $_GET['remove']);
 }
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
-if ($session->isSuperAdmin) {
-	echo createMenu($super_admin_menu, 'blog_menu');
-	echo createMenu($super_admin_tools_menu, 'blog_menu');
-}
+require('design_admin_head.php');
 
 $list = getBlocks(BLOCK_IP);
 echo '<h1>Spärrade IP:n</h1>';
@@ -42,6 +36,6 @@ foreach ($list as $row) {
 }
 echo '</table>';
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 
 ?>

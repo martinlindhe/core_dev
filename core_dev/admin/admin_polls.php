@@ -8,11 +8,9 @@ require_core('atom_polls.php');
 
 $session->requireAdmin();
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
+require('design_admin_head.php');
 
 managePolls(POLL_SITE);
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

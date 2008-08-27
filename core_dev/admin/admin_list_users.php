@@ -6,9 +6,7 @@
 require_once('find_config.php');
 $session->requireAdmin();
 
-require($project.'design_head.php');
-	
-echo createMenu($admin_menu, 'blog_menu');
+require('design_admin_head.php');
 
 echo '<h2>List users</h2>';
 echo 'As a super admin, you can upgrade users to other user levels, or remove them from the system from this page.<br/><br/>';
@@ -79,7 +77,7 @@ foreach ($list as $user)
 		echo '<option value="'.USERLEVEL_SUPERADMIN.'"'.($user['userMode']==USERLEVEL_SUPERADMIN?' selected="selected"':'').'>Super admin</option>';
 		echo '</select> ';
 		if ($session->id != $user['userId'] && !$user['timeDeleted']) {
-			coreButton('Delete', '?del='.$user['userId'].getProjectPath());
+			coreButton('Delete', '?del='.$user['userId']);
 		}
 	} else {
 		echo $user['userMode'];
@@ -109,5 +107,5 @@ if ($session->isSuperAdmin) {
 	echo '</form>';
 }
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

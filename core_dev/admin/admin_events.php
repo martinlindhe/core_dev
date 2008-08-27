@@ -6,11 +6,9 @@
 require_once('find_config.php');
 $session->requireAdmin();
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
+require('design_admin_head.php');
 
 $db->showEvents();
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

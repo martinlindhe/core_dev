@@ -9,7 +9,7 @@ require_once('find_config.php');
 $session->requireAdmin();
 
 $bugId = $_GET['id'];
-	
+
 if (isset($_POST['desc'])) {
 	$pr = moveBugReport($bugId, $_POST['creator'], $_POST['desc'], $_POST['details'], $_POST['timestamp'], $_POST['itemCategory'], $_POST['categoryId']);
 
@@ -26,7 +26,7 @@ if (!$item) {
 	die;
 }
 
-require($project.'design_head.php');	
+require('design_admin_head.php');
 
 echo '<h2>Move bug report</h2>';
 
@@ -50,7 +50,7 @@ echo 'Add to TODO-list: ';
 echo '<select name="categoryId">';
 $list = getTodoCategories(0);
 foreach ($list as $row) {
-	echo '<option>';			
+	echo '<option>';
 	echo '<option value="'.$row['categoryId'].'">'.$row['categoryName'];
 	$sublist = getTodoCategories($row['categoryId']);
 	foreach ($sublist as $sub) {
@@ -68,5 +68,5 @@ echo '</form>';
 echo '<a href="admin_bug_reports.php">&raquo; Back to Bug Reports</a><br/>';
 echo '<a href="admin_current_work.php">&raquo; Back to current work</a><br/>';
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

@@ -9,9 +9,7 @@ $session->requireAdmin();
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 $userId = $_GET['id'];
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
+require('design_admin_head.php');
 
 if ($session->isSuperAdmin) {
 	if (isset($_GET['delete'])) Users::removeUser($userId);
@@ -22,11 +20,9 @@ if ($session->isSuperAdmin) {
 	}
 }
 
-
-
 if (!Users::exists($userId)) {
 	echo '<h2>No such user exists</h2>';
-	require($project.'design_foot.php');
+	require('design_admin_foot.php');
 	die;
 }
 
@@ -37,11 +33,10 @@ if ($session->isSuperAdmin) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;block">Block user</a><br/><br/>';
 
 	echo 'Change password: ';
-	echo '<form method="post" action="">';
+	echo xhtmlForm();
 	echo xhtmlInputPassword('chgpwd');
 	echo xhtmlSubmit('Change');
-	echo '</form><br/><br/>';
-
+	echo xhtmlFormClose().'<br/><br/>';
 }
 
 echo '<h2>Userdata</h2>';
@@ -66,5 +61,5 @@ echo '<h2>userdata settings</h2>';
 $list = readAllSettings(SETTING_USERDATA, $userId);
 d($list);
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

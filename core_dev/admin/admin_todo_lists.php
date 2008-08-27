@@ -8,13 +8,11 @@ die('UNTESTED');
 require_once('find_config.php');
 $session->requireAdmin();
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
+require('design_admin_head.php');
 
 echo 'Admin todo lists<br/><br/>';
 
-echo '<a href="admin_current_work.php'.getProjectPath(0).'">Show your current work</a>';
+echo '<a href="admin_current_work.php">Show your current work</a>';
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('give id');
 
@@ -34,7 +32,7 @@ if (isset($_POST['changestatus'])) {
 	} else {
 		$comment='Status changed from '.$todo_item_status[$item['itemStatus'] ].' to '.$todo_item_status[ $_POST['changestatus']].' by '.$session->username.'.';
 	}
-	$item['itemStatus'] = $_POST['changestatus']; //update changes			
+	$item['itemStatus'] = $_POST['changestatus']; //update changes
 	addComment(CATEGORY_TODOLIST, $itemId, $comment);
 
 } else if (isset($_POST['assignto'])) {
@@ -42,15 +40,15 @@ if (isset($_POST['changestatus'])) {
 	assignTodoItem($itemId, $_POST['assignto']);
 	$item['itemStatus'] = TODO_ITEM_ASSIGNED; //update changes
 	$item['assignedTo'] = $_POST['assignto']; //update changes
-			
+
 	$comment = $session->username.' assigned the task to '.Users::getName($_POST['assignto']).'.';
 	addComment(CATEGORY_TODOLIST, $itemId, $comment);
-			
+
 } else if (isset($_GET['unassign'])) {
 	//Unassign item
 	if ($item['assignedTo'] == $session->id) {
 		unassignTodoItem($itemId);
-				
+
 		$comment = $_SESSION['userName'].' unassigned himself from the task.';
 		addComment(CATEGORY_TODOLIST, $itemId, $comment);
 		$item['assignedTo'] = 0;
@@ -75,7 +73,7 @@ echo '</td></tr>';
 
 echo '<tr><td>Category:</td><td>'.$todo_item_category[ $item['itemCategory'] ].'</td></tr>';
 echo '<tr><td>Status:</td>';
-echo '<form name="changestatus" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.getProjectPath().'">';
+echo '<form name="changestatus" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
 echo '<td>'.$todo_item_status[ $item['itemStatus'] ].', change to ';
 echo '<select name="changestatus">';
 for ($i=0; $i<count($todo_item_status); $i++) {
@@ -90,12 +88,12 @@ for ($i=0; $i<count($todo_item_status); $i++) {
 echo '</select> <input type="submit" class="button" value="Change">';
 echo '</td></form></tr>';
 echo '<tr><td>Assigned to:&nbsp;</td>';
-	echo '<form name="assignto" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.getProjectPath().'">';
+	echo '<form name="assignto" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
 	echo '<td>';
 	if (!$item['assignedTo']) {
 		if ($item['itemStatus'] != TODO_ITEM_CLOSED) {
 			echo 'Nobody, assign to ';
-					
+
 			echo '<select name="assignto">';
 			$admins = Users::getAdmins();
 			foreach ($admins as $arow) {
@@ -123,7 +121,7 @@ echo '<b>Development log</b><br/><br/>';
 showComments(COMMENT_TODOLIST, $itemId);
 
 //echo showFileAttachments($itemId, FILETYPE_PR);
-		
+
 echo '<a href="admin_assigned_tasks.php">&raquo; Back to your assigned tasks</a><br/>';
 echo '<a href="admin_current_work.php">&raquo; Back to current work</a><br/>';
 
@@ -131,16 +129,16 @@ if (isset($_GET['category'])) {
 	//Show a item category
 	$categoryId = $_GET['category'];
 	$listName = getCategoryName(CATEGORY_TODOLIST, $categoryId);
-		
+
 	if (isset($_GET['showclosed'])) {
 		//Show only CLOSED items in this category
 		echo '<b class="topic">Administration screen - TODO list for "'.$listName.'" category</b><br/>';
 		echo '<b>OBSERVE - ONLY CLOSED ITEMS IN THIS LIST.</b><br/><br/>';
-			
+
 		$list = getClosedTodoItems($categoryId);
 		for ($i=0; $i<count($list); $i++) {
 			echo sprintf("PR%04d: ", $list[$i]['itemId']);
-			echo '<a href="admin_todo_lists.php?id='.$list[$i]['itemId'].getProjectPath().'">'.$list[$i]['itemDesc'].'</a> ('.$todo_item_status[$list[$i]['itemStatus']].')<br/>';
+			echo '<a href="admin_todo_lists.php?id='.$list[$i]['itemId'].'">'.$list[$i]['itemDesc'].'</a> ('.$todo_item_status[$list[$i]['itemStatus']].')<br/>';
 		}
 		echo '<br/>'.count($list).' items in list.<br/>';
 
@@ -154,10 +152,10 @@ if (isset($_GET['category'])) {
 		}
 
 		echo '<b class="topic">Administration screen - TODO list for "'.$listName.'" category</b><br/><br/>';
-		
+
 		$list = getTodoItems($categoryId);
 		for ($i=0; $i<count($list); $i++) {
-			echo '<a href="admin_todo_lists.php?id='.$list[$i]['itemId'].getProjectPath().'">';
+			echo '<a href="admin_todo_lists.php?id='.$list[$i]['itemId'].'">';
 			echo sprintf('PR%04d: ', $list[$i]['itemId'] );
 			echo $list[$i]['itemDesc'].'</a> ('.$todo_item_status[$list[$i]['itemStatus']].')<br/>';
 		}
@@ -166,8 +164,8 @@ if (isset($_GET['category'])) {
 		if ($closeditems) {
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?category='.$categoryId.'&showclosed=1">&raquo; List closed items for this category</a><br/>';
 		}
-		
-		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?category='.$categoryId.getProjectPath().'">';
+
+		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?category='.$categoryId.'">';
 		echo '<b class="topic">Add a item to the list</b><br/><br/>';
 		echo 'Description:<br/>';
 		echo '<input type="text" name="desc" size=66><br/>';
@@ -180,14 +178,14 @@ if (isset($_GET['category'])) {
 		}
 		echo '</select>';
 		echo '<br/><br/>';
-	
+
 		echo '<input type="submit" class="button" value="Add item">';
 		echo '</form>';
 		echo '<br/>';
-	
+
 		echo '<a href="admin_current_work.php">&raquo; Back to current work</a><br/>';
 	}
 }
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

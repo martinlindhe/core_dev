@@ -21,13 +21,7 @@ else $block = 0;
 $userId = '';
 if ($user) $userId = Users::getId($user);
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
-if ($session->isSuperAdmin) {
-	echo createMenu($super_admin_menu, 'blog_menu');
-	echo createMenu($super_admin_tools_menu, 'blog_menu');
-}
+require('design_admin_head.php');
 
 echo '<h2>Query IP information</h2>';
 
@@ -36,7 +30,7 @@ if ($ip && !$block) {
 
 	echo '<h1>'.$ip.' ('.gethostbyaddr($ip).')</h1>';
 	echo '<br/><br/>';
-		
+
 	$list = Users::byIP($geoip);
 
 	echo 'This IP is associated with '.count($list).' registered users:<br/>';
@@ -56,7 +50,7 @@ if ($ip && !$block) {
 	$name = Users::getName($userId);
 	echo '<h1>'.$name.'</h1>';
 	echo '<br/><br/>';
-		
+
 	$ips = Users::getIPByUser($userId);
 
 	echo '<table>';
@@ -73,7 +67,7 @@ if ($ip && !$block) {
 		echo '</tr>';
 	}
 	echo '</table>';
-		
+
 } else if ($block) {
 	addBlock(BLOCK_IP, IPv4_to_GeoIP($ip));
 	echo '<h2>IP Blocked</h2>';
@@ -88,5 +82,5 @@ if ($ip && !$block) {
 	echo '</form>';
 }
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>

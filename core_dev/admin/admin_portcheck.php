@@ -20,14 +20,10 @@ $geoip = IPv4_to_GeoIP($ip);
 if (IgnoredIPRange($geoip)) {
 	//$error = '<span class="msg_error">Error:</span> '.$ip.' is an invalid IP!';
 }
-	
+
 $timeout = 5;
 
-require($project.'design_head.php');
-
-echo createMenu($admin_menu, 'blog_menu');
-echo createMenu($super_admin_menu, 'blog_menu');
-echo createMenu($super_admin_tools_menu, 'blog_menu');
+require('design_admin_head.php');
 
 if ($port) echo '<b>Checking  '.$ip.':'.$port.'</b> ... ('.$timeout.' seconds timeout)<br/>';
 if ($error) echo $error.'<br/>';
@@ -66,5 +62,5 @@ echo xhtmlInput('p', $port, 5).'<br/>';
 echo xhtmlSubmit('Test');
 echo '</form>';
 
-require($project.'design_foot.php');
+require('design_admin_foot.php');
 ?>
