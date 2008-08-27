@@ -7,6 +7,7 @@ createXHTMLHeader();
 $admin_menu = array(
 	$config['core']['web_root'].'admin/admin.php' => 'Admin::',
 	$config['core']['web_root'].'admin/admin_users.php' => 'Users',
+	$config['core']['web_root'].'admin/admin_incoming.php' => 'Incoming',
 	$config['core']['web_root'].'admin/admin_moderation.php' => 'Moderation',
 	$config['core']['web_root'].'admin/admin_news.php' => 'News',
 	$config['core']['web_root'].'admin/admin_polls.php' => 'Polls',

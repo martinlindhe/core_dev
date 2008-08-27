@@ -24,11 +24,15 @@ function addGuestbookEntry($ownerId, $subject, $body, $private = 0)
 		spam / repeated message protection
 		checks if the user has written a identical message in the last 5 minutes
 	*/
-	$q  = 'SELECT COUNT(*) FROM tblGuestbooks WHERE userId='.$ownerId.' AND authorId='.$session->id;
-	$q .= ' AND subject="'.$subject.'" AND body="'.$body.'" AND timeCreated>=DATE_SUB(NOW(),INTERVAL 5 MINUTE)';
+	$q  = 'SELECT COUNT(*) FROM tblGuestbooks';
+	$q .= ' WHERE userId='.$ownerId.' AND authorId='.$session->id;
+	$q .= ' AND subject="'.$subject.'" AND body="'.$body.'"';
+	$q .= ' AND timeCreated>=DATE_SUB(NOW(),INTERVAL 5 MINUTE)';
 	if ($db->getOneItem($q)) return false;
 
-	$q = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',authorId='.$session->id.',subject="'.$subject.'",body="'.$body.'",timeCreated=NOW(),isPrivate='.$private.'';
+	$q  = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',';
+	$q .= 'authorId='.$session->id.',subject="'.$subject.'",';
+	$q .= 'body="'.$body.'",timeCreated=NOW(),isPrivate='.$private;
 	$entryId = $db->insert($q);
 
 	//Add entry to moderation queue
@@ -72,12 +76,12 @@ function getGuestbook($userId, $_limit_sql = '')
 	global $db;
 	if (!is_numeric($userId)) return false;
 
-	$q  = 'SELECT t1.*,t2.userName AS authorName ';
-	$q .= 'FROM tblGuestbooks AS t1 ';
-	$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-	$q .= 'WHERE t1.userId='.$userId.' ';
-	$q .= 'AND t1.entryDeleted=0 ';
-	$q .= 'ORDER BY t1.timeCreated DESC'.$_limit_sql;
+	$q  = 'SELECT t1.*,t2.userName AS authorName';
+	$q .= ' FROM tblGuestbooks AS t1';
+	$q .= ' INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId)';
+	$q .= ' WHERE t1.userId='.$userId;
+	$q .= ' AND t1.entryDeleted=0';
+	$q .= ' ORDER BY t1.timeCreated DESC'.$_limit_sql;
 	return $db->getArray($q);
 }
 
@@ -89,14 +93,14 @@ function getGuestbookConversation($userId, $otherId, $_limit_sql = '')
 	global $db;
 	if (!is_numeric($userId) || !is_numeric($otherId)) return false;
 
-	$q  = 'SELECT t1.*,t2.userName AS authorName, t3.userName AS otherName ';
-	$q .= 'FROM tblGuestbooks AS t1 ';
-	$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-	$q .= 'INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
-	$q .= 'WHERE (t1.userId='.$userId.' OR t1.authorId = '.$userId.') AND ';
-	$q .= '(t1.userId='.$otherId.' OR t1.authorId = '.$otherId.')';
-	$q .= 'AND t1.entryDeleted=0 ';
-	$q .= 'ORDER BY t1.timeCreated DESC'.$_limit_sql;
+	$q  = 'SELECT t1.*,t2.userName AS authorName, t3.userName AS otherName';
+	$q .= ' FROM tblGuestbooks AS t1';
+	$q .= ' INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId)';
+	$q .= ' INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId)';
+	$q .= ' WHERE (t1.userId='.$userId.' OR t1.authorId = '.$userId.') AND';
+	$q .= ' (t1.userId='.$otherId.' OR t1.authorId = '.$otherId.')';
+	$q .= ' AND t1.entryDeleted=0';
+	$q .= ' ORDER BY t1.timeCreated DESC'.$_limit_sql;
 	return $db->getArray($q);
 }
 
@@ -108,12 +112,12 @@ function getGuestbookItems($userId, $count = 5)
 	global $db;
 	if (!is_numeric($userId) || !is_numeric($count)) return false;
 
-	$q  = 'SELECT t1.*,t2.userName AS authorName ';
-	$q .= 'FROM tblGuestbooks AS t1 ';
-	$q .= 'INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId) ';
-	$q .= 'WHERE t1.userId='.$userId.' ';
-	$q .= 'AND t1.entryDeleted=0 ';
-	$q .= 'ORDER BY t1.timeCreated DESC';
+	$q  = 'SELECT t1.*,t2.userName AS authorName';
+	$q .= ' FROM tblGuestbooks AS t1';
+	$q .= ' INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId)';
+	$q .= ' WHERE t1.userId='.$userId;
+	$q .= ' AND t1.entryDeleted=0';
+	$q .= ' ORDER BY t1.timeCreated DESC';
 	$q .= ' LIMIT 0,'.$count;
 	return $db->getArray($q);
 }
@@ -156,7 +160,7 @@ function getGuestbookFreeTextSearchCount($text)
 
 	$text = $db->escape($text);
 
-	$q  = 'SELECT count(*) FROM tblGuestbooks ';
+	$q  = 'SELECT COUNT(*) FROM tblGuestbooks ';
 	$q .= 'WHERE body LIKE "%'.$text.'%"';
 	return $db->getOneItem($q);
 }
@@ -180,12 +184,13 @@ function getGuestbookFreeTextSearch($text, $_limit_sql = '')
 /**
  * Returns the number of items in the guestbook
  */
-function getGuestbookCount($userId)
+function getGuestbookCount($userId = 0)
 {
 	global $db;
 	if (!is_numeric($userId)) return false;
 
-	$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND entryDeleted=0';
+	$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE entryDeleted=0';
+	if ($userId) $q .= ' AND userId='.$userId;
 	return $db->getOneItem($q);
 }
 
@@ -198,7 +203,7 @@ function getGuestbookCountPerDate($dateStart, $dateStop = '')
 
 	if (empty($dateStop)) $dateStop = $dateStart;
 
-	$q = 'SELECT count(entryId) AS cnt, date(timeCreated) AS date FROM tblGuestbooks WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
+	$q = 'SELECT COUNT(entryId) AS cnt, DATE(timeCreated) AS date FROM tblGuestbooks WHERE DATE(timeCreated) BETWEEN DATE("'.$dateStart.'") AND DATE("'.$dateStop.'") GROUP BY DATE(timeCreated)';
 	return $db->getArray($q);
 }
 
