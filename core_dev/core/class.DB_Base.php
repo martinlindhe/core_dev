@@ -360,10 +360,10 @@ abstract class DB_Base
 
 		if (!empty($_GET['sort']) && $_GET['sort']=='asc') {
 			$q .= ' ORDER BY t1.timeCreated ASC,t1.entryId ASC';
-			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].getProjectPath(0).'">show newest first</a>]<br/>';
+			echo 'Showing oldest first - [<a href="'.$_SERVER['PHP_SELF'].'">show newest first</a>]<br/>';
 		} else {
 			$q .= ' ORDER BY t1.timeCreated DESC,t1.entryId DESC';
-			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].'?sort=asc'.getProjectPath().'">show oldest first</a>]<br/>';
+			echo 'Showing newest first - [<a href="'.$_SERVER['PHP_SELF'].'?sort=asc">show oldest first</a>]<br/>';
 		}
 		$q .= $pager['limit'];
 
@@ -385,11 +385,11 @@ abstract class DB_Base
 			else echo 'Unregistered';
 			echo '</b> at '.$row['timeCreated'];
 
-			echo ' from <a href="'.$config['core']['web_root'].'admin/admin_ip.php?ip='.GeoIP_to_IPv4($row['userIP']).getProjectPath().'">'.GeoIP_to_IPv4($row['userIP']).'</a>';
+			echo ' from <a href="'.$config['core']['web_root'].'admin/admin_ip.php?ip='.GeoIP_to_IPv4($row['userIP']).'">'.GeoIP_to_IPv4($row['userIP']).'</a>';
 			echo '</i></div><br/>';
 		}
 
-		if ($session->isSuperAdmin) echo '<a href="'.$_SERVER['PHP_SELF'].'?events_clearlog'.getProjectPath().'">Clear log</a>';
+		if ($session->isSuperAdmin) echo '<a href="'.$_SERVER['PHP_SELF'].'?events_clearlog">Clear log</a>';
 	}
 }
 ?>

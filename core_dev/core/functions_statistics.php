@@ -19,7 +19,7 @@ function showStatsMonth($year, $month)
 
 	generateStatsMonth($year, $month);
 
-	echo '<img src="'.$config['core']['web_root'].'api/image_statistics.php?y='.$year.'&amp;m='.$month.getProjectPath().'" alt="Stats"/>';
+	echo '<img src="'.$config['core']['web_root'].'api/image_statistics.php?y='.$year.'&amp;m='.$month.'" alt="Stats"/>';
 }
 
 /**

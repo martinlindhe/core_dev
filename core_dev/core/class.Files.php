@@ -997,7 +997,7 @@ class Files
 			echo 'Attached files:<br/>';
 			foreach ($list as $row) {
 				$show_text = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
-				echo '<a href="'.$config['core']['web_root'].'api/file_pt.php?id='.$row['fileId'].getProjectPath().'" target="_blank">';
+				echo '<a href="'.$config['core']['web_root'].'api/file_pt.php?id='.$row['fileId'].'" target="_blank">';
 				if (in_array($row['fileMime'], $this->image_mime_types)) {
 					echo makeThumbLink($row['fileId'], $show_text).'</a> ';
 				} else {

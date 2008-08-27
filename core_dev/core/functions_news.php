@@ -190,7 +190,7 @@ function showNewsArticle($_id = 0)
 		$item = getNewsItem($_id);
 
 		echo '<h1>'.t('Edit news article').'</h1>';
-		echo '<form method="post" action="'.'?NewsEdit:'.$_id.getProjectPath().'">';
+		echo '<form method="post" action="'.'?NewsEdit:'.$_id.'">';
 		echo '<input type="hidden" name="news_rss" value="0"/>';
 		echo t('Title').': '.xhtmlInput('news_title', $item['title'], 50).'<br/>';
 		echo t('Text').':<br/>';
@@ -267,8 +267,8 @@ function showNews($limit = 0)
 		showNewsOverview($row);
 	}
 	if ($session->isAdmin) {
-		echo '<a href="'.$config['core']['web_root'].'admin/admin_news_add.php'.getProjectPath(0).'">'.t('Add news').'</a><br/>';
-		echo '<a href="'.$config['core']['web_root'].'admin/admin_news.php'.getProjectPath(0).'">'.t('Manage news').'</a><br/>';
+		echo '<a href="'.$config['core']['web_root'].'admin/admin_news_add.php">'.t('Add news').'</a><br/>';
+		echo '<a href="'.$config['core']['web_root'].'admin/admin_news.php">'.t('Manage news').'</a><br/>';
 	}
 }
 

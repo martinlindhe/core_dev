@@ -19,7 +19,7 @@ function getThumbUrl($_id, $w = 0, $h = 0)
 	if (is_float($w)) $w = floor($w);
 	if (is_float($h)) $h = floor($h);
 
-	$str = $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h.getProjectPath();
+	$str = $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h;
 	return $str;
 }
 
@@ -44,7 +44,7 @@ function makeImageLink($_id, $_title = '')
 	global $config;
 	if (!is_numeric($_id)) return false;
 
-	return '<img id="img_'.$_id.'" src="'.$config['core']['web_root'].'api/file.php?id='.$_id.getProjectPath().'" alt="Image" title="'.strip_tags($_title).'"/>';
+	return '<img id="img_'.$_id.'" src="'.$config['core']['web_root'].'api/file.php?id='.$_id.'" alt="Image" title="'.strip_tags($_title).'"/>';
 }
 
 /**

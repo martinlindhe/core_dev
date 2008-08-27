@@ -94,7 +94,7 @@ function confirmed($text, $_var, $_id = 0)
 	} else {
 		//Wiki-style links
 		//fixme: use URLadd() here
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'&amp;confirmed'.getProjectPath().'">Yes, I am sure</a><br/><br/>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'&amp;confirmed">Yes, I am sure</a><br/><br/>';
 	}
 	echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
 

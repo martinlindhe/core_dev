@@ -276,7 +276,7 @@ function showThumbnails($fileType, $categoryId)
 	echo '</div>'; //id="image_thumbs_scroller"
 
 	echo '<div id="image_comments">';
-	echo '<iframe id="image_comments_iframe" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="'.$config['core']['web_root'].'api/html_imgcomments.php?i='.$list[0]['fileId'].getProjectPath().'"></iframe>';
+	echo '<iframe id="image_comments_iframe" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="'.$config['core']['web_root'].'api/html_imgcomments.php?i='.$list[0]['fileId'].'"></iframe>';
 	echo '</div>';
 
 	echo '<div id="image_big_holder">';

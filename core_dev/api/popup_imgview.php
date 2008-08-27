@@ -17,7 +17,7 @@ require_once('find_config.php');
 
 createXHTMLHeader();
 
-echo '<img id="popup_img" src="'.$config['core']['web_root'].'api/file.php?id='.$fileId.getProjectPath().'"/>';
+echo '<img id="popup_img" src="'.$config['core']['web_root'].'api/file.php?id='.$fileId.'"/>';
 ?>
 <script type="text/javascript">
 if (image_loaded('popup_img')) resize_wnd_to_img('popup_img');

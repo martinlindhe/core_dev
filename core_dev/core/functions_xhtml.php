@@ -44,8 +44,8 @@ function createXHTMLHeader()
 
 	if ($meta_rss) {
 		foreach ($meta_rss as $feed) {
-			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'].getProjectPath();
-			else $extra = getProjectPath(0);
+			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'];
+			else $extra = '';
 			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core']['web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 		}
 	}
