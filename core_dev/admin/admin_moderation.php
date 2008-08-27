@@ -172,7 +172,7 @@ echo '</div>';
 echo $pager['head'];
 
 if (count($list)) {
-	echo 'Displaying '.count($list).' object(s) in the <b>moderat'.(isset($_GET['moded'])?'ed':'ion').' queue</b>. Showing '.(isset($_GET['moded'])?'new':'old').'est items first.<br/><br/>';
+	echo 'Showing '.(isset($_GET['moded'])?'new':'old').'est items first.<br/><br/>';
 	echo '<form method="post" action="" name="mod_form">';
 
 	foreach ($list as $row) {

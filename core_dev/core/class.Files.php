@@ -360,7 +360,7 @@ class Files
 		$this->updateFile($fileId);	//force update of filesize, mimetype & checksum
 
 		if ($fileType == FILETYPE_USERFILE) {
-			addToModerationQueue(MODERATION_FILE, $fileId);
+			addToModerationQueue(MODERATION_FILE, $fileId, true);
 
 			//notify subscribers
 			$check = getCategoryPermissions(CATEGORY_USERFILE, $categoryId);

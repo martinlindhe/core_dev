@@ -208,10 +208,10 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
 			}
 			echo t('Upload a file').':<br/>';
-			echo '<input type="file" name="file1"/><br/>';
+			echo xhtmlFile('file1').'<br/>';
 			echo t('Description').':<br/>';
 			echo xhtmlTextarea('fdesc', '', 50, 4).'<br/>';
-			echo '<input type="submit" class="button" value="'.t('Upload').'"/>';
+			echo xhtmlSubmit('Upload');
 			echo '</form>';
 			echo '</div>';
 			if ($files->apc_uploads) {
