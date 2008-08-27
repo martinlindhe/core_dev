@@ -8,7 +8,7 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-echo 'Admin overview<br/><br/>';
+echo '<h1>Admin overview</h1>';
 
 if (!empty($config['moderation']['enabled'])) {
 	echo 'Moderation: <a href="admin_moderation.php">'.getModerationQueueCount().' objects</a><br/>';

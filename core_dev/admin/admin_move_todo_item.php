@@ -18,7 +18,7 @@ if (!empty($_POST['categoryId'])) {
 
 require('design_admin_head.php');
 
-echo '<h2>Move Problem Report</h2>';
+echo '<h1>Move Problem Report</h1>';
 
 $item = getTodoItem($db, $itemId);
 $PR = sprintf("PR%04d", $itemId);

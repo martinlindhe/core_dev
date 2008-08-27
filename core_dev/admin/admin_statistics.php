@@ -10,7 +10,7 @@ require_core('functions_statistics.php');
 
 require('design_admin_head.php');
 
-echo '<h1>'.t('Statistics').'</h1><br/>';
+echo '<h1>'.t('Statistics').'</h1>';
 
 if (!empty($_GET['y']) && !empty($_GET['m'])) {
 	showStatsMonth($_GET['y'], $_GET['m']);

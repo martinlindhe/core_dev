@@ -8,6 +8,8 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
+echo '<h1>Feedback</h1>';
+
 if (empty($config['feedback']['enabled'])) {
 	echo 'Feedback feature is not enabled';
 	require('design_admin_foot.php');

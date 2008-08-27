@@ -8,7 +8,7 @@ $session->requireSuperAdmin();
 
 require('design_admin_head.php');
 
-echo 'Admin edit todo list categories<br/><br/>';
+echo '<h1>Edit todo list categories</h1>';
 
 manageCategoriesDialog(CATEGORY_TODOLIST);
 

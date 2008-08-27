@@ -9,6 +9,8 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
+echo '<h1>Moderation queue</h1>';
+
 if (empty($config['moderation']['enabled'])) {
 	echo 'Moderation feature is not enabled';
 	require('design_admin_foot.php');

@@ -12,9 +12,10 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-echo '<h1>Manage news</h1> (<a href="admin_news_add.php">Add news</a>)';
+echo '<h1>Manage news</h1>';
+echo '<a href="admin_news_add.php">Add news</a><br/><br/>';
 
-echo '<br/><br/><h2>Unpublished news</h2>';
+echo '<h2>Unpublished news</h2>';
 $list = getUnpublishedNews();
 if ($list) {
 	echo '<table><tr><td><b>Title</b></td><td><b>Time published</b></td></tr>';

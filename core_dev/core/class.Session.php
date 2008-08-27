@@ -263,7 +263,6 @@ class Session
 	{
 		global $config;
 
-		echo '<b>Current session information</b><br/>';
 		if ($this->id) {
 			echo 'User name: '.$this->username.'<br/>';
 			echo 'User ID: '.$this->id.'<br/>';

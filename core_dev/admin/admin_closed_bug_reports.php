@@ -10,7 +10,7 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-echo '<h2>Closed bug reports</h2>';
+echo '<h1>Closed bug reports</h1>';
 echo '<b>OBSERVE: THESE BUG REPORTS ARE CLOSED!</b><br/><br/>';
 
 $list = getClosedBugReports();

@@ -8,7 +8,7 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-echo '<h2>List users</h2>';
+echo '<h1>List users</h1>';
 echo 'As a super admin, you can upgrade users to other user levels, or remove them from the system from this page.<br/><br/>';
 
 if ($session->isSuperAdmin && !empty($_GET['del'])) {

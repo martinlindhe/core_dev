@@ -16,12 +16,12 @@ if (!empty($_GET['remove'])) {
 require('design_admin_head.php');
 
 $list = getBlocks(BLOCK_IP);
-echo '<h1>Spärrade IP:n</h1>';
+echo '<h1>IP blocks</h1>';
 
 echo '<table>';
 echo '<tr>';
 echo '<th width="200">IP</th>';
-echo '<th width="90">Tidpunkt</th>';
+echo '<th width="90">Time</th>';
 echo '<th width="50">Admin</th>';
 echo '<th width="50">&nbsp;</th>';
 echo '</tr>';
@@ -31,7 +31,7 @@ foreach ($list as $row) {
 	echo '<td>'.$ip.'</td>';
 	echo '<td>'.ago($row['timeCreated']).'</td>';
 	echo '<td>'.Users::getName($row['createdBy']).'</td>';
-	echo '<td><a href="'.$_SERVER['PHP_SELF'].'?remove='.urlencode($row['rule']).'""><img src="'.$config['core']['web_root'].'gfx/icon_error.png" alt="Ta bort blockering" title="Ta bort blockering"></a></td>';
+	echo '<td><a href="'.$_SERVER['PHP_SELF'].'?remove='.urlencode($row['rule']).'""><img src="'.$config['core']['web_root'].'gfx/icon_error.png" alt="Remove block" title="Remove block"></a></td>';
 	echo '</tr>';
 }
 echo '</table>';

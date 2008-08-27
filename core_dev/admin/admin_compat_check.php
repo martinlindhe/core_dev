@@ -8,6 +8,8 @@ $session->requireSuperAdmin();
 
 require('design_admin_head.php');
 
+echo '<h1>Compatiblity check</h1>';
+
 $supported_apache = array('1.3.37', '2.2.99');	//Apache 2.2.x is the current stable branch
 
 $supported_php = array('5.2.0', '5.2.99');	//PHP 5.2.x is the current stable branch
@@ -29,7 +31,6 @@ function version_compare_array($ver_range, $curr_ver)
 	return '<div class="critical">';
 }
 
-echo '<h1>Compatiblity check</h1>';
 if (empty($_SERVER['SERVER_SOFTWARE'])) {	//This is available if php is running thru Apache
 	echo '<div class="critical">Server OS: CANT DETECT</div>';
 } else if (strpos($_SERVER['SERVER_SOFTWARE'], 'Win32') !== false) {	//Apache/2.2.4 (Win32)

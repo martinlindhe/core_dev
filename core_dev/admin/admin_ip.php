@@ -23,7 +23,7 @@ if ($user) $userId = Users::getId($user);
 
 require('design_admin_head.php');
 
-echo '<h2>Query IP information</h2>';
+echo '<h1>Query IP information</h1>';
 
 if ($ip && !$block) {
 	$geoip = IPv4_to_GeoIP($ip);

@@ -10,7 +10,7 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-echo 'Admin todo lists<br/><br/>';
+echo '<h1>Admin todo lists</h1>';
 
 echo '<a href="admin_current_work.php">Show your current work</a>';
 

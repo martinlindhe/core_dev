@@ -28,7 +28,7 @@ if (!$item) {
 
 require('design_admin_head.php');
 
-echo '<h2>Move bug report</h2>';
+echo '<h1>Move bug report</h1>';
 
 echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$bugId.'">';
 echo getRelativeTimeLong($item['timestamp']).', by '.Users::link($item['bugCreator'], $item['userName']).'<br/>';

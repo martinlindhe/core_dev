@@ -25,6 +25,8 @@ $timeout = 5;
 
 require('design_admin_head.php');
 
+echo '<h1>Port checker</h1>';
+
 if ($port) echo '<b>Checking  '.$ip.':'.$port.'</b> ... ('.$timeout.' seconds timeout)<br/>';
 if ($error) echo $error.'<br/>';
 if (!is_numeric($port) || !intval($port) || ($port < 0) || ($port > 65535)) {

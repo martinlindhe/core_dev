@@ -23,7 +23,7 @@ if (isset($_POST['reason'])) {
 
 require('design_admin_head.php');
 
-echo '<h2>Close bug report</h2>';
+echo '<h1>Close bug report</h1>';
 
 $item = getBugReport($bugId);
 

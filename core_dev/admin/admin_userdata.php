@@ -24,6 +24,8 @@ if (!empty($_GET['remove']) && confirmed(t('Are you sure you want to delete this
 
 require('design_admin_head.php');
 
+echo '<h1>Userdata fields</h1>';
+
 if (!$auth->userdata) {
 	echo 'Userdata not enabled for this application.';
 	require('design_admin_foot.php');

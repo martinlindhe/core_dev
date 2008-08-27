@@ -10,7 +10,7 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-echo '<h2>Your assigned tasks</h2>';
+echo '<h1>Your assigned tasks</h1>';
 echo 'Here is all your currently assigned tasks, please update task progress in the Development Log<br/>';
 echo 'for each task, so other developers can see how things progress.<br/><br/>';
 

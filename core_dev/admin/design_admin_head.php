@@ -43,6 +43,6 @@ if ($session->isSuperAdmin) {
 	echo createMenu($super_admin_tools_menu, 'admin_menu');
 }
 
-echo '<a href="'.$config['app']['full_url'].$session->start_page.'">BACK TO SITE</a>';
+echo '<a href="'.$config['app']['full_url'].$session->start_page.'"> &laquo;&laquo; BACK TO SITE</a><br/><br/>';
 
 ?>

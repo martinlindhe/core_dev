@@ -40,7 +40,9 @@ if (count($_POST)) {
 
 require('design_admin_head.php');
 
-echo '<form name="update" method="post" action="">';
+echo '<h1>Stopwords</h1>';
+
+echo xhtmlForm('update');
 
 for($x=1; $x<=3; $x++) {
 	echo '<div class="admin_stopword">';
@@ -78,7 +80,7 @@ for($x=1; $x<=3; $x++) {
 	echo '</div>'; //class="admin_stopword"
 }
 echo xhtmlSubmit('Update');
-echo '</form>';
+echo xhtmlFormClose();
 
 require('design_admin_foot.php');
 ?>

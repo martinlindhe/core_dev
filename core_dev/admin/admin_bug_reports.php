@@ -11,7 +11,7 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-echo '<h2>Bug reports</h2>';
+echo '<h1>Bug reports</h1>';
 echo 'Here is a list of bug reports/feature requests made by users of the game.<br/>';
 echo 'The sooner these reports are dealt with the better, because users will see<br/>';
 echo 'that their engagement pays off.<br/><br/>';
