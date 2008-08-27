@@ -321,13 +321,13 @@ function xhtmlSubmit($_title)
 }
 
 /**
- * Helper to create a table out of a named array / callback function
+ * Helper to create a table out of a named array and/or callback function
  *
  * \param $arr is a usual named array
- * \param $heads can be array('Användare' => 'userId', 'Senast aktiv' => 'timeLastActive')
- * 		or it can be the funct name to call to display current row
+ * \param $heads is array('Användare' => 'userId', 'Senast aktiv' => 'timeLastActive')
+ * \param $callback is funct name to call to customize each row
  */
-function xhtmlTable($arr, $heads)
+function xhtmlTable($arr, $heads = '', $callback = '')
 {
 	$out = '<table>';
 	if (is_array($heads)) {
@@ -338,9 +338,13 @@ function xhtmlTable($arr, $heads)
 		$out .= '</tr>';
 	}
 
+	$i = 0;
 	foreach ($arr as $row) {
-		$out .= '<tr>';
-		if (is_array($heads)) {
+		if (function_exists($callback)) {
+			$out .= call_user_func($callback, $row, $i);
+			$i++;
+		} else if (is_array($heads)) {
+			$out .= '<tr>';
 			foreach ($heads as $t => $x) {
 				$out .= '<td>';
 				if ($x == 'userId') {
@@ -350,13 +354,8 @@ function xhtmlTable($arr, $heads)
 				}
 				$out .= '</td>';
 			}
-		} else {
-			if (!function_exists($heads)) {
-				die('xhtmlTable() invalid parameter '.$heads);
-			}
-			$out .= call_user_func($heads, $row);
+			$out .= '</tr>';
 		}
-		$out .= '</tr>';
 	}
 
 	$out .= '</table>';

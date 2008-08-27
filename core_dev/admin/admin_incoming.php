@@ -9,13 +9,13 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-function adminGbCell($row)
+function adminGbRow($row, $i)
 {
-	$out  = '<td>';
+	$out  = '<tr style="background-color:'.($i%2 ? '#eee' : '#aaa').'"><td>';
 	$out .= Users::link($row['authorId'], $row['authorName']).' at '.formatTime($row['timeCreated']).'<br/>';
 	if ($row['subject']) $out .= '<b>'.$row['subject'].'</b><br/>';
 	$out .= nl2br($row['body']);
-	$out .= '</td>';
+	$out .= '</td></tr>';
 
 	return $out;
 }
@@ -30,7 +30,7 @@ if (isset($_GET['gb'])) {
 
 	$list = getGuestbookItems(0, $pager['limit']);
 
-	echo xhtmlTable($list, 'adminGbCell');
+	echo xhtmlTable($list, '', 'adminGbRow');
 
 } else {
 	echo '<h1>Incoming objects</h1>';
