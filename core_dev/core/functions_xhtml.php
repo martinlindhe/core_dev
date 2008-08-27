@@ -321,30 +321,44 @@ function xhtmlSubmit($_title)
 }
 
 /**
- * Helper to create a table out of a named array
+ * Helper to create a table out of a named array / callback function
+ *
+ * \param $arr is a usual named array
+ * \param $heads can be array('Användare' => 'userId', 'Senast aktiv' => 'timeLastActive')
+ * 		or it can be the funct name to call to display current row
  */
 function xhtmlTable($arr, $heads)
 {
 	$out = '<table>';
-	$out .= '<tr>';
-	foreach ($heads as $t => $x) {
-		$out .= '<th>'.$t.'</th>';
-	}
-	$out .= '</tr>';
-
-	foreach ($arr as $row) {
+	if (is_array($heads)) {
 		$out .= '<tr>';
 		foreach ($heads as $t => $x) {
-			$out .= '<td>';
-			if ($x == 'userId') {
-				$out .= Users::link($row['userId'], $row['userName']);
-			} else {
-				$out .= $row[ $x ];
-			}
-			$out .= '</td>';
+			$out .= '<th>'.$t.'</th>';
 		}
 		$out .= '</tr>';
 	}
+
+	foreach ($arr as $row) {
+		$out .= '<tr>';
+		if (is_array($heads)) {
+			foreach ($heads as $t => $x) {
+				$out .= '<td>';
+				if ($x == 'userId') {
+					$out .= Users::link($row['userId'], $row['userName']);
+				} else {
+					$out .= $row[ $x ];
+				}
+				$out .= '</td>';
+			}
+		} else {
+			if (!function_exists($heads)) {
+				die('xhtmlTable() invalid parameter '.$heads);
+			}
+			$out .= call_user_func($heads, $row);
+		}
+		$out .= '</tr>';
+	}
+
 	$out .= '</table>';
 	return $out;
 }

@@ -105,20 +105,20 @@ function getGuestbookConversation($userId, $otherId, $_limit_sql = '')
 }
 
 /**
- * Returns $count last entries from $userId's guestbook
+ * Returns a number of guestbook entries
  */
-function getGuestbookItems($userId, $count = 5)
+function getGuestbookItems($userId = 0, $_limit_sql = '')
 {
 	global $db;
-	if (!is_numeric($userId) || !is_numeric($count)) return false;
+	if (!is_numeric($userId)) return false;
 
 	$q  = 'SELECT t1.*,t2.userName AS authorName';
 	$q .= ' FROM tblGuestbooks AS t1';
 	$q .= ' INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId)';
-	$q .= ' WHERE t1.userId='.$userId;
-	$q .= ' AND t1.entryDeleted=0';
+	$q .= ' WHERE t1.entryDeleted=0';
+	if ($userId) $q .= ' AND t1.userId='.$userId;
 	$q .= ' ORDER BY t1.timeCreated DESC';
-	$q .= ' LIMIT 0,'.$count;
+	if ($_limit_sql) $q .= $_limit_sql;
 	return $db->getArray($q);
 }
 
