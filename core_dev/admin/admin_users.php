@@ -173,9 +173,9 @@ if (isset($list)) {
 
 		echo '<td>';
 		if (!isset($_GET['blocked']) && $session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) {
-			coreButton('Delete', '?del='.$row['userId']);
+			echo coreButton('Delete', '?del='.$row['userId']);
 		} else if (isset($_GET['blocked']) && $session->isSuperAdmin) {
-			coreButton('Delete', '?del_block='.$row['userId']);
+			echo coreButton('Delete', '?del_block='.$row['userId']);
 		}
 		else echo '&nbsp;';
 		echo '</td>';

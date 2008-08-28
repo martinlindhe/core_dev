@@ -58,13 +58,12 @@ function setGuestbookAnswerId($entryId, $answerId)
 /**
  * Marks a guestbook entry as removed
  */
-function removeGuestbookEntry($entryId)
+function removeGuestbookEntry($_id)
 {
-	global $db;
-	if (!is_numeric($entryId)) return false;
+	global $db, $session;
+	if (!is_numeric($_id) || !$session->id) return false;
 
-	//FIXME: deletedby, så admin-deletes syns
-	$q = 'UPDATE tblGuestbooks SET entryDeleted=1,timeDeleted=NOW() WHERE entryId='.$entryId;
+	$q = 'UPDATE tblGuestbooks SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE entryId='.$_id;
 	$db->update($q);
 }
 
@@ -80,7 +79,7 @@ function getGuestbook($userId, $_limit_sql = '')
 	$q .= ' FROM tblGuestbooks AS t1';
 	$q .= ' INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId)';
 	$q .= ' WHERE t1.userId='.$userId;
-	$q .= ' AND t1.entryDeleted=0';
+	$q .= ' AND t1.deletedBy=0';
 	$q .= ' ORDER BY t1.timeCreated DESC'.$_limit_sql;
 	return $db->getArray($q);
 }
@@ -99,7 +98,7 @@ function getGuestbookConversation($userId, $otherId, $_limit_sql = '')
 	$q .= ' INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId)';
 	$q .= ' WHERE (t1.userId='.$userId.' OR t1.authorId = '.$userId.') AND';
 	$q .= ' (t1.userId='.$otherId.' OR t1.authorId = '.$otherId.')';
-	$q .= ' AND t1.entryDeleted=0';
+	$q .= ' AND t1.deletedBy=0';
 	$q .= ' ORDER BY t1.timeCreated DESC'.$_limit_sql;
 	return $db->getArray($q);
 }
@@ -115,7 +114,7 @@ function getGuestbookItems($userId = 0, $_limit_sql = '')
 	$q  = 'SELECT t1.*,t2.userName AS authorName';
 	$q .= ' FROM tblGuestbooks AS t1';
 	$q .= ' INNER JOIN tblUsers AS t2 ON (t1.authorId=t2.userId)';
-	$q .= ' WHERE t1.entryDeleted=0';
+	$q .= ' WHERE t1.deletedBy=0';
 	if ($userId) $q .= ' AND t1.userId='.$userId;
 	$q .= ' ORDER BY t1.timeCreated DESC';
 	if ($_limit_sql) $q .= $_limit_sql;
@@ -131,7 +130,7 @@ function getGuestbookNewItemsCount($userId)
 	if (!is_numeric($userId)) return false;
 
 	$q  = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE ';
-	$q .= 'userId='.$userId.' AND entryDeleted=0 ';
+	$q .= 'userId='.$userId.' AND deletedBy=0 ';
 	$q .= 'AND entryRead = 0';
 	return $db->getOneItem($q);
 }
@@ -189,7 +188,7 @@ function getGuestbookCount($userId = 0)
 	global $db;
 	if (!is_numeric($userId)) return false;
 
-	$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE entryDeleted=0';
+	$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE deletedBy=0';
 	if ($userId) $q .= ' AND userId='.$userId;
 	return $db->getOneItem($q);
 }
@@ -216,7 +215,7 @@ function getGuestbookConversationCount($userId, $otherId)
 	if (!is_numeric($userId) || !is_numeric($otherId)) return false;
 
 	$q  = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE (userId='.$userId.' OR authorId='.$userId.') AND ';
-	$q .= '(userId='.$otherId.' OR authorId='.$otherId.') AND entryDeleted=0';
+	$q .= '(userId='.$otherId.' OR authorId='.$otherId.') AND deletedBy=0';
 	return $db->getOneItem($q);
 }
 

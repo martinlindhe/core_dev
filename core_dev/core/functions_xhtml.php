@@ -341,7 +341,7 @@ function xhtmlTable($arr, $heads = '', $callback = '')
 	$i = 0;
 	foreach ($arr as $row) {
 		if (function_exists($callback)) {
-			$out .= call_user_func($callback, $row, $i);
+			$out .= call_user_func($callback, $row, &$i);
 			$i++;
 		} else if (is_array($heads)) {
 			$out .= '<tr>';
@@ -445,10 +445,12 @@ function coreButton($name, $dst = '')
 			return;
 	}
 
-	if ($dst) echo '<a href="'.$dst.'">';
+	$out = '';
+	if ($dst) $out .= '<a href="'.$dst.'">';
 	//FIXME: make path configurable, so user can override core_dev icon set
-	echo '<img src="'.$config['core']['web_root'].'gfx/'.$src.'" alt="'.t($name).'" title="'.t($name).'"/>';
-	if ($dst) echo '</a>';
+	$out .= '<img src="'.$config['core']['web_root'].'gfx/'.$src.'" alt="'.t($name).'" title="'.t($name).'"/>';
+	if ($dst) $out .= '</a>';
+	return $out;
 }
 
 

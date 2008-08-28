@@ -97,7 +97,7 @@ foreach ($list as $row) {
 		echo '<a href="?reply='.$row['feedbackId'].'&amp;public">Public reply</a><br/>';
 		echo '<a href="?reply='.$row['feedbackId'].'&amp;private">Reply with private message</a><br/>';
 	}
-	coreButton('Delete', '?delete='.$row['feedbackId']);
+	echo coreButton('Delete', '?delete='.$row['feedbackId']);
 	echo '</div><br/>';
 }
 

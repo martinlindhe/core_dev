@@ -20,3 +20,11 @@
 	background-color: #eee;
 	border: 1px #000 solid;
 }
+
+.admin_stopword {
+	border: 1px #888 solid;
+	padding: 10px;
+	background-color: #fff;
+	width: 200px;
+	float: left;
+}

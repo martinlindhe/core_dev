@@ -9,12 +9,22 @@ $session->requireAdmin();
 
 require('design_admin_head.php');
 
-function adminGbRow($row, $i)
+function guestbookRow($row, $i)
 {
-	$out  = '<tr style="background-color:'.($i%2 ? '#eee' : '#aaa').'"><td>';
-	$out .= Users::link($row['authorId'], $row['authorName']).' at '.formatTime($row['timeCreated']).'<br/>';
+	global $session;
+	if ($session->isAdmin && !empty($_GET['gbremove']) && $_GET['gbremove'] == $row['entryId']) {
+		removeGuestbookEntry($row['entryId']);
+		$i--;
+		return;
+	}
+
+	$out  = '<tr class="'.($i%2 ? 'gb_row_even' : 'gb_row_odd').'"><td width="300">';
+	$out .= Users::link($row['authorId'], $row['authorName']).' wrote to '.Users::link($row['userId']).' at '.formatTime($row['timeCreated']).'<br/>';
 	if ($row['subject']) $out .= '<b>'.$row['subject'].'</b><br/>';
-	$out .= nl2br($row['body']);
+	$out .= formatUserInputText($row['body']);
+	if ($session->isAdmin) {
+		$out .= '<br/>'.coreButton('Delete', '?gb&gbremove='.$row['entryId']);
+	}
 	$out .= '</td></tr>';
 
 	return $out;
@@ -30,7 +40,7 @@ if (isset($_GET['gb'])) {
 
 	$list = getGuestbookItems(0, $pager['limit']);
 
-	echo xhtmlTable($list, '', 'adminGbRow');
+	echo xhtmlTable($list, '', 'guestbookRow');
 
 } else {
 	echo '<h1>Incoming objects</h1>';
