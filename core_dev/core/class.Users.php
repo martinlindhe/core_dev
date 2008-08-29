@@ -417,7 +417,7 @@ class Users
 	function linkThumb($id, $alt = '', $w = 50, $h = 50)
 	{
 		global $config;
-		if (!$id) return 'UNREGISTERED';
+		if (!$id) return t('System message');
 		if (!$alt) $alt = Users::getName($id);
 		if (!$alt) return t('User deleted');
 

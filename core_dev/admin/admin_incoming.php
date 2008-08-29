@@ -36,6 +36,40 @@ function guestbookRow($row, $i)
 	return $out;
 }
 
+function messageRow($row, $i)
+{
+	global $session;
+
+	if ($session->isAdmin && !empty($_GET['msgremove']) && $_GET['msgremove'] == $row['msgId']) {
+		markMessageDeleted($row['msgId']);
+		$i--;
+		return;
+	}
+
+	//$out  = '<tr class="'.($i%2 ? 'gb_row_even' : 'gb_row_odd').'">';
+	$out  = '<tr>';
+	$out .= '<td>'.Users::linkThumb($row['fromId']).'</td>';
+	$out .= '<td>'.Users::link($row['fromId']).' wrote at '.formatTime($row['timeCreated']).' to '.Users::link($row['toId']).'<br/>';
+	if ($row['subject']) $out .= '<b>'.$row['subject'].'</b><br/>';
+	$out .= formatUserInputText($row['body']).'<br/>';
+	if ($row['timeRead']) {
+		$out .= '<i>Message read '.formatTime($row['timeRead']).'</i>';
+	} else {
+		$out .= '<b>Message is unread</b>';
+	}
+
+	if ($session->isAdmin) {
+		$out .= '<br/>'.coreButton('Delete', '?msg&msgremove='.$row['msgId']);
+	}
+	if ($session->isAdmin || $session->id == $row['fromId'] || $session->id == $row['toId']) {
+		//FIXME show history between these two users
+		//$out .= '<a href="">History</a>';
+	}
+	$out .= '<br/><br/></td></tr>';
+
+	return $out;
+}
+
 if (isset($_GET['gb'])) {
 	echo '<h1>Incoming GUESTBOOK ENTRIES</h1>';
 
@@ -58,7 +92,7 @@ if (isset($_GET['gb'])) {
 
 	$list = getMessages(0, 0, $pager['limit']);
 
-	echo xhtmlTable($list, '', 'guestbookRow');
+	echo xhtmlTable($list, '', 'messageRow');
 
 } else {
 	echo '<h1>Incoming objects</h1>';

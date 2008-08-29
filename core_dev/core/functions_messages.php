@@ -32,7 +32,6 @@ function sendMessage($_id, $_subj, $_msg)
 function setMessageAnswerId($msgId, $answerId)
 {
 	global $db;
-
 	if (!is_numeric($msgId) && !is_numeric($answerId)) return false;
 
 	$q = 'UPDATE tblMessages SET answerId='.$answerId.' WHERE msgId = '.$msgId.' LIMIT 1';
@@ -213,7 +212,8 @@ function markMessageDeleted($_id)
 	global $db, $session;
 	if (!is_numeric($_id)) return false;
 
-	$q = 'UPDATE tblMessages SET timeDeleted=NOW() WHERE ownerId='.$session->id.' AND msgId='.$_id;
+	$q = 'UPDATE tblMessages SET timeDeleted=NOW() WHERE msgId='.$_id;
+	if (!$session->isAdmin) $q .= ' AND ownerId='.$session->id;
 	return $db->update($q);
 }
 
