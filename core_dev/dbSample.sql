@@ -249,7 +249,6 @@ CREATE TABLE `tblGuestbooks` (
   `body` text,
   `timeDeleted` datetime default NULL,
   `deletedBy` bigint(20) unsigned NOT NULL default '0',
-  `entryRead` tinyint(3) unsigned NOT NULL default '0',
   `timeRead` datetime default NULL,
   `answerId` int(11) NOT NULL,
   `isPrivate` tinyint(1) NOT NULL,
