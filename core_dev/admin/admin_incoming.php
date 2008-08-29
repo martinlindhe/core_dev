@@ -51,12 +51,12 @@ if (isset($_GET['gb'])) {
 } else if (isset($_GET['msg'])) {
 	echo '<h1>Incoming MESSAGES</h1>';
 
-	$tot_cnt = getGuestbookCount();
+	$tot_cnt = getMessagesCount();
 	$pager = makePager($tot_cnt, 10);
 
 	echo $pager['head'];
 
-	$list = getGuestbookItems(0, $pager['limit']);
+	$list = getMessages(0, 0, $pager['limit']);
 
 	echo xhtmlTable($list, '', 'guestbookRow');
 

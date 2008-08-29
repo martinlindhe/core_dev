@@ -100,34 +100,45 @@ function getMessageCountPerDate($dateStart, $dateStop = '')
 }
 
 /**
- * XXX
+ * Fetches multiple messages
+ *
+ * \param $_group message group id
+ * \param $_id userid
+ * \param $_limit_sql makePager() sql snippet
  */
-function getMessages($_group = 0, $_limit_sql = '')
-{	//FIXME add userId parameter!
-	global $db, $session;
-	if (!is_numeric($_group)) return false;
+function getMessages($_group = 0, $_id = 0, $_limit_sql = '')
+{
+	global $db;
+	if (!is_numeric($_group) || !is_numeric($_id)) return false;
 
 	switch ($_group) {
 		case MESSAGE_GROUP_INBOX:
-			$q  = 'SELECT t1.*,t1.fromId AS otherId, t2.userName AS otherName ';
-			$q .= 'FROM tblMessages AS t1 ';
-			$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.fromId=t2.userId) ';
-			$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
-			$q .= 'AND t1.timeDeleted IS NULL ';
-			$q .= 'ORDER BY timeCreated DESC '.$_limit_sql;
+			$q  = 'SELECT t1.*,t1.fromId AS otherId, t2.userName AS otherName';
+			$q .= ' FROM tblMessages AS t1';
+			$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.fromId=t2.userId)';
+			$q .= ' WHERE t1.timeDeleted IS NULL';
+			if ($_group) $q .= ' AND t1.groupId='.$_group;
+			if ($_id) $q .= ' AND t1.ownerId='.$_id;
+			$q .= ' ORDER BY timeCreated DESC '.$_limit_sql;
 			break;
 
 		case MESSAGE_GROUP_OUTBOX:
-			$q  = 'SELECT t1.*,t1.toId AS otherId, t2.userName AS otherName ';
-			$q .= 'FROM tblMessages AS t1 ';
-			$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.toId=t2.userId) ';
-			$q .= 'WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group.' ';
-			$q .= 'AND t1.timeDeleted IS NULL ';
-			$q .= 'ORDER BY timeCreated DESC'.$_limit_sql;
+			$q  = 'SELECT t1.*,t1.toId AS otherId, t2.userName AS otherName';
+			$q .= ' FROM tblMessages AS t1';
+			$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.toId=t2.userId)';
+			$q .= ' WHERE t1.timeDeleted IS NULL';
+			if ($_group) $q .= ' AND t1.groupId='.$_group;
+			if ($_id) $q .= ' AND t1.ownerId='.$_id;
+			$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;
 			break;
 
 		default:
-			$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session->id.' AND groupId='.$_group;
+			$q = 'SELECT * FROM tblMessages';
+			$q .= ' WHERE timeDeleted IS NULL';
+			if ($_group) $q .= ' AND groupId='.$_group;
+			if ($_id) $q .= ' AND ownerId='.$_id;
+			$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;
+			break;
 	}
 
 	return $db->getArray($q);
@@ -257,7 +268,7 @@ function showMessages($_group = 0)
 	echo ($_group==MESSAGE_GROUP_OUTBOX?'<b>'.t('OUTBOX').'</b>':'<a href="?g='.MESSAGE_GROUP_OUTBOX.'">'.t('OUTBOX').'</a>').'<br/>';
 	echo '<br/>';
 
-	$list = getMessages($_group);
+	$list = getMessages($_group, $session->id);
 	if (!$list) {
 		switch ($_group) {
 			case MESSAGE_GROUP_INBOX: echo t('No messages in inbox'); break;
