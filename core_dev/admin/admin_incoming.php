@@ -86,6 +86,9 @@ function blogRow($row, $i)
 	$out .= '<td>'.Users::link($row['userId']).' wrote at '.formatTime($row['timeCreated']).'<br/>';
 	if ($row['subject']) $out .= '<b>'.$row['subject'].'</b><br/>';
 	$out .= formatUserInputText($row['body']).'<br/>';
+	if ($row['isPrivate']) {
+		$out .= '<b>PRIVATE BLOG!</b><br/>';
+	}
 
 	if ($session->isAdmin) {
 		$out .= '<br/>'.coreButton('Delete', '?blog&blogremove='.$row['blogId']);
