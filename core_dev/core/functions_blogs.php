@@ -38,9 +38,9 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
 function deleteBlog($_id)
 {
 	global $db, $session;
-	if (!$session->id || !is_numeric($blogId)) return false;
+	if (!$session->id || !is_numeric($_id)) return false;
 
-	$q = 'UPDATE tblBlogs SET timeDeleted=NOW(),deletedBy='.$session->id.' WHERE blogId='.$blogId;
+	$q = 'UPDATE tblBlogs SET timeDeleted=NOW(),deletedBy='.$session->id.' WHERE blogId='.$_id;
 	$db->update($q);
 }
 
@@ -130,7 +130,7 @@ function getBlogs($_id = 0, $_limit_sql = '')
 	$q  = 'SELECT * FROM tblBlogs';
 	$q .= ' WHERE deletedBy=0';
 	if ($_id) $q .= ' AND userId='.$_id;
-	if (!$session->isAdmin || $session->id != $_id || !isFriends($_id)) {
+	if (!$session->isAdmin && ($session->id != $_id || !isFriends($userId))) {
 		$q .= ' AND isPrivate=0';
 	}
 	$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;
@@ -150,7 +150,7 @@ function getBlogCount($_id = 0)
 	$q  = 'SELECT COUNT(blogId) FROM tblBlogs';
 	$q .= ' WHERE deletedBy=0';
 	if ($_id) $q .= ' AND userId='.$_id;
-	if (!$session->isAdmin || $session->id != $_id || !isFriends($userId)) {
+	if (!$session->isAdmin && ($session->id != $_id || !isFriends($userId))) {
 		$q .= ' AND isPrivate=0';
 	}
 	return $db->getOneItem($q);
