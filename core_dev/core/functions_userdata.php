@@ -1038,4 +1038,5 @@ function getRandomUserByGender($gender)
 
 	return $db->getOneItem($q);
 }
+
 ?>

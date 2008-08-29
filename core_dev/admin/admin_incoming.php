@@ -18,14 +18,20 @@ function guestbookRow($row, $i)
 		return;
 	}
 
-	$out  = '<tr class="'.($i%2 ? 'gb_row_even' : 'gb_row_odd').'"><td width="300">';
-	$out .= Users::link($row['authorId'], $row['authorName']).' wrote to '.Users::link($row['userId']).' at '.formatTime($row['timeCreated']).'<br/>';
+	//$out  = '<tr class="'.($i%2 ? 'gb_row_even' : 'gb_row_odd').'">';
+	$out  = '<tr>';
+	$out .= '<td>'.Users::linkThumb($row['authorId'], $row['authorName']).'</td>';
+	$out .= '<td>'.Users::link($row['authorId'], $row['authorName']).' wrote at '.formatTime($row['timeCreated']).' to '.Users::link($row['userId']).'<br/>';
 	if ($row['subject']) $out .= '<b>'.$row['subject'].'</b><br/>';
 	$out .= formatUserInputText($row['body']);
 	if ($session->isAdmin) {
 		$out .= '<br/>'.coreButton('Delete', '?gb&gbremove='.$row['entryId']);
 	}
-	$out .= '</td></tr>';
+	if ($session->isAdmin || $session->id == $row['authorId'] || $session->id == $row['userId']) {
+		//FIXME show history between these two users
+		//$out .= '<a href="">History</a>';
+	}
+	$out .= '<br/><br/></td></tr>';
 
 	return $out;
 }

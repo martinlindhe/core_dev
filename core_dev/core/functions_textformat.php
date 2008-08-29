@@ -29,12 +29,12 @@ function showThumb($_id, $_title = '', $w = 0, $h = 0)
 	return $str;
 }
 
-function makeThumbLink($_id, $_title = '')
+function makeThumbLink($_id, $_title = '', $w = 50, $h = 50)
 {
 	if (!is_numeric($_id)) return false;
 
 	$str  = '<a href="#" onclick="popup_imgview('.$_id.')">';
-	$str .= showThumb($_id, $_title);
+	$str .= showThumb($_id, $_title, $w, $h);
 	$str .= '</a>';
 	return $str;
 }

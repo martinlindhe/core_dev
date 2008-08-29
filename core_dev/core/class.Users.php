@@ -403,28 +403,38 @@ class Users
 	 */
 	function link($id, $name = '', $class = '')
 	{
+		global $config;
 		if (!$id) return t('System message');
 		if (!$name) $name = Users::getName($id);
 		if (!$name) return t('User not found');
 
-		return '<a '.($class?' class="'.$class.'"':'').'href="'.getProjectPath(3).'user.php?id='.$id.'">'.$name.'</a>';
+		return '<a '.($class?' class="'.$class.'"':'').'href="'.$config['app']['web_root'].'user.php?id='.$id.'">'.$name.'</a>';
 	}
 
 	/**
 	 * Generates a clickable thumbnail to user's page
 	 */
-	function linkThumb($id, $name = '')
+	function linkThumb($id, $alt = '', $w = 50, $h = 50)
 	{
 		global $config;
-
 		if (!$id) return 'UNREGISTERED';
-		if (!$name) $name = Users::getName($id);
-		if (!$name) return 'User deleted';
+		if (!$alt) $alt = Users::getName($id);
+		if (!$alt) return t('User deleted');
 
-		$pic_id = loadUserdataImage($id);
-
-		return makeThumbLink($pic_id, $name);
+		$out  = '<a href="'.$config['app']['web_root'].'user.php?id='.$id.'">';
+		$out .= Users::thumb($id, $alt, $w, $h).'</a>';
+		return $out;
 	}
+
+	/**
+ 	 * Generates a thumbnail of user's presentation image
+ 	 */
+	function thumb($id, $alt = '', $w = 50, $h = 50)
+	{
+		$fileId = loadUserdataImage($id);
+		return showThumb($fileId, $alt, $w, $h);
+	}
+
 
 	/**
 	 * User's public presentation page
