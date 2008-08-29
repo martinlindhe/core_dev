@@ -141,11 +141,10 @@ function getMessages($_group = 0, $_limit_sql = '')
  */
 function getMessagesCount($_group = 0, $_id = 0)
 {
-	global $db, $session;
+	global $db;
 	if (!is_numeric($_group) || !is_numeric($_id)) return false;
 
-	$q  = 'SELECT COUNT(toId) AS cnt';
-	$q .= ' FROM tblMessages';
+	$q  = 'SELECT COUNT(toId) FROM tblMessages';
 	$q .= ' WHERE timeDeleted IS NULL';
 	if ($_group) $q .= ' AND groupId='.$_group;
 	if ($_id) $q .= ' AND ownerId='.$_id;
@@ -158,13 +157,13 @@ function getMessagesCount($_group = 0, $_id = 0)
  */
 function getMessagesNewItemsCount($_group = 0, $_id = 0)
 {
-	global $db, $session;
+	global $db;
 	if (!is_numeric($_group) || !is_numeric($_id)) return false;
 
 	$q  = 'SELECT COUNT(fromId) FROM tblMessages';
 	$q .= ' WHERE timeRead IS NULL AND timeDeleted IS NULL';
-	if ($_id) $q .= ' AND ownerId='.$_id;
 	if ($_group) $q .= ' AND groupId='.$_group;
+	if ($_id) $q .= ' AND ownerId='.$_id;
 
 	return $db->getOneItem($q);
 }
