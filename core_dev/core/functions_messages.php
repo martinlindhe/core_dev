@@ -156,15 +156,15 @@ function getMessagesCount($_group = 0, $_id = 0)
 /**
  * XXX
  */
-function getMessagesNewItemsCount($userId, $_group = 0)
+function getMessagesNewItemsCount($_group = 0, $_id = 0)
 {
 	global $db, $session;
-	if (!is_numeric($_group)) return false;
+	if (!is_numeric($_group) || !is_numeric($_id)) return false;
 
-	$q  = 'SELECT COUNT(fromId) FROM tblMessages WHERE';
-	$q .= ' ownerId='.$userId;
+	$q  = 'SELECT COUNT(fromId) FROM tblMessages';
+	$q .= ' WHERE timeRead IS NULL AND timeDeleted IS NULL';
+	if ($_id) $q .= ' AND ownerId='.$_id;
 	if ($_group) $q .= ' AND groupId='.$_group;
-	$q .= ' AND timeRead IS NULL AND timeDeleted IS NULL';
 
 	return $db->getOneItem($q);
 }
