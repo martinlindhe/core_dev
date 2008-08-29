@@ -37,7 +37,19 @@ function guestbookRow($row, $i)
 }
 
 if (isset($_GET['gb'])) {
-	echo '<h1>Incoming GUESTBOOK</h1>';
+	echo '<h1>Incoming GUESTBOOK ENTRIES</h1>';
+
+	$tot_cnt = getGuestbookCount();
+	$pager = makePager($tot_cnt, 10);
+
+	echo $pager['head'];
+
+	$list = getGuestbookItems(0, $pager['limit']);
+
+	echo xhtmlTable($list, '', 'guestbookRow');
+
+} else if (isset($_GET['msg'])) {
+	echo '<h1>Incoming MESSAGES</h1>';
 
 	$tot_cnt = getGuestbookCount();
 	$pager = makePager($tot_cnt, 10);
@@ -52,7 +64,7 @@ if (isset($_GET['gb'])) {
 	echo '<h1>Incoming objects</h1>';
 	echo '<a href="?gb">GUESTBOOK</a><br/>';
 	echo '<a href="?msg">MESSAGES</a><br/>';
-	echo '<a href="?blog">BLOGS</a><br/>';
+	//echo '<a href="?blog">BLOGS</a><br/>';
 }
 
 require('design_admin_foot.php');;

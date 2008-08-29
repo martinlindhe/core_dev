@@ -134,17 +134,21 @@ function getMessages($_group = 0, $_limit_sql = '')
 }
 
 /**
- * XXX
+ * Return the number of messages in specified message box
+ *
+ * \param $_group message group id
+ * \param $_id user id
  */
-function getMessagesCount($_group = 0)
-{	//FIXME add userId parameter!
+function getMessagesCount($_group = 0, $_id = 0)
+{
 	global $db, $session;
-	if (!is_numeric($_group)) return false;
+	if (!is_numeric($_group) || !is_numeric($_id)) return false;
 
-	$q  = 'SELECT COUNT(t1.toId) AS cnt';
-	$q .= ' FROM tblMessages AS t1';
-	$q .= ' WHERE t1.ownerId='.$session->id.' AND t1.groupId='.$_group;
-	$q .= ' AND t1.timeDeleted IS NULL';
+	$q  = 'SELECT COUNT(toId) AS cnt';
+	$q .= ' FROM tblMessages';
+	$q .= ' WHERE timeDeleted IS NULL';
+	if ($_group) $q .= ' AND groupId='.$_group;
+	if ($_id) $q .= ' AND ownerId='.$_id;
 
 	return $db->getOneItem($q);
 }
