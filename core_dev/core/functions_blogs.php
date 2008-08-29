@@ -7,11 +7,11 @@
 
 require_once('atom_moderation.php');		//for automatic moderation of new blogs, and for "report blog" feature
 require_once('atom_comments.php');			//for comment support for blogs
-require_once('atom_rating.php');				//for rating support for blogs
+require_once('atom_rating.php');			//for rating support for blogs
 
 $config['blog']['moderation'] = true;		//enables automatic moderation of new blogs
 $config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport', 'BlogComment', 'BlogFiles');
-$config['blog']['allow_rating'] = true;	//allow users to rate blogs
+$config['blog']['allow_rating'] = true;		//allow users to rate blogs
 
 function addBlog($categoryId, $title, $body, $isPrivate = 0)
 {
@@ -21,7 +21,7 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
 	$title = $db->escape($title);
 	$body = $db->escape($body);
 
-	$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id.',blogTitle="'.$title.'",blogBody="'.$body.'",timeCreated=NOW(),isPrivate='.$isPrivate;
+	$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id.',subject="'.$title.'",body="'.$body.'",timeCreated=NOW(),isPrivate='.$isPrivate;
 	$blogId = $db->insert($q);
 
 	//Add entry to moderation queue
@@ -30,7 +30,12 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
 	return $blogId;
 }
 
-function deleteBlog($blogId)
+/**
+ * Marks a blog as deleted
+ *
+ * \param $_id blog id
+ */
+function deleteBlog($_id)
 {
 	global $db, $session;
 	if (!$session->id || !is_numeric($blogId)) return false;
@@ -42,7 +47,6 @@ function deleteBlog($blogId)
 function updateBlogReadCount($blogId)
 {
 	global $db;
-
 	if (!is_numeric($blogId)) return false;
 
 	$q = 'UPDATE tblBlogs SET readCnt=readCnt+1 WHERE blogId='.$blogId.' LIMIT 1';
@@ -57,7 +61,7 @@ function updateBlog($blogId, $categoryId, $title, $body, $isPrivate = 0)
 	$title = $db->escape($title);
 	$body = $db->escape($body);
 
-	$q = 'UPDATE tblBlogs SET categoryId='.$categoryId.',blogTitle="'.$title.'",blogBody="'.$body.'",timeUpdated=NOW(),isPrivate='.$isPrivate.' WHERE blogId='.$blogId;
+	$q = 'UPDATE tblBlogs SET categoryId='.$categoryId.',subject="'.$title.'",body="'.$body.'",timeUpdated=NOW(),isPrivate='.$isPrivate.' WHERE blogId='.$blogId;
 	$db->update($q);
 
 	//Add entry to moderation queue
@@ -114,40 +118,41 @@ function getBlog($blogId)
 }
 
 /**
- * Returns blogs from $userId
+ * Returns blogs for a user
+ *
+ * \param $_id userid
  */
-function getBlogsByUserid($userId, $_limit_sql = '')
+function getBlogs($_id = 0, $_limit_sql = '')
 {
 	global $db, $session;
-	if (!is_numeric($userId)) return false;
+	if (!is_numeric($_id)) return false;
 
-	$isPrivate = 'AND isPrivate=0';
-	if ($session->id == $userId || isFriends($userId)) {
-		$isPrivate = '';
+	$q  = 'SELECT * FROM tblBlogs';
+	$q .= ' WHERE deletedBy=0';
+	if ($_id) $q .= ' AND userId='.$_id;
+	if (!$session->isAdmin || $session->id != $_id || !isFriends($_id)) {
+		$q .= ' AND isPrivate=0';
 	}
-
-	$q  = 'SELECT * FROM tblBlogs ';
-	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 '.$isPrivate;
 	$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;
 	return $db->getArray($q);
 }
 
 /**
- * Returns count of blogs from $userId
+ * Returns number of blogs
+ *
+ * \param $_id userid
  */
-function getBlogsByUseridCount($userId)
+function getBlogCount($_id = 0)
 {
 	global $db, $session;
-	if (!is_numeric($userId)) return false;
+	if (!is_numeric($_id)) return false;
 
-	$isPrivate = 'AND isPrivate=0';
-	if ($session->id == $userId || isFriends($userId)) {
-		$isPrivate = '';
+	$q  = 'SELECT COUNT(blogId) FROM tblBlogs';
+	$q .= ' WHERE deletedBy=0';
+	if ($_id) $q .= ' AND userId='.$_id;
+	if (!$session->isAdmin || $session->id != $_id || !isFriends($userId)) {
+		$q .= ' AND isPrivate=0';
 	}
-
-	$q  = 'SELECT count(blogId) AS cnt FROM tblBlogs ';
-	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 '.$isPrivate;
-	$q .= ' ORDER BY timeCreated DESC';
 	return $db->getOneItem($q);
 }
 
@@ -204,7 +209,7 @@ function showBlog()
 	echo '<div class="blog">';
 
 	echo '<div class="blog_head">';
-	echo '<div class="blog_title">'.$blog['blogTitle'].'</div>';
+	echo '<div class="blog_title">'.$blog['subject'].'</div>';
 	if ($blog['categoryName']) echo '(category <b>'.$blog['categoryName'].'</b>)<br/><br/>';
 	else echo ' (no category)<br/><br/>';
 	echo 'Published '. $blog['timeCreated'].' by '.Users::link($blog['userId'], $blog['userName']).'<br/>';
@@ -227,13 +232,13 @@ function showBlog()
 
 	if ($current_tab == 'BlogEdit' && ($session->id == $blog['userId'] || $session->isAdmin) ) {
 		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogEdit:'.$_id.'">';
-		echo '<input type="text" name="blog_title" value="'.$blog['blogTitle'].'" size="40" maxlength="40"/>';
+		echo '<input type="text" name="blog_title" value="'.$blog['subject'].'" size="40" maxlength="40"/>';
 
 		echo ' Category: ';
 		echo getCategoriesSelect(CATEGORY_BLOG, 0, 'blog_cat', $blog['categoryId']);
 		echo '<br/><br/>';
 
-		$body = trim($blog['blogBody']);
+		$body = trim($blog['body']);
 		//convert | to &amp-version since it's used as a special character:
 		$body = str_replace('|', '&#124;', $body);	//	|		vertical bar
 		$body = $body."\n";	//always start with an empty line when getting focus
@@ -261,7 +266,7 @@ function showBlog()
 
 			echo 'Your report has been recieved<br/>';
 		} else {
-			echo 'Report blog - <b>'.$blog['blogTitle'].'</b><br/><br/>';
+			echo 'Report blog - <b>'.$blog['subject'].'</b><br/><br/>';
 
 			echo 'Why do you want to report this:<br/>';
 			echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogReport:'.$_id.'">';
@@ -281,7 +286,7 @@ function showBlog()
 
 	} else {
 
-		echo formatUserInputText($blog['blogBody']);
+		echo formatUserInputText($blog['body']);
 
 		if ($blog['timeUpdated']) {
 			echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
@@ -327,7 +332,7 @@ function showUserBlogs($_userid_name = '')
 			$shown_category = $row['categoryId'];
 		}
 		echo '<div class="X">';
-		echo '<a href="blog.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
+		echo '<a href="blog.php?Blog:'.$row['blogId'].'">'.$row['subject'].'</a><br/>';
 		echo $row['timeCreated'];
 		echo '</div>';
 	}

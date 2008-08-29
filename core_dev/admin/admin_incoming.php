@@ -70,6 +70,31 @@ function messageRow($row, $i)
 	return $out;
 }
 
+
+function blogRow($row, $i)
+{
+	global $session;
+
+	if ($session->isAdmin && !empty($_GET['blogremove']) && $_GET['blogremove'] == $row['blogId']) {
+		deleteBlog($row['blogId']);
+		$i--;
+		return;
+	}
+	//$out  = '<tr class="'.($i%2 ? 'gb_row_even' : 'gb_row_odd').'">';
+	$out  = '<tr>';
+	$out .= '<td>'.Users::linkThumb($row['userId']).'</td>';
+	$out .= '<td>'.Users::link($row['userId']).' wrote at '.formatTime($row['timeCreated']).'<br/>';
+	if ($row['subject']) $out .= '<b>'.$row['subject'].'</b><br/>';
+	$out .= formatUserInputText($row['body']).'<br/>';
+
+	if ($session->isAdmin) {
+		$out .= '<br/>'.coreButton('Delete', '?blog&blogremove='.$row['blogId']);
+	}
+	$out .= '<br/><br/></td></tr>';
+
+	return $out;
+}
+
 if (isset($_GET['gb'])) {
 	echo '<h1>Incoming GUESTBOOK ENTRIES</h1>';
 
@@ -94,11 +119,23 @@ if (isset($_GET['gb'])) {
 
 	echo xhtmlTable($list, '', 'messageRow');
 
+} else if (isset($_GET['blog'])) {
+	echo '<h1>Incoming BLOGS</h1>';
+
+	$tot_cnt = getBlogCount();
+	$pager = makePager($tot_cnt, 10);
+
+	echo $pager['head'];
+
+	$list = getBlogs(0, $pager['limit']);
+
+	echo xhtmlTable($list, '', 'blogRow');
+
 } else {
 	echo '<h1>Incoming objects</h1>';
 	echo '<a href="?gb">GUESTBOOK</a><br/>';
 	echo '<a href="?msg">MESSAGES</a><br/>';
-	//echo '<a href="?blog">BLOGS</a><br/>';
+	echo '<a href="?blog">BLOGS</a><br/>';
 }
 
 require('design_admin_foot.php');;
