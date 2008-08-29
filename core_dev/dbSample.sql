@@ -27,8 +27,8 @@ SET character_set_client = utf8;
 CREATE TABLE `tblBlogs` (
   `blogId` int(10) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',
-  `blogTitle` varchar(200) default NULL,
-  `blogBody` text,
+  `subject` varchar(200) default NULL,
+  `body` text,
   `timeCreated` datetime default NULL,
   `timeUpdated` datetime default NULL,
   `categoryId` bigint(20) unsigned NOT NULL default '0',
