@@ -130,7 +130,7 @@ function getBlogs($_id = 0, $_limit_sql = '')
 	$q  = 'SELECT * FROM tblBlogs';
 	$q .= ' WHERE deletedBy=0';
 	if ($_id) $q .= ' AND userId='.$_id;
-	if (!$session->isAdmin && ($session->id != $_id || !isFriends($userId))) {
+	if (!$session->isAdmin && ($session->id != $_id || !isFriends($_id))) {
 		$q .= ' AND isPrivate=0';
 	}
 	$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;
@@ -150,7 +150,7 @@ function getBlogCount($_id = 0)
 	$q  = 'SELECT COUNT(blogId) FROM tblBlogs';
 	$q .= ' WHERE deletedBy=0';
 	if ($_id) $q .= ' AND userId='.$_id;
-	if (!$session->isAdmin && ($session->id != $_id || !isFriends($userId))) {
+	if (!$session->isAdmin && ($session->id != $_id || !isFriends($_id))) {
 		$q .= ' AND isPrivate=0';
 	}
 	return $db->getOneItem($q);
