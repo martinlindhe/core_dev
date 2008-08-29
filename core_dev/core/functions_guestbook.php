@@ -131,7 +131,7 @@ function getGuestbookNewItemsCount($userId)
 
 	$q  = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE ';
 	$q .= 'userId='.$userId.' AND deletedBy=0 ';
-	$q .= 'AND entryRead = 0';
+	$q .= 'AND timeRead IS NULL';
 	return $db->getOneItem($q);
 }
 
@@ -227,7 +227,7 @@ function getGuestbookUnreadCount($userId)
 	global $db;
 	if (!is_numeric($userId)) return false;
 
-	$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND entryRead=0';
+	$q = 'SELECT COUNT(entryId) FROM tblGuestbooks WHERE userId='.$userId.' AND timeRead IS NULL';
 	return $db->getOneItem($q);
 }
 
@@ -239,7 +239,7 @@ function markGuestbookRead()
 	global $db, $session;
 	if (!$session->id) return false;
 
-	$q = 'UPDATE tblGuestbooks SET entryRead=1,timeRead=NOW() WHERE entryRead=0 AND userId='.$session->id;
+	$q = 'UPDATE tblGuestbooks SET timeRead=NOW() WHERE timeRead IS NULL AND userId='.$session->id;
 	$db->update($q);
 }
 
@@ -299,7 +299,7 @@ function showGuestbook($userId)
 		echo '</div>';
 
 		if ($session->id == $userId) {
-			if ($row['entryRead'] == 0) {
+			if (!$row['timeRead']) {
 				echo '<img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="'.t('Unread').'">';
 			}
 		}
