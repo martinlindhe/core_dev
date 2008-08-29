@@ -21,11 +21,14 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
 	$title = $db->escape($title);
 	$body = $db->escape($body);
 
-	$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id.',subject="'.$title.'",body="'.$body.'",timeCreated=NOW(),isPrivate='.$isPrivate;
+	$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id;
+	$q .= ',subject="'.$title.'",body="'.$body.'",timeCreated=NOW(),isPrivate='.$isPrivate;
 	$blogId = $db->insert($q);
 
 	//Add entry to moderation queue
-	if ($config['blog']['moderation'] && (isSensitive($title) || isSensitive($body))) addToModerationQueue(MODERATION_BLOG, $blogId, true);
+	if ($config['blog']['moderation'] && (isSensitive($title) || isSensitive($body))) {
+		addToModerationQueue(MODERATION_BLOG, $blogId, true);
+	}
 
 	return $blogId;
 }
@@ -44,12 +47,15 @@ function deleteBlog($_id)
 	$db->update($q);
 }
 
-function updateBlogReadCount($blogId)
+/**
+ * \param $_id blog id
+ */
+function updateBlogReadCount($_id)
 {
 	global $db;
-	if (!is_numeric($blogId)) return false;
+	if (!is_numeric($_id)) return false;
 
-	$q = 'UPDATE tblBlogs SET readCnt=readCnt+1 WHERE blogId='.$blogId.' LIMIT 1';
+	$q = 'UPDATE tblBlogs SET readCnt=readCnt+1 WHERE blogId='.$_id.' LIMIT 1';
 	$db->update($q);
 }
 
@@ -65,8 +71,8 @@ function updateBlog($blogId, $categoryId, $title, $body, $isPrivate = 0)
 	$db->update($q);
 
 	//Add entry to moderation queue
-	if ($config['blog']['moderation']) {
-		if (isSensitive($title) || isSensitive($body)) addToModerationQueue(MODERATION_BLOG, $blogId, true);
+	if ($config['blog']['moderation'] && (isSensitive($title) || isSensitive($body))) {
+		addToModerationQueue(MODERATION_BLOG, $blogId, true);
 	}
 }
 
@@ -97,10 +103,10 @@ function getLatestBlogs($_cnt = 5)
 	global $db;
 	if (!is_numeric($_cnt)) return false;
 
-	$q  = 'SELECT t1.*,t2.userName FROM tblBlogs AS t1 ';
-	$q .= 'INNER JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
-	$q .= 'WHERE t1.deletedBy=0 ';
-	$q .= 'ORDER BY t1.timeCreated DESC';
+	$q  = 'SELECT t1.*,t2.userName FROM tblBlogs AS t1';
+	$q .= ' INNER JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
+	$q .= ' WHERE t1.deletedBy=0';
+	$q .= ' ORDER BY t1.timeCreated DESC';
 	if ($_cnt) $q .= ' LIMIT '.$_cnt;
 	return $db->getArray($q);
 }
@@ -110,10 +116,10 @@ function getBlog($blogId)
 	global $db;
 	if (!is_numeric($blogId)) return false;
 
-	$q  = 'SELECT t1.*,t2.categoryName,t3.userName FROM tblBlogs AS t1 ';
-	$q .= 'LEFT OUTER JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOG.') ';
-	$q .= 'INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId) ';
-	$q .= 'WHERE t1.blogId='.$blogId.' AND t1.deletedBy=0';
+	$q  = 'SELECT t1.*,t2.categoryName,t3.userName FROM tblBlogs AS t1';
+	$q .= ' LEFT OUTER JOIN tblCategories AS t2 ON (t1.categoryId=t2.categoryId AND t2.categoryType='.CATEGORY_BLOG.')';
+	$q .= ' INNER JOIN tblUsers AS t3 ON (t1.userId=t3.userId)';
+	$q .= ' WHERE t1.blogId='.$blogId.' AND t1.deletedBy=0';
 	return $db->getOneRow($q);
 }
 
@@ -167,9 +173,9 @@ function getBlogsByMonth($userId, $month, $year, $order_desc = true)
 	$time_start = mktime(0, 0, 0, $month, 1, $year);			//00:00 at first day of month
 	$time_end   = mktime(23, 59, 59, $month+1, 0, $year);	//23:59 at last day of month
 
-	$q  = 'SELECT * FROM tblBlogs ';
-	$q .= 'WHERE userId='.$userId.' AND deletedBy=0 ';
-	$q .= 'AND timeCreated BETWEEN "'.sql_datetime($time_start).'" AND "'.sql_datetime($time_end).'"';
+	$q  = 'SELECT * FROM tblBlogs';
+	$q .= ' WHERE userId='.$userId.' AND deletedBy=0';
+	$q .= ' AND timeCreated BETWEEN "'.sql_datetime($time_start).'" AND "'.sql_datetime($time_end).'"';
 	if ($order_desc === true) {
 		$q .= ' ORDER BY timeCreated DESC';
 	} else {
