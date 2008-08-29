@@ -19,7 +19,7 @@ echo createMenu($menu, 'blog_menu');
 echo 'Newest blogs:<br/>';
 $list = getLatestBlogs(5);
 for ($i=0; $i<count($list); $i++) {
-	echo '<a href="blog.php?Blog:'.$list[$i]['blogId'].'">'.$list[$i]['blogTitle'].'</a> - '.$list[$i]['timeCreated'];
+	echo '<a href="blog.php?Blog:'.$list[$i]['blogId'].'">'.$list[$i]['subject'].'</a> - '.$list[$i]['timeCreated'];
 	echo ' by '.Users::link($list[$i]['userId'], $list[$i]['userName']).'<br/>';
 }
 

@@ -17,7 +17,7 @@ echo 'Archive for '.$show_month.' '.$show_year.'<br/><br/>';
 
 $list = getBlogsByMonth($show, $show_month, $show_year);
 foreach($list as $row) {
-	echo $row['timeCreated'].' - <a href="blog.php?Blog:'.$row['blogId'].'">'.$row['blogTitle'].'</a><br/>';
+	echo $row['timeCreated'].' - <a href="blog.php?Blog:'.$row['blogId'].'">'.$row['subject'].'</a><br/>';
 }
 
 if (!count($list)) {
