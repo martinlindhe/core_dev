@@ -76,12 +76,15 @@ function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
  * \param $ownerId owner of the settings
  * \return array of settings
  */
-function readAllSettings($_type, $ownerId)
-{
+function readAllSettings($_type, $ownerId = 0)
+{	//FIXME is this function unused? if so, remove!
 	global $db;
-	if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type)) return false;
+	if (!is_numeric($ownerId) || !is_numeric($_type)) return false;
 
-	$q = 'SELECT settingName,settingId,settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' ORDER BY settingName ASC';
+	$q = 'SELECT settingName,settingId,settingValue';
+	$q .= ' FROM tblSettings WHERE settingType='.$_type;
+	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+	$q .= ' ORDER BY settingName ASC';
 	return $db->getArray($q);
 }
 

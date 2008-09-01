@@ -107,7 +107,6 @@ if (isset($_GET['gb'])) {
 	echo $pager['head'];
 
 	$list = getGuestbookItems(0, $pager['limit']);
-
 	echo xhtmlTable($list, '', 'guestbookRow');
 
 } else if (isset($_GET['msg'])) {
@@ -119,7 +118,6 @@ if (isset($_GET['gb'])) {
 	echo $pager['head'];
 
 	$list = getMessages(0, 0, $pager['limit']);
-
 	echo xhtmlTable($list, '', 'messageRow');
 
 } else if (isset($_GET['blog'])) {
@@ -131,14 +129,33 @@ if (isset($_GET['gb'])) {
 	echo $pager['head'];
 
 	$list = getBlogs(0, $pager['limit']);
-
 	echo xhtmlTable($list, '', 'blogRow');
+
+} else if (isset($_GET['profimg'])) {
+	echo '<h1>Incoming PROFILE IMAGES</h1>';
+
+	$tot_cnt = getAllUserdataSettingsCount(USERDATA_TYPE_IMAGE);
+
+	$pager = makePager($tot_cnt, 10);
+
+	echo $pager['head'];
+
+	$list = getAllUserdataSettings(USERDATA_TYPE_IMAGE, $pager['limit']);
+
+	foreach ($list as $row) {
+		echo showThumb($row['settingValue'], '', 270, 200);
+		if (isInQueue($row['settingValue'], MODERATION_PRES_IMAGE)) {
+			echo 'IN MODERATION QUEUE!<br/>';
+		}
+	}
+
 
 } else {
 	echo '<h1>Incoming objects</h1>';
 	echo '<a href="?gb">GUESTBOOK</a><br/>';
 	echo '<a href="?msg">MESSAGES</a><br/>';
 	echo '<a href="?blog">BLOGS</a><br/>';
+	echo '<a href="?profimg">PROFILE IMAGES</a><br/>';
 }
 
 require('design_admin_foot.php');;

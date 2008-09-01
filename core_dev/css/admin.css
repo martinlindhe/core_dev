@@ -1,6 +1,16 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: verdana,helvetica,arial;
+}
+
+img {
+	border: 0;
+}
+
 .admin_menu {
 	font-size: 12px;
-	margin-top: 0;
+	margin-top: 0px;
 	padding-left: 0;
 }
 .admin_menu li {

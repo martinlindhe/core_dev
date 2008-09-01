@@ -619,6 +619,53 @@ function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
 }
 
 /**
+ * Used in admin interface, for example to display all user presentation images
+ *
+ * \param $settingName can be textual name of the field ('Presentationsbild'), or field type such as USERDATA_TYPE_IMAGE
+ */
+function getAllUserdataSettings($settingName, $_sql_limit = '')
+{
+	global $db;
+	if (!$settingName) return false;
+
+	if (!is_numeric($settingName)) {
+		$fieldId = getUserdataFieldIdByName($settingName);
+		if (!$fieldId) return false;
+	} else {
+		$fieldId = getUserdataFieldIdByType($settingName);
+	}
+
+	$q = 'SELECT settingValue FROM tblSettings';
+	$q .= ' WHERE settingType='.SETTING_USERDATA;
+	$q .= ' AND settingName="'.$fieldId.'"';
+	$q .= ' ORDER BY timeSaved DESC'.$_sql_limit;
+	return $db->getArray($q);
+}
+
+/**
+ * Used in admin interface, for example to display all user presentation images
+ *
+ * \param $settingName can be textual name of the field ('Presentationsbild'), or field type such as USERDATA_TYPE_IMAGE
+ */
+function getAllUserdataSettingsCount($settingName)
+{
+	global $db;
+	if (!$settingName) return false;
+
+	if (!is_numeric($settingName)) {
+		$fieldId = getUserdataFieldIdByName($settingName);
+		if (!$fieldId) return false;
+	} else {
+		$fieldId = getUserdataFieldIdByType($settingName);
+	}
+
+	$q = 'SELECT COUNT(*) FROM tblSettings';
+	$q .= ' WHERE settingType='.SETTING_USERDATA;
+	$q .= ' AND settingName="'.$fieldId.'"';
+	return $db->getOneItem($q);
+}
+
+/**
  * XXX
  */
 function saveUserdataSetting($ownerId, $settingName, $settingValue)	//FIXME: rename to saveUserSetting()
