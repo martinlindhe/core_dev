@@ -79,7 +79,7 @@ function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
 function readAllSettings($_type, $ownerId = 0)
 {
 	global $db;
-	if (!is_numeric($ownerId) || !$ownerId || !is_numeric($_type)) return false;
+	if (!is_numeric($ownerId) || !is_numeric($_type)) return false;
 
 	$q = 'SELECT * FROM tblSettings';
 	$q .= ' WHERE settingType='.$_type;
