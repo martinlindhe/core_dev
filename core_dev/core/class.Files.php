@@ -905,6 +905,7 @@ class Files
 			$fileType == FILETYPE_VIDEOBLOG) {
 			$q  = 'SELECT * FROM tblFiles';
 			$q .= ' WHERE fileType='.$fileType;
+			if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
