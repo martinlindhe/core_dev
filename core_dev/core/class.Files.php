@@ -179,6 +179,7 @@ class Files
 
 		$q = 'SELECT * FROM tblFiles WHERE fileType='.$fileType;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+		$q .= ' AND timeDeleted IS NOT NULL';
 		$q .= ' ORDER BY timeUploaded '.$order.($count ? ' LIMIT '.$count : '');
 		return $db->getArray($q);
 	}
@@ -236,13 +237,14 @@ class Files
 	}
 
 	/**
-	 * Deletes a file from disk & database
+	 * Marks a file as deleted
 	 *
 	 * \param $_id fileId to delete
 	 * \param $ownerId optionally specify owner of file
+	 * \param $force remove file from disk
 	 * \return true on success
 	 */
-	function deleteFile($_id, $ownerId = 0)
+	function deleteFile($_id, $ownerId = 0, $force = false)
 	{
 		if (!is_numeric($_id) || !is_numeric($ownerId)) return false;
 
@@ -251,11 +253,13 @@ class Files
 		$filename = $this->findUploadPath($_id);
 		if (!file_exists($filename)) return false;
 
-		unlink($filename);
-		$this->clearThumbs($_id);
+		if ($force) {
+			unlink($filename);
+			$this->clearThumbs($_id);
 
-		//remove file description
-		deleteComments(COMMENT_FILEDESC, $_id);
+			//remove file description
+			deleteComments(COMMENT_FILEDESC, $_id);
+		}
 
 		return true;
 	}
@@ -270,15 +274,15 @@ class Files
 	 * \return true on success
 	 */
 	function deleteFileEntry($_type, $_id, $ownerId = 0, $categoryId = 0)
-	{//FIXME should update tblFiles and set timeDeleted instead
+	{
 		global $db, $session;
 		if (!is_numeric($_type) || !is_numeric($_id) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
-		$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
+		$q = 'UPDATE tblFiles SET timeDeleted=NOW() WHERE fileId='.$_id;
 		if ($_type) $q .= ' AND fileType='.$_type;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
-		if ($db->delete($q)) return true;
+		if ($db->update($q)) return true;
 		return false;
 	}
 
@@ -294,9 +298,9 @@ class Files
 		global $db;
 		if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
-		$q = 'DELETE FROM tblFiles WHERE ownerId='.$ownerId;
+		$q = 'UPDATE tblFiles SET timeDeleted=NOW() WHERE ownerId='.$ownerId;
 		if ($_type) $q .= ' AND fileType='.$_type;
-		return $db->delete($q);
+		return $db->update($q);
 	}
 
 	/**
@@ -567,8 +571,9 @@ class Files
 		global $db;
 		if (!is_numeric($_id)) return false;
 
-		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
-		if (!$data) die;
+		$q = 'SELECT * FROM tblFiles WHERE fileId='.$_id.' AND timeDeleted IS NOT NULL';
+		$data = $db->getOneRow($q);
+		if (!$data) return false;
 
 		$q = 'SELECT * FROM tblChecksums WHERE fileId='.$_id;
 		$cached = $db->getOneRow($q);
@@ -761,8 +766,9 @@ class Files
 		global $db;
 		if (!is_numeric($_id)) return false;
 
-		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
-		if (!$data) die;
+		$q = 'SELECT * FROM tblFiles WHERE fileId='.$_id.' AND timeDeleted IS NULL';
+		$data = $db->getOneRow($q);
+		if (!$data) return false;
 
 		if (isset($_GET['dl'])) {
 			/* Prompts the user to save the file */
@@ -911,12 +917,14 @@ class Files
 			$q .= ' WHERE fileType='.$fileType;
 			if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+			$q .= ' AND timeDeleted IS NULL';
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
 		} else if ($session && $session->id && $fileType == FILETYPE_FORUM) {
 			$q  = 'SELECT * FROM tblFiles';
 			$q .= ' WHERE fileType='.$fileType.' AND uploaderId='.$session->id;
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+			$q .= ' AND timeDeleted IS NULL';
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
 		} else if ($fileType) {
@@ -925,9 +933,11 @@ class Files
 			$q .= ' WHERE t1.categoryId='.$categoryId;
 			if ($ownerId) $q .= ' AND t1.ownerId='.$ownerId;
 			$q .= ' AND t1.fileType='.$fileType;
+			$q .= ' AND t1.timeDeleted IS NULL';
 			$q .= ' ORDER BY t1.timeUploaded '.$_order;
 		} else {
 			$q = 'SELECT * FROM tblFiles';
+			$q .= ' WHERE timeDeleted IS NULL';
 		}
 
 		if ($_limit) $q .= ' LIMIT 0,'.$_limit;
@@ -949,7 +959,8 @@ class Files
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($media_type)) return 0;
 
 		$q = 'SELECT COUNT(fileId) FROM tblFiles';
-		if ($fileType) $q .= ' WHERE fileType='.$fileType;
+		$q .= ' WHERE timeDeleted IS NULL';
+		if ($fileType) $q .= ' AND fileType='.$fileType;
 		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 		if ($media_type) $q .= ' AND mediaType='.$media_type;
@@ -966,9 +977,9 @@ class Files
 		global $db;
 		if (!is_numeric($_id) || !$_id) return false;
 
-		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1 '.
-					'LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId) '.
-					'WHERE t1.fileId='.$_id;
+		$q = 'SELECT t1.*,t2.userName AS uploaderName FROM tblFiles AS t1';
+		$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.uploaderId=t2.userId)';
+		$q .= ' WHERE t1.fileId='.$_id.' AND t1.timeDeleted IS NULL';
 
 		return $db->getOneRow($q);
 	}
@@ -983,7 +994,7 @@ class Files
 		global $db;
 		if (!is_numeric($_id) || !$_id) return false;
 
-		$q = 'SELECT * FROM tblFiles WHERE fileId='.$_id;
+		$q = 'SELECT * FROM tblFiles WHERE fileId='.$_id.' AND timeDeleted IS NULL';
 		return $db->getOneRow($q);
 	}
 
@@ -1092,7 +1103,8 @@ class Files
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
 
 		$q = 'SELECT * FROM tblFiles';
-		$q .= ' WHERE fileType='.$fileType;
+		$q .= ' WHERE timeDeleted IS NULL';
+		if ($fileType) $q .= ' AND fileType='.$fileType;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 		if ($mediaType) $q .= ' AND mediaType='.$mediaType;
