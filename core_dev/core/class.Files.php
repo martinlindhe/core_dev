@@ -179,7 +179,7 @@ class Files
 
 		$q = 'SELECT * FROM tblFiles WHERE fileType='.$fileType;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-		$q .= ' AND timeDeleted IS NOT NULL';
+		$q .= ' AND timeDeleted IS NULL';
 		$q .= ' ORDER BY timeUploaded '.$order.($count ? ' LIMIT '.$count : '');
 		return $db->getArray($q);
 	}
@@ -571,7 +571,7 @@ class Files
 		global $db;
 		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT * FROM tblFiles WHERE fileId='.$_id.' AND timeDeleted IS NOT NULL';
+		$q = 'SELECT * FROM tblFiles WHERE fileId='.$_id.' AND timeDeleted IS NULL';
 		$data = $db->getOneRow($q);
 		if (!$data) return false;
 
