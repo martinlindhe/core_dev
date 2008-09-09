@@ -32,7 +32,8 @@ function embedVideo($url, $w = 352, $h = 288, $params = array())
 	if (!is_numeric($w) || !is_numeric($h)) return false;
 
 	if (strpos($session->user_agent, 'MSIE')) {
-		//Tested in IE 7 (FIXME try IE 6)
+		//Tested in IE 7
+		//FIXME try IE 6
 		$data  = '<object type="application/x-oleobject'.
 				' width="'.$w.'" height="'.$h.'"'.
 				' classid="clsid:6BF52A52-394A-11D3-B153-00C04F79FAA6">';	//Windows Media Player 7, 9, 10 and 11
@@ -48,9 +49,9 @@ function embedVideo($url, $w = 352, $h = 288, $params = array())
 		}
 		$data .= '</object>';
 	} else {
-		//This works with Firefox in Windows and Linux
-		//For linux, install mozilla-plugin-vlc
-		//For windows, install wmpfirefoxplugin.exe from http://port25.technet.com
+		//This works with Firefox in Windows and Linux and Opera in Windows
+		//For Firefox Linux, install mozilla-plugin-vlc
+		//For Firefox Windows, install wmpfirefoxplugin.exe from http://port25.technet.com
 		$data = '<embed type="application/x-mplayer2"'.
 				' width="'.$w.'" height="'.$h.'"'.
 				' src="'.$url.'"'.
