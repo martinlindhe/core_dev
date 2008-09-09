@@ -270,7 +270,7 @@ class Files
 	 * \return true on success
 	 */
 	function deleteFileEntry($_type, $_id, $ownerId = 0, $categoryId = 0)
-	{
+	{//FIXME should update tblFiles and set timeDeleted instead
 		global $db, $session;
 		if (!is_numeric($_type) || !is_numeric($_id) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
