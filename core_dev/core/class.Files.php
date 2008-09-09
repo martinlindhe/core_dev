@@ -246,7 +246,7 @@ class Files
 	{
 		if (!is_numeric($_id) || !is_numeric($ownerId)) return false;
 
-		if (!$this->deleteFileEntry($_id, $ownerId)) return false;
+		if (!$this->deleteFileEntry(0, $_id, $ownerId)) return false;
 
 		$filename = $this->findUploadPath($_id);
 		if (!file_exists($filename)) return false;
@@ -263,17 +263,21 @@ class Files
 	/**
 	 * Deletes a file entry from database
 	 *
+	 * \param $_type file type
 	 * \param $_id fileId to delete
 	 * \param $ownerId optionally specify owner of file
+	 * \param $categoryId file category
 	 * \return true on success
 	 */
-	function deleteFileEntry($_id, $ownerId = 0)
+	function deleteFileEntry($_type, $_id, $ownerId = 0, $categoryId = 0)
 	{
 		global $db, $session;
-		if (!is_numeric($_id) || !is_numeric($ownerId)) return false;
+		if (!is_numeric($_type) || !is_numeric($_id) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
 		$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
+		if ($_type) $q .= ' AND fileType='.$_type;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 		if ($db->delete($q)) return true;
 		return false;
 	}
