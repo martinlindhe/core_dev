@@ -44,7 +44,6 @@ class Session
 	public $error;					///< last error message
 	public $ip;						///< IP of current user
 	public $user_agent;				///< current user's UserAgent string
-	public $ua_ie;					///< boolean true if the user is using internet explorer
 	public $id;						///< current user's user ID
 	public $username;				///< username of current user
 	public $mode;					///< usermode
@@ -125,10 +124,6 @@ class Session
 			$this->ip = $ip;
 		}
 		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-
-		//FIXME conditionally reuse some functions_browserstats.php features. make user agent parsing optional & disabled by default
-		$this->ua_ie = false;
-		if (strpos($this->user_agent, 'MSIE')) $this->ua_ie = true;	//FIXME this check will handle Opera as a IE browser
 
 		$this->handleSessionEvents();
 	}

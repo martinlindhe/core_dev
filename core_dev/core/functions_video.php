@@ -8,39 +8,54 @@
  */
 
 /**
- * Helper function for embedding video in a html page
+ * Embeds a video in a html page using Windows Media Player
  *
+ * All parameters are documented here:
  * http://www.mioplanet.com/rsc/embed_mediaplayer.htm
- * http://www.mediacollege.com/video/streaming/embed/
  *
- * To embed an object in HTML document, the object class ID is required.
- * The class ID for Windows Media Player 7, 9, 10 and 11 is clsid:6BF52A52-394A-11D3-B153-00C04F79FAA6.
- * If you want to embed Windows Media Player 6.4 instead of the latest version, the class ID is clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95.
+ * Common parameters:
+ *	AutoStart	true/false
+ *	uiMode		invisible, none, mini, full
+ *	fullScreen	true/false
+ *	PlayCount	numeric
+ *
+ * Windows Media Player 6.4: "clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95"
  *
  * \param $url video url to embed
+ * \param $w width of player window (not width of video clip)
+ * \param $h height of player window (not height of video clip)
  * \return html code
  */
-function embedVideo($url)
+function embedVideo($url, $w = 352, $h = 288, $params = array())
 {
 	global $session;
+	if (!is_numeric($w) || !is_numeric($h)) return false;
 
-	$data = '';
-
-	if ($session->ua_ie) {	//FIXME: kolla User Agent i denna funktion istället
-		//Detta funkar för IE:
-		$data .= '<object id="VIDEO" width="176" height="144" '.		//qcif
-				'CLASSID="CLSID:6BF52A52-394A-11D3-B153-00C04F79FAA6" '.
-				'type="application/x-oleobject">';
-		$data .=  '<param name="URL" VALUE="'.$url.'">';
-		$data .=  '<param name="SendPlayStateChangeEvents" value="true">';
-		$data .=  '<param name="AutoStart" value="true">';
-		$data .=  '<param name="uiMode" value="none">';	//Possible values: invisible, none, mini, full
-		$data .=  '<param name="PlayCount" value="1">';
-		$data .=  '</object>';
+	if (strpos($session->user_agent, 'MSIE')) {
+		//Tested in IE 7 (FIXME try IE 6)
+		$data  = '<object type="application/x-oleobject'.
+				' width="'.$w.'" height="'.$h.'"'.
+				' classid="clsid:6BF52A52-394A-11D3-B153-00C04F79FAA6">';	//Windows Media Player 7, 9, 10 and 11
+		$data .= '<param name="URL" value="'.$url.'">';
+		if (empty($params)) {
+			//default settings
+			$data .= '<param name="AutoStart" value="false">';
+			$data .= '<param name="uiMode" value="mini">';
+		} else {
+			foreach ($params as $name => $val) {
+				$data .= '<param name="'.$name.'" value="'.$val.'">';
+			}
+		}
+		$data .= '</object>';
 	} else {
-		//detta funkar för FF i linux iaf:
-		//För linux, installera mozilla-plugin-vlc. För windows, installera wmpfirefoxplugin.exe från port25.technet.com
-		$data .= '<embed type="application/x-mplayer2" src="'.$url.'"></embed>';
+		//This works with Firefox in Windows and Linux
+		//For linux, install mozilla-plugin-vlc
+		//For windows, install wmpfirefoxplugin.exe from http://port25.technet.com
+		$data = '<embed type="application/x-mplayer2"'.
+				' width="'.$w.'" height="'.$h.'"'.
+				' src="'.$url.'"'.
+				' ShowControls="1" ShowStatusBar="1" autostart="0">';
+		$data .= '</embed>';
 	}
 
 	return $data;
