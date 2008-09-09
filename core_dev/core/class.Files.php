@@ -895,10 +895,10 @@ class Files
 	 * \param $_limit optional limit the result
 	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
 	 */
-	function getFiles($fileType = 0, $ownerId = 0, $categoryId = 0, $_limit = 0, $_order = 'ASC')
-	{	//FIXME: CLEAN UP & SIMPLIFY THIS MESS
+	function getFiles($fileType = 0, $ownerId = 0, $categoryId = 0, $_limit = '', $_order = 'ASC')
+	{	//FIXME: remove function & rename getFilesByMediaType() to getFiles() instead!
 		global $db, $session;
-		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($_limit)) return array();
+		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
 
 		if ($fileType == FILETYPE_CLONE_VIDEOTHUMB10 ||
@@ -937,16 +937,18 @@ class Files
 	 * \param $fileType type of files
 	 * \param $ownerId owner of the files (optional)
 	 * \param $categoryId category of the files (optional)
+	 * \param $media_type type of media (optional)
 	 */
-	function getFileCount($fileType = 0, $ownerId = 0, $categoryId = 0)
+	function getFileCount($fileType = 0, $ownerId = 0, $categoryId = 0, $media_type = 0)
 	{
 		global $db;
-		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return 0;
+		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($media_type)) return 0;
 
 		$q = 'SELECT COUNT(fileId) FROM tblFiles';
 		if ($fileType) $q .= ' WHERE fileType='.$fileType;
 		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+		if ($media_type) $q .= ' AND mediaType='.$media_type;
 		return $db->getOneItem($q);
 	}
 
@@ -1079,17 +1081,22 @@ class Files
 	 * \param $_limit optional limit the result
 	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
 	 */
-	function getFilesByMediaType($fileType = 0, $ownerId = 0, $categoryId = 0, $mediaType = 0, $_limit = 0)
+	function getFilesByMediaType($fileType = 0, $ownerId = 0, $categoryId = 0, $mediaType = 0, $_limit = '', $_order = 'ASC')
 	{	//FIXME rename to getFiles(), remove old function & clean up parameter usage for getFiles() everywhere
 		global $db;
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($mediaType)) return false;
+		if ($_order != 'ASC' && $_order != 'DESC') return false;
 
 		$q = 'SELECT * FROM tblFiles';
 		$q .= ' WHERE fileType='.$fileType;
 		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 		if ($mediaType) $q .= ' AND mediaType='.$mediaType;
-		if ($_limit) $q .= ' LIMIT 0,'.$_limit;
+		$q .= ' ORDER BY timeUploaded '.$_order;
+		if ($_limit) {
+			if (is_numeric($_limit)) $q .= ' LIMIT 0,'.$_limit;
+			else $q .= $_limit;
+		}
 
 		return $db->getArray($q);
 	}
