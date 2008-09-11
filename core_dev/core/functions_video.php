@@ -55,7 +55,7 @@ function embedVideo($url, $w = 352, $h = 288, $params = array())
 		$data = '<embed type="application/x-mplayer2"'.
 				' width="'.$w.'" height="'.$h.'"'.
 				' src="'.$url.'"'.
-				' ShowControls="1" ShowStatusBar="1" autostart="0">';
+				' ShowControls="1" ShowStatusBar="1" autostart="'.(!empty($params['AutoStart']) ? '1' : '0').'">';
 		$data .= '</embed>';
 	}
 
