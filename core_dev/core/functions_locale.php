@@ -342,6 +342,12 @@ function t_se($s)
 		case 'Default value': return 'Standard-värde';
 		case 'Image': return 'Bild';
 		case 'Theme': return 'Tema';
+		case 'The uploaded file is not a image. You need to upload a image to use as a presentation image!': return 'Den uppladdade filen är inte en bild. Du måste ladda upp en bild för att använda som presentationsbild!';
+		case 'Current profile image': return 'Aktuell profilbild';
+		case 'Delete current image': return 'Radera aktuell bild';
+		case 'Select a image from your computer': return 'Välj en bild från datorn';
+		case 'This image is waiting to be approved': return 'Denna bild väntar på att godkännas';
+		case "You currently don't have a profile picture": return 'Du har ingen gammal bild';
 
 		//Subscriptions
 		case 'The user': return 'Användaren';

@@ -971,9 +971,17 @@ function editUserdataImage($name, $field)
 
 	$fieldId = getUserdataFieldIdByName($name);
 
+	$out = '';
+
 	if (isset($_FILES[$field])) {
 		$curr = $files->handleUpload($_FILES[$field], FILETYPE_USERDATA, $fieldId);
-		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $curr);
+		$nfo = $files->getFile($curr);
+		if ($nfo['mediaType'] == MEDIATYPE_IMAGE) {
+			saveSetting(SETTING_USERDATA, $session->id, $fieldId, $curr);
+		} else {
+			$out .= '<div class="critical">'.t('The uploaded file is not a image. You need to upload a image to use as a presentation image!').'</div>';
+			$curr = 0;
+		}
 	} else {
 		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
 	}
@@ -984,22 +992,20 @@ function editUserdataImage($name, $field)
 		$curr = 0;
 	}
 
-	$out = '';
-
 	if ($curr) {
-		$out .= '<b>Aktuell profilbild:</b><br/>';
+		$out .= '<b>'.t('Current profile image').':</b><br/>';
 
 		// TODO: Make this an optional setting
 		if (isInQueue($curr, MODERATION_PRES_IMAGE)) {
-			$out .= '<b>DENNA BILD VÄNTAR PÅ ATT GODKÄNNAS</b><br/>';
+			$out .= '<b>'.strtoupper(t('This image is waiting to be approved')).'</b><br/>';
 		}
 		$out .= showThumb($curr, $name, 270, 200).'<br/>';
-		$out .= '<a href="?delpic='.$curr.'">Radera aktuell bild</a><br/><br/>';
+		$out .= '<a href="?delpic='.$curr.'">'.t('Delete current image').'</a><br/><br/>';
 	} else {
-		$out .= 'Du har ingen gammal bild<br/>';
+		$out .= t("You currently don't have a profile picture").'<br/>';
 	}
 
-	$out .= '<b>Välj bild från datorn:</b><br/>';
+	$out .= '<b>'.t('Select a image from your computer').':</b><br/>';
 	$out .= xhtmlFile($field);
 
 	return $out;
