@@ -195,8 +195,6 @@ class Auth_Standard extends Auth_Base
 			$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 		}
 
-		//$forgot_pwd = 1;
-
 		//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
 		if ($forgot_pwd && !$session->id && isset($_POST['forgot_pwd'])) {
 			$check = $this->handleForgotPassword($_POST['forgot_pwd']);
