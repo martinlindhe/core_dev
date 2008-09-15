@@ -34,7 +34,7 @@ if ($session->isSuperAdmin) {
 
 	echo 'Change password: ';
 	echo xhtmlForm();
-	echo xhtmlInputPassword('chgpwd');
+	echo xhtmlPassword('chgpwd');
 	echo xhtmlSubmit('Change');
 	echo xhtmlFormClose().'<br/><br/>';
 }

@@ -29,8 +29,7 @@ class Auth_Standard extends Auth_Base
 	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
 	{
 		global $db, $config, $session;
-
-		if (!is_numeric($_mode)) return false;
+		if (!is_numeric($_mode) || !is_numeric($newUserId)) return false;
 
 		if ($username != trim($username)) return t('Username contains invalid spaces');
 
@@ -196,15 +195,15 @@ class Auth_Standard extends Auth_Base
 			$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 		}
 
+		//$forgot_pwd = 1;
+
 		//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
-		if ($forgot_pwd && !$session->id) {
-			if (isset($_POST['forgot_pwd'])) {
-				$check = $this->handleForgotPassword($_POST['forgot_pwd']);
-				if (!$check) {
-					$session->error = t('The specified email address does not match any registered user.');
-				}
-				$tab = 'forgot_pwd';
+		if ($forgot_pwd && !$session->id && isset($_POST['forgot_pwd'])) {
+			$check = $this->handleForgotPassword($_POST['forgot_pwd']);
+			if (!$check) {
+				$session->error = t('The specified email address does not match any registered user.');
 			}
+			$tab = 'forgot_pwd';
 		}
 
 		if (isset($_POST['register_usr'])) {
@@ -220,21 +219,21 @@ class Auth_Standard extends Auth_Base
 		if (!$this->allow_login) {
 			echo '<div class="critical">'.t('Logins are currently not allowed.').'<br/>'.t('Please try again later.').'</div>';
 		}
-		echo '<form name="login_form" method="post" action="">';
+		echo xhtmlForm('login_form');
 
 		echo '<table cellpadding="2">';
-		echo '<tr><td>'.t('Username').':</td><td><input name="login_usr" type="text"/> <img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/></td></tr>';
-		echo '<tr><td>'.t('Password').':</td><td><input name="login_pwd" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+		echo '<tr><td>'.t('Username').':</td><td>'.xhtmlInput('login_usr').' <img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/></td></tr>';
+		echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('login_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
 		echo '</table>';
 		echo '<br/>';
-		echo '<input type="submit" class="button" value="'.t('Log in').'"/>';
+		echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
 		if (($this->allow_login && $this->allow_registration) || $allow_superadmin_reg) {
-			echo '<input type="button" class="button" value="'.t('Register').'" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_register_layer\');"/>';
-			if ($forgot_pwd) {
-				echo '<input type="button" class="button" value="Forgot password" onclick="hide_element_by_name(\'login_form_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
-			}
+			echo xhtmlButton('Register', "hide_element_by_name('login_form_layer'); show_element_by_name('login_register_layer')");
 		}
-		echo '</form>';
+		if ($forgot_pwd) {
+			echo xhtmlButton('Forgot password', "hide_element_by_name('login_form_layer'); show_element_by_name('login_forgot_pwd_layer')");
+		}
+		echo xhtmlFormClose();
 		echo '</div>';
 
 		if (($this->allow_login && $this->allow_registration) || $allow_superadmin_reg) {
@@ -257,53 +256,53 @@ class Auth_Standard extends Auth_Base
 						echo '<div class="critical">'.t('The account you create now will be the super administrator account.').'</div><br/>';
 					}
 
-					echo '<form method="post" action="">';
+					echo xhtmlForm();
 					echo '<table cellpadding="2">';
 					echo '<tr>'.
-									'<td>'.t('Username').':</td>'.
-									'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
-										'<img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
-									'</td>'.
-								'</tr>';
-					echo '<tr><td>'.t('Password').':</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
-					echo '<tr><td>'.t('Again').':</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
+							'<td>'.t('Username').':</td>'.
+							'<td>'.xhtmlInput('register_usr', !empty($_POST['register_usr']) ? $_POST['register_usr'] : '').' '.
+								'<img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
+							'</td>'.
+						'</tr>';
+					echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+					echo '<tr><td>'.t('Again').':</td><td>'.xhtmlPassword('register_pwd2').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
 					if ($this->userdata) {
 						showRequiredUserdataFields();
 					}
 					echo '</table><br/>';
 
 					if (!$allow_superadmin_reg) {
-						echo '<input type="button" class="button" value="'.t('Log in').'" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_form_layer\');"/>';
+						echo xhtmlButton('Log in', "hide_element_by_name('login_register_layer'); show_element_by_name('login_form_layer')");
 					}
-					echo '<input type="submit" class="button" value="'.t('Register').'" style="font-weight: bold;"/>';
+					echo xhtmlSubmit('Register', 'button', 'font-weight: bold');
 					if ($forgot_pwd) {
-						echo '<input type="button" class="button" value="'.t('Forgot password').'" onclick="hide_element_by_name(\'login_register_layer\'); show_element_by_name(\'login_forgot_pwd_layer\');"/>';
+						echo xhtmlButton('Forgot password', "hide_element_by_name('login_register_layer'); show_element_by_name('login_forgot_pwd_layer')");
 					}
-					echo '</form>';
+					echo xhtmlFormClose();
 				echo '</div>';
 			}
+		}
 
-			if ($forgot_pwd) {
-				echo '<div id="login_forgot_pwd_layer"'.($tab!='forgot_pwd'?' style="display: none;"':'').'>';
+		if ($forgot_pwd) {
+			echo '<div id="login_forgot_pwd_layer"'.($tab!='forgot_pwd'?' style="display: none;"':'').'>';
 
-				if ($this->resetpwd_sent) {
-					echo t('A email has been sent to your mail address with instructions how to reclaim your account.');
-				} else {
-					echo '<form method="post" action="">';
-					echo 'Enter the e-mail address used when registering your account.<br/><br/>';
-					echo 'You will recieve an e-mail with a link to follow,<br/>';
-					echo 'where you can set a new password.<br/><br/>';
-					echo '<table cellpadding="2">';
-					echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td><input type="text" name="forgot_pwd" size="26"/> <img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="E-Mail"/></td></tr>';
-					echo '</table><br/>';
+			if ($this->resetpwd_sent) {
+				echo t('A email has been sent to your mail address with instructions how to reclaim your account.');
+			} else {
+				echo xhtmlForm();
+				echo 'Enter the e-mail address used when registering your account.<br/><br/>';
+				echo 'You will recieve an e-mail with a link to follow,<br/>';
+				echo 'where you can set a new password.<br/><br/>';
+				echo '<table cellpadding="2">';
+				echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td>'.xhtmlInput('forgot_pwd', '', 26).' <img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="'.t('E-mail').'"/></td></tr>';
+				echo '</table><br/>';
 
-					echo '<input type="button" class="button" value="'.t('Log in').'" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_form_layer\');"/>';
-					echo '<input type="button" class="button" value="'.t('Register').'" onclick="hide_element_by_name(\'login_forgot_pwd_layer\'); show_element_by_name(\'login_register_layer\');"/>';
-					echo '<input type="submit" class="button" value="'.t('Forgot password').'" style="font-weight: bold;"/>';
-					echo '</form>';
-				}
-				echo '</div>';
+				echo xhtmlButton('Log in', "hide_element_by_name('login_forgot_pwd_layer'); show_element_by_name('login_form_layer')");
+				echo xhtmlButton('Register', "hide_element_by_name('login_forgot_pwd_layer'); show_element_by_name('login_register_layer')");
+				echo xhtmlSubmit('Forgot password', 'button', 'font-weight: bold');
+				echo xhtmlFormClose();
 			}
+			echo '</div>';
 		}
 
 		echo '</div>';
@@ -322,7 +321,7 @@ class Auth_Standard extends Auth_Base
 		if (!is_numeric($preId) || !is_numeric($act_code)) return false;
 
 		if ($this->mail_error) {
-			echo '<div class="critical">Ett fel uppstod när aktiveringsmail skulle skickas ut!</div><br/>';
+			echo '<div class="critical">'.t('An error occured sending activation mail!').'</div><br/>';
 			return false;
 		}
 
@@ -332,37 +331,40 @@ class Auth_Standard extends Auth_Base
 		}
 
 		if ($this->activation_sent) {
-			echo 'Ett email med din aktiveringskod har skickats.<br/>';
-			echo 'Följ länken i mailet för att slutföra din registrering.<br/>';
+			echo t('An email with your activation code has been sent.').'<br/>';
+			echo t('Follow the link in the mail to finish your registration.').'<br/>';
 			return true;
 		}
 
-		echo '<form method="post" action="">';
+		echo xhtmlForm();
 		if ($preId) {
 			echo '<input type="hidden" name="preId" value="'.$preId.'"/>';
 		}
 		echo '<table cellpadding="2">';
 		echo '<tr>'.
 				'<td>'.t('Username').':</td>'.
-				'<td><input name="register_usr" type="text"'.(!empty($_POST['register_usr'])?' value="'.$_POST['register_usr'].'"':'').'/> '.
+				'<td>'.xhtmlInput('register_usr', !empty($_POST['register_usr']) ? $_POST['register_usr'] : '').' '.
 					'<img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
 				'</td>'.
 				'</tr>';
-		echo '<tr><td>'.t('Password').':</td><td><input name="register_pwd" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
-		echo '<tr><td>'.t('Repeat password').':</td><td><input name="register_pwd2" type="password"/> <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
+		echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+		echo '<tr><td>'.t('Repeat password').':</td><td>'.xhtmlPassword('register_pwd2').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
 		if ($this->userdata) {
 			showRequiredUserdataFields();
 		}
 		echo '</table><br/>';
 
 		if ($act_code) {
-			echo '<input type="hidden" name="c" value="'.$act_code.'"/>';
+			echo xhtmlHidden('c', $act_code);
 		}
-		echo '<input type="submit" class="button" value="'.t('Register').'"/>';
-		echo '</form>';
+		echo xhtmlSubmit('Register');
+		echo xhtmlFormClose();
 		return false;
 	}
 
+	/**
+	 * Helper to change the user's current password.
+	 */
 	function changePasswordForm()
 	{
 		global $session;
@@ -384,14 +386,14 @@ class Auth_Standard extends Auth_Base
 		}
 
 		if (!$check) {
-			echo '<form method="post" action="">';
+			echo xhtmlForm();
 			echo '<table cellpadding="0" cellspacing="0" border="0">';
-			echo '<tr><td>'.t('Current password').':</td><td><input type="password" name="oldpwd"/></td></tr>';
-			echo '<tr><td>'.t('New password').':</td><td><input type="password" name="pwd1"/></td></tr>';
-			echo '<tr><td>'.t('Repeat password').':</td><td><input type="password" name="pwd2"/></td></tr>';
-			echo '<tr><td colspan="2"><input type="submit" class="button" value="'.t('Change password').'"/></td></tr>';
+			echo '<tr><td>'.t('Current password').':</td><td>'.xhtmlPassword('oldpwd').'</td></tr>';
+			echo '<tr><td>'.t('New password').':</td><td>'.xhtmlPassword('pwd1').'</td></tr>';
+			echo '<tr><td>'.t('Repeat password').':</td><td>'.xhtmlPassword('pwd2').'</td></tr>';
+			echo '<tr><td colspan="2">'.xhtmlSubmit('Change password').'</td></tr>';
 			echo '</table>';
-			echo '</form>';
+			echo xhtmlFormClose();
 		} else {
 			echo t('Your password has been changed successfully!');
 		}

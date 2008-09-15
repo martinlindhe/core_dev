@@ -286,11 +286,11 @@ The link will expire in __EXPIRETIME__";
 			$session->error = ''; //remove error message once it has been displayed
 		}
 
-		echo '<form method="post" action="">';
-		echo t('New password').': <input type="password" name="reset_pwd1" size="12"/><br/>';
-		echo t('Repeat password').': <input type="password" name="reset_pwd2" size="12"/><br/>';
-		echo '<input type="submit" class="button" value="'.t('Set password').'"/>';
-		echo '</form>';
+		echo xhtmlForm();
+		echo t('New password').': '.xhtmlPassword('reset_pwd1', '', 12).'<br/>';
+		echo t('Repeat password').': '.xhtmlPassword('reset_pwd2', '', 12).'<br/>';
+		echo xhtmlSubmit('Set password');
+		echo xhtmlFormClose();
 	}
 
 }

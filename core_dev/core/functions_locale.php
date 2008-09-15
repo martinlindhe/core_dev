@@ -194,6 +194,9 @@ function t_se($s)
 		case 'The account you create now will be the super administrator account.'; return 'Kontot du skapar nu kommer att bli super admin kontot.';
 		case 'Register new account': return 'Registrera nytt konto';
 		case 'User not found': return 'Användaren finns inte';
+		case 'An error occured sending activation mail!': return 'Ett fel uppstod när aktiveringsmail skulle skickas ut!';
+		case 'An email with your activation code has been sent.': return 'Ett email med din aktiveringskod har skickats.';
+		case 'Follow the link in the mail to finish your registration.': return 'Följ länken i mailet för att slutföra din registrering.';
 
 		//Session errors
 		case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';

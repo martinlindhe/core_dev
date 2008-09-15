@@ -214,11 +214,20 @@ function xhtmlSelectArray($_name, $_arr, $_default = 0, $_onchange = '')
 }
 
 /**
+ * Helper to create a hidden input field
+ */
+function xhtmlHidden($_name, $_val)
+{
+	$out = '<input type="hidden" name="'.$_name.'" value="'.$_val.'"/>';
+	return $out;
+}
+
+/**
  * Helper to create a checkbox
  */
 function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false)
 {
-	$out = '<input type="hidden" name="'.$_name.'" value="0"/>';
+	$out = xhtmlHidden($_name, 0);
 	$out .= '<input type="checkbox" class="checkbox" name="'.$_name.'" value="'.$_val.'" id="lab_'.$_name.'"'.($_checked ? ' checked':'').'/>';
 	if ($_title) $out .= '<label for="lab_'.$_name.'"> '.$_title.'</label>';
 
@@ -277,7 +286,7 @@ function xhtmlFile($_name)
 /**
  * Helper to create a <form> open tag
  */
-function xhtmlForm($action = '', $method = 'post', $name = '')
+function xhtmlForm($name = '', $action = '', $method = 'post')
 {
 	return '<form action="'.$action.'" method="'.$method.'"'.($name ? ' name="'.$name.'"' : '').'>';
 }
@@ -293,7 +302,7 @@ function xhtmlFormClose()
 /**
  * Helper to create a password input field
  */
-function xhtmlInputPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)
+function xhtmlPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)
 {
 	if (!is_numeric($_size) || !is_numeric($_maxlen)) return false;
 	return '<input type="password" name="'.$_name.'"'.
@@ -315,9 +324,17 @@ function xhtmlTextarea($_name, $_value = '', $_width = 0, $_height = 0)
 /**
  * Helper to create a submit button
  */
-function xhtmlSubmit($_title)
+function xhtmlSubmit($_title, $class = 'button', $style = '')
 {
-	return '<input type="submit" class="button" value="'.t($_title).'"/>';
+	return '<input type="submit" value="'.t($_title).'"'.($class ? ' class="'.$class.'"' : '').($style ? ' style="'.$style.'"' : '').'/>';
+}
+
+/**
+ * Helper to create a submit button
+ */
+function xhtmlButton($_title, $onclick = '')
+{
+	return '<input type="button" class="button" value="'.t($_title).'"'.($onclick ? ' onclick="'.$onclick.'"' : '').'/>';
 }
 
 /**

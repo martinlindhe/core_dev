@@ -137,6 +137,7 @@ class Session
 	 */
 	function startSession($_id, $_username, $_usermode)
 	{
+		global $config;
 		$this->id = $_id;
 		$this->username = $_username;
 		$this->mode = $_usermode;		//0=normal user. 1=webmaster, 2=admin, 3=super admin
@@ -147,7 +148,7 @@ class Session
 		if ($this->mode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
 
 		/* Read in current users settings */
-		if ($this->allow_themes) {
+		if ($this->allow_themes && $config['auth']['userdata']) {	//FIXME this check is retarded because $auth dont yet exist here. remove when auth & session are re-merged
 			$this->theme = loadUserdataTheme($this->id, $this->default_theme);
 		}
 
