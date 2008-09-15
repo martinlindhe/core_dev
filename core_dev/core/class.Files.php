@@ -200,7 +200,7 @@ class Files
 	 * Checks what kind of media this is (video, document etc)
 	 *
 	 * \param $filename name of file to check
-	 * \return media type id
+	 * \return media type id (0 for unknown media types)
 	 */
 	function lookupMediaType($filename)
 	{
