@@ -38,7 +38,6 @@ define('FILETYPE_GENERIC',				20); // generic file type, for application specifi
 define('FILETYPE_CLONE_CONVERTED',		30);	//converted from orginal file format (image/video/audio/document)
 define('FILETYPE_CLONE_VIDEOTHUMB10',	31);	//video thumbnail of video 10% into the clip
 
-//for future use:
 define('MEDIATYPE_IMAGE',		1);
 define('MEDIATYPE_VIDEO',		2);
 define('MEDIATYPE_AUDIO',		3);
@@ -214,7 +213,7 @@ class Files
 				if ($subtype[0] == $mime) return $type_id;
 			}
 		}
-		return false;
+		return 0;
 	}
 
 	/**
