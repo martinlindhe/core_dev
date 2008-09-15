@@ -175,8 +175,9 @@ function t_se($s)
 		//Registration
 		case 'Username contains invalid spaces': return 'Användarnamnet innehåller ogiltiga mellanslag';
 		case 'Username or password contains invalid characters': return 'Användarnamnet eller lösenordet innehåller ogiltiga tecken';
-		case 'Username must be at least 3 characters long': return 'Användarnamnet måste vara åtminstonde 3 tecken långt';
-		case 'Password must be at least 4 characters long': return 'Lösenordet måste vara åtminstonde 4 tecken långt';
+		case 'Username must be at least': return 'Användarnamnet måste vara åtminstonde';
+		case 'Password must be at least': return 'Lösenordet måste vara åtminstonde';
+		case 'characters long': return 'tecken långt';
 		case 'The passwords doesnt match': return 'Lösenorden matchar inte';
 		case 'Username is not allowed': return 'Användarnamnet är inte tillåtet';
 		case 'Username already exists': return 'Användarnamnet är upptaget';

@@ -40,8 +40,8 @@ class Auth_Standard extends Auth_Base
 			return t('Username or password contains invalid characters');
 		}
 
-		if (strlen($username) < 3) return t('Username must be at least 3 characters long');
-		if (strlen($password1) < 4) return t('Password must be at least 4 characters long');
+		if (strlen($username) < $this->minlen_username) return t('Username must be at least').' '.$this->minlen_username.' '.t('characters long');
+		if (strlen($password1) < $this->minlen_password) return t('Password must be at least').' '.$this->minlen_password.' '.t('characters long');
 		if ($password1 != $password2) return t('The passwords doesnt match');
 
 		if (!$session->isSuperAdmin) {
