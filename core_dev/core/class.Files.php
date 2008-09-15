@@ -417,9 +417,7 @@ class Files
 		$newFileId = $db->insert($q);
 
 		if ($content) {
-			//echo 'addFileEntry(): Writing file to '.$this->upload_dir.$newFileId;
 			file_put_contents($this->findUploadPath($newFileId), $content);
-			clearstatcache();	//needed to get current filesize()
 		}
 
 		$this->updateFile($newFileId);
@@ -646,6 +644,8 @@ class Files
 
 		$filename = $this->findUploadPath($_id, false);
 		if (!file_exists($filename)) return false;
+
+		clearstatcache();	//needed to get current filesize()
 
 		$size = filesize($filename);
 

@@ -22,7 +22,7 @@ $config['image']['jpeg_quality']			= 70;			///< 0-100% quality for recompression
  */
 function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $fileId = 0)
 {
-	global $db, $config;
+	global $db, $config, $files;
 	if (empty($to_width) && empty($to_height)) return false;
 
 	$data = getimagesize($in_file);
@@ -62,11 +62,7 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
 	imagedestroy($image_p);
 
 	if ($fileId) {
-		//Update fileId entry with the new file size (DONT use when creating thumbnails or cloning files!)
-		clearstatcache();	//needed to get current filesize()
-		$q = 'UPDATE tblFiles SET fileSize='.filesize($out_file).' WHERE fileId='.$fileId;
-		$db->update($q);
-		//FIXME: need to update file checksums
+		$files->updateFile($fileId);
 	}
 
 	return true;
