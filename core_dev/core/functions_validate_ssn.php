@@ -144,7 +144,7 @@ function SsnCalcSumSwedish($_ssn)
 function SsnRandomizeSwedish($_year, $_month, $_day, $_gender)
 {
 	$ssn = substr($_year, -2).$_month.$_day;
-	if (strlen($ssn) != 6) die;
+	if (strlen($ssn) != 6) return false;
 
 	//Randomizes the 2 first of the control digits, between 00 and 99
 	$randNums = substr('0'.mt_rand(0, 99), -2);

@@ -127,13 +127,14 @@ function getCategoryPermissions($_type, $_id)
  * \param $_name category name
  * \param $_flags optional matching permissions flags
  */
-function getCategoryByName($_type, $_name, $_flags = 0)
+function getCategoryByName($_type, $_name, $_flags = 0, $_ownerId = 0)
 {
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($_flags)) return false;
 
 	$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$db->escape($_name).'"';
 	if ($_flags) $q .= ' AND (permissions & '.$_flags.')';
+	if ($_ownerId) $q .= ' AND ownerId = '.$_ownerId;
 	return $db->getOneItem($q);
 }
 
@@ -253,7 +254,7 @@ function manageCategoriesDialog($_type)
 		updateCategory($_type, $edit_id, $_POST['cat_name']);
 	} else if ($edit_id) {
 		$data = getCategory($_type, $edit_id);
-		if (!$data) die;
+		if (!$data) return;
 
 		echo '<form method="post" action="">';
 		echo '<h2>Edit category</h2>';

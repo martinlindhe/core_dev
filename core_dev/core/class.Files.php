@@ -693,7 +693,7 @@ class Files
 		if (!$session->id || !is_numeric($_id) || !is_numeric($_pct)) return false;
 
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
-		if (!$data) die;
+		if (!$data) return false;
 
 		if (!in_array($data['fileMime'], $this->image_mime_types)) return false;
 
@@ -737,7 +737,7 @@ class Files
 		if (!$session->id || !is_numeric($_id) || !is_numeric($_angle)) return false;
 
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
-		if (!$data) die;
+		if (!$data) return false;
 
 		if (!in_array($data['fileMime'], $this->image_mime_types)) return false;
 
@@ -804,7 +804,7 @@ class Files
 			$db->update('UPDATE tblFiles SET cnt=cnt+1 WHERE fileId='.$_id);
 		}
 
-		die;
+		return true;
 	}
 
 	/**

@@ -879,11 +879,11 @@ function displayForum($_id)
  *
  * if _GET['q'] is set, this is the forum post to quote
  */
-//FIXME the header() usage in this function should be moved out
+//FIXME the header() usage in this function should be moved out /martin FIXED FIXME Fixa så inte goLoc behövs / linus
 //FIXME is the function documentation correct?
 function createForumCategory($itemId)
 {
-	global $db, $session, $config;
+	global $db, $session, $config, $files;
 
 	if (!$itemId && !$session->isAdmin) return false;	//invalid request
 
@@ -922,8 +922,7 @@ function createForumCategory($itemId)
 				//Create category or a forum
 				if ($writeSubject) {
 					$createdId = addForumFolder($itemId, $writeSubject, $writeBody);
-
-					header('Location: forum.php?id='.$createdId);
+					goLoc('forum.php?id='.$createdId);
 					die;
 
 				} else {
@@ -943,8 +942,7 @@ function createForumCategory($itemId)
 						$q = 'UPDATE tblFiles SET ownerId='.$createdId.' WHERE fileType='.FILETYPE_FORUM.' AND ownerId=0 AND uploaderId='.$session->id;
 						$db->update($q);
 					}
-
-					header('Location: forum.php?id='.$itemId.'#post'.$createdId);
+					goLoc('forum.php?id='.$itemId.'#post'.$createdId);
 					die;
 				}
 			}
