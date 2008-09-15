@@ -288,7 +288,7 @@ function xhtmlFile($_name)
  */
 function xhtmlForm($name = '', $action = '', $method = 'post', $enctype = '')
 {
-	return '<form action="'.$action.'" method="'.$method.'"'.($name ? ' name="'.$name.'"' : '').($enctype ? ' enctype="'.$enctype.'"' : '')'>';
+	return '<form action="'.$action.'" method="'.$method.'"'.($name ? ' name="'.$name.'"' : '').($enctype ? ' enctype="'.$enctype.'"' : '').'>';
 }
 
 /**
