@@ -4,7 +4,7 @@ ini_set('soap.wsdl_cache_enabled', '0');
 
 require_once('config.php');
 
-$client = new SoapClient("http://coredev.localhost/process/process.wsdl.php"); //, array('trace' => 1));
+$client = new SoapClient("http://process.localhost/process.wsdl.php"); //, array('trace' => 1));
 
 try {
 	$uri = 'http://localhost/sample.3gp';
