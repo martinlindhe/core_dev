@@ -18,6 +18,15 @@ define('SUBSCRIPTION_BLOG',				2);
 define('SUBSCRIPTION_FILES',			3);
 define('SUBSCRIPTION_USER_CHATREQ',		4);	//itemid = userid of user who requested chat
 
+$config['subscriptions']['notify'] = false;				//enables automatic notification of subscriptions
+$config['subscriptions']['mail_notify'] = false;		//enables automatic notification of subscriptions via e-mail
+$config['subscriptions']['subject']['forum'] = '';		//default text
+$config['subscriptions']['subject']['blog'] = '';		//default text
+$config['subscriptions']['subject']['files'] = '';		//default text
+$config['subscriptions']['message']['forum'] = '';		//default text
+$config['subscriptions']['message']['blog'] = '';		//default text
+$config['subscriptions']['message']['files'] = '';		//default text
+
 /**
  * Creates a subscription of $type on itemId
  *
@@ -108,5 +117,62 @@ function getSubscribers($type, $itemId)
 
 	$q = 'SELECT * FROM tblSubscriptions WHERE itemId='.$itemId.' AND type='.$type;
 	return $db->getArray($q);
+}
+
+function notifySubscribers($type, $itemId)
+{
+	global $db;
+	if (!is_numeric($type) || !is_numeric($itemId)) return false;
+
+	$subscribers = getSubscribers($type, $itemId);
+
+	foreach ($subscribers as $subscriber) {
+		switch ($type) {
+			case SUBSCRIPTION_FORUM:
+				$forum = getForumItem($subscriber['itemId']);
+				$subject = $config['subscriptions']['subject']['forum'];
+				$message = $config['subscriptions']['message']['forum'];
+				$pattern = array('/__USERNAME__/', '/__FORUMID__/', '/__FORUMSUBJECT__/');
+				$replacement = array(
+					$forum['authorName'],
+					$forum['itemId'],
+					substr($forum['itemBody'],0,15).'...'
+				);
+				$message = preg_replace($pattern, $replacement, $message);
+			case SUBSCRIPTION_BLOG:
+				$blog = getBlog($subscriber['itemId']);
+				$subject = $config['subscriptions']['subject']['blog'];
+				$message = $config['subscriptions']['message']['blog'];
+				$pattern = array('/__USERNAME__/', '/__BLOGID__/', '/__BLOGSUBJECT__/');
+				$replacement = array(
+					$blog['userName'],
+					$blog['blogId'],
+					$blog['subject']
+				);
+				$message = preg_replace($pattern, $replacement, $message);
+				break;
+			case SUBSCRIPTION_FILES:
+				$file = getFile($subscriber['itemId']);
+				$subject = $config['subscriptions']['subject']['file'];
+				$message = $config['subscriptions']['message']['file'];
+				$pattern = array('/__USERNAME__/', '/__FILEID__/', '__OWNERID__', '__CATID__');
+				$replacement = array(
+					Users::getName($file['ownerId']),
+					$file['fileId'],
+					$file['ownerId'],
+					$file['categoryId']
+				);
+				$message = preg_replace($pattern, $replacement, $message);
+				break;
+			default: break;
+		}
+		systemMessage($subscriber['ownerId'], $subject, $message);
+		
+		if ($config['subscriptions']['mail_notify']) {
+			smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
+		}
+	}
+
+	return true;
 }
 ?>

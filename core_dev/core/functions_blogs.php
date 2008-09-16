@@ -29,6 +29,10 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
 	if ($config['blog']['moderation'] && (isSensitive($title) || isSensitive($body))) {
 		addToModerationQueue(MODERATION_BLOG, $blogId, true);
 	}
+	//notify subscribers
+	if ($config['subscriptions']['notify']) {
+		notifySubscribers(SUBSCRIPTION_BLOG, $blogId);
+	}
 
 	return $blogId;
 }
