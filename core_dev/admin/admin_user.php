@@ -68,7 +68,6 @@ echo '<tr>';
 echo '<th>Key</th>';
 echo '<th>Value</th>';
 echo '<th>Time set</th>';
-//echo '<th>Remove (<input type="checkbox" onclick="toggle_checkboxes(this, \'mod_userdata\');"/> all)</th>';
 echo '<th>Remove ('.xhtmlCheckbox('toggle', 'all', 1, false, "toggle_checkboxes(this, 'mod_userdata')").')</th>';
 echo '</tr>';
 echo xhtmlForm('mod_userdata');
