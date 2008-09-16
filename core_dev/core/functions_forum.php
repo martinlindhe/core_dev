@@ -8,6 +8,7 @@
  */
 
 require_once('atom_subscriptions.php');	//for subscription functionality
+require_once('functions_email.php');	//for email sharing of forum links
 require_once('class.Users.php');	//for Users::link()
 
 //forum module settings:
@@ -1160,6 +1161,71 @@ function reportForumPost($itemId)
 	echo xhtmlTextarea('motivation', '', 50, 5).'<br/><br/>';
 	echo xhtmlSubmit('Report');
 	echo xhtmlFormClose().'<br/><br/>';
+}
+
+//FIXME make mail text configurable
+//FIXME finish translation
+//FIXME add ability to share with digg, del.icio.us, facebook:
+//	digg:		http://digg.com/submit?phase=2&url=http://thinkprogress.org/2008/09/15/palin-cut-funding-for-alaska-special-olympics/&title=Palin%20cut%20funding%20for%20Alaska%20Special%20Olympics.
+//	delicious:	http://del.icio.us/post?url=http://thinkprogress.org/2008/09/15/palin-cut-funding-for-alaska-special-olympics/&title=Palin%20cut%20funding%20for%20Alaska%20Special%20Olympics.
+//	facebook:	http://www.facebook.com/share.php?u=http://thinkprogress.org/2008/09/15/palin-cut-funding-for-alaska-special-olympics/&t=Palin%20cut%20funding%20for%20Alaska%20Special%20Olympics.
+function shareForumItem($itemId)
+{
+	global $session, $config;
+	if (!$session->id || !is_numeric($itemId)) return false;
+
+	if (!empty($_POST['fshare_mail'])) {
+		if (ValidEmail($_POST['fshare_mail'])) {
+			$item = getForumItem($itemId);
+
+			if (!empty($_POST['fshare_name'])) {
+				$mail = "Hej ".$_POST['fshare_name']."!\n\n";
+			} else {
+				$mail = "Hej!\n\n";
+			}
+
+			$mail .= $session->username." har skickat dig den här länken till dig från communityt\n";
+			$mail .= "på vår sajt, ".$config['app']['full_url']."/.\n\n";
+
+			if ($item['authorId']) {
+				$mail .= $item['itemSubject'].' av '.$item['authorName'].', '.formatTime($item['timeCreated']).":\n";
+			} else {
+				$mail .= $item['itemSubject'].' av gäst, '.formatTime($item['timeCreated'])."\n";
+			}
+
+			$mail .= "För att läsa inlägget i sin helhet, klicka på länken nedan:\n";
+			$mail .= $config['app']['full_url']."/forum.php?id=".$itemId."#".$itemId."\n\n";
+
+			if (!empty($_POST['fshare_comment'])) {
+				$mail .= "\n";
+				$mail .= "Din kompis lämnade även följande hälsning:\n";
+				$mail .= $_POST['fshare_comment']."\n\n";
+			}
+
+			$subject = 'Meddelande från communityt';
+
+			if (smtp_mail($_POST['fshare_mail'], $subject, $mail) == true) {
+				echo 'Tipset ivägskickat<br/>';
+			} else {
+				echo 'Problem med utskicket<br/>';
+			}
+		} else {
+			echo 'Ogiltig mailaddress!';
+		}
+		return;
+	}
+
+	$data = getForumItem($itemId);
+	echo showForumPost($data).'<br/>';
+
+	echo xhtmlForm('forum_share', $_SERVER['PHP_SELF'].'?id='.$itemId);
+	echo 'Din kompis namn: '.xhtmlInput('fshare_name', '', 20, 30).'<br/>';
+	echo t('E-mail').': '.xhtmlInput('fshare_mail', '', 40, 50).'<br/>';
+	echo '<br/>';
+	echo 'Hälsning:<br/>';
+	echo xhtmlTextarea('fshare_comment', '', 40, 6).'<br/>';
+	echo xhtmlSubmit('Share');
+	echo xhtmlFormClose();
 }
 
 ?>

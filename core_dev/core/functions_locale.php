@@ -80,6 +80,7 @@ function t_se($s)
 		case 'Events': return 'Händelser';
 		case 'Userdata': return 'Användardata';
 		case 'Forum': return 'Forum';
+		case 'Share': return 'Dela';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
