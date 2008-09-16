@@ -57,9 +57,39 @@ echo '</table>';
 echo '<h2>'.t('Comments').'</h2>';
 showComments(COMMENT_USER, $userId);
 
-echo '<h2>Userdata settings</h2>';
+echo '<h2>All userdata</h2>';
 $list = readAllSettings(SETTING_USERDATA, $userId);
-d($list);
+
+echo '<table>';
+echo '<tr>';
+echo '<th>Key</th>';
+echo '<th>Value</th>';
+echo '<th>Time set</th>';
+echo '<th>Remove</th>';
+echo '</tr>';
+echo xhtmlForm('mod_userdata');
+foreach ($list as $row) {
+	if (!empty($_POST['del_ud_'.$row['settingId']])) {
+		echo 'deleting '.$row['settingName'];
+		deleteSetting(SETTING_USERDATA, $userId, $row['settingName']);
+		continue;
+	} else if (!empty($_POST['mod_ud_'.$row['settingId']])) {
+		echo 'updating '.$row['settingName'].' to '.$_POST['mod_ud_'.$row['settingId']];
+		saveSetting(SETTING_USERDATA, $userId, $row['settingName'], $_POST['mod_ud_'.$row['settingId']]);
+		$row['settingValue'] = $_POST['mod_ud_'.$row['settingId']];
+	}
+
+	echo '<tr>';
+		echo '<td>'.$row['settingName'].'</td>';
+		echo '<td>'.xhtmlInput('mod_ud_'.$row['settingId'], $row['settingValue']).'</td>';
+		echo '<td>'.formatTime($row['timeSaved']).'</td>';
+		echo '<td>'.xhtmlCheckbox('del_ud_'.$row['settingId']).'</td>';
+	echo '</tr>';
+}
+echo '</table>';
+//FIXME "check all checkboxes" javascript
+echo xhtmlSubmit('Save changes');
+echo xhtmlFormClose();
 
 require('design_admin_foot.php');
 ?>

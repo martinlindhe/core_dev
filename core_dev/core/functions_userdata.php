@@ -666,15 +666,6 @@ function getAllUserdataSettingsCount($settingName)
 }
 
 /**
- * XXX
- */
-function saveUserdataSetting($ownerId, $settingName, $settingValue)	//FIXME: rename to saveUserSetting()
-{
-	//FIXME borde väl kolla upp id för $settingName fältet?! använder någon kod denna...?
-	return saveSetting(SETTING_USERDATA, $ownerId, $settingName, $settingValue);
-}
-
-/**
  * Returns entered email address for specified user. Needed functionality for
  * email activation code
  *
@@ -809,7 +800,7 @@ function editUserdataSettings($_userid = '')
 	if (!$list) return;
 
 	echo '<div class="settings">';
-	echo '<form name="edit_settings_frm" method="post" enctype="multipart/form-data" action="">';
+	echo xhtmlForm('edit_settings_frm', '', 'post', 'multipart/form-data');
 	echo '<table>';
 	foreach ($list as $row) {
 		if (!empty($_POST)) {
@@ -824,6 +815,7 @@ function editUserdataSettings($_userid = '')
 					break;
 
 				case USERDATA_TYPE_EMAIL:
+					if (empty($_POST['userdata_'.$row['fieldId']])) break;
 					if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) {
 						echo '<div class="critical">'.t('The email entered is not valid!').'</div>';
 					} else {
@@ -894,7 +886,7 @@ function editUserdataSettings($_userid = '')
 	}
 	echo '</table>';
 	echo xhtmlSubmit('Save');
-	echo '</form>';
+	echo xhtmlFormClose();
 	echo '</div>';
 }
 
