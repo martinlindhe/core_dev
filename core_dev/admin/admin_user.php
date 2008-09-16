@@ -73,11 +73,9 @@ echo '</tr>';
 echo xhtmlForm('mod_userdata');
 foreach ($list as $row) {
 	if (!empty($_POST['del_ud_'.$row['settingId']])) {
-		echo 'deleting '.$row['settingName'];
 		deleteSetting(SETTING_USERDATA, $userId, $row['settingName']);
 		continue;
 	} else if (!empty($_POST['mod_ud_'.$row['settingId']])) {
-		echo 'updating '.$row['settingName'].' to '.$_POST['mod_ud_'.$row['settingId']];
 		saveSetting(SETTING_USERDATA, $userId, $row['settingName'], $_POST['mod_ud_'.$row['settingId']]);
 		$row['settingValue'] = $_POST['mod_ud_'.$row['settingId']];
 	}
