@@ -32,32 +32,32 @@ if ($session->isSuperAdmin) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;delete">Delete user</a><br/><br/>';
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;block">Block user</a><br/><br/>';
 
-	echo 'Change password: ';
 	echo xhtmlForm();
+	echo t('Change password').': ';
 	echo xhtmlPassword('chgpwd');
 	echo xhtmlSubmit('Change');
 	echo xhtmlFormClose().'<br/><br/>';
 }
 
-echo '<h2>Userdata</h2>';
+echo '<h2>'.t('Userdata').'</h2>';
 editUserdataSettings($userId);
 
-echo '<h2>Events</h2>';
+echo '<h2>'.t('Events').'</h2>';
 $events = getEvents(0, $userId, ' LIMIT 0,40');
 
 echo '<table>';
 foreach ($events as $row) {
-		echo '<tr>';
-			echo '<td>'.$row['timeCreated'].'</td>';
-			echo '<td>'.$event_name[$row['type']].'</td>';
-		echo '</tr>';
+	echo '<tr>';
+		echo '<td>'.$row['timeCreated'].'</td>';
+		echo '<td>'.$event_name[$row['type']].'</td>';
+	echo '</tr>';
 }
 echo '</table>';
 
-echo '<h2>Comments</h2>';
+echo '<h2>'.t('Comments').'</h2>';
 showComments(COMMENT_USER, $userId);
 
-echo '<h2>userdata settings</h2>';
+echo '<h2>Userdata settings</h2>';
 $list = readAllSettings(SETTING_USERDATA, $userId);
 d($list);
 
