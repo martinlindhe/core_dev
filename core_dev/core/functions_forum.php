@@ -324,10 +324,10 @@ function displayRootForumContent()
 		echo '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="forum_overview_table">';
 		echo '<tr>';
 		echo '<th width="40"></th>';	//for icons
-		echo '<th>Forum</th>';
-		echo '<th width="200" align="center">Last topic</th>';
-		echo '<th width="70" align="center">Topics</th>';
-		echo '<th width="70" align="center">Posts</th>';
+		echo '<th>'.t('Forum').'</th>';
+		echo '<th width="200" align="center">'.t('Last topic').'</th>';
+		echo '<th width="70" align="center">'.t('Topics').'</th>';
+		echo '<th width="70" align="center">'.t('Posts').'</th>';
 		echo '</tr>';
 
 		$i = 0;
@@ -355,10 +355,10 @@ function displayRootForumContent()
 				} else {
 					echo '<a href="forum.php?id='.$data['parentId'].'#post'.$data['itemId'].'">'.$data['parentSubject'].'</a><br/>';
 				}
-				echo 'by '.Users::link($data['authorId'], $data['authorName']).'<br/>';
-				echo $data['timeCreated'];
+				echo t('by').' '.Users::link($data['authorId'], $data['authorName']).'<br/>';
+				echo formatTime($data['timeCreated']);
 			} else {
-				echo 'Never';
+				echo t('Never');
 			}
 			echo '</td>';
 			echo '<td align="center">'.formatNumber(getForumItemCountFlat($row['itemId'])).'</td>';
@@ -463,17 +463,17 @@ function displayForumContentFlat($itemId)
 	echo '<tr class="forum_subheader">';
 	echo '<th width=30></th>';
 	if ($data['parentId'] == 0) {
-		echo '<th>Forum</th>';
-		echo '<th width=80>Author</th>';
-		echo '<th width=70 align="center">Topics</th>';
-		echo '<th width=70 align="center">Views</th>';
-		echo '<th width=200>Last topic</th>';
+		echo '<th>'.t('Forum').'</th>';
+		echo '<th width=80>'.t('Author').'</th>';
+		echo '<th width=70 align="center">'.t('Topics').'</th>';
+		echo '<th width=70 align="center">'.t('Views').'</th>';
+		echo '<th width=200>'.t('Last topic').'</th>';
 	} else {
-		echo '<th>Topic</th>';
-		echo '<th width=80>Author</th>';
-		echo '<th width=70 align="center">Posts</th>';
-		echo '<th width=70 align="center">Views</th>';
-		echo '<th width=200>Last post</th>';
+		echo '<th>'.t('Topic').'</th>';
+		echo '<th width=80>'.t('Author').'</th>';
+		echo '<th width=70 align="center">'.t('Posts').'</th>';
+		echo '<th width=70 align="center">'.t('Views').'</th>';
+		echo '<th width=200>'.t('Last post').'</th>';
 	}
 	echo '</tr>';
 
@@ -526,8 +526,8 @@ function displayForumContentFlat($itemId)
 				//This is a post (a reply to a topic)
 				echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"><img src="'.$config['core']['web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
 			}
-			echo 'by '.Users::link($lastpost['userId'], $lastpost['userName']).'<br/>';
-			echo $lastpost['timeCreated'];
+			echo t('by').' '.Users::link($lastpost['userId'], $lastpost['userName']).'<br/>';
+			echo formatTime($lastpost['timeCreated']);
 		} else {
 			if ($data['parentId'] == 0) {
 				echo 'No topics';
@@ -583,7 +583,7 @@ function showForumPost($item, $islocked = false)
 	echo '<div class="forum_post_details">';
 	echo '<a href="forum.php?id='.$item['parentId'].'#post'.$item['itemId'].'">';
 	echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
-	echo 'by '.Users::link($item['authorId'], $item['authorName']).' on '.$item['timeCreated'];
+	echo t('by').' '.Users::link($item['authorId'], $item['authorName']).' '.formatTime($item['timeCreated']);
 	echo '</div><br/>';
 
 	echo $body;
@@ -597,7 +597,7 @@ function showForumPost($item, $islocked = false)
 	echo Users::linkThumb($item['authorId'], $item['authorName']).'<br/><br/>';
 	echo Users::getMode($item['authorId']).'<br/>';
 	//echo 'Join date: '.getUserCreated($item['authorId']).'<br/>';
-	echo 'Posts: '.getForumPostsCount($item['authorId']);
+	echo t('Posts').': '.getForumPostsCount($item['authorId']);
 	echo '</td>';
 
 	echo '</tr>';
@@ -612,35 +612,35 @@ function showForumPost($item, $islocked = false)
 
 	if (!$islocked) {
 		if (forumItemIsDiscussion($item['itemId'])) {
-			echo '<a href="forum_new.php?id='.$item['itemId'].'&amp;q='.$item['itemId'].'">Quote</a> ';
+			echo '<a href="forum_new.php?id='.$item['itemId'].'&amp;q='.$item['itemId'].'">'.t('Quote').'</a> ';
 		} else {
-			echo '<a href="forum_new.php?id='.$item['parentId'].'&amp;q='.$item['itemId'].'">Quote</a> ';
+			echo '<a href="forum_new.php?id='.$item['parentId'].'&amp;q='.$item['itemId'].'">'.t('Quote').'</a> ';
 		}
 
 		if ($item['authorId'] == $session->id || $session->isAdmin) {
-			echo '<a href="forum_edit.php?id='.$item['itemId'].'">Edit</a> ';
+			echo '<a href="forum_edit.php?id='.$item['itemId'].'">'.t('Edit').'</a> ';
 		}
 	}
 
 	if (!$islocked && $session->isAdmin) {
-		echo '<a href="forum_delete.php?id='.$item['itemId'].'">Remove</a> ';
+		echo '<a href="forum_delete.php?id='.$item['itemId'].'">'.t('Remove').'</a> ';
 	}
 
 	if (forumItemIsDiscussion($item['itemId'])) {
-		echo '<a href="forum_tipsa.php?id='.$item['itemId'].'">Tell a friend</a> ';
+		echo '<a href="forum_tipsa.php?id='.$item['itemId'].'">'.t('Tell a friend').'</a> ';
 
 		if ($session->isAdmin) {
 			if (!$item['locked']) {
-				echo '<a href="forum_lock.php?id='.$item['itemId'].'">Lock</a> ';
+				echo '<a href="forum_lock.php?id='.$item['itemId'].'">'.t('Lock').'</a> ';
 			} else {
-				echo '<a href="forum_lock.php?id='.$item['itemId'].'&unlock">Unlock</a> ';
+				echo '<a href="forum_lock.php?id='.$item['itemId'].'&unlock">'.t('Unlock').'</a> ';
 			}
-			echo '<a href="forum_move.php?id='.$item['itemId'].'">Move</a> ';
+			echo '<a href="forum_move.php?id='.$item['itemId'].'">'.t('Move').'</a> ';
 		}
 	}
 
 	if ($session->id != $item['authorId']) {
-		echo '<a href="forum_report.php?id='.$item['itemId'].'">Report</a> ';
+		echo '<a href="forum_report.php?id='.$item['itemId'].'">'.t('Report').'</a> ';
 	}
 
 	echo '</td></tr>';
@@ -836,7 +836,7 @@ function displayForum($_id)
 		//display root level
 		echo displayRootForumContent();
 
-		if ($session->isAdmin) echo '<a href="forum_new.php?id=0">New root level category</a>';
+		if ($session->isAdmin) echo '<a href="forum_new.php?id=0">'.t('Create new root level category').'</a>';
 		return;
 	}
 
@@ -850,14 +850,14 @@ function displayForum($_id)
 			echo '<a href="forum_delete.php?id='.$_id.'">Delete forum</a><br/>';
 		}
 	} else {
-		echo '<a href="forum_new.php?id='.$_id.'">Post response</a>';
+		echo '<a href="forum_new.php?id='.$_id.'">'.t('Reply').'</a>';
 		echo '<br/><br/>';
 
 		//display flat discussion overview
 		echo displayTopicFlat($_id);
 
 		echo '<br/>';
-		echo '<a href="forum_new.php?id='.$_id.'">Post response</a>';
+		echo '<a href="forum_new.php?id='.$_id.'">'.t('Reply').'</a>';
 	}
 }
 
@@ -879,7 +879,7 @@ function displayForum($_id)
  *
  * if _GET['q'] is set, this is the forum post to quote
  */
-//FIXME the header() usage in this function should be moved out /martin FIXED FIXME Fixa så inte goLoc behövs / linus
+//FIXME the header() usage here should be moved out /martin FIXED FIXME Fixa så inte goLoc behövs / linus
 //FIXME is the function documentation correct?
 function createForumCategory($itemId)
 {
@@ -981,13 +981,13 @@ function createForumCategory($itemId)
 		//Create a category inside a "root level category" (admins only)
 		echo 'Forum - Add new subcategory (under <b>'.getForumName($itemId).'</b>)<br/><br/>';
 
-		echo 'Subject: <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
-		echo 'Description:<br/>';
+		echo t('Subject').': <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
+		echo t('Description').':<br/>';
 		echo '<input type="text" name="body" size="60" value="'.$writeBody.'"/><br/><br/>';
 	} else if ($parent['parentId'] == 0) {
 		//Create a discussion thread (everyone)
 		echo 'Add new discussion thread under '.getForumDepthHTML(FORUM_FOLDER, $itemId).'<br/><br/>';
-		echo 'Subject: <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
+		echo t('Subject').': <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
 		echo '<textarea name="body" cols="60" rows="14">'.$writeBody.'</textarea><br/><br/>';
 
 		if ($session->isAdmin) {
@@ -1009,9 +1009,9 @@ function createForumCategory($itemId)
 		$files->showAttachments(FILETYPE_FORUM, 0);
 
 		echo '<div id="forum_new_attachment">';
-		echo 'Attach a file: ';
+		echo t('Attach a file').': ';
 		echo '<input type="file" name="file1"/>';
-		echo '<input type="submit" class="button" value="Upload"/> ';
+		echo xhtmlSubmit('Upload');
 		echo '</div>';
 		echo '<textarea name="body" cols="60" rows="14">'.$writeBody.'</textarea><br/><br/>';
 	}
@@ -1096,4 +1096,44 @@ function forumEdit($itemId)	//FIXME använd inte header()
 	echo '<input type="submit" class="button" value="Save"/>';
 	echo '</form><br/><br/>';
 }
+
+//FIXME dont use goLoc()
+function moveForum($itemId)
+{
+	global $session;
+	$item = getForumItem($itemId);
+
+	if (!$item) {
+		goLoc($session->start_page);
+		die;
+	}
+
+	if (isset($_POST['destId'])) {
+		setForumItemParent($itemId, $_POST['destId']);
+		goLoc('forum.php?id='.$itemId);
+		die;
+	}
+
+	echo '<h1>Move thread</h1>';
+
+	echo 'This discussion thread will be moved:<br/><br/>';
+	echo showForumPost($item, '', false).'<br/>';
+
+	echo 'Where do you want to move the thread?<br/>';
+	echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'">';
+
+	$list = getForumStructure();
+
+	echo '<select name="destId">';
+	//echo '<option value="0">Flytta till roten';
+	foreach ($list as $row) {
+		echo '<option value="'.$row['itemId'].'">'.$row['name'];
+	}
+	echo '</select>';
+
+	echo '<br/><br/>';
+	echo xhtmlSubmit('Move');
+	echo '</form><br/><br/>';
+}
+
 ?>

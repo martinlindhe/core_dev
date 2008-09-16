@@ -79,6 +79,7 @@ function t_se($s)
 		case 'Name': return 'Namn';
 		case 'Events': return 'Händelser';
 		case 'Userdata': return 'Användardata';
+		case 'Forum': return 'Forum';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
@@ -350,6 +351,20 @@ function t_se($s)
 		case 'Select a image from your computer': return 'Välj en bild från datorn';
 		case 'This image is waiting to be approved': return 'Denna bild väntar på att godkännas';
 		case "You currently don't have a profile picture": return 'Du har ingen gammal bild';
+
+		//Forum
+		case 'Create new root level category': return 'Skapa ny huvudkategori';
+		case 'Last topic': return 'Senaste tråden';
+		case 'Topic': return 'Tråd';
+		case 'Topics': return 'Trådar';
+		case 'Posts': return 'Inlägg';
+		case 'Author': return 'Trådskapare';
+		case 'Views': return 'Visningar';
+		case 'Last post': return 'Senaste inlägget';
+		case 'Never': return 'Aldrig';
+		case 'Tell a friend': return 'Tipsa en kompis';
+		case 'Subject': return 'Ämne';
+		case 'Attach a file': return 'Bifoga en fil';
 
 		//Subscriptions
 		case 'The user': return 'Användaren';
