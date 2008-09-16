@@ -88,6 +88,7 @@ foreach ($list as $row) {
 }
 echo '</table>';
 //FIXME "check all checkboxes" javascript
+//FIXME "add new userdata field" ability
 echo xhtmlSubmit('Save changes');
 echo xhtmlFormClose();
 
