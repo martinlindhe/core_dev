@@ -370,17 +370,8 @@ class Files
 			addToModerationQueue(MODERATION_FILE, $fileId, true);
 
 			//notify subscribers
-			$check = getCategoryPermissions(CATEGORY_USERFILE, $categoryId);
-
-			$subs = getSubscribers(SUBSCRIPTION_FILES, $ownerId);
-			foreach ($subs as $sub) {
-				if (($check & CAT_PERM_PUBLIC) || (($check & CAT_PERM_PRIVATE) && isFriends($sub['ownerId'])) ) {
-					$dst_adr = loadUserdataEmail($sub['ownerId']);
-					$subj = t('Updated gallery');
-					$msg = t('The user').' '.Users::getName($ownerId).' '.t('has uploaded files to their file area.');
-					$auth->SmtpSend($dst_adr, $subj, $msg);
-					systemMessage($sub['ownerId'], $subj, $msg);
-				}
+			if ($config['subscriptions']['notify']) {
+				notifySubscribers(SUBSCRIPTION_FILES, $fileId);
 			}
 		}
 		if ($fileType == FILETYPE_USERDATA) {
@@ -421,6 +412,10 @@ class Files
 		}
 
 		$this->updateFile($newFileId);
+
+		if ($config['subscriptions']['notify']) {
+			notifySubscribers(SUBSCRIPTION_FILES, $session->id);
+		}
 
 	  	return $newFileId;
 	}

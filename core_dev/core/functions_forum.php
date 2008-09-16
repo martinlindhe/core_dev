@@ -193,7 +193,10 @@ function addForumMessage($parentId, $subject, $body, $sticky = 0)
 	if (isSensitive($subject) || isSensitive($body)) addToModerationQueue(MODERATION_FORUM, $itemId, true);
 
 	//Check if there is any users who should be notified about this new message
-	//notifySubscribers($parentId, $itemId, SUBSCRIBE_MAIL);
+	if ($config['subscriptions']['notify']) {
+		//TODO: Not ideal, would be neat to be able to insert text from this post in notification message
+		notifySubscribers(SUBSCRIPTION_FORUM, $parentId);
+	}
 	return $itemId;
 }
 

@@ -136,40 +136,60 @@ function notifySubscribers($type, $itemId)
 				$replacement = array(
 					$forum['authorName'],
 					$forum['itemId'],
-					substr($forum['itemBody'],0,15).'...'
+					$forum['itemSubject']
 				);
 				$message = preg_replace($pattern, $replacement, $message);
+
+				systemMessage($subscriber['ownerId'], $subject, $message);
+				
+				if ($config['subscriptions']['mail_notify']) {
+					smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
+				}
 			case SUBSCRIPTION_BLOG:
 				$blog = getBlog($subscriber['itemId']);
-				$subject = $config['subscriptions']['subject']['blog'];
-				$message = $config['subscriptions']['message']['blog'];
-				$pattern = array('/__USERNAME__/', '/__BLOGID__/', '/__BLOGSUBJECT__/');
-				$replacement = array(
-					$blog['userName'],
-					$blog['blogId'],
-					$blog['subject']
-				);
-				$message = preg_replace($pattern, $replacement, $message);
+				if (!$blog['isPrivate'] || isFriends($blog['userId'], $subscriber['ownerId'])) {
+					$subject = $config['subscriptions']['subject']['blog'];
+					$message = $config['subscriptions']['message']['blog'];
+					$pattern = array('/__USERNAME__/', '/__BLOGID__/', '/__BLOGSUBJECT__/');
+					$replacement = array(
+						$blog['userName'],
+						$blog['blogId'],
+						$blog['subject']
+					);
+					$message = preg_replace($pattern, $replacement, $message);
+
+					systemMessage($subscriber['ownerId'], $subject, $message);
+					
+					if ($config['subscriptions']['mail_notify']) {
+						smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
+					}
+				}
 				break;
 			case SUBSCRIPTION_FILES:
 				$file = getFile($subscriber['itemId']);
-				$subject = $config['subscriptions']['subject']['file'];
-				$message = $config['subscriptions']['message']['file'];
-				$pattern = array('/__USERNAME__/', '/__FILEID__/', '__OWNERID__', '__CATID__');
-				$replacement = array(
-					Users::getName($file['ownerId']),
-					$file['fileId'],
-					$file['ownerId'],
-					$file['categoryId']
-				);
-				$message = preg_replace($pattern, $replacement, $message);
+
+				$check = getCategoryPermissions(CATEGORY_USERFILE, $file['categoryId']);
+
+				if (($check & CAT_PERM_PUBLIC) || (($check & CAT_PERM_PRIVATE) && isFriends($file['ownerId'], $subscriber['ownerId']))) {
+					$subject = $config['subscriptions']['subject']['file'];
+					$message = $config['subscriptions']['message']['file'];
+					$pattern = array('/__USERNAME__/', '/__FILEID__/', '__OWNERID__', '__CATID__');
+					$replacement = array(
+						Users::getName($file['ownerId']),
+						$file['fileId'],
+						$file['ownerId'],
+						$file['categoryId']
+					);
+					$message = preg_replace($pattern, $replacement, $message);
+
+					systemMessage($subscriber['ownerId'], $subject, $message);
+					
+					if ($config['subscriptions']['mail_notify']) {
+						smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
+					}
+				}
 				break;
 			default: break;
-		}
-		systemMessage($subscriber['ownerId'], $subject, $message);
-		
-		if ($config['subscriptions']['mail_notify']) {
-			smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
 		}
 	}
 
