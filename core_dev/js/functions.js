@@ -353,10 +353,16 @@ function set_div_content(n, txt)
 	show_element_by_name(n);
 }
 
-
-
-
-
+//toggles all checkboxes in form "frm" on/off
+function toggle_checkboxes(type, frm)
+{
+	type = (type.checked) ? true : false;
+	var e = document.getElementById(frm);
+	for (i = 0; i < e.length; i++) {
+		var toggle = e.elements[i];
+		if (toggle.type == 'checkbox') toggle.checked = type;
+	}
+}
 
 
 

@@ -791,19 +791,17 @@ function findUserByEmail($email)
 function editUserdataSettings($_userid = '')
 {
 	global $config, $session, $files;
-
-	if (empty($_userid)) {
-		$_userid = $session->id;
-	}
+	if (empty($_userid)) $_userid = $session->id;
 
 	$list = readAllUserdata($_userid);
 	if (!$list) return;
 
 	echo '<div class="settings">';
 	echo xhtmlForm('edit_settings_frm', '', 'post', 'multipart/form-data');
+	echo xhtmlHidden('edit_settings_check', 1);
 	echo '<table>';
 	foreach ($list as $row) {
-		if (!empty($_POST)) {
+		if (!empty($_POST['edit_settings_check'])) {
 			switch ($row['fieldType']) {
 				case USERDATA_TYPE_IMAGE:
 					if (!empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {

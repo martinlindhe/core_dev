@@ -40,7 +40,6 @@ function saveSetting($_type, $ownerId, $settingName, $settingValue)
 		$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$_type.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
 		$db->insert($q);
 	}
-
 	return true;
 }
 

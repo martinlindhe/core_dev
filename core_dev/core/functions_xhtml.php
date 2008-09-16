@@ -216,7 +216,7 @@ function xhtmlSelectArray($_name, $_arr, $_default = 0, $_onchange = '')
 /**
  * Helper to create a hidden input field
  */
-function xhtmlHidden($_name, $_val)
+function xhtmlHidden($_name, $_val = 1)
 {
 	$out = '<input type="hidden" name="'.$_name.'" value="'.$_val.'"/>';
 	return $out;
@@ -225,10 +225,11 @@ function xhtmlHidden($_name, $_val)
 /**
  * Helper to create a checkbox
  */
-function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false)
+function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false, $onclick = '')
 {
-	$out = xhtmlHidden($_name, 0);
-	$out .= '<input type="checkbox" class="checkbox" name="'.$_name.'" value="'.$_val.'" id="lab_'.$_name.'"'.($_checked ? ' checked':'').'/>';
+	$out = '';
+	if (!$onclick) $out .= xhtmlHidden($_name, 0);
+	$out .= '<input type="checkbox" class="checkbox" name="'.$_name.'" value="'.$_val.'" id="lab_'.$_name.'"'.($_checked ? ' checked':'').($onclick ? ' onclick="'.$onclick.'"' : '').'/>';
 	if ($_title) $out .= '<label for="lab_'.$_name.'"> '.$_title.'</label>';
 
 	return $out;
@@ -288,7 +289,7 @@ function xhtmlFile($_name)
  */
 function xhtmlForm($name = '', $action = '', $method = 'post', $enctype = '')
 {
-	return '<form action="'.$action.'" method="'.$method.'"'.($name ? ' name="'.$name.'"' : '').($enctype ? ' enctype="'.$enctype.'"' : '').'>';
+	return '<form action="'.$action.'" method="'.$method.'"'.($name ? ' id="'.$name.'" name="'.$name.'"' : '').($enctype ? ' enctype="'.$enctype.'"' : '').'>';
 }
 
 /**

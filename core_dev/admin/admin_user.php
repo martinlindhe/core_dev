@@ -68,14 +68,15 @@ echo '<tr>';
 echo '<th>Key</th>';
 echo '<th>Value</th>';
 echo '<th>Time set</th>';
-echo '<th>Remove</th>';
+//echo '<th>Remove (<input type="checkbox" onclick="toggle_checkboxes(this, \'mod_userdata\');"/> all)</th>';
+echo '<th>Remove ('.xhtmlCheckbox('toggle', 'all', 1, false, "toggle_checkboxes(this, 'mod_userdata')").')</th>';
 echo '</tr>';
 echo xhtmlForm('mod_userdata');
 foreach ($list as $row) {
 	if (!empty($_POST['del_ud_'.$row['settingId']])) {
 		deleteSetting(SETTING_USERDATA, $userId, $row['settingName']);
 		continue;
-	} else if (!empty($_POST['mod_ud_'.$row['settingId']])) {
+	} else if (!empty($_POST['mod_ud_'.$row['settingId']]) && $row['settingValue'] != $_POST['mod_ud_'.$row['settingId']]) {
 		saveSetting(SETTING_USERDATA, $userId, $row['settingName'], $_POST['mod_ud_'.$row['settingId']]);
 		$row['settingValue'] = $_POST['mod_ud_'.$row['settingId']];
 	}
@@ -88,7 +89,6 @@ foreach ($list as $row) {
 	echo '</tr>';
 }
 echo '</table>';
-//FIXME "check all checkboxes" javascript
 echo 'New key: '.xhtmlInput('new_ud_key').', value: '.xhtmlInput('new_ud_val').'<br/>';
 echo xhtmlSubmit('Save changes');
 echo xhtmlFormClose();
