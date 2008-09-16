@@ -365,6 +365,7 @@ function t_se($s)
 		case 'Tell a friend': return 'Tipsa en kompis';
 		case 'Subject': return 'Ämne';
 		case 'Attach a file': return 'Bifoga en fil';
+		case 'Write a motivation': return 'Skriv en motivering';
 
 		//Subscriptions
 		case 'The user': return 'Användaren';

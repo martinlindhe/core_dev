@@ -1100,7 +1100,9 @@ function forumEdit($itemId)	//FIXME använd inte header()
 //FIXME dont use goLoc()
 function moveForum($itemId)
 {
+	if (!is_numeric($itemId)) return false;
 	global $session;
+
 	$item = getForumItem($itemId);
 
 	if (!$item) {
@@ -1134,6 +1136,30 @@ function moveForum($itemId)
 	echo '<br/><br/>';
 	echo xhtmlSubmit('Move');
 	echo '</form><br/><br/>';
+}
+
+//FIXME dont use goLoc() !
+function reportForumPost($itemId)
+{
+	if (!is_numeric($itemId)) return false;
+	$item = getForumItem($itemId);
+	if (!$item) return false;
+
+	if (isset($_POST['motivation'])) {
+		$queueId = addToModerationQueue(MODERATION_FORUM, $itemId);
+		addComment(COMMENT_MODERATION, $queueId, $_POST['motivation']);
+
+		goLoc('forum.php?id='.$item['parentId']);
+		die;
+	}
+
+	echo showForumPost($item, '', false).'<br/>';
+
+	echo xhtmlForm('abuse', $_SERVER['PHP_SELF'].'?id='.$itemId);
+	echo t('Write a motivation').':<br/>';
+	echo xhtmlTextarea('motivation', '', 50, 5).'<br/><br/>';
+	echo xhtmlSubmit('Report');
+	echo xhtmlFormClose().'<br/><br/>';
 }
 
 ?>
