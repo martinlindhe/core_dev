@@ -58,6 +58,9 @@ echo '<h2>'.t('Comments').'</h2>';
 showComments(COMMENT_USER, $userId);
 
 echo '<h2>All userdata</h2>';
+if (!empty($_POST['new_ud_key']) && isset($_POST['new_ud_val'])) {
+	saveSetting(SETTING_USERDATA, $userId, $_POST['new_ud_key'], $_POST['new_ud_val']);
+}
 $list = readAllSettings(SETTING_USERDATA, $userId);
 
 echo '<table>';
@@ -88,7 +91,7 @@ foreach ($list as $row) {
 }
 echo '</table>';
 //FIXME "check all checkboxes" javascript
-//FIXME "add new userdata field" ability
+echo 'New key: '.xhtmlInput('new_ud_key').', value: '.xhtmlInput('new_ud_val').'<br/>';
 echo xhtmlSubmit('Save changes');
 echo xhtmlFormClose();
 
