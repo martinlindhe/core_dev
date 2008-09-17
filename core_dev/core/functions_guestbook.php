@@ -196,13 +196,11 @@ function getGuestbookCount($userId = 0)
 /**
  * Returns the number of items written in guestbooks the specified date interval
  */
-function getGuestbookCountPerDate($dateStart, $dateStop = '')
+function getGuestbookCountPeriod($dateStart, $dateStop)
 {
 	global $db;
 
-	if (empty($dateStop)) $dateStop = $dateStart;
-
-	$q = 'SELECT COUNT(entryId) AS cnt, DATE(timeCreated) AS date FROM tblGuestbooks WHERE DATE(timeCreated) BETWEEN DATE("'.$dateStart.'") AND DATE("'.$dateStop.'") GROUP BY DATE(timeCreated)';
+	$q = 'SELECT COUNT(entryId) AS cnt FROM tblGuestbooks WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
 	return $db->getArray($q);
 }
 

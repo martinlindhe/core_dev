@@ -820,6 +820,17 @@ function getForumPostsCount($userId)
 	return $db->getOneItem($q);
 }
 
+/**
+ * Get the number of new forum "entries" (all types) during the specified time period
+ */
+function getForumEntriesCountPeriod($dateStart, $dateStop)
+{
+	global $db;
+
+	$q = 'SELECT count(itemId) AS cnt FROM tblForums WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+	return $db->getArray($q);
+}
+
 function displayForum($_id)
 {
 	global $session;

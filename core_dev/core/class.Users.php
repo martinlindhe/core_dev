@@ -59,33 +59,35 @@ class Users
 	}
 
 	/**
-	 * Get the number of logins the specified date
+	 * Get the number of logins during the specified time period
 	 */
-	function getLoginCountPerDate($dateStart, $dateStop = '')
+	function getLoginCountPeriod($dateStart, $dateStop)
 	{
 		global $db;
 
-		if (empty($dateStop)) {
-			$dateStop = $dateStart;
-		}
-
-		$q = 'SELECT count(userId) AS cnt, date(timeCreated) AS date FROM tblLogins WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
+		$q = 'SELECT count(userId) AS cnt FROM tblLogins WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
 		return $db->getArray($q);
 	}
 
 	/**
-	 * Get the number of distinct logins the specified date
+	 * Get the number of distinct logins during the specified time period
 	 */
-	function getDistinctLoginCountPerDate($dateStart, $dateStop = '')
+	function getDistinctLoginCountPeriod($dateStart, $dateStop)
 	{
 		global $db;
 
-		if (empty($dateStop)) {
-			$dateStop = $dateStart;
-		}
+		$q = 'SELECT count(distinct(userId)) AS cnt FROM tblLogins WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+		return $db->getArray($q);
+	}
 
+	/**
+	 * Get the number of new users registred during the specified time period
+	 */
+	function getUsersNewPeriod($dateStart, $dateStop)
+	{
+		global $db;
 
-		$q = 'SELECT count(distinct(userId)) AS cnt, date(timeCreated) AS date FROM tblLogins WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
+		$q = 'SELECT count(userId) AS cnt FROM tblUsers WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
 		return $db->getArray($q);
 	}
 

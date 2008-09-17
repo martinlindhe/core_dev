@@ -167,6 +167,17 @@ function getBlogCount($_id = 0)
 }
 
 /**
+ * Get the number of new blog entries written during the specified time period
+ */
+function getBlogsNewPeriod($dateStart, $dateStop)
+{
+	global $db;
+
+	$q = 'SELECT count(blogId) AS cnt FROM tblBlogs WHERE timeCreated BETWEEN "'.$dateStart.'" AND "'.$dateStop.'"';
+	return $db->getArray($q);
+}
+
+/**
  * Returns all blogs from $userId for the specified month
  */
 function getBlogsByMonth($userId, $month, $year, $order_desc = true)

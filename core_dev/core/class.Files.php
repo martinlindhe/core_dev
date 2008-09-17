@@ -962,6 +962,17 @@ class Files
 	}
 
 	/**
+	 * Get the number of new files uploaded during the specified time period
+	 */
+	function getFilesNewCountPeriod($dateStart, $dateStop)
+	{
+		global $db;
+
+		$q = 'SELECT count(fileId) AS cnt FROM tblFiles WHERE timeUploaded BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+		return $db->getArray($q);
+	}
+
+	/**
 	 * Retrieves detailed info about the specified file
 	 *
 	 * \param $_id fileId

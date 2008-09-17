@@ -56,4 +56,16 @@ function chat_1on1_XHTML($otherId)
 	echo '</body></html>';
 }
 
+/**
+ * Get the number of new chat messages during the specified time period
+ */
+function getChatMessagesCountPeriod($dateStart, $dateStop)
+{
+	global $db;
+
+	$q = 'SELECT count(userId) AS cnt FROM tblChat WHERE msgDate BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+	return $db->getArray($q);
+}
+
+
 ?>

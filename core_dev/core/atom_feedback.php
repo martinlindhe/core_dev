@@ -67,6 +67,16 @@ function getFeedbackCnt($_type = 0)
 	return $db->getOneItem($q);
 }
 
+/**
+ * Get the number of new feedback entries during the specified time period
+ */
+function getFeedbackNewCountPeriod($dateStart, $dateStop)
+{
+	global $db;
+
+	$q = 'SELECT count(fileId) AS cnt FROM tblFiles WHERE timeUploaded BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+	return $db->getArray($q);
+}
 
 /**
  * Returns answered feedback entries

@@ -86,15 +86,11 @@ function getMessageFreeTextSearch($text, $_limit_sql = '')
 /**
  * Returns the number of items written in messages the specified date interval
  */
-function getMessageCountPerDate($dateStart, $dateStop = '')
+function getMessageCountPeriod($timeStart, $timeStop)
 {
 	global $db;
 
-	if (empty($dateStop)) {
-		$dateStop = $dateStart;
-	}
-
-	$q = 'SELECT floor(count(msgId)/2) AS cnt, date(timeCreated) AS date FROM tblMessages WHERE date(timeCreated) BETWEEN date("'.$dateStart.'") AND date("'.$dateStop.'") GROUP BY date(timeCreated)';
+	$q = 'SELECT floor(count(msgId)/2) AS cnt FROM tblMessages WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
 	return $db->getArray($q);
 }
 
