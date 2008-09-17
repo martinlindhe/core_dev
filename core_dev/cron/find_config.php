@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: find_config.php 3925 2008-08-27 09:41:44Z ml $
+ * $Id$
  */
 
 $project = '../../';
