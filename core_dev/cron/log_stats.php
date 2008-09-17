@@ -35,6 +35,9 @@ define('STAT_COMMENTS_FILES',		41);	///< number of comments written to files/pho
 	$newCommentBlog = getCommentsCountPeriod($startDate,$endDate, COMMENT_BLOG);
 	$newCommentFile = getCommentsCountPeriod($startDate,$endDate, COMMENT_FILE);
 
+
+echo $newCommentFile;
+
 	saveStat(STAT_TOTAL_LOGINS, $login, $startDate, $endDate);
 	saveStat(STAT_UNIQUE_LOGINS, $loginsDistinct, $startDate, $endDate);
 	saveStat(STAT_NEW_USERS, $newUser, $startDate, $endDate);
