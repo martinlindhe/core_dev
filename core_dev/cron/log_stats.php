@@ -24,7 +24,7 @@ define('STAT_COMMENTS_FILES',		41);	///< number of comments written to files/pho
 	$newMail = getMessageCountPeriod($startDate,$endDate);
 	$newChat = getChatMessagesCountPeriod($startDate,$endDate);
 	$newForumEntry = getForumEntriesCountPeriod($startDate,$endDate);
-	$newFiles = getFilesCountPeriod($startDate,$endDate);
+	$newFiles = Files::getFilesCountPeriod($startDate,$endDate);
 	$newFeedback = getFeedbackCountPeriod($startDate,$endDate);
 	$newSubscriptionForum = getSubscriptionsNewCountPeriod($startDate,$endDate, SUBSCRIPTION_FORUM);
 	$newSubscriptionBlog = getSubscriptionsNewCountPeriod($startDate,$endDate, SUBSCRIPTION_BLOG);
