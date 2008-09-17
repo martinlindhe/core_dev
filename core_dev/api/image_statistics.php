@@ -4,6 +4,9 @@
  * $Id$
  */
 
+
+die;	//FIXME: this file is nonworking. keeping the code for now because it makes pretty matrix gfx ;)
+
 require_once('find_config.php');
 
 if (!$session->isAdmin || empty($_GET['y']) || !is_numeric($_GET['y']) || empty($_GET['m']) || !is_numeric($_GET['m'])) die;

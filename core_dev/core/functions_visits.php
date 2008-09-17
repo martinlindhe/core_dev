@@ -5,8 +5,11 @@
  * Simple functions to enable visit logs for various objects
  */
 
+//FIXME: rename to atom_visits.php
+
 define('VISIT_USERPAGE',	1);
 define('VISIT_FILE',		2);
+define('VISIT_BLOG',		3);	//FIXME implement!
 
 /**
  * XXX
