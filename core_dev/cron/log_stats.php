@@ -14,7 +14,7 @@ define('STAT_COMMENTS_FILES',		41);	///< number of comments written to files/pho
 
 */
 	$startDate = sql_datetime(strtotime('yesterday'));
-	$endDate = sql_datetime(strtotime('yesterday')+86399); // 86399s = 24h - 1s
+	$endDate = sql_datetime(strtotime('yesterday')+86399); // 86399s = 24h - 1s 
 echo "1";
 
 	$login = Users::getLoginCountPeriod($startDate,$endDate);
