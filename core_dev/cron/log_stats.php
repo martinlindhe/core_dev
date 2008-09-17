@@ -14,15 +14,14 @@ define('STAT_COMMENTS_FILES',		41);	///< number of comments written to files/pho
 
 */
 	$startDate = sql_datetime(strtotime('yesterday'));
-	$endDate = sql_datetime(strtotime('yesterday')+86399); // 86399s = 24h - 1s 
-echo "1";
+	//FIXME: Använd något som tar hänsyn till vår bajsidé om klockan och tiden med skottsekunder och sommar-/vintertid osv... typ.. mktime?
+	$endDate = sql_datetime(strtotime('yesterday')+86399); // 86399s = 24h - 1s
 
 	$login = Users::getLoginCountPeriod($startDate,$endDate);
 	$loginsDistinct = Users::getDistinctLoginCountPeriod($startDate,$endDate);
 	$newUser = Users::getNewCountPeriod($startDate,$endDate);
 	$newBlog = getBlogsCountPeriod($startDate,$endDate);
 	$newGb = getGuestbookCountPeriod($startDate,$endDate);
-echo "2";
 	$newMail = getMessageCountPeriod($startDate,$endDate);
 	$newChat = getChatMessagesCountPeriod($startDate,$endDate);
 	$newForumEntry = getForumEntriesCountPeriod($startDate,$endDate);
@@ -30,17 +29,12 @@ echo "2";
 	$newFeedback = getFeedbackCountPeriod($startDate,$endDate);
 	$newSubscriptionForum = getSubscriptionsNewCountPeriod($startDate,$endDate, SUBSCRIPTION_FORUM);
 	$newSubscriptionBlog = getSubscriptionsNewCountPeriod($startDate,$endDate, SUBSCRIPTION_BLOG);
-echo "3";
 	$newSubscriptionFile = getSubscriptionsNewCountPeriod($startDate,$endDate, SUBSCRIPTION_FILES);
 	$newViewsFile = getVisitsCountPeriod($startDate,$endDate, VISIT_FILE);
 	$newViewsBlog = getVisitsCountPeriod($startDate,$endDate, VISIT_BLOG);
 	$newViewsUserPage = getVisitsCountPeriod($startDate,$endDate, VISIT_USERPAGE);
-echo "4";
 	$newCommentBlog = getCommentsCountPeriod($startDate,$endDate, COMMENT_BLOG);
 	$newCommentFile = getCommentsCountPeriod($startDate,$endDate, COMMENT_FILE);
-
-
-echo "5";
 
 	saveStat(STAT_TOTAL_LOGINS, $login, $startDate, $endDate);
 	saveStat(STAT_UNIQUE_LOGINS, $loginsDistinct, $startDate, $endDate);
