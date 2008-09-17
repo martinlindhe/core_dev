@@ -454,7 +454,7 @@ CREATE TABLE `tblStatistics` (
   `entryId` bigint(20) unsigned NOT NULL auto_increment,
   `timeStart` datetime default NULL,
   `timeEnd` datetime default NULL,
-  `type` tinyint(10) unsigned NOT NULL default '0',
+  `type` tinyint(3) unsigned NOT NULL default '0',
   `value` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
