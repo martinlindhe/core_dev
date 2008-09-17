@@ -70,7 +70,7 @@ function getFeedbackCnt($_type = 0)
 /**
  * Get the number of new feedback entries during the specified time period
  */
-function getFeedbackNewCountPeriod($dateStart, $dateStop)
+function getFeedbackCountPeriod($dateStart, $dateStop)
 {
 	global $db;
 
