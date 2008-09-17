@@ -169,7 +169,7 @@ function getBlogCount($_id = 0)
 /**
  * Get the number of new blog entries written during the specified time period
  */
-function getBlogsNewPeriod($dateStart, $dateStop)
+function getBlogsCountPeriod($dateStart, $dateStop)
 {
 	global $db;
 
