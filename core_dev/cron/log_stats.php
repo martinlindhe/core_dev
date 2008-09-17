@@ -29,9 +29,9 @@ define('STAT_COMMENTS_FILES',		41);	///< number of comments written to files/pho
 	$newSubscriptionForum = getSubscriptionsNewCountPeriod($startDate,$endDate, SUBSCRIPTION_FORUM);
 	$newSubscriptionBlog = getSubscriptionsNewCountPeriod($startDate,$endDate, SUBSCRIPTION_BLOG);
 	$newSubscriptionFile = getSubscriptionsNewCountPeriod($startDate,$endDate, SUBSCRIPTION_FILES);
-	$newViewsFile = getVisitsNewCountPeriod($startDate,$endDate, VISIT_FILE);
-	$newViewsBlog = getVisitsNewCountPeriod($startDate,$endDate, VISIT_BLOG);
-	$newViewsUserPage = getVisitsNewCountPeriod($startDate,$endDate, VISIT_USERPAGE);
+	$newViewsFile = getVisitsCountPeriod($startDate,$endDate, VISIT_FILE);
+	$newViewsBlog = getVisitsCountPeriod($startDate,$endDate, VISIT_BLOG);
+	$newViewsUserPage = getVisitsCountPeriod($startDate,$endDate, VISIT_USERPAGE);
 	$newCommentBlog = getCommentsCountPeriod($startDate,$endDate, COMMENT_BLOG);
 	$newCommentFile = getCommentsCountPeriod($startDate,$endDate, COMMENT_FILE);
 
