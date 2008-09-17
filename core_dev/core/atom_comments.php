@@ -212,6 +212,20 @@ function getCommentsCount($commentType, $ownerId, $privateComments = false)
 }
 
 /**
+ * Get the number of comments during the specified time period
+ */
+function getCommentsCountPeriod($type, $dateStart, $dateStop)
+{
+	global $db;
+
+	if (!is_numeric($type)) return false;
+
+	$q = 'SELECT count(commentId) AS cnt FROM tblComments WHERE commentType = '.$type.' AND timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+	return $db->getOneItem($q);
+}
+
+
+/**
  * Helper function, standard "show comments" to be used by other modules
  * col_w sets the column width of the textarea
  */

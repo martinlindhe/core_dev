@@ -66,7 +66,7 @@ class Users
 		global $db;
 
 		$q = 'SELECT count(userId) AS cnt FROM tblLogins WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-		return $db->getArray($q);
+		return $db->getOneItem($q);
 	}
 
 	/**
@@ -77,18 +77,18 @@ class Users
 		global $db;
 
 		$q = 'SELECT count(distinct(userId)) AS cnt FROM tblLogins WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-		return $db->getArray($q);
+		return $db->getOneItem($q);
 	}
 
 	/**
 	 * Get the number of new users registred during the specified time period
 	 */
-	function getUsersNewPeriod($dateStart, $dateStop)
+	function getNewCountPeriod($dateStart, $dateStop)
 	{
 		global $db;
 
 		$q = 'SELECT count(userId) AS cnt FROM tblUsers WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-		return $db->getArray($q);
+		return $db->getOneItem($q);
 	}
 
 	/**

@@ -64,7 +64,7 @@ function getChatMessagesCountPeriod($dateStart, $dateStop)
 	global $db;
 
 	$q = 'SELECT count(userId) AS cnt FROM tblChat WHERE msgDate BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-	return $db->getArray($q);
+	return $db->getOneItem($q);
 }
 
 

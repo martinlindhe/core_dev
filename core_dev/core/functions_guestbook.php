@@ -201,7 +201,7 @@ function getGuestbookCountPeriod($dateStart, $dateStop)
 	global $db;
 
 	$q = 'SELECT COUNT(entryId) AS cnt FROM tblGuestbooks WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-	return $db->getArray($q);
+	return $db->getOneItem($q);
 }
 
 /**

@@ -828,7 +828,7 @@ function getForumEntriesCountPeriod($dateStart, $dateStop)
 	global $db;
 
 	$q = 'SELECT count(itemId) AS cnt FROM tblForums WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-	return $db->getArray($q);
+	return $db->getOneItem($q);
 }
 
 function displayForum($_id)

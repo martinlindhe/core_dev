@@ -174,7 +174,7 @@ function getBlogsNewPeriod($dateStart, $dateStop)
 	global $db;
 
 	$q = 'SELECT count(blogId) AS cnt FROM tblBlogs WHERE timeCreated BETWEEN "'.$dateStart.'" AND "'.$dateStop.'"';
-	return $db->getArray($q);
+	return $db->getOneItem($q);
 }
 
 /**

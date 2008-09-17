@@ -91,7 +91,7 @@ function getMessageCountPeriod($timeStart, $timeStop)
 	global $db;
 
 	$q = 'SELECT floor(count(msgId)/2) AS cnt FROM tblMessages WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-	return $db->getArray($q);
+	return $db->getOneItem($q);
 }
 
 /**

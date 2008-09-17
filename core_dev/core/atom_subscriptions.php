@@ -104,6 +104,19 @@ function getSubscriptions($type)	//FIXME ta userId som parameter
 }
 
 /**
+ * Get the number of new subscriptions during the specified time period
+ */
+function getSubscriptionsNewCountPeriod($type, $dateStart, $dateStop)
+{
+	global $db;
+
+	if (!is_numeric($type)) return false;
+
+	$q = 'SELECT count(id) AS cnt FROM tblSubscriptions WHERE type = '.$type.' AND timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+	return $db->getOneItem($q);
+}
+
+/**
  * Returns all subscribers for $itemId, only of type $type if specified
  *
  * \param $type type of subscription

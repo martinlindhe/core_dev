@@ -41,4 +41,18 @@ function getVisits($_type, $_id, $_limit = 5)
 	if ($_limit) $q .= ' LIMIT 0,'.$_limit;
 	return $db->getArray($q);
 }
+
+/**
+ * Get the number of visits during the specified time period
+ */
+function getVisitsCountPeriod($_type, $dateStart, $dateStop)
+{
+	global $db;
+
+	if (!is_numeric($_type)) return false;
+
+	$q = 'SELECT count(visitId) AS cnt FROM tblVisits WHERE type = '.$type.' AND timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+	return $db->getOneItem($q);
+}
+
 ?>
