@@ -393,7 +393,7 @@ class Files
 	 */
 	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
 	{
-		global $db, $session;
+		global $db, $session, $config;
 		if (!is_numeric($fileType) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
 		$fileSize = 0;
@@ -401,7 +401,7 @@ class Files
 		$fileName = basename(strip_tags($fileName));
 
 		if ($session) {
-	  	$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
 		} else {
 			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
 		}
@@ -413,7 +413,7 @@ class Files
 
 		$this->updateFile($newFileId);
 
-		if ($config['subscriptions']['notify']) {
+		if (!empty($config['subscriptions']['notify'])) {
 			notifySubscribers(SUBSCRIPTION_FILES, $session->id);
 		}
 
