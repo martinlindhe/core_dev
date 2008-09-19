@@ -25,6 +25,8 @@ define('EVENT_MSG_DENIED',			0x61);	//referer = fileId
 define('EVENT_BLOCKED_ANON_CALL',	0x62);	//call was dropped because caller was anonymous
 define('EVENT_BLOCKED_CALLER',		0x63);	//caller is blocked from service
 
+define('EVENT_CALLDROP_LINEFULL',	0x70);	//call was dropped because line is full
+
 $event_name[EVENT_USER_LOGIN] = 'User login';
 $event_name[EVENT_USER_LOGOUT] = 'User logout';
 $event_name[EVENT_PRES_APPROVED] = 'Approved pres.';
@@ -43,6 +45,8 @@ $event_name[EVENT_MSG_DENIED] = 'Denied msg.';
 
 $event_name[EVENT_BLOCKED_ANON_CALL] = 'Blocked anon caller';
 $event_name[EVENT_BLOCKED_CALLER] = 'Dropped blocked caller';
+
+$event_name[EVENT_CALLDROP_LINEFULL] = 'Call dropped (LINE FULL)';
 
 /**
  * Creates a new event
