@@ -1177,12 +1177,13 @@ function reportForumPost($itemId)
 	echo xhtmlFormClose().'<br/><br/>';
 }
 
-//FIXME make mail text configurable
-//FIXME finish translation
+//FIXME make mail text configurable / finish translation
+//FIXME make this function a generic "share content", for all kinds of sharing
 //FIXME add ability to share with digg, del.icio.us, facebook:
 //	digg:		http://digg.com/submit?phase=2&url=http://thinkprogress.org/2008/09/15/palin-cut-funding-for-alaska-special-olympics/&title=Palin%20cut%20funding%20for%20Alaska%20Special%20Olympics.
 //	delicious:	http://del.icio.us/post?url=http://thinkprogress.org/2008/09/15/palin-cut-funding-for-alaska-special-olympics/&title=Palin%20cut%20funding%20for%20Alaska%20Special%20Olympics.
 //	facebook:	http://www.facebook.com/share.php?u=http://thinkprogress.org/2008/09/15/palin-cut-funding-for-alaska-special-olympics/&t=Palin%20cut%20funding%20for%20Alaska%20Special%20Olympics.
+//	myspace:	http://www.myspace.com/Modules/PostTo/Pages
 function shareForumItem($itemId)
 {
 	global $session, $config;
