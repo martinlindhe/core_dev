@@ -75,7 +75,7 @@ function getFeedbackCountPeriod($dateStart, $dateStop)
 	global $db;
 
 	$q = 'SELECT count(feedbackId) AS cnt FROM tblFeedback WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-	return $db->getArray($q);
+	return $db->getOneItem($q);
 }
 
 /**

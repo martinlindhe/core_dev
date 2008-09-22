@@ -51,7 +51,7 @@ function getVisitsCountPeriod($_type, $dateStart, $dateStop)
 
 	if (!is_numeric($_type)) return false;
 
-	$q = 'SELECT count(visitId) AS cnt FROM tblVisits WHERE type = '.$type.' AND timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+	$q = 'SELECT count(visitId) AS cnt FROM tblVisits WHERE type = '.$_type.' AND timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
 	return $db->getOneItem($q);
 }
 
