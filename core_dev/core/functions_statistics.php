@@ -55,6 +55,168 @@ function saveStat($type, $val, $timeStart, $timeEnd)
 	return true;
 }
 
+/**
+ * XXX
+ */
+function getStat($type, $timeStart, $timeEnd)
+{
+	global $db;
+	if (!is_numeric($type)) return false;
+
+	$q = 'SELECT value FROM tblStatistics WHERE type='.$type.' AND timeStart="'.$db->escape($timeStart).'" AND timeEnd="'.$db->escape($timeEnd).'" LIMIT 1';
+//echo $q;
+	return $db->getOneItem($q);
+}
+
+/**
+ * XXX
+ */
+function showStatsMonth($year, $month) {
+	
+	if (!is_numeric($year) || !is_numeric($month)) {
+		return false;
+	}
+	if (strlen($month) == 1) $month = '0'.$month;
+	
+	echo 'Year: '.$year.' Month: '.$month;
+	
+	$ts = mktime(0,0,0,$month-1,0,$year);
+
+	echo '<table>';	
+
+	echo '<tr>';
+		echo '<td>';
+			echo '&nbsp;';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_NEW_USERS';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_NEW_BLOGS';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_NEW_CHATMESSAGES';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_NEW_FORUMPOSTS';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_NEW_FILES';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_NEW_GUESTBOOK';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_NEW_MESSAGES';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_NEW_FEEDBACK';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_SUBSCRIPTIONS_FORUMS';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_SUBSCRIPTIONS_BLOGS';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_SUBSCRIPTIONS_FILES';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_VIEWS_PROFILES';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_VIEWS_BLOGS';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_VIEWS_FILES';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_COMMENTS_BLOGS';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_COMMENTS_FILES';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_UNIQUE_LOGINS';
+		echo '</td>';
+		echo '<td>';
+			echo 'STAT_TOTAL_LOGINS';
+		echo '</td>';
+	echo '</tr>';
+
+	for ($day = 1; $day < date('t', $ts); $day++) {
+		if (strlen($day) == 1) {
+			$alpha_day = '0'.$day;
+		} else {
+			$alpha_day = $day;
+		}
+		$date = $year.'-'.$month.'-'.$alpha_day;
+	
+		echo '<tr>';
+			echo '<td>';
+				echo $date;
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_NEW_USERS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_NEW_BLOGS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_NEW_CHATMESSAGES,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_NEW_FORUMPOSTS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_NEW_FILES,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_NEW_GUESTBOOK,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_NEW_MESSAGES,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_NEW_FEEDBACK,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_SUBSCRIPTIONS_FORUMS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_SUBSCRIPTIONS_BLOGS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_SUBSCRIPTIONS_FILES,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_VIEWS_PROFILES,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_VIEWS_BLOGS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_VIEWS_FILES,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_COMMENTS_BLOGS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_COMMENTS_FILES,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_UNIQUE_LOGINS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+			echo '<td>';
+				echo getStat(STAT_TOTAL_LOGINS,$date.' 00:00:00',$date.' 23:59:59');
+			echo '</td>';
+		echo '</tr>';
+	}
+
+	echo '</table>';	
+
+	
+}
 
 /**
  * XXX
