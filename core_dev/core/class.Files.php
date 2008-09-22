@@ -336,7 +336,7 @@ class Files
 	 */
 	function handleUpload($FileData, $fileType, $ownerId = 0, $categoryId = 0)
 	{
-		global $db, $session, $auth;
+		global $db, $session, $auth, $config;
 		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
 		//ignore empty file uploads
@@ -370,7 +370,7 @@ class Files
 			addToModerationQueue(MODERATION_FILE, $fileId, true);
 
 			//notify subscribers
-			if ($config['subscriptions']['notify']) {
+			if (!empty($config['subscriptions']['notify'])) {
 				notifySubscribers(SUBSCRIPTION_FILES, $fileId);
 			}
 		}
@@ -393,7 +393,7 @@ class Files
 	 */
 	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
 	{
-		global $db, $session, $config;
+		global $db, $session;
 		if (!is_numeric($fileType) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
 		$fileSize = 0;
@@ -412,10 +412,6 @@ class Files
 		}
 
 		$this->updateFile($newFileId);
-
-		if (!empty($config['subscriptions']['notify'])) {
-			notifySubscribers(SUBSCRIPTION_FILES, $session->id);
-		}
 
 	  	return $newFileId;
 	}

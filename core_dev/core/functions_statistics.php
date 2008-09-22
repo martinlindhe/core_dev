@@ -44,13 +44,15 @@ function saveStat($type, $val, $timeStart, $timeEnd)
 	global $db;
 	if (!is_numeric($type) || !is_numeric($val)) return false;
 
-	$q = 'SELECT entryid FROM tblStatistics WHERE type='.$type.' AND timeStart="'.$db->escape($timeStart).'" AND timeEnd="'.$db->escape($timeEnd).'"';
+	$q = 'SELECT entryId FROM tblStatistics WHERE type='.$type.' AND timeStart="'.$db->escape($timeStart).'" AND timeEnd="'.$db->escape($timeEnd).'" LIMIT 1';
 	if ($db->getOneItem($q)) {
 		$q = 'UPDATE tblStatistics SET value='.$val.' WHERE type='.$type.' AND timeStart="'.$db->escape($timeStart).'" AND timeEnd="'.$db->escape($timeEnd).'" LIMIT 1';
-		return $db->update($q);
+		$db->update($q);
+	} else {
+		$q = 'INSERT INTO tblStatistics SET type='.$type.',value='.$val.',timeStart="'.$db->escape($timeStart).'",timeEnd="'.$db->escape($timeEnd).'"';
+		$db->insert($q);
 	}
-	$q = 'INSERT INTO tblStatistics SET type='.$type.',value='.$val.',timeStart="'.$db->escape($timeStart).'",timeEnd="'.$db->escape($timeEnd).'"';
-	return $db->insert($q);
+	return true;
 }
 
 
