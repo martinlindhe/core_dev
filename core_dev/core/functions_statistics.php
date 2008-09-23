@@ -64,7 +64,6 @@ function getStat($type, $timeStart, $timeEnd)
 	if (!is_numeric($type)) return false;
 
 	$q = 'SELECT value FROM tblStatistics WHERE type='.$type.' AND timeStart="'.$db->escape($timeStart).'" AND timeEnd="'.$db->escape($timeEnd).'" LIMIT 1';
-//echo $q;
 	return $db->getOneItem($q);
 }
 

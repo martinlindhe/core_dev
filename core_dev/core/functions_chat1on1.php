@@ -68,4 +68,28 @@ function getChatMessagesCountPeriod($dateStart, $dateStop)
 }
 
 
+/**
+ * Get number of all chat messages
+ */
+function getAllChatMessagesCount()
+{
+	global $db;
+
+	$q = 'SELECT count(userId) AS cnt FROM tblChat';
+	return $db->getOneItem($q);
+}
+
+/**
+ * Get all chat messages
+ */
+function getAllChatMessages($_limit_sql)
+{
+	global $db;
+
+	$q = 'SELECT * FROM tblChat';
+	if ($_limit_sql) $q .= $_limit_sql;
+	return $db->getOneItem($q);
+}
+
+
 ?>
