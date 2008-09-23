@@ -13,8 +13,7 @@ require('design_admin_head.php');
 echo '<h1>'.t('Statistics').'</h1>';
 
 if (!empty($_GET['y']) && !empty($_GET['m'])) {
-	echo 'FIXME: show stats here!';
-	//showStatsMonth($_GET['y'], $_GET['m']);
+	showStatsMonth($_GET['y'], $_GET['m']);
 
 	echo '<br/><br/>';
 	echo '<a href="'.$_SERVER['PHP_SELF'].'">Return to overview</a>';
@@ -59,7 +58,7 @@ if (!empty($_GET['y']) && !empty($_GET['m'])) {
 
 	echo '<h2>'.t('Custom report').'</h2>';
 	echo xhtmlForm();
-	echo 'From date: '.xhtmlInput('sdate', '2008-04-01 00:00').'<br/>';
+	echo 'From date: '.xhtmlInput('sdate', sql_datetime($start_date)).'<br/>';
 	echo 'To date: '.xhtmlInput('edate', 'now').'<br/>';
 	echo xhtmlSubmit('Show');
 	echo xhtmlFormClose();

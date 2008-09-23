@@ -70,7 +70,6 @@ function messageRow($row, $i)
 	return $out;
 }
 
-
 function blogRow($row, $i)
 {
 	global $session;
@@ -92,6 +91,40 @@ function blogRow($row, $i)
 
 	if ($session->isAdmin) {
 		$out .= '<br/>'.coreButton('Delete', '?blog&blogremove='.$row['blogId']);
+	}
+	$out .= '<br/><br/></td></tr>';
+
+	return $out;
+}
+
+function chatMessageRow($row, $i)
+{
+	global $session;
+
+	if ($session->isAdmin && !empty($_GET['chatmsgremove']) && $_GET['chatmsgremove'] == $row['chatId']) {
+//FIXME: TODO, DELETE CHAT MESSAGES?
+//		markMessageDeleted($row['msgId']);
+		$i--;
+		return;
+	}
+
+	//$out  = '<tr class="'.($i%2 ? 'gb_row_even' : 'gb_row_odd').'">';
+	$out  = '<tr>';
+	$out .= '<td>'.Users::linkThumb($row['authorId']).'</td>';
+	$out .= '<td>'.Users::link($row['authorId']).' wrote at '.formatTime($row['msgDate']).' to '.Users::link($row['userId']).'<br/>';
+	$out .= formatUserInputText($row['msg']).'<br/>';
+	if ($row['msgRead']) {
+		$out .= '<i>Message read</i>';
+	} else {
+		$out .= '<b>Message is unread</b>';
+	}
+
+	if ($session->isAdmin) {
+		$out .= '<br/>'.coreButton('Delete', '?msg&chatremove='.$row['chatId']);
+	}
+	if ($session->isAdmin || $session->id == $row['fromId'] || $session->id == $row['toId']) {
+		//FIXME show history between these two users
+		//$out .= '<a href="">History</a>';
 	}
 	$out .= '<br/><br/></td></tr>';
 
@@ -145,17 +178,55 @@ if (isset($_GET['gb'])) {
 	foreach ($list as $row) {
 		echo showThumb($row['settingValue'], '', 270, 200);
 		if (isInQueue($row['settingValue'], MODERATION_PRES_IMAGE)) {
-			echo 'IN MODERATION QUEUE!<br/>';
+			echo '<br/><b>IN MODERATION QUEUE!</b>';
 		}
+		echo '<br/>Owner: '.makeUserLink($row['ownerId']).'<br/>';
+		echo 'Time Saved: '.$row['timeSaved'].'<br/>';
 	}
 
 
+} else if (isset($_GET['gallimg'])) {
+	echo '<h1>Incoming GALLERY IMAGES</h1>';
+
+	$tot_cnt = $files->getFileCount(FILETYPE_USERFILE, 0, 0, MEDIATYPE_IMAGE);
+
+	$pager = makePager($tot_cnt, 10);
+
+	echo $pager['head'];
+
+	$list = $files->getFilesByMediaType(FILETYPE_USERFILE, 0, 0, MEDIATYPE_IMAGE, $pager['limit'], 'DESC');
+
+	foreach ($list as $row) {
+		echo showThumb($row['fileId'], '', 270, 200);
+		if (isInQueue($row['fileId'], MODERATION_FILE)) {
+			echo '<br/><b>IN MODERATION QUEUE!</b>';
+		}
+		echo '<br/>Owner: '.makeUserLink($row['ownerId']).'<br/>';
+		echo 'Time Uploaded: '.$row['timeUploaded'].'<br/>';
+	}
+
+
+} else if (isset($_GET['chatmsg'])) {
+	echo '<h1>Incoming CHAT MESSAGES</h1>';
+
+	$tot_cnt = getAllChatMessagesCount();
+
+	$pager = makePager($tot_cnt, 10);
+
+	echo $pager['head'];
+
+	$list = getAllChatMessages($pager['limit']);
+
+	echo xhtmlTable($list, '', 'chatMessageRow');
+	
 } else {
 	echo '<h1>Incoming objects</h1>';
 	echo '<a href="?gb">GUESTBOOK</a><br/>';
 	echo '<a href="?msg">MESSAGES</a><br/>';
 	echo '<a href="?blog">BLOGS</a><br/>';
 	echo '<a href="?profimg">PROFILE IMAGES</a><br/>';
+	echo '<a href="?gallimg">GALLERY IMAGES</a><br/>';
+	echo '<a href="?chatmsg">CHAT MESSAGES</a><br/>';
 }
 
 require('design_admin_foot.php');;
