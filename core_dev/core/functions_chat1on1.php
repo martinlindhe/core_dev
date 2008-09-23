@@ -88,7 +88,7 @@ function getAllChatMessages($_limit_sql)
 
 	$q = 'SELECT * FROM tblChat';
 	if ($_limit_sql) $q .= $_limit_sql;
-	return $db->getOneItem($q);
+	return $db->getArray($q);
 }
 
 
