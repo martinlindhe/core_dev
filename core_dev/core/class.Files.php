@@ -371,7 +371,7 @@ class Files
 
 			//notify subscribers
 			if (!empty($config['subscriptions']['notify'])) {
-				notifySubscribers(SUBSCRIPTION_FILES, $fileId);
+				notifySubscribers(SUBSCRIPTION_FILES, $ownerId, $fileId);
 			}
 		}
 		if ($fileType == FILETYPE_USERDATA) {

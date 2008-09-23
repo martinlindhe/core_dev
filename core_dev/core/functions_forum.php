@@ -195,7 +195,7 @@ function addForumMessage($parentId, $subject, $body, $sticky = 0)
 	//Check if there is any users who should be notified about this new message
 	if ($config['subscriptions']['notify']) {
 		//TODO: Not ideal, would be neat to be able to insert text from this post in notification message
-		notifySubscribers(SUBSCRIPTION_FORUM, $parentId);
+		notifySubscribers(SUBSCRIPTION_FORUM, $parentId, 0);
 	}
 	return $itemId;
 }

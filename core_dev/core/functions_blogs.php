@@ -31,7 +31,7 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
 	}
 	//notify subscribers
 	if ($config['subscriptions']['notify']) {
-		notifySubscribers(SUBSCRIPTION_BLOG, $session->id);
+		notifySubscribers(SUBSCRIPTION_BLOG, $session->id, $blogId);
 	}
 
 	return $blogId;

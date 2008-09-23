@@ -132,10 +132,10 @@ function getSubscribers($type, $itemId)
 	return $db->getArray($q);
 }
 
-function notifySubscribers($type, $itemId)
+function notifySubscribers($type, $itemId, $newItemId)
 {
-	global $db;
-	if (!is_numeric($type) || !is_numeric($itemId)) return false;
+	global $db, $config, $files;
+	if (!is_numeric($type) || !is_numeric($itemId) || !is_numeric($newItemId)) return false;
 
 	$subscribers = getSubscribers($type, $itemId);
 
@@ -159,7 +159,7 @@ function notifySubscribers($type, $itemId)
 					smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
 				}
 			case SUBSCRIPTION_BLOG:
-				$blog = getBlog($subscriber['itemId']);
+				$blog = getBlog($newItemId);
 				if (!$blog['isPrivate'] || isFriends($blog['userId'], $subscriber['ownerId'])) {
 					$subject = $config['subscriptions']['subject']['blog'];
 					$message = $config['subscriptions']['message']['blog'];
@@ -179,14 +179,14 @@ function notifySubscribers($type, $itemId)
 				}
 				break;
 			case SUBSCRIPTION_FILES:
-				$file = getFile($subscriber['itemId']);
+				$file = $files->getFile($newItemId);
 
 				$check = getCategoryPermissions(CATEGORY_USERFILE, $file['categoryId']);
 
 				if (($check & CAT_PERM_PUBLIC) || (($check & CAT_PERM_PRIVATE) && isFriends($file['ownerId'], $subscriber['ownerId']))) {
-					$subject = $config['subscriptions']['subject']['file'];
-					$message = $config['subscriptions']['message']['file'];
-					$pattern = array('/__USERNAME__/', '/__FILEID__/', '__OWNERID__', '__CATID__');
+					$subject = $config['subscriptions']['subject']['files'];
+					$message = $config['subscriptions']['message']['files'];
+					$pattern = array('/__USERNAME__/', '/__FILEID__/', '/__OWNERID__/', '/__CATID__/');
 					$replacement = array(
 						Users::getName($file['ownerId']),
 						$file['fileId'],
