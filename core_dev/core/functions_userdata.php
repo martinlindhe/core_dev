@@ -636,7 +636,7 @@ function getAllUserdataSettings($settingName, $_sql_limit = '')
 		$fieldId = getUserdataFieldIdByType($settingName);
 	}
 
-	$q = 'SELECT settingValue FROM tblSettings';
+	$q = 'SELECT * FROM tblSettings';
 	$q .= ' WHERE settingType='.SETTING_USERDATA;
 	$q .= ' AND settingName="'.$fieldId.'"';
 	$q .= ' ORDER BY timeSaved DESC'.$_sql_limit;
