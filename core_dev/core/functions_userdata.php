@@ -25,6 +25,7 @@ define('USERDATA_TYPE_CELLPHONE',			11);//UNIQUE: cellphone number
 define('USERDATA_TYPE_AVATAR',				12);//UNIQUE: avatar is radiobutton list but with images
 define('USERDATA_TYPE_BIRTHDATE',			13);//UNIQUE: Date of birth
 define('USERDATA_TYPE_GENDER',				14);//UNIQUE: radiobutton list-selector for gender
+define('USERDATA_TYPE_VIDEOPRES',			15);//UNIQUE: videopresentation (FIXME: IMPLEMENT!!!)
 
 //userdata module settings:
 $config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
