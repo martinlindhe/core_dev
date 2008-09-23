@@ -7,6 +7,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+//FIXME cleanup some constant naming. for example use EVENT_APPROVED_xxx
+
 define('EVENT_USER_LOGIN',			0x01);
 define('EVENT_USER_LOGOUT',			0x02);
 
