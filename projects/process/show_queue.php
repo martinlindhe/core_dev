@@ -22,7 +22,7 @@ if (!empty($list)) {
 			case PROCESSQUEUE_AUDIO_RECODE:
 				echo 'Audio recode to <b>"'.$row['orderParams'].'"</b><br/>';
 				break;
-					
+
 			case PROCESSQUEUE_IMAGE_RECODE:
 				echo 'Image recode to <b>"'.$row['orderParams'].'"</b><br/>';
 				break;
@@ -68,8 +68,8 @@ if (!empty($list)) {
 
 			$file = $files->getFileInfo($row['referId']);
 			if ($file) {
-				echo '<h3>Source file:</h3><br/>';
-				echo $file['fileName'].' ('.$file['fileMime'].')<br/>';
+				echo '<h3>Source file:</h3>';
+				echo 'filename: '.$file['fileName'].' ('.$file['fileMime'].')<br/>';
 				echo 'size: '.formatDataSize($file['fileSize']).'<br/>';
 				echo 'sha1: '.$files->sha1($row['referId']).'<br/>';
 			}

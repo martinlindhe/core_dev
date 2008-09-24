@@ -10,8 +10,6 @@ $fileId = $_GET['id'];
 
 require('design_head.php');
 
-wiki('ProcessShowfileStatus');
-
 showFileQueueStatus($fileId);
 
 $file = $files->getFileInfo($fileId);
@@ -25,7 +23,7 @@ foreach ($list as $row) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['fileId'].'">'.$row['fileId'].'</a> '.formatDataSize($row['fileSize']).' '.$row['fileMime'].'<br/>';
 }
 echo '<br/>';
-	
+
 $files->updateFile($fileId);
 
 echo '<a href="http_enqueue.php?id='.$fileId.'">Create process (media conversion, or further processing)</a>';
