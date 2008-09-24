@@ -6,12 +6,19 @@ $session->requireLoggedIn();
 require('design_head.php');
 
 if (isset($_GET['completed'])) {
-	$list = getProcessQueue(0, true);
+	$tot_cnt = getProcessQueueCount(true);
 } else {
-	$list = getProcessQueue(50);
+	$tot_cnt = getProcessQueueCount();
 }
 
-echo count($list) . ' items';
+$pager = makePager($tot_cnt, 10);
+echo $pager['head'];
+
+if (isset($_GET['completed'])) {
+	$list = getProcessQueue($pager['limit'], true);
+} else {
+	$list = getProcessQueue($pager['limit']);
+}
 
 if (!empty($list)) {
 	foreach ($list as $row) {
