@@ -56,12 +56,11 @@ function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
 {
 	global $db;
 	if (!is_numeric($ownerId) || !is_numeric($_type) || !$settingName) return false;
-	if ($_type != SETTING_APPDATA && !$ownerId) return false;
 
-	$settingName = $db->escape($settingName);
-	$defaultValue = $db->escape($defaultValue);
-
-	$q = 'SELECT settingValue FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+	$q = 'SELECT settingValue FROM tblSettings';
+	$q .= ' WHERE settingType='.$_type;
+	$q .= ' AND ownerId='.$ownerId;
+	$q .= ' AND settingName="'.$db->escape($settingName).'"';
 	$result = $db->getOneItem($q);
 
 	if ($result) return $result;
