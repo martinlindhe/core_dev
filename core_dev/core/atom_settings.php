@@ -61,9 +61,9 @@ function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
 	$q .= ' WHERE settingType='.$_type;
 	$q .= ' AND ownerId='.$ownerId;
 	$q .= ' AND settingName="'.$db->escape($settingName).'"';
-	$result = $db->getOneItem($q);
+	$result = $db->getOneRow($q);
 
-	if ($result) return $result;
+	if ($result) return $result['settingValue'];
 	return $defaultValue;
 }
 
