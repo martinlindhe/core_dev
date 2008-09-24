@@ -90,11 +90,13 @@ SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `tblChat` (
+  `chatId` int(11) unsigned NOT NULL auto_increment,
   `userId` int(11) NOT NULL,
   `authorId` int(11) NOT NULL,
   `msg` varchar(255) NOT NULL,
   `msgDate` datetime NOT NULL,
   `msgRead` tinyint(1) NOT NULL,
+  PRIMARY KEY  (`chatId`),
   KEY `user_and_author_ids` (`authorId`,`userId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -439,7 +441,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL auto_increment,
-  `ownerId` smallint(5) unsigned NOT NULL default '0',
+  `ownerId` int(10) unsigned NOT NULL default '0',
   `settingName` varchar(200) default NULL,
   `settingValue` text,
   `settingType` tinyint(3) unsigned NOT NULL default '0',
