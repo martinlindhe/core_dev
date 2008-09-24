@@ -66,6 +66,7 @@ if (!empty($list)) {
 				echo '<a href="show_file_status.php?id='.$row['referId'].'">Show file status</a><br/>';
 			}
 
+			$files->updateFile($row['referId']);
 			$file = $files->getFileInfo($row['referId']);
 			if ($file) {
 				echo '<h3>Source file:</h3>';
