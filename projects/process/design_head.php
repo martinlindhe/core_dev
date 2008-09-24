@@ -1,4 +1,5 @@
 <?php
+$meta_css[] = 'css/site.css';
 createXHTMLHeader();
 ?>
 <div id="header">
