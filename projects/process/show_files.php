@@ -5,8 +5,6 @@ $session->requireLoggedIn();
 
 require('design_head.php');
 
-wiki('ProcessShowFiles');
-
 echo '<input type="checkbox" checked="checked="/> Show all ';
 echo '<input type="checkbox"/> Images ';
 echo '<input type="checkbox"/> Videos ';
