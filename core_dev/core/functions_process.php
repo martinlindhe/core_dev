@@ -146,17 +146,31 @@ function getProcessQueueEntry($_id = 0)
 /**
  * Returns the oldest work orders still active for processing
  */
-function getProcessQueue($_limit = 10, $completed = false)
+function getProcessQueue($_limit = '', $completed = false)
 {
 	global $db;
-	if (!is_numeric($_limit) || !is_bool($completed)) return false;
+	if (!is_bool($completed)) return false;
 
 	if ($completed) $cnd = 'orderStatus != '.ORDER_NEW;
 	else $cnd = 'orderStatus = '.ORDER_NEW;
 
-	$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated DESC';
-	if ($_limit) $q .= ' LIMIT '.$_limit;
+	$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated DESC'.$_limit;
 	return $db->getArray($q);
+}
+
+/**
+ * Returns the number of entries in work queue
+ */
+function getProcessQueueCount($completed = false)
+{
+	global $db;
+	if (!is_bool($completed)) return false;
+
+	if ($completed) $cnd = 'orderStatus != '.ORDER_NEW;
+	else $cnd = 'orderStatus = '.ORDER_NEW;
+
+	$q = 'SELECT COUNT(entryId) FROM tblProcessQueue WHERE '.$cnd;
+	return $db->getOneItem($q);
 }
 
 /**
