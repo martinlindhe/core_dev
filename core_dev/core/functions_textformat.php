@@ -10,7 +10,7 @@ $config['url_rewrite_length'] = 45;		//max length of visible url's after rewrite
 $config['url_rewrite_trailing'] = 15;	//number of characters to save at the end of the string
 $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disable redir feature
 
-function getThumbUrl($_id, $w = 0, $h = 0)
+function getThumbUrl($_id, $w = 0, $h = 0, $fullUrl = false)
 {
 	global $files, $config;
 
@@ -19,7 +19,10 @@ function getThumbUrl($_id, $w = 0, $h = 0)
 	if (is_float($w)) $w = floor($w);
 	if (is_float($h)) $h = floor($h);
 
-	$str = $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h;
+	$str = '';
+	if ($fullUrl) $str .= $config['app']['full_url'];
+	
+	$str .= $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h;
 	return $str;
 }
 
