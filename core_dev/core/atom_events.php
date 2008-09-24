@@ -21,6 +21,7 @@ define('EVENT_PRES_APPROVED',		0x55);	//referer = fileId
 define('EVENT_PRES_DENIED',			0x56);	//referer = fileId
 define('EVENT_RECORDED_BLOG',		0x57);	//referer = fileId
 define('EVENT_CALLER_UNREGISTER',	0x58);
+define('EVENT_CALL_FORWARDED',		0x59);
 
 define('EVENT_MSG_APPROVED',		0x60);	//referer = fileId
 define('EVENT_MSG_DENIED',			0x61);	//referer = fileId
@@ -36,6 +37,7 @@ $event_name[EVENT_PRES_DENIED] = 'Denied pres.';
 
 $event_name[EVENT_CALL_BEGIN] = 'Call begin';
 $event_name[EVENT_CALL_END] = 'Call end';
+$event_name[EVENT_CALL_FORWARDED] = 'Call forwarded';
 $event_name[EVENT_RECORDED_PRES] = 'Recorded pres.';
 $event_name[EVENT_RECORDED_MSG] = 'Recorded msg.';
 $event_name[EVENT_RECORDED_CHATREQ] = 'Recorded chatreq.';
