@@ -364,6 +364,13 @@ function toggle_checkboxes(type, frm)
 	}
 }
 
+function confirm_chk(t) {
+	var r=confirm(t);
+	if (r==true) return true;
+	return false;
+}
+
+
 
 
 
