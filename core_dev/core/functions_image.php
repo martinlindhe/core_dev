@@ -8,7 +8,7 @@
  */
 
 $config['image']['resample_resized']	= true;		///< use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
-$config['image']['jpeg_quality']			= 70;			///< 0-100% quality for recompression of very large uploads (like digital camera pictures)
+$config['image']['jpeg_quality']		= 75;		///< 0-100% quality for recompression of very large uploads (like digital camera pictures)
 
 /**
  * Resizes specified image file to specified dimensions
@@ -307,7 +307,10 @@ function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 1
 
 	$ttf = false;
 	if (!is_numeric($font)) {
-		if (substr(strtolower($font), -4) == '.ttf') {
+		if (substr(strtolower($font), -4) == '.ttf' || substr(strtolower($font), -4) == '.otf') {
+			//supported font formats:
+			//.ttf (true type font)
+			//.otf (open type font)
 			$ttf = true;
 
 			$fh = 0;
