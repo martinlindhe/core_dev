@@ -21,7 +21,7 @@ class Render_Table_XLS extends Render_Table
 	function render()
 	{
 		//Begin Of File marker
-		$out = pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0);
+		$out = pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0);	//FIXME move general xls functionality to general xls writer class
 
 		$row = 0;
 		$col = 0;

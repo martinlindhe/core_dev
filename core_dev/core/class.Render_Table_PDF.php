@@ -2,9 +2,12 @@
 /**
  * $Id$
  *
- * Wrapper class for FPDF
+ * Renders a table of data in XHTML (.xhtml) format
+ *
+ * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+//FIXME move fpdf depencency & functionality to general pdf writer class
 require('ext/fpdf.php');
 
 //FIXME output like rest of Render_Table

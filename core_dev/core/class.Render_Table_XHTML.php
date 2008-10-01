@@ -2,10 +2,12 @@
 /**
  * $Id$
  *
- * Functions to create a XHTML table
+ * Renders a table of data in XHTML (.xhtml) format
  *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
+
+//FIXME use functions_xhtml.php internally??
 
 class Render_Table_XHTML extends Render_Table
 {
