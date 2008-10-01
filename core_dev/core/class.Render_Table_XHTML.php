@@ -7,50 +7,53 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-class XHTML
+class Render_Table_XHTML extends Render_Table
 {
-	private $columns = 3;		//std
-	private $data = array();	//std
+	private $table_class = '';
+	private $table_style = '';
+	function tableClass($class) $this->table_class = $class;
+	function tableStyle($style) $this->table_style = $style;
 
-	/**
-	 * Set the number of columns (fields) in the file
-	 */
-	function setColumns($val)			//std funct
+	private $tr_class = '';
+	private $tr_style = '';
+	function trClass($class) $this->tr_class = $class;
+	function trStyle($style) $this->tr_style = $style;
+
+	private $td_class = '';
+	private $td_style = '';
+	function tdClass($class) $this->td_class = $class;
+	function tdStyle($style) $this->td_style = $style;
+
+	function render()
 	{
-		$this->columns = $val;
-	}
-
-	/**
-	 * Add a value to the data buffer
-	 */
-	function add($val)					//std funct
-	{
-		$this->data[] = $val;
-	}
-
-	/**
-	 * Outputs the data to specified file
-	 */
-	function write($filename = 'stdout')	//std function. FIXME rename to "render". add "output" function to write to file
-	{
-		$fp = fopen($filename, 'w');
-
-		fwrite($fp, '<table border="1">');
+		$out = '<table'.
+			($this->table_class ? ' class="'.$this->table_class.'"' : '').
+			($this->table_style ? ' style="'.$this->table_style.'"' : '').
+			'>';
 
 		$i = 0;
 		foreach ($this->data as $data) {
 			if ($i == 0) {
-				fwrite($fp, '<tr>');
+				$out .= '<tr'.
+					($this->tr_class ? ' class="'.$this->tr_class.'"' : '').
+					($this->tr_style ? ' style="'.$this->tr_style.'"' : '').
+					'>';
 			}
-			fwrite($fp, '<td>'.$data.'</td>');	//FIXME only escape with " if string contains $this->separator (?)
+			$out .= '<td'.
+				($this->td_class ? ' class="'.$this->td_class.'"' : '').
+				($this->td_style ? ' style="'.$this->td_style.'"' : '').
+				'>'.$data.'</td>';
+
 			$i++;
 			if ($i == $this->columns) {
-				fwrite($fp, '</tr>');
+				$out .= '</tr>';
 				$i = 0;
 			}
 		}
 
-		fwrite($fp, '</table>');
-		fclose($fp);
+		$out .= '</table>';
+		return $out;
 	}
 }
+
+?>

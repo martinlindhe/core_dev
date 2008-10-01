@@ -5,8 +5,9 @@
  * Wrapper class for FPDF
  */
 
-define('FPDF_FONTPATH', $config['core']['fs_root'].'core/ext/fpdf_fonts/');
-require($config['core']['fs_root'].'core/ext/fpdf.php');
+require('ext/fpdf.php');
+
+//FIXME output like rest of Render_Table
 
 class PDF extends FPDF
 {

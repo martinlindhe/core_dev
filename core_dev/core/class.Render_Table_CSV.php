@@ -2,28 +2,17 @@
 /**
  * $Id$
  *
- * Functions to create a Comma-Separated Values file (.csv)
+ * Renders a table of data in Comma-Separated Values (.csv) format
  *
  * http://en.wikipedia.org/wiki/Comma-separated_values
  *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-class CSV
+class Render_Table_CSV extends Render_Table
 {
 	private $EOL = "\r\n";		//DOS style line endings
 	private $separator = ",";
-	private $columns = 3;
-
-	private $data = array();
-
-	/**
-	 * Set the number of columns (fields) in the file
-	 */
-	function setColumns($val)
-	{
-		$this->columns = $val;
-	}
 
 	/**
 	 * Set the line ending characters (usually "\r\n" or "\n")
@@ -41,33 +30,22 @@ class CSV
 		$this->separator = $val;
 	}
 
-	/**
-	 * Add a value to the data buffer
-	 */
-	function add($val)
+	function render()
 	{
-		$this->data[] = $val;
-	}
-
-	/**
-	 * Outputs the data to specified file
-	 */
-	function write($filename)
-	{
-		$fp = fopen($filename, 'w');
-
+		$out = '';
 		$i = 0;
 		foreach ($this->data as $data) {
-			fwrite($fp, '"'.$data.'"');	//FIXME only escape with " if string contains $this->separator (?)
+			$out .= '"'.$data.'"';	//FIXME only escape with " if string contains $this->separator (?)
 			$i++;
 			if ($i == $this->columns) {
-				fwrite($fp, $this->EOL);
+				$out .= $this->EOL;
 				$i = 0;
 			} else {
-				fwrite($fp, $this->separator);
+				$out .= $this->separator;
 			}
 		}
-
-		fclose($fp);
+		return $out;
 	}
 }
+
+?>
