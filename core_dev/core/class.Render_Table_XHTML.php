@@ -7,7 +7,7 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-//FIXME use functions_xhtml.php internally??
+require_once('output_xhtml.php');
 
 class Render_Table_XHTML extends Render_Table
 {
@@ -28,6 +28,7 @@ class Render_Table_XHTML extends Render_Table
 
 	function render()
 	{
+		//FIXME use xhtmlTable() with callback?
 		$out = '<table'.
 			($this->table_class ? ' class="'.$this->table_class.'"' : '').
 			($this->table_style ? ' style="'.$this->table_style.'"' : '').

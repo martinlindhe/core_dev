@@ -20,7 +20,6 @@ class Render_Table_XLS extends Render_Table
 {
 	function render()
 	{
-		//Begin Of File marker
 		$out = xlsBOF();
 
 		$row = 0;
@@ -38,7 +37,6 @@ class Render_Table_XLS extends Render_Table
 			}
 		}
 
-		//End Of File marker
 		$out .= xlsEOF();
 		return $out;
 	}
