@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions_email.php 3743 2008-05-22 12:35:11Z ml $
+ * $Id$
  *
  * \author Linus Wiklund, 2008 <linus.wiklund@ljw.se>
  */
