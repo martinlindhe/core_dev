@@ -40,6 +40,7 @@ class XLS
 
 		foreach ($this->labels as $label) {
 			//Writes a label (text)
+			//FIXME support unicode strings, see pg 18 in Excel97-2007BinaryFileFormat(xls)Specification.xps
 			$len = strlen($label[2]);
 			fwrite($fp, pack("ssssss", 0x204, 8 + $len, $label[0], $label[1], 0x0, $len));
 			fwrite($fp, $label[2]);
