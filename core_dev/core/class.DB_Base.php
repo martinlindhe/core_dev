@@ -11,6 +11,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+//FIXME rename to class.DB.php + require alla db klasser och i konstruktorn här berätta vilken driver som ska användas
+
 abstract class DB_Base
 {
 	/****************************************************/
