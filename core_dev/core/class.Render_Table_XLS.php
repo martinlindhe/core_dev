@@ -11,31 +11,25 @@
  *
  * FIXME try Office 2007
  *
- * Parts of the code is based on http://px.sklar.com/code.html/id=488 by Christian Novak
- *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
+
+require_once('output_xls.php');
 
 class Render_Table_XLS extends Render_Table
 {
 	function render()
 	{
 		//Begin Of File marker
-		$out = pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0);	//FIXME move general xls functionality to general xls writer class
+		$out = xlsBOF();
 
 		$row = 0;
 		$col = 0;
 		foreach ($this->data as $data) {
 			if (is_numeric($data)) {
-				//Writes a Number (double)
-				$out .= pack("sssss", 0x203, 14, $row, $col, 0x0);
-				$out .= pack("d", $data);
+				$out .= xlsWriteDouble($row, $col, $data);
 			} else {
-				//Writes a label (text)
-				//FIXME support unicode strings, see pg 18 in Excel97-2007BinaryFileFormat(xls)Specification.xps
-				$len = strlen($data);
-				$out .= pack("ssssss", 0x204, 8 + $len, $row, $col, 0x0, $len);
-				$out .= $data;
+				$out .= xlsWriteLabel($row, $col, $data);
 			}
 			$col++;
 			if ($col == $this->columns) {
@@ -45,7 +39,7 @@ class Render_Table_XLS extends Render_Table
 		}
 
 		//End Of File marker
-		$out .= pack("ss", 0x0A, 0x00);
+		$out .= xlsEOF();
 		return $out;
 	}
 }

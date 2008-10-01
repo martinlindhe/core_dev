@@ -13,18 +13,18 @@ class Render_Table_XHTML extends Render_Table
 {
 	private $table_class = '';
 	private $table_style = '';
-	function tableClass($class) $this->table_class = $class;
-	function tableStyle($style) $this->table_style = $style;
+	function tableClass($class) { $this->table_class = $class; }
+	function tableStyle($style) { $this->table_style = $style; }
 
 	private $tr_class = '';
 	private $tr_style = '';
-	function trClass($class) $this->tr_class = $class;
-	function trStyle($style) $this->tr_style = $style;
+	function trClass($class) { $this->tr_class = $class; }
+	function trStyle($style) { $this->tr_style = $style; }
 
 	private $td_class = '';
 	private $td_style = '';
-	function tdClass($class) $this->td_class = $class;
-	function tdStyle($style) $this->td_style = $style;
+	function tdClass($class) { $this->td_class = $class; }
+	function tdStyle($style) { $this->td_style = $style; }
 
 	function render()
 	{
