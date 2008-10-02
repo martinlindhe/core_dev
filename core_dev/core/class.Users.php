@@ -344,7 +344,7 @@ class Users
 		$q = 'DELETE FROM tblUsers WHERE userId='.$_id;
 		$db->delete($q);
 
-		deleteSettings(SETTING_USERDATA, $_id);
+		deleteSettings(SETTING_USERDATA, 0, $_id);
 		deleteAllContacts($_id);
 		//FIXME delete other traces too
 	}

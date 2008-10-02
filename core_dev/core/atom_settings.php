@@ -104,15 +104,17 @@ function readAllSettings($_type, $categoryId = 0, $ownerId = 0)
  * Deletes all settings for owner, of specified type
  *
  * \param $_type type of settings
+ * \param $categoryId setting category (use 0 for all)
  * \param $ownerId owner of the settings
  * \return number of settings removed
  */
-function deleteSettings($_type, $ownerId)
+function deleteSettings($_type, $categoryId, $ownerId)
 {
 	global $db;
-	if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
 	$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type;
+	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 	return $db->delete($q);
 }
 
