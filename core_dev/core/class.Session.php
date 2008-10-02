@@ -238,6 +238,16 @@ class Session
 		return $db->insert($q);
 	}
 
+	function save($settingName, $settingValue, $categoryId = 0)
+	{
+		return saveSetting(SETTING_USERDATA, $categoryId, $this->id, $settingName, $settingValue);
+	}
+
+	function load($settingName, $defaultValue, $categoryId = 0)
+	{
+		return loadSetting(SETTING_USERDATA, $categoryId, $this->id, $settingName, $defaultValue);
+	}
+
 	/**
 	 * Displays session error
 	 */

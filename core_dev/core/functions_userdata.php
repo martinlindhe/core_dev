@@ -896,14 +896,14 @@ function editUserdataDropdown($name, $field, $default = '')
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
+		$session->save($fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 
 		if (getUserdataFieldType($fieldId) == USERDATA_TYPE_THEME) {
 			$session->theme = $curr;
 		}
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, 0);
+		$curr = $session->load($fieldId, 0);
 	}
 
 	if (!$curr) $curr = $default;
@@ -918,10 +918,10 @@ function editUserdataInput($name, $field)
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
+		$session->save($fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
+		$curr = $session->load($fieldId, '');
 	}
 	return xhtmlInput($field, $curr);
 }
@@ -933,10 +933,10 @@ function editUserdataCheckbox($name, $field)
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
+		$session->save($fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
+		$curr = $session->load($fieldId, '');
 	}
 	return xhtmlCheckbox($field, $name, 1, $curr);
 }
@@ -948,10 +948,10 @@ function editUserdataTextarea($name, $field, $width, $height)
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
+		$session->save($fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
+		$curr = $session->load($fieldId, '');
 	}
 	return xhtmlTextarea($field, $curr, $width, $height);
 }
@@ -968,18 +968,18 @@ function editUserdataImage($name, $field)
 		$curr = $files->handleUpload($_FILES[$field], FILETYPE_USERDATA, $fieldId);
 		$nfo = $files->getFile($curr);
 		if ($nfo['mediaType'] == MEDIATYPE_IMAGE) {
-			saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $curr);
+			$session->save($fieldId, $curr);
 		} else {
 			$out .= '<div class="critical">'.t('The uploaded file is not a image. You need to upload a image to use as a presentation image!').'</div>';
 			$curr = 0;
 		}
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
+		$curr = $session->load($fieldId, '');
 	}
 
 	if (!empty($_GET['delpic']) && $_GET['delpic'] == $curr) {
 		$files->deleteFile($curr);
-		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
+		$session->save($fieldId, '');
 		$curr = 0;
 	}
 
