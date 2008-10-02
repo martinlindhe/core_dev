@@ -87,7 +87,7 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
  * \param $ownerId owner of the settings
  * \return array of settings
  */
-function readAllSettings($_type, $categoryId = 0, $ownerId = 0)
+function readAllSettings($_type, $categoryId = 0, $ownerId = 0)	//rename to loadSettings() ?
 {
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
@@ -122,16 +122,20 @@ function deleteSettings($_type, $categoryId, $ownerId)
  * Deletes specified setting for owner, of specified type
  *
  * \param $_type type of setting
+ * \param $categoryId setting category
  * \param $ownerId owner of the setting
  * \param $settingName name of the setting
  * \return number of settings removed
  */
-function deleteSetting($_type, $ownerId, $settingName)
+function deleteSetting($_type, $categoryId, $ownerId, $settingName)
 {
 	global $db;
-	if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
+	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
-	$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName = "'.$settingName.'" LIMIT 1';
+	$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
+	$q .= ' AND categoryId='.$categoryId;
+	$q .= ' AND settingType='.$_type;
+	$q .= ' AND settingName = "'.$settingName.'" LIMIT 1';
 	return $db->delete($q);
 }
 

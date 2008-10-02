@@ -110,7 +110,7 @@ if (!isset($_GET['moded'])) {
 					systemMessage($owner, $subject, $msg);
 				}
 
-				deleteSetting(SETTING_USERDATA, $owner, getUserdataFieldIdByType(USERDATA_TYPE_IMAGE));
+				deleteSetting(SETTING_USERDATA, 0, $owner, getUserdataFieldIdByType(USERDATA_TYPE_IMAGE));
 				$files->deleteFile($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
 				break;
