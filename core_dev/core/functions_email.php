@@ -98,7 +98,7 @@ function contact_users($message, $subject, $all, $presvid, $logged_in_days, $day
 			//FIXME denna kod är m2w-specifik och har inget att göra i core_dev. urval borde göras efter USERDATA_TYPE_VIDEOPRES
 			if (!empty($presvid)) {
 				if ($presvid == 1) {
-					$cId = loadSetting(SETTING_USERDATA, $row['userId'], 'm2w_id');
+					$cId = loadSetting(SETTING_USERDATA, 0, $row['userId'], 'm2w_id');
 					if (!$cId) continue;
 					$vid_pres = $files->getFiles(FILETYPE_VIDEOPRES, $cId);
 					if (!is_array($vid_pres)) continue;

@@ -57,18 +57,20 @@ function saveSetting($_type, $categoryId, $ownerId, $settingName, $settingValue)
  * Loads a setting associated with $ownerId
  *
  * \param $_type type of setting
+ * \param $categoryId setting category (use 0 if unneeded)
  * \param $ownerId owner of the setting
  * \param $settingName name of the setting, text-string
  * \param $defaultValue is the default value to return if no such setting was previously stored
  * \return the value of the requested setting
  */
-function loadSetting($_type, $ownerId, $settingName, $defaultValue = '')
+function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue = '')
 {
 	global $db;
-	if (!is_numeric($ownerId) || !is_numeric($_type) || !$settingName) return false;
+	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !$settingName) return false;
 
 	$q = 'SELECT settingValue FROM tblSettings';
 	$q .= ' WHERE settingType='.$_type;
+	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 	$q .= ' AND ownerId='.$ownerId;
 	$q .= ' AND settingName="'.$db->escape($settingName).'"';
 	$result = $db->getOneRow($q);

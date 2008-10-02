@@ -682,7 +682,7 @@ class Users
 	{
 		if (!is_numeric($_id)) return false;
 
-		if (loadSetting(SETTING_USERDATA, $_id, 'activated')) return true;
+		if (loadSetting(SETTING_USERDATA, 0, $_id, 'activated')) return true;
 		return false;
 	}
 

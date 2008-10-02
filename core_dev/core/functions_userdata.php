@@ -903,7 +903,7 @@ function editUserdataDropdown($name, $field, $default = '')
 			$session->theme = $curr;
 		}
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, 0);
+		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, 0);
 	}
 
 	if (!$curr) $curr = $default;
@@ -921,7 +921,7 @@ function editUserdataInput($name, $field)
 		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
 	}
 	return xhtmlInput($field, $curr);
 }
@@ -936,7 +936,7 @@ function editUserdataCheckbox($name, $field)
 		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
 	}
 	return xhtmlCheckbox($field, $name, 1, $curr);
 }
@@ -951,7 +951,7 @@ function editUserdataTextarea($name, $field, $width, $height)
 		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
 	}
 	return xhtmlTextarea($field, $curr, $width, $height);
 }
@@ -974,7 +974,7 @@ function editUserdataImage($name, $field)
 			$curr = 0;
 		}
 	} else {
-		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+		$curr = loadSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
 	}
 
 	if (!empty($_GET['delpic']) && $_GET['delpic'] == $curr) {
