@@ -34,18 +34,18 @@ function saveSetting($_type, $categoryId, $ownerId, $settingName, $settingValue)
 	$settingValue = $db->escape($settingValue);
 
 	$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId;
-	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+	$q .= ' AND categoryId='.$categoryId;
 	$q .= ' AND settingType='.$_type;
 	$q .= ' AND settingName="'.$settingName.'"';
 	if ($db->getOneItem($q)) {
 		$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId;
-		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+		$q .= ' AND categoryId='.$categoryId;
 		$q .= ' AND settingType='.$_type;
 		$q .= ' AND settingName="'.$settingName.'"';
 		$db->update($q);
 	} else {
 		$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',';
-		if ($categoryId) $q .= 'categoryId='.$categoryId.',';
+		$q .= 'categoryId='.$categoryId.',';
 		$q .= 'settingType='.$_type.',settingName="'.$settingName.'",';
 		$q .= 'settingValue="'.$settingValue.'",timeSaved=NOW()';
 		$db->insert($q);
@@ -70,7 +70,7 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
 
 	$q = 'SELECT settingValue FROM tblSettings';
 	$q .= ' WHERE settingType='.$_type;
-	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+	$q .= ' AND categoryId='.$categoryId;
 	$q .= ' AND ownerId='.$ownerId;
 	$q .= ' AND settingName="'.$db->escape($settingName).'"';
 	$result = $db->getOneRow($q);
