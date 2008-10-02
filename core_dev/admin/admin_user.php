@@ -61,7 +61,7 @@ echo '<h2>All userdata</h2>';
 if (!empty($_POST['new_ud_key']) && isset($_POST['new_ud_val'])) {
 	saveSetting(SETTING_USERDATA, 0, $userId, $_POST['new_ud_key'], $_POST['new_ud_val']);
 }
-$list = readAllSettings(SETTING_USERDATA, $userId);
+$list = readAllSettings(SETTING_USERDATA, 0, $userId);
 
 echo '<table>';
 echo '<tr>';

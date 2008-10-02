@@ -83,16 +83,18 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
  * Returns array of all settings for requested owner
  *
  * \param $_type type of settings
+ * \param $categoryId setting category (use 0 for all)
  * \param $ownerId owner of the settings
  * \return array of settings
  */
-function readAllSettings($_type, $ownerId = 0)
+function readAllSettings($_type, $categoryId = 0, $ownerId = 0)
 {
 	global $db;
-	if (!is_numeric($ownerId) || !is_numeric($_type)) return false;
+	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
 	$q = 'SELECT * FROM tblSettings';
 	$q .= ' WHERE settingType='.$_type;
+	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
 	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 	$q .= ' ORDER BY settingName ASC';
 	return $db->getArray($q);
