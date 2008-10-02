@@ -670,7 +670,7 @@ class Users
 	{
 		if (!is_numeric($_id)) return false;
 
-		saveSetting(SETTING_USERDATA, $_id, 'activated', true);
+		saveSetting(SETTING_USERDATA, 0, $_id, 'activated', true);
 	}
 
 	/**

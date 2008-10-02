@@ -59,7 +59,7 @@ showComments(COMMENT_USER, $userId);
 
 echo '<h2>All userdata</h2>';
 if (!empty($_POST['new_ud_key']) && isset($_POST['new_ud_val'])) {
-	saveSetting(SETTING_USERDATA, $userId, $_POST['new_ud_key'], $_POST['new_ud_val']);
+	saveSetting(SETTING_USERDATA, 0, $userId, $_POST['new_ud_key'], $_POST['new_ud_val']);
 }
 $list = readAllSettings(SETTING_USERDATA, $userId);
 
@@ -76,7 +76,7 @@ foreach ($list as $row) {
 		deleteSetting(SETTING_USERDATA, $userId, $row['settingName']);
 		continue;
 	} else if (!empty($_POST['mod_ud_'.$row['settingId']]) && $row['settingValue'] != $_POST['mod_ud_'.$row['settingId']]) {
-		saveSetting(SETTING_USERDATA, $userId, $row['settingName'], $_POST['mod_ud_'.$row['settingId']]);
+		saveSetting(SETTING_USERDATA, 0, $userId, $row['settingName'], $_POST['mod_ud_'.$row['settingId']]);
 		$row['settingValue'] = $_POST['mod_ud_'.$row['settingId']];
 	}
 

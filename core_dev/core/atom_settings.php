@@ -18,26 +18,36 @@ $config['settings']['default_signature'] = 'Signature';	//default name of the us
  * Saves a setting associated with $ownerId
  *
  * \param $_type type of setting
+ * \param $categoryId setting category (use 0 if unneeded)
  * \param $ownerId owner of the setting
  * \param $settingName name of the setting, text-string
  * \param $settingValue value of the setting
  * \return true on success
  */
-function saveSetting($_type, $ownerId, $settingName, $settingValue)
+function saveSetting($_type, $categoryId, $ownerId, $settingName, $settingValue)
 {
 	global $db;
-	if (!is_numeric($ownerId) || !is_numeric($_type) || !$settingName) return false;
+	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !$settingName) return false;
 	if ($_type != SETTING_APPDATA && !$ownerId) return false;
 
 	$settingName = $db->escape($settingName);
 	$settingValue = $db->escape($settingValue);
 
-	$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+	$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId;
+	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+	$q .= ' AND settingType='.$_type;
+	$q .= ' AND settingName="'.$settingName.'"';
 	if ($db->getOneItem($q)) {
-		$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId.' AND settingType='.$_type.' AND settingName="'.$settingName.'"';
+		$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId;
+		if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+		$q .= ' AND settingType='.$_type;
+		$q .= ' AND settingName="'.$settingName.'"';
 		$db->update($q);
 	} else {
-		$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',settingType='.$_type.',settingName="'.$settingName.'",settingValue="'.$settingValue.'",timeSaved=NOW()';
+		$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',';
+		if ($categoryId) $q .= 'categoryId='.$categoryId.',';
+		$q .= 'settingType='.$_type.',settingName="'.$settingName.'",';
+		$q .= 'settingValue="'.$settingValue.'",timeSaved=NOW()';
 		$db->insert($q);
 	}
 	return true;

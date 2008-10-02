@@ -525,8 +525,8 @@ function handleRequiredUserdataFields($userId)
 				break;
 
 			case USERDATA_TYPE_LOCATION_SWE:
-				saveSetting(SETTING_USERDATA, $userId, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
-				saveSetting(SETTING_USERDATA, $userId, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
+				saveSetting(SETTING_USERDATA, 0, $userId, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
+				saveSetting(SETTING_USERDATA, 0, $userId, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
 				$val = $_POST['userdata_'.$row['fieldId']];
 				break;
 
@@ -536,7 +536,7 @@ function handleRequiredUserdataFields($userId)
 				break;
 		}
 
-		saveSetting(SETTING_USERDATA, $userId, $row['fieldId'], $val);
+		saveSetting(SETTING_USERDATA, 0, $userId, $row['fieldId'], $val);
 	}
 }
 
@@ -862,8 +862,8 @@ function editUserdataSettings($_userid = '')
 						echo '<div class="critical">'.t('The Swedish zipcode you entered is not valid!').'</div>';
 						$session->log('User entered invalid swedish zipcode: '.$_POST['userdata_'.$row['fieldId']], LOGLEVEL_WARNING);
 					} else {
-						saveSetting(SETTING_USERDATA, $_userid, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
-						saveSetting(SETTING_USERDATA, $_userid, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
+						saveSetting(SETTING_USERDATA, 0, $_userid, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
+						saveSetting(SETTING_USERDATA, 0, $_userid, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
 						$row['settingValue'] = $_POST['userdata_'.$row['fieldId']];
 					}
 					break;
@@ -878,7 +878,7 @@ function editUserdataSettings($_userid = '')
 			}
 
 			//Stores the setting
-			saveSetting(SETTING_USERDATA, $_userid, $row['fieldId'], $row['settingValue']);
+			saveSetting(SETTING_USERDATA, 0, $_userid, $row['fieldId'], $row['settingValue']);
 		}
 
 		echo '<tr>'.getUserdataInput($row).'</tr>';
@@ -896,7 +896,7 @@ function editUserdataDropdown($name, $field, $default = '')
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
+		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 
 		if (getUserdataFieldType($fieldId) == USERDATA_TYPE_THEME) {
@@ -918,7 +918,7 @@ function editUserdataInput($name, $field)
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
+		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
 		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
@@ -933,7 +933,7 @@ function editUserdataCheckbox($name, $field)
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
+		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
 		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
@@ -948,7 +948,7 @@ function editUserdataTextarea($name, $field, $width, $height)
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		saveSetting(SETTING_USERDATA, $session->id, $fieldId, $_POST[$field]);
+		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
 		$curr = loadSetting(SETTING_USERDATA, $session->id, $fieldId, '');
@@ -968,7 +968,7 @@ function editUserdataImage($name, $field)
 		$curr = $files->handleUpload($_FILES[$field], FILETYPE_USERDATA, $fieldId);
 		$nfo = $files->getFile($curr);
 		if ($nfo['mediaType'] == MEDIATYPE_IMAGE) {
-			saveSetting(SETTING_USERDATA, $session->id, $fieldId, $curr);
+			saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, $curr);
 		} else {
 			$out .= '<div class="critical">'.t('The uploaded file is not a image. You need to upload a image to use as a presentation image!').'</div>';
 			$curr = 0;
@@ -979,7 +979,7 @@ function editUserdataImage($name, $field)
 
 	if (!empty($_GET['delpic']) && $_GET['delpic'] == $curr) {
 		$files->deleteFile($curr);
-		saveSetting(SETTING_USERDATA, $session->id, $fieldId, '');
+		saveSetting(SETTING_USERDATA, 0, $session->id, $fieldId, '');
 		$curr = 0;
 	}
 
