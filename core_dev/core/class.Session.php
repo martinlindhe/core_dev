@@ -34,7 +34,7 @@ class Session
 	public $online_timeout = 1800;			///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 	//todo: make online_timeout configurable
 	private $check_ip = true;				///< client will be logged out if client ip is changed during the session
-	private $check_useragent = true;		///< keeps track if the client user agent string changes during the session
+	private $check_useragent = false;		///< keeps track if the client user agent string changes during the session
 
 	public $start_page = 'index.php';		///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
 	public $logged_out_start_page = 'index.php';
@@ -206,6 +206,10 @@ class Session
 
 		//Logged in: Check if client user agent string changed, after active check to avoid useragent change log on auto browser upgrade (Firefox)
 		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
+			//FIXME this occured once for a IE7 user while using embedded WMP11 + core_dev:
+			//	"Client user agent string changed from "Windows-Media-Player/11.0.5721.5145" to "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)""
+			//	also, this could be triggered if user is logged in & Firefox decides to auto-upgrade and restore previous tabs and sessions after restart
+
 			$this->error = t('Client user agent string changed.');
 			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
 			$this->endSession();
