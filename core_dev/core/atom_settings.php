@@ -139,20 +139,4 @@ function deleteSetting($_type, $categoryId, $ownerId, $settingName)
 	return $db->delete($q);
 }
 
-/**
- * Removes all occurances of settings with the specified paramets
- *
- * \param $_type type of settings
- * \param $settingName name of the setting
- * \param $settingValue value of the setting
- * \return number of settings removed
- */
-function deleteSettingByValue($_type, $settingName, $settingValue)
-{
-	global $db;
-	if (!is_numeric($_type)) return false;
-
-	$q = 'DELETE FROM tblSettings WHERE settingType='.$_type.' AND settingName="'.$db->escape($settingName).'" AND settingValue="'.$db->escape($settingValue).'"';
-	return $db->delete($q);
-}
 ?>
