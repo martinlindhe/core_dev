@@ -270,8 +270,9 @@ abstract class DB_Base
 	 * \param $pageload_start is the microtime of when the script execution started
 	 * \return nothing
 	 */
-	function showProfile($pageload_start = 0)
+	function showProfile($pageload_start = 0, $output_type = 'xhtml')
 	{
+		//TODO implement $output_type = 'text'
 		global $config;
 		if (!$config['debug']) return;
 
