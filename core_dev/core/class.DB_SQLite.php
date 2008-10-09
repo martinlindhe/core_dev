@@ -37,7 +37,7 @@ class DB_SQLite extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		//SQLite defaults
 		if (!$this->database) $this->database = 'default';
@@ -57,7 +57,7 @@ class DB_SQLite extends DB_Base
 		$this->server_version = sqlite_libversion();
 		$this->client_version = sqlite_libversion();
 
-		if ($config['debug']) $this->profileConnect($time_started);
+		if (!empty($config['debug'])) $this->profileConnect($time_started);
 	}
 
 	/**
@@ -105,16 +105,16 @@ class DB_SQLite extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = sqlite_query($this->db_handle, $q);
 
 		if (!$result) {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
 			else die;	//if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $result;
 	}
@@ -130,7 +130,7 @@ class DB_SQLite extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = sqlite_query($this->db_handle, $q);
 
@@ -139,11 +139,11 @@ class DB_SQLite extends DB_Base
 		if ($result) {
 			$ret_id = $this->db_handle->insert_id;		//FIXME: how to do this for sqlite???
 		} else {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
 			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $ret_id;
 	}
@@ -159,7 +159,7 @@ class DB_SQLite extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = sqlite_query($this->db_handle, $q);
 
@@ -168,11 +168,11 @@ class DB_SQLite extends DB_Base
 		if ($result) {
 			$affected_rows = sqlite_changes($this->db_handle);
 		} else {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = sqlite_last_error($this->db_handle);
 			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $affected_rows;
 	}
@@ -188,10 +188,10 @@ class DB_SQLite extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = sqlite_query($this->db_handle, $q, SQLITE_ASSOC, $err)) {	//FIXME: untested. sqlite_array_query also exists
-			if ($config['debug']) $this->profileError($time_started, $q, $err);
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, $err);
 			return array();
 		}
 
@@ -199,7 +199,7 @@ class DB_SQLite extends DB_Base
 
 		//$result->free();	//FIXME: how?!?!?
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -215,10 +215,10 @@ class DB_SQLite extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = sqlite_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return array();
 		}
 
@@ -230,7 +230,7 @@ class DB_SQLite extends DB_Base
 
 		//$result->free();	//FIXME: how!!!!
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -246,10 +246,10 @@ class DB_SQLite extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = sqlite_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return array();
 		}
 
@@ -261,7 +261,7 @@ class DB_SQLite extends DB_Base
 
 		//$result->free();	//FIXME: how!!!
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -277,10 +277,10 @@ class DB_SQLite extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = sqlite_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return array();
 		}
 
@@ -291,7 +291,7 @@ class DB_SQLite extends DB_Base
 		$data = $result->fetch_array(MYSQLI_ASSOC);		//FIXME: how?!?!?!
 		//$result->free();	//FIXME: how?!?!
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -307,10 +307,10 @@ class DB_SQLite extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = sqlite_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, sqlite_last_error($this->db_handle));
 			return '';
 		}
 
@@ -320,7 +320,7 @@ class DB_SQLite extends DB_Base
 
 		$data = pg_fetch_row($result);		//FIXME: sqlite_fetch_row finns inte!
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		if (!$data) return false;
 		return $data[0];

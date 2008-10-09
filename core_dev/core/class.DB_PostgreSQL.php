@@ -34,7 +34,7 @@ class DB_PostgreSQL extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		//PostgreSQL defaults
 		if (!$this->host) $this->host = 'localhost';
@@ -59,7 +59,7 @@ class DB_PostgreSQL extends DB_Base
 		$info = pg_version($this->db_handle);
 		$this->client_version = $info['client'];
 
-		if ($config['debug']) $this->profileConnect($time_started);
+		if (!empty($config['debug'])) $this->profileConnect($time_started);
 	}
 
 	/**
@@ -109,16 +109,16 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = pg_query($this->db_handle, $q);
 
 		if (!$result) {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
 			else die;	//if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $result;
 	}
@@ -134,7 +134,7 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = pg_query($this->db_handle, $q);
 
@@ -143,11 +143,11 @@ class DB_PostgreSQL extends DB_Base
 		if ($result) {
 			$ret_id = $this->db_handle->insert_id;	//FIXME: how to return last insert_id for pgsql???
 		} else {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
 			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $ret_id;
 	}
@@ -163,7 +163,7 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = pg_query($this->db_handle, $q);
 
@@ -172,11 +172,11 @@ class DB_PostgreSQL extends DB_Base
 		if ($result) {
 			$affected_rows = $this->db_handle->affected_rows;	//FIXME: this is not correct!
 		} else {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = pg_last_error($this->db_handle);
 			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $affected_rows;
 	}
@@ -192,10 +192,10 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
 			return array();
 		}
 
@@ -207,7 +207,7 @@ class DB_PostgreSQL extends DB_Base
 
 		$result->free();	//FIXME: how?
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -223,10 +223,10 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
 			return array();
 		}
 
@@ -238,7 +238,7 @@ class DB_PostgreSQL extends DB_Base
 
 		$result->free();	//FIXME: how?
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -254,10 +254,10 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
 			return array();
 		}
 
@@ -269,7 +269,7 @@ class DB_PostgreSQL extends DB_Base
 
 		$result->free();	//FIXME: how???
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -285,10 +285,10 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
 			return array();
 		}
 
@@ -299,7 +299,7 @@ class DB_PostgreSQL extends DB_Base
 		$data = $result->fetch_array(MYSQLI_ASSOC);		//FIXME: this is not correct
 		$result->free();		//FIXME: how???
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -315,10 +315,10 @@ class DB_PostgreSQL extends DB_Base
 		global $config;
 		$q = $this->translate($q);
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = pg_query($this->db_handle, $q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, pg_last_error($this->db_handle));
 			return '';
 		}
 
@@ -328,7 +328,7 @@ class DB_PostgreSQL extends DB_Base
 
 		$data = pg_fetch_row($result);
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		if (!$data) return false;
 		return $data[0];

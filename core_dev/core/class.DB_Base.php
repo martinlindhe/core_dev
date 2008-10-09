@@ -274,7 +274,7 @@ abstract class DB_Base
 	{
 		//TODO implement $output_type = 'text'
 		global $config;
-		if (!$config['debug']) return;
+		if (empty($config['debug'])) return;
 
 		if (extension_loaded('xdebug')) {
 			$total_time = xdebug_time_index();

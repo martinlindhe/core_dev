@@ -30,7 +30,7 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		//MySQL defaults
 		if (!$this->host) $this->host = 'localhost';
@@ -41,7 +41,7 @@ class DB_MySQLi extends DB_Base
 
 		if (mysqli_connect_errno()) {
 			$this->db_handle = false;
-			if ($config['debug']) die('DB_MySQLi: Database connection error '.mysqli_connect_errno().': '.mysqli_connect_error().'.</bad>');
+			if (!empty($config['debug'])) die('DB_MySQLi: Database connection error '.mysqli_connect_errno().': '.mysqli_connect_error().'.</bad>');
 			else die;
 		}
 
@@ -54,7 +54,7 @@ class DB_MySQLi extends DB_Base
 		$this->server_version = $this->db_handle->server_info;
 		$this->client_version = $this->db_handle->client_info;
 
-		if ($config['debug']) $this->profileConnect($time_started);
+		if (!empty($config['debug'])) $this->profileConnect($time_started);
 	}
 
 	/**
@@ -91,16 +91,16 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = $this->db_handle->query($q);
 
 		if (!$result) {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 			else die;	//if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $result;
 	}
@@ -115,7 +115,7 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = $this->db_handle->query($q);
 
@@ -124,11 +124,11 @@ class DB_MySQLi extends DB_Base
 		if ($result) {
 			$ret_id = $this->db_handle->insert_id;
 		} else {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $ret_id;
 	}
@@ -143,7 +143,7 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		$result = $this->db_handle->query($q);
 
@@ -152,11 +152,11 @@ class DB_MySQLi extends DB_Base
 		if ($result) {
 			$affected_rows = $this->db_handle->affected_rows;
 		} else {
-			if ($config['debug']) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			if (!empty($config['debug'])) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 			else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $affected_rows;
 	}
@@ -171,10 +171,10 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = $this->db_handle->query($q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 
@@ -186,7 +186,7 @@ class DB_MySQLi extends DB_Base
 
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -201,10 +201,10 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = $this->db_handle->query($q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 
@@ -216,7 +216,7 @@ class DB_MySQLi extends DB_Base
 
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -231,10 +231,10 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = $this->db_handle->query($q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 
@@ -246,7 +246,7 @@ class DB_MySQLi extends DB_Base
 
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -261,10 +261,10 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = $this->db_handle->query($q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
 
@@ -275,7 +275,7 @@ class DB_MySQLi extends DB_Base
 		$data = $result->fetch_array(MYSQLI_ASSOC);
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		return $data;
 	}
@@ -290,10 +290,10 @@ class DB_MySQLi extends DB_Base
 	{
 		global $config;
 
-		if ($config['debug']) $time_started = microtime(true);
+		if (!empty($config['debug'])) $time_started = microtime(true);
 
 		if (!$result = $this->db_handle->query($q)) {
-			if ($config['debug']) $this->profileError($time_started, $q, $this->db_handle->error);
+			if (!empty($config['debug'])) $this->profileError($time_started, $q, $this->db_handle->error);
 			return '';
 		}
 
@@ -304,7 +304,7 @@ class DB_MySQLi extends DB_Base
 		$data = $result->fetch_row();
 		$result->free();
 
-		if ($config['debug']) $this->profileQuery($time_started, $q);
+		if (!empty($config['debug'])) $this->profileQuery($time_started, $q);
 
 		if (!$data) return false;
 		return $data[0];
