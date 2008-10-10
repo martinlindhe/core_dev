@@ -63,12 +63,13 @@ function embedVideo($url, $w = 352, $h = 288, $params = array())
 	return $data;
 }
 
-function embedAudio($url, $w = 352, $h = 100)
+function embedAudio($url, $w = 352)
 {
 	global $session;
-	if (!is_numeric($w) || !is_numeric($h)) return false;
+	if (!is_numeric($w)) return false;
 
 	if (strpos($session->user_agent, 'MSIE')) {
+		$h = 46;
 		//Tested in IE 7
 		//FIXME try IE 6
 		$data  = '<object type="application/x-oleobject'.
@@ -81,6 +82,7 @@ function embedAudio($url, $w = 352, $h = 100)
 		$data .= '<param name="uiMode" value="mini">';
 		$data .= '</object>';
 	} else {
+		$h = 50;
 		//This works with Firefox in Windows and Linux and Opera in Windows
 		//For Firefox Linux, install mozilla-plugin-vlc
 		//For Firefox Windows, install wmpfirefoxplugin.exe from http://port25.technet.com
