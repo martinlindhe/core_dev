@@ -384,6 +384,9 @@ function t_se($s)
 		case 'Statistics': return 'Statistik';
 		case 'Custom report': return 'Anpassad rapport';
 
+		//Moderation / monitoring
+		case 'Monitored': return 'Granskad';
+
 		default: return '__('.$s.')__';
 	}
 }
