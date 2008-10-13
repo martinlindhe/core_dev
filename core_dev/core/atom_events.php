@@ -73,10 +73,9 @@ function getEvents($_category = 0, $ownerId = 0, $limit = '')
 	if (!is_numeric($_category) || !is_numeric($ownerId)) return false;
 
 	$q = 'SELECT * FROM tblEvents';
-	if ($_category) {
-		$q .= ' WHERE category='.$_category;
-		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-	}
+	$q .= ' WHERE timeCreated IS NOT NULL';
+	if ($_category) $q .= ' AND category='.$_category;
+	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 	$q .= ' ORDER BY timeCreated DESC'.$limit;
 
 	return $db->getArray($q);
@@ -98,4 +97,29 @@ function getEventCnt($_category = 0, $ownerId = 0)
 
 	return $db->getOneItem($q);
 }
+
+function showEvents($_category = 0, $ownerId = 0)
+{
+	$list = getEvents($_category, $ownerId);
+
+	$heads = array(t('Category'), t('Owner'), t('Type'), t('Referer'), t('Time'));
+
+	echo xhtmlTable($list, $heads, 'eventRow');
+}
+
+function eventRow($row, $i)
+{
+	global $event_name;
+
+	$out  = '<tr>';
+	$out .= '<td>'.$row['category'].'</td>';
+	$out .= '<td>'.$row['ownerId'].'</td>';
+	$out .= '<td>'.$event_name[ $row['type'] ].'</td>';
+	$out .= '<td>'.$row['refererId'].'</td>';
+	$out .= '<td>'.$row['timeCreated'].'</td>';
+	$out .= '</tr>';
+
+	return $out;
+}
+
 ?>

@@ -351,17 +351,25 @@ function xhtmlButton($_title, $onclick = '')
 /**
  * Helper to create a table out of a named array and/or callback function
  *
- * \param $arr is a usual named array
- * \param $heads is array('Användare' => 'userId', 'Senast aktiv' => 'timeLastActive')
+ * \param $arr is a normal $list array
+ * \param $heads is array('User' => 'userId', 'Last active' => 'timeLastActive')
  * \param $callback is funct name to call to customize each row
  */
 function xhtmlTable($arr, $heads = '', $callback = '')
 {
 	$out = '<table>';
+
+	$heads_idx = false;
+
 	if (is_array($heads)) {
 		$out .= '<tr>';
+
+		if (key($heads)) $heads_idx = true;
+		else $heads_idx = false;
+
 		foreach ($heads as $t => $x) {
-			$out .= '<th>'.$t.'</th>';
+			if ($heads_idx) $out .= '<th>'.$t.'</th>';
+			else $out .= '<th>'.$x.'</th>';
 		}
 		$out .= '</tr>';
 	}
@@ -371,7 +379,7 @@ function xhtmlTable($arr, $heads = '', $callback = '')
 		if (function_exists($callback)) {
 			$out .= call_user_func($callback, $row, &$i);
 			$i++;
-		} else if (is_array($heads)) {
+		} else if (is_array($heads) && $heads_idx) {
 			$out .= '<tr>';
 			foreach ($heads as $t => $x) {
 				$out .= '<td>';

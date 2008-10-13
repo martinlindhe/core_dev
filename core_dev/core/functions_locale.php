@@ -81,6 +81,9 @@ function t_se($s)
 		case 'Userdata': return 'Användardata';
 		case 'Forum': return 'Forum';
 		case 'Share': return 'Dela';
+		case 'Owner': return 'Ägare';
+		case 'Time': return 'Tidpunkt';
+		case 'Referer': return 'Referens';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
