@@ -283,6 +283,16 @@ function xhtmlFile($_name)
 	return '<input type="file" name="'.$_name.'"/>';
 }
 
+/**
+ * Helper to generate image tags
+ */
+function xhtmlImage($_src, $_alt = '')
+{
+	return '<img src="'.$_src.'"'.
+		($_alt ? ' alt="'.$_alt.'" title="'.$_alt.'"' : '').
+		'>';
+}
+
 
 /**
  * Helper to create a <form> open tag
