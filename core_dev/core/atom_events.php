@@ -55,7 +55,7 @@ $event_name[EVENT_CALLDROP_LINEFULL] = 'Call dropped (LINE FULL)';
 /**
  * Creates a new event
  */
-function addEvent($_type, $_category = 0 , $ownerId = 0, $_referer = 0)
+function addEvent($_type, $_category = 0, $ownerId = 0, $_referer = 0)
 {
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($_category) || !is_numeric($ownerId) || !is_numeric($_referer)) return false;
