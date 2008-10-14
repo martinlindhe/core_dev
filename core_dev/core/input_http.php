@@ -17,7 +17,7 @@ $config['http']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE;
 function http_status($url)
 {
 	global $config;
-
+	//FIXME: isURL() check
 	$u = parse_url($url);
 
 	switch ($u['scheme']) {

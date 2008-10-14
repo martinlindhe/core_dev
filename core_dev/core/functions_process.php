@@ -418,9 +418,14 @@ function processQueue()
 			echo "FETCH CONTENT\n";
 
 			$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
+
+			if (http_status($job['orderParams']) != 200) {
+				retryQueueEntry($job['entryId'], 60);
+				break;
+			}
+
 			$newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
 
-			//FIXME: isURL() check
 			$c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$files->findUploadPath($newFileId);
 			echo "$ ".$c."\n";
 			$retval = 0;
@@ -430,7 +435,7 @@ function processQueue()
 				markQueueCompleted($job['entryId'], $exec_time, $newFileId);
 				$files->updateFile($newFileId);
 			} else {
-				//wget failed to fetch the content. delay work for 1 minute
+				//wget failed somehow, delay work for 1 minute
 				retryQueueEntry($job['entryId'], 60);
 				$files->deleteFile($newFileId, 0, true);	//remove failed local file entry
 			}
