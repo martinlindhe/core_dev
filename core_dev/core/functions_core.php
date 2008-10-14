@@ -73,11 +73,16 @@ function loadPlugins()
 
 /**
  * Executes $c and returns the time it took
+ *
+ * \param $c command to execute
+ * \param $retval return value of command executed
  */
-function exectime($c)
+function exectime($c, &$retval = 0)
 {
+	//XXX: Use 2>&1 in $c to redirect stderr to $output buffer
 	$exec_start = microtime(true);
-	exec($c);
+	exec($c, $output, &$retval);
+
 	return microtime(true) - $exec_start;
 }
 
