@@ -430,6 +430,7 @@ function processQueue()
 			} else {
 				//wget failed to fetch the content. delay work for 1 minute
 				retryQueueEntry($job['entryId'], 60);
+				$files->deleteFile($newFileId, 0, true);	//remove failed local file entry
 			}
 			break;
 
