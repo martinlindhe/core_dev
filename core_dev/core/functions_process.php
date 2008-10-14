@@ -144,6 +144,40 @@ function getProcessQueueEntry($_id = 0)
 }
 
 /**
+ * Updates timeCreated for the entry, to have it retry again later
+ *
+ * \param $_id entry
+ * \param $_delay in seconds
+ */
+function retryQueueEntry($_id, $_delay)
+{
+	global $db;
+	if (!is_numeric($_id) || !is_numeric($_delay)) return false;
+
+	$curr = getProcessQueueEntry($_id);
+	if ($curr['attempts'] >= 5) {
+		echo "***************************************************************\n";
+		echo "***************************************************************\n";
+		echo "****** GAVE UP entry ".$_id." after ".$curr['attempts']." attempts  *************\n";
+		echo "***************************************************************\n";
+		echo "***************************************************************\n";
+	}
+
+	$q = 'UPDATE tblProcessQueue';
+	$q .= ' SET timeCreated = DATE_ADD(NOW(), INTERVAL '.$_delay.' SECOND),';
+	$q .= ' orderStatus='.ORDER_NEW.',';
+	$q .= ' attempts=attempts+1';
+	$q .= ' WHERE entryId='.$_id;
+	$db->update($q);
+
+	echo "***************************************************************\n";
+	echo "***************************************************************\n";
+	echo "****** RETRYING entry ".$_id." in ".$_delay." seconds  *************\n";
+	echo "***************************************************************\n";
+	echo "***************************************************************\n";
+}
+
+/**
  * Returns the oldest work orders still active for processing
  */
 function getProcessQueue($_limit = '', $completed = false)
@@ -267,19 +301,14 @@ function processQueue()
 {
 	global $db, $config, $files;
 
-	//FIXME: db locking problems
-	//$db->lock('tblProcessQueue');
-
 	//Only allows a few work orders being executed at once, so we can do this very often
 	if (getProcessesQueueStatusCnt(ORDER_EXECUTING) > $config['process']['process_limit']) {
-		//$db->unlock();
 		echo "TOO MUCH ACTIVE WORK, ABORTING\n";
 		return;
 	}
 
 	$job = getProcessQueueEntry();
 	if (!$job) {
-		//$db->unlock();
 		return;
 	}
 
@@ -391,12 +420,16 @@ function processQueue()
 			//FIXME: isURL() check
 			$c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$files->findUploadPath($newFileId);
 			echo "$ ".$c."\n";
-			$exec_time = exectime($c);
-
-			//TODO: process html document for media links if it is a html document
-
-			markQueueCompleted($job['entryId'], $exec_time, $newFileId);
-			$files->updateFile($newFileId);
+			$retval = 0;
+			$exec_time = exectime($c, $retval);
+			if (!$retval) {
+				//TODO: process html document for media links if it is a html document
+				markQueueCompleted($job['entryId'], $exec_time, $newFileId);
+				$files->updateFile($newFileId);
+			} else {
+				//wget failed to fetch the content. delay work for 1 minute
+				retryQueueEntry($job['entryId'], 60);
+			}
 			break;
 
 		case PROCESS_CONVERT_TO_DEFAULT:
@@ -461,7 +494,7 @@ function processQueue()
 			d($job);
 			die;
 	}
-	//$db->unlock();
+
 }
 
 /**

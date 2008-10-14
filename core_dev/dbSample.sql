@@ -407,8 +407,10 @@ CREATE TABLE `tblProcessQueue` (
   `orderType` tinyint(3) unsigned NOT NULL,
   `orderStatus` tinyint(1) unsigned NOT NULL default '0',
   `orderParams` text,
+  `attempts` tinyint(3) unsigned NOT NULL,
   `timeExec` float unsigned default NULL,
   `timeCompleted` datetime default NULL,
+  `callback_log` text,
   PRIMARY KEY  (`entryId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
