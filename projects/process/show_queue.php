@@ -82,7 +82,7 @@ if (!empty($list)) {
 			}
 		}
 
-		echo $row['timeCreated'].' added by '.Users::link($row['creatorId']).'<br/>';
+		echo $row['timeCreated'].' added by '.getCustomerName($row['creatorId']).'<br/>';
 
 		if ($row['orderStatus'] == ORDER_COMPLETED) {
 			echo '<b>Order completed</b><br/>';
