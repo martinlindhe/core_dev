@@ -18,6 +18,7 @@
  * soap.wsdl_cache_ttl=172800
  */
 
+require_once('atom_customers.php');
 require_once('functions_image.php');
 require_once('functions_fileareas.php');
 
