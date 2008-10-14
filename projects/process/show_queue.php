@@ -5,20 +5,13 @@ $session->requireLoggedIn();
 
 require('design_head.php');
 
-if (isset($_GET['completed'])) {
-	$tot_cnt = getProcessQueueCount(true);
-} else {
-	$tot_cnt = getProcessQueueCount();
-}
+//FIXME show failed & in progress aswell
+$tot_cnt = getProcessQueueCount(0, isset($_GET['completed']) ? ORDER_COMPLETED : ORDER_NEW);
 
 $pager = makePager($tot_cnt, 10);
 echo $pager['head'];
 
-if (isset($_GET['completed'])) {
-	$list = getProcessQueue($pager['limit'], true);
-} else {
-	$list = getProcessQueue($pager['limit']);
-}
+$list = getProcessQueue(0, $pager['limit'], isset($_GET['completed']) ? ORDER_COMPLETED : ORDER_NEW);
 
 if (!empty($list)) {
 	foreach ($list as $row) {
