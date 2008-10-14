@@ -10,7 +10,7 @@
 define('SETTING_APPDATA',		1);		//setting global to the whole application
 define('SETTING_USERDATA',		2);		//settings used to store personal userdata
 define('SETTING_CALLERDATA',	3);		//settings used to store data of a caller
-define('SETTING_EXTERNALDATA',	4);		//settings used to store data with external ownerid
+define('SETTING_EXTERNALDATA',	4);		//settings used to store data with external ownerid (such as a Facebook id)
 //TODO remove these and make more userdata field types instead
 $config['settings']['default_signature'] = 'Signature';	//default name of the userdata field used to contain the forum signature
 
