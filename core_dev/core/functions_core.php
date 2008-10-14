@@ -47,7 +47,7 @@ function dp($m)
 }
 
 /**
- * Helper function to include core function files
+ * Includes a core function file
  *
  * \param $file filename to include
  */

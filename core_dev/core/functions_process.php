@@ -454,7 +454,7 @@ function processQueue()
 
 			$file = $files->getFileInfo($prev_job['referId']);
 
-			if (in_array($file['fileMime'], $files->video_mime_types)) {
+			if ($file['mediaType'] == MEDIATYPE_VIDEO) {
 				$exec_start = microtime(true);
 				$newId = convertVideo(
 					$prev_job['referId'],	//what file
@@ -482,12 +482,12 @@ function processQueue()
 
 					//delete files after callback processing
 					$files->deleteFile($prev_job['referId']);
-					$files->deleteFile($newId);
+					//$files->deleteFile($newId);
 				}
-			} else if (in_array($file['fileMime'], $files->audio_mime_types)) {
-				die('CONVERT TO MP3!!!!');
+			} else if ($file['mediaType'] == MEDIATYPE_AUDIO) {
+				die('FIXME CONVERT TO MP3!!!!');
 			} else {
-				echo "UNKNOWN MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
+				echo "UNKNOWN MEDIA TYPE ".$file['mediaType'].", MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
 				markQueue($job['entryId'], ORDER_FAILED);
 			}
 			break;

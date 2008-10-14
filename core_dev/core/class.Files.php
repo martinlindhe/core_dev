@@ -639,11 +639,8 @@ class Files
 		clearstatcache();	//needed to get current filesize()
 
 		$size = filesize($filename);
+		if (!is_numeric($size) || !$size) return false;
 
-		if (!is_numeric($size) || !$size) {
-			echo "updateFile(): file ".$filename." dont exist\n";
-			return false;
-		}
 		$mime_type = $this->lookupMimeType($filename);
 		$media_type = $this->lookupMediaType($filename);
 
@@ -1099,7 +1096,7 @@ class Files
 	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
 	 */
 	function getFilesByMediaType($fileType = 0, $ownerId = 0, $categoryId = 0, $mediaType = 0, $_limit = '', $_order = 'ASC')
-	{	//FIXME rename to getFiles(), remove old function & clean up parameter usage for getFiles() everywhere
+	{	//FIXME rename to getFiles(), remove old getFiles() & clean up parameter usage for getFiles() everywhere
 		global $db;
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId) || !is_numeric($mediaType)) return false;
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
