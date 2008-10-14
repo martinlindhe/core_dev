@@ -480,8 +480,8 @@ function processQueue()
 					echo "Client callback script returned:\n".$data;
 					storeCallbackData($job['entryId'], $data);
 
-					//delete files after callback processing
-					$files->deleteFile($prev_job['referId']);
+					//FIXME delete files 30 days after processing
+					//$files->deleteFile($prev_job['referId']);
 					//$files->deleteFile($newId);
 				}
 			} else if ($file['mediaType'] == MEDIATYPE_AUDIO) {

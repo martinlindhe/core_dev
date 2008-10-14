@@ -768,7 +768,7 @@ class Files
 		header('Content-Transfer-Encoding: binary');
 
 		//Serves the file differently depending on what kind of file it is
-		if (in_array($data['fileMime'], $this->image_mime_types)) {
+		if ($data['mediaType'] == MEDIATYPE_IMAGE) {
 			//Generate resized image if needed
 			$this->sendImage($_id);
 		} else {
@@ -781,9 +781,9 @@ class Files
 				header('Content-Type: '.$data['fileMime']);
 			}
 
-			//Just delivers the file as-is
 			if ($data['fileSize']) header('Content-Length: '. $data['fileSize']);
 
+			//Deliver the file as-is
 			readfile($this->findUploadPath($_id));
 		}
 
