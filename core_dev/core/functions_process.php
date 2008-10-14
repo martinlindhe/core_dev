@@ -34,14 +34,8 @@ define('PROCESSQUEUE_IMAGE_RECODE', 12);	///< Enqueue this file for recoding/con
 define('PROCESS_UPLOAD',			19);	///< HTTP Post upload
 define('PROCESS_FETCH',				20);	///< Ask the server to download remote media. Parameter is URL
 
-define('PROCESSPARSE_AND_FETCH',	21);	///< Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
+define('PROCESS_PARSE_AND_FETCH',	21);	///< Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
 define('PROCESS_CONVERT_TO_DEFAULT',22);	///< Convert media to default format
-
-
-define('PROCESSMONITOR_SERVER',		30);	///< Monitors server uptime
-
-//event types
-define('EVENT_PROCESS',	1);	///< event from the process server
 
 
 //process order status modes
@@ -102,18 +96,12 @@ function addProcessEvent($_type, $creatorId, $param, $param2 = '')
 			$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape(serialize($param2)).'"';
 			return $db->insert($q);
 
-		case PROCESSMONITOR_SERVER:
-			//enqueues a server to be monitored
-			// $param = serialized params
-			$q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
-			return $db->insert($q);
-
-		case PROCESSPARSE_AND_FETCH:
+		case PROCESS_PARSE_AND_FETCH:
 			//parse this resource for further media resources and fetches them
 			// $param = fileId
 			// use to process a uploaded .torrent file & download it's content
 			// or to process a webpage and extract video files from it (including youtube) and download them to the server
-			die('not implemented PROCESSPARSE_AND_FETCH');
+			die('not implemented PROCESS_PARSE_AND_FETCH');
 			break;
 
 		default:
@@ -183,30 +171,30 @@ function retryQueueEntry($_id, $_delay)
 /**
  * Returns the oldest work orders still active for processing
  */
-function getProcessQueue($_limit = '', $completed = false)
+function getProcessQueue($orderType = 0, $_limit = '', $orderStatus = ORDER_NEW, $agedDays = 0)
 {
 	global $db;
-	if (!is_bool($completed)) return false;
+	if (!is_numeric($orderType) || !is_numeric($orderStatus) || !is_numeric($agedDays)) return false;
 
-	if ($completed) $cnd = 'orderStatus != '.ORDER_NEW;
-	else $cnd = 'orderStatus = '.ORDER_NEW;
-
-	$q = 'SELECT * FROM tblProcessQueue WHERE '.$cnd.' ORDER BY timeCreated DESC'.$_limit;
+	$q = 'SELECT * FROM tblProcessQueue';
+	$q .= ' WHERE orderStatus='.$orderStatus;
+	if ($orderType) $q .= ' AND orderType='.$orderType;
+	if ($agedDays) $q .= ' AND timeCompleted <= DATE_SUB(NOW(), INTERVAL '.$agedDays.' DAY)';
+	$q .= ' ORDER BY timeCreated DESC'.$_limit;
 	return $db->getArray($q);
 }
 
 /**
  * Returns the number of entries in work queue
  */
-function getProcessQueueCount($completed = false)
+function getProcessQueueCount($orderType = 0, $orderStatus = ORDER_NEW)
 {
 	global $db;
-	if (!is_bool($completed)) return false;
+	if (!is_numeric($orderType) || !is_numeric($orderStatus)) return false;
 
-	if ($completed) $cnd = 'orderStatus != '.ORDER_NEW;
-	else $cnd = 'orderStatus = '.ORDER_NEW;
-
-	$q = 'SELECT COUNT(entryId) FROM tblProcessQueue WHERE '.$cnd;
+	$q = 'SELECT COUNT(entryId) FROM tblProcessQueue';
+	$q .= ' WHERE orderStatus='.$orderStatus;
+	if ($orderType) $q .= ' AND orderType='.$orderType;
 	return $db->getOneItem($q);
 }
 
@@ -305,7 +293,7 @@ function processQueue()
 	global $db, $config, $files;
 
 	//Only allows a few work orders being executed at once, so we can do this very often
-	if (getProcessesQueueStatusCnt(ORDER_EXECUTING) > $config['process']['process_limit']) {
+	if (getProcessesQueueStatusCnt(ORDER_EXECUTING) >= $config['process']['process_limit']) {
 		echo "TOO MUCH ACTIVE WORK, ABORTING\n";
 		return;
 	}
@@ -489,18 +477,6 @@ function processQueue()
 			} else {
 				echo "UNKNOWN MEDIA TYPE ".$file['mediaType'].", MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
 				markQueue($job['entryId'], ORDER_FAILED);
-			}
-			break;
-
-		case PROCESSMONITOR_SERVER:
-			echo "MONITOR SERVER\n";
-			$d = unserialize($job['orderParams']);
-			switch ($d['type']) {
-				case 'ping':
-					echo 'Pinging '.$d['adr'].' ... TODO<br/>';
-					break;
-				default:
-					die('unknown server type '.$d['type']);
 			}
 			break;
 
