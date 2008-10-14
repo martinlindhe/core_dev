@@ -162,6 +162,7 @@ function retryQueueEntry($_id, $_delay)
 		echo "****** GAVE UP entry ".$_id." after ".$curr['attempts']." attempts  *************\n";
 		echo "***************************************************************\n";
 		echo "***************************************************************\n";
+		markQueue($_id, ORDER_FAILED);
 	}
 
 	$q = 'UPDATE tblProcessQueue';
@@ -439,6 +440,12 @@ function processQueue()
 			//referId is entryId of previous proccess queue order
 			$params = unserialize($job['orderParams']);
 			$prev_job = getProcessQueueEntry($job['referId']);
+
+			if ($prev_job['orderStatus'] != ORDER_COMPLETED) {
+				retryQueueEntry($job['entryId'], 60);
+				break;
+			}
+
 			$file = $files->getFileInfo($prev_job['referId']);
 
 			if (in_array($file['fileMime'], $files->video_mime_types)) {
