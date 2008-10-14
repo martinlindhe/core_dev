@@ -22,7 +22,6 @@ require_once('class.Files.php');
 require_once('functions_core.php');
 require_once('functions_wiki.php');
 require_once('functions_process.php');
-require_once('functions_customers.php');
 restore_include_path();
 
 $config['db']['username']	= 'ml';
