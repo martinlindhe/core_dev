@@ -60,13 +60,14 @@ if (!empty($list)) {
 				}
 				if ($row['callback_log']) {
 					echo 'Callback script returned:<br/>';
-					echo '<b>'.$row['callback_log'].'</b>';
+					echo '<b>'.$row['callback_log'].'</b><br/>';
 				}
 				break;
 
 			default:
 				die('unknown processqueue type: '.$row['orderType']);
 		}
+		echo 'Attempts: '.$row['attempts'].'<br/>';
 
 		if ($row['orderType'] != PROCESS_CONVERT_TO_DEFAULT) {
 			if ($row['referId']) {
