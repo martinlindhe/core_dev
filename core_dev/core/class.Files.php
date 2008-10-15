@@ -258,6 +258,10 @@ class Files
 
 			//remove file description
 			deleteComments(COMMENT_FILEDESC, $_id);
+
+			$q = 'DELETE FROM tblFiles WHERE fileId='.$_id;
+			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+			$db->delete($q);
 		}
 
 		return true;
