@@ -245,6 +245,7 @@ class Files
 	 */
 	function deleteFile($_id, $ownerId = 0, $force = false)
 	{
+		global $db;
 		if (!is_numeric($_id) || !is_numeric($ownerId)) return false;
 
 		if (!$this->deleteFileEntry(0, $_id, $ownerId)) return false;
