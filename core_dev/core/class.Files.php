@@ -657,7 +657,8 @@ class Files
 		$mime_type = $arr[0];
 
 		$q = 'UPDATE tblFiles SET fileMime="'.$db->escape($mime_type).'",mediaType='.$media_type.',fileSize='.$size.' WHERE fileId='.$_id;
-		return $db->update($q);
+		$db->update($q);
+		return true;
 	}
 
 	/**
