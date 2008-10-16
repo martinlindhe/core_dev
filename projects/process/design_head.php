@@ -32,7 +32,6 @@ if ($session->id) {
 	$menu = array(
 		'http_upload.php' => 'Upload file',
 		'http_download.php' => 'Request a fetch',
-		'http_monitor.php' => 'Monitor server',
 		'?logout' => 'Logout');
 	createMenu($menu);
 }

@@ -39,11 +39,6 @@ if (!empty($list)) {
 				echo 'Uploaded remote media from client<br/>';
 				break;
 
-			case PROCESSMONITOR_SERVER:
-				$d = unserialize($row['orderParams']);
-				echo 'Monitor remote server <b>'.$d['adr'].'</b> for '.$d['type'].' uptime<br/>';
-				break;
-
 			case PROCESS_CONVERT_TO_DEFAULT:
 				echo 'Convert media to default type for entry #'.$row['referId'].'<br/>';
 				if ($row['orderParams']) {
