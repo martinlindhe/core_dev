@@ -26,6 +26,7 @@ require_once('functions_fileareas.php');
 //how many enqued items to process at max each time the process_queue.php script is called
 //WARNING: keep this a low number unless you are sure what the consequences are
 $config['process']['process_limit'] = 3;
+$config['process']['retry_limit'] = 50;
 
 define('PROCESSQUEUE_AUDIO_RECODE', 10);	///< Enqueue this
 define('PROCESSQUEUE_VIDEO_RECODE', 11);	///< fixme: use
@@ -141,11 +142,11 @@ function getProcessQueueEntry($_id = 0)
  */
 function retryQueueEntry($_id, $_delay)
 {
-	global $db;
+	global $db, $config;
 	if (!is_numeric($_id) || !is_numeric($_delay)) return false;
 
 	$curr = getProcessQueueEntry($_id);
-	if ($curr['attempts'] >= 50) {
+	if ($curr['attempts'] >= $config['process']['retry_limit']) {
 		echo "***************************************************************\n";
 		echo "***************************************************************\n";
 		echo "****** GAVE UP entry ".$_id." after ".$curr['attempts']." attempts  *************\n";
