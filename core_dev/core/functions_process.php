@@ -145,13 +145,14 @@ function retryQueueEntry($_id, $_delay)
 	if (!is_numeric($_id) || !is_numeric($_delay)) return false;
 
 	$curr = getProcessQueueEntry($_id);
-	if ($curr['attempts'] >= 5) {
+	if ($curr['attempts'] >= 50) {
 		echo "***************************************************************\n";
 		echo "***************************************************************\n";
 		echo "****** GAVE UP entry ".$_id." after ".$curr['attempts']." attempts  *************\n";
 		echo "***************************************************************\n";
 		echo "***************************************************************\n";
 		markQueue($_id, ORDER_FAILED);
+		return false;
 	}
 
 	$q = 'UPDATE tblProcessQueue';
