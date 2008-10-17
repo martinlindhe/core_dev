@@ -5,17 +5,24 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-define('TODO_ITEM_OPEN',    0); $todo_item_status[TODO_ITEM_OPEN]     = 'OPEN';
-define('TODO_ITEM_ASSIGNED',1); $todo_item_status[TODO_ITEM_ASSIGNED] = 'ASSIGNED';
-define('TODO_ITEM_CLOSED',  2); $todo_item_status[TODO_ITEM_CLOSED]   = 'CLOSED';
+define('TODO_ITEM_OPEN',    0);
+define('TODO_ITEM_ASSIGNED',1);
+define('TODO_ITEM_CLOSED',  2);
+
+$todo_item_status[TODO_ITEM_OPEN]     = 'OPEN';
+$todo_item_status[TODO_ITEM_ASSIGNED] = 'ASSIGNED';
+$todo_item_status[TODO_ITEM_CLOSED]   = 'CLOSED';
 
 $todo_item_category[0] = 'Missing feature';
 $todo_item_category[1] = 'Bug';
 $todo_item_category[2] = 'Code rewrite';
 $todo_item_category[3] = 'Other';
 
-define('CLOSE_BUG_BOGUS',        0); $close_bug_reason[CLOSE_BUG_BOGUS]        = 'BOGUS';
-define('CLOSE_BUG_ALREADYFIXED', 1); $close_bug_reason[CLOSE_BUG_ALREADYFIXED] = 'ALREADY FIXED';
+define('CLOSE_BUG_BOGUS',        0);
+define('CLOSE_BUG_ALREADYFIXED', 1);
+
+$close_bug_reason[CLOSE_BUG_BOGUS]        = 'BOGUS';
+$close_bug_reason[CLOSE_BUG_ALREADYFIXED] = 'ALREADY FIXED';
 
 
 /**

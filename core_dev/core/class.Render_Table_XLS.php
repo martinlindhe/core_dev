@@ -24,11 +24,21 @@ class Render_Table_XLS extends Render_Table
 
 		$row = 0;
 		$col = 0;
-		foreach ($this->data as $data) {
-			if (is_numeric($data)) {
-				$out .= xlsWriteDouble($row, $col, $data);
+
+		if ($this->heads) {
+			foreach ($this->heads as $h) {
+				$out .= xlsWriteLabel($row, $col, $h);	//FIXME can text be made bold or something?
+				$col++;
+			}
+			$row = 1;
+			$col = 0;
+		}
+
+		foreach ($this->data as $d) {
+			if (is_numeric($d)) {
+				$out .= xlsWriteDouble($row, $col, $d);
 			} else {
-				$out .= xlsWriteLabel($row, $col, $data);
+				$out .= xlsWriteLabel($row, $col, $d);
 			}
 			$col++;
 			if ($col == $this->columns) {

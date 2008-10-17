@@ -13,7 +13,9 @@ class Render_Table_PDF extends Render_Table
 {
 	function render()
 	{
-		$out = '';
+		$out = pdfBOF();
+
+/*
 		$i = 0;
 		foreach ($this->data as $data) {
 			$out .= '"'.$data.'"';
@@ -25,6 +27,9 @@ class Render_Table_PDF extends Render_Table
 				$out .= $this->separator;
 			}
 		}
+*/
+		$out .= pdfTrailer();
+
 		return $out;
 	}
 

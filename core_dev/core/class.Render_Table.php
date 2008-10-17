@@ -8,6 +8,7 @@ require_once('class.Render_Table_XHTML.php');
 abstract class Render_Table
 {
 	protected $columns = 3;
+	protected $heads = array();
 	protected $data = array();
 
 	/**
@@ -15,10 +16,21 @@ abstract class Render_Table
 	 */
 	function setColumns($val)
 	{
-		$this->columns = $val;
+		//ignored if heading() dictates other
+		if (!$this->heads) {
+			$this->columns = $val;
+		}
 	}
 
-//TODO ability to add heading data
+	/**
+	 * Add headers
+	 */
+	function heading($heads = array())
+	{
+		$this->columns = count($heads);
+
+		$this->heads = $heads;
+	}
 
 	/**
 	 * Add a value to the data buffer
