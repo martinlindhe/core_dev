@@ -1,7 +1,7 @@
 <?php
 
 require_once('class.Render_Table_CSV.php');
-require_once('class.Render_Table_PDF.php');
+//require_once('class.Render_Table_PDF.php');	//FIXME not complete
 require_once('class.Render_Table_XLS.php');
 require_once('class.Render_Table_XHTML.php');
 
