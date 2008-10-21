@@ -13,6 +13,10 @@
  */
 function ago($sql_time)
 {
+	if (function_exists('agoOverride')) {
+		return agoOverride($sql_time);
+	}
+
 	$old_time = strtotime($sql_time);
 	$curr_time = time();
 
