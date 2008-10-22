@@ -30,12 +30,31 @@ class Render_Table_CSV extends Render_Table
 		$this->separator = $val;
 	}
 
+	private function escape($str)
+	{
+		//FIXME only escape with " if string contains $this->separator (?)
+		return '"'.$str.'"';
+	}
+
 	function render()
 	{
 		$out = '';
+
+		if ($this->heads) {
+			$i = 0;
+			foreach ($this->heads as $h) {
+				$out .= $this->escape($h);
+				$i++;
+				if ($i < $this->columns) {
+					$out .= $this->separator;
+				}
+			}
+			$out .= $this->EOL;
+		}
+
 		$i = 0;
 		foreach ($this->data as $data) {
-			$out .= '"'.$data.'"';	//FIXME only escape with " if string contains $this->separator (?)
+			$out .= $this->escape($data);
 			$i++;
 			if ($i == $this->columns) {
 				$out .= $this->EOL;
