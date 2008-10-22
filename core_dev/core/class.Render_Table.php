@@ -11,7 +11,8 @@ abstract class Render_Table
 	protected $heads = array();
 	protected $data = array();
 
-	protected $default_ext;	///< default filename extension for output to file
+	protected $default_mime = '';	///< default mime type for browser output - FIXME implement
+	protected $default_ext = '';	///< default filename extension for output to file
 
 	/**
 	 * Set the number of columns (fields) in the file
