@@ -34,6 +34,14 @@ class Render_Table_XHTML extends Render_Table
 			($this->table_style ? ' style="'.$this->table_style.'"' : '').
 			'>';
 
+		if ($this->heads) {
+			$out .= '<tr>';
+			foreach ($this->heads as $h) {
+				$out .= '<th>'.$h.'</th>';
+			}
+			$out .= '</tr>';
+		}
+
 		$i = 0;
 		foreach ($this->data as $data) {
 			if ($i == 0) {
