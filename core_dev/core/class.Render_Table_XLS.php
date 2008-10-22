@@ -29,7 +29,7 @@ class Render_Table_XLS extends Render_Table
 
 		if ($this->heads) {
 			foreach ($this->heads as $h) {
-				$out .= xlsWriteLabel($row, $col, $h);	//FIXME can text be made bold or something?
+				$out .= xlsWriteText($row, $col, $h);	//FIXME can text be made bold or something?
 				$col++;
 			}
 			$row = 1;
@@ -38,9 +38,9 @@ class Render_Table_XLS extends Render_Table
 
 		foreach ($this->data as $d) {
 			if (is_numeric($d)) {
-				$out .= xlsWriteDouble($row, $col, $d);
+				$out .= xlsWriteNumber($row, $col, $d);
 			} else {
-				$out .= xlsWriteLabel($row, $col, $d);
+				$out .= xlsWriteText($row, $col, $d);
 			}
 			$col++;
 			if ($col == $this->columns) {

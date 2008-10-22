@@ -22,18 +22,20 @@ function xlsEOF()
 	return pack("ss", 0x0A, 0x00);
 }
 
-/** Writes a number (double) */
-function xlsWriteDouble($row, $col, $val)
+/** Writes a number */
+function xlsWriteNumber($row, $col, $val)
 {
-	return pack("sssssd", 0x203, 14, $row, $col, 0x0, $val);
+	//FIXME this don't output good enough precision, seem to round to 2 decimals (at least Open Office)
+
+	return pack("sssssd", 0x203, 14, $row, $col, 0x0, $val);	//0x203 = double
 }
 
-/** Writes a label (text) */
-function xlsWriteLabel($row, $col, $text)
+/** Writes a text string */
+function xlsWriteText($row, $col, $text)
 {
 	//FIXME support unicode strings, see pg 18 in Excel97-2007BinaryFileFormat(xls)Specification.xps
 	$len = strlen($text);
-	return pack("ssssss", 0x204, 8 + $len, $row, $col, 0x0, $len) . $text;
+	return pack("ssssss", 0x204, 8 + $len, $row, $col, 0x0, $len) . $text;	//0x204 = label
 }
 
 ?>
