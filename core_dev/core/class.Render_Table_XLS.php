@@ -18,6 +18,8 @@ require_once('output_xls.php');
 
 class Render_Table_XLS extends Render_Table
 {
+	protected $default_ext = '.xls';
+
 	function render()
 	{
 		$out = xlsBOF();

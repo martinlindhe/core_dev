@@ -11,6 +11,8 @@ require_once('output_xhtml.php');
 
 class Render_Table_XHTML extends Render_Table
 {
+	protected $default_ext = '.html';
+
 	private $table_class = '';
 	private $table_style = '';
 	function tableClass($class) { $this->table_class = $class; }

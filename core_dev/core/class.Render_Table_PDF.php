@@ -11,6 +11,8 @@ require_once('output_pdf.php');
 
 class Render_Table_PDF extends Render_Table
 {
+	protected $default_ext = '.pdf';
+
 	function render()
 	{
 		$out = pdfBOF();

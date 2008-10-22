@@ -11,6 +11,8 @@ abstract class Render_Table
 	protected $heads = array();
 	protected $data = array();
 
+	protected $default_ext;	///< default filename extension for output to file
+
 	/**
 	 * Set the number of columns (fields) in the file
 	 */
@@ -45,6 +47,10 @@ abstract class Render_Table
 	 */
 	function write($filename)
 	{
+		if (strpos($filename, '.') == false) {
+			$filename .= $this->default_ext;
+		}
+
 		$fp = fopen($filename, 'w');
 		fwrite($fp, $this->render());
 		fclose($fp);

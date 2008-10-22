@@ -14,6 +14,8 @@ class Render_Table_CSV extends Render_Table
 	private $EOL = "\r\n";		//DOS style line endings
 	private $separator = ",";
 
+	protected $default_ext = '.csv';
+
 	/**
 	 * Set the line ending characters (usually "\r\n" or "\n")
 	 */
