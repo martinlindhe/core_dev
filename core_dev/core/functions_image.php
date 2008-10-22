@@ -362,4 +362,36 @@ function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 1
 	}
 	return $im;
 }
+
+function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12, $px = 10, $py = 10)
+{
+	$ttf_angle = 0;
+
+	$im = imagecreatefrompng($template);
+
+	if (empty($col)) {
+		$color = imagecolorallocate($im, 0, 0, 0); //defaults to black
+	} else {
+		$color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
+	}
+
+	$font = loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh);
+
+	//Prints the text in $str array centered vertically & horizontally over the image
+	foreach ($str as $txt) {
+		if (!$ttf) {
+			$txt = mb_convert_encoding($txt, 'ISO-8859-1', 'auto'); //FIXME required with php 5.2, as imagestring() cant handle utf8
+		}
+
+		$py += $fh;
+
+		if (!$ttf) {
+			imagestring($im, $font, $px, $py, $txt, $color);
+		} else {
+			imagettftext($im, $ttf_size, $ttf_angle, $px, $py, $color, $font, $txt);
+		}
+	}
+	return $im;
+}
+
 ?>
