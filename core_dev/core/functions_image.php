@@ -284,27 +284,10 @@ function rotateImage($in_file, $out_file, $_angle)
 }
 
 /**
- * Draws text centered horizontally & vertically
- *
- * \param $str array of lines of text to print
- * \param $template png image to use as template to draw the text upon
- * \param $font specify the font to use. numeric 1-5 for gd's internal fonts, or specify a .gdf or .ttf font instead
- * \param $col optional color to draw the font in, array(r,g,b). defaults to black
- * \param $ttf_size optional size of ttf font, defaults to 12
- * \return image resource
+ * Loads a font & sets font type & font height variables
  */
-function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 12)
+function loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh)
 {
-	$ttf_angle = 0;
-
-	$im = imagecreatefrompng($template);
-
-	if (empty($col)) {
-		$color = imagecolorallocate($im, 0, 0, 0); //defaults to black
-	} else {
-		$color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
-	}
-
 	$ttf = false;
 	if (!is_numeric($font)) {
 		if (substr(strtolower($font), -4) == '.ttf' || substr(strtolower($font), -4) == '.otf') {
@@ -326,6 +309,33 @@ function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 1
 	}
 
 	if (!$ttf) $fh = imagefontheight($font);
+
+	return $font;
+}
+
+/**
+ * Draws text centered horizontally & vertically
+ *
+ * \param $str array of lines of text to print
+ * \param $template png image to use as template to draw the text upon
+ * \param $font specify the font to use. numeric 1-5 for gd's internal fonts, or specify a .gdf or .ttf font instead
+ * \param $col optional color to draw the font in, array(r,g,b). defaults to black
+ * \param $ttf_size optional size of ttf font, defaults to 12
+ * \return image resource
+ */
+function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 12)
+{
+	$ttf_angle = 0;
+
+	$im = imagecreatefrompng($template);
+
+	if (empty($col)) {
+		$color = imagecolorallocate($im, 0, 0, 0); //defaults to black
+	} else {
+		$color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
+	}
+
+	$font = loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh);
 
 	$i = 0;
 
