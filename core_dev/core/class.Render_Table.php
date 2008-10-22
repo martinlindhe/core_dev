@@ -48,7 +48,7 @@ abstract class Render_Table
 	 */
 	function write($filename)
 	{
-		if (strpos($filename, '.') == false) {
+		if (strpos($filename, '.') === false) {
 			$filename .= $this->default_ext;
 		}
 
