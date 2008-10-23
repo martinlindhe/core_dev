@@ -10,6 +10,9 @@
 $config['image']['resample_resized']	= true;		///< use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 $config['image']['jpeg_quality']		= 75;		///< 0-100% quality for recompression of very large uploads (like digital camera pictures)
 
+$predef_color['white'] = array(255,255,255);
+$predef_color['black'] = array(0,0,0);
+
 /**
  * Resizes specified image file to specified dimensions
  *
@@ -383,12 +386,22 @@ function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12,
 			$txt = mb_convert_encoding($txt, 'ISO-8859-1', 'auto'); //FIXME required with php 5.2, as imagestring() cant handle utf8
 		}
 
+		$tmp_color = array();
+		$p1 = strpos($txt, '[');
+		$p2 = strpos($txt, ']');
+		if ($p1 !== false && $p2 !== false && $p2 > $p1) {
+			//extract RGB color code tag & use for current row only, format: [r,g,b]
+			$cut = explode(',', substr($txt, $p1 +1, $p2-$p1-1));
+			$tmp_color = imagecolorallocate($im, $cut[0], $cut[1], $cut[2]);
+			$txt = substr($txt, $p2 +1);
+		}
+
 		$py += $fh;
 
 		if (!$ttf) {
-			imagestring($im, $font, $px, $py, $txt, $color);
+			imagestring($im, $font, $px, $py, $txt, empty($tmp_color) ? $color : $tmp_color);
 		} else {
-			imagettftext($im, $ttf_size, $ttf_angle, $px, $py, $color, $font, $txt);
+			imagettftext($im, $ttf_size, $ttf_angle, $px, $py, empty($tmp_color) ? $color : $tmp_color, $font, $txt);
 		}
 	}
 	return $im;
