@@ -7,6 +7,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+//FIXME cleanup API and take userId as parameter, no tblUsers assumtions & usage
+
 define('COMMENT_NEWS',				1);
 define('COMMENT_BLOG',				2);		//anonymous or registered users comments on a blog
 define('COMMENT_FILE',				3);		//anonymous or registered users comments on a image
@@ -43,14 +45,16 @@ function addComment($_type, $ownerId, $commentText, $privateComment = false)
 	global $db, $session;
 	if (!is_numeric($_type) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
 
-	if ($_type != COMMENT_FILE && $_type != COMMENT_PASTEBIN && !$session->id) return false;
-
 	$commentText = $db->escape(htmlspecialchars($commentText));
 
 	if ($privateComment) $private = 1;
 	else $private = 0;
 
-	$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+	if (!empty($session->id)) {
+		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+	} else {
+		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId=0, userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+	}
 	return $db->insert($q);
 }
 
@@ -60,12 +64,16 @@ function addComment($_type, $ownerId, $commentText, $privateComment = false)
 function updateComment($commentType, $ownerId, $commentId, $commentText)
 {	//FIXME commentId och ownerId parametrarna borde byta plats
 	global $db, $session;
-	if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
+	if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
 
 	$commentText = $db->escape(htmlspecialchars($commentText));
 
 	$q  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).' ';
-	$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$session->id;
+	if (empty($session->id)) {
+		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId=0';
+	} else {
+		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$session->id;
+	}
 	$db->update($q);
 }
 
@@ -129,11 +137,13 @@ function getCommentFreeTextSearch($text, $_limit_sql = '')
  */
 function getComments($commentType, $ownerId = 0, $privateComments = false, $limit = '')
 {
-	global $db;
+	global $db, $session;
 	if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
 
-	$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 ';
-	$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
+	$q  = 'SELECT t1.*';
+	if (!empty($session->id)) $q .= ',t2.userName';
+	$q .= ' FROM tblComments AS t1 ';
+	if (!empty($session->id)) $q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
 	$q .= 'WHERE ';
 	if ($ownerId) $q .= 't1.ownerId='.$ownerId.' AND ';
 	$q .= 't1.commentType='.$commentType.' AND t1.deletedBy=0';
