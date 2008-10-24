@@ -58,6 +58,10 @@ __URL__
 
 The link will expire in __EXPIRETIME__";
 
+	/**
+	 * Constructor
+	 * @param array $auth_conf auth configuration
+	 */
 	function __construct(array $auth_conf = array())
 	{
 		global $db;
@@ -84,14 +88,32 @@ The link will expire in __EXPIRETIME__";
 		$this->handleAuthEvents();
 	}
 
+	/**
+	 * Attempts to register a user
+	 * @param string $username
+	 * @param string $password1
+	 * @param string $password2
+	 * @param int $userMode
+	 */
 	abstract function registerUser($username, $password1, $password2, $userMode = 0);
 
 	//FIXME abstract func. unregisterUser()
 
+	/**
+	 * Logs in a user
+	 * @param string $username
+	 * @param string $password
+	 */
 	abstract function login($username, $password);
 
+	/**
+	 * Logs out the user
+	 */
 	abstract function logout();
 
+	/**
+	 * Displays built in login form
+	 */
 	abstract function showLoginForm();
 
 	/**
@@ -163,6 +185,7 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Sends a account activation mail to specified user
+	 * @param $_id user id
 	 */
 	function sendActivationMail($_id)
 	{
@@ -193,6 +216,12 @@ The link will expire in __EXPIRETIME__";
 		return true;
 	}
 
+	/**
+	 * Verifies user activaction code
+	 * @param int $_id
+	 * @param int $_code
+	 * @return bool true if success
+	 */
 	function verifyActivationMail($_id, $_code)
 	{
 		if (!is_numeric($_id) || !is_numeric($_code)) return false;
@@ -213,6 +242,7 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Looks up user supplied email address / alias and generates a mail for them if needed
+	 * @param $email string email address
 	 */
 	function handleForgotPassword($email)
 	{
@@ -257,6 +287,12 @@ The link will expire in __EXPIRETIME__";
 		return true;
 	}
 
+	/**
+	 * Reset user's password
+	 * @param int $_id user id
+	 * @param int $_code reset code
+	 * @return bool true on success
+	 */
 	function resetPassword($_id, $_code)
 	{
 		global $session;

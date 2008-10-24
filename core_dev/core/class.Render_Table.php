@@ -1,4 +1,9 @@
 <?php
+/**
+ * $Id$
+ *
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
+ */
 
 require_once('class.Render_Table_CSV.php');
 //require_once('class.Render_Table_PDF.php');	//FIXME not complete

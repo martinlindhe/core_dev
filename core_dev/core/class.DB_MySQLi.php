@@ -312,6 +312,7 @@ class DB_MySQLi extends DB_Base
 
 	/**
 	 * Lock table from reading
+	 * @param $t string table name
 	 */
 	function lock($t)
 	{
