@@ -12,10 +12,13 @@ $admin_menu = array(
 	$config['core']['web_root'].'admin/admin_news.php' => 'News',
 	$config['core']['web_root'].'admin/admin_polls.php' => 'Polls',
 	$config['core']['web_root'].'admin/admin_fortunes.php' => 'Fortunes',
-	$config['core']['web_root'].'admin/admin_feedback.php' => 'Feedback',	//FIXME: hide if feedback-module is disabled
 	$config['core']['web_root'].'admin/admin_statistics.php' => 'Stats',
 	$config['core']['web_root'].'admin/admin_events.php' => 'Event log'
 );
+
+if (!empty($config['feedback']['enabled'])) {
+    $admin_menu[] = $config['core']['web_root'].'admin/admin_feedback.php' => 'Feedback';
+}
 
 $super_admin_menu = array(
 	$config['core']['web_root'].'admin/admin_userdata.php' => 'Userdata',
