@@ -159,7 +159,7 @@ function getMessagesCount($_group = 0, $_id = 0)
 }
 
 /**
- * XXX
+ * Returns number of unread messages
  */
 function getMessagesNewItemsCount($_group = 0, $_id = 0)
 {
@@ -175,7 +175,9 @@ function getMessagesNewItemsCount($_group = 0, $_id = 0)
 }
 
 /**
- * XXX
+ * Returns a message
+ *
+ * \param $_id message id
  */
 function getMessage($_id)
 {
@@ -214,7 +216,7 @@ function markMessageDeleted($_id)
 }
 
 /**
- * XXX
+ * Shows messages
  */
 function showMessages($_group = 0)
 {

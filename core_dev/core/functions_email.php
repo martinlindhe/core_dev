@@ -64,7 +64,7 @@ function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '')
 }
 
 /**
- * XXX
+ * Send email to multiple users
  */
 function contact_users($message, $subject, $all, $presvid, $logged_in_days, $days, $res)
 {

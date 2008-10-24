@@ -6,7 +6,11 @@
  */
 
 /**
- * XXX
+ * Adds a new FAQ entry
+ *
+ * \param $_q question
+ * \param $_a answer
+ * \return FAQ id
  */
 function addFAQ($_q, $_a)
 {
@@ -18,31 +22,41 @@ function addFAQ($_q, $_a)
 }
 
 /**
- * XXX
+ * Updates a FAQ entry
+ *
+ * \param $_id FAQ id
+ * \param $_q question
+ * \param $_a answe
+ * \return true on success
  */
 function updateFAQ($_id, $_q, $_a)
 {
 	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_id)) return;
+	if (!$session->isAdmin || !is_numeric($_id)) return false;
 
 	$q = 'UPDATE tblFAQ SET question="'.$db->escape($_q).'",answer="'.$db->escape($_a).'" WHERE faqId='.$_id;
 	$db->update($q);
+    return true;
 }
 
 /**
- * XXX
+ * Deletes a FAQ entry
+ *
+ * \param $_id FAQ id
+ * \return true on success
  */
 function deleteFAQ($_id)
 {
 	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_id)) return;
+	if (!$session->isAdmin || !is_numeric($_id)) return false;
 
 	$q = 'DELETE FROM tblFAQ WHERE faqId='.$_id;
 	$db->delete($q);
+    return true;
 }
 
 /**
- * XXX
+ * Fetches all FAQ entries
  */
 function getFAQ()
 {
@@ -53,7 +67,7 @@ function getFAQ()
 }
 
 /**
- * XXX
+ * Shows all FAQ entries with ability to edit them
  */
 function showFAQ()
 {

@@ -92,7 +92,9 @@ function CCmaskNumber($number)
 }
 
 /**
- * XXX
+ * Returns type of credit card for supplied cc number
+ *
+ * \param $number credit card number
  */
 function CCgetTypeName($number)
 {
@@ -149,15 +151,19 @@ function CCgetType($number)
 	return CC_INVALID;
 }
 
+/**
+ * Performs MOD 10 calculation of credit card number
+ *
+ * \return true if checksums is correct
+ */
 function CCvalidateMod10($number)
 {
 	$number = CCstripNumber($number);
-	if ($number === false) return false;
-	if (CCgetType($number) == CC_INVALID) return false;
+	if ($number === false || CCgetType($number) == CC_INVALID) return false;
 
 	$tot=0;
 	for ($i = strlen($number)-1; $i>=0; $i--) {
-		$char = substr($number, $i,1);
+		$char = substr($number, $i, 1);
 		if (!((strlen($number)-$i) % 2)) { //Even numbers
 			$char *= 2;
 			$d1 = substr($char,0,1);
@@ -168,7 +174,7 @@ function CCvalidateMod10($number)
 		}
 	}
 
-	if (substr($tot, -1) == "0") return true;
+	if (substr($tot, -1) == '0') return true;
 	return false;
 }
 ?>
