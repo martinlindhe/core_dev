@@ -12,21 +12,21 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-define('SSN_INVALID_INPUT',		1);
-define('SSN_INVALID_DATE',		2);
-define('SSN_WRONG_CHECKSUM',	3);
-define('SSN_GENDER_IS_MALE',	4);
-define('SSN_GENDER_IS_FEMALE',	5);
+define('SSN_ERR_INVALID_INPUT',		1);
+define('SSN_ERR_INVALID_DATE',		2);
+define('SSN_ERR_WRONG_CHECKSUM',	3);
+define('SSN_ERR_GENDER_IS_MALE',	4);
+define('SSN_ERR_GENDER_IS_FEMALE',	5);
 
 define('SSN_GENDER_UNKNOWN',	0);
 define('SSN_GENDER_MALE', 		1);
 define('SSN_GENDER_FEMALE',		2);
 
-$ssn_error[SSN_INVALID_INPUT] = 'Invalid input';
-$ssn_error[SSN_INVALID_DATE] = 'Invalid date';
-$ssn_error[SSN_WRONG_CHECKSUM] = 'Wrong checksum';
-$ssn_error[SSN_GENDER_IS_MALE] = 'Wrong gender specified, this ssn belongs to a male';
-$ssn_error[SSN_GENDER_IS_FEMALE] = 'Wrong gender specified, this ssn belongs to a female';
+$ssn_error[SSN_ERR_INVALID_INPUT] = 'Invalid input';
+$ssn_error[SSN_ERR_INVALID_DATE] = 'Invalid date';
+$ssn_error[SSN_ERR_WRONG_CHECKSUM] = 'Wrong checksum';
+$ssn_error[SSN_ERR_GENDER_IS_MALE] = 'Wrong gender specified, this ssn belongs to a male';
+$ssn_error[SSN_ERR_GENDER_IS_FEMALE] = 'Wrong gender specified, this ssn belongs to a female';
 
 /**
  * Cleans up user-inputted ssn
@@ -43,6 +43,19 @@ function SsnCleanInput($_ssn)
 }
 
 /**
+ * Looks up error message for SSN error code
+ *
+ * @param $_errcode SSN error code
+ * @return error message
+ */
+function SsnError($_errcode)
+{
+	global $ssn_error;
+	if (!is_numeric($_errcode)) return false;
+	return $ssn_error[$_errcode];
+}
+
+/**
  * Validates a swedish social security number (personnummer)
  *
  * \param $_ssn a swedish social security number (personnummer) in the format "YYYYMMDD-XXXX" or "YYMMDD-XXXX"
@@ -56,14 +69,14 @@ function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
 	//year specified in 4 digits
 	if (strlen($_ssn) == 12) $_ssn = substr($_ssn, 2);
 
-	if (strlen($_ssn) != 10) return SSN_INVALID_INPUT;
+	if (strlen($_ssn) != 10) return SSN_ERR_INVALID_INPUT;
 
 	//validate if the date existed, for example 19810230 is invalid
 	$yr = substr($_ssn, 0, 2);
 	$yr = ($yr > date('y')) ? '19'.$yr : '20'.$yr;	//years below curryear is considered to be 2000-20xx, otherwise its 1900-19xx
 	$mn = intval(substr($_ssn, 2, 2));
 	$dy = intval(substr($_ssn, 4, 2));
-	return SsnValidateSwedishNum($yr, $mn, $dy, substr($_ssn, -4));
+	return SsnValidateSwedishNum($yr, $mn, $dy, substr($_ssn, -4), $_gender);
 }
 
 /**
@@ -71,21 +84,23 @@ function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
  */
 function SsnValidateSwedishNum($_yr, $_mn, $_dy, $_last4, $_gender = SSN_GENDER_UNKNOWN)
 {
-	if (!checkdate($_mn, $_dy, $_yr)) return SSN_INVALID_DATE;
+	if (!checkdate($_mn, $_dy, $_yr)) return SSN_ERR_INVALID_DATE;
 
 	if (strlen($_yr) == 4) $_yr = substr($_yr, -2);
 	$ssn = $_yr . (strlen($_mn)==1?'0'.$_mn:$_mn) . (strlen($_dy)==1?'0'.$_dy:$_dy) . $_last4;
 
-	if (substr($_last4, -1) != SsnCalcSumSwedish($ssn)) return SSN_WRONG_CHECKSUM;
+	if (substr($_last4, -1) != SsnCalcSumSwedish($ssn)) return SSN_ERR_WRONG_CHECKSUM;
 
 	$ssn_gender = intval(substr($ssn, 8, 1));
+
 	if (($ssn_gender % 2) && $_gender == SSN_GENDER_FEMALE) {
 		//Error: odd (male) ssn found but user thinks its a female ssn
-		return SSN_GENDER_IS_MALE;
+		return SSN_ERR_GENDER_IS_MALE;
 	}
+
 	if (!($ssn_gender % 2) && $_gender == SSN_GENDER_MALE) {
 		//Error: even (female) ssn found but user thinks its a male ssn
-		return SSN_GENDER_IS_FEMALE;
+		return SSN_ERR_GENDER_IS_FEMALE;
 	}
 
 	return true;
