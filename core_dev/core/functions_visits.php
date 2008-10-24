@@ -12,7 +12,7 @@ define('VISIT_FILE',		2);
 define('VISIT_BLOG',		3);	//FIXME implement!
 
 /**
- * XXX
+ * Creates a visit log entry
  */
 function logVisit($_type, $_owner)
 {
@@ -28,7 +28,7 @@ function logVisit($_type, $_owner)
 }
 
 /**
- * XXX
+ * Returns visits
  */
 function getVisits($_type, $_id, $_limit = 5)
 {

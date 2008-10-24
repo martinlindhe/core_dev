@@ -2,9 +2,9 @@
 /**
  * $Id$
  *
- * Functions for validating / generating swedish social security numbers
+ * Functions for validating / generating swedish social security numbers (SSN)
  *
- * \todo validation of ssn's for other countries
+ * \todo validation of SSN's for other countries
  *
  * References:
  * http://sv.wikipedia.org/wiki/Personnummer_i_Sverige (in swedish)
@@ -67,7 +67,7 @@ function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
 }
 
 /**
- * XXX
+ * Validates a Swedish SSN
  */
 function SsnValidateSwedishNum($_yr, $_mn, $_dy, $_last4, $_gender = SSN_GENDER_UNKNOWN)
 {

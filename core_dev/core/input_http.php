@@ -25,8 +25,8 @@ function http_status($url)
 			$default_port = 80;
 			break;
 
+		//FIXME https support (?)
 		default:
-			//TODO handle https
 			echo "unsupported url scheme: ".$u['scheme']."\n";
 			return;
 	}
