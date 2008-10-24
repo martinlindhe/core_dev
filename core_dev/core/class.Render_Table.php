@@ -16,6 +16,7 @@ abstract class Render_Table
 
 	/**
 	 * Set the number of columns (fields) in the file
+	 * @param $val int number of columns
 	 */
 	function setColumns($val)
 	{
@@ -27,6 +28,7 @@ abstract class Render_Table
 
 	/**
 	 * Add headers
+	 * @param $heads array List of heading elements
 	 */
 	function heading($heads = array())
 	{
@@ -37,6 +39,7 @@ abstract class Render_Table
 
 	/**
 	 * Add a value to the data buffer
+	 * @param $val mixed Value
 	 */
 	function add($val)
 	{
@@ -45,6 +48,7 @@ abstract class Render_Table
 
 	/**
 	 * Renders & stores table in specified file
+	 * @param $filename string file name
 	 */
 	function write($filename)
 	{
@@ -60,7 +64,7 @@ abstract class Render_Table
 	/**
 	 * Returns rendered table
 	 *
-	 * \return Rendered data in desired format
+	 * @return Rendered data in desired format
 	 */
 	abstract function render();
 }
