@@ -17,7 +17,7 @@ $admin_menu = array(
 );
 
 if (!empty($config['feedback']['enabled'])) {
-    $admin_menu[] = $config['core']['web_root'].'admin/admin_feedback.php' => 'Feedback';
+    $admin_menu[$config['core']['web_root'].'admin/admin_feedback.php'] = 'Feedback';
 }
 
 $super_admin_menu = array(
