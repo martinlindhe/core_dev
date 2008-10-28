@@ -16,9 +16,14 @@ define('CATEGORY_BLOG', 			10);	///< normal, personal blog category
 define('CATEGORY_CONTACT',			11);	///< friend relation category, like "Old friends", "Family"
 define('CATEGORY_USERDATA',			12);	///< used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
 define('CATEGORY_POLL',				13);	///< used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
+define('CATEGORY_EMAIL',			14);	///< list of user-associated email-adresses
+define('CATEGORY_SMS',				15);	///< list of user-associated sms-contact-numbers
+define('CATEGORY_CELLPHONE',		16);	///< list of user-associated cellphone-numbers
 
 define('CATEGORY_NEWS',				20);	///< news categories
 define('CATEGORY_LANGUAGE',			51);	///< represents a language, for multi-language features & used by "lang" project
+
+
 
 //tblCategory.permissions:
 define('CAT_PERM_PUBLIC',	0x01);	///< public category
