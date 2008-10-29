@@ -130,7 +130,7 @@ function parseAnr($anr)
 		case '236':	//Central African Republic
 		case '237':	//Cameroon
 		case '238':	//Cape Verde
-		case '239': //São Tomé and Príncipe
+		case '239':	//São Tomé and Príncipe
 		case '240':	//Equatorial Guinea
 		case '241':	//Gabon
 		case '242':	//Republic of Congo
@@ -138,7 +138,7 @@ function parseAnr($anr)
 		case '244':	//Angola
 		case '245':	//Guinea-Bissau
 		case '246':	//British Indian Ocean Territory
-		case '247': //Ascension Island
+		case '247':	//Ascension Island
 		case '248':	//Seychelles
 		case '249':	//Sudan
 		case '250':	//Rwanda
