@@ -457,38 +457,9 @@ $area_code[46][692] = 'Liden';
 $area_code[46][693] = 'Bräcke-Gällö';
 $area_code[46][695] = 'Stugun';
 $area_code[46][696] = 'Hammarstrand';
-$area_code[46][700] = 'Cellphone';
-$area_code[46][701] = 'Cellphone';
-$area_code[46][702] = 'Cellphone';
-$area_code[46][703] = 'Cellphone';
-$area_code[46][704] = 'Cellphone';
-$area_code[46][705] = 'Cellphone';
-$area_code[46][706] = 'Cellphone';
-$area_code[46][707] = 'Cellphone';
-$area_code[46][708] = 'Cellphone';
-$area_code[46][709] = 'Cellphone';
-
-$area_code[46][730] = 'Cellphone';
-$area_code[46][731] = 'Cellphone';
-$area_code[46][732] = 'Cellphone';
-$area_code[46][733] = 'Cellphone';
-$area_code[46][734] = 'Cellphone';
-$area_code[46][735] = 'Cellphone';
-$area_code[46][736] = 'Cellphone';
-$area_code[46][737] = 'Cellphone';
-$area_code[46][738] = 'Cellphone';
-$area_code[46][739] = 'Cellphone';
-
-$area_code[46][761] = 'Cellphone';
-$area_code[46][762] = 'Cellphone';
-$area_code[46][763] = 'Cellphone';
-$area_code[46][764] = 'Cellphone';
-$area_code[46][765] = 'Cellphone';
-$area_code[46][766] = 'Cellphone';
-$area_code[46][767] = 'Cellphone';
-$area_code[46][768] = 'Cellphone';
-//+46-769 still unused?
-
+$area_code[46][70] = 'Cellphone';
+$area_code[46][73] = 'Cellphone';
+$area_code[46][76] = 'Cellphone';	//+46-769 appears to be unallocated still, 2008.10.30
 $area_code[46][8] = 'Stockholm';
 $area_code[46][90] = 'Umeå';
 $area_code[46][910] = 'Skellefteå';
