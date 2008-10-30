@@ -7,6 +7,11 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+/**
+ * All country codes from:
+ * http://www.itu.int/publ/T-SP-E.164D-2007/en
+ * as of 2008.10.29
+ */
 $e164_cc[1] = 'USA, Canada';
 $e164_cc[7] = 'Russia';	//& Kazakhstan
 $e164_cc[20] = 'Egypt';
@@ -229,6 +234,308 @@ $e164_cc[996] = 'Kyrgyzstan';
 $e164_cc[998] = 'Uzbekistan';
 
 /**
+ * Swedish area codes from
+ * http://sv.wikipedia.org/wiki/Lista_över_svenska_riktnummer
+ * as of 2008.10.30
+ */
+$area_code[46][11] = 'Norrköping';
+$area_code[46][120] = 'Åtvidaberg';
+$area_code[46][121] = 'Söderköping';
+$area_code[46][122] = 'Finspång';
+$area_code[46][123] = 'Valdemarsvik';
+$area_code[46][125] = 'Vikbolandet';
+$area_code[46][13] = 'Linköping';
+$area_code[46][140] = 'Tranås';
+$area_code[46][141] = 'Motala';
+$area_code[46][142] = 'Mjölby-Skänninge-Boxholm';
+$area_code[46][143] = 'Vadstena';
+$area_code[46][144] = 'Ödeshög';
+$area_code[46][150] = 'Katrineholm';
+$area_code[46][151] = 'Vingåker';
+$area_code[46][152] = 'Strängnäs';
+$area_code[46][155] = 'Nyköping-Oxelösund';
+$area_code[46][156] = 'Trosa-Vagnhärad';
+$area_code[46][157] = 'Flen-Malmköping';
+$area_code[46][158] = 'Gnesta';
+$area_code[46][159] = 'Mariefred';
+$area_code[46][16] = 'Eskilstuna-Torshälla';
+$area_code[46][171] = 'Enköping';
+$area_code[46][173] = 'Öregrund-Östhammar';
+$area_code[46][174] = 'Alunda';
+$area_code[46][175] = 'Hallstavik-Rimbo';
+$area_code[46][176] = 'Norrtälje';
+$area_code[46][18] = 'Uppsala';
+$area_code[46][19] = 'Örebro-Kumla';
+$area_code[46][21] = 'Västerås';
+$area_code[46][220] = 'Hallstahammar-Surahammar';
+$area_code[46][221] = 'Köping';
+$area_code[46][222] = 'Skinnskatteberg';
+$area_code[46][223] = 'Fagersta-Norberg';
+$area_code[46][224] = 'Sala-Heby';
+$area_code[46][225] = 'Hedemora-Säter';
+$area_code[46][226] = 'Avesta-Krylbo';
+$area_code[46][227] = 'Kungsör';
+$area_code[46][23] = 'Falun';
+$area_code[46][240] = 'Ludvika-Smedjebacken';
+$area_code[46][241] = 'Gagnef-Floda';
+$area_code[46][243] = 'Borlänge';
+$area_code[46][246] = 'Svärdsjö-Enviken';
+$area_code[46][247] = 'Leksand-Insjön';
+$area_code[46][248] = 'Rättvik';
+$area_code[46][250] = 'Mora-Orsa';
+$area_code[46][251] = 'Älvdalen';
+$area_code[46][253] = 'Idre-Särna';
+$area_code[46][258] = 'Furudal';
+$area_code[46][26] = 'Gävle-Sandviken';
+$area_code[46][270] = 'Söderhamn';
+$area_code[46][271] = 'Alfta-Edsbyn';
+$area_code[46][278] = 'Bollnäs';
+$area_code[46][280] = 'Malung';
+$area_code[46][281] = 'Vansbro';
+$area_code[46][290] = 'Hofors-Storvik';
+$area_code[46][291] = 'Hedesunda-Österfärnebo';
+$area_code[46][292] = 'Tärnsjö-Östervåla';
+$area_code[46][293] = 'Tierp-Söderfors';
+$area_code[46][294] = 'Karlholmsbruk-Skärplinge';
+$area_code[46][295] = 'Örbyhus-Dannemora';
+$area_code[46][297] = 'Ockelbo-Hamrånge';
+$area_code[46][300] = 'Kungsbacka';
+$area_code[46][301] = 'Hindås';
+$area_code[46][302] = 'Lerum';
+$area_code[46][303] = 'Kungälv';
+$area_code[46][304] = 'Orust-Tjörn';
+$area_code[46][31] = 'Göteborg';
+$area_code[46][320] = 'Kinna';
+$area_code[46][321] = 'Ulricehamn';
+$area_code[46][322] = 'Alingsås-Vårgårda';
+$area_code[46][325] = 'Svenljunga-Tranemo';
+$area_code[46][33] = 'Borås';
+$area_code[46][340] = 'Varberg';
+$area_code[46][345] = 'Hyltebruk-Torup';
+$area_code[46][346] = 'Falkenberg';
+$area_code[46][35] = 'Halmstad';
+$area_code[46][36] = 'Jönköping-Huskvarna';
+$area_code[46][370] = 'Värnamo';
+$area_code[46][371] = 'Gislaved-Anderstorp';
+$area_code[46][372] = 'Ljungby';
+$area_code[46][380] = 'Nässjö';
+$area_code[46][381] = 'Eksjö';
+$area_code[46][382] = 'Sävsjö';
+$area_code[46][383] = 'Vetlanda';
+$area_code[46][390] = 'Gränna';
+$area_code[46][392] = 'Mullsjö';
+$area_code[46][393] = 'Vaggeryd';
+$area_code[46][40] = 'Malmö';
+$area_code[46][410] = 'Trelleborg';
+$area_code[46][411] = 'Ystad';
+$area_code[46][413] = 'Eslöv-Höör';
+$area_code[46][414] = 'Simrishamn';
+$area_code[46][415] = 'Hörby';
+$area_code[46][416] = 'Sjöbo';
+$area_code[46][417] = 'Tomelilla';
+$area_code[46][418] = 'Landskrona-Svalöv';
+$area_code[46][42] = 'Helsingborg-Höganäs-Åstorp';
+$area_code[46][430] = 'Laholm';
+$area_code[46][431] = 'Ängelholm-Båstad';
+$area_code[46][433] = 'Markaryd-Strömsnäsbruk';
+$area_code[46][435] = 'Klippan-Perstorp';
+$area_code[46][44] = 'Kristianstad';
+$area_code[46][451] = 'Hässleholm';
+$area_code[46][454] = 'Karlshamn-Olofström';
+$area_code[46][455] = 'Karlskrona';
+$area_code[46][456] = 'Sölvesborg-Bromölla';
+$area_code[46][457] = 'Ronneby';
+$area_code[46][459] = 'Ryd';
+$area_code[46][46] = 'Lund';
+$area_code[46][470] = 'Växjö';
+$area_code[46][471] = 'Emmaboda';
+$area_code[46][472] = 'Alvesta-Rydaholm';
+$area_code[46][474] = 'Åseda-Lenhovda';
+$area_code[46][476] = 'Älmhult';
+$area_code[46][477] = 'Tingsryd';
+$area_code[46][478] = 'Lessebo';
+$area_code[46][479] = 'Osby';
+$area_code[46][480] = 'Kalmar';
+$area_code[46][481] = 'Nybro';
+$area_code[46][485] = 'Öland';
+$area_code[46][486] = 'Torsås';
+$area_code[46][490] = 'Västervik';
+$area_code[46][491] = 'Oskarshamn-Högsby';
+$area_code[46][492] = 'Vimmerby';
+$area_code[46][493] = 'Gamleby';
+$area_code[46][494] = 'Kisa';
+$area_code[46][495] = 'Hultsfred-Virserum';
+$area_code[46][496] = 'Mariannelund';
+$area_code[46][498] = 'Gotland';
+$area_code[46][499] = 'Mönsterås';
+$area_code[46][500] = 'Skövde';
+$area_code[46][501] = 'Mariestad';
+$area_code[46][502] = 'Tidaholm';
+$area_code[46][503] = 'Hjo';
+$area_code[46][504] = 'Tibro';
+$area_code[46][505] = 'Karlsborg';
+$area_code[46][506] = 'Töreboda-Hova';
+$area_code[46][510] = 'Lidköping';
+$area_code[46][511] = 'Skara-Götene';
+$area_code[46][512] = 'Vara-Nossebro';
+$area_code[46][513] = 'Herrljunga';
+$area_code[46][514] = 'Grästorp';
+$area_code[46][515] = 'Falköping';
+$area_code[46][520] = 'Trollhättan';
+$area_code[46][521] = 'Vänersborg';
+$area_code[46][522] = 'Uddevalla';
+$area_code[46][523] = 'Lysekil';
+$area_code[46][524] = 'Munkedal';
+$area_code[46][525] = 'Grebbestad';
+$area_code[46][526] = 'Strömstad';
+$area_code[46][528] = 'Färgelanda';
+$area_code[46][530] = 'Mellerud';
+$area_code[46][531] = 'Bengtsfors';
+$area_code[46][532] = 'Åmål';
+$area_code[46][533] = 'Säffle';
+$area_code[46][534] = 'Ed';
+$area_code[46][54] = 'Karlstad';
+$area_code[46][550] = 'Kristinehamn';
+$area_code[46][551] = 'Gullspång';
+$area_code[46][552] = 'Deje';
+$area_code[46][553] = 'Molkom';
+$area_code[46][554] = 'Kil';
+$area_code[46][555] = 'Grums';
+$area_code[46][560] = 'Torsby';
+$area_code[46][563] = 'Hagfors-Munkfors';
+$area_code[46][564] = 'Sysslebäck';
+$area_code[46][565] = 'Sunne';
+$area_code[46][570] = 'Arvika';
+$area_code[46][571] = 'Charlottenberg-Åmotfors';
+$area_code[46][573] = 'Årjäng';
+$area_code[46][580] = 'Kopparberg';
+$area_code[46][581] = 'Lindesberg';
+$area_code[46][582] = 'Hallsberg';
+$area_code[46][583] = 'Askersund';
+$area_code[46][584] = 'Laxå';
+$area_code[46][585] = 'Fjugesta-Svartå';
+$area_code[46][586] = 'Karlskoga-Degerfors';
+$area_code[46][587] = 'Nora';
+$area_code[46][589] = 'Arboga';
+$area_code[46][590] = 'Filipstad';
+$area_code[46][591] = 'Hällefors-Grythyttan';
+$area_code[46][60] = 'Sundsvall-Timrå';
+$area_code[46][611] = 'Härnösand';
+$area_code[46][612] = 'Kramfors';
+$area_code[46][613] = 'Ullånger';
+$area_code[46][620] = 'Sollefteå';
+$area_code[46][621] = 'Junsele';
+$area_code[46][622] = 'Näsåker';
+$area_code[46][623] = 'Ramsele';
+$area_code[46][624] = 'Backe';
+$area_code[46][63] = 'Östersund';
+$area_code[46][640] = 'Krokom';
+$area_code[46][642] = 'Lit';
+$area_code[46][643] = 'Hallen-Oviken';
+$area_code[46][644] = 'Hammerdal';
+$area_code[46][645] = 'Föllinge';
+$area_code[46][647] = 'Åre-Järpen';
+$area_code[46][650] = 'Hudiksvall';
+$area_code[46][651] = 'Ljusdal';
+$area_code[46][652] = 'Bergsjö';
+$area_code[46][653] = 'Delsbo';
+$area_code[46][657] = 'Los';
+$area_code[46][660] = 'Örnsköldsvik';
+$area_code[46][661] = 'Bredbyn';
+$area_code[46][662] = 'Björna';
+$area_code[46][663] = 'Husum';
+$area_code[46][670] = 'Strömsund';
+$area_code[46][671] = 'Hoting';
+$area_code[46][672] = 'Gäddede';
+$area_code[46][680] = 'Sveg';
+$area_code[46][682] = 'Rätan';
+$area_code[46][684] = 'Hede-Funäsdalen';
+$area_code[46][687] = 'Svenstavik';
+$area_code[46][690] = 'Ånge';
+$area_code[46][691] = 'Torpshammar';
+$area_code[46][692] = 'Liden';
+$area_code[46][693] = 'Bräcke-Gällö';
+$area_code[46][695] = 'Stugun';
+$area_code[46][696] = 'Hammarstrand';
+$area_code[46][700] = 'Cellphone';
+$area_code[46][701] = 'Cellphone';
+$area_code[46][702] = 'Cellphone';
+$area_code[46][703] = 'Cellphone';
+$area_code[46][704] = 'Cellphone';
+$area_code[46][705] = 'Cellphone';
+$area_code[46][706] = 'Cellphone';
+$area_code[46][707] = 'Cellphone';
+$area_code[46][708] = 'Cellphone';
+$area_code[46][709] = 'Cellphone';
+
+$area_code[46][730] = 'Cellphone';
+$area_code[46][731] = 'Cellphone';
+$area_code[46][732] = 'Cellphone';
+$area_code[46][733] = 'Cellphone';
+$area_code[46][734] = 'Cellphone';
+$area_code[46][735] = 'Cellphone';
+$area_code[46][736] = 'Cellphone';
+$area_code[46][737] = 'Cellphone';
+$area_code[46][738] = 'Cellphone';
+$area_code[46][739] = 'Cellphone';
+
+$area_code[46][761] = 'Cellphone';
+$area_code[46][762] = 'Cellphone';
+$area_code[46][763] = 'Cellphone';
+$area_code[46][764] = 'Cellphone';
+$area_code[46][765] = 'Cellphone';
+$area_code[46][766] = 'Cellphone';
+$area_code[46][767] = 'Cellphone';
+$area_code[46][768] = 'Cellphone';
+//+46-769 still unused?
+
+$area_code[46][8] = 'Stockholm';
+$area_code[46][90] = 'Umeå';
+$area_code[46][910] = 'Skellefteå';
+$area_code[46][911] = 'Piteå';
+$area_code[46][912] = 'Byske';
+$area_code[46][913] = 'Lövånger';
+$area_code[46][914] = 'Burträsk';
+$area_code[46][915] = 'Bastuträsk';
+$area_code[46][916] = 'Jörn';
+$area_code[46][918] = 'Norsjö';
+$area_code[46][920] = 'Luleå';
+$area_code[46][921] = 'Boden';
+$area_code[46][922] = 'Haparanda';
+$area_code[46][923] = 'Kalix';
+$area_code[46][924] = 'Råneå';
+$area_code[46][925] = 'Lakaträsk';
+$area_code[46][926] = 'Överkalix';
+$area_code[46][927] = 'Övertorneå';
+$area_code[46][928] = 'Harads';
+$area_code[46][929] = 'Älvsbyn';
+$area_code[46][930] = 'Nordmaling';
+$area_code[46][932] = 'Bjurholm';
+$area_code[46][933] = 'Vindeln';
+$area_code[46][934] = 'Robertsfors';
+$area_code[46][935] = 'Vännäs';
+$area_code[46][940] = 'Vilhelmina';
+$area_code[46][941] = 'Åsele';
+$area_code[46][942] = 'Dorotea';
+$area_code[46][943] = 'Fredrika';
+$area_code[46][950] = 'Lycksele';
+$area_code[46][951] = 'Storuman';
+$area_code[46][952] = 'Sorsele';
+$area_code[46][953] = 'Malå';
+$area_code[46][954] = 'Tärnaby';
+$area_code[46][960] = 'Arvidsjaur';
+$area_code[46][961] = 'Arjeplog';
+$area_code[46][970] = 'Gällivare';
+$area_code[46][971] = 'Jokkmokk';
+$area_code[46][973] = 'Porjus';
+$area_code[46][975] = 'Hakkas';
+$area_code[46][976] = 'Vuollerim';
+$area_code[46][977] = 'Korpilombolo';
+$area_code[46][978] = 'Pajala';
+$area_code[46][980] = 'Kiruna';
+$area_code[46][981] = 'Vittangi';
+
+/**
  * Returns textual representation of country code
  * @param $cc E.164 country code
  */
@@ -240,13 +547,35 @@ function E164cc($cc)
 	return $cc;
 }
 
+function prettyAnr($country, $anr)
+{
+	global $e164_cc, $area_code;
+
+	if ($country == 'SIP') return 'SIP:'.$anr;
+
+	$parsed_anr = parseAnr($country.$anr);
+
+	$out = '+'.$parsed_anr['country'];
+	if ($parsed_anr['area_code']) $out .= '-'.$parsed_anr['area_code'];
+	$out .= '-'.$parsed_anr['anr'];
+
+	$suff = '';
+
+	if (!empty($e164_cc[$parsed_anr['country']])) {
+		$suff = ' ('. $e164_cc[$parsed_anr['country']];
+		if ($parsed_anr['area_code']) {
+			$suff .= ', '.$area_code[$parsed_anr['country']][$parsed_anr['area_code']];
+		} else {
+			$suff .= ', UNKNOWN AREA';
+		}
+		$suff .= ')';
+	}
+	return $out.$suff;
+}
+
 /**
  * Separate country code (if any) from phone number
  * Defaults to swedish (+46) in case of missing country code
- *
- * Implements all country codes from:
- * http://www.itu.int/publ/T-SP-E.164D-2007/en
- * as of 2008.10.29
  *
  * See also:
  * http://en.wikipedia.org/wiki/Country_calling_code
@@ -261,6 +590,7 @@ function parseAnr($anr)
 		//FIXME users could perform call spoofing if we allow numerical usernames from sip callers
 		$res['country'] = 'SIP';
 		$res['anr'] = $anr;
+		$res['area_code'] = '';
 		return $res;
 	}
 
@@ -268,6 +598,7 @@ function parseAnr($anr)
 		//Swedish numer without country code
 		$res['country'] = '46';
 		$res['anr'] = substr($anr, 1);
+		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
 		return $res;
 	}
 
@@ -276,6 +607,7 @@ function parseAnr($anr)
 		//FIXME: identify correct country: http://en.wikipedia.org/wiki/List_of_NANP_area_codes
 		$res['country'] = '1';
 		$res['anr'] = substr($anr, 1);
+		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
 		return $res;
 	}
 
@@ -284,22 +616,59 @@ function parseAnr($anr)
 		//FIXME: identify correct country: http://en.wikipedia.org/wiki/+7
 		$res['country'] = '7';
 		$res['anr'] = substr($anr, 1);
+		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
 		return $res;
 	}
 
 	//2-digit country codes
 	$res['country'] = substr($anr, 0, 2);
 	$res['anr'] = substr($anr, 2);
-	if (!empty($e164_cc[$res['country']])) return $res;
+	if (!empty($e164_cc[$res['country']])) {
+		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
+		return $res;
+	}
 
 	//3-digit country codes
 	$res['country'] = substr($anr, 0, 3);
 	$res['anr'] = substr($anr, 3);
-	if (!empty($e164_cc[$res['country']])) return $res;
+	if (!empty($e164_cc[$res['country']])) {
+		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
+		return $res;
+	}
 
 	//XXX This should not be able to happen. All existing country codes are handled above
 	echo "Unknown country code: ".$anr."\n";
 	return $res;
+}
+
+function parseAreaCode($country, &$anr)
+{
+	global $area_code;
+
+	if (empty($area_code[$country])) return false;
+
+	//1-digit area codes
+	$tmp = substr($anr, 0, 1);
+	if (!empty($area_code[$country][$tmp])) {
+		$anr = substr($anr, 1);
+		return $tmp;
+	}
+
+	//2-digit area codes
+	$tmp = substr($anr, 0, 2);
+	if (!empty($area_code[$country][$tmp])) {
+		$anr = substr($anr, 2);
+		return $tmp;
+	}
+
+	//3-digit area codes
+	$tmp = substr($anr, 0, 3);
+	if (!empty($area_code[$country][$tmp])) {
+		$anr = substr($anr, 3);
+		return $tmp;
+	}
+
+	return 'MISSING-'.$anr;
 }
 
 ?>
