@@ -7,6 +7,239 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+$e164_cc[1] = 'USA, Canada';
+$e164_cc[7] = 'Russia';	//& Kazakhstan
+$e164_cc[20] = 'Egypt';
+$e164_cc[27] = 'South Africa';
+$e164_cc[30] = 'Greece';
+$e164_cc[31] = 'Netherlands';
+$e164_cc[32] = 'Belgium';
+$e164_cc[33] = 'France';
+$e164_cc[34] = 'Spain';	//& Ceuta and Melilla, Canary Islands
+$e164_cc[36] = 'Hungary';
+$e164_cc[39] = 'Italy';	//& Vatican City #2
+$e164_cc[40] = 'Romania';
+$e164_cc[41] = 'Switzerland';
+$e164_cc[43] = 'Austria';
+$e164_cc[44] = 'United Kingdom';	//& Guernsey, Isle of Man, Jersey
+$e164_cc[45] = 'Denmark';
+$e164_cc[46] = 'Sweden';
+$e164_cc[47] = 'Norway';	//& Svalbard and Jan Mayen
+$e164_cc[48] = 'Poland';
+$e164_cc[49] = 'Germany';
+$e164_cc[51] = 'Peru';
+$e164_cc[52] = 'Mexico';
+$e164_cc[53] = 'Cuba';
+$e164_cc[54] = 'Argentina';
+$e164_cc[55] = 'Brazil';
+$e164_cc[56] = 'Chile';
+$e164_cc[57] = 'Colombia';
+$e164_cc[58] = 'Venezuela';
+$e164_cc[60] = 'Malaysia';
+$e164_cc[61] = 'Australia';	//& Christmas Island, Cocos Islands
+$e164_cc[62] = 'Indonesia';
+$e164_cc[63] = 'Philippines';
+$e164_cc[64] = 'New Zealand';
+$e164_cc[65] = 'Singapore';
+$e164_cc[66] = 'Thailand';
+$e164_cc[81] = 'Japan';
+$e164_cc[82] = 'South Korea';
+$e164_cc[84] = 'Vietnam';
+$e164_cc[86] = "People's Republic of China";
+$e164_cc[90] = 'Turkey';	//& Turkish Republic of Northern Cyprus
+$e164_cc[91] = 'India';
+$e164_cc[92] = 'Pakistan';
+$e164_cc[93] = 'Afghanistan';
+$e164_cc[94] = 'Sri Lanka';
+$e164_cc[95] = 'Burma';
+$e164_cc[98] = 'Iran';
+$e164_cc[212] = 'Morocco';	//& Western Sahara
+$e164_cc[213] = 'Algeria';
+$e164_cc[216] = 'Tunisia';
+$e164_cc[218] = 'Libya';
+$e164_cc[220] = 'The Gambia';
+$e164_cc[221] = 'Senegal';
+$e164_cc[222] = 'Mauritania';
+$e164_cc[223] = 'Mali';
+$e164_cc[224] = 'Guinea';
+$e164_cc[225] = "Côte d'Ivoire";
+$e164_cc[226] = 'Burkina Faso';
+$e164_cc[227] = 'Niger';
+$e164_cc[228] = 'Togo';
+$e164_cc[229] = 'Benin';
+$e164_cc[230] = 'Mauritius';
+$e164_cc[231] = 'Liberia';
+$e164_cc[232] = 'Sierra Leone';
+$e164_cc[233] = 'Ghana';
+$e164_cc[234] = 'Nigeria';
+$e164_cc[235] = 'Chad';
+$e164_cc[236] = 'Central African Republic';
+$e164_cc[237] = 'Cameroon';
+$e164_cc[238] = 'Cape Verde';
+$e164_cc[239] = 'São Tomé and Príncipe';
+$e164_cc[240] = 'Equatorial Guinea';
+$e164_cc[241] = 'Gabon';
+$e164_cc[242] = 'Republic of Congo';
+$e164_cc[243] = 'Democratic Republic of Congo';
+$e164_cc[244] = 'Angola';
+$e164_cc[245] = 'Guinea-Bissau';
+$e164_cc[246] = 'British Indian Ocean Territory';
+$e164_cc[247] = 'Ascension Island';
+$e164_cc[248] = 'Seychelles';
+$e164_cc[249] = 'Sudan';
+$e164_cc[250] = 'Rwanda';
+$e164_cc[251] = 'Ethiopia';
+$e164_cc[252] = 'Somalia, Somaliland';
+$e164_cc[253] = 'Djibouti';
+$e164_cc[254] = 'Kenya';
+$e164_cc[255] = 'Tanzania';
+$e164_cc[256] = 'Uganda';
+$e164_cc[257] = 'Burundi';
+$e164_cc[258] = 'Mozambique';
+$e164_cc[260] = 'Zambia';
+$e164_cc[261] = 'Madagascar';
+$e164_cc[262] = 'Réunion, Mayotte';
+$e164_cc[263] = 'Zimbabwe';
+$e164_cc[264] = 'Namibia';
+$e164_cc[265] = 'Malawi';
+$e164_cc[266] = 'Lesotho';
+$e164_cc[267] = 'Botswana';
+$e164_cc[268] = 'Swaziland';
+$e164_cc[269] = 'Comoros';
+$e164_cc[290] = 'Saint Helena, Tristan da Cunha';
+$e164_cc[291] = 'Eritrea';
+$e164_cc[297] = 'Aruba';
+$e164_cc[298] = 'Faroe Islands';
+$e164_cc[299] = 'Greenland';
+$e164_cc[350] = 'Gibraltar';
+$e164_cc[351] = 'Portugal';
+$e164_cc[352] = 'Luxembourg';
+$e164_cc[353] = 'Republic of Ireland';
+$e164_cc[354] = 'Iceland';
+$e164_cc[355] = 'Albania';
+$e164_cc[356] = 'Malta';
+$e164_cc[357] = 'Cyprus';
+$e164_cc[358] = 'Finland';	//& Aland Islands
+$e164_cc[359] = 'Bulgaria';
+$e164_cc[370] = 'Lithuania';
+$e164_cc[371] = 'Latvia';
+$e164_cc[372] = 'Estonia';
+$e164_cc[373] = 'Moldova';
+$e164_cc[374] = 'Armenia, Nagorno-Karabakh #1';
+$e164_cc[375] = 'Belarus';
+$e164_cc[376] = 'Andorra';
+$e164_cc[377] = 'Monaco';
+$e164_cc[378] = 'San Marino';
+$e164_cc[379] = 'Vatican City #1';
+$e164_cc[380] = 'Ukraine';
+$e164_cc[381] = 'Serbia';
+$e164_cc[382] = 'Montenegro';
+$e164_cc[385] = 'Croatia';
+$e164_cc[386] = 'Slovenia';
+$e164_cc[387] = 'Bosnia and Herzegovina';
+$e164_cc[388] = 'SPECIAL';	//http://en.wikipedia.org/wiki/European_Telephony_Numbering_Space
+$e164_cc[389] = 'Republic of Macedonia';
+$e164_cc[420] = 'Czech Republic';
+$e164_cc[421] = 'Slovakia';
+$e164_cc[423] = 'Liechtenstein';
+$e164_cc[500] = 'Falkland Islands';
+$e164_cc[501] = 'Belize';
+$e164_cc[502] = 'Guatemala';
+$e164_cc[503] = 'El Salvador';
+$e164_cc[504] = 'Honduras';
+$e164_cc[505] = 'Nicaragua';
+$e164_cc[506] = 'Costa Rica';
+$e164_cc[507] = 'Panama';
+$e164_cc[508] = 'St. Pierre and Miquelon';
+$e164_cc[509] = 'Haiti';
+$e164_cc[590] = 'Guadeloupe';
+$e164_cc[591] = 'Bolivia';
+$e164_cc[592] = 'Guyana';
+$e164_cc[593] = 'Ecuador';
+$e164_cc[594] = 'French Guiana';
+$e164_cc[595] = 'Paraguay';
+$e164_cc[596] = 'Martinique';
+$e164_cc[597] = 'Suriname';
+$e164_cc[598] = 'Uruguay';
+$e164_cc[599] = 'Netherlands Antilles';
+$e164_cc[670] = 'East Timor';
+$e164_cc[672] = 'Norfolk Island';	//& Australian Antarctic Territory
+$e164_cc[673] = 'Brunei Darussalam';
+$e164_cc[674] = 'Nauru';
+$e164_cc[675] = 'Papua New Guinea';
+$e164_cc[676] = 'Tonga';
+$e164_cc[677] = 'Solomon Islands';
+$e164_cc[678] = 'Vanuatu';
+$e164_cc[679] = 'Fiji';
+$e164_cc[680] = 'Palau';
+$e164_cc[681] = 'Wallis and Futuna';
+$e164_cc[682] = 'Cook Islands';
+$e164_cc[683] = 'Niue';
+$e164_cc[685] = 'Samoa';
+$e164_cc[686] = 'Kiribati';
+$e164_cc[687] = 'New Caledonia';
+$e164_cc[688] = 'Tuvalu';
+$e164_cc[689] = 'French Polynesia';
+$e164_cc[690] = 'Tokelau';
+$e164_cc[691] = 'Federated States of Micronesia';
+$e164_cc[692] = 'Marshall Islands';
+$e164_cc[800] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Universal_international_freephone_number
+$e164_cc[808] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Shared_Cost_Service
+$e164_cc[850] = 'North Korea';
+$e164_cc[852] = 'Hong Kong';
+$e164_cc[853] = 'Macau';
+$e164_cc[855] = 'Cambodia';
+$e164_cc[856] = 'Laos';
+$e164_cc[870] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[871] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[872] = 'Pitcairn Islands';	//& http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[873] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[874] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[878] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Universal_Personal_Telecommunications
+$e164_cc[880] = 'Bangladesh';
+$e164_cc[881] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Global_Mobile_Satellite_System
+$e164_cc[882] = 'SPECIAL';	//http://en.wikipedia.org/wiki/International_Networks_(country_code)
+$e164_cc[883] = 'SPECIAL';	//"International National Rate Service"
+$e164_cc[886] = 'Republic of China (Taiwan)';
+$e164_cc[888] = 'SPECIAL';	//http://en.wikipedia.org/wiki/OCHA
+$e164_cc[960] = 'Maldives';
+$e164_cc[961] = 'Lebanon';
+$e164_cc[962] = 'Jordan';
+$e164_cc[963] = 'Syria';
+$e164_cc[964] = 'Iraq';
+$e164_cc[965] = 'Kuwait';
+$e164_cc[966] = 'Saudi Arabia';
+$e164_cc[967] = 'Yemen';
+$e164_cc[968] = 'Oman';
+$e164_cc[970] = 'Palestinian Authority #1';
+$e164_cc[971] = 'United Arab Emirates';
+$e164_cc[972] = 'Israel, Palestinian Authority #2';
+$e164_cc[973] = 'Bahrain';
+$e164_cc[974] = 'Qatar';
+$e164_cc[975] = 'Bhutan';
+$e164_cc[976] = 'Mongolia';
+$e164_cc[977] = 'Nepal';
+$e164_cc[979] = 'SPECIAL';	//http://en.wikipedia.org/wiki/International_premium_rate_service
+$e164_cc[991] = 'SPECIAL';	//http://en.wikipedia.org/wiki/ITPCS
+$e164_cc[992] = 'Tajikistan';
+$e164_cc[993] = 'Turkmenistan';
+$e164_cc[994] = 'Azerbaijan';	//& Nagorno-Karabakh #2
+$e164_cc[995] = 'Georgia';
+$e164_cc[996] = 'Kyrgyzstan';
+$e164_cc[998] = 'Uzbekistan';
+
+/**
+ * Returns textual representation of country code
+ * @param $cc E.164 country code
+ */
+function E164cc($cc)
+{
+	global $e164_cc;
+
+	if (!empty($e164_cc[$cc])) return '+'.$cc.' ('. $e164_cc[$cc].')';
+	return $cc;
+}
+
 /**
  * Separate country code (if any) from phone number
  * Defaults to swedish (+46) in case of missing country code
@@ -21,6 +254,8 @@
  */
 function parseAnr($anr)
 {
+	global $e164_cc;
+
 	if (!is_numeric($anr)) {
 		//SIP user address
 		//FIXME users could perform call spoofing if we allow numerical usernames from sip callers
@@ -55,234 +290,12 @@ function parseAnr($anr)
 	//2-digit country codes
 	$res['country'] = substr($anr, 0, 2);
 	$res['anr'] = substr($anr, 2);
-	switch ($res['country']) {
-		case '20':	//Egypt
-		case '27':	//South Africa
-		case '30':	//Greece
-		case '31':	//Netherlands
-		case '32':	//Belgium
-		case '33':	//France
-		case '34':	//Spain, Ceuta and Melilla, Canary Islands
-		case '36':	//Hungary
-		case '39':	//Italy, Vatican City #2
-		case '40':	//Romania
-		case '41':	//Switzerland
-		case '43':	//Austria
-		case '44':	//United Kingdom, Guernsey, Isle of Man, Jersey
-		case '45':	//Denmark
-		case '46':	//Sweden
-		case '47':	//Norway, Svalbard and Jan Mayen
-		case '48':	//Poland
-		case '49':	//Germany
-		case '51':	//Peru
-		case '52':	//Mexico
-		case '53':	//Cuba
-		case '54':	//Argentina
-		case '55':	//Brazil
-		case '56':	//Chile
-		case '57':	//Colombia
-		case '58':	//Venezuela
-		case '60':	//Malaysia
-		case '61':	//Australia, Christmas Island, Cocos Islands
-		case '62':	//Indonesia
-		case '63':	//Philippines
-		case '64':	//New Zealand
-		case '65':	//Singapore
-		case '66':	//Thailand
-		case '81':	//Japan
-		case '82':	//South Korea
-		case '84':	//Vietnam
-		case '86':	//People's Republic of China
-		case '90':	//Turkey, Turkish Republic of Northern Cyprus
-		case '91':	//India
-		case '92':	//Pakistan
-		case '93':	//Afghanistan
-		case '94':	//Sri Lanka
-		case '95':	//Burma
-		case '98':	//Iran
-			return $res;
-	}
+	if (!empty($e164_cc[$res['country']])) return $res;
 
 	//3-digit country codes
 	$res['country'] = substr($anr, 0, 3);
 	$res['anr'] = substr($anr, 3);
-	switch ($res['country']) {
-		case '212':	//Morocco & Western Sahara
-		case '213':	//Algeria
-		case '216':	//Tunisia
-		case '218':	//Libya
-		case '220':	//The Gambia
-		case '221':	//Senegal
-		case '222':	//Mauritania
-		case '223':	//Mali
-		case '224':	//Guinea
-		case '225':	//Côte d'Ivoire
-		case '226':	//Burkina Faso
-		case '227':	//Niger
-		case '228':	//Togo
-		case '229':	//Benin
-		case '230':	//Mauritius
-		case '231':	//Liberia
-		case '232':	//Sierra Leone
-		case '233':	//Ghana
-		case '234':	//Nigeria
-		case '235':	//Chad
-		case '236':	//Central African Republic
-		case '237':	//Cameroon
-		case '238':	//Cape Verde
-		case '239':	//São Tomé and Príncipe
-		case '240':	//Equatorial Guinea
-		case '241':	//Gabon
-		case '242':	//Republic of Congo
-		case '243':	//Democratic Republic of Congo
-		case '244':	//Angola
-		case '245':	//Guinea-Bissau
-		case '246':	//British Indian Ocean Territory
-		case '247':	//Ascension Island
-		case '248':	//Seychelles
-		case '249':	//Sudan
-		case '250':	//Rwanda
-		case '251':	//Ethiopia
-		case '252':	//Somalia, Somaliland
-		case '253':	//Djibouti
-		case '254':	//Kenya
-		case '255':	//Tanzania
-		case '256':	//Uganda
-		case '257':	//Burundi
-		case '258':	//Mozambique
-		case '260':	//Zambia
-		case '261':	//Madagascar
-		case '262':	//Réunion, Mayotte
-		case '263':	//Zimbabwe
-		case '264':	//Namibia
-		case '265':	//Malawi
-		case '266':	//Lesotho
-		case '267':	//Botswana
-		case '268':	//Swaziland
-		case '269':	//Comoros
-		case '290':	//Saint Helena, Tristan da Cunha
-		case '291':	//Eritrea
-		case '297':	//Aruba
-		case '298':	//Faroe Islands
-		case '299':	//Greenland
-		case '350':	//Gibraltar
-		case '351':	//Portugal
-		case '352':	//Luxembourg
-		case '353':	//Republic of Ireland
-		case '354':	//Iceland
-		case '355':	//Albania
-		case '356':	//Malta
-		case '357':	//Cyprus
-		case '358':	//Finland, Aland Islands
-		case '359':	//Bulgaria
-		case '370':	//Lithuania
-		case '371':	//Latvia
-		case '372':	//Estonia
-		case '373':	//Moldova
-		case '374':	//Armenia, Nagorno-Karabakh #1
-		case '375':	//Belarus
-		case '376':	//Andorra
-		case '377':	//Monaco
-		case '378':	//San Marino
-		case '379':	//Vatican City #1
-		case '380':	//Ukraine
-		case '381':	//Serbia
-		case '382':	//Montenegro
-		case '385':	//Croatia
-		case '386':	//Slovenia
-		case '387':	//Bosnia and Herzegovina
-		case '388':	//http://en.wikipedia.org/wiki/European_Telephony_Numbering_Space
-		case '389':	//Republic of Macedonia
-		case '420':	//Czech Republic
-		case '421':	//Slovakia
-		case '423':	//Liechtenstein
-		case '500':	//Falkland Islands
-		case '501':	//Belize
-		case '502':	//Guatemala
-		case '503':	//El Salvador
-		case '504':	//Honduras
-		case '505':	//Nicaragua
-		case '506':	//Costa Rica
-		case '507':	//Panama
-		case '508':	//St. Pierre and Miquelon
-		case '509':	//Haiti
-		case '590':	//Guadeloupe
-		case '591':	//Bolivia
-		case '592':	//Guyana
-		case '593':	//Ecuador
-		case '594':	//French Guiana
-		case '595':	//Paraguay
-		case '596':	//Martinique
-		case '597':	//Suriname
-		case '598':	//Uruguay
-		case '599':	//Netherlands Antilles
-		case '670':	//East Timor
-		case '672':	//Norfolk Island, Australian Antarctic Territory
-		case '673':	//Brunei Darussalam
-		case '674':	//Nauru
-		case '675':	//Papua New Guinea
-		case '676':	//Tonga
-		case '677':	//Solomon Islands
-		case '678':	//Vanuatu
-		case '679':	//Fiji
-		case '680':	//Palau
-		case '681':	//Wallis and Futuna
-		case '682':	//Cook Islands
-		case '683':	//Niue
-		case '685':	//Samoa
-		case '686':	//Kiribati
-		case '687':	//New Caledonia
-		case '688':	//Tuvalu
-		case '689':	//French Polynesia
-		case '690':	//Tokelau
-		case '691':	//Federated States of Micronesia
-		case '692':	//Marshall Islands
-		case '800':	//http://en.wikipedia.org/wiki/Universal_international_freephone_number
-		case '808':	//http://en.wikipedia.org/wiki/Shared_Cost_Service
-		case '850':	//North Korea
-		case '852':	//Hong Kong
-		case '853':	//Macau
-		case '855':	//Cambodia
-		case '856':	//Laos
-		case '870':	//http://en.wikipedia.org/wiki/Inmarsat
-		case '871':	//http://en.wikipedia.org/wiki/Inmarsat
-		case '872':	//http://en.wikipedia.org/wiki/Inmarsat, Pitcairn Islands
-		case '873':	//http://en.wikipedia.org/wiki/Inmarsat
-		case '874':	//http://en.wikipedia.org/wiki/Inmarsat
-		case '878':	//http://en.wikipedia.org/wiki/Universal_Personal_Telecommunications
-		case '880':	//Bangladesh
-		case '881':	//http://en.wikipedia.org/wiki/Global_Mobile_Satellite_System
-		case '882':	//http://en.wikipedia.org/wiki/International_Networks_(country_code)
-		case '883':	//"International National Rate Service"
-		case '886':	//Republic of China (Taiwan)
-		case '888':	//http://en.wikipedia.org/wiki/OCHA
-		case '960':	//Maldives
-		case '961':	//Lebanon
-		case '962':	//Jordan
-		case '963':	//Syria
-		case '964':	//Iraq
-		case '965':	//Kuwait
-		case '966':	//Saudi Arabia
-		case '967':	//Yemen
-		case '968':	//Oman
-		case '970':	//Palestinian Authority #1
-		case '971':	//United Arab Emirates
-		case '972':	//Israel, Palestinian Authority #2
-		case '973':	//Bahrain
-		case '974':	//Qatar
-		case '975':	//Bhutan
-		case '976':	//Mongolia
-		case '977':	//Nepal
-		case '979':	//http://en.wikipedia.org/wiki/International_premium_rate_service
-		case '991':	//http://en.wikipedia.org/wiki/ITPCS
-		case '992':	//Tajikistan
-		case '993':	//Turkmenistan
-		case '994':	//Azerbaijan, Nagorno-Karabakh #2
-		case '995':	//Georgia
-		case '996':	//Kyrgyzstan
-		case '998':	//Uzbekistan
-			return $res;
-	}
+	if (!empty($e164_cc[$res['country']])) return $res;
 
 	//XXX This should not be able to happen. All existing country codes are handled above
 	echo "Unknown country code: ".$anr."\n";
