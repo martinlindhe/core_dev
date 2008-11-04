@@ -43,8 +43,8 @@ if (!empty($list)) {
 				echo 'Convert media to default type for entry #'.$row['referId'].'<br/>';
 				if ($row['orderParams']) {
 					$params = unserialize($row['orderParams']);
-					if (!empty($params['callback'])) echo 'Callback: <b>'.$params['callback'].'</b><br/>';
-					if (!empty($params['watermark'])) echo 'Watermark: <b>'.$params['watermark'].'</b><br/>';
+					if (!empty($params['callback'])) echo 'Callback: <b>'.urldecode($params['callback']).'</b><br/>';
+					if (!empty($params['watermark'])) echo 'Watermark: <b>'.urldecode($params['watermark']).'</b><br/>';
 				}
 				if ($row['callback_log']) {
 					echo 'Callback script returned:<br/>';
