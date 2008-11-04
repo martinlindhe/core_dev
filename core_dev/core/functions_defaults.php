@@ -11,8 +11,10 @@
 /**
  * Default time format display, handles unix times or SQL DATETIME input formats
  */
-function formatTime($ts)
+function formatTime($ts = 0)
 {
+	if (!$ts) $ts = time();
+
 	if (function_exists('formatTimeOverride')) {
 		return formatTimeOverride($ts);
 	}

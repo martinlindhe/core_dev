@@ -21,7 +21,7 @@ $config['smtp']['sender_name'] = 'core_dev';
  * \param $attach_name filename of attachment (optional)
  * \param $attach_data data of attachment (optional)
  */
-function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '')
+function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '', $html = true)
 {
 	global $config;
 
@@ -37,10 +37,10 @@ function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '')
 	$mail->From = $config['smtp']['sender'];
 	$mail->FromName = $config['smtp']['sender_name'];
 
-	$mail->IsHTML(true); // send HTML mail?
+	$mail->IsHTML($html); // send HTML mail?
 
 	//Embed graphics
-	if (isset($config['smtp']['mail_footer'])) {
+	if (!empty($config['smtp']['mail_footer'])) {
 		$mail->AddEmbeddedImage($config['smtp']['mail_footer'], 'pic_name', '', 'base64', 'image/png');
 	}
 
@@ -49,7 +49,7 @@ function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '')
 	}
 
 	if (is_array($dst_adr)) {
-		foreach ($mails as $adr) {
+		foreach ($dst_adr as $adr) {
 			$mail->AddAddress($adr);
 		}
 	} else {
