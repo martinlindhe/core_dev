@@ -33,12 +33,31 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 				echo "FATAL: CSV format error in $filename at line $i: ".count($arr)." columns found, $cols expected\n";
 				return false;
 			}
+			//Clean up escaped fields
+			for ($i=0; $i<$cols; $i++) {
+				$arr[$i] = csvUnescape($arr[$i]);
+			}
+
 			call_user_func($callback, $arr);
 		}
 
 		$i++;
 	}
 	fclose($fp);
+}
+
+/**
+ * Unescapes csv data
+ */
+function csvUnescape($str)
+{
+	if (substr($str, 0, 1) == '"' && substr($str, -1) == '"') {
+		$str = substr($str, 1, -1);
+	}
+
+	//embedded double-quote characters must be represented by a pair of double-quote characters.
+	$str = str_replace('""', '"', $str);
+	return $str;
 }
 
 ?>
