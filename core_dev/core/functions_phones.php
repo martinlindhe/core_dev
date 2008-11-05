@@ -556,6 +556,8 @@ function parseAnr($anr)
 {
 	global $e164_cc;
 
+	$anr = cleanupAnr($anr);
+
 	if (!is_numeric($anr)) {
 		//SIP user address
 		//FIXME users could perform call spoofing if we allow numerical usernames from sip callers
@@ -640,6 +642,18 @@ function parseAreaCode($country, &$anr)
 	}
 
 	return 'MISSING-'.$anr;
+}
+
+/**
+ * Takes a text string representing a phone number
+ * as input and returns it in a common format
+ */
+function cleanupAnr($anr)
+{
+	$anr = str_replace(' ', '', $anr);
+	$anr = str_replace('-', '', $anr);
+	$anr = str_replace('+', '', $anr);
+	return $anr;
 }
 
 ?>
