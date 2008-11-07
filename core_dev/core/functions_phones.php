@@ -650,6 +650,8 @@ function parseAreaCode($country, &$anr)
  */
 function cleanupAnr($anr)
 {
+	$anr = trim($anr);
+	$anr = str_replace("\t", '', $anr);
 	$anr = str_replace(' ', '', $anr);
 	$anr = str_replace('-', '', $anr);
 	$anr = str_replace('+', '', $anr);
