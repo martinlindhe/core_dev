@@ -16,15 +16,13 @@
  * "slia" = Standard Location Immediate Answer (PG p.14)
  * "MSID" = cellphone id (phone number)
  *
- * World Geodetic System (WGS84):
- * http://en.wikipedia.org/wiki/WGS84
- *
  * Mobile Location Protocol (MLP) 3.0.0: "LIF TS 101"
  * http://www.openmobilealliance.org/tech/affiliates/lif/lifindex.html
  *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+require_once('functions_gps.php');
 
 $positioning_server = 'https://pooh.sun.telia.se:9221/LocationQueryService';
 $invitations_service = 'https://pooh.sun.telia.se:9261/Service/Invitation';
@@ -98,8 +96,8 @@ function parseSliaPos($values)
 
 		switch ($val['tag']) {
 				case 'MSID': $res['msid'] = $val['value']; break;
-				case 'X': $res['x'] = $val['value']; break;	//XXX detta funkar bara för CircularArcArea coordinates
-				case 'Y': $res['y'] = $val['value']; break;
+				case 'X': $res['x'] = gpsToWGS84($val['value']); break;	//XXX detta funkar bara för CircularArcArea coordinates
+				case 'Y': $res['y'] = gpsToWGS84($val['value']); break;
 		}
 	}
 	return $res;
