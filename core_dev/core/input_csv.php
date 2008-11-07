@@ -25,23 +25,16 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 	$i = 0;
 	while (!feof($fp)) {
 		$buffer = fgets($fp, 4096);
-//FIXME merge this with csvParseRow()
-		if ($i >= $start_line && strpos($buffer, $delimiter) !== false) {
-			$arr = explode($delimiter, $buffer);
-			if (!$cols) $cols = count($arr);
-
-			if ($cols != count($arr)) {
-				echo "FATAL: CSV format error in $filename at line $i: ".count($arr)." columns found, $cols expected\n";
+		if ($i >= $start_line) {
+			if (!$buffer) break;
+			$row = csvParseRow($buffer, $delimiter);
+			if (!$cols) $cols = count($row);
+			if ($cols != count($row)) {
+				echo "FATAL: CSV format error in $filename at line ".($i+1).": ".count($row)." columns found, $cols expected\n";
 				return false;
 			}
-			//Clean up escaped fields
-			for ($i=0; $i<count($arr); $i++) {
-				$arr[$i] = csvUnescape($arr[$i]);
-			}
-
-			call_user_func($callback, $arr);
+			if ($row) call_user_func($callback, $row);
 		}
-
 		$i++;
 	}
 	fclose($fp);
