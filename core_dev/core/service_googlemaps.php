@@ -29,7 +29,7 @@ $config['google_maps']['api_key'] = '';
  * @param $maptype mobile, satellite, terrain, hybrid
  * @param $format png8, png32, jpg, jpg-baseline or gif
  */
-function googleMapsStaticMap($lat, $long, $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
+function googleMapsStaticMap($lat, $long, $markers = array(), $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
 {
 	global $config;
 	if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height) || !is_numeric($zoom)) return false;
@@ -40,12 +40,23 @@ function googleMapsStaticMap($lat, $long, $width = 512, $height = 512, $zoom = 1
 
 	$url = 'http://maps.google.com/staticmap'.
 		'?center='.$lat.','.$long.
-		'&zoom='.$zoom.
+		(count($markers) > 1 ? '' : '&zoom='.$zoom).	//autozoom if we have multiple markers
 		'&size='.$width.'x'.$height.
 		'&format='.urlencode($format).
 		'&maptype='.urlencode($maptype).
-		'&markers='.$lat.','.$long.',current pos'.	//XXX separate multiple markers with |
 		'&key='.$config['google_maps']['api_key'];
+
+	$cols = array('red', 'blue', 'green', 'orange', 'purple', 'brown', 'yellow', 'gray', 'black', 'white');
+
+	if (!empty($markers)) {
+		$url .= '&markers=';
+		for ($i = 0; $i<count($markers); $i++) {
+			if ($i == 0) $desc = $cols[$i];
+			else $desc = 'mid'.$cols[$i];
+			$url .= $markers[$i]['x'].','.$markers[$i]['y'].','.$desc.($i+1);
+			if ($i < count($markers)-1) $url .= '|';
+		}
+	}
 
 	return '<img src="'.$url.'"/>';
 }
