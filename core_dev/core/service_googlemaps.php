@@ -29,7 +29,7 @@ $config['google_maps']['api_key'] = '';
  * @param $maptype mobile, satellite, terrain, hybrid
  * @param $format png8, png32, jpg, jpg-baseline or gif
  */
-function googleMapsStaticMap($lat, $long, $markers = array(), $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
+function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
 {
 	global $config;
 	if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height)) return false;
@@ -55,6 +55,18 @@ function googleMapsStaticMap($lat, $long, $markers = array(), $width = 512, $hei
 			else $desc = 'mid'.$cols[$i];
 			$url .= $markers[$i]['x'].','.$markers[$i]['y'].','.$desc.($i+1);
 			if ($i < count($markers)-1) $url .= '|';
+		}
+	}
+
+	$width = array(6,4,2,2,1,1,1,1,1,1,1,1);
+
+	if (!empty($path)) {
+		$alpha = 0xA0;
+		for ($i = 0; $i<count($path)-1; $i++) {
+			$url .= '&path=rgba:0x0000ff'.dechex($alpha).',weight:'.$width[$i].
+				'|'.$path[$i]['x'].','.$path[$i]['y'].
+				'|'.$path[$i+1]['x'].','.$path[$i+1]['y'];
+			if ($alpha > 0x40) $alpha -= 0x20;
 		}
 	}
 
