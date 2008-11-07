@@ -1,0 +1,83 @@
+<?php
+/**
+ * $Id$
+ *
+ * Functions to interact with the Google Maps API
+ *
+ * Official documentation:
+ * http://code.google.com/apis/maps/
+ *
+ * Google Maps API wiki:
+ * http://mapki.com/
+ *
+ * \author Martin Lindhe, 2008 <martin@startwars.org>
+ */
+
+$config['google_maps']['api_key'] = '';
+
+/**
+ * Displays a static map
+ *
+ * for more documentation, see
+ * http://code.google.com/apis/maps/documentation/staticmaps/
+ *
+ * @param $lat latitude (-90.0 to 90.0)
+ * @param $long longitude (-180.0 to 180.0)
+ * @param $width up to 640 pixels
+ * @param $height up to 640 pixels
+ * @param $zoom 0 (whole world) to 19 (very detailed view)
+ * @param $maptype mobile, satellite, terrain, hybrid
+ * @param $format png8, png32, jpg, jpg-baseline or gif
+ */
+function googleMapsStaticMap($lat, $long, $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
+{
+	global $config;
+	if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height) || !is_numeric($zoom)) return false;
+	if ($lat < -90.0 || $lat > 90.0 || $long < -180.0 || $long > 180.0) return false;
+	if ($width < 0 || $width > 640 || $height < 0 || $height > 640) return false;
+	if ($zoom < 0 || $zoom > 19) return false;
+	if (empty($config['google_maps']['api_key'])) return false;
+
+	$url = 'http://maps.google.com/staticmap'.
+		'?center='.$lat.','.$long.
+		'&zoom='.$zoom.
+		'&size='.$width.'x'.$height.
+		'&format='.urlencode($format).
+		'&maptype='.urlencode($maptype).
+		'&markers='.$lat.','.$long.',current pos'.	//XXX separate multiple markers with |
+		'&key='.$config['google_maps']['api_key'];
+
+	return '<img src="'.$url.'"/>';
+}
+
+
+//FIXME implement geocoding helper function:
+//http://code.google.com/apis/maps/documentation/services.html#Geocoding
+
+
+/**
+ * Converts GPS coordinates from degrees, minutes and seconds (D'M'S)
+ * to WGS84 Longitude and Latitude (Google Maps API format)
+ *
+ * Lat:   62 23 37.00N  ->  62.393611
+ * Long: 017 18 28.00E  ->  17.307778
+ *
+ * @param $coord Geographic coordinate from GPS device or MLP service
+ */
+function gpsToWGS84($coord)
+{
+	$s_coord = explode(' ', trim($coord));
+	if (count($s_coord) != 3) return false;
+
+	switch (substr($s_coord[2], -1)) {
+		case 'N': case 'E': $sign = 1; break;
+		case 'S': case 'W': $sign = -1; break;
+		default: return false;
+	}
+
+	$s_coord[2] = substr($s_coord[2], 0, -1);
+
+	return round($sign * ($s_coord[0] + ($s_coord[1]/60) + ($s_coord[2]/3600)), 6);
+}
+
+?>
