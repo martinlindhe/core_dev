@@ -10,10 +10,11 @@
 
 /**
  * CSV data parser
+ *
  * @param $filename string filename
  * @param $callback string callback function
  * @param $start_line int starting line number
- * @param $delimiter character separating csv cells (usually , or ;)
+ * @param $delimiter character separating CSV cells (usually , or ;)
  */
 function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 {
@@ -24,7 +25,7 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 	$i = 0;
 	while (!feof($fp)) {
 		$buffer = fgets($fp, 4096);
-
+//FIXME merge this with csvParseRow()
 		if ($i >= $start_line && strpos($buffer, $delimiter) !== false) {
 			$arr = explode($delimiter, $buffer);
 			if (!$cols) $cols = count($arr);
@@ -34,7 +35,7 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 				return false;
 			}
 			//Clean up escaped fields
-			for ($i=0; $i<$cols; $i++) {
+			for ($i=0; $i<count($arr); $i++) {
 				$arr[$i] = csvUnescape($arr[$i]);
 			}
 
@@ -47,7 +48,48 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 }
 
 /**
- * Unescapes csv data
+ * Parses a row of CSV data into a array
+ *
+ * @param $row line of raw CSV data to parse
+ * @param $delimiter character separating CSV cells (usually , or ;)
+ */
+function csvParseRow($row, $delimiter = ',')
+{
+	if (strpos($row, $delimiter) === false) return false;
+
+	$el = 0;
+	$res = array();
+	$in_esc = false;
+
+	for ($i=0; $i<strlen($row); $i++) {
+		if (!isset($res[$el])) $res[$el] = '';
+		$c = substr($row, $i, 1);
+		switch ($c) {
+			case $delimiter:
+				if (!$in_esc) $el++;
+				else $res[$el] .= $c;
+				break;
+
+			case '"':
+				$in_esc = !$in_esc;
+				$res[$el] .= $c;
+				break;
+
+			default:
+				$res[$el] .= $c;
+		}
+	}
+
+	//Clean up escaped fields
+	for ($i=0; $i<count($res); $i++) {
+		$res[$i] = csvUnescape($res[$i]);
+	}
+
+	return $res;
+}
+
+/**
+ * Unescapes CSV data
  */
 function csvUnescape($str)
 {

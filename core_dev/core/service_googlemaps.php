@@ -13,6 +13,8 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+require_once('input_csv.php');
+
 $config['google_maps']['api_key'] = '';
 
 /**
@@ -93,7 +95,7 @@ function googleMapsGeocode($address)
 		'&output=csv'.	//XXX "xml" output format returns prettified street address & more info if needed
 		'&key='.$config['google_maps']['api_key'];
 
-	$res = explode(',', file_get_contents($url));
+	$res = csvParseRow(file_get_contents($url));
 	if ($res[0] != 200 || $res[1] == 0) return false;
 
 	$out['x'] = $res[2];
@@ -102,9 +104,28 @@ function googleMapsGeocode($address)
 	return $out;
 }
 
+/**
+ * Performs a reverse geocoding lookup from coordinates
+ *
+ * Google Reverse Geocoding API documentation:
+ * http://code.google.com/apis/maps/documentation/services.html#ReverseGeocoding
+ */
+function googleMapsReverseGeocode($lat, $long)
+{
+	global $config;
 
-//FIXME reverse geocoding:
-//http://code.google.com/apis/maps/documentation/services.html#ReverseGeocoding
+	$url = 'http://maps.google.com/maps/geo'.
+		'?ll='.$lat.','.$long.
+		'&output=csv'.	//XXX "xml" output format returns prettified street address & more info if needed
+		'&key='.$config['google_maps']['api_key'];
+
+	$res = csvParseRow(file_get_contents($url));
+	if ($res[0] != 200 || $res[1] == 0) return false;
+
+	$out['name'] = $res[2];
+	$out['accuracy'] = $res[1];	//0 (worst) to 9 (best)
+	return $out;
+}
 
 /**
  * Converts GPS coordinates from degrees, minutes and seconds (D'M'S)
