@@ -18,7 +18,7 @@ $config['google_maps']['api_key'] = '';
 /**
  * Displays a static map
  *
- * for more documentation, see
+ * Google Static Maps HTTP API documentation:
  * http://code.google.com/apis/maps/documentation/staticmaps/
  *
  * @param $lat latitude (-90.0 to 90.0)
@@ -28,6 +28,7 @@ $config['google_maps']['api_key'] = '';
  * @param $zoom 0 (whole world) to 19 (very detailed view) or "auto" to autozoom
  * @param $maptype mobile, satellite, terrain, hybrid
  * @param $format png8, png32, jpg, jpg-baseline or gif
+ * @return URL to static map or false
  */
 function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
 {
@@ -70,13 +71,40 @@ function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $
 		}
 	}
 
-	return '<img src="'.$url.'"/>';
+	return $url;
 }
 
 
-//FIXME implement geocoding helper function:
-//http://code.google.com/apis/maps/documentation/services.html#Geocoding
+/**
+ * Performs a Geocoding lookup from street address
+ *
+ * Google Geocoding HTTP API documentation:
+ * http://code.google.com/apis/maps/documentation/services.html#Geocoding
+ *
+ * @param $address address to get coordinates for
+ * @return coordinates of specified location or false
+ */
+function googleMapsGeocode($address)
+{
+	global $config;
 
+	$url = 'http://maps.google.com/maps/geo'.
+		'?q='.urlencode(trim($address)).
+		'&output=csv'.	//XXX "xml" output format returns prettified street address & more info if needed
+		'&key='.$config['google_maps']['api_key'];
+
+	$res = explode(',', file_get_contents($url));
+	if ($res[0] != 200 || $res[1] == 0) return false;
+
+	$out['x'] = $res[2];
+	$out['y'] = $res[3];
+	$out['accuracy'] = $res[1];	//0 (worst) to 9 (best)
+	return $out;
+}
+
+
+//FIXME reverse geocoding:
+//http://code.google.com/apis/maps/documentation/services.html#ReverseGeocoding
 
 /**
  * Converts GPS coordinates from degrees, minutes and seconds (D'M'S)
