@@ -76,7 +76,6 @@ function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $
 	return $url;
 }
 
-
 /**
  * Performs a Geocoding lookup from street address
  *
@@ -84,7 +83,7 @@ function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $
  * http://code.google.com/apis/maps/documentation/services.html#Geocoding
  *
  * @param $address address to get coordinates for
- * @return coordinates of specified location or false
+ * @return coordinates & accuracy of specified location or false
  */
 function googleMapsGeocode($address)
 {
@@ -109,6 +108,10 @@ function googleMapsGeocode($address)
  *
  * Google Reverse Geocoding API documentation:
  * http://code.google.com/apis/maps/documentation/services.html#ReverseGeocoding
+ *
+ * @param $lat Latitude
+ * @param $long Longitude
+ * @return name & accuracy of specified location or false
  */
 function googleMapsReverseGeocode($lat, $long)
 {
