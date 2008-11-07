@@ -25,28 +25,28 @@ $config['google_maps']['api_key'] = '';
  * @param $long longitude (-180.0 to 180.0)
  * @param $width up to 640 pixels
  * @param $height up to 640 pixels
- * @param $zoom 0 (whole world) to 19 (very detailed view)
+ * @param $zoom 0 (whole world) to 19 (very detailed view) or "auto" to autozoom
  * @param $maptype mobile, satellite, terrain, hybrid
  * @param $format png8, png32, jpg, jpg-baseline or gif
  */
 function googleMapsStaticMap($lat, $long, $markers = array(), $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
 {
 	global $config;
-	if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height) || !is_numeric($zoom)) return false;
+	if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height)) return false;
 	if ($lat < -90.0 || $lat > 90.0 || $long < -180.0 || $long > 180.0) return false;
 	if ($width < 0 || $width > 640 || $height < 0 || $height > 640) return false;
-	if ($zoom < 0 || $zoom > 19) return false;
+	if ((is_numeric($zoom) && ($zoom < 0 || $zoom > 19)) || is_string($zoom) && $zoom != 'auto') return false;
 	if (empty($config['google_maps']['api_key'])) return false;
 
 	$url = 'http://maps.google.com/staticmap'.
 		'?center='.$lat.','.$long.
-		(count($markers) > 1 ? '' : '&zoom='.$zoom).	//autozoom if we have multiple markers
+		($zoom == 'auto' ? '' : '&zoom='.$zoom).
 		'&size='.$width.'x'.$height.
 		'&format='.urlencode($format).
 		'&maptype='.urlencode($maptype).
 		'&key='.$config['google_maps']['api_key'];
 
-	$cols = array('red', 'blue', 'green', 'orange', 'purple', 'brown', 'yellow', 'gray', 'black', 'white');
+	$cols = array('red', 'green', 'blue', 'orange', 'purple', 'brown', 'yellow', 'gray', 'black', 'white');
 
 	if (!empty($markers)) {
 		$url .= '&markers=';
