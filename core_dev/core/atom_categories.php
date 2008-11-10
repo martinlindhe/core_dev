@@ -19,6 +19,7 @@ define('CATEGORY_POLL',				13);	///< used for multi-choice polls. tblCategories.
 define('CATEGORY_EMAIL',			14);	///< list of user-associated email-adresses
 define('CATEGORY_SMS',				15);	///< list of user-associated sms-contact-numbers
 define('CATEGORY_CELLPHONE',		16);	///< list of user-associated cellphone-numbers
+define('CATEGORY_MMS',				17);	///< list of user-associated mms-numbers
 
 define('CATEGORY_NEWS',				20);	///< news categories
 define('CATEGORY_LANGUAGE',			51);	///< represents a language, for multi-language features & used by "lang" project
