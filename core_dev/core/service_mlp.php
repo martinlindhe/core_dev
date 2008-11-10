@@ -24,8 +24,8 @@
 
 require_once('functions_gps.php');
 
-$positioning_server = 'https://pooh.sun.telia.se:9221/LocationQueryService';
-$invitations_service = 'https://pooh.sun.telia.se:9261/Service/Invitation';
+$config['mlp']['soap_positioning'] = 'https://pooh.sun.telia.se:9221/LocationQueryService';
+$config['mlp']['soap_invitation'] = 'https://pooh.sun.telia.se:9261/Service/Invitation';
 
 /**
  * @param $msid MSID in the format 46701234567
