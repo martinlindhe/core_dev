@@ -1,0 +1,44 @@
+Overview
+========
+A flexible yet easy to use issue tracker for
+project management and problem report
+follow ups.
+
+
+
+Dependencies
+============
+The software will be based on the core_dev
+framework, allowing rapid development of
+advanced web application features.
+
+* core_dev needs to be enhanced to reliably
+	support importing & processing of email
+	messages.
+
+* The "userdata" functionality of core_dev needs
+	to be enhanced to allow for the creation and
+	configuration of fields for the issue reports.
+
+
+
+Vocalubarity
+============
+* A common name for issue tickets needs to be established,
+	proposed are: issue ticket, problem report, issue report.
+
+
+
+Needs
+=====
+* Ability for admins to easily customise
+	the needed fields of a issue ticket
+	through a web interface.
+	(This is a weakness of Trac)
+
+* Ability to automatically create issue
+	tickets from emails sent to a special
+	support email address.
+	(This is a weakness of Trac)
+
+
