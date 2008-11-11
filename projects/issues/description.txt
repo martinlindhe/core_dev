@@ -25,7 +25,10 @@ advanced web application features.
 Vocalubarity
 ============
 * A common name for issue tickets needs to be established,
-	proposed are: issue ticket, problem report, issue report.
+	proposed are:
+		- issue ticket
+		- problem report
+		- issue report
 
 
 

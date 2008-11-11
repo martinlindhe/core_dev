@@ -8,7 +8,8 @@ $config['core']['fs_root'] = '/home/ml/dev/core_dev/';
 $config['core']['web_root'] = '/core_dev/';
 
 $config['app']['web_root'] = '/issues/';
-$config['default_title'] = 'issue tracker';
+$config['app']['full_url'] = 'http://projects.x/issues/';
+$config['default_title'] = 'GIR - Issue Tracker';
 
 set_include_path($config['core']['fs_root'].'core/');
 require_once('class.DB_MySQLi.php');

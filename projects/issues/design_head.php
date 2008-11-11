@@ -1,14 +1,16 @@
 <?php
 
-$meta_css[] = 'css/site.css';
+$meta_css[] = $config['app']['web_root'].'css/site.css';
 createXHTMLHeader();
 ?>
 <div id="top">
 	<div id="top-logo"></div>
 	<div id="top-items">
-		<a href="wiki.php">Wiki</a>
-		<a href="">New Issue</a>
-		<a href="">Search</a> <input type="text" size=8/>
+		<?=xhtmlForm()?>
+		<a href="<?=$config['app']['web_root']?>wiki.php">Wiki</a>
+		<a href="<?=$config['app']['web_root']?>new_issue.php">New issue</a>
+		Search <?=xhtmlInput('search', '', 8)?>
+		<?=xhtmlFormClose()?>
 	</div>
 </div>
 
@@ -21,19 +23,31 @@ $menu = array(
 );
 createMenu($menu);
 
-if ($session->isAdmin) {
-	$menu = array(
-		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
-	createMenu($menu);
-}
-
 if ($session->id) {
 	$menu = array(
-		'?logout' => 'Logout');
+		'x' => 'Projects',					//overview of all projects
+		'issues.php?show=open' => 'Issues',	//overview of open issues
+		'z' => 'My tasks'					//overview of my assigned tasks
+	);
+	createMenu($menu);
+
+	if ($session->isAdmin) {
+		$menu = array(
+			'manage/issue_categories.php' => 'Manage',
+			$config['core']['web_root'].'admin/admin.php' => 'Admin'
+		);
+		createMenu($menu);
+	}
+
+	$menu = array(
+		'?logout' => 'Logout'
+	);
+	createMenu($menu);
+
 } else {
 	$menu = array('?login' => 'Log in');
+	createMenu($menu);
 }
-createMenu($menu);
 ?>
 </div>
 
