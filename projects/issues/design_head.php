@@ -6,7 +6,9 @@ createXHTMLHeader();
 <div id="top">
 	<div id="top-logo"></div>
 	<div id="top-items">
-		<a href="xxx">fffd</a>
+		<a href="wiki.php">Wiki</a>
+		<a href="">New Issue</a>
+		<a href="">Search</a> <input type="text" size=8/>
 	</div>
 </div>
 

@@ -30,14 +30,6 @@ img { border: 0; }
 	height: 80px;
 	border-bottom: 1px dashed #888;
 }
-#top-items {
-	position: absolute;
-	right: 10px;
-	top: 30px;
-	text-align: right;
-	display: inline;
-	font-size: 12px;
-}
 
 #top-logo {
 	background: url(../gfx/gir_logo1.png);
@@ -49,10 +41,18 @@ img { border: 0; }
 	height: 145px;
 }
 
+#top-items {
+	position: absolute;
+	right: 10px;
+	top: 30px;
+	text-align: right;
+	display: inline;
+	font-size: 18px;
+}
 #top-items a {
 	color: #000;
 	text-decoration: none;
-	padding: 7pt;
+	padding: 15pt;
 }
 #top-items a:hover {
 	color: #f20;
@@ -65,5 +65,5 @@ img { border: 0; }
 	left: 14px;
 	top: 160px;
 	width: 160px;
-	font-size: 14px;
+	font-size: 18px;
 }
