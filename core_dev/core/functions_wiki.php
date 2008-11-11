@@ -211,25 +211,26 @@ function wiki($wikiName = '')
 		//List "unused files" for this Wiki when in edit mode
 		if ($config['wiki']['allow_files']) {
 			$filelist = $files->getFiles(FILETYPE_WIKI, $data['wikiId']);
+			if ($filelist) {
+				$str = '';
 
-			$str = '';
+				foreach ($filelist as $row) {
+					$temp = explode('.', $row['fileName']);
 
-			foreach ($filelist as $row) {
-				$temp = explode('.', $row['fileName']);
+					$showTag = $linkTag = '[[file:'.$row['fileId'].']]';
 
-				$showTag = $linkTag = '[[file:'.$row['fileId'].']]';
+					if (in_array($row['fileMime'], $files->image_mime_types)) {
+						$showTag = showThumb($row['fileId'], $showTag);
+					}
 
-				if (in_array($row['fileMime'], $files->image_mime_types)) {
-					$showTag = showThumb($row['fileId'], $showTag);
+					if (strpos($text, $linkTag) === false) {
+						$str .= '<span onclick="document.wiki_edit.wiki_'.$data['wikiId'].'.value += \' '.$linkTag.'\';">'.$showTag.'</span>, ';
+					}
 				}
-
-				if (strpos($text, $linkTag) === false) {
-					$str .= '<span onclick="document.wiki_edit.wiki_'.$data['wikiId'].'.value += \' '.$linkTag.'\';">'.$showTag.'</span>, ';
+				if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
+				if ($str) {
+					echo '<b>'.t('Unused files').':</b> '.$str;
 				}
-			}
-			if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
-			if ($str) {
-				echo '<b>'.t('Unused files').':</b> '.$str;
 			}
 		}
 		echo '</form>';
