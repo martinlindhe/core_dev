@@ -216,6 +216,7 @@ function getGlobalAndUserCategories($_type, $_owner = 0)
 		case CATEGORY_WIKIFILE:
 		case CATEGORY_LANGUAGE:
 		case CATEGORY_TODOLIST:
+		case CATEGORY_ISSUE:
 			$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
 			if ($_owner) $q .= ' AND ownerId='.$_owner;
 			break;
@@ -307,7 +308,7 @@ function manageCategoriesDialog($_type)
 		echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
 		echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
 		*/
-	} else if ($_type != CATEGORY_NEWS && $_type != CATEGORY_CONTACT && $session->isSuperAdmin) {
+	} else if ($_type == CATEGORY_NEWS) {
 		die('FIXME news cat is broken');
 		/*
 		echo '<br/>';

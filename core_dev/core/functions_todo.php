@@ -5,13 +5,93 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-define('TODO_ITEM_OPEN',    0);
-define('TODO_ITEM_ASSIGNED',1);
-define('TODO_ITEM_CLOSED',  2);
+define('ISSUE_OPEN',    0);
+define('ISSUE_ASSIGNED',1);
+define('ISSUE_CLOSED',  2);
 
-$todo_item_status[TODO_ITEM_OPEN]     = 'OPEN';
-$todo_item_status[TODO_ITEM_ASSIGNED] = 'ASSIGNED';
-$todo_item_status[TODO_ITEM_CLOSED]   = 'CLOSED';
+$issue_status[ISSUE_OPEN]     = 'OPEN';
+$issue_status[ISSUE_ASSIGNED] = 'ASSIGNED';
+$issue_status[ISSUE_CLOSED]   = 'CLOSED';
+
+
+/**
+ * Creates a new issue ticket
+ *
+ * @param $userId user id
+ * @param $categoryId category id
+ * @param $desc description
+ * @return id of the created issue or false on error
+ */
+function addIssue($userId, $categoryId, $desc)
+{
+	global $db;
+	if (!is_numeric($userId) || !is_numeric($categoryId)) return false;
+
+	$q = 'SELECT COUNT(id) FROM tblIssues WHERE description="'.$db->escape($desc).'" AND categoryId='.$categoryId.' AND creatorId='.$userId;
+	if ($db->getOneItem($q)) return false;
+
+	$q = 'INSERT INTO tblIssues SET description="'.$db->escape($desc).'",categoryId='.$categoryId.',creatorId='.$userId.',timeCreated=NOW()';
+	return $db->insert($q);
+}
+
+
+/**
+ * Returns a list of issues
+ */
+function getIssues($categoryId = 0, $status = 0)
+{
+	global $db;
+	if (!is_numeric($categoryId) || !is_numeric($status)) return false;
+
+	$q  = 'SELECT * FROM tblIssues';
+	$q .= ' WHERE categoryId='.$categoryId;
+	if ($status) $q .= ' AND status='.$status;
+	$q .= ' ORDER By timeCreated ASC';
+	return $db->getArray($q);
+}
+
+
+/**
+ * Return a list of closed issues
+ */
+function getClosedIssues($categoryId = 0)
+{
+	return getIssues($categoryId, ISSUE_CLOSED);
+}
+
+
+/**
+ * Returns number of issues
+ */
+function getIssueCount($categoryId = 0, $status = 0)
+{
+	global $db;
+	if (!is_numeric($categoryId) || !is_numeric($status)) return false;
+
+	$q  = 'SELECT COUNT(id) FROM tblIssues';
+	$q .= ' WHERE categoryId='.$categoryId;
+	if ($status) $q .= ' AND status='.$status;
+	return $db->getOneItem($q);
+}
+
+/**
+ * Returns number of closed issues
+ */
+function getClosedIssueCount($categoryId = 0)
+{
+	return getIssueCount($categoryId, ISSUE_CLOSED);
+}
+
+
+
+
+
+/*************************************
+ *************************************
+ * CODE BELOW IS NOT YET UPDATED!!!!!!
+ *************************************
+ ************************************/
+
 
 $todo_item_category[0] = 'Missing feature';
 $todo_item_category[1] = 'Bug';
@@ -23,6 +103,67 @@ define('CLOSE_BUG_ALREADYFIXED', 1);
 
 $close_bug_reason[CLOSE_BUG_BOGUS]        = 'BOGUS';
 $close_bug_reason[CLOSE_BUG_ALREADYFIXED] = 'ALREADY FIXED';
+
+
+/**
+ * XXX
+ */
+function getBugReport($bugId)
+{
+	global $db;
+	if (!is_numeric($bugId)) return false;
+
+	$q = 'SELECT tblBugReports.*,tblUsers.userName FROM tblBugReports ';
+	$q .= 'INNER JOIN tblUsers ON (tblBugReports.bugCreator=tblUsers.userId) ';
+	$q .= 'WHERE bugId='.$bugId;
+	return $db->getOneRow($q);
+}
+
+/**
+ * Flyttar buggrapporten från tblBugReports till tblTodoLists
+ * Returnerar ID för det nya todo-itemet
+ * userId : den som flyttar buggen, creator = den som skapat buggen
+ */
+function moveBugReport($bugId, $creator, $desc, $details, $timestamp, $category, $categoryId)
+{
+	global $db, $session;
+	if (!$session->id) return false;
+	if (!is_numeric($bugId) || !is_numeric($creator) || !is_numeric($timestamp) || !is_numeric($category) || !is_numeric($categoryId)) return false;
+
+	$desc = $db->escape($desc);
+	$details = $db->escape($details);
+
+	$comment = 'Imported by '.Users::getName($userId).' from a report by '.Users::getName($creator).'.';
+
+	$q = 'INSERT INTO tblTodoLists SET categoryId='.$categoryId.',itemDesc="'.$desc.'",itemDetails="'.$details.'",itemCategory='.$category.',timestamp='.$timestamp.',itemCreator='.$creator;
+	$itemId = $db->insert($q);
+
+	$db->delete('DELETE FROM tblBugReports WHERE bugId='.$bugId);
+
+	$q = 'INSERT INTO tblTodoListComments SET itemId='.$itemId.',itemComment="'.$comment.'",timestamp='.time().',userId=0';
+	$db->insert($q);
+
+	return $itemId;
+}
+
+/**
+ * Mark specified bug report as closed
+ */
+function closeBugReport($bugId, $reason)
+{
+	global $db;
+	if (!is_numeric($bugId) || !is_numeric($reason)) return false;
+
+	$q = 'UPDATE tblBugReports SET bugClosed=1, bugClosedReason='.$reason.' WHERE bugId='.$bugId;
+	$db->update($q);
+}
+
+
+
+
+
+
+
 
 
 /**
@@ -218,115 +359,5 @@ function getClosedTodoCategoryItems($categoryId)
 	return $db->getOneItem($q);
 }
 
-/**
- * XXX
- */
-function addBugReport($desc)
-{
-	global $db, $session;
-	if (!$session->id) return false;
-	$desc = $db->escape(strip_tags($desc));
 
-	$q = 'INSERT INTO tblBugReports SET bugDesc="'.$desc.'",bugCreator='.$session->id.',reportMethod=0,timestamp='.time();
-	$db->insert($q);
-}
-
-/**
- * XXX
- */
-function getBugReports()
-{
-	global $db;
-	$q  = 'SELECT tblBugReports.*,tblUsers.userName FROM tblBugReports ';
-	$q .= 'LEFT OUTER JOIN tblUsers ON (tblBugReports.bugCreator=tblUsers.userId) ';
-	$q .= 'WHERE bugClosed=0 ';
-	$q .= 'ORDER By tblBugReports.timestamp ASC';
-	return $db->getArray($q);
-}
-
-/**
- * XXX
- */
-function getClosedBugReports()
-{
-	global $db;
-	$q  = 'SELECT tblBugReports.*,tblUsers.userName FROM tblBugReports ';
-	$q .= 'LEFT OUTER JOIN tblUsers ON (tblBugReports.bugCreator=tblUsers.userId) ';
-	$q .= 'WHERE bugClosed=1 ';
-	$q .= 'ORDER By tblBugReports.timestamp ASC';
-	return $db->getArray($q);
-}
-
-/**
- * XXX
- */
-function getClosedBugReportsCount()
-{
-	global $db;
-	$q = 'SELECT COUNT(bugId) FROM tblBugReports WHERE bugClosed=1';
-	return $db->getOneItem($q);
-}
-
-/**
- * Returns number of OPEN bugs
- */
-function getBugReportsCount()
-{
-	global $db;
-	$q = 'SELECT COUNT(bugId) FROM tblBugReports WHERE bugClosed=0';
-	return $db->getOneItem($q);
-}
-
-/**
- * XXX
- */
-function getBugReport($bugId)
-{
-	global $db;
-	if (!is_numeric($bugId)) return false;
-
-	$q = 'SELECT tblBugReports.*,tblUsers.userName FROM tblBugReports ';
-	$q .= 'INNER JOIN tblUsers ON (tblBugReports.bugCreator=tblUsers.userId) ';
-	$q .= 'WHERE bugId='.$bugId;
-	return $db->getOneRow($q);
-}
-
-/**
- * Flyttar buggrapporten från tblBugReports till tblTodoLists
- * Returnerar ID för det nya todo-itemet
- * userId : den som flyttar buggen, creator = den som skapat buggen
- */
-function moveBugReport($bugId, $creator, $desc, $details, $timestamp, $category, $categoryId)
-{
-	global $db, $session;
-	if (!$session->id) return false;
-	if (!is_numeric($bugId) || !is_numeric($creator) || !is_numeric($timestamp) || !is_numeric($category) || !is_numeric($categoryId)) return false;
-
-	$desc = $db->escape($desc);
-	$details = $db->escape($details);
-
-	$comment = 'Imported by '.Users::getName($userId).' from a report by '.Users::getName($creator).'.';
-
-	$q = 'INSERT INTO tblTodoLists SET categoryId='.$categoryId.',itemDesc="'.$desc.'",itemDetails="'.$details.'",itemCategory='.$category.',timestamp='.$timestamp.',itemCreator='.$creator;
-	$itemId = $db->insert($q);
-
-	$db->delete('DELETE FROM tblBugReports WHERE bugId='.$bugId);
-
-	$q = 'INSERT INTO tblTodoListComments SET itemId='.$itemId.',itemComment="'.$comment.'",timestamp='.time().',userId=0';
-	$db->insert($q);
-
-	return $itemId;
-}
-
-/**
- * Mark specified bug report as closed
- */
-function closeBugReport($bugId, $reason)
-{
-	global $db;
-	if (!is_numeric($bugId) || !is_numeric($reason)) return false;
-
-	$q = 'UPDATE tblBugReports SET bugClosed=1, bugClosedReason='.$reason.' WHERE bugId='.$bugId;
-	$db->update($q);
-}
 ?>
