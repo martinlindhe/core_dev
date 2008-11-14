@@ -24,8 +24,7 @@ $config['email']['text_allowed_mime_types'] = array('text/plain');
 class pop3
 {
 	var $handle;
-	var $errno;
-	var $errstr;
+	var $errno, $errstr;
 
 	var $server, $port;
 	var $username, $password;
@@ -41,9 +40,9 @@ class pop3
 		$this->password = $password;
 	}
 
-	function open($timeout = 30)
+	function open($timeout)
 	{
-		$this->handle = fsockopen($this->server, $this->port, $this->errorno, $this->errstr, $timeout);
+		$this->handle = fsockopen($this->server, $this->port, $this->errno, $this->errstr, $timeout);
 		if (!$this->handle) {
 			if (!empty($config['debug'])) echo "Error: pop3->open() failed\n";
 			return false;
@@ -209,9 +208,9 @@ class pop3
 	/**
 	 * Fetches all mail
 	 */
-	function getMail()
+	function getMail($timeout = 30)
 	{
-		if (!$this->open() || $this->errno) return false;
+		if (!$this->open($timeout)) return false;
 		if (!$this->login($this->username, $this->password)) return false;
 
 		$mail = array();
