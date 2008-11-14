@@ -129,15 +129,14 @@ class pop3
 	{
 		$this->write('STAT');
 
-		//Response: +OK 0 0			first number means 0 unread mail. second means number of bytes for all mail
-		$response = $this->read();
-		if (!$this->is_ok($response)) {
+		$res = $this->read();		//Response: +OK unread_mails tot_bytes
+		if (!$this->is_ok($res)) {
 			$this->QUIT();
 			echo "pop3->_STAT(): failed\n";
 			return false;
 		}
 
-		$arr = explode(' ', $response);
+		$arr = explode(' ', $res);
 		if (count($arr) != 3) {
 			echo "pop3->_STAT(): unexpected response\n";
 			return false;
@@ -193,7 +192,7 @@ class pop3
 		if (!is_numeric($_id)) return false;
 
 		$this->write('RETR '.$_id);
-		if (!$this->is_ok()) return false;		//+OK 39265 octets
+		if (!$this->is_ok()) return false;
 
 		$msg = '';
 		do {
@@ -202,7 +201,7 @@ class pop3
 
 		$msg = substr($msg, 0, -5);	//remove ending "\r\n.\r\n"
 
-		$this->parseAttachments($msg);
+		$this->parseMail($msg);
 		return true;
 	}
 
@@ -226,7 +225,7 @@ class pop3
 			$msg_size = $this->_LIST($i);
 			if (!$msg_size) continue;
 
-			echo "Downloading #".$i."... (".$msg_size." bytes)\n";
+			echo "Downloading ".$i." of ".$this->unread_mails." ... (".$msg_size." bytes)\n";
 
 			$check = $this->_RETR($i);
 			//if ($check) $this->_DELE($i);
@@ -237,43 +236,11 @@ class pop3
 	}
 
 	/**
-	 * Takes a text string with email header and returns array
-	 * FIXME: limitation: multiple keys with same name will just be glued together (Received are one such common header key)
-	 */
-	function parseHeader($raw_head)
-	{
-		$arr = explode("\n", $raw_head);
-
-		$header = array();
-
-		foreach ($arr as $row)
-		{
-			$pos = strpos($row, ': ');
-			if ($pos) $curr_key = substr($row, 0, $pos);
-			if (!$curr_key) die('super error');
-			if (empty($header[ $curr_key ])) {
-				$header[ $curr_key ] = substr($row, $pos + strlen(': '));
-			} else {
-				$header[ $curr_key ] .= $row;
-			}
-
-			$header[ $curr_key ] = str_replace("\r", ' ', $header[ $curr_key ]);
-			$header[ $curr_key ] = str_replace("\n", ' ', $header[ $curr_key ]);
-			$header[ $curr_key ] = str_replace("\t", ' ', $header[ $curr_key ]);
-			$header[ $curr_key ] = str_replace('  ', ' ', $header[ $curr_key ]);
-		}
-
-		//echo '<pre>';print_r($header);
-
-		return $header;
-	}
-
-	/**
 	 * Takes a raw email (including headers) as parameter, returns all attachments, body & header nicely parsed up
 	 * also automatically extracts file attachments and handles them as file uploads
 	 * allowed file types as attachments are $config['email']['attachments_allowed_mime_types']
 	 */
-	function parseAttachments($msg)
+	function parseMail($msg)
 	{
 		global $config;
 
@@ -420,6 +387,38 @@ class pop3
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Takes a text string with email header and returns array
+	 * FIXME: limitation: multiple keys with same name will just be glued together (Received are one such common header key)
+	 */
+	function parseHeader($raw_head)
+	{
+		$arr = explode("\n", $raw_head);
+
+		$header = array();
+
+		foreach ($arr as $row)
+		{
+			$pos = strpos($row, ': ');
+			if ($pos) $curr_key = substr($row, 0, $pos);
+			if (!$curr_key) die('super error');
+			if (empty($header[ $curr_key ])) {
+				$header[ $curr_key ] = substr($row, $pos + strlen(': '));
+			} else {
+				$header[ $curr_key ] .= $row;
+			}
+
+			$header[ $curr_key ] = str_replace("\r", ' ', $header[ $curr_key ]);
+			$header[ $curr_key ] = str_replace("\n", ' ', $header[ $curr_key ]);
+			$header[ $curr_key ] = str_replace("\t", ' ', $header[ $curr_key ]);
+			$header[ $curr_key ] = str_replace('  ', ' ', $header[ $curr_key ]);
+		}
+
+		//echo '<pre>';print_r($header);
+
+		return $header;
 	}
 }
 
