@@ -76,7 +76,7 @@ function getEvents($_category = 0, $ownerId = 0, $limit = '')
 	$q .= ' WHERE timeCreated IS NOT NULL';
 	if ($_category) $q .= ' AND category='.$_category;
 	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-	$q .= ' ORDER BY timeCreated DESC'.$limit;
+	$q .= ' ORDER BY timeCreated DESC, eventId DESC'.$limit;
 
 	return $db->getArray($q);
 }
