@@ -236,8 +236,10 @@ $e164_cc[998] = 'Uzbekistan';
 /**
  * Swedish area codes from
  * http://sv.wikipedia.org/wiki/Lista_över_svenska_riktnummer
+ * http://www.pts.se/upload/Documents/SE/Riktnummeromraden_nrordning.pdf
  * as of 2008.10.30
  */
+$area_code[46][10] = 'PBX'; //Lokalt direktval för företagsväxlar
 $area_code[46][11] = 'Norrköping';
 $area_code[46][120] = 'Åtvidaberg';
 $area_code[46][121] = 'Söderköping';
@@ -642,8 +644,8 @@ function parseAreaCode($country, &$anr)
 		$anr = substr($anr, 3);
 		return $tmp;
 	}
-
-	return 'MISSING-'.$anr;
+	echo "parseAreaCode() ERROR: invalid area code for ".$country." - ".$anr."!\n";
+	return '';
 }
 
 /**
