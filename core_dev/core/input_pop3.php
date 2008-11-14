@@ -45,7 +45,7 @@ class pop3
 	{
 		$this->handle = fsockopen($this->server, $this->port, $this->errorno, $this->errstr, $timeout);
 		if (!$this->handle) {
-			echo "Error: pop3->open() failed\n";
+			if (!empty($config['debug'])) echo "Error: pop3->open() failed\n";
 			return false;
 		}
 		return true;
@@ -73,7 +73,6 @@ class pop3
 
 		$this->write('USER '.$user);
 		if (!$this->is_ok()) {
-			//Expected response: +OK User:'martin@unicorn.tv' ok
 			echo "Error: pop3->login() Wrong username\n";
 			$this->_QUIT();
 			return false;
@@ -81,9 +80,6 @@ class pop3
 
 		$this->write('PASS '.$pass);
 		if (!$this->is_ok()) {
-			//Response 1: -ERR UserName or Password is incorrect
-			//Response 2: +OK logged in.
-
 			echo "Error: pop3->login() Wrong password\n";
 			$this->_QUIT();
 			return false;
@@ -138,15 +134,18 @@ class pop3
 		$response = $this->read();
 		if (!$this->is_ok($response)) {
 			$this->QUIT();
-			echo "pop3->_STAT(): STAT error\n";
+			echo "pop3->_STAT(): failed\n";
 			return false;
 		}
 
 		$arr = explode(' ', $response);
-		if (count($arr) == 3) {
-			$this->unread_mails = $arr[1];
-			$this->tot_bytes = $arr[2];
+		if (count($arr) != 3) {
+			echo "pop3->_STAT(): unexpected response\n";
+			return false;
 		}
+
+		$this->unread_mails = $arr[1];
+		$this->tot_bytes = $arr[2];
 
 		return true;
 	}
@@ -178,7 +177,6 @@ class pop3
 	{
 		if (!is_numeric($_id)) return false;
 
-		//Retrieve email
 		$this->write('RETR '.$_id);
 		if (!$this->is_ok()) return false;		//+OK 39265 octets
 
