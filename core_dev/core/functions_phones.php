@@ -235,9 +235,11 @@ $e164_cc[998] = 'Uzbekistan';
 
 /**
  * Swedish area codes from
- * http://sv.wikipedia.org/wiki/Lista_över_svenska_riktnummer
  * http://www.pts.se/upload/Documents/SE/Riktnummeromraden_nrordning.pdf
  * as of 2008.10.30
+ *
+ * See also
+ * http://sv.wikipedia.org/wiki/Lista_över_svenska_riktnummer
  */
 $area_code[46][10] = 'PBX'; //Lokalt direktval för företagsväxlar
 $area_code[46][11] = 'Norrköping';
