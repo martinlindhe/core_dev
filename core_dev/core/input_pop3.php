@@ -21,8 +21,6 @@
 $config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'image/png', 'video/3gpp');
 $config['email']['text_allowed_mime_types'] = array('text/plain');
 
-$config['debug'] = true;	//echos POP3 commands and responses if enabled
-
 class pop3
 {
 	var $handle;
@@ -48,31 +46,6 @@ class pop3
 		return true;
 	}
 
-	function read()
-	{
-		global $config;
-
-		$var = fgets($this->handle, 128);
-		if ($config['debug']) echo "Read: ".$var."\n";
-		return $var;
-	}
-
-	function write($line)
-	{
-		global $config;
-
-		if ($config['debug']) echo "Wrote: ".$line."\n";
-		fputs($this->handle, $line."\r\n");
-	}
-
-	//Return true or false on +OK or -ERR
-	function is_ok($cmd = '')
-	{
-		if (!$cmd) $cmd = $this->read();
-		if (ereg("^\+OK", $cmd)) return true;
-		return false;
-	}
-
 	function login($user, $pass)
 	{
 		global $config;
@@ -90,7 +63,7 @@ class pop3
 			$apop_string = trim(substr($server_ready, $pos));
 			$this->write('APOP '.$user.' '.md5($apop_string.$pass));
 			if ($this->is_ok()) return true;
-			if ($config['debug']) echo "APOP login failed, trying normal method\n";
+			if (!empty($config['debug'])) echo "APOP login failed, trying normal method\n";
 		}
 
 		$this->write('USER '.$user);
@@ -112,6 +85,34 @@ class pop3
 		}
 
 		return true;
+	}
+
+	function read()
+	{
+		global $config;
+
+		$var = fgets($this->handle, 128);
+		if (!empty($config['debug'])) echo "Read: ".$var."\n";
+
+		return $var;
+	}
+
+	function write($line)
+	{
+		global $config;
+
+		if (!empty($config['debug'])) echo "Wrote: ".$line."\n";
+		fputs($this->handle, $line."\r\n");
+	}
+
+	/**
+	 * @return true if server response is "+OK"
+	 */
+	function is_ok($cmd = '')
+	{
+		if (!$cmd) $cmd = $this->read();
+		if (ereg("^\+OK", $cmd)) return true;
+		return false;
 	}
 
 	/**
@@ -145,7 +146,9 @@ class pop3
 		return true;
 	}
 
-	/* Ask the server for size of a specific message */
+	/**
+	 * Ask the server for size of specified message
+	 */
 	function _LIST($_id = 0)
 	{
 		if (!is_numeric($_id)) return false;
@@ -163,19 +166,9 @@ class pop3
 		return intval($arr[2]);	//returns number of bytes in current mail
 	}
 
-	/* Tells the server to delete a mail */
-	function _DELE($_id)
-	{
-		if (!is_numeric($_id)) return false;
-
-		$this->write('DELE '.$_id);
-		if (!$this->is_ok()) {
-			echo "pop3->_DELE() Failed to DELE ".$_id."\n";
-			return false;
-		}
-		return true;
-	}
-
+	/**
+	 * Retrieves specified mail from the server
+	 */
 	function _RETR($_id)
 	{
 		if (!is_numeric($_id)) return false;
@@ -193,6 +186,56 @@ class pop3
 
 		$this->parseAttachments($msg);
 		return true;
+	}
+
+	/**
+	 * Tells the server to delete a mail
+	 */
+	function _DELE($_id)
+	{
+		if (!is_numeric($_id)) return false;
+
+		$this->write('DELE '.$_id);
+		if (!$this->is_ok()) {
+			echo "pop3->_DELE() Failed to DELE ".$_id."\n";
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Fetches all mail
+	 */
+	function getMail($server, $user, $pass, $port = 110)
+	{
+		$this->open($server, $port);
+		if (!$this->handle || $this->errno) return;
+
+		if ($this->login($user, $pass) === false) return;
+
+		$mail = array();
+		$ret = array();
+
+		if (!$this->_STAT()) return;
+
+		if (!$this->unread_mails) {
+			echo "No new mail\n";
+		} else {
+			echo $this->unread_mails." new mail(s)\n";
+		}
+
+		for ($i=1; $i <= $this->unread_mails; $i++)
+		{
+			$msg_size = $this->_LIST($i);
+			if (!$msg_size) continue;
+
+			echo "Downloading #".$i."... (".$msg_size." bytes)\n";
+
+			$check = $this->_RETR($i);
+			//if ($check) $this->_DELE($i);
+		}
+
+		$this->_QUIT();
 	}
 
 	/* takes a text string with email header and returns array */
@@ -259,7 +302,7 @@ class pop3
 
 			} else {
 				$pos = strpos($part, '=');
-				if ($pos === false) die('multipart header err');
+				if ($pos === false) die("multipart header err\n");
 				$key = substr($part, 0, $pos);
 				$val = substr($part, $pos+1);
 
@@ -363,52 +406,19 @@ class pop3
 				case 'base64':
 					/* file attachments like images, videos */
 					if (!in_array($attachment_mime, $config['email']['attachments_allowed_mime_types'])) {
-						$this->logAct('Attachment mime type unrecognized: '. $attachment_mime);
+						echo "Attachment mime type unrecognized: ".$attachment_mime."\n";
 						continue;
 					}
 					$this->saveFile($filename, $attachment_mime, base64_decode($attachment['body']), $result['mms_code']);
 					break;
 
 				default:
-					$this->logAct('Unknown transfer encoding: '. $attachment['head']['Content-Transfer-Encoding']);
+					echo "Unknown transfer encoding: ". $attachment['head']['Content-Transfer-Encoding']."\n";
 					break;
 			}
 		}
 
 		return $result;
-	}
-
-	/* fetches all mail from a pop3 inbox */
-	function getMail($server, $user, $pass, $port = 110)
-	{
-		$this->open($server, $port);
-		if (!$this->handle || $this->errno) return;
-
-		if ($this->login($user, $pass) === false) return;
-
-		$mail = array();
-		$ret = array();
-
-		if (!$this->_STAT()) return;
-
-		if (!$this->unread_mails) {
-			echo "No new mail\n";
-		} else {
-			echo $this->unread_mails." new mail(s)\n";
-		}
-
-		for ($i=1; $i <= $this->unread_mails; $i++)
-		{
-			$msg_size = $this->_LIST($i);
-			if (!$msg_size) continue;
-
-			echo "Downloading #".$i."... (".$msg_size." bytes)\n";
-
-			$check = $this->_RETR($i);
-			//if ($check) $this->_DELE($i);
-		}
-
-		$this->_QUIT();
 	}
 }
 
