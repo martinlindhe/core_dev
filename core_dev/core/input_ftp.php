@@ -45,7 +45,7 @@ function ftp_get_contents($server, $username, $password, $remote_file)
 	fclose($pipes[0]);
 	fclose($pipes[1]);
 
-    if ($ret != FTP_FINISHED) return false;
+	if ($ret != FTP_FINISHED) return false;
 	return $data;
 }
 
