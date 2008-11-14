@@ -40,6 +40,11 @@ class pop3
 		$this->password = $password;
 	}
 
+	function __destruct()
+	{
+		if ($this->handle) $this->_QUIT();
+	}
+
 	function open($timeout)
 	{
 		$this->handle = fsockopen($this->server, $this->port, $this->errno, $this->errstr, $timeout);
@@ -50,7 +55,7 @@ class pop3
 		return true;
 	}
 
-	function login($user, $pass)
+	function login()
 	{
 		global $config;
 
@@ -63,28 +68,24 @@ class pop3
 		//Checks for APOP id in connection response
 		$pos = strpos($server_ready, '<');
 		if ($pos !== false) {
-			//APOP support assumed
 			$apop_string = trim(substr($server_ready, $pos));
-			$this->write('APOP '.$user.' '.md5($apop_string.$pass));
+			$this->write('APOP '.$this->username.' '.md5($apop_string.$this->password));
 			if ($this->is_ok()) return true;
 			if (!empty($config['debug'])) echo "APOP login failed, trying normal method\n";
 		}
 
-		$this->write('USER '.$user);
+		$this->write('USER '.$this->username);
 		if (!$this->is_ok()) {
 			echo "Error: pop3->login() Wrong username\n";
 			$this->_QUIT();
 			return false;
 		}
 
-		$this->write('PASS '.$pass);
-		if (!$this->is_ok()) {
-			echo "Error: pop3->login() Wrong password\n";
-			$this->_QUIT();
-			return false;
-		}
-
-		return true;
+		$this->write('PASS '.$this->password);
+		if ($this->is_ok()) return true;
+		echo "Error: pop3->login() Wrong password\n";
+		$this->_QUIT();
+		return false;
 	}
 
 	function read()
@@ -123,6 +124,7 @@ class pop3
 		$this->write('QUIT');
 		$this->read();		//Response: +OK Bye-bye.
 		fclose($this->handle);
+		$this->handle = false;
 	}
 
 	function _STAT()
@@ -208,7 +210,7 @@ class pop3
 	function getMail($timeout = 30)
 	{
 		if (!$this->open($timeout)) return false;
-		if (!$this->login($this->username, $this->password)) return false;
+		if (!$this->login()) return false;
 
 		if (!$this->_STAT()) return false;
 
@@ -234,15 +236,16 @@ class pop3
 	}
 
 	/**
-	 * Takes a raw email (including headers) as parameter, returns all attachments, body & header nicely parsed up
-	 * also automatically extracts file attachments and handles them as file uploads
-	 * allowed file types as attachments are $config['email']['attachments_allowed_mime_types']
+	 * Email parser
+	 *
+	 * @param $msg raw email text from pop3 server
+	 * @return all attachments, body & header nicely parsed up
 	 */
 	function parseMail($msg)
 	{
 		global $config;
 
-		$msg = str_replace("\r\n", "\n", $msg);
+		//$msg = str_replace("\r\n", "\n", $msg);
 
 		//1. Klipp ut headern
 		$pos = strpos($msg, "\n\n");
