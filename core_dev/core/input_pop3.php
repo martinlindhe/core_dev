@@ -199,10 +199,7 @@ class pop3
 			$msg .= $this->read();
 		} while (substr($msg, -5) != "\r\n.\r\n");
 
-		$msg = substr($msg, 0, -5);	//remove ending "\r\n.\r\n"
-
-		$this->parseMail($msg);
-		return true;
+		return substr($msg, 0, -5);	//remove ending "\r\n.\r\n"
 	}
 
 	/**
@@ -227,8 +224,9 @@ class pop3
 
 			echo "Downloading ".$i." of ".$this->unread_mails." ... (".$msg_size." bytes)\n";
 
-			$check = $this->_RETR($i);
-			//if ($check) $this->_DELE($i);
+			$msg = $this->_RETR($i);
+			$this->parseMail($msg);
+			//if ($msg) $this->_DELE($i);
 		}
 
 		$this->_QUIT();
