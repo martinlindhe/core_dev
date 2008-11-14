@@ -27,11 +27,18 @@ class pop3
 	var $errno;
 	var $errstr;
 
+	var $server, $port;
+	var $username, $password;
+
 	var $unread_mails = 0;
 	var $tot_bytes = 0;
 
-	function __construct()
+	function __construct($server = '', $username = '', $password = '', $port = 110)
 	{
+		$this->server = $server;
+		$this->port = $port;
+		$this->username = $username;
+		$this->password = $password;
 	}
 
 	function open($server, $port, $timeout = 30)
@@ -206,12 +213,12 @@ class pop3
 	/**
 	 * Fetches all mail
 	 */
-	function getMail($server, $user, $pass, $port = 110)
+	function getMail()
 	{
-		$this->open($server, $port);
+		$this->open($this->server, $this->port);
 		if (!$this->handle || $this->errno) return;
 
-		if ($this->login($user, $pass) === false) return;
+		if ($this->login($this->username, $this->password) === false) return;
 
 		$mail = array();
 		$ret = array();
