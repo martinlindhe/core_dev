@@ -151,6 +151,8 @@ class pop3
 
 	/**
 	 * Ask the server for size of specified message
+	 *
+	 * @return number of bytes in current mail
 	 */
 	function _LIST($_id = 0)
 	{
@@ -158,15 +160,29 @@ class pop3
 
 		$this->write('LIST '.$_id);
 
-		//Response: +OK 1 1234		first number = $_id, sencond number is bytes in current mail
-		$response = $this->read();
+		$response = $this->read();	//Response: +OK id size
 		if (!$this->is_ok($response)) {
-			echo "pop3->_LIST(): Failed to LIST ".$_id."\n";
+			echo "pop3->_LIST(): Failed on ".$_id."\n";
 			return false;
 		}
 
 		$arr = explode(' ', $response);
-		return intval($arr[2]);	//returns number of bytes in current mail
+		return intval($arr[2]);
+	}
+
+	/**
+	 * Tells the server to delete a mail
+	 */
+	function _DELE($_id)
+	{
+		if (!is_numeric($_id)) return false;
+
+		$this->write('DELE '.$_id);
+		if (!$this->is_ok()) {
+			echo "pop3->_DELE() Failed on ".$_id."\n";
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -191,30 +207,12 @@ class pop3
 	}
 
 	/**
-	 * Tells the server to delete a mail
-	 */
-	function _DELE($_id)
-	{
-		if (!is_numeric($_id)) return false;
-
-		$this->write('DELE '.$_id);
-		if (!$this->is_ok()) {
-			echo "pop3->_DELE() Failed to DELE ".$_id."\n";
-			return false;
-		}
-		return true;
-	}
-
-	/**
 	 * Fetches all mail
 	 */
 	function getMail($timeout = 30)
 	{
 		if (!$this->open($timeout)) return false;
 		if (!$this->login($this->username, $this->password)) return false;
-
-		$mail = array();
-		$ret = array();
 
 		if (!$this->_STAT()) return false;
 
