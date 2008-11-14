@@ -41,11 +41,9 @@ class pop3
 		$this->password = $password;
 	}
 
-	function open($server, $port, $timeout = 30)
+	function open($timeout = 30)
 	{
-		global $config;
-
-		$this->handle = fsockopen($server, $port, $this->errorno, $this->errstr, $timeout);
+		$this->handle = fsockopen($this->server, $this->port, $this->errorno, $this->errstr, $timeout);
 		if (!$this->handle) {
 			echo "Error: pop3->open() failed\n";
 			return false;
@@ -215,24 +213,21 @@ class pop3
 	 */
 	function getMail()
 	{
-		$this->open($this->server, $this->port);
-		if (!$this->handle || $this->errno) return;
-
-		if ($this->login($this->username, $this->password) === false) return;
+		if (!$this->open() || $this->errno) return false;
+		if (!$this->login($this->username, $this->password)) return false;
 
 		$mail = array();
 		$ret = array();
 
-		if (!$this->_STAT()) return;
+		if (!$this->_STAT()) return false;
 
-		if (!$this->unread_mails) {
-			echo "No new mail\n";
-		} else {
+		if ($this->unread_mails) {
 			echo $this->unread_mails." new mail(s)\n";
+		} else {
+			echo "No new mail\n";
 		}
 
-		for ($i=1; $i <= $this->unread_mails; $i++)
-		{
+		for ($i=1; $i <= $this->unread_mails; $i++) {
 			$msg_size = $this->_LIST($i);
 			if (!$msg_size) continue;
 
@@ -243,10 +238,13 @@ class pop3
 		}
 
 		$this->_QUIT();
+		return true;
 	}
 
-	/* takes a text string with email header and returns array */
-	//current limitation: multiple keys with same name will just be glued together (Received are one such common header key)
+	/**
+	 * Takes a text string with email header and returns array
+	 * FIXME: limitation: multiple keys with same name will just be glued together (Received are one such common header key)
+	 */
 	function parseHeader($raw_head)
 	{
 		$arr = explode("\n", $raw_head);
@@ -275,10 +273,11 @@ class pop3
 		return $header;
 	}
 
-	/* Takes a raw email (including headers) as parameter, returns all attachments, body & header nicely parsed up
-		also automatically extracts file attachments and handles them as file uploads
-		allowed file types as attachments are $config['email']['attachments_allowed_mime_types']
-	*/
+	/**
+	 * Takes a raw email (including headers) as parameter, returns all attachments, body & header nicely parsed up
+	 * also automatically extracts file attachments and handles them as file uploads
+	 * allowed file types as attachments are $config['email']['attachments_allowed_mime_types']
+	 */
 	function parseAttachments($msg)
 	{
 		global $config;
