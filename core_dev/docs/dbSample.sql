@@ -156,7 +156,7 @@ SET character_set_client = utf8;
 CREATE TABLE `tblEvents` (
   `eventId` bigint(20) unsigned NOT NULL auto_increment,
   `type` tinyint(3) unsigned NOT NULL,
-  `category` tinyint(3) unsigned NOT NULL,
+  `category` int(10) unsigned NOT NULL,
   `ownerId` bigint(20) unsigned NOT NULL,
   `refererId` bigint(20) unsigned NOT NULL,
   `timeCreated` datetime default NULL,
