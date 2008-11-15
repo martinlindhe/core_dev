@@ -45,23 +45,19 @@ class pop3
 		if ($this->handle) $this->_QUIT();
 	}
 
-	function open($timeout)
-	{
-		$this->handle = fsockopen($this->server, $this->port, $this->errno, $this->errstr, $timeout);
-		if (!$this->handle) {
-			if (!empty($config['debug'])) echo "Error: pop3->open() failed\n";
-			return false;
-		}
-		return true;
-	}
-
-	function login()
+	function login($timeout)
 	{
 		global $config;
 
+		$this->handle = fsockopen($this->server, $this->port, $this->errno, $this->errstr, $timeout);
+		if (!$this->handle) {
+			if (!empty($config['debug'])) echo "pop3->login() connection failed\n";
+			return false;
+		}
+
 		$server_ready = $this->read();
 		if (!$this->is_ok($server_ready)) {
-			echo "pop3->login() failed! Server not allowing connections?\n";
+			echo "pop3->login() response error! Server not allowing connections?\n";
 			return false;
 		}
 
@@ -71,19 +67,19 @@ class pop3
 			$apop_string = trim(substr($server_ready, $pos));
 			$this->write('APOP '.$this->username.' '.md5($apop_string.$this->password));
 			if ($this->is_ok()) return true;
-			if (!empty($config['debug'])) echo "APOP login failed, trying normal method\n";
+			if (!empty($config['debug'])) echo "pop3->login() APOP failed, trying normal method\n";
 		}
 
 		$this->write('USER '.$this->username);
 		if (!$this->is_ok()) {
-			echo "Error: pop3->login() Wrong username\n";
+			echo "pop3->login() wrong username\n";
 			$this->_QUIT();
 			return false;
 		}
 
 		$this->write('PASS '.$this->password);
 		if ($this->is_ok()) return true;
-		echo "Error: pop3->login() Wrong password\n";
+		echo "pop3->login() wrong password\n";
 		$this->_QUIT();
 		return false;
 	}
@@ -162,12 +158,13 @@ class pop3
 		$this->write('LIST '.$_id);
 
 		$response = $this->read();	//Response: +OK id size
-		if (!$this->is_ok($response)) {
+		$arr = explode(' ', $response);
+
+		if (!$this->is_ok($response) || $arr[1] != $_id) {
 			echo "pop3->_LIST(): Failed on ".$_id."\n";
 			return false;
 		}
 
-		$arr = explode(' ', $response);
 		return intval($arr[2]);
 	}
 
@@ -209,10 +206,7 @@ class pop3
 	 */
 	function getMail($timeout = 30)
 	{
-		if (!$this->open($timeout)) return false;
-		if (!$this->login()) return false;
-
-		if (!$this->_STAT()) return false;
+		if (!$this->login($timeout) || !$this->_STAT()) return false;
 
 		if ($this->unread_mails) {
 			echo $this->unread_mails." new mail(s)\n";
