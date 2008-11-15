@@ -55,17 +55,17 @@ class pop3
 			return false;
 		}
 
-		$server_ready = $this->read();
-		if (!$this->is_ok($server_ready)) {
+		$res = $this->read();
+		if (!$this->is_ok($res)) {
 			echo "pop3->login() response error! Server not allowing connections?\n";
 			return false;
 		}
 
 		//Checks for APOP id in connection response
-		$pos = strpos($server_ready, '<');
+		$pos = strpos($res, '<');
 		if ($pos !== false) {
-			$apop_string = trim(substr($server_ready, $pos));
-			$this->write('APOP '.$this->username.' '.md5($apop_string.$this->password));
+			$apop_hash = trim(substr($res, $pos));
+			$this->write('APOP '.$this->username.' '.md5($apop_hash.$this->password));
 			if ($this->is_ok()) return true;
 			if (!empty($config['debug'])) echo "pop3->login() APOP failed, trying normal method\n";
 		}
@@ -123,26 +123,26 @@ class pop3
 		$this->handle = false;
 	}
 
+	/**
+	 * Asks the server about inbox status
+	 * Expected response: +OK unread_mails tot_bytes
+	 *
+	 * @return true on success
+	 */
 	function _STAT()
 	{
 		$this->write('STAT');
 
-		$res = $this->read();		//Response: +OK unread_mails tot_bytes
-		if (!$this->is_ok($res)) {
+		$res = $this->read();
+		$arr = explode(' ', $res);
+		if (!$this->is_ok($res) || count($arr) != 3) {
 			$this->QUIT();
 			echo "pop3->_STAT(): failed\n";
 			return false;
 		}
 
-		$arr = explode(' ', $res);
-		if (count($arr) != 3) {
-			echo "pop3->_STAT(): unexpected response\n";
-			return false;
-		}
-
 		$this->unread_mails = $arr[1];
 		$this->tot_bytes = $arr[2];
-
 		return true;
 	}
 
