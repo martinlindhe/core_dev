@@ -17,9 +17,7 @@
 ///WIP CODE! not complete yet
 
 
-//allowed mail attachment mime types
-$config['email']['attachments_allowed_mime_types'] = array('image/jpeg', 'image/png', 'video/3gpp');
-$config['email']['text_allowed_mime_types'] = array('text/plain');
+$config['email']['allowed_mime_types'] = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
 
 class pop3
 {
@@ -292,16 +290,15 @@ class pop3
 	{
 		global $config;
 
-		$attachment = array();
+		$att = array();
 
 		//Check content type
 		$content = explode(';', $header['Content-Type']);
 
-
 		//Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 		//Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
 		switch ($content[0]) {
-			case 'text/plain': return $attachment;
+			case 'text/plain': return $att;
 		}
 
 		$multipart_id = '';
@@ -320,7 +317,6 @@ class pop3
 			switch ($key) {
 				case 'boundary':
 					$multipart_id = '--'.str_replace('"', '', $val);
-					//echo "boundary: '".$multipart_id."'\n";
 					break;
 
 				default:
@@ -332,12 +328,13 @@ class pop3
 
 		//echo "Splitting msg using id '".$multipart_id."'\n";
 
+		//Parses attachments into array
 		$part_cnt = 0;
 		do {
 			$p1 = strpos($body, $multipart_id);
 			$p2 = strpos($body, $multipart_id, $p1+strlen($multipart_id));
 
-			if ($p1 === false || $p2 === false) die('error parsing attachment');
+			if ($p1 === false || $p2 === false) die("error parsing attachment\n");
 
 			//$current contains a whole block with attachment & attachment header
 			$current = substr($body, $p1 + strlen($multipart_id), $p2 - $p1 - strlen($multipart_id));
@@ -350,65 +347,45 @@ class pop3
 				die("error: '".$current."'\n");
 			}
 
-			$attachment[ $part_cnt ]['head'] = $this->parseHeader($a_head);
-			$attachment[ $part_cnt ]['body'] = $a_body;
-
-			$part_cnt++;
-
+			$att[ $part_cnt ]['head'] = $this->parseHeader($a_head);
+			$att[ $part_cnt ]['body'] = $a_body;
 			$body = substr($body, $p2);
 
-		} while ($body != $multipart_id.'--');
+			$params = explode('; ', $att[ $part_cnt ]['head']['Content-Type']);
+			$att[ $part_cnt ]['mimetype'] = $params[0];
 
-		//Stores all base64-encoded attachments to disk
-		foreach ($attachment as $att)
-		{
-			if (empty($att['head']['Content-Transfer-Encoding'])) {
-				echo 'No Content-Transfer-Encoding header set!<br/>';
-				continue;
-			}
-
-			//print_r($att['head']);
-
-			$params = explode('; ', $att['head']['Content-Type']);
-			$attachment_mime = $params[0];
-
-			$filename = '';
-			if (!empty($att['head']['Content-Location'])) $filename = $att['head']['Content-Location'];
-			if (!$filename) {
-				//Extracta filename från: [Content-Type] => image/jpeg; name="header.jpg"
-				//Eller									: [Content-Type] => image/jpeg; name=DSC00071.jpeg
-
-				//fixme fulhack:
+			if (!empty($att[ $part_cnt ]['head']['Content-Location'])) $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['head']['Content-Location'];
+			if (empty($att[ $part_cnt ]['filename'])) {
+				//Extract name from [Content-Type] => image/jpeg; name="header.jpg"
+				//or                [Content-Type] => image/jpeg; name=DSC00071.jpeg
 				if (isset($params[1]) && substr($params[1], 0, 5) == 'name=') {
-					$filename = str_replace('"', '', substr($params[1], 5) );
+					$att[ $part_cnt ]['filename'] = str_replace('"', '', substr($params[1], 5) );
 				}
 			}
 
-			switch (trim($att['head']['Content-Transfer-Encoding'])) {
+			if (!in_array($att[ $part_cnt ]['mimetype'], $config['email']['allowed_mime_types'])) {
+				echo "Unknown mime type: ". $att[ $part_cnt ]['mimetype']."\n";
+				continue;
+			}
+
+			switch (trim($att[ $part_cnt ]['head']['Content-Transfer-Encoding'])) {
 				case '7bit':
-					//text/html content
-					if (!in_array($attachment_mime, $config['email']['text_allowed_mime_types'])) {
-						//echo 'Text mime type unrecongized: '. $attachment_mime.'<br>';
-						continue;
-					}
-					//echo 'Checking text: '.$attachment['body'].'<br>';
 					break;
 
 				case 'base64':
-					//file attachments like images, videos
-					if (!in_array($attachment_mime, $config['email']['attachments_allowed_mime_types'])) {
-						echo "Attachment mime type unrecognized: ".$attachment_mime."\n";
-						continue;
-					}
-					//$this->saveFile($filename, $attachment_mime, base64_decode($att['body']), $result['mms_code']);
+					$att[ $part_cnt ]['body'] = base64_decode($att[ $part_cnt ]['body']);
 					break;
 
 				default:
-					echo "Unknown transfer encoding: '". $att['head']['Content-Transfer-Encoding']."'\n";
+					echo "Unknown transfer encoding: '". $att[ $part_cnt ]['head']['Content-Transfer-Encoding']."'\n";
 					break;
 			}
-		}
-		return $attachment;
+
+			$part_cnt++;
+
+		} while ($body != $multipart_id.'--');
+
+		return $att;
 	}
 }
 
