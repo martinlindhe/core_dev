@@ -14,9 +14,6 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-///WIP CODE! not complete yet
-
-
 $config['email']['allowed_mime_types'] = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
 
 class pop3
@@ -201,27 +198,37 @@ class pop3
 
 	/**
 	 * Fetches all mail
+	 *
+	 * @param $callback callback function to pass each mail to, if it returns true then delete mail from server
+	 * @param $timeout timeout in seconds for server connection
 	 */
 	function getMail($callback = '', $timeout = 30)
 	{
 		if (!$this->login($timeout) || !$this->_STAT()) return false;
 
-		if ($this->unread_mails) {
-			echo $this->unread_mails." new mail(s)\n";
-		} else {
-			echo "No new mail\n";
+		if (!empty($config['debug'])) {
+			if ($this->unread_mails) {
+				echo $this->unread_mails." new mail(s)\n";
+			} else {
+				echo "No new mail\n";
+			}
 		}
 
 		for ($i=1; $i <= $this->unread_mails; $i++) {
 			$msg_size = $this->_LIST($i);
 			if (!$msg_size) continue;
 
-			echo "Downloading ".$i." of ".$this->unread_mails." ... (".$msg_size." bytes)\n";
+			if (!empty($config['debug'])) {
+				echo "Downloading ".$i." of ".$this->unread_mails." ... (".$msg_size." bytes)\n";
+			}
 
 			$msg = $this->_RETR($i);
 			if ($msg) {
-				$this->parseMail($msg, $callback);
-				//$this->_DELE($i);
+				if ($callback && $this->parseMail($msg, $callback)) {
+					$this->_DELE($i);
+				} else {
+					echo "Leaving ".$i." on server\n";
+				}
 			} else {
 				echo "Download #".$i." failed!\n";
 			}
@@ -246,19 +253,20 @@ class pop3
 		$pos = strpos($msg, "\r\n\r\n");
 		if ($pos === false) return false;
 
-		$result['header'] = $this->parseHeader(substr($msg, 0, $pos));
-		$result['body'] = trim(substr($msg, $pos + strlen("\r\n\r\n")));
-		$result['attachments'] = $this->parseAttachments($result['header'], $result['body']);
+		$header = $this->parseHeader(substr($msg, 0, $pos));
+		$body = trim(substr($msg, $pos + strlen("\r\n\r\n")));
+		$res = $this->parseAttachments($header, $body);
 
 		if (function_exists($callback)) {
-			call_user_func($callback, $result);
+			return call_user_func($callback, $res);
 		}
-		return $result;
+		return $res;
 	}
 
 	/**
-	 * Takes a text string with email header and returns array
-	 * FIXME: limitation: multiple keys with same name will just be glued together (Received are one such common header key)
+	 * Parses a string of email headers into an array
+	 * XXX: limitation - multiple keys with same name will just be
+	 * 		glued together (Received are one such common header key)
 	 */
 	function parseHeader($raw_head)
 	{
@@ -286,19 +294,26 @@ class pop3
 		return $header;
 	}
 
+	/**
+	 * Parses and decodes attachments
+	 */
 	function parseAttachments(&$header, &$body)
 	{
 		global $config;
 
 		$att = array();
 
-		//Check content type
 		$content = explode(';', $header['Content-Type']);
 
 		//Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 		//Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
 		switch ($content[0]) {
-			case 'text/plain': return $att;
+			case 'text/plain':
+				//returns main message as an text/plain attachment also
+				$att[0]['mimetype'] = $content[0];
+				$att[0]['header'] = $header;
+				$att[0]['body'] = $body;
+				return $att;
 		}
 
 		$multipart_id = '';
