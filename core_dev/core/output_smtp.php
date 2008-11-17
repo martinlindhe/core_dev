@@ -135,15 +135,14 @@ class smtp
 	{
 		global $config;
 
-		$var = '';
-    	while ($str = fgets($this->handle, 512)) {
-			$var .= $str;
-      		if (substr($str, 3, 1) == ' ') break;
-    	}
+		$str = '';
+		while ($row = fgets($this->handle, 512)) {
+			$str .= $row;
+			if (substr($row, 3, 1) == ' ') break;
+		}
 
-		if (!empty($config['debug'])) echo "Read: ".$var."\n";
-
-		return $var;
+		if (!empty($config['debug'])) echo "Read: ".$str."\n";
+		return $str;
 	}
 
 	function write($str)
