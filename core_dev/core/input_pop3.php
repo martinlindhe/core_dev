@@ -89,12 +89,12 @@ class pop3
 		return $var;
 	}
 
-	function write($line)
+	function write($str)
 	{
 		global $config;
 
-		if (!empty($config['debug'])) echo "Wrote: ".$line."\n";
-		fputs($this->handle, $line."\r\n");
+		if (!empty($config['debug'])) echo "Wrote: ".$str."\n";
+		fputs($this->handle, $str."\r\n");
 	}
 
 	/**
