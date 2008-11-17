@@ -47,6 +47,41 @@ function dp($m)
 }
 
 /**
+ * Debug function. Prints $m as hex + ascii values
+ */
+function hp($m)
+{
+	echo "[[dumping ".strlen($m)." bytes]]\n";
+	$j = 0;
+	$bytes = '';
+	$hex = '';
+
+	for ($i=0; $i<strlen($m); $i++) {
+		$x = substr($m, $i, 1);
+		if (ord($x) > 30) {
+			$bytes .= $x;
+		} else {
+			$bytes .= '.';
+		}
+		$hex .= bin2hex($x).' ';
+
+		$j++;
+		if ($j == 15) {
+			$j = 0;
+			echo "$hex $bytes\n";
+			$bytes = '';
+			$hex = '';
+		}
+	}
+
+	if ($j) {
+		echo $hex." ";
+		echo str_repeat(' ', (15-strlen($bytes))*3 );
+		echo "$bytes\n";
+	}
+}
+
+/**
  * Includes a core function file
  *
  * \param $file filename to include
