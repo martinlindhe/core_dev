@@ -204,7 +204,7 @@ class pop3
 	/**
 	 * Fetches all mail
 	 */
-	function getMail($timeout = 30)
+	function getMail($callback = '', $timeout = 30)
 	{
 		if (!$this->login($timeout) || !$this->_STAT()) return false;
 
@@ -221,8 +221,12 @@ class pop3
 			echo "Downloading ".$i." of ".$this->unread_mails." ... (".$msg_size." bytes)\n";
 
 			$msg = $this->_RETR($i);
-			$this->parseMail($msg);
-			//if ($msg) $this->_DELE($i);
+			if ($msg) {
+				$this->parseMail($msg, $callback);
+				//$this->_DELE($i);
+			} else {
+				echo "Download #".$i." failed!\n";
+			}
 		}
 
 		$this->_QUIT();
@@ -233,154 +237,24 @@ class pop3
 	 * Email parser
 	 *
 	 * @param $msg raw email text from pop3 server
+	 * @param $callback callback function to execute after mail is parsed
 	 * @return all attachments, body & header nicely parsed up
 	 */
-	function parseMail($msg)
+	function parseMail($msg, $callback = '')
 	{
 		global $config;
 
-		//$msg = str_replace("\r\n", "\n", $msg);
+		//Separate header from mail body
+		$pos = strpos($msg, "\r\n\r\n");
+		if ($pos === false) return false;
 
-		//1. Klipp ut headern
-		$pos = strpos($msg, "\n\n");
-		if ($pos === false) return;
+		$result['header'] = $this->parseHeader(substr($msg, 0, $pos));
+		$result['body'] = trim(substr($msg, $pos + strlen("\r\n\r\n")));
+		$result['attachments'] = $this->parseAttachments($result['header'], $result['body']);
 
-		$header = substr($msg, 0, $pos);
-		//Parse each header element into an array
-		$result['header'] = $this->parseHeader($header);
-
-		//Cut out the rest of the message
-		$msg = trim(substr($msg, $pos + strlen("\n\n")));
-
-		//Check content type
-		$check = explode(';', $result['header']['Content-Type']);
-		//print_r($check);
-
-		$multipart_id = '';
-
-		foreach ($check as $part)
-		{
-			$part = trim($part);
-			if ($part == 'multipart/mixed' || $part == 'multipart/related') {
-
-			} else {
-				$pos = strpos($part, '=');
-				if ($pos === false) die("multipart header err\n");
-				$key = substr($part, 0, $pos);
-				$val = substr($part, $pos+1);
-
-				switch ($key) {
-					case 'boundary':
-						//echo 'boundary: '.$val;
-						$multipart_id = '--'.str_replace('"', '', $val);
-						break;
-
-					default:
-						//echo 'unknown param: '.$key.' = '.$val.'<br>';
-						break;
-				}
-			}
+		if (function_exists($callback)) {
+			call_user_func($callback, $result);
 		}
-
-		if (!$multipart_id) die('didnt find multipart id');
-
-		//echo 'Splitting msg using id '.$multipart_id.'<br>';
-
-		$part_cnt = 0;
-		do {
-			$pos1 = strpos($msg, $multipart_id);
-			$pos2 = strpos($msg, $multipart_id, $pos1+strlen($multipart_id));
-
-			//echo 'p1: '.$pos1.', p2: '.$pos2.'<br/>';
-
-			if ($pos1 === false || $pos2 === false) die('error parsing attachment');
-
-			//Current innehåller ett helt block med en attachment, inklusive attachment header
-			//$current = substr($msg, $pos1 + strlen($multipart_id) + strlen("\n"), $pos2 - strlen($multipart_id));
-			$current = substr($msg, $pos1 + strlen($multipart_id), $pos2 - $pos1 - strlen($multipart_id));
-
-			//echo 'x'.$current.'x'; die;
-
-			$head_pos = strpos($current, "\n\n");
-			if ($head_pos) {
-				$head = trim(substr($current, 0, $head_pos));
-				//echo 'head: '.$head.'<br><br>';
-
-				$body = trim(substr($current, $head_pos+2));
-				//echo 'body: Y'.$body.'Y<br>';
-			} else {
-				die('error: "'.$current.'"');
-			}
-
-			//echo $body;
-			//todo: klipp upp attachment headern
-
-			$result['attachment'][ $part_cnt ]['head'] = $this->parseHeader($head);
-			$result['attachment'][ $part_cnt ]['body'] = $body;
-
-			$part_cnt++;
-
-			$msg = substr($msg, $pos2);
-
-			//echo 'x'.$msg.'x<br><br>';
-
-		} while ($msg != $multipart_id.'--');
-
-		/* Stores all base64-encoded attachments to disk */
-		foreach ($result['attachment'] as $attachment)
-		{
-
-			if (empty($attachment['head']['Content-Transfer-Encoding'])) {
-				echo 'No Content-Transfer-Encoding header set!<br/>';
-				continue;
-			}
-
-			//print_r($attachment['head']);
-
-			//Check attachment content type
-			//echo 'Attachment type: '. $attachment['head']['Content-Type'].'<br>';
-
-			$params = explode('; ', $attachment['head']['Content-Type']);
-			//print_r($params);
-			$attachment_mime = $params[0];
-
-			$filename = '';
-			if (!empty($attachment['head']['Content-Location'])) $filename = $attachment['head']['Content-Location'];
-			if (!$filename) {
-				//Extracta filename från: [Content-Type] => image/jpeg; name="header.jpg"
-				//Eller									: [Content-Type] => image/jpeg; name=DSC00071.jpeg
-
-				//fixme fulhack:
-				if (isset($params[1]) && substr($params[1], 0, 5) == 'name=') {
-					$filename = str_replace('"', '', substr($params[1], 5) );
-				}
-			}
-
-			switch ($attachment['head']['Content-Transfer-Encoding']) {
-				case '7bit':
-				/* text/html content */
-					if (!in_array($attachment_mime, $config['email']['text_allowed_mime_types'])) {
-						//echo 'Text mime type unrecongized: '. $attachment_mime.'<br>';
-						continue;
-					}
-					//echo 'Checking text: '.$attachment['body'].'<br>';
-					break;
-
-				case 'base64':
-					/* file attachments like images, videos */
-					if (!in_array($attachment_mime, $config['email']['attachments_allowed_mime_types'])) {
-						echo "Attachment mime type unrecognized: ".$attachment_mime."\n";
-						continue;
-					}
-					$this->saveFile($filename, $attachment_mime, base64_decode($attachment['body']), $result['mms_code']);
-					break;
-
-				default:
-					echo "Unknown transfer encoding: ". $attachment['head']['Content-Transfer-Encoding']."\n";
-					break;
-			}
-		}
-
 		return $result;
 	}
 
@@ -411,9 +285,130 @@ class pop3
 			$header[ $curr_key ] = str_replace('  ', ' ', $header[ $curr_key ]);
 		}
 
-		//echo '<pre>';print_r($header);
-
 		return $header;
+	}
+
+	function parseAttachments(&$header, &$body)
+	{
+		global $config;
+
+		$attachment = array();
+
+		//Check content type
+		$content = explode(';', $header['Content-Type']);
+
+
+		//Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+		//Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
+		switch ($content[0]) {
+			case 'text/plain': return $attachment;
+		}
+
+		$multipart_id = '';
+		foreach ($content as $part)
+		{
+			$part = trim($part);
+			if ($part == 'multipart/mixed' || $part == 'multipart/related') {
+				continue;
+			}
+
+			$pos = strpos($part, '=');
+			if ($pos === false) die("multipart header err\n");
+			$key = substr($part, 0, $pos);
+			$val = substr($part, $pos+1);
+
+			switch ($key) {
+				case 'boundary':
+					$multipart_id = '--'.str_replace('"', '', $val);
+					//echo "boundary: '".$multipart_id."'\n";
+					break;
+
+				default:
+					echo "Unknown param: ".$key." = ".$val."\n";
+					break;
+			}
+		}
+		if (!$multipart_id) die('didnt find multipart id');
+
+		//echo "Splitting msg using id '".$multipart_id."'\n";
+
+		$part_cnt = 0;
+		do {
+			$p1 = strpos($body, $multipart_id);
+			$p2 = strpos($body, $multipart_id, $p1+strlen($multipart_id));
+
+			if ($p1 === false || $p2 === false) die('error parsing attachment');
+
+			//$current contains a whole block with attachment & attachment header
+			$current = substr($body, $p1 + strlen($multipart_id), $p2 - $p1 - strlen($multipart_id));
+
+			$head_pos = strpos($current, "\r\n\r\n");
+			if ($head_pos) {
+				$a_head = trim(substr($current, 0, $head_pos));
+				$a_body = trim(substr($current, $head_pos+2));
+			} else {
+				die("error: '".$current."'\n");
+			}
+
+			$attachment[ $part_cnt ]['head'] = $this->parseHeader($a_head);
+			$attachment[ $part_cnt ]['body'] = $a_body;
+
+			$part_cnt++;
+
+			$body = substr($body, $p2);
+
+		} while ($body != $multipart_id.'--');
+
+		//Stores all base64-encoded attachments to disk
+		foreach ($attachment as $att)
+		{
+			if (empty($att['head']['Content-Transfer-Encoding'])) {
+				echo 'No Content-Transfer-Encoding header set!<br/>';
+				continue;
+			}
+
+			//print_r($att['head']);
+
+			$params = explode('; ', $att['head']['Content-Type']);
+			$attachment_mime = $params[0];
+
+			$filename = '';
+			if (!empty($att['head']['Content-Location'])) $filename = $att['head']['Content-Location'];
+			if (!$filename) {
+				//Extracta filename från: [Content-Type] => image/jpeg; name="header.jpg"
+				//Eller									: [Content-Type] => image/jpeg; name=DSC00071.jpeg
+
+				//fixme fulhack:
+				if (isset($params[1]) && substr($params[1], 0, 5) == 'name=') {
+					$filename = str_replace('"', '', substr($params[1], 5) );
+				}
+			}
+
+			switch (trim($att['head']['Content-Transfer-Encoding'])) {
+				case '7bit':
+					//text/html content
+					if (!in_array($attachment_mime, $config['email']['text_allowed_mime_types'])) {
+						//echo 'Text mime type unrecongized: '. $attachment_mime.'<br>';
+						continue;
+					}
+					//echo 'Checking text: '.$attachment['body'].'<br>';
+					break;
+
+				case 'base64':
+					//file attachments like images, videos
+					if (!in_array($attachment_mime, $config['email']['attachments_allowed_mime_types'])) {
+						echo "Attachment mime type unrecognized: ".$attachment_mime."\n";
+						continue;
+					}
+					//$this->saveFile($filename, $attachment_mime, base64_decode($att['body']), $result['mms_code']);
+					break;
+
+				default:
+					echo "Unknown transfer encoding: '". $att['head']['Content-Transfer-Encoding']."'\n";
+					break;
+			}
+		}
+		return $attachment;
 	}
 }
 
