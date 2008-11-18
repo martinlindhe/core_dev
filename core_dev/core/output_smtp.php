@@ -7,7 +7,10 @@
  * References
  * http://tools.ietf.org/html/rfc5321
  * http://tools.ietf.org/html/rfc821
- * STARTTLS extension: http://www.ietf.org/rfc/rfc2487.txt
+ *
+ * Extension references
+ * STARTTLS     http://www.ietf.org/rfc/rfc2487.txt
+ * AUTH         http://www.rfc-editor.org/rfc/rfc2554.txt
  *
  * http://cr.yp.to/smtp.html
  *
@@ -15,7 +18,8 @@
  */
 
 /**
- * TODO: support legacy "HELO" servers (need one to test against)
+ * TODO: implement "AUTH DIGEST-MD5"
+ * TODO: support legacy "HELO" servers (need one to test with)
  */
 
 class smtp
@@ -165,12 +169,19 @@ class smtp
 
 	function _AUTH()
 	{
+		/*
 		if (isset($this->ability['AUTH']['DIGEST-MD5'])) {
-			//FIXME implement
+			//FIXME implement DIGEST-MD5: http://www.ietf.org/rfc/rfc2831.txt
+			$this->write('AUTH DIGEST-MD5');
+			if ($this->status != 334) {
+				echo "smtp->_AUTH() DIGEST-MD5 [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			//nonce="ovWlckRqRQQtzgrPlSwwVYJe15NuLFxbo2za8RVX2ew=",realm="mailgw8.surf-town.net",qop="auth",charset=utf-8,algorithm=md5-sess
+			$digest = base64_decode($this->lastreply);
+			echo "digest: ".$digest."\n";
 		}
-		if (isset($this->ability['AUTH']['PLAIN'])) {
-			//FIXME implement
-		}
+		*/
 
 		if (isset($this->ability['AUTH']['CRAM-MD5'])) {
 			$this->write('AUTH CRAM-MD5');
@@ -205,6 +216,21 @@ class smtp
 			$this->write(base64_encode($this->password));
 			if ($this->status != 235) {
 				echo "smtp->_AUTH() LOGIN password [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			return true;
+		}
+
+		if (isset($this->ability['AUTH']['PLAIN'])) {
+			$this->write('AUTH PLAIN');
+			if ($this->status != 334) {
+				echo "smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			$cmd = base64_encode(chr(0).$this->username.chr(0).$this->password);
+			$this->write($cmd);
+			if ($this->status != 235) {
+				echo "smtp->_AUTH() PLAIN error [".$this->status."]: ".$this->lastreply."\n";
 				return false;
 			}
 			return true;
