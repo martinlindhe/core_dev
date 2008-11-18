@@ -40,18 +40,7 @@ class smtp
 
 	function __destruct()
 	{
-		if ($this->handle) $this->logout();
-	}
-
-	function logout()
-	{
-		if (!$this->handle) return;
-		$this->write('QUIT');
-		if ($this->status != 221) {
-			echo "smtp->logout() QUIT response error: ".$this->lastreply."\n";
-		}
-		fclose($this->handle);
-		$this->handle = false;
+		if ($this->handle) $this->_QUIT();
 	}
 
 	function login($timeout = 30)
@@ -66,14 +55,14 @@ class smtp
 		$this->read();
 		if ($this->status != 220) {
 			echo "smtp->login() unexpected server response: ".$this->lastreply."\n";
-			$this->logout();
+			$this->_QUIT();
 			return false;
 		}
 
 		if (strpos($this->lastreply, 'ESMTP') === false) {
 			//XXX in this case, send normal "HELO"
 			echo "smtp->login() server don't expose ESMTP support: ".$this->lastreply."\n";
-			$this->logout();
+			$this->_QUIT();
 			return false;
 		}
 
@@ -81,8 +70,8 @@ class smtp
 		$this->write('EHLO '.$this->hostname);
 		if ($this->status != 250) {
 			//FIXME fallback on "HELO" if "EHLO" is not supported
-			echo "smtp->login() EHLO response error: ".$res."\n";
-			$this->logout();
+			echo "smtp->login() EHLO response error: ".$this->lastreply."\n";
+			$this->_QUIT();
 			return false;
 		}
 		/**
@@ -103,24 +92,24 @@ class smtp
 		//send "AUTH LOGIN"
 		$this->write('AUTH LOGIN');
 		if ($this->status != 334) {
-			echo "smtp->login() AUTH LOGIN error: ".$res."\n";
-			$this->logout();
+			echo "smtp->login() AUTH LOGIN error: ".$this->lastreply."\n";
+			$this->_QUIT();
 			return false;
 		}
 
 		//send username
 		$this->write(base64_encode($this->username));
 		if ($this->status != 334) {
-			echo "smtp->login() username error: ".$res."\n";
-			$this->logout();
+			echo "smtp->login() username error: ".$this->lastreply."\n";
+			$this->_QUIT();
 			return false;
 		}
 
 		//send password
 		$this->write(base64_encode($this->password));
 		if ($this->status != 235) {
-			echo "smtp->login() password error: ".$res."\n";
-			$this->logout();
+			echo "smtp->login() password error: ".$this->lastreply."\n";
+			$this->_QUIT();
 			return false;
 		}
 
@@ -154,45 +143,66 @@ class smtp
 
 		if (!empty($config['debug'])) echo "Write: ".$str."\n";
 		fputs($this->handle, $str."\r\n");
-
 		$this->read();	//read response
 	}
 
+	function _QUIT()
+	{
+		if (!$this->handle) return;
+		$this->write('QUIT');
+		if ($this->status != 221) {
+			echo "smtp->_QUIT() response error: ".$this->lastreply."\n";
+		}
+		fclose($this->handle);
+		$this->handle = false;
+	}
+
+	function _MAIL_FROM($f)
+	{
+		$this->write('MAIL FROM:<'.$f.'>');
+		if ($this->status != 250) {
+			echo "smtp->_MAIL_FROM() response error: ".$this->lastreply."\n";
+			return false;
+		}
+		return true;
+	}
+
+	function _RCPT_TO($t)
+	{
+		$this->write('RCPT TO:<'.$t.'>');
+		if ($this->status != 250) {
+			echo "smtp->_RCPT_TO() response error: ".$this->lastreply."\n";
+			return false;
+		}
+		return true;
+	}
+
 	/**
-	 * Sends a email
+	 * Sends a text email
 	 */
 	function send($dst, $subject, $msg)
 	{
 		if (!$this->login()) return false;
-
-		$this->write('MAIL FROM:<'.$this->username.'>');
-		if ($this->status != 250) {
-			echo "smtp->send() MAIL FROM response error: ".$res."\n";
-			return false;
-		}
-
-		$this->write('RCPT TO:<'.$dst.'>');
-		if ($this->status != 250) {
-			echo "smtp->send() RCPT TO response error: ".$res."\n";
-			return false;
-		}
+		if (!$this->_MAIL_FROM($this->username)) return false;
+		if (!$this->_RCPT_TO($dst)) return false;
 
 		$this->write('DATA');
 		if ($this->status != 354) {
-			echo "smtp->send() DATA response error: ".$res."\n";
+			echo "smtp->send() DATA response error: ".$this->lastreply."\n";
 			return false;
 		}
 
 		//send message
 		$header =
-			"Date: ".date('r')."\r\n".
-			"From: ".$this->username."\r\n".
-			"To: ".$dst."\r\n".
-			"Subject: ".$subject."\r\n\r\n";
+		"From: ".$this->username."\r\n".
+		"To: ".$dst."\r\n".
+		"Subject: ".$subject."\r\n".
+		"Date: ".date('r')."\r\n".
+		"X-Mailer: core_dev\r\n\r\n";	//XXX version string
 
 		$this->write($header.$msg."\r\n.\r\n");
 		if ($this->status != 250) {
-			echo "smtp->send() mail response error: ".$res."\n";
+			echo "smtp->send() mail response error: ".$this->lastreply."\n";
 			return false;
 		}
 	}
