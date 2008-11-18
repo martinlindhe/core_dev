@@ -70,7 +70,7 @@ class smtp
 
 		if (!$this->_EHLO()) return false;
 		if (!$this->_STARTTLS()) return false;
-		if (!$this->_AUTH_LOGIN()) return false;
+		if (!$this->_AUTH()) return false;
 		return true;
 	}
 
@@ -90,6 +90,7 @@ class smtp
 			if (substr($row, 3, 1) == ' ') break;
 		}
 		$this->status = intval($code);
+		if (substr($str, -2) == "\r\n") $str = substr($str, 0, -2);
 		$this->lastreply = $str;
 		if (!empty($config['debug'])) echo "Read [".$code."]: ".$str."\n";
 	}
@@ -128,17 +129,19 @@ class smtp
 		$this->ability = array();
 
 		foreach ($arr as $line) {
-			if (!$line) continue;
 			if (substr($line, 0, 5) == "AUTH=") $line = "AUTH ".substr($line, 5);
 			$t = explode(' ', $line);
 			$name = array_shift($t);
 			$val = implode(' ', $t);
 			if (is_numeric($val)) $val = intval($val);
-			if (!empty($this->ability[$name]) && $this->ability[$name] != $val) {
-				//XXX this should not happen
-				echo "smtp->_EHLO() abilitiy ".$name." overwrites '".$this->ability[$name]."' with '".$val."'\n";
+			if (strpos($val, ' ')) {
+				$vals = explode(' ', $val);
+				foreach ($vals as $n) {
+					$this->ability[$name][$n] = true;
+				}
+			} else {
+				$this->ability[$name] = $val;
 			}
-			$this->ability[$name] = $val;
 		}
 		return true;
 	}
@@ -160,28 +163,54 @@ class smtp
 		return true;
 	}
 
-	function _AUTH_LOGIN()
+	function _AUTH()
 	{
-		$this->write('AUTH LOGIN');
-		if ($this->status != 334) {
-			echo "smtp->_AUTH_LOGIN() [".$this->status."]: ".$this->lastreply."\n";
-			return false;
+		if (isset($this->ability['AUTH']['DIGEST-MD5'])) {
+			//FIXME implement
+		}
+		if (isset($this->ability['AUTH']['PLAIN'])) {
+			//FIXME implement
 		}
 
-		//send username
-		$this->write(base64_encode($this->username));
-		if ($this->status != 334) {
-			echo "smtp->_AUTH_LOGIN() username [".$this->status."]: ".$this->lastreply."\n";
-			return false;
+		if (isset($this->ability['AUTH']['CRAM-MD5'])) {
+			$this->write('AUTH CRAM-MD5');
+			if ($this->status != 334) {
+				echo "smtp->_AUTH() CRAM-MD5 [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			$digest = hash_hmac('md5', base64_decode($this->lastreply), $this->password);
+			$this->write(base64_encode($this->username.' '.$digest));
+			if ($this->status != 235) {
+				echo "smtp->_AUTH() CRAM-MD5 challenge [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			return true;
 		}
 
-		//send password
-		$this->write(base64_encode($this->password));
-		if ($this->status != 235) {
-			echo "smtp->_AUTH_LOGIN() password [".$this->status."]: ".$this->lastreply."\n";
-			return false;
+		if (isset($this->ability['AUTH']['LOGIN'])) {
+			$this->write('AUTH LOGIN');
+			if ($this->status != 334) {
+				echo "smtp->_AUTH() LOGIN [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+
+			//send username
+			$this->write(base64_encode($this->username));
+			if ($this->status != 334) {
+				echo "smtp->_AUTH() LOGIN username [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+
+			//send password
+			$this->write(base64_encode($this->password));
+			if ($this->status != 235) {
+				echo "smtp->_AUTH() LOGIN password [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			return true;
 		}
-		return true;
+
+		return false;
 	}
 
 	function _MAIL_FROM($f)
