@@ -27,6 +27,9 @@ class smtp
 
 	var $hostname = 'localhost.localdomain';	//our hostname, sent with HELO requests (XXX be dynamic)
 
+	var $status = 0;		///< the last status code returned from the server
+	var $lastreply = '';	///< the last reply from the server with status code stripped out
+
 	function __construct($server = '', $username = '', $password = '', $port = 25)
 	{
 		$this->server = $server;
@@ -44,10 +47,8 @@ class smtp
 	{
 		if (!$this->handle) return;
 		$this->write('QUIT');
-		$res = $this->read();
-		if (substr($res, 0, 3) != 221) {
-			echo "smtp->logout() QUIT response error\n";
-			print_r($res);
+		if ($this->status != 221) {
+			echo "smtp->logout() QUIT response error: ".$this->lastreply."\n";
 		}
 		fclose($this->handle);
 		$this->handle = false;
@@ -62,24 +63,23 @@ class smtp
 			if (!empty($config['debug'])) echo "smtp->login() connection failed\n";
 			return false;
 		}
-		$announce = $this->read();
-		if (substr($announce, 0, 3) != 220) {
-			echo "smtp->login() unexpected server response: ".$announce."\n";
+		$this->read();
+		if ($this->status != 220) {
+			echo "smtp->login() unexpected server response: ".$this->lastreply."\n";
 			$this->logout();
 			return false;
 		}
 
-		if (strpos($announce, 'ESMTP') === false) {
+		if (strpos($this->lastreply, 'ESMTP') === false) {
 			//XXX in this case, send normal "HELO"
-			echo "smtp->login() server don't expose ESMTP support: ".$announce."\n";
+			echo "smtp->login() server don't expose ESMTP support: ".$this->lastreply."\n";
 			$this->logout();
 			return false;
 		}
 
 		//send "EHLO"
 		$this->write('EHLO '.$this->hostname);
-		$res = $this->read();
-		if (substr($res, 0, 3) != 250) {
+		if ($this->status != 250) {
 			//FIXME fallback on "HELO" if "EHLO" is not supported
 			echo "smtp->login() EHLO response error: ".$res."\n";
 			$this->logout();
@@ -88,23 +88,21 @@ class smtp
 		/**
 		 * EHLO reply (FIXME parse abilities):
 		 *
-		 * 250-PIPELINING
-		 * 250-SIZE 52428800
-		 * 250-VRFY
-		 * 250-ETRN
-		 * 250-STARTTLS
-		 * 250-AUTH DIGEST-MD5 CRAM-MD5 LOGIN PLAIN
-		 * 250-AUTH=DIGEST-MD5 CRAM-MD5 LOGIN PLAIN
-		 * 250-ENHANCEDSTATUSCODES
-		 * 250-8BITMIME
-		 * 250 DSN
+		 * PIPELINING
+		 * SIZE 52428800
+		 * VRFY
+		 * ETRN
+		 * STARTTLS
+		 * AUTH DIGEST-MD5 CRAM-MD5 LOGIN PLAIN
+		 * AUTH=DIGEST-MD5 CRAM-MD5 LOGIN PLAIN
+		 * ENHANCEDSTATUSCODES
+		 * 8BITMIME
+		 * DSN
 		 */
-		//d($res);
 
 		//send "AUTH LOGIN"
 		$this->write('AUTH LOGIN');
-		$res = $this->read();
-		if (substr($res, 0, 3) != 334) {
+		if ($this->status != 334) {
 			echo "smtp->login() AUTH LOGIN error: ".$res."\n";
 			$this->logout();
 			return false;
@@ -112,8 +110,7 @@ class smtp
 
 		//send username
 		$this->write(base64_encode($this->username));
-		$res = $this->read();
-		if (substr($res, 0, 3) != 334) {
+		if ($this->status != 334) {
 			echo "smtp->login() username error: ".$res."\n";
 			$this->logout();
 			return false;
@@ -121,8 +118,7 @@ class smtp
 
 		//send password
 		$this->write(base64_encode($this->password));
-		$res = $this->read();
-		if (substr($res, 0, 3) != 235) {
+		if ($this->status != 235) {
 			echo "smtp->login() password error: ".$res."\n";
 			$this->logout();
 			return false;
@@ -136,13 +132,20 @@ class smtp
 		global $config;
 
 		$str = '';
+		$code = '';
 		while ($row = fgets($this->handle, 512)) {
-			$str .= $row;
+			if ($code && substr($row, 0, 3) != $code) {
+				//XXX debugging, should never happen!
+				echo "smtp->read() ERROR status changed from ".$code." to ".substr($row, 0, 3)."\n";
+			}
+			$code = substr($row, 0, 3);
+			$str .= substr($row, 4);
 			if (substr($row, 3, 1) == ' ') break;
 		}
+		$this->status = intval($code);
+		$this->lastreply = $str;
 
 		if (!empty($config['debug'])) echo "Read: ".$str."\n";
-		return $str;
 	}
 
 	function write($str)
@@ -151,6 +154,8 @@ class smtp
 
 		if (!empty($config['debug'])) echo "Write: ".$str."\n";
 		fputs($this->handle, $str."\r\n");
+
+		$this->read();	//read response
 	}
 
 	/**
@@ -161,22 +166,19 @@ class smtp
 		if (!$this->login()) return false;
 
 		$this->write('MAIL FROM:<'.$this->username.'>');
-		$res = $this->read();
-		if (substr($res, 0, 3) != 250) {
+		if ($this->status != 250) {
 			echo "smtp->send() MAIL FROM response error: ".$res."\n";
 			return false;
 		}
 
 		$this->write('RCPT TO:<'.$dst.'>');
-		$res = $this->read();
-		if (substr($res, 0, 3) != 250) {
+		if ($this->status != 250) {
 			echo "smtp->send() RCPT TO response error: ".$res."\n";
 			return false;
 		}
 
 		$this->write('DATA');
-		$res = $this->read();
-		if (substr($res, 0, 3) != 354) {
+		if ($this->status != 354) {
 			echo "smtp->send() DATA response error: ".$res."\n";
 			return false;
 		}
@@ -189,8 +191,7 @@ class smtp
 			"Subject: ".$subject."\r\n\r\n";
 
 		$this->write($header.$msg."\r\n.\r\n");
-		$res = $this->read();
-		if (substr($res, 0, 3) != 250) {
+		if ($this->status != 250) {
 			echo "smtp->send() mail response error: ".$res."\n";
 			return false;
 		}
