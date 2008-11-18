@@ -7,17 +7,15 @@
  * References
  * http://tools.ietf.org/html/rfc5321
  * http://tools.ietf.org/html/rfc821
+ * STARTTLS extension: http://www.ietf.org/rfc/rfc2487.txt
+ *
  * http://cr.yp.to/smtp.html
- * http://www.vanemery.com/Protocols/SMTP/smtp.html
  *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**
- * TODO: TLS (encryption) support
  * TODO: support legacy "HELO" servers (need one to test against)
- *
- * FIXME: after mail is sent with smtp->mail(), "smtp->_QUIT() [500]: 5.5.2 Error: bad syntax" happens
  */
 
 class smtp
@@ -28,10 +26,11 @@ class smtp
 	var $server, $port;
 	var $username, $password;
 
-	var $hostname = 'localhost.localdomain';	//our hostname, sent with HELO requests (XXX be dynamic)
+	var $hostname = 'localhost.localdomain';	///< our hostname, sent with HELO requests (XXX be dynamic)
 
 	var $status = 0;		///< the last status code returned from the server
 	var $lastreply = '';	///< the last reply from the server with status code stripped out
+	var $ability;			///< server abilities (response from EHLO)
 
 	function __construct($server = '', $username = '', $password = '', $port = 25)
 	{
@@ -70,8 +69,8 @@ class smtp
 		}
 
 		if (!$this->_EHLO()) return false;
+		if (!$this->_STARTTLS()) return false;
 		if (!$this->_AUTH_LOGIN()) return false;
-
 		return true;
 	}
 
@@ -92,7 +91,6 @@ class smtp
 		}
 		$this->status = intval($code);
 		$this->lastreply = $str;
-
 		if (!empty($config['debug'])) echo "Read [".$code."]: ".$str."\n";
 	}
 
@@ -110,7 +108,7 @@ class smtp
 		if (!$this->handle) return;
 		$this->write('QUIT');
 		if ($this->status != 221) {
-			echo "smtp->_QUIT() response [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_QUIT() [".$this->status."]: ".$this->lastreply."\n";
 		}
 		fclose($this->handle);
 		$this->handle = false;
@@ -124,20 +122,41 @@ class smtp
 			echo "smtp->_EHLO() [".$this->status."]: ".$this->lastreply."\n";
 			return false;
 		}
-		/**
-		 * EHLO reply (FIXME parse abilities):
-		 *
-		 * PIPELINING
-		 * SIZE 52428800
-		 * VRFY
-		 * ETRN
-		 * STARTTLS
-		 * AUTH DIGEST-MD5 CRAM-MD5 LOGIN PLAIN
-		 * AUTH=DIGEST-MD5 CRAM-MD5 LOGIN PLAIN
-		 * ENHANCEDSTATUSCODES
-		 * 8BITMIME
-		 * DSN
-		 */
+
+		$arr = explode("\r\n", $this->lastreply);
+		$servername = array_shift($arr);
+		$this->ability = array();
+
+		foreach ($arr as $line) {
+			if (!$line) continue;
+			if (substr($line, 0, 5) == "AUTH=") $line = "AUTH ".substr($line, 5);
+			$t = explode(' ', $line);
+			$name = array_shift($t);
+			$val = implode(' ', $t);
+			if (is_numeric($val)) $val = intval($val);
+			if (!empty($this->ability[$name]) && $this->ability[$name] != $val) {
+				//XXX this should not happen
+				echo "smtp->_EHLO() abilitiy ".$name." overwrites '".$this->ability[$name]."' with '".$val."'\n";
+			}
+			$this->ability[$name] = $val;
+		}
+		return true;
+	}
+
+	function _STARTTLS()
+	{
+		if (isset($this->ability['STARTTLS'])) {
+			$this->write('STARTTLS');
+			if ($this->status != 220) {
+				echo "smtp->_STARTTLS() [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			if (!stream_socket_enable_crypto($this->handle, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+				echo "smtp->_STARTTLS() enable crypto failed\n";
+				return false;
+			}
+			$this->_EHLO();	//must resend EHLO after STARTTLS
+		}
 		return true;
 	}
 
@@ -169,7 +188,7 @@ class smtp
 	{
 		$this->write('MAIL FROM:<'.$f.'>');
 		if ($this->status != 250) {
-			echo "smtp->_MAIL_FROM() response [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_MAIL_FROM() [".$this->status."]: ".$this->lastreply."\n";
 			return false;
 		}
 		return true;
@@ -179,7 +198,7 @@ class smtp
 	{
 		$this->write('RCPT TO:<'.$t.'>');
 		if ($this->status != 250) {
-			echo "smtp->_RCPT_TO() response [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_RCPT_TO() [".$this->status."]: ".$this->lastreply."\n";
 			return false;
 		}
 		return true;
@@ -196,7 +215,7 @@ class smtp
 
 		$this->write('DATA');
 		if ($this->status != 354) {
-			echo "smtp->send() DATA response [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->send() DATA [".$this->status."]: ".$this->lastreply."\n";
 			return false;
 		}
 
@@ -210,9 +229,9 @@ class smtp
 		//"Content-Type: text/plain; charset=ISO-8859-1\r\n".
 		"X-Mailer: core_dev\r\n\r\n";	//XXX version string
 
-		$this->write($header.$msg."\r\n.\r\n");
+		$this->write($header.$msg."\r\n.");
 		if ($this->status != 250) {
-			echo "smtp->send() mail response [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->send() mail [".$this->status."]: ".$this->lastreply."\n";
 			return false;
 		}
 	}
