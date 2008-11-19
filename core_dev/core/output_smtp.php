@@ -14,8 +14,6 @@
  * AUTH CRAM-MD5    http://www.ietf.org/rfc/rfc2195.txt
  * AUTH DIGEST-MD5  http://www.ietf.org/rfc/rfc2831.txt
  *
- * http://cr.yp.to/smtp.html
- *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
@@ -76,8 +74,7 @@ class smtp
 		$str = '';
 		$code = '';
 		while ($row = fgets($this->handle, 512)) {
-			if ($code && substr($row, 0, 3) != $code) {
-				//XXX debugging, should never happen!
+			if ($this->debug && $code && substr($row, 0, 3) != $code) {
 				echo "smtp->read() ERROR status changed from ".$code." to ".substr($row, 0, 3)."\n";
 			}
 			$code = substr($row, 0, 3);
@@ -307,38 +304,20 @@ class smtp
 		return true;
 	}
 
-	/**
-	 * Sends a text email
-	 */
-	function mail($dst, $subject, $msg)
+	function _DATA($d)
 	{
-		if (!$this->login()) return false;
-		if (!$this->_MAIL_FROM($this->username)) return false;
-		if (!$this->_RCPT_TO($dst)) return false;
-
 		$this->write('DATA');
 		if ($this->status != 354) {
-			echo "smtp->send() DATA [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_DATA() [".$this->status."]: ".$this->lastreply."\n";
 			return false;
 		}
 
-		//send message
-		$header =
-		"From: ".$this->username."\r\n".
-		"To: ".$dst."\r\n".
-		"Subject: ".$subject."\r\n".
-		"Date: ".date('r')."\r\n".
-		//"MIME-Version: 1.0\r\n".
-		//"Content-Type: text/plain; charset=ISO-8859-1\r\n".
-		//"Content-Transfer-Encoding: 7bit\r\n".
-		"X-Mailer: core_dev\r\n\r\n";	//XXX version string
-
-		$this->write($header.$msg."\r\n.");
+		$this->write($d."\r\n.");
 		if ($this->status != 250) {
-			echo "smtp->send() mail [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_DATA() [".$this->status."]: ".$this->lastreply."\n";
 			return false;
 		}
+		return true;
 	}
-
 }
 ?>
