@@ -5,6 +5,11 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+/**
+ * TODO: ability to add file attachments to the mail
+ * TODO: ability to embed graphics in the mail (html)
+ */
+
 require_once('output_smtp.php');
 
 class Sendmail
@@ -44,7 +49,7 @@ class Sendmail
 	}
 
 	/**
-	 * Sends a text email
+	 * Sends a email
 	 */
 	function send($subject, $msg)
 	{
