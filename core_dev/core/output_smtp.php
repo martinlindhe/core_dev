@@ -121,6 +121,8 @@ class smtp
 
 	function _EHLO()
 	{
+		$this->ability = array();
+
 		$this->write('EHLO '.$this->hostname);
 		if ($this->status != 250) {
 			echo "smtp->_EHLO() [".$this->status."]: ".$this->lastreply."\n";
@@ -129,7 +131,6 @@ class smtp
 
 		$arr = explode("\r\n", $this->lastreply);
 		$this->servername = array_shift($arr);
-		$this->ability = array();
 
 		foreach ($arr as $line) {
 			if (substr($line, 0, 5) == "AUTH=") $line = "AUTH ".substr($line, 5);
