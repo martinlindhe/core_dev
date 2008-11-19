@@ -18,8 +18,7 @@ $config['email']['allowed_mime_types'] = array('text/plain', 'image/jpeg', 'imag
 
 class pop3
 {
-	var $handle;
-	var $errno, $errstr;
+	var $handle = false, $debug = false;
 
 	var $server, $port;
 	var $username, $password;
@@ -29,6 +28,8 @@ class pop3
 
 	function __construct($server = '', $username = '', $password = '', $port = 110)
 	{
+		global $config;
+		if (!empty($config['debug'])) $this->debug = true;
 		$this->server = $server;
 		$this->port = $port;
 		$this->username = $username;
@@ -42,11 +43,9 @@ class pop3
 
 	function login($timeout)
 	{
-		global $config;
-
-		$this->handle = fsockopen($this->server, $this->port, $this->errno, $this->errstr, $timeout);
+		$this->handle = fsockopen($this->server, $this->port, $errno, $errstr, $timeout);
 		if (!$this->handle) {
-			if (!empty($config['debug'])) echo "pop3->login() connection failed\n";
+			if ($this->debug) echo "pop3->login() connection failed: ".$errno.": ".$errstr."\n";
 			return false;
 		}
 
@@ -62,7 +61,7 @@ class pop3
 			$apop_hash = trim(substr($res, $pos));
 			$this->write('APOP '.$this->username.' '.md5($apop_hash.$this->password));
 			if ($this->is_ok()) return true;
-			if (!empty($config['debug'])) echo "pop3->login() APOP failed, trying normal method\n";
+			if ($this->debug) echo "pop3->login() APOP failed, trying normal method\n";
 		}
 
 		$this->write('USER '.$this->username);
@@ -81,19 +80,14 @@ class pop3
 
 	function read()
 	{
-		global $config;
-
 		$var = fgets($this->handle, 128);
-		if (!empty($config['debug'])) echo "Read: ".$var."\n";
-
+		if ($this->debug) echo "Read: ".$var."\n";
 		return $var;
 	}
 
 	function write($str)
 	{
-		global $config;
-
-		if (!empty($config['debug'])) echo "Wrote: ".$str."\n";
+		if ($this->debug) echo "Wrote: ".$str."\n";
 		fputs($this->handle, $str."\r\n");
 	}
 
@@ -247,8 +241,6 @@ class pop3
 	 */
 	function parseMail($msg, $callback = '')
 	{
-		global $config;
-
 		//Separate header from mail body
 		$pos = strpos($msg, "\r\n\r\n");
 		if ($pos === false) return false;

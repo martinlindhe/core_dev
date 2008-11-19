@@ -25,8 +25,7 @@
 
 class smtp
 {
-	var $handle;
-	var $errno, $errstr;
+	var $handle = false, $debug = false;
 
 	var $server, $port;
 	var $username, $password;
@@ -39,6 +38,8 @@ class smtp
 
 	function __construct($server = '', $username = '', $password = '', $port = 25)
 	{
+		global $config;
+		if (!empty($config['debug'])) $this->debug = true;
 		$this->server = $server;
 		$this->port = $port;
 		$this->username = $username;
@@ -52,11 +53,9 @@ class smtp
 
 	function login($timeout = 30)
 	{
-		global $config;
-
-		$this->handle = fsockopen($this->server, $this->port, $this->errno, $this->errstr, $timeout);
+		$this->handle = fsockopen($this->server, $this->port, $errno, $errstr, $timeout);
 		if (!$this->handle) {
-			if (!empty($config['debug'])) echo "smtp->login() connection failed\n";
+			if ($this->debug) echo "smtp->login() connection failed: ".$errno.": ".$errstr."\n";
 			return false;
 		}
 		$this->read();
@@ -81,8 +80,6 @@ class smtp
 
 	function read()
 	{
-		global $config;
-
 		$str = '';
 		$code = '';
 		while ($row = fgets($this->handle, 512)) {
@@ -97,14 +94,12 @@ class smtp
 		$this->status = intval($code);
 		if (substr($str, -2) == "\r\n") $str = substr($str, 0, -2);
 		$this->lastreply = $str;
-		if (!empty($config['debug'])) echo "Read [".$code."]: ".$str."\n";
+		if ($this->debug) echo "Read [".$code."]: ".$str."\n";
 	}
 
 	function write($str)
 	{
-		global $config;
-
-		if (!empty($config['debug'])) echo "Write: ".$str."\n";
+		if ($this->debug) echo "Write: ".$str."\n";
 		fputs($this->handle, $str."\r\n");
 		$this->read();	//read response
 	}
