@@ -49,7 +49,7 @@ function dp($m)
 /**
  * Debug function. Prints $m as hex + ascii values
  */
-function hp($m)
+function dh($m)
 {
 	echo "[[dumping ".strlen($m)." bytes]]\n";
 	$j = 0;
