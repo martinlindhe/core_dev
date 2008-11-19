@@ -14,18 +14,15 @@
  * AUTH CRAM-MD5    http://www.ietf.org/rfc/rfc2195.txt
  * AUTH DIGEST-MD5  http://www.ietf.org/rfc/rfc2831.txt
  *
- * Tested SMTP servers:
- * postfix
- *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**
- * TODO: verify the different AUTH methods against different SMTP servers
- * TODO: verify that HELO works on a non-ESMTP capable server
- * TODO: figure out why "AUTH DIGEST-MD5" needs an extra NOOP at the end
- * TODO: verify that all AUTH methods work with non-latin1 letters in username & password
- * TODO: move out AUTH implementations to separate files (can be reused by IMAP etc)
+ * VERIFY: different AUTH methods against different SMTP servers
+ * VERIFY: do all AUTH methods work with non-latin1 letters in username & password?
+ * VERIFY: do HELO work on a non-ESMTP capable server?
+ * FIXME: figure out why "AUTH DIGEST-MD5" needs an extra NOOP at the end
+ * TODO: move out AUTH implementations to separate file (can be reused by IMAP etc)
  */
 
 class smtp
