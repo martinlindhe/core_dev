@@ -63,11 +63,9 @@ class smtp
 		}
 
 		if (strpos($this->lastreply, 'ESMTP') === false) {
-			echo "smtp->login() server don't expose ESMTP support: ".$this->lastreply."\n";
-			if (!$this->_HELO()) return false;
-		} else {
-			if (!$this->_EHLO()) return false;
+			if ($this->debug) echo "Warning: smtp->login() server don't expose ESMTP support: ".$this->lastreply."\n";
 		}
+		if (!$this->_EHLO()) return false;
 		if (!$this->_STARTTLS()) return false;
 		if (!$this->_AUTH()) return false;
 		return true;
