@@ -9,45 +9,70 @@ require_once('output_smtp.php');
 
 class Sendmail
 {
-	var $debug = false;
-	var $smtp = false;
-	var $to_adr = array();
+	var $smtp, $debug = false;
+
+	var $from_adr;
+	var $to_adr = array(), $cc_adr = array(), $bcc_adr = array();
+	var $html = false;
 
 	function __construct($server = '', $username = '', $password = '', $port = 25)
 	{
 		global $config;
 		if (!empty($config['debug'])) $this->debug = true;
 		$this->smtp = new smtp($server, $username, $password, $port);
+		$this->from_adr = $username;
 	}
 
-	function addRcpt($r)
+	function from($s)
 	{
-		if (!$this->smtp->login()) return false;
-		$this->to_adr[] = $r;
+		$this->from_adr = $s;
+	}
+
+	function to($s)
+	{
+		$this->to_adr[] = $s;
+	}
+
+	function cc($s)
+	{
+		$this->cc_adr[] = $s;
+	}
+
+	function bcc($s)
+	{
+		$this->bcc_adr[] = $s;
 	}
 
 	/**
 	 * Sends a text email
-	 * FIXME: move out to different class
 	 */
 	function send($subject, $msg)
 	{
-		if (!$this->smtp->_MAIL_FROM($this->smtp->username)) return false;
+		if (!$this->smtp->login()) return false;
+		if (!$this->smtp->_MAIL_FROM($this->from_adr)) return false;
 
 		$header = '';
 		foreach ($this->to_adr as $to) {
 			if (!$this->smtp->_RCPT_TO($to)) continue;
 			$header .= "To: ".$to."\r\n";
 		}
+		foreach ($this->cc_adr as $cc) {
+			if (!$this->smtp->_RCPT_TO($cc)) continue;
+			$header .= "Cc: ".$cc."\r\n";
+		}
+		foreach ($this->bcc_adr as $bcc) {
+			if (!$this->smtp->_RCPT_TO($bcc)) continue;
+			$header .= "Bcc: ".$bcc."\r\n";
+		}
 
 		$header .=
-		"From: ".$this->smtp->username."\r\n".		//XXX make from address configurable
+		"From: ".$this->from_adr."\r\n".
 		"Subject: ".$subject."\r\n".
 		"Date: ".date('r')."\r\n".
-		//"MIME-Version: 1.0\r\n".
-		//"Content-Type: text/plain; charset=ISO-8859-1\r\n".
-		//"Content-Transfer-Encoding: 7bit\r\n".
-		"X-Mailer: core_dev\r\n\r\n";	//XXX version string
+		"X-Mailer: core_dev\r\n".	//XXX version string
+		"MIME-Version: 1.0\r\n".
+		"Content-Type: ".($this->html ? 'text/html' : 'text/plain')."; charset=\"utf-8\"\r\n".
+		"\r\n";
 
 		return $this->smtp->_DATA($header.$msg);
 	}

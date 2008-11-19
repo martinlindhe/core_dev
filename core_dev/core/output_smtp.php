@@ -173,7 +173,6 @@ class smtp
 				echo "smtp->_AUTH() DIGEST-MD5 [".$this->status."]: ".$this->lastreply."\n";
 				return false;
 			}
-			//FIXME: use $this->servername instead of $this->server
 			//echo "challenge: ".base64_decode($this->lastreply)."\n";
 			$chal = array();
 			$chal_str = explode(',', base64_decode($this->lastreply));
@@ -197,7 +196,7 @@ class smtp
 			//RFC 2831 @ 2.1.2.1
 			$nc = '00000001';		//"nonce count", number of times same nonce has been used
 			$cnonce = md5(mt_rand(0, 9999999999999).microtime());
-			$digest_uri = 'smtp/'.$this->server;	//XXX: correct??
+			$digest_uri = 'smtp/'.$this->servername;
 
 			$a1 = md5($this->username.':'.$chal['realm'].':'.$this->password, true).
 				':'.$chal['nonce'].':'.$cnonce.(!empty($chal['authzid']) ? ':'.$chal['authzid'] : '');
