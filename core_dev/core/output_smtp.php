@@ -19,10 +19,6 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-/**
- * TODO: support legacy "HELO" servers (need one to test with)
- */
-
 class smtp
 {
 	var $handle = false, $debug = false;
@@ -31,6 +27,7 @@ class smtp
 	var $username, $password;
 
 	var $hostname = 'localhost.localdomain';	///< our hostname, sent with HELO requests (XXX be dynamic)
+	var $servername = '';
 
 	var $status = 0;		///< the last status code returned from the server
 	var $lastreply = '';	///< the last reply from the server with status code stripped out
@@ -66,13 +63,11 @@ class smtp
 		}
 
 		if (strpos($this->lastreply, 'ESMTP') === false) {
-			//TODO in this case, send normal "HELO"
 			echo "smtp->login() server don't expose ESMTP support: ".$this->lastreply."\n";
-			$this->_QUIT();
-			return false;
+			if (!$this->_HELO()) return false;
+		} else {
+			if (!$this->_EHLO()) return false;
 		}
-
-		if (!$this->_EHLO()) return false;
 		if (!$this->_STARTTLS()) return false;
 		if (!$this->_AUTH()) return false;
 		return true;
@@ -115,17 +110,27 @@ class smtp
 		$this->handle = false;
 	}
 
+	function _HELO()
+	{
+		$this->write('HELO '.$this->hostname);
+		if ($this->status != 250) {
+			echo "smtp->_HELO() [".$this->status."]: ".$this->lastreply."\n";
+			return false;
+		}
+		$this->servername = $this->lastreply;
+		return true;
+	}
+
 	function _EHLO()
 	{
 		$this->write('EHLO '.$this->hostname);
 		if ($this->status != 250) {
-			//FIXME fallback on "HELO" if "EHLO" is not supported
 			echo "smtp->_EHLO() [".$this->status."]: ".$this->lastreply."\n";
-			return false;
+			return $this->_HELO();	//fallback to HELO (FIXME: verify against real server)
 		}
 
 		$arr = explode("\r\n", $this->lastreply);
-		$servername = array_shift($arr);
+		$this->servername = array_shift($arr);
 		$this->ability = array();
 
 		foreach ($arr as $line) {
@@ -172,7 +177,7 @@ class smtp
 				echo "smtp->_AUTH() DIGEST-MD5 [".$this->status."]: ".$this->lastreply."\n";
 				return false;
 			}
-
+			//FIXME: use $this->servername instead of $this->server
 			//echo "challenge: ".base64_decode($this->lastreply)."\n";
 			$chal = array();
 			$chal_str = explode(',', base64_decode($this->lastreply));
@@ -268,23 +273,19 @@ class smtp
 			return true;
 		}
 
-		if (isset($this->ability['AUTH']['PLAIN'])) {
-			$this->write('AUTH PLAIN');
-			if ($this->status != 334) {
-				echo "smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply."\n";
-				return false;
-			}
-			$cmd = base64_encode(chr(0).$this->username.chr(0).$this->password);
-			$this->write($cmd);
-			if ($this->status != 235) {
-				echo "smtp->_AUTH() PLAIN error [".$this->status."]: ".$this->lastreply."\n";
-				return false;
-			}
-			return true;
+		//Defaults to "AUTH PLAIN" in case the server is not ESMTP-capable (FIXME: verify with non-capable server)
+		$this->write('AUTH PLAIN');
+		if ($this->status != 334) {
+			echo "smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply."\n";
+			return false;
 		}
-
-		echo "smtp->_AUTH() error: no AUTH method found\n";
-		return false;
+		$cmd = base64_encode(chr(0).$this->username.chr(0).$this->password);
+		$this->write($cmd);
+		if ($this->status != 235) {
+			echo "smtp->_AUTH() PLAIN error [".$this->status."]: ".$this->lastreply."\n";
+			return false;
+		}
+		return true;
 	}
 
 	function _MAIL_FROM($f)
