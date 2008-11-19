@@ -14,7 +14,18 @@
  * AUTH CRAM-MD5    http://www.ietf.org/rfc/rfc2195.txt
  * AUTH DIGEST-MD5  http://www.ietf.org/rfc/rfc2831.txt
  *
+ * Tested SMTP servers:
+ * postfix
+ *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
+ */
+
+/**
+ * TODO: verify the different AUTH methods against different SMTP servers
+ * TODO: verify that HELO works on a non-ESMTP capable server
+ * TODO: figure out why "AUTH DIGEST-MD5" needs an extra NOOP at the end
+ * TODO: verify that all AUTH methods work with non-latin1 letters in username & password
+ * TODO: move out AUTH implementations to separate files (can be reused by IMAP etc)
  */
 
 class smtp
@@ -29,6 +40,7 @@ class smtp
 
 	var $status = 0;		///< the last status code returned from the server
 	var $lastreply = '';	///< the last reply from the server with status code stripped out
+	var $esmtp = false;		///< is server ESMTP capable?
 	var $ability;			///< server abilities (response from EHLO)
 
 	function __construct($server = '', $username = '', $password = '', $port = 25)
@@ -60,9 +72,7 @@ class smtp
 			return false;
 		}
 
-		if (strpos($this->lastreply, 'ESMTP') === false) {
-			if ($this->debug) echo "Warning: smtp->login() server don't expose ESMTP support: ".$this->lastreply."\n";
-		}
+		if (strpos($this->lastreply, 'ESMTP')) $this->esmtp = true;
 		if (!$this->_EHLO()) return false;
 		if (!$this->_STARTTLS()) return false;
 		if (!$this->_AUTH()) return false;
@@ -119,11 +129,12 @@ class smtp
 	function _EHLO()
 	{
 		$this->ability = array();
+		if (!$this->esmtp) return $this->_HELO();
 
 		$this->write('EHLO '.$this->hostname);
 		if ($this->status != 250) {
 			echo "smtp->_EHLO() [".$this->status."]: ".$this->lastreply."\n";
-			return $this->_HELO();	//fallback to HELO (FIXME: verify against real server)
+			return false;
 		}
 
 		$arr = explode("\r\n", $this->lastreply);
@@ -175,6 +186,7 @@ class smtp
 			}
 			//echo "challenge: ".base64_decode($this->lastreply)."\n";
 			$chal = array();
+			$chal['qop'] = 'auth';	//default
 			$chal_str = explode(',', base64_decode($this->lastreply));
 			foreach ($chal_str as $row) {
 				$pos = strpos($row, '=');
@@ -186,7 +198,6 @@ class smtp
 				}
 				$chal[ $name ] = $val;
 			}
-			if (empty($chal['qop'])) $chal['qop'] = 'auth';	//default
 
 			if ($chal['algorithm'] != 'md5-sess') {
 				echo "smtp->_AUTH() DIGEST-MD5 unknown algorithm: ".$chal['algorithm']."\n";
@@ -194,7 +205,7 @@ class smtp
 			}
 
 			//RFC 2831 @ 2.1.2.1
-			$nc = '00000001';		//"nonce count", number of times same nonce has been used
+			$nc = '00000001';		//number of times same nonce has been used
 			$cnonce = md5(mt_rand(0, 9999999999999).microtime());
 			$digest_uri = 'smtp/'.$this->servername;
 
@@ -224,7 +235,7 @@ class smtp
 			//XXX validate server response, RFC 2831 @ 2.1.3
 			//echo "response: ".base64_decode($this->lastreply)."\n";
 
-			$this->write('NOOP');	//XXX need to send 1 more command to get the 235 status
+			$this->write('NOOP');	//FIXME figure out why we need to send 1 more command to get the 235 status
 			if ($this->status != 235) {
 				echo "smtp->_AUTH() DIGEST-MD5 auth failed [".$this->status."]: ".$this->lastreply."\n";
 				return false;
@@ -268,8 +279,9 @@ class smtp
 			return true;
 		}
 
-		//Defaults to "AUTH PLAIN" in case the server is not ESMTP-capable (FIXME: verify with non-capable server)
+		//Defaults to "AUTH PLAIN" if the server is not ESMTP-capable (FIXME: verify with non-capable server)
 		$this->write('AUTH PLAIN');
+		if ($this->status == 503) return true; //authentication not enabled
 		if ($this->status != 334) {
 			echo "smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply."\n";
 			return false;

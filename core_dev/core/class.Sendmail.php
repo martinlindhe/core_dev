@@ -76,7 +76,7 @@ class Sendmail
 		"Date: ".date('r')."\r\n".
 		"X-Mailer: core_dev\r\n".	//XXX version string
 		"MIME-Version: 1.0\r\n".
-		"Content-Type: ".($this->html ? 'text/html' : 'text/plain')."; charset=\"utf-8\"\r\n".
+		"Content-Type: ".($this->html ? 'text/html' : 'text/plain')."; charset=utf-8\r\n".
 		"\r\n";
 
 		return $this->smtp->_DATA($header.$msg);
