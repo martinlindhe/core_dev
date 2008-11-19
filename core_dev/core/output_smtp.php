@@ -9,8 +9,10 @@
  * http://tools.ietf.org/html/rfc821
  *
  * Extension references
- * STARTTLS     http://www.ietf.org/rfc/rfc2487.txt
- * AUTH         http://www.rfc-editor.org/rfc/rfc2554.txt
+ * STARTTLS         http://www.ietf.org/rfc/rfc2487.txt
+ * AUTH             http://www.rfc-editor.org/rfc/rfc2554.txt
+ * AUTH CRAM-MD5    http://www.ietf.org/rfc/rfc2195.txt
+ * AUTH DIGEST-MD5  http://www.ietf.org/rfc/rfc2831.txt
  *
  * http://cr.yp.to/smtp.html
  *
@@ -18,7 +20,6 @@
  */
 
 /**
- * TODO: implement "AUTH DIGEST-MD5"
  * TODO: support legacy "HELO" servers (need one to test with)
  */
 
@@ -169,19 +170,72 @@ class smtp
 
 	function _AUTH()
 	{
-		/*
 		if (isset($this->ability['AUTH']['DIGEST-MD5'])) {
-			//FIXME implement DIGEST-MD5: http://www.ietf.org/rfc/rfc2831.txt
+			//XXX: this implementation might be buggy in regards to charset (non latin1 letters in username / password)
 			$this->write('AUTH DIGEST-MD5');
 			if ($this->status != 334) {
 				echo "smtp->_AUTH() DIGEST-MD5 [".$this->status."]: ".$this->lastreply."\n";
 				return false;
 			}
-			//nonce="ovWlckRqRQQtzgrPlSwwVYJe15NuLFxbo2za8RVX2ew=",realm="mailgw8.surf-town.net",qop="auth",charset=utf-8,algorithm=md5-sess
-			$digest = base64_decode($this->lastreply);
-			echo "digest: ".$digest."\n";
+
+			//echo "challenge: ".base64_decode($this->lastreply)."\n";
+			$chal = array();
+			$chal_str = explode(',', base64_decode($this->lastreply));
+			foreach ($chal_str as $row) {
+				$pos = strpos($row, '=');
+				if (!$pos) continue;
+				$name = substr($row, 0, $pos);
+				$val = substr($row, $pos+1);
+				if (substr($val, 0, 1) == '"' && substr($val, -1) == '"') {
+					$val = substr($val, 1, -1);
+				}
+				$chal[ $name ] = $val;
+			}
+			if (empty($chal['qop'])) $chal['qop'] = 'auth';	//default
+
+			if ($chal['algorithm'] != 'md5-sess') {
+				echo "smtp->_AUTH() DIGEST-MD5 unknown algorithm: ".$chal['algorithm']."\n";
+				return false;
+			}
+
+			//RFC 2831 @ 2.1.2.1
+			$nc = '00000001';		//"nonce count", number of times same nonce has been used
+			$cnonce = md5(mt_rand(0, 9999999999999).microtime());
+			$digest_uri = 'smtp/'.$this->server;	//XXX: correct??
+
+			$a1 = md5($this->username.':'.$chal['realm'].':'.$this->password, true).
+				':'.$chal['nonce'].':'.$cnonce.(!empty($chal['authzid']) ? ':'.$chal['authzid'] : '');
+
+			$a2 = 'AUTHENTICATE:'.$digest_uri.($chal['qop'] != 'auth' ? ':00000000000000000000000000000000' : '');
+
+			$response = md5( md5($a1).':'.$chal['nonce'].':'.$nc.':'.$cnonce.':'.$chal['qop'].':'.md5($a2) );
+
+			$cmd =
+			'charset='.$chal['charset'].','.
+			'username="'.$this->username.'",'.
+			'realm="'.$chal['realm'].'",'.
+			'nonce="'.$chal['nonce'].'",'.
+			'nc='.$nc.','.
+			'cnonce="'.$cnonce.'",'.
+			'digest-uri="'.$digest_uri.'",'.
+			'response='.$response.','.
+			'qop='.$chal['qop'];
+
+			$this->write(base64_encode($cmd));
+			if ($this->status != 334) {
+				echo "smtp->_AUTH() DIGEST-MD5 challenge [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			//XXX validate server response, RFC 2831 @ 2.1.3
+			//echo "response: ".base64_decode($this->lastreply)."\n";
+
+			$this->write('NOOP');	//XXX need to send 1 more command to get the 235 status
+			if ($this->status != 235) {
+				echo "smtp->_AUTH() DIGEST-MD5 auth failed [".$this->status."]: ".$this->lastreply."\n";
+				return false;
+			}
+			return true;
 		}
-		*/
 
 		if (isset($this->ability['AUTH']['CRAM-MD5'])) {
 			$this->write('AUTH CRAM-MD5');
@@ -205,14 +259,12 @@ class smtp
 				return false;
 			}
 
-			//send username
 			$this->write(base64_encode($this->username));
 			if ($this->status != 334) {
 				echo "smtp->_AUTH() LOGIN username [".$this->status."]: ".$this->lastreply."\n";
 				return false;
 			}
 
-			//send password
 			$this->write(base64_encode($this->password));
 			if ($this->status != 235) {
 				echo "smtp->_AUTH() LOGIN password [".$this->status."]: ".$this->lastreply."\n";
@@ -236,6 +288,7 @@ class smtp
 			return true;
 		}
 
+		echo "smtp->_AUTH() error: no AUTH method found\n";
 		return false;
 	}
 
@@ -282,6 +335,7 @@ class smtp
 		"Date: ".date('r')."\r\n".
 		//"MIME-Version: 1.0\r\n".
 		//"Content-Type: text/plain; charset=ISO-8859-1\r\n".
+		//"Content-Transfer-Encoding: 7bit\r\n".
 		"X-Mailer: core_dev\r\n\r\n";	//XXX version string
 
 		$this->write($header.$msg."\r\n.");
