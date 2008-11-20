@@ -12,7 +12,6 @@
  */
 
 /**
- * TODO: ability to add "Reply-To:" header
  * TODO: use regexp to catch invalid mail address input
  * TODO: figure out the proper "multipart" content-type to set on
  *    attachments/embedded files. the current approach works for Thunderbird,
@@ -27,6 +26,7 @@ class Sendmail
 	var $smtp, $debug = false;
 
 	var $from_adr, $from_name;
+	var $rply_adr, $rply_name;
 	var $to_adr = array(), $cc_adr = array(), $bcc_adr = array();
 	var $html = false;
 	var $attachments = array();
@@ -43,6 +43,12 @@ class Sendmail
 	{
 		$this->from_adr = $s;
 		$this->from_name = $n;
+	}
+
+	function reply_to($s, $n = '')
+	{
+		$this->rply_adr = $s;
+		$this->rply_name = $n;
 	}
 
 	function to($s)
@@ -90,6 +96,10 @@ class Sendmail
 			"Subject: ".$subject."\r\n".
 			"User-Agent: core_dev\r\n".	//XXX version string
 			"MIME-Version: 1.0\r\n";
+
+		if ($this->rply_adr) {
+			$header .= "Reply-To: ".($this->rply_name ? $this->rply_name." <".$this->rply_adr.">" : $this->rply_adr)."\r\n";
+		}
 
 		foreach ($this->to_adr as $to) {
 			if (!$this->smtp->_RCPT_TO($to)) continue;
