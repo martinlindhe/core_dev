@@ -5,6 +5,7 @@
  * MIME attachments:                 http://tools.ietf.org/html/rfc2231
  * MIME message bodies:              http://tools.ietf.org/html/rfc2045
  * MIME header Content-Disposition:  http://tools.ietf.org/html/rfc2183
+ * MIME validator:                   http://www.apps.ietf.org/msglint.html
  *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
@@ -22,7 +23,7 @@ class Sendmail
 {
 	var $smtp, $debug = false;
 
-	var $from_adr;
+	var $from_adr, $from_name;
 	var $to_adr = array(), $cc_adr = array(), $bcc_adr = array();
 	var $html = false;
 	var $attachments = array();
@@ -35,9 +36,10 @@ class Sendmail
 		$this->from_adr = $username;
 	}
 
-	function from($s)
+	function from($s, $n = '')
 	{
 		$this->from_adr = $s;
+		$this->from_name = $n;
 	}
 
 	function to($s)
@@ -75,7 +77,8 @@ class Sendmail
 
 		$header =
 			"Date: ".date('r')."\r\n".
-			"From: Martin Lindhe <".$this->from_adr.">\r\n".	//XXX testing!!!!!!!!!!!!!1111111111111111
+			"From: ".($this->from_name ? $this->from_name." <".$this->from_adr.">" : $this->from_adr)."\r\n".
+			"Subject: ".$subject."\r\n".
 			"User-Agent: core_dev\r\n".	//XXX version string
 			"MIME-Version: 1.0\r\n";
 
@@ -92,41 +95,34 @@ class Sendmail
 			$header .= "Bcc: ".$bcc."\r\n";
 		}
 
-		$header .= "Subject: ".$subject."\r\n";
-
-		//$boundary = '------------060501040008'.mt_rand(0, 9999999999999);	//XXX: create a better boundary (Typically this is done by inserting a large random string)
-		$boundary = '------------060501040008060800050807';
+		$boundary = '------------000'.md5(mt_rand(0, 9999999999999).microtime());
 
 		if (count($this->attachments)) {
 			$header .=
-				"Content-Type: multipart/mixed;\r\n".
-				" boundary=\"".$boundary."\"\r\n".
+				"Content-Type: multipart/mixed; boundary=\"".$boundary."\"\r\n".
 				"\r\n".
-				"This is a multi-part message in MIME format.\r\n".
-				$boundary."\r\n";
+				"This is a multi-part message in MIME format.\r\n\r\n".
+				"--".$boundary."\r\n";
 		}
 		$header .=
-			//"Content-Type: ".($this->html ? 'text/html' : 'text/plain')."; charset=utf-8; format=flowed\r\n".	//XXX what is "format=flowed" ???
-			"Content-Type: ".($this->html ? 'text/html' : 'text/plain')."; charset=ISO-8859-1; format=flowed\r\n".	//XXX what is "format=flowed" ???
+			"Content-Type: ".($this->html ? 'text/html' : 'text/plain')."; charset=utf-8\r\n".
 			"Content-Transfer-Encoding: 7bit\r\n".
 			"\r\n".
-			$msg."\r\n";	//XXX: ska \r\n paddas här för icke-attachment mails??
+			$msg."\r\n";
 
 		$attachment_data = '';
 		foreach ($this->attachments as $a) {
 			$data = file_get_contents($a);
 			$attachment_data .=
-				"\r\n".$boundary."\r\n".
-				"Content-Type: image/png;\r\n".
-				" name=\"".basename($a)."\"\r\n".	//XXX: get mimetype
-				"Content-Transfer-Encoding: base64\r\n".
-				//"Content-Disposition: attachment\r\n".	//XXX use "inline" for embedded gfx
-				"Content-Disposition: inline;\r\n".	//XXX use "inline" for embedded gfx
-				" filename=\"".basename($a)."\"\r\n".
 				"\r\n".
-				chunk_split(base64_encode($data), 72, "\r\n");	//XXX: unneeeded, 72 = thunderbird length
+				"--".$boundary."\r\n".
+				"Content-Type: image/png; name=\"".basename($a)."\"\r\n".	//XXX: get mimetype
+				"Content-Transfer-Encoding: base64\r\n".
+				"Content-Disposition: attachment; filename=\"".basename($a)."\"\r\n".	//XXX use "inline" for embedded gfx
+				"\r\n".
+				chunk_split(base64_encode($data));
 		}
-		if ($attachment_data) $attachment_data .= $boundary."--";
+		if ($attachment_data) $attachment_data .= "--".$boundary."--";
 
 		return $this->smtp->_DATA($header.$attachment_data);
 	}
