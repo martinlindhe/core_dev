@@ -555,7 +555,7 @@ function prettyAnr($country, $anr)
  * Defaults to swedish (+46) in case of missing country code
  *
  * @param $anr user typed phone number
- * @return MSID formatted phone number (46707123456)
+ * @return MSID formatted phone number (46707123456) or false if input is invalid
  */
 function formatMSID($anr)
 {
@@ -563,8 +563,9 @@ function formatMSID($anr)
 
 	if (substr($anr, 0, 1) == '0') {
 		//Swedish numer without country code
-		return '46'.substr($anr, 1);
+		$anr = '46'.substr($anr, 1);
 	}
+	if (strlen($anr) < 10) return false;
 	return $anr;
 }
 
