@@ -4,6 +4,7 @@
  *
  * MIME attachments:                 http://tools.ietf.org/html/rfc2231
  * MIME message bodies:              http://tools.ietf.org/html/rfc2045
+ * MIME media types & multipart:     http://tools.ietf.org/html/rfc2046
  * MIME header Content-Disposition:  http://tools.ietf.org/html/rfc2183
  * MIME validator:                   http://www.apps.ietf.org/msglint.html
  *
@@ -11,10 +12,12 @@
  */
 
 /**
- * TODO: ability to add file attachments to the mail
- * TODO: ability to embed graphics in the mail (html)
  * TODO: ability to add "Reply-To:" header
  * TODO: use regexp to catch invalid mail address input
+ * TODO: figure out the proper "multipart" content-type to set on
+ *    attachments/embedded files. the current approach works for Thunderbird,
+ *    but message with attachment is shown without attachments before they
+ *    are fully loaded (no gem next to mail)
  */
 
 require_once('output_smtp.php');
@@ -59,11 +62,17 @@ class Sendmail
 
 	function attach($file)
 	{
+		return $this->embed($file, '');
+	}
+
+	//<img src="cid:pic_name">
+	function embed($file, $cid)
+	{
 		if (!file_exists($file)) {
 			echo "Error: File ".$file." not found\n";
 			return false;
 		}
-		$this->attachments[] = $file;
+		$this->attachments[] = array($file, $cid);
 		return true;
 	}
 
@@ -95,33 +104,40 @@ class Sendmail
 			$header .= "Bcc: ".$bcc."\r\n";
 		}
 
-		$boundary = '------------000'.md5(mt_rand(0, 9999999999999).microtime());
-
 		if (count($this->attachments)) {
+			$boundary = '------------0'.time().md5(mt_rand(0, 9999999999999).microtime());
 			$header .=
-				"Content-Type: multipart/mixed; boundary=\"".$boundary."\"\r\n".
+				//"Content-Type: ".(count($this->embedded) ? "multipart/related" : "multipart/mixed").";".
+				"Content-Type: multipart/related;".	//XXX what is "multipart/alternative"?
+					" type=\"".($this->html ? "text/html" : "text/plain")."\";\r\n".
+					" boundary=\"".$boundary."\"\r\n".
 				"\r\n".
 				"This is a multi-part message in MIME format.\r\n\r\n".
 				"--".$boundary."\r\n";
 		}
+
 		$header .=
-			"Content-Type: ".($this->html ? 'text/html' : 'text/plain')."; charset=utf-8\r\n".
+			"Content-Type: ".($this->html ? "text/html" : "text/plain")."; charset=utf-8\r\n".
 			"Content-Transfer-Encoding: 7bit\r\n".
 			"\r\n".
 			$msg."\r\n";
 
 		$attachment_data = '';
 		foreach ($this->attachments as $a) {
-			$data = file_get_contents($a);
+			$data = file_get_contents($a[0]);
 			$attachment_data .=
 				"\r\n".
 				"--".$boundary."\r\n".
-				"Content-Type: image/png; name=\"".basename($a)."\"\r\n".	//XXX: get mimetype
+				"Content-Type: image/png;\r\n".	//FIXME: get mimetype
+				" name=\"".basename($a[0])."\"\r\n".
 				"Content-Transfer-Encoding: base64\r\n".
-				"Content-Disposition: attachment; filename=\"".basename($a)."\"\r\n".	//XXX use "inline" for embedded gfx
+				($a[1] ? "Content-ID: <".$a[1].">\r\n" : "").
+				"Content-Disposition: ".($a[1] ? "inline" : "attachment").";\r\n".
+				" filename=\"".basename($a[0])."\"\r\n".
 				"\r\n".
 				chunk_split(base64_encode($data));
 		}
+
 		if ($attachment_data) $attachment_data .= "--".$boundary."--";
 
 		return $this->smtp->_DATA($header.$attachment_data);
