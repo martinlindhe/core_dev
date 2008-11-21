@@ -7,14 +7,12 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-//FIXME: mimeParseAttachments(): ending of filenames contain additonal spaces??? plz investigate!!1
-
-$config['email']['allowed_mime_types'] = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
+$config['mime']['allowed_mime_types'] = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
 
 /**
  * Email parser
  *
- * @param $msg raw email text from pop3 server
+ * @param $msg raw email text from mail server
  * @param $callback callback function to execute after mail is parsed
  * @return all attachments, body & header nicely parsed up
  */
@@ -152,7 +150,7 @@ function mimeParseAttachments(&$header, &$body)
 			}
 		}
 
-		if (!in_array($att[ $part_cnt ]['mimetype'], $config['email']['allowed_mime_types'])) {
+		if (!in_array($att[ $part_cnt ]['mimetype'], $config['mime']['allowed_mime_types'])) {
 			echo "Unknown mime type: ". $att[ $part_cnt ]['mimetype']."\n";
 			continue;
 		}

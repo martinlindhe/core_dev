@@ -7,7 +7,7 @@
  * Required PHP extension: php_imap (sudo aptitude install php5-imap)
  *
  * References:
- * http://tools.ietf.org/rfc/rfc2060.txt
+ * http://tools.ietf.org/html/rfc3501
  *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
@@ -27,12 +27,12 @@ class imap
 
 	var $tot_mails = 0;
 
-	function __construct($server = '', $username = '', $password = '', $port = 143)	//XXX: va e default port???
+	function __construct($server = '', $username = '', $password = '', $port = 143)
 	{
 		global $config;
 		if (!empty($config['debug'])) $this->debug = true;
 		$this->server = $server;
-		$this->port = $port;
+		$this->port = $port;	//XXX: "ssl" default port is 993
 		$this->username = $username;
 		$this->password = $password;
 	}
@@ -50,7 +50,7 @@ class imap
 		return true;
 	}
 
-	function getMail($callback = '', $timeout = 30)	//XXX: hittar inget sätt att ange timeout. däremot "retries" på imap_open()
+	function getMail($callback = '', $timeout = 30)	//FIXME: cant find a way to specify connection timeout
 	{
 		if (!$this->login()) return false;
 
@@ -60,6 +60,7 @@ class imap
 		$this->tot_mails = $msginfo->Nmsgs;
 
 		for ($i=1; $i<= $this->tot_mails; $i++) {
+			if ($this->debug) echo "Downloading ".$i." of ".$this->tot_mails." ...\n";
 			//XXX hack because retarded imap_fetchbody() dont allow to fetch the whole message
 			$fp = fopen("php://temp", 'w');
 			imap_savebody($this->handle, $fp, $i);
@@ -68,7 +69,7 @@ class imap
 			fclose($fp);
 
 			if ($callback && mimeParseMail($msg, $callback)) {
-				//imap_delete($this->handle, $i);
+				imap_delete($this->handle, $i);
 			} else {
 				echo "Leaving ".$i." on server\n";
 			}

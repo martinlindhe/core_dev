@@ -200,7 +200,7 @@ class pop3
 	{
 		if (!$this->login($timeout) || !$this->_STAT()) return false;
 
-		if ($this-> {
+		if ($this->debug) {
 			if ($this->tot_mails) {
 				echo $this->tot_mails." mail(s)\n";
 			} else {
@@ -229,7 +229,6 @@ class pop3
 		$this->_QUIT();
 		return true;
 	}
-
 
 }
 
