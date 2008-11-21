@@ -14,7 +14,7 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-$config['email']['allowed_mime_types'] = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
+require_once('input_mime.php');
 
 class pop3
 {
@@ -23,7 +23,7 @@ class pop3
 	var $server, $port;
 	var $username, $password;
 
-	var $unread_mails = 0;
+	var $tot_mails = 0;
 	var $tot_bytes = 0;
 
 	function __construct($server = '', $username = '', $password = '', $port = 110)
@@ -114,7 +114,7 @@ class pop3
 
 	/**
 	 * Asks the server about inbox status
-	 * Expected response: +OK unread_mails tot_bytes
+	 * Expected response: +OK tot_mails tot_bytes
 	 *
 	 * @return true on success
 	 */
@@ -130,7 +130,7 @@ class pop3
 			return false;
 		}
 
-		$this->unread_mails = $arr[1];
+		$this->tot_mails = $arr[1];
 		$this->tot_bytes = $arr[2];
 		return true;
 	}
@@ -200,25 +200,23 @@ class pop3
 	{
 		if (!$this->login($timeout) || !$this->_STAT()) return false;
 
-		if (!empty($config['debug'])) {
-			if ($this->unread_mails) {
-				echo $this->unread_mails." new mail(s)\n";
+		if ($this-> {
+			if ($this->tot_mails) {
+				echo $this->tot_mails." mail(s)\n";
 			} else {
-				echo "No new mail\n";
+				echo "No mail\n";
 			}
 		}
 
-		for ($i=1; $i <= $this->unread_mails; $i++) {
+		for ($i=1; $i <= $this->tot_mails; $i++) {
 			$msg_size = $this->_LIST($i);
 			if (!$msg_size) continue;
 
-			if (!empty($config['debug'])) {
-				echo "Downloading ".$i." of ".$this->unread_mails." ... (".$msg_size." bytes)\n";
-			}
+			if ($this->debug) echo "Downloading ".$i." of ".$this->tot_mails." ... (".$msg_size." bytes)\n";
 
 			$msg = $this->_RETR($i);
 			if ($msg) {
-				if ($callback && $this->parseMail($msg, $callback)) {
+				if ($callback && mimeParseMail($msg, $callback)) {
 					$this->_DELE($i);
 				} else {
 					echo "Leaving ".$i." on server\n";
@@ -232,168 +230,7 @@ class pop3
 		return true;
 	}
 
-	/**
-	 * Email parser
-	 *
-	 * @param $msg raw email text from pop3 server
-	 * @param $callback callback function to execute after mail is parsed
-	 * @return all attachments, body & header nicely parsed up
-	 */
-	function parseMail($msg, $callback = '')
-	{
-		//Separate header from mail body
-		$pos = strpos($msg, "\r\n\r\n");
-		if ($pos === false) return false;
 
-		$header = $this->parseHeader(substr($msg, 0, $pos));
-		$body = trim(substr($msg, $pos + strlen("\r\n\r\n")));
-		$res = $this->parseAttachments($header, $body);
-
-		if (function_exists($callback)) {
-			return call_user_func($callback, $res);
-		}
-		return $res;
-	}
-
-	/**
-	 * Parses a string of email headers into an array
-	 * XXX: limitation - multiple keys with same name will just be
-	 * 		glued together (Received are one such common header key)
-	 */
-	function parseHeader($raw_head)
-	{
-		$arr = explode("\n", $raw_head);
-
-		$header = array();
-
-		foreach ($arr as $row)
-		{
-			$pos = strpos($row, ': ');
-			if ($pos) $curr_key = substr($row, 0, $pos);
-			if (!$curr_key) die('super error');
-			if (empty($header[ $curr_key ])) {
-				$header[ $curr_key ] = substr($row, $pos + strlen(': '));
-			} else {
-				$header[ $curr_key ] .= $row;
-			}
-
-			$header[ $curr_key ] = str_replace("\r", ' ', $header[ $curr_key ]);
-			$header[ $curr_key ] = str_replace("\n", ' ', $header[ $curr_key ]);
-			$header[ $curr_key ] = str_replace("\t", ' ', $header[ $curr_key ]);
-			$header[ $curr_key ] = str_replace('  ', ' ', $header[ $curr_key ]);
-		}
-
-		return $header;
-	}
-
-	/**
-	 * Parses and decodes attachments
-	 */
-	function parseAttachments(&$header, &$body)
-	{
-		global $config;
-
-		$att = array();
-
-		$content = explode(';', $header['Content-Type']);
-
-		//Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-		//Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
-		switch ($content[0]) {
-			case 'text/plain':
-				//returns main message as an text/plain attachment also
-				$att[0]['mimetype'] = $content[0];
-				$att[0]['header'] = $header;
-				$att[0]['body'] = $body;
-				return $att;
-		}
-
-		$multipart_id = '';
-		foreach ($content as $part)
-		{
-			$part = trim($part);
-			if ($part == 'multipart/mixed' || $part == 'multipart/related') {
-				continue;
-			}
-
-			$pos = strpos($part, '=');
-			if ($pos === false) die("multipart header err\n");
-			$key = substr($part, 0, $pos);
-			$val = substr($part, $pos+1);
-
-			switch ($key) {
-				case 'boundary':
-					$multipart_id = '--'.str_replace('"', '', $val);
-					break;
-
-				default:
-					echo "Unknown param: ".$key." = ".$val."\n";
-					break;
-			}
-		}
-		if (!$multipart_id) die('didnt find multipart id');
-
-		//echo "Splitting msg using id '".$multipart_id."'\n";
-
-		//Parses attachments into array
-		$part_cnt = 0;
-		do {
-			$p1 = strpos($body, $multipart_id);
-			$p2 = strpos($body, $multipart_id, $p1+strlen($multipart_id));
-
-			if ($p1 === false || $p2 === false) die("error parsing attachment\n");
-
-			//$current contains a whole block with attachment & attachment header
-			$current = substr($body, $p1 + strlen($multipart_id), $p2 - $p1 - strlen($multipart_id));
-
-			$head_pos = strpos($current, "\r\n\r\n");
-			if ($head_pos) {
-				$a_head = trim(substr($current, 0, $head_pos));
-				$a_body = trim(substr($current, $head_pos+2));
-			} else {
-				die("error: '".$current."'\n");
-			}
-
-			$att[ $part_cnt ]['head'] = $this->parseHeader($a_head);
-			$att[ $part_cnt ]['body'] = $a_body;
-			$body = substr($body, $p2);
-
-			$params = explode('; ', $att[ $part_cnt ]['head']['Content-Type']);
-			$att[ $part_cnt ]['mimetype'] = $params[0];
-
-			if (!empty($att[ $part_cnt ]['head']['Content-Location'])) $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['head']['Content-Location'];
-			if (empty($att[ $part_cnt ]['filename'])) {
-				//Extract name from [Content-Type] => image/jpeg; name="header.jpg"
-				//or                [Content-Type] => image/jpeg; name=DSC00071.jpeg
-				if (isset($params[1]) && substr($params[1], 0, 5) == 'name=') {
-					$att[ $part_cnt ]['filename'] = str_replace('"', '', substr($params[1], 5) );
-				}
-			}
-
-			if (!in_array($att[ $part_cnt ]['mimetype'], $config['email']['allowed_mime_types'])) {
-				echo "Unknown mime type: ". $att[ $part_cnt ]['mimetype']."\n";
-				continue;
-			}
-
-			switch (trim($att[ $part_cnt ]['head']['Content-Transfer-Encoding'])) {
-				case '7bit':
-					break;
-
-				case 'base64':
-					$att[ $part_cnt ]['body'] = base64_decode($att[ $part_cnt ]['body']);
-					break;
-
-				default:
-					echo "Unknown transfer encoding: '". $att[ $part_cnt ]['head']['Content-Transfer-Encoding']."'\n";
-					break;
-			}
-
-			$part_cnt++;
-
-		} while ($body != $multipart_id.'--');
-
-		return $att;
-	}
 }
 
 ?>

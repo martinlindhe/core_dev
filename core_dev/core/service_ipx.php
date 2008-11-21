@@ -10,6 +10,7 @@
  * References:
  * "Implementation Guide SMS 5.1" from 2007.07.09 (supplied by Ericsson)
  * "Implementation Guide MMS" from 2007.07.09 (supplied by Ericsson)
+ * "Implementation Guide, Web & WAP" from 2005.12.09 (supplied by Ericsson)
  *
  * Required PHP extensions: php_soap & php_openssl
  *

@@ -22,7 +22,10 @@ require_once('functions_general.php');	//FIXME: anything in there worth keeping?
   */
 function d($v)
 {
-	if (is_string($v)) echo htmlentities($v);
+	if (is_string($v)) {
+		if (php_sapi_name() == 'cli') echo $v;
+		else echo htmlentities($v);
+	}
 	else {
 		if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
 		else {
