@@ -74,6 +74,8 @@ function mimeParseAttachments(&$header, &$body)
 
 	$content = explode(';', $header['Content-Type']);
 
+	$att['header'] = $header;	//XXX: the main email header
+
 	//Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 	//Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
 	switch ($content[0]) {
@@ -134,14 +136,14 @@ function mimeParseAttachments(&$header, &$body)
 			die("error: '".$current."'\n");
 		}
 
-		$att[ $part_cnt ]['head'] = mimeParseHeader($a_head);
+		$att[ $part_cnt ]['header'] = mimeParseHeader($a_head);
 		$att[ $part_cnt ]['body'] = $a_body;
 		$body = substr($body, $p2);
 
-		$params = explode('; ', $att[ $part_cnt ]['head']['Content-Type']);
+		$params = explode('; ', $att[ $part_cnt ]['header']['Content-Type']);
 		$att[ $part_cnt ]['mimetype'] = $params[0];
 
-		if (!empty($att[ $part_cnt ]['head']['Content-Location'])) $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['head']['Content-Location'];
+		if (!empty($att[ $part_cnt ]['header']['Content-Location'])) $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['header']['Content-Location'];
 		if (empty($att[ $part_cnt ]['filename'])) {
 			//Extract name from [Content-Type] => image/jpeg; name="header.jpg"
 			//or                [Content-Type] => image/jpeg; name=DSC00071.jpeg
@@ -155,7 +157,7 @@ function mimeParseAttachments(&$header, &$body)
 			continue;
 		}
 
-		switch ($att[ $part_cnt ]['head']['Content-Transfer-Encoding']) {
+		switch ($att[ $part_cnt ]['header']['Content-Transfer-Encoding']) {
 			case '7bit':
 				break;
 
@@ -167,7 +169,7 @@ function mimeParseAttachments(&$header, &$body)
 				break;
 
 			default:
-				echo "Unknown transfer encoding: '". $att[ $part_cnt ]['head']['Content-Transfer-Encoding']."'\n";
+				echo "Unknown transfer encoding: '". $att[ $part_cnt ]['header']['Content-Transfer-Encoding']."'\n";
 				break;
 		}
 
