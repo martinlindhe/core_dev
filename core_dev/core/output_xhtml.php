@@ -8,6 +8,8 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+require_once('functions_locale.php');
+
 /**
  * Creates a complete XHTML header, showing rss feeds if available, etc
  * Uses the following global variables, if they are set:
@@ -30,7 +32,7 @@ function createXHTMLHeader()
 	echo '<title>'.$title.'</title>';
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 
-	echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
+	if (!empty($config['core']['web_root'])) echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
 
 	if ($meta_css) {
 		foreach ($meta_css as $css) {
@@ -38,9 +40,11 @@ function createXHTMLHeader()
 		}
 	}
 
+	$theme_dir = '';
 	if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
-	else $theme_dir = $config['core']['web_root'].'css/themes/';
-	if (!empty($session)) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$session->theme.'"/>';
+	else if (!empty($config['core']['web_root'])) $theme_dir = $config['core']['web_root'].'css/themes/';
+
+	if (!empty($session) && $theme_dir) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$session->theme.'"/>';
 
 	if ($meta_rss) {
 		foreach ($meta_rss as $feed) {
@@ -56,18 +60,18 @@ function createXHTMLHeader()
 	}
 
 	//echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
-	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';
-	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
-	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/functions.js"></script>';
-	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/fileareas.js"></script>';
+	if (!empty($config['core']['web_root'])) {
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/functions.js"></script>';
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/fileareas.js"></script>';
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/chat_1on1.js"></script>';
-
-	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
-	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
-
-	echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
-	if (!empty($files) && $files->allow_rating) {
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
+		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
+		if (!empty($files) && $files->allow_rating) {
+			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
+		}
 	}
 
 	if ($meta_js) {
@@ -87,9 +91,12 @@ function createXHTMLHeader()
 	} else {
 		echo '<body>';
 	}
-	echo '<script type="text/javascript">';
-	echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core']['web_root'].'api/";';
-	echo '</script>';
+
+	if (function_exists('getProjectPath') && !empty($config['core']['web_root'])) {	//XXX: remove getProjectPath eventually
+		echo '<script type="text/javascript">';
+		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core']['web_root'].'api/";';
+		echo '</script>';
+	}
 }
 
 /**
@@ -335,7 +342,7 @@ function xhtmlTextarea($_name, $_value = '', $_width = 0, $_height = 0)
 /**
  * Helper to create a submit button
  */
-function xhtmlSubmit($_title, $class = 'button', $style = '')
+function xhtmlSubmit($_title = 'Submit', $class = 'button', $style = '')
 {
 	return '<input type="submit" value="'.t($_title).'"'.($class ? ' class="'.$class.'"' : '').($style ? ' style="'.$style.'"' : '').'/>';
 }
