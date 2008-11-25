@@ -54,19 +54,20 @@ function http_post($url, $data, $port = 80)
 	fclose($handle);
 
 	//Separate HTTP response from MIME data
-	$x = explode("\n", $data, 1); //FIXME plocka ut http response först!!! explode me 3:e param!!
-	$res['status'] = $x;
-	echo "response code : ".$x."<br>";
+	$x = explode("\r\n", $data, 2);
+	$status = explode(" ", $x[0]);
+	$res['status'] = intval($status[1]);
 	$data = $x[1];
-	d($data);
-	die;
 
 	//Separate header from body of HTTP response
 	$pos = strpos($data, "\r\n\r\n");
-	if ($data === false) return false;
-
-	$res['header'] = mimeParseHeader(substr($data, 0, $pos));
-	$res['body'] = trim(substr($data, $pos + strlen("\r\n\r\n")));
+	if (!$pos) {
+		$res['header'] = mimeParseHeader($data);
+		$res['body'] = '';
+	} else {
+		$res['header'] = mimeParseHeader(substr($data, 0, $pos));
+		$res['body'] = trim(substr($data, $pos + strlen("\r\n\r\n")));
+	}
 	return $res;
 }
 

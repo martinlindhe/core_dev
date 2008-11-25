@@ -47,8 +47,7 @@ function recaptchaVerify($priv_key, $challenge, $response)
 	);
 
 	$res = http_post(RECAPTCHA_VERIFY, $params);
-	d($res);	die;
-	$answers = explode("\n", $res[1]);
+	$answers = explode("\n", $res['body']);
 
 	if (trim($answers[0]) == 'true') return true;
 
