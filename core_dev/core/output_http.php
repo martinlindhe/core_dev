@@ -9,6 +9,8 @@ require_once('input_mime.php');
 
 /**
  * Encodes parameters to a HTTP GET/POST request
+ * For GET requests in URL
+ * For POST requests with "Content-Type: application/x-www-form-urlencoded"
  */
 function http_encode_params($params)
 {
@@ -39,7 +41,7 @@ function http_post($url, $data, $port = 80)
 	$h =
 		"POST ".$p['path']." HTTP/1.0\r\n".
 		"Host: ".$p['host']."\r\n".
-		"Content-Type: application/x-www-form-urlencoded;\r\n".
+		"Content-Type: application/x-www-form-urlencoded\r\n".
 		"Content-Length: ".strlen($params)."\r\n".
 		"User-Agent: core_dev\r\n".	//XXX version
 		"\r\n".

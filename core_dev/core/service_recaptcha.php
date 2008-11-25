@@ -14,17 +14,50 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+/**
+ * TODO: recaptchaVerify() returns a 2nd line of fail reason, which could be displayed to the user
+ */
+
 require_once('output_http.php');
 
 define('RECAPTCHA_API',     'http://api.recaptcha.net');
 define('RECAPTCHA_API_SSL', 'https://api-secure.recaptcha.net');
 define('RECAPTCHA_VERIFY',  'http://api-verify.recaptcha.net/verify');
 
-function recaptchaEmbed($pub_key, $ssl = true)
+/**
+ * Verifies a recaptcha
+ *
+ * @param $priv_key private recaptcha key
+ * @return true on success
+ */
+function recaptchaVerify($priv_key)
+{
+	if (!isset($_POST['recaptcha_challenge_field']) || !isset($_POST['recaptcha_response_field'])) return false;
+
+	$params = array (
+		'privatekey' => $priv_key,
+		'remoteip' => $_SERVER['REMOTE_ADDR'],
+		'challenge' => $_POST['recaptcha_challenge_field'],
+		'response' => $_POST['recaptcha_response_field']
+	);
+
+	$res = http_post(RECAPTCHA_VERIFY, $params);
+	$answers = explode("\n", $res['body']);
+	if (trim($answers[0]) == 'true') return true;
+	return false;
+}
+
+/**
+ * Embeds a recaptcha on your website
+ *
+ * @param $pub_key public recaptcha key
+ * @param $ssl use SSL to connect to recaptcha.net
+ * @return HTML code to display recaptcha
+ */
+function recaptchaShow($pub_key, $ssl = true)
 {
 	$server = ($ssl ? RECAPTCHA_API_SSL : RECAPTCHA_API);
 
-	//XXX "error" get parameter can also be set to embed a error message or something (didnt see it displayed in the recaptcha so ignoring it)
 	$res =
 		'<script type="text/javascript" src="'.$server.'/challenge?k='.$pub_key.'"></script>'.
 		'<noscript>'.
@@ -33,26 +66,6 @@ function recaptchaEmbed($pub_key, $ssl = true)
   			'<input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>'.
 		'</noscript>';
 	return $res;
-}
-
-function recaptchaVerify($priv_key, $challenge, $response)
-{
-	if (empty($priv_key) || empty($challenge) || empty($response)) return false;
-
-	$params = array (
-		'privatekey' => $priv_key,
-		'remoteip' => $_SERVER['REMOTE_ADDR'],
-		'challenge' => $challenge,
-		'response' => $response
-	);
-
-	$res = http_post(RECAPTCHA_VERIFY, $params);
-	$answers = explode("\n", $res['body']);
-
-	if (trim($answers[0]) == 'true') return true;
-
-	echo "Error: ".$answers[1]."\n";
-	return false;
 }
 
 ?>
