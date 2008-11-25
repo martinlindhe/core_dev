@@ -12,7 +12,7 @@ require_once('input_mime.php');
  * For GET requests in URL
  * For POST requests with "Content-Type: application/x-www-form-urlencoded"
  */
-function http_encode_params($params)
+function http_encode_params($params)	//XXX: can "http_build_query" be used instead?
 {
 	$res = '';
 	foreach ($params as $key => $val) {
@@ -25,13 +25,24 @@ function http_encode_params($params)
 /**
  * Performs a HTTP POST request on given url
  */
-function http_post($url, $data, $port = 80)
+function http_post($url, $data)
 {
 	$p = parse_url($url);
-	if ($p['scheme'] != 'http') {
-		echo "http_post() unhandled scheme '".$p['scheme']."'\n";
-		return false;
+
+	switch ($p['scheme']) {
+		case 'http':
+			$port = 80;
+			break;
+
+		case 'https':
+			$port = 443;
+			break;
+
+		default:
+			echo "http_post() unhandled scheme '".$p['scheme']."'\n";
+			return false;
 	}
+	if (!empty($p['port'])) $port = $p['port'];
 
 	$handle = @fsockopen($p['host'], $port, $errno, $errstr, 30);
 	if (!$handle) return false;
@@ -46,6 +57,12 @@ function http_post($url, $data, $port = 80)
 		"User-Agent: core_dev\r\n".	//XXX version
 		"\r\n".
 		$params;
+
+	if ($p['scheme'] == 'https') {
+		//FIXME: how to start a https session? example here http://www.nusphere.com/kb/phpmanual/wrappers.http.htm?/
+		echo "http_post() HTTPS not supported\n";
+		return false;
+	}
 
 	fwrite($handle, $h);
 
