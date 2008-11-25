@@ -2,9 +2,16 @@
 /**
  * $Id$
  *
- * google.com OpenID:
+ * OpenID 2.0 implementation
+ *
+ *
+ * Google OpenID:
  * http://code.google.com/apis/accounts/docs/OpenID.html
  * http://groups.google.com/group/google-federated-login-api
+ *
+ * Yahoo OpenID:
+ * http://developer.yahoo.com/openid/
+ * http://developer.yahoo.com/openid/faq.html
  *
  * References:
  * http://openid.net/
@@ -12,6 +19,21 @@
  * http://openid.net/specs/openid-attribute-exchange-1_0.html
  *
  * \author Martin Lindhe, 2008 <martin@startwars.org>
+ */
+
+/**
+ * TODO: yahoo openid
+ * Your site must publish a discoverable XRDS document listing all the valid return_to URLs for your Realm.
+ * An excellent writeup describing how to do this can can be found here:
+ * Why Yahoo! says your OpenID site's identity is not confirmed:
+ * http://blog.nerdbank.net/2008/06/why-yahoo-says-your-openid-site.html
+ *
+ * TODO - READ THE FOLLOWING:
+ * http://www.plaxo.com/api/openid_recipe
+ *
+ *
+ * TODO: microsoft OpenId (will be available in 2009)
+ * TODO: myspace openid (not yet available)
  */
 
 //STATUS: this code is working but needs a cleanup
@@ -51,8 +73,10 @@ function openidLogin($site_url)
 			echo "\n\npost:\n\n";
 			print_r($_POST);
 
-			echo "email address is: ".$_GET['openid_ext1_value_email']."\n";
 			echo "claimed openid  : ".$_GET['openid_claimed_id']."\n";
+			if (!empty($_GET['openid_ext1_value_email'])) {
+				echo "email address is: ".$_GET['openid_ext1_value_email']."\n";
+			}
 
 			return true;
 		} else {
