@@ -6,7 +6,7 @@
  *
  * When possible, use class.DB_MySQLi.php instead (it is faster)
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('class.DB_Base.php');
@@ -15,8 +15,6 @@ class DB_MySQL extends DB_Base
 {
 	/**
 	 * Destructor
-	 *
-	 * \return nothing
 	 */
 	function __destruct()
 	{
@@ -25,8 +23,6 @@ class DB_MySQL extends DB_Base
 
 	/**
 	 * Opens a connection to MySQL database
-	 *
-	 * \return nothing
 	 */
 	function connect()
 	{
@@ -34,7 +30,7 @@ class DB_MySQL extends DB_Base
 
 		//MySQL defaults
 		if (!$this->host) $this->host = 'localhost';
-		if (!$this->port) $this->port = 3306;	//MySQL default port
+		if (!$this->port) $this->port = 3306;
 		if (!$this->username) $this->username = 'root';
 
 		$this->db_handle = mysql_connect($this->host.':'.$this->port, $this->username, $this->password);
@@ -59,8 +55,6 @@ class DB_MySQL extends DB_Base
 
 	/**
 	 * Shows MySQL driver status
-	 *
-	 * \return nothing
 	 */
 	function showDriverStatus()
 	{
@@ -73,8 +67,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Escapes the string for use in MySQL queries
 	 *
-	 * \param $q the query to escape
-	 * \return escaped query
+	 * @param $q the query to escape
+	 * @return escaped query
 	 */
 	function escape($q)
 	{
@@ -84,8 +78,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Executes a MySQL query
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function query($q)
 	{
@@ -106,8 +100,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Helper function for MySQL INSERT queries
 	 *
-	 * \param $q the query to execute
-	 * \return insert_id
+	 * @param $q the query to execute
+	 * @return insert_id
 	 */
 	function insert($q)
 	{
@@ -132,8 +126,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Helper function for MySQL DELETE queries
 	 *
-	 * \param $q the query to execute
-	 * \return number of rows affected
+	 * @param $q the query to execute
+	 * @return number of rows affected
 	 */
 	function delete($q)
 	{
@@ -158,8 +152,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns array of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getArray($q)
 	{
@@ -186,8 +180,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns mapped array of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getMappedArray($q)
 	{
@@ -214,8 +208,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns array of data with numerical index
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getNumArray($q)
 	{
@@ -242,8 +236,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns one row of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getOneRow($q)
 	{
@@ -271,8 +265,8 @@ class DB_MySQL extends DB_Base
 	/**
 	 * Helper function for MySQL SELECT queries who returns one entry of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getOneItem($q)
 	{
@@ -300,7 +294,8 @@ class DB_MySQL extends DB_Base
 
 	/**
 	 * Lock table from reading
-	 * @param $t string table name
+	 *
+	 * @param $t table to lock
 	 */
 	function lock($t)
 	{

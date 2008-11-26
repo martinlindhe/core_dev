@@ -105,6 +105,13 @@ function dm($db = '', $kb = true)
 		echo "Query history: ".sizeof($db->queries)."\n";	//XXX how to get actual size of the array?
 	}
 
+/*
+	if (extension_loaded('xdebug')) {
+		echo 'Memory usage peaked at '.formatDataSize(xdebug_peak_memory_usage());
+		echo ', currently '.formatDataSize(xdebug_memory_usage());
+	}
+*/
+
 	echo "---\n";
 }
 

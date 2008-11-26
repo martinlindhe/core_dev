@@ -6,13 +6,11 @@
  *
  * This interface translates MySQL syntax into SQLite syntax, see the function translate()
  *
- * IMPORTANT: This has only been tested with SQLite 3.3.17, as shipped with PHP 5.2.5 for Windows
- *
- * \todo THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
- * \todo REWRITE TO USE object oriented interface. but first: make it work procedural style
- *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
+
+//TODO THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
+//TODO REWRITE TO USE object oriented interface. but first: make it work procedural style
 
 require_once('class.DB_Base.php');
 
@@ -20,8 +18,6 @@ class DB_SQLite extends DB_Base
 {
 	/**
 	 * Destructor
-	 *
-	 * \return nothing
 	 */
 	function __destruct()
 	{
@@ -30,8 +26,6 @@ class DB_SQLite extends DB_Base
 
 	/**
 	 * Opens a connection to SQLite database
-	 *
-	 * \return nothing
 	 */
 	function connect()
 	{
@@ -60,8 +54,6 @@ class DB_SQLite extends DB_Base
 
 	/**
 	 * Shows SQLite driver status
-	 *
-	 * \return nothing
 	 */
 	function showDriverStatus()
 	{
@@ -72,8 +64,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Transparently translates MySQL queries to SQLite queries.
 	 *
-	 * \param $q MySQL query to translate
-	 * \return SQLite version of the query
+	 * @param $q MySQL query to translate
+	 * @return SQLite version of the query
 	 */
 	private function translate($q)
 	{
@@ -84,8 +76,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Escapes the string for use in SQLite queries
 	 *
-	 * \param $q the query to escape
-	 * \return escaped query
+	 * @param $q the query to escape
+	 * @return escaped query
 	 */
 	function escape($q)
 	{
@@ -95,8 +87,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Executes a SQL query
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function query($q)
 	{
@@ -119,8 +111,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Helper function for SQL INSERT queries
 	 *
-	 * \param $q the query to execute
-	 * \return insert_id
+	 * @param $q the query to execute
+	 * @return insert_id
 	 */
 	function insert($q)
 	{
@@ -147,8 +139,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Helper function for SQL DELETE queries
 	 *
-	 * \param $q the query to execute
-	 * \return number of rows affected
+	 * @param $q the query to execute
+	 * @return number of rows affected
 	 */
 	function delete($q)
 	{
@@ -175,8 +167,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns array of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getArray($q)
 	{
@@ -201,8 +193,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns mapped array of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getMappedArray($q)
 	{
@@ -231,8 +223,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns array of data with numerical index
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getNumArray($q)
 	{
@@ -261,8 +253,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns one row of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getOneRow($q)
 	{
@@ -293,8 +285,8 @@ class DB_SQLite extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns one entry of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getOneItem($q)
 	{
@@ -323,7 +315,8 @@ class DB_SQLite extends DB_Base
 
 	/**
 	 * Lock table from reading
-	 * @param $t string table name
+	 *
+	 * @param $t table to lock
 	 */
 	function lock($t)
 	{

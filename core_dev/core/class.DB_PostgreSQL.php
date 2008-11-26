@@ -6,10 +6,10 @@
  *
  * This interface translates MySQL syntax into PostgreSQL syntax, see the function translate()
  *
- * \todo THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
- *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
+
+//TODO: THIS DRIVER IS CURRENTLY NOT COMPLETE. WIP!!!!
 
 require_once('class.DB_Base.php');
 
@@ -17,8 +17,6 @@ class DB_PostgreSQL extends DB_Base
 {
 	/**
 	 * Destructor
-	 *
-	 * \return nothing
 	 */
 	function __destruct()
 	{
@@ -27,8 +25,6 @@ class DB_PostgreSQL extends DB_Base
 
 	/**
 	 * Opens a connection to PostgreSQL database
-	 *
-	 * \return nothing
 	 */
 	function connect()
 	{
@@ -36,7 +32,7 @@ class DB_PostgreSQL extends DB_Base
 
 		//PostgreSQL defaults
 		if (!$this->host) $this->host = 'localhost';
-		if (!$this->port) $this->port = 5432;	//PostgreSQL default port
+		if (!$this->port) $this->port = 5432;
 		if (!$this->username) $this->username = 'postgres';
 
 		$str = 'host='.$this->host.' user='.$this->username.' password='.$this->password.' dbname='.$this->database.' port='.$this->port;
@@ -62,8 +58,6 @@ class DB_PostgreSQL extends DB_Base
 
 	/**
 	 * Shows PostgreSQL driver status
-	 *
-	 * \return nothing
 	 */
 	function showDriverStatus()
 	{
@@ -76,8 +70,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Transparently translates MySQL queries to PostgreSQL queries.
 	 *
-	 * \param $q MySQL query to translate
-	 * \return PostgreSQL version of the query
+	 * @param $q MySQL query to translate
+	 * @return PostgreSQL version of the query
 	 */
 	private function translate($q)
 	{
@@ -88,8 +82,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Escapes the string for use in PostgreSQL queries
 	 *
-	 * \param $q the query to escape
-	 * \return escaped query
+	 * @param $q the query to escape
+	 * @return escaped query
 	 */
 	function escape($q)
 	{
@@ -99,8 +93,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Executes a SQL query
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function query($q)
 	{
@@ -123,8 +117,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Helper function for SQL INSERT queries
 	 *
-	 * \param $q the query to execute
-	 * \return insert_id
+	 * @param $q the query to execute
+	 * @return insert_id
 	 */
 	function insert($q)
 	{
@@ -151,8 +145,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Helper function for SQL DELETE queries
 	 *
-	 * \param $q the query to execute
-	 * \return number of rows affected
+	 * @param $q the query to execute
+	 * @return number of rows affected
 	 */
 	function delete($q)
 	{
@@ -179,8 +173,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns array of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getArray($q)
 	{
@@ -209,8 +203,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns mapped array of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getMappedArray($q)
 	{
@@ -239,8 +233,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns array of data with numerical index
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getNumArray($q)
 	{
@@ -269,8 +263,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns one row of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getOneRow($q)
 	{
@@ -300,8 +294,8 @@ class DB_PostgreSQL extends DB_Base
 	/**
 	 * Helper function for SQL SELECT queries who returns one entry of data
 	 *
-	 * \param $q the query to execute
-	 * \return result
+	 * @param $q the query to execute
+	 * @return result
 	 */
 	function getOneItem($q)
 	{
@@ -330,7 +324,8 @@ class DB_PostgreSQL extends DB_Base
 
 	/**
 	 * Lock table from reading
-	 * @param $t string table name
+	 *
+	 * @param $t table to lock
 	 */
 	function lock($t)
 	{

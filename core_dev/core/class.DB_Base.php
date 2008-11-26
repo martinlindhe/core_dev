@@ -6,12 +6,11 @@
  *
  * The SQL profiler features additional PHP profiling if the xdebug extension is loaded
  *
- * \todo Make a test script to verify each of the database classes returns data as expected
- *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-//FIXME rename to class.DB.php + require alla db klasser och i konstruktorn här berätta vilken driver som ska användas
+//TODO rename to class.DB.php + require alla db klasser och i konstruktorn här berätta vilken driver som ska användas
+//TODO Make a test script to verify each of the database classes returns data as expected
 
 abstract class DB_Base
 {
@@ -21,8 +20,9 @@ abstract class DB_Base
 
 	/**
 	 * Escapes a string for use in queries
-	 * \param $q is the query to escape
-	 * \return the escaped string, taking db-connection locale into account
+	 *
+	 * @param $q is the query to escape
+	 * @return the escaped string, taking db-connection locale into account
 	 */
 	abstract function escape($q);
 
@@ -30,83 +30,95 @@ abstract class DB_Base
 	 * Performs a general query. Should only be used with special commands that don't return anything.
 	 * Use the other functions for common SQL operations such as select, insert, update, delete
 	 * Example: LOCK TABLES
-	 * \param $q is the query to execute
-	 * \return the result of the query, if anything
+	 *
+	 * @param $q is the query to execute
+	 * @return the result of the query, if anything
 	 */
 	abstract function query($q);
 
 	/**
 	 * Performs a query that does a DELETE
 	 * Example: DELETE FROM t WHERE id=1
-	 * \param $q is the query to execute
-	 * \return the number of rows affected
+	 *
+	 * @param $q is the query to execute
+	 * @return the number of rows affected
 	 */
 	abstract function delete($q);
 
 	/**
 	 * Performs a query that does a UPDATE
 	 * Example: UPDATE t SET n=1
-	 * \param $q is the query to execute
-	 * \return the number of rows affected
+	 *
+	 * @param $q is the query to execute
+	 * @return the number of rows affected
 	 */
 	function update($q) { return $this->delete($q); }
 
 	/**
 	 * Performs a query that does a INSERT
-	 * \param $q is the query to execute
-	 * \return insert_id (autoincrement primary key of table)
+	 *
+	 * @param $q is the query to execute
+	 * @return insert_id (autoincrement primary key of table)
 	 */
 	abstract function insert($q);
 
 	/**
 	 * Performs a query that does a REPLACE
-	 * \param $q is the query to execute
-	 * \return the number of rows affected
+	 *
+	 * @param $q is the query to execute
+	 * @return the number of rows affected
 	 */
 	function replace($q) { return $this->insert($q); }
 
 	/**
 	 * Selects data
 	 * Example: SELECT * FROM t
-	 * \param $q is the query to execute
-	 * \return an array with the results, with columns as array indexes
+	 *
+	 * @param $q is the query to execute
+	 * @return an array with the results, with columns as array indexes
 	 */
 	abstract function getArray($q);
 
 	/**
 	 * Selects data
 	 * Example: SHOW VARIABLES LIKE "%cache%"
-	 * \param $q is the query to execute
-	 * \return an array with the results mapped as key => value
+	 *
+	 * @param $q is the query to execute
+	 * @return an array with the results mapped as key => value
 	 */
 	abstract function getMappedArray($q);
 
 	/**
 	 * Selects data
 	 * Example: SELECT textRow FROM t
-	 * \param $q is the query to execute
-	 * \return an 1-dimensional array with a numeric index
+	 *
+	 * @param $q is the query to execute
+	 * @return an 1-dimensional array with a numeric index
 	 */
 	abstract function getNumArray($q);
 
 	/**
 	 * Selects one row of data
 	 * Example: SELECT * FROM t WHERE id=1 (where id is distinct)
-	 * \param $q is the query to execute
-	 * \return one row-result with columns as array indexes
+	 *
+	 * @param $q is the query to execute
+	 * @return one row-result with columns as array indexes
 	 */
 	abstract function getOneRow($q);
 
 	/**
 	 * Selects one column of one row of data
 	 * Example: SELECT a FROM t WHERE id=1 (where id is distinct)
-	 * \param $q is the query to execute
-	 * \return one column-result only
+	 *
+	 * @param $q is the query to execute
+	 * @return one column-result only
 	 */
 	abstract function getOneItem($q);
 
 	/**
 	 * Lock db/table helper function
+	 *
+	 * @param $t table to lock
 	 */
 	abstract function lock($t);
 
@@ -122,45 +134,43 @@ abstract class DB_Base
 
 	/**
 	 * Creates a database connection
-	 * \return nothing
 	 */
 	abstract function connect();
 
 	/**
 	 * Shows driver-specific settings + status
-	 * \return nothing
 	 */
 	abstract function showDriverStatus();
 
 
 	//db settings
-	protected $host	= '';					///<Hostname or numeric IP address of the db server
-	protected $port	= 0;					///<Port number
+	protected $host	= '';				///<Hostname or numeric IP address of the db server
+	protected $port	= 0;				///<Port number
 	protected $username = '';			///<Username to use to connect to the database
 	protected $password = '';			///<Password to use to connect to the database
 	protected $database = '';			///<Name of the database to connect to
-	protected $charset = 'utf8';	///<Default charset to use. utf8 should be used always
+	protected $charset = 'utf8';		///<Default charset to use. utf8 should be used always
 
 	//db variables
-	public $db_handle = false;		///<Internal db handle
+	public $db_handle = false;			///<Internal db handle
 	public $db_driver = '';				///<holds the full name of the db driver, example: DB_MySQLi, DB_MySQL
-	public $dialect = '';					///<tells what dialect of sql is currently allowed by the db driver, possible values: mysql, pgsql
-	public $server_version = '';	///<used for version checking
-	public $client_version = '';	///<used for version checking
+	public $dialect = '';				///<tells what dialect of sql is currently allowed by the db driver, possible values: mysql, pgsql
+	public $server_version = '';		///<used for version checking
+	public $client_version = '';		///<used for version checking
 
 	//profiling variables
-	public $debug = false;
-	protected $connect_time = 0;			///<Used internally for the SQL profiler
+	public $debug = false;				///<Debugging enabled?
+	protected $connect_time = 0;		///<Used internally for the SQL profiler
 	protected $time_spent = array();	///<Used internally for the SQL profiler
-	protected $queries_cnt = 0;				///<Used internally for the SQL profiler
-	public $queries = array();			///<Used internally for the SQL profiler
+	protected $queries_cnt = 0;			///<Used internally for the SQL profiler
+	protected $queries = array();		///<Used internally for the SQL profiler
 	protected $query_error = array();	///<Used internally for the SQL profiler
 
 
 	/**
 	 * Constructor. Initializes db driver and connects to the database
-	 * \param $settings is array with DB-specific settings
-	 * \return nothing
+	 *
+	 * @param $settings is array with DB-specific settings
 	 */
 	function __construct(array $settings)
 	{
@@ -180,7 +190,6 @@ abstract class DB_Base
 
 	/**
 	 * Shows current settings
-	 * \return nothing
 	 */
 	function showConfig()
 	{
@@ -208,7 +217,7 @@ abstract class DB_Base
 
 		echo '<div class="item">';
 		if ($this->dialect == 'mysql') {
-			/* Show MySQL query cache settings */
+			//Show MySQL query cache settings
 			$data = $this->getMappedArray('SHOW VARIABLES LIKE "%query_cache%"');
 			if ($data['have_query_cache'] == 'YES') {
 				echo '<h2>MySQL query cache settings</h2>';
@@ -218,7 +227,7 @@ abstract class DB_Base
 				echo 'Min result unit: '. formatDataSize($data['query_cache_min_res_unit']).'<br/>';
 				echo 'Wlock invalidate: '. $data['query_cache_wlock_invalidate'].'<br/><br/>';
 
-				/* Current query cache status */
+				//Current query cache status
 				$data = $this->getMappedArray('SHOW STATUS LIKE "%Qcache%"', 'Variable_name', 'Value');
 				echo '<h2>MySQL query cache status</h2>';
 				echo 'Hits: '. formatNumber($data['Qcache_hits']).'<br/>';
@@ -240,8 +249,8 @@ abstract class DB_Base
 
 	/**
 	 * Stores profiling information about connect time to database
-	 * \param $time_started is the microtime of when the script execution started
-	 * \return nothing
+	 *
+	 * @param $time_started is the microtime of when the script execution started
 	 */
 	function profileConnect($time_started)
 	{
@@ -250,9 +259,9 @@ abstract class DB_Base
 
 	/**
 	 * Stores profiling information about query execution time
-	 * \param $time_started is microtime from when the execution of this query begun
-	 * \param $q is the query being profiled
-	 * \return nothing
+	 *
+	 * @param $time_started is microtime from when the execution of this query begun
+	 * @param $q is the query being profiled
 	 */
 	function profileQuery($time_started, $q)
 	{
@@ -263,10 +272,10 @@ abstract class DB_Base
 
 	/**
 	 * Stores profiling information about a failed query execution
-	 * \param $time_started is microtime from when the execution of this query begun
-	 * \param $q is the query being profiled
-	 * \param $err is the error message returned by the db driver in use
-	 * \return nothing
+	 *
+	 * @param $time_started is microtime from when the execution of this query begun
+	 * @param $q is the query being profiled
+	 * @param $err is the error message returned by the db driver in use
 	 */
 	function profileError($time_started, $q, $err)
 	{
@@ -276,8 +285,8 @@ abstract class DB_Base
 
 	/**
 	 * Shows SQL query profiling information
-	 * \param $pageload_start is the microtime of when the script execution started
-	 * \return nothing
+	 *
+	 * @param $pageload_start is the microtime of when the script execution started
 	 */
 	function showProfile($pageload_start = 0, $output_type = 'xhtml')
 	{
@@ -285,11 +294,7 @@ abstract class DB_Base
 		global $config;
 		if (!$this->debug) return;
 
-		if (extension_loaded('xdebug')) {
-			$total_time = xdebug_time_index();
-		} else {
-			$total_time = microtime(true) - $pageload_start;
-		}
+		$total_time = microtime(true) - $pageload_start;
 
 		$rand_id = mt_rand(1,5000000);
 
@@ -340,17 +345,13 @@ abstract class DB_Base
 			echo 'Time spent - SQL: '.round($sql_time, 3).'<br/>';
 		}
 
-		if (extension_loaded('xdebug')) {
-			//Show script memory usage
-			echo 'Memory usage peaked at '.formatDataSize(xdebug_peak_memory_usage());
-			echo ', currently '.formatDataSize(xdebug_memory_usage());
-		}
+		//Show script memory usage
+		dm($this);
 		echo '</div>';
 	}
 
 	/**
 	 * Displays all events from the event log
-	 * \return nothing
 	 */
 	function showEvents()
 	{
