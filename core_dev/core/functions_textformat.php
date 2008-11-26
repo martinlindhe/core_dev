@@ -21,7 +21,7 @@ function getThumbUrl($_id, $w = 0, $h = 0, $fullUrl = false)
 
 	$str = '';
 	if ($fullUrl) $str .= $config['app']['full_url'];
-	
+
 	$str .= $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h;
 	return $str;
 }
@@ -48,6 +48,41 @@ function makeImageLink($_id, $_title = '')
 	if (!is_numeric($_id)) return false;
 
 	return '<img id="img_'.$_id.'" src="'.$config['core']['web_root'].'api/file.php?id='.$_id.'" alt="Image" title="'.strip_tags($_title).'"/>';
+}
+
+/**
+ * Takes text input such as "128M" and returns bytes
+ */
+function decodeDataSize($s)
+{
+	$s = str_replace(' ', '', $s);
+
+	//FIXME find first non-digit in a easier way
+	for ($i=0; $i<strlen($s); $i++) {
+		if (!is_numeric(substr($s, $i, 1))) break;
+	}
+	$suff = substr($s, $i);
+	$val = substr($s, 0, $i);
+
+	switch (strtolower($suff)) {
+		case 'g':
+		case 'gb':
+		case 'gib':
+			return $val * 1024 * 1024 * 1024;
+
+		case 'm':
+		case 'mb':
+		case 'mib':
+			return $val * 1024 * 1024;
+
+		case 'k':
+		case 'kb':
+		case 'kib':
+			return $val * 1024;
+
+		default:
+			echo "decodeDataSize(): unknown suffix '".$suff."'\n";
+	}
 }
 
 /**

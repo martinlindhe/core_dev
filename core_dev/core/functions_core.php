@@ -87,30 +87,30 @@ function dh($m)
 /**
  * Debug function. Dumps memory usage
  */
-function dm($db = '', $kb = true)
+function dm($db = '')
 {
-	if ($kb) {
-		require_once('functions_textformat.php');	//for formatDataSize()
-		echo "[Memory usage]\n";
-		echo "Current: ".formatDataSize(memory_get_usage(true)).", emalloc: ".formatDataSize(memory_get_usage(false))."\n";
-		echo "Peak   : ".formatDataSize(memory_get_peak_usage(true)).", emalooc: ".formatDataSize(memory_get_peak_usage(false))."\n";
-	} else {
-		echo "[Memory usage, in bytes]\n";
-		echo "Current: ".memory_get_usage(true).", emalloc: ".memory_get_usage(false)."\n";
-		echo "Peak   : ".memory_get_peak_usage(true).", emalooc: ".memory_get_peak_usage(false)."\n";
+	$limit = decodeDataSize(ini_get('memory_limit'));
+
+	require_once('functions_textformat.php');	//for formatDataSize()
+	echo "[Memory usage]\n";
+	echo "Limit  : ".formatDataSize($limit)."\n";
+	echo "Current: ".formatDataSize(memory_get_usage(true))." (".round(memory_get_usage(true) / $limit * 100, 2)." %)\n";
+	echo "Peak   : ".formatDataSize(memory_get_peak_usage(true))." (".round(memory_get_peak_usage(true) / $limit * 100, 2)." %)\n\n";
+
+	echo "[emalloc memory report]\n";
+	echo "Current: ".formatDataSize(memory_get_usage(false))." (".round(memory_get_usage(false) / $limit * 100, 2)." %)\n";
+	echo "Peak   : ".formatDataSize(memory_get_peak_usage(false))." (".round(memory_get_peak_usage(false) / $limit * 100, 2)." %)\n\n";
+
+	if (extension_loaded('xdebug')) {
+		echo "[Xdebug Memory report]\n";
+		echo "Current: ".formatDataSize(xdebug_memory_usage())." (".round(xdebug_memory_usage() / $limit * 100, 2)." %)\n";
+		echo "Peak   : ".formatDataSize(xdebug_peak_memory_usage())." (".round(xdebug_peak_memory_usage() / $limit * 100, 2)." %)\n\n";
 	}
 
 	if ($db) {
 		echo "[DB driver memory usage]\n";
 		echo "Query history: ".sizeof($db->queries)."\n";	//XXX how to get actual size of the array?
 	}
-
-/*
-	if (extension_loaded('xdebug')) {
-		echo 'Memory usage peaked at '.formatDataSize(xdebug_peak_memory_usage());
-		echo ', currently '.formatDataSize(xdebug_memory_usage());
-	}
-*/
 
 	echo "---\n";
 }
