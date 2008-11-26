@@ -160,11 +160,11 @@ abstract class DB_Base
 
 	//profiling variables
 	public $debug = false;				///<Debugging enabled?
-	protected $connect_time = 0;		///<Used internally for the SQL profiler
-	protected $time_spent = array();	///<Used internally for the SQL profiler
-	protected $queries_cnt = 0;			///<Used internally for the SQL profiler
-	protected $queries = array();		///<Used internally for the SQL profiler
-	protected $query_error = array();	///<Used internally for the SQL profiler
+	public $connect_time = 0;			///<Used internally for the SQL profiler
+	public $time_spent = array();		///<Used internally for the SQL profiler
+	public $queries_cnt = 0;			///<Used internally for the SQL profiler
+	public $queries = array();			///<Used internally for the SQL profiler
+	public $query_error = array();		///<Used internally for the SQL profiler
 
 
 	/**
