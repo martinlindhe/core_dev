@@ -149,10 +149,11 @@ abstract class DB_Base
 	public $client_version = '';	///<used for version checking
 
 	//profiling variables
+	public $debug = false;
 	protected $connect_time = 0;			///<Used internally for the SQL profiler
 	protected $time_spent = array();	///<Used internally for the SQL profiler
 	protected $queries_cnt = 0;				///<Used internally for the SQL profiler
-	protected $queries = array();			///<Used internally for the SQL profiler
+	public $queries = array();			///<Used internally for the SQL profiler
 	protected $query_error = array();	///<Used internally for the SQL profiler
 
 
@@ -163,12 +164,16 @@ abstract class DB_Base
 	 */
 	function __construct(array $settings)
 	{
+		global $config;
+
 		if (!empty($settings['host'])) $this->host = $settings['host'];
 		if (!empty($settings['port'])) $this->port = $settings['port'];
 		if (!empty($settings['username'])) $this->username = $settings['username'];
 		if (!empty($settings['password'])) $this->password = $settings['password'];
 		if (!empty($settings['database'])) $this->database = $settings['database'];
 		if (!empty($settings['charset'])) $this->charset = $settings['charset'];
+
+		if (!empty($config['debug'])) $this->debug = true;
 
 		$this->connect();
 	}
@@ -278,7 +283,7 @@ abstract class DB_Base
 	{
 		//TODO implement $output_type = 'text'
 		global $config;
-		if (empty($config['debug'])) return;
+		if (!$this->debug) return;
 
 		if (extension_loaded('xdebug')) {
 			$total_time = xdebug_time_index();
