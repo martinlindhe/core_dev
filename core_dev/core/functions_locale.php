@@ -204,6 +204,7 @@ function t_se($s)
 		case 'An error occured sending activation mail!': return 'Ett fel uppstod när aktiveringsmail skulle skickas ut!';
 		case 'An email with your activation code has been sent.': return 'Ett email med din aktiveringskod har skickats.';
 		case 'Follow the link in the mail to finish your registration.': return 'Följ länken i mailet för att slutföra din registrering.';
+		case 'Ok': return 'Ok';
 
 		//Session errors
 		case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';
