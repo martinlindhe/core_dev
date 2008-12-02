@@ -7,13 +7,11 @@
  * Utility script: cron\cleanup_activations.php
  * 		This script deletes all > 30 day old entries from tblActivation
  *
- * \todo cleanup script that deletes un-activated users entirely
- * \todo finish api/human_test.php implementation
- *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //FIXME: tblActivation.answer was only used for CAPTCHA's. safe to drop?
+//TODO: create a cleanup script that deletes un-activated users entirely
 
 define('ACTIVATE_EMAIL',		1);
 define('ACTIVATE_SMS',			2);
@@ -28,9 +26,9 @@ $config['activate']['expire_time_account']		= (24*60*60)*30;	///< 30 days
 /**
  * Returns an unused numeric activation code
  *
- * \param $lo lower limit of code
- * \param $hi upper limit of code
- * \return unused numeric activation code
+ * @param $lo lower limit of code
+ * @param $hi upper limit of code
+ * @return unused numeric activation code
  */
 function generateActivationCode($_type, $lo, $hi)
 {
@@ -47,6 +45,9 @@ function generateActivationCode($_type, $lo, $hi)
 
 /**
  * Returns the expire time of specified type of activation code
+ *
+ * @param $_type activation type
+ * @return the expire time of specified type of activation code
  */
 function getActivationExpireTime($_type)
 {
@@ -64,9 +65,9 @@ function getActivationExpireTime($_type)
 /**
  * Verify if activation code is valid
  *
- * \param $_type type
- * \param $_code activation code
- * \param $_answer is string for CAPTCHA's, userId for email/sms activation
+ * @param $_type type
+ * @param $_code activation code
+ * @param $_answer is string for CAPTCHA's, userId for email/sms activation
  */
 function verifyActivation($_type, $_code, $_answer = '')
 {
@@ -92,9 +93,9 @@ function verifyActivation($_type, $_code, $_answer = '')
 /**
  * Checks if the activation code is valid, returns associated user id
  *
- * \param $_type type
- * \param $_code activation code
- * \return user id
+ * @param $_type type
+ * @param $_code activation code
+ * @return user id
  */
 function getActivationUserId($_type, $_code)
 {
@@ -111,9 +112,9 @@ function getActivationUserId($_type, $_code)
 /**
  * Get users activation date
  *
- * \param $_type type
- * \param $_id userId
- * \return date
+ * @param $_type type
+ * @param $_id userId
+ * @return date
  */
 function getActivationDate($_type, $_id)
 {
@@ -129,9 +130,9 @@ function getActivationDate($_type, $_id)
 /**
  * Get users activation code
  *
- * \param $_type type
- * \param $_id userId
- * \return user id
+ * @param $_type type
+ * @param $_id userId
+ * @return user id
  */
 function getActivationCode($_type, $_id)
 {
@@ -146,10 +147,10 @@ function getActivationCode($_type, $_id)
 /**
  * Creates a new activation code
  *
- * \param $_type type
- * \param $_code activation code
- * \param $_answer is correct answer to captcha-implementation, or userId for email/sms activation
- * \return activationId
+ * @param $_type type
+ * @param $_code activation code
+ * @param $_answer is correct answer to captcha-implementation, or userId for email/sms activation
+ * @return activationId
  */
 function createActivation($_type, $_code, $_answer = '')
 {
@@ -174,8 +175,8 @@ function createActivation($_type, $_code, $_answer = '')
  * Removes all activation codes of same type for same user. Used when generating a new activation
  * code of specified type
  *
- * \param $_type type
- * \param $_id user id
+ * @param $_type type
+ * @param $_id user id
  */
 function removeActivations($_type, $_id)
 {
@@ -189,8 +190,8 @@ function removeActivations($_type, $_id)
 /**
  * Removes a single activation code. Call this when activation process has succeeded
  *
- * \param $_type type
- * \param $_code activation code
+ * @param $_type type
+ * @param $_code activation code
  */
 function removeActivation($_type, $_code)
 {
