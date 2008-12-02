@@ -227,7 +227,7 @@ class Session
 	 */
 	function log($str, $entryLevel = LOGLEVEL_NOTICE)
 	{
-		return createLogEntry($str, $entryLevel, $this->id, $this->ip);
+		return logEntry($str, $entryLevel, $this->id, $this->ip);
 	}
 
 	function save($settingName, $settingValue, $categoryId = 0)
