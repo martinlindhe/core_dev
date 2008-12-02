@@ -8,7 +8,7 @@
  *
  * User setting examples:
  *   $session->save('variablename', 'some random setting to save');
- *   $kex = $session->read('variablename');
+ *   $kex = $session->load('variablename');
  *
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
@@ -16,11 +16,7 @@
 require_once('functions_ip.php');
 require_once('atom_settings.php');	//for storing userdata
 require_once('atom_blocks.php');	//for isBlocked()
-
-define('LOGLEVEL_NOTICE',	1);
-define('LOGLEVEL_WARNING',	2);
-define('LOGLEVEL_ERROR',	3);
-define('LOGLEVEL_ALL',		5);
+require_once('atom_logging.php');	//for createLogEntry()
 
 define('USERLEVEL_NORMAL',		0);
 define('USERLEVEL_WEBMASTER',	1);
@@ -231,11 +227,7 @@ class Session
 	 */
 	function log($str, $entryLevel = LOGLEVEL_NOTICE)
 	{
-		global $db;
-		if (!is_numeric($entryLevel)) return false;
-
-		$q = 'INSERT INTO tblLogs SET entryText="'.$db->escape($str).'",entryLevel='.$entryLevel.',timeCreated=NOW(),userId='.$this->id.',userIP='.$this->ip;
-		return $db->insert($q);
+		return createLogEntry($str, $entryLevel, $this->id, $this->ip);
 	}
 
 	function save($settingName, $settingValue, $categoryId = 0)

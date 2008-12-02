@@ -7,10 +7,11 @@
  * Uses tblFiles
  * Uses php_id3.dll if enabled, to show more details of mp3s in the file module
  *
- * \todo rename tblFiles.timeUploaded to tblFiles.timeCreated
- *
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
+
+//TODO: rename tblFiles.timeUploaded to tblFiles.timeCreated
+//FIXME: use bmp mimetype "image/x-ms-bmp" and verify it is recognized in all browsers
 
 require_once('atom_comments.php');		//for image comments support
 require_once('atom_categories.php');	//for file categories support
