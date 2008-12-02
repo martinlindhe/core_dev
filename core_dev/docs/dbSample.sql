@@ -443,7 +443,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `tblSettings` (
   `settingId` bigint(20) unsigned NOT NULL auto_increment,
-  `ownerId` bigint(10) unsigned NOT NULL default '0',
+  `ownerId` bigint(20) unsigned NOT NULL default '0',
   `categoryId` int(10) unsigned NOT NULL default '0',
   `settingName` varchar(200) default NULL,
   `settingValue` text,

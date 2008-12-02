@@ -13,13 +13,13 @@
  * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-define('ACTIVATE_CAPTCHA',		1);
-define('ACTIVATE_EMAIL',		2);
-define('ACTIVATE_SMS',			3);
-define('ACTIVATE_CHANGE_PWD',	4);		//used to allow the user to set a new password from a email link when he forgot password
-define('ACTIVATE_ACCOUNT',		5);		//used to activate a pre-generated account
+//FIXME: tblActivation.answer was only used for CAPTCHA's. safe to drop?
 
-$config['activate']['expire_time_captcha']		= 60*5;			///< 5 minutes
+define('ACTIVATE_EMAIL',		1);
+define('ACTIVATE_SMS',			2);
+define('ACTIVATE_CHANGE_PWD',	3);		//used to allow the user to set a new password from a email link when he forgot password
+define('ACTIVATE_ACCOUNT',		4);		//used to activate a pre-generated account
+
 $config['activate']['expire_time_email']		= (24*60*60)*30; 	///< 30 days
 $config['activate']['expire_time_sms']			= (24*60*60)*30;	///< 30 days
 $config['activate']['expire_time_change_pwd']	= (24*60*60)*30; 	///< 30 days
@@ -53,7 +53,6 @@ function getActivationExpireTime($_type)
 	global $config;
 	switch ($_type)
 	{
-		case ACTIVATE_CAPTCHA:		return $config['activate']['expire_time_captcha'];
 		case ACTIVATE_EMAIL:		return $config['activate']['expire_time_email'];
 		case ACTIVATE_SMS:			return $config['activate']['expire_time_sms'];
 		case ACTIVATE_CHANGE_PWD:	return $config['activate']['expire_time_change_pwd'];
@@ -80,10 +79,6 @@ function verifyActivation($_type, $_code, $_answer = '')
 	$q .= ' AND timeActivated IS NULL AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
 
 	switch ($_type) {
-		case ACTIVATE_CAPTCHA:
-			$q .= ' AND answer="'.$db->escape($_answer).'"';
-			break;
-
 		case ACTIVATE_EMAIL:
 		case ACTIVATE_SMS:
 		case ACTIVATE_CHANGE_PWD:
@@ -163,10 +158,6 @@ function createActivation($_type, $_code, $_answer = '')
 
 	$q = 'INSERT INTO tblActivation SET type='.$_type.',rnd="'.$db->escape($_code).'",timeCreated=NOW()';
 	switch ($_type) {
-		case ACTIVATE_CAPTCHA:
-			$q .= ', answer="'.$db->escape($_answer).'"';
-			break;
-
 		case ACTIVATE_EMAIL:
 		case ACTIVATE_SMS:
 		case ACTIVATE_CHANGE_PWD:
