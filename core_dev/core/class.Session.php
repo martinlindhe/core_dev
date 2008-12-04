@@ -16,7 +16,7 @@
 require_once('functions_ip.php');
 require_once('atom_settings.php');	//for storing userdata
 require_once('atom_blocks.php');	//for isBlocked()
-require_once('atom_logging.php');	//for createLogEntry()
+require_once('atom_logging.php');	//for logEntry()
 
 define('USERLEVEL_NORMAL',		0);
 define('USERLEVEL_WEBMASTER',	1);
