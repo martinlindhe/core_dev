@@ -45,7 +45,7 @@ function dp($m)
 
 	error_log($m);
 	if (!empty($config['debug'])) {
-		error_log($m, 3, '/tmp/core_dev.log');
+		error_log(date('[r] ').$m."\n", 3, '/tmp/core_dev.log');
 	}
 }
 
