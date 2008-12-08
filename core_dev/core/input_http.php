@@ -12,11 +12,12 @@
 $config['http']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
 
 /**
- * Return the status code of given URL, or false on network error
+ * Fetches header for given URL and returns it in a parsed array
  */
-function http_status($url)
+function http_head($url)
 {
 	global $config;
+
 	//FIXME: isURL() check
 	$u = parse_url($url);
 
@@ -56,12 +57,39 @@ function http_status($url)
 	$result_header = substr($result, 0, $pos);
 
 	$headers = explode("\r\n", $result_header);
+	return $headers;
+}
+
+/**
+ * Return the status code of given URL, or false on network error
+ */
+function http_status($url)
+{
+	$headers = http_head($url);
 
 	foreach ($headers as $h) {
 		switch (substr($h, 0, 9)) {
 			case 'HTTP/1.0 ':
 			case 'HTTP/1.1 ':
 				return intval(substr($h, 9));
+		}
+	}
+	return false;
+}
+
+/**
+ * Returns the Last-Modified field from given URL head
+ * as a unix timestamp, or false if none exists.
+ */
+function http_last_modified($url)
+{
+	$headers = http_head($url);
+
+	foreach ($headers as $h) {
+		$col = explode(': ', $h);
+		switch ($col[0]) {
+			case 'Last-Modified':
+				return strtotime($col[1]);
 		}
 	}
 	return false;
