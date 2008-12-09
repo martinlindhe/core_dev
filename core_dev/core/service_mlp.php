@@ -19,7 +19,7 @@
  * Mobile Location Protocol (MLP) 3.0.0: "LIF TS 101"
  * http://www.openmobilealliance.org/tech/affiliates/lif/lifindex.html
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 require_once('input_coordinates.php');

@@ -2,18 +2,22 @@
 /**
  * $Id$
  *
- * Helper functions to convert GPS coordinates
- * between different presentation formats
+ * Helper functions to convert different coordinate syntaxes
+ * to the internal format (WGS84)
+ *
+ * WGS84 coordinates is also used in
+ * service_mlp.php
+ * service_googlemaps.php
  *
  * World Geodetic System (WGS84):
  * http://en.wikipedia.org/wiki/WGS84
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**
  * Converts GPS coordinates from degrees, minutes and seconds (D'M'S)
- * to WGS84 Longitude and Latitude (Google Maps API format)
+ * to WGS84 Longitude and Latitude
  *
  * Lat:   62 23 37.00N  ->  62.393611
  * Long: 017 18 28.00E  ->  17.307778

@@ -1,4 +1,5 @@
 <?php
+require_once('/var/www/core_dev/core/service_googlemaps.php');
 
 $path[0]['x'] = gpsToWGS84('62 23 37.00N');
 $path[0]['y'] = gpsToWGS84('017 18 28.00E');
