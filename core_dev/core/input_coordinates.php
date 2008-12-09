@@ -21,33 +21,47 @@
 
 /**
  * Converts WGS84 degrees, minutes and seconds (D'M'S)
+ * or degrees, minutes
  * to WGS84 Longitude and Latitude
  *
- * Lat:   62 23 37.00N  ->  62.393611
- * Long: 017 18 28.00E  ->  17.307778
+ * 59 20 7.12N       (D'M'S)
+ * N59 20 7.12       (D'M'S)
+ * N 59° 20' 7.12"   (D'M'S)
+ * N 59° 20.1187'    (D'M)
  *
  * @param $coord Geographic coordinate from GPS device or MLP service
  * @return WGS84 coordinate in degrees
  */
-//FIXME handle more syntaxes:
-//  N62 23 37.00
-//  N 62 23 37.00
-//	N 58° 41.3862'  (degree, minute)
-//	N 58° 41' 23.17" (degree, minute, second)
 function gpsToWGS84($coord)	//XXX rename function
 {
-	$s_coord = explode(' ', trim($coord));
-	if (count($s_coord) != 3) return false;
+	$coord = str_replace('°', '', $coord);	//Degrees
+	$coord = str_replace('"', '', $coord);	//Minutes
+	$coord = str_replace("'", '', $coord);	//Seconds
+	$coord = trim($coord);
 
-	switch (substr($s_coord[2], -1)) {
+	if (!is_numeric(substr($coord, -1))) {
+		$dir = substr($coord, -1);
+		$coord = trim(substr($coord, 0, -1));
+	} else if (!is_numeric(substr($coord, 0, 1))) {
+		$dir = substr($coord, 0, 1);
+		$coord = trim(substr($coord, 1));
+	} else return false;
+
+	switch ($dir) {
 		case 'N': case 'E': $sign = 1; break;
 		case 'S': case 'W': $sign = -1; break;
 		default: return false;
 	}
 
-	$s_coord[2] = substr($s_coord[2], 0, -1);
+	$s_coord = explode(' ', $coord);
+	switch (count($s_coord)) {
+		case 3:
+			return round($sign * ($s_coord[0] + ($s_coord[1]/60) + ($s_coord[2]/3600)), 6);
 
-	return round($sign * ($s_coord[0] + ($s_coord[1]/60) + ($s_coord[2]/3600)), 6);
+		case 2:
+			return round($sign * ($s_coord[0] + ($s_coord[1]/60)), 6);
+	}
+	return false;
 }
 
 /**
