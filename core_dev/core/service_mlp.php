@@ -22,7 +22,7 @@
  * \author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-require_once('functions_gps.php');
+require_once('input_coordinates.php');
 
 define('MLP_POSITIONING', 'https://pooh.sun.telia.se:9221/LocationQueryService');
 define('MLP_INVITATION',  'https://pooh.sun.telia.se:9261/Service/Invitation');
