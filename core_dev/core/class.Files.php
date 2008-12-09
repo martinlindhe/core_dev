@@ -1105,9 +1105,8 @@ class Files
 	function getFilesByMediaType($fileType = 0, $ownerId = 0, $categoryId = 0, $mediaType = 0, $_limit = '', $_order = 'ASC')
 	{	//FIXME rename to getFiles(), remove old getFiles() & clean up parameter usage for getFiles() everywhere
 		global $db;
-		if (!is_numeric($fileType) || (!is_numeric($ownerId) || !is_array($ownerId)) || !is_numeric($categoryId) || !is_numeric($mediaType)) return false;
+		if (!is_numeric($fileType) || (!is_numeric($ownerId) && !is_array($ownerId)) || !is_numeric($categoryId) || !is_numeric($mediaType)) return false;
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
-
 		$q = 'SELECT * FROM tblFiles';
 		$q .= ' WHERE timeDeleted IS NULL';
 		if ($fileType) $q .= ' AND fileType='.$fileType;
