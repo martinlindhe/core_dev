@@ -6,13 +6,16 @@
  *
  * http://tools.ietf.org/html/rfc2616 - Hypertext Transfer Protocol -- HTTP/1.1
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 $config['http']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
 
 /**
  * Fetches header for given URL and returns it in a parsed array
+ *
+ * @param $url URL to request HTTP headers for
+ * @return array of parsed headers or false on error
  */
 function http_head($url)
 {
@@ -36,13 +39,13 @@ function http_head($url)
 
 	$fp = fsockopen($u['host'], $u['port'], $errno, $errstr, 30);
 	if (!$fp) {
-		echo "$errstr ($errno)<br />\n";
+		echo "$errstr ($errno)\n";
 		return false;
 	}
 
 	$query_header  = "HEAD ".$u['path'].(!empty($u['query']) ? '?'.$u['query'] : '')." HTTP/1.1\r\n";
 	$query_header .= "Host: ".$u['host']."\r\n";
-	$query_header .= "User-Agent: ".$config['http']['user_agent']."\r\n";
+	$query_header .= "User-Agent: ".$config['http']['user_agent']."\r\n";	//XXX: core_dev + version?
 	$query_header .= "Connection: close\r\n\r\n";
 	fwrite($fp, $query_header);
 
@@ -61,13 +64,16 @@ function http_head($url)
 }
 
 /**
- * Return the status code of given URL, or false on network error
- */
-function http_status($url)
+ * Fetch HTTP status code of given URL
+ *
+ * @param $p is a URL or an array from http_head()
+ * @return HTTP status code, or false if none was found
+  */
+function http_status($p)
 {
-	$headers = http_head($url);
+	if (!is_array($p)) $p = http_head($p);
 
-	foreach ($headers as $h) {
+	foreach ($p as $h) {
 		switch (substr($h, 0, 9)) {
 			case 'HTTP/1.0 ':
 			case 'HTTP/1.1 ':
@@ -78,14 +84,16 @@ function http_status($url)
 }
 
 /**
- * Returns the Last-Modified field from given URL head
- * as a unix timestamp, or false if none exists.
+ * Returns the Last-Modified field from given URL
+ *
+ * @param $p is a URL or an array from http_head()
+ * @return a unix timestamp, or false if none was found
  */
-function http_last_modified($url)
+function http_last_modified($p)
 {
-	$headers = http_head($url);
+	if (!is_array($p)) $p = http_head($p);
 
-	foreach ($headers as $h) {
+	foreach ($p as $h) {
 		$col = explode(': ', $h);
 		switch ($col[0]) {
 			case 'Last-Modified':
@@ -93,6 +101,26 @@ function http_last_modified($url)
 		}
 	}
 	return false;
+}
+
+/**
+ * Returns the Content-Length field from given URL
+ *
+ * @param $p is a URL or an array from http_head()
+ * @return content length
+ */
+function http_content_length($p)
+{
+	if (!is_array($p)) $p = http_head($p);
+
+	foreach ($p as $h) {
+		$col = explode(': ', $h);
+		switch ($col[0]) {
+			case 'Content-Length':
+				return intval($col[1]);
+		}
+	}
+	return 0;
 }
 
 ?>
