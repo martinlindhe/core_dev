@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //TODO: rename config variables
@@ -397,28 +397,4 @@ function ValidEmail($email)
 	return false;
 }
 
-/**
- * Returns true if $_mobil is a valid swedish cellphone number
- */
-function ValidMobilNr($_mobil)
-{
-	$_mobil = str_replace('-', '', $_mobil);
-	$_mobil = str_replace(' ', '', $_mobil);
-
-	$prefix = substr($_mobil, 0, 3);
-	$number = substr($_mobil, 3);
-
-	$fake_numbers = array('1234567', '0000000', '1111111', '2222222');
-	if (in_array($number, $fake_numbers)) return false;
-
-	switch ($prefix) {
-		case '070':
-		case '073':
-		case '075':
-		case '076':
-			return true;
-	}
-
-	return false;
-}
 ?>

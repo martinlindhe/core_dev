@@ -4,6 +4,9 @@
  *
  * OpenID 2.0 implementation
  *
+ * Currently supports OpenID authentication through the following providers:
+ * google.com
+ *
  *
  * Google OpenID:
  * http://code.google.com/apis/accounts/docs/OpenID.html
@@ -18,7 +21,7 @@
  * http://openid.net/specs/openid-authentication-2_0.html
  * http://openid.net/specs/openid-attribute-exchange-1_0.html
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**
@@ -31,9 +34,12 @@
  * TODO - READ THE FOLLOWING:
  * http://www.plaxo.com/api/openid_recipe
  *
+ * TODO: facebook openid
  *
  * TODO: microsoft OpenId (will be available in 2009)
  * TODO: myspace openid (not yet available)
+ *
+ * TODO: do AOL have openid too?
  */
 
 //STATUS: this code is working but needs a cleanup
