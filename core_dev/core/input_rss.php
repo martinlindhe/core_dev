@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+//TODO: identify and handle atom feeds transparently
+
 class rss_input
 {
 	var $inside_item = false;
