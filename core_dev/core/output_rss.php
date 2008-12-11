@@ -11,6 +11,7 @@
  */
 
 //TODO: verify that the outputted feeds & mime types actually works with some popular news readers & feed aggregators
+//TODO: maybe need to use <![CDATA[text here]]> everywhere too to embed HTML. verify with html entries
 
 require_once('functions_time.php');	//for date3339() and date882()
 
