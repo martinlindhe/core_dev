@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Simple RSS feed renderer
+ * Simple news feed renderer with support for RSS 2.0 and Atom 1.0
  *
  * RSS 2.0:  http://www.rssboard.org/rss-specification
  * Atom 1.0: http://www.atomenabled.org/developers/syndication
@@ -12,14 +12,12 @@
 
 require_once('functions_time.php');	//for date3339()
 
-//TODO: rss 1.0 output
-
 class rss_output
 {
 	var $entries = array();
 
 	var $ttl = 15;	///< time to live, in minutes
-	var $title = 'Untitled RSS 2.0 feed';
+	var $title = 'Untitled news feed';
 	var $desc = '';
 	var $link = '';
 
@@ -75,14 +73,6 @@ class rss_output
 	}
 
 	/**
-	 * Renders the feed in RSS 1.0 format
-	 */
-	function renderRSS1()
-	{
-		//XXX implement
-	}
-
-	/**
 	 * Renders the feed in RSS 2.0 format
 	 */
 	function renderRSS2()
@@ -128,9 +118,6 @@ class rss_output
 			case 'atom':
 				return $this->renderATOM();
 
-			case 'rss1':
-				return $this->renderRSS1();
-
 			case 'rss2':
 				return $this->renderRSS2();
 		}
@@ -147,7 +134,6 @@ class rss_output
 				header('Content-type: application/atom+xml');
 				break;
 
-			case 'rss1':
 			case 'rss2':
 				header('Content-type: application/rss+xml');
 				break;
