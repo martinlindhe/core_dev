@@ -2,14 +2,14 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 /**
  * Converts a SQL timestamp to a text string representing how long ago this timestamp occured
  *
- * \param $sql_time SQL timestamp
- * \return text string representing how long ago this timestamp occured
+ * @param $sql_time SQL timestamp
+ * @return text string representing how long ago this timestamp occured
  */
 function ago($sql_time)
 {
@@ -31,8 +31,8 @@ function ago($sql_time)
  * Returns the age (in years)
  * Does not take into account timezone offset differences
  *
- * \param $sql_time sql timestamp representing day of birth
- * \return number of years old
+ * @param $sql_time sql timestamp representing day of birth
+ * @return number of years old
  */
 function age($sql_time)
 {
@@ -45,10 +45,10 @@ function age($sql_time)
 /**
  * Calculates difference between two dates
  *
- * \param $t1 oldest timestamp (or datetime)
- * \param $t2 newer timestamp (or datetime)
- * \param $precision how exact? (year,month,day,hour,minute,second)
- * \param $arr set to true to return result as a array with precision as index, default is text string
+ * @param $t1 oldest timestamp (or datetime)
+ * @param $t2 newer timestamp (or datetime)
+ * @param $precision how exact? (year,month,day,hour,minute,second)
+ * @param $arr set to true to return result as a array with precision as index, default is text string
  */
 function date_diff($t1, $t2, $precision = 6, $arr = false)
 {
@@ -88,8 +88,8 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
 /**
  * Converts a timespan into human-readable text
  *
- * \param $seconds number of seconds to present
- * \return returns a sting like: 4h10m3s
+ * @param $seconds number of seconds to present
+ * @return returns a sting like: 4h10m3s
  */
 function shortTimePeriod($seconds)
 {
@@ -137,24 +137,24 @@ function shortTimePeriod($seconds)
 /**
  * Return the current time in NTP timestamp format, or converts Unix timestamp to NTP timestamp
  *
- * \param $timestamp UNIX timestamp
- * \return timestamp in NTP format
+ * @param $ts UNIX timestamp
+ * @return timestamp in NTP format
  */
-function ntptime($timestamp = 0)
+function ntptime($ts = 0)
 {
-	if (!$timestamp) $timestamp = time();
-	return 2208988800 + $timestamp;
+	if (!$ts) $ts = time();
+	return 2208988800 + $ts;
 }
 
 /**
  * Converts a ntp timestamp to a unix timestamp
  *
- * \param $timestamp ntp timestamp
- * \return timestamp in UNIX format
+ * @param $ts ntp timestamp
+ * @return timestamp in UNIX format
  */
-function ntptime_to_unixtime($timestamp)
+function ntptime_to_unixtime($ts)
 {
-	return $timestamp - 2208988800;
+	return $ts - 2208988800;
 }
 
 /**
