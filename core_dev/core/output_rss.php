@@ -10,7 +10,9 @@
  * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-require_once('functions_time.php');	//for date3339()
+//TODO: verify that the outputted feeds & mime types actually works with some popular news readers & feed aggregators
+
+require_once('functions_time.php');	//for date3339() and date882()
 
 class rss_output
 {
