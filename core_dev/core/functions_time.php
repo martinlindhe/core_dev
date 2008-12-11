@@ -156,4 +156,34 @@ function ntptime_to_unixtime($timestamp)
 {
 	return $timestamp - 2208988800;
 }
+
+/**
+ * Formats timestamp according to RFC 3339
+ */
+function date3339($ts = 0)
+{
+	if (!$ts) $ts = time();
+	if (!is_numeric($ts)) $ts = strtotime($ts);
+
+	$date = date('Y-m-d\TH:i:s', $ts);
+
+	$matches = array();
+	if (preg_match('/^([\-+])(\d{2})(\d{2})$/', date('O', $ts), $matches)) {
+		$date .= $matches[1].$matches[2].':'.$matches[3];
+	} else {
+		$date .= 'Z';
+	}
+	return $date;
+}
+
+/**
+ * Formats timestamp according to RFC 882
+ */
+function date882($ts = 0)
+{
+	if (!$ts) $ts = time();
+	if (!is_numeric($ts)) $ts = strtotime($ts);
+
+	return date('r', $ts);	//XXX actually RFC 2882 (supersedes RFC 882)
+}
 ?>

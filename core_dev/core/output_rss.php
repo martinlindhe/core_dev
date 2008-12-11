@@ -2,16 +2,17 @@
 /**
  * $Id$
  *
- * Creates a RSS feed from a array
+ * Simple RSS feed renderer
  *
- * RSS 2.0: http://www.rssboard.org/rss-specification
+ * RSS 2.0:  http://www.rssboard.org/rss-specification
+ * Atom 1.0: http://www.atomenabled.org/developers/syndication
  *
  * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
+require_once('functions_time.php');	//for date3339()
 
 //TODO: rss 1.0 output
-//TODO: atom output
 
 class rss_output
 {
@@ -40,16 +41,50 @@ class rss_output
 		$this->entries[] = $entry;
 	}
 
+	/**
+	 * Renders the feed in Atom 1.0 format
+	 */
 	function renderATOM()
 	{
-		//XXX implement
+		$res =
+		'<?xml version="1.0" encoding="UTF-8"?>'.
+		'<feed xmlns="http://www.w3.org/2005/Atom">'.
+			//required fields:
+			'<id>'.$this->link.'</id>'.
+			'<title>'.$this->title.'</title>'.
+			'<updated>2003-12-13T18:30:02Z</updated>'.
+			//optional fields:
+			'<link href="'.$this->link.'"/>'.
+			'<generator>core_dev</generator>';	//XXX version
+
+		foreach ($this->entries as $entry) {
+			$res .=
+			'<entry>'.
+				//required fields:
+				'<id>'.trim($entry['link']).'</id>'.
+				'<title>'.trim($entry['title']).'</title>'.
+				'<updated>'.date3339($entry['pubdate']).'</updated>'.	//RFC 3339 timestamp
+				//optional fields:
+				'<link href="'.trim($entry['link']).'"/>'.
+				'<summary>'.trim($entry['desc']).'</summary>'.
+			'</entry>';
+		}
+		$res .=
+		'</feed>';
+		return $res;
 	}
 
+	/**
+	 * Renders the feed in RSS 1.0 format
+	 */
 	function renderRSS1()
 	{
 		//XXX implement
 	}
 
+	/**
+	 * Renders the feed in RSS 2.0 format
+	 */
 	function renderRSS2()
 	{
 		$res =
@@ -68,11 +103,11 @@ class rss_output
 			$res .=
 			'<item>'.
 				//required fields:
-				'<title>'.$entry['title'].'</title>'.
-				'<link>'.$entry['link'].'</link>'.
-				'<description>'.$entry['desc'].'</description>'.
+				'<title>'.trim($entry['title']).'</title>'.
+				'<link>'.trim($entry['link']).'</link>'.
+				'<description>'.trim($entry['desc']).'</description>'.
 				//optional fields:
-				'<pubDate>'.date('r', $entry['pubdate']).'</pubDate>'.
+				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.	//RFC 822 timestamp
 				//<enclosure> is used to attach a media object to the feed
 			'</item>';
 		}
@@ -107,7 +142,17 @@ class rss_output
 	 */
 	function output($format = 'rss2')
 	{
-		//header()   application/rss+xml
+		switch ($format) {
+			case 'atom':
+				header('Content-type: application/atom+xml');
+				break;
+
+			case 'rss1':
+			case 'rss2':
+				header('Content-type: application/rss+xml');
+				break;
+		}
+
 		echo $this->render($format);
 	}
 }
