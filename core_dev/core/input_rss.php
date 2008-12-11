@@ -2,15 +2,18 @@
 /**
  * $Id$
  *
+ * Simple RSS parser
+ *
  * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 class rss_input
 {
-	var $inside_item;
-	var $current_tag;
+	var $inside_item = false;
+	var $current_tag = '';
 	var $link, $title, $desc, $pubDate;
 	var $entries = array();
+	var $callback = '';
 
 	function startElement($parser, $name, $attrs = '')
 	{
@@ -22,12 +25,14 @@ class rss_input
 	function endElement($parser, $tagName, $attrs = '')
 	{
 		if ($tagName == 'ITEM') {
-			$this->entries[] = array(
+			$row = array(
 				'link' => trim($this->link),
 				'title' => html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8'),
 				'desc' => html_entity_decode(trim($this->desc), ENT_QUOTES, 'UTF-8'),
 				'pubdate' => strtotime(trim($this->pubDate))
 			);
+			$this->entries[] = $row;
+			if ($this->callback) call_user_func($this->callback, $row);
 
 			$this->link = '';
 			$this->title = '';
@@ -59,12 +64,14 @@ class rss_input
 		}
 	}
 
-	function parse($data)
+	function parse($data, $callback = '')
 	{
 		$parser = xml_parser_create();
 		xml_set_object($parser, $this);
 		xml_set_element_handler($parser, 'startElement', 'endElement');
 		xml_set_character_data_handler($parser, 'characterData');
+
+		if (function_exists($callback)) $this->callback = $callback;
 
 		if (!xml_parse($parser, $data, true)) {
 			echo "input_rss XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
@@ -73,8 +80,6 @@ class rss_input
 
 		return $this->entries;
 	}
-
 }
-
 
 ?>
