@@ -24,8 +24,8 @@ class rss_input
 		if ($tagName == 'ITEM') {
 			$this->entries[] = array(
 				'link' => trim($this->link),
-				'title' => trim($this->title),
-				'desc' => trim($this->desc),
+				'title' => html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8'),
+				'desc' => html_entity_decode(trim($this->desc), ENT_QUOTES, 'UTF-8'),
 				'pubdate' => strtotime(trim($this->pubDate))
 			);
 
