@@ -16,13 +16,13 @@
  * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-//TODO: set background color
 //TODO: define transpacency on polygons
 
 class svg
 {
 	var $polygons = array();
 	var $width, $height;
+	var $bgcolor = false;	///< background color
 
 	function __construct($width = 100, $height = 100)
 	{
@@ -44,6 +44,11 @@ class svg
 		}
 	}
 
+	function setBackground($col)
+	{
+		$this->bgcolor = $col;
+	}
+
 	function render()
 	{
 		$res =
@@ -52,11 +57,18 @@ class svg
 		'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"'.
 			' version="1.1" width="'.$this->width.'px" height="'.$this->height.'px" viewBox="0 0 '.$this->width.' '.$this->height.'">';
 
+		//SVG has a transparent background by default. simulate background color with a filled rectangle
+		if ($this->bgcolor !== false) {
+			$res .=
+			'<rect x="0" y="0" width="'.$this->width.'" height="'.$this->height.'" fill="'.sprintf('%06x', $this->bgcolor).'"/>';
+		}
+
+//fill-opacity:0.2; stroke-opacity:0.8
 		foreach ($this->polygons as $poly) {
 			$res .=
-			'<polygon stroke-width="1"'.
+			'<polygon'.
 				' fill="#'.sprintf('%06x', $poly['color']).'"'.
-				' stroke="#'.sprintf('%06x', $poly['border']).'"'.
+				(!empty($poly['border']) ? ' stroke-width="1" stroke="#'.sprintf('%06x', $poly['border']).'"' : '').
 				' points="';
 			for ($i=0; $i<count($poly['coords']); $i+=2) {
 				$res .= $poly['coords'][$i].','.$poly['coords'][$i+1];
