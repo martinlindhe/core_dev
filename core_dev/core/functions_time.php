@@ -120,7 +120,7 @@ function shortTimePeriod($seconds)
 	$seconds -= ($a*60)*60;
 
 	//minutes
-	$a = date('i',$seconds)-0; //translate from 09 to 9 quickly ;)
+	$a = date('i',$seconds)-0; //XXX ugly hack, translate from 09 to 9 quickly ;)
 	if ($a>0) $retval .= $a.'m';
 	$seconds -= $a*60;
 
