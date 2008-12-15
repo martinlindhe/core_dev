@@ -16,6 +16,8 @@ require_once('functions_userdata.php');	//for showRequiredUserdataFields()
 
 class Auth_Standard extends Auth_Base
 {
+	var $driver = 'default';
+
 	/**
 	 * Register new user in the database
 	 *

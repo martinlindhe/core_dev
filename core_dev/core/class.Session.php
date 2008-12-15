@@ -15,7 +15,6 @@
 
 require_once('functions_ip.php');
 require_once('atom_settings.php');	//for storing userdata
-require_once('atom_blocks.php');	//for isBlocked()
 require_once('atom_logging.php');	//for logEntry()
 
 define('USERLEVEL_NORMAL',		0);
@@ -29,8 +28,6 @@ class Session
 	private $timeout = 86400;				///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
 	public $online_timeout = 1800;			///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 	//todo: make online_timeout configurable
-	private $check_ip = true;				///< client will be logged out if client ip is changed during the session
-	private $check_useragent = false;		///< keeps track if the client user agent string changes during the session
 
 	public $start_page = 'index.php';		///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
 	public $logged_out_start_page = 'index.php';
@@ -38,7 +35,7 @@ class Session
 
 	//Aliases of $_SESSION[] variables
 	public $error;					///< last error message
-	public $ip;						///< IP of current user
+	public $ip;						///< IP of user
 	public $user_agent;				///< current user's UserAgent string
 	public $id;						///< current user's user ID
 	public $username;				///< username of current user
@@ -74,8 +71,6 @@ class Session
 
 		if (isset($conf['name'])) $this->session_name = $conf['name'];
 		if (isset($conf['timeout'])) $this->timeout = $conf['timeout'];
-		if (isset($conf['check_ip'])) $this->check_ip = $conf['check_ip'];
-		if (isset($conf['check_useragent'])) $this->check_useragent = $conf['check_useragent'];
 		if (isset($conf['start_page'])) $this->start_page = $conf['start_page'];
 		if (isset($conf['error_page'])) $this->error_page = $conf['error_page'];
 		if (isset($conf['allow_themes'])) $this->allow_themes = $conf['allow_themes'];
@@ -87,7 +82,6 @@ class Session
 		if (!isset($_SESSION['started']) || !$_SESSION['started']) $_SESSION['started'] = time();
 		if (!isset($_SESSION['error'])) $_SESSION['error'] = '';
 		if (!isset($_SESSION['ip'])) $_SESSION['ip'] = 0;
-		if (!isset($_SESSION['user_agent'])) $_SESSION['user_agent'] = '';
 		if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
 		if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
 		if (!isset($_SESSION['mode'])) $_SESSION['mode'] = 0;
@@ -101,7 +95,6 @@ class Session
 		$this->started = &$_SESSION['started'];
 		$this->error = &$_SESSION['error'];
 		$this->ip = &$_SESSION['ip'];
-		$this->user_agent = &$_SESSION['user_agent'];
 		$this->id = &$_SESSION['id'];	//if id is set, also means that the user is logged in
 		$this->username = &$_SESSION['username'];
 		$this->mode = &$_SESSION['mode'];
@@ -112,14 +105,9 @@ class Session
 		$this->theme = &$_SESSION['theme'];
 		$this->referer = &$_SESSION['referer'];
 
-		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {
-			$ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
-			if (isBlocked(BLOCK_IP, $ip)) {
-				die('You have been blocked from this site.');
-			}
-			$this->ip = $ip;
+		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {	//FIXME map to $this->auth->ip
+			$this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		}
-		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
 		$this->handleSessionEvents();
 	}
@@ -184,30 +172,10 @@ class Session
 		//force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
 		if (!empty($config['no_session']) || !$this->id) return;
 
-		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
-		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
-			$this->error = t('Client IP changed.');
-			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
-			$this->endSession();
-			$this->errorPage();
-		}
-
 		//Logged in: Check user activity - log out inactive user
 		if ($this->lastActive < (time()-$this->timeout)) {
 			$this->error = t('Inactivity timeout.');
 			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')', LOGLEVEL_NOTICE);
-			$this->endSession();
-			$this->errorPage();
-		}
-
-		//Logged in: Check if client user agent string changed, after active check to avoid useragent change log on auto browser upgrade (Firefox)
-		if ($this->check_useragent && $this->user_agent && ($this->user_agent != $_SERVER['HTTP_USER_AGENT'])) {
-			//FIXME this occured once for a IE7 user while using embedded WMP11 + core_dev:
-			//	"Client user agent string changed from "Windows-Media-Player/11.0.5721.5145" to "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)""
-			//	also, this could be triggered if user is logged in & Firefox decides to auto-upgrade and restore previous tabs and sessions after restart
-
-			$this->error = t('Client user agent string changed.');
-			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
 			$this->endSession();
 			$this->errorPage();
 		}
@@ -281,7 +249,8 @@ class Session
 
 		echo 'Session name: '.$this->session_name.'<br/>';
 		echo 'Current IP: '.GeoIP_to_IPv4($this->ip).'<br/>';
-		echo 'User Agent: '.$this->user_agent.'<br/>';
+		echo 'Authentication method: '.$this->auth->driver.'<br/>';
+		echo 'User Agent: '.$this->auth->user_agent.'<br/>';
 		echo 'Session timeout: '.shortTimePeriod($this->timeout).'<br/>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
 		echo 'Start page: '.$config['app']['web_root'].$this->start_page.'<br/>';

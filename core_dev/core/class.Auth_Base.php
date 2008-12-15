@@ -11,9 +11,15 @@
 
 require_once('atom_activation.php');		//for activation
 require_once('ext/class.phpmailer.php');	//for outgoing mail. FIXME look for bsd-compatible mailer
+require_once('functions_ip.php');			//for IPv4_to_GeoIP()
+require_once('atom_blocks.php');			//for isBlocked()
 
 abstract class Auth_Base
 {
+	private $check_ip = true;				///< client will be logged out if client ip is changed during the session
+	private $check_useragent = false;		///< keeps track if the client user agent string changes during the session
+	private $ip = false;					///< IP of user
+
 	public $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	///< used to further encode sha1 passwords, to make rainbow table attacks harder
 
 	public $allow_login = true;				///< set to false to only let superadmins log in to the site
@@ -63,28 +69,45 @@ The link will expire in __EXPIRETIME__";
 	 *
 	 * @param $auth_conf auth configuration
 	 */
-	function __construct(array $auth_conf = array())
+	function __construct(array $conf = array())
 	{
 		global $db;
 
-		if (isset($auth_conf['sha1_key'])) $this->sha1_key = $auth_conf['sha1_key'];
-		if (isset($auth_conf['allow_login'])) $this->allow_login = $auth_conf['allow_login'];
-		if (isset($auth_conf['allow_registration'])) $this->allow_registration = $auth_conf['allow_registration'];
-		if (isset($auth_conf['reserved_usercheck'])) $this->reserved_usercheck = $auth_conf['reserved_usercheck'];
-		if (isset($auth_conf['userdata'])) $this->userdata = $auth_conf['userdata'];
-		if (isset($auth_conf['mail_activate'])) $this->mail_activate = $auth_conf['mail_activate'];
+		if (!isset($_SESSION['user_agent'])) $_SESSION['user_agent'] = '';
 
-		if (isset($auth_conf['minlen_username'])) $this->minlen_username = $auth_conf['minlen_username'];
-		if (isset($auth_conf['minlen_password'])) $this->minlen_password = $auth_conf['minlen_password'];
+		if (isset($conf['check_ip'])) $this->check_ip = $conf['check_ip'];
+		if (isset($conf['check_useragent'])) $this->check_useragent = $conf['check_useragent'];
 
-		if (isset($auth_conf['smtp_host'])) $this->smtp_host = $auth_conf['smtp_host'];
-		if (isset($auth_conf['smtp_username'])) $this->smtp_username = $auth_conf['smtp_username'];
-		if (isset($auth_conf['smtp_password'])) $this->smtp_password = $auth_conf['smtp_password'];
-		if (isset($auth_conf['mail_from'])) $this->mail_from = $auth_conf['mail_from'];
-		if (isset($auth_conf['mail_from_name'])) $this->mail_from_name = $auth_conf['mail_from_name'];
+		if (isset($conf['sha1_key'])) $this->sha1_key = $conf['sha1_key'];
+		if (isset($conf['allow_login'])) $this->allow_login = $conf['allow_login'];
+		if (isset($conf['allow_registration'])) $this->allow_registration = $conf['allow_registration'];
+		if (isset($conf['reserved_usercheck'])) $this->reserved_usercheck = $conf['reserved_usercheck'];
+		if (isset($conf['userdata'])) $this->userdata = $conf['userdata'];
+		if (isset($conf['mail_activate'])) $this->mail_activate = $conf['mail_activate'];
 
-		if (isset($auth_conf['mail_activate_msg'])) $this->mail_activate_msg = $auth_conf['mail_activate_msg'];
-		if (isset($auth_conf['mail_password_msg'])) $this->mail_password_msg = $auth_conf['mail_password_msg'];
+		if (isset($conf['minlen_username'])) $this->minlen_username = $conf['minlen_username'];
+		if (isset($conf['minlen_password'])) $this->minlen_password = $conf['minlen_password'];
+
+		if (isset($conf['smtp_host'])) $this->smtp_host = $conf['smtp_host'];
+		if (isset($conf['smtp_username'])) $this->smtp_username = $conf['smtp_username'];
+		if (isset($conf['smtp_password'])) $this->smtp_password = $conf['smtp_password'];
+		if (isset($conf['mail_from'])) $this->mail_from = $conf['mail_from'];
+		if (isset($conf['mail_from_name'])) $this->mail_from_name = $conf['mail_from_name'];
+
+		if (isset($conf['mail_activate_msg'])) $this->mail_activate_msg = $conf['mail_activate_msg'];
+		if (isset($conf['mail_password_msg'])) $this->mail_password_msg = $conf['mail_password_msg'];
+
+		$this->ip = &$_SESSION['ip'];
+		$this->user_agent = &$_SESSION['user_agent'];
+
+		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {	//FIXME move ip check to auth_default
+			$ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+			if (isBlocked(BLOCK_IP, $ip)) {
+				die('You have been blocked from this site.');
+			}
+			$this->ip = $ip;
+		}
+		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
 		$this->handleAuthEvents();
 	}
@@ -126,6 +149,14 @@ The link will expire in __EXPIRETIME__";
 	{
 		global $config, $session;
 
+		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
+		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+			$this->error = t('Client IP changed.');
+			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
+			$this->endSession();
+			$this->errorPage();
+		}
+
 		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
 		if (!$session->id) {
 			if (!empty($_POST['login_usr']) && isset($_POST['login_pwd']) && $this->login($_POST['login_usr'], $_POST['login_pwd'])) {
@@ -153,6 +184,19 @@ The link will expire in __EXPIRETIME__";
 			} else {
 				$session->error = t('Registration failed').', '.$check;
 			}
+		}
+
+		//Check if client user agent string changed
+		if ($this->check_useragent && $this->user_agent != $_SERVER['HTTP_USER_AGENT']) {
+			//FIXME this breaks when Firefox autoupdates & restarts
+			//FIXME this occured once for a IE7 user while using embedded WMP11 + core_dev:
+			//	"Client user agent string changed from "Windows-Media-Player/11.0.5721.5145" to "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)""
+			//	also, this could be triggered if user is logged in & Firefox decides to auto-upgrade and restore previous tabs and sessions after restart
+
+			$this->error = t('Client user agent string changed.');
+			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
+			$this->endSession();
+			$this->errorPage();
 		}
 	}
 
