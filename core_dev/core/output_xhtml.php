@@ -44,7 +44,7 @@ function createXHTMLHeader()
 	if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
 	else if (!empty($config['core']['web_root'])) $theme_dir = $config['core']['web_root'].'css/themes/';
 
-	if (!empty($session) && $theme_dir) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$session->theme.'"/>';
+	if (!empty($session) && $theme_dir) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$session->sess->theme.'"/>';
 
 	if ($meta_rss) {
 		foreach ($meta_rss as $feed) {

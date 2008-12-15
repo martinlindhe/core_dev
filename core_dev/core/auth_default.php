@@ -2,21 +2,96 @@
 /**
  * $Id$
  *
- * Standard authentication module. Uses core_dev's own tblUsers
+ * Default authentication class. Uses core_dev's own tblUsers
  *
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('class.Auth_Base.php');
+require_once('auth_base.php');
 require_once('class.Users.php');
 
 require_once('atom_moderation.php');	//for checking if username is reserved on user registration
 require_once('atom_events.php');		//for event logging
 require_once('functions_userdata.php');	//for showRequiredUserdataFields()
 
-class Auth_Standard extends Auth_Base
+class auth_default extends auth_base
 {
 	var $driver = 'default';
+	var $db = false;	///< points to $db driver to use
+	var $error = '';	///< contains last error message, if any
+
+	private $check_ip = true;				///< client will be logged out if client ip is changed during the session
+	private $check_useragent = false;		///< keeps track if the client user agent string changes during the session
+	private $ip = false;					///< IP of user
+
+	function __construct($db = false, $conf = array())
+	{
+		$this->db = &$db;
+
+		if (!isset($_SESSION['user_agent'])) $_SESSION['user_agent'] = '';
+
+		$this->ip = &$_SESSION['ip'];
+		$this->user_agent = &$_SESSION['user_agent'];
+
+		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {	//FIXME move ip check to auth_default
+			$ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+			if (isBlocked(BLOCK_IP, $ip)) {
+				die('You have been blocked from this site.');
+			}
+			$this->ip = $ip;
+		}
+		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+	}
+
+	/**
+	 * Handles login, logout & register user requests
+	 */
+	function handleAuthEvents($session)
+	{
+		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
+		if (!$session->id) {
+			if (!empty($_POST['login_usr']) && isset($_POST['login_pwd']) && $this->login($_POST['login_usr'], $_POST['login_pwd'])) {
+				$session->startPage();
+			}
+		}
+
+		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
+		if ($this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+			$this->error = t('Client IP changed.');
+			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
+			$this->endSession();
+			$this->errorPage();
+		}
+
+		//Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
+		if (($this->allow_registration || !Users::cnt()) && !$session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
+			$preId = 0;
+			if (!empty($_POST['preId']) && is_numeric($_POST['preId'])) $preId = $_POST['preId'];
+			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL, $preId);
+			if (is_numeric($check)) {
+				if ($this->mail_activate) {
+					$this->sendActivationMail($check);
+				} else {
+					$this->login($_POST['register_usr'], $_POST['register_pwd']);
+				}
+			} else {
+				$session->error = t('Registration failed').', '.$check;
+			}
+		}
+
+		//Check if client user agent string changed
+		if ($this->check_useragent && $this->user_agent != $_SERVER['HTTP_USER_AGENT']) {
+			//FIXME this breaks when Firefox autoupdates & restarts
+			//FIXME this occured once for a IE7 user while using embedded WMP11 + core_dev:
+			//	"Client user agent string changed from "Windows-Media-Player/11.0.5721.5145" to "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)""
+			//	also, this could be triggered if user is logged in & Firefox decides to auto-upgrade and restore previous tabs and sessions after restart
+
+			$this->error = t('Client user agent string changed.');
+			$this->log('Client user agent string changed from "'.$this->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
+			$this->endSession();
+			$this->errorPage();
+		}
+	}
 
 	/**
 	 * Register new user in the database
@@ -30,7 +105,7 @@ class Auth_Standard extends Auth_Base
 	 */
 	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
 	{
-		global $db, $config, $session;
+		global $config, $session;
 		if (!is_numeric($_mode) || !is_numeric($newUserId)) return false;
 
 		if ($username != trim($username)) return t('Username contains invalid spaces');
@@ -64,10 +139,10 @@ class Auth_Standard extends Auth_Base
 
 		if (!$newUserId) {
 			$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
-			$newUserId = $db->insert($q);
+			$newUserId = $this->db->insert($q);
 		} else {
 			$q = 'UPDATE tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW() WHERE userId='.$newUserId;
-			$db->update($q);
+			$this->db->update($q);
 		}
 
 		Users::setPassword($newUserId, $password1, $password1, $this->sha1_key);
@@ -87,91 +162,8 @@ class Auth_Standard extends Auth_Base
 	 */
 	function reserveUser()
 	{
-		global $db;
 		$q = 'INSERT INTO tblUsers SET userMode=0';
-		return $db->insert($q);
-	}
-
-	/**
-	 * Handles logins
-	 *
-	 * @param $username
-	 * @param $password
-	 * @return true on success
-	 */
-	function login($username, $password)
-	{
-		global $db, $session;
-
-		$data = $this->validLogin($username, $password);
-
-		if (!$data) {
-			$session->error = t('Login failed');
-			$session->log('Failed login attempt: username '.$username, LOGLEVEL_WARNING);
-			return false;
-		}
-
-		if ($data['userMode'] != USERLEVEL_SUPERADMIN) {
-			if ($this->mail_activate && !Users::isActivated($data['userId'])) {
-				$session->error = t('This account has not yet been activated.');
-				return false;
-			}
-
-			if (!$this->allow_login) {
-				$session->error = t('Logins currently not allowed.');
-				return false;
-			}
-
-			$blocked = isBlocked(BLOCK_USERID, $data['userId']);
-			if ($blocked) {
-				$session->error = t('Account blocked');
-				$session->log('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
-				return false;
-			}
-		}
-
-		$session->startSession($data['userId'], $data['userName'], $data['userMode']);
-
-		//Update last login time
-		$db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$session->id);
-		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$session->id.', IP='.$session->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
-
-		addEvent(EVENT_USER_LOGIN, 0, $session->id);
-
-		return true;
-	}
-
-	/**
-	 * Logs out the user
-	 */
-	function logout()
-	{
-		global $db, $session;
-		$db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$session->id);
-
-		addEvent(EVENT_USER_LOGOUT, 0, $session->id);
-		$session->endSession();
-	}
-
-	/**
-	 * Checks if this is a valid login
-	 *
-	 * @return if valid login, return user data, else false
-	 */
-	function validLogin($username, $password)
-	{
-		global $db;
-
-		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($username).'" AND timeDeleted IS NULL';
-		$id = $db->getOneItem($q);
-		if (!$id) return false;
-
-		$enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
-
- 		$q = 'SELECT * FROM tblUsers WHERE userId='.$id.' AND userPass="'.$enc_password.'"';
- 		$data = $db->getOneRow($q);
-
-		return $data;
+		return $this->db->insert($q);
 	}
 
 	/**
@@ -210,9 +202,9 @@ class Auth_Standard extends Auth_Base
 			$tab = 'register';
 		}
 
-		if ($session->error) {
-			echo '<div class="critical">'.$session->error.'</div><br/>';
-			$session->error = ''; //remove error message once it has been displayed
+		if ($this->error) {
+			echo '<div class="critical">'.$this->error.'</div><br/>';
+			$this->error = ''; //remove error message once it has been displayed
 		}
 
 		echo '<div id="login_form_layer"'.($tab!='login'?' style="display: none;"':'').'>';

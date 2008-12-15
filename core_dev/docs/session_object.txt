@@ -33,6 +33,7 @@ $session->load / save / delete - the settings handler:
 				default - stores user settings in tblSettings
 
 
+
 XXX eventually a class for fine-grained user access? default implements the normal/admin/superadmin thing?
 
 
