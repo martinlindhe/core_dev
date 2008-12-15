@@ -114,8 +114,8 @@ function getCategoryName($_type, $_id)
 /**
  * Returns the permissions of the specified category
  *
- * \param $_type type of category
- * \param $_id category id
+ * @param $_type type of category
+ * @param $_id category id
  */
 function getCategoryPermissions($_type, $_id)
 {
