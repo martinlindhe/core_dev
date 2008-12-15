@@ -7,7 +7,7 @@
 
 require_once('atom_categories.php');	//for multi-choise userdata types
 require_once('functions_textformat.php');	//for ValidEmail()
-require_once('functions_validate_ssn.php');	//to validate swedish ssn's
+require_once('validate_ssn.php');	//to validate swedish ssn's
 require_once('class.ZipLocation.php');	//for location datatype
 
 /* Userdata field types */
