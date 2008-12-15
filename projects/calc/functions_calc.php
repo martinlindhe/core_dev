@@ -2,14 +2,14 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 /**
  * Calculates the expression & returns an array with the result
  *
- * \param $expr textual string representing math formula to solve
- * \return array with the resulting equations from the input
+ * @param $expr textual string representing math formula to solve
+ * @return array with the resulting equations from the input
  */
 function calcExpr($expr)
 {

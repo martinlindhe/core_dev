@@ -1,8 +1,6 @@
 <?php
 /**
  * Sample program to expose functions_validate_ssn.php features
- *
- * \author Martin Lindhe, 2007-2008
  */
 
 require_once('config.php');
@@ -10,7 +8,7 @@ require_once('config.php');
 $months = array('Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec');
 
 $_year = $_month = $_day = $_gender = 0;
-	
+
 if (!empty($_POST['year'])) $_year = $_POST['year'];
 if (!empty($_POST['month'])) $_month = $_POST['month'];
 if (!empty($_POST['day'])) $_day = $_POST['day'];
@@ -81,7 +79,7 @@ if (!empty($_POST['persnr'])) {
 }
 ?>
 	<br/>
-	Personnummret tillhör en 
+	Personnummret tillhör en
 	<input type="radio" name="chkgender" id="chkgender2" value="<?=SSN_GENDER_FEMALE?>"<?if($chkgender==SSN_GENDER_FEMALE) echo' checked="checked"';?>/>
 	<label for="chkgender2">Kvinna</label>
 	<input type="radio" name="chkgender" id="chkgender1" value="<?=SSN_GENDER_MALE?>"<?if($chkgender==SSN_GENDER_MALE) echo' checked="checked"';?>/>

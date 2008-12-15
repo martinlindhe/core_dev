@@ -1,8 +1,6 @@
 <?php
 /**
  * Sample program to expose functions_validate_cc.php features
- *
- * \author Martin Lindhe, 2007-2008
  */
 
 require_once('config.php');

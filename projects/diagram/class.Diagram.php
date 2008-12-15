@@ -4,7 +4,7 @@
  *
  * This file is part of core_dev. For licencing, see docs/LICENCE.BSD
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 class Diagram
@@ -121,7 +121,7 @@ class Diagram
 	/**
 	 * Draws the diagram based on the settings given
 	 *
-	 * \todo support built in ugly fonts, see functions_image.php: pngCenterText()
+	 * @todo support built in ugly fonts, see functions_image.php: pngCenterText()
 	 */
 	private function Render()
 	{

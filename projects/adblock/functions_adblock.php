@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 define('COMMENT_ADBLOCKRULE',	20);
@@ -163,7 +163,7 @@ function makeAdblockTypeSQL($types)
  * Returns a list of rules from the db. $types looks like this: "1,2,3"
  * no types = get full list
  *
- * \param $_limit $pager['limit']
+ * @param $_limit $pager['limit']
  */
 function searchAdblockRules($searchword, $types='', $_limit = '', $sortByTime = false)
 {
@@ -221,7 +221,7 @@ function getAdblockLatestAdditions($cnt)
  * POST param: type string
  * POST param:
  * GET param: type
- * \return true if download request was handled
+ * @return true if download request was handled
  */
 function handleAdblockDownloadRequest()
 {
