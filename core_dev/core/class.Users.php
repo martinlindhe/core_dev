@@ -4,10 +4,10 @@
  *
  * Users class
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_visits.php');
+require_once('atom_visits.php');		//for logVisit()
 require_once('functions_messages.php');	//for sendMessage()
 
 $config['user']['log_visitors'] = true;
@@ -51,10 +51,6 @@ class Users
 
 		$q  = 'SELECT ownerId FROM tblSettings WHERE settingName = '.$type.' AND ';
 		$q .= 'day(settingValue) = day("'.$date.'") AND month(settingValue) = month("'.$date.'")';
-/*
-		$q  = 'SELECT ownerId FROM tblSettings WHERE settingName = '.$type.' AND ';
-		$q .= 'day(settingValue) = day("2008-11-09") AND month(settingValue) = month("2008-11-09")';
-*/
  		return $db->getArray($q);
 	}
 
@@ -161,9 +157,9 @@ class Users
 	/**
 	 * Sets a new password for the user
 	 *
-	 * \param $_id user id
-	 * \param $_pwd1 password to set
-	 * \param $_pwd2 password to compare with (optional)
+	 * @param $_id user id
+	 * @param $_pwd1 password to set
+	 * @param $_pwd2 password to compare with (optional)
 	 */
 	function setPassword($_id, $_pwd1, $_pwd2 = '', $key = '')
 	{
@@ -274,9 +270,9 @@ class Users
 	/**
 	 * Admin function used by admin_list_users.php
 	 *
-	 * \param $_mode usermode
-	 * \param $_limit sql LIMIT (from makePager)
-	 * \param $_namefilter partial username matching
+	 * @param $_mode usermode
+	 * @param $_limit sql LIMIT (from makePager)
+	 * @param $_namefilter partial username matching
 	 */
 	function getUsers($_mode = 0, $_limit = '', $_namefilter = '')
 	{
@@ -436,7 +432,6 @@ class Users
 		$fileId = loadUserdataImage($id);
 		return showThumb($fileId, $alt, $w, $h);
 	}
-
 
 	/**
 	 * User's public presentation page
@@ -664,7 +659,7 @@ class Users
 	/**
 	 * Adds a entry in tblSettings marking this user account as activated
 	 *
-	 * \param $_id user id
+	 * @param $_id user id
 	 */
 	function activate($_id)
 	{
@@ -676,7 +671,7 @@ class Users
 	/**
 	 * Checks if user is activated, returns true/false
 	 *
-	 * \param $_id user id
+	 * @param $_id user id
 	 */
 	function isActivated($_id)
 	{
@@ -689,7 +684,7 @@ class Users
 	/**
 	 * Checks if user exists (and is not deleted), returns true/false
 	 *
-	 * \param $_id user id
+	 * @param $_id user id
 	 */
 	function exists($_id)
 	{
@@ -704,7 +699,7 @@ class Users
 	/**
 	 * Checks if user is online, returns true/false
 	 *
-	 * \param $_id user id
+	 * @param $_id user id
 	 */
 	function isOnline($_id)
 	{
@@ -712,9 +707,8 @@ class Users
 		if (!is_numeric($_id)) return false;
 
 		$q = 'SELECT userId FROM tblUsers WHERE userId = '.$_id.' AND timeDeleted IS NULL AND timeLastActive>=DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND) LIMIT 1';
-		if ($db->getOneItem($q)) {
-			return true;
-		}
+		if ($db->getOneItem($q)) return true;
+
 		return false;
 	}
 
