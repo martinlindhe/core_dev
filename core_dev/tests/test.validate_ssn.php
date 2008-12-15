@@ -1,9 +1,9 @@
 <?php
 /**
- * Test script for functions_validate_ssn.php
+ * Test script for validate_ssn.php
  */
 
-require_once('../core/functions_validate_ssn.php');
+require_once('../core/validate_ssn.php');
 
 $male_ssn = '740524-5593'; //valid male ssn (randomized)
 $female_ssn = '770911-8884'; //valid female ssn (randomized)
