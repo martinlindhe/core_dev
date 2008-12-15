@@ -50,7 +50,9 @@ require_once('output_http.php');
 define('OPENID_GOOGLE_XRDS',  'https://www.google.com/accounts/o8/id');	//XXX this should be parsed to get login URL, its currently static on google but that might change
 define('OPENID_GOOGLE_LOGIN', 'https://www.google.com/accounts/o8/ud');
 
-
+/**
+ * XXX
+ */
 function openidLogin($site_url)
 {
 	//FIXME php maps GET parameter with . in it to _, example: "openid.ns" => $_GET['openid_ns'], can this be disabled??

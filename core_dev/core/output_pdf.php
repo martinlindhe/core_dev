@@ -8,7 +8,7 @@
  * http://www.adobe.com/devnet/acrobat/pdfs/PDF32000_2008.pdf
  * http://www.adobe.com/devnet/livecycle/articles/lc_pdf_overview_format.pdf
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**
@@ -20,8 +20,9 @@ function pdfBOF()
 }
 
 /**
+ * XXX
  *
- * \param $p is page content
+ * @param $p is page content
  */
 function pdfPage($p)
 {

@@ -9,10 +9,10 @@
  *		Microsoft Office 2003
  *		Open Office 2.4
  *
- * FIXME try Office 2007
- *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
+
+//FIXME try Office 2007
 
 require_once('output_xls.php');
 

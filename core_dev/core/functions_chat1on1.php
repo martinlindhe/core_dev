@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Linus Wiklund, 2008 <linus.wiklund@ljw.se>
+ * @author Linus Wiklund, 2008 <linus.wiklund@ljw.se>
  */
 
 /**
@@ -10,7 +10,7 @@
  * NOTE: Dont use any other code that uses createXHTMLHeader
  * on the page that uses this function.
  *
- * \param $otherId user ID of the user the logged in user wants to chat with
+ * @param $otherId user ID of the user the logged in user wants to chat with
  */
 function chat_1on1_XHTML($otherId)
 {

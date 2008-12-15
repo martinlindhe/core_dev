@@ -4,21 +4,21 @@
  *
  * Set of functions to implement revisioned backups of data, used by various modules
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //revision types:
 define('REVISIONS_WIKI', 1);
 
 //revision categories:
-define('REV_CAT_TEXT_CHANGED', 1);
+define('REV_CAT_TEXT_CHANGED',  1);
 define('REV_CAT_FILE_UPLOADED', 2);
-define('REV_CAT_FILE_DELETED', 3);
-define('REV_CAT_LOCKED', 4);
-define('REV_CAT_UNLOCKED', 5);
+define('REV_CAT_FILE_DELETED',  3);
+define('REV_CAT_LOCKED',        4);
+define('REV_CAT_UNLOCKED',      5);
 
 /**
- * \todo kanske kunna minska ner antalet parametrar på nåt sätt?
+ * @todo kanske kunna minska ner antalet parametrar på nåt sätt?
  */
 function addRevision($fieldType, $fieldId, $fieldText, $timestamp, $creatorId, $categoryId = 0)
 {

@@ -4,7 +4,7 @@
  *
  * File area implementation
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('atom_rating.php');	//for file rating
@@ -68,9 +68,9 @@ function showFile($fileId, $mime = '', $title = '', $click = true)
  * Shows all files uploaded in a public file area (FILETYPE_FILEAREA_UPLOAD)
  * Or all files belonging to a wiki (FILETYPE_WIKI)
  *
- * \param $fileType type of files to show
- * \param $ownerId show files from this owner only
- * \param $categoryId show files from this category only
+ * @param $fileType type of files to show
+ * @param $ownerId show files from this owner only
+ * @param $categoryId show files from this category only
  */
 function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 {
@@ -244,8 +244,8 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
  * Shows tumbnail overview of files
  * Click a thumbnail to show the whole image
  *
- * \param $fileType type of files to show
- * \param $categoryId category to display files from
+ * @param $fileType type of files to show
+ * @param $categoryId category to display files from
  */
 function showThumbnails($fileType, $categoryId)
 {
@@ -287,7 +287,7 @@ function showThumbnails($fileType, $categoryId)
 /**
  * Used by the ajax file core/ajax_fileinfo.php to show file details of currently selected file
  *
- * \param $_id fileId
+ * @param $_id fileId
  */
 function showFileInfo($_id)
 {
@@ -338,7 +338,7 @@ function showFileInfo($_id)
 /**
  * Generates image gadget
  *
- * \param $ownerId owner of this image
+ * @param $ownerId owner of this image
  */
 function showImageGadgetXHTML($ownerId)
 {

@@ -14,7 +14,7 @@
  * AUTH CRAM-MD5    http://www.ietf.org/rfc/rfc2195.txt
  * AUTH DIGEST-MD5  http://www.ietf.org/rfc/rfc2831.txt
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**

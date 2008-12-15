@@ -4,7 +4,7 @@
  *
  * Store user/server or other custom types of settings in database
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 define('SETTING_APPDATA',		1);		//setting global to the whole application
@@ -17,12 +17,12 @@ $config['settings']['default_signature'] = 'Signature';	//default name of the us
 /**
  * Saves a setting associated with $ownerId
  *
- * \param $_type type of setting
- * \param $categoryId setting category (use 0 if unneeded)
- * \param $ownerId owner of the setting
- * \param $settingName name of the setting, text-string
- * \param $settingValue value of the setting
- * \return true on success
+ * @param $_type type of setting
+ * @param $categoryId setting category (use 0 if unneeded)
+ * @param $ownerId owner of the setting
+ * @param $settingName name of the setting, text-string
+ * @param $settingValue value of the setting
+ * @return true on success
  */
 function saveSetting($_type, $categoryId, $ownerId, $settingName, $settingValue)
 {
@@ -56,12 +56,12 @@ function saveSetting($_type, $categoryId, $ownerId, $settingName, $settingValue)
 /**
  * Loads a setting associated with $ownerId
  *
- * \param $_type type of setting
- * \param $categoryId setting category (use 0 if unneeded)
- * \param $ownerId owner of the setting
- * \param $settingName name of the setting, text-string
- * \param $defaultValue is the default value to return if no such setting was previously stored
- * \return the value of the requested setting
+ * @param $_type type of setting
+ * @param $categoryId setting category (use 0 if unneeded)
+ * @param $ownerId owner of the setting
+ * @param $settingName name of the setting, text-string
+ * @param $defaultValue is the default value to return if no such setting was previously stored
+ * @return the value of the requested setting
  */
 function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue = '')
 {
@@ -82,10 +82,10 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
 /**
  * Returns array of all settings for requested owner
  *
- * \param $_type type of settings
- * \param $categoryId setting category (use 0 for all)
- * \param $ownerId owner of the settings
- * \return array of settings
+ * @param $_type type of settings
+ * @param $categoryId setting category (use 0 for all)
+ * @param $ownerId owner of the settings
+ * @return array of settings
  */
 function readAllSettings($_type, $categoryId = 0, $ownerId = 0)	//rename to loadSettings() ?
 {
@@ -103,10 +103,10 @@ function readAllSettings($_type, $categoryId = 0, $ownerId = 0)	//rename to load
 /**
  * Deletes all settings for owner, of specified type
  *
- * \param $_type type of settings
- * \param $categoryId setting category (use 0 for all)
- * \param $ownerId owner of the settings
- * \return number of settings removed
+ * @param $_type type of settings
+ * @param $categoryId setting category (use 0 for all)
+ * @param $ownerId owner of the settings
+ * @return number of settings removed
  */
 function deleteSettings($_type, $categoryId, $ownerId)
 {
@@ -121,11 +121,11 @@ function deleteSettings($_type, $categoryId, $ownerId)
 /**
  * Deletes specified setting for owner, of specified type
  *
- * \param $_type type of setting
- * \param $categoryId setting category
- * \param $ownerId owner of the setting
- * \param $settingName name of the setting
- * \return number of settings removed
+ * @param $_type type of setting
+ * @param $categoryId setting category
+ * @param $ownerId owner of the setting
+ * @param $settingName name of the setting
+ * @return number of settings removed
  */
 function deleteSetting($_type, $categoryId, $ownerId, $settingName)
 {

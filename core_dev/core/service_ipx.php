@@ -14,7 +14,7 @@
  *
  * Required PHP extensions: php_soap & php_openssl
  *
- * \author Martin Lindhe, 2007-2008
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 /**
@@ -46,12 +46,12 @@ function sendSmsLoggedIn($username, $password, $from_number, $dst_number, $msg, 
  *
  * For non-premium SMS, dont set $tariff or $reference
  *
- * \param $creatorId userId of the customer creating the outgoing SMS. used for internal billing
- * \param $dst_number the destination A-Number to send to. please provide country code
- * \param $msg the message to send. max 160 characters
- * \param $tariff currency to charge the a-number, 'SEK2000' = 20 SEK, required for premium MT SMS
- * \param $reference referenceId of a previously incoming SMS, required for premium MT SMS
- * \return returns true upon success, else the status code returned by IPX
+ * @param $creatorId userId of the customer creating the outgoing SMS. used for internal billing
+ * @param $dst_number the destination A-Number to send to. please provide country code
+ * @param $msg the message to send. max 160 characters
+ * @param $tariff currency to charge the a-number, 'SEK2000' = 20 SEK, required for premium MT SMS
+ * @param $reference referenceId of a previously incoming SMS, required for premium MT SMS
+ * @return returns true upon success, else the status code returned by IPX
  */
 function sendSMS($customerId, $from_number, $dst_number, $msg, $tariff = '', $reference = '')
 {
@@ -135,7 +135,7 @@ function sendSMS($customerId, $from_number, $dst_number, $msg, $tariff = '', $re
 /**
  * Sends SMS to multiple reciepents
  *
- * \return number of successfully sent messages
+ * @return number of successfully sent messages
  */
 function sendSmsBatch($customerId, $from_number, $dst, $msg)
 {

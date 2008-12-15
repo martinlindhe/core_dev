@@ -2,15 +2,15 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 /**
  * Adds a new FAQ entry
  *
- * \param $_q question
- * \param $_a answer
- * \return FAQ id
+ * @param $_q question
+ * @param $_a answer
+ * @return FAQ id
  */
 function addFAQ($_q, $_a)
 {
@@ -24,10 +24,10 @@ function addFAQ($_q, $_a)
 /**
  * Updates a FAQ entry
  *
- * \param $_id FAQ id
- * \param $_q question
- * \param $_a answe
- * \return true on success
+ * @param $_id FAQ id
+ * @param $_q question
+ * @param $_a answe
+ * @return true on success
  */
 function updateFAQ($_id, $_q, $_a)
 {
@@ -42,8 +42,8 @@ function updateFAQ($_id, $_q, $_a)
 /**
  * Deletes a FAQ entry
  *
- * \param $_id FAQ id
- * \return true on success
+ * @param $_id FAQ id
+ * @return true on success
  */
 function deleteFAQ($_id)
 {

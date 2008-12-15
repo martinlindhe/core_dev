@@ -4,15 +4,15 @@
  *
  * External customer accounts
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 
 /**
  * Looks up a customer name by id
  *
- * \param $_id customer id
- * \return customer name
+ * @param $_id customer id
+ * @return customer name
  */
 function getCustomerName($_id)
 {
@@ -26,9 +26,9 @@ function getCustomerName($_id)
 /**
  * Checks if customer exists
  *
- * \param $name customer name
- * \param $password
- * \return customer id if found
+ * @param $name customer name
+ * @param $password
+ * @return customer id if found
  */
 function getCustomerId($name, $password = '')
 {

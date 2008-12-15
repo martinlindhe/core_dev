@@ -14,7 +14,7 @@
  *
  * Admin: this atom module has two admin pages: "moderation queue" and "edit stopwords"
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 $config['moderation']['enabled'] = true;
@@ -129,7 +129,7 @@ function checkStopword($text, $_type)
 
 /**
  * Checks if the word in $text is a reserved username
- * \todo integrate this with checkStopword() somehow
+ * @todo integrate this with checkStopword() somehow
  */
 function isReservedUsername($text)
 {

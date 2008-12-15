@@ -2,16 +2,16 @@
 /**
  * $Id$
  *
- * \todo Implement forum "bookmarks", personal favorite list using this module
- *
  * tblSubscriptions
  *  id				subscription id
  *  type			subscription type, SUBSCRIPTION_FORUM, SUBSCRIPTION_BLOG
  *  ownerId			owner of the subscription (userId)
  *  itemId			id of the item we are subscribing to (tblForums.forumId, tblUsers.userId etc)
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
+
+//TODO Implement forum "bookmarks", personal favorite list using this module
 
 define('SUBSCRIPTION_FORUM',			1);
 define('SUBSCRIPTION_BLOG',				2);
@@ -30,10 +30,10 @@ $config['subscriptions']['message']['files'] = '';		//default text
 /**
  * Creates a subscription of $type on itemId
  *
- * \param $type type of subscription
- * \param $itemId id of item to subscribe to
- * \param $ownerId id of owner
- * \return id of created subscription
+ * @param $type type of subscription
+ * @param $itemId id of item to subscribe to
+ * @param $ownerId id of owner
+ * @return id of created subscription
  */
 function addSubscription($type, $itemId, $ownerId = 0)
 {
@@ -48,9 +48,9 @@ function addSubscription($type, $itemId, $ownerId = 0)
 /**
  * Deletes a subscription
  *
- * \param $type type of subscription
- * \param $itemId id to delete
- * \return >0 on success
+ * @param $type type of subscription
+ * @param $itemId id to delete
+ * @return >0 on success
  */
 function removeSubscription($type, $itemId)
 {
@@ -64,9 +64,9 @@ function removeSubscription($type, $itemId)
 /**
  * Checks if the user is subscribed to this item
  *
- * \param $type type of subscription
- * \param $itemId id of item to check
- * \return true if user is subscribed
+ * @param $type type of subscription
+ * @param $itemId id of item to check
+ * @return true if user is subscribed
  */
 function isSubscribed($type, $itemId)
 {
@@ -81,10 +81,10 @@ function isSubscribed($type, $itemId)
 /**
  * Returns array of subscriptions
  *
- * \param $type type of subscription
- * \return array of subscriptions
+ * @param $type type of subscription
+ * @return array of subscriptions
  */
-function getSubscriptions($type)	//FIXME ta userId som parameter
+function getSubscriptions($type)	//FIXME take userId parameter
 {
 	global $db, $session;
 	if (!$session->id || !is_numeric($type)) return false;
@@ -119,9 +119,9 @@ function getSubscriptionsNewCountPeriod($type, $dateStart, $dateStop)
 /**
  * Returns all subscribers for $itemId, only of type $type if specified
  *
- * \param $type type of subscription
- * \param $ownerId owner of subscribable information
- * \return array of subscriptions
+ * @param $type type of subscription
+ * @param $ownerId owner of subscribable information
+ * @return array of subscriptions
  */
 function getSubscribers($type, $itemId)
 {
@@ -154,7 +154,7 @@ function notifySubscribers($type, $itemId, $newItemId)
 				$message = preg_replace($pattern, $replacement, $message);
 
 				systemMessage($subscriber['ownerId'], $subject, $message);
-				
+
 				if ($config['subscriptions']['mail_notify']) {
 					smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
 				}
@@ -172,7 +172,7 @@ function notifySubscribers($type, $itemId, $newItemId)
 					$message = preg_replace($pattern, $replacement, $message);
 
 					systemMessage($subscriber['ownerId'], $subject, $message);
-					
+
 					if ($config['subscriptions']['mail_notify']) {
 						smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
 					}
@@ -196,7 +196,7 @@ function notifySubscribers($type, $itemId, $newItemId)
 					$message = preg_replace($pattern, $replacement, $message);
 
 					systemMessage($subscriber['ownerId'], $subject, $message);
-					
+
 					if ($config['subscriptions']['mail_notify']) {
 						smtp_mail(loadUserdataEmail($subscriber['ownerId']), $subject, $message);
 					}

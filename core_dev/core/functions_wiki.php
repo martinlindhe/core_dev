@@ -6,7 +6,7 @@
  *	for history-support: atom_revisions.php			tblRevisions
  *	for files-support: $files objekt				tblFiles
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('atom_revisions.php');

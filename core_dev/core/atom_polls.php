@@ -5,7 +5,7 @@
  * Implements a couple of different types of polling functionality
  * used by "site polls" and "polls attached to news articles"
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 define('POLL_SITE',		1);	//"Question of the week"-style polls on the site's front page (for example)
@@ -15,7 +15,7 @@ define('POLL_FORTUNE',	3);	//this is actually a "fortune of the day" message, wi
 /**
  * Add a poll
  *
- * \param $duration_mode "day", "week" or numerical number of days
+ * @param $duration_mode "day", "week" or numerical number of days
  */
 function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
 {
@@ -284,7 +284,7 @@ function poll($_type, $_id)
 /**
  * Shows active polls of specified type
  *
- * \param $_type type of poll
+ * @param $_type type of poll
  */
 function showPolls($_type)
 {

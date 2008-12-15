@@ -9,12 +9,10 @@
  * References:
  * http://tools.ietf.org/html/rfc3501
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
-/**
- * TODO: ability to use SSL to connect to server, see imap_open()
- */
+//TODO: ability to use SSL to connect to server, see imap_open()
 
 require_once('input_mime.php');
 

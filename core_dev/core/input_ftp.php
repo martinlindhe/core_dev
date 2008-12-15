@@ -4,7 +4,7 @@
  *
  * Collection of utilities to deal with FTP servers
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**

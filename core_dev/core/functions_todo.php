@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 define('ISSUE_OPEN',    0);

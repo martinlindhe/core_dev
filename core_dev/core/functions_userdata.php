@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('atom_categories.php');	//for multi-choise userdata types
@@ -112,8 +112,8 @@ function setUserdataFieldPriority($fieldId, $old, $new)
 /**
  * Returns userdata fieldId for specified field name
  *
- * \param $_name field name
- * \return field id
+ * @param $_name field name
+ * @return field id
  */
 function getUserdataFieldIdByName($_name)
 {
@@ -126,8 +126,8 @@ function getUserdataFieldIdByName($_name)
 /**
  * Used to retrieve field id for "email" field. Assumes there is just 1 field of this type in the db
  *
- * \param $_type field type
- * \return field id
+ * @param $_type field type
+ * @return field id
  */
 function getUserdataFieldIdByType($_type)
 {
@@ -543,8 +543,8 @@ function handleRequiredUserdataFields($userId)
 /**
  * Returns all userdata settings for specified user
  *
- * \param $userId user id
- * \return array of settings
+ * @param $userId user id
+ * @return array of settings
  */
 function readAllUserdata($userId)
 {
@@ -597,10 +597,10 @@ function showUserdataField($userId, $settingName, $defaultValue = '')
 /**
  * Looks up setting id from tblUserdata. useful for SETTING_USERDATA
  *
- * \param $ownerId owner of the setting to load
- * \param $settingName name of the setting, text-string. for userdata it is actually a numeric
- * \param $defaultValue is the default value to return if no such setting was previously stored
- * \return the value of the requested setting
+ * @param $ownerId owner of the setting to load
+ * @param $settingName name of the setting, text-string. for userdata it is actually a numeric
+ * @param $defaultValue is the default value to return if no such setting was previously stored
+ * @return the value of the requested setting
  */
 function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
 {
@@ -622,7 +622,7 @@ function loadUserdataSetting($ownerId, $settingName, $defaultValue = '')
 /**
  * Used in admin interface, for example to display all user presentation images
  *
- * \param $settingName can be textual name of the field ('Presentationsbild'), or field type such as USERDATA_TYPE_IMAGE
+ * @param $settingName can be textual name of the field ('Presentationsbild'), or field type such as USERDATA_TYPE_IMAGE
  */
 function getAllUserdataSettings($settingName, $_sql_limit = '')
 {
@@ -646,7 +646,7 @@ function getAllUserdataSettings($settingName, $_sql_limit = '')
 /**
  * Used in admin interface, for example to display all user presentation images
  *
- * \param $settingName can be textual name of the field ('Presentationsbild'), or field type such as USERDATA_TYPE_IMAGE
+ * @param $settingName can be textual name of the field ('Presentationsbild'), or field type such as USERDATA_TYPE_IMAGE
  */
 function getAllUserdataSettingsCount($settingName)
 {
@@ -670,8 +670,8 @@ function getAllUserdataSettingsCount($settingName)
  * Returns entered email address for specified user. Needed functionality for
  * email activation code
  *
- * \param $userId user id
- * \return email or false on error
+ * @param $userId user id
+ * @return email or false on error
  */
 function loadUserdataEmail($userId)
 {
@@ -685,8 +685,8 @@ function loadUserdataEmail($userId)
  * Returns entered cellphone number for specified user. Needed functionality for
  * cellphone activation code
  *
- * \param $userId user id
- * \return cellphone number or false on error
+ * @param $userId user id
+ * @return cellphone number or false on error
  */
 function loadUserdataCellphone($userId)
 {
@@ -699,8 +699,8 @@ function loadUserdataCellphone($userId)
 /**
  * Returns entered birthdate for specified user
  *
- * \param $userId user id
- * \return datetime formatted birthdate, or false on error
+ * @param $userId user id
+ * @return datetime formatted birthdate, or false on error
  */
 function loadUserdataBirthdate($userId)
 {
@@ -713,8 +713,8 @@ function loadUserdataBirthdate($userId)
 /**
  * Returns entered swedish birthdate for specified user
  *
- * \param $userId user id
- * \return datetime formatted birthdate, or false on error
+ * @param $userId user id
+ * @return datetime formatted birthdate, or false on error
  */
 function loadUserdataBirthdateSwe($userId)
 {
@@ -727,8 +727,8 @@ function loadUserdataBirthdateSwe($userId)
 /**
  * Returns user's stored theme
  *
- * \param $userId user id
- * \return theme
+ * @param $userId user id
+ * @return theme
  */
 function loadUserdataTheme($userId, $default)
 {
@@ -743,7 +743,7 @@ function loadUserdataTheme($userId, $default)
 /**
  * Returns fileId of user's image id or false if none is set
  *
- * \param $userId user id
+ * @param $userId user id
  */
 function loadUserdataImage($userId)
 {
@@ -764,8 +764,8 @@ function loadUserdataImage($userId)
 /**
  * Used for "forgot my password" feature and to verify that email address is not taken when someone sets email
  *
- * \param $email e-mail to look for
- * \return userId that has this email, or false
+ * @param $email e-mail to look for
+ * @return userId that has this email, or false
  */
 function findUserByEmail($email)
 {
@@ -787,7 +787,7 @@ function findUserByEmail($email)
 /**
  * Renders html for editing all tblSettings field for current user
  *
- * \return nothing
+ * @return nothing
  */
 function editUserdataSettings($_userid = '')
 {
@@ -1006,7 +1006,7 @@ function editUserdataImage($name, $field)
  * Helper to return users online based on their gender selection
  * Requires a USERDATA_TYPE_GENDER field to work
  *
- * \param $gender the textual name of the gender to select, same as what you name the field to in admin interface
+ * @param $gender the textual name of the gender to select, same as what you name the field to in admin interface
  */
 function getUsersOnlineByGender($gender)
 {

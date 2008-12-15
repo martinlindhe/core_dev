@@ -31,8 +31,8 @@ $ssn_error[SSN_ERR_GENDER_IS_FEMALE] = 'Wrong gender specified, this ssn belongs
 /**
  * Cleans up user-inputted ssn
  *
- * @param $_ssn string SSN to clean up
- * @return string Cleaned up ssn
+ * @param $_ssn SSN to clean up
+ * @return Cleaned up ssn
  */
 function SsnCleanInput($_ssn)
 {
@@ -45,8 +45,8 @@ function SsnCleanInput($_ssn)
 /**
  * Looks up error message for SSN error code
  *
- * @param $_errcode int SSN error code
- * @return string Error message
+ * @param $_errcode SSN error code
+ * @return Error message
  */
 function SsnError($_errcode)
 {
@@ -58,9 +58,9 @@ function SsnError($_errcode)
 /**
  * Validates a swedish social security number (personnummer)
  *
- * @param $_ssn string a swedish SSN in the format "YYYYMMDD-XXXX" or "YYMMDD-XXXX"
- * @param $_gender int 0=unknown, 1=male, 2=female
- * @return bool True if the supplied SSN is correct, or a SSN error code
+ * @param $_ssn a swedish SSN in the format "YYYYMMDD-XXXX" or "YYMMDD-XXXX"
+ * @param $_gender 0=unknown, 1=male, 2=female
+ * @return True if the supplied SSN is correct, or a SSN error code
  */
 function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
 {
@@ -82,12 +82,12 @@ function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
 /**
  * Validates a Swedish SSN
  *
- * @param $_yr int year
- * @param $_mn int month
- * @param $_dy int day
- * @param $_last4 string last 4 digits
- * @param $_gender int gender
- * @return mixed True if valid, or a SSN error
+ * @param $_yr year
+ * @param $_mn month
+ * @param $_dy day
+ * @param $_last4 last 4 digits
+ * @param $_gender gender
+ * @return True if valid, or a SSN error
  */
 function SsnValidateSwedishNum($_yr, $_mn, $_dy, $_last4, $_gender = SSN_GENDER_UNKNOWN)
 {
@@ -126,8 +126,8 @@ function SsnValidateSwedishNum($_yr, $_mn, $_dy, $_last4, $_gender = SSN_GENDER_
  * The resulting products (a two digit product, such as 16, would be converted to 1 + 6) are
  * added together. The checksum is 10 minus the ones place digit in this sum.
  *
- * @param $_ssn string A swedish SSN
- * @return string The calculated checksum for $_persnr
+ * @param $_ssn A swedish SSN
+ * @return The calculated checksum for $_persnr
  */
 function SsnCalcSumSwedish($_ssn)
 {
@@ -159,7 +159,7 @@ function SsnCalcSumSwedish($_ssn)
  *
  * @param $_year number in "YY" or "YYYY" format
  * @param $_month number in "MM" format
- * @param $_day numbre in "DD" format
+ * @param $_day number in "DD" format
  * @param $_gender SSN_GENDER_MALE or SSN_GENDER_FEMALE
  * @return the last 4 digits of a swedish ssn
  */

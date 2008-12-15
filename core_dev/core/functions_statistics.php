@@ -4,7 +4,7 @@
  *
  * Used by admin module to display statistics
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 define('STAT_NEW_USERS',			1);		///< number of new users created during this timeperiod	FIXME IMPLEMENT
@@ -71,17 +71,17 @@ function getStat($type, $timeStart, $timeEnd)
  * XXX
  */
 function showStatsMonth($year, $month) {
-	
+
 	if (!is_numeric($year) || !is_numeric($month)) {
 		return false;
 	}
 	if (strlen($month) == 1) $month = '0'.$month;
-	
+
 	echo 'Year: '.$year.' Month: '.$month;
-	
+
 	$ts = mktime(0,0,0,$month-1,0,$year);
 
-	echo '<table>';	
+	echo '<table>';
 
 	echo '<tr>';
 		echo '<td>';
@@ -150,7 +150,7 @@ function showStatsMonth($year, $month) {
 			$alpha_day = $day;
 		}
 		$date = $year.'-'.$month.'-'.$alpha_day;
-	
+
 		echo '<tr>';
 			echo '<td>';
 				echo $date;
@@ -212,9 +212,7 @@ function showStatsMonth($year, $month) {
 		echo '</tr>';
 	}
 
-	echo '</table>';	
-
-	
+	echo '</table>';
 }
 
 /**

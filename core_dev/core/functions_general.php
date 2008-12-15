@@ -2,8 +2,8 @@
 /**
  * $Id$
  *
- * \disclaimer This file is a required component of core_dev
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @disclaimer This file is a required component of core_dev
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 /**

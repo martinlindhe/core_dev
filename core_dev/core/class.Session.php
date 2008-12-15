@@ -10,7 +10,7 @@
  *   $session->save('variablename', 'some random setting to save');
  *   $kex = $session->load('variablename');
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('functions_ip.php');
@@ -66,7 +66,7 @@ class Session
 	/**
 	 * Constructor. Initializes the session class
 	 *
-	 * \param $conf array with session settings
+	 * @param $conf array with session settings
 	 */
 	function __construct(array $conf = array())
 	{
@@ -127,9 +127,9 @@ class Session
 	/**
 	 * Sets up a session. Called from the auth class
 	 *
-	 * \param $_id user id
-	 * \param $_username user name
-	 * \param $_usermode user mode
+	 * @param $_id user id
+	 * @param $_username user name
+	 * @param $_usermode user mode
 	 */
 	function startSession($_id, $_username, $_usermode)
 	{
@@ -222,8 +222,8 @@ class Session
 	/**
 	 * Writes a log entry to tblLogs
 	 *
-	 * \param $str text to log
-	 * \param $entryLevel type of log entry
+	 * @param $str text to log
+	 * @param $entryLevel type of log entry
 	 */
 	function log($str, $entryLevel = LOGLEVEL_NOTICE)
 	{

@@ -11,7 +11,7 @@
  * at the following location:
  * http://recaptcha.net/api/getkey
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**

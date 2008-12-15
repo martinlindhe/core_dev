@@ -4,7 +4,7 @@
  *
  * Generic event logging functions
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //FIXME cleanup some constant naming. for example use EVENT_APPROVED_xxx
@@ -98,6 +98,9 @@ function getEventCnt($_category = 0, $ownerId = 0)
 	return $db->getOneItem($q);
 }
 
+/**
+ * XXX
+ */
 function showEvents($_category = 0, $ownerId = 0)
 {
 	$list = getEvents($_category, $ownerId);
@@ -107,6 +110,9 @@ function showEvents($_category = 0, $ownerId = 0)
 	echo xhtmlTable($list, $heads, 'eventRow');
 }
 
+/**
+ * XXX
+ */
 function eventRow($row, $i)
 {
 	global $event_name;

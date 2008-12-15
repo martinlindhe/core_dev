@@ -4,7 +4,7 @@
  *
  * Locale functions. core-dev strings are in English internally, this module translates to swedish currently
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 $month_swe[1] = 'Januari';

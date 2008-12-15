@@ -4,10 +4,10 @@
  *
  * Skeleton for authentication modules
  *
- * \todo libapache2-mod-auth-openid module
- *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
+
+//TODO libapache2-mod-auth-openid module
 
 require_once('atom_activation.php');		//for activation
 require_once('ext/class.phpmailer.php');	//for outgoing mail. FIXME look for bsd-compatible mailer
@@ -60,7 +60,8 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Constructor
-	 * @param array $auth_conf auth configuration
+	 *
+	 * @param $auth_conf auth configuration
 	 */
 	function __construct(array $auth_conf = array())
 	{
@@ -90,10 +91,11 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Attempts to register a user
-	 * @param string $username
-	 * @param string $password1
-	 * @param string $password2
-	 * @param int $userMode
+	 *
+	 * @param $username
+	 * @param $password1
+	 * @param $password2
+	 * @param $userMode
 	 */
 	abstract function registerUser($username, $password1, $password2, $userMode = 0);
 
@@ -101,8 +103,9 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Logs in a user
-	 * @param string $username
-	 * @param string $password
+	 *
+	 * @param $username
+	 * @param $password
 	 */
 	abstract function login($username, $password);
 
@@ -185,6 +188,7 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Sends a account activation mail to specified user
+	 *
 	 * @param $_id user id
 	 */
 	function sendActivationMail($_id)
@@ -218,9 +222,10 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Verifies user activaction code
-	 * @param int $_id
-	 * @param int $_code
-	 * @return bool true if success
+	 *
+	 * @param $_id
+	 * @param $_code
+	 * @return true if success
 	 */
 	function verifyActivationMail($_id, $_code)
 	{
@@ -242,7 +247,8 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Looks up user supplied email address / alias and generates a mail for them if needed
-	 * @param $email string email address
+	 *
+	 * @param $email email address
 	 */
 	function handleForgotPassword($email)
 	{
@@ -289,9 +295,10 @@ The link will expire in __EXPIRETIME__";
 
 	/**
 	 * Reset user's password
-	 * @param int $_id user id
-	 * @param int $_code reset code
-	 * @return bool true on success
+	 *
+	 * @param $_id user id
+	 * @param $_code reset code
+	 * @return true on success
 	 */
 	function resetPassword($_id, $_code)
 	{

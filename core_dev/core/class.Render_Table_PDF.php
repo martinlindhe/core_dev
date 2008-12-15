@@ -4,7 +4,7 @@
  *
  * Renders a table of data in PDF (.pdf) format
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 require_once('output_pdf.php');

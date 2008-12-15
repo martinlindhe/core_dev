@@ -4,7 +4,7 @@
  *
  * Forum functions
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('atom_subscriptions.php');	//for subscription functionality
@@ -104,6 +104,9 @@ function getForumItemCount($itemId, $mecnt = 0)
 	return $mecnt;
 }
 
+/**
+ * XXX
+ */
 function forumItemIsFolder($itemId)
 {
 	global $db;
@@ -425,8 +428,7 @@ function getForumItemCountFlat($itemId)
 }
 
 /* Returns the total number of posts contained in all the threads with parentId=$itemId */
-//fixme: kanske byta namn på funktionen
-function getForumThreadContentCount($itemId)
+function getForumThreadContentCount($itemId)	//FIXME: maybe rename function?
 {
 	global $db;
 	if (!is_numeric($itemId)) return false;

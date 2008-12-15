@@ -6,7 +6,7 @@
  *
  * http://en.wikipedia.org/wiki/Comma-separated_values
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 require_once('output_csv.php');

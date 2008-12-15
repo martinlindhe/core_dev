@@ -16,6 +16,8 @@
  * suggested config:
  * soap.wsdl_cache_enabled=1
  * soap.wsdl_cache_ttl=172800
+ *
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 require_once('atom_customers.php');
@@ -48,7 +50,7 @@ define('ORDER_FAILED',		3);
 /**
  * Adds something to the process queue
  *
- * \return process event id
+ * @return process event id
  */
 function addProcessEvent($_type, $creatorId, $param, $param2 = '')
 {
@@ -114,7 +116,7 @@ function addProcessEvent($_type, $creatorId, $param, $param2 = '')
 /**
  * Returns a process queue entry
  *
- * \param $_id entryId or 0 to return the oldest marked as ORDER_NEW
+ * @param $_id entryId or 0 to return the oldest marked as ORDER_NEW
  */
 function getProcessQueueEntry($_id = 0)
 {
@@ -137,8 +139,8 @@ function getProcessQueueEntry($_id = 0)
 /**
  * Updates timeCreated for the entry, to have it retry again later
  *
- * \param $_id entry
- * \param $_delay in seconds
+ * @param $_id entry
+ * @param $_delay in seconds
  */
 function retryQueueEntry($_id, $_delay)
 {
@@ -275,8 +277,8 @@ function showFileQueueStatus($_id)
  * Returns the number of items in process queue of specified status
  * Particulary useful to see how many orders are currently being processed (ORDER_EXECUTING)
  *
- * \param $_order_status status code
- * \return number of entries of specified status
+ * @param $_order_status status code
+ * @return number of entries of specified status
  */
 function getProcessesQueueStatusCnt($_order_status)
 {
@@ -493,7 +495,7 @@ function processQueue()
 /**
  * Converts a video to another video format
  *
- * \return file id of the newly converted video, or false on error
+ * @return file id of the newly converted video, or false on error
  */
 function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
 {
@@ -559,9 +561,9 @@ function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
 /**
  * Marks an object in the process queue as completed
  *
- * \param $entryId entry id
- * \param $exec_time time it took to execute this task
- * \param $referId optional, specify if we now refer to a file, used when the process event was to fetch a file
+ * @param $entryId entry id
+ * @param $exec_time time it took to execute this task
+ * @param $referId optional, specify if we now refer to a file, used when the process event was to fetch a file
  */
 function markQueueCompleted($entryId, $exec_time, $referId = 0)
 {
@@ -577,8 +579,8 @@ function markQueueCompleted($entryId, $exec_time, $referId = 0)
 /**
  * Marks an object in the process queue with specified status code
  *
- * \param $entryId entry id
- * \param $_status status code
+ * @param $entryId entry id
+ * @param $_status status code
  */
 function markQueue($entryId, $_status)
 {

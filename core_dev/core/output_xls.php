@@ -6,7 +6,7 @@
  *
  * Parts of the code was based on http://px.sklar.com/code.html/id=488 by Christian Novak
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 

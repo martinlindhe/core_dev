@@ -11,7 +11,7 @@
  * APOP details: http://tools.ietf.org/html/rfc1939#page-15
  * More examples & info: http://www.thewebmasters.net/php/POP3.phtml
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 require_once('input_mime.php');

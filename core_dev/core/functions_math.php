@@ -4,7 +4,7 @@
  *
  * Misc math functions
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**
@@ -16,7 +16,6 @@
  * We then calculate as such:
  * $ints = findApproxDivision(0.9883, 256);
  */
-
 function findApproxDivision($approx, $top = 256)
 {
 	$closest = 999999;

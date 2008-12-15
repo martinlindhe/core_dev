@@ -5,7 +5,7 @@
  * Generic module to have users submit questions / suggestions to the site admins
  * Admins can then choose to comment on the feedback and have it published on the website.
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 $config['feedback']['enabled'] = true;
@@ -27,6 +27,9 @@ function saveFeedback($_type, $_subj, $_body = '', $_subjectId = 0)
 	return $db->insert($q);
 }
 
+/**
+ * XXX
+ */
 function answerFeedback($_id, $_answer)
 {
 	global $db, $session;
@@ -108,9 +111,6 @@ function getAnsweredFeedbackCnt($_type = 0)
 	if ($_type) $q .= ' AND feedbackType='.$_type;
 	return $db->getOneItem($q);
 }
-
-
-
 
 /**
  * Returns matches in question or answer text of answered feedback

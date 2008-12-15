@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 require_once('input_mime.php');

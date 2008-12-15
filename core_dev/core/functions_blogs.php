@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('atom_moderation.php');		//for automatic moderation of new blogs, and for "report blog" feature
@@ -13,6 +13,9 @@ $config['blog']['moderation'] = true;		//enables automatic moderation of new blo
 $config['blog']['allowed_tabs'] = array('Blog', 'BlogEdit', 'BlogDelete', 'BlogReport', 'BlogComment', 'BlogFiles');
 $config['blog']['allow_rating'] = true;		//allow users to rate blogs
 
+/**
+ * XXX
+ */
 function addBlog($categoryId, $title, $body, $isPrivate = 0)
 {
 	global $db, $session, $config;
@@ -40,7 +43,7 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
 /**
  * Marks a blog as deleted
  *
- * \param $_id blog id
+ * @param $_id blog id
  */
 function deleteBlog($_id)
 {
@@ -52,7 +55,9 @@ function deleteBlog($_id)
 }
 
 /**
- * \param $_id blog id
+ * XXX
+ *
+ * @param $_id blog id
  */
 function updateBlogReadCount($_id)
 {
@@ -63,6 +68,9 @@ function updateBlogReadCount($_id)
 	$db->update($q);
 }
 
+/**
+ * XXX
+ */
 function updateBlog($blogId, $categoryId, $title, $body, $isPrivate = 0)
 {
 	global $db, $session, $config;
@@ -81,7 +89,7 @@ function updateBlog($blogId, $categoryId, $title, $body, $isPrivate = 0)
 }
 
 /**
- * Sorterar resultat per kategori för snygg visning
+ * Sorts results by category for pretty printing
  */
 function getBlogsByCategory($userId, $limit = 0)
 {
@@ -115,6 +123,9 @@ function getLatestBlogs($_cnt = 5)
 	return $db->getArray($q);
 }
 
+/**
+ * XXX
+ */
 function getBlog($blogId)
 {
 	global $db;
@@ -130,7 +141,7 @@ function getBlog($blogId)
 /**
  * Returns blogs for a user
  *
- * \param $_id userid
+ * @param $_id userid
  */
 function getBlogs($_id = 0, $_limit_sql = '')
 {
@@ -150,7 +161,7 @@ function getBlogs($_id = 0, $_limit_sql = '')
 /**
  * Returns number of blogs
  *
- * \param $_id userid
+ * @param $_id userid
  */
 function getBlogCount($_id = 0)
 {

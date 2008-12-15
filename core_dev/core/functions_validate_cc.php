@@ -15,7 +15,7 @@
  *	CCgetType: Returns a constant for the identifed card type, or false on failure (may be incomplete, based on info from '97)
  *	CCvalidateMod10: Validates number using the mod 10 algorithm (complete!)
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 define("CC_INVALID",	0);
@@ -37,8 +37,8 @@ $cc_name[CC_JCB]		= "JCB";
 /**
  *  Cleans up a cc number entered by a user
  *
- * \param $number credit card number
- * \return false on invalid number
+ * @param $number credit card number
+ * @return false on invalid number
  */
 function CCstripNumber($number)
 {
@@ -53,8 +53,8 @@ function CCstripNumber($number)
 /**
  * Used to format the card number with spaces between every 4:th digit so it's easier to read
  *
- * \param $number credit card number
- * \return formatted credit card number
+ * @param $number credit card number
+ * @return formatted credit card number
  */
 function CCprintNumber($number)
 {
@@ -72,8 +72,8 @@ function CCprintNumber($number)
  * Used to format the card number with spaces between every 4:th digit so it's easier to read
  * Masks out the middle part of the number, showing the first 4 and last 4 digits.
  *
- * \param $number credit card number
- * \return formatted credit card number
+ * @param $number credit card number
+ * @return formatted credit card number
  */
 function CCmaskNumber($number)
 {
@@ -94,7 +94,7 @@ function CCmaskNumber($number)
 /**
  * Returns type of credit card for supplied cc number
  *
- * \param $number credit card number
+ * @param $number credit card number
  */
 function CCgetTypeName($number)
 {
@@ -105,8 +105,8 @@ function CCgetTypeName($number)
 /**
  * Tries to figure out the card type
  *
- * \param $number credit card number
- * \return type of cc number
+ * @param $number credit card number
+ * @return type of cc number
  */
 function CCgetType($number)
 {
@@ -154,7 +154,7 @@ function CCgetType($number)
 /**
  * Performs MOD 10 calculation of credit card number
  *
- * \return true if checksums is correct
+ * @return true if checksums is correct
  */
 function CCvalidateMod10($number)
 {

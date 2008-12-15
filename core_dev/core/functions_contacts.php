@@ -4,8 +4,10 @@
  *
  * Implements friend lists. also implements blocked contacts
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
+
+//TODO: rename to atom_contacts.php
 
 define('CONTACT_FRIEND',	1);
 define('CONTACT_BLOCKED',	2);
@@ -15,10 +17,10 @@ $config['contacts']['friend_requests'] = true; //sends a request to another user
 /**
  * Checks if $userId has a contact of type $_type with $otherId
  *
- * \param $_type type of contact (friend or blocked)
- * \param $userId user id
- * \param $otherId user id of other person
- * \return true if userId has otherId as contact
+ * @param $_type type of contact (friend or blocked)
+ * @param $userId user id
+ * @param $otherId user id of other person
+ * @return true if userId has otherId as contact
  */
 function haveContact($_type, $userId, $otherId)
 {
@@ -46,9 +48,9 @@ function isFriends($userId)
 /**
  * Checks if userId has blocked $otherId
  *
- * \param $userId user id
- * \param $otherId user id
- * \return true if $userId has blocked user $otherId
+ * @param $userId user id
+ * @param $otherId user id
+ * @return true if $userId has blocked user $otherId
  */
 function isUserBlocked($userId, $otherId)
 {
@@ -63,9 +65,9 @@ function isUserBlocked($userId, $otherId)
 /**
  * Deletes a contact entry
  *
- * \param $_type type of contact (friend, blocked)
- * \param $otherId user Id to remove contact entry with (session->id is the affected user)
- * \return true on success
+ * @param $_type type of contact (friend, blocked)
+ * @param $otherId user Id to remove contact entry with (session->id is the affected user)
+ * @return true on success
  */
 function removeContact($_type, $otherId)	//FIXME rename to deleteContact()
 {
@@ -86,10 +88,10 @@ function removeContact($_type, $otherId)	//FIXME rename to deleteContact()
 /**
  * Adds or updates a user contact (relation with another user)
  *
- * \param $_type type of contact (friend, blocked)
- * \param $userId user id
- * \param $otherId user id
- * \param $groupId contact group id
+ * @param $_type type of contact (friend, blocked)
+ * @param $userId user id
+ * @param $otherId user id
+ * @param $groupId contact group id
  */
 function setContact($_type, $userId, $otherId, $groupId = 0)
 {
@@ -110,9 +112,9 @@ function setContact($_type, $userId, $otherId, $groupId = 0)
 /**
  * Returns one type of contacts for specified userId.
  *
- * \param $_type type of contact (friend, blocked)
- * \param $userId user id
- * \param $groupId contact group id
+ * @param $_type type of contact (friend, blocked)
+ * @param $userId user id
+ * @param $groupId contact group id
  */
 function getContacts($_type, $userId, $groupId = '', $_limit_sql = '')
 {
@@ -132,9 +134,9 @@ function getContacts($_type, $userId, $groupId = '', $_limit_sql = '')
 /**
  * Returns one type of contacts count for specified userId.
  *
- * \param $_type type of contact (friend, blocked)
- * \param $userId user id
- * \param $groupId contact group id
+ * @param $_type type of contact (friend, blocked)
+ * @param $userId user id
+ * @param $groupId contact group id
  */
 function getContactsCount($_type, $userId, $groupId = '')
 {
@@ -152,9 +154,9 @@ function getContactsCount($_type, $userId, $groupId = '')
 /**
  * Returns one type of contacts for specified userId. Either their friend list or block list
  *
- * \param $_type type of contact (friend, blocked)
- * \param $userId user id
- * \param $groupId contact group id
+ * @param $_type type of contact (friend, blocked)
+ * @param $userId user id
+ * @param $groupId contact group id
  */
 function getContactsWithMe($_type, $userId, $groupId = '')
 {
@@ -174,9 +176,9 @@ function getContactsWithMe($_type, $userId, $groupId = '')
 /**
  * Deletes all contacts of $_type for specified user
  *
- * \param $_type type of contacts (friends / blocked users)
- * \param $userId user id
- * \return number of contacts removed
+ * @param $_type type of contacts (friends / blocked users)
+ * @param $userId user id
+ * @return number of contacts removed
  */
 function deleteContacts($_type, $userId)
 {
@@ -190,9 +192,9 @@ function deleteContacts($_type, $userId)
 /**
  * Deletes all contacts for specified user
  *
- * \param $_type type of contacts (friends / blocked users)
- * \param $userId user id
- * \return number of contacts removed
+ * @param $_type type of contacts (friends / blocked users)
+ * @param $userId user id
+ * @return number of contacts removed
  */
 function deleteAllContacts($userId)
 {
@@ -206,9 +208,9 @@ function deleteAllContacts($userId)
 /**
  * Returns an array with $userId's all friends, including usernames & "isOnline" boolean, but no other info
  *
- * \param $_type type of contacts (friends / blocked users)
- * \param $userId user id
- * \return array of contacts
+ * @param $_type type of contacts (friends / blocked users)
+ * @param $userId user id
+ * @return array of contacts
  */
 function getContactsFlat($_type, $userId)
 {
@@ -227,10 +229,10 @@ function getContactsFlat($_type, $userId)
 /**
  * Adds a request-to-become-friends to $userId, from current user, with the optional relation category type
  *
- * \param $userId user id
- * \param $categoryId contact group id
- * \param $msg optional relation request message
- * \return true on success
+ * @param $userId user id
+ * @param $categoryId contact group id
+ * @param $msg optional relation request message
+ * @return true on success
  */
 function addFriendRequest($userId, $categoryId, $msg = '')
 {
@@ -249,7 +251,7 @@ function addFriendRequest($userId, $categoryId, $msg = '')
 /**
  * Returns all pending requests sent from current user
  *
- * \return array of pending requests
+ * @return array of pending requests
  */
 function getSentFriendRequests()
 {
@@ -265,7 +267,7 @@ function getSentFriendRequests()
 /**
  * Returns all pending requests sent to $userId
  *
- * \return array of pending requests
+ * @return array of pending requests
  */
 function getRecievedFriendRequests()
 {
@@ -282,8 +284,8 @@ function getRecievedFriendRequests()
 /**
  * Returns a specific friend request
  *
- * \param $requestId request Id
- * \return data for specified friend request
+ * @param $requestId request Id
+ * @return data for specified friend request
  */
 function getFriendRequest($requestId)
 {
@@ -301,8 +303,8 @@ function getFriendRequest($requestId)
 /**
  * Deletes a friend request, only doable for the person who created the request
  *
- * \param $otherId userid
- * \return true on success
+ * @param $otherId userid
+ * @return true on success
  */
 function removeSentFriendRequest($otherId)
 {
@@ -318,8 +320,8 @@ function removeSentFriendRequest($otherId)
 /**
  * Deletes a friend request, only doable for the person who recieved the request
  *
- * \param $otherId user id
- * \return true on success
+ * @param $otherId user id
+ * @return true on success
  */
 function denyFriendRequest($otherId)
 {
@@ -339,8 +341,8 @@ function denyFriendRequest($otherId)
 /**
  * Deletes a friend request & creates a relation, only doable for the person who recieved the request
  *
- * \param $otherId user id
- * \return true on success
+ * @param $otherId user id
+ * @return true on success
  */
 function acceptFriendRequest($otherId)
 {
@@ -370,8 +372,8 @@ function acceptFriendRequest($otherId)
 /**
  * Adds a block between two users, both users block eachother
  *
- * \param $otherId user id
- * \return true on success
+ * @param $otherId user id
+ * @return true on success
  */
 function addContactBlock($otherId)
 {
@@ -390,8 +392,8 @@ function addContactBlock($otherId)
 /**
  * Returns true if current user has a pending friend request with $userId
  *
- * \param $userId
- * \return true or false
+ * @param $userId
+ * @return true or false
  */
 function hasPendingFriendRequest($userId)
 {

@@ -4,7 +4,7 @@
  *
  * Image handling helper functions
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 $config['image']['resample_resized']	= true;		///< use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
@@ -16,12 +16,12 @@ $predef_color['black'] = array(0,0,0);
 /**
  * Resizes specified image file to specified dimensions
  *
- * \param $in_file filename of input image
- * \param $out_file filename of output image
- * \param $to_width if set, resize image to this width
- * \param $to_height if set, resize image to this height
- * \param $fileId if set, update this tblFiles entry with the new file size
- * \return true on success
+ * @param $in_file filename of input image
+ * @param $out_file filename of output image
+ * @param $to_width if set, resize image to this width
+ * @param $to_height if set, resize image to this height
+ * @param $fileId if set, update this tblFiles entry with the new file size
+ * @return true on success
  */
 function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $fileId = 0)
 {
@@ -74,10 +74,10 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
 /**
  * Utility function, Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio
  *
- * \param $filename image file to calculate new size for
- * \param $to_width wanted width
- * \param $to_height wanted height
- * \return new width & height of image, while preserving aspect ratio
+ * @param $filename image file to calculate new size for
+ * @param $to_width wanted width
+ * @param $to_height wanted height
+ * @return new width & height of image, while preserving aspect ratio
  */
 function resizeImageCalc($filename, $to_width, $to_height)
 {
@@ -102,10 +102,10 @@ function resizeImageCalc($filename, $to_width, $to_height)
 /**
  * Resizes selected image to $pct percent of orginal image dimensions
  *
- * \param $in_file filename of input image
- * \param $out_file filename of output image
- * \param $_pct percent to resize, relative to orginal image dimensions
- * \return true on success
+ * @param $in_file filename of input image
+ * @param $out_file filename of output image
+ * @param $_pct percent to resize, relative to orginal image dimensions
+ * @return true on success
  */
 function resizeImage($in_file, $out_file, $_pct)
 {
@@ -143,13 +143,13 @@ function resizeImage($in_file, $out_file, $_pct)
 /**
  * Crops selected image to the requested dimensions
  *
- * \param $in_file filename of input image
- * \param $in_file filename of output image
- * \param $x1 coordinate x1
- * \param $y1 coordinate y1
- * \param $x2 coordinate x2
- * \param $y2 coordinate y2
- * \return true on success
+ * @param $in_file filename of input image
+ * @param $in_file filename of output image
+ * @param $x1 coordinate x1
+ * @param $y1 coordinate y1
+ * @param $x2 coordinate x2
+ * @param $y2 coordinate y2
+ * @return true on success
  */
 function cropImage($in_file, $out_file, $x1, $y1, $x2, $y2)
 {
@@ -190,10 +190,10 @@ function cropImage($in_file, $out_file, $x1, $y1, $x2, $y2)
  * Converts a image to specified file type. Currently supports conversions to jpeg, png or gif
  * Requires ImageMagick commandline image converter "convert" installed
  *
- * \param $in_file input filename
- * \param $out_file output filename
- * \param $to_mime wanted output format
- * \return true on success
+ * @param $in_file input filename
+ * @param $out_file output filename
+ * @param $to_mime wanted output format
+ * @return true on success
  */
 function convertImage($in_file, $out_file, $to_mime)
 {
@@ -226,9 +226,9 @@ function convertImage($in_file, $out_file, $to_mime)
  * Rotates a image the specified angle. Uses imagemagick if possible
  * The gd function imagerotate() is only available in bundled gd (php windows)
  *
- * \param $in_file input filename
- * \param $out_file output filename
- * \param $_angle %angle to rotate. between -360 and 360
+ * @param $in_file input filename
+ * @param $out_file output filename
+ * @param $_angle %angle to rotate. between -360 and 360
  */
 function rotateImage($in_file, $out_file, $_angle)
 {
@@ -319,12 +319,12 @@ function loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh)
 /**
  * Draws text centered horizontally & vertically
  *
- * \param $str array of lines of text to print
- * \param $template png image to use as template to draw the text upon
- * \param $font specify the font to use. numeric 1-5 for gd's internal fonts, or specify a .gdf or .ttf font instead
- * \param $col optional color to draw the font in, array(r,g,b). defaults to black
- * \param $ttf_size optional size of ttf font, defaults to 12
- * \return image resource
+ * @param $str array of lines of text to print
+ * @param $template png image to use as template to draw the text upon
+ * @param $font specify the font to use. numeric 1-5 for gd's internal fonts, or specify a .gdf or .ttf font instead
+ * @param $col optional color to draw the font in, array(r,g,b). defaults to black
+ * @param $ttf_size optional size of ttf font, defaults to 12
+ * @return image resource
  */
 function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 12)
 {

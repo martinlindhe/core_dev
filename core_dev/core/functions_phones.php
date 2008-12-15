@@ -4,7 +4,7 @@
  *
  * Utility functions for working with phone numbers
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 /**
@@ -524,6 +524,9 @@ function E164cc($cc)
 	return $cc;
 }
 
+/**
+ * XXX
+ */
 function prettyAnr($country, $anr)
 {
 	global $e164_cc, $area_code;
@@ -639,6 +642,9 @@ function parseAnr($anr)
 	return $res;
 }
 
+/**
+ * XXX
+ */
 function parseAreaCode($country, &$anr)
 {
 	global $area_code;

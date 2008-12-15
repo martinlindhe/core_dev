@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('functions_textformat.php'); //for formatting messages
@@ -10,6 +10,9 @@ require_once('functions_textformat.php'); //for formatting messages
 define('MESSAGE_GROUP_INBOX',	1);
 define('MESSAGE_GROUP_OUTBOX',	2);
 
+/**
+ * XXX
+ */
 function sendMessage($_id, $_subj, $_msg)
 {
 	global $db, $session;
@@ -38,7 +41,6 @@ function setMessageAnswerId($msgId, $answerId)
 	return $db->update($q);
 
 }
-
 
 /**
  * Adds a system message to recievers inbox
@@ -97,9 +99,9 @@ function getMessageCountPeriod($timeStart, $timeStop)
 /**
  * Fetches multiple messages
  *
- * \param $_group message group id
- * \param $_id userid
- * \param $_limit_sql makePager() sql snippet
+ * @param $_group message group id
+ * @param $_id userid
+ * @param $_limit_sql makePager() sql snippet
  */
 function getMessages($_group = 0, $_id = 0, $_limit_sql = '')
 {
@@ -142,8 +144,8 @@ function getMessages($_group = 0, $_id = 0, $_limit_sql = '')
 /**
  * Return the number of messages in specified message box
  *
- * \param $_group message group id
- * \param $_id user id
+ * @param $_group message group id
+ * @param $_id user id
  */
 function getMessagesCount($_group = 0, $_id = 0)
 {
@@ -177,7 +179,7 @@ function getMessagesNewItemsCount($_group = 0, $_id = 0)
 /**
  * Returns a message
  *
- * \param $_id message id
+ * @param $_id message id
  */
 function getMessage($_id)
 {

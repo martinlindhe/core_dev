@@ -4,7 +4,7 @@
  *
  * Video handling helper functions
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 /**
@@ -21,10 +21,10 @@
  *
  * Windows Media Player 6.4: "clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95"
  *
- * \param $url video url to embed
- * \param $w width of player window (not width of video clip)
- * \param $h height of player window (not height of video clip)
- * \return html code
+ * @param $url video url to embed
+ * @param $w width of player window (not width of video clip)
+ * @param $h height of player window (not height of video clip)
+ * @return html code
  */
 function embedVideo($url, $w = 352, $h = 288, $params = array())
 {
@@ -63,6 +63,9 @@ function embedVideo($url, $w = 352, $h = 288, $params = array())
 	return $data;
 }
 
+/**
+ * XXX
+ */
 function embedAudio($url, $w = 352)
 {
 	global $session;
@@ -104,8 +107,8 @@ function embedAudio($url, $w = 352)
  * Requires Apple's AC_QuickTime.js from http://developer.apple.com/internet/ieembedprep.html
  * Parameter docs: http://www.apple.com/quicktime/tutorials/embed2.html
  *
- * \param $url url to embed
- * \param $mute bool. set to true to mute audio
+ * @param $url url to embed
+ * @param $mute bool. set to true to mute audio
  */
 function embedQuickTimeVideo($url, $mute = false)
 {

@@ -4,7 +4,7 @@
  *
  * Standard authentication module. Uses core_dev's own tblUsers
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('class.Auth_Base.php');
@@ -19,12 +19,12 @@ class Auth_Standard extends Auth_Base
 	/**
 	 * Register new user in the database
 	 *
-	 * \param $username user name
-	 * \param $password1 password
-	 * \param $password2 password (repeat)
-	 * \param $_mode user mode
-	 * \param $newUserId supply reserved user id. if not supplied, a new user id will be allocated
-	 * \return the user ID of the newly created user
+	 * @param $username user name
+	 * @param $password1 password
+	 * @param $password2 password (repeat)
+	 * @param $_mode user mode
+	 * @param $newUserId supply reserved user id. if not supplied, a new user id will be allocated
+	 * @return the user ID of the newly created user
 	 */
 	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
 	{
@@ -93,9 +93,9 @@ class Auth_Standard extends Auth_Base
 	/**
 	 * Handles logins
 	 *
-	 * \param $username
-	 * \param $password
-	 * \return true on success
+	 * @param $username
+	 * @param $password
+	 * @return true on success
 	 */
 	function login($username, $password)
 	{
@@ -154,7 +154,7 @@ class Auth_Standard extends Auth_Base
 	/**
 	 * Checks if this is a valid login
 	 *
-	 * \return if valid login, return user data, else false
+	 * @return if valid login, return user data, else false
 	 */
 	function validLogin($username, $password)
 	{
@@ -309,9 +309,9 @@ class Auth_Standard extends Auth_Base
 	/**
 	 * Displays a account registration form
 	 *
-	 * \param $preId userId previously created to use, instead of creating a new id (optional)
-	 * \param $act_code activation code supplied to finish account creation
-	 * \return true if registration was successful & activation mail was sent out
+	 * @param $preId userId previously created to use, instead of creating a new id (optional)
+	 * @param $act_code activation code supplied to finish account creation
+	 * @return true if registration was successful & activation mail was sent out
 	 */
 	function showRegisterForm($preId = 0, $act_code = 0)
 	{

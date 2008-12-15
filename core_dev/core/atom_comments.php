@@ -4,7 +4,7 @@
  *
  * Set of functions to implement comments, used by various modules
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //FIXME cleanup API and take userId as parameter, no tblUsers assumtions & usage
@@ -80,7 +80,7 @@ function updateComment($commentType, $ownerId, $commentId, $commentText)
 /**
  * Marks a comment as deleted
  *
- * \param $commentId comment to delete
+ * @param $commentId comment to delete
  */
 function deleteComment($commentId)
 {

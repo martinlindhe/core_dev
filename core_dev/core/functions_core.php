@@ -4,8 +4,8 @@
  *
  * Functions assumed to always be available
  *
- * \disclaimer This file is a required component of core_dev
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @disclaimer This file is a required component of core_dev
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //Include required core_dev files:
@@ -18,9 +18,9 @@ require_once('functions_textformat.php');	//for decodeDataSize()
 /**
  * Debug function. Prints out variable $v
  *
- * \param $v variable of any type to display
- * \return nothing
-  */
+ * @param $v variable of any type to display
+ * @return nothing
+ */
 function d($v)
 {
 	if (is_string($v)) {
@@ -119,7 +119,7 @@ function dm($db = '')
 /**
  * Includes a core function file
  *
- * \param $file filename to include
+ * @param $file filename to include
  */
 function require_core($file)
 {
@@ -144,8 +144,8 @@ function loadPlugins()
 /**
  * Executes $c and returns the time it took
  *
- * \param $c command to execute
- * \param $retval return value of command executed
+ * @param $c command to execute
+ * @param $retval return value of command executed
  */
 function exectime($c, &$retval = 0)
 {
@@ -189,7 +189,7 @@ function getProjectPath($_amp = 1)	//FIXME: get rid of this function
 
 /**
  * Returns the current time in the same format as the MySQL "NOW()" command
- * \return time in MySQL datetime format
+ * @return time in MySQL datetime format
  */
 function now()
 {
@@ -198,8 +198,8 @@ function now()
 
 /**
  * Returns given UNIX timestamp in MySQL datetime format
- * \param $timestamp is a UNIX timestamp
- * \return given UNIX timestamp in MySQL datetime format
+ * @param $timestamp is a UNIX timestamp
+ * @return given UNIX timestamp in MySQL datetime format
  */
 function sql_datetime($timestamp)
 {
@@ -208,8 +208,8 @@ function sql_datetime($timestamp)
 
 /**
  * Returns MySQL datetime in UNIX timestamp format
- * \param $datetime is a MySQL datetime
- * \return given MySQL datetime in UNIX timestamp format
+ * @param $datetime is a MySQL datetime
+ * @return given MySQL datetime in UNIX timestamp format
  */
 function datetime_to_timestamp($datetime)
 {
@@ -218,9 +218,9 @@ function datetime_to_timestamp($datetime)
 
 /**
  * Compares two MySQL datetime timestamps
- * \param $d1 is a MySQL datetime
- * \param $d2 is a MySQL datetime
- * \return true if $d1 is older date than $d2
+ * @param $d1 is a MySQL datetime
+ * @param $d2 is a MySQL datetime
+ * @return true if $d1 is older date than $d2
  */
 function datetime_less($d1, $d2)
 {

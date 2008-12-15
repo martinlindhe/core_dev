@@ -21,19 +21,21 @@ abstract class Render_Table
 
 	/**
 	 * Set the number of columns (fields) in the file
-	 * @param $val int number of columns
+	 *
+	 * @param $n number of columns
 	 */
-	function setColumns($val)
+	function setColumns($n)
 	{
 		//ignored if heading() dictates other
 		if (!$this->heads) {
-			$this->columns = $val;
+			$this->columns = $n;
 		}
 	}
 
 	/**
 	 * Add headers
-	 * @param $heads array List of heading elements
+	 *
+	 * @param $heads List of heading elements
 	 */
 	function heading($heads = array())
 	{
@@ -44,7 +46,8 @@ abstract class Render_Table
 
 	/**
 	 * Add a value to the data buffer
-	 * @param $val mixed Value
+	 *
+	 * @param $val value
 	 */
 	function add($val)
 	{
@@ -53,7 +56,8 @@ abstract class Render_Table
 
 	/**
 	 * Renders & stores table in specified file
-	 * @param $filename string file name
+	 *
+	 * @param $filename file name
 	 */
 	function write($filename)
 	{

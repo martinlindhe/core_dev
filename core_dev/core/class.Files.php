@@ -7,7 +7,7 @@
  * Uses tblFiles
  * Uses php_id3.dll if enabled, to show more details of mp3s in the file module
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //TODO: rename tblFiles.timeUploaded to tblFiles.timeCreated
@@ -136,8 +136,8 @@ class Files
 	/**
 	 * Constructor. Initializes class configuration
 	 *
-	 * \param $config array of config options for the Files class
-	 * \return nothing
+	 * @param $config array of config options for the Files class
+	 * @return nothing
 	 */
 	function __construct($config = '')
 	{
@@ -166,11 +166,11 @@ class Files
 	/**
 	 * Returns files uploaded of the type specified
 	 *
-	 * \param $fileType filetype
-	 * \param $ownerId optionally select by owner also
-	 * \param $order optionally specify sort order
-	 * \param $count optionally specify how many to return
-	 * \return list of files
+	 * @param $fileType filetype
+	 * @param $ownerId optionally select by owner also
+	 * @param $order optionally specify sort order
+	 * @param $count optionally specify how many to return
+	 * @return list of files
 	 */
 	function getFileList($fileType, $ownerId = 0, $order = 'ASC', $count = 0)
 	{
@@ -187,7 +187,7 @@ class Files
 	/**
 	 * Performs mimetype lookup using GNU file utility
 	 *
-	 * \param $filename name of file to check
+	 * @param $filename name of file to check
 	 */
 	function lookupMimeType($filename)
 	{
@@ -200,8 +200,8 @@ class Files
 	/**
 	 * Checks what kind of media this is (video, document etc)
 	 *
-	 * \param $filename name of file to check
-	 * \return media type id (0 for unknown media types)
+	 * @param $filename name of file to check
+	 * @return media type id (0 for unknown media types)
 	 */
 	function lookupMediaType($filename)
 	{
@@ -220,9 +220,9 @@ class Files
 	/**
 	 * Moves a file to a different file category
 	 *
-	 * \param $_category category to move to
-	 * \param $_id fileId to move
-	 * \return true on success
+	 * @param $_category category to move to
+	 * @param $_id fileId to move
+	 * @return true on success
 	 */
 	function moveFile($_category, $_id)
 	{
@@ -239,10 +239,10 @@ class Files
 	/**
 	 * Marks a file as deleted
 	 *
-	 * \param $_id fileId to delete
-	 * \param $ownerId optionally specify owner of file
-	 * \param $force remove file from disk
-	 * \return true on success
+	 * @param $_id fileId to delete
+	 * @param $ownerId optionally specify owner of file
+	 * @param $force remove file from disk
+	 * @return true on success
 	 */
 	function deleteFile($_id, $ownerId = 0, $force = false)
 	{
@@ -272,11 +272,11 @@ class Files
 	/**
 	 * Deletes a file entry from database
 	 *
-	 * \param $_type file type
-	 * \param $_id fileId to delete
-	 * \param $ownerId optionally specify owner of file
-	 * \param $categoryId file category
-	 * \return true on success
+	 * @param $_type file type
+	 * @param $_id fileId to delete
+	 * @param $ownerId optionally specify owner of file
+	 * @param $categoryId file category
+	 * @return true on success
 	 */
 	function deleteFileEntry($_type, $_id, $ownerId = 0, $categoryId = 0)
 	{
@@ -294,9 +294,9 @@ class Files
 	/**
 	 * Deletes all file entries for specified owner
 	 *
-	 * \param $type type of file (0 for all)
-	 * \param $ownerId user Id
-	 * \return number of files deleted
+	 * @param $type type of file (0 for all)
+	 * @param $ownerId user Id
+	 * @return number of files deleted
 	 */
 	function deleteFileEntries($_type, $ownerId)
 	{
@@ -311,8 +311,8 @@ class Files
 	/**
 	 * Deletes all thumbnails for this file ID
 	 *
-	 * \param $_id file id
-	 * \return true on success
+	 * @param $_id file id
+	 * @return true on success
 	 */
 	function clearThumbs($_id)
 	{
@@ -334,11 +334,11 @@ class Files
 	/**
 	 * Stores uploaded file associated to $session->id
 	 *
-	 * \param $FileData array of php internal file data from file upload
-	 * \param $fileType type of file
-	 * \param $ownerId file owner
-	 * \param $categoryId category where to store the file
-	 * \return fileId of the newly imported file
+	 * @param $FileData array of php internal file data from file upload
+	 * @param $fileType type of file
+	 * @param $ownerId file owner
+	 * @param $categoryId category where to store the file
+	 * @return fileId of the newly imported file
 	 */
 	function handleUpload($FileData, $fileType, $ownerId = 0, $categoryId = 0)
 	{
@@ -390,12 +390,12 @@ class Files
 	/**
 	 * Adds a new entry for a new file in the database
 	 *
-	 * \param $fileType
-	 * \param $categoryId
-	 * \param $ownerId
-	 * \param $fileName
-	 * \param $content
-	 * \return fileId from the database entry created, or false on failure
+	 * @param $fileType
+	 * @param $categoryId
+	 * @param $ownerId
+	 * @param $fileName
+	 * @param $content
+	 * @return fileId from the database entry created, or false on failure
 	 */
 	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
 	{
@@ -501,8 +501,8 @@ class Files
 	/**
 	 * Handle image upload, used internally only
 	 *
-	 * \param $fileId file id to deal with
-	 * \param $FileData array of php internal file data from file upload
+	 * @param $fileId file id to deal with
+	 * @param $FileData array of php internal file data from file upload
 	 */
 	function handleImageUpload($fileId, $FileData)
 	{
@@ -555,10 +555,10 @@ class Files
 	 * Returns checksums for specified file.
 	 * If checksums were already generated, it fetches them from tblChecksums
 	 *
-	 * \param $_id fileId to get checksums for
-	 * \param $force if set to true the db cache of checksums is ignored
-	 * \param $update if set updates database, otherwise just return checksum array
-	 * \return checksums in array
+	 * @param $_id fileId to get checksums for
+	 * @param $force if set to true the db cache of checksums is ignored
+	 * @param $update if set updates database, otherwise just return checksum array
+	 * @return checksums in array
 	 */
 	function checksums($_id, $force = false, $update = true)
 	{
@@ -600,8 +600,8 @@ class Files
 	/**
 	 * Returns sha1 checksum of file $_id. forces checksum generation if missing
 	 *
-	 * \param $_id fileId
-	 * \return sha1-sum
+	 * @param $_id fileId
+	 * @return sha1-sum
 	 */
 	function sha1($_id)
 	{
@@ -612,9 +612,9 @@ class Files
 	/**
 	 * Used for file processing. generates a new file entry referencing to entry $_id. returns new id
 	 *
-	 * \param $_id fileId
-	 * \param $_clone_type filetype of clone
-	 * \return fileId of the clone
+	 * @param $_id fileId
+	 * @param $_clone_type filetype of clone
+	 * @return fileId of the clone
 	 */
 	function cloneFile($_id, $_clone_type)
 	{
@@ -631,8 +631,8 @@ class Files
 	/**
 	 * Forces recalculation of filesize, mimetype and checksums
 	 *
-	 * \param $_id
-	 * \return numeric value on true, else 0 or false
+	 * @param $_id
+	 * @return numeric value on true, else 0 or false
 	 */
 	function updateFile($_id)
 	{
@@ -722,8 +722,8 @@ class Files
 	/**
 	 * Performs an image rotation and then pass on the result to the user
 	 *
-	 * \param $_id fileId
-	 * \param $_angle how much to rotate the image
+	 * @param $_id fileId
+	 * @param $_angle how much to rotate the image
 	 */
 	function imageRotate($_id, $_angle)
 	{
@@ -752,8 +752,8 @@ class Files
 	/**
 	 * Takes get parameter 'dl' to send the file as an attachment
 	 *
-	 * \param $_id fileId
-	 * \param $force_mime
+	 * @param $_id fileId
+	 * @param $force_mime
 	 */
 	function sendFile($_id, $force_mime = false)
 	{
@@ -805,7 +805,7 @@ class Files
 	/**
 	 * Sends text file to user
 	 *
-	 * \param $filename name of file to send
+	 * @param $filename name of file to send
 	 */
 	function sendTextfile($filename)
 	{
@@ -834,7 +834,7 @@ class Files
 	 * $_GET['w'] width
 	 * $_GET['h'] height
 	 *
-	 * \param $_id fileId
+	 * @param $_id fileId
 	 */
 	function sendImage($_id)
 	{
@@ -894,11 +894,11 @@ class Files
 	/**
 	 * Selects all files for specified type & owner
 	 *
-	 * \param $fileType type of files
-	 * \param $ownerId owner of the files
-	 * \param $categoryId category of the files
-	 * \param $_limit optional limit the result
-	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
+	 * @param $fileType type of files
+	 * @param $ownerId owner of the files
+	 * @param $categoryId category of the files
+	 * @param $_limit optional limit the result
+	 * @param $_order optional return order ASC or DESC (timeUploaded ASC default)
 	 */
 	function getFiles($fileType = 0, $ownerId = 0, $categoryId = 0, $_limit = '', $_order = 'ASC')
 	{	//FIXME: remove function & rename getFilesByMediaType() to getFiles() instead!
@@ -943,10 +943,10 @@ class Files
 	/**
 	 * Get file count
 	 *
-	 * \param $fileType type of files
-	 * \param $ownerId owner of the files (optional)
-	 * \param $categoryId category of the files (optional)
-	 * \param $media_type type of media (optional)
+	 * @param $fileType type of files
+	 * @param $ownerId owner of the files (optional)
+	 * @param $categoryId category of the files (optional)
+	 * @param $media_type type of media (optional)
 	 */
 	function getFileCount($fileType = 0, $ownerId = 0, $categoryId = 0, $media_type = 0)
 	{
@@ -976,7 +976,7 @@ class Files
 	/**
 	 * Retrieves detailed info about the specified file
 	 *
-	 * \param $_id fileId
+	 * @param $_id fileId
 	 */
 	function getFileInfo($_id)
 	{
@@ -993,7 +993,7 @@ class Files
 	/**
 	 * Retrieves info about the specified file
 	 *
-	 * \param $_id fileId
+	 * @param $_id fileId
 	 */
 	function getFile($_id)
 	{
@@ -1007,8 +1007,8 @@ class Files
 	/**
 	 * Shows attachments. used to show files attached to a forum post
 	 *
-	 * \param $_type type of file
-	 * \param $_owner owner of the files
+	 * @param $_type type of file
+	 * @param $_owner owner of the files
 	 */
 	function showAttachments($_type, $_owner)
 	{
@@ -1034,7 +1034,7 @@ class Files
 	/**
 	 * Returns user who uploaded specified file
 	 *
-	 * \param $_id fileId
+	 * @param $_id fileId
 	 */
 	function getUploader($_id)
 	{
@@ -1048,7 +1048,7 @@ class Files
 	/**
 	 * Returns owner of specified file
 	 *
-	 * \param $_id fileId
+	 * @param $_id fileId
 	 */
 	function getOwner($_id)
 	{
@@ -1062,7 +1062,7 @@ class Files
 	/**
 	 * Returns category of specified file
 	 *
-	 * \param $_id fileId
+	 * @param $_id fileId
 	 */
 	function getCategory($_id)
 	{
@@ -1076,8 +1076,8 @@ class Files
 	/**
 	 * Calculates estimated download times for common internet connection speeds
 	 *
-	 * \param $size file size in bytes
-	 * \return array of estimated download times
+	 * @param $size file size in bytes
+	 * @return array of estimated download times
 	 */
 	function estimateTime($size)
 	{
@@ -1095,12 +1095,12 @@ class Files
 	/**
 	 * Returns a list of file entries
 	 *
-	 * \param $fileType type of files (wiki file, user file etc)
-	 * \param $ownerId owner of the files
-	 * \param $categoryId category of the files
-	 * \param $mediaType media type of file (image, audio etc)
-	 * \param $_limit optional limit the result
-	 * \param $_order optional return order ASC or DESC (timeUploaded ASC default)
+	 * @param $fileType type of files (wiki file, user file etc)
+	 * @param $ownerId owner of the files
+	 * @param $categoryId category of the files
+	 * @param $mediaType media type of file (image, audio etc)
+	 * @param $_limit optional limit the result
+	 * @param $_order optional return order ASC or DESC (timeUploaded ASC default)
 	 */
 	function getFilesByMediaType($fileType = 0, $ownerId = 0, $categoryId = 0, $mediaType = 0, $_limit = '', $_order = 'ASC')
 	{	//FIXME rename to getFiles(), remove old getFiles() & clean up parameter usage for getFiles() everywhere

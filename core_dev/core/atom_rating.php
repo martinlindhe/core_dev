@@ -6,20 +6,20 @@
  *
  * Currently used by the following modules: News
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-define('RATE_NEWS',		1);
-define('RATE_BLOG',		2);
-define('RATE_FILE',		3);
+define('RATE_NEWS',  1);
+define('RATE_BLOG',  2);
+define('RATE_FILE',  3);
 
 /**
  * Adds a rating + keeps track if the user has already added a rating
  *
- * \param $_type type of item
- * \param $_id id of item to rate
- * \param $_rating is a integer between 1-5, or 1-100 (or what the min & max-values are)
- * \return nothing
+ * @param $_type type of item
+ * @param $_id id of item to rate
+ * @param $_rating is a integer between 1-5, or 1-100 (or what the min & max-values are)
+ * @return nothing
  */
 function rateItem($_type, $_id, $_rating)
 {
@@ -65,9 +65,9 @@ function rateItem($_type, $_id, $_rating)
 /**
  * Is specified item rated?
  *
- * \param $_type type of item
- * \param $_id id of item to rate
- * \return true if current user already voted for specified object
+ * @param $_type type of item
+ * @param $_id id of item to rate
+ * @return true if current user already voted for specified object
  */
 function isRated($_type, $_id)
 {
@@ -82,9 +82,9 @@ function isRated($_type, $_id)
 /**
  * Returns average rating for specified item
  *
- * \param $_type type of item
- * \param $_id id of item to rate
- * \return average rating for item
+ * @param $_type type of item
+ * @param $_id id of item to rate
+ * @return average rating for item
  */
 function getRating($_type, $_id)
 {
@@ -114,9 +114,9 @@ function getRating($_type, $_id)
 /**
  * Generates a general "rate this"-gadget used by various modules
  *
- * \param $_type type of item
- * \param $_id id of item to rate
- * \return html block for self-contained rating gadget
+ * @param $_type type of item
+ * @param $_id id of item to rate
+ * @return html block for self-contained rating gadget
  */
 function ratingGadget($_type, $_id)
 {
@@ -148,9 +148,9 @@ function ratingGadget($_type, $_id)
 /**
  * Shows current votes
  *
- * \param $_type type of item
- * \param $_id id of item to rate
- * \return html block for self-contained "current votes" gadget
+ * @param $_type type of item
+ * @param $_id id of item to rate
+ * @return html block for self-contained "current votes" gadget
  */
 function showRating($_type, $_id)
 {

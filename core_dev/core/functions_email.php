@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //defaults, please override:
@@ -15,11 +15,11 @@ $config['smtp']['sender_name'] = 'core_dev';
 /**
  * Helper function: calls class.phpmailer.php functions
  *
- * \param $dst_adr single address or array of destination e-mail addresses
- * \param $subj subject of e-mail
- * \param $msg body of e-mail
- * \param $attach_name filename of attachment (optional)
- * \param $attach_data data of attachment (optional)
+ * @param $dst_adr single address or array of destination e-mail addresses
+ * @param $subj subject of e-mail
+ * @param $msg body of e-mail
+ * @param $attach_name filename of attachment (optional)
+ * @param $attach_data data of attachment (optional)
  */
 function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '', $html = true)
 {

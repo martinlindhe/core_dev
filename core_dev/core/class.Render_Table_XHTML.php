@@ -4,7 +4,7 @@
  *
  * Renders a table of data in XHTML (.xhtml) format
  *
- * \author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008 <martin@startwars.org>
  */
 
 require_once('output_xhtml.php');

@@ -6,7 +6,7 @@
  *
  * The blocking rules are stored as textual strings to allow for great flexibility.
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 define('BLOCK_IP',		1);		//block by IP address. should be able to transparently support IPv6
@@ -16,8 +16,8 @@ define('BLOCK_USERID',	3);		//block by userid
 /**
  * Creates a new blocking rule
  *
- * \param $_type type of block rule
- * \param $rule the actual rule
+ * @param $_type type of block rule
+ * @param $rule the actual rule
  */
 function addBlock($_type, $rule)
 {
@@ -34,8 +34,8 @@ function addBlock($_type, $rule)
 /**
  * Removes a blocking rule
  *
- * \param $_type type of block rule
- * \param $rule the actual rule
+ * @param $_type type of block rule
+ * @param $rule the actual rule
  */
  function removeBlock($_type, $rule)
 {
@@ -49,8 +49,8 @@ function addBlock($_type, $rule)
 /**
  * Removes a blocking rule
  *
- * \param $_type type of block rule
- * \param $rule the actual rule
+ * @param $_type type of block rule
+ * @param $rule the actual rule
  */
  function removeBlockId($_type, $ruleId)
 {
@@ -64,7 +64,7 @@ function addBlock($_type, $rule)
 /**
  * Returns an array of all blocks of specified type
  *
- * \param $_type type of block rule
+ * @param $_type type of block rule
  */
 function getBlocks($_type, $_limit = '')
 {
@@ -81,7 +81,7 @@ function getBlocks($_type, $_limit = '')
 /**
  * Returns count of all blocks of specified type
  *
- * \param $_type type of block rule
+ * @param $_type type of block rule
  */
 function getBlocksCount($_type)
 {
@@ -95,8 +95,8 @@ function getBlocksCount($_type)
 /**
  * Returns true if the specified blocking rule exists
  *
- * \param $_type type of block rule
- * \param $rule the rule to match with
+ * @param $_type type of block rule
+ * @param $rule the rule to match with
  */
 function isBlocked($_type, $rule)
 {

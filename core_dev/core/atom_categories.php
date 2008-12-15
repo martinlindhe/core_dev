@@ -4,7 +4,7 @@
  *
  * Set of functions to implement categories, used by various modules
  *
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 //tblCategory.categoryType: System categories. Reserved 1-50. Use a number above 50 for your own category types
@@ -37,10 +37,10 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
 /**
  * Adds a new category
  *
- * \param $_type type of category
- * \param $_name name of category
- * \param $_owner object owning category, the meaning depends on $_type
- * \param $_flags boolean AND flags (personal/global) & (public/private/hidden)
+ * @param $_type type of category
+ * @param $_name name of category
+ * @param $_owner object owning category, the meaning depends on $_type
+ * @param $_flags boolean AND flags (personal/global) & (public/private/hidden)
  */
 function addCategory($_type, $_name, $_owner = 0, $_flags = 0)
 {
@@ -99,8 +99,8 @@ function getCategory($_type, $_id)
 /**
  * Returns the name of the specified category
  *
- * \param $_type type of category
- * \param $_id category id
+ * @param $_type type of category
+ * @param $_id category id
  */
 function getCategoryName($_type, $_id)
 {
@@ -129,9 +129,9 @@ function getCategoryPermissions($_type, $_id)
 /**
  * Returns the id of the specified category
  *
- * \param $_type type of category
- * \param $_name category name
- * \param $_flags optional matching permissions flags
+ * @param $_type type of category
+ * @param $_name category name
+ * @param $_flags optional matching permissions flags
  */
 function getCategoryByName($_type, $_name, $_flags = 0, $_ownerId = 0)
 {
@@ -147,8 +147,8 @@ function getCategoryByName($_type, $_name, $_flags = 0, $_ownerId = 0)
 /**
  * Returns all categories of specified type belonging to specified owner
  *
- * \param $_type type of category
- * \param $_owner object owning the categories (meaning depends on category type)
+ * @param $_type type of category
+ * @param $_owner object owning the categories (meaning depends on category type)
  */
 function getCategoriesByOwner($_type, $_owner)
 {	//FIXME merge with getCategories(), add sort order optional parameter
@@ -177,7 +177,7 @@ function getCategories($_type, $_owner = 0)
 /**
  * Returns all global categories of specified type
  *
- * \param $_type type of categories
+ * @param $_type type of categories
  */
 function getGlobalCategories($_type)
 {
@@ -232,7 +232,7 @@ function getGlobalAndUserCategories($_type, $_owner = 0)
  * Default "create a new category" dialog, used by "create blog category" and "create category in personal file area"
  * also allows for managing and deleting categories
  *
- * \param $_type
+ * @param $_type
  */
 function manageCategoriesDialog($_type)
 {

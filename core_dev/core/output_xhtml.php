@@ -4,8 +4,8 @@
  *
  * Helper functions for rapid XHTML generation
  *
- * \disclaimer This file is a required component of core_dev
- * \author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @disclaimer This file is a required component of core_dev
+ * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
 require_once('functions_locale.php');
@@ -127,7 +127,7 @@ function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu
  * Reads the 'p' get parameter for current page
  * Example: $pager = makePager(102, 25);		will create a pager for total of 102 items with 25 items per page
  *
- * \return Returns a $pager array with some properties filled
+ * @return $pager array with some properties filled
  */
 function makePager($_total_cnt, $_items_per_page, $_add_value = '')
 {
@@ -300,7 +300,6 @@ function xhtmlImage($_src, $_alt = '')
 		'>';
 }
 
-
 /**
  * Helper to create a <form> open tag
  */
@@ -358,9 +357,9 @@ function xhtmlButton($_title, $onclick = '')
 /**
  * Helper to create a table out of a named array and/or callback function
  *
- * \param $arr is a normal $list array
- * \param $heads is array('User' => 'userId', 'Last active' => 'timeLastActive')
- * \param $callback is funct name to call to customize each row
+ * @param $arr is a normal $list array
+ * @param $heads is array('User' => 'userId', 'Last active' => 'timeLastActive')
+ * @param $callback is funct name to call to customize each row
  */
 function xhtmlTable($arr, $heads = '', $callback = '')
 {
@@ -499,7 +498,6 @@ function coreButton($name, $dst = '')
 
 /**
  * Implements a OpenSearch compatible search engine
- *
  */
 function xhtmlOpenSearch($url, $name, $icon_url = '')
 {
