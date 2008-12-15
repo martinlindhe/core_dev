@@ -1,6 +1,6 @@
 <?php
 /**
- * Sample program to expose functions_validate_ssn.php features
+ * Sample program to expose validate_ssn.php features
  */
 
 require_once('config.php');

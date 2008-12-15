@@ -1,6 +1,6 @@
 <?php
 /**
- * Sample program to expose functions_validate_cc.php features
+ * Sample program to expose validate_cc.php features
  */
 
 require_once('config.php');
