@@ -23,7 +23,7 @@ $menu = array(
 );
 createMenu($menu);
 
-if ($session->id) {
+if ($h->sess->id) {
 	$menu = array(
 		'x' => 'Projects',					//overview of all projects
 		'issues.php?show=open' => 'Issues',	//overview of open issues
@@ -31,7 +31,7 @@ if ($session->id) {
 	);
 	createMenu($menu);
 
-	if ($session->isAdmin) {
+	if ($h->sess->isAdmin) {
 		$menu = array(
 			'manage/issue_categories.php' => 'Manage',
 			$config['core']['web_root'].'admin/admin.php' => 'Admin'

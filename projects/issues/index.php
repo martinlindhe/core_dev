@@ -4,9 +4,9 @@ require_once('config.php');
 
 require('design_head.php');
 
-if (!$session->id) {
+if (!$h->sess->id) {
 	echo 'You need to log in to continue.<br/><br/>';
-	$session->auth->showLoginForm();
+	$h->auth->showLoginForm();
 } else {
 	echo 'You are logged in';
 }
