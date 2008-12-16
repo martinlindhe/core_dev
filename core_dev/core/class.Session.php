@@ -7,19 +7,31 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('class.DB_MySQLi.php');	//class DB_MySQLi
-require_once('session_default.php');	//class session_default()
-require_once('user_default.php');		//class user_default()
-require_once('auth_default.php');		//class auth_default()
+require_once('db_mysqli.php');			//class db_mysqli
+require_once('session_default.php');	//class session_default
+require_once('user_default.php');		//class user_default
+require_once('auth_default.php');		//class auth_default
 
-class Session
+class Handler	//core_dev handler
 {
 	var $db = false;	///< db driver in use
-	var $sess = false;	///< session handler in use
-	var $user = false;	///< user handler in use
+	var $user = false;	///< user driver in use
+	var $auth = false;	///< auth driver in use
+	var $sess = false;	///< session driver in use
 
 	var $id = false;
 
+
+	// The parameterized factory method
+	public static function factory($type, $driver, $conf = array())
+	{
+		$class = $type.'_'.$driver;
+		if (require_once($class.'.php')) {
+			return new $class($conf);
+		} else {
+			throw new Exception('Driver '.$class.' not found');
+		}
+	}
 
 	/**
 	 * Constructor. Initializes the session class
@@ -29,8 +41,8 @@ class Session
 	function __construct($conf = array())
 	{
 		//Load db driver
-		if (empty($conf['db']['driver']) || $conf['session']['driver'] == 'mysqli') {
-			$this->db = new DB_MySQLi($conf['db']);
+		if (!empty($conf['db']['driver'])) {
+			$this->db = $this->factory('db', $conf['db']['driver'], $conf['db']);
 
 			//XXX remove this hack:
 			global $db;
@@ -38,18 +50,18 @@ class Session
 		}
 
 		//Load user driver
-		if (empty($conf['user']['driver']) || $conf['user']['driver'] == 'default') {
-			$this->user = new user_default($this->db, $conf['user']);
+		if (!empty($conf['user']['driver'])) {
+			$this->user = $this->factory('user', $conf['user']['driver'], $conf['user']);
 		}
 
 		//Load auth driver
-		if (empty($conf['auth']['driver']) || $conf['auth']['driver'] == 'default') {
-			$this->auth = new auth_default($this->db, $conf['auth']);
+		if (!empty($conf['auth']['driver'])) {
+			$this->auth = $this->factory('auth', $conf['auth']['driver'], $conf['auth']);
 		}
 
 		//Load session driver
-		if (empty($conf['session']['driver']) || $conf['session']['driver'] == 'default') {
-			$this->sess = new session_default($this->db, $conf['session']);
+		if (!empty($conf['session']['driver'])) {
+			$this->sess = $this->factory('session', $conf['session']['driver'], $conf['session']);
 
 			//XXX map all $this->sess->function to $this->function
 			$this->id = $this->sess->id;
@@ -58,7 +70,7 @@ class Session
 
 	function handleEvents()
 	{
-		if ($this->auth) $this->auth->handleAuthEvents($this->sess);
+		if ($this->auth) $this->auth->handleAuthEvents($this->sess, $this->user);
 		if ($this->sess) $this->sess->handleSessionEvents();
 	}
 

@@ -110,5 +110,125 @@ function contact_users($message, $subject, $all, $presvid, $logged_in_days, $day
 		}
 	}
 }
+/*
+
+	//SMTP out settings
+	public $smtp_host = 'smtp.example.com';
+	public $smtp_username = '';
+	public $smtp_password = '';
+
+	public $mail_from = 'noreply@example.com';
+	public $mail_from_name = 'core_dev';
+
+	public $mail_activate_msg =	//XXX move all smtp crap out of here
+		"Hello. Someone (probably you) registered an account from IP __IP__
+
+Username: __USERNAME__
+Activation code: __CODE__
+
+Follow this link to activate your account:
+__URL__
+
+The link will expire in __EXPIRETIME__";
+
+	public $mail_password_msg =
+		"Hello. Someone (probably you) asked for a password reset procedure from IP __IP__
+
+Registered username: __USERNAME__
+
+Follow this link to set a new password:
+__URL__
+
+The link will expire in __EXPIRETIME__";
+*/
+	/**
+	 * FIXME remove smtp settings from Auth. use $config['email']
+	 */
+/*	function SmtpSend($dst_adr, $subj, $msg)
+	{
+		$mail = new PHPMailer();
+
+		$mail->Mailer = 'smtp';
+		$mail->Host = $this->smtp_host;
+		$mail->Username = $this->smtp_username;
+		$mail->Password = $this->smtp_password;
+
+		$mail->CharSet  = 'utf-8';
+
+		$mail->From = $this->mail_from;
+		$mail->FromName = $this->mail_from_name;
+
+		$mail->IsHTML(false); // send HTML mail?
+
+		$mail->AddAddress($dst_adr);
+		$mail->Subject = $subj;
+		$mail->Body = $msg;
+
+		if (!$mail->Send()) {
+			$this->mail_error = true;
+			return false;
+		}
+		return true;
+	}
+*/
+	/**
+	 * Sends a account activation mail to specified user
+	 *
+	 * @param $_id user id
+	 */
+/*	function sendActivationMail($_id)
+	{
+		global $config;
+		if (!is_numeric($_id)) return false;
+
+		$email = loadUserdataEmail($_id);
+		if (!$email) return false;
+
+		$code = generateActivationCode(ACTIVATE_EMAIL, 1000000, 9999999);
+		createActivation(ACTIVATE_EMAIL, $code, $_id);
+
+		$subj = t('Account activation');
+
+		$pattern = array('/__USERNAME__/', '/__IP__/', '/__CODE__/', '/__URL__/', '/__EXPIRETIME__/');
+		$replacement = array(
+			Users::getName($_id),
+			$_SERVER['REMOTE_ADDR'],
+			$code,
+			$config['app']['full_url']."activate.php?id=".$_id."&code=".$code,
+			shortTimePeriod($config['activate']['expire_time_email'])
+		);
+		$msg = preg_replace($pattern, $replacement, $this->mail_activate_msg);
+
+		if (!$this->SmtpSend($email, $subj, $msg)) return false;
+
+		$this->activation_sent = true;
+		return true;
+	}
+*/
+	/**
+	 * Verifies user activaction code
+	 *
+	 * @param $_id
+	 * @param $_code
+	 * @return true if success
+	 */
+/*	function verifyActivationMail($_id, $_code)
+	{
+		if (!is_numeric($_id) || !is_numeric($_code)) return false;
+
+		if (!verifyActivation(ACTIVATE_EMAIL, $_code, $_id)) {
+			echo t('Activation code is invalid or expired.');
+			return false;
+		}
+
+		Users::activate($_id);
+
+		removeActivation(ACTIVATE_EMAIL, $_code);
+
+		echo t('Your account has been activated.').'<br/>';
+		echo t('You can now proceed to').' <a href="login.php">'.t('log in').'</a>.';
+		return true;
+	}
+*/
 
 ?>

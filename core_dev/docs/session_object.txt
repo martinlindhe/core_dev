@@ -3,39 +3,45 @@ Explanation of the design of the session object
 
 WIP - still in draft
 
-$session - always exists in a core_dev project
+$h - core handler - always exists in a core_dev project
 it is automatically created by XXX_CORE_DEV_START function
 
-$session->db - the database driver in use:
-				default - mysqli
-				none - db driver not in use			FIXME!!!
-				mysql
-				postgresql - FIXME unfinished
-				sqlite - FIXME unfinished
+$h->db - the database driver in use:
+			mysqli - the preferred driver
+			mysql - older & slower mysql database driver
+			postgresql - FIXME unfinished
+			sqlite - FIXME unfinished
 
-$session->user - the user handler:
-				XXX - what functions must be implemented for user class?
-				default - uses tblUsers to store user data
-				TODO - another premade user handler (external db with simplificated interface?)
-				application defined - for m2w, lookup directly in tblCallers and dont use tblUsers
+$h->user - the user handler: (XXX what functions is required?)
+			default - uses tblUsers to store user data
+			application defined - for m2w, lookup directly
+					in tblCallers and dont use tblUsers
 
-$session->auth - the authentication handler:
-				XXX - what functions must be implemented for auth class?
-				default - built in authentication handler from http requests (store data in tblUsers - XXX use $session->user functions to abstract underlying DB (currently uses tblUsers))
-				openid - XXX how? openid against multiple sites (just store openid provider?)
-				application defined - for m2w
+$h->auth - the authentication handler: (XXX what functions is required?)
+			default - built in authentication handler for http requests
+					(store data in tblUsers - XXX use $session->user
+					functions to abstract underlying DB which is
+					currently using tblUsers)
+			openid - XXX how? openid against multiple sites
+					(just store openid provider?)
+			application defined - for m2w
 
-$session->log - the log handler:
-				default - built in handler using the Log class (uses tblLogs)
-				text - logs to /tmp/core_dev.log or user-defined    FIXME!
+$h->sess - the session handler:  (XXX what functions is required?)
+			default - built in session handler for web
+					server access with http requests
 
-$session->load / save / delete - the settings handler:
-				default - stores user settings in tblSettings
+$h->log - the log handler:
+			default - built in handler using the Log class (uses tblLogs)
+			text - logs to /tmp/core_dev.log or user-defined    FIXME!
+
+$h->load / save / delete - the settings handler:
+			default - stores user settings in tblSettings
 
 
 
-XXX eventually a class for fine-grained user access? default implements the normal/admin/superadmin thing?
+XXX eventually a class for fine-grained user access?
+    default implements the normal/admin/superadmin thing?
 
 
-XXX ability for additional classes to be registerd that attach their own functions,
-	such as: theming (currently $session->default_theme etc)
+XXX ability for additional classes to be registerd that attach their own
+	functions, such as: theming (currently $session->default_theme etc)

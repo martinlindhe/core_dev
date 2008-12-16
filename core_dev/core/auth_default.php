@@ -14,6 +14,10 @@ require_once('atom_moderation.php');	//for checking if username is reserved on u
 require_once('atom_events.php');		//for event logging
 require_once('functions_userdata.php');	//for showRequiredUserdataFields()
 
+require_once('atom_activation.php');		//for activation
+require_once('functions_ip.php');			//for IPv4_to_GeoIP()
+require_once('atom_blocks.php');			//for isBlocked()
+
 class auth_default extends auth_base
 {
 	var $driver = 'default';
@@ -27,6 +31,9 @@ class auth_default extends auth_base
 	function __construct($db = false, $conf = array())
 	{
 		$this->db = &$db;
+
+		if (isset($conf['check_ip'])) $this->check_ip = $conf['check_ip'];
+		if (isset($conf['check_useragent'])) $this->check_useragent = $conf['check_useragent'];
 
 		if (!isset($_SESSION['user_agent'])) $_SESSION['user_agent'] = '';
 
@@ -46,11 +53,11 @@ class auth_default extends auth_base
 	/**
 	 * Handles login, logout & register user requests
 	 */
-	function handleAuthEvents($session)
+	function handleAuthEvents($session, $user)
 	{
 		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
 		if (!$session->id) {
-			if (!empty($_POST['login_usr']) && isset($_POST['login_pwd']) && $this->login($_POST['login_usr'], $_POST['login_pwd'])) {
+			if (!empty($_POST['login_usr']) && isset($_POST['login_pwd']) && $user->login($_POST['login_usr'], $_POST['login_pwd'])) {
 				$session->startPage();
 			}
 		}
@@ -389,6 +396,97 @@ class auth_default extends auth_base
 		} else {
 			echo t('Your password has been changed successfully!');
 		}
+	}
+
+	/**
+	 * Looks up user supplied email address / alias and generates a mail for them if needed
+	 *
+	 * @param $email email address
+	 */
+	function handleForgotPassword($email)
+	{
+		global $config, $session;
+
+		$email = trim($email);
+		if (strpos($email, '@')) {
+			if (!ValidEmail($email)) return false;
+			$_id = findUserByEmail($email);
+		} else {
+			//find user by alias
+			$_id = Users::getId($email);
+		}
+		if (!$_id) {
+			$session->error = t('Invalid email address or username');
+			return false;
+		}
+
+		$email = loadUserdataEmail($_id);
+
+		$code = generateActivationCode(ACTIVATE_CHANGE_PWD, 10000000, 99999999);
+		createActivation(ACTIVATE_CHANGE_PWD, $code, $_id);
+
+		$subj  = t('Forgot password');
+
+		$pattern = array('/__USERNAME__/', '/__IP__/', '/__URL__/', '/__EXPIRETIME__/');
+		$replacement = array(
+			Users::getName($_id),
+			$_SERVER['REMOTE_ADDR'],
+			$config['app']['full_url']."reset_password.php?id=".$_id."&code=".$code,
+			shortTimePeriod($config['activate']['expire_time_email'])
+		);
+		$msg = preg_replace($pattern, $replacement, $this->mail_password_msg);
+
+		if (!$this->SmtpSend($email, $subj, $msg)) {
+			removeActivation(ACTIVATE_CHANGE_PWD, $code);
+			$session->error = t('Problems sending mail');
+			return false;
+		}
+
+		$this->resetpwd_sent = true;
+		return true;
+	}
+
+	/**
+	 * Reset user's password
+	 *
+	 * @param $_id user id
+	 * @param $_code reset code
+	 * @return true on success
+	 */
+	function resetPassword($_id, $_code)
+	{
+		global $session;
+		if (!is_numeric($_id) || !is_numeric($_code)) return false;
+
+		if (!verifyActivation(ACTIVATE_CHANGE_PWD, $_code, $_id)) {
+			echo t('Activation code is invalid or expired.');
+			return false;
+		}
+
+		echo '<h1>'.t('Set a new password').'</h1>';
+
+		if (isset($_POST['reset_pwd1']) && isset($_POST['reset_pwd2'])) {
+			$chk = Users::setPassword($_id, $_POST['reset_pwd1'], $_POST['reset_pwd2']);
+			if ($chk) {
+				echo t('Your password has been changed!');
+				removeActivation(ACTIVATE_CHANGE_PWD, $_code);
+				return true;
+			}
+		}
+
+		echo t('Because we don\'t store the password in clear text it cannot be retrieved.').'<br/>';
+		echo t('You will therefore need to set a new password for your account.').'<br/>';
+
+		if ($session->error) {
+			echo '<div class="critical">'.$session->error.'</div><br/>';
+			$session->error = ''; //remove error message once it has been displayed
+		}
+
+		echo xhtmlForm();
+		echo t('New password').': '.xhtmlPassword('reset_pwd1', '', 12).'<br/>';
+		echo t('Repeat password').': '.xhtmlPassword('reset_pwd2', '', 12).'<br/>';
+		echo xhtmlSubmit('Set password');
+		echo xhtmlFormClose();
 	}
 
 }
