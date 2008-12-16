@@ -9,10 +9,9 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-//TODO rename to class.DB.php + require alla db klasser och i konstruktorn här berätta vilken driver som ska användas
 //TODO Make a test script to verify each of the database classes returns data as expected
 
-abstract class DB_Base
+abstract class db_base
 {
 	/****************************************************/
 	/* PUBLIC INTERFACE EXPOSED BY ALL DB MODULES				*/

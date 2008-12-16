@@ -9,9 +9,9 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('class.DB_Base.php');
+require_once('db_base.php');
 
-class DB_MySQL extends DB_Base
+class db_mysql extends db_base
 {
 	/**
 	 * Destructor
