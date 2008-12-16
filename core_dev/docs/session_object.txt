@@ -39,9 +39,8 @@ $h->load / save / delete - the settings handler:
 
 
 
-XXX eventually a class for fine-grained user access?
-    default implements the normal/admin/superadmin thing?
-
-
 XXX ability for additional classes to be registerd that attach their own
 	functions, such as: theming (currently $session->default_theme etc)
+
+XXX eventually a class for fine-grained user access?
+    default implements the normal/admin/superadmin thing?

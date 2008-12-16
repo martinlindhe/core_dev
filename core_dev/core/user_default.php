@@ -9,95 +9,86 @@
 
 class user_default
 {
-	var $db = false;	///< points to $db driver to use
+	var $par = false;	///< points to parent class
 
-	function __construct($db = false, $conf = array())
+	function __construct($conf = array())
 	{
-		$this->db = $db;
 		//echo "___ user_default constructor!\n";
 	}
 
 	/**
-	 * Handles logins
+	 * Register new user in the database
 	 *
-	 * @param $username
-	 * @param $password
-	 * @return true on success
+	 * @param $username user name
+	 * @param $password1 password
+	 * @param $password2 password (repeat)
+	 * @param $_mode user mode
+	 * @param $newUserId supply reserved user id. if not supplied, a new user id will be allocated
+	 * @return the user ID of the newly created user
 	 */
-	function login($username, $password)
-	{
-		global $db, $session;
-
-		$data = $this->validLogin($username, $password);
-
-		if (!$data) {
-			$session->error = t('Login failed');
-			$session->log('Failed login attempt: username '.$username, LOGLEVEL_WARNING);
-			return false;
-		}
-
-		if ($data['userMode'] != USERLEVEL_SUPERADMIN) {
-			if ($this->mail_activate && !Users::isActivated($data['userId'])) {
-				$this->error = t('This account has not yet been activated.');
-				return false;
-			}
-
-			if (!$this->allow_login) {
-				$this->error = t('Logins currently not allowed.');
-				return false;
-			}
-
-			$blocked = isBlocked(BLOCK_USERID, $data['userId']);
-			if ($blocked) {
-				$this->error = t('Account blocked');
-				$session->log('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
-				return false;
-			}
-		}
-
-		$session->startSession($data['userId'], $data['userName'], $data['userMode']);
-
-		//Update last login time
-		$db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$session->id);
-		$db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$session->id.', IP='.$session->ip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
-
-		addEvent(EVENT_USER_LOGIN, 0, $session->id);
-
-		return true;
-	}
-
-	/**
-	 * Checks if this is a valid login
-	 *
-	 * @return if valid login, return user data, else false
-	 */
-	function validLogin($username, $password)
-	{
-		global $db;
-
-		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($username).'" AND timeDeleted IS NULL';
-		$id = $db->getOneItem($q);
-		if (!$id) return false;
-
-		$enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
-
- 		$q = 'SELECT * FROM tblUsers WHERE userId='.$id.' AND userPass="'.$enc_password.'"';
- 		$data = $db->getOneRow($q);
-
-		return $data;
-	}
-
-	/**
-	 * Logs out the user
-	 */
-	function logout()
+	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
 	{
 		global $session;
-		$this->db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$session->id);
+		if (!is_numeric($_mode) || !is_numeric($newUserId)) return false;
 
-		addEvent(EVENT_USER_LOGOUT, 0, $session->id);
-		$session->endSession();
+		if ($username != trim($username)) return t('Username contains invalid spaces');
+
+		if (($db->escape($username) != $username) || ($db->escape($password1) != $password1)) {
+			//if someone tries to enter ' or " etc as username/password letters
+			//with this check, we dont need to encode the strings for use in sql query
+			return t('Username or password contains invalid characters');
+		}
+
+		if (strlen($username) < $this->minlen_username) return t('Username must be at least').' '.$this->minlen_username.' '.t('characters long');
+		if (strlen($password1) < $this->minlen_password) return t('Password must be at least').' '.$this->minlen_password.' '.t('characters long');
+		if ($password1 != $password2) return t('The passwords doesnt match');
+
+		if (!$session->isSuperAdmin) {
+			if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
+
+			//Checks if email was required, and if so if it was correctly entered
+			if ($this->userdata) {
+				$chk = verifyRequiredUserdataFields();
+				if ($chk !== true) return $chk;
+			}
+		}
+
+		if (Users::cnt()) {
+			if (Users::getId($username)) return t('Username already exists');
+		} else {
+			//No users exists, give this user superadmin status
+			$_mode = USERLEVEL_SUPERADMIN;
+		}
+
+		if (!$newUserId) {
+			$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
+			$newUserId = $this->db->insert($q);
+		} else {
+			$q = 'UPDATE tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW() WHERE userId='.$newUserId;
+			$this->db->update($q);
+		}
+
+		Users::setPassword($newUserId, $password1, $password1, $this->sha1_key);
+
+		$session->log('Registered user <b>'.$username.'</b>');
+
+		//Stores the additional data from the userdata fields that's required at registration
+		if (!$session->isSuperAdmin && $this->userdata) {
+			handleRequiredUserdataFields($newUserId);
+		}
+
+		return $newUserId;
 	}
+
+	/**
+	 * Creates a tblUsers entry without username or password
+	 */
+	function reserveUser()
+	{
+		$q = 'INSERT INTO tblUsers SET userMode=0';
+		return $this->db->insert($q);
+	}
+
 
 }
 

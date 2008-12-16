@@ -45,7 +45,7 @@ class db_mysql extends db_base
 
 		$this->query('SET NAMES '.$this->charset);
 
-		$this->db_driver = 'DB_MySQL';
+		$this->driver = 'mysql';
 		$this->dialect = 'mysql';
 		$this->server_version = mysql_get_server_info($this->db_handle);
 		$this->client_version = mysql_get_client_info();

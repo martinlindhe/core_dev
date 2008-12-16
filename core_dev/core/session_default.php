@@ -25,7 +25,8 @@ define('USERLEVEL_SUPERADMIN',	3);
 
 class session_default
 {
-	private $db = false;	///< points to $db driver to use
+	var $par = false;	///< points to parent class
+	//private $db = false;	///< points to $db driver to use
 
 	private $session_name = 'someSID';		///< default session name
 	private $timeout = 86400;				///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
@@ -39,7 +40,6 @@ class session_default
 	//Aliases of $_SESSION[] variables
 	public $error;					///< last error message
 	public $ip;						///< IP of user
-	public $user_agent;				///< current user's UserAgent string
 	public $id;						///< current user's user ID
 	public $username;				///< username of current user
 	public $mode;					///< usermode
@@ -69,11 +69,11 @@ class session_default
 		$this->db = $db;
 
 		//echo "___ session_default constructor!\n";
-		if (isset($conf['session']['name'])) $this->session_name = $conf['session']['name'];
-		if (isset($conf['session']['timeout'])) $this->timeout = $conf['session']['timeout'];
-		if (isset($conf['session']['start_page'])) $this->start_page = $conf['session']['start_page'];
-		if (isset($conf['session']['error_page'])) $this->error_page = $conf['session']['error_page'];
-		if (isset($conf['session']['allow_themes'])) $this->allow_themes = $conf['session']['allow_themes'];
+		if (isset($conf['name'])) $this->session_name = $conf['name'];
+		if (isset($conf['timeout'])) $this->timeout = $conf['timeout'];
+		if (isset($conf['start_page'])) $this->start_page = $conf['start_page'];
+		if (isset($conf['error_page'])) $this->error_page = $conf['error_page'];
+		if (isset($conf['allow_themes'])) $this->allow_themes = $conf['allow_themes'];
 
 		ini_set('session.gc_maxlifetime', $this->timeout);
 		session_name($this->session_name);
@@ -145,7 +145,6 @@ class session_default
 		$this->started = 0;
 		$this->username = '';
 		$this->ip = 0;
-		$this->user_agent = '';
 		$this->mode = 0;
 		$this->isWebmaster = false;
 		$this->isAdmin = false;
@@ -155,9 +154,8 @@ class session_default
 
 		if (!$this->id) return;
 
-		$this->id = 0;
-
 		$this->log('User logged out', LOGLEVEL_NOTICE);
+		$this->id = 0;
 	}
 
 	/**
@@ -170,8 +168,8 @@ class session_default
 
 		//Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
 		if (isset($_GET['logout'])) {
-			$this->logout();
-			$session->loggedOutStartPage();
+			$this->par->auth->logout();
+			$this->loggedOutStartPage();
 		}
 
 		//Logged in: Check user activity - log out inactive user
@@ -185,7 +183,7 @@ class session_default
 		if (!$this->id) return;
 
 		//Update last active timestamp
-		$this->db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
+		$this->par->db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
 		$this->lastActive = time();
 	}
 
@@ -231,7 +229,6 @@ class session_default
 		echo 'Session name: '.$this->session_name.'<br/>';
 		echo 'Current IP: '.GeoIP_to_IPv4($this->ip).'<br/>';
 		echo 'Authentication method: '.$this->auth->driver.'<br/>';
-		echo 'User Agent: '.$this->auth->user_agent.'<br/>';
 		echo 'Session timeout: '.shortTimePeriod($this->timeout).'<br/>';
 		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
 		echo 'Start page: '.$config['app']['web_root'].$this->start_page.'<br/>';

@@ -19,19 +19,7 @@ class Handler	//core_dev handler
 	var $auth = false;	///< auth driver in use
 	var $sess = false;	///< session driver in use
 
-	var $id = false;
-
-
-	// The parameterized factory method
-	public static function factory($type, $driver, $conf = array())
-	{
-		$class = $type.'_'.$driver;
-		if (require_once($class.'.php')) {
-			return new $class($conf);
-		} else {
-			throw new Exception('Driver '.$class.' not found');
-		}
-	}
+	//var $id = false;
 
 	/**
 	 * Constructor. Initializes the session class
@@ -43,6 +31,7 @@ class Handler	//core_dev handler
 		//Load db driver
 		if (!empty($conf['db']['driver'])) {
 			$this->db = $this->factory('db', $conf['db']['driver'], $conf['db']);
+			$this->db->par = &$this;	//XXX hack to allow access to parent class
 
 			//XXX remove this hack:
 			global $db;
@@ -52,19 +41,35 @@ class Handler	//core_dev handler
 		//Load user driver
 		if (!empty($conf['user']['driver'])) {
 			$this->user = $this->factory('user', $conf['user']['driver'], $conf['user']);
+			$this->user->par = &$this;	//XXX hack to allow access to parent class
 		}
 
 		//Load auth driver
 		if (!empty($conf['auth']['driver'])) {
 			$this->auth = $this->factory('auth', $conf['auth']['driver'], $conf['auth']);
+			$this->auth->par = &$this;	//XXX hack to allow access to parent class
 		}
 
 		//Load session driver
 		if (!empty($conf['session']['driver'])) {
 			$this->sess = $this->factory('session', $conf['session']['driver'], $conf['session']);
+			$this->sess->par = &$this;	//XXX hack to allow access to parent class
 
 			//XXX map all $this->sess->function to $this->function
 			$this->id = $this->sess->id;
+		}
+	}
+
+	/**
+	 * The parameterized factory method
+	 */
+	public static function factory($type, $driver, $conf = array())
+	{
+		$class = $type.'_'.$driver;
+		if (require_once($class.'.php')) {
+			return new $class($conf);
+		} else {
+			throw new Exception('Driver '.$class.' not found');
 		}
 	}
 

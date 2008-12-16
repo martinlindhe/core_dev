@@ -20,17 +20,41 @@ require_once('atom_blocks.php');			//for isBlocked()
 
 class auth_default extends auth_base
 {
+	var $par = false;	///< points to parent class
 	var $driver = 'default';
-	var $db = false;	///< points to $db driver to use
+
 	var $error = '';	///< contains last error message, if any
+
+	public $sha1_key = 'rpxp8xFDSGsdfgds5tgddgsDh9tkeWljo';	///< used to further encode sha1 passwords, to make rainbow table attacks harder
+
+	public $allow_login = true;				///< set to false to only let superadmins log in to the site
+	public $allow_registration = true;		///< set to false to disallow the possibility to register new users. will be disabled if login is disabled
+	public $reserved_usercheck = true;		///< check if username is listed as reserved username, requires tblStopwords
+	public $userdata = true; 				///< shall we use tblUserdata for required userdata fields?
+	public $mail_activate = false;			///< does account registration require email activation?
+	public $mail_error = false;				///< will be set to true if there was problems sending out email
+
+	public $activation_sent = false;		///< internal. true if mail activation has been sent
+	public $resetpwd_sent = false;			///< internal. true if mail for password reset has been sent
+
+	public $minlen_username = 3;			///< minimum length for valid usernames
+	public $minlen_password = 4;			///< minimum length for valid passwords
+
 
 	private $check_ip = true;				///< client will be logged out if client ip is changed during the session
 	private $check_useragent = false;		///< keeps track if the client user agent string changes during the session
-	private $ip = false;					///< IP of user
+	private $ip = 0;						///< IP of user
 
-	function __construct($db = false, $conf = array())
+	function __construct($conf = array())
 	{
-		$this->db = &$db;
+		if (isset($conf['sha1_key'])) $this->sha1_key = $conf['sha1_key'];
+		if (isset($conf['allow_login'])) $this->allow_login = $conf['allow_login'];
+		if (isset($conf['allow_registration'])) $this->allow_registration = $conf['allow_registration'];
+		if (isset($conf['reserved_usercheck'])) $this->reserved_usercheck = $conf['reserved_usercheck'];
+		if (isset($conf['userdata'])) $this->userdata = $conf['userdata'];
+		if (isset($conf['mail_activate'])) $this->mail_activate = $conf['mail_activate'];
+		if (isset($conf['minlen_username'])) $this->minlen_username = $conf['minlen_username'];
+		if (isset($conf['minlen_password'])) $this->minlen_password = $conf['minlen_password'];
 
 		if (isset($conf['check_ip'])) $this->check_ip = $conf['check_ip'];
 		if (isset($conf['check_useragent'])) $this->check_useragent = $conf['check_useragent'];
@@ -40,25 +64,27 @@ class auth_default extends auth_base
 		$this->ip = &$_SESSION['ip'];
 		$this->user_agent = &$_SESSION['user_agent'];
 
-		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {	//FIXME move ip check to auth_default
-			$ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
-			if (isBlocked(BLOCK_IP, $ip)) {
-				die('You have been blocked from this site.');
-			}
-			$this->ip = $ip;
+		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {
+			$this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
 		}
-		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 	}
 
 	/**
 	 * Handles login, logout & register user requests
 	 */
-	function handleAuthEvents($session, $user)
+	function handleAuthEvents()
 	{
+		/* 	//FIXME verify this works:
+		if ($this->ip && isBlocked(BLOCK_IP, $this->ip)) {
+			die('You have been blocked from this site.');
+		}
+		if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+		*/
+
 		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
-		if (!$session->id) {
-			if (!empty($_POST['login_usr']) && isset($_POST['login_pwd']) && $user->login($_POST['login_usr'], $_POST['login_pwd'])) {
-				$session->startPage();
+		if (!$this->par->sess->id) {
+			if (!empty($_POST['login_usr']) && isset($_POST['login_pwd']) && $this->login($_POST['login_usr'], $_POST['login_pwd'])) {
+				$this->par->sess->startPage();
 			}
 		}
 
@@ -71,7 +97,7 @@ class auth_default extends auth_base
 		}
 
 		//Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
-		if (($this->allow_registration || !Users::cnt()) && !$session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
+		if (($this->allow_registration || !Users::cnt()) && !$this->par->sess->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
 			$preId = 0;
 			if (!empty($_POST['preId']) && is_numeric($_POST['preId'])) $preId = $_POST['preId'];
 			$check = $this->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL, $preId);
@@ -82,7 +108,7 @@ class auth_default extends auth_base
 					$this->login($_POST['register_usr'], $_POST['register_pwd']);
 				}
 			} else {
-				$session->error = t('Registration failed').', '.$check;
+				$this->error = t('Registration failed').', '.$check;
 			}
 		}
 
@@ -101,76 +127,80 @@ class auth_default extends auth_base
 	}
 
 	/**
-	 * Register new user in the database
+	 * Handles logins
 	 *
-	 * @param $username user name
-	 * @param $password1 password
-	 * @param $password2 password (repeat)
-	 * @param $_mode user mode
-	 * @param $newUserId supply reserved user id. if not supplied, a new user id will be allocated
-	 * @return the user ID of the newly created user
+	 * @param $username
+	 * @param $password
+	 * @return true on success
 	 */
-	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
+	function login($username, $password)
 	{
-		global $config, $session;
-		if (!is_numeric($_mode) || !is_numeric($newUserId)) return false;
+		$data = $this->validLogin($username, $password);
 
-		if ($username != trim($username)) return t('Username contains invalid spaces');
-
-		if (($db->escape($username) != $username) || ($db->escape($password1) != $password1)) {
-			//if someone tries to enter ' or " etc as username/password letters
-			//with this check, we dont need to encode the strings for use in sql query
-			return t('Username or password contains invalid characters');
+		if (!$data) {
+			$this->error = t('Login failed');
+			$this->log('Failed login attempt: username '.$username, LOGLEVEL_WARNING);
+			return false;
 		}
 
-		if (strlen($username) < $this->minlen_username) return t('Username must be at least').' '.$this->minlen_username.' '.t('characters long');
-		if (strlen($password1) < $this->minlen_password) return t('Password must be at least').' '.$this->minlen_password.' '.t('characters long');
-		if ($password1 != $password2) return t('The passwords doesnt match');
+		if ($data['userMode'] != USERLEVEL_SUPERADMIN) {
+			if ($this->mail_activate && !Users::isActivated($data['userId'])) {
+				$this->error = t('This account has not yet been activated.');
+				return false;
+			}
 
-		if (!$session->isSuperAdmin) {
-			if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
+			if (!$this->allow_login) {
+				$this->error = t('Logins currently not allowed.');
+				return false;
+			}
 
-			//Checks if email was required, and if so if it was correctly entered
-			if ($this->userdata) {
-				$chk = verifyRequiredUserdataFields();
-				if ($chk !== true) return $chk;
+			$blocked = isBlocked(BLOCK_USERID, $data['userId']);
+			if ($blocked) {
+				$this->error = t('Account blocked');
+				$this->log('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
+				return false;
 			}
 		}
 
-		if (Users::cnt()) {
-			if (Users::getId($username)) return t('Username already exists');
-		} else {
-			//No users exists, give this user superadmin status
-			$_mode = USERLEVEL_SUPERADMIN;
-		}
+		$this->par->sess->startSession($data['userId'], $data['userName'], $data['userMode']);
 
-		if (!$newUserId) {
-			$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
-			$newUserId = $this->db->insert($q);
-		} else {
-			$q = 'UPDATE tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW() WHERE userId='.$newUserId;
-			$this->db->update($q);
-		}
+		//Update last login time
+		$this->par->db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->par->sess->id);
+		$this->par->db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->par->sess->id.', IP='.$this->ip.', userAgent="'.$this->par->db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
-		Users::setPassword($newUserId, $password1, $password1, $this->sha1_key);
+		addEvent(EVENT_USER_LOGIN, 0, $this->par->sess->id);
 
-		$session->log('Registered user <b>'.$username.'</b>');
-
-		//Stores the additional data from the userdata fields that's required at registration
-		if (!$session->isSuperAdmin && $this->userdata) {
-			handleRequiredUserdataFields($newUserId);
-		}
-
-		return $newUserId;
+		return true;
 	}
 
 	/**
-	 * Creates a tblUsers entry without username or password
+	 * Checks if this is a valid login
+	 *
+	 * @return if valid login, return user data, else false
 	 */
-	function reserveUser()
+	function validLogin($username, $password)
 	{
-		$q = 'INSERT INTO tblUsers SET userMode=0';
-		return $this->db->insert($q);
+		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$this->par->db->escape($username).'" AND timeDeleted IS NULL';
+		$id = $this->par->db->getOneItem($q);
+		if (!$id) return false;
+
+		$enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
+
+ 		$q = 'SELECT * FROM tblUsers WHERE userId='.$id.' AND userPass="'.$enc_password.'"';
+ 		$data = $this->par->db->getOneRow($q);
+
+		return $data;
+	}
+
+	/**
+	 * Logs out the user
+	 */
+	function logout()
+	{
+		$this->par->db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this->par->sess->id);
+
+		addEvent(EVENT_USER_LOGOUT, 0, $this->par->sess->id);
+		$this->par->sess->endSession();
 	}
 
 	/**
@@ -487,6 +517,18 @@ class auth_default extends auth_base
 		echo t('Repeat password').': '.xhtmlPassword('reset_pwd2', '', 12).'<br/>';
 		echo xhtmlSubmit('Set password');
 		echo xhtmlFormClose();
+	}
+
+	/**
+	 * Writes a log entry to tblLogs
+	 *
+	 * @param $str text to log
+	 * @param $entryLevel type of log entry
+	 */
+	function log($str, $entryLevel = LOGLEVEL_NOTICE)
+	{
+		echo "auth_log(".$str.")\n";
+		return logEntry($str, $entryLevel, $this->par->sess->id, $this->ip);
 	}
 
 }

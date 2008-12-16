@@ -46,7 +46,7 @@ class db_postgresql extends db_base
 
 		//FIXME: set charset if it is not utf8 (will be the default anyways if none is specified)
 
-		$this->db_driver = 'DB_PostgreSQL';
+		$this->driver = 'postgresql';
 		$this->dialect = 'pgsql';
 
 		$this->server_version = pg_parameter_status($this->db_handle, 'server_version');

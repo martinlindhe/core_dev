@@ -43,7 +43,7 @@ class db_sqlite extends db_base
 
 		//FIXME: set charset to utf8. see http://se.php.net/manual/en/function.sqlite-libencoding.php WARNINGS for more details of the problem
 
-		$this->db_driver = 'DB_SQLite';
+		$this->driver = 'sqlite';
 		$this->dialect = 'sqlite';
 
 		$this->server_version = sqlite_libversion();

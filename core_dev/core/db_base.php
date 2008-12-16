@@ -13,8 +13,34 @@
 
 abstract class db_base
 {
+	var $par = false;	///< points to parent class
+
+	//db settings
+	protected $host	= '';				///<Hostname or numeric IP address of the db server
+	protected $port	= 0;				///<Port number
+	protected $username = '';			///<Username to use to connect to the database
+	protected $password = '';			///<Password to use to connect to the database
+	protected $database = '';			///<Name of the database to connect to
+	protected $charset = 'utf8';		///<Default charset to use. utf8 should be used always
+
+	//db variables
+	public $db_handle = false;			///<Internal db handle
+	public $driver = '';				///<holds the full name of the db driver, example: DB_MySQLi, DB_MySQL
+	public $dialect = '';				///<tells what dialect of sql is currently allowed by the db driver, possible values: mysql, pgsql
+	public $server_version = '';		///<used for version checking
+	public $client_version = '';		///<used for version checking
+
+	//profiling variables
+	public $debug = false;				///<Debugging enabled?
+	public $connect_time = 0;			///<Used internally for the SQL profiler
+	public $time_spent = array();		///<Used internally for the SQL profiler
+	public $queries_cnt = 0;			///<Used internally for the SQL profiler
+	public $queries = array();			///<Used internally for the SQL profiler
+	public $query_error = array();		///<Used internally for the SQL profiler
+
+
 	/****************************************************/
-	/* PUBLIC INTERFACE EXPOSED BY ALL DB MODULES				*/
+	/* PUBLIC INTERFACE EXPOSED BY ALL DB MODULES       */
 	/****************************************************/
 
 	/**
@@ -142,45 +168,21 @@ abstract class db_base
 	abstract function showDriverStatus();
 
 
-	//db settings
-	protected $host	= '';				///<Hostname or numeric IP address of the db server
-	protected $port	= 0;				///<Port number
-	protected $username = '';			///<Username to use to connect to the database
-	protected $password = '';			///<Password to use to connect to the database
-	protected $database = '';			///<Name of the database to connect to
-	protected $charset = 'utf8';		///<Default charset to use. utf8 should be used always
-
-	//db variables
-	public $db_handle = false;			///<Internal db handle
-	public $db_driver = '';				///<holds the full name of the db driver, example: DB_MySQLi, DB_MySQL
-	public $dialect = '';				///<tells what dialect of sql is currently allowed by the db driver, possible values: mysql, pgsql
-	public $server_version = '';		///<used for version checking
-	public $client_version = '';		///<used for version checking
-
-	//profiling variables
-	public $debug = false;				///<Debugging enabled?
-	public $connect_time = 0;			///<Used internally for the SQL profiler
-	public $time_spent = array();		///<Used internally for the SQL profiler
-	public $queries_cnt = 0;			///<Used internally for the SQL profiler
-	public $queries = array();			///<Used internally for the SQL profiler
-	public $query_error = array();		///<Used internally for the SQL profiler
-
-
 	/**
 	 * Constructor. Initializes db driver and connects to the database
 	 *
 	 * @param $settings is array with DB-specific settings
 	 */
-	function __construct(array $settings)
+	function __construct(array $conf)
 	{
 		global $config;
 
-		if (!empty($settings['host'])) $this->host = $settings['host'];
-		if (!empty($settings['port'])) $this->port = $settings['port'];
-		if (!empty($settings['username'])) $this->username = $settings['username'];
-		if (!empty($settings['password'])) $this->password = $settings['password'];
-		if (!empty($settings['database'])) $this->database = $settings['database'];
-		if (!empty($settings['charset'])) $this->charset = $settings['charset'];
+		if (!empty($conf['host'])) $this->host = $conf['host'];
+		if (!empty($conf['port'])) $this->port = $conf['port'];
+		if (!empty($conf['username'])) $this->username = $conf['username'];
+		if (!empty($conf['password'])) $this->password = $conf['password'];
+		if (!empty($conf['database'])) $this->database = $conf['database'];
+		if (!empty($conf['charset'])) $this->charset = $conf['charset'];
 
 		if (!empty($config['debug'])) $this->debug = true;
 
@@ -194,7 +196,7 @@ abstract class db_base
 	{
 		echo '<div class="item">';
 		echo '<h2>Current database configuration</h2>';
-		echo 'DB driver: '.$this->db_driver.'<br/>';
+		echo 'DB driver: '.$this->driver.'<br/>';
 		echo 'Server version: '.$this->server_version.'<br/>';
 		echo 'Client version: '.$this->client_version.'<br/>';
 		echo 'Host: '.$this->host.':'.$this->port.'<br/>';

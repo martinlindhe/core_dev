@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Object oriented interface for MySQL databases using the php_mysqli.dll extension
+ * MySQL db driver using the php_mysqli extension
  *
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
@@ -43,7 +43,7 @@ class db_mysqli extends db_base
 			die('Error loading character set '.$this->charset.': '.$this->db_handle->error);
 		}
 
-		$this->db_driver = 'DB_MySQLi';
+		$this->driver = 'mysqli';
 		$this->dialect = 'mysql';
 		$this->server_version = $this->db_handle->server_info;
 		$this->client_version = $this->db_handle->client_info;
@@ -96,7 +96,7 @@ class db_mysqli extends db_base
 	}
 
 	/**
-	 * Helper function for SQL INSERT queries
+	 * For SQL INSERT queries
 	 *
 	 * @param $q the query to execute
 	 * @return insert_id
@@ -122,7 +122,7 @@ class db_mysqli extends db_base
 	}
 
 	/**
-	 * Helper function for SQL DELETE queries
+	 * For SQL DELETE queries
 	 *
 	 * @param $q the query to execute
 	 * @return number of rows affected
@@ -148,7 +148,7 @@ class db_mysqli extends db_base
 	}
 
 	/**
-	 * Helper function for SQL SELECT queries who returns array of data
+	 * For SQL SELECT queries who returns array of data
 	 *
 	 * @param $q the query to execute
 	 * @return result
@@ -176,7 +176,7 @@ class db_mysqli extends db_base
 	}
 
 	/**
-	 * Helper function for SQL SELECT queries who returns mapped array of data
+	 * For SQL SELECT queries who returns mapped array of data
 	 *
 	 * @param $q the query to execute
 	 * @return result
@@ -204,7 +204,7 @@ class db_mysqli extends db_base
 	}
 
 	/**
-	 * Helper function for SQL SELECT queries who returns array of data with numerical index
+	 * For SQL SELECT queries who returns array of data with numerical index
 	 *
 	 * @param $q the query to execute
 	 * @return result
@@ -232,7 +232,7 @@ class db_mysqli extends db_base
 	}
 
 	/**
-	 * Helper function for SQL SELECT queries who returns one row of data
+	 * For SQL SELECT queries who returns one row of data
 	 *
 	 * @param $q the query to execute
 	 * @return result
@@ -261,7 +261,7 @@ class db_mysqli extends db_base
 	}
 
 	/**
-	 * Helper function for SQL SELECT queries who returns one entry of data
+	 * For SQL SELECT queries who returns one entry of data
 	 *
 	 * @param $q the query to execute
 	 * @return result
