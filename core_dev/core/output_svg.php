@@ -19,6 +19,8 @@
 //FIXME: opacity is not quite correct
 //FIXME: use just one array with all objects to render, so z-index ordering would work as expected
 
+//FIXME: circle opacity is not working
+
 class svg
 {
 	var $polygons = array();
@@ -41,6 +43,7 @@ class svg
 	 */
 	function addPoly($poly)
 	{
+		if (!isset($poly['border'])) $poly['border'] = false;
 		$this->polygons[] = $poly;
 	}
 
@@ -49,7 +52,7 @@ class svg
 		if (!is_array($list)) return false;
 
 		foreach ($list as $poly) {
-			$this->polygons[] = $poly;
+			$this->addPoly($poly);
 		}
 	}
 
@@ -62,6 +65,7 @@ class svg
 	 * ['border'] border color RGBA
 	 */
 	function addCircle($circ) {
+		if (!isset($circ['border'])) $circ['border'] = false;
 		$this->circles[] = $circ;
 	}
 
@@ -70,7 +74,7 @@ class svg
 		if (!is_array($list)) return false;
 
 		foreach ($list as $circ) {
-			$this->circles[] = $circ;
+			$this->addCircle($circ);
 		}
 	}
 
@@ -90,7 +94,7 @@ class svg
 		//SVG has a transparent background by default. simulate background color with a filled rectangle
 		if ($this->bgcolor !== false) {
 			$res .=
-			'<rect x="0" y="0" width="'.$this->width.'" height="'.$this->height.'" fill="'.sprintf('%06x', $this->bgcolor).'"/>';
+			'<rect x="0" y="0" width="'.$this->width.'" height="'.$this->height.'" fill="#'.sprintf('%06x', $this->bgcolor).'"/>';
 		}
 
 		foreach ($this->polygons as $poly) {
@@ -98,7 +102,7 @@ class svg
 			$fill_a = round($fill_a/127, 2);		//XXX loss of precision
 			$poly['color'] = $poly['color'] & 0xFFFFFF;
 
-			if (!empty($poly['border'])) {
+			if ($poly['border'] !== false) {
 				$stroke_a = ($poly['border'] >> 24) & 0xFF;
 				$stroke_a = round($stroke_a/127, 2);
 				$poly['border'] = $poly['border'] & 0xFFFFFF;
@@ -108,7 +112,7 @@ class svg
 			'<polygon'.
 				' fill="#'.sprintf('%06x', $poly['color']).'"'.
 				($fill_a < 1 ? ' fill-opacity="'.$fill_a.'"' : '');
-				if (!empty($poly['border'])) {
+				if ($poly['border'] !== false) {
 					$res .=
 					' stroke-width="1" stroke="#'.sprintf('%06x', $poly['border']).'"'.
 					($stroke_a < 1 ? ' stroke-opacity="'.$stroke_a.'"': '');
@@ -126,13 +130,13 @@ class svg
 		foreach ($this->circles as $circ) {
 			$fill_a = ($circ['color'] >> 24) & 0xFF;
 			$fill_a = round($fill_a/127, 2);		//XXX loss of precision
-			$fill_a = 1;
+			//$fill_a = 1;
 			$circ['color'] = $circ['color'] & 0xFFFFFF;
 
-			if (!empty($circ['border'])) {
+			if ($circ['border'] !== false) {
 				$stroke_a = ($circ['border'] >> 24) & 0xFF;
 				$stroke_a = round($stroke_a/127, 2);
-				$stroke_a = 1;
+				//$stroke_a = 1;
 				$circ['border'] = $circ['border'] & 0xFFFFFF;
 			}
 
@@ -140,7 +144,7 @@ class svg
 			'<circle'.
 				' fill="#'.sprintf('%06x', $circ['color']).'"'.
 				($fill_a < 1 ? ' fill-opacity="'.$fill_a.'"' : '');
-				if (!empty($circ['border'])) {
+				if ($circ['border'] !== false) {
 					$res .=
 					' stroke-width="1" stroke="#'.sprintf('%06x', $circ['border']).'"'.
 					($stroke_a < 1 ? ' stroke-opacity="'.$stroke_a.'"': '');
