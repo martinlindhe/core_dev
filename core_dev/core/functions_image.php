@@ -407,4 +407,26 @@ function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12,
 	return $im;
 }
 
+/**
+ * Wrapper for GD imagecreatefrom*() functions
+ */
+function loadImage($in_file)
+{
+	//XXX lookup mime type with command line util
+	$x = explode('.', $in_file);
+	switch (array_pop($x)) {
+		case 'jpg':
+			return imagecreatefromjpeg($in_file);
+
+		case 'png':
+			return imagecreatefrompng($in_file);
+
+		case 'gif':
+			return imagecreatefromgif($in_file);
+
+		default:
+			die("Unknown file extension: ".$in_file."\n");
+	}
+}
+
 ?>
