@@ -17,10 +17,13 @@
  */
 
 //FIXME: opacity is not quite correct
+//FIXME: use just one array with all objects to render, so z-index ordering would work as expected
 
 class svg
 {
 	var $polygons = array();
+	var $circles = array();
+
 	var $width, $height;
 	var $bgcolor = false;	///< background color
 
@@ -30,6 +33,12 @@ class svg
 		$this->height = $height;
 	}
 
+	/**
+	 * each array element contains:
+	 * ['coords'] a set of X,Y coordinates
+	 * ['color'] fill color RGBA
+	 * ['border'] border color RGBA
+	 */
 	function addPoly($poly)
 	{
 		$this->polygons[] = $poly;
@@ -41,6 +50,27 @@ class svg
 
 		foreach ($list as $poly) {
 			$this->polygons[] = $poly;
+		}
+	}
+
+	/**
+	 * each array element contains:
+	 * ['x'] x-axis coordinate of the center of the circle
+	 * ['y'] y-axis coordinate of the center of the circle
+	 * ['r'] the radius of the circle
+	 * ['color'] fill color RGBA
+	 * ['border'] border color RGBA
+	 */
+	function addCircle($circ) {
+		$this->circles[] = $circ;
+	}
+
+	function addCircles($list)
+	{
+		if (!is_array($list)) return false;
+
+		foreach ($list as $circ) {
+			$this->circles[] = $circ;
 		}
 	}
 
@@ -91,6 +121,32 @@ class svg
 			}
 			$res .=
 			'"/>';
+		}
+
+		foreach ($this->circles as $circ) {
+			$fill_a = ($circ['color'] >> 24) & 0xFF;
+			$fill_a = round($fill_a/127, 2);		//XXX loss of precision
+			$fill_a = 1;
+			$circ['color'] = $circ['color'] & 0xFFFFFF;
+
+			if (!empty($circ['border'])) {
+				$stroke_a = ($circ['border'] >> 24) & 0xFF;
+				$stroke_a = round($stroke_a/127, 2);
+				$stroke_a = 1;
+				$circ['border'] = $circ['border'] & 0xFFFFFF;
+			}
+
+			$res .=
+			'<circle'.
+				' fill="#'.sprintf('%06x', $circ['color']).'"'.
+				($fill_a < 1 ? ' fill-opacity="'.$fill_a.'"' : '');
+				if (!empty($circ['border'])) {
+					$res .=
+					' stroke-width="1" stroke="#'.sprintf('%06x', $circ['border']).'"'.
+					($stroke_a < 1 ? ' stroke-opacity="'.$stroke_a.'"': '');
+				}
+
+			$res .= ' cx="'.$circ['x'].'" cy="'.$circ['y'].'" r="'.$circ['r'].'"/>';
 		}
 
 		$res .=
