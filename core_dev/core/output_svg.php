@@ -19,8 +19,6 @@
 //FIXME: opacity is not quite correct
 //FIXME: use just one array with all objects to render, so z-index ordering would work as expected
 
-//FIXME: circle opacity is not working
-
 class svg
 {
 	var $polygons = array();
