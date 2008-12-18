@@ -40,9 +40,9 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
 	//echo 'Resizing from '.$orig_width.'x'.$orig_height.' to '.$tn_width.'x'.$tn_height.'<br/>';
 
 	switch ($mime_type) {
-		case 'image/png':	$image = imagecreatefrompng($in_file); break;
 		case 'image/jpeg': $image = imagecreatefromjpeg($in_file); break;
-		case 'image/gif': $image = imagecreatefromgif($in_file); break;
+		case 'image/png':  $image = imagecreatefrompng($in_file); break;
+		case 'image/gif':  $image = imagecreatefromgif($in_file); break;
 		default: die('Unsupported image type '.$mime_type);
 	}
 
@@ -55,9 +55,9 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
 	}
 
  	switch ($mime_type) {
-		case 'image/png':	imagepng($image_p, $out_file); break;
 		case 'image/jpeg': imagejpeg($image_p, $out_file, $config['image']['jpeg_quality']); break;
-		case 'image/gif': imagegif($image_p, $out_file); break;
+		case 'image/png':  imagepng($image_p, $out_file); break;
+		case 'image/gif':  imagegif($image_p, $out_file); break;
 		default: die('Unsupported image type '.$mime_type);
 	}
 
@@ -267,9 +267,9 @@ function rotateImage($in_file, $out_file, $_angle)
 	}
 
 	switch ($mime) {
-		case 'image/png': $im = imagecreatefrompng($in_file); break;
-		case 'image/gif': $im = imagecreatefromgif($in_file); break;
 		case 'image/jpeg': $im = imagecreatefromjpeg($in_file); break;
+		case 'image/png':  $im = imagecreatefrompng($in_file); break;
+		case 'image/gif':  $im = imagecreatefromgif($in_file); break;
 		default: die('Unsupported image type '.$mime);
 	}
 
@@ -277,9 +277,9 @@ function rotateImage($in_file, $out_file, $_angle)
 	imagedestroy($im);
 
 	switch ($mime) {
-		case 'image/png': imagepng($rotated, $filename); break;
-		case 'image/gif': imagegif($rotated, $filename); break;
 		case 'image/jpeg': imagejpeg($rotated, $filename, $config['image']['jpeg_quality']); break;
+		case 'image/png':  imagepng($rotated, $filename); break;
+		case 'image/gif':  imagegif($rotated, $filename); break;
 		default: die('Unsupported image type '.$mime);
 	}
 
