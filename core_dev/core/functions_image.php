@@ -412,20 +412,22 @@ function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12,
  */
 function loadImage($in_file)
 {
-	//XXX lookup mime type with command line util
-	$x = explode('.', $in_file);
-	switch (array_pop($x)) {
-		case 'jpg':
+	$info = getimagesize($in_file);
+	if (!$info) return false;
+
+	switch ($info['mime']) {
+		case 'image/jpeg':
 			return imagecreatefromjpeg($in_file);
 
-		case 'png':
+		case 'image/png':
 			return imagecreatefrompng($in_file);
 
-		case 'gif':
+		case 'image/gif':
 			return imagecreatefromgif($in_file);
 
 		default:
-			die("Unknown file extension: ".$in_file."\n");
+			echo "Unknown image type: ".$info['mime']."\n";
+			return false;
 	}
 }
 
