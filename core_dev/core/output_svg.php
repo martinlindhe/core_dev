@@ -98,11 +98,13 @@ class svg
 		foreach ($this->polygons as $poly) {
 			$fill_a = ($poly['color'] >> 24) & 0xFF;
 			$fill_a = round($fill_a/127, 2);		//XXX loss of precision
+			if (!$fill_a) $fill_a = 1;	//set missing alpha as 100% alpha
 			$poly['color'] = $poly['color'] & 0xFFFFFF;
 
 			if ($poly['border'] !== false) {
 				$stroke_a = ($poly['border'] >> 24) & 0xFF;
 				$stroke_a = round($stroke_a/127, 2);
+				if (!$stroke_a) $stroke_a = 1;
 				$poly['border'] = $poly['border'] & 0xFFFFFF;
 			}
 
@@ -128,13 +130,13 @@ class svg
 		foreach ($this->circles as $circ) {
 			$fill_a = ($circ['color'] >> 24) & 0xFF;
 			$fill_a = round($fill_a/127, 2);		//XXX loss of precision
-			//$fill_a = 1;
+			if (!$fill_a) $fill_a = 1;	//set missing alpha as 100% alpha
 			$circ['color'] = $circ['color'] & 0xFFFFFF;
 
 			if ($circ['border'] !== false) {
 				$stroke_a = ($circ['border'] >> 24) & 0xFF;
 				$stroke_a = round($stroke_a/127, 2);
-				//$stroke_a = 1;
+				if (!$stroke_a) $stroke_a = 1;
 				$circ['border'] = $circ['border'] & 0xFFFFFF;
 			}
 
