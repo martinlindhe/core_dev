@@ -1,15 +1,15 @@
 <?php
 
-require_once('functions_icalendar.php');
+require_once('output_ical.php');
 
-header('Content-Type: text/plain; charset="UTF-8"');
+$cal = new ical('Månadslön');
 
-iCalBegin('VCALENDAR', 'Månadslön');
 for ($i = date('Y')-1; $i <= date('Y')+1; $i++)
 {
-	$cal = calPaydaysMonthly($i, 25);
-	iCalEvents($cal, 'Europe/Stockholm');	//$cal->renderiCal();
+	$e = $cal->paydaysMonthly($i, 25);
+	$cal->addEvents($e, 'Europe/Stockholm');
 }
-iCalEnd('VCALENDAR');
+
+$cal->output();
 
 ?>

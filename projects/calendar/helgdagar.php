@@ -1,16 +1,15 @@
 <?php
-//XXX: can you get ical file over webdav (if possible, behind https) into outlook?
 
-require_once('functions_icalendar.php');
+require_once('output_ical.php');
 
-header('Content-Type: text/plain; charset="UTF-8"');
+$cal = new ical('Svenska Helgdagar');
 
-iCalBegin('VCALENDAR', 'Svenska Helgdagar');
 for ($i = date('Y')-1; $i <= date('Y')+1; $i++)
 {
-	$cal = calDaysOffSwe($i);
-	iCalEvents($cal, 'Europe/Stockholm');	//$cal->renderiCal();
+	$e = $cal->daysOffSwe($i);
+	$cal->addEvents($e, 'Europe/Stockholm');
 }
-iCalEnd('VCALENDAR');
+
+$cal->output();
 
 ?>
