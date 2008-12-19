@@ -72,7 +72,8 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
 }
 
 /**
- * Utility function, Returns array(width, height) resized to maximum $to_width and $to_height while keeping aspect ratio
+ * Utility function, Returns array(width, height) proportionally resized to
+ * maximum $to_width and $to_height while keeping aspect ratio
  *
  * @param $filename image file to calculate new size for
  * @param $to_width wanted width
@@ -81,22 +82,16 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
  */
 function resizeImageCalc($filename, $to_width, $to_height)
 {
-	list($orig_width, $orig_height) = getimagesize($filename);
+	list($org_width, $org_height) = getimagesize($filename);
 
-	//Proportionally resize the image to the max sizes specified above
-	$x_ratio = $to_width / $orig_width;
-	$y_ratio = $to_height / $orig_height;
+	$x_ratio = $to_width / $org_width;
+	$y_ratio = $to_height / $org_height;
 
-	/*
-	if (($orig_width <= $to_width) && ($orig_height <= $to_height)) {
-		return Array($orig_width, $orig_height);
-	}*/
-
-	if (($x_ratio * $orig_height) < $to_height) {
-		return Array($to_width, ceil($x_ratio * $orig_height));
+	if (($x_ratio * $org_height) < $to_height) {
+		return array($to_width, ceil($x_ratio * $org_height));
 	}
 
-	return Array(ceil($y_ratio * $orig_width), $to_height);
+	return array(ceil($y_ratio * $org_width), $to_height);
 }
 
 /**
