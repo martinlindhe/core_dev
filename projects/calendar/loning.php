@@ -1,6 +1,6 @@
 <?php
 
-require_once('output_ical.php');
+require_once('/var/www/core_dev/core/output_ical.php');
 
 $cal = new ical('Månadslön');
 
