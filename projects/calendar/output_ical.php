@@ -12,11 +12,15 @@
  */
 
 //TODO: use VEVENT "DURATION" element to specify "all day event"
+//TODO: come up with a elegant solution to store needed data for "days off" tables
+//TODO: use daysOffSwe() in paydaysMonthly() to find out if assumed weekday really
+//      is a weekday (for example you never get salary on 25:th december)
 //XXX: can you get ical file over webdav (if possible, behind https) into outlook?
 
 class ical
 {
 	var $events = array();
+	var $dateevents = array();
 
 	function __construct($name = '')
 	{
@@ -28,7 +32,20 @@ class ical
 		header('Content-Type: text/plain; charset="UTF-8"');
 		echo $this->tagBegin('VCALENDAR', $this->name);
 
-		foreach ($this->events as $e) {
+		foreach ($this->dateevents as $e) {
+			echo $this->tagBegin('VEVENT');
+			$y = date('Y', $e[0]);
+			$m = date('m', $e[0]);
+			$d = date('d', $e[0]);
+			$end = mktime(0, 0, 0, $m, $d +1 , $y);	//date+1
+			echo "DTSTART;VALUE=DATE:".date("Ymd", $e[0])."\r\n";	//YYYYMMDD
+			echo "DTEND;VALUE=DATE:".  date("Ymd", $end)."\r\n";
+			echo "SUMMARY:".$e[1]."\r\n";
+			//TRANSP:TRANSPARENT   ???
+			echo $this->tagEnd('VEVENT');
+		}
+
+		foreach ($this->events as $e) {	//XXX currently unused
 			$tz = $e[1];
 			echo $this->tagBegin('VEVENT');
 			echo "DTSTART;TZID=".($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000\r\n";
@@ -41,7 +58,7 @@ class ical
 	}
 
 	/**
-	 * Creates iCalendar object header
+	 * Creates iCalendar begin tag
 	 */
 	function tagBegin($obj, $s = '')
 	{
@@ -49,7 +66,7 @@ class ical
 
 		switch ($obj) {
 			case 'VCALENDAR':
-				$res .= "PRODID:-//core_dev v1.0/".$s."/NONSGML v1.0//EN\r\n";	//FIXME: core_dev version string
+				$res .= "PRODID:-//core_dev v1.0/".$s."/NONSGML v1.0//EN\r\n";	//XXX core_dev version
 				$res .= "VERSION:2.0\r\n";
 				break;
 
@@ -67,10 +84,20 @@ class ical
 	/**
 	 * Adds additional events to the calendar
 	 */
-	function addEvents($cal, $tz = '')
+	function addEvents($cal, $tz)
 	{
 		foreach ($cal as $a) {
 			$this->events[] = array($a, $tz);
+		}
+	}
+
+	/**
+	 * Adds events that is valid a whole day
+	 */
+	function addDateEvents($cal)
+	{
+		foreach ($cal as $a) {
+			$this->dateevents[] = $a;
 		}
 	}
 
@@ -169,7 +196,6 @@ class ical
 	 * Generates calendar events for given year
 	 * for paydays, which occur at $dom or the last weekday before
 	 */
-	//TODO Use daysOffSwe() to find out if assumed weekday really is a weekday (example you never get salary on 25:th december)
 	function paydaysMonthly($year, $dom, $desc = 'Salary')
 	{
 		$res = array();
