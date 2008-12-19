@@ -93,7 +93,7 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
  */
 function shortTimePeriod($seconds)
 {
-	if (is_float($seconds)) $seconds = round($seconds);
+	if (is_float($seconds)) $seconds = ceil($seconds);
 	$retval = '';
 
 	//years
@@ -135,31 +135,38 @@ function shortTimePeriod($seconds)
 }
 
 /**
- * Return the current time in NTP timestamp format, or converts Unix timestamp to NTP timestamp
+ * Convert Unix timestamp to NTP timestamp
  *
- * @param $ts UNIX timestamp
+ * @param $ts UNIX timestamp or format strtotime() understands
  * @return timestamp in NTP format
  */
 function ntptime($ts = 0)
 {
 	if (!$ts) $ts = time();
+	if (!is_numeric($ts)) $ts = strtotime($ts);
+
 	return 2208988800 + $ts;
 }
 
 /**
- * Converts a ntp timestamp to a unix timestamp
+ * Converts a NTP timestamp to Unix timestamp
  *
- * @param $ts ntp timestamp
+ * @param $ts NTP timestamp
  * @return timestamp in UNIX format
  */
 function ntptime_to_unixtime($ts)
 {
+	if (!is_numeric($ts)) return false;
+
 	return $ts - 2208988800;
 }
 
 /**
  * Formats timestamp according to RFC 3339
  * Example: 2008-12-19T16:50:19+01:00
+ *
+ * @param $ts UNIX timestamp or format strtotime() understands
+ * @return RFC 3339 formatted timestamp
  */
 function date3339($ts = 0)
 {
@@ -177,7 +184,10 @@ function date3339($ts = 0)
 
 /**
  * Formats timestamp according to RFC 882
- * Example: Fri, 19 Dec 2008 16:50:19 +0100m
+ * Example: Fri, 19 Dec 2008 16:50:19 +0100
+ *
+ * @param $ts UNIX timestamp or format strtotime() understands
+ * @return RFC 882 formatted timestamp
  */
 function date882($ts = 0)
 {
