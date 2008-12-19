@@ -47,7 +47,7 @@ class ical
 		foreach ($this->events as $e) {	//XXX currently unused
 			$tz = $e[1];
 			echo $this->tagBegin('VEVENT');
-			echo "DTSTART;TZID=".($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000\r\n";
+			echo "DTSTART;TZID=".($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000\r\n";	//XXX what is this dateformat called?
 			echo "DTEND;TZID=".  ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T235959\r\n";
 			echo "SUMMARY:".$e[0][1]."\r\n";
 			echo $this->tagEnd('VEVENT');
@@ -83,7 +83,7 @@ class ical
 	/**
 	 * Adds additional events to the calendar
 	 */
-	function addEvents($cal, $tz)
+	function addEvents($cal, $tz = '')
 	{
 		foreach ($cal as $a) {
 			$this->events[] = array($a, $tz);
@@ -194,6 +194,10 @@ class ical
 	/**
 	 * Generates calendar events for given year
 	 * for paydays, which occur at $dom or the last weekday before
+	 *
+	 * @param $year year to generate paydays for
+	 * @param $dom day of month when salary is paid
+	 * @param $desc optional textfield describing the event
 	 */
 	function paydaysMonthly($year, $dom, $desc = 'Salary')
 	{

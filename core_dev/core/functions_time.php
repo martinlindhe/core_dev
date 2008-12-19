@@ -159,6 +159,7 @@ function ntptime_to_unixtime($ts)
 
 /**
  * Formats timestamp according to RFC 3339
+ * Example: 2008-12-19T16:50:19+01:00
  */
 function date3339($ts = 0)
 {
@@ -169,15 +170,14 @@ function date3339($ts = 0)
 
 	$matches = array();
 	if (preg_match('/^([\-+])(\d{2})(\d{2})$/', date('O', $ts), $matches)) {
-		$date .= $matches[1].$matches[2].':'.$matches[3];
-	} else {
-		$date .= 'Z';
+		return $date.$matches[1].$matches[2].':'.$matches[3];
 	}
-	return $date;
+	return $date.'Z';
 }
 
 /**
  * Formats timestamp according to RFC 882
+ * Example: Fri, 19 Dec 2008 16:50:19 +0100m
  */
 function date882($ts = 0)
 {
