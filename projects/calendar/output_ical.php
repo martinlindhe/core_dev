@@ -170,7 +170,7 @@ class ical
 	 * for paydays, which occur at $dom or the last weekday before
 	 */
 	//TODO Use daysOffSwe() to find out if assumed weekday really is a weekday (example you never get salary on 25:th december)
-	function paydaysMonthly($year, $dom)
+	function paydaysMonthly($year, $dom, $desc = 'Salary')
 	{
 		$res = array();
 
@@ -179,7 +179,7 @@ class ical
 			$dow = date('N', $ts);	//day of week. 1=monday,7=sunday
 			if ($dow > 5) //saturday or sunday
 				$ts = mktime(0, 0, 0, $m, $dom-$dow+5, $year);	//friday selected week
-			$res[] = array($ts, 'Löning');
+			$res[] = array($ts, $desc);
 		}
 		return $res;
 	}
