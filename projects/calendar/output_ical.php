@@ -11,7 +11,6 @@
  * RFC 2447 iCalendar Message-Based Interoperability Protocol (iMIP)
  */
 
-//TODO: use VEVENT "DURATION" element to specify "all day event"
 //TODO: come up with a elegant solution to store needed data for "days off" tables
 //TODO: use daysOffSwe() in paydaysMonthly() to find out if assumed weekday really
 //      is a weekday (for example you never get salary on 25:th december)
