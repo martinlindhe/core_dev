@@ -40,7 +40,6 @@ class ical
 			echo "DTSTART;VALUE=DATE:".date("Ymd", $e[0])."\r\n";	//YYYYMMDD
 			echo "DTEND;VALUE=DATE:".  date("Ymd", $end)."\r\n";
 			echo "SUMMARY:".$e[1]."\r\n";
-			//TRANSP:TRANSPARENT   ???
 			echo $this->tagEnd('VEVENT');
 		}
 
