@@ -63,7 +63,7 @@ int main(int argc, char** argv)
 		goto fail;
 	}
 
-	int info = 0;	///< output mime info?
+	int info = 0;	///< output detailed info?
 	if (argc >= 3) {
 		if (!strcmp(argv[2], "-info")) info = 1;
 		else {

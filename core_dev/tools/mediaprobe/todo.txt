@@ -1,7 +1,5 @@
 * move all detected media from /core_dev/projects/mime_types to this repo
 
-* Report mime-type for detected formats (like "magic" but with smarter detection)
-
 * (maybe) use ffmpeg's probe functions directly. if so, perhaps make patches to improve this probing with ffmpeg directly (ps. remember ffprobe)
 
 * Detect image formats:
