@@ -1,4 +1,11 @@
 /**
+ * $Id$
+ *
+ * Probes input file for detected media types
+ * Defaults to output detected mime-type
+ * Can be instructed to output more detailed
+ * information of several media types.
+ *
  * Copyright (c) 2008 Martin Lindhe
  *
  * mediaprobe is distributed under the BSD licence
@@ -15,14 +22,19 @@ static void hex_dump(uint8_t *buf, int size);
 const unsigned char pngsig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
 const unsigned char mngsig[8] = {138, 77, 78, 71, 13, 10, 26, 10};
 
+#define TAG6(o,a,b,c,d,e,f) (o[0]==a && o[1]==b && o[2]==c && o[3]==d && o[4]==e && o[5]==f)
+#define TAG2(o,a,b)         (o[0]==a && o[1]==b)
+
 int main(int argc, char** argv)
 {
 	FILE *f;
-	int len, readlen;
 	uint8_t *buf = 0;
 
 	if (argc < 2){
-		printf("USAGE: %s <filename>\n", argv[0]);
+		printf("USAGE: %s <filename> [params]\n", argv[0]);
+		printf("\n");
+		printf("Param ---- Usage\n");
+		printf(" -info     Display file info\n");
 		return 1;
 	}
 
@@ -33,7 +45,7 @@ int main(int argc, char** argv)
 	}
 
 	fseek(f, 0, SEEK_END);
-	len = ftell(f);
+	int len = ftell(f);
 	fseek(f, 0, SEEK_SET);
 
 	if (len < 10) {
@@ -41,7 +53,7 @@ int main(int argc, char** argv)
 		goto fail;
 	}
 
-	readlen = len;
+	int readlen = len;
 	if (len > 1024) readlen = 1024;
 
 	buf = malloc(readlen);
@@ -51,27 +63,53 @@ int main(int argc, char** argv)
 		goto fail;
 	}
 
-	/* Look for GIF image */
-	if (len >= 10 && buf[0] == 'G' && buf[1] == 'I' && buf[2] == 'F' && buf[3] == '8' &&  (buf[4] == '7' || buf[4] == '9') && buf[5] == 'a')
-	{
-		//FIXME minimum possible size of a GIF?
-		//FIXME detect animated gif
-		printf("GIF file\n");
-		goto finish;
+	int info = 0;	///< output mime info?
+	if (argc >= 3) {
+		if (!strcmp(argv[2], "-info")) info = 1;
+		else {
+			printf("Unknown parameter: %s\n", argv[2]);
+		}
 	}
 
-	/* Look for BMP image */
-	if (len >= 0x0E && buf[0] == 'B' && buf[1] == 'M') {
-		//bmp file header is 0x0E bytes
-		//mime: image/x-ms-bmp
-		printf("BMP file\n");
+	/* Look for JPEG image */
+	if (len >= 0x10 && TAG2(buf, 0xFF, 0xD8)) {
+		//FIXME minimum size of JPEG?
+		printf("image/jpeg\n");
+		if (info) {
+			printf("JPEG file\n");
+		}
 		goto finish;
 	}
 
 	/* Look for PNG image */
 	if (len >= 10 && memcmp(buf, pngsig, 8) == 0) {
 		//FIXME minimum size of PNG?
-		printf("PNG file\n");
+		printf("image/png\n");
+		if (info) {
+			printf("PNG file\n");
+		}
+		goto finish;
+	}
+
+	/* Look for GIF image */
+	if (len >= 10 && (TAG6(buf,'G','I','F','8','7','a') || TAG6(buf,'G','I','F','8','9','a')))
+	{
+		//FIXME minimum possible size of a GIF?
+		//FIXME detect animated gif
+		printf("image/gif\n");
+		if (info) {
+			printf("GIF file\n");
+		}
+		goto finish;
+	}
+
+	/* Look for BMP image */
+	if (len >= 0x0E && TAG2(buf, 'B', 'M')) {
+		//bmp file header is 0x0E bytes
+		printf("image/bmp\n");	//XXX or image/x-ms-bmp ?
+		if (info) {
+			printf("BMP file\n");
+		}
 		goto finish;
 	}
 
@@ -79,17 +117,12 @@ int main(int argc, char** argv)
 	if (len >= 10 && memcmp(buf, mngsig, 8) == 0) {
 		//FIXME minimum size of MNG?
 		//FIXME need sample file
-		printf("MNG file\n");
+		printf("video/x-mng\n");	//XXX correct mime?
+		if (info) {
+			printf("MNG file\n");
+		}
 		goto finish;
 	}
-
-	/* Look for JPEG image */
-	if (len >= 0x10 && buf[0] == 0xFF && buf[1] == 0xD8) {
-		//FIXME minimum size of JPEG?
-		printf("JPEG file\n");
-		goto finish;
-	}
-
 
 	//FIXME detect TIFF & need sample file
 
