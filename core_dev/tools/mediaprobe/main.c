@@ -104,11 +104,27 @@ int main(int argc, char** argv)
 	}
 
 	/* Look for BMP image */
-	if (len >= 0x0E && TAG2(buf, 'B', 'M')) {
+	if (len >= 0x0E && TAG2(buf, 'B', 'M') && (len == buf[0x2])) {
 		//bmp file header is 0x0E bytes
 		printf("image/bmp\n");	//XXX or image/x-ms-bmp ?
 		if (info) {
 			printf("BMP file\n");
+
+			printf("  size of bmp : %d\n", buf[0x2]);	//xxx specify u32 read not byte
+			printf("  bmp offset  : 0x%x\n", buf[0xa]);	//xxx specify u32 read not byte
+
+			switch (buf[0xe]) {
+				case 40:
+					printf("  [DIB HEADER - Windows V3 BITMAPINFOHEADER]\n");
+					printf("  width : %d\n", buf[0x12]);	//xxx s32 read not byte
+					printf("  height: %d\n", buf[0x16]);	//xxx s32 read not byte
+					printf("  bpp   : %d\n", buf[0x1c]);	//xxx u16 read!
+					printf("  compression : %d\n", buf[0x1e]);	//xxx u32 read not byte
+					break;
+
+				default:
+					printf("Unknown dib hdr size: %d\n", buf[0xe]);	//xxx specify u32 read not byte
+			}
 		}
 		goto finish;
 	}
@@ -127,7 +143,7 @@ int main(int argc, char** argv)
 	//FIXME detect TIFF & need sample file
 
 
-	printf("Can't detect format. Hex dump of header:\n");
+	printf("Can't detect format:\n");
 	hex_dump(buf, readlen);
 
 
