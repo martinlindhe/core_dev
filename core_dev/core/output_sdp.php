@@ -8,7 +8,7 @@
  */
 
 require_once('input_sdp.php');
-require_once('/var/www/core_dev/core/functions_time.php');	//for ntptime()
+require_once('functions_time.php');	//for ntptime()
 
 
 //SDP media stream types
