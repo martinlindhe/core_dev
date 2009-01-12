@@ -35,6 +35,9 @@ class Sendmail
 	{
 		global $config;
 		if (!empty($config['debug'])) $this->debug = true;
+
+		mb_internal_encoding('UTF-8');	//XXX: required for uf8-encoded text to work
+
 		$this->smtp = new smtp($server, $username, $password, $port);
 		$this->from_adr = $username;
 	}
@@ -92,13 +95,13 @@ class Sendmail
 
 		$header =
 			"Date: ".date('r')."\r\n".
-			"From: ".($this->from_name ? $this->from_name." <".$this->from_adr.">" : $this->from_adr)."\r\n".
-			"Subject: ".$subject."\r\n".
+			"From: ".(mb_encode_mimeheader($this->from_name, 'UTF-8') ? mb_encode_mimeheader($this->from_name, 'UTF-8')." <".$this->from_adr.">" : $this->from_adr)."\r\n".
+			"Subject: ".mb_encode_mimeheader($subject, 'UTF-8')."\r\n".
 			"User-Agent: core_dev\r\n".	//XXX version string
 			"MIME-Version: 1.0\r\n";
 
 		if ($this->rply_adr) {
-			$header .= "Reply-To: ".($this->rply_name ? $this->rply_name." <".$this->rply_adr.">" : $this->rply_adr)."\r\n";
+			$header .= "Reply-To: ".(mb_encode_mimeheader($this->rply_name, 'UTF-8') ? mb_encode_mimeheader($this->rply_name, 'UTF-8')." <".$this->rply_adr.">" : $this->rply_adr)."\r\n";
 		}
 
 		foreach ($this->to_adr as $to) {
@@ -132,6 +135,8 @@ class Sendmail
 			"\r\n".
 			$msg."\r\n";
 
+		//$header = mb_encode_mimeheader($header, 'UTF-8', 'Q');
+
 		$attachment_data = '';
 		foreach ($this->attachments as $a) {
 			$data = file_get_contents($a[0]);
@@ -139,11 +144,11 @@ class Sendmail
 				"\r\n".
 				"--".$boundary."\r\n".
 				"Content-Type: image/png;\r\n".	//FIXME: get mimetype
-				" name=\"".basename($a[0])."\"\r\n".
+				" name=\"".mb_encode_mimeheader(basename($a[0]), 'UTF-8')."\"\r\n".
 				"Content-Transfer-Encoding: base64\r\n".
 				($a[1] ? "Content-ID: <".$a[1].">\r\n" : "").
 				"Content-Disposition: ".($a[1] ? "inline" : "attachment").";\r\n".
-				" filename=\"".basename($a[0])."\"\r\n".
+				" filename=\"".mb_encode_mimeheader(basename($a[0]), 'UTF-8')."\"\r\n".
 				"\r\n".
 				chunk_split(base64_encode($data));
 		}
