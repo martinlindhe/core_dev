@@ -8,7 +8,7 @@
  * MIME header Content-Disposition:  http://tools.ietf.org/html/rfc2183
  * MIME validator:                   http://www.apps.ietf.org/msglint.html
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 /**
@@ -134,8 +134,6 @@ class Sendmail
 			"Content-Transfer-Encoding: 7bit\r\n".
 			"\r\n".
 			$msg."\r\n";
-
-		//$header = mb_encode_mimeheader($header, 'UTF-8', 'Q');
 
 		$attachment_data = '';
 		foreach ($this->attachments as $a) {
