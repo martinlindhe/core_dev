@@ -25,6 +25,8 @@
  * TODO: move out AUTH implementations to separate file (can be reused by IMAP etc)
  */
 
+require_once('input_mime.php');	//for parseAuthRequest()
+
 class smtp
 {
 	var $handle = false, $debug = false;
@@ -184,17 +186,8 @@ class smtp
 			//echo "challenge: ".base64_decode($this->lastreply)."\n";
 			$chal = array();
 			$chal['qop'] = 'auth';	//default
-			$chal_str = explode(',', base64_decode($this->lastreply));
-			foreach ($chal_str as $row) {
-				$pos = strpos($row, '=');
-				if (!$pos) continue;
-				$name = substr($row, 0, $pos);
-				$val = substr($row, $pos+1);
-				if (substr($val, 0, 1) == '"' && substr($val, -1) == '"') {
-					$val = substr($val, 1, -1);
-				}
-				$chal[ $name ] = $val;
-			}
+
+			$chal = parseAuthRequest(base64_decode($this->lastreply));	//XXX veriufy!!!!!111111111
 
 			if ($chal['algorithm'] != 'md5-sess') {
 				echo "smtp->_AUTH() DIGEST-MD5 unknown algorithm: ".$chal['algorithm']."\n";
@@ -328,4 +321,5 @@ class smtp
 		return true;
 	}
 }
+
 ?>

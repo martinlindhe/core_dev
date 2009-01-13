@@ -10,6 +10,7 @@
  * @author Martin Lindhe, 2007-2009
  */
 
+require_once('input_mime.php');
 require_once('input_sdp.php');
 require_once('output_sdp.php');
 
@@ -31,6 +32,9 @@ class sip_server
 	var $host, $port;
 	var $handle = false;
 	var $dst_ip = 0;
+	var $nonce_arr = array();	///< array of previously generated nonce's for authentication
+
+	var $auth_realm = 'core_dev sip_server';	///< MUST be globally unique
 
 	function __construct($host, $port = 5060)
 	{
@@ -38,6 +42,7 @@ class sip_server
 
 		$this->host = $host;
 		$this->port = $port;
+
 		$this->start_server();
 	}
 
@@ -101,12 +106,12 @@ class sip_server
 
 		$sip_type = SIP_UNKNOWN;
 		$sdp_present = false;
-		$auth_req = false;
+		$auth_response = false;
 
 //XXX maybe reuse mime header parse code
 		foreach ($sip_msg as $row) {
 			$cmd = explode(' ', $row);
-			$params = @trim($cmd[1].' '.$cmd[2].' '.$cmd[3].' '.$cmd[4].' '.$cmd[5].' '.$cmd[6]);
+			$params = @trim($cmd[1].' '.$cmd[2].' '.$cmd[3].' '.$cmd[4].' '.$cmd[5].' '.$cmd[6].' '.$cmd[7].' '.$cmd[8].' '.$cmd[9].' '.$cmd[10]);
 			switch ($cmd[0]) {
 				case 'INVITE':		$sip_type = SIP_INVITE; break;
 				case 'ACK':			$sip_type = SIP_ACK; break;
@@ -145,7 +150,9 @@ class sip_server
 				case 'Expires:': break;
 				case 'Supported:': break;
 				case 'Content-Length:': break;
-				case 'Authorization:': $auth_req = true; break;
+				case 'Authorization:':
+					$auth_response = $params;
+					break;
 
 				case 'Content-Type:':
 					if ($params == 'application/sdp') $sdp_present = true;
@@ -213,26 +220,74 @@ class sip_server
 			//We are acting a SIP Registrar
 			case SIP_REGISTER:
 				echo "Recieved SIP REGISTER from ".$peer."\n";
-				d($sip_msg);
 
-				if (!$auth_req) {
+				if (!$auth_response) {
 					echo "sending auth req!\n";
 					//FIXME sip bindings (hur ser dom ut?!) RFC 3261: 10.3
 					$res = $this->send_message(SIP_UNAUTHORIZED, $peer, $sip);
 				} else {
-					echo "sending OK!\n";
-					$res = $this->send_message(SIP_OK, $peer, $sip);
+					$pos = strpos($auth_response, ' ');
+					$auth_type = substr($auth_response, 0, $pos);
+					$auth_response = substr($auth_response, $pos+1);
+					if ($auth_type != "Digest") {
+						//FIXME: send error code!
+					} else {
+						//RFC 2617: "3.2.2.1 Request-Digest":
+						$chal = parseAuthRequest($auth_response);
+
+						$a1 = "user".':'.$this->auth_realm.':'."pass";
+						$a2 = "REGISTER".':'.$chal['uri'];
+						$response = md5( md5($a1).':'.$chal['nonce'].':'.md5($a2) );
+
+						if ($chal['algorithm'] != "MD5" ||
+							$chal['realm'] != $this->auth_realm ||
+							$chal['nonce'] != $this->get_nonce($peer) ||
+							$chal['opaque'] != md5("iam opaque!") ||
+							$chal['response'] != $response)
+						{
+							echo "FAIL!\n";
+							//FIXME: send error code!
+						} else {
+							//FIXME: ska man skicka nåt extra för "auth successful" eller räcker det med en OK ?
+							echo "sending OK!\n";
+							$res = $this->send_message(SIP_OK, $peer, $sip);
+						}
+					}
 				}
 				break;
 
 			case SIP_CANCEL:
 				echo "Recieved SIP CANCEL from ".$peer."\n";
-				//FIXME ska vi svara????
+				//FIXME vi ska svara!!!
 				break;
 
 			default:
 				echo "Unknown SIP message type\n";
 		}
+	}
+
+	/**
+	 * Creates a guaranteed unique nonce for the client auth challenge.
+	 * If the client previously had a nonce, it will be replaced.
+	 */
+	function allocate_nonce($peer, $key)
+	{
+		$nonce = md5(microtime().':'.$key.':'.mt_rand(0, 9999999999999));
+
+		//FIXME verify that genrated nonce is not already in use
+		$this->nonce_arr[$peer] = $nonce;
+
+		return $nonce;
+	}
+
+	/**
+	 * Returns previously generated nonce for client, or false if none is found
+	 */
+	function get_nonce($peer)
+	{
+		if (!empty($this->nonce_arr[$peer])) return $this->nonce_arr[$peer];
+
+		return false;
 	}
 
 	/**
@@ -266,13 +321,18 @@ class sip_server
 		"User-Agent: core_dev\r\n";			//XXX core_dev version
 
 		if ($type == SIP_UNAUTHORIZED) {
+			//RFC 3261 #22.4
+			//Based on HTTP Digest authentication: http://www.faqs.org/rfcs/rfc2617.html
+
+			$nonce = $this->allocate_nonce($peer, $prev['callid']);
+
 			$res .=
 			"WWW-Authenticate: Digest".
-			" realm=\"MCI WorldCom SIP\",".
-    		" domain=\"sip:ss2.wcom.com\",".
-			" nonce=\"ea9c8e88df84f1cec4341ae6cbe5a359\",".
-    		" opaque=\"\",".
-			" stale=FALSE,".
+			" realm=\"".$this->auth_realm."\",".	//text string
+    		" domain=\"sip:sip.example.com\",".		//FIXME: set domain according to the "To:" field set by client
+			" nonce=\"".$nonce."\",".
+    		" opaque=\"".md5("iam opaque!")."\",".	//XXX  A string of data, specified by the server, which should be returned by the client unchanged in the Authorization header of subsequent  requests with URIs in the same protection space.
+			" stale=FALSE,".	//XXX A flag, indicating that the previous request from the client was rejected because the nonce value was stale.
 			" algorithm=MD5\r\n";
 		}
 

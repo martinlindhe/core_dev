@@ -180,4 +180,25 @@ function mimeParseAttachments(&$header, &$body)
 	return $att;
 }
 
+/**
+ * Parses a MIME Authenticate response, useful for output_smtp.php, input_sip.php etc
+ */
+function parseAuthRequest($s)
+{
+	$chal_str = explode(',', $s);
+
+	foreach ($chal_str as $row) {
+		$pos = strpos($row, '=');
+		if (!$pos) continue;
+		$name = trim(substr($row, 0, $pos));
+		$val = substr($row, $pos+1);
+		if (substr($val, 0, 1) == '"' && substr($val, -1) == '"') {
+			$val = substr($val, 1, -1);
+		}
+		$chal[ $name ] = $val;
+	}
+
+	return $chal;
+}
+
 ?>
