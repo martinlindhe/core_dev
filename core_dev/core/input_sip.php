@@ -4,7 +4,10 @@
  *
  * Basic SIP client/server implementation
  *
- * @author Martin Lindhe, 2007-2008
+ * SIP RFC: http://www.ietf.org/rfc/rfc3261.txt
+ * http://tools.ietf.org/id/draft-ietf-sip-call-flows-05.txt
+ *
+ * @author Martin Lindhe, 2007-2009
  */
 
 require_once('input_sdp.php');
@@ -16,12 +19,14 @@ define('SIP_ACK',		2);
 define('SIP_BYE',		3);
 define('SIP_OPTIONS',	4);
 define('SIP_CANCEL',	5);
+define('SIP_REGISTER',	6);
 
-define('SIP_TRYING',	10);
-define('SIP_RINGING',	11);
-define('SIP_OK',		12);
+define('SIP_TRYING',		10);
+define('SIP_RINGING',		11);
+define('SIP_OK',			12);
+define('SIP_UNAUTHORIZED',	13);
 
-class sip_client
+class sip_server
 {
 	var $host, $port;
 	var $handle = false;
@@ -96,6 +101,7 @@ class sip_client
 
 		$sip_type = SIP_UNKNOWN;
 		$sdp_present = false;
+		$auth_req = false;
 
 //XXX maybe reuse mime header parse code
 		foreach ($sip_msg as $row) {
@@ -107,6 +113,7 @@ class sip_client
 				case 'BYE':			$sip_type = SIP_BYE; break;
 				case 'OPTIONS':		$sip_type = SIP_OPTIONS; break;
 				case 'CANCEL':		$sip_type = SIP_CANCEL; break;
+				case 'REGISTER':	$sip_type = SIP_REGISTER; break;
 
 				case 'Via:':	//Contains IP & port which we should send response to
 					$sip['via'] = $params;
@@ -135,8 +142,10 @@ class sip_client
 				case 'User-Agent:': break;
 				case 'Max-Forwards:': break;
 				case 'Allow:': break;
+				case 'Expires:': break;
 				case 'Supported:': break;
 				case 'Content-Length:': break;
+				case 'Authorization:': $auth_req = true; break;
 
 				case 'Content-Type:':
 					if ($params == 'application/sdp') $sdp_present = true;
@@ -167,7 +176,7 @@ class sip_client
 					$res_sdp = generate_sdp($sip['sdp'], $this->dst_ip);
 					$res = $this->send_message(SIP_OK, $peer, $sip, $res_sdp);
 
-					echo "SDP FROM CALLER:\n".$sip['sdp']."\n";
+					echo "SDP FROM CALLER:\n".$sip['sdp']."\n\n";
 					echo "SDP TO CALLER & STREAMING SERVER:\n".$res_sdp."\n";
 
 					$sdp_file = '/tmp/sip_tmp.sdp';
@@ -175,7 +184,7 @@ class sip_client
 
 					//NOTE: playback live stream locally with VLC:
 					//exec('/home/ml/scripts/compile/vlc-git/vlc -vvv '.$sdp_file);
-					exec('ffplay '.$sdp_file);
+					//exec('ffplay '.$sdp_file);
 
 				} else {
 					echo "Error: DIDNT GET SDP FROM CLIENT INVITE MSG\n";
@@ -197,7 +206,23 @@ class sip_client
 
 			case SIP_OPTIONS:
 				echo "Recieved SIP OPTIONS from ".$peer."\n";
-				//FIXME ska vi svara????
+				//FIXME more parameters should be set in the OK response (???)
+				$res = $this->send_message(SIP_OK, $peer, $sip);
+				break;
+
+			//We are acting a SIP Registrar
+			case SIP_REGISTER:
+				echo "Recieved SIP REGISTER from ".$peer."\n";
+				d($sip_msg);
+
+				if (!$auth_req) {
+					echo "sending auth req!\n";
+					//FIXME sip bindings (hur ser dom ut?!) RFC 3261: 10.3
+					$res = $this->send_message(SIP_UNAUTHORIZED, $peer, $sip);
+				} else {
+					echo "sending OK!\n";
+					$res = $this->send_message(SIP_OK, $peer, $sip);
+				}
 				break;
 
 			case SIP_CANCEL:
@@ -221,9 +246,10 @@ class sip_client
 	function send_message($type, $peer, $prev, $sdp_data = '')
 	{
 		switch ($type) {
-			case SIP_TRYING:  $res = "SIP/2.0 100 TRYING\r\n"; break;
-			case SIP_RINGING: $res = "SIP/2.0 180 RINGING\r\n"; break;
-			case SIP_OK:      $res = "SIP/2.0 200 OK\r\n"; break;
+			case SIP_OK:           $res = "SIP/2.0 200 OK\r\n"; break;
+			case SIP_TRYING:       $res = "SIP/2.0 100 TRYING\r\n"; break;
+			case SIP_RINGING:      $res = "SIP/2.0 180 RINGING\r\n"; break;
+			case SIP_UNAUTHORIZED: $res = "SIP/2.0 401 Unauthorized\r\n"; break;
 			default:
 				echo "sip_client->send_message() unknown type ".$type."\n";
 				return false;
@@ -235,9 +261,20 @@ class sip_client
 		"CSeq: ".$prev['cseq']."\r\n".		//echo
 		"Via: ".$prev['via']."\r\n".		//append "recieved="
 		"To: <".$prev['to'].">\r\n".		//append "tag="
-		"Allow: MESSAGE, INVITE, CANCEL, ACK, OPTIONS, SUBSCRIBE, NOTIFY, BYE\r\n".
+		"Allow: MESSAGE, INVITE, CANCEL, ACK, OPTIONS, SUBSCRIBE, NOTIFY, BYE\r\n".	//XXX "MESSAGE" ?
 		"Contact: \"core_dev\" <sip:core_dev@".$this->host.":".$this->port.">\r\n".	//XXX core_dev here??
 		"User-Agent: core_dev\r\n";			//XXX core_dev version
+
+		if ($type == SIP_UNAUTHORIZED) {
+			$res .=
+			"WWW-Authenticate: Digest".
+			" realm=\"MCI WorldCom SIP\",".
+    		" domain=\"sip:ss2.wcom.com\",".
+			" nonce=\"ea9c8e88df84f1cec4341ae6cbe5a359\",".
+    		" opaque=\"\",".
+			" stale=FALSE,".
+			" algorithm=MD5\r\n";
+		}
 
 		if ($sdp_data) {
 			$res .=
