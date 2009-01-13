@@ -184,10 +184,9 @@ class smtp
 				return false;
 			}
 			//echo "challenge: ".base64_decode($this->lastreply)."\n";
-			$chal = array();
-			$chal['qop'] = 'auth';	//default
 
-			$chal = parseAuthRequest(base64_decode($this->lastreply));	//XXX veriufy!!!!!111111111
+			$chal = parseAuthRequest(base64_decode($this->lastreply));
+			if (empty($chal['qop'])) $chal['qop'] = 'auth';	//default
 
 			if ($chal['algorithm'] != 'md5-sess') {
 				echo "smtp->_AUTH() DIGEST-MD5 unknown algorithm: ".$chal['algorithm']."\n";

@@ -2,9 +2,10 @@
 /**
  * $Id$
  *
- * Basic SIP client/server implementation
+ * Basic SIP/2.0 server implementation
  *
  * SIP RFC: http://www.ietf.org/rfc/rfc3261.txt
+ * HTTP Authentication RFC: http://www.faqs.org/rfcs/rfc2617.html
  * http://tools.ietf.org/id/draft-ietf-sip-call-flows-05.txt
  *
  * @author Martin Lindhe, 2007-2009
@@ -34,7 +35,7 @@ class sip_server
 	var $dst_ip = 0;
 	var $nonce_arr = array();	///< array of previously generated nonce's for authentication
 
-	var $auth_realm = 'core_dev sip_server';	///< MUST be globally unique
+	var $auth_realm = 'core_dev SIP server';	///< MUST be globally unique
 
 	function __construct($host, $port = 5060)
 	{
@@ -331,7 +332,7 @@ class sip_server
 			" realm=\"".$this->auth_realm."\",".	//text string
     		" domain=\"sip:sip.example.com\",".		//FIXME: set domain according to the "To:" field set by client
 			" nonce=\"".$nonce."\",".
-    		" opaque=\"".md5("iam opaque!")."\",".	//XXX  A string of data, specified by the server, which should be returned by the client unchanged in the Authorization header of subsequent  requests with URIs in the same protection space.
+    		" opaque=\"".md5("iam opaque!")."\",".
 			" stale=FALSE,".	//XXX A flag, indicating that the previous request from the client was rejected because the nonce value was stale.
 			" algorithm=MD5\r\n";
 		}
