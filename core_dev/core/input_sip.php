@@ -100,16 +100,13 @@ class sip_server
 	function handle_message($peer, $msg)
 	{
 		$pos = strpos($msg, "\r\n\r\n");
-		$sip_msg = trim(substr($msg, 0, $pos));
+		$head = explode("\r\n", trim(substr($msg, 0, $pos)), 2);
+		$mime = mimeParseHeader($head[1]);
 		$body = trim(substr($msg, $pos));
 
-		$tmp = explode("\r\n", $sip_msg, 2);
-		$mime = mimeParseHeader($tmp[1]);
+		$tmp = explode(' ', $head[0]);	//INVITE sip:xxx@10.10.10.240 SIP/2.0
 
-		$tmp = explode(' ', $tmp[0]);	//INVITE sip:xxx@10.10.10.240 SIP/2.0
-		$status = $tmp[0];
-
-		switch ($status) {
+		switch ($tmp[0]) {
 			case 'INVITE':		$sip_type = SIP_INVITE; break;
 			case 'ACK':			$sip_type = SIP_ACK; break;
 			case 'BYE':			$sip_type = SIP_BYE; break;
@@ -117,7 +114,7 @@ class sip_server
 			case 'CANCEL':		$sip_type = SIP_CANCEL; break;
 			case 'REGISTER':	$sip_type = SIP_REGISTER; break;
 			default:
-				echo "Unknown SIP command: ".$status."\n";
+				echo "Unknown SIP command: ".$tmp[0]."\n";
 				return false;
 		}
 
