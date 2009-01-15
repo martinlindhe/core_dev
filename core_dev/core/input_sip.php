@@ -101,71 +101,24 @@ class sip_server
 	{
 		$pos = strpos($msg, "\r\n\r\n");
 		$sip_msg = trim(substr($msg, 0, $pos));
-		$sip['sdp'] = trim(substr($msg, $pos));
+		$body = trim(substr($msg, $pos));
 
-		$sip_msg = explode("\r\n", $sip_msg);
+		$tmp = explode("\r\n", $sip_msg, 2);
+		$mime = mimeParseHeader($tmp[1]);
 
-		$sip_type = SIP_UNKNOWN;
-		$sdp_present = false;
-		$auth_response = false;
+		$tmp = explode(' ', $tmp[0]);	//INVITE sip:xxx@10.10.10.240 SIP/2.0
+		$status = $tmp[0];
 
-//XXX maybe reuse mime header parse code
-		foreach ($sip_msg as $row) {
-			$cmd = explode(' ', $row);
-			$params = @trim($cmd[1].' '.$cmd[2].' '.$cmd[3].' '.$cmd[4].' '.$cmd[5].' '.$cmd[6].' '.$cmd[7].' '.$cmd[8].' '.$cmd[9].' '.$cmd[10]);
-			switch ($cmd[0]) {
-				case 'INVITE':		$sip_type = SIP_INVITE; break;
-				case 'ACK':			$sip_type = SIP_ACK; break;
-				case 'BYE':			$sip_type = SIP_BYE; break;
-				case 'OPTIONS':		$sip_type = SIP_OPTIONS; break;
-				case 'CANCEL':		$sip_type = SIP_CANCEL; break;
-				case 'REGISTER':	$sip_type = SIP_REGISTER; break;
-
-				case 'Via:':	//Contains IP & port which we should send response to
-					$sip['via'] = $params;
-					break;
-
-				case 'To:':		//Display name of called person (me)
-					$sip['to'] = $params;
-					$sip['to'] = str_replace('<', '', $sip['to']);
-					$sip['to'] = str_replace('>', '', $sip['to']);
-					break;
-
-				case 'From:':	//Display name of the caller
-					$sip['from'] = $params;
-					break;
-
-				case 'Call-ID:':
-					$sip['callid'] = $params;
-					break;
-
-				case 'CSeq:':
-					$sip['cseq'] = $params;
-					break;
-
-				case 'Subject:': break;
-				case 'Contact:': break;
-				case 'User-Agent:': break;
-				case 'Max-Forwards:': break;
-				case 'Allow:': break;
-				case 'Expires:': break;
-				case 'Supported:': break;
-				case 'Content-Length:': break;
-				case 'Authorization:':
-					$auth_response = $params;
-					break;
-
-				case 'Content-Type:':
-					if ($params == 'application/sdp') $sdp_present = true;
-					break;
-
-				default:
-					echo "Unknown SIP header: ".$cmd[0]." ".$params."\n";
-					echo "full SIP message follows:\n";
-					print_r($sip_msg);
-					echo "\n-----------\n";
-					break;
-			}
+		switch ($status) {
+			case 'INVITE':		$sip_type = SIP_INVITE; break;
+			case 'ACK':			$sip_type = SIP_ACK; break;
+			case 'BYE':			$sip_type = SIP_BYE; break;
+			case 'OPTIONS':		$sip_type = SIP_OPTIONS; break;
+			case 'CANCEL':		$sip_type = SIP_CANCEL; break;
+			case 'REGISTER':	$sip_type = SIP_REGISTER; break;
+			default:
+				echo "Unknown SIP command: ".$status."\n";
+				return false;
 		}
 
 		switch ($sip_type) {
@@ -173,18 +126,18 @@ class sip_server
 				//echo "Recieved SIP INVITE from ".$peer."\n";
 
 				//Send "100 TRYING" response
-				$res = $this->send_message(SIP_TRYING, $peer, $sip);
+				$res = $this->send_message(SIP_TRYING, $peer, $mime);
 
 				//Send "180 RINGING" response
-				$res = $this->send_message(SIP_RINGING, $peer, $sip);
+				$res = $this->send_message(SIP_RINGING, $peer, $mime);
 
 				//Send "200 OK" response
-				if ($sdp_present) {
+				if ($mime['Content-Type'] == 'application/sdp') {
 					echo "Forwarding SIP media streams to IP: ".$this->dst_ip."\n";
-					$res_sdp = generate_sdp($sip['sdp'], $this->dst_ip);
-					$res = $this->send_message(SIP_OK, $peer, $sip, $res_sdp);
+					$res_sdp = generate_sdp($body, $this->dst_ip);
+					$res = $this->send_message(SIP_OK, $peer, $mime, $res_sdp);
 
-					echo "SDP FROM CALLER:\n".$sip['sdp']."\n\n";
+					echo "SDP FROM CALLER:\n".$body."\n\n";
 					echo "SDP TO CALLER & STREAMING SERVER:\n".$res_sdp."\n";
 
 					$sdp_file = '/tmp/sip_tmp.sdp';
@@ -192,7 +145,10 @@ class sip_server
 
 					//NOTE: playback live stream locally with VLC:
 					//exec('/home/ml/scripts/compile/vlc-git/vlc -vvv '.$sdp_file);
-					//exec('ffplay '.$sdp_file);
+					exec('ffplay '.$sdp_file);
+
+					//XXX dump rtp stream (command not working!!!)
+					//exec('ffmpeg -i '.$sdp_file.' -vcodec copy /tmp/out.263');
 
 				} else {
 					echo "Error: DIDNT GET SDP FROM CLIENT INVITE MSG\n";
@@ -204,7 +160,7 @@ class sip_server
 				echo "Recieved SIP BYE from ".$peer."\n";
 
 				//Send "200 OK" response
-				$res = $this->send_message(SIP_OK, $peer, $sip);
+				$res = $this->send_message(SIP_OK, $peer, $mime);
 				break;
 
 			case SIP_ACK:
@@ -215,21 +171,21 @@ class sip_server
 			case SIP_OPTIONS:
 				echo "Recieved SIP OPTIONS from ".$peer."\n";
 				//FIXME more parameters should be set in the OK response (???)
-				$res = $this->send_message(SIP_OK, $peer, $sip);
+				$res = $this->send_message(SIP_OK, $peer, $mime);
 				break;
 
 			//We are acting a SIP Registrar
 			case SIP_REGISTER:
 				echo "Recieved SIP REGISTER from ".$peer."\n";
 
-				if (!$auth_response) {
+				if (empty($mime['Authorization'])) {
 					echo "sending auth req!\n";
 					//FIXME sip bindings (hur ser dom ut?!) RFC 3261: 10.3
-					$res = $this->send_message(SIP_UNAUTHORIZED, $peer, $sip);
+					$res = $this->send_message(SIP_UNAUTHORIZED, $peer, $mime);
 				} else {
-					$pos = strpos($auth_response, ' ');
-					$auth_type = substr($auth_response, 0, $pos);
-					$auth_response = substr($auth_response, $pos+1);
+					$pos = strpos($mime['Authorization'], ' ');
+					$auth_type = substr($mime['Authorization'], 0, $pos);
+					$auth_response = substr($mime['Authorization'], $pos+1);
 					if ($auth_type != "Digest") {
 						//FIXME: send error code!
 					} else {
@@ -251,7 +207,7 @@ class sip_server
 						} else {
 							//FIXME: ska man skicka nåt extra för "auth successful" eller räcker det med en OK ?
 							echo "sending OK!\n";
-							$res = $this->send_message(SIP_OK, $peer, $sip);
+							$res = $this->send_message(SIP_OK, $peer, $mime);
 						}
 					}
 				}
@@ -296,7 +252,7 @@ class sip_server
 	 *
 	 * @param $type type of sip message to generat
 	 * @param $peer client address to send to
-	 * @param $prev array of values from previous recieved SIP message
+	 * @param $prev array of Mime header data from previous recieved SIP message
 	 * @param $sdp_data SDP data to attach to message if needed
 	 */
 	function send_message($type, $peer, $prev, $sdp_data = '')
@@ -312,11 +268,11 @@ class sip_server
 		}
 
 		$res .=
-		"From: ".$prev['from']."\r\n".		//append "epid="
-		"Call-ID: ".$prev['callid']."\r\n".	//echo
-		"CSeq: ".$prev['cseq']."\r\n".		//echo
-		"Via: ".$prev['via']."\r\n".		//append "recieved="
-		"To: <".$prev['to'].">\r\n".		//append "tag="
+		"From: ".$prev['From']."\r\n".		//append "epid="
+		"Call-ID: ".$prev['Call-ID']."\r\n".//echo
+		"CSeq: ".$prev['CSeq']."\r\n".		//echo
+		"Via: ".$prev['Via']."\r\n".		//append "recieved="
+		"To: ".$prev['To']."\r\n".			//append "tag="
 		"Allow: MESSAGE, INVITE, CANCEL, ACK, OPTIONS, SUBSCRIBE, NOTIFY, BYE\r\n".	//XXX "MESSAGE" ?
 		"Contact: \"core_dev\" <sip:core_dev@".$this->host.":".$this->port.">\r\n".	//XXX core_dev here??
 		"User-Agent: core_dev\r\n";			//XXX core_dev version
@@ -325,7 +281,7 @@ class sip_server
 			//RFC 3261 #22.4
 			//Based on HTTP Digest authentication: http://www.faqs.org/rfcs/rfc2617.html
 
-			$nonce = $this->allocate_nonce($peer, $prev['callid']);
+			$nonce = $this->allocate_nonce($peer, $prev['Call-ID']);
 
 			$res .=
 			"WWW-Authenticate: Digest".
