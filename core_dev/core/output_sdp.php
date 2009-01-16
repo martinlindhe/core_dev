@@ -66,7 +66,6 @@ function generate_sdp($raw_sdp, $dst_ip, $port)
 	}
 	if (!empty($sdp_arr['audio'])) {
 		$sdp .= generate_sdp_media_tag(SDP_AUDIO, $sdp_arr['audio'], $port);
-		$port += 2;
 	}
 
 	return $sdp;

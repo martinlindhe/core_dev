@@ -11,8 +11,6 @@
  * @author Martin Lindhe, 2007-2009
  */
 
-//TODO (maybe??): merge get_nonce / allocate_nonce & port allocation code into child class ($x = new child() )?
-
 //TODO: debug output: show sip messages
 //TODO: return correct error codes on failures
 
@@ -21,30 +19,30 @@ require_once('input_sdp.php');
 require_once('output_sdp.php');
 
 //Client requests
-define('SIP_INVITE',	1);
-define('SIP_ACK',		2);
-define('SIP_BYE',		3);
-define('SIP_OPTIONS',	4);
-define('SIP_CANCEL',	5);
-define('SIP_REGISTER',	6);
+define('SIP_INVITE',   1);
+define('SIP_ACK',      2);
+define('SIP_BYE',      3);
+define('SIP_OPTIONS',  4);
+define('SIP_CANCEL',   5);
+define('SIP_REGISTER', 6);
 
 //Server responses
-define('SIP_TRYING',		10);
-define('SIP_RINGING',		11);
-define('SIP_OK',			12);
-define('SIP_UNAUTHORIZED',	13);
+define('SIP_TRYING',       10);
+define('SIP_RINGING',      11);
+define('SIP_OK',           12);
+define('SIP_UNAUTHORIZED', 13);
 
 class sip_server
 {
 	var $interface, $port;
-	var $handle = false;
-	var $dst_ip = 0;
-	var $nonce_arr = array();		///< array of previously generated nonce's for authentication
-	var $allocated_ports = array();	///< array of currently allocated ports for A/V RTP streams
+	var $handle          = false;
+	var $dst_ip          = 0;
+	var $nonce_arr       = array();  ///< array of previously generated nonce's for authentication
+	var $allocated_ports = array();  ///< array of currently allocated ports for A/V RTP streams
 
-	var $auth_realm   = 'core_dev SIP server';	///< MUST be globally unique
-	var $auth_opaque  = 'iam opaque!';			///< the content of this string is irrelevant
-	var $auth_handler = false;					///< defines custom authentication handler
+	var $auth_realm   = 'core_dev SIP server'; ///< MUST be globally unique
+	var $auth_opaque  = 'iam opaque!';         ///< the content of this string is irrelevant
+	var $auth_handler = false;                 ///< defines custom authentication handler
 
 	/**
 	 * Constructor
@@ -69,6 +67,11 @@ class sip_server
 		}
 	}
 
+	function auth_callback($cb)
+	{
+		$this->auth_handler = $cb;
+	}
+
 	/**
 	 * Starts to listen for SIP messages over UDP
 	 */
@@ -80,11 +83,6 @@ class sip_server
 		}
 
 		echo "sip_server ready for connections at ".$this->interface.":".$this->port."\n";
-	}
-
-	function auth_callback($cb)
-	{
-		$this->auth_handler = $cb;
 	}
 
 	/**
