@@ -11,6 +11,7 @@
  * @author Martin Lindhe, 2007-2009
  */
 
+//TODO: handle port allocation logic in input_sip class instead of output_sdp.php
 //TODO: debug output: show sip messages
 //TODO: return correct error codes on failures
 
@@ -85,6 +86,8 @@ class sip_server
 
 	/**
 	 * Sample SIP "Digest" authentication
+	 *
+	 * @return true if credentials are correct
 	 */
 	function auth_default_handler($username, $realm, $uri, $nonce, $response)
 	{
@@ -125,6 +128,7 @@ class sip_server
 	 *
 	 * @param $peer client address to send to
 	 * @param $msg the raw SIP message
+	 * @return true if message was handled
 	 */
 	function handle_message($peer, $msg)
 	{
@@ -252,12 +256,15 @@ class sip_server
 
 			case SIP_CANCEL:
 				echo "Recieved SIP CANCEL from ".$peer."\n";
-				//FIXME vi ska svara!!!
+				//FIXME what should we respond?
 				break;
 
 			default:
 				echo "Unknown SIP message type\n";
+				return false;
 		}
+
+		return true;
 	}
 
 	/**
@@ -266,12 +273,20 @@ class sip_server
 	 */
 	function allocate_nonce($peer, $key)
 	{
-		$nonce = md5(microtime().':'.$key.':'.mt_rand(0, 9999999999999));
+		for (;;) {
+			$nonce = md5(microtime().':'.$key.':'.mt_rand(0, 9999999999999));
+			$conflict = false;
 
-		//FIXME verify that genrated nonce is not already in use
-		$this->nonce_arr[$peer] = $nonce;
+			//verifies that generated nonce is not already in use
+			foreach ($this->nonce_arr as $old_peer => $old_nonce) {
+				if ($old_nonce == $nonce) $conflict = true;
+			}
 
-		return $nonce;
+			if (!$conflict) {
+				$this->nonce_arr[$peer] = $nonce;
+				return $nonce;
+			}
+		}
 	}
 
 	/**
