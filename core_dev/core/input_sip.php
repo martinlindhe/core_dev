@@ -11,7 +11,8 @@
  * @author Martin Lindhe, 2007-2009
  */
 
-//TODO: handle port allocation logic in input_sip class instead of output_sdp.php
+//TODO (maybe??): merge get_nonce / allocate_nonce & port allocation code into child class ($x = new child() )?
+
 //TODO: debug output: show sip messages
 //TODO: return correct error codes on failures
 
@@ -19,7 +20,7 @@ require_once('input_mime.php');
 require_once('input_sdp.php');
 require_once('output_sdp.php');
 
-define('SIP_UNKNOWN',	0);
+//Client requests
 define('SIP_INVITE',	1);
 define('SIP_ACK',		2);
 define('SIP_BYE',		3);
@@ -27,6 +28,7 @@ define('SIP_OPTIONS',	4);
 define('SIP_CANCEL',	5);
 define('SIP_REGISTER',	6);
 
+//Server responses
 define('SIP_TRYING',		10);
 define('SIP_RINGING',		11);
 define('SIP_OK',			12);
@@ -37,10 +39,11 @@ class sip_server
 	var $interface, $port;
 	var $handle = false;
 	var $dst_ip = 0;
-	var $nonce_arr = array();	///< array of previously generated nonce's for authentication
+	var $nonce_arr = array();		///< array of previously generated nonce's for authentication
+	var $allocated_ports = array();	///< array of currently allocated ports for A/V RTP streams
 
-	var $auth_realm = 'core_dev SIP server';	///< MUST be globally unique
-	var $auth_opaque = 'iam opaque!';			///< the content of this string is irrelevant
+	var $auth_realm   = 'core_dev SIP server';	///< MUST be globally unique
+	var $auth_opaque  = 'iam opaque!';			///< the content of this string is irrelevant
 	var $auth_handler = false;					///< defines custom authentication handler
 
 	/**
@@ -99,6 +102,73 @@ class sip_server
 		$a2 = "REGISTER".':'.$uri;
 
 		if (md5(md5($a1).':'.$nonce.':'.md5($a2)) == $response) return true;
+		return false;
+	}
+
+	/**
+	 * Allocates a free port to be used for current peer
+	 * The port must be even numbered and come in blocks of 4
+	 *
+	 * @return allocated port or false if no more ports are available
+	 */
+	function allocate_port($peer)
+	{
+		for ($i = 20000; $i < 64000; $i += 4) {
+			if (empty($this->allocated_ports[$i])) {
+				$this->allocated_ports[$i] = $peer;
+				echo "DEBUG: Port range ".$i." - ".($i+3)." allocated for ".$peer."\n";
+				return $i;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Frees allocated port associated with peer
+	 *
+	 * @return true on success
+	 */
+	function free_port($peer)
+	{
+		for ($i = 20000; $i < 64000; $i += 4) {
+			if (!empty($this->allocated_ports[$i]) && $this->allocated_ports[$i] == $peer) {
+				unset($this->allocated_ports[$i]);
+				echo "DEBUG: Port range ".$i." - ".($i+3)." freed for ".$peer."\n";
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Creates a guaranteed unique nonce for the client auth challenge.
+	 * If the client previously had a nonce, it will be replaced.
+	 */
+	function allocate_nonce($peer, $key)
+	{
+		for (;;) {
+			$nonce = md5(microtime().':'.$key.':'.mt_rand(0, 9999999999999));
+			$conflict = false;
+
+			//verifies that generated nonce is not already in use
+			foreach ($this->nonce_arr as $old_peer => $old_nonce) {
+				if ($old_nonce == $nonce) $conflict = true;
+			}
+
+			if (!$conflict) {
+				$this->nonce_arr[$peer] = $nonce;
+				return $nonce;
+			}
+		}
+	}
+
+	/**
+	 * Returns previously generated nonce for client, or false if none is found
+	 */
+	function get_nonce($peer)
+	{
+		if (!empty($this->nonce_arr[$peer])) return $this->nonce_arr[$peer];
+
 		return false;
 	}
 
@@ -169,13 +239,16 @@ class sip_server
 
 				//Send "200 OK" response
 				if ($mime['Content-Type'] != 'application/sdp') {
-					echo "Error: DIDNT GET SDP FROM CLIENT INVITE MSG\n";
+					echo "ERROR: DIDNT GET SDP FROM CLIENT INVITE MSG\n";
 					//FIXME how to handle. hangup?
 					break;
 				}
 
 				echo "Forwarding SIP media streams to IP: ".$this->dst_ip."\n";
-				$res_sdp = generate_sdp($body, $this->dst_ip);
+
+				$port = $this->allocate_port($peer);
+
+				$res_sdp = generate_sdp($body, $this->dst_ip, $port);
 				$res = $this->send_message(SIP_OK, $peer, $mime, $res_sdp);
 
 				echo "SDP FROM CALLER:\n".$body."\n\n";
@@ -194,9 +267,9 @@ class sip_server
 
 			case SIP_BYE:
 				echo "Recieved SIP BYE from ".$peer."\n";
-
 				//Send "200 OK" response
 				$res = $this->send_message(SIP_OK, $peer, $mime);
+				$this->free_port($peer);
 				break;
 
 			case SIP_ACK:
@@ -205,8 +278,8 @@ class sip_server
 				break;
 
 			case SIP_OPTIONS:
-				echo "Recieved SIP OPTIONS from ".$peer."\n";
 				//FIXME more parameters should be set in the OK response (???)
+				echo "Recieved SIP OPTIONS from ".$peer."\n";
 				$res = $this->send_message(SIP_OK, $peer, $mime);
 				break;
 
@@ -215,8 +288,8 @@ class sip_server
 				echo "Recieved SIP REGISTER from ".$peer."\n";
 
 				if (empty($mime['Authorization'])) {
-					echo "Sending auth request!\n";
 					//FIXME sip bindings (how does that work?!) RFC 3261: 10.3
+					echo "Sending auth request!\n";
 					$res = $this->send_message(SIP_UNAUTHORIZED, $peer, $mime);
 					break;
 				}
@@ -226,31 +299,33 @@ class sip_server
 				$auth_response = substr($mime['Authorization'], $pos+1);
 
 				if ($auth_type != "Digest") {
-					//NOTE: SIP/2.0 only support Digest authentication
 					//FIXME: send error code! 400 Bad request (???)
+					echo "ERROR: SIP/2.0 only support Digest authentication\n";
 					break;
 				}
 
-				//RFC 2617: "3.2.2.1 Request-Digest":
+				//RFC 2617: "3.2.2.1 Request-Digest"
 				$chal = parseAuthRequest($auth_response);
 
 				if ($chal['algorithm'] != "MD5" ||
 					$chal['realm'] != $this->auth_realm ||
 					$chal['nonce'] != $this->get_nonce($peer) ||
-					$chal['opaque'] != md5($this->auth_opaque))
+					$chal['opaque'] != md5($this->auth_opaque) ||
+					empty($chal['username']))
 				{
-					echo "FAIL!\n";
 					//FIXME: send error code! 400 Bad request (???)
+					echo "ERROR: Authentication details for user ".$chal['username']." is invalid!\n";
 					break;
 				}
 
 				$check = $this->auth_default_handler($chal['username'], $this->auth_realm, $chal['uri'], $chal['nonce'], $chal['response']);
 
 				if ($check) {
+					echo "DEBUG: Authentication of user ".$chal['username']." SUCCESSFUL!\n";
 					$res = $this->send_message(SIP_OK, $peer, $mime);
 				} else {
 					//FIXME: send error code! 403 Forbidden (???)
-					echo "FAIL\n";
+					echo "ERROR: Authentication of user ".$chal['username']." FAILED!\n";
 				}
 				break;
 
@@ -265,38 +340,6 @@ class sip_server
 		}
 
 		return true;
-	}
-
-	/**
-	 * Creates a guaranteed unique nonce for the client auth challenge.
-	 * If the client previously had a nonce, it will be replaced.
-	 */
-	function allocate_nonce($peer, $key)
-	{
-		for (;;) {
-			$nonce = md5(microtime().':'.$key.':'.mt_rand(0, 9999999999999));
-			$conflict = false;
-
-			//verifies that generated nonce is not already in use
-			foreach ($this->nonce_arr as $old_peer => $old_nonce) {
-				if ($old_nonce == $nonce) $conflict = true;
-			}
-
-			if (!$conflict) {
-				$this->nonce_arr[$peer] = $nonce;
-				return $nonce;
-			}
-		}
-	}
-
-	/**
-	 * Returns previously generated nonce for client, or false if none is found
-	 */
-	function get_nonce($peer)
-	{
-		if (!empty($this->nonce_arr[$peer])) return $this->nonce_arr[$peer];
-
-		return false;
 	}
 
 	/**

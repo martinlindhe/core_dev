@@ -44,23 +44,30 @@ $rtpavp_payload['static'] = array(
  *
  * @param $raw_sdp unparsed sdp header
  * @param $dst_ip ip address to tell the client to send media streams to
+ * @param $port specifies lower port number to use. this +3 ports will be allocated
  * @return generated sdp header to use as response for $raw_sdp
  */
-function generate_sdp($raw_sdp, $dst_ip)
+function generate_sdp($raw_sdp, $dst_ip, $port)
 {
 	$sdp_arr = parse_sdp($raw_sdp);
 
 	//Session description
 	$sdp =
-		"v=0\r\n".
-		"o=- ".ntptime()." 0 IN IP4 ".$sdp_arr['ip']."\r\n".	//Origin (this string is used as a "session identifier")
-		"s=core_dev\r\n".										//XXX core_dev version
-		"c=IN IP4 ".$dst_ip."\r\n".								//Connection data (send RTP data to this IP)
-		//Time description
-		"t=0 0\r\n";	//Time active. "0 0" means the session is regarded as permanent
+	"v=0\r\n".
+	"o=- ".ntptime()." 0 IN IP4 ".$sdp_arr['ip']."\r\n".	//Origin (this string is used as a "session identifier")
+	"s=core_dev\r\n".										//XXX core_dev version
+	"c=IN IP4 ".$dst_ip."\r\n".								//Connection data (send RTP data to this IP)
+	//Time description
+	"t=0 0\r\n";	//Time active. "0 0" means the session is regarded as permanent
 
-	if (!empty($sdp_arr['video'])) $sdp .= generate_sdp_media_tag(SDP_VIDEO, $sdp_arr['video']);
-	if (!empty($sdp_arr['audio'])) $sdp .= generate_sdp_media_tag(SDP_AUDIO, $sdp_arr['audio']);
+	if (!empty($sdp_arr['video'])) {
+		$sdp .= generate_sdp_media_tag(SDP_VIDEO, $sdp_arr['video'], $port);
+		$port += 2;
+	}
+	if (!empty($sdp_arr['audio'])) {
+		$sdp .= generate_sdp_media_tag(SDP_AUDIO, $sdp_arr['audio'], $port);
+		$port += 2;
+	}
 
 	return $sdp;
 }
@@ -72,20 +79,9 @@ function generate_sdp($raw_sdp, $dst_ip)
  * @param $sdp_media data describing the media formats of specified media type
  * @return a sdp media tag
  */
-function generate_sdp_media_tag($type, $sdp_media)
+function generate_sdp_media_tag($type, $sdp_media, $port)
 {
-	global $rtpavp_payload, $used_ports;
-
-	//find free port:
-	if (empty($used_ports)) $used_ports = array();
-
-	//TODO free a/v ports when the call ends
-	$port = 23440;	//FIXME improve port allocation
-
-	while (in_array($port, $used_ports)) {
-		$port += 2;
-	}
-	$used_ports[] = $port;
+	global $rtpavp_payload;
 
 	switch ($type) {
 		case SDP_VIDEO:
