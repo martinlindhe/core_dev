@@ -135,6 +135,12 @@ class sip_server
 
 		$tmp = explode(' ', $head[0]);	//INVITE sip:xxx@10.10.10.240 SIP/2.0
 
+		if ($tmp[2] != 'SIP/2.0') {
+			//XXX return error code!
+			echo "ERROR: Unsupported SIP version: ".$tmp[2]."\n";
+			return false;
+		}
+
 		switch ($tmp[0]) {
 			case 'INVITE':		$sip_type = SIP_INVITE; break;
 			case 'ACK':			$sip_type = SIP_ACK; break;
@@ -158,28 +164,28 @@ class sip_server
 				$res = $this->send_message(SIP_RINGING, $peer, $mime);
 
 				//Send "200 OK" response
-				if ($mime['Content-Type'] == 'application/sdp') {
-					echo "Forwarding SIP media streams to IP: ".$this->dst_ip."\n";
-					$res_sdp = generate_sdp($body, $this->dst_ip);
-					$res = $this->send_message(SIP_OK, $peer, $mime, $res_sdp);
-
-					echo "SDP FROM CALLER:\n".$body."\n\n";
-					echo "SDP TO CALLER & STREAMING SERVER:\n".$res_sdp."\n";
-
-					$sdp_file = '/tmp/sip_tmp.sdp';
-					file_put_contents($sdp_file, $res_sdp);
-
-					//NOTE: playback live stream locally with VLC:
-					//exec('/home/ml/scripts/compile/vlc-git/vlc -vvv '.$sdp_file);
-					//exec('ffplay '.$sdp_file);
-
-					//XXX dump rtp stream (command not working!!!)
-					//exec('ffmpeg -i '.$sdp_file.' -vcodec copy /tmp/out.263');
-
-				} else {
+				if ($mime['Content-Type'] != 'application/sdp') {
 					echo "Error: DIDNT GET SDP FROM CLIENT INVITE MSG\n";
 					//FIXME how to handle. hangup?
+					break;
 				}
+
+				echo "Forwarding SIP media streams to IP: ".$this->dst_ip."\n";
+				$res_sdp = generate_sdp($body, $this->dst_ip);
+				$res = $this->send_message(SIP_OK, $peer, $mime, $res_sdp);
+
+				echo "SDP FROM CALLER:\n".$body."\n\n";
+				echo "SDP TO CALLER & STREAMING SERVER:\n".$res_sdp."\n";
+
+				$sdp_file = '/tmp/sip_tmp.sdp';
+				file_put_contents($sdp_file, $res_sdp);
+
+				//NOTE: playback live stream locally with VLC:
+				//exec('/home/ml/scripts/compile/vlc-git/vlc -vvv '.$sdp_file);
+				//exec('ffplay '.$sdp_file);
+
+				//XXX dump rtp stream (command not working!!!)
+				//exec('ffmpeg -i '.$sdp_file.' -vcodec copy /tmp/out.263');
 				break;
 
 			case SIP_BYE:
@@ -205,40 +211,42 @@ class sip_server
 				echo "Recieved SIP REGISTER from ".$peer."\n";
 
 				if (empty($mime['Authorization'])) {
-					echo "sending auth req!\n";
-					//FIXME sip bindings (hur ser dom ut?!) RFC 3261: 10.3
+					echo "Sending auth request!\n";
+					//FIXME sip bindings (how does that work?!) RFC 3261: 10.3
 					$res = $this->send_message(SIP_UNAUTHORIZED, $peer, $mime);
+					break;
+				}
+
+				$pos = strpos($mime['Authorization'], ' ');
+				$auth_type = substr($mime['Authorization'], 0, $pos);
+				$auth_response = substr($mime['Authorization'], $pos+1);
+
+				if ($auth_type != "Digest") {
+					//NOTE: SIP/2.0 only support Digest authentication
+					//FIXME: send error code! 400 Bad request (???)
+					break;
+				}
+
+				//RFC 2617: "3.2.2.1 Request-Digest":
+				$chal = parseAuthRequest($auth_response);
+
+				if ($chal['algorithm'] != "MD5" ||
+					$chal['realm'] != $this->auth_realm ||
+					$chal['nonce'] != $this->get_nonce($peer) ||
+					$chal['opaque'] != md5($this->auth_opaque))
+				{
+					echo "FAIL!\n";
+					//FIXME: send error code! 400 Bad request (???)
+					break;
+				}
+
+				$check = $this->auth_default_handler($chal['username'], $this->auth_realm, $chal['uri'], $chal['nonce'], $chal['response']);
+
+				if ($check) {
+					$res = $this->send_message(SIP_OK, $peer, $mime);
 				} else {
-					$pos = strpos($mime['Authorization'], ' ');
-					$auth_type = substr($mime['Authorization'], 0, $pos);
-					$auth_response = substr($mime['Authorization'], $pos+1);
-
-					if ($auth_type != "Digest") {
-						//NOTE: SIP/2.0 only support Digest authentication
-						//FIXME: send error code! 400 Bad request (???)
-					} else {
-						//RFC 2617: "3.2.2.1 Request-Digest":
-						$chal = parseAuthRequest($auth_response);
-
-						if ($chal['algorithm'] != "MD5" ||
-							$chal['realm'] != $this->auth_realm ||
-							$chal['nonce'] != $this->get_nonce($peer) ||
-							$chal['opaque'] != md5($this->auth_opaque))
-						{
-							echo "FAIL!\n";
-							//FIXME: send error code! 400 Bad request (???)
-							break;
-						}
-
-						$check = $this->auth_default_handler($chal['username'], $this->auth_realm, $chal['uri'], $chal['nonce'], $chal['response']);
-
-						if ($check) {
-							$res = $this->send_message(SIP_OK, $peer, $mime);
-						} else {
-							//FIXME: send error code! 403 Forbidden (???)
-							echo "FAIL\n";
-						}
-					}
+					//FIXME: send error code! 403 Forbidden (???)
+					echo "FAIL\n";
 				}
 				break;
 
