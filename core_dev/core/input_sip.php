@@ -11,6 +11,8 @@
  * @author Martin Lindhe, 2007-2009
  */
 
+//TODO: debug output: show sip messages
+
 require_once('input_mime.php');
 require_once('input_sdp.php');
 require_once('output_sdp.php');
@@ -30,18 +32,26 @@ define('SIP_UNAUTHORIZED',	13);
 
 class sip_server
 {
-	var $host, $port;
+	var $interface, $port;
 	var $handle = false;
 	var $dst_ip = 0;
 	var $nonce_arr = array();	///< array of previously generated nonce's for authentication
 
 	var $auth_realm = 'core_dev SIP server';	///< MUST be globally unique
+	var $auth_opaque = 'iam opaque!';			///< the content of this string is irrelevant
+	var $auth_handler = false;					///< defines custom authentication handler
 
-	function __construct($host, $port = 5060)
+	/**
+	 * Constructor
+	 *
+	 * @param $interface IP address to listen to
+	 * @param $port port to listen to
+	 */
+	function __construct($interface = '0.0.0.0', $port = 5060)
 	{
 		if (!is_numeric($port)) return false;
 
-		$this->host = $host;
+		$this->interface = $interface;
 		$this->port = $port;
 
 		$this->start_server();
@@ -59,12 +69,32 @@ class sip_server
 	 */
 	function start_server()
 	{
-		$this->handle = stream_socket_server('udp://'.$this->host.':'.$this->port, $errno, $errstr, STREAM_SERVER_BIND);
+		$this->handle = stream_socket_server('udp://'.$this->interface.':'.$this->port, $errno, $errstr, STREAM_SERVER_BIND);
 		if (!$this->handle) {
 			die("$errstr ($errno)");
 		}
 
-		echo "sip_client ready for connections at ".$this->host.":".$this->port."\n";
+		echo "sip_client ready for connections at ".$this->interface.":".$this->port."\n";
+	}
+
+	function auth_callback($cb)
+	{
+		$this->auth_handler = $cb;
+	}
+
+	/**
+	 * Sample SIP "Digest" authentication
+	 */
+	function auth_default_handler($username, $realm, $uri, $nonce, $response)
+	{
+		if ($this->auth_handler) {
+			return call_user_func($this->auth_handler, $username, $realm, $uri, $nonce, $response);
+		}
+
+		$a1 = $username.':'.$realm.':'."test";	//XXX fetch password from somewhere
+		$a2 = "REGISTER".':'.$uri;
+		if (md5(md5($a1).':'.$nonce.':'.md5($a2)) == $response) return true;
+		return false;
 	}
 
 	/**
@@ -142,7 +172,7 @@ class sip_server
 
 					//NOTE: playback live stream locally with VLC:
 					//exec('/home/ml/scripts/compile/vlc-git/vlc -vvv '.$sdp_file);
-					exec('ffplay '.$sdp_file);
+					//exec('ffplay '.$sdp_file);
 
 					//XXX dump rtp stream (command not working!!!)
 					//exec('ffmpeg -i '.$sdp_file.' -vcodec copy /tmp/out.263');
@@ -183,28 +213,31 @@ class sip_server
 					$pos = strpos($mime['Authorization'], ' ');
 					$auth_type = substr($mime['Authorization'], 0, $pos);
 					$auth_response = substr($mime['Authorization'], $pos+1);
+
 					if ($auth_type != "Digest") {
-						//FIXME: send error code!
+						//NOTE: SIP/2.0 only support Digest authentication
+						//FIXME: send error code! 400 Bad request (???)
 					} else {
 						//RFC 2617: "3.2.2.1 Request-Digest":
 						$chal = parseAuthRequest($auth_response);
 
-						$a1 = "user".':'.$this->auth_realm.':'."pass";
-						$a2 = "REGISTER".':'.$chal['uri'];
-						$response = md5( md5($a1).':'.$chal['nonce'].':'.md5($a2) );
-
 						if ($chal['algorithm'] != "MD5" ||
 							$chal['realm'] != $this->auth_realm ||
 							$chal['nonce'] != $this->get_nonce($peer) ||
-							$chal['opaque'] != md5("iam opaque!") ||
-							$chal['response'] != $response)
+							$chal['opaque'] != md5($this->auth_opaque))
 						{
 							echo "FAIL!\n";
-							//FIXME: send error code!
-						} else {
-							//FIXME: ska man skicka nåt extra för "auth successful" eller räcker det med en OK ?
-							echo "sending OK!\n";
+							//FIXME: send error code! 400 Bad request (???)
+							break;
+						}
+
+						$check = $this->auth_default_handler($chal['username'], $this->auth_realm, $chal['uri'], $chal['nonce'], $chal['response']);
+
+						if ($check) {
 							$res = $this->send_message(SIP_OK, $peer, $mime);
+						} else {
+							//FIXME: send error code! 403 Forbidden (???)
+							echo "FAIL\n";
 						}
 					}
 				}
@@ -271,7 +304,7 @@ class sip_server
 		"Via: ".$prev['Via']."\r\n".		//append "recieved="
 		"To: ".$prev['To']."\r\n".			//append "tag="
 		"Allow: MESSAGE, INVITE, CANCEL, ACK, OPTIONS, SUBSCRIBE, NOTIFY, BYE\r\n".	//XXX "MESSAGE" ?
-		"Contact: \"core_dev\" <sip:core_dev@".$this->host.":".$this->port.">\r\n".	//XXX core_dev here??
+		"Contact: \"core_dev\" <sip:core_dev@".$this->interface.":".$this->port.">\r\n".	//XXX core_dev here??
 		"User-Agent: core_dev\r\n";			//XXX core_dev version
 
 		if ($type == SIP_UNAUTHORIZED) {
@@ -285,7 +318,7 @@ class sip_server
 			" realm=\"".$this->auth_realm."\",".	//text string
     		" domain=\"sip:sip.example.com\",".		//FIXME: set domain according to the "To:" field set by client
 			" nonce=\"".$nonce."\",".
-    		" opaque=\"".md5("iam opaque!")."\",".
+    		" opaque=\"".md5($this->auth_opaque)."\",".
 			" stale=FALSE,".	//XXX A flag, indicating that the previous request from the client was rejected because the nonce value was stale.
 			" algorithm=MD5\r\n";
 		}
