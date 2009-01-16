@@ -12,6 +12,7 @@
  */
 
 //TODO: debug output: show sip messages
+//TODO: return correct error codes on failures
 
 require_once('input_mime.php');
 require_once('input_sdp.php');
@@ -74,7 +75,7 @@ class sip_server
 			die("$errstr ($errno)");
 		}
 
-		echo "sip_client ready for connections at ".$this->interface.":".$this->port."\n";
+		echo "sip_server ready for connections at ".$this->interface.":".$this->port."\n";
 	}
 
 	function auth_callback($cb)
@@ -91,8 +92,9 @@ class sip_server
 			return call_user_func($this->auth_handler, $username, $realm, $uri, $nonce, $response);
 		}
 
-		$a1 = $username.':'.$realm.':'."test";	//XXX fetch password from somewhere
+		$a1 = $username.':'.$realm.':'."password";	//XXX fetch password from somewhere
 		$a2 = "REGISTER".':'.$uri;
+
 		if (md5(md5($a1).':'.$nonce.':'.md5($a2)) == $response) return true;
 		return false;
 	}
@@ -110,10 +112,7 @@ class sip_server
 		$pos = strpos($peer, ':');
 		$peer_ip = substr($peer, 0, $pos);
 		$peer_port = substr($peer, $pos + 1);
-
-		if (!in_array($peer_ip, $allowed_ip)) {
-			echo "The IP ".$peer_ip." tried to send SIP commands\n";
-		}
+		echo "Data incoming from  ".$peer_ip." on port ".$peer_port."\n";
 		*/
 
 		$this->handle_message($peer, $pkt);
