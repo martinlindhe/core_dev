@@ -6,7 +6,7 @@
  * Can be instructed to output more detailed
  * information of several media types.
  *
- * Copyright (c) 2008 Martin Lindhe
+ * Copyright (c) 2008-2009 Martin Lindhe
  *
  * mediaprobe is distributed under the BSD licence
  */
@@ -21,6 +21,8 @@ static void hex_dump(uint8_t *buf, int size);
 
 const unsigned char pngsig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
 const unsigned char mngsig[8] = {138, 77, 78, 71, 13, 10, 26, 10};
+const unsigned char asfsig[16] = {0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11,
+                                  0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C};
 
 #define TAG6(o,a,b,c,d,e,f) (o[0]==a && o[1]==b && o[2]==c && o[3]==d && o[4]==e && o[5]==f)
 #define TAG2(o,a,b)         (o[0]==a && o[1]==b)
@@ -143,6 +145,22 @@ int main(int argc, char** argv)
 	//FIXME detect TIFF & need sample file
 
 
+
+
+	/* Look for ASF (??) header */
+	if (len > 16 && memcmp(buf, asfsig, 16) == 0) {
+		//FIXME distinguish between wma & wmv files!
+		printf("video/x-ms-wmv\n");
+
+		if (info) {
+			printf("ASF container\n");
+		}
+		goto finish;
+	}
+
+
+
+
 	printf("Can't detect format:\n");
 	hex_dump(buf, readlen);
 
@@ -156,15 +174,6 @@ int main(int argc, char** argv)
 	fclose(f);
 	exit(1);
 }
-/*
-static int asf_probe(AVProbeData *pd)
-{
-	if (!memcmp(pd->buf, &asf_header, sizeof(GUID)))
-		return AVPROBE_SCORE_MAX;
-	else
-		return 0;
-}
-*/
 
 //function based on ffmpeg/libavformat/utils.c "hex_dump_internal"
 static void hex_dump(uint8_t *buf, int size)
