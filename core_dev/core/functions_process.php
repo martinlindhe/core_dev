@@ -578,7 +578,7 @@ function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
  *
  * @return file id of the newly converted audio, or false on error
  */
-function convertVideo($fileId, $mime)
+function convertAudio($fileId, $mime)
 {
 	global $files, $config;
 	if (!is_numeric($fileId)) return false;
