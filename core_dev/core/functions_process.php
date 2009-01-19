@@ -446,42 +446,57 @@ function processQueue()
 
 			$file = $files->getFileInfo($prev_job['referId']);
 
-			if ($file['mediaType'] == MEDIATYPE_VIDEO) {
-				$exec_start = microtime(true);
-				$newId = convertVideo(
-					$prev_job['referId'],	//what file
-					$files->default_video,	//destination format (flv)
-					(!empty($params['callback']) ? false : true),//no thumbs on callback files
-					(!empty($params['watermark']) ? $params['watermark'] : '')//specify watermark file to use
-				);
-				if ($newId === false) {
-					markQueue($job['entryId'], ORDER_FAILED);
-				} else {
-					markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
+			$exec_start = microtime(true);
 
-					if (empty($params['callback'])) break;
+			$newId = false;
+			switch ($file['mediaType']) {
+				case MEDIATYPE_VIDEO:
+					$newId = convertVideo(
+						$prev_job['referId'],	//what file
+						$files->default_video,	//destination format (flv)
+						(!empty($params['callback']) ? false : true),//no thumbs on callback files
+						(!empty($params['watermark']) ? $params['watermark'] : '')//specify watermark file to use
+					);
+					break;
 
-					//execute callback
-					$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
+				case MEDIATYPE_AUDIO:
+					echo "XXX: converting to MP3!!!\n";
+					$newId = convertAudio(
+						$prev_job['referId'],	//what file
+						$files->default_audio,	//destination format (mp3)
+						(!empty($params['callback']) ? false : true),//no thumbs on callback files
+						(!empty($params['watermark']) ? $params['watermark'] : '')//specify watermark file to use
+					);
+					break;
 
-					$callback_uri = $params['callback'].(strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
-
-					$data = file_get_contents($callback_uri);
-
-					echo "Performing callback: ".$callback_uri. "\n\n";
-					echo "Client callback script returned:\n".$data;
-					storeCallbackData($job['entryId'], $data);
-
-					//FIXME delete files 30 days after processing
-					//$files->deleteFile($prev_job['referId']);
-					//$files->deleteFile($newId);
-				}
-			} else if ($file['mediaType'] == MEDIATYPE_AUDIO) {
-				die('FIXME CONVERT TO MP3!!!!');
-			} else {
-				echo "UNKNOWN MEDIA TYPE ".$file['mediaType'].", MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
-				markQueue($job['entryId'], ORDER_FAILED);
+				default:
+					echo "UNKNOWN MEDIA TYPE ".$file['mediaType'].", MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
+					break;
 			}
+
+			if (!$newId) {
+				markQueue($job['entryId'], ORDER_FAILED);
+				return false;
+			}
+
+			markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
+
+			if (empty($params['callback'])) break;
+
+			//execute callback
+			$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
+
+			$callback_uri = $params['callback'].(strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
+
+			$data = file_get_contents($callback_uri);
+
+			echo "Performing callback: ".$callback_uri. "\n\n";
+			echo "Client callback script returned:\n".$data;
+			storeCallbackData($job['entryId'], $data);
+
+			//FIXME delete files 30 days after processing
+			//$files->deleteFile($prev_job['referId']);
+			//$files->deleteFile($newId);
 			break;
 
 		default:
@@ -552,6 +567,43 @@ function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
 
 	if ($thumbs) {
 		generateVideoThumbs($newId);
+	}
+
+	$files->updateFile($newId);
+	return $newId;
+}
+
+/**
+ * Converts a audio file to another audio format
+ *
+ * @return file id of the newly converted audio, or false on error
+ */
+function convertVideo($fileId, $mime)
+{
+	global $files, $config;
+	if (!is_numeric($fileId)) return false;
+
+	//FIXME dont convert uploaded mp3 TO mp3
+	$newId = $files->cloneFile($fileId, FILETYPE_CLONE_CONVERTED);
+
+	switch ($mime) {
+		case 'audio/x-mpeg':
+			//MP3 audio
+			$c = 'ffmpeg -i '.$files->findUploadPath($fileId).' -f mp3 -ac 2 -ar 22050 ';
+			$c .= $files->findUploadPath($newId);
+			break;
+
+		default:
+			die('unknown destination audio format: '.$mime);
+	}
+
+	echo "$ ".$c."\n";
+	exec($c);
+
+	if (!file_exists($files->findUploadPath($newId)) || !filesize($files->findUploadPath($newId))) {
+		echo "convertAudio() FAILED - dst file ".$files->findUploadPath($newId)." dont exist!\n";
+		$files->deleteFile($newId);
+		return false;
 	}
 
 	$files->updateFile($newId);
