@@ -18,14 +18,44 @@
 #include <inttypes.h>
 
 static void hex_dump(uint8_t *buf, int size);
+static void print_guid(uint8_t *buf);
 
 const unsigned char pngsig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
 const unsigned char mngsig[8] = {138, 77, 78, 71, 13, 10, 26, 10};
-const unsigned char asfsig[16] = {0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11,
-                                  0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C};
+
+const unsigned char asf_sig[16] =
+	{0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11, 0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C};
+
+const unsigned char asf_stream_properties_object[16] =
+	{0x91, 0x07, 0xDC, 0xB7, 0xB7, 0xA9, 0xCF, 0x11, 0x8E, 0xE6, 0x00, 0xC0, 0x0C, 0x20, 0x53, 0x65};
+
+
+const unsigned char asf_stream_audio[16] =
+	{0x40, 0x9E, 0x69, 0xF8, 0x4D, 0x5B, 0xCF, 0x11, 0xA8, 0xFD, 0x00, 0x80, 0x5F, 0x5C, 0x44, 0x2B};
+
+const unsigned char asf_stream_video[16] =
+	{0xC0, 0xEF, 0x19, 0xBC, 0x4D, 0x5B, 0xCF, 0x11, 0xA8, 0xFD, 0x00, 0x80, 0x5F, 0x5C, 0x44, 0x2B};
+
+
 
 #define TAG6(o,a,b,c,d,e,f) (o[0]==a && o[1]==b && o[2]==c && o[3]==d && o[4]==e && o[5]==f)
 #define TAG2(o,a,b)         (o[0]==a && o[1]==b)
+
+struct asf_header {
+	uint8_t guid[16];
+	unsigned long size; //XXX 64 bit
+	unsigned int num;	//XXX 32bit
+	uint8_t res1, res2;
+};
+
+struct asf_object {
+	uint8_t guid[16];
+	unsigned long size; //XXX 64 bit
+};
+
+struct asf_stream_properties {
+	uint8_t stream_type[16];
+};
 
 int main(int argc, char** argv)
 {
@@ -56,7 +86,7 @@ int main(int argc, char** argv)
 	}
 
 	int readlen = len;
-	if (len > 1024) readlen = 1024;
+	if (len > 65536) readlen = 65536;
 
 	buf = malloc(readlen);
 
@@ -147,10 +177,58 @@ int main(int argc, char** argv)
 
 
 
+	struct asf_header hdr;
+
+	fseek(f, 0, SEEK_SET);
+	fread(&hdr, 30, 1, f);	//XXX sizeof(hdr) returnerar 32 men ska vara 30. WTF?!?!
+
 	/* Look for ASF (??) header */
-	if (len > 16 && memcmp(buf, asfsig, 16) == 0) {
-		//FIXME distinguish between wma & wmv files!
-		printf("video/x-ms-wmv\n");
+	if (len > 16 && memcmp(hdr.guid, asf_sig, 16) == 0) {
+
+		/*
+		printf("size of header       : %ld\n", hdr.size);
+		printf("number of hdr objects: %ld\n", hdr.num);
+		*/
+		struct asf_object obj;
+
+		int i, is_video = 0;
+		for (i=0; i<hdr.num; i++) {
+			fread(&obj, sizeof(obj), 1, f);
+
+			if (memcmp(obj.guid, asf_stream_properties_object, 16) == 0) {
+
+				struct asf_stream_properties prop;
+
+				fread(&prop, sizeof(prop), 1, f);	//XXX read whole object??
+
+				if (memcmp(prop.stream_type, asf_stream_video, 16) == 0) {
+					is_video = 1;
+				} else if (memcmp(prop.stream_type, asf_stream_audio, 16) == 0) {
+					//xxx
+				} else {
+					printf("unknown stream type guid: ");
+					print_guid(prop.stream_type);
+					printf("\n");
+				}
+				fseek(f, obj.size - sizeof(obj) - sizeof(prop), SEEK_CUR);
+
+			} else {
+				/*
+				printf("unknown guid: ");
+				print_guid(obj.guid);
+				printf("\n");
+				printf("size: %ld\n", obj.size);
+				*/
+
+				fseek(f, obj.size - sizeof(obj), SEEK_CUR);
+			}
+		}
+
+		if (is_video) {
+			printf("video/x-ms-wmv\n");
+		} else {
+			printf("audio/x-ms-wma\n");
+		}
 
 		if (info) {
 			printf("ASF container\n");
@@ -199,5 +277,14 @@ static void hex_dump(uint8_t *buf, int size)
 			printf("%c", c);
 		}
 		printf("\n");
+	}
+}
+
+static void print_guid(uint8_t *buf)
+{
+	int i;
+
+	for(i=0; i<16; i++) {
+		printf(" %02x", buf[i]);
 	}
 }
