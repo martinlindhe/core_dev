@@ -33,6 +33,7 @@ define('FILETYPE_VIDEOPRES',			11);	// video clip representing a presentation of
 define('FILETYPE_VIDEOMESSAGE',			12);	// video clip respresenting a private message
 define('FILETYPE_VIDEOCHATREQUEST',		13);	// video clip representing a live videochat request
 define('FILETYPE_VIDEOABORTED',			14);	// video clip aborted during recording
+define('FILETYPE_VIDEOTV',				15);	// video clip representing a video
 
 define('FILETYPE_GENERIC',				20); // generic file type, for application specific file type
 
