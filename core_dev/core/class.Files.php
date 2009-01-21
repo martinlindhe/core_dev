@@ -194,7 +194,16 @@ class Files
 		if (!file_exists($filename)) return false;
 
 		$c = 'file -bi '.escapeshellarg($filename);
-		return exec($c);
+		$result = exec($c);
+
+		//XXX: use mediaprobe to distinguish between wmv/wma files.
+		//FIXME: enhance mediaprobe to handle all media detection and stop use "file"
+		if ($result == 'video/x-ms-wmv') {
+			$c = 'mediaprobe '.escapeshellarg($filename);
+			return exec($c);
+		}
+
+		return $result;
 	}
 
 	/**
