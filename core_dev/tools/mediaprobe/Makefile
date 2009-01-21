@@ -3,6 +3,7 @@ EXE = mediaprobe
 OBJS =           \
     debug.o      \
     probe_asf.o  \
+    probe_gif.o  \
     probe_jpeg.o \
     main.o
 

@@ -20,7 +20,9 @@
 #include "mediaprobe.h"
 #include "debug.h"
 
+#include "probe_gif.h"
 #include "probe_jpeg.h"
+
 #include "probe_asf.h"
 
 const unsigned char pngsig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
@@ -83,18 +85,6 @@ int main(int argc, char** argv)
 		goto finish;
 	}
 
-	/* Look for GIF image */
-	if (len >= 10 && (TAG6(buf,'G','I','F','8','7','a') || TAG6(buf,'G','I','F','8','9','a')))
-	{
-		//FIXME minimum possible size of a GIF?
-		//FIXME detect animated gif
-		printf("image/gif\n");
-		if (info) {
-			printf("GIF file\n");
-		}
-		goto finish;
-	}
-
 	/* Look for BMP image */
 	if (len >= 0x0E && TAG2(buf, 'B', 'M') && (len == buf[0x2])) {
 		//bmp file header is 0x0E bytes
@@ -135,6 +125,7 @@ int main(int argc, char** argv)
 	//FIXME detect TIFF & need sample file
 
 
+	if (probe_gif (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 	if (probe_jpeg(f, buf, len, info) == E_PROBESUCCESS) goto finish;
 
 	if (probe_asf(f, len, info) == E_PROBESUCCESS) goto finish;
