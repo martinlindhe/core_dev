@@ -18,6 +18,6 @@ struct asf_stream_properties {
 };
 
 int probe_asf(FILE *f, int len, int info);
-static void print_guid(uint8_t *buf);
+void print_guid(uint8_t *buf);
 
 #endif /* PROBE_ASF_H */

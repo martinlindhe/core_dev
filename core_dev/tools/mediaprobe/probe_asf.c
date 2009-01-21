@@ -80,7 +80,7 @@ int probe_asf(FILE *f, int len, int info)
 	return E_PROBESUCCESS;
 }
 
-static void print_guid(uint8_t *buf)
+void print_guid(uint8_t *buf)
 {
 	int i;
 

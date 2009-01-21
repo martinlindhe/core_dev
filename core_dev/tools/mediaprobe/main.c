@@ -18,16 +18,12 @@
 #include <inttypes.h>
 
 #include "mediaprobe.h"
-#include "probe_asf.h"
+#include "debug.h"
 
-static void hex_dump(uint8_t *buf, int size);
-static void print_guid(uint8_t *buf);
+#include "probe_asf.h"
 
 const unsigned char pngsig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
 const unsigned char mngsig[8] = {138, 77, 78, 71, 13, 10, 26, 10};
-
-#define TAG6(o,a,b,c,d,e,f) (o[0]==a && o[1]==b && o[2]==c && o[3]==d && o[4]==e && o[5]==f)
-#define TAG2(o,a,b)         (o[0]==a && o[1]==b)
 
 int main(int argc, char** argv)
 {
@@ -166,32 +162,3 @@ int main(int argc, char** argv)
 	fclose(f);
 	exit(1);
 }
-
-//function based on ffmpeg/libavformat/utils.c "hex_dump_internal"
-static void hex_dump(uint8_t *buf, int size)
-{
-	int len, i, j, c;
-
-	for(i=0;i<size;i+=16) {
-		len = size - i;
-		if (len > 16)
-			len = 16;
-		printf("%08x ", i);
-		for(j=0;j<16;j++) {
-			if (j < len)
-				printf(" %02x", buf[i+j]);
-			else
-				printf("   ");
-		}
-		printf(" ");
-		for(j=0;j<len;j++) {
-			c = buf[i+j];
-			if (c < ' ' || c > '~')
-				c = '.';
-			printf("%c", c);
-		}
-		printf("\n");
-	}
-}
-
-

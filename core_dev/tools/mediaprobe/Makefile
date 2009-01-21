@@ -1,5 +1,11 @@
 EXE = mediaprobe
-OBJS = main.o probe_asf.o
+
+OBJS =          \
+    debug.o     \
+    probe_asf.o \
+    main.o
+
+
 CFLAGS = -Wall -O3
 LFLAGS = -s
 
