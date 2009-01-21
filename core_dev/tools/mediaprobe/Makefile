@@ -13,12 +13,12 @@ OBJS = \
     \
     main.o
 
-
+CC = gcc
 CFLAGS = -Wall -O3
 LFLAGS = -s
 
 all: $(OBJS)
-	gcc $(CFLAGS) -o $(EXE) $(OBJS) $(LFLAGS)
+	$(CC) $(CFLAGS) -o $(EXE) $(OBJS) $(LFLAGS)
 
 clean:
 	@rm -f *.o $(EXE)
