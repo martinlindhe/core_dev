@@ -3,7 +3,6 @@
 #include <inttypes.h>
 
 #include "mediaprobe.h"
-#include "probe_png.h"
 
 const unsigned char png_sig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
 const unsigned char mng_sig[8] = {138, 77, 78, 71, 13, 10, 26, 10};

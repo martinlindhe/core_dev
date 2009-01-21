@@ -75,9 +75,6 @@ int main(int argc, char** argv)
 		}
 	}
 
-
-	//FIXME detect TIFF & need sample file
-
 	if (probe_bmp (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 	if (probe_gif (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 	if (probe_jpeg(f, buf, len, info) == E_PROBESUCCESS) goto finish;

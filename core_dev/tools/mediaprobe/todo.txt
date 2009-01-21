@@ -3,10 +3,12 @@
 * (maybe) use ffmpeg's probe functions directly. if so, perhaps make patches to improve this probing with ffmpeg directly (ps. remember ffprobe)
 
 * Detect image formats:
-	TIFF
+	- TIFF
 
 * Detect audio formats:
-	WAVE, MP3, OGG
+	- WAVE
+	- OGG
+	- MP3 (is this MPEG container with audio track?)
 
 * Detect video formats:
-	???
+	- MPEG with video track

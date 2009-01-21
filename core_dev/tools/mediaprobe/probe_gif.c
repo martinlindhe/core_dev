@@ -3,7 +3,6 @@
 #include <inttypes.h>
 
 #include "mediaprobe.h"
-#include "probe_gif.h"
 
 int probe_gif(FILE *f, uint8_t *buf, int len, int info)
 {

@@ -3,7 +3,6 @@
 #include <inttypes.h>
 
 #include "mediaprobe.h"
-#include "probe_bmp.h"
 
 int probe_bmp(FILE *f, uint8_t *buf, int len, int info)
 {
