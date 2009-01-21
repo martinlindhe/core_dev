@@ -12,3 +12,6 @@
 
 * Detect video formats:
 	- MPEG with video track
+
+
+Samples: http://samples.ffmpeg.org/

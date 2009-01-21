@@ -101,14 +101,23 @@ int probe_asf(FILE *f, int len, int info)
 		}
 	}
 
-	if (is_video) {
-		printf("video/x-ms-wmv\n");
-	} else {
-		printf("audio/x-ms-wma\n");
-	}
+	if (!info) {
 
-	if (info) {
-		printf("ASF container\n");
+		if (is_video) {
+			printf("video/x-ms-wmv\n");
+		} else {
+			printf("audio/x-ms-wma\n");
+		}
+	} else {
+		printf("Format: ASF\n");
+
+		if (is_video) {
+			printf("Mediatype: video\n");
+			printf("Mimetype: video/x-ms-wmv\n");
+		} else {
+			printf("Mediatype: audio\n");
+			printf("Mimetype: audio/x-ms-wma\n");
+		}
 	}
 
 	return E_PROBESUCCESS;

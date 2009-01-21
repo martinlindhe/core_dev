@@ -73,6 +73,7 @@ int main(int argc, char** argv)
 		if (!strcmp(argv[2], "-info")) info = 1;
 		else {
 			printf("Unknown parameter: %s\n", argv[2]);
+			goto fail;
 		}
 	}
 
