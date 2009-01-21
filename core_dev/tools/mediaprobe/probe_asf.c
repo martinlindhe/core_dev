@@ -48,7 +48,9 @@ int probe_asf(FILE *f, int len, int info)
 
 	fseek(f, 0, SEEK_SET);
 
-	//XXX sizeof(hdr) returnerar 32 men ska vara 30. WTF?!?!
+	//XXX sizeof(hdr) returnerar 32 men ska vara 30. WTF?!?! (amd64)
+	//printf("sizeof(hdr) = %ld\n", sizeof(hdr) );
+
 	if (fread(&hdr, 30, 1, f) != 1)
 		return E_READERROR;
 

@@ -24,6 +24,7 @@
 #include "probe_bmp.h"
 #include "probe_gif.h"
 #include "probe_jpeg.h"
+#include "probe_mng.h"
 #include "probe_png.h"
 
 //container format parsers
@@ -75,24 +76,24 @@ int main(int argc, char** argv)
 		}
 	}
 
+	//image format parsers
 	if (probe_bmp (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 	if (probe_gif (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 	if (probe_jpeg(f, buf, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_mng (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 	if (probe_png (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 
+	//container format parsers
 	if (probe_asf(f, len, info) == E_PROBESUCCESS) goto finish;
-
 
 	printf("Can't detect format:\n");
 	hex_dump(buf, readlen);
 
-
-	finish:
+finish:
 	fclose(f);
 	exit(0);
 
-
-	fail:
+fail:
 	fclose(f);
 	exit(1);
 }

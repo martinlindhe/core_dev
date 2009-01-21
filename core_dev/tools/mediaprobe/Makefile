@@ -6,6 +6,7 @@ OBJS = \
     probe_bmp.o  \
     probe_gif.o  \
     probe_jpeg.o \
+    probe_mng.o  \
     probe_png.o  \
     \
     probe_asf.o  \

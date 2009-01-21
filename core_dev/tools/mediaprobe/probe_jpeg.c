@@ -4,15 +4,21 @@
 
 #include "mediaprobe.h"
 
+/**
+ * Look for JPEG image
+ */
 int probe_jpeg(FILE *f, uint8_t *buf, int len, int info)
 {
-	/* Look for JPEG image */
-	if (len < 0x10 || !TAG2(buf, 0xFF, 0xD8)) return E_PROBEFAIL;
-
 	//FIXME minimum size of JPEG?
-	printf("image/jpeg\n");
-	if (info) {
-		printf("JPEG file\n");
+	if (len < 0x10 || !TAG2(buf, 0xFF, 0xD8))
+		return E_PROBEFAIL;
+
+	if (!info) {
+		printf("image/jpeg\n");
+	} else {
+		printf("Format: JPEG\n");
+		printf("Mediatype: image\n");
+		printf("Mimetype: image/jpeg\n");
 	}
 
 	return E_PROBESUCCESS;
