@@ -9,5 +9,8 @@ all: $(OBJS)
 clean:
 	@rm -f *.o $(EXE)
 
+install:
+	cp $(EXE) /usr/bin
+
 upx:
 	upx -9 $(EXE)

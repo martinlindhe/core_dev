@@ -182,9 +182,8 @@ int main(int argc, char** argv)
 	fseek(f, 0, SEEK_SET);
 	fread(&hdr, 30, 1, f);	//XXX sizeof(hdr) returnerar 32 men ska vara 30. WTF?!?!
 
-	/* Look for ASF (??) header */
+	/* Look for ASF header */
 	if (len > 16 && memcmp(hdr.guid, asf_sig, 16) == 0) {
-
 		/*
 		printf("size of header       : %ld\n", hdr.size);
 		printf("number of hdr objects: %ld\n", hdr.num);
@@ -235,7 +234,6 @@ int main(int argc, char** argv)
 		}
 		goto finish;
 	}
-
 
 
 
