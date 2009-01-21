@@ -1,8 +1,9 @@
 EXE = mediaprobe
 
-OBJS =          \
-    debug.o     \
-    probe_asf.o \
+OBJS =           \
+    debug.o      \
+    probe_asf.o  \
+    probe_jpeg.o \
     main.o
 
 

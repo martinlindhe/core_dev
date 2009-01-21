@@ -20,6 +20,7 @@
 #include "mediaprobe.h"
 #include "debug.h"
 
+#include "probe_jpeg.h"
 #include "probe_asf.h"
 
 const unsigned char pngsig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
@@ -71,15 +72,6 @@ int main(int argc, char** argv)
 		}
 	}
 
-	/* Look for JPEG image */
-	if (len >= 0x10 && TAG2(buf, 0xFF, 0xD8)) {
-		//FIXME minimum size of JPEG?
-		printf("image/jpeg\n");
-		if (info) {
-			printf("JPEG file\n");
-		}
-		goto finish;
-	}
 
 	/* Look for PNG image */
 	if (len >= 10 && memcmp(buf, pngsig, 8) == 0) {
@@ -143,6 +135,7 @@ int main(int argc, char** argv)
 	//FIXME detect TIFF & need sample file
 
 
+	if (probe_jpeg(f, buf, len, info) == E_PROBESUCCESS) goto finish;
 
 	if (probe_asf(f, len, info) == E_PROBESUCCESS) goto finish;
 
