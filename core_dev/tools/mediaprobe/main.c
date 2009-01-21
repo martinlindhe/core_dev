@@ -20,14 +20,14 @@
 #include "mediaprobe.h"
 #include "debug.h"
 
-#include "probe_asf.h"
-
+//image format parsers
 #include "probe_bmp.h"
 #include "probe_gif.h"
 #include "probe_jpeg.h"
+#include "probe_png.h"
 
-const unsigned char pngsig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
-const unsigned char mngsig[8] = {138, 77, 78, 71, 13, 10, 26, 10};
+//container format parsers
+#include "probe_asf.h"
 
 int main(int argc, char** argv)
 {
@@ -76,37 +76,14 @@ int main(int argc, char** argv)
 	}
 
 
-	/* Look for PNG image */
-	if (len >= 10 && memcmp(buf, pngsig, 8) == 0) {
-		//FIXME minimum size of PNG?
-		printf("image/png\n");
-		if (info) {
-			printf("PNG file\n");
-		}
-		goto finish;
-	}
-
-	/* Look for MNG image */
-	if (len >= 10 && memcmp(buf, mngsig, 8) == 0) {
-		//FIXME minimum size of MNG?
-		//FIXME need sample file
-		printf("video/x-mng\n");	//XXX correct mime?
-		if (info) {
-			printf("MNG file\n");
-		}
-		goto finish;
-	}
-
 	//FIXME detect TIFF & need sample file
-
 
 	if (probe_bmp (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 	if (probe_gif (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 	if (probe_jpeg(f, buf, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_png (f, buf, len, info) == E_PROBESUCCESS) goto finish;
 
 	if (probe_asf(f, len, info) == E_PROBESUCCESS) goto finish;
-
-
 
 
 	printf("Can't detect format:\n");

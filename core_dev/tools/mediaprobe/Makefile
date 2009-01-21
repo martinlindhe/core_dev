@@ -1,14 +1,15 @@
 EXE = mediaprobe
 
-OBJS =           \
+OBJS = \
     debug.o      \
-	\
-    probe_asf.o  \
-	\
+    \
     probe_bmp.o  \
     probe_gif.o  \
     probe_jpeg.o \
-	\
+    probe_png.o  \
+    \
+    probe_asf.o  \
+    \
     main.o
 
 
