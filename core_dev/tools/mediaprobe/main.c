@@ -43,14 +43,14 @@ const unsigned char asf_stream_video[16] =
 
 struct asf_header {
 	uint8_t guid[16];
-	unsigned long size; //XXX 64 bit
-	unsigned int num;	//XXX 32bit
+	uint64_t size;
+	uint32_t num;
 	uint8_t res1, res2;
 };
 
 struct asf_object {
 	uint8_t guid[16];
-	unsigned long size; //XXX 64 bit
+	uint64_t size;
 };
 
 struct asf_stream_properties {
