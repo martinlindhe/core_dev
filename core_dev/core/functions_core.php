@@ -9,7 +9,7 @@
  */
 
 //Include required core_dev files:
-require_once('functions_locale.php');	//for translations
+require_once('locale.php');	//for translations
 require_once('output_xhtml.php');	//for XHTML output helper functions
 require_once('functions_defaults.php');	//default appearance such as time display
 require_once('functions_general.php');	//FIXME: anything in there worth keeping?

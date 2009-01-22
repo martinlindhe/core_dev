@@ -1,0 +1,93 @@
+Explanation of the design of the core_dev Handler()
+-----------------------------------------------
+
+WIP - still in draft
+
+//core handler - always exists in a core_dev project
+
+$h = new Handler();
+
+
+= database driver =
+$h->db('mysqli', $config['db']);
+
+These drivers handles connections & queries to SQL databases.
+
+Available drivers:
+
+  mysqli - the preferred driver
+  mysql - older & slower mysql database driver
+  postgresql - FIXME unfinished
+  sqlite - FIXME unfinished
+
+New drivers must implement the db_base.php interface
+
+
+= user driver =
+$h->user('default');
+
+These drivers handles registering & unregistering of user accounts.
+
+Available drivers:
+  default - uses tblUsers to store user data
+
+  application defined - for m2w, lookup directly in tblCallers and dont use tblUsers
+
+New drivers must implement the user_base.php interface
+
+
+= auth driver =
+
+$h->auth('default', $config['auth']);
+
+Available drivers:
+  default - built in authentication handler for http requests
+            (store data in tblUsers - XXX use $session->user
+            functions to abstract underlying DB which is
+            currently using tblUsers)
+   openid - XXX how? openid against multiple sites
+            (just store openid provider?)
+
+   application defined - for m2w (XXX create)
+
+
+New drivers must implement the auth_base.php interface
+
+= session driver =
+
+$h->session('default', $config['session']);
+
+Available drivers:
+  default - built in session handler for web server access with http requests
+
+New drivers must implement the session_base.php interface
+
+
+
+= files driver =
+
+$h->files('default', $config['files']);
+
+Available drivers:
+  default - uses tblFiles
+
+(XXX what functions is required?)
+
+
+
+--------------------
+
+$h->log - the log handler:
+			default - built in handler using the Log class (uses tblLogs)
+			text - logs to /tmp/core_dev.log or user-defined    FIXME!
+
+$h->load / save / delete - the settings handler:
+			default - stores user settings in tblSettings
+
+
+
+XXX ability for additional classes to be registerd that attach their own
+	functions, such as: theming (currently $session->default_theme etc)
+
+XXX eventually a class for fine-grained user access?
+    default implements the normal/admin/superadmin thing?

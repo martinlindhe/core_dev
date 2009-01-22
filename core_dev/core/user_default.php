@@ -2,18 +2,36 @@
 /**
  * $Id$
  *
- * Default user class
+ * Default user class, using tblUsers
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-class user_default
+require_once('user_base.php');
+
+//TODO: implement remove() & unregister()
+//TODO: define required functions in user_base.php
+
+define('USERLEVEL_NORMAL',		0);
+define('USERLEVEL_WEBMASTER',	1);
+define('USERLEVEL_ADMIN',		2);
+define('USERLEVEL_SUPERADMIN',	3);
+
+class user_default extends user_base
 {
 	var $par = false;	///< points to parent class
 
 	function __construct($conf = array())
 	{
-		//echo "___ user_default constructor!\n";
+	}
+
+	/**
+	 * Creates a tblUsers entry without username or password
+	 */
+	function reserve()
+	{
+		$q = 'INSERT INTO tblUsers SET userMode=0';
+		return $this->db->insert($q);
 	}
 
 	/**
@@ -26,7 +44,7 @@ class user_default
 	 * @param $newUserId supply reserved user id. if not supplied, a new user id will be allocated
 	 * @return the user ID of the newly created user
 	 */
-	function registerUser($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
+	function register($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
 	{
 		global $session;
 		if (!is_numeric($_mode) || !is_numeric($newUserId)) return false;
@@ -81,14 +99,20 @@ class user_default
 	}
 
 	/**
-	 * Creates a tblUsers entry without username or password
+	 * Marks user as unregistered, keeping their username reserved
 	 */
-	function reserveUser()
+	function unregister()
 	{
-		$q = 'INSERT INTO tblUsers SET userMode=0';
-		return $this->db->insert($q);
+		die('FIXME IMPLEMENT unregister()!');
 	}
 
+	/**
+	 * Removes a user from the database
+	 */
+	function remove()
+	{
+		die('FIXME IMPLEMENT remove()!');
+	}
 
 }
 

@@ -2,73 +2,62 @@
 /**
  * $Id$
  *
- * Default session class
+ * Default session class.
  *
- * Uses tblLogs to store session events
- *
- * User setting examples:
- *   $session->save('variablename', 'some random setting to save');
- *   $kex = $session->load('variablename');
- *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-require_once('functions_ip.php');
+require_once('session_base.php');
+
+require_once('atom_ip.php');		//for IPv4_to_GeoIP()
 require_once('atom_settings.php');	//for storing userdata
 require_once('atom_logging.php');	//for logEntry()
 
-
-define('USERLEVEL_NORMAL',		0);
-define('USERLEVEL_WEBMASTER',	1);
-define('USERLEVEL_ADMIN',		2);
-define('USERLEVEL_SUPERADMIN',	3);
-
-class session_default
+class session_default extends session_base
 {
 	var $par = false;	///< points to parent class
 	//private $db = false;	///< points to $db driver to use
 
-	private $session_name = 'someSID';		///< default session name
-	private $timeout = 86400;				///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
-	public $online_timeout = 1800;			///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
+	var $session_name = 'someSID';		///< default session name
+	var $timeout = 86400;				///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+	var $online_timeout = 1800;			///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 	//todo: make online_timeout configurable
 
-	public $start_page = 'index.php';		///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
-	public $logged_out_start_page = 'index.php';
-	public $error_page = 'error.php';		///< redirects the user to this page (in $config['app']['web_root'] directory) to show errors
+	var $start_page = 'index.php';		///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
+	var $logged_out_start_page = 'index.php';
+	var $error_page = 'error.php';		///< redirects the user to this page (in $config['app']['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
-	public $error;					///< last error message
-	public $ip;						///< IP of user
-	public $id;						///< current user's user ID
-	public $username;				///< username of current user
-	public $mode;					///< usermode
-	public $lastActive;				///< last active
-	public $started;				///< timestamp of when the session started
-	public $theme = '';				///< contains the currently selected theme
-	public $referer = '';			///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
-	public $log_pageviews = false;	///< logs page views to tblPageViews
+	var $error;					///< last error message
+	var $ip;						///< IP of user
+	var $id;						///< current user's user ID
+	var $username;				///< username of current user
+	var $mode;					///< usermode
+	var $lastActive;				///< last active
+	var $started;				///< timestamp of when the session started
+	var $theme = '';				///< contains the currently selected theme
+	var $referer = '';			///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
+	var $log_pageviews = false;	///< logs page views to tblPageViews
 
-	public $isWebmaster;			///< is user webmaster?
-	public $isAdmin;				///< is user admin?
-	public $isSuperAdmin;			///< is user superadmin?
+	var $isWebmaster;			///< is user webmaster?
+	var $isAdmin;				///< is user admin?
+	var $isSuperAdmin;			///< is user superadmin?
 
-	public $userModes = array(
+	var $userModes = array(
 		0 => 'Normal user',
 		1 => 'Webmaster',
 		2 => 'Admin',
 		3 => 'Super admin'
 	); ///< user modes
 
-	private $default_theme = 'default.css';			///< default theme if none is choosen
-	private $allow_themes = false;					///< allow themes?
+	var $default_theme = 'default.css';			///< default theme if none is choosen
+	var $allow_themes = false;					///< allow themes?
 
 
 	function __construct($db = false, $conf = array())
 	{
 		$this->db = $db;
 
-		//echo "___ session_default constructor!\n";
 		if (isset($conf['name'])) $this->session_name = $conf['name'];
 		if (isset($conf['timeout'])) $this->timeout = $conf['timeout'];
 		if (isset($conf['start_page'])) $this->start_page = $conf['start_page'];
@@ -117,7 +106,7 @@ class session_default
 	 * @param $_username user name
 	 * @param $_usermode user mode
 	 */
-	function startSession($_id, $_username, $_usermode)
+	function start($_id, $_username, $_usermode)
 	{
 		global $config;
 		$this->id = $_id;
@@ -133,14 +122,12 @@ class session_default
 		if ($this->allow_themes && !empty($config['auth']['userdata'])) {	//FIXME this check is retarded because $auth dont yet exist here. remove when auth & session are re-merged
 			$this->theme = loadUserdataTheme($this->id, $this->default_theme);
 		}
-
-		$this->log('User logged in', LOGLEVEL_NOTICE);
 	}
 
 	/**
 	 * Kills the current session, clearing all session variables
 	 */
-	function endSession()
+	function end()
 	{
 		$this->started = 0;
 		$this->username = '';
@@ -154,85 +141,7 @@ class session_default
 
 		if (!$this->id) return;
 
-		$this->log('User logged out', LOGLEVEL_NOTICE);
 		$this->id = 0;
-	}
-
-	/**
-	 * Handles session events, such as idle timeout check. called from the constructor
-	 */
-	function handleSessionEvents()
-	{
-		//force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
-		if (!empty($config['no_session']) || !$this->id) return;
-
-		//Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
-		if (isset($_GET['logout'])) {
-			$this->par->auth->logout();
-			$this->loggedOutStartPage();
-		}
-
-		//Logged in: Check user activity - log out inactive user
-		if ($this->lastActive < (time()-$this->timeout)) {
-			$this->error = t('Inactivity timeout.');
-			$this->log('Session timed out after '.(time()-$this->lastActive).' (timeout is '.($this->timeout).')', LOGLEVEL_NOTICE);
-			$this->endSession();
-			$this->errorPage();
-		}
-
-		if (!$this->id) return;
-
-		//Update last active timestamp
-		$this->par->db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
-		$this->lastActive = time();
-	}
-
-	/**
-	 * Displays session error
-	 */
-	function showError($show_no_error = true)
-	{
-		global $config;
-
-		if (!$this->error) {
-			if ($show_no_error) echo '<div class="okay">'.t('No errors to display.').'</div>';
-			return;
-		}
-
-		echo '<div class="critical">'.$this->error.'</div>';
-
-		$this->error = '';
-
-	}
-
-	/**
-	 * Shows info about the session
-	 */
-	function showInfo()
-	{
-		global $config;
-
-		if ($this->id) {
-			echo 'User name: '.$this->username.'<br/>';
-			echo 'User ID: '.$this->id.'<br/>';
-		} else {
-			echo 'Not logged in<br/>';
-		}
-
-		echo 'User mode: ';	//FIXME: use $session->userModes
-		if ($this->isSuperAdmin) echo 'Super admin<br/>';
-		else if ($this->isAdmin) echo 'Admin<br/>';
-		else if ($this->isWebmaster) echo 'Webmaster<br/>';
-		else if ($this->id) echo 'Normal user<br/>';
-		else echo 'Visitor<br/>';
-
-		echo 'Session name: '.$this->session_name.'<br/>';
-		echo 'Current IP: '.GeoIP_to_IPv4($this->ip).'<br/>';
-		echo 'Authentication method: '.$this->auth->driver.'<br/>';
-		echo 'Session timeout: '.shortTimePeriod($this->timeout).'<br/>';
-		echo 'Check for IP changes: '. ($this->check_ip?'YES':'NO').'<br/>';
-		echo 'Start page: '.$config['app']['web_root'].$this->start_page.'<br/>';
-		echo 'Error page: '.$config['app']['web_root'].$this->error_page.'<br/>';
 	}
 
 	/**
@@ -277,7 +186,6 @@ class session_default
 	 */
 	function requireLoggedOut()
 	{
-		global $config;
 		if (!$this->id) return;
 		$this->startPage();
 	}
@@ -300,7 +208,6 @@ class session_default
 	 */
 	function requireWebmaster()
 	{
-		global $config;
 		if ($this->isWebmaster) return;
 		if (!$this->error) $this->error = t('The page you requested requires webmaster rights to view.');
 		$this->errorPage();
@@ -311,7 +218,6 @@ class session_default
 	 */
 	function requireAdmin()
 	{
-		global $config;
 		if ($this->isAdmin) return;
 		if (!$this->error) $this->error = t('The page you requested requires admin rights to view.');
 		$this->errorPage();
@@ -322,7 +228,6 @@ class session_default
 	 */
 	function requireSuperAdmin()
 	{
-		global $config;
 		if ($this->isSuperAdmin) return;
 		if (!$this->error) $this->error = t('The page you requested requires superadmin rights to view.');
 		$this->errorPage();
@@ -335,17 +240,6 @@ class session_default
 	{
 		if (GeoIP_to_IPv4($this->ip) == '127.0.0.1') return;
 		die;
-	}
-
-	/**
-	 * Writes a log entry to tblLogs
-	 *
-	 * @param $str text to log
-	 * @param $entryLevel type of log entry
-	 */
-	function log($str, $entryLevel = LOGLEVEL_NOTICE)
-	{
-		return logEntry($str, $entryLevel, $this->id, $this->ip);
 	}
 
 }

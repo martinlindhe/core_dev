@@ -8,7 +8,7 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-require_once('functions_locale.php');
+require_once('locale.php');
 
 /**
  * Creates a complete XHTML header, showing rss feeds if available, etc

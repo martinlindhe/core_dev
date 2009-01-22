@@ -1,5 +1,5 @@
 <?php
-require_once('/home/ml/dev/core_dev/core/functions_ip.php');
+require_once('/home/ml/dev/core_dev/core/atom_ip.php');
 
 $x = IPv4_to_GeoIP('192.168.0.1');
 if ($x != 3232235521) echo "FAIL 1\n";

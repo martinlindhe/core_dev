@@ -7,7 +7,7 @@
  * Uses tblFiles
  * Uses php_id3.dll if enabled, to show more details of mp3s in the file module
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 //TODO: rename tblFiles.timeUploaded to tblFiles.timeCreated
@@ -45,7 +45,7 @@ define('MEDIATYPE_AUDIO',		3);
 define('MEDIATYPE_DOCUMENT',	4);
 define('MEDIATYPE_WEBRESOURCE',	5);	//webresources can/will contain other files. those files will refer to this file entry as their owner
 
-class Files
+class files_default
 {
 	public $image_mime_types = array(
 		'image/jpeg',

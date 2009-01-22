@@ -2,9 +2,9 @@
 /**
  * $Id$
  *
- * Locale functions. core-dev strings are in English internally, this module translates to swedish currently
+ * Swedish translation
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 $month_swe[1] = 'Januari';
@@ -27,21 +27,6 @@ $weekday_swe[4] = 'Torsdag';
 $weekday_swe[5] = 'Fredag';
 $weekday_swe[6] = 'Lördag';
 $weekday_swe[7] = 'Söndag';
-
-/**
- * Translates strings into other languages
- */
-function t($s)
-{
-	global $config;
-	if (empty($config['language'])) return $s;
-
-	switch ($config['language']) {
-		case 'en': return $s;		//English (System default)
-		case 'se': return t_se($s);	//Swedish
-		default: die('Unhandled language: '.$config['language']);
-	}
-}
 
 /**
  * Translates strings into Swedish
@@ -175,7 +160,7 @@ function t_se($s)
 		case 'Month': return 'Månad';
 		case 'Day': return 'Dag';
 
-		// Contacts
+		//Contacts
 		case ' has blocked you.': return ' har blockerat dig.';
 		case 'User blocking': return 'Användarblockering';
 
@@ -207,6 +192,7 @@ function t_se($s)
 		case 'Ok': return 'Ok';
 
 		//Session errors
+		case 'Session timed out.': return 'Sessionen avslutades på grund av inaktivitet.';
 		case 'The page you requested requires you to be logged in.': return 'Sidan du försöker visa kräver att du är inloggad.';
 		case 'The page you requested requires webmaster rights to view.': return 'Sidan du försöker visa kräver att du är webmaster.';
 		case 'The page you requested requires admin rights to view.': return 'Sidan du försöker visa kräver admin rättigheter.';
