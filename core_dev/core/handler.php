@@ -7,8 +7,6 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-//XXX: maybe the constructors of other classes could look for $h->db etc to complain if required components is missing
-
 require_once('core.php');
 
 class handler
@@ -41,9 +39,11 @@ class handler
 		}
 	}
 
+	/**
+	 * Load db driver
+	 */
 	function db($driver = 'mysqli', $conf = array())
 	{
-		//Load db driver
 		$this->db = $this->factory('db', $driver, $conf);
 
 		//XXX remove this hack:
@@ -53,27 +53,34 @@ class handler
 		return true;
 	}
 
+	/**
+	 * Load user driver
+	 */
 	function user($driver = 'default', $conf = array())
 	{
-		//Load user driver
 		$this->user = $this->factory('user', $driver, $conf);
 
 		return true;
 	}
 
+	/**
+	 * Load auth driver
+	 */
 	function auth($driver = 'default', $conf = array())
 	{
 		if (!$this->user) {
 			die("FATAL ERRROR: cant add auth handler without a user handler!\n");
 		}
 
-		//Load auth driver
 		$this->auth = $this->factory('auth', $driver, $conf);
 		$this->auth->par = &$this;	//XXX hack to allow access to parent class
 
 		return true;
 	}
 
+	/**
+	 * Load session driver
+	 */
 	function session($driver = 'default', $conf = array())
 	{
 		if (!$this->user) {
@@ -84,13 +91,15 @@ class handler
 			die("FATAL ERRROR: cant add session handler without a auth handler!\n");
 		}
 
-		//Load session driver
 		$this->session = $this->factory('session', $driver, $conf);
 		$this->session->par = &$this;	//XXX hack to allow access to parent class
 
 		return true;
 	}
 
+	/**
+	 * Load files driver
+	 */
 	function files($driver = 'default', $conf = array())
 	{
 		$this->files = $this->factory('files', $driver, $conf);
@@ -106,8 +115,28 @@ class handler
 
 	function handleEvents()
 	{
+		if ($this->user) $this->handleUserEvents();
 		if ($this->auth) $this->handleAuthEvents();
 		if ($this->session) $this->handleSessionEvents();
+	}
+
+	function handleUserEvents()
+	{
+		//Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
+		if (($this->auth->allow_registration || !Users::cnt()) && !$this->session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
+			$preId = 0;
+			if (!empty($_POST['preId']) && is_numeric($_POST['preId'])) $preId = $_POST['preId'];
+			$check = $this->user->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL, $preId);
+			if (is_numeric($check)) {
+				if ($this->auth->mail_activate) {
+					$this->auth->sendActivationMail($check);
+				} else {
+					$this->auth->login($_POST['register_usr'], $_POST['register_pwd']);
+				}
+			} else {
+				$this->error = t('Registration failed').', '.$check;
+			}
+		}
 	}
 
 	/**
@@ -137,22 +166,6 @@ class handler
 
 				$this->log('User logged in', LOGLEVEL_NOTICE);
 				$this->session->startPage();
-			}
-		}
-
-		//Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
-		if (($this->auth->allow_registration || !Users::cnt()) && !$this->session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
-			$preId = 0;
-			if (!empty($_POST['preId']) && is_numeric($_POST['preId'])) $preId = $_POST['preId'];
-			$check = $this->auth->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL, $preId);
-			if (is_numeric($check)) {
-				if ($this->auth->mail_activate) {
-					$this->auth->sendActivationMail($check);
-				} else {
-					$this->auth->login($_POST['register_usr'], $_POST['register_pwd']);
-				}
-			} else {
-				$this->error = t('Registration failed').', '.$check;
 			}
 		}
 
