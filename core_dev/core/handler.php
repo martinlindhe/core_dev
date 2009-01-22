@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//XXX: maybe the constructors of other classes could look for $h->db etc to complain if required components is missing
+
 require_once('core.php');
 
 class handler
@@ -55,7 +57,6 @@ class handler
 	{
 		//Load user driver
 		$this->user = $this->factory('user', $driver, $conf);
-		$this->user->par = &$this;	//XXX hack to allow access to parent class
 
 		return true;
 	}
@@ -114,7 +115,8 @@ class handler
 	 */
 	function handleAuthEvents()
 	{
-		/* 	//FIXME verify this works:
+		//FIXME verify this works:
+		/*
 		if ($this->ip && isBlocked(BLOCK_IP, $this->ip)) {
 			die('You have been blocked from this site.');
 		}
@@ -122,19 +124,20 @@ class handler
 		*/
 
 		//Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
-		if (!$this->session->id) {
-			if (!empty($_POST['login_usr']) && isset($_POST['login_pwd']) && $this->auth->login($_POST['login_usr'], $_POST['login_pwd'])) {
+		if (!$this->session->id && !empty($_POST['login_usr']) && isset($_POST['login_pwd'])) {
+			$data = $this->auth->login($_POST['login_usr'], $_POST['login_pwd']);
+			if ($data) {
+				$this->session->start($data['userId'], $data['userName'], $data['userMode']);
+
+				//Update last login time
+				$this->db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->session->id);
+				$this->db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->session->id.', IP='.$this->auth->ip.', userAgent="'.$this->db->escape($_SERVER['HTTP_USER_AGENT']).'"');
+
+				addEvent(EVENT_USER_LOGIN, 0, $this->session->id);
+
 				$this->log('User logged in', LOGLEVEL_NOTICE);
 				$this->session->startPage();
 			}
-		}
-
-		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
-		if ($this->auth->check_ip && $this->auth->ip && ($this->auth->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
-			//$this->error = t('Client IP changed.');
-			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->auth->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
-			$this->session->end();
-			$this->session->errorPage();
 		}
 
 		//Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
@@ -153,15 +156,10 @@ class handler
 			}
 		}
 
-		//Check if client user agent string changed
-		if ($this->auth->check_useragent && $this->auth->user_agent != $_SERVER['HTTP_USER_AGENT']) {
-			//FIXME this breaks when Firefox autoupdates & restarts
-			//FIXME this occured once for a IE7 user while using embedded WMP11 + core_dev:
-			//	"Client user agent string changed from "Windows-Media-Player/11.0.5721.5145" to "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)""
-			//	also, this could be triggered if user is logged in & Firefox decides to auto-upgrade and restore previous tabs and sessions after restart
-
-			$this->error = t('Client user agent string changed.');
-			$this->log('Client user agent string changed from "'.$this->auth->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
+		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
+		if ($this->session->id && $this->auth->check_ip && $this->auth->ip && ($this->auth->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
+			//$this->error = t('Client IP changed.');
+			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->auth->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
 			$this->session->end();
 			$this->session->errorPage();
 		}

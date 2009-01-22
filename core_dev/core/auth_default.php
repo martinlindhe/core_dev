@@ -47,7 +47,6 @@ class auth_default extends auth_base
 
 
 	var $check_ip = true;				///< client will be logged out if client ip is changed during the session
-	var $check_useragent = false;		///< keeps track if the client user agent string changes during the session
 	var $ip = 0;						///< IP of user
 
 	function __construct($conf = array())
@@ -62,7 +61,6 @@ class auth_default extends auth_base
 		if (isset($conf['minlen_password'])) $this->minlen_password = $conf['minlen_password'];
 
 		if (isset($conf['check_ip'])) $this->check_ip = $conf['check_ip'];
-		if (isset($conf['check_useragent'])) $this->check_useragent = $conf['check_useragent'];
 
 		if (!isset($_SESSION['user_agent'])) $_SESSION['user_agent'] = '';
 
@@ -109,16 +107,7 @@ class auth_default extends auth_base
 				return false;
 			}
 		}
-
-		$this->par->session->start($data['userId'], $data['userName'], $data['userMode']);
-
-		//Update last login time
-		$this->par->db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->par->session->id);
-		$this->par->db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->par->session->id.', IP='.$this->ip.', userAgent="'.$this->par->db->escape($_SERVER['HTTP_USER_AGENT']).'"');
-
-		addEvent(EVENT_USER_LOGIN, 0, $this->par->session->id);
-
-		return true;
+		return $data;
 	}
 
 	/**

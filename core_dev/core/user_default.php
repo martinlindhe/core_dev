@@ -19,8 +19,6 @@ define('USERLEVEL_SUPERADMIN',	3);
 
 class user_default extends user_base
 {
-	var $par = false;	///< points to parent class
-
 	function __construct($conf = array())
 	{
 	}

@@ -29,7 +29,6 @@ class session_default extends session_base
 
 	//Aliases of $_SESSION[] variables
 	var $error;					///< last error message
-	var $ip;						///< IP of user
 	var $id;						///< current user's user ID
 	var $username;				///< username of current user
 	var $mode;					///< usermode
