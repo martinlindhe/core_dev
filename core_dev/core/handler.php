@@ -8,10 +8,6 @@
  */
 
 require_once('core.php');
-require_once('db_mysqli.php');			//class db_mysqli
-require_once('user_default.php');		//class user_default
-require_once('auth_default.php');		//class auth_default
-require_once('session_default.php');	//class session_default
 
 class handler
 {

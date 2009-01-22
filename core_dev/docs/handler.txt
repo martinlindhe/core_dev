@@ -1,14 +1,14 @@
-Explanation of the design of the core_dev Handler()
+Explanation of the design of the core_dev handler()
 -----------------------------------------------
 
 WIP - still in draft
 
 //core handler - always exists in a core_dev project
 
-$h = new Handler();
+$h = new handler();
 
 
-= database driver =
+=== database driver ===
 $h->db('mysqli', $config['db']);
 
 These drivers handles connections & queries to SQL databases.
@@ -23,7 +23,8 @@ Available drivers:
 New drivers must implement the db_base.php interface
 
 
-= user driver =
+
+=== user driver ===
 $h->user('default');
 
 These drivers handles registering & unregistering of user accounts.
@@ -36,8 +37,8 @@ Available drivers:
 New drivers must implement the user_base.php interface
 
 
-= auth driver =
 
+=== auth driver ===
 $h->auth('default', $config['auth']);
 
 Available drivers:
@@ -53,8 +54,9 @@ Available drivers:
 
 New drivers must implement the auth_base.php interface
 
-= session driver =
 
+
+=== session driver ===
 $h->session('default', $config['session']);
 
 Available drivers:
@@ -64,8 +66,7 @@ New drivers must implement the session_base.php interface
 
 
 
-= files driver =
-
+=== files driver ===
 $h->files('default', $config['files']);
 
 Available drivers:
