@@ -1,6 +1,6 @@
 <?php
 
-require_once('/var/www/core_dev/core/functions_core.php');
+require_once('/var/www/core_dev/core/core.php');
 require_once('/var/www/core_dev/core/input_sip.php');
 
 function sipAuthCallback($username, $realm, $uri, $nonce, $response)

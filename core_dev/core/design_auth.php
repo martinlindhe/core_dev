@@ -76,7 +76,7 @@ function showLoginForm()
 	if (($h->auth->allow_login && $h->auth->allow_registration) || $allow_superadmin_reg) {
 		echo '<div id="login_register_layer"'.($tab!='register'?' style="display: none;"':'').'>';
 
-			if ($this->activation_sent) {
+			if ($h->auth->activation_sent) {
 				echo t('An email with your activation code has been sent.').'<br/>';
 				echo t('Follow the link in the mail to complete your registration.').'<br/>';
 				/*	//FIXME implement this:
@@ -102,7 +102,7 @@ function showLoginForm()
 					'</tr>';
 				echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
 				echo '<tr><td>'.t('Again').':</td><td>'.xhtmlPassword('register_pwd2').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
-				if ($this->userdata) {
+				if ($h->auth->userdata) {
 					showRequiredUserdataFields();
 				}
 				echo '</table><br/>';

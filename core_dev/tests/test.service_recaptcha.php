@@ -1,6 +1,6 @@
 <?php
 
-require_once('/var/www/core_dev/core/functions_core.php');
+require_once('/var/www/core_dev/core/core.php');
 require_once('/var/www/core_dev/core/service_recaptcha.php');
 require_once('/var/www/core_dev/core/output_xhtml.php');
 

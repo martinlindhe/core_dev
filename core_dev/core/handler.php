@@ -7,12 +7,13 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+require_once('core.php');
 require_once('db_mysqli.php');			//class db_mysqli
-require_once('session_default.php');	//class session_default
 require_once('user_default.php');		//class user_default
 require_once('auth_default.php');		//class auth_default
+require_once('session_default.php');	//class session_default
 
-class Handler	//core_dev handler
+class handler
 {
 	var $db      = false; ///< db driver in use
 	var $user    = false; ///< user driver in use
@@ -46,7 +47,6 @@ class Handler	//core_dev handler
 	{
 		//Load db driver
 		$this->db = $this->factory('db', $driver, $conf);
-		$this->db->par = &$this;	//XXX hack to allow access to parent class
 
 		//XXX remove this hack:
 		global $db;
@@ -66,6 +66,10 @@ class Handler	//core_dev handler
 
 	function auth($driver = 'default', $conf = array())
 	{
+		if (!$this->user) {
+			die("FATAL ERRROR: cant add auth handler without a user handler!\n");
+		}
+
 		//Load auth driver
 		$this->auth = $this->factory('auth', $driver, $conf);
 		$this->auth->par = &$this;	//XXX hack to allow access to parent class
@@ -93,20 +97,19 @@ class Handler	//core_dev handler
 	function files($driver = 'default', $conf = array())
 	{
 		$this->files = $this->factory('files', $driver, $conf);
-		$this->auth->par = &$this;	//XXX hack to allow access to parent class
+		$this->files->par = &$this;	//XXX hack to allow access to parent class
 
 		return true;
 	}
 
-
-
-
-
+	function log($str, $level = LOGLEVEL_NOTICE)
+	{
+		dp("handler->log(): ".$str);
+	}
 
 	function handleEvents()
 	{
 		if ($this->auth) $this->handleAuthEvents();
-
 		if ($this->session) $this->handleSessionEvents();
 	}
 
@@ -133,21 +136,21 @@ class Handler	//core_dev handler
 		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
 		if ($this->auth->check_ip && $this->auth->ip && ($this->auth->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
 			//$this->error = t('Client IP changed.');
-			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
-			$this->endSession();
-			$this->errorPage();
+			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->auth->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
+			$this->session->end();
+			$this->session->errorPage();
 		}
 
 		//Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
 		if (($this->auth->allow_registration || !Users::cnt()) && !$this->session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
 			$preId = 0;
 			if (!empty($_POST['preId']) && is_numeric($_POST['preId'])) $preId = $_POST['preId'];
-			$check = $this->auth->registerUser($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL, $preId);
+			$check = $this->auth->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL, $preId);
 			if (is_numeric($check)) {
 				if ($this->auth->mail_activate) {
 					$this->auth->sendActivationMail($check);
 				} else {
-					$this->login($_POST['register_usr'], $_POST['register_pwd']);
+					$this->auth->login($_POST['register_usr'], $_POST['register_pwd']);
 				}
 			} else {
 				$this->error = t('Registration failed').', '.$check;
@@ -164,7 +167,7 @@ class Handler	//core_dev handler
 			$this->error = t('Client user agent string changed.');
 			$this->log('Client user agent string changed from "'.$this->auth->user_agent.'" to "'.$_SERVER['HTTP_USER_AGENT'].'"', LOGLEVEL_ERROR);
 			$this->session->end();
-			$this->errorPage();
+			$this->session->errorPage();
 		}
 	}
 
@@ -221,28 +224,7 @@ class Handler	//core_dev handler
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	function log($str, $level = LOGLEVEL_NOTICE)
-	{
-		echo "handler->log(): ".$str."\n";
-		//return $this->session->log($str, $level);
-	}
-
+/*
 	function save($settingName, $settingValue, $categoryId = 0)
 	{
 		return saveSetting(SETTING_USERDATA, $categoryId, $this->id, $settingName, $settingValue);
@@ -252,6 +234,6 @@ class Handler	//core_dev handler
 	{
 		return loadSetting(SETTING_USERDATA, $categoryId, $this->id, $settingName, $defaultValue);
 	}
-
+*/
 }
 ?>

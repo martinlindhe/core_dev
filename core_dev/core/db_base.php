@@ -13,8 +13,6 @@
 
 abstract class db_base
 {
-	var $par = false;	///< points to parent class
-
 	//db settings
 	protected $host	= '';				///<Hostname or numeric IP address of the db server
 	protected $port	= 0;				///<Port number
