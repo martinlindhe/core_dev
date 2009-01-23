@@ -99,7 +99,7 @@ class auth_default extends auth_base
 	 */
 	function logout($userId)
 	{
-		Users::logout($userId);
+		Users::logoutTime($userId);
 		addEvent(EVENT_USER_LOGOUT, 0, $userId);
 	}
 

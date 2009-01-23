@@ -157,8 +157,9 @@ class handler
 				$this->session->start($data['userId'], $data['userName'], $data['userMode']);
 
 				//Update last login time
-				//FIXME: move the sql to auth or user or session class
-				$this->db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->session->id);
+				Users::loginTime($this->session->id);
+
+				//FIXME: move the sql somehwere else
 				$this->db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->session->id.', IP='.$this->auth->ip.', userAgent="'.$this->db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
 				addEvent(EVENT_USER_LOGIN, 0, $this->session->id);
