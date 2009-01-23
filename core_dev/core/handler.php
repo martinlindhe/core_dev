@@ -17,6 +17,8 @@ class handler
 	var $session = false; ///< session driver in use
 	var $files   = false; ///< files driver in use
 
+	var $error;           ///< holds last error message. FIXME both auth->error and session->error exists aswell
+
 	/**
 	 * Constructor. Initializes the session class
 	 *
@@ -169,6 +171,8 @@ class handler
 
 				$this->log('User logged in', LOGLEVEL_NOTICE);
 				$this->session->startPage();
+			} else {
+				$this->error = t('Login failed');
 			}
 		}
 

@@ -5,6 +5,9 @@
  * Default functions for auth drivers
  */
 
+//TODO: update changePasswordForm()
+//TODO: update resetPassword()
+
 require_once('output_xhtml.php');
 
 /**
@@ -33,7 +36,7 @@ function showLoginForm()
 		$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 	}
 
-	$error = '';
+	$error = $h->error;
 
 	//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
 	if ($forgot_pwd && !$session->id && isset($_POST['forgot_pwd'])) {

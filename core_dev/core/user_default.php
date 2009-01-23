@@ -7,11 +7,13 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//TODO: implement remove() & unregister()
+
 require_once('user_base.php');
+require_once('class.Users.php');
+
 require_once('functions_userdata.php');	//for verifyRequiredUserdataFields()
 require_once('atom_moderation.php');	//for isReservedUsername()
-
-//TODO: implement remove() & unregister()
 
 define('USERLEVEL_NORMAL',		0);
 define('USERLEVEL_WEBMASTER',	1);

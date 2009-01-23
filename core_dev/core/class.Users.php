@@ -10,7 +10,7 @@
 require_once('atom_visits.php');		//for logVisit()
 require_once('functions_messages.php');	//for sendMessage()
 
-$config['user']['log_visitors'] = true;
+$config['user']['log_visitors'] = true;	//XXX move setting somewhere else!
 
 class Users
 {
