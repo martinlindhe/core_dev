@@ -22,7 +22,7 @@ require_once('locale.php');
  */
 function createXHTMLHeader()
 {
-	global $config, $session, $files, $title, $meta_rss, $meta_js, $meta_css, $meta_search, $body_onload;
+	global $config, $h, $files, $title, $meta_rss, $meta_js, $meta_css, $meta_search, $body_onload;
 
 	if (!$title && !empty($config['default_title'])) $title = $config['default_title'];
 
@@ -44,7 +44,7 @@ function createXHTMLHeader()
 	if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
 	else if (!empty($config['core']['web_root'])) $theme_dir = $config['core']['web_root'].'css/themes/';
 
-	if (!empty($session) && $theme_dir) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$session->sess->theme.'"/>';
+	if (!empty($h->session) && $theme_dir) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$h->session->theme.'"/>';
 
 	if ($meta_rss) {
 		foreach ($meta_rss as $feed) {

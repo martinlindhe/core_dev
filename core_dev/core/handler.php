@@ -89,7 +89,6 @@ class handler
 		}
 
 		$this->session = $this->factory('session', $driver, $conf);
-		$this->session->par = &$this;	//XXX hack to allow access to parent class
 
 		return true;
 	}
@@ -100,7 +99,6 @@ class handler
 	function files($driver = 'default', $conf = array())
 	{
 		$this->files = $this->factory('files', $driver, $conf);
-		$this->files->par = &$this;	//XXX hack to allow access to parent class
 
 		return true;
 	}
@@ -164,6 +162,11 @@ class handler
 
 				addEvent(EVENT_USER_LOGIN, 0, $this->session->id);
 
+				//Load custom theme
+				if ($this->session->allow_themes && $this->user->userdata) {
+					$this->session->theme = loadUserdataTheme($this->session->id, $this->session->default_theme);
+				}
+
 				$this->log('User logged in', LOGLEVEL_NOTICE);
 				$this->session->startPage();
 			}
@@ -205,33 +208,9 @@ class handler
 		if (!$this->session->id) return;
 
 		//Update last active timestamp
-		//FIXME: move this SQL command to auth or user class!
-		$this->db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->session->id);
+		Users::activeTime($this->session->id);
 		$this->session->lastActive = time();
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-	function save($settingName, $settingValue, $categoryId = 0)
-	{
-		return saveSetting(SETTING_USERDATA, $categoryId, $this->id, $settingName, $settingValue);
-	}
-
-	function load($settingName, $defaultValue, $categoryId = 0)
-	{
-		return loadSetting(SETTING_USERDATA, $categoryId, $this->id, $settingName, $defaultValue);
-	}
-*/
 }
 ?>

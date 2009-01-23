@@ -141,8 +141,6 @@ class files_default
 	 */
 	function __construct($config = '')
 	{
-		global $session;
-
 		if (isset($config['upload_dir'])) $this->upload_dir = $config['upload_dir'];
 		if (isset($config['tmp_dir'])) $this->tmp_dir = $config['tmp_dir'];
 
@@ -235,11 +233,11 @@ class files_default
 	 */
 	function moveFile($_category, $_id)
 	{
-		global $db, $session;
-		if (!$session->id || !is_numeric($_category) || !is_numeric($_id)) return false;
+		global $db, $h;
+		if (!$h->session->id || !is_numeric($_category) || !is_numeric($_id)) return false;
 
 		$q = 'UPDATE tblFiles SET categoryId='.$_category.' WHERE fileId='.$_id;
-		if (!$session->isAdmin) $q.= ' AND uploaderId='.$session->id;
+		if (!$h->session->isAdmin) $q.= ' AND uploaderId='.$h->session->id;
 		$db->update($q);
 
 		return true;
@@ -289,7 +287,7 @@ class files_default
 	 */
 	function deleteFileEntry($_type, $_id, $ownerId = 0, $categoryId = 0)
 	{
-		global $db, $session;
+		global $db;
 		if (!is_numeric($_type) || !is_numeric($_id) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
 		$q = 'UPDATE tblFiles SET timeDeleted=NOW() WHERE fileId='.$_id;
@@ -325,7 +323,6 @@ class files_default
 	 */
 	function clearThumbs($_id)
 	{
-		global $db;
 		if (!is_numeric($_id)) return false;
 
 		$thumbs_dir = dirname($this->findThumbPath($_id));
@@ -351,15 +348,15 @@ class files_default
 	 */
 	function handleUpload($FileData, $fileType, $ownerId = 0, $categoryId = 0)
 	{
-		global $db, $session, $auth, $config;
-		if ((!$session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
+		global $h, $config;
+		if ((!$h->session->id && !$this->anon_uploads) || !is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 
 		//ignore empty file uploads
 		if (!$FileData['name']) return;
 
 		if (!is_uploaded_file($FileData['tmp_name'])) {
-			$session->error = t('Uploaded file is too big');
-			$session->log('Attempt to upload too big file');
+			$h->session->error = t('Uploaded file is too big');
+			$h->session->log('Attempt to upload too big file');
 			return false;
 		}
 
@@ -408,15 +405,15 @@ class files_default
 	 */
 	function addFileEntry($fileType, $categoryId, $ownerId, $fileName, $content = '')
 	{
-		global $db, $session;
+		global $db, $h;
 		if (!is_numeric($fileType) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
 		$fileSize = 0;
 		$fileMime = '';
 		$fileName = basename(strip_tags($fileName));
 
-		if ($session) {
-			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$session->id.',uploaderIP='.$session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
+		if ($h->session) {
+			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$h->session->id.',uploaderIP='.$h->session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
 		} else {
 			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
 		}
@@ -436,15 +433,13 @@ class files_default
 	 */
 	function moveUpload($tmp_name, $fileId)
 	{
-		global $session;
-
 		//Move the uploaded file to upload directory
 		$uploadfile = $this->findUploadPath($fileId);
 		if (move_uploaded_file($tmp_name, $uploadfile)) {
 			chmod($uploadfile, 0777);
 			return true;
 		}
-		$session->log('Failed to move file from '.$tmp_name.' to '.$uploadfile);
+		dp('Failed to move file from '.$tmp_name.' to '.$uploadfile);
 		return false;
 	}
 
@@ -515,7 +510,7 @@ class files_default
 	 */
 	function handleImageUpload($fileId, $FileData)
 	{
-		global $db, $session;
+		global $db;
 
 		switch ($FileData['type']) {
 			case 'image/bmp':	//IE 7, Firefox 2, Opera 9.2
@@ -523,7 +518,7 @@ class files_default
 				$out_tempfile = $this->tmp_dir.'core_outfile.jpg';
 				$check = convertImage($FileData['tmp_name'], $out_tempfile, 'image/jpeg');
 				if (!$check) {
-					$session->log('Failed to convert bmp to jpeg!');
+					dp('Failed to convert bmp to jpeg!');
 					break;
 				}
 
@@ -692,8 +687,8 @@ class files_default
 
 	function imageResize($_id, $_pct)
 	{
-		global $db, $session;
-		if (!$session->id || !is_numeric($_id) || !is_numeric($_pct)) return false;
+		global $db, $h;
+		if (!$h->session->id || !is_numeric($_id) || !is_numeric($_pct)) return false;
 
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) return false;
@@ -716,8 +711,8 @@ class files_default
 
 	function imageCrop($_id, $x1, $y1, $x2, $y2)
 	{
-		global $session;
-		if (!$session->id || !is_numeric($_id) || !is_numeric($x1) || !is_numeric($y1) || !is_numeric($x2) || !is_numeric($y2)) return false;
+		global $h;
+		if (!$h->session->id || !is_numeric($_id) || !is_numeric($x1) || !is_numeric($y1) || !is_numeric($x2) || !is_numeric($y2)) return false;
 
 		$filename = $this->findUploadPath($_id);
 		cropImage($filename, $filename, $x1, $y1, $x2, $y2);
@@ -736,8 +731,8 @@ class files_default
 	 */
 	function imageRotate($_id, $_angle)
 	{
-		global $db, $session;
-		if (!$session->id || !is_numeric($_id) || !is_numeric($_angle)) return false;
+		global $db, $h;
+		if (!$h->session->id || !is_numeric($_id) || !is_numeric($_angle)) return false;
 
 		$data = $db->getOneRow('SELECT * FROM tblFiles WHERE fileId='.$_id);
 		if (!$data) return false;
@@ -847,7 +842,7 @@ class files_default
 	 */
 	function sendImage($_id)
 	{
-		global $session;
+		global $h;
 
 		$filename = $this->findUploadPath($_id);
 		if (!file_exists($filename)) die('file not found');
@@ -885,7 +880,7 @@ class files_default
 			}
 		}
 
-		if ($session && filemtime($out_filename) < $session->started) {
+		if ($h && filemtime($out_filename) < $h->session->started) {
 			$this->setCachedHeaders();
 		} else {
 			$this->setNoCacheHeaders();
@@ -911,7 +906,7 @@ class files_default
 	 */
 	function getFiles($fileType = 0, $ownerId = 0, $categoryId = 0, $_limit = '', $_order = 'ASC')
 	{	//FIXME: remove function & rename getFilesByMediaType() to getFiles() instead!
-		global $db, $session;
+		global $db, $h;
 		if (!is_numeric($fileType) || !is_numeric($ownerId) || !is_numeric($categoryId)) return false;
 		if ($_order != 'ASC' && $_order != 'DESC') return false;
 
@@ -924,9 +919,9 @@ class files_default
 			$q .= ' AND timeDeleted IS NULL';
 			$q .= ' ORDER BY timeUploaded '.$_order;
 
-		} else if ($session && $session->id && $fileType == FILETYPE_FORUM) {
+		} else if ($h->session && $h->session->id && $fileType == FILETYPE_FORUM) {
 			$q  = 'SELECT * FROM tblFiles';
-			$q .= ' WHERE fileType='.$fileType.' AND uploaderId='.$session->id;
+			$q .= ' WHERE fileType='.$fileType.' AND uploaderId='.$h->session->id;
 			if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 			$q .= ' AND timeDeleted IS NULL';
 			$q .= ' ORDER BY timeUploaded '.$_order;

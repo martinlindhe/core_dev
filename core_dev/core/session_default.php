@@ -111,11 +111,6 @@ class session_default extends session_base
 		if ($this->mode >= USERLEVEL_WEBMASTER) $this->isWebmaster = true;
 		if ($this->mode >= USERLEVEL_ADMIN) $this->isAdmin = true;
 		if ($this->mode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
-
-		/* Read in current users settings */
-		if ($this->allow_themes && !empty($config['auth']['userdata'])) {	//FIXME this check is retarded because $auth dont yet exist here. remove when auth & session are re-merged
-			$this->theme = loadUserdataTheme($this->id, $this->default_theme);
-		}
 	}
 
 	/**

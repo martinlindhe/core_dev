@@ -75,6 +75,14 @@ class Users
 		return true;
 	}
 
+	function activeTime($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$_id);
+	}
+
 	function loginTime($_id)
 	{
 		global $db;
