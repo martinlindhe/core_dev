@@ -7,25 +7,19 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//TODO: handleForgotPassword(): use output_smtp.php instead!
+
 require_once('auth_base.php');
 require_once('design_auth.php');		//default functions for auth xhtml forms
 
-//TODO: look over mail activation of account
-//XXX: all these includes really needed?
-
 require_once('class.Users.php');
-
-require_once('functions_userdata.php');	//for showRequiredUserdataFields()
-
-require_once('atom_moderation.php');	//for checking if username is reserved on user registration
 require_once('atom_events.php');		//for event logging
-require_once('atom_activation.php');	//for activation
 require_once('atom_ip.php');			//for IPv4_to_GeoIP()
 require_once('atom_blocks.php');		//for isBlocked()
+require_once('atom_activation.php');	//for generateActivationCode()
 
 class auth_default extends auth_base
 {
-	var $par = false;	///< points to parent class
 	var $driver = 'default';
 
 	var $error = '';	///< contains last error message, if any
@@ -34,17 +28,11 @@ class auth_default extends auth_base
 
 	var $allow_login = true;				///< set to false to only let superadmins log in to the site
 	var $allow_registration = true;		///< set to false to disallow the possibility to register new users. will be disabled if login is disabled
-	var $reserved_usercheck = true;		///< check if username is listed as reserved username, requires tblStopwords
-	var $userdata = true; 				///< shall we use tblUserdata for required userdata fields?
 	var $mail_activate = false;			///< does account registration require email activation?
 	var $mail_error = false;				///< will be set to true if there was problems sending out email
 
 	var $activation_sent = false;		///< internal. true if mail activation has been sent
 	var $resetpwd_sent = false;			///< internal. true if mail for password reset has been sent
-
-	var $minlen_username = 3;			///< minimum length for valid usernames
-	var $minlen_password = 4;			///< minimum length for valid passwords
-
 
 	var $check_ip = true;				///< client will be logged out if client ip is changed during the session
 	var $ip = 0;						///< IP of user
@@ -54,11 +42,7 @@ class auth_default extends auth_base
 		if (isset($conf['sha1_key'])) $this->sha1_key = $conf['sha1_key'];
 		if (isset($conf['allow_login'])) $this->allow_login = $conf['allow_login'];
 		if (isset($conf['allow_registration'])) $this->allow_registration = $conf['allow_registration'];
-		if (isset($conf['reserved_usercheck'])) $this->reserved_usercheck = $conf['reserved_usercheck'];
-		if (isset($conf['userdata'])) $this->userdata = $conf['userdata'];
 		if (isset($conf['mail_activate'])) $this->mail_activate = $conf['mail_activate'];
-		if (isset($conf['minlen_username'])) $this->minlen_username = $conf['minlen_username'];
-		if (isset($conf['minlen_password'])) $this->minlen_password = $conf['minlen_password'];
 
 		if (isset($conf['check_ip'])) $this->check_ip = $conf['check_ip'];
 
@@ -85,7 +69,7 @@ class auth_default extends auth_base
 
 		if (!$data) {
 			$this->error = t('Login failed');
-			$this->log('Failed login attempt: username '.$username, LOGLEVEL_WARNING);
+			dp('Failed login attempt: username '.$username, LOGLEVEL_WARNING);
 			return false;
 		}
 
@@ -103,7 +87,7 @@ class auth_default extends auth_base
 			$blocked = isBlocked(BLOCK_USERID, $data['userId']);
 			if ($blocked) {
 				$this->error = t('Account blocked');
-				$this->log('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
+				dp('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
 				return false;
 			}
 		}
@@ -113,11 +97,10 @@ class auth_default extends auth_base
 	/**
 	 * Logs out the user
 	 */
-	function logout()
+	function logout($userId)
 	{
-		$this->par->db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this->par->session->id);
-
-		addEvent(EVENT_USER_LOGOUT, 0, $this->par->session->id);
+		Users::logout($userId);
+		addEvent(EVENT_USER_LOGOUT, 0, $userId);
 	}
 
 	/**
@@ -127,17 +110,18 @@ class auth_default extends auth_base
 	 */
 	function validLogin($username, $password)
 	{
-		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$this->par->db->escape($username).'" AND timeDeleted IS NULL';
-		$id = $this->par->db->getOneItem($q);
-		if (!$id) return false;
-
+		$id = Users::getId($username);
 		$enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
 
- 		$q = 'SELECT * FROM tblUsers WHERE userId='.$id.' AND userPass="'.$enc_password.'"';
- 		$data = $this->par->db->getOneRow($q);
-
-		return $data;
+		return Users::validLogin($username, $enc_password);
 	}
+
+
+
+
+
+
+
 
 	/**
 	 * Looks up user supplied email address / alias and generates a mail for them if needed
@@ -146,7 +130,7 @@ class auth_default extends auth_base
 	 */
 	function handleForgotPassword($email)
 	{
-		global $config, $session;
+		global $config;
 
 //FIXME use output_smtp.php instead!
 die('handleForgotPassword() needs fixing!');

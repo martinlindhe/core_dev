@@ -10,7 +10,7 @@
 abstract class auth_base
 {
 	abstract function login($username, $password);
-	abstract function logout();
+	abstract function logout($userId);
 
 	abstract function validLogin($username, $password);
 

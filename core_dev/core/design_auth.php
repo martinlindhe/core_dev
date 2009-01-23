@@ -29,7 +29,7 @@ function showLoginForm()
 	}
 
 	$forgot_pwd = false;
-	if ($h->auth->userdata) {
+	if ($h->user->userdata) {
 		$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 	}
 
@@ -102,7 +102,7 @@ function showLoginForm()
 					'</tr>';
 				echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
 				echo '<tr><td>'.t('Again').':</td><td>'.xhtmlPassword('register_pwd2').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
-				if ($h->auth->userdata) {
+				if ($h->user->userdata) {
 					showRequiredUserdataFields();
 				}
 				echo '</table><br/>';
@@ -153,7 +153,7 @@ function showLoginForm()
  */
 function showRegisterForm($preId = 0, $act_code = 0)
 {
-	global $config, $session;
+	global $config;
 	if (!is_numeric($preId) || !is_numeric($act_code)) return false;
 
 	if ($this->mail_error) {
@@ -203,8 +203,8 @@ function showRegisterForm($preId = 0, $act_code = 0)
  */
 function changePasswordForm()
 {
-	global $session;
-	if (!$session->id) return false;
+	global $h;
+	if (!$h->session->id) return false;
 
 	$check = false;
 
@@ -244,7 +244,6 @@ function changePasswordForm()
  */
 function resetPassword($_id, $_code)
 {
-	global $session;
 	if (!is_numeric($_id) || !is_numeric($_code)) return false;
 
 	if (!verifyActivation(ACTIVATE_CHANGE_PWD, $_code, $_id)) {

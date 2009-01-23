@@ -8,9 +8,10 @@
  */
 
 require_once('user_base.php');
+require_once('functions_userdata.php');	//for verifyRequiredUserdataFields()
+require_once('atom_moderation.php');	//for isReservedUsername()
 
 //TODO: implement remove() & unregister()
-//TODO: define required functions in user_base.php
 
 define('USERLEVEL_NORMAL',		0);
 define('USERLEVEL_WEBMASTER',	1);
@@ -19,8 +20,18 @@ define('USERLEVEL_SUPERADMIN',	3);
 
 class user_default extends user_base
 {
+	var $reserved_usercheck = true;		///< check if username is listed as reserved username, requires tblStopwords
+	var $userdata = true; 				///< shall we use tblUserdata for required userdata fields?
+
+	var $minlen_username = 3;			///< minimum length for valid usernames
+	var $minlen_password = 4;			///< minimum length for valid passwords
+
 	function __construct($conf = array())
 	{
+		if (isset($conf['minlen_username'])) $this->minlen_username = $conf['minlen_username'];
+		if (isset($conf['minlen_password'])) $this->minlen_password = $conf['minlen_password'];
+		if (isset($conf['reserved_usercheck'])) $this->reserved_usercheck = $conf['reserved_usercheck'];
+		if (isset($conf['userdata'])) $this->userdata = $conf['userdata'];
 	}
 
 	/**
@@ -28,8 +39,7 @@ class user_default extends user_base
 	 */
 	function reserve()
 	{
-		$q = 'INSERT INTO tblUsers SET userMode=0';
-		return $this->db->insert($q);
+		return Users::reserveId();
 	}
 
 	/**
@@ -44,29 +54,20 @@ class user_default extends user_base
 	 */
 	function register($username, $password1, $password2, $_mode = USERLEVEL_NORMAL, $newUserId = 0)
 	{
-		global $session;
 		if (!is_numeric($_mode) || !is_numeric($newUserId)) return false;
 
 		if ($username != trim($username)) return t('Username contains invalid spaces');
-
-		if (($db->escape($username) != $username) || ($db->escape($password1) != $password1)) {
-			//if someone tries to enter ' or " etc as username/password letters
-			//with this check, we dont need to encode the strings for use in sql query
-			return t('Username or password contains invalid characters');
-		}
 
 		if (strlen($username) < $this->minlen_username) return t('Username must be at least').' '.$this->minlen_username.' '.t('characters long');
 		if (strlen($password1) < $this->minlen_password) return t('Password must be at least').' '.$this->minlen_password.' '.t('characters long');
 		if ($password1 != $password2) return t('The passwords doesnt match');
 
-		if (!$session->isSuperAdmin) {
-			if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
+		if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
 
-			//Checks if email was required, and if so if it was correctly entered
-			if ($this->userdata) {
-				$chk = verifyRequiredUserdataFields();
-				if ($chk !== true) return $chk;
-			}
+		//Checks if email was required, and if so if it was correctly entered
+		if ($this->userdata) {
+			$chk = verifyRequiredUserdataFields();
+			if ($chk !== true) return $chk;
 		}
 
 		if (Users::cnt()) {
@@ -77,19 +78,15 @@ class user_default extends user_base
 		}
 
 		if (!$newUserId) {
-			$q = 'INSERT INTO tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW()';
-			$newUserId = $this->db->insert($q);
+			$newUserId = Users::registerUser($username, $_mode);
 		} else {
-			$q = 'UPDATE tblUsers SET userName="'.$username.'",userMode='.$_mode.',timeCreated=NOW() WHERE userId='.$newUserId;
-			$this->db->update($q);
+			Users::updateUser($newUserId, $username, $_mode);
 		}
 
-		Users::setPassword($newUserId, $password1, $password1, $this->sha1_key);
-
-		$session->log('Registered user <b>'.$username.'</b>');
+		dp('Registered user: '.$username);
 
 		//Stores the additional data from the userdata fields that's required at registration
-		if (!$session->isSuperAdmin && $this->userdata) {
+		if ($this->userdata) {
 			handleRequiredUserdataFields($newUserId);
 		}
 

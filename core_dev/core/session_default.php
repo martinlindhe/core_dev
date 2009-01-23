@@ -15,9 +15,6 @@ require_once('atom_logging.php');	//for logEntry()
 
 class session_default extends session_base
 {
-	var $par = false;	///< points to parent class
-	//private $db = false;	///< points to $db driver to use
-
 	var $session_name = 'someSID';		///< default session name
 	var $timeout = 86400;				///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
 	var $online_timeout = 1800;			///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
@@ -53,10 +50,8 @@ class session_default extends session_base
 	var $allow_themes = false;					///< allow themes?
 
 
-	function __construct($db = false, $conf = array())
+	function __construct($conf = array())
 	{
-		$this->db = $db;
-
 		if (isset($conf['name'])) $this->session_name = $conf['name'];
 		if (isset($conf['timeout'])) $this->timeout = $conf['timeout'];
 		if (isset($conf['start_page'])) $this->start_page = $conf['start_page'];

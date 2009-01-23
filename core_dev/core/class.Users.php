@@ -14,6 +14,114 @@ $config['user']['log_visitors'] = true;
 
 class Users
 {
+	function reserveId()
+	{
+		global $db;
+
+		$q = 'INSERT INTO tblUsers SET userMode=0';
+		return $db->insert($q);
+	}
+
+	function registerUser($username, $mode)
+	{
+		global $db;
+		if (!is_numeric($mode)) return false;
+
+		$q = 'INSERT INTO tblUsers SET userName="'.$db->escape($username).'",userMode='.$mode.',timeCreated=NOW()';
+		return $db->insert($q);
+	}
+
+	function updateUser($id, $username, $mode)
+	{
+		global $db;
+		if (!is_numeric($id) || !is_numeric($mode)) return false;
+
+		$q = 'UPDATE tblUsers SET userName="'.$db->escape($username).'",userMode='.$_mode.',timeCreated=NOW() WHERE userId='.$id;
+		$db->update($q);
+	}
+
+	/**
+	 * Sets a new password for the user
+	 *
+	 * @param $_id user id
+	 * @param $_pwd1 password to set
+	 * @param $_pwd2 password to compare with (optional)
+	 */
+	function setPassword($_id, $_pwd1, $_pwd2 = '', $key = '')
+	{
+		global $db, $session, $auth;
+		if (!is_numeric($_id)) return false;
+		/* This function is referenced in the Auth-class too, but in that
+		 * context you cant use the $auth-object, since it's itself.
+		 * If $key is empty, the reference wasn't from the Auth-class
+		 * so therefore use the key from the Auth-object instead.
+		 */
+		if (empty($key)) $key = $auth->sha1_key;
+
+		if ($_pwd2) {
+			if (strlen($_pwd1) < 4) {
+				$session->error = t('Password must be at least 4 characters long');
+				return false;
+			}
+
+			if ($_pwd1 != $_pwd2) {
+				$session->error = t('The passwords doesnt match');
+				return false;
+			}
+		}
+//FIXME move password algorithm out of here!!!
+		$q = 'UPDATE tblUsers SET userPass="'.sha1( $_id.sha1($key).sha1($_pwd1) ).'" WHERE userId='.$_id;
+		$db->update($q);
+		return true;
+	}
+
+	function logout($_id)
+	{
+		global $db;
+		if (!is_numeric($_id)) return false;
+
+		$db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$_id);
+	}
+
+	function validLogin($username, $password)
+	{
+		global $db;
+
+ 		$q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$db->escape($password).'" AND timeDeleted IS NULL';
+		return $db->getOneRow($q);
+	}
+
+	/**
+	 * Looks up a user id by name. Does not take into account deleted users
+	 */
+	function getId($_name)
+	{
+		global $db;
+		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($_name).'" AND timeDeleted IS NULL';
+		return $db->getOneItem($q);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * Looks up a username by id
 	 */
@@ -28,17 +136,7 @@ class Users
 		return $db->getOneItem($q);
 	}
 
-	/**
-	 * Looks up a user id by name. Does not take into account deleted users
-	 */
-	function getId($_name)
-	{
-		global $db, $session;
-		if ($_name == $session->username) return $session->id;
 
-		$q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($_name).'" AND timeDeleted IS NULL';
-		return $db->getOneItem($q);
-	}
 
 	/**
 	 * Get a list of all users with birthday at $date
@@ -151,41 +249,6 @@ class Users
 		sendMessage($_id, 'System message', $msg);
 
 		$session->log('Changed usermode for '.Users::getName($_id).' to '.$_mode);	//FIXME lookup from Session->userModes
-		return true;
-	}
-
-	/**
-	 * Sets a new password for the user
-	 *
-	 * @param $_id user id
-	 * @param $_pwd1 password to set
-	 * @param $_pwd2 password to compare with (optional)
-	 */
-	function setPassword($_id, $_pwd1, $_pwd2 = '', $key = '')
-	{
-		global $db, $session, $auth;
-		if (!is_numeric($_id)) return false;
-		/* This function is referenced in the Auth-class too, but in that
-		 * context you cant use the $auth-object, since it's itself.
-		 * If $key is empty, the reference wasn't from the Auth-class
-		 * so therefore use the key from the Auth-object instead.
-		 */
-		if (empty($key)) $key = $auth->sha1_key;
-
-		if ($_pwd2) {
-			if (strlen($_pwd1) < 4) {
-				$session->error = t('Password must be at least 4 characters long');
-				return false;
-			}
-
-			if ($_pwd1 != $_pwd2) {
-				$session->error = t('The passwords doesnt match');
-				return false;
-			}
-		}
-
-		$q = 'UPDATE tblUsers SET userPass="'.sha1( $_id.sha1($key).sha1($_pwd1) ).'" WHERE userId='.$_id;
-		$db->update($q);
 		return true;
 	}
 

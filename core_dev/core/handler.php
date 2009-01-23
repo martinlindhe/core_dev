@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * core_dev base class
+ * core_dev handler
  *
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
@@ -59,7 +59,6 @@ class handler
 	function user($driver = 'default', $conf = array())
 	{
 		$this->user = $this->factory('user', $driver, $conf);
-
 		return true;
 	}
 
@@ -73,8 +72,6 @@ class handler
 		}
 
 		$this->auth = $this->factory('auth', $driver, $conf);
-		$this->auth->par = &$this;	//XXX hack to allow access to parent class
-
 		return true;
 	}
 
@@ -128,6 +125,7 @@ class handler
 			if (!empty($_POST['preId']) && is_numeric($_POST['preId'])) $preId = $_POST['preId'];
 			$check = $this->user->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL, $preId);
 			if (is_numeric($check)) {
+				Users::setPassword($check, $_POST['register_pwd'], $_POST['register_pwd'], $this->auth->sha1_key);
 				if ($this->auth->mail_activate) {
 					$this->auth->sendActivationMail($check);
 				} else {
@@ -159,6 +157,7 @@ class handler
 				$this->session->start($data['userId'], $data['userName'], $data['userMode']);
 
 				//Update last login time
+				//FIXME: move the sql to auth or user or session class
 				$this->db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->session->id);
 				$this->db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->session->id.', IP='.$this->auth->ip.', userAgent="'.$this->db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
@@ -188,7 +187,7 @@ class handler
 
 		//Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
 		if (isset($_GET['logout'])) {
-			$this->auth->logout();
+			$this->auth->logout($this->session->id);
 			$this->session->end();
 			$this->log('User logged out', LOGLEVEL_NOTICE);
 			$this->session->loggedOutStartPage();
@@ -209,15 +208,6 @@ class handler
 		$this->db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->session->id);
 		$this->session->lastActive = time();
 	}
-
-
-
-
-
-
-
-
-
 
 
 
