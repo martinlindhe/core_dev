@@ -1,3 +1,13 @@
+/**
+ * JPEG image probe
+ *
+ * Status: ?
+ *
+ * http://fileformatwiki.org/index.php/Jpeg
+ */
+
+//TODO: show header data
+
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
@@ -7,10 +17,11 @@
 /**
  * Look for JPEG image
  */
-int probe_jpeg(FILE *f, uint8_t *buf, int len, int info)
+int probe_jpeg(FILE *f, int len, int info)
 {
-	//FIXME minimum size of JPEG?
-	if (len < 0x10 || !TAG2(buf, 0xFF, 0xD8))
+	fseek(f, 0, SEEK_SET);
+
+	if (len < 0x10 || read16be(f) != MKTAG2(0xFF, 0xD8))
 		return E_PROBEFAIL;
 
 	if (!info) {

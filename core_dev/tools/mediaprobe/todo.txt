@@ -13,5 +13,7 @@
 * Detect video formats:
 	- MPEG with video track
 
+* Redo byte reading! read bytes as they are needed & skip bytes etc instead of using a buffer
+
 
 Samples: http://samples.ffmpeg.org/

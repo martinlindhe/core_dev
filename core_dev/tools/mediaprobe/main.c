@@ -33,7 +33,6 @@
 int main(int argc, char** argv)
 {
 	FILE *f;
-	uint8_t *buf = 0;
 
 	if (argc < 2){
 		printf("USAGE: %s <filename> [params]\n", argv[0]);
@@ -58,16 +57,6 @@ int main(int argc, char** argv)
 		goto fail;
 	}
 
-	int readlen = len;
-	if (len > 1000) readlen = 1000;
-
-	buf = malloc(readlen);
-
-	if (fread(buf, sizeof(char), readlen, f) != readlen) {
-		printf("Failed to read header. wanted %d, got %d\n", len, readlen);
-		goto fail;
-	}
-
 	int info = 0;	///< output detailed info?
 	if (argc >= 3) {
 		if (!strcmp(argv[2], "-info")) info = 1;
@@ -78,17 +67,17 @@ int main(int argc, char** argv)
 	}
 
 	//image format parsers
-	if (probe_bmp (f, buf, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_gif (f, buf, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_jpeg(f, buf, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_mng (f, buf, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_png (f, buf, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_bmp (f, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_gif (f, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_jpeg(f, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_mng (f, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_png (f, len, info) == E_PROBESUCCESS) goto finish;
 
 	//container format parsers
 	if (probe_asf(f, len, info) == E_PROBESUCCESS) goto finish;
 
 	printf("Can't detect format:\n");
-	hex_dump(buf, readlen);
+	//hex_dump(buf, readlen);
 
 finish:
 	fclose(f);

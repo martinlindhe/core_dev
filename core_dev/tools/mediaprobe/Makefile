@@ -1,6 +1,7 @@
 EXE = mediaprobe
 
 OBJS = \
+	io.o         \
     debug.o      \
     \
     probe_bmp.o  \
