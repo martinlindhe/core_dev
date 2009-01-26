@@ -260,7 +260,7 @@ class sip_server
 				//exec('ffplay '.$sdp_file);
 
 				//XXX dump rtp stream (command not working!!!)
-				//exec('ffmpeg -i '.$sdp_file.' -vcodec copy /tmp/out.263');
+				//exec('ffmpeg -i '.$sdp_file.' -vcodec copy -f raw /tmp/out.h263');
 				break;
 
 			case SIP_BYE:
