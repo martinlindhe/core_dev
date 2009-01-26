@@ -26,7 +26,7 @@ $config['wiki']['first_tab'] = 'Wiki';
  */
 function wikiUpdate($wikiName, $_text)
 {
-	global $db, $session, $config;
+	global $db, $h, $config;
 
 	$wikiName = $db->escape(trim($wikiName));
 	if (!$wikiName) return false;
@@ -43,9 +43,9 @@ function wikiUpdate($wikiName, $_text)
 		if ($config['wiki']['log_history']) {
 			addRevision(REVISIONS_WIKI, $data['wikiId'], $data['msg'], $data['timeCreated'], $data['createdBy'], REV_CAT_TEXT_CHANGED);
 		}
-		$db->update('UPDATE tblWiki SET msg="'.$_text.'",timeCreated=NOW(),createdBy='.$session->id.' WHERE wikiName="'.$wikiName.'"');
+		$db->update('UPDATE tblWiki SET msg="'.$_text.'",timeCreated=NOW(),createdBy='.$h->session->id.' WHERE wikiName="'.$wikiName.'"');
 	} else {
-		$q = 'INSERT INTO tblWiki SET wikiName="'.$wikiName.'",msg="'.$_text.'",createdBy='.$session->id.',timeCreated=NOW()';
+		$q = 'INSERT INTO tblWiki SET wikiName="'.$wikiName.'",msg="'.$_text.'",createdBy='.$h->session->id.',timeCreated=NOW()';
 		$db->insert($q);
 	}
 }
@@ -55,15 +55,14 @@ function wikiUpdate($wikiName, $_text)
  */
 function wikiFormat($wikiName, $data)
 {
-	global $db, $files, $config, $session;
+	global $db, $files, $config, $h;
 
 	if (empty($data['msg'])) {
 		echo '<div class="wiki">';
 		echo '<div class="wiki_body">';
 		echo t('The wiki').' "'.$wikiName.'" '.t('does not yet exist').'!<br/>';
-		if ($session->id && $session->isWebmaster) {
+		if ($h->session->id && $h->session->isWebmaster) {
 			echo coreButton('Create', $_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName);
-
 		}
 		echo '</div>';
 		echo '</div>';
@@ -89,7 +88,7 @@ function wikiFormat($wikiName, $data)
  */
 function wiki($wikiName = '')
 {
-	global $db, $files, $session, $config;
+	global $db, $files, $h, $config;
 
 	$current_tab = $config['wiki']['first_tab'];
 
@@ -114,7 +113,7 @@ function wiki($wikiName = '')
 		$text = '';
 	}
 
-	if (!$session->isAdmin && !$config['wiki']['allow_edit']) {
+	if (!$h->session->isAdmin && !$config['wiki']['allow_edit']) {
 		//Only display the text for normal visitors
 		echo '<div class="wiki">';
 		echo '<div class="wiki_body">';
@@ -144,7 +143,7 @@ function wiki($wikiName = '')
 	echo '<div class="wiki_body">';
 
 	//Display the wiki toolbar for super admins
-	if ($current_tab == 'WikiEdit' && ($session->isAdmin || !$data['lockedBy'])) {
+	if ($current_tab == 'WikiEdit' && ($h->session->isAdmin || !$data['lockedBy'])) {
 		if (isset($_POST['wiki_'.$data['wikiId']])) {
 			//save changes to database
 			wikiUpdate($wikiName, $_POST['wiki_'.$data['wikiId']]);
@@ -153,19 +152,19 @@ function wiki($wikiName = '')
 			//JS_Alert('Changes saved!');
 		}
 
-		if ($session->isAdmin && isset($_GET['wiki_lock'])) {
-			$q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE wikiId='.$data['wikiId'];
+		if ($h->session->isAdmin && isset($_GET['wiki_lock'])) {
+			$q = 'UPDATE tblWiki SET lockedBy='.$h->session->id.',timeLocked=NOW() WHERE wikiId='.$data['wikiId'];
 			$db->update($q);
-			$data['lockedBy'] = $session->id;
-			$data['lockerName'] = $session->username;
-			addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been locked', now(), $session->id, REV_CAT_LOCKED);
+			$data['lockedBy'] = $h->session->id;
+			$data['lockerName'] = $h->session->username;
+			addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been locked', now(), $h->session->id, REV_CAT_LOCKED);
 		}
 
-		if ($session->isAdmin && isset($_GET['wiki_unlock'])) {
+		if ($h->session->isAdmin && isset($_GET['wiki_unlock'])) {
 			$q = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$data['wikiId'];
 			$db->update($q);
 			$data['lockedBy'] = 0;
-			addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been unlocked', now(), $session->id, REV_CAT_UNLOCKED);
+			addRevision(REVISIONS_WIKI, $data['wikiId'], 'The wiki has been unlocked', now(), $h->session->id, REV_CAT_UNLOCKED);
 		}
 
 		$rows = 6+substr_count($text, "\n");
@@ -195,7 +194,7 @@ function wiki($wikiName = '')
 		echo t('Last edited').': '.$last_edited.'<br/>';
 		echo xhtmlSubmit('Save');
 
-		if ($session->isAdmin) {
+		if ($h->session->isAdmin) {
 			if ($data['lockedBy']) {
 				echo '<input type="button" class="button" value="'.t('Unlock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$wikiName, '&amp;wiki_unlock').'\'"/>';
 				echo '<img src="'.$config['core']['web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked" title="This wiki is currently locked"/>';
