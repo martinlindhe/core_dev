@@ -13,7 +13,9 @@
 * Detect video formats:
 	- MPEG with video track
 
-* Redo byte reading! read bytes as they are needed & skip bytes etc instead of using a buffer
+* regularry use valgrind to look for memory leaks:
+
+  valgrind --leak-check=yes ./mediaprobe media/audio_wma.wma
 
 
 Samples: http://samples.ffmpeg.org/

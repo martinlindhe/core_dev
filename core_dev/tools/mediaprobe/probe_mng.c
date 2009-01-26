@@ -39,7 +39,7 @@ int probe_mng(FILE *f, int len, int info)
 
 	if (!info) {
 		//XXX: MNG does not yet have a registered MIME media type, but video/x-mng or image/x-mng can be used.
-		printf("video/x-mng\n");	//XXX correct mime?
+		printf("image/x-mng\n");
 	} else {
 		printf("Format: MNG\n");
 		printf("Mediatype: image\n");

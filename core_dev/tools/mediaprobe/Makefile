@@ -23,7 +23,10 @@ all: $(OBJS)
 	$(CC) $(CFLAGS) -o $(EXE) $(OBJS) $(LFLAGS)
 
 clean:
-	@rm -f *.o $(EXE)
+	rm -f *.o $(EXE)
+
+test:
+	sh ./testsuite.sh
 
 install:
 	cp $(EXE) /usr/bin
