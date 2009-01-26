@@ -26,11 +26,15 @@ int probe_png(FILE *f, int len, int info)
 
 	uint8_t *buf = malloc(8);
 
-	if (fread(buf, sizeof(char), 8, f) != 8)
+	if (fread(buf, sizeof(char), 8, f) != 8) {
+		free(buf);
 		return E_READERROR;
+	}
 
-	if (len < 10 || memcmp(buf, png_sig, 8) != 0)
+	if (len < 10 || memcmp(buf, png_sig, 8) != 0) {
+		free(buf);
 		return E_PROBEFAIL;
+	}
 
 	free(buf);
 

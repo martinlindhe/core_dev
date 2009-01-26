@@ -15,8 +15,9 @@ OBJS = \
     main.o
 
 CC = gcc
-CFLAGS = -Wall -O3
-LFLAGS = -s
+CFLAGS = -Wall -O3 -g
+LFLAGS =
+#LFLAGS = -s
 
 all: $(OBJS)
 	$(CC) $(CFLAGS) -o $(EXE) $(OBJS) $(LFLAGS)
