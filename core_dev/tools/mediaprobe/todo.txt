@@ -1,21 +1,24 @@
-* move all detected media from /core_dev/projects/mime_types to this repo
+* samples:
+	- replace some samples with smaller files
+	- more samples at http://samples.ffmpeg.org/
 
-* (maybe) use ffmpeg's probe functions directly. if so, perhaps make patches to improve this probing with ffmpeg directly (ps. remember ffprobe)
-
-* Detect image formats:
+* image formats:
 	- TIFF
 
-* Detect audio formats:
+* audio formats:
 	- WAVE
 	- OGG
-	- MP3 (is this MPEG container with audio track?)
 
-* Detect video formats:
-	- MPEG with video track
+* video formats:
+	- MPEG video
+	- AVI (need avi container parser)
+	- MKV (need mkv container parser)
+	- MOV (need mov container parser)
+
+* (maybe) use ffmpeg's probe functions directly.
+	if so, perhaps make patches to improve this probing
+	with ffmpeg directly (ps. remember ffprobe)
 
 * regularry use valgrind to look for memory leaks:
 
-  valgrind --leak-check=yes ./mediaprobe media/audio_wma.wma
-
-
-Samples: http://samples.ffmpeg.org/
+	valgrind --leak-check=yes ./mediaprobe media/audio_wma.wma

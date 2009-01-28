@@ -11,6 +11,7 @@
  * http://www.mpgedit.org/mpgedit/mpeg_format/MP3Format.html
  */
 
+//FIXME id3: 172 of 3439 mp3 files was not detected. seems to be some issue with id3_size calculation (use fullprobe.sh to find them)
 //TODO id3: handle more id3 versions
 //TODO id3: show details of the id3 tag (artis, title, year etc)
 //TODO id3: separate id3 code in it's own functions since other formats can use it
