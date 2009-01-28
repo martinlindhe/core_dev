@@ -1,2 +1,0 @@
-This directory contains small reference files for the mime types
-recognized by core_dev as defined in the provided mime.magic
