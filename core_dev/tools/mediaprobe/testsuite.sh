@@ -18,7 +18,9 @@ img_formats=(
 
 aud_formats=(
 	"media/audio_wma.wma"              "audio/x-ms-wma"
-	"media/audio_mp3.mp3"              "audio/mpeg"
+	"media/audio_mp3_no_id3.mp3"       "audio/mpeg"
+	"media/audio_mp3_id3v23.mp3"       "audio/mpeg"
+	"media/audio_mp3_id3v24.mp3"       "audio/mpeg"
 )
 
 vid_formats=(
@@ -39,13 +41,13 @@ testRun() {
 }
 
 
-echo "Running image tests ..."
+# echo "Running image tests ..."
 testRun "${img_formats[@]}"
 
 
-echo "Running audio tests ..."
+# echo "Running audio tests ..."
 testRun "${aud_formats[@]}"
 
 
-echo "Running video tests ..."
+# echo "Running video tests ..."
 testRun "${vid_formats[@]}"

@@ -4,6 +4,7 @@
  * Status: works with a few samples
  *
  * ID3 tags:
+ * http://www.id3.org/id3v2.3.0
  * http://www.id3.org/id3v2.4.0-structure
  *
  * MPEG format:
@@ -33,7 +34,10 @@ int probe_mp3(FILE *f, int len, int info)
 		return E_PROBEFAIL;
 
 	//find & skip ID3 tags
-	if (read32be(f) == MKTAG4('I', 'D', '3', 4)) {	//ID3v2.4 tag (current standard since 2000)
+	uint32_t id3_tag = read32be(f);
+	if (id3_tag == MKTAG4('I', 'D', '3', 3) ||	//ID3v2.3 tag (most commonly used in the wild)
+		id3_tag == MKTAG4('I', 'D', '3', 4)) 	//ID3v2.4 tag (current standard since 2000)
+	{
 		uint8_t id3_minor_ver = read8(f); //(0x00) of id3 minor version field
 		uint8_t id3_flags = read8(f);
 		uint32_t id3_size = read32be_ss(f);
@@ -54,6 +58,8 @@ int probe_mp3(FILE *f, int len, int info)
 			*/
 			printf("ERROR unhandled id3 flags!\n");	//TODO: id3 tag can have "extended header" etc
 		}
+	} else {
+		fseek(f, 0, SEEK_SET);
 	}
 
 	uint32_t mpeg_header = read32be(f);
