@@ -10,12 +10,16 @@ OBJS = \
     probe_mng.o  \
     probe_png.o  \
     \
+    probe_mp3.o  \
     probe_asf.o  \
     \
     main.o
 
 CC = gcc
-CFLAGS = -Wall -O3 -g
+
+CFLAGS = -Wall -O3
+#CFLAGS += -g -DDEBUG
+
 LFLAGS =
 #LFLAGS = -s
 
@@ -26,7 +30,7 @@ clean:
 	rm -f *.o $(EXE)
 
 test:
-	sh ./testsuite.sh
+	/bin/bash ./testsuite.sh
 
 install:
 	cp $(EXE) /usr/bin

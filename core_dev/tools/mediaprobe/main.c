@@ -30,6 +30,9 @@
 //container format parsers
 #include "probe_asf.h"
 
+//audio format parsers
+#include "probe_mp3.h"
+
 int main(int argc, char** argv)
 {
 	FILE *f;
@@ -74,9 +77,13 @@ int main(int argc, char** argv)
 	if (probe_png (f, len, info) == E_PROBESUCCESS) goto finish;
 
 	//container format parsers
-	if (probe_asf(f, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_asf (f, len, info) == E_PROBESUCCESS) goto finish;
 
-	printf("Can't detect format:\n");
+	//audio format parsers
+	if (probe_mp3 (f, len, info) == E_PROBESUCCESS) goto finish;
+
+	//unknown mime format:
+	printf("application/octet-stream\n");
 	//hex_dump(buf, readlen);
 
 finish:

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-make clean
 make all
 
 img_formats=(
@@ -19,6 +18,7 @@ img_formats=(
 
 aud_formats=(
 	"media/audio_wma.wma"              "audio/x-ms-wma"
+	"media/audio_mp3.mp3"              "audio/mpeg"
 )
 
 vid_formats=(
@@ -31,7 +31,7 @@ testRun() {
 	for ((i=0; i<${#x[@]}; i+=2)); do
     	RUN=`./mediaprobe ${x[${i}]}`
 		if [ $RUN != ${x[${i}+1]} ]; then
-			echo "FAIL ${x[${i}]}"
+			echo "FAIL ${x[${i}]}: $RUN"
 		else
 			echo "OK ${x[${i}]}"
 		fi
