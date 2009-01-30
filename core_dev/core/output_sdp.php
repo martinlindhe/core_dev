@@ -18,8 +18,8 @@ define('SDP_AUDIO', 2);
 //Recognized "RTP/AVP" payload types
 $rtpavp_payload['video'] = array(
 	'H264/90000'      => 20,  //VLC & ffmpeg handles H264 over RTP well
-	'H263/90000'      => 10,  //TESTED: ffmpeg visar perfekt bild med lagg vid 7fps. this is the format that comes from the 3GGW
-	//'H263-1998/90000' => 9,   //ffplay visar en svart bild, verkar ej ta emot videoframes
+	//'H263/90000'      => 10,  //TESTED: ffmpeg visar perfekt bild med lagg vid 7fps. this is the format that comes from the 3GGW
+	'H263-1998/90000' => 9,   //ffplay visar en svart bild, verkar ej ta emot videoframes
 	//'H261/90000'      => 8    //TESTED: ffmpeg does not support H.261 packetization (image shows but distorted!)
 );
 

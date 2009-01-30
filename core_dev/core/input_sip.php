@@ -257,7 +257,7 @@ class sip_server
 
 				//NOTE: playback live stream locally with VLC:
 				//exec('/home/ml/scripts/compile/vlc-git/vlc -vvv '.$sdp_file);
-				//exec('ffplay '.$sdp_file);
+				exec('ffplay '.$sdp_file);
 
 				//XXX dump rtp stream (command not working!!!)
 				//exec('ffmpeg -i '.$sdp_file.' -vcodec copy -f raw /tmp/out.h263');
