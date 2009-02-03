@@ -8,12 +8,14 @@
 * audio formats:
 	- WAVE
 	- OGG
+	- RA (need RM container parser?)
 
 * video formats:
 	- MPEG video
 	- AVI (need avi container parser)
 	- MKV (need mkv container parser)
 	- MOV (need mov container parser)
+	- RV (need RM container parser)
 
 * (maybe) use ffmpeg's probe functions directly.
 	if so, perhaps make patches to improve this probing
