@@ -303,9 +303,7 @@ function processQueue()
 	}
 
 	$job = getProcessQueueEntry();
-	if (!$job) {
-		return;
-	}
+	if (!$job) return;
 
 	//mark current job as "IN PROGRESS" so another process won't start on it aswell
 	markQueue($job['entryId'], ORDER_EXECUTING);
@@ -460,12 +458,9 @@ function processQueue()
 					break;
 
 				case MEDIATYPE_AUDIO:
-					echo "XXX: converting to MP3!!!\n";
 					$newId = convertAudio(
 						$prev_job['referId'],	//what file
-						$files->default_audio,	//destination format (mp3)
-						(!empty($params['callback']) ? false : true),//no thumbs on callback files
-						(!empty($params['watermark']) ? $params['watermark'] : '')//specify watermark file to use
+						$files->default_audio	//destination format (mp3)
 					);
 					break;
 
@@ -490,13 +485,9 @@ function processQueue()
 
 			$data = file_get_contents($callback_uri);
 
-			echo "Performing callback: ".$callback_uri. "\n\n";
+			echo "Performing callback: ".$callback_uri."\n\n";
 			echo "Client callback script returned:\n".$data;
-			storeCallbackData($job['entryId'], $data);
-
-			//FIXME delete files 30 days after processing
-			//$files->deleteFile($prev_job['referId']);
-			//$files->deleteFile($newId);
+			storeCallbackData($job['entryId'], $data);	//FIXME: "uri" parametern sparas aldrig i databasen....
 			break;
 
 		default:
