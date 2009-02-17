@@ -412,7 +412,7 @@ class files_default
 		$fileMime = '';
 		$fileName = basename(strip_tags($fileName));
 
-		if ($h->session) {
+		if ($h && $h->session) {
 			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$h->session->id.',uploaderIP='.$h->session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
 		} else {
 			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
