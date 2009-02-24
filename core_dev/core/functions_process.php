@@ -171,6 +171,20 @@ function retryQueueEntry($_id, $_delay)
 }
 
 /**
+ * Returns past process queue entries for specified file
+ *
+ * @param $_id file id
+ */
+function getProcessLog($_id)
+{
+	global $db;
+	if (!is_numeric($_id)) return false;
+
+	$q = 'SELECT * FROM tblProcessQueue WHERE referId='.$_id.' AND orderType != '.PROCESS_CONVERT_TO_DEFAULT;
+	return $db->getArray($q);
+}
+
+/**
  * Returns the oldest work orders still active for processing
  */
 function getProcessQueue($orderType = 0, $_limit = '', $orderStatus = ORDER_NEW, $agedDays = 0)
@@ -221,54 +235,7 @@ function showFileQueueStatus($_id)
 	global $db, $files;
 	if (!is_numeric($_id)) return false;
 
-	$data = $files->getFileInfo($_id);
-	if (!$data) {
-		echo '<h1>File dont exist</h1>';
-		return;
-	}
 
-	$list = getQueuedEvents($_id);
-
-	if (!empty($list)) {
-		echo '<h1>'.count($list).' queued actions</h1>';
-		foreach ($list as $row) {
-			echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.Users::link($row['creatorId']);
-			echo ' type='.$row['orderType'].', params='.$row['orderParams'];
-			echo '</h3>';
-		}
-	} else {
-		echo '<h1>No queued action</h1>';
-	}
-
-	echo 'Process log:<br/>';
-	$q = 'SELECT * FROM tblProcessQueue WHERE referId='.$_id.' AND orderType != '.PROCESS_CONVERT_TO_DEFAULT;
-	$list = $db->getArray($q);
-	echo '<table border="1">';
-	echo '<tr>';
-	echo '<th>Added</th>';
-	echo '<th>Completed</th>';
-	echo '<th>Exec time</th>';
-	echo '<th>Type</th>';
-	echo '<th>Created by</th>';
-	echo '</tr>';
-	foreach ($list as $row) {
-		echo '<tr>';
-		echo '<td>'.$row['timeCreated'].'</td>';
-		if ($row['orderStatus'] == ORDER_COMPLETED) {
-			echo '<td>'.$row['timeCompleted'].'</td>';
-			echo '<td>'.round($row['timeExec'], 3).'s</td>';
-		} else {
-			echo '<td>not done</td>';
-			echo '<td>?</td>';
-		}
-		echo '<td>'.$row['orderType'].'</td>';
-		echo '<td>'.Users::link($row['creatorId']).'</td>';
-		//echo $row['orderParams'];
-		echo '</tr>';
-	}
-	echo '</table>';
-
-	showFileInfo($_id);
 }
 
 /**
