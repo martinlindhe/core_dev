@@ -6,20 +6,23 @@
  *
  * References:
  * http://en.wikipedia.org/wiki/ICalendar
- * RFC 2445 Internet Calendaring and Scheduling Core Object Specification (iCalendar)
- * RFC 2446 iCalendar Transport-Independent Interoperability Protocol (iTIP)
- * RFC 2447 iCalendar Message-Based Interoperability Protocol (iMIP)
+ * http://severinghaus.org/projects/icv/ - iCal validator
+ * http://www.ietf.org/rfc/rfc2445.txt - Internet Calendaring and Scheduling Core Object Specification (iCalendar)
+ * http://www.ietf.org/rfc/rfc2446.txt - iCalendar Transport-Independent Interoperability Protocol (iTIP)
+ * http://www.ietf.org/rfc/rfc2447.txt - iCalendar Message-Based Interoperability Protocol (iMIP)
  */
 
 //TODO: come up with a elegant solution to store needed data for "days off" tables
 //TODO: use daysOffSwe() in paydaysMonthly() to find out if assumed weekday really
 //      is a weekday (for example you never get salary on 25:th december)
-//TODO: verify that the calendars work with Apple Calendar
+//TODO: verify that the calendars work with Apple Calendar & Google Calendar
 
 class ical
 {
 	var $events = array();
 	var $dateevents = array();
+
+	var $name;
 
 	function __construct($name = '')
 	{
@@ -28,27 +31,37 @@ class ical
 
 	function output()
 	{
-		header('Content-Type: text/plain; charset="UTF-8"');
+		header('Content-Type: text/calendar; charset="UTF-8"');
+		header('Content-Disposition: inline; filename=calendar.ics');
+		header('Cache-Control: no-cache, must-revalidate');	//HTTP/1.1
+		header('Expires: Thu, 1 Jan 2009 00:00:00 GMT');	//date in the past
+
 		echo $this->tagBegin('VCALENDAR', $this->name);
+		echo "UID:".md5($this->name)."@core_dev\r\n"; //unique identifier
 
 		foreach ($this->dateevents as $e) {
 			echo $this->tagBegin('VEVENT');
 			$y = date('Y', $e[0]);
 			$m = date('m', $e[0]);
 			$d = date('d', $e[0]);
-			$end = mktime(0, 0, 0, $m, $d +1 , $y);	//date+1
-			echo "DTSTART;VALUE=DATE:".date("Ymd", $e[0])."\r\n";	//YYYYMMDD
-			echo "DTEND;VALUE=DATE:".  date("Ymd", $end)."\r\n";
+			$c_start = date("Ymd", $e[0]);
+			$c_end   = date("Ymd", mktime(0, 0, 0, $m, $d +1 , $y));	//date+1
+			echo "DTSTART;VALUE=DATE:".$c_start."\r\n";	//YYYYMMDD
+			echo "DTEND;VALUE=DATE:".  $c_end  ."\r\n";
 			echo "SUMMARY:".$e[1]."\r\n";
+			echo "UID:".md5($c_start.$c_end.$e[1])."@core_dev\r\n"; //unique identifier
 			echo $this->tagEnd('VEVENT');
 		}
 
 		foreach ($this->events as $e) {	//XXX currently unused
-			$tz = $e[1];
 			echo $this->tagBegin('VEVENT');
-			echo "DTSTART;TZID=".($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000\r\n";	//XXX what is this dateformat called?
-			echo "DTEND;TZID=".  ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T235959\r\n";
+			$tz = $e[1];
+			$c_start = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000";
+			$c_end   = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T235959";
+			echo "DTSTART;TZID=".$c_start."\r\n";	//XXX what is this dateformat called?
+			echo "DTEND;TZID=".  $c_end.  "\r\n";
 			echo "SUMMARY:".$e[0][1]."\r\n";
+			echo "UID:".md5($c_start.$c_end.$e[0][1])."@core_dev\r\n"; //unique identifier
 			echo $this->tagEnd('VEVENT');
 		}
 
@@ -64,8 +77,10 @@ class ical
 
 		switch ($obj) {
 			case 'VCALENDAR':
-				$res .= "PRODID:-//core_dev v1.0/".$s."/NONSGML v1.0//EN\r\n";	//XXX core_dev version
 				$res .= "VERSION:2.0\r\n";
+				//$res .= "PRODID:-//core_dev/".$s."/NONSGML v1.0//EN\r\n";	//XXX core_dev version
+				$res .= "PRODID:-//Google Inc//Google Calendar 70.9054//EN\r\n";
+				$res .= "CALSCALE:GREGORIAN\r\n"; //http://en.wikipedia.org/wiki/Gregorian_calendar
 				break;
 
 			case 'VEVENT':
