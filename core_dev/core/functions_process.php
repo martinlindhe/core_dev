@@ -438,13 +438,13 @@ function processQueue()
 
 			//'uri' isnt known before the new file is created so it is added at this point
 			$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
-dp('callback1: '.$params['callback']);
+echo 'callback1: '.$params['callback']."\n";
 			$params['callback'] .= (strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
-dp('callback2: '.$params['callback']);
+echo 'callback2: '.$params['callback']."\n";
 			$data = file_get_contents($params['callback']);
 
 			echo "Performing callback: ".$params['callback']."\n\n";
-			echo "Client callback script returned:\n".$data;
+			echo "Callback script returned:\n".$data;
 			storeCallbackData($job['entryId'], $data, $params);
 			break;
 
