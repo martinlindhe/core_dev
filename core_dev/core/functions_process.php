@@ -6,8 +6,6 @@
  *
  * mencoder, ffmpeg (recent svn), ffprobe and imagemagick needs to be available
  *
- * uses MySQL table locking to ensure atomic operation
- *
  * this module requires:
  * - php_soap.dll extension (included in windows php dist, disabled by default)
  * - allow_url_fopen = On
@@ -17,7 +15,7 @@
  * soap.wsdl_cache_enabled=1
  * soap.wsdl_cache_ttl=172800
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 require_once('atom_customers.php');
@@ -28,24 +26,24 @@ require_once('functions_fileareas.php');
 //how many enqued items to process at max each time the process_queue.php script is called
 //WARNING: keep this a low number unless you are sure what the consequences are
 $config['process']['process_limit'] = 3;
-$config['process']['retry_limit'] = 50;
+$config['process']['retry_limit']   = 50;
 
-define('PROCESSQUEUE_AUDIO_RECODE', 10);	///< Enqueue this
-define('PROCESSQUEUE_VIDEO_RECODE', 11);	///< fixme: use
-define('PROCESSQUEUE_IMAGE_RECODE', 12);	///< Enqueue this file for recoding/converting to another image format
+define('PROCESSQUEUE_AUDIO_RECODE',  10); ///< Enqueue this
+define('PROCESSQUEUE_VIDEO_RECODE',  11); ///< fixme: use
+define('PROCESSQUEUE_IMAGE_RECODE',  12); ///< Enqueue this file for recoding/converting to another image format
 
-define('PROCESS_UPLOAD',			19);	///< HTTP Post upload
-define('PROCESS_FETCH',				20);	///< Ask the server to download remote media. Parameter is URL
+define('PROCESS_UPLOAD',             19); ///< HTTP Post upload
+define('PROCESS_FETCH',              20); ///< Ask the server to download remote media. Parameter is URL
 
-define('PROCESS_PARSE_AND_FETCH',	21);	///< Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
-define('PROCESS_CONVERT_TO_DEFAULT',22);	///< Convert media to default format
+define('PROCESS_PARSE_AND_FETCH',    21); ///< Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
+define('PROCESS_CONVERT_TO_DEFAULT', 22); ///< Convert media to default format
 
 
 //process order status modes
-define('ORDER_NEW',			0);
-define('ORDER_EXECUTING',	1);
-define('ORDER_COMPLETED',	2);
-define('ORDER_FAILED',		3);
+define('ORDER_NEW',         0);
+define('ORDER_EXECUTING',   1);
+define('ORDER_COMPLETED',   2);
+define('ORDER_FAILED',      3);
 
 /**
  * Adds something to the process queue
@@ -659,81 +657,6 @@ function generateVideoThumbs($fileId)
 	exec($c);
 
 	$files->updateFile($newId);
-}
-
-/**
- * Uploads video to youtube
- *
- * XXX: Requires zend framework installed and php.ini paths configured!!!
- */
-function youtubeUpload($username, $password, $devkey, $filename, $filetype, $movie_title, $movie_desc, $keywords, $category_name, $coords = '')
-{
-	require_once('Zend/Loader.php'); // the Zend dir must be in your include_path
-	Zend_Loader::loadClass('Zend_Gdata_YouTube');
-	$yt = new Zend_Gdata_YouTube();
-	Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
-
-	$authenticationURL = 'https://www.google.com/youtube/accounts/ClientLogin';
-	$httpClient = Zend_Gdata_ClientLogin::getHttpClient(
-		$username,
-		$password,
-		$service = 'youtube',
-		$client = null,
-		$source = 'core_dev', // a short string identifying your application
-		$loginToken = null,
-		$loginCaptcha = null,
-		$authenticationURL);
-
-	$httpClient->setHeaders('X-GData-Key', "key=${devkey}");
-	$yt = new Zend_Gdata_YouTube($httpClient);
-
-	// create a new Zend_Gdata_YouTube_VideoEntry object
-	$myVideoEntry = new Zend_Gdata_YouTube_VideoEntry();
-
-	// create a new Zend_Gdata_App_MediaFileSource object
-	$filesource = $yt->newMediaFileSource($filename);
-	$filesource->setContentType($filetype);
-	// set slug header
-	$filesource->setSlug($filename);	//FIXME: vafan är en slug header???
-
-	// add the filesource to the video entry
-	$myVideoEntry->setMediaSource($filesource);
-
-	// create a new Zend_Gdata_YouTube_Extension_MediaGroup object
-	$mediaGroup = $yt->newMediaGroup();
-	$mediaGroup->title = $yt->newMediaTitle()->setText($movie_title);
-	$mediaGroup->description = $yt->newMediaDescription()->setText($movie_desc);
-
-	// the category must be a valid YouTube category
-	// optionally set some developer tags (see Searching by Developer Tags for more details)
-	$mediaGroup->category = array(
-		$yt->newMediaCategory()->setText($category_name)->setScheme('http://gdata.youtube.com/schemas/2007/categories.cat')
-		//$yt->newMediaCategory()->setText('mydevelopertag')->setScheme('http://gdata.youtube.com/schemas/2007/developertags.cat'),
-		//$yt->newMediaCategory()->setText('anotherdevelopertag')->setScheme('http://gdata.youtube.com/schemas/2007/developertags.cat')
-	);
-
-	// set keywords, please note that they cannot contain white-space
-	$mediaGroup->keywords = $yt->newMediaKeywords()->setText($keywords);
-	$myVideoEntry->mediaGroup = $mediaGroup;
-
-	if ($coords) {
-		// set video location
-		$yt->registerPackage('Zend_Gdata_Geo');
-		$yt->registerPackage('Zend_Gdata_Geo_Extension');
-		$where = $yt->newGeoRssWhere();
-		$position = $yt->newGmlPos($coords);
-		$where->point = $yt->newGmlPoint($position);
-		$myVideoEntry->setWhere($where);
-	}
-
-	// upload URL for the currently authenticated user
-	$uploadUrl = 'http://uploads.gdata.youtube.com/feeds/users/default/uploads';
-
-	try {
-		$newEntry = $yt->insertEntry($myVideoEntry, $uploadUrl, 'Zend_Gdata_YouTube_VideoEntry');
-	} catch (Zend_Gdata_App_Exception $e) {
-		echo $e->getMessage()."\n";
-	}
 }
 
 function storeCallbackData($entryId, $data)
