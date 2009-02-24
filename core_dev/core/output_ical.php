@@ -34,7 +34,7 @@ class ical
 	function output()
 	{
 		header('Content-Type: text/calendar; charset="UTF-8"');
-		header('Content-Disposition: inline; filename=calendar.ics');
+		//header('Content-Disposition: inline; filename=calendar.ics');
 		header('Cache-Control: no-cache, must-revalidate');	//HTTP/1.1
 		header('Expires: Thu, 1 Jan 2009 00:00:00 GMT');	//date in the past
 
