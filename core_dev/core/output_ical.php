@@ -10,6 +10,8 @@
  * http://www.ietf.org/rfc/rfc2445.txt - Internet Calendaring and Scheduling Core Object Specification (iCalendar)
  * http://www.ietf.org/rfc/rfc2446.txt - iCalendar Transport-Independent Interoperability Protocol (iTIP)
  * http://www.ietf.org/rfc/rfc2447.txt - iCalendar Message-Based Interoperability Protocol (iMIP)
+ *
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 //TODO: come up with a elegant solution to store needed data for "days off" tables
