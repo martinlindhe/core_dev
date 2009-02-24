@@ -48,6 +48,10 @@ define('ORDER_FAILED',      3);
 /**
  * Adds something to the process queue
  *
+ * @param $_type type of process action
+ * @param $creatorId user id of the one giving the order
+ * @param $param
+ * @param $param2
  * @return process event id
  */
 function addProcessEvent($_type, $creatorId, $param, $param2 = '')
@@ -225,17 +229,6 @@ function getQueuedEvents($_id)
 
 	$q = 'SELECT * FROM tblProcessQueue WHERE referId='.$_id.' AND orderStatus='.ORDER_NEW.' ORDER BY timeCreated ASC';
 	return $db->getArray($q);
-}
-
-/**
- * Displays the enqueued actions in the process queue for the fileId $_id
- */
-function showFileQueueStatus($_id)
-{
-	global $db, $files;
-	if (!is_numeric($_id)) return false;
-
-
 }
 
 /**
@@ -443,16 +436,16 @@ function processQueue()
 
 			if (empty($params['callback'])) break;
 
-			//execute callback
+			//'uri' isnt known before the new file is created so it is added at this point
 			$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
 
-			$callback_uri = $params['callback'].(strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
+			$params['callback'] = $params['callback'].(strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
 
-			$data = file_get_contents($callback_uri);
+			$data = file_get_contents($params['callback']);
 
-			echo "Performing callback: ".$callback_uri."\n\n";
+			echo "Performing callback: ".$params['callback']."\n\n";
 			echo "Client callback script returned:\n".$data;
-			storeCallbackData($job['entryId'], $data);	//FIXME: "uri" parametern sparas aldrig i databasen....
+			storeCallbackData($job['entryId'], $data, $params);
 			break;
 
 		default:
@@ -626,12 +619,14 @@ function generateVideoThumbs($fileId)
 	$files->updateFile($newId);
 }
 
-function storeCallbackData($entryId, $data)
+function storeCallbackData($entryId, $data, $newParams = '')
 {
 	global $db;
 	if (!is_numeric($entryId)) return false;
 
-	$q = 'UPDATE tblProcessQueue SET callback_log="'.$db->escape($data).'" WHERE entryId='.$entryId;
+	$q = 'UPDATE tblProcessQueue SET callback_log="'.$db->escape($data).'"';
+	if ($newParams) $q .= ', orderParams="'.serialize($newParams).'"';
+	$q .= ' WHERE entryId='.$entryId;
 	$db->update($q);
 }
 
