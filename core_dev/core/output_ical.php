@@ -80,8 +80,7 @@ class ical
 		switch ($obj) {
 			case 'VCALENDAR':
 				$res .= "VERSION:2.0\r\n";
-				//$res .= "PRODID:-//core_dev/".$s."/NONSGML v1.0//EN\r\n";	//XXX core_dev version
-				$res .= "PRODID:-//Google Inc//Google Calendar 70.9054//EN\r\n";
+				$res .= "PRODID:-//core_dev/".$s."/NONSGML v1.0//EN\r\n";	//XXX core_dev version
 				$res .= "CALSCALE:GREGORIAN\r\n"; //http://en.wikipedia.org/wiki/Gregorian_calendar
 				break;
 
