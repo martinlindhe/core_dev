@@ -438,9 +438,9 @@ function processQueue()
 
 			//'uri' isnt known before the new file is created so it is added at this point
 			$uri = $config['core']['full_url'].'api/file.php?id='.$newId;
-echo 'callback1: '.$params['callback']."\n";
+
 			$params['callback'] .= (strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
-echo 'callback2: '.$params['callback']."\n";
+
 			$data = file_get_contents($params['callback']);
 
 			echo "Performing callback: ".$params['callback']."\n\n";
@@ -625,7 +625,7 @@ function storeCallbackData($entryId, $data, $newParams = '')
 	if (!is_numeric($entryId)) return false;
 
 	$q = 'UPDATE tblProcessQueue SET callback_log="'.$db->escape($data).'"';
-	if ($newParams) $q .= ', orderParams="'.serialize($newParams).'"';
+	if ($newParams) $q .= ', orderParams="'.$db->escape(serialize($newParams)).'"';
 	$q .= ' WHERE entryId='.$entryId;
 	$db->update($q);
 }
