@@ -16,46 +16,48 @@ $list = getProcessQueue(0, $pager['limit'], isset($_GET['completed']) ? ORDER_CO
 if (!empty($list)) {
 	foreach ($list as $row) {
 		echo '<div class="item">';
-		echo '#'.$row['entryId'].': ';
+		echo '<h2>#'.$row['entryId'].': ';
 
 		switch ($row['orderType']) {
 			case PROCESSQUEUE_AUDIO_RECODE:
-				echo 'Audio recode to <b>"'.$row['orderParams'].'"</b><br/>';
+				echo 'Audio recode to <b>"'.$row['orderParams'].'"</b></h2>';
 				break;
 
 			case PROCESSQUEUE_IMAGE_RECODE:
-				echo 'Image recode to <b>"'.$row['orderParams'].'"</b><br/>';
+				echo 'Image recode to <b>"'.$row['orderParams'].'"</b></h2>';
 				break;
 
 			case PROCESSQUEUE_VIDEO_RECODE:
-				echo 'Video recode to <b>"'.$row['orderParams'].'"</b><br/>';
+				echo 'Video recode to <b>"'.$row['orderParams'].'"</b></h2>';
 				break;
 
 			case PROCESS_FETCH:
-				echo 'Fetch remote media from <b>'.$row['orderParams'].'</b><br/>';
+				echo 'Fetch remote media</h2>';
+				echo 'from <b>'.$row['orderParams'].'</b><br/>';
 				break;
 
 			case PROCESS_UPLOAD:
-				echo 'Uploaded remote media from client<br/>';
+				echo 'Uploaded remote media from client</h2>';
 				break;
 
 			case PROCESS_CONVERT_TO_DEFAULT:
-				echo 'Convert media to default type for entry #'.$row['referId'].'<br/>';
+				echo 'Convert media to default type for entry <b>#'.$row['referId'].'</b></h2>';
 				if ($row['orderParams']) {
 					$params = unserialize($row['orderParams']);
-					if (!empty($params['callback'])) echo 'Callback: <b>'.urldecode($params['callback']).'</b><br/>';
-					if (!empty($params['watermark'])) echo 'Watermark: <b>'.urldecode($params['watermark']).'</b><br/>';
+					if (!empty($params['callback']))  echo 'Callback: <b>'. urldecode($params['callback']). '</b><br/><br/>';
+					if (!empty($params['watermark'])) echo 'Watermark: <b>'.urldecode($params['watermark']).'</b><br/><br/>';
 				}
 				if ($row['callback_log']) {
-					echo 'Callback script returned:<br/>';
-					echo '<b>'.$row['callback_log'].'</b><br/>';
+					echo 'Callback returned:<br/>';
+					echo '<b>'.$row['callback_log'].'</b><br/><br/>';
 				}
 				break;
 
 			default:
 				die('unknown processqueue type: '.$row['orderType']);
 		}
-		echo 'Attempts: '.$row['attempts'].'<br/>';
+		echo $row['timeCreated'].' added by '.getCustomerName($row['creatorId']).'<br/><br/>';
+		echo 'Attempts: '.$row['attempts'].'<br/><br/>';
 
 		if ($row['orderType'] != PROCESS_CONVERT_TO_DEFAULT) {
 			if ($row['referId']) {
@@ -65,13 +67,11 @@ if (!empty($list)) {
 			$file = $files->getFileInfo($row['referId']);
 			if ($file) {
 				echo '<h3>Source file:</h3>';
-				echo 'filename: '.$file['fileName'].' ('.$file['fileMime'].')<br/>';
-				echo 'size: '.formatDataSize($file['fileSize']).'<br/>';
-				echo 'sha1: '.$files->sha1($row['referId']).'<br/>';
+				echo 'Mime: '.$file['fileMime'].'<br/>';
+				echo 'Size: '.formatDataSize($file['fileSize']).'<br/>';
+				echo 'SHA1: '.$files->sha1($row['referId']).'<br/>';
 			}
 		}
-
-		echo $row['timeCreated'].' added by '.getCustomerName($row['creatorId']).'<br/>';
 
 		if ($row['orderStatus'] == ORDER_COMPLETED) {
 			echo '<b>Order completed</b><br/>';

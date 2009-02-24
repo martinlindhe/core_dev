@@ -15,6 +15,7 @@ class SOAP_ProcessService
 		$id = addProcessEvent(PROCESS_FETCH, $customerId, $uri);
 		$params['callback'] = $callback;
 		$params['watermark'] = $watermark_uri;
+
 		$endId = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $customerId, $id, $params);
 
 		return $endId;
