@@ -10,7 +10,54 @@ $fileId = $_GET['id'];
 
 require('design_head.php');
 
-showFileQueueStatus($fileId);
+$data = $files->getFileInfo($fileId);
+if (!$data) {
+	echo '<h1>File dont exist</h1>';
+	die;
+}
+
+$list = getQueuedEvents($fileId);
+
+if (!empty($list)) {
+	echo '<h1>'.count($list).' queued actions</h1>';
+	foreach ($list as $row) {
+		echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.Users::link($row['creatorId']);
+		echo ' type='.$row['orderType'].', params='.$row['orderParams'];
+		echo '</h3>';
+	}
+} else {
+	echo '<h1>No queued action</h1>';
+}
+
+echo 'Process log:<br/>';
+$list = getProcessLog($fileId);
+
+echo '<table border="1">';
+echo '<tr>';
+echo '<th>Added</th>';
+echo '<th>Completed</th>';
+echo '<th>Exec time</th>';
+echo '<th>Type</th>';
+echo '<th>Created by</th>';
+echo '</tr>';
+foreach ($list as $row) {
+	echo '<tr>';
+	echo '<td>'.$row['timeCreated'].'</td>';
+	if ($row['orderStatus'] == ORDER_COMPLETED) {
+		echo '<td>'.$row['timeCompleted'].'</td>';
+		echo '<td>'.round($row['timeExec'], 3).'s</td>';
+	} else {
+		echo '<td>not done</td>';
+		echo '<td>?</td>';
+	}
+	echo '<td>'.$row['orderType'].'</td>';
+	echo '<td>'.Users::link($row['creatorId']).'</td>';
+	//echo $row['orderParams'];
+	echo '</tr>';
+}
+echo '</table>';
+
+showFileInfo($fileId);
 
 $file = $files->getFileInfo($fileId);
 if ($file['fileType'] == FILETYPE_CLONE_CONVERTED) {
