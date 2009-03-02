@@ -287,9 +287,8 @@ abstract class db_base
 	 *
 	 * @param $pageload_start is the microtime of when the script execution started
 	 */
-	function showProfile($pageload_start = 0, $output_type = 'xhtml')
+	function showProfile($pageload_start = 0)
 	{
-		//TODO implement $output_type = 'text'
 		global $config;
 		if (!$this->debug) return;
 
@@ -339,13 +338,15 @@ abstract class db_base
 
 		if ($pageload_start) {
 			$php_time = $total_time - $this->connect_time - $sql_time;
-			echo 'Total time spent: '.round($total_time, 3).'s '.' (SQL connect: '.round($this->connect_time, 3).'s, SQL queries: '.round($sql_time, 3).'s, PHP: '.round($php_time, 3).'s)<br/>';
+			echo 'Total time spent: '.round($total_time, 2).'s '.' (SQL connect: '.round($this->connect_time, 2).'s, SQL queries: '.round($sql_time, 2).'s, PHP: '.round($php_time, 2).'s)<br/>';
 		} else {
-			echo 'Time spent - SQL: '.round($sql_time, 3).'<br/>';
+			echo 'Time spent - SQL: '.round($sql_time, 2).'<br/>';
 		}
 
 		//Show script memory usage
+		echo '<pre>';
 		dm($this);
+		echo '</pre>';
 		echo '</div>';
 	}
 
