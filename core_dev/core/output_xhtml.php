@@ -18,11 +18,14 @@ require_once('locale.php');
  * $meta_rss[]		- array of rss feeds to expose for current page
  * $meta_js[]		- array of javascript files that needs to be included for current page
  * $meta_css[]		- array of css files that needs to be included for current page
+ * $meta_favicon    - uri for favicon (normally /favicon.ico)
  * $body_onload[]	- array of js function(s) to call on load
  */
 function createXHTMLHeader()
 {
-	global $config, $h, $files, $title, $meta_rss, $meta_js, $meta_css, $meta_search, $body_onload;
+	global $config, $h, $files, $title;
+	global $meta_rss, $meta_js, $meta_css, $meta_search, $meta_favicon;
+	global $body_onload;
 
 	if (!$title && !empty($config['default_title'])) $title = $config['default_title'];
 
@@ -59,7 +62,10 @@ function createXHTMLHeader()
 		}
 	}
 
-	//echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>';
+	if ($meta_favicon) {
+		echo '<link rel="icon" type="image/png" href="'.$meta_favicon.'"/>';
+	}
+
 	if (!empty($config['core']['web_root'])) {
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
