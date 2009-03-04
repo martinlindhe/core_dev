@@ -38,15 +38,15 @@ function d($v)
 }
 
 /**
- * Debug function. Prints $m to Apache log file
+ * Debug function. Prints $str to Apache log file
  */
-function dp($m)
+function dp($str)
 {
 	global $config;
 
-	error_log($m);
+	error_log($str);
 	if (!empty($config['debug'])) {
-		error_log(date('[r] ').$m."\n", 3, '/tmp/core_dev.log');
+		error_log(date('[r] ').$str."\n", 3, '/tmp/core_dev.log');
 	}
 }
 

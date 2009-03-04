@@ -83,7 +83,7 @@ class xhtml_header
 	 */
 	function render()
 	{
-		global $config, $h, $files;
+		global $config, $h;
 
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
@@ -131,7 +131,7 @@ class xhtml_header
 			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
 			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
-			if (!empty($files) && $files->allow_rating) {
+			if (!empty($h->files) && $h->files->allow_rating) {
 				echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
 			}
 		}
