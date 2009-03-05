@@ -72,8 +72,14 @@ class xhtml_form
 		}
 
 		if (!empty($_POST)) {
-			//XXX: avoid form processing if function return TRUE ?
-			call_user_func($this->handler, $_POST);
+			if (call_user_func($this->handler, $_POST)) {
+				//TODO: customize success message
+				echo 'Form data processed successfully!<br/>';
+				return;
+			} else {
+				//TODO: fill in form with previous entered data
+				echo 'Failed to process form data!<br/>';
+			}
 		}
 
 		echo xhtmlForm($this->name, '', 'post', $this->enctype);
