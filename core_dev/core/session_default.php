@@ -10,35 +10,37 @@
 require_once('session_base.php');
 require_once('class.Users.php');
 
-require_once('atom_ip.php');		//for IPv4_to_GeoIP()
-require_once('atom_settings.php');	//for storing userdata
-require_once('atom_logging.php');	//for logEntry()
+require_once('atom_ip.php');        //for IPv4_to_GeoIP()
+require_once('atom_settings.php');  //for storing userdata
+require_once('atom_logging.php');   //for logEntry()
 
 class session_default extends session_base
 {
-	var $session_name = 'someSID';		///< default session name
-	var $timeout = 86400;				///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
-	var $online_timeout = 1800;			///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
-	//todo: make online_timeout configurable
+	var $session_name = 'someSID'; ///< default session name
+	var $timeout = 86400;          ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+	var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
+	//TODO: make online_timeout configurable
 
-	var $start_page = 'index.php';		///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
+	var $start_page = 'index.php'; ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
 	var $logged_out_start_page = 'index.php';
-	var $error_page = 'error.php';		///< redirects the user to this page (in $config['app']['web_root'] directory) to show errors
+	var $error_page = 'error.php'; ///< redirects the user to this page (in $config['app']['web_root'] directory) to show errors
 
 	//Aliases of $_SESSION[] variables
-	var $error;					///< last error message
-	var $id;						///< current user's user ID
-	var $username;				///< username of current user
-	var $mode;					///< usermode
-	var $lastActive;				///< last active
-	var $started;				///< timestamp of when the session started
-	var $theme = '';				///< contains the currently selected theme
-	var $referer = '';			///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
-	var $log_pageviews = false;	///< logs page views to tblPageViews
+	var $error;                 ///< last error message
+	var $id;                    ///< current user's user ID
+	var $username;              ///< username of current user
+	var $mode;                  ///< usermode
+	var $lastActive;            ///< last active
+	var $started;               ///< timestamp of when the session started
+	var $theme = '';            ///< contains the currently selected theme
+	var $referer = '';          ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
+	var $log_pageviews = false; ///< logs page views to tblPageViews
+	var $default_theme = 'default.css';  ///< default theme if none is choosen
+	var $allow_themes = false;  ///< allow themes?
 
-	var $isWebmaster;			///< is user webmaster?
-	var $isAdmin;				///< is user admin?
-	var $isSuperAdmin;			///< is user superadmin?
+	var $isWebmaster;           ///< is user webmaster?
+	var $isAdmin;               ///< is user admin?
+	var $isSuperAdmin;          ///< is user superadmin?
 
 	var $userModes = array(
 		0 => 'Normal user',
@@ -46,10 +48,6 @@ class session_default extends session_base
 		2 => 'Admin',
 		3 => 'Super admin'
 	); ///< user modes
-
-	var $default_theme = 'default.css';			///< default theme if none is choosen
-	var $allow_themes = false;					///< allow themes?
-
 
 	function __construct($conf = array())
 	{
@@ -59,7 +57,11 @@ class session_default extends session_base
 		if (isset($conf['error_page'])) $this->error_page = $conf['error_page'];
 		if (isset($conf['allow_themes'])) $this->allow_themes = $conf['allow_themes'];
 
+		//enable garbage collector
+		ini_set('session.gc_probability', 1);
+		ini_set('session.gc_divisor', 1);
 		ini_set('session.gc_maxlifetime', $this->timeout);
+
 		session_name($this->session_name);
 		session_start();
 

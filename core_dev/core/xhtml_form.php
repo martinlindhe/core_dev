@@ -78,27 +78,35 @@ class xhtml_form
 
 		echo xhtmlForm($this->name, '', 'post', $this->enctype);
 
+		//TODO use xhtml_table class when it is created
+
+		echo '<table cellpadding="10" cellspacing="0" border="1">';
+
 		foreach ($this->elems as $e) {
+			echo '<tr>';
 			switch ($e['type']) {
-				case 'INPUT':
-					echo $e['str'].': ';
-					echo xhtmlInput($e['name']).'<br/>';
-					break;
+			case 'INPUT':
+				echo '<td>'.$e['str'].':</td>';
+				echo '<td>'.xhtmlInput($e['name']).'</td>';
+				break;
 
-				case 'TEXTAREA':
-					echo $e['str'].': ';
-					echo xhtmlTextarea($e['name']).'<br/>';
-					break;
+			case 'TEXTAREA':
+				echo '<td>'.$e['str'].':</td>';
+				echo '<td>'.xhtmlTextarea($e['name']).'</td>';
+				break;
 
-				case 'TEXT':
-					echo $e['str'].'<br/>';
-					break;
+			case 'TEXT':
+				echo '<td colspan="2">'.$e['str'].'</td>';
+				break;
 
-				case 'SUBMIT':
-					echo xhtmlSubmit($e['str']);
-					break;
+			case 'SUBMIT':
+				echo '<td colspan="2">'.xhtmlSubmit($e['str']).'</td>';
+				break;
 			}
+			echo '</tr>';
 		}
+
+		echo '</table>';
 
 		echo xhtmlFormClose();
 	}
