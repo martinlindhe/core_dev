@@ -347,6 +347,8 @@ abstract class db_base
 		echo '<pre>';
 		dm($this);
 		echo '</pre>';
+		echo date('r');
+
 		echo '</div>';
 	}
 
@@ -355,6 +357,7 @@ abstract class db_base
 	 */
 	function showEvents()
 	{
+		//TODO: move out of db class!!!
 		global $session, $config;
 		if (!$session->isAdmin) return false;
 
