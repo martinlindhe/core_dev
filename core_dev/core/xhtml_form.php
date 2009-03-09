@@ -33,9 +33,9 @@ class xhtml_form
 	/**
 	 * Adds a input field to the form
 	 */
-	function input($name, $str)
+	function input($name, $str, $default = '')
 	{
-		$this->elems[] = array('type' => 'INPUT', 'name' => $name, 'str' => $str);
+		$this->elems[] = array('type' => 'INPUT', 'name' => $name, 'str' => $str, 'default' => $default);
 	}
 
 	/**
@@ -60,6 +60,19 @@ class xhtml_form
 	function submit($str)
 	{
 		$this->elems[] = array('type' => 'SUBMIT', 'str' => $str);
+	}
+
+	/**
+	 * Adds a select dropdown list to the form
+	 */
+	function dropdown($name, $str, $arr)
+	{
+		$this->elems[] = array('type' => 'DROPDOWN', 'name' => $name, 'str' => $str, 'arr' => $arr);
+	}
+
+	function radio($name, $str, $arr)
+	{
+		$this->elems[] = array('type' => 'RADIO', 'name' => $name, 'str' => $str, 'arr' => $arr);
 	}
 
 	/**
@@ -93,7 +106,7 @@ class xhtml_form
 			switch ($e['type']) {
 			case 'INPUT':
 				echo '<td>'.$e['str'].':</td>';
-				echo '<td>'.xhtmlInput($e['name']).'</td>';
+				echo '<td>'.xhtmlInput($e['name'], $e['default']).'</td>';
 				break;
 
 			case 'TEXTAREA':
@@ -105,8 +118,22 @@ class xhtml_form
 				echo '<td colspan="2">'.$e['str'].'</td>';
 				break;
 
+			case 'DROPDOWN':
+				echo '<td>'.$e['str'].'</td>';
+				echo '<td>'.xhtmlSelectArray($e['name'], $e['arr']).'</td>';
+				break;
+
+			case 'RADIO':
+				echo '<td>'.$e['str'].'</td>';
+				echo '<td>'.xhtmlRadioArray($e['name'], $e['arr']).'</td>';
+				break;
+
 			case 'SUBMIT':
 				echo '<td colspan="2">'.xhtmlSubmit($e['str']).'</td>';
+				break;
+
+			default:
+				echo '<h1>'.$e['type'].' not implemented</h1>';
 				break;
 			}
 			echo '</tr>';
