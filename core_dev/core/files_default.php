@@ -42,6 +42,7 @@ define('FILETYPE_CLONE_VIDEOTHUMB10',	31);	//video thumbnail of video 10% into t
 define('MEDIATYPE_IMAGE',		1);
 define('MEDIATYPE_VIDEO',		2);
 define('MEDIATYPE_AUDIO',		3);
+//TODO: add "MEDIATYPE_AUDIOVIDEO"  for files containing both video & audio streams
 define('MEDIATYPE_DOCUMENT',	4);
 define('MEDIATYPE_WEBRESOURCE',	5);	//webresources can/will contain other files. those files will refer to this file entry as their owner
 

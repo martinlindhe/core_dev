@@ -640,3 +640,9 @@ overflow: auto;
 	margin-bottom: 10px;
 	margin-top: 10px;
 }
+
+/* output_diff */
+.diff_line {
+	font-family: courier;
+	font-size: 14px;
+}
