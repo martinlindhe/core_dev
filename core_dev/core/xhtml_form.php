@@ -65,9 +65,9 @@ class xhtml_form
 	/**
 	 * Adds a select dropdown list to the form
 	 */
-	function dropdown($name, $str, $arr)
+	function dropdown($name, $str, $arr, $default = 0)
 	{
-		$this->elems[] = array('type' => 'DROPDOWN', 'name' => $name, 'str' => $str, 'arr' => $arr);
+		$this->elems[] = array('type' => 'DROPDOWN', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
 	}
 
 	function radio($name, $str, $arr)
@@ -120,7 +120,7 @@ class xhtml_form
 
 			case 'DROPDOWN':
 				echo '<td>'.$e['str'].'</td>';
-				echo '<td>'.xhtmlSelectArray($e['name'], $e['arr']).'</td>';
+				echo '<td>'.xhtmlSelectArray($e['name'], $e['arr'], $e['default']).'</td>';
 				break;
 
 			case 'RADIO':
