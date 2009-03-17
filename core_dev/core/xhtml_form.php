@@ -70,9 +70,9 @@ class xhtml_form
 		$this->elems[] = array('type' => 'DROPDOWN', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
 	}
 
-	function radio($name, $str, $arr)
+	function radio($name, $str, $arr, $default = 0)
 	{
-		$this->elems[] = array('type' => 'RADIO', 'name' => $name, 'str' => $str, 'arr' => $arr);
+		$this->elems[] = array('type' => 'RADIO', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
 	}
 
 	/**
@@ -125,7 +125,7 @@ class xhtml_form
 
 			case 'RADIO':
 				echo '<td>'.$e['str'].'</td>';
-				echo '<td>'.xhtmlRadioArray($e['name'], $e['arr']).'</td>';
+				echo '<td>'.xhtmlRadioArray($e['name'], $e['arr'], $e['default']).'</td>';
 				break;
 
 			case 'SUBMIT':
