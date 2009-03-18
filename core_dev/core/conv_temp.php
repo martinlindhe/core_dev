@@ -21,12 +21,13 @@ class temp
 {
 	function conv($from, $to, $val)
 	{
-		$val = floatval($val);
+		//XXX: the rounding is neccesary to work around PHP's handling of floats,
+		//     or some will return .0000000000001 precision which make testcase fail
 		switch ($to) {
-			case 'C': return $this->toCelcius($from, $val);
-			case 'F': return $this->toFarenheit($from, $val);
-			case 'K': return $this->toKelvin($from, $val);
-			case 'R': return $this->toRankine($from, $val);
+			case 'C': return round($this->toCelcius($from, $val), 10);
+			case 'F': return round($this->toFarenheit($from, $val), 10);
+			case 'K': return round($this->toKelvin($from, $val), 10);
+			case 'R': return round($this->toRankine($from, $val), 10);
 		}
 	}
 
@@ -70,25 +71,5 @@ class temp
 		}
 	}
 }
-
-$t = new temp();
-
-if ($t->conv('C', 'F', 300) != 572)       echo "FAIL 1\n";
-if ($t->conv('C', 'K', 300) != 573.15)    echo "FAIL 2\n";
-if ($t->conv('C', 'R', 300) != 1031.67)   echo "FAIL 3\n";
-
-if ($t->conv('F', 'C', 500) != 260)       echo "FAIL 4\n";
-if ($t->conv('F', 'K', 500) != 533.15)    echo "FAIL 5\n"; //XXX
-if ($t->conv('F', 'R', 500) != 959.67)    echo "FAIL 6\n"; //XXX
-
-if ($t->conv('K', 'C', 0) != -273.15)     echo "FAIL 7\n";
-if ($t->conv('K', 'F', 0) != -459.67)     echo "FAIL 8\n";
-if ($t->conv('K', 'R', 0) != 0)           echo "FAIL 9\n";
-
-if ($t->conv('R', 'C', 509.67) != 10)     echo "FAIL 10\n";
-if ($t->conv('R', 'F', 509.67) != 50)     echo "FAIL 11\n";
-if ($t->conv('R', 'K', 509.67) != 283.15) echo "FAIL 12\n"; //XXX
-
-//FIXME: some checks fail (5,6,12) but they return correct value. datatype issue??
 
 ?>
