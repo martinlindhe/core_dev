@@ -47,6 +47,14 @@ class xhtml_form
 	}
 
 	/**
+	 * Adds a hidden input field to the form
+	 */
+	function hidden($name, $val)
+	{
+		$this->elems[] = array('type' => 'HIDDEN', 'name' => $name, 'value' => $val);
+	}
+
+	/**
 	 * Adds a input field to the form
 	 */
 	function input($name, $str, $default = '')
@@ -107,6 +115,10 @@ class xhtml_form
 		foreach ($this->elems as $e) {
 			echo '<tr>';
 			switch ($e['type']) {
+			case 'HIDDEN':
+				echo xhtmlHidden($e['name'], $e['value']);
+				break;
+
 			case 'INPUT':
 				echo '<td>'.$e['str'].':</td>';
 				echo '<td>'.xhtmlInput($e['name'], $e['default']).'</td>';
