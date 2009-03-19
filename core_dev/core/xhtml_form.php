@@ -11,8 +11,8 @@ require_once('output_xhtml.php');
 
 class xhtml_form
 {
-	var $enctype = '';	//TODO: set multipart type if form contains file upload parts
-	var $handler = '';
+	var $enctype = '';     ///< TODO: set multipart type if form contains file upload parts
+	var $handled = false;  ///< is set to true when form data has been processed by callback function
 	var $name    = '';
 
 	var $elems = array();
@@ -27,7 +27,23 @@ class xhtml_form
 	 */
 	function handler($func)
 	{
-		$this->handler = $func;
+		$this->handled = false;
+
+		if (!$func || !function_exists($func)) {
+			die('FATAL: xhtml_form() does not have a defined data handler');
+		}
+
+		if (!empty($_POST)) {
+			if (call_user_func($func, $_POST)) {
+				//TODO: customize success message
+				echo 'Form data processed successfully!<br/>';
+				$this->handled = true;
+				return;
+			} else {
+				//TODO: fill in form with previous entered data
+				echo 'Failed to process form data!<br/>';
+			}
+		}
 	}
 
 	/**
@@ -80,20 +96,7 @@ class xhtml_form
 	 */
 	function render()
 	{
-		if (!$this->handler || !function_exists($this->handler)) {
-			die('FATAL: xhtml_form() does not have a defined data handler');
-		}
-
-		if (!empty($_POST)) {
-			if (call_user_func($this->handler, $_POST)) {
-				//TODO: customize success message
-				echo 'Form data processed successfully!<br/>';
-				return;
-			} else {
-				//TODO: fill in form with previous entered data
-				echo 'Failed to process form data!<br/>';
-			}
-		}
+		if ($this->handled) return;
 
 		echo xhtmlForm($this->name, '', 'post', $this->enctype);
 

@@ -102,7 +102,6 @@ class Users
 	function validLogin($username, $password)
 	{
 		global $db;
-
  		$q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$db->escape($password).'" AND timeDeleted IS NULL';
 		return $db->getOneRow($q);
 	}
@@ -117,40 +116,45 @@ class Users
 		return $db->getOneItem($q);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 * Looks up a username by id
 	 */
 	function getName($_id)
 	{
-		global $db, $session;
+		global $db, $h;
 
 		if (!is_numeric($_id) || !$_id) return false;
-		if ($_id == $session->id) return $session->username;
+		if ($_id == $h->session->id) return $h->session->username;
 
 		$q = 'SELECT userName FROM tblUsers WHERE userId='.$_id;
 		return $db->getOneItem($q);
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
