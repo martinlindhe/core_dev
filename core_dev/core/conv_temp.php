@@ -24,10 +24,10 @@ class temp
 		//XXX: the rounding is neccesary to work around PHP's handling of floats,
 		//     or some will return .0000000000001 precision which make testcase fail
 		switch ($to) {
-			case 'C': return round($this->toCelcius($from, $val), 10);
-			case 'F': return round($this->toFarenheit($from, $val), 10);
-			case 'K': return round($this->toKelvin($from, $val), 10);
-			case 'R': return round($this->toRankine($from, $val), 10);
+			case 'C': return round($this->toCelcius($from, $val), 8);
+			case 'F': return round($this->toFarenheit($from, $val), 8);
+			case 'K': return round($this->toKelvin($from, $val), 8);
+			case 'R': return round($this->toRankine($from, $val), 8);
 		}
 	}
 

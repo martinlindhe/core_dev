@@ -1,8 +1,6 @@
 <?php
 
-//require_once('/var/www/core_dev/core/core.php');
 require_once('/var/www/core_dev/core/conv_temp.php');
-
 
 $t = new temp();
 
