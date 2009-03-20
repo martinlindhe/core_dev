@@ -31,7 +31,7 @@ class mass
 	{
 		switch ($s) {
 			case 'kg': return $val;
-			case 'lb': return $val * 0.45359237; //XXX verify!
+			case 'lb': return $val * 0.45359237;
 		}
 	}
 
