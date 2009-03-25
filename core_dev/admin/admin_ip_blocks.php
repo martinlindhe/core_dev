@@ -6,7 +6,7 @@
  */
 
 require_once('find_config.php');
-$session->requireSuperAdmin();
+$h->session->requireSuperAdmin();
 
 if (!empty($_GET['remove'])) {
 	//remove ip block

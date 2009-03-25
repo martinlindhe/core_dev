@@ -8,7 +8,7 @@
 require_once('find_config.php');
 require_core('functions_news.php');
 
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 require('design_admin_head.php');
 

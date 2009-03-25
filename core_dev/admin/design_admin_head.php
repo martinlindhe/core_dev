@@ -42,11 +42,11 @@ $super_admin_tools_menu = array(
 );
 
 echo createMenu($admin_menu, 'admin_menu');
-if ($session->isSuperAdmin) {
+if ($h->session->isSuperAdmin) {
 	echo createMenu($super_admin_menu, 'admin_menu');
 	echo createMenu($super_admin_tools_menu, 'admin_menu');
 }
 
-echo '<a href="'.$config['app']['full_url'].$session->start_page.'"> &laquo;&laquo; BACK TO SITE</a><br/><br/>';
+echo '<a href="'.$config['app']['full_url'].$h->session->start_page.'"> &laquo;&laquo; BACK TO SITE</a><br/><br/>';
 
 ?>

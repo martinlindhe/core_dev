@@ -9,8 +9,8 @@ if (empty($_GET['ip'])) $ip = '';
 else $ip = $_GET['ip'];
 
 require_once('find_config.php');
-$session->requireAdmin();
-if (!$ip) $session->requireSuperAdmin();
+$h->session->requireAdmin();
+if (!$ip) $h->session->requireSuperAdmin();
 
 if (empty($_GET['user'])) $user = '';
 else $user = $_GET['user'];

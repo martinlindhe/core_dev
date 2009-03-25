@@ -4,7 +4,7 @@
  */
 
 require_once('find_config.php');
-$session->requireSuperAdmin();
+$h->session->requireSuperAdmin();
 
 require('design_admin_head.php');
 

@@ -5,14 +5,14 @@
 
 require_once('find_config.php');
 
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 require('design_admin_head.php');
 
 function guestbookRow($row, $i)
 {
-	global $session;
-	if ($session->isAdmin && !empty($_GET['gbremove']) && $_GET['gbremove'] == $row['entryId']) {
+	global $h;
+	if ($h->session->isAdmin && !empty($_GET['gbremove']) && $_GET['gbremove'] == $row['entryId']) {
 		removeGuestbookEntry($row['entryId']);
 		$i--;
 		return;
@@ -24,10 +24,10 @@ function guestbookRow($row, $i)
 	$out .= '<td>'.Users::link($row['authorId'], $row['authorName']).' wrote at '.formatTime($row['timeCreated']).' to '.Users::link($row['userId']).'<br/>';
 	if ($row['subject']) $out .= '<b>'.$row['subject'].'</b><br/>';
 	$out .= formatUserInputText($row['body']);
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		$out .= '<br/>'.coreButton('Delete', '?gb&gbremove='.$row['entryId']);
 	}
-	if ($session->isAdmin || $session->id == $row['authorId'] || $session->id == $row['userId']) {
+	if ($h->session->isAdmin || $h->session->id == $row['authorId'] || $h->session->id == $row['userId']) {
 		//FIXME show history between these two users
 		//$out .= '<a href="">History</a>';
 	}
@@ -38,9 +38,9 @@ function guestbookRow($row, $i)
 
 function messageRow($row, $i)
 {
-	global $session;
+	global $h;
 
-	if ($session->isAdmin && !empty($_GET['msgremove']) && $_GET['msgremove'] == $row['msgId']) {
+	if ($h->session->isAdmin && !empty($_GET['msgremove']) && $_GET['msgremove'] == $row['msgId']) {
 		markMessageDeleted($row['msgId']);
 		$i--;
 		return;
@@ -58,10 +58,10 @@ function messageRow($row, $i)
 		$out .= '<b>Message is unread</b>';
 	}
 
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		$out .= '<br/>'.coreButton('Delete', '?msg&msgremove='.$row['msgId']);
 	}
-	if ($session->isAdmin || $session->id == $row['fromId'] || $session->id == $row['toId']) {
+	if ($h->session->isAdmin || $h->session->id == $row['fromId'] || $h->session->id == $row['toId']) {
 		//FIXME show history between these two users
 		//$out .= '<a href="">History</a>';
 	}
@@ -72,9 +72,9 @@ function messageRow($row, $i)
 
 function blogRow($row, $i)
 {
-	global $session;
+	global $h;
 
-	if ($session->isAdmin && !empty($_GET['blogremove']) && $_GET['blogremove'] == $row['blogId']) {
+	if ($h->session->isAdmin && !empty($_GET['blogremove']) && $_GET['blogremove'] == $row['blogId']) {
 		deleteBlog($row['blogId']);
 		$i--;
 		return;
@@ -89,7 +89,7 @@ function blogRow($row, $i)
 		$out .= '<b>PRIVATE BLOG!</b><br/>';
 	}
 
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		$out .= '<br/>'.coreButton('Delete', '?blog&blogremove='.$row['blogId']);
 	}
 	$out .= '<br/><br/></td></tr>';
@@ -99,9 +99,9 @@ function blogRow($row, $i)
 
 function chatMessageRow($row, $i)
 {
-	global $session;
+	global $h;
 
-	if ($session->isAdmin && !empty($_GET['chatmsgremove']) && $_GET['chatmsgremove'] == $row['chatId']) {
+	if ($h->session->isAdmin && !empty($_GET['chatmsgremove']) && $_GET['chatmsgremove'] == $row['chatId']) {
 //FIXME: TODO, DELETE CHAT MESSAGES?
 //		markMessageDeleted($row['msgId']);
 		$i--;
@@ -119,10 +119,10 @@ function chatMessageRow($row, $i)
 		$out .= '<b>Message is unread</b>';
 	}
 
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		$out .= '<br/>'.coreButton('Delete', '?msg&chatremove='.$row['chatId']);
 	}
-	if ($session->isAdmin || $session->id == $row['fromId'] || $session->id == $row['toId']) {
+	if ($h->session->isAdmin || $h->session->id == $row['fromId'] || $h->session->id == $row['toId']) {
 		//FIXME show history between these two users
 		//$out .= '<a href="">History</a>';
 	}
@@ -218,7 +218,7 @@ if (isset($_GET['gb'])) {
 	$list = getAllChatMessages($pager['limit']);
 
 	echo xhtmlTable($list, '', 'chatMessageRow');
-	
+
 } else {
 	echo '<h1>Incoming objects</h1>';
 	echo '<a href="?gb">GUESTBOOK</a><br/>';

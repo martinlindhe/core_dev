@@ -4,7 +4,7 @@
  *
  * Users class
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 require_once('atom_visits.php');		//for logVisit()
@@ -130,6 +130,16 @@ class Users
 		return $db->getOneItem($q);
 	}
 
+	/**
+	 * Returns number of users online
+	 */
+	function onlineCnt()
+	{
+		global $db, $h;
+
+		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
+		return $db->getOneItem($q);
+	}
 
 
 
@@ -298,17 +308,6 @@ class Users
 			$q .= $_limit;
 		}
 		return $db->getArray($q);
-	}
-
-	/**
-	 * Returns number of users online
-	 */
-	function onlineCnt()
-	{
-		global $db, $session;
-
-		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
-		return $db->getOneItem($q);
 	}
 
 	/**

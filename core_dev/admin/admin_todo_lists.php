@@ -6,7 +6,7 @@
 die('UNTESTED');
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 require('design_admin_head.php');
 
@@ -25,12 +25,12 @@ if (isset($_POST['changestatus'])) {
 	setTodoItemStatus($itemId, $_POST['changestatus']);
 
 	if ($_POST['changestatus'] == TODO_ITEM_ASSIGNED) {
-		assignTodoItem($itemId, $session->id);
-		$comment ='Status changed from '.$todo_item_status[$item['itemStatus'] ].' to '.$todo_item_status[ $_POST['changestatus']].' by '.$session->username.'.<br/>';
+		assignTodoItem($itemId, $h->session->id);
+		$comment ='Status changed from '.$todo_item_status[$item['itemStatus'] ].' to '.$todo_item_status[ $_POST['changestatus']].' by '.$h->session->username.'.<br/>';
 		$comment.='(Meaning item is now assigned to '.$_SESSION['userName'].').';
-		$item['assignedTo'] = $session->id; //update changes
+		$item['assignedTo'] = $h->session->id; //update changes
 	} else {
-		$comment='Status changed from '.$todo_item_status[$item['itemStatus'] ].' to '.$todo_item_status[ $_POST['changestatus']].' by '.$session->username.'.';
+		$comment='Status changed from '.$todo_item_status[$item['itemStatus'] ].' to '.$todo_item_status[ $_POST['changestatus']].' by '.$h->session->username.'.';
 	}
 	$item['itemStatus'] = $_POST['changestatus']; //update changes
 	addComment(CATEGORY_TODOLIST, $itemId, $comment);
@@ -41,12 +41,12 @@ if (isset($_POST['changestatus'])) {
 	$item['itemStatus'] = TODO_ITEM_ASSIGNED; //update changes
 	$item['assignedTo'] = $_POST['assignto']; //update changes
 
-	$comment = $session->username.' assigned the task to '.Users::getName($_POST['assignto']).'.';
+	$comment = $h->session->username.' assigned the task to '.Users::getName($_POST['assignto']).'.';
 	addComment(CATEGORY_TODOLIST, $itemId, $comment);
 
 } else if (isset($_GET['unassign'])) {
 	//Unassign item
-	if ($item['assignedTo'] == $session->id) {
+	if ($item['assignedTo'] == $h->session->id) {
 		unassignTodoItem($itemId);
 
 		$comment = $_SESSION['userName'].' unassigned himself from the task.';
@@ -98,7 +98,7 @@ echo '<tr><td>Assigned to:&nbsp;</td>';
 			$admins = Users::getAdmins();
 			foreach ($admins as $arow) {
 				echo '<option value="'.$arow['userId'].'"';
-				if ($arow['userId'] == $session->id) echo ' selected';
+				if ($arow['userId'] == $h->session->id) echo ' selected';
 				echo '>'.$arow['userName'];
 			}
 			echo '</select> <input type="submit" class="button" value="Assign">';
@@ -107,7 +107,7 @@ echo '<tr><td>Assigned to:&nbsp;</td>';
 		}
 	} else {
 		echo Users::link($item['assignedTo']);
-		if ($item['assignedTo'] == $session->id) {
+		if ($item['assignedTo'] == $h->session->id) {
 			echo ', <a href="'.$_SERVER['PHP_SELF'].'?id='.$itemId.'&unassign=1">unassign</a>';
 		} else {
 			echo ', only he can unassign himself.';

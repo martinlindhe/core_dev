@@ -4,7 +4,7 @@
  */
 
 require_once('find_config.php');
-$session->requireSuperAdmin();
+$h->session->requireSuperAdmin();
 
 $allowHTML = 0;
 $regRequire = 0;
@@ -26,7 +26,7 @@ require('design_admin_head.php');
 
 echo '<h1>Userdata fields</h1>';
 
-if (!$auth->userdata) {
+if (!$h->user->userdata) {
 	echo 'Userdata not enabled for this application.';
 	require('design_admin_foot.php');
 	die;

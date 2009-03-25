@@ -6,7 +6,7 @@
 die('UNTESTED');
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 $pr = $_POST['pr'];
 $prData = getTodoItem($pr);

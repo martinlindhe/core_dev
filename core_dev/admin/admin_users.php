@@ -4,14 +4,14 @@
  */
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 require('design_admin_head.php');
 
-if ($session->isSuperAdmin && !empty($_GET['del'])) {
+if ($h->session->isSuperAdmin && !empty($_GET['del'])) {
 	Users::removeUser($_GET['del']);
 }
-if ($session->isSuperAdmin && !empty($_GET['del_block'])) {
+if ($h->session->isSuperAdmin && !empty($_GET['del_block'])) {
 	removeBlock(BLOCK_USERID, $_GET['del_block']);
 }
 
@@ -80,7 +80,7 @@ if (isset($_GET['notactivated'])) {
 
 } else if (isset($_GET['online'])) {
 	echo '<h1>Users online</h1>';
-	echo 'Was active in the last '.shortTimePeriod($session->online_timeout).'<br/><br/>';
+	echo 'Was active in the last '.shortTimePeriod($h->session->online_timeout).'<br/><br/>';
 
 	$cnt = Users::onlineCnt();
 
@@ -118,7 +118,7 @@ if (isset($list)) {
 	echo '<th>Username</th>';
 	$email = $cell = $birth = false;
 
-	if ($auth->userdata) {
+	if ($h->user->userdata) {
 		$email = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 		$cell = getUserdataFieldIdByType(USERDATA_TYPE_CELLPHONE); // TODO: Make this work
 		$birth = getUserdataFieldIdByType(USERDATA_TYPE_BIRTHDATE); // TODO: Make this work
@@ -134,7 +134,7 @@ if (isset($list)) {
 		echo '<th>Birthdate</th>';
 	}
 	echo '<th>Time created</th>';
-	if (isset($_GET['notactivated']) && $auth->mail_activate) {
+	if (isset($_GET['notactivated']) && $h->auth->mail_activate) {
 		echo '<th>Activation code</th>';
 	}
 	if (isset($_GET['activated'])) {
@@ -161,7 +161,7 @@ if (isset($list)) {
 			echo '<td>'.loadUserdataBirthdate($row['userId']).'</td>';
 		}
 		echo '<td>'.$row['timeCreated'].'</td>';
-		if (isset($_GET['notactivated']) && $auth->mail_activate) {
+		if (isset($_GET['notactivated']) && $h->auth->mail_activate) {
 			echo '<td>'.(getActivationCode(ACTIVATE_EMAIL,$row['userId'])?getActivationCode(ACTIVATE_EMAIL,$row['userId']):getActivationCode(ACTIVATE_SMS,$row['userId'])).'</td>';
 		}
 		if (isset($_GET['activated'])) {
@@ -172,9 +172,9 @@ if (isset($list)) {
 		}
 
 		echo '<td>';
-		if (!isset($_GET['blocked']) && $session->isSuperAdmin && $session->id != $row['userId'] && !$row['timeDeleted']) {
+		if (!isset($_GET['blocked']) && $h->session->isSuperAdmin && $h->session->id != $row['userId'] && !$row['timeDeleted']) {
 			echo coreButton('Delete', '?del='.$row['userId']);
-		} else if (isset($_GET['blocked']) && $session->isSuperAdmin) {
+		} else if (isset($_GET['blocked']) && $h->session->isSuperAdmin) {
 			echo coreButton('Delete', '?del_block='.$row['userId']);
 		}
 		else echo '&nbsp;';

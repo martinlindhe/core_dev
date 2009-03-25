@@ -4,14 +4,14 @@
  */
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 $userId = $_GET['id'];
 
 require('design_admin_head.php');
 
-if ($session->isSuperAdmin) {
+if ($h->session->isSuperAdmin) {
 	if (isset($_GET['delete'])) Users::removeUser($userId);
 	if (isset($_GET['block'])) addBlock(BLOCK_USERID, $userId);
 	if (!empty($_POST['chgpwd'])) {
@@ -28,7 +28,7 @@ if (!Users::exists($userId)) {
 
 echo '<h1>User admin for '.Users::getName($userId).'</h1>';
 
-if ($session->isSuperAdmin) {
+if ($h->session->isSuperAdmin) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;delete">Delete user</a><br/><br/>';
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;block">Block user</a><br/><br/>';
 

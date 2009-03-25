@@ -6,7 +6,7 @@
 die('UNTESTED');
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 if (!isset($_GET['id'])) {
 	header('Location: admin_bug_reports.php');

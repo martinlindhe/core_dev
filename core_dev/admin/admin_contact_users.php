@@ -4,7 +4,7 @@
  */
 
 require_once('find_config.php');
-$session->requireSuperAdmin();
+$h->session->requireSuperAdmin();
 
 require('design_admin_head.php');
 
@@ -39,7 +39,7 @@ echo '<br/><input type="checkbox" name="all" value="1"> Alla';
 $list = getUserdataFields();
 echo '<table>';
 foreach ($list as $row) {
-	if ($row['private'] && !$session->isAdmin) continue;
+	if ($row['private'] && !$h->session->isAdmin) continue;
 
 	echo '<tr'.($row['private']?' class="critical"':'').'>';
 	echo getUserdataSearch($row);

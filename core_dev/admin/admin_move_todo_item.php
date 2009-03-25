@@ -6,7 +6,7 @@
 die('UNTESTED');
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 $itemId = $_GET['id'];
 

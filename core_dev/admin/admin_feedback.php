@@ -4,7 +4,7 @@
  */
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 require('design_admin_head.php');
 
@@ -42,7 +42,7 @@ if (!empty($_GET['reply']) && is_numeric($_GET['reply'])) {
 
 		$text = "In response to:\n".
 				"\"".$msg['body']."\"\n".
-				"\n\n\n----------------------\n- Best regards\n- Administrator ".$session->username;
+				"\n\n\n----------------------\n- Best regards\n- Administrator ".$h->session->username;
 	} else {
 		echo 'Publish a public reply to message from '.Users::link($msg['userId']).':<br/>';
 		echo '<b>'.$msg['body'].'</b>';

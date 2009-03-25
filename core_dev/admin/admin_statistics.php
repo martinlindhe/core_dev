@@ -4,7 +4,7 @@
  */
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 require_core('functions_statistics.php');
 

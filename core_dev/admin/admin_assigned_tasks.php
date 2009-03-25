@@ -6,7 +6,7 @@
 die('UNTESTED');
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 require('design_admin_head.php');
 
@@ -17,7 +17,7 @@ echo 'for each task, so other developers can see how things progress.<br/><br/>'
 if (isset($_GET['closed'])) {
 	echo '<b>OBSERVE: THIS IS YOUR CLOSED TASKS!</b><br/><br/>';
 
-	$list = getClosedAssignedTasks($session->id);
+	$list = getClosedAssignedTasks($h->session->id);
 	foreach ($list as $row) {
 		echo sprintf('PR%04d: ', $row['itemId']);
 		echo '<a href="admin_todo_lists.php?id='.$row['itemId'].'">'.$row['itemDesc'].'</a> ('.getTodoCategoryName($row['categoryId']).')<br/>';
@@ -28,14 +28,14 @@ if (isset($_GET['closed'])) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'">&raquo; Show your UNCLOSED assigned tasks</a><br/>';
 	echo '<a href="admin_current_work.php">&raquo; Back to current work</a><br/>';
 } else {
-	$list = getAssignedTasks($session->id);
+	$list = getAssignedTasks($h->session->id);
 	foreach ($list as $row) {
 		echo sprintf('PR%04d: ', $row['itemId']);
 		echo '<a href="admin_todo_lists.php?id='.$row['itemId'].'">'.$row['itemDesc'].'</a> ('. getTodoCategoryName($row['categoryId']).')<br/>';
 	}
 
 	echo '<br/>';
-	$closedtasks = getClosedAssignedTasksCount($session->id);
+	$closedtasks = getClosedAssignedTasksCount($h->session->id);
 	echo '<b>You have '.count($list).' assigned tasks</b> (excluding '.$closedtasks.' CLOSED tasks).<br/><br/>';
 	if ($closedtasks) {
 		echo '<a href="'.$_SERVER['PHP_SELF'].'?closed">&raquo; Show your CLOSED assigned tasks</a><br/>';

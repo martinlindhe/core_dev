@@ -4,14 +4,14 @@
  */
 
 require_once('find_config.php');
-$session->requireAdmin();
+$h->session->requireAdmin();
 
 require('design_admin_head.php');
 
 echo '<h1>List users</h1>';
 echo 'As a super admin, you can upgrade users to other user levels, or remove them from the system from this page.<br/><br/>';
 
-if ($session->isSuperAdmin && !empty($_GET['del'])) {
+if ($h->session->isSuperAdmin && !empty($_GET['del'])) {
 	Users::removeUser($_GET['del']);
 }
 
@@ -21,7 +21,7 @@ if (!empty($_POST['usearch'])) $usermatch = $_POST['usearch'];
 $mode = 0;
 if (!empty($_GET['mode'])) $mode = $_GET['mode'];
 
-if ($session->isSuperAdmin && !empty($_POST)) {
+if ($h->session->isSuperAdmin && !empty($_POST)) {
 	$list = Users::getUsers($mode);
 	foreach ($list as $row) {
 		if (empty($_POST['mode_'.$row['userId']])) continue;
@@ -32,7 +32,7 @@ if ($session->isSuperAdmin && !empty($_POST)) {
 	}
 
 	if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode'])) {
-		$newUserId = $auth->registerUser($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
+		$newUserId = $h->user->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
 		if (!is_numeric($newUserId)) {
 			echo '<div class="critical">'.$newUserId.'</div>';
 		} else {
@@ -54,7 +54,7 @@ $list = Users::getUsers($mode, $pager['limit'], $usermatch);
 
 echo $pager['head'];
 
-if ($session->isSuperAdmin) echo '<form method="post" action="">';
+if ($h->session->isSuperAdmin) echo '<form method="post" action="">';
 echo '<table summary="" border="1">';
 echo '<tr>';
 echo '<th>Username</th>';
@@ -69,14 +69,14 @@ foreach ($list as $user)
 	echo '<td>'.$user['timeLastActive'].'</td>';
 	echo '<td>'.$user['timeCreated'].'</td>';
 	echo '<td>';
-	if ($session->isSuperAdmin) {
+	if ($h->session->isSuperAdmin) {
 		echo '<select name="mode_'.$user['userId'].'">';
 		echo '<option value="'.USERLEVEL_NORMAL.'"'.($user['userMode']==USERLEVEL_NORMAL?' selected="selected"':'').'>Normal</option>';
 		echo '<option value="'.USERLEVEL_WEBMASTER.'"'.($user['userMode']==USERLEVEL_WEBMASTER?' selected="selected"':'').'>Webmaster</option>';
 		echo '<option value="'.USERLEVEL_ADMIN.'"'.($user['userMode']==USERLEVEL_ADMIN?' selected="selected"':'').'>Admin</option>';
 		echo '<option value="'.USERLEVEL_SUPERADMIN.'"'.($user['userMode']==USERLEVEL_SUPERADMIN?' selected="selected"':'').'>Super admin</option>';
 		echo '</select> ';
-		if ($session->id != $user['userId'] && !$user['timeDeleted']) {
+		if ($h->session->id != $user['userId'] && !$user['timeDeleted']) {
 			echo coreButton('Delete', '?del='.$user['userId']);
 		}
 	} else {
@@ -88,7 +88,7 @@ foreach ($list as $user)
 echo '<tr>';
 echo '<td colspan="3">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
 echo '<td>';
-if ($session->isSuperAdmin) {
+if ($h->session->isSuperAdmin) {
 	echo '<select name="u_mode">';
 	echo '<option value="'.USERLEVEL_NORMAL.'">Normal</option>';
 	echo '<option value="'.USERLEVEL_WEBMASTER.'">Webmaster</option>';
@@ -102,7 +102,7 @@ echo '</td>';
 echo '</tr>';
 echo '</table>';
 
-if ($session->isSuperAdmin) {
+if ($h->session->isSuperAdmin) {
 	echo xhtmlSubmit('Save changes');
 	echo '</form>';
 }

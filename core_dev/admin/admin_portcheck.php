@@ -4,7 +4,7 @@
  */
 
 require_once('find_config.php');
-$session->requireSuperAdmin();
+$h->session->requireSuperAdmin();
 
 $error = '';
 $port = 0;
