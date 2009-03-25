@@ -39,7 +39,7 @@ function showLoginForm()
 	$error = $h->error;
 
 	//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
-	if ($forgot_pwd && !$session->id && isset($_POST['forgot_pwd'])) {
+	if ($forgot_pwd && !$h->session->id && isset($_POST['forgot_pwd'])) {
 		$check = $h->auth->handleForgotPassword($_POST['forgot_pwd']);
 		if (!$check) {
 			$error = t('The specified email address does not match any registered user.');
@@ -100,11 +100,11 @@ function showLoginForm()
 				echo '<tr>'.
 						'<td>'.t('Username').':</td>'.
 						'<td>'.xhtmlInput('register_usr', !empty($_POST['register_usr']) ? $_POST['register_usr'] : '').' '.
-							'<img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
+							xhtmlImage($config['core']['web_root'].'gfx/icon_user.png', t('Username')).
 						'</td>'.
 					'</tr>';
-				echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
-				echo '<tr><td>'.t('Again').':</td><td>'.xhtmlPassword('register_pwd2').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
+				echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' '.xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Password')).'</td></tr>';
+				echo '<tr><td>'.t('Again').':</td><td>'.xhtmlPassword('register_pwd2').' '.xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Repeat password')).'</td></tr>';
 				if ($h->user->userdata) {
 					showRequiredUserdataFields();
 				}
@@ -124,10 +124,11 @@ function showLoginForm()
 
 	if ($forgot_pwd) {
 		echo '<div id="login_forgot_pwd_layer"'.($tab!='forgot_pwd'?' style="display: none;"':'').'>';
-
+/*
+ *  * XXX FIXME how to read resetpwd_sent
 		if ($this->resetpwd_sent) {
 			echo t('A email has been sent to your mail address with instructions how to reclaim your account.');
-		} else {
+		} else */{
 			echo xhtmlForm();
 			echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 			echo 'You will recieve an e-mail with a link to follow,<br/>';

@@ -8,7 +8,9 @@
 require_once('atom_categories.php');	//for multi-choise userdata types
 require_once('functions_textformat.php');	//for ValidEmail()
 require_once('validate_ssn.php');	//to validate swedish ssn's
-require_once('class.ZipLocation.php');	//for location datatype
+require_once('class.ZipLocation.php');	//for location datatyper
+require_once('output_xhtml.php');
+
 
 /* Userdata field types */
 define('USERDATA_TYPE_TEXT',				1);
@@ -225,7 +227,12 @@ function getUserdataInput($row, $fill = false)
 		case USERDATA_TYPE_EMAIL:
 		case USERDATA_TYPE_TEXT:
 			$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
-			$result .= '<input name="userdata_'.$fieldId.'" type="text" value="'.$value.'" size="30" maxlength="50"/>';
+			$result .= xhtmlInput('userdata_'.$fieldId, $value, 20, 50);
+			if ($row['fieldType'] == USERDATA_TYPE_EMAIL) {
+				$result .= ' '.xhtmlImage($config['core']['web_root'].'gfx/icon_mail.png', t('E-mail')).'<br/>';
+				//$result .= '<div id="email_valid_'.$fieldId.'">dskksks</div>';	//XXX show email input status (invalid, taken)
+
+			}
 			if ($row['private']) $result .= '<br/>'.t('This setting is hidden from other users.');
 			$result .= '</td>';
 			break;
