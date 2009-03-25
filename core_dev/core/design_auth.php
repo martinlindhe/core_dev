@@ -5,6 +5,8 @@
  * Default functions for auth drivers
  */
 
+//TODO: implement ajax callbacks for showRegisterForm() to warn about taken username, taken email address
+//TODO: js validation functions in showRegisterForm() to warn about invalid email format and incorrect repeated password
 //TODO: update changePasswordForm()
 //TODO: update resetPassword()
 
