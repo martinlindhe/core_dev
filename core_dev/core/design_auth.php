@@ -62,8 +62,18 @@ function showLoginForm()
 	echo xhtmlForm('login_form');
 
 	echo '<table cellpadding="2">';
-	echo '<tr><td>'.t('Username').':</td><td>'.xhtmlInput('login_usr').' <img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/></td></tr>';
-	echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('login_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+	echo '<tr>'.
+			'<td>'.t('Username').':</td>'.
+			'<td>'.xhtmlInput('login_usr').' '.
+				xhtmlImage($config['core']['web_root'].'gfx/icon_user.png', t('Username')).
+			'</td>'.
+		'</tr>';
+	echo '<tr>'.
+			'<td>'.t('Password').':</td>'.
+			'<td>'.xhtmlPassword('login_pwd').' '.
+				xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Password')).
+			'</td>'.
+		'</tr>';
 	echo '</table>';
 	echo '<br/>';
 	echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
@@ -103,8 +113,16 @@ function showLoginForm()
 							xhtmlImage($config['core']['web_root'].'gfx/icon_user.png', t('Username')).
 						'</td>'.
 					'</tr>';
-				echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' '.xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Password')).'</td></tr>';
-				echo '<tr><td>'.t('Again').':</td><td>'.xhtmlPassword('register_pwd2').' '.xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Repeat password')).'</td></tr>';
+				echo '<tr><td>'.t('Password').':</td>'.
+						'<td>'.xhtmlPassword('register_pwd').' '.
+							xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Password')).
+						'</td>'.
+					'</tr>';
+				echo '<tr><td>'.t('Again').':</td>'.
+						'<td>'.xhtmlPassword('register_pwd2').' '.
+							xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Repeat password')).
+						'</td>'.
+					'</tr>';
 				if ($h->user->userdata) {
 					showRequiredUserdataFields();
 				}
