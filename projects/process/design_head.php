@@ -14,25 +14,25 @@ createXHTMLHeader();
 <?php
 
 $menu = array(
-	'index.php' => 'Home',
-	'show_files.php' => 'Show uploaded files',
-	'show_queue.php' => 'Show work queue'
+	'index.php' => 'Home'
 );
 createMenu($menu);
+
+if ($session->id) {
+	$menu = array(
+		'show_files.php' => 'Show uploaded files',
+		'show_queue.php' => 'Show work queue',
+		'http_upload.php' => 'Upload file',
+		'http_download.php' => 'Request a fetch',
+		'?logout' => 'Logout');
+	createMenu($menu);
+}
 
 if ($session->isAdmin) {
 	$menu = array(
 		'process_queue.php' => 'FORCE process',
 		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
 	);
-	createMenu($menu);
-}
-
-if ($session->id) {
-	$menu = array(
-		'http_upload.php' => 'Upload file',
-		'http_download.php' => 'Request a fetch',
-		'?logout' => 'Logout');
 	createMenu($menu);
 }
 ?>
