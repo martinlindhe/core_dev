@@ -10,7 +10,7 @@ class SOAP_ProcessService
 	function fetchAndConvert($username, $password, $uri, $callback, $watermark_uri)
 	{
 		$customerId = getCustomerId($username, $password);
-		if (!$customerId) return false;
+		if (!$customerId || empty($uri)) return false;
 
 		$id = addProcessEvent(PROCESS_FETCH, $customerId, $uri);
 		$params['callback'] = $callback;
