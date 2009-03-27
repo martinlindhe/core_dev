@@ -137,7 +137,7 @@ class Users
 	{
 		global $db, $h;
 
-		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL'.
+		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL';
 		$q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
 		return $db->getOneItem($q);
 	}
