@@ -40,7 +40,7 @@ function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $
 	if ($lat < -90.0 || $lat > 90.0 || $long < -180.0 || $long > 180.0) return false;
 	if ($width < 0 || $width > 640 || $height < 0 || $height > 640) return false;
 	if ((is_numeric($zoom) && ($zoom < 0 || $zoom > 19)) || is_string($zoom) && $zoom != 'auto') return false;
-	if (empty($config['google_maps']['api_key'])) return false;
+	if (empty($config['google_maps']['api_key'])) die('google maps api_key not set!');
 
 	$url = 'http://maps.google.com/staticmap'.
 		'?center='.$lat.','.$long.

@@ -137,11 +137,24 @@ class Users
 	{
 		global $db, $h;
 
-		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
+		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL'.
+		$q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
 		return $db->getOneItem($q);
 	}
 
+	/**
+	 * Returns array of all users online
+	 */
+	function allOnline($_limit = '')
+	{
+		global $db, $h;
 
+		$q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL';
+		$q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
+		$q .= ' ORDER BY timeLastActive DESC';
+		if (!empty($_limit)) $q .= $_limit;
+		return $db->getArray($q);
+	}
 
 
 
@@ -292,21 +305,6 @@ class Users
 
 		$q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL ORDER BY timeLastLogin DESC';
 		$q .= ' LIMIT 0,'.$_limit;
-		return $db->getArray($q);
-	}
-
-	/**
-	 * Returns array of all users online
-	 */
-	function allOnline($_limit = '')
-	{
-		global $db, $session;
-
-		$q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
-		$q .= ' ORDER BY timeLastActive DESC';
-		if (!empty($_limit)) {
-			$q .= $_limit;
-		}
 		return $db->getArray($q);
 	}
 
