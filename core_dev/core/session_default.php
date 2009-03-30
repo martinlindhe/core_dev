@@ -57,9 +57,13 @@ class session_default extends session_base
 		if (isset($conf['error_page'])) $this->error_page = $conf['error_page'];
 		if (isset($conf['allow_themes'])) $this->allow_themes = $conf['allow_themes'];
 
-		//enable garbage collector
-		ini_set('session.gc_probability', 1);
-		ini_set('session.gc_divisor', 1);
+		//ini_set('session.gc_probability', 1);
+		//ini_set('session.gc_divisor', 1);
+
+		//disable garbage collector to work around ubuntu/debian bug, see:
+		//   http://forum.kohanaphp.com/comments.php?DiscussionID=565
+		ini_set('session.gc_probability', 0);
+
 		ini_set('session.gc_maxlifetime', $this->timeout);
 
 		session_name($this->session_name);
