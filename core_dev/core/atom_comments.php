@@ -173,7 +173,7 @@ function getComment($commentId)
  */
 function getCommentsByOwner($_type, $ownerId)
 {	//FIXME remove, this is already implemented with getComments()
-	global $db, $files;
+	global $db, $h;
 	if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
 	$q  = 'SELECT t1.*,t2.userName FROM tblComments AS t1 ';
@@ -183,7 +183,7 @@ function getCommentsByOwner($_type, $ownerId)
 
 	$result = array();
 	foreach ($list as $row) {
-		if ($_type == COMMENT_FILE && $files->getUploader($row['ownerId']) == $ownerId) {
+		if ($_type == COMMENT_FILE && $h->files->getUploader($row['ownerId']) == $ownerId) {
 			$result[] = $row;
 		}
 	}
@@ -252,7 +252,7 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 	if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 		//let users delete comments belonging to their files
 		if ($h->session->isAdmin ||
-			($_type == COMMENT_FILE && Files::getOwner($ownerId) == $h->session->id)
+			($_type == COMMENT_FILE && $h->files->getOwner($ownerId) == $h->session->id)
 		) {
 			deleteComment($_GET['delete']);	//FIXME: comment typ!
 			unset($_GET['delete']);
@@ -333,7 +333,7 @@ function showComment($row)
 		//allow users to delete their own comments
 		$h->session->id == $row['userId'] ||
 		//allow users to delete comments on their files
-		($row['commentType'] == COMMENT_FILE && Files::getOwner($row['ownerId']) == $h->session->id)
+		($row['commentType'] == COMMENT_FILE && $h->files->getOwner($row['ownerId']) == $h->session->id)
 	) {
 		echo ' | ';
 		echo coreButton('Delete', URLadd('delete', $row['commentId']) );
