@@ -4,13 +4,13 @@
  */
 
 require_once('config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
 require('design_head.php');
 
 if (!empty($_POST['url'])) {
 	//FIXME: en isURL() funktion som kollar om strängen är en valid url
-	$eventId = addProcessEvent(PROCESS_FETCH, $session->id, $_POST['url']);
+	$eventId = addProcessEvent(PROCESS_FETCH, $h->session->id, $_POST['url']);
 
 	echo '<div class="okay">URL to process has been enqueued.</div><br/>';
 	echo '<a href="http_enqueue.php?id='.$eventId.'">Click here</a> to perform further actions on this file.';

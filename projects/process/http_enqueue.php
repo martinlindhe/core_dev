@@ -1,7 +1,7 @@
 <?php
 
 require_once('config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) die('no id');
 $eventId = $_GET['id'];
@@ -13,15 +13,15 @@ require('design_head.php');
 
 $added = false;
 if (!empty($_POST['dst_audio_fmt'])) {
-	$added = addProcessEvent(PROCESSQUEUE_AUDIO_RECODE, $session->id, $fileId, $_POST['dst_audio_fmt']);
+	$added = addProcessEvent(PROCESSQUEUE_AUDIO_RECODE, $h->session->id, $fileId, $_POST['dst_audio_fmt']);
 } else if (!empty($_POST['dst_image_fmt'])) {
-	$added = addProcessEvent(PROCESSQUEUE_IMAGE_RECODE, $session->id, $fileId, $_POST['dst_image_fmt']);
+	$added = addProcessEvent(PROCESSQUEUE_IMAGE_RECODE, $h->session->id, $fileId, $_POST['dst_image_fmt']);
 } else if (!empty($_POST['dst_video_fmt'])) {
-	$added = addProcessEvent(PROCESSQUEUE_VIDEO_RECODE, $session->id, $fileId, $_POST['dst_video_fmt']);
+	$added = addProcessEvent(PROCESSQUEUE_VIDEO_RECODE, $h->session->id, $fileId, $_POST['dst_video_fmt']);
 } else if (isset($_GET['process'])) {
-	$added = addProcessEvent(PROCESSPARSE_AND_FETCH, $session->id, $fileId);
+	$added = addProcessEvent(PROCESSPARSE_AND_FETCH, $h->session->id, $fileId);
 } else if (!empty($_POST['unfetched_process']) && $_POST['unfetched_process'] == 'convert') {
-	$added = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $session->id, $eventId);
+	$added = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $h->session->id, $eventId);
 }
 
 if ($added) {
@@ -116,9 +116,9 @@ if ($event['orderType'] == PROCESS_FETCH) {
 	} else if ($data['fileMime'] == 'text/html') {
 		//extract video links from the html
 		echo '<h1>extract videos from html</h1>';
-			
+
 		echo 'todo: show found video links from html and allow user to choose which ones to queue for download';
-			
+
 		$arr = extract_filenames(file_get_contents($files->getFileInfo($fileId)));
 		d($arr);
 	} else {

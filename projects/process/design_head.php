@@ -18,7 +18,7 @@ $menu = array(
 );
 createMenu($menu);
 
-if ($session->id) {
+if ($h->session->id) {
 	$menu = array(
 		'show_files.php' => 'Show uploaded files',
 		'show_queue.php' => 'Show work queue',
@@ -28,7 +28,7 @@ if ($session->id) {
 	createMenu($menu);
 }
 
-if ($session->isAdmin) {
+if ($h->session->isAdmin) {
 	$menu = array(
 		'process_queue.php' => 'FORCE process',
 		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'

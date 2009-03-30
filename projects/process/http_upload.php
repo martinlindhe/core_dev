@@ -1,14 +1,14 @@
 <?php
 
 require_once('config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
 set_time_limit(60*10);	//10 minute max, for big uploads
 
 require('design_head.php');
 
 if (!empty($_FILES['file2'])) {
-	$eventId = addProcessEvent(PROCESS_UPLOAD, $session->id, $_FILES['file2']);
+	$eventId = addProcessEvent(PROCESS_UPLOAD, $h->session->id, $_FILES['file2']);
 	if ($eventId) {
 		echo '<div class="okay">Your file has been uploaded successfully!</div><br/>';
 		echo '<a href="http_enqueue.php?id='.$eventId.'">Click here</a> to perform further actions on this file.';

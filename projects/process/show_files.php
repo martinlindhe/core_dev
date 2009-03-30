@@ -1,7 +1,7 @@
 <?php
 
 require_once('config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
 require('design_head.php');
 
@@ -15,7 +15,7 @@ echo '<input type="checkbox"/> Other ';
 echo '<h1>Uploaded files</h1>';
 showFiles(FILETYPE_PROCESS);
 
-$list = $files->getFileList(FILETYPE_PROCESS);
+$list = $h->files->getFileList(FILETYPE_PROCESS);
 foreach ($list as $row) {
 	echo '<a href="show_file_status.php?id='.$row['fileId'].'">'.$row['fileName'].'</a>';
 	echo ', mime='.$row['fileMime'].' uploaded '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
@@ -24,7 +24,7 @@ foreach ($list as $row) {
 echo '<h1>Converted files:</h1>';
 showFiles(FILETYPE_CLONE_CONVERTED);
 
-$list = $files->getFileList(FILETYPE_CLONE_CONVERTED);
+$list = $h->files->getFileList(FILETYPE_CLONE_CONVERTED);
 foreach ($list as $row) {
 	echo '<a href="show_file_status.php?id='.$row['fileId'].'">Details</a>';
 	echo ', mime='.$row['fileMime'].' created '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';

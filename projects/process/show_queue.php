@@ -1,7 +1,7 @@
 <?php
 
 require_once('config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
 require('design_head.php');
 
@@ -64,12 +64,12 @@ if (!empty($list)) {
 				echo '<a href="show_file_status.php?id='.$row['referId'].'">Show file status</a><br/>';
 			}
 
-			$file = $files->getFileInfo($row['referId']);
+			$file = $h->files->getFileInfo($row['referId']);
 			if ($file) {
 				echo '<h3>Source file:</h3>';
 				echo 'Mime: '.$file['fileMime'].'<br/>';
 				echo 'Size: '.formatDataSize($file['fileSize']).'<br/>';
-				echo 'SHA1: '.$files->sha1($row['referId']).'<br/>';
+				echo 'SHA1: '.$h->files->sha1($row['referId']).'<br/>';
 			}
 		}
 

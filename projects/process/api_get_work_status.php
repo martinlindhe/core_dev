@@ -12,7 +12,7 @@
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) die('x');
 
 require_once('config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
 echo getWorkOrderStatus($_GET['id']);
 ?>

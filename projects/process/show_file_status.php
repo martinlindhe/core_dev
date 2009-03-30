@@ -1,7 +1,7 @@
 <?php
 
 require_once('config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
 //TODO: ability to force recalculation of checksums. verify that the file is on disk
 
