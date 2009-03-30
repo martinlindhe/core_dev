@@ -10,5 +10,5 @@ if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 require_once('find_config.php');
 
-$files->sendFile($_GET['id'], true);
+$h->files->sendFile($_GET['id'], true);
 ?>
