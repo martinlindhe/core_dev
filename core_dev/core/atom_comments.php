@@ -42,7 +42,7 @@ $comment_constants[COMMENT_CUSTOMER]			= 'Customer';
  */
 function addComment($_type, $ownerId, $commentText, $privateComment = false)
 {
-	global $db, $session;
+	global $db, $h;
 	if (!is_numeric($_type) || !is_numeric($ownerId) || !is_bool($privateComment)) return false;
 
 	$commentText = $db->escape(htmlspecialchars($commentText));
@@ -50,8 +50,8 @@ function addComment($_type, $ownerId, $commentText, $privateComment = false)
 	if ($privateComment) $private = 1;
 	else $private = 0;
 
-	if (!empty($session->id)) {
-		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+	if (!empty($h->session->id)) {
+		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$h->session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
 	} else {
 		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId=0, userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
 	}
@@ -63,16 +63,16 @@ function addComment($_type, $ownerId, $commentText, $privateComment = false)
  */
 function updateComment($commentType, $ownerId, $commentId, $commentText)
 {	//FIXME commentId och ownerId parametrarna borde byta plats
-	global $db, $session;
+	global $db, $h;
 	if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_numeric($commentId)) return false;
 
 	$commentText = $db->escape(htmlspecialchars($commentText));
 
 	$q  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).' ';
-	if (empty($session->id)) {
+	if (empty($h->session->id)) {
 		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId=0';
 	} else {
-		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$session->id;
+		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId='.$h->session->id;
 	}
 	$db->update($q);
 }
@@ -84,9 +84,9 @@ function updateComment($commentType, $ownerId, $commentId, $commentText)
  */
 function deleteComment($commentId)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($commentId)) return false;
-	$db->update('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentId='.$commentId);
+	global $db, $h;
+	if (!$h->session->id || !is_numeric($commentId)) return false;
+	$db->update('UPDATE tblComments SET deletedBy='.$h->session->id.',timeDeleted=NOW() WHERE commentId='.$commentId);
 }
 
 /**
@@ -94,10 +94,10 @@ function deleteComment($commentId)
  */
 function deleteComments($commentType, $ownerId)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
+	global $db, $h;
+	if (!$h->session->id || !is_numeric($commentType) || !is_numeric($ownerId)) return false;
 
-	$q = 'UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
+	$q = 'UPDATE tblComments SET deletedBy='.$h->session->id.',timeDeleted=NOW() WHERE commentType='.$commentType.' AND ownerId='.$ownerId;
 	return $db->update($q);
 }
 
@@ -137,13 +137,13 @@ function getCommentFreeTextSearch($text, $_limit_sql = '')
  */
 function getComments($commentType, $ownerId = 0, $privateComments = false, $limit = '')
 {
-	global $db, $session;
+	global $db, $h;
 	if (!is_numeric($commentType) || !is_numeric($ownerId) || !is_bool($privateComments)) return array();
 
 	$q  = 'SELECT t1.*';
-	if (!empty($session->id)) $q .= ',t2.userName';
+	if (!empty($h->session->id)) $q .= ',t2.userName';
 	$q .= ' FROM tblComments AS t1 ';
-	if (!empty($session->id)) $q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
+	if (!empty($h->session->id)) $q .= 'LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId) ';
 	$q .= 'WHERE ';
 	if ($ownerId) $q .= 't1.ownerId='.$ownerId.' AND ';
 	$q .= 't1.commentType='.$commentType.' AND t1.deletedBy=0';
@@ -241,7 +241,7 @@ function getCommentsCountPeriod($type, $dateStart, $dateStop)
  */
 function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15)
 {
-	global $session, $config;
+	global $h, $config;
 	if (!is_numeric($_type) || !is_numeric($ownerId) || !is_numeric($col_w) || !is_numeric($col_h)) return false;
 
 	if (!empty($_POST['cmt_'.$_type])) {
@@ -251,8 +251,8 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 
 	if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 		//let users delete comments belonging to their files
-		if ($session->isAdmin ||
-			($_type == COMMENT_FILE && Files::getOwner($ownerId) == $session->id)
+		if ($h->session->isAdmin ||
+			($_type == COMMENT_FILE && Files::getOwner($ownerId) == $h->session->id)
 		) {
 			deleteComment($_GET['delete']);	//FIXME: comment typ!
 			unset($_GET['delete']);
@@ -276,7 +276,7 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 	if ($cnt >= 5) echo $pager['head'];
 	echo '</div>'; //id="comments_only"
 
-	if ( ($session->id && $_type != COMMENT_MODERATION) ||
+	if ( ($h->session->id && $_type != COMMENT_MODERATION) ||
 			($_type == COMMENT_FILE || $_type == COMMENT_PASTEBIN)
 	) {
 		echo '<form method="post" action="">';
@@ -291,12 +291,12 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 }
 
 /**
- * Shows all comments to objects of $_type owned by $session->id, typically to be used by site admins
+ * Shows all comments to objects of $_type owned by $h->session->id, typically to be used by site admins
  */
 function showAllComments($_type)
 {
-	global $session, $config;
-	if (!$session->id || !is_numeric($_type)) return false;
+	global $h, $config;
+	if (!$h->session->id || !is_numeric($_type)) return false;
 
 	if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 		deleteComment($_GET['delete']);
@@ -308,7 +308,7 @@ function showAllComments($_type)
 			break;
 
 		default:
-			$list = getCommentsByOwner($_type, $session->id);
+			$list = getCommentsByOwner($_type, $h->session->id);
 	}
 
 	foreach ($list as $row) {
@@ -322,18 +322,18 @@ function showAllComments($_type)
  */
 function showComment($row)
 {
-	global $config, $session;
+	global $config, $h;
 	echo '<div class="comment_details">';
 	//echo makeThumbLink($row['ownerId']);
 	echo Users::link($row['userId'], $row['userName']).'<br/>';
 	echo $row['timeCreated'];
 	echo '</div>';
 	echo '<div class="comment_text">'.nl2br($row['commentText']);
-	if ($session->isAdmin ||
+	if ($h->session->isAdmin ||
 		//allow users to delete their own comments
-		$session->id == $row['userId'] ||
+		$h->session->id == $row['userId'] ||
 		//allow users to delete comments on their files
-		($row['commentType'] == COMMENT_FILE && Files::getOwner($row['ownerId']) == $session->id)
+		($row['commentType'] == COMMENT_FILE && Files::getOwner($row['ownerId']) == $h->session->id)
 	) {
 		echo ' | ';
 		echo coreButton('Delete', URLadd('delete', $row['commentId']) );

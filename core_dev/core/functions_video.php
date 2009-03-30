@@ -28,10 +28,10 @@
  */
 function embedVideo($url, $w = 352, $h = 288, $params = array())
 {
-	global $session;
+	global $h;
 	if (!is_numeric($w) || !is_numeric($h)) return false;
 
-	if (strpos($session->user_agent, 'MSIE')) {
+	if (strpos($h->session->user_agent, 'MSIE')) {
 		//Tested in IE 7
 		//FIXME try IE 6
 		$data  = '<object type="application/x-oleobject'.
@@ -68,10 +68,10 @@ function embedVideo($url, $w = 352, $h = 288, $params = array())
  */
 function embedAudio($url, $w = 352)
 {
-	global $session;
+	global $h;
 	if (!is_numeric($w)) return false;
 
-	if (strpos($session->user_agent, 'MSIE')) {
+	if (strpos($h->session->user_agent, 'MSIE')) {
 		$h = 46;
 		//Tested in IE 7
 		//FIXME try IE 6
