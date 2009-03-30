@@ -14,33 +14,33 @@ require_once('atom_rating.php');	//for file rating
  */
 function showFile($fileId, $mime = '', $title = '', $click = true)
 {
-	global $config, $files;
+	global $config, $h;
 	if (!is_numeric($fileId)) return false;
 	if (!$mime) {
-		$data = Files::getFileInfo($fileId);
+		$data = $h->files->getFileInfo($fileId);
 		$mime = $data['fileMime'];
 	}
 
-	if (in_array($mime, $files->image_mime_types)) {
-		if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomImage('.$fileId.',1,'.($files->allow_rating?'1':'0').');"><center>';
+	if (in_array($mime, $h->files->image_mime_types)) {
+		if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomImage('.$fileId.',1,'.($h->files->allow_rating?'1':'0').');"><center>';
 		echo showThumb($fileId);
 		if ($click) echo '</center></div>';
-	} else if (in_array($mime, $files->audio_mime_types)) {
+	} else if (in_array($mime, $h->files->audio_mime_types)) {
 		if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomAudio('.$fileId.',\''.urlencode($title).'\');"><center>';
 		echo '<img src="'.$config['core']['web_root'].'gfx/icon_file_audio.png" width="70" height="70" alt="Audio file"/>';
 		if ($click) echo '</center></div>';
-	} else if (in_array($mime, $files->video_mime_types)) {
+	} else if (in_array($mime, $h->files->video_mime_types)) {
 
 		if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomVideo('.$fileId.',\''.urlencode($title).'\');"><center>';
 		echo '<table cellpadding="0" cellspacing="0" border="0"><tr>';
 		echo '<td width="10" style="background: url(\''.$config['core']['web_root'].'gfx/video_left.png\')">&nbsp;</td>';
 		echo '<td>';
 
-		if ($files->process_callback && $mime != $files->default_video) {
+		if ($h->files->process_callback && $mime != $h->files->default_video) {
 			echo t('Video awaiting conversion.');
 		} else {
 
-			$vid_thumb = $files->getFiles(FILETYPE_CLONE_VIDEOTHUMB10, $fileId);
+			$vid_thumb = $h->files->getFiles(FILETYPE_CLONE_VIDEOTHUMB10, $fileId);
 			if ($vid_thumb) {
 				echo showThumb($vid_thumb[0]['fileId'], '', 64, 64);
 			} else {
@@ -52,7 +52,7 @@ function showFile($fileId, $mime = '', $title = '', $click = true)
 		echo '</tr></table>';
 		if ($click) echo '</center></div>';
 
-	} else if (in_array($mime, $files->document_mime_types)) {
+	} else if (in_array($mime, $h->files->document_mime_types)) {
 		if ($click) echo '<div class="file_gadget_entry" id="file_'.$fileId.'" title="'.$title.'" onclick="zoomFile('.$fileId.');"><center>';
 		echo '<img src="'.$config['core']['web_root'].'gfx/icon_file_document.png" width="40" height="49" alt="Document"/>';
 		if ($click) echo '</center></div>';
@@ -74,7 +74,7 @@ function showFile($fileId, $mime = '', $title = '', $click = true)
  */
 function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 {
-	global $session, $db, $config, $files;
+	global $db, $config, $h;
 	if (!is_numeric($fileType) || !is_numeric($categoryId)) return;
 
 	if (!empty($_GET['cat']) && is_numeric($_GET['cat'])) $categoryId = $_GET['cat'];
@@ -83,24 +83,24 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 		if (!empty($_GET['file_category_id']) && is_numeric($_GET['file_category_id'])) $categoryId = $_GET['file_category_id'];
 	}
 
-	if (($session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
-		$uploadedId = $files->handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
+	if (($h->session->id || $this->anon_uploads) && !empty($_FILES['file1'])) {
+		$uploadedId = $h->files->handleUpload($_FILES['file1'], $fileType, $ownerId, $categoryId);
 		unset($_FILES['file1']);	//to avoid further processing of this file upload elsewhere
 		if (!empty($_POST['fdesc'])) {
 			addComment(COMMENT_FILEDESC, $uploadedId, $_POST['fdesc']);
 		}
 		if ($fileType == FILETYPE_WIKI) {
-			addRevision(REVISIONS_WIKI, $ownerId, 'File uploaded...', now(), $session->id, REV_CAT_FILE_UPLOADED);
+			addRevision(REVISIONS_WIKI, $ownerId, 'File uploaded...', now(), $h->session->id, REV_CAT_FILE_UPLOADED);
 		}
 	}
 
-	$userid = $session->id;
-	$username = $session->username;
+	$userid = $h->session->id;
+	$username = $h->session->username;
 
 	$action = '';
 	if ($categoryId) $action = '?file_category_id='.$categoryId;
 
-	if ($session->error) $session->showError();
+	if ($h->session->error) $h->session->showError();
 
 	echo '<div id="ajax_anim" style="display:none; float:right; background-color: #eee; padding: 5px; border: 1px solid #aaa;">';
 	echo '<img id="ajax_anim_pic" alt="AJAX Loading ..." title="AJAX Loading ..." src="'.$config['core']['web_root'].'gfx/ajax_loading.gif"/></div>';
@@ -152,7 +152,7 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 	}
 	echo '</div>';
 
-	$list = Files::getFiles($fileType, $ownerId, $categoryId);
+	$list = $h->files->getFiles($fileType, $ownerId, $categoryId);
 
 	echo '<div id="filearea_mover" style="display:none">';
 	echo '<form method="post" action=""/>';
@@ -180,8 +180,8 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 	//FIXME: gör ett progress id av session id + random id, så en user kan ha flera paralella uploads
 	//FIXME: stöd anon_uploads ! den ignoreras totalt idag, dvs anon uploads tillåts aldrig
 	if (
-		($fileType == FILETYPE_USERFILE && $session->id == $userid) ||
-		($fileType == FILETYPE_NEWS && $session->isAdmin) ||
+		($fileType == FILETYPE_USERFILE && $h->session->id == $userid) ||
+		($fileType == FILETYPE_NEWS && $h->session->isAdmin) ||
 		($fileType == FILETYPE_WIKI) ||
 		($fileType == FILETYPE_BLOG) ||
 		($fileType == FILETYPE_FILEAREA_UPLOAD)
@@ -189,21 +189,21 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 		$file_upload = true;
 		if ($fileType == FILETYPE_BLOG) {
 			$data = getBlog($ownerId);
-			if ($data['userId'] != $session->id) $file_upload = false;
+			if ($data['userId'] != $h->session->id) $file_upload = false;
 		}
 
 		if ($file_upload) {
 			echo '<div id="file_gadget_upload">';
-			if ($files->allow_user_categories && (
-					($fileType == FILETYPE_USERFILE && !$categoryId && $session->id == $userid) ||
+			if ($h->files->allow_user_categories && (
+					($fileType == FILETYPE_USERFILE && !$categoryId && $h->session->id == $userid) ||
 					$fileType == FILETYPE_WIKI
 			) ) {
 				echo '<input type="button" class="button" value="'.t('New file category').'" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
 			}
 
-			if ($files->apc_uploads) {
-				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$session->id.');">';
-				echo '<input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$session->id.'"/>';
+			if ($h->files->apc_uploads) {
+				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data" onsubmit="return submit_apc_upload('.$h->session->id.');">';
+				echo '<input type="hidden" name="APC_UPLOAD_PROGRESS" value="'.$h->session->id.'"/>';
 			} else {
 				echo '<form name="ajax_file_upload" method="post" action="'.$action.'" enctype="multipart/form-data">';
 			}
@@ -214,14 +214,14 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 			echo xhtmlSubmit('Upload');
 			echo '</form>';
 			echo '</div>';
-			if ($files->apc_uploads) {
+			if ($h->files->apc_uploads) {
 				echo '<div id="file_gadget_apc_progress" style="display:none">';
 				echo '</div>';
 			}
 		}
 	}
 
-	if ($files->allow_user_categories && (
+	if ($h->files->allow_user_categories && (
 		($fileType == FILETYPE_USERFILE && !$categoryId) ||
 		($fileType == FILETYPE_WIKI)
 	) ) {
@@ -235,7 +235,7 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 
 	if (!empty($_GET['focus']) && is_numeric($_GET['focus'])) {
 		echo '<script type="text/javascript">';
-		echo 'zoomImage('.$_GET['focus'].',1,'.($files->allow_rating?'1':'0').');';
+		echo 'zoomImage('.$_GET['focus'].',1,'.($h->files->allow_rating?'1':'0').');';
 		echo '</script>';
 	}
 }
@@ -249,7 +249,7 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
  */
 function showThumbnails($fileType, $categoryId)
 {
-	global $config, $session, $db;
+	global $h, $config, $db;
 	if (!is_numeric($fileType)) return false;
 
 	$list = $db->getArray('SELECT * FROM tblFiles WHERE categoryId='.$categoryId.' AND fileType='.$fileType.' ORDER BY timeUploaded ASC');
@@ -291,9 +291,9 @@ function showThumbnails($fileType, $categoryId)
  */
 function showFileInfo($_id)
 {
-	global $session, $files;
+	global $h;
 
-	$file = $files->getFileInfo($_id);
+	$file = $h->files->getFileInfo($_id);
 	if (!$file) return false;
 
 	$list = getComments(COMMENT_FILEDESC, $_id);
@@ -307,18 +307,18 @@ function showFileInfo($_id)
 	echo t('Uploaded at').': '.formatTime($file['timeUploaded']).' ('.ago($file['timeUploaded']).')<br/>';
 	echo t('Filename').': '.strip_tags($file['fileName']).'<br/>';
 	echo t('Filesize').': '.formatDataSize($file['fileSize']).' ('.$file['fileSize'].' bytes)<br/>';
-	if ($files->count_file_views) echo t('Downloaded').': '.$file['cnt'].' '.t('times').'<br/>';
+	if ($h->files->count_file_views) echo t('Downloaded').': '.$file['cnt'].' '.t('times').'<br/>';
 
-	if (!$session->isAdmin) return;
+	if (!$h->session->isAdmin) return;
 	echo t('Uploader').': '.htmlentities($file['uploaderName']).'<br/>';
 	echo 'Mime type: '.$file['fileMime'].'<br/>';
 
-	if (in_array($file['fileMime'], $files->image_mime_types)) {
+	if (in_array($file['fileMime'], $h->files->image_mime_types)) {
 		//Show additional information for image files
-		list($img_width, $img_height) = getimagesize($files->findUploadPath($_id));
+		list($img_width, $img_height) = getimagesize($h->files->findUploadPath($_id));
 		echo t('Width').': '.$img_width.', '.t('Height').': '.$img_height.'<br/>';
 		echo makeThumbLink($_id);
-	} else if (in_array($file['fileMime'], $files->audio_mime_types) && extension_loaded('id3')) {
+	} else if (in_array($file['fileMime'], $h->files->audio_mime_types) && extension_loaded('id3')) {
 		//Show additional information for audio files
 		echo '<h3>id3 tag</h3>';
 		$id3 = @id3_get_tag($this->findUploadPath($_id), ID3_V2_2);	//XXX: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this
@@ -326,7 +326,7 @@ function showFileInfo($_id)
 	}
 
 	//display checksums, if any
-	$arr = $files->checksums($_id);
+	$arr = $h->files->checksums($_id);
 	echo '<h3>Checksums</h3>';
 	echo '<pre>';
 	echo 'sha1: '.$arr['sha1']."\n";
@@ -342,26 +342,26 @@ function showFileInfo($_id)
  */
 function showImageGadgetXHTML($ownerId)
 {
-	global $config, $session, $files;
+	global $config, $h;
 
 	echo '<div id="zoom_image_layer" style="display:none">';
 	//echo 	'<center>';
 	echo 		'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
 	//FIXME: make it possible to configure what buttons to hide
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 	}
-	if ($session->id == $ownerId || $session->isAdmin) {
+	if ($h->session->id == $ownerId || $h->session->isAdmin) {
 		echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Edit').'" onclick="edit_selected_file()"/>';
 	}
-	if ($session->id != $ownerId) {
+	if ($h->session->id != $ownerId) {
 		echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 	}
 	echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
 
-	if ($session->id == $ownerId || $session->isAdmin) {
+	if ($h->session->id == $ownerId || $h->session->isAdmin) {
 		echo '<div id="slider_toolbar" style="display:none; clear: both">';
 		echo	'<p align="left">';
 		echo	'<div id="resize_slider" style="width:200px;background-color:#aaa;height:5px;margin:10px;">';
@@ -377,7 +377,7 @@ function showImageGadgetXHTML($ownerId)
 	echo '<img id="zoom_image" src="'.$config['core']['web_root'].'gfx/ajax_loading.gif" alt="Image"/>';
 	echo '</div>';
 
-	if ($session->id == $ownerId || $session->isAdmin) {
+	if ($h->session->id == $ownerId || $h->session->isAdmin) {
 		echo '<div id="cropper_toolbar" style="display:none">';
 		echo	'<input type="button" class="button" value="'.t('Crop selection').'" onclick="crop_selection()"/>';
 		echo	'<input type="button" class="button" value="'.t('Cancel').'" onclick="hide_cropper()"/>';
@@ -393,7 +393,7 @@ function showImageGadgetXHTML($ownerId)
 		echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 	}
 
-	if ($files->allow_rating) {
+	if ($h->files->allow_rating) {
 		echo '<div id="rate_file"></div>';
 	}
 	//echo	'</center>';
@@ -405,25 +405,25 @@ function showImageGadgetXHTML($ownerId)
  */
 function showAudioGadgetXHTML($ownerId)
 {
-	global $session;
+	global $h;
 
 	echo '<div id="zoom_audio_layer" style="display:none">';
 	echo	'<center>';
 	echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
 	//FIXME: make it possible to configure what buttons to hide
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 	}
 
 	echo	'<div id="zoom_audio" style="width: 180px; height: 45px;"></div>';
 
-	if ($session->id == $ownerId  || $session->isAdmin) {
+	if ($h->session->id == $ownerId  || $h->session->isAdmin) {
 		echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 		echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 		echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 	}
-	if ($session->id != $ownerId) {
+	if ($h->session->id != $ownerId) {
 		echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 	}
 	echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
@@ -436,13 +436,13 @@ function showAudioGadgetXHTML($ownerId)
  */
 function showVideoGadgetXHTML($ownerId)
 {
-	global $session;
+	global $h;
 
 	echo '<div id="zoom_video_layer" style="display:none">';
 	echo	'<center>';
 	echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/>';
 	//FIXME: make it possible to configure what buttons to hide
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 	}
 
@@ -450,12 +450,12 @@ function showVideoGadgetXHTML($ownerId)
 	echo	'<a href="http://www.macromedia.com/go/getflashplayer">You need Flash Player</a>.';
 	echo	'</div>';
 
-	if ($session->id == $ownerId || $session->isAdmin) {
+	if ($h->session->id == $ownerId || $h->session->isAdmin) {
 		echo	'<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 		echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 	}
-	if ($session->id != $ownerId) {
+	if ($h->session->id != $ownerId) {
 		echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 	}
 	echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
@@ -468,22 +468,22 @@ function showVideoGadgetXHTML($ownerId)
  */
 function showDocumentGadgetXHTML($ownerId)
 {
-	global $session;
+	global $h;
 
 	echo '<div id="zoom_file_layer" style="display:none">';
 	echo	'<center>';
 	echo	'<input type="button" class="button_bold" value="'.t('Close').'" onclick="zoom_hide_elements()"/> ';
 	//FIXME: make it possible to configure what buttons to hide
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		echo	'<input type="button" class="button" value="'.t('Download').'" onclick="download_selected_file()"/>';
 		echo	'<input type="button" class="button" value="'.t('Pass thru').'" onclick="passthru_selected_file()"/>';
 	}
-	if ($session->id == $ownerId || $session->isAdmin) {
+	if ($h->session->id == $ownerId || $h->session->isAdmin) {
 		echo '<input type="button" class="button" value="'.t('View log').'" onclick="viewlog_selected_file()"/><br/>';
 		echo '<input type="button" class="button" value="'.t('Move').'" onclick="move_selected_file()"/>';
 		echo '<input type="button" class="button" value="'.t('Delete').'" onclick="delete_selected_file()"/>';
 	}
-	if ($session->id != $ownerId) {
+	if ($h->session->id != $ownerId) {
 		echo	'<input type="button" class="button" value="'.t('Report').'" onclick="report_selected_file()"/>';
 	}
 	echo	'<input type="button" class="button" value="'.t('Comments').'" onclick="comment_selected_file()"/><br/>';
@@ -496,7 +496,7 @@ function showDocumentGadgetXHTML($ownerId)
  */
 function showFileViewlog($fileId)
 {
-	global $session, $files;
+	global $h;
 	//FIXME kolla filägaren
 
 	$list = getVisits(VISIT_FILE, $fileId, 0);
