@@ -114,6 +114,14 @@ class handler
 		dp("handler->log(): ".$str);
 	}
 
+	function showError($clear_err = true)
+	{
+		if (!$this->session->error) return;
+
+		echo '<div class="critical">'.$this->session->error.'</div><br/>';
+		if ($clear_err) $this->session->error = ''; //remove error message once it has been displayed
+	}
+
 	function handleEvents()
 	{
 		if ($this->user) $this->handleUserEvents();

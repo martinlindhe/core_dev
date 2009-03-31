@@ -19,7 +19,7 @@ require_once('output_xhtml.php');
  */
 function showLoginForm()
 {
-	global $config, $h;
+	global $h, $config;
 
 	if (!$h->auth) return false;
 
@@ -38,13 +38,11 @@ function showLoginForm()
 		$forgot_pwd = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 	}
 
-	$error = $h->error;
-
 	//Check for "forgot password" request, POST to any page with 'forgot_pwd' set
 	if ($forgot_pwd && !$h->session->id && isset($_POST['forgot_pwd'])) {
 		$check = $h->auth->handleForgotPassword($_POST['forgot_pwd']);
 		if (!$check) {
-			$error = t('The specified email address does not match any registered user.');
+			$h->error = t('The specified email address does not match any registered user.');
 		}
 		$tab = 'forgot_pwd';
 	}
@@ -53,9 +51,7 @@ function showLoginForm()
 		$tab = 'register';
 	}
 
-	if ($error) {
-		echo '<div class="critical">'.$error.'</div><br/>';
-	}
+	$h->showError();
 
 	echo '<div id="login_form_layer"'.($tab!='login'?' style="display: none;"':'').'>';
 	if (!$h->auth->allow_login) {
@@ -177,7 +173,7 @@ function showLoginForm()
  */
 function showRegisterForm($preId = 0, $act_code = 0)
 {
-	global $config;
+	global $h, $config;
 	if (!is_numeric($preId) || !is_numeric($act_code)) return false;
 
 	if ($this->mail_error) {
@@ -185,10 +181,7 @@ function showRegisterForm($preId = 0, $act_code = 0)
 		return false;
 	}
 
-	if ($session->error) {
-		echo '<div class="critical">'.$session->error.'</div><br/>';
-		$session->error = ''; //remove error message once it has been displayed
-	}
+	$h->showError();
 
 	if ($this->activation_sent) {
 		echo t('An email with your activation code has been sent.').'<br/>';
@@ -240,10 +233,7 @@ function changePasswordForm()
 		}
 	}
 
-	if ($session->error) {
-		echo '<div class="critical">'.$session->error.'</div><br/>';
-		$session->error = '';
-	}
+	$h->showError();
 
 	if (!$check) {
 		echo xhtmlForm();
@@ -268,6 +258,7 @@ function changePasswordForm()
  */
 function resetPassword($_id, $_code)
 {
+	global $h;
 	if (!is_numeric($_id) || !is_numeric($_code)) return false;
 
 	if (!verifyActivation(ACTIVATE_CHANGE_PWD, $_code, $_id)) {
@@ -289,10 +280,7 @@ function resetPassword($_id, $_code)
 	echo t('Because we don\'t store the password in clear text it cannot be retrieved.').'<br/>';
 	echo t('You will therefore need to set a new password for your account.').'<br/>';
 
-	if ($session->error) {
-		echo '<div class="critical">'.$session->error.'</div><br/>';
-		$session->error = ''; //remove error message once it has been displayed
-	}
+	$h->showError();
 
 	echo xhtmlForm();
 	echo t('New password').': '.xhtmlPassword('reset_pwd1', '', 12).'<br/>';
